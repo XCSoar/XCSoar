@@ -148,8 +148,6 @@ public:
 
 private:
   Mutex mutexVoice;
-  void Lock();
-  void UnLock();
  private:
   static bool AirspaceNotifierInstalled;
 };

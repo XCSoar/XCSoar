@@ -541,14 +541,6 @@ VegaVoice::~VegaVoice() {
 #endif
 }
 
-void VegaVoice::Lock() {
-  mutexVoice.Lock();
-}
-
-void VegaVoice::UnLock() {
-  mutexVoice.Unlock();
-}
-
 void
 VegaVoice::Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
 		  const SETTINGS_COMPUTER &settings)
@@ -564,29 +556,27 @@ VegaVoice::Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
 #endif
   }
 
-  Lock();
+  ScopeLock protect(mutexVoice);
+
   // update values in each message to determine whether
   // the message should be active
-  for (int i=0; i<VV_MESSAGE_COUNT; i++) {
-    if (message[i].Update(Basic, Calculated, settings)) {
-      UnLock();
+  for (int i=0; i<VV_MESSAGE_COUNT; i++)
+    if (message[i].Update(Basic, Calculated, settings))
       return;
-    }
-  }
+
   // no message is active now
   // need to send null message (cancel all)
   // message[0].SendNullMessage();
-  UnLock();
 }
 
 
 // called when notified by Altair that the message has been spoken
 void VegaVoice::MessageSpoken(int id_this, double time) {
-  Lock();
+  ScopeLock protect(mutexVoice);
+
   if ((id_this>=0)&&(id_this<VV_MESSAGE_COUNT)) {
     message[id_this].MessageSpoken(time);
   }
-  UnLock();
 }
 
 
