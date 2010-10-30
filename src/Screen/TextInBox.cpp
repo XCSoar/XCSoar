@@ -174,7 +174,6 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     y -= tsize.cy / 2;
   }
 
-  bool drawn = false;
   if (Mode.AsFlag.Border || Mode.AsFlag.WhiteBorder) {
     brect.left = x - 2;
     brect.right = brect.left + tsize.cx + 4;
@@ -201,8 +200,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       canvas.background_transparent();
       canvas.text(x, y, Value);
       canvas.background_opaque();
-
-      drawn = true;
+      return true;
     }
   } else if (Mode.AsFlag.FillBackground) {
     brect.left = x - 1;
@@ -220,7 +218,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     if (label_block ? label_block->check(brect) : true) {
       canvas.set_background_color(Color::WHITE);
       canvas.text_opaque(x, y, brect, Value);
-      drawn = true;
+      return true;
     }
   } else if (Mode.AsFlag.WhiteBold) {
     brect.left = x - 2;
@@ -230,7 +228,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
     if (label_block ? label_block->check(brect) : true) {
       RenderShadowedText(canvas, Value, x, y);
-      drawn = true;
+      return true;
     }
   } else {
     brect.left = x - 2;
@@ -242,10 +240,9 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       canvas.background_transparent();
       canvas.text(x, y, Value);
       canvas.background_opaque();
-
-      drawn = true;
+      return true;
     }
   }
 
-  return drawn;
+  return false;
 }
