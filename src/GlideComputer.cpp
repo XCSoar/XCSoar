@@ -178,8 +178,6 @@ GlideComputer::CalculateOwnTeamCode()
   if (!last_team_code_update.check_update(10000))
     return;
 
-  TCHAR code[10];
-
   // Get bearing and distance to the reference waypoint
   const Waypoint *wp =
       way_points.lookup_id(SettingsComputer().TeamCodeRefWaypoint);
@@ -190,11 +188,8 @@ GlideComputer::CalculateOwnTeamCode()
   Angle bearing = wp->Location.bearing(Basic().Location);
   fixed distance = wp->Location.distance(Basic().Location);
 
-  // Calculate teamcode from bearing and distance
-  GetTeamCode(code, bearing, distance);
-
   // Save teamcode to Calculated
-  _tcsncpy(SetCalculated().OwnTeamCode, code, 5);
+  SetCalculated().OwnTeamCode.Update(bearing, distance);
 }
 
 void

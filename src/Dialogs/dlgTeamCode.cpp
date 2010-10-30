@@ -93,7 +93,7 @@ Update()
 
   wp = (WndProperty*)wf->FindByName(_T("prpOwnCode"));
   if (wp) {
-    _tcsncpy(Text, XCSoarInterface::Calculated().OwnTeamCode, 5);
+    _tcsncpy(Text, XCSoarInterface::Calculated().OwnTeamCode.GetCode(), 5);
     Text[5] = '\0';
     wp->SetText(Text);
     wp->RefreshDisplay();

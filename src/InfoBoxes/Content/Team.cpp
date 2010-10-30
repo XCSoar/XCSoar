@@ -55,7 +55,7 @@ InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  infobox.SetValue(XCSoarInterface::Calculated().OwnTeamCode);
+  infobox.SetValue(XCSoarInterface::Calculated().OwnTeamCode.GetCode());
 
   // Set Comment
   if (XCSoarInterface::SettingsComputer().TeammateCodeValid == true){

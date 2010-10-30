@@ -45,6 +45,7 @@ Copyright_License {
 #include "Task/TaskStats/TaskStats.hpp"
 #include "Task/TaskStats/CommonStats.hpp"
 #include "NMEA/ThermalBand.hpp"
+#include "TeamCodeCalculation.h"
 
 #include <tchar.h>
 
@@ -243,7 +244,7 @@ struct THERMAL_LOCATOR_INFO
 struct TEAMCODE_INFO
 {
   /** Team code */
-  TCHAR OwnTeamCode[10];
+  TeamCode OwnTeamCode;
   /** Bearing to the chosen team mate */
   Angle TeammateBearing;
   /** Distance to the chosen team mate */
