@@ -188,15 +188,11 @@ public:
           do_write_label = true;
         }
 
-        if (way_point.Flags.Airport)
-          icon = &Graphics::AirportReachableIcon;
-        else
-          icon = &Graphics::FieldReachableIcon;
+        icon = way_point.Flags.Airport ? &Graphics::AirportReachableIcon :
+                                         &Graphics::FieldReachableIcon;
       } else {
-        if (way_point.Flags.Airport)
-          icon = &Graphics::AirportUnreachableIcon;
-        else
-          icon = &Graphics::FieldUnreachableIcon;
+        icon = way_point.Flags.Airport ? &Graphics::AirportUnreachableIcon :
+                                         &Graphics::FieldUnreachableIcon;
       }
 
     } else {
