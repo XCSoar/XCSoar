@@ -48,7 +48,7 @@ Copyright_License {
 #include "OS/FlashCardEnumerator.hpp"
 #endif
 
-#include <windows.h>
+#include <windef.h> /* for MAX_PATH */
 #include <assert.h>
 #include <stdlib.h>
 
