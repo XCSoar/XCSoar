@@ -65,7 +65,13 @@ main(int argc, char **argv)
     if ((x < 0) && (x > -1.0e-8))
       x = -1.0e-8;
 
+#ifdef HAVE_MSVCRT
+    // Due to non-standard behavior of the microsoft implementation
+    // this hack is needed to compile on windows machines
+    printf("  %I64dLL,\n",
+#else
     printf("  %lldLL,\n",
+#endif
            (long long)((double)fixed::resolution / x));
   }
   puts("#else");
