@@ -363,12 +363,12 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
 
   while ((EndBearing - StartBearing).magnitude_degrees() > fixed_75) {
     StartBearing = StartBearing.as_bearing();
-    FindLatitudeLongitude(temp_area.Center, StartBearing, Radius, &TempPoint);
+    TempPoint = FindLatitudeLongitude(temp_area.Center, StartBearing, Radius);
     temp_area.points.push_back(TempPoint);
     StartBearing += BearingStep;
   }
 
-  FindLatitudeLongitude(temp_area.Center, EndBearing, Radius, &TempPoint);
+  TempPoint = FindLatitudeLongitude(temp_area.Center, EndBearing, Radius);
   temp_area.points.push_back(TempPoint);
 }
 
@@ -401,7 +401,7 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
   while ((EndBearing - StartBearing).magnitude_degrees() > fixed_75) {
     StartBearing += BearingStep;
     StartBearing = StartBearing.as_bearing();
-    FindLatitudeLongitude(temp_area.Center, StartBearing, Radius, &TempPoint);
+    TempPoint = FindLatitudeLongitude(temp_area.Center, StartBearing, Radius);
     temp_area.points.push_back(TempPoint);
   }
 
@@ -688,7 +688,7 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
   while ((bearing_to - bearing_from).magnitude_degrees() > fixed_75) {
     bearing_from += BearingStep;
     bearing_from = bearing_from.as_bearing();
-    FindLatitudeLongitude(temp_area.Center, bearing_from, radius, &TempPoint);
+    TempPoint = FindLatitudeLongitude(temp_area.Center, bearing_from, radius);
     temp_area.points.push_back(TempPoint);
   }
 

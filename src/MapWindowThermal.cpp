@@ -62,8 +62,8 @@ MapWindow::CalculateScreenPositionsThermalSources()
 
     fixed t = -dh / Calculated().ThermalSources[i].LiftRate;
     GeoPoint loc;
-    FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
-                          Basic().wind.bearing, Basic().wind.norm * t, &loc);
+    loc = FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
+                                Basic().wind.bearing, Basic().wind.norm * t);
     ThermalSources[i].Visible =
         render_projection.GeoToScreenIfVisible(loc,
                                                  ThermalSources[i].Screen);

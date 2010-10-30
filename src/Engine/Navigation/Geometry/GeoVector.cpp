@@ -48,9 +48,7 @@ GeoVector::end_point(const GeoPoint &source) const
   if (!positive(Distance)) {
     return source;
   } else {
-    GeoPoint p;
-    ::FindLatitudeLongitude(source, Bearing, Distance, &p);
-    return p;
+    return ::FindLatitudeLongitude(source, Bearing, Distance);
   }
 }
 
@@ -60,9 +58,7 @@ GeoVector::mid_point(const GeoPoint &source) const
   if (!positive(Distance)) {
     return source;
   } else {
-    GeoPoint p;
-    ::FindLatitudeLongitude(source, Bearing, Distance*fixed_half, &p);
-    return p;
+    return ::FindLatitudeLongitude(source, Bearing, Distance * fixed_half);
   }
 }
 

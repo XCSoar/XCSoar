@@ -286,15 +286,14 @@ DoubleDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3)
  * @param Distance Distance to predict
  * @param loc_out Future location
  */
-void
+GeoPoint
 FindLatitudeLongitude(GeoPoint loc, Angle Bearing, 
-                      fixed Distance, GeoPoint *loc_out)
+                      fixed Distance)
 {
-  if (!positive(Distance)) {
-    *loc_out = loc;
-    return;
-  }
+  if (!positive(Distance))
+    return loc;
 
+  GeoPoint loc_out;
   Distance *= fixed_inv_earth_r;
 
   fixed sinDistance, cosDistance;
@@ -306,9 +305,7 @@ FindLatitudeLongitude(GeoPoint loc, Angle Bearing,
   fixed sinLatitude, cosLatitude;
   loc.Latitude.sin_cos(sinLatitude, cosLatitude);
 
-  assert(loc_out != NULL); // pointless calling this otherwise
-
-  loc_out->Latitude = Angle::radians((fixed)asin(sinLatitude * cosDistance + cosLatitude
+  loc_out.Latitude = Angle::radians((fixed)asin(sinLatitude * cosDistance + cosLatitude
                                           * sinDistance * cosBearing));
 
   fixed result;
@@ -322,11 +319,13 @@ FindLatitudeLongitude(GeoPoint loc, Angle Bearing,
     result = fmod((result + fixed_pi), fixed_two_pi) - fixed_pi;
   }
 
-  loc_out->Longitude = Angle::radians(result);
+  loc_out.Longitude = Angle::radians(result);
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;
 #endif
+
+  return loc_out;
 }
 
 /**

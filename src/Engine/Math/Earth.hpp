@@ -89,7 +89,6 @@ GeoPoint IntermediatePoint(GeoPoint loc1, GeoPoint loc2, const fixed dthis);
  */
 fixed DoubleDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3);
 
-void FindLatitudeLongitude(GeoPoint loc, Angle Bearing, fixed Distance,
-    GeoPoint *loc_out);
+GeoPoint FindLatitudeLongitude(GeoPoint loc, Angle Bearing, fixed Distance);
 
 #endif

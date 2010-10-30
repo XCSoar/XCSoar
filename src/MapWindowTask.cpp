@@ -121,7 +121,7 @@ protected:
     GeoPoint dloc;
     int ilast = 0;
     for (fixed d = fixed_one / 4; d <= fixed_one; d += fixed_one / 4) {
-      FindLatitudeLongitude(start, m_bearing, distance_max * d, &dloc);
+      dloc = FindLatitudeLongitude(start, m_bearing, distance_max * d);
 
       fixed distance0 = Distance(start, dloc);
       fixed distance1 = Distance(dloc, target);

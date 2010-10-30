@@ -174,9 +174,7 @@ GetTeamCodePosition(GeoPoint wpPos, const TCHAR *TeamCode)
   Angle bearing = GetBearing(TeamCode);
 	fixed distance = GetRange(TeamCode);
 
-	GeoPoint position;
-  FindLatitudeLongitude(wpPos, bearing, distance, &position);
-  return position;
+	return FindLatitudeLongitude(wpPos, bearing, distance);
 }
 
 /**

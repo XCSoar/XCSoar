@@ -94,12 +94,8 @@ MapWindow::DrawTrail(Canvas &canvas) const
 
   if (SettingsMap().EnableTrailDrift &&
       projection.GetDisplayMode() == dmCircling) {
-    GeoPoint tp1;
-
-    FindLatitudeLongitude(Basic().Location,
-                          Basic().wind.bearing,
-                          Basic().wind.norm,
-                          &tp1);
+    GeoPoint tp1 = FindLatitudeLongitude(Basic().Location, Basic().wind.bearing,
+                                         Basic().wind.norm);
     traildrift = Basic().Location - tp1;
   }
 

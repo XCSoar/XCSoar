@@ -104,8 +104,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
     if ((SettingsMap().EnableFLARMMap == 2) && (scalefact > fixed_one)) {
       GeoVector gv = Basic().Location.distance_bearing(target_loc);
 
-      FindLatitudeLongitude(Basic().Location, gv.Bearing,
-                            gv.Distance * scalefact, &target_loc);
+      target_loc= FindLatitudeLongitude(Basic().Location, gv.Bearing,
+                                        gv.Distance * scalefact);
     }
 
     // TODO feature: draw direction, rel height?

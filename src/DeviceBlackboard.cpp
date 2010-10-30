@@ -221,10 +221,9 @@ DeviceBlackboard::ProcessSimulation()
   SetBasic().gps.Simulator = true;
 
   SetNAVWarning(false);
-  FindLatitudeLongitude(Basic().Location,
-                        Basic().TrackBearing,
-                        Basic().GroundSpeed,
-                        &SetBasic().Location);
+  SetBasic().Location = FindLatitudeLongitude(Basic().Location,
+                                              Basic().TrackBearing,
+                                              Basic().GroundSpeed);
   SetBasic().Time += fixed_one;
   long tsec = (long)Basic().Time;
   SetBasic().DateTime.hour = tsec / 3600;

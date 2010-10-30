@@ -119,11 +119,9 @@ ThermalLocator::Update(const fixed t_0,
     return; // nothing to do.
   }
 
-  GeoPoint dloc;
+  GeoPoint dloc = FindLatitudeLongitude(location_0, wind.bearing, wind.norm);
 
-  FindLatitudeLongitude(location_0, wind.bearing, wind.norm, &dloc);
-
-  const GeoPoint traildrift = location_0-dloc;
+  const GeoPoint traildrift = location_0 - dloc;
 
   TaskProjection projection;
   projection.reset(location_0);
