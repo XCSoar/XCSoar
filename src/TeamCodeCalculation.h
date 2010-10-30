@@ -40,6 +40,7 @@ Copyright_License {
 #define	TEAMCALCULATION_H
 
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 #include <tchar.h>
 
 struct GeoPoint;
@@ -53,6 +54,8 @@ public:
   }
 
   const TCHAR* GetCode() const;
+
+  gcc_pure
   GeoPoint GetLocation(const GeoPoint ref) const;
 
   void Update(Angle bearing, fixed range);
