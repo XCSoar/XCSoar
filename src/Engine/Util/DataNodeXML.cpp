@@ -140,7 +140,8 @@ DataNodeXML::save(const TCHAR* path)
   if (file == NULL)
     return false;
 
-  const TCHAR* text = serialise().c_str();
+  const tstring str = serialise();
+  const TCHAR* text = str.c_str();
 
 #ifdef _UNICODE
   char text2[_tcslen(text) * 4];
