@@ -154,56 +154,54 @@ an internal GPS.
 \end{description}
 
 \section{Downloading XCSoar}
-The software is available as a free download from the XCSoar website~\xcsoarwebsite.  Follow the links to the download section.
+The software is available as a free download from the XCSoar website
+~\xcsoarwebsite. Follow the links to the download section.
 
-Several versions are available for different operating systems:
-\begin{description}
-\item[Pocket PC] This version is used by Pocket PC (Windows Mobile) organisers.
-\item[Altair] This version is used by the Altair glide computer.
-\item[PC]  This version is used on Windows personal computers.
-\end{description}
-
-\subsection*{Pocket PC Installer}
+\subsection*{Pocket PC versions}
 Download the relevant package for your Pocket PC operating system
 version and save it to disk:
 \begin{description}
-\item[PPC2000] For Pocket PC 2002 and older, MIPS or ARM CPU.
-\item[PPC2003] For Pocket PC 2003, Pocket PC 2003 Second Edition, 
-  and Windows Mobile 5.0 and Windows Mobile 6.0.
-\item[ALL] This package contains the executable programs for all
- operating systems versions listed above.
+\item[Pocket PC 2000] For Pocket PC 2002 and older
+\item[Windows Mobile 2003] For Windows Mobile 2003 (or Pocket PC 2003)
+\item[Windows Mobile 5] For Windows Mobile 5 and 6
 \end{description}
 
-\begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/XCS_Download.png}
-\end{center}
-
-%XXX SmartPhone?
-
 \subsection*{Additional files}
+To be able to use XCSoar's advanced features additional data files, such as
+terrain, topology, special use airspace, waypoints etc.\ are needed. The files
+that can be used with XCSoar are described in Chapter~\ref{cha:data-files}.
 
-Additional data files, such as terrain and topology, special use
-airspace, waypoints etc.\ can also be downloaded.  The files used by
-XCSoar are described in Chapter~\ref{cha:data-files}.
+All data files should be copied into the directory \texttt{XCSoarData}. The
+location of this directory is determined with the following method:
 
-All data files should be copied into the directory
-\texttt{XCSoarData}.  The location of this directory is determined
-with the following method:
-
+\begin{description}
+\item[Windows PC]
+\texttt{XCSoarData} is always located in your personal folder (``\texttt{My
+Documents}'')
+\item[Windows Mobile PDA]
 \begin{itemize}
-\item on PC, it is always in your personal folder (``\texttt{My
-  Documents}'')
-\item if you start XCSoar from a SD card, it is always in the root of
+\item If you start XCSoar from a SD card, it is always in the root of
   that SD card (e.g. ``\texttt{/SD Card/XCSoarData}'')
-\item if \texttt{XCSoarData} already exists on any SD card inserted
-  during XCSoar startup, this one is used
-\item if none of the above applies, then it is in your personal folder
+\item If \texttt{XCSoarData} already exists on any SD card inserted
+  at XCSoar startup, this one is used
+\item If none of the above applies, then it is in your personal folder
   (``\texttt{/My Documents}'')
 \end{itemize}
+\item[Unix PC]
+\begin{itemize}
+\item If \texttt{.xcsoar} exists in you user folder (e.g.
+``\texttt{\~{}/.xcsoar}'') this one is used
+\item Otherwise ``\texttt{/etc/xcsoar}'' will be used
+\end{itemize}
+\item[Android Devices]
+\texttt{XCSoarData} is located on the SD card (e.g.
+``\texttt{/sdcard/XCSoarData}'')
+\item[Altair]
+\texttt{XCSoarData} is located in the interal storage
+\end{description}
 
-It is recommended to create \texttt{XCSoarData} on a SD card, because
-you can easily update the data files on your PC.
-
+For embedded devices it is recommended to create \texttt{XCSoarData} on a SD
+card, because you can easily update the data files on your PC.
 
 \section{Installation}
 \subsection*{Installation of Pocket PC version from Windows PC}
