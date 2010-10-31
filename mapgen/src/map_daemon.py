@@ -40,15 +40,15 @@ class MapDaemon:
         open(self.__get_file_download_lock(uuid), "w").close()
     
     def __delete_job(self, uuid, complete = True):
-        dir_job = self.__get_dir_job(uuid)
+        file_job = self.__get_file_job(uuid)
+        if os.path.exists(file_job):
+            os.unlink(file_job)
+
         if complete:
+            dir_job = self.__get_dir_job(uuid)
             for file in os.listdir(dir_job):
                 os.unlink(os.path.join(dir_job, file))
             os.rmdir(dir_job)
-        else:
-            file_job = self.__get_file_job(uuid)
-            if os.path.exists(file_job):
-                os.unlink(file_job)
             
         print "Job deleted (" + file_job + ")"
     
