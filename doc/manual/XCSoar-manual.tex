@@ -278,7 +278,7 @@ must be placed in the \verb|My Documents\XCSoarData| directory.
 \section{Running XCSoar}
 %\subsection*{Fly and simulator modes}
 
-Two versions of XCSoar are available, FLY and SIM. 
+Two modes are available inside the XCSoar application: 
 \begin{description}
 \item[FLY] This mode is used when actually flying.  The simulator is 
   disabled and serial communications are active. 
@@ -287,25 +287,20 @@ Two versions of XCSoar are available, FLY and SIM.
 \end{description}
 
 The simulator contains a simple interface allowing the user to fly
-the glider about.  Dragging the map screen (with touchscreen or
+the glider about.  Dragging the glider symbol (with touchscreen or
 mouse) causes the glider to move in the direction of the drag, the
 speed being proportional to the length of the drag.  In SIM mode, the
 aircraft altitude can be adjusted by selecting the GPS altitude
-{\InfoBox} (marked \infobox{H GPS}), and pressing the up or down keys.
+{\InfoBox} (marked \infobox{H GPS}), and pressing the up or down key.
+
+\subsection*{XCSoar Pocket PC version}
+The program can be run in either of two modes by pressing the `FLY' or
+`SIM' launcher on the Today screen. If the application is started directly from
+the explorer a dialog is asking you which mode you want to start.
 
 \tip It is recommended that on Pocket PC devices, no other programs
  are running while XCSoar is used in flights.  This gives the best
  possible performance and responsiveness of the program.
-
-\subsection*{XCSoar Pocket PC version}
-The program can be run in either of two modes by pressing the `FLY' or
-`SIM' launcher on the Today screen.
-
-In addition to starting the program through the use of the launcher,
-it is also possible to use the File Explorer to locate the
-\verb|XCSoar.exe| or \verb|XCSoarSimulator.exe| programs 
-(respectively FLY and SIM modes).  Typically these are located in the
-\verb|Program Files\XCSoar| directory.
 
 \subsection*{Altair version}
 XCSoar starts up automatically when Altair is powered on.
@@ -323,34 +318,30 @@ Escape key, typically used to close dialog pages or as a cancel function.
 The Altair version of XCSoar does not include a simulator mode.
 
 \subsection*{XCSoar PC version}
-The program can be run by opening the explorer window, find the
-\verb|C:\XCSoar| directory, and double clicking on the program file:
-\begin{description}
-\item[FLY] Run XCSoarPC.exe 
-\item[SIM] Run XCSoarPCSim.exe
-\end{description}
+The program can be run by opening the explorer window, finding the directory
+that has the XCSoar.exe executable, and double clicking on that program file.
 
 The program command line options allows the screen orientation of
 the display to be defined:
 \begin{description}
 \item[-portrait] The screen is 480 pixels wide, 640 pixels high.
 \item[-square] The screen is 480 pixels wide, 480 pixels high.
-\item[-landscape] The screen is 640 pixels wide, 480 pixels high.
+\item[-landscape] The screen is 640 pixels wide, 480 pixels high. This is the
+usual setting. If you don't specify this parameter the landscape version will be
+loaded automatically.
 \item[-small] Draws the screen at half size.  This is useful for using XCSoar in
  conjunction with flight simulators e.g.\ Condor.
 \end{description}
-To change the default screen orientation, it is convenient to create a
-shortcut to the program, then right click on the shortcut icon, then
-click ``Shortcut''.  In the field ``Target'' add the desired option
-listed above.
+To change the screen orientation, it is convenient to create a shortcut to the
+program, then right click on the shortcut icon and click on ``Shortcut''. 
+In the field ``Target'' add one of the desired options listed above.
 
 \subsection*{Start-up and user profiles}
-
-When XCSoar starts up, it displays a small window with a safety
-reminder.  To proceed, press Enter (to acknowledge the reminder).
-There is also a data field that allows the user to select a profile
-from a list.  This allows multiple independent configurations of
-XCSoar to coexist for different purposes, such as:
+When XCSoar starts up, it will check for existing profiles. If multiple
+profiles are detected it will displays a small window asking you which profile
+to load. To proceed, choose the desired profile and press Enter. If no
+profile is chosen the settings from the last session are loaded again. Profiles
+can be usefull for example in the following cases:
 \begin{itemize}
 \item Different pilots
 \item Competition versus casual flying
@@ -358,44 +349,23 @@ XCSoar to coexist for different purposes, such as:
 \end{itemize}
 
 \begin{center}
+% TODO update screenshot
 \includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/disclaimer.png}
 \end{center}
 
-This customisation of profiles is described briefly in
-Chapter~\ref{cha:data-files} and in greater detail in the {\em XCSoar
-Advanced Configuration Manual}.  When multiple profiles are available,
-changes to configuration settings will only affect the profile
-selected at start-up; others are unaffected.
-
 \subsection*{Splash screen}
-
-When XCSoar starts up, shuts down, or loads large files, such as
-airspace, waypoints etc, a splash screen is presented while the file
-is being loaded.  This screen has a progress bar which indicates the
-file loading activity, and a short line of text describing the action
-that is being performed.
+When XCSoar starts up, shuts down, or loads large files, such as airspace,
+waypoints, terrain, etc, a progress screen is presented while the data is being
+loaded. This screen has a progress bar which indicates the data loading
+activity, and a short line of text describing the action that is being performed.
 
 This screen also displays the software version information.
 
-\subsection*{Last flight statistics}
-
-The previous flight's statistics are saved when XCSoar exits, and
-loaded at startup.  This allows the flight to be reviewed after
-shutting down Altair.  Statistics are reset on takeoff so they will
-not affect the next flight.  Note that these persistent flight
-statistics use approximately 85 kilobytes of storage.
-
-\subsection*{Persistent settings}
-
-The basic settings (MacCready setting, Bugs, Ballast, QNH, maximum
-forecast temperature) are preserved when XCSoar shuts down and
-restored when XCSoar initialises.  
-
 \subsection*{Exiting the program}
-
-For PDA and PC versions, XCSoar is shut down from the menu:
+For PDA and PC versions, XCSoar is shut down from the menu. The menu can be
+opened by double-clicking on the map or the infoboxes.
 \begin{quote}
-\bmenu{INFO}\blink\bmenu{INFO}\blink\bmenu{INFO}\blink\bmenu{Exit}
+\bmenu{QUIT}
 \end{quote}
 
 For PC versions, XCSoar can also be shut down by clicking the close icon
@@ -404,16 +374,13 @@ on the XCSoar window.
 For Altair, XCSoar is shut down by holding the PWR button for two seconds or
 more.
 
-
 \section{Through-life support}
 
 \subsection*{Troubleshooting}
-
-A small team of dedicated developers produces XCSoar.  Although we are
+A small team of dedicated developers produces XCSoar. Although we are
 happy to help with the use of our software, we cannot teach you about
-basics of modern information technology. There are ample existing
-resources dealing with these.  If you have a question about XCSoar
-please email us at 
+basics of modern information technology. If you have a question about XCSoar in
+particular please email us at: 
 \begin{quote}
 \url{xcsoar-user@lists.sourceforge.net}.
 \end{quote}
@@ -422,20 +389,23 @@ Any frequent questions will be added to this document and to the Frequently
 Asked Questions (FAQ) section of the XCSoar website.
 
 You may also find it useful to subscribe to the XCSoar users mailing
-list so you will be kept up to date with latest developments.
+list so you will be kept up to date with latest developments. You can find more
+information about the XCSoar mailing lists on our website:
+\begin{quote}
+\xcsoarwebsite
+\end{quote}
 
-A log file of the startup functions of XCSoar is generated to the file
-\verb|xcsoar-startup.log|.  This can be sent to the XCSoar developers
-to help determine the cause if the program crashes at startup.
+A log file of the startup progress of XCSoar is generated in the file
+\verb|xcsoar-startup.log|. This can be sent to the XCSoar developers
+to help determine the cause of any startup-related problems.
 
 For Altair users, the startup file is transferred to the `FromAltair'
 directory by AltairSync if a USB drive is plugged in when Altair is
 first switched on.
 
 \subsection*{Updates}
-
 You should periodically visit the XCSoar website to check for program
-updates.  The installation procedure described above can typically be
+updates. The installation procedure described above can typically be
 repeated in order to upgrade the software.  All user configuration
 settings and data files will be preserved during the
 re-installation/upgrade.
@@ -446,17 +416,16 @@ change by the national civil aviation authority.
 
 Like any complex software program, XCSoar may be subject to software
 bugs, so if you find any, please report them to the XCSoar developers
-by using the bug tracker at 
+by using our bug tracker ``trac'' at 
 \begin{quote}
-\url{http://sourceforge.net/projects/xcsoar}
+\url{http://www.xcsoar.org/trac/}
 \end{quote}
-or email
+or by sending an email to
 \begin{quote}
 \url{xcsoar-devel@lists.sourceforge.net}
 \end{quote} 
 
 \subsection*{Updating XCSoar on Altair}
-
 Updating XCSoar on Altair involves downloading the latest program file
 {\tt XCSoarAltair-YYY-CRCXX.exe}, copying it to a USB memory stick,
 then using the AltairSync utility on the Altair device to complete the
