@@ -230,7 +230,10 @@ class MapDaemon:
             print "Command \"generate\" found. Generating map file."
             # Execute "generate" job
             self.__do_generate_job(job)
-        
+            # Delete the job file
+            self.__delete_job(job.uuid, False)
+            return;
+
         # Check for "stop" command
         elif job.command == "stop":
             print "Command \"stop\" found. Stopping daemon."
