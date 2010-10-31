@@ -5,19 +5,25 @@
 	\fcolorbox {black}{buttongreen}{{\sf{#1}}}
 }
 \newcommand{\bmenut}[2]{
-	\fcolorbox {black}{buttongreen}{%
-\makebox[1.4cm][c]{
-	\begin{tabular}{c}
-	{\footnotesize\sf{#1}}\\
-	{\footnotesize\sf{#2}}
-	\end{tabular}}}}
+	\fcolorbox {black}{buttongreen}{
+    \makebox[1.4cm][c]{
+    	\begin{tabular}{c}
+    	{\footnotesize\sf{#1}}\\
+    	{\footnotesize\sf{#2}}
+    	\end{tabular}
+    }
+  }
+}
 \newcommand{\bmenus}[1]{
-	\fcolorbox {black}{buttongreen}{%
-\makebox[1.4cm][c]{
-	\begin{tabular}{c}
-	{\footnotesize\sf{#1}}\\
-	 \\
-	\end{tabular}}}}
+	\fcolorbox {black}{buttongreen}{
+    \makebox[1.4cm][c]{
+      \begin{tabular}{c}
+        {\footnotesize\sf{#1}}\\
+    	  \\
+    	\end{tabular}
+	  }
+	}
+}
 \newcommand{\button}[1]{
 	\fcolorbox {black}{gray}{{\sf #1}}
 }
@@ -34,8 +40,7 @@
 }
 {\end{description}}
 
-
-\newcommand{\jindent}[2]{%
-\noindent\makebox[0pt][r]{{#1}\hspace*{\marginparsep}}
-\parbox[t]{0.95\linewidth}{#2}\par
+\newcommand{\jindent}[2]{
+  \noindent\makebox[0pt][r]{{#1}\hspace*{\marginparsep}}
+  \parbox[t]{0.95\linewidth}{#2}\par
 }
