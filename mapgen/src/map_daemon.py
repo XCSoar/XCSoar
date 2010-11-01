@@ -224,26 +224,31 @@ class MapDaemon:
         # Activate the download lock
         self.__lock_download(job.uuid)
         
+        # Delete the job file
+        self.__delete_job(job.uuid, False)
+        
     def __do_job(self, job):
         # Check for "generate" command
         if job.command == "generate":
             print "Command \"generate\" found. Generating map file."
+            
             # Execute "generate" job
             self.__do_generate_job(job)
-            # Delete the job file
-            self.__delete_job(job.uuid, False)
             return;
 
         # Check for "stop" command
-        elif job.command == "stop":
+        if job.command == "stop":
             print "Command \"stop\" found. Stopping daemon."
+            
+            # Delete the job
+            self.__delete_job(job.uuid)
             # Stop the daemon 
             self.__run = False
+            return;
+            
         
         # Every other command
-        else:
-            print "No known command given inside MapJob object"
-        
+        print "No known command given inside MapJob object"
         # Delete the job
         self.__delete_job(job.uuid)
                 
