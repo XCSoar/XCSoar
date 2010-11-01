@@ -5,6 +5,8 @@ import pickle
 from map_generator import MapGenerator
 
 class MapJob:
+    name = None
+    mail = None
     use_waypoint_file = False
     use_waypoint_details_file = False
     use_airspace_file = False
