@@ -41,6 +41,8 @@ Copyright_License {
 #include "Terrain/RasterMap.hpp"
 #include "Components.hpp"
 #include "Math/Earth.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
+#include "Engine/Navigation/SpeedVector.hpp"
 
 void
 EstimateThermalBase(const GeoPoint Thermal_Location,

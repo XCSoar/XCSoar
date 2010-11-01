@@ -40,8 +40,9 @@ Copyright_License {
 #define THERMALBASE_HPP
 
 #include "Math/fixed.hpp"
-#include "Navigation/GeoPoint.hpp"
-#include "Navigation/SpeedVector.hpp"
+
+class GeoPoint;
+class SpeedVector;
 
 void EstimateThermalBase(const GeoPoint Thermal_Location,
                          const fixed altitude,
