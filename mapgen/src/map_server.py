@@ -171,6 +171,5 @@ form input.button:hover, form input.button:focus { background: #1B8D29; color: #
         return cherrypy.lib.static.serve_download(file_map)
         
 if __name__ == '__main__':
-    cherrypy.config.update({'tools.sessions.on': True})
     cherrypy.config.update({'server.socket_port': 8037})
     cherrypy.quickstart(MapServer())
