@@ -163,12 +163,6 @@ MapWindowProjection::CalculateOrigin(const RECT rc, const NMEA_INFO &DrawInfo,
 }
 
 fixed
-MapWindowProjection::GetScreenDistanceMeters() const
-{
-  return DistancePixelsToMeters(max_dimension(GetMapRect()));
-}
-
-fixed
 MapWindowProjection::CalculateMapScale(int scale) const
 {
   assert(scale >= 0 && scale < ScaleListCount);

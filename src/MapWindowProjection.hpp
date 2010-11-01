@@ -57,9 +57,6 @@ public:
   MapWindowProjection();
 
   gcc_pure
-  fixed GetScreenDistanceMeters() const;
-
-  gcc_pure
   virtual fixed GetMapScaleUser() const;
 
   const POINT &GetOrigAircraft() const {
@@ -102,11 +99,6 @@ public:
                        const SETTINGS_MAP &settings_map);
 
   void Initialize(const SETTINGS_MAP &settings, const RECT &rc);
-
-  gcc_pure
-  fixed DistancePixelsToMeters(const int x) const {
-    return x * GetMapScale() / GetMapResolutionFactor();
-  }
 
   gcc_pure
   fixed RequestDistancePixelsToMeters(const int x) const {

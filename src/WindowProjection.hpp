@@ -89,6 +89,14 @@ public:
     return MapRect.bottom - MapRect.top;
   }
 
+  gcc_pure
+  fixed DistancePixelsToMeters(const int x) const {
+    return x * GetMapScale() / GetMapResolutionFactor();
+  }
+
+  gcc_pure
+  fixed GetScreenDistanceMeters() const;
+
   // used by terrain renderer, topology and airspace
   gcc_pure
   GeoBounds CalculateScreenBounds(const fixed scale) const;
