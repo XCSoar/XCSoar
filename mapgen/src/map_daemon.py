@@ -37,7 +37,9 @@ class MapDaemon:
         self.__run = False
     
     def __lock_download(self, uuid):
-        open(self.__get_file_download_lock(uuid), "w").close()
+        file_job = self.__get_file_job(uuid)
+        download_lock = self.__get_file_download_lock(uuid)
+        os.rename(file_job, download_lock)
     
     def __delete_job(self, uuid, complete = True):
         file_job = self.__get_file_job(uuid)
@@ -223,9 +225,6 @@ class MapDaemon:
         
         # Activate the download lock
         self.__lock_download(job.uuid)
-        
-        # Delete the job file
-        self.__delete_job(job.uuid, False)
         
     def __do_job(self, job):
         # Check for "generate" command
