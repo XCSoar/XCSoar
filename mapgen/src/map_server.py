@@ -16,6 +16,9 @@ class MapServer(object):
     def get_dir_job(self, uuid):
         return os.path.join(dir_jobs, uuid)
     
+    def dir_job_exists(self, uuid):
+        return os.path.exists(self.get_dir_job(uuid))
+    
     def get_file_status(self, uuid):
         return os.path.join(self.get_dir_job(uuid), "status")
     
@@ -43,8 +46,7 @@ class MapServer(object):
             os.unlink(job_lock)
             
     def get_job_status(self, uuid):
-        dir_job = self.get_dir_job(uuid)
-        if not os.path.exists(dir_job):
+        if not self.dir_job_exists(uuid):
             return None
         
         file_status = self.get_file_status(uuid)
