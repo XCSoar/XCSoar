@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Projection.hpp"
-
+#include "Units.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/Layout.hpp"
@@ -47,6 +47,12 @@ Projection::Projection() :
   ScreenRotation(Angle::native(fixed_zero)),
   scale(fixed_one)
 {
+}
+
+fixed
+Projection::GetMapScale() const
+{
+  return Units::ToSysDistance(GetMapScaleUser());
 }
 
 GeoPoint

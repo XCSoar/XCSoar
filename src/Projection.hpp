@@ -74,6 +74,12 @@ public:
   virtual fixed GetMapScaleUser() const;
 
   /**
+   * Returns the value of GetMapScaleUser() based on SI units.
+   */
+  gcc_pure
+  fixed GetMapScale() const;
+
+  /**
    * Convert a pixel distance to an angle on Earth's surface.
    */
   gcc_pure
