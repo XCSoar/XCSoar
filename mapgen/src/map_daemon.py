@@ -1,8 +1,10 @@
 import os
 import time
 import pickle
+import smtplib
 
 from map_generator import MapGenerator
+import socket
 
 class MapJob:
     name = None
@@ -22,7 +24,8 @@ class MapDaemon:
     def __init__(self, 
                  dir_jobs = "../jobs/", 
                  dir_data = "../data/", 
-                 dir_temp = "../tmp/"):
+                 dir_temp = "../tmp/",
+                 mail_server = "localhost"):
         
         self.__dir_jobs = os.path.abspath(dir_jobs)
         if not os.path.exists(self.__dir_jobs):
@@ -35,6 +38,8 @@ class MapDaemon:
         self.__dir_temp = os.path.abspath(dir_temp)
         if not os.path.exists(self.__dir_temp):
             os.mkdir(self.__dir_temp)
+            
+        self.mail_server = mail_server
 
         self.__run = False
     
@@ -118,6 +123,28 @@ class MapDaemon:
     def __download_locked(self, uuid):
         file_lock = self.__get_file_download_lock(uuid)
         return os.path.exists(file_lock)
+    
+    def __send_download_mail(self, job):
+        print "Sending download mail to " + job.mail + " ..."
+        
+        try: 
+            s = smtplib.SMTP(self.mail_server)
+        except socket.error:
+            print "Connection to the SMTP server failed!"
+            return
+        
+        msg = "From: no-replay@" + self.mail_server + "\n"
+        msg += "To: " + job.mail + "\n"
+        msg += "Subject: Download ready (" + job.name + ".xcm)\n"
+        msg += "The map generator has finished your map.\n"
+        msg += "It can be downloaded at http://www.xcsoar.org:8037/download?uuid=" + job.uuid
+        
+        try: 
+            s.sendmail("no-replay@" + self.mail_server, job.mail, msg)
+        except smtplib.SMTPRecipientsRefused:
+            print "The recipient was refused by the SMTP server!"
+            
+        s.quit()
     
     def __get_next_job(self):
         # Iterate through files/folders in our jobs folder
@@ -224,6 +251,8 @@ class MapDaemon:
         self.__update_job_status(job.uuid,  
                                  "Done")
         print "Map ready for use (" + self.__get_file(job.uuid, "map.xcm") + ")"
+        
+        self.__send_download_mail(job)
         
         # Activate the download lock
         self.__lock_download(job.uuid)
