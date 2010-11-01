@@ -152,6 +152,8 @@ form input.button:hover, form input.button:focus { background: #1B8D29; color: #
         file_job = self.get_file_job(uuid)
         
         job = MapJob()
+        job.name = name
+        job.mail = mail1
         job.command = "generate"
         job.use_waypoint_file = True
            
