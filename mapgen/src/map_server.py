@@ -1,28 +1,27 @@
 import os
 import cherrypy
-from waypoint_list import WaypointList
 from map_daemon import MapJob
 import pickle
+import hashlib
+import random
 
-'''
-page 1 - area name, email address, input method (waypoints or manual)
-page 2 - waypoint upload, additional border / coordinate entry
-page 3 - terrain resolution
-page 4 - status, download
-'''
-
-dir_temp = "../tmp"
 dir_jobs = "../jobs"
 
 class MapServer(object):
-    def get_dir_job(self, job_id):
-        dir_job = os.path.join(dir_jobs, job_id)
+    def generate_uuid(self):
+        m = hashlib.sha1()
+        m.update(str(random.random()))
+        return m.hexdigest()
+    
+    def get_dir_job(self, uuid):
+        return os.path.join(dir_jobs, uuid)
+    
+    def create_dir_job(self, uuid):
+        dir_job = self.get_dir_job(uuid)
         if not os.path.exists(dir_job):
             os.mkdir(dir_job)
-    
-        self.lock_job(dir_job)    
         return dir_job
-    
+        
     def lock_job(self, dir_job):
         open(os.path.join(dir_job, "job.lock"), "w").close()
     
@@ -46,172 +45,128 @@ class MapServer(object):
         
         return ret
     
-    def header(self, subtitle = ""):
-        return """
-        <html>
-        <head>
-            <title>XCSoar - Map Server</title>
-        </head>
-        <body>
-            <h1>XCSoar - Map Server</h1>
-            <h2>""" + subtitle + """</h2>
-        """
+    def header(self):
+        return """<html>
+<head>
+    <title>XCSoar - Map Server</title>
+    <link rel="stylesheet" type="text/css" href="/style" /> 
+</head>
+<body>
+"""
 
     def footer(self):
         return """
-        </body>
-        </html>
-        """
+</body>
+</html>
+"""
         
-    def surround(self, html, subtitle = ""):
-        return self.header(subtitle) + html + self.footer()
+    def surround(self, html):
+        return self.header() + html + self.footer()
     
     @cherrypy.expose
-    def index(self, error = ""):
-        html = error + """
-        <form action="submit_start" method="post">
+    def style(self):
+        return """body { margin: 0px; font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Helvetica, Arial, sans-serif; }
+form p, div { margin-bottom: 20px; padding-right: 20px; font-family: Georgia, serif; font-size: 22px; line-height: 40px; font-weight: normal; }
+form div.box { width: 580px; padding: 10px; margin-bottom: 4px; border: 1px solid #9f9c99; border-radius: 8px; font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Helvetica, Arial, sans-serif;  font-size: 20px; }
+form input.text { width: 100%; border: 0px; font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Helvetica, Arial, sans-serif;  font-size: 20px; }
+form input.button { width: 200px; cursor: pointer; padding: 8px 20px; margin-left: 205px; font-size: 18px; text-transform: uppercase; border: 0; border-radius: 8px; cursor: pointer; }
+form input.button:hover, form input.button:focus { background: #1B8D29; color: #fff; }
+"""
+
+    @cherrypy.expose
+    def index(self):
+        html = """<form action="/generate/" method="post" enctype="multipart/form-data">
+    <div>
         Map name:<br/>
-        <input type="text" name="name"/><br/>
-        eMail address:<br/>
-        <input type="text" name="mail1"/><br/>
-        <input type="text" name="mail2"/><br/>
-        Method:<br/>
-        <input type="radio" name="method" value="waypoints" checked/>Waypoint file<br/>
-        <input type="radio" name="method" value="coordinates"/>Coordinates<br/>
-        <input type="submit">
-        </form>
-        """
-        return self.surround(html, "General")
+        <div class="box">
+            <input type="text" name="name" class="text" />
+        </div>
+    </div>
+    <div>
+        eMail:<br/>
+        <div class="box">
+            <input type="text" name="mail1" class="text" /><br/>
+        </div>
+        <div class="box">
+            <input type="text" name="mail2" class="text" />
+        </div>
+    </div>
+    <div>
+        Waypoint file:<br/>
+        <div class="box">
+            <input type="file" name="waypoint_file" />
+        </div>
+    </div>
+    <div>
+        <input type="submit" value="Generate" class="button" id="submit">
+    </div>
+</form>"""
+        return self.surround(html)
+    
+    def error(self, error):
+        return self.surround(error)
     
     @cherrypy.expose
-    def submit_start(self, name, mail1, mail2, method = "waypoints"):
+    def generate(self, name, mail1, mail2, waypoint_file):
         name = name.strip()
         if name == "":
-            return self.index("<h3>No map name given!</h3>")
+            return self.error("No map name given!")
         
         mail1 = mail1.strip()
         mail2 = mail2.strip()
         if mail1 != mail2:
-            return self.index("<h3>eMail address don't match!</h3>")
+            return self.error("eMail addresses don't match!")
         
         if mail1 == "" or mail2 == "":
-            return self.index("<h3>No eMail address given!</h3>")
+            return self.error("No eMail address given!")
         
-        cherrypy.session['name'] = name
-        cherrypy.session['mail'] = mail1
-        cherrypy.session['method'] = method
-        cherrypy.session.save()
-        self.get_dir_job(cherrypy.session.id)
-        
-        if method == "coordinates":
-            return self.coordinates()
-        else:
-            return self.waypoints()
-    
-    def waypoints(self, error = ""):
-        html = error + """
-        <form action="submit_waypoints" method="post" enctype="multipart/form-data">
-        Waypoint file:<br/>
-        <input type="file" name="waypoint_file"/><br/>
-        <input type="submit">
-        </form>
-        """
-        return self.surround(html, "Waypoint file")
-    
-    @cherrypy.expose
-    def submit_waypoints(self, waypoint_file):
         if not os.path.exists(waypoint_file.file.name):
-            return self.waypoints("<h3>Waypoint file could not be read!</h3>")
+            return self.error("Waypoint file could not be read!")
             
-        path = os.path.join(self.get_dir_job(cherrypy.session.id), 
-                            waypoint_file.filename)
+        uuid = self.generate_uuid()
+        dir_job = self.create_dir_job(uuid)
+        self.lock_job(dir_job)        
+        
+        path = os.path.join(dir_job, "waypoints.dat")
         f = open(path, "w")
-        print f
         while True:
             data = waypoint_file.file.read(8192)
             if not data:
                 break
             f.write(data)
         f.close()
-        print path
-            
-        cherrypy.session['waypoint_file'] = path
 
-        wplist = WaypointList()
-        wplist.parse(open(path))
-        bounds = wplist.get_bounds()
-        print bounds
-        cherrypy.session['bounds'] = bounds
-        cherrypy.session.save()
-
-        return self.terrain()
-
-    def coordinates(self, error = ""):
-        return self.surround("", "Coordinates")
-
-    @cherrypy.expose
-    def submit_manual(self, waypoint_file):
-        return self.surround(cherrypy.session.get('mail'))
-    
-    def terrain(self, error = ""):
-        html = error + """
-        <form action="submit_terrain" method="post">
-        Resolution:<br/>
-        <input type="radio" name="resolution" value="3"/>3 arc-seconds<br/>
-        <input type="radio" name="resolution" value="6"/>6 arc-seconds<br/>
-        <input type="radio" name="resolution" value="9" checked/>9 arc-seconds<br/>
-        <input type="radio" name="resolution" value="12"/>12 arc-seconds<br/>
-        <input type="radio" name="resolution" value="15"/>15 arc-seconds<br/>
-        <input type="radio" name="resolution" value="20"/>20 arc-seconds<br/>
-        <input type="submit">
-        </form>
-        """
-        return self.surround(html, "Terrain")
-
-    @cherrypy.expose
-    def submit_terrain(self, resolution):
-        cherrypy.session['resolution'] = resolution
-        cherrypy.session.save()
-        
-        dir_job = self.get_dir_job(cherrypy.session.id)
         file_job = os.path.join(dir_job, "job")
         
         job = MapJob()
         job.command = "generate"
-        job.output_file = os.path.join(dir_job, "map.xcm")
-        job.resolution = cherrypy.session.get("resolution")
-        if cherrypy.session.get("method") == "coordinates":
-            job.bounds = cherrypy.session.get("bounds")
-        else:
-            job.waypoint_file = cherrypy.session.get("waypoint_file")
-            
+        job.use_waypoint_file = True
+           
         f = open(file_job, "wb")
         pickle.dump(job, f)
         f.close()
-        
+       
         self.unlock_job(dir_job)
-        
-        return self.status()
-    
+       
+        return self.status(uuid)
+ 
     @cherrypy.expose
-    def status(self, job_id = None):
-        if job_id == None:
-            job_id = cherrypy.session.id
-        
-        status = self.get_job_status(job_id)
+    def status(self, uuid):
+        status = self.get_job_status(uuid)
         if status == None:
-            return self.surround("<h3>Job not found...</h3>", "Status")
-        if status == "Done":
-            return self.surround("<h3>Map ready for <a href=\"download?job_id=" +
-                                 job_id + "\">Download</a>", "Status")
+            return self.error("Job not found!")
         
-        return self.surround("<h3>" + status + "</h3><br/>" + 
-                             "<a href=\"status?job_id=" + job_id + 
-                             "\">Refresh</a>", "Status")
+        if status == "Done":
+            return self.surround("Map ready for <a href=\"/download?uuid=" +
+                                 uuid + "\">Download</a>")
+        
+        return self.surround(status + "<br/>" + 
+                             "<a href=\"/status?uuid=" + uuid + 
+                             "\">Refresh</a>")
     
     @cherrypy.expose
-    def download(self, job_id = None):
-        dir_job = self.get_dir_job(job_id)
+    def download(self, uuid):
+        dir_job = self.get_dir_job(uuid)
         file_map = os.path.abspath(os.path.join(dir_job, "map.xcm"))
         return cherrypy.lib.static.serve_download(file_map)
         
