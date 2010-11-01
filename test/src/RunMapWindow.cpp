@@ -38,7 +38,6 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
-#include "Screen/Blank.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
@@ -74,10 +73,6 @@ Copyright_License {
 #ifndef _MSC_VER
 #include <algorithm>
 using std::min;
-#endif
-
-#ifdef HAVE_BLANK
-int DisplayTimeOut;
 #endif
 
 DeviceBlackboard device_blackboard;

@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
-#include "Screen/Blank.hpp"
+
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/WindowCanvas.hpp"
 #include "Screen/Layout.hpp"
@@ -47,10 +47,6 @@ Copyright_License {
 #ifndef _MSC_VER
 #include <algorithm>
 using std::min;
-#endif
-
-#ifdef HAVE_BLANK
-int DisplayTimeOut;
 #endif
 
 class TestWindow : public SingleWindow {

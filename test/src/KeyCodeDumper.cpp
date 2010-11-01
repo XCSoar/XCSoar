@@ -37,7 +37,6 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
-#include "Screen/Blank.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/WindowCanvas.hpp"
 #include "Screen/Layout.hpp"
@@ -47,10 +46,6 @@ Copyright_License {
 #include <algorithm>
 
 #include <stdio.h>
-
-#ifdef HAVE_BLANK
-int DisplayTimeOut;
-#endif
 
 class KeyCodeDumper : public PaintWindow {
 protected:

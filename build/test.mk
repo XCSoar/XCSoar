@@ -362,6 +362,7 @@ KEY_CODE_DUMPER_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/KeyCodeDumper.cpp
 KEY_CODE_DUMPER_OBJS = $(call SRC_TO_OBJ,$(KEY_CODE_DUMPER_SOURCES))
@@ -514,6 +515,7 @@ RUN_CANVAS_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/RunCanvas.cpp
 RUN_CANVAS_OBJS = $(call SRC_TO_OBJ,$(RUN_CANVAS_SOURCES))
@@ -608,6 +610,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeInfoBoxLayout.cpp \
 	$(TEST_SRC_DIR)/FakeInterface.cpp \
@@ -650,6 +653,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -683,6 +687,7 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunProgressWindow.cpp
 RUN_PROGRESS_WINDOW_OBJS = $(call SRC_TO_OBJ,$(RUN_PROGRESS_WINDOW_SOURCES))
 RUN_PROGRESS_WINDOW_BIN = $(TARGET_BIN_DIR)/RunProgressWindow$(TARGET_EXEEXT)
@@ -723,6 +728,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Compatibility/string.c \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeInfoBoxLayout.cpp \
 	$(TEST_SRC_DIR)/FakeInterface.cpp \
@@ -785,6 +791,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/WayPointFileZander.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \

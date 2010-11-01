@@ -46,7 +46,6 @@ Copyright_License {
 #include "Airspace/AirspaceClientUI.hpp"
 #include "TaskClientUI.hpp"
 #include "Task/TaskManager.hpp"
-#include "Screen/Blank.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
@@ -57,10 +56,6 @@ Copyright_License {
 
 #include <tchar.h>
 #include <stdio.h>
-
-#ifdef HAVE_BLANK
-int DisplayTimeOut = 0;
-#endif
 
 unsigned InfoBoxLayout::ControlWidth = 100;
 

@@ -49,7 +49,6 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "GlideComputerInterface.hpp"
 #include "Task/TaskManager.hpp"
-#include "Screen/Blank.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
 #include "ResourceLoader.hpp"
@@ -59,10 +58,6 @@ Copyright_License {
 
 #include <tchar.h>
 #include <stdio.h>
-
-#ifdef HAVE_BLANK
-int DisplayTimeOut = 0;
-#endif
 
 unsigned InfoBoxLayout::ControlWidth = 100;
 

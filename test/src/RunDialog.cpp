@@ -36,7 +36,6 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "Screen/Blank.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
@@ -49,10 +48,6 @@ Copyright_License {
 
 #include <tchar.h>
 #include <stdio.h>
-
-#ifdef HAVE_BLANK
-int DisplayTimeOut = 0;
-#endif
 
 #ifdef WIN32
 #include <shellapi.h>

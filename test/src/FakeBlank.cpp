@@ -35,49 +35,8 @@ Copyright_License {
 }
 */
 
-#include "Screen/SingleWindow.hpp"
-#include "Screen/ProgressWindow.hpp"
-#include "Screen/Layout.hpp"
-#include "ResourceLoader.hpp"
+#include "Screen/Blank.hpp"
 
-#ifndef ENABLE_SDL
-#include <commctrl.h>
-#endif /* !ENABLE_SDL */
-
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
+#ifdef HAVE_BLANK
+int DisplayTimeOut;
 #endif
-        int nCmdShow)
-#endif
-{
-#ifndef ENABLE_SDL
-  InitCommonControls();
-  PaintWindow::register_class(hInstance);
-#endif
-
-#ifdef WIN32
-  ResourceLoader::Init(hInstance);
-#endif
-
-  Layout::Initialize(320,240);
-  SingleWindow main_window;
-  main_window.set(_T("STATIC"), _T("RunProgressWindow"),
-                  0, 0, 640, 480);
-  main_window.show();
-
-  ProgressWindow progress(main_window);
-  progress.set_message(_T("Testing..."));
-  progress.set_range(0, 1024);
-  progress.set_pos(768);
-
-  main_window.event_loop();
-
-  return 0;
-}
