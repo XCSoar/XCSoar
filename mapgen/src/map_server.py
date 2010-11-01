@@ -16,26 +16,38 @@ class MapServer(object):
     def get_dir_job(self, uuid):
         return os.path.join(dir_jobs, uuid)
     
+    def get_file_status(self, uuid):
+        return os.path.join(self.get_dir_job(uuid), "status")
+    
+    def get_file_job(self, uuid):
+        return os.path.join(self.get_dir_job(uuid), "job")
+    
+    def get_job_lock(self, uuid):
+        return os.path.join(self.get_dir_job(uuid), "job.lock")
+    
+    def get_download_lock(self, uuid):
+        return os.path.join(self.get_dir_job(uuid), "download.lock")
+    
     def create_dir_job(self, uuid):
         dir_job = self.get_dir_job(uuid)
         if not os.path.exists(dir_job):
             os.mkdir(dir_job)
         return dir_job
         
-    def lock_job(self, dir_job):
-        open(os.path.join(dir_job, "job.lock"), "w").close()
+    def lock_job(self, uuid):
+        open(self.get_job_lock(uuid), "w").close()
     
-    def unlock_job(self, dir_job):
-        lock_path = os.path.join(dir_job, "job.lock")
-        if os.path.exists(lock_path):
-            os.unlink(lock_path)
+    def unlock_job(self, uuid):
+        job_lock = self.get_job_lock(uuid)
+        if os.path.exists(job_lock):
+            os.unlink(job_lock)
             
-    def get_job_status(self, job_id):
-        dir_job = os.path.join(dir_jobs, job_id)
+    def get_job_status(self, uuid):
+        dir_job = self.get_dir_job(uuid)
         if not os.path.exists(dir_job):
             return None
         
-        file_status = os.path.join(dir_job, "status")
+        file_status = self.get_file_status(uuid)
         if not os.path.exists(file_status):
             return "Queued ..."
         
@@ -124,8 +136,9 @@ form input.button:hover, form input.button:focus { background: #1B8D29; color: #
             return self.error("Waypoint file could not be read!")
             
         uuid = self.generate_uuid()
+
         dir_job = self.create_dir_job(uuid)
-        self.lock_job(dir_job)        
+        self.lock_job(uuid)
         
         path = os.path.join(dir_job, "waypoints.dat")
         f = open(path, "w")
@@ -136,7 +149,7 @@ form input.button:hover, form input.button:focus { background: #1B8D29; color: #
             f.write(data)
         f.close()
 
-        file_job = os.path.join(dir_job, "job")
+        file_job = self.get_file_job(uuid)
         
         job = MapJob()
         job.command = "generate"
@@ -146,7 +159,7 @@ form input.button:hover, form input.button:focus { background: #1B8D29; color: #
         pickle.dump(job, f)
         f.close()
        
-        self.unlock_job(dir_job)
+        self.unlock_job(uuid)
        
         return self.status(uuid)
  
