@@ -181,6 +181,9 @@ form input.button:hover, form input.button:focus { background: #1B8D29; color: #
     
     @cherrypy.expose
     def download(self, uuid):
+        if self.get_job_status(uuid) != "Done":
+            return self.status(uuid)
+
         dir_job = self.get_dir_job(uuid)
         file_map = os.path.abspath(os.path.join(dir_job, "map.xcm"))
         return cherrypy.lib.static.serve_download(file_map)
