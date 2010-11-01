@@ -37,8 +37,6 @@ Copyright_License {
 
 #include "Asset.hpp"
 
-#include <windef.h> // for MAX_PATH
-
 #if defined(_WIN32_WCE) && !defined(GNAV)
 
 ModelType GlobalModelType = MODELTYPE_PNA_PNA;
