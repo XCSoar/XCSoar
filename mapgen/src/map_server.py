@@ -179,7 +179,12 @@ form input.button:hover, form input.button:focus { background: #1B8D29; color: #
         
         return self.surround(status + "<br/>" + 
                              "<a href=\"/status?uuid=" + uuid + 
-                             "\">Refresh</a>")
+                             "\">Refresh</a>" + 
+"""
+<script>
+setTimeout(function(){ location.href = '/status?uuid=""" + uuid + """'; }, 10000);
+</script>
+""")
     
     @cherrypy.expose
     def download(self, uuid):
