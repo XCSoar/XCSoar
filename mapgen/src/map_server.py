@@ -80,11 +80,13 @@ class MapServer(object):
     @cherrypy.expose
     def style(self):
         return """body { margin: 0px; font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Helvetica, Arial, sans-serif; }
-form p, div { margin-bottom: 20px; padding-right: 20px; font-family: Georgia, serif; font-size: 22px; line-height: 40px; font-weight: normal; }
-form div.box { width: 580px; padding: 10px; margin-bottom: 4px; border: 1px solid #9f9c99; border-radius: 8px; font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Helvetica, Arial, sans-serif;  font-size: 20px; }
-form input.text { width: 100%; border: 0px; font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Helvetica, Arial, sans-serif;  font-size: 20px; }
-form input.button { width: 200px; cursor: pointer; padding: 8px 20px; margin-left: 205px; font-size: 18px; text-transform: uppercase; border: 0; border-radius: 8px; cursor: pointer; }
-form input.button:hover, form input.button:focus { background: #1B8D29; color: #fff; }
+p, div { margin-bottom: 20px; padding-right: 20px; font-family: Georgia, serif; font-size: 22px; line-height: 40px; font-weight: normal; }
+div.box { width: 580px; padding: 10px; margin-bottom: 4px; border: 1px solid #9f9c99; border-radius: 8px; font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Helvetica, Arial, sans-serif;  font-size: 20px; }
+input.text { width: 100%; border: 0px; font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Helvetica, Arial, sans-serif;  font-size: 20px; }
+input.button { width: 200px; background: #F0F0F0; cursor: pointer; padding: 8px 20px; margin-left: 205px; font-size: 18px; text-transform: uppercase; border: 0; border-radius: 8px; }
+input.button:hover, input.button:focus { background: #1B8D29; color: #fff; }
+a.button { text-align: center; text-decoration: none; color: #000; display: block; background: #F0F0F0; width: 200px; cursor: pointer; padding: 8px 20px; margin-left: 185px; font-size: 18px; text-transform: uppercase; border: 0; border-radius: 8px; }
+a.button:hover, a.button:focus { background: #1B8D29; color: #fff; }
 """
 
     @cherrypy.expose
@@ -118,7 +120,8 @@ form input.button:hover, form input.button:focus { background: #1B8D29; color: #
         return self.surround(html)
     
     def error(self, error):
-        return self.surround(error)
+        return self.surround("""<div><div class="box"><b>Error:</b> """ + error + """</div></div>
+        <a class="button" href="javascript:history.back()">Back</a>""")
     
     @cherrypy.expose
     def generate(self, name, mail1, mail2, waypoint_file):
@@ -176,16 +179,14 @@ form input.button:hover, form input.button:focus { background: #1B8D29; color: #
         if status == "Done":
             return self.surround("Map ready for <a href=\"/download?uuid=" +
                                  uuid + "\">Download</a>")
+        reload_script = """<script>
+        setTimeout(function(){ location.href = '/status?uuid=""" + uuid + """'; }, 10000);
+        </script>"""
         
-        return self.surround(status + "<br/>" + 
-                             "<a href=\"/status?uuid=" + uuid + 
-                             "\">Refresh</a>" + 
-"""
-<script>
-setTimeout(function(){ location.href = '/status?uuid=""" + uuid + """'; }, 10000);
-</script>
-""")
-    
+        return self.surround("""<div><div class="box"><b>Status:</b> """ + status + """</div></div>
+        <a class="button" href="/status?uuid=""" + uuid + """">Refresh</a>""" +
+        reload_script)
+ 
     @cherrypy.expose
     def download(self, uuid):
         if self.get_job_status(uuid) != "Done":
