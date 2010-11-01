@@ -1485,7 +1485,7 @@ PrepareConfigurationDialog()
   configuration_tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(configuration_tabbed != NULL);
 
-  if (!is_embedded() || !is_altair()) {
+  if (!is_embedded() || is_altair()) {
     wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
     if (wp) {
       wp->hide();
