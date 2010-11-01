@@ -134,7 +134,7 @@ form input.button:hover, form input.button:focus { background: #1B8D29; color: #
         if mail1 == "" or mail2 == "":
             return self.error("No eMail address given!")
         
-        if not os.path.exists(waypoint_file.file.name):
+        if not waypoint_file.file or not os.path.exists(waypoint_file.file.name):
             return self.error("Waypoint file could not be read!")
             
         uuid = self.generate_uuid()
