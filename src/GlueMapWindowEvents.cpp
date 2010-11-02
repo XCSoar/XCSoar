@@ -25,7 +25,6 @@ Copyright_License {
 #include "Message.hpp"
 #include "InputEvents.h"
 #include "Screen/Layout.hpp"
-#include "Screen/Event.hpp"
 #include "Appearance.hpp"
 #include "Defines.h"
 #include "Simulator.hpp"
@@ -305,7 +304,6 @@ GlueMapWindow::on_key_up(unsigned key_code)
 bool
 GlueMapWindow::on_key_press(unsigned key_code)
 {
-  key_code = TranscodeKey(key_code);
   if (is_altair() && key_code == 0xF5) {
     XCSoarInterface::SignalShutdown(false);
     return true;

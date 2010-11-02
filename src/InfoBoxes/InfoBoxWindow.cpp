@@ -29,7 +29,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/ContainerWindow.hpp"
-#include "Screen/Event.hpp"
 #include "Appearance.hpp"
 #include "Defines.h"
 #include "Asset.hpp"
@@ -448,8 +447,6 @@ InfoBoxWindow::on_resize(unsigned width, unsigned height)
 bool
 InfoBoxWindow::on_key_down(unsigned key_code)
 {
-  key_code = TranscodeKey(key_code);
-
   // Get the input event_id of the event
   unsigned event_id = InputEvents::key_to_event(InputEvents::MODE_INFOBOX,
                                                 key_code);
