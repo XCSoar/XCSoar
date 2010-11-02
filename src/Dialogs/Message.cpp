@@ -95,6 +95,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   // Create dialog
   WindowStyle style;
   style.hide();
+  style.control_parent();
 
   WndForm wf(XCSoarInterface::main_window,
              X, Y, Width, Height, lpCaption,
