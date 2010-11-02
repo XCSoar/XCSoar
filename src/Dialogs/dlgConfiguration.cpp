@@ -886,6 +886,8 @@ setVariables()
     dfe->addEnumText(_("OLC Sprint"));
     dfe->addEnumText(_("OLC FAI"));
     dfe->addEnumText(_("OLC Classic"));
+    dfe->addEnumText(_("OLC League"));
+    dfe->addEnumText(_("OLC Plus"));
     dfe->Set(settings_computer.contest);
     wp->RefreshDisplay();
   }
