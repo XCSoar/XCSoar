@@ -104,7 +104,7 @@ public:
    *
    * @return Distance (m)
    */
-  fixed calc_time() const;
+  virtual fixed calc_time() const;
 
   /**
    * Reset the optimiser as if never flown

@@ -97,7 +97,9 @@ ContestDijkstra::solve()
     save_solution();
     return true;
   }
-
+  if (m_dijkstra.empty()) {
+    return true;
+  }
   return false;
 }
 
