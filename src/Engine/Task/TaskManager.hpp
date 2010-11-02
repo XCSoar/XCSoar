@@ -40,7 +40,7 @@
 
 #include "Compiler.h"
 #include "Util/NonCopyable.hpp"
-#include "Tasks/AbortTask.hpp"
+#include "Tasks/AlternateTask.hpp"
 #include "Tasks/GotoTask.hpp"
 #include "Tasks/OrderedTask.hpp"
 #include "Tasks/ContestManager.hpp"
@@ -603,7 +603,7 @@ private:
 
   GotoTask task_goto;
   
-  AbortTask task_abort;
+  AlternateTask task_abort;
 
   ContestManager contest_manager;
 
