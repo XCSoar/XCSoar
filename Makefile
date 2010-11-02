@@ -439,7 +439,7 @@ call-%:
 
 $(addprefix all-,$(TARGETS)): all-%: $(OUTPUTS)
 
-EVERYTHING = $(OUTPUTS) debug-$(TARGET) build-check
+EVERYTHING = $(OUTPUTS) debug-$(TARGET) build-check build-harness
 
 everything-: $(addprefix call-everything-,$(DEFAULT_TARGETS))
 call-everything-%:
