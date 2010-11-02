@@ -669,7 +669,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
   if (terrain != NULL) {
     RasterTerrain::Lease map(*terrain);
 
-    POINT points[2 + AIRSPACE_SCANSIZE_X + 1];
+    POINT points[2 + AIRSPACE_SCANSIZE_X];
 
     POINT pf0, pf1;
     pf0.x = chart.screenX(range);
@@ -689,8 +689,6 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
 
       points[2 + j] = p;
     }
-
-    points[2 + AIRSPACE_SCANSIZE_X] = points[0];
 
     Brush a_brush(Chart::GROUND_COLOUR);
 
