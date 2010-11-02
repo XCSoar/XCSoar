@@ -53,6 +53,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "Atmosphere.h"
 #include "SettingsComputer.hpp"
+#include "SettingsMap.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
@@ -579,8 +580,6 @@ public:
                                    const GeoPoint start) :
     m_canvas(canvas), m_chart(chart), m_settings(settings), m_start(start)
   {
-    Pen mpen(Pen::BLANK, 0, Color(0xf0, 0xf0, 0xb0));
-    m_canvas.select(mpen);
   }
 
   void
@@ -588,6 +587,11 @@ public:
   {
     if (m_intersections.empty())
       return;
+
+    if (m_settings.bAirspaceBlackOutline)
+      m_canvas.black_pen();
+    else
+      m_canvas.select(Graphics::hAirspacePens[type]);
 
     m_canvas.select(Graphics::GetAirspaceBrushByClass(type, m_settings));
     m_canvas.set_text_color(Graphics::GetAirspaceColourByClass(type, m_settings));
