@@ -58,7 +58,7 @@ public:
    * @param n_legs Maximum number of legs in Contest task
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
-  AbstractContest(const TracePointVector &_trace, const unsigned n_legs,
+  AbstractContest(const TracePointVector &_trace,
                   const unsigned finish_alt_diff = 1000);
 
   /**

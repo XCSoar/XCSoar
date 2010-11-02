@@ -39,7 +39,6 @@
 #include "Task/TaskStats/ContestResult.hpp"
 
 AbstractContest::AbstractContest(const TracePointVector &_trace,
-                                 const unsigned n_legs,
                                  const unsigned finish_alt_diff):
   trace(_trace),
   m_finish_alt_diff(finish_alt_diff),

@@ -50,7 +50,7 @@
 ContestDijkstra::ContestDijkstra(const TracePointVector &_trace,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
-  AbstractContest(_trace, n_legs, finish_alt_diff),
+  AbstractContest(_trace, finish_alt_diff),
   NavDijkstra<TracePoint>(n_legs + 1),
   m_dijkstra(false),
   solution_found(false)
