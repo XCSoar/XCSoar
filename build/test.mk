@@ -29,6 +29,8 @@ TESTSLOW = \
 
 HARNESS_PROGRAMS = $(TESTFAST) $(TESTSLOW)
 
+build-harness: $(HARNESS_PROGRAMS)
+
 testslow: $(TESTSLOW)
 	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTSLOW)
 
