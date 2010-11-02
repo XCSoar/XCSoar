@@ -42,10 +42,7 @@ AbstractContest::AbstractContest(const TracePointVector &_trace,
                                  const unsigned finish_alt_diff):
   trace(_trace),
   m_finish_alt_diff(finish_alt_diff),
-  best_score(fixed_zero),
-  best_distance(fixed_zero),
-  best_speed(fixed_zero),
-  best_time(fixed_zero)
+  best_result()
 {
   reset();
 }
@@ -54,20 +51,14 @@ AbstractContest::AbstractContest(const TracePointVector &_trace,
 void
 AbstractContest::reset()
 {
-  best_score = fixed_zero;
-  best_distance = fixed_zero;
-  best_speed = fixed_zero;
-  best_time = fixed_zero;
+  best_result.reset();
 }
 
 bool
 AbstractContest::score(ContestResult &result)
 {
   if (positive(calc_time())) {
-    result.score = best_score;
-    result.distance = best_distance;
-    result.speed = best_speed;
-    result.time = best_time;
+    result = best_result;
     return true;
   }
   return false;
@@ -86,16 +77,16 @@ bool
 AbstractContest::save_solution()
 {
   const fixed score = calc_score();
-  const bool improved = (score>best_score);
+  const bool improved = (score>best_result.score);
 
   if (improved) {
-    best_score = score;
-    best_distance = calc_distance();
-    best_time = calc_time();
-    if (positive(best_time))
-      best_speed = best_distance / best_time;
+    best_result.score = score;
+    best_result.distance = calc_distance();
+    best_result.time = calc_time();
+    if (positive(best_result.time))
+      best_result.speed = best_result.distance / best_result.time;
     else
-      best_speed = fixed_zero;
+      best_result.speed = fixed_zero;
     return true;
   }
   return false;

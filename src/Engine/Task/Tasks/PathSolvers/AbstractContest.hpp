@@ -41,8 +41,7 @@
 #include "Navigation/TracePoint.hpp"
 #include "ScanTaskPoint.hpp"
 #include "Math/fixed.hpp"
-
-struct ContestResult;
+#include "Task/TaskStats/ContestResult.hpp"
 
 /**
  * Abstract class for contest searches
@@ -134,10 +133,7 @@ protected:
 
 private:
   const unsigned m_finish_alt_diff;
-  fixed best_score;
-  fixed best_distance;
-  fixed best_speed;
-  fixed best_time;
+  ContestResult best_result;
 };
 
 #endif
