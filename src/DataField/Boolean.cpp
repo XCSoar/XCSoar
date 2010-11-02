@@ -109,11 +109,11 @@ DataFieldBoolean::SetAsString(const TCHAR *Value)
 void
 DataFieldBoolean::Inc(void)
 {
-  SetAsBoolean(!GetAsBoolean());
+  SetAsBoolean(true);
 }
 
 void
 DataFieldBoolean::Dec(void)
 {
-  SetAsBoolean(!GetAsBoolean());
+  SetAsBoolean(false);
 }
