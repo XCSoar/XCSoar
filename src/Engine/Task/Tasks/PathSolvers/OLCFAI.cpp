@@ -71,6 +71,7 @@ OLCFAI::reset()
   is_complete = false;
   is_closed = false;
   first_tp = 0;
+  best_d = 0;
 }
 
 
