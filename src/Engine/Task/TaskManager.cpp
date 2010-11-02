@@ -243,7 +243,11 @@ TaskManager::update(const AIRCRAFT_STATE &state,
                     const AIRCRAFT_STATE& state_last)
 {
   // always update ordered task so even if we are temporarily
-  // in abort/goto mode, the task stats are still updated
+  // in a different mode, so the task stats are still updated.
+  // Otherwise, the task stats would freeze and sampling etc would
+  // not be performed.  In actual use, even if you are in Abort/Goto
+  // you still may want to go back to the task and have it know where
+  // you went with respect to your task turnpoints etc.
 
   bool retval = false;
 
