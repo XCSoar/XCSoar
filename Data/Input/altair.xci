@@ -67,15 +67,10 @@ event=AutoLogger stop
 # mode=default
 # ------------
 
-mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2 Preview
+mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2
 type=key
 data=ESCAPE
 event=Mode default
-
-mode=default
-type=key
-data=ESCAPE
-event=Mode Preview
 
 mode=pan
 type=key
@@ -210,60 +205,6 @@ data=RETURN
 event=FLARMRadar toggle
 event=ClearAirspaceWarnings
 event=ClearStatusMessages
-
-mode=Preview
-type=key
-data=F1
-event=ScreenModes togglebiginfo
-event=Mode default
-label=Big Info
-location=1
-
-mode=Preview
-type=key
-data=F2
-event=AddWaypoint landable
-event=Mode default
-label=Add Land
-location=2
-
-mode=Preview
-type=key
-data=6
-event=Setup Basic
-event=Mode default
-label=Flight\nSetup
-location=5
-
-mode=Preview
-type=key
-data=7
-event=Calculator
-label=Task\nCalc$(CheckTaskResumed)$(CheckTask)
-location=6
-
-mode=Preview
-type=key
-data=8
-event=Setup Task
-event=Mode default
-label=Task\nEdit$(CheckWaypointFile)
-location=7
-
-mode=Preview
-type=key
-data=9
-event=Setup Target
-label=$(CheckTask)$(CheckTaskResumed)Target
-location=8
-
-mode=Preview
-type=key
-data=0
-event=ArmAdvance show
-event=ArmAdvance toggle
-label=$(CheckTaskResumed)$(CheckTask)$(AdvanceArmed)
-location=9
 
 
 # ------------
