@@ -54,7 +54,7 @@ inline void load_score_file(std::ifstream& fscore,
 }
 
 
-inline void load_scores(void) {
+inline void load_scores(unsigned &contest_handicap) {
   // replay_file
   int index = replay_file.find_last_of(".");
   std::string score_file = replay_file.substr(0, index) + ".txt";
@@ -70,6 +70,8 @@ inline void load_scores(void) {
   load_score_file(fscore, official_score_fai);
   load_score_file(fscore, official_score_plus);
   fscore.close();
+
+  contest_handicap = (unsigned)official_index;
 }
 
 class ReplayLoggerSim: public IgcReplay
@@ -139,7 +141,7 @@ test_replay(const Contests olc_type,
   ConvertCToT(szFilename, replay_file.c_str());
   sim.SetFilename(szFilename);
 
-  load_scores();
+  load_scores(task_manager.get_task_behaviour().contest_handicap);
 
   if (verbose) {
     switch (olc_type) {
@@ -210,19 +212,8 @@ test_replay(const Contests olc_type,
   if (verbose) {
     distance_counts();
   }
-  ContestResult handicapped_result = task_manager.get_common_stats().olc;
-  fixed fact(fixed(200)/(fixed(100)+official_index));
-  switch (olc_type) {
-  case OLC_Sprint:
-  case OLC_League:
-    handicapped_result.score *= fact;
-    break;
-  default:
-    handicapped_result.score *= fixed(100)/official_index;
-  };
-
   return compare_scores(official_score, 
-                        handicapped_result);
+                        task_manager.get_common_stats().olc);
 }
 
 

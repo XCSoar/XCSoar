@@ -48,12 +48,8 @@ class OLCLeague:
   public AbstractContest
 {
 public:
-  /**
-   * Constructor
-   *
-   * @param _trace Trace object reference to use for solving
-   */
-  OLCLeague(const Trace &_trace);
+  OLCLeague(const Trace &_trace,
+    const unsigned& _handicap);
 
   bool score(ContestResult &result);
 

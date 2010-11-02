@@ -41,8 +41,10 @@
 
 
 AbstractContest::AbstractContest(const Trace &_trace,
+                                 const unsigned &_handicap,
                                  const unsigned finish_alt_diff):
   trace_master(_trace),
+  contest_handicap(_handicap),
   m_finish_alt_diff(finish_alt_diff),
   best_result()
 {
@@ -100,4 +102,15 @@ AbstractContest::finish_altitude_valid(const TracePoint& start,
 {
   return (finish.NavAltitude + fixed(m_finish_alt_diff) >=
           start.NavAltitude);
+}
+
+fixed 
+AbstractContest::apply_handicap(const fixed& unhandicapped_score,
+                                const bool shifted) const
+{
+  if (shifted) {
+    return (200*unhandicapped_score/(100+contest_handicap));
+  } else {
+    return (100*unhandicapped_score/contest_handicap);
+  }
 }

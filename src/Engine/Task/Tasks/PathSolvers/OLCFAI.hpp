@@ -47,11 +47,8 @@ class OLCFAI:
   public ContestDijkstra
 {
 public:
-  /**
-   * Constructor
-   *
-   */
-  OLCFAI(const Trace &_trace);
+  OLCFAI(const Trace &_trace,
+         const unsigned &_handicap);
 
   fixed calc_score() const;
   fixed calc_distance() const;

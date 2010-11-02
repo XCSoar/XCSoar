@@ -37,8 +37,9 @@
 
 #include "OLCClassic.hpp"
 
-OLCClassic::OLCClassic(const Trace &_trace):
-  ContestDijkstra(_trace, 6, 1000) {}
+OLCClassic::OLCClassic(const Trace &_trace,
+                       const unsigned &_handicap):
+  ContestDijkstra(_trace, _handicap, 6, 1000) {}
 
 void 
 OLCClassic::set_weightings()

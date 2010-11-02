@@ -48,10 +48,8 @@ class OLCPlus:
   public AbstractContest
 {
 public:
-  /**
-   * Constructor
-   */
-  OLCPlus(const Trace &_trace);
+  OLCPlus(const Trace &_trace,
+          const unsigned &_handicap);
 
   virtual void copy_solution(TracePointVector &vec) const;
 

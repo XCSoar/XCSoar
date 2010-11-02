@@ -47,12 +47,8 @@ class OLCClassic:
   public ContestDijkstra
 {
 public:
-  /**
-   * Constructor
-   *
-   * @param _olc The OLC task to solve for
-   */
-  OLCClassic(const Trace &_trace);
+  OLCClassic(const Trace &_trace,
+             const unsigned &_handicap);
 
 protected:
   void set_weightings();

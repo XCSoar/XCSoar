@@ -38,8 +38,9 @@
 #include "Trace/Trace.hpp"
 #include <assert.h>
 
-OLCLeague::OLCLeague(const Trace &_trace):
-  AbstractContest(_trace, 0)
+OLCLeague::OLCLeague(const Trace &_trace,
+                     const unsigned &_handicap):
+  AbstractContest(_trace, _handicap, 0)
 {
   reset();
 }
@@ -144,8 +145,7 @@ OLCLeague::calc_distance() const
 fixed 
 OLCLeague::calc_score() const
 {
-  // @todo: apply handicap *(200/(100+handicap)
-  return calc_distance()/fixed(2500);
+  return apply_handicap(calc_distance()/fixed(2500), true);
 }
 
 

@@ -56,8 +56,9 @@
   4: end
 */
 
-OLCFAI::OLCFAI(const Trace &_trace):
-  ContestDijkstra(_trace, 3, 1000),
+OLCFAI::OLCFAI(const Trace &_trace,
+  const unsigned &_handicap):
+  ContestDijkstra(_trace, _handicap, 3, 1000),
   is_closed(false),
   is_complete(false),
   first_tp(0) 
@@ -279,8 +280,7 @@ OLCFAI::calc_time() const
 fixed
 OLCFAI::calc_score() const
 {
-  // @todo: apply handicap
-  return calc_distance()*fixed(0.0003);
+  return apply_handicap(calc_distance()*fixed(0.0003));
 }
 
 void

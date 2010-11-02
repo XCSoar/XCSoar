@@ -38,8 +38,9 @@
 #include "Trace/Trace.hpp"
 #include <assert.h>
 
-OLCPlus::OLCPlus(const Trace &_trace):
-  AbstractContest(_trace, 0)
+OLCPlus::OLCPlus(const Trace &_trace,
+                 const unsigned &_handicap):
+  AbstractContest(_trace, _handicap, 0)
 {
   reset();
 }
@@ -80,8 +81,7 @@ OLCPlus::calc_distance() const
 fixed 
 OLCPlus::calc_score() const
 {
-  // @todo: apply handicap
-  return (result_classic.distance + fixed(0.3)*result_fai.distance)*fixed(0.001);
+  return apply_handicap((result_classic.distance + fixed(0.3)*result_fai.distance)*fixed(0.001));
 }
 
 

@@ -4,18 +4,19 @@
 #include "Trace/Trace.hpp"
 
 ContestManager::ContestManager(const Contests _contest,
-                             ContestResult &_result,
-                             const Trace& trace_full,
-                             const Trace& trace_sprint):
+                               const unsigned &_handicap,
+                               ContestResult &_result,
+                               const Trace& trace_full,
+                               const Trace& trace_sprint):
   contest(_contest),
   result(_result),
   trace_full(trace_full),
   trace_sprint(trace_sprint),
-  olc_sprint(trace_sprint),
-  olc_fai(trace_full),
-  olc_classic(trace_full),
-  olc_league(trace_sprint),
-  olc_plus(trace_full)
+  olc_sprint(trace_sprint, _handicap),
+  olc_fai(trace_full, _handicap),
+  olc_classic(trace_full, _handicap),
+  olc_league(trace_sprint, _handicap),
+  olc_plus(trace_full, _handicap)
 {
   reset();
 }

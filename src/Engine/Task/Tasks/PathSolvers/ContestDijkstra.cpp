@@ -47,9 +47,10 @@ unsigned long ContestDijkstra::count_olc_trace = 0;
 unsigned ContestDijkstra::count_olc_size = 0;
 
 ContestDijkstra::ContestDijkstra(const Trace &_trace,
+                                 const unsigned &_handicap,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
-  AbstractContest(_trace, finish_alt_diff),
+  AbstractContest(_trace, _handicap, finish_alt_diff),
   NavDijkstra<TracePoint>(n_legs + 1),
   m_dijkstra(false),
   solution_found(false)
@@ -216,8 +217,8 @@ ContestDijkstra::calc_score() const
 
   static const fixed fixed_fifth(0.0002);
   score *= fixed_fifth;
-  // @todo: apply handicap
-  return score;
+
+  return apply_handicap(score);
 }
 
 void

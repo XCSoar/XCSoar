@@ -61,7 +61,9 @@ public:
    * @param n_legs Maximum number of legs in Contest task
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
-  ContestDijkstra(const Trace &_trace, const unsigned n_legs,
+  ContestDijkstra(const Trace &_trace, 
+                  const unsigned &_handicap,
+                  const unsigned n_legs,
                   const unsigned finish_alt_diff = 1000);
 
   bool score(ContestResult &result);

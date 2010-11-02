@@ -28,6 +28,7 @@ public:
    * Base constructor.
    * 
    * @param _contest Contests that shall be used
+   * @param _handicap Contest handicap factor
    * @param _result ContestRules to write result to
    * @param trace_full Trace object reference
    * containing full flight history for scanning
@@ -35,8 +36,10 @@ public:
    * containing 2.5 hour flight history for scanning
    */
   ContestManager(const Contests _contest,
-                ContestResult &_result, const Trace &trace_full,
-                const Trace &trace_sprint);
+                 const unsigned &_handicap,
+                 ContestResult &_result,
+                 const Trace &trace_full,
+                 const Trace &trace_sprint);
 
   void set_contest(Contests _contest) {
     contest = _contest;

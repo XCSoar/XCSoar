@@ -56,10 +56,12 @@ public:
    * Constructor
    *
    * @param _trace Trace object reference to use to retrieve shorter trace for solving
+   * @param _handicap Contest handicap factor
    * @param n_legs Maximum number of legs in Contest task
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
   AbstractContest(const Trace &_trace,
+                  const unsigned &_handicap,
                   const unsigned finish_alt_diff = 1000);
 
   /**
@@ -129,11 +131,21 @@ protected:
   bool finish_altitude_valid(const TracePoint& start,
                              const TracePoint& finish) const;
 
-protected:
   const Trace &trace_master;
   virtual bool save_solution();
 
+  /**
+   * Apply handicap.
+   *
+   * @param unhandicapped_score
+   * @param shifted if true, apply (h+100)/200, otherwise h/100
+   *
+   * @return Handicap adjusted score
+   */
+  fixed apply_handicap(const fixed& unhandicapped_score, const bool shifted=false) const;
+
 private:
+  const unsigned &contest_handicap;
   const unsigned m_finish_alt_diff;
   ContestResult best_result;
 };

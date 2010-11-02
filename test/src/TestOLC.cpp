@@ -49,21 +49,25 @@
 
 Trace full_trace;
 Trace sprint_trace(9000, 2, 300);
+unsigned handicap = 100;
 
 ContestResult stats_classic;
-ContestManager olc_classic(OLC_Classic, stats_classic,
+ContestManager olc_classic(OLC_Classic, handicap, 
+                           stats_classic,
                            full_trace, sprint_trace);
 
 ContestResult stats_fai;
-ContestManager olc_fai(OLC_FAI, stats_fai,
+ContestManager olc_fai(OLC_FAI, handicap, stats_fai,
                        full_trace, sprint_trace);
 
 ContestResult stats_sprint;
-ContestManager olc_sprint(OLC_Sprint, stats_sprint,
+ContestManager olc_sprint(OLC_Sprint, handicap, 
+                          stats_sprint,
                           full_trace, sprint_trace);
 
 ContestResult stats_league;
-ContestManager olc_league(OLC_League, stats_league,
+ContestManager olc_league(OLC_League, handicap, 
+                          stats_league,
                           full_trace, sprint_trace);
 
 class IgcReplayGlue:

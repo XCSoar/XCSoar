@@ -50,7 +50,8 @@ public:
   /**
    * Constructor
    */
-  OLCSprint(const Trace &_trace);
+  OLCSprint(const Trace &_trace,
+            const unsigned &_handicap);
 
   void reset();
 
