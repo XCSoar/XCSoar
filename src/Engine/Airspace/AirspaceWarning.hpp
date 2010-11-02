@@ -40,6 +40,10 @@
 #include "AirspaceInterceptSolution.hpp"
 #include "Compiler.h"
 
+#ifdef DO_PRINT
+#include <iostream>
+#endif
+
 class AbstractAirspace;
 
 /**

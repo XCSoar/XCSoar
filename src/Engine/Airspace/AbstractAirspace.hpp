@@ -43,6 +43,10 @@
 #include "Navigation/GeoPoint.hpp"
 #include "Compiler.h"
 
+#ifdef DO_PRINT
+#include <iostream>
+#endif
+
 struct AIRCRAFT_STATE;
 struct GeoVector;
 class AtmosphericPressure;

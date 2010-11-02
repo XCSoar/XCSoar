@@ -40,6 +40,10 @@
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "AbstractAirspace.hpp"
 
+#ifdef DO_PRINT
+#include <iostream>
+#endif
+
 class AtmosphericPressure;
 
 /**

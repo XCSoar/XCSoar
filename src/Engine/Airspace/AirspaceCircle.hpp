@@ -40,6 +40,10 @@
 
 #include "AbstractAirspace.hpp"
 
+#ifdef DO_PRINT
+#include <iostream>
+#endif
+
 /**
  * Airspace object defined by the area within a distance (radius) from a center point 
  */

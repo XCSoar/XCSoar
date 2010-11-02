@@ -41,10 +41,6 @@
 
 // Abstract classes
 
-#ifdef DO_PRINT
-#include <iostream>
-#endif
-
 class DataNode;
 #include "tstring.hpp"
 

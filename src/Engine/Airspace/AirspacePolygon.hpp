@@ -41,6 +41,10 @@
 #include "Navigation/SearchPointVector.hpp"
 #include <vector>
 
+#ifdef DO_PRINT
+#include <iostream>
+#endif
+
 /**
  * General polygon form airspace
  *

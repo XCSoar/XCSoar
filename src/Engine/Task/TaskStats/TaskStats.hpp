@@ -39,6 +39,10 @@
 
 #include "ElementStat.hpp"
 
+#ifdef DO_PRINT
+#include <iostream>
+#endif
+
 /**
  * Container for common task statistics
  */

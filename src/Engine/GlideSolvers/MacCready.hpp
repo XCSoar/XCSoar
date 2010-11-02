@@ -37,10 +37,6 @@
 #ifndef MACCREADY_HPP
 #define MACCREADY_HPP
 
-#ifdef DO_PRINT
-#include <iostream>
-#endif
-
 #include "Math/fixed.hpp"
 
 struct GlideState;
