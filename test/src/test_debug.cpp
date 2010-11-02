@@ -1,11 +1,9 @@
 #include "test_debug.hpp"
 #include "harness_task.hpp"
 #include "harness_flight.hpp"
+#include "Task/Tasks/PathSolvers/ContestDijkstra.hpp"
 #include <stdlib.h>
-
-#ifdef DO_PRINT
 #include <stdio.h>
-#endif
 
 int n_samples = 0;
 int interactive = 0;
@@ -28,13 +26,11 @@ long count_dijkstra_links = 0;
 long count_dijkstra_queries = 0;
 extern unsigned n_queries;
 extern unsigned count_distbearing;
-long count_olc = 0;
 #endif
 
 
 void distance_counts() {
   if (n_samples) {
-#ifdef DO_PRINT
     printf("# Instrumentation\n");
 #ifdef INSTRUMENT_TASK
     printf("#     dist+bearing calcs/c %d\n",count_distbearing/n_samples); 
@@ -43,15 +39,13 @@ void distance_counts() {
       printf("#     intersection tests/q %d\n",(unsigned)(count_intersections/n_queries));
       printf("#    (total queries %d)\n\n",n_queries);
     }
-    if (count_olc>0) {
-      printf("#     q/olc_res %d\n",(unsigned)(n_samples/count_olc));
-    }
     if (count_dijkstra_queries>0) {
       printf("#     dijkstra links/q %d\n", (unsigned)(count_dijkstra_links/count_dijkstra_queries));
     }
 #endif
-    printf("#    (total cycles %d)\n\n",n_samples);
-#endif
+    printf("#     count_olc_solve %d\n", (int)ContestDijkstra::count_olc_solve);
+    printf("#     count_olc_trace %d\n", (int)ContestDijkstra::count_olc_trace);
+    printf("#    (total cycles %d)\n#\n",n_samples);
   }
   n_samples = 0;
 #ifdef INSTRUMENT_TASK
