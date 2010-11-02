@@ -51,7 +51,7 @@ public:
   /**
    * Constructor
    */
-  OLCPlus(const TracePointVector &_trace);
+  OLCPlus(const Trace &_trace);
 
   virtual void copy_solution(TracePointVector &vec) const;
 

@@ -51,9 +51,9 @@ public:
   /**
    * Constructor
    *
-   * @param _trace TracePointVector object reference to use for solving
+   * @param _trace Trace object reference to use for solving
    */
-  OLCLeague(const TracePointVector &_trace);
+  OLCLeague(const Trace &_trace);
 
   bool score(ContestResult &result);
 

@@ -37,7 +37,7 @@
 
 #include "OLCClassic.hpp"
 
-OLCClassic::OLCClassic(const TracePointVector &_trace):
+OLCClassic::OLCClassic(const Trace &_trace):
   ContestDijkstra(_trace, 6, 1000) {}
 
 void 

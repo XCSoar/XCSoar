@@ -57,11 +57,11 @@ public:
   /**
    * Constructor
    *
-   * @param _trace TracePointVector object reference to use for solving
+   * @param _trace Trace object reference to use for solving
    * @param n_legs Maximum number of legs in Contest task
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
-  ContestDijkstra(const TracePointVector &_trace, const unsigned n_legs,
+  ContestDijkstra(const Trace &_trace, const unsigned n_legs,
                   const unsigned finish_alt_diff = 1000);
 
   bool score(ContestResult &result);
@@ -88,6 +88,11 @@ public:
 protected:
   /** Number of points in current trace set */
   unsigned n_points;
+
+  /** Update working trace from master --- never to be done during a solution! */
+  void update_trace();
+
+  TracePointVector trace; // working trace for solver
 
   /**
    * Determine if a trace point can be added to the search list

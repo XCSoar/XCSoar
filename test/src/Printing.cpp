@@ -587,6 +587,7 @@ std::ostream& operator<< (std::ostream& f,
 void
 PrintHelper::contestmanager_print(const ContestManager& man)  
 {
+/*
   {
     std::ofstream fs("results/res-olc-trace.txt");
 
@@ -608,7 +609,7 @@ PrintHelper::contestmanager_print(const ContestManager& man)
          << "\n";
     }
   }
-
+*/
   std::ofstream fs("results/res-olc-solution.txt");
 
   if (man.solution.empty()) {

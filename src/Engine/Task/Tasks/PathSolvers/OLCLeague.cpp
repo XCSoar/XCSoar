@@ -38,7 +38,7 @@
 #include "Trace/Trace.hpp"
 #include <assert.h>
 
-OLCLeague::OLCLeague(const TracePointVector &_trace):
+OLCLeague::OLCLeague(const Trace &_trace):
   AbstractContest(_trace, 0)
 {
   reset();
@@ -66,25 +66,18 @@ OLCLeague::reset()
 bool
 OLCLeague::solve()
 {
-  const unsigned n_points = trace.size();
-  unsigned index_start = 0;
-  const TracePoint tp_finish = trace[n_points-1];
-  const unsigned end_time = tp_finish.time;
-  if (end_time > 9000) {
-    const unsigned start_time = end_time-9000;
-    while (trace[index_start].time< start_time) {
-      ++index_start;
-    }
+  TracePointVector trace = trace_master.get_trace_points(2);
+  if (trace.size()!=2) {
+    return false;
   }
-  const TracePoint tp_start = trace[index_start];
 
-  if (!finish_altitude_valid(tp_start, tp_finish)) {
+  if (!finish_altitude_valid(trace[0], trace[1])) {
     return false;
   }
 
   // solution found, so set start/finish points
-  solution[0] = tp_start;
-  solution[4] = tp_finish;
+  solution[0] = trace[0];
+  solution[4] = trace[1];
 
   // scan through classic solution to find points there to add
 
@@ -92,7 +85,7 @@ OLCLeague::solve()
 
   for (unsigned index_classic = 1; index_classic+1 < solution_classic.size(); ++index_classic) {
     if ((solution_classic[index_classic].time > solution[index_fill-1].time)
-        &&(solution_classic[index_classic].time < end_time)) {
+        &&(solution_classic[index_classic].time < trace[1].time)) {
 
       solution[index_fill] = solution_classic[index_classic];
       index_fill++;
@@ -109,6 +102,7 @@ OLCLeague::solve()
   }
 
   solution_found = true;
+
   return true;
 }
 

@@ -43,15 +43,6 @@ public:
   }
 
   /**
-   * Update internal states when aircraft state advances.
-   *
-   * @param state Aircraft state at this time step
-   *
-   * @return True if internal state changes
-   */
-  bool update_sample(const AIRCRAFT_STATE &state);
-
-  /**
    * Update internal states (non-essential) for housework,
    * or where functions are slow and would cause loss to real-time performance.
    *
@@ -79,9 +70,6 @@ private:
   const Trace &trace_full;
   const Trace &trace_sprint;
 
-  TracePointVector trace_points_full;
-  TracePointVector trace_points_sprint;
-
   TracePointVector solution;
 
   bool run_contest(AbstractContest& the_contest, 
@@ -93,10 +81,6 @@ private:
   OLCClassic olc_classic;
   OLCLeague olc_league;
   OLCPlus olc_plus;
-
-  void update_trace();
-
-  bool update_trace_sample(const AIRCRAFT_STATE &state, TracePointVector& vec);
 };
 
 #endif

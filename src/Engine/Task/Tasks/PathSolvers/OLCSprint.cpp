@@ -65,7 +65,7 @@
     potentially implement as circular buffer (emulate as dequeue)
 */
 
-OLCSprint::OLCSprint(const TracePointVector &_trace):
+OLCSprint::OLCSprint(const Trace &_trace):
   ContestDijkstra(_trace, 4, 0) {}
 
 void

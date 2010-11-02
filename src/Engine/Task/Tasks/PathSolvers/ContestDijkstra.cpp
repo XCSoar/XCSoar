@@ -42,7 +42,7 @@
 #include <algorithm>
 #include <assert.h>
 
-ContestDijkstra::ContestDijkstra(const TracePointVector &_trace,
+ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
   AbstractContest(_trace, finish_alt_diff),
@@ -73,36 +73,49 @@ ContestDijkstra::score(ContestResult &result)
 }
 
 
+void
+ContestDijkstra::update_trace()
+{
+  trace = trace_master.get_trace_points(300);
+  n_points = trace.size();
+}
+
+
 bool
 ContestDijkstra::solve()
 {
   if (m_dijkstra.empty()) {
     set_weightings();
-    n_points = trace.size();
   }
 
-  if (n_points < num_stages)
+  if (n_points < num_stages) {
+    update_trace();
     return true;
+  }
 
   if (m_dijkstra.empty()) {
     m_dijkstra.restart(ScanTaskPoint(0, 0));
     start_search();
     add_start_edges();
-    if (m_dijkstra.empty())
+    if (m_dijkstra.empty()) {
       // no processing to perform!
       // @todo
       // problem with this is it will immediately ask
       // ContestManager for new data, which will be expensive
       // instead, new data should arrive only when preconditions
       // are satisfied (significant difference and valid)
+      update_trace();
       return true;
+    }
   }
 
   if (distance_general(m_dijkstra, 25)) {
     save_solution();
+    update_trace();
     return true;
   }
   if (m_dijkstra.empty()) {
+    update_trace();
     return true;
   }
   return false;
@@ -114,6 +127,7 @@ ContestDijkstra::reset()
   n_points = 0;
   solution_found = false;
   m_dijkstra.clear();
+  trace.clear();
   AbstractContest::reset();
 }
 
@@ -228,6 +242,9 @@ ContestDijkstra::start_search()
 {
   // nothing required by default
 }
+
+
+
 
 /*
 

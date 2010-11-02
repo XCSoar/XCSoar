@@ -49,10 +49,8 @@ class OLCSprint:
 public:
   /**
    * Constructor
-   *
-   * @param _olc The OLC task to solve for
    */
-  OLCSprint(const TracePointVector &_trace);
+  OLCSprint(const Trace &_trace);
 
   void reset();
 

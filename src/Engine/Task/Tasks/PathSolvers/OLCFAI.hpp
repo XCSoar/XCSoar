@@ -50,9 +50,8 @@ public:
   /**
    * Constructor
    *
-   * @param _olc The OLC task to solve for
    */
-  OLCFAI(const TracePointVector &_trace);
+  OLCFAI(const Trace &_trace);
 
   fixed calc_score() const;
   fixed calc_distance() const;

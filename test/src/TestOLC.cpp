@@ -117,11 +117,6 @@ IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
   full_trace.append(new_state);
   sprint_trace.append(new_state);
 
-  olc_classic.update_sample(new_state);
-  olc_fai.update_sample(new_state);
-  olc_sprint.update_sample(new_state);
-  olc_league.update_sample(new_state);
-
   full_trace.optimise_if_old();
   sprint_trace.optimise_if_old();
 }

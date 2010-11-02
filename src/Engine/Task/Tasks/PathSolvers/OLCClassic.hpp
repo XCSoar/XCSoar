@@ -52,7 +52,7 @@ public:
    *
    * @param _olc The OLC task to solve for
    */
-  OLCClassic(const TracePointVector &_trace);
+  OLCClassic(const Trace &_trace);
 
 protected:
   void set_weightings();

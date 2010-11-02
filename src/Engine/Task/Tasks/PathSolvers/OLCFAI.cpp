@@ -56,7 +56,7 @@
   4: end
 */
 
-OLCFAI::OLCFAI(const TracePointVector &_trace):
+OLCFAI::OLCFAI(const Trace &_trace):
   ContestDijkstra(_trace, 3, 1000),
   is_closed(false),
   is_complete(false),

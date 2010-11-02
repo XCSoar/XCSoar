@@ -37,10 +37,12 @@
 
 #include "ContestDijkstra.hpp"
 #include "Task/TaskStats/ContestResult.hpp"
+#include "Trace/Trace.hpp"
 
-AbstractContest::AbstractContest(const TracePointVector &_trace,
+
+AbstractContest::AbstractContest(const Trace &_trace,
                                  const unsigned finish_alt_diff):
-  trace(_trace),
+  trace_master(_trace),
   m_finish_alt_diff(finish_alt_diff),
   best_result()
 {

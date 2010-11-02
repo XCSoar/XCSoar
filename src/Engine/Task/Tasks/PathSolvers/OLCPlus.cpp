@@ -38,7 +38,7 @@
 #include "Trace/Trace.hpp"
 #include <assert.h>
 
-OLCPlus::OLCPlus(const TracePointVector &_trace):
+OLCPlus::OLCPlus(const Trace &_trace):
   AbstractContest(_trace, 0)
 {
   reset();

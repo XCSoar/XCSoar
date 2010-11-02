@@ -43,6 +43,8 @@
 #include "Math/fixed.hpp"
 #include "Task/TaskStats/ContestResult.hpp"
 
+class Trace;
+
 /**
  * Abstract class for contest searches
  *
@@ -53,11 +55,11 @@ public:
   /**
    * Constructor
    *
-   * @param _trace TracePointVector object reference to use for solving
+   * @param _trace Trace object reference to use to retrieve shorter trace for solving
    * @param n_legs Maximum number of legs in Contest task
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
-  AbstractContest(const TracePointVector &_trace,
+  AbstractContest(const Trace &_trace,
                   const unsigned finish_alt_diff = 1000);
 
   /**
@@ -128,7 +130,7 @@ protected:
                              const TracePoint& finish) const;
 
 protected:
-  const TracePointVector &trace;
+  const Trace &trace_master;
   virtual bool save_solution();
 
 private:

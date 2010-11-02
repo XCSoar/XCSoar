@@ -15,37 +15,15 @@ ContestManager::ContestManager(const Contests _contest,
   result(_result),
   trace_full(trace_full),
   trace_sprint(trace_sprint),
-  olc_sprint(trace_points_sprint),
-  olc_fai(trace_points_full),
-  olc_classic(trace_points_full),
-  olc_league(trace_points_sprint),
-  olc_plus(trace_points_full)
+  olc_sprint(trace_sprint),
+  olc_fai(trace_full),
+  olc_classic(trace_full),
+  olc_league(trace_sprint),
+  olc_plus(trace_full)
 {
   reset();
 }
 
-bool 
-ContestManager::update_trace_sample(const AIRCRAFT_STATE &state,
-                                   TracePointVector& vec)
-{
-  if (vec.empty())
-    return false;
-    
-  if (state.NavAltitude < vec.back().NavAltitude) {
-    // replace if lower even if not significant distance away
-    vec.back().NavAltitude = state.NavAltitude;
-    return true;
-  }
-
-  return false;
-}
-
-bool 
-ContestManager::update_sample(const AIRCRAFT_STATE &state)
-{
-  return update_trace_sample(state, trace_points_full) |
-         update_trace_sample(state, trace_points_sprint);
-}
 
 #ifdef INSTRUMENT_TASK
 extern long count_olc;
@@ -62,9 +40,8 @@ ContestManager::run_contest(AbstractContest &the_contest,
     return false;
 
   // if no improved solution was found, must have finished processing
-  // with invalid data so need to retrieve new trace
+  // with invalid data
   if (!the_contest.score(contest_result)) {
-    update_trace();
     return true;
   }
 
@@ -72,7 +49,6 @@ ContestManager::run_contest(AbstractContest &the_contest,
   // and retrieve new trace.
 
   the_contest.copy_solution(contest_solution);
-  update_trace();
 
 #ifdef INSTRUMENT_TASK
   count_olc++;
@@ -81,12 +57,6 @@ ContestManager::run_contest(AbstractContest &the_contest,
   return true;
 }
 
-void
-ContestManager::update_trace()
-{
-  trace_points_full = trace_full.get_trace_points(300);
-  trace_points_sprint = trace_sprint.get_trace_points(300);
-}
 
 bool 
 ContestManager::update_idle()
@@ -94,9 +64,6 @@ ContestManager::update_idle()
   // \todo: possibly scan each type in a round robin fashion?
   bool retval = false;
   ContestResult dummy_result;
-
-  if (trace_points_full.size() < 10)
-    update_trace();
 
   switch (contest) {
   case OLC_Sprint:
@@ -127,8 +94,6 @@ ContestManager::update_idle()
 void
 ContestManager::reset()
 {
-  trace_points_full.clear();
-  trace_points_sprint.clear();
   solution.clear();
   olc_sprint.reset();
   olc_fai.reset();
