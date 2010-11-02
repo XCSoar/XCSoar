@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_EVENT_HPP
 #define XCSOAR_SCREEN_EVENT_HPP
 
+#include "Util/NonCopyable.hpp"
 #include "Compiler.h"
 
 #ifdef ENABLE_SDL
@@ -33,7 +34,7 @@ Copyright_License {
 
 class TopWindow;
 
-class EventLoop {
+class EventLoop : private NonCopyable {
   TopWindow &top_window;
 
   /**
