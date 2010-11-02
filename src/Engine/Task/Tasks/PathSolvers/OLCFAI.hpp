@@ -65,13 +65,18 @@ protected:
   bool triangle_closed() const;
 
   unsigned second_leg_distance(const ScanTaskPoint &dest,
-    unsigned &best_d) const;
+    unsigned &best) const;
 
   void add_edges(DijkstraTaskPoint &dijkstra,
                  const ScanTaskPoint &curNode);
 
   bool is_closed;
   bool is_complete;
+  unsigned best_d;
+
+  void start_search();
+private:
+  void add_start_edges();
 };
 
 #endif

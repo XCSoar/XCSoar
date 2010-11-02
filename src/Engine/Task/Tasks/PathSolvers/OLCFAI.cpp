@@ -21,7 +21,7 @@
 */
 
 OLCFAI::OLCFAI(const TracePointVector &_trace):
-  ContestDijkstra(_trace, 2, 1000),
+  ContestDijkstra(_trace, 3, 1000),
   is_closed(false),
   is_complete(false) {}
 
@@ -65,14 +65,14 @@ OLCFAI::finish_satisfied(const ScanTaskPoint &sp) const
 
 unsigned 
 OLCFAI::second_leg_distance(const ScanTaskPoint &destination,
-                            unsigned &best_d) const
+  unsigned &best) const
 {
   // this is a heuristic to remove invalid triangles
   // we do as much of this in flat projection for speed
 
-  const unsigned df_1 = solution[0].flat_distance(solution[1])/32;
-  const unsigned df_2 = solution[1].flat_distance(get_point(destination))/32;
-  const unsigned df_3 = get_point(destination).flat_distance(solution[0])/32;
+  const unsigned df_1 = solution[0].flat_distance(solution[1]);
+  const unsigned df_2 = solution[1].flat_distance(solution[2]);
+  const unsigned df_3 = solution[2].flat_distance(solution[0]);
   const unsigned df_total = df_1+df_2+df_3;
 
   // require some distance!
@@ -81,7 +81,7 @@ OLCFAI::second_leg_distance(const ScanTaskPoint &destination,
   }
 
   // no point scanning if worst than best
-  if (df_total< best_d) {
+  if (df_total<= best) {
     return 0;
   }
 
@@ -95,12 +95,12 @@ OLCFAI::second_leg_distance(const ScanTaskPoint &destination,
     return 0;
   }
 
-  const unsigned d = df_3+df_1;
+  const unsigned d = df_3+df_2;
 
   if (shortest*25>=df_total*7) { 
     // passes min > 28% rule,
     // this automatically means we pass max > 45% worst-case
-    best_d = d;
+    best = df_total;
     return d;
   }
 
@@ -125,14 +125,25 @@ OLCFAI::second_leg_distance(const ScanTaskPoint &destination,
   // this is a slight approximation, but saves having to do
   // three accurate distance calculations.
 
-  const fixed d_total(df_total*leg/shortest);
+  const fixed d_total((df_total*leg)/shortest);
   if (d_total>=fixed(500000)) {
     // long distance, ok that it failed 28% rule
-    best_d = d;
+    best = df_total;
     return d;
   }
-
   return 0;
+}
+
+
+void
+OLCFAI::add_start_edges()
+{
+  // use last point as single start,
+  // this is out of order but required
+
+  m_dijkstra.pop();
+  ScanTaskPoint destination(0, n_points-1);
+  m_dijkstra.link(destination, destination, 0);
 }
 
 
@@ -141,12 +152,11 @@ OLCFAI::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
 {
   ScanTaskPoint destination(origin.first+1, origin.second+1);
 
-  unsigned best_d = 0;
-
   switch (destination.first) {
   case 1:
-    is_complete = false;
-    for (; destination.second != n_points; ++destination.second) {
+    // add points up to finish
+    for (destination.second=0; destination.second < origin.second; 
+         ++destination.second) {
       const unsigned d = get_weighting(origin.first) *
         distance(origin, destination);
       dijkstra.link(destination, origin, d);
@@ -156,7 +166,7 @@ OLCFAI::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
     find_solution(dijkstra, origin);
 
     // give first leg points to penultimate node
-    for (; destination.second < n_points; ++destination.second) {
+    for (; destination.second < n_points-1; ++destination.second) {
       solution[2] = get_point(destination);
       const unsigned d = second_leg_distance(destination, best_d);
       if (d) {
@@ -164,6 +174,11 @@ OLCFAI::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
         is_complete = true;
       }
     }
+    break;
+  case 3:
+    // dummy just to close the triangle
+    destination.second = n_points-1;
+    dijkstra.link(destination, origin, 0);
     break;
   default:
     assert(1);
@@ -196,4 +211,11 @@ OLCFAI::calc_score() const
 {
   // @todo: apply handicap
   return calc_distance()*fixed(0.0003);
+}
+
+void
+OLCFAI::start_search()
+{
+  is_complete = false;
+  best_d = 0;
 }
