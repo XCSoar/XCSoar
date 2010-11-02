@@ -159,6 +159,15 @@ protected:
    */
   virtual void start_search();
 
+  /**
+   * Perform check on whether score needs to be
+   * updated (even if score isn't improved, due to
+   * new conditions occuring, e.g. closure of path)
+   *
+   * @return true if score is updated
+   */
+  virtual bool update_score();
+
 private:
   const TracePointVector &trace;
   const unsigned m_finish_alt_diff;

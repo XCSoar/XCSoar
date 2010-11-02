@@ -216,11 +216,23 @@ ContestDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
             solution[0].NavAltitude);
 }
 
+
+bool 
+ContestDijkstra::update_score()
+{
+  // for normal contests, nothing needs to be done
+  return false;
+}
+
+
 void
 ContestDijkstra::save_solution()
 {
   const fixed score = calc_score();
-  if (score > best_score) {
+  const bool improved = (score>best_score);
+
+  if (improved) {
+    // save
     std::copy(solution, solution + num_stages, best_solution);
     best_score = score;
     best_distance = calc_distance();
