@@ -285,7 +285,6 @@ OLCFAI::calc_score() const
 void
 OLCFAI::start_search()
 {
-  is_complete = false;
 }
 
 
