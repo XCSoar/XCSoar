@@ -215,10 +215,27 @@ private:
                     TraceTree::const_iterator it_next);
 
   static const unsigned null_delta;
-  static const unsigned null_time;
 
 public:
+  static const unsigned null_time;
+
+  /**
+   * Check if this point is invalid
+   *
+   * @return True if point is invalid
+   */
+  gcc_pure
   static bool is_null(const TracePoint& tp);
+
+  /**
+   * Get last point added to store
+   *
+   * @return Last point added
+   */
+  gcc_pure
+  const TracePoint& get_last_point() const {
+    return m_last_point;
+  }
 };
 
 #endif
