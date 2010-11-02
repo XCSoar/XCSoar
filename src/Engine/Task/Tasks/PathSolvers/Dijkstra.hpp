@@ -107,6 +107,15 @@ public:
   }
 
   /**
+   * Return size of queue
+   *
+   * @return Queue size in elements
+   */
+  unsigned queue_size() const {
+    return q.size();
+  }
+
+  /**
    * Return top element of queue for processing
    *
    * @return Node for processing
