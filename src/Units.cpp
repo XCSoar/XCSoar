@@ -438,21 +438,16 @@ bool
 Units::FormatUserAltitude(fixed Altitude, TCHAR *Buffer, size_t size,
                           bool IncludeUnit)
 {
-  int prec;
   TCHAR sTmp[32];
   const UnitDescriptor_t *pU = &UnitDescriptors[AltitudeUnit];
 
   /// \todo rounding
   Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
 
-  // prec = 4-log10(Altitude);
-  // prec = max(prec, 0);
-  prec = 0;
-
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%.*f%s"), prec, (double)Altitude, pU->Name);
+    _stprintf(sTmp, _T("%d%s"), iround(Altitude), pU->Name);
   else
-    _stprintf(sTmp, _T("%.*f"), prec, (double)Altitude);
+    _stprintf(sTmp, _T("%d"), iround(Altitude));
 
   if (_tcslen(sTmp) < size - 1) {
     _tcscpy(Buffer, sTmp);
@@ -490,20 +485,15 @@ bool
 Units::FormatUserArrival(fixed Altitude, TCHAR *Buffer, size_t size,
                          bool IncludeUnit)
 {
-  int prec;
   TCHAR sTmp[32];
   const UnitDescriptor_t *pU = &UnitDescriptors[AltitudeUnit];
 
   Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
 
-  // prec = 4-log10(Altitude);
-  // prec = max(prec, 0);
-  prec = 0;
-
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%+.*f%s"), prec, (double)Altitude, pU->Name);
+    _stprintf(sTmp, _T("%+d%s"), iround(Altitude), pU->Name);
   else
-    _stprintf(sTmp, _T("%+.*f"), prec, (double)Altitude);
+    _stprintf(sTmp, _T("%+d"), iround(Altitude));
 
   if (_tcslen(sTmp) < size - 1) {
     _tcscpy(Buffer, sTmp);
