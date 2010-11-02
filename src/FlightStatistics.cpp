@@ -636,7 +636,7 @@ private:
   Canvas& m_canvas;
   Chart& m_chart;
   const SETTINGS_MAP& m_settings;
-  const GeoPoint& m_start;
+  const GeoPoint m_start;
 };
 
 void
