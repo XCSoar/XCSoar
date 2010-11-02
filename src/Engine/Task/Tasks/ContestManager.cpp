@@ -51,18 +51,18 @@ extern long count_olc;
 #endif
 
 bool
-ContestManager::run_contest(AbstractContest &contest, 
+ContestManager::run_contest(AbstractContest &the_contest, 
                             ContestResult &contest_result,
-                            const bool save_result)
+                            TracePointVector &contest_solution)
 {
   // run solver, return immediately if further processing is required
   // by subsequent calls
-  if (!contest.solve())
+  if (!the_contest.solve())
     return false;
 
   // if no improved solution was found, must have finished processing
   // with invalid data so need to retrieve new trace
-  if (!contest.score(contest_result)) {
+  if (!the_contest.score(contest_result)) {
     update_trace();
     return true;
   }
@@ -70,11 +70,7 @@ ContestManager::run_contest(AbstractContest &contest,
   // solver finished and improved solution was found.  save solution
   // and retrieve new trace.
 
-  if (save_result) {
-    contest.copy_solution(solution);
-  } else {
-    contest.copy_solution(olc_league.get_solution_classic());
-  }
+  the_contest.copy_solution(contest_solution);
   update_trace();
 
 #ifdef INSTRUMENT_TASK
@@ -103,17 +99,17 @@ ContestManager::update_idle()
 
   switch (contest) {
   case OLC_Sprint:
-    retval = run_contest(olc_sprint, result);
+    retval = run_contest(olc_sprint, result, solution);
     break;
   case OLC_FAI:
-    retval = run_contest(olc_fai, result);
+    retval = run_contest(olc_fai, result, solution);
     break;
   case OLC_Classic:
-    retval = run_contest(olc_classic, result);
+    retval = run_contest(olc_classic, result, solution);
     break;
   case OLC_League:
-    retval = run_contest(olc_classic, dummy_result, false);
-    retval |= run_contest(olc_league, result);
+    retval = run_contest(olc_classic, dummy_result, olc_league.get_solution_classic());
+    retval |= run_contest(olc_league, result, solution);
     break;
   };
 
