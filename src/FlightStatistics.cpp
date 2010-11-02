@@ -679,22 +679,36 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
     pf1.y = chart.screenY(fixed_zero);
     points[1] = pf1;
 
+    unsigned i = 2;
     for (unsigned j = 0; j < AIRSPACE_SCANSIZE_X; ++j) {
       const fixed t_this = fixed(j) / (AIRSPACE_SCANSIZE_X - 1);
       const GeoPoint p_this = p_start + (p_end - p_start) * t_this;
 
+      short h = map->GetField(p_this);
+      if (RasterBuffer::is_special(h)) {
+        if (RasterBuffer::is_water(h))
+          /* water is at 0m MSL */
+          /* XXX paint in blue? */
+          h = 0;
+        else
+          /* skip "unknown" values */
+          continue;
+      }
+
       POINT p;
       p.x = chart.screenX(t_this * range);
-      p.y = chart.screenY(fixed(map->GetField(p_this)));
+      p.y = chart.screenY(fixed(h));
 
-      points[2 + j] = p;
+      points[i++] = p;
     }
 
-    Brush a_brush(Chart::GROUND_COLOUR);
+    if (i >= 4) {
+      Brush a_brush(Chart::GROUND_COLOUR);
 
-    canvas.null_pen();
-    canvas.select(a_brush);
-    canvas.polygon(&points[0], sizeof(points) / sizeof(points[0]));
+      canvas.null_pen();
+      canvas.select(a_brush);
+      canvas.polygon(&points[0], i);
+    }
   }
 
   // draw aircraft trend line
