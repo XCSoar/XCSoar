@@ -67,7 +67,7 @@ event=AutoLogger stop
 # mode=default
 # ------------
 
-mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2
+mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Config3 Info1 Info2 Info3 Vario1 Vario2
 type=key
 data=ESCAPE
 event=Mode default
@@ -516,7 +516,7 @@ location=9
 mode=Config2
 type=key
 data=APP3
-event=Mode default
+event=Mode Config3
 label=Config
 location=3
 
@@ -558,6 +558,23 @@ event=Setup Replay
 event=Mode default
 label=Logger\nReplay$(CheckReplay)
 location=9
+
+# -------------
+# mode=Config3
+# -------------
+mode=Config3
+type=key
+data=APP3
+event=Mode default
+label=Config
+location=3
+
+mode=Config3
+type=key
+data=6
+event=Logger nmea
+label=Raw Logger
+location=5
 
 
 # -------------
@@ -705,7 +722,7 @@ location=9
 mode=Info2
 type=key
 data=APP4
-event=Mode default
+event=Mode Info3
 label=Info
 location=4
 
@@ -748,4 +765,27 @@ event=RepeatStatusMessage
 label=Message\nRepeat
 location=9
 
-# =============================
+
+# -------------
+# mode=Info3
+# -------------
+mode=Info3
+type=key
+data=APP4
+event=Mode default
+label=Info
+location=4
+
+mode=Info3
+type=key
+data=6
+event=FlarmTraffic
+label=FLARM Radar
+location=5
+
+mode=Info3
+type=key
+data=7
+event=ThermalAssistant
+label=Thermal Assistant
+location=6
