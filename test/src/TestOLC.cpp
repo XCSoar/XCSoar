@@ -146,6 +146,7 @@ TestOLC(const char *filename)
   for (int i = 1; replay.Update(); i++) {
     if (i % 500 == 0) {
       putchar('.');
+      fflush(stdout);
     }
 
     olc_classic.update_idle();
