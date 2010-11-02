@@ -191,9 +191,11 @@ TEST_OLC_SOURCES = \
 	$(SRC)/Math/Angle.cpp \
 	$(SRC)/Math/FastMath.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
+	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TestOLC.cpp 
 TEST_OLC_OBJS = $(call SRC_TO_OBJ,$(TEST_OLC_SOURCES))
 TEST_OLC_LDADD = $(UTIL_LIBS) $(MATH_LIBS) $(IO_LIBS) $(ENGINE_LIBS)
+$(TARGET_BIN_DIR)/TestOLC$(TARGET_EXEEXT): CPPFLAGS += -DDO_PRINT
 $(TARGET_BIN_DIR)/TestOLC$(TARGET_EXEEXT): $(TEST_OLC_OBJS) $(TEST_OLC_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@

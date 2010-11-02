@@ -41,6 +41,7 @@
 #include "Engine/Task/TaskStats/CommonStats.hpp"
 #include "Engine/Task/Tasks/ContestManager.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
+#include "Printing.hpp"
 
 #include <windef.h>
 #include <assert.h>
@@ -156,19 +157,14 @@ TestOLC(const char *filename)
 
   putchar('\n');
 
-  printf("classic: %.2f km / %.3f min / %.2f km/h\n",
-          (double)stats_classic.distance / 1000,
-          (double)stats_classic.time / 60,
-          (double)stats_classic.speed * 3.6);
-  printf("fai: %.2f km / %.3f min / %.2f km/h\n",
-          (double)stats_fai.distance / 1000,
-          (double)stats_fai.time / 60,
-          (double)stats_fai.speed * 3.6);
-  printf("sprint: %.2f km / %.3f min / %.2f km/h\n",
-          (double)stats_sprint.distance / 1000,
-          (double)stats_sprint.time / 60,
-          (double)stats_sprint.speed * 3.6);
+  std::cout << "classic\n";
+  PrintHelper::print(stats_classic);
+  std::cout << "fai\n";
+  PrintHelper::print(stats_fai);
+  std::cout << "sprint\n";
+  PrintHelper::print(stats_sprint);
 }
+
 
 int main(int argc, char **argv)
 {
