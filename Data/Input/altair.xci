@@ -77,30 +77,6 @@ type=key
 data=ESCAPE
 event=Pan supertoggle
 
-# clear main entry buttons
-
-###### main entry buttons
-
-mode=default
-type=key
-data=F1
-event=Mode Nav1
-
-mode=default
-type=key
-data=F2
-event=Mode Display1
-
-mode=default
-type=key
-data=F3
-event=Mode Config1
-
-mode=default
-type=key
-data=F4
-event=Mode Info1
-
 ################## Pan mode
 
 mode=pan
@@ -152,6 +128,28 @@ label=Nearest\nWaypoint
 location=8
 
 ##################
+
+###### main entry buttons
+
+mode=default
+type=key
+data=APP1
+event=Mode Nav1
+
+mode=default
+type=key
+data=APP2
+event=Mode Display1
+
+mode=default
+type=key
+data=APP3
+event=Mode Config1
+
+mode=default
+type=key
+data=APP4
+event=Mode Info1
 
 # Always active buttons. (unless over-written)
 
