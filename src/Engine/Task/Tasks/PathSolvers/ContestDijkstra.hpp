@@ -147,6 +147,7 @@ private:
 public: // instrumentation
   static unsigned long count_olc_solve;
   static unsigned long count_olc_trace;
+  static unsigned count_olc_size;
 };
 
 #endif

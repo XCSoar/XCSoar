@@ -45,6 +45,7 @@ void distance_counts() {
 #endif
     printf("#     count_olc_solve %d\n", (int)ContestDijkstra::count_olc_solve);
     printf("#     count_olc_trace %d\n", (int)ContestDijkstra::count_olc_trace);
+    printf("#     count_olc_size %d\n",ContestDijkstra::count_olc_size);
     printf("#    (total cycles %d)\n#\n",n_samples);
   }
   n_samples = 0;

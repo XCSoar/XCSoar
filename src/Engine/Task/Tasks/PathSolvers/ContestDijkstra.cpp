@@ -44,6 +44,7 @@
 
 unsigned long ContestDijkstra::count_olc_solve = 0;
 unsigned long ContestDijkstra::count_olc_trace = 0;
+unsigned ContestDijkstra::count_olc_size = 0;
 
 ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned n_legs,
@@ -157,6 +158,7 @@ ContestDijkstra::solve()
   }
 
   count_olc_solve++;
+  count_olc_size = max(count_olc_size, m_dijkstra.queue_size());
 
   if (distance_general(m_dijkstra, 25)) {
     save_solution();
@@ -182,6 +184,10 @@ ContestDijkstra::reset()
   trace_dirty = true;
   min_distance_trace = (unsigned)-1;
   min_delta_t_trace = (unsigned)-1;
+
+  count_olc_solve = 0;
+  count_olc_trace = 0;
+  count_olc_size = 0;
 }
 
 
