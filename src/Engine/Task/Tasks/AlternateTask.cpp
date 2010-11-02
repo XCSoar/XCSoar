@@ -62,3 +62,9 @@ AlternateTask::clear()
   AbortTask::clear();
   alternates.clear();
 }
+
+void 
+AlternateTask::client_update(const bool reachable)
+{
+
+}

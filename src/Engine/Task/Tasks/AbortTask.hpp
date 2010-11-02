@@ -241,6 +241,14 @@ protected:
 protected:
   bool is_active; /// whether the AbortTask is the master or running in background
 
+  /**
+   * This is called by update_sample after the turnpoint list has 
+   * been filled with landpoints.
+   * It's first called after the reachable scan, then may be called again after scanning
+   * for unreachable.
+   */
+  virtual void client_update(const bool reachable);
+
 public:
 /**
  * Specify whether the task is active or not.  If it's active, it will

@@ -236,6 +236,13 @@ private:
 };
 
 
+void 
+AbortTask::client_update(const bool reachable)
+{
+  // nothing to do here, it's specialisations that may use this
+}
+
+
 bool 
 AbortTask::update_sample(const AIRCRAFT_STATE &state, 
                          const bool full_update)
@@ -264,6 +271,9 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, true, true);
   m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, false, true);
 
+  // inform clients that the landable reachable scan has been performed 
+  client_update(true);
+
   // now try with non-safety polar
   fill_reachable(state, approx_waypoints, glide_polar, true, false);
   fill_reachable(state, approx_waypoints, glide_polar, false, false);
@@ -273,6 +283,9 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   fake.NavAltitude += fixed(10000.0);
   fill_reachable(fake, approx_waypoints, glide_polar, true, false);
   fill_reachable(fake, approx_waypoints, glide_polar, false, false);
+
+  // inform clients that the landable unreachable scan has been performed 
+  client_update(false);
 
   if (tps.size()) {
     active_waypoint = tps[activeTaskPoint].first->get_waypoint().id;

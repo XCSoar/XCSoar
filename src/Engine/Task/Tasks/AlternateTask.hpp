@@ -68,6 +68,7 @@ public:
 
 protected:
   void clear();
+  void client_update(const bool reachable);
 
 private:
   AlternateVector alternates;
