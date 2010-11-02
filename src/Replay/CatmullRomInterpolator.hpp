@@ -129,7 +129,7 @@ public:
 
     u = max(fixed_zero, min(fixed_one, u));
 
-    return a0.Fraction(a1, u);
+    return a0.Fraction(a1, u).as_bearing();
   }
 
   void

@@ -143,8 +143,12 @@ Angle::Fraction(const Angle &End, const fixed fraction) const
   if (m_value == End.m_value)
     return Angle(m_value);
 
-  Angle diff = Angle(End.m_value - m_value).as_delta();
-  return Angle(m_value + diff.m_value * fraction).as_bearing();
+  const Angle diff = Angle(End.m_value - m_value).as_delta();
+
+  // Note: do not return with as_bearing() since this will produce incorrect
+  // results for latitude values!
+
+  return Angle(m_value + diff.m_value * fraction);
 }
 
 gcc_pure
