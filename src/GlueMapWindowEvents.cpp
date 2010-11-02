@@ -47,7 +47,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Math/Earth.hpp"
 #include "Protection.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "UtilsSystem.hpp"
 #include "Math/FastMath.h"
 #include "Compiler.h"

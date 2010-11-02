@@ -40,7 +40,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceVisitor.hpp"

@@ -69,7 +69,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "SettingsComputer.hpp"
 #include "SettingsMap.hpp"
 #include "Math/FastMath.h"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "Message.hpp"
 #include "Marks.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"

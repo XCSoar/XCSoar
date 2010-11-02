@@ -42,7 +42,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Device/device.hpp"
 #include "Device/All.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "Screen/Blank.hpp"
 #include "SettingsMap.hpp"
 #include "UtilsSystem.hpp"

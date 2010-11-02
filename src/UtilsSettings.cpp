@@ -45,7 +45,7 @@ Copyright_License {
 #include "AirfieldDetails.h"
 #include "Topology/TopologyStore.hpp"
 #include "Topology/TopologyGlue.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "Device/device.hpp"
 #include "Message.hpp"
 #include "Polar/Loader.hpp"

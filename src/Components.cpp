@@ -50,7 +50,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Atmosphere.h"
 #include "Device/Geoid.h"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "ButtonLabel.hpp"
 #include "Language.hpp"
 #include "Protection.hpp"

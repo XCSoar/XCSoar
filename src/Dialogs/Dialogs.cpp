@@ -37,7 +37,7 @@ Copyright_License {
 
 */
 
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 
 #include "MainWindow.hpp"
 #include "Interface.hpp"

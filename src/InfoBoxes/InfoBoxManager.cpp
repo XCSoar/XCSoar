@@ -53,7 +53,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/ComboList.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Interface.hpp"
 

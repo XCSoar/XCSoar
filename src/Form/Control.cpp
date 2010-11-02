@@ -40,7 +40,7 @@ Copyright_License {
 #include "Form/Internal.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "PeriodClock.hpp"
 #include "Util/StringUtil.hpp"
 #include "Language.hpp"

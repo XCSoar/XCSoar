@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_FORM_FORM_HPP
 
 #include "Screen/ContainerWindow.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "Util/tstring.hpp"
 
 #include <map>

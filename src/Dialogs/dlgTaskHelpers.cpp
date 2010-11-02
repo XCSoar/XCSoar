@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "dlgTaskHelpers.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Task/Tasks/OrderedTask.hpp"

@@ -55,7 +55,7 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Topology/TopologyStore.hpp"
 #include "Topology/TopologyGlue.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "Logger/LoggerImpl.hpp"
 #include "Audio/Sound.hpp"
 #include "ButtonLabel.hpp"

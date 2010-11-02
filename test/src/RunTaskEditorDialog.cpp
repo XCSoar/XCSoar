@@ -38,7 +38,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Fonts.hpp"
 #include "Interface.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "MapWindow.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"

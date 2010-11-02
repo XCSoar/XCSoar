@@ -42,7 +42,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "resource.h"
 
 #include <assert.h>

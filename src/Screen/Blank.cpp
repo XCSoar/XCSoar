@@ -43,7 +43,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Hardware/Battery.hpp"
 #include "Hardware/Display.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "LogFile.hpp"
 #include "Message.hpp"
 #include "Simulator.hpp"

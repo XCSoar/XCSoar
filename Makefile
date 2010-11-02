@@ -227,7 +227,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/MenuData.cpp \
 	$(SRC)/MenuBar.cpp \
 	$(SRC)/ButtonLabel.cpp \
-	$(SRC)/Dialogs.cpp \
+	$(SRC)/Dialogs/Dialogs.cpp \
 	$(SRC)/ExpandMacros.cpp \
 	$(SRC)/InfoBoxes/Content/Factory.cpp \
 	$(SRC)/InfoBoxes/Content/Alternate.cpp \

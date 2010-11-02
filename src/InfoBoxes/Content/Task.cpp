@@ -42,7 +42,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Dialogs.h"
+#include "Dialogs/Dialogs.h"
 #include "MainWindow.hpp"
 #include "LocalTime.hpp"
 
