@@ -404,7 +404,7 @@ private:
     int i = VtoI(V_west);
 
     // find best angle estimate for this assumed wind speed i
-    Angle theta;
+    Angle theta = Angle::native(fixed(0));
     if (!FindBestAngle(i, theta))
       theta = theta_west_best;
 
