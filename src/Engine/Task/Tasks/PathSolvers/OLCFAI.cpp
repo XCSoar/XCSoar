@@ -64,6 +64,16 @@ OLCFAI::OLCFAI(const TracePointVector &_trace):
 {}
 
 
+void 
+OLCFAI::reset()
+{
+  ContestDijkstra::reset();
+  is_complete = false;
+  is_closed = false;
+  first_tp = 0;
+}
+
+
 fixed
 OLCFAI::leg_distance(const unsigned index) const
 {  

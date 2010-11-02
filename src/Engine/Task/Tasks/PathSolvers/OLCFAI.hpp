@@ -58,6 +58,8 @@ public:
   fixed calc_distance() const;
   fixed calc_time() const;
 
+  void reset();
+
 protected:
   fixed leg_distance(unsigned i) const;
 
