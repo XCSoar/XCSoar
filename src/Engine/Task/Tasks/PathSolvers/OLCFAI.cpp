@@ -24,8 +24,11 @@ OLCFAI::fai_triangle_satisfied(const ScanTaskPoint &sp) const
 
     const fixed leg = solution[i].get_location().distance(p_dest);
 
-    if (leg <= fixed_zero) // ignore
+    if (leg <= fixed_zero) {
+      if (i==0) return false;
+      // ignore
       break;
+    }
 
     dist += leg;
 
@@ -52,8 +55,13 @@ OLCFAI::triangle_closed(const ScanTaskPoint &sp) const
 
   const FlatRay leg_3(solution[2].get_flatLocation(),
                       get_point(sp).get_flatLocation());
+  const fixed t = leg_1.intersects(leg_3);
 
-  return leg_1.intersects(leg_3);
+  if ((t>fixed_zero) && (t<fixed_one)) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 
