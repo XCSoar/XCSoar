@@ -30,7 +30,12 @@ inline bool compare_scores(const ContestResult& official,
     output_score("#  Official:", official);
     output_score("#  Estimated:", estimated);
   }
-  return true;
+  if (!positive(official.score)) {
+    return true;
+  }
+  fixed e = fabs((official.score-estimated.score)/official.score);
+  std::cout << "# Error (score) " << e << "\n";
+  return (e<fixed(0.01));
 }
 
 inline void load_score_file(std::ifstream& fscore,
