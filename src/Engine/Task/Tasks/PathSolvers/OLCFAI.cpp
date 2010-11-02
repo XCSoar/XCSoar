@@ -222,9 +222,13 @@ OLCFAI::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
     // add points up to finish
     for (destination.second=0; destination.second < origin.second; 
          ++destination.second) {
-      const unsigned d = get_weighting(origin.first) *
+      const unsigned d = 
         distance(origin, destination);
-      dijkstra.link(destination, origin, d);
+
+      if (4*d >= best_d) { // no reason to add candidate if worse than 25% rule
+        dijkstra.link(destination, origin, get_weighting(origin.first)*d);
+      }
+
     }
     break;
   case 2:
