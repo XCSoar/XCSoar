@@ -84,7 +84,7 @@ public:
    *
    * @return Distance (m)
    */
-  fixed calc_distance() const;
+  virtual fixed calc_distance() const;
 
   /**
    * Calculate score of best path
