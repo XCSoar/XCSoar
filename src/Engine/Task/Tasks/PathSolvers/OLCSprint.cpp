@@ -104,3 +104,10 @@ OLCSprint::add_edges(DijkstraTaskPoint &dijkstra,
     }
   }
 }
+
+fixed
+OLCSprint::calc_score() const
+{
+  // @todo: apply handicap *(200/(100+handicap)
+  return calc_distance()/fixed(2500);
+}

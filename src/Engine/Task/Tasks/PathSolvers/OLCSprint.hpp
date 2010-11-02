@@ -56,6 +56,8 @@ public:
 
   void reset();
 
+  fixed calc_score() const;
+
 protected:
   bool admit_candidate(const ScanTaskPoint &candidate) const;
 
