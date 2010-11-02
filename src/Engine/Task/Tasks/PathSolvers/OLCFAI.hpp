@@ -54,6 +54,8 @@ public:
    */
   OLCFAI(const TracePointVector &_trace);
 
+  fixed calc_score() const;
+
 protected:
   bool finish_satisfied(const ScanTaskPoint &sp) const;
   bool fai_triangle_satisfied(const ScanTaskPoint &sp) const;

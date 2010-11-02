@@ -120,3 +120,10 @@ OLCFAI::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
     }
   }
 }
+
+fixed
+OLCFAI::calc_score() const
+{
+  // @todo: apply handicap
+  return calc_distance()*fixed(0.0003);
+}
