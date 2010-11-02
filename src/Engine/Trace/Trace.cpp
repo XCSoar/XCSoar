@@ -422,3 +422,9 @@ Trace::get_trace_points(const unsigned max_points) const
 
   return TracePointVector(tlist.begin(), tlist.end());
 }
+
+bool
+Trace::is_null(const TracePoint& tp)
+{
+  return tp.time == null_time;
+}

@@ -216,6 +216,9 @@ private:
 
   static const unsigned null_delta;
   static const unsigned null_time;
+
+public:
+  static bool is_null(const TracePoint& tp);
 };
 
 #endif
