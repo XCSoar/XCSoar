@@ -108,6 +108,10 @@ fixed
 AbstractContest::apply_handicap(const fixed& unhandicapped_score,
                                 const bool shifted) const
 {
+  assert(contest_handicap != 0);
+  if (contest_handicap == 0) {
+    return unhandicapped_score;
+  }
   if (shifted) {
     return (200*unhandicapped_score/(100+contest_handicap));
   } else {
