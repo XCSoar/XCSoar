@@ -36,10 +36,6 @@
  */
 #include "OLCSprint.hpp"
 
-#ifdef DO_PRINT
-#include <stdio.h>
-#endif
-
 /*
   - note, this only searches 2.5 hour blocks, so should be able
     to handle larger number of points than other ContestDijkstra's

@@ -43,10 +43,6 @@
 #include <algorithm>
 #include <assert.h>
 
-#ifdef DO_PRINT
-#include <stdio.h>
-#endif
-
 ContestDijkstra::ContestDijkstra(const TracePointVector &_trace,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):

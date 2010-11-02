@@ -105,15 +105,6 @@ ContestManager::update_idle()
     break;
   };
 
-  if (retval) {
-#ifdef DO_PRINT
-    printf("# size %d/%d dist %g\n",
-           trace_points_full.size(), 
-           trace_points_sprint.size(), 
-           (double)result.distance);
-#endif
-  }
-
   return retval;
 }
 
