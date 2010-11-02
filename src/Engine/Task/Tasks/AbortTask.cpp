@@ -134,7 +134,7 @@ AbortTask::task_full() const
 /**
  * Function object used to rank waypoints by arrival time
  */
-struct AlternateRank : public std::binary_function<AbortTask::Alternate, 
+struct AbortRank : public std::binary_function<AbortTask::Alternate, 
                                                    AbortTask::Alternate, bool> {
   /**
    * Condition, ranks by arrival time 
@@ -165,7 +165,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
     return false;
   }
   bool found = false;
-  std::priority_queue<Alternate, AlternateVector, AlternateRank> q;
+  std::priority_queue<Alternate, AlternateVector, AbortRank> q;
   for (AlternateVector::iterator v = approx_waypoints.begin();
        v!=approx_waypoints.end(); ) {
 
