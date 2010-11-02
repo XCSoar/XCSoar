@@ -1538,6 +1538,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/ThermalBandRenderer.cpp \
 	$(SRC)/GlideRatio.cpp \
 	$(SRC)/AutoQNH.cpp \
+	$(SRC)/BasicComputer.cpp \
 	$(SRC)/GlideComputer.cpp \
 	$(SRC)/GlideComputerBlackboard.cpp \
 	$(SRC)/GlideComputerTask.cpp \
@@ -1545,8 +1546,10 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/GlideComputerAirData.cpp \
 	$(SRC)/GlideComputerStats.cpp \
 	$(SRC)/SettingsComputer.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
+	$(SRC)/InterfaceBlackboard.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \

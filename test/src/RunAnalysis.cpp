@@ -45,6 +45,7 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/TaskEvents.hpp"
+#include "BasicComputer.hpp"
 #include "GlideComputer.hpp"
 #include "GlideComputerInterface.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -53,6 +54,12 @@ Copyright_License {
 #include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
 #include "InterfaceBlackboard.hpp"
+#include "Replay/IGCParser.hpp"
+#include "IO/FileLineReader.hpp"
+
+#ifdef WIN32
+#include <shellapi.h>
+#endif
 
 /* fake symbols: */
 
@@ -115,6 +122,60 @@ LoadFiles(Airspaces &airspace_database)
   ReadAirspace(airspace_database, terrain, pressure);
 }
 
+static void
+LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
+        InterfaceBlackboard &blackboard)
+{
+  FileLineReader reader(path);
+  if (reader.error()) {
+    fprintf(stderr, "Failed to open input file\n");
+    exit(EXIT_FAILURE);
+  }
+
+  BasicComputer basic_computer;
+
+  NMEA_INFO basic, last;
+  basic.reset();
+  last.reset();
+
+  TCHAR *line;
+  while ((line = reader.read()) != NULL) {
+    IGCFix fix;
+    if (!IGCParseFix(line, fix))
+      continue;
+
+    basic.Connected.Update(fix.time);
+    basic.Time = fix.time;
+    basic.DateTime.year = 2011;
+    basic.DateTime.month = 6;
+    basic.DateTime.day = 5;
+    basic.DateTime.hour = (unsigned)(fix.time / 3600);
+    basic.DateTime.minute = (unsigned)(fix.time / 60) % 60;
+    basic.DateTime.second = (unsigned)fix.time % 60;
+
+    basic.Location = fix.location;
+    basic.LocationAvailable.Update(fix.time);
+    basic.GPSAltitude = fix.gps_altitude;
+    basic.GPSAltitudeAvailable.Update(fix.time);
+    basic.PressureAltitude = basic.BaroAltitude = fix.pressure_altitude;
+    basic.PressureAltitudeAvailable.Update(fix.time);
+    basic.BaroAltitudeAvailable.Update(fix.time);
+
+    basic_computer.Fill(basic, blackboard.SettingsComputer());
+    basic_computer.Compute(basic, last, glide_computer.Calculated(),
+                           blackboard.SettingsComputer());
+
+    glide_computer.ReadBlackboard(basic);
+    if (glide_computer.ProcessGPS())
+      glide_computer.ProcessIdle();
+
+    last = basic;
+  }
+
+  blackboard.ReadBlackboardBasic(glide_computer.Basic());
+  blackboard.ReadBlackboardCalculated(glide_computer.Calculated());
+}
+
 #ifndef WIN32
 int main(int argc, char **argv)
 #else
@@ -128,6 +189,31 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+#ifdef WIN32
+#ifndef _WIN32_WCE
+  /* on Windows (non-CE), the lpCmdLine argument is narrow, and we
+     have to use GetCommandLine() to get the UNICODE string */
+  LPCTSTR lpCmdLine = GetCommandLine();
+#endif
+
+#ifdef _WIN32_WCE
+  int argc = 2;
+
+  WCHAR arg0[] = _T("");
+  LPWSTR argv[] = { arg0, lpCmdLine, NULL };
+#else
+  int argc;
+  LPWSTR* argv = CommandLineToArgvW(lpCmdLine, &argc);
+#endif
+#endif
+
+  if (argc != 2) {
+    fprintf(stderr, "Usage: RunAnalysis FILE.igc\n");
+    return EXIT_FAILURE;
+  }
+
+  const TCHAR *path = argv[1];
+
   InitialiseDataPath();
   Profile::SetFiles(_T(""));
   Profile::Load();
@@ -160,6 +246,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   glide_computer.SetScreenDistanceMeters(fixed(50000));
 
   ScreenGlobalInit screen_init;
+
+  LoadIGC(path, glide_computer, blackboard);
 
 #ifdef WIN32
   ResourceLoader::Init(hInstance);
