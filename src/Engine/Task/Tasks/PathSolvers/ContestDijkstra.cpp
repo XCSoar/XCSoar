@@ -213,12 +213,6 @@ ContestDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
             solution[0].NavAltitude);
 }
 
-bool
-ContestDijkstra::finish_satisfied(const ScanTaskPoint &sp) const
-{
-  return admit_candidate(sp);
-}
-
 void
 ContestDijkstra::save_solution()
 {

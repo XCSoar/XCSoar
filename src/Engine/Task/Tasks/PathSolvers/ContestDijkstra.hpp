@@ -125,8 +125,6 @@ protected:
   virtual void add_edges(DijkstraTaskPoint &dijkstra,
                          const ScanTaskPoint &curNode);
 
-  virtual bool finish_satisfied(const ScanTaskPoint &sp) const;
-
   /**
    * Set weightings of each leg.  Default is constant weighting.
    */
