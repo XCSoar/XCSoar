@@ -163,6 +163,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+  Profile::SetFiles(_T(""));
+  Profile::Load();
+
   LoadFiles();
 
 #ifdef WIN32
