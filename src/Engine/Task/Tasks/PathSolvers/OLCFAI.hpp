@@ -56,16 +56,21 @@ public:
 
   fixed calc_score() const;
   fixed calc_distance() const;
+  fixed calc_time() const;
 
 protected:
   fixed leg_distance(unsigned i) const;
 
-  bool admit_finish(const ScanTaskPoint &sp) const;
-  bool fai_triangle_satisfied() const;
+  bool finish_satisfied(const ScanTaskPoint &sp) const;
   bool triangle_closed() const;
+
+  unsigned second_leg_distance(const ScanTaskPoint &dest) const;
 
   void add_edges(DijkstraTaskPoint &dijkstra,
                  const ScanTaskPoint &curNode);
+
+  bool is_closed;
+  bool is_complete;
 };
 
 #endif
