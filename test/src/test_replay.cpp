@@ -17,10 +17,7 @@ inline void output_score(const char* header,
                          const ContestResult& score)
 {
   std::cout << header << "\n";
-  std::cout << "#   score " << score.score << "\n";
-  std::cout << "#   distance " << score.distance/fixed(1000) << " (km)\n";
-  std::cout << "#   speed " << score.speed*fixed(3.6) << " (kph)\n";
-  std::cout << "#   time " << score.time << " (sec)\n";
+  PrintHelper::print(score);
 }
 
 inline bool compare_scores(const ContestResult& official,

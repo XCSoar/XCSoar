@@ -62,6 +62,10 @@ ContestResult stats_sprint;
 ContestManager olc_sprint(OLC_Sprint, stats_sprint,
                           full_trace, sprint_trace);
 
+ContestResult stats_league;
+ContestManager olc_league(OLC_League, stats_league,
+                          full_trace, sprint_trace);
+
 class IgcReplayGlue:
   public IgcReplay
 {
@@ -116,6 +120,7 @@ IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
   olc_classic.update_sample(new_state);
   olc_fai.update_sample(new_state);
   olc_sprint.update_sample(new_state);
+  olc_league.update_sample(new_state);
 
   full_trace.optimise_if_old();
   sprint_trace.optimise_if_old();
@@ -153,12 +158,15 @@ TestOLC(const char *filename)
     olc_classic.update_idle();
     olc_fai.update_idle();
     olc_sprint.update_idle();
+    olc_league.update_idle();
   }
 
   putchar('\n');
 
   std::cout << "classic\n";
   PrintHelper::print(stats_classic);
+  std::cout << "league\n";
+  PrintHelper::print(stats_league);
   std::cout << "fai\n";
   PrintHelper::print(stats_fai);
   std::cout << "sprint\n";
