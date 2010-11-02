@@ -36,9 +36,6 @@
  */
 #include "FlatGeoPoint.hpp"
 #include "Math/FastMath.h"
-#include <algorithm>
-
-using std::min;
 
 unsigned 
 FlatGeoPoint::distance_to(const FlatGeoPoint &sp) const
@@ -51,17 +48,4 @@ FlatGeoPoint::distance_sq_to(const FlatGeoPoint &sp) const
 {
   const FlatGeoPoint delta = *this - sp;
   return delta.dot(delta);
-}
-
-unsigned 
-FlatGeoPoint::projected_distance(const FlatGeoPoint &other) const
-{
-  const unsigned d_this = dot(*this);
-
-  if (d_this == 0) {
-    return 0;
-  } else {
-    const unsigned d_other = other.dot(other);
-    return min(d_other, dot(other)/d_this);
-  }
 }
