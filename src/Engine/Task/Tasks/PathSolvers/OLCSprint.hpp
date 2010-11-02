@@ -59,8 +59,6 @@ public:
   fixed calc_score() const;
 
 protected:
-  bool admit_candidate(const ScanTaskPoint &candidate) const;
-
   void add_edges(DijkstraTaskPoint &dijkstra,
                  const ScanTaskPoint &origin);
 

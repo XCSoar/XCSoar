@@ -42,16 +42,6 @@ OLCSprint::reset()
   ContestDijkstra::reset();
 }
 
-bool 
-OLCSprint::admit_candidate(const ScanTaskPoint &candidate) const
-{
-  if (candidate.first > 0 &&
-      get_point(candidate).time > solution[0].time + 9000)
-    return false;
-
-  return ContestDijkstra::admit_candidate(candidate);
-}
-
 unsigned
 OLCSprint::find_start() const
 {
