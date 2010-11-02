@@ -79,10 +79,12 @@ public:
 protected:
   void clear();
   void client_update(const AIRCRAFT_STATE &state_now, const bool reachable);
+  void check_alternate_changed();
 
 private:
   AlternateVector alternates;
   GeoPoint destination;
+  unsigned best_alternate_id;
 };
 
 #endif //ALTERNATETASK_HPP

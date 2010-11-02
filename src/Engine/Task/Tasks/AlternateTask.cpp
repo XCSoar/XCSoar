@@ -46,7 +46,8 @@ AlternateTask::AlternateTask(TaskEvents &te,
                              const TaskBehaviour &tb,
                              GlidePolar &gp,
                              const Waypoints &wps):
-  AbortTask(te, tb, gp, wps)
+  AbortTask(te, tb, gp, wps),
+  best_alternate_id((unsigned)-1)
 {
 }
 
@@ -56,6 +57,7 @@ AlternateTask::reset()
 {
   AbortTask::reset();
   destination = GeoPoint();
+  best_alternate_id = (unsigned)-1;
 }
 
 
@@ -82,12 +84,30 @@ struct AlternateRank : public std::binary_function<AlternateTask::Divert,
 };
 
 
+void
+AlternateTask::check_alternate_changed()
+{
+  unsigned id;
+  if (alternates.size()) {
+    id = alternates[0].first.id;
+  } else {
+    id = (unsigned)-1;
+  }
+  if (best_alternate_id != id) {
+    // @todo: call notification event
+    best_alternate_id = id;
+  }
+}
+
+
 void 
 AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
                              const bool reachable)
 {
-  if (!reachable) // for now, only do reachable points
+  if (!reachable) { // for now, only do reachable points
+    check_alternate_changed();
     return;
+  }
 
   std::priority_queue<Divert, DivertVector, AlternateRank> q;
 
@@ -104,8 +124,14 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
 
     q.push(std::make_pair(std::make_pair(wp_alt, i->second), delta));
   }
-
+  while (!q.empty() && alternates.size()<3) {
+    const Alternate top = q.top().first;
+    alternates.push_back(top);
+    q.pop();
+  }
+  check_alternate_changed();
 }
+
 
 void 
 AlternateTask::set_task_destination(const AIRCRAFT_STATE &state_now,
