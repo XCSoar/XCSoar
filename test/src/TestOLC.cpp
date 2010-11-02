@@ -147,11 +147,11 @@ TestOLC(const char *filename)
     if (i % 500 == 0) {
       putchar('.');
     }
-  }
 
-  while (!olc_classic.update_idle()) {}
-  while (!olc_fai.update_idle()) {}
-  while (!olc_sprint.update_idle()) {}
+    olc_classic.update_idle();
+    olc_fai.update_idle();
+    olc_sprint.update_idle();
+  }
 
   putchar('\n');
 
