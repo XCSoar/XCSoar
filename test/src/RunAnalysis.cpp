@@ -40,6 +40,7 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Graphics.hpp"
 #include "ResourceLoader.hpp"
 #include "Interface.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -182,6 +183,11 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   SingleWindow main_window;
   main_window.set(_T("STATIC"), _T("RunDialog"),
                   0, 0, 640, 480);
+
+  SETTINGS_MAP settings_map;
+  Graphics::Initialise();
+  Graphics::InitialiseConfigured(CommonInterface::SetSettingsMap());
+
   Fonts::Initialize();
   main_window.show();
 
