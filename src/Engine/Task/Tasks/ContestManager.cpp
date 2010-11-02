@@ -3,10 +3,6 @@
 #include "Task/TaskStats/CommonStats.hpp"
 #include "Trace/Trace.hpp"
 
-#ifdef DO_PRINT
-#include <stdio.h>
-#endif
-
 ContestManager::ContestManager(const Contests _contest,
                              ContestResult &_result,
                              const Trace& trace_full,
@@ -24,10 +20,6 @@ ContestManager::ContestManager(const Contests _contest,
   reset();
 }
 
-
-#ifdef INSTRUMENT_TASK
-extern long count_olc;
-#endif
 
 bool
 ContestManager::run_contest(AbstractContest &the_contest, 
@@ -49,10 +41,6 @@ ContestManager::run_contest(AbstractContest &the_contest,
   // and retrieve new trace.
 
   the_contest.copy_solution(contest_solution);
-
-#ifdef INSTRUMENT_TASK
-  count_olc++;
-#endif
 
   return true;
 }
@@ -82,9 +70,8 @@ ContestManager::update_idle()
   case OLC_Plus:
     retval = run_contest(olc_classic, olc_plus.get_result_classic(), olc_plus.get_solution_classic());
     retval |= run_contest(olc_fai, olc_plus.get_result_fai(), olc_plus.get_solution_fai());
-    if (retval) {
+    if (retval) 
       retval |= run_contest(olc_plus, result, solution);
-    }
     break;
   };
 
