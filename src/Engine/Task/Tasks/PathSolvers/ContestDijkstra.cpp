@@ -76,8 +76,14 @@ ContestDijkstra::score(ContestResult &result)
 void
 ContestDijkstra::update_trace()
 {
+  const TracePoint& last_master = trace_master.get_last_point();
+  if ((n_points >= num_stages) && (last_master.time < last_point.time + 30)) {
+    return;
+  }
+  last_point = last_master;
   trace = trace_master.get_trace_points(300);
   n_points = trace.size();
+  trace_dirty = true;
 }
 
 
@@ -94,16 +100,18 @@ ContestDijkstra::solve()
   }
 
   if (m_dijkstra.empty()) {
+
+    // don't re-start search unless we have had new data appear
+    if (!trace_dirty) {
+      update_trace();
+      return true;
+    }
+    trace_dirty = false;
+
     m_dijkstra.restart(ScanTaskPoint(0, 0));
     start_search();
     add_start_edges();
     if (m_dijkstra.empty()) {
-      // no processing to perform!
-      // @todo
-      // problem with this is it will immediately ask
-      // ContestManager for new data, which will be expensive
-      // instead, new data should arrive only when preconditions
-      // are satisfied (significant difference and valid)
       update_trace();
       return true;
     }
@@ -128,7 +136,9 @@ ContestDijkstra::reset()
   solution_found = false;
   m_dijkstra.clear();
   trace.clear();
+  last_point.time = Trace::null_time;
   AbstractContest::reset();
+  trace_dirty = true;
 }
 
 

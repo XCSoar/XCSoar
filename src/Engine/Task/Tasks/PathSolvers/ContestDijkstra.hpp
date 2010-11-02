@@ -135,7 +135,9 @@ protected:
 
 private:
   bool solution_found;
+  bool trace_dirty;
   virtual void add_start_edges();
+  TracePoint last_point;
 
   TracePoint best_solution[MAX_STAGES];
 };
