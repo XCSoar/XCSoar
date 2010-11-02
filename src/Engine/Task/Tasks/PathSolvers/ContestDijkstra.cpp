@@ -82,6 +82,7 @@ ContestDijkstra::solve()
 
   if (m_dijkstra.empty()) {
     m_dijkstra.restart(ScanTaskPoint(0, 0));
+    start_search();
     add_start_edges();
     if (m_dijkstra.empty())
       // no processing to perform!
@@ -240,6 +241,12 @@ ContestDijkstra::copy_solution(TracePointVector &vec)
     for (unsigned i = 0; i < num_stages; ++i)
       vec.push_back(best_solution[i]);
   }
+}
+
+void 
+ContestDijkstra::start_search()
+{
+  // nothing required by default
 }
 
 /*

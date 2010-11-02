@@ -154,6 +154,11 @@ protected:
    */
   unsigned get_weighting(const unsigned index) const;
 
+  /**
+   * Perform actions required at start of new search
+   */
+  virtual void start_search();
+
 private:
   const TracePointVector &trace;
   const unsigned m_finish_alt_diff;
