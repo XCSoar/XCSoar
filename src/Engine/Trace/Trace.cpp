@@ -406,6 +406,26 @@ Trace::thin_trace(TracePointList& tlist, const unsigned mrange_sq)
 TracePointVector
 Trace::get_trace_points(const unsigned max_points) const
 {
+  if (max_points == 2) {
+    if (trace_tree.size()<2) {
+      return TracePointVector();
+    }
+    // special case - just look for points within time range
+    TracePoint p;
+    unsigned tmin = (unsigned)-1;
+    for (TraceTree::const_iterator tr = trace_tree.begin();
+         tr != trace_tree.end(); ++tr) {
+      if (inside_time_window(tr->time) && (tr->time< tmin)) {
+        p = *tr;
+        tmin = tr->time;
+      }
+    }
+    TracePointVector v;
+    v.push_back(p);
+    v.push_back(m_last_point);
+    return v;
+  }
+
   TracePointSet tset(begin(), end());
 
   if (tset.empty())
