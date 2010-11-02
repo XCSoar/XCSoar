@@ -70,6 +70,11 @@ ContestManager olc_league(OLC_League, handicap,
                           stats_league,
                           full_trace, sprint_trace);
 
+ContestResult stats_plus;
+ContestManager olc_plus(OLC_Plus, handicap, 
+                        stats_plus,
+                        full_trace, sprint_trace);
+
 class IgcReplayGlue:
   public IgcReplay
 {
@@ -158,6 +163,7 @@ TestOLC(const char *filename)
     olc_fai.update_idle();
     olc_sprint.update_idle();
     olc_league.update_idle();
+    olc_plus.update_idle();
   }
 
   putchar('\n');
@@ -170,6 +176,8 @@ TestOLC(const char *filename)
   PrintHelper::print(stats_fai);
   std::cout << "sprint\n";
   PrintHelper::print(stats_sprint);
+  std::cout << "plus\n";
+  PrintHelper::print(stats_plus);
 }
 
 
