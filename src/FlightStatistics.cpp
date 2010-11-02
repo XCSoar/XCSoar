@@ -191,10 +191,9 @@ FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
     DrawLegs(chart, task, nmea_info, derived_info, false);
   }
 
-  Pen hpHorizonGround(Pen::SOLID, IBLSCALE(1), Chart::GROUND_COLOUR);
   Brush hbHorizonGround(Chart::GROUND_COLOUR);
 
-  canvas.select(hpHorizonGround);
+  canvas.null_pen();
   canvas.select(hbHorizonGround);
 
   chart.DrawFilledLineGraph(Altitude_Terrain);
@@ -693,10 +692,9 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
 
     points[2 + AIRSPACE_SCANSIZE_X] = points[0];
 
-    Pen a_pen(Pen::SOLID, IBLSCALE(1), Chart::GROUND_COLOUR);
     Brush a_brush(Chart::GROUND_COLOUR);
 
-    canvas.select(a_pen);
+    canvas.null_pen();
     canvas.select(a_brush);
     canvas.polygon(&points[0], sizeof(points) / sizeof(points[0]));
   }
