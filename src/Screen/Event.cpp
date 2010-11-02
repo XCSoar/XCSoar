@@ -88,6 +88,19 @@ EventLoop::dispatch(const MSG &msg)
   assert_none_locked();
 }
 
+void
+DialogEventLoop::dispatch(MSG &msg)
+{
+  assert_none_locked();
+
+  if (::IsDialogMessage(dialog, &msg)) {
+    assert_none_locked();
+    return;
+  }
+
+  EventLoop::dispatch(msg);
+}
+
 #endif /* !ENABLE_SDL */
 
 unsigned

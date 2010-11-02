@@ -69,6 +69,15 @@ public:
   void dispatch(const MSG &msg);
 };
 
+class DialogEventLoop : public EventLoop {
+  HWND dialog;
+
+public:
+  DialogEventLoop(HWND _dialog):dialog(_dialog) {}
+
+  void dispatch(MSG &msg);
+};
+
 #endif /* !ENABLE_SDL */
 
 gcc_const

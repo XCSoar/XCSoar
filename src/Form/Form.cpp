@@ -288,7 +288,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 
 #else /* !ENABLE_SDL */
 
-  EventLoop loop;
+  DialogEventLoop loop(*this);
   while (mModalResult == 0 && loop.get(msg)) {
 //hack!
 
