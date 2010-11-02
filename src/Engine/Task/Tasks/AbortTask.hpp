@@ -238,6 +238,17 @@ protected:
                       const bool only_airfield,
                       const bool final_glide);
 
+protected:
+  bool is_active; /// whether the AbortTask is the master or running in background
+
+public:
+/**
+ * Specify whether the task is active or not.  If it's active, it will
+ * notify the user about the abort task point being changed via the events.
+ *
+ */
+  void set_active(const bool _active) { is_active = _active; }
+
 private:
   typedef std::vector<std::pair<TaskPoint*, GlideResult> > AlternateTaskVector;
   AlternateTaskVector tps;

@@ -276,7 +276,7 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
 
   if (tps.size()) {
     active_waypoint = tps[activeTaskPoint].first->get_waypoint().id;
-    if (active_waypoint_on_entry != active_waypoint) {
+    if (is_active && (active_waypoint_on_entry != active_waypoint)) {
       task_events.active_changed(*(tps[activeTaskPoint].first));
     }
   }
