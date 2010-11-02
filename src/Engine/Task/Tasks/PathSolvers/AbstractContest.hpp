@@ -125,6 +125,9 @@ protected:
    */
   virtual bool update_score();
 
+  bool finish_altitude_valid(const TracePoint& start,
+                             const TracePoint& finish) const;
+
 protected:
   const TracePointVector &trace;
   const unsigned m_finish_alt_diff;

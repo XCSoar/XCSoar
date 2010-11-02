@@ -203,8 +203,7 @@ ContestDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
   if (!is_final(candidate))
     return true;
   else
-    return (get_point(candidate).NavAltitude + fixed(m_finish_alt_diff) >=
-            solution[0].NavAltitude);
+    return finish_altitude_valid(solution[0], get_point(candidate));
 }
 
 bool

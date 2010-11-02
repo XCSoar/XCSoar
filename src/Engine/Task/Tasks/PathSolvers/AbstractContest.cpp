@@ -103,3 +103,11 @@ AbstractContest::save_solution()
   }
   return false;
 }
+
+bool
+AbstractContest::finish_altitude_valid(const TracePoint& start,
+                                       const TracePoint& finish) const
+{
+  return (finish.NavAltitude + fixed(m_finish_alt_diff) >=
+          start.NavAltitude);
+}
