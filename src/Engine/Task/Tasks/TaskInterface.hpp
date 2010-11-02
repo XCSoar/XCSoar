@@ -128,10 +128,5 @@ public:
  * @return True if internal state changed
  */
   virtual bool update_idle(const AIRCRAFT_STATE &state_now) = 0;
-
-#ifdef DO_PRINT
-  virtual void print(const AIRCRAFT_STATE &state) = 0;
-#endif
-
 };
 #endif //TASKINTERFACE_H

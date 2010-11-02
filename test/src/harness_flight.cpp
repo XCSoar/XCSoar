@@ -121,7 +121,7 @@ bool run_flight(TaskManager &task_manager,
 
 #ifdef DO_PRINT
     if (do_print) {
-      task_manager.print(ac.get_state());
+      PrintHelper::taskmanager_print(task_manager, ac.get_state());
       ac.print(f4);
       f4.flush();
       if (aircraft_filter) {
@@ -163,7 +163,7 @@ bool run_flight(TaskManager &task_manager,
 
 #ifdef DO_PRINT
   if (verbose) {
-    task_manager.print(ac.get_state());
+    PrintHelper::taskmanager_print(task_manager, ac.get_state());
     ac.print(f4);
     f4 << "\n";
     f4.flush();

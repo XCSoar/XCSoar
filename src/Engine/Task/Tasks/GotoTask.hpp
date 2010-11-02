@@ -133,10 +133,6 @@ protected:
 private:    
   TaskPoint* tp;
 public:
-#ifdef DO_PRINT
-  void print(const AIRCRAFT_STATE &state);
-#endif
-
 /** 
  * Accept a task point visitor; makes the visitor visit
  * all TaskPoint in the task
@@ -147,6 +143,10 @@ public:
  */
   void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
   void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) {};
+
+#ifdef DO_PRINT
+  friend class PrintHelper;
+#endif
 };
 
 #endif //GOTOTASK_H

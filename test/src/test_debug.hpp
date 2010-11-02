@@ -1,6 +1,7 @@
 #ifndef TEST_DEBUG_HPP
 #define TEST_DEBUG_HPP
 
+#include "Printing.hpp"
 #include <fstream>
 #include <iostream>
 #include <getopt.h>

@@ -246,10 +246,6 @@ private:
   bool m_landable_reachable;
 
 public:
-#ifdef DO_PRINT
-  void print(const AIRCRAFT_STATE &location);
-#endif
-
 /** 
  * Accept a const task point visitor; makes the visitor visit
  * all TaskPoint in the task
@@ -269,6 +265,10 @@ public:
  *
  */
   void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) {};
+
+#ifdef DO_PRINT
+  friend class PrintHelper;
+#endif
 };
 
 #endif //ABORTTASK_H

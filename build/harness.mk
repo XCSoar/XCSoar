@@ -15,6 +15,7 @@ TEST_SRC = \
 
 HARNESS_LIBS = $(TARGET_OUTPUT_DIR)/harness.a
 
+$(HARNESS_LIBS): CPPFLAGS += -DDO_PRINT
 $(HARNESS_LIBS): $(call SRC_TO_OBJ,$(TEST_SRC))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^

@@ -34,23 +34,157 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-
-#ifdef DO_PRINT
+#include "Printing.hpp"
 #include <fstream>
 
-#include "Task/TaskManager.hpp"
+#ifdef FIXED_MATH
+#include "Math/fixed.hpp"
 
-void TaskManager::print(const AIRCRAFT_STATE &state)
+std::ostream& operator<<(std::ostream& os,fixed const& value)
 {
-  if (active_task) 
-    active_task->print(state);
+  return os<<value.as_double();
+}
+#endif
 
-  trace_full.print(state.Location);
+void
+PrintHelper::abstracttask_print(AbstractTask& task, const AIRCRAFT_STATE &state) 
+{
+  std::ofstream fs("results/res-stats-all.txt");
+  fs << task.stats;
 
-  contest_manager.print();
+  static std::ofstream f6("results/res-stats.txt");
+  static bool first = true;
+
+  if (first) {
+    first = false;
+    f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc task_vario effective_mc\n";
+  }
+
+  if (positive(task.stats.Time)) {
+    f6 << task.stats.Time
+       << " " << task.activeTaskPoint
+       << " " << task.stats.mc_best
+       << " " << task.stats.total.remaining_effective.get_distance()
+       << " " << task.stats.total.remaining.get_distance() 
+       << " " << task.stats.cruise_efficiency 
+       << " " << task.stats.total.remaining.get_speed() 
+       << " " << task.stats.total.remaining.get_speed_incremental() 
+       << " " << task.stats.total.remaining_effective.get_speed() 
+       << " " << task.stats.total.remaining_effective.get_speed_incremental() 
+       << " " << task.stats.total.vario.get_value() 
+       << " " << task.stats.effective_mc
+       << "\n";
+    f6.flush();
+  } else {
+    f6 << "\n";
+    f6.flush();
+  }
+}
+
+
+void 
+PrintHelper::gototask_print(GotoTask& task, const AIRCRAFT_STATE &state) 
+{
+  abstracttask_print(task, state);
+  if (task.tp) {
+    std::ofstream f1("results/res-goto.txt");
+    task.tp->print(f1,state);
+  }
+}
+
+void 
+PrintHelper::orderedtask_print(OrderedTask& task, const AIRCRAFT_STATE &state) 
+{
+  abstracttask_print(task, state);
+
+  std::ofstream fi("results/res-isolines.txt");
+  for (unsigned i=0; i<task.tps.size(); i++) {
+    fi << "## point " << i << "\n";
+    task.tps[i]->print(fi,state,1);
+    fi << "\n";
+  }
+
+  std::ofstream f1("results/res-task.txt");
+
+  f1 << "#### Task points\n";
+  for (unsigned i=0; i<task.tps.size(); i++) {
+    f1 << "## point " << i << " ###################\n";
+    task.tps[i]->print(f1,state,0);
+    f1 << "\n";
+  }
+
+  std::ofstream f5("results/res-ssample.txt");
+  f5 << "#### Task sampled points\n";
+  for (unsigned i=0; i<task.tps.size(); i++) {
+    f5 << "## point " << i << "\n";
+    task.tps[i]->print_samples(f5,state);
+    f5 << "\n";
+  }
+
+  std::ofstream f2("results/res-max.txt");
+  f2 << "#### Max task\n";
+  for (unsigned i=0; i<task.tps.size(); i++) {
+    OrderedTaskPoint *tp = task.tps[i];
+    f2 <<  tp->get_location_max().Longitude << " " 
+       <<  tp->get_location_max().Latitude << "\n";
+  }
+
+  std::ofstream f3("results/res-min.txt");
+  f3 << "#### Min task\n";
+  for (unsigned i=0; i<task.tps.size(); i++) {
+    OrderedTaskPoint *tp = task.tps[i];
+    f3 <<  tp->get_location_min().Longitude << " " 
+       <<  tp->get_location_min().Latitude << "\n";
+  }
+
+  std::ofstream f4("results/res-rem.txt");
+  f4 << "#### Remaining task\n";
+  for (unsigned i=0; i<task.tps.size(); i++) {
+    OrderedTaskPoint *tp = task.tps[i];
+    f4 <<  tp->get_location_remaining().Longitude << " " 
+       <<  tp->get_location_remaining().Latitude << "\n";
+  }
+}
+
+
+void PrintHelper::aborttask_print(AbortTask& task, const AIRCRAFT_STATE &state)
+{
+  abstracttask_print(task, state);
+
+  std::ofstream f1("results/res-abort-task.txt");
+  f1 << "#### Task points\n";
+  for (unsigned i=0; i<task.tps.size(); i++) {
+    GeoPoint l = task.tps[i].first->get_location();
+    f1 << "## point " << i << " ###################\n";
+    if (i==task.activeTaskPoint) {
+      f1 << state.Location.Longitude << " " << state.Location.Latitude << "\n";
+    }
+    f1 << l.Longitude << " " << l.Latitude << "\n";
+    f1 << "\n";
+  }
+}
+
+
+void PrintHelper::taskmanager_print(TaskManager& task, const AIRCRAFT_STATE &state)
+{
+  if (task.active_task) {
+    if (task.active_task == &task.task_abort) {
+      aborttask_print(task.task_abort, state);
+    }
+    if (task.active_task == &task.task_goto) {
+      gototask_print(task.task_goto, state);
+    }
+    if (task.active_task == &task.task_ordered) {
+      orderedtask_print(task.task_ordered, state);
+    }
+  }
+
+  task.trace_full.print(state.Location);
+
+  task.contest_manager.print();
 
   std::ofstream fs("results/res-stats-common.txt");
-  fs << common_stats;
+  fs << task.common_stats;
 }
 
 #include "Math/Earth.hpp"
@@ -236,8 +370,7 @@ std::ostream& operator<< (std::ostream& f,
 {
   f << "# circle " << as.get_base_altitude() << " " << as.get_top_altitude() << "\n";
   for (double t=0; t<=360; t+= 30) {
-    GeoPoint l;
-    FindLatitudeLongitude(as.m_center, Angle::degrees(fixed(t)), as.m_radius, &l);
+    GeoPoint l = FindLatitudeLongitude(as.m_center, Angle::degrees(fixed(t)), as.m_radius);
     f << l.Longitude << " " << l.Latitude << "\n";
   }
   f << "\n";
@@ -287,131 +420,6 @@ TaskPoint::print(std::ostream& f, const AIRCRAFT_STATE &state) const
   f << "# Task point \n";
   f << "#   Location " << get_location().Longitude << "," <<
     get_location().Latitude << "\n";
-}
-
-
-#include "Task/Tasks/AbstractTask.hpp"
-
-void
-AbstractTask::print(const AIRCRAFT_STATE &state)
-{
-  std::ofstream fs("results/res-stats-all.txt");
-  fs << stats;
-
-  static std::ofstream f6("results/res-stats.txt");
-  static bool first = true;
-
-  if (first) {
-    first = false;
-    f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc task_vario effective_mc\n";
-  }
-
-  if (positive(stats.Time)) {
-    f6 << stats.Time
-       << " " << activeTaskPoint
-       << " " << stats.mc_best
-       << " " << stats.total.remaining_effective.get_distance()
-       << " " << stats.total.remaining.get_distance() 
-       << " " << stats.cruise_efficiency 
-       << " " << stats.total.remaining.get_speed() 
-       << " " << stats.total.remaining.get_speed_incremental() 
-       << " " << stats.total.remaining_effective.get_speed() 
-       << " " << stats.total.remaining_effective.get_speed_incremental() 
-       << " " << stats.total.vario.get_value() 
-       << " " << stats.effective_mc
-       << "\n";
-    f6.flush();
-  } else {
-    f6 << "\n";
-    f6.flush();
-  }
-}
-
-#include "Task/Tasks/GotoTask.hpp"
-
-void 
-GotoTask::print(const AIRCRAFT_STATE &state)
-{
-  AbstractTask::print(state);
-  if (tp) {
-    std::ofstream f1("results/res-goto.txt");
-    tp->print(f1,state);
-  }
-}
-
-#include "Task/Tasks/OrderedTask.hpp"
-
-void OrderedTask::print(const AIRCRAFT_STATE &state) 
-{
-  AbstractTask::print(state);
-
-  std::ofstream fi("results/res-isolines.txt");
-  for (unsigned i=0; i<tps.size(); i++) {
-    fi << "## point " << i << "\n";
-    tps[i]->print(fi,state,1);
-    fi << "\n";
-  }
-
-  std::ofstream f1("results/res-task.txt");
-
-  f1 << "#### Task points\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    f1 << "## point " << i << " ###################\n";
-    tps[i]->print(f1,state,0);
-    f1 << "\n";
-  }
-
-  std::ofstream f5("results/res-ssample.txt");
-  f5 << "#### Task sampled points\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    f5 << "## point " << i << "\n";
-    tps[i]->print_samples(f5,state);
-    f5 << "\n";
-  }
-
-  std::ofstream f2("results/res-max.txt");
-  f2 << "#### Max task\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    OrderedTaskPoint *tp = tps[i];
-    f2 <<  tp->get_location_max().Longitude << " " 
-       <<  tp->get_location_max().Latitude << "\n";
-  }
-
-  std::ofstream f3("results/res-min.txt");
-  f3 << "#### Min task\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    OrderedTaskPoint *tp = tps[i];
-    f3 <<  tp->get_location_min().Longitude << " " 
-       <<  tp->get_location_min().Latitude << "\n";
-  }
-
-  std::ofstream f4("results/res-rem.txt");
-  f4 << "#### Remaining task\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    OrderedTaskPoint *tp = tps[i];
-    f4 <<  tp->get_location_remaining().Longitude << " " 
-       <<  tp->get_location_remaining().Latitude << "\n";
-  }
-
-}
-
-#include "Task/Tasks/AbortTask.hpp"
-
-void AbortTask::print(const AIRCRAFT_STATE &state)
-{
-  AbstractTask::print(state);
-
-  std::ofstream f1("results/res-abort-task.txt");
-  f1 << "#### Task points\n";
-  for (unsigned i=0; i<tps.size(); i++) {
-    GeoPoint l = tps[i].first->get_location();
-    f1 << "## point " << i << " ###################\n";
-    if (i==activeTaskPoint) {
-      f1 << state.Location.Longitude << " " << state.Location.Latitude << "\n";
-    }
-    f1 << l.Longitude << " " << l.Latitude << "\n";
-    f1 << "\n";
-  }
 }
 
 
@@ -643,5 +651,3 @@ std::ostream& operator<< (std::ostream& o, const Angle& a)
   o << a.value_degrees();
   return o;
 } 
-
-#endif

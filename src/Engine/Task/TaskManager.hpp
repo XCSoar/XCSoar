@@ -441,7 +441,7 @@ public:
   fixed get_task_radius(const GeoPoint& fallback_location) const;
 
 #ifdef DO_PRINT
-  void print(const AIRCRAFT_STATE &location);
+  friend class PrintHelper;
 #endif
 
   /**

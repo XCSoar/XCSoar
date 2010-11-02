@@ -187,7 +187,7 @@ test_replay(const Contests olc_type,
         f.flush();
       }
       if (do_print) {
-        task_manager.print(sim.state);
+        PrintHelper::taskmanager_print(task_manager, sim.state);
       }
 #endif
       do_print = (++print_counter % output_skip ==0) && verbose;

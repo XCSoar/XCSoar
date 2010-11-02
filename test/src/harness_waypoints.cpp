@@ -1,3 +1,4 @@
+#include "Printing.hpp"
 #include "harness_waypoints.hpp"
 #include "test_debug.hpp"
 #include <fstream>
