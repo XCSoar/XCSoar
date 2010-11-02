@@ -31,9 +31,6 @@ void CreateDirectoryIfAbsent(const TCHAR *filename);
 
 void StartupLogFreeRamAndStorage();
 
-unsigned
-TranscodeKey(unsigned wParam);
-
 RECT SystemWindowSize(void);
 
 #endif

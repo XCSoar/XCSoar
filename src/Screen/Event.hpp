@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_EVENT_HPP
 #define XCSOAR_SCREEN_EVENT_HPP
 
+#include "Compiler.h"
+
 #ifdef ENABLE_SDL
 
 #include <SDL_version.h>
@@ -50,7 +52,7 @@ public:
 
 #else /* !ENABLE_SDL */
 
-#include <windef.h>
+#include <windows.h>
 
 static inline bool
 is_user_input(UINT message)
@@ -61,5 +63,9 @@ is_user_input(UINT message)
 }
 
 #endif /* !ENABLE_SDL */
+
+gcc_const
+unsigned
+TranscodeKey(unsigned key_code);
 
 #endif

@@ -135,64 +135,6 @@ StartupLogFreeRamAndStorage()
   LogStartUp(_T("Free ram %d; free storage %d"), freeram, freestorage);
 }
 
-unsigned
-TranscodeKey(unsigned wParam)
-{
-  // VENTA-ADDON HARDWARE KEYS TRANSCODING
-
-  if (GlobalModelType == MODELTYPE_PNA_HP31X) {
-    if (wParam == 0x7b)
-      wParam = 0x1b;
-  } else if (GlobalModelType == MODELTYPE_PNA_PN6000) {
-    switch(wParam) {
-    case 0x79:					// Upper Silver key short press
-      wParam = 0xc1;	// F10 -> APP1
-      break;
-    case 0x7b:					// Lower Silver key short press
-      wParam = 0xc2;	// F12 -> APP2
-      break;
-    case 0x72:					// Back key plus
-      wParam = 0xc3;	// F3  -> APP3
-      break;
-    case 0x71:					// Back key minus
-      wParam = 0xc4;	// F2  -> APP4
-      break;
-    case 0x7a:					// Upper silver key LONG press
-      wParam = 0x70;	// F11 -> F1
-      break;
-    case 0x7c:					// Lower silver key LONG press
-      wParam = 0x71;	// F13 -> F2
-      break;
-    }
-  } else if (GlobalModelType == MODELTYPE_PNA_NOKIA_500) {
-    switch(wParam) {
-    case 0xc1:
-      wParam = 0x0d;	// middle key = enter
-      break;
-    case 0xc5:
-      wParam = 0x26;	// + key = pg Up
-      break;
-    case 0xc6:
-      wParam = 0x28;	// - key = pg Down
-      break;
-    }
-  } else if (GlobalModelType == MODELTYPE_PNA_MEDION_P5) {
-    switch(wParam) {
-    case 0x79:
-      wParam = 0x0d;	// middle key = enter
-      break;
-    case 0x75:
-      wParam = 0x26;	// + key = pg Up
-      break;
-    case 0x76:
-      wParam = 0x28;	// - key = pg Down
-      break;
-    }
-  }
-
-  return wParam;
-}
-
 /**
  * Returns the screen dimension rect to be used
  * @return The screen dimension rect to be used
