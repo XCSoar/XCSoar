@@ -767,8 +767,11 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Audio/VegaVoice.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
+	$(SRC)/Airspace/AirspaceParser.cpp \
+	$(SRC)/Airspace/AirspaceGlue.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/Compatibility/string.c \
+	$(SRC)/IO/ConfiguredFile.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakePersist.cpp \

@@ -50,6 +50,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Airspace/AirspaceParser.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Airspace/AirspaceGlue.hpp"
 #include "Profile/Profile.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
@@ -148,6 +149,9 @@ static void
 LoadFiles()
 {
   terrain = RasterTerrain::OpenTerrain(NULL);
+
+  AtmosphericPressure pressure;
+  ReadAirspace(airspace_database, terrain, pressure);
 }
 
 #ifndef WIN32
