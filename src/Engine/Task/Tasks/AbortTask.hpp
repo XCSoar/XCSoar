@@ -53,6 +53,7 @@ class AbortTask :
   public UnorderedTask 
 {
 public:
+  friend class PrintHelper;
 
   typedef std::pair < Waypoint, GlideResult > Alternate;
   typedef std::vector < Alternate > AlternateVector; 
@@ -266,9 +267,6 @@ public:
  */
   void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) {};
 
-#ifdef DO_PRINT
-  friend class PrintHelper;
-#endif
 };
 
 #endif //ABORTTASK_H

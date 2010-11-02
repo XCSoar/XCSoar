@@ -56,6 +56,8 @@
  */
 class AATPoint : public IntermediatePoint {
 public:
+  friend class PrintHelper;
+
 /** 
  * Constructor.  Initialises to unlocked target, target is
  * initially set to origin.
@@ -205,11 +207,6 @@ public:
  */
   bool close_to_target(const AIRCRAFT_STATE& state,
                        const fixed threshold=fixed_zero) const;
-
-#ifdef DO_PRINT
-  void print(std::ostream& f, const AIRCRAFT_STATE&state, 
-             const int item=0) const;
-#endif
 
 private:
   GeoPoint m_target_location;      /**< Location of target within OZ */

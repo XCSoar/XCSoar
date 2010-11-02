@@ -57,6 +57,8 @@ class TaskPoint :
 {
 
 public:
+  friend class PrintHelper;
+
   enum type {
     UNORDERED,
     START,
@@ -212,10 +214,6 @@ public:
  */
   gcc_pure
   virtual fixed get_elevation() const = 0;
-
-#ifdef DO_PRINT
-  virtual void print(std::ostream& f, const AIRCRAFT_STATE &state) const;
-#endif
 
 protected:
   const fixed m_elevation; /**< Altitude (AMSL, m) of task point terrain */

@@ -62,6 +62,8 @@ typedef std::list<TracePoint> TracePointList;
 class Trace: private NonCopyable 
 {
 public:
+  friend class PrintHelper;
+
   /**
    * Constructor.  Task projection is updated after first call to append().
    *
@@ -214,11 +216,6 @@ private:
 
   static const unsigned null_delta;
   static const unsigned null_time;
-
-public:
-#ifdef DO_PRINT
-  void print(const GeoPoint &loc) const;
-#endif
 };
 
 #endif

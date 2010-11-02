@@ -69,6 +69,7 @@ class OrderedTask:
 public:
   friend class Serialiser;
   friend class TaskDijkstra;
+  friend class PrintHelper;
 
   typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector; /**< Storage type of task points */ 
 
@@ -775,9 +776,6 @@ public:
    */
   void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false);
 
-#ifdef DO_PRINT
-  friend class PrintHelper;
-#endif
 };
 
 #endif //ORDEREDTASK_H

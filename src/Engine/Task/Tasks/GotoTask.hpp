@@ -48,6 +48,8 @@ class GotoTask :
   public UnorderedTask 
 {
 public:
+  friend class PrintHelper;
+
   /** 
    * Base constructor.
    * 
@@ -144,9 +146,6 @@ public:
   void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
   void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) {};
 
-#ifdef DO_PRINT
-  friend class PrintHelper;
-#endif
 };
 
 #endif //GOTOTASK_H

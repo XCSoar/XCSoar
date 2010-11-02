@@ -57,6 +57,7 @@ class AbstractTask:
   public TaskInterface 
 {
 public:
+  friend class PrintHelper;
   /** 
    * Base constructor.  Sets time constants of Best Mc and cruise efficiency
    * low pass filters.
@@ -500,9 +501,5 @@ public:
  * @param reverse Perform scan in reverse sequence
  */
   virtual void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) = 0;
-
-#ifdef DO_PRINT
-  friend class PrintHelper;
-#endif
 };
 #endif //ABSTRACTTASK_H

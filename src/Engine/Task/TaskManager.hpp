@@ -69,6 +69,7 @@ class TaskManager:
 {
 public:
   friend class Serialiser;
+  friend class PrintHelper;
 
   /**
    * Constructor for task manager
@@ -439,10 +440,6 @@ public:
    * @return Radius (m) from center to edge of task
    */
   fixed get_task_radius(const GeoPoint& fallback_location) const;
-
-#ifdef DO_PRINT
-  friend class PrintHelper;
-#endif
 
   /**
    * returns taskpoint name

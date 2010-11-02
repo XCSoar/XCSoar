@@ -37,14 +37,146 @@
 #include "Printing.hpp"
 #include <fstream>
 
-#ifdef FIXED_MATH
-#include "Math/fixed.hpp"
+#include "Engine/Task/TaskManager.hpp"
+#include "Task/Tasks/AbortTask.hpp"
+#include "Task/Tasks/GotoTask.hpp"
+#include "Task/Tasks/OrderedTask.hpp"
+#include "Task/Tasks/AbstractTask.hpp"
+#include "Task/Tasks/BaseTask/TaskPoint.hpp"
+#include "Task/Tasks/BaseTask/SampledTaskPoint.hpp"
+#include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
+#include "Task/Tasks/ContestManager.hpp"
+#include "Trace/Trace.hpp"
 
+#ifdef FIXED_MATH
 std::ostream& operator<<(std::ostream& os,fixed const& value)
 {
   return os<<value.as_double();
 }
 #endif
+
+
+#include "Task/TaskPoints/AATPoint.hpp"
+#include "Task/TaskPoints/AATIsolineSegment.hpp"
+
+void 
+PrintHelper::aatpoint_print(std::ostream& f, 
+                            const AATPoint& tp,
+                            const AIRCRAFT_STATE& state,
+                            const int item) 
+{
+  switch(item) {
+  case 0:
+    orderedtaskpoint_print(f, tp, state, item);
+    f << "#   Target " << tp.m_target_location.Longitude << "," 
+      << tp.m_target_location.Latitude << "\n";
+    break;
+
+  case 1:
+
+    if ((tp.get_next()!= NULL) && (tp.getActiveState() != OrderedTaskPoint::BEFORE_ACTIVE)) {
+
+      // note in general this will only change if 
+      // prev max or target changes
+
+      AATIsolineSegment seg(tp);
+      double tdist = tp.get_previous()->get_location_remaining().distance(
+        tp.get_location_min());
+      double rdist = tp.get_previous()->get_location_remaining().distance(
+        tp.get_location_target());
+
+      bool filter_backtrack = true;
+      if (seg.valid()) {
+        for (double t = 0.0; t<=1.0; t+= 1.0/20) {
+          GeoPoint ga = seg.parametric(fixed(t));
+          double dthis = tp.get_previous()->get_location_remaining().distance(ga);
+          if (!filter_backtrack 
+              || (dthis>=tdist)
+              || (dthis>=rdist)) {
+            /// @todo unless double dist is better than current
+            f << ga.Longitude << " " << ga.Latitude << "\n";
+          }
+        }
+      } else {
+        GeoPoint ga = seg.parametric(fixed_zero);
+        f << ga.Longitude << " " << ga.Latitude << "\n";
+      }
+      f << "\n";
+
+    }
+    break;
+  }
+}
+
+
+void 
+PrintHelper::orderedtaskpoint_print(std::ostream& f, 
+                                    const OrderedTaskPoint& tp,
+                                    const AIRCRAFT_STATE& state,
+                                    const int item) 
+{
+  if (item==0) {
+    sampledtaskpoint_print(f,tp,state);
+    orderedtaskpoint_print_boundary(f,tp,state);
+    f << "# Entered " << tp.get_state_entered().Time << "\n";
+    f << "# Bearing travelled " << tp.vector_travelled.Bearing << "\n";
+    f << "# Distance travelled " << tp.vector_travelled.Distance << "\n";
+    f << "# Bearing remaining " << tp.vector_remaining.Bearing << "\n";
+    f << "# Distance remaining " << tp.vector_remaining.Distance << "\n";
+    f << "# Bearing planned " << tp.vector_planned.Bearing << "\n";
+    f << "# Distance planned " << tp.vector_planned.Distance << "\n";
+  }
+}
+
+
+void 
+PrintHelper::orderedtaskpoint_print_boundary(std::ostream& f, 
+                                             const OrderedTaskPoint& tp,
+                                             const AIRCRAFT_STATE &state) 
+{
+  f << "#   Boundary points\n";
+  for (double t=0; t<= 1.0; t+= 0.05) {
+    GeoPoint loc = tp.get_boundary_parametric(fixed(t));
+    f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
+  }
+  GeoPoint loc = tp.get_boundary_parametric(fixed_zero);
+  f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
+  f << "\n";
+}
+
+
+void 
+PrintHelper::sampledtaskpoint_print(std::ostream& f, const SampledTaskPoint& tp,
+                                    const AIRCRAFT_STATE &state) 
+{
+  taskpoint_print(f,tp,state);
+}
+
+
+void 
+PrintHelper::sampledtaskpoint_print_samples(std::ostream& f,
+                                            const SampledTaskPoint& tp,
+                                            const AIRCRAFT_STATE &state) 
+{
+  const unsigned n= tp.get_search_points().size();
+  f << "#   Search points\n";
+  for (unsigned i=0; i<n; i++) {
+    const GeoPoint loc = tp.get_search_points()[i].get_location();
+    f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
+  }
+  f << "\n";
+}
+
+
+void 
+PrintHelper::taskpoint_print(std::ostream& f, const TaskPoint& tp,
+                             const AIRCRAFT_STATE &state) 
+{
+  f << "# Task point \n";
+  f << "#   Location " << tp.get_location().Longitude << "," <<
+    tp.get_location().Latitude << "\n";
+}
+
 
 void
 PrintHelper::abstracttask_print(AbstractTask& task, const AIRCRAFT_STATE &state) 
@@ -88,7 +220,7 @@ PrintHelper::gototask_print(GotoTask& task, const AIRCRAFT_STATE &state)
   abstracttask_print(task, state);
   if (task.tp) {
     std::ofstream f1("results/res-goto.txt");
-    task.tp->print(f1,state);
+    taskpoint_print(f1,*task.tp,state);
   }
 }
 
@@ -100,7 +232,11 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AIRCRAFT_STATE &state)
   std::ofstream fi("results/res-isolines.txt");
   for (unsigned i=0; i<task.tps.size(); i++) {
     fi << "## point " << i << "\n";
-    task.tps[i]->print(fi,state,1);
+    if (task.tps[i]->type == TaskPoint::AST) {
+      aatpoint_print(fi,(AATPoint&)*task.tps[i],state,1);
+    } else {
+      orderedtaskpoint_print(fi,*task.tps[i],state,1);
+    }
     fi << "\n";
   }
 
@@ -109,7 +245,11 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AIRCRAFT_STATE &state)
   f1 << "#### Task points\n";
   for (unsigned i=0; i<task.tps.size(); i++) {
     f1 << "## point " << i << " ###################\n";
-    task.tps[i]->print(f1,state,0);
+    if (task.tps[i]->type == TaskPoint::AST) {
+      aatpoint_print(f1,(AATPoint&)*task.tps[i],state,0);
+    } else {
+      orderedtaskpoint_print(f1,*task.tps[i],state,0);
+    }
     f1 << "\n";
   }
 
@@ -117,7 +257,7 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AIRCRAFT_STATE &state)
   f5 << "#### Task sampled points\n";
   for (unsigned i=0; i<task.tps.size(); i++) {
     f5 << "## point " << i << "\n";
-    task.tps[i]->print_samples(f5,state);
+    sampledtaskpoint_print_samples(f5,*task.tps[i],state);
     f5 << "\n";
   }
 
@@ -179,9 +319,9 @@ void PrintHelper::taskmanager_print(TaskManager& task, const AIRCRAFT_STATE &sta
     }
   }
 
-  task.trace_full.print(state.Location);
+  trace_print(task.trace_full, state.Location);
 
-  task.contest_manager.print();
+  contestmanager_print(task.contest_manager);
 
   std::ofstream fs("results/res-stats-common.txt");
   fs << task.common_stats;
@@ -410,124 +550,6 @@ std::ostream& operator<< (std::ostream& f,
   return f;
 }
 
-///////////////////////////////////////////////////////////////////////////
-
-#include "Task/Tasks/BaseTask/TaskPoint.hpp"
-
-void 
-TaskPoint::print(std::ostream& f, const AIRCRAFT_STATE &state) const
-{
-  f << "# Task point \n";
-  f << "#   Location " << get_location().Longitude << "," <<
-    get_location().Latitude << "\n";
-}
-
-
-#include "Task/TaskPoints/AATPoint.hpp"
-#include "Task/TaskPoints/AATIsolineSegment.hpp"
-
-void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
-                     const int item) const
-{
-  switch(item) {
-  case 0:
-    OrderedTaskPoint::print(f, state, item);
-    f << "#   Target " << m_target_location.Longitude << "," 
-      << m_target_location.Latitude << "\n";
-    break;
-
-  case 1:
-
-    if ((get_next()!= NULL) && (getActiveState() != BEFORE_ACTIVE)) {
-
-      // note in general this will only change if 
-      // prev max or target changes
-
-      AATIsolineSegment seg(*this);
-      double tdist = ::Distance(get_previous()->get_location_remaining(),
-                                get_location_min());
-      double rdist = ::Distance(get_previous()->get_location_remaining(),
-                                get_location_target());
-
-      bool filter_backtrack = true;
-      if (seg.valid()) {
-        for (double t = 0.0; t<=1.0; t+= 1.0/20) {
-          GeoPoint ga = seg.parametric(fixed(t));
-          double dthis = ::Distance(get_previous()->get_location_remaining(),
-                                    ga);
-          if (!filter_backtrack 
-              || (dthis>=tdist)
-              || (dthis>=rdist)) {
-            /// @todo unless double dist is better than current
-            f << ga.Longitude << " " << ga.Latitude << "\n";
-          }
-        }
-      } else {
-        GeoPoint ga = seg.parametric(fixed_zero);
-        f << ga.Longitude << " " << ga.Latitude << "\n";
-      }
-      f << "\n";
-
-    }
-    break;
-  }
-}
-
-#include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
-
-void 
-OrderedTaskPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
-                        const int item) const
-{
-  if (item==0) {
-    SampledTaskPoint::print(f,state);
-    print_boundary(f, state);
-    f << "# Entered " << get_state_entered().Time << "\n";
-    f << "# Bearing travelled " << vector_travelled.Bearing << "\n";
-    f << "# Distance travelled " << vector_travelled.Distance << "\n";
-    f << "# Bearing remaining " << vector_remaining.Bearing << "\n";
-    f << "# Distance remaining " << vector_remaining.Distance << "\n";
-    f << "# Bearing planned " << vector_planned.Bearing << "\n";
-    f << "# Distance planned " << vector_planned.Distance << "\n";
-  }
-}
-
-void 
-OrderedTaskPoint::print_boundary(std::ostream& f, const AIRCRAFT_STATE &state) const
-{
-  f << "#   Boundary points\n";
-  for (double t=0; t<= 1.0; t+= 0.05) {
-    GeoPoint loc = get_boundary_parametric(fixed(t));
-    f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
-  }
-  GeoPoint loc = get_boundary_parametric(fixed_zero);
-  f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
-  f << "\n";
-}
-
-
-#include "Task/Tasks/BaseTask/SampledTaskPoint.hpp"
-
-
-void 
-SampledTaskPoint::print(std::ostream& f, const AIRCRAFT_STATE &state) const
-{
-  TaskPoint::print(f,state);
-}
-
-void 
-SampledTaskPoint::print_samples(std::ostream& f,
-  const AIRCRAFT_STATE &state) 
-{
-  const unsigned n= get_search_points().size();
-  f << "#   Search points\n";
-  for (unsigned i=0; i<n; i++) {
-    const GeoPoint loc = get_search_points()[i].get_location();
-    f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
-  }
-  f << "\n";
-}
-
 #include "Airspace/AirspaceWarning.hpp"
 
 std::ostream& operator<< (std::ostream& f, 
@@ -562,17 +584,14 @@ std::ostream& operator<< (std::ostream& f,
 }
 
 
-
-#include "Task/Tasks/ContestManager.hpp"
-
 void
-ContestManager::print() const 
+PrintHelper::contestmanager_print(const ContestManager& man)  
 {
   {
     std::ofstream fs("results/res-olc-trace.txt");
 
-    for (TracePointVector::const_iterator it = trace_points_full.begin();
-         it != trace_points_full.end(); ++it) {
+    for (TracePointVector::const_iterator it = man.trace_points_full.begin();
+         it != man.trace_points_full.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 
          << "\n";
@@ -582,8 +601,8 @@ ContestManager::print() const
   {
     std::ofstream fs("results/res-olc-trace_sprint.txt");
 
-    for (TracePointVector::const_iterator it = trace_points_sprint.begin();
-         it != trace_points_sprint.end(); ++it) {
+    for (TracePointVector::const_iterator it = man.trace_points_sprint.begin();
+         it != man.trace_points_sprint.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 
          << "\n";
@@ -592,13 +611,13 @@ ContestManager::print() const
 
   std::ofstream fs("results/res-olc-solution.txt");
 
-  if (solution.empty()) 
+  if (man.solution.empty())
     return;
 
-  if (positive(result.time)) {
+  if (positive(man.result.time)) {
 
-    for (TracePointVector::const_iterator it = solution.begin();
-         it != solution.end(); ++it) {
+    for (TracePointVector::const_iterator it = man.solution.begin();
+         it != man.solution.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 
          << "\n";
@@ -606,8 +625,6 @@ ContestManager::print() const
   }
 }
 
-
-#include "Trace/Trace.hpp"
 
 static void
 print_tpv(const TracePointVector& vec, std::ofstream& fs)
@@ -630,19 +647,20 @@ print_tpv(const TracePointVector& vec, std::ofstream& fs)
 }
 
 void
-Trace::print(const GeoPoint &loc) const
+PrintHelper::trace_print(const Trace& trace, const GeoPoint &loc)
 {
   std::ofstream fs("results/res-trace.txt");
 
-  TracePointVector vec = find_within_range(loc, fixed(10000),
-                                           0, -fixed_one);
+  TracePointVector vec = trace.find_within_range(loc, fixed(10000),
+                                                 0, -fixed_one);
   print_tpv(vec, fs);
 
   std::ofstream ft("results/res-trace-thin.txt");
-  vec = find_within_range(loc, fixed(10000), 0, fixed(1000));
+  vec = trace.find_within_range(loc, fixed(10000), 0, fixed(1000));
 
   print_tpv(vec, ft);
 }
+
 
 #include "Math/Angle.hpp"
 

@@ -20,6 +20,7 @@ class Trace;
  */
 class ContestManager {
 public:
+  friend class PrintHelper;
 
   /** 
    * Base constructor.
@@ -90,11 +91,6 @@ private:
   void update_trace();
 
   bool update_trace_sample(const AIRCRAFT_STATE &state, TracePointVector& vec);
-
-public:
-#ifdef DO_PRINT
-  void print() const;
-#endif
 };
 
 #endif

@@ -63,6 +63,7 @@ class SampledTaskPoint:
 {
 public:  
   friend class OrderedTask;
+  friend class PrintHelper;
 
 /** 
  * Constructor.  Clears boundary and interior samples on instantiation.
@@ -246,12 +247,5 @@ private:
   SearchPoint m_search_max;
   SearchPoint m_search_min;
   SearchPoint m_search_reference;
-
-public:
-#ifdef DO_PRINT
-  virtual void print(std::ostream& f, const AIRCRAFT_STATE&state) const;
-  virtual void print_samples(std::ostream& f, const AIRCRAFT_STATE&state);
-#endif
-
 };
 #endif //SAMPLEDOBSERVATIONZONE_H

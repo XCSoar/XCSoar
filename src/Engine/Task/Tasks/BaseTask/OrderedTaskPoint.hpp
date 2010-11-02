@@ -61,6 +61,7 @@ class OrderedTaskPoint :
 {
 public:
   friend class Serialiser;
+  friend class PrintHelper;
 
 /** 
  * Constructor.
@@ -223,13 +224,6 @@ public:
  * @param task_projection Projection to update
  */
   void scan_projection(TaskProjection& task_projection) const;
-
-#ifdef DO_PRINT
-  virtual void print(std::ostream& f, const AIRCRAFT_STATE& state,
-                     const int item=0) const;
-  virtual void print_boundary(std::ostream& f, const AIRCRAFT_STATE &state) const;
-
-#endif
 
 protected:
 
