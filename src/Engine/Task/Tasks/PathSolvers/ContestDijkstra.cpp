@@ -42,6 +42,9 @@
 #include <algorithm>
 #include <assert.h>
 
+unsigned long ContestDijkstra::count_olc_solve = 0;
+unsigned long ContestDijkstra::count_olc_trace = 0;
+
 ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
@@ -72,18 +75,54 @@ ContestDijkstra::score(ContestResult &result)
   return false;
 }
 
+bool
+ContestDijkstra::master_is_updated()
+{
+  const bool insufficient = (n_points < num_stages);
+  const TracePoint& last_master = trace_master.get_last_point();
+
+  // update trace if time and distance are greater than previous deltas,
+  // or if time is greater than at least 30 seconds greater than previous
+
+  const bool updated = 
+    ((last_master.time >= last_point.time + min_delta_t_trace)
+     && (last_master.approx_sq_dist(last_point) >= min_distance_trace))
+    || (last_master.time >= last_point.time + max((unsigned)30, min_delta_t_trace));
+
+  // need an update if there's insufficient data in the buffer, or if
+  // the update was significant
+
+  if (insufficient || updated) {
+    last_point = last_master;
+  }
+  return insufficient || updated;
+}
+
 
 void
 ContestDijkstra::update_trace()
 {
-  const TracePoint& last_master = trace_master.get_last_point();
-  if ((n_points >= num_stages) && (last_master.time < last_point.time + 30)) {
+  if (!master_is_updated()) 
     return;
-  }
-  last_point = last_master;
+
   trace = trace_master.get_trace_points(300);
   n_points = trace.size();
   trace_dirty = true;
+
+  count_olc_trace++;
+
+  if (n_points<2) return;
+
+  // find min distance and time step within this trace
+  min_delta_t_trace = (unsigned)-1;
+  min_distance_trace = (unsigned)-1;
+  for (TracePointVector::const_iterator it = trace.begin();
+       it+1 != trace.end(); ++it) {
+    const TracePoint &p0 = *it;
+    const TracePoint &p1 = *(it+1);
+    min_distance_trace = min(p0.approx_sq_dist(p1), min_distance_trace);
+    min_delta_t_trace = min(p1.time-p0.time, min_delta_t_trace);
+  }
 }
 
 
@@ -117,6 +156,8 @@ ContestDijkstra::solve()
     }
   }
 
+  count_olc_solve++;
+
   if (distance_general(m_dijkstra, 25)) {
     save_solution();
     update_trace();
@@ -139,6 +180,8 @@ ContestDijkstra::reset()
   last_point.time = Trace::null_time;
   AbstractContest::reset();
   trace_dirty = true;
+  min_distance_trace = (unsigned)-1;
+  min_delta_t_trace = (unsigned)-1;
 }
 
 
