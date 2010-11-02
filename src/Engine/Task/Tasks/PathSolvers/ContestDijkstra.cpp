@@ -38,6 +38,7 @@
 #include "ContestDijkstra.hpp"
 #include "Task/Tasks/ContestManager.hpp"
 #include "Task/TaskStats/ContestResult.hpp"
+#include "Trace/Trace.hpp"
 
 #include <algorithm>
 #include <assert.h>
@@ -131,7 +132,10 @@ ContestDijkstra::score(ContestResult &result)
 fixed
 ContestDijkstra::calc_time() const
 {
-  return fixed(solution[num_stages - 1].time - solution[0].time);
+  if (Trace::is_null(solution[num_stages-1]))
+    return fixed_zero;
+  else 
+    return fixed(solution[num_stages - 1].time - solution[0].time);
 }
 
 fixed
