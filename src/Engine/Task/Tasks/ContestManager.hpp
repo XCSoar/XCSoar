@@ -10,6 +10,7 @@
 #include "PathSolvers/OLCFAI.hpp"
 #include "PathSolvers/OLCClassic.hpp"
 #include "PathSolvers/OLCLeague.hpp"
+#include "PathSolvers/OLCPlus.hpp"
 #include "PathSolvers/Contests.hpp"
 
 class TaskPoint;
@@ -91,6 +92,7 @@ private:
   OLCFAI olc_fai;
   OLCClassic olc_classic;
   OLCLeague olc_league;
+  OLCPlus olc_plus;
 
   void update_trace();
 

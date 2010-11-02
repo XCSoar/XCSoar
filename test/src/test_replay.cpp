@@ -153,6 +153,9 @@ test_replay(const Contests olc_type,
     case OLC_Classic:
       std::cout << "# OLC-Classic\n";
       break;
+    case OLC_Plus:
+      std::cout << "# OLC-Plus\n";
+      break;
     default:
       std::cout << "# Unknown!\n";
       break;
@@ -229,8 +232,9 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(4);
+  plan_tests(5);
 
+  ok(test_replay(OLC_Plus, official_score_classic),"replay plus",0);
   ok(test_replay(OLC_League, official_score_sprint),"replay league",0);
   ok(test_replay(OLC_FAI, official_score_fai),"replay fai",0);
   ok(test_replay(OLC_Sprint, official_score_sprint),"replay sprint",0);

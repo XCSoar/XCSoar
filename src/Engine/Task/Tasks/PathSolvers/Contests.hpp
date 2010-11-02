@@ -5,7 +5,8 @@ enum Contests {
   OLC_Sprint = 0,
   OLC_FAI,
   OLC_Classic,
-  OLC_League
+  OLC_League,
+  OLC_Plus
 };
 
 #endif

@@ -18,7 +18,8 @@ ContestManager::ContestManager(const Contests _contest,
   olc_sprint(trace_points_sprint),
   olc_fai(trace_points_full),
   olc_classic(trace_points_full),
-  olc_league(trace_points_sprint)
+  olc_league(trace_points_sprint),
+  olc_plus(trace_points_full)
 {
   reset();
 }
@@ -110,6 +111,13 @@ ContestManager::update_idle()
   case OLC_League:
     retval = run_contest(olc_classic, dummy_result, olc_league.get_solution_classic());
     retval |= run_contest(olc_league, result, solution);
+    break;
+  case OLC_Plus:
+    retval = run_contest(olc_classic, olc_plus.get_result_classic(), olc_plus.get_solution_classic());
+    retval |= run_contest(olc_fai, olc_plus.get_result_fai(), olc_plus.get_solution_fai());
+    if (retval) {
+      retval |= run_contest(olc_plus, result, solution);
+    }
     break;
   };
 
