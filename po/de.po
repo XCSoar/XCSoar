@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-10-28 07:04+0200\n"
-"PO-Revision-Date: 2010-10-28 20:42+0000\n"
-"Last-Translator: Helmut Rohs <Unknown>\n"
+"PO-Revision-Date: 2010-11-01 17:08+0000\n"
+"Last-Translator: Niklas Fischer <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-29 13:48+0000\n"
+"X-Launchpad-Export-Date: 2010-11-02 20:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Language: de\n"
 
@@ -321,7 +321,7 @@ msgstr "Auto"
 
 #: src/ExpandMacros.cpp:396
 msgid "MID"
-msgstr ""
+msgstr "MID"
 
 #: src/InfoBoxes/Content/Factory.cpp:70
 msgid "Height GPS"
@@ -1221,6 +1221,9 @@ msgid ""
 "The current Team code for this aircraft. Use this to report to other team "
 "members. The last team aircraft code entered is displayed underneath."
 msgstr ""
+"Der eingestellte Teamcode für dieses Flugzeug. Verbreite diesen um Weitere "
+"ins Team zu holen. Der zuletzt eingegebene Flugzeugcode wird darunter "
+"angezeigt."
 
 #: src/InfoBoxes/Content/Factory.cpp:518
 msgid "Team Bearing"
@@ -1436,6 +1439,16 @@ msgid ""
 "virtual key then the waypoint detail page will come up and you will be able "
 "to perform actions on this Alternate such as goto, insert in task etc."
 msgstr ""
+"Automatische Auswahl der besten Möglichkeit für eine Landung. Die erste "
+"Zeile zeigt den Name des Landeortes, die Mittlere die benötigte Gleitzahl "
+"an, die Unterste springt zwischen der Ankunftshöhe über der eingestellten "
+"Sicherheitshöhe und Entfernung hin und her. Bitte die Anleitung - im "
+"Speziellen den Bereich für die beste Alternative - genau lesen um zu "
+"erfahren, wie man diese Funktion richtig einstellt. Diese Funktion ist noch "
+"in der Entwicklung - also bitte mit Vorsicht benutzen. Beim Auswählen "
+"mittels ENTER von \"Beste Alternative\" über die Infobox (auch mit einem "
+"virtuellen Taste) kommt man auf die Detailseite, auf welcher man Optionen "
+"wie \"goto\", \"In Aufgabe einfügen\" usw. wählen kann."
 
 #: src/InfoBoxes/Content/Factory.cpp:635 src/InfoBoxes/Content/Factory.cpp:636
 msgid "QFE GPS"
@@ -1474,6 +1487,16 @@ msgid ""
 "it's exactly the distance you have made even in a zigzag glide. This value "
 "is not calculated while circling. "
 msgstr ""
+"Die Entfernung über eine definierte Zeit, geteilt durch die bereits "
+"verlorene Höhe. Negative Werte werden als ^^^ angezeigt und zeigen, dass man "
+"im Vorflug Höhe gewonnen hat. Bei einer Gleitzahl über 200 wird +++ "
+"angezeigt. Die Durchschnittszeit kann im Spezialmenü eingestellt werden. Die "
+"vorgeschlagenen Werte sind 60, 90, 120: Niedrigere Werte ergeben quasi die "
+"momentane Gleitzahl, höhere Werte ergeben eine Gleitzahl nahe der "
+"Überlandgleitzahl. Bitte drauf achten, dass die Entfernung nicht der gerade "
+"Liene zwischen der alten und der aktuellen Position entspricht, sondern "
+"exakt dem zurückgelegten Weg (incl. Zick-Zack o.ä.). Der Wert wird im "
+"Kreisflug nicht berechnet. "
 
 #: src/InfoBoxes/Content/Factory.cpp:651
 msgid "Experimental1"
@@ -1501,11 +1524,11 @@ msgstr "Exp2"
 
 #: src/InfoBoxes/Content/Other.cpp:74
 msgid "AC OFF"
-msgstr ""
+msgstr "AC Aus"
 
 #: src/InfoBoxes/Content/Other.cpp:78
 msgid "AC ON"
-msgstr ""
+msgstr "AC  Ein"
 
 #: src/InfoBoxes/Content/Speed.cpp:126 src/InfoBoxes/Content/Speed.cpp:161
 msgid "Calibrate ON"
@@ -1517,7 +1540,7 @@ msgstr "Kalibrieren AUS"
 
 #: src/InfoBoxes/Content/Speed.cpp:196
 msgid "BLOCK"
-msgstr ""
+msgstr "BLOCK"
 
 #: src/InfoBoxes/Content/Speed.cpp:198
 msgid "DOLPHIN"
@@ -2178,11 +2201,11 @@ msgstr "Distanz"
 
 #: src/Dialogs/dlgAnalysis.cpp:251
 msgid "Score"
-msgstr ""
+msgstr "Punkte"
 
 #: src/Dialogs/dlgAnalysis.cpp:253
 msgid "pts"
-msgstr ""
+msgstr "Punkte"
 
 #: src/Dialogs/dlgAnalysis.cpp:254 Data/Dialogs/dlgStartTask.xml:4
 #: Data/Dialogs/dlgWeather.xml:10 Data/Dialogs/dlgWeather_L.xml:10
@@ -2406,19 +2429,19 @@ msgstr "Endanflug"
 
 #: src/Dialogs/dlgConfiguration.cpp:838
 msgid "Trending Average climb"
-msgstr ""
+msgstr "Erwartetes mittleres Steigen"
 
 #: src/Dialogs/dlgConfiguration.cpp:851
 msgid "OLC Sprint"
-msgstr ""
+msgstr "OLC Sprint"
 
 #: src/Dialogs/dlgConfiguration.cpp:852
 msgid "OLC FAI"
-msgstr ""
+msgstr "OLC FAI"
 
 #: src/Dialogs/dlgConfiguration.cpp:853
 msgid "OLC Classic"
-msgstr ""
+msgstr "OLC Classic"
 
 #: src/Dialogs/dlgConfiguration.cpp:869
 msgid "Statue"
@@ -3305,6 +3328,10 @@ msgid ""
 "indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% "
 "is maximum AAT distance."
 msgstr ""
+"Bei AAT Aufgaben besagt dieser Wert relativ zur minimal und maximal "
+"möglichen Strecke Deiner Aufgabe wie weit fliegen wirst. -100% entspricht "
+"der minimalen AAT Strecke. 0% ist die nominale AAT Strecke. +100% entspricht "
+"der maximalen AAT Strecke."
 
 #: Data/Dialogs/dlgConfiguration.xml:338
 #: Data/Dialogs/dlgConfiguration_L.xml:337
@@ -3456,6 +3483,10 @@ msgid ""
 "MacCready setting.   [AVERAGE]: State HIGH if gross vario value is greater "
 "than average gross vario value."
 msgstr ""
+"Methode zum Einstufen des Steigens (HOCH/GERING). [KEIN]: Stufe GERING "
+"deaktiviert [MACCREADY]: Stufe HOCH, falls das Bruttosteigen größer als die "
+"MacCready Einstellung ist. [DURCHSCHNITT]: Stufe HOCH, wenn das "
+"Bruttosteigen höher als das mittlere Bruttosteigen ist."
 
 #: Data/Dialogs/dlgConfiguration.xml:582
 #: Data/Dialogs/dlgConfiguration_L.xml:581
@@ -3738,6 +3769,10 @@ msgid ""
 "task distances, smaller values move the target points to produce smaller "
 "task distances."
 msgstr ""
+"Bei AAT Aufgaben kann diese Einstellung dazu benutzt werden die Zielpunkte "
+"in den Sektoren anzupassen. Größere Werte setzen die Zielpunkte für eine "
+"größere Strecke, kleinere Werte setzen die Zielpunkte für eine kleinere "
+"Distanz der Aufgabe."
 
 #: Data/Dialogs/dlgVario.xml:20 Data/Dialogs/dlgVario_L.xml:21
 msgid "Whether the Static port is connected."
@@ -4021,6 +4056,14 @@ msgid ""
 "climb rate based on all climbs. [Both] Uses trending average during task, "
 "then fastest arrival when in final glide mode."
 msgstr ""
+"Diese Option legt fest, welcher MacCready Algorythmus benutzt wird. "
+"[Endanflug] stellt MacCready auf die schnellstmögliche Ankunft ein. Bei den "
+"OLC Sprint-Aufgaben sind die Einstellungen so, dass eine möglichst große "
+"Strecke innerhalb der verbleibenden Zeit beim erreichen der Ankunftshöhe im "
+"Ziel erreicht wird. [Erwartetes mittleres Steigen] stellt MacCready auf den "
+"Wert aller bisherigen Steigwerte. [Beide] nutzt [Erwartetes mittleres "
+"Steigen] während der Aufgabe und wechselt beim Endanflug automatisch auf "
+"[Endanflug]."
 
 #: Data/Dialogs/dlgTeamCode.xml:6 Data/Dialogs/dlgTeamCode_L.xml:6
 msgid "Mate code:"
@@ -4078,6 +4121,18 @@ msgid ""
 "height must not be lower than start height less 1000 meters.  Points awarded "
 "80% on second last leg and 60% on last leg."
 msgstr ""
+"Regeln zur Berechnung optimaler Wegpunkte für den OnLine Contest. [Sprint]: "
+"Gleich lautend zu den FAI IGC Liga Regeln. Bis zu 5 Wegpunkte Abflug und "
+"Ziel mit eingeschlossen, 2,5 Stunden maximale Flugzeit, die Höhe am Ziel "
+"darf nicht unter der Abflughöhe liegen. [Dreieck]: Gleich lautend zu den FAI "
+"OLC Dreieck Regeln. 4 Wegpunkte wobei Abflug und Ziel identisch sind. Bei "
+"Aufgaben über 500km: Es darf kein Schenkel kleiner 25%, oder größer als 45% "
+"sein; sonst: Kein Schenkel darf kürzer als 28% der Gesamtstrecke sein. Die "
+"Ankunftshöhe am Ziel darf nicht kleiner als 1000 Meter unter der Abflughöhe "
+"sein.  [Klassisch]: Gleich lautend zu den OLC Classic Regeln. Bis zu 7 "
+"Wegpunkte Abflug und Ziel eingeschlossen. Die Zielhöhe darf max. 1000 Meter "
+"unter dem Abflug liegen. Es werden 80% des zweitletzten Schenkels und nur "
+"60% des letzten Schenkels zuerkannt."
 
 #: Data/Dialogs/dlgTaskEdit.xml:14 Data/Dialogs/dlgTaskEdit_L.xml:10
 msgid "Save as"
@@ -4223,7 +4278,7 @@ msgstr "Wölbklappen neutral"
 
 #: Data/Dialogs/dlgTarget_L.xml:23
 msgid "AAT Est Remaining Help"
-msgstr ""
+msgstr "Hilfe zu geschätzte verbleibende AAT"
 
 #: Data/Dialogs/dlgConfiguration.xml:526
 #: Data/Dialogs/dlgConfiguration_L.xml:525
@@ -4318,7 +4373,7 @@ msgstr "Radius"
 #: Data/Dialogs/dlgTaskCalculator.xml:25
 #: Data/Dialogs/dlgTaskCalculator_L.xml:27
 msgid "AAT Range"
-msgstr ""
+msgstr "AAT Bereich"
 
 #: Data/Dialogs/dlgConfiguration.xml:460
 #: Data/Dialogs/dlgConfiguration_L.xml:459
@@ -4394,6 +4449,13 @@ msgid ""
 "than half MC.   [NET MC/2] LIFT tone when airmass velocity greater than half "
 "MC.    "
 msgstr ""
+"Wahl der Methode zur Entscheidung, ob während des Vorflugs auf Steigen-Töne "
+"geschaltet wird. [KEIN]: Steigen-Töne sind im Vorflug ausgeschaltet. "
+"[RELATIV NULL] Steigen-Töne, sobald das relativ Vario größer Null zeigt. "
+"[BRUTTO NULL] Steigen-Töne, wenn der Segler steigt. [RELATIV MC/2] Steigen-"
+"Töne, sobald das relativ Vario mehr als die Hälfte der MacCready Einstellung "
+"zeigt. [NET MC/2] Steigen-Töne, wenn das Steigen der Luftmasse größer als "
+"die Hälfte des MacCready ist.    "
 
 #: Data/Dialogs/dlgTaskPointType.xml:3 Data/Dialogs/dlgTaskPointType_L.xml:3
 msgid "Task Point Type"
@@ -4454,7 +4516,7 @@ msgstr "Berechne"
 
 #: Data/Dialogs/dlgTaskEdit.xml:7 Data/Dialogs/dlgTaskEdit_L.xml:12
 msgid "v"
-msgstr ""
+msgstr "v"
 
 #: Data/Dialogs/dlgTaskCalculator.xml:29
 #: Data/Dialogs/dlgTaskCalculator_L.xml:31
@@ -4479,6 +4541,13 @@ msgid ""
 "than half MC. [NET MC/2] LIFT tone when airmass velocity greater than half "
 "MC."
 msgstr ""
+"Wahl der Methode zur Entscheidung, ob während des Vorflugs auf Steigen-Töne "
+"geschaltet wird. [KEIN]: Steigen-Töne sind im Vorflug ausgeschaltet. "
+"[RELATIV NULL] Steigen-Töne, sobald das relativ Vario größer Null zeigt. "
+"[BRUTTO NULL] Steigen-Töne, wenn der Segler steigt. [RELATIV MC/2] Steigen-"
+"Töne, sobald das relativ Vario mehr als die Hälfte der MacCready Einstellung "
+"zeigt. [NET MC/2] Steigen-Töne, wenn das Steigen der Luftmasse größer als "
+"die Hälfte des MacCready ist."
 
 #: Data/Dialogs/dlgSwitches.xml:45
 msgid "User middle"
@@ -4504,7 +4573,7 @@ msgstr "Schrift bearbeiten"
 
 #: Data/Dialogs/dlgVario.xml:329 Data/Dialogs/dlgVario_L.xml:329
 msgid "Max reported circling"
-msgstr ""
+msgstr "Max registriertes Kreisen"
 
 #: Data/Dialogs/dlgStatus.xml:46
 msgid "Valid finish"
@@ -4745,6 +4814,10 @@ msgid ""
 "setting. [AVERAGE]: State HIGH if gross vario value is greater than average "
 "gross vario value."
 msgstr ""
+"Methode zum Einstufen des Steigens (HOCH/GERING). [KEIN]: Stufe GERING "
+"deaktiviert [MACCREADY]: Stufe HOCH, falls das Bruttosteigen größer als die "
+"MacCready Einstellung ist. [DURCHSCHNITT]: Stufe HOCH, wenn das "
+"Bruttosteigen höher als das mittlere Bruttosteigen ist."
 
 #: Data/Dialogs/dlgVario.xml:139 Data/Dialogs/dlgVario_L.xml:139
 msgid "Cruise hi cutoff"
@@ -4826,7 +4899,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:228
 #: Data/Dialogs/dlgConfiguration_L.xml:230
 msgid "L/D Average period*"
-msgstr ""
+msgstr "Gleitzahl Mittelwertzeitintervall"
 
 #: Data/Dialogs/dlgWayPointSelect.xml:1 Data/Dialogs/dlgWayPointSelect_L.xml:1
 msgid "Select Waypoint"
@@ -5075,6 +5148,10 @@ msgid ""
 "clock with battery backup or your computer frequently runs out of battery "
 "power or otherwise loses time."
 msgstr ""
+"Wenn aktiviert wird die Uhr des Rechners nach der GPS Zeit gestellt, sobald "
+"Empfang vorhanden ist. Diese Einstellung mach nur Sinn wenn der Rechner über "
+"keine Batterie gepufferte Echtzeituhr verfügt, öfters ganz ohne "
+"Spannungsversorgung ist, oder aus anderen Gründen die Zeit verliert."
 
 #: Data/Dialogs/dlgConfiguration.xml:272
 #: Data/Dialogs/dlgConfiguration_L.xml:273
@@ -5246,6 +5323,10 @@ msgid ""
 "and can turn now with estimated arrival time greater than AAT time plus 5 "
 "minutes."
 msgstr ""
+"AA Delta Zeit - die Differenz zwischen geschätzter Augabenzeit und minimaler "
+"AAT Zeit. Der Wert wird rot gefärbt wenn die Ankunft zu früh erwartet wird, "
+"oder blau wenn im Sektor gewendet werden kann und die geschätzte "
+"Ankunftszeit mehr als 5 Minuten nach der AAT Zeit liegt."
 
 #: Data/Dialogs/dlgConfiguration.xml:480
 #: Data/Dialogs/dlgConfiguration_L.xml:479
@@ -5262,7 +5343,7 @@ msgstr "Farben"
 
 #: Data/Dialogs/dlgVario.xml:379 Data/Dialogs/dlgVario_L.xml:379
 msgid "Gear off delay"
-msgstr ""
+msgstr "Verzögerung beim Ausfahren des Fahrwerks"
 
 #: Data/Dialogs/dlgStatus.xml:34 Data/Dialogs/dlgStatusTask.xml:9
 msgid "Remaining distance"
@@ -5397,6 +5478,7 @@ msgstr ""
 #: Data/Dialogs/dlgVario.xml:93 Data/Dialogs/dlgVario_L.xml:93
 msgid "Time scale used for cruise speed command averager."
 msgstr ""
+"Zeitintervall für die Mittelung der empfohlenen Vorfluggeschwindigkeit."
 
 #: Data/Dialogs/dlgConfiguration.xml:406
 #: Data/Dialogs/dlgConfiguration_L.xml:405
@@ -5630,6 +5712,9 @@ msgid ""
 "disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
 "specified."
 msgstr ""
+"Ob ein Temperatur- und Feuchtigkeitssensor verfügbar ist. Setze auf 0, wenn "
+"nicht verfügbar, 255 für eine automatische Erkennung, oder auf die "
+"Gerätekennung der Eindrahtverbindung."
 
 #: Data/Dialogs/dlgSwitches.xml:19
 msgid "Flap negative"
@@ -6001,7 +6086,7 @@ msgstr "TE Sondenkalibrierung"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:14
 msgid "Base"
-msgstr ""
+msgstr "Untergrenze"
 
 #: Data/Dialogs/dlgConfiguration.xml:235
 #: Data/Dialogs/dlgConfiguration_L.xml:236
@@ -6022,7 +6107,7 @@ msgstr "Höhe"
 
 #: Data/Dialogs/dlgVario.xml:375 Data/Dialogs/dlgVario_L.xml:375
 msgid "Gear on delay"
-msgstr ""
+msgstr "Verzögerung beim Einfahren des Fahrwerks"
 
 #: Data/Dialogs/dlgConfiguration.xml:82 Data/Dialogs/dlgConfiguration_L.xml:82
 msgid ""
@@ -6080,7 +6165,7 @@ msgstr "FLARM Sperre"
 
 #: Data/Dialogs/dlgTarget_L.xml:35
 msgid "V ach"
-msgstr ""
+msgstr "V ach"
 
 #: Data/Dialogs/dlgTaskCalculator.xml:3 Data/Dialogs/dlgTaskCalculator_L.xml:3
 msgid "Task Calculator"
@@ -6486,6 +6571,8 @@ msgid ""
 "Airframe\n"
 "Switches"
 msgstr ""
+"Flugzeugzelle\n"
+"Schalter"
 
 #: Data/Input/default.xci:467
 msgid ""
