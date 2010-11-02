@@ -52,13 +52,20 @@ extern long count_olc;
 bool
 ContestManager::run_olc(ContestDijkstra &dijkstra)
 {
+  // run solver, return immediately if further processing is required
+  // by subsequent calls
   if (!dijkstra.solve())
     return false;
 
+  // if no improved solution was found, must have finished processing
+  // with invalid data so need to retrieve new trace
   if (!dijkstra.score(result)) {
     update_trace();
-    return false;
+    return true;
   }
+
+  // solver finished and improved solution was found.  save solution
+  // and retrieve new trace.
 
   dijkstra.copy_solution(solution);
   update_trace();
