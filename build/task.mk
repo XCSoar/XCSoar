@@ -90,6 +90,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/KeyholeZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/BGAFixedCourseZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/BGAEnhancedOptionZone.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/AbstractContest.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstra.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/ContestDijkstra.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCSprint.cpp \

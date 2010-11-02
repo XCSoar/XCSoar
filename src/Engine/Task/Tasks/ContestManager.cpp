@@ -50,16 +50,16 @@ extern long count_olc;
 #endif
 
 bool
-ContestManager::run_olc(ContestDijkstra &dijkstra)
+ContestManager::run_contest(AbstractContest &contest)
 {
   // run solver, return immediately if further processing is required
   // by subsequent calls
-  if (!dijkstra.solve())
+  if (!contest.solve())
     return false;
 
   // if no improved solution was found, must have finished processing
   // with invalid data so need to retrieve new trace
-  if (!dijkstra.score(result)) {
+  if (!contest.score(result)) {
     update_trace();
     return true;
   }
@@ -67,7 +67,7 @@ ContestManager::run_olc(ContestDijkstra &dijkstra)
   // solver finished and improved solution was found.  save solution
   // and retrieve new trace.
 
-  dijkstra.copy_solution(solution);
+  contest.copy_solution(solution);
   update_trace();
 
 #ifdef INSTRUMENT_TASK
@@ -95,13 +95,13 @@ ContestManager::update_idle()
 
   switch (contest) {
   case OLC_Sprint:
-    retval = run_olc(olc_sprint);
+    retval = run_contest(olc_sprint);
     break;
   case OLC_FAI:
-    retval = run_olc(olc_fai);
+    retval = run_contest(olc_fai);
     break;
   case OLC_Classic:
-    retval = run_olc(olc_classic);
+    retval = run_contest(olc_classic);
     break;
   };
 

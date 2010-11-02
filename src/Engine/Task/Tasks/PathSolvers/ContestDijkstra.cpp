@@ -50,15 +50,10 @@
 ContestDijkstra::ContestDijkstra(const TracePointVector &_trace,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
+  AbstractContest(_trace, n_legs, finish_alt_diff),
   NavDijkstra<TracePoint>(n_legs + 1),
   m_dijkstra(false),
-  trace(_trace),
-  m_finish_alt_diff(finish_alt_diff),
-  solution_found(false),
-  best_score(fixed_zero),
-  best_distance(fixed_zero),
-  best_speed(fixed_zero),
-  best_time(fixed_zero)
+  solution_found(false)
 {
   reset();
 }
@@ -68,6 +63,20 @@ ContestDijkstra::set_weightings()
 {
   std::fill(m_weightings, m_weightings + num_stages - 1, 5);
 }
+
+
+bool
+ContestDijkstra::score(ContestResult &result)
+{
+  if (n_points < num_stages)
+    return false;
+  if (AbstractContest::score(result)) {
+    solution_found = true;
+    return true;
+  }
+  return false;
+}
+
 
 bool
 ContestDijkstra::solve()
@@ -107,33 +116,12 @@ ContestDijkstra::solve()
 void
 ContestDijkstra::reset()
 {
-  m_dijkstra.clear();
   n_points = 0;
   solution_found = false;
-  best_score = fixed_zero;
-  best_distance = fixed_zero;
-  best_speed = fixed_zero;
-  best_time = fixed_zero;
+  m_dijkstra.clear();
+  AbstractContest::reset();
 }
 
-bool
-ContestDijkstra::score(ContestResult &result)
-{
-  if (n_points < num_stages)
-    return false;
-
-  if (positive(calc_time())) {
-    solution_found = true;
-    result.score = best_score;
-    result.distance = best_distance;
-    result.speed = best_speed;
-    result.time = best_time;
-
-    return true;
-  }
-
-  return false;
-}
 
 fixed
 ContestDijkstra::calc_time() const
@@ -219,33 +207,16 @@ ContestDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
             solution[0].NavAltitude);
 }
 
-
-bool 
-ContestDijkstra::update_score()
+bool
+ContestDijkstra::save_solution()
 {
-  // for normal contests, nothing needs to be done
+  if (AbstractContest::save_solution()) {
+    std::copy(solution, solution + num_stages, best_solution);
+    return true;
+  }
   return false;
 }
 
-
-void
-ContestDijkstra::save_solution()
-{
-  const fixed score = calc_score();
-  const bool improved = (score>best_score);
-
-  if (improved) {
-    // save
-    std::copy(solution, solution + num_stages, best_solution);
-    best_score = score;
-    best_distance = calc_distance();
-    best_time = calc_time();
-    if (positive(best_time))
-      best_speed = best_distance / best_time;
-    else
-      best_speed = fixed_zero;
-  }
-}
 
 void
 ContestDijkstra::copy_solution(TracePointVector &vec)

@@ -38,14 +38,12 @@
 #ifndef OLC_DIJKSTRA_HPP
 #define OLC_DIJKSTRA_HPP
 
+#include "AbstractContest.hpp"
 #include "NavDijkstra.hpp"
-#include "Navigation/TracePoint.hpp"
 #include "Math/fixed.hpp"
 
-struct ContestResult;
-
 /**
- * Abstract class for OLC path searches
+ * Abstract class for contest searches using dijkstra algorithm
  *
  * These algorithms are designed for online/realtime use, and as such
  * expect solve() to be called during the simulation as time advances.
@@ -53,6 +51,7 @@ struct ContestResult;
  *
  */
 class ContestDijkstra:
+  public AbstractContest,
   public NavDijkstra<TracePoint>
 {
 public:
@@ -64,46 +63,14 @@ public:
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
   ContestDijkstra(const TracePointVector &_trace, const unsigned n_legs,
-                  const unsigned finish_alt_diff = 3000);
+                  const unsigned finish_alt_diff = 1000);
 
-  /**
-   * Calculate the scored values of the Contest path
-   *
-   * @param result The ContestResult reference
-   * in which the solution will be written
-   *
-   * @return True is solution was found, False otherwise
-   */
   bool score(ContestResult &result);
 
-  /**
-   * Copy the best Contest path solution
-   *
-   * @param vec output vector
-   */
-  void copy_solution(TracePointVector &vec);
+  virtual void copy_solution(TracePointVector &vec);
 
-  /**
-   * Calculate distance of best path
-   *
-   * @return Distance (m)
-   */
   virtual fixed calc_distance() const;
-
-  /**
-   * Calculate score of best path
-   * This is specialised by each contest type, defaults to
-   * speed in kph measured by weighted distance divided by time
-   * 
-   * @return Score (pts)
-   */
   virtual fixed calc_score() const;
-
-  /**
-   * Calculate elapsed time of best path
-   *
-   * @return Distance (m)
-   */
   virtual fixed calc_time() const;
 
   /**
@@ -120,15 +87,8 @@ public:
   bool solve();
 
 protected:
-  const TracePoint &get_point(const ScanTaskPoint &sp) const;
-
-  virtual void add_edges(DijkstraTaskPoint &dijkstra,
-                         const ScanTaskPoint &curNode);
-
-  /**
-   * Set weightings of each leg.  Default is constant weighting.
-   */
-  virtual void set_weightings();
+  /** Number of points in current trace set */
+  unsigned n_points;
 
   /**
    * Determine if a trace point can be added to the search list
@@ -138,14 +98,22 @@ protected:
    */
   virtual bool admit_candidate(const ScanTaskPoint &candidate) const;
 
+  const TracePoint &get_point(const ScanTaskPoint &sp) const;
+
+
+  virtual void add_edges(DijkstraTaskPoint &dijkstra,
+                         const ScanTaskPoint &curNode);
+
+  /**
+   * Set weightings of each leg.  Default is constant weighting.
+   */
+  virtual void set_weightings();
+
   /** Weightings applied to each leg distance */
   unsigned m_weightings[MAX_STAGES];
 
   /** Dijkstra search algorithm */
   DijkstraTaskPoint m_dijkstra;
-
-  /** Number of points in current trace set */
-  unsigned n_points;
 
   /**
    * Retrieve weighting of specified leg
@@ -159,30 +127,13 @@ protected:
    */
   virtual void start_search();
 
-  /**
-   * Perform check on whether score needs to be
-   * updated (even if score isn't improved, due to
-   * new conditions occuring, e.g. closure of path)
-   *
-   * @return true if score is updated
-   */
-  virtual bool update_score();
+  virtual bool save_solution();
 
 private:
-  const TracePointVector &trace;
-  const unsigned m_finish_alt_diff;
-
-  void save_solution();
-
   bool solution_found;
-  fixed best_score;
-  fixed best_distance;
-  fixed best_speed;
-  fixed best_time;
+  virtual void add_start_edges();
 
   TracePoint best_solution[MAX_STAGES];
-
-  virtual void add_start_edges();
 };
 
 #endif
