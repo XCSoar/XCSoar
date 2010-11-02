@@ -64,7 +64,16 @@ AlternateTask::clear()
 }
 
 void 
-AlternateTask::client_update(const bool reachable)
+AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
+                             const bool reachable)
 {
+  if (!reachable) // for now, only do reachable points
+    return;
 
+  for (AlternateTaskVector::const_iterator 
+         i= tps.begin(); i!= tps.end(); ++i) {
+
+//    const TaskPoint &tp =  *i->first;
+
+  }
 }

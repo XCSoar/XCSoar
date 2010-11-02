@@ -68,7 +68,7 @@ public:
 
 protected:
   void clear();
-  void client_update(const bool reachable);
+  void client_update(const AIRCRAFT_STATE &state_now, const bool reachable);
 
 private:
   AlternateVector alternates;

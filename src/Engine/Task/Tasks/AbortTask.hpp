@@ -239,6 +239,9 @@ protected:
                       const bool final_glide);
 
 protected:
+  typedef std::vector<std::pair<TaskPoint*, GlideResult> > AlternateTaskVector;
+  AlternateTaskVector tps;
+
   bool is_active; /// whether the AbortTask is the master or running in background
 
   /**
@@ -247,7 +250,8 @@ protected:
    * It's first called after the reachable scan, then may be called again after scanning
    * for unreachable.
    */
-  virtual void client_update(const bool reachable);
+  virtual void client_update(const AIRCRAFT_STATE &state_now,
+                             const bool reachable);
 
 public:
 /**
@@ -258,8 +262,6 @@ public:
   void set_active(const bool _active) { is_active = _active; }
 
 private:
-  typedef std::vector<std::pair<TaskPoint*, GlideResult> > AlternateTaskVector;
-  AlternateTaskVector tps;
   unsigned active_waypoint;
   const Waypoints &waypoints;
   GlidePolar polar_safety;
