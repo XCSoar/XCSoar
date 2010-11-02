@@ -627,6 +627,15 @@ PrintHelper::contestmanager_print(const ContestManager& man)
   }
 }
 
+void 
+PrintHelper::print(const ContestResult& score)
+{
+  std::cout << "#   score " << score.score << "\n";
+  std::cout << "#   distance " << score.distance/fixed(1000) << " (km)\n";
+  std::cout << "#   speed " << score.speed*fixed(3.6) << " (kph)\n";
+  std::cout << "#   time " << score.time << " (sec)\n";
+}
+
 
 static void
 print_tpv(const TracePointVector& vec, std::ofstream& fs)

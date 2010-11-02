@@ -16,6 +16,7 @@ class Trace;
 class AATPoint;
 class AIRCRAFT_STATE;
 class GeoPoint;
+class ContestResult;
 
 #ifdef FIXED_MATH
 #include "Math/fixed.hpp"
@@ -44,6 +45,7 @@ public:
                              const int item=0);
   static void contestmanager_print(const ContestManager& cm);
   static void trace_print(const Trace& trace, const GeoPoint &loc);
+  static void print(const ContestResult& result);
 };
 
 #endif
