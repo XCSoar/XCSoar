@@ -10,7 +10,8 @@
 
 ContestResult official_score_classic,
   official_score_sprint,
-  official_score_fai;
+  official_score_fai,
+  official_score_plus;
 fixed official_index;
 
 inline void output_score(const char* header,
@@ -67,6 +68,7 @@ inline void load_scores(void) {
   load_score_file(fscore, official_score_classic);
   load_score_file(fscore, official_score_sprint);
   load_score_file(fscore, official_score_fai);
+  load_score_file(fscore, official_score_plus);
   fscore.close();
 }
 
@@ -234,11 +236,11 @@ int main(int argc, char** argv)
 
   plan_tests(5);
 
-  ok(test_replay(OLC_Plus, official_score_classic),"replay plus",0);
   ok(test_replay(OLC_League, official_score_sprint),"replay league",0);
   ok(test_replay(OLC_FAI, official_score_fai),"replay fai",0);
   ok(test_replay(OLC_Sprint, official_score_sprint),"replay sprint",0);
   ok(test_replay(OLC_Classic, official_score_classic),"replay classic",0);
+  ok(test_replay(OLC_Plus, official_score_plus),"replay plus",0);
 
   return exit_status();
 }
