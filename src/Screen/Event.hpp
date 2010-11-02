@@ -63,6 +63,12 @@ is_user_input(UINT message)
     message == WM_LBUTTONDBLCLK;
 }
 
+class EventLoop : private NonCopyable {
+public:
+  bool get(MSG &msg);
+  void dispatch(const MSG &msg);
+};
+
 #endif /* !ENABLE_SDL */
 
 gcc_const

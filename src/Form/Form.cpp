@@ -287,7 +287,9 @@ int WndForm::ShowModal(bool bEnableMap) {
     loop.dispatch(event);
 
 #else /* !ENABLE_SDL */
-  while ((mModalResult == 0) && GetMessage(&msg, NULL, 0, 0)) {
+
+  EventLoop loop;
+  while (mModalResult == 0 && loop.get(msg)) {
 //hack!
 
     // JMW update display timeout so we don't get blanking
@@ -346,10 +348,7 @@ int WndForm::ShowModal(bool bEnableMap) {
     if (::IsDialogMessage(hWnd, &msg))
       continue;
 
-    TranslateMessage(&msg);
-    assert_none_locked();
-    DispatchMessage(&msg);
-    assert_none_locked();
+    loop.dispatch(msg);
   } // End Modal Loop
 #endif /* !ENABLE_SDL */
 

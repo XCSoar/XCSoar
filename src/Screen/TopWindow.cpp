@@ -386,11 +386,10 @@ TopWindow::event_loop()
 
 #else /* !ENABLE_SDL */
 
+  EventLoop loop;
   MSG msg;
-  while (::GetMessage(&msg, NULL, 0, 0)) {
-    ::TranslateMessage(&msg);
-    ::DispatchMessage(&msg);
-  }
+  while (loop.get(msg))
+    loop.dispatch(msg);
 
   return msg.wParam;
 #endif /* !ENABLE_SDL */

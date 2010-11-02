@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Event.hpp"
+#include "Thread/Debug.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_SDL
@@ -63,6 +64,28 @@ EventLoop::dispatch(SDL_Event &event)
     window->on_timer(timer);
   } else
     ((Window &)top_window).on_event(event);
+}
+
+#else /* !ENABLE_SDL */
+
+bool
+EventLoop::get(MSG &msg)
+{
+  assert_none_locked();
+
+  if (!::GetMessage(&msg, NULL, 0, 0))
+    return false;
+
+  ::TranslateMessage(&msg);
+  return true;
+}
+
+void
+EventLoop::dispatch(const MSG &msg)
+{
+  assert_none_locked();
+  ::DispatchMessage(&msg);
+  assert_none_locked();
 }
 
 #endif /* !ENABLE_SDL */
