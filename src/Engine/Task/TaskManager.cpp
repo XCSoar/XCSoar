@@ -266,8 +266,12 @@ TaskManager::update(const AIRCRAFT_STATE &state,
   // inform the abort task whether it is running as the task or not  
   task_abort.set_active(active_task == &task_abort);
 
-  if (active_task && (active_task != &task_ordered))
-    // update mode task
+  retval |= task_abort.update(state, state_last);
+
+  if (active_task 
+      && (active_task != &task_ordered)
+      && (active_task != &task_abort))
+    // update mode task for any that have not yet run
     retval |= active_task->update(state, state_last);
 
   update_common_stats(state);
