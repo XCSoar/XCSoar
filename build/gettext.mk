@@ -18,9 +18,9 @@ $(OUT)/po/cpp.pot: $(GETTEXT_SOURCES) | $(OUT)/po/dirstamp
 	  --from-code=utf-8 \
 	  --keyword=C_:1c,2 \
 	  --keyword=NC_:1c,2 \
-	  --flag=N_:1:pass-c-format \
-	  --flag=C_:2:pass-c-format \
-	  --flag=NC_:2:pass-c-format \
+	  --flag=N_:1:no-c-format \
+	  --flag=C_:2:no-c-format \
+	  --flag=NC_:2:no-c-format \
 	  --output=$@ \
 	  --force-po \
 	  $^
