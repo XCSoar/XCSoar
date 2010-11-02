@@ -54,6 +54,8 @@ public:
 
   void transition_exit(const TaskPoint &tp);
 
+  void transition_alternate();
+
   void active_advanced(const TaskPoint &tp, const int i);
 
   void active_changed(const TaskPoint &tp);

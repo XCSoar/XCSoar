@@ -52,6 +52,15 @@ TaskEventsPrint::transition_enter(const TaskPoint& tp)
 }
 
 void 
+TaskEventsPrint::transition_alternate() 
+{
+  if (verbose) {
+    printf("#- alternate changed\n");
+  }
+}
+
+
+void 
 TaskEventsPrint::transition_exit(const TaskPoint &tp) 
 {
   if (verbose) {

@@ -38,9 +38,7 @@
 #include <queue>
 #include "BaseTask/TaskPoint.hpp"
 #include "Math/Earth.hpp"
-
-
-// @todo: call task_events.transition_best_alternate() in update
+#include "Task/TaskEvents.hpp"
 
 AlternateTask::AlternateTask(TaskEvents &te, 
                              const TaskBehaviour &tb,
@@ -94,8 +92,8 @@ AlternateTask::check_alternate_changed()
     id = (unsigned)-1;
   }
   if (best_alternate_id != id) {
-    // @todo: call notification event
     best_alternate_id = id;
+    task_events.transition_alternate();
   }
 }
 

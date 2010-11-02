@@ -38,6 +38,7 @@
 #define TASKEVENTS_HPP
 
 class TaskPoint;
+class Waypoint;
 
 /**
  * Class used to provide feedback based on events that can be triggered
@@ -67,6 +68,11 @@ public:
  * @param tp The turnpoint the aircraft has exited
  */
   virtual void transition_exit(const TaskPoint &tp) {};
+
+/** 
+ * Called when the aircraft alternate changes
+ */
+  virtual void transition_alternate() {};
 
 /** 
  * Called when auto-advance has changed the active

@@ -13,6 +13,8 @@ public:
 
   void transition_enter(const TaskPoint& tp);
 
+  void transition_alternate();
+
   void active_advanced(const TaskPoint &tp, const int i);
 
   void request_arm(const TaskPoint &tp);
