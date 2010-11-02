@@ -440,9 +440,6 @@ call-%:
 $(addprefix all-,$(TARGETS)): all-%: $(OUTPUTS)
 
 EVERYTHING = $(OUTPUTS) debug-$(TARGET) build-check
-ifeq ($(TARGET),UNIX)
-EVERYTHING += $(TESTS)
-endif
 
 everything-: $(addprefix call-everything-,$(DEFAULT_TARGETS))
 call-everything-%:
