@@ -21,7 +21,7 @@
 */
 
 OLCFAI::OLCFAI(const TracePointVector &_trace):
-  ContestDijkstra(_trace, 3, 1000),
+  ContestDijkstra(_trace, 2, 1000),
   is_closed(false),
   is_complete(false) {}
 
@@ -33,10 +33,10 @@ OLCFAI::leg_distance(const unsigned index) const
   // leg 1: 2-3
   // leg 2: 3-1
 
-  const GeoPoint &p_start = solution[index+1].get_location();
+  const GeoPoint &p_start = solution[index].get_location();
   const GeoPoint &p_dest = (index < 2)? 
-    solution[index+2].get_location():
-    solution[1].get_location();
+    solution[index+1].get_location():
+    solution[0].get_location();
 
   return p_start.distance(p_dest);
 }
@@ -47,9 +47,10 @@ OLCFAI::triangle_closed() const
 {
   // note this may fail if resolution of sampled trace is too low
   static const fixed fixed_1000(1000);
+  static const ScanTaskPoint start(0, 0);
   static const ScanTaskPoint end(0, n_points-1);
   
-  return solution[0].get_location().distance(get_point(end).get_location())
+  return get_point(start).get_location().distance(get_point(end).get_location())
     <= fixed_1000;
 }
 
@@ -63,20 +64,27 @@ OLCFAI::finish_satisfied(const ScanTaskPoint &sp) const
 
 
 unsigned 
-OLCFAI::second_leg_distance(const ScanTaskPoint &destination) const
+OLCFAI::second_leg_distance(const ScanTaskPoint &destination,
+                            unsigned &best_d) const
 {
   // this is a heuristic to remove invalid triangles
   // we do as much of this in flat projection for speed
 
-  const unsigned df_1 = solution[1].flat_distance(solution[2])/32;
-  const unsigned df_2 = solution[2].flat_distance(get_point(destination))/32;
-  const unsigned df_3 = get_point(destination).flat_distance(solution[1])/32;
+  const unsigned df_1 = solution[0].flat_distance(solution[1])/32;
+  const unsigned df_2 = solution[1].flat_distance(get_point(destination))/32;
+  const unsigned df_3 = get_point(destination).flat_distance(solution[0])/32;
   const unsigned df_total = df_1+df_2+df_3;
 
   // require some distance!
   if (df_total<20) {
     return 0;
   }
+
+  // no point scanning if worst than best
+  if (df_total< best_d) {
+    return 0;
+  }
+
   const unsigned shortest = min(df_1, min(df_2, df_3));
 
   // require all legs to have distance
@@ -88,9 +96,11 @@ OLCFAI::second_leg_distance(const ScanTaskPoint &destination) const
   }
 
   const unsigned d = df_3+df_1;
+
   if (shortest*25>=df_total*7) { 
     // passes min > 28% rule,
     // this automatically means we pass max > 45% worst-case
+    best_d = d;
     return d;
   }
 
@@ -118,6 +128,7 @@ OLCFAI::second_leg_distance(const ScanTaskPoint &destination) const
   const fixed d_total(df_total*leg/shortest);
   if (d_total>=fixed(500000)) {
     // long distance, ok that it failed 28% rule
+    best_d = d;
     return d;
   }
 
@@ -130,24 +141,24 @@ OLCFAI::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
 {
   ScanTaskPoint destination(origin.first+1, origin.second+1);
 
+  unsigned best_d = 0;
+
   switch (destination.first) {
   case 1:
     is_complete = false;
-    // don't award any points for first partial leg
-    for (; destination.second < n_points; ++destination.second) {
-      dijkstra.link(destination, origin, 1);
+    for (; destination.second != n_points; ++destination.second) {
+      const unsigned d = get_weighting(origin.first) *
+        distance(origin, destination);
+      dijkstra.link(destination, origin, d);
     }
     break;
   case 2:
-    ContestDijkstra::add_edges(dijkstra, origin);
-    break;
-  case 3:
     find_solution(dijkstra, origin);
 
     // give first leg points to penultimate node
     for (; destination.second < n_points; ++destination.second) {
-      solution[3] = get_point(destination);
-      const unsigned d = second_leg_distance(destination);
+      solution[2] = get_point(destination);
+      const unsigned d = second_leg_distance(destination, best_d);
       if (d) {
         dijkstra.link(destination, origin, get_weighting(origin.first)*d);
         is_complete = true;
@@ -174,8 +185,9 @@ OLCFAI::calc_distance() const
 fixed
 OLCFAI::calc_time() const
 {
-  const ScanTaskPoint destination(0, n_points-1);
-  return fixed(get_point(destination).time - solution[0].time);
+  const ScanTaskPoint start(0, 0);
+  const ScanTaskPoint end(0, n_points-1);
+  return fixed(get_point(end).time - get_point(start).time);
 }
 
 

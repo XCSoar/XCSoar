@@ -64,7 +64,8 @@ protected:
   bool finish_satisfied(const ScanTaskPoint &sp) const;
   bool triangle_closed() const;
 
-  unsigned second_leg_distance(const ScanTaskPoint &dest) const;
+  unsigned second_leg_distance(const ScanTaskPoint &dest,
+    unsigned &best_d) const;
 
   void add_edges(DijkstraTaskPoint &dijkstra,
                  const ScanTaskPoint &curNode);
