@@ -66,6 +66,11 @@ public:
 
   void reset();
 
+protected:
+  void clear();
+
+private:
+  AlternateVector alternates;
 };
 
 #endif //ALTERNATETASK_HPP

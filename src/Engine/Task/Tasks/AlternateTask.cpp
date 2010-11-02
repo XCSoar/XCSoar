@@ -55,3 +55,10 @@ AlternateTask::reset()
 
   // @todo: clear the alternate list
 }
+
+void
+AlternateTask::clear()
+{
+  AbortTask::clear();
+  alternates.clear();
+}

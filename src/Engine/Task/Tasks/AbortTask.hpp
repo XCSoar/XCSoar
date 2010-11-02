@@ -193,7 +193,7 @@ protected:
  * Clears task points in list
  * 
  */
-  void clear();
+  virtual void clear();
 
 /** 
  * Check whether abort task list is full
