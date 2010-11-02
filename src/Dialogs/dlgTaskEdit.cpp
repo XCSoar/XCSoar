@@ -99,6 +99,7 @@ OnNewClicked(WndButton &Sender)
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
     task_modified = true;
     ordered_task->clear();
+    RefreshView();
     dlgTaskTypeShowModal(*parent_window, &ordered_task);
     RefreshView();
   }
