@@ -231,6 +231,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/ExpandMacros.cpp \
 	$(SRC)/InfoBoxes/Content/Factory.cpp \
 	$(SRC)/InfoBoxes/Content/Alternate.cpp \
+	$(SRC)/InfoBoxes/Content/Base.cpp \
 	$(SRC)/InfoBoxes/Content/Altitude.cpp \
 	$(SRC)/InfoBoxes/Content/Direction.cpp \
   $(SRC)/InfoBoxes/Content/Glide.cpp \

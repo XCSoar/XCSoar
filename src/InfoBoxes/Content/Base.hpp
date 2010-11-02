@@ -28,6 +28,7 @@ Copyright_License {
 #include "Language.hpp"
 
 class InfoBoxWindow;
+class Waypoint;
 
 class InfoBoxContent
 {
@@ -44,6 +45,8 @@ public:
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) {
     return false;
   }
+  void SetTitleFromWaypointName(InfoBoxWindow &infobox, const Waypoint* waypoint);
+  void SetCommentFromWaypointName(InfoBoxWindow &infobox, const Waypoint* waypoint);
 };
 
 #endif

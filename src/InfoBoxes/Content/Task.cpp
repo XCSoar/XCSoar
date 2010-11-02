@@ -91,25 +91,11 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
   const Waypoint* way_point = protected_task_manager.getActiveWaypoint();
 
   if (!way_point) {
-    // Set Title
     infobox.SetTitle(_("Next"));
-
     infobox.SetInvalid();
     return;
   }
-
-  // Set Title
-  TCHAR tmp[32];
-  if (XCSoarInterface::SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE) {
-    _tcsncpy(tmp, way_point->Name.c_str(), 3);
-    tmp[3] = '\0';
-  } else if (XCSoarInterface::SettingsMap().DisplayTextType == DISPLAYNUMBER) {
-    _stprintf(tmp, _T("%d"), way_point->id);
-  } else {
-    _tcsncpy(tmp, way_point->Name.c_str(), (sizeof(tmp) / sizeof(TCHAR)) - 1);
-    tmp[(sizeof(tmp) / sizeof(TCHAR)) - 1] = '\0';
-  }
-  infobox.SetTitle(tmp);
+  SetTitleFromWaypointName(infobox, way_point);
 
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.
@@ -123,6 +109,8 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
       (XCSoarInterface::Calculated().task_stats.current_leg.
        solution_remaining.Vector.Bearing - XCSoarInterface::Basic().
        TrackBearing).as_delta().value_degrees();
+
+  TCHAR tmp[32];
 
 #ifndef __MINGW32__
   if (Value > 1)
