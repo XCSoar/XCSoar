@@ -611,8 +611,10 @@ PrintHelper::contestmanager_print(const ContestManager& man)
 
   std::ofstream fs("results/res-olc-solution.txt");
 
-  if (man.solution.empty())
+  if (man.solution.empty()) {
+    fs << "# no solution\n";
     return;
+  }
 
   if (positive(man.result.time)) {
 
