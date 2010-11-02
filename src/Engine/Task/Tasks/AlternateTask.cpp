@@ -35,6 +35,9 @@
 }
  */
 #include "AlternateTask.hpp"
+#include <queue>
+#include "BaseTask/TaskPoint.hpp"
+#include "Math/Earth.hpp"
 
 
 // @todo: call task_events.transition_best_alternate() in update
@@ -52,9 +55,9 @@ void
 AlternateTask::reset()
 {
   AbortTask::reset();
-
-  // @todo: clear the alternate list
+  destination = GeoPoint();
 }
+
 
 void
 AlternateTask::clear()
@@ -63,6 +66,22 @@ AlternateTask::clear()
   alternates.clear();
 }
 
+
+/**
+ * Function object used to rank waypoints by arrival time
+ */
+struct AlternateRank : public std::binary_function<AlternateTask::Divert, 
+                                                   AlternateTask::Divert, bool> {
+  /**
+   * Condition, ranks by distance diversion 
+   */
+  bool operator()(const AlternateTask::Divert& x, 
+                  const AlternateTask::Divert& y) const {
+    return (x.second < y.second);
+  }
+};
+
+
 void 
 AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
                              const bool reachable)
@@ -70,10 +89,31 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
   if (!reachable) // for now, only do reachable points
     return;
 
+  std::priority_queue<Divert, DivertVector, AlternateRank> q;
+
   for (AlternateTaskVector::const_iterator 
          i= tps.begin(); i!= tps.end(); ++i) {
 
-//    const TaskPoint &tp =  *i->first;
+    const TaskPoint& tp = *i->first;
+    const Waypoint& wp_alt = tp.get_waypoint();
+    const fixed dist_straight = state_now.get_location().distance(destination);
+    const fixed dist_divert = ::DoubleDistance(state_now.get_location(),
+                                               wp_alt.Location,
+                                               destination);
+    const fixed delta = dist_straight-dist_divert;
 
+    q.push(std::make_pair(std::make_pair(wp_alt, i->second), delta));
+  }
+
+}
+
+void 
+AlternateTask::set_task_destination(const AIRCRAFT_STATE &state_now,
+                                    const TaskPoint* _target) 
+{
+  if (_target) {
+    destination = _target->get_location();
+  } else {
+    destination = state_now.get_location();
   }
 }

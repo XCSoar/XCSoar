@@ -259,12 +259,15 @@ TaskManager::update(const AIRCRAFT_STATE &state,
     trace_sprint.append(state);
   }
 
-  if (task_ordered.task_size() > 1)
+  if (task_ordered.task_size() > 1) {
     // always update ordered task
     retval |= task_ordered.update(state, state_last);
+  }
 
   // inform the abort task whether it is running as the task or not  
   task_abort.set_active(active_task == &task_abort);
+  // and tell it where the task destination is (if any)
+  task_abort.set_task_destination(state, getActiveTaskPoint());
 
   retval |= task_abort.update(state, state_last);
 

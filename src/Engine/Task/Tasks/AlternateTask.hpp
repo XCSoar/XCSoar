@@ -49,6 +49,9 @@ class AlternateTask :
   public AbortTask 
 {
 public:
+  typedef std::pair < Alternate, fixed > Divert;
+  typedef std::vector < Divert > DivertVector; 
+
   /** 
    * Base constructor.
    * 
@@ -66,12 +69,20 @@ public:
 
   void reset();
 
+  /**
+   * Sets the target of the task (if any) or fallback to aircraft location.  
+   * Must be called before running update_sample!
+   */
+  void set_task_destination(const AIRCRAFT_STATE &state_now,
+                            const TaskPoint* _target);
+
 protected:
   void clear();
   void client_update(const AIRCRAFT_STATE &state_now, const bool reachable);
 
 private:
   AlternateVector alternates;
+  GeoPoint destination;
 };
 
 #endif //ALTERNATETASK_HPP
