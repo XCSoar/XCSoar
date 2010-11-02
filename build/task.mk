@@ -62,6 +62,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/Factory/TouringTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskInterface.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/AbortTask.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/AlternateTask.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/AbstractTask.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/GotoTask.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/OrderedTask.cpp \

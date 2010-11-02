@@ -151,7 +151,7 @@ public:
     return m_landable_reachable;
   }
 
-  void reset();
+  virtual void reset();
 
 /** 
  * Calculate vector to home waypoint
