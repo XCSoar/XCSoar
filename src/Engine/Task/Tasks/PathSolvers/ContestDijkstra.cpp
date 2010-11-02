@@ -141,9 +141,10 @@ ContestDijkstra::solve()
 
   if (m_dijkstra.empty()) {
 
+    update_trace();
+
     // don't re-start search unless we have had new data appear
     if (!trace_dirty) {
-      update_trace();
       return true;
     }
     trace_dirty = false;
@@ -152,7 +153,6 @@ ContestDijkstra::solve()
     start_search();
     add_start_edges();
     if (m_dijkstra.empty()) {
-      update_trace();
       return true;
     }
   }
@@ -162,14 +162,10 @@ ContestDijkstra::solve()
 
   if (distance_general(m_dijkstra, 25)) {
     save_solution();
-    update_trace();
     return true;
   }
-  if (m_dijkstra.empty()) {
-    update_trace();
-    return true;
-  }
-  return false;
+
+  return !m_dijkstra.empty();
 }
 
 void
@@ -230,9 +226,15 @@ ContestDijkstra::add_start_edges()
   m_dijkstra.pop();
 
   ScanTaskPoint destination(0, 0);
+  const ScanTaskPoint end(num_stages-1, n_points-1);
 
-  for (; destination.second != n_points; ++destination.second)
-    m_dijkstra.link(destination, destination, 0);
+  for (; destination.second != n_points; ++destination.second) {
+    // only add points that are valid for the finish
+    solution[0] = get_point(destination);
+    if (admit_candidate(end)) {
+      m_dijkstra.link(destination, destination, 0);
+    }
+  }
 }
 
 void
@@ -241,6 +243,11 @@ ContestDijkstra::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& ori
   ScanTaskPoint destination(origin.first + 1, origin.second);
 
   find_solution(dijkstra, origin);
+
+  // only add last point!
+  if (is_final(destination)) {
+    destination.second = n_points-1;
+  }
 
   for (; destination.second != n_points; ++destination.second) {
     if (admit_candidate(destination)) {
