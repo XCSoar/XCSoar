@@ -93,6 +93,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/AbstractContest.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstra.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/ContestDijkstra.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCLeague.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCSprint.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCClassic.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCFAI.cpp \

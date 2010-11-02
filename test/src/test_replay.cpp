@@ -144,6 +144,9 @@ test_replay(const Contests olc_type,
 
   if (verbose) {
     switch (olc_type) {
+    case OLC_League:
+      std::cout << "# OLC-League\n";
+      break;
     case OLC_Sprint:
       std::cout << "# OLC-Sprint\n";
       break;
@@ -209,6 +212,7 @@ test_replay(const Contests olc_type,
   fixed fact(fixed(200)/(fixed(100)+official_index));
   switch (olc_type) {
   case OLC_Sprint:
+  case OLC_League:
     handicapped_result.score *= fact;
     break;
   default:
@@ -228,8 +232,9 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(3);
+  plan_tests(4);
 
+  ok(test_replay(OLC_League, official_score_sprint),"replay league",0);
   ok(test_replay(OLC_FAI, official_score_fai),"replay fai",0);
   ok(test_replay(OLC_Sprint, official_score_sprint),"replay sprint",0);
   ok(test_replay(OLC_Classic, official_score_classic),"replay classic",0);

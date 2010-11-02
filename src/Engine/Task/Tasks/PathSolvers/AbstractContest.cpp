@@ -68,10 +68,8 @@ AbstractContest::score(ContestResult &result)
     result.distance = best_distance;
     result.speed = best_speed;
     result.time = best_time;
-
     return true;
   }
-
   return false;
 }
 

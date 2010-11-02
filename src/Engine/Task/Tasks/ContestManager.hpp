@@ -9,6 +9,7 @@
 #include "PathSolvers/OLCSprint.hpp"
 #include "PathSolvers/OLCFAI.hpp"
 #include "PathSolvers/OLCClassic.hpp"
+#include "PathSolvers/OLCLeague.hpp"
 #include "PathSolvers/Contests.hpp"
 
 class TaskPoint;
@@ -82,11 +83,13 @@ private:
 
   TracePointVector solution;
 
-  bool run_contest(AbstractContest& dijkstra);
+  bool run_contest(AbstractContest& dijkstra, ContestResult &contest_result,
+                   const bool save_result=true);
 
   OLCSprint olc_sprint;
   OLCFAI olc_fai;
   OLCClassic olc_classic;
+  OLCLeague olc_league;
 
   void update_trace();
 

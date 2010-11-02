@@ -36,7 +36,6 @@
 */
 
 #include "ContestDijkstra.hpp"
-#include "Task/Tasks/ContestManager.hpp"
 #include "Task/TaskStats/ContestResult.hpp"
 #include "Trace/Trace.hpp"
 

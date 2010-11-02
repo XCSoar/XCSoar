@@ -130,10 +130,10 @@ protected:
 
 protected:
   const TracePointVector &trace;
-  const unsigned m_finish_alt_diff;
   virtual bool save_solution();
 
 private:
+  const unsigned m_finish_alt_diff;
   fixed best_score;
   fixed best_distance;
   fixed best_speed;

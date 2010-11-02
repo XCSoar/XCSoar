@@ -17,7 +17,8 @@ ContestManager::ContestManager(const Contests _contest,
   trace_sprint(trace_sprint),
   olc_sprint(trace_points_sprint),
   olc_fai(trace_points_full),
-  olc_classic(trace_points_full)
+  olc_classic(trace_points_full),
+  olc_league(trace_points_sprint)
 {
   reset();
 }
@@ -50,7 +51,9 @@ extern long count_olc;
 #endif
 
 bool
-ContestManager::run_contest(AbstractContest &contest)
+ContestManager::run_contest(AbstractContest &contest, 
+                            ContestResult &contest_result,
+                            const bool save_result)
 {
   // run solver, return immediately if further processing is required
   // by subsequent calls
@@ -59,7 +62,7 @@ ContestManager::run_contest(AbstractContest &contest)
 
   // if no improved solution was found, must have finished processing
   // with invalid data so need to retrieve new trace
-  if (!contest.score(result)) {
+  if (!contest.score(contest_result)) {
     update_trace();
     return true;
   }
@@ -67,7 +70,11 @@ ContestManager::run_contest(AbstractContest &contest)
   // solver finished and improved solution was found.  save solution
   // and retrieve new trace.
 
-  contest.copy_solution(solution);
+  if (save_result) {
+    contest.copy_solution(solution);
+  } else {
+    contest.copy_solution(olc_league.get_solution_classic());
+  }
   update_trace();
 
 #ifdef INSTRUMENT_TASK
@@ -89,19 +96,24 @@ ContestManager::update_idle()
 {
   // \todo: possibly scan each type in a round robin fashion?
   bool retval = false;
+  ContestResult dummy_result;
 
   if (trace_points_full.size() < 10)
     update_trace();
 
   switch (contest) {
   case OLC_Sprint:
-    retval = run_contest(olc_sprint);
+    retval = run_contest(olc_sprint, result);
     break;
   case OLC_FAI:
-    retval = run_contest(olc_fai);
+    retval = run_contest(olc_fai, result);
     break;
   case OLC_Classic:
-    retval = run_contest(olc_classic);
+    retval = run_contest(olc_classic, result);
+    break;
+  case OLC_League:
+    retval = run_contest(olc_classic, dummy_result, false);
+    retval |= run_contest(olc_league, result);
     break;
   };
 
@@ -117,6 +129,7 @@ ContestManager::reset()
   olc_sprint.reset();
   olc_fai.reset();
   olc_classic.reset();
+  olc_league.reset();
 }
 
 const TracePointVector& 

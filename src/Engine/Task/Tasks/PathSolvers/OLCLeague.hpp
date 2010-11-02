@@ -35,34 +35,25 @@
 }
  */
 
-#ifndef OLC_DIJKSTRA_HPP
-#define OLC_DIJKSTRA_HPP
+#ifndef OLC_LEAGUE_HPP
+#define OLC_LEAGUE_HPP
 
 #include "AbstractContest.hpp"
-#include "NavDijkstra.hpp"
 
 /**
  * Abstract class for contest searches using dijkstra algorithm
  *
- * These algorithms are designed for online/realtime use, and as such
- * expect solve() to be called during the simulation as time advances.
- *
- *
  */
-class ContestDijkstra:
-  public AbstractContest,
-  public NavDijkstra<TracePoint>
+class OLCLeague:
+  public AbstractContest
 {
 public:
   /**
    * Constructor
    *
    * @param _trace TracePointVector object reference to use for solving
-   * @param n_legs Maximum number of legs in Contest task
-   * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
-  ContestDijkstra(const TracePointVector &_trace, const unsigned n_legs,
-                  const unsigned finish_alt_diff = 1000);
+  OLCLeague(const TracePointVector &_trace);
 
   bool score(ContestResult &result);
 
@@ -85,54 +76,18 @@ public:
    */
   bool solve();
 
+  TracePointVector& get_solution_classic() {
+    return solution_classic;
+  }
+
 protected:
-  /** Number of points in current trace set */
-  unsigned n_points;
-
-  /**
-   * Determine if a trace point can be added to the search list
-   *
-   * @param candidate The index to the candidate
-   * @return True if candidate is valid
-   */
-  virtual bool admit_candidate(const ScanTaskPoint &candidate) const;
-
-  const TracePoint &get_point(const ScanTaskPoint &sp) const;
-
-
-  virtual void add_edges(DijkstraTaskPoint &dijkstra,
-                         const ScanTaskPoint &curNode);
-
-  /**
-   * Set weightings of each leg.  Default is constant weighting.
-   */
-  virtual void set_weightings();
-
-  /** Weightings applied to each leg distance */
-  unsigned m_weightings[MAX_STAGES];
-
-  /** Dijkstra search algorithm */
-  DijkstraTaskPoint m_dijkstra;
-
-  /**
-   * Retrieve weighting of specified leg
-   * @param index Index of leg
-   * @return Weighting of leg
-   */
-  unsigned get_weighting(const unsigned index) const;
-
-  /**
-   * Perform actions required at start of new search
-   */
-  virtual void start_search();
-
   virtual bool save_solution();
+  TracePointVector solution_classic;
 
 private:
+  TracePoint best_solution[5];
+  TracePoint solution[5];
   bool solution_found;
-  virtual void add_start_edges();
-
-  TracePoint best_solution[MAX_STAGES];
 };
 
 #endif
