@@ -76,26 +76,17 @@ void
 OLCSprint::add_edges(DijkstraTaskPoint &dijkstra,
                      const ScanTaskPoint &origin)
 {
-  ScanTaskPoint destination(origin.first + 1, origin.second);
+  const ScanTaskPoint destination(origin.first + 1, n_points - 1);
   if (!is_final(destination)) {
     ContestDijkstra::add_edges(dijkstra, origin);
     return;
   }
-
   /*
     For final, only add last valid point
    */
-
-  find_solution(dijkstra, origin);
-
-  for (; destination.second >= origin.second; --destination.second) {
-    if (admit_candidate(destination)) {
-      const unsigned d = get_weighting(origin.first) *
-                         distance(origin, destination);
-      dijkstra.link(destination, origin, d);
-      return;
-    }
-  }
+  const unsigned d = get_weighting(origin.first) *
+    distance(origin, destination);
+  dijkstra.link(destination, origin, d);
 }
 
 fixed
