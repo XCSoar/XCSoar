@@ -109,6 +109,15 @@ public:
                                 const fixed mag=fixed_one) const;
 
   /**
+   * Retrieve the task alternate waypoints
+   *
+   * @param index Index sequence of alternate
+   *
+   * @return Waypoint pointer or null if invalid
+   */
+  const Waypoint* getAlternateWaypoint(const unsigned index) const;
+
+  /**
    * Enumeration of task modes
    */
   enum TaskMode_t {

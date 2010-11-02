@@ -647,3 +647,9 @@ TaskManager::commit(const OrderedTask& other)
 
   return retval;
 }
+
+const Waypoint* 
+TaskManager::getAlternateWaypoint(const unsigned index) const
+{
+  return task_abort.getAlternateWaypoint(index);
+}

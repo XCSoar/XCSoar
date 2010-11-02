@@ -22,15 +22,22 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Alternate.hpp"
-
 #include "InfoBoxes/InfoBoxWindow.hpp"
+#include "Components.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 
 #include <tchar.h>
 
 void
 InfoBoxContentAlternateBest::Update(InfoBoxWindow &infobox)
 {
-  infobox.SetInvalid();
+  infobox.SetTitle(_("Best Altn"));
+  const Waypoint* way_point = protected_task_manager.getAlternateWaypoint(0);
+  SetCommentFromWaypointName(infobox, way_point);
+  if (!way_point) {
+    infobox.SetInvalid();
+  }
+  // @todo: set colour
 }
 
 void

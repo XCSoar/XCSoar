@@ -126,3 +126,13 @@ AlternateTask::set_task_destination(const AIRCRAFT_STATE &state_now,
     destination = state_now.get_location();
   }
 }
+
+const Waypoint* 
+AlternateTask::getAlternateWaypoint(const unsigned index) const
+{
+  if (index< alternates.size()) {
+    return &alternates[index].first;
+  } else {
+    return NULL;
+  }
+}

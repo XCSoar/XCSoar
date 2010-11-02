@@ -61,6 +61,15 @@ public:
   void set_task_destination(const AIRCRAFT_STATE &state_now,
                             const TaskPoint* _target);
 
+  /**
+   * Retrieve the task alternate waypoints
+   *
+   * @param index Index sequence of alternate
+   *
+   * @return Waypoint pointer or null if invalid
+   */
+  const Waypoint* getAlternateWaypoint(const unsigned index) const;
+
 protected:
   void clear();
   void client_update(const AIRCRAFT_STATE &state_now, const bool reachable);

@@ -84,6 +84,15 @@ ProtectedTaskManager::getActiveWaypoint() const
 
   return NULL;
 }
+
+const Waypoint* 
+ProtectedTaskManager::getAlternateWaypoint(const unsigned index) const
+{
+  Lease lease(*this);
+  return lease->getAlternateWaypoint(index);
+}
+
+
 //////////////////////////////
 bool
 ProtectedTaskManager::isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref) const
