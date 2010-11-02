@@ -23,7 +23,9 @@
 OLCFAI::OLCFAI(const TracePointVector &_trace):
   ContestDijkstra(_trace, 3, 1000),
   is_closed(false),
-  is_complete(false) {}
+  is_complete(false),
+  first_tp(0) 
+{}
 
 
 fixed
@@ -43,23 +45,38 @@ OLCFAI::leg_distance(const unsigned index) const
 
 
 bool 
-OLCFAI::triangle_closed() const
+OLCFAI::path_closed() const
 {
+
+  // RESERVED FOR FUTURE USE: DO NOT DELETE
+
   // note this may fail if resolution of sampled trace is too low
   static const fixed fixed_1000(1000);
-  static const ScanTaskPoint start(0, 0);
-  static const ScanTaskPoint end(0, n_points-1);
-  
-  return get_point(start).get_location().distance(get_point(end).get_location())
-    <= fixed_1000;
-}
+  const ScanTaskPoint end(0, n_points-1);
+  fixed d_min(-1);
+  unsigned i_min;
 
+  ScanTaskPoint start(0, 0);
 
-bool 
-OLCFAI::finish_satisfied(const ScanTaskPoint &sp) const
-{
-  //    && triangle_closed()
-  return true;
+  for (start.second=0; start.second <= first_tp; 
+       ++start.second) {
+
+    const fixed d_this =
+      get_point(start).get_location().distance(
+        get_point(end).get_location());
+
+    if (!positive(d_min) || (d_this < d_min)) {
+      d_min = d_this;
+      i_min = start.second;
+    } 
+    if (d_this<= fixed_1000) {
+      return true;
+    }
+  }
+
+//  std::cout << d_min << " " << i_min << "\n";
+
+  return false;
 }
 
 
@@ -171,7 +188,13 @@ OLCFAI::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
       const unsigned d = second_leg_distance(destination, best_d);
       if (d) {
         dijkstra.link(destination, origin, get_weighting(origin.first)*d);
+
+        // we have an improved solution
         is_complete = true;
+
+        // need to scan again whether path is closed
+        is_closed = false;
+        first_tp = origin.second;
       }
     }
     break;
@@ -217,5 +240,23 @@ void
 OLCFAI::start_search()
 {
   is_complete = false;
-  best_d = 0;
+}
+
+
+bool 
+OLCFAI::update_score()
+{
+  // RESERVED FOR FUTURE USE: DO NOT DELETE
+  /*
+  if (positive(get_best_score()) && !is_closed) {
+    if (path_closed()) {
+      std::cout << "complete, closed\n";
+      is_closed = true;
+    } else {
+      std::cout << "complete, not closed\n";
+      return true;
+    }
+  }
+  */
+  return false;
 }

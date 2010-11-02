@@ -61,8 +61,7 @@ public:
 protected:
   fixed leg_distance(unsigned i) const;
 
-  bool finish_satisfied(const ScanTaskPoint &sp) const;
-  bool triangle_closed() const;
+  bool path_closed() const;
 
   unsigned second_leg_distance(const ScanTaskPoint &dest,
     unsigned &best) const;
@@ -72,9 +71,13 @@ protected:
 
   bool is_closed;
   bool is_complete;
+  unsigned first_tp;
   unsigned best_d;
 
   void start_search();
+
+  bool update_score();
+
 private:
   void add_start_edges();
 };
