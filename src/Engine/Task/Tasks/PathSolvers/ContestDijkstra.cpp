@@ -214,7 +214,7 @@ ContestDijkstra::save_solution()
 
 
 void
-ContestDijkstra::copy_solution(TracePointVector &vec)
+ContestDijkstra::copy_solution(TracePointVector &vec) const
 {
   vec.clear();
   if (solution_found) {

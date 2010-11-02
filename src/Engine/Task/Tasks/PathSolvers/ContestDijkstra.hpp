@@ -67,7 +67,7 @@ public:
 
   bool score(ContestResult &result);
 
-  virtual void copy_solution(TracePointVector &vec);
+  virtual void copy_solution(TracePointVector &vec) const;
 
   virtual fixed calc_distance() const;
   virtual fixed calc_score() const;

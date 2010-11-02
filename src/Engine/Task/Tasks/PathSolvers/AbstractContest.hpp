@@ -76,7 +76,7 @@ public:
    *
    * @param vec output vector
    */
-  virtual void copy_solution(TracePointVector &vec) = 0;
+  virtual void copy_solution(TracePointVector &vec) const = 0;
 
   /**
    * Calculate distance of best path
