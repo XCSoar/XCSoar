@@ -47,6 +47,10 @@ struct ContestResult;
 /**
  * Abstract class for OLC path searches
  *
+ * These algorithms are designed for online/realtime use, and as such
+ * expect solve() to be called during the simulation as time advances.
+ *
+ *
  */
 class ContestDijkstra:
   public NavDijkstra<TracePoint>
