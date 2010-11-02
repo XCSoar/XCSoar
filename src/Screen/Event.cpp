@@ -98,6 +98,13 @@ DialogEventLoop::dispatch(MSG &msg)
     return;
   }
 
+  if (is_altair() && msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE) {
+    /* the Windows CE dialog manager does not handle VK_ESCAPE, but
+       the Altair needs it - let's roll our own */
+    ::SendMessage(dialog, WM_COMMAND, IDCANCEL, 0);
+    return;
+  }
+
   EventLoop::dispatch(msg);
 }
 
