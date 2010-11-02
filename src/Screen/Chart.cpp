@@ -321,7 +321,7 @@ Chart::DrawBarChart(const LeastSquares &lsdata)
 }
 
 void
-Chart::DrawFilledLineGraph(const LeastSquares &lsdata, const Color color)
+Chart::DrawFilledLineGraph(const LeastSquares &lsdata)
 {
   POINT line[4];
 

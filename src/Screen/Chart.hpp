@@ -74,7 +74,7 @@ public:
   void Reset();
 
   void DrawBarChart(const LeastSquares &lsdata);
-  void DrawFilledLineGraph(const LeastSquares &lsdata, const Color thecolor);
+  void DrawFilledLineGraph(const LeastSquares &lsdata);
   void DrawLineGraph(const LeastSquares &lsdata,  enum Style Style);
   void DrawTrend(const LeastSquares &lsdata, enum Style Style);
   void DrawTrendN(const LeastSquares &lsdata, enum Style Style);

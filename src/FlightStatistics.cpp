@@ -197,7 +197,7 @@ FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
   canvas.select(hpHorizonGround);
   canvas.select(hbHorizonGround);
 
-  chart.DrawFilledLineGraph(Altitude_Terrain, Chart::GROUND_COLOUR);
+  chart.DrawFilledLineGraph(Altitude_Terrain);
   canvas.white_pen();
   canvas.white_brush();
 
