@@ -112,7 +112,7 @@ AlternateTask::set_task_destination(const AIRCRAFT_STATE &state_now,
                                     const TaskPoint* _target) 
 {
   if (_target) {
-    destination = _target->get_location();
+    destination = _target->get_location_remaining();
   } else {
     destination = state_now.get_location();
   }
