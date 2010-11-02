@@ -100,7 +100,7 @@ protected:
    * @param candidate The index to the candidate
    * @return True if candidate is valid
    */
-  virtual bool admit_candidate(const ScanTaskPoint &candidate) const;
+  bool admit_candidate(const ScanTaskPoint &candidate) const;
 
   const TracePoint &get_point(const ScanTaskPoint &sp) const;
 
