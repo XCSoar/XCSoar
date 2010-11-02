@@ -78,7 +78,7 @@ ContestDijkstra::solve()
   }
 
   if (n_points < num_stages)
-    return false;
+    return true;
 
   if (m_dijkstra.empty()) {
     m_dijkstra.restart(ScanTaskPoint(0, 0));
@@ -119,6 +119,9 @@ ContestDijkstra::reset()
 bool
 ContestDijkstra::score(ContestResult &result)
 {
+  if (n_points < num_stages)
+    return false;
+
   if (positive(calc_time())) {
     solution_found = true;
     result.score = best_score;
