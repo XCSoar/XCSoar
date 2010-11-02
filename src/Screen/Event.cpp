@@ -88,12 +88,29 @@ EventLoop::dispatch(const MSG &msg)
   assert_none_locked();
 }
 
+/**
+ * Checks if we should pass this message to the WIN32 dialog manager.
+ */
+gcc_pure
+static bool
+AllowDialogMessage(const MSG &msg)
+{
+  /* this hack disallows the dialog manager to handle VK_LEFT/VK_RIGHT
+     on the Altair; some dialogs use the knob as a hot key, and they
+     can't implement Window::on_key_check() */
+  if (is_altair() && (msg.message == WM_KEYDOWN || msg.message == WM_KEYUP) &&
+      (msg.wParam == VK_LEFT || msg.wParam == VK_RIGHT))
+    return false;
+
+  return true;
+}
+
 void
 DialogEventLoop::dispatch(MSG &msg)
 {
   assert_none_locked();
 
-  if (::IsDialogMessage(dialog, &msg)) {
+  if (AllowDialogMessage(msg) && ::IsDialogMessage(dialog, &msg)) {
     assert_none_locked();
     return;
   }
