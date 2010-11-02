@@ -46,6 +46,8 @@ unsigned long ContestDijkstra::count_olc_solve = 0;
 unsigned long ContestDijkstra::count_olc_trace = 0;
 unsigned ContestDijkstra::count_olc_size = 0;
 
+const unsigned ContestDijkstra::max_contest_trace = 300;
+
 ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned &_handicap,
                                  const unsigned n_legs,
@@ -107,7 +109,7 @@ ContestDijkstra::update_trace()
   if (!master_is_updated()) 
     return;
 
-  trace = trace_master.get_trace_points(300);
+  trace = trace_master.get_trace_points(max_contest_trace);
   n_points = trace.size();
   trace_dirty = true;
 

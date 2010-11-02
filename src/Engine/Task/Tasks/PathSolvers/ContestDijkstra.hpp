@@ -91,6 +91,9 @@ protected:
   /** Number of points in current trace set */
   unsigned n_points;
 
+  /** Max number of points in trace set */
+  static const unsigned max_contest_trace;
+
   /** Update working trace from master --- never to be done during a solution! */
   void update_trace();
 
