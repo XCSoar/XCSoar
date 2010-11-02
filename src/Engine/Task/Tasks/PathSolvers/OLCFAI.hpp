@@ -57,14 +57,14 @@ public:
   fixed calc_score() const;
 
 protected:
-  bool finish_satisfied(const ScanTaskPoint &sp) const;
+  fixed leg_distance(unsigned i) const;
+
+  bool admit_finish(const ScanTaskPoint &sp) const;
   bool fai_triangle_satisfied(const ScanTaskPoint &sp) const;
   bool triangle_closed(const ScanTaskPoint &sp) const;
 
   void add_edges(DijkstraTaskPoint &dijkstra,
                  const ScanTaskPoint &curNode);
-
-  bool admit_candidate(const ScanTaskPoint &candidate) const;
 };
 
 #endif
