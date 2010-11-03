@@ -138,17 +138,10 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  double Value = XCSoarInterface::Calculated().TeammateBearing -
+  Angle Value = XCSoarInterface::Calculated().TeammateBearing -
                  XCSoarInterface::Basic().TrackBearing;
 
-  if (Value < -180.0)
-    Value += 360.0;
-  else if (Value > 180.0)
-    Value -= 360.0;
-
   SetValueBearingDifference(infobox, Value);
-  infobox.SetValue(tmp);
 #endif
 
   // Set Comment

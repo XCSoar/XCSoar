@@ -40,6 +40,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
 #include "Waypoint/Waypoint.hpp"
+#include "Math/Angle.hpp"
 
 #include <stdio.h>
 
@@ -69,9 +70,9 @@ void FillInfoBoxWaypointName(InfoBoxWindow& infobox, const Waypoint* way_point,
 }
 
 void
-InfoBoxContent::SetValueBearingDifference(InfoBoxWindow &infobox,
-                                          const double delta_degrees)
+InfoBoxContent::SetValueBearingDifference(InfoBoxWindow &infobox, Angle delta)
 {
+  double delta_degrees = delta.as_delta().value_degrees();
   TCHAR tmp[32];
   if (delta_degrees > 1)
     _stprintf(tmp, _T("%2.0f°»"), delta_degrees);

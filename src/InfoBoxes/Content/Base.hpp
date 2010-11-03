@@ -29,6 +29,7 @@ Copyright_License {
 
 class InfoBoxWindow;
 class Waypoint;
+class Angle;
 
 class InfoBoxContent
 {
@@ -52,8 +53,7 @@ public:
   static void SetCommentFromWaypointName(InfoBoxWindow &infobox,
                                          const Waypoint* waypoint);
 
-  static void SetValueBearingDifference(InfoBoxWindow &infobox,
-                                        const double delta_degrees);
+  static void SetValueBearingDifference(InfoBoxWindow &infobox, Angle delta);
 };
 
 #endif

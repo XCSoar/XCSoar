@@ -60,10 +60,10 @@ InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  double Value =
+  Angle Value =
       (XCSoarInterface::Calculated().task_stats.current_leg.
        solution_remaining.Vector.Bearing - XCSoarInterface::Basic().
-       TrackBearing).as_delta().value_degrees();
+       TrackBearing);
 
   SetValueBearingDifference(infobox, Value);
 }
@@ -88,10 +88,10 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  double Value =
+  Angle Value =
       (XCSoarInterface::Calculated().task_stats.current_leg.
        solution_remaining.Vector.Bearing - XCSoarInterface::Basic().
-       TrackBearing).as_delta().value_degrees();
+       TrackBearing);
 
   SetValueBearingDifference(infobox, Value);
 

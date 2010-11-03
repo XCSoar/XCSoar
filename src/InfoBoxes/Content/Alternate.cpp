@@ -45,8 +45,8 @@ InfoBoxContentAlternateBest::Update(InfoBoxWindow &infobox)
   const GlideResult& solution = alternates[0].second;
 
   // Set Value
-  double Value = (solution.Vector.Bearing - XCSoarInterface::Basic().
-                  TrackBearing).as_delta().value_degrees();
+  Angle Value = solution.Vector.Bearing -
+    XCSoarInterface::Basic().TrackBearing;
 
   SetValueBearingDifference(infobox, Value);
 
