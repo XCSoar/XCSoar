@@ -236,7 +236,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT &Start,
   canvas.set_text_color(Color::BLACK);
 
   TextInBoxMode_t TextInBoxMode;
-  TextInBoxMode.AlignCenter = true;
+  TextInBoxMode.Align = Center;
   TextInBoxMode.WhiteBorder = true;
 
   if (Arrow[5].y >= Arrow[6].y)

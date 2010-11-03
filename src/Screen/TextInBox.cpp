@@ -152,9 +152,9 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
   SIZE tsize = canvas.text_size(Value);
 
-  if (Mode.AlignRight) {
+  if (Mode.Align == Right) {
     x -= tsize.cx;
-  } else if (Mode.AlignCenter) {
+  } else if (Mode.Align == Center) {
     x -= tsize.cx / 2;
     y -= tsize.cy / 2;
   }
@@ -165,7 +165,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     brect.top = y + ((tsize.cy + 4) >> 3) - 2;
     brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
 
-    if (Mode.AlignRight)
+    if (Mode.Align == Right)
       x -= 3;
 
     POINT offset = TextInBoxMoveInView(brect, MapRect);
@@ -193,7 +193,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     brect.top = y + ((tsize.cy + 4) >> 3);
     brect.bottom = brect.top + tsize.cy - ((tsize.cy + 4) >> 3);
 
-    if (Mode.AlignRight)
+    if (Mode.Align == Right)
       x -= 2;
 
     POINT offset = TextInBoxMoveInView(brect, MapRect);

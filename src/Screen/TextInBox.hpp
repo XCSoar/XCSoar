@@ -29,22 +29,27 @@ Copyright_License {
 class Canvas;
 class LabelBlock;
 
+enum TextAlign
+{
+  Left,
+  Center,
+  Right
+};
+
 struct TextInBoxMode_t
 {
   bool Border;
   bool FillBackground;
-  bool AlignRight;
+  TextAlign Align;
   bool Reachable;
-  bool AlignCenter;
   bool WhiteBorder;
   bool WhiteBold;
 
   TextInBoxMode_t() :
     Border(false),
     FillBackground(false),
-    AlignRight(false),
+    Align(Left),
     Reachable(false),
-    AlignCenter(false),
     WhiteBorder(false),
     WhiteBold(false) {}
 };
