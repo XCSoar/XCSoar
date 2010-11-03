@@ -55,7 +55,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Height GPS"),
     N_("H GPS"),
     N_("This is the height above mean sea level reported by the GPS. Touchscreen/PC only: in simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn."),
-    1, 33,
+    1, // H AGL
+    33, // H Baro
   },
 
   // 1
@@ -63,7 +64,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Height AGL"),
     N_("H AGL"),
     N_("This is the navigation altitude minus the terrain height obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height."),
-    20, 0,
+    20, // H Gnd
+    0, // H GPS
   },
 
   // 2
@@ -71,7 +73,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Thermal last 30 sec"),
     N_("TC 30s"),
     N_("A 30 second rolling average climb rate based of the reported GPS altitude, or vario if available."),
-    7, 44,
+    7, // TL Avg
+    44, // Netto
   },
 
   // 3
@@ -79,7 +82,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Bearing"),
     N_("Bearing"),
     N_("True bearing of the next waypoint.  For AAT tasks, this is the true bearing to the target within the AAT sector."),
-    6, 54,
+    6, // V Gnd
+    54, // V TAS
   },
 
   // 4
@@ -87,7 +91,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("L/D instantaneous"),
     N_("L/D Inst"),
     N_("Instantaneous glide ratio, given by the ground speed divided by the vertical speed (GPS speed) over the last 20 seconds. Negative values indicate climbing cruise. If the vertical speed is close to zero, the displayed value is '---'."),
-    5, 38,
+    5, // LD Cruise
+    53, // LD Vario
   },
 
   // 5
@@ -95,7 +100,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("L/D cruise"),
     N_("L/D Cru"),
     N_("The distance from the top of the last thermal, divided by the altitude lost since the top of the last thermal. Negative values indicate climbing cruise (height gain since leaving the last thermal). If the vertical speed is close to zero, the displayed value is '---'."),
-    19, 4,
+    19, // Final LD
+    4, // LD Inst
   },
 
   // 6
@@ -103,7 +109,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Speed ground"),
     N_("V Gnd"),
     N_("Ground speed measured by the GPS. If this infobox is active in simulation mode, pressing the up and down arrows adjusts the speed, and left and right turn the glider."),
-    23, 3,
+    23, // Track
+    3, // Bearing
   },
 
   // 7
@@ -111,7 +118,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Last Thermal Average"),
     N_("TL Avg"),
     N_("Total altitude gain/loss in the last thermal divided by the time spent circling."),
-    8, 2,
+    8, // TL Gain
+    2, // TC 30s
   },
 
   // 8
@@ -119,7 +127,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Last Thermal Gain"),
     N_("TL Gain"),
     N_("Total altitude gain/loss in the last thermal."),
-    9, 7,
+    9, // TL Time
+    7, // TL Avg
   },
 
   // 9
@@ -127,7 +136,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Last Thermal Time"),
     N_("TL Time"),
     N_("Time spent circling in the last thermal."),
-    21, 8,
+    21, // TC Avg
+    8, // TL Gain
   },
 
   // 10
@@ -135,7 +145,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("MacCready Setting"),
     N_("MacCready"),
     N_("The current MacCready setting. This infobox also shows whether MacCready is manual or auto. (Touchscreen/PC only) Also used to adjust the MacCready Setting if the infobox is active, by using the up/down cursor keys."),
-    34, 43,
+    34, // V MC
+    43, // V Opt
   },
 
   // 11
@@ -143,7 +154,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Next Distance"),
     N_("WP Dist"),
     N_("The distance to the currently selected waypoint. For AAT tasks, this is the distance to the target within the AAT sector."),
-    12, 31,
+    12, // WP AltD
+    31,
   },
 
   // 12
@@ -151,7 +163,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Next Altitude Difference"),
     N_("WP AltD"),
     N_("Arrival altitude at the next waypoint relative to the safety arrival altitude."),
-    13, 11,
+    13, // WP AltR
+    11, // WP Dist
   },
 
   // 13
@@ -159,7 +172,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Next Altitude Required"),
     N_("WP AltR"),
     N_("Altitude required to reach the next turn point."),
-    15, 12,
+    15, // Fin AltD
+    12, // WP AltD
   },
 
   // 14
@@ -167,7 +181,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Next Waypoint"),
     N_("Next"),
     N_("The name of the currently selected turn point. When this infobox is active, using the up/down cursor keys selects the next/previous waypoint in the task. (Touchscreen/PC only) Pressing the enter cursor key brings up the waypoint details."),
-    36, 46,
+    36, // Time flt
+    46, // WP ETA
   },
 
   // 15
@@ -175,7 +190,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Final Altitude Difference"),
     N_("Fin AltD"),
     N_("Arrival altitude at the final task turn point relative to the safety arrival altitude."),
-    16, 13,
+    16, // Fin AltR
+    13, // WP AltR
   },
 
   // 16
@@ -183,7 +199,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Final Altitude Required"),
     N_("Fin AltR"),
     N_("Altitude required to finish the task."),
-    17, 15,
+    17, // V Task Av
+    15, // Fin AltD
   },
 
   // 17
@@ -191,7 +208,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Speed Task Average"),
     N_("V Task Av"),
     N_("Average cross country speed while on current task, compensated for altitude."),
-    18, 16,
+    59, // V Task Inst
+    16, // Fin AltR
   },
 
   // 18
@@ -199,7 +217,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Final Distance"),
     N_("Fin Dis"),
     N_("Distance to finish around remaining turn points."),
-    27, 17,
+    27, // AA Time
+    61, // V Task Ach
   },
 
   // 19
@@ -207,7 +226,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Final LD"),
     N_("Fin LD"),
     N_("The required glide ratio to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival altitude. Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'. Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds."),
-    38, 5,
+    38, // Next LD
+    5, // LD Cruise
   },
 
   // 20
@@ -215,7 +235,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Terrain Elevation"),
     N_("H GND"),
     N_("This is the elevation of the terrain above mean sea level, obtained from the terrain file at the current GPS location."),
-    33, 1,
+    33, // H Baro
+    1, // H AGL
   },
 
   // 21
@@ -223,7 +244,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Thermal Average"),
     N_("TC Avg"),
     N_("Altitude gained/lost in the current thermal, divided by time spent thermaling."),
-    22, 9,
+    22, // TC Gain
+    9, // TL Time
   },
 
   // 22
@@ -231,7 +253,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Thermal Gain"),
     N_("TC Gain"),
     N_("The altitude gained/lost in the current thermal."),
-    24, 21,
+    24, // Vario
+    21, // TC Avg
   },
 
   // 23
@@ -239,7 +262,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Track"),
     N_("Track"),
     N_("Magnetic track reported by the GPS. (Touchscreen/PC only) If this infobox is active in simulation mode, pressing the up and down  arrows adjusts the track."),
-    32, 6,
+    32, // V IAS
+    6, // V Gnd
   },
 
   // 24
@@ -247,7 +271,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Vario"),
     N_("Vario"),
     N_("Instantaneous vertical speed, as reported by the GPS, or the intelligent vario total energy vario value if connected to one."),
-    44, 22,
+    44, // Netto
+    22, // TC Gain
   },
 
   // 25
@@ -255,7 +280,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Wind Speed"),
     N_("Wind V"),
     N_("Wind speed estimated by XCSoar. (Touchscreen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust magnitude and left/right cursor keys to adjust bearing when the infobox is active. Pressing the enter cursor key saves the wind value as the initial value when XCSoar next starts."),
-    26, 50,
+    26, // Wind B
+    50, // Max Temp
   },
 
   // 26
@@ -263,7 +289,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Wind Bearing"),
     N_("Wind B"),
     N_("Wind bearing estimated by XCSoar. (Touchscreen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust bearing when the infobox is active."),
-    48, 25,
+    48, // OAT
+    25, // Wind V
   },
 
   // 27
@@ -271,7 +298,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("AA Time"),
     N_("AA Time"),
     N_("Assigned Area Task time remaining. Goes red when time remaining has expired."),
-    28, 18,
+    28, // AA Dmax
+    18, // Fin Dis
   },
 
   // 28
@@ -279,7 +307,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("AA Distance Max"),
     N_("AA Dmax"),
     N_("Assigned Area Task maximum distance possible for remainder of task."),
-    29, 27,
+    29, // AA Dmin
+    27, // AA Time
   },
 
   // 29
@@ -287,7 +316,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("AA Distance Min"),
     N_("AA Dmin"),
     N_("Assigned Area Task minimum distance possible for remainder of task."),
-    30, 28,
+    30, // AA Vmax
+    28, // AA Dmax
   },
 
   // 30
@@ -295,7 +325,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("AA Speed Max"),
     N_("AA Vmax"),
     N_("Assigned Area Task average speed achievable if flying maximum possible distance remaining in minimum AAT time."),
-    31, 29,
+    31, // AA Vmin
+    29, // AA Dmin
   },
 
   // 31
@@ -303,7 +334,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("AA Speed Min"),
     N_("AA Vmin"),
     N_("Assigned Area Task average speed achievable if flying minimum possible distance remaining in minimum AAT time."),
-    51, 30,
+    51, // AA Dtgt
+    30, // AA Vmax
   },
 
   // 32
@@ -311,7 +343,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Airspeed IAS"),
     N_("V IAS"),
     N_("Indicated Airspeed reported by a supported external intelligent vario."),
-    37, 23,
+    37, // G load
+    23, // Track
   },
 
   // 33
@@ -319,7 +352,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Pressure Altitude"),
     N_("H Baro"),
     N_("This is the barometric altitude obtained from a GPS equipped with pressure sensor, or a supported external intelligent vario."),
-    0, 20,
+    0, // H GPS
+    20, // H Gnd
   },
 
   // 34
@@ -327,7 +361,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Speed MacCready"),
     N_("V Mc"),
     N_("The MacCready speed-to-fly for optimal flight to the next waypoint. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent."),
-    35, 10,
+    35, // % Climb
+    10, // MC
   },
 
   // 35
@@ -335,7 +370,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Percentage climb"),
     N_("% Climb"),
     N_("Percentage of time spent in climb mode. These statistics are reset upon starting the task."),
-    43, 34,
+    43, // V Opt
+    34, // V MC
   },
 
   // 36
@@ -343,7 +379,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Time of flight"),
     N_("Time flt"),
     N_("Time elapsed since takeoff was detected."),
-    39, 14,
+    39, // Time local
+    14, // Next
   },
 
   // 37
@@ -351,7 +388,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("G load"),
     N_("G"),
     N_("Magnitude of G loading reported by a supported external intelligent vario. This value is negative for pitch-down manoeuvres."),
-    47, 32,
+    47, // Bearing D
+    32, // Track
   },
 
   // 38
@@ -359,7 +397,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Next LD"),
     N_("WP LD"),
     N_("The required glide ratio to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival altitude. Negative values indicate a climb is necessary to reach the waypoint. If the height required is close to zero, the displayed value is '---'.   Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds."),
-    53, 19,
+    53, // LD Vario
+    19, // Final LD
   },
 
   // 39
@@ -367,7 +406,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Time local"),
     N_("Time loc"),
     N_("GPS time expressed in local time zone."),
-    40, 36,
+    40, // Time UTC
+    36, // Time flt
   },
 
   // 40
@@ -375,7 +415,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Time UTC"),
     N_("Time UTC"),
     N_("GPS time expressed in UTC."),
-    41, 39,
+    41, // Fin ETE
+    39, // Time local
   },
 
   // 41
@@ -383,7 +424,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Task Time To Go"),
     N_("Fin ETE"),
     N_("Estimated time required to complete task, assuming performance of ideal MacCready cruise/climb cycle."),
-    42, 40,
+    42, // WP ETE
+    40, // Time UTC
   },
 
   // 42
@@ -391,7 +433,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Next Time To Go"),
     N_("WP ETE"),
     N_("Estimated time required to reach next waypoint, assuming performance of ideal MacCready cruise/climb cycle."),
-    45, 41,
+    45, // Fin ETA
+    41, // Fin ETE
   },
 
   // 43
@@ -399,7 +442,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Speed Dolphin"),
     N_("V Opt"),
     N_("The instantaneous MacCready speed-to-fly, making use of Netto vario calculations to determine dolphin cruise speed in the glider's current bearing. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent. In climb mode, this switches to the speed for minimum sink at the current load factor (if an accelerometer is connected). When Block mode speed to fly is selected, this infobox displays the MacCready speed."),
-    10, 35,
+    10, // MC
+    35, // % Climb
   },
 
   // 44
@@ -407,7 +451,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Netto Vario"),
     N_("Netto"),
     N_("Instantaneous vertical speed of air-mass, equal to vario value less the glider's estimated sink rate. Best used if airspeed, accelerometers and vario are connected, otherwise calculations are based on GPS measurements and wind estimates."),
-    2, 24,
+    2, // TC 30s
+    24, // Vario
   },
 
   // 45
@@ -415,7 +460,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Task Arrival Time"),
     N_("Fin ETA"),
     N_("Estimated arrival local time at task completion, assuming performance of ideal MacCready cruise/climb cycle."),
-    46, 42,
+    46, // WP ETA
+    42, // WP ETE
   },
 
   // 46
@@ -423,7 +469,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Next Arrival Time"),
     N_("WP ETA"),
     N_("Estimated arrival local time at next waypoint, assuming performance of ideal MacCready cruise/climb cycle."),
-    14, 45,
+    14, // Next
+    45, // Fin ETA
   },
 
   // 47
@@ -431,7 +478,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Bearing Difference"),
     N_("Brng D"),
     N_("The difference between the glider's track bearing, to the bearing of the next waypoint, or for AAT tasks, to the bearing to the target within the AAT sector. GPS navigation is based on the track bearing across the ground, and this track bearing may differ from the glider's heading when there is wind present. Chevrons point to the direction the glider needs to alter course to correct the bearing difference, that is, so that the glider's course made good is pointing directly at the next waypoint. This bearing takes into account the curvature of the Earth."),
-    54, 37,
+    54, // V TAS
+    37, // G load
   },
 
   // 48
@@ -439,7 +487,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Outside Air Temperature"),
     N_("OAT"),
     N_("Outside air temperature measured by a probe if supported by a connected intelligent variometer."),
-    49, 26,
+    49, // RelHum
+    26, // Wind B
   },
 
   // 49
@@ -447,7 +496,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Relative Humidity"),
     N_("RelHum"),
     N_("Relative humidity of the air in percent as measured by a probe if supported by a connected intelligent variometer."),
-    50, 48,
+    50, // MaxTemp
+    48, // OAT
   },
 
   // 50
@@ -455,7 +505,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Forecast Temperature"),
     N_("MaxTemp"),
     N_("Forecast temperature of the ground at the home airfield, used in estimating convection height and cloud base in conjunction with outside air temperature and relative humidity probe. (Touchscreen/PC only) Pressing the up/down cursor keys adjusts this forecast temperature."),
-    49, 25,
+    25, // Wind V
+    49, // RelHum
   },
 
   // 51
@@ -463,7 +514,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("AA Distance Tgt"),
     N_("AA Dtgt"),
     N_("Assigned Area Task distance around target points for remainder of task."),
-    52, 31,
+    52, // AA Vtgt
+    31, // AA Vmin
   },
 
   // 52
@@ -471,7 +523,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("AA Speed Tgt"),
     N_("AA Vtgt"),
     N_("Assigned Area Task average speed achievable around target points remaining in minimum AAT time."),
-    11, 51,
+    60, // Home Dis
+    51, // AA Dtgt
   },
 
   // 53
@@ -479,7 +532,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("L/D vario"),
     N_("L/D vario"),
     N_("Instantaneous glide ratio, given by the indicated airspeed divided by the total energy vertical speed, when connected to an intelligent variometer. Negative values indicate climbing cruise. If the total energy vario speed is close to zero, the displayed value is '---'."),
-    4, 38,
+    4, // LD Inst
+    38, // Next LD
   },
 
   // 54
@@ -487,7 +541,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Airspeed TAS"),
     N_("V TAS"),
     N_("True Airspeed reported by a supported external intelligent vario."),
-    3, 47,
+    3, // Bearing
+    47, // Bearing Diff
   },
 
   // 55
@@ -495,7 +550,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Team Code"),
     N_("TeamCode"),
     N_("The current Team code for this aircraft. Use this to report to other team members. The last team aircraft code entered is displayed underneath."),
-    56, 54,
+    56, // Team Bearing
+    58, // Team Range
   },
 
   // 56
@@ -503,7 +559,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Team Bearing"),
     N_("Tm Brng"),
     N_("The bearing to the team aircraft location at the last team code report."),
-    57, 55,
+    57, // Team Bearing Diff
+    55, // Team Code
   },
 
   // 57
@@ -511,7 +568,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Team Bearing Diff"),
     N_("Team Bd"),
     N_("The relative bearing to the team aircraft location at the last reported team code."),
-    58, 56,
+    58, // Team Range
+    56, // Team Bearing
   },
 
   // 58
@@ -519,7 +577,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Team Range"),
     N_("Team Dis"),
     N_("The range to the team aircraft location at the last reported team code."),
-    55, 57,
+    55, // Team Code
+    57, // Team Bearing Diff
   },
 
   // 59
@@ -527,7 +586,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Speed Task Instantaneous"),
     N_("V Tsk Ins"),
     N_("Instantaneous cross country speed while on current task, compensated for altitude."),
-    18, 16,
+    61, // V Task Ach
+    16, // Fin AltR
   },
 
   // 60
@@ -535,7 +595,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Distance Home"),
     N_("Home Dis"),
     N_("Distance to home waypoint (if defined)."),
-    18, 16,
+    11, // WP Dist
+    52, // AA Vtgt
   },
 
   // 61
@@ -543,7 +604,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Speed Task Achieved"),
     N_("V Tsk Ach"),
     N_("Achieved cross country speed while on current task, compensated for altitude."),
-    18, 16,
+    18, // Fin Dis
+    59, // V Task Inst
   },
 
   // 62
