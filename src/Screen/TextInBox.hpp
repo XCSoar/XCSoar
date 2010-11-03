@@ -41,7 +41,6 @@ struct TextInBoxMode_t
   bool Border;
   bool FillBackground;
   TextAlign Align;
-  bool Reachable;
   bool WhiteBorder;
   bool WhiteBold;
 
@@ -49,7 +48,6 @@ struct TextInBoxMode_t
     Border(false),
     FillBackground(false),
     Align(Left),
-    Reachable(false),
     WhiteBorder(false),
     WhiteBold(false) {}
 };
