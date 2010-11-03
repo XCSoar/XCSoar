@@ -30,11 +30,7 @@ Copyright_License {
 #include <tchar.h>
 class Angle;
 
-#ifndef __GNUC__
-#define DEG "°"
-#else
 #define DEG "Â°"
-#endif
 
 enum CoordinateFormats_t {
   cfDDMMSS = 0,
@@ -57,8 +53,8 @@ enum Units_t {
   unFeet,
   unFlightLevel,
   unKelvin,
-  unGradCelcius, // K = C° + 273,15
-  unGradFahrenheit, // K = (°F + 459,67) / 1,8
+  unGradCelcius, // K = CÂ° + 273,15
+  unGradFahrenheit, // K = (Â°F + 459,67) / 1,8
 
   /**
    * The sentinel: the number of units in this enum.
