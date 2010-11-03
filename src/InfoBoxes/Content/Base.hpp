@@ -45,9 +45,15 @@ public:
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) {
     return false;
   }
-  void SetTitleFromWaypointName(InfoBoxWindow &infobox, const Waypoint* waypoint);
-  void SetCommentFromWaypointName(InfoBoxWindow &infobox, const Waypoint* waypoint);
-  void SetValueBearingDifference(InfoBoxWindow &infobox, const double delta_degrees);
+
+  static void SetTitleFromWaypointName(InfoBoxWindow &infobox,
+                                       const Waypoint* waypoint);
+
+  static void SetCommentFromWaypointName(InfoBoxWindow &infobox,
+                                         const Waypoint* waypoint);
+
+  static void SetValueBearingDifference(InfoBoxWindow &infobox,
+                                        const double delta_degrees);
 };
 
 #endif
