@@ -447,7 +447,6 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
 
       TextInBoxMode_t TextInBoxMode;
       TextInBoxMode.Border = true;
-      TextInBoxMode.Reachable = true;
       TextInBox(canvas, Value, 0, (int)Offset, TextInBoxMode, rc);
 
     } else if (Appearance.IndFinalGlide == fgFinalGlideAltA) {
