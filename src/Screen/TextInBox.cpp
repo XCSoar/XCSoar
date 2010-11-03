@@ -139,8 +139,6 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       || (y > MapRect.bottom + WPCIRCLESIZE))
     return false; // FIX Not drawn really
 
-  canvas.white_brush();
-
   // landable waypoint label inside white box
 
   canvas.select(Mode.Border ? Fonts::MapBold : Fonts::Map);
@@ -173,7 +171,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       else
         canvas.white_pen();
 
-
+      canvas.white_brush();
       canvas.round_rectangle(brect.left, brect.top, brect.right, brect.bottom,
                              Layout::Scale(8), Layout::Scale(8));
 
