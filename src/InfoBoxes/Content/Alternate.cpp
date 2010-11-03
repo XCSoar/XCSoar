@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Alternate.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
+#include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 
@@ -32,12 +33,30 @@ void
 InfoBoxContentAlternateBest::Update(InfoBoxWindow &infobox)
 {
   infobox.SetTitle(_("Best Altn"));
-  const Waypoint* way_point = protected_task_manager.getAlternateWaypoint(0);
+  const AbortTask::AlternateVector alternates = protected_task_manager.getAlternates();
+  const Waypoint* way_point = (alternates.size()>0) ? &alternates[0].first : NULL;
+
   SetCommentFromWaypointName(infobox, way_point);
   if (!way_point) {
     infobox.SetInvalid();
+    return;
   }
-  // @todo: set colour
+
+  const GlideResult& solution = alternates[0].second;
+
+  // Set Value
+  double Value = (solution.Vector.Bearing - XCSoarInterface::Basic().
+                  TrackBearing).as_delta().value_degrees();
+
+  SetValueBearingDifference(infobox, Value);
+
+  // Set Color
+  if (solution.is_final_glide())
+    // blue
+    infobox.SetColor(2);
+  else
+    // black
+    infobox.SetColor(0);
 }
 
 void

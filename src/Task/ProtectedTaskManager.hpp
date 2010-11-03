@@ -70,7 +70,7 @@ public:
   GlidePolar get_safety_polar() const;
 
   const Waypoint* getActiveWaypoint() const;
-  const Waypoint* getAlternateWaypoint(const unsigned index) const;
+  const AbortTask::AlternateVector getAlternates() const;
 
   void incrementActiveTaskPoint(int offset);
 

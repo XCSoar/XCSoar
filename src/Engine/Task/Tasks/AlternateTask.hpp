@@ -62,13 +62,13 @@ public:
                             const TaskPoint* _target);
 
   /**
-   * Retrieve the task alternate waypoints
+   * Retrieve a copy of the task alternates
    *
    * @param index Index sequence of alternate
    *
-   * @return Waypoint pointer or null if invalid
+   * @return Vector of alternates
    */
-  const Waypoint* getAlternateWaypoint(const unsigned index) const;
+  const AlternateVector getAlternates() const;
 
 protected:
   void clear();

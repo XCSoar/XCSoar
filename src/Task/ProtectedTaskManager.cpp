@@ -85,11 +85,11 @@ ProtectedTaskManager::getActiveWaypoint() const
   return NULL;
 }
 
-const Waypoint* 
-ProtectedTaskManager::getAlternateWaypoint(const unsigned index) const
+const AbortTask::AlternateVector
+ProtectedTaskManager::getAlternates() const
 {
   Lease lease(*this);
-  return lease->getAlternateWaypoint(index);
+  return lease->getAlternates();
 }
 
 
