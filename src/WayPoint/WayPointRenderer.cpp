@@ -43,6 +43,7 @@ Copyright_License {
 #include "Screen/Icon.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Canvas.hpp"
+#include "Appearance.hpp"
 
 #include <stdio.h>
 
@@ -142,6 +143,7 @@ public:
       text_mode.WhiteBold = true;
 
     bool do_write_label = in_task || (settings_map.DeclutterLabels < 2);
+    bool reachable = false;
 
     const MaskedIcon *icon = &Graphics::SmallIcon;
 
@@ -154,7 +156,7 @@ public:
         TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
 
       if (r.glide_reachable()) {
-        text_mode.Reachable = true;
+        reachable = true;
 
         if ((settings_map.DeclutterLabels < 1) || in_task) {
           AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
@@ -208,6 +210,10 @@ public:
 
       _stprintf(Buffer + length, _T("%d%s"), AltArrivalAGL, sAltUnit);
     }
+
+    if (reachable && Appearance.IndLandable == wpLandableDefault)
+      // make space for the green circle
+      sc.x += 5;
 
     labels.Add(Buffer, sc.x + 5, sc.y, text_mode, AltArrivalAGL,
                in_task, way_point.is_landable(), way_point.is_airport());

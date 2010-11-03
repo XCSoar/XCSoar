@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
-#include "Appearance.hpp"
 #include "Sizes.h" /* for WPCIRCLESIZE */
 
 static POINT
@@ -141,10 +140,6 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     return false; // FIX Not drawn really
 
   canvas.white_brush();
-
-  if (Mode.Reachable && Appearance.IndLandable == wpLandableDefault)
-    // make space for the green circle
-    x += 5;
 
   // landable waypoint label inside white box
 
