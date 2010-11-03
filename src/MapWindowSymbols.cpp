@@ -235,7 +235,9 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT &Start,
 
   canvas.set_text_color(Color::BLACK);
 
-  TextInBoxMode_t TextInBoxMode = { 16 | 32 };
+  TextInBoxMode_t TextInBoxMode;
+  TextInBoxMode.AlignCenter = true;
+  TextInBoxMode.WhiteBorder = true;
 
   if (Arrow[5].y >= Arrow[6].y)
     TextInBox(canvas, sTmp, Arrow[5].x - kx, Arrow[5].y, TextInBoxMode, rc);
@@ -443,7 +445,9 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
 
       canvas.set_text_color(Color::BLACK);
 
-      TextInBoxMode_t TextInBoxMode = { 1 | 8 };
+      TextInBoxMode_t TextInBoxMode;
+      TextInBoxMode.Border = true;
+      TextInBoxMode.Reachable = true;
       TextInBox(canvas, Value, 0, (int)Offset, TextInBoxMode, rc);
 
     } else if (Appearance.IndFinalGlide == fgFinalGlideAltA) {

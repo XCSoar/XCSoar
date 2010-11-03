@@ -138,9 +138,8 @@ public:
       return;
 
     TextInBoxMode_t text_mode;
-    text_mode.AsInt = 0;
     if (in_task)
-      text_mode.AsFlag.WhiteBold = 1;
+      text_mode.WhiteBold = true;
 
     bool do_write_label = in_task || (settings_map.DeclutterLabels < 2);
 
@@ -155,7 +154,7 @@ public:
         TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
 
       if (r.glide_reachable()) {
-        text_mode.AsFlag.Reachable = 1;
+        text_mode.Reachable = true;
 
         if ((settings_map.DeclutterLabels < 1) || in_task) {
           AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
@@ -166,7 +165,7 @@ public:
         } 
         if ((settings_map.DeclutterLabels < 2) || in_task) {
           if (in_task || (settings_map.DeclutterLabels < 1))
-            text_mode.AsFlag.Border = 1;
+            text_mode.Border = true;
 
           // show all reachable landing field labels unless we want a
           // decluttered screen.

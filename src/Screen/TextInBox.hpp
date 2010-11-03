@@ -29,20 +29,25 @@ Copyright_License {
 class Canvas;
 class LabelBlock;
 
-typedef union
+struct TextInBoxMode_t
 {
-  unsigned int AsInt;
-  struct
-  {
-    unsigned Border :1;
-    unsigned FillBackground :1;
-    unsigned AlignRight :1;
-    unsigned Reachable :1;
-    unsigned AlignCenter :1;
-    unsigned WhiteBorder :1;
-    unsigned WhiteBold :1;
-  } AsFlag;
-} TextInBoxMode_t;
+  bool Border;
+  bool FillBackground;
+  bool AlignRight;
+  bool Reachable;
+  bool AlignCenter;
+  bool WhiteBorder;
+  bool WhiteBold;
+
+  TextInBoxMode_t() :
+    Border(false),
+    FillBackground(false),
+    AlignRight(false),
+    Reachable(false),
+    AlignCenter(false),
+    WhiteBorder(false),
+    WhiteBold(false) {}
+};
 
 bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
                TextInBoxMode_t Mode, const RECT &MapRect,

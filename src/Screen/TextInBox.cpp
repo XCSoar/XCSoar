@@ -142,30 +142,30 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
   canvas.white_brush();
 
-  if (Mode.AsFlag.Reachable && Appearance.IndLandable == wpLandableDefault)
+  if (Mode.Reachable && Appearance.IndLandable == wpLandableDefault)
     // make space for the green circle
     x += 5;
 
   // landable waypoint label inside white box
 
-  canvas.select(Mode.AsFlag.Border ? Fonts::MapBold : Fonts::Map);
+  canvas.select(Mode.Border ? Fonts::MapBold : Fonts::Map);
 
   SIZE tsize = canvas.text_size(Value);
 
-  if (Mode.AsFlag.AlignRight) {
+  if (Mode.AlignRight) {
     x -= tsize.cx;
-  } else if (Mode.AsFlag.AlignCenter) {
+  } else if (Mode.AlignCenter) {
     x -= tsize.cx / 2;
     y -= tsize.cy / 2;
   }
 
-  if (Mode.AsFlag.Border || Mode.AsFlag.WhiteBorder) {
+  if (Mode.Border || Mode.WhiteBorder) {
     brect.left = x - 2;
     brect.right = brect.left + tsize.cx + 4;
     brect.top = y + ((tsize.cy + 4) >> 3) - 2;
     brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
 
-    if (Mode.AsFlag.AlignRight)
+    if (Mode.AlignRight)
       x -= 3;
 
     POINT offset = TextInBoxMoveInView(brect, MapRect);
@@ -173,7 +173,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     y += offset.y;
 
     if (label_block ? label_block->check(brect) : true) {
-      if (Mode.AsFlag.Border)
+      if (Mode.Border)
         canvas.select(Graphics::hpMapScale);
       else
         canvas.white_pen();
@@ -187,13 +187,13 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       canvas.background_opaque();
       return true;
     }
-  } else if (Mode.AsFlag.FillBackground) {
+  } else if (Mode.FillBackground) {
     brect.left = x - 1;
     brect.right = brect.left + tsize.cx + 1;
     brect.top = y + ((tsize.cy + 4) >> 3);
     brect.bottom = brect.top + tsize.cy - ((tsize.cy + 4) >> 3);
 
-    if (Mode.AsFlag.AlignRight)
+    if (Mode.AlignRight)
       x -= 2;
 
     POINT offset = TextInBoxMoveInView(brect, MapRect);
@@ -205,7 +205,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       canvas.text_opaque(x, y, brect, Value);
       return true;
     }
-  } else if (Mode.AsFlag.WhiteBold) {
+  } else if (Mode.WhiteBold) {
     brect.left = x - 2;
     brect.right = brect.left + tsize.cx + 4;
     brect.top = y + ((tsize.cy + 4) >> 3) - 2;
