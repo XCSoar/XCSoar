@@ -47,6 +47,7 @@ public:
   }
   void SetTitleFromWaypointName(InfoBoxWindow &infobox, const Waypoint* waypoint);
   void SetCommentFromWaypointName(InfoBoxWindow &infobox, const Waypoint* waypoint);
+  void SetValueBearingDifference(InfoBoxWindow &infobox, const double delta_degrees);
 };
 
 #endif

@@ -68,6 +68,29 @@ void FillInfoBoxWaypointName(InfoBoxWindow& infobox, const Waypoint* way_point,
   }
 }
 
+void
+InfoBoxContent::SetValueBearingDifference(InfoBoxWindow &infobox,
+                                          const double delta_degrees)
+{
+  TCHAR tmp[32];
+#ifndef __MINGW32__
+  if (delta_degrees > 1)
+    _stprintf(tmp, _T("%2.0f°»"), delta_degrees);
+  else if (delta_degrees < -1)
+    _stprintf(tmp, _T("«%2.0f°"), -delta_degrees);
+  else
+    _tcscpy(tmp, _T("«»"));
+#else
+  if (delta_degrees > 1)
+    _stprintf(tmp, _T("%2.0fÂ°Â»"), delta_degrees);
+  else if (delta_degrees < -1)
+    _stprintf(tmp, _T("Â«%2.0fÂ°"), -delta_degrees);
+  else
+    _tcscpy(tmp, _T("Â«Â»"));
+#endif
+
+  infobox.SetValue(tmp);
+}
 
 void
 InfoBoxContent::SetTitleFromWaypointName(InfoBoxWindow &infobox,

@@ -147,21 +147,7 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
   else if (Value > 180.0)
     Value -= 360.0;
 
-#ifndef __MINGW32__
-  if (Value > 1)
-    _stprintf(tmp, TEXT("%2.0f°»"), Value);
-  else if (Value < -1)
-    _stprintf(tmp, TEXT("«%2.0f°"), -Value);
-  else
-    _tcscpy(tmp, TEXT("«»"));
-#else
-  if (Value > 1)
-    _stprintf(tmp, TEXT("%2.0fÂ°Â»"), Value);
-  else if (Value < -1)
-    _stprintf(tmp, TEXT("Â«%2.0fÂ°"), -Value);
-  else
-    _tcscpy(tmp, TEXT("Â«Â»"));
-#endif
+  SetValueBearingDifference(infobox, Value);
   infobox.SetValue(tmp);
 #endif
 
