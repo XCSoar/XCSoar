@@ -177,8 +177,9 @@ a.button:hover, a.button:focus { background: #1B8D29; color: #fff; }
             return self.error("Job not found!")
         
         if status == "Done":
-            return self.surround("Map ready for <a href=\"/download?uuid=" +
-                                 uuid + "\">Download</a>")
+            return self.surround("""<div><div class="box"><b>Status:</b> Map ready to download</div></div>
+            <a class="button" href="/download?uuid=""" + uuid + """">Download</a>""")
+            
         reload_script = """<script>
         setTimeout(function(){ location.href = '/status?uuid=""" + uuid + """'; }, 10000);
         </script>"""
