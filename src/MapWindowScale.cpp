@@ -24,6 +24,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Appearance.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Icon.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/UnitSymbol.hpp"
@@ -95,21 +96,6 @@ MapWindow::DrawMapScale2(Canvas &canvas, const RECT &rc, const MapWindowProjecti
   }
 }
 
-static void
-draw_bitmap(Canvas &canvas, BitmapCanvas &bitmap_canvas, const Bitmap &bitmap,
-            const int x, const int y,
-            const unsigned src_x_offset, const unsigned src_y_offset,
-            const unsigned src_width, const unsigned src_height)
-{
-#ifndef ENABLE_SDL
-  bitmap_canvas.background_opaque();
-  bitmap_canvas.set_text_color(Color::WHITE);
-#endif
-
-  bitmap_canvas.select(bitmap);
-  canvas.scale_copy(x, y, bitmap_canvas, src_x_offset, src_y_offset,
-                    src_width, src_height);
-}
 
 void
 MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc, const MapWindowProjection &projection) const
@@ -130,8 +116,8 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc, const MapWindowProjectio
   Height = Fonts::MapBold.get_capital_height() + IBLSCALE(2);
   // 2: add 1pix border
 
-  canvas.fill_rectangle(0, rc.bottom - Height,
-                        TextSize.cx + IBLSCALE(21), rc.bottom,
+  canvas.fill_rectangle(IBLSCALE(4), rc.bottom - Height,
+                        TextSize.cx + IBLSCALE(16), rc.bottom,
                         Color::WHITE);
 
   canvas.background_transparent();
@@ -141,10 +127,10 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc, const MapWindowProjectio
               rc.bottom - Fonts::MapBold.get_ascent_height() - IBLSCALE(1),
               ScaleInfo);
 
-  draw_bitmap(canvas, bitmap_canvas, Graphics::hBmpMapScale,
-              0, rc.bottom - Height, 0, 0, 6, 11);
-  draw_bitmap(canvas, bitmap_canvas, Graphics::hBmpMapScale,
-              IBLSCALE(14) + TextSize.cx, rc.bottom - Height, 6, 0, 8, 11);
+  Graphics::hBmpMapScaleLeft.draw(canvas, bitmap_canvas,
+                                  0, rc.bottom - Height);
+  Graphics::hBmpMapScaleRight.draw(canvas, bitmap_canvas,
+                                   IBLSCALE(14) + TextSize.cx, rc.bottom - Height);
 
   const UnitSymbol *symbol = GetUnitSymbol(Unit);
   if (symbol != NULL)

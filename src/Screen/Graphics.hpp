@@ -97,7 +97,8 @@ namespace Graphics {
   extern MaskedIcon hBmpTarget;
   extern MaskedIcon hBmpTeammatePosition;
 
-  extern Bitmap hBmpMapScale;
+  extern MaskedIcon hBmpMapScaleLeft;
+  extern MaskedIcon hBmpMapScaleRight;
 
   // used for flarm
   extern Brush AlarmBrush;

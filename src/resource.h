@@ -44,7 +44,6 @@
 #define IDB_FLARMTRAFFIC_HD            5278
 #define IDB_AIRSPACE3                   280
 #define IDB_DLGBUTTONLEFT32             282
-#define IDB_MAPSCALE_A                  283
 #define IDB_UNIT_KM                     284
 #define IDB_UNIT_SM                     285
 #define IDB_UNIT_NM                     286
@@ -96,12 +95,14 @@
 #define IDB_PROGRESSBORDER              337
 #define IDB_TITLE                       338
 #define IDB_TITLE_HD                    339
+#define IDB_MAPSCALE_LEFT               340
+#define IDB_MAPSCALE_RIGHT              341
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        335
+#define _APS_NEXT_RESOURCE_VALUE        342
 #define _APS_NEXT_COMMAND_VALUE         40025
 #define _APS_NEXT_CONTROL_VALUE         1264
 #define _APS_NEXT_SYMED_VALUE           102

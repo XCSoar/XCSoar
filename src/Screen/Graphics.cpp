@@ -94,7 +94,8 @@ MaskedIcon Graphics::hBmpThermalSource;
 MaskedIcon Graphics::hBmpTarget;
 MaskedIcon Graphics::hBmpTeammatePosition;
 
-Bitmap Graphics::hBmpMapScale;
+MaskedIcon Graphics::hBmpMapScaleLeft;
+MaskedIcon Graphics::hBmpMapScaleRight;
 
 // used for flarm
 Brush Graphics::AlarmBrush;
@@ -200,7 +201,8 @@ Graphics::Initialise()
 
   hbWind.set(Color::GRAY);
 
-  hBmpMapScale.load(IDB_MAPSCALE_A);
+  hBmpMapScaleLeft.load_big(IDB_MAPSCALE_LEFT, 0, false);
+  hBmpMapScaleRight.load_big(IDB_MAPSCALE_RIGHT, 0, false);
 
   hBmpThermalSource.load_big(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
   hBmpTarget.load_big(IDB_TARGET, IDB_TARGET_HD);
