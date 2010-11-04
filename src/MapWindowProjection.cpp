@@ -251,11 +251,8 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   }
 
   if (settings_map.AutoZoom && positive(wpd)) {
-    fixed AutoZoomFactor;
-    if (IsOriginCentered(settings_map.DisplayOrientation))
-      AutoZoomFactor = fixed(2.5);
-    else
-      AutoZoomFactor = fixed_four;
+    fixed AutoZoomFactor = IsOriginCentered(settings_map.DisplayOrientation) ?
+                           fixed(2.5) : fixed_four;
 
     if (wpd < Units::ToSysDistance(AutoZoomFactor * MapScale)) {
       // waypoint is too close, so zoom in
