@@ -140,7 +140,7 @@ public:
 
     TextInBoxMode_t text_mode;
     if (in_task)
-      text_mode.WhiteBold = true;
+      text_mode.Mode = Outlined;
 
     bool do_write_label = in_task || (settings_map.DeclutterLabels < 2);
     bool reachable = false;
@@ -167,7 +167,7 @@ public:
         } 
         if ((settings_map.DeclutterLabels < 2) || in_task) {
           if (in_task || (settings_map.DeclutterLabels < 1))
-            text_mode.Border = true;
+            text_mode.Mode = RoundedBlack;
 
           // show all reachable landing field labels unless we want a
           // decluttered screen.

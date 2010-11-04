@@ -36,20 +36,23 @@ enum TextAlign
   Right
 };
 
+enum RenderMode
+{
+  Simple,
+  Filled,
+  Outlined,
+  RoundedWhite,
+  RoundedBlack
+};
+
 struct TextInBoxMode_t
 {
-  bool Border;
-  bool FillBackground;
+  RenderMode Mode;
   TextAlign Align;
-  bool WhiteBorder;
-  bool WhiteBold;
 
   TextInBoxMode_t() :
-    Border(false),
-    FillBackground(false),
-    Align(Left),
-    WhiteBorder(false),
-    WhiteBold(false) {}
+    Mode(Simple),
+    Align(Left) {}
 };
 
 bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,

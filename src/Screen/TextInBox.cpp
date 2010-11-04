@@ -141,7 +141,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
   // landable waypoint label inside white box
 
-  canvas.select(Mode.Border ? Fonts::MapBold : Fonts::Map);
+  canvas.select(Mode.Mode == RoundedBlack ? Fonts::MapBold : Fonts::Map);
 
   SIZE tsize = canvas.text_size(Value);
 
@@ -152,7 +152,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     y -= tsize.cy / 2;
   }
 
-  if (Mode.Border || Mode.WhiteBorder) {
+  if (Mode.Mode == RoundedBlack || Mode.Mode == RoundedWhite) {
     brect.left = x - 2;
     brect.right = brect.left + tsize.cx + 4;
     brect.top = y + ((tsize.cy + 4) >> 3) - 2;
@@ -166,7 +166,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     y += offset.y;
 
     if (label_block ? label_block->check(brect) : true) {
-      if (Mode.Border)
+      if (Mode.Mode == RoundedBlack)
         canvas.black_pen();
       else
         canvas.white_pen();
@@ -180,7 +180,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       canvas.background_opaque();
       return true;
     }
-  } else if (Mode.FillBackground) {
+  } else if (Mode.Mode == Filled) {
     brect.left = x - 1;
     brect.right = brect.left + tsize.cx + 1;
     brect.top = y + ((tsize.cy + 4) >> 3);
@@ -198,7 +198,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       canvas.text_opaque(x, y, brect, Value);
       return true;
     }
-  } else if (Mode.WhiteBold) {
+  } else if (Mode.Mode == Outlined) {
     brect.left = x - 2;
     brect.right = brect.left + tsize.cx + 4;
     brect.top = y + ((tsize.cy + 4) >> 3) - 2;
