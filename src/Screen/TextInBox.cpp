@@ -32,7 +32,7 @@ Copyright_License {
 static POINT
 TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
 {
-  int LabelMargin = 4;
+  const int LabelMargin = 4;
 
   POINT offset;
   offset.x = 0;
