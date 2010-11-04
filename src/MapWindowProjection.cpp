@@ -191,14 +191,14 @@ MapWindowProjection::StepMapScale(fixed scale, int Step) const
 int
 MapWindowProjection::FindMapScale(const fixed Value) const
 {
-  fixed BestFit(99999);
-  int BestFitIdx = -1;
+  fixed BestFit;
+  int BestFitIdx = 0;
   fixed DesiredScale = Value * Layout::Scale(GetScreenWidth()) /
                        GetMapResolutionFactor();
 
   for (int i = 0; i < ScaleListCount; i++) {
     fixed err = fabs(DesiredScale - ScaleList[i]) / DesiredScale;
-    if (err < BestFit) {
+    if (i == 0 || err < BestFit) {
       BestFit = err;
       BestFitIdx = i;
     }
