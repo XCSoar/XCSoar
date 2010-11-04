@@ -4630,13 +4630,9 @@ start sectors again.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \chapter{{\InfoBox} Reference}\label{cha:infobox}
 Infobox data types are grouped into logical categories.
-%
-%The type of a
-%particular infobox may be cycled through each type within its category
-%by pressing the application buttons 2 and 3 when the infobox is
-%highlighted.
 
 All InfoBoxes display their data in user-specified units.  Where data
 is invalid, the displayed value will be '---' and the contents are
@@ -4645,17 +4641,7 @@ or it is not in range for the Terrain Elevation infobox type.
 
 In the following description of the infobox data types, the first
 title is as it appears in the infobox configuration dialog box, the
-second title is the label used in the infobox title.  Note that these
-labels have changed since older versions (pre V4.2) of XCSoar.
-
-\section{Altitude}
-
-%\newcommand{\ibi}[3]{%
-%\hfill\begin{tabular}{r}
-%{\bf #1} \\
-%\infobox{{#2}} \\
-%\end{tabular} & #3 \\
-%}
+second title is the label used in the infobox title.
 
 \newcommand{\ibi}[3]{%
 \jindent{
@@ -4665,10 +4651,20 @@ labels have changed since older versions (pre V4.2) of XCSoar.
 \end{tabular}}{#3}
 }
 
-\ibi{Height GPS}{H GPS}{This is the height above mean sea level reported by the GPS. Touchscreen/PC only: in simulation mode, this value is adjustable with the up/down arrow keys, and the right/left arrow keys also cause the glider to turn.}
-\ibi{Height AGL}{H AGL}{This is the navigation altitude minus the terrain height obtained from the terrain file.  The value is coloured red when the glider is below the terrain safety clearance height.}
-\ibi{Terrain Elevation }{H Gnd}{This is the elevation of the terrain above mean sea level obtained from the terrain file, at the current GPS location.}
-\ibi{Pressure Altitude }{H Baro}{This is the barometric altitude obtained from a GPS equipped with pressure sensor, or a supported external intelligent vario.}
+\section{Altitude}
+
+\ibi{Height GPS}{H GPS}{This is the height above mean sea level reported by the
+GPS. Touchscreen/PC only: in simulation mode, this value is adjustable with the
+up/down arrow keys. The right/left arrow keys also cause the glider to turn.}
+\ibi{Height AGL}{H AGL}{This is the navigation altitude minus the terrain height
+obtained from the terrain file. The value is coloured red when the glider is
+below the terrain safety clearance height.}
+\ibi{Terrain Elevation}{H Gnd}{This is the elevation of the terrain above mean
+sea level obtained from the terrain file at the current GPS location.}
+\ibi{Pressure Altitude}{H Baro}{This is the barometric altitude obtained from a
+GPS equipped with pressure sensor or a supported external intelligent vario.}
+\ibi{QFE GPS}{QFE GPS}{This is the height above the home airfield calculated
+by subtracting the airfield elevation from the altitude reported by the GPS.}
 
 \section{Aircraft state}
 
