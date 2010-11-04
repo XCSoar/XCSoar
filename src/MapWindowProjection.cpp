@@ -168,8 +168,7 @@ MapWindowProjection::LimitMapScale(fixed value,
   value = max(minreasonable, min(fixed_int_constant(160), value));
   if (HaveScaleList()) {
     int scale = FindMapScale(value);
-    if (scale >= 0)
-      value = CalculateMapScale(scale);
+    value = CalculateMapScale(scale);
   }
 
   return value;
@@ -179,8 +178,6 @@ fixed
 MapWindowProjection::StepMapScale(fixed scale, int Step) const
 {
   int i = FindMapScale(scale);
-  if (i < 0)
-    return scale;
 
   i += Step;
 
