@@ -196,7 +196,7 @@ MapWindowProjection::FindMapScale(const fixed Value) const
 {
   fixed BestFit(99999);
   int BestFitIdx = -1;
-  fixed DesiredScale = Value * Layout::Scale(MapRect.right) /
+  fixed DesiredScale = Value * Layout::Scale(GetScreenWidth()) /
                        GetMapResolutionFactor();
 
   for (int i = 0; i < ScaleListCount; i++) {
