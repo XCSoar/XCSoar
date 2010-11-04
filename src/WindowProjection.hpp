@@ -91,7 +91,7 @@ public:
    */
   long GetScreenDistance() const
   {
-    return max_dimension(GetMapRect());
+    return std::max(GetScreenHeight(), GetScreenWidth());
   }
 
   gcc_pure
@@ -103,9 +103,6 @@ public:
 
 protected:
   RECT MapRect;
-
-  gcc_pure
-  static long max_dimension(const RECT &rc);
 
   void UpdateScreenBounds();
 

@@ -80,9 +80,3 @@ WindowProjection::CalculateScreenBounds(const fixed scale) const
 
   return sb;
 }
-
-long
-WindowProjection::max_dimension(const RECT &rc)
-{
-  return std::max(rc.right - rc.left, rc.bottom - rc.top);
-}
