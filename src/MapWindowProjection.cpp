@@ -182,10 +182,7 @@ MapWindowProjection::StepMapScale(fixed scale, int Step) const
   if (i < 0)
     return scale;
 
-  if (abs(Step) >= 4)
-    i += Step / 4;
-  else
-    i += Step;
+  i += Step;
 
   i = max(0, min(ScaleListCount - 1, i));
   return CalculateMapScale(i);

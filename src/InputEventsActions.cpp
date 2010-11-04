@@ -281,9 +281,9 @@ InputEvents::eventZoom(const TCHAR* misc)
     else
       Message::AddMessage(_("AutoZoom OFF"));
   } else if (_tcscmp(misc, _T("slowout")) == 0)
-    sub_ScaleZoom(-4);
+    sub_ScaleZoom(-1);
   else if (_tcscmp(misc, _T("slowin")) == 0)
-    sub_ScaleZoom(4);
+    sub_ScaleZoom(1);
   else if (_tcscmp(misc, _T("out")) == 0)
     sub_ScaleZoom(-1);
   else if (_tcscmp(misc, _T("in")) == 0)
@@ -1625,13 +1625,6 @@ InputEvents::sub_ScaleZoom(int vswitch)
   if (projection.HaveScaleList()) {
     value = projection.StepMapScale(fixed(value), -vswitch);
   } else {
-    if (abs(vswitch) >= 4) {
-      if (vswitch == 4)
-        vswitch = 1;
-      else if (vswitch == -4)
-        vswitch = -1;
-    }
-
     if (vswitch == 1)
       // zoom in a little
       value /= fixed_sqrt_two;
