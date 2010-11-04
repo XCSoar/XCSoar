@@ -274,16 +274,10 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   }
 
   if (settings_map.AutoZoom && positive(wpd)) {
-    if (((settings_map.DisplayOrientation == NORTHTRACK)
-          && (DisplayMode != dmCircling))
-         || (settings_map.DisplayOrientation == NORTHUP)
-         || (((settings_map.DisplayOrientation == NORTHCIRCLE)
-             || (settings_map.DisplayOrientation == TRACKCIRCLE))
-            && (DisplayMode == dmCircling))) {
+    if (IsOriginCentered(settings_map.DisplayOrientation))
       AutoZoomFactor = fixed(2.5);
-    } else {
+    else
       AutoZoomFactor = fixed_four;
-    }
 
     if ((wpd < Units::ToSysDistance(AutoZoomFactor * MapScale))
         || (StartingAutoMapScale == fixed_zero)) {
