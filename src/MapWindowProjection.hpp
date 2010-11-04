@@ -70,7 +70,6 @@ public:
 
 protected:
   DisplayMode_t DisplayMode;
-  Angle DisplayAircraftAngle;
 
 public:
   // scale/display stuff

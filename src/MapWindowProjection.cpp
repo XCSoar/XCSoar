@@ -34,7 +34,6 @@ Copyright_License {
 MapWindowProjection::MapWindowProjection():
   WindowProjection(),
   DisplayMode(dmCruise),
-  DisplayAircraftAngle(Angle::native(fixed_zero)),
   MapScale(5),
   _RequestedMapScale(5),
   ScaleListCount (0) {}
@@ -86,20 +85,14 @@ MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &basic,
   Angle trackbearing = basic.TrackBearing;
 
   if (IsOriginCentered(settings.DisplayOrientation)) {
-    if (settings.DisplayOrientation == TRACKCIRCLE) {
+    if (settings.DisplayOrientation == TRACKCIRCLE)
       SetScreenAngle(derived.task_stats.current_leg.
                      solution_remaining.Vector.Bearing);
-      DisplayAircraftAngle = trackbearing - GetScreenAngle();
-    } else {
+    else
       SetScreenAngle(Angle::native(fixed_zero));
-      DisplayAircraftAngle = trackbearing;
-    }
-
-    DisplayAircraftAngle = DisplayAircraftAngle.as_bearing();
   } else {
     // normal, glider forward
     SetScreenAngle(trackbearing);
-    DisplayAircraftAngle = Angle::native(fixed_zero);
   }
 }
 
@@ -108,12 +101,10 @@ MapWindowProjection::CalculateOrientationTargetPan(const NMEA_INFO &basic,
     const DERIVED_INFO &derived, const SETTINGS_MAP &settings)
 {
   if (derived.common_stats.active_taskpoint_index ==
-      settings.TargetPanIndex) {
+      settings.TargetPanIndex)
     CalculateOrientationNormal(basic, derived, settings);
-  } else {
+  else
     SetScreenAngle(Angle::native(fixed_zero));
-    DisplayAircraftAngle = basic.TrackBearing;
-  }
 }
 
 void
