@@ -73,10 +73,8 @@ protected:
 
 public:
   // scale/display stuff
-  void CalculateOrigin(const RECT rc,
-                       const NMEA_INFO &nmea_info,
-                       const DERIVED_INFO &derived_info,
-                       const SETTINGS_MAP &settings_map);
+  void Update(const RECT rc, const NMEA_INFO &nmea_info,
+              const DERIVED_INFO &derived_info, const SETTINGS_MAP &settings_map);
 
   void Initialize(const SETTINGS_MAP &settings, const RECT &rc);
 

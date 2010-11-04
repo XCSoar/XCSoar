@@ -97,7 +97,7 @@ MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &basic,
 }
 
 void
-MapWindowProjection::CalculateOrigin(const RECT rc, const NMEA_INFO &DrawInfo,
+MapWindowProjection::Update(const RECT rc, const NMEA_INFO &DrawInfo,
     const DERIVED_INFO &DerivedDrawInfo,
     const SETTINGS_MAP &settings_map)
 {

@@ -36,7 +36,7 @@ void
 MapWindow::RenderStart(Canvas &canvas, const RECT &rc)
 {
   // Calculate screen position of the aircraft
-  visible_projection.CalculateOrigin(rc, Basic(), Calculated(), SettingsMap());
+  visible_projection.Update(rc, Basic(), Calculated(), SettingsMap());
   render_projection = visible_projection;
 
   // Calculate screen positions of the thermal sources
