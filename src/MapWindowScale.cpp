@@ -106,7 +106,7 @@ MapWindow::DrawMapScale(Canvas &canvas, const RECT &rc, const MapWindowProjectio
   int Height;
   Units_t Unit;
 
-  MapWidth = projection.DistancePixelsToMeters(rc.right - rc.left);
+  MapWidth = projection.GetScreenWidthMeters();
 
   canvas.select(Fonts::MapBold);
   Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
