@@ -214,7 +214,6 @@ void
 MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
                                     const SETTINGS_MAP &settings_map)
 {
-  static fixed StartingAutoMapScale(fixed_zero);
   fixed AutoZoomFactor;
   static DisplayMode_t DisplayModeLast = DisplayMode;
   static bool TargetPanLast = false;
@@ -258,16 +257,8 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
     else
       AutoZoomFactor = fixed_four;
 
-    if ((wpd < Units::ToSysDistance(AutoZoomFactor * MapScale))
-        || (StartingAutoMapScale == fixed_zero)) {
+    if (wpd < Units::ToSysDistance(AutoZoomFactor * MapScale)) {
       // waypoint is too close, so zoom in
-      // OR just turned waypoint
-
-      // this is the first time this waypoint has gotten close,
-      // so save original map scale
-
-      if (StartingAutoMapScale == fixed_zero)
-        StartingAutoMapScale = MapScale;
 
       // set scale exactly so that waypoint distance is the zoom factor
       // across the screen
