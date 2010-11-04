@@ -57,7 +57,7 @@ WindowProjection::ScreenVisible(const POINT &P) const
 fixed
 WindowProjection::GetScreenDistanceMeters() const
 {
-  return DistancePixelsToMeters(max_dimension(GetMapRect()));
+  return DistancePixelsToMeters(GetScreenDistance());
 }
 
 void

@@ -86,6 +86,14 @@ public:
     return DistancePixelsToMeters(GetScreenWidth());
   }
 
+  /**
+   * Returns the length of the larger edge of the map area in pixels.
+   */
+  long GetScreenDistance() const
+  {
+    return max_dimension(GetMapRect());
+  }
+
   gcc_pure
   fixed GetScreenDistanceMeters() const;
 
