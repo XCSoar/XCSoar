@@ -77,7 +77,7 @@ MapWindow::DrawAircraft(Canvas &canvas) const
 
   int n = sizeof(Aircraft) / sizeof(Aircraft[0]);
 
-  const Angle angle = render_projection.GetDisplayAircraftAngle() +
+  const Angle angle = (Basic().TrackBearing - render_projection.GetScreenAngle()) +
                       (Basic().Heading - Basic().TrackBearing);
 
   PolygonRotateShift(Aircraft, n, render_projection.GetOrigAircraft().x - 1,

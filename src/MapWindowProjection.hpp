@@ -68,10 +68,6 @@ public:
     DisplayMode = _DisplayMode;
   }
 
-  Angle GetDisplayAircraftAngle() const {
-    return DisplayAircraftAngle;
-  }
-
 protected:
   DisplayMode_t DisplayMode;
   Angle DisplayAircraftAngle;
