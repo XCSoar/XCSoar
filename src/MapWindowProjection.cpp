@@ -97,25 +97,16 @@ MapWindowProjection::CalculateOrientationNormal(const NMEA_INFO &basic,
 }
 
 void
-MapWindowProjection::CalculateOrientationTargetPan(const NMEA_INFO &basic,
-    const DERIVED_INFO &derived, const SETTINGS_MAP &settings)
-{
-  if (derived.common_stats.active_taskpoint_index ==
-      settings.TargetPanIndex)
-    CalculateOrientationNormal(basic, derived, settings);
-  else
-    SetScreenAngle(Angle::native(fixed_zero));
-}
-
-void
 MapWindowProjection::CalculateOrigin(const RECT rc, const NMEA_INFO &DrawInfo,
     const DERIVED_INFO &DerivedDrawInfo,
     const SETTINGS_MAP &settings_map)
 {
   MapRect = rc;
 
-  if (settings_map.TargetPan)
-    CalculateOrientationTargetPan(DrawInfo, DerivedDrawInfo, settings_map);
+  if (settings_map.TargetPan &&
+      DerivedDrawInfo.common_stats.active_taskpoint_index !=
+          settings_map.TargetPanIndex)
+    SetScreenAngle(Angle::native(fixed_zero));
   else
     CalculateOrientationNormal(DrawInfo, DerivedDrawInfo, settings_map);
 

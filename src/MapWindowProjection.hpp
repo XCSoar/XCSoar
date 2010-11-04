@@ -134,18 +134,6 @@ private:
    */
   void ModifyMapScale(const SETTINGS_MAP &settings_map);
 
-  /**
-   * sets orientation for dlgTarget
-   * if he next tp is the one being viewed by dlgTarget
-   * then use normal orientation, else use NorthUp
-   * @param nmea_info
-   * @param derived_info
-   * @param settings
-   */
-  void CalculateOrientationTargetPan(const NMEA_INFO &basic,
-                                     const DERIVED_INFO &derived,
-                                     const SETTINGS_MAP &settings);
-
   void CalculateOrientationNormal(const NMEA_INFO &basic,
                                   const DERIVED_INFO &derived,
                                   const SETTINGS_MAP &settings);
