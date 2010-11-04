@@ -162,18 +162,8 @@ MapWindowProjection::LimitMapScale(fixed value,
 {
   fixed minreasonable = fixed(0.05);
 
-  if (settings_map.AutoZoom && DisplayMode != dmCircling) {
-#ifdef OLD_TASK // auto zoom 
-    if (Calculated().common_stats.active_has_previous &&
-        Calculated().common_stats.ordered_has_targets) {
-      minreasonable = 0.88;
-    } else {
-      minreasonable = 0.44;
-    }
-#else
+  if (settings_map.AutoZoom && DisplayMode != dmCircling)
     minreasonable = fixed(0.44);
-#endif
-  }
 
   value = max(minreasonable, min(fixed_int_constant(160), value));
   if (HaveScaleList()) {
