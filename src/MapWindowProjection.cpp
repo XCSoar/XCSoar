@@ -214,7 +214,6 @@ void
 MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
                                     const SETTINGS_MAP &settings_map)
 {
-  fixed AutoZoomFactor;
   static DisplayMode_t DisplayModeLast = DisplayMode;
   static bool TargetPanLast = false;
   static fixed TargetPanUnZoom = fixed_one;
@@ -252,6 +251,7 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   }
 
   if (settings_map.AutoZoom && positive(wpd)) {
+    fixed AutoZoomFactor;
     if (IsOriginCentered(settings_map.DisplayOrientation))
       AutoZoomFactor = fixed(2.5);
     else
