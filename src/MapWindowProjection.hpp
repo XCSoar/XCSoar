@@ -132,9 +132,8 @@ private:
    */
   void ModifyMapScale(const SETTINGS_MAP &settings_map);
 
-  void CalculateOrientationNormal(const NMEA_INFO &basic,
-                                  const DERIVED_INFO &derived,
-                                  const SETTINGS_MAP &settings);
+  void UpdateScreenAngle(const NMEA_INFO &basic, const DERIVED_INFO &derived,
+                         const SETTINGS_MAP &settings);
 
   fixed LimitMapScale(fixed value, const SETTINGS_MAP &settings);
 
