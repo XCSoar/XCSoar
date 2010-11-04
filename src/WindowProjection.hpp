@@ -79,6 +79,11 @@ public:
     return x * GetMapScale() / GetMapResolutionFactor();
   }
 
+  gcc_pure
+  fixed DistanceScreenToUser(const int x) const {
+    return x * GetMapScaleUser() / GetMapResolutionFactor();
+  }
+
   /**
    * Returns the width of the map area in meters.
    */

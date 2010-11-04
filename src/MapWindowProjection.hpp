@@ -84,11 +84,6 @@ public:
            Units::ToUserDistance(fixed(GetMapResolutionFactor()));
   }
 
-  gcc_pure
-  fixed DistanceScreenToUser(const int x) const {
-    return x * GetMapScaleUser() / GetMapResolutionFactor();
-  }
-
   void RequestMapScale(fixed x, const SETTINGS_MAP &settings_map) {
     _RequestedMapScale = LimitMapScale(x, settings_map);
   }
