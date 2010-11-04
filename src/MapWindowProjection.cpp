@@ -103,13 +103,13 @@ MapWindowProjection::UpdateScreenAngle(const NMEA_INFO &basic,
 }
 
 void
-MapWindowProjection::Update(const RECT rc, const NMEA_INFO &DrawInfo,
-    const DERIVED_INFO &DerivedDrawInfo,
+MapWindowProjection::Update(const RECT rc, const NMEA_INFO &basic,
+    const DERIVED_INFO &derived,
     const SETTINGS_MAP &settings_map)
 {
   MapRect = rc;
 
-  UpdateScreenAngle(DrawInfo, DerivedDrawInfo, settings_map);
+  UpdateScreenAngle(basic, derived, settings_map);
 
   if (IsOriginCentered(settings_map.DisplayOrientation) ||
       settings_map.EnablePan)
@@ -123,9 +123,9 @@ MapWindowProjection::Update(const RECT rc, const NMEA_INFO &DrawInfo,
     SetGeoLocation(settings_map.PanLocation);
   else
     // Pan is off
-    SetGeoLocation(DrawInfo.Location);
+    SetGeoLocation(basic.Location);
 
-  Orig_Aircraft = GeoToScreen(DrawInfo.Location);
+  Orig_Aircraft = GeoToScreen(basic.Location);
 
   UpdateScreenBounds();
 }
