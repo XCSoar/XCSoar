@@ -56,7 +56,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("H GPS"),
     N_("This is the height above mean sea level reported by the GPS. Touchscreen/PC only: in simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn."),
     1, // H AGL
-    33, // H Baro
+    70, // QFE MSL
   },
 
   // 1
@@ -352,7 +352,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Pressure Altitude"),
     N_("H Baro"),
     N_("This is the barometric altitude obtained from a GPS equipped with pressure sensor, or a supported external intelligent vario."),
-    0, // H GPS
+    70, // QFE GPS
     20, // H Gnd
   },
 
@@ -682,7 +682,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("QFE GPS"),
     N_("QFE GPS"),
     N_("Automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude."),
-    1, 33,
+    0, // H MSL
+    33, // H Baro
   },
 
   // 71 TODO FIX those 19,4 values
