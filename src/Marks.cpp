@@ -87,9 +87,6 @@ void Marks::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 {
   Poco::ScopedRWLock protect(lock, false); // read only
 
-  if (projection.GetMapScaleUser() > fixed(30.0))
-    return;
-
   for (unsigned i = 0; i < marker_store.size(); i++) {
     POINT sc;
     if (projection.GeoToScreenIfVisible(marker_store[i], sc))
