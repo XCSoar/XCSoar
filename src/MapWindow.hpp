@@ -231,10 +231,6 @@ private:
   THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
 
   // display element functions
-
-  void CalculateScreenPositions(const POINT &Orig, const RECT &rc,
-                                POINT *Orig_Aircraft);
-
   void CalculateScreenPositionsGroundline();
   void CalculateScreenPositionsThermalSources();
 
