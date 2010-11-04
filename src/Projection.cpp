@@ -102,5 +102,5 @@ Projection::GetMapScaleUser() const
 int
 Projection::GetMapResolutionFactor()
 {
-  return IBLSCALE(30);
+  return Layout::Scale(30);
 }
