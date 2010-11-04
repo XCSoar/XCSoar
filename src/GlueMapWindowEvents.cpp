@@ -124,8 +124,8 @@ GlueMapWindow::on_mouse_down(int x, int y)
 
   if (is_simulator() && !Basic().gps.Replay && drag_mode == DRAG_NONE)
     if (!XCSoarInterface::SettingsComputer().EnableGestures ||
-        compare_squared(visible_projection.GetOrigAircraft().x - x,
-                        visible_projection.GetOrigAircraft().y - y,
+        compare_squared(visible_projection.GetScreenOrigin().x - x,
+                        visible_projection.GetScreenOrigin().y - y,
                         Layout::Scale(30)) != 1)
         drag_mode = DRAG_SIMULATOR;
   if (XCSoarInterface::SettingsComputer().EnableGestures &&
