@@ -104,9 +104,16 @@ public:
 protected:
   RECT MapRect;
 
+  /** Updates the cached screenbounds_latlon member */
   void UpdateScreenBounds();
 
 private:
+  /**
+   * Geographical representation of the screen boundaries.
+   *
+   * This is a cached member that has to be updated manually by
+   * calling UpdateScreenBounds()
+   */
   GeoBounds screenbounds_latlon;
 };
 
