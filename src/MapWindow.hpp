@@ -217,7 +217,6 @@ public:
 private:
 
   void DrawThreadLoop ();
-  void DrawThreadInitialise (void);
 
   void UpdateDisplayMode();
 
