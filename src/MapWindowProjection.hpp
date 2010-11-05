@@ -44,10 +44,6 @@ public:
   gcc_pure
   virtual fixed GetMapScaleUser() const;
 
-  const POINT &GetOrigAircraft() const {
-    return Orig_Aircraft;
-  }
-
   /**
    * sets the map scale based on three possible inputs:
    * If TerrainPan is enabled, then uses that parameter
@@ -115,8 +111,6 @@ public:
   bool WaypointInScaleFilter(const Waypoint &way_point) const;
 
 private:
-  POINT Orig_Aircraft;
-
   fixed MapScale;
   fixed _RequestedMapScale;
 

@@ -125,8 +125,6 @@ MapWindowProjection::Update(const RECT rc, const NMEA_INFO &basic,
     // Pan is off
     SetGeoLocation(basic.Location);
 
-  Orig_Aircraft = GeoToScreen(basic.Location);
-
   UpdateScreenBounds();
 }
 
