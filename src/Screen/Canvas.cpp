@@ -531,12 +531,11 @@ Canvas::stretch_or(int dest_x, int dest_y,
 
 #ifdef ENABLE_OPENGL
   if (surface->flags & SDL_OPENGL) {
-    glPushAttrib(GL_COLOR_BUFFER_BIT);
     glEnable(GL_COLOR_LOGIC_OP);
     glLogicOp(GL_OR);
     stretch(dest_x, dest_y, dest_width, dest_height,
             src, src_x, src_y, src_width, src_height);
-    glPopAttrib();
+    glDisable(GL_COLOR_LOGIC_OP);
     return;
   }
 #endif
@@ -572,12 +571,11 @@ Canvas::stretch_and(int dest_x, int dest_y,
 
 #ifdef ENABLE_OPENGL
   if (surface->flags & SDL_OPENGL) {
-    glPushAttrib(GL_COLOR_BUFFER_BIT);
     glEnable(GL_COLOR_LOGIC_OP);
     glLogicOp(GL_AND);
     stretch(dest_x, dest_y, dest_width, dest_height,
             src, src_x, src_y, src_width, src_height);
-    glPopAttrib();
+    glDisable(GL_COLOR_LOGIC_OP);
     return;
   }
 #endif
