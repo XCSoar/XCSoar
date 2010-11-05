@@ -97,9 +97,9 @@ MapWindow::RenderAreas(Canvas &canvas, const RECT &rc)
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderTrail(Canvas &canvas)
+MapWindow::RenderTrail(Canvas &canvas, const POINT aircraft_pos)
 {
-  DrawTrail(canvas);
+  DrawTrail(canvas, aircraft_pos);
 }
 
 /**
@@ -224,7 +224,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   // Render the snail trail
   /// @todo trail should be drawn above task shaded sections
 
-  RenderTrail(canvas);
+  RenderTrail(canvas, aircraft_pos);
 
   DrawThermalEstimate(canvas);
 

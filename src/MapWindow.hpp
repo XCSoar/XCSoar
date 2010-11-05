@@ -253,7 +253,7 @@ public:
   void DrawFlightMode(Canvas &canvas, const RECT &rc) const;
   void DrawGPSStatus(Canvas &canvas, const RECT &rc,
                      const GPS_STATE &gps) const;
-  void DrawTrail(Canvas &canvas) const;
+  void DrawTrail(Canvas &canvas, const POINT aircraft_pos) const;
   void DrawTeammate(Canvas &canvas) const;
   void DrawProjectedTrack(Canvas &canvas) const;
   void DrawTask(Canvas &canvas, const RECT &rc, Canvas &buffer);
@@ -320,7 +320,7 @@ private:
   void RenderStart(Canvas &canvas, const RECT &rc);
   void RenderMapLayer(Canvas &canvas);
   void RenderAreas(Canvas &canvas, const RECT &rc);
-  void RenderTrail(Canvas &canvas);
+  void RenderTrail(Canvas &canvas, const POINT aircraft_pos);
   void RenderTaskElements(Canvas &canvas, const RECT &rc);
   void RenderGlide(Canvas &canvas, const RECT &rc);
   void RenderAirborne(Canvas &canvas, const RECT &rc, const POINT aircraft_pos);

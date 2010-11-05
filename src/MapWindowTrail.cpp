@@ -42,7 +42,7 @@ fSnailColour(fixed cv)
 }
 
 void
-MapWindow::DrawTrail(Canvas &canvas) const
+MapWindow::DrawTrail(Canvas &canvas, const POINT aircraft_pos) const
 {
   if (!SettingsMap().TrailActive || task == NULL)
     return;
@@ -118,8 +118,7 @@ MapWindow::DrawTrail(Canvas &canvas) const
     }
     last_time = it->time;
   }
-  canvas.line_to(projection.GetOrigAircraft().x,
-                 projection.GetOrigAircraft().y);
+  canvas.line_to(aircraft_pos.x, aircraft_pos.y);
 }
 
 
