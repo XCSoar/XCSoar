@@ -143,7 +143,7 @@ RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
     dest = image->GetNextRow(dest);
 
     for (unsigned x = height_matrix.get_width(); x > 0; --x) {
-      short h = *src;
+      short h = *src++;
       if (RasterBuffer::is_invalid(h)) {
         /* outside the terrain file bounds: white background */
         *p++ = BGRColor(0xff, 0xff, 0xff);
