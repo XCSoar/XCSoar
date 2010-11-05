@@ -33,6 +33,7 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "resource.h"
 #include "shapelib/map.h"
+#include "Units.hpp"
 
 #include <stdlib.h>
 #include <tchar.h>
@@ -118,7 +119,7 @@ TopologyFile::updateCache(const WindowProjection &map_projection)
   if (!shapefileopen)
     return;
 
-  if (map_projection.GetMapScaleUser() > fixed(scaleThreshold))
+  if (Units::ToUserDistance(map_projection.GetMapScale()) > fixed(scaleThreshold))
     /* not visible, don't update cache now */
     return;
 
@@ -178,7 +179,7 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
   if (!shapefileopen)
     return;
 
-  double map_scale = projection.GetMapScaleUser();
+  double map_scale = Units::ToUserDistance(projection.GetMapScale());
   if (map_scale > scaleThreshold)
     return;
 
@@ -265,7 +266,7 @@ TopologyFile::PaintLabels(Canvas &canvas,
   if (!shapefileopen || settings_map.DeclutterLabels >= 2)
     return;
 
-  double map_scale = projection.GetMapScaleUser();
+  double map_scale = Units::ToUserDistance(projection.GetMapScale());
   if (map_scale > scaleThreshold)
     return;
 
