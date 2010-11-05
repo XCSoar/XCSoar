@@ -104,7 +104,7 @@ public:
 
   // used by terrain renderer, topology and airspace
   gcc_pure
-  GeoBounds CalculateScreenBounds() const;
+  GeoBounds GetScreenBounds() const;
 
 protected:
   RECT MapRect;

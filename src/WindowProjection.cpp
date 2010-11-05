@@ -70,7 +70,7 @@ WindowProjection::UpdateScreenBounds()
 }
 
 GeoBounds
-WindowProjection::CalculateScreenBounds() const
+WindowProjection::GetScreenBounds() const
 {
   return screenbounds_latlon;
 }
