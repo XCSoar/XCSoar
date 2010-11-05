@@ -46,7 +46,7 @@ fSnailColour(fixed cv)
  * @param canvas Canvas for drawing
  */
 void
-MapWindow::DrawFLARMTraffic(Canvas &canvas) const
+MapWindow::DrawFLARMTraffic(Canvas &canvas, const POINT aircraft_pos) const
 {
   // Return if FLARM icons on moving map are disabled
   if (!SettingsMap().EnableFLARMMap)
@@ -129,8 +129,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas) const
 
     // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 
-    int dx = sc_av.x - projection.GetOrigAircraft().x;
-    int dy = sc_av.y - projection.GetOrigAircraft().y;
+    int dx = sc_av.x - aircraft_pos.x;
+    int dy = sc_av.y - aircraft_pos.y;
 
     // only draw labels if not close to aircraft
     if (dx * dx + dy * dy > IBLSCALE(30) * IBLSCALE(30)) {

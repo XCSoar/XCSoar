@@ -147,7 +147,7 @@ MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc,
 
   // Draw traffic
   DrawTeammate(canvas);
-  DrawFLARMTraffic(canvas);
+  DrawFLARMTraffic(canvas, aircraft_pos);
 
   // Finally, draw you!
   if (Basic().gps.Connected)

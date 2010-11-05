@@ -269,7 +269,7 @@ public:
   void DrawTerrainAbove(Canvas &hDC, Canvas &buffer);
 
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
-  void DrawFLARMTraffic(Canvas &canvas) const;
+  void DrawFLARMTraffic(Canvas &canvas, const POINT aircraft_pos) const;
 
   gcc_pure
   fixed findMapScaleBarSize(const RECT &rc, const MapWindowProjection &projection) const;
