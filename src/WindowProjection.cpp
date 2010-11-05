@@ -61,7 +61,12 @@ WindowProjection::GetScreenDistanceMeters() const
 void
 WindowProjection::UpdateScreenBounds()
 {
-  screenbounds_latlon = CalculateScreenBounds(fixed_zero);
+  GeoBounds sb(ScreenToGeo(MapRect.left, MapRect.top));
+  sb.merge(ScreenToGeo(MapRect.right, MapRect.top));
+  sb.merge(ScreenToGeo(MapRect.right, MapRect.bottom));
+  sb.merge(ScreenToGeo(MapRect.left, MapRect.bottom));
+
+  screenbounds_latlon = sb;
 }
 
 GeoBounds
@@ -71,10 +76,5 @@ WindowProjection::CalculateScreenBounds(const fixed scale) const
   if (scale >= fixed_one)
     return screenbounds_latlon.scale(scale);
 
-  GeoBounds sb(ScreenToGeo(MapRect.left, MapRect.top));
-  sb.merge(ScreenToGeo(MapRect.right, MapRect.top));
-  sb.merge(ScreenToGeo(MapRect.right, MapRect.bottom));
-  sb.merge(ScreenToGeo(MapRect.left, MapRect.bottom));
-
-  return sb;
+  return screenbounds_latlon;
 }
