@@ -53,6 +53,18 @@ DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text)
  }
 }
 
+bool
+DataFieldEnum::addEnumText(const TCHAR *Text, unsigned i)
+{
+  if (entries.full())
+    return false;
+
+  Entry &entry = entries.append();
+  entry.mText = _tcsdup(Text);
+  entry.index = i;
+  return true;
+}
+
 unsigned
 DataFieldEnum::addEnumText(const TCHAR *Text)
 {

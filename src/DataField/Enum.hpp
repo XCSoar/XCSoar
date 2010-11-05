@@ -56,6 +56,7 @@ public:
   virtual ComboList *CreateComboList() const;
 
   void replaceEnumText(unsigned int i, const TCHAR *Text);
+  bool addEnumText(const TCHAR *Text, unsigned i);
   unsigned addEnumText(const TCHAR *Text);
   void addEnumTexts(const TCHAR *const*list);
 
