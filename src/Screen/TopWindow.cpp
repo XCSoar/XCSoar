@@ -46,6 +46,7 @@ TopCanvas::set()
 
 #ifdef ENABLE_OPENGL
   ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+  ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
 
   flags |= SDL_OPENGL;
 #else /* !ENABLE_OPENGL */

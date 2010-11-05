@@ -48,7 +48,42 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     return;
 
 #ifdef ENABLE_OPENGL
-  // XXX implement
+  glClearStencil(0);
+  glClear(GL_STENCIL_BUFFER_BIT);
+
+  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+  glEnable(GL_STENCIL_TEST);
+  glStencilFunc(GL_ALWAYS, 1, 1);
+  glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+  canvas.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
+
+  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+  glStencilFunc(GL_NOTEQUAL, 1, 1);
+  glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  glColor4f(1.0, 1.0, 1.0, 0.3);
+  const GLfloat v[] = {
+    0, 0,
+    canvas.get_width(), 0,
+    canvas.get_width(), canvas.get_height(),
+    0, canvas.get_height(),
+  };
+  glVertexPointer(2, GL_FLOAT, 0, v);
+
+#ifdef ANDROID
+  GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
+#else
+  glDrawArrays(GL_QUADS, 0, 4);
+#endif
+
+  glDisable(GL_BLEND);
+  glDisable(GL_STENCIL_TEST);
 #else
   Canvas &buffer = buffer_canvas;
 
