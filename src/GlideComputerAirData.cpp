@@ -544,7 +544,8 @@ GlideComputerAirData::TerrainFootprint(fixed screen_range)
 
   unsigned i = 0;
   AIRCRAFT_STATE state = ToAircraftState(Basic());
-  for (fixed ang = fixed_zero; ang <= fixed_360; ang += d_bearing, i++) {
+  for (fixed ang = fixed_zero; i < TERRAIN_ALT_INFO::NUMTERRAINSWEEPS;
+       ang += d_bearing, i++) {
     state.TrackBearing = Angle::degrees(ang);
 
     TerrainIntersection its = g_terrain.find_intersection(state, glide_polar);

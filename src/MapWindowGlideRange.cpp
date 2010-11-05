@@ -31,7 +31,7 @@ void MapWindow::CalculateScreenPositionsGroundline(void) {
   if (SettingsComputer().FinalGlideTerrain)
     render_projection.GeoToScreen(Calculated().GlideFootPrint,
                                     Groundline,
-                                    TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
+                                    TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
 }
 
 /**
@@ -55,7 +55,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   buffer.null_pen();
   buffer.white_brush();
-  buffer.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
+  buffer.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
 
   canvas.copy_transparent_white(buffer);
 }
@@ -65,11 +65,13 @@ void
 MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 {
   if (SettingsComputer().FinalGlideTerrain) {
+    canvas.hollow_brush();
+
     canvas.select(Graphics::hpTerrainLineBg);
-    canvas.polyline(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
+    canvas.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
 
     canvas.select(Graphics::hpTerrainLine);
-    canvas.polyline(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
+    canvas.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
   }
 
   if (!Basic().flight.Flying)

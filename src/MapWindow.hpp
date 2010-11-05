@@ -224,7 +224,7 @@ private:
   // display management
   void SwitchZoomClimb(void);
 
-  POINT Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1];
+  POINT Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS];
 
   ZoomClimb_t zoomclimb;
 

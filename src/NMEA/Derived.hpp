@@ -187,7 +187,7 @@ struct TERRAIN_ALT_INFO
   GeoPoint TerrainWarningLocation;
 
   /** Final glide ground line */
-  GeoPoint GlideFootPrint[NUMTERRAINSWEEPS+1];
+  GeoPoint GlideFootPrint[NUMTERRAINSWEEPS];
 
   /** Lowest height within glide range */
   fixed TerrainBase;
