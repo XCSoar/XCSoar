@@ -71,7 +71,7 @@ MapWindow::RenderMapLayer(Canvas &canvas)
     if ((SettingsComputer().FinalGlideTerrain == 2) && 
         Calculated().TerrainValid)
       // Draw the groundline (and shading)
-      DrawTerrainAbove(canvas, buffer_canvas);
+      DrawTerrainAbove(canvas);
   }
 
   if (topology != NULL && SettingsMap().EnableTopology)
@@ -89,7 +89,7 @@ MapWindow::RenderAreas(Canvas &canvas)
 {
   // Draw airspace on top
   if (SettingsMap().OnAirSpace > 0)
-    DrawAirspace(canvas, buffer_canvas);
+    DrawAirspace(canvas);
 }
 
 /**

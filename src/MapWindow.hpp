@@ -246,7 +246,7 @@ public:
   void DrawHorizon(Canvas &canvas, const RECT &rc) const;
   void DrawWindAtAircraft2(Canvas &canvas, const POINT &Orig,
                            const RECT &rc) const;
-  void DrawAirspace(Canvas &canvas, Canvas &buffer);
+  void DrawAirspace(Canvas &canvas);
   void DrawAirspaceIntersections(Canvas &canvas) const;
   void DrawWaypoints(Canvas &canvas);
 
@@ -266,7 +266,7 @@ public:
   void DrawFinalGlide(Canvas &canvas, const RECT &rc) const;
   void DrawThermalBand(Canvas &canvas, const RECT &rc) const;
   void DrawGlideThroughTerrain(Canvas &canvas) const;
-  void DrawTerrainAbove(Canvas &hDC, Canvas &buffer);
+  void DrawTerrainAbove(Canvas &canvas);
 
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
   void DrawFLARMTraffic(Canvas &canvas, const POINT aircraft_pos) const;

@@ -233,7 +233,7 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas) const
  * @param buffer The drawing buffer
  */
 void
-MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
+MapWindow::DrawAirspace(Canvas &canvas)
 {
   if (airspace_database == NULL)
     return;
@@ -242,7 +242,9 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   if (airspace_warnings != NULL)
     airspace_warnings->visit_warnings(awc);
 
-  MapDrawHelper helper(canvas, buffer, stencil_canvas, render_projection,
+  MapDrawHelper helper(canvas,
+                       buffer_canvas, stencil_canvas,
+                       render_projection,
                         SettingsMap());
   AirspaceVisitorMap v(helper, awc);
   const AirspaceMapVisible visible(SettingsComputer(),

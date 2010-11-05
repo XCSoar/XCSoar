@@ -42,10 +42,12 @@ void MapWindow::CalculateScreenPositionsGroundline(void) {
  * @param buffer The drawing buffer
  */
 void
-MapWindow::DrawTerrainAbove(Canvas &canvas, Canvas &buffer)
+MapWindow::DrawTerrainAbove(Canvas &canvas)
 {
   if (!Basic().flight.Flying)
     return;
+
+  Canvas &buffer = buffer_canvas;
 
   buffer.set_background_color(Color::WHITE);
   buffer.set_text_color(Color(0xf0,0xf0,0xf0));
