@@ -53,7 +53,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   buffer.set_text_color(Color(0xf0,0xf0,0xf0));
   buffer.clear(Graphics::hAboveTerrainBrush);
 
-  buffer.white_pen();
+  buffer.null_pen();
   buffer.white_brush();
   buffer.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
 
