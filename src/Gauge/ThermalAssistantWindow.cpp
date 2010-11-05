@@ -97,7 +97,7 @@ ThermalAssistantWindow::Update(const Angle &_direction,
   UpdateLiftMax();
   UpdateLiftPoints();
 
-  Paint();
+  repaint();
 }
 
 void
@@ -233,10 +233,8 @@ ThermalAssistantWindow::PaintNotCircling(Canvas &canvas) const
 }
 
 void
-ThermalAssistantWindow::Paint()
+ThermalAssistantWindow::on_paint_buffer(Canvas &canvas)
 {
-  Canvas &canvas = get_canvas();
-
   PaintRadarBackground(canvas);
   if (!derived.Circling) {
     PaintNotCircling(canvas);

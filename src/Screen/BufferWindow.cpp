@@ -55,5 +55,5 @@ BufferWindow::on_resize(unsigned width, unsigned height)
 void
 BufferWindow::on_paint(Canvas &canvas)
 {
-  commit_buffer(canvas);
+  canvas.copy(buffer);
 }

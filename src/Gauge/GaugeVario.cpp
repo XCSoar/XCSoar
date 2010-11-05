@@ -129,9 +129,6 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
 
   blankThickPen.set(Layout::Scale(5), colTextBackgnd);
 
-  get_canvas().set_text_color(colText);
-  get_canvas().set_background_color(colTextBackgnd);
-
   unit_symbol = GetUnitSymbol(Units::VerticalSpeedUnit);
 
   xoffset = get_width();
@@ -147,7 +144,7 @@ GaugeVario::~GaugeVario()
 }
 
 void
-GaugeVario::Render()
+GaugeVario::on_paint_buffer(Canvas &canvas)
 {
   static POINT orgTop     = {-1, -1};
   static POINT orgMiddle  = {-1, -1};
@@ -156,8 +153,6 @@ GaugeVario::Render()
   static bool InitDone = false;
 
   fixed vval;
-
-  Canvas &canvas = get_canvas();
 
   if (!InitDone){
     ValueHeight = 4 + Fonts::CDI.get_capital_height()

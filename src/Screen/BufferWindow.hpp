@@ -35,19 +35,12 @@ private:
   BufferCanvas buffer;
 
 public:
-  Canvas &get_canvas() {
-    return buffer;
-  }
-
-  const Canvas &get_canvas() const {
-    return buffer;
-  }
-
   /**
-   * Copies the buffer to the specified canvas.
+   * Repaints the buffer, and copies it onto the physical screen.
    */
-  void commit_buffer(Canvas &dest) {
-    dest.copy(get_canvas());
+  void repaint() {
+    on_paint_buffer(buffer);
+    invalidate();
   }
 
 protected:
@@ -57,6 +50,8 @@ protected:
   virtual bool on_resize(unsigned width, unsigned height);
 
   virtual void on_paint(Canvas &canvas);
+
+  virtual void on_paint_buffer(Canvas &canvas) = 0;
 };
 
 #endif

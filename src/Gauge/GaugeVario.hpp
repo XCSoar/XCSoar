@@ -84,7 +84,8 @@ public:
              const WindowStyle style=WindowStyle());
   ~GaugeVario();
 
-  void Render();
+protected:
+  virtual void on_paint_buffer(Canvas &canvas);
 
 private:
   void RenderZero(Canvas &canvas);
