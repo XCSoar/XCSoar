@@ -72,33 +72,33 @@ public:
   /** Option to enable Goto tasks for non-landable waypoints */
   bool goto_nonlandable;
 
-  /**< Compensation factor for risk at low altitude */
+  /** Compensation factor for risk at low altitude */
   fixed risk_gamma;
 
-  /**< Whether to do online OLC optimisation */
+  /** Whether to do online OLC optimisation */
   bool enable_olc;
 
-  /**< Rule set to scan for in OLC */
+  /** Rule set to scan for in OLC */
   Contests contest;
-  /**< Handicap factor */
+  /** Handicap factor */
   unsigned contest_handicap;
 
-  /**< Safety MacCready value (m/s) used by abort task */
+  /** Safety MacCready value (m/s) used by abort task */
   fixed safety_mc;
-  /**< Whether to use safety mc value or current task polar MC */
+  /** Whether to use safety mc value or current task polar MC */
   bool safety_mc_use_current;
 
-  /**< Minimum height above terrain for arrival height at non-landable waypoint (m) */
+  /** Minimum height above terrain for arrival height at non-landable waypoint (m) */
   fixed safety_height_terrain;
-  /**< Minimum height above terrain for arrival height at landable waypoint (m) */
+  /** Minimum height above terrain for arrival height at landable waypoint (m) */
   fixed safety_height_arrival;
 
-  /**< Margin in maximum ground speed (m/s) allowed in start sector */
+  /** Margin in maximum ground speed (m/s) allowed in start sector */
   fixed start_max_speed_margin;
-  /**< Margin in maximum height (m) allowed in start sector */
+  /** Margin in maximum height (m) allowed in start sector */
   unsigned start_max_height_margin;
 
-  /**< Defaults for ordered task */
+  /** Defaults for ordered task */
   OrderedTaskBehaviour ordered_defaults;
 
   /**
