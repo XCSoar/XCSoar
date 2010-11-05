@@ -102,7 +102,7 @@ private:
 
   XShape** shpCache;
 
-  unsigned GetSkipSteps(double map_scale) const;
+  unsigned GetSkipSteps(double map_scale_user) const;
   static rectObj ConvertRect(const GeoBounds &br);
 
 protected:
