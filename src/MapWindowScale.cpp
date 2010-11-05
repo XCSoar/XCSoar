@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/UnitSymbol.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Units.hpp"
 
 #include <math.h>
 #include <stdio.h>
@@ -38,9 +39,10 @@ fixed
 MapWindow::findMapScaleBarSize(const RECT &rc, 
            const MapWindowProjection &projection) const
 {
-  fixed pixelsize = projection.DistanceScreenToUser(1); // units/pixel
-  fixed half_displaysize =
-    projection.DistanceScreenToUser((rc.bottom - rc.top) / 2); // units
+  // units/pixel
+  fixed pixelsize = Units::ToUserDistance(projection.DistancePixelsToMeters(1));
+  fixed half_displaysize = Units::ToUserDistance(
+      projection.DistancePixelsToMeters((rc.bottom - rc.top) / 2));
 
   // find largest bar size that will fit two of (black and white) in display
   if (half_displaysize > fixed(100))
