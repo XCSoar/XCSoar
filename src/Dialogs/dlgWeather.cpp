@@ -42,38 +42,6 @@ OnCloseClicked(WndButton &Sender)
 }
 
 static void
-RASPGetTime(DataFieldEnum *Sender)
-{
-  int index = 0;
-  for (unsigned i = 0; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
-    if (RASP.isWeatherAvailable(i)) {
-      if (RASP.GetTime() == i)
-        Sender->Set(index);
-
-      index++;
-    }
-  }
-}
-
-static void
-RASPSetTime(DataFieldEnum *Sender)
-{
-  int index = 0;
-  if (Sender->GetAsInteger() <= 0) {
-    RASP.SetTime(0);
-    return;
-  }
-  for (unsigned i = 0; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
-    if (RASP.isWeatherAvailable(i)) {
-      if (index == Sender->GetAsInteger())
-        RASP.SetTime(i);
-
-      index++;
-    }
-  }
-}
-
-static void
 OnWeatherHelp(WindowControl * Sender)
 {
   WndProperty *wp = (WndProperty*)Sender;
@@ -120,11 +88,11 @@ dlgWeatherShowModal(void)
       if (RASP.isWeatherAvailable(i)) {
         TCHAR timetext[10];
         _stprintf(timetext, _T("%04d"), RASP.IndexToTime(i));
-        dfe->addEnumText(timetext);
+        dfe->addEnumText(timetext, i);
       }
     }
 
-    RASPGetTime(dfe);
+    dfe->Set(RASP.GetTime());
 
     wp->RefreshDisplay();
   }
@@ -138,7 +106,7 @@ dlgWeatherShowModal(void)
     for (int i = 1; i <= 15; i++) {
       const TCHAR *label = RASP.ItemLabel(i);
       if (label != NULL)
-        dfe->addEnumText(label);
+        dfe->addEnumText(label, i);
     }
     dfe->Set(RASP.GetParameter());
     wp->RefreshDisplay();
@@ -150,7 +118,7 @@ dlgWeatherShowModal(void)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    RASPSetTime(dfe);
+    RASP.SetTime(dfe->GetAsInteger());
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpDisplayItem"));
