@@ -26,6 +26,7 @@ Copyright_License {
 #include "Marks.hpp"
 #include "Topology/TopologyStore.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Units.hpp"
 
 /**
  * Calculates the screen positions of all important features
@@ -115,7 +116,7 @@ MapWindow::RenderTaskElements(Canvas &canvas, const RECT &rc)
   DrawWaypoints(canvas, rc);
 
   if (marks != NULL &&
-      render_projection.GetMapScaleUser() <= fixed(30.0))
+      Units::ToUserDistance(render_projection.GetMapScale()) <= fixed(30.0))
     marks->Draw(canvas, bitmap_canvas, render_projection);
 }
 
