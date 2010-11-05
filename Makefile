@@ -281,6 +281,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/GlueMapWindow.cpp \
 	$(SRC)/GlueMapWindowAirspace.cpp \
 	$(SRC)/GlueMapWindowEvents.cpp \
+	$(SRC)/GlueMapWindowOverlays.cpp \
 	$(SRC)/GestureManager.cpp \
 	$(SRC)/DrawThread.cpp \
 	\

@@ -98,6 +98,9 @@ private:
    * 0xc0..0xc4 (VK_APP1..4) in WM_KEYUP.  We prefer the VK_APP codes.
    */
   bool on_key_press(unsigned key_code);
+
+private:
+  void DrawCrossHairs(Canvas &canvas) const;
 };
 
 #endif

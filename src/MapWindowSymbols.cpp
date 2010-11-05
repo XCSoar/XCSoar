@@ -39,20 +39,6 @@ Copyright_License {
 #include <stdio.h>
 
 void
-MapWindow::DrawCrossHairs(Canvas &canvas) const
-{
-  Pen dash_pen(Pen::DASH, 1, Color(50, 50, 50));
-  canvas.select(dash_pen);
-
-  const POINT Orig_Screen = render_projection.GetScreenOrigin();
-
-  canvas.line(Orig_Screen.x + 20, Orig_Screen.y,
-              Orig_Screen.x - 20, Orig_Screen.y);
-  canvas.line(Orig_Screen.x, Orig_Screen.y + 20,
-              Orig_Screen.x, Orig_Screen.y - 20);
-}
-
-void
 MapWindow::DrawAircraft(Canvas &canvas, const POINT aircraft_pos) const
 {
   POINT Aircraft[] = {
