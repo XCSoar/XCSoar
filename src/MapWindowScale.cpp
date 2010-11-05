@@ -66,7 +66,7 @@ MapWindow::DrawMapScale2(Canvas &canvas, const RECT &rc, const MapWindowProjecti
   int barsize = iround(findMapScaleBarSize(rc, projection));
 
   End.x = rc.right - 1;
-  End.y = projection.GetOrigAircraft().y;
+  End.y = projection.GetScreenOrigin().y;
   Start = End;
   for (Start.y += barsize; Start.y < rc.bottom + barsize; Start.y += barsize) {
     if (color)
@@ -81,7 +81,7 @@ MapWindow::DrawMapScale2(Canvas &canvas, const RECT &rc, const MapWindowProjecti
   }
 
   color = true;
-  End.y = projection.GetOrigAircraft().y;
+  End.y = projection.GetScreenOrigin().y;
   Start = End;
   for (Start.y -= barsize; Start.y > rc.top - barsize; Start.y -= barsize) {
     if (color)
