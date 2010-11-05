@@ -56,7 +56,6 @@ public:
   void step();
 
 protected:
-  virtual bool on_erase(Canvas &canvas);
   virtual void on_paint(Canvas &canvas);
   virtual Brush *on_color(Window &window, Canvas &canvas);
 };

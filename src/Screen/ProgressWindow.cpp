@@ -121,16 +121,11 @@ ProgressWindow::step()
   progress_bar.step();
 }
 
-bool
-ProgressWindow::on_erase(Canvas &canvas)
-{
-  canvas.clear(background_brush);
-  return true;
-}
-
 void
 ProgressWindow::on_paint(Canvas &canvas)
 {
+  canvas.clear(background_color);
+
   BitmapCanvas bitmap_canvas(canvas);
 
   // Determine window size
