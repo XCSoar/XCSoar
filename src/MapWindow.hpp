@@ -235,7 +235,7 @@ private:
   void CalculateScreenPositionsThermalSources();
 
   // display renderers
-  void DrawAircraft(Canvas &canvas) const;
+  void DrawAircraft(Canvas &canvas, const POINT aircraft_pos) const;
 
 protected:
   void DrawCrossHairs(Canvas &canvas) const;
@@ -323,7 +323,7 @@ private:
   void RenderTrail(Canvas &canvas);
   void RenderTaskElements(Canvas &canvas, const RECT &rc);
   void RenderGlide(Canvas &canvas, const RECT &rc);
-  void RenderAirborne(Canvas &canvas, const RECT &rc);
+  void RenderAirborne(Canvas &canvas, const RECT &rc, const POINT aircraft_pos);
   void RenderSymbology_upper(Canvas &canvas, const RECT &rc);
   void RenderSymbology_lower(Canvas &canvas, const RECT &rc);
 

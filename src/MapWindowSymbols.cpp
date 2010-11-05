@@ -53,7 +53,7 @@ MapWindow::DrawCrossHairs(Canvas &canvas) const
 }
 
 void
-MapWindow::DrawAircraft(Canvas &canvas) const
+MapWindow::DrawAircraft(Canvas &canvas, const POINT aircraft_pos) const
 {
   POINT Aircraft[] = {
     {1, -5},
@@ -79,8 +79,7 @@ MapWindow::DrawAircraft(Canvas &canvas) const
 
   const Angle angle = Basic().Heading - render_projection.GetScreenAngle();
 
-  PolygonRotateShift(Aircraft, n, render_projection.GetOrigAircraft().x - 1,
-                     render_projection.GetOrigAircraft().y, angle);
+  PolygonRotateShift(Aircraft, n, aircraft_pos.x - 1, aircraft_pos.y, angle);
 
   canvas.select(Graphics::hpAircraft);
   canvas.polygon(Aircraft, n);

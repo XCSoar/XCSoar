@@ -138,7 +138,8 @@ MapWindow::RenderGlide(Canvas &canvas, const RECT &rc)
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc)
+MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc,
+                          const POINT aircraft_pos)
 {
   // Draw wind vector at aircraft
   if (!SettingsMap().EnablePan || SettingsMap().TargetPan)
@@ -150,7 +151,7 @@ MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc)
 
   // Finally, draw you!
   if (Basic().gps.Connected)
-    DrawAircraft(canvas);
+    DrawAircraft(canvas, aircraft_pos);
 }
 
 /**
@@ -212,6 +213,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
 { 
   // Calculate screen positions
   RenderStart(canvas, rc);
+  const POINT aircraft_pos = render_projection.GeoToScreen(Basic().Location);
 
   // Render terrain, groundline and topology and reset pen, brush and font
   RenderMapLayer(canvas);
@@ -245,7 +247,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   RenderSymbology_lower(canvas, rc);
 
   // Render aircraft symbol (and FLARM traffic)
-  RenderAirborne(canvas, rc);
+  RenderAirborne(canvas, rc, aircraft_pos);
   
   // Render upper symbology
   RenderSymbology_upper(canvas, rc);
