@@ -85,7 +85,7 @@ MapWindow::RenderMapLayer(Canvas &canvas)
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderAreas(Canvas &canvas, const RECT &rc)
+MapWindow::RenderAreas(Canvas &canvas)
 {
   // Draw airspace on top
   if (SettingsMap().OnAirSpace > 0)
@@ -109,11 +109,11 @@ MapWindow::RenderTrail(Canvas &canvas, const POINT aircraft_pos)
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderTaskElements(Canvas &canvas, const RECT &rc)
+MapWindow::RenderTaskElements(Canvas &canvas)
 {
-  DrawTask(canvas, rc, buffer_canvas);
+  DrawTask(canvas);
 
-  DrawWaypoints(canvas, rc);
+  DrawWaypoints(canvas);
 
   if (marks != NULL &&
       Units::ToUserDistance(render_projection.GetMapScale()) <= fixed(30.0))
@@ -126,7 +126,7 @@ MapWindow::RenderTaskElements(Canvas &canvas, const RECT &rc)
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderGlide(Canvas &canvas, const RECT &rc)
+MapWindow::RenderGlide(Canvas &canvas)
 {
   // draw red cross on glide through terrain marker
   if (Calculated().TerrainValid)
@@ -195,8 +195,7 @@ MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
  * @param rc
  */
 void
-MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT &rc,
-                                 const POINT aircraft_pos)
+MapWindow::RenderSymbology_lower(Canvas &canvas, const POINT aircraft_pos)
 {
   if (Basic().gps.Connected)
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
@@ -221,7 +220,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   RenderMapLayer(canvas);
 
   // Render the AAT areas and airspace
-  RenderAreas(canvas, rc);
+  RenderAreas(canvas);
 
   // Render the snail trail
   /// @todo trail should be drawn above task shaded sections
@@ -231,7 +230,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   DrawThermalEstimate(canvas);
 
   // Render task, waypoints and marks
-  RenderTaskElements(canvas, rc);
+  RenderTaskElements(canvas);
 
   // Render topology on top of airspace, to keep the text readable
   if (topology != NULL && SettingsMap().EnableTopology)
@@ -239,14 +238,14 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
                          SettingsMap());
 
   // Render glide through terrain range
-  RenderGlide(canvas, rc);
+  RenderGlide(canvas);
 
   // Render weather/terrain max/min values
   canvas.select(Fonts::Title);
   m_background.DrawSpotHeights(canvas, render_projection, label_block);
 
   // Render lower symbology
-  RenderSymbology_lower(canvas, rc, aircraft_pos);
+  RenderSymbology_lower(canvas, aircraft_pos);
 
   // Render aircraft symbol (and FLARM traffic)
   RenderAirborne(canvas, rc, aircraft_pos);

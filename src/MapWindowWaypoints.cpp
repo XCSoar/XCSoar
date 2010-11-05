@@ -25,7 +25,7 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 
 void
-MapWindow::DrawWaypoints(Canvas &canvas, const RECT &MapRect)
+MapWindow::DrawWaypoints(Canvas &canvas)
 {
   GlidePolar polar = get_glide_polar();
   polar.set_mc(min(Calculated().common_stats.current_risk_mc,

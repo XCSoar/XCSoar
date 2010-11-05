@@ -248,7 +248,7 @@ public:
                            const RECT &rc) const;
   void DrawAirspace(Canvas &canvas, Canvas &buffer);
   void DrawAirspaceIntersections(Canvas &canvas) const;
-  void DrawWaypoints(Canvas &canvas, const RECT &rc);
+  void DrawWaypoints(Canvas &canvas);
 
   void DrawFlightMode(Canvas &canvas, const RECT &rc) const;
   void DrawGPSStatus(Canvas &canvas, const RECT &rc,
@@ -256,7 +256,7 @@ public:
   void DrawTrail(Canvas &canvas, const POINT aircraft_pos) const;
   void DrawTeammate(Canvas &canvas) const;
   void DrawProjectedTrack(Canvas &canvas) const;
-  void DrawTask(Canvas &canvas, const RECT &rc, Canvas &buffer);
+  void DrawTask(Canvas &canvas);
   void DrawThermalEstimate(Canvas &canvas) const;
 
   void DrawMapScale(Canvas &canvas, const RECT &rc,
@@ -319,14 +319,13 @@ private:
 
   void RenderStart(Canvas &canvas, const RECT &rc);
   void RenderMapLayer(Canvas &canvas);
-  void RenderAreas(Canvas &canvas, const RECT &rc);
+  void RenderAreas(Canvas &canvas);
   void RenderTrail(Canvas &canvas, const POINT aircraft_pos);
-  void RenderTaskElements(Canvas &canvas, const RECT &rc);
-  void RenderGlide(Canvas &canvas, const RECT &rc);
+  void RenderTaskElements(Canvas &canvas);
+  void RenderGlide(Canvas &canvas);
   void RenderAirborne(Canvas &canvas, const RECT &rc, const POINT aircraft_pos);
   void RenderSymbology_upper(Canvas &canvas, const RECT &rc);
-  void RenderSymbology_lower(Canvas &canvas, const RECT &rc,
-                             const POINT aircraft_pos);
+  void RenderSymbology_lower(Canvas &canvas, const POINT aircraft_pos);
 
   StaticArray<GeoPoint,32> m_airspace_intersections;
 
