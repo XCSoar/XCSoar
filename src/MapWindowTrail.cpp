@@ -97,6 +97,7 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
 
   unsigned last_time = 0;
 
+  RasterPoint last_point;
   for (TracePointVector::const_iterator it = trace.begin();
        it != trace.end(); ++it) {
 
@@ -104,20 +105,18 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
     RasterPoint pt = projection.GeoToScreen(it->get_location().
         parametric(traildrift, dt * it->drift_factor));
 
-    if (it->last_time != last_time) {
-      canvas.move_to(pt.x, pt.y);
-    } else {
-
+    if (it->last_time == last_time) {
       const fixed colour_vario = negative(it->NettoVario)?
         -it->NettoVario/vario_min :
         it->NettoVario/vario_max ;
 
       canvas.select(Graphics::hSnailPens[fSnailColour(colour_vario)]);
-      canvas.line_to(pt.x, pt.y);
+      canvas.line(last_point, pt);
     }
     last_time = it->time;
+    last_point = pt;
   }
-  canvas.line_to(aircraft_pos.x, aircraft_pos.y);
+  canvas.line(last_point, aircraft_pos);
 }
 
 
