@@ -35,15 +35,8 @@ MapWindowProjection::MapWindowProjection():
   WindowProjection(),
   DisplayMode(dmCruise),
   MapScale(5),
-  _RequestedMapScale(5),
-  ScaleListCount (0) {}
-
-void
-MapWindowProjection::Initialize(const SETTINGS_MAP &settings_map,
-                                         const RECT &rc)
+  _RequestedMapScale(5)
 {
-  MapRect = rc;
-
   ScaleList[0] = fixed_half;
   ScaleList[1] = fixed_one;
   ScaleList[2] = fixed_two;
@@ -56,6 +49,13 @@ MapWindowProjection::Initialize(const SETTINGS_MAP &settings_map,
   ScaleList[9] = fixed(500);
   ScaleList[10] = fixed(1000);
   ScaleListCount = 11;
+}
+
+void
+MapWindowProjection::Initialize(const SETTINGS_MAP &settings_map,
+                                         const RECT &rc)
+{
+  MapRect = rc;
 
   _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
 }
