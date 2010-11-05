@@ -70,11 +70,7 @@ WindowProjection::UpdateScreenBounds()
 }
 
 GeoBounds
-WindowProjection::CalculateScreenBounds(const fixed scale) const
+WindowProjection::CalculateScreenBounds() const
 {
-  // compute lat lon extents of visible screen
-  if (scale >= fixed_one)
-    return screenbounds_latlon.scale(scale);
-
   return screenbounds_latlon;
 }

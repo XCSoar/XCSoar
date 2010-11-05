@@ -123,12 +123,12 @@ TopologyFile::updateCache(const WindowProjection &map_projection)
     return;
 
   const GeoBounds screenRect =
-    map_projection.CalculateScreenBounds(fixed_zero);
+    map_projection.CalculateScreenBounds();
   if (cache_bounds.inside(screenRect))
     /* the cache is still fresh */
     return;
 
-  cache_bounds = map_projection.CalculateScreenBounds(fixed_two);
+  cache_bounds = map_projection.CalculateScreenBounds().scale(fixed_two);
 
   rectObj deg_bounds = ConvertRect(cache_bounds);
 
@@ -195,7 +195,7 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
   int iskip = GetSkipSteps(map_scale);
 
   const rectObj screenRect =
-    ConvertRect(projection.CalculateScreenBounds(fixed_zero));
+    ConvertRect(projection.CalculateScreenBounds());
 
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     const XShape *cshape = shpCache[ixshp];
@@ -281,7 +281,7 @@ TopologyFile::PaintLabels(Canvas &canvas,
   int iskip = GetSkipSteps(map_scale);
 
   rectObj screenRect =
-    ConvertRect(projection.CalculateScreenBounds(fixed_zero));
+    ConvertRect(projection.CalculateScreenBounds());
 
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     const XShape *cshape = shpCache[ixshp];
