@@ -194,11 +194,12 @@ MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
  * @param rc
  */
 void
-MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT &rc)
+MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT &rc,
+                                 const POINT aircraft_pos)
 {
   if (Basic().gps.Connected)
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
-    DrawBestCruiseTrack(canvas);
+    DrawBestCruiseTrack(canvas, aircraft_pos);
 
   DrawAirspaceIntersections(canvas);
 }
@@ -244,7 +245,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   m_background.DrawSpotHeights(canvas, render_projection, label_block);
 
   // Render lower symbology
-  RenderSymbology_lower(canvas, rc);
+  RenderSymbology_lower(canvas, rc, aircraft_pos);
 
   // Render aircraft symbol (and FLARM traffic)
   RenderAirborne(canvas, rc, aircraft_pos);

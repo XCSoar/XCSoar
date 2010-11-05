@@ -241,7 +241,7 @@ protected:
   void DrawCrossHairs(Canvas &canvas) const;
 
 public:
-  void DrawBestCruiseTrack(Canvas &canvas) const;
+  void DrawBestCruiseTrack(Canvas &canvas, const POINT aircraft_pos) const;
   void DrawCompass(Canvas &canvas, const RECT &rc) const;
   void DrawHorizon(Canvas &canvas, const RECT &rc) const;
   void DrawWindAtAircraft2(Canvas &canvas, const POINT &Orig,
@@ -325,7 +325,8 @@ private:
   void RenderGlide(Canvas &canvas, const RECT &rc);
   void RenderAirborne(Canvas &canvas, const RECT &rc, const POINT aircraft_pos);
   void RenderSymbology_upper(Canvas &canvas, const RECT &rc);
-  void RenderSymbology_lower(Canvas &canvas, const RECT &rc);
+  void RenderSymbology_lower(Canvas &canvas, const RECT &rc,
+                             const POINT aircraft_pos);
 
   StaticArray<GeoPoint,32> m_airspace_intersections;
 

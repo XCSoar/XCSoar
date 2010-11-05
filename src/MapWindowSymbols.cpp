@@ -535,7 +535,7 @@ MapWindow::DrawCompass(Canvas &canvas, const RECT &rc) const
 }
 
 void
-MapWindow::DrawBestCruiseTrack(Canvas &canvas) const
+MapWindow::DrawBestCruiseTrack(Canvas &canvas, const POINT aircraft_pos) const
 {
   if (!Calculated().task_stats.task_valid ||
       Calculated().task_stats.current_leg.solution_remaining.Vector.Distance
@@ -552,9 +552,7 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas) const
                     {  6, -62 }, {  1, -62 }, {  1, -40 }, { -1, -40 } };
 
   PolygonRotateShift(Arrow, sizeof(Arrow) / sizeof(Arrow[0]),
-                     render_projection.GetOrigAircraft().x,
-                     render_projection.GetOrigAircraft().y,
-                     angle);
+                     aircraft_pos.x, aircraft_pos.y, angle);
 
   canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
 }
