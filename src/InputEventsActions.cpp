@@ -1620,7 +1620,7 @@ InputEvents::sub_ScaleZoom(int vswitch)
   if (positive(XCSoarInterface::SettingsMap().MapScale))
     value = XCSoarInterface::SettingsMap().MapScale;
   else
-    value = projection.GetMapScaleUser();
+    value = Units::ToUserDistance(projection.GetMapScale());
 
   if (projection.HaveScaleList()) {
     value = projection.StepMapScale(fixed(value), -vswitch);
