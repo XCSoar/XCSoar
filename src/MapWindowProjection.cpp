@@ -182,6 +182,11 @@ MapWindowProjection::FindMapScale(const fixed Value) const
 }
 
 void
+MapWindowProjection::RequestMapScale(fixed x) {
+  _RequestedMapScale = Units::ToUserDistance(x);
+}
+
+void
 MapWindowProjection::ModifyMapScale(const SETTINGS_MAP &settings_map)
 {
   // limit zoomed in so doesn't reach silly levels

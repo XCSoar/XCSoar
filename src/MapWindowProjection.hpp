@@ -73,9 +73,7 @@ public:
 
   void Initialize(const SETTINGS_MAP &settings, const RECT &rc);
 
-  void RequestMapScale(fixed x) {
-    _RequestedMapScale = x;
-  }
+  void RequestMapScale(fixed x);
 
 protected:
   bool IsOriginCentered(const DisplayOrientation_t orientation);
