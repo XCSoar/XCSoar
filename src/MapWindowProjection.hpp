@@ -52,7 +52,7 @@ protected:
   DisplayMode_t DisplayMode;
 
 public:
-  void Initialize(const SETTINGS_MAP &settings, const RECT &rc);
+  void Initialize(const RECT &rc);
 
   void RequestMapScale(fixed x);
 

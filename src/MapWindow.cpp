@@ -61,7 +61,7 @@ MapWindow::set(ContainerWindow &parent, const RECT &rc)
                           style);
 
   // initialize other systems
-  visible_projection.Initialize(SettingsMap(), get_client_rect());
+  visible_projection.Initialize(get_client_rect());
 
 #ifndef ENABLE_OPENGL
   buffer_projection = visible_projection;
