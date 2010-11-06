@@ -88,7 +88,13 @@ public:
   fixed CalculateMapScale(int scale) const;
 
   gcc_pure
+  fixed CalculateMapScaleUser(int scale) const;
+
+  gcc_pure
   fixed StepMapScale(fixed scale, int Step) const;
+
+  gcc_pure
+  fixed StepMapScaleUser(fixed scale, int Step) const;
 
   gcc_pure
   bool WaypointInScaleFilter(const Waypoint &way_point) const;
@@ -99,10 +105,15 @@ private:
   void UpdateScreenAngle(const NMEA_INFO &basic, const DERIVED_INFO &derived,
                          const SETTINGS_MAP &settings);
 
+  fixed LimitMapScaleUser(fixed value, const SETTINGS_MAP &settings);
+
   fixed LimitMapScale(fixed value, const SETTINGS_MAP &settings);
 
   gcc_pure
   int FindMapScale(const fixed Value) const;
+
+  gcc_pure
+  int FindMapScaleUser(const fixed Value) const;
 
   fixed ScaleList[11];
   int ScaleListCount;

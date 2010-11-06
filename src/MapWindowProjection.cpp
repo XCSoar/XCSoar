@@ -131,6 +131,12 @@ MapWindowProjection::Update(const RECT rc, const NMEA_INFO &basic,
 fixed
 MapWindowProjection::CalculateMapScale(int scale) const
 {
+  return Units::ToSysDistance(CalculateMapScaleUser(scale));
+}
+
+fixed
+MapWindowProjection::CalculateMapScaleUser(int scale) const
+{
   assert(scale >= 0 && scale < ScaleListCount);
 
   return ScaleList[scale] * GetMapResolutionFactor() /
@@ -141,6 +147,14 @@ fixed
 MapWindowProjection::LimitMapScale(fixed value,
                                    const SETTINGS_MAP& settings_map)
 {
+  return Units::ToSysDistance(LimitMapScaleUser(Units::ToUserDistance(value),
+                                                settings_map));
+}
+
+fixed
+MapWindowProjection::LimitMapScaleUser(fixed value,
+                                       const SETTINGS_MAP& settings_map)
+{
   fixed minreasonable = fixed(0.05);
 
   if (settings_map.AutoZoom && DisplayMode != dmCircling)
@@ -148,7 +162,7 @@ MapWindowProjection::LimitMapScale(fixed value,
 
   value = max(minreasonable, min(fixed_int_constant(160), value));
   if (HaveScaleList())
-    value = CalculateMapScale(FindMapScale(value));
+    value = CalculateMapScaleUser(FindMapScaleUser(value));
 
   return value;
 }
@@ -161,8 +175,22 @@ MapWindowProjection::StepMapScale(fixed scale, int Step) const
   return CalculateMapScale(i);
 }
 
+fixed
+MapWindowProjection::StepMapScaleUser(fixed scale, int Step) const
+{
+  int i = FindMapScaleUser(scale) + Step;
+  i = max(0, min(ScaleListCount - 1, i));
+  return CalculateMapScaleUser(i);
+}
+
 int
 MapWindowProjection::FindMapScale(const fixed Value) const
+{
+  return FindMapScaleUser(Units::ToUserDistance(Value));
+}
+
+int
+MapWindowProjection::FindMapScaleUser(const fixed Value) const
 {
   fixed BestFit;
   int BestFitIdx = 0;
@@ -184,7 +212,7 @@ void
 MapWindowProjection::RequestMapScaleUser(fixed x,
                                          const SETTINGS_MAP &settings_map)
 {
-  MapScale = LimitMapScale(x, settings_map);
+  MapScale = LimitMapScaleUser(x, settings_map);
   SetScale(fixed(GetMapResolutionFactor()) / Units::ToSysDistance(MapScale));
 }
 
