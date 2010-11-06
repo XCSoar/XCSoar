@@ -217,4 +217,6 @@ WeatherTerrainRenderer::Draw(Canvas &canvas,
                                 sunazimuth);
 
   CopyTo(canvas, projection.GetScreenWidth(), projection.GetScreenHeight());
+
+  ScanSpotHeights();
 }
