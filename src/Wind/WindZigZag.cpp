@@ -47,10 +47,7 @@ Copyright_License {
 #define NUM_SAMPLES 20
 
 /**
- * equivalent to a circle to prevent
- * zigzag from dominating when used in
- * conjunction with circling drift
- * calculation.
+ * one sample is updated per n seconds
  */
 static const fixed SAMPLE_RATE(4);
 
