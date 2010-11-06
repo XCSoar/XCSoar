@@ -275,7 +275,9 @@ MapWindow::UpdateMapScale(const DERIVED_INFO &derived,
     }
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
-    visible_projection.RequestMapScale(wpd / 4, settings_map);
+
+    wpd = max(fixed_int_constant(50), min(fixed_int_constant(160000), wpd / 4));
+    visible_projection.RequestMapScale(wpd, settings_map);
     return;
   }
 
@@ -290,7 +292,10 @@ MapWindow::UpdateMapScale(const DERIVED_INFO &derived,
 
       // set scale exactly so that waypoint distance is the zoom factor
       // across the screen
-      visible_projection.RequestMapScale(wpd / AutoZoomFactor, settings_map);
+      wpd = max(fixed_int_constant(440), min(fixed_int_constant(160000),
+                                             wpd / AutoZoomFactor));
+
+      visible_projection.RequestMapScale(wpd, settings_map);
     }
   } else if (TargetPanLast) {
     visible_projection.RequestMapScale(TargetPanUnZoom, settings_map);

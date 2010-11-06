@@ -131,11 +131,6 @@ MapWindowProjection::FindMapScaleUser(const fixed Value) const
 void
 MapWindowProjection::RequestMapScale(fixed x, const SETTINGS_MAP &settings_map)
 {
-  fixed minreasonable = fixed_int_constant(50);
-  if (settings_map.AutoZoom && DisplayMode != dmCircling)
-    minreasonable = fixed_int_constant(440);
-
-  x = max(minreasonable, min(fixed_int_constant(160000), x));
   MapScale = LimitMapScaleUser(Units::ToUserDistance(x));
   SetScale(fixed(GetMapResolutionFactor()) / Units::ToSysDistance(MapScale));
 }
