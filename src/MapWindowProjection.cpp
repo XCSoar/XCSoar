@@ -109,6 +109,6 @@ MapWindowProjection::FindMapScale(const fixed Value) const
 void
 MapWindowProjection::RequestMapScale(fixed x)
 {
-  MapScale = Units::ToUserDistance(LimitMapScale(x));
-  SetScale(fixed(GetMapResolutionFactor()) / Units::ToSysDistance(MapScale));
+  MapScale = LimitMapScale(x);
+  SetScale(fixed(GetMapResolutionFactor()) / MapScale);
 }
