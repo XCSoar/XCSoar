@@ -80,9 +80,8 @@ public:
 private:
   fixed MapScale;
 
-  fixed LimitMapScaleUser(fixed value, const SETTINGS_MAP &settings);
-
-  fixed LimitMapScale(fixed value, const SETTINGS_MAP &settings);
+  fixed LimitMapScaleUser(fixed value);
+  fixed LimitMapScale(fixed value);
 
   gcc_pure
   int FindMapScale(const fixed Value) const;
