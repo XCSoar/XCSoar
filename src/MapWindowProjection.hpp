@@ -54,7 +54,6 @@ protected:
 public:
   void Initialize(const SETTINGS_MAP &settings, const RECT &rc);
 
-  void RequestMapScaleUser(fixed x, const SETTINGS_MAP &setting_map);
   void RequestMapScale(fixed x, const SETTINGS_MAP &setting_map);
 
 public:
