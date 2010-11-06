@@ -206,8 +206,7 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
 
   // if there is user intervention in the scale
   if (positive(settings_map.MapScale)) {
-    fixed ext_mapscale = LimitMapScale(fixed(settings_map.MapScale),
-                                       settings_map);
+    fixed ext_mapscale = LimitMapScale(settings_map.MapScale, settings_map);
     if (positive(ext_mapscale) && DisplayMode == DisplayModeLast)
       _RequestedMapScale = ext_mapscale;
   }
@@ -219,7 +218,7 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
 
   fixed wpd;
   if (settings_map.TargetPan)
-    wpd = fixed(settings_map.TargetZoomDistance);
+    wpd = settings_map.TargetZoomDistance;
   else
     wpd = DerivedDrawInfo.AutoZoomDistance;
 

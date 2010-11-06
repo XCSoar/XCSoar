@@ -1627,7 +1627,7 @@ InputEvents::sub_ScaleZoom(int vswitch)
     value = Units::ToUserDistance(projection.GetMapScale());
 
   if (projection.HaveScaleList()) {
-    value = projection.StepMapScale(fixed(value), -vswitch);
+    value = projection.StepMapScale(value, -vswitch);
   } else {
     if (vswitch == 1)
       // zoom in a little
