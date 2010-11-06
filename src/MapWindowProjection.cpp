@@ -31,8 +31,7 @@ Copyright_License {
 #include <assert.h>
 
 MapWindowProjection::MapWindowProjection():
-  WindowProjection(),
-  MapScale(5)
+  WindowProjection()
 {
   ScaleList[0] = fixed_half;
   ScaleList[1] = fixed_one;
@@ -109,6 +108,5 @@ MapWindowProjection::FindMapScale(const fixed Value) const
 void
 MapWindowProjection::RequestMapScale(fixed x)
 {
-  MapScale = LimitMapScale(x);
-  SetScale(fixed(GetMapResolutionFactor()) / MapScale);
+  SetScale(fixed(GetMapResolutionFactor()) / LimitMapScale(x));
 }
