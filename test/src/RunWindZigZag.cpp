@@ -167,7 +167,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  printf("# time quality bearing (deg) speed (m/s)\n");
+  printf("# time quality wind_bearing (deg) wind_speed (m/s) grndspeed (m/s) tas (m/s) bearing (deg)\n");
   char buffer[1024];
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
     device.LineReceived(buffer);
@@ -180,7 +180,10 @@ int main(int argc, char **argv)
                                    device_blackboard.Calculated(),
                                    speed, bearing);
     if (quality > 0)
-      printf("%d %d %d %d\n", (int)device_blackboard.Basic().Time, quality,
-             (int)bearing.value_degrees(), (int)speed);
+      printf("%d %d %d %d %d %d %d\n", (int)device_blackboard.Basic().Time, quality,
+             (int)bearing.value_degrees(), (int)speed, 
+             (int)device_blackboard.Basic().GroundSpeed,
+             (int)device_blackboard.Basic().TrueAirspeed,
+             (int)device_blackboard.Basic().TrackBearing.value_degrees());
   }
 }
