@@ -146,14 +146,6 @@ public:
     GeoLocation = g;
   }
 
-  fixed GetScreenToGeoScale() const {
-    return InvDrawScale;
-  }
-
-  fixed GetGeoToScreenScale() const {
-    return DrawScale;
-  }
-
   /**
    * Converts a geographical distance (m) to a screen distance (px)
    * @param x A geographical distance (m)
