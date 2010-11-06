@@ -294,8 +294,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Graphics::InitialiseConfigured(blackboard.SettingsMap());
 
   TestWindow window;
-  GenerateBlackboard(window.map);
   window.set(0, 0, 640, 480);
+  GenerateBlackboard(window.map);
   Fonts::Initialize();
 #ifndef ENABLE_OPENGL
   DrawThread::Draw(window.map);
