@@ -200,11 +200,10 @@ public:
   }
 #endif
 
-  void rectangle(int left, int top, int right, int bottom) {
-    fill_rectangle(left, top, right, bottom, brush);
-
+  void outline_rectangle(int left, int top, int right, int bottom,
+                         Color color) {
 #ifdef ENABLE_OPENGL
-    if (pen_over_brush() && surface->flags & SDL_OPENGL) {
+    if (surface->flags & SDL_OPENGL) {
       glColor(pen.get_color());
 
       const GLfloat v[] = {
@@ -220,14 +219,15 @@ public:
     }
 #endif
 
-    left += x_offset;
-    right += x_offset;
-    top += y_offset;
-    bottom += y_offset;
+    ::rectangleColor(surface, left + x_offset, top + y_offset,
+                     right + x_offset, bottom + y_offset, color.gfx_color());
+  }
+
+  void rectangle(int left, int top, int right, int bottom) {
+    fill_rectangle(left, top, right, bottom, brush);
 
     if (pen_over_brush())
-      ::rectangleColor(surface, left, top, right, bottom,
-                       pen.get_color().gfx_color());
+      outline_rectangle(left, top, right, bottom, pen.get_color());
   }
 
   void fill_rectangle(int left, int top, int right, int bottom,
