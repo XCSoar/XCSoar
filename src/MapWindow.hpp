@@ -261,18 +261,11 @@ public:
   void DrawTask(Canvas &canvas);
   void DrawThermalEstimate(Canvas &canvas) const;
 
-  void DrawMapScale(Canvas &canvas, const RECT &rc,
-                    const MapWindowProjection &projection) const;
-  void DrawMapScale2(Canvas &canvas, const RECT &rc,
-                     const MapWindowProjection &projection) const;
   void DrawGlideThroughTerrain(Canvas &canvas) const;
   void DrawTerrainAbove(Canvas &canvas);
 
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
   void DrawFLARMTraffic(Canvas &canvas, const POINT aircraft_pos) const;
-
-  gcc_pure
-  fixed findMapScaleBarSize(const RECT &rc, const MapWindowProjection &projection) const;
 
   // thread, main functions
   void Render(Canvas &canvas, const RECT &rc);

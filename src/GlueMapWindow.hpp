@@ -100,6 +100,13 @@ private:
   bool on_key_press(unsigned key_code);
 
 private:
+  gcc_pure
+  fixed findMapScaleBarSize(const RECT &rc, const MapWindowProjection &projection) const;
+
+  void DrawMapScale(Canvas &canvas, const RECT &rc,
+                    const MapWindowProjection &projection) const;
+  void DrawMapScale2(Canvas &canvas, const RECT &rc,
+                     const MapWindowProjection &projection) const;
   void DrawFlightMode(Canvas &canvas, const RECT &rc) const;
   void DrawGPSStatus(Canvas &canvas, const RECT &rc, const GPS_STATE &gps) const;
   void DrawCrossHairs(Canvas &canvas) const;

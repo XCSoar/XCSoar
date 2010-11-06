@@ -33,6 +33,7 @@ Copyright_License {
 #include "Screen/TextInBox.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/UnitSymbol.hpp"
+#include "Terrain/RasterWeather.hpp"
 
 void
 GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
@@ -446,5 +447,148 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
     GliderBand[0].y = IBLSCALE(4) + iround(TBSCALEY * (fixed_one - hstart)) + rc.top;
     GliderBand[1].y = GliderBand[0].y;
     canvas.polyline(GliderBand, 2);
+  }
+}
+
+fixed
+GlueMapWindow::findMapScaleBarSize(const RECT &rc,
+                                   const MapWindowProjection &projection) const
+{
+  // units/pixel
+  fixed pixelsize = Units::ToUserDistance(projection.DistancePixelsToMeters(1));
+  fixed half_displaysize = Units::ToUserDistance(
+      projection.DistancePixelsToMeters((rc.bottom - rc.top) / 2));
+
+  // find largest bar size that will fit two of (black and white) in display
+  if (half_displaysize > fixed(100))
+    return fixed(100) / pixelsize;
+
+  if (half_displaysize > fixed_ten)
+    return fixed_ten / pixelsize;
+
+  if (half_displaysize > fixed_one)
+    return fixed_one / pixelsize;
+
+  return fixed_one / 10 / pixelsize;
+}
+
+void
+GlueMapWindow::DrawMapScale2(Canvas &canvas, const RECT &rc,
+                             const MapWindowProjection &projection) const
+{
+  canvas.select(Graphics::hpMapScale);
+
+  bool color = false;
+  POINT Start, End = { 0, 0 };
+
+  int barsize = iround(findMapScaleBarSize(rc, projection));
+
+  End.x = rc.right - 1;
+  End.y = projection.GetScreenOrigin().y;
+  Start = End;
+  for (Start.y += barsize; Start.y < rc.bottom + barsize; Start.y += barsize) {
+    if (color)
+      canvas.white_pen();
+    else
+      canvas.black_pen();
+
+    canvas.line(Start, End);
+
+    End = Start;
+    color = !color;
+  }
+
+  color = true;
+  End.y = projection.GetScreenOrigin().y;
+  Start = End;
+  for (Start.y -= barsize; Start.y > rc.top - barsize; Start.y -= barsize) {
+    if (color)
+      canvas.white_pen();
+    else
+      canvas.black_pen();
+
+    canvas.line(Start, End);
+
+    End = Start;
+    color = !color;
+  }
+}
+
+void
+GlueMapWindow::DrawMapScale(Canvas &canvas, const RECT &rc,
+                            const MapWindowProjection &projection) const
+{
+  fixed MapWidth;
+  TCHAR ScaleInfo[80];
+
+  int Height;
+  Units_t Unit;
+
+  MapWidth = projection.GetScreenWidthMeters();
+
+  canvas.select(Fonts::MapBold);
+  Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
+                            sizeof(ScaleInfo) / sizeof(TCHAR), false);
+  SIZE TextSize = canvas.text_size(ScaleInfo);
+
+  Height = Fonts::MapBold.get_capital_height() + IBLSCALE(2);
+  // 2: add 1pix border
+
+  canvas.fill_rectangle(IBLSCALE(4), rc.bottom - Height,
+                        TextSize.cx + IBLSCALE(16), rc.bottom,
+                        Color::WHITE);
+
+  canvas.background_transparent();
+  canvas.set_text_color(Color::BLACK);
+
+  canvas.text(IBLSCALE(7),
+              rc.bottom - Fonts::MapBold.get_ascent_height() - IBLSCALE(1),
+              ScaleInfo);
+
+  Graphics::hBmpMapScaleLeft.draw(canvas, bitmap_canvas,
+                                  0, rc.bottom - Height);
+  Graphics::hBmpMapScaleRight.draw(canvas, bitmap_canvas,
+                                   IBLSCALE(14) + TextSize.cx, rc.bottom - Height);
+
+  const UnitSymbol *symbol = GetUnitSymbol(Unit);
+  if (symbol != NULL)
+    symbol->draw(canvas, bitmap_canvas, IBLSCALE(8) + TextSize.cx,
+                 rc.bottom - Height);
+
+  int y = rc.bottom - Height - Fonts::Title.get_ascent_height() + IBLSCALE(2);
+
+  ScaleInfo[0] = 0;
+  if (SettingsMap().AutoZoom)
+    _tcscat(ScaleInfo, _T("AUTO "));
+
+  if (SettingsMap().TargetPan)
+    _tcscat(ScaleInfo, _T("TARGET "));
+  else if (SettingsMap().EnablePan)
+    _tcscat(ScaleInfo, _T("PAN "));
+
+  if (SettingsMap().EnableAuxiliaryInfo)
+    _tcscat(ScaleInfo, _T("AUX "));
+
+  if (Basic().gps.Replay)
+    _tcscat(ScaleInfo, _T("REPLAY "));
+
+  if (task != NULL && SettingsComputer().BallastTimerActive) {
+    TCHAR TEMP[20];
+    _stprintf(TEMP, _T("BALLAST %d LITERS"),
+              (int)task->get_glide_polar().get_ballast_litres());
+    _tcscat(ScaleInfo, TEMP);
+  }
+
+  if (weather != NULL && weather->GetParameter() > 0) {
+    const TCHAR *label = weather->ItemLabel(weather->GetParameter());
+    if (label != NULL)
+      _tcscat(ScaleInfo, label);
+  }
+
+  if (ScaleInfo[0]) {
+    canvas.select(Fonts::Title);
+    canvas.background_opaque();
+    canvas.set_background_color(Color::WHITE);
+    canvas.text(IBLSCALE(1), y, ScaleInfo);
   }
 }

@@ -164,17 +164,6 @@ MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc,
 void
 MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
 {
-  {
-    /* hold the lock to protect this->bitmap_canvas; since
-       DrawMapScale() is called from the main thread by on_paint(), we
-       need to serialize access to it */
-#ifndef ENABLE_OPENGL
-    ScopeLock protect(DoubleBufferWindow::mutex);
-#endif
-    DrawMapScale(canvas, rc, render_projection);
-  }
-
-  DrawMapScale2(canvas, rc, render_projection);
   DrawCompass(canvas, rc);
 
   // JMW Experimental only! EXPERIMENTAL
