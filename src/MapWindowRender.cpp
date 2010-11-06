@@ -236,7 +236,6 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   RenderGlide(canvas);
 
   // Render weather/terrain max/min values
-  canvas.select(Fonts::Title);
   m_background.DrawSpotHeights(canvas, render_projection, label_block);
 
   // Render lower symbology

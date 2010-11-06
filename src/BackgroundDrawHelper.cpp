@@ -30,6 +30,7 @@ Copyright_License {
 #include "WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/LabelBlock.hpp"
+#include "Screen/Fonts.hpp"
 #include "Util/StringUtil.hpp"
 
 BackgroundDrawHelper::BackgroundDrawHelper():
@@ -146,6 +147,8 @@ BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas,
   if (m_weather == NULL || m_weather->GetParameter() == 0 ||
       m_rend == NULL)
     return;
+
+  canvas.select(Fonts::Title);
 
   TCHAR Buffer[20];
   m_weather->ValueToText(Buffer, m_rend->spot_max_val);
