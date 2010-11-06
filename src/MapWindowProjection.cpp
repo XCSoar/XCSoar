@@ -80,8 +80,7 @@ MapWindowProjection::IsOriginCentered(const DisplayOrientation_t orientation)
 
 void
 MapWindowProjection::Update(const RECT rc, const NMEA_INFO &basic,
-    const DERIVED_INFO &derived,
-    const SETTINGS_MAP &settings_map)
+                            const SETTINGS_MAP &settings_map)
 {
   MapRect = rc;
 

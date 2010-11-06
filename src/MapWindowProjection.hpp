@@ -66,7 +66,7 @@ protected:
 public:
   // scale/display stuff
   void Update(const RECT rc, const NMEA_INFO &basic,
-              const DERIVED_INFO &derived, const SETTINGS_MAP &settings_map);
+              const SETTINGS_MAP &settings_map);
 
   void Initialize(const SETTINGS_MAP &settings, const RECT &rc);
 
