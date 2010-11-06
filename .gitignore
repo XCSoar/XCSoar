@@ -23,6 +23,7 @@ Doc/html/*
 Doc/cloc.txt
 output
 perf.data
+perf.data.old
 
 debian/files
 debian/stamp-*
