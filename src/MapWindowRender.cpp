@@ -117,7 +117,7 @@ MapWindow::RenderTaskElements(Canvas &canvas)
   DrawWaypoints(canvas);
 
   if (marks != NULL &&
-      Units::ToUserDistance(render_projection.GetMapScale()) <= fixed(30.0))
+      render_projection.GetMapScale() <= fixed_int_constant(30000))
     marks->Draw(canvas, bitmap_canvas, render_projection);
 }
 
