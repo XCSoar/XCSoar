@@ -40,6 +40,7 @@ GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
 #ifndef ENABLE_OPENGL
   /* update the Projection */
 
+  UpdateScreenAngle(Basic(), Calculated(), SettingsMap());
   visible_projection.Update(get_client_rect(), Basic(), Calculated(),
                             SettingsMap());
 

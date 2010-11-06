@@ -73,7 +73,6 @@ public:
   void RequestMapScaleUser(fixed x, const SETTINGS_MAP &setting_map);
   void RequestMapScale(fixed x, const SETTINGS_MAP &setting_map);
 
-protected:
   bool IsOriginCentered(const DisplayOrientation_t orientation);
 
 public:
@@ -101,9 +100,6 @@ public:
 
 private:
   fixed MapScale;
-
-  void UpdateScreenAngle(const NMEA_INFO &basic, const DERIVED_INFO &derived,
-                         const SETTINGS_MAP &settings);
 
   fixed LimitMapScaleUser(fixed value, const SETTINGS_MAP &settings);
 

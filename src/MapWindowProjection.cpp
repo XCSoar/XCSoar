@@ -79,37 +79,11 @@ MapWindowProjection::IsOriginCentered(const DisplayOrientation_t orientation)
 }
 
 void
-MapWindowProjection::UpdateScreenAngle(const NMEA_INFO &basic,
-    const DERIVED_INFO &derived, const SETTINGS_MAP &settings)
-{
-  if (settings.TargetPan &&
-      derived.common_stats.active_taskpoint_index != settings.TargetPanIndex) {
-    SetScreenAngle(Angle::native(fixed_zero));
-    return;
-  }
-
-  Angle trackbearing = basic.TrackBearing;
-
-  if (IsOriginCentered(settings.DisplayOrientation)) {
-    if (settings.DisplayOrientation == TRACKCIRCLE)
-      SetScreenAngle(derived.task_stats.current_leg.
-                     solution_remaining.Vector.Bearing);
-    else
-      SetScreenAngle(Angle::native(fixed_zero));
-  } else {
-    // normal, glider forward
-    SetScreenAngle(trackbearing);
-  }
-}
-
-void
 MapWindowProjection::Update(const RECT rc, const NMEA_INFO &basic,
     const DERIVED_INFO &derived,
     const SETTINGS_MAP &settings_map)
 {
   MapRect = rc;
-
-  UpdateScreenAngle(basic, derived, settings_map);
 
   if (IsOriginCentered(settings_map.DisplayOrientation) ||
       settings_map.EnablePan)
