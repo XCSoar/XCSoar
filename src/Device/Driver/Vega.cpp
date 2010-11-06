@@ -31,6 +31,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "LogFile.hpp"
 #include "NMEA/InputLine.hpp"
+#include "Units.hpp"
 
 #include <tchar.h>
 #include <stdio.h>

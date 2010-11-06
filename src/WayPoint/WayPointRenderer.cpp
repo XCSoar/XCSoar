@@ -44,6 +44,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Canvas.hpp"
 #include "Appearance.hpp"
+#include "Units.hpp"
 
 #include <stdio.h>
 

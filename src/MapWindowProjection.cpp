@@ -27,6 +27,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Waypoint/Waypoint.hpp"
+#include "Units.hpp"
 
 #include <stdlib.h>
 #include <math.h>

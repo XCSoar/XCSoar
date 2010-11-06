@@ -31,6 +31,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "GlideComputer.hpp"
 #include "Language.hpp"
+#include "Units.hpp"
 
 #include <math.h>
 

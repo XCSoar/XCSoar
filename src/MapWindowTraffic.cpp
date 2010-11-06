@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "StringUtil.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "Units.hpp"
 
 #include <stdio.h>
 

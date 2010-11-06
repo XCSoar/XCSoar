@@ -35,6 +35,8 @@ Copyright_License {
 #include "Screen/UnitSymbol.hpp"
 #include "Terrain/RasterWeather.hpp"
 
+#include <stdio.h>
+
 void
 GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
 {

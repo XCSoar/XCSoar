@@ -30,6 +30,7 @@ Copyright_License {
 #include "Terrain/RasterWeather.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Math/Earth.hpp"
+#include "Units.hpp"
 
 #include <tchar.h>
 
