@@ -351,5 +351,7 @@ GlueMapWindow::on_paint(Canvas &canvas)
     TargetPaintDrag(canvas, drag_last);
 
   DrawFlightMode(canvas, rc);
+  DrawThermalBand(canvas, rc);
+  DrawFinalGlide(canvas, rc);
   DrawGPSStatus(canvas, rc, Basic().gps);
 }

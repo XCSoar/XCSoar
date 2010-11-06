@@ -182,9 +182,6 @@ MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
   if (EnableAuxiliaryInfo)
     DrawHorizon(canvas, rc);
 #endif
-
-  DrawThermalBand(canvas, rc);
-  DrawFinalGlide(canvas, rc);
 }
 
 /**

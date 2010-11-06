@@ -103,6 +103,8 @@ private:
   void DrawFlightMode(Canvas &canvas, const RECT &rc) const;
   void DrawGPSStatus(Canvas &canvas, const RECT &rc, const GPS_STATE &gps) const;
   void DrawCrossHairs(Canvas &canvas) const;
+  void DrawFinalGlide(Canvas &canvas, const RECT &rc) const;
+  void DrawThermalBand(Canvas &canvas, const RECT &rc) const;
 };
 
 #endif

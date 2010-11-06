@@ -265,8 +265,6 @@ public:
                     const MapWindowProjection &projection) const;
   void DrawMapScale2(Canvas &canvas, const RECT &rc,
                      const MapWindowProjection &projection) const;
-  void DrawFinalGlide(Canvas &canvas, const RECT &rc) const;
-  void DrawThermalBand(Canvas &canvas, const RECT &rc) const;
   void DrawGlideThroughTerrain(Canvas &canvas) const;
   void DrawTerrainAbove(Canvas &canvas);
 
@@ -318,9 +316,9 @@ protected:
 
   virtual void on_paint(Canvas& canvas);
 
-private:
   GlidePolar get_glide_polar() const;
 
+private:
   void RenderStart(Canvas &canvas, const RECT &rc);
   void RenderMapLayer(Canvas &canvas);
   void RenderAreas(Canvas &canvas);

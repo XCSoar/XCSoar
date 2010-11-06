@@ -29,6 +29,10 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Logger/Logger.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Appearance.hpp"
+#include "Screen/TextInBox.hpp"
+#include "Screen/Fonts.hpp"
+#include "Screen/UnitSymbol.hpp"
 
 void
 GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
@@ -119,4 +123,328 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
 
   bmp->draw(canvas, bitmap_canvas, rc.right + IBLSCALE(offset - 1),
             rc.bottom + IBLSCALE(-21));
+}
+
+void
+GlueMapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
+{
+  POINT GlideBar[6] = {
+      { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
+  };
+  POINT GlideBar0[6] = {
+      { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
+  };
+
+  TCHAR Value[10];
+
+  int Offset;
+  int Offset0;
+  int i;
+
+  if (Calculated().task_stats.task_valid) {
+    const int y0 = ((rc.bottom - rc.top) / 2) + rc.top;
+
+    // 60 units is size, div by 8 means 60*8 = 480 meters.
+    Offset = ((int)Calculated().task_stats.total.solution_remaining.AltitudeDifference) / 8;
+
+    // JMW OLD_TASK this is broken now
+    Offset0 = ((int)Calculated().task_stats.total.solution_mc0.AltitudeDifference) / 8;
+    // TODO feature: should be an angle if in final glide mode
+
+    if (Offset > 60)
+      Offset = 60;
+    if (Offset < -60)
+      Offset = -60;
+
+    Offset = IBLSCALE(Offset);
+    if (Offset < 0)
+      GlideBar[1].y = IBLSCALE(9);
+
+    if (Offset0 > 60)
+      Offset0 = 60;
+    if (Offset0 < -60)
+      Offset0 = -60;
+
+    Offset0 = IBLSCALE(Offset0);
+    if (Offset0 < 0)
+      GlideBar0[1].y = IBLSCALE(9);
+
+    for (i = 0; i < 6; i++) {
+      GlideBar[i].y += y0;
+      GlideBar[i].x = IBLSCALE(GlideBar[i].x) + rc.left;
+    }
+
+    GlideBar[0].y -= Offset;
+    GlideBar[1].y -= Offset;
+    GlideBar[2].y -= Offset;
+
+    for (i = 0; i < 6; i++) {
+      GlideBar0[i].y += y0;
+      GlideBar0[i].x = IBLSCALE(GlideBar0[i].x) + rc.left;
+    }
+
+    GlideBar0[0].y -= Offset0;
+    GlideBar0[1].y -= Offset0;
+    GlideBar0[2].y -= Offset0;
+
+    if ((Offset < 0) && (Offset0 < 0)) {
+      // both below
+      if (Offset0 != Offset) {
+        int dy = (GlideBar0[0].y - GlideBar[0].y) +
+            (GlideBar0[0].y - GlideBar0[3].y);
+        dy = max(IBLSCALE(3), dy);
+        GlideBar[3].y = GlideBar0[0].y - dy;
+        GlideBar[4].y = GlideBar0[1].y - dy;
+        GlideBar[5].y = GlideBar0[2].y - dy;
+
+        GlideBar0[0].y = GlideBar[3].y;
+        GlideBar0[1].y = GlideBar[4].y;
+        GlideBar0[2].y = GlideBar[5].y;
+      } else {
+        Offset0 = 0;
+      }
+    } else if ((Offset > 0) && (Offset0 > 0)) {
+      // both above
+      GlideBar0[3].y = GlideBar[0].y;
+      GlideBar0[4].y = GlideBar[1].y;
+      GlideBar0[5].y = GlideBar[2].y;
+
+      if (abs(Offset0 - Offset) < IBLSCALE(4))
+        Offset = Offset0;
+    }
+
+    // draw actual glide bar
+    if (Offset <= 0) {
+      if (Calculated().common_stats.landable_reachable) {
+        canvas.select(Graphics::hpFinalGlideBelowLandable);
+        canvas.select(Graphics::hbFinalGlideBelowLandable);
+      } else {
+        canvas.select(Graphics::hpFinalGlideBelow);
+        canvas.select(Graphics::hbFinalGlideBelow);
+      }
+    } else {
+      canvas.select(Graphics::hpFinalGlideAbove);
+      canvas.select(Graphics::hbFinalGlideAbove);
+    }
+    canvas.polygon(GlideBar, 6);
+
+    // draw glide bar at mc 0
+    if (Offset0 <= 0) {
+      if (Calculated().common_stats.landable_reachable) {
+        canvas.select(Graphics::hpFinalGlideBelowLandable);
+        canvas.hollow_brush();
+      } else {
+        canvas.select(Graphics::hpFinalGlideBelow);
+        canvas.hollow_brush();
+      }
+    } else {
+      canvas.select(Graphics::hpFinalGlideAbove);
+      canvas.hollow_brush();
+    }
+
+    if (Offset != Offset0)
+      canvas.polygon(GlideBar0, 6);
+
+    // draw x on final glide bar if unreachable at current Mc
+    if (!Calculated().task_stats.total.achievable()) {
+      canvas.select(Graphics::hpAircraftBorder);
+      canvas.line(Layout::Scale(9 - 5), y0 + Layout::Scale(9 - 5),
+                  Layout::Scale(9 + 5), y0 + Layout::Scale(9 + 5));
+      canvas.line(Layout::Scale(9 - 5), y0 + Layout::Scale(9 + 5),
+                  Layout::Scale(9 + 5), y0 + Layout::Scale(9 - 5));
+    }
+
+    if (Appearance.IndFinalGlide == fgFinalGlideDefault) {
+      Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.AltitudeDifference,
+                                Value, sizeof(Value) / sizeof(Value[0]),
+                                false);
+
+      if (Offset >= 0)
+        Offset = GlideBar[2].y + Offset + IBLSCALE(5);
+      else if (Offset0 > 0)
+        Offset = GlideBar0[1].y - IBLSCALE(15);
+      else
+        Offset = GlideBar[2].y + Offset - IBLSCALE(15);
+
+      canvas.set_text_color(Color::BLACK);
+
+      TextInBoxMode_t TextInBoxMode;
+      TextInBoxMode.Mode = RoundedBlack;
+      TextInBox(canvas, Value, 0, (int)Offset, TextInBoxMode, rc);
+
+    } else if (Appearance.IndFinalGlide == fgFinalGlideAltA) {
+
+      SIZE TextSize;
+      int y = GlideBar[3].y;
+      // was ((rc.bottom - rc.top )/2)-rc.top-
+      //            Appearance.MapWindowBoldFont.CapitalHeight/2-1;
+      int x = GlideBar[2].x + IBLSCALE(1);
+
+      Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.AltitudeDifference,
+                                Value, sizeof(Value) / sizeof(Value[0]), false);
+
+      canvas.select(Fonts::MapBold);
+      TextSize = canvas.text_size(Value);
+
+      canvas.fill_rectangle(x, y, x + IBLSCALE(1) + TextSize.cx,
+                            y + Fonts::MapBold.get_capital_height() + IBLSCALE(2),
+                            Color::WHITE);
+
+      canvas.set_text_color(Color::BLACK);
+      canvas.text(x + IBLSCALE(1),
+                  y + Fonts::MapBold.get_capital_height() -
+                  Fonts::MapBold.get_ascent_height() + IBLSCALE(1), Value);
+
+      const UnitSymbol *unit_symbol = GetUnitSymbol(
+        Units::GetUserAltitudeUnit());
+
+      if (unit_symbol != NULL)
+        unit_symbol->draw(canvas, bitmap_canvas,
+                          x + TextSize.cx + IBLSCALE(1), y);
+    }
+  }
+}
+
+void
+GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
+{
+  POINT GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
+
+  if ((Calculated().task_stats.total.solution_remaining.AltitudeDifference > fixed(50))
+      && render_projection.GetDisplayMode() == dmFinalGlide)
+    return;
+
+  const ThermalBandInfo &thermal_band = Calculated().thermal_band;
+
+  // JMW TODO accuracy: gather proper statistics
+  // note these should/may also be relative to ground
+  int i;
+  fixed mth = thermal_band.MaxThermalHeight;
+  fixed maxh, minh;
+  fixed h;
+  fixed Wt[NUMTHERMALBUCKETS];
+  fixed ht[NUMTHERMALBUCKETS];
+  fixed Wmax = fixed_zero;
+  int TBSCALEY = ((rc.bottom - rc.top) / 2) - IBLSCALE(30);
+#define TBSCALEX 20
+
+  // calculate height above safety altitude
+  fixed hoffset = SettingsComputer().safety_height_terrain +
+                   Calculated().TerrainBase;
+  h = Basic().NavAltitude - hoffset;
+
+  bool draw_start_height = false;
+  fixed hstart = fixed_zero;
+
+  OrderedTaskBehaviour task_props;
+  if (task != NULL)
+    task_props = task->get_ordered_task_behaviour();
+
+  draw_start_height = Calculated().common_stats.ordered_valid
+                      && (task_props.start_max_height != 0)
+                      && Calculated().TerrainValid;
+  if (draw_start_height) {
+    if (task_props.start_max_height_ref == 0) {
+      hstart = fixed(task_props.start_max_height) + Calculated().TerrainAlt;
+    } else {
+      hstart = fixed(task_props.start_max_height);
+    }
+    hstart -= hoffset;
+  }
+
+  // calculate top/bottom height
+  maxh = max(h, mth);
+  minh = min(h, fixed_zero);
+
+  if (draw_start_height) {
+    maxh = max(maxh, hstart);
+    minh = min(minh, hstart);
+  }
+
+  // no thermalling has been done above safety altitude
+  if (mth <= fixed_one)
+    return;
+  if (maxh <= minh)
+    return;
+
+  // normalised heights
+  fixed hglider = (h - minh) / (maxh - minh);
+  hstart = (hstart - minh) / (maxh - minh);
+
+  // calculate averages
+  int numtherm = 0;
+
+  const fixed mc = get_glide_polar().get_mc();
+  Wmax = max(fixed_half, mc);
+
+  for (i = 0; i < NUMTHERMALBUCKETS; i++) {
+    fixed wthis = fixed_zero;
+    // height of this thermal point [0,mth]
+    fixed hi = i * mth / NUMTHERMALBUCKETS;
+    fixed hp = ((hi - minh) / (maxh - minh));
+
+    if (thermal_band.ThermalProfileN[i] > 5) {
+      // now requires 10 items in bucket before displaying,
+      // to eliminate kinks
+      wthis = thermal_band.ThermalProfileW[i] / thermal_band.ThermalProfileN[i];
+    }
+    if (positive(wthis)) {
+      ht[numtherm] = hp;
+      Wt[numtherm] = wthis;
+      Wmax = max(Wmax, wthis * 2 / 3);
+      numtherm++;
+    }
+  }
+
+  if ((!draw_start_height) && (numtherm<=1))
+    // don't display if insufficient statistics
+    // but do draw if start height needs to be drawn
+    return;
+
+  // position of thermal band
+  if (numtherm > 1) {
+    canvas.select(Graphics::hpThermalBand);
+    canvas.select(Graphics::hbThermalBand);
+
+    POINT ThermalProfile[NUMTHERMALBUCKETS + 2];
+    for (i = 0; i < numtherm; i++) {
+      ThermalProfile[1 + i].x =
+          (iround((Wt[i] / Wmax) * IBLSCALE(TBSCALEX))) + rc.left;
+
+      ThermalProfile[1 + i].y =
+          IBLSCALE(4) + iround(TBSCALEY * (fixed_one - ht[i])) + rc.top;
+    }
+    ThermalProfile[0].x = rc.left;
+    ThermalProfile[0].y = ThermalProfile[1].y;
+    ThermalProfile[numtherm + 1].x = rc.left;
+    ThermalProfile[numtherm + 1].y = ThermalProfile[numtherm].y;
+
+    canvas.polygon(ThermalProfile, numtherm + 2);
+  }
+
+  // position of thermal band
+
+  GliderBand[0].y = IBLSCALE(4) + iround(TBSCALEY * (fixed_one - hglider)) + rc.top;
+  GliderBand[1].y = GliderBand[0].y;
+  GliderBand[1].x =
+      max(iround((mc / Wmax) * IBLSCALE(TBSCALEX)), IBLSCALE(4)) + rc.left;
+
+  GliderBand[2].x = GliderBand[1].x - IBLSCALE(4);
+  GliderBand[2].y = GliderBand[0].y - IBLSCALE(4);
+  GliderBand[3].x = GliderBand[1].x;
+  GliderBand[3].y = GliderBand[1].y;
+  GliderBand[4].x = GliderBand[1].x - IBLSCALE(4);
+  GliderBand[4].y = GliderBand[0].y + IBLSCALE(4);
+
+  canvas.select(Graphics::hpThermalBandGlider);
+
+  canvas.polyline(GliderBand, 2);
+  canvas.polyline(GliderBand + 2, 3); // arrow head
+
+  if (draw_start_height) {
+    canvas.select(Graphics::hpFinalGlideBelow);
+    GliderBand[0].y = IBLSCALE(4) + iround(TBSCALEY * (fixed_one - hstart)) + rc.top;
+    GliderBand[1].y = GliderBand[0].y;
+    canvas.polyline(GliderBand, 2);
+  }
 }
