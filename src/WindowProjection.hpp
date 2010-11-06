@@ -60,6 +60,10 @@ public:
     return MapRect;
   }
 
+  void SetMapRect(const RECT &rc) {
+    MapRect = rc;
+  }
+
   /**
    * Returns the width of the map area in pixels.
    */
