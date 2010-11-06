@@ -61,7 +61,7 @@ MapWindow::DrawTrail(Canvas &canvas, const POINT aircraft_pos) const
     case 2:
       min_time = max(0, (int)Basic().Time - 600);
       break;
-    case 0:
+    case 3:
       min_time = 0; // full
       break;
     }
