@@ -49,9 +49,8 @@ MapWindowProjection::MapWindowProjection():
 }
 
 void
-MapWindowProjection::Initialize(const RECT &rc)
+MapWindowProjection::Initialize()
 {
-  MapRect = rc;
   RequestMapScale(fixed_int_constant(5000));
 }
 

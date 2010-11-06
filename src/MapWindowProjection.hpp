@@ -37,7 +37,7 @@ public:
   MapWindowProjection();
 
 public:
-  void Initialize(const RECT &rc);
+  void Initialize();
 
   void RequestMapScale(fixed x);
 
