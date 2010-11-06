@@ -75,9 +75,6 @@ public:
   fixed StepMapScale(fixed scale, int Step) const;
 
   gcc_pure
-  fixed StepMapScaleUser(fixed scale, int Step) const;
-
-  gcc_pure
   bool WaypointInScaleFilter(const Waypoint &way_point) const;
 
 private:

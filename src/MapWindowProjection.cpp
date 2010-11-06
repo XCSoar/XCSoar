@@ -112,14 +112,6 @@ MapWindowProjection::StepMapScale(fixed scale, int Step) const
   return CalculateMapScale(i);
 }
 
-fixed
-MapWindowProjection::StepMapScaleUser(fixed scale, int Step) const
-{
-  int i = FindMapScaleUser(scale) + Step;
-  i = max(0, min(ScaleListCount - 1, i));
-  return CalculateMapScaleUser(i);
-}
-
 int
 MapWindowProjection::FindMapScale(const fixed Value) const
 {
