@@ -42,15 +42,15 @@ GlueMapWindow::SwitchZoomClimb()
     if (my_target_pan) {
       // save starting values
       if (isclimb)
-        zoomclimb.ClimbMapScale = visible_projection.GetMapScale();
+        zoomclimb.ClimbMapScale = visible_projection.GetScale();
       else
-        zoomclimb.CruiseMapScale = visible_projection.GetMapScale();
+        zoomclimb.CruiseMapScale = visible_projection.GetScale();
     } else {
       // restore scales
       if (isclimb)
-        visible_projection.RequestMapScale(zoomclimb.ClimbMapScale);
+        visible_projection.SetScale(zoomclimb.ClimbMapScale);
       else
-        visible_projection.RequestMapScale(zoomclimb.CruiseMapScale);
+        visible_projection.SetScale(zoomclimb.CruiseMapScale);
     }
     zoomclimb.last_targetpan = my_target_pan;
     return;
@@ -60,15 +60,15 @@ GlueMapWindow::SwitchZoomClimb()
     if (isclimb != zoomclimb.last_isclimb) {
       if (isclimb) {
         // save cruise scale
-        zoomclimb.CruiseMapScale = visible_projection.GetMapScale();
+        zoomclimb.CruiseMapScale = visible_projection.GetScale();
         // switch to climb scale
-        visible_projection.RequestMapScale(zoomclimb.ClimbMapScale);
+        visible_projection.SetScale(zoomclimb.ClimbMapScale);
       } else {
         // leaving climb
         // save cruise scale
-        zoomclimb.ClimbMapScale = visible_projection.GetMapScale();
+        zoomclimb.ClimbMapScale = visible_projection.GetScale();
         // switch to climb scale
-        visible_projection.RequestMapScale(zoomclimb.CruiseMapScale);
+        visible_projection.SetScale(zoomclimb.CruiseMapScale);
       }
 
       zoomclimb.last_isclimb = isclimb;
