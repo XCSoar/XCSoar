@@ -48,9 +48,11 @@ GlueMapWindow::SwitchZoomClimb()
     } else {
       // restore scales
       if (isclimb)
-        visible_projection.RequestMapScale(zoomclimb.ClimbMapScale);
+        visible_projection.RequestMapScale(zoomclimb.ClimbMapScale,
+                                           SettingsMap());
       else
-        visible_projection.RequestMapScale(zoomclimb.CruiseMapScale);
+        visible_projection.RequestMapScale(zoomclimb.CruiseMapScale,
+                                           SettingsMap());
     }
     zoomclimb.last_targetpan = my_target_pan;
     return;
@@ -62,13 +64,15 @@ GlueMapWindow::SwitchZoomClimb()
         // save cruise scale
         zoomclimb.CruiseMapScale = visible_projection.GetMapScale();
         // switch to climb scale
-        visible_projection.RequestMapScale(zoomclimb.ClimbMapScale);
+        visible_projection.RequestMapScale(zoomclimb.ClimbMapScale,
+                                           SettingsMap());
       } else {
         // leaving climb
         // save cruise scale
         zoomclimb.ClimbMapScale = visible_projection.GetMapScale();
         // switch to climb scale
-        visible_projection.RequestMapScale(zoomclimb.CruiseMapScale);
+        visible_projection.RequestMapScale(zoomclimb.CruiseMapScale,
+                                           SettingsMap());
       }
 
       zoomclimb.last_isclimb = isclimb;

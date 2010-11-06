@@ -1609,7 +1609,8 @@ InputEvents::sub_SetZoom(fixed value)
     Message::AddMessage(_("AutoZoom OFF"));
   }
 
-  XCSoarInterface::main_window.map.SetProjection().RequestMapScaleUser(value);
+  XCSoarInterface::main_window.map.SetProjection().RequestMapScaleUser(value,
+                                                                       XCSoarInterface::SettingsMap());
 
   XCSoarInterface::main_window.map.QuickRedraw(XCSoarInterface::SettingsMap());
   XCSoarInterface::SendSettingsMap(true);

@@ -35,8 +35,7 @@ Copyright_License {
 MapWindowProjection::MapWindowProjection():
   WindowProjection(),
   DisplayMode(dmCruise),
-  MapScale(5),
-  _RequestedMapScale(5)
+  MapScale(5)
 {
   ScaleList[0] = fixed_half;
   ScaleList[1] = fixed_one;
@@ -58,7 +57,7 @@ MapWindowProjection::Initialize(const SETTINGS_MAP &settings_map,
 {
   MapRect = rc;
 
-  _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
+  RequestMapScaleUser(MapScale, settings_map);
 }
 
 bool
@@ -182,18 +181,17 @@ MapWindowProjection::FindMapScale(const fixed Value) const
 }
 
 void
-MapWindowProjection::RequestMapScale(fixed x) {
-  _RequestedMapScale = Units::ToUserDistance(x);
+MapWindowProjection::RequestMapScaleUser(fixed x,
+                                         const SETTINGS_MAP &settings_map)
+{
+  MapScale = LimitMapScale(x, settings_map);
+  SetScale(fixed(GetMapResolutionFactor()) / Units::ToSysDistance(MapScale));
 }
 
 void
-MapWindowProjection::ModifyMapScale(const SETTINGS_MAP &settings_map)
+MapWindowProjection::RequestMapScale(fixed x, const SETTINGS_MAP &settings_map)
 {
-  // limit zoomed in so doesn't reach silly levels
-  _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
-  MapScale = _RequestedMapScale;
-
-  SetScale(fixed(GetMapResolutionFactor()) / Units::ToSysDistance(MapScale));
+  RequestMapScaleUser(Units::ToUserDistance(x), settings_map);
 }
 
 void
@@ -202,9 +200,6 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
 {
   static bool TargetPanLast = false;
   static fixed TargetPanUnZoom = fixed_one;
-
-  if(MapScale != _RequestedMapScale)
-    ModifyMapScale(settings_map);
 
   fixed wpd;
   if (settings_map.TargetPan)
@@ -219,9 +214,7 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
     }
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
-    _RequestedMapScale = LimitMapScale(Units::ToUserDistance(wpd / 4),
-                                       settings_map);
-    ModifyMapScale(settings_map);
+    RequestMapScale(wpd / 4, settings_map);
     return;
   }
 
@@ -234,13 +227,10 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
 
       // set scale exactly so that waypoint distance is the zoom factor
       // across the screen
-      _RequestedMapScale = LimitMapScale(
-          Units::ToUserDistance(wpd / AutoZoomFactor), settings_map);
-      ModifyMapScale(settings_map);
+      RequestMapScale(wpd / AutoZoomFactor, settings_map);
     }
   } else if (TargetPanLast) {
-    _RequestedMapScale = TargetPanUnZoom;
-    ModifyMapScale(settings_map);
+    RequestMapScaleUser(TargetPanUnZoom, settings_map);
   }
 
   if (!settings_map.TargetPan && TargetPanLast)
