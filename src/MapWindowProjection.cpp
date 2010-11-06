@@ -22,10 +22,8 @@ Copyright_License {
 */
 
 #include "MapWindowProjection.hpp"
-#include "Math/FastRotation.hpp"
 #include "Screen/Layout.hpp"
 #include "NMEA/Info.hpp"
-#include "NMEA/Derived.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Units.hpp"
 
