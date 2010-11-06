@@ -67,18 +67,6 @@ MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
                                                  fixed_ten));
 }
 
-bool
-MapWindowProjection::IsOriginCentered(const DisplayOrientation_t orientation,
-                                      const DisplayMode_t mode)
-{
-  return (orientation == NORTHUP
-      || (orientation == NORTHTRACK
-          && mode != dmCircling)
-      || ((orientation == NORTHCIRCLE
-           || orientation == TRACKCIRCLE)
-          && mode == dmCircling));
-}
-
 fixed
 MapWindowProjection::CalculateMapScale(int scale) const
 {

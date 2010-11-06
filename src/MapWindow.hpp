@@ -277,6 +277,9 @@ protected:
     UpdateWeather();
   }
 
+  static bool IsOriginCentered(const DisplayOrientation_t orientation,
+                               const DisplayMode_t mode);
+
 #ifndef ENABLE_OPENGL
 private:
   // graphics vars

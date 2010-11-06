@@ -57,9 +57,6 @@ public:
   void RequestMapScaleUser(fixed x, const SETTINGS_MAP &setting_map);
   void RequestMapScale(fixed x, const SETTINGS_MAP &setting_map);
 
-  static bool IsOriginCentered(const DisplayOrientation_t orientation,
-                               const DisplayMode_t mode);
-
 public:
   bool HaveScaleList() const {
     return ScaleListCount > 0;
