@@ -28,8 +28,6 @@ Copyright_License {
 #include "Util/AllocatedArray.hpp"
 #include "Compiler.h"
 
-#include <windef.h>
-
 class RasterMap;
 class WindowProjection;
 
