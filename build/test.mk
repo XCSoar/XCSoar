@@ -557,7 +557,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindowLabels.cpp \
 	$(SRC)/MapWindowProjection.cpp \
 	$(SRC)/MapWindowRender.cpp \
-	$(SRC)/MapWindowScale.cpp \
 	$(SRC)/MapWindowSymbols.cpp \
 	$(SRC)/MapWindowTask.cpp \
 	$(SRC)/MapWindowThermal.cpp \
