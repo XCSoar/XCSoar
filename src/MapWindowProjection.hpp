@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_MAPWINDOW_PROJECTION_HPP
 
 #include "WindowProjection.hpp"
-#include "Units.hpp"
 #include "SettingsMap.hpp"
 #include "Sizes.h"
 #include "Math/fixed.hpp"
@@ -74,21 +73,11 @@ public:
 
   void Initialize(const SETTINGS_MAP &settings, const RECT &rc);
 
-  gcc_pure
-  fixed RequestDistancePixelsToMeters(const int x) const {
-    return x * _RequestedMapScale /
-           Units::ToUserDistance(fixed(GetMapResolutionFactor()));
-  }
-
   void RequestMapScale(fixed x, const SETTINGS_MAP &settings_map) {
     _RequestedMapScale = LimitMapScale(x, settings_map);
   }
 
 protected:
-  fixed GetRequestedMapScale() const {
-    return _RequestedMapScale;
-  }
-
   bool IsOriginCentered(const DisplayOrientation_t orientation);
 
   fixed StepMapScale(int Step) const;
