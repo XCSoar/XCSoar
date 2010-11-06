@@ -78,8 +78,6 @@ public:
 protected:
   bool IsOriginCentered(const DisplayOrientation_t orientation);
 
-  fixed StepMapScale(int Step) const;
-
 public:
   bool HaveScaleList() const {
     return ScaleListCount > 0;
