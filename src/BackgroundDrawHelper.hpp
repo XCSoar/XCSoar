@@ -49,9 +49,7 @@ public:
             const WindowProjection& proj,
             const SETTINGS_MAP& settings_map);
 
-  void DrawSpotHeights(Canvas& canvas,
-                       const WindowProjection &proj,
-                       LabelBlock& block);
+  void DrawSpotHeights(Canvas& canvas, LabelBlock& block);
 
   void sun_from_wind(const WindowProjection& proj,
                      const SpeedVector& wind);
@@ -60,8 +58,8 @@ public:
   void set_weather(const RasterWeather *weather);
 
 private:
-  static void DrawSpotHeight(Canvas &canvas, const WindowProjection &map_projection,
-                             LabelBlock &block, const TCHAR *Buffer, POINT pt);
+  static void DrawSpotHeight(Canvas &canvas,  LabelBlock &block,
+                             const TCHAR *Buffer, POINT pt);
 
 private:
   TerrainRenderer* m_rend;

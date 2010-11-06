@@ -225,7 +225,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   RenderGlide(canvas);
 
   // Render weather/terrain max/min values
-  m_background.DrawSpotHeights(canvas, render_projection, label_block);
+  m_background.DrawSpotHeights(canvas, label_block);
 
   // Render lower symbology
   RenderSymbology_lower(canvas, aircraft_pos);

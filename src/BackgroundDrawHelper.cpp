@@ -115,9 +115,7 @@ BackgroundDrawHelper::sun_from_wind(const WindowProjection& projection,
 }
 
 void
-BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas,
-                                     const WindowProjection &map_projection,
-                                     LabelBlock &block,
+BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas, LabelBlock &block,
                                      const TCHAR *Buffer, POINT pt)
 {
   if (string_is_empty(Buffer))
@@ -141,7 +139,6 @@ BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas,
 
 void
 BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas, 
-                                      const WindowProjection &proj,
                                       LabelBlock& block)
 {
   if (m_weather == NULL || m_weather->GetParameter() == 0 ||
@@ -154,8 +151,8 @@ BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas,
 
   TCHAR Buffer[20];
   m_weather->ValueToText(Buffer, m_rend->spot_max_val);
-  DrawSpotHeight(canvas, proj, block, Buffer, m_rend->spot_max_pt);
+  DrawSpotHeight(canvas, block, Buffer, m_rend->spot_max_pt);
 
   m_weather->ValueToText(Buffer, m_rend->spot_min_val);
-  DrawSpotHeight(canvas, proj, block, Buffer, m_rend->spot_min_pt);
+  DrawSpotHeight(canvas, block, Buffer, m_rend->spot_min_pt);
 }
