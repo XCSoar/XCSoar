@@ -59,7 +59,7 @@ public:
   bool WaypointInScaleFilter(const Waypoint &way_point) const;
 
 private:
-  fixed LimitMapScale(fixed value);
+  fixed LimitMapScale(const fixed value) const;
 
   gcc_pure
   int FindMapScale(const fixed Value) const;
