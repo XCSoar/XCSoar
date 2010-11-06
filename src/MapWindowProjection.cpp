@@ -55,7 +55,7 @@ MapWindowProjection::Initialize(const SETTINGS_MAP &settings_map,
 {
   MapRect = rc;
 
-  RequestMapScale(fixed_int_constant(5000), settings_map);
+  RequestMapScale(fixed_int_constant(5000));
 }
 
 bool
@@ -129,7 +129,7 @@ MapWindowProjection::FindMapScaleUser(const fixed Value) const
 }
 
 void
-MapWindowProjection::RequestMapScale(fixed x, const SETTINGS_MAP &settings_map)
+MapWindowProjection::RequestMapScale(fixed x)
 {
   MapScale = LimitMapScaleUser(Units::ToUserDistance(x));
   SetScale(fixed(GetMapResolutionFactor()) / Units::ToSysDistance(MapScale));
