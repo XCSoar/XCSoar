@@ -122,12 +122,11 @@ BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas,
   if (string_is_empty(Buffer))
     return;
 
-  POINT orig = map_projection.GetScreenOrigin();
   RECT brect;
   SIZE tsize = canvas.text_size(Buffer);
 
-  pt.x += 2 + orig.x;
-  pt.y += 2 + orig.y;
+  pt.x += 2;
+  pt.y += 2;
   brect.left = pt.x;
   brect.right = brect.left + tsize.cx;
   brect.top = pt.y;
