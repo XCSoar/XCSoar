@@ -33,7 +33,6 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "resource.h"
 #include "shapelib/map.h"
-#include "Units.hpp"
 
 #include <stdlib.h>
 #include <tchar.h>
@@ -58,7 +57,7 @@ TopologyFile::loadIcon(const int res_id)
 TopologyFile::TopologyFile(const char *filename, const Color thecolor,
                    int _label_field)
   :label_field(_label_field),
-  scaleThreshold(1000),
+  scaleThreshold(1000000),
   hPen(1, thecolor),
   hbBrush(thecolor),
   shapefileopen(false)
@@ -119,7 +118,7 @@ TopologyFile::updateCache(const WindowProjection &map_projection)
   if (!shapefileopen)
     return;
 
-  if (Units::ToUserDistance(map_projection.GetMapScale()) > scaleThreshold)
+  if (map_projection.GetMapScale() > scaleThreshold)
     /* not visible, don't update cache now */
     return;
 
@@ -160,13 +159,13 @@ TopologyFile::updateCache(const WindowProjection &map_projection)
 }
 
 unsigned
-TopologyFile::GetSkipSteps(fixed map_scale_user) const
+TopologyFile::GetSkipSteps(fixed map_scale) const
 {
-  if (map_scale_user * 4 > scaleThreshold * 3)
+  if (map_scale * 4 > scaleThreshold * 3)
     return 4;
-  if (map_scale_user * 2 > scaleThreshold)
+  if (map_scale * 2 > scaleThreshold)
     return 3;
-  if (map_scale_user * 4 > scaleThreshold)
+  if (map_scale * 4 > scaleThreshold)
     return 2;
 
   return 1;
@@ -179,8 +178,8 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
   if (!shapefileopen)
     return;
 
-  fixed map_scale_user = Units::ToUserDistance(projection.GetMapScale());
-  if (map_scale_user > scaleThreshold)
+  fixed map_scale = projection.GetMapScale();
+  if (map_scale > scaleThreshold)
     return;
 
   // TODO code: only draw inside screen!
@@ -193,7 +192,7 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
   // get drawing info
 
-  int iskip = GetSkipSteps(map_scale_user);
+  int iskip = GetSkipSteps(map_scale);
 
   const rectObj screenRect =
     ConvertRect(projection.GetScreenBounds());
@@ -266,8 +265,8 @@ TopologyFile::PaintLabels(Canvas &canvas,
   if (!shapefileopen || settings_map.DeclutterLabels >= 2)
     return;
 
-  fixed map_scale_user = Units::ToUserDistance(projection.GetMapScale());
-  if (map_scale_user > scaleThreshold)
+  fixed map_scale = projection.GetMapScale();
+  if (map_scale > scaleThreshold)
     return;
 
   // TODO code: only draw inside screen!
@@ -279,7 +278,7 @@ TopologyFile::PaintLabels(Canvas &canvas,
 
   // get drawing info
 
-  int iskip = GetSkipSteps(map_scale_user);
+  int iskip = GetSkipSteps(map_scale);
 
   rectObj screenRect =
     ConvertRect(projection.GetScreenBounds());
