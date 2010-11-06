@@ -251,6 +251,7 @@ GenerateBlackboard(MapWindow &map)
 
   map.ReadBlackboard(nmea_info, derived_info, settings_computer,
                      blackboard.SettingsMap());
+  map.UpdateDisplayMode();
   map.UpdateProjection();
 }
 

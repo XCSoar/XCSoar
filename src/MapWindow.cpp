@@ -96,7 +96,6 @@ MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
 void
 MapWindow::UpdateProjection()
 {
-  UpdateDisplayMode();
   visible_projection.UpdateMapScale(Calculated(), SettingsMap());
 }
 

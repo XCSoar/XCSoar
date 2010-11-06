@@ -227,8 +227,6 @@ private:
   void DrawThreadLoop ();
 #endif
 
-  void UpdateDisplayMode();
-
   // display management
   void SwitchZoomClimb(void);
 
@@ -269,6 +267,8 @@ public:
 
   // thread, main functions
   void Render(Canvas &canvas, const RECT &rc);
+
+  void UpdateDisplayMode();
 
 protected:
   void UpdateTopology();
