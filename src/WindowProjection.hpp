@@ -80,7 +80,7 @@ public:
 
   gcc_pure
   fixed DistancePixelsToMeters(const int x) const {
-    return x * GetMapScale() / GetMapResolutionFactor();
+    return fixed(x) / GetScale();
   }
 
   /**
