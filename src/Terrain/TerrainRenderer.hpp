@@ -58,7 +58,7 @@ protected:
   short TerrainContrast;
   short TerrainBrightness;
 
-  void ScanSpotHeights(const RECT& rect);
+  void ScanSpotHeights();
 
   /**
    * Convert the height matrix into the image, without shading.

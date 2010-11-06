@@ -174,7 +174,7 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain) :
 }
 
 void
-TerrainRenderer::ScanSpotHeights(const RECT& rect)
+TerrainRenderer::ScanSpotHeights()
 {
   spot_max_pt.x = -1;
   spot_max_pt.y = -1;
@@ -184,11 +184,12 @@ TerrainRenderer::ScanSpotHeights(const RECT& rect)
   spot_min_val = 32767;
 
   const HeightMatrix &height_matrix = raster_renderer.GetHeightMatrix();
+  const short *h_buf = height_matrix.GetData();
   const unsigned quantisation_pixels = raster_renderer.GetQuantisation();
-  for (int y = rect.top; y < rect.bottom; y += quantisation_pixels) {
-    const short *h_buf = height_matrix.GetRow(y);
-    for (int x = rect.left; x < rect.right; x += quantisation_pixels, ++h_buf) {
-      const short val = *h_buf;
+
+  for (unsigned y = 0; y < height_matrix.get_height(); ++y) {
+    for (unsigned x = 0; x < height_matrix.get_width(); ++x) {
+      short val = *h_buf++;
       if (RasterBuffer::is_special(val))
         continue;
 
@@ -204,6 +205,11 @@ TerrainRenderer::ScanSpotHeights(const RECT& rect)
       }
     }
   }
+
+  spot_max_pt.x *= quantisation_pixels;
+  spot_max_pt.y *= quantisation_pixels;
+  spot_min_pt.x *= quantisation_pixels;
+  spot_min_pt.y *= quantisation_pixels;
 }
 
 void
