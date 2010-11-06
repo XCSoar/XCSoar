@@ -44,7 +44,7 @@ void MapWindow::CalculateScreenPositionsGroundline(void) {
 void
 MapWindow::DrawTerrainAbove(Canvas &canvas)
 {
-  if (!Basic().flight.Flying)
+  if (!Basic().flight.Flying || SettingsMap().EnablePan)
     return;
 
 #ifdef ENABLE_OPENGL
