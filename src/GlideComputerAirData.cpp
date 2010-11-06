@@ -151,7 +151,6 @@ GlideComputerAirData::Wind()
 
   // update zigzag wind
   if ((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG)
-      && !Basic().gps.Replay
       && (Basic().TrueAirspeed > m_task.get_glide_polar().get_Vtakeoff())) {
     fixed zz_wind_speed;
     Angle zz_wind_bearing;
