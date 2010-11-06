@@ -239,10 +239,10 @@ MapWindow::SwitchZoomClimb(void)
       // restore scales
       if (isclimb)
         visible_projection.RequestMapScale(
-            Units::ToUserDistance(zoomclimb.ClimbMapScale), SettingsMap());
+            Units::ToUserDistance(zoomclimb.ClimbMapScale));
       else
         visible_projection.RequestMapScale(
-            Units::ToUserDistance(zoomclimb.CruiseMapScale), SettingsMap());
+            Units::ToUserDistance(zoomclimb.CruiseMapScale));
     }
     zoomclimb.last_targetpan = my_target_pan;
     return;
@@ -255,14 +255,14 @@ MapWindow::SwitchZoomClimb(void)
         zoomclimb.CruiseMapScale = visible_projection.GetMapScale();
         // switch to climb scale
         visible_projection.RequestMapScale(
-            Units::ToUserDistance(zoomclimb.ClimbMapScale), SettingsMap());
+            Units::ToUserDistance(zoomclimb.ClimbMapScale));
       } else {
         // leaving climb
         // save cruise scale
         zoomclimb.ClimbMapScale = visible_projection.GetMapScale();
-        visible_projection.RequestMapScale(
-            Units::ToUserDistance(zoomclimb.CruiseMapScale), SettingsMap());
         // switch to climb scale
+        visible_projection.RequestMapScale(
+            Units::ToUserDistance(zoomclimb.CruiseMapScale));
       }
 
       zoomclimb.last_isclimb = isclimb;

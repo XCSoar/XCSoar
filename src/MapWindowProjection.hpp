@@ -73,7 +73,7 @@ public:
 
   void Initialize(const SETTINGS_MAP &settings, const RECT &rc);
 
-  void RequestMapScale(fixed x, const SETTINGS_MAP &settings_map) {
+  void RequestMapScale(fixed x) {
     _RequestedMapScale = x;
   }
 
