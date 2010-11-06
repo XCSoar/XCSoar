@@ -56,11 +56,6 @@ class Projection {
 public:
   Projection();
 
-  virtual fixed GetMapScaleUser() const;
-
-  /**
-   * Returns the value of GetMapScaleUser() based on SI units.
-   */
   gcc_pure
   fixed GetMapScale() const;
 

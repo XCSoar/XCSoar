@@ -40,9 +40,6 @@ class MapWindowProjection:
 public:
   MapWindowProjection();
 
-  gcc_pure
-  virtual fixed GetMapScaleUser() const;
-
   /**
    * sets the map scale based on three possible inputs:
    * If TerrainPan is enabled, then uses that parameter

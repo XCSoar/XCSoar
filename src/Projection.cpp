@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Projection.hpp"
-#include "Units.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/Layout.hpp"
@@ -37,7 +36,7 @@ Projection::Projection() :
 fixed
 Projection::GetMapScale() const
 {
-  return Units::ToSysDistance(GetMapScaleUser());
+  return fixed(GetMapResolutionFactor()) / scale;
 }
 
 GeoPoint
@@ -91,12 +90,6 @@ Projection::SetScale(const fixed _scale)
   DrawScale = fixed_earth_r * scale;
   // Save inverted value for faster calculations
   InvDrawScale = fixed_one / DrawScale;
-}
-
-fixed
-Projection::GetMapScaleUser() const
-{
-  return fixed(GetMapResolutionFactor()) / scale;
 }
 
 int

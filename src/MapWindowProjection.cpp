@@ -256,9 +256,3 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   if (!settings_map.TargetPan && TargetPanLast)
     TargetPanLast = false;
 }
-
-fixed 
-MapWindowProjection::GetMapScaleUser() const 
-{
-  return MapScale;
-}
