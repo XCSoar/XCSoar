@@ -57,8 +57,8 @@ MapWindowProjection::Initialize()
 bool
 MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 {
-  return (MapScale <= (way_point.is_landable() ? fixed_int_constant(20) :
-                                                 fixed_ten));
+  return (GetMapScale() <= (way_point.is_landable() ? fixed_int_constant(20000) :
+                                                      fixed_int_constant(10000)));
 }
 
 fixed
