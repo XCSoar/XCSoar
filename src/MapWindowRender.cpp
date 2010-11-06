@@ -164,8 +164,6 @@ MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc,
 void
 MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
 {
-  const NMEA_INFO &data = Basic();
-
   {
     /* hold the lock to protect this->bitmap_canvas; since
        DrawMapScale() is called from the main thread by on_paint(), we
@@ -185,10 +183,8 @@ MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
     DrawHorizon(canvas, rc);
 #endif
 
-  DrawFlightMode(canvas, rc);
   DrawThermalBand(canvas, rc);
-  DrawFinalGlide(canvas,rc);
-  DrawGPSStatus(canvas, rc, data.gps);
+  DrawFinalGlide(canvas, rc);
 }
 
 /**

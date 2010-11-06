@@ -100,6 +100,8 @@ private:
   bool on_key_press(unsigned key_code);
 
 private:
+  void DrawFlightMode(Canvas &canvas, const RECT &rc) const;
+  void DrawGPSStatus(Canvas &canvas, const RECT &rc, const GPS_STATE &gps) const;
   void DrawCrossHairs(Canvas &canvas) const;
 };
 

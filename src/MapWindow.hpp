@@ -255,9 +255,6 @@ public:
   void DrawAirspaceIntersections(Canvas &canvas) const;
   void DrawWaypoints(Canvas &canvas);
 
-  void DrawFlightMode(Canvas &canvas, const RECT &rc) const;
-  void DrawGPSStatus(Canvas &canvas, const RECT &rc,
-                     const GPS_STATE &gps) const;
   void DrawTrail(Canvas &canvas, const POINT aircraft_pos) const;
   void DrawTeammate(Canvas &canvas) const;
   void DrawProjectedTrack(Canvas &canvas) const;
