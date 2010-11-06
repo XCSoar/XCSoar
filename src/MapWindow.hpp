@@ -324,6 +324,18 @@ private:
   StaticArray<GeoPoint,32> m_airspace_intersections;
 
   friend class DrawThread;
+
+public:
+  DisplayMode_t GetDisplayMode() const {
+    return DisplayMode;
+  }
+
+  void SetDisplayMode(DisplayMode_t _DisplayMode) {
+    DisplayMode = _DisplayMode;
+  }
+
+protected:
+  DisplayMode_t DisplayMode;
 };
 
 #endif

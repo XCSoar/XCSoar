@@ -51,7 +51,7 @@ MapWindow::DrawTrail(Canvas &canvas, const POINT aircraft_pos) const
 
   unsigned min_time = 0;
 
-  if (projection.GetDisplayMode() == dmCircling) {
+  if (GetDisplayMode() == dmCircling) {
     min_time = max(0, (int)Basic().Time - 600);
   } else {
     switch(SettingsMap().TrailActive) {
@@ -77,8 +77,7 @@ MapWindow::DrawTrail(Canvas &canvas, const POINT aircraft_pos) const
 
   GeoPoint traildrift;
 
-  if (SettingsMap().EnableTrailDrift &&
-      projection.GetDisplayMode() == dmCircling) {
+  if (SettingsMap().EnableTrailDrift && GetDisplayMode() == dmCircling) {
     GeoPoint tp1 = FindLatitudeLongitude(Basic().Location, Basic().wind.bearing,
                                          Basic().wind.norm);
     traildrift = Basic().Location - tp1;

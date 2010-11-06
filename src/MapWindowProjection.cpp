@@ -32,7 +32,6 @@ Copyright_License {
 
 MapWindowProjection::MapWindowProjection():
   WindowProjection(),
-  DisplayMode(dmCruise),
   MapScale(5)
 {
   ScaleList[0] = fixed_half;

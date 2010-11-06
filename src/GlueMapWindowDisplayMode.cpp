@@ -34,7 +34,7 @@ ZoomClimb_t::ZoomClimb_t():
 void
 GlueMapWindow::SwitchZoomClimb()
 {
-  bool isclimb = (visible_projection.GetDisplayMode() == dmCircling);
+  bool isclimb = (GetDisplayMode() == dmCircling);
 
   bool my_target_pan = SettingsMap().TargetPan;
 
@@ -93,11 +93,11 @@ GetNewDisplayMode(const SETTINGS_MAP &settings_map,
 void
 GlueMapWindow::UpdateDisplayMode()
 {
-  DisplayMode_t old_mode = visible_projection.GetDisplayMode();
+  DisplayMode_t old_mode = GetDisplayMode();
   DisplayMode_t new_mode = GetNewDisplayMode(SettingsMap(), Calculated());
 
   if (new_mode != old_mode) {
-    visible_projection.SetDisplayMode(new_mode);
+    SetDisplayMode(new_mode);
     SwitchZoomClimb();
   }
 }

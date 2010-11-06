@@ -40,17 +40,6 @@ class MapWindowProjection:
 public:
   MapWindowProjection();
 
-  DisplayMode_t GetDisplayMode() const {
-    return DisplayMode;
-  }
-
-  void SetDisplayMode(DisplayMode_t _DisplayMode) {
-    DisplayMode = _DisplayMode;
-  }
-
-protected:
-  DisplayMode_t DisplayMode;
-
 public:
   void Initialize(const RECT &rc);
 

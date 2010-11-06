@@ -60,7 +60,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
 {
   const MapWindowProjection &projection = render_projection;
 
-  if (projection.GetDisplayMode() == dmCircling) {
+  if (GetDisplayMode() == dmCircling) {
     if (positive(Calculated().ThermalEstimate_R)) {
       POINT sc;
       if (projection.GeoToScreenIfVisible(Calculated().ThermalEstimate_Location, sc)) {

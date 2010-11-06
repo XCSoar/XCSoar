@@ -197,9 +197,9 @@ InfoBoxManager::GetCurrentMode()
 {
   if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo)
     return MODE_AUXILIARY;
-  else if (XCSoarInterface::MapProjection().GetDisplayMode() == dmCircling)
+  else if (XCSoarInterface::main_window.map.GetDisplayMode() == dmCircling)
     return MODE_CIRCLING;
-  else if (XCSoarInterface::MapProjection().GetDisplayMode() == dmFinalGlide)
+  else if (XCSoarInterface::main_window.map.GetDisplayMode() == dmFinalGlide)
     return MODE_FINAL_GLIDE;
   else
     return MODE_CRUISE;

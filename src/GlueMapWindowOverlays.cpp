@@ -115,9 +115,9 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
 
   if (task != NULL && (task->get_mode() == TaskManager::MODE_ABORT))
     bmp = &Graphics::hAbort;
-  else if (render_projection.GetDisplayMode() == dmCircling)
+  else if (GetDisplayMode() == dmCircling)
     bmp = &Graphics::hClimb;
-  else if (render_projection.GetDisplayMode() == dmFinalGlide)
+  else if (GetDisplayMode() == dmFinalGlide)
     bmp = &Graphics::hFinalGlide;
   else
     bmp = &Graphics::hCruise;
@@ -314,7 +314,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
   POINT GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
 
   if ((Calculated().task_stats.total.solution_remaining.AltitudeDifference > fixed(50))
-      && render_projection.GetDisplayMode() == dmFinalGlide)
+      && GetDisplayMode() == dmFinalGlide)
     return;
 
   const ThermalBandInfo &thermal_band = Calculated().thermal_band;
