@@ -157,7 +157,7 @@ TopologyStore::Load(NLineReader &reader, const TCHAR* Directory)
     if (ShapeIcon != 0)
       topology_store[numtopo]->loadIcon(ShapeIcon);
 
-    topology_store[numtopo]->scaleThreshold = ShapeRange;
+    topology_store[numtopo]->scaleThreshold = fixed(ShapeRange);
 
     numtopo++;
   }

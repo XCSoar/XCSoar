@@ -31,6 +31,7 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"
 #include "Util/NonCopyable.hpp"
+#include "Math/fixed.hpp"
 
 struct GeoPoint;
 class Canvas;
@@ -84,7 +85,7 @@ public:
    * The threshold value for the visibility check. If the current scale
    * is below this value the contents of this TopologyFile will be drawn.
    */
-  double scaleThreshold;
+  fixed scaleThreshold;
 
   /**
    * This function loads an icon from the resource file that
@@ -102,7 +103,7 @@ private:
 
   XShape** shpCache;
 
-  unsigned GetSkipSteps(double map_scale_user) const;
+  unsigned GetSkipSteps(fixed map_scale_user) const;
   static rectObj ConvertRect(const GeoBounds &br);
 
 protected:

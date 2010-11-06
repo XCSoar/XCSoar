@@ -58,7 +58,7 @@ TopologyFile::loadIcon(const int res_id)
 TopologyFile::TopologyFile(const char *filename, const Color thecolor,
                    int _label_field)
   :label_field(_label_field),
-  scaleThreshold(1000.0),
+  scaleThreshold(1000),
   hPen(1, thecolor),
   hbBrush(thecolor),
   shapefileopen(false)
@@ -119,7 +119,7 @@ TopologyFile::updateCache(const WindowProjection &map_projection)
   if (!shapefileopen)
     return;
 
-  if (Units::ToUserDistance(map_projection.GetMapScale()) > fixed(scaleThreshold))
+  if (Units::ToUserDistance(map_projection.GetMapScale()) > scaleThreshold)
     /* not visible, don't update cache now */
     return;
 
@@ -160,13 +160,13 @@ TopologyFile::updateCache(const WindowProjection &map_projection)
 }
 
 unsigned
-TopologyFile::GetSkipSteps(double map_scale_user) const
+TopologyFile::GetSkipSteps(fixed map_scale_user) const
 {
-  if (map_scale_user > 0.75 * scaleThreshold)
+  if (map_scale_user * 4 > scaleThreshold * 3)
     return 4;
-  if (map_scale_user > 0.5 * scaleThreshold)
+  if (map_scale_user * 2 > scaleThreshold)
     return 3;
-  if (map_scale_user > 0.25 * scaleThreshold)
+  if (map_scale_user * 4 > scaleThreshold)
     return 2;
 
   return 1;
@@ -179,7 +179,7 @@ TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
   if (!shapefileopen)
     return;
 
-  double map_scale_user = Units::ToUserDistance(projection.GetMapScale());
+  fixed map_scale_user = Units::ToUserDistance(projection.GetMapScale());
   if (map_scale_user > scaleThreshold)
     return;
 
@@ -266,7 +266,7 @@ TopologyFile::PaintLabels(Canvas &canvas,
   if (!shapefileopen || settings_map.DeclutterLabels >= 2)
     return;
 
-  double map_scale_user = Units::ToUserDistance(projection.GetMapScale());
+  fixed map_scale_user = Units::ToUserDistance(projection.GetMapScale());
   if (map_scale_user > scaleThreshold)
     return;
 
