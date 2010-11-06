@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "MapWindowProjection.hpp"
 #include "Screen/Layout.hpp"
-#include "NMEA/Info.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Units.hpp"
 
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
 
 MapWindowProjection::MapWindowProjection():
   WindowProjection(),

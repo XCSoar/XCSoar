@@ -25,13 +25,9 @@ Copyright_License {
 #define XCSOAR_MAPWINDOW_PROJECTION_HPP
 
 #include "WindowProjection.hpp"
-#include "SettingsMap.hpp"
-#include "Sizes.h"
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
-struct NMEA_INFO;
-struct DERIVED_INFO;
 class Waypoint;
 
 class MapWindowProjection:
