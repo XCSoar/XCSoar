@@ -64,7 +64,6 @@ public:
 private:
   fixed MapScale;
 
-  fixed LimitMapScaleUser(fixed value);
   fixed LimitMapScale(fixed value);
 
   gcc_pure

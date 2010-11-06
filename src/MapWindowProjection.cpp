@@ -79,14 +79,8 @@ MapWindowProjection::CalculateMapScaleUser(int scale) const
 fixed
 MapWindowProjection::LimitMapScale(fixed value)
 {
-  return Units::ToSysDistance(LimitMapScaleUser(Units::ToUserDistance(value)));
-}
-
-fixed
-MapWindowProjection::LimitMapScaleUser(fixed value)
-{
   if (HaveScaleList())
-    value = CalculateMapScaleUser(FindMapScaleUser(value));
+    value = CalculateMapScale(FindMapScale(value));
 
   return value;
 }
@@ -127,6 +121,6 @@ MapWindowProjection::FindMapScaleUser(const fixed Value) const
 void
 MapWindowProjection::RequestMapScale(fixed x)
 {
-  MapScale = LimitMapScaleUser(Units::ToUserDistance(x));
+  MapScale = Units::ToUserDistance(LimitMapScale(x));
   SetScale(fixed(GetMapResolutionFactor()) / Units::ToSysDistance(MapScale));
 }
