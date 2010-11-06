@@ -39,6 +39,12 @@ Projection::GetMapScale() const
   return fixed(GetMapResolutionFactor()) / scale;
 }
 
+fixed
+Projection::GetScale() const
+{
+  return scale;
+}
+
 GeoPoint
 Projection::ScreenToGeo(int x, int y) const
 {

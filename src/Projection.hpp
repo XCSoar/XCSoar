@@ -59,6 +59,15 @@ public:
   gcc_pure
   fixed GetMapScale() const;
 
+  gcc_pure
+  fixed GetScale() const;
+
+  /**
+   * Sets the scaling factor
+   * @param _scale New scale in px/m
+   */
+  void SetScale(const fixed _scale);
+
   /**
    * Convert a pixel distance to an angle on Earth's surface.
    */
@@ -177,12 +186,6 @@ public:
 protected:
   gcc_const
   static int GetMapResolutionFactor();
-
-  /**
-   * Sets the scaling factor
-   * @param _scale New scale in px/m
-   */
-  void SetScale(const fixed _scale);
 
 private:
   /** This is the geographical location that the ScreenOrigin is mapped to */
