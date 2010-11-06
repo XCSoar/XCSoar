@@ -242,8 +242,6 @@ MapWindow::UpdateScreenAngle(const NMEA_INFO &basic,
     return;
   }
 
-  Angle trackbearing = basic.TrackBearing;
-
   if (IsOriginCentered(settings.DisplayOrientation,
                        visible_projection.GetDisplayMode())) {
     if (settings.DisplayOrientation == TRACKCIRCLE)
@@ -253,7 +251,7 @@ MapWindow::UpdateScreenAngle(const NMEA_INFO &basic,
       visible_projection.SetScreenAngle(Angle::native(fixed_zero));
   } else {
     // normal, glider forward
-    visible_projection.SetScreenAngle(trackbearing);
+    visible_projection.SetScreenAngle(basic.TrackBearing);
   }
 }
 
