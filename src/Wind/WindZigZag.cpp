@@ -430,6 +430,9 @@ public:
     bool continue_search = true;
     bool full_search = false;
 
+    V_west_best = V_westb;
+    theta_west_best = theta_westb;
+
     while (continue_search) {
       continue_search = false;
 
