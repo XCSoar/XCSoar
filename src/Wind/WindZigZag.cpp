@@ -436,22 +436,23 @@ public:
     while (continue_search) {
       continue_search = false;
 
-      int ib = VtoI(V_west_best);
       int il, ih;
       if (full_search) {
         il = 0;
         ih = NUM_V_POINTS - 1;
       } else {
-        il = min(NUM_V_POINTS - 1, max(0, ib - 3));
-        ih = min(NUM_V_POINTS - 1, max(0, ib + 3));
+        const int ib = VtoI(V_west_best);
+        il = max(0, ib - 3);
+        ih = min(NUM_V_POINTS - 1, ib + 3);
       }
-      for (i = il; i <= ih; i++) {
+
+      for (int i = il; i <= ih; ++i) {
         if (scanned[i]) {
           continue;
         } else {
           scanned[i] = true;
           // see if we can find a better estimate
-          fixed V_west = ItoV(i);
+          const fixed V_west = ItoV(i);
           if (UpdateSearch(V_west)) {
             improved = true;
             continue_search = true; // earnt more search
