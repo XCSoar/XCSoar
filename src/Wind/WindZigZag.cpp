@@ -406,7 +406,7 @@ public:
   {
     V_west_best = V_start;
     theta_west_best = theta_start;
-    error_best = 10000;
+    error_best = 100000000; // big enough to always be bad
     UpdateSearch(V_start);
     V_west_best = V_start;
     theta_west_best = theta_start;
