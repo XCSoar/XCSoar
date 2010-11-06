@@ -72,10 +72,7 @@ MapWindowProjection::CalculateMapScale(int scale) const
 fixed
 MapWindowProjection::LimitMapScale(fixed value)
 {
-  if (HaveScaleList())
-    value = CalculateMapScale(FindMapScale(value));
-
-  return value;
+  return HaveScaleList() ? CalculateMapScale(FindMapScale(value)) : value;
 }
 
 fixed
