@@ -57,23 +57,25 @@ static const fixed SAMPLE_RATE(4);
  */
 static const fixed UPDATE_RATE(20);
 
-/** 15 m/s = 30 knots max approx */
+/** 20 m/s = 40 knots max approx */
 static const int V_SCALE = 20;
-/** resolution on V search */
+
+/** resolution on V search (0.5 m/s) */
 #define NUM_V_POINTS 41
-/** resolution on theta search */
+
+/** resolution on theta search (ten degrees) */
 #define NUM_THETA_POINTS (36)
 
 static int
-VtoI(fixed V)
+VtoI(const fixed V)
 {
   return min(NUM_V_POINTS - 1, iround(V * (NUM_V_POINTS - 1) / V_SCALE));
 }
 
 static fixed
-ItoV(int i)
+ItoV(const int i)
 {
-  return fixed(max(0, min(i, NUM_V_POINTS - 1)) * V_SCALE / (NUM_V_POINTS - 1));
+  return fixed(V_SCALE*max(0, min(i, NUM_V_POINTS - 1))) / (NUM_V_POINTS - 1);
 }
 
 /**
