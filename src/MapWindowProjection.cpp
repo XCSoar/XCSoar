@@ -68,14 +68,15 @@ MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 }
 
 bool
-MapWindowProjection::IsOriginCentered(const DisplayOrientation_t orientation)
+MapWindowProjection::IsOriginCentered(const DisplayOrientation_t orientation,
+                                      const DisplayMode_t mode)
 {
   return (orientation == NORTHUP
       || (orientation == NORTHTRACK
-          && DisplayMode != dmCircling)
+          && mode != dmCircling)
       || ((orientation == NORTHCIRCLE
            || orientation == TRACKCIRCLE)
-          && DisplayMode == dmCircling));
+          && mode == dmCircling));
 }
 
 fixed

@@ -232,7 +232,8 @@ MapWindow::UpdateScreenAngle(const NMEA_INFO &basic,
 
   Angle trackbearing = basic.TrackBearing;
 
-  if (visible_projection.IsOriginCentered(settings.DisplayOrientation)) {
+  if (visible_projection.IsOriginCentered(settings.DisplayOrientation,
+                                          visible_projection.GetDisplayMode())) {
     if (settings.DisplayOrientation == TRACKCIRCLE)
       visible_projection.SetScreenAngle(derived.task_stats.current_leg.
                                         solution_remaining.Vector.Bearing);
@@ -270,7 +271,8 @@ MapWindow::UpdateMapScale(const DERIVED_INFO &derived,
 
   if (settings_map.AutoZoom && positive(wpd)) {
     fixed AutoZoomFactor =
-        visible_projection.IsOriginCentered(settings_map.DisplayOrientation) ?
+        visible_projection.IsOriginCentered(settings_map.DisplayOrientation,
+                                            visible_projection.GetDisplayMode()) ?
         fixed(2.5) : fixed_four;
 
     if (wpd < AutoZoomFactor * visible_projection.GetMapScale()) {
@@ -294,7 +296,8 @@ MapWindow::Update(const RECT rc, const NMEA_INFO &basic,
 {
   visible_projection.SetMapRect(rc);
 
-  if (visible_projection.IsOriginCentered(settings_map.DisplayOrientation) ||
+  if (visible_projection.IsOriginCentered(settings_map.DisplayOrientation,
+                                          visible_projection.GetDisplayMode()) ||
       settings_map.EnablePan)
     visible_projection.SetScreenOrigin((rc.left + rc.right) / 2,
                                        (rc.bottom + rc.top) / 2);
