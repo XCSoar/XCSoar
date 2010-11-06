@@ -455,12 +455,15 @@ public:
           const fixed V_west = ItoV(i);
           if (UpdateSearch(V_west)) {
             improved = true;
-            continue_search = true; // earnt more search
+            if ((i==il) || (i==ih)) {
+              // improved on edge, expand search
+              continue_search = true;
+            }
           }
         }
       }
 
-      if (!continue_search && !full_search && (error_best > 100)) {
+      if (!continue_search && !improved && !full_search && (error_best > 100)) {
         full_search = true;
         continue_search = true;
         // if no improvement and still large error,
