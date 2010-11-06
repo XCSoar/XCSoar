@@ -1612,7 +1612,7 @@ InputEvents::sub_SetZoom(fixed value)
   fixed minreasonable = fixed_int_constant(XCSoarInterface::main_window.map.
       GetDisplayMode() != dmCircling ? 440 : 50);
   value = max(minreasonable, min(fixed_int_constant(160000), value));
-  XCSoarInterface::main_window.map.SetProjection().RequestMapScale(value);
+  XCSoarInterface::main_window.map.SetProjection().SetMapScale(value);
 
   XCSoarInterface::main_window.map.QuickRedraw(XCSoarInterface::SettingsMap());
   XCSoarInterface::SendSettingsMap(true);

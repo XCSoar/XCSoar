@@ -39,7 +39,7 @@ public:
 public:
   void Initialize();
 
-  void RequestMapScale(const fixed x);
+  void SetMapScale(const fixed x);
 
 public:
   bool HaveScaleList() const {

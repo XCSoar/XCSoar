@@ -278,7 +278,7 @@ MapWindow::UpdateMapScale(const DERIVED_INFO &derived,
     // across the screen
 
     wpd = max(fixed_int_constant(50), min(fixed_int_constant(160000), wpd / 4));
-    visible_projection.RequestMapScale(wpd);
+    visible_projection.SetMapScale(wpd);
     return;
   }
 
@@ -295,7 +295,7 @@ MapWindow::UpdateMapScale(const DERIVED_INFO &derived,
       wpd = max(fixed_int_constant(440), min(fixed_int_constant(160000),
                                              wpd / AutoZoomFactor));
 
-      visible_projection.RequestMapScale(wpd);
+      visible_projection.SetMapScale(wpd);
     }
   } else if (TargetPanLast) {
     visible_projection.SetScale(TargetPanUnZoom);

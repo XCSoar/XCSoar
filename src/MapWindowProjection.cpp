@@ -50,7 +50,7 @@ MapWindowProjection::MapWindowProjection():
 void
 MapWindowProjection::Initialize()
 {
-  RequestMapScale(fixed_int_constant(5000));
+  SetMapScale(fixed_int_constant(5000));
 }
 
 bool
@@ -103,7 +103,7 @@ MapWindowProjection::FindMapScale(const fixed Value) const
 }
 
 void
-MapWindowProjection::RequestMapScale(const fixed x)
+MapWindowProjection::SetMapScale(const fixed x)
 {
   SetScale(fixed(GetMapResolutionFactor()) / LimitMapScale(x));
 }
