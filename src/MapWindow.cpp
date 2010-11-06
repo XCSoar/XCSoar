@@ -272,7 +272,7 @@ MapWindow::UpdateMapScale(const DERIVED_INFO &derived,
   if (settings_map.TargetPan) {
     if (!TargetPanLast) { // just entered targetpan so save zoom
       TargetPanLast = true;
-      TargetPanUnZoom = visible_projection.GetMapScale();
+      TargetPanUnZoom = visible_projection.GetScale();
     }
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
@@ -298,7 +298,7 @@ MapWindow::UpdateMapScale(const DERIVED_INFO &derived,
       visible_projection.RequestMapScale(wpd);
     }
   } else if (TargetPanLast) {
-    visible_projection.RequestMapScale(TargetPanUnZoom);
+    visible_projection.SetScale(TargetPanUnZoom);
   }
 
   if (!settings_map.TargetPan && TargetPanLast)
