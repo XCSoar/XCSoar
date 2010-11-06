@@ -287,3 +287,28 @@ MapWindow::UpdateMapScale(const DERIVED_INFO &derived,
   if (!settings_map.TargetPan && TargetPanLast)
     TargetPanLast = false;
 }
+
+void
+MapWindow::Update(const RECT rc, const NMEA_INFO &basic,
+                  const SETTINGS_MAP &settings_map)
+{
+  visible_projection.SetMapRect(rc);
+
+  if (visible_projection.IsOriginCentered(settings_map.DisplayOrientation) ||
+      settings_map.EnablePan)
+    visible_projection.SetScreenOrigin((rc.left + rc.right) / 2,
+                                       (rc.bottom + rc.top) / 2);
+  else
+    visible_projection.SetScreenOrigin(
+        (rc.left + rc.right) / 2,
+        ((rc.top - rc.bottom) * settings_map.GliderScreenPosition / 100) + rc.bottom);
+
+  if (settings_map.EnablePan)
+    visible_projection.SetGeoLocation(settings_map.PanLocation);
+  else
+    // Pan is off
+    visible_projection.SetGeoLocation(basic.Location);
+
+  visible_projection.UpdateScreenBounds();
+}
+

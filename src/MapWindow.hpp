@@ -258,6 +258,9 @@ public:
   void Render(Canvas &canvas, const RECT &rc);
 
 protected:
+  void Update(const RECT rc, const NMEA_INFO &basic,
+              const SETTINGS_MAP &settings_map);
+
   void UpdateScreenAngle(const NMEA_INFO &basic, const DERIVED_INFO &derived,
                          const SETTINGS_MAP &settings);
 

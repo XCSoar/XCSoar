@@ -78,29 +78,6 @@ MapWindowProjection::IsOriginCentered(const DisplayOrientation_t orientation)
           && DisplayMode == dmCircling));
 }
 
-void
-MapWindowProjection::Update(const RECT rc, const NMEA_INFO &basic,
-                            const SETTINGS_MAP &settings_map)
-{
-  MapRect = rc;
-
-  if (IsOriginCentered(settings_map.DisplayOrientation) ||
-      settings_map.EnablePan)
-    SetScreenOrigin((rc.left + rc.right) / 2, (rc.bottom + rc.top) / 2);
-  else
-    SetScreenOrigin((rc.left + rc.right) / 2,
-                    ((rc.top - rc.bottom) *
-                     settings_map.GliderScreenPosition / 100) + rc.bottom);
-
-  if (settings_map.EnablePan)
-    SetGeoLocation(settings_map.PanLocation);
-  else
-    // Pan is off
-    SetGeoLocation(basic.Location);
-
-  UpdateScreenBounds();
-}
-
 fixed
 MapWindowProjection::CalculateMapScale(int scale) const
 {

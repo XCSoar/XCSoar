@@ -105,11 +105,11 @@ public:
   gcc_pure
   GeoBounds GetScreenBounds() const;
 
-protected:
-  RECT MapRect;
-
   /** Updates the cached screenbounds_latlon member */
   void UpdateScreenBounds();
+
+protected:
+  RECT MapRect;
 
 private:
   /**

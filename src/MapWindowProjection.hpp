@@ -52,10 +52,6 @@ protected:
   DisplayMode_t DisplayMode;
 
 public:
-  // scale/display stuff
-  void Update(const RECT rc, const NMEA_INFO &basic,
-              const SETTINGS_MAP &settings_map);
-
   void Initialize(const SETTINGS_MAP &settings, const RECT &rc);
 
   void RequestMapScaleUser(fixed x, const SETTINGS_MAP &setting_map);
