@@ -55,7 +55,7 @@ MapWindowProjection::Initialize(const SETTINGS_MAP &settings_map,
 {
   MapRect = rc;
 
-  RequestMapScaleUser(MapScale, settings_map);
+  RequestMapScale(fixed_int_constant(5000), settings_map);
 }
 
 bool
