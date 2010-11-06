@@ -1608,7 +1608,8 @@ InputEvents::sub_SetZoom(fixed value)
     Profile::Set(szProfileAutoZoom, false);
     Message::AddMessage(_("AutoZoom OFF"));
   }
-  XCSoarInterface::SetSettingsMap().MapScale = value;
+
+  XCSoarInterface::main_window.map.SetProjection().RequestMapScaleUser(value);
 
   XCSoarInterface::main_window.map.QuickRedraw(XCSoarInterface::SettingsMap());
   XCSoarInterface::SendSettingsMap(true);
@@ -1620,11 +1621,7 @@ InputEvents::sub_ScaleZoom(int vswitch)
   const MapWindowProjection &projection =
       XCSoarInterface::main_window.map.VisibleProjection();
 
-  fixed value;
-  if (positive(XCSoarInterface::SettingsMap().MapScale))
-    value = XCSoarInterface::SettingsMap().MapScale;
-  else
-    value = Units::ToUserDistance(projection.GetMapScale());
+  fixed value = Units::ToUserDistance(projection.GetMapScale());
 
   if (projection.HaveScaleList()) {
     value = projection.StepMapScale(value, -vswitch);

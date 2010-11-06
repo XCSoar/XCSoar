@@ -200,21 +200,11 @@ void
 MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
                                     const SETTINGS_MAP &settings_map)
 {
-  static DisplayMode_t DisplayModeLast = DisplayMode;
   static bool TargetPanLast = false;
   static fixed TargetPanUnZoom = fixed_one;
 
-  // if there is user intervention in the scale
-  if (positive(settings_map.MapScale)) {
-    fixed ext_mapscale = LimitMapScale(settings_map.MapScale, settings_map);
-    if (positive(ext_mapscale) && DisplayMode == DisplayModeLast)
-      _RequestedMapScale = ext_mapscale;
-  }
-
   if(MapScale != _RequestedMapScale)
     ModifyMapScale(settings_map);
-
-  DisplayModeLast = DisplayMode;
 
   fixed wpd;
   if (settings_map.TargetPan)

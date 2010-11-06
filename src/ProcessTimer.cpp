@@ -89,9 +89,6 @@ ProcessTimer::CommonProcessTimer()
   ActionInterface::DisplayModes();
   XCSoarInterface::ExchangeBlackboard();
 
-  // send ignore command
-  CommonInterface::SetSettingsMap().MapScale = fixed_zero;
-
   InfoBoxManager::ProcessTimer();
   InputEvents::ProcessTimer();
 

@@ -70,6 +70,10 @@ public:
 
   void Initialize(const SETTINGS_MAP &settings, const RECT &rc);
 
+  void RequestMapScaleUser(fixed x) {
+    _RequestedMapScale = x;
+  }
+
   void RequestMapScale(fixed x);
 
 protected:

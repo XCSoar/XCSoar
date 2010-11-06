@@ -211,6 +211,10 @@ public:
     return visible_projection;
   }
 
+  MapWindowProjection &SetProjection() {
+    return visible_projection;
+  }
+
 private:
 
 #ifndef ENABLE_OPENGL

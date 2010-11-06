@@ -190,7 +190,6 @@ public:
     settings_map.DisplayTextType = DISPLAYNAME;
     settings_map.EnableTopology = true;
     settings_map.EnableTerrain = true;
-    settings_map.MapScale = fixed(3);
   }
 };
 
