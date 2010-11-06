@@ -149,6 +149,8 @@ BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas,
     return;
 
   canvas.select(Fonts::Title);
+  canvas.set_text_color(Color::BLACK);
+  canvas.background_transparent();
 
   TCHAR Buffer[20];
   m_weather->ValueToText(Buffer, m_rend->spot_max_val);
