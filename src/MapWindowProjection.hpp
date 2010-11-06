@@ -53,9 +53,6 @@ public:
   fixed CalculateMapScale(int scale) const;
 
   gcc_pure
-  fixed CalculateMapScaleUser(int scale) const;
-
-  gcc_pure
   fixed StepMapScale(fixed scale, int Step) const;
 
   gcc_pure

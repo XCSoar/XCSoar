@@ -64,16 +64,10 @@ MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 fixed
 MapWindowProjection::CalculateMapScale(int scale) const
 {
-  return Units::ToSysDistance(CalculateMapScaleUser(scale));
-}
-
-fixed
-MapWindowProjection::CalculateMapScaleUser(int scale) const
-{
   assert(scale >= 0 && scale < ScaleListCount);
 
-  return ScaleList[scale] * GetMapResolutionFactor() /
-         Layout::Scale(GetScreenWidth());
+  return Units::ToSysDistance(ScaleList[scale]) *
+         GetMapResolutionFactor() / Layout::Scale(GetScreenWidth());
 }
 
 fixed
