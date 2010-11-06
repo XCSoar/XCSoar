@@ -61,7 +61,7 @@ MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 }
 
 fixed
-MapWindowProjection::CalculateMapScale(int scale) const
+MapWindowProjection::CalculateMapScale(const int scale) const
 {
   assert(scale >= 0 && scale < ScaleListCount);
 
@@ -76,7 +76,7 @@ MapWindowProjection::LimitMapScale(const fixed value) const
 }
 
 fixed
-MapWindowProjection::StepMapScale(fixed scale, int Step) const
+MapWindowProjection::StepMapScale(const fixed scale, int Step) const
 {
   int i = FindMapScale(scale) + Step;
   i = max(0, min(ScaleListCount - 1, i));
@@ -103,7 +103,7 @@ MapWindowProjection::FindMapScale(const fixed Value) const
 }
 
 void
-MapWindowProjection::RequestMapScale(fixed x)
+MapWindowProjection::RequestMapScale(const fixed x)
 {
   SetScale(fixed(GetMapResolutionFactor()) / LimitMapScale(x));
 }

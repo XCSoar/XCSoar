@@ -39,7 +39,7 @@ public:
 public:
   void Initialize();
 
-  void RequestMapScale(fixed x);
+  void RequestMapScale(const fixed x);
 
 public:
   bool HaveScaleList() const {
@@ -50,10 +50,10 @@ public:
    * Calculates a scale index.
    */
   gcc_pure
-  fixed CalculateMapScale(int scale) const;
+  fixed CalculateMapScale(const int scale) const;
 
   gcc_pure
-  fixed StepMapScale(fixed scale, int Step) const;
+  fixed StepMapScale(const fixed scale, int Step) const;
 
   gcc_pure
   bool WaypointInScaleFilter(const Waypoint &way_point) const;
