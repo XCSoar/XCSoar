@@ -318,7 +318,7 @@ InputEvents::eventZoom(const TCHAR* misc)
     if (endptr == misc)
       return;
 
-    sub_SetZoom(fixed(zoom));
+    sub_SetZoom(Units::ToSysDistance(fixed(zoom)));
   }
 
   XCSoarInterface::SendSettingsMap(true);
@@ -1609,8 +1609,8 @@ InputEvents::sub_SetZoom(fixed value)
     Message::AddMessage(_("AutoZoom OFF"));
   }
 
-  XCSoarInterface::main_window.map.SetProjection().RequestMapScaleUser(value,
-                                                                       XCSoarInterface::SettingsMap());
+  XCSoarInterface::main_window.map.SetProjection().RequestMapScale(value,
+                                                                   XCSoarInterface::SettingsMap());
 
   XCSoarInterface::main_window.map.QuickRedraw(XCSoarInterface::SettingsMap());
   XCSoarInterface::SendSettingsMap(true);
@@ -1622,10 +1622,10 @@ InputEvents::sub_ScaleZoom(int vswitch)
   const MapWindowProjection &projection =
       XCSoarInterface::main_window.map.VisibleProjection();
 
-  fixed value = Units::ToUserDistance(projection.GetMapScale());
+  fixed value = projection.GetMapScale();
 
   if (projection.HaveScaleList()) {
-    value = projection.StepMapScaleUser(value, -vswitch);
+    value = projection.StepMapScale(value, -vswitch);
   } else {
     if (vswitch == 1)
       // zoom in a little
