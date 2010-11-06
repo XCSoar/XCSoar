@@ -37,8 +37,10 @@ Copyright_License {
 
 #ifdef ENABLE_SDL
 
+#ifndef ENABLE_OPENGL
 #include <SDL_rotozoom.h>
 #include <SDL_imageFilter.h>
+#endif
 
 void
 Canvas::reset()
@@ -67,6 +69,9 @@ void
 Canvas::segment(int x, int y, unsigned radius,
                 Angle start, Angle end, bool horizon)
 {
+#ifdef ENABLE_OPENGL
+  // XXX
+#else /* !OPENGL */
   // XXX horizon
 
   x += x_offset;
@@ -83,6 +88,7 @@ Canvas::segment(int x, int y, unsigned radius,
                (int)start.value_degrees() - 90,
                (int)end.value_degrees() - 90,
                pen.get_color().gfx_color());
+#endif /* !OPENGL */
 }
 
 void
@@ -252,6 +258,8 @@ Canvas::copy(const Canvas &src)
   copy(src, 0, 0);
 }
 
+#ifndef ENABLE_OPENGL
+
 void
 Canvas::copy_transparent_white(const Canvas &src)
 {
@@ -272,14 +280,21 @@ Canvas::copy_transparent_black(const Canvas &src)
   ::SDL_SetColorKey(src.surface, 0, 0);
 }
 
+#endif /* !OPENGL */
+
 void
 Canvas::stretch_transparent(const Canvas &src, Color key)
 {
   assert(src.surface != NULL);
 
+#ifdef ENABLE_OPENGL
+  // XXX
+  stretch(src);
+#else /* !OPENGL */
   ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(key));
   stretch(src);
   ::SDL_SetColorKey(src.surface, 0, 0);
+#endif /* !OPENGL */
 }
 
 void
@@ -292,17 +307,14 @@ Canvas::stretch(int dest_x, int dest_y,
   assert(src.surface != NULL);
 
 #ifdef ENABLE_OPENGL
-  if (surface->flags & SDL_OPENGL) {
-    glColor4f(1.0, 1.0, 1.0, 1.0);
+  glColor4f(1.0, 1.0, 1.0, 1.0);
 
-    GLTexture texture(src.surface);
-    texture.draw(x_offset, y_offset,
-                 dest_x, dest_y, dest_width, dest_height,
-                 src_x, src_y, src_width, src_height,
-                 src.surface->w, src.surface->h);
-    return;
-  }
-#endif
+  GLTexture texture(src.surface);
+  texture.draw(x_offset, y_offset,
+               dest_x, dest_y, dest_width, dest_height,
+               src_x, src_y, src_width, src_height,
+               src.surface->w, src.surface->h);
+#else /* !OPENGL */
 
   SDL_Surface *zoomed =
     ::zoomSurface(src.surface, (double)dest_width / (double)src_width,
@@ -318,6 +330,7 @@ Canvas::stretch(int dest_x, int dest_y,
        zoomed, (src_x * dest_width) / src_width,
        (src_y * dest_height) / src_height);
   ::SDL_FreeSurface(zoomed);
+#endif /* !OPENGL */
 }
 
 void
@@ -329,6 +342,8 @@ Canvas::stretch(const Canvas &src,
   stretch(0, 0, get_width(), get_height(),
           src, src_x, src_y, src_width, src_height);
 }
+
+#ifndef ENABLE_OPENGL
 
 static bool
 clip_range(int &a, unsigned a_size, int &b, unsigned b_size, unsigned &size)
@@ -476,6 +491,8 @@ blit_and(SDL_Surface *dest, int dest_x, int dest_y,
   ::SDL_UnlockSurface(dest);
 }
 
+#endif /* !OPENGL */
+
 void
 Canvas::copy_or(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
@@ -484,18 +501,16 @@ Canvas::copy_or(int dest_x, int dest_y,
   assert(src.surface != NULL);
 
 #ifdef ENABLE_OPENGL
-  if (surface->flags & SDL_OPENGL) {
-    stretch_or(dest_x, dest_y, dest_width, dest_height,
-               src, src_x, src_y, dest_width, dest_height);
-    return;
-  }
-#endif
+  stretch_or(dest_x, dest_y, dest_width, dest_height,
+             src, src_x, src_y, dest_width, dest_height);
+#else /* !OPENGL */
 
   dest_x += x_offset;
   dest_y += y_offset;
 
   ::blit_or(surface, dest_x, dest_y, dest_width, dest_height,
             src.surface, src_x, src_y);
+#endif /* !OPENGL */
 }
 
 void
@@ -506,18 +521,16 @@ Canvas::copy_and(int dest_x, int dest_y,
   assert(src.surface != NULL);
 
 #ifdef ENABLE_OPENGL
-  if (surface->flags & SDL_OPENGL) {
-    stretch_and(dest_x, dest_y, dest_width, dest_height,
+  stretch_and(dest_x, dest_y, dest_width, dest_height,
                 src, src_x, src_y, dest_width, dest_height);
-    return;
-  }
-#endif
+#else /* !OPENGL */
 
   dest_x += x_offset;
   dest_y += y_offset;
 
   ::blit_and(surface, dest_x, dest_y, dest_width, dest_height,
              src.surface, src_x, src_y);
+#endif /* !OPENGL */
 }
 
 void
@@ -530,15 +543,12 @@ Canvas::stretch_or(int dest_x, int dest_y,
   assert(src.surface != NULL);
 
 #ifdef ENABLE_OPENGL
-  if (surface->flags & SDL_OPENGL) {
-    glEnable(GL_COLOR_LOGIC_OP);
-    glLogicOp(GL_OR);
-    stretch(dest_x, dest_y, dest_width, dest_height,
-            src, src_x, src_y, src_width, src_height);
-    glDisable(GL_COLOR_LOGIC_OP);
-    return;
-  }
-#endif
+  glEnable(GL_COLOR_LOGIC_OP);
+  glLogicOp(GL_OR);
+  stretch(dest_x, dest_y, dest_width, dest_height,
+          src, src_x, src_y, src_width, src_height);
+  glDisable(GL_COLOR_LOGIC_OP);
+#else /* !OPENGL */
 
   dest_x += x_offset;
   dest_y += y_offset;
@@ -558,6 +568,7 @@ Canvas::stretch_or(int dest_x, int dest_y,
             (src_x * dest_width) / src_width,
             (src_y * dest_height) / src_height);
   ::SDL_FreeSurface(zoomed);
+#endif /* !OPENGL */
 }
 
 void
@@ -570,15 +581,12 @@ Canvas::stretch_and(int dest_x, int dest_y,
   assert(src.surface != NULL);
 
 #ifdef ENABLE_OPENGL
-  if (surface->flags & SDL_OPENGL) {
-    glEnable(GL_COLOR_LOGIC_OP);
-    glLogicOp(GL_AND);
-    stretch(dest_x, dest_y, dest_width, dest_height,
-            src, src_x, src_y, src_width, src_height);
-    glDisable(GL_COLOR_LOGIC_OP);
-    return;
-  }
-#endif
+  glEnable(GL_COLOR_LOGIC_OP);
+  glLogicOp(GL_AND);
+  stretch(dest_x, dest_y, dest_width, dest_height,
+          src, src_x, src_y, src_width, src_height);
+  glDisable(GL_COLOR_LOGIC_OP);
+#else /* !OPENGL */
 
   dest_x += x_offset;
   dest_y += y_offset;
@@ -598,6 +606,7 @@ Canvas::stretch_and(int dest_x, int dest_y,
              (src_x * dest_width) / src_width,
              (src_y * dest_height) / src_height);
   ::SDL_FreeSurface(zoomed);
+#endif /* !OPENGL */
 }
 
 #else /* !ENABLE_SDL */

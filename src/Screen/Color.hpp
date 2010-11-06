@@ -183,6 +183,8 @@ operator !=(const Color a, const Color b)
   return !(a == b);
 }
 
+#ifndef ENABLE_OPENGL
+
 /**
  * A hardware color on a specific Canvas.  A Canvas maps a Color
  * object into HWColor.  Depending on the platform, Color and
@@ -209,5 +211,7 @@ struct HWColor {
   operator COLORREF() const { return value; }
   #endif
 };
+
+#endif /* !OPENGL */
 
 #endif

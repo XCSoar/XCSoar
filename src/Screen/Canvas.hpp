@@ -38,7 +38,9 @@ Copyright_License {
 
 #ifdef ENABLE_SDL
 
+#ifndef ENABLE_OPENGL
 #include <SDL_gfxPrimitives.h>
+#endif
 
 #ifdef ENABLE_OPENGL
 #ifdef ANDROID
@@ -118,12 +120,14 @@ public:
     return height;
   }
 
+#ifndef ENABLE_OPENGL
   gcc_pure
   const HWColor map(const Color color) const
   {
     return HWColor(::SDL_MapRGB(surface->format, color.value.r,
                                 color.value.g, color.value.b));
   }
+#endif /* !OPENGL */
 
   void null_pen() {
     pen = Pen(0, Color::BLACK);
@@ -203,24 +207,20 @@ public:
   void outline_rectangle(int left, int top, int right, int bottom,
                          Color color) {
 #ifdef ENABLE_OPENGL
-    if (surface->flags & SDL_OPENGL) {
-      glColor(pen.get_color());
+    glColor(pen.get_color());
 
-      const GLfloat v[] = {
-        left, top,
-        right, top,
-        right, bottom,
-        left, bottom,
-      };
-      glVertexPointer(2, GL_FLOAT, 0, v);
-      glDrawArrays(GL_LINE_LOOP, 0, 4);
-
-      return;
-    }
-#endif
-
+    const GLfloat v[] = {
+      left, top,
+      right, top,
+      right, bottom,
+      left, bottom,
+    };
+    glVertexPointer(2, GL_FLOAT, 0, v);
+    glDrawArrays(GL_LINE_LOOP, 0, 4);
+#else /* !OPENGL */
     ::rectangleColor(surface, left + x_offset, top + y_offset,
                      right + x_offset, bottom + y_offset, color.gfx_color());
+#endif /* !OPENGL */
   }
 
   void rectangle(int left, int top, int right, int bottom) {
@@ -230,6 +230,7 @@ public:
       outline_rectangle(left, top, right, bottom, pen.get_color());
   }
 
+#ifndef ENABLE_OPENGL
   void fill_rectangle(int left, int top, int right, int bottom,
                       const HWColor color) {
     if (left >= right || top >= bottom)
@@ -243,32 +244,31 @@ public:
     SDL_Rect r = { left, top, right - left, bottom - top };
     SDL_FillRect(surface, &r, color);
   }
+#endif
 
   void fill_rectangle(int left, int top, int right, int bottom,
                       const Color color) {
 #ifdef ENABLE_OPENGL
-    if (surface->flags & SDL_OPENGL) {
-      glColor(color);
+    glColor(color);
 
-      const GLfloat v[] = {
-        left, top,
-        right, top,
-        right, bottom,
-        left, bottom,
-      };
-      glVertexPointer(2, GL_FLOAT, 0, v);
+    const GLfloat v[] = {
+      left, top,
+      right, top,
+      right, bottom,
+      left, bottom,
+    };
+    glVertexPointer(2, GL_FLOAT, 0, v);
 
 #ifdef ANDROID
-      GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
-      glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
+    GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
 #else
-      glDrawArrays(GL_QUADS, 0, 4);
-#endif
-      return;
-    }
+    glDrawArrays(GL_QUADS, 0, 4);
 #endif
 
+#else /* !OPENGL */
     fill_rectangle(left, top, right, bottom, map(color));
+#endif /* !OPENGL */
   }
 
   void fill_rectangle(int left, int top, int right, int bottom,
@@ -279,9 +279,11 @@ public:
     fill_rectangle(left, top, right, bottom, brush.get_color());
   }
 
+#ifndef ENABLE_OPENGL
   void fill_rectangle(const RECT &rc, const HWColor color) {
     fill_rectangle(rc.left, rc.top, rc.right, rc.bottom, color);
   }
+#endif /* !OPENGL */
 
   void fill_rectangle(const RECT &rc, const Color color) {
     fill_rectangle(rc.left, rc.top, rc.right, rc.bottom, color);
@@ -295,9 +297,11 @@ public:
     rectangle(0, 0, get_width(), get_height());
   }
 
+#ifndef ENABLE_OPENGL
   void clear(const HWColor color) {
     fill_rectangle(0, 0, get_width(), get_height(), color);
   }
+#endif /* !OPENGL */
 
   void clear(const Color color) {
     fill_rectangle(0, 0, get_width(), get_height(), color);
@@ -356,33 +360,28 @@ public:
       return;
 
 #ifdef ENABLE_OPENGL
-    if (surface->flags & SDL_OPENGL) {
-      GLfloat v[cPoints * 2];
-      for (unsigned i = 0; i < cPoints; ++i) {
-        v[i * 2] = lppt[i].x;
-        v[i * 2 + 1] = lppt[i].y;
-      }
-      glVertexPointer(2, GL_FLOAT, 0, v);
-
-      if (!brush.is_hollow()) {
-        glColor(brush.get_color());
-#ifdef ANDROID
-        // XXX
-        glDrawArrays(GL_TRIANGLES, 0, cPoints / 3);
-#else
-        glDrawArrays(GL_POLYGON, 0, cPoints);
-#endif
-      }
-
-      if (pen_over_brush()) {
-        glColor(pen.get_color());
-        glDrawArrays(GL_LINE_LOOP, 0, cPoints);
-      }
-
-      return;
+    GLfloat v[cPoints * 2];
+    for (unsigned i = 0; i < cPoints; ++i) {
+      v[i * 2] = lppt[i].x;
+      v[i * 2 + 1] = lppt[i].y;
     }
-#endif
+    glVertexPointer(2, GL_FLOAT, 0, v);
 
+    if (!brush.is_hollow()) {
+      glColor(brush.get_color());
+#ifdef ANDROID
+      // XXX
+      glDrawArrays(GL_TRIANGLES, 0, cPoints / 3);
+#else
+      glDrawArrays(GL_POLYGON, 0, cPoints);
+#endif
+    }
+
+    if (pen_over_brush()) {
+      glColor(pen.get_color());
+      glDrawArrays(GL_LINE_LOOP, 0, cPoints);
+    }
+#else /* !OPENGL */
     Sint16 vx[cPoints], vy[cPoints];
 
     for (unsigned i = 0; i < cPoints; ++i) {
@@ -396,6 +395,7 @@ public:
 
     if (pen_over_brush())
       ::polygonColor(surface, vx, vy, cPoints, pen.get_color().gfx_color());
+#endif /* !OPENGL */
   }
 
   void autoclip_polygon(const POINT* lppt, unsigned cPoints) {
@@ -410,15 +410,12 @@ public:
 
   void line(int ax, int ay, int bx, int by) {
 #ifdef ENABLE_OPENGL
-    if (surface->flags & SDL_OPENGL) {
-      glColor(pen.get_color());
+    glColor(pen.get_color());
 
-      const GLfloat v[] = { ax, ay, bx, by };
-      glVertexPointer(2, GL_FLOAT, 0, v);
-      glDrawArrays(GL_LINE_STRIP, 0, 2);
-      return;
-    }
-#endif
+    const GLfloat v[] = { ax, ay, bx, by };
+    glVertexPointer(2, GL_FLOAT, 0, v);
+    glDrawArrays(GL_LINE_STRIP, 0, 2);
+#else /* !OPENGL */
 
     ax += x_offset;
     bx += x_offset;
@@ -426,6 +423,7 @@ public:
     by += y_offset;
 
     ::lineColor(surface, ax, ay, bx, by, pen.get_color().gfx_color());
+#endif /* !OPENGL */
   }
 
   void line(const POINT a, const POINT b) {
@@ -446,6 +444,9 @@ public:
   void line_to(int x, int y);
 
   void circle(int x, int y, unsigned radius) {
+#ifdef ENABLE_OPENGL
+    // XXX
+#else /* !OPENGL */
     x += x_offset;
     y += y_offset;
 
@@ -455,6 +456,7 @@ public:
 
     if (pen_over_brush())
       ::circleColor(surface, x, y, radius, pen.get_color().gfx_color());
+#endif
   }
 
   void segment(int x, int y, unsigned radius,
