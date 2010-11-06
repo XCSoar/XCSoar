@@ -28,6 +28,16 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "GestureManager.hpp"
 
+struct ZoomClimb_t
+{
+  fixed CruiseMapScale;
+  fixed ClimbMapScale;
+  bool last_isclimb;
+  bool last_targetpan;
+
+  ZoomClimb_t();
+};
+
 class GlueMapWindow : public MapWindow {
   unsigned idle_robin;
 
@@ -53,6 +63,8 @@ private:
   POINT drag_start, drag_last, drag_last_valid_target;
   GestureManager gestures;
   bool ignore_single_click;
+
+  ZoomClimb_t zoomclimb;
 
   /**
    * The projection which was active when dragging started.
@@ -112,6 +124,11 @@ private:
   void DrawCrossHairs(Canvas &canvas) const;
   void DrawFinalGlide(Canvas &canvas, const RECT &rc) const;
   void DrawThermalBand(Canvas &canvas, const RECT &rc) const;
+
+  void SwitchZoomClimb();
+
+public:
+  void UpdateDisplayMode();
 };
 
 #endif

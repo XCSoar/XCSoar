@@ -45,16 +45,6 @@ struct THERMAL_SOURCE_VIEW
   bool Visible;
 };
 
-struct ZoomClimb_t
-{
-  fixed CruiseMapScale;
-  fixed ClimbMapScale;
-  bool last_isclimb;
-  bool last_targetpan;
-
-  ZoomClimb_t();
-};
-
 class TopologyStore;
 class RasterTerrain;
 class RasterWeather;
@@ -227,12 +217,7 @@ private:
   void DrawThreadLoop ();
 #endif
 
-  // display management
-  void SwitchZoomClimb(void);
-
   POINT Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS];
-
-  ZoomClimb_t zoomclimb;
 
   THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
 
@@ -267,8 +252,6 @@ public:
 
   // thread, main functions
   void Render(Canvas &canvas, const RECT &rc);
-
-  void UpdateDisplayMode();
 
 protected:
   void UpdateTopology();
