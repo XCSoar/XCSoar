@@ -90,7 +90,7 @@ MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
 void
 MapWindow::UpdateProjection()
 {
-  visible_projection.UpdateMapScale(Calculated(), SettingsMap());
+  UpdateMapScale(Calculated(), SettingsMap());
 }
 
 void
@@ -242,4 +242,48 @@ MapWindow::UpdateScreenAngle(const NMEA_INFO &basic,
     // normal, glider forward
     visible_projection.SetScreenAngle(trackbearing);
   }
+}
+
+void
+MapWindow::UpdateMapScale(const DERIVED_INFO &derived,
+                          const SETTINGS_MAP &settings_map)
+{
+  static bool TargetPanLast = false;
+  static fixed TargetPanUnZoom = fixed_one;
+
+  fixed wpd;
+  if (settings_map.TargetPan)
+    wpd = settings_map.TargetZoomDistance;
+  else
+    wpd = derived.AutoZoomDistance;
+
+  if (settings_map.TargetPan) {
+    if (!TargetPanLast) { // just entered targetpan so save zoom
+      TargetPanLast = true;
+      TargetPanUnZoom = visible_projection.GetMapScale();
+    }
+    // set scale exactly so that waypoint distance is the zoom factor
+    // across the screen
+    visible_projection.RequestMapScale(wpd / 4, settings_map);
+    return;
+  }
+
+  if (settings_map.AutoZoom && positive(wpd)) {
+    fixed AutoZoomFactor =
+        visible_projection.IsOriginCentered(settings_map.DisplayOrientation) ?
+        fixed(2.5) : fixed_four;
+
+    if (wpd < AutoZoomFactor * visible_projection.GetMapScale()) {
+      // waypoint is too close, so zoom in
+
+      // set scale exactly so that waypoint distance is the zoom factor
+      // across the screen
+      visible_projection.RequestMapScale(wpd / AutoZoomFactor, settings_map);
+    }
+  } else if (TargetPanLast) {
+    visible_projection.RequestMapScale(TargetPanUnZoom, settings_map);
+  }
+
+  if (!settings_map.TargetPan && TargetPanLast)
+    TargetPanLast = false;
 }

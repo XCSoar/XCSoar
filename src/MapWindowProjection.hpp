@@ -40,18 +40,6 @@ class MapWindowProjection:
 public:
   MapWindowProjection();
 
-  /**
-   * sets the map scale based on three possible inputs:
-   * If TerrainPan is enabled, then uses that parameter
-   * Else If settings_map.MapScale > 0, uses that value (which
-   * will be reset back to zero during the blackboard copy)
-   * Else If AutoZoom is enabled, scales to DerivedDrawInfo.AutoZoomDistance
-   * @param derived_info
-   * @param settings_map
-   */
-  void UpdateMapScale(const DERIVED_INFO &derived_info,
-                      const SETTINGS_MAP &settings_map);
-
   DisplayMode_t GetDisplayMode() const {
     return DisplayMode;
   }

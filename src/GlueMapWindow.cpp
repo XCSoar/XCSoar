@@ -43,7 +43,7 @@ GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
   UpdateScreenAngle(Basic(), Calculated(), SettingsMap());
   visible_projection.Update(get_client_rect(), Basic(), SettingsMap());
 
-  visible_projection.UpdateMapScale(Calculated(), SettingsMap());
+  UpdateMapScale(Calculated(), SettingsMap());
 
   ++ui_generation;
 
