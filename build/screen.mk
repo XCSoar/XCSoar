@@ -37,6 +37,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Timer.cpp
 ifeq ($(OPENGL),y)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/OpenGL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Texture.cpp
 endif
 else

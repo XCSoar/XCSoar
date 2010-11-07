@@ -23,10 +23,6 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Texture.hpp"
-#endif
-
 #include <assert.h>
 #include <string.h>
 
@@ -58,13 +54,12 @@ Canvas::line_to(int x, int y)
   move_to(x, y);
 }
 
+#ifndef ENABLE_OPENGL
+
 void
 Canvas::segment(int x, int y, unsigned radius,
                 Angle start, Angle end, bool horizon)
 {
-#ifdef ENABLE_OPENGL
-  // XXX
-#else /* !OPENGL */
   // XXX horizon
 
   x += x_offset;
@@ -81,8 +76,9 @@ Canvas::segment(int x, int y, unsigned radius,
                (int)start.value_degrees() - 90,
                (int)end.value_degrees() - 90,
                pen.get_color().gfx_color());
-#endif /* !OPENGL */
 }
+
+#endif /* !OPENGL */
 
 void
 Canvas::draw_button(RECT rc, bool down)
@@ -140,6 +136,8 @@ Canvas::text_size(const TCHAR *text) const
   return size;
 }
 
+#ifndef ENABLE_OPENGL
+
 void
 Canvas::text(int x, int y, const TCHAR *text)
 {
@@ -151,34 +149,6 @@ Canvas::text(int x, int y, const TCHAR *text)
   s = ::TTF_RenderUTF8_Solid(font, text, Color::BLACK);
   if (s == NULL)
     return;
-
-#ifdef ENABLE_OPENGL
-  if (background_mode == TRANSPARENT && s->format->palette != NULL &&
-      s->format->palette->ncolors >= 2) {
-    s->flags &= ~SDL_SRCCOLORKEY;
-
-    glEnable(GL_COLOR_LOGIC_OP);
-
-    /* clear the text pixels (AND) */
-    s->format->palette->colors[0] = Color::WHITE;
-    s->format->palette->colors[1] = Color::BLACK;
-    glLogicOp(GL_AND);
-    copy(x, y, s);
-
-    /* paint with the text color on top (OR) */
-    if (text_color != Color::BLACK) {
-      s->format->palette->colors[0] = Color::BLACK;
-      s->format->palette->colors[1] = text_color;
-      glLogicOp(GL_OR);
-      copy(x, y, s);
-    }
-
-    glDisable(GL_COLOR_LOGIC_OP);
-
-    ::SDL_FreeSurface(s);
-    return;
-  }
-#endif /* !OPENGL */
 
   if (s->format->palette != NULL && s->format->palette->ncolors >= 2) {
     s->format->palette->colors[1] = text_color;
@@ -192,6 +162,8 @@ Canvas::text(int x, int y, const TCHAR *text)
   copy(x, y, s);
   ::SDL_FreeSurface(s);
 }
+
+#endif /* !OPENGL */
 
 void
 Canvas::text(int x, int y, const TCHAR *_text, size_t length)
@@ -208,6 +180,8 @@ Canvas::text_opaque(int x, int y, const RECT &rc, const TCHAR *_text)
   fill_rectangle(rc, background_color);
   text(x, y, _text);
 }
+
+#ifndef ENABLE_OPENGL
 
 static bool
 clip(int &position, unsigned &length, unsigned max)
@@ -240,24 +214,13 @@ Canvas::copy(int dest_x, int dest_y,
       !clip(dest_y, dest_height, height))
     return;
 
-#ifdef ENABLE_OPENGL
-  if (surface->flags & SDL_OPENGL) {
-    glColor4f(1.0, 1.0, 1.0, 1.0);
-
-    GLTexture texture(src_surface);
-    texture.draw(x_offset, y_offset,
-                 dest_x, dest_y, dest_width, dest_height,
-                 src_x, src_y, dest_width, dest_height,
-                 src_surface->w, src_surface->h);
-    return;
-  }
-#endif
-
   SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
   SDL_Rect dest_rect = { x_offset + dest_x, y_offset + dest_y };
 
   ::SDL_BlitSurface(src_surface, &src_rect, surface, &dest_rect);
 }
+
+#endif /* !OPENGL */
 
 void
 Canvas::copy(const Canvas &src, int src_x, int src_y)
@@ -293,21 +256,14 @@ Canvas::copy_transparent_black(const Canvas &src)
   ::SDL_SetColorKey(src.surface, 0, 0);
 }
 
-#endif /* !OPENGL */
-
 void
 Canvas::stretch_transparent(const Canvas &src, Color key)
 {
   assert(src.surface != NULL);
 
-#ifdef ENABLE_OPENGL
-  // XXX
-  stretch(src);
-#else /* !OPENGL */
   ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(key));
   stretch(src);
   ::SDL_SetColorKey(src.surface, 0, 0);
-#endif /* !OPENGL */
 }
 
 void
@@ -318,16 +274,6 @@ Canvas::stretch(int dest_x, int dest_y,
                 unsigned src_width, unsigned src_height)
 {
   assert(src.surface != NULL);
-
-#ifdef ENABLE_OPENGL
-  glColor4f(1.0, 1.0, 1.0, 1.0);
-
-  GLTexture texture(src.surface);
-  texture.draw(x_offset, y_offset,
-               dest_x, dest_y, dest_width, dest_height,
-               src_x, src_y, src_width, src_height,
-               src.surface->w, src.surface->h);
-#else /* !OPENGL */
 
   SDL_Surface *zoomed =
     ::zoomSurface(src.surface, (double)dest_width / (double)src_width,
@@ -343,8 +289,9 @@ Canvas::stretch(int dest_x, int dest_y,
        zoomed, (src_x * dest_width) / src_width,
        (src_y * dest_height) / src_height);
   ::SDL_FreeSurface(zoomed);
-#endif /* !OPENGL */
 }
+
+#endif /* !OPENGL */
 
 void
 Canvas::stretch(const Canvas &src,
@@ -504,8 +451,6 @@ blit_and(SDL_Surface *dest, int dest_x, int dest_y,
   ::SDL_UnlockSurface(dest);
 }
 
-#endif /* !OPENGL */
-
 void
 Canvas::copy_or(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
@@ -513,17 +458,11 @@ Canvas::copy_or(int dest_x, int dest_y,
 {
   assert(src.surface != NULL);
 
-#ifdef ENABLE_OPENGL
-  stretch_or(dest_x, dest_y, dest_width, dest_height,
-             src, src_x, src_y, dest_width, dest_height);
-#else /* !OPENGL */
-
   dest_x += x_offset;
   dest_y += y_offset;
 
   ::blit_or(surface, dest_x, dest_y, dest_width, dest_height,
             src.surface, src_x, src_y);
-#endif /* !OPENGL */
 }
 
 void
@@ -533,17 +472,11 @@ Canvas::copy_and(int dest_x, int dest_y,
 {
   assert(src.surface != NULL);
 
-#ifdef ENABLE_OPENGL
-  stretch_and(dest_x, dest_y, dest_width, dest_height,
-                src, src_x, src_y, dest_width, dest_height);
-#else /* !OPENGL */
-
   dest_x += x_offset;
   dest_y += y_offset;
 
   ::blit_and(surface, dest_x, dest_y, dest_width, dest_height,
              src.surface, src_x, src_y);
-#endif /* !OPENGL */
 }
 
 void
@@ -554,14 +487,6 @@ Canvas::stretch_or(int dest_x, int dest_y,
                    unsigned src_width, unsigned src_height)
 {
   assert(src.surface != NULL);
-
-#ifdef ENABLE_OPENGL
-  glEnable(GL_COLOR_LOGIC_OP);
-  glLogicOp(GL_OR);
-  stretch(dest_x, dest_y, dest_width, dest_height,
-          src, src_x, src_y, src_width, src_height);
-  glDisable(GL_COLOR_LOGIC_OP);
-#else /* !OPENGL */
 
   dest_x += x_offset;
   dest_y += y_offset;
@@ -581,7 +506,6 @@ Canvas::stretch_or(int dest_x, int dest_y,
             (src_x * dest_width) / src_width,
             (src_y * dest_height) / src_height);
   ::SDL_FreeSurface(zoomed);
-#endif /* !OPENGL */
 }
 
 void
@@ -592,14 +516,6 @@ Canvas::stretch_and(int dest_x, int dest_y,
                     unsigned src_width, unsigned src_height)
 {
   assert(src.surface != NULL);
-
-#ifdef ENABLE_OPENGL
-  glEnable(GL_COLOR_LOGIC_OP);
-  glLogicOp(GL_AND);
-  stretch(dest_x, dest_y, dest_width, dest_height,
-          src, src_x, src_y, src_width, src_height);
-  glDisable(GL_COLOR_LOGIC_OP);
-#else /* !OPENGL */
 
   dest_x += x_offset;
   dest_y += y_offset;
@@ -619,5 +535,6 @@ Canvas::stretch_and(int dest_x, int dest_y,
              (src_x * dest_width) / src_width,
              (src_y * dest_height) / src_height);
   ::SDL_FreeSurface(zoomed);
-#endif /* !OPENGL */
 }
+
+#endif /* !OPENGL */
