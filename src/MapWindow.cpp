@@ -92,7 +92,7 @@ MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
 void
 MapWindow::UpdateProjection()
 {
-  UpdateMapScale(Calculated(), SettingsMap());
+  UpdateMapScale();
 }
 
 void
@@ -257,19 +257,18 @@ MapWindow::UpdateScreenAngle(const NMEA_INFO &basic,
 }
 
 void
-MapWindow::UpdateMapScale(const DERIVED_INFO &derived,
-                          const SETTINGS_MAP &settings_map)
+MapWindow::UpdateMapScale()
 {
   static bool TargetPanLast = false;
   static fixed TargetPanUnZoom = fixed_one;
 
   fixed wpd;
-  if (settings_map.TargetPan)
-    wpd = settings_map.TargetZoomDistance;
+  if (SettingsMap().TargetPan)
+    wpd = SettingsMap().TargetZoomDistance;
   else
-    wpd = derived.AutoZoomDistance;
+    wpd = Calculated().AutoZoomDistance;
 
-  if (settings_map.TargetPan) {
+  if (SettingsMap().TargetPan) {
     if (!TargetPanLast) { // just entered targetpan so save zoom
       TargetPanLast = true;
       TargetPanUnZoom = visible_projection.GetScale();
@@ -282,9 +281,9 @@ MapWindow::UpdateMapScale(const DERIVED_INFO &derived,
     return;
   }
 
-  if (settings_map.AutoZoom && positive(wpd)) {
+  if (SettingsMap().AutoZoom && positive(wpd)) {
     fixed AutoZoomFactor =
-        IsOriginCentered(settings_map.DisplayOrientation, GetDisplayMode()) ?
+        IsOriginCentered(SettingsMap().DisplayOrientation, GetDisplayMode()) ?
         fixed(2.5) : fixed_four;
 
     if (wpd < AutoZoomFactor * visible_projection.GetMapScale()) {
@@ -301,7 +300,7 @@ MapWindow::UpdateMapScale(const DERIVED_INFO &derived,
     visible_projection.SetScale(TargetPanUnZoom);
   }
 
-  if (!settings_map.TargetPan && TargetPanLast)
+  if (!SettingsMap().TargetPan && TargetPanLast)
     TargetPanLast = false;
 }
 
