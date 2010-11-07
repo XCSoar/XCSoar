@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_HPP
-#define XCSOAR_SCREEN_OPENGL_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_TEXTURE_HPP
+#define XCSOAR_SCREEN_OPENGL_TEXTURE_HPP
 
 #include <SDL.h>
 

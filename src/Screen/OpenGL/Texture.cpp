@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Screen/OpenGL.hpp"
+#include "Screen/OpenGL/Texture.hpp"
 #include "Asset.hpp"
 #include "Compiler.h"
 

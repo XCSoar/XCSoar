@@ -28,7 +28,7 @@ Copyright_License {
 #include "Asset.hpp" /* for needclipping */
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL.hpp"
+#include "Screen/OpenGL/Texture.hpp"
 #endif
 
 #include <assert.h>
