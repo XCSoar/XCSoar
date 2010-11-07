@@ -320,10 +320,6 @@ public:
     return DisplayMode;
   }
 
-  void SetDisplayMode(DisplayMode_t _DisplayMode) {
-    DisplayMode = _DisplayMode;
-  }
-
 protected:
   DisplayMode_t DisplayMode;
 };
