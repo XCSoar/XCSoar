@@ -75,7 +75,6 @@ void
 MapWindow::DrawWind(Canvas &canvas, const POINT &Start,
                                const RECT &rc) const
 {
-  int i;
   TCHAR sTmp[12];
   static SIZE tsize = { 0, 0 };
 
@@ -108,7 +107,7 @@ MapWindow::DrawWind(Canvas &canvas, const POINT &Start,
       { -8 - kx, -24 }
   };
 
-  for (i = 1; i < 4; i++)
+  for (int i = 1; i < 4; i++)
     Arrow[i].y -= wmag;
 
   PolygonRotateShift(Arrow, 7, Start.x, Start.y,
