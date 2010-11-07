@@ -587,34 +587,6 @@ public:
     scale_or(dest_x, dest_y, src, 0, 0, src_width, src_height);
     scale_and(dest_x, dest_y, src, src_width, 0, src_width, src_height);
   }
-
-  void copy(int dest_x, int dest_y,
-            unsigned dest_width, unsigned dest_height,
-            const Canvas &src, int src_x, int src_y,
-            bool transparent)
-  {
-    if (transparent)
-      copy_and(dest_x, dest_y, dest_width, dest_height,
-               src, src_x, src_y);
-    else
-      copy(dest_x, dest_y, dest_width, dest_height,
-           src, src_x, src_y);
-  }
-
-  void stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Canvas &src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height,
-               bool transparent)
-  {
-    if (transparent)
-      stretch_and(dest_x, dest_y, dest_width, dest_height,
-                  src, src_x, src_y, src_width, src_height);
-    else
-      stretch(dest_x, dest_y, dest_width, dest_height,
-              src, src_x, src_y, src_width, src_height);
-  }
 };
 
 #else /* !ENABLE_SDL */
@@ -1002,34 +974,6 @@ public:
                     unsigned src_width, unsigned src_height) {
     scale_or(dest_x, dest_y, src, 0, 0, src_width, src_height);
     scale_and(dest_x, dest_y, src, src_width, 0, src_width, src_height);
-  }
-
-  void copy(int dest_x, int dest_y,
-            unsigned dest_width, unsigned dest_height,
-            const Canvas &src, int src_x, int src_y,
-            bool transparent)
-  {
-    if (transparent)
-      copy_and(dest_x, dest_y, dest_width, dest_height,
-               src, src_x, src_y);
-    else
-      copy(dest_x, dest_y, dest_width, dest_height,
-           src, src_x, src_y);
-  }
-
-  void stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Canvas &src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height,
-               bool transparent)
-  {
-    if (transparent)
-      stretch_and(dest_x, dest_y, dest_width, dest_height,
-                  src, src_x, src_y, src_width, src_height);
-    else
-      stretch(dest_x, dest_y, dest_width, dest_height,
-              src, src_x, src_y, src_width, src_height);
   }
 
   gcc_pure
