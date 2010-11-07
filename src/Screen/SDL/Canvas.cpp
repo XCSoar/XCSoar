@@ -57,6 +57,34 @@ Canvas::line_to(int x, int y)
 #ifndef ENABLE_OPENGL
 
 void
+Canvas::polyline(const POINT *lppt, unsigned cPoints)
+{
+  for (unsigned i = 1; i < cPoints; ++i)
+    line(lppt[i - 1].x, lppt[i - 1].y, lppt[i].x, lppt[i].y);
+}
+
+void
+Canvas::polygon(const POINT* lppt, unsigned cPoints)
+{
+  if (brush.is_hollow() && !pen.defined())
+    return;
+
+  Sint16 vx[cPoints], vy[cPoints];
+
+  for (unsigned i = 0; i < cPoints; ++i) {
+    vx[i] = x_offset + lppt[i].x;
+    vy[i] = y_offset + lppt[i].y;
+  }
+
+  if (!brush.is_hollow())
+    ::filledPolygonColor(surface, vx, vy, cPoints,
+                         brush.get_color().gfx_color());
+
+  if (pen_over_brush())
+    ::polygonColor(surface, vx, vy, cPoints, pen.get_color().gfx_color());
+}
+
+void
 Canvas::segment(int x, int y, unsigned radius,
                 Angle start, Angle end, bool horizon)
 {

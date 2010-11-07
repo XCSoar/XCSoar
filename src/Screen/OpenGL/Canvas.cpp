@@ -27,6 +27,69 @@ Copyright_License {
 #include <assert.h>
 
 void
+Canvas::fill_rectangle(int left, int top, int right, int bottom,
+                       const Color color)
+{
+  glColor(color);
+
+  const GLfloat v[] = {
+    left, top,
+    right, top,
+    right, bottom,
+    left, bottom,
+  };
+  glVertexPointer(2, GL_FLOAT, 0, v);
+
+#ifdef ANDROID
+  GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
+#else
+  glDrawArrays(GL_QUADS, 0, 4);
+#endif
+}
+
+void
+Canvas::polyline(const POINT *lppt, unsigned cPoints)
+{
+  GLfloat v[cPoints * 2];
+  for (unsigned i = 0; i < cPoints; ++i) {
+    v[i * 2] = lppt[i].x;
+    v[i * 2 + 1] = lppt[i].y;
+  }
+  glVertexPointer(2, GL_FLOAT, 0, v);
+  glDrawArrays(GL_LINE_LOOP, 0, cPoints);
+}
+
+void
+Canvas::polygon(const POINT* lppt, unsigned cPoints)
+{
+  if (brush.is_hollow() && !pen.defined())
+    return;
+
+  GLfloat v[cPoints * 2];
+  for (unsigned i = 0; i < cPoints; ++i) {
+    v[i * 2] = lppt[i].x;
+    v[i * 2 + 1] = lppt[i].y;
+  }
+  glVertexPointer(2, GL_FLOAT, 0, v);
+
+  if (!brush.is_hollow()) {
+    glColor(brush.get_color());
+#ifdef ANDROID
+    // XXX
+    glDrawArrays(GL_TRIANGLES, 0, cPoints / 3);
+#else
+    glDrawArrays(GL_POLYGON, 0, cPoints);
+#endif
+  }
+
+  if (pen_over_brush()) {
+    glColor(pen.get_color());
+    glDrawArrays(GL_LINE_LOOP, 0, cPoints);
+  }
+}
+
+void
 Canvas::segment(int x, int y, unsigned radius,
                 Angle start, Angle end, bool horizon)
 {

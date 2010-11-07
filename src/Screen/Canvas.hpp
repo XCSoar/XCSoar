@@ -246,30 +246,15 @@ public:
   }
 #endif
 
+#ifdef ENABLE_OPENGL
+  void fill_rectangle(int left, int top, int right, int bottom,
+                      const Color color);
+#else /* !OPENGL */
   void fill_rectangle(int left, int top, int right, int bottom,
                       const Color color) {
-#ifdef ENABLE_OPENGL
-    glColor(color);
-
-    const GLfloat v[] = {
-      left, top,
-      right, top,
-      right, bottom,
-      left, bottom,
-    };
-    glVertexPointer(2, GL_FLOAT, 0, v);
-
-#ifdef ANDROID
-    GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
-#else
-    glDrawArrays(GL_QUADS, 0, 4);
-#endif
-
-#else /* !OPENGL */
     fill_rectangle(left, top, right, bottom, map(color));
-#endif /* !OPENGL */
   }
+#endif /* !OPENGL */
 
   void fill_rectangle(int left, int top, int right, int bottom,
                       const Brush &brush) {
@@ -337,66 +322,8 @@ public:
     --rc.bottom;
   }
 
-  void polyline(const POINT *lppt, unsigned cPoints) {
-#ifdef ENABLE_OPENGL
-    if (surface->flags & SDL_OPENGL) {
-      GLfloat v[cPoints * 2];
-      for (unsigned i = 0; i < cPoints; ++i) {
-        v[i * 2] = lppt[i].x;
-        v[i * 2 + 1] = lppt[i].y;
-      }
-      glVertexPointer(2, GL_FLOAT, 0, v);
-      glDrawArrays(GL_LINE_LOOP, 0, cPoints);
-      return;
-    }
-#endif
-
-    for (unsigned i = 1; i < cPoints; ++i)
-      line(lppt[i - 1].x, lppt[i - 1].y, lppt[i].x, lppt[i].y);
-  }
-
-  void polygon(const POINT* lppt, unsigned cPoints) {
-    if (brush.is_hollow() && !pen.defined())
-      return;
-
-#ifdef ENABLE_OPENGL
-    GLfloat v[cPoints * 2];
-    for (unsigned i = 0; i < cPoints; ++i) {
-      v[i * 2] = lppt[i].x;
-      v[i * 2 + 1] = lppt[i].y;
-    }
-    glVertexPointer(2, GL_FLOAT, 0, v);
-
-    if (!brush.is_hollow()) {
-      glColor(brush.get_color());
-#ifdef ANDROID
-      // XXX
-      glDrawArrays(GL_TRIANGLES, 0, cPoints / 3);
-#else
-      glDrawArrays(GL_POLYGON, 0, cPoints);
-#endif
-    }
-
-    if (pen_over_brush()) {
-      glColor(pen.get_color());
-      glDrawArrays(GL_LINE_LOOP, 0, cPoints);
-    }
-#else /* !OPENGL */
-    Sint16 vx[cPoints], vy[cPoints];
-
-    for (unsigned i = 0; i < cPoints; ++i) {
-      vx[i] = x_offset + lppt[i].x;
-      vy[i] = y_offset + lppt[i].y;
-    }
-
-    if (!brush.is_hollow())
-      ::filledPolygonColor(surface, vx, vy, cPoints,
-                           brush.get_color().gfx_color());
-
-    if (pen_over_brush())
-      ::polygonColor(surface, vx, vy, cPoints, pen.get_color().gfx_color());
-#endif /* !OPENGL */
-  }
+  void polyline(const POINT *points, unsigned num_points);
+  void polygon(const POINT *points, unsigned num_points);
 
   void autoclip_polygon(const POINT* lppt, unsigned cPoints) {
     // XXX clip
