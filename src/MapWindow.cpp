@@ -63,7 +63,7 @@ MapWindow::set(ContainerWindow &parent, const RECT &rc)
 
   // initialize other systems
   visible_projection.SetMapRect(get_client_rect());
-  visible_projection.Initialize();
+  visible_projection.SetMapScale(fixed_int_constant(5000));
 
 #ifndef ENABLE_OPENGL
   buffer_projection = visible_projection;

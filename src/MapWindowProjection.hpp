@@ -37,8 +37,6 @@ public:
   MapWindowProjection();
 
 public:
-  void Initialize();
-
   void SetMapScale(const fixed x);
 
 public:

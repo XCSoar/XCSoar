@@ -47,12 +47,6 @@ MapWindowProjection::MapWindowProjection():
   ScaleListCount = 11;
 }
 
-void
-MapWindowProjection::Initialize()
-{
-  SetMapScale(fixed_int_constant(5000));
-}
-
 bool
 MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 {
