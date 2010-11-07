@@ -591,18 +591,6 @@ public:
 
 #else /* !ENABLE_SDL */
 
-#ifndef _WIN32_WCE
-#define HAVE_VIEWPORT
-#define HAVE_OFFSET_VIEWPORT
-#elif defined(_WIN32_WCE) && _WIN32_WCE >= 0x0500
-#define HAVE_VIEWPORT
-#if !defined(__GNUC__)
-/* OffsetViewportOrgEx() is supported since Windows CE 5.0, but not in
-   mingw32ce */
-#define HAVE_OFFSET_VIEWPORT
-#endif /* __GNUC__ */
-#endif
-
 /**
  * Base drawable canvas class
  * 
@@ -729,36 +717,6 @@ public:
   void mix_mask() {
     ::SetROP2(dc, R2_MASKPEN);
   }
-
-#ifdef HAVE_VIEWPORT
-  gcc_pure
-  POINT get_viewport_origin() {
-    POINT old;
-#ifdef HAVE_OFFSET_VIEWPORT
-    ::GetViewportOrgEx(dc, &old);
-#else
-    ::SetViewportOrgEx(dc, 0, 0, &old);
-    if (old.x != 0 || old.y != 0)
-      /* restore old viewport */
-      ::SetViewportOrgEx(dc, old.x, old.y, NULL);
-#endif
-    return old;
-  }
-
-  POINT set_viewport_origin(int x, int y) {
-    POINT old;
-    ::SetViewportOrgEx(dc, x, y, &old);
-    return old;
-  }
-
-#ifdef HAVE_OFFSET_VIEWPORT
-  POINT offset_viewport_origin(int dx, int dy) {
-    POINT old;
-    ::OffsetViewportOrgEx(dc, dx, dy, &old);
-    return old;
-  }
-#endif /* HAVE_OFFSET_VIEWPORT */
-#endif /* HAVE_VIEWPORT */
 
   void rectangle(int left, int top, int right, int bottom) {
     ::Rectangle(dc, left, top, right, bottom);
