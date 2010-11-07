@@ -155,7 +155,7 @@ Canvas::text(int x, int y, const TCHAR *text)
   if (font == NULL)
     return;
 
-  s = ::TTF_RenderUTF8_Solid(font, text, text_color);
+  s = ::TTF_RenderUTF8_Solid(font, text, Color::BLACK);
   if (s == NULL)
     return;
 
