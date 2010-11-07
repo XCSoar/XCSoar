@@ -72,7 +72,7 @@ MapWindow::DrawAircraft(Canvas &canvas, const POINT aircraft_pos) const
 }
 
 void
-MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT &Start,
+MapWindow::DrawWind(Canvas &canvas, const POINT &Start,
                                const RECT &rc) const
 {
   int i;

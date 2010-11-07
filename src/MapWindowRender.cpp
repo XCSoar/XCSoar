@@ -145,7 +145,7 @@ MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc,
 {
   // Draw wind vector at aircraft
   if (!SettingsMap().EnablePan || SettingsMap().TargetPan)
-    DrawWindAtAircraft2(canvas, render_projection.GetScreenOrigin(), rc);
+    DrawWind(canvas, render_projection.GetScreenOrigin(), rc);
 
   // Draw traffic
   DrawTeammate(canvas);
