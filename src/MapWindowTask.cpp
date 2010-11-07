@@ -156,7 +156,7 @@ MapWindow::DrawTask(Canvas &canvas)
   RenderTaskPointMap tpv(canvas, render_projection, SettingsMap(),
                          ozv, draw_bearing,
                          Basic().Location,
-                         label_block, get_bitmap_canvas(),
+                         label_block, bitmap_canvas,
                          Basic().TrackBearing,
                          !Calculated().Circling);
   RenderTask dv(tpv);

@@ -74,7 +74,7 @@ MapWindow::isInSector(const int x, const int y)
 void
 MapWindow::TargetPaintDrag(Canvas &canvas, const POINT drag_last)
 {
-  Graphics::hBmpTarget.draw(canvas, get_bitmap_canvas(),
+  Graphics::hBmpTarget.draw(canvas, bitmap_canvas,
                             drag_last.x, drag_last.y);
 }
 

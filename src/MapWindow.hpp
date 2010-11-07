@@ -291,9 +291,6 @@ protected:
 private:
   LabelBlock label_block;
 
-public:
-  BitmapCanvas& get_bitmap_canvas() { return bitmap_canvas; };
-
 protected:
   virtual bool on_create();
   virtual bool on_destroy();
