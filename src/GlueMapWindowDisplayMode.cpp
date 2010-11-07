@@ -93,11 +93,10 @@ GetNewDisplayMode(const SETTINGS_MAP &settings_map,
 void
 GlueMapWindow::UpdateDisplayMode()
 {
-  DisplayMode_t old_mode = GetDisplayMode();
   DisplayMode_t new_mode = GetNewDisplayMode(SettingsMap(), Calculated());
 
-  if (new_mode != old_mode) {
-    SetDisplayMode(new_mode);
+  if (new_mode != DisplayMode) {
+    DisplayMode = new_mode;
     SwitchZoomClimb();
   }
 }
