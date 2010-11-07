@@ -42,7 +42,6 @@ GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
 
   UpdateScreenAngle(Basic(), Calculated(), SettingsMap());
   Update(get_client_rect(), Basic(), SettingsMap());
-  UpdateMapScale();
 
   ++ui_generation;
 
