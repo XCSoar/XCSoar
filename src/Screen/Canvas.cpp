@@ -159,6 +159,34 @@ Canvas::text(int x, int y, const TCHAR *text)
   if (s == NULL)
     return;
 
+#ifdef ENABLE_OPENGL
+  if (background_mode == TRANSPARENT && s->format->palette != NULL &&
+      s->format->palette->ncolors >= 2) {
+    s->flags &= ~SDL_SRCCOLORKEY;
+
+    glEnable(GL_COLOR_LOGIC_OP);
+
+    /* clear the text pixels (AND) */
+    s->format->palette->colors[0] = Color::WHITE;
+    s->format->palette->colors[1] = Color::BLACK;
+    glLogicOp(GL_AND);
+    copy(x, y, s);
+
+    /* paint with the text color on top (OR) */
+    if (text_color != Color::BLACK) {
+      s->format->palette->colors[0] = Color::BLACK;
+      s->format->palette->colors[1] = text_color;
+      glLogicOp(GL_OR);
+      copy(x, y, s);
+    }
+
+    glDisable(GL_COLOR_LOGIC_OP);
+
+    ::SDL_FreeSurface(s);
+    return;
+  }
+#endif /* !OPENGL */
+
   if (s->format->palette != NULL && s->format->palette->ncolors >= 2) {
     s->format->palette->colors[1] = text_color;
 
