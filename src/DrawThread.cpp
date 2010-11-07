@@ -42,7 +42,7 @@ DrawThread::ExchangeBlackboard()
 
   /* recalculate the MapWindow projection */
   map.UpdateDisplayMode();
-  map.UpdateProjection();
+  map.UpdateMapScale();
 
   /* return MapWindow projection to the device_blackboard */
   mutexBlackboard.Lock();

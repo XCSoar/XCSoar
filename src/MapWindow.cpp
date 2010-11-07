@@ -90,12 +90,6 @@ MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
 }
 
 void
-MapWindow::UpdateProjection()
-{
-  UpdateMapScale();
-}
-
-void
 MapWindow::UpdateTopology()
 {
   if (topology != NULL && SettingsMap().EnableTopology)

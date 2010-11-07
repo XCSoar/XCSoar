@@ -205,8 +205,6 @@ public:
                       const SETTINGS_COMPUTER &settings_computer,
                       const SETTINGS_MAP &settings_map);
 
-  void UpdateProjection();
-
   const MapWindowProjection &VisibleProjection() const {
     return visible_projection;
   }
@@ -257,14 +255,14 @@ public:
   // thread, main functions
   void Render(Canvas &canvas, const RECT &rc);
 
+  void UpdateMapScale();
+
 protected:
   void Update(const RECT rc, const NMEA_INFO &basic,
               const SETTINGS_MAP &settings_map);
 
   void UpdateScreenAngle(const NMEA_INFO &basic, const DERIVED_INFO &derived,
                          const SETTINGS_MAP &settings);
-
-  void UpdateMapScale();
 
   void UpdateTopology();
   void UpdateTerrain();
