@@ -48,14 +48,21 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
 #endif
 }
 
+static void
+PointsToVertices(GLfloat *dest, const POINT *src, unsigned count)
+{
+  while (count-- > 0) {
+    *dest++ = src->x;
+    *dest++ = src->y;
+    ++src;
+  }
+}
+
 void
 Canvas::polyline(const POINT *lppt, unsigned cPoints)
 {
   GLfloat v[cPoints * 2];
-  for (unsigned i = 0; i < cPoints; ++i) {
-    v[i * 2] = lppt[i].x;
-    v[i * 2 + 1] = lppt[i].y;
-  }
+  PointsToVertices(v, lppt, cPoints);
   glVertexPointer(2, GL_FLOAT, 0, v);
 
   glColor(pen.get_color());
@@ -69,10 +76,7 @@ Canvas::polygon(const POINT* lppt, unsigned cPoints)
     return;
 
   GLfloat v[cPoints * 2];
-  for (unsigned i = 0; i < cPoints; ++i) {
-    v[i * 2] = lppt[i].x;
-    v[i * 2 + 1] = lppt[i].y;
-  }
+  PointsToVertices(v, lppt, cPoints);
   glVertexPointer(2, GL_FLOAT, 0, v);
 
   if (!brush.is_hollow()) {
