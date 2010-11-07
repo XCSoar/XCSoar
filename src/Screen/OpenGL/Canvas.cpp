@@ -57,6 +57,8 @@ Canvas::polyline(const POINT *lppt, unsigned cPoints)
     v[i * 2 + 1] = lppt[i].y;
   }
   glVertexPointer(2, GL_FLOAT, 0, v);
+
+  glColor(pen.get_color());
   glDrawArrays(GL_LINE_STRIP, 0, cPoints);
 }
 
