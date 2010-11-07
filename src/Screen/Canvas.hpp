@@ -199,8 +199,15 @@ public:
 
 #ifdef ENABLE_OPENGL
   void glColor(Color color) {
+#ifdef ANDROID
+    /* on Android, glColor4ub() is not implemented, and we're forced
+       to use floating point math for something as trivial as
+       configuring a RGB color value */
     glColor4f(color.red() / 256., color.green() / 256.,
               color.blue() / 256., 1.0);
+#else
+    glColor4ub(color.red(), color.green(), color.blue(), 255);
+#endif
   }
 #endif
 
