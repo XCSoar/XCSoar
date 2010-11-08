@@ -72,12 +72,14 @@ struct AlternateRank : public std::binary_function<AlternateTask::Divert,
 void
 AlternateTask::check_alternate_changed()
 {
+  // remember previous value (or invalid)
   unsigned id;
   if (alternates.size()) {
     id = alternates[0].first.id;
   } else {
     id = (unsigned)-1;
   }
+  // send notification on change
   if (best_alternate_id != id) {
     best_alternate_id = id;
     task_events.transition_alternate();
