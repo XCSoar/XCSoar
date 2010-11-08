@@ -234,24 +234,26 @@ MapWindow::IsOriginCentered(const DisplayOrientation_t orientation,
 }
 
 void
-MapWindow::UpdateScreenAngle(const NMEA_INFO &basic,
-    const DERIVED_INFO &derived, const SETTINGS_MAP &settings)
+MapWindow::UpdateScreenAngle()
 {
+  const SETTINGS_MAP &settings = SettingsMap();
+
   if (settings.TargetPan &&
-      derived.common_stats.active_taskpoint_index != settings.TargetPanIndex) {
+      Calculated().common_stats.active_taskpoint_index !=
+          settings.TargetPanIndex) {
     visible_projection.SetScreenAngle(Angle::native(fixed_zero));
     return;
   }
 
   if (IsOriginCentered(settings.DisplayOrientation, GetDisplayMode())) {
     if (settings.DisplayOrientation == TRACKCIRCLE)
-      visible_projection.SetScreenAngle(derived.task_stats.current_leg.
+      visible_projection.SetScreenAngle(Calculated().task_stats.current_leg.
                                         solution_remaining.Vector.Bearing);
     else
       visible_projection.SetScreenAngle(Angle::native(fixed_zero));
   } else {
     // normal, glider forward
-    visible_projection.SetScreenAngle(basic.TrackBearing);
+    visible_projection.SetScreenAngle(Basic().TrackBearing);
   }
 }
 

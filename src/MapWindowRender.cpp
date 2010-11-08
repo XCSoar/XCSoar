@@ -37,7 +37,7 @@ void
 MapWindow::RenderStart(Canvas &canvas, const RECT &rc)
 {
   // Calculate screen position of the aircraft
-  UpdateScreenAngle(Basic(), Calculated(), SettingsMap());
+  UpdateScreenAngle();
   Update();
   render_projection = visible_projection;
 

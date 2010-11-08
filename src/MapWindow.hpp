@@ -262,8 +262,7 @@ public:
 protected:
   void Update();
 
-  void UpdateScreenAngle(const NMEA_INFO &basic, const DERIVED_INFO &derived,
-                         const SETTINGS_MAP &settings);
+  void UpdateScreenAngle();
 
   void UpdateTopology();
   void UpdateTerrain();
