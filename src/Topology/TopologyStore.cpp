@@ -36,11 +36,8 @@ TopologyStore::ScanVisibility(const WindowProjection &m_projection)
 
   // we will make sure we update at least one cache per call
   // to make sure eventually everything gets refreshed
-  for (int z = 0; z < MAXTOPOLOGY; z++) {
-    if (topology_store[z]) {
-      topology_store[z]->updateCache(m_projection);
-    }
-  }
+  for (unsigned i = 0; i < files.size(); ++i)
+    files[i]->updateCache(m_projection);
 }
 
 TopologyStore::~TopologyStore()
@@ -57,10 +54,8 @@ void
 TopologyStore::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
                     const WindowProjection &projection) const
 {
-  for (int z = 0; z < MAXTOPOLOGY; z++) {
-    if (topology_store[z])
-      topology_store[z]->Paint(canvas, bitmap_canvas, projection);
-  }
+  for (unsigned i = 0; i < files.size(); ++i)
+    files[i]->Paint(canvas, bitmap_canvas, projection);
 }
 
 void
@@ -68,17 +63,8 @@ TopologyStore::DrawLabels(Canvas &canvas, const WindowProjection &projection,
                           LabelBlock &label_block,
                           const SETTINGS_MAP &settings_map) const
 {
-  for (unsigned i = 0; i < MAXTOPOLOGY; i++)
-    if (topology_store[i] != NULL)
-      topology_store[i]->PaintLabels(canvas, projection,
-                                     label_block, settings_map);
-}
-
-TopologyStore::TopologyStore()
-{
-  for (int z = 0; z < MAXTOPOLOGY; z++) {
-    topology_store[z] = NULL;
-  }
+  for (unsigned i = 0; i < files.size(); ++i)
+    files[i]->PaintLabels(canvas, projection, label_block, settings_map);
 }
 
 void
@@ -89,7 +75,6 @@ TopologyStore::Load(NLineReader &reader, const TCHAR* Directory)
   double ShapeRange;
   long ShapeIcon;
   long ShapeField;
-  int numtopo = 0;
   char ShapeFilename[MAX_PATH];
 
   strcpy(ShapeFilename, NarrowPathName(Directory));
@@ -98,7 +83,7 @@ TopologyStore::Load(NLineReader &reader, const TCHAR* Directory)
   char *ShapeFilenameEnd = ShapeFilename + strlen(ShapeFilename);
 
   char *line;
-  while ((line = reader.read()) != NULL) {
+  while (!files.full() && (line = reader.read()) != NULL) {
     // Look For Comment
     if (string_is_empty(line) || line[0] == '*')
       continue;
@@ -150,20 +135,18 @@ TopologyStore::Load(NLineReader &reader, const TCHAR* Directory)
       blue = 255;
     }
 
-    topology_store[numtopo] = new TopologyFile(ShapeFilename,
-                                               fixed(ShapeRange) * 1000,
-                                               Color(red, green, blue),
-                                               ShapeField, ShapeIcon);
-
-    numtopo++;
+    files.append(new TopologyFile(ShapeFilename,
+                                  fixed(ShapeRange) * 1000,
+                                  Color(red, green, blue),
+                                  ShapeField, ShapeIcon));
   }
 }
 
 void
 TopologyStore::Reset()
 {
-  for (int z = 0; z < MAXTOPOLOGY; z++) {
-    delete topology_store[z];
-    topology_store[z] = NULL;
-  }
+  for (unsigned i = 0; i < files.size(); ++i)
+    delete files[i];
+
+  files.clear();
 }

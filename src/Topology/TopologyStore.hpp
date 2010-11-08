@@ -25,6 +25,7 @@ Copyright_License {
 #define TOPOLOGY_STORE_H
 
 #include "Util/NonCopyable.hpp"
+#include "Util/StaticArray.hpp"
 
 #include <tchar.h>
 
@@ -45,8 +46,9 @@ class TopologyStore : private NonCopyable {
     MAXTOPOLOGY = 20,
   };
 
+  StaticArray<TopologyFile *, MAXTOPOLOGY> files;
+
 public:
-  TopologyStore();
   ~TopologyStore();
 
   void ScanVisibility(const WindowProjection &m_projection);
@@ -58,8 +60,6 @@ public:
 
   void Load(NLineReader &reader, const TCHAR* Directory);
   void Reset();
-
-  TopologyFile* topology_store[MAXTOPOLOGY];
 };
 
 #endif
