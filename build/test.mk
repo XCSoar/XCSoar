@@ -8,7 +8,6 @@ TESTFAST = \
 	$(TARGET_BIN_DIR)/test_modes$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_automc$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_trees$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_acfilter$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_airspace$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_replay$(TARGET_EXEEXT) \
@@ -25,6 +24,7 @@ TESTSLOW = \
 	$(TARGET_BIN_DIR)/test_cruiseefficiency$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_bestcruisetrack$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_aat$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_acfilter$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_flight$(TARGET_EXEEXT)
 
 HARNESS_PROGRAMS = $(TESTFAST) $(TESTSLOW)
