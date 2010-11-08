@@ -1,5 +1,5 @@
-xcsoar (6.0~alpha4) unstable; urgency=low
+xcsoar (6.0~alpha5) unstable; urgency=low
 
   * initial debian package
 
- -- Max Kellermann <mk@cm4all.com>  Sat, 06 Nov 2010 17:36:03 +0100
+ -- Max Kellermann <mk@cm4all.com>  Mon, 08 Nov 2010 23:32:14 +0100
