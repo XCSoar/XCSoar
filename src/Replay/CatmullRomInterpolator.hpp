@@ -78,13 +78,13 @@ public:
   }
 
   bool
-  Ready()
+  Ready() const
   {
     return (num == 4);
   }
 
   fixed
-  GetSpeed(fixed time)
+  GetSpeed(fixed time) const
   {
     if (!Ready())
       return fixed_zero;
@@ -102,7 +102,7 @@ public:
   }
 
   Angle
-  GetBearing(fixed time)
+  GetBearing(fixed time) const
   {
     if (!Ready())
       return Angle::degrees(fixed_zero);
@@ -118,7 +118,7 @@ public:
   }
 
   void
-  Interpolate(fixed time, GeoPoint &loc, fixed &alt)
+  Interpolate(fixed time, GeoPoint &loc, fixed &alt) const
   {
     if (!Ready()) {
       loc = p[num].loc;
@@ -165,19 +165,19 @@ public:
   }
 
   fixed
-  GetMinTime()
+  GetMinTime() const
   {
     return p[0].t;
   }
 
   fixed
-  GetMaxTime()
+  GetMaxTime() const
   {
     return max(fixed_zero, max(p[0].t, max(p[1].t, max(p[2].t, p[3].t))));
   }
 
   fixed
-  GetAverageTime()
+  GetAverageTime() const
   {
     if (num <= 0)
       return fixed_zero;
@@ -191,7 +191,7 @@ public:
   }
 
   bool
-  NeedData(fixed t_simulation)
+  NeedData(fixed t_simulation) const
   {
     return !Ready() || (p[2].t <= t_simulation + fixed(0.1));
   }
