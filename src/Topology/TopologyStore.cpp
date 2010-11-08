@@ -151,13 +151,9 @@ TopologyStore::Load(NLineReader &reader, const TCHAR* Directory)
     }
 
     topology_store[numtopo] = new TopologyFile(ShapeFilename,
+                                               fixed(ShapeRange) * 1000,
                                                Color(red, green, blue),
-                                               ShapeField);
-
-    if (ShapeIcon != 0)
-      topology_store[numtopo]->loadIcon(ShapeIcon);
-
-    topology_store[numtopo]->scaleThreshold = fixed(ShapeRange) * 1000;
+                                               ShapeField, ShapeIcon);
 
     numtopo++;
   }

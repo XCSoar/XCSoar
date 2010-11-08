@@ -51,11 +51,14 @@ public:
   /**
    * The constructor opens the given shapefile and clears the cache
    * @param shpname The shapefile to open (*.shp)
+   * @param threshold the zoom threshold for displaying this object
    * @param thecolor The color to use for drawing
    * @param label_field The field in which the labels should be searched
+   * @param icon the resource id of the icon, 0 for no icon
    * @return
    */
-  TopologyFile(const char* shpname, const Color thecolor, int label_field);
+  TopologyFile(const char* shpname, fixed threshold, const Color color,
+               int label_field=-1, int icon=0);
 
   /**
    * The destructor clears the cache and closes the shapefile

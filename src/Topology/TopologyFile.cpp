@@ -55,10 +55,11 @@ TopologyFile::loadIcon(const int res_id)
     icon.load(res_id);
 }
 
-TopologyFile::TopologyFile(const char *filename, const Color thecolor,
-                   int _label_field)
+TopologyFile::TopologyFile(const char *filename, fixed _threshold,
+                           const Color thecolor,
+                           int _label_field, int icon)
   :label_field(_label_field),
-  scaleThreshold(1000000),
+   scaleThreshold(_threshold),
   hPen(1, thecolor),
   hbBrush(thecolor),
   shapefileopen(false)
@@ -74,6 +75,9 @@ TopologyFile::TopologyFile(const char *filename, const Color thecolor,
     cache_bounds.south = cache_bounds.north = Angle::native(fixed_zero);
 
   std::fill(shpCache.begin(), shpCache.end(), (XShape *)NULL);
+
+  if (icon != 0)
+    loadIcon(icon);
 }
 
 TopologyFile::~TopologyFile()
