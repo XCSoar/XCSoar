@@ -37,6 +37,8 @@ public:
   typedef std::pair < Alternate, fixed > Divert;
   typedef std::vector < Divert > DivertVector; 
 
+  static const unsigned max_alternates; /// number of alternates
+
   /** 
    * Base constructor.
    * 
