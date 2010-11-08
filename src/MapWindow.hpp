@@ -301,7 +301,7 @@ protected:
   GlidePolar get_glide_polar() const;
 
 private:
-  void RenderStart(Canvas &canvas, const RECT &rc);
+  void RenderStart(Canvas &canvas);
   void RenderMapLayer(Canvas &canvas);
   void RenderAreas(Canvas &canvas);
   void RenderTrail(Canvas &canvas, const POINT aircraft_pos);

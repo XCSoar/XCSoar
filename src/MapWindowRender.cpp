@@ -34,7 +34,7 @@ Copyright_License {
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderStart(Canvas &canvas, const RECT &rc)
+MapWindow::RenderStart(Canvas &canvas)
 {
   // Calculate screen position of the aircraft
   UpdateScreenAngle();
@@ -198,7 +198,7 @@ void
 MapWindow::Render(Canvas &canvas, const RECT &rc)
 { 
   // Calculate screen positions
-  RenderStart(canvas, rc);
+  RenderStart(canvas);
   const POINT aircraft_pos = render_projection.GeoToScreen(Basic().Location);
 
   // Render terrain, groundline and topology and reset pen, brush and font
