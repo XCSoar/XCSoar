@@ -487,7 +487,7 @@ int plan_tests(unsigned int a) {
   num_planned = a;
 
   TCHAR buffer[80];
-  wsprintf(buffer,TEXT("Planned %d tests"),num_planned);
+  wsprintf(buffer, TEXT("Planned %d tests"), num_planned);
   MessageBox(0, buffer, TEXT("ex_xcsoar"), MB_OK);
 
   fpsTime_start = GetTickCount();
@@ -500,10 +500,10 @@ int exit_status(void) {
   fpsTime_finish = GetTickCount();
   DWORD dt = fpsTime_finish-fpsTime_start;
 
-  wsprintf(buffer,TEXT("Passed %d out of %d\nTime elapsed %d"),num_passed,num_planned,
-    dt);
+  wsprintf(buffer, TEXT("Passed %d out of %d\nTime elapsed %d"),
+           num_passed, num_planned, dt);
   MessageBox(0, buffer, TEXT("ex_xcsoar"), MB_OK);
-  return 0;
+  return num_planned - num_passed;
 }
 
 #endif
