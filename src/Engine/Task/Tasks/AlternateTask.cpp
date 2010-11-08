@@ -87,11 +87,6 @@ void
 AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
                              const bool reachable)
 {
-  if (!reachable) { // for now, only do reachable points
-    check_alternate_changed();
-    return;
-  }
-
   // build a list of alternates, sorted by distance.
   // this is done in separate stages so we can add the reachable ones
   // before the unreachable ones, without the sort criteria affecting
