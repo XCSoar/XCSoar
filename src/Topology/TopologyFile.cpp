@@ -65,9 +65,7 @@ TopologyFile::TopologyFile(const char *filename, const Color thecolor,
   if (msSHPOpenFile(&shpfile, "rb", filename) == -1)
     return;
 
-  shpCache = (XShape**)malloc(sizeof(XShape*) * shpfile.numshapes);
-  if (!shpCache)
-    return;
+  shpCache.resize_discard(shpfile.numshapes);
 
   shapefileopen = true;
 
@@ -83,19 +81,14 @@ TopologyFile::~TopologyFile()
   if (!shapefileopen)
     return;
 
-  if (shpCache) {
-    ClearCache();
-    free(shpCache);
-    shpCache = NULL;
-  }
-
+  ClearCache();
   msSHPCloseFile(&shpfile);
 }
 
 void
 TopologyFile::ClearCache()
 {
-  for (int i = 0; i < shpfile.numshapes; i++) {
+  for (unsigned i = 0; i < shpCache.size(); i++) {
     delete shpCache[i];
     shpCache[i] = NULL;
   }

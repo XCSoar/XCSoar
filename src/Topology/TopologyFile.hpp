@@ -31,6 +31,7 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"
 #include "Util/NonCopyable.hpp"
+#include "Util/AllocatedArray.hpp"
 #include "Math/fixed.hpp"
 
 struct GeoPoint;
@@ -42,6 +43,8 @@ struct SETTINGS_MAP;
 class XShape;
 
 class TopologyFile : private NonCopyable {
+  AllocatedArray<XShape *> shpCache;
+
   int label_field;
 
 public:
@@ -100,8 +103,6 @@ private:
    * rectangle, then we need to update the cache.
    */
   GeoBounds cache_bounds;
-
-  XShape** shpCache;
 
   unsigned GetSkipSteps(fixed map_scale) const;
   static rectObj ConvertRect(const GeoBounds &br);
