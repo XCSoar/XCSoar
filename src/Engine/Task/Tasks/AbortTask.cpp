@@ -27,6 +27,9 @@
 #include "TaskSolvers/TaskSolution.hpp"
 #include "Task/TaskEvents.hpp"
 
+
+static const unsigned AbortTask::max_abort = 10; 
+
 AbortTask::AbortTask(TaskEvents &te, 
                      const TaskBehaviour &tb,
                      GlidePolar &gp,
@@ -113,7 +116,7 @@ AbortTask::update_polar()
 bool
 AbortTask::task_full() const
 {
-  return (tps.size()>=10);
+  return (tps.size()>= max_abort);
 }
 
 /**

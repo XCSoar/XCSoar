@@ -40,6 +40,8 @@ class AbortTask :
 public:
   friend class PrintHelper;
 
+  static const unsigned max_abort; /// max number of items in list
+
   typedef std::pair < Waypoint, GlideResult > Alternate;
   typedef std::vector < Alternate > AlternateVector; 
      /**< Vector of waypoints and solutions used to store candidates */
