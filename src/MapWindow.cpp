@@ -304,9 +304,9 @@ MapWindow::UpdateMapScale()
 }
 
 void
-MapWindow::Update(const RECT rc, const NMEA_INFO &basic,
-                  const SETTINGS_MAP &settings_map)
+MapWindow::Update(const NMEA_INFO &basic, const SETTINGS_MAP &settings_map)
 {
+  const RECT rc = get_client_rect();
   visible_projection.SetMapRect(rc);
 
   if (IsOriginCentered(settings_map.DisplayOrientation, GetDisplayMode()) ||
