@@ -77,8 +77,7 @@ TopologyFileRenderer::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
   // we already do an outer visibility test, but may need a test
   // in screen coords
 
-  canvas.select(pen);
-  canvas.select(brush);
+  enum { NONE, OUTLINE, SOLID } mode = NONE;
 
   // get drawing info
 
@@ -113,6 +112,11 @@ TopologyFileRenderer::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
       break;
 
     case MS_SHAPE_LINE:
+      if (mode != OUTLINE) {
+        canvas.select(pen);
+        mode = OUTLINE;
+      }
+
       for (int tt = 0; tt < shape.numlines; ++tt) {
         const lineObj &line = shape.line[tt];
         unsigned msize = line.numpoints;
@@ -128,6 +132,12 @@ TopologyFileRenderer::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
       break;
 
     case MS_SHAPE_POLYGON:
+      if (mode != SOLID) {
+        canvas.null_pen();
+        canvas.select(brush);
+        mode = SOLID;
+      }
+
       for (int tt = 0; tt < shape.numlines; ++tt) {
         const lineObj &line = shape.line[tt];
         unsigned msize = line.numpoints / iskip;
