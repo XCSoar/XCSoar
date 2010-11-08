@@ -34,6 +34,7 @@ Copyright_License {
 #include "resource.h"
 #include "shapelib/map.h"
 
+#include <algorithm>
 #include <stdlib.h>
 #include <tchar.h>
 #include <ctype.h> // needed for Wine
@@ -72,8 +73,7 @@ TopologyFile::TopologyFile(const char *filename, const Color thecolor,
   cache_bounds.west = cache_bounds.east =
     cache_bounds.south = cache_bounds.north = Angle::native(fixed_zero);
 
-  for (int i = 0; i < shpfile.numshapes; i++)
-    shpCache[i] = NULL;
+  std::fill(shpCache.begin(), shpCache.end(), (XShape *)NULL);
 }
 
 TopologyFile::~TopologyFile()
