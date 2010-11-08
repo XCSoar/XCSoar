@@ -32,12 +32,16 @@ Copyright_License {
 void
 Canvas::clipped_polygon(const POINT* lppt, unsigned cPoints)
 {
+  assert(defined());
+
   ::ClipPolygon(*this, lppt, cPoints, true);
 }
 
 void
 Canvas::clipped_polyline(const POINT* lppt, unsigned cPoints)
 {
+  assert(defined());
+
   ::ClipPolygon(*this, lppt, cPoints, false);
 }
 
@@ -62,6 +66,8 @@ Canvas::autoclip_polyline(const POINT* lppt, unsigned cPoints)
 void
 Canvas::line(int ax, int ay, int bx, int by)
 {
+  assert(defined());
+
 #ifndef NOLINETO
   ::MoveToEx(dc, ax, ay, NULL);
   ::LineTo(dc, bx, by);
@@ -74,6 +80,8 @@ Canvas::line(int ax, int ay, int bx, int by)
 void
 Canvas::two_lines(int ax, int ay, int bx, int by, int cx, int cy)
 {
+  assert(defined());
+
 #ifndef NOLINETO
   ::MoveToEx(dc, ax, ay, NULL);
   ::LineTo(dc, bx, by);
@@ -96,6 +104,8 @@ Canvas::two_lines(int ax, int ay, int bx, int by, int cx, int cy)
 void
 Canvas::move_to(int x, int y)
 {
+  assert(defined());
+
 #ifdef NOLINETO
   cursor.x = x;
   cursor.y = y;
@@ -107,6 +117,8 @@ Canvas::move_to(int x, int y)
 void
 Canvas::line_to(int x, int y)
 {
+  assert(defined());
+
 #ifdef NOLINETO
   line(cursor.x, cursor.y, x, y);
   move_to(x, y);
@@ -119,12 +131,16 @@ void
 Canvas::segment(int x, int y, unsigned radius,
                 Angle start, Angle end, bool horizon)
 {
+  assert(defined());
+
   ::Segment(*this, x, y, radius, start, end, horizon);
 }
 
 const SIZE
 Canvas::text_size(const TCHAR *text, size_t length) const
 {
+  assert(defined());
+
   SIZE size;
   ::GetTextExtentPoint(dc, text, length, &size);
   return size;
@@ -139,6 +155,8 @@ Canvas::text_size(const TCHAR *text) const
 unsigned
 Canvas::text_height(const TCHAR *text) const
 {
+  assert(defined());
+
   TEXTMETRIC tm;
   GetTextMetrics(dc, &tm);
   return tm.tmHeight;
@@ -147,24 +165,32 @@ Canvas::text_height(const TCHAR *text) const
 void
 Canvas::text(int x, int y, const TCHAR *text)
 {
+  assert(defined());
+
   ::ExtTextOut(dc, x, y, 0, NULL, text, _tcslen(text), NULL);
 }
 
 void
 Canvas::text(int x, int y, const TCHAR *text, size_t length)
 {
+  assert(defined());
+
   ::ExtTextOut(dc, x, y, 0, NULL, text, length, NULL);
 }
 
 void
 Canvas::text_opaque(int x, int y, const RECT &rc, const TCHAR *text)
 {
+  assert(defined());
+
   ::ExtTextOut(dc, x, y, ETO_OPAQUE, &rc, text, _tcslen(text), NULL);
 }
 
 void
 Canvas::text_clipped(int x, int y, const RECT &rc, const TCHAR *text)
 {
+  assert(defined());
+
   ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), NULL);
 }
 
@@ -183,6 +209,9 @@ Canvas::copy(int dest_x, int dest_y,
              unsigned dest_width, unsigned dest_height,
              const Canvas &src, int src_x, int src_y)
 {
+  assert(defined());
+  assert(src.defined());
+
   ::BitBlt(dc, dest_x, dest_y, dest_width, dest_height,
            src.dc, src_x, src_y, SRCCOPY);
 }
@@ -202,6 +231,9 @@ Canvas::copy(const Canvas &src)
 void
 Canvas::copy_transparent_black(const Canvas &src)
 {
+  assert(defined());
+  assert(src.defined());
+
 #ifdef _WIN32_WCE
   ::TransparentImage(dc, 0, 0, get_width(), get_height(),
                      src.dc, 0, 0, get_width(), get_height(),
@@ -216,6 +248,9 @@ Canvas::copy_transparent_black(const Canvas &src)
 void
 Canvas::copy_transparent_white(const Canvas &src)
 {
+  assert(defined());
+  assert(src.defined());
+
 #ifdef _WIN32_WCE
   ::TransparentImage(dc, 0, 0, get_width(), get_height(),
                      src.dc, 0, 0, get_width(), get_height(),
@@ -230,6 +265,9 @@ Canvas::copy_transparent_white(const Canvas &src)
 void
 Canvas::stretch_transparent(const Canvas &src, Color key)
 {
+  assert(defined());
+  assert(src.defined());
+
 #ifdef _WIN32_WCE
   ::TransparentImage(dc, 0, 0, get_width(), get_height(),
                      src.dc, 0, 0, src.get_width(), src.get_height(),
@@ -248,6 +286,9 @@ Canvas::stretch(int dest_x, int dest_y,
                 int src_x, int src_y,
                 unsigned src_width, unsigned src_height)
 {
+  assert(defined());
+  assert(src.defined());
+
   ::StretchBlt(dc, dest_x, dest_y, dest_width, dest_height,
                src.dc, src_x, src_y, src_width, src_height,
                SRCCOPY);
@@ -266,6 +307,9 @@ Canvas::copy_or(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 const Canvas &src, int src_x, int src_y)
 {
+  assert(defined());
+  assert(src.defined());
+
   ::BitBlt(dc, dest_x, dest_y, dest_width, dest_height,
            src.dc, src_x, src_y, SRCPAINT);
 }
@@ -275,6 +319,9 @@ Canvas::copy_and(int dest_x, int dest_y,
                  unsigned dest_width, unsigned dest_height,
                  const Canvas &src, int src_x, int src_y)
 {
+  assert(defined());
+  assert(src.defined());
+
   ::BitBlt(dc, dest_x, dest_y, dest_width, dest_height,
            src.dc, src_x, src_y, SRCAND);
 }
@@ -286,6 +333,9 @@ Canvas::stretch_or(int dest_x, int dest_y,
                    int src_x, int src_y,
                    unsigned src_width, unsigned src_height)
 {
+  assert(defined());
+  assert(src.defined());
+
   ::StretchBlt(dc, dest_x, dest_y, dest_width, dest_height,
                src.dc, src_x, src_y, src_width, src_height,
                SRCPAINT);
@@ -298,6 +348,9 @@ Canvas::stretch_and(int dest_x, int dest_y,
                     int src_x, int src_y,
                     unsigned src_width, unsigned src_height)
 {
+  assert(defined());
+  assert(src.defined());
+
   ::StretchBlt(dc, dest_x, dest_y, dest_width, dest_height,
                src.dc, src_x, src_y, src_width, src_height,
                SRCAND);

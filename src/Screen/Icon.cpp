@@ -55,6 +55,8 @@ MaskedIcon::draw(Canvas &canvas,
                  BitmapCanvas &bitmap_canvas, 
                  int x, int y) const
 {
+  assert(defined());
+
   bitmap_canvas.select(bitmap);
 
   canvas.copy_or(x - origin.x, y - origin.y, size.cx, size.cy,

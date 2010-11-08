@@ -33,6 +33,7 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Compiler.h"
 
+#include <assert.h>
 #include <windows.h>
 #include <tchar.h>
 
@@ -546,9 +547,15 @@ private:
 public:
   Canvas():dc(NULL) {}
   Canvas(HDC _dc, unsigned _width, unsigned _height)
-    :dc(_dc), width(_width), height(_height) {}
+    :dc(_dc), width(_width), height(_height) {
+    assert(dc != NULL);
+  }
 
   void set(HDC _dc, unsigned _width, unsigned _height) {
+    assert(_dc != NULL);
+    assert(_width > 0);
+    assert(_height > 0);
+
     dc = _dc;
     width = _width;
     height = _height;
@@ -560,14 +567,20 @@ public:
   }
 
   operator HDC() const {
+    assert(defined());
+
     return dc;
   }
 
   unsigned get_width() const {
+    assert(defined());
+
     return width;
   }
 
   unsigned get_height() const {
+    assert(defined());
+
     return height;
   }
 
@@ -582,52 +595,69 @@ public:
     return HWColor(color);
   }
 
+  HGDIOBJ select_object(HGDIOBJ handle) {
+    assert(defined());
+    assert(handle != INVALID_HANDLE_VALUE);
+
+    return ::SelectObject(dc, handle);
+  }
+
+  void select_stock(int fnObject) {
+    select_object(::GetStockObject(fnObject));
+  }
+
   void null_pen() {
-    ::SelectObject(dc, GetStockObject(NULL_PEN));
+    select_stock(NULL_PEN);
   }
 
   void white_pen() {
-    ::SelectObject(dc, GetStockObject(WHITE_PEN));
+    select_stock(WHITE_PEN);
   }
 
   void black_pen() {
-    ::SelectObject(dc, GetStockObject(BLACK_PEN));
+    select_stock(BLACK_PEN);
   }
 
   void hollow_brush() {
-    ::SelectObject(dc, GetStockObject(HOLLOW_BRUSH));
+    select_stock(HOLLOW_BRUSH);
   }
 
   void white_brush() {
-    ::SelectObject(dc, GetStockObject(WHITE_BRUSH));
+    select_stock(WHITE_BRUSH);
   }
 
   void black_brush() {
-    ::SelectObject(dc, GetStockObject(BLACK_BRUSH));
+    select_stock(BLACK_BRUSH);
   }
 
   void select(const Pen &pen) {
-    ::SelectObject(dc, pen.native());
+    select_object(pen.native());
   }
 
   void select(const Brush &brush) {
-    ::SelectObject(dc, brush.native());
+    select_object(brush.native());
   }
 
   void select(const Font &font) {
-    ::SelectObject(dc, font.native());
+    select_object(font.native());
   }
 
   void set_text_color(const Color c) {
+    assert(defined());
+
     ::SetTextColor(dc, c);
   }
 
   gcc_pure
   Color get_text_color() const {
+    assert(defined());
+
     return Color(::GetTextColor(dc));
   }
 
   void set_background_color(const Color c) {
+    assert(defined());
+
     ::SetBkColor(dc, c);
   }
 
@@ -637,22 +667,32 @@ public:
   }
 
   void background_opaque() {
+    assert(defined());
+
     ::SetBkMode(dc, OPAQUE);
   }
 
   void background_transparent() {
+    assert(defined());
+
     ::SetBkMode(dc, TRANSPARENT);
   }
 
   void mix_copy() {
+    assert(defined());
+
     ::SetROP2(dc, R2_COPYPEN);
   }
 
   void mix_mask() {
+    assert(defined());
+
     ::SetROP2(dc, R2_MASKPEN);
   }
 
   void rectangle(int left, int top, int right, int bottom) {
+    assert(defined());
+
     ::Rectangle(dc, left, top, right, bottom);
   }
 
@@ -673,6 +713,8 @@ public:
   }
 
   void fill_rectangle(const RECT &rc, const HWColor color) {
+    assert(defined());
+
     /* this hack allows filling a rectangle with a solid color,
        without the need to create a HBRUSH */
     ::SetBkColor(dc, color);
@@ -684,6 +726,8 @@ public:
   }
 
   void fill_rectangle(const RECT rc, const Brush &brush) {
+    assert(defined());
+
     ::FillRect(dc, &rc, brush.native());
   }
 
@@ -714,23 +758,33 @@ public:
   }
 
   void clear_white() {
+    assert(defined());
+
     ::BitBlt(dc, 0, 0, width, height, NULL, 0, 0, WHITENESS);
   }
 
   void round_rectangle(int left, int top, int right, int bottom,
                        unsigned ellipse_width, unsigned ellipse_height) {
+    assert(defined());
+
     ::RoundRect(dc, left, top, right, bottom, ellipse_width, ellipse_height);
   }
 
   void raised_edge(RECT &rc) {
+    assert(defined());
+
     ::DrawEdge(dc, &rc, EDGE_RAISED, BF_ADJUST | BF_FLAT | BF_RECT);
   }
 
   void polyline(const POINT* lppt, unsigned cPoints) {
+    assert(defined());
+
     ::Polyline(dc, lppt, cPoints);
   }
 
   void polygon(const POINT* lppt, unsigned cPoints) {
+    assert(defined());
+
     ::Polygon(dc, lppt, cPoints);
   }
 
@@ -756,6 +810,8 @@ public:
   void line_to(int x, int y);
 
   void circle(int x, int y, unsigned radius) {
+    assert(defined());
+
     ::Ellipse(dc, x - radius, y - radius, x + radius, y + radius);
   }
 
@@ -763,10 +819,14 @@ public:
                Angle start, Angle end, bool horizon=false);
 
   void draw_focus(RECT rc) {
+    assert(defined());
+
     ::DrawFocusRect(dc, &rc);
   }
 
   void draw_button(RECT rc, bool down) {
+    assert(defined());
+
     ::DrawFrameControl(dc, &rc, DFC_BUTTON,
                        DFCS_BUTTONPUSH | (down ? DFCS_PUSHED : 0));
   }

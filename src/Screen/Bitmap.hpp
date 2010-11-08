@@ -33,6 +33,7 @@ Copyright_License {
 #include <windows.h>
 #endif
 
+#include <assert.h>
 #include <tchar.h>
 
 /**
@@ -88,6 +89,8 @@ public:
   }
 #else
   HBITMAP native() const {
+    assert(defined());
+
     return bitmap;
   }
 #endif

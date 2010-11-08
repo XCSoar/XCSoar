@@ -273,13 +273,9 @@ Bitmap::reset()
 const SIZE
 Bitmap::get_size() const
 {
-#ifdef ENABLE_SDL
-  if (surface == NULL) {
-    // XXX eliminate this case
-    const SIZE size = { 0, 0 };
-    return size;
-  }
+  assert(defined());
 
+#ifdef ENABLE_SDL
   const SIZE size = { surface->w, surface->h };
   return size;
 #else /* !ENABLE_SDL */
