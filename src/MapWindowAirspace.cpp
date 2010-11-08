@@ -172,7 +172,7 @@ private:
     // get brush, can be solid or a 1bpp bitmap
     m_buffer.select(Graphics::hAirspaceBrushes[m_settings_map.
                                             iAirspaceBrush[airspace.get_type()]]);
-    m_buffer.white_pen();
+    m_buffer.null_pen();
 
 #ifndef ENABLE_OPENGL
     if (m_warnings.is_warning(airspace) || m_warnings.is_inside(airspace)) {
