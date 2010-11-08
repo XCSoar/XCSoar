@@ -79,6 +79,12 @@ private:
   AlternateVector alternates;
   GeoPoint destination;
   unsigned best_alternate_id;
+
+  /**
+   * Determine if the candidate waypoint is already in the
+   * alternate list.
+   */
+  bool is_waypoint_in_alternates(const Waypoint& waypoint) const;
 };
 
 #endif //ALTERNATETASK_HPP

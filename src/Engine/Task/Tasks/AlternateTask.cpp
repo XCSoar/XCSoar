@@ -92,6 +92,11 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
     return;
   }
 
+  // build a list of alternates, sorted by distance.
+  // this is done in separate stages so we can add the reachable ones
+  // before the unreachable ones, without the sort criteria affecting
+  // the reachability.
+
   std::priority_queue<Divert, DivertVector, AlternateRank> q;
 
   for (AlternateTaskVector::const_iterator 
@@ -107,11 +112,21 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
 
     q.push(std::make_pair(std::make_pair(wp_alt, i->second), delta));
   }
+
+  // now push results onto the list, best first.
   while (!q.empty() && alternates.size()<3) {
     const Alternate top = q.top().first;
-    alternates.push_back(top);
+
+    // only add if not already in the list (from previous stage in two
+    // stage process)
+    if (!is_waypoint_in_alternates(top.first)) {
+      alternates.push_back(top);
+    }
+
     q.pop();
   }
+
+  // check for notifications
   check_alternate_changed();
 }
 
@@ -120,6 +135,8 @@ void
 AlternateTask::set_task_destination(const AIRCRAFT_STATE &state_now,
                                     const TaskPoint* _target) 
 {
+  // if we have a target, use that, otherwise use the aircraft location
+  // (which ends up equivalent to sorting by distance)
   if (_target) {
     destination = _target->get_location_remaining();
   } else {
@@ -131,4 +148,16 @@ const AbortTask::AlternateVector
 AlternateTask::getAlternates() const
 {
   return alternates;
+}
+
+bool 
+AlternateTask::is_waypoint_in_alternates(const Waypoint& waypoint) const
+{
+  for (AlternateVector::const_iterator it = alternates.begin();
+       it != alternates.end(); ++it) {
+    if (it->first == waypoint) {
+      return true;
+    }
+  }
+  return false;
 }
