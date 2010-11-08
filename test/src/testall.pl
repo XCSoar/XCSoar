@@ -15,4 +15,5 @@ my $harness = TAP::Harness->new({
 		die "Unknown test file type - $test_file\n";
 	},
 });
-$harness->runtests(@ARGV);
+my $aggregator = $harness->runtests(@ARGV);
+exit($aggregator->exit);
