@@ -260,7 +260,7 @@ public:
   void UpdateMapScale();
 
 protected:
-  void Update(const NMEA_INFO &basic, const SETTINGS_MAP &settings_map);
+  void Update();
 
   void UpdateScreenAngle(const NMEA_INFO &basic, const DERIVED_INFO &derived,
                          const SETTINGS_MAP &settings);

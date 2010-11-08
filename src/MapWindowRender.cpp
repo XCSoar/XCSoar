@@ -38,7 +38,7 @@ MapWindow::RenderStart(Canvas &canvas, const RECT &rc)
 {
   // Calculate screen position of the aircraft
   UpdateScreenAngle(Basic(), Calculated(), SettingsMap());
-  Update(Basic(), SettingsMap());
+  Update();
   render_projection = visible_projection;
 
   // Calculate screen positions of the thermal sources

@@ -304,9 +304,11 @@ MapWindow::UpdateMapScale()
 }
 
 void
-MapWindow::Update(const NMEA_INFO &basic, const SETTINGS_MAP &settings_map)
+MapWindow::Update()
 {
   const RECT rc = get_client_rect();
+  const SETTINGS_MAP &settings_map = SettingsMap();
+
   visible_projection.SetMapRect(rc);
 
   if (IsOriginCentered(settings_map.DisplayOrientation, GetDisplayMode()) ||
@@ -322,7 +324,7 @@ MapWindow::Update(const NMEA_INFO &basic, const SETTINGS_MAP &settings_map)
     visible_projection.SetGeoLocation(settings_map.PanLocation);
   else
     // Pan is off
-    visible_projection.SetGeoLocation(basic.Location);
+    visible_projection.SetGeoLocation(Basic().Location);
 
   visible_projection.UpdateScreenBounds();
 }
