@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/WindowCanvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Topology/TopologyStore.hpp"
+#include "Topology/TopologyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -39,7 +40,7 @@ Copyright_License {
  */
 MapWindow::MapWindow()
   :way_points(NULL),
-   topology(NULL),
+   topology(NULL), topology_renderer(NULL),
    terrain(NULL),
    terrain_center(Angle::native(fixed_zero), Angle::native(fixed_zero)),
    weather(NULL),
@@ -191,7 +192,11 @@ void
 MapWindow::set_topology(TopologyStore *_topology)
 {
   topology = _topology;
-  m_background.reset();
+
+  delete topology_renderer;
+  topology_renderer = topology != NULL
+    ? new TopologyRenderer(*topology)
+    : NULL;
 }
 
 void

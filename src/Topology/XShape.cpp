@@ -22,16 +22,17 @@ Copyright_License {
 */
 
 #include "Topology/XShape.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/LabelBlock.hpp"
 #include "Units.hpp"
-#include "UtilsText.hpp"
 #include "shapelib/map.h"
 
 #include <tchar.h>
 #include <ctype.h>
 #include <string.h>
 #include <stdio.h>
+
+#ifdef _UNICODE
+#include <windows.h>
+#endif
 
 static TCHAR *
 import_label(const char *src)
@@ -93,31 +94,4 @@ XShape::~XShape()
 {
   free(label);
   msFreeShape(&shape);
-}
-
-void
-XShape::DrawLabel(Canvas &canvas, LabelBlock &label_block,
-                      int x, int y) const
-{
-  if (!label)
-    return;
-
-  SIZE tsize = canvas.text_size(label);
-
-  x += 2;
-  y += 2;
-
-  RECT brect;
-  brect.left = x;
-  brect.right = brect.left + tsize.cx;
-  brect.top = y;
-  brect.bottom = brect.top + tsize.cy;
-
-  if (!label_block.check(brect))
-    return;
-
-  canvas.background_transparent();
-  canvas.set_text_color(Color(0x20, 0x20, 0x20));
-  canvas.text(x, y, label);
-  canvas.background_opaque();
 }

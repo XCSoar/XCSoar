@@ -23,15 +23,12 @@ Copyright_License {
 
 #include "Topology/TopologyFile.hpp"
 #include "Topology/XShape.hpp"
-#include "Screen/Canvas.hpp"
 #include "Screen/Util.hpp"
 #include "WindowProjection.hpp"
 #include "Screen/Graphics.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "SettingsMap.hpp"
 #include "Navigation/GeoPoint.hpp"
-#include "resource.h"
 #include "shapelib/map.h"
 
 #include <algorithm>
@@ -39,29 +36,12 @@ Copyright_License {
 #include <tchar.h>
 #include <ctype.h> // needed for Wine
 
-gcc_pure
-static GeoPoint
-point2GeoPoint(const pointObj& p)
-{
-  return GeoPoint(Angle::native(fixed(p.x)), Angle::native(fixed(p.y)));
-}
-
-void
-TopologyFile::loadIcon(const int res_id)
-{
-  if (res_id == IDB_TOWN)
-    icon.load_big(IDB_TOWN, IDB_TOWN_HD);
-  else
-    icon.load(res_id);
-}
-
 TopologyFile::TopologyFile(const char *filename, fixed _threshold,
                            const Color thecolor,
-                           int _label_field, int icon)
-  :label_field(_label_field),
+                           int _label_field, int _icon)
+  :label_field(_label_field), icon(_icon),
+   color(thecolor),
    scaleThreshold(_threshold),
-  hPen(1, thecolor),
-  hbBrush(thecolor),
   shapefileopen(false)
 {
   if (msSHPOpenFile(&shpfile, "rb", filename) == -1)
@@ -75,9 +55,6 @@ TopologyFile::TopologyFile(const char *filename, fixed _threshold,
     cache_bounds.south = cache_bounds.north = Angle::native(fixed_zero);
 
   std::fill(shpCache.begin(), shpCache.end(), (XShape *)NULL);
-
-  if (icon != 0)
-    loadIcon(icon);
 }
 
 TopologyFile::~TopologyFile()
@@ -166,148 +143,4 @@ TopologyFile::GetSkipSteps(fixed map_scale) const
     return 2;
 
   return 1;
-}
-
-void
-TopologyFile::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-                const WindowProjection &projection) const
-{
-  if (!shapefileopen)
-    return;
-
-  fixed map_scale = projection.GetMapScale();
-  if (map_scale > scaleThreshold)
-    return;
-
-  // TODO code: only draw inside screen!
-  // this will save time with rendering pixmaps especially
-  // we already do an outer visibility test, but may need a test
-  // in screen coords
-
-  canvas.select(hPen);
-  canvas.select(hbBrush);
-
-  // get drawing info
-
-  int iskip = GetSkipSteps(map_scale);
-
-  const rectObj screenRect =
-    ConvertRect(projection.GetScreenBounds());
-
-  for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
-    const XShape *cshape = shpCache[ixshp];
-    if (!cshape || !cshape->is_visible(label_field))
-      continue;
-
-    const shapeObj &shape = cshape->shape;
-
-    if (!msRectOverlap(&shape.bounds, &screenRect))
-      continue;
-
-    switch (shape.type) {
-    case MS_SHAPE_POINT:
-      for (int tt = 0; tt < shape.numlines; ++tt) {
-        const lineObj &line = shape.line[tt];
-
-        for (int jj = 0; jj < line.numpoints; ++jj) {
-          POINT sc;
-          const GeoPoint l = point2GeoPoint(line.point[jj]);
-
-          if (projection.GeoToScreenIfVisible(l, sc))
-            icon.draw(canvas, bitmap_canvas, sc.x, sc.y);
-        }
-      }
-      break;
-
-    case MS_SHAPE_LINE:
-      for (int tt = 0; tt < shape.numlines; ++tt) {
-        const lineObj &line = shape.line[tt];
-        unsigned msize = line.numpoints;
-        POINT pt[msize];
-
-        for (unsigned i = 0; i < msize; ++i) {
-          GeoPoint g = point2GeoPoint(line.point[i]);
-          pt[i] = projection.GeoToScreen(g);
-        }
-
-        canvas.polyline(pt, msize);
-      }
-      break;
-
-    case MS_SHAPE_POLYGON:
-      for (int tt = 0; tt < shape.numlines; ++tt) {
-        const lineObj &line = shape.line[tt];
-        unsigned msize = line.numpoints / iskip;
-        POINT pt[msize];
-
-        const pointObj *in = line.point;
-        for (unsigned i = 0; i < msize; ++i) {
-          GeoPoint g = point2GeoPoint(*in);
-          in += iskip;
-          pt[i] = projection.GeoToScreen(g);
-        }
-
-        canvas.polygon(pt, msize);
-      }
-      break;
-    }
-  }
-}
-
-void
-TopologyFile::PaintLabels(Canvas &canvas,
-                      const WindowProjection &projection, LabelBlock &label_block,
-                      const SETTINGS_MAP &settings_map) const
-{
-  if (!shapefileopen || settings_map.DeclutterLabels >= 2)
-    return;
-
-  fixed map_scale = projection.GetMapScale();
-  if (map_scale > scaleThreshold)
-    return;
-
-  // TODO code: only draw inside screen!
-  // this will save time with rendering pixmaps especially
-  // we already do an outer visibility test, but may need a test
-  // in screen coords
-
-  canvas.select(Fonts::MapLabel);
-
-  // get drawing info
-
-  int iskip = GetSkipSteps(map_scale);
-
-  rectObj screenRect =
-    ConvertRect(projection.GetScreenBounds());
-
-  for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
-    const XShape *cshape = shpCache[ixshp];
-    if (!cshape || !cshape->is_visible(label_field))
-      continue;
-
-    const shapeObj &shape = cshape->shape;
-
-    if (!msRectOverlap(&shape.bounds, &screenRect))
-      continue;
-
-    for (int tt = 0; tt < shape.numlines; ++tt) {
-      const lineObj &line = shape.line[tt];
-
-      int minx = canvas.get_width();
-      int miny = canvas.get_height();
-      const pointObj *in = line.point;
-      for (unsigned i = 0; i < (unsigned)line.numpoints; i += iskip) {
-        GeoPoint g = point2GeoPoint(line.point[i]);
-        in += iskip;
-        POINT pt = projection.GeoToScreen(g);
-
-        if (pt.x <= minx) {
-          minx = pt.x;
-          miny = pt.y;
-        }
-      }
-
-      cshape->DrawLabel(canvas, label_block, minx, miny);
-    }
-  }
 }

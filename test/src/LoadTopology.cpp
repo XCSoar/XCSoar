@@ -44,13 +44,9 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "WindowProjection.hpp"
-#include "Screen/Fonts.hpp"
-#include "Screen/Font.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
-
-Font Fonts::MapLabel;
 
 class TestProjection : public WindowProjection {
 public:

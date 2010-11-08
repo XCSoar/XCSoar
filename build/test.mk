@@ -389,22 +389,16 @@ LOAD_TOPOLOGY_SOURCES = \
 	$(SRC)/WindowProjection.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/LabelBlock.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
-	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/LoadTopology.cpp
 LOAD_TOPOLOGY_OBJS = $(call SRC_TO_OBJ,$(LOAD_TOPOLOGY_SOURCES))
 LOAD_TOPOLOGY_BIN = $(TARGET_BIN_DIR)/LoadTopology$(TARGET_EXEEXT)
 LOAD_TOPOLOGY_LDADD = \
 	$(MATH_LIBS) \
 	$(IO_LIBS) \
-	$(SCREEN_LIBS) \
 	$(SHAPELIB_LIBS) \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
-$(LOAD_TOPOLOGY_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
-$(LOAD_TOPOLOGY_BIN): LDLIBS += $(SCREEN_LDLIBS)
 $(LOAD_TOPOLOGY_BIN): $(LOAD_TOPOLOGY_OBJS) $(LOAD_TOPOLOGY_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
@@ -596,6 +590,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Topology/TopologyFile.cpp \
 	$(SRC)/Topology/TopologyStore.cpp \
+	$(SRC)/Topology/TopologyRenderer.cpp \
 	$(SRC)/Topology/TopologyGlue.cpp \
 	$(SRC)/Topology/XShape.cpp \
 	$(SRC)/Units.cpp \

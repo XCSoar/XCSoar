@@ -24,7 +24,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Screen/Fonts.hpp"
 #include "Marks.hpp"
-#include "Topology/TopologyStore.hpp"
+#include "Topology/TopologyRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Units.hpp"
 
@@ -75,9 +75,9 @@ MapWindow::RenderMapLayer(Canvas &canvas)
       DrawTerrainAbove(canvas);
   }
 
-  if (topology != NULL && SettingsMap().EnableTopology)
+  if (topology_renderer != NULL && SettingsMap().EnableTopology)
     // Draw the topology
-    topology->Draw(canvas, bitmap_canvas, render_projection);
+    topology_renderer->Draw(canvas, bitmap_canvas, render_projection);
 }
 
 /**
@@ -218,9 +218,9 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   RenderTaskElements(canvas);
 
   // Render topology on top of airspace, to keep the text readable
-  if (topology != NULL && SettingsMap().EnableTopology)
-    topology->DrawLabels(canvas, render_projection, label_block,
-                         SettingsMap());
+  if (topology_renderer != NULL && SettingsMap().EnableTopology)
+    topology_renderer->DrawLabels(canvas, render_projection, label_block,
+                                  SettingsMap());
 
   // Render glide through terrain range
   RenderGlide(canvas);

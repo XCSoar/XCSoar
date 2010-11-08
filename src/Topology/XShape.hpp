@@ -30,9 +30,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-class Canvas;
-class LabelBlock;
-
 class XShape : private NonCopyable {
   TCHAR *label;
 
@@ -44,8 +41,9 @@ public:
     return label_field < 0 || label != NULL;
   }
 
-  void DrawLabel(Canvas &canvas, LabelBlock &label_block,
-                     int x, int y) const;
+  const TCHAR *get_label() const {
+    return label;
+  }
 
   shapeObj shape;
 };

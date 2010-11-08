@@ -46,6 +46,7 @@ struct THERMAL_SOURCE_VIEW
 };
 
 class TopologyStore;
+class TopologyRenderer;
 class RasterTerrain;
 class RasterWeather;
 class Marks;
@@ -88,6 +89,7 @@ protected:
 
   const Waypoints *way_points;
   TopologyStore *topology;
+  TopologyRenderer *topology_renderer;
 
   RasterTerrain *terrain;
   GeoPoint terrain_center;

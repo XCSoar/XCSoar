@@ -27,12 +27,10 @@ Copyright_License {
 
 #include "shapelib/mapshape.h"
 #include "Geo/GeoBounds.hpp"
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Icon.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/AllocatedArray.hpp"
 #include "Math/fixed.hpp"
+#include "Screen/Color.hpp"
 
 struct GeoPoint;
 class Canvas;
@@ -45,7 +43,9 @@ class XShape;
 class TopologyFile : private NonCopyable {
   AllocatedArray<XShape *> shpCache;
 
-  int label_field;
+  int label_field, icon;
+
+  Color color;
 
 public:
   /**
@@ -65,40 +65,44 @@ public:
    */
   ~TopologyFile();
 
+  bool is_visible(fixed map_scale) const {
+    return map_scale <= scaleThreshold;
+  }
+
+  int get_label_field() const {
+    return label_field;
+  }
+
+  int get_icon() const {
+    return icon;
+  }
+
+  Color get_color() const {
+    return color;
+  }
+
+  bool empty() const {
+    return shpCache.size() == 0;
+  }
+
+  unsigned size() const {
+    return shpCache.size();
+  }
+
+  const XShape *operator[](unsigned i) const {
+    return shpCache[i];
+  }
+
+  gcc_pure
+  unsigned GetSkipSteps(fixed map_scale) const;
+
   void updateCache(const WindowProjection &map_projection);
-
-  /**
-   * Paints the polygons, lines and points/icons in the TopologyFile
-   * @param canvas The canvas to paint on
-   * @param bitmap_canvas Temporary canvas for the icon
-   * @param projection
-   */
-  void Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-             const WindowProjection &projection) const;
-
-  /**
-   * Paints a topology label if the space is available in the LabelBlock
-   * @param canvas The canvas to paint on
-   * @param projection
-   * @param label_block The LabelBlock class to use for decluttering
-   * @param settings_map
-   */
-  void PaintLabels(Canvas &canvas,
-                   const WindowProjection &projection, LabelBlock &label_block,
-                   const SETTINGS_MAP &settings_map) const;
 
   /**
    * The threshold value for the visibility check. If the current scale
    * is below this value the contents of this TopologyFile will be drawn.
    */
   fixed scaleThreshold;
-
-  /**
-   * This function loads an icon from the resource file that
-   * will be drawn at each MS_SHAPE_POINT of the TopologyFile
-   * @param
-   */
-  void loadIcon(const int);
 
 private:
   /**
@@ -107,15 +111,11 @@ private:
    */
   GeoBounds cache_bounds;
 
-  unsigned GetSkipSteps(fixed map_scale) const;
   static rectObj ConvertRect(const GeoBounds &br);
 
 protected:
   void ClearCache();
 
-  Pen hPen;
-  Brush hbBrush;
-  MaskedIcon icon;
   shapefileObj shpfile;
   bool shapefileopen;
 };

@@ -29,34 +29,35 @@ Copyright_License {
 
 #include <tchar.h>
 
-class Canvas;
-class BitmapCanvas;
 class WindowProjection;
-class LabelBlock;
 class TopologyFile;
-struct SETTINGS_MAP;
 class NLineReader;
 
 /**
  * Class used to manage and render vector topology layers
  */
 class TopologyStore : private NonCopyable {
+public:
   enum {
     /** maximum number of topologies */
     MAXTOPOLOGY = 20,
   };
 
+private:
   StaticArray<TopologyFile *, MAXTOPOLOGY> files;
 
 public:
   ~TopologyStore();
 
+  unsigned size() const {
+    return files.size();
+  }
+
+  const TopologyFile &operator [](unsigned i) const {
+    return *files[i];
+  }
+
   void ScanVisibility(const WindowProjection &m_projection);
-  void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-            const WindowProjection &projection) const;
-  void DrawLabels(Canvas &canvas,
-                  const WindowProjection &projection, LabelBlock &label_block,
-                  const SETTINGS_MAP &settings_map) const;
 
   void Load(NLineReader &reader, const TCHAR* Directory);
   void Reset();

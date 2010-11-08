@@ -28,6 +28,8 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
 
+#include <windef.h> // for MAX_PATH
+
 void
 TopologyStore::ScanVisibility(const WindowProjection &m_projection)
 {
@@ -43,28 +45,6 @@ TopologyStore::ScanVisibility(const WindowProjection &m_projection)
 TopologyStore::~TopologyStore()
 {
   Reset();
-}
-
-/**
- * Draws the topology to the given canvas
- * @param canvas The drawing canvas
- * @param rc The area to draw in
- */
-void
-TopologyStore::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-                    const WindowProjection &projection) const
-{
-  for (unsigned i = 0; i < files.size(); ++i)
-    files[i]->Paint(canvas, bitmap_canvas, projection);
-}
-
-void
-TopologyStore::DrawLabels(Canvas &canvas, const WindowProjection &projection,
-                          LabelBlock &label_block,
-                          const SETTINGS_MAP &settings_map) const
-{
-  for (unsigned i = 0; i < files.size(); ++i)
-    files[i]->PaintLabels(canvas, projection, label_block, settings_map);
 }
 
 void
