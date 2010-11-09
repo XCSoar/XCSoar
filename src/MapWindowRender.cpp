@@ -166,12 +166,6 @@ void
 MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
 {
   DrawCompass(canvas, rc);
-
-  // JMW Experimental only! EXPERIMENTAL
-#if 0
-  if (EnableAuxiliaryInfo)
-    DrawHorizon(canvas, rc);
-#endif
 }
 
 /**
