@@ -264,15 +264,9 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   // inform clients that the landable reachable scan has been performed 
   client_update(state, true);
 
-  // now try with non-safety polar
+  // now try with non-safety polar, not final glide
   fill_reachable(state, approx_waypoints, glide_polar, true, false);
   fill_reachable(state, approx_waypoints, glide_polar, false, false);
-
-  // now try with fake height added
-  AIRCRAFT_STATE fake = state;
-  fake.NavAltitude += fixed(10000.0);
-  fill_reachable(fake, approx_waypoints, glide_polar, true, false);
-  fill_reachable(fake, approx_waypoints, glide_polar, false, false);
 
   // inform clients that the landable unreachable scan has been performed 
   client_update(state, false);
