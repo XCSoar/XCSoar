@@ -26,13 +26,13 @@ Copyright_License {
 
 #include "BufferedSource.hpp"
 
-#include <zzip/lib.h>
-
 #include <tchar.h>
+
+struct zzip_file;
 
 class ZipSource : public BufferedSource<char> {
 private:
-  ZZIP_FILE *file;
+  struct zzip_file *file;
 
 public:
   ZipSource(const char *path);
