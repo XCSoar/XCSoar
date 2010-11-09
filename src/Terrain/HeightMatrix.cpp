@@ -55,7 +55,7 @@ HeightMatrix::SetSize(unsigned width, unsigned height,
 
 void
 HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
-                   unsigned quantisation_pixels)
+                   unsigned quantisation_pixels, bool interpolate)
 {
   const unsigned screen_width = projection.GetScreenWidth();
   const unsigned screen_height = projection.GetScreenHeight();
@@ -87,7 +87,7 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
       GeoPoint gp = projection.ScreenToGeo(x, y);
 #endif
 
-      short h = map.GetField(gp);
+      short h = interpolate ? map.GetFieldInterpolated(gp) : map.GetField(gp);
       if (!RasterBuffer::is_special(h)) {
         if (h < minimum)
           minimum = h;

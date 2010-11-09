@@ -46,8 +46,11 @@ protected:
   void SetSize(unsigned width, unsigned height, unsigned quantisation_pixels);
 
 public:
+  /**
+   * @param interpolate true enables interpolation of sub-pixel values
+   */
   void Fill(const RasterMap &map, const WindowProjection &map_projection,
-            unsigned quantisation_pixels);
+            unsigned quantisation_pixels, bool interpolate);
 
   unsigned get_width() const {
     return width;

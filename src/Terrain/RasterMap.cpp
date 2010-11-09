@@ -97,3 +97,10 @@ RasterMap::GetField(const GeoPoint &location) const
   std::pair<unsigned, unsigned> xy = projection.project(location);
   return raster_tile_cache.GetField(xy.first, xy.second);
 }
+
+short
+RasterMap::GetFieldInterpolated(const GeoPoint &location) const
+{
+  std::pair<unsigned, unsigned> xy = projection.project(location);
+  return raster_tile_cache.GetFieldInterpolated(xy.first, xy.second);
+}

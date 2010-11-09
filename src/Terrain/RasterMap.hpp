@@ -71,6 +71,9 @@ public:
 
   gcc_pure
   short GetField(const GeoPoint &location) const;
+
+  gcc_pure
+  short GetFieldInterpolated(const GeoPoint &location) const;
 };
 
 

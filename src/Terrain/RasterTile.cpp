@@ -68,7 +68,28 @@ RasterTile::Enable()
 }
 
 short
-RasterTile::GetField(unsigned lx, unsigned ly, unsigned ix, unsigned iy) const
+RasterTile::GetField(unsigned x, unsigned y) const
+{
+  // we want to exit out of this function as soon as possible
+  // if we have the wrong tile
+
+  if (IsDisabled())
+    return RasterBuffer::TERRAIN_INVALID;
+
+  // check x in range
+  if ((x -= xstart) >= width)
+    return RasterBuffer::TERRAIN_INVALID;
+
+  // check y in range
+  if ((y -= ystart) >= height)
+    return RasterBuffer::TERRAIN_INVALID;
+
+  return buffer.get(x, y);
+}
+
+short
+RasterTile::GetFieldInterpolated(unsigned lx, unsigned ly,
+                                 unsigned ix, unsigned iy) const
 {
   // we want to exit out of this function as soon as possible
   // if we have the wrong tile
@@ -200,12 +221,32 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly) const
     // outside overall bounds
     return RasterBuffer::TERRAIN_INVALID;
 
+  unsigned px = lx >> 8, py = ly >> 8;
+
+  for (unsigned i = 0; i < ActiveTiles.length(); ++i) {
+    short h = ActiveTiles[i].GetField(px, py);
+    if (!RasterBuffer::is_invalid(h)) {
+      ActiveTiles.move_to_front(i);
+      return h;
+    }
+  }
+  // still not found, so go to overview
+  return Overview.get_interpolated(lx / RTC_SUBSAMPLING, ly / RTC_SUBSAMPLING);
+}
+
+short
+RasterTileCache::GetFieldInterpolated(unsigned int lx, unsigned int ly) const
+{
+  if ((lx >= overview_width_fine) || (ly >= overview_height_fine))
+    // outside overall bounds
+    return RasterBuffer::TERRAIN_INVALID;
+
   unsigned px = lx, py = ly;
   const unsigned int ix = CombinedDivAndMod(px);
   const unsigned int iy = CombinedDivAndMod(py);
 
   for (unsigned i = 0; i < ActiveTiles.length(); ++i) {
-    short h = ActiveTiles[i].GetField(px, py, ix, iy);
+    short h = ActiveTiles[i].GetFieldInterpolated(px, py, ix, iy);
     if (!RasterBuffer::is_invalid(h)) {
       ActiveTiles.move_to_front(i);
       return h;

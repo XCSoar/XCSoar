@@ -104,6 +104,11 @@ public:
   short get_interpolated(unsigned lx, unsigned ly) const;
 
   gcc_pure
+  short get(unsigned x, unsigned y) const {
+    return *get_data_at(x, y);
+  }
+
+  gcc_pure
   short get_max() const;
 };
 

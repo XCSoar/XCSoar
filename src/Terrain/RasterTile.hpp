@@ -66,7 +66,11 @@ public:
   }
 
   gcc_pure
-  short GetField(unsigned x, unsigned y, unsigned ix, unsigned iy) const;
+  short GetField(unsigned x, unsigned y) const;
+
+  gcc_pure
+  short GetFieldInterpolated(unsigned x, unsigned y,
+                             unsigned ix, unsigned iy) const;
 
   inline short* GetImageBuffer() {
     return buffer.get_data();
@@ -123,8 +127,11 @@ private:
 
 public:
   gcc_pure
-  short GetField(unsigned int lx,
-                 unsigned int ly) const;
+  short GetField(unsigned x, unsigned y) const;
+
+  gcc_pure
+  short GetFieldInterpolated(unsigned int lx,
+                             unsigned int ly) const;
 
 protected:
   void LoadJPG2000(const char *path);
