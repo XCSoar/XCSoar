@@ -121,17 +121,41 @@ ContainerWindow::on_mouse_double(int x, int y)
 void
 ContainerWindow::on_paint(Canvas &canvas)
 {
+  Window *full = NULL;
+
+  /* find the last full window, which covers all the other windows
+     behind it */
+  for (std::list<Window*>::const_reverse_iterator i = children.rbegin();
+       i != children.rend(); ++i) {
+    Window &child = **i;
+    if (child.is_visible() &&
+        child.get_left() <= 0 && child.get_right() >= (int)get_width() &&
+        child.get_top() <= 0 && child.get_bottom() >= (int)get_height())
+      full = &child;
+  }
+
   for (std::list<Window*>::const_reverse_iterator i = children.rbegin();
        i != children.rend(); ++i) {
     Window &child = **i;
     if (!child.is_visible())
       continue;
 
+    if (full != NULL) {
+      if (&child == full)
+        full = NULL;
+      else
+        /* don't bother to draw the children "behind" the last full
+           window */
+        continue;
+    }
+
     SubCanvas sub_canvas(canvas, child.get_left(), child.get_top(),
                          child.get_width(), child.get_height());
     child.setup(sub_canvas);
     child.on_paint(sub_canvas);
   }
+
+  assert(full == NULL);
 }
 
 
