@@ -161,14 +161,6 @@ RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
   }
 }
 
-static int
-checked_height_difference(int a, int b)
-{
-  return RasterBuffer::is_special(a) || RasterBuffer::is_special(b)
-    ? 0
-    : a - b;
-}
-
 // JMW: if zoomed right in (e.g. one unit is larger than terrain
 // grid), then increase the step size to be equal to the terrain
 // grid for purposes of calculating slope, to avoid shading problems
@@ -226,9 +218,6 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
         assert(src - row_minus_offset < height_matrix.GetDataEnd());
         assert(src + row_plus_offset < height_matrix.GetDataEnd());
 
-        const int p32 = checked_height_difference(src[-(int)row_minus_offset],
-                                                  src[row_plus_offset]);
-
         // X direction
 
         const unsigned column_plus_index = x < (unsigned)border.right
@@ -242,8 +231,23 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
         assert(src - column_minus_index < height_matrix.GetDataEnd());
         assert(src + column_plus_index < height_matrix.GetDataEnd());
 
-        const int p22 = checked_height_difference(src[column_plus_index],
-                                                  src[-(int)column_minus_index]);
+        short h_above = src[-(int)row_minus_offset];
+        short h_below = src[row_plus_offset];
+        short h_left = src[-(int)column_minus_index];
+        short h_right = src[column_plus_index];
+
+        if (gcc_unlikely(RasterBuffer::is_special(h_above) ||
+                         RasterBuffer::is_special(h_below) ||
+                         RasterBuffer::is_special(h_left) ||
+                         RasterBuffer::is_special(h_right))) {
+          /* some "special" terrain value surrounding us (water or
+             invalid), skip slope calculation */
+          *p++ = oColorBuf[h];
+          continue;
+        }
+
+        const int p32 = h_above - h_below;
+        const int p22 = h_right - h_left;
 
         const unsigned p20 = column_plus_index + column_minus_index;
 
