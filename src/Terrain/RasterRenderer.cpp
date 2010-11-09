@@ -255,19 +255,14 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
         const int dd1 = p20 * p32;
         const int dd2 = p20 * p31 * height_slope_factor;
         const int mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
-        if (mag>0) {
-          const long num = (dd2 * sz + dd0 * sx + dd1 * sy);
-          const int sval = num/(int)sqrt((fixed)mag);
-          int sindex = (sval - sz) * contrast / 128;
-          if (gcc_unlikely(sindex < -64))
-            sindex = -64;
-          if (gcc_unlikely(sindex > 63))
-            sindex = 63;
-          *p++ = oColorBuf[h + 256*sindex];
-        } else {
-          // slope is zero, so just look up the color
-          *p++ = oColorBuf[h];
-        }
+        const int num = (dd2 * sz + dd0 * sx + dd1 * sy);
+        const int sval = num / (int)sqrt((fixed)mag);
+        int sindex = (sval - sz) * contrast / 128;
+        if (gcc_unlikely(sindex < -64))
+          sindex = -64;
+        if (gcc_unlikely(sindex > 63))
+          sindex = 63;
+        *p++ = oColorBuf[h + 256*sindex];
       } else if (RasterBuffer::is_water(h)) {
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
