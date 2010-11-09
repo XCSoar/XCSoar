@@ -91,7 +91,7 @@ WayPointFile::check_altitude(Waypoint &new_waypoint,
 
   // Load waypoint altitude from terrain
   const short t_alt = AltitudeFromTerrain(new_waypoint.Location, *terrain);
-  if (t_alt == RasterTerrain::TERRAIN_INVALID) {
+  if (RasterBuffer::is_special(t_alt)) {
     new_waypoint.Altitude = fixed_zero;
   } else { // TERRAIN_VALID
     new_waypoint.Altitude = (fixed)t_alt;
