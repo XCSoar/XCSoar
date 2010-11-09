@@ -43,7 +43,7 @@ class RasterProjection {
 public:
   void set(const GeoBounds &bounds, unsigned width, unsigned height);
 
-  gcc_const std::pair<unsigned, unsigned>
+  gcc_pure std::pair<unsigned, unsigned>
   project(const GeoPoint &location) const {
     unsigned x = (int)(location.Longitude.value_native() * x_scale) - left;
     unsigned y = top - (int)(location.Latitude.value_native() * y_scale);
