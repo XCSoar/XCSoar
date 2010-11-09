@@ -8,6 +8,7 @@ ZZIP = \
 
 ZZIP_LIBS = $(TARGET_OUTPUT_DIR)/zzip.a
 
+$(ZZIP_LIBS): CFLAGS += -Wno-strict-aliasing
 $(ZZIP_LIBS): INCLUDES += $(ZLIB_INCLUDES)
 $(ZZIP_LIBS): $(call SRC_TO_OBJ,$(ZZIP))
 	@$(NQ)echo "  AR      $@"
