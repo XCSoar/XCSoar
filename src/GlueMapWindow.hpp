@@ -50,6 +50,8 @@ public:
 
   bool Idle();
 
+  virtual void Render(Canvas &canvas, const RECT &rc);
+
 private:
   enum drag_mode {
     DRAG_NONE,

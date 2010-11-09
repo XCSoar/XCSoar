@@ -358,6 +358,12 @@ GlueMapWindow::on_paint(Canvas &canvas)
   // Draw center screen cross hair in pan mode
   if (SettingsMap().EnablePan && !SettingsMap().TargetPan)
     DrawCrossHairs(canvas);
+}
+
+void
+GlueMapWindow::Render(Canvas &canvas, const RECT &rc)
+{
+  MapWindow::Render(canvas, rc);
 
   if (drag_mode == DRAG_TARGET)
     TargetPaintDrag(canvas, drag_last);

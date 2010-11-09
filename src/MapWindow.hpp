@@ -255,7 +255,7 @@ public:
   void DrawFLARMTraffic(Canvas &canvas, const POINT aircraft_pos) const;
 
   // thread, main functions
-  void Render(Canvas &canvas, const RECT &rc);
+  virtual void Render(Canvas &canvas, const RECT &rc);
 
   void UpdateMapScale();
 
