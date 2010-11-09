@@ -78,20 +78,20 @@ MapWindowProjection::StepMapScale(const fixed scale, int Step) const
 unsigned
 MapWindowProjection::FindMapScale(const fixed Value) const
 {
-  fixed BestFit;
-  unsigned BestFitIdx = 0;
   unsigned DesiredScale = Value *
                        Layout::Scale(GetScreenWidth()) / GetMapResolutionFactor();
 
-  for (unsigned i = 0; i < ScaleListCount; i++) {
-    fixed err = fixed(abs(DesiredScale - ScaleList[i])) / DesiredScale;
-    if (i == 0 || err < BestFit) {
-      BestFit = err;
-      BestFitIdx = i;
+  unsigned i;
+  for (i = 0; i < ScaleListCount; i++) {
+    if (DesiredScale < ScaleList[i]) {
+      if (i == 0)
+        return 0;
+
+      return i - (DesiredScale < (ScaleList[i] + ScaleList[i - 1]) / 2);
     }
   }
 
-  return BestFitIdx;
+  return ScaleListCount - 1;
 }
 
 void
