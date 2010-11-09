@@ -32,17 +32,17 @@ Copyright_License {
 MapWindowProjection::MapWindowProjection():
   WindowProjection()
 {
-  ScaleList[0] = fixed(500);
-  ScaleList[1] = fixed(1000);
-  ScaleList[2] = fixed(2000);
-  ScaleList[3] = fixed(5000);
-  ScaleList[4] = fixed(10000);
-  ScaleList[5] = fixed(20000);
-  ScaleList[6] = fixed(50000);
-  ScaleList[7] = fixed(100000);
-  ScaleList[8] = fixed(200000);
-  ScaleList[9] = fixed(500000);
-  ScaleList[10] = fixed(1000000);
+  ScaleList[0] = 500;
+  ScaleList[1] = 1000;
+  ScaleList[2] = 2000;
+  ScaleList[3] = 5000;
+  ScaleList[4] = 10000;
+  ScaleList[5] = 20000;
+  ScaleList[6] = 50000;
+  ScaleList[7] = 100000;
+  ScaleList[8] = 200000;
+  ScaleList[9] = 500000;
+  ScaleList[10] = 1000000;
   ScaleListCount = 11;
 }
 
@@ -57,8 +57,7 @@ fixed
 MapWindowProjection::CalculateMapScale(const int scale) const
 {
   assert(scale >= 0 && scale < ScaleListCount);
-
-  return ScaleList[scale] *
+  return fixed(ScaleList[scale]) *
     GetMapResolutionFactor() / Layout::Scale(GetScreenWidth());
 }
 
@@ -81,11 +80,11 @@ MapWindowProjection::FindMapScale(const fixed Value) const
 {
   fixed BestFit;
   int BestFitIdx = 0;
-  fixed DesiredScale = Value *
+  unsigned DesiredScale = Value *
                        Layout::Scale(GetScreenWidth()) / GetMapResolutionFactor();
 
   for (int i = 0; i < ScaleListCount; i++) {
-    fixed err = fabs(DesiredScale - ScaleList[i]) / DesiredScale;
+    fixed err = fixed(abs(DesiredScale - ScaleList[i])) / DesiredScale;
     if (i == 0 || err < BestFit) {
       BestFit = err;
       BestFitIdx = i;

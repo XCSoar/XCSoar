@@ -62,7 +62,7 @@ private:
   gcc_pure
   int FindMapScale(const fixed Value) const;
 
-  fixed ScaleList[11];
+  unsigned ScaleList[11];
   int ScaleListCount;
 };
 

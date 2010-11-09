@@ -47,7 +47,6 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Thread/Trigger.hpp"
 #include "DeviceBlackboard.hpp"
-#include "MapWindowProjection.hpp"
 #include "OS/PathName.hpp"
 #include "Protection.hpp"
 
@@ -115,7 +114,6 @@ InputEvents::processNmea(unsigned key)
  */
 
 Projection::Projection() {}
-MapWindowProjection::MapWindowProjection() {}
 
 /*
  * Fake Settings*Blackboard.cpp

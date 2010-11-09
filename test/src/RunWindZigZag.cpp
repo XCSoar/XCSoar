@@ -116,7 +116,6 @@ InputEvents::processNmea(unsigned key)
  */
 
 Projection::Projection() {}
-MapWindowProjection::MapWindowProjection() {}
 
 /*
  * Fake Settings*Blackboard.cpp

@@ -68,7 +68,6 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc,
 void dlgStartPointShowModal() {}
 
 Projection::Projection() {}
-MapWindowProjection::MapWindowProjection() {}
 
 SettingsComputerBlackboard::SettingsComputerBlackboard() {}
 SettingsMapBlackboard::SettingsMapBlackboard() {}
