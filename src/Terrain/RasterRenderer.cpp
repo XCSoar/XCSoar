@@ -24,6 +24,7 @@ Copyright_License {
 #include "Terrain/RasterRenderer.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Math/Earth.hpp"
+#include "Math/FastMath.h"
 #include "Screen/Ramp.hpp"
 #include "Screen/Layout.hpp"
 #include "WindowProjection.hpp"
@@ -256,7 +257,11 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
         const int dd2 = p20 * p31 * height_slope_factor;
         const int mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
         const int num = (dd2 * sz + dd0 * sx + dd1 * sy);
+#ifdef FIXED_MATH
+        const int sval = num / (int)isqrt4(mag);
+#else
         const int sval = num / (int)sqrt((fixed)mag);
+#endif
         int sindex = (sval - sz) * contrast / 128;
         if (gcc_unlikely(sindex < -64))
           sindex = -64;
