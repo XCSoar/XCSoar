@@ -52,11 +52,11 @@ RasterProjection::pixel_distance(const GeoPoint &location, unsigned pixels) cons
 
   GeoPoint p;
 
-  Angle distance = Angle::native(fixed_sqrt_two * FACTOR / (x_scale / pixels));
+  Angle distance = width_to_angle(fixed_sqrt_two * FACTOR * pixels);
   p = GeoPoint(location.Longitude + distance, location.Latitude);
   fixed x = Distance(location, p);
 
-  distance = Angle::native(fixed_sqrt_two * FACTOR / (y_scale / pixels));
+  distance = height_to_angle(fixed_sqrt_two * FACTOR * pixels);
   p = GeoPoint(location.Longitude, location.Latitude + distance);
   fixed y = Distance(location, p);
 

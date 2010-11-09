@@ -43,6 +43,16 @@ class RasterProjection {
 public:
   void set(const GeoBounds &bounds, unsigned width, unsigned height);
 
+  gcc_pure
+  Angle width_to_angle(fixed pixels) const {
+    return Angle::native(fixed(pixels) / x_scale);
+  }
+
+  gcc_pure
+  Angle height_to_angle(fixed pixels) const {
+    return Angle::native(fixed(pixels) / y_scale);
+  }
+
   gcc_pure std::pair<unsigned, unsigned>
   project(const GeoPoint &location) const {
     unsigned x = (int)(location.Longitude.value_native() * x_scale) - left;
