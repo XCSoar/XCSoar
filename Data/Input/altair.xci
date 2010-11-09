@@ -338,7 +338,7 @@ type=key
 data=7
 event=GotoLookup
 event=Mode default
-label=GoTo
+label=GoTo$(CheckWaypointFile)
 location=6
 
 mode=Nav2
