@@ -42,7 +42,7 @@ Copyright_License {
 gcc_const int compare_squared(int a, int b, int c);
 
 gcc_const static inline int
-iround(const fixed &x)
+iround(fixed x)
 {
   return (int)floor(x + fixed_half);
 }
