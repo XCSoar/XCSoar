@@ -267,8 +267,6 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
                 _T("Gross"));
 
   RenderZero(canvas);
-
-  invalidate();
 }
 
 void
