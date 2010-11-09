@@ -436,9 +436,9 @@ include $(topdir)/build/cab.mk
 all: all-$(TARGET)
 
 # if no TARGET is set, build all targets
-all-: $(addprefix call-,$(DEFAULT_TARGETS))
-call-%:
-	$(MAKE) TARGET=$(patsubst call-%,%,$@) DEBUG=$(DEBUG) V=$(V)
+all-: $(addprefix call-all-,$(DEFAULT_TARGETS))
+call-all-%:
+	$(MAKE) TARGET=$(patsubst call-all-%,%,$@) DEBUG=$(DEBUG) V=$(V)
 
 $(addprefix all-,$(TARGETS)): all-%: $(OUTPUTS)
 
