@@ -29,6 +29,22 @@ Copyright_License {
 #include <windows.h>
 #endif
 
+ZipSource::ZipSource(struct zzip_dir *dir, const char *path)
+  :BufferedSource<char>(4096)
+{
+  int mode = O_RDONLY;
+
+#ifdef O_NOCTTY
+  mode |= O_NOCTTY;
+#endif
+
+#ifdef O_BINARY
+  mode |= O_BINARY;
+#endif
+
+  file = zzip_file_open(dir, path, mode);
+}
+
 ZipSource::ZipSource(const char *path)
   :BufferedSource<char>(4096)
 {

@@ -29,12 +29,14 @@ Copyright_License {
 #include <tchar.h>
 
 struct zzip_file;
+struct zzip_dir;
 
 class ZipSource : public BufferedSource<char> {
 private:
   struct zzip_file *file;
 
 public:
+  ZipSource(struct zzip_dir *dir, const char *path);
   ZipSource(const char *path);
 #ifdef _UNICODE
   ZipSource(const TCHAR *path);

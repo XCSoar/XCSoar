@@ -38,6 +38,8 @@ protected:
   LineSplitter splitter;
 
 public:
+  ZipLineReaderA(struct zzip_dir *dir, const char *path)
+    :zip(dir, path), splitter(zip) {}
   ZipLineReaderA(const char *path)
     :zip(path), splitter(zip) {}
 #ifdef _UNICODE
