@@ -50,6 +50,10 @@ OnWaypointNewClicked(WndButton &Sender)
   (void)Sender;
 
   Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().Location);
+  edit_waypoint.Altitude = XCSoarInterface::Calculated().TerrainValid
+    ? XCSoarInterface::Calculated().TerrainAlt
+    : XCSoarInterface::Basic().NavAltitude;
+
   if (dlgWaypointEditShowModal(edit_waypoint) &&
       edit_waypoint.Name.size()) {
     way_points.append(edit_waypoint);
