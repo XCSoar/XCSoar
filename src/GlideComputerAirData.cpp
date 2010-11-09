@@ -434,9 +434,18 @@ GlideComputerAirData::TerrainHeight()
   }
 
   short Alt = terrain->GetTerrainHeight(Basic().Location);
+  if (RasterBuffer::is_special(Alt)) {
+    if (RasterBuffer::is_water(Alt))
+      /* assume water is 0m MSL; that's the best guess */
+      Alt = 0;
+    else {
+      SetCalculated().TerrainValid = false;
+      return;
+    }
+  }
 
-  SetCalculated().TerrainValid = Alt > RasterTerrain::TERRAIN_INVALID;
-  SetCalculated().TerrainAlt = fixed(std::max((short)0, Alt));
+  SetCalculated().TerrainValid = true;
+  SetCalculated().TerrainAlt = fixed(Alt);
 }
 
 /**
