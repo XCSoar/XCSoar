@@ -43,7 +43,7 @@ static const unsigned ScaleList[] = {
   1000000,
 };
 
-static const int ScaleListCount =
+static const unsigned ScaleListCount =
   sizeof(ScaleList) / sizeof(ScaleList[0]);
 
 bool
@@ -54,9 +54,9 @@ MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 }
 
 fixed
-MapWindowProjection::CalculateMapScale(const int scale) const
+MapWindowProjection::CalculateMapScale(unsigned scale) const
 {
-  assert(scale >= 0 && scale < ScaleListCount);
+  assert(scale < ScaleListCount);
   return fixed(ScaleList[scale]) *
     GetMapResolutionFactor() / Layout::Scale(GetScreenWidth());
 }
@@ -71,19 +71,19 @@ fixed
 MapWindowProjection::StepMapScale(const fixed scale, int Step) const
 {
   int i = FindMapScale(scale) + Step;
-  i = max(0, min(ScaleListCount - 1, i));
+  i = max(0, min((int)ScaleListCount - 1, i));
   return CalculateMapScale(i);
 }
 
-int
+unsigned
 MapWindowProjection::FindMapScale(const fixed Value) const
 {
   fixed BestFit;
-  int BestFitIdx = 0;
+  unsigned BestFitIdx = 0;
   unsigned DesiredScale = Value *
                        Layout::Scale(GetScreenWidth()) / GetMapResolutionFactor();
 
-  for (int i = 0; i < ScaleListCount; i++) {
+  for (unsigned i = 0; i < ScaleListCount; i++) {
     fixed err = fixed(abs(DesiredScale - ScaleList[i])) / DesiredScale;
     if (i == 0 || err < BestFit) {
       BestFit = err;

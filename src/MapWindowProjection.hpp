@@ -45,7 +45,7 @@ public:
    * Calculates a scale index.
    */
   gcc_pure
-  fixed CalculateMapScale(const int scale) const;
+  fixed CalculateMapScale(unsigned scale) const;
 
   gcc_pure
   fixed StepMapScale(const fixed scale, int Step) const;
@@ -57,7 +57,7 @@ private:
   fixed LimitMapScale(const fixed value) const;
 
   gcc_pure
-  int FindMapScale(const fixed Value) const;
+  unsigned FindMapScale(const fixed Value) const;
 };
 
 #endif
