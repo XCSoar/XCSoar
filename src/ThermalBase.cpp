@@ -62,7 +62,7 @@ EstimateThermalBase(const GeoPoint Thermal_Location,
     short hground = map != NULL
       ? (*map)->GetField(loc)
       : RasterTerrain::TERRAIN_INVALID;
-    if (hground == RasterTerrain::TERRAIN_INVALID)
+    if (RasterBuffer::is_special(hground))
       hground = 0;
 
     fixed dh = hthermal - fixed(hground);
@@ -76,7 +76,7 @@ EstimateThermalBase(const GeoPoint Thermal_Location,
   short hground = terrain != NULL
     ? terrain->GetTerrainHeight(loc)
     : RasterTerrain::TERRAIN_INVALID;
-  if (hground == RasterTerrain::TERRAIN_INVALID)
+  if (RasterBuffer::is_special(hground))
     hground = 0;
 
   delete map;
