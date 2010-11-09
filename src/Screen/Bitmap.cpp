@@ -35,6 +35,8 @@ Copyright_License {
 #endif
 
 #ifdef ENABLE_SDL
+#include "Screen/SDL/Format.hpp"
+
 #include <SDL_endian.h>
 
   #ifdef WIN32
@@ -106,8 +108,7 @@ Bitmap::load(unsigned id)
   if (original == NULL)
     return false;
 
-  surface = ::SDL_DisplayFormat(original);
-  ::SDL_FreeSurface(original);
+  surface = ConvertToDisplayFormat(original);
 
 #ifdef WIN32
   free(header);

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/OpenGL/Texture.hpp"
+#include "Screen/SDL/Format.hpp"
 #include "Asset.hpp"
 #include "Compiler.h"
 
@@ -47,7 +48,8 @@ gcc_pure
 static SDL_Surface *
 SurfaceToTextureSurface(SDL_Surface *src)
 {
-  SDL_Surface *converted = ::SDL_DisplayFormat(src);
+  SDL_Surface *converted = ConvertToDisplayFormatPreserve(src);
+
   if (!is_android())
     /* full OpenGL allows non-aligned textures */
     return converted;
@@ -68,15 +70,16 @@ SurfaceToTextureSurface(SDL_Surface *src)
   SDL_Rect dest_rect = { 0, 0 };
 
   ::SDL_BlitSurface(converted, &src_rect, dest, &dest_rect);
-  ::SDL_FreeSurface(converted);
+  if (converted != src)
+    ::SDL_FreeSurface(converted);
 
   return dest;
 }
 
 void
-GLTexture::load(SDL_Surface *surface)
+GLTexture::load(SDL_Surface *src)
 {
-  surface = SurfaceToTextureSurface(surface);
+  SDL_Surface *surface = SurfaceToTextureSurface(src);
 
 #ifdef ANDROID
   /* 16 bit 5/6/5 on Android */
@@ -88,7 +91,8 @@ GLTexture::load(SDL_Surface *surface)
                GL_BGRA, GL_UNSIGNED_BYTE, surface->pixels);
 #endif
 
-  SDL_FreeSurface(surface);
+  if (surface != src)
+    SDL_FreeSurface(surface);
 }
 
 void
