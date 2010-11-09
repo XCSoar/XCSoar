@@ -86,12 +86,6 @@ RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp)
   if (m_layer == 0) {
     // draw shaded part of observation zone
     draw_oz_background(tp);
-
-    // Draw clear area on top indicating part of OZ already travelled in.
-    // This provides a simple and intuitive visual representation of
-    // where in the OZ to go to increase scoring distance.
-
-    draw_samples(tp);
   }
   
   if (m_layer == 1) {
@@ -136,6 +130,13 @@ RenderTaskPoint::Visit(const AATPoint& tp)
   m_index++;
   
   draw_ordered(tp);
+  if (m_layer == 0) {
+    // Draw clear area on top indicating part of OZ already travelled in.
+    // This provides a simple and intuitive visual representation of
+    // where in the OZ to go to increase scoring distance.
+    draw_samples(tp);
+  }
+
   if (m_layer == 3) {
     draw_isoline(tp);
     draw_bearing(tp);
