@@ -24,7 +24,6 @@ Copyright_License {
 #include "MapWindowProjection.hpp"
 #include "Screen/Layout.hpp"
 #include "Waypoint/Waypoint.hpp"
-#include "Units.hpp"
 
 #include <stdlib.h>
 #include <math.h>
@@ -33,17 +32,17 @@ Copyright_License {
 MapWindowProjection::MapWindowProjection():
   WindowProjection()
 {
-  ScaleList[0] = fixed_half;
-  ScaleList[1] = fixed_one;
-  ScaleList[2] = fixed_two;
-  ScaleList[3] = fixed(5);
-  ScaleList[4] = fixed_ten;
-  ScaleList[5] = fixed(20);
-  ScaleList[6] = fixed(50);
-  ScaleList[7] = fixed(100);
-  ScaleList[8] = fixed(200);
-  ScaleList[9] = fixed(500);
-  ScaleList[10] = fixed(1000);
+  ScaleList[0] = fixed(500);
+  ScaleList[1] = fixed(1000);
+  ScaleList[2] = fixed(2000);
+  ScaleList[3] = fixed(5000);
+  ScaleList[4] = fixed(10000);
+  ScaleList[5] = fixed(20000);
+  ScaleList[6] = fixed(50000);
+  ScaleList[7] = fixed(100000);
+  ScaleList[8] = fixed(200000);
+  ScaleList[9] = fixed(500000);
+  ScaleList[10] = fixed(1000000);
   ScaleListCount = 11;
 }
 
@@ -59,8 +58,8 @@ MapWindowProjection::CalculateMapScale(const int scale) const
 {
   assert(scale >= 0 && scale < ScaleListCount);
 
-  return Units::ToSysDistance(ScaleList[scale]) *
-         GetMapResolutionFactor() / Layout::Scale(GetScreenWidth());
+  return ScaleList[scale] *
+    GetMapResolutionFactor() / Layout::Scale(GetScreenWidth());
 }
 
 fixed
@@ -82,7 +81,7 @@ MapWindowProjection::FindMapScale(const fixed Value) const
 {
   fixed BestFit;
   int BestFitIdx = 0;
-  fixed DesiredScale = Units::ToUserDistance(Value) *
+  fixed DesiredScale = Value *
                        Layout::Scale(GetScreenWidth()) / GetMapResolutionFactor();
 
   for (int i = 0; i < ScaleListCount; i++) {
