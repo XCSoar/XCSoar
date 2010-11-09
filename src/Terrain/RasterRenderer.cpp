@@ -96,7 +96,8 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
 
   // set resolution
 
-  quantisation_effective = map.GetEffectivePixelSize(pixel_size, Gmid);
+  fixed map_pixel_size = map.pixel_distance(Gmid, 1);
+  quantisation_effective = (int)ceil(map_pixel_size / pixel_size);
 
   height_matrix.Fill(map, projection, quantisation_pixels);
 }

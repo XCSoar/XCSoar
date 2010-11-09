@@ -67,10 +67,6 @@ public:
     return lease->GetField(location);
   }
 
-  int GetEffectivePixelSize(fixed &pixel_D, const GeoPoint &location) const {
-    return map.GetEffectivePixelSize(pixel_D, location);
-  }
-
   GeoPoint GetTerrainCenter() const {
     return map.GetMapCenter();
   }

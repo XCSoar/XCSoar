@@ -91,23 +91,6 @@ RasterMap::SetViewCenter(const GeoPoint &location)
   raster_tile_cache.UpdateTiles(path, x, y);
 }
 
-// accurate method
-int
-RasterMap::GetEffectivePixelSize(fixed &pixel_D,
-                                 const GeoPoint &location) const
-{
-  if (negative(pixel_D)) {
-    pixel_D = fixed_one;
-    return 1;
-  }
-
-  fixed rfact = projection.pixel_distance(location, 256) / pixel_D;
-
-  int epx = (int)(max(fixed_one, ceil(rfact)));
-  //  *pixel_D = (*pixel_D)*rfact/epx;
-  return epx;
-}
-
 short
 RasterMap::GetField(const GeoPoint &location) const
 {

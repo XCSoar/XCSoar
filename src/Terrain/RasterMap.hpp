@@ -59,9 +59,15 @@ public:
 
   void SetViewCenter(const GeoPoint &location);
 
-  // accurate method
-  int GetEffectivePixelSize(fixed &pixel_D,
-                            const GeoPoint &location) const;
+  /**
+   * @see RasterProjection::pixel_distance()
+   */
+  gcc_pure fixed
+  pixel_distance(const GeoPoint &location, unsigned pixels) const {
+    /* factor 256 because the caller should pass a physical pixel
+       number, not interpolated */
+    return projection.pixel_distance(location, 256 * pixels);
+  }
 
   gcc_pure
   short GetField(const GeoPoint &location) const;
