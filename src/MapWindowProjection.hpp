@@ -34,14 +34,11 @@ class MapWindowProjection:
   public WindowProjection
 {
 public:
-  MapWindowProjection();
-
-public:
   void SetMapScale(const fixed x);
 
 public:
   bool HaveScaleList() const {
-    return ScaleListCount > 0;
+    return true;
   }
 
   /**
@@ -61,9 +58,6 @@ private:
 
   gcc_pure
   int FindMapScale(const fixed Value) const;
-
-  unsigned ScaleList[11];
-  int ScaleListCount;
 };
 
 #endif

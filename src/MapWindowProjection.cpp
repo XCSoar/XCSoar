@@ -29,22 +29,22 @@ Copyright_License {
 #include <math.h>
 #include <assert.h>
 
-MapWindowProjection::MapWindowProjection():
-  WindowProjection()
-{
-  ScaleList[0] = 500;
-  ScaleList[1] = 1000;
-  ScaleList[2] = 2000;
-  ScaleList[3] = 5000;
-  ScaleList[4] = 10000;
-  ScaleList[5] = 20000;
-  ScaleList[6] = 50000;
-  ScaleList[7] = 100000;
-  ScaleList[8] = 200000;
-  ScaleList[9] = 500000;
-  ScaleList[10] = 1000000;
-  ScaleListCount = 11;
-}
+static const unsigned ScaleList[] = {
+  500,
+  1000,
+  2000,
+  5000,
+  10000,
+  20000,
+  50000,
+  100000,
+  200000,
+  500000,
+  1000000,
+};
+
+static const int ScaleListCount =
+  sizeof(ScaleList) / sizeof(ScaleList[0]);
 
 bool
 MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
