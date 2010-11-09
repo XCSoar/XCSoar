@@ -247,6 +247,9 @@ GetSize(const XMLNode &Node, const RECT rc, const POINT pos)
   if (sz.cy <= 0)
     sz.cy += rc.bottom - pos.y;
 
+  assert(sz.cx > 0);
+  assert(sz.cy > 0);
+
   return sz;
 }
 
