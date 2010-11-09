@@ -144,17 +144,17 @@ RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
 
     for (unsigned x = height_matrix.get_width(); x > 0; --x) {
       short h = *src++;
-      if (RasterBuffer::is_invalid(h)) {
-        /* outside the terrain file bounds: white background */
-        *p++ = BGRColor(0xff, 0xff, 0xff);
-      } else if (!RasterBuffer::is_water(h)) {
+      if (gcc_likely(!RasterBuffer::is_special(h))) {
         h = height_factor > 0
           ? (h - min_height) * 254 / height_factor
           : min(254, h >> height_scale);
         *p++ = oColorBuf[h];
-      } else {
+      } else if (!RasterBuffer::is_water(h)) {
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
+      } else {
+        /* outside the terrain file bounds: white background */
+        *p++ = BGRColor(0xff, 0xff, 0xff);
       }
     }
   }
@@ -212,10 +212,7 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
 
     for (unsigned x = 0; x < height_matrix.get_width(); ++x, ++src) {
       short h = *src;
-      if (RasterBuffer::is_invalid(h)) {
-        /* outside the terrain file bounds: white background */
-        *p++ = BGRColor(0xff, 0xff, 0xff);
-      } else if (!RasterBuffer::is_water(h)) {
+      if (gcc_likely(!RasterBuffer::is_special(h))) {
         h = height_factor > 0
           ? (h - min_height) * 254 / height_factor
           : min(254, h >> height_scale);
@@ -256,15 +253,22 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
         if (mag>0) {
           const long num = (dd2 * sz + dd0 * sx + dd1 * sy);
           const int sval = num/(int)sqrt((fixed)mag);
-          const int sindex = max(-64, min(63, (sval - sz) * contrast / 128));
+          int sindex = (sval - sz) * contrast / 128;
+          if (gcc_unlikely(sindex < -64))
+            sindex = -64;
+          if (gcc_unlikely(sindex > 63))
+            sindex = 63;
           *p++ = oColorBuf[h + 256*sindex];
         } else {
           // slope is zero, so just look up the color
           *p++ = oColorBuf[h];
         }
-      } else {
+      } else if (RasterBuffer::is_water(h)) {
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
+      } else {
+        /* outside the terrain file bounds: white background */
+        *p++ = BGRColor(0xff, 0xff, 0xff);
       }
     }
   }
