@@ -117,6 +117,9 @@ OrderedTask::scan_distance_min(const GeoPoint &location, bool full)
 fixed
 OrderedTask::scan_distance_max()
 {
+  assert((tps.empty() && activeTaskPoint == 0) ||
+         activeTaskPoint < tps.size());
+
   // for max calculations, since one can still travel further in the
   // sector, we pretend we are on the previous turnpoint so the
   // search samples will contain the full boundary
@@ -891,7 +894,6 @@ OrderedTask::clone(TaskEvents &te,
 {
   OrderedTask* new_task = new OrderedTask(te, tb, gp);
 
-  new_task->activeTaskPoint = activeTaskPoint;
   new_task->m_ordered_behaviour = m_ordered_behaviour;
 
   new_task->set_factory(factory_mode);
@@ -899,6 +901,7 @@ OrderedTask::clone(TaskEvents &te,
     new_task->append(tps[i]->clone(tb, new_task->m_ordered_behaviour,
                                    new_task->get_task_projection()));
   }
+  new_task->activeTaskPoint = activeTaskPoint;
   new_task->update_geometry();
   return new_task;
 }
