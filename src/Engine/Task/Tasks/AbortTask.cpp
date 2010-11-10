@@ -169,7 +169,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
       // remove it since it's already in the list now      
       approx_waypoints.erase(v);
 
-      if (final_glide || result.is_final_glide()) {
+      if (is_reachable(result, true)) {
         found_final_glide = true;
       }
 

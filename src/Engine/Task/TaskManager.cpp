@@ -158,7 +158,7 @@ TaskManager::update_common_stats_waypoints(const AIRCRAFT_STATE &state)
     // update abort task offline
     task_abort.update_offline(state);
 
-  common_stats.landable_reachable |= task_abort.has_landable_reachable();
+  common_stats.landable_reachable = task_abort.has_landable_reachable();
 }
 
 void
