@@ -51,6 +51,7 @@ Copyright_License {
 class TestProjection : public WindowProjection {
 public:
   TestProjection() {
+    SetScreenOrigin(0, 0);
     SetScale(fixed(640) / (fixed(100) * 2));
     SetGeoLocation(GeoPoint(Angle::degrees(fixed(7.7061111111111114)),
                             Angle::degrees(fixed(51.051944444444445))));
