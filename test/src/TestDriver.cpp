@@ -37,6 +37,7 @@
 
 #include "Device/Driver/CAI302.hpp"
 #include "Device/Driver/LX.hpp"
+#include "Device/Driver/ILEC.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
 #include "NMEA/Info.hpp"
@@ -130,12 +131,43 @@ TestLX()
   delete device;
 }
 
+static void
+TestILEC()
+{
+  Device *device = ilec_device_driver.CreateOnPort(NULL);
+  ok1(device != NULL);
+
+  NMEA_INFO nmea_info;
+  memset(&nmea_info, 0, sizeof(nmea_info));
+
+  /* baro altitude disabled */
+  device->ParseNMEA("$PILC,PDA1,1489,-3.21*7D", &nmea_info, false);
+  ok1(!nmea_info.BaroAltitudeAvailable);
+  ok1(!nmea_info.AirspeedAvailable);
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, -3.21));
+  ok1(!nmea_info.ExternalWindAvailable);
+
+  /* baro altitude enabled */
+  device->ParseNMEA("$PILC,PDA1,1489,-3.21,274,15,58*7D", &nmea_info, true);
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 1489));
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, -3.21));
+  ok1(nmea_info.ExternalWindAvailable);
+  ok1(equals(nmea_info.ExternalWind.norm, 15 / 3.6));
+  ok1(equals(nmea_info.ExternalWind.bearing, 274));
+
+  delete device;
+}
+
 int main(int argc, char **argv)
 {
-  plan_tests(24);
+  plan_tests(37);
 
   TestCAI302();
   TestLX();
+  TestILEC();
 
   return exit_status();
 }

@@ -31,6 +31,7 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/Vega.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger.cpp \
 	$(DRIVER_SRC_DIR)/XCOM760.cpp \
+	$(DRIVER_SRC_DIR)/ILEC.cpp \
 	$(DRIVER_SRC_DIR)/Zander.cpp
 
 DRIVER_LIBS = $(TARGET_OUTPUT_DIR)/driver.a

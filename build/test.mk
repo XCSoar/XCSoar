@@ -146,6 +146,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Driver/CAI302.cpp \
 	$(SRC)/Device/Driver/LX.cpp \
+	$(SRC)/Device/Driver/ILEC.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Math/Angle.cpp \
