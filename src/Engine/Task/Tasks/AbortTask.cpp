@@ -153,7 +153,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   if (task_full()) {
     return false;
   }
-  bool found = false;
+  bool found_final_glide = false;
   std::priority_queue<Alternate, AlternateVector, AbortRank> q;
   for (AlternateVector::iterator v = approx_waypoints.begin();
        v!=approx_waypoints.end(); ) {
@@ -169,7 +169,9 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
       // remove it since it's already in the list now      
       approx_waypoints.erase(v);
 
-      found = true;
+      if (final_glide || result.is_final_glide()) {
+        found_final_glide = true;
+      }
 
     } else {
       ++v;
@@ -187,7 +189,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
 
     q.pop();
   }
-  return found;
+  return found_final_glide;
 }
 
 

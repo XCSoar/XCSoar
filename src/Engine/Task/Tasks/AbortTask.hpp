@@ -218,7 +218,7 @@ protected:
  * @param only_airfield If true, only add waypoints that are airfields.
  * @param final_glide Whether solution must be glide only or climb allowed
  *
- * @return True if a reachable landpoint was found
+ * @return True if a landpoint within final glide was found
  */
   bool fill_reachable(const AIRCRAFT_STATE &state,
                       AlternateVector &approx_waypoints,
