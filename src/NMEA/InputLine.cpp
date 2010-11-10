@@ -192,6 +192,29 @@ NMEAInputLine::read_checked(fixed &value_r)
 #endif /* FIXED_MATH */
 
 bool
+NMEAInputLine::read_checked(int &value_r)
+{
+  char *endptr;
+  long value = strtol(data, &endptr, 10);
+  assert(endptr >= data && endptr <= end);
+
+  bool success = endptr > data;
+  if (is_end_of_line(*endptr)) {
+    data = "";
+  } else if (*endptr == ',') {
+    data = endptr + 1;
+  } else {
+    data = endptr;
+    skip();
+    return false;
+  }
+
+  if (success)
+    value_r = value;
+  return success;
+}
+
+bool
 NMEAInputLine::read_checked_compare(fixed &value_r, const char *string)
 {
   fixed value;

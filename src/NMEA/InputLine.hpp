@@ -78,6 +78,8 @@ public:
   bool read_checked(fixed &value_r);
 #endif
 
+  bool read_checked(int &value_r);
+
   /**
    * Read a #fixed only if the unit string which follows matches.
    */
