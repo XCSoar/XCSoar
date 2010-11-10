@@ -32,12 +32,9 @@ Copyright_License {
 bool
 EventLoop::get(SDL_Event &event)
 {
-  if (event.type == SDL_QUIT)
-    return false;
-
   if (bulk) {
     if (::SDL_PollEvent(&event))
-      return true;
+      return event.type != SDL_QUIT;
 
     /* that was the last event for now, refresh the screen now */
     top_window.refresh();
@@ -46,7 +43,7 @@ EventLoop::get(SDL_Event &event)
 
   if (::SDL_WaitEvent(&event)) {
     bulk = true;
-    return true;
+    return event.type != SDL_QUIT;
   }
 
   return false;
