@@ -50,6 +50,9 @@
  */
 
 #include "map.h"
+
+#include <zzip/lib.h>
+
 #include <stdlib.h> /* for atof() and atoi() */
 #include <string.h>
 #include <ctype.h>

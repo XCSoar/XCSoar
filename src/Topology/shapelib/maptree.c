@@ -48,6 +48,8 @@
 #include "map.h"
 #include "maptree.h"
 
+#include <zzip/lib.h>
+
 #include <stdlib.h>
 #include <string.h>
 #include <sys/param.h>

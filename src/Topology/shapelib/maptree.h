@@ -76,7 +76,7 @@ typedef struct {
 
 typedef struct
 {
-  ZZIP_FILE     *zfp;
+    struct zzip_file *zfp;
     char        signature[3];
     char	LSB_order;
     char        needswap;

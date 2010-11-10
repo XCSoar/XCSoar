@@ -74,6 +74,8 @@
 #include <assert.h>
 #include "map.h"
 
+#include <zzip/lib.h>
+
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>

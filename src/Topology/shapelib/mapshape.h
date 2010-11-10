@@ -47,8 +47,6 @@
 #include <stdio.h>
 #include "mapprimitive.h"
 
-#include <zzip/lib.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -96,8 +94,8 @@ extern "C" {
 typedef unsigned char uchar;
 
 typedef	struct {
-  ZZIP_FILE     *zfpSHP; // JMW Zip
-  ZZIP_FILE	*zfpSHX; // JMW Zip
+    struct zzip_file *zfpSHP;
+    struct zzip_file *zfpSHX;
 
     int		nShapeType;				/* SHPT_* */
     int		nFileSize;				/* SHP file */
@@ -128,7 +126,7 @@ typedef	struct
 #ifdef SWIG
 %immutable;
 #endif
-  ZZIP_FILE	*zfp; // JMW Zip
+    struct zzip_file *zfp;
 
     int		nRecords;
 
