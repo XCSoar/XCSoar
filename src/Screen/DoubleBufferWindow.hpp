@@ -63,6 +63,7 @@ public:
     return buffers[current];
   }
 
+private:
   /**
    * Marks the hidden Canvas as "done" and schedules it for painting
    * to the Window.
