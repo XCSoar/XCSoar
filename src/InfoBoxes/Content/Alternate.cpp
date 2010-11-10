@@ -51,8 +51,8 @@ InfoBoxContentAlternateBest::Update(InfoBoxWindow &infobox)
   SetValueBearingDifference(infobox, Value);
 
   // Set Color
-  if (solution.is_final_glide())
-    // blue
+  if (solution.glide_reachable(true))
+    // blue if reachable in final glide
     infobox.SetColor(2);
   else
     // black
