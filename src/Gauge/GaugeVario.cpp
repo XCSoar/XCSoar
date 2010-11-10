@@ -169,7 +169,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
     InitDone = true;
   }
 
-  vval = Units::ToUserUnit(Basic().TotalEnergyVario, Units::VerticalSpeedUnit);
+  vval = Units::ToUserVSpeed(Basic().TotalEnergyVario);
 
   fixed vvaldisplay = min(fixed(99.9), max(fixed(-99.9), vval));
 
@@ -177,18 +177,16 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
     // JMW averager now displays netto average if not circling
     if (!Calculated().Circling) {
       RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
-                  Units::ToUserUnit(Calculated().NettoAverage30s,
-                                    Units::VerticalSpeedUnit), _T("NetAvg"));
+                  Units::ToUserVSpeed(Calculated().NettoAverage30s),
+                  _T("NetAvg"));
     } else {
       RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
-                  Units::ToUserUnit(Calculated().Average30s,
-                                    Units::VerticalSpeedUnit), _T("Avg"));
+                  Units::ToUserVSpeed(Calculated().Average30s), _T("Avg"));
     }
   }
 
   if (Appearance.GaugeVarioMc) {
-    fixed mc = Units::ToUserUnit(Calculated().common_stats.current_mc,
-                                 Units::VerticalSpeedUnit);
+    fixed mc = Units::ToUserVSpeed(Calculated().common_stats.current_mc);
     if (SettingsComputer().auto_mc)
       RenderValue(canvas, orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
