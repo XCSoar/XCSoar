@@ -27,11 +27,63 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "ProgressGlue.hpp"
+#include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 
 #include <windef.h> /* for MAX_PATH */
+
+/**
+ * Load topology from a plain file, load the other files from the same
+ * directory.
+ */
+static bool
+LoadConfiguredTopologyFile(TopologyStore &store)
+{
+  TCHAR file[MAX_PATH];
+  if (!Profile::GetPath(szProfileTopologyFile, file))
+    return false;
+
+  FileLineReaderA reader(file);
+  if (reader.error()) {
+    LogStartUp(_T("No topology file: %s"), file);
+    return false;
+  }
+
+  TCHAR buffer[MAX_PATH];
+  const TCHAR *directory = DirName(file, buffer);
+  if (directory == NULL)
+    return false;
+
+  store.Load(reader, directory);
+  return true;
+}
+
+/**
+ * Load topology from the map file (ZIP), load the other files from
+ * the same ZIP file.
+ */
+static bool
+LoadConfiguredTopologyZip(TopologyStore &store)
+{
+  TCHAR path[MAX_PATH];
+  if (!Profile::GetPath(szProfileMapFile, path))
+    return false;
+
+  TCHAR file[MAX_PATH];
+  _tcscpy(file, path);
+  _tcscat(file, _T("/topology.tpl"));
+
+  ZipLineReaderA reader(file);
+  if (reader.error()) {
+    LogStartUp(_T("No topology in map file: %s"), path);
+    return false;
+  }
+
+  store.Load(reader, path);
+  return true;
+}
 
 bool
 LoadConfiguredTopology(TopologyStore &store)
@@ -39,33 +91,6 @@ LoadConfiguredTopology(TopologyStore &store)
   LogStartUp(_T("Loading Topology File..."));
   ProgressGlue::Create(_("Loading Topology File..."));
 
-  // Start off by getting the names and paths
-  TCHAR szFile[MAX_PATH];
-
-  if (!Profile::GetPath(szProfileTopologyFile, szFile) ||
-      !File::Exists(szFile)) {
-    // file is blank, so look for it in a map file
-    if (!Profile::GetPath(szProfileMapFile, szFile) ||
-        !File::Exists(szFile))
-      return false;
-
-    // Look for the file within the map zip file...
-    _tcscat(szFile, _T("/"));
-    _tcscat(szFile, _T("topology.tpl"));
-  }
-
-  // Ready to open the file now..
-  ZipLineReaderA reader(szFile);
-  if (reader.error()) {
-    LogStartUp(_T("No topology file: %s"), szFile);
-    return false;
-  }
-
-  TCHAR buffer[MAX_PATH];
-  const TCHAR *Directory = DirName(szFile, buffer);
-  if (Directory == NULL)
-    return false;
-
-  store.Load(reader, Directory);
-  return true;
+  return LoadConfiguredTopologyFile(store) ||
+    LoadConfiguredTopologyZip(store);
 }
