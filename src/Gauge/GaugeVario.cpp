@@ -395,9 +395,8 @@ void
 GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
 {
   dirty = true;
-  bool colorfull = false;
 
-  if (clear || !colorfull) {
+  if (clear || true) {
     // legacy behaviour
     if (clear ^ Appearance.InverseInfoBox) {
       canvas.white_brush();
