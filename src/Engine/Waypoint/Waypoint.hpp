@@ -38,7 +38,7 @@ class TaskProjection;
 struct WaypointFlags {
   bool Airport:1;      /**< If waypoint is an airport/airfield */
   bool TurnPoint:1;    /**< If waypoint can be used as a turnpoint */
-  bool LandPoint:1;    /**< If waypoint can be landed at */
+  bool LandPoint:1;    /**< If waypoint can be landed at although not an airport */
   bool Home:1;         /**< If waypoint is to be used as home */
   bool StartPoint:1;   /**< If waypoint is marked as a potential start point */
   bool FinishPoint:1;  /**< If waypoint is marked as a potential finish point */
