@@ -73,10 +73,8 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   set(parent, left, top, width, height, style);
 
   // load vario scale
-  if (Units::GetUserVerticalSpeedUnit() == unKnots)
-    hDrawBitMap.load(IDB_VARIOSCALEC);
-  else
-    hDrawBitMap.load(IDB_VARIOSCALEA);
+  hDrawBitMap.load(Units::GetUserVerticalSpeedUnit() == unKnots ?
+                   IDB_VARIOSCALEC : IDB_VARIOSCALEA);
 
   Color theredColor;
   Color theblueColor;
