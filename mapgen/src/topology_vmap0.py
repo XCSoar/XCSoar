@@ -7,6 +7,8 @@ from georect import GeoRect
 
 cmd_ogr2ogr = "ogr2ogr"
 cmd_7zip = "7za"
+cmd_shptree = "shptree"
+
 #gather_from_server = None
 gather_from_server = "http://gis-lab.info/data/vmap0/"
 #gather_from_server = "http://webbuster.dyndns.info/xcsoar/mapgen_data/topo/vmap0/"
@@ -102,6 +104,29 @@ def __create_layer_from_map(bounds, layer, map_name, overwrite, dir_data, dir_te
 
     return True
 
+def __create_layer_index(layer, dir_temp):
+    if not os.path.exists(os.path.join(dir_temp, layer[1] + ".shp")):
+        return False
+
+    print "Generating index file for layer " + layer[1] + " ..."
+    arg = [cmd_shptree]
+
+    arg.append(os.path.join(dir_temp, layer[1] + ".shp"))
+
+    try:
+        p = subprocess.Popen(arg)
+    except OSError, WindowsError:
+        print ("There has been a problem running the shptree application "+
+               "that generates the topology index files!")
+        print ("Please check the \"cmd_shptree\" variable in the "+
+               "topology_vmap0 module and modify it if necessary.")
+        print "Current value: \""+cmd_shptree+"\""
+        return False
+
+    p.wait()
+
+    return True
+
 def __create_layer(bounds, layer, maps, dir_data, dir_temp):
     print "Creating topology layer " + layer[1] + " ..."
 
@@ -109,12 +134,17 @@ def __create_layer(bounds, layer, maps, dir_data, dir_temp):
         __create_layer_from_map(bounds, layer, maps[i][0],
                                 i == 0, dir_data, dir_temp)
 
+    __create_layer_index(layer, dir_temp)
+
     files = []
     if os.path.exists(os.path.join(dir_temp, layer[1] + ".shp")):
         files.append([os.path.join(dir_temp, layer[1] + ".shp"), False])
         files.append([os.path.join(dir_temp, layer[1] + ".shx"), False])
         files.append([os.path.join(dir_temp, layer[1] + ".dbf"), False])
         files.append([os.path.join(dir_temp, layer[1] + ".prj"), False])
+
+    if os.path.exists(os.path.join(dir_temp, layer[1] + ".qix")):
+        files.append([os.path.join(dir_temp, layer[1] + ".qix"), False])
 
     return files
 
