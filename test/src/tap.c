@@ -318,7 +318,7 @@ _expected_tests(unsigned int tests)
 }
 
 int
-skip(unsigned int n, const char *fmt, ...)
+skip(unsigned int n, unsigned int ok, const char *fmt, ...)
 {
   LOCK;
 
@@ -332,14 +332,24 @@ skip(unsigned int n, const char *fmt, ...)
 
   while(n-- > 0) {
     test_count++;
-    printf("ok %d # skip %s\n", test_count, skip_msg);
+    if (!ok) {
+      failures++;
+      printf("not ok %d # skip: %s\n", test_count, skip_msg);
+    } else {
+      printf("ok %d # skip: %s\n", test_count, skip_msg);
+    }
   }
 
   free(skip_msg);
 #else
   while(n-- > 0) {
     test_count++;
-    printf("ok %d # skip %s\n", test_count, fmt);
+    if (!ok) {
+      failures++;
+      printf("not ok %d # skip: %s\n", test_count, fmt);
+    } else {
+      printf("ok %d # skip: %s\n", test_count, fmt);
+    }
   }
 #endif
 
