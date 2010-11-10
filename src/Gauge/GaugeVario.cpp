@@ -396,48 +396,13 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
 {
   dirty = true;
 
-  if (clear || true) {
-    // legacy behaviour
-    if (clear ^ Appearance.InverseInfoBox) {
-      canvas.white_brush();
-      canvas.white_pen();
-    } else {
-      canvas.black_brush();
-      canvas.black_pen();
-    }
+  // legacy behaviour
+  if (clear ^ Appearance.InverseInfoBox) {
+    canvas.white_brush();
+    canvas.white_pen();
   } else {
-    if (Appearance.InverseInfoBox) {
-      if (average) {
-        // Average Needle
-        if (i >= 0) {
-          canvas.select(greenBrush);
-          canvas.white_pen();
-        } else {
-          canvas.select(redBrush);
-          canvas.white_pen();
-        }
-      } else {
-        // varioline needle: b&w as usual, could also change aspect..
-        canvas.select(yellowBrush);
-        canvas.white_pen();
-      }
-    } else {
-      // Non inverse infoboxes
-      if (average) {
-        // Average Needle
-        if (i >= 0) {
-          canvas.select(greenBrush);
-          canvas.black_pen();
-        } else {
-          canvas.select(redBrush);
-          canvas.black_pen();
-        }
-      } else {
-        // varioline needle: b&w as usual, could also change aspect..
-        canvas.black_brush();
-        canvas.black_pen();
-      }
-    }
+    canvas.black_brush();
+    canvas.black_pen();
   }
 
   if (average)
