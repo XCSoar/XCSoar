@@ -82,11 +82,49 @@ TestWinPilot()
   ok1(!wp->Flags.Restricted);
 }
 
+static void
+TestSeeYou()
+{
+  WayPointFile *f = WayPointFile::create(_T("test/data/waypoints.cup"), 0);
+  if (!ok1(f != NULL)) {
+    skip(14, 0, "opening waypoint file failed");
+    return;
+  }
+
+  Waypoints way_points;
+  bool success = f->Parse(way_points, NULL);
+  ok1(success);
+  delete f;
+
+  way_points.optimise();
+
+  ok1(!way_points.empty());
+  ok1(way_points.size() == 1);
+
+  const Waypoint *wp = way_points.lookup_name(_T("Bergneustadt"));
+  if (!ok1(wp != NULL)) {
+    skip(10, 0, "waypoint not found");
+    return;
+  }
+  ok1(equals(wp->Location.Longitude, 7.7061111111111114));
+  ok1(equals(wp->Location.Latitude, 51.051944444444445));
+  ok1(equals(wp->Altitude, 488));
+  ok1(wp->Flags.Airport);
+  ok1(wp->Flags.TurnPoint);
+  ok1(!wp->Flags.LandPoint);
+  // No home waypoints in a SeeYou file
+  //ok1(wp->Flags.Home);
+  ok1(!wp->Flags.StartPoint);
+  ok1(!wp->Flags.FinishPoint);
+  ok1(!wp->Flags.Restricted);
+}
+
 int main(int argc, char **argv)
 {
-  plan_tests(15);
+  plan_tests(29);
 
   TestWinPilot();
+  TestSeeYou();
 
   return exit_status();
 }
