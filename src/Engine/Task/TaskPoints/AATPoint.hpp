@@ -73,6 +73,17 @@ public:
  * @return Location 
  */
   const GeoPoint& get_location_remaining() const;
+
+/** 
+ * Retrieve polygon of "scoring deadzone", the area in which
+ * flight inside this area results in no additional scoring points.
+ * 
+ * @return Vector of deadzone points representing a closed polygon
+ */
+  gcc_pure
+  const SearchPointVector& get_deadzone() const {
+    return m_deadzone;
+  }
   
 /** 
  * Update sample, specialisation to move target for active
@@ -239,6 +250,9 @@ private:
  * @return True if same WP, type and OZ
  */
   bool equals(const OrderedTaskPoint* other) const;
+
+private:
+  SearchPointVector m_deadzone;
 };
 
 #endif

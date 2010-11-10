@@ -22,7 +22,9 @@
 
 #include "AATPoint.hpp"
 #include "Navigation/Flat/FlatLine.hpp"
+#include "Navigation/ConvexHull/PolygonInterior.hpp"
 #include <math.h>
+#include <assert.h>
 
 const GeoPoint&
 AATPoint::get_location_remaining() const
@@ -43,6 +45,23 @@ AATPoint::update_sample(const AIRCRAFT_STATE& state,
                         TaskEvents &task_events) 
 {
   bool retval = OrderedTaskPoint::update_sample(state,task_events);
+
+  if (retval) {
+    // deadzone must be updated
+
+    assert(get_next());
+
+    // the deadzone is the convex hull formed from the sampled points
+    // with the inclusion of the destination of the next turnpoint.
+
+    m_deadzone = SearchPointVector(get_sample_points().begin(),
+                                   get_sample_points().end());
+    SearchPoint destination(get_next()->get_location_remaining(), 
+                            get_task_projection(), true);
+    m_deadzone.push_back(destination);
+    prune_interior(m_deadzone);
+  }
+
   if ((getActiveState() == CURRENT_ACTIVE) && (!m_target_locked)) {
     retval |= check_target(state);
   }

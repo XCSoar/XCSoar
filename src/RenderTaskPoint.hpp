@@ -62,7 +62,7 @@ protected:
   bool leg_active();
   bool point_past();
   bool point_current();
-  bool do_draw_samples(const TaskPoint& tp);
+  bool do_draw_deadzone(const TaskPoint& tp);
   bool do_draw_bearing(const TaskPoint &tp);
   bool do_draw_target(const TaskPoint &tp);
   bool do_draw_isoline(const TaskPoint &tp);
@@ -79,7 +79,7 @@ protected:
    *
    * @param tp
    */
-  void draw_samples(const OrderedTaskPoint& tp);
+  void draw_deadzone(const AATPoint& tp);
   void draw_oz_background(const OrderedTaskPoint& tp);
   void draw_oz_foreground(const OrderedTaskPoint& tp);
   const bool m_draw_bearing;

@@ -131,10 +131,10 @@ RenderTaskPoint::Visit(const AATPoint& tp)
   
   draw_ordered(tp);
   if (m_layer == 0) {
-    // Draw clear area on top indicating part of OZ already travelled in.
+    // Draw clear area on top indicating part of OZ already travelled in
     // This provides a simple and intuitive visual representation of
     // where in the OZ to go to increase scoring distance.
-    draw_samples(tp);
+    draw_deadzone(tp);
   }
 
   if (m_layer == 3) {
@@ -185,7 +185,7 @@ RenderTaskPoint::point_current()
 }
 
 bool 
-RenderTaskPoint::do_draw_samples(const TaskPoint& tp) 
+RenderTaskPoint::do_draw_deadzone(const TaskPoint& tp) 
 {
   return point_current() || point_past();
 }
@@ -285,9 +285,9 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
 }
 
 void 
-RenderTaskPoint::draw_samples(const OrderedTaskPoint& tp) 
+RenderTaskPoint::draw_deadzone(const AATPoint& tp) 
 {
-  if (!do_draw_samples(tp)) {
+  if (!do_draw_deadzone(tp)) {
     return;
   }
   /*
@@ -297,11 +297,18 @@ RenderTaskPoint::draw_samples(const OrderedTaskPoint& tp)
     m_buffer.select(Graphics::hAirspaceBrushes[m_settings_map.
     iAirspaceBrush[1]]);
     */
-    // erase where aircraft has been
-    m_buffer.white_brush();
-    m_buffer.white_pen();
-    
-  map_canvas.draw(tp.get_sample_points());
+
+  // erase where aircraft has been
+  m_buffer.white_brush();
+  m_buffer.white_pen();
+  
+  if (point_current()) {
+    // scoring deadzone should include the area to the next destination
+    map_canvas.draw(tp.get_deadzone());
+  } else {
+    // scoring deadzone is just the samples convex hull
+    map_canvas.draw(tp.get_sample_points());
+  }
 }
 
 void 
