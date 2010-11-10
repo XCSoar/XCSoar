@@ -50,6 +50,10 @@ private:
   int xoffset;
   int yoffset;
 
+  Color colTextGray;
+  Color colText;
+  Color colTextBackgnd;
+
   Brush redBrush;
   Brush blueBrush;
   Brush yellowBrush;

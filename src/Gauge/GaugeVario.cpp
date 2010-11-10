@@ -42,10 +42,6 @@ Copyright_License {
 using std::min;
 using std::max;
 
-static Color colTextGray;
-static Color colText;
-static Color colTextBackgnd;
-
 #define NARROWS 3
 #define GAUGEVARIORANGE fixed(5) // 5 m/s
 #define GAUGEVARIOSWEEP fixed(180) // degrees total sweep
