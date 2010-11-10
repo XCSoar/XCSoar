@@ -35,6 +35,7 @@ class NmeaReplay
 {
 public:
   NmeaReplay();
+  ~NmeaReplay();
 
   bool Update();
   void Stop();

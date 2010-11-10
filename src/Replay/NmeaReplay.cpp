@@ -37,6 +37,11 @@ NmeaReplay::NmeaReplay() :
   FileName[0] = _T('\0');
 }
 
+NmeaReplay::~NmeaReplay()
+{
+  delete reader;
+}
+
 void
 NmeaReplay::Stop()
 {
