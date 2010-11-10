@@ -47,8 +47,6 @@ static Color colText;
 static Color colTextBackgnd;
 
 #define NARROWS 3
-#define ARROWYSIZE Layout::Scale(3)
-#define ARROWXSIZE Layout::Scale(7)
 #define GAUGEVARIORANGE fixed(5) // 5 m/s
 #define GAUGEVARIOSWEEP fixed(180) // degrees total sweep
 #define YOFFSET 36
@@ -576,6 +574,9 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 
   static fixed lastVdiff;
   fixed vdiff;
+
+  const int ARROWYSIZE = Layout::Scale(3);
+  const int ARROWXSIZE = Layout::Scale(7);
 
   int nary = NARROWS * ARROWYSIZE;
   int ytop = get_top() + YOFFSET + nary; // JMW
