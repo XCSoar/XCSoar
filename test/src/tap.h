@@ -85,7 +85,7 @@ int plan_tests(unsigned int);
 
 unsigned int diag(const char *, ...);
 
-int skip(unsigned int, char *, ...);
+int skip(unsigned int, const char *, ...);
 
 void todo_start(char *, ...);
 void todo_end(void);
