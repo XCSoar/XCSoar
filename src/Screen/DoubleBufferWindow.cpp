@@ -64,11 +64,15 @@ DoubleBufferWindow::flip()
   buffers[current].grow(get_width(), get_height());
 }
 
+#endif
+
 void
 DoubleBufferWindow::on_paint(Canvas &canvas)
 {
+#ifndef ENABLE_OPENGL
   ScopeLock protect(mutex);
   canvas.copy(get_visible_canvas());
-}
-
+#else
+  on_paint_buffer(canvas);
 #endif
+}

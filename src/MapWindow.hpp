@@ -216,11 +216,6 @@ public:
   }
 
 private:
-
-#ifndef ENABLE_OPENGL
-  void DrawThreadLoop ();
-#endif
-
   POINT Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS];
 
   THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
@@ -297,6 +292,7 @@ protected:
   virtual bool on_resize(unsigned width, unsigned height);
 
   virtual void on_paint(Canvas& canvas);
+  virtual void on_paint_buffer(Canvas& canvas);
 
   GlidePolar get_glide_polar() const;
 

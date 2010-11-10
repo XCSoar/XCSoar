@@ -257,9 +257,9 @@ GenerateBlackboard(MapWindow &map)
 class DrawThread {
 public:
   static void Draw(MapWindow &map) {
-    map.DrawThreadLoop();
+    map.repaint();
     map.UpdateAll();
-    map.DrawThreadLoop();
+    map.repaint();
   }
 };
 

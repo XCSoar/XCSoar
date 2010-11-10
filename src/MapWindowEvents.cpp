@@ -88,7 +88,7 @@ MapWindow::on_paint(Canvas &canvas)
 
   /* paint it */
 
-  Render(canvas, get_client_rect());
+  on_paint_buffer(canvas);
 
   /* copy MapWindow to device_blackboard */
 

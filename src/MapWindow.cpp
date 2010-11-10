@@ -123,13 +123,13 @@ MapWindow::UpdateWeather()
   }
 }
 
-#ifndef ENABLE_OPENGL
 /**
  * Handles the drawing of the moving map and is called by the DrawThread
  */
 void
-MapWindow::DrawThreadLoop(void)
+MapWindow::on_paint_buffer(Canvas &canvas)
 {
+#ifndef ENABLE_OPENGL
   unsigned render_generation = ui_generation;
 
   // Start the drawing timer (for drawing time calculation)
@@ -138,10 +138,12 @@ MapWindow::DrawThreadLoop(void)
   //  static PeriodClock mclock;
   //  printf("draw %d\n",mclock.elapsed());
   //  mclock.update();
+#endif
 
   // Render the moving map
-  Render(get_canvas(), get_client_rect());
+  Render(canvas, get_client_rect());
 
+#ifndef ENABLE_OPENGL
   // Stop the drawing timer and calculate drawing time
   StopTimer();
 
@@ -149,10 +151,8 @@ MapWindow::DrawThreadLoop(void)
      begun */
   buffer_projection = render_projection;
   buffer_generation = render_generation;
-
-  flip();
-}
 #endif
+}
 
 bool
 MapWindow::register_class(HINSTANCE hInstance)

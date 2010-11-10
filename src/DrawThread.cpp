@@ -69,14 +69,14 @@ DrawThread::run()
   ExchangeBlackboard();
 
   // first time draw
-  map.DrawThreadLoop();
+  map.repaint();
 
   bool bounds_dirty = true;
   while (bounds_dirty)
     bounds_dirty = map.Idle();
 
   // second time draw
-  map.DrawThreadLoop();
+  map.repaint();
 
   // circle until application is closed
   while (true) {
@@ -105,7 +105,7 @@ DrawThread::run()
                    map.Calculated());
 
       // Draw the moving map
-      map.DrawThreadLoop();
+      map.repaint();
 
       if (trigger.test()) {
         // interrupt re-calculation of bounds if there was a 

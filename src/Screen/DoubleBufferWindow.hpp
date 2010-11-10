@@ -81,8 +81,21 @@ protected:
 protected:
   virtual bool on_create();
   virtual bool on_destroy();
-  virtual void on_paint(Canvas &canvas);
 #endif
+
+protected:
+  virtual void on_paint(Canvas &canvas);
+  virtual void on_paint_buffer(Canvas &canvas) = 0;
+
+public:
+  void repaint() {
+#ifndef ENABLE_OPENGL
+    on_paint_buffer(buffers[current]);
+    flip();
+#else
+    invalidate();
+#endif
+  }
 };
 
 #endif
