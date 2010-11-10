@@ -98,6 +98,9 @@ TopologyFileRenderer::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
     switch (shape.type) {
     case MS_SHAPE_POINT:
+      if (!icon.defined())
+        break;
+
       for (int tt = 0; tt < shape.numlines; ++tt) {
         const lineObj &line = shape.line[tt];
 
