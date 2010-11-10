@@ -24,6 +24,13 @@ Copyright_License {
 #include "FLARM/FlarmCalculations.h"
 #include "FLARM/State.hpp"
 
+FlarmCalculations::~FlarmCalculations()
+{
+  for (AverageCalculatorMap::iterator i = averageCalculatorMap.begin();
+       i != averageCalculatorMap.end(); ++i)
+    delete i->second;
+}
+
 fixed
 FlarmCalculations::Average30s(FlarmId flarmId, fixed curTime, fixed curAltitude)
 {

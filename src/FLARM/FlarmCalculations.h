@@ -35,6 +35,8 @@ struct FLARM_STATE;
 class FlarmCalculations
 {
 public:
+  ~FlarmCalculations();
+
   fixed Average30s(FlarmId flarmId, fixed curTime, fixed curAltitude);
 
 private:

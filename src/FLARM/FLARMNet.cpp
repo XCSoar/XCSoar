@@ -29,6 +29,12 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 
+FLARMNetDatabase::~FLARMNetDatabase()
+{
+  for (iterator i = begin(); i != end(); ++i)
+    delete i->second;
+}
+
 /**
  * Decodes the FLARMnet.org file and puts the wanted
  * characters into the res pointer

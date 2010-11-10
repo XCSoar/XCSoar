@@ -55,6 +55,8 @@ class FLARMNetDatabase
   : protected std::map<FlarmId, FLARMNetRecord*>
 {
 public:
+  ~FLARMNetDatabase();
+
   unsigned LoadFile(NLineReader &reader);
   unsigned LoadFile(const TCHAR *path);
 
