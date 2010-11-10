@@ -31,25 +31,31 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "shapelib/map.h"
 
+#include <zzip/lib.h>
+
 #include <algorithm>
 #include <stdlib.h>
 #include <tchar.h>
 #include <ctype.h> // needed for Wine
 
-TopologyFile::TopologyFile(const char *filename, fixed _threshold,
+TopologyFile::TopologyFile(struct zzip_dir *_dir, const char *filename,
+                           fixed _threshold,
                            const Color thecolor,
                            int _label_field, int _icon)
-  :label_field(_label_field), icon(_icon),
+  :dir(_dir), label_field(_label_field), icon(_icon),
    color(thecolor),
    scaleThreshold(_threshold),
   shapefileopen(false)
 {
-  if (msSHPOpenFile(&shpfile, "rb", filename) == -1)
+  if (msSHPOpenFile(&shpfile, "rb", dir, filename) == -1)
     return;
 
   shpCache.resize_discard(shpfile.numshapes);
 
   shapefileopen = true;
+
+  if (dir != NULL)
+    ++dir->refcount;
 
   cache_bounds.west = cache_bounds.east =
     cache_bounds.south = cache_bounds.north = Angle::native(fixed_zero);
@@ -64,6 +70,11 @@ TopologyFile::~TopologyFile()
 
   ClearCache();
   msSHPCloseFile(&shpfile);
+
+  if (dir != NULL) {
+    --dir->refcount;
+    zzip_dir_free(dir);
+  }
 }
 
 void
@@ -108,7 +119,7 @@ TopologyFile::updateCache(const WindowProjection &map_projection)
 
   // Test which shapes are inside the given bounds and save the
   // status to shpfile.status
-  msSHPWhichShapes(&shpfile, deg_bounds, 0);
+  msSHPWhichShapes(&shpfile, dir, deg_bounds, 0);
 
   // If not a single shape is inside the bounds
   if (!shpfile.status) {

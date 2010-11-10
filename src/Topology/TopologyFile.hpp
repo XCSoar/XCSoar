@@ -39,8 +39,11 @@ struct GeoBounds;
 class LabelBlock;
 struct SETTINGS_MAP;
 class XShape;
+struct zzip_dir;
 
 class TopologyFile : private NonCopyable {
+  struct zzip_dir *dir;
+
   AllocatedArray<XShape *> shpCache;
 
   int label_field, icon;
@@ -57,7 +60,8 @@ public:
    * @param icon the resource id of the icon, 0 for no icon
    * @return
    */
-  TopologyFile(const char* shpname, fixed threshold, const Color color,
+  TopologyFile(struct zzip_dir *dir, const char *shpname,
+               fixed threshold, const Color color,
                int label_field=-1, int icon=0);
 
   /**

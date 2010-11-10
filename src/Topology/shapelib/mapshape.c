@@ -74,7 +74,7 @@
 #include <assert.h>
 #include "map.h"
 
-#include <zzip/lib.h>
+#include <zzip/util.h>
 
 #include <string.h>
 #include <stdlib.h>
@@ -234,7 +234,8 @@ static void writeHeader( SHPHandle psSHP )
 /*      Open the .shp and .shx files based on the basename of the       */
 /*      files or either file name.                                      */
 /************************************************************************/   
-SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
+SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer,
+                    const char * pszAccess)
 {
   char		*pszFullname, *pszBasename;
   SHPHandle	psSHP;
@@ -297,7 +298,7 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
   /* -------------------------------------------------------------------- */
   pszFullname = (char *) malloc(strlen(pszBasename) + 5);
   sprintf( pszFullname, "%s.shp", pszBasename );
-  psSHP->zfpSHP = zzip_fopen(pszFullname, pszAccess );
+  psSHP->zfpSHP = zzip_open_rb(zdir, pszFullname);
   if( psSHP->zfpSHP == NULL )
   {
     msFree(pszBasename);
@@ -307,7 +308,7 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
   }
   
   sprintf( pszFullname, "%s.shx", pszBasename );
-  psSHP->zfpSHX = zzip_fopen(pszFullname, pszAccess );
+  psSHP->zfpSHX = zzip_open_rb(zdir, pszFullname);
   if( psSHP->zfpSHX == NULL )
   {
     msFree(pszBasename);
@@ -1446,7 +1447,8 @@ int msSHPReadBounds( SHPHandle psSHP, int hEntity, rectObj *padBounds)
   return(0);
 }
 
-int msSHPOpenFile(shapefileObj *shpfile, const char *mode, const char *filename)
+int msSHPOpenFile(shapefileObj *shpfile, const char *mode,
+                  struct zzip_dir *zdir, const char *filename)
 {
   int i;
   char *dbfFilename;
@@ -1463,9 +1465,9 @@ int msSHPOpenFile(shapefileObj *shpfile, const char *mode, const char *filename)
 
   /* open the shapefile file (appending ok) and get basic info */
   if(!mode) 	
-    shpfile->hSHP = msSHPOpen( filename, "rb");
+    shpfile->hSHP = msSHPOpen(zdir, filename, "rb");
   else
-    shpfile->hSHP = msSHPOpen( filename, mode);
+    shpfile->hSHP = msSHPOpen(zdir, filename, mode);
 
   if(!shpfile->hSHP) {
     msSetError(MS_IOERR, "(%s)", "msSHPOpenFile()", filename);
@@ -1491,7 +1493,7 @@ int msSHPOpenFile(shapefileObj *shpfile, const char *mode, const char *filename)
   
   strcat(dbfFilename, ".dbf");
 
-  shpfile->hDBF = msDBFOpen(dbfFilename, "rb");
+  shpfile->hDBF = msDBFOpen(zdir, dbfFilename, "rb");
 
   if(!shpfile->hDBF) {
     msSetError(MS_IOERR, "(%s)", "msSHPOpenFile()", dbfFilename);    
@@ -1552,7 +1554,8 @@ void msSHPCloseFile(shapefileObj *shpfile)
 }
 
 /* status array lives in the shpfile, can return MS_SUCCESS/MS_FAILURE/MS_DONE */
-int msSHPWhichShapes(shapefileObj *shpfile, rectObj rect, int debug)
+int msSHPWhichShapes(shapefileObj *shpfile, struct zzip_dir *zdir,
+                     rectObj rect, int debug)
 {
   int i;
   rectObj shaperect;
@@ -1592,7 +1595,7 @@ int msSHPWhichShapes(shapefileObj *shpfile, rectObj rect, int debug)
   
     sprintf(filename, "%s%s", sourcename, MS_INDEX_EXTENSION);
     
-    shpfile->status = msSearchDiskTree(filename, rect, debug);
+    shpfile->status = msSearchDiskTree(zdir, filename, rect, debug);
     free(filename);
     free(sourcename);
 

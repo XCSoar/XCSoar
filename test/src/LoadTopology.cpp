@@ -45,6 +45,8 @@ Copyright_License {
 #include "IO/ZipLineReader.hpp"
 #include "WindowProjection.hpp"
 
+#include <zzip/zzip.h>
+
 #include <stdio.h>
 #include <tchar.h>
 
@@ -70,19 +72,23 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  PathName path(argv[1]);
+  const char *path = argv[1];
 
-  TCHAR tpl[MAX_PATH];
-  _tcscpy(tpl, path);
-  _tcscat(tpl, _T("/topology.tpl"));
-  ZipLineReaderA reader(tpl);
+  ZZIP_DIR *dir = zzip_dir_open(path, NULL);
+  if (dir == NULL) {
+    fprintf(stderr, "Failed to open %s\n", (const char *)path);
+    return EXIT_FAILURE;
+  }
+
+  ZipLineReaderA reader(dir, "topology.tpl");
   if (reader.error()) {
-    _ftprintf(stderr, _T("Failed to open %s\n"), tpl);
+    fprintf(stderr, "Failed to open %s\n", (const char *)path);
     return EXIT_FAILURE;
   }
 
   TopologyStore topology;
-  topology.Load(reader, path);
+  topology.Load(reader, NULL, dir);
+  zzip_dir_close(dir);
 
   TestProjection projection;
 

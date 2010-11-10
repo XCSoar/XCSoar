@@ -48,7 +48,8 @@ TopologyStore::~TopologyStore()
 }
 
 void
-TopologyStore::Load(NLineReader &reader, const TCHAR* Directory)
+TopologyStore::Load(NLineReader &reader, const TCHAR *Directory,
+                    struct zzip_dir *zdir)
 {
   Reset();
 
@@ -57,8 +58,11 @@ TopologyStore::Load(NLineReader &reader, const TCHAR* Directory)
   long ShapeField;
   char ShapeFilename[MAX_PATH];
 
-  strcpy(ShapeFilename, NarrowPathName(Directory));
-  strcat(ShapeFilename, DIR_SEPARATOR_S);
+  if (Directory != NULL) {
+    strcpy(ShapeFilename, NarrowPathName(Directory));
+    strcat(ShapeFilename, DIR_SEPARATOR_S);
+  } else
+    ShapeFilename[0] = 0;
 
   char *ShapeFilenameEnd = ShapeFilename + strlen(ShapeFilename);
 
@@ -115,7 +119,7 @@ TopologyStore::Load(NLineReader &reader, const TCHAR* Directory)
       blue = 255;
     }
 
-    files.append(new TopologyFile(ShapeFilename,
+    files.append(new TopologyFile(zdir, ShapeFilename,
                                   fixed(ShapeRange) * 1000,
                                   Color(red, green, blue),
                                   ShapeField, ShapeIcon));

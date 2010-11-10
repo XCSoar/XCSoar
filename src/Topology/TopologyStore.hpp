@@ -32,6 +32,7 @@ Copyright_License {
 class WindowProjection;
 class TopologyFile;
 class NLineReader;
+struct zzip_dir;
 
 /**
  * Class used to manage and render vector topology layers
@@ -59,7 +60,8 @@ public:
 
   void ScanVisibility(const WindowProjection &m_projection);
 
-  void Load(NLineReader &reader, const TCHAR* Directory);
+  void Load(NLineReader &reader, const TCHAR *Directory,
+            struct zzip_dir *zdir=NULL);
   void Reset();
 };
 

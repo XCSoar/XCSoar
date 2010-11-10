@@ -47,6 +47,8 @@
 #include <stdio.h>
 #include "mapprimitive.h"
 
+struct zzip_dir;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -201,13 +203,18 @@ typedef struct {
 
 
 /* shapefileObj function prototypes  */
-MS_DLL_EXPORT int msSHPOpenFile(shapefileObj *shpfile, const char *mode, const char *filename);
+MS_DLL_EXPORT int msSHPOpenFile(shapefileObj *shpfile, const char *mode,
+                                struct zzip_dir *zdir, const char *filename);
 MS_DLL_EXPORT int msSHPCreateFile(shapefileObj *shpfile, char *filename, int type);
 MS_DLL_EXPORT void msSHPCloseFile(shapefileObj *shpfile);
-MS_DLL_EXPORT int msSHPWhichShapes(shapefileObj *shpfile, rectObj rect, int debug);
+MS_DLL_EXPORT int msSHPWhichShapes(shapefileObj *shpfile,
+                                   struct zzip_dir *zdir,
+                                   rectObj rect, int debug);
 
 /* SHP/SHX function prototypes */
-MS_DLL_EXPORT SHPHandle msSHPOpen( const char * pszShapeFile, const char * pszAccess );
+MS_DLL_EXPORT SHPHandle msSHPOpen(struct zzip_dir *zdir,
+                                  const char *pszShapeFile,
+                                  const char *pszAccess);
 MS_DLL_EXPORT SHPHandle msSHPCreate( const char * pszShapeFile, int nShapeType );
 MS_DLL_EXPORT void msSHPClose( SHPHandle hSHP );
 MS_DLL_EXPORT void msSHPGetInfo( SHPHandle hSHP, int * pnEntities, int * pnShapeType );
@@ -220,7 +227,9 @@ MS_DLL_EXPORT int msSHPWritePoint(SHPHandle psSHP, pointObj *point );
 /* tiledShapefileObj function prototypes are in map.h */
 
 /* XBase function prototypes */
-MS_DLL_EXPORT DBFHandle msDBFOpen( const char * pszDBFFile, const char * pszAccess );
+MS_DLL_EXPORT DBFHandle msDBFOpen(struct zzip_dir *zdir,
+                                  const char *pszDBFFile,
+                                  const char *pszAccess);
 MS_DLL_EXPORT void msDBFClose( DBFHandle hDBF );
 MS_DLL_EXPORT DBFHandle msDBFCreate( const char * pszDBFFile );
 

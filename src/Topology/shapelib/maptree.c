@@ -48,7 +48,7 @@
 #include "map.h"
 #include "maptree.h"
 
-#include <zzip/lib.h>
+#include <zzip/util.h>
 
 #include <stdlib.h>
 #include <string.h>
@@ -120,7 +120,8 @@ static treeNodeObj *treeNodeCreate(rectObj rect)
 
 #endif /* SHAPELIB_DISABLED */
 
-SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
+SHPTreeHandle msSHPDiskTreeOpen(struct zzip_dir *zdir, const char * pszTree,
+                                int debug)
 {
     char		*pszFullname, *pszBasename;
     SHPTreeHandle	psTree;
@@ -165,7 +166,7 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
   /* -------------------------------------------------------------------- */
     pszFullname = (char *) malloc(strlen(pszBasename) + 5);
     sprintf( pszFullname, "%s%s", pszBasename, MS_INDEX_EXTENSION); 
-    psTree->zfp = zzip_fopen(pszFullname, "rb" );
+    psTree->zfp = zzip_open_rb(zdir, pszFullname);
 
     msFree(pszBasename); /* don't need these any more */
     msFree(pszFullname);    
@@ -549,12 +550,13 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status
   return;
 }
 
-char *msSearchDiskTree(const char *filename, rectObj aoi, int debug)
+char *msSearchDiskTree(struct zzip_dir *zdir, const char *filename,
+                       rectObj aoi, int debug)
 {
   SHPTreeHandle	disktree;
   char *status=NULL;
 
-  disktree = msSHPDiskTreeOpen (filename, debug);
+  disktree = msSHPDiskTreeOpen(zdir, filename, debug);
   if(!disktree) {
 
     /* only set this error IF debugging is turned on, gets annoying otherwise */

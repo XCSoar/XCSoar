@@ -51,7 +51,7 @@
 
 #include "map.h"
 
-#include <zzip/lib.h>
+#include <zzip/util.h>
 
 #include <stdlib.h> /* for atof() and atoi() */
 #include <string.h>
@@ -159,7 +159,8 @@ static void flushRecord( DBFHandle psDBF )
 /*                                                                      */
 /*      Open a .dbf file.                                               */
 /************************************************************************/   
-DBFHandle msDBFOpen( const char * pszFilename, const char * pszAccess )
+DBFHandle msDBFOpen(struct zzip_dir *zdir, const char *pszFilename,
+                    const char *pszAccess)
 
 {
     DBFHandle		psDBF;
@@ -196,7 +197,7 @@ DBFHandle msDBFOpen( const char * pszFilename, const char * pszAccess )
     /*      Open the file.                                                  */
     /* -------------------------------------------------------------------- */
     psDBF = (DBFHandle) calloc( 1, sizeof(DBFInfo) );
-    psDBF->zfp = zzip_fopen( pszDBFFilename, pszAccess );
+    psDBF->zfp = zzip_open_rb(zdir, pszDBFFilename);
     if( psDBF->zfp == NULL )
         return( NULL );
 

@@ -29,8 +29,11 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
+#include "IO/FileLineReader.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
+
+#include <zzip/zzip.h>
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -71,17 +74,18 @@ LoadConfiguredTopologyZip(TopologyStore &store)
   if (!Profile::GetPath(szProfileMapFile, path))
     return false;
 
-  TCHAR file[MAX_PATH];
-  _tcscpy(file, path);
-  _tcscat(file, _T("/topology.tpl"));
+  ZZIP_DIR *dir = zzip_dir_open(NarrowPathName(path), NULL);
+  if (dir == NULL)
+    return false;
 
-  ZipLineReaderA reader(file);
+  ZipLineReaderA reader(dir, "topology.tpl");
   if (reader.error()) {
     LogStartUp(_T("No topology in map file: %s"), path);
     return false;
   }
 
-  store.Load(reader, path);
+  store.Load(reader, NULL, dir);
+  zzip_dir_close(dir);
   return true;
 }
 
