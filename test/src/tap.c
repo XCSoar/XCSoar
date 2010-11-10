@@ -24,11 +24,10 @@
  * SUCH DAMAGE.
  */
 
-#ifdef HAVE_TAP
-
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
+
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -62,8 +61,6 @@ static int test_died = 0;
 # define LOCK
 # define UNLOCK
 //#endif
-
-
 
 static void _expected_tests(unsigned int);
 static void _tap_init(void);
@@ -471,49 +468,3 @@ _cleanup(void)
 
 	UNLOCK;
 }
-
-#else
-
-#include <windows.h>
-
-static unsigned num_planned=0;
-static unsigned num_passed=0;
-static DWORD	fpsTime_start = 0;
-static DWORD	fpsTime_finish = 0;
-
-#ifndef __GNUC__
-
-void ok(int a, const char* b, unsigned int c) {
-  if (a) {
-    num_passed++;
-  } else {
-    // print failed
-  }
-}
-
-#endif
-
-int plan_tests(unsigned int a) {
-  num_planned = a;
-
-  TCHAR buffer[80];
-  wsprintf(buffer, TEXT("Planned %d tests"), num_planned);
-  MessageBox(0, buffer, TEXT("ex_xcsoar"), MB_OK);
-
-  fpsTime_start = GetTickCount();
-  return 0;
-}
-
-int exit_status(void) {
-  TCHAR buffer[80];
-
-  fpsTime_finish = GetTickCount();
-  DWORD dt = fpsTime_finish-fpsTime_start;
-
-  wsprintf(buffer, TEXT("Passed %d out of %d\nTime elapsed %d"),
-           num_passed, num_planned, dt);
-  MessageBox(0, buffer, TEXT("ex_xcsoar"), MB_OK);
-  return num_planned - num_passed;
-}
-
-#endif
