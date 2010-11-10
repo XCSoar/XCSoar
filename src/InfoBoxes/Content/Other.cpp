@@ -26,6 +26,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
 #include "Hardware/Battery.hpp"
+#include "OS/SystemLoad.hpp"
 #include "Asset.hpp"
 
 #include <tchar.h>
@@ -126,4 +127,17 @@ InfoBoxContentExperimental2::Update(InfoBoxWindow &infobox)
 {
   // Set Value
   infobox.SetInvalid();
+}
+
+void
+InfoBoxContentCPULoad::Update(InfoBoxWindow &infobox)
+{
+  TCHAR tmp[32];
+  unsigned percent_load = SystemLoadCPU();
+  if (percent_load <= 100) {
+    _stprintf(tmp, _T("%d%%"), percent_load);
+    infobox.SetValue(tmp);
+  } else {
+    infobox.SetInvalid();
+  }
 }

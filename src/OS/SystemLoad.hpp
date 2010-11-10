@@ -21,40 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_INFOBOX_CONTENT_OTHER_HPP
-#define XCSOAR_INFOBOX_CONTENT_OTHER_HPP
+#ifndef XCSOAR_OS_SYSTEMLOAD_HPP
 
-#include "InfoBoxes/Content/Base.hpp"
-
-class InfoBoxContentGLoad : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxWindow &infobox);
-};
-
-class InfoBoxContentBattery : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxWindow &infobox);
-};
-
-class InfoBoxContentExperimental1 : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxWindow &infobox);
-};
-
-class InfoBoxContentExperimental2 : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxWindow &infobox);
-};
-
-class InfoBoxContentCPULoad : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxWindow &infobox);
-};
-
+unsigned SystemLoadCPU();
 
 #endif

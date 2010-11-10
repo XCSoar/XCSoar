@@ -716,6 +716,14 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     NULL,
     8, 2,
   },
+
+  // 75 //
+  {
+    N_("CPU Load"),
+    N_("CPU"),
+    N_("CPU load consumed by XCSoar averaged over 5 seconds."),
+    8, 2,
+  },
 };
 
 InfoBoxContent*
@@ -872,6 +880,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentOLC();
   case 74:
     return new InfoBoxContentExperimental2();
+  case 75:
+    return new InfoBoxContentCPULoad();
   }
 
   return NULL;
