@@ -512,7 +512,9 @@ InputEvents::readFile(TLineReader &reader)
 
             pt2Event event = findEvent(d_event);
             if (event) {
-              event_id = makeEvent(event, StringMallocParse(d_misc), event_id);
+              TCHAR *allocated = StringMallocParse(d_misc);
+              event_id = makeEvent(event, allocated, event_id);
+              free(allocated);
 
             #ifdef _INPUTDEBUG_
             } else if (input_errors_count < MAX_INPUT_ERRORS) {
