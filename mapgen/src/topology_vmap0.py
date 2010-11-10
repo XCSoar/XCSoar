@@ -111,10 +111,10 @@ def __create_layer(bounds, layer, maps, dir_data, dir_temp):
 
     files = []
     if os.path.exists(os.path.join(dir_temp, layer[1] + ".shp")):
-        files.append([os.path.join(dir_temp, layer[1] + ".shp"), True])
-        files.append([os.path.join(dir_temp, layer[1] + ".shx"), True])
-        files.append([os.path.join(dir_temp, layer[1] + ".dbf"), True])
-        files.append([os.path.join(dir_temp, layer[1] + ".prj"), True])
+        files.append([os.path.join(dir_temp, layer[1] + ".shp"), False])
+        files.append([os.path.join(dir_temp, layer[1] + ".shx"), False])
+        files.append([os.path.join(dir_temp, layer[1] + ".dbf"), False])
+        files.append([os.path.join(dir_temp, layer[1] + ".prj"), False])
 
     return files
 
@@ -146,6 +146,6 @@ def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
 
     maps = __filter_maps(bounds)
     files = __create_layers(bounds, maps, dir_data, dir_temp)
-    files.append([__create_index_file(dir_temp), True])
+    files.append([__create_index_file(dir_temp), False])
 
     return files
