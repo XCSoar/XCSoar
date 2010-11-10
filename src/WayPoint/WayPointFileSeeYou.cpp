@@ -248,6 +248,7 @@ WayPointFileSeeYou::parseStyle(const TCHAR* src, WaypointFlags& dest)
   // Update flags
   dest.LandPoint = (style == 3);
   dest.Airport = (style == 2 || style == 4 || style == 5);
+  dest.TurnPoint = true;
 
   return true;
 }
