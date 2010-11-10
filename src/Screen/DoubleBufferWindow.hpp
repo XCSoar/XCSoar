@@ -55,6 +55,7 @@ public:
   DoubleBufferWindow()
     :current(0) {}
 
+private:
   /**
    * Returns the Canvas which is currently used for rendering.  This
    * method may only be called within the drawing thread.
@@ -63,7 +64,6 @@ public:
     return buffers[current];
   }
 
-private:
   /**
    * Marks the hidden Canvas as "done" and schedules it for painting
    * to the Window.
@@ -91,7 +91,7 @@ protected:
 public:
   void repaint() {
 #ifndef ENABLE_OPENGL
-    on_paint_buffer(buffers[current]);
+    on_paint_buffer(get_canvas());
     flip();
 #else
     invalidate();
