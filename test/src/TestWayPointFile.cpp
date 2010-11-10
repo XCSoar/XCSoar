@@ -50,7 +50,10 @@ static void
 TestWinPilot()
 {
   WayPointFile *f = WayPointFile::create(_T("test/data/waypoints.dat"), 0);
-  ok1(f != NULL);
+  if (!ok1(f != NULL)) {
+    skip(14, 0, "opening waypoint file failed");
+    return;
+  }
 
   Waypoints way_points;
   bool success = f->Parse(way_points, NULL);
@@ -63,7 +66,10 @@ TestWinPilot()
   ok1(way_points.size() == 1);
 
   const Waypoint *wp = way_points.lookup_name(_T("Bergneustadt"));
-  ok1(wp != NULL);
+  if (!ok1(wp != NULL)) {
+    skip(10, 0, "waypoint not found");
+    return;
+  }
   ok1(equals(wp->Location.Longitude, 7.7061111111111114));
   ok1(equals(wp->Location.Latitude, 51.051944444444445));
   ok1(equals(wp->Altitude, 488));
