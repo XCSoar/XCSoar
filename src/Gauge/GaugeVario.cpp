@@ -353,16 +353,13 @@ GaugeVario::ValueToNeedlePos(fixed Value)
 
   if (!InitDone){
     degrees_per_unit = (int)((GAUGEVARIOSWEEP / 2) /
-                             Units::ToUserUnit(GAUGEVARIORANGE,
-                                               Units::VerticalSpeedUnit));
+                             Units::ToUserVSpeed(GAUGEVARIORANGE));
     gmax = max(80, (int)(degrees_per_unit *
-                         Units::ToUserUnit(GAUGEVARIORANGE,
-                                           Units::VerticalSpeedUnit)) + 2);
+                         Units::ToUserVSpeed(GAUGEVARIORANGE)) + 2);
     MakeAllPolygons();
     InitDone = true;
   }
-  i = iround(Units::ToUserUnit(Value * degrees_per_unit,
-                               Units::VerticalSpeedUnit));
+  i = iround(Units::ToUserVSpeed(Value * degrees_per_unit));
   i = min(gmax,max(-gmax,i));
   return i;
 }
