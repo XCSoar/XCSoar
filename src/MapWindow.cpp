@@ -53,6 +53,11 @@ MapWindow::MapWindow()
    DisplayMode(dmCruise)
 {}
 
+MapWindow::~MapWindow()
+{
+  delete topology_renderer;
+}
+
 void
 MapWindow::set(ContainerWindow &parent, const RECT &rc)
 {

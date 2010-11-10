@@ -123,6 +123,7 @@ protected:
 
 public:
   MapWindow();
+  ~MapWindow();
 
   static bool register_class(HINSTANCE hInstance);
 
