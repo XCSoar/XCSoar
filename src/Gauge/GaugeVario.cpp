@@ -374,14 +374,8 @@ GaugeVario::RenderVarioLine(Canvas &canvas, int i, int sink, bool clear)
   if (i == sink)
     return;
 
-  if (clear) {
-    canvas.select(blankThickPen);
-  } else {
-    if (i > sink)
-      canvas.select(blueThickPen);
-    else
-      canvas.select(redThickPen);
-  }
+  canvas.select(clear ? blankThickPen :
+                        (i > sink ? blueThickPen: redThickPen));
 
   if (i > sink)
     canvas.polyline(lines + gmax + sink, i - sink);
