@@ -21,37 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_EVENT_HPP
-#define XCSOAR_SCREEN_EVENT_HPP
+#ifndef XCSOAR_SCREEN_GDI_EVENT_HPP
+#define XCSOAR_SCREEN_GDI_EVENT_HPP
 
 #include "Util/NonCopyable.hpp"
 #include "Compiler.h"
-
-#ifdef ENABLE_SDL
-
-#include <SDL_version.h>
-#include <SDL_events.h>
-
-class TopWindow;
-
-class EventLoop : private NonCopyable {
-  TopWindow &top_window;
-
-  /**
-   * True if working on a bulk of events.  At the end of that bulk,
-   * TopWindow::validate() gets called.
-   */
-  bool bulk;
-
-public:
-  EventLoop(TopWindow &_top_window)
-    :top_window(_top_window), bulk(false) {}
-
-  bool get(SDL_Event &event);
-  void dispatch(SDL_Event &event);
-};
-
-#else /* !ENABLE_SDL */
 
 #include <windows.h>
 
@@ -77,8 +51,6 @@ public:
 
   void dispatch(MSG &msg);
 };
-
-#endif /* !ENABLE_SDL */
 
 gcc_const
 unsigned

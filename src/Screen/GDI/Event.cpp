@@ -21,49 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Screen/Event.hpp"
+#include "Screen/GDI/Event.hpp"
 #include "Thread/Debug.hpp"
 #include "Asset.hpp"
-
-#ifdef ENABLE_SDL
-
-#include "Screen/TopWindow.hpp"
-
-bool
-EventLoop::get(SDL_Event &event)
-{
-  if (bulk) {
-    if (::SDL_PollEvent(&event))
-      return event.type != SDL_QUIT;
-
-    /* that was the last event for now, refresh the screen now */
-    top_window.refresh();
-    bulk = false;
-  }
-
-  if (::SDL_WaitEvent(&event)) {
-    bulk = true;
-    return event.type != SDL_QUIT;
-  }
-
-  return false;
-}
-
-void
-EventLoop::dispatch(SDL_Event &event)
-{
-  if (event.type == Window::EVENT_USER && event.user.data1 != NULL) {
-    Window *window = (Window *)event.user.data1;
-    window->on_user(event.user.code);
-  } else if (event.type == Window::EVENT_TIMER && event.user.data1 != NULL) {
-    Window *window = (Window *)event.user.data1;
-    SDLTimer *timer = (SDLTimer *)event.user.data2;
-    window->on_timer(timer);
-  } else
-    ((Window &)top_window).on_event(event);
-}
-
-#else /* !ENABLE_SDL */
 
 bool
 EventLoop::get(MSG &msg)
@@ -121,8 +81,6 @@ DialogEventLoop::dispatch(MSG &msg)
 
   EventLoop::dispatch(msg);
 }
-
-#endif /* !ENABLE_SDL */
 
 unsigned
 TranscodeKey(unsigned key_code)

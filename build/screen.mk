@@ -3,7 +3,6 @@
 SCREEN_SRC_DIR = $(SRC)/Screen
 
 SCREEN_SOURCES = \
-	$(SCREEN_SRC_DIR)/Event.cpp \
 	$(SCREEN_SRC_DIR)/ButtonWindow.cpp \
 	$(SCREEN_SRC_DIR)/CheckBox.cpp \
 	$(SCREEN_SRC_DIR)/ProgressBar.cpp \
@@ -33,6 +32,7 @@ SCREEN_SOURCES = \
 
 ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/SDL/Event.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Timer.cpp
 ifeq ($(OPENGL),y)
@@ -42,6 +42,7 @@ SCREEN_SOURCES += \
 endif
 else
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/GDI/Event.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/PaintCanvas.cpp
 endif

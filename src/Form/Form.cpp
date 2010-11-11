@@ -30,8 +30,13 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/Event.hpp"
 #include "Util/StringUtil.hpp"
+
+#ifdef ENABLE_SDL
+#include "Screen/SDL/Event.hpp"
+#else
+#include "Screen/GDI/Event.hpp"
+#endif
 
 bool
 WndForm::ClientAreaWindow::on_command(unsigned id, unsigned code)

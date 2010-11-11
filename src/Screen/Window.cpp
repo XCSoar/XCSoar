@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 #include "Screen/ContainerWindow.hpp"
-#include "Screen/Event.hpp"
 #include "Screen/Blank.hpp"
 #include "Interface.hpp"
 #include "Asset.hpp"
 
 #ifndef ENABLE_SDL
+#include "Screen/GDI/Event.hpp"
 #include "Screen/PaintCanvas.hpp"
 #endif /* !ENABLE_SDL */
 

@@ -22,12 +22,13 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
-#include "Screen/Event.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_SDL
+#include "Screen/SDL/Event.hpp"
 #include "PeriodClock.hpp"
 #else
+#include "Screen/GDI/Event.hpp"
 #include "Interface.hpp" /* for XCSoarInterface::hInst */
 #if defined(GNAV) && !defined(PCGNAV)
 #include "resource.h" /* for IDI_XCSOAR */
