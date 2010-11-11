@@ -21,33 +21,17 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_PAINT_CANVAS_HPP
-#define XCSOAR_SCREEN_PAINT_CANVAS_HPP
+#include "Screen/GDI/PaintCanvas.hpp"
+#include "Screen/Window.hpp"
 
-#ifdef ENABLE_SDL
-#error Not implemented on SDL
-#endif
+PaintCanvas::PaintCanvas(Window &_window)
+  :window(_window)
+{
+  HDC hDC = window.BeginPaint(&ps);
+  set(hDC, window.get_width(), window.get_height());
+}
 
-#include "Screen/Canvas.hpp"
-
-class Window;
-
-/**
- * A #Canvas implementation to use during WM_PAINT.  Use this class
- * instead of #PaintWindow.get_canvas().
- */
-class PaintCanvas : public Canvas {
-private:
-  Window &window;
-  PAINTSTRUCT ps;
-
-public:
-  PaintCanvas(Window &_window);
-  ~PaintCanvas();
-
-  const RECT &get_dirty() const {
-    return ps.rcPaint;
-  }
-};
-
-#endif
+PaintCanvas::~PaintCanvas()
+{
+  window.EndPaint(&ps);
+}

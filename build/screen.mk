@@ -44,7 +44,7 @@ else
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/Event.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \
-	$(SCREEN_SRC_DIR)/PaintCanvas.cpp
+	$(SCREEN_SRC_DIR)/GDI/PaintCanvas.cpp
 endif
 
 SCREEN_OBJS = $(call SRC_TO_OBJ,$(SCREEN_SOURCES))

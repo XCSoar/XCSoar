@@ -29,7 +29,7 @@ Copyright_License {
 
 #ifndef ENABLE_SDL
 #include "Screen/GDI/Event.hpp"
-#include "Screen/PaintCanvas.hpp"
+#include "Screen/GDI/PaintCanvas.hpp"
 #endif /* !ENABLE_SDL */
 
 #include <assert.h>
