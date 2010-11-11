@@ -201,6 +201,8 @@ CreateOriginalWaypoints()
   wp_vector org_wp;
 
   GeoPoint loc;
+
+  // Bergneustadt
   loc.Latitude = Angle::degrees(fixed(51.051944444444445));
   loc.Longitude = Angle::degrees(fixed(7.7061111111111114));
 
@@ -215,8 +217,75 @@ CreateOriginalWaypoints()
   wp.Flags.StartPoint = false;
   wp.Flags.FinishPoint = false;
   wp.Flags.Restricted = false;
-
   org_wp.push_back(wp);
+
+  // Aconcagua
+  loc.Latitude = Angle::dms(fixed(32), fixed(39), fixed(12)).flipped();
+  loc.Longitude = Angle::dms(fixed(70), fixed(0), fixed(42)).flipped();
+
+  Waypoint wp2(loc);
+  wp2.Altitude = fixed(6962);
+  wp2.Name = _T("Aconcagua");
+
+  wp2.Flags.Airport = false;
+  wp2.Flags.TurnPoint = true;
+  wp2.Flags.LandPoint = false;
+  wp2.Flags.Home = false;
+  wp2.Flags.StartPoint = false;
+  wp2.Flags.FinishPoint = false;
+  wp2.Flags.Restricted = false;
+  org_wp.push_back(wp2);
+
+  // Golden Gate Bridge
+  loc.Latitude = Angle::dms(fixed(37), fixed(49), fixed(3));
+  loc.Longitude = Angle::dms(fixed(122), fixed(28), fixed(42)).flipped();
+
+  Waypoint wp3(loc);
+  wp3.Altitude = fixed(227);
+  wp3.Name = _T("Golden Gate Bridge");
+
+  wp3.Flags.Airport = false;
+  wp3.Flags.TurnPoint = true;
+  wp3.Flags.LandPoint = false;
+  wp3.Flags.Home = false;
+  wp3.Flags.StartPoint = false;
+  wp3.Flags.FinishPoint = false;
+  wp3.Flags.Restricted = false;
+  org_wp.push_back(wp3);
+
+  // Red Square
+  loc.Latitude = Angle::dms(fixed(55), fixed(45), fixed(15));
+  loc.Longitude = Angle::dms(fixed(37), fixed(37), fixed(12));
+
+  Waypoint wp4(loc);
+  wp4.Altitude = fixed(123);
+  wp4.Name = _T("Red Square");
+
+  wp4.Flags.Airport = false;
+  wp4.Flags.TurnPoint = true;
+  wp4.Flags.LandPoint = true;
+  wp4.Flags.Home = false;
+  wp4.Flags.StartPoint = false;
+  wp4.Flags.FinishPoint = false;
+  wp4.Flags.Restricted = false;
+  org_wp.push_back(wp4);
+
+  // Sydney Opera
+  loc.Latitude = Angle::dms(fixed(33), fixed(51), fixed(25)).flipped();
+  loc.Longitude = Angle::dms(fixed(151), fixed(12), fixed(55));
+
+  Waypoint wp5(loc);
+  wp5.Altitude = fixed(5);
+  wp5.Name = _T("Sydney Opera");
+
+  wp5.Flags.Airport = false;
+  wp5.Flags.TurnPoint = true;
+  wp5.Flags.LandPoint = false;
+  wp5.Flags.Home = false;
+  wp5.Flags.StartPoint = false;
+  wp5.Flags.FinishPoint = false;
+  wp5.Flags.Restricted = false;
+  org_wp.push_back(wp5);
 
   return org_wp;
 }
