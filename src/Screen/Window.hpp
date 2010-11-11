@@ -30,7 +30,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #ifdef ENABLE_SDL
-#include "Screen/Timer.hpp"
+#include "Screen/SDL/Timer.hpp"
 #endif /* ENABLE_SDL */
 
 class Canvas;

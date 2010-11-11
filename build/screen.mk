@@ -34,7 +34,7 @@ SCREEN_SOURCES = \
 ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp \
-	$(SCREEN_SRC_DIR)/Timer.cpp
+	$(SCREEN_SRC_DIR)/SDL/Timer.cpp
 ifeq ($(OPENGL),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Canvas.cpp \

@@ -21,25 +21,27 @@ Copyright_License {
 }
 */
 
-#include "Screen/Timer.hpp"
-#include "Screen/Window.hpp"
+#ifndef XCSOAR_SCREEN_SDL_TIMER_HXX
+#define XCSOAR_SCREEN_SDL_TIMER_HXX
 
-SDLTimer::SDLTimer(Window &_window, unsigned ms)
-  :window(_window), id(::SDL_AddTimer(ms, callback, this))
-{
-}
+#ifndef ENABLE_SDL
+#error This header is SDL-only
+#endif
 
-SDLTimer::~SDLTimer()
-{
-  ::SDL_RemoveTimer(id);
-}
+#include <SDL.h>
 
-Uint32
-SDLTimer::callback(Uint32 interval, void *param)
-{
-  SDLTimer *timer = (SDLTimer *)param;
+class Window;
 
-  timer->window.send_timer(timer);
+class SDLTimer {
+  Window &window;
+  SDL_TimerID id;
 
-  return interval;
-}
+public:
+  SDLTimer(Window &window, unsigned ms);
+  ~SDLTimer();
+
+protected:
+  static Uint32 callback(Uint32 interval, void *param);
+};
+
+#endif
