@@ -113,12 +113,12 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkRight:
-  case ibkDown:
+  case ibkUp:
     protected_task_manager.incrementActiveTaskPoint(1);
     return true;
 
   case ibkLeft:
-  case ibkUp:
+  case ibkDown:
     protected_task_manager.incrementActiveTaskPoint(-1);
     return true;
 
