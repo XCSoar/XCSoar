@@ -557,9 +557,9 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const RECT &rc,
     symbol->draw(canvas, bitmap_canvas, IBLSCALE(8) + TextSize.cx,
                  rc.bottom - Height);
 
-  int y = rc.bottom - Height - Fonts::Title.get_ascent_height() + IBLSCALE(2);
+  int y = rc.bottom - Height - Fonts::Title.get_ascent_height();
 
-  ScaleInfo[0] = 0;
+  ScaleInfo[0] = '\0';
   if (SettingsMap().AutoZoom)
     _tcscat(ScaleInfo, _T("AUTO "));
 
@@ -576,7 +576,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const RECT &rc,
 
   if (task != NULL && SettingsComputer().BallastTimerActive) {
     TCHAR TEMP[20];
-    _stprintf(TEMP, _T("BALLAST %d LITERS"),
+    _stprintf(TEMP, _T("BALLAST %d LITERS "),
               (int)task->get_glide_polar().get_ballast_litres());
     _tcscat(ScaleInfo, TEMP);
   }
@@ -591,6 +591,6 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const RECT &rc,
     canvas.select(Fonts::Title);
     canvas.background_opaque();
     canvas.set_background_color(Color::WHITE);
-    canvas.text(IBLSCALE(1), y, ScaleInfo);
+    canvas.text(0, y, ScaleInfo);
   }
 }
