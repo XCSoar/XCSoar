@@ -68,7 +68,7 @@ TestWayPointFile(const TCHAR* filename, Waypoints &way_points)
 }
 
 static void
-TestWinPilot()
+TestWinPilot(const Waypoint org_wp)
 {
   Waypoints way_points;
   if (!TestWayPointFile(_T("test/data/waypoints.dat"), way_points)) {
@@ -76,26 +76,26 @@ TestWinPilot()
     return;
   }
 
-  const Waypoint *wp = way_points.lookup_name(_T("Bergneustadt"));
+  const Waypoint *wp = way_points.lookup_name(org_wp.Name);
   if (!ok1(wp != NULL)) {
     skip(10, 0, "waypoint not found");
     return;
   }
-  ok1(equals(wp->Location.Longitude, 7.7061111111111114));
-  ok1(equals(wp->Location.Latitude, 51.051944444444445));
-  ok1(equals(wp->Altitude, 488));
+  ok1(equals(wp->Location.Longitude, org_wp.Location.Longitude));
+  ok1(equals(wp->Location.Latitude, org_wp.Location.Latitude));
+  ok1(equals(wp->Altitude, org_wp.Altitude));
 
-  ok1(wp->Flags.Airport);
-  ok1(wp->Flags.TurnPoint);
-  ok1(!wp->Flags.LandPoint);
-  ok1(wp->Flags.Home);
-  ok1(!wp->Flags.StartPoint);
-  ok1(!wp->Flags.FinishPoint);
-  ok1(!wp->Flags.Restricted);
+  ok1(wp->Flags.Airport == org_wp.Flags.Airport);
+  ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
+  ok1(wp->Flags.LandPoint == org_wp.Flags.LandPoint);
+  ok1(wp->Flags.Home == org_wp.Flags.Home);
+  ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
+  ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
+  ok1(wp->Flags.Restricted == org_wp.Flags.Restricted);
 }
 
 static void
-TestSeeYou()
+TestSeeYou(const Waypoint org_wp)
 {
   Waypoints way_points;
   if (!TestWayPointFile(_T("test/data/waypoints.cup"), way_points)) {
@@ -103,27 +103,27 @@ TestSeeYou()
     return;
   }
 
-  const Waypoint *wp = way_points.lookup_name(_T("Bergneustadt"));
+  const Waypoint *wp = way_points.lookup_name(org_wp.Name);
   if (!ok1(wp != NULL)) {
     skip(9, 0, "waypoint not found");
     return;
   }
-  ok1(equals(wp->Location.Longitude, 7.7061111111111114));
-  ok1(equals(wp->Location.Latitude, 51.051944444444445));
-  ok1(equals(wp->Altitude, 488));
+  ok1(equals(wp->Location.Longitude, org_wp.Location.Longitude));
+  ok1(equals(wp->Location.Latitude, org_wp.Location.Latitude));
+  ok1(equals(wp->Altitude, org_wp.Altitude));
 
-  ok1(wp->Flags.Airport);
-  ok1(wp->Flags.TurnPoint);
-  ok1(!wp->Flags.LandPoint);
+  ok1(wp->Flags.Airport == org_wp.Flags.Airport);
+  ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
+  ok1(wp->Flags.LandPoint == org_wp.Flags.LandPoint);
   // No home waypoints in a SeeYou file
-  //ok1(wp->Flags.Home);
-  ok1(!wp->Flags.StartPoint);
-  ok1(!wp->Flags.FinishPoint);
-  ok1(!wp->Flags.Restricted);
+  //ok1(wp->Flags.Home == org_wp.Flags.Home);
+  ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
+  ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
+  ok1(wp->Flags.Restricted == org_wp.Flags.Restricted);
 }
 
 static void
-TestZander()
+TestZander(const Waypoint org_wp)
 {
   Waypoints way_points;
   if (!TestWayPointFile(_T("test/data/waypoints.wpz"), way_points)) {
@@ -131,31 +131,47 @@ TestZander()
     return;
   }
 
-  const Waypoint *wp = way_points.lookup_name(_T("Bergneustadt"));
+  const Waypoint *wp = way_points.lookup_name(org_wp.Name);
   if (!ok1(wp != NULL)) {
     skip(10, 0, "waypoint not found");
     return;
   }
-  ok1(equals(wp->Location.Longitude, 7.7061111111111114));
-  ok1(equals(wp->Location.Latitude, 51.051944444444445));
-  ok1(equals(wp->Altitude, 488));
+  ok1(equals(wp->Location.Longitude, org_wp.Location.Longitude));
+  ok1(equals(wp->Location.Latitude, org_wp.Location.Latitude));
+  ok1(equals(wp->Altitude, org_wp.Altitude));
 
-  ok1(wp->Flags.Airport);
-  ok1(wp->Flags.TurnPoint);
-  ok1(!wp->Flags.LandPoint);
-  ok1(wp->Flags.Home);
-  ok1(!wp->Flags.StartPoint);
-  ok1(!wp->Flags.FinishPoint);
-  ok1(!wp->Flags.Restricted);
+  ok1(wp->Flags.Airport == org_wp.Flags.Airport);
+  ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
+  ok1(wp->Flags.LandPoint == org_wp.Flags.LandPoint);
+  ok1(wp->Flags.Home == org_wp.Flags.Home);
+  ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
+  ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
+  ok1(wp->Flags.Restricted == org_wp.Flags.Restricted);
 }
 
 int main(int argc, char **argv)
 {
   plan_tests(44);
 
-  TestWinPilot();
-  TestSeeYou();
-  TestZander();
+  GeoPoint loc;
+  loc.Latitude = Angle::degrees(fixed(51.051944444444445));
+  loc.Longitude = Angle::degrees(fixed(7.7061111111111114));
+
+  Waypoint wp(loc);
+  wp.Altitude = fixed(488);
+  wp.Name = _T("Bergneustadt");
+
+  wp.Flags.Airport = true;
+  wp.Flags.TurnPoint = true;
+  wp.Flags.LandPoint = false;
+  wp.Flags.Home = true;
+  wp.Flags.StartPoint = false;
+  wp.Flags.FinishPoint = false;
+  wp.Flags.Restricted = false;
+
+  TestWinPilot(wp);
+  TestSeeYou(wp);
+  TestZander(wp);
 
   return exit_status();
 }
