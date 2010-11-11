@@ -21,17 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_COLOR_HPP
-#define XCSOAR_SCREEN_COLOR_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_COLOR_HPP
+#define XCSOAR_SCREEN_OPENGL_COLOR_HPP
 
-#ifdef ENABLE_SDL
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Color.hpp"
-#else /* !OPENGL */
 #include "Screen/SDL/Color.hpp"
-#endif /* !OPENGL */
-#else /* !SDL */
-#include "Screen/GDI/Color.hpp"
-#endif /* !SDL */
 
 #endif
