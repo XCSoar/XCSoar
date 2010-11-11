@@ -59,7 +59,7 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
   new_waypoint.FileNum = file_num;
 
   // Name (Characters 0-12)
-  if (!parseString(line, new_waypoint.Name))
+  if (!parseString(line, new_waypoint.Name, 12))
     return false;
 
   // Altitude (Characters 30-34 // e.g. 1561 (in meters))
@@ -69,7 +69,7 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
 
   // Description (Characters 35-44)
   if (len > 35)
-    parseString(line + 35, new_waypoint.Comment);
+    parseString(line + 35, new_waypoint.Comment, 9);
 
   // Flags (Characters 45-49)
   if (len > 45)
@@ -81,7 +81,7 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
 
 
 bool
-WayPointFileZander::parseString(const TCHAR* src, tstring& dest)
+WayPointFileZander::parseString(const TCHAR* src, tstring& dest, unsigned len)
 {
   if (src[0] == 0)
     return true;
@@ -89,10 +89,11 @@ WayPointFileZander::parseString(const TCHAR* src, tstring& dest)
   dest.assign(src);
 
   // Cut the string after the first space, tab or null character
-  size_t found = dest.find_first_of(_T(" \t\0"));
+  size_t found = dest.find_first_of(_T("\t\0"));
   if (found != tstring::npos)
     dest = dest.substr(0, found);
 
+  dest = dest.substr(0, len);
   trim_inplace(dest);
   return true;
 }
