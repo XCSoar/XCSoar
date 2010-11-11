@@ -48,20 +48,16 @@ public:
     height = _height;
 
 #ifdef ENABLE_OPENGL
-    if (surface->flags & SDL_OPENGL) {
-      glMatrixMode(GL_PROJECTION);
-      glPushMatrix();
-      glTranslatef(_x, _y, 0);
-    }
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glTranslatef(_x, _y, 0);
 #endif
   }
 
   ~SubCanvas() {
 #ifdef ENABLE_OPENGL
-    if (surface->flags & SDL_OPENGL) {
-      glMatrixMode(GL_PROJECTION);
-      glPopMatrix();
-    }
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
 #endif
   }
 };
