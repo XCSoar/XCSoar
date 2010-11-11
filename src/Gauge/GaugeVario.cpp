@@ -78,32 +78,19 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
 
   Color theredColor;
   Color theblueColor;
-  Color theyellowColor;
-  Color thegreenColor;
-  Color themagentaColor;
 
   if (Appearance.InverseInfoBox) {
     theredColor = Graphics::inv_redColor;
     theblueColor = Graphics::inv_blueColor;
-    theyellowColor = Graphics::inv_yellowColor;
-    thegreenColor = Graphics::inv_greenColor;
-    themagentaColor = Graphics::inv_magentaColor;
   } else {
     theredColor = Color::RED;
     theblueColor = Color::BLUE;
-    theyellowColor = Color::YELLOW;
-    thegreenColor = Color::GREEN;
-    themagentaColor = Color::MAGENTA;
   }
 
   redBrush.set(theredColor);
   blueBrush.set(theblueColor);
-  yellowBrush.set(theyellowColor);
-  greenBrush.set(thegreenColor);
   redPen.set(1, theredColor);
   bluePen.set(1, theblueColor);
-  yellowPen.set(1, theyellowColor);
-  greenPen.set(1, thegreenColor);
   redThickPen.set(Layout::Scale(5), theredColor);
   blueThickPen.set(Layout::Scale(5), theblueColor);
 

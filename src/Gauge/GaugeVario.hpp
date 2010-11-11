@@ -56,12 +56,8 @@ private:
 
   Brush redBrush;
   Brush blueBrush;
-  Brush yellowBrush;
-  Brush greenBrush;
   Pen redPen;
   Pen bluePen;
-  Pen yellowPen;
-  Pen greenPen;
   Pen redThickPen;
   Pen blueThickPen;
   Pen blankThickPen;
