@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 #include "Screen/OpenGL/Texture.hpp"
+#include "Screen/OpenGL/Scope.hpp"
 #include "Screen/Util.hpp"
 #include "Math/FastMath.h"
 
@@ -153,23 +154,20 @@ Canvas::text(int x, int y, const TCHAR *text)
       s->format->palette->ncolors >= 2) {
     s->flags &= ~SDL_SRCCOLORKEY;
 
-    glEnable(GL_COLOR_LOGIC_OP);
+    GLLogicOp logic_op(GL_AND);
 
     /* clear the text pixels (AND) */
     s->format->palette->colors[0] = Color::WHITE;
     s->format->palette->colors[1] = Color::BLACK;
-    glLogicOp(GL_AND);
     copy(x, y, s);
 
     /* paint with the text color on top (OR) */
     if (text_color != Color::BLACK) {
       s->format->palette->colors[0] = Color::BLACK;
       s->format->palette->colors[1] = text_color;
-      glLogicOp(GL_OR);
+      logic_op.set(GL_OR);
       copy(x, y, s);
     }
-
-    glDisable(GL_COLOR_LOGIC_OP);
 
     ::SDL_FreeSurface(s);
     return;
@@ -262,11 +260,9 @@ Canvas::stretch_or(int dest_x, int dest_y,
 {
   assert(src.surface != NULL);
 
-  glEnable(GL_COLOR_LOGIC_OP);
-  glLogicOp(GL_OR);
+  GLLogicOp logic_op(GL_OR);
   stretch(dest_x, dest_y, dest_width, dest_height,
           src, src_x, src_y, src_width, src_height);
-  glDisable(GL_COLOR_LOGIC_OP);
 }
 
 void
@@ -278,9 +274,7 @@ Canvas::stretch_and(int dest_x, int dest_y,
 {
   assert(src.surface != NULL);
 
-  glEnable(GL_COLOR_LOGIC_OP);
-  glLogicOp(GL_AND);
+  GLLogicOp logic_op(GL_AND);
   stretch(dest_x, dest_y, dest_width, dest_height,
           src, src_x, src_y, src_width, src_height);
-  glDisable(GL_COLOR_LOGIC_OP);
 }
