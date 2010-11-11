@@ -8,15 +8,24 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-11-02 23:33+0100\n"
-"PO-Revision-Date: 2010-11-01 17:08+0000\n"
-"Last-Translator: Niklas Fischer <Unknown>\n"
+"PO-Revision-Date: 2010-11-11 01:01+0000\n"
+"Last-Translator: Folken Van Vanel <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-02 20:28+0000\n"
+"X-Launchpad-Export-Date: 2010-11-11 21:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: de\n"
+
+#: src/Dialogs/dlgTaskHelpers.cpp:382
+msgid "Save task?"
+msgstr "Aufgabe speichern?"
+
+#: Data/Dialogs/dlgConfiguration.xml:338
+#: Data/Dialogs/dlgConfiguration_L.xml:337
+msgid "Ignore checksum*"
+msgstr "Prüfsumme ignorieren*"
 
 #: src/Airspace/AirspaceGlue.cpp:40
 msgid "Loading Airspace File..."
@@ -800,10 +809,10 @@ msgstr "Windgeschw"
 #, no-c-format
 msgid ""
 "Wind speed estimated by XCSoar. (Touchscreen/PC only) Manual adjustment is "
-"possible by pressing the up/down cursor keys to adjust magnitude and left/"
-"right cursor keys to adjust bearing when the infobox is active. Pressing the "
-"enter cursor key saves the wind value as the initial value when XCSoar next "
-"starts."
+"possible by pressing the up/down cursor keys to adjust magnitude and "
+"left/right cursor keys to adjust bearing when the infobox is active. "
+"Pressing the enter cursor key saves the wind value as the initial value when "
+"XCSoar next starts."
 msgstr ""
 "Von XCSoar geschätzte Windgeschwindigkeit. Nur Touchscreen und PC: Wenn "
 "diese Infobox aktiv ist, kann mit den Pfeiltasten auf/ab die Winstärke und "
@@ -924,7 +933,8 @@ msgstr "V IAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:313
 #, no-c-format
-msgid "Indicated Airspeed reported by a supported external intelligent vario."
+msgid ""
+"Indicated Airspeed reported by a supported external intelligent vario."
 msgstr ""
 "Angezeigte Geschwindigkeit gegenüber Luft, laut angeschlossenem Sensor."
 
@@ -974,7 +984,7 @@ msgstr "Prozentsatz Steigen"
 #: src/InfoBoxes/Content/Factory.cpp:336
 #, no-c-format
 msgid "% Climb"
-msgstr ""
+msgstr "% Steigen"
 
 #: src/InfoBoxes/Content/Factory.cpp:337
 #, no-c-format
@@ -1035,8 +1045,8 @@ msgid ""
 "The required glide ratio to reach the next waypoint, given by the distance "
 "to next waypoint divided by the height required to arrive at the safety "
 "arrival altitude. Negative values indicate a climb is necessary to reach the "
-"waypoint. If the height required is close to zero, the displayed value is "
-"'---'.   Note that this calculation may be optimistic because it reduces the "
+"waypoint. If the height required is close to zero, the displayed value is '--"
+"-'.   Note that this calculation may be optimistic because it reduces the "
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
@@ -1286,8 +1296,8 @@ msgid ""
 msgstr ""
 "Vorhergesagte Maximal-Bodentemperatur am Startplatz. Wird zusammen mit der "
 "Außentemperatur und der rel. Feuchtigkeit (soweit Sensoren vorhanden) zur "
-"Schätzung der Konvektionshöhe und Wolkenuntergrenze benutzt. (Touchscreen/"
-"PC: Die Hoch-/Runtertasten ändern die Vorhersagetemperatur)."
+"Schätzung der Konvektionshöhe und Wolkenuntergrenze benutzt. "
+"(Touchscreen/PC: Die Hoch-/Runtertasten ändern die Vorhersagetemperatur)."
 
 #: src/InfoBoxes/Content/Factory.cpp:463
 #, no-c-format
@@ -1301,7 +1311,8 @@ msgstr "AA DZiel"
 
 #: src/InfoBoxes/Content/Factory.cpp:465
 #, no-c-format
-msgid "Assigned Area Task distance around target points for remainder of task."
+msgid ""
+"Assigned Area Task distance around target points for remainder of task."
 msgstr "Verbleibende Strecke der Assigned Area Aufgabe um alle Zielpunkte."
 
 #: src/InfoBoxes/Content/Factory.cpp:471
@@ -1353,7 +1364,8 @@ msgstr "V TAS"
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
 msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr "Wahre Geschwindigkeit gegenüber Luft laut dem angeschlossenen Sensor."
+msgstr ""
+"Wahre Geschwindigkeit gegenüber Luft laut dem angeschlossenen Sensor."
 
 #: src/InfoBoxes/Content/Factory.cpp:495
 #, no-c-format
@@ -1387,7 +1399,8 @@ msgstr "Tm Peilung"
 
 #: src/InfoBoxes/Content/Factory.cpp:505
 #, no-c-format
-msgid "The bearing to the team aircraft location at the last team code report."
+msgid ""
+"The bearing to the team aircraft location at the last team code report."
 msgstr "Peilung zum Teamkollegen der letzten Teamkode Meldung."
 
 #: src/InfoBoxes/Content/Factory.cpp:511
@@ -1419,7 +1432,8 @@ msgstr "Team Dis"
 
 #: src/InfoBoxes/Content/Factory.cpp:521
 #, no-c-format
-msgid "The range to the team aircraft location at the last reported team code."
+msgid ""
+"The range to the team aircraft location at the last reported team code."
 msgstr "Entfernung zum Teamkollegen der letzten Teamkode Meldung."
 
 #: src/InfoBoxes/Content/Factory.cpp:527
@@ -1952,9 +1966,8 @@ msgid "GPS waiting for fix"
 msgstr "GPS wartet auf Positionsbestimmung"
 
 #: src/GlueMapWindowAirspace.cpp:150
-#, fuzzy
 msgid "Airspaces at this location"
-msgstr "Luftraumanzeige"
+msgstr "Lufträume an diesem Ort"
 
 #: src/Topology/TopologyGlue.cpp:40
 msgid "Loading Topology File..."
@@ -2233,13 +2246,13 @@ msgstr "Suche Wetterprognose"
 msgid "Starting devices"
 msgstr "Starte Geräte"
 
-#.
+#. 
 #. -- Reset polar in case devices need the data
 #. LogStartUp(_T("GlidePolar::UpdatePolar"));
 #. GlidePolar::UpdatePolar(true, SettingsComputer());
-#.
+#. 
 #. This should be done inside devStartup if it is really required
-#.
+#. 
 #: src/Components.cpp:403
 msgid "Initialising display"
 msgstr "Initialisiere Anzeige"
@@ -2690,9 +2703,8 @@ msgid "OLC League"
 msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:875
-#, fuzzy
 msgid "OLC Plus"
-msgstr "OLC Classic"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:891
 msgid "Statue"
@@ -3149,10 +3161,6 @@ msgid "Task Point"
 msgstr "Wendepunkt"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:382
-msgid "Save task?"
-msgstr "Aufgabe speichern?"
-
-#: src/Dialogs/dlgTaskHelpers.cpp:382
 msgid "Task Selection"
 msgstr "Aufgaben Auswahl"
 
@@ -3216,9 +3224,8 @@ msgid "Choose a filter or click here"
 msgstr "Wähle einen Filter oder klicke hier"
 
 #: src/Dialogs/dlgWindSettings.cpp:94
-#, fuzzy
 msgid "External"
-msgstr "Erweitert"
+msgstr "Extern"
 
 #: src/Device/Driver/Volkslogger.cpp:145
 msgid "Comms with Volkslogger"
@@ -3849,12 +3856,12 @@ msgstr "Dies schaltet das Variometer in Steig- oder Vorflugmodus."
 #: Data/Dialogs/dlgConfiguration.xml:315
 msgid ""
 "Type of secondary device.             The secondary device may be used as "
-"backup GPS data or other data e.g. from an intelligent "
-"variometer.             Generic can be used for GPS sources including FLARM."
+"backup GPS data or other data e.g. from an intelligent variometer.           "
+"  Generic can be used for GPS sources including FLARM."
 msgstr ""
-"Typ des zusätzlichen Geräts. Es kann ein Ersatz-GPS, oder für andere Daten z."
-"B. ein intelligentes Variometer sein. \"Generisch\" ist die Einstellung für "
-"eine GPS Quelle, FLARM eingeschlossen."
+"Typ des zusätzlichen Geräts. Es kann ein Ersatz-GPS, oder für andere Daten "
+"z.B. ein intelligentes Variometer sein. \"Generisch\" ist die Einstellung "
+"für eine GPS Quelle, FLARM eingeschlossen."
 
 #: Data/Dialogs/dlgConfiguration.xml:107
 #: Data/Dialogs/dlgConfiguration_L.xml:107
@@ -4151,8 +4158,8 @@ msgid ""
 "will be rotated to show its course. [Track up] The moving map display will "
 "be rotated so the glider's track is oriented up. [North up when circling] "
 "Track-up in cruise and north-up when circling. [Target up when circling] "
-"Track-up in cruise and the bearing to next waypoint up when circling. [North/"
-"track] North-up in cruise, glider track-track up in circling"
+"Track-up in cruise and the bearing to next waypoint up when circling. "
+"[North/track] North-up in cruise, glider track-track up in circling"
 msgstr ""
 "Bestimmt, wie die Anzeige zum Segler ausgerichtet ist: [Norden oben] Die "
 "Karte ist immer nach Norden ausgerichtet und das Selgersymbol dreht sich "
@@ -4274,7 +4281,7 @@ msgstr "Soll der Ballastprozentanteil angezeigt werden."
 
 #: Data/Dialogs/dlgConfiguration.xml:82 Data/Dialogs/dlgConfiguration_L.xml:82
 msgid "Acknowledge time*"
-msgstr "Quittierungszeit*"
+msgstr "Bestätigungszeit*"
 
 #: Data/Dialogs/dlgConfiguration.xml:490
 #: Data/Dialogs/dlgConfiguration_L.xml:489
@@ -4726,7 +4733,7 @@ msgstr "Volumen"
 #: Data/Dialogs/dlgConfiguration.xml:206
 #: Data/Dialogs/dlgConfiguration_L.xml:207
 msgid "External wind"
-msgstr ""
+msgstr "Externer Wind"
 
 #: Data/Dialogs/dlgFontEdit.xml:16
 msgid "Italic font"
@@ -5053,8 +5060,10 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:245
 #: Data/Dialogs/dlgConfiguration_L.xml:246
-msgid "The height above terrain that the glider must clear during final glide."
-msgstr "Höhe über Grund, die der Segler während des Endanflugs einhalten soll."
+msgid ""
+"The height above terrain that the glider must clear during final glide."
+msgstr ""
+"Höhe über Grund, die der Segler während des Endanflugs einhalten soll."
 
 #: Data/Dialogs/dlgVario.xml:109 Data/Dialogs/dlgVario_L.xml:109
 msgid "Filter circling"
@@ -5064,11 +5073,6 @@ msgstr "Filter Kreisen"
 #: Data/Dialogs/dlgWayPointDetails_L.xml:4
 msgid "Goto"
 msgstr "Ziele auf"
-
-#: Data/Dialogs/dlgConfiguration.xml:338
-#: Data/Dialogs/dlgConfiguration_L.xml:337
-msgid "Ignore checksum*"
-msgstr "Prüfsumme ignorieren*"
 
 #: Data/Dialogs/dlgVario_L.xml:73
 msgid ""
@@ -5110,7 +5114,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarning.xml:8
 msgid "ACK Day"
-msgstr "Quittiern Tag"
+msgstr "Best. Tag"
 
 #: Data/Dialogs/dlgConfiguration.xml:245
 #: Data/Dialogs/dlgConfiguration_L.xml:246
@@ -5257,8 +5261,8 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:494
 msgid ""
 "This enables the display of FLARM traffic on the map window [OFF] FLARM map "
-"display disabled [ON/Fixed] FLARM map display enabled with fixed scale. [ON/"
-"Scaled] FLARM map display enabled and auto scaled. When auto scaling is "
+"display disabled [ON/Fixed] FLARM map display enabled with fixed scale. "
+"[ON/Scaled] FLARM map display enabled and auto scaled. When auto scaling is "
 "enabled, the FLARM targets on the map display are scaled so that when the "
 "map is at large zoom levels, targets are still visible."
 msgstr ""
@@ -5450,7 +5454,7 @@ msgstr "Dialogbox"
 
 #: Data/Dialogs/dlgAirspaceWarning.xml:7
 msgid "ACK Space"
-msgstr "Luftraum Quittiern"
+msgstr "Best. Luftraum"
 
 #: Data/Dialogs/dlgConfiguration.xml:563
 #: Data/Dialogs/dlgConfiguration_L.xml:562
@@ -5469,9 +5473,9 @@ msgid ""
 "data or other data e.g. from an intelligent variometer. Generic can be used "
 "for GPS sources including FLARM."
 msgstr ""
-"Typ des zusätzlichen Geräts. Es kann ein Ersatz-GPS, oder für andere Daten z."
-"B. ein intelligentes Variometer sein. \"Generisch\" ist die Einstellung für "
-"eine GPS Quelle, FLARM eingeschlossen."
+"Typ des zusätzlichen Geräts. Es kann ein Ersatz-GPS, oder für andere Daten "
+"z.B. ein intelligentes Variometer sein. \"Generisch\" ist die Einstellung "
+"für eine GPS Quelle, FLARM eingeschlossen."
 
 #: Data/Dialogs/dlgVario.xml:307 Data/Dialogs/dlgVario_L.xml:307
 msgid "Voice muting"
@@ -5671,7 +5675,8 @@ msgstr ""
 msgid ""
 "Calibration factor applied to static pressure used in total energy "
 "calculation. "
-msgstr "Kalibrierfaktor des statischen Druck für die Totalenergieberechnung. "
+msgstr ""
+"Kalibrierfaktor des statischen Druck für die Totalenergieberechnung. "
 
 #: Data/Dialogs/dlgVoice.xml:10
 msgid "Enable warnings for final glide through terrain."
@@ -5997,7 +6002,7 @@ msgstr "Type des Tonausblendung für den Vorflugmodus."
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:6
 msgid "Ack Day"
-msgstr "Quittieren für den Tag"
+msgstr "Best. Tag"
 
 #: Data/Dialogs/dlgWindSettings.xml:19
 msgid "Trail drift"
@@ -6011,8 +6016,8 @@ msgstr "Ereignisse"
 #: Data/Dialogs/dlgConfiguration.xml:495
 msgid ""
 "This enables the display of FLARM traffic on the map window. [OFF] FLARM map "
-"display disabled [ON/Fixed] FLARM map display enabled with fixed scale. [ON/"
-"Scaled] FLARM map display enabled and auto scaled. When auto scaling is "
+"display disabled [ON/Fixed] FLARM map display enabled with fixed scale. "
+"[ON/Scaled] FLARM map display enabled and auto scaled. When auto scaling is "
 "enabled, the FLARM targets on the map display are scaled so that when the "
 "map is at large zoom levels, targets are still visible."
 msgstr ""
@@ -6488,8 +6493,8 @@ msgstr "Lauftraum Details"
 #: Data/Dialogs/dlgBasicSettings.xml:8
 msgid ""
 "Ballast of the glider.  Increase this value if the pilot/cockpit load is "
-"greater than the reference pilot weight of the glide polar (typically "
-"75kg).  Press ENTER on this field to toggle count-down of the ballast volume "
+"greater than the reference pilot weight of the glide polar (typically 75kg). "
+" Press ENTER on this field to toggle count-down of the ballast volume "
 "according to the dump rate specified in the configuration settings."
 msgstr ""
 "Ballast des Seglers. Erhöhe diesen Wert, wenn der Pilot/Zuladung im Cockpit "
@@ -6553,7 +6558,8 @@ msgid "Valid start"
 msgstr "Gültiger Abflug"
 
 #: Data/Dialogs/dlgBrightness.xml:6
-msgid " (Altair only) Enables automatic backlight, responsive to light sensor."
+msgid ""
+" (Altair only) Enables automatic backlight, responsive to light sensor."
 msgstr ""
 " (Nur Altair) Aktiviert die automatische Hintergrundbeleuchtung, "
 "entsprechend dem Lichtsensor."
@@ -6713,7 +6719,7 @@ msgstr ""
 
 #: Data/Input/default.xci:432
 msgid "GoTo"
-msgstr "Ziel auf"
+msgstr "Gehe Zu"
 
 #: Data/Input/default.xci:634
 msgid "Logger\n"
@@ -6914,22 +6920,6 @@ msgstr ""
 "Ganzer\n"
 "Bildsch.\n"
 
-#~ msgid ""
-#~ "Set automatic backlight for this device. Max brightness and no timeout if "
-#~ "on external power, otherwise max brightneess and a 5 minutes timeout on "
-#~ "batteries. After timeout screen blanks to save energy."
-#~ msgstr ""
-#~ "Stellt die automatische Hintergrundbeleuchtung für das Gerät ein. Solange "
-#~ "es extern versorgt ist, wird die maximale Helligkeit eingestellt, "
-#~ "ansonsten wird nach 5 Minuten Untätigkeit der Bildschirm dunkel um "
-#~ "Batterie zu sparen."
-
-#~ msgid "Auto Backlight"
-#~ msgstr "Auto Hintergrundbeleuchtung"
-
-#~ msgid "Bright"
-#~ msgstr "Helligkeit"
-
 #~ msgid "Appearance"
 #~ msgstr "Darstellung"
 
@@ -6957,6 +6947,9 @@ msgstr ""
 #~ msgid "Nokia500"
 #~ msgstr "Nokia500"
 
+#~ msgid "Extended"
+#~ msgstr "Erweitert"
+
 #~ msgid "HP31x"
 #~ msgstr "HP31X"
 
@@ -6975,6 +6968,10 @@ msgstr ""
 #~ msgid "Set range"
 #~ msgstr "Setze Reichweite"
 
+#~ msgid "Auto Backlight"
+#~ msgstr "Auto Hintergrundbeleuchtung"
+
+#, c-format
 #~ msgid ""
 #~ "Waypoint \"%s\" \r\n"
 #~ "out of Terrain bounds\r\n"
@@ -7013,11 +7010,11 @@ msgstr ""
 #~ msgstr "Wp"
 
 #~ msgid ""
-#~ "Supply battery voltage for Altair systems, for PDA systems, this gives "
-#~ "the percent battery capacity available."
+#~ "Supply battery voltage for Altair systems, for PDA systems, this gives the "
+#~ "percent battery capacity available."
 #~ msgstr ""
-#~ "Versorgunsspannung  des Altair Systems, bei PDA Systemen wird prozentual "
-#~ "die verfügbare Batteriekapazität angezeigt."
+#~ "Versorgunsspannung  des Altair Systems, bei PDA Systemen wird prozentual die "
+#~ "verfügbare Batteriekapazität angezeigt."
 
 #~ msgid "Map"
 #~ msgstr "Karte"
@@ -7040,6 +7037,9 @@ msgstr ""
 #~ msgid "Target locked"
 #~ msgstr "Luftbremse verriegelt"
 
+#~ msgid "Bright"
+#~ msgstr "Helligkeit"
+
 #~ msgid "Auto Sound Volume"
 #~ msgstr "Auto Lautstärkenregelung"
 
@@ -7051,6 +7051,15 @@ msgstr ""
 
 #~ msgid "Set maximum sound volume automatically."
 #~ msgstr "Automatische Einstellung der maximalen Lautstärke."
+
+#~ msgid ""
+#~ "Set automatic backlight for this device. Max brightness and no timeout if on "
+#~ "external power, otherwise max brightneess and a 5 minutes timeout on "
+#~ "batteries. After timeout screen blanks to save energy."
+#~ msgstr ""
+#~ "Stellt die automatische Hintergrundbeleuchtung für das Gerät ein. Solange es "
+#~ "extern versorgt ist, wird die maximale Helligkeit eingestellt, ansonsten "
+#~ "wird nach 5 Minuten Untätigkeit der Bildschirm dunkel um Batterie zu sparen."
 
 #~ msgid "Wpt outside terrain*"
 #~ msgstr "Wegpunkte ausserhalb der Karte"
@@ -7065,22 +7074,22 @@ msgstr ""
 #~ msgstr "nachfragen"
 
 #~ msgid ""
-#~ "This option defines how waypoints outside the terrain range are handled: "
-#~ "the user can be asked when this occurs, or they can be always included or "
+#~ "This option defines how waypoints outside the terrain range are handled: the "
+#~ "user can be asked when this occurs, or they can be always included or "
 #~ "excluded."
 #~ msgstr ""
-#~ "Diese Einstellung legt fest wie mit Wegpunkten außerhalb des "
-#~ "Geländeumfangs umgegangen wird: Der Benutzer kann jedes mal gefragt "
-#~ "werden, oder die Punkte können immer aus- oder eingeschlossen werden."
+#~ "Diese Einstellung legt fest wie mit Wegpunkten außerhalb des Geländeumfangs "
+#~ "umgegangen wird: Der Benutzer kann jedes mal gefragt werden, oder die Punkte "
+#~ "können immer aus- oder eingeschlossen werden."
 
 #~ msgid ""
-#~ "Auto-zoom changes the zoom level during flight so that the map zooms in "
-#~ "as the active waypoint is approached.  After passing a waypoint, the map "
-#~ "zooms out to the next waypoint."
+#~ "Auto-zoom changes the zoom level during flight so that the map zooms in as "
+#~ "the active waypoint is approached.  After passing a waypoint, the map zooms "
+#~ "out to the next waypoint."
 #~ msgstr ""
-#~ "Auto-Zoom passt den Zoomlevel während des Flugs an, sodass beim Annähern "
-#~ "an einen Wegpunkt die Darstellung heranzoomt. Nachdem der Wegpunkt "
-#~ "passiert ist zoomt die Darstellung heraus zum nächsten Wegpunkt."
+#~ "Auto-Zoom passt den Zoomlevel während des Flugs an, sodass beim Annähern an "
+#~ "einen Wegpunkt die Darstellung heranzoomt. Nachdem der Wegpunkt passiert ist "
+#~ "zoomt die Darstellung heraus zum nächsten Wegpunkt."
 
 #~ msgid "Auto zoom"
 #~ msgstr "Auto Zoom"
