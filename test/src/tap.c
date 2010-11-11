@@ -317,37 +317,38 @@ _expected_tests(unsigned int tests)
 int
 skip(unsigned int n, unsigned int ok, const char *fmt, ...)
 {
-  LOCK;
-
 #ifdef HAVE_VASPRINTF
   va_list ap;
   char *skip_msg;
+#endif
 
+  LOCK;
+
+#ifdef HAVE_VASPRINTF
   va_start(ap, fmt);
   asprintf(&skip_msg, fmt, ap);
   va_end(ap);
-
-  while(n-- > 0) {
-    test_count++;
-    if (!ok) {
-      failures++;
-      printf("not ok %d # skip: %s\n", test_count, skip_msg);
-    } else {
-      printf("ok %d # skip: %s\n", test_count, skip_msg);
-    }
-  }
-
-  free(skip_msg);
 #else
+#define skip_msg fmt
+#endif
+
   while(n-- > 0) {
     test_count++;
+
     if (!ok) {
       failures++;
-      printf("not ok %d # skip: %s\n", test_count, fmt);
+      printf("not ok %d # skip: %s\n", test_count,
+             skip_msg != NULL ?
+             skip_msg : "libtap():malloc() failed");
     } else {
-      printf("ok %d # skip: %s\n", test_count, fmt);
+      printf("ok %d # skip: %s\n", test_count,
+             skip_msg != NULL ?
+             skip_msg : "libtap():malloc() failed");
     }
   }
+
+#ifdef HAVE_VASPRINTF
+  free(skip_msg);
 #endif
 
   UNLOCK;
