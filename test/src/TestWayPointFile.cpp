@@ -40,6 +40,10 @@
 #include "Terrain/RasterMap.hpp"
 #include "TestUtil.hpp"
 
+#include <vector>
+
+typedef std::vector<Waypoint> wp_vector;
+
 short
 RasterMap::GetField(const GeoPoint &location) const
 {
@@ -47,7 +51,7 @@ RasterMap::GetField(const GeoPoint &location) const
 }
 
 static bool
-TestWayPointFile(const TCHAR* filename, Waypoints &way_points)
+TestWayPointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
 {
   WayPointFile *f = WayPointFile::create(filename, 0);
   if (!ok1(f != NULL)) {
@@ -65,7 +69,7 @@ TestWayPointFile(const TCHAR* filename, Waypoints &way_points)
   way_points.optimise();
 
   ok1(!way_points.empty());
-  ok1(way_points.size() == 1);
+  ok1(way_points.size() == num_wps);
 
   return true;
 }
@@ -103,16 +107,20 @@ TestWinPilotWayPoint(const Waypoint org_wp, const Waypoint *wp)
 }
 
 static void
-TestWinPilot(const Waypoint org_wp)
+TestWinPilot(wp_vector org_wp)
 {
   Waypoints way_points;
-  if (!TestWayPointFile(_T("test/data/waypoints.dat"), way_points)) {
-    skip(11, 0, "opening waypoint file failed");
+  if (!TestWayPointFile(_T("test/data/waypoints.dat"), way_points,
+                        org_wp.size())) {
+    skip(11 * org_wp.size(), 0, "opening waypoint file failed");
     return;
   }
 
-  const Waypoint *wp = GetWayPoint(org_wp, way_points);
-  TestWinPilotWayPoint(org_wp, wp);
+  wp_vector::iterator it;
+  for (it = org_wp.begin(); it < org_wp.end(); it++) {
+    const Waypoint *wp = GetWayPoint(*it, way_points);
+    TestWinPilotWayPoint(*it, wp);
+  }
 }
 
 static void
@@ -134,16 +142,20 @@ TestSeeYouWayPoint(const Waypoint org_wp, const Waypoint *wp)
 }
 
 static void
-TestSeeYou(const Waypoint org_wp)
+TestSeeYou(wp_vector org_wp)
 {
   Waypoints way_points;
-  if (!TestWayPointFile(_T("test/data/waypoints.cup"), way_points)) {
-    skip(10, 0, "opening waypoint file failed");
+  if (!TestWayPointFile(_T("test/data/waypoints.cup"), way_points,
+                        org_wp.size())) {
+    skip(10 * org_wp.size(), 0, "opening waypoint file failed");
     return;
   }
 
-  const Waypoint *wp = GetWayPoint(org_wp, way_points);
-  TestSeeYouWayPoint(org_wp, wp);
+  wp_vector::iterator it;
+  for (it = org_wp.begin(); it < org_wp.end(); it++) {
+    const Waypoint *wp = GetWayPoint(*it, way_points);
+    TestSeeYouWayPoint(*it, wp);
+  }
 }
 
 static void
@@ -164,21 +176,26 @@ TestZanderWayPoint(const Waypoint org_wp, const Waypoint *wp)
 }
 
 static void
-TestZander(const Waypoint org_wp)
+TestZander(wp_vector org_wp)
 {
   Waypoints way_points;
-  if (!TestWayPointFile(_T("test/data/waypoints.wpz"), way_points)) {
-    skip(11, 0, "opening waypoint file failed");
+  if (!TestWayPointFile(_T("test/data/waypoints.wpz"), way_points,
+                        org_wp.size())) {
+    skip(11 * org_wp.size(), 0, "opening waypoint file failed");
     return;
   }
 
-  const Waypoint *wp = GetWayPoint(org_wp, way_points);
-  TestZanderWayPoint(org_wp, wp);
+  wp_vector::iterator it;
+  for (it = org_wp.begin(); it < org_wp.end(); it++) {
+    const Waypoint *wp = GetWayPoint(*it, way_points);
+    TestZanderWayPoint(*it, wp);
+  }
 }
 
-int main(int argc, char **argv)
+static wp_vector
+CreateOriginalWaypoints()
 {
-  plan_tests(44);
+  wp_vector org_wp;
 
   GeoPoint loc;
   loc.Latitude = Angle::degrees(fixed(51.051944444444445));
@@ -196,9 +213,20 @@ int main(int argc, char **argv)
   wp.Flags.FinishPoint = false;
   wp.Flags.Restricted = false;
 
-  TestWinPilot(wp);
-  TestSeeYou(wp);
-  TestZander(wp);
+  org_wp.push_back(wp);
+
+  return org_wp;
+}
+
+int main(int argc, char **argv)
+{
+  wp_vector org_wp = CreateOriginalWaypoints();
+
+  plan_tests(3 * 4 + (11 + 10 + 11) * org_wp.size());
+
+  TestWinPilot(org_wp);
+  TestSeeYou(org_wp);
+  TestZander(org_wp);
 
   return exit_status();
 }
