@@ -62,6 +62,13 @@ MapWindow::on_create()
 bool
 MapWindow::on_destroy()
 {
+  set_marks(NULL);
+  set_airspaces(NULL, NULL);
+  set_way_points(NULL);
+  set_topology(NULL);
+  set_terrain(NULL);
+  set_weather(NULL);
+
 #ifndef ENABLE_OPENGL
   buffer_canvas.reset();
   stencil_canvas.reset();

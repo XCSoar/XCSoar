@@ -531,6 +531,9 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(_T("dlgAirspaceWarningDeInit"));
   dlgAirspaceWarningDeInit();
 
+  LogStartUp(_T("delete MapWindow"));
+  main_window.map.reset();
+
   // Save the task for the next time
   ProgressGlue::Create(_("Shutdown, saving task..."));
 
