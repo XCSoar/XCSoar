@@ -539,7 +539,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     GPS_INFO->TrackBearing = Angle::degrees(TrackBearing).as_bearing();
   }
 
-  if (!gps.Replay) {
+  if (!gps.Replay && !devHasBaroSource()) {
     if (RMZAvailable) {
       // JMW changed from Altitude to BaroAltitude
       GPS_INFO->BaroAltitudeAvailable = true;
@@ -644,12 +644,14 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   gps.HDOP = line.read(fixed_zero);
 
-  if (RMZAvailable) {
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = RMZAltitude;
-  } else if (RMAAvailable) {
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = RMAAltitude;
+  if (!devHasBaroSource()) {
+    if (RMZAvailable) {
+      GPS_INFO->BaroAltitudeAvailable = true;
+      GPS_INFO->BaroAltitude = RMZAltitude;
+    } else if (RMAAvailable) {
+      GPS_INFO->BaroAltitudeAvailable = true;
+      GPS_INFO->BaroAltitude = RMAAltitude;
+    }
   }
 
   // VENTA3 CONDOR ALTITUDE
