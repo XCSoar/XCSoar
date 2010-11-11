@@ -40,7 +40,9 @@ AIRCRAFT_STATE::AIRCRAFT_STATE():
 }
 
 ALTITUDE_STATE::ALTITUDE_STATE():
-  working_band_fraction(fixed_one)
+  NavAltitude(fixed_zero),
+  working_band_fraction(fixed_one),
+  AltitudeAGL(fixed_zero)
 {
 }
 
