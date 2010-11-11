@@ -32,6 +32,14 @@ RenderObservationZone::draw_style(bool is_boundary_active)
     if (m_past)
       return false;
 
+#ifdef ENABLE_OPENGL
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    Color color = Graphics::Colours[m_settings_map.iAirspaceColour[AATASK]];
+    m_buffer.select(Brush(color.with_alpha(64)));
+#else /* !OPENGL */
+
     m_buffer.mix_mask();
 
     // this color is used as the black bit
@@ -40,11 +48,17 @@ RenderObservationZone::draw_style(bool is_boundary_active)
     // get brush, can be solid or a 1bpp bitmap
     m_buffer.select(Graphics::hAirspaceBrushes[m_settings_map.
                                             iAirspaceBrush[AATASK]]);
+#endif /* !OPENGL */
+
     m_buffer.null_pen();
     
     return true;
   } else {
+#ifdef ENABLE_OPENGL
+    glDisable(GL_BLEND);
+#else /* !OPENGL */
     m_buffer.mix_copy();
+#endif /* !OPENGL */
 
     m_buffer.hollow_brush();
     if (is_boundary_active) {
