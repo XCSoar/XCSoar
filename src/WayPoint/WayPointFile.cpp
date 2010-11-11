@@ -22,6 +22,11 @@ Copyright_License {
 */
 
 #include "WayPointFile.hpp"
+
+#include "WayPointFileZander.hpp"
+#include "WayPointFileSeeYou.hpp"
+#include "WayPointFileWinPilot.hpp"
+
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "UtilsFile.hpp"
@@ -172,12 +177,6 @@ WayPointFile::Save(const Waypoints &way_points)
   // and tell everyone we saved successfully
   return true;
 }
-
-
-
-#include "WayPointFileZander.hpp"
-#include "WayPointFileSeeYou.hpp"
-#include "WayPointFileWinPilot.hpp"
 
 WayPointFile*
 WayPointFile::create(const TCHAR* filename, int the_filenum)
