@@ -74,6 +74,8 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
   // Flags (Characters 45-49)
   if (len > 45)
     parseFlags(line + 45, new_waypoint.Flags);
+  else
+    new_waypoint.Flags.TurnPoint = true;
 
   add_waypoint(way_points, new_waypoint);
   return true;
