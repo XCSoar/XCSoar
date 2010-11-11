@@ -29,6 +29,9 @@ bool
 RenderObservationZone::draw_style(bool is_boundary_active) 
 {
   if (m_background) {
+    if (m_past)
+      return false;
+
     m_buffer.mix_mask();
 
     // this color is used as the black bit
@@ -39,7 +42,7 @@ RenderObservationZone::draw_style(bool is_boundary_active)
                                             iAirspaceBrush[AATASK]]);
     m_buffer.null_pen();
     
-    return !m_past;
+    return true;
   } else {
     m_buffer.mix_copy();
 
