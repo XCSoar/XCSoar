@@ -29,6 +29,10 @@
 #include "Units.hpp"
 #include "Language.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 const Color ThermalAssistantWindow::hcBackground(0xFF, 0xFF, 0xFF);
 const Color ThermalAssistantWindow::hcCircles(0xB0, 0xB0, 0xB0);
 const Color ThermalAssistantWindow::hcStandard(0x00, 0x00, 0x00);
@@ -54,10 +58,19 @@ ThermalAssistantWindow::on_create()
 
   hbBackground.set(hcBackground);
   hbRadar.set(hcCircles);
+
+#ifdef ENABLE_OPENGL
+  hbPolygon.set(hcPolygonBrush.with_alpha(128));
+#else /* !OPENGL */
   hbPolygon.set(hcPolygonBrush);
+#endif /* !OPENGL */
 
   int width = Layout::FastScale(small ? 1 : 2);
+#ifdef ENABLE_OPENGL
+  hpPolygon.set(width, hcPolygonPen.with_alpha(128));
+#else /* !OPENGL */
   hpPolygon.set(width, hcPolygonPen);
+#endif /* !OPENGL */
   hpInnerCircle.set(1, hcCircles);
   hpOuterCircle.set(Pen::DASH, 1, hcCircles);
   hpPlane.set(width, hcCircles);
@@ -207,7 +220,12 @@ ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas) const
 void
 ThermalAssistantWindow::PaintPoints(Canvas &canvas) const
 {
+#ifdef ENABLE_OPENGL
+  GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#else /* !OPENGL */
   canvas.mix_mask();
+#endif /* !OPENGL */
+
   canvas.select(hbPolygon);
   canvas.select(hpPolygon);
   canvas.polygon(lift_points, 36);
