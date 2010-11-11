@@ -80,23 +80,23 @@ class RadixTree {
   struct Node : private NonCopyable {
     tstring label;
     Node *next_sibling, *children;
-    Leaf *leafs;
+    Leaf *leaves;
 
     Node(const TCHAR *_label)
       :label(_label),
        next_sibling(NULL), children(NULL),
-       leafs(NULL) {}
+       leaves(NULL) {}
     ~Node() {
       delete next_sibling;
       delete children;
-      delete leafs;
+      delete leaves;
     }
 
     void clear() {
       delete children;
       children = NULL;
-      delete leafs;
-      leafs = NULL;
+      delete leaves;
+      leaves = NULL;
     }
 
     /**
@@ -142,8 +142,8 @@ class RadixTree {
     T *get(const TCHAR *key) {
       if (string_is_empty(key))
         /* found */
-        return leafs != NULL
-          ? &leafs->value
+        return leaves != NULL
+          ? &leaves->value
           : NULL;
 
       match_pair m = find_child(key);
@@ -155,8 +155,8 @@ class RadixTree {
     const T *get(const TCHAR *key) const {
       if (string_is_empty(key))
         /* found */
-        return leafs != NULL
-          ? &leafs->value
+        return leaves != NULL
+          ? &leaves->value
           : NULL;
 
       match_pair m = find_child(key);
@@ -207,8 +207,8 @@ class RadixTree {
       node->children = children;
       children = node;
 
-      node->leafs = leafs;
-      leafs = NULL;
+      node->leaves = leaves;
+      leaves = NULL;
 
       label.erase(length);
     }
@@ -218,16 +218,16 @@ class RadixTree {
      * same key.
      */
     void add_value(const T &value) {
-      Leaf *leaf = new Leaf(leafs, value);
-      leafs = leaf;
+      Leaf *leaf = new Leaf(leaves, value);
+      leaves = leaf;
     }
 
     /**
      * Remove all values of this node.
      */
     void remove_values() {
-      delete leafs;
-      leafs = NULL;
+      delete leaves;
+      leaves = NULL;
     }
 
     /**
@@ -237,7 +237,7 @@ class RadixTree {
      * @return true if a value was found and removed
      */
     bool remove_value(const T &value) {
-      Leaf **leaf_r = &leafs;
+      Leaf **leaf_r = &leaves;
 
       while (*leaf_r != NULL) {
         Leaf *leaf = *leaf_r;
@@ -294,7 +294,7 @@ class RadixTree {
      */
     template<typename V>
     void visit_values(V &visitor) {
-      for (Leaf *leaf = leafs; leaf != NULL; leaf = leaf->next)
+      for (Leaf *leaf = leaves; leaf != NULL; leaf = leaf->next)
         visitor(leaf->value);
     }
 
@@ -303,7 +303,7 @@ class RadixTree {
      */
     template<typename V>
     void visit_values(V &visitor) const {
-      for (const Leaf *leaf = leafs; leaf != NULL; leaf = leaf->next)
+      for (const Leaf *leaf = leaves; leaf != NULL; leaf = leaf->next)
         visitor(leaf->value);
     }
 
@@ -316,7 +316,7 @@ class RadixTree {
       tstring key(prefix);
       key.append(label);
 
-      for (const Leaf *leaf = leafs; leaf != NULL; leaf = leaf->next)
+      for (const Leaf *leaf = leaves; leaf != NULL; leaf = leaf->next)
         visitor(key.c_str(), leaf->value);
     }
 
@@ -568,7 +568,7 @@ class RadixTree {
     operator<<(typename std::basic_ostream<Char, Traits>& out,
                const Node &node) {
       out << "node '" << node.label << "' {\n";
-      for (const RadixTree<T>::Leaf *leaf = node.leafs; leaf != NULL;
+      for (const RadixTree<T>::Leaf *leaf = node.leaves; leaf != NULL;
            leaf = leaf->next)
         out << "  value " << leaf->value << "\n";
       for (const RadixTree<T>::Node *child = node.children; child != NULL;
