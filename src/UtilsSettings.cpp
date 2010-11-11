@@ -133,8 +133,11 @@ SettingsLeave()
     XCSoarInterface::main_window.map.set_terrain(terrain);
   }
 
-  if (TopologyFileChanged)
+  if (TopologyFileChanged) {
+    XCSoarInterface::main_window.map.set_topology(NULL);
     LoadConfiguredTopology(*topology);
+    XCSoarInterface::main_window.map.set_topology(topology);
+  }
 
   if (AirspaceFileChanged) {
     airspace_warnings.clear();
