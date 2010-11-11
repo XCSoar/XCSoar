@@ -39,6 +39,7 @@
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "TestUtil.hpp"
+#include "tstring.hpp"
 
 #include <vector>
 
@@ -187,6 +188,8 @@ TestZander(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
+    it->Name = it->Name.substr(0, 12);
+    trim_inplace(it->Name);
     const Waypoint *wp = GetWayPoint(*it, way_points);
     TestZanderWayPoint(*it, wp);
   }
