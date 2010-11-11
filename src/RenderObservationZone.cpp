@@ -37,7 +37,7 @@ RenderObservationZone::draw_style(bool is_boundary_active)
     // get brush, can be solid or a 1bpp bitmap
     m_buffer.select(Graphics::hAirspaceBrushes[m_settings_map.
                                             iAirspaceBrush[AATASK]]);
-    m_buffer.white_pen();
+    m_buffer.null_pen();
     
     return !m_past;
   } else {
