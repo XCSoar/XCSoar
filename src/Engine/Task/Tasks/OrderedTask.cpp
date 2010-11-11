@@ -427,7 +427,8 @@ OrderedTask::remove(const unsigned position)
   if (position >= tps.size())
     return false;
 
-  if (activeTaskPoint > position)
+  if (activeTaskPoint > position ||
+      (activeTaskPoint > 0 && activeTaskPoint == tps.size() - 1))
     activeTaskPoint--;
 
   erase(position);
