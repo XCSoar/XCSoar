@@ -364,21 +364,7 @@ public:
   void move_to(int x, int y);
   void line_to(int x, int y);
 
-  void circle(int x, int y, unsigned radius) {
-#ifdef ENABLE_OPENGL
-    // XXX
-#else /* !OPENGL */
-    x += x_offset;
-    y += y_offset;
-
-    if (!brush.is_hollow())
-      ::filledCircleColor(surface, x, y, radius,
-                          brush.get_color().gfx_color());
-
-    if (pen_over_brush())
-      ::circleColor(surface, x, y, radius, pen.get_color().gfx_color());
-#endif
-  }
+  void circle(int x, int y, unsigned radius);
 
   void segment(int x, int y, unsigned radius,
                Angle start, Angle end, bool horizon=false);

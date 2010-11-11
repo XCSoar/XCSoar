@@ -96,6 +96,12 @@ Canvas::polygon(const POINT* lppt, unsigned cPoints)
 }
 
 void
+Canvas::circle(int x, int y, unsigned radius)
+{
+  // XXX
+}
+
+void
 Canvas::segment(int x, int y, unsigned radius,
                 Angle start, Angle end, bool horizon)
 {

@@ -85,6 +85,20 @@ Canvas::polygon(const POINT* lppt, unsigned cPoints)
 }
 
 void
+Canvas::circle(int x, int y, unsigned radius)
+{
+  x += x_offset;
+  y += y_offset;
+
+  if (!brush.is_hollow())
+    ::filledCircleColor(surface, x, y, radius,
+                        brush.get_color().gfx_color());
+
+  if (pen_over_brush())
+    ::circleColor(surface, x, y, radius, pen.get_color().gfx_color());
+}
+
+void
 Canvas::segment(int x, int y, unsigned radius,
                 Angle start, Angle end, bool horizon)
 {
