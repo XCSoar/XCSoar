@@ -67,6 +67,21 @@ TestWayPointFile(const TCHAR* filename, Waypoints &way_points)
   return success;
 }
 
+static const Waypoint*
+GetWayPoint(const Waypoint org_wp, const Waypoints &way_points)
+{
+  const Waypoint *wp = way_points.lookup_name(org_wp.Name);
+  if (!ok1(wp != NULL)) {
+    skip(3, 0, "waypoint not found");
+    return NULL;
+  }
+  ok1(equals(wp->Location.Longitude, org_wp.Location.Longitude));
+  ok1(equals(wp->Location.Latitude, org_wp.Location.Latitude));
+  ok1(equals(wp->Altitude, org_wp.Altitude));
+
+  return wp;
+}
+
 static void
 TestWinPilot(const Waypoint org_wp)
 {
@@ -76,14 +91,11 @@ TestWinPilot(const Waypoint org_wp)
     return;
   }
 
-  const Waypoint *wp = way_points.lookup_name(org_wp.Name);
-  if (!ok1(wp != NULL)) {
-    skip(10, 0, "waypoint not found");
+  const Waypoint *wp = GetWayPoint(org_wp, way_points);
+  if (wp == NULL) {
+    skip(7, 0, "waypoint not found");
     return;
   }
-  ok1(equals(wp->Location.Longitude, org_wp.Location.Longitude));
-  ok1(equals(wp->Location.Latitude, org_wp.Location.Latitude));
-  ok1(equals(wp->Altitude, org_wp.Altitude));
 
   ok1(wp->Flags.Airport == org_wp.Flags.Airport);
   ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
@@ -103,14 +115,11 @@ TestSeeYou(const Waypoint org_wp)
     return;
   }
 
-  const Waypoint *wp = way_points.lookup_name(org_wp.Name);
-  if (!ok1(wp != NULL)) {
-    skip(9, 0, "waypoint not found");
+  const Waypoint *wp = GetWayPoint(org_wp, way_points);
+  if (wp == NULL) {
+    skip(6, 0, "waypoint not found");
     return;
   }
-  ok1(equals(wp->Location.Longitude, org_wp.Location.Longitude));
-  ok1(equals(wp->Location.Latitude, org_wp.Location.Latitude));
-  ok1(equals(wp->Altitude, org_wp.Altitude));
 
   ok1(wp->Flags.Airport == org_wp.Flags.Airport);
   ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
@@ -131,14 +140,11 @@ TestZander(const Waypoint org_wp)
     return;
   }
 
-  const Waypoint *wp = way_points.lookup_name(org_wp.Name);
-  if (!ok1(wp != NULL)) {
-    skip(10, 0, "waypoint not found");
+  const Waypoint *wp = GetWayPoint(org_wp, way_points);
+  if (wp == NULL) {
+    skip(7, 0, "waypoint not found");
     return;
   }
-  ok1(equals(wp->Location.Longitude, org_wp.Location.Longitude));
-  ok1(equals(wp->Location.Latitude, org_wp.Location.Latitude));
-  ok1(equals(wp->Altitude, org_wp.Altitude));
 
   ok1(wp->Flags.Airport == org_wp.Flags.Airport);
   ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
