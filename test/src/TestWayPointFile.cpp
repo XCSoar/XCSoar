@@ -114,12 +114,31 @@ TestSeeYou()
   ok1(!wp->Flags.Restricted);
 }
 
+static void
+TestZander()
+{
+  const Waypoint *wp = TestWayPointFile(_T("test/data/waypoints.wpz"));
+  if (wp == NULL) {
+    skip(6, 0, "TestWayPointFile() failed");
+    return;
+  }
+
+  ok1(wp->Flags.Airport);
+  ok1(wp->Flags.TurnPoint);
+  ok1(!wp->Flags.LandPoint);
+  ok1(wp->Flags.Home);
+  ok1(!wp->Flags.StartPoint);
+  ok1(!wp->Flags.FinishPoint);
+  ok1(!wp->Flags.Restricted);
+}
+
 int main(int argc, char **argv)
 {
-  plan_tests(29);
+  plan_tests(44);
 
   TestWinPilot();
   TestSeeYou();
+  TestZander();
 
   return exit_status();
 }
