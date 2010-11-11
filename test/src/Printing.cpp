@@ -74,22 +74,23 @@ PrintHelper::aatpoint_print(std::ostream& f,
 
   case 1:
 
-    if ((tp.get_next()!= NULL) && (tp.getActiveState() != OrderedTaskPoint::BEFORE_ACTIVE)) {
-
+    if (tp.valid() && (tp.getActiveState() != OrderedTaskPoint::BEFORE_ACTIVE)) {
+      assert(tp.get_previous());
+      assert(tp.get_next());
       // note in general this will only change if 
       // prev max or target changes
 
       AATIsolineSegment seg(tp);
-      double tdist = tp.get_previous()->get_location_remaining().distance(
+      fixed tdist = tp.get_previous()->get_location_remaining().distance(
         tp.get_location_min());
-      double rdist = tp.get_previous()->get_location_remaining().distance(
+      fixed rdist = tp.get_previous()->get_location_remaining().distance(
         tp.get_location_target());
 
       bool filter_backtrack = true;
       if (seg.valid()) {
         for (double t = 0.0; t<=1.0; t+= 1.0/20) {
           GeoPoint ga = seg.parametric(fixed(t));
-          double dthis = tp.get_previous()->get_location_remaining().distance(ga);
+          fixed dthis = tp.get_previous()->get_location_remaining().distance(ga);
           if (!filter_backtrack 
               || (dthis>=tdist)
               || (dthis>=rdist)) {
@@ -232,7 +233,7 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AIRCRAFT_STATE &state)
   std::ofstream fi("results/res-isolines.txt");
   for (unsigned i=0; i<task.tps.size(); i++) {
     fi << "## point " << i << "\n";
-    if (task.tps[i]->type == TaskPoint::AST) {
+    if (task.tps[i]->type == TaskPoint::AAT) {
       aatpoint_print(fi,(AATPoint&)*task.tps[i],state,1);
     } else {
       orderedtaskpoint_print(fi,*task.tps[i],state,1);
@@ -245,7 +246,7 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AIRCRAFT_STATE &state)
   f1 << "#### Task points\n";
   for (unsigned i=0; i<task.tps.size(); i++) {
     f1 << "## point " << i << " ###################\n";
-    if (task.tps[i]->type == TaskPoint::AST) {
+    if (task.tps[i]->type == TaskPoint::AAT) {
       aatpoint_print(f1,(AATPoint&)*task.tps[i],state,0);
     } else {
       orderedtaskpoint_print(f1,*task.tps[i],state,0);
