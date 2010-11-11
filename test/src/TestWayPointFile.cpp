@@ -55,8 +55,11 @@ TestWayPointFile(const TCHAR* filename, Waypoints &way_points)
     return false;
   }
 
-  bool success = f->Parse(way_points, NULL);
-  ok1(success);
+  if(!ok1(f->Parse(way_points, NULL))) {
+    delete f;
+    skip(2, 0, "parsing waypoint file failed");
+  }
+
   delete f;
 
   way_points.optimise();
@@ -64,7 +67,7 @@ TestWayPointFile(const TCHAR* filename, Waypoints &way_points)
   ok1(!way_points.empty());
   ok1(way_points.size() == 1);
 
-  return success;
+  return true;
 }
 
 static const Waypoint*
