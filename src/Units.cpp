@@ -521,12 +521,10 @@ Units::FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
     prec = 0;
   else if (value > fixed_ten)
     prec = 1;
-  else if (value > fixed_one)
-    prec = 2;
   else if (!IncludeUnit)
-    prec = 3;
+    prec = 2;
   else {
-    prec = 3;
+    prec = 2;
     if (DistanceUnit == unKiloMeter) {
       prec = 0;
       pU = &UnitDescriptors[unMeter];
