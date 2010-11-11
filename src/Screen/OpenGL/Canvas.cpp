@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 #include "Screen/OpenGL/Texture.hpp"
+#include "Math/FastMath.h"
 
 #include <assert.h>
 
@@ -98,7 +99,34 @@ Canvas::polygon(const POINT* lppt, unsigned cPoints)
 void
 Canvas::circle(int x, int y, unsigned radius)
 {
-  // XXX
+  enum { COUNT = 32 };
+  GLfloat v[(2 + COUNT) * 2], *p = v;
+
+  /* center (only needed for filling) */
+  *p++ = x;
+  *p++ = y;
+  p += 2;
+
+  for (unsigned i = 0; i < COUNT; ++i) {
+    *p++ = x + ICOSTABLE[i * 4096 / COUNT] * (int)radius / 1024.;
+    *p++ = y + ISINETABLE[i * 4096 / COUNT] * (int)radius / 1024.;
+  }
+
+  /* end point == start point (only needed for filling) */
+  v[2] = p[-2];
+  v[3] = p[-1];
+
+  glVertexPointer(2, GL_FLOAT, 0, v);
+
+  if (!brush.is_hollow()) {
+    brush.get_color().set();
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 2 + COUNT);
+  }
+
+  if (pen_over_brush()) {
+    pen.get_color().set();
+    glDrawArrays(GL_LINE_LOOP, 2, COUNT);
+  }
 }
 
 void
