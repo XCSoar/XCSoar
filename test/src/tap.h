@@ -24,13 +24,10 @@
  * SUCH DAMAGE.
  */
 
-#include <assert.h>
-
 /* '## __VA_ARGS__' is a gcc'ism. C99 doesn't allow the token pasting
    and requires the caller to add the final comma if they've ommitted
    the optional arguments */
 #ifdef __GNUC__
-
 # define ok(e, test, ...) ((e) ?					\
 			   _gen_result(1, __func__, __FILE__, __LINE__,	\
 				       test, ## __VA_ARGS__) :		\
