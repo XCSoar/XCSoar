@@ -64,7 +64,7 @@ private:
    */
   struct Rank : public std::binary_function<Intersection, Intersection, bool> {
     bool operator()(const Intersection& x, const Intersection& y) const {
-      return x.first > y.first;
+      return x.first < y.first;
     }
   };
 
