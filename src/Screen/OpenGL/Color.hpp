@@ -44,11 +44,14 @@ struct Color {
   Color():r(0), g(0), b(0), a(1) {}
   Color(int _r, int _g, int _b)
     :r(_r / 256.), g(_g / 256.), b(_b / 256.), a(1) {}
+  Color(int _r, int _g, int _b, int _a)
+    :r(_r / 256.), g(_g / 256.), b(_b / 256.), a(_a) {}
 #else
   GLubyte r, g, b, a;
 
   Color():r(0), g(0), b(0), a(1) {}
   Color(int _r, int _g, int _b):r(_r), g(_g), b(_b), a(255) {}
+  Color(int _r, int _g, int _b, int _a):r(_r), g(_g), b(_b), a(_a) {}
 #endif
 
   /**
@@ -106,6 +109,11 @@ struct Color {
     color.b = blue();
     color.unused = SDL_ALPHA_OPAQUE;
     return color;
+  }
+
+  Color
+  with_alpha(int alpha) const {
+    return Color(red(), green(), blue(), alpha);
   }
 
   /**
