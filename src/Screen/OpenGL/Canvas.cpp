@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 #include "Screen/OpenGL/Texture.hpp"
+#include "Screen/Util.hpp"
 #include "Math/FastMath.h"
 
 #include <assert.h>
@@ -133,7 +134,7 @@ void
 Canvas::segment(int x, int y, unsigned radius,
                 Angle start, Angle end, bool horizon)
 {
-  // XXX
+  ::Segment(*this, x, y, radius, start, end, horizon);
 }
 
 void
