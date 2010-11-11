@@ -60,7 +60,7 @@ enum {
 };
 
 enum {
-  IDOK,
+  IDOK = 1,
   IDCANCEL,
   IDYES,
   IDNO,
