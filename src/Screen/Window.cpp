@@ -120,8 +120,10 @@ Window::created(HWND _hWnd)
 void
 Window::reset()
 {
-  if (defined())
-    assert_thread();
+  if (!defined())
+    return;
+
+  assert_thread();
 
 #ifdef ENABLE_SDL
   on_destroy();
@@ -129,16 +131,14 @@ Window::reset()
   width = 0;
   height = 0;
 #else /* !ENABLE_SDL */
-  if (hWnd != NULL) {
-    ::DestroyWindow(hWnd);
+  ::DestroyWindow(hWnd);
 
-    /* the on_destroy() method must have cleared the variable by
-       now */
-    assert(prev_wndproc == NULL || hWnd == NULL);
+  /* the on_destroy() method must have cleared the variable by
+     now */
+  assert(prev_wndproc == NULL || hWnd == NULL);
 
-    hWnd = NULL;
-    prev_wndproc = NULL;
-  }
+  hWnd = NULL;
+  prev_wndproc = NULL;
 #endif /* !ENABLE_SDL */
 }
 
