@@ -207,15 +207,9 @@ test_flight(int test_num, int n_wind, const double speed_factor,
 
   switch (test_num) {
   case 0:
-    goto_target = true;
-    break;
   case 2:
-    goto_target = true;
-    break;
   case 7:
     goto_target = true;
-    break;
-  default:
     break;
   }
 
