@@ -121,6 +121,20 @@ struct Color {
 #endif
   }
 
+  /**
+   * Configures this color in the OpenGL context.
+   */
+  void set() const {
+#ifdef ANDROID
+    /* on Android, glColor4ub() is not implemented, and we're forced
+       to use floating point math for something as trivial as
+       configuring a RGB color value */
+    glColor4f(r, g, b, a);
+#else
+    glColor4ub(r, g, b, a);
+#endif
+  }
+
   static const Color WHITE, BLACK, GRAY, RED, GREEN, BLUE, YELLOW, CYAN,
     MAGENTA, LIGHT_GRAY;
 };

@@ -30,7 +30,7 @@ void
 Canvas::fill_rectangle(int left, int top, int right, int bottom,
                        const Color color)
 {
-  glColor(color);
+  color.set();
 
 #ifdef ANDROID
   const GLfloat v[] = {
@@ -65,7 +65,7 @@ Canvas::polyline(const POINT *lppt, unsigned cPoints)
   PointsToVertices(v, lppt, cPoints);
   glVertexPointer(2, GL_FLOAT, 0, v);
 
-  glColor(pen.get_color());
+  pen.get_color().set();
   glDrawArrays(GL_LINE_STRIP, 0, cPoints);
 }
 
@@ -80,7 +80,7 @@ Canvas::polygon(const POINT* lppt, unsigned cPoints)
   glVertexPointer(2, GL_FLOAT, 0, v);
 
   if (!brush.is_hollow()) {
-    glColor(brush.get_color());
+    brush.get_color().set();
 #ifdef ANDROID
     // XXX
     glDrawArrays(GL_TRIANGLES, 0, cPoints / 3);
@@ -90,7 +90,7 @@ Canvas::polygon(const POINT* lppt, unsigned cPoints)
   }
 
   if (pen_over_brush()) {
-    glColor(pen.get_color());
+    pen.get_color().set();
     glDrawArrays(GL_LINE_LOOP, 0, cPoints);
   }
 }

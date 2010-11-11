@@ -198,24 +198,10 @@ public:
     // XXX
   }
 
-#ifdef ENABLE_OPENGL
-  void glColor(Color color) {
-#ifdef ANDROID
-    /* on Android, glColor4ub() is not implemented, and we're forced
-       to use floating point math for something as trivial as
-       configuring a RGB color value */
-    glColor4f(color.red() / 256., color.green() / 256.,
-              color.blue() / 256., 1.0);
-#else
-    glColor4ub(color.red(), color.green(), color.blue(), 255);
-#endif
-  }
-#endif
-
   void outline_rectangle(int left, int top, int right, int bottom,
                          Color color) {
 #ifdef ENABLE_OPENGL
-    glColor(pen.get_color());
+    pen.get_color().set();
 
     const GLfloat v[] = {
       left, top,
@@ -345,7 +331,7 @@ public:
 
   void line(int ax, int ay, int bx, int by) {
 #ifdef ENABLE_OPENGL
-    glColor(pen.get_color());
+    pen.get_color().set();
 
     const GLfloat v[] = { ax, ay, bx, by };
     glVertexPointer(2, GL_FLOAT, 0, v);
