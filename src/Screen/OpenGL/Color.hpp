@@ -24,6 +24,131 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_COLOR_HPP
 #define XCSOAR_SCREEN_OPENGL_COLOR_HPP
 
-#include "Screen/SDL/Color.hpp"
+#ifdef ANDROID
+#include <GLES/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
+#include <SDL_video.h> // for SDL_Color
+
+/**
+ * This class represents a color in the RGB color space.  This is used
+ * for compile-time constant colors, or for colors loaded from the
+ * configuration.
+ */
+struct Color {
+#ifdef ANDROID
+  GLfloat r, g, b, a;
+
+  Color():r(0), g(0), b(0), a(1) {}
+  Color(int _r, int _g, int _b)
+    :r(_r / 256.), g(_g / 256.), b(_b / 256.), a(1) {}
+#else
+  GLubyte r, g, b, a;
+
+  Color():r(0), g(0), b(0), a(1) {}
+  Color(int _r, int _g, int _b):r(_r), g(_g), b(_b), a(255) {}
+#endif
+
+  /**
+   * Returns the red part of the color
+   * @return The red part of the color (0-255)
+   */
+  unsigned char
+  red() const
+  {
+#ifdef ANDROID
+    return (unsigned char)(r * 256);
+#else
+    return r;
+#endif
+  }
+
+  /**
+   * Returns the green part of the color
+   * @return The green part of the color (0-255)
+   */
+  unsigned char
+  green() const
+  {
+#ifdef ANDROID
+    return (unsigned char)(g * 256);
+#else
+    return g;
+#endif
+  }
+
+  /**
+   * Returns the blue part of the color
+   * @return The blue part of the color (0-255)
+   */
+  unsigned char
+  blue() const
+  {
+#ifdef ANDROID
+    return (unsigned char)(b * 256);
+#else
+    return b;
+#endif
+  }
+
+  /**
+   * Convert this object to a SDL_Color.
+   *
+   * This function must be removed as soon as we have a pure OpenGL
+   * renderer (without libSDL).
+   */
+  operator const SDL_Color() const {
+    SDL_Color color;
+    color.r = red();
+    color.g = green();
+    color.b = blue();
+    color.unused = SDL_ALPHA_OPAQUE;
+    return color;
+  }
+
+  /**
+   * Returns the highlighted version of this color.
+   */
+  Color
+  highlight() const
+  {
+#ifdef ANDROID
+    return Color((r + 3) / 4., (g + 3) / 4., (b + 3) / 4.);
+#else
+    return Color((r + 0xff * 3) / 4, (g + 0xff * 3) / 4, (b + 0xff * 3) / 4);
+#endif
+  }
+
+  static const Color WHITE, BLACK, GRAY, RED, GREEN, BLUE, YELLOW, CYAN,
+    MAGENTA, LIGHT_GRAY;
+};
+
+/**
+ * Compares two colors
+ * @param a Color 1
+ * @param b Color 2
+ * @return True if colors match, False otherwise
+ */
+static inline bool
+operator ==(const Color a, const Color b)
+{
+  return a.r == b.r
+         && a.g == b.g
+         && a.b == b.b;
+}
+
+/**
+ * Compares two colors (negative)
+ * @param a Color 1
+ * @param b Color 2
+ * @return True if color do not match, False otherwise
+ */
+static inline bool
+operator !=(const Color a, const Color b)
+{
+  return !(a == b);
+}
 
 #endif
