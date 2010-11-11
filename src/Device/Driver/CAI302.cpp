@@ -501,7 +501,7 @@ CAI302CreateOnPort(Port *com_port)
 
 const struct DeviceRegister cai302Device = {
   _T("CAI 302"),
-  drfGPS | drfLogger | drfSpeed | drfVario | drfWind,
+  drfGPS | drfBaroAlt | drfLogger | drfSpeed | drfVario | drfWind,
   CAI302CreateOnPort,
 };
 
