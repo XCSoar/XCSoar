@@ -107,4 +107,10 @@ equals(const Angle a, double b)
   return equals(a.value_degrees(), fixed(b));
 }
 
+static inline bool
+equals(const Angle a, const Angle b)
+{
+  return equals(a.value_degrees(), b.value_degrees());
+}
+
 #endif
