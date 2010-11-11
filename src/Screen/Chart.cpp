@@ -291,8 +291,9 @@ Chart::DrawBarChart(const LeastSquares &lsdata)
   if (unscaled_x || unscaled_y)
     return;
 
-  canvas.white_pen();
-  canvas.white_brush();
+  Brush green_brush(Color::GREEN);
+  canvas.select(green_brush);
+  canvas.null_pen();
 
   int xmin, ymin, xmax, ymax;
 
