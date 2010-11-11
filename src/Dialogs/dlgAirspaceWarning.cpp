@@ -427,7 +427,10 @@ void dlgAirspaceWarningShowDlg()
     // JMW need to deselect everything on new reopening of dialog
     CursorAirspace = NULL;
     FocusAirspace = NULL;
+
+    wf->SetTimerNotify(OnTimer);
     wf->ShowModal();
+    wf->SetTimerNotify(NULL);
   }
 }
 
@@ -451,7 +454,6 @@ dlgAirspaceWarningInit(SingleWindow &parent)
     return;
 
   wf->SetKeyDownNotify(OnKeyDown);
-  wf->SetTimerNotify(OnTimer);
 
   hBrushInsideBk.set(Color(254,50,50));
   hBrushNearBk.set(Color(254,254,50));
