@@ -102,25 +102,24 @@ WayPointFileZander::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {
   TCHAR *endptr;
 
-  long min = _tcstol(src, &endptr, 10);
-  if (endptr == src || *endptr != _T('.') || min < 0)
+  long deg = _tcstol(src, &endptr, 10);
+  if (endptr == src || deg < 0)
     return false;
 
-  src = endptr + 1;
+  long sec = deg % 100;
+  if (sec >= 60)
+    return false;
 
-  long deg = min / 100;
-  min = min % 100;
+  long min = ((deg - sec) % 10000) / 100;
   if (min >= 60)
     return false;
+
+  deg = (deg - min - sec) / 10000;
 
   // Limit angle to +/- 90 degrees for Latitude or +/- 180 degrees for Longitude
   deg = std::min(deg, lat ? 90L : 180L);
 
-  long l = _tcstol(src, &endptr, 10);
-  if (endptr != src + 3 || l < 0 || l >= 1000)
-    return false;
-
-  fixed value = fixed(deg) + fixed(min) / 60 + fixed(l) / 60000;
+  fixed value = fixed(deg) + fixed(min) / 60 + fixed(sec) / 3600;
 
   TCHAR sign = *src;
   if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')
