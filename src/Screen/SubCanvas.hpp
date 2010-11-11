@@ -39,8 +39,16 @@ Copyright_License {
  * #Canvas.
  */
 class SubCanvas : public Canvas {
+#ifdef ENABLE_OPENGL
+  GLfloat relative_x, relative_y;
+#endif
+
 public:
-  SubCanvas(Canvas &canvas, int _x, int _y, unsigned _width, unsigned _height) {
+  SubCanvas(Canvas &canvas, int _x, int _y, unsigned _width, unsigned _height)
+#ifdef ENABLE_OPENGL
+    :relative_x(_x), relative_y(_y)
+#endif
+  {
     surface = canvas.surface;
     x_offset = canvas.x_offset + _x;
     y_offset = canvas.y_offset + _y;
@@ -49,15 +57,14 @@ public:
 
 #ifdef ENABLE_OPENGL
     glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glTranslatef(_x, _y, 0);
+    glTranslatef(relative_x, relative_y, 0);
 #endif
   }
 
   ~SubCanvas() {
 #ifdef ENABLE_OPENGL
     glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
+    glTranslatef(-relative_x, -relative_y, 0);
 #endif
   }
 };
