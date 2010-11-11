@@ -165,6 +165,12 @@ private:
   }
 
   void set_buffer_pens(const AbstractAirspace &airspace) {
+#ifdef ENABLE_OPENGL
+    Color color = Graphics::Colours[m_settings_map.iAirspaceColour[airspace.get_type()]];
+    m_buffer.select(Brush(color.with_alpha(48)));
+    m_buffer.null_pen();
+#else /* !OPENGL */
+
     // this color is used as the black bit
     m_buffer.set_text_color(light_color(Graphics::Colours[m_settings_map.
                                         iAirspaceColour[airspace.get_type()]]));
@@ -174,7 +180,6 @@ private:
                                             iAirspaceBrush[airspace.get_type()]]);
     m_buffer.null_pen();
 
-#ifndef ENABLE_OPENGL
     if (m_warnings.is_warning(airspace) || m_warnings.is_inside(airspace)) {
       m_stencil.black_brush();
       m_stencil.select(pen_medium);
@@ -260,9 +265,19 @@ MapWindow::DrawAirspace(Canvas &canvas)
   // JMW TODO wasteful to draw twice, can't it be drawn once?
   // we are using two draws so borders go on top of everything
 
+#ifdef ENABLE_OPENGL
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#endif
+
   airspace_database->visit_within_range(render_projection.GetGeoLocation(),
                                         render_projection.GetScreenDistanceMeters(),
                                         v, visible);
+
+#ifdef ENABLE_OPENGL
+  glDisable(GL_BLEND);
+#endif
+
   v.draw_intercepts();
 
   AirspaceOutlineRenderer outline_renderer(canvas, render_projection,
