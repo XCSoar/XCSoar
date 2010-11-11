@@ -30,6 +30,8 @@ Copyright_License {
 #include <SDL_events.h>
 
 class TopWindow;
+class SDLTimer;
+class Window;
 
 class EventLoop : private NonCopyable {
   TopWindow &top_window;
@@ -46,6 +48,24 @@ public:
 
   bool get(SDL_Event &event);
   void dispatch(SDL_Event &event);
+};
+
+namespace EventQueue {
+  /**
+   * Purge all matching events from the event queue.
+   */
+  void purge(Uint32 mask,
+             bool (*match)(const SDL_Event &event, void *ctx), void *ctx);
+
+  /**
+   * Purge all events for this Window from the event queue.
+   */
+  void purge(Window &window);
+
+  /**
+   * Purge all events for this SDLTimer from the event queue.
+   */
+  void purge(SDLTimer &timer);
 };
 
 #endif

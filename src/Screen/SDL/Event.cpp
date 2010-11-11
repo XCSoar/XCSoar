@@ -60,3 +60,42 @@ EventLoop::dispatch(SDL_Event &event)
   } else
     ((Window &)top_window).on_event(event);
 }
+
+void
+EventQueue::purge(Uint32 mask,
+                  bool (*match)(const SDL_Event &event, void *ctx),
+                  void *ctx)
+{
+  SDL_Event events[256]; // is that enough?
+  int count = SDL_PeepEvents(events, 256, SDL_GETEVENT, mask);
+  assert(count >= 0);
+
+  for (int i = count - 1; i >= 0; --i)
+    if (!match(events[i], ctx))
+      std::copy(events + i + 1, events + count--, events + i);
+  SDL_PeepEvents(events, count, SDL_ADDEVENT, mask);
+}
+
+static bool
+match_window(const SDL_Event &event, void *ctx)
+{
+  return event.type == Window::EVENT_USER && event.user.data1 == ctx;
+}
+
+void
+EventQueue::purge(Window &window)
+{
+  purge(SDL_EVENTMASK(Window::EVENT_USER), match_window, (void *)&window);
+}
+
+static bool
+match_timer(const SDL_Event &event, void *ctx)
+{
+  return event.type == Window::EVENT_TIMER && event.user.data2 == ctx;
+}
+
+void
+EventQueue::purge(SDLTimer &timer)
+{
+  purge(SDL_EVENTMASK(Window::EVENT_TIMER), match_timer, (void *)&timer);
+}

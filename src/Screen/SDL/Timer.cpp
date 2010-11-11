@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/SDL/Timer.hpp"
+#include "Screen/SDL/Event.hpp"
 #include "Screen/Window.hpp"
 
 SDLTimer::SDLTimer(Window &_window, unsigned ms)
@@ -32,6 +33,8 @@ SDLTimer::SDLTimer(Window &_window, unsigned ms)
 SDLTimer::~SDLTimer()
 {
   ::SDL_RemoveTimer(id);
+
+  EventQueue::purge(*this);
 }
 
 Uint32

@@ -27,7 +27,9 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Asset.hpp"
 
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+#include "Screen/SDL/Event.hpp"
+#else
 #include "Screen/GDI/Event.hpp"
 #include "Screen/GDI/PaintCanvas.hpp"
 #endif /* !ENABLE_SDL */
@@ -280,6 +282,8 @@ Window::on_destroy()
     parent->remove_child(*this);
     parent = NULL;
   }
+
+  EventQueue::purge(*this);
 #else /* !ENABLE_SDL */
   assert(hWnd != NULL);
 
