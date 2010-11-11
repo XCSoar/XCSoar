@@ -46,16 +46,15 @@ RasterMap::GetField(const GeoPoint &location) const
   return 0;
 }
 
-static const Waypoint*
-TestWayPointFile(const TCHAR* filename)
+static bool
+TestWayPointFile(const TCHAR* filename, Waypoints &way_points)
 {
   WayPointFile *f = WayPointFile::create(filename, 0);
   if (!ok1(f != NULL)) {
-    skip(6, 0, "opening waypoint file failed");
-    return NULL;
+    skip(3, 0, "opening waypoint file failed");
+    return false;
   }
 
-  Waypoints way_points;
   bool success = f->Parse(way_points, NULL);
   ok1(success);
   delete f;
@@ -65,26 +64,26 @@ TestWayPointFile(const TCHAR* filename)
   ok1(!way_points.empty());
   ok1(way_points.size() == 1);
 
-  const Waypoint *wp = way_points.lookup_name(_T("Bergneustadt"));
-  if (!ok1(wp != NULL)) {
-    skip(3, 0, "waypoint not found");
-    return NULL;
-  }
-  ok1(equals(wp->Location.Longitude, 7.7061111111111114));
-  ok1(equals(wp->Location.Latitude, 51.051944444444445));
-  ok1(equals(wp->Altitude, 488));
-
-  return wp;
+  return success;
 }
 
 static void
 TestWinPilot()
 {
-  const Waypoint *wp = TestWayPointFile(_T("test/data/waypoints.dat"));
-  if (wp == NULL) {
-    skip(7, 0, "TestWayPointFile() failed");
+  Waypoints way_points;
+  if (!TestWayPointFile(_T("test/data/waypoints.dat"), way_points)) {
+    skip(11, 0, "opening waypoint file failed");
     return;
   }
+
+  const Waypoint *wp = way_points.lookup_name(_T("Bergneustadt"));
+  if (!ok1(wp != NULL)) {
+    skip(10, 0, "waypoint not found");
+    return;
+  }
+  ok1(equals(wp->Location.Longitude, 7.7061111111111114));
+  ok1(equals(wp->Location.Latitude, 51.051944444444445));
+  ok1(equals(wp->Altitude, 488));
 
   ok1(wp->Flags.Airport);
   ok1(wp->Flags.TurnPoint);
@@ -98,11 +97,20 @@ TestWinPilot()
 static void
 TestSeeYou()
 {
-  const Waypoint *wp = TestWayPointFile(_T("test/data/waypoints.cup"));
-  if (wp == NULL) {
-    skip(6, 0, "TestWayPointFile() failed");
+  Waypoints way_points;
+  if (!TestWayPointFile(_T("test/data/waypoints.cup"), way_points)) {
+    skip(10, 0, "opening waypoint file failed");
     return;
   }
+
+  const Waypoint *wp = way_points.lookup_name(_T("Bergneustadt"));
+  if (!ok1(wp != NULL)) {
+    skip(9, 0, "waypoint not found");
+    return;
+  }
+  ok1(equals(wp->Location.Longitude, 7.7061111111111114));
+  ok1(equals(wp->Location.Latitude, 51.051944444444445));
+  ok1(equals(wp->Altitude, 488));
 
   ok1(wp->Flags.Airport);
   ok1(wp->Flags.TurnPoint);
@@ -117,11 +125,20 @@ TestSeeYou()
 static void
 TestZander()
 {
-  const Waypoint *wp = TestWayPointFile(_T("test/data/waypoints.wpz"));
-  if (wp == NULL) {
-    skip(6, 0, "TestWayPointFile() failed");
+  Waypoints way_points;
+  if (!TestWayPointFile(_T("test/data/waypoints.wpz"), way_points)) {
+    skip(11, 0, "opening waypoint file failed");
     return;
   }
+
+  const Waypoint *wp = way_points.lookup_name(_T("Bergneustadt"));
+  if (!ok1(wp != NULL)) {
+    skip(10, 0, "waypoint not found");
+    return;
+  }
+  ok1(equals(wp->Location.Longitude, 7.7061111111111114));
+  ok1(equals(wp->Location.Latitude, 51.051944444444445));
+  ok1(equals(wp->Altitude, 488));
 
   ok1(wp->Flags.Airport);
   ok1(wp->Flags.TurnPoint);
