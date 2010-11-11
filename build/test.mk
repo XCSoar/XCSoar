@@ -1,5 +1,4 @@
 TESTFAST = \
-	$(TARGET_BIN_DIR)/test_olc$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_fixed$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_waypoints$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_pressure$(TARGET_EXEEXT) \
@@ -9,15 +8,12 @@ TESTFAST = \
 	$(TARGET_BIN_DIR)/test_automc$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_trees$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_airspace$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_replay$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_highterrain$(TARGET_EXEEXT)
-
-ifeq ($(HAVE_WIN32),y)
-TESTFAST += $(TARGET_BIN_DIR)/test_win32$(TARGET_EXEEXT)
-endif
+	$(TARGET_BIN_DIR)/test_replay$(TARGET_EXEEXT)
 
 TESTSLOW = \
+	$(TARGET_BIN_DIR)/test_olc$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_airspace$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_highterrain$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_effectivemc$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_randomtask$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_vopt$(TARGET_EXEEXT) \
@@ -26,6 +22,10 @@ TESTSLOW = \
 	$(TARGET_BIN_DIR)/test_aat$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_acfilter$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_flight$(TARGET_EXEEXT)
+
+ifeq ($(HAVE_WIN32),y)
+TESTSLOW += $(TARGET_BIN_DIR)/test_win32$(TARGET_EXEEXT)
+endif
 
 HARNESS_PROGRAMS = $(TESTFAST) $(TESTSLOW)
 
