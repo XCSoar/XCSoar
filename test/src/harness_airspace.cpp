@@ -11,7 +11,7 @@
 static void
 airspace_random_properties(AbstractAirspace& as)
 {
-  AirspaceClass_t Type = (AirspaceClass_t)(rand()%15);
+  AirspaceClass_t Type = (AirspaceClass_t)(rand()%14);
   AIRSPACE_ALT base;
   AIRSPACE_ALT top;
   base.Altitude = fixed(rand()%2000);
