@@ -83,15 +83,8 @@ GetWayPoint(const Waypoint org_wp, const Waypoints &way_points)
 }
 
 static void
-TestWinPilot(const Waypoint org_wp)
+TestWinPilotWayPoint(const Waypoint org_wp, const Waypoint *wp)
 {
-  Waypoints way_points;
-  if (!TestWayPointFile(_T("test/data/waypoints.dat"), way_points)) {
-    skip(11, 0, "opening waypoint file failed");
-    return;
-  }
-
-  const Waypoint *wp = GetWayPoint(org_wp, way_points);
   if (wp == NULL) {
     skip(7, 0, "waypoint not found");
     return;
@@ -107,15 +100,21 @@ TestWinPilot(const Waypoint org_wp)
 }
 
 static void
-TestSeeYou(const Waypoint org_wp)
+TestWinPilot(const Waypoint org_wp)
 {
   Waypoints way_points;
-  if (!TestWayPointFile(_T("test/data/waypoints.cup"), way_points)) {
-    skip(10, 0, "opening waypoint file failed");
+  if (!TestWayPointFile(_T("test/data/waypoints.dat"), way_points)) {
+    skip(11, 0, "opening waypoint file failed");
     return;
   }
 
   const Waypoint *wp = GetWayPoint(org_wp, way_points);
+  TestWinPilotWayPoint(org_wp, wp);
+}
+
+static void
+TestSeeYouWayPoint(const Waypoint org_wp, const Waypoint *wp)
+{
   if (wp == NULL) {
     skip(6, 0, "waypoint not found");
     return;
@@ -132,15 +131,21 @@ TestSeeYou(const Waypoint org_wp)
 }
 
 static void
-TestZander(const Waypoint org_wp)
+TestSeeYou(const Waypoint org_wp)
 {
   Waypoints way_points;
-  if (!TestWayPointFile(_T("test/data/waypoints.wpz"), way_points)) {
-    skip(11, 0, "opening waypoint file failed");
+  if (!TestWayPointFile(_T("test/data/waypoints.cup"), way_points)) {
+    skip(10, 0, "opening waypoint file failed");
     return;
   }
 
   const Waypoint *wp = GetWayPoint(org_wp, way_points);
+  TestSeeYouWayPoint(org_wp, wp);
+}
+
+static void
+TestZanderWayPoint(const Waypoint org_wp, const Waypoint *wp)
+{
   if (wp == NULL) {
     skip(7, 0, "waypoint not found");
     return;
@@ -153,6 +158,19 @@ TestZander(const Waypoint org_wp)
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
   ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
   ok1(wp->Flags.Restricted == org_wp.Flags.Restricted);
+}
+
+static void
+TestZander(const Waypoint org_wp)
+{
+  Waypoints way_points;
+  if (!TestWayPointFile(_T("test/data/waypoints.wpz"), way_points)) {
+    skip(11, 0, "opening waypoint file failed");
+    return;
+  }
+
+  const Waypoint *wp = GetWayPoint(org_wp, way_points);
+  TestZanderWayPoint(org_wp, wp);
 }
 
 int main(int argc, char **argv)
