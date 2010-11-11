@@ -32,6 +32,7 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
 {
   glColor(color);
 
+#ifdef ANDROID
   const GLfloat v[] = {
     left, top,
     right, top,
@@ -40,11 +41,10 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
   };
   glVertexPointer(2, GL_FLOAT, 0, v);
 
-#ifdef ANDROID
   GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
 #else
-  glDrawArrays(GL_QUADS, 0, 4);
+  glRecti(left, top, right, bottom);
 #endif
 }
 
