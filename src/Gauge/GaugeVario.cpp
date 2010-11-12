@@ -188,19 +188,12 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
 
   if (ShowMc) {
     fixed mc = Units::ToUserVSpeed(Calculated().common_stats.current_mc);
-    if (SettingsComputer().auto_mc)
-      RenderValue(canvas, orgBottom.x, orgBottom.y,
-		  &diValueBottom, &diLabelBottom,
-		  mc, _T("Auto Mc"));
-    else
-      RenderValue(canvas, orgBottom.x, orgBottom.y,
-		  &diValueBottom, &diLabelBottom,
-		  mc, _T("Mc"));
+    RenderValue(canvas, orgBottom.x, orgBottom.y, &diValueBottom, &diLabelBottom,
+                mc, SettingsComputer().auto_mc ? _T("Auto Mc") : _T("Mc"));
   }
 
   if (ShowSpeedToFly)
-    RenderSpeedToFly(canvas,
-                     get_right() - 11, get_height() / 2);
+    RenderSpeedToFly(canvas, get_right() - 11, get_height() / 2);
   else
     RenderClimb(canvas);
 
