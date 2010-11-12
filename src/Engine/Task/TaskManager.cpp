@@ -93,7 +93,11 @@ TaskManager::incrementActiveTaskPoint(int offset)
 {
   if (active_task) {
     unsigned i = getActiveTaskPointIndex();
-    setActiveTaskPoint(i+offset);
+    if ((int)i+offset<0) { // prevent wrap-around
+      setActiveTaskPoint(0);
+    } else {
+      setActiveTaskPoint(i+offset);
+    }
   }
 }
 
