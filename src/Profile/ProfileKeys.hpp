@@ -95,8 +95,6 @@ extern const TCHAR szProfileSoundTask[];
 extern const TCHAR szProfileSoundModes[];
 extern const TCHAR szProfileNettoSpeed[];
 extern const TCHAR szProfileAutoBlank[];
-extern const TCHAR szProfileAutoBacklight[]; // VENTA4
-extern const TCHAR szProfileAutoSoundVolume[]; // VENTA4
 extern const TCHAR szProfileGestures[];
 extern const TCHAR szProfileAverEffTime[]; // VENTA6
 extern const TCHAR szProfileVarioGauge[];
