@@ -146,8 +146,6 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
   static int ValueHeight;
   static bool InitDone = false;
 
-  fixed vval;
-
 #ifdef ENABLE_OPENGL
   InitDone = false;
 #endif
@@ -169,10 +167,6 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
 
     InitDone = true;
   }
-
-  vval = Units::ToUserVSpeed(Basic().TotalEnergyVario);
-
-  fixed vvaldisplay = min(fixed(99.9), max(fixed(-99.9), vval));
 
   if (ShowAvgText) {
     // JMW averager now displays netto average if not circling
@@ -209,6 +203,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
   static int sval_last = 0;
   static int ival_last = 0;
 
+  fixed vval = Units::ToUserVSpeed(Basic().TotalEnergyVario);
   ival = ValueToNeedlePos(fixed(vval));
   sval = ValueToNeedlePos(Basic().GliderSinkRate);
   if (ShowAveNeedle) {
@@ -244,11 +239,14 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
 
   RenderNeedle(canvas, ival, false, false);
 
-  if (ShowGross)
+  if (ShowGross) {
+    fixed vvaldisplay = min(fixed(99.9), max(fixed(-99.9), vval));
+
     RenderValue(canvas, orgMiddle.x, orgMiddle.y,
                 &diValueMiddle, &diLabelMiddle,
                 vvaldisplay,
                 _T("Gross"));
+  }
 
   RenderZero(canvas);
 }
