@@ -709,7 +709,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
     if (BALLAST < fixed(0.001))
       Temp[0] = _T('\0');
     else
-      _stprintf(Temp, _T("%.0f%%"), (double)(BALLAST * 100));
+      _stprintf(Temp, _T("%d%%"), (int)(BALLAST * 100));
 
     canvas.set_text_color(colText);
     canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
