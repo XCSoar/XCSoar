@@ -35,6 +35,8 @@
 #include <utility>
 #include <algorithm>
 
+#include <assert.h>
+
 /**
  * A first-in-first-out buffer: you can append data at the end, and
  * read data from the beginning.  This class automatically shifts the
@@ -62,6 +64,10 @@ protected:
     if (head == 0)
       return;
 
+    assert(head <= size);
+    assert(tail <= size);
+    assert(tail >= head);
+
     std::copy(data + head, data + tail, data);
 
     tail -= head;
@@ -87,6 +93,10 @@ public:
    * the buffer returned by write().
    */
   void append(unsigned n) {
+    assert(tail <= size);
+    assert(n <= size);
+    assert(tail + n <= size);
+
     tail += n;
   }
 
@@ -102,6 +112,11 @@ public:
    * Marks a chunk as consumed.
    */
   void consume(unsigned n) {
+    assert(tail <= size);
+    assert(head <= tail);
+    assert(n <= tail);
+    assert(head + n <= tail);
+
     head += n;
   }
 };
