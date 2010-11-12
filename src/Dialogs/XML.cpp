@@ -207,7 +207,7 @@ GetPosition(const XMLNode &Node, const RECT rc, int bottom_most=-1)
 
   if (pt.x < -1) {
     pt.x += rc.right;
-    pt.no_scaling = false;
+    pt.no_scaling = true;
   }
   if (pt.y < -1)
     pt.y += rc.bottom;
