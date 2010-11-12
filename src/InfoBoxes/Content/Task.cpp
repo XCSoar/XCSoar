@@ -30,6 +30,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "MainWindow.hpp"
 #include "LocalTime.hpp"
+#include "Engine/Util/Gradient.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -264,14 +265,17 @@ InfoBoxContentNextLD::Update(InfoBoxWindow &infobox)
 
   fixed gradient = XCSoarInterface::Calculated().task_stats.current_leg.gradient;
 
-  if (!positive(gradient) || gradient > fixed(500)) {
+  if (!positive(gradient)) {
     infobox.SetValue(_T("+++"));
     return;
   }
-
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%d"), (int)gradient);
-  infobox.SetValue(tmp);
+  if (::GradientValid(gradient)) {
+    TCHAR tmp[32];
+    _stprintf(tmp, _T("%d"), (int)gradient);
+    infobox.SetValue(tmp);
+  } else {
+    infobox.SetInvalid();
+  }
 }
 
 void
@@ -466,14 +470,17 @@ InfoBoxContentFinalLD::Update(InfoBoxWindow &infobox)
 
   fixed gradient = task_stats.total.gradient;
 
-  if (!positive(gradient) || gradient > fixed(500)) {
+  if (!positive(gradient)) {
     infobox.SetValue(_T("+++"));
     return;
   }
-
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%d"), (int)gradient);
-  infobox.SetValue(tmp);
+  if (::GradientValid(gradient)) {
+    TCHAR tmp[32];
+    _stprintf(tmp, _T("%d"), (int)gradient);
+    infobox.SetValue(tmp);
+  } else {
+    infobox.SetInvalid();
+  }
 }
 
 void
@@ -487,14 +494,17 @@ InfoBoxContentFinalGR::Update(InfoBoxWindow &infobox)
 
   fixed gradient = task_stats.total.gradient;
 
-  if (!positive(gradient) || gradient > fixed(500)) {
+  if (!positive(gradient)) {
     infobox.SetValue(_T("+++"));
     return;
   }
-
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%d"), (int)gradient);
-  infobox.SetValue(tmp);
+  if (::GradientValid(gradient)) {
+    TCHAR tmp[32];
+    _stprintf(tmp, _T("%d"), (int)gradient);
+    infobox.SetValue(tmp);
+  } else {
+    infobox.SetInvalid();
+  }
 }
 
 void
