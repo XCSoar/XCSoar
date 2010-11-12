@@ -36,8 +36,8 @@ Trace::append(const AIRCRAFT_STATE& state)
   m_last_point = tp;
 
   // update deltas.  Last point is always high delta
-  distance_delta_map[tp.time] = null_delta;
-  time_delta_map[tp.time] = null_time;
+  delta_map[tp.time].distance = null_delta;
+  delta_map[tp.time].time = null_time;
 
   TraceTree::const_iterator it_prev = find_prev(tp);
   if (it_prev != end())
@@ -55,8 +55,8 @@ Trace::update_delta(TraceTree::const_iterator it_prev,
   const unsigned d_this = it_prev->approx_dist(*it) + it->approx_dist(*it_next);
   const unsigned d_rem = it_prev->approx_dist(*it_next);
   const unsigned delta = d_this - d_rem;
-  distance_delta_map[it->time] = delta;
-  time_delta_map[it->time] = std::max(it->dt(), it_next->dt());
+  delta_map[it->time].distance = delta;
+  delta_map[it->time].time = std::max(it->dt(), it_next->dt());
 }
 
 bool
@@ -84,13 +84,13 @@ Trace::lowest_delta() const
 
   unsigned lowest = null_delta;
 
-  TraceDeltaMap::const_iterator it = distance_delta_map.begin();
-  for (++it; it != distance_delta_map.end(); ++it) {
+  TraceDeltaMap::const_iterator it = delta_map.begin();
+  for (++it; it != delta_map.end(); ++it) {
     if (inside_recent_time(it->first))
       return lowest;
 
-    if (it->second < lowest)
-      lowest = it->second;
+    if (it->second.distance < lowest)
+      lowest = it->second.distance;
   }
   return lowest;
 }
@@ -114,24 +114,21 @@ Trace::erase_earlier_than(unsigned min_time)
     }
   } while (found);
 
-  distance_delta_map.erase(distance_delta_map.begin(), 
-                           distance_delta_map.lower_bound(min_time));
-
-  time_delta_map.erase(time_delta_map.begin(), 
-                       time_delta_map.lower_bound(min_time));
+  delta_map.erase(delta_map.begin(), 
+                  delta_map.lower_bound(min_time));
 }
 
 void
 Trace::trim_point_time()
 {
-  for (TraceDeltaMap::const_iterator it = distance_delta_map.begin(); 
-       it != distance_delta_map.end(); ++it) {
+  for (TraceDeltaMap::const_iterator it = delta_map.begin(); 
+       it != delta_map.end(); ++it) {
     const unsigned this_time = it->first;
 
     if (inside_time_window(this_time)) {
       erase_earlier_than(this_time);
-      distance_delta_map[this_time] = null_delta;
-      time_delta_map[this_time] = null_time;
+      delta_map[this_time].distance = null_delta;
+      delta_map[this_time].time = null_time;
 
       return;
     }
@@ -151,19 +148,19 @@ Trace::trim_point_delta()
   TraceTree::const_iterator candidate = trace_tree.end();
 
 #ifndef NDEBUG
-  const unsigned min_time = distance_delta_map.begin()->first;
+  const unsigned min_time = delta_map.begin()->first;
 #endif
 
   for (TraceTree::const_iterator it = trace_tree.begin();
        it != trace_tree.end(); ++it) {
     const unsigned this_time = it->time;
     assert(this_time >= min_time);
+    const TraceDelta& this_delta = delta_map[this_time];
 
     if (!inside_recent_time(this_time) &&
-        distance_delta_map[this_time] == delta) {
-      const unsigned dt = time_delta_map[this_time];
-      if (dt < lowest_dt) {
-        lowest_dt = dt;
+        this_delta.distance == delta) {
+      if (this_delta.time < lowest_dt) {
+        lowest_dt = this_delta.time;
         candidate = it;
       }
     }
@@ -229,9 +226,8 @@ Trace::erase(TraceTree::const_iterator& rit)
   TracePoint tp_next = *it_next;
   tp_next.last_time = it_prev->time;
 
-  // remove erased point from the distance/time delta maps
-  distance_delta_map.erase(rit->time);
-  time_delta_map.erase(rit->time);
+  // remove erased point from the delta map
+  delta_map.erase(rit->time);
 
   // remove current (deletion), and next (to be replaced)
   trace_tree.erase(rit);
@@ -253,8 +249,7 @@ Trace::clear()
   m_optimise_time = null_time;
   m_last_point.time = null_time;
 
-  distance_delta_map.clear();
-  time_delta_map.clear();
+  delta_map.clear();
 }
 
 unsigned

@@ -148,7 +148,11 @@ public:
   TracePointVector get_trace_points(const unsigned max_points) const;
 
 private:
-  typedef std::map<unsigned, unsigned> TraceDeltaMap;
+  struct TraceDelta {
+    unsigned time;
+    unsigned distance;
+  };
+  typedef std::map<unsigned, TraceDelta> TraceDeltaMap;
 
   static void thin_trace(TracePointList& vec, const unsigned range_sq);
   void trim_point_delta();
@@ -164,8 +168,7 @@ private:
   bool inside_time_window(unsigned time) const;
 
   TraceTree trace_tree;
-  TraceDeltaMap distance_delta_map;
-  TraceDeltaMap time_delta_map;
+  TraceDeltaMap delta_map;
 
   TaskProjection task_projection;
 
