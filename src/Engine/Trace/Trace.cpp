@@ -221,20 +221,26 @@ Trace::erase(TraceTree::const_iterator& rit)
   TraceTree::const_iterator it_prev = find_prev(*rit);
   TraceTree::const_iterator it_next = find_next(*rit);
 
+  // don't erase if last or first point in tree
   if ((it_prev == trace_tree.end()) || (it_next == trace_tree.end()))
     return;
 
+  // create new point representing the next point since this is merged with it
   TracePoint tp_next = *it_next;
   tp_next.last_time = it_prev->time;
 
+  // remove erased point from the distance/time delta maps
   distance_delta_map.erase(rit->time);
   time_delta_map.erase(rit->time);
 
+  // remove current (deletion), and next (to be replaced)
   trace_tree.erase(rit);
   trace_tree.erase(it_next);
 
+  // insert point replacement
   it_next = trace_tree.insert(tp_next);
 
+  // recompute data for previous and replacement point
   update_delta(find_prev(*it_prev), it_prev, it_next);
   update_delta(it_prev, it_next, find_next(*it_next));
 }
