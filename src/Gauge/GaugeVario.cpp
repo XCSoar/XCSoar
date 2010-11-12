@@ -339,8 +339,7 @@ GaugeVario::ValueToNeedlePos(fixed Value)
   if (!InitDone){
     degrees_per_unit = (int)(GAUGEVARIOSWEEP /
                              Units::ToUserVSpeed(GAUGEVARIORANGE));
-    gmax = max(80, (int)(degrees_per_unit *
-                         Units::ToUserVSpeed(GAUGEVARIORANGE)) + 2);
+    gmax = max(80, (int)(GAUGEVARIOSWEEP) + 2);
     MakeAllPolygons();
     InitDone = true;
   }
