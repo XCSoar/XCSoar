@@ -788,7 +788,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
     if (BUGS > fixed(0.999))
       Temp[0] = _T('\0');
     else
-      _stprintf(Temp, _T("%.0f%%"), (double)((fixed_one - BUGS) * 100));
+      _stprintf(Temp, _T("%d%%"), (int)((fixed_one - BUGS) * 100));
 
     canvas.set_text_color(colText);
     canvas.text_opaque(orgLabel.x, orgLabel.y, recValueBk, Temp);
