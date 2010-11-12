@@ -199,7 +199,7 @@ test_replay(const Contests olc_type,
       state_last = sim.state;
 
 #ifdef DO_PRINT
-      if (verbose) {
+      if (verbose>1) {
         sim.print(f);
         f.flush();
       }
