@@ -44,7 +44,7 @@ using std::max;
 
 #define NARROWS 3
 #define GAUGEVARIORANGE fixed(5) // 5 m/s
-#define GAUGEVARIOSWEEP fixed(180) // degrees total sweep
+#define GAUGEVARIOSWEEP fixed(90) // degrees total sweep
 #define YOFFSET 36
 #define DeltaVstep fixed_four
 #define DeltaVlimit fixed(16)
@@ -337,7 +337,7 @@ GaugeVario::ValueToNeedlePos(fixed Value)
   int i;
 
   if (!InitDone){
-    degrees_per_unit = (int)((GAUGEVARIOSWEEP / 2) /
+    degrees_per_unit = (int)(GAUGEVARIOSWEEP /
                              Units::ToUserVSpeed(GAUGEVARIORANGE));
     gmax = max(80, (int)(degrees_per_unit *
                          Units::ToUserVSpeed(GAUGEVARIORANGE)) + 2);
