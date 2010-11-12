@@ -44,14 +44,23 @@ extract_line(const char *data, unsigned length)
 char *
 LineSplitter::read()
 {
-  Source<char>::Range range = source.read();
-  if (range.second == 0)
-    /* end of file */
-    return NULL;
+  /* is there enough data left in the buffer to read another line? */
+  if (memchr(remaining.first, '\n', remaining.second) == NULL) {
+    /* no: read more data from the Source */
+    remaining = source.read();
+    if (remaining.second == 0)
+      /* end of file */
+      return NULL;
+  }
 
+  assert(remaining.second > 0);
+
+  Source<char>::Range range = remaining;
   std::pair<unsigned, unsigned> bounds =
     extract_line(range.first, range.second);
   source.consume(bounds.second);
+  remaining.first += bounds.second;
+  remaining.second -= bounds.second;
 
   if (bounds.first >= range.second) {
     /* last line, not terminated by a line feed: copy to local buffer,

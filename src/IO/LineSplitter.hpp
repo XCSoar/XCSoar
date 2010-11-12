@@ -43,12 +43,18 @@ class LineSplitter : public NLineReader {
 protected:
   Source<char> &source;
 
+  /**
+   * The remaining range of the buffer returned by the Source.
+   */
+  Source<char>::Range remaining;
+
   /** a buffer for guaranteeing that the last line is
       null-terminated */
   ReusableArray<char> last;
 
 public:
-  LineSplitter(Source<char> &_source):source(_source) {}
+  LineSplitter(Source<char> &_source)
+    :source(_source), remaining(NULL, 0) {}
 
   virtual char *read();
   virtual long size() const;
