@@ -1976,7 +1976,7 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpGestures")); // VENTA6
+  wp = (WndProperty*)wf->FindByName(_T("prpGestures"));
   if (wp) {
     if (settings_computer.EnableGestures != wp->GetDataField()->GetAsBoolean()) {
       settings_computer.EnableGestures =
