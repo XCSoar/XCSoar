@@ -72,6 +72,10 @@ inline void load_scores(unsigned &contest_handicap) {
   fscore.close();
 
   contest_handicap = (unsigned)official_index;
+
+  if (contest_handicap==0) { // in case file load failed
+    contest_handicap = 100;
+  }
 }
 
 class ReplayLoggerSim: public IgcReplay
