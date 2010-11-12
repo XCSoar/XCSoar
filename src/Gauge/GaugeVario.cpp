@@ -333,8 +333,7 @@ int
 GaugeVario::ValueToNeedlePos(fixed Value)
 {
   static bool InitDone = false;
-  static fixed degrees_per_unit = GAUGEVARIOSWEEP /
-                                  Units::ToUserVSpeed(GAUGEVARIORANGE);
+  static fixed degrees_per_unit = GAUGEVARIOSWEEP / GAUGEVARIORANGE;
   int i;
 
   if (!InitDone){
@@ -342,7 +341,7 @@ GaugeVario::ValueToNeedlePos(fixed Value)
     MakeAllPolygons();
     InitDone = true;
   }
-  i = iround(Units::ToUserVSpeed(Value * degrees_per_unit));
+  i = iround(Value * degrees_per_unit);
   i = min(gmax,max(-gmax,i));
   return i;
 }
