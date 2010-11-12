@@ -26,22 +26,24 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 
-class InfoBoxContentAlternateBest : public InfoBoxContent
+class InfoBoxContentAlternateName : public InfoBoxContent
 {
 public:
+  InfoBoxContentAlternateName(const unsigned _index):
+    InfoBoxContent(), index(_index) {}
   virtual void Update(InfoBoxWindow &infobox);
+private:
+  const unsigned index;
 };
 
-class InfoBoxContentAlternate1 : public InfoBoxContent
+class InfoBoxContentAlternateGR : public InfoBoxContent
 {
 public:
+  InfoBoxContentAlternateGR(const unsigned _index):
+    InfoBoxContent(), index(_index) {}
   virtual void Update(InfoBoxWindow &infobox);
-};
-
-class InfoBoxContentAlternate2 : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxWindow &infobox);
+private:
+  const unsigned index;
 };
 
 #endif

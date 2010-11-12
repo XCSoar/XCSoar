@@ -26,15 +26,18 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-
+#include "Engine/Util/Gradient.hpp"
 #include <tchar.h>
 
 void
-InfoBoxContentAlternateBest::Update(InfoBoxWindow &infobox)
+InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
 {
-  infobox.SetTitle(_("Best Altn"));
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("Altrn %d"), index+1);
+  infobox.SetTitle(tmp);
+
   const AbortTask::AlternateVector alternates = protected_task_manager.getAlternates();
-  const Waypoint* way_point = (alternates.size()>0) ? &alternates[0].first : NULL;
+  const Waypoint* way_point = (alternates.size()>index) ? &alternates[index].first : NULL;
 
   SetCommentFromWaypointName(infobox, way_point);
   if (!way_point) {
@@ -42,7 +45,7 @@ InfoBoxContentAlternateBest::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  const GlideResult& solution = alternates[0].second;
+  const GlideResult& solution = alternates[index].second;
 
   // Set Value
   Angle Value = solution.Vector.Bearing -
@@ -60,13 +63,36 @@ InfoBoxContentAlternateBest::Update(InfoBoxWindow &infobox)
 }
 
 void
-InfoBoxContentAlternate1::Update(InfoBoxWindow &infobox)
+InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
 {
-  infobox.SetInvalid();
+  TCHAR tmp[32];
+  _stprintf(tmp, _T("Altrn %d GR"), index+1);
+  infobox.SetTitle(tmp);
+
+  const AbortTask::AlternateVector alternates = protected_task_manager.getAlternates();
+  const Waypoint* way_point = (alternates.size()>index) ? &alternates[index].first : NULL;
+
+  SetCommentFromWaypointName(infobox, way_point);
+  if (!way_point) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  const GlideResult& solution = alternates[index].second;
+  const fixed &d = solution.Vector.Distance;
+  if (d) {
+    int gradient = ::AngleToGradient(solution.AltitudeDifference / d);
+    _stprintf(tmp, _T("%d"), gradient);
+    infobox.SetValue(tmp);
+    // Set Color
+    if (solution.glide_reachable(true))
+      // blue if reachable in final glide
+      infobox.SetColor(2);
+    else
+      // black
+      infobox.SetColor(0);
+  } else {
+    infobox.SetInvalid();
+  }
 }
 
-void
-InfoBoxContentAlternate2::Update(InfoBoxWindow &infobox)
-{
-  infobox.SetInvalid();
-}

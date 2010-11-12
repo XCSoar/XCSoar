@@ -644,8 +644,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     49, 26,
   },
 
-  // 66  VENTA-ADDON added Final GR
-  // VENTA-TODO: fix those 38,5 numbers to point correctly menu items
+  // 66
   {
     N_("Final GR"),
     N_("Fin GR"),
@@ -653,27 +652,27 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     38, 5,
   },
 
-  // 67 VENTA3-ADDON Alternate1 destinations infoboxes  TODO> fix 36 46 to something correct
+  // 67
+  {
+    N_("Alternate1 name"),
+    N_("Altrn 1"),
+    N_("Displays name and bearing to the best alternate landing location."),
+    36, 46,
+  },
+
+  // 68
+  {
+    N_("Alternate2 name"),
+    N_("Altrn 2"),
+    N_("Displays name and bearing to the second alternate landing location."),
+    36, 46,
+  },
+
+  // 69 
   {
     N_("Alternate1 GR"),
-    N_("Altern 1"),
-    N_("Geometric gradient to the arrival height above the selected alternate waypoint. This is not adjusted for total energy. Over 200 nothing is shown, between 100 and 200 an integer number is shown, between 1 and 99 a decimal value is shown. The Alternate value is RED if above the best LD or unreachable (terrain, wind, arrival altitude is less than 100m OVER safety altitude). The bottom line is changing every 3 seconds showing distance or arrival altitude over safety. All values are calculated in real-time. PRESS the ENTER key to make the relative waypoint info page come up: here you can perform actions on the alternate such as goto, insert in task etc."),
-    36, 46,
-  },
-
-  // 68 Alternate 2
-  {
-    N_("Alternate2 GR"),
-    N_("Altern 2"),
-    NULL,
-    36, 46,
-  },
-
-  // 69 BestAlternate aka BestLanding
-  {
-    N_("Best Alternate"),
-    N_("BestAltn"),
-    N_("Automatic search for the best landing option available. Top line is name of landpoint, middle is LD required, bottom line hold distance and arrival altitude over safety, swapped every few seconds. Please read the full manual document about the BestAlternate and how you can customise its behaviour. This is still experimental so be careful. If you select BestAlternate by clicking on the infobox and the PRESS ENTER either with a real key or virtual key then the waypoint detail page will come up and you will be able to perform actions on this Alternate such as goto, insert in task etc."),
+    N_("Altrn1 GR"),
+    N_("Geometric gradient to the arrival height above the best alternate. This is not adjusted for total energy."),
     36, 46,
   },
 
@@ -858,11 +857,11 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
   case 66:
     return new InfoBoxContentFinalGR();
   case 67:
-    return new InfoBoxContentAlternate1();
+    return new InfoBoxContentAlternateName(0);
   case 68:
-    return new InfoBoxContentAlternate2();
+    return new InfoBoxContentAlternateName(1);
   case 69:
-    return new InfoBoxContentAlternateBest();
+    return new InfoBoxContentAlternateGR(0);
   case 70:
     return new InfoBoxContentAltitudeQFE();
   case 71:
