@@ -110,8 +110,8 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
 
   unit_symbol = GetUnitSymbol(Units::VerticalSpeedUnit);
 
-  xoffset = get_width();
-  yoffset = get_height() / 2;
+  xoffset = get_right();
+  yoffset = get_height() / 2 + get_top();
 
   hide();
 }
