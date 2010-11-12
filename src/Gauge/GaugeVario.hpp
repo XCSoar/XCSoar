@@ -33,7 +33,6 @@ class UnitSymbol;
 
 typedef struct {
   bool    InitDone;
-  int     maxLabelSize;
   RECT    recBkg;
   POINT   orgText;
   fixed lastValue;
