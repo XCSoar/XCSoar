@@ -69,15 +69,8 @@ struct Appearance {
   bool InverseInfoBox;
   StateMessageAlign_t StateMessageAlign;
   TextInputStyle_t TextInputStyle;
-  bool GaugeVarioAvgText;
-  bool GaugeVarioMc;
-  bool GaugeVarioSpeedToFly;
-  bool GaugeVarioBallast;
-  bool GaugeVarioBugs;
   bool InfoBoxColors;
   InfoBoxBorderAppearance_t InfoBoxBorder;
-  bool GaugeVarioGross;
-  bool GaugeVarioAveNeedle;
   bool UseCustomFonts;
 };
 

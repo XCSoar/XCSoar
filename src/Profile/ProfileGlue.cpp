@@ -255,18 +255,6 @@ Profile::Use()
 
   Get(szProfileAppInverseInfoBox,
 		  Appearance.InverseInfoBox);
-  Get(szProfileAppGaugeVarioSpeedToFly,
-		  Appearance.GaugeVarioSpeedToFly);
-  Get(szProfileAppGaugeVarioAvgText,
-		  Appearance.GaugeVarioAvgText);
-  Get(szProfileAppGaugeVarioMc,
-		  Appearance.GaugeVarioMc);
-  Get(szProfileAppGaugeVarioBugs,
-		  Appearance.GaugeVarioBugs);
-  Get(szProfileAppGaugeVarioBallast,
-		  Appearance.GaugeVarioBallast);
-  Get(szProfileAppGaugeVarioGross,
-		  Appearance.GaugeVarioGross);
 
   if (Get(szProfileAppCompassAppearance, Temp))
     Appearance.CompassAppearance = (CompassAppearance_t)Temp;
@@ -285,8 +273,6 @@ Profile::Use()
 
   Get(szProfileAppInfoBoxColors,
 		  Appearance.InfoBoxColors);
-  Get(szProfileAppAveNeedle,
-		  Appearance.GaugeVarioAveNeedle);
 
   if (Get(szProfileAutoMcMode, Temp))
     settings_computer.auto_mc_mode =

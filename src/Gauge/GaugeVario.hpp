@@ -45,6 +45,15 @@ class GaugeVario:
   public BufferWindow,
   public InstrumentBlackboard
 {
+public:
+  bool ShowAvgText;
+  bool ShowMc;
+  bool ShowSpeedToFly;
+  bool ShowBallast;
+  bool ShowBugs;
+  bool ShowGross;
+  bool ShowAveNeedle;
+
 private:
   int nlength0, nlength1, nwidth, nline;
   int xoffset;

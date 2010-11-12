@@ -30,14 +30,7 @@ struct Appearance Appearance = {
   false,
   smAlignCenter,
   tiDefault,
-  false,
-  false,
-  false,
-  false,
-  false,
   true,
   apIbBox,
-  true,
-  false,
   false
 };

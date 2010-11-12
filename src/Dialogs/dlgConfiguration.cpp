@@ -62,6 +62,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Hardware/Display.hpp"
 #include "OS/PathName.hpp"
+#include "Gauge/GaugeVario.hpp"
 
 #include <assert.h>
 
@@ -1294,17 +1295,21 @@ setVariables()
   }
 
   LoadFormProperty(*wf, _T("prpAppInfoBoxColors"), Appearance.InfoBoxColors);
-  LoadFormProperty(*wf, _T("prpAppAveNeedle"), Appearance.GaugeVarioAveNeedle);
+
+  LoadFormProperty(*wf, _T("prpAppAveNeedle"),
+                   XCSoarInterface::main_window.vario->ShowAveNeedle);
   LoadFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
-                   Appearance.GaugeVarioSpeedToFly);
+                   XCSoarInterface::main_window.vario->ShowSpeedToFly);
   LoadFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
-                   Appearance.GaugeVarioAvgText );
+                   XCSoarInterface::main_window.vario->ShowAvgText);
   LoadFormProperty(*wf, _T("prpAppGaugeVarioGross"),
-                   Appearance.GaugeVarioGross);
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioMc"), Appearance.GaugeVarioMc);
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioBugs"), Appearance.GaugeVarioBugs);
+                   XCSoarInterface::main_window.vario->ShowGross);
+  LoadFormProperty(*wf, _T("prpAppGaugeVarioMc"),
+                   XCSoarInterface::main_window.vario->ShowMc);
+  LoadFormProperty(*wf, _T("prpAppGaugeVarioBugs"),
+                   XCSoarInterface::main_window.vario->ShowBugs);
   LoadFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
-                   Appearance.GaugeVarioBallast);
+                   XCSoarInterface::main_window.vario->ShowBallast);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAutoBlank"));
   if (wp) {
@@ -2103,7 +2108,7 @@ void dlgConfigurationShowModal(void)
                               XCSoarInterface::SetSettingsMap().GliderScreenPosition);
 
   changed |= SaveFormProperty(*wf, _T("prpAppAveNeedle"), szProfileAppAveNeedle,
-                              Appearance.GaugeVarioAveNeedle);
+                              XCSoarInterface::main_window.vario->ShowAveNeedle);
 
   changed |= requirerestart |=
     SaveFormProperty(*wf, _T("prpAppInfoBoxColors"),
@@ -2112,29 +2117,29 @@ void dlgConfigurationShowModal(void)
   changed |= requirerestart |=
     SaveFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
                      szProfileAppGaugeVarioSpeedToFly,
-                     Appearance.GaugeVarioSpeedToFly);
+                     XCSoarInterface::main_window.vario->ShowSpeedToFly);
 
   changed |= requirerestart |=
     SaveFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
                      szProfileAppGaugeVarioAvgText,
-                     Appearance.GaugeVarioAvgText);
+                     XCSoarInterface::main_window.vario->ShowAvgText);
 
   changed |= requirerestart |=
     SaveFormProperty(*wf, _T("prpAppGaugeVarioGross"),
                      szProfileAppGaugeVarioGross,
-                     Appearance.GaugeVarioGross);
+                     XCSoarInterface::main_window.vario->ShowGross);
 
   changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioMc"),
                               szProfileAppGaugeVarioMc,
-                              Appearance.GaugeVarioMc);
+                              XCSoarInterface::main_window.vario->ShowMc);
 
   changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioBugs"),
                               szProfileAppGaugeVarioBugs,
-                              Appearance.GaugeVarioBugs);
+                              XCSoarInterface::main_window.vario->ShowBugs);
 
   changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
                               szProfileAppGaugeVarioBallast,
-                              Appearance.GaugeVarioBallast);
+                              XCSoarInterface::main_window.vario->ShowBallast);
 
 #ifdef HAVE_BLANK
   changed |= SaveFormProperty(*wf, _T("prpAutoBlank"),
