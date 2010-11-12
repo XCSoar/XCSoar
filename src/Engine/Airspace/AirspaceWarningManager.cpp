@@ -132,7 +132,8 @@ AirspaceWarningManager::get_warning_index(const AbstractAirspace& airspace) cons
 
 
 bool 
-AirspaceWarningManager::update(const AIRCRAFT_STATE& state)
+AirspaceWarningManager::update(const AIRCRAFT_STATE& state,
+                               const bool circling)
 {
   bool changed = false;
 
@@ -146,7 +147,9 @@ AirspaceWarningManager::update(const AIRCRAFT_STATE& state)
 
   update_inside(state);
   update_glide(state);
-  update_filter(state);
+  if (circling) {
+    update_filter(state);
+  }
   update_task(state);
 
   // action changes

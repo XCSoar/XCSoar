@@ -85,13 +85,17 @@ public:
   void reset(const AIRCRAFT_STATE& state);
 
 /** 
- * Perform predictions and interior search to update warning list
+ * Perform predictions and interior search to update warning list If
+ * not in circling mode, the prediction based on the state filter
+ * predictor not used, since a long term prediction is not valid
+ * if in cruise mode.
  * 
  * @param state Current aircraft state
+ * @param circling Whether aircraft is circling
  * 
  * @return True if warnings changed
  */
-  bool update(const AIRCRAFT_STATE &state);
+  bool update(const AIRCRAFT_STATE &state, const bool circling);
 
 /** 
  * Adjust time of glide predictor

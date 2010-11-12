@@ -132,7 +132,8 @@ run_flight(TaskManager &task_manager, bool goto_target, double random_mag,
     if (airspace_warnings) {
 #ifdef DO_PRINT
       if (verbose > 1) {
-        bool warnings_updated = airspace_warnings->update(ac.get_state());
+        bool warnings_updated = airspace_warnings->update(ac.get_state(),
+                                                          false);
         if (warnings_updated) {
           printf("# airspace warnings updated, size %d\n",
                  (int)airspace_warnings->size());

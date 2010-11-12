@@ -524,7 +524,7 @@ GlideComputerAirData::AirspaceWarning()
   airspace_database.set_flight_levels(Basic().pressure);
 
   const AIRCRAFT_STATE as = ToAircraftState(Basic());
-  if (m_airspace.update_warning(as))
+  if (m_airspace.update_warning(as, Calculated().Circling))
     airspaceWarningEvent.trigger();
 }
 
