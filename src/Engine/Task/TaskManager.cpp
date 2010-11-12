@@ -639,14 +639,28 @@ TaskManager::clone(TaskEvents &te, const TaskBehaviour &tb,
 bool 
 TaskManager::commit(const OrderedTask& other)
 {
-  if ((mode == MODE_ORDERED) && !other.task_size())
-    set_mode(MODE_NULL);
-
   bool retval = task_ordered.commit(other);
 
-  if (mode == MODE_NULL) {
-    setActiveTaskPoint(0);
-    set_mode(MODE_ORDERED);
+  if (other.task_size()) {
+    // if valid, resume the task
+    switch (mode) {
+    case MODE_NULL:
+      set_mode(MODE_ORDERED); // set mode first
+      setActiveTaskPoint(0); // then set tp
+      break;
+    case MODE_GOTO:
+    case MODE_ABORT:
+      // resume on load
+      set_mode(MODE_ORDERED);
+      break;
+    case MODE_ORDERED:
+      incrementActiveTaskPoint(0); // ensure tp is within size
+      break;
+    };
+  } else if (mode == MODE_ORDERED) {
+    setActiveTaskPoint(0); // reset tp of ordered task so will be zero
+                           // on next load if valid
+    set_mode(MODE_NULL);
   }
 
   return retval;
