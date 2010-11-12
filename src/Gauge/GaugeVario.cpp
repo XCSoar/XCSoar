@@ -257,19 +257,19 @@ GaugeVario::MakePolygon(const int i)
 
   p = r.Rotate(fixed(-xoffset + nlength0), fixed(nwidth));
   bit[0].x = (int)p.first + xoffset;
-  bit[0].y = (int)p.second + yoffset + 1;
+  bit[0].y = (int)(p.second * 112 / 100) + yoffset + 1;
 
   p = r.Rotate(fixed(-xoffset + nlength0), fixed(-nwidth));
   bit[2].x = (int)p.first + xoffset;
-  bit[2].y = (int)p.second + yoffset + 1;
+  bit[2].y = (int)(p.second * 112 / 100) + yoffset + 1;
 
   p = r.Rotate(fixed(-xoffset + nlength1), fixed_zero);
   bit[1].x = (int)p.first + xoffset;
-  bit[1].y = (int)p.second + yoffset + 1;
+  bit[1].y = (int)(p.second * 112 / 100) + yoffset + 1;
 
   p = r.Rotate(fixed(-xoffset + nline), fixed_zero);
   bline->x = (int)p.first + xoffset;
-  bline->y = (int)p.second + yoffset + 1;
+  bline->y = (int)(p.second * 112 / 100) + yoffset + 1;
 }
 
 POINT *
