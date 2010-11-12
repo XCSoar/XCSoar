@@ -333,12 +333,11 @@ int
 GaugeVario::ValueToNeedlePos(fixed Value)
 {
   static bool InitDone = false;
-  static int degrees_per_unit;
+  static fixed degrees_per_unit = GAUGEVARIOSWEEP /
+                                  Units::ToUserVSpeed(GAUGEVARIORANGE);
   int i;
 
   if (!InitDone){
-    degrees_per_unit = (int)(GAUGEVARIOSWEEP /
-                             Units::ToUserVSpeed(GAUGEVARIORANGE));
     gmax = max(80, (int)(GAUGEVARIOSWEEP) + 2);
     MakeAllPolygons();
     InitDone = true;
