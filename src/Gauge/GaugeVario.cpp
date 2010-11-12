@@ -338,7 +338,7 @@ GaugeVario::ValueToNeedlePos(fixed Value)
   int i;
 
   if (!InitDone){
-    gmax = max(80, (int)(GAUGEVARIOSWEEP) + 2);
+    gmax = (int)(GAUGEVARIOSWEEP) + 2;
     MakeAllPolygons();
     InitDone = true;
   }
