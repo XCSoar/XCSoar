@@ -270,7 +270,7 @@ InfoBoxContentNextLD::Update(InfoBoxWindow &infobox)
   }
 
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%1.0f"), (double)gradient);
+  _stprintf(tmp, _T("%d"), (int)gradient);
   infobox.SetValue(tmp);
 }
 
@@ -472,7 +472,7 @@ InfoBoxContentFinalLD::Update(InfoBoxWindow &infobox)
   }
 
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%1.0f"), (double)gradient);
+  _stprintf(tmp, _T("%d"), (int)gradient);
   infobox.SetValue(tmp);
 }
 
@@ -493,7 +493,7 @@ InfoBoxContentFinalGR::Update(InfoBoxWindow &infobox)
   }
 
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%1.0f"), (double)gradient);
+  _stprintf(tmp, _T("%d"), (int)gradient);
   infobox.SetValue(tmp);
 }
 
