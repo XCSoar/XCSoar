@@ -36,6 +36,8 @@ AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint>& pts,
   if (pts.size()<2) {
     m_is_convex = true;
   } else {
+    m_border.reserve(pts.size() + 1);
+
     TaskProjection task_projection; // note dummy blank projection
     for (std::vector<GeoPoint>::const_iterator v = pts.begin();
          v != pts.end(); ++v) {

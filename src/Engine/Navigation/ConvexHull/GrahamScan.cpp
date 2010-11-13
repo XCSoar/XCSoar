@@ -73,6 +73,9 @@ void GrahamScan::partition_points()
 
   GeoPoint loclast = left->get_location();
 
+  upper_partition_points.reserve(raw_vector.size());
+  lower_partition_points.reserve(raw_vector.size());
+
   for (std::list<SearchPoint>::iterator i = raw_points.begin(); 
        i != raw_points.end(); ) {
 
@@ -122,6 +125,8 @@ void GrahamScan::build_half_hull( std::vector< SearchPoint* > input,
                                   std::vector< SearchPoint* > &output,
                                   int factor )
 {
+  output.reserve(input.size() + 1);
+
   //
   // The hull will always start with the left point, and end with the
   // right point. According, we start by adding the left point as the
@@ -180,6 +185,7 @@ int GrahamScan::direction( const GeoPoint& p0,
 SearchPointVector GrahamScan::prune_interior(bool *changed)
 {
   SearchPointVector res;
+  res.reserve(raw_vector.size());
 
   if (raw_points.size()<3) {
     std::copy(raw_points.begin(), raw_points.end(),
