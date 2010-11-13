@@ -31,6 +31,7 @@ Copyright_License {
 #include <tchar.h>
 
 class RasterMap;
+struct zzip_dir;
 
 /**
  * Class to manage raster weather data
@@ -89,13 +90,17 @@ private:
   bool reload;
   RasterMap *weather_map;
 
+  static void NarrowWeatherFilename(char *filename, const TCHAR *name,
+                                    unsigned time_index);
+
   static void GetFilename(TCHAR *rasp_filename, const TCHAR *name,
                           unsigned time_index);
 
   bool LoadItem(const TCHAR* name, unsigned time_index);
 
   gcc_pure
-  bool ExistsItem(const TCHAR* name, unsigned time_index) const;
+  bool ExistsItem(struct zzip_dir *dir, const TCHAR* name,
+                  unsigned time_index) const;
 
   bool weather_available[MAX_WEATHER_TIMES];
 

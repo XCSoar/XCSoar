@@ -170,6 +170,14 @@ RasterWeather::isWeatherAvailable(unsigned t) const
 }
 
 void
+RasterWeather::NarrowWeatherFilename(char *filename, const TCHAR *name,
+                                     unsigned time_index)
+{
+  sprintf(filename, "%s.curr.%04dlst.d2.jp2",
+          (const char *)NarrowPathName(name), IndexToTime(time_index));
+}
+
+void
 RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR* name,
                            unsigned time_index)
 {
@@ -196,17 +204,14 @@ RasterWeather::LoadItem(const TCHAR* name, unsigned time_index)
 }
 
 bool
-RasterWeather::ExistsItem(const TCHAR* name, unsigned time_index) const
+RasterWeather::ExistsItem(struct zzip_dir *dir, const TCHAR* name,
+                          unsigned time_index) const
 {
-  TCHAR rasp_filename[MAX_PATH];
-  GetFilename(rasp_filename, name, time_index);
+  char filename[MAX_PATH];
+  NarrowWeatherFilename(filename, name, time_index);
 
-  ZZIP_FILE *zf = zzip_fopen(NarrowPathName(rasp_filename), "rb");
-  if (zf == NULL)
-    return false;
-
-  zzip_fclose(zf);
-  return true;
+  ZZIP_STAT st;
+  return zzip_dir_stat(dir, filename, &st, 0) == 0;
 }
 
 void
@@ -217,15 +222,19 @@ RasterWeather::ScanAll(const GeoPoint &location)
 
   TCHAR fname[MAX_PATH];
   LocalPath(fname, _T("xcsoar-rasp.dat"));
-  if (!File::Exists(fname))
+
+  ZZIP_DIR *dir = zzip_dir_open(NarrowPathName(fname), NULL);
+  if (dir == NULL)
     return;
 
   ProgressGlue::SetRange(MAX_WEATHER_TIMES);
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
     ProgressGlue::SetValue(i);
-    weather_available[i] = ExistsItem(_T("wstar"), i) ||
-      ExistsItem(_T("wstar_bsratio"), i);
+    weather_available[i] = ExistsItem(dir, _T("wstar"), i) ||
+      ExistsItem(dir, _T("wstar_bsratio"), i);
   }
+
+  zzip_dir_close(dir);
 }
 
 void
