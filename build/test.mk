@@ -214,7 +214,7 @@ DEBUG_PROGRAM_NAMES = \
 	ReadGRecord VerifyGRecord AppendGRecord \
 	KeyCodeDumper \
 	LoadTopology \
-	RunWayPointParser RunDeviceDriver \
+	RunWayPointParser RunAirspaceParser RunDeviceDriver \
 	RunWindZigZag \
 	RunCanvas RunMapWindow RunDialog \
 	RunProgressWindow \
@@ -426,6 +426,25 @@ RUN_WAY_POINT_PARSER_LDADD = \
 	$(MATH_LIBS) \
 	$(UTIL_LIBS)
 $(TARGET_BIN_DIR)/RunWayPointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS) $(RUN_WAY_POINT_PARSER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_AIRSPACE_PARSER_SOURCES = \
+	$(SRC)/Airspace/AirspaceParser.cpp \
+	$(SRC)/Units.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/RunAirspaceParser.cpp
+RUN_AIRSPACE_PARSER_OBJS = $(call SRC_TO_OBJ,$(RUN_AIRSPACE_PARSER_SOURCES))
+RUN_AIRSPACE_PARSER_LDADD = \
+	$(FAKE_LIBS) \
+	$(ENGINE_LIBS) \
+	$(IO_LIBS) \
+	$(ZZIP_LIBS) \
+	$(MATH_LIBS) \
+	$(UTIL_LIBS)
+$(TARGET_BIN_DIR)/RunAirspaceParser$(TARGET_EXEEXT): $(RUN_AIRSPACE_PARSER_OBJS) $(RUN_AIRSPACE_PARSER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
