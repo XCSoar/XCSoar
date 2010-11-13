@@ -139,10 +139,6 @@ MapWindow::on_paint_buffer(Canvas &canvas)
 
   // Start the drawing timer (for drawing time calculation)
   StartTimer();
-
-  //  static PeriodClock mclock;
-  //  printf("draw %d\n",mclock.elapsed());
-  //  mclock.update();
 #endif
 
   // Render the moving map
