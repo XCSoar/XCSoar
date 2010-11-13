@@ -265,9 +265,6 @@ MapWindow::UpdateScreenAngle()
 void
 MapWindow::UpdateMapScale()
 {
-  static bool TargetPanLast = false;
-  static fixed TargetPanUnZoom = fixed_one;
-
   fixed wpd;
   if (SettingsMap().TargetPan)
     wpd = SettingsMap().TargetZoomDistance;
@@ -275,10 +272,6 @@ MapWindow::UpdateMapScale()
     wpd = Calculated().AutoZoomDistance;
 
   if (SettingsMap().TargetPan) {
-    if (!TargetPanLast) { // just entered targetpan so save zoom
-      TargetPanLast = true;
-      TargetPanUnZoom = visible_projection.GetScale();
-    }
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
 
@@ -302,12 +295,7 @@ MapWindow::UpdateMapScale()
 
       visible_projection.SetMapScale(wpd);
     }
-  } else if (TargetPanLast) {
-    visible_projection.SetScale(TargetPanUnZoom);
   }
-
-  if (!SettingsMap().TargetPan && TargetPanLast)
-    TargetPanLast = false;
 }
 
 void
