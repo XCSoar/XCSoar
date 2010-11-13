@@ -42,6 +42,8 @@ public:
    */
   SearchPoint():ReferencePoint(GeoPoint()) {}
 
+  SearchPoint(const GeoPoint &loc):ReferencePoint(loc) {}
+
 /** 
  * Constructor
  * 

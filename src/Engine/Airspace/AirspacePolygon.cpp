@@ -38,16 +38,15 @@ AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint>& pts,
   } else {
     m_border.reserve(pts.size() + 1);
 
-    TaskProjection task_projection; // note dummy blank projection
     for (std::vector<GeoPoint>::const_iterator v = pts.begin();
          v != pts.end(); ++v) {
-      m_border.push_back(SearchPoint(*v, task_projection));
+      m_border.push_back(SearchPoint(*v));
     }
     // ensure airspace is closed
     GeoPoint p_start = pts[0];
     GeoPoint p_end = *(pts.end()-1);
     if (p_start != p_end) {
-      m_border.push_back(SearchPoint(p_start, task_projection));
+      m_border.push_back(SearchPoint(p_start));
     }
     
     if (prune) {
