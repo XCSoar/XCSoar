@@ -824,7 +824,8 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
         return false;
 
     // Update the ProgressDialog
-    ProgressGlue::SetValue(reader.tell() * 1024 / file_size);
+    if ((LineCount & 0x3f) == 0)
+      ProgressGlue::SetValue(reader.tell() * 1024 / file_size);
   }
 
   if (filetype == ftUnknown) {

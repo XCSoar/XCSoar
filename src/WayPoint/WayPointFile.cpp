@@ -128,8 +128,10 @@ WayPointFile::Parse(Waypoints &way_points,
       // and parse them
       parseLine(line, i, way_points, terrain);
 
-      unsigned status = reader.tell() * 25 / filesize;
-      ProgressGlue::SetValue(status);
+      if ((i & 0x3f) == 0) {
+        unsigned status = reader.tell() * 25 / filesize;
+        ProgressGlue::SetValue(status);
+      }
     }
   // If compressed file inside map file
   } else {
@@ -146,8 +148,10 @@ WayPointFile::Parse(Waypoints &way_points,
       // and parse them
       parseLine(line, i, way_points, terrain);
 
-      unsigned status = reader.tell() * 25 / filesize;
-      ProgressGlue::SetValue(status);
+      if ((i & 0x3f) == 0) {
+        unsigned status = reader.tell() * 25 / filesize;
+        ProgressGlue::SetValue(status);
+      }
     }
   }
 
