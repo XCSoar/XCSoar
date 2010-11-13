@@ -139,15 +139,16 @@ void GrahamScan::build_half_hull( std::vector< SearchPoint* > input,
   //
   // The construction loop runs until the input is exhausted
   //
-  while ( input.size() != 0 ) {
+  for (std::vector<SearchPoint *>::const_iterator i = input.begin();
+       i != input.end(); ++i) {
     //
     // Repeatedly add the leftmost point to the hull, then test to see
     // if a convexity violation has occured. If it has, fix things up
     // by removing the next-to-last point in the output sequence until
     // convexity is restored.
     //
-    output.push_back( input.front() );
-    input.erase( input.begin() );
+    output.push_back(*i);
+
     while ( output.size() >= 3 ) {
       size_t end = output.size() - 1;
 
