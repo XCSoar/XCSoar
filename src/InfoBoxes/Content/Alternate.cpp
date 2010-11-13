@@ -27,6 +27,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Util/Gradient.hpp"
+
+#include <stdio.h>
 #include <tchar.h>
 
 void
