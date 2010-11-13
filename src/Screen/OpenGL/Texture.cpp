@@ -104,8 +104,7 @@ GLTexture::draw(int x_offset, int y_offset,
                 unsigned src_full_width, unsigned src_full_height)
 {
 #ifdef ANDROID
-  const GLint rect[4] = { src_x, src_y,
-                          src_x + src_width, src_y + src_height };
+  const GLint rect[4] = { src_x, src_y, src_width, src_height };
   glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
 
   /* glDrawTexiOES() circumvents the projection settings, thus we must
