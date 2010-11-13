@@ -54,7 +54,7 @@ SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state,
       // do nothing
       return false;
     } else {
-      SearchPoint sp(state.Location, m_task_projection, true);
+      SearchPoint sp(state.Location, m_task_projection);
       m_sampled_points.push_back(sp);
       // only return true if hull changed 
       return prune_interior(m_sampled_points);
@@ -69,7 +69,7 @@ SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last)
 {
   if (has_sampled()) {
     m_sampled_points.clear();
-    SearchPoint sp(ref_last.Location, m_task_projection, true);
+    SearchPoint sp(ref_last.Location, m_task_projection);
     m_sampled_points.push_back(sp);
   }
 }
@@ -142,7 +142,7 @@ SampledTaskPoint::get_search_points() const
 void 
 SampledTaskPoint::set_search_min(const GeoPoint &location)
 {
-  SearchPoint sp(location, m_task_projection, false);
+  SearchPoint sp(location, m_task_projection);
   set_search_min(sp);
 }
 

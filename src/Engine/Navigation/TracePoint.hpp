@@ -30,7 +30,7 @@ public:
    * SearchPoint base class.
    */
   TracePoint(const GeoPoint &location, const TaskProjection &tp)
-    :SearchPoint(location, tp, true) {}
+    :SearchPoint(location, tp) {}
 
 /** 
  * Constructor for actual trace points

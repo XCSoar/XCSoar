@@ -29,9 +29,7 @@
 class TaskProjection;
 
 /**
- * Class used to hold a geodetic point, its projected integer form and
- * whether or not the point is a virtual point or an actual search point.
- * The 'virtuality' of this object is currently not used. 
+ * Class used to hold a geodetic point, its projected integer form.
  */
 class SearchPoint: 
   public ReferencePoint 
@@ -49,10 +47,8 @@ public:
  * 
  * @param loc Location of search point
  * @param tp Projection used
- * @param _actual Whether search point is real or virtual
  */
-  SearchPoint(const GeoPoint &loc, const TaskProjection& tp,
-    bool _actual=false);
+  SearchPoint(const GeoPoint &loc, const TaskProjection& tp);
 
 /** 
  * Calculate projected value of geodetic coordinate
@@ -109,7 +105,6 @@ public:
 
 private:
   FlatGeoPoint flatLocation;
-  bool actual;
 };
 
 

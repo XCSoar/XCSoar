@@ -57,7 +57,7 @@ AATPoint::update_sample(const AIRCRAFT_STATE& state,
     m_deadzone = SearchPointVector(get_sample_points().begin(),
                                    get_sample_points().end());
     SearchPoint destination(get_next()->get_location_remaining(), 
-                            get_task_projection(), true);
+                            get_task_projection());
     m_deadzone.push_back(destination);
     prune_interior(m_deadzone);
   }

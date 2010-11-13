@@ -25,11 +25,9 @@
 #include <math.h>
 
 SearchPoint::SearchPoint(const GeoPoint &loc, 
-                         const TaskProjection& tp,
-                         bool _actual):
+                         const TaskProjection& tp):
   ReferencePoint(loc),
-  flatLocation(tp.project(loc)),
-  actual(_actual)
+  flatLocation(tp.project(loc))
 {      
 }
 
