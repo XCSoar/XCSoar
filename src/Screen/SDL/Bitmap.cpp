@@ -36,6 +36,16 @@ Copyright_License {
 #include <assert.h>
 
 bool
+Bitmap::load(SDL_Surface *_surface)
+{
+  assert(_surface != NULL);
+  assert(surface == NULL);
+
+  surface = _surface;
+  return true;
+}
+
+bool
 Bitmap::load(unsigned id)
 {
   reset();
@@ -80,7 +90,7 @@ Bitmap::load(unsigned id)
   if (original == NULL)
     return false;
 
-  surface = ConvertToDisplayFormat(original);
+  load(ConvertToDisplayFormat(original));
 
 #ifdef WIN32
   free(header);
@@ -103,14 +113,8 @@ Bitmap::load_file(const TCHAR *path)
 {
   NarrowPathName narrow_path(path);
   SDL_Surface *original = ::SDL_LoadBMP(narrow_path);
-  if (original != NULL) {
-    surface = ::SDL_DisplayFormat(original);
-    ::SDL_FreeSurface(original);
-    if (surface != NULL)
-      return true;
-  }
-
-  return false;
+  return original != NULL &&
+    load(ConvertToDisplayFormat(original));
 }
 
 void

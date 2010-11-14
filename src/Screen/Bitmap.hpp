@@ -73,6 +73,10 @@ public:
 #endif
   }
 
+#ifdef ENABLE_SDL
+  bool load(SDL_Surface *_surface);
+#endif
+
   bool load(unsigned id);
 
   /**
