@@ -85,5 +85,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   if (!XCSoarInterface::Startup(hInstance))
     return 0;
 
-  return CommonInterface::main_window.event_loop();
+  int ret = CommonInterface::main_window.event_loop();
+  CommonInterface::main_window.reset();
+
+  return ret;
 }
