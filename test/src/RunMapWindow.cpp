@@ -287,11 +287,12 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   MapWindow::register_class(hInstance);
 #endif
 
+  TestWindow window;
+  window.set(0, 0, 640, 480);
+
   Graphics::Initialise();
   Graphics::InitialiseConfigured(blackboard.SettingsMap());
 
-  TestWindow window;
-  window.set(0, 0, 640, 480);
   GenerateBlackboard(window.map);
   Fonts::Initialize();
 #ifndef ENABLE_OPENGL
