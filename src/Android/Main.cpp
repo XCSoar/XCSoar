@@ -21,6 +21,8 @@ Copyright_License {
 }
 */
 
+#include "Screen/Init.hpp"
+#include "Screen/Fonts.hpp"
 #include "Simulator.hpp"
 #include "Asset.hpp"
 #include "Profile/Profile.hpp"
@@ -43,6 +45,12 @@ Java_org_xcsoar_DemoRenderer_nativeInit(JNIEnv *env, jobject obj)
 
   Profile::SetFiles(_T(""));
 
+  ScreenGlobalInit screen_init;
+
   if (XCSoarInterface::Startup(NULL))
     CommonInterface::main_window.event_loop();
+
+  CommonInterface::main_window.reset();
+
+  Fonts::Deinitialize();
 };
