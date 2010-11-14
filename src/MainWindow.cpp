@@ -64,11 +64,7 @@ MainWindow::register_class(HINSTANCE hInstance)
   wc.cbClsExtra                 = 0;
   wc.cbWndExtra = 0;
   wc.hInstance                  = hInstance;
-#if defined(GNAV) && !defined(PCGNAV)
-  wc.hIcon = NULL;
-#else
   wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOAR));
-#endif
   wc.hCursor                    = 0;
   wc.hbrBackground              = (HBRUSH) GetStockObject(WHITE_BRUSH);
   wc.lpszMenuName               = 0;

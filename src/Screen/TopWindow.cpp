@@ -29,7 +29,6 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #else
 #include "Screen/GDI/Event.hpp"
-#include "Interface.hpp" /* for XCSoarInterface::hInst */
 #if defined(GNAV) && !defined(PCGNAV)
 #include "resource.h" /* for IDI_XCSOAR */
 #endif
@@ -175,16 +174,6 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
   ::SDL_WM_SetCaption(text2, NULL);
 #else /* !ENABLE_SDL */
   Window::set(NULL, cls, text, left, top, width, height, style);
-
-#if defined(GNAV) && !defined(PCGNAV)
-  // TODO code: release the handle?
-  HANDLE hTmp = LoadIcon(XCSoarInterface::hInst,
-                         MAKEINTRESOURCE(IDI_XCSOAR));
-  SendMessage(hWnd, WM_SETICON,
-	      (WPARAM)ICON_BIG, (LPARAM)hTmp);
-  SendMessage(hWnd, WM_SETICON,
-	      (WPARAM)ICON_SMALL, (LPARAM)hTmp);
-#endif
 #endif /* !ENABLE_SDL */
 }
 
