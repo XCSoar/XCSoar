@@ -22,10 +22,9 @@ Copyright_License {
 */
 
 #include "Audio/Sound.hpp"
+#include "ResourceLoader.hpp"
 
 #ifndef DISABLEAUDIO
-#include "Interface.hpp"
-
 #include <windows.h>
 #include <mmsystem.h>
 #endif
@@ -36,8 +35,6 @@ bool PlayResource (const TCHAR* lpName)
   return false;
 #else
   BOOL bRtn;
-  LPTSTR lpRes;
-  HANDLE hResInfo, hRes;
 
   // TODO code: Modify to allow use of WAV Files and/or Embedded files
 
@@ -45,28 +42,10 @@ bool PlayResource (const TCHAR* lpName)
     bRtn = sndPlaySound (lpName, SND_ASYNC | SND_NODEFAULT );
 
   } else {
-
-    // Find the wave resource.
-    hResInfo = FindResource (XCSoarInterface::hInst, lpName, TEXT("WAVE"));
-
-    if (hResInfo == NULL)
-      return false;
-
-    // Load the wave resource.
-    hRes = LoadResource (XCSoarInterface::hInst, (HRSRC)hResInfo);
-
-    if (hRes == NULL)
-      return false;
-
-    // Lock the wave resource and play it.
-    lpRes = (LPTSTR)LockResource ((HGLOBAL)hRes);
-
-    if (lpRes != NULL)
-      {
-	bRtn = sndPlaySound (lpRes, SND_MEMORY | SND_ASYNC | SND_NODEFAULT );
-      }
-    else
-      bRtn = 0;
+    ResourceLoader::Data data = ResourceLoader::Load(lpName, _T("WAVE"));
+    return data.first != NULL &&
+      sndPlaySound((LPCTSTR)data.first,
+                   SND_MEMORY | SND_ASYNC | SND_NODEFAULT);
   }
   return bRtn;
 #endif
