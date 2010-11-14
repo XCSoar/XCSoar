@@ -31,7 +31,7 @@ MapWindow::DrawWaypoints(Canvas &canvas)
   polar.set_mc(min(Calculated().common_stats.current_risk_mc,
                    SettingsComputer().safety_mc));
 
-  way_point_renderer.render(canvas, bitmap_canvas, label_block,
+  way_point_renderer.render(canvas, label_block,
                             render_projection, SettingsMap(),
                             SettingsComputer(), polar,
                             ToAircraftState(Basic()),

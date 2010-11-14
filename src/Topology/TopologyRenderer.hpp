@@ -31,7 +31,6 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 
 class Canvas;
-class BitmapCanvas;
 class WindowProjection;
 class LabelBlock;
 struct SETTINGS_MAP;
@@ -56,8 +55,7 @@ public:
    * @param bitmap_canvas Temporary canvas for the icon
    * @param projection
    */
-  void Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-             const WindowProjection &projection) const;
+  void Paint(Canvas &canvas, const WindowProjection &projection) const;
 
   /**
    * Paints a topology label if the space is available in the LabelBlock
@@ -87,8 +85,7 @@ public:
    * @param canvas The drawing canvas
    * @param rc The area to draw in
    */
-  void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-            const WindowProjection &projection) const;
+  void Draw(Canvas &canvas, const WindowProjection &projection) const;
 
   void DrawLabels(Canvas &canvas,
                   const WindowProjection &projection, LabelBlock &label_block,

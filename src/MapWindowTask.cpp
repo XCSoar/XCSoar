@@ -41,7 +41,6 @@ class RenderTaskPointMap: public RenderTaskPoint
 protected:
   const MapWindowProjection &projection;
   LabelBlock &label_block;
-  BitmapCanvas &bitmap_canvas;
 
 public:
   RenderTaskPointMap(Canvas &_canvas, const MapWindowProjection &_projection,
@@ -50,14 +49,12 @@ public:
                      const bool draw_bearing,
                      const GeoPoint &location,
                      LabelBlock &_label_block,
-                     BitmapCanvas &_bitmap_canvas,
                      const Angle bearing,
                      const bool do_draw_off_track):
     RenderTaskPoint(_canvas, _projection, _settings_map,
                     _ozv, draw_bearing, location),
     projection(_projection),
     label_block(_label_block),
-    bitmap_canvas(_bitmap_canvas),
     m_bearing(bearing),
     m_draw_off_track(do_draw_off_track) {};
 
@@ -70,7 +67,7 @@ protected:
 
     POINT sc;
     if (m_proj.GeoToScreenIfVisible(tp.get_location_remaining(), sc))
-      Graphics::hBmpTarget.draw(m_buffer, bitmap_canvas, sc.x, sc.y);
+      Graphics::hBmpTarget.draw(m_buffer, sc.x, sc.y);
   }
 
   void
@@ -156,7 +153,7 @@ MapWindow::DrawTask(Canvas &canvas)
   RenderTaskPointMap tpv(canvas, render_projection, SettingsMap(),
                          ozv, draw_bearing,
                          Basic().Location,
-                         label_block, bitmap_canvas,
+                         label_block,
                          Basic().TrackBearing,
                          !Calculated().Circling);
   RenderTask dv(tpv);

@@ -57,18 +57,15 @@ class WaypointVisitorMap:
   const MapWindowProjection &projection;
   const SETTINGS_MAP &settings_map;
   const TaskBehaviour &task_behaviour;
-  BitmapCanvas &bitmap_canvas;
 
 public:
   WaypointVisitorMap(const MapWindowProjection &_projection,
                      const SETTINGS_MAP &_settings_map,
                      const TaskBehaviour &_task_behaviour,
                      const AIRCRAFT_STATE &_aircraft_state, Canvas &_canvas,
-                     BitmapCanvas &_bitmap_canvas,
                      const GlidePolar &polar):
     projection(_projection),
     settings_map(_settings_map), task_behaviour(_task_behaviour),
-    bitmap_canvas(_bitmap_canvas),
     aircraft_state(_aircraft_state),
     canvas(_canvas),
     glide_polar(polar),
@@ -189,7 +186,7 @@ public:
         icon = &Graphics::TurnPointIcon;
     }
 
-    icon->draw(canvas, bitmap_canvas, sc.x, sc.y);
+    icon->draw(canvas, sc.x, sc.y);
 
     if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
       if (!in_task)
@@ -327,8 +324,7 @@ MapWaypointLabelRender(Canvas &canvas, const RECT &MapRect,
 }
 
 void
-WayPointRenderer::render(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-                         LabelBlock &label_block,
+WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
                          const MapWindowProjection &projection,
                          const SETTINGS_MAP &settings_map,
                          const TaskBehaviour &task_behaviour,
@@ -343,7 +339,7 @@ WayPointRenderer::render(Canvas &canvas, BitmapCanvas &bitmap_canvas,
 
   WaypointVisitorMap v(projection, settings_map, task_behaviour,
                        aircraft_state,
-                       canvas, bitmap_canvas, glide_polar);
+                       canvas, glide_polar);
   way_points->visit_within_range(projection.GetGeoLocation(),
                                  projection.GetScreenDistanceMeters(), v);
   if (task != NULL) {

@@ -31,7 +31,6 @@ Copyright_License {
 #ifndef ENABLE_OPENGL
 #include "Screen/BufferCanvas.hpp"
 #endif
-#include "Screen/BitmapCanvas.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "MapWindowBlackboard.hpp"
 #include "NMEA/Derived.hpp"
@@ -280,9 +279,6 @@ private:
   BufferCanvas buffer_canvas;
   BufferCanvas stencil_canvas;
 #endif
-
-protected:
-  mutable BitmapCanvas bitmap_canvas;
 
 private:
   LabelBlock label_block;

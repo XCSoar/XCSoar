@@ -24,7 +24,6 @@ Copyright_License {
 #include "Screen/Icon.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/BitmapCanvas.hpp"
 
 void
 MaskedIcon::load_big(unsigned id, unsigned big_id, bool center)
@@ -51,16 +50,12 @@ MaskedIcon::load_big(unsigned id, unsigned big_id, bool center)
 }
 
 void
-MaskedIcon::draw(Canvas &canvas, 
-                 BitmapCanvas &bitmap_canvas, 
-                 int x, int y) const
+MaskedIcon::draw(Canvas &canvas, int x, int y) const
 {
   assert(defined());
 
-  bitmap_canvas.select(bitmap);
-
   canvas.copy_or(x - origin.x, y - origin.y, size.cx, size.cy,
-                 bitmap_canvas, 0, 0);
+                 bitmap, 0, 0);
   canvas.copy_and(x - origin.x, y - origin.y, size.cx, size.cy,
-                  bitmap_canvas, size.cx, 0);
+                  bitmap, size.cx, 0);
 }

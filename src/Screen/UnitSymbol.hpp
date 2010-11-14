@@ -28,7 +28,6 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 
 class Canvas;
-class BitmapCanvas;
 
 class UnitSymbol {
 public:
@@ -72,8 +71,7 @@ public:
     return size;
   }
 
-  void draw(Canvas& canvas, BitmapCanvas& bitmap_canvas,
-            const int x, const int y) const;
+  void draw(Canvas& canvas, const int x, const int y) const;
 };
 
 void

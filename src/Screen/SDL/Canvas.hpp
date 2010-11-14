@@ -427,15 +427,35 @@ public:
   void copy(const Canvas &src, int src_x, int src_y);
   void copy(const Canvas &src);
 
+  void copy(int dest_x, int dest_y,
+            unsigned dest_width, unsigned dest_height,
+            const Bitmap &src, int src_x, int src_y);
+  void copy(const Bitmap &src);
+
   void copy_transparent_white(const Canvas &src);
   void copy_transparent_black(const Canvas &src);
-  void stretch_transparent(const Canvas &src, Color key);
+  void stretch_transparent(const Bitmap &src, Color key);
+
+  void stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               SDL_Surface *src,
+               int src_x, int src_y,
+               unsigned src_width, unsigned src_height);
+
+  void stretch(SDL_Surface *src) {
+    stretch(0, 0, get_width(), get_height(),
+            src, 0, 0, src->w, src->h);
+  }
 
   void stretch(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
                const Canvas &src,
                int src_x, int src_y,
-               unsigned src_width, unsigned src_height);
+               unsigned src_width, unsigned src_height) {
+    stretch(dest_x, dest_y, dest_width, dest_height,
+            src.surface,
+            src_x, src_y, src_width, src_height);
+  }
 
   void stretch(const Canvas &src,
                int src_x, int src_y,
@@ -443,24 +463,56 @@ public:
 
   void stretch(const Canvas &src);
 
+  void stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Bitmap &src,
+               int src_x, int src_y,
+               unsigned src_width, unsigned src_height);
+  void stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Bitmap &src);
+
+  void stretch(const Bitmap &src) {
+    stretch(0, 0, width, height, src);
+  }
+
   void copy_or(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
-               const Canvas &src, int src_x, int src_y);
+               SDL_Surface *src, int src_x, int src_y);
 
-  void copy_or(const Canvas &src) {
+  void copy_or(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Bitmap &src, int src_x, int src_y);
+
+  void copy_or(const Bitmap &src) {
     copy_or(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
   void copy_and(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
-                const Canvas &src, int src_x, int src_y);
+                SDL_Surface *src, int src_x, int src_y);
+
+  void copy_and(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Canvas &src, int src_x, int src_y) {
+    copy_and(dest_x, dest_y, dest_width, dest_height,
+             src.surface, src_x, src_y);
+  }
 
   void copy_and(const Canvas &src) {
+    copy_and(0, 0, src.get_width(), src.get_height(), src, 0, 0);
+  }
+
+  void copy_and(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src, int src_x, int src_y);
+
+  void copy_and(const Bitmap &src) {
     copy_and(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
   void scale_copy(int dest_x, int dest_y,
-                  const Canvas &src,
+                  const Bitmap &src,
                   int src_x, int src_y,
                   unsigned src_width, unsigned src_height);
 };

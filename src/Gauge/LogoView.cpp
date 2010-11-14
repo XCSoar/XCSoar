@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "LogoView.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Screen/BitmapCanvas.hpp"
+#include "Screen/Canvas.hpp"
 #include "resource.h"
 #include "Version.hpp"
 
@@ -41,8 +41,6 @@ DrawLogo(Canvas &canvas, const RECT &rc)
   Bitmap bitmap_title((width >= 530 && height >= 60) ||
                       (width >= 330 && height >= 250)
                       ? IDB_TITLE_HD : IDB_TITLE);
-
-  BitmapCanvas bitmap_canvas(canvas);
 
   // Determine logo size
   SIZE logo_size = bitmap_logo.get_size();
@@ -75,14 +73,11 @@ DrawLogo(Canvas &canvas, const RECT &rc)
   }
 
   // Draw 'XCSoar N.N' title
-  if (!hidetitle){
-    bitmap_canvas.select(bitmap_title);
-    canvas.copy(titlex, titley, title_size.cx, title_size.cy, bitmap_canvas, 0, 0);
-  }
+  if (!hidetitle)
+    canvas.copy(titlex, titley, title_size.cx, title_size.cy, bitmap_title, 0, 0);
 
   // Draw XCSoar swift logo
-  bitmap_canvas.select(bitmap_logo);
-  canvas.copy(logox, logoy, logo_size.cx, logo_size.cy, bitmap_canvas, 0, 0);
+  canvas.copy(logox, logoy, logo_size.cx, logo_size.cy, bitmap_logo, 0, 0);
 
   // Draw full XCSoar version number
   canvas.set_text_color(Color::BLACK);

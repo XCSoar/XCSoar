@@ -25,7 +25,6 @@ Copyright_License {
 #include "Form/Internal.hpp"
 #include "DataField/Base.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Screen/BitmapCanvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Dialogs/Dialogs.h"
 #include "resource.h"
@@ -415,18 +414,14 @@ WndProperty::on_paint(Canvas &canvas)
   // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
   // so it calls dlgCombopicker on the click/focus handlers for the wndproperty & label
   if (!mDialogStyle && edit.has_focus() && !edit.is_read_only()) {
-    BitmapCanvas bitmap_canvas(canvas);
-
-    bitmap_canvas.select(hBmpLeft32);
     canvas.stretch(mHitRectDown.left, mHitRectDown.top,
                    mBitmapSize, mBitmapSize,
-                   bitmap_canvas,
+                   hBmpLeft32,
                    mDownDown ? 32 : 0, 0, 32, 32);
 
-    bitmap_canvas.select(hBmpRight32);
     canvas.stretch(mHitRectUp.left, mHitRectUp.top,
                    mBitmapSize, mBitmapSize,
-                   bitmap_canvas,
+                   hBmpRight32,
                    mUpDown ? 32 : 0, 0, 32, 32);
   }
 }

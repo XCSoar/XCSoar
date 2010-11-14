@@ -24,7 +24,6 @@ Copyright_License {
 #include "Form/SymbolButton.hpp"
 #include "Form/Control.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Screen/BitmapCanvas.hpp"
 #include "Screen/Layout.hpp"
 #include "resource.h"
 
@@ -115,24 +114,22 @@ WndSymbolButton::on_paint(Canvas &canvas)
   // Draw Fly bitmap
   if (caption == _T("Fly")) {
     Bitmap launcher1_bitmap(IDB_LAUNCHER1);
-    BitmapCanvas bitmap_canvas(canvas, launcher1_bitmap);
     if (is_down())
-      canvas.stretch(bitmap_canvas);
+      canvas.stretch(launcher1_bitmap);
     else {
       canvas.clear_white();
-      canvas.stretch_transparent(bitmap_canvas, Color::BLUE);
+      canvas.stretch_transparent(launcher1_bitmap, Color::BLUE);
     }
   }
 
   // Draw Simulator bitmap
   if (caption == _T("Simulator")) {
     Bitmap launcher2_bitmap(IDB_LAUNCHER2);
-    BitmapCanvas bitmap_canvas(canvas, launcher2_bitmap);
     if (is_down())
-      canvas.stretch(bitmap_canvas);
+      canvas.stretch(launcher2_bitmap);
     else {
       canvas.clear_white();
-      canvas.stretch_transparent(bitmap_canvas, Color::BLUE);
+      canvas.stretch_transparent(launcher2_bitmap, Color::BLUE);
     }
   }
 

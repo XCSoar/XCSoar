@@ -31,7 +31,6 @@ Copyright_License {
 struct SETTINGS_MAP;
 struct AIRCRAFT_STATE;
 class Canvas;
-class BitmapCanvas;
 class LabelBlock;
 class MapWindowProjection;
 class Waypoints;
@@ -53,8 +52,7 @@ public:
     way_points = _way_points;
   }
 
-  void render(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-              LabelBlock &label_block,
+  void render(Canvas &canvas, LabelBlock &label_block,
               const MapWindowProjection &projection,
               const SETTINGS_MAP &settings_map,
               const TaskBehaviour &task_behaviour,

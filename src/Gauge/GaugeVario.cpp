@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/BitmapCanvas.hpp"
 #include "Math/FastRotation.hpp"
 #include "Appearance.hpp"
 #include "resource.h"
@@ -148,9 +147,8 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
     orgBottom.y = orgMiddle.y + ValueHeight;
     orgBottom.x = get_right();
 
-    BitmapCanvas hdcTemp(canvas, hDrawBitMap);
     // copy scale bitmap to memory DC
-    canvas.scale_copy(0, 0, hdcTemp,
+    canvas.scale_copy(0, 0, hDrawBitMap,
                       Appearance.InverseInfoBox ? 58 : 0, 0, 58, 120);
 
     InitDone = true;
@@ -312,8 +310,7 @@ GaugeVario::RenderClimb(Canvas &canvas)
 
     canvas.rectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12));
   } else {
-    BitmapCanvas hdcTemp(canvas, hBitmapClimb);
-    canvas.scale_copy(x, y, hdcTemp, 12, 0, 12, 12);
+    canvas.scale_copy(x, y, hBitmapClimb, 12, 0, 12, 12);
   }
 }
 
@@ -486,9 +483,8 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
                                                   : UnitSymbol::GRAY);
     SIZE BitmapUnitSize = unit_symbol->get_size();
 
-    BitmapCanvas hdcTemp(canvas, *unit_symbol);
     canvas.scale_copy(x - Layout::Scale(5), diValue->recBkg.top,
-                      hdcTemp,
+                      *unit_symbol,
                       BitmapUnitPos.x, BitmapUnitPos.y,
                       BitmapUnitSize.cx, BitmapUnitSize.cy);
 

@@ -55,7 +55,6 @@ MapWindow::on_create()
   buffer_canvas.set(canvas);
   stencil_canvas.set(canvas);
 #endif
-  bitmap_canvas.set(canvas);
   return true;
 }
 

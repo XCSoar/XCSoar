@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/ProgressWindow.hpp"
-#include "Screen/BitmapCanvas.hpp"
+#include "Screen/VirtualCanvas.hpp"
 #include "Gauge/LogoView.hpp"
 #include "resource.h"
 
@@ -126,8 +126,6 @@ ProgressWindow::on_paint(Canvas &canvas)
 {
   canvas.clear(background_color);
 
-  BitmapCanvas bitmap_canvas(canvas);
-
   // Determine window size
   int window_width = canvas.get_width();
   int window_height = canvas.get_height();
@@ -140,14 +138,9 @@ ProgressWindow::on_paint(Canvas &canvas)
   DrawLogo(canvas, logo_rect);
 
   // Draw progress bar background
-  bitmap_canvas.select(bitmap_progress_border);
-  int progress_bitmap_width = bitmap_canvas.get_width();
-  int progress_bitmap_height = bitmap_canvas.get_height();
-
   canvas.stretch(0, (window_height - progress_border_height),
                  window_width, progress_border_height,
-                 bitmap_canvas, 0, 0,
-                 progress_bitmap_width, progress_bitmap_height);
+                 bitmap_progress_border);
 
   ContainerWindow::on_paint(canvas);
 }

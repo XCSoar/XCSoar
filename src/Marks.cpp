@@ -82,14 +82,13 @@ Marks::MarkLocation(const GeoPoint &loc,
   }
 }
 
-void Marks::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-                 const WindowProjection &projection)
+void Marks::Draw(Canvas &canvas, const WindowProjection &projection)
 {
   Poco::ScopedRWLock protect(lock, false); // read only
 
   for (unsigned i = 0; i < marker_store.size(); i++) {
     POINT sc;
     if (projection.GeoToScreenIfVisible(marker_store[i], sc))
-      icon.draw(canvas, bitmap_canvas, sc.x, sc.y);
+      icon.draw(canvas, sc.x, sc.y);
   }
 }

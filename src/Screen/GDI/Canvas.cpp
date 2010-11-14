@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Canvas.hpp"
+#include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
 #include "Compatibility/gdi.h"
 #include "Asset.hpp" /* for needclipping */
@@ -207,13 +208,31 @@ Canvas::text_clipped(int x, int y, unsigned width, const TCHAR *text)
 void
 Canvas::copy(int dest_x, int dest_y,
              unsigned dest_width, unsigned dest_height,
-             const Canvas &src, int src_x, int src_y)
+             HBITMAP src, int src_x, int src_y,
+             DWORD dwRop)
 {
   assert(defined());
-  assert(src.defined());
+  assert(src != NULL);
 
-  ::BitBlt(dc, dest_x, dest_y, dest_width, dest_height,
-           src.dc, src_x, src_y, SRCCOPY);
+  if (compatible_dc == NULL)
+    compatible_dc = ::CreateCompatibleDC(dc);
+
+  HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src);
+  copy(dest_x, dest_y, dest_width, dest_height,
+       compatible_dc, src_x, src_y,
+       dwRop);
+  ::SelectObject(compatible_dc, old);
+}
+
+void
+Canvas::copy(int dest_x, int dest_y,
+             unsigned dest_width, unsigned dest_height,
+             const Bitmap &src, int src_x, int src_y,
+             DWORD dwRop)
+{
+  copy(dest_x, dest_y, dest_width, dest_height,
+       src.native(), src_x, src_y,
+       dwRop);
 }
 
 void
@@ -226,6 +245,13 @@ void
 Canvas::copy(const Canvas &src)
 {
   copy(src, 0, 0);
+}
+
+void
+Canvas::copy(const Bitmap &src)
+{
+  SIZE size = src.get_size();
+  copy(0, 0, size.cx, size.cy, src, 0, 0);
 }
 
 void
@@ -263,35 +289,28 @@ Canvas::copy_transparent_white(const Canvas &src)
 }
 
 void
-Canvas::stretch_transparent(const Canvas &src, Color key)
+Canvas::stretch_transparent(const Bitmap &src, Color key)
 {
   assert(defined());
   assert(src.defined());
 
+  if (compatible_dc == NULL)
+    compatible_dc = ::CreateCompatibleDC(dc);
+
+  HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src.native());
+
+  SIZE size = src.get_size();
 #ifdef _WIN32_WCE
   ::TransparentImage(dc, 0, 0, get_width(), get_height(),
-                     src.dc, 0, 0, src.get_width(), src.get_height(),
+                     compatible_dc, 0, 0, size.cx, size.cy,
                      key);
 #else
   ::TransparentBlt(dc, 0, 0, get_width(), get_height(),
-                   src.dc, 0, 0, src.get_width(), src.get_height(),
+                   compatible_dc, 0, 0, size.cx, size.cy,
                    key);
 #endif
-}
 
-void
-Canvas::stretch(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                const Canvas &src,
-                int src_x, int src_y,
-                unsigned src_width, unsigned src_height)
-{
-  assert(defined());
-  assert(src.defined());
-
-  ::StretchBlt(dc, dest_x, dest_y, dest_width, dest_height,
-               src.dc, src_x, src_y, src_width, src_height,
-               SRCCOPY);
+  ::SelectObject(compatible_dc, old);
 }
 
 void
@@ -303,25 +322,55 @@ Canvas::stretch(const Canvas &src,
 }
 
 void
-Canvas::copy_or(int dest_x, int dest_y,
+Canvas::stretch(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
-                const Canvas &src, int src_x, int src_y)
+                HBITMAP src,
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height)
 {
   assert(defined());
-  assert(src.defined());
+  assert(src != NULL);
 
-  ::BitBlt(dc, dest_x, dest_y, dest_width, dest_height,
-           src.dc, src_x, src_y, SRCPAINT);
+  if (compatible_dc == NULL)
+    compatible_dc = ::CreateCompatibleDC(dc);
+
+  HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src);
+  stretch(dest_x, dest_y, dest_width, dest_height,
+          compatible_dc, src_x, src_y, src_width, src_height);
+  ::SelectObject(compatible_dc, old);
 }
 
 void
-Canvas::copy_and(int dest_x, int dest_y,
-                 unsigned dest_width, unsigned dest_height,
-                 const Canvas &src, int src_x, int src_y)
+Canvas::stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src,
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height)
 {
   assert(defined());
   assert(src.defined());
 
-  ::BitBlt(dc, dest_x, dest_y, dest_width, dest_height,
-           src.dc, src_x, src_y, SRCAND);
+  stretch(dest_x, dest_y, dest_width, dest_height,
+          src.native(), src_x, src_y, src_width, src_height);
+}
+
+void
+Canvas::stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Bitmap &src)
+{
+  assert(src.defined());
+
+  SIZE size = src.get_size();
+  stretch(dest_x, dest_y, dest_width, dest_height,
+          src, 0, 0, size.cx, size.cy);
+}
+
+void
+Canvas::stretch(const Bitmap &src)
+{
+  assert(src.defined());
+
+  SIZE size = src.get_size();
+  stretch(src, 0, 0, size.cx, size.cy);
 }

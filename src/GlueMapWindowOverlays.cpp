@@ -68,9 +68,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const RECT &rc,
     return; // early exit
   }
 
-  icon->draw(canvas, bitmap_canvas,
-             rc.left + IBLSCALE(2),
-            rc.bottom + IBLSCALE(-35));
+  icon->draw(canvas, rc.left + IBLSCALE(2), rc.bottom + IBLSCALE(-35));
 
   canvas.background_opaque();
   canvas.set_background_color(Color::WHITE);
@@ -106,9 +104,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
     MaskedIcon &icon = (logger.isLoggerActive() && flip) ?
                        Graphics::hLogger : Graphics::hLoggerOff;
 
-    icon.draw(canvas, bitmap_canvas,
-              rc.right + IBLSCALE(offset),
-              rc.bottom + IBLSCALE(-7));
+    icon.draw(canvas, rc.right + IBLSCALE(offset), rc.bottom + IBLSCALE(-7));
   }
 
   MaskedIcon *bmp;
@@ -124,7 +120,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
 
   offset -= 24;
 
-  bmp->draw(canvas, bitmap_canvas, rc.right + IBLSCALE(offset - 1),
+  bmp->draw(canvas, rc.right + IBLSCALE(offset - 1),
             rc.bottom + IBLSCALE(-21));
 }
 
@@ -302,8 +298,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
         Units::GetUserAltitudeUnit());
 
       if (unit_symbol != NULL)
-        unit_symbol->draw(canvas, bitmap_canvas,
-                          x + TextSize.cx + IBLSCALE(1), y);
+        unit_symbol->draw(canvas, x + TextSize.cx + IBLSCALE(1), y);
     }
   }
 }
@@ -547,15 +542,13 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const RECT &rc,
               rc.bottom - Fonts::MapBold.get_ascent_height() - IBLSCALE(1),
               ScaleInfo);
 
-  Graphics::hBmpMapScaleLeft.draw(canvas, bitmap_canvas,
-                                  0, rc.bottom - Height);
-  Graphics::hBmpMapScaleRight.draw(canvas, bitmap_canvas,
-                                   IBLSCALE(14) + TextSize.cx, rc.bottom - Height);
+  Graphics::hBmpMapScaleLeft.draw(canvas, 0, rc.bottom - Height);
+  Graphics::hBmpMapScaleRight.draw(canvas, IBLSCALE(14) + TextSize.cx,
+                                   rc.bottom - Height);
 
   const UnitSymbol *symbol = GetUnitSymbol(Unit);
   if (symbol != NULL)
-    symbol->draw(canvas, bitmap_canvas, IBLSCALE(8) + TextSize.cx,
-                 rc.bottom - Height);
+    symbol->draw(canvas, IBLSCALE(8) + TextSize.cx, rc.bottom - Height);
 
   int y = rc.bottom - Height - Fonts::Title.get_ascent_height();
 

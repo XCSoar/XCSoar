@@ -65,7 +65,7 @@ ConvertRect(const GeoBounds br)
 }
 
 void
-TopologyFileRenderer::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
+TopologyFileRenderer::Paint(Canvas &canvas,
                             const WindowProjection &projection) const
 {
   fixed map_scale = projection.GetMapScale();
@@ -109,7 +109,7 @@ TopologyFileRenderer::Paint(Canvas &canvas, BitmapCanvas &bitmap_canvas,
           const GeoPoint l = point2GeoPoint(line.point[jj]);
 
           if (projection.GeoToScreenIfVisible(l, sc))
-            icon.draw(canvas, bitmap_canvas, sc.x, sc.y);
+            icon.draw(canvas, sc.x, sc.y);
         }
       }
       break;
@@ -253,11 +253,11 @@ TopologyRenderer::~TopologyRenderer()
 }
 
 void
-TopologyRenderer::Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
+TopologyRenderer::Draw(Canvas &canvas,
                        const WindowProjection &projection) const
 {
   for (unsigned i = 0; i < store.size(); ++i)
-    files[i]->Paint(canvas, bitmap_canvas, projection);
+    files[i]->Paint(canvas, projection);
 }
 
 void

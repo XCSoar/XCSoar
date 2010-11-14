@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/UnitSymbol.hpp"
-#include "Screen/BitmapCanvas.hpp"
+#include "Screen/Canvas.hpp"
 #include "resource.h"
 
 #include <assert.h>
@@ -69,16 +69,11 @@ GetUnitSymbol(Units_t unit)
 
 
 void 
-UnitSymbol::draw(Canvas& canvas, 
-                 BitmapCanvas& bitmap_canvas,
-                 const int x, const int y) const
+UnitSymbol::draw(Canvas& canvas, const int x, const int y) const
 {
   const POINT BmpPos = get_origin(UnitSymbol::NORMAL);
   const SIZE size = get_size();
-  bitmap_canvas.background_opaque();
-  bitmap_canvas.set_text_color(Color::WHITE);
-  bitmap_canvas.select(bitmap);
-  canvas.scale_copy(x, y, bitmap_canvas,
+  canvas.scale_copy(x, y, bitmap,
 		    BmpPos.x, BmpPos.y,
 		    size.cx, size.cy);
 }

@@ -500,11 +500,9 @@ OnImagePaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   (void)Sender;
 
   if (page == 4) {
-    BitmapCanvas bitmap_canvas(canvas, jpgimage1);
-    canvas.copy(bitmap_canvas);
+    canvas.copy(jpgimage1);
   } else if (page == 5) {
-    BitmapCanvas bitmap_canvas(canvas, jpgimage2);
-    canvas.copy(bitmap_canvas);
+    canvas.copy(jpgimage2);
   }
 }
 

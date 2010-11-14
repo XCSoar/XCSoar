@@ -25,7 +25,6 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "Screen/UnitSymbol.hpp"
-#include "Screen/BitmapCanvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/ContainerWindow.hpp"
@@ -285,12 +284,10 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
                                            ? UnitSymbol::INVERSE
                                            : UnitSymbol::NORMAL);
 
-    BitmapCanvas temp(canvas, *unit_symbol);
-
     canvas.scale_copy(x + tsize.cx,
                       y + ascent_height
                       - Layout::FastScale(unit_size.cy),
-                      temp,
+                      *unit_symbol,
                       origin.x, origin.y,
                       unit_size.cx, unit_size.cy);
   }

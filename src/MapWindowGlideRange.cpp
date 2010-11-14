@@ -120,7 +120,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
     POINT sc;
     if (render_projection.GeoToScreenIfVisible(Calculated().TerrainWarningLocation,
                                                  sc))
-      Graphics::hTerrainWarning.draw(canvas, bitmap_canvas, sc.x, sc.y);
+      Graphics::hTerrainWarning.draw(canvas, sc.x, sc.y);
   }
 }
 

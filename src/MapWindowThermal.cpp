@@ -64,13 +64,13 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
     if (positive(Calculated().ThermalEstimate_R)) {
       POINT sc;
       if (projection.GeoToScreenIfVisible(Calculated().ThermalEstimate_Location, sc)) {
-        Graphics::hBmpThermalSource.draw(canvas, bitmap_canvas, sc.x, sc.y);
+        Graphics::hBmpThermalSource.draw(canvas, sc.x, sc.y);
       }
     }
   } else if (projection.GetMapScale() <= fixed(4000)) {
     for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
       if (ThermalSources[i].Visible) 
-        Graphics::hBmpThermalSource.draw(canvas, bitmap_canvas,
+        Graphics::hBmpThermalSource.draw(canvas,
                                       ThermalSources[i].Screen.x,
                                       ThermalSources[i].Screen.y);
     }

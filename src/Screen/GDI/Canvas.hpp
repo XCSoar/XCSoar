@@ -42,7 +42,7 @@ Copyright_License {
  */
 class Canvas : private NonCopyable {
 protected:
-  HDC dc;
+  HDC dc, compatible_dc;
   unsigned width, height;
 
 #ifdef NOLINETO
@@ -50,19 +50,33 @@ protected:
 #endif
 
 public:
-  Canvas():dc(NULL) {}
+  Canvas():dc(NULL), compatible_dc(NULL) {}
   Canvas(HDC _dc, unsigned _width, unsigned _height)
-    :dc(_dc), width(_width), height(_height) {
+    :dc(_dc), compatible_dc(NULL), width(_width), height(_height) {
     assert(dc != NULL);
   }
 
+  ~Canvas() {
+    reset();
+  }
+
 protected:
+  void reset() {
+    if (compatible_dc != NULL) {
+      ::DeleteDC(compatible_dc);
+      compatible_dc = NULL;
+    }
+  }
+
   void set(HDC _dc, unsigned _width, unsigned _height) {
     assert(_dc != NULL);
     assert(_width > 0);
     assert(_height > 0);
 
+    reset();
+
     dc = _dc;
+    compatible_dc = NULL;
     width = _width;
     height = _height;
   }
@@ -364,19 +378,62 @@ public:
 
   void copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,
-            const Canvas &src, int src_x, int src_y);
+            HDC src, int src_x, int src_y,
+            DWORD dwRop=SRCCOPY) {
+    assert(defined());
+    assert(src != NULL);
+
+    ::BitBlt(dc, dest_x, dest_y, dest_width, dest_height,
+             src, src_x, src_y, dwRop);
+  }
+
+  void copy(int dest_x, int dest_y,
+            unsigned dest_width, unsigned dest_height,
+            const Canvas &src, int src_x, int src_y) {
+    copy(dest_x, dest_y, dest_width, dest_height,
+         src.dc, src_x, src_y);
+  }
+
+  void copy(int dest_x, int dest_y,
+            unsigned dest_width, unsigned dest_height,
+            HBITMAP src, int src_x, int src_y,
+            DWORD dwRop=SRCCOPY);
+
+  void copy(int dest_x, int dest_y,
+            unsigned dest_width, unsigned dest_height,
+            const Bitmap &src, int src_x, int src_y,
+            DWORD dwRop=SRCCOPY);
+
   void copy(const Canvas &src, int src_x, int src_y);
   void copy(const Canvas &src);
 
+  void copy(const Bitmap &src);
+
   void copy_transparent_white(const Canvas &src);
   void copy_transparent_black(const Canvas &src);
-  void stretch_transparent(const Canvas &src, Color key);
+  void stretch_transparent(const Bitmap &src, Color key);
+
+  void stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               HDC src,
+               int src_x, int src_y,
+               unsigned src_width, unsigned src_height) {
+    assert(defined());
+    assert(src != NULL);
+
+    ::StretchBlt(dc, dest_x, dest_y, dest_width, dest_height,
+                 src, src_x, src_y, src_width, src_height,
+                 SRCCOPY);
+  }
 
   void stretch(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
                const Canvas &src,
                int src_x, int src_y,
-               unsigned src_width, unsigned src_height);
+               unsigned src_width, unsigned src_height) {
+    stretch(dest_x, dest_y, dest_width, dest_height,
+            src.dc, src_x, src_y, src_width, src_height);
+  }
 
   void stretch(const Canvas &src,
                int src_x, int src_y,
@@ -384,24 +441,70 @@ public:
 
   void stretch(const Canvas &src);
 
+  void stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               HBITMAP src,
+               int src_x, int src_y,
+               unsigned src_width, unsigned src_height);
+
+  void stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Bitmap &src,
+               int src_x, int src_y,
+               unsigned src_width, unsigned src_height);
+
+  void stretch(const Bitmap &src,
+               int src_x, int src_y,
+               unsigned src_width, unsigned src_height) {
+    stretch(0, 0, width, height, src, src_x, src_y, src_width, src_height);
+  }
+
+  void stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Bitmap &src);
+
+  void stretch(const Bitmap &src);
+
   void copy_or(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
-               const Canvas &src, int src_x, int src_y);
+               const Canvas &src, int src_x, int src_y) {
+    copy(dest_x, dest_y, dest_width, dest_height,
+         src, src_x, src_y, SRCPAINT);
+  }
 
   void copy_or(const Canvas &src) {
     copy_or(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
+  void copy_or(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Bitmap &src, int src_x, int src_y) {
+    copy(dest_x, dest_y, dest_width, dest_height,
+         src, src_x, src_y,
+         SRCPAINT);
+  }
+
   void copy_and(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
-                const Canvas &src, int src_x, int src_y);
+                const Canvas &src, int src_x, int src_y) {
+    copy(dest_x, dest_y, dest_width, dest_height,
+         src.dc, src_x, src_y, SRCAND);
+  }
 
   void copy_and(const Canvas &src) {
     copy_and(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
+  void copy_and(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src, int src_x, int src_y) {
+    copy(dest_x, dest_y, dest_width, dest_height,
+         src, src_x, src_y,
+         SRCAND);
+  }
+
   void scale_copy(int dest_x, int dest_y,
-                  const Canvas &src,
+                  const Bitmap &src,
                   int src_x, int src_y,
                   unsigned src_width, unsigned src_height);
 

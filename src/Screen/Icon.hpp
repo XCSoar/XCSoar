@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 
 class Canvas;
-class BitmapCanvas;
 
 /**
  * An icon with a mask which marks transparent pixels.
@@ -61,7 +60,7 @@ public:
     bitmap.reset();
   }
 
-  void draw(Canvas &canvas, BitmapCanvas &bitmap_canvas, int x, int y) const;
+  void draw(Canvas &canvas, int x, int y) const;
 };
 
 #endif

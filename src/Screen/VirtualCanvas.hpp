@@ -28,8 +28,8 @@ Copyright_License {
 
 /**
  * A #Canvas implementation which draws to an off-screen surface.
- * This is an abstract class; see #BufferCanvas or #BitmapCanvas for
- * concrete implementations.
+ * This is an abstract class; see #BufferCanvas for
+ * a concrete implementation.
  */
 class VirtualCanvas : public Canvas {
 public:

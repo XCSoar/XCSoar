@@ -23,16 +23,19 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Bitmap.hpp"
 
 void
 Canvas::stretch(const Canvas &src)
 {
+  assert(src.defined());
+
   stretch(src, 0, 0, src.get_width(), src.get_height());
 }
 
 void
 Canvas::scale_copy(int dest_x, int dest_y,
-                   const Canvas &src,
+                   const Bitmap &src,
                    int src_x, int src_y,
                    unsigned src_width, unsigned src_height)
 {

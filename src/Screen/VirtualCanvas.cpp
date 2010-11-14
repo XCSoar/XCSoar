@@ -106,6 +106,8 @@ VirtualCanvas::set(const Canvas &canvas)
 #ifndef ENABLE_SDL
 void VirtualCanvas::reset()
 {
+  Canvas::reset();
+
   if (dc != NULL)
     ::DeleteDC(dc);
 }

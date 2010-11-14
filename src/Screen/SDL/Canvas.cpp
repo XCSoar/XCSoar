@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Canvas.hpp"
+#include "Screen/Bitmap.hpp"
 
 #include <assert.h>
 #include <string.h>
@@ -276,6 +277,22 @@ Canvas::copy(const Canvas &src)
   copy(src, 0, 0);
 }
 
+void
+Canvas::copy(int dest_x, int dest_y,
+             unsigned dest_width, unsigned dest_height,
+             const Bitmap &src, int src_x, int src_y)
+{
+  copy(dest_x, dest_y, dest_width, dest_height,
+       src.native(), src_x, src_y);
+}
+
+void
+Canvas::copy(const Bitmap &src)
+{
+  SDL_Surface *surface = src.native();
+  copy(0, 0, surface->w, surface->h, surface, 0, 0);
+}
+
 #ifndef ENABLE_OPENGL
 
 void
@@ -299,26 +316,30 @@ Canvas::copy_transparent_black(const Canvas &src)
 }
 
 void
-Canvas::stretch_transparent(const Canvas &src, Color key)
+Canvas::stretch_transparent(const Bitmap &src, Color key)
 {
-  assert(src.surface != NULL);
+  assert(src.defined());
 
-  ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(key));
-  stretch(src);
-  ::SDL_SetColorKey(src.surface, 0, 0);
+  SDL_Surface *surface = src.native();
+
+  ::SDL_SetColorKey(surface, SDL_SRCCOLORKEY,
+                    ::SDL_MapRGB(surface->format, key.value.r,
+                                 key.value.g, key.value.b));
+  stretch(surface);
+  ::SDL_SetColorKey(surface, 0, 0);
 }
 
 void
 Canvas::stretch(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
-                const Canvas &src,
+                SDL_Surface *src,
                 int src_x, int src_y,
                 unsigned src_width, unsigned src_height)
 {
-  assert(src.surface != NULL);
+  assert(src != NULL);
 
   SDL_Surface *zoomed =
-    ::zoomSurface(src.surface, (double)dest_width / (double)src_width,
+    ::zoomSurface(src, (double)dest_width / (double)src_width,
                   (double)dest_height / (double)src_height,
                   SMOOTHING_OFF);
 
@@ -343,6 +364,34 @@ Canvas::stretch(const Canvas &src,
   // XXX
   stretch(0, 0, get_width(), get_height(),
           src, src_x, src_y, src_width, src_height);
+}
+
+void
+Canvas::stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src,
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height)
+{
+  assert(defined());
+  assert(src.defined());
+
+  stretch(dest_x, dest_y, dest_width, dest_height,
+          src.native(),
+          src_x, src_y, src_width, src_height);
+}
+
+void
+Canvas::stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src)
+{
+  assert(defined());
+  assert(src.defined());
+
+  SDL_Surface *surface = src.native();
+  stretch(dest_x, dest_y, dest_width, dest_height,
+          surface, 0, 0, surface->w, surface->h);
 }
 
 #ifndef ENABLE_OPENGL
@@ -496,29 +545,51 @@ blit_and(SDL_Surface *dest, int dest_x, int dest_y,
 void
 Canvas::copy_or(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
-                const Canvas &src, int src_x, int src_y)
+                SDL_Surface *src, int src_x, int src_y)
 {
-  assert(src.surface != NULL);
+  assert(src != NULL);
 
   dest_x += x_offset;
   dest_y += y_offset;
 
   ::blit_or(surface, dest_x, dest_y, dest_width, dest_height,
-            src.surface, src_x, src_y);
+            src, src_x, src_y);
 }
 
 void
 Canvas::copy_and(int dest_x, int dest_y,
                  unsigned dest_width, unsigned dest_height,
-                 const Canvas &src, int src_x, int src_y)
+                 SDL_Surface *src, int src_x, int src_y)
 {
-  assert(src.surface != NULL);
+  assert(src != NULL);
 
   dest_x += x_offset;
   dest_y += y_offset;
 
   ::blit_and(surface, dest_x, dest_y, dest_width, dest_height,
-             src.surface, src_x, src_y);
+             src, src_x, src_y);
 }
 
 #endif /* !OPENGL */
+
+void
+Canvas::copy_or(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src, int src_x, int src_y)
+{
+  assert(src.defined());
+
+  copy_or(dest_x, dest_y, dest_width, dest_height,
+          src.native(), src_x, src_y);
+}
+
+void
+Canvas::copy_and(int dest_x, int dest_y,
+                 unsigned dest_width, unsigned dest_height,
+                 const Bitmap &src, int src_x, int src_y)
+{
+  assert(src.defined());
+
+  copy_and(dest_x, dest_y, dest_width, dest_height,
+           src.native(), src_x, src_y);
+}

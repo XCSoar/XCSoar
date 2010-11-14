@@ -77,7 +77,7 @@ MapWindow::RenderMapLayer(Canvas &canvas)
 
   if (topology_renderer != NULL && SettingsMap().EnableTopology)
     // Draw the topology
-    topology_renderer->Draw(canvas, bitmap_canvas, render_projection);
+    topology_renderer->Draw(canvas, render_projection);
 }
 
 /**
@@ -118,7 +118,7 @@ MapWindow::RenderTaskElements(Canvas &canvas)
 
   if (marks != NULL &&
       render_projection.GetMapScale() <= fixed_int_constant(30000))
-    marks->Draw(canvas, bitmap_canvas, render_projection);
+    marks->Draw(canvas, render_projection);
 }
 
 /**

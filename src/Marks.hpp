@@ -41,8 +41,7 @@ public:
   ~Marks();
 
   void Reset();
-  void Draw(Canvas &canvas, BitmapCanvas &bitmap_canvas,
-            const WindowProjection &projection);
+  void Draw(Canvas &canvas, const WindowProjection &projection);
   void MarkLocation(const GeoPoint &loc,
                     const BrokenDateTime &time,
                     bool play_sound);

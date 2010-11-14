@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Canvas.hpp"
+#include "Screen/Bitmap.hpp"
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/Util.hpp"
@@ -203,9 +204,9 @@ Canvas::copy(int dest_x, int dest_y,
 }
 
 void
-Canvas::stretch_transparent(const Canvas &src, Color key)
+Canvas::stretch_transparent(const Bitmap &src, Color key)
 {
-  assert(src.surface != NULL);
+  assert(src.defined());
 
   // XXX
   stretch(src);
@@ -214,27 +215,27 @@ Canvas::stretch_transparent(const Canvas &src, Color key)
 void
 Canvas::stretch(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
-                const Canvas &src,
+                SDL_Surface *src,
                 int src_x, int src_y,
                 unsigned src_width, unsigned src_height)
 {
-  assert(src.surface != NULL);
+  assert(src != NULL);
 
   glColor4f(1.0, 1.0, 1.0, 1.0);
 
-  GLTexture texture(src.surface);
+  GLTexture texture(src);
   texture.draw(x_offset, y_offset,
                dest_x, dest_y, dest_width, dest_height,
                src_x, src_y, src_width, src_height,
-               src.surface->w, src.surface->h);
+               src->w, src->h);
 }
 
 void
 Canvas::copy_or(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
-                const Canvas &src, int src_x, int src_y)
+                SDL_Surface *src, int src_x, int src_y)
 {
-  assert(src.surface != NULL);
+  assert(src != NULL);
 
   GLLogicOp logic_op(GL_OR);
   copy(dest_x, dest_y, dest_width, dest_height,
@@ -244,9 +245,9 @@ Canvas::copy_or(int dest_x, int dest_y,
 void
 Canvas::copy_and(int dest_x, int dest_y,
                  unsigned dest_width, unsigned dest_height,
-                 const Canvas &src, int src_x, int src_y)
+                 SDL_Surface *src, int src_x, int src_y)
 {
-  assert(src.surface != NULL);
+  assert(src != NULL);
 
   GLLogicOp logic_op(GL_AND);
   copy(dest_x, dest_y, dest_width, dest_height,
