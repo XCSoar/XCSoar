@@ -200,8 +200,7 @@ Canvas::copy(int dest_x, int dest_y,
   GLEnable scope(GL_TEXTURE_2D);
   texture.draw(x_offset, y_offset,
                dest_x, dest_y, dest_width, dest_height,
-               src_x, src_y, dest_width, dest_height,
-               src_surface->w, src_surface->h);
+               src_x, src_y, dest_width, dest_height);
 }
 
 void
@@ -242,8 +241,7 @@ Canvas::stretch(int dest_x, int dest_y,
   GLTexture texture(src);
   texture.draw(x_offset, y_offset,
                dest_x, dest_y, dest_width, dest_height,
-               src_x, src_y, src_width, src_height,
-               src->w, src->h);
+               src_x, src_y, src_width, src_height);
 }
 
 void
@@ -261,8 +259,7 @@ Canvas::stretch(int dest_x, int dest_y,
   texture.bind();
   texture.draw(x_offset, y_offset,
                dest_x, dest_y, dest_width, dest_height,
-               src_x, src_y, src_width, src_height,
-               src.get_width(), src.get_height());
+               src_x, src_y, src_width, src_height);
 }
 
 void
@@ -279,8 +276,7 @@ Canvas::stretch(int dest_x, int dest_y,
   texture.bind();
   texture.draw(x_offset, y_offset,
                dest_x, dest_y, dest_width, dest_height,
-               0, 0, src.get_width(), src.get_height(),
-               src.get_width(), src.get_height());
+               0, 0, src.get_width(), src.get_height());
 }
 
 void

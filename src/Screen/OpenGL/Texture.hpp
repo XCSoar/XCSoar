@@ -37,6 +37,7 @@ Copyright_License {
  */
 class GLTexture {
   GLuint id;
+  unsigned width, height;
 
 public:
   GLTexture() {
@@ -52,6 +53,14 @@ public:
     glDeleteTextures(1, &id);
   }
 
+  unsigned get_width() const {
+    return width;
+  }
+
+  unsigned get_height() const {
+    return height;
+  }
+
 protected:
   void init() {
     glGenTextures(1, &id);
@@ -64,19 +73,18 @@ protected:
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   }
 
-  static void load(SDL_Surface *surface);
+  void load(SDL_Surface *surface);
 
 public:
   void bind() {
     glBindTexture(GL_TEXTURE_2D, id);
   }
 
-  static void draw(int x_offset, int y_offset,
-                   int dest_x, int dest_y,
-                   unsigned dest_width, unsigned dest_height,
-                   int src_x, int src_y,
-                   unsigned src_width, unsigned src_height,
-                   unsigned src_full_width, unsigned src_full_height);
+  void draw(int x_offset, int y_offset,
+            int dest_x, int dest_y,
+            unsigned dest_width, unsigned dest_height,
+            int src_x, int src_y,
+            unsigned src_width, unsigned src_height) const;
 };
 
 #endif

@@ -79,6 +79,9 @@ SurfaceToTextureSurface(SDL_Surface *src)
 void
 GLTexture::load(SDL_Surface *src)
 {
+  width = src->w;
+  height = src->h;
+
   SDL_Surface *surface = SurfaceToTextureSurface(src);
 
 #ifdef ANDROID
@@ -100,8 +103,7 @@ GLTexture::draw(int x_offset, int y_offset,
                 int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 int src_x, int src_y,
-                unsigned src_width, unsigned src_height,
-                unsigned src_full_width, unsigned src_full_height)
+                unsigned src_width, unsigned src_height) const
 {
 #ifdef ANDROID
   const GLint rect[4] = { src_x, src_y, src_width, src_height };
@@ -114,10 +116,10 @@ GLTexture::draw(int x_offset, int y_offset,
                 screen_height - y_offset - dest_y,
                 0, dest_width, -dest_height);
 #else
-  GLdouble x0 = (GLdouble)src_x / src_full_width;
-  GLdouble y0 = (GLdouble)src_y / src_full_height;
-  GLdouble x1 = (GLdouble)(src_x + src_width) / src_full_width;
-  GLdouble y1 = (GLdouble)(src_y + src_height) / src_full_height;
+  GLdouble x0 = (GLdouble)src_x / width;
+  GLdouble y0 = (GLdouble)src_y / height;
+  GLdouble x1 = (GLdouble)(src_x + src_width) / width;
+  GLdouble y1 = (GLdouble)(src_y + src_height) / height;
 
   glBegin(GL_QUADS);
   glTexCoord2d(x0, y0);
