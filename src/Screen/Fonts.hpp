@@ -38,8 +38,6 @@ namespace Fonts
   extern Font CDI;
   extern Font MapLabel;
 
-  void LoadCustomFont(Font *theFont, const TCHAR FontRegKey[]);
-
   void Initialize();
   void SizeInfoboxFont();
   void LoadCustom();

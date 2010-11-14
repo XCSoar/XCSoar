@@ -73,8 +73,8 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
   font->lfQuality = ANTIALIASED_QUALITY;
 }
 
-void
-Fonts::LoadCustomFont(Font *theFont, const TCHAR FontRegKey[])
+static void
+LoadCustomFont(Font *theFont, const TCHAR FontRegKey[])
 {
   LOGFONT logfont;
   memset((char *)&logfont, 0, sizeof(LOGFONT));
