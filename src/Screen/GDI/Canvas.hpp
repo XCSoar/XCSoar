@@ -400,39 +400,10 @@ public:
     copy_and(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
-  void stretch_or(int dest_x, int dest_y,
-                  unsigned dest_width, unsigned dest_height,
-                  const Canvas &src,
-                  int src_x, int src_y,
-                  unsigned src_width, unsigned src_height);
-
-  void stretch_and(int dest_x, int dest_y,
-                   unsigned dest_width, unsigned dest_height,
-                   const Canvas &src,
-                   int src_x, int src_y,
-                   unsigned src_width, unsigned src_height);
-
   void scale_copy(int dest_x, int dest_y,
                   const Canvas &src,
                   int src_x, int src_y,
                   unsigned src_width, unsigned src_height);
-
-  void scale_or(int dest_x, int dest_y,
-                const Canvas &src,
-                int src_x, int src_y,
-                unsigned src_width, unsigned src_height);
-
-  void scale_and(int dest_x, int dest_y,
-                 const Canvas &src,
-                 int src_x, int src_y,
-                 unsigned src_width, unsigned src_height);
-
-  void scale_or_and(int dest_x, int dest_y,
-                    const Canvas &src,
-                    unsigned src_width, unsigned src_height) {
-    scale_or(dest_x, dest_y, src, 0, 0, src_width, src_height);
-    scale_and(dest_x, dest_y, src, src_width, 0, src_width, src_height);
-  }
 
   gcc_pure
   HWColor get_pixel(int x, int y) const {

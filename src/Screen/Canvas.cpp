@@ -44,33 +44,3 @@ Canvas::scale_copy(int dest_x, int dest_y,
     copy(dest_x, dest_y, src_width, src_height,
             src, src_x, src_y);
 }
-
-void
-Canvas::scale_or(int dest_x, int dest_y,
-                 const Canvas &src,
-                 int src_x, int src_y,
-                 unsigned src_width, unsigned src_height)
-{
-  if (Layout::ScaleEnabled())
-    stretch_or(dest_x, dest_y,
-               Layout::Scale(src_width), Layout::Scale(src_height),
-               src, src_x, src_y, src_width, src_height);
-  else
-    copy_or(dest_x, dest_y, src_width, src_height,
-            src, src_x, src_y);
-}
-
-void
-Canvas::scale_and(int dest_x, int dest_y,
-                  const Canvas &src,
-                  int src_x, int src_y,
-                  unsigned src_width, unsigned src_height)
-{
-  if (Layout::ScaleEnabled())
-    stretch_and(dest_x, dest_y,
-                Layout::Scale(src_width), Layout::Scale(src_height),
-                src, src_x, src_y, src_width, src_height);
-  else
-    copy_and(dest_x, dest_y, src_width, src_height,
-             src, src_x, src_y);
-}

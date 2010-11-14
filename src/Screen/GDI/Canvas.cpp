@@ -325,33 +325,3 @@ Canvas::copy_and(int dest_x, int dest_y,
   ::BitBlt(dc, dest_x, dest_y, dest_width, dest_height,
            src.dc, src_x, src_y, SRCAND);
 }
-
-void
-Canvas::stretch_or(int dest_x, int dest_y,
-                   unsigned dest_width, unsigned dest_height,
-                   const Canvas &src,
-                   int src_x, int src_y,
-                   unsigned src_width, unsigned src_height)
-{
-  assert(defined());
-  assert(src.defined());
-
-  ::StretchBlt(dc, dest_x, dest_y, dest_width, dest_height,
-               src.dc, src_x, src_y, src_width, src_height,
-               SRCPAINT);
-}
-
-void
-Canvas::stretch_and(int dest_x, int dest_y,
-                    unsigned dest_width, unsigned dest_height,
-                    const Canvas &src,
-                    int src_x, int src_y,
-                    unsigned src_width, unsigned src_height)
-{
-  assert(defined());
-  assert(src.defined());
-
-  ::StretchBlt(dc, dest_x, dest_y, dest_width, dest_height,
-               src.dc, src_x, src_y, src_width, src_height,
-               SRCAND);
-}

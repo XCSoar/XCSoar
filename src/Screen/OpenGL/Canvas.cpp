@@ -236,8 +236,9 @@ Canvas::copy_or(int dest_x, int dest_y,
 {
   assert(src.surface != NULL);
 
-  stretch_or(dest_x, dest_y, dest_width, dest_height,
-             src, src_x, src_y, dest_width, dest_height);
+  GLLogicOp logic_op(GL_OR);
+  copy(dest_x, dest_y, dest_width, dest_height,
+       src, src_x, src_y);
 }
 
 void
@@ -247,34 +248,7 @@ Canvas::copy_and(int dest_x, int dest_y,
 {
   assert(src.surface != NULL);
 
-  stretch_and(dest_x, dest_y, dest_width, dest_height,
-                src, src_x, src_y, dest_width, dest_height);
-}
-
-void
-Canvas::stretch_or(int dest_x, int dest_y,
-                   unsigned dest_width, unsigned dest_height,
-                   const Canvas &src,
-                   int src_x, int src_y,
-                   unsigned src_width, unsigned src_height)
-{
-  assert(src.surface != NULL);
-
-  GLLogicOp logic_op(GL_OR);
-  stretch(dest_x, dest_y, dest_width, dest_height,
-          src, src_x, src_y, src_width, src_height);
-}
-
-void
-Canvas::stretch_and(int dest_x, int dest_y,
-                    unsigned dest_width, unsigned dest_height,
-                    const Canvas &src,
-                    int src_x, int src_y,
-                    unsigned src_width, unsigned src_height)
-{
-  assert(src.surface != NULL);
-
   GLLogicOp logic_op(GL_AND);
-  stretch(dest_x, dest_y, dest_width, dest_height,
-          src, src_x, src_y, src_width, src_height);
+  copy(dest_x, dest_y, dest_width, dest_height,
+       src, src_x, src_y);
 }
