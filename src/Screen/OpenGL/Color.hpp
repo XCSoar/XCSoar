@@ -27,7 +27,7 @@ Copyright_License {
 #ifdef ANDROID
 #include <GLES/gl.h>
 #else
-#include <GL/gl.h>
+#include <SDL/SDL_opengl.h>
 #endif
 
 #include <SDL_video.h> // for SDL_Color
