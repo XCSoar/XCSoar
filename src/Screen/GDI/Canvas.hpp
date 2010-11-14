@@ -56,6 +56,7 @@ public:
     assert(dc != NULL);
   }
 
+protected:
   void set(HDC _dc, unsigned _width, unsigned _height) {
     assert(_dc != NULL);
     assert(_width > 0);
