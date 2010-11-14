@@ -30,9 +30,6 @@ Font::set(const char *file, int ptsize, bool bold, bool italic)
 {
   reset();
 
-  if (!TTF_WasInit())
-    TTF_Init();
-
   font = TTF_OpenFont(file, ptsize);
   if (font == NULL)
     return false;

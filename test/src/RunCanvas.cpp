@@ -37,12 +37,9 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
-
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/WindowCanvas.hpp"
-#include "Screen/Layout.hpp"
-#include "Interface.hpp"
-#include "Asset.hpp"
+#include "Screen/Init.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -267,6 +264,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+  ScreenGlobalInit screen_init;
+
 #ifdef WIN32
   TestWindow::register_class(hInstance);
 #endif

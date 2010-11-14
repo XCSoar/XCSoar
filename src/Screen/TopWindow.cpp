@@ -45,9 +45,6 @@ TopCanvas::set()
   Uint32 flags = SDL_ANYFORMAT;
 
 #ifdef ENABLE_OPENGL
-  ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
-
   flags |= SDL_OPENGL;
 #else /* !ENABLE_OPENGL */
   /* double buffering temporarily disabled on Android because
@@ -149,12 +146,6 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
   style.popup();
 
 #ifdef ENABLE_SDL
-  int ret;
-
-  ret = ::SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER);
-  if (ret != 0)
-    fprintf(stderr, "SDL_Init() has failed\n");
-
   screen.set();
 
   /* apply the mode which was chosen by TopCanvas */
@@ -369,8 +360,6 @@ TopWindow::event_loop()
   SDL_Event event;
   while (loop.get(event))
     loop.dispatch(event);
-
-  SDL_Quit();
 
   return 0;
 

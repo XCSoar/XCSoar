@@ -37,10 +37,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Compiler.h"
 #include "Screen/Fonts.hpp"
-
-#ifndef ENABLE_SDL
-#include <commctrl.h>
-#endif /* !ENABLE_SDL */
+#include "Screen/Init.hpp"
 
 /**
  * Main entry point for the whole XCSoar application
@@ -75,9 +72,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   ParseCommandLine(lpCmdLine);
 
-#ifndef ENABLE_SDL
-  InitCommonControls();
-#endif /* !ENABLE_SDL */
+  ScreenGlobalInit screen_init;
 
   // Write initialization note to logfile
   LogStartUp(_T("Initialise application instance"));

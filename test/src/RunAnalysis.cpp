@@ -41,6 +41,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"
 #include "Interface.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -172,6 +173,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Profile::Load();
 
   LoadFiles();
+
+  ScreenGlobalInit screen_init;
 
 #ifdef WIN32
   ResourceLoader::Init(hInstance);

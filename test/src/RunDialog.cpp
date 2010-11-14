@@ -39,6 +39,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"
 #include "MapWindow.hpp"
 #include "StatusMessage.hpp"
@@ -118,6 +119,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     fprintf(stderr, "Usage: RunDialog XMLFILE\n");
     return 1;
   }
+
+  ScreenGlobalInit screen_init;
 
   Layout::Initialize(320,240);
   SingleWindow main_window;

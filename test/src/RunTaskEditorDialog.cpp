@@ -37,6 +37,7 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Init.hpp"
 #include "Dialogs/Dialogs.h"
 #include "MapWindow.hpp"
 #include "UtilsSystem.hpp"
@@ -181,6 +182,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+  ScreenGlobalInit screen_init;
+
 #ifdef WIN32
   PaintWindow::register_class(hInstance);
 #endif

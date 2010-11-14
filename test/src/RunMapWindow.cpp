@@ -38,12 +38,10 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
-#include "Screen/BufferCanvas.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
-#include "Screen/Layout.hpp"
+#include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"
-#include "Interface.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Logger/Logger.hpp"
 #include "Terrain/RasterWeather.hpp"
@@ -279,6 +277,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 {
   LoadFiles();
+
+  ScreenGlobalInit screen_init;
 
 #ifdef WIN32
   ResourceLoader::Init(hInstance);

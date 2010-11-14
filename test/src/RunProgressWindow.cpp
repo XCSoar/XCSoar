@@ -38,11 +38,8 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ProgressWindow.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"
-
-#ifndef ENABLE_SDL
-#include <commctrl.h>
-#endif /* !ENABLE_SDL */
 
 #ifndef WIN32
 int main(int argc, char **argv)
@@ -57,8 +54,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+  ScreenGlobalInit screen_init;
+
 #ifndef ENABLE_SDL
-  InitCommonControls();
   PaintWindow::register_class(hInstance);
 #endif
 
