@@ -25,8 +25,7 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/TextWindow.cpp \
 	$(SCREEN_SRC_DIR)/EditWindow.cpp \
 	$(SCREEN_SRC_DIR)/TopWindow.cpp \
-	$(SCREEN_SRC_DIR)/SingleWindow.cpp \
-	$(SCREEN_SRC_DIR)/Dialog.cpp
+	$(SCREEN_SRC_DIR)/SingleWindow.cpp
 
 ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += \
