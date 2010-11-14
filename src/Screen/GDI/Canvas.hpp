@@ -40,7 +40,7 @@ Copyright_License {
  * Base drawable canvas class
  * 
  */
-class Canvas {
+class Canvas : private NonCopyable {
 protected:
   HDC dc;
   unsigned width, height;
@@ -48,11 +48,6 @@ protected:
 #ifdef NOLINETO
   POINT cursor;
 #endif
-
-private:
-  /* copy constructor not allowed */
-  Canvas(const Canvas &canvas) {}
-  Canvas &operator=(const Canvas &canvas) { return *this; }
 
 public:
   Canvas():dc(NULL) {}
