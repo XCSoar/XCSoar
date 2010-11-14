@@ -21,13 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_BITMAP_CANVAS_HPP
-#define XCSOAR_SCREEN_BITMAP_CANVAS_HPP
-
-#ifdef ENABLE_SDL
-#include "Screen/SDL/BitmapCanvas.hpp"
-#else /* !ENABLE_SDL */
 #include "Screen/GDI/BitmapCanvas.hpp"
-#endif /* !ENABLE_SDL */
+#include "Screen/Bitmap.hpp"
 
-#endif
+void
+BitmapCanvas::select(const Bitmap &bitmap)
+{
+  old = (HBITMAP)SelectObject(dc, bitmap.native());
+
+  SIZE size = bitmap.get_size();
+  width = size.cx;
+  height = size.cy;
+}
+
+void BitmapCanvas::clear()
+{
+  SelectObject(dc, old);
+  old = NULL;
+}

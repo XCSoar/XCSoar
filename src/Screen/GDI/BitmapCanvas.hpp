@@ -21,25 +21,48 @@ Copyright_License {
 }
 */
 
-#include "Screen/BitmapCanvas.hpp"
-#include "Screen/Bitmap.hpp"
+#ifndef XCSOAR_SCREEN_GDI_BITMAP_CANVAS_HPP
+#define XCSOAR_SCREEN_GDI_BITMAP_CANVAS_HPP
 
-#ifndef ENABLE_SDL
+#include "Screen/VirtualCanvas.hpp"
 
-void
-BitmapCanvas::select(const Bitmap &bitmap)
-{
-  old = (HBITMAP)SelectObject(dc, bitmap.native());
+class Bitmap;
 
-  SIZE size = bitmap.get_size();
-  width = size.cx;
-  height = size.cy;
-}
+/**
+ * A #Canvas implementation which represents a #Bitmap object.  Use
+ * this class to draw a #Bitmap into another #Canvas object.
+ */
+class BitmapCanvas : public VirtualCanvas {
+protected:
+  HBITMAP old;
 
-void BitmapCanvas::clear()
-{
-  SelectObject(dc, old);
-  old = NULL;
-}
+public:
+  BitmapCanvas():old(NULL) {}
+  BitmapCanvas(const Canvas &canvas)
+    :VirtualCanvas(canvas, 1, 1), old(NULL) {}
 
-#endif /* !ENABLE_SDL */
+  /**
+   * Creates the BitmapCanvas, and initially selects the specified
+   * bitmap.
+   */
+  BitmapCanvas(const Canvas &canvas, const Bitmap &bitmap)
+    :VirtualCanvas(canvas, 1, 1), old(NULL) {
+    select(bitmap);
+  }
+
+  void set()
+  {
+    VirtualCanvas::set(1, 1);
+  }
+
+  void set(const Canvas &canvas)
+  {
+    VirtualCanvas::set(canvas, 1, 1);
+  }
+
+  void select(const Bitmap &bitmap);
+
+  void clear();
+};
+
+#endif

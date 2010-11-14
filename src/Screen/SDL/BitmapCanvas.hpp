@@ -21,13 +21,38 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_BITMAP_CANVAS_HPP
-#define XCSOAR_SCREEN_BITMAP_CANVAS_HPP
+#ifndef XCSOAR_SCREEN_SDL_BITMAP_CANVAS_HPP
+#define XCSOAR_SCREEN_SDL_BITMAP_CANVAS_HPP
 
-#ifdef ENABLE_SDL
-#include "Screen/SDL/BitmapCanvas.hpp"
-#else /* !ENABLE_SDL */
-#include "Screen/GDI/BitmapCanvas.hpp"
-#endif /* !ENABLE_SDL */
+#include "Screen/VirtualCanvas.hpp"
+#include "Screen/Bitmap.hpp"
+
+class BitmapCanvas : public Canvas {
+public:
+  BitmapCanvas() {}
+  BitmapCanvas(const Canvas &canvas) {}
+  BitmapCanvas(const Canvas &canvas, const Bitmap &bitmap) {
+    select(bitmap);
+  }
+
+  void set(const Canvas &canvas)
+  {
+    reset();
+  }
+
+  void reset() {
+    surface = NULL;
+  }
+
+  void select(const Bitmap &bitmap) {
+    surface = bitmap.native();
+    width = surface->w;
+    height = surface->h;
+  }
+
+  void clear() {
+    surface = NULL;
+  }
+};
 
 #endif

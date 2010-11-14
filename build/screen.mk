@@ -15,7 +15,6 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Color.cpp \
 	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/BufferCanvas.cpp \
-	$(SCREEN_SRC_DIR)/BitmapCanvas.cpp \
 	$(SCREEN_SRC_DIR)/Font.cpp \
 	$(SCREEN_SRC_DIR)/Pen.cpp \
 	$(SCREEN_SRC_DIR)/Window.cpp \
@@ -44,6 +43,7 @@ else
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/Event.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \
+	$(SCREEN_SRC_DIR)/GDI/BitmapCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/PaintCanvas.cpp
 endif
 
