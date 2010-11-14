@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
+#include "Screen/OpenGL/Cache.hpp"
 #include "Screen/Util.hpp"
 #include "Math/FastMath.h"
 
@@ -142,49 +143,40 @@ Canvas::segment(int x, int y, unsigned radius,
 void
 Canvas::text(int x, int y, const TCHAR *text)
 {
-  SDL_Surface *s;
-
   if (font == NULL)
     return;
 
-  s = ::TTF_RenderUTF8_Solid(font, text, Color::BLACK);
-  if (s == NULL)
-    return;
+  glColor4f(1.0, 1.0, 1.0, 1.0);
 
-  if (background_mode == TRANSPARENT && s->format->palette != NULL &&
-      s->format->palette->ncolors >= 2) {
-    s->flags &= ~SDL_SRCCOLORKEY;
+  if (background_mode == TRANSPARENT) {
+    GLTexture *texture = TextCache::get(font, Color::WHITE, Color::BLACK, text);
+    if (texture == NULL)
+      return;
 
     GLLogicOp logic_op(GL_AND);
+    GLEnable scope(GL_TEXTURE_2D);
 
-    /* clear the text pixels (AND) */
-    s->format->palette->colors[0] = Color::WHITE;
-    s->format->palette->colors[1] = Color::BLACK;
-    copy(x, y, s);
+    texture->bind();
+    texture->draw(x_offset, y_offset, x, y);
 
-    /* paint with the text color on top (OR) */
     if (text_color != Color::BLACK) {
-      s->format->palette->colors[0] = Color::BLACK;
-      s->format->palette->colors[1] = text_color;
+      GLTexture *texture = TextCache::get(font, Color::BLACK, text_color, text);
+      if (texture == NULL)
+        return;
+
       logic_op.set(GL_OR);
-      copy(x, y, s);
+      texture->bind();
+      texture->draw(x_offset, y_offset, x, y);
     }
+  } else {
+    GLTexture *texture = TextCache::get(font, background_color, text_color, text);
+    if (texture == NULL)
+      return;
 
-    ::SDL_FreeSurface(s);
-    return;
+    GLEnable scope(GL_TEXTURE_2D);
+    texture->bind();
+    texture->draw(x_offset, y_offset, x, y);
   }
-
-  if (s->format->palette != NULL && s->format->palette->ncolors >= 2) {
-    s->format->palette->colors[1] = text_color;
-
-    if (background_mode == OPAQUE) {
-      s->flags &= ~SDL_SRCCOLORKEY;
-      s->format->palette->colors[0] = background_color;
-    }
-  }
-
-  copy(x, y, s);
-  ::SDL_FreeSurface(s);
 }
 
 void

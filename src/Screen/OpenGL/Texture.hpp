@@ -85,6 +85,13 @@ public:
             unsigned dest_width, unsigned dest_height,
             int src_x, int src_y,
             unsigned src_width, unsigned src_height) const;
+
+  void draw(int x_offset, int y_offset,
+            int dest_x, int dest_y) const {
+    draw(x_offset, y_offset,
+         dest_x, dest_y, width, height,
+         0, 0, width, height);
+  }
 };
 
 #endif

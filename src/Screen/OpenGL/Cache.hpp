@@ -21,42 +21,29 @@ Copyright_License {
 }
 */
 
-#include "Screen/Init.hpp"
+#ifndef XCSOAR_SCREEN_OPENGL_CACHE_HPP
+#define XCSOAR_SCREEN_OPENGL_CACHE_HPP
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Cache.hpp"
+#include "Compiler.h"
+
+#ifdef ANDROID
+#include <GLES/gl.h>
+#else
+#include <SDL_opengl.h>
 #endif
 
-#include <SDL.h>
 #include <SDL_ttf.h>
 
-#include <stdio.h>
-#include <stdlib.h>
+class GLTexture;
+class Font;
+class Color;
 
-ScreenGlobalInit::ScreenGlobalInit()
-{
-  if (::SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) != 0) {
-    fprintf(stderr, "SDL_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
+namespace TextCache {
+  gcc_pure
+  GLTexture *get(TTF_Font *font, Color background_color, Color text_color,
+                 const char *text);
 
-#ifdef ENABLE_OPENGL
-  ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
+  void flush();
+};
+
 #endif
-
-  if (::TTF_Init() != 0) {
-    fprintf(stderr, "TTF_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
-}
-
-ScreenGlobalInit::~ScreenGlobalInit()
-{
-#ifdef ENABLE_OPENGL
-  TextCache::flush();
-#endif
-
-  ::TTF_Quit();
-  ::SDL_Quit();
-}
