@@ -36,6 +36,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Interface.hpp"
 #include "Compiler.h"
+#include "Screen/Fonts.hpp"
 
 #ifndef ENABLE_SDL
 #include <commctrl.h>
@@ -87,6 +88,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   int ret = CommonInterface::main_window.event_loop();
   CommonInterface::main_window.reset();
+
+  Fonts::Deinitialize();
 
   return ret;
 }

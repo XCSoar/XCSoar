@@ -303,6 +303,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   window.event_loop();
   window.reset();
 
+  Fonts::Deinitialize();
+
   delete terrain;
   delete topology;
 

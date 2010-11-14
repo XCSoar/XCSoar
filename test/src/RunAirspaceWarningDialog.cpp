@@ -137,5 +137,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   dlgAirspaceWarningShowDlg();
   dlgAirspaceWarningDeInit();
 
+  Fonts::Deinitialize();
+
   return 0;
 }

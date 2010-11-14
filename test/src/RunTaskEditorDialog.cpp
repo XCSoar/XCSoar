@@ -200,5 +200,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   dlgTaskOverviewShowModal(main_window);
 
+  Fonts::Deinitialize();
+
   return 0;
 }

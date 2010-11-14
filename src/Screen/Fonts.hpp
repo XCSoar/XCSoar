@@ -41,6 +41,7 @@ namespace Fonts
   void Initialize();
   void SizeInfoboxFont();
   void LoadCustom();
+  void Deinitialize();
 
   const TCHAR* GetStandardFontFace();
 }

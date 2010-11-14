@@ -190,6 +190,18 @@ Fonts::LoadCustom()
   LoadCustomFont(&MapBold, szProfileFontMapWindowBoldFont);
 }
 
+void
+Fonts::Deinitialize()
+{
+  InfoBox.reset();
+  InfoBoxSmall.reset();
+  Title.reset();
+  Map.reset();
+  MapBold.reset();
+  CDI.reset();
+  MapLabel.reset();
+}
+
 const TCHAR*
 Fonts::GetStandardFontFace()
 {
