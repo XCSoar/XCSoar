@@ -22,8 +22,6 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "Screen/Graphics.hpp"
-#include "Screen/WindowCanvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Topology/TopologyStore.hpp"
 #include "Topology/TopologyRenderer.hpp"

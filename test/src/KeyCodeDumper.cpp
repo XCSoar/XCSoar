@@ -37,11 +37,7 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
-#include "Screen/BufferCanvas.hpp"
-#include "Screen/WindowCanvas.hpp"
-#include "Screen/Layout.hpp"
 #include "Interface.hpp"
-#include "Asset.hpp"
 
 #include <algorithm>
 
