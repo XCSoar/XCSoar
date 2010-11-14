@@ -28,11 +28,10 @@ Copyright_License {
  */
 
 #include "Device/Geoid.h"
-#include "Interface.hpp"
-
-#include <windows.h>
+#include "ResourceLoader.hpp"
 
 #include <stdlib.h>
+#include <string.h>
 #include <tchar.h>
 
 #define EGM96SIZE 16200
@@ -45,47 +44,16 @@ unsigned char* egm96data= NULL;
 void
 OpenGeoid(void)
 {
-#ifdef WIN32
-  const TCHAR *lpRes;
-  HRSRC hResInfo;
-  HGLOBAL hRes;
-  int len;
-
-  hResInfo = FindResource(XCSoarInterface::hInst,
-                          _T("IDR_RASTER_EGM96S"),
-                          _T("RASTERDATA"));
-
-  if (hResInfo == NULL) {
+  ResourceLoader::Data data = ResourceLoader::Load(_T("IDR_RASTER_EGM96S"),
+                                                   _T("RASTERDATA"));
+  if (data.first == NULL) {
     // unable to find the resource
     egm96data = NULL;
     return;
   }
 
-  // Load the wave resource.
-  hRes = LoadResource(XCSoarInterface::hInst, hResInfo);
-  if (hRes == NULL) {
-    // unable to load the resource
-    egm96data = NULL;
-    return;
-  }
-
-  // Lock the wave resource and do something with it.
-  lpRes = (const TCHAR *)LockResource(hRes);
-
-  if (lpRes) {
-    len = SizeofResource(XCSoarInterface::hInst,hResInfo);
-
-    if (len == EGM96SIZE) {
-      egm96data = (unsigned char*)malloc(len);
-      strncpy((char*)egm96data,(const char*)lpRes,len);
-    } else {
-      egm96data = NULL;
-      return;
-    }
-  }
-#else /* !WIN32 */
-  // XXX we have no resources on UNIX
-#endif /* !WIN32 */
+  egm96data = (unsigned char *)malloc(data.second);
+  memcpy(egm96data, data.first, data.second);
 }
 
 /**
