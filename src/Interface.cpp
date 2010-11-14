@@ -44,7 +44,6 @@ Copyright_License {
 bool ActionInterface::doForceShutdown = false;
 
 InterfaceBlackboard CommonInterface::blackboard;
-HINSTANCE CommonInterface::hInst; // The current instance
 StatusMessageList CommonInterface::status_messages;
 MainWindow CommonInterface::main_window(status_messages);
 

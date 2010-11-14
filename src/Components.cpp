@@ -246,8 +246,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   ResourceLoader::Init(hInstance);
 #endif
 
-  hInst = hInstance;
-
   //If "XCSoar" is already running, stop this instance
   if (MainWindow::find(szTitle))
     return false;
@@ -256,9 +254,9 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   SendSettingsMap();
 
   // Register window classes
-  PaintWindow::register_class(hInst);
-  MainWindow::register_class(hInst);
-  MapWindow::register_class(hInst);
+  PaintWindow::register_class(hInstance);
+  MainWindow::register_class(hInstance);
+  MapWindow::register_class(hInstance);
 
   // Send the SettingsMap to the DeviceBlackboard
   SendSettingsMap();

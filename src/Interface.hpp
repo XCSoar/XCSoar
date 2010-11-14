@@ -35,9 +35,6 @@ class StatusMessageList;
  */
 class CommonInterface {
 public:
-  /** Instance of the main application */
-  static HINSTANCE hInst;
-
   // window.. make this protected TODO so have to subclass to get access
   static StatusMessageList status_messages;
   static MainWindow main_window;
