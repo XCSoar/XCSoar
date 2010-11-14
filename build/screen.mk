@@ -8,7 +8,6 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/ProgressBar.cpp \
 	$(SCREEN_SRC_DIR)/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/Util.cpp \
-	$(SCREEN_SRC_DIR)/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/Icon.cpp \
 	$(SCREEN_SRC_DIR)/Brush.cpp \
 	$(SCREEN_SRC_DIR)/Canvas.cpp \
@@ -31,6 +30,7 @@ SCREEN_SOURCES = \
 
 ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Event.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Timer.cpp
@@ -41,6 +41,7 @@ SCREEN_SOURCES += \
 endif
 else
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Event.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/BitmapCanvas.cpp \

@@ -59,7 +59,10 @@ public:
     load(id);
   }
 #endif
-  ~Bitmap();
+
+  ~Bitmap() {
+    reset();
+  }
 
 public:
   bool defined() const {
