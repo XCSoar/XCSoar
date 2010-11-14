@@ -197,10 +197,26 @@ Canvas::copy(int dest_x, int dest_y,
   glColor4f(1.0, 1.0, 1.0, 1.0);
 
   GLTexture texture(src_surface);
+  GLEnable scope(GL_TEXTURE_2D);
   texture.draw(x_offset, y_offset,
                dest_x, dest_y, dest_width, dest_height,
                src_x, src_y, dest_width, dest_height,
                src_surface->w, src_surface->h);
+}
+
+void
+Canvas::copy(int dest_x, int dest_y,
+             unsigned dest_width, unsigned dest_height,
+             const Bitmap &src, int src_x, int src_y)
+{
+  stretch(dest_x, dest_y, dest_width, dest_height,
+          src, src_x, src_y, dest_width, dest_height);
+}
+
+void
+Canvas::copy(const Bitmap &src)
+{
+  copy(0, 0, src.get_width(), src.get_height(), src, 0, 0);
 }
 
 void
@@ -231,11 +247,48 @@ Canvas::stretch(int dest_x, int dest_y,
 }
 
 void
+Canvas::stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src, int src_x, int src_y,
+                unsigned src_width, unsigned src_height)
+{
+  assert(src.defined());
+
+  glColor4f(1.0, 1.0, 1.0, 1.0);
+
+  GLTexture &texture = *src.native();
+  GLEnable scope(GL_TEXTURE_2D);
+  texture.bind();
+  texture.draw(x_offset, y_offset,
+               dest_x, dest_y, dest_width, dest_height,
+               src_x, src_y, src_width, src_height,
+               src.get_width(), src.get_height());
+}
+
+void
+Canvas::stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src)
+{
+  assert(src.defined());
+
+  glColor4f(1.0, 1.0, 1.0, 1.0);
+
+  GLTexture &texture = *src.native();
+  GLEnable scope(GL_TEXTURE_2D);
+  texture.bind();
+  texture.draw(x_offset, y_offset,
+               dest_x, dest_y, dest_width, dest_height,
+               0, 0, src.get_width(), src.get_height(),
+               src.get_width(), src.get_height());
+}
+
+void
 Canvas::copy_or(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
-                SDL_Surface *src, int src_x, int src_y)
+                const Bitmap &src, int src_x, int src_y)
 {
-  assert(src != NULL);
+  assert(src.defined());
 
   GLLogicOp logic_op(GL_OR);
   copy(dest_x, dest_y, dest_width, dest_height,
@@ -245,9 +298,9 @@ Canvas::copy_or(int dest_x, int dest_y,
 void
 Canvas::copy_and(int dest_x, int dest_y,
                  unsigned dest_width, unsigned dest_height,
-                 SDL_Surface *src, int src_x, int src_y)
+                 const Bitmap &src, int src_x, int src_y)
 {
-  assert(src != NULL);
+  assert(src.defined());
 
   GLLogicOp logic_op(GL_AND);
   copy(dest_x, dest_y, dest_width, dest_height,

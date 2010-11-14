@@ -36,19 +36,31 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 
+#ifdef ENABLE_OPENGL
+class GLTexture;
+#endif
+
 /**
  * An image loaded from storage.
  */
 class Bitmap : private NonCopyable {
 protected:
-#ifdef ENABLE_SDL
+#ifdef ENABLE_OPENGL
+  GLTexture *texture;
+  unsigned width, height;
+#elif defined(ENABLE_SDL)
   SDL_Surface *surface;
 #else
   HBITMAP bitmap;
 #endif
 
 public:
-#ifdef ENABLE_SDL
+#ifdef ENABLE_OPENGL
+  Bitmap():texture(NULL) {}
+  explicit Bitmap(unsigned id):texture(NULL) {
+    load(id);
+  }
+#elif defined(ENABLE_SDL)
   Bitmap():surface(NULL) {}
   explicit Bitmap(unsigned id):surface(NULL) {
     load(id);
@@ -66,12 +78,24 @@ public:
 
 public:
   bool defined() const {
-#ifdef ENABLE_SDL
+#ifdef ENABLE_OPENGL
+    return texture != NULL;
+#elif defined(ENABLE_SDL)
     return surface != NULL;
 #else
     return bitmap != NULL;
 #endif
   }
+
+#ifdef ENABLE_OPENGL
+  unsigned get_width() const {
+    return width;
+  }
+
+  unsigned get_height() const {
+    return height;
+  }
+#endif
 
 #ifdef ENABLE_SDL
   bool load(SDL_Surface *_surface);
@@ -90,7 +114,11 @@ public:
 
   const SIZE get_size() const;
 
-#ifdef ENABLE_SDL
+#ifdef ENABLE_OPENGL
+  GLTexture *native() const {
+    return texture;
+  }
+#elif defined(ENABLE_SDL)
   SDL_Surface* native() const {
     return surface;
   }

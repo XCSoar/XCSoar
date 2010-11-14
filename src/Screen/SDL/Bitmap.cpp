@@ -27,6 +27,10 @@ Copyright_License {
 
 #include "Screen/SDL/Format.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Texture.hpp"
+#endif
+
 #include <SDL_endian.h>
 
   #ifdef WIN32
@@ -39,10 +43,22 @@ bool
 Bitmap::load(SDL_Surface *_surface)
 {
   assert(_surface != NULL);
+
+#ifdef ENABLE_OPENGL
+  assert(texture == NULL);
+
+  texture = new GLTexture(_surface);
+  width = _surface->w;
+  height = _surface->h;
+  SDL_FreeSurface(_surface);
+
+  return true;
+#else
   assert(surface == NULL);
 
   surface = _surface;
   return true;
+#endif
 }
 
 bool
@@ -120,10 +136,15 @@ Bitmap::load_file(const TCHAR *path)
 void
 Bitmap::reset()
 {
+#ifdef ENABLE_OPENGL
+  delete texture;
+  texture = NULL;
+#else
   if (surface != NULL) {
     SDL_FreeSurface(surface);
     surface = NULL;
   }
+#endif
 }
 
 const SIZE
@@ -131,6 +152,10 @@ Bitmap::get_size() const
 {
   assert(defined());
 
+#ifdef ENABLE_OPENGL
+  const SIZE size = { width, height };
+#else
   const SIZE size = { surface->w, surface->h };
+#endif
   return size;
 }

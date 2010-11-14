@@ -100,7 +100,6 @@ TopCanvas::set()
   glLoadIdentity();
 
   glDisable(GL_DEPTH_TEST);
-  glEnable(GL_TEXTURE_2D);
 
   glEnableClientState(GL_VERTEX_ARRAY);
 #endif

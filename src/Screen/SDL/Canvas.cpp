@@ -263,8 +263,6 @@ Canvas::copy(int dest_x, int dest_y,
   ::SDL_BlitSurface(src_surface, &src_rect, surface, &dest_rect);
 }
 
-#endif /* !OPENGL */
-
 void
 Canvas::copy(const Canvas &src, int src_x, int src_y)
 {
@@ -292,8 +290,6 @@ Canvas::copy(const Bitmap &src)
   SDL_Surface *surface = src.native();
   copy(0, 0, surface->w, surface->h, surface, 0, 0);
 }
-
-#ifndef ENABLE_OPENGL
 
 void
 Canvas::copy_transparent_white(const Canvas &src)
@@ -354,8 +350,6 @@ Canvas::stretch(int dest_x, int dest_y,
   ::SDL_FreeSurface(zoomed);
 }
 
-#endif /* !OPENGL */
-
 void
 Canvas::stretch(const Canvas &src,
                 int src_x, int src_y,
@@ -393,8 +387,6 @@ Canvas::stretch(int dest_x, int dest_y,
   stretch(dest_x, dest_y, dest_width, dest_height,
           surface, 0, 0, surface->w, surface->h);
 }
-
-#ifndef ENABLE_OPENGL
 
 static bool
 clip_range(int &a, unsigned a_size, int &b, unsigned b_size, unsigned &size)
@@ -570,8 +562,6 @@ Canvas::copy_and(int dest_x, int dest_y,
              src, src_x, src_y);
 }
 
-#endif /* !OPENGL */
-
 void
 Canvas::copy_or(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
@@ -593,3 +583,5 @@ Canvas::copy_and(int dest_x, int dest_y,
   copy_and(dest_x, dest_y, dest_width, dest_height,
            src.native(), src_x, src_y);
 }
+
+#endif /* !OPENGL */

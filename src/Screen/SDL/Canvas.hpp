@@ -417,6 +417,7 @@ public:
     copy(dest_x, dest_y, surface->w, surface->h, surface, 0, 0);
   }
 
+#ifndef ENABLE_OPENGL
   void copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,
             const Canvas &src, int src_x, int src_y) {
@@ -426,6 +427,7 @@ public:
 
   void copy(const Canvas &src, int src_x, int src_y);
   void copy(const Canvas &src);
+#endif /* !OPENGL */
 
   void copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,
@@ -460,8 +462,6 @@ public:
   void stretch(const Canvas &src,
                int src_x, int src_y,
                unsigned src_width, unsigned src_height);
-
-  void stretch(const Canvas &src);
 
   void stretch(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
