@@ -175,7 +175,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 #ifdef WIN32
   ResourceLoader::Init(hInstance);
-  CommonInterface::hInst = hInstance;
 
   PaintWindow::register_class(hInstance);
 #endif

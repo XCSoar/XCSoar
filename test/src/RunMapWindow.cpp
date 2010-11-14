@@ -282,7 +282,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 #ifdef WIN32
   ResourceLoader::Init(hInstance);
-  CommonInterface::hInst = hInstance;
 
   TestWindow::register_class(hInstance);
   MapWindow::register_class(hInstance);

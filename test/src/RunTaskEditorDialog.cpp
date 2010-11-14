@@ -37,7 +37,6 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Fonts.hpp"
-#include "Interface.hpp"
 #include "Dialogs/Dialogs.h"
 #include "MapWindow.hpp"
 #include "UtilsSystem.hpp"
@@ -183,7 +182,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 {
 #ifdef WIN32
-  CommonInterface::hInst = hInstance;
   PaintWindow::register_class(hInstance);
 #endif
 

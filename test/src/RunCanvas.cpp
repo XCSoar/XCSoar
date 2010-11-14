@@ -268,8 +268,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 {
 #ifdef WIN32
-  CommonInterface::hInst = hInstance;
-
   TestWindow::register_class(hInstance);
 #endif
 

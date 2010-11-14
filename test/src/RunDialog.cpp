@@ -110,7 +110,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   ResourceLoader::Init(hInstance);
-  CommonInterface::hInst = hInstance;
 
   PaintWindow::register_class(hInstance);
 #endif

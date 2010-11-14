@@ -367,7 +367,6 @@ KEY_CODE_DUMPER_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
-	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/KeyCodeDumper.cpp
 KEY_CODE_DUMPER_OBJS = $(call SRC_TO_OBJ,$(KEY_CODE_DUMPER_SOURCES))
 KEY_CODE_DUMPER_BIN = $(TARGET_BIN_DIR)/KeyCodeDumper$(TARGET_EXEEXT)
@@ -534,7 +533,6 @@ RUN_CANVAS_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
-	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/RunCanvas.cpp
 RUN_CANVAS_OBJS = $(call SRC_TO_OBJ,$(RUN_CANVAS_SOURCES))
 RUN_CANVAS_BIN = $(TARGET_BIN_DIR)/RunCanvas$(TARGET_EXEEXT)
@@ -631,7 +629,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeInfoBoxLayout.cpp \
-	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
@@ -673,7 +670,6 @@ RUN_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
-	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunDialog.cpp \
@@ -703,7 +699,6 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/ResourceLoader.cpp \
-	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunProgressWindow.cpp
@@ -792,7 +787,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
 RUN_ANALYSIS_OBJS = $(call SRC_TO_OBJ,$(RUN_ANALYSIS_SOURCES))
@@ -845,7 +839,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeInfoBoxLayout.cpp \
-	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
@@ -907,7 +900,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
-	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \

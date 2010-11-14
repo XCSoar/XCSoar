@@ -24,7 +24,6 @@ Copyright_License {
 #include "Screen/Window.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Blank.hpp"
-#include "Interface.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_SDL
@@ -99,7 +98,7 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
   hWnd = ::CreateWindowEx(ex_style, cls, text, style,
                           left, top, width, height,
                           parent != NULL ? parent->hWnd : NULL,
-                          NULL, XCSoarInterface::hInst, this);
+                          NULL, NULL, this);
 
   /* this isn't good error handling, but this only happens if
      out-of-memory (we can't do anything useful) or if we passed wrong
