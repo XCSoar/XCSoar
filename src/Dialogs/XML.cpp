@@ -501,7 +501,7 @@ LoadDataField(const XMLNode &node, CallBackTableEntry *LookUpTable,
     return new DataFieldFileReader(callback);
 
   if (_tcsicmp(DataType, _T("boolean")) == 0)
-    return new DataFieldBoolean(false, _T("ON"), _T("OFF"), callback);
+    return new DataFieldBoolean(false, _("ON"), _("OFF"), callback);
 
   if (_tcsicmp(DataType, _T("double")) == 0)
     return new DataFieldFloat(EditFormat, DisplayFmt, Min, Max,
