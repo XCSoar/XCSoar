@@ -50,10 +50,10 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static const TCHAR *const info_box_mode_names[] = {
-  _T("Circling"),
-  _T("Cruise"),
-  _T("FinalGlide"),
-  _T("Aux"),
+  N_("Circling"),
+  N_("Cruise"),
+  N_("FinalGlide"),
+  N_("Auxiliary"),
 };
 
 static WndProperty *
@@ -182,7 +182,7 @@ void dlgConfigInfoboxesShowModal(InfoBoxManager::mode _mode)
 
   TCHAR caption[100];
   _tcscpy(caption, wf->GetCaption());
-  _tcscat(caption, info_box_mode_names[(int)mode]);
+  _tcscat(caption, gettext(info_box_mode_names[(int)mode]));
   wf->SetCaption(caption);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
