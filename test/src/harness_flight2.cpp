@@ -222,7 +222,7 @@ bool test_abort(int n_wind)
 
   task_manager.set_glide_polar(glide_polar);
 
-  test_task(task_manager, waypoints, 2);
+  test_task(task_manager, waypoints, 1);
 
   task_manager.abort();
   task_report(task_manager, "abort");
@@ -251,7 +251,7 @@ bool test_goto(int n_wind, unsigned id, bool auto_mc)
 
   task_manager.set_glide_polar(glide_polar);
 
-  test_task(task_manager, waypoints, 2);
+  test_task(task_manager, waypoints, 1);
 
   task_manager.do_goto(*waypoints.lookup_id(id));
   task_report(task_manager, "goto");
