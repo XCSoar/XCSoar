@@ -5,11 +5,10 @@ TESTFAST = \
 	$(TARGET_BIN_DIR)/test_task$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_mc$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_modes$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_automc$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_replay$(TARGET_EXEEXT)
+	$(TARGET_BIN_DIR)/test_automc$(TARGET_EXEEXT) 
 
 TESTSLOW = \
+	$(TARGET_BIN_DIR)/test_replay$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_olc$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_trees$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_airspace$(TARGET_EXEEXT) \
