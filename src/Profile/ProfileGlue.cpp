@@ -154,6 +154,9 @@ Profile::Use()
   Get(szProfileDrawTerrain,
       settings_map.EnableTerrain);
 
+  Get(szProfileSlopeShading,
+      settings_map.SlopeShading);
+
   Get(szProfileFinalGlideTerrain,
       settings_computer.FinalGlideTerrain);
 

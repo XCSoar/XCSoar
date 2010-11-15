@@ -170,6 +170,11 @@
         <DataField DataType="boolean"/>
       </Edit>
     
+      <Edit Name="prpSlopeShading" Caption="Slope shading" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Draw shades among slopes, indicating the wind direction.">
+        <DataField DataType="boolean"/>
+      </Edit>
+
       <Edit Name="prpTerrainContrast" Caption="Terrain contrast" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Defines the amount of phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.">
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="100" Step="5"/>

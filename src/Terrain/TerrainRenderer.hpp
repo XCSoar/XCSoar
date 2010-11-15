@@ -54,6 +54,7 @@ private:
   const RasterTerrain *terrain;
 
 protected:
+  bool SlopeShading;
   short TerrainRamp;
   short TerrainContrast;
   short TerrainBrightness;
@@ -82,9 +83,11 @@ protected:
 
 public:
   void
-  SetSettings(short _TerrainRamp, short _TerrainContrast,
-      short _TerrainBrightness)
+  SetSettings(bool _SlopeShading,
+              short _TerrainRamp, short _TerrainContrast,
+              short _TerrainBrightness)
   {
+    SlopeShading = _SlopeShading;
     TerrainRamp = _TerrainRamp;
     TerrainContrast = _TerrainContrast;
     TerrainBrightness = _TerrainBrightness;

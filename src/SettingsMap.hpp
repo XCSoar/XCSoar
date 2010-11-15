@@ -66,6 +66,12 @@ struct SETTINGS_MAP {
   bool EnableTopology;
   /** Map will show terrain */
   bool EnableTerrain;
+
+  /**
+   * Apply slope shading to the terrain?
+   */
+  bool SlopeShading;
+
   /**
    * 0: show all labels
    * 1: show decluttered labels

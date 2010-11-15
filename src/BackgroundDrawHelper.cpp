@@ -95,7 +95,8 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
     }
   }
 
-  m_rend->SetSettings(settings_map.TerrainRamp,
+  m_rend->SetSettings(settings_map.SlopeShading,
+                      settings_map.TerrainRamp,
                       settings_map.TerrainContrast,
                       settings_map.TerrainBrightness);
   m_rend->Draw(canvas, proj,

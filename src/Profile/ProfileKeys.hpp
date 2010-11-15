@@ -70,6 +70,7 @@ extern const TCHAR szProfileAltMargin[];
 extern const TCHAR szProfileSnailTrail[];
 extern const TCHAR szProfileDrawTopology[];
 extern const TCHAR szProfileDrawTerrain[];
+extern const TCHAR szProfileSlopeShading[];
 extern const TCHAR szProfileFinalGlideTerrain[];
 extern const TCHAR szProfileAutoWind[];
 extern const TCHAR szProfileExternalWind[];

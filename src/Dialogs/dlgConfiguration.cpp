@@ -788,6 +788,8 @@ setVariables()
                    XCSoarInterface::SettingsMap().EnableTerrain);
   LoadFormProperty(*wf, _T("prpEnableTopology"),
                    XCSoarInterface::SettingsMap().EnableTopology);
+  LoadFormProperty(*wf, _T("prpSlopeShading"),
+                   XCSoarInterface::SettingsMap().SlopeShading);
   LoadFormProperty(*wf, _T("prpCirclingZoom"),
                    XCSoarInterface::SettingsMap().CircleZoom);
 
@@ -1653,6 +1655,10 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpEnableTopology"),
                               szProfileDrawTopology,
                               XCSoarInterface::SetSettingsMap().EnableTopology);
+
+  changed |= SaveFormProperty(*wf, _T("prpSlopeShading"),
+                              szProfileSlopeShading,
+                              XCSoarInterface::SetSettingsMap().SlopeShading);
 
   changed |= SaveFormProperty(*wf, _T("prpCirclingZoom"),
                               szProfileCircleZoom,
