@@ -14,7 +14,8 @@ set style line 8 lt 2 lc rgb "red" lw 2
 plot \
      'results/res-olc-solution.txt' using 1:2 with linespoints ls 8 title "olc", \
      'results/res-sample.txt' using 2:3 with lines ls 1 title "sample", \
-     'results/res-olc-trace.txt' using 1:2 with lines ls 6 title "trace"
+     'results/res-olc-trace.txt' using 1:2 with lines ls 6 title "trace full", \
+     'results/res-olc-trace_sprint.txt' using 1:2 with lines ls 6 title "trace sprint"
 pause -1
 
 set size noratio
@@ -24,6 +25,7 @@ set xlabel "t (s)"
 plot \
      'results/res-olc-solution.txt' using 4:3 with linespoints ls 8 title "olc", \
      'results/res-sample.txt' using 1:4 with lines ls 1 title "sample", \
-     'results/res-olc-trace.txt' using 4:3 with lines ls 6 title "trace"
+     'results/res-olc-trace.txt' using 4:3 with lines ls 6 title "trace full", \
+     'results/res-olc-trace_sprint.txt' using 4:3 with lines ls 6 title "trace sprint"
 pause -1
 
