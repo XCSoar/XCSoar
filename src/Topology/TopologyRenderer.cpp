@@ -77,7 +77,7 @@ TopologyFileRenderer::Paint(Canvas &canvas,
   // we already do an outer visibility test, but may need a test
   // in screen coords
 
-  enum { NONE, OUTLINE, SOLID } mode = NONE;
+  shape_renderer.configure(&pen, &brush);
 
   // get drawing info
 
@@ -115,49 +115,42 @@ TopologyFileRenderer::Paint(Canvas &canvas,
       break;
 
     case MS_SHAPE_LINE:
-      if (mode != OUTLINE) {
-        canvas.select(pen);
-        mode = OUTLINE;
-      }
-
       for (int tt = 0; tt < shape.numlines; ++tt) {
         const lineObj &line = shape.line[tt];
         unsigned msize = line.numpoints;
-        POINT pt[msize];
+
+        shape_renderer.begin_shape(msize);
 
         for (unsigned i = 0; i < msize; ++i) {
           GeoPoint g = point2GeoPoint(line.point[i]);
-          pt[i] = projection.GeoToScreen(g);
+          shape_renderer.add_point(projection.GeoToScreen(g));
         }
 
-        canvas.polyline(pt, msize);
+        shape_renderer.finish_polyline(canvas);
       }
       break;
 
     case MS_SHAPE_POLYGON:
-      if (mode != SOLID) {
-        canvas.null_pen();
-        canvas.select(brush);
-        mode = SOLID;
-      }
-
       for (int tt = 0; tt < shape.numlines; ++tt) {
         const lineObj &line = shape.line[tt];
         unsigned msize = line.numpoints / iskip;
-        POINT pt[msize];
+
+        shape_renderer.begin_shape(msize);
 
         const pointObj *in = line.point;
         for (unsigned i = 0; i < msize; ++i) {
           GeoPoint g = point2GeoPoint(*in);
           in += iskip;
-          pt[i] = projection.GeoToScreen(g);
+          shape_renderer.add_point(projection.GeoToScreen(g));
         }
 
-        canvas.polygon(pt, msize);
+        shape_renderer.finish_polygon(canvas);
       }
       break;
     }
   }
+
+  shape_renderer.commit();
 }
 
 void

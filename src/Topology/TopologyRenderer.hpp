@@ -25,6 +25,7 @@ Copyright_License {
 #define TOPOLOGY_RENDERER_HPP
 
 #include "Topology/TopologyStore.hpp"
+#include "Topology/ShapeRenderer.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"
@@ -40,6 +41,8 @@ struct SETTINGS_MAP;
  */
 class TopologyFileRenderer : private NonCopyable {
   const TopologyFile &file;
+
+  mutable ShapeRenderer shape_renderer;
 
   Pen pen;
   Brush brush;
