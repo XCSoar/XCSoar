@@ -116,19 +116,19 @@ GLTexture::draw(int x_offset, int y_offset,
                 screen_height - y_offset - dest_y,
                 0, dest_width, -dest_height);
 #else
-  GLdouble x0 = (GLdouble)src_x / width;
-  GLdouble y0 = (GLdouble)src_y / height;
-  GLdouble x1 = (GLdouble)(src_x + src_width) / width;
-  GLdouble y1 = (GLdouble)(src_y + src_height) / height;
+  GLfloat x0 = (GLfloat)src_x / width;
+  GLfloat y0 = (GLfloat)src_y / height;
+  GLfloat x1 = (GLfloat)(src_x + src_width) / width;
+  GLfloat y1 = (GLfloat)(src_y + src_height) / height;
 
   glBegin(GL_QUADS);
-  glTexCoord2d(x0, y0);
+  glTexCoord2f(x0, y0);
   glVertex3f(dest_x, dest_y, 0);
-  glTexCoord2d(x1, y0);
+  glTexCoord2f(x1, y0);
   glVertex3f(dest_x + dest_width, dest_y, 0);
-  glTexCoord2d(x1, y1);
+  glTexCoord2f(x1, y1);
   glVertex3f(dest_x + dest_width, dest_y + dest_height, 0);
-  glTexCoord2d(x0, y1);
+  glTexCoord2f(x0, y1);
   glVertex3f(dest_x, dest_y + dest_height, 0);
   glEnd();
 #endif
