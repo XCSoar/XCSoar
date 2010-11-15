@@ -573,12 +573,12 @@ std::ostream& operator<< (std::ostream& f,
 void
 PrintHelper::contestmanager_print(const ContestManager& man)  
 {
-/*
   {
     std::ofstream fs("results/res-olc-trace.txt");
+    TracePointVector v = man.trace_full.get_trace_points(-1);
 
-    for (TracePointVector::const_iterator it = man.trace_points_full.begin();
-         it != man.trace_points_full.end(); ++it) {
+    for (TracePointVector::const_iterator it = v.begin();
+         it != v.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 
          << "\n";
@@ -588,14 +588,16 @@ PrintHelper::contestmanager_print(const ContestManager& man)
   {
     std::ofstream fs("results/res-olc-trace_sprint.txt");
 
-    for (TracePointVector::const_iterator it = man.trace_points_sprint.begin();
-         it != man.trace_points_sprint.end(); ++it) {
+    TracePointVector v = man.trace_sprint.get_trace_points(-1);
+
+    for (TracePointVector::const_iterator it = v.begin();
+         it != v.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 
          << "\n";
     }
   }
-*/
+
   std::ofstream fs("results/res-olc-solution.txt");
 
   if (man.solution.empty()) {
