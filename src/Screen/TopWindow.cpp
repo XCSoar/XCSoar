@@ -96,6 +96,7 @@ TopCanvas::set()
   glLoadIdentity();
 
   glDisable(GL_DEPTH_TEST);
+  glDisable(GL_DITHER);
 
   glEnableClientState(GL_VERTEX_ARRAY);
 #endif
