@@ -26,10 +26,6 @@
 
 #include "Task/Tasks/BaseTask/IntermediatePoint.hpp"
 
-#ifdef DO_PRINT
-#include <iostream>
-#endif
-
 /**
  * An AATPoint is an abstract IntermediatePoint,
  * can manage a target within the observation zone
