@@ -171,7 +171,7 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT &rc) const
   Pen hpHorizonGround(IBLSCALE(1), Color(106, 55, 12));
   Brush hbHorizonGround(Color(157, 101, 60));
 
-  static const fixed fixed_div(1.0 / 50.0);
+#define fixed_div fixed(1.0 / 50.0)
 #define fixed_89 fixed_int_constant(89)
 
   int radius = IBLSCALE(17);

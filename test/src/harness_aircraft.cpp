@@ -96,8 +96,8 @@ bool AircraftSim::far(TaskManager &task_manager) {
   }
 }
 
-static const fixed fixed_1000(1000);
-static const fixed fixed_20(20);
+#define fixed_1000 fixed(1000)
+#define fixed_20 fixed(20)
 
 fixed AircraftSim::small_rand() {
   return fixed(heading_filt.update(fixed(bearing_noise) *
@@ -160,8 +160,8 @@ void AircraftSim::update_state(TaskManager &task_manager)  {
   state.NettoVario = state.Vario+glide_polar.SinkRate(state.TrueAirspeed);
 }
 
-static const fixed fixed_300(300);
-static const fixed fixed_1500(1500);
+#define fixed_300 fixed(300)
+#define fixed_1500 fixed(1500)
 
 fixed
 AircraftSim::target_height(TaskManager &task_manager)  

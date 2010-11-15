@@ -23,18 +23,18 @@ Copyright_License {
 
 #include "Pressure.hpp"
 
-static const fixed fixed_101325(1013.25);
-static const fixed isa_sea_level_density(1.225);
-static const fixed hpa_to_pa(100);
-static const fixed pa_to_hpa(0.01);
-static const fixed k1(0.190263);
-static const fixed inv_k1(1.0 / 0.190263);
-static const fixed k2(8.417286e-5);
-static const fixed inv_k2(1.0 / 8.417286e-5);
-static const fixed k4(44330.8);
-static const fixed k5(1.0 / 4946.54);
-static const fixed k6(1.0 / 42266.5);
-static const fixed k7(1.0 / 0.234969);
+#define fixed_101325 fixed(1013.25)
+#define isa_sea_level_density fixed(1.225)
+#define hpa_to_pa fixed_int_constant(100)
+#define pa_to_hpa fixed(0.01)
+#define k1 fixed(0.190263)
+#define inv_k1 fixed(1.0 / 0.190263)
+#define k2 fixed(8.417286e-5)
+#define inv_k2 fixed(1.0 / 8.417286e-5)
+#define k4 fixed(44330.8)
+#define k5 fixed(1.0 / 4946.54)
+#define k6 fixed(1.0 / 42266.5)
+#define k7 fixed(1.0 / 0.234969)
 
 AtmosphericPressure::AtmosphericPressure():
   m_QNH(fixed_101325) {}

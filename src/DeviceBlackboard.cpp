@@ -36,6 +36,10 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Simulator.hpp"
 
+#define fixed_inv_2g fixed(1.0/(2.0*9.81))
+#define fixed_inv_g fixed(1.0/9.81)
+#define fixed_small fixed(0.001)
+
 DeviceBlackboard device_blackboard;
 
 /**
@@ -568,9 +572,6 @@ DeviceBlackboard::TurnRate()
 void
 DeviceBlackboard::Dynamics()
 {
-  static const fixed fixed_inv_g(1.0/9.81);
-  static const fixed fixed_small(0.001);
-
   if (Basic().flight.Flying &&
       (positive(Basic().GroundSpeed) ||
        Basic().wind.is_non_zero())) {
@@ -617,8 +618,6 @@ DeviceBlackboard::Dynamics()
 void
 DeviceBlackboard::EnergyHeight()
 {
-  static const fixed fixed_inv_2g (1.0/(2.0*9.81));
-
   SetBasic().EnergyHeight =
       Basic().TrueAirspeed * Basic().TrueAirspeed * fixed_inv_2g;
   SetBasic().TEAltitude = Basic().NavAltitude + Basic().EnergyHeight;

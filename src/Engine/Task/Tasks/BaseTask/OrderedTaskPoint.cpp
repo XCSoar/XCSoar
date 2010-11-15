@@ -179,7 +179,7 @@ void
 OrderedTaskPoint::scan_projection(TaskProjection& task_projection) const
 {
   task_projection.scan_location(get_location());
-  static const fixed fixed_steps(0.05);
+#define fixed_steps fixed(0.05)
   for (fixed t=fixed_zero; t<= fixed_one; t+= fixed_steps) {
     task_projection.scan_location(get_boundary_parametric(t));
   }

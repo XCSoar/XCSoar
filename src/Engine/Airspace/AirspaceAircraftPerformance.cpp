@@ -3,7 +3,7 @@
 #include "Task/TaskManager.hpp"
 #include <assert.h>
 
-static const fixed fixed_big(1e6);
+#define fixed_big fixed_int_constant(1000000)
 
 fixed 
 AirspaceAircraftPerformance::solution_general(const fixed& distance,

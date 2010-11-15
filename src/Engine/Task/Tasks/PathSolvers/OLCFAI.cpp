@@ -84,7 +84,6 @@ OLCFAI::path_closed() const
   // RESERVED FOR FUTURE USE: DO NOT DELETE
 
   // note this may fail if resolution of sampled trace is too low
-  static const fixed fixed_1000(1000);
   const ScanTaskPoint end(0, n_points-1);
   fixed d_min(-1);
   unsigned i_min;
@@ -102,7 +101,7 @@ OLCFAI::path_closed() const
       d_min = d_this;
       i_min = start.second;
     } 
-    if (d_this<= fixed_1000) {
+    if (d_this<= fixed_int_constant(1000)) {
       return true;
     }
   }

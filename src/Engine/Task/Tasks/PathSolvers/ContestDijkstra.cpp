@@ -202,7 +202,7 @@ ContestDijkstra::calc_score() const
     score += get_weighting(i) *
              solution[i].distance(solution[i + 1].get_location());
 
-  static const fixed fixed_fifth(0.0002);
+  #define fixed_fifth fixed(0.0002)
   score *= fixed_fifth;
 
   return apply_handicap(score);

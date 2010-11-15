@@ -98,7 +98,7 @@ GlideResult::add(const GlideResult &s2)
     AltitudeDifference = min(s2.AltitudeDifference, AltitudeDifference);
 }
 
-static const fixed fixed_bignum(1e6); // error condition
+#define fixed_bignum fixed_int_constant(1000000) // error condition
 
 fixed
 GlideResult::calc_vspeed(const fixed inv_mc)
@@ -127,12 +127,10 @@ GlideResult::calc_vspeed(const fixed inv_mc)
 fixed
 GlideResult::glide_angle_ground() const
 {
-  static const fixed fixed_100(100);
-
   if (positive(Vector.Distance))
     return HeightGlide / Vector.Distance;
 
-  return fixed_100;
+  return fixed_int_constant(100);
 }
 
 bool

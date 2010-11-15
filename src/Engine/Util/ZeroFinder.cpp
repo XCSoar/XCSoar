@@ -84,7 +84,7 @@ const fixed ZeroFinder::r((3. - sqrt(5.0)) / 2); /* Gold section ratio */
 
 #include "math.h"
 
-static const fixed fixed_threequaters(0.75);
+#define fixed_threequaters fixed(0.75)
 
 fixed ZeroFinder::find_zero(const fixed xstart) {
   fixed a, b, c; // Abscissae, descr. see above

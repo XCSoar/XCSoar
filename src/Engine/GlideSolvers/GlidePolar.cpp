@@ -30,7 +30,7 @@
 #include "Util/Quadratic.hpp"
 #include <assert.h>
 
-static const fixed fixed_75(75.0);
+#define fixed_75 fixed(75.0)
 
 GlidePolar::GlidePolar(const fixed _mc, const fixed _bugs, const fixed _ballast) :
   mc(_mc),
@@ -374,8 +374,8 @@ FRiskFunction(const fixed x, const fixed k)
 fixed
 GlidePolar::mc_risk(const fixed height_fraction, const fixed riskGamma) const
 {
-  static const fixed fixed_low_limit(0.1);
-  static const fixed fixed_up_limit(0.9);
+#define fixed_low_limit fixed(0.1)
+#define fixed_up_limit fixed(0.9)
 
   fixed x = max(fixed_zero, min(fixed_one, height_fraction));
 

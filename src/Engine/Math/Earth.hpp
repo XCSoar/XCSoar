@@ -34,8 +34,9 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "Compiler.h"
 
-extern const fixed fixed_earth_r;
-extern const fixed fixed_inv_earth_r;
+#define REARTH 6371000
+#define fixed_earth_r fixed_int_constant(REARTH)
+#define fixed_inv_earth_r fixed(1.0 / REARTH)
 
 /**
  * Finds cross track error in meters and closest point P4 between P3

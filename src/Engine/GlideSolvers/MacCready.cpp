@@ -30,7 +30,7 @@
 #include "Util/ZeroFinder.hpp"
 #include "Util/Tolerances.hpp"
 
-static const fixed fixed_1mil(1.0e6);
+#define fixed_1mil fixed_int_constant(1000000)
 
 MacCready::MacCready(const GlidePolar &_glide_polar,
     const fixed _cruise_efficiency) :

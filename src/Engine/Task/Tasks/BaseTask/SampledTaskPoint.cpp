@@ -76,7 +76,7 @@ SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last)
 
 // BOUNDARY
 
-static const fixed fixed_steps(0.05);
+#define fixed_steps fixed(0.05)
 
 void 
 SampledTaskPoint::update_oz() 

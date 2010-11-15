@@ -46,7 +46,7 @@ TaskMacCready::TaskMacCready(TaskPoint* tp, const GlidePolar &gp):
 void
 TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
 {
-  static const fixed fixed_tolerance(0.01);
+  #define fixed_tolerance fixed(0.01)
 
   // set min heights (earliest climb possible)
   fixed minH = get_min_height(aircraft);

@@ -46,7 +46,7 @@ TaskBestMc::TaskBestMc(TaskPoint* tp,
 {
 }
 
-static const fixed fixed_tiny(0.001);
+#define fixed_tiny fixed(0.001)
 
 fixed 
 TaskBestMc::f(const fixed mc) 

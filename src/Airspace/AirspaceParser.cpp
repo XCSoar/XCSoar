@@ -41,6 +41,8 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
+#define fixed_75 fixed(7.5)
+
 enum asFileType {
   ftUnknown,
   ftOpenAir,
@@ -336,7 +338,6 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
   fixed Radius;
   TCHAR *Stop;
   GeoPoint TempPoint;
-  static const fixed fixed_75 = fixed(7.5);
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
   Radius = Units::ToSysUnit(fixed(_tcstod(&Text[2], &Stop)), unNauticalMiles);
@@ -366,7 +367,6 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
   fixed Radius;
   const TCHAR *Comma = NULL;
   GeoPoint TempPoint;
-  static const fixed fixed_75 = fixed(7.5);
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
   ReadCoords(&Text[3], Start);
@@ -663,7 +663,6 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
   Angle bearing_to;
   fixed radius;
 
-  static const fixed fixed_75 = fixed(7.5);
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
   temp_area.Center.distance_bearing(from, radius, bearing_from);

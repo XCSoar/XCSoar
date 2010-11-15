@@ -268,7 +268,7 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
     return;
   }
   std::vector<POINT> screen; 
-  static const fixed fixed_twentieth(1.0 / 20.0);
+  #define fixed_twentieth fixed(1.0 / 20.0)
   
   if (m_proj.GeoToScreenDistance(seg.parametric(fixed_zero).
                                     distance(seg.parametric(fixed_one)))>2) {

@@ -79,14 +79,13 @@ AirspaceSorter::filter_name(AirspaceSelectInfoVector& vec,
   vec.erase(std::remove_if(vec.begin(), vec.end(), AirspaceNameFilter), vec.end());
 }
 
-static const fixed fixed_18(18);
 static Angle Direction;
 
 static bool
 AirspaceDirectionFilter(const AirspaceSelectInfo& elem1) 
 {
   fixed DirectionErr = (elem1.Direction-Direction).as_delta().magnitude_degrees();
-  return (DirectionErr > fixed_18);
+  return DirectionErr > fixed_int_constant(18);
 }
 
 void 
