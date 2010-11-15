@@ -100,15 +100,6 @@ public:
   POINT GeoToScreen(const GeoPoint &location) const;
 
   /**
-   * Converts a LatLon-based polygon to screen coordinates
-   * @param ptin Input polygon
-   * @param ptout Output polygon
-   * @param n Number of points in the polygon
-   */
-  void GeoToScreen(const GeoPoint *ptin, POINT *ptout,
-                     unsigned n) const;
-
-  /**
    * Returns the origin/rotation center in screen coordinates
    * @return The origin/rotation center in screen coordinates
    */

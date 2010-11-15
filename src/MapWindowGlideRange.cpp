@@ -29,9 +29,8 @@ Copyright_License {
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
   if (SettingsComputer().FinalGlideTerrain)
-    render_projection.GeoToScreen(Calculated().GlideFootPrint,
-                                    Groundline,
-                                    TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
+    for (unsigned i = 0; i < TERRAIN_ALT_INFO::NUMTERRAINSWEEPS; ++i)
+      Groundline[i] = render_projection.GeoToScreen(Calculated().GlideFootPrint[i]);
 }
 
 /**

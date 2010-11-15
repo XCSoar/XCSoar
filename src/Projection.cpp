@@ -74,19 +74,6 @@ Projection::GeoToScreen(const GeoPoint &g) const
   return sc;
 }
 
-void
-Projection::GeoToScreen(const GeoPoint *ptin, POINT *ptout,
-                          unsigned n) const
-{
-  const GeoPoint *p = ptin;
-  const GeoPoint *ptend = ptin + n;
-
-  while (p < ptend) {
-    *ptout++ = GeoToScreen(*p);
-    p++;
-  }
-}
-
 void 
 Projection::SetScale(const fixed _scale)
 {
