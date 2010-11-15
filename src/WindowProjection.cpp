@@ -30,7 +30,7 @@ WindowProjection::GeoVisible(const GeoPoint &loc) const
 }
 
 bool
-WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, POINT &sc) const
+WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, RasterPoint &sc) const
 {
   if (GeoVisible(loc)) {
     sc = GeoToScreen(loc);
@@ -41,7 +41,7 @@ WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, POINT &sc) const
 }
 
 bool
-WindowProjection::ScreenVisible(const POINT &P) const
+WindowProjection::ScreenVisible(const RasterPoint &P) const
 {
   if ((P.x >= MapRect.left) &&
       (P.x <= MapRect.right) &&

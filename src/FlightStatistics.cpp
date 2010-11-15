@@ -336,10 +336,10 @@ static void
 DrawTrace(Chart &chart, const ChartProjection& proj,
           const TracePointVector& trace, Chart::Style style)
 {
-  POINT last;
+  RasterPoint last;
   for (TracePointVector::const_iterator it = trace.begin();
        it != trace.end(); ++it) {
-    POINT sc = proj.GeoToScreen(it->get_location());
+    RasterPoint sc = proj.GeoToScreen(it->get_location());
     if (it != trace.begin())
       chart.StyleLine(sc, last, style);
 
@@ -658,9 +658,9 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
   if (terrain != NULL) {
     RasterTerrain::Lease map(*terrain);
 
-    POINT points[2 + AIRSPACE_SCANSIZE_X];
+    RasterPoint points[2 + AIRSPACE_SCANSIZE_X];
 
-    POINT pf0, pf1;
+    RasterPoint pf0, pf1;
     pf0.x = chart.screenX(range);
     pf0.y = chart.screenY(fixed_zero);
     points[0] = pf0;
@@ -684,7 +684,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
           continue;
       }
 
-      POINT p;
+      RasterPoint p;
       p.x = chart.screenX(t_this * range);
       p.y = chart.screenY(fixed(h));
 
@@ -714,7 +714,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
     canvas.white_pen();
     canvas.white_brush();
 
-    POINT line[4];
+    RasterPoint line[4];
     line[0].x = chart.screenX(fixed_zero);
     line[0].y = chart.screenY(nmea_info.GPSAltitude);
     line[1].x = rc.left;

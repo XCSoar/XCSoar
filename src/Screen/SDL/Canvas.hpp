@@ -31,6 +31,7 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
+#include "Screen/Point.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -75,7 +76,7 @@ protected:
   enum {
     OPAQUE, TRANSPARENT
   } background_mode;
-  POINT cursor;
+  RasterPoint cursor;
 
 public:
   Canvas()
@@ -314,15 +315,15 @@ public:
     --rc.bottom;
   }
 
-  void polyline(const POINT *points, unsigned num_points);
-  void polygon(const POINT *points, unsigned num_points);
+  void polyline(const RasterPoint *points, unsigned num_points);
+  void polygon(const RasterPoint *points, unsigned num_points);
 
-  void autoclip_polygon(const POINT* lppt, unsigned cPoints) {
+  void autoclip_polygon(const RasterPoint *lppt, unsigned cPoints) {
     // XXX clip
     polygon(lppt, cPoints);
   }
 
-  void autoclip_polyline(const POINT* lppt, unsigned cPoints) {
+  void autoclip_polyline(const RasterPoint *lppt, unsigned cPoints) {
     // XXX clip
     polyline(lppt, cPoints);
   }
@@ -345,7 +346,7 @@ public:
 #endif /* !OPENGL */
   }
 
-  void line(const POINT a, const POINT b) {
+  void line(const RasterPoint a, const RasterPoint b) {
     line(a.x, a.y, b.x, b.y);
   }
 
@@ -355,7 +356,8 @@ public:
     line(bx, by, cx, cy);
   }
 
-  void two_lines(const POINT a, const POINT b, const POINT c) {
+  void two_lines(const RasterPoint a, const RasterPoint b,
+                 const RasterPoint c) {
     two_lines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 

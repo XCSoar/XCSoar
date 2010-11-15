@@ -34,9 +34,9 @@ Copyright_License {
 #include <stdio.h>
 
 void
-MapWindow::DrawAircraft(Canvas &canvas, const POINT aircraft_pos) const
+MapWindow::DrawAircraft(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
-  POINT Aircraft[] = {
+  RasterPoint Aircraft[] = {
     {1, -5},
     {1, 0},
     {14, 0},
@@ -72,7 +72,7 @@ MapWindow::DrawAircraft(Canvas &canvas, const POINT aircraft_pos) const
 }
 
 void
-MapWindow::DrawWind(Canvas &canvas, const POINT &Start,
+MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
                                const RECT &rc) const
 {
   TCHAR sTmp[12];
@@ -97,7 +97,7 @@ MapWindow::DrawWind(Canvas &canvas, const POINT &Start,
 
   int kx = tsize.cx / Layout::FastScale(1) / 2;
 
-  POINT Arrow[7] = {
+  RasterPoint Arrow[7] = {
       { 0, -20 },
       { -6, -26 },
       { 0, -20 },
@@ -116,7 +116,7 @@ MapWindow::DrawWind(Canvas &canvas, const POINT &Start,
   canvas.polygon(Arrow, 5);
 
   if (SettingsMap().WindArrowStyle == 1) {
-    POINT Tail[2] = {
+    RasterPoint Tail[2] = {
       { 0, Layout::FastScale(-20) },
       { 0, Layout::FastScale(-26 - min(20, wmag) * 3) },
     };
@@ -162,7 +162,7 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT &rc) const
   is the case or not.
   */
 
-  POINT Start;
+  RasterPoint Start;
   Start.y = IBLSCALE(55) + rc.top;
   Start.x = rc.right - IBLSCALE(19);
 
@@ -219,13 +219,13 @@ MapWindow::DrawHorizon(Canvas &canvas, const RECT &rc) const
 void
 MapWindow::DrawCompass(Canvas &canvas, const RECT &rc) const
 {
-  POINT Start;
+  RasterPoint Start;
 
   if (Appearance.CompassAppearance == apCompassDefault) {
     Start.y = IBLSCALE(19) + rc.top;
     Start.x = rc.right - IBLSCALE(19);
 
-    POINT Arrow[5] = { { 0, -18 }, { -6, 10 }, { 0, 0 }, { 6, 10 }, { 0, -18 } };
+    RasterPoint Arrow[5] = { { 0, -18 }, { -6, 10 }, { 0, 0 }, { 6, 10 }, { 0, -18 } };
 
     canvas.select(Graphics::hpCompass);
     canvas.select(Graphics::hbCompass);
@@ -238,7 +238,7 @@ MapWindow::DrawCompass(Canvas &canvas, const RECT &rc) const
 
     static Angle lastDisplayAngle = Angle::native(fixed_zero);
     static int lastRcRight = 0;
-    static POINT Arrow[5] = { { 0, -11 }, { -5, 9 }, { 0, 3 }, { 5, 9 }, { 0, -11 } };
+    static RasterPoint Arrow[5] = { { 0, -11 }, { -5, 9 }, { 0, 3 }, { 5, 9 }, { 0, -11 } };
 
     if (lastDisplayAngle != render_projection.GetScreenAngle() ||
         lastRcRight != rc.right) {
@@ -271,7 +271,7 @@ MapWindow::DrawCompass(Canvas &canvas, const RECT &rc) const
 }
 
 void
-MapWindow::DrawBestCruiseTrack(Canvas &canvas, const POINT aircraft_pos) const
+MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
   if (!Calculated().task_stats.task_valid ||
       Calculated().task_stats.current_leg.solution_remaining.Vector.Distance
@@ -284,7 +284,7 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const POINT aircraft_pos) const
   const Angle angle = Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
                     - render_projection.GetScreenAngle();
 
-  POINT Arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, {  0, -70 },
+  RasterPoint Arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, {  0, -70 },
                     {  6, -62 }, {  1, -62 }, {  1, -40 }, { -1, -40 } };
 
   PolygonRotateShift(Arrow, sizeof(Arrow) / sizeof(Arrow[0]),

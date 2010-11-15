@@ -114,10 +114,10 @@ MapWindow::on_paint(Canvas &canvas)
     /* do the projection */
 
     const RECT buffer_rect = buffer_projection.GetMapRect();
-    const POINT top_left =
+    const RasterPoint top_left =
       visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(buffer_rect.left,
                                                                        buffer_rect.top));
-    POINT bottom_right =
+    RasterPoint bottom_right =
       visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(buffer_rect.right,
                                                                        buffer_rect.bottom));
 

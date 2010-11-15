@@ -25,6 +25,7 @@ Copyright_License {
 #define SHAPE_RENDERER_HPP
 
 #include "Screen/Pen.hpp"
+#include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/AllocatedArray.hpp"
 
@@ -37,28 +38,17 @@ class Brush;
 #endif
 
 #include <assert.h>
-#include <windef.h> /* for POINT */
 
 /**
  * A helper class optimized for doing bulk draws on OpenGL.
  */
 class ShapeRenderer : private NonCopyable {
-#ifdef ENABLE_OPENGL
-  struct GLpoint {
-    GLfloat x, y;
-
-    GLpoint() {}
-    GLpoint(POINT pt):x(pt.x), y(pt.y) {}
-  };
-
-  AllocatedArray<GLpoint> points;
+  AllocatedArray<RasterPoint> points;
   unsigned num_points;
-#else
+
+#ifndef ENABLE_OPENGL
   const Pen *pen;
   const Brush *brush;
-
-  AllocatedArray<POINT> points;
-  unsigned num_points;
 
   enum { NONE, OUTLINE, SOLID } mode;
 #endif
@@ -82,7 +72,7 @@ public:
     points.grow_discard(((n - 1) | 0x3ff) + 1);
   }
 
-  void add_point(POINT pt) {
+  void add_point(RasterPoint pt) {
     assert(num_points < points.size());
 
     points[num_points++] = pt;

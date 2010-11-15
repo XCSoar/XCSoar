@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Units.hpp"
 #include "Screen/Bitmap.hpp"
+#include "Screen/Point.hpp"
 
 class Canvas;
 
@@ -65,7 +66,7 @@ public:
     return bitmap;
   }
 
-  const POINT get_origin(enum kind kind) const;
+  const RasterPoint get_origin(enum kind kind) const;
 
   const SIZE get_size() const {
     return size;

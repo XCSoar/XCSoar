@@ -32,7 +32,7 @@ Copyright_License {
 #include "SettingsMap.hpp"
 
 bool
-MapWindow::isClickOnTarget(const POINT pc)
+MapWindow::isClickOnTarget(const RasterPoint pc)
 {
   if (XCSoarInterface::SettingsMap().TargetPan) {
     if (!protected_task_manager.target_is_locked(
@@ -46,7 +46,7 @@ MapWindow::isClickOnTarget(const POINT pc)
     if (t == gnull)
       return false;
 
-    const POINT pt = visible_projection.GeoToScreen(t);
+    const RasterPoint pt = visible_projection.GeoToScreen(t);
     const GeoPoint gp = visible_projection.ScreenToGeo(pc.x, pc.y);
     if (visible_projection.GeoToScreenDistance(gp.distance(t)) <
         unsigned(Layout::Scale(10)))
@@ -58,7 +58,7 @@ MapWindow::isClickOnTarget(const POINT pc)
 bool
 MapWindow::isInSector(const int x, const int y)
 {
-  POINT dragPT;
+  RasterPoint dragPT;
   dragPT.x = x;
   dragPT.y = y;
 
@@ -72,7 +72,7 @@ MapWindow::isInSector(const int x, const int y)
   return false;
 }
 void
-MapWindow::TargetPaintDrag(Canvas &canvas, const POINT drag_last)
+MapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
 {
   Graphics::hBmpTarget.draw(canvas, drag_last.x, drag_last.y);
 }

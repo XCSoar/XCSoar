@@ -42,7 +42,7 @@ fSnailColour(fixed cv)
 }
 
 void
-MapWindow::DrawTrail(Canvas &canvas, const POINT aircraft_pos) const
+MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
   if (!SettingsMap().TrailActive || task == NULL)
     return;
@@ -101,7 +101,7 @@ MapWindow::DrawTrail(Canvas &canvas, const POINT aircraft_pos) const
        it != trace.end(); ++it) {
 
     const fixed dt = Basic().Time - fixed(it->time);
-    POINT pt = projection.GeoToScreen(it->get_location().
+    RasterPoint pt = projection.GeoToScreen(it->get_location().
         parametric(traildrift, dt * it->drift_factor));
 
     if (it->last_time != last_time) {

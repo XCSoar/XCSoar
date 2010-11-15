@@ -130,7 +130,7 @@ public:
   void
   DrawWaypoint(const Waypoint& way_point, bool in_task = false)
   {
-    POINT sc;
+    RasterPoint sc;
     if (!projection.GeoToScreenIfVisible(way_point.Location, sc))
       return;
 

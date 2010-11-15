@@ -25,8 +25,7 @@ Copyright_License {
 #define XCSOAR_MAP_CANVAS_HPP
 
 #include "Navigation/SearchPointVector.hpp"
-
-#include <windef.h>
+#include "Screen/Point.hpp"
 
 class Canvas;
 class Projection;
@@ -52,10 +51,10 @@ public:
    * Projects all points of the #SearchPointVector to screen
    * coordinates.
    *
-   * @param screen a POINT array allocated by the caller, large enough
+   * @param screen a RasterPoint array allocated by the caller, large enough
    * to hold all points of the #SearchPointVector
    */
-  void project(const SearchPointVector &points, POINT *screen) const;
+  void project(const SearchPointVector &points, RasterPoint *screen) const;
 
   /**
    * Determines whether the polygon is visible, or off-screen.
@@ -65,7 +64,7 @@ public:
    * and this function aims to reduce the overhead for off-screen
    * airspaces.
    */
-  bool visible(const POINT *screen, unsigned num);
+  bool visible(const RasterPoint *screen, unsigned num);
 
   void draw(const SearchPointVector &points);
 };

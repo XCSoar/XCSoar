@@ -113,13 +113,13 @@ private:
 
     Brush red_brush(Color::RED);
 
-    POINT p1[3] = {
+    RasterPoint p1[3] = {
       { -100, get_vmiddle() },
       { (get_width() * 2) / 3, -100 },
       { get_hmiddle(), get_height() * 2 },
     };
 
-    POINT p2[3] = {
+    RasterPoint p2[3] = {
       { -2000, get_vmiddle() },
       { get_width() * 10, -3000 },
       { get_width() * 5, 3000 },

@@ -66,7 +66,7 @@ OnTextPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   SIZE tsizec = canvas.text_size(edittext, cursor);
   SIZE tsizea = canvas.text_size(edittext, cursor + 1);
 
-  POINT p[5];
+  RasterPoint p[5];
   p[0].x = 10;
   p[0].y = 20;
 

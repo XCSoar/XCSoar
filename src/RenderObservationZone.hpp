@@ -26,8 +26,7 @@ Copyright_License {
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/Pen.hpp"
-
-#include <windef.h>
+#include "Screen/Point.hpp"
 
 class Canvas;
 class Projection;
@@ -87,7 +86,7 @@ protected:
   const Pen pen_boundary_current;
   const Pen pen_boundary_active;
   const Pen pen_boundary_inactive;
-  POINT p_center, p_start, p_end;
+  RasterPoint p_center, p_start, p_end;
   unsigned p_radius;
   bool m_past;
   bool m_current;

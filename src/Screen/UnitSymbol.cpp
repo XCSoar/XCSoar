@@ -23,16 +23,17 @@ Copyright_License {
 
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Point.hpp"
 #include "resource.h"
 
 #include <assert.h>
 
-const POINT
+const RasterPoint
 UnitSymbol::get_origin(enum kind kind) const
 {
   assert(kind >= 0 && kind < 4);
 
-  POINT origin;
+  RasterPoint origin;
   origin.x = size.cx * kind;
   origin.y = 0;
   return origin;
@@ -71,7 +72,7 @@ GetUnitSymbol(Units_t unit)
 void 
 UnitSymbol::draw(Canvas& canvas, const int x, const int y) const
 {
-  const POINT BmpPos = get_origin(UnitSymbol::NORMAL);
+  const RasterPoint BmpPos = get_origin(UnitSymbol::NORMAL);
   const SIZE size = get_size();
   canvas.scale_copy(x, y, bitmap,
 		    BmpPos.x, BmpPos.y,

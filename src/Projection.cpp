@@ -59,7 +59,7 @@ Projection::ScreenToGeo(int x, int y) const
   return g;
 }
 
-POINT
+RasterPoint
 Projection::GeoToScreen(const GeoPoint &g) const
 {
   const GeoPoint d = GeoLocation-g;
@@ -68,7 +68,7 @@ Projection::GeoToScreen(const GeoPoint &g) const
                                 g.Latitude.fastcosine()),
                           (int)AngleToPixels(d.Latitude));
 
-  POINT sc;
+  RasterPoint sc;
   sc.x = ScreenOrigin.x - p.first;
   sc.y = ScreenOrigin.y + p.second;
   return sc;

@@ -40,7 +40,7 @@ Copyright_License {
 
 struct THERMAL_SOURCE_VIEW
 {
-  POINT Screen;
+  RasterPoint Screen;
   bool Visible;
 };
 
@@ -168,7 +168,7 @@ public:
    *
    * @return true if click is near target
    */
-  bool isClickOnTarget(const POINT drag_last);
+  bool isClickOnTarget(const RasterPoint drag_last);
 
   /**
    * If PanTarget, tests if drag destination
@@ -189,7 +189,7 @@ public:
    * @param drag_last location of target
    * @param canvas
    */
-  void TargetPaintDrag(Canvas &canvas, const POINT last_drag);
+  void TargetPaintDrag(Canvas &canvas, const RasterPoint last_drag);
 
   /**
    * If PanTarget, updates task with new target
@@ -216,7 +216,7 @@ public:
   }
 
 private:
-  POINT Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS];
+  RasterPoint Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS];
 
   THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
 
@@ -225,19 +225,20 @@ private:
   void CalculateScreenPositionsThermalSources();
 
   // display renderers
-  void DrawAircraft(Canvas &canvas, const POINT aircraft_pos) const;
+  void DrawAircraft(Canvas &canvas, const RasterPoint aircraft_pos) const;
 
 public:
-  void DrawBestCruiseTrack(Canvas &canvas, const POINT aircraft_pos) const;
+  void DrawBestCruiseTrack(Canvas &canvas,
+                           const RasterPoint aircraft_pos) const;
   void DrawCompass(Canvas &canvas, const RECT &rc) const;
   void DrawHorizon(Canvas &canvas, const RECT &rc) const;
-  void DrawWind(Canvas &canvas, const POINT &Orig,
+  void DrawWind(Canvas &canvas, const RasterPoint &Orig,
                            const RECT &rc) const;
   void DrawAirspace(Canvas &canvas);
   void DrawAirspaceIntersections(Canvas &canvas) const;
   void DrawWaypoints(Canvas &canvas);
 
-  void DrawTrail(Canvas &canvas, const POINT aircraft_pos) const;
+  void DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;
   void DrawTeammate(Canvas &canvas) const;
   void DrawProjectedTrack(Canvas &canvas) const;
   void DrawTask(Canvas &canvas);
@@ -247,7 +248,7 @@ public:
   void DrawTerrainAbove(Canvas &canvas);
 
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
-  void DrawFLARMTraffic(Canvas &canvas, const POINT aircraft_pos) const;
+  void DrawFLARMTraffic(Canvas &canvas, const RasterPoint aircraft_pos) const;
 
   // thread, main functions
   virtual void Render(Canvas &canvas, const RECT &rc);
@@ -297,12 +298,13 @@ private:
   void RenderStart(Canvas &canvas);
   void RenderMapLayer(Canvas &canvas);
   void RenderAreas(Canvas &canvas);
-  void RenderTrail(Canvas &canvas, const POINT aircraft_pos);
+  void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos);
   void RenderTaskElements(Canvas &canvas);
   void RenderGlide(Canvas &canvas);
-  void RenderAirborne(Canvas &canvas, const RECT &rc, const POINT aircraft_pos);
+  void RenderAirborne(Canvas &canvas, const RECT &rc,
+                      const RasterPoint aircraft_pos);
   void RenderSymbology_upper(Canvas &canvas, const RECT &rc);
-  void RenderSymbology_lower(Canvas &canvas, const POINT aircraft_pos);
+  void RenderSymbology_lower(Canvas &canvas, const RasterPoint aircraft_pos);
 
   StaticArray<GeoPoint,32> m_airspace_intersections;
 

@@ -152,7 +152,7 @@ Chart::ScaleXFromValue(const fixed value)
 }
 
 void
-Chart::StyleLine(const POINT l1, const POINT l2, enum Style Style)
+Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, enum Style Style)
 {
   assert((unsigned)Style < sizeof(pens) / sizeof(pens[0]));
   canvas.select(pens[(unsigned)Style]);
@@ -231,7 +231,7 @@ Chart::DrawTrend(const LeastSquares &lsdata, enum Style Style)
   ymin = (y_max - ymin) * yscale + fixed(rc.top);
   ymax = (y_max - ymax) * yscale + fixed(rc.top);
 
-  POINT line[2];
+  RasterPoint line[2];
   line[0].x = (int)xmin;
   line[0].y = (int)ymin;
   line[1].x = (int)xmax;
@@ -260,7 +260,7 @@ Chart::DrawTrendN(const LeastSquares &lsdata, enum Style Style)
   ymin = (y_max - ymin * yscale) + fixed(rc.top);
   ymax = (y_max - ymax * yscale) + fixed(rc.top);
 
-  POINT line[2];
+  RasterPoint line[2];
   line[0].x = (int)xmin;
   line[0].y = (int)ymin;
   line[1].x = (int)xmax;
@@ -276,7 +276,7 @@ Chart::DrawLine(const fixed xmin, const fixed ymin,
   if (unscaled_x || unscaled_y)
     return;
 
-  POINT line[2];
+  RasterPoint line[2];
   line[0].x = (int)((xmin - x_min) * xscale) + rc.left + BORDER_X;
   line[0].y = (int)((y_max - ymin) * yscale) + rc.top;
   line[1].x = (int)((xmax - x_min) * xscale) + rc.left + BORDER_X;
@@ -309,7 +309,7 @@ Chart::DrawBarChart(const LeastSquares &lsdata)
 void
 Chart::DrawFilledLineGraph(const LeastSquares &lsdata)
 {
-  POINT line[4];
+  RasterPoint line[4];
 
   for (int i = 0; i < lsdata.sum_n - 1; i++) {
     line[0].x = (int)((lsdata.xstore[i] - x_min) * xscale) + rc.left + BORDER_X;
@@ -327,7 +327,7 @@ Chart::DrawFilledLineGraph(const LeastSquares &lsdata)
 void
 Chart::DrawLineGraph(const LeastSquares &lsdata, enum Style Style)
 {
-  POINT line[2];
+  RasterPoint line[2];
 
   for (int i = 0; i < lsdata.sum_n - 1; i++) {
     line[0].x = (int)((lsdata.xstore[i] - x_min) * xscale) + rc.left + BORDER_X;
@@ -358,7 +358,7 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, enum Style Style,
   if (!tic_step)
     return;
 
-  POINT line[2];
+  RasterPoint line[2];
 
   int xmin, ymin, xmax, ymax;
 
@@ -426,7 +426,7 @@ Chart::DrawYGrid(const fixed tic_step, const fixed zero, enum Style Style,
   if (!tic_step)
     return;
 
-  POINT line[2];
+  RasterPoint line[2];
 
   int xmin, ymin, xmax, ymax;
 
@@ -541,7 +541,7 @@ void
 Chart::DrawArrow(const fixed x, const fixed y, const fixed mag,
                  const Angle angle, enum Style Style)
 {
-  POINT wv[2];
+  RasterPoint wv[2];
 
   wv[0].x = screenX(x);
   wv[0].y = screenY(y);

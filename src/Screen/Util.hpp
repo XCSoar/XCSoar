@@ -30,8 +30,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_UTIL_HPP
 
 #include "Math/Angle.hpp"
-
-#include <windef.h>
+#include "Screen/Point.hpp"
 
 class Canvas;
 
@@ -39,7 +38,8 @@ enum {
   MAXCLIPPOLYGON = 5000
 };
 
-void ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
+void ClipPolygon(Canvas &canvas, const RasterPoint *m_ptin,
+                 unsigned int inLength,
                  bool fill);
 
 bool

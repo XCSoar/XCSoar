@@ -24,14 +24,15 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Math/FastMath.h"
 #include "Screen/Layout.hpp"
+#include "Screen/Point.hpp"
 
 #include <math.h>
 
 // note these use static vars! not thread-safe
 
 void
-ScreenClosestPoint(const POINT &p1, const POINT &p2, const POINT &p3,
-                   POINT *p4, int offset)
+ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
+                   const RasterPoint &p3, RasterPoint *p4, int offset)
 {
   int v12x, v12y, v13x, v13y;
 
@@ -74,7 +75,7 @@ ScreenClosestPoint(const POINT &p1, const POINT &p2, const POINT &p3,
  * @param angle Angle of rotation
  */
 void
-PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys,
+PolygonRotateShift(RasterPoint *poly, const int n, const int xs, const int ys,
     Angle angle)
 {
   static Angle lastangle = Angle::native(-fixed_one);
@@ -89,8 +90,8 @@ PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys,
 
   const int xxs = xs * 1024 + 512;
   const int yys = ys * 1024 + 512;
-  POINT *p = poly;
-  const POINT *pe = poly + n;
+  RasterPoint *p = poly;
+  const RasterPoint *pe = poly + n;
 
   while (p < pe) {
     int x = p->x;

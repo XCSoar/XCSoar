@@ -124,9 +124,9 @@ GaugeVario::~GaugeVario()
 void
 GaugeVario::on_paint_buffer(Canvas &canvas)
 {
-  static POINT orgTop     = {-1, -1};
-  static POINT orgMiddle  = {-1, -1};
-  static POINT orgBottom  = {-1, -1};
+  static RasterPoint orgTop = {-1, -1};
+  static RasterPoint orgMiddle = {-1, -1};
+  static RasterPoint orgBottom = {-1, -1};
   static int ValueHeight;
   static bool InitDone = false;
 
@@ -247,8 +247,8 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
 void
 GaugeVario::MakePolygon(const int i)
 {
-  POINT *bit = getPolygon(i);
-  POINT *bline = &lines[i + gmax];
+  RasterPoint *bit = getPolygon(i);
+  RasterPoint *bline = &lines[i + gmax];
 
   const FastRotation r = FastRotation(Angle::degrees(fixed(i)));
   FastRotation::Pair p;
@@ -270,7 +270,7 @@ GaugeVario::MakePolygon(const int i)
   bline->y = (int)(p.second * 112 / 100) + yoffset + 1;
 }
 
-POINT *
+RasterPoint *
 GaugeVario::getPolygon(int i)
 {
   return polys + (i + gmax) * 3;
@@ -279,8 +279,8 @@ GaugeVario::getPolygon(int i)
 void
 GaugeVario::MakeAllPolygons()
 {
-  polys = (POINT*)malloc((gmax * 2 + 1) * 3 * sizeof(POINT));
-  lines = (POINT*)malloc((gmax * 2 + 1) * sizeof(POINT));
+  polys = (RasterPoint*)malloc((gmax * 2 + 1) * 3 * sizeof(RasterPoint));
+  lines = (RasterPoint*)malloc((gmax * 2 + 1) * sizeof(RasterPoint));
 
   assert(polys);
   assert(lines);
@@ -478,7 +478,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
 
   if (dirty && unit_symbol != NULL &&
       diLabel->last_unit_symbol != unit_symbol) {
-    POINT BitmapUnitPos = unit_symbol->get_origin(Appearance.InverseInfoBox
+    RasterPoint BitmapUnitPos = unit_symbol->get_origin(Appearance.InverseInfoBox
                                                   ? UnitSymbol::INVERSE_GRAY
                                                   : UnitSymbol::GRAY);
     SIZE BitmapUnitSize = unit_symbol->get_size();
@@ -579,7 +579,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
         if (vdiff > DeltaVstep) {
           canvas.rectangle(x, y, x + ARROWXSIZE * 2 + 1, y + ARROWYSIZE - 1);
         } else {
-          POINT Arrow[4];
+          RasterPoint Arrow[4];
           Arrow[0].x = x;
           Arrow[0].y = y;
           Arrow[1].x = x + ARROWXSIZE;
@@ -602,7 +602,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
         if (vdiff < -DeltaVstep) {
           canvas.rectangle(x, y + 1, x + ARROWXSIZE * 2 + 1, y - ARROWYSIZE + 2);
         } else {
-          POINT Arrow[4];
+          RasterPoint Arrow[4];
           Arrow[0].x = x;
           Arrow[0].y = y;
           Arrow[1].x = x + ARROWXSIZE;
@@ -626,8 +626,8 @@ GaugeVario::RenderBallast(Canvas &canvas)
   static fixed lastBallast = fixed_one;
   static RECT recLabelBk = {-1,-1,-1,-1};
   static RECT recValueBk = {-1,-1,-1,-1};
-  static POINT orgLabel = {-1,-1};
-  static POINT orgValue = {-1,-1};
+  static RasterPoint orgLabel = {-1,-1};
+  static RasterPoint orgValue = {-1,-1};
 
   if (Appearance.InverseInfoBox)
     canvas.white_pen();
@@ -720,8 +720,8 @@ GaugeVario::RenderBugs(Canvas &canvas)
   static fixed lastBugs = fixed_one;
   static RECT recLabelBk = {-1,-1,-1,-1};
   static RECT recValueBk = {-1,-1,-1,-1};
-  static POINT orgLabel = {-1,-1};
-  static POINT orgValue = {-1,-1};
+  static RasterPoint orgLabel = {-1,-1};
+  static RasterPoint orgValue = {-1,-1};
 
   if (Appearance.InverseInfoBox)
     canvas.white_pen();

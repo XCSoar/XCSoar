@@ -58,14 +58,14 @@ Canvas::line_to(int x, int y)
 #ifndef ENABLE_OPENGL
 
 void
-Canvas::polyline(const POINT *lppt, unsigned cPoints)
+Canvas::polyline(const RasterPoint *lppt, unsigned cPoints)
 {
   for (unsigned i = 1; i < cPoints; ++i)
     line(lppt[i - 1].x, lppt[i - 1].y, lppt[i].x, lppt[i].y);
 }
 
 void
-Canvas::polygon(const POINT* lppt, unsigned cPoints)
+Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
 {
   if (brush.is_hollow() && !pen.defined())
     return;

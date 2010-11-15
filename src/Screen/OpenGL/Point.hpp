@@ -21,20 +21,19 @@ Copyright_License {
 }
 */
 
-/** @file
- * @brief Library for calculating on-screen coordinates
- */
+#ifndef XCSOAR_SCREEN_OPENGL_POINT_HPP
+#define XCSOAR_SCREEN_OPENGL_POINT_HPP
 
-#ifndef XCSOAR_MATH_SCREEN_HPP
-#define XCSOAR_MATH_SCREEN_HPP
+#ifdef ANDROID
+#include <GLES/gl.h>
+#else
+#include <SDL/SDL_opengl.h>
+#endif
 
-#include "Math/Angle.hpp"
-#include "Screen/Point.hpp"
+struct RasterPoint {
+  typedef GLfloat value_type;
 
-void ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
-                        const RasterPoint &p3, RasterPoint *p4, int offset);
-
-void PolygonRotateShift(RasterPoint *poly, int n, int x, int y,
-                        Angle angle);
+  value_type x, y;
+};
 
 #endif

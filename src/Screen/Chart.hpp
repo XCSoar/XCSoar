@@ -28,6 +28,7 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
+#include "Screen/Point.hpp"
 #include "Compiler.h"
 
 #include <windef.h>
@@ -72,7 +73,7 @@ public:
   void ScaleXFromValue(const fixed val);
   void ScaleMakeSquare();
 
-  void StyleLine(const POINT l1, const POINT l2, enum Style Style);
+  void StyleLine(const RasterPoint l1, const RasterPoint l2, enum Style Style);
 
   void ResetScale();
 

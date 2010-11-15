@@ -239,11 +239,11 @@ RenderTaskPoint::draw_task_line(const GeoPoint& start, const GeoPoint& end)
   m_buffer.background_opaque();
   
   // draw small arrow along task direction
-  POINT p_p;
-  POINT Arrow[3] = { {6,6}, {-6,6}, {0,0} };
+  RasterPoint p_p;
+  RasterPoint Arrow[3] = { {6,6}, {-6,6}, {0,0} };
   
-  const POINT p_start = m_proj.GeoToScreen(start);
-  const POINT p_end = m_proj.GeoToScreen(end);
+  const RasterPoint p_start = m_proj.GeoToScreen(start);
+  const RasterPoint p_end = m_proj.GeoToScreen(end);
   
   const Angle ang = Angle::radians(atan2(fixed(p_end.x - p_start.x),
                                          fixed(p_start.y - p_end.y))).as_bearing();
@@ -267,7 +267,7 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
   if (!seg.valid()) {
     return;
   }
-  std::vector<POINT> screen; 
+  std::vector<RasterPoint> screen; 
   #define fixed_twentieth fixed(1.0 / 20.0)
   
   if (m_proj.GeoToScreenDistance(seg.parametric(fixed_zero).

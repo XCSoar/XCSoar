@@ -47,7 +47,8 @@ fSnailColour(fixed cv)
  * @param canvas Canvas for drawing
  */
 void
-MapWindow::DrawFLARMTraffic(Canvas &canvas, const POINT aircraft_pos) const
+MapWindow::DrawFLARMTraffic(Canvas &canvas,
+                            const RasterPoint aircraft_pos) const
 {
   // Return if FLARM icons on moving map are disabled
   if (!SettingsMap().EnableFLARMMap)
@@ -65,7 +66,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas, const POINT aircraft_pos) const
   canvas.select(thinBlackPen);
 
   // Create point array that will form that arrow polygon
-  POINT Arrow[5];
+  RasterPoint Arrow[5];
 
   // Determine scale factor for use in Scaled mode
   fixed screenrange = projection.GetScreenDistanceMeters();
@@ -97,7 +98,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas, const POINT aircraft_pos) const
     // TODO feature: draw direction, rel height?
 
     // Points for the screen coordinates for the icon, name and average climb
-    POINT sc, sc_name, sc_av;
+    RasterPoint sc, sc_name, sc_av;
 
     // If FLARM target not on the screen, move to the next one
     if (!projection.GeoToScreenIfVisible(target_loc, sc))
@@ -235,7 +236,7 @@ void
 MapWindow::DrawTeammate(Canvas &canvas) const
 {
   if (SettingsComputer().TeammateCodeValid) {
-    POINT sc;
+    RasterPoint sc;
     if (render_projection.GeoToScreenIfVisible(Calculated().TeammateLocation,
                                                  sc))
       Graphics::hBmpTeammatePosition.draw(canvas, sc.x, sc.y);

@@ -26,9 +26,8 @@ Copyright_License {
 
 #include "Navigation/GeoPoint.hpp"
 #include "Math/FastRotation.hpp"
+#include "Screen/Point.hpp"
 #include "Compiler.h"
-
-#include <windef.h>
 
 /**
  * This is a class that can be used for converting geographical into screen
@@ -97,13 +96,13 @@ public:
    * @param g GeoPoint to convert
    */
   gcc_pure
-  POINT GeoToScreen(const GeoPoint &location) const;
+  RasterPoint GeoToScreen(const GeoPoint &location) const;
 
   /**
    * Returns the origin/rotation center in screen coordinates
    * @return The origin/rotation center in screen coordinates
    */
-  const POINT &GetScreenOrigin() const {
+  const RasterPoint &GetScreenOrigin() const {
     return ScreenOrigin;
   }
 
@@ -121,7 +120,7 @@ public:
    * Set the origin/rotation center to the given screen coordinates
    * @param pt Screen coordinate
    */
-  void SetScreenOrigin(POINT pt) {
+  void SetScreenOrigin(RasterPoint pt) {
     ScreenOrigin = pt;
   }
 
@@ -186,7 +185,7 @@ private:
    * This is the point that the ScreenRotation will rotate around.
    * It is also the point that the GeoLocation points to.
    */
-  POINT ScreenOrigin;
+  RasterPoint ScreenOrigin;
 
   /**
    * FastIntegerRotation instance for fast

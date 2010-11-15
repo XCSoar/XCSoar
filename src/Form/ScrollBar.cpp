@@ -149,7 +149,7 @@ ScrollBar::paint(Canvas &canvas) const
               up_arrow_rect.right, up_arrow_rect.bottom);
   canvas.draw_button(up_arrow_rect, false);
 
-  POINT up_arrow[3] = {
+  RasterPoint up_arrow[3] = {
     { (up_arrow_rect.left + rc.right) / 2,
       up_arrow_rect.top + arrow_padding },
     { up_arrow_rect.left + arrow_padding,
@@ -166,7 +166,7 @@ ScrollBar::paint(Canvas &canvas) const
               down_arrow_rect.right, down_arrow_rect.top - 1);
   canvas.draw_button(down_arrow_rect, false);
 
-  POINT down_arrow[3] = {
+  RasterPoint down_arrow[3] = {
     { (down_arrow_rect.left + rc.right) / 2,
       down_arrow_rect.bottom - arrow_padding },
     { down_arrow_rect.left + arrow_padding,

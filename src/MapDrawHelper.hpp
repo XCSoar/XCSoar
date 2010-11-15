@@ -24,8 +24,7 @@ Copyright_License {
 #define MAP_DRAW_HELPER_HPP
 
 #include "Navigation/SearchPointVector.hpp"
-
-#include <windef.h>
+#include "Screen/Point.hpp"
 
 class Canvas;
 class Projection;
@@ -64,7 +63,8 @@ protected:
 
   void draw_search_point_vector(Canvas& the_canvas, const SearchPointVector& points);
 
-  void draw_circle(Canvas& the_canvas, const POINT& center, unsigned radius);
+  void draw_circle(Canvas &the_canvas,
+                   const RasterPoint &center, unsigned radius);
 
   void buffer_render_finish();
 

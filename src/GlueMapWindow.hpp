@@ -62,7 +62,7 @@ private:
   } drag_mode;
 
   GeoPoint drag_start_geopoint;
-  POINT drag_start, drag_last, drag_last_valid_target;
+  RasterPoint drag_start, drag_last, drag_last_valid_target;
   GestureManager gestures;
   bool ignore_single_click;
 

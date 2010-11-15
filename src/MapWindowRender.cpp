@@ -99,7 +99,7 @@ MapWindow::RenderAreas(Canvas &canvas)
  * @param rc The area to draw in
  */
 void
-MapWindow::RenderTrail(Canvas &canvas, const POINT aircraft_pos)
+MapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
 {
   DrawTrail(canvas, aircraft_pos);
 }
@@ -141,7 +141,7 @@ MapWindow::RenderGlide(Canvas &canvas)
  */
 void
 MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc,
-                          const POINT aircraft_pos)
+                          const RasterPoint aircraft_pos)
 {
   // Draw wind vector at aircraft
   if (!SettingsMap().EnablePan || SettingsMap().TargetPan)
@@ -192,7 +192,8 @@ is the case or not.
  * @param rc
  */
 void
-MapWindow::RenderSymbology_lower(Canvas &canvas, const POINT aircraft_pos)
+MapWindow::RenderSymbology_lower(Canvas &canvas,
+                                 const RasterPoint aircraft_pos)
 {
   if (Basic().gps.Connected)
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
@@ -211,7 +212,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
 { 
   // Calculate screen positions
   RenderStart(canvas);
-  const POINT aircraft_pos = render_projection.GeoToScreen(Basic().Location);
+  const RasterPoint aircraft_pos = render_projection.GeoToScreen(Basic().Location);
 
   // Render terrain, groundline and topology and reset pen, brush and font
   RenderMapLayer(canvas);

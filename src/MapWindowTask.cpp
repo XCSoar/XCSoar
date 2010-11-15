@@ -65,7 +65,7 @@ protected:
     if (!do_draw_target(tp))
       return;
 
-    POINT sc;
+    RasterPoint sc;
     if (m_proj.GeoToScreenIfVisible(tp.get_location_remaining(), sc))
       Graphics::hBmpTarget.draw(m_buffer, sc.x, sc.y);
   }
@@ -113,7 +113,7 @@ protected:
       if ((idist != ilast) && (idist > 0) && (idist < 1000)) {
         TCHAR Buffer[5];
         _stprintf(Buffer, _T("%d"), idist);
-        POINT sc = m_proj.GeoToScreen(dloc);
+        RasterPoint sc = m_proj.GeoToScreen(dloc);
         RECT brect;
         SIZE tsize = m_canvas.text_size(Buffer);
 
@@ -189,7 +189,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas) const
     bearing = Basic().TrackBearing;
     // too short to have valid data
   }
-  POINT pt[2] = {{0,-75},{0,-400}};
+  RasterPoint pt[2] = {{0,-75},{0,-400}};
   if (SettingsMap().TargetPan) {
     double screen_range = GetScreenDistanceMeters();
     double f_low = 0.4;

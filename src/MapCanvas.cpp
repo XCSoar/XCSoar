@@ -29,7 +29,7 @@ Copyright_License {
 void
 MapCanvas::line(const GeoPoint &a, const GeoPoint &b)
 {
-  POINT pts[2];
+  RasterPoint pts[2];
   pts[0] = projection.GeoToScreen(a);
   pts[1] = projection.GeoToScreen(b);
 
@@ -42,13 +42,13 @@ MapCanvas::line(const GeoPoint &a, const GeoPoint &b)
 void
 MapCanvas::circle(const GeoPoint &center, fixed radius)
 {
-  POINT screen_center = projection.GeoToScreen(center);
+  RasterPoint screen_center = projection.GeoToScreen(center);
   unsigned screen_radius = projection.GeoToScreenDistance(radius);
   canvas.circle(screen_center.x, screen_center.y, screen_radius);
 }
 
 void
-MapCanvas::project(const SearchPointVector &points, POINT *screen) const
+MapCanvas::project(const SearchPointVector &points, RasterPoint *screen) const
 {
   for (SearchPointVector::const_iterator it = points.begin();
        it != points.end(); ++it)
@@ -56,7 +56,7 @@ MapCanvas::project(const SearchPointVector &points, POINT *screen) const
 }
 
 static void
-update_bounds(RECT &bounds, const POINT &pt)
+update_bounds(RECT &bounds, const RasterPoint &pt)
 {
   if (pt.x < bounds.left)
     bounds.left = pt.x;
@@ -69,7 +69,7 @@ update_bounds(RECT &bounds, const POINT &pt)
 }
 
 bool
-MapCanvas::visible(const POINT *screen, unsigned num)
+MapCanvas::visible(const RasterPoint *screen, unsigned num)
 {
   RECT bounds;
   bounds.left = 0x7fff;
@@ -91,7 +91,7 @@ MapCanvas::draw(const SearchPointVector &points)
   if (num_points < 3)
     return;
 
-  POINT pts[num_points];
+  RasterPoint pts[num_points];
   project(points, pts);
 
   if (visible(pts, num_points))

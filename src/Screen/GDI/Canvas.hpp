@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
+#include "Screen/Point.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -46,7 +47,7 @@ protected:
   unsigned width, height;
 
 #ifdef NOLINETO
-  POINT cursor;
+  RasterPoint cursor;
 #endif
 
 public:
@@ -296,33 +297,34 @@ public:
     ::DrawEdge(dc, &rc, EDGE_RAISED, BF_ADJUST | BF_FLAT | BF_RECT);
   }
 
-  void polyline(const POINT* lppt, unsigned cPoints) {
+  void polyline(const RasterPoint *lppt, unsigned cPoints) {
     assert(defined());
 
     ::Polyline(dc, lppt, cPoints);
   }
 
-  void polygon(const POINT* lppt, unsigned cPoints) {
+  void polygon(const RasterPoint *lppt, unsigned cPoints) {
     assert(defined());
 
     ::Polygon(dc, lppt, cPoints);
   }
 
 private:
-  void clipped_polygon(const POINT* lppt, unsigned cPoints);
-  void clipped_polyline(const POINT* lppt, unsigned cPoints);
+  void clipped_polygon(const RasterPoint *lppt, unsigned cPoints);
+  void clipped_polyline(const RasterPoint *lppt, unsigned cPoints);
 
 public:
-  void autoclip_polygon(const POINT *lppt, unsigned cPoints);
-  void autoclip_polyline(const POINT *lppt, unsigned cPoints);
+  void autoclip_polygon(const RasterPoint *lppt, unsigned cPoints);
+  void autoclip_polyline(const RasterPoint *lppt, unsigned cPoints);
 
   void line(int ax, int ay, int bx, int by);
-  void line(const POINT a, const POINT b) {
+  void line(const RasterPoint a, const RasterPoint b) {
     line(a.x, a.y, b.x, b.y);
   }
 
   void two_lines(int ax, int ay, int bx, int by, int cx, int cy);
-  void two_lines(const POINT a, const POINT b, const POINT c) {
+  void two_lines(const RasterPoint a, const RasterPoint b,
+                 const RasterPoint c) {
     two_lines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 

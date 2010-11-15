@@ -46,7 +46,7 @@ protected:
    */
   fixed max_lift;
 
-  POINT mid;
+  RasterPoint mid;
 
   /**
    * The minimum distance between the window boundary and the biggest
@@ -63,8 +63,8 @@ protected:
 
   Angle direction;
   DERIVED_INFO derived;
-  POINT lift_points[37];
-  POINT lift_point_avg;
+  RasterPoint lift_points[37];
+  RasterPoint lift_point_avg;
 
 public:
   ThermalAssistantWindow(unsigned _padding, bool _small = false);

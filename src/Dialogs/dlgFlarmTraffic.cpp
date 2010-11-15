@@ -249,7 +249,7 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
   canvas.select(hpRadar);
   canvas.hollow_brush();
 
-  POINT triangle[4];
+  RasterPoint triangle[4];
   triangle[0].x = 0;
   triangle[0].y = -radius / Layout::FastScale(1) + 15;
   triangle[1].x = 7;

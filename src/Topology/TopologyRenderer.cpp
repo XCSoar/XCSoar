@@ -105,7 +105,7 @@ TopologyFileRenderer::Paint(Canvas &canvas,
         const lineObj &line = shape.line[tt];
 
         for (int jj = 0; jj < line.numpoints; ++jj) {
-          POINT sc;
+          RasterPoint sc;
           const GeoPoint l = point2GeoPoint(line.point[jj]);
 
           if (projection.GeoToScreenIfVisible(l, sc))
@@ -206,7 +206,7 @@ TopologyFileRenderer::PaintLabels(Canvas &canvas,
       for (unsigned i = 0; i < (unsigned)line.numpoints; i += iskip) {
         GeoPoint g = point2GeoPoint(line.point[i]);
         in += iskip;
-        POINT pt = projection.GeoToScreen(g);
+        RasterPoint pt = projection.GeoToScreen(g);
 
         if (pt.x <= minx) {
           minx = pt.x;

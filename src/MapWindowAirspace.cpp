@@ -132,7 +132,7 @@ public:
     buffer_render_start();
     set_buffer_pens(airspace);
 
-    POINT center = m_proj.GeoToScreen(airspace.get_center());
+    RasterPoint center = m_proj.GeoToScreen(airspace.get_center());
     unsigned radius = m_proj.GeoToScreenDistance(airspace.get_radius());
     draw_circle(m_buffer, center, radius);
   }
@@ -230,7 +230,7 @@ void
 MapWindow::DrawAirspaceIntersections(Canvas &canvas) const
 {
   for (unsigned i = m_airspace_intersections.size(); i--;) {
-    POINT sc;
+    RasterPoint sc;
     if (render_projection.GeoToScreenIfVisible(m_airspace_intersections[i], sc))
       Graphics::hAirspaceInterceptBitmap.draw(canvas, sc.x, sc.y);
   }

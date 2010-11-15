@@ -226,7 +226,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
     canvas.select(look.border_pen);
 
-    POINT tab[8];
+    RasterPoint tab[8];
     tab[0].x = tab[1].x = recTitle.left + IBLSCALE(1);
     tab[0].y = tab[7].y = ybottom;
     tab[2].x = recTitle.left + IBLSCALE(3);
@@ -280,7 +280,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   canvas.text(x, y, mValue);
 
   if (unit_symbol != NULL && colorValue >= 0) {
-    POINT origin = unit_symbol->get_origin(Appearance.InverseInfoBox
+    RasterPoint origin = unit_symbol->get_origin(Appearance.InverseInfoBox
                                            ? UnitSymbol::INVERSE
                                            : UnitSymbol::NORMAL);
 

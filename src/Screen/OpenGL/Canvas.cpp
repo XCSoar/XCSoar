@@ -54,7 +54,7 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
 }
 
 static void
-PointsToVertices(GLfloat *dest, const POINT *src, unsigned count)
+PointsToVertices(GLfloat *dest, const RasterPoint *src, unsigned count)
 {
   while (count-- > 0) {
     *dest++ = src->x;
@@ -64,7 +64,7 @@ PointsToVertices(GLfloat *dest, const POINT *src, unsigned count)
 }
 
 void
-Canvas::polyline(const POINT *lppt, unsigned cPoints)
+Canvas::polyline(const RasterPoint *lppt, unsigned cPoints)
 {
   GLfloat v[cPoints * 2];
   PointsToVertices(v, lppt, cPoints);
@@ -75,7 +75,7 @@ Canvas::polyline(const POINT *lppt, unsigned cPoints)
 }
 
 void
-Canvas::polygon(const POINT* lppt, unsigned cPoints)
+Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
 {
   if (brush.is_hollow() && !pen.defined())
     return;

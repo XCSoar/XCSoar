@@ -27,6 +27,8 @@ Copyright_License {
 #include "Projection.hpp"
 #include "Geo/GeoBounds.hpp"
 
+#include <windef.h>
+
 class WindowProjection:
   public Projection
 {
@@ -38,7 +40,7 @@ public:
    * @param sc Screen coordinate (output)
    * @return True if the location is within the bounds
    */
-  bool GeoToScreenIfVisible(const GeoPoint &loc, POINT &sc) const;
+  bool GeoToScreenIfVisible(const GeoPoint &loc, RasterPoint &sc) const;
 
   /**
    * Checks whether a geographical location is within the visible bounds
@@ -54,7 +56,7 @@ public:
    * @return True if the screen coordinate is within the bounds
    */
   gcc_pure
-  bool ScreenVisible(const POINT &P) const;
+  bool ScreenVisible(const RasterPoint &P) const;
 
   const RECT &GetMapRect() const {
     return MapRect;

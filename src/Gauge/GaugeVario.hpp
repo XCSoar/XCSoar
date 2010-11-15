@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/BufferWindow.hpp"
 #include "Screen/Bitmap.hpp"
+#include "Screen/Point.hpp"
 #include "InstrumentBlackboard.hpp"
 
 class ContainerWindow;
@@ -34,7 +35,7 @@ class UnitSymbol;
 typedef struct {
   bool    InitDone;
   RECT    recBkg;
-  POINT   orgText;
+  RasterPoint orgText;
   fixed lastValue;
   TCHAR   lastText[32];
   const UnitSymbol *last_unit_symbol;
@@ -63,8 +64,8 @@ private:
 
   Bitmap hBitmapClimb;
 
-  POINT *polys;
-  POINT *lines;
+  RasterPoint *polys;
+  RasterPoint *lines;
 
   int gmax;
   bool dirty;
@@ -101,7 +102,7 @@ private:
 
   void MakePolygon(const int i);
   void MakeAllPolygons();
-  POINT* getPolygon(const int i);
+  RasterPoint *getPolygon(const int i);
 };
 
 #endif

@@ -31,7 +31,7 @@ Copyright_License {
 // We need to make it so.
 
 void
-Canvas::clipped_polygon(const POINT* lppt, unsigned cPoints)
+Canvas::clipped_polygon(const RasterPoint *lppt, unsigned cPoints)
 {
   assert(defined());
 
@@ -39,7 +39,7 @@ Canvas::clipped_polygon(const POINT* lppt, unsigned cPoints)
 }
 
 void
-Canvas::clipped_polyline(const POINT* lppt, unsigned cPoints)
+Canvas::clipped_polyline(const RasterPoint *lppt, unsigned cPoints)
 {
   assert(defined());
 
@@ -47,7 +47,7 @@ Canvas::clipped_polyline(const POINT* lppt, unsigned cPoints)
 }
 
 void
-Canvas::autoclip_polygon(const POINT* lppt, unsigned cPoints)
+Canvas::autoclip_polygon(const RasterPoint *lppt, unsigned cPoints)
 {
   if (need_clipping())
     clipped_polygon(lppt, cPoints);
@@ -56,7 +56,7 @@ Canvas::autoclip_polygon(const POINT* lppt, unsigned cPoints)
 }
 
 void
-Canvas::autoclip_polyline(const POINT* lppt, unsigned cPoints)
+Canvas::autoclip_polyline(const RasterPoint *lppt, unsigned cPoints)
 {
   if (need_clipping())
     clipped_polyline(lppt, cPoints);
@@ -73,7 +73,7 @@ Canvas::line(int ax, int ay, int bx, int by)
   ::MoveToEx(dc, ax, ay, NULL);
   ::LineTo(dc, bx, by);
 #else
-  POINT p[2] = {{ax, ay}, {bx, by}};
+  RasterPoint p[2] = {{ax, ay}, {bx, by}};
   polyline(p, 2);
 #endif
 }
@@ -88,7 +88,7 @@ Canvas::two_lines(int ax, int ay, int bx, int by, int cx, int cy)
   ::LineTo(dc, bx, by);
   ::LineTo(dc, cx, cy);
 #else
-  POINT p[2];
+  RasterPoint p[2];
 
   p[0].x = ax;
   p[0].y = ay;

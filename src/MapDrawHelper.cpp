@@ -77,7 +77,7 @@ MapDrawHelper::draw_search_point_vector(Canvas& the_canvas,
   }
 
   MapCanvas map_canvas(the_canvas, m_proj);
-  POINT screen[size];
+  RasterPoint screen[size];
   map_canvas.project(points, screen);
 
   if (!map_canvas.visible(screen, size))
@@ -92,7 +92,8 @@ MapDrawHelper::draw_search_point_vector(Canvas& the_canvas,
 }
 
 void 
-MapDrawHelper::draw_circle(Canvas& the_canvas, const POINT& center, unsigned radius) 
+MapDrawHelper::draw_circle(Canvas &the_canvas,
+                           const RasterPoint &center, unsigned radius)
 {
   the_canvas.circle(center.x, center.y, radius);
 #ifndef ENABLE_OPENGL

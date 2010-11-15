@@ -61,7 +61,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
   if (ch == '<' || ch == '>') {
     int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
-    static POINT Arrow[4];
+    static RasterPoint Arrow[4];
     Arrow[0].x = (rc.left + rc.right) / 2 + (ch == '<' ? size : -size);
     Arrow[0].y = (rc.top + rc.bottom) / 2 + size;
     Arrow[1].x = (rc.left + rc.right) / 2 + (ch == '<' ? -size : size);
@@ -78,7 +78,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
   if (ch == '^' || ch == 'v') {
     int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
-    static POINT Arrow[4];
+    static RasterPoint Arrow[4];
     Arrow[0].x = (rc.left + rc.right) / 2 +
                  size;
     Arrow[0].y = (rc.top + rc.bottom) / 2 +

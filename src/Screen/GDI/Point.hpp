@@ -21,20 +21,11 @@ Copyright_License {
 }
 */
 
-/** @file
- * @brief Library for calculating on-screen coordinates
- */
+#ifndef XCSOAR_SCREEN_GDI_POINT_HPP
+#define XCSOAR_SCREEN_GDI_POINT_HPP
 
-#ifndef XCSOAR_MATH_SCREEN_HPP
-#define XCSOAR_MATH_SCREEN_HPP
+#include <windef.h>
 
-#include "Math/Angle.hpp"
-#include "Screen/Point.hpp"
-
-void ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
-                        const RasterPoint &p3, RasterPoint *p4, int offset);
-
-void PolygonRotateShift(RasterPoint *poly, int n, int x, int y,
-                        Angle angle);
+#define RasterPoint tagPOINT
 
 #endif

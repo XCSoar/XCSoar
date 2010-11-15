@@ -43,7 +43,7 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
   Pen dash_pen(Pen::DASH, 1, Color(50, 50, 50));
   canvas.select(dash_pen);
 
-  const POINT Orig_Screen = render_projection.GetScreenOrigin();
+  const RasterPoint Orig_Screen = render_projection.GetScreenOrigin();
 
   canvas.line(Orig_Screen.x + 20, Orig_Screen.y,
               Orig_Screen.x - 20, Orig_Screen.y);
@@ -127,10 +127,10 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
 void
 GlueMapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
 {
-  POINT GlideBar[6] = {
+  RasterPoint GlideBar[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
   };
-  POINT GlideBar0[6] = {
+  RasterPoint GlideBar0[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
   };
 
@@ -306,7 +306,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
 void
 GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
 {
-  POINT GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
+  RasterPoint GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
 
   if ((Calculated().task_stats.total.solution_remaining.AltitudeDifference > fixed(50))
       && GetDisplayMode() == dmFinalGlide)
@@ -404,7 +404,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
     canvas.select(Graphics::hpThermalBand);
     canvas.select(Graphics::hbThermalBand);
 
-    POINT ThermalProfile[NUMTHERMALBUCKETS + 2];
+    RasterPoint ThermalProfile[NUMTHERMALBUCKETS + 2];
     for (i = 0; i < numtherm; i++) {
       ThermalProfile[1 + i].x =
           (iround((Wt[i] / Wmax) * IBLSCALE(TBSCALEX))) + rc.left;
@@ -476,7 +476,7 @@ GlueMapWindow::DrawMapScale2(Canvas &canvas, const RECT &rc,
   canvas.select(Graphics::hpMapScale);
 
   bool color = false;
-  POINT Start, End = { 0, 0 };
+  RasterPoint Start, End = { 0, 0 };
 
   int barsize = iround(findMapScaleBarSize(rc, projection));
 
