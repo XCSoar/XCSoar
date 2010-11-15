@@ -106,8 +106,10 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
   if (SettingsComputer().FinalGlideTerrain) {
     canvas.hollow_brush();
 
+#ifndef ENABLE_OPENGL
     canvas.select(Graphics::hpTerrainLineBg);
     canvas.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
+#endif
 
     canvas.select(Graphics::hpTerrainLine);
     canvas.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
