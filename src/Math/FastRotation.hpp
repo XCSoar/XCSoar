@@ -134,8 +134,8 @@ public:
 
   gcc_pure
   Pair Rotate(int x) const {
-    return Pair((x * cost - y_sint + 512) / 1024,
-                (y_cost + x * sint + 512) / 1024);
+    return Pair((x * cost - y_sint + 512) >> 10,
+                (y_cost + x * sint + 512) >> 10);
   }
 };
 

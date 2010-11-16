@@ -88,16 +88,16 @@ PolygonRotateShift(RasterPoint *poly, const int n, const int xs, const int ys,
     sint = Layout::FastScale(angle.ifastsine());
   }
 
-  const int xxs = xs * 1024 + 512;
-  const int yys = ys * 1024 + 512;
+  const int xxs = (xs << 10) + 512;
+  const int yys = (ys << 10) + 512;
   RasterPoint *p = poly;
   const RasterPoint *pe = poly + n;
 
   while (p < pe) {
     int x = p->x;
     int y = p->y;
-    p->x = (x * cost - y * sint + xxs) / 1024;
-    p->y = (y * cost + x * sint + yys) / 1024;
+    p->x = (x * cost - y * sint + xxs) >> 10;
+    p->y = (y * cost + x * sint + yys) >> 10;
     p++;
   }
 }

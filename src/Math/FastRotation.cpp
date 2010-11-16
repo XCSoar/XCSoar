@@ -59,6 +59,6 @@ FastIntegerRotation::SetAngle(Angle _angle)
 FastIntegerRotation::Pair
 FastIntegerRotation::Rotate(int x, int y) const
 {
-  return Pair((x * cost - y * sint + 512) / 1024,
-              (y * cost + x * sint + 512) / 1024);
+  return Pair((x * cost - y * sint + 512) >> 10,
+              (y * cost + x * sint + 512) >> 10);
 }
