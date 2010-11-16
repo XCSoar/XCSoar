@@ -108,7 +108,8 @@ ifeq ($(TARGET),ANDROID)
 
   ANDROID_NDK_PLATFORM = $(ANDROID_NDK)/build/platforms/$(ANDROID_PLATFORM)
   ANDROID_TARGET_ROOT = $(ANDROID_NDK_PLATFORM)/arch-$(ANDROID_ARCH)
-  TCPATH = $(ANDROID_NDK)/build/prebuilt/linux-x86/$(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)/bin/$(ANDROID_ABI2)-
+  ANDROID_TOOLCHAIN = $(ANDROID_NDK)/build/prebuilt/linux-x86/$(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)
+  TCPATH = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI2)-
 
   MCPU := -march=armv5te -mtune=xscale -msoft-float -fpic -mthumb-interwork -ffunction-sections -funwind-tables -fstack-protector -fno-short-enums
 endif
@@ -342,6 +343,7 @@ ifeq ($(TARGET),ANDROID)
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libGLESv1_CM.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libc.so $(ANDROID_TARGET_ROOT)/usr/lib/libm.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/liblog.so
+  TARGET_LDLIBS += $(ANDROID_TOOLCHAIN)/lib/gcc/$(ANDROID_ABI2)/$(ANDROID_GCC_VERSION)/libgcc.a
 endif
 
 ######## output files
