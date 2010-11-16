@@ -75,6 +75,7 @@ include $(topdir)/build/setup.mk
 include $(topdir)/build/launch.mk
 include $(topdir)/build/vali.mk
 include $(topdir)/build/test.mk
+include $(topdir)/build/hot.mk
 
 ######## output files
 
