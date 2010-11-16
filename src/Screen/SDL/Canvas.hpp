@@ -411,6 +411,7 @@ public:
     this->text(rc->left, rc->top, text);
   }
 
+#ifndef ENABLE_OPENGL
   void copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,
             SDL_Surface *surface, int src_x, int src_y);
@@ -419,7 +420,6 @@ public:
     copy(dest_x, dest_y, surface->w, surface->h, surface, 0, 0);
   }
 
-#ifndef ENABLE_OPENGL
   void copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,
             const Canvas &src, int src_x, int src_y) {

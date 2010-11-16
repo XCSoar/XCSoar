@@ -182,22 +182,6 @@ Canvas::text(int x, int y, const TCHAR *text)
 void
 Canvas::copy(int dest_x, int dest_y,
              unsigned dest_width, unsigned dest_height,
-             SDL_Surface *src_surface, int src_x, int src_y)
-{
-  assert(src_surface != NULL);
-
-  glColor4f(1.0, 1.0, 1.0, 1.0);
-
-  GLTexture texture(src_surface);
-  GLEnable scope(GL_TEXTURE_2D);
-  texture.draw(x_offset, y_offset,
-               dest_x, dest_y, dest_width, dest_height,
-               src_x, src_y, dest_width, dest_height);
-}
-
-void
-Canvas::copy(int dest_x, int dest_y,
-             unsigned dest_width, unsigned dest_height,
              const Bitmap &src, int src_x, int src_y)
 {
   stretch(dest_x, dest_y, dest_width, dest_height,
