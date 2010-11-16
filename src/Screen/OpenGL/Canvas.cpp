@@ -227,24 +227,6 @@ Canvas::stretch_transparent(const Bitmap &src, Color key)
 void
 Canvas::stretch(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
-                SDL_Surface *src,
-                int src_x, int src_y,
-                unsigned src_width, unsigned src_height)
-{
-  assert(src != NULL);
-
-  glColor4f(1.0, 1.0, 1.0, 1.0);
-
-  GLTexture texture(src);
-  GLEnable scope(GL_TEXTURE_2D);
-  texture.draw(x_offset, y_offset,
-               dest_x, dest_y, dest_width, dest_height,
-               src_x, src_y, src_width, src_height);
-}
-
-void
-Canvas::stretch(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
                 const Bitmap &src, int src_x, int src_y,
                 unsigned src_width, unsigned src_height)
 {

@@ -454,10 +454,14 @@ public:
             const Bitmap &src, int src_x, int src_y);
   void copy(const Bitmap &src);
 
+#ifndef ENABLE_OPENGL
   void copy_transparent_white(const Canvas &src);
   void copy_transparent_black(const Canvas &src);
+#endif /* !OPENGL */
+
   void stretch_transparent(const Bitmap &src, Color key);
 
+#ifndef ENABLE_OPENGL
   void stretch(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
                SDL_Surface *src,
@@ -482,6 +486,7 @@ public:
   void stretch(const Canvas &src,
                int src_x, int src_y,
                unsigned src_width, unsigned src_height);
+#endif /* !OPENGL */
 
   void stretch(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
@@ -496,9 +501,11 @@ public:
     stretch(0, 0, width, height, src);
   }
 
+#ifndef ENABLE_OPENGL
   void copy_or(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
                SDL_Surface *src, int src_x, int src_y);
+#endif /* !OPENGL */
 
   void copy_or(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
@@ -508,6 +515,7 @@ public:
     copy_or(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
+#ifndef ENABLE_OPENGL
   void copy_and(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 SDL_Surface *src, int src_x, int src_y);
@@ -522,6 +530,7 @@ public:
   void copy_and(const Canvas &src) {
     copy_and(0, 0, src.get_width(), src.get_height(), src, 0, 0);
   }
+#endif /* !OPENGL */
 
   void copy_and(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
