@@ -13,6 +13,11 @@
 
 #include "Screen/Canvas.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Texture.hpp"
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 /**
  * BGRColor structure encapsulates color information about one point. Color
  * order is Blue, Green, Red (not RGB).
@@ -87,6 +92,10 @@ protected:
   const unsigned int height;
   const unsigned int corrected_width;
   BGRColor *buffer;
+
+#ifdef ENABLE_OPENGL
+  mutable GLTexture *texture;
+#endif
 
 #ifdef ENABLE_SDL
   SDL_Surface *surface;
@@ -167,7 +176,19 @@ public:
 
   void stretch_to(unsigned width, unsigned height, Canvas &dest_canvas,
                   unsigned dest_width, unsigned dest_height) const {
-#ifdef ENABLE_SDL
+#ifdef ENABLE_OPENGL
+    if (texture == NULL)
+      texture = new GLTexture(surface);
+    else {
+      texture->bind();
+      texture->update(surface);
+    }
+
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+    GLEnable scope(GL_TEXTURE_2D);
+    dest_canvas.stretch(0, 0, dest_width, dest_height,
+                        *texture, 0, 0, width, height);
+#elif defined(ENABLE_SDL)
     Canvas src_canvas(surface);
     dest_canvas.stretch(0, 0, dest_width, dest_height,
                         src_canvas, 0, 0, width, height);

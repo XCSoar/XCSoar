@@ -38,6 +38,9 @@ CorrectedWidth(unsigned nWidth)
 RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth))
+#ifdef ENABLE_OPENGL
+  , texture(NULL)
+#endif
 {
   assert(nWidth > 0);
   assert(nHeight > 0);
@@ -98,6 +101,10 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
 
 RawBitmap::~RawBitmap()
 {
+#ifdef ENABLE_OPENGL
+  delete texture;
+#endif
+
 #ifdef ENABLE_SDL
   ::SDL_FreeSurface(surface);
 #elif defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
