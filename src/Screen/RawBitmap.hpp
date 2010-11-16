@@ -20,16 +20,35 @@
 struct BGRColor
 {
   BGRColor() {}
+
+#ifdef ENABLE_SDL
+
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+  unsigned char dummy;
+  unsigned char r;
+  unsigned char g;
+  unsigned char b;
+
+  BGRColor(unsigned char R, unsigned char G, unsigned char B)
+    :r(R), g(G), b(B) {}
+#else /* little endian */
+  unsigned char b;
+  unsigned char g;
+  unsigned char r;
+  unsigned char dummy;
+
   BGRColor(unsigned char R, unsigned char G, unsigned char B)
     :b(B), g(G), r(R) {}
+#endif /* little endian */
 
+#else /* !SDL */
   unsigned char b;
   unsigned char g;
   unsigned char r;
 
-#ifdef ENABLE_SDL
-  unsigned char dummy;
-#endif
+  BGRColor(unsigned char R, unsigned char G, unsigned char B)
+    :b(B), g(G), r(R) {}
+#endif /* !SDL */
 };
 
 /**

@@ -45,15 +45,9 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
 #ifdef ENABLE_SDL
   Uint32 rmask, gmask, bmask, amask;
 
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-  rmask = 0x000000ff;
-  gmask = 0x0000ff00;
-  bmask = 0x00ff0000;
-#else
   rmask = 0x00ff0000;
   gmask = 0x0000ff00;
   bmask = 0x000000ff;
-#endif
   amask = 0x00000000;
 
   surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, corrected_width, height, 32,
