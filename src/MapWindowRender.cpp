@@ -63,11 +63,6 @@ MapWindow::RenderMapLayer(Canvas &canvas)
   m_background.sun_from_wind(render_projection, Basic().wind);
   m_background.Draw(canvas, render_projection, SettingsMap());
 
-  // Select black brush/pen and the MapWindowFont
-  canvas.black_brush();
-  canvas.black_pen();
-  canvas.select(Fonts::Map);
-
   if (terrain != NULL) {
     if ((SettingsComputer().FinalGlideTerrain == 2) && 
         Calculated().TerrainValid)
