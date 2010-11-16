@@ -296,6 +296,10 @@ public:
   friend std::ostream& operator<< (std::ostream& o, const Angle& a);
 #endif
 
+  static Angle from_xy(const fixed& x, const fixed& y) {
+    return Angle::native(atan2(y,x));
+  }
+
 private:
   fixed m_value;
 };
