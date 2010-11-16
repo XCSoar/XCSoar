@@ -55,7 +55,7 @@ public:
    * @param nHeight Height of the buffer
    * @param clr Fill color of the buffer
    */
-  RawBitmap(unsigned width, unsigned height, const Color color);
+  RawBitmap(unsigned width, unsigned height);
   ~RawBitmap();
 
   /**

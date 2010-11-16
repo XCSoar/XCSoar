@@ -115,7 +115,7 @@ RasterRenderer::GenerateImage(bool is_terrain, bool do_shading,
       height_matrix.get_height() > image->GetHeight()) {
     delete image;
     image = new RawBitmap(height_matrix.get_width(),
-                          height_matrix.get_height(), Color::WHITE);
+                          height_matrix.get_height());
   }
 
   if (quantisation_effective > min(height_matrix.get_width(),

@@ -24,7 +24,6 @@ Copyright_License {
 #include "Screen/RawBitmap.hpp"
 
 #include <assert.h>
-#include <algorithm>
 
 /**
  * Returns minimum width that is greater then the given width and
@@ -36,7 +35,7 @@ CorrectedWidth(unsigned nWidth)
   return ((nWidth + 3) / 4) * 4;
 }
 
-RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
+RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth))
 {
@@ -86,9 +85,6 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight, const Color clr)
   buffer = new BGRColor[corrected_width * height];
 #endif
 #endif /* !ENABLE_SDL */
-
-  std::fill(buffer, buffer + corrected_width * height,
-            BGRColor(clr.blue(), clr.green(), clr.red()));
 }
 
 RawBitmap::~RawBitmap()
