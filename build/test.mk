@@ -222,6 +222,7 @@ check: $(TESTS) | $(OUT)/test/dirstamp
 DEBUG_PROGRAM_NAMES = \
 	TestTrace \
 	TestOLC \
+	BenchmarkProjection \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
 	ReadMO \
 	ReadProfileString ReadProfileInt \
@@ -241,6 +242,16 @@ DEBUG_PROGRAM_NAMES += FeedNMEA
 endif
 
 DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRAM_NAMES))
+
+BENCHMARK_PROJECTION_SOURCES = \
+	$(SRC)/Projection.cpp \
+	$(TEST_SRC_DIR)/BenchmarkProjection.cpp
+BENCHMARK_PROJECTION_OBJS = $(call SRC_TO_OBJ,$(BENCHMARK_PROJECTION_SOURCES))
+BENCHMARK_PROJECTION_LDADD = \
+	$(MATH_LIBS)
+$(TARGET_BIN_DIR)/BenchmarkProjection$(TARGET_EXEEXT): $(BENCHMARK_PROJECTION_OBJS) $(BENCHMARK_PROJECTION_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 DUMP_TEXT_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/DumpTextFile.cpp
