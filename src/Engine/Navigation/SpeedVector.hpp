@@ -57,6 +57,15 @@ struct SpeedVector {
    */
   SpeedVector(Angle _bearing, fixed _norm):bearing(_bearing), norm(_norm) {}
 
+  /** 
+   * Constructor given two magnitudes (east and north)
+   * 
+   * @param _x East speed
+   * @param _x North speed
+   * @return Initialised object
+   */
+  SpeedVector(fixed x, fixed y):bearing(Angle::from_xy(y,x).as_bearing()), norm(sqrt(x*x+y*y)) {}
+
   /**
    * Returns true if the norm of the vector is zero.
    */
