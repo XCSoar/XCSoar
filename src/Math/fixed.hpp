@@ -59,6 +59,18 @@ void sin_cos(const double&theta, double*s, double*c);
 #define negative(x) (x < 0)
 #define sigmoid(x) (2.0 / (1.0 + exp(-x)) - 1.0)
 
+gcc_const
+inline fixed fast_mult(fixed a, int a_bits, fixed b, int b_bits)
+{
+  return a * b;
+}
+
+gcc_const
+inline fixed fast_mult(fixed a, fixed b, int b_bits)
+{
+  return a * b;
+}
+
 #else
 #define FIXED_DOUBLE(x) x.as_double()
 #define FIXED_INT(x) x.as_int()
@@ -352,6 +364,13 @@ public:
     return *this;
   }
 
+  gcc_const
+  static fixed fast_mult(fixed a, int a_shift, fixed b, int b_shift) {
+    return fixed(internal(),
+                 ((a.m_nVal >> a_shift) * (b.m_nVal >> b_shift))
+                 >> (resolution_shift - a_shift - b_shift));
+  }
+
 /*
     fixed& operator/=(value_t val)
     {
@@ -592,6 +611,28 @@ inline fixed operator*(fixed const& a,fixed const& b)
 {
   fixed temp(a);
   return temp*=b;
+}
+
+/**
+ * Simplified and faster multiplication when you know the range of
+ * the coefficients at compile time.
+ *
+ * @param a first coefficient
+ * @param a_shift number of bits to discard from the first coefficient
+ * @param b second coefficient
+ * @param b_shift number of bits to discard from the second coefficient
+ */
+gcc_const
+inline fixed
+fast_mult(fixed a, int a_shift, fixed b, int b_shift)
+{
+  return fixed::fast_mult(a, a_shift, b, b_shift);
+}
+
+gcc_const
+inline fixed fast_mult(fixed a, fixed b, int b_bits)
+{
+  return fixed::fast_mult(a, 0, b, b_bits);
 }
 
 gcc_pure

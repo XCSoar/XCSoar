@@ -64,8 +64,8 @@ Projection::GeoToScreen(const GeoPoint &g) const
 {
   const GeoPoint d = GeoLocation-g;
   const FastIntegerRotation::Pair p =
-    ScreenRotation.Rotate((int)(AngleToPixels(d.Longitude) *
-                                g.Latitude.fastcosine()),
+    ScreenRotation.Rotate((int)fast_mult(g.Latitude.fastcosine(),
+                                         AngleToPixels(d.Longitude), 16),
                           (int)AngleToPixels(d.Latitude));
 
   RasterPoint sc;

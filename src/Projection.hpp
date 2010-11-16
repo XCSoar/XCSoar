@@ -80,7 +80,7 @@ public:
    */
   gcc_pure
   fixed AngleToPixels(Angle angle) const {
-    return angle.value_radians() * DrawScale;
+    return fast_mult(angle.value_radians(), DrawScale, 8);
   }
 
   /**
