@@ -405,6 +405,12 @@ protected:
         !cmp.Calculated().task_stats.task_valid)
       return false;
 
+    const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
+    if (!res.is_final_glide()) {
+      // only give message about terrain warnings if above final glide
+      return false;
+    }
+
     const GeoPoint null_point;
     return (cmp.Calculated().TerrainWarningLocation != null_point);
   }
