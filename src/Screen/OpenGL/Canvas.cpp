@@ -180,6 +180,27 @@ Canvas::text(int x, int y, const TCHAR *text)
 }
 
 void
+Canvas::stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const GLTexture &texture,
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height)
+{
+  texture.draw(x_offset, y_offset,
+               dest_x, dest_y, dest_width, dest_height,
+               src_x, src_y, src_width, src_height);
+}
+
+void
+Canvas::stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const GLTexture &texture)
+{
+  stretch(dest_x, dest_y, dest_width, dest_height,
+          texture, 0, 0, texture.get_width(), texture.get_height());
+}
+
+void
 Canvas::copy(int dest_x, int dest_y,
              unsigned dest_width, unsigned dest_height,
              const Bitmap &src, int src_x, int src_y)

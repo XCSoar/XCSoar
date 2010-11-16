@@ -48,6 +48,8 @@ Copyright_License {
 #else
 #include <SDL/SDL_opengl.h>
 #endif
+
+class GLTexture;
 #endif
 
 /* those are WIN32 macros - undefine, or Canvas::background_mode will
@@ -411,7 +413,23 @@ public:
     this->text(rc->left, rc->top, text);
   }
 
-#ifndef ENABLE_OPENGL
+
+#ifdef ENABLE_OPENGL
+  /**
+   * Draws a texture.  The caller is responsible for binding it and
+   * enabling GL_TEXTURE_2D.
+   */
+  void stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const GLTexture &texture,
+               int src_x, int src_y,
+               unsigned src_width, unsigned src_height);
+
+  void stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const GLTexture &texture);
+
+#else /* !OPENGL */
   void copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,
             SDL_Surface *surface, int src_x, int src_y);
