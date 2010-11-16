@@ -26,6 +26,10 @@ struct BGRColor
   unsigned char b;
   unsigned char g;
   unsigned char r;
+
+#ifdef ENABLE_SDL
+  unsigned char dummy;
+#endif
 };
 
 /**

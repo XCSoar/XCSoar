@@ -56,7 +56,7 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
 #endif
   amask = 0x00000000;
 
-  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, corrected_width, height, 24,
+  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, corrected_width, height, 32,
                                    rmask, gmask, bmask, amask);
   assert(!SDL_MUSTLOCK(surface));
 
