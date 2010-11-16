@@ -77,6 +77,20 @@ SurfaceToTextureSurface(SDL_Surface *src)
 }
 
 void
+GLTexture::update(SDL_Surface *surface)
+{
+#ifdef ANDROID
+  /* 16 bit 5/6/5 on Android */
+  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, surface->w, surface->h,
+                  GL_RGB, GL_UNSIGNED_SHORT_5_6_5, surface->pixels);
+#else
+  /* 32 bit R/G/B/A on full OpenGL */
+  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, surface->w, surface->h,
+                  GL_BGRA, GL_UNSIGNED_BYTE, surface->pixels);
+#endif
+}
+
+void
 GLTexture::load(SDL_Surface *src)
 {
   width = src->w;

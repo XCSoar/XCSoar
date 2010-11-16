@@ -83,6 +83,8 @@ public:
     glBindTexture(GL_TEXTURE_2D, id);
   }
 
+  void update(SDL_Surface *surface);
+
   void draw(int x_offset, int y_offset,
             int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,
