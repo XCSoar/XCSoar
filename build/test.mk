@@ -198,6 +198,21 @@ $(TARGET_BIN_DIR)/TestOLC$(TARGET_EXEEXT): $(TEST_OLC_OBJS) $(TEST_OLC_LDADD) | 
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
+TEST_TRACE_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(SRC)/Math/fixed.cpp \
+	$(SRC)/Math/Angle.cpp \
+	$(SRC)/Math/FastMath.cpp \
+	$(SRC)/Replay/IgcReplay.cpp \
+	$(TEST_SRC_DIR)/Printing.cpp \
+	$(TEST_SRC_DIR)/TestTrace.cpp 
+TEST_TRACE_OBJS = $(call SRC_TO_OBJ,$(TEST_TRACE_SOURCES))
+TEST_TRACE_LDADD = $(UTIL_LIBS) $(MATH_LIBS) $(IO_LIBS) $(ENGINE_LIBS)
+$(TARGET_BIN_DIR)/TestTrace$(TARGET_EXEEXT): CPPFLAGS += -DDO_PRINT
+$(TARGET_BIN_DIR)/TestTrace$(TARGET_EXEEXT): $(TEST_TRACE_OBJS) $(TEST_TRACE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
 build-check: $(TESTS)
 
 check: $(TESTS) | $(OUT)/test/dirstamp
@@ -205,6 +220,7 @@ check: $(TESTS) | $(OUT)/test/dirstamp
 	$(Q)$(PERL) $(TEST_SRC_DIR)/testall.pl $(TESTS)
 
 DEBUG_PROGRAM_NAMES = \
+	TestTrace \
 	TestOLC \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
 	ReadMO \
