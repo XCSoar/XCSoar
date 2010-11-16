@@ -78,6 +78,17 @@ public:
     points[num_points++] = pt;
   }
 
+  /**
+   * Adds the point only if it a few pixels distant from the previous
+   * one.  Useful to reduce the complexity of small figures.
+   */
+   void add_point_if_distant(RasterPoint pt) {
+    assert(num_points < points.size());
+
+    if (num_points == 0 || manhattan_distance(points[num_points - 1], pt) >= 8)
+      add_point(pt);
+  }
+
   void finish_polyline(Canvas &canvas) {
 #ifdef ENABLE_OPENGL
     glVertexPointer(2, GL_FLOAT, 0, &points[0].x);

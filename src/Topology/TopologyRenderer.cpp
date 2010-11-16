@@ -123,7 +123,7 @@ TopologyFileRenderer::Paint(Canvas &canvas,
 
         for (unsigned i = 0; i < msize; ++i) {
           GeoPoint g = point2GeoPoint(line.point[i]);
-          shape_renderer.add_point(projection.GeoToScreen(g));
+          shape_renderer.add_point_if_distant(projection.GeoToScreen(g));
         }
 
         shape_renderer.finish_polyline(canvas);
@@ -141,7 +141,7 @@ TopologyFileRenderer::Paint(Canvas &canvas,
         for (unsigned i = 0; i < msize; ++i) {
           GeoPoint g = point2GeoPoint(*in);
           in += iskip;
-          shape_renderer.add_point(projection.GeoToScreen(g));
+          shape_renderer.add_point_if_distant(projection.GeoToScreen(g));
         }
 
         shape_renderer.finish_polygon(canvas);
