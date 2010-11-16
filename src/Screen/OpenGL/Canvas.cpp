@@ -215,6 +215,7 @@ Canvas::stretch(int dest_x, int dest_y,
   glColor4f(1.0, 1.0, 1.0, 1.0);
 
   GLTexture texture(src);
+  GLEnable scope(GL_TEXTURE_2D);
   texture.draw(x_offset, y_offset,
                dest_x, dest_y, dest_width, dest_height,
                src_x, src_y, src_width, src_height);
