@@ -53,12 +53,28 @@ struct BGRColor
 #endif /* little endian */
 
 #else /* !SDL */
+
+#ifdef _WIN32_WCE
+  /**
+   * RGB color value encoded with 5/5/5 bits per channel.  The most
+   * significant bit is unused.
+   */
+  unsigned short value;
+
+  BGRColor(unsigned char R, unsigned char G, unsigned char B)
+    :value(((R & 0xf8) << 7) |
+           ((G & 0xf8) << 2) |
+           (B >> 3)) {}
+
+#else /* !_WIN32_WCE */
   unsigned char b;
   unsigned char g;
   unsigned char r;
 
   BGRColor(unsigned char R, unsigned char G, unsigned char B)
     :b(B), g(G), r(R) {}
+#endif /* !_WIN32_WCE */
+
 #endif /* !SDL */
 };
 

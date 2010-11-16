@@ -71,7 +71,11 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   bi.bmiHeader.biWidth = corrected_width;
   bi.bmiHeader.biHeight = height;
   bi.bmiHeader.biPlanes = 1;
+#ifdef _WIN32_WCE
+  bi.bmiHeader.biBitCount = 16;
+#else
   bi.bmiHeader.biBitCount = 24;
+#endif
   bi.bmiHeader.biCompression = BI_RGB;
   bi.bmiHeader.biSizeImage = 0;
   bi.bmiHeader.biXPelsPerMeter = 3780;
