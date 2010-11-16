@@ -23,7 +23,18 @@ struct BGRColor
 
 #ifdef ENABLE_SDL
 
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+#ifdef ANDROID
+  /**
+   * RGB color value encoded with 5/6/5 bits per channel.
+   */
+  unsigned short value;
+
+  BGRColor(unsigned char R, unsigned char G, unsigned char B)
+    :value(((R & 0xf8) << 8) |
+           ((G & 0xfc) << 3) |
+           (B >> 3)) {}
+
+#elif SDL_BYTEORDER == SDL_BIG_ENDIAN
   unsigned char dummy;
   unsigned char r;
   unsigned char g;
