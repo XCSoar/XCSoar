@@ -49,13 +49,13 @@ Copyright_License {
 /**
  * one sample is updated per n seconds
  */
-static const fixed SAMPLE_RATE(4);
+#define SAMPLE_RATE fixed_int_constant(4)
 
 /**
  * minimum number of seconds between
  * recalculating estimate
  */
-static const fixed UPDATE_RATE(20);
+#define UPDATE_RATE fixed_int_constant(20)
 
 /** 20 m/s = 40 knots max approx */
 static const int V_SCALE = 20;
