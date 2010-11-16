@@ -29,18 +29,20 @@ Copyright_License {
 #include <string>
 #include <assert.h>
 
-struct RenderedText {
-  RenderedText *prev, *next;
+struct ListHead {
+  ListHead *prev, *next;
+};
+
+struct RenderedText : public ListHead {
   std::string key;
   GLTexture texture;
 
-  RenderedText():prev(this), next(this) {}
   RenderedText(const char *_key, SDL_Surface *surface)
     :key(_key), texture(surface) {}
 };
 
 static std::map<std::string,RenderedText*> text_cache_map;
-static RenderedText text_cache_head;
+static ListHead text_cache_head = { &text_cache_head, &text_cache_head };
 static unsigned text_cache_size = 0;
 
 GLTexture *
@@ -74,7 +76,7 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
   /* remove old entries from cache */
 
   if (text_cache_size >= 256) {
-    RenderedText *rt = text_cache_head.prev;
+    RenderedText *rt = (RenderedText *)text_cache_head.prev;
     printf("remove '%s'\n", rt->key.c_str());
     text_cache_map.erase(rt->key);
     rt->next->prev = rt->prev;
@@ -118,8 +120,9 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
 void
 TextCache::flush()
 {
-  for (RenderedText *rt = text_cache_head.next; rt != &text_cache_head;) {
-    RenderedText *next = rt->next;
+  for (RenderedText *rt = (RenderedText *)text_cache_head.next;
+       rt != &text_cache_head;) {
+    RenderedText *next = (RenderedText *)rt->next;
     delete rt;
     rt = next;
   }
