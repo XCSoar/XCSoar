@@ -113,6 +113,7 @@ ifeq ($(TARGET),ANDROID)
   TCPATH = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI2)-
 
   MCPU := -march=armv5te -mtune=xscale -msoft-float -fpic -mthumb-interwork -ffunction-sections -funwind-tables -fstack-protector -fno-short-enums
+  HAVE_FPU := n
 endif
 
 ifeq ($(TARGET),CYGWIN)
