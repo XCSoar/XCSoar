@@ -14,7 +14,7 @@ HOST_CFLAGS = $(OPTIMIZE) $(C_FEATURES) $(CFLAGS)
 
 host-cc-flags = $(DEPFLAGS) $(HOST_CFLAGS) $(HOST_CPPFLAGS)
 host-cxx-flags = $(DEPFLAGS) $(HOST_CXXFLAGS) $(HOST_CPPFLAGS)
-host-ld-flags = -lm
+host-ld-flags = -lm -lstdc++
 
 $(HOST_OUTPUT_DIR)/%.o: %.c | $(HOST_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  HOSTCC  $@"
