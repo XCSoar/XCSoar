@@ -42,10 +42,6 @@ class GLTexture {
   unsigned width, height;
 
 public:
-  GLTexture() {
-    init();
-  }
-
   GLTexture(SDL_Surface *surface) {
     init();
     load(surface);
