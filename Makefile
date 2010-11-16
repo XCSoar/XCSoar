@@ -96,7 +96,7 @@ INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR) -I$(SRC)/WayPoint
 
 ####### linker configuration
 
-LDFLAGS = $(TARGET_LDFLAGS) $(FLAGS_PROFILE)
+LDFLAGS = $(TARGET_LDFLAGS) $(FLAGS_PROFILE) $(OPTIMIZE)
 LDLIBS = $(TARGET_LDLIBS)
 
 ####### sources
