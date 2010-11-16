@@ -26,8 +26,8 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-class GeoPoint;
-class SpeedVector;
+struct GeoPoint;
+struct SpeedVector;
 
 void EstimateThermalBase(const GeoPoint Thermal_Location,
                          const fixed altitude,

@@ -36,7 +36,7 @@ Copyright_License {
 
 class GLTexture;
 class Font;
-class Color;
+struct Color;
 
 namespace TextCache {
   gcc_pure

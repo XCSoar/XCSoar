@@ -30,7 +30,7 @@ Copyright_License {
 class Bitmap;
 class MaskedIcon;
 class Brush;
-class Color;
+struct Color;
 class Pen;
 
 struct SETTINGS_MAP;

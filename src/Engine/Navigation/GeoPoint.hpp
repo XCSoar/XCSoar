@@ -28,7 +28,7 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Compiler.h"
 
-class GeoVector;
+struct GeoVector;
 
 /**
  * Geodetic coordinate expressed as Longitude and Latitude angles.

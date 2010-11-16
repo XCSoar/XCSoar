@@ -14,9 +14,9 @@ class OrderedTaskPoint;
 class ContestManager;
 class Trace;
 class AATPoint;
-class AIRCRAFT_STATE;
-class GeoPoint;
-class ContestResult;
+struct AIRCRAFT_STATE;
+struct GeoPoint;
+struct ContestResult;
 
 #ifdef FIXED_MATH
 #include "Math/fixed.hpp"
