@@ -1584,6 +1584,9 @@ void jpc_qmfb1d_getbands(jpc_qmfb1d_t *qmfb, int flags, uint_fast32_t xstart,
 	int start;
 	int end;
 
+	(void)qmfb;
+	(void)maxbands;
+
 	assert(maxbands >= 2);
 
 	if (flags & JPC_QMFB1D_VERT) {

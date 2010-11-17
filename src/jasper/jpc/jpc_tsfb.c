@@ -451,6 +451,8 @@ static void qmfb2d_getbands(jpc_qmfb1d_t *hqmfb, jpc_qmfb1d_t *vqmfb,
 	int vbandno;
 	jpc_tsfbnodeband_t *band;
 
+	(void)maxbands;
+
 	if (hqmfb) {
 		jpc_qmfb1d_getbands(hqmfb, 0, xstart, ystart, xend, yend,
 		  JPC_QMFB1D_MAXCHANS, &numhbands, hbands);
