@@ -46,7 +46,6 @@ MapWindow::isClickOnTarget(const RasterPoint pc)
     if (t == gnull)
       return false;
 
-    const RasterPoint pt = visible_projection.GeoToScreen(t);
     const GeoPoint gp = visible_projection.ScreenToGeo(pc.x, pc.y);
     if (visible_projection.GeoToScreenDistance(gp.distance(t)) <
         unsigned(Layout::Scale(10)))
