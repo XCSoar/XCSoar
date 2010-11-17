@@ -27,6 +27,8 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
+#include "Profile/Profile.hpp"
+#include "OS/PathName.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Components.hpp"
@@ -186,6 +188,17 @@ PrepareData(void)
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wpType->GetDataField();
     dfe->addEnumTexts(TypeFilter);
+
+    TCHAR szFile[MAX_PATH];
+    const TCHAR * t;
+    if (Profile::GetPath(szProfileWayPointFile, szFile)) {
+      t = BaseName(szFile);
+      dfe->replaceEnumText(4, t);
+    }
+    if (Profile::GetPath(szProfileAdditionalWayPointFile, szFile)) {
+      t = BaseName(szFile);
+      dfe->replaceEnumText(5, t);
+    }
     dfe->SetAsInteger(filter_data.type_index);
     wpType->RefreshDisplay();
   }
