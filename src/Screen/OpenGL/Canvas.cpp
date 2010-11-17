@@ -87,6 +87,27 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
 }
 
 void
+Canvas::two_lines(int ax, int ay, int bx, int by, int cx, int cy)
+{
+  pen.get_color().set();
+
+  const GLvalue v[] = { ax, ay, bx, by, cx, cy };
+  glVertexPointer(2, GL_VALUE, 0, v);
+  glDrawArrays(GL_LINE_STRIP, 0, 3);
+}
+
+void
+Canvas::two_lines(const RasterPoint a, const RasterPoint b,
+                  const RasterPoint c)
+{
+  pen.get_color().set();
+
+  const RasterPoint v[] = { a, b, c };
+  glVertexPointer(2, GL_VALUE, 0, v);
+  glDrawArrays(GL_LINE_STRIP, 0, 3);
+}
+
+void
 Canvas::circle(int x, int y, unsigned radius)
 {
   enum { COUNT = 32 };

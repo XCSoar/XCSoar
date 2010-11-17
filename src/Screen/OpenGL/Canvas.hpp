@@ -280,16 +280,9 @@ public:
     line(a.x, a.y, b.x, b.y);
   }
 
-  void two_lines(int ax, int ay, int bx, int by, int cx, int cy)
-  {
-    line(ax, ay, bx, by);
-    line(bx, by, cx, cy);
-  }
-
+  void two_lines(int ax, int ay, int bx, int by, int cx, int cy);
   void two_lines(const RasterPoint a, const RasterPoint b,
-                 const RasterPoint c) {
-    two_lines(a.x, a.y, b.x, b.y, c.x, c.y);
-  }
+                 const RasterPoint c);
 
   void circle(int x, int y, unsigned radius);
 
