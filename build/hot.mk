@@ -1,4 +1,4 @@
-ifeq ($(DEBUG),n)
+ifeq ($(DEBUG)$(CLANG),nn)
 
 # These sources contain a lot of "hot" code, and should be optimized
 # for speed, not for size.
