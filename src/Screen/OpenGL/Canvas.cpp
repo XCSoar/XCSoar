@@ -90,21 +90,21 @@ void
 Canvas::circle(int x, int y, unsigned radius)
 {
   enum { COUNT = 32 };
-  GLfloat v[(2 + COUNT) * 2], *p = v;
+  RasterPoint v[1 + COUNT], *p = v;
 
   /* center (only needed for filling) */
-  *p++ = x;
-  *p++ = y;
+  p->x = x;
+  p->y = y;
   p += 2;
 
   for (unsigned i = 0; i < COUNT; ++i) {
-    *p++ = x + ICOSTABLE[i * 4096 / COUNT] * (int)radius / 1024.;
-    *p++ = y + ISINETABLE[i * 4096 / COUNT] * (int)radius / 1024.;
+    p->x = x + ICOSTABLE[i * 4096 / COUNT] * (int)radius / 1024.;
+    p->y = y + ISINETABLE[i * 4096 / COUNT] * (int)radius / 1024.;
+    ++p;
   }
 
   /* end point == start point (only needed for filling) */
-  v[2] = p[-2];
-  v[3] = p[-1];
+  v[1] = p[-1];
 
   glVertexPointer(2, GL_FLOAT, 0, v);
 
