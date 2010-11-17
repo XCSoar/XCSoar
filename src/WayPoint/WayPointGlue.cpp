@@ -152,7 +152,7 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
 
   // Get second waypoint filename
   if (Profile::GetPath(szProfileAdditionalWayPointFile, szFile))
-    wp_file1.reset(WayPointFile::create(szFile, 0));
+    wp_file1.reset(WayPointFile::create(szFile, 1));
 
   // If waypoint file exists
   if (wp_file1.get() != NULL) {
