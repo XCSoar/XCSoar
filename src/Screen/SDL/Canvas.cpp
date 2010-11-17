@@ -170,7 +170,11 @@ Canvas::text_size(const TCHAR *text) const
     return size;
 
   int ret, w, h;
+#ifdef UNICODE
+  ret = ::TTF_SizeUNICODE(font, (const Uint16 *)text, &w, &h);
+#else
   ret = ::TTF_SizeUTF8(font, text, &w, &h);
+#endif
   if (ret == 0) {
     size.cx = w;
     size.cy = h;
@@ -189,7 +193,11 @@ Canvas::text(int x, int y, const TCHAR *text)
   if (font == NULL)
     return;
 
+#ifdef UNICODE
+  s = ::TTF_RenderUNICODE_Solid(font, (const Uint16 *)text, text_color);
+#else
   s = ::TTF_RenderUTF8_Solid(font, text, Color::BLACK);
+#endif
   if (s == NULL)
     return;
 
