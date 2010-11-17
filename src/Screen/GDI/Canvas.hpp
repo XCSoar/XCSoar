@@ -46,10 +46,6 @@ protected:
   HDC dc, compatible_dc;
   unsigned width, height;
 
-#ifdef NOLINETO
-  RasterPoint cursor;
-#endif
-
 public:
   Canvas():dc(NULL), compatible_dc(NULL) {}
   Canvas(HDC _dc, unsigned _width, unsigned _height)
@@ -327,9 +323,6 @@ public:
                  const RasterPoint c) {
     two_lines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
-
-  void move_to(int x, int y);
-  void line_to(int x, int y);
 
   void circle(int x, int y, unsigned radius) {
     assert(defined());

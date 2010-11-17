@@ -41,20 +41,6 @@ Canvas::reset()
   }
 }
 
-void
-Canvas::move_to(int x, int y)
-{
-  cursor.x = x;
-  cursor.y = y;
-}
-
-void
-Canvas::line_to(int x, int y)
-{
-  line(cursor.x, cursor.y, x, y);
-  move_to(x, y);
-}
-
 #ifndef ENABLE_OPENGL
 
 void

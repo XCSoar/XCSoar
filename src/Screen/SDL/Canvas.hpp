@@ -70,7 +70,6 @@ protected:
   enum {
     OPAQUE, TRANSPARENT
   } background_mode;
-  RasterPoint cursor;
 
 public:
   Canvas()
@@ -319,9 +318,6 @@ public:
                  const RasterPoint c) {
     two_lines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
-
-  void move_to(int x, int y);
-  void line_to(int x, int y);
 
   void circle(int x, int y, unsigned radius);
 

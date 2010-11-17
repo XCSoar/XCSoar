@@ -103,32 +103,6 @@ Canvas::two_lines(int ax, int ay, int bx, int by, int cx, int cy)
 }
 
 void
-Canvas::move_to(int x, int y)
-{
-  assert(defined());
-
-#ifdef NOLINETO
-  cursor.x = x;
-  cursor.y = y;
-#else
-  ::MoveToEx(dc, x, y, NULL);
-#endif
-}
-
-void
-Canvas::line_to(int x, int y)
-{
-  assert(defined());
-
-#ifdef NOLINETO
-  line(cursor.x, cursor.y, x, y);
-  move_to(x, y);
-#else
-  ::LineTo(dc, x, y);
-#endif
-}
-
-void
 Canvas::segment(int x, int y, unsigned radius,
                 Angle start, Angle end, bool horizon)
 {
