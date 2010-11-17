@@ -30,7 +30,7 @@ Copyright_License {
 #include <GLES/glext.h>
 #endif
 
-gcc_const
+gcc_const gcc_unused
 static unsigned
 next_power_of_two(unsigned i)
 {
@@ -38,42 +38,6 @@ next_power_of_two(unsigned i)
   while (p < i)
     p <<= 1;
   return p;
-}
-
-/**
- * Convert the specified SDL_Surface to a format which is supported by
- * the OpenGL 2D texture code.
- */
-gcc_pure
-static SDL_Surface *
-SurfaceToTextureSurface(SDL_Surface *src)
-{
-  SDL_Surface *converted = ConvertToDisplayFormatPreserve(src);
-
-  if (!is_android())
-    /* full OpenGL allows non-aligned textures */
-    return converted;
-
-  /* grow the texture size to the next power of two */
-  unsigned width = next_power_of_two(converted->w);
-  unsigned height = next_power_of_two(converted->h);
-  if (width == (unsigned)converted->w && height == (unsigned)converted->h)
-    return converted;
-
-  const SDL_PixelFormat *format = converted->format;
-  SDL_Surface *dest = ::SDL_CreateRGBSurface(SDL_SWSURFACE, width, height,
-                                             format->BitsPerPixel,
-                                             format->Rmask, format->Gmask,
-                                             format->Bmask, format->Amask);
-
-  SDL_Rect src_rect = { 0, 0, converted->w, converted->h };
-  SDL_Rect dest_rect = { 0, 0 };
-
-  ::SDL_BlitSurface(converted, &src_rect, dest, &dest_rect);
-  if (converted != src)
-    ::SDL_FreeSurface(converted);
-
-  return dest;
 }
 
 void
@@ -96,12 +60,25 @@ GLTexture::load(SDL_Surface *src)
   width = src->w;
   height = src->h;
 
-  SDL_Surface *surface = SurfaceToTextureSurface(src);
+  SDL_Surface *surface = ConvertToDisplayFormatPreserve(src);
 
 #ifdef ANDROID
-  /* 16 bit 5/6/5 on Android */
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, surface->w, surface->h, 0,
-               GL_RGB, GL_UNSIGNED_SHORT_5_6_5, surface->pixels);
+  unsigned width2 = next_power_of_two(width);
+  unsigned height2 = next_power_of_two(height);
+
+  if (width2 == width && height2 == height)
+    /* 16 bit 5/6/5 on Android */
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+                 GL_RGB, GL_UNSIGNED_SHORT_5_6_5, surface->pixels);
+  else {
+    /* dimensions are not a power of two: create an "undefined"
+       expanded texture first, then copy the SDL_Surface as a sub
+       texture */
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width2, height2, 0,
+                 GL_RGB, GL_UNSIGNED_SHORT_5_6_5, NULL);
+    update(surface);
+  }
+
 #else
   /* 32 bit R/G/B/A on full OpenGL */
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0,
