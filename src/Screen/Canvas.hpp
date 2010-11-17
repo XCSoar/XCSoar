@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_CANVAS_HPP
 #define XCSOAR_SCREEN_CANVAS_HPP
 
-#ifdef ENABLE_SDL
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Canvas.hpp"
+#elif defined(ENABLE_SDL)
 #include "Screen/SDL/Canvas.hpp"
 #else
 #include "Screen/GDI/Canvas.hpp"

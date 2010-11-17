@@ -21,12 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_SDL_CANVAS_HPP
-#define XCSOAR_SCREEN_SDL_CANVAS_HPP
-
-#ifdef ENABLE_OPENGL
-#error Please include OpenGL/Canvas.hpp
-#endif
+#ifndef XCSOAR_SCREEN_OPENGL_CANVAS_HPP
+#define XCSOAR_SCREEN_OPENGL_CANVAS_HPP
 
 #include "Util/NonCopyable.hpp"
 #include "Math/fixed.hpp"
@@ -34,20 +30,20 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
-#include "Screen/SDL/Color.hpp"
-#include "Screen/SDL/Point.hpp"
+#include "Screen/OpenGL/Color.hpp"
+#include "Screen/OpenGL/Point.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
-#include <windows.h>
 #include <tchar.h>
 
-#include <SDL_gfxPrimitives.h>
+#ifdef ANDROID
+#include <GLES/gl.h>
+#else
+#include <SDL/SDL_opengl.h>
+#endif
 
-/* those are WIN32 macros - undefine, or Canvas::background_mode will
-   break */
-#undef OPAQUE
-#undef TRANSPARENT
+class GLTexture;
 
 /**
  * Base drawable canvas class
@@ -112,13 +108,6 @@ public:
 
   unsigned get_height() const {
     return height;
-  }
-
-  gcc_pure
-  const HWColor map(const Color color) const
-  {
-    return HWColor(::SDL_MapRGB(surface->format, color.value.r,
-                                color.value.g, color.value.b));
   }
 
   void null_pen() {
@@ -191,8 +180,16 @@ public:
 
   void outline_rectangle(int left, int top, int right, int bottom,
                          Color color) {
-    ::rectangleColor(surface, left + x_offset, top + y_offset,
-                     right + x_offset, bottom + y_offset, color.gfx_color());
+    pen.get_color().set();
+
+    const GLfloat v[] = {
+      left, top,
+      right, top,
+      right, bottom,
+      left, bottom,
+    };
+    glVertexPointer(2, GL_FLOAT, 0, v);
+    glDrawArrays(GL_LINE_LOOP, 0, 4);
   }
 
   void rectangle(int left, int top, int right, int bottom) {
@@ -203,23 +200,7 @@ public:
   }
 
   void fill_rectangle(int left, int top, int right, int bottom,
-                      const HWColor color) {
-    if (left >= right || top >= bottom)
-      return;
-
-    left += x_offset;
-    right += x_offset;
-    top += y_offset;
-    bottom += y_offset;
-
-    SDL_Rect r = { left, top, right - left, bottom - top };
-    SDL_FillRect(surface, &r, color);
-  }
-
-  void fill_rectangle(int left, int top, int right, int bottom,
-                      const Color color) {
-    fill_rectangle(left, top, right, bottom, map(color));
-  }
+                      const Color color);
 
   void fill_rectangle(int left, int top, int right, int bottom,
                       const Brush &brush) {
@@ -227,10 +208,6 @@ public:
       return;
 
     fill_rectangle(left, top, right, bottom, brush.get_color());
-  }
-
-  void fill_rectangle(const RECT &rc, const HWColor color) {
-    fill_rectangle(rc.left, rc.top, rc.right, rc.bottom, color);
   }
 
   void fill_rectangle(const RECT &rc, const Color color) {
@@ -243,10 +220,6 @@ public:
 
   void clear() {
     rectangle(0, 0, get_width(), get_height());
-  }
-
-  void clear(const HWColor color) {
-    fill_rectangle(0, 0, get_width(), get_height(), color);
   }
 
   void clear(const Color color) {
@@ -297,12 +270,11 @@ public:
   }
 
   void line(int ax, int ay, int bx, int by) {
-    ax += x_offset;
-    bx += x_offset;
-    ay += y_offset;
-    by += y_offset;
+    pen.get_color().set();
 
-    ::lineColor(surface, ax, ay, bx, by, pen.get_color().gfx_color());
+    const GLfloat v[] = { ax, ay, bx, by };
+    glVertexPointer(2, GL_FLOAT, 0, v);
+    glDrawArrays(GL_LINE_STRIP, 0, 2);
   }
 
   void line(const RasterPoint a, const RasterPoint b) {
@@ -370,58 +342,27 @@ public:
     this->text(rc->left, rc->top, text);
   }
 
-  void copy(int dest_x, int dest_y,
-            unsigned dest_width, unsigned dest_height,
-            SDL_Surface *surface, int src_x, int src_y);
+  /**
+   * Draws a texture.  The caller is responsible for binding it and
+   * enabling GL_TEXTURE_2D.
+   */
+  void stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const GLTexture &texture,
+               int src_x, int src_y,
+               unsigned src_width, unsigned src_height);
 
-  void copy(int dest_x, int dest_y, SDL_Surface *surface) {
-    copy(dest_x, dest_y, surface->w, surface->h, surface, 0, 0);
-  }
+  void stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const GLTexture &texture);
 
-  void copy(int dest_x, int dest_y,
-            unsigned dest_width, unsigned dest_height,
-            const Canvas &src, int src_x, int src_y) {
-    copy(dest_x, dest_y, dest_width, dest_height,
-         src.surface, src_x, src_y);
-  }
-
-  void copy(const Canvas &src, int src_x, int src_y);
-  void copy(const Canvas &src);
 
   void copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,
             const Bitmap &src, int src_x, int src_y);
   void copy(const Bitmap &src);
 
-  void copy_transparent_white(const Canvas &src);
-  void copy_transparent_black(const Canvas &src);
-
   void stretch_transparent(const Bitmap &src, Color key);
-
-  void stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               SDL_Surface *src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height);
-
-  void stretch(SDL_Surface *src) {
-    stretch(0, 0, get_width(), get_height(),
-            src, 0, 0, src->w, src->h);
-  }
-
-  void stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Canvas &src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height) {
-    stretch(dest_x, dest_y, dest_width, dest_height,
-            src.surface,
-            src_x, src_y, src_width, src_height);
-  }
-
-  void stretch(const Canvas &src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height);
 
   void stretch(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
@@ -438,29 +379,10 @@ public:
 
   void copy_or(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
-               SDL_Surface *src, int src_x, int src_y);
-
-  void copy_or(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
                const Bitmap &src, int src_x, int src_y);
 
   void copy_or(const Bitmap &src) {
     copy_or(0, 0, get_width(), get_height(), src, 0, 0);
-  }
-
-  void copy_and(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                SDL_Surface *src, int src_x, int src_y);
-
-  void copy_and(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                const Canvas &src, int src_x, int src_y) {
-    copy_and(dest_x, dest_y, dest_width, dest_height,
-             src.surface, src_x, src_y);
-  }
-
-  void copy_and(const Canvas &src) {
-    copy_and(0, 0, src.get_width(), src.get_height(), src, 0, 0);
   }
 
   void copy_and(int dest_x, int dest_y,
