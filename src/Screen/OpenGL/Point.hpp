@@ -24,16 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_POINT_HPP
 #define XCSOAR_SCREEN_OPENGL_POINT_HPP
 
-#ifdef ANDROID
-#include <GLES/gl.h>
-#else
-#include <SDL/SDL_opengl.h>
-#endif
+#include "Screen/OpenGL/Types.hpp"
 
 struct RasterPoint {
-  typedef GLfloat value_type;
-
-  value_type x, y;
+  GLvalue x, y;
 };
 
 #endif

@@ -21,52 +21,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_SUB_CANVAS_HPP
-#define XCSOAR_SCREEN_SUB_CANVAS_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_TYPES_HPP
+#define XCSOAR_SCREEN_OPENGL_TYPES_HPP
 
-#include "Screen/Canvas.hpp"
-
-#ifdef ENABLE_OPENGL
 #ifdef ANDROID
 #include <GLES/gl.h>
 #else
 #include <SDL/SDL_opengl.h>
 #endif
-#endif
 
 /**
- * A #Canvas implementation which maps into a part of an existing
- * #Canvas.
+ * A position component in the OpenGL surface.
  */
-class SubCanvas : public Canvas {
-#ifdef ENABLE_OPENGL
-  GLvalue relative_x, relative_y;
-#endif
-
-public:
-  SubCanvas(Canvas &canvas, int _x, int _y, unsigned _width, unsigned _height)
-#ifdef ENABLE_OPENGL
-    :relative_x(_x), relative_y(_y)
-#endif
-  {
-    surface = canvas.surface;
-    x_offset = canvas.x_offset + _x;
-    y_offset = canvas.y_offset + _y;
-    width = _width;
-    height = _height;
-
-#ifdef ENABLE_OPENGL
-    glMatrixMode(GL_PROJECTION);
-    glTranslatef(relative_x, relative_y, 0);
-#endif
-  }
-
-  ~SubCanvas() {
-#ifdef ENABLE_OPENGL
-    glMatrixMode(GL_PROJECTION);
-    glTranslatef(-relative_x, -relative_y, 0);
-#endif
-  }
-};
+typedef GLfloat GLvalue;
+static const GLenum GL_VALUE = GL_FLOAT;
 
 #endif

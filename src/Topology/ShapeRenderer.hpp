@@ -91,7 +91,7 @@ public:
 
   void finish_polyline(Canvas &canvas) {
 #ifdef ENABLE_OPENGL
-    glVertexPointer(2, GL_FLOAT, 0, &points[0].x);
+    glVertexPointer(2, GL_VALUE, 0, &points[0].x);
     glDrawArrays(GL_LINE_STRIP, 0, num_points);
 #else
     if (mode != OUTLINE) {
@@ -107,7 +107,7 @@ public:
 
   void finish_polygon(Canvas &canvas) {
 #ifdef ENABLE_OPENGL
-    glVertexPointer(2, GL_FLOAT, 0, &points[0].x);
+    glVertexPointer(2, GL_VALUE, 0, &points[0].x);
 #ifdef ANDROID
     // XXX
     glDrawArrays(GL_TRIANGLES, 0, num_points / 3);

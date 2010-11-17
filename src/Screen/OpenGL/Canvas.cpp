@@ -38,13 +38,13 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
   color.set();
 
 #ifdef ANDROID
-  const GLfloat v[] = {
+  const GLvalue v[] = {
     left, top,
     right, top,
     right, bottom,
     left, bottom,
   };
-  glVertexPointer(2, GL_FLOAT, 0, v);
+  glVertexPointer(2, GL_VALUE, 0, v);
 
   GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
@@ -56,7 +56,7 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
 void
 Canvas::polyline(const RasterPoint *lppt, unsigned cPoints)
 {
-  glVertexPointer(2, GL_FLOAT, 0, lppt);
+  glVertexPointer(2, GL_VALUE, 0, lppt);
 
   pen.get_color().set();
   glDrawArrays(GL_LINE_STRIP, 0, cPoints);
@@ -68,7 +68,7 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
   if (brush.is_hollow() && !pen.defined())
     return;
 
-  glVertexPointer(2, GL_FLOAT, 0, lppt);
+  glVertexPointer(2, GL_VALUE, 0, lppt);
 
   if (!brush.is_hollow()) {
     brush.get_color().set();
@@ -106,7 +106,7 @@ Canvas::circle(int x, int y, unsigned radius)
   /* end point == start point (only needed for filling) */
   v[1] = p[-1];
 
-  glVertexPointer(2, GL_FLOAT, 0, v);
+  glVertexPointer(2, GL_VALUE, 0, v);
 
   if (!brush.is_hollow()) {
     brush.get_color().set();

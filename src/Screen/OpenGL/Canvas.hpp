@@ -181,13 +181,13 @@ public:
                          Color color) {
     pen.get_color().set();
 
-    const GLfloat v[] = {
+    const GLvalue v[] = {
       left, top,
       right, top,
       right, bottom,
       left, bottom,
     };
-    glVertexPointer(2, GL_FLOAT, 0, v);
+    glVertexPointer(2, GL_VALUE, 0, v);
     glDrawArrays(GL_LINE_LOOP, 0, 4);
   }
 
@@ -271,8 +271,8 @@ public:
   void line(int ax, int ay, int bx, int by) {
     pen.get_color().set();
 
-    const GLfloat v[] = { ax, ay, bx, by };
-    glVertexPointer(2, GL_FLOAT, 0, v);
+    const GLvalue v[] = { ax, ay, bx, by };
+    glVertexPointer(2, GL_VALUE, 0, v);
     glDrawArrays(GL_LINE_STRIP, 0, 2);
   }
 
