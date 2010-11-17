@@ -25,15 +25,22 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_TYPES_HPP
 
 #ifdef ANDROID
+
 #include <GLES/gl.h>
+
+typedef GLfloat GLvalue;
+static const GLenum GL_VALUE = GL_FLOAT;
+
 #else
+
 #include <SDL/SDL_opengl.h>
-#endif
 
 /**
  * A position component in the OpenGL surface.
  */
-typedef GLfloat GLvalue;
-static const GLenum GL_VALUE = GL_FLOAT;
+typedef GLint GLvalue;
+static const GLenum GL_VALUE = GL_INT;
+
+#endif
 
 #endif
