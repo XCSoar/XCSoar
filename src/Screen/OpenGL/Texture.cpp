@@ -30,14 +30,31 @@ Copyright_License {
 #include <GLES/glext.h>
 #endif
 
-gcc_const gcc_unused
-static unsigned
-next_power_of_two(unsigned i)
+static inline bool
+allow_unaligned_textures()
 {
-  unsigned p = 1;
+#ifdef ANDROID
+  return false;
+#else
+  return true;
+#endif
+}
+
+gcc_const gcc_unused
+static GLsizei
+next_power_of_two(GLsizei i)
+{
+  GLsizei p = 1;
   while (p < i)
     p <<= 1;
   return p;
+}
+
+gcc_const
+static inline GLsizei
+validate_texture_size(GLsizei i)
+{
+  return allow_unaligned_textures() ? i : next_power_of_two(i);
 }
 
 void
@@ -69,8 +86,8 @@ GLTexture::load(SDL_Surface *src)
 #ifdef ANDROID
   glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
 
-  unsigned width2 = next_power_of_two(pitch);
-  unsigned height2 = next_power_of_two(height);
+  unsigned width2 = validate_texture_size(pitch);
+  unsigned height2 = validate_texture_size(height);
 
   if (width2 == pitch && height2 == height)
     /* 16 bit 5/6/5 on Android */
