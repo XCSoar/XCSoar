@@ -42,6 +42,11 @@ class GLTexture {
   unsigned width, height;
 
 public:
+  /**
+   * Create a texture with undefined content.
+   */
+  GLTexture(unsigned _width, unsigned _height);
+
   GLTexture(SDL_Surface *surface) {
     init();
     load(surface);

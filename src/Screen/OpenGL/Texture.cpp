@@ -57,6 +57,16 @@ validate_texture_size(GLsizei i)
   return allow_unaligned_textures() ? i : next_power_of_two(i);
 }
 
+GLTexture::GLTexture(unsigned _width, unsigned _height)
+  :width(_width), height(_height)
+{
+  init();
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+               validate_texture_size(width), validate_texture_size(height),
+               0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+}
+
 void
 GLTexture::update(SDL_Surface *surface)
 {
