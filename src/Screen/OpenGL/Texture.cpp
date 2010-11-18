@@ -22,13 +22,14 @@ Copyright_License {
 */
 
 #include "Screen/OpenGL/Texture.hpp"
-#include "Screen/SDL/Format.hpp"
 #include "Asset.hpp"
 #include "Compiler.h"
 
 #ifdef ANDROID
 #include <GLES/glext.h>
 #endif
+
+#include <assert.h>
 
 static inline bool
 allow_unaligned_textures()
@@ -80,6 +81,57 @@ load_texture_auto_align(GLint internal_format,
   }
 }
 
+/**
+ * Loads a SDL_Surface into the current texture.  Attempts to
+ * auto-detect the pixel format.
+ *
+ * @return false if the pixel format is not supported
+ */
+static bool
+load_surface_into_texture(const SDL_Surface *surface)
+{
+  assert(surface != NULL);
+  assert(surface->format != NULL);
+
+  const SDL_PixelFormat *fmt = surface->format;
+  if (fmt->palette != NULL)
+    /* OpenGL does not support a hardware palette */
+    return false;
+
+  GLenum format, type;
+  if (fmt->BitsPerPixel == 16 && fmt->BytesPerPixel == 2 &&
+      fmt->Rmask == 0xf800 && fmt->Gmask == 0x07e0 &&
+      fmt->Bmask == 0x1f) {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
+    format = GL_RGB;
+    type = GL_UNSIGNED_SHORT_5_6_5;
+  } else if (fmt->BitsPerPixel == 24 && fmt->BytesPerPixel == 3 &&
+             fmt->Rmask == 0xff0000 && fmt->Gmask == 0xff00 &&
+             fmt->Bmask == 0xff) {
+#ifdef ANDROID
+    /* big endian */
+    format = GL_RGB;
+#else
+    /* little endian */
+    format = GL_BGR;
+#endif
+    type = GL_UNSIGNED_BYTE;
+#ifndef ANDROID
+  } else if ((fmt->BitsPerPixel == 24 || fmt->BitsPerPixel == 32) &&
+             fmt->BytesPerPixel == 4 && fmt->Rmask == 0xff0000 &&
+             fmt->Gmask == 0xff00 && fmt->Bmask == 0xff) {
+    format = GL_BGRA;
+    type = GL_UNSIGNED_BYTE;
+#endif
+  } else
+    return false;
+
+  unsigned pitch = surface->pitch / fmt->BytesPerPixel;
+  load_texture_auto_align(GL_RGB, pitch, surface->h,
+                          format, type, surface->pixels);
+  return true;
+}
+
 GLTexture::GLTexture(unsigned _width, unsigned _height)
   :width(_width), height(_height)
 {
@@ -112,24 +164,12 @@ GLTexture::load(SDL_Surface *src)
   width = src->w;
   height = src->h;
 
-  SDL_Surface *surface = ConvertToDisplayFormatPreserve(src);
-
-  unsigned pitch = surface->pitch / surface->format->BytesPerPixel;
-
-#ifdef ANDROID
-  /* 16 bit 5/6/5 on Android */
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
-
-  load_texture_auto_align(GL_RGB, pitch, height,
-                          GL_RGB, GL_UNSIGNED_SHORT_5_6_5, surface->pixels);
-#else
-  /* 32 bit R/G/B/A on full OpenGL */
-  load_texture_auto_align(GL_RGB, pitch, height,
-                          GL_BGRA, GL_UNSIGNED_BYTE, surface->pixels);
-#endif
-
-  if (surface != src)
+  if (!load_surface_into_texture(src)) {
+    /* try again after conversion */
+    SDL_Surface *surface = SDL_DisplayFormat(src);
+    load_surface_into_texture(surface);
     SDL_FreeSurface(surface);
+  }
 }
 
 void
