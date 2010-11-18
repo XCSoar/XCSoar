@@ -57,6 +57,29 @@ validate_texture_size(GLsizei i)
   return allow_unaligned_textures() ? i : next_power_of_two(i);
 }
 
+/**
+ * Load data into the current texture.  Fixes alignment to the next
+ * power of two if needed.
+ */
+static void
+load_texture_auto_align(GLint internal_format,
+                        GLsizei width, GLsizei height,
+                        GLenum format, GLenum type, const GLvoid *pixels)
+{
+  GLsizei width2 = validate_texture_size(width);
+  GLsizei height2 = validate_texture_size(height);
+
+  if (width2 == width && height2 == height)
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0,
+                 format, type, pixels);
+  else {
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width2, height2, 0,
+                 format, type, NULL);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height,
+                    format, type, pixels);
+  }
+}
+
 GLTexture::GLTexture(unsigned _width, unsigned _height)
   :width(_width), height(_height)
 {
@@ -94,28 +117,15 @@ GLTexture::load(SDL_Surface *src)
   unsigned pitch = surface->pitch / surface->format->BytesPerPixel;
 
 #ifdef ANDROID
+  /* 16 bit 5/6/5 on Android */
   glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
 
-  unsigned width2 = validate_texture_size(pitch);
-  unsigned height2 = validate_texture_size(height);
-
-  if (width2 == pitch && height2 == height)
-    /* 16 bit 5/6/5 on Android */
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pitch, height, 0,
-                 GL_RGB, GL_UNSIGNED_SHORT_5_6_5, surface->pixels);
-  else {
-    /* dimensions are not a power of two: create an "undefined"
-       expanded texture first, then copy the SDL_Surface as a sub
-       texture */
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width2, height2, 0,
-                 GL_RGB, GL_UNSIGNED_SHORT_5_6_5, NULL);
-    update(surface);
-  }
-
+  load_texture_auto_align(GL_RGB, pitch, height,
+                          GL_RGB, GL_UNSIGNED_SHORT_5_6_5, surface->pixels);
 #else
   /* 32 bit R/G/B/A on full OpenGL */
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pitch, surface->h, 0,
-               GL_BGRA, GL_UNSIGNED_BYTE, surface->pixels);
+  load_texture_auto_align(GL_RGB, pitch, height,
+                          GL_BGRA, GL_UNSIGNED_BYTE, surface->pixels);
 #endif
 
   if (surface != src)
