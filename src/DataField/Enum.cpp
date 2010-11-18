@@ -38,10 +38,13 @@ DataFieldEnum::Entry::~Entry()
 int
 DataFieldEnum::GetAsInteger() const
 {
-  if (mValue < entries.size())
+  if (entries.empty()) {
+    assert(mValue == 0);
+    return 0;
+  } else {
+    assert(mValue < entries.size());
     return entries[mValue].id;
-
-  return 0;
+  }
 }
 
 void
@@ -88,10 +91,13 @@ DataFieldEnum::addEnumTexts(const TCHAR *const*list)
 const TCHAR *
 DataFieldEnum::GetAsString() const
 {
-  if (mValue < entries.size())
+  if (entries.empty()) {
+    assert(mValue == 0);
+    return NULL;
+  } else {
+    assert(mValue < entries.size());
     return entries[mValue].mText;
-
-  return NULL;
+  }
 }
 
 void
@@ -139,6 +145,13 @@ DataFieldEnum::SetAsString(const TCHAR *Value)
 void
 DataFieldEnum::Inc(void)
 {
+  if (entries.empty()) {
+    assert(mValue == 0);
+    return;
+  }
+
+  assert(mValue < entries.size());
+
   if (mValue < entries.size() - 1) {
     mValue++;
     if (!GetDetachGUI())
@@ -149,6 +162,13 @@ DataFieldEnum::Inc(void)
 void
 DataFieldEnum::Dec(void)
 {
+  if (entries.empty()) {
+    assert(mValue == 0);
+    return;
+  }
+
+  assert(mValue < entries.size());
+
   if (mValue > 0) {
     mValue--;
     if (!GetDetachGUI())
