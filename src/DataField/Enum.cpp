@@ -193,7 +193,7 @@ DataFieldEnum::Find(const TCHAR *text) const
 
   for (unsigned int i = 0; i < entries.size(); i++)
     if (_tcscmp(text, entries[i].mText) == 0)
-      return entries[i].index;
+      return i;
 
   return -1;
 }
