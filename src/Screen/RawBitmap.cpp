@@ -39,13 +39,15 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth))
 #ifdef ENABLE_OPENGL
-  , texture(NULL)
+  , texture(CorrectedWidth(nWidth), nHeight)
 #endif
 {
   assert(nWidth > 0);
   assert(nHeight > 0);
 
 #ifdef ENABLE_SDL
+  buffer = new BGRColor[corrected_width * height];
+#elif defined(ENABLE_SDL)
   Uint32 rmask, gmask, bmask, amask;
   int depth;
 
@@ -102,10 +104,8 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
 RawBitmap::~RawBitmap()
 {
 #ifdef ENABLE_OPENGL
-  delete texture;
-#endif
-
-#ifdef ENABLE_SDL
+  delete buffer;
+#elif defined(ENABLE_SDL)
   ::SDL_FreeSurface(surface);
 #elif defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
   ::DeleteObject(bitmap);
