@@ -1086,7 +1086,7 @@ setVariables()
         continue;
 
       path = BaseName(path);
-      if (path != NULL && df.Find(path) < 0)
+      if (path != NULL && !df.Exists(path))
         df.addEnumText(path);
     }
 

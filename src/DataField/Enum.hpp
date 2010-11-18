@@ -51,6 +51,11 @@ public:
     SupportCombo = true;
   }
 
+  gcc_pure
+  bool Exists(const TCHAR *text) const {
+    return Find(text) >= 0;
+  }
+
   void Inc(void);
   void Dec(void);
   virtual ComboList *CreateComboList() const;
@@ -81,9 +86,11 @@ public:
     return entries.size();
   }
 
+protected:
   /**
    * Finds an entry with the specified text.  Returns -1 if not found.
    */
+  gcc_pure
   int Find(const TCHAR *text) const;
 };
 
