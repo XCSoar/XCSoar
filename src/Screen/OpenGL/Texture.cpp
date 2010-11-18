@@ -67,6 +67,8 @@ GLTexture::load(SDL_Surface *src)
   unsigned pitch = surface->pitch / surface->format->BytesPerPixel;
 
 #ifdef ANDROID
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
+
   unsigned width2 = next_power_of_two(pitch);
   unsigned height2 = next_power_of_two(height);
 
