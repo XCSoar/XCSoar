@@ -49,7 +49,14 @@ public class Native {
     static {
         try {
             System.loadLibrary("sdl-1.2");
-            System.loadLibrary("sdl_gfx");
+
+            try {
+                System.loadLibrary("sdl_gfx");
+            } catch (UnsatisfiedLinkError e) {
+                /* this library is not needed for the OpenGL renderer,
+                   failure to load it is not critical */
+            }
+
             System.loadLibrary("sdl_ttf");
             System.loadLibrary("application");
             loaded = true;
