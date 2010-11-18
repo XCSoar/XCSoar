@@ -35,10 +35,6 @@ class ContainerWindow;
  * WindowControl class.
  */
 class WndListFrame : public PaintWindow {
-  static const Color text_color;
-  static const Color background_color;
-  static const Color selected_background_color;
-
 public:
   typedef void (*ActivateCallback_t)(unsigned idx);
   typedef void (*CursorCallback_t)(unsigned idx);

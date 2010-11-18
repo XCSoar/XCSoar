@@ -34,10 +34,6 @@ Copyright_License {
 using std::min;
 using std::max;
 
-const Color WndListFrame::text_color = Color::BLACK;
-const Color WndListFrame::background_color = Color::WHITE;
-const Color WndListFrame::selected_background_color = Color::LIGHT_GRAY;
-
 WndListFrame::WndListFrame(ContainerWindow &parent,
                            int X, int Y, int Width, int Height,
                            const WindowStyle style,
@@ -94,6 +90,10 @@ WndListFrame::on_killfocus()
 void
 WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 {
+  const Color text_color = Color::BLACK;
+  const Color background_color = Color::WHITE;
+  const Color selected_background_color = Color::LIGHT_GRAY;
+
   RECT rc = item_rect(start);
 
   canvas.set_text_color(text_color);
