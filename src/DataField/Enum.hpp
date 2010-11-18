@@ -92,6 +92,11 @@ protected:
    */
   gcc_pure
   int Find(const TCHAR *text) const;
+
+  gcc_pure
+  int Find(unsigned id) const;
+
+  void SetIndex(unsigned new_value);
 };
 
 #endif

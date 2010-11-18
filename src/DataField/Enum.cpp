@@ -103,23 +103,9 @@ DataFieldEnum::GetAsString() const
 void
 DataFieldEnum::Set(int Value)
 {
-  // first look it up
-  if (Value < 0)
-    Value = 0;
-
-  for (unsigned int i = 0; i < entries.size(); i++) {
-    if (entries[i].id == (unsigned int)Value) {
-      unsigned lastValue = mValue;
-      mValue = i;
-
-      if (mValue != lastValue) {
-        if (!GetDetachGUI())
-          (mOnDataAccess)(this, daChange);
-      }
-      return;
-    }
-  }
-  mValue = 0; // fallback
+  int i = Find(Value);
+  if (i >= 0)
+    SetIndex(i);
 }
 
 void
@@ -132,14 +118,8 @@ void
 DataFieldEnum::SetAsString(const TCHAR *Value)
 {
   int i = Find(Value);
-  if (i >= 0) {
-    if ((unsigned)i != mValue) {
-      mValue = i;
-      if (!GetDetachGUI())
-        (mOnDataAccess)(this, daChange);
-    }
-  } else
-    mValue = 0; // fallback
+  if (i >= 0)
+    SetIndex(i);
 }
 
 void
@@ -216,4 +196,27 @@ DataFieldEnum::Find(const TCHAR *text) const
       return i;
 
   return -1;
+}
+
+int
+DataFieldEnum::Find(unsigned id) const
+{
+  for (unsigned i = 0; i < entries.size(); i++)
+    if (entries[i].id == id)
+      return i;
+
+  return -1;
+}
+
+void
+DataFieldEnum::SetIndex(unsigned new_value)
+{
+  assert(new_value < entries.size());
+
+  if (new_value == mValue)
+    return;
+
+  mValue = new_value;
+  if (!GetDetachGUI())
+    mOnDataAccess(this, daChange);
 }
