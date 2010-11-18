@@ -111,7 +111,7 @@ void
 Canvas::circle(int x, int y, unsigned radius)
 {
   enum { COUNT = 32 };
-  RasterPoint v[1 + COUNT], *p = v;
+  RasterPoint v[2 + COUNT], *p = v;
 
   /* center (only needed for filling) */
   p->x = x;
