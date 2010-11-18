@@ -353,7 +353,7 @@ public:
 
   void text_clipped(int x, int y, const RECT &rc, const TCHAR *text) {
     // XXX
-    text_opaque(x, y, rc, text);
+    this->text(x, y, text);
   }
 
   void text_clipped(int x, int y, unsigned width, const TCHAR *text) {
