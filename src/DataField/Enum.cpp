@@ -39,7 +39,7 @@ int
 DataFieldEnum::GetAsInteger() const
 {
   if (mValue < entries.size())
-    return entries[mValue].index;
+    return entries[mValue].id;
 
   return 0;
 }
@@ -54,14 +54,14 @@ DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text)
 }
 
 bool
-DataFieldEnum::addEnumText(const TCHAR *Text, unsigned i)
+DataFieldEnum::addEnumText(const TCHAR *Text, unsigned id)
 {
   if (entries.full())
     return false;
 
   Entry &entry = entries.append();
   entry.mText = _tcsdup(Text);
-  entry.index = i;
+  entry.id = id;
   return true;
 }
 
@@ -74,7 +74,7 @@ DataFieldEnum::addEnumText(const TCHAR *Text)
   unsigned i = entries.size();
   Entry &entry = entries.append();
   entry.mText = _tcsdup(Text);
-  entry.index = i;
+  entry.id = i;
   return i;
 }
 
@@ -102,7 +102,7 @@ DataFieldEnum::Set(int Value)
     Value = 0;
 
   for (unsigned int i = 0; i < entries.size(); i++) {
-    if (entries[i].index == (unsigned int)Value) {
+    if (entries[i].id == (unsigned int)Value) {
       int lastValue = mValue;
       mValue = i;
 
@@ -179,7 +179,7 @@ DataFieldEnum::CreateComboList() const
   ComboList *combo_list = new ComboList();
 
   for (unsigned i = 0; i < entries.size(); i++)
-    combo_list->Append(i, entries[i].index,
+    combo_list->Append(i, entries[i].id,
                        entries[i].mText, entries[i].mText);
 
   combo_list->ComboPopupItemSavedIndex = mValue;

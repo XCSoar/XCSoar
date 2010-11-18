@@ -33,7 +33,7 @@ class DataFieldEnum: public DataField
 public:
   struct Entry : private NonCopyable {
     TCHAR *mText;
-    unsigned int index;
+    unsigned id;
 
     Entry():mText(NULL) {}
     ~Entry();
@@ -56,7 +56,7 @@ public:
   virtual ComboList *CreateComboList() const;
 
   void replaceEnumText(unsigned int i, const TCHAR *Text);
-  bool addEnumText(const TCHAR *Text, unsigned i);
+  bool addEnumText(const TCHAR *Text, unsigned id);
   unsigned addEnumText(const TCHAR *Text);
   void addEnumTexts(const TCHAR *const*list);
 
