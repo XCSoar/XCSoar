@@ -103,10 +103,10 @@ DataFieldEnum::Set(int Value)
 
   for (unsigned int i = 0; i < entries.size(); i++) {
     if (entries[i].id == (unsigned int)Value) {
-      int lastValue = mValue;
+      unsigned lastValue = mValue;
       mValue = i;
 
-      if (mValue != (unsigned int)lastValue) {
+      if (mValue != lastValue) {
         if (!GetDetachGUI())
           (mOnDataAccess)(this, daChange);
       }
