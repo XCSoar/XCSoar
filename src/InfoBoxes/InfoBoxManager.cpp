@@ -545,7 +545,7 @@ InfoBoxManager::SetupFocused()
   /* create a fake WndProperty for dlgComboPicker() */
   /* XXX reimplement properly */
 
-  DataFieldEnum *dfe = new DataFieldEnum(old_type, NULL);
+  DataFieldEnum *dfe = new DataFieldEnum(NULL);
   for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; i++)
     dfe->addEnumText(gettext(GetTypeDescription(i)));
   dfe->Sort(0);

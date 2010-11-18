@@ -44,9 +44,9 @@ private:
   unsigned int mValue;
 
 public:
-  DataFieldEnum(int Default, DataAccessCallback_t OnDataAccess) :
+  DataFieldEnum(DataAccessCallback_t OnDataAccess) :
     DataField(_T(""), _T(""), OnDataAccess),
-    mValue(Default >= 0 ? Default : 0)
+    mValue(0)
   {
     SupportCombo = true;
   }

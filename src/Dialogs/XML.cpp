@@ -495,7 +495,7 @@ LoadDataField(const XMLNode &node, CallBackTableEntry *LookUpTable,
                                       NULL));
 
   if (_tcsicmp(DataType, _T("enum")) == 0)
-    return new DataFieldEnum(false, callback);
+    return new DataFieldEnum(callback);
 
   if (_tcsicmp(DataType, _T("filereader")) == 0)
     return new DataFieldFileReader(callback);
