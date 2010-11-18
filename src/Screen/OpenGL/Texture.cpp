@@ -87,7 +87,7 @@ GLTexture::load(SDL_Surface *src)
 
 #else
   /* 32 bit R/G/B/A on full OpenGL */
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pitch, surface->h, 0,
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pitch, surface->h, 0,
                GL_BGRA, GL_UNSIGNED_BYTE, surface->pixels);
 #endif
 
