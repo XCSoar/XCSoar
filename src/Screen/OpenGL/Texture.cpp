@@ -43,13 +43,15 @@ next_power_of_two(unsigned i)
 void
 GLTexture::update(SDL_Surface *surface)
 {
+  unsigned pitch = surface->pitch / surface->format->BytesPerPixel;
+
 #ifdef ANDROID
   /* 16 bit 5/6/5 on Android */
-  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, surface->w, surface->h,
+  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, pitch, surface->h,
                   GL_RGB, GL_UNSIGNED_SHORT_5_6_5, surface->pixels);
 #else
   /* 32 bit R/G/B/A on full OpenGL */
-  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, surface->w, surface->h,
+  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, pitch, surface->h,
                   GL_BGRA, GL_UNSIGNED_BYTE, surface->pixels);
 #endif
 }
@@ -62,13 +64,15 @@ GLTexture::load(SDL_Surface *src)
 
   SDL_Surface *surface = ConvertToDisplayFormatPreserve(src);
 
+  unsigned pitch = surface->pitch / surface->format->BytesPerPixel;
+
 #ifdef ANDROID
-  unsigned width2 = next_power_of_two(width);
+  unsigned width2 = next_power_of_two(pitch);
   unsigned height2 = next_power_of_two(height);
 
-  if (width2 == width && height2 == height)
+  if (width2 == pitch && height2 == height)
     /* 16 bit 5/6/5 on Android */
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pitch, height, 0,
                  GL_RGB, GL_UNSIGNED_SHORT_5_6_5, surface->pixels);
   else {
     /* dimensions are not a power of two: create an "undefined"
@@ -81,7 +85,7 @@ GLTexture::load(SDL_Surface *src)
 
 #else
   /* 32 bit R/G/B/A on full OpenGL */
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0,
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pitch, surface->h, 0,
                GL_BGRA, GL_UNSIGNED_BYTE, surface->pixels);
 #endif
 
