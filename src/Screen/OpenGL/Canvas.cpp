@@ -153,35 +153,29 @@ Canvas::text(int x, int y, const TCHAR *text)
   if (font == NULL)
     return;
 
-  glColor4f(1.0, 1.0, 1.0, 1.0);
+  GLTexture *texture = TextCache::get(font, Color::BLACK, Color::WHITE, text);
+  if (texture == NULL)
+    return;
 
-  if (background_mode == TRANSPARENT) {
-    GLTexture *texture = TextCache::get(font, Color::WHITE, Color::BLACK, text);
-    if (texture == NULL)
-      return;
+  if (background_mode == OPAQUE)
+    /* draw the opaque background */
+    fill_rectangle(x, y, x + texture->get_width(), y + texture->get_height(),
+                   background_color);
 
-    GLLogicOp logic_op(GL_AND);
-    GLEnable scope(GL_TEXTURE_2D);
+  GLEnable scope(GL_TEXTURE_2D);
+  texture->bind();
+  GLLogicOp logic_op(GL_AND_INVERTED);
 
-    texture->bind();
+  if (background_mode != OPAQUE || background_color != Color::BLACK) {
+    /* cut out the shape in black */
+    glColor4f(1.0, 1.0, 1.0, 1.0);
     texture->draw(x_offset, y_offset, x, y);
+  }
 
-    if (text_color != Color::BLACK) {
-      GLTexture *texture = TextCache::get(font, Color::BLACK, text_color, text);
-      if (texture == NULL)
-        return;
-
-      logic_op.set(GL_OR);
-      texture->bind();
-      texture->draw(x_offset, y_offset, x, y);
-    }
-  } else {
-    GLTexture *texture = TextCache::get(font, background_color, text_color, text);
-    if (texture == NULL)
-      return;
-
-    GLEnable scope(GL_TEXTURE_2D);
-    texture->bind();
+  if (text_color != Color::BLACK) {
+    /* draw the text color on top */
+    logic_op.set(GL_OR);
+    text_color.set();
     texture->draw(x_offset, y_offset, x, y);
   }
 }
