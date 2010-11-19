@@ -89,12 +89,17 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   else
     config.speed_index = 2;
 
-  config.driver_name[0] = '\0';
-
   _tcscpy(buffer, CONF("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
-  Get(buffer, config.driver_name,
-      sizeof(config.driver_name) / sizeof(config.driver_name[0]));
+  if (!Get(buffer, config.driver_name,
+           sizeof(config.driver_name) / sizeof(config.driver_name[0]))) {
+    if (is_altair() && n == 0)
+      _tcscpy(config.driver_name, _T("Altair RU"));
+    else if (is_altair() && n == 1)
+      _tcscpy(config.driver_name, _T("Vega"));
+    else
+      config.driver_name[0] = '\0';
+  }
 }
 
 static const TCHAR *
