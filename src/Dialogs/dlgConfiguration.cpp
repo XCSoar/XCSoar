@@ -201,7 +201,7 @@ SetupDevice(DeviceDescriptor &device)
 
   // this is a hack, devices dont jet support device dependant setup dialogs
 
-  if (is_simulator() || !device.IsVega())
+  if (!device.IsVega())
     return;
 
   changed = dlgConfigurationVarioShowModal();
@@ -643,9 +643,7 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
   }
 
   if (setup_button != NULL)
-    setup_button->set_visible(is_simulator()
-                              ? _tcscmp(config.driver_name, _T("Vega")) == 0
-                              : device.IsVega());
+    setup_button->set_visible(device.IsVega());
 }
 
 static void
