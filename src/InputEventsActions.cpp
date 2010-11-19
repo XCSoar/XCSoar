@@ -1517,7 +1517,14 @@ InputEvents::sub_TerrainTopology(int vswitch)
             ? _("ON") : _("OFF"));
 
     Message::AddMessage(_("Topology / Terrain"), buf);
+    return;
   }
+
+  /* save new values to profile */
+  Profile::Set(szProfileDrawTopology,
+               XCSoarInterface::SettingsMap().EnableTopology);
+  Profile::Set(szProfileDrawTerrain,
+               XCSoarInterface::SettingsMap().EnableTerrain);
 }
 
 /**
