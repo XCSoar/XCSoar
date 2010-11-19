@@ -140,13 +140,6 @@ DeviceDescriptor::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
   assert(String != NULL);
   assert(GPS_INFO != NULL);
 
-  if (pDevPipeTo && pDevPipeTo->Com) {
-    // stream pipe, pass nmea to other device (NmeaOut)
-    // TODO code: check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
-    pDevPipeTo->Com->Write(String);
-    pDevPipeTo->Com->Write("\r\n");
-  }
-
   if (device != NULL && device->ParseNMEA(String, GPS_INFO, enable_baro)) {
     GPS_INFO->gps.Connected = 2;
     return true;
@@ -246,6 +239,13 @@ void
 DeviceDescriptor::LineReceived(const char *line)
 {
   LogNMEA(line);
+
+  if (pDevPipeTo && pDevPipeTo->Com) {
+    // stream pipe, pass nmea to other device (NmeaOut)
+    // TODO code: check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
+    pDevPipeTo->Com->Write(line);
+    pDevPipeTo->Com->Write("\r\n");
+  }
 
   ScopeLock protect(mutexBlackboard);
   ParseNMEA(line, &device_blackboard.SetBasic());
