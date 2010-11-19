@@ -144,6 +144,7 @@ DeviceDescriptor::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
     // stream pipe, pass nmea to other device (NmeaOut)
     // TODO code: check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
     pDevPipeTo->Com->Write(String);
+    pDevPipeTo->Com->Write("\r\n");
   }
 
   if (device != NULL && device->ParseNMEA(String, GPS_INFO, enable_baro)) {
