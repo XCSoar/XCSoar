@@ -545,8 +545,6 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 static DeviceConfig device_config[NUMDEV];
-static int dwDeviceIndex1 = 0;
-static int dwDeviceIndex2 = 0;
 static int Speed = 1; // default is knots
 static int TaskSpeed = 2; // default is kph
 static int Distance = 2; // default is km
@@ -583,7 +581,6 @@ InitFileField(WndForm &wf, const TCHAR *control_name,
 
 static void
 SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
-                  int &driver_index,
                   WndProperty *port_field, WndProperty *speed_field,
                   WndProperty *driver_field, WndButton *setup_button)
 {
@@ -636,20 +633,11 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
     DataFieldEnum *dfe = (DataFieldEnum *)driver_field->GetDataField();
 
     const TCHAR *DeviceName;
-    for (unsigned i = 0; (DeviceName = devRegisterGetName(i)) != NULL; i++) {
+    for (unsigned i = 0; (DeviceName = devRegisterGetName(i)) != NULL; i++)
       dfe->addEnumText(DeviceName);
 
-      if (!is_simulator()) {
-        if (device.IsDriver(DeviceName))
-            driver_index = i;
-      } else {
-        if (_tcscmp(DeviceName, config.driver_name) == 0)
-          driver_index = i;
-      }
-    }
-
     dfe->Sort(1);
-    dfe->Set(driver_index);
+    dfe->SetAsString(config.driver_name);
 
     driver_field->RefreshDisplay();
   }
@@ -694,13 +682,13 @@ setVariables()
   for (unsigned i = 0; i < NUMDEV; ++i)
     Profile::GetDeviceConfig(i, device_config[i]);
 
-  SetupDeviceFields(DeviceList[0], device_config[0], dwDeviceIndex1,
+  SetupDeviceFields(DeviceList[0], device_config[0],
                     (WndProperty*)wf->FindByName(_T("prpComPort1")),
                     (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
                     (WndProperty*)wf->FindByName(_T("prpComDevice1")),
                     (WndButton *)wf->FindByName(_T("cmdSetupDeviceA")));
 
-  SetupDeviceFields(DeviceList[1], device_config[1], dwDeviceIndex2,
+  SetupDeviceFields(DeviceList[1], device_config[1],
                     (WndProperty*)wf->FindByName(_T("prpComPort2")),
                     (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
                     (WndProperty*)wf->FindByName(_T("prpComDevice2")),
@@ -1411,7 +1399,7 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
 }
 
 static bool
-FinishDeviceFields(DeviceConfig &config, int &driver_index,
+FinishDeviceFields(DeviceConfig &config,
                    WndProperty *port_field, WndProperty *speed_field,
                    WndProperty *driver_field)
 {
@@ -1427,9 +1415,9 @@ FinishDeviceFields(DeviceConfig &config, int &driver_index,
   }
 
   if (driver_field != NULL &&
-      driver_index != driver_field->GetDataField()->GetAsInteger()) {
-    driver_index = driver_field->GetDataField()->GetAsInteger();
-    _tcscpy(config.driver_name, devRegisterGetName(driver_index));
+      _tcscmp(config.driver_name,
+              driver_field->GetDataField()->GetAsString()) != 0) {
+    _tcscpy(config.driver_name, driver_field->GetDataField()->GetAsString());
     changed = true;
   }
 
@@ -2208,13 +2196,13 @@ void dlgConfigurationShowModal(void)
                               settings_computer.LoggerTimeStepCircling);
 
   DevicePortChanged =
-    FinishDeviceFields(device_config[0], dwDeviceIndex1,
+    FinishDeviceFields(device_config[0],
                        (WndProperty*)wf->FindByName(_T("prpComPort1")),
                        (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
                        (WndProperty*)wf->FindByName(_T("prpComDevice1")));
 
   DevicePortChanged =
-    FinishDeviceFields(device_config[1], dwDeviceIndex2,
+    FinishDeviceFields(device_config[1],
                        (WndProperty*)wf->FindByName(_T("prpComPort2")),
                        (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
                        (WndProperty*)wf->FindByName(_T("prpComDevice2"))) ||
