@@ -35,7 +35,7 @@ public:
 
   virtual void Write(const void *data, unsigned length);
   virtual void Flush();
-  virtual int SetRxTimeout(int Timeout);
+  virtual bool SetRxTimeout(int Timeout);
   virtual unsigned long SetBaudrate(unsigned long BaudRate);
   virtual bool StopRxThread();
   virtual bool StartRxThread();

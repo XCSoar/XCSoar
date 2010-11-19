@@ -58,7 +58,7 @@ NullPort::GetChar(void)
   return EOF;
 }
 
-int
+bool
 NullPort::SetRxTimeout(int Timeout)
 {
   return Timeout;

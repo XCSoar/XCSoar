@@ -394,24 +394,18 @@ SerialPort::GetChar(void)
   return EOF;
 }
 
-int
+bool
 SerialPort::SetRxTimeout(int Timeout)
 {
 #ifdef HAVE_POSIX
-  return Timeout; // XXX
+  return true; // XXX
 #else /* !HAVE_POSIX */
   COMMTIMEOUTS CommTimeouts;
-  int result;
   DWORD dwError;
 
   if (hPort == INVALID_HANDLE_VALUE)
-    return -1;
+    return false;
 
-  GetCommTimeouts(hPort, &CommTimeouts);
-
-  result = CommTimeouts.ReadTotalTimeoutConstant;
-
-  // Change the COMMTIMEOUTS structure settings.
   CommTimeouts.ReadIntervalTimeout = MAXDWORD;
 
   if (Timeout == 0) {
@@ -441,10 +435,10 @@ SerialPort::SetRxTimeout(int Timeout)
     SerialPort_StatusMessage(MB_OK, _("Error"),
                           _("Unable to set serial port timers %s"), sPortName);
     dwError = GetLastError();
-    return -1;
+    return false;
   }
 
-  return result;
+  return true;
 #endif /* !HAVE_POSIX */
 }
 

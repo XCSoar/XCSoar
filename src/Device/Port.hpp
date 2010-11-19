@@ -75,9 +75,9 @@ public:
   /**
    * Sets the RX timeout in ms
    * @param Timeout The receive timeout in ms
-   * @return The previous timeout in ms or -1 on error
+   * @return true on success, false on error
    */
-  virtual int SetRxTimeout(int Timeout) = 0;
+  virtual bool SetRxTimeout(int Timeout) = 0;
 
   /**
    * Sets the baud rate of the serial port to the given value
