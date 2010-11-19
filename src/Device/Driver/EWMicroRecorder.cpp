@@ -67,30 +67,6 @@ public:
 };
 
 static bool
-ExpectStringWait(Port *port, const char *token)
-{
-  assert(port != NULL);
-  assert(token != NULL);
-
-  unsigned j = 0;
-  const char *p = token;
-  while (*p != '\0') {
-    int ch = port->GetChar();
-    if (ch == EOF)
-      return false;
-
-    if (ch != *p++)
-      /* retry */
-      p = token;
-
-    if (++j >= 500)
-      return false;
-  }
-
-  return true;
-}
-
-static bool
 ReadAltitude(NMEAInputLine &line, fixed &value_r)
 {
   fixed value;
@@ -276,7 +252,7 @@ EWMicroRecorderDevice::Declare(const Declaration *decl)
 
   port->Write('\x03');         // finish sending user file
 
-  bool success = ExpectStringWait(port, "uploaded successfully");
+  bool success = port->ExpectString("uploaded successfully");
 
   port->Write("!!\r\n");         // go back to NMEA mode
 
