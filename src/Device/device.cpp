@@ -33,7 +33,6 @@ Copyright_License {
 #include "Device/Port.hpp"
 #include "Device/SerialPort.hpp"
 #include "Device/NullPort.hpp"
-#include "Thread/Mutex.hpp"
 #include "LogFile.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Dialogs/Message.hpp"
@@ -48,8 +47,6 @@ Copyright_License {
 #endif
 
 #include <assert.h>
-
-Mutex mutexComm;
 
 // A note about locking.
 //  The ComPort RX threads lock using FlightData critical section.
@@ -227,36 +224,30 @@ devDeclare(DeviceDescriptor &d, const struct Declaration *decl)
   if (is_simulator())
     return true;
 
-  ScopeLock protect(mutexComm);
   return d.Declare(decl);
 }
 
 bool
 devIsLogger(const DeviceDescriptor &d)
 {
-  ScopeLock protect(mutexComm);
   return d.IsLogger();
 }
 
 bool
 devIsGPSSource(const DeviceDescriptor &d)
 {
-  ScopeLock protect(mutexComm);
   return d.IsGPSSource();
 }
 
 bool
 devIsBaroSource(const DeviceDescriptor &d)
 {
-  ScopeLock protect(mutexComm);
   return d.IsBaroSource();
 }
 
 bool
 HaveCondorDevice()
 {
-  ScopeLock protect(mutexComm);
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     if (DeviceList[i].IsCondor())
       return true;
@@ -286,14 +277,12 @@ devWriteNMEAString(DeviceDescriptor &d, const TCHAR *text)
   if (d.Com == NULL)
     return;
 
-  ScopeLock protect(mutexComm);
   PortWriteNMEA(d.Com, text);
 }
 
 void
 VarioWriteNMEA(const TCHAR *text)
 {
-  ScopeLock protect(mutexComm);
   for (int i = 0; i < NUMDEV; i++)
     if (DeviceList[i].IsVega())
       if (DeviceList[i].Com)
@@ -328,8 +317,6 @@ devRestart()
 {
   LogStartUp(_T("RestartCommPorts"));
 
-  ScopeLock protect(mutexComm);
-
   devShutdown();
 
   devStartup();
@@ -337,8 +324,6 @@ devRestart()
 
 void devConnectionMonitor()
 {
-  ScopeLock protect(mutexComm);
-
   /* check which port has valid GPS information and activate it */
 
   bool active = false;

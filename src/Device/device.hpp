@@ -32,8 +32,6 @@ Copyright_License {
 class Mutex;
 class DeviceDescriptor;
 
-extern Mutex mutexComm;
-
 void devWriteNMEAString(DeviceDescriptor &d, const TCHAR *Text);
 void VarioWriteNMEA(const TCHAR *Text);
 DeviceDescriptor *devVarioFindVega(void);

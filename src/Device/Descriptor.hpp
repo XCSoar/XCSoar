@@ -53,8 +53,6 @@ public:
   DeviceDescriptor();
 
 public:
-  /* Warning: the following methods do not lock mutexComm */
-
   void Clear();
 
   bool Open();

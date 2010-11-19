@@ -33,8 +33,6 @@ devTick()
 {
   int i;
 
-  ScopeLock protect(mutexComm);
-
   for (i = 0; i < NUMDEV; i++) {
     DeviceDescriptor *d = &DeviceList[i];
     d->OnSysTicker();
@@ -47,8 +45,6 @@ AllDevicesPutMacCready(double MacCready)
   if (is_simulator())
     return;
 
-  ScopeLock protect(mutexComm);
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     DeviceList[i].PutMacCready(MacCready);
 }
@@ -58,8 +54,6 @@ AllDevicesPutBugs(double bugs)
 {
   if (is_simulator())
     return;
-
-  ScopeLock protect(mutexComm);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     DeviceList[i].PutBugs(bugs);
@@ -71,8 +65,6 @@ AllDevicesPutBallast(double ballast)
   if (is_simulator())
     return;
 
-  ScopeLock protect(mutexComm);
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     DeviceList[i].PutBallast(ballast);
 }
@@ -82,8 +74,6 @@ AllDevicesPutVolume(int volume)
 {
   if (is_simulator())
     return;
-
-  ScopeLock protect(mutexComm);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     DeviceList[i].PutBallast(volume);
@@ -95,8 +85,6 @@ AllDevicesPutActiveFrequency(double frequency)
   if (is_simulator())
     return;
 
-  ScopeLock protect(mutexComm);
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     DeviceList[i].PutActiveFrequency(frequency);
 }
@@ -106,8 +94,6 @@ AllDevicesPutStandbyFrequency(double frequency)
 {
   if (is_simulator())
     return;
-
-  ScopeLock protect(mutexComm);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     DeviceList[i].PutStandbyFrequency(frequency);
@@ -119,8 +105,6 @@ AllDevicesPutQNH(const AtmosphericPressure& pres)
   if (is_simulator())
     return;
 
-  ScopeLock protect(mutexComm);
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     DeviceList[i].PutQNH(pres);
 }
@@ -131,8 +115,6 @@ AllDevicesPutVoice(const TCHAR *sentence)
   if (is_simulator())
     return;
 
-  ScopeLock protect(mutexComm);
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     DeviceList[i].PutVoice(sentence);
 }
@@ -142,8 +124,6 @@ AllDevicesLinkTimeout()
 {
   if (is_simulator())
     return;
-
-  ScopeLock protect(mutexComm);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     DeviceList[i].LinkTimeout();
