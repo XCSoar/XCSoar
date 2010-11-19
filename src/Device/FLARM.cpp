@@ -61,37 +61,30 @@ FlarmDeclareSetGet(Port *port, TCHAR *s)
 }
 #endif
 
-bool
-FlarmDeclare(Port *port, const Declaration *decl)
+static bool
+FlarmDeclareInternal(Port *port, const Declaration *decl)
 {
-  assert(port != NULL);
-
-  bool result = true;
-
   TCHAR Buffer[256];
-
-  port->StopRxThread();
-  port->SetRxTimeout(500); // set RX timeout to 500[ms]
 
   _stprintf(Buffer, _T("PFLAC,S,PILOT,%s"), decl->PilotName);
   if (!FlarmDeclareSetGet(port, Buffer))
-    result = false;
+    return false;
 
   _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"), decl->AircraftRego);
   if (!FlarmDeclareSetGet(port, Buffer))
-    result = false;
+    return false;
 
   _stprintf(Buffer, _T("PFLAC,S,GLIDERTYPE,%s"), decl->AircraftType);
   if (!FlarmDeclareSetGet(port, Buffer))
-    result = false;
+    return false;
 
   _stprintf(Buffer, _T("PFLAC,S,NEWTASK,Task"));
   if (!FlarmDeclareSetGet(port, Buffer))
-    result = false;
+    return false;
 
   _stprintf(Buffer, _T("PFLAC,S,ADDWP,0000000N,00000000E,TAKEOFF"));
   if (!FlarmDeclareSetGet(port, Buffer))
-    result = false;
+    return false;
 
   for (unsigned i = 0; i < decl->size(); ++i) {
     int DegLat, DegLon;
@@ -123,12 +116,12 @@ FlarmDeclare(Port *port, const Declaration *decl)
 	      DegLat, MinLat, NoS, DegLon, MinLon, EoW,
 	      decl->get_name(i));
     if (!FlarmDeclareSetGet(port, Buffer))
-      result = false;
+      return false;
   }
 
   _stprintf(Buffer, _T("PFLAC,S,ADDWP,0000000N,00000000E,LANDING"));
   if (!FlarmDeclareSetGet(port, Buffer))
-    result = false;
+    return false;
 
   // PFLAC,S,KEY,VALUE
   // Expect
@@ -139,6 +132,19 @@ FlarmDeclare(Port *port, const Declaration *decl)
 
   // PFLAC,,NEWTASK:
   // PFLAC,,ADDWP:
+
+  return true;
+}
+
+bool
+FlarmDeclare(Port *port, const Declaration *decl)
+{
+  assert(port != NULL);
+
+  port->StopRxThread();
+  port->SetRxTimeout(500); // set RX timeout to 500[ms]
+
+  bool result = FlarmDeclareInternal(port, decl);
 
   // TODO bug: JMW, FLARM Declaration checks
   // Note: FLARM must be power cycled to activate a declaration!
