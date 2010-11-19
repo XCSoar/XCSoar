@@ -30,7 +30,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_LIST_HPP
 
 enum {
-  NUMDEV = 2,
+  NUMDEV = 3,
 };
 
 class DeviceDescriptor;

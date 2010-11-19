@@ -78,6 +78,8 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
     config.port_index = Temp;
   else if (is_altair() && n == 0)
     config.port_index = 2;
+  else if (is_altair() && n == 2)
+    config.port_index = 1;
   else
     config.port_index = 0;
 
@@ -97,6 +99,8 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
       _tcscpy(config.driver_name, _T("Altair RU"));
     else if (is_altair() && n == 1)
       _tcscpy(config.driver_name, _T("Vega"));
+    else if (is_altair() && n == 2)
+      _tcscpy(config.driver_name, _T("NmeaOut"));
     else
       config.driver_name[0] = '\0';
   }
