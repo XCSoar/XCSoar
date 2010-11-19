@@ -530,10 +530,16 @@ location=6
 mode=Display2
 type=key
 data=8
-event=TerrainTopology show
-event=TerrainTopology toggle
-label=$(TerrainTopologyToggleName)
+event=TerrainTopology terrain toggle
+label=Terrain $(TerrainToggleActionName)
 location=7
+
+mode=Display2
+type=key
+data=9
+event=TerrainTopology topology toggle
+label=Topology $(TopologyToggleActionName)
+location=8
 
 mode=Display2
 type=key
