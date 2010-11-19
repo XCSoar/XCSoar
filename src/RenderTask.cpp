@@ -14,7 +14,7 @@ void
 RenderTask::draw_layers(const AbstractTask& task) 
 {
   for (unsigned i=0; i<4; i++) {
-    tpv.set_layer(i);
+    tpv.set_layer((RenderTaskLayer)i);
     task.tp_CAccept(tpv);
   }
 }

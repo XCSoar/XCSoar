@@ -54,13 +54,13 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
    m_index(0),
    ozv(_ozv),
    m_active_index(0),
-   m_layer(0),
+   m_layer(RENDER_TASK_OZ_SHADE),
    m_location(location)
 {
 }
 
 void 
-RenderTaskPoint::set_layer(unsigned set) 
+RenderTaskPoint::set_layer(RenderTaskLayer set)
 {
   m_layer = set;
   m_index = 0;
@@ -69,10 +69,10 @@ RenderTaskPoint::set_layer(unsigned set)
 void 
 RenderTaskPoint::Visit(const UnorderedTaskPoint& tp) 
 {
-  if (m_layer == 1) {
+  if (m_layer == RENDER_TASK_LEG) {
     draw_task_line(m_location, tp.get_location_remaining());
   }
-  if (m_layer == 3) {
+  if (m_layer == RENDER_TASK_SYMBOLS) {
     draw_bearing(tp);
     if (m_settings_map.EnableDetourCostMarker)
       draw_off_track(tp);
@@ -83,19 +83,19 @@ RenderTaskPoint::Visit(const UnorderedTaskPoint& tp)
 void 
 RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp) 
 {
-  if (m_layer == 0) {
+  if (m_layer == RENDER_TASK_OZ_SHADE) {
     // draw shaded part of observation zone
     draw_oz_background(tp);
   }
   
-  if (m_layer == 1) {
+  if (m_layer == RENDER_TASK_LEG) {
     if (m_index>0) {
       draw_task_line(m_last_point, tp.get_location_remaining());
     }
     m_last_point = tp.get_location_remaining();
   }
   
-  if (m_layer == 2) {
+  if (m_layer == RENDER_TASK_OZ_OUTLINE) {
     draw_oz_foreground(tp);
   }
 }
@@ -105,7 +105,7 @@ RenderTaskPoint::Visit(const StartPoint& tp)
 {
   m_index = 0;
   draw_ordered(tp);
-  if (m_layer == 3) {
+  if (m_layer == RENDER_TASK_SYMBOLS) {
     draw_bearing(tp);
     draw_target(tp);
   }
@@ -116,7 +116,7 @@ RenderTaskPoint::Visit(const FinishPoint& tp)
 {
   m_index++;
   draw_ordered(tp);
-  if (m_layer == 3) {
+  if (m_layer == RENDER_TASK_SYMBOLS) {
     draw_bearing(tp);
     if (m_settings_map.EnableDetourCostMarker)
       draw_off_track(tp);
@@ -130,14 +130,14 @@ RenderTaskPoint::Visit(const AATPoint& tp)
   m_index++;
   
   draw_ordered(tp);
-  if (m_layer == 0) {
+  if (m_layer == RENDER_TASK_OZ_SHADE) {
     // Draw clear area on top indicating part of OZ already travelled in
     // This provides a simple and intuitive visual representation of
     // where in the OZ to go to increase scoring distance.
     draw_deadzone(tp);
   }
 
-  if (m_layer == 3) {
+  if (m_layer == RENDER_TASK_SYMBOLS) {
     draw_isoline(tp);
     draw_bearing(tp);
     if (m_settings_map.EnableDetourCostMarker)
@@ -152,7 +152,7 @@ RenderTaskPoint::Visit(const ASTPoint& tp)
   m_index++;
   
   draw_ordered(tp);
-  if (m_layer == 3) {
+  if (m_layer == RENDER_TASK_SYMBOLS) {
     draw_bearing(tp);
     if (m_settings_map.EnableDetourCostMarker)
       draw_off_track(tp);

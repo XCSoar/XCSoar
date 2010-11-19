@@ -34,6 +34,13 @@ class RenderObservationZone;
 class OrderedTaskPoint;
 struct SETTINGS_MAP;
 
+enum RenderTaskLayer {
+  RENDER_TASK_OZ_SHADE,
+  RENDER_TASK_LEG,
+  RENDER_TASK_OZ_OUTLINE,
+  RENDER_TASK_SYMBOLS,
+};
+
 class RenderTaskPoint:
   public TaskPointConstVisitor
 {
@@ -55,7 +62,7 @@ public:
   void Visit(const FinishPoint& tp);
   void Visit(const AATPoint& tp);
   void Visit(const ASTPoint& tp);
-  void set_layer(unsigned set);
+  void set_layer(RenderTaskLayer set);
   void set_active_index(unsigned active_index);
 protected:
   void draw_ordered(const OrderedTaskPoint& tp);
@@ -91,7 +98,7 @@ protected:
   unsigned m_index;
   RenderObservationZone &ozv;
   unsigned m_active_index;
-  unsigned m_layer;
+  RenderTaskLayer m_layer;
   const GeoPoint m_location;
 };
 
