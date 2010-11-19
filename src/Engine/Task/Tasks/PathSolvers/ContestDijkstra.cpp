@@ -130,6 +130,8 @@ ContestDijkstra::solve()
   if (m_dijkstra.empty()) {
 
     update_trace();
+    if (n_points < num_stages)
+      return true;
 
     // don't re-start search unless we have had new data appear
     if (!trace_dirty) {
