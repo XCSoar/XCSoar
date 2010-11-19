@@ -81,33 +81,26 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
   }
 
   const GlideResult& solution = alternates[index].second;
-  const fixed &d = way_point->Location.distance(XCSoarInterface::Basic().Location);
-  if (d) {
+  fixed gradient = ::AngleToGradient(solution.destination_angle_ground());
 
-    fixed gradient = ::AngleToGradient((solution.AltitudeDifference-solution.HeightGlide) / d);
-
-    if (!positive(gradient)) {
-      infobox.SetColor(0);
-      infobox.SetValue(_T("+++"));
-      return;
-    }
-    if (::GradientValid(gradient)) {
-      TCHAR tmp[32];
-      _stprintf(tmp, _T("%d"), (int)gradient);
-      infobox.SetValue(tmp);
-    } else {
-      infobox.SetInvalid();
-    }
-    // Set Color
-    if (solution.glide_reachable(true))
-      // blue if reachable in final glide
-      infobox.SetColor(2);
-    else
-      // black
-      infobox.SetColor(0);
-
+  if (negative(gradient)) {
+    infobox.SetColor(0);
+    infobox.SetValue(_T("+++"));
+    return;
+  }
+  if (::GradientValid(gradient)) {
+    TCHAR tmp[32];
+    _stprintf(tmp, _T("%d"), (int)gradient);
+    infobox.SetValue(tmp);
   } else {
     infobox.SetInvalid();
   }
+  // Set Color
+  if (solution.glide_reachable(true))
+    // blue if reachable in final glide
+    infobox.SetColor(2);
+  else
+    // black
+    infobox.SetColor(0);
 }
 

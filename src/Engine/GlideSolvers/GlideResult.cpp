@@ -130,7 +130,16 @@ GlideResult::glide_angle_ground() const
   if (positive(Vector.Distance))
     return HeightGlide / Vector.Distance;
 
-  return fixed_int_constant(100);
+  return fixed_int_constant(1000);
+}
+
+fixed
+GlideResult::destination_angle_ground() const
+{
+  if (positive(Vector.Distance))
+    return (AltitudeDifference+HeightGlide) / Vector.Distance;
+
+  return fixed_int_constant(1000);
 }
 
 bool

@@ -131,11 +131,20 @@ struct GlideResult {
   fixed calc_vspeed(const fixed inv_mc);
 
   /**
-   * Find the gradient of this solution relative to ground
+   * Find the gradient of this solution relative to ground.
+   * (does not use up AltitudeDifference)
    *
-   * @return Glide gradient (positive down), or zero if no distance to travel.
+   * @return Glide gradient (positive down), or inf if no distance to travel.
    */
   fixed glide_angle_ground() const;
+
+  /**
+   * Find the gradient of the target relative to ground
+   * (uses up AltitudeDifference)
+   *
+   * @return Glide gradient (positive down), or inf if no distance to travel.
+   */
+  fixed destination_angle_ground() const;
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
