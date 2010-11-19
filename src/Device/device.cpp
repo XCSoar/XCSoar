@@ -205,13 +205,17 @@ devStartup()
   Profile::Get(szProfileIgnoreNMEAChecksum, NMEAParser::ignore_checksum);
 
   DeviceConfig config[NUMDEV];
-  for (unsigned i = 0; i < NUMDEV; ++i)
+  for (unsigned i = 0; i < NUMDEV; ++i) {
     Profile::GetDeviceConfig(i, config[i]);
 
-  devInitOne(DeviceList[0], config[0], pDevNmeaOut);
+    bool overlap = false;
+    for (unsigned j = 0; j < i; ++j)
+      if (config[i].port_index == config[j].port_index)
+        overlap = true;
 
-  if (config[0].port_index != config[1].port_index)
-    devInitOne(DeviceList[1], config[1], pDevNmeaOut);
+    if (!overlap)
+      devInitOne(DeviceList[i], config[i], pDevNmeaOut);
+  }
 
   if (pDevNmeaOut != NULL)
     SetPipeTo(*pDevNmeaOut);
