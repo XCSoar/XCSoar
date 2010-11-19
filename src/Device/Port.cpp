@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Device/Port.hpp"
+#include "PeriodClock.hpp"
 
 #include <assert.h>
 #include <string.h>
@@ -43,15 +44,24 @@ Port::ExpectString(const char *token)
 {
   assert(token != NULL);
 
+  PeriodClock timeout;
+  timeout.update();
+
   const char *p = token;
   while (*p != '\0') {
     int ch = GetChar();
     if (ch == EOF)
       return false;
 
-    if (ch != *p++)
+    if (ch != *p++) {
+      if (timeout.elapsed() > 2000)
+        /* give up after 2 seconds (is that enough for all
+           devices?) */
+        return false;
+
       /* retry */
       p = token;
+    }
   }
 
   return true;
