@@ -54,7 +54,7 @@ TaskMacCreadyRemaining::get_aircraft_start(const AIRCRAFT_STATE &aircraft) const
 bool
 TaskMacCreadyRemaining::has_targets() const
 {
-  for (int i=m_start; i<=m_end; i++) {
+  for (int i = m_start; i <= m_end; i++) {
     if (m_tps[i]->has_target() && !m_tps[i]->target_is_locked()) {
       return true;
     }
@@ -68,12 +68,12 @@ TaskMacCreadyRemaining::set_range(const fixed tp, const bool force_current)
 {
   // first try to modify targets without regard to current inside (unless forced)
   bool modified = force_current;
-  for (int i=m_start; i<=m_end; i++) {
+  for (int i = m_start; i <= m_end; i++) {
     modified |= m_tps[i]->set_range(tp,false);
   }
   if (!force_current && !modified) {
     // couldn't modify remaining targets, so force move even if inside
-    for (int i=m_start; i<=m_end; i++) {
+    for (int i = m_start; i <= m_end; i++) {
       if (m_tps[i]->set_range(tp,true)) {
         // quick exit
         return;
@@ -86,7 +86,7 @@ TaskMacCreadyRemaining::set_range(const fixed tp, const bool force_current)
 void 
 TaskMacCreadyRemaining::target_save()
 {
-  for (int i=m_start; i<=m_end; i++) {
+  for (int i = m_start; i <= m_end; i++) {
       m_tps[i]->target_save();
   }
 }
@@ -94,7 +94,7 @@ TaskMacCreadyRemaining::target_save()
 void 
 TaskMacCreadyRemaining::target_restore()
 {
-  for (int i=m_start; i<=m_end; i++) {
+  for (int i = m_start; i <= m_end; i++) {
       m_tps[i]->target_restore();
   }
 }
