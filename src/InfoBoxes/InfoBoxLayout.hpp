@@ -53,7 +53,7 @@ namespace InfoBoxLayout
   extern unsigned numInfoWindows;
 
   void Init(RECT rc);
-  void LoadGeometry(RECT rc);
+  void LoadGeometry();
 
   // used by manager
   void GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,

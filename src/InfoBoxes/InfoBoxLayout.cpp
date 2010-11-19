@@ -56,7 +56,7 @@ namespace InfoBoxLayout
 void
 InfoBoxLayout::Init(RECT rc)
 {
-  LoadGeometry(rc);
+  LoadGeometry();
   CalcInfoBoxSizes(rc);
 }
 
@@ -149,7 +149,7 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
 }
 
 void
-InfoBoxLayout::LoadGeometry(RECT rc)
+InfoBoxLayout::LoadGeometry()
 {
   unsigned tmp;
   if (Profile::Get(szProfileInfoBoxGeometry, tmp))
