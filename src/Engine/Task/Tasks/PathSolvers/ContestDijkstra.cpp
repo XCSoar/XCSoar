@@ -48,6 +48,8 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
 void
 ContestDijkstra::set_weightings()
 {
+  assert(num_stages <= MAX_STAGES);
+
   std::fill(m_weightings, m_weightings + num_stages - 1, 5);
 }
 
@@ -55,6 +57,8 @@ ContestDijkstra::set_weightings()
 bool
 ContestDijkstra::score(ContestResult &result)
 {
+  assert(num_stages <= MAX_STAGES);
+
   if (n_points < num_stages)
     return false;
   if (AbstractContest::score(result)) {
@@ -67,6 +71,8 @@ ContestDijkstra::score(ContestResult &result)
 bool
 ContestDijkstra::master_is_updated()
 {
+  assert(num_stages <= MAX_STAGES);
+
   const bool insufficient = (n_points < num_stages);
   const TracePoint& last_master = trace_master.get_last_point();
 
@@ -122,6 +128,7 @@ ContestDijkstra::solve()
     set_weightings();
   }
 
+  assert(num_stages <= MAX_STAGES);
   if (n_points < num_stages) {
     update_trace();
     return true;
@@ -180,6 +187,8 @@ ContestDijkstra::reset()
 fixed
 ContestDijkstra::calc_time() const
 {
+  assert(num_stages <= MAX_STAGES);
+
   if (Trace::is_null(solution[num_stages-1]))
     return fixed_zero;
   else 
@@ -189,6 +198,8 @@ ContestDijkstra::calc_time() const
 fixed
 ContestDijkstra::calc_distance() const
 {
+  assert(num_stages <= MAX_STAGES);
+
   fixed dist = fixed_zero;
   for (unsigned i = 0; i + 1 < num_stages; ++i)
     dist += solution[i].distance(solution[i + 1].get_location());
@@ -199,6 +210,8 @@ ContestDijkstra::calc_distance() const
 fixed
 ContestDijkstra::calc_score() const
 {
+  assert(num_stages <= MAX_STAGES);
+
   fixed score = fixed_zero;
   for (unsigned i = 0; i + 1 < num_stages; ++i)
     score += get_weighting(i) *
@@ -214,6 +227,9 @@ void
 ContestDijkstra::add_start_edges()
 {
   m_dijkstra.pop();
+
+  assert(num_stages <= MAX_STAGES);
+  assert(n_points > 0);
 
   ScanTaskPoint destination(0, 0);
   const ScanTaskPoint end(num_stages-1, n_points-1);
@@ -236,6 +252,7 @@ ContestDijkstra::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& ori
 
   // only add last point!
   if (is_final(destination)) {
+    assert(n_points > 0);
     destination.second = n_points-1;
   }
 
@@ -258,7 +275,9 @@ ContestDijkstra::get_point(const ScanTaskPoint &sp) const
 unsigned
 ContestDijkstra::get_weighting(const unsigned i) const
 {
+  assert(num_stages <= MAX_STAGES);
   assert(i < num_stages - 1);
+
   return m_weightings[i];
 }
 
@@ -274,6 +293,8 @@ ContestDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
 bool
 ContestDijkstra::save_solution()
 {
+  assert(num_stages <= MAX_STAGES);
+
   if (AbstractContest::save_solution()) {
     std::copy(solution, solution + num_stages, best_solution);
     return true;
@@ -285,8 +306,12 @@ ContestDijkstra::save_solution()
 void
 ContestDijkstra::copy_solution(TracePointVector &vec) const
 {
+  assert(num_stages <= MAX_STAGES);
+
   vec.clear();
   if (solution_found) {
+    assert(num_stages <= MAX_STAGES);
+
     vec.reserve(num_stages);
     for (unsigned i = 0; i < num_stages; ++i)
       vec.push_back(best_solution[i]);

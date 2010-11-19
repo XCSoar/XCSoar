@@ -84,12 +84,14 @@ OLCFAI::path_closed() const
   // RESERVED FOR FUTURE USE: DO NOT DELETE
 
   // note this may fail if resolution of sampled trace is too low
+  assert(n_points > 0);
   const ScanTaskPoint end(0, n_points-1);
   fixed d_min(-1);
   unsigned i_min;
 
   ScanTaskPoint start(0, 0);
 
+  assert(first_tp < n_points);
   for (start.second=0; start.second <= first_tp; 
        ++start.second) {
 
@@ -199,6 +201,7 @@ OLCFAI::add_start_edges()
 void 
 OLCFAI::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
 {
+  assert(origin.second < n_points);
   ScanTaskPoint destination(origin.first+1, origin.second+1);
 
   switch (destination.first) {
@@ -259,6 +262,8 @@ OLCFAI::calc_distance() const
 fixed
 OLCFAI::calc_time() const
 {
+  assert(n_points > 0);
+
   const ScanTaskPoint start(0, 0);
   const ScanTaskPoint end(0, n_points-1);
   return fixed(get_point(end).time - get_point(start).time);

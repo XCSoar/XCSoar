@@ -99,6 +99,7 @@ protected:
    * @return True if point is terminal
    */
   bool is_final(const ScanTaskPoint &sp) const {
+    assert(num_stages <= MAX_STAGES);
     return sp.first + 1 == num_stages;
   }
 
