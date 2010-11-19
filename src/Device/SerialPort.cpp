@@ -268,17 +268,12 @@ SerialPort::Close()
   fd = -1;
   return true;
 #else /* !HAVE_POSIX */
-  DWORD dwError;
-
   if (hPort != INVALID_HANDLE_VALUE) {
     StopRxThread();
     Sleep(100); // todo ...
 
-    dwError = 0;
-
     // Close the communication port.
     if (!CloseHandle(hPort)) {
-      dwError = GetLastError();
       return false;
     } else {
       if (!is_embedded())
@@ -401,7 +396,6 @@ SerialPort::SetRxTimeout(int Timeout)
   return true; // XXX
 #else /* !HAVE_POSIX */
   COMMTIMEOUTS CommTimeouts;
-  DWORD dwError;
 
   if (hPort == INVALID_HANDLE_VALUE)
     return false;
@@ -434,7 +428,6 @@ SerialPort::SetRxTimeout(int Timeout)
 
     SerialPort_StatusMessage(MB_OK, _("Error"),
                           _("Unable to set serial port timers %s"), sPortName);
-    dwError = GetLastError();
     return false;
   }
 
