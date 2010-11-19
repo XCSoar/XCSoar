@@ -202,21 +202,9 @@ devStartup()
   for (unsigned i = 0; i < NUMDEV; i++)
     DeviceList[i].Clear();
 
-  DeviceConfig config[NUMDEV];
-  if (is_altair()) {
-    config[0].port_index = 2;
-    config[0].speed_index = 5;
-    config[1].port_index = 0;
-    config[1].speed_index = 5;
-  } else {
-    config[0].port_index = 0;
-    config[0].speed_index = 2;
-    config[1].port_index = 0;
-    config[1].speed_index = 2;
-  }
-
   Profile::Get(szProfileIgnoreNMEAChecksum, NMEAParser::ignore_checksum);
 
+  DeviceConfig config[NUMDEV];
   for (unsigned i = 0; i < NUMDEV; ++i)
     Profile::GetDeviceConfig(i, config[i]);
 

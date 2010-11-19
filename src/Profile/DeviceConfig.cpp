@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Profile/DeviceConfig.hpp"
-
 #include "Profile/Profile.hpp"
+#include "Asset.hpp"
 
 #include <stdio.h>
 
@@ -76,10 +76,18 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
   if (Get(buffer, Temp))
     config.port_index = Temp;
+  else if (is_altair() && n == 0)
+    config.port_index = 2;
+  else
+    config.port_index = 0;
 
   MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
   if (Get(buffer, Temp))
     config.speed_index = Temp;
+  else if (is_altair())
+    config.speed_index = 5;
+  else
+    config.speed_index = 2;
 
   config.driver_name[0] = '\0';
 
