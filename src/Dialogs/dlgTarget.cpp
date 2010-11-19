@@ -401,7 +401,7 @@ OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-SetRadius(void)
+SetZoom(void)
 {
   const fixed Radius =
       protected_task_manager.get_ordered_taskpoint_radius(target_point) * fixed(2);
@@ -429,7 +429,7 @@ RefreshTargetPoint(void)
     fixed range = fixed_zero;
     fixed radial = fixed_zero;
     protected_task_manager.get_target_range_radial(target_point, range, radial);
-    SetRadius();
+    SetZoom();
     RefreshCalculator();
   } else {
     Range = fixed_zero;
@@ -512,7 +512,7 @@ InitTargetPoints()
   if (TaskSize > target_point) {
     const GeoPoint t = protected_task_manager.get_ordered_taskpoint_location(target_point,
         XCSoarInterface::Basic().Location);
-    SetRadius();
+    SetZoom();
     XCSoarInterface::SetSettingsMap().TargetPan = true;
     XCSoarInterface::SetSettingsMap().EnablePan = true;
     XCSoarInterface::SetSettingsMap().PanLocation = t;
