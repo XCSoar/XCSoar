@@ -24,10 +24,10 @@ Copyright_License {
 #include "Device/Driver/AltairPro.hpp"
 #include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/InputLine.hpp"
 #include "Units.hpp"
 
-#include <tchar.h>
-#include <stdlib.h>
+#include <string.h>
 
 class AltairProDevice : public AbstractDevice {
 private:
@@ -38,45 +38,42 @@ public:
   AltairProDevice():lastAlt(fixed_zero), last_enable_baro(false) {}
 
 public:
-  virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
   virtual bool PutQNH(const AtmosphericPressure& pres);
   virtual bool Declare(const struct Declaration *declaration);
   virtual void OnSysTicker();
 };
 
+static bool
+ReadAltitude(NMEAInputLine &line, fixed &value_r)
+{
+  fixed value;
+  bool available = line.read_checked(value);
+  char unit = line.read_first_char();
+  if (!available)
+    return false;
+
+  if (unit == _T('f') || unit == _T('F'))
+    value = Units::ToSysUnit(value, unFeet);
+
+  value_r = value;
+  return true;
+}
+
 bool
-AltairProDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
+AltairProDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                            bool enable_baro)
 {
+  NMEAInputLine line(String);
+  char type[16];
+  line.read(type, 16);
 
   // no propriatary sentence
 
-  if (_tcsncmp(_T("$PGRMZ"), String, 6) == 0){
-    // eat $PGRMZ
-
-    String = _tcschr(String + 6, ',');
-    if (String == NULL)
-      return false;
-
-    ++String;
-
-    // get <alt>
-
-    lastAlt = fixed(_tcstod(String, NULL));
-
-    String = _tcschr(String, ',');
-    if (String == NULL)
-      return false;
-
-    ++String;
-
-    // get <unit>
-
-    if (*String == 'f' || *String== 'F')
-      lastAlt = Units::ToSysUnit(lastAlt, unFeet);
-
-    if (enable_baro) {
+  if (strcmp(type, "$PGRMZ") == 0) {
+    bool available = ReadAltitude(line, lastAlt);
+    if (enable_baro && available) {
       GPS_INFO->BaroAltitudeAvailable = true;
       GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(lastAlt);
     }
