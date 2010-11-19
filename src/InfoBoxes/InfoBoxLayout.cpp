@@ -156,7 +156,7 @@ InfoBoxLayout::LoadGeometry()
     InfoBoxGeometry = (Layouts)tmp;
 
   if (Layout::landscape) {
-    if (InfoBoxGeometry < ibLeft8)
+    if (InfoBoxGeometry < ibLeft4Right4)
       InfoBoxGeometry = ibGNav;
   } else if (Layout::square) {
     InfoBoxGeometry = ibSquare;
