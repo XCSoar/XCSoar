@@ -211,10 +211,6 @@ public:
     return visible_projection;
   }
 
-  MapWindowProjection &SetProjection() {
-    return visible_projection;
-  }
-
 private:
   RasterPoint Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS];
 
