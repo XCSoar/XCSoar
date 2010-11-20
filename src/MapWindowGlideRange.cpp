@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Icon.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/VertexArray.hpp"
+#include "Screen/OpenGL/Draw.hpp"
 #endif
 
 #include <stdio.h>
@@ -70,15 +70,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   glColor4f(1.0, 1.0, 1.0, 0.3);
-  GLRectangleVertices rectangle(0, 0, canvas.get_width(), canvas.get_height());
-  rectangle.bind();
-
-#ifdef ANDROID
-  GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
-#else
-  glDrawArrays(GL_QUADS, 0, 4);
-#endif
+  GLFillRectangle(0, 0, canvas.get_width(), canvas.get_height());
 
   glDisable(GL_BLEND);
   glDisable(GL_STENCIL_TEST);

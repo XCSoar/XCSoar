@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/Cache.hpp"
 #include "Screen/OpenGL/VertexArray.hpp"
+#include "Screen/OpenGL/Draw.hpp"
 #include "Screen/Util.hpp"
 
 #include <assert.h>
@@ -36,16 +37,7 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
                        const Color color)
 {
   color.set();
-
-#ifdef ANDROID
-  GLRectangleVertices vertices(left, top, right, bottom);
-  vertices.bind();
-
-  GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
-#else
-  glRecti(left, top, right, bottom);
-#endif
+  GLFillRectangle(left, top, right, bottom);
 }
 
 void
