@@ -32,6 +32,12 @@ ZoomClimb_t::ZoomClimb_t():
   last_targetpan(false) {}
 
 void
+GlueMapWindow::SetMapScale(const fixed x)
+{
+  visible_projection.SetMapScale(x);
+}
+
+void
 GlueMapWindow::SwitchZoomClimb()
 {
   bool isclimb = (GetDisplayMode() == dmCircling);

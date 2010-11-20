@@ -131,6 +131,7 @@ private:
 
 public:
   void UpdateDisplayMode();
+  void SetMapScale(const fixed x);
 };
 
 #endif
