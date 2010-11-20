@@ -175,7 +175,7 @@ ReadValues()
   unsigned min_height =
     iround(Units::ToSysAltitude(GetFormValueFixed(*wf, _T("prpFinishMinHeight"))));
   if (min_height != p.finish_min_height) {
-    p.finish_min_height = max_height;
+    p.finish_min_height = min_height;
     task_changed = true;
   }
 
