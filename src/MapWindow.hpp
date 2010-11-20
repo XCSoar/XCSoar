@@ -134,7 +134,7 @@ public:
   static bool identify(HWND hWnd);
 #endif
 
-  void set(ContainerWindow &parent, const RECT &rc);
+  virtual void set(ContainerWindow &parent, const RECT &rc);
 
   void set_way_points(const Waypoints *_way_points) {
     way_points = _way_points;

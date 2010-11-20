@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "GlueMapWindow.hpp"
 
-#include "Units.hpp"
+#include "Profile/Profile.hpp"
 
 ZoomClimb_t::ZoomClimb_t():
   CruiseMapScale(fixed_ten),
@@ -35,6 +35,33 @@ void
 GlueMapWindow::SetMapScale(const fixed x)
 {
   visible_projection.SetMapScale(x);
+
+  if (!SettingsMap().TargetPan) {
+    if (GetDisplayMode() == dmCircling && SettingsMap().CircleZoom)
+      // save cruise scale
+      zoomclimb.ClimbMapScale = visible_projection.GetScale();
+    else
+      zoomclimb.CruiseMapScale = visible_projection.GetScale();
+
+    SaveDisplayModeScales();
+  }
+}
+
+void
+GlueMapWindow::LoadDisplayModeScales()
+{
+  fixed tmp;
+  if (Profile::Get(szProfileClimbMapScale, tmp))
+    zoomclimb.ClimbMapScale = tmp / 10000;
+  if (Profile::Get(szProfileCruiseMapScale, tmp))
+    zoomclimb.CruiseMapScale = tmp / 10000;
+}
+
+void
+GlueMapWindow::SaveDisplayModeScales()
+{
+  Profile::Set(szProfileClimbMapScale, (int)(zoomclimb.ClimbMapScale * 10000));
+  Profile::Set(szProfileCruiseMapScale, (int)(zoomclimb.CruiseMapScale * 10000));
 }
 
 void
@@ -77,6 +104,7 @@ GlueMapWindow::SwitchZoomClimb()
         visible_projection.SetScale(zoomclimb.CruiseMapScale);
       }
 
+      SaveDisplayModeScales();
       zoomclimb.last_isclimb = isclimb;
     }
   }

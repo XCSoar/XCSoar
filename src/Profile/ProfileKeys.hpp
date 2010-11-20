@@ -194,4 +194,7 @@ extern const TCHAR szProfileFlarmNorthUp[];
 extern const TCHAR szProfileIgnoreNMEAChecksum[];
 extern const TCHAR szProfileDisplayOrientation[];
 
+extern const TCHAR szProfileClimbMapScale[];
+extern const TCHAR szProfileCruiseMapScale[];
+
 #endif

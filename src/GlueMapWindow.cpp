@@ -31,6 +31,15 @@ GlueMapWindow::GlueMapWindow()
    ignore_single_click(true) {}
 
 void
+GlueMapWindow::set(ContainerWindow &parent, const RECT &rc)
+{
+  MapWindow::set(parent, rc);
+
+  LoadDisplayModeScales();
+  visible_projection.SetScale(zoomclimb.CruiseMapScale);
+}
+
+void
 GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
 {
   assert(&_settings_map != &SettingsMap());

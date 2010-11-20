@@ -52,6 +52,8 @@ public:
 
   virtual void Render(Canvas &canvas, const RECT &rc);
 
+  virtual void set(ContainerWindow &parent, const RECT &rc);
+
 private:
   enum drag_mode {
     DRAG_NONE,
@@ -128,6 +130,9 @@ private:
   void DrawThermalBand(Canvas &canvas, const RECT &rc) const;
 
   void SwitchZoomClimb();
+
+  void LoadDisplayModeScales();
+  void SaveDisplayModeScales();
 
 public:
   void UpdateDisplayMode();

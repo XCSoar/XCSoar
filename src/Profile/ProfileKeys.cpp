@@ -270,3 +270,6 @@ const TCHAR szProfileFlarmNorthUp[] = CONF("FlarmRadarNorthUp");
 
 const TCHAR szProfileIgnoreNMEAChecksum[] = CONF("IgnoreNMEAChecksum");
 const TCHAR szProfileDisplayOrientation[] = CONF("DisplayOrientation");
+
+const TCHAR szProfileClimbMapScale[] = CONF("ClimbMapScale");
+const TCHAR szProfileCruiseMapScale[] = CONF("CruiseMapScale");
