@@ -109,13 +109,8 @@ IDR_REMOVE              WAVE    DISCARDABLE     "sound/Remove.wav"
 
 #ifndef GNAV
 IDR_WAV_BEEPBWEEP       WAVE    DISCARDABLE     "sound/beep-bweep.wav"
-IDR_WAV_BELL			      WAVE	  DISCARDABLE		  "sound/bell.wav"
 IDR_WAV_CLEAR           WAVE    DISCARDABLE     "sound/beep-clear.wav"
-IDR_WAV_CLICK			      WAVE	  DISCARDABLE		  "sound/coolwindclick.wav"
 IDR_WAV_DRIP            WAVE    DISCARDABLE     "sound/beep-drip.wav"
-IDR_WAV_GREEN           WAVE    DISCARDABLE     "sound/green.wav"
-IDR_WAV_RED             WAVE    DISCARDABLE     "sound/red.wav"
-IDR_WAV_TASKTURNPOINT   WAVE    DISCARDABLE     "sound/task-turnpoint.wav"
 #endif
 
 // --- XML Dialogs ---
