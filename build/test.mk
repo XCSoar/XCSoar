@@ -845,7 +845,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/dlgComboPicker.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
-	$(SRC)/Dialogs/dlgAirspaceWarning.cpp \
+	$(SRC)/Dialogs/dlgAirspaceWarnings.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
