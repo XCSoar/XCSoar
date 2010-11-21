@@ -416,14 +416,12 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
     configuration_tabbed->PreviousPage();
     PageSwitched();
-    //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
   case '7':
     ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
     configuration_tabbed->NextPage();
     PageSwitched();
-    //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:
