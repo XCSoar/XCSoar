@@ -298,7 +298,6 @@ private:
   void RenderGlide(Canvas &canvas);
   void RenderAirborne(Canvas &canvas, const RECT &rc,
                       const RasterPoint aircraft_pos);
-  void RenderSymbology_upper(Canvas &canvas, const RECT &rc);
   void RenderSymbology_lower(Canvas &canvas, const RasterPoint aircraft_pos);
 
   StaticArray<GeoPoint,32> m_airspace_intersections;

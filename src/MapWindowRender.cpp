@@ -152,18 +152,6 @@ MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc,
 }
 
 /**
- * Renders the upper symbology (compass, map scale, flight mode icon,
- * thermal band, final glide bar and gps status)
- * @param canvas The drawing canvas
- * @param rc The area to draw in
- */
-void
-MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
-{
-  DrawCompass(canvas, rc);
-}
-
-/**
  * Renders lower symbology (track lines, bearing, etc)
  * @param canvas
  * @param rc
@@ -224,8 +212,8 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   // Render aircraft symbol (and FLARM traffic)
   RenderAirborne(canvas, rc, aircraft_pos);
   
-  // Render upper symbology
-  RenderSymbology_upper(canvas, rc);
+  // Render compass
+  DrawCompass(canvas, rc);
 
 #ifdef DRAWLOAD
   canvas.select(Fonts::Map);
