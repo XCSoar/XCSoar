@@ -151,17 +151,16 @@ AirspaceWarning::trivial() const
 bool 
 AirspaceWarning::operator < (const AirspaceWarning& other)
 {
-  // compare bother.state
-
-  if (get_warning_state() != other.get_warning_state()) {
-    // most severe top
-    return get_warning_state() > other.get_warning_state();
-  }
-
-  // state equal, compare bother.ack 
+  // compare bother.ack
   if (get_ack_expired() != other.get_ack_expired()) {
     // least expired top
     return get_ack_expired() > other.get_ack_expired();
+  }
+
+  // compare bother.state
+  if (get_warning_state() != other.get_warning_state()) {
+    // most severe top
+    return get_warning_state() > other.get_warning_state();
   }
 
   // state and ack equal, compare bother.time to intersect
