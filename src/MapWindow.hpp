@@ -227,7 +227,6 @@ public:
   void DrawBestCruiseTrack(Canvas &canvas,
                            const RasterPoint aircraft_pos) const;
   void DrawCompass(Canvas &canvas, const RECT &rc) const;
-  void DrawHorizon(Canvas &canvas, const RECT &rc) const;
   void DrawWind(Canvas &canvas, const RasterPoint &Orig,
                            const RECT &rc) const;
   void DrawAirspace(Canvas &canvas);

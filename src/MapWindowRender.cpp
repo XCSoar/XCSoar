@@ -161,24 +161,6 @@ void
 MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT &rc)
 {
   DrawCompass(canvas, rc);
-
-#if 0
-/*
- FEATURE TEMPORARILY DISABLED DUE TO USE OF XCSOAR IN FAI COMPETITIONS
-
-This feature of having a backup artificial horizon based on inferred
-orientation from GPS and vario data is useful, and reasonably well
-tested, but has the issue of potentially invalidating use of XCSoar in
-FAI contests due to rule ref Annex A to Section 3 (2010 Edition) 4.1.2
-"No instruments permitting pilots to fly without visual reference to
-the ground may be carried on board, even if made unserviceable."  The
-quality of XCSoar's pseudo-AH is arguably good enough that this
-violates the rule.  We need to seek clarificat ion as to whether this
-is the case or not.
-*/
-  if (EnableAuxiliaryInfo)
-    DrawHorizon(canvas, rc);
-#endif
 }
 
 /**
