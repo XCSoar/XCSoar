@@ -80,6 +80,7 @@ FlarmTrafficWindow::on_create()
   hpStandard.set(width, hcStandard);
   hpPassive.set(width, hcPassive);
   hpSelection.set(width, hcSelection);
+  hpTeam.set(width, hcTeam);
 
   hpPlane.set(width, hcRadar);
   hpRadar.set(1, hcRadar);
@@ -309,6 +310,12 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       canvas.hollow_brush();
       canvas.select(hpPassive);
     } else {
+      if (settings.TeamFlarmTracking &&
+          traffic.ID == settings.TeamFlarmIdTarget) {
+        canvas.hollow_brush();
+        canvas.select(hpTeam);
+        canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
+      }
       if (!small && static_cast<unsigned> (selection) == i) {
         canvas.select(hpSelection);
         canvas.select(hbSelection);
@@ -321,10 +328,6 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
           canvas.select(hpPassive);
         else
           canvas.select(hpStandard);
-      }
-      if (settings.TeamFlarmTracking &&
-          traffic.ID == settings.TeamFlarmIdTarget) {
-        canvas.select(hbTeam);
       }
     }
     break;

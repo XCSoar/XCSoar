@@ -54,6 +54,7 @@ protected:
   Pen hpStandard;
   Pen hpPassive;
   Pen hpSelection;
+  Pen hpTeam;
 
   Pen hpPlane, hpRadar;
 
