@@ -636,11 +636,6 @@ GaugeVario::RenderBallast(Canvas &canvas)
   static RasterPoint orgLabel = {-1,-1};
   static RasterPoint orgValue = {-1,-1};
 
-  if (Appearance.InverseInfoBox)
-    canvas.white_pen();
-  else
-    canvas.black_pen();
-
   if (recLabelBk.left == -1) { // ontime init, origin and background rect
 
     SIZE tSize;
@@ -729,11 +724,6 @@ GaugeVario::RenderBugs(Canvas &canvas)
   static RECT recValueBk = {-1,-1,-1,-1};
   static RasterPoint orgLabel = {-1,-1};
   static RasterPoint orgValue = {-1,-1};
-
-  if (Appearance.InverseInfoBox)
-    canvas.white_pen();
-  else
-    canvas.black_pen();
 
   if (recLabelBk.left == -1) {
     SIZE tSize;
