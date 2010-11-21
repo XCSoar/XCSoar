@@ -210,6 +210,9 @@ endif
 ifeq ($(HAVE_WIN32),y)
   TARGET_CPPFLAGS += -DWIN32_LEAN_AND_MEAN
   TARGET_CPPFLAGS += -DNOMINMAX
+  ifeq ($(CONFIG_CYGWIN),y)
+  TARGET_CPPFLAGS += -DWIN32
+  endif
 endif
 
 ifeq ($(TARGET),PPC2000)
@@ -278,6 +281,7 @@ ifeq ($(TARGET),WINE)
 endif
 
 ifeq ($(TARGET),CYGWIN)
+  WINDRESFLAGS += -I./Data
   TARGET_ARCH :=
 endif
 
