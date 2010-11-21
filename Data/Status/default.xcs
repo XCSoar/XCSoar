@@ -26,14 +26,6 @@ key=Calibrate OFF
 sound=IDR_REMOVE
 delay=1500
 
-key=Simulation\r\nNothing is real!
-sound=/My Documents/XCSoarData/Start_Real.wav
-delay=1500
-
-key=Maintain effective\r\nLOOKOUT at all times
-sound=/My Documents/XCSoarData/Start_Simulator.wav
-delay=1500
-
 key=Closest Airfield Changed!
 sound=IDR_REMOVE
 delay=1500
@@ -136,24 +128,6 @@ delay=1000
 key=Screen Mode Normal
 delay=1000
 
-key=Above Final Glide
-sound=FinalGlide.wav
-delay=5000
-
-key=Marginal Final Glide
-sound=Tiptoe.wav
-delay=5000
-
-key=TAKEOFF\r\nLog Started
-sound=Takeoff.wav
-delay=1000
-
-key=LANDING\r\nLog Stopped
-sound=Landing.wav
-delay=1000
-
 # Always leave dummy entry for now (work around issue in parser)
 key=Dummy
 delay=1500
-
-
