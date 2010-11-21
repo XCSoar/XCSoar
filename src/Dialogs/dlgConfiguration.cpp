@@ -1193,9 +1193,13 @@ setVariables()
 
   wp = (WndProperty*)wf->FindByName(_T("prpGestures"));
   if (wp) {
-    DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
-    df.Set(settings_computer.EnableGestures);
-    wp->RefreshDisplay();
+    if (has_pointer()) {
+      DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
+      df.Set(settings_computer.EnableGestures);
+      wp->RefreshDisplay();
+    } else {
+      wp->hide();
+    }
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAverEffTime"));
