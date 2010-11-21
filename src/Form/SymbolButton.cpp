@@ -52,7 +52,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
   if (is_down())
     OffsetRect(&rc, Layout::FastScale(1), Layout::FastScale(1));
 
-  canvas.black_pen();
+  canvas.null_pen();
   canvas.black_brush();
 
   const char ch = (char)caption[0];
