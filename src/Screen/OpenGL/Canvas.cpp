@@ -60,8 +60,7 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
   if (!brush.is_hollow()) {
     brush.get_color().set();
 #ifdef ANDROID
-    // XXX
-    glDrawArrays(GL_TRIANGLES, 0, cPoints / 3);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, cPoints);
 #else
     glDrawArrays(GL_POLYGON, 0, cPoints);
 #endif
