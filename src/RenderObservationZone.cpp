@@ -62,11 +62,10 @@ RenderObservationZone::draw_style(bool is_boundary_active)
 
     m_buffer.hollow_brush();
     if (is_boundary_active) {
-      if (m_current) {
+      if (m_current)
         m_buffer.select(pen_boundary_current);
-      } else {
+      else
         m_buffer.select(pen_boundary_active);
-      }
     } else {
       m_buffer.select(pen_boundary_inactive); 
     }
@@ -112,12 +111,11 @@ void
 RenderObservationZone::Visit(const FAISectorZone& oz) 
 {
   parms_sector(oz);
-  if (draw_style(false)) {
+  if (draw_style(false))
     draw_segment(oz.getStartRadial(), oz.getEndRadial());
-  }
-  if (draw_style(!m_past)) {
+
+  if (draw_style(!m_past))
     draw_two_lines();
-  }
 
   m_buffer.mix_copy();
 }
@@ -131,9 +129,10 @@ RenderObservationZone::Visit(const KeyholeZone& oz)
     p_radius = m_proj.GeoToScreenDistance(fixed(500));
     draw_circle();
   }
-  if (draw_style(!m_past)) {
+
+  if (draw_style(!m_past))
     draw_two_lines();
-  }
+
 
   m_buffer.mix_copy();
 }
@@ -147,9 +146,9 @@ RenderObservationZone::Visit(const BGAFixedCourseZone& oz)
     p_radius = m_proj.GeoToScreenDistance(fixed(500));
     draw_circle();
   }
-  if (draw_style(!m_past)) {
+
+  if (draw_style(!m_past))
     draw_two_lines();
-  }
 
   m_buffer.mix_copy();
 }
@@ -163,9 +162,9 @@ RenderObservationZone::Visit(const BGAEnhancedOptionZone& oz)
     p_radius = m_proj.GeoToScreenDistance(fixed(500));
     draw_circle();
   }
-  if (draw_style(!m_past)) {
+
+  if (draw_style(!m_past))
     draw_two_lines();
-  }
 
   m_buffer.mix_copy();
 }
@@ -186,12 +185,11 @@ void
 RenderObservationZone::Visit(const LineSectorZone& oz) 
 {
   parms_sector(oz);
-  if (draw_style(false)) {
+  if (draw_style(false))
     draw_segment(oz.getStartRadial(), oz.getEndRadial());
-  }
-  if (draw_style(!m_past)) {
+
+  if (draw_style(!m_past))
     draw_two_lines();
-  }
 
   m_buffer.mix_copy();
 }
@@ -200,9 +198,8 @@ void
 RenderObservationZone::Visit(const CylinderZone& oz) 
 {
   parms_oz(oz);
-  if (draw_style(!m_past)) {
+  if (draw_style(!m_past))
     draw_circle();
-  }
 
   m_buffer.mix_copy();
 }

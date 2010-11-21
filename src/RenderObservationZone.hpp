@@ -20,7 +20,8 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(XCSOAR_RENDER_OBSERVATION_ZONE_HPP)
+
+#ifndef XCSOAR_RENDER_OBSERVATION_ZONE_HPP
 #define XCSOAR_RENDER_OBSERVATION_ZONE_HPP
 
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
@@ -70,6 +71,7 @@ public:
   void set_background(bool set) {
     m_background = set;
   }
+
 protected:
   bool draw_style(bool is_boundary_active);
 
@@ -92,6 +94,5 @@ protected:
   bool m_current;
   bool m_background;
 };
-
 
 #endif
