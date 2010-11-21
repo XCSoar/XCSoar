@@ -307,15 +307,9 @@ GaugeVario::RenderClimb(Canvas &canvas)
     return;
 
   if (!Basic().SwitchState.VarioCircling) {
-    if (Appearance.InverseInfoBox) {
-      canvas.black_brush();
-      canvas.black_pen();
-    } else {
-      canvas.white_brush();
-      canvas.white_pen();
-    }
-
-    canvas.rectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12));
+    canvas.fill_rectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12),
+                          Appearance.InverseInfoBox
+                          ? Color::BLACK : Color::WHITE);
   } else {
     canvas.scale_copy(x, y, hBitmapClimb, 12, 0, 12, 12);
   }
@@ -534,25 +528,22 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
   if ((lastVdiff != vdiff) || (dirty)) {
     lastVdiff = vdiff;
 
-    if (Appearance.InverseInfoBox){
-      canvas.black_brush();
-      canvas.black_pen();
-    } else {
-      canvas.white_brush();
-      canvas.white_pen();
-    }
+    Color background_color = Appearance.InverseInfoBox
+      ? Color::BLACK : Color::WHITE;
 
     // bottom (too slow)
-    canvas.rectangle(x, ybottom + YOFFSET,
-                     x + ARROWXSIZE * 2 + 1,
-                     ybottom + YOFFSET + nary + ARROWYSIZE +
-                     Layout::FastScale(2));
+    canvas.fill_rectangle(x, ybottom + YOFFSET,
+                          x + ARROWXSIZE * 2 + 1,
+                          ybottom + YOFFSET + nary + ARROWYSIZE +
+                          Layout::FastScale(2),
+                          background_color);
 
     // top (too fast)
-    canvas.rectangle(x, ytop - YOFFSET + 1,
-                     x + ARROWXSIZE * 2  +1,
-                     ytop - YOFFSET - nary + 1 - ARROWYSIZE -
-                     Layout::FastScale(2));
+    canvas.fill_rectangle(x, ytop - YOFFSET + 1,
+                          x + ARROWXSIZE * 2  +1,
+                          ytop - YOFFSET - nary + 1 - ARROWYSIZE -
+                          Layout::FastScale(2),
+                          background_color);
 
     RenderClimb(canvas);
 
