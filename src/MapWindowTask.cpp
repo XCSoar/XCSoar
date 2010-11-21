@@ -86,8 +86,7 @@ protected:
       return;
 
     fixed distance_max =
-        min(vec.Distance,
-            projection.GetScreenDistanceMeters() * fixed(0.7));
+        min(vec.Distance, projection.GetScreenDistanceMeters() * fixed(0.7));
 
     // too short to bother
     if (distance_max < fixed(5000))
@@ -159,65 +158,3 @@ MapWindow::DrawTask(Canvas &canvas)
   RenderTask dv(tpv);
   task_manager->CAccept(dv);
 }
-
-#ifdef OLD_TASK // projected track line
-
-void
-MapWindow::DrawProjectedTrack(Canvas &canvas) const
-{
-  if (task == NULL || !task->Valid() || !task->getSettings().AATEnabled ||
-      task->getActiveIndex() ==0)
-    return;
-
-  if (Calculated().Circling || task->TaskIsTemporary()) {
-    // don't display in various modes
-    return;
-  }
-
-  // TODO feature: maybe have this work even if no task?
-  // TODO feature: draw this also when in target pan mode
-
-  GeoPoint start = Basic().Location;
-  GeoPoint previous_loc = task->getTargetLocation(task->getActiveIndex() - 1);
-
-  double distance_from_previous, bearing;
-  DistanceBearing(previous_loc, start,
-		  &distance_from_previous,
-		  &bearing);
-
-  if (distance_from_previous < 100.0) {
-    bearing = Basic().TrackBearing;
-    // too short to have valid data
-  }
-  RasterPoint pt[2] = {{0,-75},{0,-400}};
-  if (SettingsMap().TargetPan) {
-    double screen_range = GetScreenDistanceMeters();
-    double f_low = 0.4;
-    double f_high = 1.5;
-    screen_range = max(screen_range, Calculated().WaypointDistance);
-
-    GeoPoint p1, p2;
-    FindLatitudeLongitude(start,
-			  bearing, f_low*screen_range,
-			  &p1);
-    FindLatitudeLongitude(start,
-			  bearing, f_high*screen_range,
-			  &p2);
-    GeoToScreen(p1, pt[0]);
-    GeoToScreen(p2, pt[1]);
-  } else if (fabs(bearing-Calculated().WaypointBearing)<10) {
-    // too small an error to bother
-    return;
-  } else {
-    pt[1].y = (long)(max(canvas.get_width(), canvas.get_height()) * -1.2);
-    PolygonRotateShift(pt, 2, Orig_Aircraft.x, Orig_Aircraft.y,
-		       bearing-ScreenRotation);
-  }
-
-  Pen dash_pen(Pen::DASH, IBLSCALE(2), Color(0, 0, 0));
-  canvas.select(dash_pen);
-  canvas.line(pt[0], pt[1]);
-}
-
-
-#endif
