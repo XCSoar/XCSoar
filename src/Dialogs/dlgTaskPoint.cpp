@@ -412,16 +412,10 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
   task_modified = false;
   active_index = index;
 
-  if (Layout::landscape)
-    wf = LoadDialog(CallBackTable,
-                        parent,
-                        _T("IDR_XML_TASKPOINT_L"));
-  else
-    wf = LoadDialog(CallBackTable,
-                        parent,
-                        _T("IDR_XML_TASKPOINT"));
-  if (!wf)
-    return false;
+  wf = LoadDialog(CallBackTable, parent,
+                  Layout::landscape ? _T("IDR_XML_TASKPOINT_L") :
+                                      _T("IDR_XML_TASKPOINT"));
+  assert(wf != NULL);
 
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
   assert(wTaskView != NULL);
@@ -435,7 +429,6 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
   } while (next_previous != 0);
 
   delete wf;
-  wf = NULL;
 
   if (*task != ordered_task) {
     *task = ordered_task;
