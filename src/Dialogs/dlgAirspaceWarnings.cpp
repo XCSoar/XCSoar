@@ -208,10 +208,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 
   assert(i < lease->size());
 
-  const AirspaceWarning* _warning = lease->get_warning(i);
-
-  const AirspaceWarning warning = *_warning;
-
+  const AirspaceWarning warning = *(lease->get_warning(i));
   const AbstractAirspace& as = warning.get_airspace();
   const AirspaceInterceptSolution& solution = warning.get_solution();
 
