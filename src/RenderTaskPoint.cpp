@@ -134,7 +134,11 @@ RenderTaskPoint::Visit(const AATPoint& tp)
     // Draw clear area on top indicating part of OZ already travelled in
     // This provides a simple and intuitive visual representation of
     // where in the OZ to go to increase scoring distance.
-    draw_deadzone(tp);
+
+    // DISABLED by Tobias.Bieniek@gmx.de
+    // This code produced graphical bugs due to previously
+    // modified code which should be fixed before re-enabling this call
+    //draw_deadzone(tp);
   }
 
   if (m_layer == RENDER_TASK_SYMBOLS) {
