@@ -58,7 +58,6 @@ void
 AirspaceWarningManager::reset(const AIRCRAFT_STATE& state)
 {
   m_warnings.clear();
-
   m_state_filter.reset(state);
 }
 
@@ -75,19 +74,16 @@ AirspaceWarningManager::set_prediction_time_filter(const fixed& the_time)
   m_state_filter.design(m_prediction_time_filter); // or multiple of?
 }
 
-
 AirspaceWarning& 
 AirspaceWarningManager::get_warning(const AbstractAirspace& airspace)
 {
   AirspaceWarning* warning = get_warning_ptr(airspace);
-
-  if (warning) {
+  if (warning)
     return *warning;
-  } else {
-    // not found, create new entry
-    m_warnings.push_back(AirspaceWarning(airspace));
-    return m_warnings.back();
-  }
+
+  // not found, create new entry
+  m_warnings.push_back(AirspaceWarning(airspace));
+  return m_warnings.back();
 }
 
 
@@ -95,41 +91,36 @@ AirspaceWarning*
 AirspaceWarningManager::get_warning_ptr(const AbstractAirspace& airspace) 
 {
   for (AirspaceWarningList::iterator it = m_warnings.begin();
-       it != m_warnings.end(); ++it) {
-    if (&(it->get_airspace()) == &airspace) {
+       it != m_warnings.end(); ++it)
+    if (&(it->get_airspace()) == &airspace)
       return &(*it);
-    }
-  }
+
   return NULL;
 }
 
 const AirspaceWarning* 
 AirspaceWarningManager::get_warning(const unsigned index) const
 {
-  unsigned i=0;
+  unsigned i = 0;
   for (AirspaceWarningList::const_iterator it = m_warnings.begin();
-       it != m_warnings.end(); ++it, ++i) {
-    if (i==index) {
+       it != m_warnings.end(); ++it, ++i)
+    if (i == index)
       return &(*it);
-    }
-  }
+
   return NULL;
 }
-
 
 int
 AirspaceWarningManager::get_warning_index(const AbstractAirspace& airspace) const
 {
-  int i=0;
+  unsigned i = 0;
   for (AirspaceWarningList::const_iterator it = m_warnings.begin();
-       it != m_warnings.end(); ++it, ++i) {
-    if (&(it->get_airspace()) == &airspace) {
+       it != m_warnings.end(); ++it, ++i)
+    if (&(it->get_airspace()) == &airspace)
       return i;
-    }
-  }
+
   return -1;
 }
-
 
 bool 
 AirspaceWarningManager::update(const AIRCRAFT_STATE& state,
@@ -139,32 +130,28 @@ AirspaceWarningManager::update(const AIRCRAFT_STATE& state,
 
   // save old state
   for (AirspaceWarningList::iterator it = m_warnings.begin();
-       it != m_warnings.end(); ++it) {
+       it != m_warnings.end(); ++it)
     it->save_state();
-  }
 
   // check from strongest to weakest alerts 
-
   update_inside(state);
   update_glide(state);
-  if (circling) {
+  if (circling)
     update_filter(state);
-  }
   update_task(state);
 
   // action changes
   for (AirspaceWarningList::iterator it = m_warnings.begin();
        it != m_warnings.end(); ) {
-
     if (it->warning_live()) {
-      if (it->changed_state()) {
+      if (it->changed_state())
         changed = true;
-      }
+
       it++;
     } else {
-      if (!it->trivial()) {
-//        changed = true; // was downgraded to eliminate
-      }
+      if (!it->trivial())
+        //changed = true; // was downgraded to eliminate
+
       it = m_warnings.erase(it);
     }
   }
@@ -174,7 +161,6 @@ AirspaceWarningManager::update(const AIRCRAFT_STATE& state,
 
   return changed;
 }
-
 
 /**
  * Class used temporarily to check intersections with warning system
