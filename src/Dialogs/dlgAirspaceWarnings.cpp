@@ -436,6 +436,7 @@ dlgAirspaceWarningShowDlg()
     FocusAirspace = NULL;
 
     wf->SetTimerNotify(OnTimer);
+    wAirspaceList->SetCursorIndex(0);
     wf->ShowModal();
     wf->SetTimerNotify(NULL);
   }
