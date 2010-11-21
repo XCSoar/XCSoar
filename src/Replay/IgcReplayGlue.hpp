@@ -41,7 +41,8 @@ protected:
                           const fixed alt, const fixed baroalt, const fixed t);
 
   virtual bool ScanBuffer(const TCHAR* buffer, fixed &Time, fixed &Latitude,
-                          fixed &Longitude, fixed &Altitude);
+                          fixed &Longitude, fixed &Altitude,
+                          fixed &PressureAltitude);
 private:
   PeriodClock clock;
 };

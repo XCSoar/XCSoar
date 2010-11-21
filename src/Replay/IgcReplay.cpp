@@ -38,24 +38,25 @@ IgcReplay::IgcReplay() :
 
 bool
 IgcReplay::ScanBuffer(const TCHAR* buffer, fixed &Time,
-                      fixed &Latitude, fixed &Longitude, fixed &Altitude)
+                      fixed &Latitude, fixed &Longitude, fixed &Altitude,
+                      fixed &PressureAltitude)
 {
   int DegLat, DegLon;
   int MinLat, MinLon;
   TCHAR NoS, EoW;
-  int iAltitude;
+  int iAltitude, iPressureAltitude;
   int Hour = 0;
   int Minute = 0;
   int Second = 0;
   int lfound =
-      _stscanf(buffer, _T("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%*05d"),
+      _stscanf(buffer, _T("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05d"),
       &Hour, &Minute, &Second, &DegLat, &MinLat, &NoS, &DegLon,
-      &MinLon, &EoW, &iAltitude);
+      &MinLon, &EoW, &iPressureAltitude, &iAltitude);
 
   if (lfound == EOF)
     return false;
 
-  if (lfound != 10)
+  if (lfound != 11)
     return false;
 
   Latitude = fixed(DegLat) + fixed(MinLat) / 60000;
@@ -67,18 +68,19 @@ IgcReplay::ScanBuffer(const TCHAR* buffer, fixed &Time,
     Longitude *= -1;
 
   Altitude = fixed(iAltitude);
+  PressureAltitude = fixed(iPressureAltitude);
   Time = fixed(Hour * 3600 + Minute * 60 + Second);
   return true;
 }
 
 bool
 IgcReplay::ReadPoint(fixed &Time, fixed &Latitude, fixed &Longitude,
-                     fixed &Altitude)
+                     fixed &Altitude, fixed &PressureAltitude)
 {
   TCHAR *buffer;
 
   while ((buffer = reader->read()) != NULL) {
-    if (ScanBuffer(buffer, Time, Latitude, Longitude, Altitude))
+    if (ScanBuffer(buffer, Time, Latitude, Longitude, Altitude, PressureAltitude))
       return true;
   }
 
@@ -158,11 +160,11 @@ IgcReplay::Update()
   // if need a new point
   while (cli.NeedData(t_simulation) && Enabled) {
     fixed t1 = fixed_zero;
-    fixed Lat1, Lon1, Alt1;
-    Enabled = ReadPoint(t1, Lat1, Lon1, Alt1);
+    fixed Lat1, Lon1, Alt1, PAlt1;
+    Enabled = ReadPoint(t1, Lat1, Lon1, Alt1, PAlt1);
 
     if (Enabled && positive(t1))
-      cli.Update(t1, Lon1, Lat1, Alt1);
+      cli.Update(t1, Lon1, Lat1, Alt1, PAlt1);
   }
 
   if (t_simulation == fixed_zero)
@@ -171,15 +173,15 @@ IgcReplay::Update()
   if (!Enabled) {
     Stop();
   } else {
-    fixed Alt;
+    fixed Alt, PAlt;
     GeoPoint Pos;
 
-    cli.Interpolate(t_simulation, Pos, Alt);
+    cli.Interpolate(t_simulation, Pos, Alt, PAlt);
 
     const fixed Speed = cli.GetSpeed(t_simulation);
     const Angle Bearing = cli.GetBearing(t_simulation);
 
-    on_advance(Pos, Speed, Bearing, Alt, Alt, t_simulation);
+    on_advance(Pos, Speed, Bearing, Alt, PAlt, t_simulation);
   }
 
   return Enabled;

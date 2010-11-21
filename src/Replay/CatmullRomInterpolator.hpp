@@ -28,6 +28,7 @@ typedef struct _LOGGER_INTERP_POINT
 {
   GeoPoint loc;
   fixed alt;
+  fixed palt;
   fixed t;
 } LOGGER_INTERP_POINT;
 
@@ -57,7 +58,7 @@ public:
   }
 
   void
-  Update(fixed t, fixed lon, fixed lat, fixed alt)
+  Update(fixed t, fixed lon, fixed lat, fixed alt, fixed palt)
   {
     if (num && (t <= p[num - 1].t))
       return;
@@ -68,12 +69,14 @@ public:
     for (int i = 0; i < 3; i++) {
       p[i].loc = p[i + 1].loc;
       p[i].alt = p[i + 1].alt;
+      p[i].palt = p[i + 1].palt;
       p[i].t = p[i + 1].t;
     }
 
     p[3].loc.Latitude = Angle::degrees(fixed(lat));
     p[3].loc.Longitude = Angle::degrees(fixed(lon));
     p[3].alt = alt;
+    p[3].palt = palt;
     p[3].t = t;
   }
 
@@ -118,7 +121,7 @@ public:
   }
 
   void
-  Interpolate(fixed time, GeoPoint &loc, fixed &alt) const
+  Interpolate(fixed time, GeoPoint &loc, fixed &alt, fixed &palt) const
   {
     if (!Ready()) {
       loc = p[num].loc;
@@ -162,6 +165,8 @@ public:
                      + p[2].loc.Longitude * c[2] + p[3].loc.Longitude * c[3]);
 
     alt = (p[0].alt * c[0] + p[1].alt * c[1] + p[2].alt * c[2] + p[3].alt * c[3]);
+    palt = (p[0].palt * c[0] + p[1].palt * c[1] +
+            p[2].palt * c[2] + p[3].palt * c[3]);
   }
 
   fixed

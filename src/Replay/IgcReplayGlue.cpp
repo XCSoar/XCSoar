@@ -44,10 +44,11 @@
 bool
 IgcReplayGlue::ScanBuffer(const TCHAR* buffer, fixed &Time,
                              fixed &Latitude, fixed &Longitude,
-                             fixed &Altitude)
+                             fixed &Altitude, fixed &PressureAltitude)
 {
 
-  if (IgcReplay::ScanBuffer(buffer, Time, Latitude, Longitude, Altitude))
+  if (IgcReplay::ScanBuffer(buffer, Time, Latitude, Longitude, Altitude,
+                            PressureAltitude))
     return true;
 
   int found = 0;
@@ -95,8 +96,8 @@ IgcReplayGlue::reset_time()
 
 void
 IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
-                             const Angle bearing, const fixed alt,
-                             const fixed baroalt, const fixed t)
+                          const Angle bearing, const fixed alt,
+                          const fixed baroalt, const fixed t)
 {
   device_blackboard.SetLocation(loc, speed, bearing, alt, baroalt, t);
   TriggerGPSUpdate();
