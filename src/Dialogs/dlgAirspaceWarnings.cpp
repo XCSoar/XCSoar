@@ -303,65 +303,6 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
                 (paint_rc.bottom + paint_rc.top - state_text_size.cy) / 2,
                 state_text);
 
-/*  
-  
-  TCHAR sAckIndicator[6] = _T(" -++*");
-
-  if (pAS.Inside){
-    
-    _stprintf(sTmp, _T("> %c %s"), sAckIndicator[pAS.Acknowledge], sType);
-    
-  } else {
-    
-    TCHAR DistanceText[MAX_PATH];
-    if (pAS.hDistance == 0) {
-      
-      // Directly above or below airspace
-      
-      Units::FormatUserAltitude(fabs((double)pAS.vDistance),DistanceText, 7);
-      if (pAS.vDistance > 0) {
-        _stprintf(sTmp, _T("< %c %s ab %s"),
-                  sAckIndicator[pAS.Acknowledge],
-                  sType, DistanceText);
-      }
-      if (pAS.vDistance < 0) {
-        Units::FormatUserAltitude(fabs((double)pAS.vDistance),DistanceText, 7);
-        _stprintf(sTmp, _T("< %c %s bl %s"),
-                  sAckIndicator[pAS.Acknowledge],
-                  sType, DistanceText);
-      }
-    } else {
-      if ((pAS.vDistance == 0) ||
-          (pAS.hDistance < abs(pAS.vDistance)*30 )) {
-        
-        // Close to airspace altitude, horizontally separated
-        
-        Units::FormatUserDistance(fabs((double)pAS.hDistance),DistanceText, 7);
-        _stprintf(sTmp, _T("< %c %s H %s"), sAckIndicator[pAS.Acknowledge],
-                  sType, DistanceText);
-      } else {
-        
-        // Effectively above or below airspace, steep climb or descent
-        // necessary to enter
-        
-        Units::FormatUserAltitude(fabs((double)pAS.vDistance),DistanceText, 7);
-        if (pAS.vDistance > 0) {
-          _stprintf(sTmp, _T("< %c %s ab %s"),
-                    sAckIndicator[pAS.Acknowledge],
-                    sType, DistanceText);
-        } else {
-          _stprintf(sTmp, _T("< %c %s bl %s"),
-                    sAckIndicator[pAS.Acknowledge], sType,
-                    DistanceText);
-        }
-      }
-    }
-  }
-  canvas.text_clipped(paint_rc.left + IBLSCALE(Col0Left),
-                      paint_rc.top + IBLSCALE(TextTop + TextHeight),
-                      rcTextClip, sTmp);
-*/  
-
   if (!warning.get_ack_expired())
     canvas.set_text_color(old_text_color);
 }
