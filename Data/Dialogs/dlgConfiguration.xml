@@ -8,7 +8,7 @@
   <CheckBox Name="Expert" Caption="Expert" X="70" Y="270" Width="100" Height="28" OnClick="OnUserLevel"/>
 
   <Button Name="cmdFonts" Caption="Fonts" X="75" Y="240" Width="60" Height="28" />
-  <Button Name="cmdWaypoints" Caption="Waypoints" X="75" Y="240" Width="60" Height="28" />
+  <Button Name="cmdWaypoints" Caption="Waypts." X="75" Y="240" Width="60" Height="28" />
 
   <Tabbed Name="tabbed" X="0" Y="0" Width="0" Height="222">
     <Panel Name="frmSite">
