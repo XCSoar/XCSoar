@@ -25,6 +25,10 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/VertexArray.hpp"
+#endif
+
 #include <stdio.h>
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
@@ -66,13 +70,8 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   glColor4f(1.0, 1.0, 1.0, 0.3);
-  const GLvalue v[] = {
-    0, 0,
-    canvas.get_width(), 0,
-    canvas.get_width(), canvas.get_height(),
-    0, canvas.get_height(),
-  };
-  glVertexPointer(2, GL_VALUE, 0, v);
+  GLRectangleVertices rectangle(0, 0, canvas.get_width(), canvas.get_height());
+  rectangle.bind();
 
 #ifdef ANDROID
   GLubyte i[] = { 0, 1, 2, 0, 2, 3 };

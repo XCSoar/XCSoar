@@ -26,8 +26,8 @@ Copyright_License {
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/Cache.hpp"
+#include "Screen/OpenGL/VertexArray.hpp"
 #include "Screen/Util.hpp"
-#include "Math/FastMath.h"
 
 #include <assert.h>
 
@@ -38,13 +38,8 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
   color.set();
 
 #ifdef ANDROID
-  const GLvalue v[] = {
-    left, top,
-    right, top,
-    right, bottom,
-    left, bottom,
-  };
-  glVertexPointer(2, GL_VALUE, 0, v);
+  GLRectangleVertices vertices(left, top, right, bottom);
+  vertices.bind();
 
   GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
@@ -110,33 +105,17 @@ Canvas::two_lines(const RasterPoint a, const RasterPoint b,
 void
 Canvas::circle(int x, int y, unsigned radius)
 {
-  enum { COUNT = 32 };
-  RasterPoint v[2 + COUNT], *p = v;
-
-  /* center (only needed for filling) */
-  p->x = x;
-  p->y = y;
-  p += 2;
-
-  for (unsigned i = 0; i < COUNT; ++i) {
-    p->x = x + ICOSTABLE[i * 4096 / COUNT] * (int)radius / 1024.;
-    p->y = y + ISINETABLE[i * 4096 / COUNT] * (int)radius / 1024.;
-    ++p;
-  }
-
-  /* end point == start point (only needed for filling) */
-  v[1] = p[-1];
-
-  glVertexPointer(2, GL_VALUE, 0, v);
+  GLCircleVertices vertices(x, y, radius);
+  vertices.bind();
 
   if (!brush.is_hollow()) {
     brush.get_color().set();
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 2 + COUNT);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.SIZE);
   }
 
   if (pen_over_brush()) {
     pen.get_color().set();
-    glDrawArrays(GL_LINE_LOOP, 2, COUNT);
+    glDrawArrays(GL_LINE_LOOP, 2, vertices.OUTLINE_SIZE);
   }
 }
 
