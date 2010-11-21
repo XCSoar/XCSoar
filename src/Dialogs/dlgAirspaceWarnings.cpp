@@ -35,8 +35,8 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-static WndForm *wf=NULL;
-static WndListFrame *wAirspaceList=NULL;
+static WndForm *wf = NULL;
+static WndListFrame *wAirspaceList = NULL;
 static Brush hBrushInsideBk;
 static Brush hBrushNearBk;
 static Brush hBrushInsideAckBk;
@@ -92,7 +92,9 @@ AutoHide()
 }
 
 /** ack inside */
-static void OnAckClicked(WndButton &Sender){
+static void
+OnAckClicked(WndButton &Sender)
+{
   (void)Sender;
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
@@ -104,7 +106,9 @@ static void OnAckClicked(WndButton &Sender){
 }
 
 /** ack warn */
-static void OnAck1Clicked(WndButton &Sender){
+static void
+OnAck1Clicked(WndButton &Sender)
+{
   (void)Sender;
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
@@ -116,7 +120,9 @@ static void OnAck1Clicked(WndButton &Sender){
 }
 
 /** ack day */
-static void OnAck2Clicked(WndButton &Sender){
+static void
+OnAck2Clicked(WndButton &Sender)
+{
   (void)Sender;
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
@@ -128,7 +134,9 @@ static void OnAck2Clicked(WndButton &Sender){
 }
 
 /** unack */
-static void OnEnableClicked(WndButton &Sender) {
+static void
+OnEnableClicked(WndButton &Sender)
+{
   (void)Sender;
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
@@ -139,19 +147,19 @@ static void OnEnableClicked(WndButton &Sender) {
   }
 }
 
-static void OnCloseClicked(WndButton &Sender) {
-	(void)Sender;
+static void
+OnCloseClicked(WndButton &Sender)
+{
+  (void)Sender;
 
   wf->hide();
   wf->SetModalResult(mrOK);
-
 }
-
 
 static bool
 OnKeyDown(WndForm &Sender, unsigned key_code)
 {
-  switch(key_code){
+  switch (key_code){
     case VK_ESCAPE:
       OnCloseClicked(*(WndButton *)NULL);
     return true;
@@ -215,8 +223,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   const int TextHeight = 12, TextTop = 1;
   const int Col0Left = 3, Col1Left = 120, Col2Left = 200;
 
-  RECT         rcTextClip;
-    
+  RECT rcTextClip;
+
   rcTextClip = paint_rc;
   rcTextClip.right = IBLSCALE(Col1Left - 2);
 
@@ -275,8 +283,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
     state_text = NULL;
   }
 
-  const SIZE state_text_size = canvas.text_size(state_text != NULL
-                                                ? state_text : _T("W"));
+  const SIZE state_text_size =
+      canvas.text_size(state_text != NULL ? state_text : _T("W"));
 
   if (state_brush != NULL) {
     /* colored background */
@@ -358,8 +366,6 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
     canvas.set_text_color(old_text_color);
 }
 
-
-
 static bool
 update_list()
 {
@@ -402,19 +408,20 @@ OnTimer(WndForm &Sender)
   update_list();
 }
 
-bool dlgAirspaceWarningVisible()
+bool
+dlgAirspaceWarningVisible()
 {
   return wf && wf->is_visible();
 }
 
-
-bool dlgAirspaceWarningIsEmpty() 
+bool
+dlgAirspaceWarningIsEmpty()
 {
   return airspace_warnings.warning_empty();
 }
 
-
-void dlgAirspaceWarningShowDlg()
+void
+dlgAirspaceWarningShowDlg()
 {
   assert(wf != NULL);
   assert(wAirspaceList != NULL);
@@ -434,8 +441,7 @@ void dlgAirspaceWarningShowDlg()
   }
 }
 
-
-static CallBackTableEntry CallBackTable[]={
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnAckClicked),
   DeclareCallBackEntry(OnAck1Clicked),
   DeclareCallBackEntry(OnAck2Clicked),
@@ -447,11 +453,8 @@ static CallBackTableEntry CallBackTable[]={
 void
 dlgAirspaceWarningInit(SingleWindow &parent)
 {
-  wf = LoadDialog(CallBackTable,
-                      parent,
-                      _T("IDR_XML_AIRSPACEWARNING"));
-  if (wf == NULL)
-    return;
+  wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_AIRSPACEWARNING"));
+  assert(wf != NULL);
 
   wf->SetKeyDownNotify(OnKeyDown);
 
@@ -461,6 +464,7 @@ dlgAirspaceWarningInit(SingleWindow &parent)
   hBrushNearAckBk.set(Color(254,254,100));
 
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceWarningList"));
+  assert(wAirspaceList != NULL);
   wAirspaceList->SetPaintItemCallback(OnAirspaceListItemPaint);
   wAirspaceList->SetCursorCallback(AirspaceWarningCursorCallback);
 
@@ -470,12 +474,13 @@ dlgAirspaceWarningInit(SingleWindow &parent)
     wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
 }
 
-void dlgAirspaceWarningDeInit()
+void
+dlgAirspaceWarningDeInit()
 {
   if (dlgAirspaceWarningVisible()) {
     wf->hide();
     wf->SetModalResult(mrOK);
   }
+
   delete wf;
 }
-
