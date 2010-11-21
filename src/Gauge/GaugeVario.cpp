@@ -556,19 +556,14 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 
     RenderClimb(canvas);
 
-    if (Appearance.InverseInfoBox)
-      canvas.white_pen();
-    else
-      canvas.black_pen();
+    canvas.null_pen();
 
     if (Appearance.InfoBoxColors) {
       if (positive(vdiff)) {
         // too slow
         canvas.select(redBrush);
-        canvas.select(redPen);
       } else {
         canvas.select(blueBrush);
-        canvas.select(bluePen);
       }
     } else {
       if (Appearance.InverseInfoBox)
