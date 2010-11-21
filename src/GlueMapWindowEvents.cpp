@@ -36,6 +36,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Compiler.h"
 #include "Interface.hpp"
+#include "Screen/Fonts.hpp"
 
 #include <algorithm>
 
@@ -390,4 +391,15 @@ GlueMapWindow::Render(Canvas &canvas, const RECT &rc)
   DrawThermalBand(canvas, rc);
   DrawFinalGlide(canvas, rc);
   DrawGPSStatus(canvas, rc, Basic().gps);
+
+#ifdef DRAWLOAD
+  canvas.select(Fonts::Map);
+  TCHAR load[80];
+  _stprintf(load, _T("draw %d gps %d idle %d"),
+            GetAverageTime(),
+            Calculated().time_process_gps,
+            Calculated().time_process_idle);
+
+  canvas.text(rc.left, rc.top, load);
+#endif
 }
