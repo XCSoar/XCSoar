@@ -198,7 +198,7 @@ ExistingDataOnFlash(TCHAR *buffer)
 static TCHAR *
 FindDataPath()
 {
-  if (is_altair())
+  if (is_altair() && is_embedded())
     /* hard-coded path for Altair */
     return _tcsdup(_T("\\NOR Flash"));
 
