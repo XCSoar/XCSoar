@@ -21,7 +21,7 @@ int main(int argc, char** argv)
     terrain_height = (int)((800)*(j+1)/(NUM_TERRAIN*1.0));
 
     unsigned i = rand()%NUM_WIND;
-    ok (test_flight_times(7,i), test_name("high terrain",7,i),0);
+    ok (test_flight_times(1,i), test_name("high terrain",7,i),0);
   }
   return exit_status();
 }
