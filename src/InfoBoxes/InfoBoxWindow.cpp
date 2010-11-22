@@ -179,6 +179,7 @@ InfoBoxWindow::SetComment(Angle value, const TCHAR *suffix)
 void
 InfoBoxWindow::SetInvalid()
 {
+  SetColor(0);
   SetValueInvalid();
   SetCommentInvalid();
 }
