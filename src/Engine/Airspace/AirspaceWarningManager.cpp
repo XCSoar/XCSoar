@@ -149,9 +149,9 @@ AirspaceWarningManager::update(const AIRCRAFT_STATE& state,
 
       it++;
     } else {
-      if (!it->trivial())
+      if (!it->trivial()) {
         //changed = true; // was downgraded to eliminate
-
+      }
       it = m_warnings.erase(it);
     }
   }
