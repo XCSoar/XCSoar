@@ -45,7 +45,7 @@ struct Color {
   Color(int _r, int _g, int _b)
     :r(_r / 256.), g(_g / 256.), b(_b / 256.), a(1) {}
   Color(int _r, int _g, int _b, int _a)
-    :r(_r / 256.), g(_g / 256.), b(_b / 256.), a(_a) {}
+    :r(_r / 256.), g(_g / 256.), b(_b / 256.), a(_a / 256.) {}
 #else
   GLubyte r, g, b, a;
 
