@@ -101,6 +101,14 @@ protected:
   SDL_Surface *surface;
 #else
   BITMAPINFO bi;
+#ifdef _WIN32_WCE
+  /**
+   * Need RGB masks for BI_BITFIELDS (16 bit 5-5-5).  This attribute
+   * is not used explicitly, it is only here to reserve enough room
+   * after the BITMAPINFO attribute.
+   */
+  DWORD mask_buffer[3];
+#endif
 #if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
   HBITMAP bitmap;
 #endif

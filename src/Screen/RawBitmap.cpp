@@ -76,17 +76,25 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   bi.bmiHeader.biWidth = corrected_width;
   bi.bmiHeader.biHeight = height;
   bi.bmiHeader.biPlanes = 1;
-#ifdef _WIN32_WCE
-  bi.bmiHeader.biBitCount = 16;
-#else
   bi.bmiHeader.biBitCount = 24;
-#endif
   bi.bmiHeader.biCompression = BI_RGB;
   bi.bmiHeader.biSizeImage = 0;
   bi.bmiHeader.biXPelsPerMeter = 3780;
   bi.bmiHeader.biYPelsPerMeter = 3780;
   bi.bmiHeader.biClrUsed = 0;
   bi.bmiHeader.biClrImportant = 0;
+
+#ifdef _WIN32_WCE
+  /* configure 16 bit 5-5-5 on Windows CE */
+  bi.bmiHeader.biBitCount = 16;
+  bi.bmiHeader.biCompression = BI_BITFIELDS;
+  bi.bmiHeader.biClrUsed = 3;
+  LPVOID p = &bi.bmiColors[0];
+  DWORD *q = (DWORD *)p;
+  *q++ = 0x7c00; /* 5 bits red */
+  *q++ = 0x03e0; /* 5 bits green */
+  *q++ = 0x001f; /* 5 bits blue */
+#endif
 
 #if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
   /* StretchDIBits() is bugged on PPC2002, workaround follows */
