@@ -117,7 +117,7 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   } else {
     colText = Color::BLACK;
     colTextBackgnd = Color::WHITE;
-    colTextGray = Color(~0xa0, ~0xa0, ~0xa0);
+    colTextGray = Color((uint8_t)~0xa0, (uint8_t)~0xa0, (uint8_t)~0xa0);
     hBitmapClimb.load(IDB_CLIMBSMALL);
   }
 

@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_SDL_COLOR_HPP
 
 #include <SDL_video.h>
+#include <stdint.h>
 
 /**
  * This class represents a color in the RGB color space.  This is used
@@ -36,7 +37,7 @@ struct Color {
 
   Color() {}
 
-  Color(int r, int g, int b)
+  Color(uint8_t r, uint8_t g, uint8_t b)
   {
     value.r = r;
     value.g = g;
@@ -48,8 +49,7 @@ struct Color {
    * Returns the red part of the color
    * @return The red part of the color (0-255)
    */
-  unsigned char
-  red() const
+  uint8_t red() const
   {
     return value.r;
   }
@@ -58,8 +58,7 @@ struct Color {
    * Returns the green part of the color
    * @return The green part of the color (0-255)
    */
-  unsigned char
-  green() const
+  uint8_t green() const
   {
     return value.g;
   }
@@ -68,8 +67,7 @@ struct Color {
    * Returns the blue part of the color
    * @return The blue part of the color (0-255)
    */
-  unsigned char
-  blue() const
+  uint8_t blue() const
   {
     return value.b;
   }

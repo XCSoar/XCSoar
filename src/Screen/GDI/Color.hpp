@@ -24,7 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_GDI_COLOR_HPP
 #define XCSOAR_SCREEN_GDI_COLOR_HPP
 
+#include "Compiler.h"
+
 #include <windows.h>
+#include <stdint.h>
 
 /**
  * This class represents a color in the RGB color space.  This is used
@@ -48,14 +51,14 @@ struct Color {
    * @param g Green part
    * @param b Blue part
    */
-  Color(int r, int g, int b) : value(RGB(r, g, b)) {}
+  Color(uint8_t r, uint8_t g, uint8_t b) : value(RGB(r, g, b)) {}
 
   /**
    * Returns the red part of the color
    * @return The red part of the color (0-255)
    */
-  unsigned char
-  red() const
+  gcc_pure
+  uint8_t red() const
   {
     return GetRValue(value);
   }
@@ -64,8 +67,8 @@ struct Color {
    * Returns the green part of the color
    * @return The green part of the color (0-255)
    */
-  unsigned char
-  green() const
+  gcc_pure
+  uint8_t green() const
   {
     return GetGValue(value);
   }
@@ -74,8 +77,8 @@ struct Color {
    * Returns the blue part of the color
    * @return The blue part of the color (0-255)
    */
-  unsigned char
-  blue() const
+  gcc_pure
+  uint8_t blue() const
   {
     return GetBValue(value);
   }
@@ -92,6 +95,7 @@ struct Color {
   /**
    * Returns the highlighted version of this color.
    */
+  gcc_pure
   Color
   highlight() const
   {

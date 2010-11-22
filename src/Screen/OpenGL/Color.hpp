@@ -41,15 +41,16 @@ struct Color {
 #ifdef ANDROID
   GLfloat r, g, b, a;
 
-  Color(int _r, int _g, int _b)
+  Color(GLubyte _r, GLubyte _g, GLubyte _b)
     :r(_r / 256.), g(_g / 256.), b(_b / 256.), a(1) {}
-  Color(int _r, int _g, int _b, int _a)
+  Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)
     :r(_r / 256.), g(_g / 256.), b(_b / 256.), a(_a / 256.) {}
 #else
   GLubyte r, g, b, a;
 
-  Color(int _r, int _g, int _b):r(_r), g(_g), b(_b), a(255) {}
-  Color(int _r, int _g, int _b, int _a):r(_r), g(_g), b(_b), a(_a) {}
+  Color(GLubyte _r, GLubyte _g, GLubyte _b):r(_r), g(_g), b(_b), a(255) {}
+  Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)
+    :r(_r), g(_g), b(_b), a(_a) {}
 #endif
 
   Color() {}
@@ -58,11 +59,11 @@ struct Color {
    * Returns the red part of the color
    * @return The red part of the color (0-255)
    */
-  unsigned char
+  uint8_t
   red() const
   {
 #ifdef ANDROID
-    return (unsigned char)(r * 256);
+    return (uint8_t)(r * 256);
 #else
     return r;
 #endif
@@ -72,11 +73,11 @@ struct Color {
    * Returns the green part of the color
    * @return The green part of the color (0-255)
    */
-  unsigned char
+  uint8_t
   green() const
   {
 #ifdef ANDROID
-    return (unsigned char)(g * 256);
+    return (uint8_t)(g * 256);
 #else
     return g;
 #endif
@@ -86,11 +87,11 @@ struct Color {
    * Returns the blue part of the color
    * @return The blue part of the color (0-255)
    */
-  unsigned char
+  uint8_t
   blue() const
   {
 #ifdef ANDROID
-    return (unsigned char)(b * 256);
+    return (uint8_t)(b * 256);
 #else
     return b;
 #endif
@@ -112,7 +113,7 @@ struct Color {
   }
 
   Color
-  with_alpha(int alpha) const {
+  with_alpha(GLubyte alpha) const {
     return Color(red(), green(), blue(), alpha);
   }
 
