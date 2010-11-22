@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "Audio/Sound.hpp"
 #include "Units.hpp"
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
@@ -373,10 +372,6 @@ dlgAirspaceWarningShowDlg()
     // JMW need to deselect everything on new reopening of dialog
     CursorAirspace = NULL;
     FocusAirspace = NULL;
-
-#ifndef GNAV
-    PlayResource(_T("IDR_WAV_BEEPBWEEP"));
-#endif
 
     wf->SetTimerNotify(OnTimer);
     wAirspaceList->SetCursorIndex(0);

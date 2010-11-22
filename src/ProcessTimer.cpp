@@ -41,6 +41,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Simulator.hpp"
 #include "Replay/Replay.hpp"
+#include "Audio/Sound.hpp"
 
 void
 ProcessTimer::HeapCompact()
@@ -77,6 +78,9 @@ ProcessTimer::AirspaceProcessTimer()
       airspaceWarningEvent.test()) {
     airspaceWarningEvent.reset();
     ResetDisplayTimeOut();
+#ifndef GNAV
+    PlayResource(_T("IDR_WAV_BEEPBWEEP"));
+#endif
     dlgAirspaceWarningShowDlg();
   }
 }
