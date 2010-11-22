@@ -142,7 +142,8 @@ bool test_aat(int test_num, int n_wind)
   // elapsed (finish) times equal to desired time with 1.5% tolerance
 
   bool fine = test_flight(test_num, n_wind);
-  double min_time = aat_min_time(test_num);
+  double min_time = (double)aat_min_time(test_num)+300.0;
+  // 300 second offset is 5 minute margin provided in OrderedTask
 
   const double t_ratio = fabs(time_elapsed/min_time-1.0);
   fine &= (t_ratio<0.015);

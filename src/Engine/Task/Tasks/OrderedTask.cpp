@@ -303,6 +303,7 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
 
     fixed p = calc_min_target(state, get_ordered_task_behaviour().aat_min_time + fixed(300));
     (void)p;
+    // note: 300s is 5 minute margin
 
     if (task_behaviour.optimise_targets_bearing) {
       if (tps[activeTaskPoint]->type == TaskPoint::AAT) {
