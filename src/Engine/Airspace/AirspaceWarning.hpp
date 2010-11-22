@@ -112,12 +112,11 @@ public:
  * Update warnings, calculate whether this airspace still needs to
  * have warnings managed.
  * 
- * @param warning_time Lifetime of warnings (s)
- * @param ack_time Lifetime of acknowledgements (s)
+ * @param ack_time Lifetime of acknowledgements
  *
  * @return True if warning is still active
  */
-  bool warning_live(const unsigned warning_time, const unsigned ack_time);
+  bool warning_live(const unsigned ack_time);
 
 /** 
  * Determine if airspace warning was a dummy one created for testing but otherwise

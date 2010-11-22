@@ -60,12 +60,13 @@ AirspaceWarning::update_solution(const AirspaceWarningState state,
   }
 }
 
+
 bool
-AirspaceWarning::warning_live(const unsigned warning_time, const unsigned ack_time)
+AirspaceWarning::warning_live(const unsigned ack_time)
 {
   // propagate settings from manager
   if (m_acktime_warning == null_acktime) {
-    m_acktime_warning = warning_time;
+    m_acktime_warning = ack_time;
   }
   if (m_acktime_inside == null_acktime) {
     m_acktime_inside = ack_time;
