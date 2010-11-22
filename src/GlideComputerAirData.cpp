@@ -62,8 +62,8 @@ GlideComputerAirData::GlideComputerAirData(ProtectedAirspaceWarningManager &awm,
                                            ProtectedTaskManager& _task):
   GlideComputerBlackboard(_task),
   m_airspace(awm),
-  // scan airspace every 2 seconds
-  airspace_clock(fixed_two),
+  // scan airspace every second
+  airspace_clock(fixed_one),
   // only update every 5 seconds to stop flooding the devices
   ballast_clock(fixed(5)),
   vario_30s_filter(30),
