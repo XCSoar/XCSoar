@@ -41,7 +41,6 @@ struct Color {
 #ifdef ANDROID
   GLfloat r, g, b, a;
 
-  Color():r(0), g(0), b(0), a(1) {}
   Color(int _r, int _g, int _b)
     :r(_r / 256.), g(_g / 256.), b(_b / 256.), a(1) {}
   Color(int _r, int _g, int _b, int _a)
@@ -49,10 +48,11 @@ struct Color {
 #else
   GLubyte r, g, b, a;
 
-  Color():r(0), g(0), b(0), a(1) {}
   Color(int _r, int _g, int _b):r(_r), g(_g), b(_b), a(255) {}
   Color(int _r, int _g, int _b, int _a):r(_r), g(_g), b(_b), a(_a) {}
 #endif
+
+  Color() {}
 
   /**
    * Returns the red part of the color

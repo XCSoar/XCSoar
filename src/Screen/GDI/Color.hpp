@@ -34,8 +34,9 @@ Copyright_License {
 struct Color {
   COLORREF value;
 
-  /** Base Constructor (creates a black Color object) */
-  Color() : value(RGB(0, 0, 0)) {}
+  /** Base Constructor (creates an undefined Color object) */
+  Color() {}
+
   /**
    * Constructor (creates a Color object based on the given COLORREF)
    * @param c COLORREF (e.g. 0xFF6677)

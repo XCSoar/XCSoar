@@ -34,11 +34,8 @@ Copyright_License {
 struct Color {
   SDL_Color value;
 
-  Color()
-  {
-    value.r = 0; value.g = 0; value.b = 0;
-    value.unused = SDL_ALPHA_OPAQUE;
-  }
+  Color() {}
+
   Color(int r, int g, int b)
   {
     value.r = r;
