@@ -130,7 +130,8 @@ struct AbortRank : public std::binary_function<AbortTask::Alternate,
    */
   bool operator()(const AbortTask::Alternate& x, 
                   const AbortTask::Alternate& y) const {
-    return x.second.TimeElapsed > y.second.TimeElapsed;
+    return x.second.TimeElapsed+x.second.TimeVirtual > 
+      y.second.TimeElapsed + y.second.TimeVirtual;
   }
 };
 
@@ -242,7 +243,7 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   update_polar();
   clear();
 
-  const unsigned active_waypoint_on_entry = active_waypoint;
+  const unsigned active_waypoint_on_entry = is_active? active_waypoint: (unsigned)-1;
   activeTaskPoint = 0; // default to best result if can't find user-set one 
 
   AlternateVector approx_waypoints; 
