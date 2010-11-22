@@ -77,16 +77,12 @@ PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   static long last_switchinputs;
   static long last_switchoutputs;
-  double MACCREADY;
-  /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
 
-  MACCREADY = line.read(0.0);
+  GPS_INFO->MacCready = line.read(fixed_zero) / 10;
+
   long switchinputs = line.read_hex(0L);
   long switchoutputs = line.read_hex(0L);
   GPS_INFO->SupplyBatteryVoltage = line.read(fixed_zero) / 10;
-
-  MACCREADY /= 10;
-//  oldGlidePolar::SetMacCready(MACCREADY);
 
   GPS_INFO->SwitchStateAvailable = true;
 
