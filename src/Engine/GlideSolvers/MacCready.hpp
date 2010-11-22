@@ -85,6 +85,7 @@ public:
    * @param allow_partial Return after glide exhausted
    * @return Returns the glide result containing data about the optimal solution
    */
+  gcc_pure
   GlideResult solve_glide(const GlideState &task, const fixed V,
       const bool allow_partial=false) const;
 

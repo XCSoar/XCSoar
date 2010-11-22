@@ -50,6 +50,7 @@ public:
    *
    * @return Ground speed during cruise (m/s)
    */
+  gcc_pure
   fixed
   solve() const
   {
@@ -66,8 +67,7 @@ GlideState::calc_ave_speed(const fixed Veff) const
 {
   if (positive(EffectiveWindSpeed)) {
     // only need to solve if positive wind speed
-    GlideQuadratic q(*this, Veff);
-    return q.solve();
+    return GlideQuadratic(*this, Veff).solve();
   }
 
   return Veff;
