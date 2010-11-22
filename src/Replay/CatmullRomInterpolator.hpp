@@ -134,12 +134,14 @@ public:
     if (!positive(u)) {
       loc = p[1].loc;
       alt = p[1].alt;
+      palt = p[1].palt;
       return;
     }
 
     if (u > fixed_one) {
       loc = p[2].loc;
       alt = p[2].alt;
+      palt = p[2].palt;
       return;
     }
 
