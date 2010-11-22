@@ -1,5 +1,7 @@
 #include "AirspaceWarning.hpp"
 
+#include <assert.h>
+
 AirspaceWarning::AirspaceWarning(const AbstractAirspace& the_airspace):
   m_airspace(the_airspace),
   m_state(WARNING_CLEAR),
@@ -103,6 +105,7 @@ AirspaceWarning::get_ack_expired() const
     return !m_acktime_inside;
   };
   // unknown, should never get here
+  assert(1);
   return true;
 }
 
