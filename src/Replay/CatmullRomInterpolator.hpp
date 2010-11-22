@@ -126,6 +126,7 @@ public:
     if (!Ready()) {
       loc = p[num].loc;
       alt = p[num].alt;
+      palt = p[num].palt;
       return;
     }
 
