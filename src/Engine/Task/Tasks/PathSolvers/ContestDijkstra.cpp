@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <assert.h>
+#include <limits.h>
 
 unsigned long ContestDijkstra::count_olc_solve = 0;
 unsigned long ContestDijkstra::count_olc_trace = 0;
@@ -109,8 +110,8 @@ ContestDijkstra::update_trace()
   if (n_points<2) return;
 
   // find min distance and time step within this trace
-  min_delta_t_trace = (unsigned)-1;
-  min_distance_trace = (unsigned)-1;
+  min_delta_t_trace = UINT_MAX;
+  min_distance_trace = UINT_MAX;
   for (TracePointVector::const_iterator it = trace.begin();
        it+1 != trace.end(); ++it) {
     const TracePoint &p0 = *it;
@@ -175,8 +176,8 @@ ContestDijkstra::reset()
   last_point.time = Trace::null_time;
   AbstractContest::reset();
   trace_dirty = true;
-  min_distance_trace = (unsigned)-1;
-  min_delta_t_trace = (unsigned)-1;
+  min_distance_trace = UINT_MAX;
+  min_delta_t_trace = UINT_MAX;
 
   count_olc_solve = 0;
   count_olc_trace = 0;

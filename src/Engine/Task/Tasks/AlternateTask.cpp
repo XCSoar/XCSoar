@@ -25,6 +25,8 @@
 #include "Math/Earth.hpp"
 #include "Task/TaskEvents.hpp"
 
+#include <limits.h>
+
 const unsigned AlternateTask::max_alternates = 3;
 
 AlternateTask::AlternateTask(TaskEvents &te, 
@@ -32,7 +34,7 @@ AlternateTask::AlternateTask(TaskEvents &te,
                              GlidePolar &gp,
                              const Waypoints &wps):
   AbortTask(te, tb, gp, wps),
-  best_alternate_id((unsigned)-1)
+  best_alternate_id(UINT_MAX)
 {
 }
 
@@ -42,7 +44,7 @@ AlternateTask::reset()
 {
   AbortTask::reset();
   destination = GeoPoint();
-  best_alternate_id = (unsigned)-1;
+  best_alternate_id = UINT_MAX;
 }
 
 
@@ -77,7 +79,7 @@ AlternateTask::check_alternate_changed()
   if (alternates.size()) {
     id = alternates[0].first.id;
   } else {
-    id = (unsigned)-1;
+    id = UINT_MAX;
   }
   // send notification on change
   if (best_alternate_id != id) {
