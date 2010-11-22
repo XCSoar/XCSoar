@@ -203,7 +203,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
   static int sval_last = 0;
   static int ival_last = 0;
 
-  fixed vval = Units::ToUserVSpeed(Basic().TotalEnergyVario);
+  fixed vval = Basic().TotalEnergyVario;
   ival = ValueToNeedlePos(fixed(vval));
   sval = ValueToNeedlePos(Basic().GliderSinkRate);
   if (ShowAveNeedle) {
@@ -240,7 +240,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
   RenderNeedle(canvas, ival, false, false);
 
   if (ShowGross) {
-    fixed vvaldisplay = min(fixed(99.9), max(fixed(-99.9), vval));
+    fixed vvaldisplay = min(fixed(99.9), max(fixed(-99.9), Units::ToUserVSpeed(vval)));
 
     RenderValue(canvas, orgMiddle.x, orgMiddle.y,
                 &diValueMiddle, &diLabelMiddle,
