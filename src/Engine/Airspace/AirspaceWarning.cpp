@@ -24,6 +24,9 @@ Copyright_License {
 #include "AirspaceWarning.hpp"
 
 #include <assert.h>
+#include <limits.h>
+
+const unsigned AirspaceWarning::null_acktime = UINT_MAX;
 
 AirspaceWarning::AirspaceWarning(const AbstractAirspace& the_airspace):
   m_airspace(the_airspace),
@@ -58,8 +61,16 @@ AirspaceWarning::update_solution(const AirspaceWarningState state,
 }
 
 bool
-AirspaceWarning::warning_live()
+AirspaceWarning::warning_live(const unsigned warning_time, const unsigned ack_time)
 {
+  // propagate settings from manager
+  if (m_acktime_warning == null_acktime) {
+    m_acktime_warning = warning_time;
+  }
+  if (m_acktime_inside == null_acktime) {
+    m_acktime_inside = ack_time;
+  }
+
   if ((m_state != WARNING_CLEAR) 
       && (m_state < m_state_last) 
       && (m_state_last == WARNING_INSIDE)) 
@@ -136,7 +147,7 @@ void
 AirspaceWarning::acknowledge_inside(const bool set)
 {
   if (set) {
-    m_acktime_inside = 60;
+    m_acktime_inside = null_acktime;
   } else {
     m_acktime_inside = 0;
   }
@@ -146,7 +157,7 @@ void
 AirspaceWarning::acknowledge_warning(const bool set)
 {
   if (set) {
-    m_acktime_warning = 60;
+    m_acktime_warning = null_acktime;
   } else {
     m_acktime_warning = 0;
   }
