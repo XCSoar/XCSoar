@@ -383,6 +383,16 @@ public:
 
   bool check_duplicate_waypoints(Waypoints& waypoints);
 
+  /**
+   * Update internal geometric state of task points.
+   * Typically called after task geometry or observation zones are modified.
+   *
+   *
+   * This also updates planned/nominal distances so clients can use that
+   * data during task construction.
+   */
+  void update_geometry();
+
 protected:
   bool is_scored() const;
 
@@ -635,16 +645,6 @@ private:
    * @param position Index of task point
    */
   void set_neighbours(unsigned position);
-
-  /**
-   * Update internal geometric state of task points.
-   * Typically called after task geometry or observation zones are modified.
-   *
-   *
-   * This also updates planned/nominal distances so clients can use that
-   * data during task construction.
-   */
-  void update_geometry();
 
   /**
    * Erase taskpoint in sequence (for internal use)
