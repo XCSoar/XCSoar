@@ -39,12 +39,12 @@ Copyright_License {
  */
 struct Color {
 #ifdef ANDROID
-  GLfloat r, g, b, a;
+  GLfixed r, g, b, a;
 
   Color(GLubyte _r, GLubyte _g, GLubyte _b)
-    :r(_r / 256.), g(_g / 256.), b(_b / 256.), a(1) {}
+    :r(_r << 8u), g(_g << 8u), b(_b << 8u), a(1u << 16u) {}
   Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)
-    :r(_r / 256.), g(_g / 256.), b(_b / 256.), a(_a / 256.) {}
+    :r(_r << 8u), g(_g << 8u), b(_b << 8u), a(_a << 8u) {}
 #else
   GLubyte r, g, b, a;
 
@@ -63,7 +63,7 @@ struct Color {
   red() const
   {
 #ifdef ANDROID
-    return (uint8_t)(r * 256);
+    return (uint8_t)(r >> 8u);
 #else
     return r;
 #endif
@@ -77,7 +77,7 @@ struct Color {
   green() const
   {
 #ifdef ANDROID
-    return (uint8_t)(g * 256);
+    return (uint8_t)(g >> 8u);
 #else
     return g;
 #endif
@@ -91,7 +91,7 @@ struct Color {
   blue() const
   {
 #ifdef ANDROID
-    return (uint8_t)(b * 256);
+    return (uint8_t)(b >> 8u);
 #else
     return b;
 #endif
@@ -138,7 +138,7 @@ struct Color {
     /* on Android, glColor4ub() is not implemented, and we're forced
        to use floating point math for something as trivial as
        configuring a RGB color value */
-    glColor4f(r, g, b, a);
+    glColor4x(r, g, b, a);
 #else
     glColor4ub(r, g, b, a);
 #endif
