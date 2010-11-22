@@ -164,14 +164,19 @@ class MapGenerator:
 
         return self.SetBounds(wplist.get_bounds())
 
-    def Create(self, filename):
+    def Create(self, filename, attach = False):
         '''
         Creates the map at the given location
         @param filename: Location of the map file that should be created
         '''
         print "Creating map file ..."
         # Open the zip file
-        z = ZipFile(filename, "w", ZIP_DEFLATED)
+        if attach:
+            attach = "a"
+        else:
+            attach = "w"
+
+        z = ZipFile(filename, attach, ZIP_DEFLATED)
         for file in self.__files:
             # Make sure we have a list
             if not isinstance(file, list):
