@@ -37,12 +37,8 @@ Copyright_License {
 TopologyFileRenderer::TopologyFileRenderer(const TopologyFile &_file)
   :file(_file), pen(1, file.get_color()), brush(file.get_color())
 {
-  if (file.get_icon() != 0) {
-    if (file.get_icon() == IDB_TOWN)
-      icon.load_big(IDB_TOWN, IDB_TOWN_HD);
-    else
-      icon.load(file.get_icon());
-  }
+  if (file.get_icon() == IDB_TOWN)
+    icon.load_big(IDB_TOWN, IDB_TOWN_HD);
 }
 
 gcc_pure
