@@ -40,13 +40,13 @@ class ScopeBusyIndicator {
 public:
   ScopeBusyIndicator()
     :old_cursor(::SetCursor(::LoadCursor(NULL, IDC_WAIT))) {
-    if (is_altair())
+    if (is_altair() && is_embedded())
       SetCursorPos(160,120);
   }
 
   ~ScopeBusyIndicator() {
     ::SetCursor(old_cursor);
-    if (is_altair())
+    if (is_altair() && is_embedded())
       SetCursorPos(640, 480);
   }
 #endif /* WIN32 */
