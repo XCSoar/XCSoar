@@ -24,10 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_LOG_FILE_HPP
 #define XCSOAR_LOG_FILE_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 #if !defined(NDEBUG) && !defined(GNAV)
 
+#ifndef _UNICODE
+gcc_printf(1, 2)
+#endif
 void LogDebug(const TCHAR *Str, ...);
 
 #else /* NDEBUG */
@@ -38,6 +43,9 @@ void LogDebug(const TCHAR *Str, ...);
 
 #endif /* NDEBUG */
 
+#ifndef _UNICODE
+gcc_printf(1, 2)
+#endif
 void LogStartUp(const TCHAR *Str, ...);
 
 #endif
