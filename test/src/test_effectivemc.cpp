@@ -12,11 +12,14 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(6*NUM_WIND);
+#define NUM_RUNS 3
+
+  plan_tests(6*NUM_RUNS);
 
   // tests whether effective mc is calculated correctly
-  for (int i=0; i<NUM_WIND; i++) {
-    test_effective_mc(3,i);
+  for (int i=0; i<NUM_RUNS; i++) {
+    unsigned j = rand()%NUM_WIND;
+    test_effective_mc(3,j);
   }
 
   return exit_status();
