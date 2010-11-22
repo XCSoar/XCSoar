@@ -33,6 +33,15 @@
  *
  * @todo
  *  - should prefer landable points that are non-intersecting with terrain
+ *
+ * Sorting order is as follows:
+ * - airfields reachable from final glide (sorted by arrival time) at safety mc
+ * - landpoints reachable from final glide (sorted by arrival time) at safety mc
+ * - airfields reachable with climb (sorted by arrival time including climb time) 
+ *   at current mc
+ * - landpoints reachable with climb (sorted by arrival time including climb time) 
+ *   at current mc
+ * 
  */
 class AbortTask : 
   public UnorderedTask 
