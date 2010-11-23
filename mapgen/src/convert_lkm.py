@@ -80,10 +80,10 @@ def convert(template, working_dir):
     shutil.copy(lkm_file, xcm_file)
 
     m = MapGenerator()
-    m.SetBoundsSeperatly(Angle.degrees(float(template["LATMIN"])), 
-                         Angle.degrees(float(template["LATMAX"])), 
-                         Angle.degrees(float(template["LONMIN"])), 
-                         Angle.degrees(float(template["LONMAX"])))
+    m.SetBoundsSeperatly(Angle.degrees(float(template["LATMIN"].replace(",", "."))), 
+                         Angle.degrees(float(template["LATMAX"].replace(",", "."))), 
+                         Angle.degrees(float(template["LONMIN"].replace(",", "."))), 
+                         Angle.degrees(float(template["LONMAX"].replace(",", "."))))
     m.AddTerrain(9)
     m.Create(xcm_file, True)
 
