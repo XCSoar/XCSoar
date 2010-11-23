@@ -173,7 +173,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
        redraws */
     scale_buffer = 2;
 #endif
-    return true;
+    break;
 
   case DRAG_SIMULATOR:
     if (click_time > 50 &&
