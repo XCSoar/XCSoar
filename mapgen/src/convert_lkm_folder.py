@@ -4,18 +4,30 @@ import convert_lkm
 
 def main():
     if len(sys.argv) < 2:
-        print "Too few arguments given! Please provide a template folder."
+        print "Too few arguments given! Please provide a working folder."
         return
     
     folder = sys.argv[1]
     if not os.path.exists(folder) and os.path.isdir(folder):
-        print "Template folder \"" + file + "\" does not exist!"
+        print "Working folder \"" + folder + "\" does not exist!"
         return
     
+    txt_files = []
+    xcm_files = []
     for file in os.listdir(folder):
-        if file.endswith(".TXT"):
-            template = convert_lkm.read_template(os.path.join(folder, file))
-            convert_lkm.convert(template, folder)
+        if file.lower().endswith(".txt"):
+            txt_files.append(file[:-4])
+        if file.lower().endswith(".xcm"):
+            xcm_files.append(file[:-4])
+
+    # Filter already created XCM files from the todo list
+    for file in xcm_files:
+        try: txt_files.remove(file)
+        except ValueError: pass
+      
+    for file in txt_files:
+        template = convert_lkm.read_template(os.path.join(folder, file + ".TXT"))
+        convert_lkm.convert(template, folder)
     
 if __name__ == '__main__':
     main()    
