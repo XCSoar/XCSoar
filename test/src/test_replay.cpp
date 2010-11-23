@@ -33,8 +33,12 @@ inline bool compare_scores(const ContestResult& official,
   }
   fixed e = fabs((official.score-estimated.score)/official.score);
   std::cout << "# Error (score) " << e << "\n";
-  // return (e<fixed(0.01));
-  return true;
+  if (positive(official.score)) {
+    return (e<fixed(0.01));
+  } else {
+    // nothing to compare with
+    return true; 
+  }
 }
 
 inline void load_score_file(std::ifstream& fscore,
