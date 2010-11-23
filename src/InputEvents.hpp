@@ -29,8 +29,6 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Math/fixed.hpp"
 
-class TLineReader;
-
 typedef void (*pt2Event)(const TCHAR *);
 
 namespace InputEvents
@@ -49,7 +47,6 @@ namespace InputEvents
   void ResetMenuTimeOut();
 
   void readFile();
-  void readFile(TLineReader &reader);
   mode mode2int(const TCHAR *mode, bool create);
   void setMode(mode mode);
   void setMode(const TCHAR *mode);
@@ -70,8 +67,6 @@ namespace InputEvents
   bool processButton(unsigned bindex);
   bool processGlideComputer(unsigned gce_id);
   void processGo(unsigned event_id);
-  unsigned makeEvent(void (*event)(const TCHAR *),
-                            const TCHAR *misc, unsigned next = 0);
   void makeLabel(mode mode_id, const TCHAR *label,
                         unsigned location, unsigned event_id);
 
