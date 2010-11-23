@@ -354,7 +354,7 @@ OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
       const fixed RangeNew = Sender->GetAsFixed() / fixed(100);
       if (RangeNew != Range) {
         protected_task_manager.set_target(target_point, RangeNew, Radial);
-        Range = RangeNew;
+        protected_task_manager.get_target_range_radial(target_point, Range, Radial);
       }
     }
     break;
