@@ -97,13 +97,17 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
   (void)Sender;
   switch (key_code) {
   case VK_LEFT:
+#ifdef GNAV
   case '6':
+#endif
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
     PrevPage();
     return true;
 
   case VK_RIGHT:
+#ifdef GNAV
   case '7':
+#endif
     ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
     NextPage();
     return true;

@@ -386,6 +386,8 @@ OnTimerNotify(WndForm &Sender)
   }
 }
 
+#ifdef GNAV
+
 static bool
 FormKeyDown(WndForm &Sender, unsigned key_code){
 
@@ -420,6 +422,8 @@ FormKeyDown(WndForm &Sender, unsigned key_code){
   return true;
 }
 
+#endif /* GNAV */
+
 static CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnFilterName),
   DeclareCallBackEntry(OnFilterDistance),
@@ -447,7 +451,9 @@ PrepareAirspaceSelectDialog()
 
   assert(wf!=NULL);
 
+#ifdef GNAV
   wf->SetKeyDownNotify(FormKeyDown);
+#endif
 
   ((WndButton *)wf->
    FindByName(_T("cmdClose")))->

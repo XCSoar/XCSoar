@@ -504,11 +504,15 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
     wdf->ZoomOut();
     return true;
   case VK_LEFT:
+#ifdef GNAV
   case '6':
+#endif
     wdf->PrevTarget();
     return true;
   case VK_RIGHT:
+#ifdef GNAV
   case '7':
+#endif
     wdf->NextTarget();
     return true;
   }
