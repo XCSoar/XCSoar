@@ -27,12 +27,6 @@ Copyright_License {
 #define LF_FACESIZE 256
 
 enum {
-  ANSI_CHARSET,
-  VARIABLE_PITCH,
-  FIXED_PITCH,
-  FF_DONTCARE,
-  ANTIALIASED_QUALITY,
-
   FW_MEDIUM = 500,
   FW_BOLD = 700,
 };

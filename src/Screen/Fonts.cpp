@@ -65,15 +65,22 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
   memset((char *)font, 0, sizeof(LOGFONT));
 
   _tcscpy(font->lfFaceName, facename);
+
+#ifdef WIN32
   font->lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
                           | FF_DONTCARE;
+#endif
+
   font->lfHeight = (long)height;
   font->lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
   font->lfItalic = italic;
+
+#ifdef WIN32
   if (is_altair())
     font->lfQuality = NONANTIALIASED_QUALITY;
   else
     font->lfQuality = ANTIALIASED_QUALITY;
+#endif
 }
 
 static void
@@ -136,7 +143,9 @@ InitialiseLogFonts()
   InitialiseLogfont(&LogInfoBox, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 1.4), true, false, true);
 
+#ifdef WIN32
   LogInfoBox.lfCharSet = ANSI_CHARSET;
+#endif
 
   InitialiseLogfont(&LogTitle, Fonts::GetStandardFontFace(),
                     FontHeight / 3, true);
