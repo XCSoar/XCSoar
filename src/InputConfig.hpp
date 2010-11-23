@@ -86,8 +86,8 @@ struct InputConfig {
   }
 
   void clear_all_events() {
-    memset(&Key2Event, 0, sizeof(Key2Event));
-    memset(&GC2Event, 0, sizeof(GC2Event));
+    memset(Key2Event, 0, sizeof(Key2Event));
+    memset(GC2Event, 0, sizeof(GC2Event));
     Events_count = 1;
   }
 
