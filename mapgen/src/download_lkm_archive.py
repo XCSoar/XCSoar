@@ -60,7 +60,7 @@ def recursive_download(url, folder):
     
     for link in parser.hyperlinks:
         # Download files
-        if link.upper().endswith(".TXT") or link.upper().endswith(".LKM"):
+        if link.upper().endswith(".LKM"):
             download_file(link, folder)
 
         if link.upper().endswith(".HTM") or link.upper().endswith(".HTML"):
