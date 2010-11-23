@@ -34,7 +34,6 @@ typedef void (*pt2Event)(const TCHAR *);
 namespace InputEvents
 {
   enum mode {
-    MODE_INVALID = -1,
     MODE_DEFAULT,
     MODE_PAN,
     MODE_INFOBOX,
@@ -47,7 +46,6 @@ namespace InputEvents
   void ResetMenuTimeOut();
 
   void readFile();
-  mode mode2int(const TCHAR *mode, bool create);
   void setMode(mode mode);
   void setMode(const TCHAR *mode);
   mode getModeID();

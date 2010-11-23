@@ -326,29 +326,6 @@ InputEvents::makeLabel(mode mode_id, const TCHAR* label,
   input_config.append_menu(mode_id, label, location, event_id);
 }
 
-// Return 0 for anything else - should probably return -1 !
-InputEvents::mode
-InputEvents::mode2int(const TCHAR *mode, bool create)
-{
-  // Better checks !
-  if ((mode == NULL))
-    return MODE_INVALID;
-
-  int i = input_config.lookup_mode(mode);
-  if (i >= 0)
-    return (InputEvents::mode)i;
-
-  if (create) {
-    // Keep a copy
-    i = input_config.append_mode(mode);
-    return (InputEvents::mode)i;
-  }
-
-  // Should never reach this point
-  assert(false);
-  return MODE_INVALID;
-}
-
 void
 InputEvents::setMode(mode mode)
 {
@@ -376,18 +353,9 @@ InputEvents::setMode(mode mode)
 void
 InputEvents::setMode(const TCHAR *mode)
 {
-  InputEvents::mode thismode;
-
-  assert(mode != NULL);
-
-  // Mode must already exist to use it here...
-  thismode = mode2int(mode, false);
-  // Technically an error in config (eg event=Mode DoesNotExist)
-  if (thismode == MODE_INVALID)
-    // TODO enhancement: Add debugging here
-    return;
-
-  setMode(thismode);
+  int m = input_config.lookup_mode(mode);
+  if (m >= 0)
+    setMode((InputEvents::mode)m);
 }
 
 void
