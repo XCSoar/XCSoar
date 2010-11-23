@@ -120,7 +120,7 @@ foreach my $m (@modes) {
 print "  NULL\n";
 print "};\n";
 
-print "static const EventSTRUCT default_events[] = {\n";
+print "static const InputConfig::Event default_events[] = {\n";
 foreach my $e (@events) {
     my ($handler, $misc, $next_id) = @$e;
     $misc = '' unless defined $misc;

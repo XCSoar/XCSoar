@@ -45,6 +45,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 */
 
 #include "InputEvents.hpp"
+#include "InputConfig.hpp"
 #include "Interface.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"
@@ -82,18 +83,6 @@ namespace InputEvents
 
   bool processGlideComputer_real(unsigned gce_id);
   bool processNmea_real(unsigned key);
-};
-
-// Sensible maximums
-enum {
-  MAX_MODE = 64,
-  MAX_MODE_STRING = 24,
-#ifdef ENABLE_SDL
-  MAX_KEY = 400,
-#else
-  MAX_KEY = 255,
-#endif
-  MAX_EVENTS = 2048,
 };
 
 /*
@@ -142,46 +131,7 @@ struct flat_label {
   const TCHAR *label;
 };
 
-/** Map mode to location */
-static TCHAR mode_map[MAX_MODE][MAX_MODE_STRING] = {
-  _T("default"),
-  _T("pan"),
-  _T("infobox"),
-  _T("Menu"),
-};
-
-static unsigned mode_map_count = 4;
-
-// Key map to Event - Keys (per mode) mapped to events
-static unsigned Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
-
-// Glide Computer Events
-static unsigned GC2Event[MAX_MODE][GCE_COUNT];
-
-// NMEA Triggered Events
-static unsigned N2Event[MAX_MODE][NE_COUNT];
-
-// Events - What do you want to DO
-typedef struct {
-  // Which function to call (can be any, but should be here)
-  pt2Event event;
-  // Parameters
-  const TCHAR *misc;
-  // Next in event list - eg: Macros
-  unsigned next;
-} EventSTRUCT;
-
-static EventSTRUCT Events[MAX_EVENTS];
-// How many have we defined
-/**
- * How many have we defined.
- *
- * This is initialized with 1 because event 0 is reserved - it stands
- * for "no event".
- */
-static unsigned Events_count = 1;
-
-static Menu menus[MAX_MODE];
+static InputConfig input_config;
 
 #define MAX_GCE_QUEUE 10
 static int GCE_Queue[MAX_GCE_QUEUE];
@@ -219,35 +169,37 @@ static const TCHAR *const Text2NE[] = {
 
 static void
 apply_defaults(const TCHAR *const* default_modes,
-               const EventSTRUCT *default_events, unsigned num_default_events,
+               const InputConfig::Event *default_events,
+               unsigned num_default_events,
                const flat_event_map *default_key2event,
                const flat_event_map *default_gc2event,
                const flat_event_map *default_n2event,
                const flat_label *default_labels)
 {
-  assert(num_default_events <= MAX_EVENTS);
+  assert(num_default_events <= InputConfig::MAX_EVENTS);
 
-  for (mode_map_count = 0; default_modes[mode_map_count] != NULL;
-       ++mode_map_count)
-    _tcscpy(mode_map[mode_map_count], default_modes[mode_map_count]);
+  input_config.clear_mode_map();
+  while (*default_modes != NULL)
+    input_config.append_mode(*default_modes++);
 
-  Events_count = num_default_events + 1;
-  std::copy(default_events, default_events + num_default_events, Events + 1);
+  input_config.Events_count = num_default_events + 1;
+  std::copy(default_events, default_events + num_default_events,
+            input_config.Events + 1);
 
   while (default_key2event->event > 0) {
-    Key2Event[default_key2event->mode][default_key2event->key] =
+    input_config.Key2Event[default_key2event->mode][default_key2event->key] =
       default_key2event->event;
     ++default_key2event;
   }
 
   while (default_gc2event->event > 0) {
-    GC2Event[default_gc2event->mode][default_gc2event->key] =
+    input_config.GC2Event[default_gc2event->mode][default_gc2event->key] =
       default_gc2event->event;
     ++default_gc2event;
   }
 
   while (default_n2event->event > 0) {
-    N2Event[default_n2event->mode][default_n2event->key] =
+    input_config.N2Event[default_n2event->mode][default_n2event->key] =
       default_n2event->event;
     ++default_n2event;
   }
@@ -353,9 +305,7 @@ InputEvents::readFile(TLineReader &reader)
     // experimental: if the first line is "#CLEAR" then the whole default config is cleared
     //               and can be overwritten by file
     if (line == 1 && _tcscmp(buffer, _T("#CLEAR")) == 0) {
-      memset(&Key2Event, 0, sizeof(Key2Event));
-      memset(&GC2Event, 0, sizeof(GC2Event));
-      Events_count = 1;
+      input_config.clear_all_events();
     } else if (buffer[0] == _T('\0')) {
       // Check valid line? If not valid, assume next record (primative, but works ok!)
       // General checks before continue...
@@ -400,7 +350,7 @@ InputEvents::readFile(TLineReader &reader)
             // Get the int key (eg: APP1 vs 'a')
             unsigned key = findKey(d_data);
             if (key > 0)
-              Key2Event[mode_id][key] = event_id;
+              input_config.Key2Event[mode_id][key] = event_id;
 
             #ifdef _INPUTDEBUG_
             else if (input_errors_count < MAX_INPUT_ERRORS)
@@ -413,7 +363,7 @@ InputEvents::readFile(TLineReader &reader)
             // Get the int key (eg: APP1 vs 'a')
             int key = findGCE(d_data);
             if (key >= 0)
-              GC2Event[mode_id][key] = event_id;
+              input_config.GC2Event[mode_id][key] = event_id;
 
             #ifdef _INPUTDEBUG_
             else if (input_errors_count < MAX_INPUT_ERRORS)
@@ -426,7 +376,7 @@ InputEvents::readFile(TLineReader &reader)
             // Get the int key (eg: APP1 vs 'a')
             int key = findNE(d_data);
             if (key >= 0)
-              N2Event[mode_id][key] = event_id;
+              input_config.N2Event[mode_id][key] = event_id;
 
             #ifdef _INPUTDEBUG_
             else if (input_errors_count < MAX_INPUT_ERRORS)
@@ -655,16 +605,7 @@ unsigned
 InputEvents::makeEvent(void (*event)(const TCHAR *), const TCHAR *misc,
                        unsigned next)
 {
-  if (Events_count >= MAX_EVENTS) {
-    assert(0);
-    return 0;
-  }
-
-  Events[Events_count].event = event;
-  Events[Events_count].misc = misc;
-  Events[Events_count].next = next;
-
-  return Events_count++;
+  return input_config.append_event(event, misc, next);
 }
 
 
@@ -675,10 +616,7 @@ void
 InputEvents::makeLabel(mode mode_id, const TCHAR* label,
                        unsigned location, unsigned event_id)
 {
-  assert((int)mode_id >= 0);
-  assert((int)mode_id < MAX_MODE);
-
-  menus[mode_id].Add(label, location, event_id);
+  input_config.append_menu(mode_id, label, location, event_id);
 }
 
 // Return 0 for anything else - should probably return -1 !
@@ -689,15 +627,14 @@ InputEvents::mode2int(const TCHAR *mode, bool create)
   if ((mode == NULL))
     return MODE_INVALID;
 
-  for (unsigned i = 0; i < mode_map_count; i++) {
-    if (_tcscmp(mode, mode_map[i]) == 0)
-      return (InputEvents::mode)i;
-  }
+  int i = input_config.lookup_mode(mode);
+  if (i >= 0)
+    return (InputEvents::mode)i;
 
   if (create) {
     // Keep a copy
-    _tcsncpy(mode_map[mode_map_count], mode, 25);
-    return (InputEvents::mode)mode_map_count++;
+    i = input_config.append_mode(mode);
+    return (InputEvents::mode)i;
   }
 
   // Should never reach this point
@@ -708,7 +645,7 @@ InputEvents::mode2int(const TCHAR *mode, bool create)
 void
 InputEvents::setMode(mode mode)
 {
-  assert((unsigned)mode < mode_map_count);
+  assert((unsigned)mode < input_config.mode_map_count);
 
   if (mode == current_mode)
     return;
@@ -752,7 +689,7 @@ InputEvents::drawButtons(mode Mode)
   if (!globalRunningEvent.test())
     return;
 
-  const Menu &menu = menus[Mode];
+  const Menu &menu = input_config.menus[Mode];
   for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
     const MenuItem &item = menu[i];
 
@@ -781,7 +718,7 @@ InputEvents::processButton(unsigned bindex)
     return false;
 
   mode lastMode = getModeID();
-  const MenuItem &item = menus[lastMode][bindex];
+  const MenuItem &item = input_config.menus[lastMode][bindex];
   if (!item.defined())
     return false;
 
@@ -802,13 +739,13 @@ InputEvents::processButton(unsigned bindex)
 unsigned
 InputEvents::key_to_event(mode mode, unsigned key_code)
 {
-  if (key_code >= MAX_KEY)
+  if (key_code >= InputConfig::MAX_KEY)
     return 0;
 
-  unsigned event_id = Key2Event[mode][key_code];
+  unsigned event_id = input_config.Key2Event[mode][key_code];
   if (event_id == 0)
     /* not found in this mode - try the default binding */
-    event_id = Key2Event[0][key_code];
+    event_id = input_config.Key2Event[0][key_code];
 
   return event_id;
 }
@@ -840,7 +777,7 @@ InputEvents::processKey(unsigned dWord)
   // JMW should be done by gui handler
   // if (!Debounce()) return true;
 
-  const Menu &menu = menus[mode];
+  const Menu &menu = input_config.menus[mode];
   int i = menu.FindByEvent(event_id);
   if (i >= 0 && menu[i].defined()) {
     bindex = i;
@@ -893,10 +830,10 @@ InputEvents::processNmea_real(unsigned ne_id)
   InputEvents::mode mode = InputEvents::getModeID();
 
   // Which key - can be defined locally or at default (fall back to default)
-  event_id = N2Event[mode][ne_id];
+  event_id = input_config.N2Event[mode][ne_id];
   if (event_id == 0) {
     // go with default key..
-    event_id = N2Event[0][ne_id];
+    event_id = input_config.N2Event[0][ne_id];
   }
 
   if (event_id > 0) {
@@ -973,10 +910,10 @@ InputEvents::processGlideComputer_real(unsigned gce_id)
   InputEvents::mode mode = InputEvents::getModeID();
 
   // Which key - can be defined locally or at default (fall back to default)
-  event_id = GC2Event[mode][gce_id];
+  event_id = input_config.GC2Event[mode][gce_id];
   if (event_id == 0) {
     // go with default key..
-    event_id = GC2Event[0][gce_id];
+    event_id = input_config.GC2Event[0][gce_id];
   }
 
   if (event_id > 0) {
@@ -1004,12 +941,12 @@ InputEvents::processGo(unsigned eventid)
   // evnentid 0 is special for "noop" - otherwise check event
   // exists (pointer to function)
   if (eventid) {
-    if (Events[eventid].event) {
-      Events[eventid].event(Events[eventid].misc);
+    if (input_config.Events[eventid].event) {
+      input_config.Events[eventid].event(input_config.Events[eventid].misc);
       MenuTimeOut = 0;
     }
-    if (Events[eventid].next > 0)
-      InputEvents::processGo(Events[eventid].next);
+    if (input_config.Events[eventid].next > 0)
+      InputEvents::processGo(input_config.Events[eventid].next);
   }
 }
 
