@@ -301,7 +301,6 @@ WndListFrame::on_key_down(unsigned key_code)
       ActivateCallback(GetCursorIndex());
     return true;
 
-//#ifndef GNAV
   case VK_LEFT:
     if (origin == 0 || length <= items_visible)
       break;
@@ -316,7 +315,6 @@ WndListFrame::on_key_down(unsigned key_code)
     SetOrigin(origin + items_visible);
     return true;
 
-//#endif
   case VK_DOWN:
     if (GetCursorIndex() + 1 >= length)
       break;
