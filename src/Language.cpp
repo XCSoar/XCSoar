@@ -208,6 +208,8 @@ AutoDetectLanguage()
 #if defined(HAVE_POSIX)
 
   setlocale(LC_ALL, "");
+  // allways use a dot as decimal point in printf/scanf.
+  setlocale(LC_NUMERIC, "C");
   bindtextdomain("xcsoar", "/usr/share/locale");
   textdomain("xcsoar");
 

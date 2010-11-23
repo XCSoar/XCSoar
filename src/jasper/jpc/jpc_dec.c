@@ -1629,8 +1629,8 @@ static int jpc_dec_process_com(jpc_dec_t *dec, jpc_ms_t *ms)
 			sTmp[ms->len-2]= '\0';
 			cptr = strstr (sTmp, "XCSoar");
 			if (cptr) {
-				sscanf(cptr+6, "%f %f %f %f", &lon_min, &lon_max, &lat_min, &lat_max);
-				jas_rtc_SetLatLonBounds(lon_min, lon_max, lat_min, lat_max);
+				if (sscanf(cptr+6, "%f %f %f %f", &lon_min, &lon_max, &lat_min, &lat_max) == 4)
+					jas_rtc_SetLatLonBounds(lon_min, lon_max, lat_min, lat_max);
 			}
 		}
 	}
