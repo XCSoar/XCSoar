@@ -224,9 +224,6 @@ XCSoarInterface::AfterStartup()
   TriggerGPSUpdate();
 
   status_messages.Startup(false);
-#ifdef _INPUTDEBUG_
-  InputEvents::showErrors();
-#endif
 }
 
 /**

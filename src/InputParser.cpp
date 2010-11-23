@@ -27,6 +27,7 @@ Copyright_License {
 #include "IO/LineReader.hpp"
 #include "Util/StringUtil.hpp"
 #include "UtilsText.hpp"
+#include "LogFile.hpp"
 #include "Compatibility/string.h" /* for _ttoi() */
 
 #include <string.h>
@@ -132,11 +133,8 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
             unsigned key = InputEvents::findKey(d_data);
             if (key > 0)
               config.Key2Event[mode_id][key] = event_id;
-
-            #ifdef _INPUTDEBUG_
-            else if (input_errors_count < MAX_INPUT_ERRORS)
-            _stprintf(input_errors[input_errors_count++], _T("Invalid key data: %s at %i"), d_data, line);
-            #endif
+            else
+              LogStartUp(_T("Invalid key data: %s at %i"), d_data, line);
 
           // Make gce (Glide Computer Event)
           // GCE - Glide Computer Event
@@ -145,11 +143,8 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
             int key = InputEvents::findGCE(d_data);
             if (key >= 0)
               config.GC2Event[mode_id][key] = event_id;
-
-            #ifdef _INPUTDEBUG_
-            else if (input_errors_count < MAX_INPUT_ERRORS)
-            _stprintf(input_errors[input_errors_count++], _T("Invalid GCE data: %s at %i"), d_data, line);
-            #endif
+            else
+              LogStartUp(_T("Invalid GCE data: %s at %i"), d_data, line);
 
           // Make ne (NMEA Event)
           // NE - NMEA Event
@@ -158,21 +153,15 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
             int key = InputEvents::findNE(d_data);
             if (key >= 0)
               config.N2Event[mode_id][key] = event_id;
-
-            #ifdef _INPUTDEBUG_
-            else if (input_errors_count < MAX_INPUT_ERRORS)
-            _stprintf(input_errors[input_errors_count++], _T("Invalid GCE data: %s at %i"), d_data, line);
-            #endif
+            else
+              LogStartUp(_T("Invalid GCE data: %s at %i"), d_data, line);
 
           // label only - no key associated (label can still be touch screen)
           } else if (_tcscmp(d_type, _T("label")) == 0) {
             // Nothing to do here...
 
-          #ifdef _INPUTDEBUG_
-          } else if (input_errors_count < MAX_INPUT_ERRORS) {
-            _stprintf(input_errors[input_errors_count++], _T("Invalid type: %s at %i"), d_type, line);
-          #endif
-
+          } else {
+            LogStartUp(_T("Invalid type: %s at %i"), d_type, line);
           }
 
           token = _tcstok(NULL, _T(" "));
@@ -246,20 +235,11 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
               event_id = config.append_event(event, allocated, event_id);
               free(allocated);
 
-            #ifdef _INPUTDEBUG_
-            } else if (input_errors_count < MAX_INPUT_ERRORS) {
-              _stprintf(input_errors[input_errors_count++],
-                  _T("Invalid event type: %s at %i"), d_event, line);
-            #endif
-
+            } else {
+              LogStartUp(_T("Invalid event type: %s at %i"), d_event, line);
             }
-
-          #ifdef _INPUTDEBUG_
-          } else if (input_errors_count < MAX_INPUT_ERRORS) {
-            _stprintf(input_errors[input_errors_count++],
-                _T("Invalid event type at %i"), line);
-          #endif
-
+          } else {
+            LogStartUp(_T("Invalid event type at %i"), line);
           }
         }
       } else if (_tcscmp(key, _T("label")) == 0) {
@@ -267,17 +247,11 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
       } else if (_tcscmp(key, _T("location")) == 0) {
         d_location = _ttoi(value);
 
-      #ifdef _INPUTDEBUG_
-      } else if (input_errors_count < MAX_INPUT_ERRORS) {
-        _stprintf(input_errors[input_errors_count++], _T("Invalid key/value pair %s=%s at %i"), key, value, line);
-      #endif
-
+      } else {
+        LogStartUp(_T("Invalid key/value pair %s=%s at %i"), key, value, line);
       }
-#ifdef _INPUTDEBUG_
-    } else if (input_errors_count < MAX_INPUT_ERRORS) {
-      _stprintf(input_errors[input_errors_count++],
-                _T("Invalid line at %i"), line);
-#endif
+    } else  {
+      LogStartUp(_T("Invalid line at %i"), line);
     }
 
   } // end while

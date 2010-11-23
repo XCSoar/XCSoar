@@ -146,10 +146,6 @@ namespace InputEvents
   void eventOrientation(const TCHAR *misc);
   void eventFlarmTraffic(const TCHAR *misc);
   // -------
-
-#ifdef _INPUTDEBUG_
-  void showErrors();
-#endif
 };
 
 
