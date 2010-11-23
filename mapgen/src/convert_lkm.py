@@ -135,14 +135,13 @@ def convert(template, working_dir):
         print "LKM file \"" + lkm_file + "\" does not exist!"
         return
     
-    shutil.copy(lkm_file, xcm_file)
-
     m = MapGenerator()
     m.SetBoundsSeperatly(Angle.degrees(float(template["LATMIN"].replace(",", "."))), 
                          Angle.degrees(float(template["LATMAX"].replace(",", "."))), 
                          Angle.degrees(float(template["LONMIN"].replace(",", "."))), 
                          Angle.degrees(float(template["LONMAX"].replace(",", "."))))
     m.AddTerrain(9)
+    shutil.copy(lkm_file, xcm_file)
     m.Create(xcm_file, True)
 
 def main():
