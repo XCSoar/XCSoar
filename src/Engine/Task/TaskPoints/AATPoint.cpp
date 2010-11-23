@@ -223,9 +223,7 @@ AATPoint::get_target_range_radial(fixed &range, fixed &radial) const
 
   const fixed d = floc.distance(get_location_target());
   const fixed radius = floc.distance(get_location_min());
-  const fixed rangeraw = d / radius;
-  if (d > radius)
-    return; // should never happen
+  const fixed rangeraw = min(fixed_one, d / radius);
 
   radial = radialraw.as_delta().value_degrees();
   const fixed rangesign = (fabs(radial) > fixed(90)) ?
