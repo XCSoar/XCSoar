@@ -3,8 +3,58 @@ import os
 from map_generator import MapGenerator
 from angle import Angle
 import shutil
+import zipfile
 
-def read_template(file):
+def read_template_from_map(file):
+    map = {}
+
+    print "Opening map file \"" + file + "\" ..."
+    zip = zipfile.ZipFile(file, "r")
+    f = zip.open("INFO.TXT", "r")
+    for line in f:
+        line = line.strip()
+        if line == "" or line[0] == "#":
+            continue
+        
+        if line.upper().startswith("MAPSET NAME:"):
+            # Mapset name: <AFR_GARIEP_DAM> srcbase: <soa>
+            line = line.replace("Mapset name: ", "")
+            line = line.strip().lstrip("<")
+            line = line[:line.find(">")]
+            map["NAME"] = line
+            continue
+    
+        if line.upper().startswith("BOUNDARIES:"):
+            # Boundaries: long. 19.3-31 lat. -34--24.30
+            line = line.replace("Boundaries: ", "").strip()
+            line = line.split(" ", 3)
+            if len(line) != 4:
+                return {}
+            
+            lons = ""
+            lats = ""
+            if line[0] == "long.":
+                lons = line[1]
+            if line[0] == "lat.":
+                lats = line[1]
+            if line[2] == "long.":
+                lons = line[3]
+            if line[2] == "lat.":
+                lats = line[3]
+            
+            if lons == "" or lats == "":
+                continue
+            
+            map["LONMIN"] = lons[:lons.find("-", 1)].strip()
+            map["LONMAX"] = lons[lons.find("-", 1)+1:].strip()
+            
+            map["LATMIN"] = lats[:lats.find("-", 1)].strip()
+            map["LATMAX"] = lats[lats.find("-", 1)+1:].strip()
+            continue
+    
+    return map
+
+def read_template_file(file):
     map = {}
     type = None
 
@@ -27,7 +77,7 @@ def read_template(file):
                 map[line[0]] = line[1]
                 
         if type == 2:
-            if line.startswith("MAPSET NAME:"):
+            if line.upper().startswith("MAPSET NAME:"):
                 # MAPSET NAME: <ALPS>
                 line = line.replace("MAPSET NAME: ", "")
                 line = line.strip().lstrip("<").rstrip(">")
@@ -41,7 +91,7 @@ def read_template(file):
                 line = line.replace(": Longitude", "").strip()
                 line = line.split(" to ", 1)
                 if len(line) != 2:
-                    return {}
+                    return None
                 
                 map["LONMIN"] = line[0].strip()
                 map["LONMAX"] = line[1].strip()
@@ -52,13 +102,21 @@ def read_template(file):
                 line = line.replace(": Latitude", "").strip()
                 line = line.split(" to ", 1)
                 if len(line) != 2:
-                    return {}
+                    return None
                 
                 map["LATMIN"] = line[0].strip()
                 map["LATMAX"] = line[1].strip()
                 continue
         
     return map
+
+def read_template(file):
+    if file.lower().endswith(".lkm"):
+        return read_template_from_map(file)
+    elif file.lower().endswith(".txt"):
+        return read_template_file(file)
+    
+    return None
 
 def convert(template, working_dir):
     if not "NAME" in template:
@@ -89,17 +147,18 @@ def convert(template, working_dir):
 
 def main():
     if len(sys.argv) < 2:
-        print "Too few arguments given! Please provide a template file."
+        print "Too few arguments given! Please provide a map or template file."
         return
     
     file = sys.argv[1]
     if not os.path.exists(file):
-        print "Template file \"" + file + "\" does not exist!"
+        print "Nap or template file \"" + file + "\" does not exist!"
         return
     
     working_dir = os.path.dirname(os.path.abspath(file))
     template = read_template(file)
-    convert(template, working_dir)
+    if template != None:
+        convert(template, working_dir)
     
 if __name__ == '__main__':
     main()    
