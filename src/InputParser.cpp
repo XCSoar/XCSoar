@@ -233,7 +233,15 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
             if (event) {
               TCHAR *allocated = StringMallocParse(d_misc);
               event_id = config.append_event(event, allocated, event_id);
-              free(allocated);
+
+              /* not freeing the string, because
+                 InputConfig::append_event() stores the string point
+                 without duplicating it; strictly speaking, this is a
+                 memory leak, but the input file is only loaded once
+                 at startup, so this is acceptable; in return, we
+                 don't have to duplicate the hard-coded defaults,
+                 which saves some memory */
+              //free(allocated);
 
             } else {
               LogStartUp(_T("Invalid event type: %s at %i"), d_event, line);
