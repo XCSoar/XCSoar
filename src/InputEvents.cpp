@@ -660,12 +660,11 @@ InputEvents::makeEvent(void (*event)(const TCHAR *), const TCHAR *misc,
     return 0;
   }
 
-  Events_count++;	// NOTE - Starts at 1 - 0 is a noop
   Events[Events_count].event = event;
   Events[Events_count].misc = misc;
   Events[Events_count].next = next;
 
-  return Events_count;
+  return Events_count++;
 }
 
 
