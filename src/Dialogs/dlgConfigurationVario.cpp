@@ -688,7 +688,7 @@ static bool
 FormKeyDown(WndForm &Sender, unsigned key_code)
 {
   switch (key_code) {
-  // JMW NO! This disables editing! //   case VK_LEFT:
+  case VK_LEFT:
   case '6':
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
     tabbed->PreviousPage();
@@ -696,7 +696,7 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
     //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
-    // JMW NO! This disables editing!  //  case VK_RIGHT:
+  case VK_RIGHT:
   case '7':
     ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
     tabbed->NextPage();
