@@ -12,21 +12,21 @@ def main():
         print "Working folder \"" + folder + "\" does not exist!"
         return
     
-    txt_files = []
+    lkm_files = []
     xcm_files = []
     for file in os.listdir(folder):
-        if file.lower().endswith(".txt"):
-            txt_files.append(file[:-4])
+        if file.lower().endswith(".lkm"):
+            lkm_files.append(file[:-4])
         if file.lower().endswith(".xcm"):
             xcm_files.append(file[:-4])
 
     # Filter already created XCM files from the todo list
     for file in xcm_files:
-        try: txt_files.remove(file)
+        try: lkm_files.remove(file)
         except ValueError: pass
       
-    for file in txt_files:
-        template = convert_lkm.read_template(os.path.join(folder, file + ".TXT"))
+    for file in lkm_files:
+        template = convert_lkm.read_template(os.path.join(folder, file + ".LKM"))
         convert_lkm.convert(template, folder)
     
 if __name__ == '__main__':
