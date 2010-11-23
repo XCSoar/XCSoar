@@ -14,7 +14,8 @@ def read_template(file):
             continue
         
         line = line.strip().upper().split("=", 1)
-        map[line[0]] = line[1]
+        if len(line) == 2:
+            map[line[0]] = line[1]
         
     return map
 
