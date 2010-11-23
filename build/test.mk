@@ -230,6 +230,7 @@ DEBUG_PROGRAM_NAMES = \
 	ReadGRecord VerifyGRecord AppendGRecord \
 	KeyCodeDumper \
 	LoadTopology \
+	RunInputParser \
 	RunWayPointParser RunAirspaceParser RunDeviceDriver \
 	RunWindZigZag \
 	RunCanvas RunMapWindow RunDialog \
@@ -425,6 +426,21 @@ LOAD_TOPOLOGY_LDADD = \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
 $(LOAD_TOPOLOGY_BIN): $(LOAD_TOPOLOGY_OBJS) $(LOAD_TOPOLOGY_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_INPUT_PARSER_SOURCES = \
+	$(SRC)/InputParser.cpp \
+	$(SRC)/MenuData.cpp \
+	$(SRC)/UtilsText.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/RunInputParser.cpp
+RUN_INPUT_PARSER_OBJS = $(call SRC_TO_OBJ,$(RUN_INPUT_PARSER_SOURCES))
+RUN_INPUT_PARSER_LDADD = \
+	$(IO_LIBS) \
+	$(UTIL_LIBS)
+$(TARGET_BIN_DIR)/RunInputParser$(TARGET_EXEEXT): $(RUN_INPUT_PARSER_OBJS) $(RUN_INPUT_PARSER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
