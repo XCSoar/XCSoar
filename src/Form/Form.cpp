@@ -261,6 +261,25 @@ check_key(const MSG &msg)
   return (r & DLGC_WANTMESSAGE) != 0;
 }
 
+static bool
+is_special_key(unsigned key_code)
+{
+  return key_code == VK_LEFT || key_code == VK_RIGHT ||
+    key_code == VK_UP || key_code == VK_DOWN ||
+    key_code == VK_TAB || key_code == VK_RETURN || key_code == VK_ESCAPE;
+}
+
+/**
+ * Is this "special" key handled by the focused control? (bypassing
+ * the dialog manager)
+ */
+gcc_pure
+static bool
+check_special_key(const MSG &msg)
+{
+  return !is_special_key(msg.wParam) || check_key(msg);
+}
+
 #endif /* !ENABLE_SDL */
 
 int WndForm::ShowModal(bool bEnableMap) {
@@ -341,6 +360,7 @@ int WndForm::ShowModal(bool bEnableMap) {
       continue;
 
     if (msg.message == WM_KEYDOWN && mOnKeyDownNotify != NULL &&
+        identify_descendant(msg.hwnd) && !check_special_key(msg) &&
         mOnKeyDownNotify(*this, msg.wParam))
       continue;
 
