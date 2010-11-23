@@ -135,27 +135,27 @@ public:
   void set_target(const GeoPoint &loc, const bool override_lock=false);
 
 /**
- * Set target location from a range and radial
- * referenced on the bearing from the previous target
+ * Set target location from a signed range & radial as bearing
+ * referenced from the previous target
  * used by dlgTarget
  *
- * @param range the range [0,1] from center to perimeter
- * of the oz
+ * @param range the signed range [-1,1] from near point on
+ * perimeter through center to far side of the oz perimeter
  *
- * @param radial the angle in degrees of the target
+ * @param radial the bearing in degrees of the target
  */
   void set_target(const fixed range, const fixed radial);
 
 /**
- * returns position of the target in range / radial format
- * referenced on the bearing from the previous target
- * used by dlgTarget
+ * returns position of the target in signed range & radial as
+ * bearing referenced from the previous target
+ * used by dlgTarget.
  *
- * @param &range returns the range [0,1] from center
- * to perimeter of the oz
+ * @param &range returns signed range [-1,1] from near point on
+ * perimeter through center to far side of the oz perimeter
  *
- * @param &radial returns the angle in degrees of
- * the target in the sector in polar coordinates
+ * @param &radial returns the bearing in degrees of
+ * the target
  */
   void get_target_range_radial(fixed &range, fixed &radial) const;
 
