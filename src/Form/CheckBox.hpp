@@ -70,10 +70,11 @@ public:
    */
   virtual bool on_clicked();
 
+#ifdef _WIN32_WCE
 protected:
   virtual bool on_key_check(unsigned key_code) const;
   virtual bool on_key_down(unsigned key_code);
-
+#endif
 
 private:
   /**

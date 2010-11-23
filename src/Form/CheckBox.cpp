@@ -46,6 +46,8 @@ CheckBoxControl::on_clicked()
   return false;
 }
 
+#ifdef _WIN32_WCE
+
 bool
 CheckBoxControl::on_key_check(unsigned key_code) const
 {
@@ -73,4 +75,4 @@ CheckBoxControl::on_key_down(unsigned key_code)
   return CheckBox::on_key_down(key_code);
 }
 
-
+#endif /* _WIN32_WCE */
