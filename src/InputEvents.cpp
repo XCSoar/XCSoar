@@ -232,7 +232,7 @@ apply_defaults(const TCHAR *const* default_modes,
     _tcscpy(mode_map[mode_map_count], default_modes[mode_map_count]);
 
   Events_count = num_default_events + 1;
-  memcpy(Events + 1, default_events, num_default_events * sizeof(Events[0]));
+  std::copy(default_events, default_events + num_default_events, Events + 1);
 
   while (default_key2event->event > 0) {
     Key2Event[default_key2event->mode][default_key2event->key] =
