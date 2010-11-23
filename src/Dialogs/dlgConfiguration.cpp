@@ -1113,7 +1113,8 @@ setVariables()
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpTextInput"));
-  if (wp) {
+  assert(wp != NULL);
+  if (has_pointer()) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Default"));
@@ -1121,7 +1122,10 @@ setVariables()
     dfe->addEnumText(_("HighScore Style"));
     dfe->Set(Appearance.TextInputStyle);
     wp->RefreshDisplay();
-  }
+  } else
+    /* on-screen keyboard doesn't work without a pointing device
+       (mouse or touch screen), hide the option on Altair */
+    wp->hide();
 
   wp = (WndProperty*)wf->FindByName(_T("prpDialogStyle"));
   if (wp) {
@@ -2057,16 +2061,15 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTextInput"));
-  if (wp)
-    {
-      if (Appearance.TextInputStyle != (TextInputStyle_t)(wp->GetDataField()->GetAsInteger()))
-        {
-          Appearance.TextInputStyle = (TextInputStyle_t)(wp->GetDataField()->GetAsInteger());
-          Profile::Set(szProfileAppTextInputStyle, Appearance.TextInputStyle);
-          changed = true;
-        }
+  if (has_pointer()) {
+    wp = (WndProperty*)wf->FindByName(_T("prpTextInput"));
+    assert(wp != NULL);
+    if (Appearance.TextInputStyle != (TextInputStyle_t)(wp->GetDataField()->GetAsInteger())) {
+      Appearance.TextInputStyle = (TextInputStyle_t)(wp->GetDataField()->GetAsInteger());
+      Profile::Set(szProfileAppTextInputStyle, Appearance.TextInputStyle);
+      changed = true;
     }
+  }
 
   wp = (WndProperty*)wf->FindByName(_T("prpDialogStyle"));
   if (wp)
