@@ -12,12 +12,11 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(6*NUM_WIND);
+  unsigned i = rand()%NUM_WIND;
+  plan_tests(6);
 
   // tests whether cruise efficiency is calculated correctly
-  for (int i=0; i<NUM_WIND; i++) {
-    test_cruise_efficiency(3,i);
-  }
+  test_cruise_efficiency(3,i);
 
   return exit_status();
 }

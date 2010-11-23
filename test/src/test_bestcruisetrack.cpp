@@ -13,10 +13,9 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(NUM_WIND-1);
+  unsigned i = rand()%(NUM_WIND-1)+1;
+  plan_tests(1);
 
-  for (int i=1; i<NUM_WIND; i++) {
-    test_bestcruisetrack(2,i);
-  }
+  test_bestcruisetrack(2,i);
   return exit_status();
 }

@@ -13,11 +13,10 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(NUM_WIND*2);
+  unsigned i = rand()%NUM_WIND;
+  plan_tests(2);
 
   // tests whether flying at VOpt for OR task is optimal
-  for (int i=0; i<NUM_WIND; i++) {
-    test_speed_factor(3,i);
-  }
+  test_speed_factor(3,i);
   return exit_status();
 }
