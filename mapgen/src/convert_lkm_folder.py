@@ -28,6 +28,7 @@ def main():
     for file in lkm_files:
         template = convert_lkm.read_template(os.path.join(folder, file + ".LKM"))
         convert_lkm.convert(template, folder)
+        print "-------------------"
     
 if __name__ == '__main__':
     main()    
