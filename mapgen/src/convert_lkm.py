@@ -6,16 +6,57 @@ import shutil
 
 def read_template(file):
     map = {}
+    type = None
 
     print "Opening template file \"" + file + "\" ..."
     f = open(file, "r")
     for line in f:
-        if line[0] == "#":
+        if type == None: 
+            type = 1
+            if line.startswith("CREATED BY"):
+                type = 2
+                continue
+            
+        line = line.strip()
+        if line == "" or line[0] == "#":
             continue
         
-        line = line.strip().upper().split("=", 1)
-        if len(line) == 2:
-            map[line[0]] = line[1]
+        if type == 1:
+            line = line.strip().upper().split("=", 1)
+            if len(line) == 2:
+                map[line[0]] = line[1]
+                
+        if type == 2:
+            if line.startswith("MAPSET NAME:"):
+                # MAPSET NAME: <ALPS>
+                line = line.replace("MAPSET NAME: ", "")
+                line = line.strip().lstrip("<").rstrip(">")
+                map["NAME"] = line
+                continue
+        
+            line = line.replace("BOUNDARIES", "").strip()
+            
+            if line.startswith(": Longitude"):
+                # : Longitude 4.5  to  16.5
+                line = line.replace(": Longitude", "").strip()
+                line = line.split(" to ", 1)
+                if len(line) != 2:
+                    return {}
+                
+                map["LONMIN"] = line[0].strip()
+                map["LONMAX"] = line[1].strip()
+                continue
+        
+            if line.startswith(": Latitude"):
+                # : Latitude 4.5  to  16.5
+                line = line.replace(": Latitude", "").strip()
+                line = line.split(" to ", 1)
+                if len(line) != 2:
+                    return {}
+                
+                map["LATMIN"] = line[0].strip()
+                map["LATMAX"] = line[1].strip()
+                continue
         
     return map
 
