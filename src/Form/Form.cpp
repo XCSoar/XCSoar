@@ -248,6 +248,19 @@ is_allowed_map(HWND hWnd, UINT message, bool enable_map)
     is_allowed_map_message(message);
 }
 
+/**
+ * Is this key handled by the focused control? (bypassing the dialog
+ * manager)
+ */
+gcc_pure
+static bool
+check_key(const MSG &msg)
+{
+  LRESULT r = ::SendMessage(msg.hwnd, WM_GETDLGCODE, msg.wParam,
+                            (LPARAM)&msg);
+  return (r & DLGC_WANTMESSAGE) != 0;
+}
+
 #endif /* !ENABLE_SDL */
 
 int WndForm::ShowModal(bool bEnableMap) {
@@ -337,9 +350,7 @@ int WndForm::ShowModal(bool bEnableMap) {
          control group - but we want it to behave like Shift-Tab and
          Tab */
 
-      LRESULT r = ::SendMessage(msg.hwnd, WM_GETDLGCODE, msg.wParam,
-                                (LPARAM)&msg);
-      if ((r & DLGC_WANTMESSAGE) == 0) {
+      if (!check_key(msg)) {
         /* this window doesn't handle VK_UP/VK_DOWN */
         if (msg.wParam == VK_DOWN)
           focus_next_control();
