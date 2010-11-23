@@ -124,16 +124,16 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
   (void)Sender;
 
   switch (key_code) {
-    case VK_LEFT:
-    case '6':
-      ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
-      NextPage(-1);
+  case VK_LEFT:
+  case '6':
+    ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
+    NextPage(-1);
     return true;
 
-    case VK_RIGHT:
-    case '7':
-      ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
-      NextPage(+1);
+  case VK_RIGHT:
+  case '7':
+    ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
+    NextPage(+1);
     return true;
 
   default:
