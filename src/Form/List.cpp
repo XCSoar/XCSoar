@@ -306,6 +306,7 @@ WndListFrame::on_key_down(unsigned key_code)
       break;
 
     SetOrigin(origin - items_visible);
+    SetCursorIndex(cursor >= items_visible ? cursor - items_visible : 0);
     return true;
 
   case VK_RIGHT:
@@ -313,6 +314,8 @@ WndListFrame::on_key_down(unsigned key_code)
       break;
 
     SetOrigin(origin + items_visible);
+    SetCursorIndex(cursor + items_visible < length ?
+                   cursor + items_visible : length - 1);
     return true;
 
   case VK_DOWN:
