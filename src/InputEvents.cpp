@@ -355,7 +355,6 @@ InputEvents::readFile(TLineReader &reader)
     if (line == 1 && _tcscmp(buffer, _T("#CLEAR")) == 0) {
       memset(&Key2Event, 0, sizeof(Key2Event));
       memset(&GC2Event, 0, sizeof(GC2Event));
-      memset(&Events, 0, sizeof(Events));
       Events_count = 1;
     } else if (buffer[0] == _T('\0')) {
       // Check valid line? If not valid, assume next record (primative, but works ok!)
