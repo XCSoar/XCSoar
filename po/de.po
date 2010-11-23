@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-11-02 23:33+0100\n"
-"PO-Revision-Date: 2010-11-11 01:01+0000\n"
-"Last-Translator: Folken Van Vanel <Unknown>\n"
+"PO-Revision-Date: 2010-11-23 15:54+0000\n"
+"Last-Translator: Niklas Fischer <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-11 21:12+0000\n"
+"X-Launchpad-Export-Date: 2010-11-23 22:16+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Language: de\n"
 
@@ -280,7 +280,7 @@ msgstr "Aus"
 #: src/InputEventsActions.cpp:1508 src/InputEventsActions.cpp:1513
 #: src/Dialogs/dlgStatus.cpp:198
 msgid "ON"
-msgstr "AN"
+msgstr "EIN"
 
 #: src/ExpandMacros.cpp:357 src/ExpandMacros.cpp:409
 #: src/InputEventsActions.cpp:1510 src/InputEventsActions.cpp:1513
@@ -308,7 +308,7 @@ msgstr "Gelände aus"
 #: src/ExpandMacros.cpp:390 src/ExpandMacros.cpp:396 src/ExpandMacros.cpp:399
 #: src/ExpandMacros.cpp:423 src/ExpandMacros.cpp:476
 msgid "On"
-msgstr "An"
+msgstr "Ein"
 
 #: src/ExpandMacros.cpp:393 src/ExpandMacros.cpp:420
 #: src/Dialogs/dlgConfiguration.cpp:843 src/Dialogs/dlgWindSettings.cpp:100
@@ -433,7 +433,7 @@ msgstr "Gleitzahl - Geradeausflug"
 #: src/InfoBoxes/Content/Factory.cpp:96
 #, no-c-format
 msgid "L/D Cru"
-msgstr "Überlandgleitzahl"
+msgstr "Überland GZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:97
 #, no-c-format
@@ -979,7 +979,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:335
 #, no-c-format
 msgid "Percentage climb"
-msgstr "Prozentsatz Steigen"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:336
 #, no-c-format
@@ -1484,7 +1484,7 @@ msgstr "V Agb errb."
 msgid ""
 "Achieved cross country speed while on current task, compensated for altitude."
 msgstr ""
-"Erreichte Überland-Geschwindigkeit während der Aufgabe, Höhenkompensiert."
+"Erreichte Überland-Geschwindigkeit während der Aufgabe (höhenkompensiert)."
 
 #: src/InfoBoxes/Content/Factory.cpp:551
 #, no-c-format
@@ -1746,7 +1746,7 @@ msgstr "AC  Ein"
 
 #: src/InfoBoxes/Content/Speed.cpp:114 src/InfoBoxes/Content/Speed.cpp:155
 msgid "Calibrate ON"
-msgstr "Kalibrieren AN"
+msgstr "Kalibrieren EIN"
 
 #: src/InfoBoxes/Content/Speed.cpp:115 src/InfoBoxes/Content/Speed.cpp:156
 msgid "Calibrate OFF"
@@ -1779,7 +1779,7 @@ msgstr "Keine Hilfe verfügbar."
 
 #: src/InputEventsActions.cpp:135
 msgid "Vario Sounds ON"
-msgstr "Vario-Ton AN"
+msgstr "Vario-Ton EIN"
 
 #: src/InputEventsActions.cpp:137
 msgid "Vario Sounds OFF"
@@ -1807,7 +1807,7 @@ msgstr "Zeige Luftraum AUS"
 
 #: src/InputEventsActions.cpp:202
 msgid "Show Airspace ON"
-msgstr "Zeige Luftraum AN"
+msgstr "Zeige Luftraum"
 
 #: src/InputEventsActions.cpp:238
 msgid "Screen Mode Full"
@@ -1823,7 +1823,7 @@ msgstr "Normaler Bildschirm"
 
 #: src/InputEventsActions.cpp:280
 msgid "AutoZoom ON"
-msgstr "Auto Anzeige AN"
+msgstr "Auto Zoom EIN"
 
 #: src/InputEventsActions.cpp:282 src/InputEventsActions.cpp:1605
 msgid "AutoZoom OFF"
@@ -1831,7 +1831,7 @@ msgstr "Auto Anzeige AUS"
 
 #: src/InputEventsActions.cpp:308
 msgid "Circling Zoom ON"
-msgstr "Zoom im Kreisflug AN"
+msgstr "Zoom im Kreisflug EIN"
 
 #: src/InputEventsActions.cpp:310
 msgid "Circling Zoom OFF"
@@ -1839,7 +1839,7 @@ msgstr "Zoom im Kreisflug AUS"
 
 #: src/InputEventsActions.cpp:375
 msgid "Pan mode ON"
-msgstr "Verschiebemodus AN"
+msgstr "Verschiebemodus EIN"
 
 #: src/InputEventsActions.cpp:377
 msgid "Pan mode OFF"
@@ -1875,7 +1875,7 @@ msgstr "Kein Wegpunkt ausgewählt!"
 
 #: src/InputEventsActions.cpp:718
 msgid "Auto MacCready ON"
-msgstr "Auto MacCready AN"
+msgstr "Auto MacCready EIN"
 
 #: src/InputEventsActions.cpp:720
 msgid "Auto MacCready OFF"
@@ -1911,7 +1911,7 @@ msgstr "Ballast %"
 
 #: src/InputEventsActions.cpp:1081
 msgid "NMEA Log ON"
-msgstr "NEMA Log AN"
+msgstr "NEMA Log EIN"
 
 #: src/InputEventsActions.cpp:1083
 msgid "NMEA Log OFF"
@@ -1919,7 +1919,7 @@ msgstr "NEMA Log OFF"
 
 #: src/InputEventsActions.cpp:1087
 msgid "Logger ON"
-msgstr "Logger AN"
+msgstr "Logger EIN"
 
 #: src/InputEventsActions.cpp:1089
 msgid "Logger OFF"
@@ -1931,7 +1931,7 @@ msgstr "Temperaturprognose"
 
 #: src/InputEventsActions.cpp:1330 src/InputEventsActions.cpp:1366
 msgid "Map labels ON"
-msgstr "Beschriftung AN"
+msgstr "Beschriftung EIN"
 
 #: src/InputEventsActions.cpp:1332
 msgid "Map labels MID"
@@ -2482,7 +2482,7 @@ msgstr "Kartenanzeige"
 #: src/Dialogs/dlgConfiguration.cpp:92
 #, no-c-format
 msgid "Symbols"
-msgstr "Symbole"
+msgstr "Kartensymbole"
 
 #: src/Dialogs/dlgConfiguration.cpp:93
 #, no-c-format
@@ -2580,7 +2580,7 @@ msgstr "Logger ID"
 
 #: src/Dialogs/dlgConfiguration.cpp:718
 msgid "All on"
-msgstr "Alles AN"
+msgstr "Alles EIN"
 
 #: src/Dialogs/dlgConfiguration.cpp:719
 msgid "Clip"
@@ -2592,11 +2592,11 @@ msgstr "Alles unter mir"
 
 #: src/Dialogs/dlgConfiguration.cpp:755
 msgid "ON/Fixed"
-msgstr "ON/Fix"
+msgstr "EIN/Fix"
 
 #: src/Dialogs/dlgConfiguration.cpp:756
 msgid "ON/Scaled"
-msgstr "ON/Skaliert"
+msgstr "EIN/Skaliert"
 
 #: src/Dialogs/dlgConfiguration.cpp:776
 msgid "Names"
@@ -2700,11 +2700,11 @@ msgstr "OLC Classic"
 
 #: src/Dialogs/dlgConfiguration.cpp:874
 msgid "OLC League"
-msgstr ""
+msgstr "OLC Wettbewerb"
 
 #: src/Dialogs/dlgConfiguration.cpp:875
 msgid "OLC Plus"
-msgstr ""
+msgstr "OLC Plus"
 
 #: src/Dialogs/dlgConfiguration.cpp:891
 msgid "Statue"
@@ -3277,7 +3277,7 @@ msgstr "An Aufgabe hinzufügen"
 
 #: Data/Dialogs/dlgTaskPoint.xml:41 Data/Dialogs/dlgTaskPoint_L.xml:42
 msgid "Finish radial of the OZ area"
-msgstr "Endanflugradial des OZ Gebiet"
+msgstr "Endanflugradial zur OZ"
 
 #: Data/Dialogs/dlgVario.xml:54 Data/Dialogs/dlgVario_L.xml:55
 msgid "TE mixing"
@@ -3377,7 +3377,7 @@ msgstr "Wegpunkt Info"
 #: Data/Dialogs/dlgConfiguration.xml:421
 #: Data/Dialogs/dlgConfiguration_L.xml:420
 msgid "Menu timeout*"
-msgstr "Menu Zeitabschaltung*"
+msgstr "Menü Zeitabschaltung*"
 
 #: Data/Dialogs/dlgVario.xml:50 Data/Dialogs/dlgVario_L.xml:51
 msgid "Calibration factor applied to total energy probe to obtain TE vario."
@@ -4109,7 +4109,7 @@ msgstr "Kreisflug Zoom"
 
 #: Data/Dialogs/dlgAirspaceWarning.xml:6
 msgid "ACK Warn"
-msgstr "Warnung quittieren"
+msgstr "Warnung Bestätigen"
 
 #: Data/Dialogs/dlgConfiguration.xml:453
 #: Data/Dialogs/dlgConfiguration_L.xml:452
@@ -4422,7 +4422,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint.xml:37 Data/Dialogs/dlgTaskPoint_L.xml:38
 msgid "Start radial of the OZ area"
-msgstr "Abflugradial aus dem OZ Gebiet"
+msgstr "Abflugradial aus der OZ"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:16
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:16
@@ -4582,7 +4582,7 @@ msgid ""
 "Enable voice announcement that the glider is within the task observation "
 "sector."
 msgstr ""
-"Aktiviere die Sprachansage, dass der Segler in das OZ Gebiet eingeflogen ist."
+"Aktiviere die Sprachansage, dass der Segler in die OZ eingeflogen ist."
 
 #: Data/Dialogs/dlgTarget_L.xml:31
 msgid "V rem"
@@ -4669,7 +4669,7 @@ msgstr "Erreichte Geschwindigkeit"
 #: Data/Dialogs/dlgConfiguration.xml:178
 #: Data/Dialogs/dlgConfiguration_L.xml:179
 msgid "Terrain brightness"
-msgstr "Gelände Helligkeit"
+msgstr "Geländehelligkeit"
 
 #: Data/Dialogs/dlgTaskProperties.xml:3 Data/Dialogs/dlgTaskProperties_L.xml:3
 msgid "Task Properties"
@@ -4828,6 +4828,8 @@ msgid ""
 "If enabled, then the wind vector received from external devices overrides "
 "XCSoar's internal wind calculation."
 msgstr ""
+"Wenn diese Einstellung aktiv ist, wird der Empfangene Wind von anderen "
+"Geräten der Berechnung von XCSoar vorgezogen."
 
 #: Data/Dialogs/dlgAirspaceSelect.xml:4 Data/Dialogs/dlgAirspaceSelect_L.xml:4
 #: Data/Dialogs/dlgWayPointSelect.xml:2 Data/Dialogs/dlgWayPointSelect_L.xml:2
@@ -5696,7 +5698,7 @@ msgstr "Zwei Arten stehen zur Auswahl. Normal, oder mit weißer Kontur."
 #: Data/Dialogs/dlgConfiguration.xml:561
 #: Data/Dialogs/dlgConfiguration_L.xml:560
 msgid "Auxiliary"
-msgstr "Zusatz"
+msgstr "Zusätzlich"
 
 #: Data/Dialogs/dlgStatus.xml:32 Data/Dialogs/dlgStatusTask.xml:6
 msgid "Remaining time"
@@ -5916,7 +5918,7 @@ msgstr "Batterie leer Verzögerung"
 #: Data/Dialogs/dlgConfiguration.xml:169
 #: Data/Dialogs/dlgConfiguration_L.xml:170
 msgid "Topology display"
-msgstr "Topologieanzeige"
+msgstr "Topologie"
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid ""
@@ -6218,7 +6220,7 @@ msgstr "Versetzen"
 #: Data/Dialogs/dlgConfiguration.xml:165
 #: Data/Dialogs/dlgConfiguration_L.xml:166
 msgid "Terrain display"
-msgstr "Geländeanzeige"
+msgstr "Gelände"
 
 #: Data/Dialogs/dlgConfiguration.xml:504
 #: Data/Dialogs/dlgConfiguration_L.xml:503
@@ -6246,7 +6248,7 @@ msgstr "interval, Batterie"
 #: Data/Dialogs/dlgConfiguration.xml:151
 #: Data/Dialogs/dlgConfiguration_L.xml:152
 msgid "North arrow*"
-msgstr "Pfeil Norden*"
+msgstr "Nordpfeil*"
 
 #: Data/Dialogs/dlgWaypointEdit.xml:8 Data/Dialogs/dlgWaypointEdit_L.xml:8
 msgid "Comment: "
@@ -6872,7 +6874,7 @@ msgstr ""
 
 #: Data/Input/default.xci:847
 msgid "Aux Info\n"
-msgstr "Weit. Info\n"
+msgstr "Zus. Info\n"
 
 #: Data/Input/default.xci:840
 msgid ""
