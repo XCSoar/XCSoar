@@ -188,7 +188,7 @@ AATPoint::set_target(const fixed range, const fixed radial)
 
   const TaskProjection &proj = get_task_projection();
 
-  const FlatPoint fprev = proj.fproject(get_previous()->get_location());
+  const FlatPoint fprev = proj.fproject(get_previous()->get_location_remaining());
   const FlatPoint floc = proj.fproject(get_location());
   const FlatLine flb (fprev,floc);
   const FlatLine fradius (floc,proj.fproject(get_location_min()));
@@ -216,7 +216,7 @@ AATPoint::get_target_range_radial(fixed &range, fixed &radial) const
 {
   const fixed oldrange = range;
 
-  const GeoPoint fprev = get_previous()->get_location();
+  const GeoPoint fprev = get_previous()->get_location_remaining();
   const GeoPoint floc = get_location();
   const Angle radialraw = (floc.bearing(get_location_target()) -
       fprev.bearing(floc)).as_bearing();
