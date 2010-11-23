@@ -16,6 +16,6 @@ int main(int argc, char** argv)
   unsigned i = rand()%(NUM_WIND-1)+1;
   plan_tests(1);
 
-  test_bestcruisetrack(2,i);
+  test_bestcruisetrack(1,i);
   return exit_status();
 }
