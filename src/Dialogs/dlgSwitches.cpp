@@ -24,7 +24,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Blackboard.hpp"
 #include "Units.hpp"
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 #include "DataField/Boolean.hpp"
 #include "MainWindow.hpp"
 

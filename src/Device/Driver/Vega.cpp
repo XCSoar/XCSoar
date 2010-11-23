@@ -28,7 +28,7 @@ Copyright_License {
 #include "Message.hpp"
 #include "Profile/Profile.hpp"
 #include "DeviceBlackboard.hpp"
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 #include "LogFile.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units.hpp"

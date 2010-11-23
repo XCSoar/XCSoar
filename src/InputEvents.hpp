@@ -20,8 +20,9 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef INPUTEVENTS_H
-#define INPUTEVENTS_H
+
+#ifndef XCSOAR_INPUT_EVENTS_HPP
+#define XCSOAR_INPUT_EVENTS_HPP
 
 #include <tchar.h>
 

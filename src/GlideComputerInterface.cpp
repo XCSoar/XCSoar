@@ -23,7 +23,7 @@ Copyright_License {
 */
 
 #include "GlideComputerInterface.hpp"
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 #include "GlideComputer.hpp"
 
 void 

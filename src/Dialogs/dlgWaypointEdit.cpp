@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Units.hpp"
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 #include "Screen/Layout.hpp"
 #include "WayPointFile.hpp"
 #include "Math/FastMath.h"

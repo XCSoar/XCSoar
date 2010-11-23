@@ -32,7 +32,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "PeriodClock.hpp"
 #include "GlideComputerInterface.hpp"
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 #include "SettingsComputer.hpp"
 #include "Math/Earth.hpp"
 #include "Logger/Logger.hpp"

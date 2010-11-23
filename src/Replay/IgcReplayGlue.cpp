@@ -34,7 +34,7 @@
 #include "UtilsText.hpp"
 #include "LocalPath.hpp"
 #include "Device/device.hpp"
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 #include "Compatibility/string.h"
 #include "DeviceBlackboard.hpp"
 #include "Components.hpp"

@@ -45,7 +45,7 @@ Copyright_License {
 #include "Device/Geoid.h"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 #include "Thread/Trigger.hpp"
 #include "DeviceBlackboard.hpp"
 #include "OS/PathName.hpp"

@@ -33,7 +33,7 @@ Copyright_License {
 #include "NMEA/Checksum.h"
 #include "NMEA/InputLine.hpp"
 #include "StringUtil.hpp"
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 #include "Compatibility/string.h" /* for _ttoi() */
 #include "Units.hpp"
 

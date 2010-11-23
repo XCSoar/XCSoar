@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 #include "Compatibility/string.h"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"

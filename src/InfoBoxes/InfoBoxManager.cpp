@@ -27,7 +27,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Protection.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"

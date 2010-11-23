@@ -44,7 +44,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 
 */
 
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 #include "Interface.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"

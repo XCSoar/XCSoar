@@ -28,7 +28,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "LocalTime.hpp"
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 #include "GlideComputer.hpp"
 #include "Language.hpp"
 #include "Units.hpp"

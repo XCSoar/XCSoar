@@ -8,19 +8,19 @@ $(OUT)/include/MathTables.h: $(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_E
 
 $(call SRC_TO_OBJ,$(SRC)/Math/FastMath.c): $(OUT)/include/MathTables.h
 
-$(OUT)/include/InputEvents_Text2Event.cpp: $(SRC)/InputEvents.h \
+$(OUT)/include/InputEvents_Text2Event.cpp: $(SRC)/InputEvents.hpp \
 	$(topdir)/tools/Text2Event.pl | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) $(topdir)/tools/Text2Event.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-$(OUT)/include/InputEvents_Text2GCE.cpp: $(SRC)/InputEvents.h \
+$(OUT)/include/InputEvents_Text2GCE.cpp: $(SRC)/InputEvents.hpp \
 	$(topdir)/tools/Text2GCE.pl | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) $(topdir)/tools/Text2GCE.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-$(OUT)/include/InputEvents_Text2NE.cpp: $(SRC)/InputEvents.h \
+$(OUT)/include/InputEvents_Text2NE.cpp: $(SRC)/InputEvents.hpp \
 	$(topdir)/tools/Text2NE.pl | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) $(topdir)/tools/Text2NE.pl $< >$@.tmp

@@ -32,7 +32,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 #include "Atmosphere.h"
 #include "Device/Geoid.h"
 #include "Dialogs/Dialogs.h"

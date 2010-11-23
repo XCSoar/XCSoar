@@ -24,7 +24,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
 #include "Units.hpp"
-#include "InputEvents.h"
+#include "InputEvents.hpp"
 
 #include <stdio.h>
 
