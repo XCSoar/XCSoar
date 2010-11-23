@@ -177,7 +177,8 @@ Fonts::Initialize()
 void
 Fonts::SizeInfoboxFont()
 {
-  SizeLogFont(LogInfoBox, InfoBoxLayout::ControlWidth, _T("1234m"));
+  if (!is_altair())
+    SizeLogFont(LogInfoBox, InfoBoxLayout::ControlWidth, _T("1234m"));
   InfoBox.set(LogInfoBox);
 }
 
