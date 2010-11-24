@@ -187,8 +187,8 @@ GLTexture::draw(int x_offset, int y_offset,
      roll our own translation */
   unsigned screen_height = SDL_GetVideoSurface()->h;
   glDrawTexiOES(x_offset + dest_x,
-                screen_height - y_offset - dest_y,
-                0, dest_width, -dest_height);
+                (int)screen_height - y_offset - dest_y,
+                0, dest_width, -(int)dest_height);
 #else
   GLfloat x0 = (GLfloat)src_x / width;
   GLfloat y0 = (GLfloat)src_y / height;
