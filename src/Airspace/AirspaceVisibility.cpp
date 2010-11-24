@@ -50,14 +50,14 @@ AirspaceVisible::altitude_visible(const AbstractAirspace& airspace) const
 
   case AUTO:
 
-    if ((m_altitude >= (airspace.get_base_altitude() - fixed(m_settings.AltWarningMargin)))
-        && (m_altitude <= (airspace.get_top_altitude() + fixed(m_settings.AltWarningMargin))))
+    if ((m_altitude >= (airspace.get_base_altitude() - fixed(m_settings.airspace_warnings.AltWarningMargin)))
+        && (m_altitude <= (airspace.get_top_altitude() + fixed(m_settings.airspace_warnings.AltWarningMargin))))
       return true;
     else
       return false;
 
   case ALLBELOW:
-    if (m_altitude >= (airspace.get_base_altitude() - fixed(m_settings.AltWarningMargin)))
+    if (m_altitude >= (airspace.get_base_altitude() - fixed(m_settings.airspace_warnings.AltWarningMargin)))
       return true;
     else
       return false;

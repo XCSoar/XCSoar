@@ -35,11 +35,15 @@ struct AirspaceWarningConfig {
   /** Time an acknowledgement will persist before a warning is reissued */
   unsigned AcknowledgementTime;
 
+  /** Altitude margin (m) outside of which to not display airspace for auto mode */
+  unsigned AltWarningMargin;    
+
   /** Class-specific warning flags */
   bool class_warnings[AIRSPACECLASSCOUNT];
 
   AirspaceWarningConfig()
-    :WarningTime(30), AcknowledgementTime(30) {
+    :WarningTime(30), AcknowledgementTime(30),
+     AltWarningMargin(100) {
     std::fill(class_warnings, class_warnings + AIRSPACECLASSCOUNT, true);
   }
 

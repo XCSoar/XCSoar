@@ -165,7 +165,7 @@ Profile::Use()
   Get(szProfileClipAlt,
       settings_computer.ClipAltitude);
   Get(szProfileAltMargin,
-      settings_computer.AltWarningMargin);
+      settings_computer.airspace_warnings.AltWarningMargin);
 
   Get(szProfileSafetyAltitudeArrival,
       settings_computer.safety_height_arrival);

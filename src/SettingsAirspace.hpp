@@ -49,7 +49,6 @@ struct SETTINGS_AIRSPACE
 
   AirspaceDisplayMode_t AltitudeMode; /**< Mode controlling how airspaces are filtered for display */
   unsigned ClipAltitude;        /**< Altitude (m) above which airspace is not drawn for clip mode */
-  unsigned AltWarningMargin;    /**< Altitude margin (m) outside of which to not display airspace for auto mode */
 
   /** Class-specific display flags */
   bool DisplayAirspaces[AIRSPACECLASSCOUNT];

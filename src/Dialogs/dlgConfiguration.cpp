@@ -729,7 +729,7 @@ setVariables()
   LoadFormProperty(*wf, _T("prpClipAltitude"), ugAltitude,
                    settings_computer.ClipAltitude);
   LoadFormProperty(*wf, _T("prpAltWarningMargin"), ugAltitude,
-                   settings_computer.AltWarningMargin);
+                   settings_computer.airspace_warnings.AltWarningMargin);
 
   LoadFormProperty(*wf, _T("prpAirspaceOutline"),
                    settings_map.bAirspaceBlackOutline);
@@ -1646,7 +1646,7 @@ void dlgConfigurationShowModal(void)
                               szProfileClipAlt);
 
   changed |= SaveFormProperty(*wf, _T("prpAltWarningMargin"),
-                              ugAltitude, settings_computer.AltWarningMargin,
+                              ugAltitude, settings_computer.airspace_warnings.AltWarningMargin,
                               szProfileAltMargin);
 
   changed |= SaveFormProperty(*wf, _T("prpAirspaceWarnings"),

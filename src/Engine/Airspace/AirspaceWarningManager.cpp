@@ -257,10 +257,26 @@ AirspaceWarningManager::update_predicted(const AIRCRAFT_STATE& state,
                                          const AirspaceWarning::AirspaceWarningState& warning_state,
                                          const fixed max_time) 
 {
+  // this is the time limit of intrusions, beyond which we are not interested.
+  // it can be the minimum of the user set warning time, or the time of the 
+  // task segment
+
+  const fixed max_time_limit = min(fixed(config.WarningTime), max_time);
+
+  // the ceiling is the max height for predicted intrusions, given
+  // that you may be climbing.  the ceiling is nominally set at 1000m
+  // above the current altitude, but the 1000m margin should be at
+  // least as big as config.AltWarningMargin since if the airspace is
+  // visible according to that display mode, it should have warnings
+  // collected for it.  It is very unlikely users will have more than 1000m
+  // in AltWarningMargin anyway.
+
+  const fixed ceiling = state.NavAltitude + fixed(max((unsigned)1000, config.AltWarningMargin));
+
   AirspaceIntersectionWarningVisitor visitor(state, perf, 
                                              *this, 
-                                             warning_state, max_time,
-                                             state.NavAltitude + fixed(1000));
+                                             warning_state, max_time_limit,
+                                             ceiling);
 
   GeoVector vector_predicted(state.Location, location_predicted);
   m_airspaces.visit_intersecting(state.Location, vector_predicted, visitor);
@@ -281,10 +297,8 @@ AirspaceWarningManager::update_task(const AIRCRAFT_STATE& state)
   const GeoPoint location_tp = m_task.getActiveTaskPoint()->get_location_remaining();
   const fixed time_remaining = m_task.get_stats().current_leg.solution_remaining.TimeElapsed; 
 
-  fixed max_time = min(fixed(config.WarningTime), time_remaining);
-
   return update_predicted(state, location_tp, perf_task,
-                          AirspaceWarning::WARNING_TASK, max_time);
+                          AirspaceWarning::WARNING_TASK, time_remaining);
 }
 
 
