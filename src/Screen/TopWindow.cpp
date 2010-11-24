@@ -89,6 +89,7 @@ TopCanvas::set()
 #endif
 
 #ifdef ENABLE_OPENGL
+  glViewport(0, 0, get_width(), get_height());
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 #ifdef ANDROID
