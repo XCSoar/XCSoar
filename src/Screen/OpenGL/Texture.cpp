@@ -151,7 +151,40 @@ GLTexture::load(SDL_Surface *src)
 
   if (!load_surface_into_texture(src)) {
     /* try again after conversion */
-    SDL_Surface *surface = SDL_DisplayFormat(src);
+    SDL_PixelFormat format;
+    format.palette = NULL;
+#ifdef ANDROID
+    format.BitsPerPixel = 16;
+    format.BytesPerPixel = 2;
+    format.Rloss = 3;
+    format.Gloss = 2;
+    format.Bloss = 3;
+    format.Rshift = 11;
+    format.Gshift = 5;
+    format.Bshift = 0;
+    format.Rmask = 0xf800;
+    format.Gmask = 0x07e0;
+    format.Bmask = 0x001f;
+#else
+    format.BitsPerPixel = 24;
+    format.BytesPerPixel = 4;
+    format.Rloss = format.Gloss = format.Bloss = 0;
+    format.Rshift = 16;
+    format.Gshift = 8;
+    format.Bshift = 0;
+    format.Rmask = 0xff0000;
+    format.Gmask = 0x00ff00;
+    format.Bmask = 0x0000ff;
+#endif
+    format.Aloss = 8;
+    format.Ashift = 0;
+    format.Amask = 0;
+    format.colorkey = 0;
+    format.alpha = 0xff;
+
+    SDL_Surface *surface = ::SDL_ConvertSurface(src, &format, SDL_SWSURFACE);
+    assert(surface != NULL);
+
     load_surface_into_texture(surface);
     SDL_FreeSurface(surface);
   }
