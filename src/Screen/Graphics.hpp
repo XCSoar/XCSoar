@@ -36,12 +36,18 @@ class Pen;
 struct SETTINGS_MAP;
 class LabelBlock;
 
+class Canvas;
+class Angle;
+#include "Screen/Point.hpp"
+
 namespace Graphics {
   void Initialise();
   void InitialiseConfigured(const SETTINGS_MAP &settings_map);
   void InitSnailTrail(const SETTINGS_MAP &settings_map);
   void InitLandableIcons();
   void InitAirspacePens(const SETTINGS_MAP &settings_map);
+  void DrawAircraft(Canvas &canvas, const Angle angle,
+                    const RasterPoint aircraft_pos);
 
   // airspace brushes/colours
   const Color GetAirspaceColour(const int i);

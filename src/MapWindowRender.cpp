@@ -26,6 +26,7 @@ Copyright_License {
 #include "Topology/TopologyRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Units.hpp"
+#include "Screen/Graphics.hpp"
 
 void
 MapWindow::RenderTerrain(Canvas &canvas)
@@ -139,8 +140,11 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   DrawFLARMTraffic(canvas, aircraft_pos);
 
   // Finally, draw you!
-  DrawAircraft(canvas, aircraft_pos);
-  
+  if (Basic().gps.Connected)
+    Graphics::DrawAircraft(canvas, 
+                           Basic().Heading - render_projection.GetScreenAngle(),
+                           aircraft_pos);
+
   // Render compass
   DrawCompass(canvas, rc);
 }

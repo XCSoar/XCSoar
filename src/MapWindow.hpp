@@ -172,9 +172,6 @@ private:
   // display element functions
   void CalculateScreenPositionsGroundline();
 
-  // display renderers
-  void DrawAircraft(Canvas &canvas, const RasterPoint aircraft_pos) const;
-
 public:
   void DrawBestCruiseTrack(Canvas &canvas,
                            const RasterPoint aircraft_pos) const;

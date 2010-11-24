@@ -33,46 +33,6 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-void
-MapWindow::DrawAircraft(Canvas &canvas, const RasterPoint aircraft_pos) const
-{
-  if (!Basic().gps.Connected)
-    return;
-
-  RasterPoint Aircraft[] = {
-    {1, -5},
-    {1, 0},
-    {14, 0},
-    {14, 1},
-    {1, 1},
-    {1, 8},
-    {4, 8},
-    {4, 9},
-    {-3, 9},
-    {-3, 8},
-    {0, 8},
-    {0, 1},
-    {-13, 1},
-    {-13, 0},
-    {0, 0},
-    {0, -5},
-    {1, -5},
-  };
-
-  int n = sizeof(Aircraft) / sizeof(Aircraft[0]);
-
-  const Angle angle = Basic().Heading - render_projection.GetScreenAngle();
-
-  PolygonRotateShift(Aircraft, n, aircraft_pos.x - 1, aircraft_pos.y, angle);
-
-  canvas.select(Graphics::hpAircraft);
-  canvas.polygon(Aircraft, n);
-
-  canvas.black_brush();
-
-  canvas.select(Graphics::hpAircraftBorder);
-  canvas.polygon(Aircraft, n);
-}
 
 void
 MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,

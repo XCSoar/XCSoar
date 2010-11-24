@@ -20,8 +20,9 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-
+#include <windef.h>
 #include "Screen/Graphics.hpp"
+#include "Screen/Point.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Ramp.hpp"
@@ -30,6 +31,8 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
+#include "Screen/Canvas.hpp"
+#include "Math/Screen.hpp"
 #include "Appearance.hpp"
 #include "SettingsMap.hpp"
 #include "resource.h"
@@ -305,4 +308,43 @@ Graphics::InitAirspacePens(const SETTINGS_MAP &settings_map)
   for (int i = 0; i < AIRSPACECLASSCOUNT; i++)
     hAirspacePens[i].set(Layout::Scale(2),
                          GetAirspaceColourByClass(i, settings_map));
+}
+
+
+void
+Graphics::DrawAircraft(Canvas &canvas, 
+                       const Angle angle,
+                       const RasterPoint aircraft_pos)
+{
+  RasterPoint Aircraft[] = {
+    {1, -5},
+    {1, 0},
+    {14, 0},
+    {14, 1},
+    {1, 1},
+    {1, 8},
+    {4, 8},
+    {4, 9},
+    {-3, 9},
+    {-3, 8},
+    {0, 8},
+    {0, 1},
+    {-13, 1},
+    {-13, 0},
+    {0, 0},
+    {0, -5},
+    {1, -5},
+  };
+
+  int n = sizeof(Aircraft) / sizeof(Aircraft[0]);
+
+  PolygonRotateShift(Aircraft, n, aircraft_pos.x - 1, aircraft_pos.y, angle);
+
+  canvas.select(Graphics::hpAircraft);
+  canvas.polygon(Aircraft, n);
+
+  canvas.black_brush();
+
+  canvas.select(Graphics::hpAircraftBorder);
+  canvas.polygon(Aircraft, n);
 }
