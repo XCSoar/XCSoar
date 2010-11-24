@@ -40,7 +40,7 @@ ScreenGlobalInit::ScreenGlobalInit()
     exit(EXIT_FAILURE);
   }
 
-#ifdef ENABLE_OPENGL
+#if defined(ENABLE_OPENGL) && !defined(ANDROID)
   ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
 #endif

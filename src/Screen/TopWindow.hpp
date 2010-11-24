@@ -33,6 +33,12 @@ Copyright_License {
 #ifdef ENABLE_SDL
 #include "Thread/Mutex.hpp"
 
+#if defined(ENABLE_OPENGL) && defined(ANDROID)
+extern "C" {
+  int SDL_ANDROID_CallJavaSwapBuffers();
+};
+#endif
+
 class TopCanvas : public Canvas {
 public:
   void set();
@@ -41,7 +47,11 @@ public:
 
   void flip() {
 #ifdef ENABLE_OPENGL
+#ifdef ANDROID
+    ::SDL_ANDROID_CallJavaSwapBuffers();
+#else
     ::SDL_GL_SwapBuffers();
+#endif
 #else
     ::SDL_Flip(surface);
 #endif

@@ -86,7 +86,9 @@ TopCanvas::set()
   }
 
 #ifdef ENABLE_OPENGL
+#ifndef ANDROID
   ::SDL_SetVideoMode(width, height, 0, flags);
+#endif
   OpenGL::screen_width = width;
   OpenGL::screen_height = height;
   Canvas::set(width, height);
