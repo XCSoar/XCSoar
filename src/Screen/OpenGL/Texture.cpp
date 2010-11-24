@@ -144,22 +144,6 @@ GLTexture::GLTexture(unsigned _width, unsigned _height)
 }
 
 void
-GLTexture::update(SDL_Surface *surface)
-{
-  unsigned pitch = surface->pitch / surface->format->BytesPerPixel;
-
-#ifdef ANDROID
-  /* 16 bit 5/6/5 on Android */
-  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, pitch, surface->h,
-                  GL_RGB, GL_UNSIGNED_SHORT_5_6_5, surface->pixels);
-#else
-  /* 32 bit R/G/B/A on full OpenGL */
-  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, pitch, surface->h,
-                  GL_BGRA, GL_UNSIGNED_BYTE, surface->pixels);
-#endif
-}
-
-void
 GLTexture::load(SDL_Surface *src)
 {
   width = src->w;
