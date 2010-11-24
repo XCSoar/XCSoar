@@ -24,6 +24,10 @@ Copyright_License {
 #include "Screen/TopWindow.hpp"
 #include "Asset.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Globals.hpp"
+#endif
+
 #ifdef ENABLE_SDL
 #include "Screen/SDL/Event.hpp"
 #include "PeriodClock.hpp"
@@ -83,6 +87,8 @@ TopCanvas::set()
 
 #ifdef ENABLE_OPENGL
   ::SDL_SetVideoMode(width, height, 0, flags);
+  OpenGL::screen_width = width;
+  OpenGL::screen_height = height;
   Canvas::set(width, height);
 #else
   Canvas::set(::SDL_SetVideoMode(width, height, 0, flags));

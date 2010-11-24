@@ -120,6 +120,11 @@ Canvas::segment(int x, int y, unsigned radius,
 void
 Canvas::text(int x, int y, const TCHAR *text)
 {
+#ifdef ANDROID
+  assert(x_offset == OpenGL::translate_x);
+  assert(y_offset == OpenGL::translate_y);
+#endif
+
   if (font == NULL)
     return;
 
@@ -139,14 +144,14 @@ Canvas::text(int x, int y, const TCHAR *text)
   if (background_mode != OPAQUE || background_color != Color::BLACK) {
     /* cut out the shape in black */
     glColor4f(1.0, 1.0, 1.0, 1.0);
-    texture->draw(x_offset, y_offset, x, y);
+    texture->draw(x, y);
   }
 
   if (text_color != Color::BLACK) {
     /* draw the text color on top */
     logic_op.set(GL_OR);
     text_color.set();
-    texture->draw(x_offset, y_offset, x, y);
+    texture->draw(x, y);
   }
 }
 
@@ -157,8 +162,12 @@ Canvas::stretch(int dest_x, int dest_y,
                 int src_x, int src_y,
                 unsigned src_width, unsigned src_height)
 {
-  texture.draw(x_offset, y_offset,
-               dest_x, dest_y, dest_width, dest_height,
+#ifdef ANDROID
+  assert(x_offset == OpenGL::translate_x);
+  assert(y_offset == OpenGL::translate_y);
+#endif
+
+  texture.draw(dest_x, dest_y, dest_width, dest_height,
                src_x, src_y, src_width, src_height);
 }
 
@@ -201,6 +210,10 @@ Canvas::stretch(int dest_x, int dest_y,
                 const Bitmap &src, int src_x, int src_y,
                 unsigned src_width, unsigned src_height)
 {
+#ifdef ANDROID
+  assert(x_offset == OpenGL::translate_x);
+  assert(y_offset == OpenGL::translate_y);
+#endif
   assert(src.defined());
 
   glColor4f(1.0, 1.0, 1.0, 1.0);
@@ -208,8 +221,7 @@ Canvas::stretch(int dest_x, int dest_y,
   GLTexture &texture = *src.native();
   GLEnable scope(GL_TEXTURE_2D);
   texture.bind();
-  texture.draw(x_offset, y_offset,
-               dest_x, dest_y, dest_width, dest_height,
+  texture.draw(dest_x, dest_y, dest_width, dest_height,
                src_x, src_y, src_width, src_height);
 }
 
@@ -218,6 +230,10 @@ Canvas::stretch(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 const Bitmap &src)
 {
+#ifdef ANDROID
+  assert(x_offset == OpenGL::translate_x);
+  assert(y_offset == OpenGL::translate_y);
+#endif
   assert(src.defined());
 
   glColor4f(1.0, 1.0, 1.0, 1.0);
@@ -225,8 +241,7 @@ Canvas::stretch(int dest_x, int dest_y,
   GLTexture &texture = *src.native();
   GLEnable scope(GL_TEXTURE_2D);
   texture.bind();
-  texture.draw(x_offset, y_offset,
-               dest_x, dest_y, dest_width, dest_height,
+  texture.draw(dest_x, dest_y, dest_width, dest_height,
                0, 0, src.get_width(), src.get_height());
 }
 

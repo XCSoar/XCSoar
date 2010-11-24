@@ -34,6 +34,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Timer.cpp
 ifeq ($(OPENGL),y)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/OpenGL/Globals.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/VertexArray.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Draw.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Cache.cpp \

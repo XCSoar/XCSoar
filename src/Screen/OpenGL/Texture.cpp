@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/OpenGL/Texture.hpp"
+#include "Screen/OpenGL/Globals.hpp"
 #include "Asset.hpp"
 #include "Compiler.h"
 
@@ -173,8 +174,7 @@ GLTexture::load(SDL_Surface *src)
 }
 
 void
-GLTexture::draw(int x_offset, int y_offset,
-                int dest_x, int dest_y,
+GLTexture::draw(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 int src_x, int src_y,
                 unsigned src_width, unsigned src_height) const
@@ -187,9 +187,8 @@ GLTexture::draw(int x_offset, int y_offset,
 
   /* glDrawTexiOES() circumvents the projection settings, thus we must
      roll our own translation */
-  unsigned screen_height = SDL_GetVideoSurface()->h;
-  glDrawTexiOES(x_offset + dest_x,
-                (int)screen_height - y_offset - dest_y - (int)dest_height,
+  glDrawTexiOES(OpenGL::translate_x + dest_x,
+                (int)OpenGL::screen_height - OpenGL::translate_y - dest_y - (int)dest_height,
                 0, dest_width, dest_height);
 #else
   GLfloat x0 = (GLfloat)src_x / width;

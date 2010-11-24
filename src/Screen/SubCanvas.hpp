@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 
 #ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Globals.hpp"
 #ifdef ANDROID
 #include <GLES/gl.h>
 #else
@@ -49,7 +50,14 @@ public:
     :relative_x(_x), relative_y(_y)
 #endif
   {
-#ifndef ENABLE_OPENGL
+#ifdef ENABLE_OPENGL
+#ifdef ANDROID
+    assert(canvas.x_offset == OpenGL::translate_x);
+    assert(canvas.y_offset == OpenGL::translate_y);
+    OpenGL::translate_x += _x;
+    OpenGL::translate_y += _y;
+#endif
+#else
     surface = canvas.surface;
 #endif
     x_offset = canvas.x_offset + _x;
@@ -65,6 +73,14 @@ public:
 
   ~SubCanvas() {
 #ifdef ENABLE_OPENGL
+#ifdef ANDROID
+    assert(x_offset == OpenGL::translate_x);
+    assert(y_offset == OpenGL::translate_y);
+
+    OpenGL::translate_x -= relative_x;
+    OpenGL::translate_y -= relative_y;
+#endif
+
     glMatrixMode(GL_PROJECTION);
     glTranslatef(-relative_x, -relative_y, 0);
 #endif
