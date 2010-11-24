@@ -50,7 +50,6 @@ class GLTexture;
  * 
  */
 class Canvas : private NonCopyable {
-  friend class WindowCanvas;
   friend class SubCanvas;
 
 protected:

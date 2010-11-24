@@ -25,7 +25,10 @@ Copyright_License {
 #include "Form/Control.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Fonts.hpp"
+
+#ifndef ENABLE_OPENGL
 #include "Screen/WindowCanvas.hpp"
+#endif
 
 #include <assert.h>
 
