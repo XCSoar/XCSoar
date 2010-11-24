@@ -197,13 +197,13 @@ GLTexture::draw(int x_offset, int y_offset,
 
   glBegin(GL_QUADS);
   glTexCoord2f(x0, y0);
-  glVertex3f(dest_x, dest_y, 0);
+  glVertex2i(dest_x, dest_y);
   glTexCoord2f(x1, y0);
-  glVertex3f(dest_x + dest_width, dest_y, 0);
+  glVertex2i(dest_x + dest_width, dest_y);
   glTexCoord2f(x1, y1);
-  glVertex3f(dest_x + dest_width, dest_y + dest_height, 0);
+  glVertex2i(dest_x + dest_width, dest_y + dest_height);
   glTexCoord2f(x0, y1);
-  glVertex3f(dest_x, dest_y + dest_height, 0);
+  glVertex2i(dest_x, dest_y + dest_height);
   glEnd();
 #endif
 }
