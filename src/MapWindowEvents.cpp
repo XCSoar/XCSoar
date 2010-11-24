@@ -22,11 +22,12 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "Screen/WindowCanvas.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
+#else
+#include "Screen/WindowCanvas.hpp"
 #endif
 
 bool
@@ -50,8 +51,8 @@ MapWindow::on_create()
   if (!DoubleBufferWindow::on_create())
     return false;
 
-  WindowCanvas canvas(*this);
 #ifndef ENABLE_OPENGL
+  WindowCanvas canvas(*this);
   buffer_canvas.set(canvas);
   stencil_canvas.set(canvas);
 #endif

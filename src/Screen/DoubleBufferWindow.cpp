@@ -22,9 +22,10 @@ Copyright_License {
 */
 
 #include "Screen/DoubleBufferWindow.hpp"
-#include "Screen/WindowCanvas.hpp"
 
 #ifndef ENABLE_OPENGL
+
+#include "Screen/WindowCanvas.hpp"
 
 bool
 DoubleBufferWindow::on_create()
