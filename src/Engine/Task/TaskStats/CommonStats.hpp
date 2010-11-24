@@ -6,7 +6,7 @@
 #include "Task/TaskStats/ContestResult.hpp"
 
 #ifdef DO_PRINT
-#include <ostream>
+#include <iostream>
 #endif
 
 /** 

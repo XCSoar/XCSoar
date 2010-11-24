@@ -2,10 +2,7 @@
 #include "harness_airspace.hpp"
 #include "TaskEventsPrint.hpp"
 #include "Util/AircraftStateFilter.hpp"
-
-#ifdef DO_PRINT
 #include <fstream>
-#endif
 
 Airspaces *airspaces = NULL;
 AirspaceWarningManager *airspace_warnings = NULL;
@@ -70,10 +67,8 @@ run_flight(TaskManager &task_manager, bool goto_target, double random_mag,
 
   ac.set_speed_factor(fixed(speed_factor));
 
-#ifdef DO_PRINT
   std::ofstream f4("results/res-sample.txt");
   std::ofstream f5("results/res-sample-filtered.txt");
-#endif
 
   bool do_print = verbose;
   bool first = true;
@@ -103,15 +98,13 @@ run_flight(TaskManager &task_manager, bool goto_target, double random_mag,
 
       time_planned = task_manager.get_stats().total.TimePlanned;
 
-#ifdef DO_PRINT
       if (verbose > 1) {
         printf("# time remaining %g\n", time_remaining);
         printf("# time planned %g\n", time_planned);
       }
-#endif
+
     }
 
-#ifdef DO_PRINT
     if (do_print) {
       PrintHelper::taskmanager_print(task_manager, ac.get_state());
       ac.print(f4);
@@ -123,16 +116,14 @@ run_flight(TaskManager &task_manager, bool goto_target, double random_mag,
         f5.flush();
       }
     }
-#endif
 
     if (airspaces)
       scan_airspaces(ac.get_state(), *airspaces, perf, do_print,
                      ac.target(task_manager));
 
     if (airspace_warnings) {
-#ifdef DO_PRINT
       if (verbose > 1) {
-        bool warnings_updated = airspace_warnings->update(ac.get_state(),
+        bool warnings_updated = airspace_warnings->update(ac.get_state(), 
                                                           false);
         if (warnings_updated) {
           printf("# airspace warnings updated, size %d\n",
@@ -141,7 +132,6 @@ run_flight(TaskManager &task_manager, bool goto_target, double random_mag,
           wait_prompt(ac.get_state().Time);
         }
       }
-#endif
     }
 
     n_samples++;
@@ -152,7 +142,6 @@ run_flight(TaskManager &task_manager, bool goto_target, double random_mag,
       aircraft_filter->update(ac.get_state());
   } while (ac.advance(task_manager));
 
-#ifdef DO_PRINT
   if (verbose) {
     PrintHelper::taskmanager_print(task_manager, ac.get_state());
     ac.print(f4);
@@ -161,7 +150,6 @@ run_flight(TaskManager &task_manager, bool goto_target, double random_mag,
     task_report(task_manager, "end of task\n");
   }
   wait_prompt(0);
-#endif
 
   time_elapsed = task_manager.get_stats().total.TimeElapsed;
   time_planned = task_manager.get_stats().total.TimePlanned;
@@ -212,7 +200,7 @@ test_flight(int test_num, int n_wind, const double speed_factor,
   case 7:
     goto_target = true;
     break;
-  }
+  };
 
   test_task(task_manager, waypoints, test_num);
 

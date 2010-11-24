@@ -37,17 +37,13 @@
 #include "TaskEventsPrint.hpp"
 #include "Task/Tasks/BaseTask/TaskPoint.hpp"
 
-#ifdef DO_PRINT
 #include <stdio.h>
-#endif
 
 void 
 TaskEventsPrint::transition_enter(const TaskPoint& tp) 
 {
   if (verbose) {
-#ifdef DO_PRINT
     printf("#- entered sector\n");
-#endif
   }
 }
 
@@ -64,9 +60,7 @@ void
 TaskEventsPrint::transition_exit(const TaskPoint &tp) 
 {
   if (verbose) {
-#ifdef DO_PRINT
     printf("#- exited sector\n");
-#endif
   }
 }
 
@@ -75,9 +69,7 @@ void
 TaskEventsPrint::active_changed(const TaskPoint &tp) 
 {
   if (verbose) {
-#ifdef DO_PRINT
     printf("#- active changed to wp %d\n", tp.get_waypoint().id);
-#endif
   }
 }
 
@@ -85,11 +77,9 @@ void
 TaskEventsPrint::construction_error(const char* error) 
 {
   if (verbose>2) {
-#ifdef DO_PRINT
     printf("#Task construction error: ");
     printf("#%s",error);
     printf("\n");
-#endif
   }
 }
 
@@ -97,9 +87,7 @@ void
 TaskEventsPrint::warning_start_speed() 
 {
   if (verbose) {
-#ifdef DO_PRINT
     printf("#- warning speed excessive\n");
-#endif
   }
 }
 
@@ -107,9 +95,7 @@ void
 TaskEventsPrint::request_arm(const TaskPoint &tp)  
 {
   if (verbose) {
-#ifdef DO_PRINT
     printf("#- ready to advance\n");
-#endif
   }
 }
 
@@ -117,9 +103,7 @@ void
 TaskEventsPrint::task_start() 
 {
   if (verbose) {
-#ifdef DO_PRINT
     printf("#- task started\n");
-#endif
   }
 }
 
@@ -127,9 +111,7 @@ void
 TaskEventsPrint::task_finish() 
 {
   if (verbose) {
-#ifdef DO_PRINT
     printf("#- task finished\n");
-#endif
   }
 }
 
@@ -138,9 +120,7 @@ void
 TaskEventsPrint::active_advanced(const TaskPoint &tp, const int i) 
 {
   if (verbose) {
-#ifdef DO_PRINT
     printf("#- advance to sector %d\n", i);
-#endif
   }
 }
 
@@ -148,12 +128,10 @@ void
 TaskEventsPrint::transition_flight_mode(const bool is_final)
 {
   if (verbose) {
-#ifdef DO_PRINT
     if (is_final) {
       printf("#- flight mode final glide \n");
     } else {
       printf("#- flight mode cruise \n");
     }
-#endif
   }
 }

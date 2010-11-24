@@ -35,9 +35,7 @@ bool test_airspace_extra(Airspaces &airspaces) {
 }
 
 void setup_airspaces(Airspaces& airspaces, const unsigned n) {
-#ifdef DO_PRINT
   std::ofstream fin("results/res-bb-in.txt");
-#endif
   for (unsigned i=0; i<n; i++) {
     AbstractAirspace* as;
     if (rand()%4!=0) {
@@ -66,9 +64,7 @@ void setup_airspaces(Airspaces& airspaces, const unsigned n) {
     }
     airspace_random_properties(*as);
     airspaces.insert(as);
-#ifdef DO_PRINT
     fin << *as;
-#endif
   }
 
   // try inserting nothing
@@ -87,47 +83,35 @@ public:
     do_report(_do_report)
     {      
       if (do_report) {
-#ifdef DO_PRINT
         fout = new std::ofstream(fname);
-#endif
       }
     };
   ~AirspaceVisitorPrint() {
-#ifdef DO_PRINT
     if (do_report) {
       delete fout;
     }
-#endif    
   }
   virtual void visit_general(const AbstractAirspace& as) {
     if (do_report) {
-#ifdef DO_PRINT
       *fout << "# Name: " << as.get_name_text().c_str()
             << " " << as.get_vertical_text().c_str()
             << "\n";
-#endif
     }
   }
   virtual void Visit(const AirspaceCircle& as) {
     if (do_report) {
-#ifdef DO_PRINT
       *fout << as;
-#endif
       visit_general(as);
     }
   }
   virtual void Visit(const AirspacePolygon& as) {
     if (do_report) {
-#ifdef DO_PRINT
       *fout << as;
-#endif
       visit_general(as);
     }
   }
 private:
-#ifdef DO_PRINT
   std::ofstream *fout;
-#endif
   const bool do_report;
 };
 
@@ -146,24 +130,19 @@ public:
     m_perf(perf)
     {      
       if (do_report) {
-#ifdef DO_PRINT
         fout = new std::ofstream(fname);
         iout = new std::ofstream(iname);
         yout = new std::ofstream(yname);
-#endif
       }
     };
   ~AirspaceIntersectionVisitorPrint() {
-#ifdef DO_PRINT
     if (do_report) {
       delete fout;
       delete iout;
       delete yout;
     }
-#endif    
   }
   virtual void intersection(const AbstractAirspace& as) {
-#ifdef DO_PRINT
     *fout << "# intersection point\n";
     for (AirspaceIntersectionVector::const_iterator it = m_intersections.begin();
          it != m_intersections.end(); ++it) {
@@ -178,30 +157,23 @@ public:
       *iout << "# intercept " << solution.elapsed_time << " h " << solution.altitude << "\n";
       *iout << solution.location.Longitude << " " << solution.location.Latitude << " " << "\n\n";
     }
-#endif
   }
   virtual void Visit(const AirspaceCircle& as) {
     if (do_report) {
-#ifdef DO_PRINT
       *yout << as;
-#endif
       intersection(as);
     }
   }
   virtual void Visit(const AirspacePolygon& as) {
     if (do_report) {
-#ifdef DO_PRINT
       *yout << as;
-#endif
       intersection(as);
     }
   }
 private:
-#ifdef DO_PRINT
   std::ofstream *fout;
   std::ofstream *yout;
   std::ofstream *iout;
-#endif
   const bool do_report;
   const AIRCRAFT_STATE m_state;
   const AirspaceAircraftPerformance &m_perf;
@@ -216,29 +188,21 @@ public:
     state(_state),
     m_perf(perf)
     {      
-#ifdef DO_PRINT
       fout = new std::ofstream(fname);
-#endif
     };
   ~AirspaceVisitorClosest() {
-#ifdef DO_PRINT
     delete fout;
-#endif    
   }
   virtual void closest(const AbstractAirspace& as) {
     GeoPoint c = as.closest_point(state.Location);
-#ifdef DO_PRINT
     *fout << "# closest point\n";
     *fout << c.Longitude << " " << c.Latitude << " " << "\n";
     *fout << state.Location.Longitude << " " << state.Location.Latitude << " " << "\n\n";
-#endif
     AirspaceInterceptSolution solution;
     GeoVector vec(state.Location, c);
     vec.Distance = fixed(20000); // set big distance (for testing)
     if (as.intercept(state, vec, m_perf, solution)) {
-#ifdef DO_PRINT
       *fout << "# intercept in " << solution.elapsed_time << " h " << solution.altitude << "\n";
-#endif
     }
   }
   virtual void Visit(const AirspaceCircle& as) {
@@ -248,9 +212,7 @@ public:
     closest(as);
   }
 private:
-#ifdef DO_PRINT
   std::ofstream *fout;
-#endif
   const AIRCRAFT_STATE& state;
   const AirspaceAircraftPerformance &m_perf;
 };
@@ -312,7 +274,6 @@ void scan_airspaces(const AIRCRAFT_STATE state,
     airspaces.visit_intersecting(state.Location, vec, ivisitor);
   }
 
-#ifdef DO_PRINT
   {
     AirspaceNearestSort ans(state.Location);
     const AbstractAirspace* as = ans.find_nearest(airspaces, range);
@@ -338,7 +299,6 @@ void scan_airspaces(const AIRCRAFT_STATE state,
       }
     }
   }
-#endif
 }
 
 
@@ -350,27 +310,19 @@ class AirspaceWarningPrint: public AirspaceWarningVisitor
 public:
   AirspaceWarningPrint(const char* fname,
                        const AirspaceWarning::AirspaceWarningState state):m_state(state) {
-#ifdef DO_PRINT
     fout = new std::ofstream(fname);
-#endif
   }
   ~AirspaceWarningPrint() {
-#ifdef DO_PRINT
     delete fout;
-#endif
   }
   virtual void Visit(const AirspaceWarning& as) {
     if (as.get_warning_state() == m_state) {
-#ifdef DO_PRINT
     *fout << as;
     *fout << as.get_airspace();
-#endif
     }
   }
 private:
-#ifdef DO_PRINT
   std::ofstream *fout;
-#endif
   AirspaceWarning::AirspaceWarningState m_state;
 };
 

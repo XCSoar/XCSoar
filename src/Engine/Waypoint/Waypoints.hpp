@@ -26,9 +26,6 @@
 #include "Util/RadixTree.hpp"
 #include <kdtree++/kdtree.hpp>
 #include "WaypointEnvelope.hpp"
-#ifdef DO_PRINT
-#include <iostream>
-#endif
 #include <deque>
 
 #include "Navigation/TaskProjection.hpp"

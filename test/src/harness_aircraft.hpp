@@ -26,9 +26,7 @@ public:
 
   bool advance(TaskManager &task_manager);
 
-#ifdef DO_PRINT
   void print(std::ostream &f4);
-#endif
   fixed time();
 
   void set_speed_factor(fixed f) {

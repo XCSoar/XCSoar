@@ -77,9 +77,7 @@ void distance_counts() {
 void print_queries(unsigned n, std::ostream &fout) {
 #ifdef INSTRUMENT_TASK
   if (n_queries>0) {
-#ifdef DO_PRINT
     fout << n << " " << count_intersections/n_queries << "\n";
-#endif
   }
   count_intersections = 0;
   n_queries = 0;
@@ -94,12 +92,10 @@ void print_queries(unsigned n, std::ostream &fout) {
  * @return character received by keyboard
  */
 char wait_prompt(const double time) {
-#ifdef DO_PRINT
   if (interactive) {
     printf("# %g [enter to continue]\n",time);
     return getchar();
   }
-#endif
   return 0;
 }
 

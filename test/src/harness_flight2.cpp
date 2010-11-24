@@ -2,9 +2,7 @@
 #include "harness_airspace.hpp"
 #include "harness_waypoints.hpp"
 #include "TaskEventsPrint.hpp"
-#ifdef DO_PRINT
 #include <fstream>
-#endif
 
 extern Airspaces *airspaces;
 

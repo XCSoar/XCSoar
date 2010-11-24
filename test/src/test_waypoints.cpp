@@ -12,9 +12,7 @@ public:
 
   virtual void Visit(const Waypoint& wp) {
     if (verbose) {
-#ifdef DO_PRINT
       _tprintf(_T("# visiting wp %d, '%s'\n"), wp.id, wp.Name.c_str());
-#endif
     }
     count++;
   }

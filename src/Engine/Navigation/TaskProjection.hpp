@@ -28,10 +28,6 @@
 #include "Flat/FlatPoint.hpp"
 #include "Compiler.h"
 
-#ifdef DO_PRINT
-#include <iostream>
-#endif
-
 /**
  * Class for performing Lambert Conformal Conic projections from
  * ellipsoidal Earth points to and from projected points.  Has
