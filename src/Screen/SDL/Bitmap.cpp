@@ -56,7 +56,7 @@ Bitmap::load(SDL_Surface *_surface)
 #else
   assert(surface == NULL);
 
-  surface = _surface;
+  surface = ConvertToDisplayFormat(_surface);
   return true;
 #endif
 }
@@ -106,7 +106,7 @@ Bitmap::load(unsigned id)
   if (original == NULL)
     return false;
 
-  load(ConvertToDisplayFormat(original));
+  load(original);
 
 #ifdef WIN32
   free(header);
@@ -129,8 +129,7 @@ Bitmap::load_file(const TCHAR *path)
 {
   NarrowPathName narrow_path(path);
   SDL_Surface *original = ::SDL_LoadBMP(narrow_path);
-  return original != NULL &&
-    load(ConvertToDisplayFormat(original));
+  return original != NULL && load(original);
 }
 
 void
