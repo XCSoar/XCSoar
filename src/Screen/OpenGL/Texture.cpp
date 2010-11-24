@@ -180,15 +180,17 @@ GLTexture::draw(int x_offset, int y_offset,
                 unsigned src_width, unsigned src_height) const
 {
 #ifdef ANDROID
-  const GLint rect[4] = { src_x, src_y, src_width, src_height };
+  const GLint rect[4] = { src_x, src_y + src_height, src_width,
+                          /* negative height to flip the texture */
+                          -(int)src_height };
   glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
 
   /* glDrawTexiOES() circumvents the projection settings, thus we must
      roll our own translation */
   unsigned screen_height = SDL_GetVideoSurface()->h;
   glDrawTexiOES(x_offset + dest_x,
-                (int)screen_height - y_offset - dest_y,
-                0, dest_width, -(int)dest_height);
+                (int)screen_height - y_offset - dest_y - (int)dest_height,
+                0, dest_width, dest_height);
 #else
   GLfloat x0 = (GLfloat)src_x / width;
   GLfloat y0 = (GLfloat)src_y / height;
