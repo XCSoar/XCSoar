@@ -28,8 +28,8 @@ Copyright_License {
 
 #include <GLES/gl.h>
 
-typedef GLfloat GLvalue;
-static const GLenum GL_VALUE = GL_FLOAT;
+typedef GLshort GLvalue;
+static const GLenum GL_VALUE = GL_SHORT;
 
 #else
 
