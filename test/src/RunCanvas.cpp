@@ -38,8 +38,11 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
-#include "Screen/WindowCanvas.hpp"
 #include "Screen/Init.hpp"
+
+#ifndef ENABLE_OPENGL
+#include "Screen/WindowCanvas.hpp"
+#endif
 
 #ifndef _MSC_VER
 #include <algorithm>
