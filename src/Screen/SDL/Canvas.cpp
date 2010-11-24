@@ -32,6 +32,8 @@ Copyright_License {
 #include <SDL_imageFilter.h>
 #endif
 
+#ifndef ENABLE_OPENGL
+
 void
 Canvas::reset()
 {
@@ -40,8 +42,6 @@ Canvas::reset()
     surface = NULL;
   }
 }
-
-#ifndef ENABLE_OPENGL
 
 void
 Canvas::polyline(const RasterPoint *lppt, unsigned cPoints)

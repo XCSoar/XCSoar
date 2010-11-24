@@ -54,16 +54,24 @@ VirtualCanvas::VirtualCanvas(const Canvas &canvas,
 
 #endif /* !ENABLE_SDL */
 
+#ifndef ENABLE_OPENGL
+
 VirtualCanvas::~VirtualCanvas()
 {
   reset();
 }
+
+#endif /* !OPENGL */
 
 void
 VirtualCanvas::set(unsigned _width, unsigned _height)
 {
   assert(_width < 0x1000000);
   assert(_height < 0x1000000);
+
+#ifdef ENABLE_OPENGL
+  Canvas::set(_width, _height);
+#else /* !OPENGL */
 
   reset();
 
@@ -82,6 +90,7 @@ VirtualCanvas::set(unsigned _width, unsigned _height)
 #else /* !ENABLE_SDL */
   Canvas::set(CreateCompatibleDC(NULL), _width, _height);
 #endif /* !ENABLE_SDL */
+#endif /* !OPENGL */
 }
 
 void

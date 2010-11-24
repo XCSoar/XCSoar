@@ -49,7 +49,9 @@ public:
     :relative_x(_x), relative_y(_y)
 #endif
   {
+#ifndef ENABLE_OPENGL
     surface = canvas.surface;
+#endif
     x_offset = canvas.x_offset + _x;
     y_offset = canvas.y_offset + _y;
     width = _width;

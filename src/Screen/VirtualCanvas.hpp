@@ -36,9 +36,13 @@ public:
   VirtualCanvas() {}
   VirtualCanvas(unsigned _width, unsigned _height);
   VirtualCanvas(const Canvas &canvas, unsigned _width, unsigned _height);
+
+#ifndef ENABLE_OPENGL
   ~VirtualCanvas();
+#endif
 
   void set(unsigned _width, unsigned _height);
+
   void set(const Canvas &canvas, unsigned _width, unsigned _height);
   void set(const Canvas &canvas);
 

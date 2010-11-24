@@ -81,7 +81,12 @@ TopCanvas::set()
     height = modes[0]->h;
   }
 
+#ifdef ENABLE_OPENGL
+  ::SDL_SetVideoMode(width, height, 0, flags);
+  Canvas::set(width, height);
+#else
   Canvas::set(::SDL_SetVideoMode(width, height, 0, flags));
+#endif
 
 #ifdef ENABLE_OPENGL
   glMatrixMode(GL_PROJECTION);

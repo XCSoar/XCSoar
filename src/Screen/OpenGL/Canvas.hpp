@@ -53,8 +53,6 @@ class Canvas : private NonCopyable {
   friend class SubCanvas;
 
 protected:
-  SDL_Surface *surface;
-
   int x_offset, y_offset;
   unsigned width, height;
 
@@ -68,21 +66,16 @@ protected:
 
 public:
   Canvas()
-    :surface(NULL), x_offset(0), y_offset(0), width(0), height(0),
+    :x_offset(0), y_offset(0), width(0), height(0),
      font(NULL), background_mode(OPAQUE) {}
-  explicit Canvas(SDL_Surface *_surface)
-    :surface(_surface), width(_surface->w), height(_surface->h),
+  Canvas(unsigned _width, unsigned _height)
+    :width(_width), height(_height),
      font(NULL), background_mode(OPAQUE) {}
 
-  void set(SDL_Surface *_surface) {
-    reset();
-
-    surface = _surface;
-    width = surface->w;
-    height = surface->h;
+  void set(unsigned _width, unsigned _height) {
+    width = _width;
+    height = _height;
   }
-
-  void reset();
 
 protected:
   /**
@@ -97,7 +90,7 @@ protected:
 
 public:
   bool defined() const {
-    return surface != NULL;
+    return true;
   }
 
   unsigned get_width() const {
