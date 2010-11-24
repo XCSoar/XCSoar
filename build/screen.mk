@@ -12,7 +12,6 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Brush.cpp \
 	$(SCREEN_SRC_DIR)/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/Color.cpp \
-	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/Font.cpp \
 	$(SCREEN_SRC_DIR)/Pen.cpp \
@@ -42,10 +41,12 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Texture.cpp
 else
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp
 endif
 else
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Init.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
