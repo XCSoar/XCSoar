@@ -45,7 +45,7 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   assert(nWidth > 0);
   assert(nHeight > 0);
 
-#ifdef ENABLE_SDL
+#ifdef ENABLE_OPENGL
   buffer = new BGRColor[corrected_width * height];
 #elif defined(ENABLE_SDL)
   Uint32 rmask, gmask, bmask, amask;
