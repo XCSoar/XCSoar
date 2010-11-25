@@ -114,7 +114,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
 
   Units_t unit = Units::GetUserUnitByGroup(unit_group);
 
-  DataField *df = ctl->GetDataField();
+  DataFieldFloat *df = (DataFieldFloat *)ctl->GetDataField();
   df->SetUnits(Units::GetUnitName(unit));
   df->SetAsFloat(Units::ToUserUnit(value, unit));
   ctl->RefreshDisplay();
@@ -139,7 +139,8 @@ GetFormValueFixed(const WndForm &form, const TCHAR *control_name)
     (const WndProperty *)form.FindByName(control_name);
   assert(control != NULL);
 
-  return control->GetDataField()->GetAsFixed();
+  const DataFieldFloat &df = *(const DataFieldFloat *)control->GetDataField();
+  return df.GetAsFixed();
 }
 
 bool

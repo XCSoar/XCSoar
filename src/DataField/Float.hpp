@@ -60,7 +60,7 @@ public DataField
   void SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
 
   virtual int GetAsInteger(void) const;
-  virtual fixed GetAsFixed() const;
+  fixed GetAsFixed() const;
   virtual const TCHAR *GetAsString(void) const;
   virtual const TCHAR *GetAsDisplayString(void) const;
 
@@ -74,7 +74,7 @@ public DataField
   #pragma warn +hid
   #endif
   virtual void SetAsInteger(int Value);
-  virtual void SetAsFloat(fixed Value);
+  void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);
 
 protected:

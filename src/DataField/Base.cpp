@@ -54,12 +54,6 @@ DataField::GetAsInteger() const
   return 0;
 }
 
-fixed
-DataField::GetAsFixed() const
-{
-  return fixed_zero;
-}
-
 const TCHAR *
 DataField::GetAsString() const
 {
@@ -74,12 +68,6 @@ DataField::GetAsDisplayString() const
 
 void
 DataField::SetAsInteger(int Value)
-{
-  (void)Value;
-}
-
-void
-DataField::SetAsFloat(fixed Value)
 {
   (void)Value;
 }

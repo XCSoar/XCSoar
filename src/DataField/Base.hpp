@@ -57,12 +57,10 @@ public:
   virtual void Dec(void);
 
   virtual int GetAsInteger() const;
-  virtual fixed GetAsFixed() const;
   virtual const TCHAR *GetAsString() const;
   virtual const TCHAR *GetAsDisplayString() const;
 
   virtual void SetAsInteger(int Value);
-  virtual void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);
 
   void SetUnits(const TCHAR *text) { _tcscpy(mUnits, text); }

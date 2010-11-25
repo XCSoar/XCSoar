@@ -62,9 +62,11 @@ OnCloseClicked(WndButton &Sender)
 static void
 OnRateData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
+  DataFieldFloat &df = *(DataFieldFloat *)Sender;
+
   switch (Mode) {
   case DataField::daChange:
-    replay.SetTimeScale(Sender->GetAsFixed());
+    replay.SetTimeScale(df.GetAsFixed());
     break;
 
   case DataField::daInc:
@@ -94,7 +96,8 @@ dlgLoggerReplayShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpRate"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(replay.GetTimeScale());
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(replay.GetTimeScale());
     wp->RefreshDisplay();
   }
 

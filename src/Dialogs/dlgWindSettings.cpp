@@ -119,14 +119,18 @@ dlgWindSettingsShowModal(void)
 
   if (!external_wind) {
     wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
-    if (wp)
+    if (wp != NULL) {
+      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
       XCSoarInterface::SetSettingsComputer().ManualWind.norm =
-        Units::ToSysSpeed(wp->GetDataField()->GetAsFixed());
+        Units::ToSysSpeed(df.GetAsFixed());
+    }
 
     wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
-    if (wp)
+    if (wp != NULL) {
+      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
       XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
-        Angle::degrees(wp->GetDataField()->GetAsFixed());
+        Angle::degrees(df.GetAsFixed());
+    }
 
     SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,
                      XCSoarInterface::SetSettingsComputer().AutoWindMode);

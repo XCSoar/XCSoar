@@ -50,6 +50,7 @@ Copyright_License {
 #include "Polar/Loader.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/Float.hpp"
 #include "DataField/FileReader.hpp"
 #include "Asset.hpp"
 #include "GlideRatio.hpp"
@@ -452,12 +453,13 @@ SetLocalTime(void)
 static void
 OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
+  DataFieldFloat &df = *(DataFieldFloat *)Sender;
   //  WndProperty* wp;
   int ival;
 
   switch(Mode){
   case DataField::daChange:
-    ival = iround(Sender->GetAsFixed() * 3600);
+    ival = iround(df.GetAsFixed() * 3600);
     if (XCSoarInterface::SettingsComputer().UTCOffset != ival) {
       XCSoarInterface::SetSettingsComputer().UTCOffset = ival;
       utcchanged = true;
@@ -1524,7 +1526,8 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
-    fixed val = Units::ToSysVSpeed(wp->GetDataField()->GetAsFixed());
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    fixed val = Units::ToSysVSpeed(df.GetAsFixed());
     if (settings_computer.safety_mc != val) {
       settings_computer.safety_mc = val;
       Profile::Set(szProfileSafetyMacCready,
@@ -1535,7 +1538,8 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpRiskGamma"));
   if (wp) {
-    fixed val = wp->GetDataField()->GetAsFixed();
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    fixed val = df.GetAsFixed();
     if (settings_computer.risk_gamma != val) {
       settings_computer.risk_gamma = val;
       Profile::Set(szProfileRiskGamma,
@@ -1607,7 +1611,8 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpUTCOffset"));
   if (wp) {
-    int ival = iround(wp->GetDataField()->GetAsFixed() * 3600);
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    int ival = iround(df.GetAsFixed() * 3600);
     if ((settings_computer.UTCOffset != ival) || (utcchanged)) {
       settings_computer.UTCOffset = ival;
 

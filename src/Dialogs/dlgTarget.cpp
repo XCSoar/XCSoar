@@ -313,8 +313,9 @@ RefreshCalculator()
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Units::ToUserUnit(speedach, Units::TaskSpeedUnit));
-    wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(Units::ToUserUnit(speedach, Units::TaskSpeedUnit));
+    df.SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }
 }
@@ -348,10 +349,12 @@ OnIsLockedClicked(WndButton &Sender)
 static void
 OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
+  DataFieldFloat &df = *(DataFieldFloat *)Sender;
+
   switch (Mode) {
   case DataField::daChange:
     if (target_point >= ActiveTaskPointOnEntry) {
-      const fixed RangeNew = Sender->GetAsFixed() / fixed(100);
+      const fixed RangeNew = df.GetAsFixed() / fixed(100);
       if (RangeNew != Range) {
         protected_task_manager.set_target(target_point, RangeNew, Radial);
         protected_task_manager.get_target_range_radial(target_point, Range, Radial);
@@ -373,11 +376,13 @@ OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
+  DataFieldFloat &df = *(DataFieldFloat *)Sender;
+
   fixed RadialNew;
   switch (Mode) {
   case DataField::daChange:
     if (target_point >= ActiveTaskPointOnEntry) {
-      fixed rTemp = Sender->GetAsFixed();
+      fixed rTemp = df.GetAsFixed();
       if (fabs(Radial) > fixed(90)) {
         if (rTemp < fixed_zero)
           RadialNew = rTemp + fixed(180);

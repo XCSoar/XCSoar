@@ -84,7 +84,8 @@ OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
     device_blackboard.SetQNH(Sender->GetAsFixed());
     wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
     if (wp) {
-      wp->GetDataField()->SetAsFloat(Units::ToUserUnit(
+      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+      df.SetAsFloat(Units::ToUserUnit(
           XCSoarInterface::Basic().BaroAltitude, Units::AltitudeUnit));
       wp->RefreshDisplay();
     }
@@ -108,7 +109,8 @@ SetAltitude()
       if (!XCSoarInterface::Basic().BaroAltitudeAvailable) {
         wp->hide();
       } else {
-        wp->GetDataField()-> SetAsFloat(Units::ToUserUnit(
+        DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+        df.SetAsFloat(Units::ToUserUnit(
             XCSoarInterface::Basic().BaroAltitude, Units::AltitudeUnit));
         wp->RefreshDisplay();
       }
@@ -124,18 +126,20 @@ SetBallast(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpBallastPercent"));
   if (wp) {
-    if (glide_polar->is_ballastable())
-      wp->GetDataField()->SetAsFloat(glide_polar->get_ballast() * 100);
-    else
+    if (glide_polar->is_ballastable()) {
+      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+      df.SetAsFloat(glide_polar->get_ballast() * 100);
+    } else
       wp->hide();
 
     wp->RefreshDisplay();
   }
   wp = (WndProperty*)wf->FindByName(_T("prpBallastLitres"));
   if (wp) {
-    if (glide_polar->is_ballastable())
-      wp->GetDataField()->SetAsFloat(glide_polar->get_ballast_litres());
-    else
+    if (glide_polar->is_ballastable()) {
+      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+      df.SetAsFloat(glide_polar->get_ballast_litres());
+    } else
       wp->hide();
 
     wp->RefreshDisplay();
@@ -143,9 +147,10 @@ SetBallast(void)
   wp = (WndProperty*)wf->FindByName(_T("prpWingLoading"));
   if (wp) {
     const fixed wl = glide_polar->get_wing_loading();
-    if (wl > fixed_zero)
-      wp->GetDataField()->SetAsFloat(wl);
-    else
+    if (wl > fixed_zero) {
+      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+      df.SetAsFloat(wl);
+    } else
       wp->hide();
 
     wp->RefreshDisplay();
@@ -169,6 +174,8 @@ OnTimerNotify(WndForm &Sender)
 static void
 OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
+  DataFieldFloat &df = *(DataFieldFloat *)Sender;
+
   switch (Mode) {
   case DataField::daSpecial:
     if (glide_polar->get_ballast() > fixed(0.01))
@@ -180,7 +187,7 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
     SetButtons();
     break;
   case DataField::daChange:
-    glide_polar->set_ballast(Sender->GetAsFixed() / 100);
+    glide_polar->set_ballast(df.GetAsFixed() / 100);
     changed = true;
     SetBallast();
     break;

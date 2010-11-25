@@ -26,6 +26,7 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Math/FastMath.h"
 #include "DataField/Boolean.hpp"
+#include "DataField/Float.hpp"
 #include "MainWindow.hpp"
 #include "PeriodClock.hpp"
 
@@ -59,9 +60,11 @@ VegaWriteDemo()
 static void
 OnVegaDemoW(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
+  DataFieldFloat &df = *(DataFieldFloat *)Sender;
+
   switch (Mode){
   case DataField::daChange:
-    VegaDemoW = Units::ToSysVSpeed(Sender->GetAsFixed());
+    VegaDemoW = Units::ToSysVSpeed(df.GetAsFixed());
     VegaWriteDemo();
     break;
 
@@ -75,9 +78,11 @@ OnVegaDemoW(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 OnVegaDemoV(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
+  DataFieldFloat &df = *(DataFieldFloat *)Sender;
+
   switch (Mode){
   case DataField::daChange:
-    VegaDemoV = Units::ToSysSpeed(Sender->GetAsFixed());
+    VegaDemoV = Units::ToSysSpeed(df.GetAsFixed());
     VegaWriteDemo();
     break;
 
@@ -127,15 +132,17 @@ dlgVegaDemoShowModal()
 
   wp = (WndProperty*)wf->FindByName(_T("prpVegaDemoW"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Units::ToUserVSpeed(fixed(VegaDemoW)));
-    wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(Units::ToUserVSpeed(fixed(VegaDemoW)));
+    df.SetUnits(Units::GetVerticalSpeedName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpVegaDemoV"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Units::ToUserVSpeed(fixed(VegaDemoV)));
-    wp->GetDataField()->SetUnits(Units::GetSpeedName());
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(Units::ToUserVSpeed(fixed(VegaDemoV)));
+    df.SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
 

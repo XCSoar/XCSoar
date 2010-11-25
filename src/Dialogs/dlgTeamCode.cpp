@@ -22,6 +22,7 @@
 */
 
 #include "Dialogs/Internal.hpp"
+#include "DataField/Float.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "SettingsComputer.hpp"
 #include "Blackboard.hpp"
@@ -66,13 +67,15 @@ Update()
 
   wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(teammateBearing.value_degrees());
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(teammateBearing.value_degrees());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Units::ToUserDistance(fixed(teammateRange)));
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(Units::ToUserDistance(fixed(teammateRange)));
     wp->RefreshDisplay();
   }
 

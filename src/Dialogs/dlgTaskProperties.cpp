@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
+#include "DataField/Float.hpp"
 
 #include "Dialogs/dlgTaskHelpers.hpp"
 
@@ -91,7 +92,8 @@ RefreshView()
   wp = ((WndProperty*)wf->FindByName(_T("prpMinTime")));
   if (wp) {
     wp->set_visible(aat_types);
-    wp->GetDataField()->SetAsFloat(p.aat_min_time/60);
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(p.aat_min_time/60);
     wp->RefreshDisplay();
   }
 
@@ -106,21 +108,24 @@ RefreshView()
   wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxSpeed")));
   if (wp) {
     wp->set_visible(racing_types);
-    wp->GetDataField()->SetAsFloat(Units::ToUserSpeed(p.start_max_speed));
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(Units::ToUserSpeed(p.start_max_speed));
     wp->RefreshDisplay();
   }
 
   wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxHeight")));
   if (wp) {
     wp->set_visible(racing_types);
-    wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(fixed(p.start_max_height)));
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(Units::ToUserAltitude(fixed(p.start_max_height)));
     wp->RefreshDisplay();
   }
 
   wp = ((WndProperty*)wf->FindByName(_T("prpFinishMinHeight")));
   if (wp) {
     wp->set_visible(racing_types);
-    wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(fixed(p.finish_min_height)));
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(Units::ToUserAltitude(fixed(p.finish_min_height)));
     wp->RefreshDisplay();
   }
 

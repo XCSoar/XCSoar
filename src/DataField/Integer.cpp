@@ -38,12 +38,6 @@ DataFieldInteger::GetAsInteger(void) const
   return mValue;
 }
 
-fixed
-DataFieldInteger::GetAsFixed() const
-{
-  return fixed(mValue);
-}
-
 const TCHAR *
 DataFieldInteger::GetAsString(void) const
 {
@@ -78,12 +72,6 @@ DataFieldInteger::SetAsInteger(int Value)
     if (!GetDetachGUI())
       (mOnDataAccess)(this, daChange);
   }
-}
-
-void
-DataFieldInteger::SetAsFloat(fixed Value)
-{
-  SetAsInteger(iround(Value));
 }
 
 void

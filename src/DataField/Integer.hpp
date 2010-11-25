@@ -55,7 +55,6 @@ public:
   virtual void SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
 
   virtual int GetAsInteger(void) const;
-  virtual fixed GetAsFixed() const;
   virtual const TCHAR *GetAsString(void) const;
   virtual const TCHAR *GetAsDisplayString(void) const;
 
@@ -72,7 +71,6 @@ public:
   #endif
 
   virtual void SetAsInteger(int Value);
-  virtual void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);
 
 protected:

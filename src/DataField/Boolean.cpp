@@ -50,12 +50,6 @@ DataFieldBoolean::GetAsInteger(void) const
     return 0;
 }
 
-fixed
-DataFieldBoolean::GetAsFixed() const
-{
-  return mValue ? fixed_one : fixed_zero;
-}
-
 const TCHAR *
 DataFieldBoolean::GetAsString(void) const
 {
@@ -86,14 +80,6 @@ DataFieldBoolean::SetAsInteger(int Value)
 {
   if (GetAsInteger() != Value) {
     SetAsBoolean(!(Value == 0));
-  }
-}
-
-void
-DataFieldBoolean::SetAsFloat(fixed Value)
-{
-  if (GetAsFixed() != Value) {
-    SetAsBoolean(Value != fixed_zero);
   }
 }
 

@@ -49,7 +49,6 @@ public:
 
   bool GetAsBoolean(void) const;
   virtual int GetAsInteger(void) const;
-  virtual fixed GetAsFixed(void) const;
   virtual const TCHAR *GetAsString(void) const;
 
   virtual void
@@ -73,7 +72,6 @@ public:
 
   void SetAsBoolean(bool Value);
   virtual void SetAsInteger(int Value);
-  virtual void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);
 };
 

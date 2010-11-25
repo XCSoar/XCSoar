@@ -78,7 +78,8 @@ RefreshCalculator(void)
   // update outputs
   wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat((
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat((
         XCSoarInterface::Calculated().common_stats.task_time_remaining +
         XCSoarInterface::Calculated().common_stats.task_time_elapsed) / 60);
     wp->RefreshDisplay();
@@ -88,7 +89,8 @@ RefreshCalculator(void)
   wp = (WndProperty*)wf->FindByName(_T("prpAATTime"));
   if (wp) {
     if (XCSoarInterface::Calculated().task_stats.has_targets) {
-      wp->GetDataField()->SetAsFloat(
+      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+      df.SetAsFloat(
           protected_task_manager.get_ordered_task_behaviour().aat_min_time / 60);
       wp->RefreshDisplay();
     } else {
@@ -100,8 +102,9 @@ RefreshCalculator(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Units::ToUserDistance(rPlanned));
-    wp->GetDataField()->SetUnits(Units::GetDistanceName());
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(Units::ToUserDistance(rPlanned));
+    df.SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
   }
 
@@ -115,8 +118,9 @@ RefreshCalculator(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpEffectiveMacCready"));
   if (wp) {
-    wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
-    wp->GetDataField()->SetAsFloat(Units::ToUserVSpeed(emc));
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetUnits(Units::GetVerticalSpeedName());
+    df.SetAsFloat(Units::ToUserVSpeed(emc));
     wp->RefreshDisplay();
   }
 
@@ -126,7 +130,8 @@ RefreshCalculator(void)
     fixed rMax = XCSoarInterface::Calculated().task_stats.distance_max;
     fixed rMin = XCSoarInterface::Calculated().task_stats.distance_min;
     fixed range = (fixed_two * (rPlanned - rMin) / (rMax - rMin)) - fixed_one;
-    wp->GetDataField()->SetAsFloat(range * fixed(100));
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(range * fixed(100));
     wp->RefreshDisplay();
   }
 /*
@@ -141,17 +146,19 @@ RefreshCalculator(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Units::ToUserTaskSpeed(
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(Units::ToUserTaskSpeed(
         XCSoarInterface::Calculated().task_stats.total.remaining_effective.get_speed()));
-    wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
+    df.SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Units::ToUserTaskSpeed(
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetAsFloat(Units::ToUserTaskSpeed(
         XCSoarInterface::Calculated().task_stats.total.travelled.get_speed()));
-    wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
+    df.SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }
 
@@ -194,7 +201,7 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
     }
     break;
   case DataField::daChange:
-    MACCREADY = Units::ToSysVSpeed(Sender->GetAsFixed());
+    MACCREADY = Units::ToSysVSpeed(df->GetAsFixed());
     SetMC(MACCREADY);
     RefreshCalculator();
     break;
@@ -208,6 +215,7 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
+  DataFieldFloat &df = *(DataFieldFloat *)Sender;
   fixed clast = protected_task_manager.get_glide_polar().get_cruise_efficiency();
   (void)clast; // unused for now
 
@@ -222,7 +230,7 @@ OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 #endif
     break;
   case DataField::daChange:
-    cruise_efficiency = Sender->GetAsFixed() / 100;
+    cruise_efficiency = df.GetAsFixed() / 100;
 #ifdef OLD_TASK
     GlidePolar::SetCruiseEfficiency(cruise_efficiency);
     if (fabs(cruise_efficiency-clast) > fixed_one / 100) {
