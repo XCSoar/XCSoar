@@ -222,7 +222,7 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   const bool last_finished = task_finished();
 
   const int t_min = max(0, (int)activeTaskPoint - 1);
-  const int t_max = min(n_task - 1, (int)activeTaskPoint + 1);
+  const int t_max = min(n_task - 1, (int)activeTaskPoint);
   bool full_update = false;
 
   for (int i = t_min; i <= t_max; i++) {
