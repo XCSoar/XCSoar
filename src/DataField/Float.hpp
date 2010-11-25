@@ -64,8 +64,6 @@ public DataField
   virtual const TCHAR *GetAsString(void) const;
   virtual const TCHAR *GetAsDisplayString(void) const;
 
-  virtual void Set(int Value){ Set(fixed(Value)); };
-
   #if defined(__BORLANDC__)
   #pragma warn -hid
   #endif
