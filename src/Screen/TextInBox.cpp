@@ -32,8 +32,6 @@ Copyright_License {
 static POINT
 TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
 {
-  const int LabelMargin = 4;
-
   POINT offset;
   offset.x = 0;
   offset.y = 0;
@@ -50,31 +48,6 @@ TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
   // If label is right of maprect
   if (MapRect.right < brect.right) {
     int d = MapRect.right - brect.right;
-
-    if (offset.y < LabelMargin) {
-      int dy;
-
-      if (d > -LabelMargin) {
-        dy = LabelMargin - offset.y;
-        if (d > -dy)
-          dy = -d;
-      } else {
-        int x = d + (brect.right - brect.left) + 10;
-
-        dy = x - offset.y;
-
-        if (dy < 0)
-          dy = 0;
-
-        if (dy > LabelMargin)
-          dy = LabelMargin;
-      }
-
-      brect.top += dy;
-      brect.bottom += dy;
-      offset.y += dy;
-    }
-
     brect.right += d;
     brect.left += d;
     offset.x += d;
@@ -82,24 +55,10 @@ TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
 
   // If label is below maprect
   if (MapRect.bottom < brect.bottom) {
-    if (offset.x == 0) {
-      int d = MapRect.bottom - brect.bottom;
-      brect.top += d;
-      brect.bottom += d;
-      offset.y += d;
-    } else {
-      if (offset.x < -LabelMargin) {
-        int d = -(brect.bottom - brect.top) - 10;
-        brect.top += d;
-        brect.bottom += d;
-        offset.y += d;
-      } else {
-        int d = -(2 * offset.x + (brect.bottom - brect.top));
-        brect.top += d;
-        brect.bottom += d;
-        offset.y += d;
-      }
-    }
+    int d = MapRect.bottom - brect.bottom;
+    brect.top += d;
+    brect.bottom += d;
+    offset.y += d;
   }
 
   // If label is left of maprect
