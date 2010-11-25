@@ -140,10 +140,10 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       return true;
     }
   } else if (Mode.Mode == Filled) {
-    brect.left = x - 1;
-    brect.right = brect.left + tsize.cx + 1;
-    brect.top = y + ((tsize.cy + 4) >> 3);
-    brect.bottom = brect.top + tsize.cy - ((tsize.cy + 4) >> 3);
+    brect.left = x - 2;
+    brect.right = brect.left + tsize.cx + 4;
+    brect.top = y + ((tsize.cy + 4) >> 3) - 2;
+    brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
 
     POINT offset = TextInBoxMoveInView(brect, MapRect);
     x += offset.x;
