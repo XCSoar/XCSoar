@@ -68,12 +68,12 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const RECT &rc,
     return; // early exit
   }
 
-  int x = rc.left + IBLSCALE(2);
-  int y = rc.bottom - IBLSCALE(35);
+  int x = rc.left + Layout::FastScale(2);
+  int y = rc.bottom - Layout::FastScale(35);
   icon->draw(canvas, x, y);
 
-  x += icon->get_size().cx + IBLSCALE(2);
-  y = rc.bottom - IBLSCALE(34);
+  x += icon->get_size().cx + Layout::FastScale(2);
+  y = rc.bottom - Layout::FastScale(34);
 
   TextInBoxMode_t mode;
   mode.Mode = RoundedBlack;
