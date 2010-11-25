@@ -43,6 +43,7 @@ TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
     // Move label down into maprect
     int d = MapRect.top - brect.top;
     brect.top += d;
+    brect.bottom += d;
     offset.y += d;
   }
 
