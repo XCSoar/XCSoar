@@ -146,9 +146,11 @@ PrintHelper::sampledtaskpoint_print_samples(std::ostream& f,
 {
   const unsigned n= tp.get_search_points().size();
   f << "#   Search points\n";
-  for (unsigned i=0; i<n; i++) {
-    const GeoPoint loc = tp.get_search_points()[i].get_location();
-    f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
+  if (tp.has_entered()) {
+    for (unsigned i=0; i<n; i++) {
+      const GeoPoint loc = tp.get_search_points()[i].get_location();
+      f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
+    }
   }
   f << "\n";
 }
