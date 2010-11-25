@@ -86,10 +86,6 @@ public:
 
     switch (pDisplayTextType) {
     case DISPLAYNAMEIFINTASK:
-      if (in_task)
-        _tcscpy(Buffer, way_point.Name.c_str());
-      break;
-
     case DISPLAYNAME:
       _tcscpy(Buffer, way_point.Name.c_str());
       break;
@@ -188,14 +184,10 @@ public:
 
     icon->draw(canvas, sc.x, sc.y);
 
-    if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
-      if (!in_task)
-        return;
-
-      do_write_label = true;
-    }
-
     TCHAR Buffer[32];
+
+    if (!in_task && (pDisplayTextType == DISPLAYNAMEIFINTASK))
+      return;
 
     if (do_write_label)
       FormatTitle(Buffer, way_point, in_task);
@@ -288,7 +280,7 @@ MapWaypointLabelRender(Canvas &canvas, const RECT &MapRect,
                        LabelBlock &label_block,
                        const WayPointLabelList &labels)
 {
-  // now draw task waypoints
+  // first draw task waypoints
   for (unsigned i = 0; i < labels.size(); i++) {
     const WayPointLabelList::Label *E = &labels[i];
     // draws if they are in task unconditionally,
@@ -300,7 +292,7 @@ MapWaypointLabelRender(Canvas &canvas, const RECT &MapRect,
   // now draw airports in order of range (closest last)
   for (unsigned i = 0; i < labels.size(); i++) {
     const WayPointLabelList::Label *E = &labels[i];
-    // draws if they are in task unconditionally,
+    // draws if they are not in task,
     // otherwise, does comparison
     if (!E->inTask && E->isAirport)
       TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode, MapRect, &label_block);
@@ -309,7 +301,7 @@ MapWaypointLabelRender(Canvas &canvas, const RECT &MapRect,
   // now draw landable waypoints in order of range (closest last)
   for (unsigned i = 0; i < labels.size(); i++) {
     const WayPointLabelList::Label *E = &labels[i];
-    // draws if they are in task unconditionally,
+    // draws if they are not in task,
     // otherwise, does comparison
     if (!E->inTask && !E->isAirport && E->isLandable)
       TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode, MapRect, &label_block);
@@ -340,12 +332,16 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
   WaypointVisitorMap v(projection, settings_map, task_behaviour,
                        aircraft_state,
                        canvas, glide_polar);
-  way_points->visit_within_range(projection.GetGeoLocation(),
-                                 projection.GetScreenDistanceMeters(), v);
+
+  // task items come first, this is the only way we know that an item is in task,
+  // and we won't add it if it is already there
   if (task != NULL) {
     ProtectedTaskManager::Lease task_manager(*task);
     task_manager->CAccept(v);
   }
+
+  way_points->visit_within_range(projection.GetGeoLocation(),
+                                 projection.GetScreenDistanceMeters(), v);
 
   v.labels.Sort();
   MapWaypointLabelRender(canvas, projection.GetMapRect(),

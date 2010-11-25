@@ -30,18 +30,13 @@ Copyright_License {
 static int _cdecl
 MapWaypointLabelListCompare(const void *elem1, const void *elem2)
 {
-  // Now sorts elements in task preferentially.
-  /*
-  if (((MapWaypointLabel_t *)elem1)->inTask && ! ((MapWaypointLabel_t *)elem2)->inTask)
-    return (-1);
-  */
+  const WayPointLabelList::Label &e1 = *(const WayPointLabelList::Label *)elem1;
+  const WayPointLabelList::Label &e2 = *(const WayPointLabelList::Label *)elem2;
 
-  if (((const WayPointLabelList::Label *)elem1)->AltArivalAGL
-      > ((const WayPointLabelList::Label *)elem2)->AltArivalAGL)
+  if (e1.AltArivalAGL > e2.AltArivalAGL)
     return -1;
 
-  if (((const WayPointLabelList::Label *)elem1)->AltArivalAGL
-      < ((const WayPointLabelList::Label *)elem2)->AltArivalAGL)
+  if (e1.AltArivalAGL < e2.AltArivalAGL)
     return 1;
 
   return 0;
@@ -57,7 +52,6 @@ WayPointLabelList::Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
       || (Y < bounds.top - WPCIRCLESIZE)
       || (Y > bounds.bottom + WPCIRCLESIZE))
     return;
-
 
   if (num_labels >= sizeof(labels) / sizeof(labels[0]))
     return;
