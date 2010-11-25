@@ -1980,16 +1980,8 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpGestures"));
-  if (wp) {
-    if (settings_computer.EnableGestures != wp->GetDataField()->GetAsBoolean()) {
-      settings_computer.EnableGestures =
-          !settings_computer.EnableGestures;
-      Profile::Set(szProfileGestures,
-                   settings_computer.EnableGestures);
-      changed = true;
-    }
-  }
+  changed |= SaveFormProperty(*wf, _T("prpGestures"), szProfileGestures,
+                              settings_computer.EnableGestures);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAverEffTime")); // VENTA6
   if (wp) {
