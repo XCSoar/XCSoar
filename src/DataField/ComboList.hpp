@@ -81,8 +81,6 @@ private:
   }
 
     int ComboPopupItemSavedIndex;
-
-    int PropertyDataFieldIndexSaved;
 };
 
 #endif
