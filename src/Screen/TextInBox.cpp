@@ -149,7 +149,6 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     x -= tsize.cx;
   } else if (Mode.Align == Center) {
     x -= tsize.cx / 2;
-    y -= tsize.cy / 2;
   }
 
   if (Mode.Mode == RoundedBlack || Mode.Mode == RoundedWhite) {
