@@ -40,11 +40,10 @@ TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
 
   // If label is above maprect
   if (MapRect.top > brect.top) {
+    // Move label down into maprect
     int d = MapRect.top - brect.top;
     brect.top += d;
     offset.y += d;
-    brect.left -= d;
-    offset.x -= d;
   }
 
   // If label is right of maprect
