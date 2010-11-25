@@ -71,7 +71,11 @@ ScoredTaskPoint::get_location_travelled() const
 const GeoPoint &
 ScoredTaskPoint::get_location_scored() const
 {
-  return get_location_min();
+  if (m_boundary_scored || !has_entered()) {
+    return get_location_min();
+  } else {
+    return get_location();
+  }
 }
 
 const GeoPoint &
