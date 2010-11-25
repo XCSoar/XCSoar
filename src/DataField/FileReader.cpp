@@ -103,14 +103,6 @@ DataFieldFileReader::DataFieldFileReader(DataAccessCallback_t OnDataAccess)
   SupportCombo = true;
 }
 
-bool
-DataFieldFileReader::GetAsBoolean() const
-{
-  return loaded
-    ? mValue > 0
-    : !string_is_empty(postponed_value);
-}
-
 int
 DataFieldFileReader::GetAsInteger(void) const
 {

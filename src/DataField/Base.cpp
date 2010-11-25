@@ -49,12 +49,6 @@ DataField::Dec(void)
   (mOnDataAccess)(this, daDec);
 }
 
-bool
-DataField::GetAsBoolean() const
-{
-  return false;
-}
-
 int
 DataField::GetAsInteger() const
 {
@@ -77,12 +71,6 @@ const TCHAR *
 DataField::GetAsDisplayString() const
 {
   return GetAsString();
-}
-
-void
-DataField::SetAsBoolean(bool Value)
-{
-  (void)Value;
 }
 
 void

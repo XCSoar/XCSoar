@@ -47,7 +47,7 @@ public:
   void Dec(void);
   virtual ComboList *CreateComboList() const;
 
-  virtual bool GetAsBoolean(void) const;
+  bool GetAsBoolean(void) const;
   virtual int GetAsInteger(void) const;
   virtual fixed GetAsFixed(void) const;
   virtual const TCHAR *GetAsString(void) const;
@@ -71,7 +71,7 @@ public:
   #pragma warn +hid
   #endif
 
-  virtual void SetAsBoolean(bool Value);
+  void SetAsBoolean(bool Value);
   virtual void SetAsInteger(int Value);
   virtual void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);

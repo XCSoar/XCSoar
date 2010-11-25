@@ -54,7 +54,6 @@ public:
   virtual ComboList *CreateComboList() const;
   virtual void SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
 
-  virtual bool GetAsBoolean(void) const;
   virtual int GetAsInteger(void) const;
   virtual fixed GetAsFixed() const;
   virtual const TCHAR *GetAsString(void) const;
@@ -72,7 +71,6 @@ public:
   #pragma warn +hid
   #endif
 
-  virtual void SetAsBoolean(bool Value);
   virtual void SetAsInteger(int Value);
   virtual void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);

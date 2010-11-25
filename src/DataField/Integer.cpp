@@ -31,12 +31,6 @@ Copyright_License {
 
 static bool DataFieldKeyUp = false;
 
-bool
-DataFieldInteger::GetAsBoolean(void) const
-{
-  return (mValue != 0);
-}
-
 int
 DataFieldInteger::GetAsInteger(void) const
 {
@@ -69,15 +63,6 @@ void
 DataFieldInteger::Set(int Value)
 {
   mValue = Value;
-}
-
-void
-DataFieldInteger::SetAsBoolean(bool Value)
-{
-  if (Value)
-    SetAsInteger(1);
-  else
-    SetAsInteger(0);
 }
 
 void

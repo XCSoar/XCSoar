@@ -29,6 +29,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
+#include "DataField/Boolean.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
@@ -58,9 +59,11 @@ static void UpdateValues() {
 }
 
 static void OnAutoData(DataField *Sender, DataField::DataAccessKind_t Mode){
+  DataFieldBoolean &df = *(DataFieldBoolean *)Sender;
+
   switch(Mode){
     case DataField::daChange:
-      EnableAutoBrightness = Sender->GetAsBoolean();
+      EnableAutoBrightness = df.GetAsBoolean();
       UpdateValues();
     break;
 

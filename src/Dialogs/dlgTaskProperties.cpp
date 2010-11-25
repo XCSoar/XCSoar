@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/Boolean.hpp"
 
 #include "Dialogs/dlgTaskHelpers.hpp"
 
@@ -82,7 +83,8 @@ RefreshView()
   wp = ((WndProperty*)wf->FindByName(_T("prpTaskScored")));
   if (wp) {
     wp->set_visible(fai_types || racing_types);
-    wp->GetDataField()->SetAsBoolean(p.task_scored);
+    DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
+    df.SetAsBoolean(p.task_scored);
     wp->RefreshDisplay();
   }
 
@@ -96,7 +98,8 @@ RefreshView()
   wp = ((WndProperty*)wf->FindByName(_T("prpFAIFinishHeight")));
   if (wp) {
     wp->set_visible(fai_types);
-    wp->GetDataField()->SetAsBoolean(p.fai_finish);
+    DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
+    df.SetAsBoolean(p.fai_finish);
     wp->RefreshDisplay();
   }
 

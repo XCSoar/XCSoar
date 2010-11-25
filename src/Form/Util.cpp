@@ -151,7 +151,9 @@ GetFormValueBoolean(const WndForm &form, const TCHAR *control_name)
     (const WndProperty *)form.FindByName(control_name);
   assert(control != NULL);
 
-  return control->GetDataField()->GetAsBoolean();
+  const DataFieldBoolean &df =
+    *(const DataFieldBoolean *)control->GetDataField();
+  return df.GetAsBoolean();
 }
 
 bool

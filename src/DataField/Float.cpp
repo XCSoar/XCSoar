@@ -30,12 +30,6 @@ Copyright_License {
 
 static bool DataFieldKeyUp = false;
 
-bool
-DataFieldFloat::GetAsBoolean() const
-{
-  return mValue != fixed_zero;
-}
-
 int
 DataFieldFloat::GetAsInteger() const
 {
@@ -82,15 +76,6 @@ DataFieldFloat::SetMax(fixed Value)
   fixed res = mMax;
   mMax = Value;
   return res;
-}
-
-void
-DataFieldFloat::SetAsBoolean(bool Value)
-{
-  bool res = GetAsBoolean();
-  if (res != Value) {
-    SetAsFloat(Value ? fixed_one : fixed_zero);
-  }
 }
 
 void

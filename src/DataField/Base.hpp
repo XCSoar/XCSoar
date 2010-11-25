@@ -56,13 +56,11 @@ public:
   virtual void Inc(void);
   virtual void Dec(void);
 
-  virtual bool GetAsBoolean() const;
   virtual int GetAsInteger() const;
   virtual fixed GetAsFixed() const;
   virtual const TCHAR *GetAsString() const;
   virtual const TCHAR *GetAsDisplayString() const;
 
-  virtual void SetAsBoolean(bool Value);
   virtual void SetAsInteger(int Value);
   virtual void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);
