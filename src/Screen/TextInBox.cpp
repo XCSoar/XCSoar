@@ -127,41 +127,32 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     y += offset.y;
   }
 
+  if (label_block != NULL && !label_block->check(brect))
+    return false;
+
   if (Mode.Mode == RoundedBlack || Mode.Mode == RoundedWhite) {
-    if (label_block ? label_block->check(brect) : true) {
-      if (Mode.Mode == RoundedBlack)
-        canvas.black_pen();
-      else
-        canvas.white_pen();
+    if (Mode.Mode == RoundedBlack)
+      canvas.black_pen();
+    else
+      canvas.white_pen();
 
-      canvas.white_brush();
-      canvas.round_rectangle(brect.left, brect.top, brect.right, brect.bottom,
-                             Layout::Scale(8), Layout::Scale(8));
+    canvas.white_brush();
+    canvas.round_rectangle(brect.left, brect.top, brect.right, brect.bottom,
+                           Layout::Scale(8), Layout::Scale(8));
 
-      canvas.background_transparent();
-      canvas.text(x, y, Value);
-      canvas.background_opaque();
-      return true;
-    }
+    canvas.background_transparent();
+    canvas.text(x, y, Value);
+    canvas.background_opaque();
   } else if (Mode.Mode == Filled) {
-    if (label_block ? label_block->check(brect) : true) {
-      canvas.set_background_color(Color::WHITE);
-      canvas.text_opaque(x, y, brect, Value);
-      return true;
-    }
+    canvas.set_background_color(Color::WHITE);
+    canvas.text_opaque(x, y, brect, Value);
   } else if (Mode.Mode == Outlined) {
-    if (label_block ? label_block->check(brect) : true) {
-      RenderShadowedText(canvas, Value, x, y);
-      return true;
-    }
+    RenderShadowedText(canvas, Value, x, y);
   } else {
-    if (label_block ? label_block->check(brect) : true) {
-      canvas.background_transparent();
-      canvas.text(x, y, Value);
-      canvas.background_opaque();
-      return true;
-    }
+    canvas.background_transparent();
+    canvas.text(x, y, Value);
+    canvas.background_opaque();
   }
 
-  return false;
+  return true;
 }
