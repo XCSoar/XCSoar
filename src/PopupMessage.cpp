@@ -25,7 +25,7 @@ Copyright_License {
 
 #include "PopupMessage.hpp"
 #include "Protection.hpp"
-#include "Screen/VirtualCanvas.hpp"
+#include "Screen/AnyCanvas.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
@@ -144,7 +144,7 @@ void PopupMessage::Resize() {
   } else {
     set_text(msgText);
 
-    VirtualCanvas canvas(1, 1);
+    AnyCanvas canvas;
     canvas.select(Fonts::MapBold);
     SIZE tsize = canvas.text_size(msgText);
 

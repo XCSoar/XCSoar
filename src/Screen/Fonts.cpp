@@ -28,7 +28,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/FontConfig.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/VirtualCanvas.hpp"
+#include "Screen/AnyCanvas.hpp"
 #include "Appearance.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 
@@ -109,7 +109,7 @@ SizeLogFont(LOGFONT &logfont, unsigned width, const TCHAR* str)
 {
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
-  VirtualCanvas canvas(1, 1);
+  AnyCanvas canvas;
   SIZE tsize;
   do {
     --logfont.lfHeight;
