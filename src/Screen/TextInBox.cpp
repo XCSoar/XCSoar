@@ -119,11 +119,15 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
   brect.top = y + ((tsize.cy + 4) >> 3) - 2;
   brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
 
-  if (Mode.Mode == RoundedBlack || Mode.Mode == RoundedWhite) {
+  if (Mode.Mode == RoundedBlack ||
+      Mode.Mode == RoundedWhite ||
+      Mode.Mode == Filled) {
     POINT offset = TextInBoxMoveInView(brect, MapRect);
     x += offset.x;
     y += offset.y;
+  }
 
+  if (Mode.Mode == RoundedBlack || Mode.Mode == RoundedWhite) {
     if (label_block ? label_block->check(brect) : true) {
       if (Mode.Mode == RoundedBlack)
         canvas.black_pen();
@@ -140,10 +144,6 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       return true;
     }
   } else if (Mode.Mode == Filled) {
-    POINT offset = TextInBoxMoveInView(brect, MapRect);
-    x += offset.x;
-    y += offset.y;
-
     if (label_block ? label_block->check(brect) : true) {
       canvas.set_background_color(Color::WHITE);
       canvas.text_opaque(x, y, brect, Value);
