@@ -69,6 +69,13 @@ IgcReplay::ScanBuffer(const TCHAR* buffer, fixed &Time,
 
   Altitude = fixed(iAltitude);
   PressureAltitude = fixed(iPressureAltitude);
+
+  // some loggers drop out GPS altitude, so when this happens, revert
+  // to pressure altitude
+  if ((iPressureAltitude != 0) && (iAltitude==0)) {
+    Altitude = PressureAltitude;
+  }
+
   Time = fixed(Hour * 3600 + Minute * 60 + Second);
   return true;
 }
