@@ -114,12 +114,12 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     x -= tsize.cx / 2;
   }
 
-  if (Mode.Mode == RoundedBlack || Mode.Mode == RoundedWhite) {
-    brect.left = x - 2;
-    brect.right = brect.left + tsize.cx + 4;
-    brect.top = y + ((tsize.cy + 4) >> 3) - 2;
-    brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
+  brect.left = x - 2;
+  brect.right = brect.left + tsize.cx + 4;
+  brect.top = y + ((tsize.cy + 4) >> 3) - 2;
+  brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
 
+  if (Mode.Mode == RoundedBlack || Mode.Mode == RoundedWhite) {
     POINT offset = TextInBoxMoveInView(brect, MapRect);
     x += offset.x;
     y += offset.y;
@@ -140,11 +140,6 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       return true;
     }
   } else if (Mode.Mode == Filled) {
-    brect.left = x - 2;
-    brect.right = brect.left + tsize.cx + 4;
-    brect.top = y + ((tsize.cy + 4) >> 3) - 2;
-    brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
-
     POINT offset = TextInBoxMoveInView(brect, MapRect);
     x += offset.x;
     y += offset.y;
@@ -155,21 +150,11 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       return true;
     }
   } else if (Mode.Mode == Outlined) {
-    brect.left = x - 2;
-    brect.right = brect.left + tsize.cx + 4;
-    brect.top = y + ((tsize.cy + 4) >> 3) - 2;
-    brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
-
     if (label_block ? label_block->check(brect) : true) {
       RenderShadowedText(canvas, Value, x, y);
       return true;
     }
   } else {
-    brect.left = x - 2;
-    brect.right = brect.left + tsize.cx + 4;
-    brect.top = y + ((tsize.cy + 4) >> 3) - 2;
-    brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
-
     if (label_block ? label_block->check(brect) : true) {
       canvas.background_transparent();
       canvas.text(x, y, Value);
