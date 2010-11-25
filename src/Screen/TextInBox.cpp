@@ -114,9 +114,9 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     x -= tsize.cx / 2;
   }
 
-  brect.left = x - 3;
-  brect.right = x + tsize.cx + 3;
-  brect.top = y - 1;
+  brect.left = x - Layout::FastScale(2) - 1;
+  brect.right = x + tsize.cx + Layout::FastScale(2);
+  brect.top = y;
   brect.bottom = y + tsize.cy + 1;
 
   if (Mode.Mode == RoundedBlack ||
