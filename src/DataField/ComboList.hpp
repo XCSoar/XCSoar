@@ -80,6 +80,10 @@ private:
                            StringValue, StringValueFormatted));
   }
 
+  unsigned Append(int DataFieldIndex, const TCHAR *StringValue) {
+    return Append(DataFieldIndex, StringValue, StringValue);
+  }
+
     int ComboPopupItemSavedIndex;
 };
 

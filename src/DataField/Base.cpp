@@ -207,8 +207,7 @@ DataField::CreateComboListStepping(void)
   // if we stopped before hitting start of list create <<Less>> value at top of list
   if (iListCount == ComboList::MAX_SIZE / 2) {
     // this data index item is checked on close of dialog
-    combo_list->Append(ComboList::Item::PREVIOUS_PAGE,
-                       _T("<<More Items>>"), _T("<<More Items>>"));
+    combo_list->Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
   }
 
   // now we're at the beginning of the list, so load forward until end
@@ -254,8 +253,7 @@ DataField::CreateComboListStepping(void)
   // if we stopped before hitting end of list create <<More>> value at end of list
   if (iListCount == ComboList::MAX_SIZE - 3) {
     // this data index item is checked on close of dialog
-    combo_list->Append(ComboList::Item::NEXT_PAGE,
-                       _T("<<More Items>>"), _T("<<More Items>>"));
+    combo_list->Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
   }
 
   SetDisableSpeedUp(false);

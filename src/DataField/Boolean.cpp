@@ -28,8 +28,8 @@ ComboList *
 DataFieldBoolean::CreateComboList() const
 {
   ComboList *combo_list = new ComboList();
-  combo_list->Append(false, mTextFalse, mTextFalse);
-  combo_list->Append(true, mTextTrue, mTextTrue);
+  combo_list->Append(false, mTextFalse);
+  combo_list->Append(true, mTextTrue);
 
   combo_list->ComboPopupItemSavedIndex = GetAsInteger();
   return combo_list;
