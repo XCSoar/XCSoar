@@ -25,6 +25,7 @@ Copyright_License {
 
 #ifdef GNAV
 
+#include "Form/Util.hpp"
 #include "Units.hpp"
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
@@ -103,18 +104,9 @@ void dlgBrightnessShowModal(void){
   if (wf == NULL)
     return;
 
-  WndProperty* wp;
+  LoadFormProperty(*wf, _T("prpBrightness"), BrightnessValue);
+  LoadFormProperty(*wf, _T("prpAuto"), EnableAutoBrightness);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpBrightness"));
-  if (wp) {
-    wp->GetDataField()->SetAsInteger(BrightnessValue);
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpAuto"));
-  if (wp) {
-    wp->GetDataField()->SetAsBoolean(EnableAutoBrightness);
-    wp->RefreshDisplay();
-  }
   wf->ShowModal();
 
   UpdateValues();
