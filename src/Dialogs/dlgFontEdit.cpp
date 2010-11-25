@@ -70,17 +70,9 @@ GetLogFont(LOGFONT &logfont)
     _tcsncpy(logfont.lfFaceName,
              wp->GetDataField()->GetAsString(), LF_FACESIZE - 1);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpFontHeight"));
-  if (wp)
-    logfont.lfHeight = wp->GetDataField()->GetAsInteger();
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFontWeight"));
-  if (wp)
-    logfont.lfWeight = wp->GetDataField()->GetAsBoolean() ? 700 : 500;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFontItalic"));
-  if (wp)
-    logfont.lfItalic = wp->GetDataField()->GetAsBoolean();
+  logfont.lfHeight = GetFormValueInteger(*wf, _T("prpFontHeight"));
+  logfont.lfWeight = GetFormValueBoolean(*wf, _T("prpFontWeight")) ? 700 : 500;
+  logfont.lfItalic = GetFormValueBoolean(*wf, _T("prpFontItalic"));
 }
 
 static void RedrawSampleFont(void)
