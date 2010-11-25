@@ -157,3 +157,9 @@ DataFieldInteger::CreateComboList() const
   DataFieldInteger clone(*this);
   return clone.CreateComboListStepping();
 }
+
+void
+DataFieldInteger::SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
+{
+  SetAsString(sValue);
+}

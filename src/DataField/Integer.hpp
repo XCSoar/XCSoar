@@ -52,6 +52,7 @@ public:
   void Inc(void);
   void Dec(void);
   virtual ComboList *CreateComboList() const;
+  virtual void SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
 
   virtual bool GetAsBoolean(void) const;
   virtual int GetAsInteger(void) const;
