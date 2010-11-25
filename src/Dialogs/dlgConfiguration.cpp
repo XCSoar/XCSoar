@@ -443,10 +443,10 @@ SetLocalTime(void)
   Units::TimeToText(temp, TimeLocal(XCSoarInterface::Basic().Time));
 
   wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
-  if (wp) {
-    wp->SetText(temp);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+
+  wp->SetText(temp);
+  wp->RefreshDisplay();
 }
 
 static void
@@ -484,10 +484,10 @@ OnPolarFileData(DataField *Sender, DataField::DataAccessKind_t Mode)
     if (Sender->GetAsString() != NULL && _tcscmp(Sender->GetAsString(), _T("")) != 0){
       // then ... set Polar Tape to Winpilot
       wp = (WndProperty *)wf->FindByName(_T("prpPolarType"));
-      if (wp != NULL){
-        wp->GetDataField()->SetAsInteger(POLARUSEWINPILOTFILE);
-        wp->RefreshDisplay();
-      }
+      assert(wp != NULL);
+
+      wp->GetDataField()->SetAsInteger(POLARUSEWINPILOTFILE);
+      wp->RefreshDisplay();
     }
     break;
 
@@ -506,19 +506,19 @@ OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
   switch(Mode){
   case DataField::daChange:
     wp = (WndProperty *)wf->FindByName(_T("prpPolarFile"));
+    assert(wp != NULL);
 
     if (Sender->GetAsInteger() != POLARUSEWINPILOTFILE){
       // then ... clear Winpilot File if Polar Type is not WinpilotFile
-      if (wp != NULL && wp->GetDataField()->GetAsBoolean()) {
+      if (wp->GetDataField()->GetAsBoolean()) {
         lastSelectedPolarFile = wp->GetDataField()->GetAsInteger();
         wp->GetDataField()->SetAsInteger(-1);
         wp->RefreshDisplay();
       }
-    } else {
-      if (wp != NULL && wp->GetDataField()->GetAsInteger() <= 0 && lastSelectedPolarFile > 0){
-        wp->GetDataField()->SetAsInteger(lastSelectedPolarFile);
-        wp->RefreshDisplay();
-      }
+    } else if (wp->GetDataField()->GetAsInteger() <= 0 &&
+               lastSelectedPolarFile > 0) {
+      wp->GetDataField()->SetAsInteger(lastSelectedPolarFile);
+      wp->RefreshDisplay();
     }
     break;
 
@@ -579,8 +579,9 @@ InitFileField(WndForm &wf, const TCHAR *control_name,
               const TCHAR *profile_key, const TCHAR *filters)
 {
   WndProperty *wp = (WndProperty *)wf.FindByName(control_name);
-  if (wp != NULL)
-    InitFileField(*wp, profile_key, filters);
+  assert(wp != NULL);
+
+  InitFileField(*wp, profile_key, filters);
 }
 
 static void
