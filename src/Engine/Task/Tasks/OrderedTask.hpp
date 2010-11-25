@@ -308,9 +308,11 @@ public:
    * Test if task has started.  Used to determine whether
    * or not update stats.
    *
+   * @param soft If true, allow soft starts
+   *
    * @return True if task has started
    */
-  bool task_started() const;
+  virtual bool task_started(bool soft=false) const;
 
   /**
    * Update internal states when aircraft state advances.

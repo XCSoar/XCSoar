@@ -750,10 +750,17 @@ OrderedTask::task_finished() const
 }
 
 bool 
-OrderedTask::task_started() const
+OrderedTask::task_started(bool soft) const
 {
-  if (ts)
-    return (ts->has_exited());
+  if (ts) {
+    // have we really started?
+    if (ts->has_exited()) 
+      return true;
+
+    // if soft starts allowed, consider started if we progressed to next tp
+    if (soft && (activeTaskPoint>0))
+      return true;
+  }
 
   return false;
 }

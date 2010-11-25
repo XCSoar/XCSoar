@@ -99,15 +99,18 @@ public:
 
 /** 
  * Test if task has started.  Used to determine whether
- * or not update stats.
- * 
+ * or not update stats.  Soft starts are defined as when the formal
+ * start condition may or may not be satisfied, but the task is evolving
+ * anyway.
+ *
+ * @param soft If true, allow soft starts
+ *
  * @return True if task has started
  */
   gcc_pure
-  virtual bool task_started() const {
+  virtual bool task_started(bool soft=false) const {
     return true;
   }
-
 
 /** 
  * Update internal states as flight progresses.  This may perform
