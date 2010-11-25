@@ -256,7 +256,8 @@ ProtectedTaskManager::task_save(const TCHAR* path)
 }
 
 OrderedTask* 
-ProtectedTaskManager::task_create(const TCHAR* path)
+ProtectedTaskManager::task_create(const TCHAR* path,
+                                  const Waypoints *waypoints)
 {
   DataNode* root = DataNodeXML::load(path);
   if (!root)
@@ -264,7 +265,7 @@ ProtectedTaskManager::task_create(const TCHAR* path)
 
   if (_tcscmp(root->get_name().c_str(),_T("Task"))==0) {
     OrderedTask* task = task_blank();
-    Serialiser des(*root);
+    Serialiser des(*root, waypoints);
     des.deserialise(*task);
     if (task->check_task()) {
       delete root;
@@ -279,9 +280,9 @@ ProtectedTaskManager::task_create(const TCHAR* path)
 }
  
 bool 
-ProtectedTaskManager::task_load(const TCHAR* path)
+ProtectedTaskManager::task_load(const TCHAR* path, const Waypoints *waypoints)
 {
-  OrderedTask* task = task_create(path);
+  OrderedTask* task = task_create(path, waypoints);
   if (task != NULL) {
     ExclusiveLease lease(*this);
     lease->commit(*task);
@@ -295,11 +296,11 @@ ProtectedTaskManager::task_load(const TCHAR* path)
 const TCHAR ProtectedTaskManager::default_task_path[] = _T("Default.tsk");
 
 bool 
-ProtectedTaskManager::task_load_default()
+ProtectedTaskManager::task_load_default(const Waypoints *waypoints)
 {
   TCHAR path[MAX_PATH];
   LocalPath(path, default_task_path);
-  return task_load(path);
+  return task_load(path, waypoints);
 }
 
 bool 

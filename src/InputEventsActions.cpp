@@ -1185,7 +1185,7 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
 
   if (!string_is_empty(misc)) {
     LocalPath(buffer, misc);
-    protected_task_manager.task_load(buffer);
+    protected_task_manager.task_load(buffer, &way_points);
   }
 }
 

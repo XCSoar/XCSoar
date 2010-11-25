@@ -32,6 +32,8 @@
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "DataNode.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
+
 #include <assert.h>
 
 
@@ -49,7 +51,7 @@ Serialiser::deserialise_point(OrderedTask& data)
   DataNode* wp_node = m_node.get_child_by_name(_T("Waypoint"));
   if (wp_node==NULL)
     return;
-  Serialiser wser(*wp_node);
+  Serialiser wser(*wp_node, waypoints);
   Waypoint *wp = wser.deserialise_waypoint();
   if (wp==NULL) {
     delete wp_node;
@@ -62,7 +64,7 @@ Serialiser::deserialise_point(OrderedTask& data)
     delete wp;
     return;
   }
-  Serialiser oser(*oz_node);
+  Serialiser oser(*oz_node, waypoints);
 
   AbstractTaskFactory& fact = data.get_factory();
 
@@ -140,12 +142,12 @@ Serialiser::serialise(const OrderedTaskPoint& data, const TCHAR* name)
   child->set_attribute(_T("type"), name);
 
   DataNode* wchild = child->add_child(_T("Waypoint"));
-  Serialiser wser(*wchild);
+  Serialiser wser(*wchild, waypoints);
   wser.serialise(data.get_waypoint());
   delete wchild;
 
   DataNode* ochild = child->add_child(_T("ObservationZone"));
-  Serialiser oser(*ochild);
+  Serialiser oser(*ochild, waypoints);
   oser.serialise(*data.get_oz());
   delete ochild;
 
@@ -282,6 +284,7 @@ Serialiser::deserialise(GeoPoint& data)
 
 ////////////////////
 
+#include <stdio.h>
 Waypoint*
 Serialiser::deserialise_waypoint()
 {
@@ -289,11 +292,18 @@ Serialiser::deserialise_waypoint()
   if (!loc_node)
     return NULL;
   GeoPoint loc;
-  Serialiser lser(*loc_node);
+  Serialiser lser(*loc_node, waypoints);
   lser.deserialise(loc);
   delete loc_node;
 
-  /// @todo: check if waypoint is already in database or needs to be added
+  if (waypoints != NULL) {
+    /* try to merge with existing waypoint from database */
+    const Waypoint *from_database = waypoints->lookup_location(loc, fixed(100));
+    // XXX narrow down search by comparing the name?
+    if (from_database != NULL)
+      /* found it, clone it for the caller to consume */
+      return new Waypoint(*from_database);
+  }
 
   Waypoint *wp = new Waypoint(loc);
   m_node.get_attribute(_T("name"), wp->Name);
@@ -313,7 +323,7 @@ Serialiser::serialise(const Waypoint& data)
   m_node.set_attribute(_T("altitude"), data.Altitude);
 
   DataNode* child = m_node.add_child(_T("Location"));
-  Serialiser ser(*child);
+  Serialiser ser(*child, waypoints);
   ser.serialise(data.Location);
   delete child;
 }
@@ -379,7 +389,7 @@ Serialiser::deserialise(OrderedTask& data)
   DataNode* point_node;
   unsigned i=0;
   while ((point_node = m_node.get_child_by_name(_T("Point"),i)) != NULL) {
-    Serialiser pser(*point_node);
+    Serialiser pser(*point_node, waypoints);
     pser.deserialise_point(data);
     delete point_node;
     i++;

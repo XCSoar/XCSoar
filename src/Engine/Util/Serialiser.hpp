@@ -28,6 +28,7 @@
 
 class DataNode;
 class Waypoint;
+class Waypoints;
 
 /**
  * Class to serialise and de-serialise tasks to/from a #DataNode structure
@@ -41,10 +42,12 @@ public:
    * Constructor
    * 
    * @param the_node Node this serialiser will edit
+   * @param _waypoints a waypoint database to merge with (optional)
    * 
    * @return Initialised object
    */
-  Serialiser(DataNode& the_node): m_node(the_node) {};
+  Serialiser(DataNode& the_node, const Waypoints *_waypoints=NULL)
+    :m_node(the_node), waypoints(_waypoints) {};
 
   /** 
    * Serialise a task (create a DataNode structure to reflect the task)
@@ -150,6 +153,8 @@ protected:
 
 private:
   DataNode &m_node;
+
+  const Waypoints *waypoints;
 
   OrderedTask::Factory_t task_factory_type() const;
   const TCHAR* task_factory_type(OrderedTask::Factory_t the_type) const;

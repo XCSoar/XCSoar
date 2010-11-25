@@ -91,11 +91,11 @@ public:
   bool task_commit(const OrderedTask& that);
 
   bool task_save(const TCHAR* path);
-  bool task_load(const TCHAR* path);
+  bool task_load(const TCHAR* path, const Waypoints *waypoints);
   bool task_save_default();
-  bool task_load_default();
+  bool task_load_default(const Waypoints *waypoints);
   OrderedTask* task_copy(const OrderedTask& that);
-  OrderedTask* task_create(const TCHAR* path);
+  OrderedTask* task_create(const TCHAR* path, const Waypoints *waypoints);
   bool task_save(const TCHAR* path, const OrderedTask& task);
 
   /** Reset the tasks (as if never flown) */
