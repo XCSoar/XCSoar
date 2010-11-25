@@ -74,6 +74,9 @@ public:
   virtual void SetAsInteger(int Value);
   virtual void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);
+
+protected:
+  void AppendComboValue(ComboList &combo_list, int value) const;
 };
 
 #endif

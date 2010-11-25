@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DataField/Integer.hpp"
+#include "DataField/ComboList.hpp"
 #include "Math/FastMath.h"
 #include "Compatibility/string.h"
 #include "Asset.hpp"
@@ -136,11 +137,60 @@ DataFieldInteger::SpeedUp(bool keyup)
   return res;
 }
 
+void
+DataFieldInteger::AppendComboValue(ComboList &combo_list, int value) const
+{
+  TCHAR a[16], b[16];
+  _stprintf(a, mEditFormat, value);
+  _stprintf(b, mDisplayFormat, value, mUnits);
+  combo_list.Append(combo_list.size(), a, b);
+}
+
 ComboList *
 DataFieldInteger::CreateComboList() const
 {
-  DataFieldInteger clone(*this);
-  return clone.CreateComboListStepping();
+  ComboList *combo_list = new ComboList();
+
+  /* how many items before and after the current value? */
+  unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
+
+  /* the value aligned to mStep */
+  int corrected_value = ((mValue - mMin) / mStep) * mStep;
+
+  int first = corrected_value - (int)surrounding_items * mStep;
+  if (first > mMin)
+    /* there are values before "first" - give the user a choice */
+    combo_list->Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
+  else if (first < mMin)
+    first = mMin;
+
+  int last = std::min(first + (int)surrounding_items * mStep * 2, mMax);
+
+  bool found_current = false;
+  for (int i = first; i <= last; i += mStep) {
+    if (!found_current && mValue <= i) {
+      if (mValue < i)
+        /* the current value is not listed - insert it here */
+        AppendComboValue(*combo_list, mValue);
+
+      combo_list->ComboPopupItemSavedIndex = combo_list->size();
+      found_current = true;
+    }
+
+    AppendComboValue(*combo_list, i);
+  }
+
+  if (mValue > last) {
+    /* the current value out of range - append it here */
+    AppendComboValue(*combo_list, mValue);
+    combo_list->ComboPopupItemSavedIndex = combo_list->size();
+  }
+
+  if (last < mMax)
+    /* there are values after "last" - give the user a choice */
+    combo_list->Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
+
+  return combo_list;
 }
 
 void
