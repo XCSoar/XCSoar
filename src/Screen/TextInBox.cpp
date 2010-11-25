@@ -38,6 +38,7 @@ TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
   offset.x = 0;
   offset.y = 0;
 
+  // If label is above maprect
   if (MapRect.top > brect.top) {
     int d = MapRect.top - brect.top;
     brect.top += d;
@@ -46,6 +47,7 @@ TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
     offset.x -= d;
   }
 
+  // If label is right of maprect
   if (MapRect.right < brect.right) {
     int d = MapRect.right - brect.right;
 
@@ -78,6 +80,7 @@ TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
     offset.x += d;
   }
 
+  // If label is below maprect
   if (MapRect.bottom < brect.bottom) {
     if (offset.x == 0) {
       int d = MapRect.bottom - brect.bottom;
@@ -99,6 +102,7 @@ TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
     }
   }
 
+  // If label is left of maprect
   if (MapRect.left > brect.left) {
     int d = MapRect.left - brect.left;
     brect.right += d;
