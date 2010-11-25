@@ -73,11 +73,12 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const RECT &rc,
   icon->draw(canvas, x, y);
 
   x += icon->get_size().cx + IBLSCALE(2);
-  y = rc.bottom - IBLSCALE(32);
-  canvas.background_opaque();
-  canvas.set_background_color(Color::WHITE);
-  canvas.set_text_color(Color::BLACK);
-  canvas.text(x, y, txt);
+  y = rc.bottom - IBLSCALE(34);
+
+  TextInBoxMode_t mode;
+  mode.Mode = RoundedBlack;
+
+  TextInBox(canvas, txt, x, y, mode, rc, NULL);
 }
 
 void
