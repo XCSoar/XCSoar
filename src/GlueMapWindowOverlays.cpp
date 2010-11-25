@@ -68,13 +68,16 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const RECT &rc,
     return; // early exit
   }
 
-  icon->draw(canvas, rc.left + IBLSCALE(2), rc.bottom + IBLSCALE(-35));
+  int x = rc.left + IBLSCALE(2);
+  int y = rc.bottom - IBLSCALE(35);
+  icon->draw(canvas, x, y);
 
+  x += icon->get_size().cx + IBLSCALE(2);
+  y = rc.bottom - IBLSCALE(32);
   canvas.background_opaque();
   canvas.set_background_color(Color::WHITE);
   canvas.set_text_color(Color::BLACK);
-  canvas.text(rc.left + IBLSCALE(24), rc.bottom + IBLSCALE(-32),
-              txt);
+  canvas.text(x, y, txt);
 }
 
 void
