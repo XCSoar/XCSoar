@@ -219,7 +219,7 @@ DataField::CreateComboListStepping(void)
   // if we stopped before hitting start of list create <<Less>> value at top of list
   if (iListCount == ComboList::MAX_SIZE / 2) {
     // this data index item is checked on close of dialog
-    combo_list->Append(combo_list->size(), ComboList::Item::PREVIOUS_PAGE,
+    combo_list->Append(ComboList::Item::PREVIOUS_PAGE,
                        _T("<<More Items>>"), _T("<<More Items>>"));
   }
 
@@ -235,7 +235,7 @@ DataField::CreateComboListStepping(void)
           (fSavedValue + ComboFloatPrec * iStepDirection)) {
         // step was too large, we skipped the selected value, so add it now
         iSelectedIndex =
-          combo_list->Append(combo_list->size(), 0, PropertyValueSaved,
+          combo_list->Append(0, PropertyValueSaved,
                              PropertyValueSavedFormatted);
       }
     }
@@ -246,7 +246,7 @@ DataField::CreateComboListStepping(void)
     }
 
     CopyString(sTemp, true); // can't call GetAsString & GetAsStringFormatted together (same output buffer)
-    combo_list->Append(combo_list->size(), 0, GetAsString(), sTemp);
+    combo_list->Append(0, GetAsString(), sTemp);
 
     Inc();
     fNext = GetAsFixed();
@@ -266,7 +266,7 @@ DataField::CreateComboListStepping(void)
   // if we stopped before hitting end of list create <<More>> value at end of list
   if (iListCount == ComboList::MAX_SIZE - 3) {
     // this data index item is checked on close of dialog
-    combo_list->Append(combo_list->size(), ComboList::Item::NEXT_PAGE,
+    combo_list->Append(ComboList::Item::NEXT_PAGE,
                        _T("<<More Items>>"), _T("<<More Items>>"));
   }
 

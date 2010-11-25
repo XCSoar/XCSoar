@@ -37,12 +37,11 @@ public:
       PREVIOUS_PAGE = -800002,
     };
 
-    int ItemIndex;
     int DataFieldIndex;
     TCHAR *StringValue;
     TCHAR *StringValueFormatted;
 
-    Item(int _ItemIndex, int _DataFieldIndex,
+    Item(int _DataFieldIndex,
          const TCHAR *_StringValue, const TCHAR *_StringValueFormatted);
     ~Item();
   };
@@ -74,10 +73,10 @@ private:
 
   unsigned Append(Item *item);
 
-  unsigned Append(int ItemIndex, int DataFieldIndex,
+  unsigned Append(int DataFieldIndex,
                   const TCHAR *StringValue,
                   const TCHAR *StringValueFormatted) {
-    return Append(new Item(ItemIndex, DataFieldIndex,
+    return Append(new Item(DataFieldIndex,
                            StringValue, StringValueFormatted));
   }
 

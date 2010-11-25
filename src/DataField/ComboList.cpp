@@ -26,10 +26,10 @@ Copyright_License {
 #include <stdlib.h>
 #include <string.h>
 
-ComboList::Item::Item(int _ItemIndex, int _DataFieldIndex,
+ComboList::Item::Item(int _DataFieldIndex,
                         const TCHAR *_StringValue,
                         const TCHAR *_StringValueFormatted)
-  :ItemIndex(_ItemIndex), DataFieldIndex(_DataFieldIndex),
+  :DataFieldIndex(_DataFieldIndex),
    StringValue(_tcsdup(_StringValue)),
    StringValueFormatted(_tcsdup(_StringValueFormatted)) {}
 

@@ -585,7 +585,7 @@ DataFieldFileReader::CreateComboList() const
       path = buffer;
     }
 
-    cl->Append(i, i, path, path);
+    cl->Append(i, path, path);
     if (i == mValue) {
       cl->ComboPopupItemSavedIndex = i;
     }

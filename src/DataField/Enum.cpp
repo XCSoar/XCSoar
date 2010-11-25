@@ -179,7 +179,7 @@ DataFieldEnum::CreateComboList() const
   ComboList *combo_list = new ComboList();
 
   for (unsigned i = 0; i < entries.size(); i++)
-    combo_list->Append(i, entries[i].id,
+    combo_list->Append(entries[i].id,
                        entries[i].mText, entries[i].mText);
 
   combo_list->ComboPopupItemSavedIndex = mValue;
