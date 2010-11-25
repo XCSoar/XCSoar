@@ -200,6 +200,18 @@ public:
   bool close_to_target(const AIRCRAFT_STATE& state,
                        const fixed threshold=fixed_zero) const;
 
+ /** 
+  * Calculate distance reduction for achieved task point,
+  * to calcuate scored distance.
+  * Specialisation from ObservationZoneClient to not adjust scoring distance
+  * for AAT Points.
+  * 
+  * @return Distance reduction once achieved
+  */
+  virtual fixed score_adjustment() const {
+    return fixed_zero;
+  }
+
 private:
   GeoPoint m_target_location;      /**< Location of target within OZ */
   GeoPoint m_target_save;          /**< Saved location of target within OZ */
