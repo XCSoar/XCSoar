@@ -1516,18 +1516,12 @@ void dlgConfigurationShowModal(void)
                               szProfileAbortSafetyUseCurrent,
                               settings_computer.safety_mc_use_current);
 
+  /* GUI label is "Enable Auto Logger" */
+  changed |= SaveFormPropertyNegated(*wf, _T("prpDisableAutoLogger"),
+                                     szProfileDisableAutoLogger,
+                                     settings_computer.DisableAutoLogger);
+
   WndProperty *wp;
-  wp = (WndProperty*)wf->FindByName(_T("prpDisableAutoLogger"));
-  if (wp) { // GUI label is "Enable Auto Logger"
-    if (!settings_computer.DisableAutoLogger
-        != wp->GetDataField()->GetAsBoolean()) {
-      settings_computer.DisableAutoLogger =
-        !(wp->GetDataField()->GetAsBoolean());
-      Profile::Set(szProfileDisableAutoLogger,
-                    settings_computer.DisableAutoLogger);
-      changed = true;
-    }
-  }
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {

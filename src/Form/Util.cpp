@@ -166,6 +166,18 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, bool &value)
 }
 
 bool
+SaveFormPropertyNegated(const WndForm &form, const TCHAR *field,
+                        const TCHAR *profile_key, bool &value)
+{
+  bool new_value = !GetFormValueBoolean(form, field);
+  if (new_value == value)
+    return false;
+
+  value = new_value;
+  return true;
+}
+
+bool
 SaveFormProperty(const WndForm &form, const TCHAR *field, unsigned int &value)
 {
   unsigned new_value = (unsigned)GetFormValueInteger(form, field);

@@ -108,6 +108,13 @@ bool
 SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
                  bool &value);
 
+/**
+ * Same as SaveFormProperty(), but negates the input value.
+ */
+bool
+SaveFormPropertyNegated(const WndForm &form, const TCHAR *field,
+                        const TCHAR *profile_key, bool &value);
+
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
                  unsigned int &value);
