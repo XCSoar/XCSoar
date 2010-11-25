@@ -74,8 +74,6 @@ RenderTaskPoint::Visit(const UnorderedTaskPoint& tp)
   }
   if (m_layer == RENDER_TASK_SYMBOLS) {
     draw_bearing(tp);
-    if (m_settings_map.EnableDetourCostMarker)
-      draw_off_track(tp);
   }
   m_index++;
 }
@@ -118,8 +116,6 @@ RenderTaskPoint::Visit(const FinishPoint& tp)
   draw_ordered(tp);
   if (m_layer == RENDER_TASK_SYMBOLS) {
     draw_bearing(tp);
-    if (m_settings_map.EnableDetourCostMarker)
-      draw_off_track(tp);
     draw_target(tp);
   }
 }
@@ -144,8 +140,6 @@ RenderTaskPoint::Visit(const AATPoint& tp)
   if (m_layer == RENDER_TASK_SYMBOLS) {
     draw_isoline(tp);
     draw_bearing(tp);
-    if (m_settings_map.EnableDetourCostMarker)
-      draw_off_track(tp);
     draw_target(tp);
   }
 }
@@ -158,8 +152,6 @@ RenderTaskPoint::Visit(const ASTPoint& tp)
   draw_ordered(tp);
   if (m_layer == RENDER_TASK_SYMBOLS) {
     draw_bearing(tp);
-    if (m_settings_map.EnableDetourCostMarker)
-      draw_off_track(tp);
     draw_target(tp);
   }
 }
@@ -333,8 +325,3 @@ RenderTaskPoint::draw_oz_foreground(const OrderedTaskPoint& tp)
   ((ObservationZoneConstVisitor &)ozv).Visit(*tp.get_oz());
 }
 
-void 
-RenderTaskPoint::draw_off_track(const TaskPoint &tp) 
-{
-
-}
