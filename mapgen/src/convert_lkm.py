@@ -133,9 +133,6 @@ def convert(template, working_dir):
     lkm_file = os.path.join(working_dir, name + ".LKM")
     xcm_file = os.path.join(working_dir, name + ".xcm")
 
-    if os.path.exists(xcm_file):
-        os.unlink(xcm_file)
-        
     if not os.path.exists(lkm_file):
         print "LKM file \"" + lkm_file + "\" does not exist!"
         return
@@ -146,6 +143,9 @@ def convert(template, working_dir):
                          Angle.degrees(float(template["LONMIN"].replace(",", "."))), 
                          Angle.degrees(float(template["LONMAX"].replace(",", "."))))
     m.AddTerrain(9)
+
+    if os.path.exists(xcm_file):
+        os.unlink(xcm_file)    
     shutil.copy(lkm_file, xcm_file)
     m.Create(xcm_file, True)
 
