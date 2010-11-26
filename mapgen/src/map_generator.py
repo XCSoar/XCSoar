@@ -169,11 +169,13 @@ class MapGenerator:
         Creates the map at the given location
         @param filename: Location of the map file that should be created
         '''
-        print "Creating map file ..."
+        
         # Open the zip file
         if attach:
+            print "Adding MapGenerator data to map file ..."
             attach = "a"
         else:
+            print "Creating map file ..."
             attach = "w"
 
         z = ZipFile(filename, attach, ZIP_DEFLATED)
