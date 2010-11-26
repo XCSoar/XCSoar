@@ -5,6 +5,7 @@ from georect import GeoRect
 from waypoint_list import WaypointList
 import terrain_srtm
 import topology_vmap0
+import time
 
 class MapGenerator:
     def __init__(self, dir_data = "../data/", dir_temp = "../tmp/"):
@@ -26,6 +27,36 @@ class MapGenerator:
 
         print "MapGenerator created"
 
+    def AddInformationFile(self, title, author = "Unknown", credits = []):
+        '''
+        Adds an information file to the map
+        '''
+
+        if self.__bounds == None:
+            print "Please set bounds before calling AddInformationFile() !"
+            return False
+
+        dst = os.path.abspath(self.__dir_temp + "/info.txt")
+        
+        f = open(dst, "w")
+        f.write("map name: " + title + "\n")
+        f.write("author: " + author + "\n")
+        f.write("creation time: " + time.strftime("%d.%m.%Y %H:%M:%S") + 
+                " (" + str(time.time()) + ")\n")
+        f.write("latitude range: " + str(self.__bounds.bottom.value_degrees()) + 
+                " to " + str(self.__bounds.top.value_degrees()) + "\n")
+        f.write("longitude range: " + str(self.__bounds.left.value_degrees()) + 
+                " to " + str(self.__bounds.right.value_degrees()) + "\n")
+        
+        for credit in credits:
+            f.write("credits: " + credit + "\n")
+        
+        f.close()
+        
+        self.__files.append([dst, True])
+        
+        return True
+            
     def AddWaypointFile(self, filename):
         '''
         Adds a waypoint file to the map
