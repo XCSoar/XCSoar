@@ -75,13 +75,19 @@ bool
 AbstractTask::update_idle(const AIRCRAFT_STATE &state)
 {
   if (task_started() && task_behaviour.calc_cruise_efficiency) {
-    stats.cruise_efficiency = ce_lpf.update(calc_cruise_efficiency(state));
+    fixed val = fixed_one;
+    if (calc_cruise_efficiency(state, val)) {
+      stats.cruise_efficiency = ce_lpf.update(val);
+    }
   } else {
     stats.cruise_efficiency = ce_lpf.reset(fixed_one);
   }
 
   if (task_started() && task_behaviour.calc_effective_mc) {
-    stats.effective_mc = em_lpf.update(calc_effective_mc(state));
+    fixed val = glide_polar.get_mc();
+    if (calc_effective_mc(state, val)) {
+      stats.effective_mc = em_lpf.update(val);
+    }
   } else {
     stats.effective_mc = em_lpf.reset(glide_polar.get_mc());
   }
@@ -252,10 +258,11 @@ AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft) const
   return (aircraft.NavAltitude - tp->get_elevation()) / d;
 }
 
-fixed 
-AbstractTask::calc_effective_mc(const AIRCRAFT_STATE &state_now) const
+bool 
+AbstractTask::calc_effective_mc(const AIRCRAFT_STATE &state_now, fixed& val) const
 {
-  return glide_polar.get_mc();
+  val = glide_polar.get_mc();
+  return true;
 }
 
 void

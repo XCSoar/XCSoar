@@ -605,12 +605,13 @@ protected:
    * predicted by MacCready theory with the current glide polar.
    *
    * @param state_now Aircraft state
+   * @param value Output cruise efficiency value (0-)
    *
-   * @return Cruise efficiency (0-1)
+   * @return True if cruise efficiency is updated
    */
-  fixed calc_cruise_efficiency(const AIRCRAFT_STATE &state_now) const;
+  bool calc_cruise_efficiency(const AIRCRAFT_STATE &state_now, fixed& value) const;
 
-  fixed calc_effective_mc(const AIRCRAFT_STATE &state_now) const;
+  bool calc_effective_mc(const AIRCRAFT_STATE &state_now, fixed& value) const;
 
   /**
    * Optimise target ranges (for adjustable tasks) to produce an estimated
@@ -673,6 +674,8 @@ private:
   AbstractTaskFactory* active_factory;
   OrderedTaskBehaviour m_ordered_behaviour;
   TaskAdvanceSmart task_advance;
+
+  bool allow_incremental_boundary_stats(const AIRCRAFT_STATE &state) const;
 
 public:
   /**

@@ -236,12 +236,14 @@ protected:
  * task start time.
  *
  * @param state_now Aircraft state
- * 
- * @return Cruise efficiency (0-1)
+ * @param value Output cruise efficiency value (0-)
+ *
+ * @return True if cruise efficiency is updated
  */
   gcc_pure
-  virtual fixed calc_cruise_efficiency(const AIRCRAFT_STATE &state_now) const {
-    return fixed_one;
+  virtual bool calc_cruise_efficiency(const AIRCRAFT_STATE &state_now, fixed &val) const {
+    val= fixed_one;
+    return true;
   }
 
 /** 
@@ -251,11 +253,12 @@ protected:
  * task start time.
  *
  * @param state_now Aircraft state
+ * @param val Output calculated effective mc
  * 
- * @return Cruise efficiency (0-1)
+ * @return True if cruise efficiency is updated
  */
   gcc_pure
-  virtual fixed calc_effective_mc(const AIRCRAFT_STATE &state_now) const;
+  virtual bool calc_effective_mc(const AIRCRAFT_STATE &state_now, fixed& val) const;
 
 /** 
  * Optimise target ranges (for adjustable tasks) to produce an estimated

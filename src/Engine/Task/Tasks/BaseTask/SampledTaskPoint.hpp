@@ -143,6 +143,10 @@ public:
     return m_sampled_points;
   }
 
+  bool is_boundary_scored() const {
+    return m_boundary_scored;
+  }
+
 protected:
 
 /** 

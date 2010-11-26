@@ -592,26 +592,43 @@ OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft) const
 }
 
 
-fixed
-OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft) const
+bool
+OrderedTask::allow_incremental_boundary_stats(const AIRCRAFT_STATE &aircraft) const
 {
-  if (activeTaskPoint > 0) {
-    TaskCruiseEfficiency bce(tps, activeTaskPoint, aircraft, glide_polar);
-    return bce.search(fixed_one);
+  if (!activeTaskPoint)
+    return false;
+  assert(tps[activeTaskPoint]);
+  bool in_sector = tps[activeTaskPoint]->isInSector(aircraft);
+  if (activeTaskPoint>0) {
+    in_sector |= tps[activeTaskPoint-1]->isInSector(aircraft);
   }
-
-  return fixed_one;
+  return (tps[activeTaskPoint]->is_boundary_scored() || !in_sector);
 }
 
-fixed 
-OrderedTask::calc_effective_mc(const AIRCRAFT_STATE &aircraft) const
+bool
+OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, fixed& val) const
 {
-  if (activeTaskPoint > 0) {
-    TaskEffectiveMacCready bce(tps,activeTaskPoint, aircraft, glide_polar);
-    return bce.search(glide_polar.get_mc());
+  if (allow_incremental_boundary_stats(aircraft)) {
+    TaskCruiseEfficiency bce(tps, activeTaskPoint, aircraft, glide_polar);
+    val = bce.search(fixed_one);
+    return true;
+  } else {
+    val = fixed_one;
+    return false;
   }
+}
 
-  return glide_polar.get_mc();
+bool 
+OrderedTask::calc_effective_mc(const AIRCRAFT_STATE &aircraft, fixed& val) const
+{
+  if (allow_incremental_boundary_stats(aircraft)) {
+    TaskEffectiveMacCready bce(tps,activeTaskPoint, aircraft, glide_polar);
+    val = bce.search(glide_polar.get_mc());
+    return true;
+  } else {
+    val = glide_polar.get_mc();
+    return false;
+  }
 }
 
 
