@@ -73,9 +73,6 @@ protected:
 
   bool FlightTimes();
 private:
-  void DoWindCirclingMode(const bool left);
-  void DoWindCirclingSample();
-  void DoWindCirclingAltitude();
   void AverageClimbRate();
   void Average30s();
   void AverageThermal();

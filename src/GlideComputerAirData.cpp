@@ -136,12 +136,15 @@ GlideComputerAirData::Wind()
   if (!Basic().flight.Flying || !time_advanced())
     return;
 
-  if (Calculated().TurnMode == CLIMB)
-    DoWindCirclingSample();
+  if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING) {
 
-  // generate new wind vector if altitude changes or a new
-  // estimate is available
-  DoWindCirclingAltitude();
+    if (Calculated().TurnMode == CLIMB) 
+      windanalyser.slot_newSample(Basic(), SetCalculated());
+
+    // generate new wind vector if altitude changes or a new
+    // estimate is available
+    windanalyser.slot_Altitude(Basic(), SetCalculated());
+  }
 
   // update zigzag wind
   if ((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG)
@@ -156,36 +159,6 @@ GlideComputerAirData::Wind()
     if (quality > 0)
       SetWindEstimate(zz_wind_speed, zz_wind_bearing, quality);
   }
-}
-
-/**
- * Passes data to the windanalyser.slot_newFlightMode method
- */
-void
-GlideComputerAirData::DoWindCirclingMode(const bool left)
-{
-  if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)
-    windanalyser.slot_newFlightMode(Basic(), Calculated(), left, 0);
-}
-
-/**
- * Passes data to the windanalyser.slot_newSample method
- */
-void
-GlideComputerAirData::DoWindCirclingSample()
-{
-  if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)
-    windanalyser.slot_newSample(Basic(), SetCalculated());
-}
-
-/**
- * Passes data to the windanalyser.SlotAltitude method
- */
-void
-GlideComputerAirData::DoWindCirclingAltitude()
-{
-  if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)
-    windanalyser.slot_Altitude(Basic(), SetCalculated());
 }
 
 void
@@ -595,7 +568,8 @@ GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
   rotaryLD.init(SettingsComputer());
 
   // Tell the windanalyser of the new flight mode
-  DoWindCirclingMode(left);
+  if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)
+    windanalyser.slot_newFlightMode(Basic(), Calculated(), left, 0);
 }
 
 /**
