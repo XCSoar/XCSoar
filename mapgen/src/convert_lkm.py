@@ -123,6 +123,11 @@ def convert(template, working_dir):
         print "Template file has no NAME specified!"
         return
     
+    if ((not "LATMIN" in template) or (not "LATMAX" in template) or
+        (not "LONMIN" in template) or (not "LONMIN" in template)):
+        print "Template file has no bounds specified!"
+        return
+    
     name = template["NAME"]
 
     lkm_file = os.path.join(working_dir, name + ".LKM")
