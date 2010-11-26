@@ -4,6 +4,7 @@ from map_generator import MapGenerator
 from angle import Angle
 import shutil
 import zipfile
+from tempfile import mkdtemp
 
 def read_template_from_map(file):
     map = {}
@@ -118,6 +119,22 @@ def read_template(file):
     
     return None
 
+def update_topology_file(temp_dir):
+    old_file = os.path.join(temp_dir, "topology_old.tpl")
+    new_file = os.path.join(temp_dir, "topology.tpl")
+    os.rename(new_file, old_file)
+    
+    old = open(old_file, "r")
+    new = open(new_file, "w")
+    for line in old:
+        if line.lower().startswith("coast_area"): continue
+        new.write(line)
+    
+    old.close()
+    new.close()
+    
+    os.unlink(old_file)
+
 def convert(template, working_dir):
     if not "NAME" in template:
         print "Template file has no NAME specified!"
@@ -144,9 +161,56 @@ def convert(template, working_dir):
                          Angle.degrees(float(template["LONMAX"].replace(",", "."))))
     m.AddTerrain(9)
 
+    lkm = zipfile.ZipFile(lkm_file, "r");
+    needed_files = []
+    for file in lkm.namelist():
+        # Don't add coast_area shapefile to the XCM file
+        if file.lower().startswith("coast_area."): continue
+        # Don't add info.txt to the XCM file
+        # -> we will create our own...
+        if file.lower() == "info.txt": continue
+        needed_files.append(file)
+        
+    if needed_files == []:
+        print "LKM file \"" + lkm_file + "\" is empty!"
+        return
+    
+    # Create temporary folder
+    temp_dir = mkdtemp()
+    # Extract LKM contents to temporary folder
+    print "Extracting \"" + lkm_file + "\" ..."
+    lkm.extractall(temp_dir, needed_files)
+    lkm.close()
+    
+    # Remove coast_area shapefile from topology file
+    update_topology_file(temp_dir)
+
+    # Delete old XCM file if exists
     if os.path.exists(xcm_file):
-        os.unlink(xcm_file)    
-    shutil.copy(lkm_file, xcm_file)
+        os.unlink(xcm_file)
+        
+    # Create new XCM file
+    print "Creating \"" + xcm_file + "\" ..."
+    xcm = zipfile.ZipFile(xcm_file, "w");
+    for file in needed_files:
+        compress = zipfile.ZIP_DEFLATED
+        # Don't compress shapefiles
+        if ((file.lower().endswith(".dbf")) or 
+            (file.lower().endswith(".prj")) or
+            (file.lower().endswith(".shp")) or 
+            (file.lower().endswith(".shx"))): 
+            compress = zipfile.ZIP_STORED
+            
+        xcm.write(os.path.join(temp_dir, file), file, compress)
+    xcm.close()
+    
+    # Delete temporary files
+    print "Deleting temporary files ..."
+    for file in needed_files:
+        os.unlink(os.path.join(temp_dir, file))
+    os.rmdir(temp_dir)
+     
+    # Add terrain to XCM file
     m.Create(xcm_file, True)
 
 def main():
