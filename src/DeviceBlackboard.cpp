@@ -35,6 +35,7 @@ Copyright_License {
 #include "Math/Constants.h"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Simulator.hpp"
+#include <limits.h>
 
 #define fixed_inv_2g fixed(1.0/(2.0*9.81))
 #define fixed_inv_g fixed(1.0/9.81)
@@ -668,25 +669,31 @@ DeviceBlackboard::FlightState(const GlidePolar& glide_polar)
 void
 DeviceBlackboard::AutoQNH()
 {
-  static int countdown_autoqnh = 0;
+  #define QNH_TIME 10
+
+  static unsigned countdown_autoqnh = QNH_TIME;
 
   if (!Basic().flight.OnGround // must be on ground
       || !countdown_autoqnh    // only do it once
       || Basic().gps.Replay // never in replay mode
+      || Basic().gps.Simulator // never in simulator
       || Basic().gps.NAVWarning // Reject if no valid GPS fix
       || !Basic().BaroAltitudeAvailable // Reject if no baro altitude
     ) {
-    countdown_autoqnh= 10; // restart...
+    if (countdown_autoqnh<= QNH_TIME) {
+      countdown_autoqnh= QNH_TIME; // restart if havent performed
+    }
     return;
   }
 
-  if (countdown_autoqnh)
+  if (countdown_autoqnh<= QNH_TIME)
     countdown_autoqnh--;
 
   if (!countdown_autoqnh) {
     SetBasic().pressure.FindQNH(Basic().BaroAltitude, 
                                 Calculated().TerrainAlt);
     AllDevicesPutQNH(Basic().pressure);
+    countdown_autoqnh = UINT_MAX; // disable after performing once
   }
 }
 
