@@ -104,9 +104,9 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
   else
     bmp = &Graphics::hCruise;
 
-  offset -= 24;
+  offset -= 25;
 
-  bmp->draw(canvas, rc.right + IBLSCALE(offset - 1),
+  bmp->draw(canvas, rc.right + IBLSCALE(offset),
             rc.bottom + IBLSCALE(-21));
 }
 
