@@ -105,9 +105,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
 
   if (drawlogger) {
     offset -= 7;
-    MaskedIcon &icon = (logger.isLoggerActive() && flip) ?
-                       Graphics::hLogger : Graphics::hLoggerOff;
-
+    MaskedIcon &icon = flip ? Graphics::hLogger : Graphics::hLoggerOff;
     icon.draw(canvas, rc.right + IBLSCALE(offset), rc.bottom + IBLSCALE(-7));
   }
 
