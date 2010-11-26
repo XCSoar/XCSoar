@@ -84,17 +84,9 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const RECT &rc,
 void
 GlueMapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
 {
-  bool drawlogger = true;
-  static bool lastLoggerActive = false;
   int offset = -1;
 
-  // don't bother drawing logger if not active for more than one second
-  if (!logger.isLoggerActive() && !lastLoggerActive)
-    drawlogger = false;
-
-  lastLoggerActive = logger.isLoggerActive();
-
-  if (drawlogger) {
+  if (logger.isLoggerActive()) {
     offset -= 7;
     bool flip = (Basic().DateTime.second % 2) == 0;
     MaskedIcon &icon = flip ? Graphics::hLogger : Graphics::hLoggerOff;
