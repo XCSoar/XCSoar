@@ -69,6 +69,7 @@ public:
     aircraft_state(_aircraft_state),
     canvas(_canvas),
     glide_polar(polar),
+    task_valid(false),
     labels(projection.GetMapRect())
   {
     // if pan mode, show full names
@@ -186,8 +187,10 @@ public:
 
     TCHAR Buffer[32];
 
-    if (!in_task && (pDisplayTextType == DISPLAYNAMEIFINTASK))
-      return;
+    if (!in_task && (pDisplayTextType == DISPLAYNAMEIFINTASK)) {
+      if (task_valid || !(way_point.is_landable() || (way_point.is_airport())))
+        return;
+    }
 
     if (do_write_label)
       FormatTitle(Buffer, way_point, in_task);
@@ -270,8 +273,12 @@ private:
   int pDisplayTextType;
   TCHAR sAltUnit[4];
   const GlidePolar glide_polar;
+  bool task_valid;
 
 public:
+  void set_task_valid() {
+    task_valid = true;
+  }
   WayPointLabelList labels;
 };
 
@@ -337,6 +344,9 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
   // and we won't add it if it is already there
   if (task != NULL) {
     ProtectedTaskManager::Lease task_manager(*task);
+    if (task_manager->stats_valid()) {
+      v.set_task_valid();
+    }
     task_manager->CAccept(v);
   }
 
