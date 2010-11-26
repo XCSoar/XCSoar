@@ -160,6 +160,11 @@ def convert(template, working_dir):
                          Angle.degrees(float(template["LONMIN"].replace(",", "."))), 
                          Angle.degrees(float(template["LONMAX"].replace(",", "."))))
     m.AddTerrain(9)
+    
+    credits = []
+    credits.append("Topology data \xa9 OpenStreetMap contributors (http://www.openstreetmap.org), CC-BY-SA (http://creativecommons.org/licenses/by-sa/2.0/)")
+    credits.append("Topology data conversion \xa9 LK8000 project (http://www.lk8000.it)")
+    m.AddInformationFile(name, "Paolo Ventafridda <coolwind@email.it>", credits)
 
     lkm = zipfile.ZipFile(lkm_file, "r");
     needed_files = []
