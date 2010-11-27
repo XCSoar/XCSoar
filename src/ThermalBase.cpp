@@ -49,9 +49,7 @@ EstimateThermalBase(const GeoPoint location, const fixed altitude,
   RasterTerrain::Lease *map = (terrain != NULL) ?
                               new RasterTerrain::Lease(*terrain) : NULL;
 
-  GeoPoint loc = FindLatitudeLongitude(location,
-                                       wind.bearing, wind.norm * dt);
-
+  GeoPoint loc;
   for (fixed t = fixed_zero; t <= Tmax; t += dt) {
     loc = FindLatitudeLongitude(location, wind.bearing, wind.norm * t);
 
