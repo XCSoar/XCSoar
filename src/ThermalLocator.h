@@ -103,7 +103,7 @@ private:
 
   void invalid_estimate(THERMAL_LOCATOR_INFO &therm) const;
 
-  void glider_average(fixed &xav, fixed& yav);
+  FlatPoint glider_average();
 
   fixed est_t;
   GeoPoint est_location;
