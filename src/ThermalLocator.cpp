@@ -82,8 +82,7 @@ ThermalLocator::AddPoint(const fixed t, const GeoPoint &location, const fixed w)
 void
 ThermalLocator::invalid_estimate(THERMAL_LOCATOR_INFO &therm) const
 {
-  therm.ThermalEstimate_R = fixed_minus_one;
-  therm.ThermalEstimate_W = fixed_zero;
+  therm.ThermalEstimate_Valid = false;
 }
 
 void
@@ -172,8 +171,7 @@ ThermalLocator::Update_Internal(const fixed t_0,
   est_location = projection.funproject(f0);
 
   therm.ThermalEstimate_Location = est_location;
-  therm.ThermalEstimate_R = fixed_one;
-  therm.ThermalEstimate_W = fixed_one;
+  therm.ThermalEstimate_Valid = true;
 }
 
 void

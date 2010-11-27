@@ -214,10 +214,8 @@ struct THERMAL_LOCATOR_INFO
 {
   /** Location of thermal at aircraft altitude */
   GeoPoint ThermalEstimate_Location;
-  /** Estimated thermal strength (m/s) */
-  fixed ThermalEstimate_W;
-  /** Estimated thermal radius (m) */
-  fixed ThermalEstimate_R;
+  /** Is thermal estimation valid? */
+  bool ThermalEstimate_Valid;
 
   /** Position and data of the last thermal sources */
   THERMAL_SOURCE_INFO ThermalSources[MAX_THERMAL_SOURCES];

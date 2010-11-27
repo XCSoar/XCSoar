@@ -434,11 +434,11 @@ VegaDevice::OnSysTicker()
   THERMAL_LOCATOR_INFO t = device_blackboard.Calculated();
   char tbuf[100];
   sprintf(tbuf, "PTLOC,%d,%g,%g,%g,%g",
-          (int)(positive(t.ThermalEstimate_R)),
+          (int)(t.ThermalEstimate_Valid),
           (double)t.ThermalEstimate_Location.Longitude.value_degrees(),
           (double)t.ThermalEstimate_Location.Latitude.value_degrees(),
-          (double)t.ThermalEstimate_W,
-          (double)t.ThermalEstimate_R);
+          (double)fixed_zero,
+          (double)fixed_zero);
 
   PortWriteNMEA(port, tbuf);
 }

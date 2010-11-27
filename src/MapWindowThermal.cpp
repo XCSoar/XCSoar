@@ -61,7 +61,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
   const MapWindowProjection &projection = render_projection;
 
   if (GetDisplayMode() == dmCircling) {
-    if (positive(Calculated().ThermalEstimate_R)) {
+    if (Calculated().ThermalEstimate_Valid) {
       RasterPoint sc;
       if (projection.GeoToScreenIfVisible(Calculated().ThermalEstimate_Location, sc)) {
         Graphics::hBmpThermalSource.draw(canvas, sc.x, sc.y);
