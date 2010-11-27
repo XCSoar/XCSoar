@@ -50,22 +50,35 @@ EstimateThermalBase(const GeoPoint location, const fixed altitude,
 
   // Time spent in last thermal
   fixed Tmax = altitude / average;
+
+  // Shortcut if no terrain available
+  if (terrain == NULL) {
+    ground_location = FindLatitudeLongitude(location, wind.bearing,
+                                            wind.norm * Tmax);
+    ground_alt = fixed_zero;
+    return;
+  }
+
   // Time of the 10 calculation intervals
   fixed dt = Tmax / 10;
 
-  RasterTerrain::Lease *map = (terrain != NULL) ?
-                              new RasterTerrain::Lease(*terrain) : NULL;
+  RasterTerrain::Lease *map = new RasterTerrain::Lease(*terrain);
+
   GeoPoint loc;
   // Iterate over 10 time-based calculation intervals
   for (fixed t = fixed_zero; t <= Tmax; t += dt) {
-    // Calculate position at the start of the calculation interval
+    // Calculate position
     loc = FindLatitudeLongitude(location, wind.bearing, wind.norm * t);
-    // Calculate altitude at the start of the calculation interval
+    // Calculate altitude
     fixed hthermal = altitude - average * t;
-
+    // Calculate altitude above ground
     fixed dh = hthermal - GetElevation(map, loc);
+
+    // Below ground level
     if (negative(dh)) {
+      // Calculate time when we passed the ground level
       t = t + dh / average;
+      // Calculate position
       loc = FindLatitudeLongitude(location, wind.bearing, wind.norm * t);
       break;
     }
