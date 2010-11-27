@@ -134,7 +134,6 @@ private:
 
   ThermalLocator_Point points[TLOCATOR_NMAX]; /**< Circular buffer of points */
 
-  bool initialised;
   unsigned n_index; /**< Index of next point to add */
   unsigned n_points; /**< Number of points in buffer */
 };

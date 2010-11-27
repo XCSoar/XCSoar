@@ -45,45 +45,38 @@ ThermalLocator::ThermalLocator_Point::Drift(fixed t,
 
 ThermalLocator::ThermalLocator()
 {
-  initialised = true;
   Reset();
 }
 
 void
 ThermalLocator::Reset()
 {
-  if (initialised) {
-    initialised = false;
+  // clear array
+  for (int i = 0; i < TLOCATOR_NMAX; ++i)
+    points[i].valid = false;
 
-    // clear array
-    for (int i = 0; i < TLOCATOR_NMAX; ++i) {
-      points[i].valid = false;
-    }
-    n_index = 0;
-    n_points = 0;
-  }
+  n_index = 0;
+  n_points = 0;
 }
 
 void
 ThermalLocator::AddPoint(const fixed t, const GeoPoint &location, const fixed w)
 {
+  if (n_points == 0) {
+    // set initial estimate
+    est_location = location;
+    est_t = t;
+  }
+
   points[n_index].location = location;
   points[n_index].t_0 = t;
   points[n_index].w = max(w, fixed(-0.1));
   points[n_index].valid = true;
 
-  n_index = (n_index+1) % TLOCATOR_NMAX;
+  n_index = (n_index + 1) % TLOCATOR_NMAX;
 
-  if (n_points+1 < TLOCATOR_NMAX)
+  if (n_points + 1 < TLOCATOR_NMAX)
     n_points++;
-
-  if (!initialised) {
-    initialised = true;
-
-    // set initial estimate
-    est_location = location;
-    est_t = t;
-  }
 }
 
 void
