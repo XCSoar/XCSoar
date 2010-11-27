@@ -135,6 +135,24 @@ TranscodeKey(unsigned key_code)
       key_code = 0x28; // - key = pg Down
       break;
     }
+  } else if (is_altair()){  // handles new keypad driver button codes
+    switch(key_code) {
+    case VK_F5:
+      key_code = '6';
+      break;
+    case VK_F6:
+      key_code = '7';
+      break;
+    case VK_F7:
+      key_code = '8';
+      break;
+    case VK_F8:
+      key_code = '9';
+      break;
+    case VK_F9:
+      key_code = '0';
+      break;
+    }
   }
 
   return key_code;
