@@ -2,12 +2,7 @@ import sys
 import os
 import convert_lkm
 
-def main():
-    if len(sys.argv) < 2:
-        print "Too few arguments given! Please provide a working folder."
-        return
-    
-    folder = sys.argv[1]
+def convert_folder(folder):
     if not os.path.exists(folder) and os.path.isdir(folder):
         print "Working folder \"" + folder + "\" does not exist!"
         return
@@ -29,6 +24,14 @@ def main():
         template = convert_lkm.read_template(os.path.join(folder, file + ".LKM"))
         convert_lkm.convert(template, folder)
         print "-------------------"
+
+def main():
+    if len(sys.argv) < 2:
+        print "Too few arguments given! Please provide a working folder."
+        return
+    
+    folder = sys.argv[1]
+    convert_folder(folder)
     
 if __name__ == '__main__':
     main()    
