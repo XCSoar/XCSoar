@@ -821,33 +821,35 @@ GlideComputerAirData::ThermalSources()
 void
 GlideComputerAirData::LastThermalStats()
 {
-  if((Calculated().Circling == false) && (LastCalculated().Circling == true)
-     && positive(Calculated().ClimbStartTime)) {
+  if (Calculated().Circling != false ||
+      LastCalculated().Circling != true ||
+      !positive(Calculated().ClimbStartTime))
+    return;
 
-    fixed ThermalTime =
-        Calculated().CruiseStartTime - Calculated().ClimbStartTime;
+  fixed ThermalTime = Calculated().CruiseStartTime - Calculated().ClimbStartTime;
 
-    if (positive(ThermalTime)) {
-      fixed ThermalGain = Calculated().CruiseStartAlt
-          + Basic().EnergyHeight - Calculated().ClimbStartAlt;
+  if (!positive(ThermalTime))
+    return;
 
-      if (positive(ThermalGain) && (ThermalTime > THERMAL_TIME_MIN)) {
-        SetCalculated().LastThermalAverage = ThermalGain / ThermalTime;
-        SetCalculated().LastThermalGain = ThermalGain;
-        SetCalculated().LastThermalTime = ThermalTime;
+  fixed ThermalGain = Calculated().CruiseStartAlt
+      + Basic().EnergyHeight - Calculated().ClimbStartAlt;
 
-        if (Calculated().LastThermalAverageSmooth == fixed_zero)
-          SetCalculated().LastThermalAverageSmooth =
-              Calculated().LastThermalAverage;
-        else
-          SetCalculated().LastThermalAverageSmooth =
-              LowPassFilter(Calculated().LastThermalAverageSmooth,
-                            Calculated().LastThermalAverage, fixed(0.3));
+  if (!positive(ThermalGain) || ThermalTime <= THERMAL_TIME_MIN)
+    return;
 
-        OnDepartedThermal();
-      }
-    }
-  }
+  SetCalculated().LastThermalAverage = ThermalGain / ThermalTime;
+  SetCalculated().LastThermalGain = ThermalGain;
+  SetCalculated().LastThermalTime = ThermalTime;
+
+  if (Calculated().LastThermalAverageSmooth == fixed_zero)
+    SetCalculated().LastThermalAverageSmooth =
+        Calculated().LastThermalAverage;
+  else
+    SetCalculated().LastThermalAverageSmooth =
+        LowPassFilter(Calculated().LastThermalAverageSmooth,
+                      Calculated().LastThermalAverage, fixed(0.3));
+
+  OnDepartedThermal();
 }
 
 void
