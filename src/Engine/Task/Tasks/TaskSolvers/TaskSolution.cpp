@@ -53,16 +53,10 @@ TaskSolution::glide_solution_travelled(const TaskPoint& taskpoint,
                                        const GlidePolar &polar,
                                        const fixed minH)
 {
-  GeoVector vec = taskpoint.get_vector_travelled(ac);
-  if (vec.Distance == fixed_zero) {
-    GlideResult null_res;
-    return null_res;
-  } else {
-    GlideState gs(vec,
-                  max(minH,taskpoint.get_elevation()),
-                  ac.NavAltitude, ac.wind);
-    return polar.solve(gs);
-  }
+  GlideState gs(taskpoint.get_vector_travelled(ac),
+                max(minH,taskpoint.get_elevation()),
+                ac.NavAltitude, ac.wind);
+  return polar.solve(gs);
 }
 
 GlideResult 
