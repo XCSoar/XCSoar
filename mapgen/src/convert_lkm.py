@@ -126,16 +126,14 @@ def update_topology_file(temp_dir):
     
     old = open(old_file, "r")
     new = open(new_file, "w")
+    
+    water_line = []
     for line in old:
         # Skip coastline shapefile
         if line.lower().startswith("coast_area"): continue
         line = line.strip().split(",")
         
         # Adjust zoom thresholds
-        if line[0].lower() == "water_area": 
-            line[1] = "30"
-            line[3] = ""
-            
         if line[0].lower() == "water_line": line[1] = "7"
         if line[0].lower() == "city_area": line[1] = "50"
         if line[0].lower() == "roadbig_line": line[1] = "15"
@@ -146,7 +144,17 @@ def update_topology_file(temp_dir):
         if line[0].lower() == "citymedium_point": line[1] = "10"
         if line[0].lower() == "citysmall_point": line[1] = "5"
         if line[0].lower() == "cityverysmall_point": line[1] = "2.5"
+        
+        # Move water areas to the end -> city names have higher priority
+        if line[0].lower() == "water_area": 
+            line[1] = "30"
+            water_line = line
+            continue
+            
         new.write(",".join(line) + "\n")
+
+    if water_line != []:
+        new.write(",".join(water_line) + "\n")
     
     old.close()
     new.close()
