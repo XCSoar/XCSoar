@@ -105,8 +105,6 @@ private:
 
   FlatPoint glider_average();
 
-  GeoPoint est_location;
-
   void AddPoint(const fixed t, const GeoPoint &location, const fixed w);
   void Update(const fixed t_0, const GeoPoint &location_0,
               const SpeedVector wind, THERMAL_LOCATOR_INFO &therm);

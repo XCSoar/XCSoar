@@ -62,10 +62,6 @@ ThermalLocator::Reset()
 void
 ThermalLocator::AddPoint(const fixed t, const GeoPoint &location, const fixed w)
 {
-  if (n_points == 0)
-    // set initial estimate
-    est_location = location;
-
   points[n_index].location = location;
   points[n_index].t_0 = t;
   points[n_index].w = max(w, fixed(-0.1));
@@ -164,9 +160,8 @@ ThermalLocator::Update_Internal(const fixed t_0,
   }
 
   const FlatPoint f0(sx / acc + av.x, sy / acc + av.y);
-  est_location = projection.funproject(f0);
 
-  therm.ThermalEstimate_Location = est_location;
+  therm.ThermalEstimate_Location = projection.funproject(f0);
   therm.ThermalEstimate_Valid = true;
 }
 
