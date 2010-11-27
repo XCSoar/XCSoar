@@ -29,7 +29,7 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
 
-static short
+static fixed
 GetElevation(RasterTerrain::Lease *map, const GeoPoint loc)
 {
   short hground = (map != NULL) ? (*map)->GetField(loc) :
@@ -37,7 +37,7 @@ GetElevation(RasterTerrain::Lease *map, const GeoPoint loc)
   if (RasterBuffer::is_special(hground))
     hground = 0;
 
-  return hground;
+  return fixed(hground);
 }
 
 void
@@ -54,21 +54,22 @@ EstimateThermalBase(const GeoPoint location, const fixed altitude,
     return;
   }
 
+  // Time spent in last thermal
   fixed Tmax = altitude / average;
+  // Time of the 10 calculation intervals
   fixed dt = Tmax / 10;
 
   RasterTerrain::Lease *map = (terrain != NULL) ?
                               new RasterTerrain::Lease(*terrain) : NULL;
-
   GeoPoint loc;
+  // Iterate over 10 time-based calculation intervals
   for (fixed t = fixed_zero; t <= Tmax; t += dt) {
+    // Calculate position at the start of the calculation interval
     loc = FindLatitudeLongitude(location, wind.bearing, wind.norm * t);
-
+    // Calculate altitude at the start of the calculation interval
     fixed hthermal = altitude - average * t;
 
-    short hground = GetElevation(map, loc);
-
-    fixed dh = hthermal - fixed(hground);
+    fixed dh = hthermal - GetElevation(map, loc);
     if (negative(dh)) {
       t = t + dh / average;
       loc = FindLatitudeLongitude(location, wind.bearing, wind.norm * t);
@@ -76,11 +77,9 @@ EstimateThermalBase(const GeoPoint location, const fixed altitude,
     }
   }
 
-  short hground = GetElevation(map, loc);
+  ground_location = loc;
+  ground_alt = GetElevation(map, ground_location);
 
   delete map;
-
-  ground_location = loc;
-  ground_alt = fixed(hground);
 }
 
