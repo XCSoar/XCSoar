@@ -37,6 +37,12 @@ Copyright_License {
 void
 InfoBoxContentSpeedGround::Update(InfoBoxWindow &infobox)
 {
+
+  if (XCSoarInterface::Basic().gps.NAVWarning) {
+    infobox.SetInvalid();
+    return;
+  }
+
   // Set Value
   TCHAR tmp[32];
   Units::FormatUserSpeed(XCSoarInterface::Basic().GroundSpeed,
