@@ -182,7 +182,8 @@ InfoBoxContentTerrainHeight::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
 
-  if (!XCSoarInterface::Calculated().TerrainValid) {
+  if (XCSoarInterface::Basic().gps.NAVWarning
+      || !XCSoarInterface::Calculated().TerrainValid){
     infobox.SetInvalid();
     return;
   }
