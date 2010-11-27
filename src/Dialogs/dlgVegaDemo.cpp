@@ -29,19 +29,22 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "PeriodClock.hpp"
 
-static WndForm *wf=NULL;
-
-static void OnCloseClicked(WndButton &Sender){
-	(void)Sender;
-  wf->SetModalResult(mrOK);
-}
+static WndForm *wf;
 
 static fixed VegaDemoW = fixed_zero;
 static fixed VegaDemoV = fixed_zero;
 static bool VegaDemoAudioClimb = true;
 
+static void
+OnCloseClicked(WndButton &Sender)
+{
+  (void)Sender;
+  wf->SetModalResult(mrOK);
+}
 
-static void VegaWriteDemo(void) {
+static void
+VegaWriteDemo()
+{
   static PeriodClock last_time;
   if (!last_time.check_update(250))
     return;
@@ -51,16 +54,15 @@ static void VegaWriteDemo(void) {
             iround(VegaDemoW * 10),
             iround(VegaDemoV * 10));
   VarioWriteNMEA(dbuf);
-};
+}
 
-
-
-static void OnVegaDemoW(DataField *Sender,
-			 DataField::DataAccessKind_t Mode){
-  switch(Mode){
-    case DataField::daChange:
-      VegaDemoW = Units::ToSysVSpeed(Sender->GetAsFixed());
-      VegaWriteDemo();
+static void
+OnVegaDemoW(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  switch (Mode){
+  case DataField::daChange:
+    VegaDemoW = Units::ToSysVSpeed(Sender->GetAsFixed());
+    VegaWriteDemo();
     break;
 
   case DataField::daInc:
@@ -70,13 +72,13 @@ static void OnVegaDemoW(DataField *Sender,
   }
 }
 
-
-static void OnVegaDemoV(DataField *Sender,
-			 DataField::DataAccessKind_t Mode){
-  switch(Mode){
-    case DataField::daChange:
-      VegaDemoV = Units::ToSysSpeed(Sender->GetAsFixed());
-      VegaWriteDemo();
+static void
+OnVegaDemoV(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  switch (Mode){
+  case DataField::daChange:
+    VegaDemoV = Units::ToSysSpeed(Sender->GetAsFixed());
+    VegaWriteDemo();
     break;
 
   case DataField::daInc:
@@ -86,13 +88,13 @@ static void OnVegaDemoV(DataField *Sender,
   }
 }
 
-
-static void OnVegaDemoAudioClimb(DataField *Sender,
-			 DataField::DataAccessKind_t Mode){
-  switch(Mode){
-    case DataField::daChange:
-      VegaDemoAudioClimb = (Sender->GetAsInteger()==1);
-      VegaWriteDemo();
+static void
+OnVegaDemoAudioClimb(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  switch (Mode){
+  case DataField::daChange:
+    VegaDemoAudioClimb = Sender->GetAsInteger() == 1;
+    VegaWriteDemo();
     break;
 
   case DataField::daInc:
@@ -101,7 +103,6 @@ static void OnVegaDemoAudioClimb(DataField *Sender,
     return;
   }
 }
-
 
 static CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnVegaDemoW),
@@ -111,11 +112,11 @@ static CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-
-void dlgVegaDemoShowModal(void){
-  wf = LoadDialog(CallBackTable,
-		      XCSoarInterface::main_window,
-		      _T("IDR_XML_VEGADEMO"));
+void
+dlgVegaDemoShowModal()
+{
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                  _T("IDR_XML_VEGADEMO"));
 
   WndProperty* wp;
 
@@ -153,6 +154,4 @@ void dlgVegaDemoShowModal(void){
   delete wf;
 
   wf = NULL;
-
 }
-
