@@ -190,6 +190,5 @@ ThermalLocator::Process(const bool circling, const fixed time,
     Update(time, location, wind, therm);
   } else {
     Reset();
-    invalid_estimate(therm);
   }
 }
