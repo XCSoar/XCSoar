@@ -788,7 +788,8 @@ GlideComputerAirData::ThermalSources()
   GeoPoint ground_location;
   fixed ground_altitude;
 
-  if (!Calculated().ThermalEstimate_Valid)
+  if (!Calculated().ThermalEstimate_Valid ||
+      !positive(Calculated().LastThermalAverage))
     return;
 
   EstimateThermalBase(Calculated().ThermalEstimate_Location,
