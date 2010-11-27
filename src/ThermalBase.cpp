@@ -45,14 +45,8 @@ EstimateThermalBase(const GeoPoint location, const fixed altitude,
                     const fixed average, const SpeedVector wind,
                     GeoPoint &ground_location, fixed &ground_alt)
 {
-  if (location.Longitude == Angle::native(fixed_zero) ||
-      location.Latitude == Angle::native(fixed_zero) ||
-      average < fixed_one) {
-    ground_location.Longitude = Angle::native(fixed_zero);
-    ground_location.Latitude = Angle::native(fixed_zero);
-    ground_alt = fixed_minus_one;
+  if (!positive(average))
     return;
-  }
 
   // Time spent in last thermal
   fixed Tmax = altitude / average;
