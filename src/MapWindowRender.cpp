@@ -86,6 +86,7 @@ MapWindow::RenderTaskElements(Canvas &canvas)
 
   DrawWaypoints(canvas);
 
+  // TODO enhancement: don't draw offtrack indicator if showing spot heights
   DrawTaskOffTrackIndicator(canvas);
 
   if (marks != NULL &&
@@ -138,7 +139,6 @@ MapWindow::RenderSymbology_lower(Canvas &canvas,
                                  const RasterPoint aircraft_pos)
 {
   if (Basic().gps.Connected)
-    // TODO enhancement: don't draw offtrack indicator if showing spot heights
     DrawBestCruiseTrack(canvas, aircraft_pos);
 
   DrawAirspaceIntersections(canvas);
