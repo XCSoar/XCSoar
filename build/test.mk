@@ -55,7 +55,7 @@ TEST_NAMES = \
 	TestAngle TestUnits TestEarth TestSunEphemeris \
 	TestRadixTree TestGeoBounds \
 	TestLogger TestDriver \
-	TestWayPointFile
+	TestWayPointFile TestThermalBase
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
 
@@ -84,6 +84,20 @@ TEST_UNITS_SOURCES = \
 TEST_UNITS_OBJS = $(call SRC_TO_OBJ,$(TEST_UNITS_SOURCES))
 TEST_UNITS_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestUnits$(TARGET_EXEEXT): $(TEST_UNITS_OBJS) $(TEST_UNITS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_THERMALBASE_SOURCES = \
+	$(SRC)/ThermalBase.cpp \
+	$(SRC)/Poco/RWLock.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestThermalBase.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp
+TEST_THERMALBASE_OBJS = $(call SRC_TO_OBJ,$(TEST_THERMALBASE_SOURCES))
+TEST_THERMALBASE_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestThermalBase$(TARGET_EXEEXT): $(TEST_THERMALBASE_OBJS) $(TEST_THERMALBASE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
