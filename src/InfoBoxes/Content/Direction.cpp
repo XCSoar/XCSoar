@@ -35,6 +35,10 @@ Copyright_License {
 void
 InfoBoxContentTrack::Update(InfoBoxWindow &infobox)
 {
+  if (XCSoarInterface::Basic().gps.NAVWarning) {
+    infobox.SetInvalid();
+    return;
+  }
   infobox.SetValue(XCSoarInterface::Basic().TrackBearing, _T("T"));
 }
 
