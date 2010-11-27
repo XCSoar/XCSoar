@@ -40,6 +40,11 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
 
+  if (XCSoarInterface::Basic().gps.NAVWarning){
+    infobox.SetInvalid();
+    return;
+  }
+
   // Set Value
   Units::FormatUserAltitude(XCSoarInterface::Basic().GPSAltitude, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
