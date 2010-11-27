@@ -69,8 +69,8 @@ EstimateThermalBase(const GeoPoint Thermal_Location, const fixed altitude,
     }
   }
 
-  short hground = (terrain != NULL) ? terrain->GetTerrainHeight(loc) :
-                                      RasterTerrain::TERRAIN_INVALID;
+  short hground = (map != NULL) ? (*map)->GetField(loc) :
+                                  RasterTerrain::TERRAIN_INVALID;
   if (RasterBuffer::is_special(hground))
     hground = 0;
 
