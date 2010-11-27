@@ -293,7 +293,6 @@ protected:
 private:
   void RenderStart(Canvas &canvas);
   void RenderMapLayer(Canvas &canvas);
-  void RenderAreas(Canvas &canvas);
   void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos);
   void RenderTaskElements(Canvas &canvas);
   void RenderGlide(Canvas &canvas);

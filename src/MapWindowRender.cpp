@@ -75,19 +75,6 @@ MapWindow::RenderMapLayer(Canvas &canvas)
 }
 
 /**
- * Render the AAT areas and airspace
- * @param canvas The drawing canvas
- * @param rc The area to draw in
- */
-void
-MapWindow::RenderAreas(Canvas &canvas)
-{
-  // Draw airspace on top
-  if (SettingsMap().OnAirSpace > 0)
-    DrawAirspace(canvas);
-}
-
-/**
  * Renders the snail trail feature
  * @param canvas The drawing canvas
  * @param rc The area to draw in
@@ -183,8 +170,9 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   // Render terrain, groundline and topology and reset pen, brush and font
   RenderMapLayer(canvas);
 
-  // Render the AAT areas and airspace
-  RenderAreas(canvas);
+  // Render airspace
+  if (SettingsMap().OnAirSpace > 0)
+    DrawAirspace(canvas);
 
   // Render the snail trail
   /// @todo trail should be drawn above task shaded sections
