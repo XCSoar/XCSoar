@@ -24,9 +24,6 @@ Copyright_License {
 #ifndef THERMALLOCATOR_H
 #define THERMALLOCATOR_H
 
-#define TLOCATOR_NMIN 5
-#define TLOCATOR_NMAX 60
-
 #include "Math/fixed.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/Flat/FlatPoint.hpp"
@@ -35,22 +32,19 @@ Copyright_License {
 
 class TaskProjection;
 
+#define TLOCATOR_NMIN 5
+#define TLOCATOR_NMAX 60
+
 /**
  * Class to estimate the location of the center of a thermal
  * when circling.
  */
 class ThermalLocator {
 private:
-
-  /** 
-   * Class used to hold thermal estimate samples
-   */
+  /** Class used to hold thermal estimate samples */
   struct ThermalLocator_Point 
   {
-    /**
-     * Default constructor
-     * 
-     */
+    /** Default constructor */
     ThermalLocator_Point()
     {
       valid = false;
@@ -69,19 +63,23 @@ private:
                const GeoPoint& wind_drift,
                fixed decay);
 
-    bool valid;                 /**< Whether this point is a valid sample */
-    
-    GeoPoint location;          /**< Actual location of sample */
-    FlatPoint loc_drift;        /**< Projected/drifted sample */
-    fixed t_0;                  /**< Time of sample (s) */
-    fixed w;                    /**< Scaled updraft value of sample */
-    fixed weight;               /**< Weighting used for this point */
+    /** Whether this point is a valid sample */
+    bool valid;
+    /** Actual location of sample */
+    GeoPoint location;
+    /** Projected/drifted sample */
+    FlatPoint loc_drift;
+    /** Time of sample (s) */
+    fixed t_0;
+    /** Scaled updraft value of sample */
+    fixed w;
+    /** Weighting used for this point */
+    fixed weight;
   };
 
 public:
   /** 
    * Default constructor.  Initialises object
-   * 
    */
   ThermalLocator();
 
@@ -96,15 +94,11 @@ public:
    * @param wind Wind vector
    * @param therm Output thermal estimate data
    */
-  void Process(const bool circling,
-               const fixed time, 
-               const GeoPoint &location, 
-               const fixed w,
-               const SpeedVector wind,
+  void Process(const bool circling, const fixed time, const GeoPoint &location,
+               const fixed w, const SpeedVector wind,
                THERMAL_LOCATOR_INFO& therm);
 
 private:
-
   void Reset();
 
   void invalid_estimate(THERMAL_LOCATOR_INFO &therm) const;
@@ -115,27 +109,23 @@ private:
   GeoPoint est_location;
 
   void AddPoint(const fixed t, const GeoPoint &location, const fixed w);
-  void Update(const fixed t_0,
-              const GeoPoint &location_0,
-              const SpeedVector wind,
-              THERMAL_LOCATOR_INFO &therm);
+  void Update(const fixed t_0, const GeoPoint &location_0,
+              const SpeedVector wind, THERMAL_LOCATOR_INFO &therm);
 
-  void Update_Internal(const fixed t_0,
-                       const TaskProjection& projection,
-                       const GeoPoint& location_0, 
-                       const GeoPoint& traildrift,
-                       const fixed decay,
-                       THERMAL_LOCATOR_INFO& therm);
+  void Update_Internal(const fixed t_0, const TaskProjection& projection,
+                       const GeoPoint& location_0, const GeoPoint& traildrift,
+                       const fixed decay, THERMAL_LOCATOR_INFO& therm);
 
-  void Drift(const fixed t_0,
-             const TaskProjection& projection, 
-             const GeoPoint& traildrift,
-             const fixed decay);
+  void Drift(const fixed t_0, const TaskProjection& projection,
+             const GeoPoint& traildrift, const fixed decay);
 
-  ThermalLocator_Point points[TLOCATOR_NMAX]; /**< Circular buffer of points */
+  /** Circular buffer of points */
+  ThermalLocator_Point points[TLOCATOR_NMAX];
 
-  unsigned n_index; /**< Index of next point to add */
-  unsigned n_points; /**< Number of points in buffer */
+  /** Index of next point to add */
+  unsigned n_index;
+  /** Number of points in buffer */
+  unsigned n_points;
 };
 
 #endif

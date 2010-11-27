@@ -33,13 +33,13 @@ ThermalLocator::ThermalLocator_Point::Drift(fixed t,
                                             fixed decay)
 {
   static const fixed decay_factor(-1.5/TLOCATOR_NMAX);
-  // convert to flat earth coordinates, then drift by wind and delta t
-  const fixed dt = t - t_0;
 
+  const fixed dt = t - t_0;
   weight = exp(decay_factor * decay * dt);
 
-  GeoPoint p = location+wind_drift*dt;
+  GeoPoint p = location + wind_drift * dt;
 
+  // convert to flat earth coordinates
   loc_drift = projection.fproject(p);
 }
 
@@ -105,11 +105,7 @@ ThermalLocator::Update(const fixed t_0,
   projection.reset(location_0);
   projection.update_fast();
 
-  Update_Internal(t_0, 
-                  projection, 
-                  location_0,
-                  traildrift, 
-                  fixed_one, therm);
+  Update_Internal(t_0, projection, location_0, traildrift, fixed_one, therm);
 }
 
 void
@@ -125,8 +121,8 @@ ThermalLocator::glider_average(fixed &xav, fixed& yav)
     }
   }
   if (acc) {
-    xav/= acc;
-    yav/= acc;
+    xav /= acc;
+    yav /= acc;
   }
 }
 
@@ -171,19 +167,17 @@ ThermalLocator::Update_Internal(const fixed t_0,
     return;
   }
 
-  const FlatPoint f0(sx/acc+xav, sy/acc+yav);
+  const FlatPoint f0(sx / acc + xav, sy / acc + yav);
   est_location = projection.funproject(f0);
-  
+
   therm.ThermalEstimate_Location = est_location;
   therm.ThermalEstimate_R = fixed_one;
   therm.ThermalEstimate_W = fixed_one;
 }
 
 void
-ThermalLocator::Drift(const fixed t_0, 
-                      const TaskProjection& projection, 
-                      const GeoPoint& traildrift,
-                      const fixed decay)
+ThermalLocator::Drift(const fixed t_0, const TaskProjection& projection,
+                      const GeoPoint& traildrift, const fixed decay)
 {
   for (int i = 0; i < TLOCATOR_NMAX; ++i) {
     if (points[i].valid)
@@ -192,12 +186,9 @@ ThermalLocator::Drift(const fixed t_0,
 }
 
 void
-ThermalLocator::Process(const bool circling,
-                        const fixed time, 
-                        const GeoPoint &location, 
-                        const fixed w,
-                        const SpeedVector wind,
-                        THERMAL_LOCATOR_INFO& therm)
+ThermalLocator::Process(const bool circling, const fixed time,
+                        const GeoPoint &location, const fixed w,
+                        const SpeedVector wind, THERMAL_LOCATOR_INFO& therm)
 {
   if (circling) {
     AddPoint(time, location, w);
