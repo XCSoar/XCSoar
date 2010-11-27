@@ -127,8 +127,26 @@ def update_topology_file(temp_dir):
     old = open(old_file, "r")
     new = open(new_file, "w")
     for line in old:
+        # Skip coastline shapefile
         if line.lower().startswith("coast_area"): continue
-        new.write(line)
+        line = line.strip().split(",")
+        
+        # Adjust zoom thresholds
+        if line[0].lower() == "water_area": 
+            line[1] = "30"
+            line[3] = ""
+            
+        if line[0].lower() == "water_line": line[1] = "7"
+        if line[0].lower() == "city_area": line[1] = "50"
+        if line[0].lower() == "roadbig_line": line[1] = "15"
+        if line[0].lower() == "roadmedium_line": line[1] = "7"
+        if line[0].lower() == "roadsmall_line": line[1] = "3"
+        if line[0].lower() == "railroad_line": line[1] = "10"
+        if line[0].lower() == "citybig_point": line[1] = "15"
+        if line[0].lower() == "citymedium_point": line[1] = "10"
+        if line[0].lower() == "citysmall_point": line[1] = "5"
+        if line[0].lower() == "cityverysmall_point": line[1] = "2.5"
+        new.write(",".join(line) + "\n")
     
     old.close()
     new.close()
