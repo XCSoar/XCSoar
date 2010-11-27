@@ -30,10 +30,9 @@ Copyright_License {
 #include "Engine/Navigation/SpeedVector.hpp"
 
 static fixed
-GetElevation(RasterTerrain::Lease *map, const GeoPoint loc)
+GetElevation(RasterTerrain::Lease &map, const GeoPoint loc)
 {
-  short hground = (map != NULL) ? (*map)->GetField(loc) :
-                                  RasterTerrain::TERRAIN_INVALID;
+  short hground = map->GetField(loc);
   if (RasterBuffer::is_special(hground))
     hground = 0;
 
@@ -62,7 +61,7 @@ EstimateThermalBase(const GeoPoint location, const fixed altitude,
   // Time of the 10 calculation intervals
   fixed dt = Tmax / 10;
 
-  RasterTerrain::Lease *map = new RasterTerrain::Lease(*terrain);
+  RasterTerrain::Lease map(*terrain);
 
   GeoPoint loc;
   // Iterate over 10 time-based calculation intervals
@@ -86,7 +85,5 @@ EstimateThermalBase(const GeoPoint location, const fixed altitude,
 
   ground_location = loc;
   ground_alt = GetElevation(map, ground_location);
-
-  delete map;
 }
 
