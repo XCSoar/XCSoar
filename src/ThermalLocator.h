@@ -105,7 +105,6 @@ private:
 
   FlatPoint glider_average();
 
-  fixed est_t;
   GeoPoint est_location;
 
   void AddPoint(const fixed t, const GeoPoint &location, const fixed w);

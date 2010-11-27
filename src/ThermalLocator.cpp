@@ -62,11 +62,9 @@ ThermalLocator::Reset()
 void
 ThermalLocator::AddPoint(const fixed t, const GeoPoint &location, const fixed w)
 {
-  if (n_points == 0) {
+  if (n_points == 0)
     // set initial estimate
     est_location = location;
-    est_t = t;
-  }
 
   points[n_index].location = location;
   points[n_index].t_0 = t;
@@ -157,8 +155,6 @@ ThermalLocator::Update_Internal(const fixed t_0,
       acc += weight;
     }
   }
-
-  est_t = t_0;
 
   // if sufficient data, estimate location
 
