@@ -230,6 +230,21 @@ OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
   return true;
 }
 
+static bool
+OnKeyDown(WndForm &Sender, unsigned key_code)
+{
+  switch (key_code){
+  case VK_ESCAPE:
+    if (is_altair() && wTaskPoints->has_focus()){
+       wf->focus_first_control();
+      return true;
+    }
+    return false;
+  default:
+    return false;
+  }
+}
+
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnPropertiesClicked),
@@ -271,6 +286,8 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
 
   wTaskPoints->SetActivateCallback(OnTaskListEnter);
   wTaskPoints->SetPaintItemCallback(OnTaskPaintListItem);
+
+  wf->SetKeyDownNotify(OnKeyDown);
 
   RefreshView();
 
