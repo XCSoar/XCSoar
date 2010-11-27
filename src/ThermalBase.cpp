@@ -30,32 +30,32 @@ Copyright_License {
 #include "Engine/Navigation/SpeedVector.hpp"
 
 void
-EstimateThermalBase(const GeoPoint Thermal_Location, const fixed altitude,
-                    const fixed wthermal, const SpeedVector wind,
+EstimateThermalBase(const GeoPoint location, const fixed altitude,
+                    const fixed average, const SpeedVector wind,
                     GeoPoint &ground_location, fixed &ground_alt)
 {
-  if (Thermal_Location.Longitude == Angle::native(fixed_zero) ||
-      Thermal_Location.Latitude == Angle::native(fixed_zero) ||
-      wthermal < fixed_one) {
+  if (location.Longitude == Angle::native(fixed_zero) ||
+      location.Latitude == Angle::native(fixed_zero) ||
+      average < fixed_one) {
     ground_location.Longitude = Angle::native(fixed_zero);
     ground_location.Latitude = Angle::native(fixed_zero);
     ground_alt = fixed_minus_one;
     return;
   }
 
-  fixed Tmax = altitude / wthermal;
+  fixed Tmax = altitude / average;
   fixed dt = Tmax / 10;
 
   RasterTerrain::Lease *map = (terrain != NULL) ?
                               new RasterTerrain::Lease(*terrain) : NULL;
 
-  GeoPoint loc = FindLatitudeLongitude(Thermal_Location,
+  GeoPoint loc = FindLatitudeLongitude(location,
                                        wind.bearing, wind.norm * dt);
 
   for (fixed t = fixed_zero; t <= Tmax; t += dt) {
-    loc = FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * t);
+    loc = FindLatitudeLongitude(location, wind.bearing, wind.norm * t);
 
-    fixed hthermal = altitude - wthermal * t;
+    fixed hthermal = altitude - average * t;
     short hground = (map != NULL) ? (*map)->GetField(loc) :
                                     RasterTerrain::TERRAIN_INVALID;
     if (RasterBuffer::is_special(hground))
@@ -63,8 +63,8 @@ EstimateThermalBase(const GeoPoint Thermal_Location, const fixed altitude,
 
     fixed dh = hthermal - fixed(hground);
     if (negative(dh)) {
-      t = t + dh / wthermal;
-      loc = FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * t);
+      t = t + dh / average;
+      loc = FindLatitudeLongitude(location, wind.bearing, wind.norm * t);
       break;
     }
   }

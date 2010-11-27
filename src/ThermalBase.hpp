@@ -29,11 +29,8 @@ Copyright_License {
 struct GeoPoint;
 struct SpeedVector;
 
-void EstimateThermalBase(const GeoPoint Thermal_Location,
-                         const fixed altitude,
-                         const fixed wthermal,
-                         const SpeedVector wind,
-                         GeoPoint &ground_location,
-                         fixed &ground_alt);
+void EstimateThermalBase(const GeoPoint location, const fixed altitude,
+                         const fixed average, const SpeedVector wind,
+                         GeoPoint &ground_location, fixed &ground_alt);
 
 #endif
