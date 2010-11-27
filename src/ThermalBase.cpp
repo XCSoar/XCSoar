@@ -33,14 +33,14 @@ void
 EstimateThermalBase(const GeoPoint Thermal_Location,
                     const fixed altitude, const fixed wthermal,
                     const SpeedVector wind,
-                    GeoPoint *ground_location, fixed *ground_alt)
+                    GeoPoint &ground_location, fixed &ground_alt)
 {
   if ((Thermal_Location.Longitude == Angle::native(fixed_zero))
       || (Thermal_Location.Latitude == Angle::native(fixed_zero))
       || (wthermal < fixed_one)) {
-    ground_location->Longitude = Angle::native(fixed_zero);
-    ground_location->Latitude = Angle::native(fixed_zero);
-    *ground_alt = fixed_minus_one;
+    ground_location.Longitude = Angle::native(fixed_zero);
+    ground_location.Latitude = Angle::native(fixed_zero);
+    ground_alt = fixed_minus_one;
     return;
   }
 
@@ -81,7 +81,7 @@ EstimateThermalBase(const GeoPoint Thermal_Location,
 
   delete map;
 
-  *ground_location = loc;
-  *ground_alt = fixed(hground);
+  ground_location = loc;
+  ground_alt = fixed(hground);
 }
 

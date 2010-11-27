@@ -792,8 +792,8 @@ GlideComputerAirData::ThermalSources()
                       Basic().NavAltitude,
                       Calculated().LastThermalAverage,
                       Basic().wind,
-                      &ground_location,
-                      &ground_altitude);
+                      ground_location,
+                      ground_altitude);
 
   if (positive(ground_altitude)) {
     fixed tbest = fixed_zero;

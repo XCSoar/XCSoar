@@ -33,7 +33,7 @@ void EstimateThermalBase(const GeoPoint Thermal_Location,
                          const fixed altitude,
                          const fixed wthermal,
                          const SpeedVector wind,
-                         GeoPoint *ground_location,
-                         fixed *ground_alt);
+                         GeoPoint &ground_location,
+                         fixed &ground_alt);
 
 #endif
