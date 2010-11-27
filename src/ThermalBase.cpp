@@ -29,6 +29,17 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
 
+static short
+GetElevation(RasterTerrain::Lease *map, const GeoPoint loc)
+{
+  short hground = (map != NULL) ? (*map)->GetField(loc) :
+                                  RasterTerrain::TERRAIN_INVALID;
+  if (RasterBuffer::is_special(hground))
+    hground = 0;
+
+  return hground;
+}
+
 void
 EstimateThermalBase(const GeoPoint location, const fixed altitude,
                     const fixed average, const SpeedVector wind,
@@ -54,10 +65,8 @@ EstimateThermalBase(const GeoPoint location, const fixed altitude,
     loc = FindLatitudeLongitude(location, wind.bearing, wind.norm * t);
 
     fixed hthermal = altitude - average * t;
-    short hground = (map != NULL) ? (*map)->GetField(loc) :
-                                    RasterTerrain::TERRAIN_INVALID;
-    if (RasterBuffer::is_special(hground))
-      hground = 0;
+
+    short hground = GetElevation(map, loc);
 
     fixed dh = hthermal - fixed(hground);
     if (negative(dh)) {
@@ -67,10 +76,7 @@ EstimateThermalBase(const GeoPoint location, const fixed altitude,
     }
   }
 
-  short hground = (map != NULL) ? (*map)->GetField(loc) :
-                                  RasterTerrain::TERRAIN_INVALID;
-  if (RasterBuffer::is_special(hground))
-    hground = 0;
+  short hground = GetElevation(map, loc);
 
   delete map;
 
