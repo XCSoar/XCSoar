@@ -1127,7 +1127,9 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
       ToAircraftState(XCSoarInterface::Basic());
   AirspaceVisible visible(XCSoarInterface::SettingsComputer(),
                           XCSoarInterface::Basic().GetAltitudeBaroPreferred());
-  AirspaceAircraftPerformanceGlide perf(protected_task_manager.get_glide_polar());
+  GlidePolar polar = protected_task_manager.get_glide_polar();
+  polar.set_mc(max(polar.get_mc(),fixed_one));
+  AirspaceAircraftPerformanceGlide perf(polar);
   AirspaceSoonestSort ans(aircraft_state, perf, fixed(1800), visible);
 
   const AbstractAirspace* as = ans.find_nearest(airspace_database);
