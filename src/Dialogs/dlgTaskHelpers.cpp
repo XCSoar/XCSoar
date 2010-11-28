@@ -354,7 +354,7 @@ OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
   case AbstractTaskFactory::KEYHOLE_SECTOR:
     return _T("Keyhole sector (DAe)");
   case AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR:
-    return _T("Standard BGA Fixed Course sector");
+    return _T("BGA Fixed Course sector");
   case AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR:
     return _T("BGA Enhanced Option Fixed Course sector");
   case AbstractTaskFactory::AST_CYLINDER:
