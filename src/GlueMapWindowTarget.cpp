@@ -22,14 +22,13 @@ Copyright_License {
 */
 
 #include "GlueMapWindow.hpp"
+
 #include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
-#include "Screen/Canvas.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Screen/Layout.hpp"
-#include "SettingsMap.hpp"
 
 void
 GlueMapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
