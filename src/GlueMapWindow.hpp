@@ -55,6 +55,15 @@ public:
   virtual void set(ContainerWindow &parent, const RECT &rc);
 
   /**
+   * If PanTarget, paints target during drag
+   * Used by dlgTarget
+   *
+   * @param drag_last location of target
+   * @param canvas
+   */
+  void TargetPaintDrag(Canvas &canvas, const RasterPoint last_drag);
+
+  /**
    * If PanTarget, tests if target is clicked
    * Used by dlgTarget
    *

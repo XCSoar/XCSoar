@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.hpp"
+#include "GlueMapWindow.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Canvas.hpp"
@@ -32,7 +32,7 @@ Copyright_License {
 #include "SettingsMap.hpp"
 
 void
-MapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
+GlueMapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
 {
   Graphics::hBmpTarget.draw(canvas, drag_last.x, drag_last.y);
 }

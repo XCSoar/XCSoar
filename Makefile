@@ -273,7 +273,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapWindowRender.cpp \
 	$(SRC)/MapWindowSymbols.cpp \
 	$(SRC)/MapWindowTask.cpp \
-	$(SRC)/MapWindowTarget.cpp \
 	$(SRC)/MapWindowThermal.cpp \
 	$(SRC)/MapWindowTimer.cpp \
 	$(SRC)/MapWindowTraffic.cpp \
@@ -283,6 +282,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/GlueMapWindowAirspace.cpp \
 	$(SRC)/GlueMapWindowEvents.cpp \
 	$(SRC)/GlueMapWindowOverlays.cpp \
+	$(SRC)/GlueMapWindowTarget.cpp \
 	$(SRC)/GlueMapWindowDisplayMode.cpp \
 	$(SRC)/GestureManager.cpp \
 	$(SRC)/DrawThread.cpp \

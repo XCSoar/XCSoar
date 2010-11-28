@@ -159,15 +159,6 @@ public:
     marks = _marks;
   }
 
-  /**
-   * If PanTarget, paints target during drag
-   * Used by dlgTarget
-   *
-   * @param drag_last location of target
-   * @param canvas
-   */
-  void TargetPaintDrag(Canvas &canvas, const RasterPoint last_drag);
-
   void ReadBlackboard(const NMEA_INFO &nmea_info,
                       const DERIVED_INFO &derived_info,
                       const SETTINGS_COMPUTER &settings_computer,
