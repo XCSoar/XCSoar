@@ -32,7 +32,6 @@
  * but does not yet have an observation zone.
  *
  * \todo
- * - TaskBehaviour is not yet used to define how targets float.
  * - Elevation may vary with target shift
  */
 class AATPoint : public IntermediatePoint {
