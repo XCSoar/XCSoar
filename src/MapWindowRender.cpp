@@ -28,29 +28,6 @@ Copyright_License {
 #include "Units.hpp"
 
 /**
- * Calculates the screen positions of all important features
- * @param canvas The drawing canvas
- * @param rc The area to draw in
- */
-void
-MapWindow::RenderStart(Canvas &canvas)
-{
-  // Calculate screen position of the aircraft
-  Update();
-  render_projection = visible_projection;
-
-  // Calculate screen positions of the thermal sources
-  CalculateScreenPositionsThermalSources();
-
-  // Calculate screen positions of the final glide groundline
-  CalculateScreenPositionsGroundline();
-
-  // reset label over-write preventer
-  label_block.reset();
-}
-
-
-/**
  * Renders the terrain background, the groundline and the topology
  * @param canvas The drawing canvas
  * @param rc The area to draw in
@@ -151,9 +128,21 @@ MapWindow::RenderSymbology_lower(Canvas &canvas,
 void
 MapWindow::Render(Canvas &canvas, const RECT &rc)
 { 
-  // Calculate screen positions
-  RenderStart(canvas);
-  const RasterPoint aircraft_pos = render_projection.GeoToScreen(Basic().Location);
+  Update();
+  render_projection = visible_projection;
+
+  // Calculate screen position of the aircraft
+  const RasterPoint aircraft_pos =
+      render_projection.GeoToScreen(Basic().Location);
+
+  // Calculate screen positions of the thermal sources
+  CalculateScreenPositionsThermalSources();
+
+  // Calculate screen positions of the final glide groundline
+  CalculateScreenPositionsGroundline();
+
+  // reset label over-write preventer
+  label_block.reset();
 
   // Render terrain, groundline and topology and reset pen, brush and font
   RenderMapLayer(canvas);

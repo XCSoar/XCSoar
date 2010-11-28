@@ -246,7 +246,6 @@ protected:
   GlidePolar get_glide_polar() const;
 
 private:
-  void RenderStart(Canvas &canvas);
   void RenderMapLayer(Canvas &canvas);
   void RenderTaskElements(Canvas &canvas);
   void RenderGlide(Canvas &canvas);
