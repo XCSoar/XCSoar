@@ -89,6 +89,6 @@ void Marks::Draw(Canvas &canvas, const WindowProjection &projection)
   for (unsigned i = 0; i < marker_store.size(); i++) {
     RasterPoint sc;
     if (projection.GeoToScreenIfVisible(marker_store[i], sc))
-      icon.draw(canvas, sc.x, sc.y);
+      icon.draw(canvas, sc);
   }
 }

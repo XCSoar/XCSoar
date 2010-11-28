@@ -183,7 +183,7 @@ public:
         icon = &Graphics::TurnPointIcon;
     }
 
-    icon->draw(canvas, sc.x, sc.y);
+    icon->draw(canvas, sc);
 
     TCHAR Buffer[32];
 

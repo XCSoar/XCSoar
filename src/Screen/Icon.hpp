@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_ICON_HPP
 
 #include "Screen/Bitmap.hpp"
+#include "Screen/Point.hpp"
 
 class Canvas;
 
@@ -61,6 +62,9 @@ public:
   }
 
   void draw(Canvas &canvas, int x, int y) const;
+  void draw(Canvas &canvas, RasterPoint pt) const {
+    draw(canvas, pt.x, pt.y);
+  }
 };
 
 #endif

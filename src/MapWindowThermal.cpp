@@ -50,8 +50,7 @@ MapWindow::CalculateScreenPositionsThermalSources()
         FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
                               Basic().wind.bearing, Basic().wind.norm * t);
     ThermalSources[i].Visible =
-        render_projection.GeoToScreenIfVisible(loc,
-                                                 ThermalSources[i].Screen);
+        render_projection.GeoToScreenIfVisible(loc, ThermalSources[i].Screen);
   }
 }
 
@@ -64,15 +63,13 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
     if (Calculated().ThermalEstimate_Valid) {
       RasterPoint sc;
       if (projection.GeoToScreenIfVisible(Calculated().ThermalEstimate_Location, sc)) {
-        Graphics::hBmpThermalSource.draw(canvas, sc.x, sc.y);
+        Graphics::hBmpThermalSource.draw(canvas, sc);
       }
     }
   } else if (projection.GetMapScale() <= fixed(4000)) {
     for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
       if (ThermalSources[i].Visible) 
-        Graphics::hBmpThermalSource.draw(canvas,
-                                      ThermalSources[i].Screen.x,
-                                      ThermalSources[i].Screen.y);
+        Graphics::hBmpThermalSource.draw(canvas, ThermalSources[i].Screen);
     }
   }
 }

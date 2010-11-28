@@ -186,7 +186,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
     // If FLARM alarm draw alarm icon below corresponding target
     if ((traffic.AlarmLevel > 0) && (traffic.AlarmLevel < 4))
-      Graphics::hFLARMTraffic.draw(canvas, sc.x, sc.y);
+      Graphics::hFLARMTraffic.draw(canvas, sc);
 
     // Fill the Arrow array with a normal arrow pointing north
     Arrow[0].x = -4;
@@ -239,6 +239,6 @@ MapWindow::DrawTeammate(Canvas &canvas) const
     RasterPoint sc;
     if (render_projection.GeoToScreenIfVisible(Calculated().TeammateLocation,
                                                  sc))
-      Graphics::hBmpTeammatePosition.draw(canvas, sc.x, sc.y);
+      Graphics::hBmpTeammatePosition.draw(canvas, sc);
   }
 }
