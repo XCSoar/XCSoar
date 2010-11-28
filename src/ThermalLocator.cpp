@@ -27,10 +27,8 @@ Copyright_License {
 #include <math.h>
 
 void
-ThermalLocator::ThermalLocator_Point::Drift(fixed t, 
-                                            const TaskProjection& projection,
-                                            const GeoPoint& wind_drift,
-                                            fixed decay)
+ThermalLocator::Point::Drift(fixed t, const TaskProjection& projection,
+                             const GeoPoint& wind_drift, fixed decay)
 {
   static const fixed decay_factor(-1.5/TLOCATOR_NMAX);
 

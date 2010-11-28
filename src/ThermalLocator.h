@@ -42,7 +42,7 @@ class TaskProjection;
 class ThermalLocator {
 private:
   /** Class used to hold thermal estimate samples */
-  struct ThermalLocator_Point 
+  struct Point 
   {
     /** 
      * Calculate drifted, weighted values of point
@@ -109,7 +109,7 @@ private:
              const GeoPoint& traildrift, const fixed decay);
 
   /** Circular buffer of points */
-  ThermalLocator_Point points[TLOCATOR_NMAX];
+  Point points[TLOCATOR_NMAX];
 
   /** Index of next point to add */
   unsigned n_index;
