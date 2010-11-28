@@ -166,6 +166,19 @@ struct FlatPoint
   };
 
 /** 
+ * Add one point to self
+ * 
+ * @param p2 Point to add
+ * 
+ * @return Added value
+ */
+  FlatPoint operator+= (const FlatPoint &p2) {
+    x += p2.x;
+    y += p2.y;
+    return *this;
+  };
+
+/** 
  * Subtract one point from another
  * 
  * @param p2 Point to subtract
