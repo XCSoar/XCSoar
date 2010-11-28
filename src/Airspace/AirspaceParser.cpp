@@ -368,13 +368,15 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
   const TCHAR *Comma = NULL;
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
-  ReadCoords(&Text[3], Start);
+  if (!ReadCoords(&Text[3], Start))
+    return;
 
   Comma = _tcschr(Text, ',');
   if (!Comma)
     return;
 
-  ReadCoords(&Comma[1], End);
+  if (!ReadCoords(&Comma[1], End))
+    return;
 
   temp_area.Center.distance_bearing(Start, Radius, StartBearing);
   Angle EndBearing = Bearing(temp_area.Center, End);
