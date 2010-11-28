@@ -101,9 +101,6 @@ FLYING_STATE::flying_state_check(const fixed time)
   //   detect takeoff when above threshold speed for 10 seconds
   //
   //   detect landing when below threshold speed for 30 seconds
-  //
-  // @todo accuracy: make this more robust by making use of terrain height data
-  // if available
 
   if (!Flying) {
     // We are moving for 10sec now
