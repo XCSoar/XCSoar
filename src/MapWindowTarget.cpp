@@ -70,20 +70,9 @@ MapWindow::isInSector(const int x, const int y)
   }
   return false;
 }
+
 void
 MapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
 {
   Graphics::hBmpTarget.draw(canvas, drag_last.x, drag_last.y);
-}
-
-bool MapWindow::TargetDragged(const int x, const int y)
-{
-  GeoPoint gp = visible_projection.ScreenToGeo(x, y);
-  if (protected_task_manager.target_is_locked(
-                             XCSoarInterface::SettingsMap().TargetPanIndex)) {
-    protected_task_manager.set_target(
-                           XCSoarInterface::SettingsMap().TargetPanIndex, gp, true);
-    return true;
-  }
-  return false;
 }

@@ -191,17 +191,6 @@ public:
    */
   void TargetPaintDrag(Canvas &canvas, const RasterPoint last_drag);
 
-  /**
-   * If PanTarget, updates task with new target
-   * Used by dlgTarget
-   *
-   * @param x mouse_up location
-   * @param y mouse_up location
-   *
-   * @return true if successful
-   */
-  bool TargetDragged(const int x, const int y);
-
   void ReadBlackboard(const NMEA_INFO &nmea_info,
                       const DERIVED_INFO &derived_info,
                       const SETTINGS_COMPUTER &settings_computer,

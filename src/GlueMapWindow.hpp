@@ -54,6 +54,17 @@ public:
 
   virtual void set(ContainerWindow &parent, const RECT &rc);
 
+  /**
+   * If PanTarget, updates task with new target
+   * Used by dlgTarget
+   *
+   * @param x mouse_up location
+   * @param y mouse_up location
+   *
+   * @return true if successful
+   */
+  bool TargetDragged(const int x, const int y);
+
 private:
   enum drag_mode {
     DRAG_NONE,

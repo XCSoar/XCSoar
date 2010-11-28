@@ -37,6 +37,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Interface.hpp"
 #include "Screen/Fonts.hpp"
+#include "Components.hpp"
 
 #include <algorithm>
 
@@ -404,4 +405,17 @@ GlueMapWindow::Render(Canvas &canvas, const RECT &rc)
 
   canvas.text(rc.left, rc.top, load);
 #endif
+}
+
+bool
+GlueMapWindow::TargetDragged(const int x, const int y)
+{
+  GeoPoint gp = visible_projection.ScreenToGeo(x, y);
+  if (protected_task_manager.target_is_locked(
+                             XCSoarInterface::SettingsMap().TargetPanIndex)) {
+    protected_task_manager.set_target(
+                           XCSoarInterface::SettingsMap().TargetPanIndex, gp, true);
+    return true;
+  }
+  return false;
 }
