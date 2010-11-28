@@ -253,7 +253,7 @@ def __cleanup(dir_temp):
                                        file.startswith("terrain")):
             os.unlink(os.path.join(dir_temp, file))
 
-def Create(bounds, arcseconds_per_pixel = 9.0,
+def create(bounds, arcseconds_per_pixel = 9.0,
            dir_data = "../data/", dir_temp = "../tmp/"):
     dir_data = os.path.abspath(os.path.join(dir_data, "srtm"))
     dir_temp = os.path.abspath(dir_temp)

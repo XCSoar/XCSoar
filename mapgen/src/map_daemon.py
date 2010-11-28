@@ -206,48 +206,48 @@ class MapDaemon:
             self.__update_job_status(job.uuid,
                                      "Adding waypoint file...")
             # Add the waypoint file to the MapGenerator
-            m.AddWaypointFile(self.__get_file(job.uuid, "waypoints.dat"))
+            m.add_waypoint_file(self.__get_file(job.uuid, "waypoints.dat"))
 
         # If the job has fixed bounds defined
         if job.bounds != None:
             # ... use them
-            m.SetBounds(job.bounds)
+            m.set_bounds(job.bounds)
         else:
             # If not -> Calculate the bounds of the waypoint file
-            m.SetBoundsByWaypointFile(self.__get_file(job.uuid, "waypoints.dat"))
+            m.set_bounds_by_waypoint_file(self.__get_file(job.uuid, "waypoints.dat"))
 
         # Check if we should create topology files
         if job.use_topology:
             self.__update_job_status(job.uuid,
                                      "Creating topology files...")
-            m.AddTopology()
+            m.add_topology()
 
         # Check if we should create terrain files
         if job.use_terrain:
             self.__update_job_status(job.uuid,
                                      "Creating terrain files...")
-            m.AddTerrain(job.resolution)
+            m.add_terrain(job.resolution)
 
         # Check if we should use a waypoint details file
         if job.use_waypoint_details_file:
             self.__update_job_status(job.uuid,
                                      "Adding waypoint details file...")
             # Add the waypoint details file to the MapGenerator
-            m.AddWaypointDetailsFile(self.__get_file(job.uuid, "details.txt"))
+            m.add_waypoint_details_file(self.__get_file(job.uuid, "details.txt"))
 
         # Check if we should use a airspace file
         if job.use_airspace_file:
             self.__update_job_status(job.uuid,
                                      "Adding airspace file...")
             # Add the airspace file to the MapGenerator
-            m.AddAirspaceFile(self.__get_file(job.uuid, "sua.txt"))
+            m.add_airspace_file(self.__get_file(job.uuid, "sua.txt"))
 
         self.__update_job_status(job.uuid,
                                  "Creating map file...")
         # Create the map file
-        m.Create(self.__get_file(job.uuid, "map.xcm"))
+        m.create(self.__get_file(job.uuid, "map.xcm"))
         # Clean up the temporary files
-        m.Cleanup()
+        m.cleanup()
         self.__update_job_status(job.uuid,
                                  "Done")
         print "Map ready for use (" + self.__get_file(job.uuid, "map.xcm") + ")"
@@ -282,7 +282,7 @@ class MapDaemon:
         # Delete the job
         self.__delete_job(job.uuid)
 
-    def Run(self):
+    def run(self):
         print "Starting MapDaemon ..."
         self.__run = True
 
@@ -299,4 +299,4 @@ class MapDaemon:
 
 if __name__ == '__main__':
     md = MapDaemon()
-    md.Run()
+    md.run()

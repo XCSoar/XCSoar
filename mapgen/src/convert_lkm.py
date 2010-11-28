@@ -181,16 +181,16 @@ def convert(template, working_dir):
         return
 
     m = MapGenerator()
-    m.SetBoundsSeperatly(Angle.degrees(float(template["LATMIN"].replace(",", "."))),
-                         Angle.degrees(float(template["LATMAX"].replace(",", "."))),
-                         Angle.degrees(float(template["LONMIN"].replace(",", "."))),
-                         Angle.degrees(float(template["LONMAX"].replace(",", "."))))
-    m.AddTerrain(9)
+    m.set_bounds_separatly(Angle.degrees(float(template["LATMIN"].replace(",", "."))),
+                           Angle.degrees(float(template["LATMAX"].replace(",", "."))),
+                           Angle.degrees(float(template["LONMIN"].replace(",", "."))),
+                           Angle.degrees(float(template["LONMAX"].replace(",", "."))))
+    m.add_terrain(9)
 
     credits = []
     credits.append("Topology data \xa9 OpenStreetMap contributors (http://www.openstreetmap.org), CC-BY-SA (http://creativecommons.org/licenses/by-sa/2.0/)")
     credits.append("Topology data conversion \xa9 LK8000 project (http://www.lk8000.it)")
-    m.AddInformationFile(name, "Paolo Ventafridda <coolwind@email.it>", credits)
+    m.add_information_file(name, "Paolo Ventafridda <coolwind@email.it>", credits)
 
     lkm = zipfile.ZipFile(lkm_file, "r");
     needed_files = []
@@ -206,7 +206,7 @@ def convert(template, working_dir):
         print "LKM file \"" + lkm_file + "\" is empty!"
         return
 
-    # Create temporary folder
+    # create temporary folder
     temp_dir = mkdtemp()
     # Extract LKM contents to temporary folder
     print "Extracting \"" + lkm_file + "\" ..."
@@ -242,7 +242,7 @@ def convert(template, working_dir):
     os.rmdir(temp_dir)
 
     # Add terrain to XCM file
-    m.Create(xcm_file, True)
+    m.create(xcm_file, True)
 
 def main():
     if len(sys.argv) < 2:

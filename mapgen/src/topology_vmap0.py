@@ -27,7 +27,7 @@ __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
 def __filter_maps(bounds, maps = __maps):
     maps_filtered = []
     for map in maps:
-        if bounds.Intersects(map[1]):
+        if bounds.intersects(map[1]):
             maps_filtered.append(map)
 
     return maps_filtered
@@ -167,7 +167,7 @@ def __create_index_file(dir_temp):
     file.close()
     return os.path.join(dir_temp, "topology.tpl")
 
-def Create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
+def create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
     dir_data = os.path.abspath(os.path.join(dir_data, "vmap0"))
     dir_temp = os.path.abspath(dir_temp)
 
