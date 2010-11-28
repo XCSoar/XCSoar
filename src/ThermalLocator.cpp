@@ -126,10 +126,9 @@ ThermalLocator::Update_Internal(const fixed t_0,
   fixed sy = fixed_zero;
 
   for (unsigned i = 0; i < n_points; ++i) {
-    const fixed weight = points[i].weight;
-    sx += (points[i].loc_drift.x - av.x) * weight;
-    sy += (points[i].loc_drift.y - av.y) * weight;
-    acc += weight;
+    sx += (points[i].loc_drift.x - av.x) * points[i].weight;
+    sy += (points[i].loc_drift.y - av.y) * points[i].weight;
+    acc += points[i].weight;
   }
 
   // if sufficient data, estimate location
