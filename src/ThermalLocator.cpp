@@ -51,10 +51,6 @@ ThermalLocator::ThermalLocator()
 void
 ThermalLocator::Reset()
 {
-  // clear array
-  for (int i = 0; i < TLOCATOR_NMAX; ++i)
-    points[i].valid = false;
-
   n_index = 0;
   n_points = 0;
 }
@@ -65,7 +61,6 @@ ThermalLocator::AddPoint(const fixed t, const GeoPoint &location, const fixed w)
   points[n_index].location = location;
   points[n_index].t_0 = t;
   points[n_index].w = max(w, fixed(-0.1));
-  points[n_index].valid = true;
 
   n_index = (n_index + 1) % TLOCATOR_NMAX;
 
@@ -108,12 +103,10 @@ ThermalLocator::glider_average()
 
   // find glider's average position
   int acc = 0;
-  for (int i = 0; i < TLOCATOR_NMAX; ++i) {
-    if (points[i].valid) {
-      result.x += points[i].loc_drift.x;
-      result.y += points[i].loc_drift.y;
-      acc++;
-    }
+  for (unsigned i = 0; i < n_points; ++i) {
+    result.x += points[i].loc_drift.x;
+    result.y += points[i].loc_drift.y;
+    acc++;
   }
   if (acc) {
     result.x /= acc;
@@ -143,13 +136,11 @@ ThermalLocator::Update_Internal(const fixed t_0,
   fixed sx = fixed_zero;
   fixed sy = fixed_zero;
 
-  for (int i = 0; i < TLOCATOR_NMAX; ++i) {
-    if (points[i].valid) {
-      const fixed weight = points[i].w * points[i].weight;
-      sx += (points[i].loc_drift.x - av.x) * weight;
-      sy += (points[i].loc_drift.y - av.y) * weight;
-      acc += weight;
-    }
+  for (unsigned i = 0; i < n_points; ++i) {
+    const fixed weight = points[i].w * points[i].weight;
+    sx += (points[i].loc_drift.x - av.x) * weight;
+    sy += (points[i].loc_drift.y - av.y) * weight;
+    acc += weight;
   }
 
   // if sufficient data, estimate location
@@ -169,10 +160,8 @@ void
 ThermalLocator::Drift(const fixed t_0, const TaskProjection& projection,
                       const GeoPoint& traildrift, const fixed decay)
 {
-  for (int i = 0; i < TLOCATOR_NMAX; ++i) {
-    if (points[i].valid)
-      points[i].Drift(t_0, projection, traildrift, decay);
-  }
+  for (unsigned i = 0; i < n_points; ++i)
+    points[i].Drift(t_0, projection, traildrift, decay);
 }
 
 void

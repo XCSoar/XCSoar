@@ -44,12 +44,6 @@ private:
   /** Class used to hold thermal estimate samples */
   struct ThermalLocator_Point 
   {
-    /** Default constructor */
-    ThermalLocator_Point()
-    {
-      valid = false;
-    }
-
     /** 
      * Calculate drifted, weighted values of point
      * 
@@ -63,8 +57,6 @@ private:
                const GeoPoint& wind_drift,
                fixed decay);
 
-    /** Whether this point is a valid sample */
-    bool valid;
     /** Actual location of sample */
     GeoPoint location;
     /** Projected/drifted sample */
