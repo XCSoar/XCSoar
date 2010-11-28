@@ -433,9 +433,8 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
   }
 }
 
-fixed
-GlueMapWindow::findMapScaleBarSize(const RECT &rc,
-                                   const MapWindowProjection &projection) const
+static fixed
+findMapScaleBarSize(const RECT &rc, const MapWindowProjection &projection)
 {
   // units/pixel
   fixed pixelsize = Units::ToUserDistance(projection.DistancePixelsToMeters(1));

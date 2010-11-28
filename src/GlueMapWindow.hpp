@@ -158,9 +158,6 @@ private:
   bool on_key_press(unsigned key_code);
 
 private:
-  gcc_pure
-  fixed findMapScaleBarSize(const RECT &rc, const MapWindowProjection &projection) const;
-
   void DrawMapScale(Canvas &canvas, const RECT &rc,
                     const MapWindowProjection &projection) const;
   void DrawMapScale2(Canvas &canvas, const RECT &rc,
