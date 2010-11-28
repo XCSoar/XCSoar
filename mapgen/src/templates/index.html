@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:py="http://genshi.edgewall.org/">
+  <xi:include href="layout.html"/>
+  <head></head>
+  <body>
+    <form action="/generate" method="post" enctype="multipart/form-data">
+      <div>
+	<div py:if="defined('error')" class="error">${error}</div>
+	<label for="name">Map name:</label>
+        <input id="name" type="text" name="name"/>
+        <label for="mail">E-Mail:</label>
+        <input id="mail" type="text" name="mail"/>
+        <label for="waypoint_file">Waypoint file:</label>
+	<div class="box">
+          <input id="waypoint_file" type="file" name="waypoint_file"/>
+	</div>
+	<button type="submit">Generate</button>
+      </div>
+    </form>
+  </body>
+</html>
