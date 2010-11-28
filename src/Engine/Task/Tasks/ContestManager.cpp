@@ -50,7 +50,6 @@ ContestManager::run_contest(AbstractContest &the_contest,
 bool 
 ContestManager::update_idle()
 {
-  // \todo: possibly scan each type in a round robin fashion?
   bool retval = false;
   ContestResult dummy_result;
 
