@@ -4,6 +4,8 @@ from map_daemon import MapJob
 import pickle
 import hashlib
 import random
+import template
+from genshi.filters import HTMLFormFiller
 
 dir_jobs = "../jobs"
 
@@ -59,86 +61,24 @@ class MapServer(object):
 
         return ret
 
-    def header(self):
-        return """<html>
-<head>
-    <title>XCSoar - Map Server</title>
-    <link rel="stylesheet" type="text/css" href="/style" />
-</head>
-<body>
-"""
-
-    def footer(self):
-        return """
-</body>
-</html>
-"""
-
-    def surround(self, html):
-        return self.header() + html + self.footer()
-
     @cherrypy.expose
-    def style(self):
-        return """body { margin: 0px; font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Helvetica, Arial, sans-serif; }
-p, div { margin-bottom: 20px; padding-right: 20px; font-family: Georgia, serif; font-size: 22px; line-height: 40px; font-weight: normal; }
-div.box { width: 580px; padding: 10px; margin-bottom: 4px; border: 1px solid #9f9c99; border-radius: 8px; font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Helvetica, Arial, sans-serif;  font-size: 20px; }
-input.text { width: 100%; border: 0px; font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Helvetica, Arial, sans-serif;  font-size: 20px; }
-input.button { width: 200px; background: #F0F0F0; cursor: pointer; padding: 8px 20px; margin-left: 205px; font-size: 18px; text-transform: uppercase; border: 0; border-radius: 8px; }
-input.button:hover, input.button:focus { background: #1B8D29; color: #fff; }
-a.button { text-align: center; text-decoration: none; color: #000; display: block; background: #F0F0F0; width: 200px; cursor: pointer; padding: 8px 20px; margin-left: 185px; font-size: 18px; text-transform: uppercase; border: 0; border-radius: 8px; }
-a.button:hover, a.button:focus { background: #1B8D29; color: #fff; }
-"""
-
-    @cherrypy.expose
+    @template.output('index.html')
     def index(self):
-        html = """<form action="/generate/" method="post" enctype="multipart/form-data">
-    <div>
-        Map name:<br/>
-        <div class="box">
-            <input type="text" name="name" class="text" />
-        </div>
-    </div>
-    <div>
-        eMail:<br/>
-        <div class="box">
-            <input type="text" name="mail1" class="text" /><br/>
-        </div>
-        <div class="box">
-            <input type="text" name="mail2" class="text" />
-        </div>
-    </div>
-    <div>
-        Waypoint file:<br/>
-        <div class="box">
-            <input type="file" name="waypoint_file" />
-        </div>
-    </div>
-    <div>
-        <input type="submit" value="Generate" class="button" id="submit">
-    </div>
-</form>"""
-        return self.surround(html)
-
-    def error(self, error):
-        return self.surround("""<div><div class="box"><b>Error:</b> """ + error + """</div></div>
-        <a class="button" href="javascript:history.back()">Back</a>""")
+        return template.render()
 
     @cherrypy.expose
-    def generate(self, name, mail1, mail2, waypoint_file):
+    @template.output('index.html')
+    def generate(self, name, mail, waypoint_file):
         name = name.strip()
         if name == "":
-            return self.error("No map name given!")
+            return template.render('index.html', error='No map name given!') | HTMLFormFiller(data=dict(name=name, mail=mail))
 
-        mail1 = mail1.strip()
-        mail2 = mail2.strip()
-        if mail1 != mail2:
-            return self.error("eMail addresses don't match!")
+        mail = mail.strip()
+        if mail == "":
+            return template.render('index.html', error='No E-Mail adress given!') | HTMLFormFiller(data=dict(name=name, mail=mail))
 
-        if mail1 == "" or mail2 == "":
-            return self.error("No eMail address given!")
-
-        if not waypoint_file.file or not os.path.exists(waypoint_file.file.name):
-            return self.error("Waypoint file could not be read!")
+        if not waypoint_file.file:
+            return template.render('index.html', error='Waypoint file could not be read!') | HTMLFormFiller(data=dict(name=name, mail=mail))
 
         uuid = self.generate_uuid()
 
@@ -158,7 +98,7 @@ a.button:hover, a.button:focus { background: #1B8D29; color: #fff; }
 
         job = MapJob()
         job.name = name
-        job.mail = mail1
+        job.mail = mail
         job.command = "generate"
         job.use_waypoint_file = True
 
@@ -171,22 +111,14 @@ a.button:hover, a.button:focus { background: #1B8D29; color: #fff; }
         return self.status(uuid)
 
     @cherrypy.expose
+    @template.output('status.html')
     def status(self, uuid):
         status = self.get_job_status(uuid)
         if status == None:
-            return self.error("Job not found!")
-
-        if status == "Done":
-            return self.surround("""<div><div class="box"><b>Status:</b> Map ready to download</div></div>
-            <a class="button" href="/download?uuid=""" + uuid + """">Download</a>""")
-
-        reload_script = """<script>
-        setTimeout(function(){ location.href = '/status?uuid=""" + uuid + """'; }, 10000);
-        </script>"""
-
-        return self.surround("""<div><div class="box"><b>Status:</b> """ + status + """</div></div>
-        <a class="button" href="/status?uuid=""" + uuid + """">Refresh</a>""" +
-        reload_script)
+            return template.render('error.html', error='Job not found!')
+        if status == 'Done':
+            return template.render('done.html', uuid=uuid, name='unknown map')
+        return template.render(uuid=uuid, status=status, name='unknown map')
 
     @cherrypy.expose
     def download(self, uuid):
@@ -204,5 +136,10 @@ a.button:hover, a.button:focus { background: #1B8D29; color: #fff; }
         return cherrypy.lib.static.serve_download(file_map, job.name + ".xcm")
 
 if __name__ == '__main__':
-    cherrypy.config.update({'server.socket_port': 8037})
-    cherrypy.quickstart(MapServer())
+    cherrypy.quickstart(MapServer(), '/', {
+        '/static': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': 'static',
+            'tools.staticdir.root': os.path.abspath(os.path.dirname(__file__)),
+        }
+    })

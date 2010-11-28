@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/" py:strip="">
+  <py:match path="head" once="true">
+    <head py:attrs="select('@*')">
+      <title py:with="title = list(select('title/text()'))">
+        XCSoar Map Generator<py:if test="title">: ${title}</py:if>
+      </title>
+      <link rel="stylesheet" href="${url('/static/style.css')}" type="text/css" />
+      ${select('*[local-name()!="title"]')}
+    </head>
+  </py:match>
+  <py:match path="body" once="true">
+    <body py:attrs="select('@*')">
+      <div id="content">
+	<div id="logo">
+	  <a href="http://www.xcsoar.org/"><img src="${url('/static/logo.png')}" alt="XCSoar"/></a>
+	  <a href="${url('/')}">Map Generator</a>
+	</div>
+        ${select('*|text()')}
+      </div>
+    </body>
+  </py:match>
+</html>
