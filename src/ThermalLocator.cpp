@@ -28,12 +28,12 @@ Copyright_License {
 
 void
 ThermalLocator::Point::Drift(fixed t, const TaskProjection& projection,
-                             const GeoPoint& wind_drift, fixed decay)
+                             const GeoPoint& wind_drift)
 {
   static const fixed decay_factor(-1.5/TLOCATOR_NMAX);
 
   const fixed dt = t - t_0;
-  weight = exp(decay_factor * decay * dt);
+  weight = exp(decay_factor * dt);
 
   GeoPoint p = location + wind_drift * dt;
 
@@ -85,7 +85,7 @@ ThermalLocator::Update(const fixed t_0,
   projection.reset(location_0);
   projection.update_fast();
 
-  Update_Internal(t_0, projection, location_0, traildrift, fixed_one, therm);
+  Update_Internal(t_0, projection, location_0, traildrift, therm);
 }
 
 FlatPoint
@@ -114,11 +114,10 @@ ThermalLocator::Update_Internal(const fixed t_0,
                                 const TaskProjection& projection, 
                                 const GeoPoint& location_0,
                                 const GeoPoint& traildrift,
-                                const fixed decay, 
                                 THERMAL_LOCATOR_INFO &therm)
 {
   // drift points 
-  Drift(t_0, projection, traildrift, decay);
+  Drift(t_0, projection, traildrift);
 
   FlatPoint av = glider_average();
 
@@ -150,10 +149,10 @@ ThermalLocator::Update_Internal(const fixed t_0,
 
 void
 ThermalLocator::Drift(const fixed t_0, const TaskProjection& projection,
-                      const GeoPoint& traildrift, const fixed decay)
+                      const GeoPoint& traildrift)
 {
   for (unsigned i = 0; i < n_points; ++i)
-    points[i].Drift(t_0, projection, traildrift, decay);
+    points[i].Drift(t_0, projection, traildrift);
 }
 
 void

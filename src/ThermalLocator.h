@@ -52,10 +52,8 @@ private:
      * @param wind_drift Wind drift offset
      * @param decay decay factor for weighting
      */
-    void Drift(fixed t, 
-               const TaskProjection& projection,
-               const GeoPoint& wind_drift,
-               fixed decay);
+    void Drift(fixed t, const TaskProjection& projection,
+               const GeoPoint& wind_drift);
 
     /** Actual location of sample */
     GeoPoint location;
@@ -101,10 +99,10 @@ private:
 
   void Update_Internal(const fixed t_0, const TaskProjection& projection,
                        const GeoPoint& location_0, const GeoPoint& traildrift,
-                       const fixed decay, THERMAL_LOCATOR_INFO& therm);
+                       THERMAL_LOCATOR_INFO& therm);
 
   void Drift(const fixed t_0, const TaskProjection& projection,
-             const GeoPoint& traildrift, const fixed decay);
+             const GeoPoint& traildrift);
 
   /** Circular buffer of points */
   Point points[TLOCATOR_NMAX];
