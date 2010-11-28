@@ -80,11 +80,10 @@ GetWayPoint(const Waypoint org_wp, const Waypoints &way_points)
 {
   const Waypoint *wp = way_points.lookup_name(org_wp.Name);
   if (!ok1(wp != NULL)) {
-    skip(3, 0, "waypoint not found");
+    skip(2, 0, "waypoint not found");
     return NULL;
   }
-  ok1(equals(wp->Location.Longitude, org_wp.Location.Longitude));
-  ok1(equals(wp->Location.Latitude, org_wp.Location.Latitude));
+  ok1(wp->Location.distance(org_wp.Location) <= fixed_two);
   ok1(equals(wp->Altitude, org_wp.Altitude));
 
   return wp;
@@ -113,7 +112,7 @@ TestWinPilot(wp_vector org_wp)
   Waypoints way_points;
   if (!TestWayPointFile(_T("test/data/waypoints.dat"), way_points,
                         org_wp.size())) {
-    skip(11 * org_wp.size(), 0, "opening waypoint file failed");
+    skip(10 * org_wp.size(), 0, "opening waypoint file failed");
     return;
   }
 
@@ -148,7 +147,7 @@ TestSeeYou(wp_vector org_wp)
   Waypoints way_points;
   if (!TestWayPointFile(_T("test/data/waypoints.cup"), way_points,
                         org_wp.size())) {
-    skip(10 * org_wp.size(), 0, "opening waypoint file failed");
+    skip(9 * org_wp.size(), 0, "opening waypoint file failed");
     return;
   }
 
@@ -182,7 +181,7 @@ TestZander(wp_vector org_wp)
   Waypoints way_points;
   if (!TestWayPointFile(_T("test/data/waypoints.wpz"), way_points,
                         org_wp.size())) {
-    skip(11 * org_wp.size(), 0, "opening waypoint file failed");
+    skip(10 * org_wp.size(), 0, "opening waypoint file failed");
     return;
   }
 
@@ -295,7 +294,7 @@ int main(int argc, char **argv)
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(3 * 4 + (11 + 10 + 11) * org_wp.size());
+  plan_tests(3 * 4 + (10 + 9 + 10) * org_wp.size());
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);
