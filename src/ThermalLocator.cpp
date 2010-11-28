@@ -92,22 +92,20 @@ FlatPoint
 ThermalLocator::glider_average()
 {
   FlatPoint result(fixed_zero, fixed_zero);
+  if (n_points == 0)
+    return result;
 
   // find glider's average position
-  int acc = 0;
   for (unsigned i = 0; i < n_points; ++i) {
     result.x += points[i].loc_drift.x;
     result.y += points[i].loc_drift.y;
-    acc++;
   }
-  if (acc) {
-    result.x /= acc;
-    result.y /= acc;
-  }
+
+  result.x /= n_points;
+  result.y /= n_points;
 
   return result;
 }
-
 
 void
 ThermalLocator::Update_Internal(const fixed t_0, 
