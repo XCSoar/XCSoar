@@ -89,9 +89,9 @@ static void RedrawSampleFont(void)
   if (wp) {
     if (NewFont.defined()) {
       wp->SetFont(NewFont);
-      wp->SetCaption(_T("Sample Text 123"));
+      wp->SetCaption(_("Sample Text\n123"));
     } else {
-      wp->SetCaption(_T("Error Creating Font!"));
+      wp->SetCaption(_("Font not found."));
     }
   }
 }
@@ -118,7 +118,9 @@ InitGUI(const TCHAR * FontDescription)
 
   WndProperty* wp;
 
-  TCHAR sTitle[FONTEDIT_GUI_MAX_TITLE] = _T("Edit Font: ");
+  TCHAR sTitle[FONTEDIT_GUI_MAX_TITLE];
+  _tcsncpy(sTitle, _("Edit Font"), FONTEDIT_GUI_MAX_TITLE);
+  _tcsncat(sTitle, _T(": "), FONTEDIT_GUI_MAX_TITLE);
   _tcsncat(sTitle, FontDescription, FONTEDIT_GUI_MAX_TITLE);
   wf->SetCaption(sTitle);
 
