@@ -48,9 +48,9 @@ OrderedTaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state,
   if (start_max_speed == fixed_zero)
     return true;
 
-  const fixed margin = with_margin? behaviour.start_max_speed_margin:fixed_zero;
+  const fixed margin = with_margin ? behaviour.start_max_speed_margin : fixed_zero;
 
-  return state.Speed <= start_max_speed+margin;
+  return state.Speed <= start_max_speed + margin;
 }
 
 
@@ -60,12 +60,12 @@ OrderedTaskBehaviour::check_start_height(const AIRCRAFT_STATE &state,
                                          const fixed spAlt,
                                          const bool with_margin) const
 {
-  if (start_max_height==0)
+  if (start_max_height == 0)
     return true;
 
-  const unsigned margin = with_margin? behaviour.start_max_height_margin:0;
+  const unsigned margin = with_margin ? behaviour.start_max_height_margin : 0;
 
-  if (start_max_height_ref>0) {
+  if (start_max_height_ref > 0) {
     return state.NavAltitude <= fixed(start_max_height + margin);
   } else {
     return state.NavAltitude <= (fixed(start_max_height + margin) + spAlt);
@@ -76,7 +76,7 @@ OrderedTaskBehaviour::check_start_height(const AIRCRAFT_STATE &state,
 bool 
 OrderedTaskBehaviour::check_finish_height(const AIRCRAFT_STATE &state, const fixed fpAlt) const
 {
-  if (finish_min_height==0)
+  if (finish_min_height == 0)
     return true;
 
 //  return state.AltitudeAGL >= fixed(finish_min_height);
