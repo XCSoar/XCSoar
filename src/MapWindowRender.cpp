@@ -38,16 +38,16 @@ MapWindow::RenderMapLayer(Canvas &canvas)
   m_background.sun_from_wind(render_projection, Basic().wind);
   m_background.Draw(canvas, render_projection, SettingsMap());
 
+  if (topology_renderer != NULL && SettingsMap().EnableTopology)
+    // Draw the topology
+    topology_renderer->Draw(canvas, render_projection);
+
   if (terrain != NULL) {
     if ((SettingsComputer().FinalGlideTerrain == 2) && 
         Calculated().TerrainValid)
       // Draw the groundline (and shading)
       DrawTerrainAbove(canvas);
   }
-
-  if (topology_renderer != NULL && SettingsMap().EnableTopology)
-    // Draw the topology
-    topology_renderer->Draw(canvas, render_projection);
 }
 
 /**
