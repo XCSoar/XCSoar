@@ -107,6 +107,9 @@ GlideComputerAirData::ProcessVertical()
   Turning();
   Wind();
 
+  if (time_retreated())
+    thermallocator.Reset();
+
   thermallocator.Process(Calculated().Circling,
                          Basic().Time, Basic().Location,
                          Basic().NettoVario,

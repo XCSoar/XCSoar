@@ -88,9 +88,12 @@ public:
                const fixed w, const SpeedVector wind,
                THERMAL_LOCATOR_INFO& therm);
 
-private:
+  /**
+   * Reset as if never flown
+   */
   void Reset();
 
+private:
   FlatPoint glider_average();
 
   void AddPoint(const fixed t, const GeoPoint &location, const fixed w);

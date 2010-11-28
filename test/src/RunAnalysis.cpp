@@ -96,6 +96,7 @@ LoggerImpl::LoggerImpl() {}
 LoggerImpl::~LoggerImpl() {}
 
 ThermalLocator::ThermalLocator() {}
+void ThermalLocator::Reset() {}
 
 void
 ThermalLocator::Process(const bool circling,
