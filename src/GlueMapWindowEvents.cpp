@@ -74,8 +74,8 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
 
   case DRAG_TARGET:
     if (isInSector(x, y)) {
-      drag_last.x = drag_last_valid_target.x = x;
-      drag_last.y = drag_last_valid_target.y = y;
+      drag_last.x = x;
+      drag_last.y = y;
       invalidate();
     }
     return true;
@@ -164,7 +164,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
     break;
 
   case DRAG_TARGET:
-    TargetDragged(drag_last_valid_target.x, drag_last_valid_target.y);
+    TargetDragged(drag_last.x, drag_last.y);
     break;
 
   case DRAG_PAN:
