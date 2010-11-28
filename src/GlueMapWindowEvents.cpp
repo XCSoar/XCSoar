@@ -343,6 +343,9 @@ GlueMapWindow::on_paint(Canvas &canvas)
 
   MapWindow::on_paint(canvas);
 
+  if (drag_mode == DRAG_TARGET)
+    TargetPaintDrag(canvas, drag_last);
+
   const RECT rc = get_client_rect();
 
   {
@@ -386,9 +389,6 @@ GlueMapWindow::Render(Canvas &canvas, const RECT &rc)
   UpdateScreenAngle();
 
   MapWindow::Render(canvas, rc);
-
-  if (drag_mode == DRAG_TARGET)
-    TargetPaintDrag(canvas, drag_last);
 
   DrawFlightMode(canvas, rc);
   DrawThermalBand(canvas, rc);
