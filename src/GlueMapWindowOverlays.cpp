@@ -460,12 +460,11 @@ GlueMapWindow::DrawMapScaleBar(Canvas &canvas, const RECT &rc,
 {
   canvas.select(Graphics::hpMapScale);
 
-  bool color = false;
-  RasterPoint Start, End = { 0, 0 };
+  RasterPoint Start, End = { rc.right - 1, 0 };
 
   int barsize = iround(findMapScaleBarSize(rc, projection));
 
-  End.x = rc.right - 1;
+  bool color = false;
   End.y = projection.GetScreenOrigin().y;
   Start = End;
   for (Start.y += barsize; Start.y < rc.bottom + barsize; Start.y += barsize) {
