@@ -212,8 +212,7 @@ void AircraftSim::update_mode(TaskManager &task_manager)
 
 GeoPoint AircraftSim::endpoint(const Angle &bear) const
 {
-  GeoPoint ref;
-  ref = GeoVector(state.TrueAirspeed, bear).end_point(state.Location);
+  GeoPoint ref = GeoVector(state.TrueAirspeed, bear).end_point(state.Location);
   return GeoVector(state.wind.norm, 
                    state.wind.bearing+ Angle::degrees(fixed_180)).end_point(ref);
 }

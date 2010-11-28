@@ -52,12 +52,8 @@ int main(int argc, char** argv) {
 
   ok(fabs(t-fixed(dt))<fixed(1.0e5),"atan(y,x)",0);
 
-  GeoPoint l1; 
-  l1.Longitude = Angle::degrees(fixed(0.0)); 
-  l1.Latitude= Angle::degrees(fixed(0.0));
-  GeoPoint l2; 
-  l2.Longitude = Angle::degrees(fixed(-0.3)); 
-  l2.Latitude= Angle::degrees(fixed(1.0));
+  GeoPoint l1(Angle::native(fixed_zero), Angle::native(fixed_zero));
+  GeoPoint l2(Angle::degrees(fixed(-0.3)), Angle::degrees(fixed(1.0)));
   fixed d; Angle b;
   l1.distance_bearing(l2, d, b);
   printf("Dist %g bearing %d\n",FIXED_DOUBLE(d),FIXED_INT(b.value_degrees()));

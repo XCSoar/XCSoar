@@ -57,7 +57,7 @@ GlueMapWindow::isClickOnTarget(const RasterPoint pc)
                                 XCSoarInterface::SettingsMap().TargetPanIndex))
       return false;
 
-    GeoPoint gnull;
+    const GeoPoint gnull(Angle::native(fixed_zero), Angle::native(fixed_zero));
     const GeoPoint& t = protected_task_manager.get_location_target(
         XCSoarInterface::SettingsMap().TargetPanIndex, gnull);
 

@@ -44,10 +44,7 @@ int main(int argc, char **argv)
 {
   plan_tests(24);
 
-  GeoPoint g;
-
-  g.Latitude = Angle::degrees(fixed(4));
-  g.Longitude = Angle::degrees(fixed(2));
+  GeoPoint g(Angle::degrees(fixed(2)), Angle::degrees(fixed(4)));
 
   GeoBounds b(g);
 

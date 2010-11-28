@@ -24,9 +24,7 @@
 
 GeoPoint LineSectorZone::get_boundary_parametric(fixed t) const
 { 
-  GeoPoint loc;
-  loc = SectorStart.interpolate(SectorEnd,t);
-  return loc;
+  return SectorStart.interpolate(SectorEnd,t);
 }
 
 fixed

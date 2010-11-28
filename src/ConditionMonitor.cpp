@@ -411,7 +411,8 @@ protected:
       return false;
     }
 
-    const GeoPoint null_point;
+    const GeoPoint null_point(Angle::native(fixed_zero),
+                              Angle::native(fixed_zero));
     return (cmp.Calculated().TerrainWarningLocation != null_point);
   }
 

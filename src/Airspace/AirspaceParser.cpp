@@ -337,7 +337,6 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
 {
   fixed Radius;
   TCHAR *Stop;
-  GeoPoint TempPoint;
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
   Radius = Units::ToSysUnit(fixed(_tcstod(&Text[2], &Stop)), unNauticalMiles);
@@ -347,6 +346,7 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
   if (EndBearing < StartBearing)
     EndBearing += Angle::degrees(fixed_360);
 
+  GeoPoint TempPoint;
   while ((EndBearing - StartBearing).magnitude_degrees() > fixed_75) {
     StartBearing = StartBearing.as_bearing();
     TempPoint = FindLatitudeLongitude(temp_area.Center, StartBearing, Radius);
@@ -361,12 +361,11 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
 static void
 CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
 {
-  GeoPoint Start;
-  GeoPoint End;
+  GeoPoint Start(Angle::native(fixed_zero), Angle::native(fixed_zero));
+  GeoPoint End(Angle::native(fixed_zero), Angle::native(fixed_zero));
   Angle StartBearing;
   fixed Radius;
   const TCHAR *Comma = NULL;
-  GeoPoint TempPoint;
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
   ReadCoords(&Text[3], Start);
@@ -379,8 +378,7 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
 
   temp_area.Center.distance_bearing(Start, Radius, StartBearing);
   Angle EndBearing = Bearing(temp_area.Center, End);
-  TempPoint.Latitude = Start.Latitude;
-  TempPoint.Longitude = Start.Longitude;
+  GeoPoint TempPoint = Start;
   temp_area.points.push_back(TempPoint);
 
   while ((EndBearing - StartBearing).magnitude_degrees() > fixed_75) {
@@ -509,7 +507,6 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
 
     {
       GeoPoint TempPoint;
-
       if (!ReadCoords(value, TempPoint))
         return false;
 
@@ -649,7 +646,6 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
     return false;
   ParseCoordsTNP(parameter, temp_area.Center);
 
-  GeoPoint to;
   if ((parameter = _tcsstr(parameter, _T(" "))) == NULL)
     return false;
   parameter++;
@@ -657,6 +653,7 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
     return false;
   if ((parameter = string_after_prefix_ci(parameter, _T(" TO="))) == NULL)
     return false;
+  GeoPoint to;
   ParseCoordsTNP(parameter, to);
 
   Angle bearing_from;
@@ -735,7 +732,6 @@ ParseLineTNP(Airspaces &airspace_database, const TCHAR *line,
     ReadAltitude(parameter, &temp_area.Base);
   } else if ((parameter = string_after_prefix_ci(line, _T("POINT="))) != NULL) {
     GeoPoint TempPoint;
-
     if (!ParseCoordsTNP(parameter, TempPoint))
       return false;
 

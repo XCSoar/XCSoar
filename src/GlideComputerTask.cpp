@@ -106,7 +106,7 @@ GlideComputerTask::TerrainWarning()
   GlidePolar polar = m_task.get_glide_polar();
 
   GlideTerrain g_terrain(SettingsComputer(), *terrain);
-  GeoPoint null_point;
+  GeoPoint null_point(Angle::native(fixed_zero), Angle::native(fixed_zero));
   const TaskStats& stats = Calculated().task_stats;
   const GlideResult& current = stats.current_leg.solution_remaining;
 
