@@ -175,7 +175,6 @@ private:
 
   // display element functions
   void CalculateScreenPositionsGroundline();
-  void CalculateScreenPositionsThermalSources();
 
   // display renderers
   void DrawAircraft(Canvas &canvas, const RasterPoint aircraft_pos) const;

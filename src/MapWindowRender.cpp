@@ -135,9 +135,6 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   const RasterPoint aircraft_pos =
       render_projection.GeoToScreen(Basic().Location);
 
-  // Calculate screen positions of the thermal sources
-  CalculateScreenPositionsThermalSources();
-
   // Calculate screen positions of the final glide groundline
   CalculateScreenPositionsGroundline();
 

@@ -30,31 +30,6 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 
 void
-MapWindow::CalculateScreenPositionsThermalSources()
-{
-  for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
-    if (!positive(Calculated().ThermalSources[i].LiftRate)) {
-      ThermalSources[i].Visible = false;
-      continue;
-    }
-
-    fixed dh = Basic().NavAltitude -
-                Calculated().ThermalSources[i].GroundHeight;
-    if (negative(dh)) {
-      ThermalSources[i].Visible = false;
-      continue;
-    }
-
-    fixed t = -dh / Calculated().ThermalSources[i].LiftRate;
-    GeoPoint loc =
-        FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
-                              Basic().wind.bearing, Basic().wind.norm * t);
-    ThermalSources[i].Visible =
-        render_projection.GeoToScreenIfVisible(loc, ThermalSources[i].Screen);
-  }
-}
-
-void
 MapWindow::DrawThermalEstimate(Canvas &canvas) const
 {
   const MapWindowProjection &projection = render_projection;
@@ -67,6 +42,27 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
       }
     }
   } else if (projection.GetMapScale() <= fixed(4000)) {
+    for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
+      if (!positive(Calculated().ThermalSources[i].LiftRate)) {
+        ThermalSources[i].Visible = false;
+        continue;
+      }
+
+      fixed dh = Basic().NavAltitude -
+                  Calculated().ThermalSources[i].GroundHeight;
+      if (negative(dh)) {
+        ThermalSources[i].Visible = false;
+        continue;
+      }
+
+      fixed t = -dh / Calculated().ThermalSources[i].LiftRate;
+      GeoPoint loc =
+          FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
+                                Basic().wind.bearing, Basic().wind.norm * t);
+      ThermalSources[i].Visible =
+          render_projection.GeoToScreenIfVisible(loc, ThermalSources[i].Screen);
+    }
+
     for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
       if (ThermalSources[i].Visible) 
         Graphics::hBmpThermalSource.draw(canvas, ThermalSources[i].Screen);
