@@ -71,7 +71,7 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "Logger/Logger.hpp"
 #include "ThermalBase.hpp"
-#include "ThermalLocator.h"
+#include "ThermalLocator.hpp"
 #include "LocalTime.hpp"
 
 unsigned InfoBoxLayout::ControlWidth = 100;

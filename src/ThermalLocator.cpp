@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "ThermalLocator.h"
+#include "ThermalLocator.hpp"
 #include "Math/Earth.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include <math.h>
