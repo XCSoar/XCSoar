@@ -455,8 +455,8 @@ findMapScaleBarSize(const RECT &rc, const MapWindowProjection &projection)
 }
 
 void
-GlueMapWindow::DrawMapScale2(Canvas &canvas, const RECT &rc,
-                             const MapWindowProjection &projection) const
+GlueMapWindow::DrawMapScaleBar(Canvas &canvas, const RECT &rc,
+                               const MapWindowProjection &projection) const
 {
   canvas.select(Graphics::hpMapScale);
 
