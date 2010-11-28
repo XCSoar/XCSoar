@@ -22,11 +22,9 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "Protection.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/Layout.hpp"
 #include "Math/Earth.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "RenderTask.hpp"
