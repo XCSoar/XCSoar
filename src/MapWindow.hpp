@@ -237,7 +237,9 @@ protected:
   GlidePolar get_glide_polar() const;
 
 private:
-  void RenderMapLayer(Canvas &canvas);
+  void RenderTerrain(Canvas &canvas);
+  void RenderTopology(Canvas &canvas);
+  void RenderFinalGlideShading(Canvas &canvas);
   void RenderTaskElements(Canvas &canvas);
   void RenderGlide(Canvas &canvas);
   void RenderAirborne(Canvas &canvas, const RECT &rc,

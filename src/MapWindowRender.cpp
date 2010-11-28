@@ -28,26 +28,38 @@ Copyright_License {
 #include "Units.hpp"
 
 /**
- * Renders the terrain background, the groundline and the topology
+ * Renders the terrain background
  * @param canvas The drawing canvas
- * @param rc The area to draw in
  */
 void
-MapWindow::RenderMapLayer(Canvas &canvas)
+MapWindow::RenderTerrain(Canvas &canvas)
 {
   m_background.sun_from_wind(render_projection, Basic().wind);
   m_background.Draw(canvas, render_projection, SettingsMap());
+}
 
+/**
+ * Renders the topology
+ * @param canvas The drawing canvas
+ */
+void
+MapWindow::RenderTopology(Canvas &canvas)
+{
   if (topology_renderer != NULL && SettingsMap().EnableTopology)
-    // Draw the topology
     topology_renderer->Draw(canvas, render_projection);
+}
 
-  if (terrain != NULL) {
-    if ((SettingsComputer().FinalGlideTerrain == 2) && 
-        Calculated().TerrainValid)
-      // Draw the groundline (and shading)
+/**
+ * Renders the final glide shading
+ * @param canvas The drawing canvas
+ */
+void
+MapWindow::RenderFinalGlideShading(Canvas &canvas)
+{
+  if (terrain != NULL &&
+      SettingsComputer().FinalGlideTerrain == 2 &&
+      Calculated().TerrainValid)
       DrawTerrainAbove(canvas);
-  }
 }
 
 /**
@@ -141,8 +153,10 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   // reset label over-write preventer
   label_block.reset();
 
-  // Render terrain, groundline and topology and reset pen, brush and font
-  RenderMapLayer(canvas);
+  // Render terrain, groundline and topology
+  RenderTerrain(canvas);
+  RenderTopology(canvas);
+  RenderFinalGlideShading(canvas);
 
   // Render airspace
   if (SettingsMap().OnAirSpace > 0)
