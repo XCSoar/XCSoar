@@ -31,46 +31,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "SettingsMap.hpp"
 
-bool
-MapWindow::isClickOnTarget(const RasterPoint pc)
-{
-  if (XCSoarInterface::SettingsMap().TargetPan) {
-    if (!protected_task_manager.target_is_locked(
-                                XCSoarInterface::SettingsMap().TargetPanIndex))
-      return false;
-
-    GeoPoint gnull;
-    const GeoPoint& t = protected_task_manager.get_location_target(
-        XCSoarInterface::SettingsMap().TargetPanIndex, gnull);
-
-    if (t == gnull)
-      return false;
-
-    const GeoPoint gp = visible_projection.ScreenToGeo(pc.x, pc.y);
-    if (visible_projection.GeoToScreenDistance(gp.distance(t)) <
-        unsigned(Layout::Scale(10)))
-      return true;
-  }
-  return false;
-}
-
-bool
-MapWindow::isInSector(const int x, const int y)
-{
-  RasterPoint dragPT;
-  dragPT.x = x;
-  dragPT.y = y;
-
-  if (XCSoarInterface::SettingsMap().TargetPan) {
-    GeoPoint gp = visible_projection.ScreenToGeo(dragPT.x, dragPT.y);
-    AIRCRAFT_STATE a;
-    a.Location = gp;
-    return protected_task_manager.isInSector(
-                                  XCSoarInterface::SettingsMap().TargetPanIndex, a);
-  }
-  return false;
-}
-
 void
 MapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
 {

@@ -159,29 +159,6 @@ public:
     marks = _marks;
   }
 
-
-  /**
-   * If PanTarget, tests if target is clicked
-   * Used by dlgTarget
-   *
-   * @param drag_last location of click
-   *
-   * @return true if click is near target
-   */
-  bool isClickOnTarget(const RasterPoint drag_last);
-
-  /**
-   * If PanTarget, tests if drag destination
-   * is in OZ of target being edited
-   * Used by dlgTarget
-   *
-   * @param x mouse_up location
-   * @param y mouse_up location
-   *
-   * @return true if location is in OZ
-   */
-  bool isInSector(const int x, const int y);
-
   /**
    * If PanTarget, paints target during drag
    * Used by dlgTarget
