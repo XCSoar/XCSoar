@@ -33,8 +33,6 @@ class AbstractAirspace;
 
 /**
  * Class to hold information about active airspace warnings
- * \todo
- * - use settings for acknowledgement time
  */
 class AirspaceWarning {
 public:

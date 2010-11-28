@@ -129,17 +129,18 @@ private:
 class AirspaceAircraftPerformanceSimple:
   public AirspaceAircraftPerformance 
 {
-public:
 /** 
- * Constructor.  Initialises current to experimental values
+ * Constructor.  Initialises current to experimental values.
+ * Intended to be specialised for a real aircraft performance model.
  * 
- * \todo use something more sensible?
  */
+protected:
   AirspaceAircraftPerformanceSimple():v_ld(30.0),s_ld(2.0),
                                       climb_rate(10.0),
                                       descent_rate(10.0)
     {};
 
+public:
   virtual fixed get_cruise_speed() const {
     return v_ld;
   }

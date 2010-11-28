@@ -43,10 +43,6 @@ class AirspaceWarningVisitor;
  * - Filter (longer range predicted warning based on low pass filtered state)
  * - Task (longer range predicted warning based on current leg of task)
  *
- * \todo
- * - Acknowledgement and 'debounce'
- * - Filter condition based on airspace warning settings
- * - Quick lookup of whether an airspace is temporarily acknowledged or active warning
  */
 class AirspaceWarningManager: 
   public NonCopyable
