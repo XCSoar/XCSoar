@@ -189,20 +189,17 @@ InputEvents::eventSnailTrail(const TCHAR *misc)
 void
 InputEvents::eventAirSpace(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("toggle")) == 0) {
-    XCSoarInterface::SetSettingsMap().OnAirSpace++;
-
-    if (XCSoarInterface::SettingsMap().OnAirSpace > 1) {
-      XCSoarInterface::SetSettingsMap().OnAirSpace = 0;
-    }
-  } else if (_tcscmp(misc, _T("off")) == 0)
-    XCSoarInterface::SetSettingsMap().OnAirSpace = 0;
+  if (_tcscmp(misc, _T("toggle")) == 0)
+    XCSoarInterface::SetSettingsMap().EnableAirspace =
+        !XCSoarInterface::SettingsMap().EnableAirspace;
+  else if (_tcscmp(misc, _T("off")) == 0)
+    XCSoarInterface::SetSettingsMap().EnableAirspace = false;
   else if (_tcscmp(misc, _T("on")) == 0)
-    XCSoarInterface::SetSettingsMap().OnAirSpace = 1;
+    XCSoarInterface::SetSettingsMap().EnableAirspace = true;
   else if (_tcscmp(misc, _T("show")) == 0) {
-    if (XCSoarInterface::SetSettingsMap().OnAirSpace == 0)
+    if (!XCSoarInterface::SetSettingsMap().EnableAirspace)
       Message::AddMessage(_("Show Airspace OFF"));
-    if (XCSoarInterface::SetSettingsMap().OnAirSpace == 1)
+    if (XCSoarInterface::SetSettingsMap().EnableAirspace)
       Message::AddMessage(_("Show Airspace ON"));
   }
 }

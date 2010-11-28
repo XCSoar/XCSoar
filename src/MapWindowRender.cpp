@@ -61,7 +61,7 @@ MapWindow::RenderFinalGlideShading(Canvas &canvas)
 void
 MapWindow::RenderAirspace(Canvas &canvas)
 {
-  if (SettingsMap().OnAirSpace > 0)
+  if (SettingsMap().EnableAirspace)
     DrawAirspace(canvas);
 }
 

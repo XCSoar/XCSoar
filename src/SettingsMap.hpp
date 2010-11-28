@@ -102,7 +102,7 @@ struct SETTINGS_MAP {
   /** Terrain brightness percentage */
   short TerrainBrightness;
   short TerrainRamp;
-  int OnAirSpace; // VENTA3 toggle DrawAirSpace
+  bool EnableAirspace;
   bool EnableAuxiliaryInfo;
   DisplayMode_t UserForceDisplayMode;
   bool EnablePan;

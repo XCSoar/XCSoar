@@ -347,12 +347,12 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   }
 
   if (_tcsstr(OutBuffer, _T("$(AirSpaceToggleName)"))) {
-    switch(SettingsMap().OnAirSpace) {
-    case 0:
+    switch(SettingsMap().EnableAirspace) {
+    case false:
       ReplaceInString(OutBuffer, _T("$(AirSpaceToggleName)"),
                       _("ON"), Size);
       break;
-    case 1:
+    case true:
       ReplaceInString(OutBuffer, _T("$(AirSpaceToggleName)"),
                       _("OFF"), Size);
       break;
@@ -464,10 +464,10 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       OutBuffer, _T("$(SnailTrailFullShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(SettingsMap().OnAirSpace == 0,
+  CondReplaceInString(!SettingsMap().EnableAirspace,
                       OutBuffer, _T("$(AirSpaceOffShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().OnAirSpace == 1,
+  CondReplaceInString(SettingsMap().EnableAirspace,
                       OutBuffer, _T("$(AirSpaceOnShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 
