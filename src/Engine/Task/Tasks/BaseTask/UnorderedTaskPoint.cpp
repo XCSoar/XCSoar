@@ -28,7 +28,7 @@ UnorderedTaskPoint::get_vector_remaining(const AIRCRAFT_STATE &ref) const
   return GeoVector(ref.Location, get_location_remaining());
 }
 
-//// These are dummies, never get called usually
+// These are dummies, never get called usually
 
 const GeoVector 
 UnorderedTaskPoint::get_vector_planned() const

@@ -92,8 +92,6 @@ ProtectedTaskManager::getAlternates() const
   return lease->getAlternates();
 }
 
-
-//////////////////////////////
 bool
 ProtectedTaskManager::isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref) const
 {
@@ -174,7 +172,7 @@ ProtectedTaskManager::get_ordered_taskpoint_name(const unsigned TPindex)
  Lease lease(*this);
  return lease->get_ordered_taskpoint_name(TPindex);
 }
-/////////////////////////////////////
+
 void 
 ProtectedTaskManager::incrementActiveTaskPoint(int offset)
 {

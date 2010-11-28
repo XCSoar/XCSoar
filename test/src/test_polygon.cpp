@@ -1,6 +1,5 @@
 #include "BaseTask/ConvexHull/GrahamScan.hpp"
 
-////////////////////////////////////////////////
 /*
 #include "ConvexHull/GrahamScan.hpp"
 #include "ConvexHull/PolygonInterior.hpp"
@@ -43,4 +42,3 @@ void test_polygon()
 
 }
 */
-////////////////////////////////////////////////

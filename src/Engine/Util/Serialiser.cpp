@@ -37,8 +37,6 @@
 #include <assert.h>
 
 
-///////////////////////////////////////////////////////////
-
 void
 Serialiser::deserialise_point(OrderedTask& data)
 {
@@ -154,8 +152,6 @@ Serialiser::serialise(const OrderedTaskPoint& data, const TCHAR* name)
   return child;
 }
 
-///////////////////////////////////////////////////
-
 ObservationZonePoint*
 Serialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
 {
@@ -264,10 +260,6 @@ Serialiser::Visit(const CylinderZone& data)
   m_node.set_attribute(_T("radius"), data.getRadius());
 }
 
-
-///////////////////
-
-
 void 
 Serialiser::serialise(const GeoPoint& data)
 {
@@ -281,8 +273,6 @@ Serialiser::deserialise(GeoPoint& data)
   m_node.get_attribute(_T("longitude"), data.Longitude);
   m_node.get_attribute(_T("latitude"), data.Latitude);
 }
-
-////////////////////
 
 #include <stdio.h>
 Waypoint*
@@ -328,10 +318,6 @@ Serialiser::serialise(const Waypoint& data)
   delete child;
 }
 
-
-
-//////////////////////////////////////////////////////////////////
-
 void 
 Serialiser::serialise(const OrderedTaskBehaviour& data)
 {
@@ -363,8 +349,6 @@ Serialiser::deserialise(OrderedTaskBehaviour& data)
   m_node.get_attribute(_T("homogeneous_tps"), data.homogeneous_tps);
   m_node.get_attribute(_T("is_closed"), data.is_closed);
 }
-
-/////////////////////////////////////////////////////
 
 void 
 Serialiser::serialise(const OrderedTask& data)
@@ -453,7 +437,6 @@ Serialiser::task_factory_type(OrderedTask::Factory_t the_type) const
 
 
 
-///////////////////////////////////////////////////////////////////
 /*
 #include "DataNodeXML.hpp"
 

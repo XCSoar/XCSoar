@@ -478,9 +478,6 @@ TaskManager::get_ordered_taskpoint_name(unsigned TPindex) const
 
  return buff;
 }
-////////////////////////////
-
-
 
 bool
 TaskManager::isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref) const
