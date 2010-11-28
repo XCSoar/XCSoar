@@ -112,6 +112,7 @@ FlatPoint
 ThermalLocator::glider_average()
 {
   FlatPoint result(fixed_zero, fixed_zero);
+  assert(n_points>0);
   if (n_points == 0)
     return result;
 
