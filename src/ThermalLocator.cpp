@@ -79,14 +79,12 @@ ThermalLocator::Update(const fixed t_0,
 
   GeoPoint dloc = FindLatitudeLongitude(location_0, wind.bearing, wind.norm);
 
-  const GeoPoint traildrift = location_0 - dloc;
-
   TaskProjection projection;
   projection.reset(location_0);
   projection.update_fast();
 
   // drift points 
-  Drift(t_0, projection, traildrift);
+  Drift(t_0, projection, location_0 - dloc);
 
   FlatPoint av = glider_average();
 
