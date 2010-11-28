@@ -32,7 +32,7 @@ def __get_tile_name(lat, lon):
 def __download_tile(path_tile_zip, filename):
     socket.setdefaulttimeout(10)
     try:
-        urllib.urlretrieve(gather_from_server + filename + ".zip", 
+        urllib.urlretrieve(gather_from_server + filename + ".zip",
                            path_tile_zip)
     except IOError:
         print "Download of tile " + filename + " failed!"
@@ -47,7 +47,7 @@ def __extract_tile(path_tile_zip, dir_temp, filename):
     zip.extract(filename + ".tif", dir_temp)
     zip.close()
     return True
-    
+
 def __gather_tile(dir_data, dir_temp, lat, lon):
     # generate filename to search for
     filename = __get_tile_name(lat, lon)
@@ -73,17 +73,17 @@ def __gather_tile(dir_data, dir_temp, lat, lon):
             if not os.path.exists(path_tile_zip):
                 print "Downloading tile " + filename + " from the internet ..."
                 __download_tile(path_tile_zip, filename)
-    
+
         # check if the ZIP file exists in the data folder
         if not os.path.exists(path_tile_zip):
             print "Tile " + filename + " can not be found!"
             return None
-    
+
         print "Tile " + filename + " found inside zip file! -> Decompressing ..."
         if not __extract_tile(path_tile_zip, dir_temp, filename):
             os.unlink(path_tile_zip)
             continue
-    
+
         # check if the GeoTIFF file now exists in the temporary folder
         path_tile = os.path.join(dir_temp, filename + ".tif")
         if os.path.exists(path_tile):
@@ -163,7 +163,7 @@ def __create(dir_temp, tiles, arcseconds_per_pixel, bounds):
 
     if use_world_file == True:
         args.extend(["-co", "TFW=YES"])
-    
+
     args.extend(["-te", str(bounds.left.value_degrees()),
                 str(bounds.bottom.value_degrees()),
                 str(bounds.right.value_degrees()),
@@ -181,7 +181,7 @@ def __create(dir_temp, tiles, arcseconds_per_pixel, bounds):
                "terrain_srtm module and modify it if necessary.")
         print "Current value: \""+cmd_gdal_warp+"\""
         return None
-    
+
     p.wait()
 
     return output_file
@@ -217,7 +217,7 @@ def __convert(dir_temp, input_file, rc):
             "-O", "rate=0.1",
             "-O", "tilewidth=256",
             "-O", "tileheight=256"]
-    
+
     if not use_world_file:
         args.extend(["-O", "xcsoar=1",
                      "-O", "lonmin=" + str(rc.left.value_degrees()),
@@ -234,11 +234,11 @@ def __convert(dir_temp, input_file, rc):
                "terrain_srtm module and modify it if necessary.")
         print "Current value: \""+cmd_geojasper+"\""
         return None
-    
+
     p.wait()
-    
+
     output = [[output_file, False]]
-    
+
     world_file_tiff = os.path.join(dir_temp, "terrain.tfw")
     world_file = os.path.join(dir_temp, "terrain.j2w")
     if use_world_file and os.path.exists(world_file_tiff):
@@ -269,11 +269,11 @@ def Create(bounds, arcseconds_per_pixel = 9.0,
     terrain_file = __create(dir_temp, tiles, arcseconds_per_pixel, bounds)
     if terrain_file == None:
         return None
-    
+
     final_files = __convert(dir_temp, terrain_file, bounds)
     if final_files == None:
         return None
-    
+
     __cleanup(dir_temp)
 
     return final_files
