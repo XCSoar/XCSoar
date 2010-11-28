@@ -65,8 +65,6 @@ struct GeoVector {
    * Constructor given start and end location.  
    * Computes Distance/Bearing internally. 
    *
-   * \todo
-   * - handle is_average
    */
   GeoVector(const GeoPoint &source, const GeoPoint &target);
 
