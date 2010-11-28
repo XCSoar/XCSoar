@@ -70,13 +70,12 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
   TracePointVector trace =
     task->find_trace_points(projection.GetGeoLocation(),
                             projection.GetScreenDistanceMeters(),
-                            min_time,
-                            projection.DistancePixelsToMeters(3));
+                            min_time, projection.DistancePixelsToMeters(3));
 
-  if (trace.empty()) return; // nothing to draw
+  if (trace.empty())
+    return;
 
   GeoPoint traildrift;
-
   if (SettingsMap().EnableTrailDrift && GetDisplayMode() == dmCircling) {
     GeoPoint tp1 = FindLatitudeLongitude(Basic().Location, Basic().wind.bearing,
                                          Basic().wind.norm);
@@ -90,25 +89,23 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
        it != trace.end(); ++it) {
     vario_max = max(it->NettoVario, vario_max);
     vario_min = min(it->NettoVario, vario_min);
-  };
+  }
 
   vario_max = min(fixed(7.5), vario_max);
   vario_min = max(fixed(-5.0), vario_min);
 
   unsigned last_time = 0;
-
   RasterPoint last_point;
   for (TracePointVector::const_iterator it = trace.begin();
        it != trace.end(); ++it) {
-
     const fixed dt = Basic().Time - fixed(it->time);
     RasterPoint pt = projection.GeoToScreen(it->get_location().
         parametric(traildrift, dt * it->drift_factor));
 
     if (it->last_time == last_time) {
-      const fixed colour_vario = negative(it->NettoVario)?
-        -it->NettoVario/vario_min :
-        it->NettoVario/vario_max ;
+      const fixed colour_vario = negative(it->NettoVario) ?
+                                 - it->NettoVario / vario_min :
+                                 it->NettoVario / vario_max ;
 
       canvas.select(Graphics::hSnailPens[fSnailColour(colour_vario)]);
       canvas.line(last_point, pt);
@@ -116,7 +113,6 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
     last_time = it->time;
     last_point = pt;
   }
+
   canvas.line(last_point, aircraft_pos);
 }
-
-
