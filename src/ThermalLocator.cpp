@@ -85,35 +85,6 @@ ThermalLocator::Update(const fixed t_0,
   projection.reset(location_0);
   projection.update_fast();
 
-  Update_Internal(t_0, projection, location_0, traildrift, therm);
-}
-
-FlatPoint
-ThermalLocator::glider_average()
-{
-  FlatPoint result(fixed_zero, fixed_zero);
-  if (n_points == 0)
-    return result;
-
-  // find glider's average position
-  for (unsigned i = 0; i < n_points; ++i) {
-    result.x += points[i].loc_drift.x;
-    result.y += points[i].loc_drift.y;
-  }
-
-  result.x /= n_points;
-  result.y /= n_points;
-
-  return result;
-}
-
-void
-ThermalLocator::Update_Internal(const fixed t_0, 
-                                const TaskProjection& projection, 
-                                const GeoPoint& location_0,
-                                const GeoPoint& traildrift,
-                                THERMAL_LOCATOR_INFO &therm)
-{
   // drift points 
   Drift(t_0, projection, traildrift);
 
@@ -141,6 +112,25 @@ ThermalLocator::Update_Internal(const fixed t_0,
 
   therm.ThermalEstimate_Location = projection.funproject(f0);
   therm.ThermalEstimate_Valid = true;
+}
+
+FlatPoint
+ThermalLocator::glider_average()
+{
+  FlatPoint result(fixed_zero, fixed_zero);
+  if (n_points == 0)
+    return result;
+
+  // find glider's average position
+  for (unsigned i = 0; i < n_points; ++i) {
+    result.x += points[i].loc_drift.x;
+    result.y += points[i].loc_drift.y;
+  }
+
+  result.x /= n_points;
+  result.y /= n_points;
+
+  return result;
 }
 
 void

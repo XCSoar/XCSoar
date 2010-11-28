@@ -97,10 +97,6 @@ private:
   void Update(const fixed t_0, const GeoPoint &location_0,
               const SpeedVector wind, THERMAL_LOCATOR_INFO &therm);
 
-  void Update_Internal(const fixed t_0, const TaskProjection& projection,
-                       const GeoPoint& location_0, const GeoPoint& traildrift,
-                       THERMAL_LOCATOR_INFO& therm);
-
   void Drift(const fixed t_0, const TaskProjection& projection,
              const GeoPoint& traildrift);
 
