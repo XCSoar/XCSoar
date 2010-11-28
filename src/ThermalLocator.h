@@ -93,8 +93,6 @@ public:
 private:
   void Reset();
 
-  void invalid_estimate(THERMAL_LOCATOR_INFO &therm) const;
-
   FlatPoint glider_average();
 
   void AddPoint(const fixed t, const GeoPoint &location, const fixed w);

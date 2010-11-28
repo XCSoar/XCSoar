@@ -67,19 +67,13 @@ ThermalLocator::AddPoint(const fixed t, const GeoPoint &location, const fixed w)
 }
 
 void
-ThermalLocator::invalid_estimate(THERMAL_LOCATOR_INFO &therm) const
-{
-  therm.ThermalEstimate_Valid = false;
-}
-
-void
 ThermalLocator::Update(const fixed t_0, 
                        const GeoPoint &location_0,
                        const SpeedVector wind, 
                        THERMAL_LOCATOR_INFO &therm)
 {
   if (n_points < TLOCATOR_NMIN) {
-    invalid_estimate(therm);
+    therm.ThermalEstimate_Valid = false;
     return; // nothing to do.
   }
 
@@ -144,7 +138,7 @@ ThermalLocator::Update_Internal(const fixed t_0,
   // if sufficient data, estimate location
 
   if (!positive(acc)) {
-    invalid_estimate(therm);
+    therm.ThermalEstimate_Valid = false;
     return;
   }
 
