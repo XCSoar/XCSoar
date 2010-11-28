@@ -27,10 +27,6 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Units.hpp"
 
-/**
- * Renders the terrain background
- * @param canvas The drawing canvas
- */
 void
 MapWindow::RenderTerrain(Canvas &canvas)
 {
@@ -38,10 +34,6 @@ MapWindow::RenderTerrain(Canvas &canvas)
   m_background.Draw(canvas, render_projection, SettingsMap());
 }
 
-/**
- * Renders the topology
- * @param canvas The drawing canvas
- */
 void
 MapWindow::RenderTopology(Canvas &canvas)
 {
@@ -49,10 +41,6 @@ MapWindow::RenderTopology(Canvas &canvas)
     topology_renderer->Draw(canvas, render_projection);
 }
 
-/**
- * Renders the topology labels
- * @param canvas The drawing canvas
- */
 void
 MapWindow::RenderTopologyLabels(Canvas &canvas)
 {
@@ -61,10 +49,6 @@ MapWindow::RenderTopologyLabels(Canvas &canvas)
                                   SettingsMap());
 }
 
-/**
- * Renders the final glide shading
- * @param canvas The drawing canvas
- */
 void
 MapWindow::RenderFinalGlideShading(Canvas &canvas)
 {
@@ -74,11 +58,6 @@ MapWindow::RenderFinalGlideShading(Canvas &canvas)
       DrawTerrainAbove(canvas);
 }
 
-/**
- * Renders the task, the waypoints and the marks
- * @param canvas The drawing canvas
- * @param rc The area to draw in
- */
 void
 MapWindow::RenderTaskElements(Canvas &canvas)
 {
@@ -94,11 +73,6 @@ MapWindow::RenderTaskElements(Canvas &canvas)
     marks->Draw(canvas, render_projection);
 }
 
-/**
- * Render final glide through terrain marker 
- * @param canvas The drawing canvas
- * @param rc The area to draw in
- */
 void
 MapWindow::RenderGlide(Canvas &canvas)
 {
@@ -107,11 +81,6 @@ MapWindow::RenderGlide(Canvas &canvas)
     DrawGlideThroughTerrain(canvas);
 }
 
-/**
- * Renders the aircraft, the FLARM targets and the wind arrow
- * @param canvas The drawing canvas
- * @param rc The area to draw in
- */
 void
 MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc,
                           const RasterPoint aircraft_pos)
@@ -129,11 +98,6 @@ MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc,
     DrawAircraft(canvas, aircraft_pos);
 }
 
-/**
- * Renders lower symbology (track lines, bearing, etc)
- * @param canvas
- * @param rc
- */
 void
 MapWindow::RenderSymbology_lower(Canvas &canvas,
                                  const RasterPoint aircraft_pos)
@@ -144,11 +108,6 @@ MapWindow::RenderSymbology_lower(Canvas &canvas,
   DrawAirspaceIntersections(canvas);
 }
 
-/**
- * Renders all the components of the moving map
- * @param canvas The drawing canvas
- * @param rc The area to draw in
- */
 void
 MapWindow::Render(Canvas &canvas, const RECT &rc)
 { 

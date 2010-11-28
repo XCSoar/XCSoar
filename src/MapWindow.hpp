@@ -195,6 +195,11 @@ public:
   void DrawFLARMTraffic(Canvas &canvas, const RasterPoint aircraft_pos) const;
 
   // thread, main functions
+  /**
+   * Renders all the components of the moving map
+   * @param canvas The drawing canvas
+   * @param rc The area to draw in
+   */
   virtual void Render(Canvas &canvas, const RECT &rc);
 
   void UpdateMapScale();
@@ -237,14 +242,47 @@ protected:
   GlidePolar get_glide_polar() const;
 
 private:
+  /**
+   * Renders the terrain background
+   * @param canvas The drawing canvas
+   */
   void RenderTerrain(Canvas &canvas);
+  /**
+   * Renders the topology
+   * @param canvas The drawing canvas
+   */
   void RenderTopology(Canvas &canvas);
+  /**
+   * Renders the topology labels
+   * @param canvas The drawing canvas
+   */
   void RenderTopologyLabels(Canvas &canvas);
+  /**
+   * Renders the final glide shading
+   * @param canvas The drawing canvas
+   */
   void RenderFinalGlideShading(Canvas &canvas);
+  /**
+   * Renders the task, the waypoints and the marks
+   * @param canvas The drawing canvas
+   */
   void RenderTaskElements(Canvas &canvas);
+  /**
+   * Render final glide through terrain marker
+   * @param canvas The drawing canvas
+   */
   void RenderGlide(Canvas &canvas);
+  /**
+   * Renders the aircraft, the FLARM targets and the wind arrow
+   * @param canvas The drawing canvas
+   * @param rc The area to draw in
+   */
   void RenderAirborne(Canvas &canvas, const RECT &rc,
                       const RasterPoint aircraft_pos);
+  /**
+   * Renders lower symbology (track lines, bearing, etc)
+   * @param canvas
+   */
   void RenderSymbology_lower(Canvas &canvas, const RasterPoint aircraft_pos);
 
   StaticArray<GeoPoint,32> m_airspace_intersections;
