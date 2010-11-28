@@ -303,18 +303,15 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
   // JMW TODO accuracy: gather proper statistics
   // note these should/may also be relative to ground
   fixed mth = thermal_band.MaxThermalHeight;
-  fixed maxh, minh;
-  fixed h;
   fixed Wt[NUMTHERMALBUCKETS];
   fixed ht[NUMTHERMALBUCKETS];
-  fixed Wmax = fixed_zero;
   int TBSCALEY = ((rc.bottom - rc.top) / 2) - IBLSCALE(30);
 #define TBSCALEX 20
 
   // calculate height above safety altitude
   fixed hoffset = SettingsComputer().safety_height_terrain +
                    Calculated().TerrainBase;
-  h = Basic().NavAltitude - hoffset;
+  fixed h = Basic().NavAltitude - hoffset;
 
   bool draw_start_height = false;
   fixed hstart = fixed_zero;
@@ -336,8 +333,8 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
   }
 
   // calculate top/bottom height
-  maxh = max(h, mth);
-  minh = min(h, fixed_zero);
+  fixed maxh = max(h, mth);
+  fixed minh = min(h, fixed_zero);
 
   if (draw_start_height) {
     maxh = max(maxh, hstart);
@@ -358,7 +355,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
   int numtherm = 0;
 
   const fixed mc = get_glide_polar().get_mc();
-  Wmax = max(fixed_half, mc);
+  fixed Wmax = max(fixed_half, mc);
 
   for (int i = 0; i < NUMTHERMALBUCKETS; i++) {
     fixed wthis = fixed_zero;
