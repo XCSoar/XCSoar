@@ -33,14 +33,14 @@ def main():
 
     m = MapGenerator()
     if wp != None:
-        m.AddWaypointFile(wp)
-        m.SetBoundsByWaypointFile(wp)
+        m.add_waypoint_file(wp)
+        m.set_bounds_by_waypoint_file(wp)
     if latmin != None:
-        m.SetBoundsSeperatly(latmin, latmax, lonmin, lonmax)
-    m.AddTopology()
-    m.AddTerrain(res)
-    m.Create(output_file)
-    m.Cleanup()
+        m.set_bounds_separatly(latmin, latmax, lonmin, lonmax)
+    m.add_topology()
+    m.add_terrain(res)
+    m.create(output_file)
+    m.cleanup()
 
 if __name__ == "__main__":
     main()
