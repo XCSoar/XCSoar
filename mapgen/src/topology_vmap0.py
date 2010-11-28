@@ -13,9 +13,9 @@ cmd_shptree = "shptree"
 gather_from_server = "http://gis-lab.info/data/vmap0/"
 #gather_from_server = "http://webbuster.dyndns.info/xcsoar/mapgen_data/topo/vmap0/"
 
-__maps = [["eur", GeoRect(-35, 180, 90, 30)], 
-          ["noa", GeoRect(-180, 0, 90, -40)], 
-          ["sas", GeoRect(25, 180, 50, -60)], 
+__maps = [["eur", GeoRect(-35, 180, 90, 30)],
+          ["noa", GeoRect(-180, 0, 90, -40)],
+          ["sas", GeoRect(25, 180, 50, -60)],
           ["soa", GeoRect(-180, 180, 30, -90)]]
 __layers = [["pop-miscellaneous-population-p", "mispopppop_point", "", "txt"],
             ["pop-built-up-a", "builtupapop_area", "", "nam"],
@@ -29,7 +29,7 @@ def __filter_maps(bounds, maps = __maps):
     for map in maps:
         if bounds.Intersects(map[1]):
             maps_filtered.append(map)
-        
+
     return maps_filtered
 
 def __gather_map(dir_data, map_name):
@@ -41,24 +41,24 @@ def __gather_map(dir_data, map_name):
 
     if not os.path.exists(zip_file):
         return False
-     
+
     print "Decompressing map file " + map_name + ".7z ..."
     arg = [cmd_7zip, "x", "-o" + dir_data, zip_file]
     p = subprocess.Popen(arg)
     p.wait()
-    
+
     os.unlink(zip_file)
 
     return True
-    
+
 
 def __check_map(dir_data, map_name):
     return os.path.exists(os.path.join(dir_data, map_name))
-    
+
 def __create_layer_from_map(bounds, layer, map_name, overwrite, dir_data, dir_temp):
     if not isinstance(bounds, GeoRect):
         return False
-    
+
     if not __check_map(dir_data, map_name):
         if not __gather_map(dir_data, map_name):
             return False

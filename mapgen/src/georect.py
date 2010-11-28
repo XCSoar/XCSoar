@@ -6,7 +6,7 @@ class GeoRect:
             self.left = left
         else:
             self.left = Angle.degrees(left)
-            
+
         if isinstance(right, Angle):
             self.right = right
         else:
@@ -29,20 +29,20 @@ class GeoRect:
                 "B: " + str(self.bottom))
 
     def Intersects(self, other):
-        if (self.Inside(other.top, other.left) or 
-            self.Inside(other.top, other.right) or 
-            self.Inside(other.bottom, other.left) or 
+        if (self.Inside(other.top, other.left) or
+            self.Inside(other.top, other.right) or
+            self.Inside(other.bottom, other.left) or
             self.Inside(other.bottom, other.right)):
-            return True 
-        
-        if (other.Inside(self.top, self.left) or 
-            other.Inside(self.top, self.right) or 
-            other.Inside(self.bottom, self.left) or 
+            return True
+
+        if (other.Inside(self.top, self.left) or
+            other.Inside(self.top, self.right) or
+            other.Inside(self.bottom, self.left) or
             other.Inside(self.bottom, self.right)):
-            return True 
-        
+            return True
+
         return False
-    
+
     def Inside(self, lat, lon):
-        return (lat.between(self.bottom, self.top) and 
+        return (lat.between(self.bottom, self.top) and
                 lon.between(self.left, self.right))
