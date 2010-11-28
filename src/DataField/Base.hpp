@@ -104,8 +104,6 @@ protected:
   TCHAR mDisplayFormat[FORMATSIZE + 1];
   TCHAR mUnits[UNITSIZE + 1];
 
-  ComboList *CreateComboListStepping(void);
-
 private:
   int mUsageCounter;
   bool mDisableSpeedup;

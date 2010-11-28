@@ -76,6 +76,9 @@ public DataField
   virtual void SetAsInteger(int Value);
   virtual void SetAsFloat(fixed Value);
   virtual void SetAsString(const TCHAR *Value);
+
+protected:
+  ComboList *CreateComboListStepping();
 };
 
 #endif
