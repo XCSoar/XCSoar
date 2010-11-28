@@ -50,6 +50,18 @@ MapWindow::RenderTopology(Canvas &canvas)
 }
 
 /**
+ * Renders the topology labels
+ * @param canvas The drawing canvas
+ */
+void
+MapWindow::RenderTopologyLabels(Canvas &canvas)
+{
+  if (topology_renderer != NULL && SettingsMap().EnableTopology)
+    topology_renderer->DrawLabels(canvas, render_projection, label_block,
+                                  SettingsMap());
+}
+
+/**
  * Renders the final glide shading
  * @param canvas The drawing canvas
  */
@@ -172,9 +184,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   RenderTaskElements(canvas);
 
   // Render topology on top of airspace, to keep the text readable
-  if (topology_renderer != NULL && SettingsMap().EnableTopology)
-    topology_renderer->DrawLabels(canvas, render_projection, label_block,
-                                  SettingsMap());
+  RenderTopologyLabels(canvas);
 
   // Render glide through terrain range
   RenderGlide(canvas);

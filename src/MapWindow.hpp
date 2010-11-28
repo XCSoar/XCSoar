@@ -239,6 +239,7 @@ protected:
 private:
   void RenderTerrain(Canvas &canvas);
   void RenderTopology(Canvas &canvas);
+  void RenderTopologyLabels(Canvas &canvas);
   void RenderFinalGlideShading(Canvas &canvas);
   void RenderTaskElements(Canvas &canvas);
   void RenderGlide(Canvas &canvas);
