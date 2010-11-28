@@ -597,6 +597,12 @@ public:
 
       rcd.left = m_chart.screenX(distance_start);
       rcd.right = m_chart.screenX(distance_end);
+      
+      // only one edge found, next edge must be beyond screen
+      if ((rcd.left == rcd.right) && (p_start == p_end)) {
+        rcd.right = m_chart.screenX(m_chart.getXmax());
+      }
+
       m_canvas.rectangle(rcd.left, rcd.top, rcd.right, rcd.bottom);
     }
   }
@@ -636,7 +642,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
                                  const Airspaces &airspace_database,
                                  RasterTerrain *terrain) const
 {
-  static const fixed range(50000); // 50 km
+  static const fixed range(50000);
   fixed hmin = max(fixed_zero, nmea_info.GPSAltitude - fixed(3300));
   fixed hmax = max(fixed(3300), nmea_info.GPSAltitude + fixed(1000));
   const GeoPoint p_start = nmea_info.Location;
