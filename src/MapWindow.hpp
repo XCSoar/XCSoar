@@ -38,12 +38,6 @@ Copyright_License {
 #include "WayPoint/WayPointRenderer.hpp"
 #include "Compiler.h"
 
-struct THERMAL_SOURCE_VIEW
-{
-  RasterPoint Screen;
-  bool Visible;
-};
-
 class TopologyStore;
 class TopologyRenderer;
 class RasterTerrain;
@@ -170,8 +164,6 @@ public:
 
 private:
   RasterPoint Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS];
-
-  THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
 
   // display element functions
   void CalculateScreenPositionsGroundline();

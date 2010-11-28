@@ -43,29 +43,22 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
     }
   } else if (projection.GetMapScale() <= fixed(4000)) {
     for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
-      if (!positive(Calculated().ThermalSources[i].LiftRate)) {
-        ThermalSources[i].Visible = false;
+      if (!positive(Calculated().ThermalSources[i].LiftRate))
         continue;
-      }
 
-      fixed dh = Basic().NavAltitude -
-                  Calculated().ThermalSources[i].GroundHeight;
-      if (negative(dh)) {
-        ThermalSources[i].Visible = false;
+      fixed dh =
+          Basic().NavAltitude - Calculated().ThermalSources[i].GroundHeight;
+      if (negative(dh))
         continue;
-      }
 
       fixed t = -dh / Calculated().ThermalSources[i].LiftRate;
       GeoPoint loc =
           FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
                                 Basic().wind.bearing, Basic().wind.norm * t);
-      ThermalSources[i].Visible =
-          render_projection.GeoToScreenIfVisible(loc, ThermalSources[i].Screen);
-    }
 
-    for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
-      if (ThermalSources[i].Visible) 
-        Graphics::hBmpThermalSource.draw(canvas, ThermalSources[i].Screen);
+      RasterPoint pt;
+      if (render_projection.GeoToScreenIfVisible(loc, pt))
+        Graphics::hBmpThermalSource.draw(canvas, pt);
     }
   }
 }
