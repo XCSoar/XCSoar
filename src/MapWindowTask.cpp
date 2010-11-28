@@ -36,18 +36,14 @@ Copyright_License {
 
 class RenderTaskPointMap: public RenderTaskPoint
 {
-protected:
-  const MapWindowProjection &projection;
-
 public:
-  RenderTaskPointMap(Canvas &_canvas, const MapWindowProjection &_projection,
+  RenderTaskPointMap(Canvas &_canvas, const WindowProjection &_projection,
                      const SETTINGS_MAP &_settings_map,
                      RenderObservationZone &_ozv,
                      const bool draw_bearing,
                      const GeoPoint &location):
     RenderTaskPoint(_canvas, _projection, _settings_map,
-                    _ozv, draw_bearing, location),
-    projection(_projection)
+                    _ozv, draw_bearing, location)
     {};
 
 protected:
