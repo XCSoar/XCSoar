@@ -263,6 +263,11 @@ private:
    */
   void RenderFinalGlideShading(Canvas &canvas);
   /**
+   * Renders the airspace
+   * @param canvas The drawing canvas
+   */
+  void RenderAirspace(Canvas &canvas);
+  /**
    * Renders the task, the waypoints and the marks
    * @param canvas The drawing canvas
    */

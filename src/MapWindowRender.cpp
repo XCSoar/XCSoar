@@ -59,6 +59,13 @@ MapWindow::RenderFinalGlideShading(Canvas &canvas)
 }
 
 void
+MapWindow::RenderAirspace(Canvas &canvas)
+{
+  if (SettingsMap().OnAirSpace > 0)
+    DrawAirspace(canvas);
+}
+
+void
 MapWindow::RenderTaskElements(Canvas &canvas)
 {
   DrawTask(canvas);
@@ -130,8 +137,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   RenderFinalGlideShading(canvas);
 
   // Render airspace
-  if (SettingsMap().OnAirSpace > 0)
-    DrawAirspace(canvas);
+  RenderAirspace(canvas);
 
   // Render the snail trail
   /// @todo trail should be drawn above task shaded sections
