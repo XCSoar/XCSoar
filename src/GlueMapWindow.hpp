@@ -135,6 +135,8 @@ private:
   void LoadDisplayModeScales();
   void SaveDisplayModeScales();
 
+  void UpdateScreenAngle();
+
 public:
   void UpdateDisplayMode();
   void SetMapScale(const fixed x);

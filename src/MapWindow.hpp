@@ -254,8 +254,6 @@ public:
 protected:
   void Update();
 
-  void UpdateScreenAngle();
-
   void UpdateTopology();
   void UpdateTerrain();
   void UpdateWeather();

@@ -233,30 +233,6 @@ MapWindow::IsOriginCentered(const DisplayOrientation_t orientation,
 }
 
 void
-MapWindow::UpdateScreenAngle()
-{
-  const SETTINGS_MAP &settings = SettingsMap();
-
-  if (settings.TargetPan &&
-      Calculated().common_stats.active_taskpoint_index !=
-          settings.TargetPanIndex) {
-    visible_projection.SetScreenAngle(Angle::native(fixed_zero));
-    return;
-  }
-
-  if (IsOriginCentered(settings.DisplayOrientation, GetDisplayMode())) {
-    if (settings.DisplayOrientation == TRACKCIRCLE)
-      visible_projection.SetScreenAngle(Calculated().task_stats.current_leg.
-                                        solution_remaining.Vector.Bearing);
-    else
-      visible_projection.SetScreenAngle(Angle::native(fixed_zero));
-  } else {
-    // normal, glider forward
-    visible_projection.SetScreenAngle(Basic().TrackBearing);
-  }
-}
-
-void
 MapWindow::UpdateMapScale()
 {
   fixed wpd;

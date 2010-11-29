@@ -382,6 +382,8 @@ GlueMapWindow::on_paint(Canvas &canvas)
 void
 GlueMapWindow::Render(Canvas &canvas, const RECT &rc)
 {
+  UpdateScreenAngle();
+
   MapWindow::Render(canvas, rc);
 
   if (drag_mode == DRAG_TARGET)
