@@ -55,6 +55,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "GlideRatio.hpp"
 #include "Components.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "WayPointFile.hpp"
 #include "StringUtil.hpp"
 #include "Simulator.hpp"
@@ -1869,7 +1870,7 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpHandicap"), szProfileHandicap,
                               settings_computer.contest_handicap);
 
-  PolarFileChanged = FinishFileField(*wf, _T("prpPolarFile"),
+  PolarFileChanged |= FinishFileField(*wf, _T("prpPolarFile"),
                                      szProfilePolarFile);
 
   WaypointFileChanged = WaypointFileChanged |
@@ -2219,6 +2220,12 @@ void dlgConfigurationShowModal(void)
       changed = true;
       Graphics::InitSnailTrail(XCSoarInterface::SettingsMap());
     }
+  }
+
+  if (PolarFileChanged) {
+    GlidePolar gp = protected_task_manager.get_glide_polar();
+    if (LoadPolarById(settings_computer, gp))
+      protected_task_manager.set_glide_polar(gp);
   }
 
   if (DevicePortChanged)
