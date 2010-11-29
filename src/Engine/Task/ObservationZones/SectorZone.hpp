@@ -62,6 +62,7 @@ public:
     StartRadial(_startRadial),
     EndRadial(_endRadial) 
     {
+      updateSector();
     };
 
   virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const {
