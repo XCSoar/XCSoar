@@ -138,13 +138,13 @@ BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas, LabelBlock &block,
   canvas.text(pt.x, pt.y, Buffer);
 }
 
-void
+bool
 BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas, 
                                       LabelBlock& block)
 {
   if (m_weather == NULL || m_weather->GetParameter() == 0 ||
       m_rend == NULL)
-    return;
+    return false;
 
   canvas.select(Fonts::Title);
   canvas.set_text_color(Color::BLACK);
@@ -156,4 +156,5 @@ BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas,
 
   m_weather->ValueToText(Buffer, m_rend->spot_min_val);
   DrawSpotHeight(canvas, block, Buffer, m_rend->spot_min_pt);
+  return true;
 }

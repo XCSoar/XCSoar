@@ -49,7 +49,7 @@ public:
             const WindowProjection& proj,
             const SETTINGS_MAP& settings_map);
 
-  void DrawSpotHeights(Canvas& canvas, LabelBlock& block);
+  bool DrawSpotHeights(Canvas& canvas, LabelBlock& block);
 
   void sun_from_wind(const WindowProjection& proj,
                      const SpeedVector& wind);
