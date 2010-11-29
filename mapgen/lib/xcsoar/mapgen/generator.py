@@ -144,9 +144,11 @@ class Generator:
             raise RuntimeError, "Waypoint file " + filename + " not found!"
 
         f = open(filename, "r")
-        wplist = WaypointList()
-        wplist.parse(f)
-        f.close()
+        try:
+            wplist = WaypointList()
+            wplist.parse(f)
+        finally:
+            f.close()
 
         self.set_bounds(wplist.get_bounds())
 
