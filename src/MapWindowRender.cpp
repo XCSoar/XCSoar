@@ -105,10 +105,6 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   // Render airspace
   RenderAirspace(canvas);
 
-  // Render the snail trail
-  /// @todo trail should be drawn above task shaded sections
-  DrawTrail(canvas, aircraft_pos);
-
   DrawThermalEstimate(canvas);
 
   // Render task, waypoints
@@ -120,6 +116,9 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
     DrawTaskOffTrackIndicator(canvas);
 
   RenderMarks(canvas);
+
+  // Render the snail trail
+  DrawTrail(canvas, aircraft_pos);
 
   // Render topology on top of airspace, to keep the text readable
   RenderTopologyLabels(canvas);
