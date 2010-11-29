@@ -23,6 +23,7 @@
 
 #include "Math/fixed.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
+#include <assert.h>
 
 typedef struct _LOGGER_INTERP_POINT
 {
@@ -92,14 +93,11 @@ public:
     if (!Ready())
       return fixed_zero;
 
-    fixed u = (time - p[1].t) / (p[2].t - p[1].t);
-
     fixed s0 = p[0].loc.distance(p[1].loc);
     s0 /= (p[1].t - p[0].t);
     fixed s1 = p[1].loc.distance(p[2].loc);
     s1 /= (p[2].t - p[1].t);
-
-    u = max(fixed_zero, min(fixed_one, u));
+    fixed u = time_fraction(time);
 
     return s1 * u + s0 * (fixed_one - u);
   }
@@ -110,13 +108,10 @@ public:
     if (!Ready())
       return Angle::degrees(fixed_zero);
 
-    fixed u = (time - p[1].t) / (p[2].t - p[1].t);
-
     Angle a0 = p[0].loc.bearing(p[1].loc);
     Angle a1 = p[1].loc.bearing(p[2].loc);
 
-    u = max(fixed_zero, min(fixed_one, u));
-
+    fixed u = time_fraction(time);
     return a0.Fraction(a1, u).as_bearing();
   }
 
@@ -130,7 +125,7 @@ public:
       return;
     }
 
-    const fixed u((time - p[1].t) / (p[2].t - p[1].t));
+    const fixed u = time_fraction(time, false);
 
     if (!positive(u)) {
       loc = p[1].loc;
@@ -205,6 +200,17 @@ public:
   }
 
 private:
+
+  fixed time_fraction(const fixed time, bool limit_range=true) const {
+    assert(p[2].t>p[1].t);
+    const fixed u = (time - p[1].t) / (p[2].t - p[1].t);
+    if (limit_range) {
+      return max(fixed_zero, min(fixed_one, u));
+    } else {
+      return u;
+    }
+  }
+
   int num;
   fixed tzero;
 };
