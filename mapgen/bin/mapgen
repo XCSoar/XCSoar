@@ -6,6 +6,7 @@ app_dir = os.path.abspath(__file__ + '/../..')
 sys.path.append(app_dir + '/lib')
 
 from xcsoar.mapgen.generator import Generator
+from xcsoar.mapgen.georect import GeoRect
 
 def print_help():
     print "Usage:   mapgen [Options] -wpf waypoint_file output_file"
@@ -43,7 +44,8 @@ def main():
         generator.add_waypoint_file(wp)
         generator.set_bounds_by_waypoint_file(wp)
     if latmin != None:
-        generator.set_bounds_separatly(latmin, latmax, lonmin, lonmax)
+        # left, right, top, bottom
+        generator.set_bounds(GeoRect(lonmin, lonmax, latmax, latmin))
     generator.add_topology()
     generator.add_terrain(res)
     generator.create(output_file)
