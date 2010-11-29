@@ -36,10 +36,10 @@ foreach $path (@ARGV) {
 
 sub quote($) {
     my $_ = shift;
-    s,\\,\\\\,;
-    s,",\\",;
-    s,\n,\\n,;
-    s,\r,\\r,;
+    s,\\,\\\\,g;
+    s,",\\",g;
+    s,\n,\\n,g;
+    s,\r,\\r,g;
     return $_;
 }
 
