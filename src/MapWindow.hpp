@@ -268,6 +268,11 @@ private:
    */
   void RenderAirspace(Canvas &canvas);
   /**
+   * Renders the markers
+   * @param canvas The drawing canvas
+   */
+  void RenderMarks(Canvas &canvas);
+  /**
    * Renders the task, the waypoints and the marks
    * @param canvas The drawing canvas
    */
