@@ -53,6 +53,7 @@ TouringTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
   to.homogeneous_tps = true;
   to.min_points = 2;
   to.max_points = 10;
+  to.is_closed = false;
 
   to.start_max_speed = fixed_zero;
   to.start_max_height = 0;
