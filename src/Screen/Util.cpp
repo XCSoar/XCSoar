@@ -362,11 +362,7 @@ bool
 Segment(Canvas &canvas, long x, long y, int radius,
         Angle start, Angle end, bool horizon)
 {
-  RasterPoint pt[66];
-  int i;
-  int istart;
-  int iend;
-
+  // dont draw if out of view
   RECT rc, bounds;
   SetRect(&rc, 0, 0, canvas.get_width(), canvas.get_height());
   SetRect(&bounds, x - radius, y - radius, x + radius, y + radius);
@@ -376,46 +372,50 @@ Segment(Canvas &canvas, long x, long y, int radius,
   start = start.as_bearing();
   end = end.as_bearing();
 
-  istart = iround(start.value_degrees()*seg_steps_degrees);
-  iend = iround(end.value_degrees()*seg_steps_degrees);
+  int istart = iround(start.value_degrees()*seg_steps_degrees);
+  int iend = iround(end.value_degrees()*seg_steps_degrees);
 
-  int npoly = 0;
-
+  // adjust for wraparound
   if (istart > iend) {
     iend+= 64;
   }
+  // we want accurate placement of start/end, so we draw those with
+  // accurate calculation, the rest use the table
+  // skip to next 
   istart++;
   iend--;
 
+  int npoly = 0;
+  RasterPoint pt[66];
+
+  // add center point
   if (!horizon) {
     pt[0].x = x;
     pt[0].y = y;
     npoly = 1;
   }
+  // add start node
   pt[npoly].x = x + (long)(radius * start.fastsine());
   pt[npoly].y = y - (long)(radius * start.fastcosine());
   npoly++;
 
-  for (i = 0; i < 64; i++) {
-    if (i <= iend - istart) {
-      pt[npoly].x = x + (long)(radius * xcoords[(i + istart) % 64]);
-      pt[npoly].y = y - (long)(radius * ycoords[(i + istart) % 64]);
-      npoly++;
-    }
+  // add intermediate nodes
+  for (int i = istart; i <= iend; ++i) {
+    pt[npoly].x = x + (long)(radius * xcoords[i % 64]);
+    pt[npoly].y = y - (long)(radius * ycoords[i % 64]);
+    npoly++;
   }
+  // and end node
   pt[npoly].x = x + (long)(radius * end.fastsine());
   pt[npoly].y = y - (long)(radius * end.fastcosine());
   npoly++;
 
-  if (!horizon) {
-    pt[npoly].x = x;
-    pt[npoly].y = y;
-    npoly++;
-  } else {
-    pt[npoly].x = pt[0].x;
-    pt[npoly].y = pt[0].y;
-    npoly++;
-  }
+  // add start point to close
+  pt[npoly].x = pt[0].x;
+  pt[npoly].y = pt[0].y;
+  npoly++;
+
+  assert(npoly<66);
   if (npoly) {
     canvas.polygon(pt, npoly);
   }
