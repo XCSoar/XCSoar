@@ -1400,16 +1400,22 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
 void
 InputEvents::eventOrientation(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("northup")) == 0)
-    XCSoarInterface::SetSettingsMap().DisplayOrientation = NORTHUP;
-  else if (_tcscmp(misc, _T("northcircle")) == 0)
-    XCSoarInterface::SetSettingsMap().DisplayOrientation = NORTHCIRCLE;
-  else if (_tcscmp(misc, _T("trackcircle")) == 0)
-    XCSoarInterface::SetSettingsMap().DisplayOrientation = TRACKCIRCLE;
-  else if (_tcscmp(misc, _T("trackup")) == 0)
-    XCSoarInterface::SetSettingsMap().DisplayOrientation = TRACKUP;
-  else if (_tcscmp(misc, _T("northtrack")) == 0)
-    XCSoarInterface::SetSettingsMap().DisplayOrientation = NORTHTRACK;
+  if (_tcscmp(misc, _T("northup")) == 0) {
+    XCSoarInterface::SetSettingsMap().OrientationCruise = NORTHUP;
+    XCSoarInterface::SetSettingsMap().OrientationCircling = NORTHUP;
+  } else if (_tcscmp(misc, _T("northcircle")) == 0) {
+    XCSoarInterface::SetSettingsMap().OrientationCruise = TRACKUP;
+    XCSoarInterface::SetSettingsMap().OrientationCircling = NORTHUP;
+  } else if (_tcscmp(misc, _T("trackcircle")) == 0) {
+    XCSoarInterface::SetSettingsMap().OrientationCruise = NORTHUP;
+    XCSoarInterface::SetSettingsMap().OrientationCircling = TRACKUP;
+  } else if (_tcscmp(misc, _T("trackup")) == 0) {
+    XCSoarInterface::SetSettingsMap().OrientationCruise = TRACKUP;
+    XCSoarInterface::SetSettingsMap().OrientationCircling = TRACKUP;
+  } else if (_tcscmp(misc, _T("northtrack")) == 0) {
+    XCSoarInterface::SetSettingsMap().OrientationCruise = TRACKUP;
+    XCSoarInterface::SetSettingsMap().OrientationCircling = TARGETUP;
+  }
 }
 
 // JMW TODO enhancement: have all inputevents return bool, indicating whether

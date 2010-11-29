@@ -221,15 +221,9 @@ MapWindow::get_glide_polar() const
 }
 
 bool
-MapWindow::IsOriginCentered(const DisplayOrientation_t orientation,
-                                      const DisplayMode_t mode)
+MapWindow::IsOriginCentered(const DisplayOrientation_t orientation)
 {
-  return (orientation == NORTHUP
-      || (orientation == NORTHTRACK
-          && mode != dmCircling)
-      || ((orientation == NORTHCIRCLE
-           || orientation == TRACKCIRCLE)
-          && mode == dmCircling));
+  return (orientation != TRACKUP);
 }
 
 void
@@ -251,9 +245,12 @@ MapWindow::UpdateMapScale()
   }
 
   if (SettingsMap().AutoZoom && positive(wpd)) {
+    DisplayOrientation_t orientation =
+        (GetDisplayMode() == dmCircling) ?
+            SettingsMap().OrientationCircling : SettingsMap().OrientationCruise;
+
     fixed AutoZoomFactor =
-        IsOriginCentered(SettingsMap().DisplayOrientation, GetDisplayMode()) ?
-        fixed(2.5) : fixed_four;
+        IsOriginCentered(orientation) ? fixed(2.5) : fixed_four;
 
     if (wpd < AutoZoomFactor * visible_projection.GetMapScale()) {
       // waypoint is too close, so zoom in
@@ -276,8 +273,11 @@ MapWindow::Update()
 
   visible_projection.SetMapRect(rc);
 
-  if (IsOriginCentered(settings_map.DisplayOrientation, GetDisplayMode()) ||
-      settings_map.EnablePan)
+  DisplayOrientation_t orientation =
+      (GetDisplayMode() == dmCircling) ?
+          settings_map.OrientationCircling : settings_map.OrientationCruise;
+
+  if (IsOriginCentered(orientation) || settings_map.EnablePan)
     visible_projection.SetScreenOrigin((rc.left + rc.right) / 2,
                                        (rc.bottom + rc.top) / 2);
   else

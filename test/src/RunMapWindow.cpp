@@ -184,7 +184,8 @@ protected:
 class Blackboard : public SettingsMapBlackboard {
 public:
   Blackboard() {
-    settings_map.DisplayOrientation = NORTHUP;
+    settings_map.OrientationCruise = NORTHUP;
+    settings_map.OrientationCircling = NORTHUP;
     settings_map.DisplayTextType = DISPLAYNAME;
     settings_map.EnableTopology = true;
     settings_map.EnableTerrain = true;

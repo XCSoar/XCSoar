@@ -145,14 +145,16 @@ GlueMapWindow::UpdateScreenAngle()
     return;
   }
 
-  if (IsOriginCentered(settings.DisplayOrientation, GetDisplayMode())) {
-    if (settings.DisplayOrientation == TRACKCIRCLE)
-      visible_projection.SetScreenAngle(Calculated().task_stats.current_leg.
-                                        solution_remaining.Vector.Bearing);
-    else
-      visible_projection.SetScreenAngle(Angle::native(fixed_zero));
-  } else {
+  DisplayOrientation_t orientation =
+      (GetDisplayMode() == dmCircling) ?
+          settings.OrientationCircling : settings.OrientationCruise;
+
+  if (orientation == TARGETUP)
+    visible_projection.SetScreenAngle(Calculated().task_stats.current_leg.
+                                      solution_remaining.Vector.Bearing);
+  else if (orientation == NORTHUP)
+    visible_projection.SetScreenAngle(Angle::native(fixed_zero));
+  else
     // normal, glider forward
     visible_projection.SetScreenAngle(Basic().TrackBearing);
-  }
 }

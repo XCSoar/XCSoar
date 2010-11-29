@@ -40,7 +40,8 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.TrailActive = 1;
   settings_map.bAirspaceBlackOutline = false;
   settings_map.GliderScreenPosition = 20; // 20% from bottom
-  settings_map.DisplayOrientation = TRACKUP;
+  settings_map.OrientationCircling = TRACKUP;
+  settings_map.OrientationCruise = TRACKUP;
   settings_map.TerrainContrast = 150;
   settings_map.TerrainBrightness = 36;
   settings_map.TerrainRamp = 0;

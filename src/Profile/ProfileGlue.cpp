@@ -68,24 +68,65 @@ Profile::Use()
 
   SETTINGS_MAP &settings_map = XCSoarInterface::SetSettingsMap();
 
-  Temp = settings_map.DisplayOrientation;
-  Get(szProfileDisplayUpValue, Temp);
+  bool orientation_found = false;
+
+  Temp = NORTHUP;
+  if (Get(szProfileOrientationCircling, Temp))
+    orientation_found = true;
+
   switch (Temp) {
   case TRACKUP:
-    settings_map.DisplayOrientation = TRACKUP;
+    settings_map.OrientationCircling = TRACKUP;
     break;
   case NORTHUP:
-    settings_map.DisplayOrientation = NORTHUP;
+    settings_map.OrientationCircling = NORTHUP;
     break;
-  case NORTHCIRCLE:
-    settings_map.DisplayOrientation = NORTHCIRCLE;
+  case TARGETUP:
+    settings_map.OrientationCircling = TARGETUP;
     break;
-  case TRACKCIRCLE:
-    settings_map.DisplayOrientation = TRACKCIRCLE;
+  }
+
+  Temp = NORTHUP;
+  if (Get(szProfileOrientationCruise, Temp))
+    orientation_found = true;
+
+  switch (Temp) {
+  case TRACKUP:
+    settings_map.OrientationCruise = TRACKUP;
     break;
-  case NORTHTRACK:
-    settings_map.DisplayOrientation = NORTHTRACK;
+  case NORTHUP:
+    settings_map.OrientationCruise = NORTHUP;
     break;
+  case TARGETUP:
+    settings_map.OrientationCruise = TARGETUP;
+    break;
+  }
+
+  if (!orientation_found) {
+    Temp = 1;
+    Get(szProfileDisplayUpValue, Temp);
+    switch (Temp) {
+    case 0:
+      settings_map.OrientationCruise = TRACKUP;
+      settings_map.OrientationCircling = TRACKUP;
+      break;
+    case 1:
+      settings_map.OrientationCruise = NORTHUP;
+      settings_map.OrientationCircling = NORTHUP;
+      break;
+    case 2:
+      settings_map.OrientationCruise = TRACKUP;
+      settings_map.OrientationCircling = NORTHUP;
+      break;
+    case 3:
+      settings_map.OrientationCruise = TRACKUP;
+      settings_map.OrientationCircling = TARGETUP;
+      break;
+    case 4:
+      settings_map.OrientationCruise = NORTHUP;
+      settings_map.OrientationCircling = TRACKUP;
+      break;
+    }
   }
 
   Temp = settings_map.DisplayTextType;

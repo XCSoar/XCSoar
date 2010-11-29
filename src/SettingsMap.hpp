@@ -29,13 +29,11 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "SettingsAirspace.hpp"
 
-typedef enum {
+enum DisplayOrientation_t {
   TRACKUP = 0,
   NORTHUP,
-  NORTHCIRCLE,
-  TRACKCIRCLE,
-  NORTHTRACK
-} DisplayOrientation_t;
+  TARGETUP
+};
 
 typedef enum {
   DISPLAYNAME = 0,
@@ -95,7 +93,8 @@ struct SETTINGS_MAP {
 
   int GliderScreenPosition;
   /** Orientation of the map (North up, Track up, etc.) */
-  DisplayOrientation_t DisplayOrientation;
+  DisplayOrientation_t OrientationCruise;
+  DisplayOrientation_t OrientationCircling;
 
   /** Terrain contrast percentage */
   short TerrainContrast;

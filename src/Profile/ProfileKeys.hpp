@@ -48,6 +48,8 @@ extern const TCHAR szProfileTemperatureUnitsValue[];
 extern const TCHAR szProfileLiftUnitsValue[];
 extern const TCHAR szProfileTaskSpeedUnitsValue[];
 extern const TCHAR szProfileDisplayUpValue[];
+extern const TCHAR szProfileOrientationCruise[];
+extern const TCHAR szProfileOrientationCircling[];
 extern const TCHAR szProfileDisplayText[];
 extern const TCHAR szProfileSafetyAltitudeArrival[];
 extern const TCHAR szProfileSafetyAltitudeTerrain[];

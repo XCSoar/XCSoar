@@ -104,14 +104,20 @@
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpOrientation" Caption="Orientation" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpOrientationCruise" Caption="Cruise Orientation" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Determines how the screen is rotated with the glider:
-[North up] The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.
-[Track up] The moving map display will be rotated so the glider's track is oriented up.
-[North up when circling] Track-up in cruise and north-up when circling.
-[Target up when circling] Track-up in cruise and the bearing to next waypoint up when circling.
-[North/track] North-up in cruise, glider track-track up in circling">
-        <DataField DataType="enum"/>
+  [North up] The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.
+  [Track up] The moving map display will be rotated so the glider's track is oriented up.
+  [Target up] The moving map display will be rotated so the navigation target is oriented up.">
+        <DataField DataType="enum" />
+      </Edit>
+  
+      <Edit Name="prpOrientationCircling" Caption="Circling Orientation" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Determines how the screen is rotated with the glider:
+  [North up] The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.
+  [Track up] The moving map display will be rotated so the glider's track is oriented up.
+  [Target up] The moving map display will be rotated so the navigation target is oriented up.">
+        <DataField DataType="enum" />
       </Edit>
   
       <Edit Name="prpCirclingZoom" Caption="Circling zoom" X="2" Width="-2" Height="22" CaptionWidth="100" Help="If enabled, then the map will zoom in automatically when entering circling mode and zoom out automatically when leaving circling mode.">

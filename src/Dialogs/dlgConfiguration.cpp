@@ -788,16 +788,25 @@ setVariables()
   LoadFormProperty(*wf, _T("prpCirclingZoom"),
                    XCSoarInterface::SettingsMap().CircleZoom);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpOrientation"));
+  wp = (WndProperty*)wf->FindByName(_T("prpOrientationCruise"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Track up"));
     dfe->addEnumText(_("North up"));
-    dfe->addEnumText(_("North circling"));
-    dfe->addEnumText(_("Target circling"));
-    dfe->addEnumText(_("North/track"));
-    dfe->Set(XCSoarInterface::SettingsMap().DisplayOrientation);
+    dfe->addEnumText(_("Target up"));
+    dfe->Set(XCSoarInterface::SettingsMap().OrientationCruise);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpOrientationCircling"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Track up"));
+    dfe->addEnumText(_("North up"));
+    dfe->addEnumText(_("Target up"));
+    dfe->Set(XCSoarInterface::SettingsMap().OrientationCircling);
     wp->RefreshDisplay();
   }
 
@@ -1672,12 +1681,22 @@ void dlgConfigurationShowModal(void)
                               szProfileCircleZoom,
                               XCSoarInterface::SetSettingsMap().CircleZoom);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpOrientation"));
+  wp = (WndProperty*)wf->FindByName(_T("prpOrientationCruise"));
   if (wp) {
-    if (XCSoarInterface::SettingsMap().DisplayOrientation != wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().DisplayOrientation = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileDisplayUpValue,
-                    XCSoarInterface::SettingsMap().DisplayOrientation);
+    if (XCSoarInterface::SettingsMap().OrientationCruise != wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsMap().OrientationCruise = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileOrientationCruise,
+                    XCSoarInterface::SettingsMap().OrientationCruise);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpOrientationCircling"));
+  if (wp) {
+    if (XCSoarInterface::SettingsMap().OrientationCircling != wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsMap().OrientationCircling = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileOrientationCircling,
+                    XCSoarInterface::SettingsMap().OrientationCircling);
       changed = true;
     }
   }
