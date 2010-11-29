@@ -15,17 +15,16 @@ class WaypointList:
     def __init__(self):
         self.__list = []
 
-    def len(self):
+    def __len__(self):
         return len(self.__list)
 
-    def entry(self, index):
-        if index < 0 or index > self.len():
+    def __getitem__(self, i):
+        if i < 0 or i > len(self):
             return None
+        return self.__list[i]
 
-        return self.__list[index]
-
-    def entries(self):
-        return self.__list
+    def __iter__(self):
+        return iter(self.__list)
 
     def append(self, wp):
         self.__list.append(wp)
@@ -43,9 +42,11 @@ class WaypointList:
             rc.bottom = min(rc.bottom, wp.location.lat)
         return rc
 
-    def parse(self, lines, type = "WinPilot"):
-        if type == "WinPilot":
+    def parse(self, lines, type = 'WinPilot'):
+        if type == 'WinPilot':
             self.__parse_winpilot(lines)
+        else:
+            raise RuntimeError, 'Waypoint format ' + type + ' is not supported'
 
     def __parse_winpilot(self, lines):
         for line in lines:
