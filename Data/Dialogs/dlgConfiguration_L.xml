@@ -132,6 +132,15 @@
          Help="If the aircraft heading deviates from the current waypoint, markers are displayed at points ahead of the aircraft. The value of each marker is the extra distance required to reach that point as a percentage of straight-line distance to the waypoint.">
         <DataField DataType="boolean"/>
       </Edit>
+
+      <Edit Name="prpEnableFLARMMap" Caption="FLARM map" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="This enables the display of FLARM traffic on the map window
+[OFF] FLARM map display disabled
+[ON/Fixed] FLARM map display enabled with fixed scale.
+[ON/Scaled] FLARM map display enabled and auto scaled.
+When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.">
+        <DataField DataType="enum" />
+      </Edit>    
     </Panel>
 
     <Panel>
@@ -490,15 +499,6 @@
       <Edit Name="prpAppAveNeedle" Caption="Averager needle*" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="If true, the vario gauge will display a hollow averager needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.">
         <DataField DataType="boolean" />
-      </Edit>
-    
-      <Edit Name="prpEnableFLARMMap" Caption="FLARM map" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="This enables the display of FLARM traffic on the map window
-[OFF] FLARM map display disabled
-[ON/Fixed] FLARM map display enabled with fixed scale.
-[ON/Scaled] FLARM map display enabled and auto scaled.
-When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.">
-        <DataField DataType="enum" />
       </Edit>
     
       <Edit Name="prpEnableFLARMGauge" Caption="FLARM radar" X="2" Width="-2" Height="22" CaptionWidth="100"
