@@ -23,7 +23,7 @@
 #define DIJKSTRA_HPP
 
 #include <map>
-#include <queue>
+#include "Util/queue.hpp"
 #include <assert.h>
 
 #ifdef INSTRUMENT_TASK
@@ -31,6 +31,12 @@ extern long count_dijkstra_links;
 #endif
 
 #define MINMAX_OFFSET 134217727
+
+//uncomment this line to reserve space in queue
+//#define USE_RESERVABLE
+#ifdef USE_RESERVABLE
+#define DIJKSTRA_QUEUE_SIZE 50000
+#endif
 
 /**
  * Dijkstra search algorithm.
@@ -45,7 +51,9 @@ public:
    * @param is_min Whether this algorithm will search for min or max distance
    */
   Dijkstra(const bool is_min = true) :
-    m_min(is_min) {}
+    m_min(is_min) {
+    reserve();
+  }
 
   /**
    * Constructor
@@ -55,7 +63,8 @@ public:
    */
   Dijkstra(const Node &node, const bool is_min = true) :
     m_min(is_min) { 
-    push(node, node, 0); 
+    push(node, node, 0);
+    reserve();
   }
 
   /**
@@ -151,6 +160,13 @@ public:
   }
 
 private:
+
+  void reserve() {
+#ifdef USE_RESERVABLE
+    q.reserve(DIJKSTRA_QUEUE_SIZE);
+#endif
+  }
+
   /** 
    * Return edge value adjusted for flipping if maximim is sought ---
    * result is metric to be minimised
@@ -237,7 +253,11 @@ private:
   /**
    * A sorted list of all possible node paths, lowest distance first.
    */
+#ifdef USE_RESERVABLE
+  reservable_priority_queue<Value, std::vector<Value>, Rank> q;
+#else
   std::priority_queue<Value, std::vector<Value>, Rank> q;
+#endif
 
   node_value_iterator cur;
   const bool m_min;
