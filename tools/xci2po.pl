@@ -18,6 +18,9 @@ while ( <@ARGV> ) {
     # event=Pan supertoggle
     # label=Pan\nOff          -> Pick these labals and dump them in pot format,
     # location=5                 except they are $( ) enclosed
+    # ...
+    # event=StatusMessage Simulation\r\nNothing is real!
+    #                         -> Also pick those messages and dump them into pot format
 
     $line = 0;
     while (<>) {
@@ -29,6 +32,9 @@ while ( <@ARGV> ) {
         if ( /^label=([^\$]+)/ ) {
             $msges{ $1 } .= "#: $filename:$line\n";
         }
+	elsif ( /^event=StatusMessage ([^\$]+)/ ) {
+            $msges{ $1 } .= "#: $filename:$line\n";
+        } 
     }
 
     close IN;
