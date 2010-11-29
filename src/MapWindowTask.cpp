@@ -86,6 +86,7 @@ MapWindow::DrawTask(Canvas &canvas)
 void
 MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
 {
+  // TODO enhancement: don't draw offtrack indicator if showing spot heights
   if (Calculated().Circling 
       || !Basic().gps.Connected
       || !SettingsMap().EnableDetourCostMarker

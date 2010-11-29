@@ -66,19 +66,6 @@ MapWindow::RenderAirspace(Canvas &canvas)
 }
 
 void
-MapWindow::RenderTaskElements(Canvas &canvas)
-{
-  DrawTask(canvas);
-
-  DrawWaypoints(canvas);
-
-  // TODO enhancement: don't draw offtrack indicator if showing spot heights
-  DrawTaskOffTrackIndicator(canvas);
-
-  RenderMarks(canvas);
-}
-
-void
 MapWindow::RenderMarks(Canvas &canvas)
 {
   if (marks != NULL &&
@@ -152,7 +139,10 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   DrawThermalEstimate(canvas);
 
   // Render task, waypoints and marks
-  RenderTaskElements(canvas);
+  DrawTask(canvas);
+  DrawWaypoints(canvas);
+  DrawTaskOffTrackIndicator(canvas);
+  RenderMarks(canvas);
 
   // Render topology on top of airspace, to keep the text readable
   RenderTopologyLabels(canvas);

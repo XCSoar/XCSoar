@@ -273,11 +273,6 @@ private:
    */
   void RenderMarks(Canvas &canvas);
   /**
-   * Renders the task, the waypoints and the marks
-   * @param canvas The drawing canvas
-   */
-  void RenderTaskElements(Canvas &canvas);
-  /**
    * Render final glide through terrain marker
    * @param canvas The drawing canvas
    */
