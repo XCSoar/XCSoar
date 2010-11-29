@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 #include "Angle.hpp"
+#include <assert.h>
 
 #ifdef RADIANS
 #define fixed_circle fixed_two_pi
@@ -67,6 +68,7 @@ Angle::flipped() const
 Angle
 Angle::as_bearing() const
 {
+  assert(fabs(m_value)< fixed(100)*fixed_circle);
   Angle retval(m_value);
 
   while (retval.m_value < fixed_zero)
@@ -81,6 +83,7 @@ Angle::as_bearing() const
 Angle
 Angle::as_delta() const
 {
+  assert(fabs(m_value)< fixed(100)*fixed_circle);
   Angle retval(m_value);
   while (retval.m_value <= -fixed_half_circle)
     retval.m_value += fixed_circle;
