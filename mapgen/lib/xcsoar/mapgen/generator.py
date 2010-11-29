@@ -133,13 +133,6 @@ class Generator:
         self.__bounds = bounds
         print "(", self.__bounds, ")"
 
-    def set_bounds_separatly(self, latmin, latmax, lonmin, lonmax):
-        self.__bounds = GeoRect()
-        self.__bounds.left = lonmin
-        self.__bounds.right = lonmax
-        self.__bounds.top = latmax
-        self.__bounds.bottom = latmin
-
     def set_bounds_by_waypoint_file(self, filename):
         print "Setting map boundaries to match waypoint file contents..."
 
