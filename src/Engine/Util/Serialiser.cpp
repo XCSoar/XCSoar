@@ -274,7 +274,6 @@ Serialiser::deserialise(GeoPoint& data)
   m_node.get_attribute(_T("latitude"), data.Latitude);
 }
 
-#include <stdio.h>
 Waypoint*
 Serialiser::deserialise_waypoint()
 {
