@@ -394,26 +394,34 @@ Segment(Canvas &canvas, long x, long y, int radius,
     pt[0].y = y;
     npoly = 1;
   }
+
   // add start node
   pt[npoly].x = x + (long)(radius * start.fastsine());
   pt[npoly].y = y - (long)(radius * start.fastcosine());
   npoly++;
-
-  // add intermediate nodes
-  for (int i = istart; i <= iend; ++i) {
-    pt[npoly].x = x + (long)(radius * xcoords[i % 64]);
-    pt[npoly].y = y - (long)(radius * ycoords[i % 64]);
-    npoly++;
+    
+  if (istart<iend) {
+    // add intermediate nodes (if any)
+    for (int i = istart; i <= iend; ++i) {
+      pt[npoly].x = x + (long)(radius * xcoords[i % 64]);
+      pt[npoly].y = y - (long)(radius * ycoords[i % 64]);
+      if ((pt[npoly].x != pt[npoly-1].x) || (pt[npoly].y != pt[npoly-1].y)) {
+        npoly++;
+      }
+    }
   }
+
   // and end node
   pt[npoly].x = x + (long)(radius * end.fastsine());
   pt[npoly].y = y - (long)(radius * end.fastcosine());
   npoly++;
 
   // add start point to close
-  pt[npoly].x = pt[0].x;
-  pt[npoly].y = pt[0].y;
-  npoly++;
+  if (npoly) {
+    pt[npoly].x = pt[0].x;
+    pt[npoly].y = pt[0].y;
+    npoly++;
+  }
 
   assert(npoly<66);
   if (npoly) {
