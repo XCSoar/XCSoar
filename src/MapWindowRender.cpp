@@ -138,10 +138,14 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
 
   DrawThermalEstimate(canvas);
 
-  // Render task, waypoints and marks
+  // Render task, waypoints
   DrawTask(canvas);
   DrawWaypoints(canvas);
-  DrawTaskOffTrackIndicator(canvas);
+
+  // Render weather/terrain max/min values
+  if (!m_background.DrawSpotHeights(canvas, label_block))
+    DrawTaskOffTrackIndicator(canvas);
+
   RenderMarks(canvas);
 
   // Render topology on top of airspace, to keep the text readable
@@ -149,9 +153,6 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
 
   // Render glide through terrain range
   RenderGlide(canvas);
-
-  // Render weather/terrain max/min values
-  m_background.DrawSpotHeights(canvas, label_block);
 
   // Render lower symbology
   RenderSymbology_lower(canvas, aircraft_pos);
