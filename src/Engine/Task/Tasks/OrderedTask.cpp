@@ -149,8 +149,7 @@ OrderedTask::scan_distance_minmax(const GeoPoint &location,
   if (force)
     *dmax = scan_distance_max();
 
-  bool force_min = distance_is_significant(location, m_location_min_last)
-                   || force;
+  bool force_min = force || distance_is_significant(location, m_location_min_last);
   *dmin = scan_distance_min(location, force_min);
 }
 
@@ -448,6 +447,10 @@ OrderedTask::append(OrderedTaskPoint* new_tp)
   tps.push_back(new_tp);
   if (tps.size() > 1)
     set_neighbours(tps.size() - 2);
+  else {
+    // give it a value when we have one tp so it is not uninitialised
+    m_location_min_last = new_tp->get_location();
+  }
 
   set_neighbours(tps.size() - 1);
   update_geometry();
