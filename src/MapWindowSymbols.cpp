@@ -202,7 +202,8 @@ MapWindow::DrawCompass(Canvas &canvas, const RECT &rc) const
 void
 MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
-  if (!Calculated().task_stats.task_valid ||
+  if (!Basic().gps.Connected ||
+      !Calculated().task_stats.task_valid ||
       Calculated().task_stats.current_leg.solution_remaining.Vector.Distance
       < fixed(0.010))
     return;

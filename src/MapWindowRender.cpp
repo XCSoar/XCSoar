@@ -99,16 +99,6 @@ MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc,
 }
 
 void
-MapWindow::RenderSymbology_lower(Canvas &canvas,
-                                 const RasterPoint aircraft_pos)
-{
-  if (Basic().gps.Connected)
-    DrawBestCruiseTrack(canvas, aircraft_pos);
-
-  DrawAirspaceIntersections(canvas);
-}
-
-void
 MapWindow::Render(Canvas &canvas, const RECT &rc)
 { 
   Update();
@@ -154,8 +144,9 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   // Render glide through terrain range
   RenderGlide(canvas);
 
-  // Render lower symbology
-  RenderSymbology_lower(canvas, aircraft_pos);
+  DrawBestCruiseTrack(canvas, aircraft_pos);
+
+  DrawAirspaceIntersections(canvas);
 
   // Render aircraft symbol (and FLARM traffic)
   RenderAirborne(canvas, rc, aircraft_pos);

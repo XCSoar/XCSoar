@@ -284,11 +284,6 @@ private:
    */
   void RenderAirborne(Canvas &canvas, const RECT &rc,
                       const RasterPoint aircraft_pos);
-  /**
-   * Renders lower symbology (track lines, bearing, etc)
-   * @param canvas
-   */
-  void RenderSymbology_lower(Canvas &canvas, const RasterPoint aircraft_pos);
 
   StaticArray<GeoPoint,32> m_airspace_intersections;
 
