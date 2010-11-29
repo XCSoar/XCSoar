@@ -86,6 +86,7 @@ ContestManager::reset()
   olc_fai.reset();
   olc_classic.reset();
   olc_league.reset();
+  olc_plus.reset();
 }
 
 const TracePointVector& 
