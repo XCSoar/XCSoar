@@ -25,7 +25,7 @@ fixed
 DistanceMemento::Distance(const GeoPoint& _origin,
                           const GeoPoint& _destination) const
 {
-  if ((_origin != origin)||(_destination != destination)) {
+  if (negative(value) || (_origin != origin)||(_destination != destination)) {
     origin = _origin;
     destination = _destination;
     value = origin.distance(destination);

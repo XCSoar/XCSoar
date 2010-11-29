@@ -35,7 +35,7 @@ public:
   /**
    * Constructor, initialises all to zero. 
    */
-  DistanceMemento():value(0.0) {};
+  DistanceMemento(): value(-1.0) {};
 
   /**
    * Returns the distance from the origin to destination in meters, 
