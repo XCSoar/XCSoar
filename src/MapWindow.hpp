@@ -277,13 +277,6 @@ private:
    * @param canvas The drawing canvas
    */
   void RenderGlide(Canvas &canvas);
-  /**
-   * Renders the aircraft, the FLARM targets and the wind arrow
-   * @param canvas The drawing canvas
-   * @param rc The area to draw in
-   */
-  void RenderAirborne(Canvas &canvas, const RECT &rc,
-                      const RasterPoint aircraft_pos);
 
   StaticArray<GeoPoint,32> m_airspace_intersections;
 

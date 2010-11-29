@@ -36,6 +36,9 @@ Copyright_License {
 void
 MapWindow::DrawAircraft(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
+  if (!Basic().gps.Connected)
+    return;
+
   RasterPoint Aircraft[] = {
     {1, -5},
     {1, 0},
@@ -75,6 +78,9 @@ void
 MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
                                const RECT &rc) const
 {
+  if (SettingsMap().EnablePan && !SettingsMap().TargetPan)
+    return;
+
   TCHAR sTmp[12];
   static SIZE tsize = { 0, 0 };
 

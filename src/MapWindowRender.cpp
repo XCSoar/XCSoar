@@ -82,23 +82,6 @@ MapWindow::RenderGlide(Canvas &canvas)
 }
 
 void
-MapWindow::RenderAirborne(Canvas &canvas, const RECT &rc,
-                          const RasterPoint aircraft_pos)
-{
-  // Draw wind vector at aircraft
-  if (!SettingsMap().EnablePan || SettingsMap().TargetPan)
-    DrawWind(canvas, aircraft_pos, rc);
-
-  // Draw traffic
-  DrawTeammate(canvas);
-  DrawFLARMTraffic(canvas, aircraft_pos);
-
-  // Finally, draw you!
-  if (Basic().gps.Connected)
-    DrawAircraft(canvas, aircraft_pos);
-}
-
-void
 MapWindow::Render(Canvas &canvas, const RECT &rc)
 { 
   Update();
@@ -148,8 +131,15 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
 
   DrawAirspaceIntersections(canvas);
 
-  // Render aircraft symbol (and FLARM traffic)
-  RenderAirborne(canvas, rc, aircraft_pos);
+  // Draw wind vector at aircraft
+  DrawWind(canvas, aircraft_pos, rc);
+
+  // Draw traffic
+  DrawTeammate(canvas);
+  DrawFLARMTraffic(canvas, aircraft_pos);
+
+  // Finally, draw you!
+  DrawAircraft(canvas, aircraft_pos);
   
   // Render compass
   DrawCompass(canvas, rc);
