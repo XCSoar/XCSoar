@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-11-02 23:33+0100\n"
-"PO-Revision-Date: 2010-11-23 23:26+0000\n"
-"Last-Translator: Helmut Rohs <Unknown>\n"
+"PO-Revision-Date: 2010-11-28 23:33+0000\n"
+"Last-Translator: Folken Van Vanel <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-28 13:00+0000\n"
+"X-Launchpad-Export-Date: 2010-11-29 17:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Language: de\n"
 
@@ -979,7 +979,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:335
 #, no-c-format
 msgid "Percentage climb"
-msgstr ""
+msgstr "Steigfluganteil"
 
 #: src/InfoBoxes/Content/Factory.cpp:336
 #, no-c-format
@@ -1807,7 +1807,7 @@ msgstr "Zeige Luftraum AUS"
 
 #: src/InputEventsActions.cpp:202
 msgid "Show Airspace ON"
-msgstr "Zeige Luftraum"
+msgstr "Zeige Luftraum EIN"
 
 #: src/InputEventsActions.cpp:238
 msgid "Screen Mode Full"
@@ -2064,7 +2064,7 @@ msgid ""
 "the max. thermalling height for dry consitions.) In the presence of clouds "
 "the maximum thermalling height may instead be limited by the cloud base.  "
 "Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr ""
+msgstr "k"
 
 #: src/Terrain/RasterWeather.cpp:75
 #, no-c-format
