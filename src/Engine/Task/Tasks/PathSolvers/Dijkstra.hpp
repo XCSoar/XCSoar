@@ -149,8 +149,12 @@ public:
       // -> Return the parent node
       return (it->second); 
   }
-  
+
 private:
+  /** 
+   * Return edge value adjusted for flipping if maximim is sought ---
+   * result is metric to be minimised
+   */
   unsigned adjust_edge_value(const unsigned edge_value) const {
     return m_min ? edge_value : MINMAX_OFFSET - edge_value;
   }
