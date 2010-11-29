@@ -753,6 +753,8 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpEnableFLARMGauge"),
                    XCSoarInterface::SettingsMap().EnableFLARMGauge);
+  LoadFormProperty(*wf, _T("prpAutoCloseFlarmDialog"),
+                   XCSoarInterface::SettingsMap().AutoCloseFlarmDialog);
   LoadFormProperty(*wf, _T("prpEnableTAGauge"),
                    XCSoarInterface::SettingsMap().EnableTAGauge);
   LoadFormProperty(*wf, _T("prpAirspaceWarnings"),
@@ -1597,6 +1599,10 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpEnableFLARMGauge"),
                               szProfileEnableFLARMGauge,
                               XCSoarInterface::SetSettingsMap().EnableFLARMGauge);
+
+  changed |= SaveFormProperty(*wf, _T("prpAutoCloseFlarmDialog"),
+                              szProfileAutoCloseFlarmDialog,
+                              XCSoarInterface::SetSettingsMap().AutoCloseFlarmDialog);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableTAGauge"),
                               szProfileEnableTAGauge,

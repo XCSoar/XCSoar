@@ -112,6 +112,8 @@ struct SETTINGS_MAP {
   fixed TargetZoomDistance;
   /** Show FLARM radar if traffic present */
   bool EnableFLARMGauge;
+  /** Automatically close the FLARM dialog when no traffic present */
+  bool AutoCloseFlarmDialog;
   /** Show ThermalAssistant if circling */
   bool EnableTAGauge;
   unsigned EnableFLARMMap;

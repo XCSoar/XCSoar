@@ -507,6 +507,11 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
         <DataField DataType="boolean"/>
       </Edit>
       
+      <Edit Name="prpAutoCloseFlarmDialog" Caption="Auto close FLARM" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Setting this to \"ON\" will automatically close the FLARM dialog if there is no traffic. \"OFF\" will keep the dialog open even without current traffic.">
+        <DataField DataType="boolean"/>
+      </Edit>
+      
       <Edit Name="prpEnableTAGauge" Caption="ThermalAssistant" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="This enables the display of the ThermalAssistant gauge.">
         <DataField DataType="boolean"/>

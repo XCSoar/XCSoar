@@ -305,6 +305,8 @@ Profile::Use()
       settings_map.EnableFLARMMap);
   Get(szProfileEnableFLARMGauge,
       settings_map.EnableFLARMGauge);
+  Get(szProfileAutoCloseFlarmDialog,
+      settings_map.AutoCloseFlarmDialog);
   Get(szProfileEnableTAGauge,
       settings_map.EnableTAGauge);
   Get(szProfileTerrainContrast,

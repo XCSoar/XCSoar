@@ -210,6 +210,7 @@ const TCHAR szProfileTerrainBrightness[] = CONF("TerrainBrightness");
 const TCHAR szProfileTerrainRamp[] = CONF("TerrainRamp");
 const TCHAR szProfileEnableFLARMMap[] = CONF("EnableFLARMDisplay");
 const TCHAR szProfileEnableFLARMGauge[] = CONF("EnableFLARMGauge");
+const TCHAR szProfileAutoCloseFlarmDialog[] = CONF("AutoCloseFlarmDialog");
 const TCHAR szProfileEnableTAGauge[] = CONF("EnableTAGauge");
 const TCHAR szProfileFLARMGaugeBearing[] = CONF("FLARMGaugeBearing");
 const TCHAR szProfileGliderScreenPosition[] = CONF("GliderScreenPosition");

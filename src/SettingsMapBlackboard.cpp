@@ -54,6 +54,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.TargetPanIndex = 0;
   settings_map.TargetZoomDistance = fixed(500);
   settings_map.EnableFLARMGauge = true;
+  settings_map.AutoCloseFlarmDialog = false;
   settings_map.EnableFLARMMap = 1;
   settings_map.ScreenBlanked = false;
   settings_map.EnableAutoBlank = false;

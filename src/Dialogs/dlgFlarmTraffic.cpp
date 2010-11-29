@@ -523,6 +523,11 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 static void
 Update()
 {
+  if (XCSoarInterface::SettingsMap().AutoCloseFlarmDialog &&
+      (!XCSoarInterface::Basic().flarm.FLARM_Available ||
+       XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0))
+    wf->SetModalResult(mrOK);
+
   wdf->Update(XCSoarInterface::Basic().TrackBearing,
               XCSoarInterface::Basic().flarm,
               XCSoarInterface::SettingsComputer());
