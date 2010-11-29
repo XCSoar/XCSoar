@@ -120,18 +120,14 @@ void AircraftSim::update_bearing(TaskManager& task_manager) {
     bearing = state.Location.bearing(target(task_manager));
   }
 
-  Angle b_best = bearing;
-  fixed e_best = fixed_360;
-  const Angle delta = Angle::degrees(fixed_two);
-  for (Angle bear= delta; bear<Angle::degrees(fixed_360); bear+= delta) {
-    Angle b_this = state.Location.bearing(endpoint(bear));
-    fixed e_this = (b_this-bearing).as_delta().magnitude_degrees();
-    if (e_this<e_best) {
-      e_best = e_this;
-      b_best = bear;
-    }    
+  if (positive(state.wind.norm) && positive(state.TrueAirspeed)) {
+    const fixed sintheta = (state.wind.bearing-bearing).sin();
+    if (fabs(sintheta)>fixed(0.0001)) {
+      bearing +=
+        Angle::radians(asin(sintheta * state.wind.norm / state.TrueAirspeed));
+    }
   }
-  bearing = b_best+Angle::degrees(small_rand());
+  bearing += Angle::degrees(small_rand());
 }
 
 
