@@ -93,6 +93,12 @@ public:
    */
   bool draw_style();
 
+  /**
+   * Cleans up the settings after drawing has been finished.  This
+   * method must be invoked if draw_style() has returned true.
+   */
+  void un_draw_style();
+
 protected:
   void draw_two_lines();
 

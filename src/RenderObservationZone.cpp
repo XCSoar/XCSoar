@@ -54,12 +54,6 @@ RenderObservationZone::draw_style()
     
     return true;
   } else {
-#ifdef ENABLE_OPENGL
-    glDisable(GL_BLEND);
-#else /* !OPENGL */
-    m_buffer.mix_copy();
-#endif /* !OPENGL */
-
     m_buffer.hollow_brush();
     if (layer == LAYER_ACTIVE && !m_past) {
       if (m_current)
@@ -70,6 +64,18 @@ RenderObservationZone::draw_style()
       m_buffer.select(pen_boundary_inactive); 
     }
     return true;
+  }
+}
+
+void
+RenderObservationZone::un_draw_style()
+{
+  if (layer == LAYER_SHADE) {
+#ifdef ENABLE_OPENGL
+    glDisable(GL_BLEND);
+#else /* !OPENGL */
+    m_buffer.mix_copy();
+#endif /* !OPENGL */
   }
 }
 
@@ -116,8 +122,6 @@ RenderObservationZone::Visit(const FAISectorZone& oz)
     draw_segment(oz.getStartRadial(), oz.getEndRadial());
   else
     draw_two_lines();
-
-  m_buffer.mix_copy();
 }
 
 void 
@@ -131,8 +135,6 @@ RenderObservationZone::Visit(const KeyholeZone& oz)
     draw_circle();
   } else
     draw_two_lines();
-
-  m_buffer.mix_copy();
 }
 
 void 
@@ -146,8 +148,6 @@ RenderObservationZone::Visit(const BGAFixedCourseZone& oz)
     draw_circle();
   } else
     draw_two_lines();
-
-  m_buffer.mix_copy();
 }
 
 void 
@@ -161,8 +161,6 @@ RenderObservationZone::Visit(const BGAEnhancedOptionZone& oz)
     draw_circle();
   } else
     draw_two_lines();
-
-  m_buffer.mix_copy();
 }
 
 void 
@@ -172,8 +170,6 @@ RenderObservationZone::Visit(const SectorZone& oz)
 
   draw_segment(oz.getStartRadial(), oz.getEndRadial());
   draw_two_lines();
-
-  m_buffer.mix_copy();
 }
 
 void 
@@ -185,8 +181,6 @@ RenderObservationZone::Visit(const LineSectorZone& oz)
     draw_segment(oz.getStartRadial(), oz.getEndRadial());
   else
     draw_two_lines();
-
-  m_buffer.mix_copy();
 }
 
 void 
@@ -198,6 +192,4 @@ RenderObservationZone::Visit(const CylinderZone& oz)
   parms_oz(oz);
 
   draw_circle();
-
-  m_buffer.mix_copy();
 }
