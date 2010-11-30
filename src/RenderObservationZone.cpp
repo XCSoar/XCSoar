@@ -16,19 +16,19 @@ RenderObservationZone::RenderObservationZone(Canvas &_canvas,
                                              const SETTINGS_MAP &_settings_map)
   :m_buffer(_canvas), m_proj(_projection),
    m_settings_map(_settings_map),
+   layer(LAYER_SHADE),
    pen_boundary_current(Pen::SOLID, Layout::SmallScale(2), Graphics::TaskColor),
    pen_boundary_active(Pen::SOLID, Layout::SmallScale(1), Graphics::TaskColor),
    pen_boundary_inactive(Pen::SOLID, Layout::SmallScale(1), Color(127, 127, 127)),
    m_past(false),
-   m_current(false),
-   m_background(false)
+   m_current(false)
 {
 }
 
 bool 
-RenderObservationZone::draw_style(bool is_boundary_active) 
+RenderObservationZone::draw_style()
 {
-  if (m_background) {
+  if (layer == LAYER_SHADE) {
     if (m_past)
       return false;
 
@@ -61,7 +61,7 @@ RenderObservationZone::draw_style(bool is_boundary_active)
 #endif /* !OPENGL */
 
     m_buffer.hollow_brush();
-    if (is_boundary_active) {
+    if (layer == LAYER_ACTIVE && !m_past) {
       if (m_current)
         m_buffer.select(pen_boundary_current);
       else
@@ -110,11 +110,14 @@ RenderObservationZone::parms_sector(const SectorZone& oz)
 void 
 RenderObservationZone::Visit(const FAISectorZone& oz) 
 {
-  parms_sector(oz);
-  if (draw_style(false))
-    draw_segment(oz.getStartRadial(), oz.getEndRadial());
+  if (!draw_style())
+    return;
 
-  if (draw_style(!m_past))
+  parms_sector(oz);
+
+  if (layer != LAYER_ACTIVE)
+    draw_segment(oz.getStartRadial(), oz.getEndRadial());
+  else
     draw_two_lines();
 
   m_buffer.mix_copy();
@@ -123,16 +126,17 @@ RenderObservationZone::Visit(const FAISectorZone& oz)
 void 
 RenderObservationZone::Visit(const KeyholeZone& oz) 
 {
+  if (!draw_style())
+    return;
+
   parms_sector(oz);
-  if (draw_style(false)) {
+
+  if (layer != LAYER_ACTIVE) {
     draw_segment(oz.getStartRadial(), oz.getEndRadial());
     p_radius = m_proj.GeoToScreenDistance(fixed(500));
     draw_circle();
-  }
-
-  if (draw_style(!m_past))
+  } else
     draw_two_lines();
-
 
   m_buffer.mix_copy();
 }
@@ -140,14 +144,16 @@ RenderObservationZone::Visit(const KeyholeZone& oz)
 void 
 RenderObservationZone::Visit(const BGAFixedCourseZone& oz) 
 {
+  if (!draw_style())
+    return;
+
   parms_sector(oz);
-  if (draw_style(false)) {
+
+  if (layer != LAYER_ACTIVE) {
     draw_segment(oz.getStartRadial(), oz.getEndRadial());
     p_radius = m_proj.GeoToScreenDistance(fixed(500));
     draw_circle();
-  }
-
-  if (draw_style(!m_past))
+  } else
     draw_two_lines();
 
   m_buffer.mix_copy();
@@ -156,14 +162,16 @@ RenderObservationZone::Visit(const BGAFixedCourseZone& oz)
 void 
 RenderObservationZone::Visit(const BGAEnhancedOptionZone& oz) 
 {
+  if (!draw_style())
+    return;
+
   parms_sector(oz);
-  if (draw_style(false)) {
+
+  if (layer != LAYER_ACTIVE) {
     draw_segment(oz.getStartRadial(), oz.getEndRadial());
     p_radius = m_proj.GeoToScreenDistance(fixed(500));
     draw_circle();
-  }
-
-  if (draw_style(!m_past))
+  } else
     draw_two_lines();
 
   m_buffer.mix_copy();
@@ -172,11 +180,13 @@ RenderObservationZone::Visit(const BGAEnhancedOptionZone& oz)
 void 
 RenderObservationZone::Visit(const SectorZone& oz) 
 {
+  if (layer == LAYER_ACTIVE || !draw_style())
+    return;
+
   parms_sector(oz);
-  if (draw_style(!m_past)) {
-    draw_segment(oz.getStartRadial(), oz.getEndRadial());
-    draw_two_lines();
-  }
+
+  draw_segment(oz.getStartRadial(), oz.getEndRadial());
+  draw_two_lines();
 
   m_buffer.mix_copy();
 }
@@ -184,11 +194,14 @@ RenderObservationZone::Visit(const SectorZone& oz)
 void 
 RenderObservationZone::Visit(const LineSectorZone& oz) 
 {
-  parms_sector(oz);
-  if (draw_style(false))
-    draw_segment(oz.getStartRadial(), oz.getEndRadial());
+  if (!draw_style())
+    return;
 
-  if (draw_style(!m_past))
+  parms_sector(oz);
+
+  if (layer != LAYER_ACTIVE)
+    draw_segment(oz.getStartRadial(), oz.getEndRadial());
+  else
     draw_two_lines();
 
   m_buffer.mix_copy();
@@ -197,9 +210,12 @@ RenderObservationZone::Visit(const LineSectorZone& oz)
 void 
 RenderObservationZone::Visit(const CylinderZone& oz) 
 {
+  if (layer == LAYER_ACTIVE || !draw_style())
+    return;
+
   parms_oz(oz);
-  if (draw_style(!m_past))
-    draw_circle();
+
+  draw_circle();
 
   m_buffer.mix_copy();
 }

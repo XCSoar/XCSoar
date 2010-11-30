@@ -312,7 +312,7 @@ RenderTaskPoint::draw_oz_background(const OrderedTaskPoint& tp)
 {
   ozv.set_past(point_past());
   ozv.set_current(point_current());
-  ozv.set_background(true);
+  ozv.set_layer(RenderObservationZone::LAYER_SHADE);
   ((ObservationZoneConstVisitor &)ozv).Visit(*tp.get_oz());
 }
 
@@ -321,7 +321,11 @@ RenderTaskPoint::draw_oz_foreground(const OrderedTaskPoint& tp)
 {
   ozv.set_past(point_past());
   ozv.set_current(point_current());
-  ozv.set_background(false);
+
+  ozv.set_layer(RenderObservationZone::LAYER_INACTIVE);
+  ((ObservationZoneConstVisitor &)ozv).Visit(*tp.get_oz());
+
+  ozv.set_layer(RenderObservationZone::LAYER_ACTIVE);
   ((ObservationZoneConstVisitor &)ozv).Visit(*tp.get_oz());
 }
 

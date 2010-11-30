@@ -39,10 +39,24 @@ struct SETTINGS_MAP;
 class RenderObservationZone: 
   public ObservationZoneConstVisitor
 {
+public:
+  enum layer {
+    /** the background shade */
+    LAYER_SHADE,
+
+    /** the inactive boundaries */
+    LAYER_INACTIVE,
+
+    /** the active boundaries */
+    LAYER_ACTIVE,
+  };
+
 protected:
   Canvas &m_buffer;
   const Projection &m_proj;
   const SETTINGS_MAP &m_settings_map;
+
+  enum layer layer;
 
 public:
   RenderObservationZone(Canvas &_canvas, const Projection &_projection,
@@ -68,12 +82,12 @@ public:
   void set_current(bool set) {
     m_current = set;
   }
-  void set_background(bool set) {
-    m_background = set;
+  void set_layer(enum layer _layer) {
+    layer = _layer;
   }
 
 protected:
-  bool draw_style(bool is_boundary_active);
+  bool draw_style();
 
   void draw_two_lines();
 
@@ -92,7 +106,6 @@ protected:
   unsigned p_radius;
   bool m_past;
   bool m_current;
-  bool m_background;
 };
 
 #endif
