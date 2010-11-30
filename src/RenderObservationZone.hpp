@@ -86,9 +86,14 @@ public:
     layer = _layer;
   }
 
-protected:
+  /**
+   * Configure brush and pen on the Canvas for the current layer.
+   *
+   * @return false if nothing is to be drawn in this layer
+   */
   bool draw_style();
 
+protected:
   void draw_two_lines();
 
   void draw_circle();

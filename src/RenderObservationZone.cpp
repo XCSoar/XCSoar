@@ -110,9 +110,6 @@ RenderObservationZone::parms_sector(const SectorZone& oz)
 void 
 RenderObservationZone::Visit(const FAISectorZone& oz) 
 {
-  if (!draw_style())
-    return;
-
   parms_sector(oz);
 
   if (layer != LAYER_ACTIVE)
@@ -126,9 +123,6 @@ RenderObservationZone::Visit(const FAISectorZone& oz)
 void 
 RenderObservationZone::Visit(const KeyholeZone& oz) 
 {
-  if (!draw_style())
-    return;
-
   parms_sector(oz);
 
   if (layer != LAYER_ACTIVE) {
@@ -144,9 +138,6 @@ RenderObservationZone::Visit(const KeyholeZone& oz)
 void 
 RenderObservationZone::Visit(const BGAFixedCourseZone& oz) 
 {
-  if (!draw_style())
-    return;
-
   parms_sector(oz);
 
   if (layer != LAYER_ACTIVE) {
@@ -162,9 +153,6 @@ RenderObservationZone::Visit(const BGAFixedCourseZone& oz)
 void 
 RenderObservationZone::Visit(const BGAEnhancedOptionZone& oz) 
 {
-  if (!draw_style())
-    return;
-
   parms_sector(oz);
 
   if (layer != LAYER_ACTIVE) {
@@ -180,9 +168,6 @@ RenderObservationZone::Visit(const BGAEnhancedOptionZone& oz)
 void 
 RenderObservationZone::Visit(const SectorZone& oz) 
 {
-  if (layer == LAYER_ACTIVE || !draw_style())
-    return;
-
   parms_sector(oz);
 
   draw_segment(oz.getStartRadial(), oz.getEndRadial());
@@ -194,9 +179,6 @@ RenderObservationZone::Visit(const SectorZone& oz)
 void 
 RenderObservationZone::Visit(const LineSectorZone& oz) 
 {
-  if (!draw_style())
-    return;
-
   parms_sector(oz);
 
   if (layer != LAYER_ACTIVE)
@@ -210,7 +192,7 @@ RenderObservationZone::Visit(const LineSectorZone& oz)
 void 
 RenderObservationZone::Visit(const CylinderZone& oz) 
 {
-  if (layer == LAYER_ACTIVE || !draw_style())
+  if (layer == LAYER_ACTIVE)
     return;
 
   parms_oz(oz);
