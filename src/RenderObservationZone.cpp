@@ -40,7 +40,9 @@ RenderObservationZone::draw_style()
     m_buffer.select(Brush(color.with_alpha(64)));
 #else /* !OPENGL */
 
+#ifndef ENABLE_SDL
     m_buffer.mix_mask();
+#endif
 
     // this color is used as the black bit
     m_buffer.set_text_color(Graphics::Colours[m_settings_map.
@@ -73,9 +75,9 @@ RenderObservationZone::un_draw_style()
   if (layer == LAYER_SHADE) {
 #ifdef ENABLE_OPENGL
     glDisable(GL_BLEND);
-#else /* !OPENGL */
+#elif !defined(ENABLE_SDL)
     m_buffer.mix_copy();
-#endif /* !OPENGL */
+#endif /* GDI */
   }
 }
 

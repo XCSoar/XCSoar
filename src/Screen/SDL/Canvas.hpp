@@ -180,14 +180,6 @@ public:
     background_mode = TRANSPARENT;
   }
 
-  void mix_copy() {
-    // XXX
-  }
-
-  void mix_mask() {
-    // XXX
-  }
-
   void outline_rectangle(int left, int top, int right, int bottom,
                          Color color) {
     ::rectangleColor(surface, left + x_offset, top + y_offset,
