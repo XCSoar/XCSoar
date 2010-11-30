@@ -284,12 +284,11 @@ MapWindow::UpdateProjection()
         ((rc.top - rc.bottom) * settings_map.GliderScreenPosition / 100) + rc.bottom);
 
   if (settings_map.EnablePan)
-    visible_projection.SetGeoLocation(settings_map.PanLocation);
+    SetLocation(settings_map.PanLocation);
   else
     // Pan is off
-    visible_projection.SetGeoLocation(Basic().Location);
+    SetLocation(Basic().Location);
 
   visible_projection.SetMapRect(rc);
   visible_projection.UpdateScreenBounds();
 }
-

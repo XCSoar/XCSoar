@@ -162,6 +162,10 @@ public:
     return visible_projection;
   }
 
+  void SetLocation(const GeoPoint location) {
+    visible_projection.SetGeoLocation(location);
+  }
+
 private:
   RasterPoint Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS];
 
