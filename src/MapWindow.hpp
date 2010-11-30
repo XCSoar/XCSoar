@@ -193,8 +193,6 @@ public:
 
   void DrawGlideThroughTerrain(Canvas &canvas) const;
   void DrawTerrainAbove(Canvas &canvas);
-
-  //  void DrawSpeedToFly(HDC hDC, RECT rc);
   void DrawFLARMTraffic(Canvas &canvas, const RasterPoint aircraft_pos) const;
 
   // thread, main functions
