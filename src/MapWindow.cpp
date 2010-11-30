@@ -291,6 +291,5 @@ MapWindow::UpdateProjection()
     // Pan is off
     SetLocation(Basic().Location);
 
-  visible_projection.SetMapRect(rc);
   visible_projection.UpdateScreenBounds();
 }
