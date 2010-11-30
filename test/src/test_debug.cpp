@@ -28,6 +28,10 @@ extern unsigned n_queries;
 extern unsigned count_distbearing;
 #endif
 
+#ifdef INSTRUMENT_ZERO
+extern unsigned long zero_skipped;
+extern unsigned long zero_total;
+#endif
 
 void distance_counts() {
   if (n_samples) {
@@ -47,6 +51,12 @@ void distance_counts() {
     printf("#     count_olc_trace %d\n", (int)ContestDijkstra::count_olc_trace);
     printf("#     count_olc_size %d\n",ContestDijkstra::count_olc_size);
     printf("#    (total cycles %d)\n#\n",n_samples);
+#ifdef INSTRUMENT_ZERO
+    if (zero_total) {
+      printf("#    ZeroFinder total %ld\n",zero_total);
+      printf("#    ZeroFinder %%skipped %d\n",(int)(100*zero_skipped/zero_total));
+    }
+#endif
   }
   n_samples = 0;
 #ifdef INSTRUMENT_TASK
@@ -57,6 +67,10 @@ void distance_counts() {
   count_distbearing = 0;
   count_mc = 0;
   count_olc = 0;
+#endif
+#ifdef INSTRUMENT_ZERO
+  zero_skipped = 0;
+  zero_total = 0;
 #endif
 }
 
