@@ -35,6 +35,42 @@ const fixed ZeroFinder::sqrt_epsilon =
 #endif
 const fixed ZeroFinder::r((3. - sqrt(5.0)) / 2); /* Gold section ratio */
 
+#define fixed_threequaters fixed(0.75)
+
+fixed ZeroFinder::tolerance_actual_min(const fixed x) const {
+  return sqrt_epsilon * fabs(x) + tolerance * fixed_third;
+}
+
+fixed ZeroFinder::tolerance_actual_zero(const fixed x) const {
+  return fixed_two * epsilon * fabs(x) + tolerance * fixed_half;
+}
+
+#define INSTRUMENT_ZERO
+#ifdef INSTRUMENT_ZERO
+unsigned long zero_skipped = 0;
+unsigned long zero_total = 0;
+#endif
+
+bool ZeroFinder::solution_within_tolerance(const fixed x,
+                                           const fixed tol_act) {
+
+  // are we away from the edges? if so, check improved solution
+  const fixed x_minus = x-tol_act;
+  if (xmin >= x_minus)
+    return false;
+  const fixed x_plus = x+tol_act;
+  if (x_plus >= xmax)
+    return false;
+
+  const fixed fx = f(x);
+  if (f(x_plus)<fx)
+    return false;
+  if (f(x_minus)<fx)
+    return false;
+  // existing solution is good 
+  return true;
+}
+
 /*
  ************************************************************************
  *	    		    C math library
@@ -82,11 +118,21 @@ const fixed ZeroFinder::r((3. - sqrt(5.0)) / 2); /* Gold section ratio */
  ************************************************************************
  */
 
-#include "math.h"
-
-#define fixed_threequaters fixed(0.75)
-
 fixed ZeroFinder::find_zero(const fixed xstart) {
+#ifdef INSTRUMENT_ZERO
+  zero_total++;
+#endif
+  if ((xmin<=xstart) || (xstart<=xmax) ||
+      (f(xstart)> sqrt_epsilon))
+    return find_zero_actual(xstart);
+#ifdef INSTRUMENT_ZERO
+  zero_skipped++;
+#endif
+  return xstart;
+}
+
+
+fixed ZeroFinder::find_zero_actual(const fixed xstart) {
   fixed a, b, c; // Abscissae, descr. see above
   fixed fa; // f(a)
   fixed fb; // f(b)
@@ -121,13 +167,12 @@ fixed ZeroFinder::find_zero(const fixed xstart) {
     }
 
     // Actual tolerance
-    const fixed tol_act = fixed_two * epsilon * fabs(b)
-        + tolerance * fixed_half;
+    const fixed tol_act = tolerance_actual_zero(b);
 
     // Step at this iteration
     fixed new_step = (c - b) * fixed_half;
 
-    if (fabs(new_step) <= tol_act || fb == (fixed)0) {
+    if (fabs(new_step) <= tol_act || fabs(fb) < sqrt_epsilon) {
       if (!b_best)
         // call once more
         fb = f(b);
@@ -198,6 +243,7 @@ fixed ZeroFinder::find_zero(const fixed xstart) {
   }
 }
 
+
 /*
  ************************************************************************
  *	    		    C math library
@@ -248,7 +294,20 @@ fixed ZeroFinder::find_zero(const fixed xstart) {
  *
  ************************************************************************
  */
-fixed ZeroFinder::find_min(const fixed xstart)
+
+fixed ZeroFinder::find_min(const fixed xstart) {
+#ifdef INSTRUMENT_ZERO
+  zero_total++;
+#endif
+  if (!solution_within_tolerance(xstart, tolerance_actual_min(xstart)))
+    return find_min_actual(xstart);
+#ifdef INSTRUMENT_ZERO
+  zero_skipped++;
+#endif
+  return xstart;
+}
+
+fixed ZeroFinder::find_min_actual(const fixed xstart)
 {
   fixed x, v, w; // Abscissae, descr. see above
   fixed fx; // f(x)
@@ -271,7 +330,7 @@ fixed ZeroFinder::find_min(const fixed xstart)
     const fixed middle_range = (a + b) * fixed_half;
 
     // Actual tolerance
-    const fixed tol_act = sqrt_epsilon * fabs(x) + tolerance * fixed_third;
+    const fixed tol_act = tolerance_actual_min(x);
     const fixed double_tol_act = fixed_two * tol_act;
 
     if( fabs(x-middle_range) + range*fixed_half <= double_tol_act ) {

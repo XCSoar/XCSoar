@@ -27,6 +27,9 @@
 
 /**
  * Zero finding and minimisation search algorithm
+ *
+ * Can be given initial value as hint of solution.
+ *
  */
 class ZeroFinder {
 public:
@@ -54,8 +57,9 @@ public:
   /**
    * Find closest value of x that produces f(x)=0
    * Method used is a variant of a bisector search.
+   * To enforce search, set xstart outside range 
    *
-   * @param xstart Initial value of x (not used)
+   * @param xstart Initial guess of x
    *
    * @return x value of best solution
    */
@@ -64,8 +68,9 @@ public:
   /**
    * Find value of x that minimises f(x)
    * Method used is a variant of a bisector search.
+   * To enforce search, set xstart outside range 
    *
-   * @param xstart Initial value of x (not used)
+   * @param xstart Initial guess of x
    *
    * @return x value of best solution
    */
@@ -76,15 +81,40 @@ protected:
   const fixed xmin;
   /** max value of search range */
   const fixed xmax;
-  /** search tolerance */
+  /** search tolerance in x */
   const fixed tolerance;
 
 private:
+  fixed find_zero_actual(const fixed xstart);
+  fixed find_min_actual(const fixed xstart);
+
   /** machine tolerance */
   static const fixed epsilon;
   /** sqrt of machine tolerance */
   static const fixed sqrt_epsilon;
   static const fixed r;
+
+  /**
+   * Tolerance in f of minimisation routine at x
+   */
+  fixed tolerance_actual_min(const fixed x) const;
+
+  /**
+   * Tolerance in f of zero finding routine at x
+   */
+  fixed tolerance_actual_zero(const fixed x) const;
+
+  /**
+   * Test whether solution is within tolerance
+   *
+   * @param xstart Initial value of x
+   * @param tol_act Actual tolerance of routine evaluated at xstart
+   *
+   * @return true if no search required (xstart is good)
+   */
+  bool solution_within_tolerance(const fixed xstart,
+                                 const fixed tol_act);
+
 };
 
 #endif
