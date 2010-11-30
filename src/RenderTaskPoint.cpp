@@ -263,22 +263,22 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
   if (!seg.valid()) {
     return;
   }
-  std::vector<RasterPoint> screen; 
+
   #define fixed_twentieth fixed(1.0 / 20.0)
   
   if (m_proj.GeoToScreenDistance(seg.parametric(fixed_zero).
                                     distance(seg.parametric(fixed_one)))>2) {
     
+    RasterPoint screen[20];
     for (unsigned i = 0; i < 20; ++i) {
       fixed t = i * fixed_twentieth;
       GeoPoint ga = seg.parametric(t);
-      screen.push_back(m_proj.GeoToScreen(ga));
+      screen[i] = m_proj.GeoToScreen(ga);
     }
-    if (screen.size()>=2) {
-      m_buffer.select(pen_isoline);
-      m_buffer.hollow_brush();
-      m_buffer.polygon(&screen[0], screen.size());
-    }
+
+    m_buffer.select(pen_isoline);
+    m_buffer.hollow_brush();
+    m_buffer.polygon(screen, 20);
   }
 }
 
