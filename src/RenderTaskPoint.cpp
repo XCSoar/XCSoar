@@ -269,7 +269,8 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
   if (m_proj.GeoToScreenDistance(seg.parametric(fixed_zero).
                                     distance(seg.parametric(fixed_one)))>2) {
     
-    for (fixed t = fixed_zero; t<fixed_one; t+= fixed_twentieth) {
+    for (unsigned i = 0; i < 20; ++i) {
+      fixed t = i * fixed_twentieth;
       GeoPoint ga = seg.parametric(t);
       screen.push_back(m_proj.GeoToScreen(ga));
     }
