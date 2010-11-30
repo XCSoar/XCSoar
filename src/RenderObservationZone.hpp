@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_RENDER_OBSERVATION_ZONE_HPP
 #define XCSOAR_RENDER_OBSERVATION_ZONE_HPP
 
-#include "Task/Visitors/ObservationZoneVisitor.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Point.hpp"
@@ -32,13 +31,14 @@ Copyright_License {
 class Canvas;
 class Projection;
 struct SETTINGS_MAP;
+class ObservationZonePoint;
+class CylinderZone;
+class SectorZone;
 
 /**
  * Utility class to render an ObzervationZonePoint to a canvas
  */
-class RenderObservationZone: 
-  public ObservationZoneConstVisitor
-{
+class RenderObservationZone {
 public:
   enum layer {
     /** the background shade */
@@ -62,19 +62,7 @@ public:
   RenderObservationZone(Canvas &_canvas, const Projection &_projection,
                         const SETTINGS_MAP &_settings_map);
 
-  void Visit(const FAISectorZone& oz);
-
-  void Visit(const KeyholeZone& oz);
-
-  void Visit(const BGAFixedCourseZone& oz);
-
-  void Visit(const BGAEnhancedOptionZone& oz);
-
-  void Visit(const SectorZone& oz);
-
-  void Visit(const LineSectorZone& oz);
-
-  void Visit(const CylinderZone& oz);
+  void Draw(const ObservationZonePoint &oz);
 
   void set_layer(enum layer _layer) {
     layer = _layer;

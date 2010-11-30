@@ -115,83 +115,60 @@ RenderObservationZone::parms_sector(const SectorZone& oz)
   p_end = m_proj.GeoToScreen(oz.get_SectorEnd());
 }
 
-void 
-RenderObservationZone::Visit(const FAISectorZone& oz) 
+void
+RenderObservationZone::Draw(const ObservationZonePoint &_oz)
 {
-  parms_sector(oz);
+  switch (_oz.shape) {
+  case ObservationZonePoint::LINE:
+  case ObservationZonePoint::FAI_SECTOR: {
+    const SectorZone &oz = (const SectorZone &)_oz;
+    parms_sector(oz);
 
-  if (layer != LAYER_ACTIVE)
-    draw_segment(oz.getStartRadial(), oz.getEndRadial());
-  else
-    draw_two_lines();
-}
+    if (layer != LAYER_ACTIVE)
+      draw_segment(oz.getStartRadial(), oz.getEndRadial());
+    else
+      draw_two_lines();
 
-void 
-RenderObservationZone::Visit(const KeyholeZone& oz) 
-{
-  parms_sector(oz);
+    break;
+  }
 
-  if (layer != LAYER_ACTIVE) {
-    draw_segment(oz.getStartRadial(), oz.getEndRadial());
-    p_radius = m_proj.GeoToScreenDistance(fixed(500));
-    draw_circle();
-  } else
-    draw_two_lines();
-}
+  case ObservationZonePoint::CYLINDER: {
+    const CylinderZone &oz = (const CylinderZone &)_oz;
 
-void 
-RenderObservationZone::Visit(const BGAFixedCourseZone& oz) 
-{
-  parms_sector(oz);
+    if (layer != LAYER_INACTIVE) {
+      parms_oz(oz);
+      draw_circle();
+    }
 
-  if (layer != LAYER_ACTIVE) {
-    draw_segment(oz.getStartRadial(), oz.getEndRadial());
-    p_radius = m_proj.GeoToScreenDistance(fixed(500));
-    draw_circle();
-  } else
-    draw_two_lines();
-}
+    break;
+  }
 
-void 
-RenderObservationZone::Visit(const BGAEnhancedOptionZone& oz) 
-{
-  parms_sector(oz);
+  case ObservationZonePoint::SECTOR: {
+    const SectorZone &oz = (const SectorZone &)_oz;
 
-  if (layer != LAYER_ACTIVE) {
-    draw_segment(oz.getStartRadial(), oz.getEndRadial());
-    p_radius = m_proj.GeoToScreenDistance(fixed(500));
-    draw_circle();
-  } else
-    draw_two_lines();
-}
+    if (layer != LAYER_INACTIVE) {
+      parms_sector(oz);
+      draw_segment(oz.getStartRadial(), oz.getEndRadial());
+      draw_two_lines();
+    }
 
-void 
-RenderObservationZone::Visit(const SectorZone& oz) 
-{
-  parms_sector(oz);
+    break;
+  }
 
-  draw_segment(oz.getStartRadial(), oz.getEndRadial());
-  draw_two_lines();
-}
+  case ObservationZonePoint::KEYHOLE:
+  case ObservationZonePoint::BGAFIXEDCOURSE:
+  case ObservationZonePoint::BGAENHANCEDOPTION: {
+    const SectorZone &oz = (const SectorZone &)_oz;
+    parms_sector(oz);
 
-void 
-RenderObservationZone::Visit(const LineSectorZone& oz) 
-{
-  parms_sector(oz);
+    if (layer != LAYER_ACTIVE) {
+      draw_segment(oz.getStartRadial(), oz.getEndRadial());
+      p_radius = m_proj.GeoToScreenDistance(fixed(500));
+      draw_circle();
+    } else
+      draw_two_lines();
 
-  if (layer != LAYER_ACTIVE)
-    draw_segment(oz.getStartRadial(), oz.getEndRadial());
-  else
-    draw_two_lines();
-}
-
-void 
-RenderObservationZone::Visit(const CylinderZone& oz) 
-{
-  if (layer == LAYER_ACTIVE)
-    return;
-
-  parms_oz(oz);
-
-  draw_circle();
+    break;
+  }
+  }
 }
