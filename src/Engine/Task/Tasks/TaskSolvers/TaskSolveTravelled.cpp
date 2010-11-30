@@ -46,13 +46,10 @@ TaskSolveTravelled::time_error()
 {
   res = tm.glide_solution(aircraft);
   fixed d = fabs(res.TimeElapsed-dt);
-  if (!res.Solution==GlideResult::RESULT_OK) {
+  if (res.Solution!=GlideResult::RESULT_OK) {
     d += res.TimeVirtual;
   }
-  if (positive(dt)) {
-    d*= inv_dt;
-  }
-  return d;
+  return d*inv_dt;
 }
 
 fixed 
