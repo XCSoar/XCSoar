@@ -37,7 +37,9 @@ GlidePolar::GlidePolar(const fixed _mc, const fixed _bugs, const fixed _ballast)
   bugs(_bugs),
   ballast(_ballast),
   cruise_efficiency(fixed_one),
+  VbestLD(fixed_zero),
   Vmax(fixed_75),
+  Vmin(fixed_zero),
   ideal_polar_a(0.00157),
   ideal_polar_b(-0.0734),
   ideal_polar_c(1.48),
@@ -161,7 +163,7 @@ void
 GlidePolar::solve_ld()
 {
   GlidePolarVopt gpvopt(*this, Vmin, Vmax);
-  VbestLD = gpvopt.find_min(Vmax);
+  VbestLD = gpvopt.find_min(VbestLD);
   SbestLD = SinkRate(VbestLD);
   bestLD = VbestLD / SbestLD;
 }
@@ -201,7 +203,7 @@ void
 GlidePolar::solve_min()
 {
   GlidePolarMinSink gpminsink(*this, Vmax);
-  Vmin = gpminsink.find_min(Vmax);
+  Vmin = gpminsink.find_min(Vmin);
   Smin = SinkRate(Vmin);
 }
 
@@ -339,18 +341,6 @@ GlidePolar::get_wing_loading() const
     return get_all_up_weight() / wing_area;
 
   return fixed_zero;
-}
-
-fixed 
-GlidePolar::get_bestLD() const 
-{
-  return bestLD;
-}
-
-fixed
-GlidePolar::get_ballast() const 
-{
-  return ballast;
 }
 
 fixed

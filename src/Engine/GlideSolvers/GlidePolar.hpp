@@ -70,6 +70,7 @@ public:
    *
    * @return Sink rate (m/s, positive down)
    */
+  gcc_pure
   fixed
   get_Smin() const
   {
@@ -81,6 +82,7 @@ public:
    *
    * @return Speed (m/s)
    */
+  gcc_pure
   fixed
   get_Vmin() const
   {
@@ -94,6 +96,7 @@ public:
    *
    * @return Speed (m/s)
    */
+  gcc_pure
   fixed
   get_Vmax() const
   {
@@ -105,6 +108,7 @@ public:
    *
    * @return Sink rate (m/s, positive down)
    */
+  gcc_pure
   fixed
   get_Smax() const
   {
@@ -116,6 +120,7 @@ public:
    *
    * @return Speed of best LD (m/s)
    */
+  gcc_pure
   fixed
   get_VbestLD() const
   {
@@ -127,6 +132,7 @@ public:
    *
    * @return Sink rate at best L/D (m/s)
    */
+  gcc_pure
   fixed
   get_SbestLD() const
   {
@@ -138,7 +144,11 @@ public:
    *
    * @return Best L/D ratio
    */
-  fixed get_bestLD() const;
+  gcc_pure
+  fixed get_bestLD() const
+  {
+    return bestLD;
+  }
 
   /**
    * Takeoff speed
@@ -162,6 +172,7 @@ public:
    *
    * @return Cruise efficiency
    */
+  gcc_pure
   fixed
   get_cruise_efficiency() const
   {
@@ -179,6 +190,7 @@ public:
    * Retrieve bugs 
    * @return Cleanliness of glider (0-1]
    */
+  gcc_pure
   fixed get_bugs() const {
     return bugs;
   }
@@ -194,7 +206,10 @@ public:
    * Retrieve ballast 
    * @return Proportion of possible ballast [0-1]
    */
-  fixed get_ballast() const;
+  gcc_pure
+  fixed get_ballast() const {
+    return ballast;
+  }
 
   /**
    * Retrieve ballast in litres
@@ -222,6 +237,7 @@ public:
    *
    * @return The current MacCready ring setting (m/s)
    */
+  gcc_pure
   fixed get_mc() const {
     return mc;
   }
@@ -231,6 +247,7 @@ public:
    *
    * @return The inverse of current MacCready ring setting (s/m)
    */
+  gcc_pure
   fixed get_inv_mc() const {
     return inv_mc;
   }
@@ -256,6 +273,7 @@ public:
    *
    * @return Sink rate (m/s, positive down)
    */
+  gcc_pure
   fixed SinkRate(const fixed V) const;
 
   /**
@@ -275,6 +293,7 @@ public:
    *
    * @return Sink rate (m/s, positive down)
    */
+  gcc_pure
   fixed SinkRate(const fixed V, const fixed n) const;
 
   /**
