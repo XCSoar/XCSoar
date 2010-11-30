@@ -40,7 +40,8 @@ TaskBehaviour::TaskBehaviour():
     safety_height_terrain(150.0),
     safety_height_arrival(300.0),
     start_max_speed_margin(0.0),
-    start_max_height_margin(0) {}
+    start_max_height_margin(0),
+    enable_trace(true) {}
 
 void
 TaskBehaviour::all_off()

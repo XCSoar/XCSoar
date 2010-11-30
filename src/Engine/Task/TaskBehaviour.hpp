@@ -101,6 +101,9 @@ public:
   /** Defaults for ordered task */
   OrderedTaskBehaviour ordered_defaults;
 
+  /** Whether to maintain a thinned trace of the flight.  This is overridden by enable_olc. */
+  bool enable_trace;
+
   /**
    * Convenience function (used primarily for testing) to disable
    * all expensive task behaviour functions.

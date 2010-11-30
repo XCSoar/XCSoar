@@ -244,8 +244,12 @@ TaskManager::update(const AIRCRAFT_STATE &state,
     reset();
 
   if (state.Flying) {
-    trace_full.append(state);
-    trace_sprint.append(state);
+    // either olc or basic trace requires trace_full
+    if (task_behaviour.enable_olc || task_behaviour.enable_trace)
+      trace_full.append(state);
+    // only olc requires trace_sprint
+    if (task_behaviour.enable_olc)
+      trace_sprint.append(state);
   }
 
   if (task_ordered.task_size() > 1) {
@@ -279,8 +283,11 @@ TaskManager::update_idle(const AIRCRAFT_STATE& state)
   if (state.Flying) {
     // Update the Traces even if contest
     // optimization is not _currently_ enabled
-    retval |= trace_full.optimise_if_old();
-    retval |= trace_sprint.optimise_if_old();
+    if (task_behaviour.enable_olc || task_behaviour.enable_trace)
+      retval |= trace_full.optimise_if_old();
+
+    if (task_behaviour.enable_olc)
+      retval |= trace_sprint.optimise_if_old();
 
     // If contest optimization is enabled
     // -> Optimize
