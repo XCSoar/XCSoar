@@ -263,11 +263,9 @@ RenderTaskPoint::draw_deadzone(const AATPoint& tp)
 void 
 RenderTaskPoint::draw_oz_background(const OrderedTaskPoint& tp) 
 {
-  ozv.set_past(point_past());
-  ozv.set_current(point_current());
   ozv.set_layer(RenderObservationZone::LAYER_SHADE);
 
-  if (ozv.draw_style()) {
+  if (ozv.draw_style(m_index - m_active_index)) {
     ((ObservationZoneConstVisitor &)ozv).Visit(*tp.get_oz());
     ozv.un_draw_style();
   }
@@ -276,17 +274,14 @@ RenderTaskPoint::draw_oz_background(const OrderedTaskPoint& tp)
 void 
 RenderTaskPoint::draw_oz_foreground(const OrderedTaskPoint& tp) 
 {
-  ozv.set_past(point_past());
-  ozv.set_current(point_current());
-
   ozv.set_layer(RenderObservationZone::LAYER_INACTIVE);
-  if (ozv.draw_style()) {
+  if (ozv.draw_style(m_index - m_active_index)) {
     ((ObservationZoneConstVisitor &)ozv).Visit(*tp.get_oz());
     ozv.un_draw_style();
   }
 
   ozv.set_layer(RenderObservationZone::LAYER_ACTIVE);
-  if (ozv.draw_style()) {
+  if (ozv.draw_style(m_index - m_active_index)) {
     ((ObservationZoneConstVisitor &)ozv).Visit(*tp.get_oz());
     ozv.un_draw_style();
   }

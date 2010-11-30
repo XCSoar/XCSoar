@@ -19,17 +19,16 @@ RenderObservationZone::RenderObservationZone(Canvas &_canvas,
    layer(LAYER_SHADE),
    pen_boundary_current(Pen::SOLID, Layout::SmallScale(2), Graphics::TaskColor),
    pen_boundary_active(Pen::SOLID, Layout::SmallScale(1), Graphics::TaskColor),
-   pen_boundary_inactive(Pen::SOLID, Layout::SmallScale(1), Color(127, 127, 127)),
-   m_past(false),
-   m_current(false)
+   pen_boundary_inactive(Pen::SOLID, Layout::SmallScale(1), Color(127, 127, 127))
 {
 }
 
 bool 
-RenderObservationZone::draw_style()
+RenderObservationZone::draw_style(int offset)
 {
   if (layer == LAYER_SHADE) {
-    if (m_past)
+    if (offset < 0)
+      /* past task point */
       return false;
 
 #ifdef ENABLE_OPENGL
@@ -57,8 +56,9 @@ RenderObservationZone::draw_style()
     return true;
   } else {
     m_buffer.hollow_brush();
-    if (layer == LAYER_ACTIVE && !m_past) {
-      if (m_current)
+    if (layer == LAYER_ACTIVE && offset >= 0) {
+      if (offset == 0)
+        /* current task point */
         m_buffer.select(pen_boundary_current);
       else
         m_buffer.select(pen_boundary_active);

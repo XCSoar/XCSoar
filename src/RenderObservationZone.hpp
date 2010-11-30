@@ -76,12 +76,6 @@ public:
 
   void Visit(const CylinderZone& oz);
 
-  void set_past(bool set) {
-    m_past = set;
-  }
-  void set_current(bool set) {
-    m_current = set;
-  }
   void set_layer(enum layer _layer) {
     layer = _layer;
   }
@@ -89,9 +83,12 @@ public:
   /**
    * Configure brush and pen on the Canvas for the current layer.
    *
+   * @param offset the offset of this task point to the current task
+   * point; 0 means it is the current task point, a negative value
+   * means it is a "past" task point
    * @return false if nothing is to be drawn in this layer
    */
-  bool draw_style();
+  bool draw_style(int offset);
 
   /**
    * Cleans up the settings after drawing has been finished.  This
@@ -115,8 +112,6 @@ protected:
   const Pen pen_boundary_inactive;
   RasterPoint p_center, p_start, p_end;
   unsigned p_radius;
-  bool m_past;
-  bool m_current;
 };
 
 #endif
