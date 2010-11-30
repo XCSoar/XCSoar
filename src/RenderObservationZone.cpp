@@ -16,9 +16,9 @@ RenderObservationZone::RenderObservationZone(Canvas &_canvas,
                                              const SETTINGS_MAP &_settings_map)
   :m_buffer(_canvas), m_proj(_projection),
    m_settings_map(_settings_map),
-   pen_boundary_current(Pen::SOLID, IBLSCALE(2), Graphics::TaskColor),
-   pen_boundary_active(Pen::SOLID, IBLSCALE(1), Graphics::TaskColor),
-   pen_boundary_inactive(Pen::SOLID, IBLSCALE(1), Color(127, 127, 127)),
+   pen_boundary_current(Pen::SOLID, Layout::SmallScale(2), Graphics::TaskColor),
+   pen_boundary_active(Pen::SOLID, Layout::SmallScale(1), Graphics::TaskColor),
+   pen_boundary_inactive(Pen::SOLID, Layout::SmallScale(1), Color(127, 127, 127)),
    m_past(false),
    m_current(false),
    m_background(false)
