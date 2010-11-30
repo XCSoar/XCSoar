@@ -271,8 +271,6 @@ MapWindow::Update()
   const RECT rc = get_client_rect();
   const SETTINGS_MAP &settings_map = SettingsMap();
 
-  visible_projection.SetMapRect(rc);
-
   DisplayOrientation_t orientation =
       (GetDisplayMode() == dmCircling) ?
           settings_map.OrientationCircling : settings_map.OrientationCruise;
@@ -291,6 +289,7 @@ MapWindow::Update()
     // Pan is off
     visible_projection.SetGeoLocation(Basic().Location);
 
+  visible_projection.SetMapRect(rc);
   visible_projection.UpdateScreenBounds();
 }
 
