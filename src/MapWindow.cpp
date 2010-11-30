@@ -266,7 +266,7 @@ MapWindow::UpdateMapScale()
 }
 
 void
-MapWindow::Update()
+MapWindow::UpdateProjection()
 {
   const RECT rc = get_client_rect();
   const SETTINGS_MAP &settings_map = SettingsMap();

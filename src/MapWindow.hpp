@@ -205,7 +205,7 @@ public:
   void UpdateMapScale();
 
 protected:
-  void Update();
+  void UpdateProjection();
 
   void UpdateTopology();
   void UpdateTerrain();
