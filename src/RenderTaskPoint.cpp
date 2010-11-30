@@ -60,13 +60,6 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
 }
 
 void 
-RenderTaskPoint::set_layer(RenderTaskLayer set)
-{
-  m_layer = set;
-  m_index = 0;
-}
-
-void 
 RenderTaskPoint::Visit(const UnorderedTaskPoint& tp) 
 {
   if (m_layer == RENDER_TASK_LEG) {
@@ -156,44 +149,8 @@ RenderTaskPoint::Visit(const ASTPoint& tp)
   }
 }
 
-void 
-RenderTaskPoint::set_active_index(unsigned active_index) 
-{
-  m_active_index = active_index;
-}
-
 bool 
-RenderTaskPoint::leg_active() 
-{
-  return (m_index+1>m_active_index);
-}
-
-bool 
-RenderTaskPoint::point_past() 
-{
-  return (m_index<m_active_index);
-}
-
-bool 
-RenderTaskPoint::point_current() 
-{
-  return (m_index==m_active_index);
-}
-
-bool 
-RenderTaskPoint::do_draw_deadzone(const TaskPoint& tp) 
-{
-  return point_current() || point_past();
-}
-
-bool 
-RenderTaskPoint::do_draw_bearing(const TaskPoint &tp) 
-{
-  return m_draw_bearing && point_current();
-}
-
-bool 
-RenderTaskPoint::do_draw_target(const TaskPoint &tp) 
+RenderTaskPoint::do_draw_target(const TaskPoint &tp) const
 {
   if (!tp.has_target()) {
     return false;
@@ -201,12 +158,6 @@ RenderTaskPoint::do_draw_target(const TaskPoint &tp)
   return (point_current()
           || m_settings_map.EnablePan 
           || m_settings_map.TargetPan);
-}
-
-bool 
-RenderTaskPoint::do_draw_isoline(const TaskPoint &tp) 
-{
-  return do_draw_target(tp);
 }
 
 void 

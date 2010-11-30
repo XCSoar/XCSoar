@@ -27,6 +27,7 @@ Copyright_License {
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Screen/Pen.hpp"
 #include "MapCanvas.hpp"
+#include "Compiler.h"
 
 class Canvas;
 class WindowProjection;
@@ -62,17 +63,46 @@ public:
   void Visit(const FinishPoint& tp);
   void Visit(const AATPoint& tp);
   void Visit(const ASTPoint& tp);
-  void set_layer(RenderTaskLayer set);
-  void set_active_index(unsigned active_index);
+
+  void set_layer(RenderTaskLayer set) {
+    m_layer = set;
+    m_index = 0;
+  }
+
+  void set_active_index(unsigned active_index) {
+    m_active_index = active_index;
+  }
+
 protected:
   void draw_ordered(const OrderedTaskPoint& tp);
-  bool leg_active();
-  bool point_past();
-  bool point_current();
-  bool do_draw_deadzone(const TaskPoint& tp);
-  bool do_draw_bearing(const TaskPoint &tp);
-  bool do_draw_target(const TaskPoint &tp);
-  bool do_draw_isoline(const TaskPoint &tp);
+
+  bool leg_active() const {
+    return m_index >= m_active_index;
+  }
+
+  bool point_past() const {
+    return m_index < m_active_index;
+  }
+
+  bool point_current() const {
+    return m_index == m_active_index;
+  }
+
+  bool do_draw_deadzone(const TaskPoint& tp) const {
+    return point_current() || point_past();
+  }
+
+  bool do_draw_bearing(const TaskPoint &tp) const {
+    return m_draw_bearing && point_current();
+  }
+
+  gcc_pure
+  bool do_draw_target(const TaskPoint &tp) const;
+
+  bool do_draw_isoline(const TaskPoint &tp) const {
+    return do_draw_target(tp);
+  }
+
   void draw_bearing(const TaskPoint &tp);
   virtual void draw_target(const TaskPoint &tp);
   void draw_task_line(const GeoPoint& start, const GeoPoint& end);
