@@ -104,6 +104,7 @@ int main(int argc, char **argv)
   i.Location = home;
   i.GPSAltitude = fixed(487);
   i.BaroAltitude = fixed(490);
+  i.BaroAltitudeAvailable = true;
 
   IGCWriter writer(path, i);
 
