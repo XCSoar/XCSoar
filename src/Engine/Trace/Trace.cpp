@@ -27,10 +27,11 @@ Trace::append(const AIRCRAFT_STATE& state)
     return;
   }
 
-  TracePoint tp(state, task_projection);
+  TracePoint tp(state);
   if ((tp.time - m_last_point.time) < 2)
     return;
 
+  tp.project(task_projection);
   tp.last_time = m_last_point.time;
   TraceTree::const_iterator it_this = trace_tree.insert(tp);
   m_last_point = tp;
@@ -333,7 +334,8 @@ TracePointVector
 Trace::find_within_range(const GeoPoint &loc, const fixed range,
                          const unsigned mintime, const fixed resolution) const
 {
-  TracePoint bb_target(loc, task_projection);
+  TracePoint bb_target(loc);
+  bb_target.project(task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
   const unsigned rrange = task_projection.project_range(loc, resolution);
 

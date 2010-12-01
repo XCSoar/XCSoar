@@ -27,11 +27,10 @@
 #include <assert.h>
 
 StartPoint::StartPoint(ObservationZonePoint* _oz,
-                       const TaskProjection& tp,
                        const Waypoint & wp,
                        const TaskBehaviour& tb,
                        const OrderedTaskBehaviour& to): 
-  OrderedTaskPoint(START, _oz, tp, wp, tb, to),
+  OrderedTaskPoint(START, _oz, wp, tb, to),
   enabled(true) 
 {
 }

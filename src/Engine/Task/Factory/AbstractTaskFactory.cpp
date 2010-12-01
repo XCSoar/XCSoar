@@ -38,7 +38,7 @@ StartPoint*
 AbstractTaskFactory::createStart(ObservationZonePoint* oz,
                                  const Waypoint& wp) const
 {
-  return new StartPoint(oz, m_task.get_task_projection(), wp, m_behaviour,
+  return new StartPoint(oz, wp, m_behaviour,
                         get_ordered_task_behaviour());
 }
 
@@ -46,7 +46,7 @@ FinishPoint*
 AbstractTaskFactory::createFinish(ObservationZonePoint* oz,
                                  const Waypoint& wp) const
 {
-  return new FinishPoint(oz, m_task.get_task_projection(), wp, m_behaviour,
+  return new FinishPoint(oz, wp, m_behaviour,
                          get_ordered_task_behaviour());
 }
 
@@ -54,7 +54,7 @@ AATPoint*
 AbstractTaskFactory::createAAT(ObservationZonePoint* oz,
                                const Waypoint& wp) const
 {
-  return new AATPoint(oz, m_task.get_task_projection(), wp, m_behaviour,
+  return new AATPoint(oz, wp, m_behaviour,
                       get_ordered_task_behaviour());
 }
 
@@ -62,7 +62,7 @@ ASTPoint*
 AbstractTaskFactory::createAST(ObservationZonePoint* oz,
                                const Waypoint& wp) const
 {
-  return new ASTPoint(oz, m_task.get_task_projection(), wp, m_behaviour,
+  return new ASTPoint(oz, wp, m_behaviour,
                       get_ordered_task_behaviour());
 }
 
@@ -424,7 +424,6 @@ AbstractTaskFactory::swap(const unsigned position, const bool auto_mutate)
   const OrderedTaskPoint* orig = m_task.getTaskPoint(position+1);
   OrderedTaskPoint* copy = orig->clone(m_behaviour, 
                                        get_ordered_task_behaviour(),
-                                       m_task.get_task_projection(),
                                        NULL);
   bool retval = insert(copy, position, auto_mutate);
   if (!retval) {

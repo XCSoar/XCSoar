@@ -22,15 +22,15 @@
 #include "SampledTaskPoint.hpp"
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
 
-SampledTaskPoint::SampledTaskPoint(enum type _type, const TaskProjection& tp,
+SampledTaskPoint::SampledTaskPoint(enum type _type,
                                    const Waypoint & wp,
                                    const TaskBehaviour &tb,
                                    const bool b_scored):
     TaskPoint(_type, wp, tb),
     m_boundary_scored(b_scored),
-    m_search_max(get_location(),tp),
-    m_search_min(get_location(),tp),
-    m_search_reference(get_location(),tp)
+    m_search_max(get_location()),
+    m_search_min(get_location()),
+    m_search_reference(get_location())
 {
   m_nominal_point.push_back(m_search_reference);
 }
@@ -87,7 +87,7 @@ SampledTaskPoint::update_oz(const TaskProjection &projection)
   m_boundary_points.clear();
   if (m_boundary_scored) {
     for (fixed t=fixed_zero; t<= fixed_one; t+= fixed_steps) {
-      SearchPoint sp(get_boundary_parametric(t), projection);
+      SearchPoint sp(get_boundary_parametric(t));
       m_boundary_points.push_back(sp);
     }
     prune_interior(m_boundary_points);

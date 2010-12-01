@@ -25,11 +25,10 @@
 #include <assert.h>
 
 FinishPoint::FinishPoint(ObservationZonePoint* _oz,
-                         const TaskProjection& tp,
                          const Waypoint & wp,
                          const TaskBehaviour& tb,
                          const OrderedTaskBehaviour& to) : 
-  OrderedTaskPoint(FINISH, _oz, tp, wp, tb, to),
+  OrderedTaskPoint(FINISH, _oz, wp, tb, to),
   fai_finish_height(fixed_zero)
 { 
 }

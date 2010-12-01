@@ -32,13 +32,12 @@
 
 
 OrderedTaskPoint::OrderedTaskPoint(enum type _type, ObservationZonePoint* _oz,
-                                   const TaskProjection& tp,
                                    const Waypoint & wp, 
                                    const TaskBehaviour &tb,
                                    const OrderedTaskBehaviour& to,
                                    const bool b_scored): 
   TaskLeg(*this),
-  ScoredTaskPoint(_type, tp, wp, tb, b_scored),
+  ScoredTaskPoint(_type, wp, tb, b_scored),
   ObservationZoneClient(_oz),
   m_ordered_task_behaviour(to),
   m_active_state(NOTFOUND_ACTIVE),
@@ -140,7 +139,6 @@ OrderedTaskPoint::equals(const OrderedTaskPoint* other) const
 OrderedTaskPoint* 
 OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
                         const OrderedTaskBehaviour &ordered_task_behaviour,
-                        const TaskProjection &task_projection,
                         const Waypoint* waypoint) const
 {
   if (waypoint == NULL)
@@ -149,22 +147,22 @@ OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
   switch (type) {
   case START:
     return new StartPoint(get_oz()->clone(&waypoint->Location),
-                          task_projection, *waypoint, task_behaviour,
+                          *waypoint, task_behaviour,
                           ordered_task_behaviour);
 
   case AST:
     return new ASTPoint(get_oz()->clone(&waypoint->Location),
-                        task_projection, *waypoint, task_behaviour,
+                        *waypoint, task_behaviour,
                         ordered_task_behaviour);
 
   case AAT:
     return new AATPoint(get_oz()->clone(&waypoint->Location),
-                        task_projection, *waypoint, task_behaviour,
+                        *waypoint, task_behaviour,
                         ordered_task_behaviour);
 
   case FINISH:
     return new FinishPoint(get_oz()->clone(&waypoint->Location),
-                           task_projection, *waypoint, task_behaviour,
+                           *waypoint, task_behaviour,
                            ordered_task_behaviour);
 
   case UNORDERED:

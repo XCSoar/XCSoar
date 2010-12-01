@@ -53,7 +53,6 @@ public:
  * Ownership of oz is transferred to this object
  * 
  * @param _oz Observation zone for this task point
- * @param tp Projection used for internal representations
  * @param wp Waypoint associated with this task point
  * @param tb Task Behaviour defining options (esp safety heights)
  * @param to OrderedTask Behaviour defining options 
@@ -62,7 +61,6 @@ public:
  * @return Partially initialised object 
  */
   OrderedTaskPoint(enum type _type, ObservationZonePoint* _oz,
-                   const TaskProjection& tp,
                    const Waypoint & wp, 
                    const TaskBehaviour &tb,
                    const OrderedTaskBehaviour& to,
@@ -76,13 +74,11 @@ public:
    *
    * @param task_behaviour Task behaviour of clone
    * @param ordered_task_behaviour Ordered task behaviour of clone
-   * @param task_projection Task projection of clone
    * @param waypoint Waypoint to shift to (or NULL)
    */
   gcc_malloc gcc_pure
   OrderedTaskPoint* clone(const TaskBehaviour &task_behaviour,
                           const OrderedTaskBehaviour &ordered_task_behaviour,
-                          const TaskProjection &task_projection,
                           const Waypoint* waypoint=NULL) const;
 
   /** 

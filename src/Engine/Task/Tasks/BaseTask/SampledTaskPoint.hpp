@@ -53,14 +53,13 @@ public:
    * Constructor.  Clears boundary and interior samples on instantiation.
    * Must be followed by update_oz() after task geometry is modified.
    *
-   * @param tp Projection used for internal representations of borders and samples
    * @param wp Waypoint associated with this task point
    * @param tb Task Behaviour defining options (esp safety heights)
    * @param b_scored Whether distance within OZ is scored
    *
    * @return Partially initialised object
    */
-  SampledTaskPoint(enum type _type, const TaskProjection& tp,
+  SampledTaskPoint(enum type _type,
                    const Waypoint & wp,
                    const TaskBehaviour &tb,
                    const bool b_scored);

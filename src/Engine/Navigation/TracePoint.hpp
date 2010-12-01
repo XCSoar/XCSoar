@@ -29,8 +29,8 @@ public:
    * TraceTree::find_within_range().  It initializes only the
    * SearchPoint base class.
    */
-  TracePoint(const GeoPoint &location, const TaskProjection &tp)
-    :SearchPoint(location, tp) {}
+  TracePoint(const GeoPoint &location)
+    :SearchPoint(location) {}
 
 /** 
  * Constructor for actual trace points
@@ -40,7 +40,7 @@ public:
  * 
  * @return Initialised object
  */  
-  TracePoint(const AIRCRAFT_STATE &state, const TaskProjection& tp);
+  TracePoint(const AIRCRAFT_STATE &state);
 
   unsigned time; /**< Time of sample */
   unsigned last_time; /**< Time of sample prior to this */

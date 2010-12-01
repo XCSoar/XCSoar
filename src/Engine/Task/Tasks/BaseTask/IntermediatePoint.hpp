@@ -43,7 +43,6 @@ public:
  * Constructor.
  * 
  * @param _oz Observation zone attached to this point
- * @param tp Global projection 
  * @param wp Waypoint origin of turnpoint
  * @param tb TaskBehaviour defining options (esp safety heights)
  * @param to OrderedTaskBehaviour defining task options
@@ -53,12 +52,11 @@ public:
  */
 
   IntermediatePoint(enum type _type, ObservationZonePoint* _oz,
-                    const TaskProjection& tp,
                     const Waypoint & wp, 
                     const TaskBehaviour& tb,
                     const OrderedTaskBehaviour& to,
                     const bool b_scored=false): 
-    OrderedTaskPoint(_type, _oz, tp, wp, tb, to, b_scored)
+    OrderedTaskPoint(_type, _oz, wp, tb, to, b_scored)
     {};
 
   gcc_pure

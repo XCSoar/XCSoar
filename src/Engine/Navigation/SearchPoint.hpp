@@ -52,6 +52,13 @@ public:
 #endif
   {}
 
+  /**
+   * Constructor.  The flat location is not initialized here; the
+   * method project() must be called before you can use it.
+   *
+   * @param loc Location of search point
+   * @param tp Projection used
+   */
   SearchPoint(const GeoPoint &loc):ReferencePoint(loc)
 #ifndef NDEBUG
                                   , projected(false)

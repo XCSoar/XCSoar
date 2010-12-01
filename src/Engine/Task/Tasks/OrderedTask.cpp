@@ -909,8 +909,7 @@ OrderedTask::clone(TaskEvents &te,
 
   new_task->set_factory(factory_mode);
   for (unsigned i = 0; i < tps.size(); ++i) {
-    new_task->append(tps[i]->clone(tb, new_task->m_ordered_behaviour,
-                                   new_task->get_task_projection()));
+    new_task->append(tps[i]->clone(tb, new_task->m_ordered_behaviour));
   }
   new_task->activeTaskPoint = activeTaskPoint;
   new_task->update_geometry();
@@ -925,8 +924,7 @@ OrderedTask::check_duplicate_waypoints(Waypoints& waypoints)
     Waypoint wp(tps[i]->get_waypoint());
     bool this_changed = !waypoints.find_duplicate(wp);
     changed |= this_changed;
-    replace(tps[i]->clone(task_behaviour, m_ordered_behaviour,
-                          get_task_projection(), &wp), i);
+    replace(tps[i]->clone(task_behaviour, m_ordered_behaviour, &wp), i);
   }
 
   if (changed)
@@ -955,13 +953,11 @@ OrderedTask::commit(const OrderedTask& that)
   for (unsigned i = 0; i < that.task_size(); ++i) {
     if (i >= task_size()) {
       // that task is larger than this
-      append(that.tps[i]->clone(task_behaviour, m_ordered_behaviour,
-                                get_task_projection()));
+      append(that.tps[i]->clone(task_behaviour, m_ordered_behaviour));
       modified = true;
     } else if (!tps[i]->equals(that.tps[i])) {
       // that task point is changed
-      replace(that.tps[i]->clone(task_behaviour, m_ordered_behaviour,
-                                 get_task_projection()), i);
+      replace(that.tps[i]->clone(task_behaviour, m_ordered_behaviour), i);
       modified = true;
     }
   }
@@ -983,7 +979,6 @@ OrderedTask::relocate(const unsigned position, const Waypoint& waypoint)
 
   OrderedTaskPoint *new_tp = tps[position]->clone(task_behaviour,
                                                   m_ordered_behaviour,
-                                                  task_projection,
                                                   &waypoint);
   return replace(new_tp, position);
 }
