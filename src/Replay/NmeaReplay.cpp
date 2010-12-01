@@ -30,8 +30,7 @@
 #include "StringUtil.hpp"
 
 NmeaReplay::NmeaReplay() :
-  TimeScale(1.0),
-  Enabled(false),
+  AbstractReplay(),
   reader(NULL)
 {
   FileName[0] = _T('\0');
@@ -141,12 +140,6 @@ NmeaReplay::CloseFile()
 {
   delete reader;
   reader = NULL;
-}
-
-bool
-NmeaReplay::IsEnabled()
-{
-  return Enabled;
 }
 
 bool

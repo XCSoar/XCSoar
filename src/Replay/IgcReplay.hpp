@@ -25,6 +25,7 @@ Copyright_License {
 #define IGC_REPLAY_HPP
 
 #include "Math/fixed.hpp"
+#include "AbstractReplay.hpp"
 #include "Replay/CatmullRomInterpolator.hpp"
 #include "IO/FileLineReader.hpp"
 
@@ -35,7 +36,7 @@ Copyright_License {
 struct GeoPoint;
 class Angle;
 
-class IgcReplay
+class IgcReplay: public AbstractReplay
 {
 public:
   IgcReplay();
@@ -45,11 +46,11 @@ public:
   void Start();
   const TCHAR* GetFilename();
   void SetFilename(const TCHAR *name);
-  fixed TimeScale;
 
 protected:
-  virtual bool update_time(const fixed mintime);
+  virtual bool update_time();
   virtual void reset_time();
+
   virtual void on_reset() = 0;
   virtual void on_stop() = 0;
   virtual void on_bad_file() = 0;
@@ -60,12 +61,12 @@ protected:
                           fixed &Longitude, fixed &Altitude,
                           fixed &PressureAltitude);
 
-  bool Enabled;
   fixed t_simulation;
 
   bool ReadPoint(fixed &Time, fixed &Latitude, fixed &Longitude,
                  fixed &Altitude, fixed &PressureAltitude);
 
+  fixed GetMinTime() const;
 private:
   CatmullRomInterpolator cli;
 

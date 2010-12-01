@@ -31,7 +31,7 @@ class IgcReplayGlue:
   public IgcReplay
 {
 protected:
-  virtual bool update_time(const fixed mintime);
+  virtual bool update_time();
   virtual void reset_time();
   virtual void on_reset();
   virtual void on_stop();

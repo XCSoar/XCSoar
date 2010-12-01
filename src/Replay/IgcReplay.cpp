@@ -28,8 +28,7 @@
 #include "StringUtil.hpp"
 
 IgcReplay::IgcReplay() :
-  TimeScale(1.0),
-  Enabled(false),
+  AbstractReplay(),
   cli(fixed(0.98)),
   reader(NULL)
 {
@@ -94,13 +93,19 @@ IgcReplay::ReadPoint(fixed &Time, fixed &Latitude, fixed &Longitude,
   return false;
 }
 
+fixed 
+IgcReplay::GetMinTime() const
+{
+  return cli.GetMinTime();
+}
+
 bool
-IgcReplay::update_time(const fixed mintime)
+IgcReplay::update_time()
 {
   const fixed t_simulation_last = t_simulation;
 
   t_simulation += fixed_one * TimeScale;
-  t_simulation = std::max(mintime, t_simulation);
+  t_simulation = std::max(GetMinTime(), t_simulation);
 
   return (t_simulation > t_simulation_last);
 }
@@ -161,7 +166,7 @@ IgcReplay::Update()
   if (!Enabled)
     return false;
 
-  if (!update_time(cli.GetMinTime()))
+  if (!update_time())
     return true;
 
   // if need a new point

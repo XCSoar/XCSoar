@@ -21,42 +21,30 @@ Copyright_License {
 }
 */
 
-#ifndef NMEA_REPLAY_HPP
-#define NMEA_REPLAY_HPP
+#ifndef ABSTRACT_REPLAY_HPP
+#define ABSTRACT_REPLAY_HPP
 
 #include "Math/fixed.hpp"
-#include "AbstractReplay.hpp"
 
-#include <tchar.h>
-#include <windef.h> /* for MAX_PATH */
-
-class FileLineReaderA;
-
-class NmeaReplay: public AbstractReplay
+class AbstractReplay 
 {
 public:
-  NmeaReplay();
-  ~NmeaReplay();
+  fixed TimeScale;
 
-  bool Update();
-  void Stop();
-  void Start();
-  const TCHAR* GetFilename();
-  void SetFilename(const TCHAR *name);
+  AbstractReplay(): TimeScale(fixed_one),Enabled(false) {};
+  virtual bool Update() = 0;
+  virtual void Stop() = 0;
+  virtual void Start() = 0;
+
+  bool IsEnabled() const {
+    return Enabled;
+  }
 
 protected:
-  virtual bool update_time();
+  bool Enabled;
+
+  virtual bool update_time() = 0;
   virtual void reset_time() = 0;
-  virtual void on_bad_file() = 0;
-  virtual void on_sentence(const char *line) = 0;
-
-private:
-  TCHAR FileName[MAX_PATH];
-  FileLineReaderA *reader;
-
-  bool OpenFile();
-  void CloseFile();
-  bool ReadUntilRMC(bool ignore);
 };
 
 #endif
