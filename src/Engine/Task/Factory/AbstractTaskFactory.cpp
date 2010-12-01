@@ -516,20 +516,22 @@ AbstractTaskFactory::validAbstractType(LegalAbstractPointType_t type,
 bool 
 AbstractTaskFactory::validType(OrderedTaskPoint *new_tp, unsigned position) const
 {
-  /// @todo also check OZ type is legal?
-
   switch (new_tp->type) {
   case TaskPoint::START:
-    return validAbstractType(POINT_START, position);
+    return validAbstractType(POINT_START, position) &&
+        validStartType(getType(new_tp));
 
   case TaskPoint::AST:
-    return validAbstractType(POINT_AST, position);
+    return validAbstractType(POINT_AST, position) &&
+        validIntermediateType(getType(new_tp));
 
   case TaskPoint::AAT:
-    return validAbstractType(POINT_AAT, position);
+    return validAbstractType(POINT_AAT, position)&&
+        validIntermediateType(getType(new_tp));
 
   case TaskPoint::FINISH:
-    return validAbstractType(POINT_FINISH, position);
+    return validAbstractType(POINT_FINISH, position)&&
+        validFinishType(getType(new_tp));
 
   case TaskPoint::UNORDERED:
     /* obviously, when we check the type of an OrderedTaskPoint, we
