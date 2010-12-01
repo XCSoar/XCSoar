@@ -231,21 +231,16 @@ MapWindow::IsOriginCentered(const DisplayOrientation_t orientation)
 void
 MapWindow::UpdateMapScale()
 {
-  fixed wpd;
-  if (SettingsMap().TargetPan)
-    wpd = SettingsMap().TargetZoomDistance;
-  else
-    wpd = Calculated().AutoZoomDistance;
-
   if (SettingsMap().TargetPan) {
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
-
+    fixed wpd = SettingsMap().TargetZoomDistance;
     wpd = max(fixed_int_constant(50), min(fixed_int_constant(160000), wpd / 4));
     visible_projection.SetMapScale(wpd);
     return;
   }
 
+  fixed wpd = Calculated().AutoZoomDistance;
   if (SettingsMap().AutoZoom && positive(wpd)) {
     DisplayOrientation_t orientation =
         (GetDisplayMode() == dmCircling) ?
