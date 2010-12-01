@@ -58,7 +58,7 @@ Supported targets:
 
  PPC2003X: Pocket PC 2003 with XScale CPU
 
- ALTAIR: Triadis Altair (unmaintained)
+ ALTAIR: Triadis Altair
 
  WINE: WineLib (experimental)
 
