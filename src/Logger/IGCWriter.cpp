@@ -278,6 +278,28 @@ IGCWriter::LoggerNote(const TCHAR *text)
   write_tstring("LPLT", text);
 }
 
+/**
+ * Applies range checks to the specified altitude value and converts
+ * it to an integer suitable for printing in the IGC file.
+ */
+static int
+normalize_igc_altitude(int value)
+{
+  if (value < -9999)
+    /* for negative values, there are only 4 characters left (after
+       the minus sign), and besides that, IGC does not support a
+       journey towards the center of the earth */
+    return -9999;
+
+  if (value >= 99999)
+    /* hooray, new world record! .. or just some invalid value; we
+       have only 5 characters for the altitude, so we must clip it at
+       99999 */
+    return 99999;
+
+  return value;
+}
+
 void
 IGCWriter::LogPoint(const NMEA_INFO& gps_info)
 {
@@ -325,7 +347,9 @@ IGCWriter::LogPoint(const NMEA_INFO& gps_info)
   q = igc_format_location(q, p.Location);
 
   sprintf(q, "%c%05d%05d%03d%02d",
-          IsValidFix, (int)gps_info.BaroAltitude, p.GPSAltitude,
+          IsValidFix,
+          normalize_igc_altitude(gps_info.BaroAltitude),
+          normalize_igc_altitude(p.GPSAltitude),
           (int)dEPE, iSIU);
 
   writeln(szBRecord);
