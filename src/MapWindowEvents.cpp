@@ -94,8 +94,6 @@ MapWindow::on_paint(Canvas &canvas)
                  device_blackboard.SettingsMap());
   mutexBlackboard.Unlock();
 
-  UpdateMapScale();
-
   /* paint it */
 
   on_paint_buffer(canvas);

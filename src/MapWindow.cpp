@@ -139,6 +139,8 @@ MapWindow::on_paint_buffer(Canvas &canvas)
 
   // Start the drawing timer (for drawing time calculation)
   StartTimer();
+#else
+  UpdateMapScale();
 #endif
 
   // Render the moving map
