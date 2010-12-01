@@ -562,7 +562,7 @@ TaskManager::set_target(const unsigned TPindex, const fixed range,
 
   AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
   if (ap)
-    ap->set_target(range, radial);
+    ap->set_target(range, radial, task_ordered.get_task_projection());
 
   return true;
 }

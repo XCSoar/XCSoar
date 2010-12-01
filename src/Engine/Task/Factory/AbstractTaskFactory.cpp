@@ -424,7 +424,7 @@ AbstractTaskFactory::swap(const unsigned position, const bool auto_mutate)
   const OrderedTaskPoint* orig = m_task.getTaskPoint(position+1);
   OrderedTaskPoint* copy = orig->clone(m_behaviour, 
                                        get_ordered_task_behaviour(),
-                                       orig->get_task_projection(),
+                                       m_task.get_task_projection(),
                                        NULL);
   bool retval = insert(copy, position, auto_mutate);
   if (!retval) {

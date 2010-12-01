@@ -28,7 +28,6 @@ SampledTaskPoint::SampledTaskPoint(enum type _type, const TaskProjection& tp,
                                    const bool b_scored):
     TaskPoint(_type, wp, tb),
     m_boundary_scored(b_scored),
-    m_task_projection(tp),
     m_search_max(get_location(),tp),
     m_search_min(get_location(),tp),
     m_search_reference(get_location(),tp)
@@ -40,7 +39,8 @@ SampledTaskPoint::SampledTaskPoint(enum type _type, const TaskProjection& tp,
 
 bool 
 SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state,
-                                TaskEvents &task_events)
+                                TaskEvents &task_events,
+                                const TaskProjection &projection)
 {
   if (isInSector(state)) {
     // if sample is inside sample polygon
@@ -54,7 +54,7 @@ SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state,
       // do nothing
       return false;
     } else {
-      SearchPoint sp(state.Location, m_task_projection);
+      SearchPoint sp(state.Location, projection);
       m_sampled_points.push_back(sp);
       // only return true if hull changed 
       return prune_interior(m_sampled_points);
@@ -65,11 +65,12 @@ SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state,
 
 
 void 
-SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last) 
+SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last,
+                                            const TaskProjection &projection)
 {
   if (has_sampled()) {
     m_sampled_points.clear();
-    SearchPoint sp(ref_last.Location, m_task_projection);
+    SearchPoint sp(ref_last.Location, projection);
     m_sampled_points.push_back(sp);
   }
 }
@@ -79,34 +80,34 @@ SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last)
 #define fixed_steps fixed(0.05)
 
 void 
-SampledTaskPoint::update_oz() 
+SampledTaskPoint::update_oz(const TaskProjection &projection)
 { 
   m_search_max = m_search_reference;
   m_search_min = m_search_reference;
   m_boundary_points.clear();
   if (m_boundary_scored) {
     for (fixed t=fixed_zero; t<= fixed_one; t+= fixed_steps) {
-      SearchPoint sp(get_boundary_parametric(t), m_task_projection);
+      SearchPoint sp(get_boundary_parametric(t), projection);
       m_boundary_points.push_back(sp);
     }
     prune_interior(m_boundary_points);
   } else {
     m_boundary_points.push_back(m_search_reference);
   }
-  update_projection();
+  update_projection(projection);
 }
 
 // SAMPLES + BOUNDARY
 
 void 
-SampledTaskPoint::update_projection()
+SampledTaskPoint::update_projection(const TaskProjection &projection)
 {
-  m_search_max.project(m_task_projection);
-  m_search_min.project(m_task_projection);
-  m_search_reference.project(m_task_projection);
-  project(m_nominal_point, m_task_projection);
-  project(m_sampled_points, m_task_projection);
-  project(m_boundary_points, m_task_projection);
+  m_search_max.project(projection);
+  m_search_min.project(projection);
+  m_search_reference.project(projection);
+  project(m_nominal_point, projection);
+  project(m_sampled_points, projection);
+  project(m_boundary_points, projection);
 }
 
 
@@ -140,9 +141,10 @@ SampledTaskPoint::get_search_points() const
 
 
 void 
-SampledTaskPoint::set_search_min(const GeoPoint &location)
+SampledTaskPoint::set_search_min(const GeoPoint &location,
+                                 const TaskProjection &projection)
 {
-  SearchPoint sp(location, m_task_projection);
+  SearchPoint sp(location, projection);
   set_search_min(sp);
 }
 

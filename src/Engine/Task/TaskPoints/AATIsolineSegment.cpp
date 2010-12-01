@@ -24,8 +24,9 @@
 #include "Util/Tolerances.hpp"
 
 
-AATIsolineSegment::AATIsolineSegment(const AATPoint& ap):
-  AATIsoline(ap)
+AATIsolineSegment::AATIsolineSegment(const AATPoint& ap,
+                                     const TaskProjection &projection):
+  AATIsoline(ap, projection)
 {
   IsolineCrossingFinder icf_up(ap, ell, fixed_zero, fixed_half);
   IsolineCrossingFinder icf_down(ap, ell, -fixed_half, fixed_zero);

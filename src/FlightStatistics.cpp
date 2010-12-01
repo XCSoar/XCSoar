@@ -396,6 +396,7 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
 
   RenderObservationZone ozv(canvas, proj, settings_map);
   RenderTaskPoint tpv(canvas, proj, settings_map,
+                      task.get_task_projection(),
                       ozv, false, nmea_info.Location);
   ::RenderTask dv(tpv);
   dv.Visit(task);

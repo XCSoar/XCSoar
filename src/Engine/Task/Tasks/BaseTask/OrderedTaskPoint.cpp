@@ -69,11 +69,11 @@ OrderedTaskPoint::update_geometry() {
 
 
 void
-OrderedTaskPoint::update_oz()
+OrderedTaskPoint::update_oz(const TaskProjection &projection)
 {
   update_geometry();
 
-  SampledTaskPoint::update_oz();
+  SampledTaskPoint::update_oz(projection);
 }
 
 

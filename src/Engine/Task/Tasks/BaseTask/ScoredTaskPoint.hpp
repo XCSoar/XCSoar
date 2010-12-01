@@ -111,7 +111,8 @@ public:
  * @return True if observation zone is exited now
  */
   bool transition_exit(const AIRCRAFT_STATE &ref_now,
-                       const AIRCRAFT_STATE &ref_last);
+                       const AIRCRAFT_STATE &ref_last,
+                       const TaskProjection &projection);
 
 /** 
  * Retrieve location to be used for the scored task.

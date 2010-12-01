@@ -43,9 +43,11 @@ AATPoint::get_location_remaining() const
 
 bool 
 AATPoint::update_sample(const AIRCRAFT_STATE& state,
-                        TaskEvents &task_events) 
+                        TaskEvents &task_events,
+                        const TaskProjection &projection)
 {
-  bool retval = OrderedTaskPoint::update_sample(state,task_events);
+  bool retval = OrderedTaskPoint::update_sample(state, task_events,
+                                                projection);
 
   if (retval) {
     // deadzone must be updated
@@ -58,7 +60,7 @@ AATPoint::update_sample(const AIRCRAFT_STATE& state,
     m_deadzone = SearchPointVector(get_sample_points().begin(),
                                    get_sample_points().end());
     SearchPoint destination(get_next()->get_location_remaining(), 
-                            get_task_projection());
+                            projection);
     m_deadzone.push_back(destination);
     prune_interior(m_deadzone);
   }
@@ -181,13 +183,12 @@ AATPoint::set_target(const GeoPoint &loc, const bool override_lock)
 }
 
 void
-AATPoint::set_target(const fixed range, const fixed radial)
+AATPoint::set_target(const fixed range, const fixed radial,
+                     const TaskProjection &proj)
 {
   fixed oldrange = fixed_zero;
   fixed oldradial = fixed_zero;
   get_target_range_radial(oldrange, oldradial);
-
-  const TaskProjection &proj = get_task_projection();
 
   const FlatPoint fprev = proj.fproject(get_previous()->get_location_remaining());
   const FlatPoint floc = proj.fproject(get_location());

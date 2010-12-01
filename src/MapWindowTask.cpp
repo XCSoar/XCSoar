@@ -39,10 +39,11 @@ class RenderTaskPointMap: public RenderTaskPoint
 public:
   RenderTaskPointMap(Canvas &_canvas, const WindowProjection &_projection,
                      const SETTINGS_MAP &_settings_map,
+                     const TaskProjection &_task_projection,
                      RenderObservationZone &_ozv,
                      const bool draw_bearing,
                      const GeoPoint &location):
-    RenderTaskPoint(_canvas, _projection, _settings_map,
+    RenderTaskPoint(_canvas, _projection, _settings_map, _task_projection,
                     _ozv, draw_bearing, location)
     {};
 
@@ -76,6 +77,10 @@ MapWindow::DrawTask(Canvas &canvas)
 
   RenderObservationZone ozv(canvas, render_projection, SettingsMap());
   RenderTaskPointMap tpv(canvas, render_projection, SettingsMap(),
+                         /* we're accessing the OrderedTask here,
+                            which may be invalid at this point, but it
+                            will be used only if active, so it's ok */
+                         task_manager->get_ordered_task().get_task_projection(),
                          ozv, draw_bearing,
                          Basic().Location);
   RenderTask dv(tpv);

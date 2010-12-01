@@ -100,7 +100,8 @@ public:
    * @return True if internal state changed
    */
   bool update_sample(const AIRCRAFT_STATE& state,
-                     TaskEvents &task_events);
+                     TaskEvents &task_events,
+                     const TaskProjection &projection);
 
   /**
    * Retrieve elevation of taskpoint, taking into account
@@ -119,7 +120,8 @@ public:
    * @param next Next task point following the start
    */
   void find_best_start(const AIRCRAFT_STATE &state,
-                       const OrderedTaskPoint& next);
+                       const OrderedTaskPoint &next,
+                       const TaskProjection &projection);
 
 private:
   bool enabled; /**< For future use with multiple start points, whether enabled */

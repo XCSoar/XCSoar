@@ -36,6 +36,7 @@ class OrderedTaskPoint;
 class ContestManager;
 class Trace;
 class AATPoint;
+class TaskProjection;
 struct AIRCRAFT_STATE;
 struct GeoPoint;
 struct ContestResult;
@@ -64,6 +65,7 @@ public:
                                               const AIRCRAFT_STATE &state);
   static void aatpoint_print(std::ostream& f, const AATPoint& tp, 
                              const AIRCRAFT_STATE &state,
+                             const TaskProjection &projection,
                              const int item=0);
   static void contestmanager_print(const ContestManager& cm);
   static void trace_print(const Trace& trace, const GeoPoint &loc);

@@ -94,7 +94,8 @@ public:
  * @return True if internal state changed
  */
   bool update_sample(const AIRCRAFT_STATE& state,
-                     TaskEvents &task_events);
+                     TaskEvents &task_events,
+                     const TaskProjection &projection);
 
 /** 
  * Lock/unlock the target from automatic shifts
@@ -145,7 +146,8 @@ public:
  *
  * @param radial the bearing in degrees of the target
  */
-  void set_target(const fixed range, const fixed radial);
+  void set_target(const fixed range, const fixed radial,
+                  const TaskProjection &projection);
 
 /**
  * returns position of the target in signed range & radial as

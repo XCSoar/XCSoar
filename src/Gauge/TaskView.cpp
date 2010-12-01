@@ -29,6 +29,7 @@
 #include "RenderTaskPoint.hpp"
 #include "RenderTask.hpp"
 #include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
+#include "Engine/Task/Tasks/OrderedTask.hpp"
 
 static void
 PaintTask(Canvas &canvas, const WindowProjection &projection,
@@ -42,6 +43,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
 
   RenderObservationZone ozv(canvas, projection, settings_map);
   RenderTaskPoint tpv(canvas, projection, settings_map,
+                      task.get_task_projection(),
                       ozv, false, location);
   RenderTask dv(tpv);
   dv.Visit(task);

@@ -89,7 +89,7 @@ public:
    * Call this when any geometry or OZ parameters are changed
    * 
    */
-  void update_oz();
+  void update_oz(const TaskProjection &projection);
 
   /** 
    * Update observation zone geometry (or other internal data) when

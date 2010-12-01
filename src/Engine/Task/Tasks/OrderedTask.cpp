@@ -64,7 +64,7 @@ OrderedTask::update_geometry()
   task_projection.update_fast();
 
   for (OrderedTaskPointVector::iterator it = tps.begin(); it!= tps.end(); it++)
-    (*it)->update_oz();
+    (*it)->update_oz(task_projection);
 
   if (has_start()) {
     // update stats so data can be used during task construction
@@ -232,7 +232,7 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
     }
 
     bool transition_exit = false;
-    if (tps[i]->transition_exit(state, state_last)) {
+    if (tps[i]->transition_exit(state, state_last, task_projection)) {
       transition_exit = true;
       task_events.transition_exit(*tps[i]);
       
@@ -244,7 +244,7 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
     if ((activeTaskPoint == 0) && (i == 0))
       update_start_transition(state);
 
-    if (tps[i]->update_sample(state, task_events))
+    if (tps[i]->update_sample(state, task_events, task_projection))
       full_update = true;
 
     if (i == (int)activeTaskPoint) {
@@ -308,7 +308,8 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
       if (tps[activeTaskPoint]->type == TaskPoint::AAT) {
         AATPoint *ap = (AATPoint *)tps[activeTaskPoint];
         // very nasty hack
-        TaskOptTarget tot(tps, activeTaskPoint, state, glide_polar, *ap, ts);
+        TaskOptTarget tot(tps, activeTaskPoint, state, glide_polar,
+                          *ap, task_projection, ts);
         tot.search(fixed(0.5));
       }
     }
@@ -832,7 +833,7 @@ OrderedTask::update_start_transition(const AIRCRAFT_STATE &state)
   if (ts->isInSector(state)) {
     // @todo find boundary point that produces shortest
     // distance from state to that point to next tp point
-    ts->find_best_start(state, *tps[1]);
+    ts->find_best_start(state, *tps[1], task_projection);
   } else {
     // reset on invalid transition to outside
     // point to nominal start point

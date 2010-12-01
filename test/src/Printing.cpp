@@ -48,6 +48,7 @@ void
 PrintHelper::aatpoint_print(std::ostream& f, 
                             const AATPoint& tp,
                             const AIRCRAFT_STATE& state,
+                            const TaskProjection &projection,
                             const int item) 
 {
   switch(item) {
@@ -65,7 +66,7 @@ PrintHelper::aatpoint_print(std::ostream& f,
       // note in general this will only change if 
       // prev max or target changes
 
-      AATIsolineSegment seg(tp);
+      AATIsolineSegment seg(tp, projection);
       fixed tdist = tp.get_previous()->get_location_remaining().distance(
         tp.get_location_min());
       fixed rdist = tp.get_previous()->get_location_remaining().distance(
@@ -221,7 +222,8 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AIRCRAFT_STATE &state)
   for (unsigned i=0; i<task.tps.size(); i++) {
     fi << "## point " << i << "\n";
     if (task.tps[i]->type == TaskPoint::AAT) {
-      aatpoint_print(fi,(AATPoint&)*task.tps[i],state,1);
+      aatpoint_print(fi, (AATPoint&)*task.tps[i], state,
+                     task.get_task_projection(), 1);
     } else {
       orderedtaskpoint_print(fi,*task.tps[i],state,1);
     }
@@ -234,7 +236,8 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AIRCRAFT_STATE &state)
   for (unsigned i=0; i<task.tps.size(); i++) {
     f1 << "## point " << i << " ###################\n";
     if (task.tps[i]->type == TaskPoint::AAT) {
-      aatpoint_print(f1,(AATPoint&)*task.tps[i],state,0);
+      aatpoint_print(f1, (AATPoint&)*task.tps[i], state,
+                     task.get_task_projection(), 0);
     } else {
       orderedtaskpoint_print(f1,*task.tps[i],state,0);
     }

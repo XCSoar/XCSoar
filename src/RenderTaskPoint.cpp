@@ -40,12 +40,14 @@ Copyright_License {
 RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
                                  const WindowProjection &_projection,
                                  const SETTINGS_MAP &_settings_map,
+                                 const TaskProjection &_task_projection,
                                  RenderObservationZone &_ozv,
                                  const bool draw_bearing,
                                  const GeoPoint &location)
   :m_canvas(_canvas), m_buffer(_canvas), m_proj(_projection),
    map_canvas(_canvas, _projection),
    m_settings_map(_settings_map),
+   task_projection(_task_projection),
    m_draw_bearing(draw_bearing),
    pen_leg_active(Pen::DASH, IBLSCALE(2), Graphics::TaskColor),
    pen_leg_inactive(Pen::DASH, IBLSCALE(1), Graphics::TaskColor),
@@ -210,7 +212,7 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
   if (!tp.valid() || !do_draw_isoline(tp))
     return;
 
-  AATIsolineSegment seg(tp);
+  AATIsolineSegment seg(tp, task_projection);
   if (!seg.valid()) {
     return;
   }

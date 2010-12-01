@@ -55,6 +55,7 @@ public:
                 const AIRCRAFT_STATE &_aircraft,
                 const GlidePolar &_gp,
                 AATPoint& _tp_current,
+                const TaskProjection &projection,
                 StartPoint *_ts);
   virtual ~TaskOptTarget() {};
 

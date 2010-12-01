@@ -57,19 +57,21 @@ StartPoint::set_neighbours(OrderedTaskPoint* _prev,
 
 bool 
 StartPoint::update_sample(const AIRCRAFT_STATE& state,
-                          TaskEvents &task_events)
+                          TaskEvents &task_events,
+                          const TaskProjection &projection)
 {
   if (isInSector(state)) {
     if (!m_ordered_task_behaviour.check_start_speed(state, m_task_behaviour)) {
       task_events.warning_start_speed();
     }
   }
-  return OrderedTaskPoint::update_sample(state, task_events);
+  return OrderedTaskPoint::update_sample(state, task_events, projection);
 }
 
 void 
 StartPoint::find_best_start(const AIRCRAFT_STATE &state,
-                            const OrderedTaskPoint& next)
+                            const OrderedTaskPoint &next,
+                            const TaskProjection &projection)
 {
   class StartPointBestStart: public ZeroFinder {
   public:
@@ -101,7 +103,7 @@ StartPoint::find_best_start(const AIRCRAFT_STATE &state,
 
   StartPointBestStart solver(*this, state.Location,
                              next.get_location_remaining());
-  set_search_min(solver.solve());
+  set_search_min(solver.solve(), projection);
 }
 
 

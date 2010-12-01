@@ -98,7 +98,7 @@ public:
    * Construct boundary polygon from internal representation of observation zone.
    * Also updates projection.
    */
-  virtual void update_oz();
+  virtual void update_oz(const TaskProjection &projection);
 
   /**
    * Check if aircraft is within observation zone, and if so,
@@ -110,7 +110,8 @@ public:
    * @return True if internal state changed
    */
   virtual bool update_sample(const AIRCRAFT_STATE& state,
-                             TaskEvents &task_events);
+                             TaskEvents &task_events,
+                             const TaskProjection &projection);
 
   /**
    * Test if the task point has recorded presence of the aircraft
@@ -122,15 +123,6 @@ public:
   bool has_sampled() const {
     return !m_sampled_points.empty();
   }
-
-  /**
-   * Accessor for task projection
-   *
-   * @return Task projection used by this point
-   */
-  const TaskProjection &get_task_projection() const {
-    return m_task_projection;
-  };
 
   /**
    * Retrieve interior sample polygon (pure).
@@ -153,7 +145,8 @@ protected:
    * This is used, for exmaple, for StartPoints to only remember the last sample
    * prior to crossing the start.
    */
-  void clear_sample_all_but_last(const AIRCRAFT_STATE& state);
+  void clear_sample_all_but_last(const AIRCRAFT_STATE& state,
+                                 const TaskProjection &projection);
 
   const bool m_boundary_scored; /**< Whether boundaries are used in scoring distance, or just the reference point */
 
@@ -162,7 +155,8 @@ protected:
    *
    * @param location Location of min point
    */
-  void set_search_min(const GeoPoint &location);
+  void set_search_min(const GeoPoint &location,
+                      const TaskProjection &projection);
 
 private:
 
@@ -171,7 +165,7 @@ private:
    * Must be called if task_projection changes.
    *
    */
-  void update_projection();
+  void update_projection(const TaskProjection &projection);
 
   /**
    * Determines whether to 'cheat' a missed OZ prior to the current active task point.
@@ -220,8 +214,6 @@ private:
   void set_search_min(const SearchPoint &locmin) {
     m_search_min = locmin;
   }
-
-  const TaskProjection &m_task_projection;
 
   /**
    * Clear all sample points.

@@ -252,6 +252,9 @@ bool test_task_manip(TaskManager& task_manager,
 bool test_task_mixed(TaskManager& task_manager,
                      const Waypoints &waypoints)
 {
+  const TaskProjection &projection =
+    task_manager.get_ordered_task().get_task_projection();
+
   OrderedTaskPoint *tp;
   const Waypoint *wp;
 
@@ -265,7 +268,7 @@ bool test_task_mixed(TaskManager& task_manager,
     if (tp->get_oz()->shape == ObservationZonePoint::CYLINDER) {
       CylinderZone *cz = (CylinderZone *)tp->get_oz();
       cz->setRadius(fixed(5000.0));
-      tp->update_oz();
+      tp->update_oz(projection);
     }
     if (!fact.append(tp,false)) return false;
   } else {
@@ -291,7 +294,7 @@ bool test_task_mixed(TaskManager& task_manager,
     if (tp->get_oz()->shape == ObservationZonePoint::CYLINDER) {
       CylinderZone *cz = (CylinderZone *)tp->get_oz();
       cz->setRadius(fixed(30000.0));
-      tp->update_oz();
+      tp->update_oz(projection);
     }
     if (!fact.append(tp,false)) return false;
   } else {
@@ -314,7 +317,7 @@ bool test_task_mixed(TaskManager& task_manager,
     if (tp->get_oz()->shape == ObservationZonePoint::CYLINDER) {
       CylinderZone *cz = (CylinderZone *)tp->get_oz();
       cz->setRadius(fixed(30000.0));
-      tp->update_oz();
+      tp->update_oz(projection);
     }
     if (!fact.append(tp,false)) return false;
   } else {
@@ -399,6 +402,9 @@ bool test_task_fai(TaskManager& task_manager,
 bool test_task_aat(TaskManager& task_manager,
                    const Waypoints &waypoints)
 {
+  const TaskProjection &projection =
+    task_manager.get_ordered_task().get_task_projection();
+
   task_manager.set_factory(OrderedTask::FACTORY_AAT);
   AbstractTaskFactory &fact = task_manager.get_factory();
   const Waypoint *wp;
@@ -421,7 +427,7 @@ bool test_task_aat(TaskManager& task_manager,
     if (tp->get_oz()->shape == ObservationZonePoint::CYLINDER) {
       CylinderZone *cz = (CylinderZone *)tp->get_oz();
       cz->setRadius(fixed(30000.0));
-      tp->update_oz();
+      tp->update_oz(projection);
     }
     if (!fact.append(tp,false)) {
       return false;
@@ -435,7 +441,7 @@ bool test_task_aat(TaskManager& task_manager,
     if (tp->get_oz()->shape == ObservationZonePoint::CYLINDER) {
       CylinderZone *cz = (CylinderZone *)tp->get_oz();
       cz->setRadius(fixed(40000.0));
-      tp->update_oz();
+      tp->update_oz(projection);
     }
     if (!fact.append(tp,false)) {
       return false;
