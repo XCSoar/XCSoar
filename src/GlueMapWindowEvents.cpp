@@ -383,6 +383,16 @@ GlueMapWindow::on_paint(Canvas &canvas)
 }
 
 void
+GlueMapWindow::on_paint_buffer(Canvas &canvas)
+{
+#ifdef ENABLE_OPENGL
+  UpdateMapScale();
+#endif
+
+  MapWindow::on_paint_buffer(canvas);
+}
+
+void
 GlueMapWindow::Render(Canvas &canvas, const RECT &rc)
 {
   UpdateScreenAngle();

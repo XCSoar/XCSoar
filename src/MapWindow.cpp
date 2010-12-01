@@ -139,8 +139,6 @@ MapWindow::on_paint_buffer(Canvas &canvas)
 
   // Start the drawing timer (for drawing time calculation)
   StartTimer();
-#else
-  UpdateMapScale();
 #endif
 
   // Render the moving map
@@ -228,40 +226,6 @@ bool
 MapWindow::IsOriginCentered(const DisplayOrientation_t orientation)
 {
   return (orientation != TRACKUP);
-}
-
-void
-MapWindow::UpdateMapScale()
-{
-  if (SettingsMap().TargetPan) {
-    // set scale exactly so that waypoint distance is the zoom factor
-    // across the screen
-    fixed wpd = SettingsMap().TargetZoomDistance;
-    wpd = max(fixed_int_constant(50), min(fixed_int_constant(160000), wpd / 4));
-    visible_projection.SetMapScale(wpd);
-    return;
-  }
-
-  fixed wpd = Calculated().AutoZoomDistance;
-  if (SettingsMap().AutoZoom && positive(wpd)) {
-    DisplayOrientation_t orientation =
-        (GetDisplayMode() == dmCircling) ?
-            SettingsMap().OrientationCircling : SettingsMap().OrientationCruise;
-
-    fixed AutoZoomFactor =
-        IsOriginCentered(orientation) ? fixed(2.5) : fixed_four;
-
-    if (wpd < AutoZoomFactor * visible_projection.GetMapScale()) {
-      // waypoint is too close, so zoom in
-
-      // set scale exactly so that waypoint distance is the zoom factor
-      // across the screen
-      wpd = max(fixed_int_constant(440), min(fixed_int_constant(160000),
-                                             wpd / AutoZoomFactor));
-
-      visible_projection.SetMapScale(wpd);
-    }
-  }
 }
 
 void

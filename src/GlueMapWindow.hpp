@@ -144,6 +144,7 @@ protected:
   virtual bool on_setfocus();
   virtual bool on_cancel_mode();
   virtual void on_paint(Canvas &canvas);
+  virtual void on_paint_buffer(Canvas& canvas);
 
 private:
 
@@ -177,6 +178,7 @@ private:
   void UpdateScreenAngle();
 
 public:
+  void UpdateMapScale();
   void UpdateDisplayMode();
   void SetMapScale(const fixed x);
 };

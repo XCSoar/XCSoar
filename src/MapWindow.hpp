@@ -200,8 +200,6 @@ public:
    */
   virtual void Render(Canvas &canvas, const RECT &rc);
 
-  void UpdateMapScale();
-
 protected:
   void UpdateProjection();
 
