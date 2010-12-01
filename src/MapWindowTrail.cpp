@@ -44,24 +44,7 @@ fSnailColour(fixed cv)
 void
 MapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
-  unsigned min_time = 0;
-
-  if (GetDisplayMode() == dmCircling) {
-    min_time = max(0, (int)Basic().Time - 600);
-  } else {
-    switch(SettingsMap().TrailActive) {
-    case 1:
-      min_time = max(0, (int)Basic().Time - 3600);
-      break;
-    case 2:
-      min_time = max(0, (int)Basic().Time - 600);
-      break;
-    case 3:
-      min_time = 0; // full
-      break;
-    }
-  }
-
+  unsigned min_time = max(0, (int)Basic().Time - 600);
   DrawTrail(canvas, aircraft_pos, min_time);
 }
 

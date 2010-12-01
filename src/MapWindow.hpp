@@ -184,7 +184,7 @@ public:
 
   void DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
                  unsigned min_time) const;
-  void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;
+  virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;
   void DrawTeammate(Canvas &canvas) const;
   void DrawTask(Canvas &canvas);
   void DrawTaskOffTrackIndicator(Canvas &canvas);
