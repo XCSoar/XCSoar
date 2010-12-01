@@ -34,7 +34,7 @@ ZoomClimb_t::ZoomClimb_t():
 void
 GlueMapWindow::SetMapScale(const fixed x)
 {
-  visible_projection.SetMapScale(x);
+  MapWindow::SetMapScale(x);
 
   if (!SettingsMap().TargetPan) {
     if (GetDisplayMode() == dmCircling && SettingsMap().CircleZoom)

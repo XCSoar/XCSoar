@@ -278,6 +278,8 @@ public:
     return DisplayMode;
   }
 
+  void SetMapScale(const fixed x);
+
 protected:
   DisplayMode_t DisplayMode;
 };

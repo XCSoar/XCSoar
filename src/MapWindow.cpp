@@ -221,3 +221,9 @@ MapWindow::get_glide_polar() const
 {
   return task != NULL ? task->get_glide_polar() : GlidePolar(fixed_zero);
 }
+
+void
+MapWindow::SetMapScale(const fixed x)
+{
+  visible_projection.SetMapScale(x);
+}
