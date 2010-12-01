@@ -50,7 +50,7 @@ GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
   /* update the Projection */
 
   UpdateScreenAngle();
-  Update();
+  UpdateProjection();
 
   ++ui_generation;
 

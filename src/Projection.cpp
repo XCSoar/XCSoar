@@ -31,6 +31,8 @@ Projection::Projection() :
   ScreenRotation(Angle::native(fixed_zero)),
   scale(fixed_one)
 {
+  ScreenOrigin.x = 0;
+  ScreenOrigin.y = 0;
 }
 
 fixed

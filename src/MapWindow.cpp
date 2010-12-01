@@ -68,6 +68,8 @@ MapWindow::set(ContainerWindow &parent, const RECT &rc)
   // initialize other systems
   visible_projection.SetMapRect(get_client_rect());
   visible_projection.SetMapScale(fixed_int_constant(5000));
+  visible_projection.SetScreenOrigin((rc.left + rc.right) / 2,
+                                     (rc.bottom + rc.top) / 2);
 
 #ifndef ENABLE_OPENGL
   buffer_projection = visible_projection;
@@ -266,12 +268,10 @@ MapWindow::UpdateMapScale()
 }
 
 void
-MapWindow::Update()
+MapWindow::UpdateProjection()
 {
   const RECT rc = get_client_rect();
   const SETTINGS_MAP &settings_map = SettingsMap();
-
-  visible_projection.SetMapRect(rc);
 
   DisplayOrientation_t orientation =
       (GetDisplayMode() == dmCircling) ?
@@ -286,11 +286,10 @@ MapWindow::Update()
         ((rc.top - rc.bottom) * settings_map.GliderScreenPosition / 100) + rc.bottom);
 
   if (settings_map.EnablePan)
-    visible_projection.SetGeoLocation(settings_map.PanLocation);
+    SetLocation(settings_map.PanLocation);
   else
     // Pan is off
-    visible_projection.SetGeoLocation(Basic().Location);
+    SetLocation(Basic().Location);
 
   visible_projection.UpdateScreenBounds();
 }
-

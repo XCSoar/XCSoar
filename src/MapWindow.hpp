@@ -162,6 +162,10 @@ public:
     return visible_projection;
   }
 
+  void SetLocation(const GeoPoint location) {
+    visible_projection.SetGeoLocation(location);
+  }
+
 private:
   RasterPoint Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS];
 
@@ -183,15 +187,12 @@ public:
 
   void DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;
   void DrawTeammate(Canvas &canvas) const;
-  void DrawProjectedTrack(Canvas &canvas) const;
   void DrawTask(Canvas &canvas);
   void DrawTaskOffTrackIndicator(Canvas &canvas);
   void DrawThermalEstimate(Canvas &canvas) const;
 
   void DrawGlideThroughTerrain(Canvas &canvas) const;
   void DrawTerrainAbove(Canvas &canvas);
-
-  //  void DrawSpeedToFly(HDC hDC, RECT rc);
   void DrawFLARMTraffic(Canvas &canvas, const RasterPoint aircraft_pos) const;
 
   // thread, main functions
@@ -205,7 +206,7 @@ public:
   void UpdateMapScale();
 
 protected:
-  void Update();
+  void UpdateProjection();
 
   void UpdateTopology();
   void UpdateTerrain();
