@@ -311,7 +311,7 @@ AbstractTaskFactory::replace(OrderedTaskPoint *new_tp, const unsigned position,
       // delete original since we own it now
       delete new_tp;
       return m_task.replace(sp, position);
-    } else if (position + 1 == m_task.task_size()) {
+    } else if (is_position_finish(position) && (position + 1 == m_task.task_size())) {
       // this point must be mutated into a finish
       FinishPoint* sp = createFinish(new_tp->get_waypoint());
       // delete original since we own it now
@@ -390,7 +390,7 @@ AbstractTaskFactory::remove(const unsigned position,
         StartPoint* sp = createStart(m_task.getTaskPoint(1)->get_waypoint());
         return m_task.remove(0) && m_task.replace(sp, 0);
       }
-    } else if (position + 1 == m_task.task_size()) {
+    } else if (is_position_finish(position - 1) && (position + 1 == m_task.task_size())) {
       // create new finish from previous point
       FinishPoint* sp = createFinish(
           m_task.getTaskPoint(position - 1)->get_waypoint());
