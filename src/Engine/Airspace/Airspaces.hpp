@@ -36,6 +36,26 @@ class AirspaceIntersectionVisitor;
 /**
  * Container for airspaces using kd-tree representation internally for fast 
  * geospatial lookups.
+ *
+ * Complexity analysis (with kdtree):
+ *   
+ *    Find within range (k points found):
+ *     O(n^(3/4) + k)
+ *
+ *    Find intersecting:
+ *     O(n^(3/4) + k)
+ *
+ *    Find nearest:
+ *     O(log(n))
+ *
+ *  Without kd-tree:
+ *
+ *    Find within range:
+ *     O(n)
+ *    Find intersecting:
+ *     O(n)
+ *    Find nearest:
+ *     O(n)
  */
 
 class Airspaces:
