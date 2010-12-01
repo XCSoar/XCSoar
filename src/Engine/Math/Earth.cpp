@@ -272,6 +272,7 @@ GeoPoint
 FindLatitudeLongitude(GeoPoint loc, Angle Bearing, 
                       fixed Distance)
 {
+  assert(!negative(Distance));
   if (!positive(Distance))
     return loc;
 
