@@ -35,6 +35,8 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
   const MapWindowProjection &projection = render_projection;
 
   if (GetDisplayMode() == dmCircling) {
+
+    // in circling mode, draw thermal at actual estimated location
     if (Calculated().ThermalEstimate_Valid) {
       RasterPoint sc;
       if (projection.GeoToScreenIfVisible(Calculated().ThermalEstimate_Location, sc)) {
@@ -42,20 +44,34 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
       }
     }
   } else if (projection.GetMapScale() <= fixed(4000)) {
+
+    // draw only at close map scales in non-circling mode
+    // draw thermal at location it would be at the glider's height
+
     for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
+
+      // trivial/bad thermal, don't draw it
       if (!positive(Calculated().ThermalSources[i].LiftRate))
         continue;
 
+      // find height difference
       fixed dh =
           Basic().NavAltitude - Calculated().ThermalSources[i].GroundHeight;
       if (negative(dh))
         continue;
 
-      fixed t = -dh / Calculated().ThermalSources[i].LiftRate;
+      // convert height difference to thermal rise time
+      fixed t = dh / Calculated().ThermalSources[i].LiftRate;
+
+      // find estimated location of thermal at glider's height by
+      // projecting the thermal to drift at wind speed for thermal rise time
+      // to reach the glider's height.
+
       GeoPoint loc =
           FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
-                                Basic().wind.bearing, Basic().wind.norm * t);
+                                Basic().wind.bearing.Reciprocal(), Basic().wind.norm * t);
 
+      // draw if it is in the field of view
       RasterPoint pt;
       if (render_projection.GeoToScreenIfVisible(loc, pt))
         Graphics::hBmpThermalSource.draw(canvas, pt);
