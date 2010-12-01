@@ -26,6 +26,9 @@
 SearchPoint::SearchPoint(const GeoPoint &loc, 
                          const TaskProjection& tp):
   ReferencePoint(loc),
+#ifndef NDEBUG
+  projected(true),
+#endif
   flatLocation(tp.project(loc))
 {      
 }
@@ -35,4 +38,8 @@ void
 SearchPoint::project(const TaskProjection& tp) 
 {
   flatLocation = tp.project(get_location());
+
+#ifndef NDEBUG
+  projected = true;
+#endif
 }

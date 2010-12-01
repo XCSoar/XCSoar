@@ -26,6 +26,8 @@
 #include "Navigation/Flat/FlatGeoPoint.hpp"
 #include "Navigation/ReferencePoint.hpp"
 
+#include <assert.h>
+
 class TaskProjection;
 
 /**
@@ -34,15 +36,27 @@ class TaskProjection;
 class SearchPoint: 
   public ReferencePoint 
 {
+#ifndef NDEBUG
+  bool projected;
+#endif
+
 public:
   /** 
    * Dummy constructor
    * 
    * @return Null object
    */
-  SearchPoint():ReferencePoint(GeoPoint()) {}
+  SearchPoint():ReferencePoint(GeoPoint())
+#ifndef NDEBUG
+               , projected(false)
+#endif
+  {}
 
-  SearchPoint(const GeoPoint &loc):ReferencePoint(loc) {}
+  SearchPoint(const GeoPoint &loc):ReferencePoint(loc)
+#ifndef NDEBUG
+                                  , projected(false)
+#endif
+  {}
 
 /** 
  * Constructor
@@ -66,6 +80,8 @@ public:
  * @return Flat projected coordinate
  */
   const FlatGeoPoint& get_flatLocation() const {
+    assert(projected);
+
     return flatLocation;
   };
 
