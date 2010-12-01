@@ -184,6 +184,13 @@ public:
   void UpdateMapScale();
   void UpdateDisplayMode();
   void SetMapScale(const fixed x);
+
+  DisplayMode_t GetDisplayMode() const {
+    return DisplayMode;
+  }
+
+protected:
+  DisplayMode_t DisplayMode;
 };
 
 #endif

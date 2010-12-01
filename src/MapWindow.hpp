@@ -276,14 +276,7 @@ private:
   friend class DrawThread;
 
 public:
-  DisplayMode_t GetDisplayMode() const {
-    return DisplayMode;
-  }
-
   void SetMapScale(const fixed x);
-
-protected:
-  DisplayMode_t DisplayMode;
 };
 
 #endif
