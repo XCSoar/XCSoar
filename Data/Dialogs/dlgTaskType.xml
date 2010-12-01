@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <Form Name="frmTaskType" Width="240" Height="320" Caption="Task Type">
-  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="60" Height="22" OnClick="OnCloseClicked"/>
-  <Button Name="cmdSelect" Caption="Select" X="150" Y="2" Width="60" Height="22" OnClick="OnSelectClicked"/>
+  <Button Name="cmdClose" Caption="Cancel" X="150" Y="2" Width="60" Height="22" OnClick="OnCloseClicked"/>
+  <Button Name="cmdSelect" Caption="Select" X="2" Y="2" Width="60" Height="22" OnClick="OnSelectClicked"/>
 
   <List Name="frmTaskTypes" X="2" Y="26" Width="-2" Height="-54" ItemHeight="18"/>
 

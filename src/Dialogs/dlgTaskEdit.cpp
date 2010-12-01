@@ -78,14 +78,26 @@ OnNewClicked(WndButton &Sender)
 {
   (void)Sender;
 
+  OrderedTask::Factory_t new_type = OrderedTask::FACTORY_FAI_GENERAL;
+  if (dlgTaskTypeShowModal(*parent_window, &ordered_task, new_type)) {
+    ordered_task->clear();
+    ordered_task->set_factory(new_type);
+  }
+
+  RefreshView();
+}
+
+static void
+OnClearClicked(WndButton &Sender)
+{
+  (void)Sender;
+
   if ((ordered_task->task_size() < 2) ||
       (MessageBoxX(_("Clear task?"),
                    _("Task edit"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
-    task_modified = true;
     ordered_task->clear();
-    RefreshView();
-    dlgTaskTypeShowModal(*parent_window, &ordered_task);
+    ordered_task->set_factory(ordered_task->get_factory_type());
     RefreshView();
   }
 }
@@ -233,6 +245,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnPropertiesClicked),
   DeclareCallBackEntry(OnNewClicked),
+  DeclareCallBackEntry(OnClearClicked),
   DeclareCallBackEntry(OnMoveUpClicked),
   DeclareCallBackEntry(OnMoveDownClicked),
   DeclareCallBackEntry(OnTaskPaint),

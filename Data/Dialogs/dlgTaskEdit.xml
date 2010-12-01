@@ -9,8 +9,9 @@
 
   <List Name="frmTaskPoints" X="2" Y="26" Width="234" Height="129" ItemHeight="18"/>
 
-  <Button Name="cmdNew" Caption="Clear" X="2" Y="158" Width="77" Height="22" OnClick="OnNewClicked"/>
+  <Button Name="cmdNew" Caption="New" X="2" Y="158" Width="77" Height="22" OnClick="OnNewClicked"/>
   <Button Name="cmdProperties" Caption="Properties" X="81" Y="158" Width="77" Height="22" OnClick="OnPropertiesClicked"/>
+  <Button Name="cmdClear" Caption="Clear" X="160" Y="158" Width="77" Height="22" OnClick="OnClearClicked"/>
 
   <Label Name="frmSummary" X="119" Y="184" Width="-2" Height="118" Border="1"/>
 </Form>

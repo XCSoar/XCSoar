@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Dialogs/ListPicker.hpp"
+#include "Task/Tasks/OrderedTask.hpp"
 
 #include <tchar.h>
 #include "Util/tstring.hpp"
@@ -114,8 +115,14 @@ dlgTaskPropertiesShowModal(SingleWindow &parent, OrderedTask** task);
 bool
 dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task);
 
+/**
+ *
+ * @param task - not modified
+ * @param task_type_returned type of task selected in UI
+ * @return true if OK was clicked, false if Cancel was clicked
+ */
 bool
-dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task);
+dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task, OrderedTask::Factory_t& task_type_returned);
 
 bool
 dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task, const unsigned index);

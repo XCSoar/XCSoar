@@ -83,25 +83,7 @@ static void OnCloseClicked(WndButton &Sender)
 static void
 OnSelect()
 {
-  if (ordered_task->get_factory_type() == get_cursor_type()) {
-    // no change
-    wf->SetModalResult(mrOK);
-    return;
-  }
-  bool apply = false;
-  if (!ordered_task->task_size()) {
-    apply = true;
-    // empty task, don't ask confirmation
-  } else if (MessageBoxX(_("Change task type?"),
-                  _("Task Type"),
-                  MB_YESNO|MB_ICONQUESTION) == IDYES) {
-    apply = true;
-  }
-  if (apply) {
-    task_modified |= true;
-    ordered_task->set_factory(get_cursor_type());
-    wf->SetModalResult(mrOK);
-  }
+  wf->SetModalResult(mrOK);
 }
 
 static void
@@ -127,9 +109,16 @@ static CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
+/**
+ *
+ * @param task - not modified
+ * @param task_type_returned type of task selected in UI
+ * @return true if OK was clicked, false if Cancel was clicked
+ */
 bool
-dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task)
+dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task, OrderedTask::Factory_t& task_type_returned)
 {
+  bool bRetVal = false;
   ordered_task = *task;
   parent_window = &parent;
   task_modified = false;
@@ -169,13 +158,12 @@ dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task)
   assert(wf!=NULL);
 
   if (wf->ShowModal()== mrOK) {
-    if (*task != ordered_task) {
-      *task = ordered_task;
-    }
+    bRetVal = true;
   }
+  task_type_returned = get_cursor_type();
 
   delete wf;
   wf = NULL;
 
-  return task_modified;
+  return bRetVal;
 }

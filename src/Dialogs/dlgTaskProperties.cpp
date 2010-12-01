@@ -204,8 +204,16 @@ static void OnCloseClicked(WndButton &Sender)
 static void OnTypeClicked(WndButton &Sender)
 {
   (void)Sender;
-  dlgTaskTypeShowModal(*parent_window, &ordered_task);
-  RefreshView();
+
+ OrderedTask::Factory_t new_type = OrderedTask::FACTORY_FAI_GENERAL;
+
+ if (dlgTaskTypeShowModal(*parent_window, &ordered_task, new_type)) {
+   if (new_type != ordered_task->get_factory_type()) {
+     ordered_task->set_factory(new_type);
+     /* todo implement: ordered_task->get_factory().mutate_tps_to_task_type(); */
+     task_changed = true;
+   }
+ }  RefreshView();
 }
 
 static CallBackTableEntry CallBackTable[]={
