@@ -41,11 +41,17 @@ TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps
   }
 }
 
+#define SOLVE_ZERO
+
 fixed 
 TaskSolveTravelled::time_error() 
 {
   res = tm.glide_solution(aircraft);
+#ifdef SOLVE_ZERO
+  fixed d = res.TimeElapsed-dt;
+#else
   fixed d = fabs(res.TimeElapsed-dt);
+#endif
   if (res.Solution!=GlideResult::RESULT_OK) {
     d += res.TimeVirtual;
   }
@@ -55,5 +61,9 @@ TaskSolveTravelled::time_error()
 fixed 
 TaskSolveTravelled::search(const fixed ce) 
 {
+#ifdef SOLVE_ZERO
+  return find_zero(ce);
+#else
   return find_min(ce);
+#endif
 }
