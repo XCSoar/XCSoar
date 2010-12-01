@@ -183,7 +183,7 @@ public:
   void DrawWaypoints(Canvas &canvas);
 
   void DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
-                 unsigned min_time) const;
+                 unsigned min_time, bool enable_traildrift = false) const;
   virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;
   void DrawTeammate(Canvas &canvas) const;
   void DrawTask(Canvas &canvas);

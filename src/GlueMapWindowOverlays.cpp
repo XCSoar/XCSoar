@@ -676,5 +676,6 @@ GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
     }
   }
 
-  DrawTrail(canvas, aircraft_pos, min_time);
+  DrawTrail(canvas, aircraft_pos, min_time,
+            SettingsMap().EnableTrailDrift && GetDisplayMode() == dmCircling);
 }
