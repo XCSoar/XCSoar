@@ -1126,7 +1126,7 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
   const AIRCRAFT_STATE aircraft_state =
       ToAircraftState(XCSoarInterface::Basic());
   AirspaceVisible visible(XCSoarInterface::SettingsComputer(),
-                          XCSoarInterface::Basic().GetAltitudeBaroPreferred());
+                          ToAircraftState(XCSoarInterface::Basic()));
   GlidePolar polar = protected_task_manager.get_glide_polar();
   polar.set_mc(max(polar.get_mc(),fixed_one));
   AirspaceAircraftPerformanceGlide perf(polar);

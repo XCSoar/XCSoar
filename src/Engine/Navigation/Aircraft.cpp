@@ -30,6 +30,7 @@ AIRCRAFT_STATE::get_predicted_state(const fixed &in_time) const
   GeoVector vec(Speed * in_time, TrackBearing);
   state_next.Location = vec.end_point(Location);
   state_next.NavAltitude += Vario * in_time;
+  state_next.AirspaceAltitude += Vario * in_time;
   return state_next;
 }
 
@@ -41,6 +42,7 @@ AIRCRAFT_STATE::AIRCRAFT_STATE():
 
 ALTITUDE_STATE::ALTITUDE_STATE():
   NavAltitude(fixed_zero),
+  AirspaceAltitude(fixed_zero),
   working_band_fraction(fixed_one),
   AltitudeAGL(fixed_zero)
 {

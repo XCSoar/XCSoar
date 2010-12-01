@@ -489,6 +489,11 @@ ToAircraftState(const NMEA_INFO &info)
   aircraft.NavAltitude = info.NavAltitude;
   aircraft.working_band_fraction = info.working_band_fraction;
   aircraft.AltitudeAGL = info.AltitudeAGL;
+  if (info.BaroAltitudeAvailable) {
+    aircraft.AirspaceAltitude = info.BaroAltitude;
+  } else {
+    aircraft.AirspaceAltitude = info.GPSAltitude;
+  }
 
   /* VARIO_INFO */
   aircraft.Vario = info.TotalEnergyVario;

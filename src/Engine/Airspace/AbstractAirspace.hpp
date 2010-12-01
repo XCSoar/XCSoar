@@ -180,13 +180,16 @@ public:
     return m_base.is_terrain();
   }
 
+  const AIRSPACE_ALT& get_base() const { return m_base; }
+  const AIRSPACE_ALT& get_top() const { return m_top; }
+
 /** 
  * Get base altitude
  * 
  * @return Altitude AMSL (m) of base
  */
-  fixed get_base_altitude() const {
-    return m_base.Altitude;
+  fixed get_base_altitude(const AIRCRAFT_STATE& state) const {
+    return m_base.get_altitude(state);
   }
 
 /** 
@@ -194,8 +197,8 @@ public:
  * 
  * @return Altitude AMSL (m) of top
  */
-  fixed get_top_altitude() const {
-    return m_top.Altitude;
+  fixed get_top_altitude(const AIRCRAFT_STATE& state) const {
+    return m_top.get_altitude(state);
   }
 
 /**

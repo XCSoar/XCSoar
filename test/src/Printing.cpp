@@ -496,7 +496,7 @@ TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
 std::ostream& operator<< (std::ostream& f, 
                           const AirspaceCircle& as)
 {
-  f << "# circle " << as.get_base_altitude() << " " << as.get_top_altitude() << "\n";
+  f << "# circle " << (int)as.get_base().Altitude << " " << (int)as.get_top().Altitude << "\n";
   for (double t=0; t<=360; t+= 30) {
     GeoPoint l = FindLatitudeLongitude(as.m_center, Angle::degrees(fixed(t)), as.m_radius);
     f << l.Longitude << " " << l.Latitude << "\n";
@@ -510,7 +510,7 @@ std::ostream& operator<< (std::ostream& f,
 std::ostream& operator<< (std::ostream& f, 
                           const AirspacePolygon& as)
 {
-  f << "# polygon " << as.get_base_altitude() << " " << as.get_top_altitude() << "\n";
+  f << "# polygon " << (int)as.get_base().Altitude << " " << (int)as.get_top().Altitude << "\n";
   for (std::vector<SearchPoint>::const_iterator v = as.m_border.begin();
        v != as.m_border.end(); ++v) {
     GeoPoint l = v->get_location();

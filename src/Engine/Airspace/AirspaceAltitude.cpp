@@ -21,6 +21,7 @@
 */
 #include "AirspaceAltitude.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "Navigation/Aircraft.hpp"
 
 #include <stdio.h>
 
@@ -69,4 +70,22 @@ AIRSPACE_ALT::get_as_text(const bool concise) const
     return tstring(buffer) + second;
   } else
     return tstring(buffer);
+}
+
+
+bool AIRSPACE_ALT::is_above  (const AIRCRAFT_STATE& state,
+                              const fixed margin) const {
+  return get_altitude(state) >= state.AirspaceAltitude - margin;
+}
+
+bool AIRSPACE_ALT::is_below  (const AIRCRAFT_STATE& state,
+                              const fixed margin) const {
+  return get_altitude(state) <= state.AirspaceAltitude + margin;
+}
+
+fixed AIRSPACE_ALT::get_altitude(const AIRCRAFT_STATE& state) const {
+  if (Base== abAGL) {
+    return AGL + (state.NavAltitude-state.AltitudeAGL);
+  }
+  return Altitude;
 }

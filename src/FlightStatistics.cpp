@@ -563,8 +563,9 @@ class AirspaceIntersectionVisitorSlice: public AirspaceIntersectionVisitor
 public:
   AirspaceIntersectionVisitorSlice(Canvas &canvas, Chart &chart,
                                    const SETTINGS_MAP &settings,
-                                   const GeoPoint start) :
-    m_canvas(canvas), m_chart(chart), m_settings(settings), m_start(start)
+                                   const GeoPoint start,
+                                   const AIRCRAFT_STATE& state) :
+    m_canvas(canvas), m_chart(chart), m_settings(settings), m_start(start), m_state(state)
   {
   }
 
@@ -583,11 +584,11 @@ public:
     m_canvas.set_text_color(Graphics::GetAirspaceColourByClass(type, m_settings));
 
     RECT rcd;
-    rcd.top = m_chart.screenY(as.get_top_altitude());
+    rcd.top = m_chart.screenY(as.get_top_altitude(m_state));
     if (as.is_base_terrain())
       rcd.bottom = m_chart.screenY(fixed_zero);
     else
-      rcd.bottom = m_chart.screenY(as.get_base_altitude());
+      rcd.bottom = m_chart.screenY(as.get_base_altitude(m_state));
     
     for (AirspaceIntersectionVector::const_iterator it = m_intersections.begin();
          it != m_intersections.end(); ++it) {
@@ -633,6 +634,7 @@ private:
   Chart& m_chart;
   const SETTINGS_MAP& m_settings;
   const GeoPoint m_start;
+  const AIRCRAFT_STATE& m_state;
 };
 
 void
@@ -658,7 +660,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
   chart.ScaleYFromValue(hmax);
 
   // draw airspaces
-  AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, p_start);
+  AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, p_start, ToAircraftState(nmea_info));
   airspace_database.visit_intersecting(p_start, vec, ivisitor);
 
   // draw terrain

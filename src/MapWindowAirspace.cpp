@@ -80,9 +80,9 @@ class AirspaceMapVisible: public AirspaceVisible
 {
 public:
   AirspaceMapVisible(const SETTINGS_COMPUTER& _settings, 
-                     const fixed& _altitude, const bool& _border,
+                     const AIRCRAFT_STATE& _state, const bool& _border,
                      const AirspaceWarningCopy& warnings):
-    AirspaceVisible(_settings, _altitude),
+    AirspaceVisible(_settings, _state),
     m_border(_border),
     m_warnings(warnings)
     {
@@ -259,7 +259,7 @@ MapWindow::DrawAirspace(Canvas &canvas)
                         SettingsMap());
   AirspaceVisitorMap v(helper, awc);
   const AirspaceMapVisible visible(SettingsComputer(),
-                                   Basic().GetAltitudeBaroPreferred(),
+                                   ToAircraftState(Basic()),
                                    false, awc);
 
   // JMW TODO wasteful to draw twice, can't it be drawn once?

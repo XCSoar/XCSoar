@@ -243,7 +243,7 @@ private:
     if (!positive(m_max_alt)) {
       return false;
     }
-    return (airspace.get_base_altitude()> m_max_alt);
+    return (airspace.get_base_altitude(m_state)> m_max_alt);
   }
 
 
@@ -271,7 +271,7 @@ AirspaceWarningManager::update_predicted(const AIRCRAFT_STATE& state,
   // collected for it.  It is very unlikely users will have more than 1000m
   // in AltWarningMargin anyway.
 
-  const fixed ceiling = state.NavAltitude + fixed(max((unsigned)1000, config.AltWarningMargin));
+  const fixed ceiling = state.AirspaceAltitude + fixed(max((unsigned)1000, config.AltWarningMargin));
 
   AirspaceIntersectionWarningVisitor visitor(state, perf, 
                                              *this, 

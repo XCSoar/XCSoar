@@ -31,8 +31,7 @@ AircraftStateFilter::AircraftStateFilter(const AIRCRAFT_STATE& state,
   m_lpf_y(cutoff_wavelength),
   m_lpf_alt(cutoff_wavelength),
   m_x(fixed_zero),
-  m_y(fixed_zero),
-  m_alt(state.NavAltitude)
+  m_y(fixed_zero)
 {
   reset(state);
 }
@@ -44,7 +43,6 @@ AircraftStateFilter::reset(const AIRCRAFT_STATE& state)
 
   m_x = fixed_zero;
   m_y = fixed_zero;
-  m_alt = state.NavAltitude;
 
   m_vx = fixed_zero;
   m_vy = fixed_zero;
@@ -55,16 +53,12 @@ AircraftStateFilter::reset(const AIRCRAFT_STATE& state)
   m_lpf_alt.reset(fixed_zero);
   m_df_x.reset(m_x, fixed_zero);
   m_df_y.reset(m_y, fixed_zero);
-  m_df_alt.reset(m_alt, fixed_zero);
+  m_df_alt.reset(state.NavAltitude, fixed_zero);
 }
 
 void 
 AircraftStateFilter::update(const AIRCRAFT_STATE& state)
 {
-  // \todo
-  // Should be able to use TrackBearing and Speed,
-  // but for now, use low-level functions
-
   fixed dt = state.Time- m_state_last.Time;
 
   if (negative(dt)) {
@@ -75,11 +69,10 @@ AircraftStateFilter::update(const AIRCRAFT_STATE& state)
   GeoVector vec(m_state_last.Location, state.Location);
   m_x+= vec.Bearing.sin()*vec.Distance;
   m_y+= vec.Bearing.cos()*vec.Distance;
-  m_alt = state.NavAltitude;
 
   m_vx = m_lpf_x.update(m_df_x.update(m_x));
   m_vy = m_lpf_y.update(m_df_y.update(m_y));
-  m_vz = m_lpf_alt.update(m_df_alt.update(m_alt));
+  m_vz = m_lpf_alt.update(m_df_alt.update(state.NavAltitude));
 
   m_state_last = state;
 }
@@ -120,5 +113,8 @@ AircraftStateFilter::get_predicted_state(const fixed &in_time) const
   GeoVector vec(get_speed()*in_time, get_bearing());
   state_next.Location = vec.end_point(m_state_last.Location);
   state_next.NavAltitude = m_state_last.NavAltitude+get_climb_rate()*in_time;
+  state_next.AirspaceAltitude = m_state_last.AirspaceAltitude+get_climb_rate()*in_time;
+  state_next.Speed = get_speed();
+  state_next.Vario = get_climb_rate();
   return state_next;
 }

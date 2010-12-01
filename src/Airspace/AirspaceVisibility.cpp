@@ -38,36 +38,17 @@ AirspaceVisible::altitude_visible(const AbstractAirspace& airspace) const
   /// @todo airspace visibility did use ToMSL(..., map.Calculated().TerrainAlt); 
 
   switch (m_settings.AltitudeMode) {
-
   case ALLON:
     return true;
-
   case CLIP:
-    if (airspace.get_base_altitude() <= fixed(m_settings.ClipAltitude))
-      return true;
-    else
-      return false;
-
+    return (airspace.get_base().get_altitude(m_state) <= fixed(m_settings.ClipAltitude));
   case AUTO:
-
-    if ((m_altitude >= (airspace.get_base_altitude() - fixed(m_settings.airspace_warnings.AltWarningMargin)))
-        && (m_altitude <= (airspace.get_top_altitude() + fixed(m_settings.airspace_warnings.AltWarningMargin))))
-      return true;
-    else
-      return false;
-
+    return (airspace.get_base().is_below(m_state, fixed(m_settings.airspace_warnings.AltWarningMargin))
+            && airspace.get_top().is_above(m_state, fixed(m_settings.airspace_warnings.AltWarningMargin)));
   case ALLBELOW:
-    if (m_altitude >= (airspace.get_base_altitude() - fixed(m_settings.airspace_warnings.AltWarningMargin)))
-      return true;
-    else
-      return false;
-
+    return (airspace.get_base().is_below(m_state, fixed(m_settings.airspace_warnings.AltWarningMargin)));
   case INSIDE:
-    if ((m_altitude >= airspace.get_base_altitude()) 
-        && (m_altitude <= airspace.get_top_altitude()))
-      return true;
-    else
-      return false;
+    return (airspace.get_base().is_below(m_state) && airspace.get_top().is_above(m_state));
 
   case ALLOFF:
     return false;

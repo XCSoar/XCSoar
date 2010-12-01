@@ -75,9 +75,9 @@ class AirspaceMapVisible: public AirspaceVisible
 {
 public:
   AirspaceMapVisible(const SETTINGS_COMPUTER& _settings, 
-                     const fixed& _altitude, const bool& _border,
+                     const AIRCRAFT_STATE& _state, const bool& _border,
                      const AirspaceWarningCopy2 &warnings):
-    AirspaceVisible(_settings, _altitude),
+    AirspaceVisible(_settings, _state),
     m_border(_border),
     m_warnings(warnings) {}
 
@@ -166,7 +166,7 @@ private:
 
   static bool CompareAirspaceBase(const AbstractAirspace *a,
                                   const AbstractAirspace *b) {
-    return a->get_base_altitude() > b->get_base_altitude();
+    return AIRSPACE_ALT::SortHighest(a->get_base(), b->get_base());
   }
 
   static void PaintListItem(Canvas &canvas, const RECT rc, unsigned idx) {
@@ -215,7 +215,7 @@ GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
   AirspaceDetailsDialogVisitor airspace_copy_popup(*(SingleWindow *)get_root_owner(),
                                                    location);
   const AirspaceMapVisible visible(SettingsComputer(),
-                                   Basic().GetAltitudeBaroPreferred(),
+                                   ToAircraftState(Basic()),
                                    false, awc);
 
   airspace_database->visit_within_range(location, fixed(100.0),

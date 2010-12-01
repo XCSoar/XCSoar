@@ -5,14 +5,15 @@
 #include "Math/fixed.hpp"
 
 struct SETTINGS_COMPUTER;
+struct AIRCRAFT_STATE;
 
 class AirspaceVisible: public AirspacePredicate
 {
 public:
   AirspaceVisible(const SETTINGS_COMPUTER& _settings,
-                  const fixed &_altitude):
+                  const AIRCRAFT_STATE& _state):
     m_settings(_settings),
-    m_altitude(_altitude)
+    m_state(_state)
     {};
 
   virtual bool operator()( const AbstractAirspace& airspace ) const { 
@@ -49,7 +50,7 @@ public:
 
 protected:
   const SETTINGS_COMPUTER &m_settings;
-  const fixed m_altitude;
+  const AIRCRAFT_STATE& m_state;
 };
 
 
