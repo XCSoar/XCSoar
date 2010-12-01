@@ -69,11 +69,12 @@ DataNode::set_attribute(const tstring &name, bool &value)
 bool
 DataNode::get_attribute(const tstring &name, Angle &value) const
 {
-  bool retval;
-  fixed v = value.value_degrees();
-  retval = get_attribute(name, v);
-  value = Angle::degrees(v);
-  return retval;
+  fixed v;
+  if (get_attribute(name, v)) {
+    value = Angle::degrees(v);
+    return true;
+  } else
+    return false;
 }
 
 bool
