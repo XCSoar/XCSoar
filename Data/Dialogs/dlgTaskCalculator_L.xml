@@ -3,7 +3,7 @@
 <Form Name="frmTaskCalculator" X="5" Y="0" Width="320" Height="240" Caption="Task Calculator">
 
   <Button Name="Target" Caption="Target" X="5" Y="10" Width="60" Height="30" OnClick="OnTargetClicked" />
-  <Button Caption="OK" X="5" Y="145" Width="60" Height="30" OnClick="OnOKClicked" />
+  <Button Caption="Close" X="5" Y="145" Width="60" Height="30" OnClick="OnOKClicked" />
   <Button Caption="Cancel" X="5" Y="185" Width="60" Height="30" OnClick="OnCancelClicked" />
 
   <Panel Name="frmData" X="70" Y="0" Width="0" Height="222" Border="0">

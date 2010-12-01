@@ -20,6 +20,6 @@
     <DataField DataType="boolean"/>
   </Edit>
   
-  <Button Caption="Okay" X="2" Y="90" Width="66" Height="22" OnClick="OnOkay"/>
+  <Button Caption="Close" X="2" Y="90" Width="66" Height="22" OnClick="OnOkay"/>
   <Button Caption="Cancel" X="74" Y="90" Width="66" Height="22" OnClick="OnCancel"/>
 </Form>

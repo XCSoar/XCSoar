@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmTarget" X="200" Y="0" Width="119" Height="240" Caption="Target" Popup="1">
-  <Button Name="btnOK" Caption="OK" X="55" Y="2" Width="60" Height="29" OnClick="OnOKClicked" />
+  <Button Name="btnOK" Caption="Close" X="55" Y="2" Width="60" Height="29" OnClick="OnOKClicked" />
 
   <Edit Name="prpTaskPoint" Caption=" " X="2" Width="115" Height="29" CaptionWidth="1"
     Help="This sets the task point for review.">

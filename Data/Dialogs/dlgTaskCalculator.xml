@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Name="frmTaskCalculator" X="5" Y="0" Width="240" Height="240" Caption="Task Calculator">
-  <Button Caption="OK" X="4" Y="2" Width="75" Height="35" OnClick="OnOKClicked" />
+  <Button Caption="Close" X="4" Y="2" Width="75" Height="35" OnClick="OnOKClicked" />
   <Button Caption="Cancel" X="82" Y="2" Width="75" Height="35" OnClick="OnCancelClicked" />
 
   <Button Name="Target" Caption="Target" X="160" Y="2" Width="75" Height="35" OnClick="OnTargetClicked" />
