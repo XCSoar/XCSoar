@@ -55,7 +55,7 @@ public:
    */
   AbstractTask(enum type _type, TaskEvents &te,
                const TaskBehaviour &tb,
-               GlidePolar &gp);
+               const GlidePolar &gp);
   /** 
    * Reset the task (as if never flown)
    * 
@@ -137,12 +137,14 @@ public:
   /** 
    * Update auto MC.  Internally uses TaskBehaviour to determine settings
    * 
+   * @param glide_polar a GlidePolar object to be edited
    * @param state_now Current state
    * @param fallback_mc MC value (m/s) to use if algorithm fails or not active
    * 
    * @return True if MC updated
    */
-  bool update_auto_mc(const AIRCRAFT_STATE& state_now,
+  bool update_auto_mc(GlidePolar &glide_polar,
+                      const AIRCRAFT_STATE& state_now,
                       const fixed fallback_mc);
 
 /** 
@@ -447,7 +449,7 @@ protected:
   TaskStatsComputer stats_computer;
   TaskEvents &task_events; /**< reference to task events (feedback) */
   const TaskBehaviour &task_behaviour; /**< reference to task behaviour (settings) */
-  GlidePolar &glide_polar; /**< reference to global glide polar */
+  const GlidePolar &glide_polar; /**< reference to global glide polar */
 
 /** 
  * Updates distance calculations and values in the statistics.

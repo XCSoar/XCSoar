@@ -68,7 +68,7 @@ public:
    */
   AbortTask(TaskEvents &te, 
             const TaskBehaviour &tb,
-            GlidePolar &gp,
+            const GlidePolar &gp,
             const Waypoints &wps);
   ~AbortTask();
 

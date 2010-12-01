@@ -28,7 +28,7 @@
 #include "Task/TaskEvents.hpp"
 
 AbstractTask::AbstractTask(enum type _type, TaskEvents &te,
-                           const TaskBehaviour &tb, GlidePolar &gp):
+                           const TaskBehaviour &tb, const GlidePolar &gp):
   TaskInterface(_type),
   activeTaskPoint(0),
   activeTaskPoint_last(0-1),
@@ -42,7 +42,9 @@ AbstractTask::AbstractTask(enum type _type, TaskEvents &te,
   trigger_auto(false) {}
 
 bool 
-AbstractTask::update_auto_mc(const AIRCRAFT_STATE& state, fixed fallback_mc)
+AbstractTask::update_auto_mc(GlidePolar &glide_polar,
+                             const AIRCRAFT_STATE& state,
+                             fixed fallback_mc)
 {
   if (!positive(fallback_mc))
     fallback_mc = glide_polar.get_mc();

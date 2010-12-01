@@ -26,7 +26,7 @@
 
 GotoTask::GotoTask(TaskEvents &te, 
                    const TaskBehaviour &tb,
-                   GlidePolar &gp): 
+                   const GlidePolar &gp):
   UnorderedTask(GOTO, te,tb,gp),
   tp(NULL) 
 {

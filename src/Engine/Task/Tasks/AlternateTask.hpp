@@ -51,7 +51,7 @@ public:
    */
   AlternateTask(TaskEvents &te, 
                 const TaskBehaviour &tb,
-                GlidePolar &gp,
+                const GlidePolar &gp,
                 const Waypoints &wps);
 
   void reset();

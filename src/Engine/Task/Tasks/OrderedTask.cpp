@@ -684,7 +684,7 @@ OrderedTask::~OrderedTask()
 
 OrderedTask::OrderedTask(TaskEvents &te, 
                          const TaskBehaviour &tb,
-                         GlidePolar &gp):
+                         const GlidePolar &gp):
   AbstractTask(ORDERED, te, tb, gp),
   ts(NULL),
   tf(NULL),
@@ -901,7 +901,7 @@ OrderedTask::get_task_radius(const GeoPoint& fallback_location) const
 OrderedTask* 
 OrderedTask::clone(TaskEvents &te, 
                    const TaskBehaviour &tb,
-                   GlidePolar &gp) const
+                   const GlidePolar &gp) const
 {
   OrderedTask* new_task = new OrderedTask(te, tb, gp);
 

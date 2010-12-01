@@ -47,7 +47,7 @@ public:
 
   GotoTask(TaskEvents &te, 
            const TaskBehaviour &tb,
-           GlidePolar &gp);
+           const GlidePolar &gp);
   ~GotoTask();
 
 /** 

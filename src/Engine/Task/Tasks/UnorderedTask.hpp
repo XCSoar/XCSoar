@@ -41,7 +41,7 @@ public:
    */
   UnorderedTask(const enum type _type, TaskEvents &te,
                 const TaskBehaviour &tb,
-                GlidePolar &gp);
+                const GlidePolar &gp);
 
   fixed get_finish_height() const;
 

@@ -420,7 +420,8 @@ bool
 TaskManager::update_auto_mc(const AIRCRAFT_STATE& state_now,
                             const fixed fallback_mc)
 {
-  if (active_task && active_task->update_auto_mc(state_now, fallback_mc))
+  if (active_task &&
+      active_task->update_auto_mc(m_glide_polar, state_now, fallback_mc))
     return true;
 
   if (!task_behaviour.auto_mc) 
@@ -637,7 +638,7 @@ TaskManager::get_ordered_taskpoint_radius(const unsigned TPindex) const
 
 OrderedTask* 
 TaskManager::clone(TaskEvents &te, const TaskBehaviour &tb,
-                   GlidePolar &gp) const
+                   const GlidePolar &gp) const
 {
   return task_ordered.clone(te, tb, gp);
 }

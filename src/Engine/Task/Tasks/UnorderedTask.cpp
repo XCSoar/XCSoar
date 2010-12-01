@@ -27,7 +27,7 @@
 
 UnorderedTask::UnorderedTask(const enum type _type, TaskEvents &te,
                              const TaskBehaviour &tb,
-                             GlidePolar &gp):
+                             const GlidePolar &gp):
   AbstractTask(_type, te, tb, gp)
 {
 }
