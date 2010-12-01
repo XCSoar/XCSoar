@@ -196,7 +196,9 @@ public:
    * @return True if task has start
    */
   gcc_pure
-  bool has_start() const;
+  bool has_start() const {
+    return ts != NULL;
+  }
 
   /**
    * Check if task has a single FinishPoint
@@ -204,7 +206,9 @@ public:
    * @return True if task has finish
    */
   gcc_pure
-  bool has_finish() const;
+  bool has_finish() const {
+    return tf != NULL;
+  }
 
   /**
    * Set active task point index
@@ -359,7 +363,10 @@ public:
    * @return Task global projection
    */
   gcc_pure
-  TaskProjection& get_task_projection();
+  const TaskProjection&
+  get_task_projection() const {
+    return task_projection;
+  }
 
   /**
    * Accesses task start state

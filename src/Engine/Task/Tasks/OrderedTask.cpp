@@ -748,18 +748,6 @@ OrderedTask::getTaskPoint(const unsigned index) const
 }
 
 bool 
-OrderedTask::has_start() const
-{
-  return (ts != NULL);
-}
-
-bool 
-OrderedTask::has_finish() const
-{
-  return (tf != NULL);
-}
-
-bool 
 OrderedTask::task_finished() const
 {
   if (tf)
@@ -833,12 +821,6 @@ unsigned
 OrderedTask::getActiveIndex() const 
 {
   return activeTaskPoint;
-}
-
-TaskProjection& 
-OrderedTask::get_task_projection() 
-{
-  return task_projection;
 }
 
 void
