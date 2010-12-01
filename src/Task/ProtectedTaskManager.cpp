@@ -204,25 +204,23 @@ ProtectedTaskManager::get_finish_height() const
 OrderedTask*
 ProtectedTaskManager::task_clone()
 {
-  ExclusiveLease lease(*this);
-  glide_polar = lease->get_glide_polar();
-  return lease->clone(task_events, task_behaviour, glide_polar);
+  Lease lease(*this);
+  return lease->clone(task_events, task_behaviour,
+                      lease->get_glide_polar());
 }
 
 OrderedTask* 
 ProtectedTaskManager::task_copy(const OrderedTask& that)
 {
-  ExclusiveLease lease(*this);
-  glide_polar = lease->get_glide_polar();
-  return that.clone(task_events, task_behaviour, glide_polar);
+  Lease lease(*this);
+  return that.clone(task_events, task_behaviour, lease->get_glide_polar());
 }
 
 OrderedTask* 
 ProtectedTaskManager::task_blank()
 {
-  ExclusiveLease lease(*this);
-  glide_polar = lease->get_glide_polar();
-  return new OrderedTask(task_events, task_behaviour, glide_polar);
+  Lease lease(*this);
+  return new OrderedTask(task_events, task_behaviour, lease->get_glide_polar());
 }
 
 bool

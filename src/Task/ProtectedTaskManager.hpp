@@ -42,7 +42,6 @@ class ProtectedTaskManager: public Guard<TaskManager>
 protected:
   const TaskBehaviour &task_behaviour;
   TaskEvents &task_events;
-  GlidePolar glide_polar;
 
   static const TCHAR default_task_path[];
 
@@ -50,8 +49,7 @@ public:
   ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour& tb,
                        TaskEvents& te)
     :Guard<TaskManager>(_task_manager),
-     task_behaviour(tb), task_events(te),
-     glide_polar(_task_manager.get_glide_polar()) {}
+     task_behaviour(tb), task_events(te) {}
 
   // common accessors for ui and calc clients
   GlidePolar get_glide_polar() const;
