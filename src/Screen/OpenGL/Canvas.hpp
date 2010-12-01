@@ -310,10 +310,7 @@ public:
     this->text(x, y, text);
   }
 
-  void formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
-    // XXX
-    this->text(rc->left, rc->top, text);
-  }
+  void formatted_text(RECT *rc, const TCHAR *text, unsigned format);
 
   /**
    * Draws a texture.  The caller is responsible for binding it and

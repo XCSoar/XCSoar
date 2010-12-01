@@ -353,10 +353,7 @@ public:
     this->text(x, y, text);
   }
 
-  void formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
-    // XXX
-    this->text(rc->left, rc->top, text);
-  }
+  void formatted_text(RECT *rc, const TCHAR *text, unsigned format);
 
   void copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,

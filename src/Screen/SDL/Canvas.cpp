@@ -203,6 +203,35 @@ Canvas::text(int x, int y, const TCHAR *text)
 #endif /* !OPENGL */
 
 void
+Canvas::formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
+  // assume format = DT_CENTER
+  TCHAR *p, *duplicated;
+  size_t i, len;
+  int x, y, lines = 1;
+  int skip;
+
+  if (font == NULL)
+    return;
+
+  p = duplicated = _tcsdup(text);
+  len = tcslen(duplicated);
+  while ((p = _tcschr(p, _T('\n'))) != NULL) {
+    *p++ = _T('\0');
+    lines++;
+  }
+  skip = ::TTF_FontLineSkip(font);
+  y = (rc->top + rc->bottom - lines*skip) / 2;
+  for (i = 0; i < len; i += tcslen(duplicated + i) + 1) {
+    SIZE sz = text_size(duplicated + i);
+    x = (rc->left + rc->right - sz.cx) / 2;
+    Canvas::text(x, y, duplicated + i);
+    y += skip;
+  }
+
+  free(duplicated);
+}
+
+void
 Canvas::text(int x, int y, const TCHAR *_text, size_t length)
 {
   TCHAR copy[length + 1];
