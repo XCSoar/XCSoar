@@ -110,7 +110,7 @@ ContestDijkstra::update_trace()
   if (!master_is_updated()) 
     return;
 
-  trace = trace_master.get_trace_points(max_contest_trace);
+  trace_master.get_trace_points(trace);
   n_points = trace.size();
   trace_dirty = true;
 

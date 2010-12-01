@@ -130,10 +130,12 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   case ANALYSIS_PAGE_OLC:
     if (protected_task_manager != NULL) {
       ProtectedTaskManager::Lease task(*protected_task_manager);
+      TracePointVector trace;
+      task->get_trace_points(trace);
       fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
                    XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::SettingsMap(),
-                   task->get_contest_solution(), task->get_trace_points());
+                   task->get_contest_solution(), trace);
     }
     break;
   case ANALYSIS_PAGE_TASK_SPEED:

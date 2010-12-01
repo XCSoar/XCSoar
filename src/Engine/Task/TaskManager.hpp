@@ -394,11 +394,10 @@ public:
   /**
    * Retrieve olc trace vector
    *
-   * @return Vector of trace points reduced for OLC
+   * @param iov Vector of trace points reduced for OLC
    */
-  gcc_pure
-  TracePointVector get_trace_points() const {
-    return trace_full.get_trace_points(300);
+  void get_trace_points(TracePointVector &iov) const {
+    trace_full.get_trace_points(iov);
   }
 
   /**

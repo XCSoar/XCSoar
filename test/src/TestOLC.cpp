@@ -33,7 +33,7 @@
 #include <cstdio>
 
 Trace full_trace;
-Trace sprint_trace(9000, 2, 300);
+Trace sprint_trace(9000, 300);
 unsigned handicap = 100;
 
 ContestResult stats_classic;
