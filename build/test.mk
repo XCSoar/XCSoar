@@ -246,6 +246,7 @@ DEBUG_PROGRAM_NAMES = \
 	LoadTopology \
 	RunInputParser \
 	RunWayPointParser RunAirspaceParser RunDeviceDriver \
+	RunIGCWriter \
 	RunWindZigZag \
 	RunCanvas RunMapWindow RunDialog \
 	RunProgressWindow \
@@ -539,6 +540,50 @@ RUN_DEVICE_DRIVER_LDADD = \
 	$(MATH_LIBS) \
 	$(UTIL_LIBS)
 $(TARGET_BIN_DIR)/RunDeviceDriver$(TARGET_EXEEXT): $(RUN_DEVICE_DRIVER_OBJS) $(RUN_DEVICE_DRIVER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_IGC_WRITER_SOURCES = \
+	$(SRC)/Version.cpp \
+	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/UtilsText.cpp \
+	$(SRC)/Units.cpp \
+	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/NullPort.cpp \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Register.cpp \
+	$(SRC)/Device/Parser.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Descriptor.cpp \
+	$(SRC)/Device/FLARM.cpp \
+	$(SRC)/Device/Declaration.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/FLARM/FlarmCalculations.cpp \
+	$(SRC)/ClimbAverageCalculator.cpp \
+	$(SRC)/Logger/IGCWriter.cpp \
+	$(SRC)/Logger/LoggerFRecord.cpp \
+	$(SRC)/Logger/LoggerGRecord.cpp \
+	$(SRC)/Logger/LoggerEPE.cpp \
+	$(SRC)/Logger/MD5.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeNMEALogger.cpp \
+	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/RunIGCWriter.cpp
+RUN_IGC_WRITER_OBJS = $(call SRC_TO_OBJ,$(RUN_IGC_WRITER_SOURCES))
+RUN_IGC_WRITER_LDADD = \
+	$(IO_LIBS) \
+	$(ENGINE_LIBS) \
+	$(DRIVER_LIBS) \
+	$(MATH_LIBS) \
+	$(UTIL_LIBS)
+$(TARGET_BIN_DIR)/RunIGCWriter$(TARGET_EXEEXT): $(RUN_IGC_WRITER_OBJS) $(RUN_IGC_WRITER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
