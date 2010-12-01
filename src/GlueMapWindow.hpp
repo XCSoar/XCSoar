@@ -150,8 +150,7 @@ private:
 
   /**
    * This (non-virtual, non-inherited) method gets called by either
-   * on_key_down() (Altair and PNAs) or on_key_up() (all other
-   * platforms).
+   * on_key_down() (Altair) or on_key_up() (all other platforms).
    *
    * Some PDAs like iPAQ hx4700 send 0xca..0xcd in WM_KEYDOWN, but
    * 0xc0..0xc4 (VK_APP1..4) in WM_KEYUP.  We prefer the VK_APP codes.
