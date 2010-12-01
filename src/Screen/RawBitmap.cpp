@@ -112,7 +112,7 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
 RawBitmap::~RawBitmap()
 {
 #ifdef ENABLE_OPENGL
-  delete buffer;
+  delete[] buffer;
 #elif defined(ENABLE_SDL)
   ::SDL_FreeSurface(surface);
 #elif defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
