@@ -34,7 +34,7 @@ class GeoVectorMemento
 public:
 
   /**
-   * Constructor, initialises all to zero. 
+   * Constructor, initialises to trigger update on first call. 
    */
   GeoVectorMemento():
     value(-fixed_one) {};

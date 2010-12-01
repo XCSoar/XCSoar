@@ -33,7 +33,7 @@ class DistanceMemento {
 public:
 
   /**
-   * Constructor, initialises all to zero. 
+   * Constructor, initialises to trigger update on first call. 
    */
   DistanceMemento(): value(-1.0) {};
 
