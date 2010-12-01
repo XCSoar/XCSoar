@@ -7,7 +7,6 @@
 
   <Button Name="cmdNew" Caption="Clear" X="2" Y="128" Width="98" Height="22" OnClick="OnNewClicked"/>
   <Button Name="cmdProperties" Caption="Properties" X="2" Width="98" Height="22" OnClick="OnPropertiesClicked"/>
-  <Button Name="cmdSave" Caption="Save as" X="2" Width="98" Height="22" OnClick="OnSaveClicked"/>
   <SymbolButton Name="cmdUp" Caption="^" X="2" Y="194" Width="48" Height="22" OnClick="OnMoveUpClicked"/>
   <SymbolButton Name="cmdDown" Caption="v" X="52" Y="194" Width="48" Height="22" OnClick="OnMoveDownClicked"/>
 

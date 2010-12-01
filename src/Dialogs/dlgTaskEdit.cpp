@@ -163,22 +163,6 @@ OnTaskListEnter(unsigned ItemIndex)
 }
 
 static void
-OnSaveClicked(WndButton &Sender)
-{
-  (void)Sender;
-  if (!ordered_task->check_task()) {
-    MessageBoxX (_("Task invalid.  Not saved."),
-                 _T("Task Edit"), MB_OK);
-    return;
-  }
-
-  if (OrderedTaskSave(*ordered_task, true)) {
-    MessageBoxX (_("Task saved"),
-                 _T("Task Edit"), MB_OK);
-  }
-}
-
-static void
 OnMoveUpClicked(WndButton &Sender)
 {
   if (!wTaskPoints)
@@ -249,7 +233,6 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnPropertiesClicked),
   DeclareCallBackEntry(OnNewClicked),
-  DeclareCallBackEntry(OnSaveClicked),
   DeclareCallBackEntry(OnMoveUpClicked),
   DeclareCallBackEntry(OnMoveDownClicked),
   DeclareCallBackEntry(OnTaskPaint),

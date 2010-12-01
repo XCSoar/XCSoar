@@ -8,5 +8,6 @@
   <Canvas Name="frmTaskView" X="2" Width="236" Height="255" Border="1" OnPaint="OnTaskPaint" />
 
   <Button Name="cmdDeclare" Caption="Declare" X="2" Y="281" Width="77" Height="22" OnClick="OnDeclareClicked"/>
+  <Button Name="cmdSave" Caption="Save as" X="160" Y="281" Width="77" Height="22" OnClick="OnSaveClicked"/>
 
 </Form>

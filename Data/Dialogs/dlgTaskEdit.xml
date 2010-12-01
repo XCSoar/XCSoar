@@ -11,7 +11,6 @@
 
   <Button Name="cmdNew" Caption="Clear" X="2" Y="158" Width="77" Height="22" OnClick="OnNewClicked"/>
   <Button Name="cmdProperties" Caption="Properties" X="81" Y="158" Width="77" Height="22" OnClick="OnPropertiesClicked"/>
-  <Button Name="cmdSave" Caption="Save as" X="160" Y="158" Width="77" Height="22" OnClick="OnSaveClicked"/>
 
   <Label Name="frmSummary" X="119" Y="184" Width="-2" Height="118" Border="1"/>
 </Form>

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/dlgTaskHelpers.hpp"
 #include "Screen/Layout.hpp"
 #include "LocalPath.hpp"
 #include "Components.hpp"
@@ -100,6 +101,21 @@ OnDeclareClicked(WndButton &Sender)
   logger.LoggerDeviceDeclare(*ordered_task);
 }
 
+static void
+OnSaveClicked(WndButton &Sender)
+{
+  (void)Sender;
+  if (!ordered_task->check_task()) {
+    MessageBoxX (_("Task invalid.  Not saved."),
+                 _T("Task Edit"), MB_OK);
+    return;
+  }
+
+  if (OrderedTaskSave(*ordered_task, true)) {
+    MessageBoxX (_("Task saved"),
+                 _T("Task Edit"), MB_OK);
+  }
+}
 
 static void
 OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
@@ -113,6 +129,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnEditClicked),
   DeclareCallBackEntry(OnListClicked),
+  DeclareCallBackEntry(OnSaveClicked),
   DeclareCallBackEntry(OnDeclareClicked),
   DeclareCallBackEntry(OnTaskPaint),
   DeclareCallBackEntry(NULL)
