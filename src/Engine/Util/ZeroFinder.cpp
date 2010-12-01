@@ -45,7 +45,7 @@ fixed ZeroFinder::tolerance_actual_zero(const fixed x) const {
   return fixed_two * epsilon * fabs(x) + tolerance * fixed_half;
 }
 
-#define INSTRUMENT_ZERO
+//#define INSTRUMENT_ZERO
 #ifdef INSTRUMENT_ZERO
 unsigned long zero_skipped = 0;
 unsigned long zero_total = 0;
@@ -70,6 +70,12 @@ bool ZeroFinder::solution_within_tolerance(const fixed x,
   // existing solution is good 
   return true;
 }
+
+/*
+  Note:
+  - When you can, use find_zero search, since it narrows in at rate of 1.6 per step compared
+    to 1.3 for the find_min.
+*/
 
 /*
  ************************************************************************
