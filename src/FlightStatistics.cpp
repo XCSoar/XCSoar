@@ -381,9 +381,11 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
                              const NMEA_INFO &nmea_info, 
                              const SETTINGS_COMPUTER &settings_computer,
                              const SETTINGS_MAP &settings_map, 
-                             const TaskManager &task) const
+                             const TaskManager &task_manager) const
 {
   Chart chart(canvas, rc);
+
+  const OrderedTask &task = task_manager.get_ordered_task();
 
   if (!task.check_task()) {
     chart.DrawNoData();
@@ -396,7 +398,7 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
   RenderTaskPoint tpv(canvas, proj, settings_map,
                       ozv, false, nmea_info.Location);
   ::RenderTask dv(tpv);
-  task.CAccept(dv); 
+  dv.Visit(task);
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.Location);
   Graphics::DrawAircraft(canvas, nmea_info.Heading, aircraft_pos);
