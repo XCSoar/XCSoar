@@ -70,6 +70,10 @@ GlidePolar::update_polar()
   polar_a = inv_bugs * ideal_polar_a / loading_factor;
   polar_b = inv_bugs * ideal_polar_b;
   polar_c = inv_bugs * ideal_polar_c * loading_factor;
+
+  assert(positive(polar_a));
+  assert(negative(polar_b));
+  assert(positive(polar_c));
 }
 
 void
@@ -162,8 +166,13 @@ private:
 void
 GlidePolar::solve_ld()
 {
+/*
+  // this method to be used if polar is not parabolic
   GlidePolarVopt gpvopt(*this, Vmin, Vmax);
   VbestLD = gpvopt.find_min(VbestLD);
+*/
+  assert(!negative(mc));
+  VbestLD = max(Vmin, min(Vmax, sqrt((polar_c+mc)/polar_a)));
   SbestLD = SinkRate(VbestLD);
   bestLD = VbestLD / SbestLD;
 }
@@ -202,8 +211,12 @@ private:
 void 
 GlidePolar::solve_min()
 {
+/*
+  // this method to be used if polar is not parabolic
   GlidePolarMinSink gpminsink(*this, Vmax);
   Vmin = gpminsink.find_min(Vmin);
+*/
+  Vmin = min(Vmax, -polar_b/(fixed_two*polar_a));
   Smin = SinkRate(Vmin);
 }
 
