@@ -42,81 +42,80 @@ struct GeoPoint;
  * - Currently undefined as to what happens to interior samples if observation 
  *   zone is modified (e.g. due to previous/next taskpoint moving) in update_oz
  */
-class SampledTaskPoint:
-  public TaskPoint, 
-  public virtual ObservationZone
+class SampledTaskPoint
+  : public TaskPoint, public virtual ObservationZone
 {
-public:  
+public:
   friend class OrderedTask;
   friend class PrintHelper;
 
-/** 
- * Constructor.  Clears boundary and interior samples on instantiation.
- * Must be followed by update_oz() after task geometry is modified.
- * 
- * @param tp Projection used for internal representations of borders and samples
- * @param wp Waypoint associated with this task point
- * @param tb Task Behaviour defining options (esp safety heights)
- * @param b_scored Whether distance within OZ is scored 
- * 
- * @return Partially initialised object 
- */
+  /**
+   * Constructor.  Clears boundary and interior samples on instantiation.
+   * Must be followed by update_oz() after task geometry is modified.
+   *
+   * @param tp Projection used for internal representations of borders and samples
+   * @param wp Waypoint associated with this task point
+   * @param tb Task Behaviour defining options (esp safety heights)
+   * @param b_scored Whether distance within OZ is scored
+   *
+   * @return Partially initialised object
+   */
   SampledTaskPoint(enum type _type, const TaskProjection& tp,
-                   const Waypoint & wp, 
+                   const Waypoint & wp,
                    const TaskBehaviour &tb,
                    const bool b_scored);
 
   virtual ~SampledTaskPoint() {};
 
-  /** 
+  /**
    * Reset the task (as if never flown)
-   * 
+   *
    */
   virtual void reset();
 
-/** 
- * Accessor to retrieve location of the sample/boundary polygon
- * node that produces the maximum task distance.
- * 
- * @return Location of max distance node
- */
+  /**
+   * Accessor to retrieve location of the sample/boundary polygon
+   * node that produces the maximum task distance.
+   *
+   * @return Location of max distance node
+   */
   gcc_pure
   const GeoPoint& get_location_max() const {
     return m_search_max.get_location();
   };
 
-/** 
- * Accessor to retrieve location of the sample/boundary polygon
- * node that produces the minimum task distance.
- * 
- * @return Location of minimum distance node
- */
+  /**
+   * Accessor to retrieve location of the sample/boundary polygon
+   * node that produces the minimum task distance.
+   *
+   * @return Location of minimum distance node
+   */
   const GeoPoint& get_location_min() const {
     return m_search_min.get_location();
   };
 
-/** 
- * Construct boundary polygon from internal representation of observation zone.
- * Also updates projection.
- */
+  /**
+   * Construct boundary polygon from internal representation of observation zone.
+   * Also updates projection.
+   */
   virtual void update_oz();
 
-/** 
- * Check if aircraft is within observation zone, and if so,
- * update the interior sample polygon.
- * 
- * @param state Aircraft state
- * @param task_events Callback class for feedback
- *
- * @return True if internal state changed
- */
+  /**
+   * Check if aircraft is within observation zone, and if so,
+   * update the interior sample polygon.
+   *
+   * @param state Aircraft state
+   * @param task_events Callback class for feedback
+   *
+   * @return True if internal state changed
+   */
   virtual bool update_sample(const AIRCRAFT_STATE& state,
                              TaskEvents &task_events);
 
-  /** 
+  /**
    * Test if the task point has recorded presence of the aircraft
    * in this sector
-   * 
+   *
    * @return True if sample present
    */
   gcc_pure
@@ -124,20 +123,20 @@ public:
     return !m_sampled_points.empty();
   }
 
-/** 
- * Accessor for task projection
- * 
- * @return Task projection used by this point
- */
+  /**
+   * Accessor for task projection
+   *
+   * @return Task projection used by this point
+   */
   const TaskProjection &get_task_projection() const {
     return m_task_projection;
   };
 
-/** 
- * Retrieve interior sample polygon (pure).
- * 
- * @return Vector of sample points representing a closed polygon
- */
+  /**
+   * Retrieve interior sample polygon (pure).
+   *
+   * @return Vector of sample points representing a closed polygon
+   */
   gcc_pure
   const SearchPointVector& get_sample_points() const {
     return m_sampled_points;
@@ -149,85 +148,85 @@ public:
 
 protected:
 
-/** 
- * Clear all sample points and add the current state as a sample.
- * This is used, for exmaple, for StartPoints to only remember the last sample
- * prior to crossing the start.
- */  
+  /**
+   * Clear all sample points and add the current state as a sample.
+   * This is used, for exmaple, for StartPoints to only remember the last sample
+   * prior to crossing the start.
+   */
   void clear_sample_all_but_last(const AIRCRAFT_STATE& state);
 
   const bool m_boundary_scored; /**< Whether boundaries are used in scoring distance, or just the reference point */
 
-  /** 
+  /**
    * Set minimum distance point based on location.
-   * 
+   *
    * @param location Location of min point
    */
   void set_search_min(const GeoPoint &location);
 
 private:
 
-/** 
- * Re-project boundary and interior sample polygons.
- * Must be called if task_projection changes.
- * 
- */
+  /**
+   * Re-project boundary and interior sample polygons.
+   * Must be called if task_projection changes.
+   *
+   */
   void update_projection();
 
-/** 
- * Determines whether to 'cheat' a missed OZ prior to the current active task point. 
- *
- * @return Vector of boundary points representing a closed polygon
- */
+  /**
+   * Determines whether to 'cheat' a missed OZ prior to the current active task point.
+   *
+   * @return Vector of boundary points representing a closed polygon
+   */
   gcc_pure
   virtual bool search_nominal_if_unsampled() const = 0;
 
-/** 
- * Determines whether to return sampled or boundary points for max/min search
- *
- * @return Vector of boundary points representing a closed polygon
- */
+  /**
+   * Determines whether to return sampled or boundary points for max/min search
+   *
+   * @return Vector of boundary points representing a closed polygon
+   */
   gcc_pure
   virtual bool search_boundary_points() const = 0;
 
-/** 
- * Retrieve interior sample polygon.
- * Because sometimes an OZ will be skipped (by accident, true miss, or
- * failure of electronics), but we still want rest of task to function,
- * the 'cheat' option allows non-achieved task points to be considered achieved
- * by assuming the aircraft appeared at the reference location.
- * 
- * @return Vector of boundary points representing a closed polygon
- */
+  /**
+   * Retrieve interior sample polygon.
+   * Because sometimes an OZ will be skipped (by accident, true miss, or
+   * failure of electronics), but we still want rest of task to function,
+   * the 'cheat' option allows non-achieved task points to be considered achieved
+   * by assuming the aircraft appeared at the reference location.
+   *
+   * @return Vector of boundary points representing a closed polygon
+   */
   gcc_pure
   const SearchPointVector& get_search_points() const;
 
-/** 
- * Set the location of the sample/boundary polygon node
- * that produces the maximum task distance.
- * 
- * @param locmax Location of max distance node 
- */
-    void set_search_max(const SearchPoint &locmax) {
-      m_search_max = locmax;
-    }
+  /**
+   * Set the location of the sample/boundary polygon node
+   * that produces the maximum task distance.
+   *
+   * @param locmax Location of max distance node
+   */
+  void set_search_max(const SearchPoint &locmax) {
+    m_search_max = locmax;
+  }
 
-/** 
- * Set the location of the sample/boundary polygon node
- * that produces the minimum task distance.
- * 
- * @param locmin Location of min distance node 
- */
+  /**
+   * Set the location of the sample/boundary polygon node
+   * that produces the minimum task distance.
+   *
+   * @param locmin Location of min distance node
+   */
   void set_search_min(const SearchPoint &locmin) {
     m_search_min = locmin;
   }
 
   const TaskProjection &m_task_projection;
 
-/** 
- * Clear all sample points.
- * 
- */
+  /**
+   * Clear all sample points.
+   *
+   */
   void clear_sample_points();
 
   SearchPointVector m_nominal_point;

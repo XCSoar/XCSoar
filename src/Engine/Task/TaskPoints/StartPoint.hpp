@@ -37,87 +37,87 @@
  * - gate start time?
  * - enabled/disabled for multiple start points
  */
-class StartPoint: 
-  public OrderedTaskPoint 
+class StartPoint:
+  public OrderedTaskPoint
 {
 public:
-/** 
- * Constructor.  Sets task area to non-scorable; distances
- * are relative to crossing point or origin.
- * 
- * @param _oz Observation zone for this task point
- * @param tp Global projection 
- * @param wp Waypoint origin of turnpoint
- * @param tb Task Behaviour defining options (esp safety heights)
- * @param to OrderedTask Behaviour defining options 
- * 
- * @return Partially-initialised object
- */
+  /**
+   * Constructor.  Sets task area to non-scorable; distances
+   * are relative to crossing point or origin.
+   *
+   * @param _oz Observation zone for this task point
+   * @param tp Global projection
+   * @param wp Waypoint origin of turnpoint
+   * @param tb Task Behaviour defining options (esp safety heights)
+   * @param to OrderedTask Behaviour defining options
+   *
+   * @return Partially-initialised object
+   */
   StartPoint(ObservationZonePoint* _oz,
              const TaskProjection& tp,
              const Waypoint & wp,
              const TaskBehaviour& tb,
              const OrderedTaskBehaviour& to);
 
-/** 
- * Set previous/next taskpoints in sequence.
- * Specialises base method to check prev is NULL.
- * 
- * @param prev Previous task point (must be null!)
- * @param next Next task point in sequence
- */
-    void set_neighbours(OrderedTaskPoint* prev,
-                        OrderedTaskPoint* next);
+  /**
+   * Set previous/next taskpoints in sequence.
+   * Specialises base method to check prev is NULL.
+   *
+   * @param prev Previous task point (must be null!)
+   * @param next Next task point in sequence
+   */
+  void set_neighbours(OrderedTaskPoint* prev,
+                      OrderedTaskPoint* next);
 
-/** 
- * Test whether aircraft is inside observation zone.
- * 
- * @param ref Aircraft state to test
- * 
- * @return True if aircraft is inside observation zone
- */
+  /**
+   * Test whether aircraft is inside observation zone.
+   *
+   * @param ref Aircraft state to test
+   *
+   * @return True if aircraft is inside observation zone
+   */
   bool isInSector(const AIRCRAFT_STATE &ref) const;
 
 
-  /** 
+  /**
    * Check if aircraft has transitioned to outside sector
    * This allows for exit through top of sector.
-   * 
+   *
    * @param ref_now Current aircraft state
    * @param ref_last Previous aircraft state
    *
    * @return True if aircraft now outside (and was inside)
    */
-  bool check_transition_exit(const AIRCRAFT_STATE & ref_now, 
+  bool check_transition_exit(const AIRCRAFT_STATE & ref_now,
                              const AIRCRAFT_STATE & ref_last) const;
 
-/** 
- * Update sample, specialisation to check start speed/height
- *
- * @param state Aircraft state
- * @param task_events Callback class for feedback
- * 
- * @return True if internal state changed
- */
-    bool update_sample(const AIRCRAFT_STATE& state,
-                       TaskEvents &task_events);
+  /**
+   * Update sample, specialisation to check start speed/height
+   *
+   * @param state Aircraft state
+   * @param task_events Callback class for feedback
+   *
+   * @return True if internal state changed
+   */
+  bool update_sample(const AIRCRAFT_STATE& state,
+                     TaskEvents &task_events);
 
-/** 
- * Retrieve elevation of taskpoint, taking into account
- * rules and safety margins. 
- * 
- * @return Minimum allowable elevation of start point
- */
+  /**
+   * Retrieve elevation of taskpoint, taking into account
+   * rules and safety margins.
+   *
+   * @return Minimum allowable elevation of start point
+   */
   fixed get_elevation() const;
 
-/** 
- * Search for the min point on the boundary from
- * the aircraft state to the next point.  Should only
- * be performed when the aircraft state is inside the sector
- * 
- * @param state Current aircraft state
- * @param next Next task point following the start
- */
+  /**
+   * Search for the min point on the boundary from
+   * the aircraft state to the next point.  Should only
+   * be performed when the aircraft state is inside the sector
+   *
+   * @param state Current aircraft state
+   * @param next Next task point following the start
+   */
   void find_best_start(const AIRCRAFT_STATE &state,
                        const OrderedTaskPoint& next);
 
