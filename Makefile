@@ -517,3 +517,6 @@ endif
 ifneq ($(wildcard $(TARGET_OUTPUT_DIR)/src/*/*/*/*/*/*.d),)
 include $(wildcard $(TARGET_OUTPUT_DIR)/src/*/*/*/*/*/*.d)
 endif
+ifneq ($(wildcard $(TARGET_OUTPUT_DIR)/test/*.d),)
+include $(wildcard $(TARGET_OUTPUT_DIR)/test/*.d)
+endif
