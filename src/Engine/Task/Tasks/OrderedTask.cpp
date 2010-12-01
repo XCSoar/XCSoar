@@ -417,7 +417,6 @@ void
 OrderedTask::erase(const unsigned index)
 {
   delete tps[index];
-  tps[index] = NULL;
   tps.erase(tps.begin() + index);
 }
 
