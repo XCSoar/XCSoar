@@ -82,25 +82,6 @@ RenderObservationZone::un_draw_style()
 }
 
 void 
-RenderObservationZone::draw_two_lines() {
-  m_buffer.two_lines(p_start, p_center, p_end);
-}
-
-void 
-RenderObservationZone::draw_circle() {
-  m_buffer.circle(p_center.x, p_center.y, p_radius);
-}
-
-void 
-RenderObservationZone::draw_segment(const Angle start_radial, 
-                                    const Angle end_radial) 
-{
-  m_buffer.segment(p_center.x, p_center.y, p_radius,
-                   start_radial-m_proj.GetScreenAngle(), 
-                   end_radial-m_proj.GetScreenAngle());
-}
-
-void 
 RenderObservationZone::parms_oz(const CylinderZone& oz) 
 {
   p_radius = m_proj.GeoToScreenDistance(oz.getRadius());
@@ -125,9 +106,11 @@ RenderObservationZone::Draw(const ObservationZonePoint &_oz)
     parms_sector(oz);
 
     if (layer != LAYER_ACTIVE)
-      draw_segment(oz.getStartRadial(), oz.getEndRadial());
+      m_buffer.segment(p_center.x, p_center.y, p_radius,
+                       oz.getStartRadial() - m_proj.GetScreenAngle(),
+                       oz.getEndRadial() - m_proj.GetScreenAngle());
     else
-      draw_two_lines();
+      m_buffer.two_lines(p_start, p_center, p_end);
 
     break;
   }
@@ -137,7 +120,7 @@ RenderObservationZone::Draw(const ObservationZonePoint &_oz)
 
     if (layer != LAYER_INACTIVE) {
       parms_oz(oz);
-      draw_circle();
+      m_buffer.circle(p_center.x, p_center.y, p_radius);
     }
 
     break;
@@ -148,8 +131,10 @@ RenderObservationZone::Draw(const ObservationZonePoint &_oz)
 
     if (layer != LAYER_INACTIVE) {
       parms_sector(oz);
-      draw_segment(oz.getStartRadial(), oz.getEndRadial());
-      draw_two_lines();
+      m_buffer.segment(p_center.x, p_center.y, p_radius,
+                       oz.getStartRadial() - m_proj.GetScreenAngle(),
+                       oz.getEndRadial() - m_proj.GetScreenAngle());
+      m_buffer.two_lines(p_start, p_center, p_end);
     }
 
     break;
@@ -162,11 +147,13 @@ RenderObservationZone::Draw(const ObservationZonePoint &_oz)
     parms_sector(oz);
 
     if (layer != LAYER_ACTIVE) {
-      draw_segment(oz.getStartRadial(), oz.getEndRadial());
-      p_radius = m_proj.GeoToScreenDistance(fixed(500));
-      draw_circle();
+      m_buffer.segment(p_center.x, p_center.y, p_radius,
+                       oz.getStartRadial() - m_proj.GetScreenAngle(),
+                       oz.getEndRadial() - m_proj.GetScreenAngle());
+      m_buffer.circle(p_center.x, p_center.y,
+                      m_proj.GeoToScreenDistance(fixed(500)));
     } else
-      draw_two_lines();
+      m_buffer.two_lines(p_start, p_center, p_end);
 
     break;
   }

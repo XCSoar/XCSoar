@@ -85,12 +85,6 @@ public:
   void un_draw_style();
 
 protected:
-  void draw_two_lines();
-
-  void draw_circle();
-
-  void draw_segment(const Angle start_radial, const Angle end_radial);
-
   void parms_oz(const CylinderZone& oz);
 
   void parms_sector(const SectorZone& oz);
