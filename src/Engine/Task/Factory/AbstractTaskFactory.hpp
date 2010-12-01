@@ -451,6 +451,19 @@ public:
   gcc_pure
   bool validIntermediateType(LegalPointType_t type) const;
 
+
+  /**
+   * Sets / verifies all tps for the task type.
+   * The resultant task is invalid if there are not enough
+   * or too many tps for the task type
+   * Also checks is_closed property if has Finish
+   *
+   * Does not ensure tps are unique
+   *
+   * * @return True if task is changed
+   */
+  bool mutate_tps_to_task_type();
+
 protected:
 
   /**
@@ -507,6 +520,19 @@ protected:
    */
   gcc_pure
   bool is_position_finish(const unsigned position) const;
+
+
+private:
+  /**
+   * Verifies and sets the finish waypoint per the is_closed
+   * property of task type.
+   *
+   * If a finish point exists and the is_closed property
+   * is set, sets the finish point waypoint to the waypoint of Start
+   *
+   * @return True if task is changed
+   */
+  bool mutate_closed_finish_per_task_type();
 };
 
 #endif

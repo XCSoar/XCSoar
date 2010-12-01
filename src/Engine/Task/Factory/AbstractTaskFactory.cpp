@@ -634,3 +634,54 @@ AbstractTaskFactory::is_unique() const
   return true;
 }
 
+
+bool
+AbstractTaskFactory::mutate_tps_to_task_type()
+{
+  bool changed = false;
+  for (unsigned int i = 0; i < m_task.task_size(); i++) {
+    OrderedTaskPoint *tp = m_task.get_tp(i);
+    if (!validType(tp, i)) {
+      if ((tp->type == TaskPoint::FINISH) &&
+          (i == m_task.task_size() - 1) && is_position_finish(i)) {
+        FinishPoint *fp = createFinish(tp->get_waypoint());
+        assert(fp);
+        replace(fp, i, false);
+      } else {
+        OrderedTaskPoint *tpnew = createIntermediate(tp->get_waypoint());
+        bool r = replace(tpnew, i, true);
+        changed |= r;
+      }
+    }
+  }
+
+  changed |= mutate_closed_finish_per_task_type();
+  return changed;
+}
+
+bool
+AbstractTaskFactory::mutate_closed_finish_per_task_type()
+{
+  if (m_task.task_size() < 2)
+    return false;
+
+  if (!is_position_finish(m_task.task_size() - 1))
+    return false;
+
+  bool changed = false;
+
+  if (get_ordered_task_behaviour().is_closed) {
+    if (!is_closed()) {
+      OrderedTaskPoint *tp = m_task.get_tp(m_task.task_size() - 1);
+      assert(tp);
+      if (tp->type == TaskPoint::FINISH) {
+        FinishPoint *fp = createFinish(m_task.get_tp(0)->get_waypoint());
+        assert(fp);
+        remove(m_task.task_size() - 1, false);
+        append(fp, false);
+        changed = true;
+      }
+    }
+  }
+  return changed;
+}

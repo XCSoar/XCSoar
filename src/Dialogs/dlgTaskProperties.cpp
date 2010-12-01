@@ -210,7 +210,7 @@ static void OnTypeClicked(WndButton &Sender)
  if (dlgTaskTypeShowModal(*parent_window, &ordered_task, new_type)) {
    if (new_type != ordered_task->get_factory_type()) {
      ordered_task->set_factory(new_type);
-     /* todo implement: ordered_task->get_factory().mutate_tps_to_task_type(); */
+     ordered_task->get_factory().mutate_tps_to_task_type();
      task_changed = true;
    }
  }  RefreshView();
