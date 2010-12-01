@@ -149,6 +149,8 @@ public:
     map.set_airspaces(&airspace_database, NULL);
     map.set_topology(topology);
     map.set_terrain(terrain);
+    if (terrain != NULL)
+      map.SetLocation(terrain->GetTerrainCenter());
 
     close_button.set(*this, _T("Close"), ID_CLOSE, 5, 5, 65, 25);
     close_button.set_font(Fonts::Map);
