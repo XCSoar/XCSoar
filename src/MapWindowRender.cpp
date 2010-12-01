@@ -105,8 +105,6 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   // Render airspace
   RenderAirspace(canvas);
 
-  DrawThermalEstimate(canvas);
-
   // Render task, waypoints
   DrawTask(canvas);
   DrawWaypoints(canvas);
@@ -119,6 +117,9 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
 
   // Render the snail trail
   DrawTrail(canvas, aircraft_pos);
+
+  // Render estimate of thermal location
+  DrawThermalEstimate(canvas);
 
   // Render topology on top of airspace, to keep the text readable
   RenderTopologyLabels(canvas);
