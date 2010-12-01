@@ -180,7 +180,7 @@ DataFieldFloat::CreateComboListStepping()
   // sets ComboPopupItemSavedIndex (global)
   // returns ComboPopupItemCount
   const fixed ComboListInitValue(-99999);
-  const fixed ComboFloatPrec(0.0000001); //rounds float errors to this precision
+  const fixed ComboFloatPrec(0.0001); //rounds float errors to this precision
 
   fixed fNext = ComboListInitValue;
   fixed fCurrent = ComboListInitValue;
