@@ -11,12 +11,8 @@
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 
-RenderObservationZone::RenderObservationZone(Canvas &_canvas,
-                                             const Projection &_projection,
-                                             const SETTINGS_MAP &_settings_map)
-  :m_buffer(_canvas), m_proj(_projection),
-   m_settings_map(_settings_map),
-   layer(LAYER_SHADE),
+RenderObservationZone::RenderObservationZone()
+  :layer(LAYER_SHADE),
    pen_boundary_current(Pen::SOLID, Layout::SmallScale(2), Graphics::TaskColor),
    pen_boundary_active(Pen::SOLID, Layout::SmallScale(1), Graphics::TaskColor),
    pen_boundary_inactive(Pen::SOLID, Layout::SmallScale(1), Color(127, 127, 127))
@@ -24,7 +20,9 @@ RenderObservationZone::RenderObservationZone(Canvas &_canvas,
 }
 
 bool 
-RenderObservationZone::draw_style(int offset)
+RenderObservationZone::draw_style(Canvas &canvas,
+                                  const SETTINGS_MAP &settings_map,
+                                  int offset) const
 {
   if (layer == LAYER_SHADE) {
     if (offset < 0)
@@ -35,71 +33,72 @@ RenderObservationZone::draw_style(int offset)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    Color color = Graphics::Colours[m_settings_map.iAirspaceColour[AATASK]];
-    m_buffer.select(Brush(color.with_alpha(64)));
+    Color color = Graphics::Colours[settings_map.iAirspaceColour[AATASK]];
+    canvas.select(Brush(color.with_alpha(64)));
 #else /* !OPENGL */
 
 #ifndef ENABLE_SDL
-    m_buffer.mix_mask();
+    canvas.mix_mask();
 #endif
 
     // this color is used as the black bit
-    m_buffer.set_text_color(Graphics::Colours[m_settings_map.
+    canvas.set_text_color(Graphics::Colours[settings_map.
                                            iAirspaceColour[AATASK]]);
     // get brush, can be solid or a 1bpp bitmap
-    m_buffer.select(Graphics::hAirspaceBrushes[m_settings_map.
+    canvas.select(Graphics::hAirspaceBrushes[settings_map.
                                             iAirspaceBrush[AATASK]]);
 #endif /* !OPENGL */
 
-    m_buffer.null_pen();
+    canvas.null_pen();
     
     return true;
   } else {
-    m_buffer.hollow_brush();
+    canvas.hollow_brush();
     if (layer == LAYER_ACTIVE && offset >= 0) {
       if (offset == 0)
         /* current task point */
-        m_buffer.select(pen_boundary_current);
+        canvas.select(pen_boundary_current);
       else
-        m_buffer.select(pen_boundary_active);
+        canvas.select(pen_boundary_active);
     } else {
-      m_buffer.select(pen_boundary_inactive); 
+      canvas.select(pen_boundary_inactive);
     }
     return true;
   }
 }
 
 void
-RenderObservationZone::un_draw_style()
+RenderObservationZone::un_draw_style(Canvas &canvas) const
 {
   if (layer == LAYER_SHADE) {
 #ifdef ENABLE_OPENGL
     glDisable(GL_BLEND);
 #elif !defined(ENABLE_SDL)
-    m_buffer.mix_copy();
+    canvas.mix_copy();
 #endif /* GDI */
   }
 }
 
 void
-RenderObservationZone::Draw(const ObservationZonePoint &_oz) const
+RenderObservationZone::Draw(Canvas &canvas, const Projection &projection,
+                            const ObservationZonePoint &_oz) const
 {
   switch (_oz.shape) {
   case ObservationZonePoint::LINE:
   case ObservationZonePoint::FAI_SECTOR: {
     const SectorZone &oz = (const SectorZone &)_oz;
 
-    RasterPoint p_center = m_proj.GeoToScreen(oz.get_location());
+    RasterPoint p_center = projection.GeoToScreen(oz.get_location());
     if (layer != LAYER_ACTIVE)
-      m_buffer.segment(p_center.x, p_center.y,
-                       m_proj.GeoToScreenDistance(oz.getRadius()),
-                       oz.getStartRadial() - m_proj.GetScreenAngle(),
-                       oz.getEndRadial() - m_proj.GetScreenAngle());
+      canvas.segment(p_center.x, p_center.y,
+                     projection.GeoToScreenDistance(oz.getRadius()),
+                     oz.getStartRadial() - projection.GetScreenAngle(),
+                     oz.getEndRadial() - projection.GetScreenAngle());
     else {
-      RasterPoint p_start = m_proj.GeoToScreen(oz.get_SectorStart());
-      RasterPoint p_end = m_proj.GeoToScreen(oz.get_SectorEnd());
+      RasterPoint p_start = projection.GeoToScreen(oz.get_SectorStart());
+      RasterPoint p_end = projection.GeoToScreen(oz.get_SectorEnd());
 
-      m_buffer.two_lines(p_start, p_center, p_end);
+      canvas.two_lines(p_start, p_center, p_end);
     }
 
     break;
@@ -109,9 +108,9 @@ RenderObservationZone::Draw(const ObservationZonePoint &_oz) const
     const CylinderZone &oz = (const CylinderZone &)_oz;
 
     if (layer != LAYER_INACTIVE) {
-      RasterPoint p_center = m_proj.GeoToScreen(oz.get_location());
-      m_buffer.circle(p_center.x, p_center.y,
-                      m_proj.GeoToScreenDistance(oz.getRadius()));
+      RasterPoint p_center = projection.GeoToScreen(oz.get_location());
+      canvas.circle(p_center.x, p_center.y,
+                    projection.GeoToScreenDistance(oz.getRadius()));
     }
 
     break;
@@ -121,16 +120,16 @@ RenderObservationZone::Draw(const ObservationZonePoint &_oz) const
     const SectorZone &oz = (const SectorZone &)_oz;
 
     if (layer != LAYER_INACTIVE) {
-      RasterPoint p_center = m_proj.GeoToScreen(oz.get_location());
+      RasterPoint p_center = projection.GeoToScreen(oz.get_location());
 
-      m_buffer.segment(p_center.x, p_center.y,
-                       m_proj.GeoToScreenDistance(oz.getRadius()),
-                       oz.getStartRadial() - m_proj.GetScreenAngle(),
-                       oz.getEndRadial() - m_proj.GetScreenAngle());
+      canvas.segment(p_center.x, p_center.y,
+                     projection.GeoToScreenDistance(oz.getRadius()),
+                     oz.getStartRadial() - projection.GetScreenAngle(),
+                     oz.getEndRadial() - projection.GetScreenAngle());
 
-      RasterPoint p_start = m_proj.GeoToScreen(oz.get_SectorStart());
-      RasterPoint p_end = m_proj.GeoToScreen(oz.get_SectorEnd());
-      m_buffer.two_lines(p_start, p_center, p_end);
+      RasterPoint p_start = projection.GeoToScreen(oz.get_SectorStart());
+      RasterPoint p_end = projection.GeoToScreen(oz.get_SectorEnd());
+      canvas.two_lines(p_start, p_center, p_end);
     }
 
     break;
@@ -141,18 +140,18 @@ RenderObservationZone::Draw(const ObservationZonePoint &_oz) const
   case ObservationZonePoint::BGAENHANCEDOPTION: {
     const SectorZone &oz = (const SectorZone &)_oz;
 
-    RasterPoint p_center = m_proj.GeoToScreen(oz.get_location());
+    RasterPoint p_center = projection.GeoToScreen(oz.get_location());
     if (layer != LAYER_ACTIVE) {
-      m_buffer.segment(p_center.x, p_center.y,
-                       m_proj.GeoToScreenDistance(oz.getRadius()),
-                       oz.getStartRadial() - m_proj.GetScreenAngle(),
-                       oz.getEndRadial() - m_proj.GetScreenAngle());
-      m_buffer.circle(p_center.x, p_center.y,
-                      m_proj.GeoToScreenDistance(fixed(500)));
+      canvas.segment(p_center.x, p_center.y,
+                     projection.GeoToScreenDistance(oz.getRadius()),
+                     oz.getStartRadial() - projection.GetScreenAngle(),
+                     oz.getEndRadial() - projection.GetScreenAngle());
+      canvas.circle(p_center.x, p_center.y,
+                    projection.GeoToScreenDistance(fixed(500)));
     } else {
-      RasterPoint p_start = m_proj.GeoToScreen(oz.get_SectorStart());
-      RasterPoint p_end = m_proj.GeoToScreen(oz.get_SectorEnd());
-      m_buffer.two_lines(p_start, p_center, p_end);
+      RasterPoint p_start = projection.GeoToScreen(oz.get_SectorStart());
+      RasterPoint p_end = projection.GeoToScreen(oz.get_SectorEnd());
+      canvas.two_lines(p_start, p_center, p_end);
     }
 
     break;

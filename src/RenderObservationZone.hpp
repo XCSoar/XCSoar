@@ -52,17 +52,13 @@ public:
   };
 
 protected:
-  Canvas &m_buffer;
-  const Projection &m_proj;
-  const SETTINGS_MAP &m_settings_map;
-
   enum layer layer;
 
 public:
-  RenderObservationZone(Canvas &_canvas, const Projection &_projection,
-                        const SETTINGS_MAP &_settings_map);
+  RenderObservationZone();
 
-  void Draw(const ObservationZonePoint &oz) const;
+  void Draw(Canvas &canvas, const Projection &projection,
+            const ObservationZonePoint &oz) const;
 
   void set_layer(enum layer _layer) {
     layer = _layer;
@@ -76,13 +72,14 @@ public:
    * means it is a "past" task point
    * @return false if nothing is to be drawn in this layer
    */
-  bool draw_style(int offset);
+  bool draw_style(Canvas &canvas, const SETTINGS_MAP &settings_map,
+                  int offset) const;
 
   /**
    * Cleans up the settings after drawing has been finished.  This
    * method must be invoked if draw_style() has returned true.
    */
-  void un_draw_style();
+  void un_draw_style(Canvas &canvas) const;
 
 protected:
   const Pen pen_boundary_current;

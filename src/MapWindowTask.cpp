@@ -75,7 +75,7 @@ MapWindow::DrawTask(Canvas &canvas)
    but we can still draw targets */
   const bool draw_bearing = Basic().gps.Connected;
 
-  RenderObservationZone ozv(canvas, render_projection, SettingsMap());
+  RenderObservationZone ozv;
   RenderTaskPointMap tpv(canvas, render_projection, SettingsMap(),
                          /* we're accessing the OrderedTask here,
                             which may be invalid at this point, but it
