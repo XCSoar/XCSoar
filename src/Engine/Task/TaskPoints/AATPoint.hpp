@@ -62,6 +62,8 @@ public:
     {
     }
 
+  virtual void reset();
+
 /** 
  * Retrieve location to be used for remaining task
  * 
@@ -215,6 +217,7 @@ private:
   GeoPoint m_target_location;      /**< Location of target within OZ */
   GeoPoint m_target_save;          /**< Saved location of target within OZ */
   bool m_target_locked;            /**< Whether target can float */
+  SearchPointVector m_deadzone;
 
 /** 
  * Check whether target needs to be moved and if so, to
@@ -257,9 +260,5 @@ private:
  * @return True if same WP, type and OZ
  */
   bool equals(const OrderedTaskPoint* other) const;
-
-private:
-  SearchPointVector m_deadzone;
 };
-
 #endif

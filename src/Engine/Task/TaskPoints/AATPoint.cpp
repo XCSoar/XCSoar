@@ -244,3 +244,10 @@ AATPoint::equals(const OrderedTaskPoint* other) const
     m_target_locked == tp.m_target_locked &&
     m_target_location == tp.m_target_location;
 }
+
+void
+AATPoint::reset()
+{
+  IntermediatePoint::reset();
+  m_deadzone.clear();
+}
