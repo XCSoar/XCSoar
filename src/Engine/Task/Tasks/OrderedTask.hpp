@@ -23,6 +23,7 @@
 #ifndef ORDEREDTASK_H
 #define ORDEREDTASK_H
 
+#include "Navigation/TaskProjection.hpp"
 #include "AbstractTask.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"

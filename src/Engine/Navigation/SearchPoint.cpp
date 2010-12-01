@@ -19,10 +19,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "SearchPoint.hpp"
-#include "Math/FastMath.h"
 #include "Navigation/TaskProjection.hpp"
-#include <math.h>
 
 SearchPoint::SearchPoint(const GeoPoint &loc, 
                          const TaskProjection& tp):

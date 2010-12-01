@@ -23,14 +23,14 @@
 #ifndef SAMPLEDTASKPOINT_H
 #define SAMPLEDTASKPOINT_H
 
-#include "Navigation/GeoPoint.hpp"
 #include "Navigation/SearchPointVector.hpp"
 #include "ObservationZone.hpp"
 #include "TaskPoint.hpp"
-#include "Navigation/TaskProjection.hpp"
 #include "Compiler.h"
 
 class TaskEvents;
+class TaskProjection;
+struct GeoPoint;
 
 /**
  * Abstract specialisation of TaskPoint which has an observation zone

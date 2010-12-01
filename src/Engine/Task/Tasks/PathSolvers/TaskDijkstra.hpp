@@ -24,7 +24,7 @@
 #define TASK_DIJKSTRA_HPP
 
 #include "NavDijkstra.hpp"
-#include "Navigation/SearchPointVector.hpp"
+#include "Navigation/SearchPoint.hpp"
 
 class OrderedTask;
 

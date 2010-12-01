@@ -21,6 +21,7 @@
 */
 
 #include "AATPoint.hpp"
+#include "Navigation/TaskProjection.hpp"
 #include "Navigation/Flat/FlatLine.hpp"
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
 #include <math.h>

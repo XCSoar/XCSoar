@@ -20,6 +20,7 @@
 }
  */
 #include "OrderedTaskPoint.hpp"
+#include "Navigation/TaskProjection.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
