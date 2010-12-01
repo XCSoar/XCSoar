@@ -211,8 +211,6 @@ protected:
     UpdateWeather();
   }
 
-  static bool IsOriginCentered(const DisplayOrientation_t orientation);
-
 #ifndef ENABLE_OPENGL
 private:
   // graphics vars

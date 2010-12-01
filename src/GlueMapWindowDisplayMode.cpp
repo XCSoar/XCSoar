@@ -159,6 +159,15 @@ GlueMapWindow::UpdateScreenAngle()
     visible_projection.SetScreenAngle(Basic().TrackBearing);
 }
 
+bool
+GlueMapWindow::IsOriginCentered()
+{
+  DisplayOrientation_t orientation =
+      (GetDisplayMode() == dmCircling) ?
+          settings_map.OrientationCircling : settings_map.OrientationCruise;
+
+  return (orientation != TRACKUP);
+}
 
 void
 GlueMapWindow::UpdateMapScale()
@@ -174,12 +183,7 @@ GlueMapWindow::UpdateMapScale()
 
   fixed wpd = Calculated().AutoZoomDistance;
   if (SettingsMap().AutoZoom && positive(wpd)) {
-    DisplayOrientation_t orientation =
-        (GetDisplayMode() == dmCircling) ?
-            SettingsMap().OrientationCircling : SettingsMap().OrientationCruise;
-
-    fixed AutoZoomFactor =
-        IsOriginCentered(orientation) ? fixed(2.5) : fixed_four;
+    fixed AutoZoomFactor = IsOriginCentered() ? fixed(2.5) : fixed_four;
 
     if (wpd < AutoZoomFactor * visible_projection.GetMapScale()) {
       // waypoint is too close, so zoom in
@@ -200,11 +204,7 @@ GlueMapWindow::UpdateProjection()
   const RECT rc = get_client_rect();
   const SETTINGS_MAP &settings_map = SettingsMap();
 
-  DisplayOrientation_t orientation =
-      (GetDisplayMode() == dmCircling) ?
-          settings_map.OrientationCircling : settings_map.OrientationCruise;
-
-  if (IsOriginCentered(orientation) || settings_map.EnablePan)
+  if (IsOriginCentered() || settings_map.EnablePan)
     visible_projection.SetScreenOrigin((rc.left + rc.right) / 2,
                                        (rc.bottom + rc.top) / 2);
   else

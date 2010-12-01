@@ -174,6 +174,7 @@ private:
   void LoadDisplayModeScales();
   void SaveDisplayModeScales();
 
+  bool IsOriginCentered();
   void UpdateScreenAngle();
   void UpdateProjection();
 

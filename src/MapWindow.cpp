@@ -221,9 +221,3 @@ MapWindow::get_glide_polar() const
 {
   return task != NULL ? task->get_glide_polar() : GlidePolar(fixed_zero);
 }
-
-bool
-MapWindow::IsOriginCentered(const DisplayOrientation_t orientation)
-{
-  return (orientation != TRACKUP);
-}
