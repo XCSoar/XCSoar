@@ -34,6 +34,7 @@
  */
 class ReferencePoint {
 public:
+  ReferencePoint() {}
 
 /**
  * Constructor

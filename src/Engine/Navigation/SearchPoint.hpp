@@ -46,9 +46,9 @@ public:
    * 
    * @return Null object
    */
-  SearchPoint():ReferencePoint(GeoPoint())
+  SearchPoint()
 #ifndef NDEBUG
-               , projected(false)
+    :projected(false)
 #endif
   {}
 
