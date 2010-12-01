@@ -68,6 +68,14 @@ public:
               const Waypoints &wps);
 
   /**
+   * Returns a reference to the OrderedTask instance, even if it is
+   * invalid or inactive.
+   */
+  const OrderedTask &get_ordered_task() const {
+    return task_ordered;
+  }
+
+  /**
    * Increments active taskpoint sequence for active task
    *
    * @param offset Offset value
