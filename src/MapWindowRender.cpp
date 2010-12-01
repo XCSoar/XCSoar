@@ -85,7 +85,6 @@ MapWindow::RenderGlide(Canvas &canvas)
 void
 MapWindow::Render(Canvas &canvas, const RECT &rc)
 { 
-  UpdateProjection();
   render_projection = visible_projection;
 
   // Calculate screen position of the aircraft

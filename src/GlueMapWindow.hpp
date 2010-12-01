@@ -175,6 +175,7 @@ private:
   void SaveDisplayModeScales();
 
   void UpdateScreenAngle();
+  void UpdateProjection();
 
 public:
   void UpdateMapScale();

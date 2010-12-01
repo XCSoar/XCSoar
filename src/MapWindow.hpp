@@ -201,8 +201,6 @@ public:
   virtual void Render(Canvas &canvas, const RECT &rc);
 
 protected:
-  void UpdateProjection();
-
   void UpdateTopology();
   void UpdateTerrain();
   void UpdateWeather();

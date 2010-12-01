@@ -227,30 +227,3 @@ MapWindow::IsOriginCentered(const DisplayOrientation_t orientation)
 {
   return (orientation != TRACKUP);
 }
-
-void
-MapWindow::UpdateProjection()
-{
-  const RECT rc = get_client_rect();
-  const SETTINGS_MAP &settings_map = SettingsMap();
-
-  DisplayOrientation_t orientation =
-      (GetDisplayMode() == dmCircling) ?
-          settings_map.OrientationCircling : settings_map.OrientationCruise;
-
-  if (IsOriginCentered(orientation) || settings_map.EnablePan)
-    visible_projection.SetScreenOrigin((rc.left + rc.right) / 2,
-                                       (rc.bottom + rc.top) / 2);
-  else
-    visible_projection.SetScreenOrigin(
-        (rc.left + rc.right) / 2,
-        ((rc.top - rc.bottom) * settings_map.GliderScreenPosition / 100) + rc.bottom);
-
-  if (settings_map.EnablePan)
-    SetLocation(settings_map.PanLocation);
-  else
-    // Pan is off
-    SetLocation(Basic().Location);
-
-  visible_projection.UpdateScreenBounds();
-}

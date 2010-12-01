@@ -396,6 +396,7 @@ void
 GlueMapWindow::Render(Canvas &canvas, const RECT &rc)
 {
   UpdateScreenAngle();
+  UpdateProjection();
 
   MapWindow::Render(canvas, rc);
 
