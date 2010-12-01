@@ -82,6 +82,7 @@ OnNewClicked(WndButton &Sender)
   if (dlgTaskTypeShowModal(*parent_window, &ordered_task, new_type)) {
     ordered_task->clear();
     ordered_task->set_factory(new_type);
+    task_modified = true;
   }
 
   RefreshView();
@@ -98,6 +99,7 @@ OnClearClicked(WndButton &Sender)
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
     ordered_task->clear();
     ordered_task->set_factory(ordered_task->get_factory_type());
+    task_modified = true;
     RefreshView();
   }
 }
