@@ -638,3 +638,20 @@ GlueMapWindow::DrawHorizon(Canvas &canvas, const RECT &rc) const
   canvas.black_pen();
   canvas.line(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);
 }
+
+void
+GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
+{
+  if (GetDisplayMode() == dmCircling) {
+    // in circling mode, draw thermal at actual estimated location
+    const MapWindowProjection &projection = render_projection;
+    if (Calculated().ThermalEstimate_Valid) {
+      RasterPoint sc;
+      if (projection.GeoToScreenIfVisible(Calculated().ThermalEstimate_Location, sc)) {
+        Graphics::hBmpThermalSource.draw(canvas, sc);
+      }
+    }
+  } else {
+    MapWindow::DrawThermalEstimate(canvas);
+  }
+}

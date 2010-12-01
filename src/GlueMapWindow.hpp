@@ -168,6 +168,7 @@ private:
   void DrawFinalGlide(Canvas &canvas, const RECT &rc) const;
   void DrawThermalBand(Canvas &canvas, const RECT &rc) const;
   void DrawHorizon(Canvas &canvas, const RECT &rc) const;
+  virtual void DrawThermalEstimate(Canvas &canvas) const;
 
   void SwitchZoomClimb();
 
