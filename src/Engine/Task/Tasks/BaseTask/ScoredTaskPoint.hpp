@@ -98,8 +98,8 @@ public:
  * 
  * @return True if observation zone is entered now
  */
-  virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
-                                const AIRCRAFT_STATE & ref_last);
+  bool transition_enter(const AIRCRAFT_STATE &ref_now,
+                        const AIRCRAFT_STATE &ref_last);
 
 /** 
  * Test whether aircraft has exited observation zone and
@@ -110,8 +110,8 @@ public:
  * 
  * @return True if observation zone is exited now
  */
-  virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
-                               const AIRCRAFT_STATE & ref_last);
+  bool transition_exit(const AIRCRAFT_STATE &ref_now,
+                       const AIRCRAFT_STATE &ref_last);
 
 /** 
  * Retrieve location to be used for the scored task.
