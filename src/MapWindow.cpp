@@ -65,7 +65,6 @@ MapWindow::set(ContainerWindow &parent, const RECT &rc)
                           style);
 
   // initialize other systems
-  visible_projection.SetMapRect(get_client_rect());
   visible_projection.SetMapScale(fixed_int_constant(5000));
   visible_projection.SetScreenOrigin((rc.left + rc.right) / 2,
                                      (rc.bottom + rc.top) / 2);
