@@ -33,15 +33,18 @@ WndSymbolButton::on_paint(Canvas &canvas)
   /* background and selector */
   canvas.clear(background_brush);
 
-  if (has_focus())
-    WindowControl::PaintSelector(canvas, get_client_rect());
-
   // Get button RECT and shrink it to make room for the selector/focus
   RECT rc = get_client_rect();
-  InflateRect(&rc, -2, -2); // todo border width
 
   // Draw button to the background
   canvas.draw_button(rc, is_down());
+
+  // Draw focus rectangle
+  if (has_focus()) {
+    RECT focus_rc = rc;
+    InflateRect(&focus_rc, -3, -3);
+    canvas.draw_focus(focus_rc);
+  }
 
   // If button has text on it
   tstring caption = get_text();
@@ -50,7 +53,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
 
   // If button is pressed, offset the text for 3D effect
   if (is_down())
-    OffsetRect(&rc, Layout::FastScale(1), Layout::FastScale(1));
+    OffsetRect(&rc, 1, 1);
 
   canvas.null_pen();
   canvas.black_brush();
