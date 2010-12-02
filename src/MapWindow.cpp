@@ -68,6 +68,7 @@ MapWindow::set(ContainerWindow &parent, const RECT &rc)
   visible_projection.SetMapScale(fixed_int_constant(5000));
   visible_projection.SetScreenOrigin((rc.left + rc.right) / 2,
                                      (rc.bottom + rc.top) / 2);
+  visible_projection.UpdateScreenBounds();
 
 #ifndef ENABLE_OPENGL
   buffer_projection = visible_projection;
