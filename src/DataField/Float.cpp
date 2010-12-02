@@ -223,9 +223,9 @@ DataFieldFloat::CreateComboListStepping()
     Dec();
     fNext = GetAsFixed();
 
-    if (fNext == fCurrent) // we're at start of the list
+    if (fabs(fNext - fCurrent) < ComboFloatPrec) // we're at start of the list
       break;
-    if (fNext == fLast) // don't repeat Yes/No/etc  (is this needed w/out Bool?)
+    if (fabs(fNext - fLast) < ComboFloatPrec) // don't repeat Yes/No/etc  (is this needed w/out Bool?)
       break;
 
     fLast = fCurrent;
@@ -274,11 +274,11 @@ DataFieldFloat::CreateComboListStepping()
     Inc();
     fNext = GetAsFixed();
 
-    if (fNext == fCurrent)
+    if (fabs(fNext - fCurrent) < ComboFloatPrec)
       // we're at start of the list
       break;
 
-    if (fNext == fLast && combo_list->size() > 0)
+    if ((fabs(fNext - fLast) < ComboFloatPrec) && combo_list->size() > 0)
       //we're at the end of the range
       break;
 
