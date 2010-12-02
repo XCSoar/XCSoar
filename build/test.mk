@@ -268,6 +268,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunIGCWriter \
 	RunWindZigZag \
 	RunCanvas RunMapWindow RunDialog \
+	RunRenderOZ \
 	RunProgressWindow \
 	RunAnalysis \
 	RunAirspaceWarningDialog
@@ -807,6 +808,41 @@ RUN_DIALOG_LDADD = \
 $(RUN_DIALOG_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(RUN_DIALOG_BIN): LDLIBS += $(SCREEN_LDLIBS)
 $(RUN_DIALOG_BIN): $(RUN_DIALOG_OBJS) $(RUN_DIALOG_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_RENDER_OZ_SOURCES = \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/RenderObservationZone.cpp \
+	$(SRC)/Screen/Graphics.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/Ramp.cpp \
+	$(SRC)/Screen/UnitSymbol.cpp \
+	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
+	$(SRC)/Math/Screen.cpp \
+	$(SRC)/Appearance.cpp \
+	$(SRC)/Projection.cpp \
+	$(SRC)/Units.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/RunRenderOZ.cpp
+RUN_RENDER_OZ_OBJS = $(call SRC_TO_OBJ,$(RUN_RENDER_OZ_SOURCES))
+RUN_RENDER_OZ_BIN = $(TARGET_BIN_DIR)/RunRenderOZ$(TARGET_EXEEXT)
+RUN_RENDER_OZ_LDADD = \
+	$(ENGINE_CORE_LIBS) \
+	$(FORM_LIBS) \
+	$(SCREEN_LIBS) \
+	$(MATH_LIBS) \
+	$(RESOURCE_BINARY)
+$(RUN_RENDER_OZ_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(RUN_RENDER_OZ_BIN): LDLIBS += $(SCREEN_LDLIBS)
+$(RUN_RENDER_OZ_BIN): $(RUN_RENDER_OZ_OBJS) $(RUN_RENDER_OZ_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
