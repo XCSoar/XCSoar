@@ -39,14 +39,12 @@ Copyright_License {
 #include "Asset.hpp"
 #include "LogFile.hpp"
 
-#define NUMSNAILRAMP 5
+#define NUMSNAILRAMP 3
 
 const COLORRAMP snail_colors_vario[] = {
   {0,   0xff, 0x3e, 0x00},
-  {50,  0xcd, 0x4f, 0x27},
   {100, 0x8f, 0x8f, 0x8f},
-  {150, 0x27, 0xcd, 0x4f},
-  {201, 0x00, 0xff, 0x3e}
+  {200, 0x00, 0xff, 0x3e}
 };
 
 Pen Graphics::hAirspacePens[AIRSPACECLASSCOUNT];
