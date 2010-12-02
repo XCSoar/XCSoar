@@ -254,9 +254,8 @@ void
 Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 {
   int iwidth;
-  int minwidth;
-  minwidth = max(Layout::Scale(2),
-                 Layout::Scale(settings_map.SnailWidthScale) / 16);
+  int minwidth =
+      max(Layout::Scale(2), Layout::Scale(settings_map.SnailWidthScale) / 16);
 
   for (int i = 0; i < NUMSNAILCOLORS; i++) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
