@@ -337,7 +337,6 @@ Trace::find_within_range(const GeoPoint &loc, const fixed range,
   TracePoint bb_target(loc);
   bb_target.project(task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
-  const unsigned rrange = task_projection.project_range(loc, resolution);
 
   // TracePointVector vectors;
   TracePointSet tset;
@@ -353,6 +352,7 @@ Trace::find_within_range(const GeoPoint &loc, const fixed range,
   */
 
   if (positive(resolution)) {
+    const unsigned rrange = task_projection.project_range(loc, resolution);
     TracePointList tlist(tset.begin(), tset.end());
     thin_trace(tlist, rrange * rrange);
     return TracePointVector(tlist.begin(), tlist.end());

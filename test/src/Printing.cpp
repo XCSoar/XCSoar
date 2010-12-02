@@ -657,7 +657,7 @@ PrintHelper::trace_print(const Trace& trace, const GeoPoint &loc)
   std::ofstream fs("results/res-trace.txt");
 
   TracePointVector vec = trace.find_within_range(loc, fixed(10000),
-                                                 0, -fixed_one);
+                                                 0);
   print_tpv(vec, fs);
 
   std::ofstream ft("results/res-trace-thin.txt");

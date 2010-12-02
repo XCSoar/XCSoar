@@ -135,7 +135,7 @@ public:
   TracePointVector
   find_within_range(const GeoPoint &loc, const fixed range,
                     const unsigned mintime = 0,
-                    const fixed resolution = -fixed_one) const;
+                    const fixed resolution = fixed_zero) const;
 
   /** 
    * Retrieve a vector of trace points thinned to limit the number of points 
