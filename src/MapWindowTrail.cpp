@@ -33,6 +33,12 @@ Copyright_License {
 using std::min;
 using std::max;
 
+/**
+ * This function returns the corresponding SnailTrail
+ * color array index to the input
+ * @param cv Input value between -1.0 and 1.0
+ * @return SnailTrail color array index
+ */
 gcc_const
 static int
 fSnailColour(fixed cv)
