@@ -28,12 +28,13 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/Flat/FlatPoint.hpp"
 #include "Navigation/SpeedVector.hpp"
-#include "NMEA/Derived.hpp"
 
 class TaskProjection;
 
 #define TLOCATOR_NMIN 5
 #define TLOCATOR_NMAX 60
+
+struct THERMAL_LOCATOR_INFO;
 
 /**
  * Class to estimate the location of the center of a thermal

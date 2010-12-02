@@ -120,6 +120,8 @@ fastcosine(fixed x)
 #endif
 }
 
+fixed thermal_recency_fn(unsigned x);
+
 inline unsigned int
 CombinedDivAndMod(unsigned int &lx)
 {

@@ -5,9 +5,16 @@
 #include "Math/Constants.h"
 #include "Math/FastMath.h"
 #include "Math/fixed.hpp"
+#include "ThermalLocator.hpp"
 
 #include <math.h>
 #include <stdio.h>
+
+static inline double
+thermal_fn(int x)
+{
+  return exp((-0.2/TLOCATOR_NMAX)*pow((double)x, 1.5));
+}
 
 static inline double
 INT_TO_DEG(int x)
@@ -87,6 +94,12 @@ main(int argc, char **argv)
     printf("  fixed(%.20e),\n", 1.0 / x);
   }
   puts("#endif");
+  puts("};");
+
+  printf("#define THERMALRECENCY_SIZE %d\n", TLOCATOR_NMAX);
+  printf("const fixed THERMALRECENCY[%d] = {", TLOCATOR_NMAX);
+  for (unsigned i = 0; i < TLOCATOR_NMAX; i++)
+    printf("  fixed(%.20e),\n", thermal_fn(i));
   puts("};");
 
   return 0;

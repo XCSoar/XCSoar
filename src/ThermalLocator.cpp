@@ -24,17 +24,19 @@ Copyright_License {
 #include "ThermalLocator.hpp"
 #include "Math/Earth.hpp"
 #include "Navigation/TaskProjection.hpp"
-#include <math.h>
+#include "Math/FastMath.h"
+#include "NMEA/Derived.hpp"
+#include <assert.h>
 
 void
 ThermalLocator::Point::Drift(fixed t, const TaskProjection& projection,
                              const GeoPoint& wind_drift)
 {
-  static const fixed decay_factor(-0.2/TLOCATOR_NMAX);
-
   const fixed dt = t - t_0;
   assert(!negative(dt));
-  recency_weight = exp(decay_factor * fixed(pow(dt, 1.5)));
+
+  // thermal decay function is located in GenerateSineTables.cpp
+  recency_weight = thermal_recency_fn((unsigned)dt);
   lift_weight = w*recency_weight;
 
   GeoPoint p = location + wind_drift * dt;

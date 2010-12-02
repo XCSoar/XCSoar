@@ -90,3 +90,9 @@ isqrt4(unsigned long val)
 }
 
 }
+
+fixed
+thermal_recency_fn(unsigned x)
+{
+  return (x+1< THERMALRECENCY_SIZE)? THERMALRECENCY[x]: fixed_zero;
+}
