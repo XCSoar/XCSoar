@@ -41,7 +41,7 @@ Copyright_License {
 
 #define NUMSNAILRAMP 6
 
-const COLORRAMP snail_colors[] = {
+const COLORRAMP snail_colors_vario[] = {
   {0,   0xff, 0x3e, 0x00},
   {50,  0xcd, 0x4f, 0x27},
   {100, 0x8f, 0x8f, 0x8f},
@@ -54,7 +54,7 @@ Pen Graphics::hAirspacePens[AIRSPACECLASSCOUNT];
 Brush Graphics::hAirspaceBrushes[NUMAIRSPACEBRUSHES];
 Bitmap Graphics::hAirspaceBitmap[NUMAIRSPACEBRUSHES];
 
-Pen Graphics::hSnailPens[NUMSNAILCOLORS];
+Pen Graphics::hpSnailVario[NUMSNAILCOLORS];
 
 Bitmap Graphics::hAboveTerrainBitmap;
 Brush Graphics::hAboveTerrainBrush;
@@ -260,7 +260,7 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 
   for (int i = 0; i < NUMSNAILCOLORS; i++) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    Color color = ColorRampLookup(ih, snail_colors, NUMSNAILRAMP, 6);
+    Color color = ColorRampLookup(ih, snail_colors_vario, NUMSNAILRAMP, 6);
 
     if (i < NUMSNAILCOLORS / 2)
       iwidth = minwidth;
@@ -268,7 +268,7 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
       iwidth = max(minwidth, (i - NUMSNAILCOLORS / 2)
           * Layout::Scale(settings_map.SnailWidthScale) / NUMSNAILCOLORS);
 
-    hSnailPens[i].set(iwidth, color);
+    hpSnailVario[i].set(iwidth, color);
   }
 }
 

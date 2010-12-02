@@ -103,7 +103,7 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
                                  - it->NettoVario / vario_min :
                                  it->NettoVario / vario_max ;
 
-      canvas.select(Graphics::hSnailPens[fSnailColour(colour_vario)]);
+      canvas.select(Graphics::hpSnailVario[fSnailColour(colour_vario)]);
       canvas.line(last_point, pt);
     }
     last_time = it->time;
