@@ -168,6 +168,8 @@ private:
   void DrawFinalGlide(Canvas &canvas, const RECT &rc) const;
   void DrawThermalBand(Canvas &canvas, const RECT &rc) const;
   void DrawHorizon(Canvas &canvas, const RECT &rc) const;
+  virtual void DrawThermalEstimate(Canvas &canvas) const;
+  virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;
 
   void SwitchZoomClimb();
 
@@ -182,6 +184,13 @@ public:
   void UpdateMapScale();
   void UpdateDisplayMode();
   void SetMapScale(const fixed x);
+
+  DisplayMode_t GetDisplayMode() const {
+    return DisplayMode;
+  }
+
+protected:
+  DisplayMode_t DisplayMode;
 };
 
 #endif

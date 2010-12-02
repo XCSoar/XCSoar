@@ -42,30 +42,20 @@ fSnailColour(fixed cv)
 }
 
 void
-MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
+MapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
+{
+  unsigned min_time = max(0, (int)Basic().Time - 600);
+  DrawTrail(canvas, aircraft_pos, min_time);
+}
+
+void
+MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
+                     unsigned min_time, bool enable_traildrift) const
 {
   if (!SettingsMap().TrailActive || task == NULL)
     return;
 
   const MapWindowProjection &projection = render_projection;
-
-  unsigned min_time = 0;
-
-  if (GetDisplayMode() == dmCircling) {
-    min_time = max(0, (int)Basic().Time - 600);
-  } else {
-    switch(SettingsMap().TrailActive) {
-    case 1:
-      min_time = max(0, (int)Basic().Time - 3600);
-      break;
-    case 2:
-      min_time = max(0, (int)Basic().Time - 600);
-      break;
-    case 3:
-      min_time = 0; // full
-      break;
-    }
-  }
 
   TracePointVector trace =
     task->find_trace_points(projection.GetGeoLocation(),
@@ -76,7 +66,7 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
     return;
 
   GeoPoint traildrift(Angle::native(fixed_zero), Angle::native(fixed_zero));
-  if (SettingsMap().EnableTrailDrift && GetDisplayMode() == dmCircling) {
+  if (enable_traildrift) {
     GeoPoint tp1 = FindLatitudeLongitude(Basic().Location, Basic().wind.bearing,
                                          Basic().wind.norm);
     traildrift = Basic().Location - tp1;

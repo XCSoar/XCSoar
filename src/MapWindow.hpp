@@ -182,11 +182,13 @@ public:
   void DrawAirspaceIntersections(Canvas &canvas) const;
   void DrawWaypoints(Canvas &canvas);
 
-  void DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;
+  void DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
+                 unsigned min_time, bool enable_traildrift = false) const;
+  virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;
   void DrawTeammate(Canvas &canvas) const;
   void DrawTask(Canvas &canvas);
   void DrawTaskOffTrackIndicator(Canvas &canvas);
-  void DrawThermalEstimate(Canvas &canvas) const;
+  virtual void DrawThermalEstimate(Canvas &canvas) const;
 
   void DrawGlideThroughTerrain(Canvas &canvas) const;
   void DrawTerrainAbove(Canvas &canvas);
@@ -274,14 +276,7 @@ private:
   friend class DrawThread;
 
 public:
-  DisplayMode_t GetDisplayMode() const {
-    return DisplayMode;
-  }
-
   void SetMapScale(const fixed x);
-
-protected:
-  DisplayMode_t DisplayMode;
 };
 
 #endif

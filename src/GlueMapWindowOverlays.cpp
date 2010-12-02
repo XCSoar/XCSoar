@@ -638,3 +638,44 @@ GlueMapWindow::DrawHorizon(Canvas &canvas, const RECT &rc) const
   canvas.black_pen();
   canvas.line(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);
 }
+
+void
+GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
+{
+  if (GetDisplayMode() == dmCircling) {
+    // in circling mode, draw thermal at actual estimated location
+    const MapWindowProjection &projection = render_projection;
+    if (Calculated().ThermalEstimate_Valid) {
+      RasterPoint sc;
+      if (projection.GeoToScreenIfVisible(Calculated().ThermalEstimate_Location, sc)) {
+        Graphics::hBmpThermalSource.draw(canvas, sc);
+      }
+    }
+  } else {
+    MapWindow::DrawThermalEstimate(canvas);
+  }
+}
+
+void
+GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
+{
+  unsigned min_time = 0;
+  if (GetDisplayMode() == dmCircling) {
+    min_time = max(0, (int)Basic().Time - 600);
+  } else {
+    switch(SettingsMap().TrailActive) {
+    case 1:
+      min_time = max(0, (int)Basic().Time - 3600);
+      break;
+    case 2:
+      min_time = max(0, (int)Basic().Time - 600);
+      break;
+    case 3:
+      min_time = 0; // full
+      break;
+    }
+  }
+
+  DrawTrail(canvas, aircraft_pos, min_time,
+            SettingsMap().EnableTrailDrift && GetDisplayMode() == dmCircling);
+}

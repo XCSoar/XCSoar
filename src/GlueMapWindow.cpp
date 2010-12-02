@@ -28,7 +28,8 @@ Copyright_License {
 GlueMapWindow::GlueMapWindow()
   :idle_robin(2),
    drag_mode(DRAG_NONE),
-   ignore_single_click(true) {}
+   ignore_single_click(true),
+   DisplayMode(dmCruise) {}
 
 void
 GlueMapWindow::set(ContainerWindow &parent, const RECT &rc)

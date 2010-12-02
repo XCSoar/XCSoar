@@ -43,12 +43,11 @@ MapWindow::MapWindow()
    terrain_center(Angle::native(fixed_zero), Angle::native(fixed_zero)),
    weather(NULL),
    airspace_database(NULL), airspace_warnings(NULL), task(NULL),
-   marks(NULL),
+   marks(NULL)
 #ifndef ENABLE_OPENGL
-   ui_generation(1), buffer_generation(0),
-   scale_buffer(0),
+   , ui_generation(1), buffer_generation(0),
+   scale_buffer(0)
 #endif
-   DisplayMode(dmCruise)
 {}
 
 MapWindow::~MapWindow()

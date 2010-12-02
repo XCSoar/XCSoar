@@ -116,7 +116,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   RenderMarks(canvas);
 
   // Render the snail trail
-  DrawTrail(canvas, aircraft_pos);
+  RenderTrail(canvas, aircraft_pos);
 
   // Render estimate of thermal location
   DrawThermalEstimate(canvas);
