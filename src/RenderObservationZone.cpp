@@ -81,36 +81,26 @@ RenderObservationZone::un_draw_style()
   }
 }
 
-void 
-RenderObservationZone::parms_oz(const CylinderZone& oz) 
-{
-  p_radius = m_proj.GeoToScreenDistance(oz.getRadius());
-  p_center = m_proj.GeoToScreen(oz.get_location());
-}
-
-void 
-RenderObservationZone::parms_sector(const SectorZone& oz) 
-{
-  parms_oz(oz);
-  p_start = m_proj.GeoToScreen(oz.get_SectorStart());
-  p_end = m_proj.GeoToScreen(oz.get_SectorEnd());
-}
-
 void
-RenderObservationZone::Draw(const ObservationZonePoint &_oz)
+RenderObservationZone::Draw(const ObservationZonePoint &_oz) const
 {
   switch (_oz.shape) {
   case ObservationZonePoint::LINE:
   case ObservationZonePoint::FAI_SECTOR: {
     const SectorZone &oz = (const SectorZone &)_oz;
-    parms_sector(oz);
 
+    RasterPoint p_center = m_proj.GeoToScreen(oz.get_location());
     if (layer != LAYER_ACTIVE)
-      m_buffer.segment(p_center.x, p_center.y, p_radius,
+      m_buffer.segment(p_center.x, p_center.y,
+                       m_proj.GeoToScreenDistance(oz.getRadius()),
                        oz.getStartRadial() - m_proj.GetScreenAngle(),
                        oz.getEndRadial() - m_proj.GetScreenAngle());
-    else
+    else {
+      RasterPoint p_start = m_proj.GeoToScreen(oz.get_SectorStart());
+      RasterPoint p_end = m_proj.GeoToScreen(oz.get_SectorEnd());
+
       m_buffer.two_lines(p_start, p_center, p_end);
+    }
 
     break;
   }
@@ -119,8 +109,9 @@ RenderObservationZone::Draw(const ObservationZonePoint &_oz)
     const CylinderZone &oz = (const CylinderZone &)_oz;
 
     if (layer != LAYER_INACTIVE) {
-      parms_oz(oz);
-      m_buffer.circle(p_center.x, p_center.y, p_radius);
+      RasterPoint p_center = m_proj.GeoToScreen(oz.get_location());
+      m_buffer.circle(p_center.x, p_center.y,
+                      m_proj.GeoToScreenDistance(oz.getRadius()));
     }
 
     break;
@@ -130,10 +121,15 @@ RenderObservationZone::Draw(const ObservationZonePoint &_oz)
     const SectorZone &oz = (const SectorZone &)_oz;
 
     if (layer != LAYER_INACTIVE) {
-      parms_sector(oz);
-      m_buffer.segment(p_center.x, p_center.y, p_radius,
+      RasterPoint p_center = m_proj.GeoToScreen(oz.get_location());
+
+      m_buffer.segment(p_center.x, p_center.y,
+                       m_proj.GeoToScreenDistance(oz.getRadius()),
                        oz.getStartRadial() - m_proj.GetScreenAngle(),
                        oz.getEndRadial() - m_proj.GetScreenAngle());
+
+      RasterPoint p_start = m_proj.GeoToScreen(oz.get_SectorStart());
+      RasterPoint p_end = m_proj.GeoToScreen(oz.get_SectorEnd());
       m_buffer.two_lines(p_start, p_center, p_end);
     }
 
@@ -144,16 +140,20 @@ RenderObservationZone::Draw(const ObservationZonePoint &_oz)
   case ObservationZonePoint::BGAFIXEDCOURSE:
   case ObservationZonePoint::BGAENHANCEDOPTION: {
     const SectorZone &oz = (const SectorZone &)_oz;
-    parms_sector(oz);
 
+    RasterPoint p_center = m_proj.GeoToScreen(oz.get_location());
     if (layer != LAYER_ACTIVE) {
-      m_buffer.segment(p_center.x, p_center.y, p_radius,
+      m_buffer.segment(p_center.x, p_center.y,
+                       m_proj.GeoToScreenDistance(oz.getRadius()),
                        oz.getStartRadial() - m_proj.GetScreenAngle(),
                        oz.getEndRadial() - m_proj.GetScreenAngle());
       m_buffer.circle(p_center.x, p_center.y,
                       m_proj.GeoToScreenDistance(fixed(500)));
-    } else
+    } else {
+      RasterPoint p_start = m_proj.GeoToScreen(oz.get_SectorStart());
+      RasterPoint p_end = m_proj.GeoToScreen(oz.get_SectorEnd());
       m_buffer.two_lines(p_start, p_center, p_end);
+    }
 
     break;
   }

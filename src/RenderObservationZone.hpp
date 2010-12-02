@@ -62,7 +62,7 @@ public:
   RenderObservationZone(Canvas &_canvas, const Projection &_projection,
                         const SETTINGS_MAP &_settings_map);
 
-  void Draw(const ObservationZonePoint &oz);
+  void Draw(const ObservationZonePoint &oz) const;
 
   void set_layer(enum layer _layer) {
     layer = _layer;
@@ -85,15 +85,9 @@ public:
   void un_draw_style();
 
 protected:
-  void parms_oz(const CylinderZone& oz);
-
-  void parms_sector(const SectorZone& oz);
-
   const Pen pen_boundary_current;
   const Pen pen_boundary_active;
   const Pen pen_boundary_inactive;
-  RasterPoint p_center, p_start, p_end;
-  unsigned p_radius;
 };
 
 #endif
