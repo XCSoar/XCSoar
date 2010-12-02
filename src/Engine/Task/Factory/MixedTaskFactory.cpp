@@ -61,7 +61,7 @@ MixedTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
   to.fai_finish = false;  
   to.homogeneous_tps = false;
   to.is_closed = false;
-  to.min_points = 4;
+  to.min_points = 2;
   to.max_points = 10;
   to.start_requires_arm = true;
 }

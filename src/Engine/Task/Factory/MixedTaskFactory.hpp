@@ -27,6 +27,8 @@
 /**
  * Factory for mixed tasks (mixture of AST and AAT sectors)
  * This is the most general of the factories.
+ * The idea is that any other type of task can be "demoted"
+ * to a Mixed AAT task with no changes required to an TPs.
  */
 class MixedTaskFactory: public AbstractTaskFactory 
 {
