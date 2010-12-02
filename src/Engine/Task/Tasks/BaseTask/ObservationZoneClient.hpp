@@ -19,13 +19,14 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef OBSERVATIONZONECLIENT_HPP
 #define OBSERVATIONZONECLIENT_HPP
 
-#include "ObservationZonePoint.hpp"
+#include "ObservationZone.hpp"
 
-class ObservationZoneVisitor;
-class ObservationZoneConstVisitor;
+class ObservationZonePoint;
+class TaskPoint;
 
 /**
  * Class holding an ObzervationZonePoint, directing calls to it
@@ -41,9 +42,7 @@ public:
    */
   ObservationZoneClient(ObservationZonePoint* _oz):m_oz(_oz) {};
 
-  virtual ~ObservationZoneClient() {
-    delete m_oz;
-  };
+  virtual ~ObservationZoneClient();
 
 /** 
  * Accessor for OZ (for modifying parameters etc)
@@ -61,10 +60,7 @@ public:
  * 
  * @return True if aircraft is inside observation zone
  */
-  virtual bool isInSector(const AIRCRAFT_STATE &ref) const
-  {
-    return m_oz->isInSector(ref);
-  }
+  virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
 
 /** 
  * Generate a random location inside the OZ (to be used for testing)
@@ -73,9 +69,7 @@ public:
  *
  * @return Location of point
  */
-  GeoPoint randomPointInSector(const fixed mag) const {
-    return m_oz->randomPointInSector(mag);
-  }
+  GeoPoint randomPointInSector(const fixed mag) const;
 
 /** 
  * Calculate distance reduction for achieved task point,
@@ -83,9 +77,7 @@ public:
  * 
  * @return Distance reduction once achieved
  */
-  virtual fixed score_adjustment() const {
-    return m_oz->score_adjustment();
-  }
+  virtual fixed score_adjustment() const;
 
 /** 
  * Calculate boundary point from parametric border
@@ -94,10 +86,7 @@ public:
  * 
  * @return Boundary point
  */
-  GeoPoint get_boundary_parametric(fixed t) const
-  {
-    return m_oz->get_boundary_parametric(t);
-  }
+  GeoPoint get_boundary_parametric(fixed t) const;
 
 protected:
 
@@ -110,9 +99,7 @@ protected:
  * @return True if constraints are satisfied
  */
   virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
-                                     const AIRCRAFT_STATE & ref_last) const {
-    return m_oz->transition_constraint(ref_now, ref_last);
-  }
+                                     const AIRCRAFT_STATE & ref_last) const;
 
 /**
  * Set previous/next taskpoints to allow OZ to update its geometry

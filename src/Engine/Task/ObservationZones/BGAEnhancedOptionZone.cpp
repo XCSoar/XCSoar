@@ -21,6 +21,7 @@
  */
 
 #include "BGAEnhancedOptionZone.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 
 GeoPoint 
 BGAEnhancedOptionZone::get_boundary_parametric(fixed t) const

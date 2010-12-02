@@ -21,6 +21,7 @@
  */
 
 #include "KeyholeZone.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 
 GeoPoint 
 KeyholeZone::get_boundary_parametric(fixed t) const

@@ -21,6 +21,7 @@
  */
 
 #include "BGAFixedCourseZone.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 
 GeoPoint 
 BGAFixedCourseZone::get_boundary_parametric(fixed t) const

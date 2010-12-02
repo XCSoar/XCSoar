@@ -26,7 +26,6 @@
 #include "Navigation/ReferencePoint.hpp"
 #include "ObservationZone.hpp"
 #include "Util/NonCopyable.hpp"
-#include "Util/Serialisable.hpp"
 
 struct GeoPoint;
 class TaskPoint;

@@ -19,8 +19,45 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "ObservationZoneClient.hpp"
+#include "ObservationZonePoint.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
+
+ObservationZoneClient::~ObservationZoneClient() {
+  delete m_oz;
+}
+
+bool
+ObservationZoneClient::isInSector(const AIRCRAFT_STATE &ref) const
+{
+  return m_oz->isInSector(ref);
+}
+
+GeoPoint
+ObservationZoneClient::randomPointInSector(const fixed mag) const
+{
+  return m_oz->randomPointInSector(mag);
+}
+
+fixed
+ObservationZoneClient::score_adjustment() const
+{
+  return m_oz->score_adjustment();
+}
+
+GeoPoint
+ObservationZoneClient::get_boundary_parametric(fixed t) const
+{
+  return m_oz->get_boundary_parametric(t);
+}
+
+bool
+ObservationZoneClient::transition_constraint(const AIRCRAFT_STATE & ref_now,
+                                             const AIRCRAFT_STATE & ref_last) const
+{
+  return m_oz->transition_constraint(ref_now, ref_last);
+}
 
 void 
 ObservationZoneClient::set_legs(const TaskPoint *previous,

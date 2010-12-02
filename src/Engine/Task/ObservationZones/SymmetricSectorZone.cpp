@@ -20,6 +20,7 @@
 }
  */
 #include "SymmetricSectorZone.hpp"
+#include "Task/Tasks/BaseTask/TaskPoint.hpp"
 
 void SymmetricSectorZone::set_legs(const TaskPoint *previous,
                                    const TaskPoint *current,

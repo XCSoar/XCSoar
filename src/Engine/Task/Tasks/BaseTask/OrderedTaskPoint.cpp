@@ -19,7 +19,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "OrderedTaskPoint.hpp"
+#include "ObservationZonePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
