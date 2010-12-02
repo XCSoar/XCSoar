@@ -259,7 +259,7 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 
   for (int i = 0; i < NUMSNAILCOLORS; i++) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    Color color = ColorRampLookup(ih, snail_colors_vario, NUMSNAILRAMP, 6);
+    Color color = ColorRampLookup(ih, snail_colors_vario, NUMSNAILRAMP);
 
     if (i < NUMSNAILCOLORS / 2)
       iwidth = minwidth;
