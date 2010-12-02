@@ -39,14 +39,6 @@ Copyright_License {
 #include "Asset.hpp"
 #include "LogFile.hpp"
 
-#define NUMSNAILRAMP 3
-
-const COLORRAMP snail_colors_vario[] = {
-  {0,   0xff, 0x3e, 0x00},
-  {100, 0x8f, 0x8f, 0x8f},
-  {200, 0x00, 0xff, 0x3e}
-};
-
 Pen Graphics::hAirspacePens[AIRSPACECLASSCOUNT];
 Brush Graphics::hAirspaceBrushes[NUMAIRSPACEBRUSHES];
 Bitmap Graphics::hAirspaceBitmap[NUMAIRSPACEBRUSHES];
@@ -250,13 +242,19 @@ Graphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
 void
 Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 {
+  const COLORRAMP snail_colors_vario[] = {
+    {0,   0xff, 0x3e, 0x00},
+    {100, 0x8f, 0x8f, 0x8f},
+    {200, 0x00, 0xff, 0x3e}
+  };
+
   int iwidth;
   int minwidth =
       max(Layout::Scale(2), Layout::Scale(settings_map.SnailWidthScale) / 16);
 
   for (int i = 0; i < NUMSNAILCOLORS; i++) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    Color color = ColorRampLookup(ih, snail_colors_vario, NUMSNAILRAMP);
+    Color color = ColorRampLookup(ih, snail_colors_vario, 3);
 
     if (i < NUMSNAILCOLORS / 2)
       iwidth = minwidth;
