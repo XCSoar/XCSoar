@@ -234,8 +234,8 @@ Profile::Use()
   Get(szProfileSnailWidthScale,
       settings_map.SnailWidthScale);
 
-  Get(szProfileSnailType,
-      settings_map.SnailType);
+  if (Get(szProfileSnailType, Temp))
+    settings_map.SnailType = (SnailType_t)Temp;
 
   Get(szProfileTeamcodeRefWaypoint,
       settings_computer.TeamCodeRefWaypoint);

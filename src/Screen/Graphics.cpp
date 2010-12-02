@@ -261,7 +261,7 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 
   for (int i = 0; i < NUMSNAILCOLORS; i++) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    Color color = (settings_map.SnailType == 1) ?
+    Color color = (settings_map.SnailType == stSeeYouVario) ?
                   ColorRampLookup(ih, snail_colors_vario2, 4) :
                   ColorRampLookup(ih, snail_colors_vario, 3);
 

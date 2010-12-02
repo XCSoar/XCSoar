@@ -52,6 +52,11 @@ typedef enum {
   dmFinalGlide
 } DisplayMode_t;
 
+enum SnailType_t {
+  stStandardVario,
+  stSeeYouVario,
+};
+
 // user interface options
 
 // where using these from Calculations or MapWindow thread, should
@@ -85,7 +90,7 @@ struct SETTINGS_MAP {
   bool AutoZoom;
   int SnailWidthScale;
   /** 0: standard, 1: seeyou colors */
-  short SnailType;
+  SnailType_t SnailType;
   int WindArrowStyle;
   /** What type of text to draw next to the waypoint icon */
   DisplayTextType_t DisplayTextType;

@@ -1366,7 +1366,7 @@ setVariables()
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Standard Vario"));
     dfe->addEnumText(_("SeeYou Vario"));
-    dfe->Set(XCSoarInterface::SettingsMap().SnailType);
+    dfe->Set((int)XCSoarInterface::SettingsMap().SnailType);
     wp->RefreshDisplay();
   }
 }
@@ -2259,9 +2259,9 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
   if (wp) {
-    if (XCSoarInterface::SettingsMap().SnailType != wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().SnailType = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileSnailType, XCSoarInterface::SettingsMap().SnailType);
+    if (XCSoarInterface::SettingsMap().SnailType != (SnailType_t)wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsMap().SnailType = (SnailType_t)wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileSnailType, (int)XCSoarInterface::SettingsMap().SnailType);
       changed = true;
       Graphics::InitSnailTrail(XCSoarInterface::SettingsMap());
     }
