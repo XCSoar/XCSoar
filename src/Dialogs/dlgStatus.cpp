@@ -427,8 +427,9 @@ UpdateValuesRules(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartPoint"));
   assert(wp != NULL);
-  if (protected_task_manager.get_mode() == TaskManager::MODE_ORDERED)
-    wp->SetText(protected_task_manager.get_ordered_taskpoint_name(0));
+  ProtectedTaskManager::Lease task_manager(protected_task_manager);
+  if (task_manager->get_mode() == TaskManager::MODE_ORDERED)
+    wp->SetText(task_manager->get_ordered_taskpoint_name(0));
   else
     wp->SetText(_T(""));
 }
