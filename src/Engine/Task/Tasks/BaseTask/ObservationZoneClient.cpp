@@ -23,6 +23,7 @@
 #include "ObservationZoneClient.hpp"
 #include "ObservationZonePoint.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
+#include "Task/Tasks/BaseTask/TaskPoint.hpp"
 
 ObservationZoneClient::~ObservationZoneClient() {
   delete m_oz;
@@ -64,5 +65,7 @@ ObservationZoneClient::set_legs(const TaskPoint *previous,
                                 const TaskPoint *current,
                                 const TaskPoint *next)
 {
-  m_oz->set_legs(previous, current, next);
+  m_oz->set_legs(previous != NULL ? &previous->get_location() : NULL,
+                 current != NULL ? &current->get_location() : NULL,
+                 next != NULL ? &next->get_location() : NULL);
 }

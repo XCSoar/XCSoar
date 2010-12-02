@@ -19,24 +19,25 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#include "SymmetricSectorZone.hpp"
-#include "Task/Tasks/BaseTask/TaskPoint.hpp"
 
-void SymmetricSectorZone::set_legs(const TaskPoint *previous,
-                                   const TaskPoint *current,
-                                   const TaskPoint *next) 
+#include "SymmetricSectorZone.hpp"
+#include "Navigation/GeoPoint.hpp"
+
+void SymmetricSectorZone::set_legs(const GeoPoint *previous,
+                                   const GeoPoint *current,
+                                   const GeoPoint *next)
 {
   Angle biSector;
   if (!next && previous) { 
     // final
-    biSector = previous->bearing(current->get_location());
+    biSector = previous->bearing(*current);
   } else if (next && previous) {
     // intermediate
-    biSector = previous->bearing(current->get_location()).
-      BiSector(current->bearing(next->get_location()));
+    biSector = previous->bearing(*current).
+      BiSector(current->bearing(*next));
   } else if (next && !previous) {
     // start
-    biSector = next->bearing(current->get_location());
+    biSector = next->bearing(*current);
   } else {
     // single point
     biSector = Angle::native(fixed_zero);

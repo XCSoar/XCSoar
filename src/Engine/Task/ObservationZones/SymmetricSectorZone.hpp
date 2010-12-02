@@ -58,9 +58,9 @@ public:
  * @param current Taskpoint this is located at
  * @param next Following task point (destination of outbound leg)
  */
-  virtual void set_legs(const TaskPoint *previous,
-                        const TaskPoint *current,
-                        const TaskPoint *next);
+  virtual void set_legs(const GeoPoint *previous,
+                        const GeoPoint *current,
+                        const GeoPoint *next);
 
 /** 
  * Test whether an OZ is equivalent to this one
