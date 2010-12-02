@@ -47,7 +47,9 @@ public:
   LineSectorZone(const GeoPoint loc, const fixed length=fixed(1000.0)):
     SymmetricSectorZone(LINE, loc, length * fixed_half,
                         Angle::radians(fixed_pi))
-  {};
+  {
+    updateSector();
+  }
 
   ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {

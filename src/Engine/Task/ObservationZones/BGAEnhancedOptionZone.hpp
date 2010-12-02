@@ -44,7 +44,9 @@ public:
   BGAEnhancedOptionZone(const GeoPoint loc):
     SymmetricSectorZone(BGAENHANCEDOPTION, loc, fixed(10000.0),
                         Angle::radians(fixed_pi))
-    {}
+  {
+    updateSector();
+  }
 
   ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {

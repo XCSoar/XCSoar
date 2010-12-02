@@ -44,7 +44,9 @@ public:
   BGAFixedCourseZone(const GeoPoint loc):
     SymmetricSectorZone(BGAFIXEDCOURSE, loc, fixed(20000.0),
                         Angle::radians(fixed_half_pi))
-    {}
+  {
+    updateSector();
+  }
 
   ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {

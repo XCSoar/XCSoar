@@ -47,7 +47,9 @@ public:
                         fixed(1000.0 * (is_turnpoint ? 10 : 1)),
                         Angle::radians(fixed_half_pi)),
     m_is_turnpoint(is_turnpoint)
-    {}
+  {
+    updateSector();
+  }
 
   ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {
