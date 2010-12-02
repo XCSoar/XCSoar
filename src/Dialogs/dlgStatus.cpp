@@ -425,15 +425,12 @@ UpdateValuesRules(void)
             Units::GetAltitudeName());
   wp->SetText(Temp);
 
-#ifdef OLD_TASK
   wp = (WndProperty*)wf->FindByName(_T("prpStartPoint"));
   assert(wp != NULL);
-  int wp_index = task.getWaypointIndex(0);
-  if (wp_index >= 0)
-    wp->SetText(way_points.get(wp_index).Name);
+  if (protected_task_manager.get_mode() == TaskManager::MODE_ORDERED)
+    wp->SetText(protected_task_manager.get_ordered_taskpoint_name(0));
   else
     wp->SetText(_T(""));
-#endif
 }
 
 static void
