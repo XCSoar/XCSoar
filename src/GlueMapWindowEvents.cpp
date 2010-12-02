@@ -349,7 +349,6 @@ GlueMapWindow::on_paint(Canvas &canvas)
 
   const RECT rc = get_client_rect();
 
-  DrawMapScale(canvas, rc, render_projection);
   DrawMapScaleBar(canvas, rc, render_projection);
 
   // Draw center screen cross hair in pan mode
@@ -383,6 +382,8 @@ GlueMapWindow::on_paint_buffer(Canvas &canvas)
 #endif
 
   MapWindow::on_paint_buffer(canvas);
+
+  DrawMapScale(canvas, get_client_rect(), render_projection);
 }
 
 void
