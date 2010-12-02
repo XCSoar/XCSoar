@@ -96,6 +96,15 @@ ContestDijkstra::master_is_updated()
 
 
 void
+ContestDijkstra::clear_trace()
+{
+  trace_dirty = true;
+  trace.clear();
+  n_points = 0;
+}
+
+
+void
 ContestDijkstra::update_trace()
 {
   if (!master_is_updated()) 
@@ -170,13 +179,11 @@ ContestDijkstra::solve()
 void
 ContestDijkstra::reset()
 {
-  n_points = 0;
   solution_found = false;
   m_dijkstra.clear();
-  trace.clear();
+  clear_trace();
   last_point.time = Trace::null_time;
   AbstractContest::reset();
-  trace_dirty = true;
   min_distance_trace = UINT_MAX;
   min_delta_t_trace = UINT_MAX;
 

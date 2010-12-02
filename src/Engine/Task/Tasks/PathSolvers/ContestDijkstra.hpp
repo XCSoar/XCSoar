@@ -80,7 +80,9 @@ protected:
   static const unsigned max_contest_trace;
 
   /** Update working trace from master --- never to be done during a solution! */
-  void update_trace();
+  virtual void update_trace();
+
+  void clear_trace();
 
   TracePointVector trace; // working trace for solver
 

@@ -20,6 +20,7 @@
 }
  */
 #include "OLCSprint.hpp"
+#include "Trace/Trace.hpp"
 
 /*
   - note, this only searches 2.5 hour blocks, so should be able
@@ -119,4 +120,25 @@ fixed
 OLCSprint::calc_score() const
 {
   return apply_handicap(calc_distance()/fixed(2500), true);
+}
+
+void
+OLCSprint::update_trace() {
+
+  // since this is online, all solutions must have start to end of trace
+  // satisfy the finish altitude requirements.  otherwise there is no point
+  // even retrieving the full trace or starting a search.
+
+  // assuming a bounded ceiling and very long flight, this would be expected to reduce
+  // the number of trace acquisitions and solution starts by 50%.  In practice the number
+  // will be lower than this but the fewer wasted cpu cycles the better.
+
+  TracePointVector e = trace_master.get_trace_points(2);
+
+  if ((e.size()<2) || !finish_altitude_valid(e[0], e[1])) {
+    clear_trace();
+    return;
+  }
+
+  ContestDijkstra::update_trace();
 }
