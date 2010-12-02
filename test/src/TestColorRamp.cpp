@@ -31,7 +31,7 @@ int main(int argc, char **argv)
   };
   Color color;
 
-  plan_tests(9);
+  plan_tests(15);
 
   // Test lower limit
   color = ColorRampLookup(0, ramp, 2);
@@ -39,8 +39,20 @@ int main(int argc, char **argv)
   ok1(color.green() == 0x80);
   ok1(color.blue() == 0x00);
 
+  // Test below lower limit
+  color = ColorRampLookup(-100, ramp, 2);
+  ok1(color.red() == 0xff);
+  ok1(color.green() == 0x80);
+  ok1(color.blue() == 0x00);
+
   // Test upper limit
   color = ColorRampLookup(1000, ramp, 2);
+  ok1(color.red() == 0x00);
+  ok1(color.green() == 0x40);
+  ok1(color.blue() == 0xcc);
+
+  // Test above upper limit
+  color = ColorRampLookup(1500, ramp, 2);
   ok1(color.red() == 0x00);
   ok1(color.green() == 0x40);
   ok1(color.blue() == 0xcc);
