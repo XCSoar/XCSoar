@@ -29,9 +29,15 @@ int main(int argc, char **argv)
     {0,    0xff, 0x80, 0x00},
     {1000, 0x00, 0x40, 0xcc},
   };
+  const COLORRAMP ramp2[] = {
+    {-1000, 0x00, 0x00, 0xff},
+    {   -1, 0x00, 0xff, 0xff},
+    {    0, 0xff, 0xff, 0x00},
+    { 1000, 0xff, 0x00, 0x00},
+  };
   Color color;
 
-  plan_tests(15);
+  plan_tests(39);
 
   // Test lower limit
   color = ColorRampLookup(0, ramp, 2);
@@ -62,6 +68,56 @@ int main(int argc, char **argv)
   ok1(color.red() == 0x7f);
   ok1(color.green() == 0x60);
   ok1(color.blue() == 0x66);
+
+
+
+  // Test lower limit
+  color = ColorRampLookup(-1000, ramp2, 4);
+  ok1(color.red() == 0x00);
+  ok1(color.green() == 0x00);
+  ok1(color.blue() == 0xff);
+
+  // Test below lower limit
+  color = ColorRampLookup(-2000, ramp2, 4);
+  ok1(color.red() == 0x00);
+  ok1(color.green() == 0x00);
+  ok1(color.blue() == 0xff);
+
+  // Test upper limit
+  color = ColorRampLookup(1000, ramp2, 4);
+  ok1(color.red() == 0xff);
+  ok1(color.green() == 0x00);
+  ok1(color.blue() == 0x00);
+
+  // Test above upper limit
+  color = ColorRampLookup(2000, ramp2, 4);
+  ok1(color.red() == 0xff);
+  ok1(color.green() == 0x00);
+  ok1(color.blue() == 0x00);
+
+  // Test interpolation point 1
+  color = ColorRampLookup(0, ramp2, 4);
+  ok1(color.red() == 0xff);
+  ok1(color.green() == 0xff);
+  ok1(color.blue() == 0x00);
+
+  // Test interpolation point 2
+  color = ColorRampLookup(-1, ramp2, 4);
+  ok1(color.red() == 0x00);
+  ok1(color.green() == 0xff);
+  ok1(color.blue() == 0xff);
+
+  // Test intermediate point 1
+  color = ColorRampLookup(500, ramp2, 4);
+  ok1(color.red() == 0xff);
+  ok1(color.green() == 0x7f);
+  ok1(color.blue() == 0x00);
+
+  // Test intermediate point 2
+  color = ColorRampLookup(-500, ramp2, 4);
+  ok1(color.red() == 0x00);
+  ok1(color.green() == 0x7f);
+  ok1(color.blue() == 0xff);
 
   return exit_status();
 }
