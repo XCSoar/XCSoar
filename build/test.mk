@@ -55,7 +55,8 @@ TEST_NAMES = \
 	TestAngle TestUnits TestEarth TestSunEphemeris \
 	TestRadixTree TestGeoBounds \
 	TestLogger TestDriver \
-	TestWayPointFile TestThermalBase
+	TestWayPointFile TestThermalBase \
+	TestColorRamp
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
 
@@ -108,6 +109,17 @@ TEST_EARTH_SOURCES = \
 TEST_EARTH_OBJS = $(call SRC_TO_OBJ,$(TEST_EARTH_SOURCES))
 TEST_EARTH_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestEarth$(TARGET_EXEEXT): $(TEST_EARTH_OBJS) $(TEST_EARTH_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_COLOR_RAMP_SOURCES = \
+	$(SRC)/Screen/Ramp.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestColorRamp.cpp
+TEST_COLOR_RAMP_OBJS = $(call SRC_TO_OBJ,$(TEST_COLOR_RAMP_SOURCES))
+TEST_COLOR_RAMP_LDADD = 
+$(TEST_COLOR_RAMP_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(TARGET_BIN_DIR)/TestColorRamp$(TARGET_EXEEXT): $(TEST_COLOR_RAMP_OBJS) $(TEST_COLOR_RAMP_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
