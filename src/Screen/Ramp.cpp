@@ -38,15 +38,6 @@ ColorRampLookup(const short h,
   unsigned short f, of;
   unsigned short is = 1<<interp_levels;
 
-  /* Monochrome
-
-     #ifndef NDEBUG
-     return Color(0xda, 0xda, 0xda);
-     #endif
-
-  */
-
-
   // gone past end, so use last color
   if (h >= ramp_colors[numramp - 1].h) {
     return Color(ramp_colors[numramp-1].r,
