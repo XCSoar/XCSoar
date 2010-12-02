@@ -648,11 +648,16 @@ AbstractTaskFactory::mutate_tps_to_task_type()
           (i == m_task.task_size() - 1) && is_position_finish(i)) {
         FinishPoint *fp = createFinish(tp->get_waypoint());
         assert(fp);
-        replace(fp, i, false);
+        if (replace(fp, i, false))
+          changed = true;
+        else
+          delete fp;
       } else {
         OrderedTaskPoint *tpnew = createIntermediate(tp->get_waypoint());
-        bool r = replace(tpnew, i, true);
-        changed |= r;
+        if (replace(tpnew, i, true))
+          changed = true;
+        else
+          delete tpnew;
       }
     }
   }
