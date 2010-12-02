@@ -41,7 +41,7 @@ using std::max;
  */
 gcc_const
 static int
-fSnailColour(fixed cv)
+GetSnailColorIndex(fixed cv)
 {
   return max((short)0, min((short)(NUMSNAILCOLORS - 1),
                            (short)((cv + fixed_one) / 2 * NUMSNAILCOLORS)));
@@ -103,7 +103,7 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
                                  - it->NettoVario / vario_min :
                                  it->NettoVario / vario_max ;
 
-      canvas.select(Graphics::hpSnailVario[fSnailColour(colour_vario)]);
+      canvas.select(Graphics::hpSnailVario[GetSnailColorIndex(colour_vario)]);
       canvas.line(last_point, pt);
     }
     last_time = it->time;
