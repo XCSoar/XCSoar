@@ -44,7 +44,7 @@ ColorRampLookup(const short h,
                  ramp_colors[numramp-1].g,
                  ramp_colors[numramp-1].b);
   }
-  for (unsigned int i = numramp - 2; i--;) {
+  for (int i = numramp - 2; i >= 0; i--) {
     assert(ramp_colors[i].h < ramp_colors[i + 1].h);
 
     if (h >= ramp_colors[i].h) {
