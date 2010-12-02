@@ -28,19 +28,12 @@ Copyright_License {
 #include "Screen/Icon.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/TextInBox.hpp"
 #include "StringUtil.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Units.hpp"
 
 #include <stdio.h>
-
-gcc_const
-static int
-fSnailColour(fixed cv)
-{
-  return max((short)0, min((short)(NUMSNAILCOLORS - 1),
-                           (short)((cv + fixed_one) / 2 * NUMSNAILCOLORS)));
-}
 
 /**
  * Draws the FLARM traffic icons onto the given canvas
@@ -72,9 +65,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   fixed screenrange = projection.GetScreenDistanceMeters();
   fixed scalefact = screenrange / 6000;
 
-  // Saves the McCready value
-  const fixed MACCREADY = get_glide_polar().get_mc();
-
   // Circle through the FLARM targets
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
     const FLARM_TRAFFIC &traffic = flarm.FLARM_Traffic[i];
@@ -95,8 +85,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
                                         gv.Distance * scalefact);
     }
 
-    // TODO feature: draw direction, rel height?
-
     // Points for the screen coordinates for the icon, name and average climb
     RasterPoint sc, sc_name, sc_av;
 
@@ -106,23 +94,22 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
     // Draw the name 16 points below the icon
     sc_name = sc;
-    sc_name.y -= IBLSCALE(16);
+    sc_name.y -= IBLSCALE(20);
 
     // Draw the average climb value above the icon
     sc_av = sc;
-    sc_av.y += IBLSCALE(16);
+    sc_av.y += IBLSCALE(5);
 
     const TCHAR *label_name;
     TCHAR label_avg[100];
 
-    sc_av.x += IBLSCALE(3);
+    TextInBoxMode_t mode;
+    mode.Mode = Outlined;
 
-    if (traffic.HasName()) {
-      sc_name.y -= IBLSCALE(8);
+    if (traffic.HasName())
       label_name = traffic.Name;
-    } else {
+    else
       label_name = NULL;
-    }
 
     if (traffic.Average30s >= fixed(0.1))
       Units::FormatUserVSpeed(traffic.Average30s, label_avg, 100, false);
@@ -136,51 +123,14 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
     // only draw labels if not close to aircraft
     if (dx * dx + dy * dy > IBLSCALE(30) * IBLSCALE(30)) {
-      // Select the MapLabelFont and black color
-      canvas.select(Fonts::MapLabel);
-      canvas.set_text_color(Color(0, 0, 0));
-
       // If FLARM callsign/name available draw it to the canvas
-      if (label_name != NULL && !string_is_empty(label_name)) {
-        canvas.set_background_color(Color::WHITE);
-        canvas.text(sc_name.x, sc_name.y, label_name);
-      }
+      if (label_name != NULL && !string_is_empty(label_name))
+        TextInBox(canvas, label_name, sc_name.x, sc_name.y,
+                  mode, get_client_rect());
 
       // If average climb data available draw it to the canvas
-      if (!string_is_empty(label_avg)) {
-        SIZE tsize;
-        RECT brect;
-
-        // Calculate the size of the average climb indicator
-        tsize = canvas.text_size(label_avg);
-        brect.left = sc_av.x - 2;
-        brect.right = brect.left + tsize.cx + 6;
-        brect.top = sc_av.y + ((tsize.cy + 4) >> 3) - 2;
-        brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
-
-        // Determine the background color for the average climb indicator
-        fixed vmax = (fixed(1.5) * min(fixed(5), max(MACCREADY, fixed_half)));
-        fixed vmin = (fixed(-1.5) * min(fixed(5), max(MACCREADY, fixed_two)));
-
-        fixed cv(traffic.Average30s);
-        if (negative(cv))
-          cv /= (-vmin); // JMW fixed bug here
-        else
-          cv /= vmax;
-
-        int colourIndex = fSnailColour(cv);
-        // Select the appropriate background color determined before
-        canvas.select(Graphics::hpSnailVario[colourIndex]);
-        canvas.white_brush();
-
-        // Draw the rounded background rectangle
-        canvas.round_rectangle(brect.left, brect.top,
-                               brect.right, brect.bottom,
-                               IBLSCALE(8), IBLSCALE(8));
-
-        canvas.background_transparent();
-        canvas.text(sc_av.x, sc_av.y, label_avg);
-      }
+      if (!string_is_empty(label_avg))
+        TextInBox(canvas, label_avg, sc_av.x, sc_av.y, mode, get_client_rect());
     }
 
     // If FLARM alarm draw alarm icon below corresponding target
