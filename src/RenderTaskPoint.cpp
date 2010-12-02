@@ -282,6 +282,7 @@ RenderTaskPoint::draw_oz_foreground(const OrderedTaskPoint& tp)
     ozv.un_draw_style(m_canvas);
   }
 
+  ozv.set_layer(RenderObservationZone::LAYER_ACTIVE);
   if (ozv.draw_style(m_canvas, m_settings_map, m_index - m_active_index)) {
     ozv.Draw(m_canvas, m_proj, *tp.get_oz());
     ozv.un_draw_style(m_canvas);
