@@ -407,8 +407,6 @@ WndProperty::on_paint(Canvas &canvas)
   if (org.x < 1)
     org.x = 1;
 
-  // JMW TODO: use stretch functions for bigger displays, since these icons are too small for them.
-
   canvas.text(org.x, org.y, mCaption);
 
   // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
