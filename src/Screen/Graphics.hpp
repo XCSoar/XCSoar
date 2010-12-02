@@ -60,7 +60,6 @@ namespace Graphics {
   extern Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
 
   extern Pen hSnailPens[NUMSNAILCOLORS];
-  extern Color hSnailColours[NUMSNAILCOLORS];
 
   extern Bitmap hAboveTerrainBitmap;
   extern Brush hAboveTerrainBrush;

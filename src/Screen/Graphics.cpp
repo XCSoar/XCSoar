@@ -55,7 +55,6 @@ Brush Graphics::hAirspaceBrushes[NUMAIRSPACEBRUSHES];
 Bitmap Graphics::hAirspaceBitmap[NUMAIRSPACEBRUSHES];
 
 Pen Graphics::hSnailPens[NUMSNAILCOLORS];
-Color Graphics::hSnailColours[NUMSNAILCOLORS];
 
 Bitmap Graphics::hAboveTerrainBitmap;
 Brush Graphics::hAboveTerrainBrush;
@@ -261,7 +260,7 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 
   for (int i = 0; i < NUMSNAILCOLORS; i++) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    hSnailColours[i] = ColorRampLookup(ih, snail_colors, NUMSNAILRAMP, 6);
+    Color color = ColorRampLookup(ih, snail_colors, NUMSNAILRAMP, 6);
 
     if (i < NUMSNAILCOLORS / 2)
       iwidth = minwidth;
@@ -269,7 +268,7 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
       iwidth = max(minwidth, (i - NUMSNAILCOLORS / 2)
           * Layout::Scale(settings_map.SnailWidthScale) / NUMSNAILCOLORS);
 
-    hSnailPens[i].set(iwidth, hSnailColours[i]);
+    hSnailPens[i].set(iwidth, color);
   }
 }
 
