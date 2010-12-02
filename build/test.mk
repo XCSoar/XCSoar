@@ -22,10 +22,6 @@ TESTSLOW = \
 	$(TARGET_BIN_DIR)/test_acfilter$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_flight$(TARGET_EXEEXT)
 
-ifeq ($(HAVE_WIN32),y)
-TESTSLOW += $(TARGET_BIN_DIR)/test_win32$(TARGET_EXEEXT)
-endif
-
 HARNESS_PROGRAMS = $(TESTFAST) $(TESTSLOW)
 
 build-harness: $(HARNESS_PROGRAMS)
