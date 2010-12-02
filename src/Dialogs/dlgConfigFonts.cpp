@@ -300,8 +300,7 @@ void dlgConfigFontsShowModal()
   if (wp) {
     DataFieldBoolean * dfb = (DataFieldBoolean*) wp->GetDataField();
     if (dfb) {
-      if ((Appearance.UseCustomFonts != dfb->GetAsBoolean())
-          || (Appearance.UseCustomFonts && FontRegistryChanged)) {
+      if (Appearance.UseCustomFonts != dfb->GetAsBoolean()) {
         Appearance.UseCustomFonts = !Appearance.UseCustomFonts;
         Profile::Set(szProfileUseCustomFonts, Appearance.UseCustomFonts);
         changed = true;
