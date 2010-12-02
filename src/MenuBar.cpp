@@ -131,6 +131,9 @@ MenuBar::Button::on_paint(Canvas &canvas)
 
   RECT rc = get_client_rect();
   canvas.formatted_text(&rc, get_text().c_str(),
+#ifdef ENABLE_SDL
+                        DT_VCENTER |
+#endif
                         DT_NOPREFIX | DT_CENTER |
                         DT_NOCLIP | DT_WORDBREAK);
 }
