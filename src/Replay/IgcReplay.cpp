@@ -185,10 +185,8 @@ IgcReplay::Update()
 
     cli.Interpolate(t_simulation, Pos, Alt, PAlt);
 
-    const fixed Speed = cli.GetSpeed(t_simulation);
-    const Angle Bearing = cli.GetBearing(t_simulation);
-
-    on_advance(Pos, Speed, Bearing, Alt, PAlt, t_simulation);
+    const GeoVector v = cli.GetVector(t_simulation);
+    on_advance(Pos, v.Distance, v.Bearing, Alt, PAlt, t_simulation);
   }
 
   return Enabled;

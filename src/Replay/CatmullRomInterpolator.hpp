@@ -23,6 +23,7 @@
 
 #include "Math/fixed.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
+#include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include <assert.h>
 
 typedef struct _LOGGER_INTERP_POINT
@@ -87,32 +88,21 @@ public:
     return (num == 4);
   }
 
-  fixed
-  GetSpeed(fixed time) const
+  GeoVector 
+  GetVector(fixed time) const
   {
     if (!Ready())
       return fixed_zero;
 
-    fixed s0 = p[0].loc.distance(p[1].loc);
-    s0 /= (p[1].t - p[0].t);
-    fixed s1 = p[1].loc.distance(p[2].loc);
-    s1 /= (p[2].t - p[1].t);
-    fixed u = time_fraction(time);
-
-    return s1 * u + s0 * (fixed_one - u);
-  }
-
-  Angle
-  GetBearing(fixed time) const
-  {
-    if (!Ready())
-      return Angle::degrees(fixed_zero);
-
-    Angle a0 = p[0].loc.bearing(p[1].loc);
-    Angle a1 = p[1].loc.bearing(p[2].loc);
-
-    fixed u = time_fraction(time);
-    return a0.Fraction(a1, u).as_bearing();
+    if (!positive(p[2].t-p[1].t)) {
+      return GeoVector(fixed_zero, Angle::native(fixed_zero));
+    }
+    fixed alt, palt;
+    GeoPoint p0, p1;
+    Interpolate(time-fixed(0.05), p0, alt, palt);
+    Interpolate(time+fixed(0.05), p1, alt, palt);
+    return GeoVector(p[1].loc.distance(p[2].loc)/
+                     (p[2].t-p[1].t), p0.bearing(p1));
   }
 
   void
