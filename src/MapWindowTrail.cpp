@@ -78,17 +78,27 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
     traildrift = Basic().Location - tp1;
   }
 
-  fixed vario_max = fixed(0.75);
-  fixed vario_min = fixed(-2.0);
+  fixed value_max, value_min;
 
-  for (TracePointVector::const_iterator it = trace.begin();
-       it != trace.end(); ++it) {
-    vario_max = max(it->NettoVario, vario_max);
-    vario_min = min(it->NettoVario, vario_min);
+  if (settings_map.SnailType == stAltitude) {
+    value_max = fixed(1000);
+    value_min = fixed(500);
+    for (TracePointVector::const_iterator it = trace.begin();
+         it != trace.end(); ++it) {
+      value_max = max(it->NavAltitude, value_max);
+      value_min = min(it->NavAltitude, value_min);
+    }
+  } else {
+    value_max = fixed(0.75);
+    value_min = fixed(-2.0);
+    for (TracePointVector::const_iterator it = trace.begin();
+         it != trace.end(); ++it) {
+      value_max = max(it->NettoVario, value_max);
+      value_min = min(it->NettoVario, value_min);
+    }
+    value_max = min(fixed(7.5), value_max);
+    value_min = max(fixed(-5.0), value_min);
   }
-
-  vario_max = min(fixed(7.5), vario_max);
-  vario_min = max(fixed(-5.0), vario_min);
 
   unsigned last_time = 0;
   RasterPoint last_point;
@@ -99,11 +109,18 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
         parametric(traildrift, dt * it->drift_factor));
 
     if (it->last_time == last_time) {
-      const fixed colour_vario = negative(it->NettoVario) ?
-                                 - it->NettoVario / vario_min :
-                                 it->NettoVario / vario_max ;
+      if (settings_map.SnailType == stAltitude) {
+        int index = (it->NavAltitude - value_min) / (value_max - value_min) *
+                    (NUMSNAILCOLORS - 1);
+        index = max(0, min(NUMSNAILCOLORS - 1, index));
+        canvas.select(Graphics::hpSnailVario[index]);
+      } else {
+        const fixed colour_vario = negative(it->NettoVario) ?
+                                   - it->NettoVario / value_min :
+                                   it->NettoVario / value_max ;
 
-      canvas.select(Graphics::hpSnailVario[GetSnailColorIndex(colour_vario)]);
+        canvas.select(Graphics::hpSnailVario[GetSnailColorIndex(colour_vario)]);
+      }
       canvas.line(last_point, pt);
     }
     last_time = it->time;

@@ -1366,6 +1366,7 @@ setVariables()
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Standard Vario"));
     dfe->addEnumText(_("SeeYou Vario"));
+    dfe->addEnumText(_("Altitude"));
     dfe->Set((int)XCSoarInterface::SettingsMap().SnailType);
     wp->RefreshDisplay();
   }

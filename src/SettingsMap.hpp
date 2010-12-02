@@ -55,6 +55,7 @@ typedef enum {
 enum SnailType_t {
   stStandardVario,
   stSeeYouVario,
+  stAltitude,
 };
 
 // user interface options

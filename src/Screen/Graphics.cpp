@@ -249,10 +249,18 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
   };
 
   const COLORRAMP snail_colors_vario2[] = {
-    {0,   0x00, 000, 0xff},
+    {0,   0x00, 0x00, 0xff},
     {99,  0x00, 0xff, 0xff},
     {100, 0xff, 0xff, 0x00},
     {200, 0xff, 0x00, 0x00}
+  };
+
+  const COLORRAMP snail_colors_alt[] = {
+    {0,   0xff, 0x00, 0x00},
+    {50,  0xff, 0xff, 0x00},
+    {100, 0x00, 0xff, 0x00},
+    {150, 0x00, 0xff, 0xff},
+    {200, 0x00, 0x00, 0xff},
   };
 
   int iwidth;
@@ -261,11 +269,13 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 
   for (int i = 0; i < NUMSNAILCOLORS; i++) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    Color color = (settings_map.SnailType == stSeeYouVario) ?
+    Color color = (settings_map.SnailType == stAltitude) ?
+                  ColorRampLookup(ih, snail_colors_alt, 5) :
+                  (settings_map.SnailType == stSeeYouVario) ?
                   ColorRampLookup(ih, snail_colors_vario2, 4) :
                   ColorRampLookup(ih, snail_colors_vario, 3);
 
-    if (i < NUMSNAILCOLORS / 2)
+    if (i < NUMSNAILCOLORS / 2 || settings_map.SnailType == stAltitude)
       iwidth = minwidth;
     else
       iwidth = max(minwidth, (i - NUMSNAILCOLORS / 2)
