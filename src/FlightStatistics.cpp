@@ -876,7 +876,7 @@ void
 FlightStatistics::CaptionPolar(TCHAR *sTmp, const GlidePolar& glide_polar) const
 {
   if (Layout::landscape) {
-    _stprintf(sTmp, _T("%s:\r\n  %d\r\n  at %d %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %d %s"),
+    _stprintf(sTmp, _T("%s:\r\n  %d\r\n  at %d %s\r\n\r\n%s:\r\n  %3.2f %s\r\n  at %d %s"),
               _("Best LD"),
               (int)glide_polar.get_bestLD(),
               (int)(Units::ToUserUnit(glide_polar.get_VbestLD(),
