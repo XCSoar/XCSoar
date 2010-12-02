@@ -204,7 +204,6 @@ Canvas::text(int x, int y, const TCHAR *text)
 
 void
 Canvas::formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
-  // assume format = DT_CENTER
   TCHAR *p, *duplicated;
   size_t i, len;
   int x, y, lines = 1;
@@ -219,12 +218,41 @@ Canvas::formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
     *p++ = _T('\0');
     lines++;
   }
+
+  // simple wordbreak algorithm. looks for single spaces only, no tabs,
+  // no grouping of multiple spaces
+  if (format & DT_WORDBREAK) {
+    for (i = 0; i < len; i += tcslen(duplicated + i) + 1) {
+      SIZE sz = text_size(duplicated + i);
+      TCHAR *prev_p = NULL;
+
+      // remove words from behind till line fits or no more space is found
+      while (sz.cx > rc->right - rc->left &&
+             (p = _tcsrchr(duplicated + i, _T(' '))) != NULL) {
+        if (prev_p)
+          *prev_p = _T(' ');
+        *p = _T('\0');
+        prev_p = p;
+        sz = text_size(duplicated + i);
+      }
+      if (prev_p)
+        lines++;
+    }
+  }
+
   skip = ::TTF_FontLineSkip(font);
-  y = (rc->top + rc->bottom - lines*skip) / 2;
+  y = (format & DT_VCENTER) ? (rc->top + rc->bottom - lines*skip)/2 : rc->top;
   for (i = 0; i < len; i += tcslen(duplicated + i) + 1) {
-    SIZE sz = text_size(duplicated + i);
-    x = (rc->left + rc->right - sz.cx) / 2;
-    Canvas::text(x, y, duplicated + i);
+    if (duplicated[i] != _T('\0')) {
+      if (format & (DT_RIGHT | DT_CENTER)) {
+        SIZE sz = text_size(duplicated + i);
+        x = (format & DT_CENTER) ? (rc->left + rc->right - sz.cx)/2 :
+                                    rc->right - sz.cx;  // DT_RIGHT
+      } else {  // default is DT_LEFT
+        x = rc->left;
+      }
+      Canvas::text(x, y, duplicated + i);
+    }
     y += skip;
   }
 
