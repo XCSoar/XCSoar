@@ -30,11 +30,11 @@ void
 ThermalLocator::Point::Drift(fixed t, const TaskProjection& projection,
                              const GeoPoint& wind_drift)
 {
-  static const fixed decay_factor(-1.5/TLOCATOR_NMAX);
+  static const fixed decay_factor(-0.2/TLOCATOR_NMAX);
 
   const fixed dt = t - t_0;
   assert(!negative(dt));
-  recency_weight = exp(decay_factor * dt);
+  recency_weight = exp(decay_factor * fixed(pow(dt, 1.5)));
   lift_weight = w*recency_weight;
 
   GeoPoint p = location + wind_drift * dt;
