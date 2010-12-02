@@ -36,6 +36,8 @@ MaskedIcon::load_big(unsigned id, unsigned big_id, bool center)
   } else
     bitmap.load(id);
 
+  assert(defined());
+
   size = bitmap.get_size();
   /* left half is mask, right half is icon */
   size.cx /= 2;
