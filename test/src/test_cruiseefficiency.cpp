@@ -26,8 +26,8 @@
 int main(int argc, char** argv) 
 {
   // default arguments
-  bearing_noise=0;
-  target_noise=0.1;
+  autopilot_parms.bearing_noise=fixed(0);
+  autopilot_parms.target_noise=fixed(0.1);
   output_skip = 5;
 
   if (!parse_args(argc,argv)) {

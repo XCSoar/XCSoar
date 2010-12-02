@@ -25,13 +25,11 @@
 #include "harness_airspace.hpp"
 
 int main(int argc, char** argv) {
-  // default arguments
-  verbose=2;  
   
   // default arguments
-  target_noise=0.1;
+  autopilot_parms.target_noise= fixed(0.1);
+  autopilot_parms.start_alt = fixed(400);
   output_skip = 5;
-  start_alt = 400;
 
   if (!parse_args(argc,argv)) {
     return 0;

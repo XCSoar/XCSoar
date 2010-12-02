@@ -75,15 +75,15 @@ wind_name(int n_wind)
   return buffer;
 }
 
-bool
-run_flight(TaskManager &task_manager, bool goto_target, double random_mag,
-           int n_wind, const double speed_factor)
+
+bool run_flight(TaskManager &task_manager,
+                const bool goto_target,
+                const AutopilotParameters &parms,
+                const int n_wind,
+                const double speed_factor) 
 {
-  srand(0);
-
-  AircraftSim ac(0, task_manager, random_mag, goto_target);
-  unsigned print_counter = 0;
-
+  AircraftSim ac(0, task_manager, parms, goto_target);
+  unsigned print_counter=0;
   if (n_wind)
     ac.set_wind(wind_to_mag(n_wind), wind_to_dir(n_wind));
 
@@ -113,8 +113,8 @@ run_flight(TaskManager &task_manager, bool goto_target, double random_mag,
         new AirspaceWarningManager(*airspaces, ac.get_state(),task_manager);
 
   do {
-    if (task_manager.getActiveTaskPointIndex() == 1 &&
-        first && task_manager.get_stats().total.TimeElapsed > fixed_10) {
+    if ((task_manager.getActiveTaskPointIndex() == 1) &&
+        first && (task_manager.get_stats().total.TimeElapsed > fixed_10)) {
       time_remaining = task_manager.get_stats().total.TimeRemaining;
       first = false;
 
@@ -124,7 +124,6 @@ run_flight(TaskManager &task_manager, bool goto_target, double random_mag,
         printf("# time remaining %g\n", time_remaining);
         printf("# time planned %g\n", time_planned);
       }
-
     }
 
     if (do_print) {
@@ -139,10 +138,11 @@ run_flight(TaskManager &task_manager, bool goto_target, double random_mag,
       }
     }
 
-    if (airspaces)
-      scan_airspaces(ac.get_state(), *airspaces, perf, do_print,
-                     ac.target(task_manager));
-
+    if (airspaces) {
+      scan_airspaces(ac.get_state(), *airspaces, perf,
+                     do_print, 
+                     ac.target());
+    }
     if (airspace_warnings) {
       if (verbose > 1) {
         bool warnings_updated = airspace_warnings->update(ac.get_state(), 
@@ -162,7 +162,8 @@ run_flight(TaskManager &task_manager, bool goto_target, double random_mag,
 
     if (aircraft_filter)
       aircraft_filter->update(ac.get_state());
-  } while (ac.advance(task_manager));
+
+  } while (ac.Update());
 
   if (verbose) {
     PrintHelper::taskmanager_print(task_manager, ac.get_state());
@@ -209,6 +210,7 @@ test_flight(int test_num, int n_wind, const double speed_factor,
 
   task_manager.get_ordered_task_behaviour().aat_min_time = aat_min_time(test_num);
 
+  task_behaviour.enable_trace = false;
   task_behaviour.auto_mc = auto_mc;
   task_behaviour.calc_glide_required = false;
   if ((test_num == 0) || (test_num == 2))
@@ -226,7 +228,9 @@ test_flight(int test_num, int n_wind, const double speed_factor,
 
   test_task(task_manager, waypoints, test_num);
 
-  return run_flight(task_manager, goto_target, target_noise, n_wind,
+  waypoints.clear(); // clear waypoints so abort wont do anything
+
+  return run_flight(task_manager, goto_target, autopilot_parms, n_wind,
                     speed_factor);
 }
 

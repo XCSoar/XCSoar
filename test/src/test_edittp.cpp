@@ -260,7 +260,7 @@ bool test_edit(TaskManager& task, const TaskBehaviour &task_behaviour)
 
 int main(int argc, char** argv) {
   // default arguments
-  verbose=1;  
+  verbose=0;  
   
   if (!parse_args(argc,argv)) {
     return 0;

@@ -8,19 +8,19 @@ TESTFAST = \
 	$(TARGET_BIN_DIR)/test_automc$(TARGET_EXEEXT) 
 
 TESTSLOW = \
-	$(TARGET_BIN_DIR)/test_trees$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_airspace$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_olc$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_highterrain$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_vopt$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_effectivemc$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_replay$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_randomtask$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_cruiseefficiency$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_bestcruisetrack$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_aat$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_acfilter$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_flight$(TARGET_EXEEXT)
+	$(TARGET_BIN_DIR)/test_trees$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_vopt$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_bestcruisetrack$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_airspace$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_effectivemc$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_cruiseefficiency$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_highterrain$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_randomtask$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_flight$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_olc$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_aat$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_replay_olc$(TARGET_EXEEXT)
 
 HARNESS_PROGRAMS = $(TESTFAST) $(TESTSLOW)
 
@@ -52,9 +52,20 @@ TEST_NAMES = \
 	TestRadixTree TestGeoBounds \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
-	TestColorRamp
+	TestColorRamp \
+	test_replay_task
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
+
+TEST_REPLAY_TASK_SOURCES = \
+	$(SRC)/Engine/Util/DataNodeXML.cpp \
+	$(SRC)/xmlParser.cpp \
+	$(TEST_SRC_DIR)/test_replay_task.cpp
+TEST_REPLAY_TASK_OBJS = $(call SRC_TO_OBJ,$(TEST_REPLAY_TASK_SOURCES))
+TEST_REPLAY_TASK_LDADD = $(TESTLIBS)
+$(TARGET_BIN_DIR)/test_replay_task$(TARGET_EXEEXT): $(TEST_REPLAY_TASK_OBJS) $(TEST_REPLAY_TASK_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_ANGLE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
@@ -1042,6 +1053,7 @@ FEED_NMEA_LDADD =
 $(FEED_NMEA_BIN): $(FEED_NMEA_OBJS) $(FEED_NMEA_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
 
 debug-: $(addprefix call-debug-,$(DEFAULT_TARGETS))
 call-debug-%:

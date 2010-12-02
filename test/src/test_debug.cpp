@@ -31,14 +31,12 @@ int n_samples = 0;
 int interactive = 0;
 int verbose = 0;
 int output_skip = 1;
-double bearing_noise = 40.0;
-double target_noise = 0.2;
-double turn_speed = 25.0;
-double sink_factor = 1.0;
-double climb_factor = 1.0;
-double start_alt = 1500.0;
+
+AutopilotParameters autopilot_parms;
+
 int terrain_height = 1;
-std::string replay_file = "test/data/9crx3101.igc";
+std::string replay_file = "test/data/0asljd01.igc";
+std::string task_file = "";
 bool enable_bestcruisetrack = false;
 
 #ifdef INSTRUMENT_TASK
@@ -139,6 +137,9 @@ char wait_prompt(const double time) {
 
 bool parse_args(int argc, char** argv) 
 {
+  // initialise random number generator once per test program
+  srand(0);
+
   while (1)    {
     static struct option long_options[] =
       {
@@ -151,12 +152,13 @@ bool parse_args(int argc, char** argv)
 	{"targetnoise", required_argument,       0, 't'},
 	{"turnspeed", required_argument,       0, 'r'},
 	{"igc", required_argument,       0, 'f'},
+	{"task", required_argument,       0, 'x'},
 	{0, 0, 0, 0}
       };
     /* getopt_long stores the option index here. */
     int option_index = 0;
     
-    int c = getopt_long (argc, argv, "s:v:i:n:t:r:a:f:",
+    int c = getopt_long (argc, argv, "s:v:i:n:t:r:a:f:x:",
                          long_options, &option_index);
     /* Detect the end of the options. */
     if (c == -1)
@@ -175,8 +177,11 @@ bool parse_args(int argc, char** argv)
     case 'f':
       replay_file = optarg;
       break;
+    case 'x':
+      task_file = optarg;
+      break;
     case 'a':
-      start_alt = atof(optarg);
+      autopilot_parms.start_alt = (fixed)atof(optarg);
       break;
     case 's':
       output_skip = atoi(optarg);
@@ -189,13 +194,13 @@ bool parse_args(int argc, char** argv)
       }
       break;
     case 'n':
-      bearing_noise = atof(optarg);
+      autopilot_parms.bearing_noise = (fixed)atof(optarg);
       break;
     case 't':
-      target_noise = atof(optarg);
+      autopilot_parms.target_noise = (fixed)atof(optarg);
       break;
     case 'r':
-      turn_speed = atof(optarg);
+      autopilot_parms.turn_speed = (fixed)atof(optarg);
       break;
     case 'i':
       if (optarg) {

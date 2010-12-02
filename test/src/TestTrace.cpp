@@ -40,7 +40,7 @@ public:
   bool error;
 
   IgcReplayGlue(unsigned ntrace): 
-    trace(Trace::null_time, ntrace),
+    trace(1000, ntrace), 
     error(false) {}
 
   void SetFilename(const char *name);
@@ -84,9 +84,17 @@ IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
   new_state.Time = t;
   new_state.AltitudeAGL = alt;
 
-  trace.append(new_state);
+  if (t>fixed_one) {
+    trace.append(new_state);
 
-  trace.optimise_if_old();
+    trace.optimise_if_old();
+
+  }
+// get the trace, just so it's included in timing
+  TracePointVector v = trace.get_trace_points(1000);
+  if (trace.size()>1) {
+//    assert(abs(v.size()-trace.size())<2);
+  }
 }
 
 void
@@ -105,36 +113,46 @@ IgcReplayGlue::SetFilename(const char *name)
 }
 
 static bool
-TestTrace(const char *filename, unsigned ntrace)
+TestTrace(const char *filename, unsigned ntrace, bool output=false)
 {
   IgcReplayGlue replay(ntrace);
   replay.SetFilename(filename);
   replay.Start();
   assert(!replay.error);
 
-  putchar('#');
-  for (int i = 1; replay.Update(); i++) {
-    if (i % 500 == 0) {
+  printf("# %d", ntrace);  
+  int i=0;
+  for (i = 1; replay.Update(); i++) {
+    if (output && (i % 500 == 0)) {
       putchar('.');
       fflush(stdout);
     }
   }
   putchar('\n');
+  printf("# samples %d\n", i);
   return true;
 }
 
 
 int main(int argc, char **argv)
 {
-  assert(argc >= 2);
-
-  plan_tests(12);
-
-  for (unsigned i=2; i<14; i++) {
-    unsigned n = pow(2,i);
-    char buf[100];
-    sprintf(buf," trace size %d", n);
-    ok(TestTrace(argv[1], n),buf, 0);
+  if (argc < 3) {
+    unsigned n = 100;
+    if (argc > 1) {
+      n = atoi(argv[1]);
+    }
+    TestTrace("test/data/09kc3ov3.igc", n);
+  } else {
+    assert(argc >= 3);
+    unsigned n = atoi(argv[2]);
+    plan_tests(n);
+    
+    for (unsigned i=2; i<2+n; i++) {
+      unsigned nt = pow(2,i);
+      char buf[100];
+      sprintf(buf," trace size %d", nt);
+      ok(TestTrace(argv[1], nt),buf, 0);
+    }
   }
   return 0;
 }

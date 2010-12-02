@@ -25,28 +25,25 @@
 
 #include <vector>
 
+#include "test_debug.hpp"
 #include "Task/TaskManager.hpp"
 
 
 class AircraftSim {
 public:
-  AircraftSim(int _test_num, const TaskManager& task_manager,
-              double random_mag,
+  AircraftSim(int _test_num, 
+              TaskManager& task_manager,
+              const AutopilotParameters &_parms,
               bool _goto_target=false);
 
   const AIRCRAFT_STATE& get_state() {
     return state;
   }
-  GeoPoint get_next() const;
   void set_wind(const fixed speed, const Angle direction);
 
-  bool far(TaskManager &task_manager);
-  fixed small_rand();
-  void update_state(TaskManager &task_manager);
-  void update_mode(TaskManager &task_manager);
-  void integrate();
-
-  bool advance(TaskManager &task_manager);
+  void Start();
+  void Stop();
+  bool Update();
 
   void print(std::ostream &f4);
   fixed time();
@@ -54,13 +51,19 @@ public:
   void set_speed_factor(fixed f) {
     speed_factor = f;
   }
-  GeoPoint target(TaskManager &task_manager);
+  GeoPoint target();
 
 private:
-  fixed target_height(TaskManager &task_manager);
+  bool far();
+  fixed small_rand();
+  void update_state();
+  void update_mode();
+  void integrate();
+
+  fixed target_height();
 
   GeoPoint endpoint(const Angle& bear) const;
-  void update_bearing(TaskManager &task_manager);
+  void update_bearing();
 
   int test_num;
   Filter heading_filt;
@@ -81,7 +84,9 @@ private:
   };
   
   AcState acstate; 
-
+  TaskManager& task_manager;
+  fixed random_mag;
+  const AutopilotParameters &parms;
 };
 
 #endif

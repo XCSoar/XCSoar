@@ -1,34 +1,10 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2010 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
-
 #include "test_debug.hpp"
 #include "harness_aircraft.hpp"
 #include "TaskEventsPrint.hpp"
 #include "Replay/IgcReplay.hpp"
 #include "Task/TaskManager.hpp"
 #include "UtilsText.hpp"
-#ifdef DO_PRINT
 #include <fstream>
-#endif
 
 ContestResult official_score_classic,
   official_score_sprint,
@@ -104,6 +80,7 @@ inline void load_scores(unsigned &contest_handicap) {
   }
 }
 
+
 class ReplayLoggerSim: public IgcReplay
 {
 public:
@@ -113,14 +90,12 @@ public:
 
   AIRCRAFT_STATE state;
 
-#ifdef DO_PRINT
   void print(std::ostream &f) {
-    f << state.Time << " " 
-      <<  state.Location.Longitude << " " 
-      <<  state.Location.Latitude << " "
-      <<  state.NavAltitude << "\n";
+    f << (double)state.Time << " " 
+      <<  (double)state.Location.Longitude.value_degrees() << " " 
+      <<  (double)state.Location.Latitude.value_degrees() << " "
+      <<  (double)state.NavAltitude << "\n";
   }
-#endif
   bool started;
 
 protected:
@@ -136,6 +111,8 @@ protected:
     state.Speed = speed;
     state.TrackBearing = bearing;
     state.NavAltitude = alt;
+    state.NettoVario = fixed_zero;
+    state.Vario = fixed_zero;
     state.Time = t;
     if (positive(t)) {
       started = true;
@@ -147,9 +124,7 @@ static bool
 test_replay(const Contests olc_type, 
             const ContestResult &official_score)
 {
-#ifdef DO_PRINT
   std::ofstream f("results/res-sample.txt");
-#endif
 
   GlidePolar glide_polar(fixed_two);
   Waypoints waypoints;
@@ -223,7 +198,6 @@ test_replay(const Contests olc_type,
   
       state_last = sim.state;
 
-#ifdef DO_PRINT
       if (verbose>1) {
         sim.print(f);
         f.flush();
@@ -231,7 +205,6 @@ test_replay(const Contests olc_type,
       if (do_print) {
         PrintHelper::taskmanager_print(task_manager, sim.state);
       }
-#endif
       do_print = (++print_counter % output_skip ==0) && verbose;
     }
     time_last = sim.state.Time;
@@ -258,8 +231,8 @@ int main(int argc, char** argv)
 
   ok(test_replay(OLC_League, official_score_sprint),"replay league",0);
   ok(test_replay(OLC_FAI, official_score_fai),"replay fai",0);
-  ok(test_replay(OLC_Sprint, official_score_sprint),"replay sprint",0);
   ok(test_replay(OLC_Classic, official_score_classic),"replay classic",0);
+  ok(test_replay(OLC_Sprint, official_score_sprint),"replay sprint",0);
   ok(test_replay(OLC_Plus, official_score_plus),"replay plus",0);
 
   return exit_status();

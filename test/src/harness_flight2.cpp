@@ -69,74 +69,74 @@ bool test_cruise_efficiency(int test_num, int n_wind)
 
   double ce0, ce1, ce2, ce3, ce4, ce5, ce6;
 
-  bearing_noise = 0.0;
-  target_noise = 0.1;
+  autopilot_parms.bearing_noise = fixed(0.0);
+  autopilot_parms.target_noise = fixed(0.1);
 
   test_flight(test_num, n_wind);
   ce0 = calc_cruise_efficiency;
 
   // wandering
-  bearing_noise = 40.0;
+  autopilot_parms.bearing_noise = fixed(40.0);
   test_flight(test_num, n_wind);
   ce1 = calc_cruise_efficiency;
   // cruise efficiency of this should be lower than nominal
-  ok (ce0>ce1, test_name("ce wandering",test_num, n_wind),0);
   if (ce0<=ce1 || verbose) {
     printf("# calc cruise efficiency %g\n", calc_cruise_efficiency);
   }
+  ok (ce0>ce1, test_name("ce wandering",test_num, n_wind),0);
 
   // flying too slow
-  bearing_noise = 0.0;
+  autopilot_parms.bearing_noise = fixed(0.0);
   test_flight(test_num, n_wind, 0.8);
   ce2 = calc_cruise_efficiency;
   // cruise efficiency of this should be lower than nominal
-  ok (ce0>ce2, test_name("ce speed slow",test_num, n_wind),0);
   if (ce0<=ce2 || verbose) {
     printf("# calc cruise efficiency %g\n", calc_cruise_efficiency);
   }
+  ok (ce0>ce2, test_name("ce speed slow",test_num, n_wind),0);
 
   // flying too fast
-  bearing_noise = 0.0;
+  autopilot_parms.bearing_noise = fixed(0.0);
   test_flight(test_num, n_wind, 1.2);
   ce3 = calc_cruise_efficiency;
   // cruise efficiency of this should be lower than nominal
-  ok (ce0>ce3, test_name("ce speed fast",test_num, n_wind),0);
   if (ce0<=ce3 || verbose) {
     printf("# calc cruise efficiency %g\n", calc_cruise_efficiency);
   }
+  ok (ce0>ce3, test_name("ce speed fast",test_num, n_wind),0);
 
   // higher than expected cruise sink
-  sink_factor = 1.2;
+  autopilot_parms.sink_factor = fixed(1.2);
   test_flight(test_num, n_wind);
   ce4 = calc_cruise_efficiency;
-  ok (ce0>ce4, test_name("ce high sink",test_num, n_wind),0);
-  // cruise efficiency of this should be lower than nominal
-  sink_factor = 1.0;
   if (ce0<=ce4 || verbose) {
     printf("# calc cruise efficiency %g\n", calc_cruise_efficiency);
   }
+  ok (ce0>ce4, test_name("ce high sink",test_num, n_wind),0);
+  // cruise efficiency of this should be lower than nominal
+  autopilot_parms.sink_factor = fixed(1.0);
 
   // slower than expected climb
-  climb_factor = 0.8;
+  autopilot_parms.climb_factor = fixed(0.8);
   test_flight(test_num, n_wind);
   ce5 = calc_cruise_efficiency;
-  ok (ce0>ce5, test_name("ce slow climb",test_num, n_wind),0);
-  // cruise efficiency of this should be lower than nominal
-  climb_factor = 1.0;
   if (ce0<=ce5 || verbose) {
     printf("# calc cruise efficiency %g\n", calc_cruise_efficiency);
   }
+  ok (ce0>ce5, test_name("ce slow climb",test_num, n_wind),0);
+  // cruise efficiency of this should be lower than nominal
+  autopilot_parms.climb_factor = fixed(1.0);
 
   // lower than expected cruise sink; 
-  sink_factor = 0.8;
+  autopilot_parms.sink_factor = fixed(0.8);
   test_flight(test_num, n_wind);
   ce6 = calc_cruise_efficiency;
-  ok (ce0<ce6, test_name("ce low sink",test_num, n_wind),0);
-  // cruise efficiency of this should be greater than nominal
-  sink_factor = 1.0;
   if (ce0>=ce6 || verbose) {
     printf("# calc cruise efficiency %g\n", calc_cruise_efficiency);
   }
+  ok (ce0<ce6, test_name("ce low sink",test_num, n_wind),0);
+  // cruise efficiency of this should be greater than nominal
+  autopilot_parms.sink_factor = fixed(1.0);
 
   bool retval = (ce0>ce1) && (ce0>ce2) && (ce0>ce3) && (ce0>ce4) && (ce0>ce5)
     && (ce0<ce6);
@@ -176,7 +176,7 @@ bool test_aat(int test_num, int n_wind)
 
 bool test_automc(int test_num, int n_wind) 
 {
-  target_noise = 0.1;
+  autopilot_parms.target_noise = fixed(0.1);
 
   // test whether flying by automc (starting above final glide)
   // arrives home faster than without
@@ -240,6 +240,7 @@ bool test_abort(int n_wind)
                            waypoints);
 
   task_manager.get_task_behaviour().all_off();
+  task_manager.get_task_behaviour().enable_trace = false;
 
   task_manager.set_glide_polar(glide_polar);
 
@@ -248,7 +249,7 @@ bool test_abort(int n_wind)
   task_manager.abort();
   task_report(task_manager, "abort");
 
-  return run_flight(task_manager, true, target_noise, n_wind);
+  return run_flight(task_manager, true, autopilot_parms, n_wind);
 
 }
 
@@ -268,7 +269,8 @@ bool test_goto(int n_wind, unsigned id, bool auto_mc)
                            waypoints);
 
   task_manager.get_task_behaviour().all_off();
-  task_manager.get_task_behaviour().auto_mc = auto_mc;
+  task_manager.get_task_behaviour().auto_mc = fixed(auto_mc);
+  task_manager.get_task_behaviour().enable_trace = false;
 
   task_manager.set_glide_polar(glide_polar);
 
@@ -277,7 +279,9 @@ bool test_goto(int n_wind, unsigned id, bool auto_mc)
   task_manager.do_goto(*waypoints.lookup_id(id));
   task_report(task_manager, "goto");
 
-  return run_flight(task_manager, true, target_noise, n_wind);
+  waypoints.clear(); // clear waypoints so abort wont do anything
+
+  return run_flight(task_manager, true, autopilot_parms, n_wind);
 }
 
 
@@ -297,12 +301,15 @@ bool test_null()
                            waypoints);
 
   task_manager.get_task_behaviour().all_off();
+  task_manager.get_task_behaviour().enable_trace = false;
 
   task_manager.set_glide_polar(glide_polar);
 
   task_report(task_manager, "null");
 
-  return run_flight(task_manager, true, target_noise, 0);
+  waypoints.clear(); // clear waypoints so abort wont do anything
+
+  return run_flight(task_manager, true, autopilot_parms, 0);
 }
 
 
@@ -323,74 +330,74 @@ bool test_effective_mc(int test_num, int n_wind)
 
   double ce0, ce1, ce2, ce3, ce4, ce5, ce6;
 
-  bearing_noise = 0.0;
-  target_noise = 0.1;
+  autopilot_parms.bearing_noise = fixed(0.0);
+  autopilot_parms.target_noise = fixed(0.1);
 
   test_flight(test_num, n_wind);
   ce0 = calc_effective_mc;
 
   // wandering
-  bearing_noise = 40.0;
+  autopilot_parms.bearing_noise = fixed(40.0);
   test_flight(test_num, n_wind);
   ce1 = calc_effective_mc;
   // effective mc of this should be lower than nominal
-  ok (ce0>ce1, test_name("emc wandering",test_num, n_wind),0);
   if (ce0<=ce1 || verbose) {
     printf("# calc effective mc %g\n", calc_effective_mc);
   }
+  ok (ce0>ce1, test_name("emc wandering",test_num, n_wind),0);
 
   // flying too slow
-  bearing_noise = 0.0;
+  autopilot_parms.bearing_noise = fixed(0.0);
   test_flight(test_num, n_wind, 0.8);
   ce2 = calc_effective_mc;
   // effective mc of this should be lower than nominal
-  ok (ce0>ce2, test_name("emc speed slow",test_num, n_wind),0);
   if (ce0<=ce2 || verbose) {
     printf("# calc effective mc %g\n", calc_effective_mc);
   }
+  ok (ce0>ce2, test_name("emc speed slow",test_num, n_wind),0);
 
   // flying too fast
-  bearing_noise = 0.0;
+  autopilot_parms.bearing_noise = fixed(0.0);
   test_flight(test_num, n_wind, 1.2);
   ce3 = calc_effective_mc;
   // effective mc of this should be lower than nominal
-  ok (ce0>ce3, test_name("emc speed fast",test_num, n_wind),0);
   if (ce0<=ce3 || verbose) {
     printf("# calc effective mc %g\n", calc_effective_mc);
   }
+  ok (ce0>ce3, test_name("emc speed fast",test_num, n_wind),0);
 
   // higher than expected cruise sink
-  sink_factor = 1.2;
+  autopilot_parms.sink_factor = fixed(1.2);
   test_flight(test_num, n_wind);
   ce4 = calc_effective_mc;
-  ok (ce0>ce4, test_name("emc high sink",test_num, n_wind),0);
-  // effective mc of this should be lower than nominal
-  sink_factor = 1.0;
   if (ce0<=ce4 || verbose) {
     printf("# calc effective mc %g\n", calc_effective_mc);
   }
+  ok (ce0>ce4, test_name("emc high sink",test_num, n_wind),0);
+  // effective mc of this should be lower than nominal
+  autopilot_parms.sink_factor = fixed(1.0);
 
   // slower than expected climb
-  climb_factor = 0.8;
+  autopilot_parms.climb_factor = fixed(0.8);
   test_flight(test_num, n_wind);
   ce5 = calc_effective_mc;
-  ok (ce0>ce5, test_name("emc slow climb",test_num, n_wind),0);
-  // effective mc of this should be lower than nominal
-  climb_factor = 1.0;
   if (ce0<=ce5 || verbose) {
     printf("# calc effective mc %g\n", calc_effective_mc);
   }
+  ok (ce0>ce5, test_name("emc slow climb",test_num, n_wind),0);
+  // effective mc of this should be lower than nominal
+  autopilot_parms.climb_factor = fixed(1.0);
 
   // lower than expected cruise sink; 
-  sink_factor = 0.8;
+  autopilot_parms.sink_factor = fixed(0.8);
   test_flight(test_num, n_wind);
   ce6 = calc_effective_mc;
-  ok (ce0<ce6, test_name("emc low sink",test_num, n_wind),0);
-  // effective mc of this should be greater than nominal
-  sink_factor = 1.0;
   if (ce0>=ce6 || verbose) {
     printf("# calc effective mc %g\n", calc_effective_mc);
   }
+  ok (ce0<ce6, test_name("emc low sink",test_num, n_wind),0);
+  // effective mc of this should be greater than nominal
+  autopilot_parms.sink_factor = fixed(1.0);
 
   bool retval = (ce0>ce1) && (ce0>ce2) && (ce0>ce3) && (ce0>ce4) && (ce0>ce5)
     && (ce0<ce6);
@@ -425,9 +432,14 @@ bool test_olc(int n_wind, Contests olc_type)
   task_manager.get_task_behaviour().all_off();
   task_manager.set_contest(olc_type);
   task_manager.get_task_behaviour().enable_olc = true;
+  if (!verbose) {
+    task_manager.get_task_behaviour().enable_trace = false;
+  }
 
   task_manager.set_glide_polar(glide_polar);
   test_task(task_manager, waypoints, 1);
 
-  return run_flight(task_manager, true, target_noise, n_wind);
+  waypoints.clear(); // clear waypoints so abort wont do anything
+
+  return run_flight(task_manager, true, autopilot_parms, n_wind);
 }

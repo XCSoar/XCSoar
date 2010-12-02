@@ -33,42 +33,64 @@ print_mode(const char* mode)
   }
 }
 
-GeoPoint AircraftSim::get_next() const {
-  return w[awp];
-}
-
-AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
-                         double random_mag,
+AircraftSim::AircraftSim(int _test_num, 
+                         TaskManager& _task_manager,
+                         const AutopilotParameters &_parms,
                          bool _goto_target):
   test_num(_test_num),
   heading_filt(fixed(8)),
   goto_target(_goto_target),
   speed_factor(1.0),
   climb_rate(2.0),
-  short_flight(false)
+  short_flight(false),
+  task_manager(_task_manager),
+  parms(_parms)
 {
+  Start();
+}
+
+void 
+AircraftSim::Stop() 
+{
+  // nothing to do
+}
+
+void
+AircraftSim::Start()
+{
+  w.clear();
+
   if (task_manager.task_size()<=1) {
     short_flight = true;
     // cheat for non-ordered tasks
     w.push_back(GeoPoint(Angle::degrees(fixed(0.1)), Angle::degrees(fixed(0.1))));
     if (task_manager.task_size()>0) {
-      w.push_back(task_manager.random_point_in_task(0, fixed(random_mag)));
+      w.push_back(task_manager.random_point_in_task(0, parms.target_noise));
     } else {
       w.push_back(GeoPoint(Angle::degrees(fixed_one), Angle::degrees(fixed_zero)));
     }
   } else {
     for (unsigned i=0; i<task_manager.task_size(); i++) {
-      w.push_back(task_manager.random_point_in_task(i, fixed(random_mag)));
+      w.push_back(task_manager.random_point_in_task(i, parms.target_noise));
     }
   }
   
-  state.Location = w[0];
-  state_last.Location = w[0];
-  state.NavAltitude = fixed(start_alt);
+  if (task_manager.task_size()>1) {
+    // set start location to 200 meters directly behind start
+    // (otherwise start may fail)
+    Angle brg = w[1].bearing(w[0]);
+    state.Location = GeoVector(fixed(200), brg).end_point(w[0]);
+  } else {
+    state.Location = w[0];
+  }
+  state.NavAltitude = parms.start_alt;
+  state.AirspaceAltitude = parms.start_alt;
   state.Time = fixed_zero;
   state.wind.norm = fixed_zero;
   state.wind.bearing = Angle();
   state.Speed = fixed(16);
+  state_last = state;
+  state_last.Location = w[0];
 
   // start with aircraft moving since this isn't a real replay (no time on ground)
   for (unsigned i=0; i<10; i++) {
@@ -81,7 +103,8 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   acstate = Cruise;
 }
 
-GeoPoint AircraftSim::target(TaskManager &task_manager) {
+
+GeoPoint AircraftSim::target() {
   if (goto_target && (awp>0)) {
     return task_manager.getActiveTaskPoint()->get_location();
   } else {
@@ -93,7 +116,7 @@ GeoPoint AircraftSim::target(TaskManager &task_manager) {
   }
 }
 
-bool AircraftSim::far(TaskManager &task_manager) {
+bool AircraftSim::far() {
 
   AbstractTaskFactory &fact = task_manager.get_factory();
   bool entered = fact.has_entered(awp);
@@ -122,12 +145,12 @@ bool AircraftSim::far(TaskManager &task_manager) {
 #define fixed_20 fixed(20)
 
 fixed AircraftSim::small_rand() {
-  return fixed(heading_filt.update(fixed(bearing_noise) *
+  return fixed(heading_filt.update(parms.bearing_noise *
                                    (fixed_two * rand() / RAND_MAX) -
-                                   fixed(bearing_noise)));
+                                   parms.bearing_noise));
 }
 
-void AircraftSim::update_bearing(TaskManager& task_manager) {
+void AircraftSim::update_bearing() {
   const ElementStat stat = task_manager.get_stats().current_leg;
   Angle bct = stat.solution_remaining.CruiseTrackBearing;
 
@@ -139,7 +162,7 @@ void AircraftSim::update_bearing(TaskManager& task_manager) {
     }
 
   } else {
-    bearing = state.Location.bearing(target(task_manager));
+    bearing = state.Location.bearing(target());
   }
 
   if (positive(state.wind.norm) && positive(state.TrueAirspeed)) {
@@ -153,7 +176,7 @@ void AircraftSim::update_bearing(TaskManager& task_manager) {
 }
 
 
-void AircraftSim::update_state(TaskManager &task_manager)  {
+void AircraftSim::update_state()  {
 
   const GlidePolar &glide_polar = task_manager.get_glide_polar();
   const ElementStat stat = task_manager.get_stats().current_leg;
@@ -166,13 +189,13 @@ void AircraftSim::update_state(TaskManager &task_manager)  {
     } else {
       state.TrueAirspeed = glide_polar.get_VbestLD();
     }
-    state.Vario = -glide_polar.SinkRate(state.TrueAirspeed)*fixed(sink_factor);
-    update_bearing(task_manager);
+    state.Vario = -glide_polar.SinkRate(state.TrueAirspeed)*parms.sink_factor;
+    update_bearing();
     break;
   case Climb:
     state.TrueAirspeed = glide_polar.get_Vmin();
     bearing += Angle::degrees(fixed_20+small_rand());
-    state.Vario = climb_rate*fixed(climb_factor);
+    state.Vario = climb_rate*parms.climb_factor;
     break;
   };
   state.NettoVario = state.Vario+glide_polar.SinkRate(state.TrueAirspeed);
@@ -182,7 +205,7 @@ void AircraftSim::update_state(TaskManager &task_manager)  {
 #define fixed_1500 fixed(1500)
 
 fixed
-AircraftSim::target_height(TaskManager &task_manager)  
+AircraftSim::target_height()  
 {
   if (task_manager.getActiveTaskPoint()) {
     return max(fixed_300, task_manager.getActiveTaskPoint()->get_elevation());
@@ -191,7 +214,7 @@ AircraftSim::target_height(TaskManager &task_manager)
   }
 }
 
-void AircraftSim::update_mode(TaskManager &task_manager)  
+void AircraftSim::update_mode()  
 {
   
   const ElementStat stat = task_manager.get_stats().current_leg;
@@ -203,7 +226,7 @@ void AircraftSim::update_mode(TaskManager &task_manager)
       print_mode("# mode fg\n");
       acstate = FinalGlide;
     } else {
-      if (state.NavAltitude<=target_height(task_manager)) {
+      if (state.NavAltitude<=target_height()) {
         print_mode("# mode climb\n");
         acstate = Climb;
       }
@@ -240,16 +263,17 @@ void AircraftSim::integrate() {
   state.Speed = endpoint(bearing).distance(state.Location);
   state.Location = endpoint(bearing);
   state.NavAltitude += state.Vario;
+  state.AirspaceAltitude += state.Vario;
   state.Time += fixed_one;
 }
 
-bool AircraftSim::advance(TaskManager &task_manager)  {
+bool AircraftSim::Update()  {
 
-  update_state(task_manager);
+  update_state();
   
   integrate();
   
-  update_mode(task_manager);
+  update_mode();
 
   task_manager.update(state, state_last);
   task_manager.update_idle(state);
@@ -259,13 +283,14 @@ bool AircraftSim::advance(TaskManager &task_manager)  {
 
   state.flying_state_moving(state.Time);
   
-  if (!far(task_manager)) {
+  if (!far()) {
     wait_prompt(time());
     
     awp++;
     if (awp>= w.size()) {
       return false;
     } 
+    task_manager.setActiveTaskPoint(awp);
   }
 
   if (goto_target) {
