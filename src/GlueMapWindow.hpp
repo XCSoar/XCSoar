@@ -109,6 +109,7 @@ private:
   RasterPoint drag_start, drag_last;
   GestureManager gestures;
   bool ignore_single_click;
+  bool dragOverMinDist; /* <// if mouse pan drag has moved over ~10 pixels */
 
   ZoomClimb_t zoomclimb;
 

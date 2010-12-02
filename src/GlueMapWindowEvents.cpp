@@ -81,6 +81,11 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
     return true;
 
   case DRAG_PAN:
+
+    if (!dragOverMinDist) {
+      if ((fabs(drag_start.x - x) + fabs(drag_start.y - y)) > 10)
+        dragOverMinDist = true;
+    }
     XCSoarInterface::SetSettingsMap().PanLocation =
       drag_projection.GetGeoLocation() + drag_start_geopoint
       - drag_projection.ScreenToGeo(x, y);
@@ -108,6 +113,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
     return true;
 
   mouse_down_clock.update();
+  dragOverMinDist = false;
 
   set_focus();
 
@@ -215,9 +221,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
   }
 
   if (!SettingsMap().TargetPan) {
-    double distance = hypot(drag_start.x - x, drag_start.y - y);
-
-    if((click_time < 1000) && (distance < 10.0)) {
+    if(!dragOverMinDist && (click_time < 1000) ) {
       // click less then one second -> open nearest waypoint details
       if (way_points != NULL &&
           PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
@@ -227,7 +231,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
     }
     else {
       // click more then one second -> open nearest airspace details
-      if ((distance < 10.0) && (airspace_database != NULL) &&
+      if (!dragOverMinDist && (airspace_database != NULL) &&
           AirspaceDetailsAtPoint(drag_start_geopoint))
         return true;
     }
