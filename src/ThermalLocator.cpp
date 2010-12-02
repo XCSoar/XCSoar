@@ -34,7 +34,8 @@ ThermalLocator::Point::Drift(fixed t, const TaskProjection& projection,
 
   const fixed dt = t - t_0;
   assert(!negative(dt));
-  weight = exp(decay_factor * dt) * w;
+  recency_weight = exp(decay_factor * dt);
+  lift_weight = w*recency_weight;
 
   GeoPoint p = location + wind_drift * dt;
 
@@ -60,6 +61,7 @@ ThermalLocator::AddPoint(const fixed t, const GeoPoint &location, const fixed w)
   points[n_index].location = location;
   points[n_index].t_0 = t;
   points[n_index].w = max(w, fixed(-0.1));
+  // lift_weight and recency_weight are set by Drift()
 
   n_index = (n_index + 1) % TLOCATOR_NMAX;
 
@@ -93,8 +95,8 @@ ThermalLocator::Update(const fixed t_0,
   FlatPoint f0(fixed_zero, fixed_zero);
   fixed acc = fixed_zero;
   for (unsigned i = 0; i < n_points; ++i) {
-    f0 += (points[i].loc_drift-av)*points[i].weight;
-    acc += points[i].weight;
+    f0 += (points[i].loc_drift-av)*points[i].lift_weight;
+    acc += points[i].lift_weight;
   }
 
   // if sufficient data, estimate location
@@ -118,12 +120,16 @@ ThermalLocator::glider_average()
     return result;
 
   // find glider's average position
+  fixed acc = fixed_zero;
   for (unsigned i = 0; i < n_points; ++i) {
-    result += points[i].loc_drift;
+    result += points[i].loc_drift*points[i].recency_weight;
+    acc += points[i].recency_weight;
   }
 
-  result.x /= n_points;
-  result.y /= n_points;
+  if (positive(acc)) {
+    result.x /= acc;
+    result.y /= acc;
+  }
 
   return result;
 }

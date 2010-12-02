@@ -63,8 +63,10 @@ private:
     fixed t_0;
     /** Scaled updraft value of sample */
     fixed w;
-    /** Weighting used for this point */
-    fixed weight;
+    /** Lift weighting used for this point */
+    fixed lift_weight;
+    /** Recency weighting used for this point */
+    fixed recency_weight;
   };
 
 public:
