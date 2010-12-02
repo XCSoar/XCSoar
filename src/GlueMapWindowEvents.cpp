@@ -349,16 +349,7 @@ GlueMapWindow::on_paint(Canvas &canvas)
 
   const RECT rc = get_client_rect();
 
-  {
-    /* hold the lock to protect this->bitmap_canvas; since
-       DrawMapScale() is called from the main thread by on_paint(), we
-       need to serialize access to it */
-#ifndef ENABLE_OPENGL
-    ScopeLock protect(DoubleBufferWindow::mutex);
-#endif
-    DrawMapScale(canvas, rc, render_projection);
-  }
-
+  DrawMapScale(canvas, rc, render_projection);
   DrawMapScaleBar(canvas, rc, render_projection);
 
   // Draw center screen cross hair in pan mode
