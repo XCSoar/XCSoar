@@ -245,6 +245,7 @@ const TCHAR szProfileEnableExternalTriggerCruise[] = CONF("EnableExternalTrigger
 const TCHAR szProfileOLCRules[] = CONF("OLCRules");
 const TCHAR szProfileHandicap[] = CONF("Handicap");
 const TCHAR szProfileSnailWidthScale[] = CONF("SnailWidthScale");
+const TCHAR szProfileSnailType[] = CONF("SnailType");
 const TCHAR szProfileUserLevel[] = CONF("UserLevel");
 const TCHAR szProfileRiskGamma[] = CONF("RiskGamma");
 const TCHAR szProfileWindArrowStyle[] = CONF("WindArrowStyle");

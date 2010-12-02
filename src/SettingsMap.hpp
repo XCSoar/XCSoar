@@ -84,6 +84,8 @@ struct SETTINGS_MAP {
   /** Automatic zoom when closing in on waypoint */
   bool AutoZoom;
   int SnailWidthScale;
+  /** 0: standard, 1: seeyou colors */
+  short SnailType;
   int WindArrowStyle;
   /** What type of text to draw next to the waypoint icon */
   DisplayTextType_t DisplayTextType;

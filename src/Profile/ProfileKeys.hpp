@@ -166,6 +166,7 @@ extern const TCHAR szProfileEnableExternalTriggerCruise[];
 extern const TCHAR szProfileOLCRules[];
 extern const TCHAR szProfileHandicap[];
 extern const TCHAR szProfileSnailWidthScale[];
+extern const TCHAR szProfileSnailType[];
 extern const TCHAR szProfileLatLonUnits[];
 extern const TCHAR szProfileUserLevel[];
 extern const TCHAR szProfileRiskGamma[];

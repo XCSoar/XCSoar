@@ -128,6 +128,11 @@
         <DataField DataType="boolean" />
       </Edit>
   
+      <Edit Name="prpSnailType" Caption="Trail type*" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="Sets the type of the snail trail display.">
+        <DataField DataType="enum" />
+      </Edit>
+
       <Edit Name="prpSnailWidthScale" Caption="Trail width*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Sets the width of the snail trail display.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="2" Max="50" Step="1" />

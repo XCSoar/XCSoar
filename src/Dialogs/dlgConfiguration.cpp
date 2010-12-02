@@ -1359,6 +1359,16 @@ setVariables()
                    settings_computer.LoggerTimeStepCircling);
   LoadFormProperty(*wf, _T("prpSnailWidthScale"),
                    XCSoarInterface::SettingsMap().SnailWidthScale);
+
+  wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Standard Vario"));
+    dfe->addEnumText(_("SeeYou Vario"));
+    dfe->Set(XCSoarInterface::SettingsMap().SnailType);
+    wp->RefreshDisplay();
+  }
 }
 
 static bool
@@ -2242,6 +2252,16 @@ void dlgConfigurationShowModal(void)
       XCSoarInterface::SetSettingsMap().SnailWidthScale = wp->GetDataField()->GetAsInteger();
       Profile::Set(szProfileSnailWidthScale,
                     XCSoarInterface::SettingsMap().SnailWidthScale);
+      changed = true;
+      Graphics::InitSnailTrail(XCSoarInterface::SettingsMap());
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
+  if (wp) {
+    if (XCSoarInterface::SettingsMap().SnailType != wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsMap().SnailType = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileSnailType, XCSoarInterface::SettingsMap().SnailType);
       changed = true;
       Graphics::InitSnailTrail(XCSoarInterface::SettingsMap());
     }

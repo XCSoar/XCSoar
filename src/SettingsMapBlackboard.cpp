@@ -35,6 +35,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.EnableDetourCostMarker = false;
   settings_map.AutoZoom = false;
   settings_map.SnailWidthScale = 16;
+  settings_map.SnailType = 0;
   settings_map.WindArrowStyle = 0;
   settings_map.DisplayTextType = DISPLAYNONE;
   settings_map.TrailActive = 1;

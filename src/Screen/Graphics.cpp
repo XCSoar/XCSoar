@@ -248,13 +248,22 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
     {200, 0x00, 0xff, 0x3e}
   };
 
+  const COLORRAMP snail_colors_vario2[] = {
+    {0,   0x00, 000, 0xff},
+    {99,  0x00, 0xff, 0xff},
+    {100, 0xff, 0xff, 0x00},
+    {200, 0xff, 0x00, 0x00}
+  };
+
   int iwidth;
   int minwidth =
       max(Layout::Scale(2), Layout::Scale(settings_map.SnailWidthScale) / 16);
 
   for (int i = 0; i < NUMSNAILCOLORS; i++) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    Color color = ColorRampLookup(ih, snail_colors_vario, 3);
+    Color color = (settings_map.SnailType == 1) ?
+                  ColorRampLookup(ih, snail_colors_vario2, 4) :
+                  ColorRampLookup(ih, snail_colors_vario, 3);
 
     if (i < NUMSNAILCOLORS / 2)
       iwidth = minwidth;
