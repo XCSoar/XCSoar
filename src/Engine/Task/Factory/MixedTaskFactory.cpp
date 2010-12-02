@@ -34,6 +34,8 @@ MixedTaskFactory::MixedTaskFactory(OrderedTask& _task,
   m_intermediate_types.push_back(AAT_CYLINDER);
   m_intermediate_types.push_back(AAT_SEGMENT);
   m_intermediate_types.push_back(KEYHOLE_SECTOR);
+  m_intermediate_types.push_back(BGAFIXEDCOURSE_SECTOR);
+  m_intermediate_types.push_back(BGAENHANCEDOPTION_SECTOR);
   m_finish_types.push_back(FINISH_LINE);
   m_finish_types.push_back(FINISH_CYLINDER);
 }
