@@ -278,8 +278,7 @@ unsigned
 ContestDijkstra::get_weighting(const unsigned i) const
 {
   assert(num_stages <= MAX_STAGES);
-  assert(i < num_stages - 1);
-
+  assert(i+1 < num_stages);
   return m_weightings[i];
 }
 
