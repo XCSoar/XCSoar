@@ -117,8 +117,10 @@ OrderedTask::scan_distance_min(const GeoPoint &location, bool full)
 fixed
 OrderedTask::scan_distance_max()
 {
-  assert((tps.empty() && activeTaskPoint == 0) ||
-         activeTaskPoint < tps.size());
+  if (tps.empty()) // nothing to do!
+    return fixed_zero;
+
+  assert(activeTaskPoint < tps.size());
 
   // for max calculations, since one can still travel further in the
   // sector, we pretend we are on the previous turnpoint so the
