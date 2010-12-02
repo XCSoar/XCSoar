@@ -160,6 +160,7 @@ ContestDijkstra::solve()
 
   if (distance_general(m_dijkstra, 25)) {
     save_solution();
+    update_trace();
     return true;
   }
 
