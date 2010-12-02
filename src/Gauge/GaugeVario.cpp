@@ -92,22 +92,22 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
                    IDB_VARIOSCALEC : IDB_VARIOSCALEA);
 
   Color theredColor;
-  Color theblueColor;
+  Color thegreenColor;
 
   if (Appearance.InverseInfoBox) {
     theredColor = Graphics::inv_redColor;
-    theblueColor = Graphics::inv_blueColor;
+    thegreenColor = Graphics::inv_blueColor;
   } else {
     theredColor = Color::RED;
-    theblueColor = Color::BLUE;
+    thegreenColor = Color::GREEN;
   }
 
   redBrush.set(theredColor);
-  blueBrush.set(theblueColor);
+  greenBrush.set(thegreenColor);
   redPen.set(1, theredColor);
-  bluePen.set(1, theblueColor);
+  greenPen.set(1, thegreenColor);
   redThickPen.set(Layout::Scale(5), theredColor);
-  blueThickPen.set(Layout::Scale(5), theblueColor);
+  greenThickPen.set(Layout::Scale(5), thegreenColor);
 
   if (Appearance.InverseInfoBox) {
     colText = Color::WHITE;
@@ -352,7 +352,7 @@ GaugeVario::RenderVarioLine(Canvas &canvas, int i, int sink, bool clear)
     return;
 
   canvas.select(clear ? blankThickPen :
-                        (i > sink ? blueThickPen: redThickPen));
+                        (i > sink ? greenThickPen: redThickPen));
 
   if (i > sink)
     canvas.polyline(lines + gmax + sink, i - sink);
@@ -554,7 +554,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
         // too slow
         canvas.select(redBrush);
       } else {
-        canvas.select(blueBrush);
+        canvas.select(greenBrush);
       }
     } else {
       if (Appearance.InverseInfoBox)

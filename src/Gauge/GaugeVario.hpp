@@ -64,11 +64,11 @@ private:
   Color colTextBackgnd;
 
   Brush redBrush;
-  Brush blueBrush;
+  Brush greenBrush;
   Pen redPen;
-  Pen bluePen;
+  Pen greenPen;
   Pen redThickPen;
-  Pen blueThickPen;
+  Pen greenThickPen;
   Pen blankThickPen;
 
   Bitmap hBitmapClimb;
