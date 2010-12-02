@@ -171,8 +171,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
         int colourIndex = fSnailColour(cv);
         // Select the appropriate background color determined before
         canvas.select(Graphics::hSnailPens[colourIndex]);
-        Brush hVarioBrush(Graphics::hSnailColours[colourIndex]);
-        canvas.select(hVarioBrush);
+        canvas.white_brush();
 
         // Draw the rounded background rectangle
         canvas.round_rectangle(brect.left, brect.top,
