@@ -103,7 +103,14 @@ class RasterTileCache : private NonCopyable {
   };
 
   struct CacheHeader {
-    enum { VERSION = 0x1 };
+    enum {
+#ifdef FIXED_MATH
+      VERSION = 0x2,
+#else
+      VERSION = 0x3,
+#endif
+    };
+
     unsigned version, width, height, num_marker_segments;
     GeoBounds bounds;
   };
