@@ -85,6 +85,8 @@ GlideComputerAirData::ResetFlight(const bool full)
   netto_30s_filter.reset();
 
   ResetLiftDatabase();
+
+  thermallocator.Reset();
 }
 
 /**
@@ -106,9 +108,6 @@ GlideComputerAirData::ProcessVertical()
 {
   Turning();
   Wind();
-
-  if (time_retreated())
-    thermallocator.Reset();
 
   thermallocator.Process(Calculated().Circling,
                          Basic().Time, Basic().Location,
