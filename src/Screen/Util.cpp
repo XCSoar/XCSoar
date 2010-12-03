@@ -294,13 +294,6 @@ ClipPolygon(Canvas &canvas, const RasterPoint *m_ptin, unsigned int inLength,
   RECT rc;
   SetRect(&rc, 0, 0, canvas.get_width(), canvas.get_height());
 
-  // PAOLO NOTE: IF CLIPPING WITH N>2 DOESN'T WORK,
-  // TRY IFDEF'ing out THE FOLLOWING ADJUSTMENT TO THE CLIPPING RECTANGLE
-  rc.top--;
-  rc.bottom++;
-  rc.left--;
-  rc.right++;
-
   // OK, do the clipping
   RasterPoint edge[5] = {{rc.left, rc.top},
                    {rc.left, rc.bottom},
