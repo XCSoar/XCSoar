@@ -79,6 +79,8 @@
 #include <jasper/jas_stream.h>
 #include <jasper/jas_types.h>
 
+#include "Compiler.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -183,6 +185,7 @@ typedef jas_matrix_t jas_seq_t;
 	(max((matrix)->numrows_, (matrix)->numcols_))
 
 /* Create a matrix with the specified dimensions. */
+gcc_malloc
 jas_matrix_t *jas_matrix_create(int numrows, int numcols);
 
 /* Destroy a matrix. */
@@ -230,14 +233,17 @@ void jas_matrix_setall(jas_matrix_t *matrix, jas_seqent_t val);
 /* Compare two matrices for equality. */
 int jas_matrix_cmp(jas_matrix_t *mat0, jas_matrix_t *mat1);
 
+gcc_malloc
 jas_matrix_t *jas_matrix_copy(jas_matrix_t *x);
 
 /******************************************************************************\
 * Functions/macros for 2-D sequence class.
 \******************************************************************************/
 
+gcc_malloc
 jas_seq2d_t *jas_seq2d_copy(jas_seq2d_t *x);
 
+gcc_malloc
 jas_matrix_t *jas_seq2d_create(int xstart, int ystart, int xend, int yend);
 
 #define	jas_seq2d_destroy(s) \

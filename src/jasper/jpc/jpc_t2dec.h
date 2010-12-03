@@ -81,6 +81,8 @@
 #include "jpc_dec.h"
 #include "jpc_mqdec.h"
 
+#include "Compiler.h"
+
 /******************************************************************************\
 * Functions.
 \******************************************************************************/
@@ -90,6 +92,7 @@ int jpc_dec_decodepkts(jpc_dec_t *dec, jas_stream_t *pkthdrstream,
   jas_stream_t *in);
 
 /* Create a packet iterator for the decoder. */
+gcc_malloc
 jpc_pi_t *jpc_dec_pi_create(jpc_dec_t *dec, jpc_dec_tile_t *tile);
 
 #endif

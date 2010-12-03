@@ -77,6 +77,8 @@
 #include <jasper/jas_config.h>
 #include <string.h>
 
+#include "Compiler.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -86,6 +88,7 @@ extern "C" {
 \******************************************************************************/
 
 /* Copy a string (a la strdup). */
+gcc_malloc
 char *jas_strdup(const char *);
 
 #ifdef __cplusplus

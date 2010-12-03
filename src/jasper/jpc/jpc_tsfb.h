@@ -79,6 +79,8 @@
 #include "jpc_fix.h"
 #include "jpc_qmfb.h"
 
+#include "Compiler.h"
+
 /******************************************************************************\
 * Constants.
 \******************************************************************************/
@@ -149,10 +151,12 @@ typedef struct {
 \******************************************************************************/
 
 /* Create a TSFB. */
+gcc_malloc
 jpc_tsfb_t *jpc_cod_gettsfb(int qmfbid, int numlevels);
 
 /* Create a wavelet-type TSFB with the specified horizontal and vertical
   QMFBs. */
+gcc_malloc
 jpc_tsfb_t *jpc_tsfb_wavelet(jpc_qmfb1d_t *hqmfb, jpc_qmfb1d_t *vqmfb,
   int numdlvls);
 

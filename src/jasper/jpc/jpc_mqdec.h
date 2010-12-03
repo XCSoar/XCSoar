@@ -121,6 +121,7 @@ typedef struct {
 \******************************************************************************/
 
 /* Create a MQ decoder. */
+gcc_malloc
 jpc_mqdec_t *jpc_mqdec_create(int maxctxs, jas_stream_t *in);
 
 /* Destroy a MQ decoder. */

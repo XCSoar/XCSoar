@@ -135,6 +135,7 @@ typedef struct {
 \******************************************************************************/
 
 /* Open a stream as a bit stream. */
+gcc_malloc
 jpc_bitstream_t *jpc_bitstream_sopen(jas_stream_t *stream, const char *mode);
 
 /* Close a bit stream. */
