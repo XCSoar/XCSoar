@@ -93,42 +93,40 @@ private:
   ObservationZoneVisitorPrint ozv;
 };
 
-class TaskVisitorPrint: public TaskVisitor
-{
-public:
-  virtual void Visit(const AbortTask& task) {
-    printf("# task is abort\n");
-    task.tp_CAccept(tpv);
-    print_distances(task);
-  };
-  virtual void Visit(const OrderedTask& task) {
-    printf("# task is ordered\n");
-    task.tp_CAccept(tpv);
-    print_distances(task);
-    if (task.get_stats().distance_max>task.get_stats().distance_min) {
-      printf("# - dist max %g\n", (double)task.get_stats().distance_max);
-      printf("# - dist min %g\n", (double)task.get_stats().distance_min);
-    }
-  };
-  virtual void Visit(const GotoTask& task) {
-    printf("# task is goto\n");
-    task.tp_CAccept(tpv);
-    print_distances(task);
-  };
-  virtual void print_distances(const AbstractTask& task) {
-    printf("# - dist nominal %g\n", (double)task.get_stats().distance_nominal);
-  };
-private:
-  TaskPointVisitorPrint tpv;
-};
-
 void task_report(TaskManager& task_manager, const char* text)
 {
   AIRCRAFT_STATE ac;
   if (verbose) {
-    TaskVisitorPrint tv;
     printf("%s",text);
-    task_manager.CAccept(tv);
+
+    const AbstractTask *task = task_manager.get_active_task();
+    if (task != NULL) {
+      switch (task->type) {
+      case TaskInterface::ORDERED:
+        printf("# task is ordered\n");
+        break;
+
+      case TaskInterface::ABORT:
+        printf("# task is abort\n");
+        break;
+
+      case TaskInterface::GOTO:
+        printf("# task is goto\n");
+        break;
+      }
+
+      TaskPointVisitorPrint tpv;
+      task->tp_CAccept(tpv);
+      printf("# - dist nominal %g\n",
+             (double)task->get_stats().distance_nominal);
+
+      if (task->type == TaskInterface::ORDERED &&
+          task->get_stats().distance_max > task->get_stats().distance_min) {
+        printf("# - dist max %g\n", (double)task->get_stats().distance_max);
+        printf("# - dist min %g\n", (double)task->get_stats().distance_min);
+      }
+    }
+
     PrintHelper::taskmanager_print(task_manager, ac);
   }
   if (interactive>1) {
