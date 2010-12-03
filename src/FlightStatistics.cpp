@@ -142,15 +142,15 @@ static void DrawLegs(Chart& chart,
                      const DERIVED_INFO& calculated,
                      const bool task_relative)
 {
-  if (calculated.common_stats.task_started) {
+  if (!calculated.common_stats.task_started)
+    return;
 
-    const fixed start_time = task_relative
-      ? basic.Time - calculated.common_stats.task_time_elapsed
-      : basic.flight.TakeOffTime;
+  const fixed start_time = task_relative
+    ? basic.Time - calculated.common_stats.task_time_elapsed
+    : basic.flight.TakeOffTime;
 
-    ChartTaskHelper visitor(chart, start_time);
-    task.ordered_CAccept(visitor);
-  }
+  ChartTaskHelper visitor(chart, start_time);
+  task.ordered_CAccept(visitor);
 }
 
 void
