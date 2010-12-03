@@ -26,7 +26,6 @@ Copyright_License {
 #include "MapWindowLabels.hpp"
 #include "SettingsMap.hpp"
 #include "SettingsComputer.hpp"
-#include "Task/Visitors/TaskVisitor.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
@@ -51,8 +50,7 @@ Copyright_License {
 
 class WaypointVisitorMap: 
   public WaypointVisitor, 
-  public TaskPointConstVisitor,
-  public TaskVisitor
+  public TaskPointConstVisitor
 {
   const MapWindowProjection &projection;
   const SETTINGS_MAP &settings_map;
@@ -214,24 +212,6 @@ public:
   }
 
   void
-  Visit(const AbortTask& task)
-  {
-    task.tp_CAccept(*this);
-  }
-
-  void
-  Visit(const OrderedTask& task)
-  {
-    task.tp_CAccept(*this);
-  }
-
-  void
-  Visit(const GotoTask& task)
-  {
-    task.tp_CAccept(*this);
-  }
-
-  void
   Visit(const Waypoint& way_point)
   {
     DrawWaypoint(way_point, false);
@@ -347,7 +327,10 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
     if (task_manager->stats_valid()) {
       v.set_task_valid();
     }
-    task_manager->CAccept(v);
+
+    const AbstractTask *task = task_manager->get_active_task();
+    if (task != NULL)
+      task->tp_CAccept(v);
   }
 
   way_points->visit_within_range(projection.GetGeoLocation(),
