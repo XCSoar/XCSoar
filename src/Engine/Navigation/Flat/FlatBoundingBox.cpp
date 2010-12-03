@@ -25,6 +25,8 @@
 
 unsigned 
 FlatBoundingBox::distance(const FlatBoundingBox &f) const {
+  if (overlaps(f)) return 0;
+
   long dx = max(0,min(f.bb_ll.Longitude-bb_ur.Longitude,
                       bb_ll.Longitude-f.bb_ur.Longitude));
   long dy = max(0,min(f.bb_ll.Latitude-bb_ur.Latitude,
