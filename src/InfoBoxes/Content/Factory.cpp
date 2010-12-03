@@ -171,7 +171,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next Altitude Required"),
     N_("WP AltR"),
-    N_("Altitude required to reach the next turn point."),
+    N_("Additional altitude required to reach the next turn point."),
     15, // Fin AltD
     12, // WP AltD
   },
@@ -198,7 +198,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Final Altitude Required"),
     N_("Fin AltR"),
-    N_("Altitude required to finish the task."),
+    N_("Additional altitude required to finish the task."),
     17, // V Task Av
     15, // Fin AltD
   },
