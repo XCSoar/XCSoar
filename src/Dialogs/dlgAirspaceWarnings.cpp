@@ -214,7 +214,10 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
     return;
   }
 
-  assert(i < lease->size());
+  if (i >= lease->size())
+    /* this cannot be an assertion, because another thread may have
+       modified the AirspaceWarningManager */
+    return;
 
   const AirspaceWarning warning = *(lease->get_warning(i));
   const AbstractAirspace& as = warning.get_airspace();
