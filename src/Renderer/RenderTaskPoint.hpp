@@ -25,7 +25,6 @@ Copyright_License {
 
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
-#include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Screen/Pen.hpp"
 #include "MapWindow/MapCanvas.hpp"
 #include "Compiler.h"
@@ -33,7 +32,9 @@ Copyright_License {
 class Canvas;
 class WindowProjection;
 class RenderObservationZone;
+class TaskPoint;
 class OrderedTaskPoint;
+class AATPoint;
 struct SETTINGS_MAP;
 struct TaskLook;
 
@@ -44,9 +45,7 @@ enum RenderTaskLayer {
   RENDER_TASK_SYMBOLS,
 };
 
-class RenderTaskPoint:
-  public TaskPointConstVisitor
-{
+class RenderTaskPoint {
 protected:
   Canvas &canvas, *buffer;
   const WindowProjection &m_proj;
@@ -78,12 +77,6 @@ public:
                   bool draw_all,
                   const GeoPoint &location);
 
-  void Visit(const UnorderedTaskPoint& tp);
-  void Visit(const StartPoint& tp);
-  void Visit(const FinishPoint& tp);
-  void Visit(const AATPoint& tp);
-  void Visit(const ASTPoint& tp);
-
   void set_layer(RenderTaskLayer set) {
     m_layer = set;
     m_index = 0;
@@ -100,6 +93,8 @@ public:
   void set_mode_optional(const bool mode) {
     mode_optional_start = mode;
   }
+
+  void Draw(const TaskPoint &tp);
 
 protected:
   void draw_ordered(const OrderedTaskPoint& tp);

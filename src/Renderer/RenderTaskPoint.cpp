@@ -66,18 +66,6 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
 }
 
 void 
-RenderTaskPoint::Visit(const UnorderedTaskPoint& tp) 
-{
-  if (m_layer == RENDER_TASK_LEG) {
-    draw_task_line(m_location, tp.get_location_remaining());
-  }
-  if (m_layer == RENDER_TASK_SYMBOLS) {
-    draw_bearing(tp);
-  }
-  m_index++;
-}
-
-void 
 RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp) 
 {
   const bool visible = tp.boundingbox_overlaps(bb_screen);
@@ -96,92 +84,6 @@ RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp)
   
   if (visible && (m_layer == RENDER_TASK_OZ_OUTLINE)) {
     draw_oz_foreground(tp);
-  }
-}
-
-void 
-RenderTaskPoint::Visit(const StartPoint& tp) 
-{
-  m_index = 0;
-  draw_ordered(tp);
-  if (m_layer == RENDER_TASK_SYMBOLS) {
-    draw_bearing(tp);
-    draw_target(tp);
-  }
-}
-
-void 
-RenderTaskPoint::Visit(const FinishPoint& tp) 
-{
-  m_index++;
-  draw_ordered(tp);
-  if (m_layer == RENDER_TASK_SYMBOLS) {
-    draw_bearing(tp);
-    draw_target(tp);
-  }
-}
-
-void 
-RenderTaskPoint::Visit(const AATPoint& tp) 
-{
-  m_index++;
-  
-#ifndef ENABLE_OPENGL
-  if (m_layer == RENDER_TASK_OZ_SHADE && buffer != NULL &&
-      do_draw_deadzone(tp) && !is_ancient_hardware()) {
-    // Draw clear area on top indicating part of OZ already travelled in
-    // This provides a simple and intuitive visual representation of
-    // where in the OZ to go to increase scoring distance.
-
-    if (!tp.boundingbox_overlaps(bb_screen))
-      return;
-
-    const SearchPointVector &dead_zone = point_current()
-      // scoring deadzone should include the area to the next destination
-      ? tp.get_deadzone()
-      // scoring deadzone is just the samples convex hull
-      : tp.get_sample_points();
-
-    /* need at least 3 points to draw the polygon */
-    if (dead_zone.size() >= 3) {
-      buffer->clear_white();
-
-      /* draw the background shade into the buffer */
-      draw_oz_background(*buffer, tp);
-
-      /* now erase the dead zone by drawing a white polygon over it */
-      buffer->null_pen();
-      buffer->white_brush();
-      MapCanvas map_canvas(*buffer, m_proj,
-                           m_proj.GetScreenBounds().scale(fixed(1.1)));
-      map_canvas.draw(dead_zone);
-
-      /* copy the result into the canvas */
-      /* we use copy_and() here to simulate Canvas::mix_mask() */
-      canvas.copy_and(*buffer);
-      return;
-    }
-  }
-#endif
-
-  draw_ordered(tp);
-
-  if (m_layer == RENDER_TASK_SYMBOLS) {
-    draw_isoline(tp);
-    draw_bearing(tp);
-    draw_target(tp);
-  }
-}
-
-void 
-RenderTaskPoint::Visit(const ASTPoint& tp) 
-{
-  m_index++;
-  
-  draw_ordered(tp);
-  if (m_layer == RENDER_TASK_SYMBOLS) {
-    draw_bearing(tp);
-    draw_target(tp);
   }
 }
 
@@ -328,3 +230,118 @@ RenderTaskPoint::draw_oz_foreground(const OrderedTaskPoint& tp)
   }
 }
 
+void
+RenderTaskPoint::Draw(const TaskPoint &tp)
+{
+  const OrderedTaskPoint &otp = (const OrderedTaskPoint &)tp;
+  const AATPoint &atp = (const AATPoint &)tp;
+
+  switch (tp.GetType()) {
+  case TaskPoint::UNORDERED:
+    if (m_layer == RENDER_TASK_LEG)
+      draw_task_line(m_location, tp.get_location_remaining());
+
+    if (m_layer == RENDER_TASK_SYMBOLS)
+      draw_bearing(tp);
+
+    m_index++;
+    break;
+
+  case TaskPoint::START:
+    m_index = 0;
+
+    draw_ordered(otp);
+    if (m_layer == RENDER_TASK_SYMBOLS) {
+      draw_bearing(tp);
+      draw_target(tp);
+    }
+
+    break;
+
+  case TaskPoint::AST:
+    m_index++;
+
+    draw_ordered(otp);
+    if (m_layer == RENDER_TASK_SYMBOLS) {
+      draw_bearing(tp);
+      draw_target(tp);
+    }
+    break;
+
+  case TaskPoint::AAT:
+    m_index++;
+
+#ifndef ENABLE_OPENGL
+    if (m_layer == RENDER_TASK_OZ_SHADE && buffer != NULL &&
+        do_draw_deadzone(tp) && !is_ancient_hardware()) {
+      // Draw clear area on top indicating part of OZ already travelled in
+      // This provides a simple and intuitive visual representation of
+      // where in the OZ to go to increase scoring distance.
+
+      if (!atp.boundingbox_overlaps(bb_screen))
+        return;
+
+      const SearchPointVector &dead_zone = point_current()
+        // scoring deadzone should include the area to the next destination
+        ? atp.get_deadzone()
+        // scoring deadzone is just the samples convex hull
+        : atp.get_sample_points();
+
+      /* need at least 3 points to draw the polygon */
+      if (dead_zone.size() >= 3) {
+        buffer->clear_white();
+
+        /* draw the background shade into the buffer */
+        draw_oz_background(*buffer, atp);
+
+        /* now erase the dead zone by drawing a white polygon over it */
+        buffer->null_pen();
+        buffer->white_brush();
+        MapCanvas map_canvas(*buffer, m_proj,
+                             m_proj.GetScreenBounds().scale(fixed(1.1)));
+        map_canvas.draw(dead_zone);
+
+        /* copy the result into the canvas */
+        /* we use copy_and() here to simulate Canvas::mix_mask() */
+        canvas.copy_and(*buffer);
+        return;
+      }
+    }
+#endif
+
+    draw_ordered(otp);
+    if (m_layer == RENDER_TASK_OZ_SHADE) {
+      // Draw clear area on top indicating part of OZ already travelled in
+      // This provides a simple and intuitive visual representation of
+      // where in the OZ to go to increase scoring distance.
+
+      // DISABLED by Tobias.Bieniek@gmx.de
+      // This code produced graphical bugs due to previously
+      // modified code which should be fixed before re-enabling this call
+      //draw_deadzone(tp);
+    }
+
+    if (m_layer == RENDER_TASK_SYMBOLS) {
+      draw_isoline(atp);
+      draw_bearing(tp);
+      draw_target(tp);
+    }
+
+    break;
+
+  case TaskPoint::FINISH:
+    m_index++;
+
+    draw_ordered(otp);
+    if (m_layer == RENDER_TASK_SYMBOLS) {
+      draw_bearing(tp);
+      draw_target(tp);
+    }
+    break;
+
+  case TaskPoint::ROUTE:
+    /* unreachable */
+    assert(false);
+    break;
+  }
+}

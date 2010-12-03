@@ -36,12 +36,40 @@ RenderTask::draw_layers(const AbstractTask &task)
 {
   for (unsigned i = 0; i < 4; i++) {
     tpv.set_layer((RenderTaskLayer)i);
-    if (i != RENDER_TASK_SYMBOLS && i != RENDER_TASK_LEG) {
-      tpv.set_mode_optional(true);
-      task.sp_CAccept(tpv);
+
+    switch (task.type) {
+    case TaskInterface::ORDERED: {
+      const OrderedTask &ordered_task = (const OrderedTask &)task;
+      if (i != RENDER_TASK_SYMBOLS && i != RENDER_TASK_LEG) {
+        tpv.set_mode_optional(true);
+
+        for (unsigned j = 0, end = ordered_task.optional_start_points_size();
+             j < end; ++j)
+          tpv.Draw(*ordered_task.get_optional_start(j));
+      }
+
+      tpv.set_mode_optional(false);
+      for (unsigned j = 0, end = task.task_size(); j < end; ++j)
+        tpv.Draw(*ordered_task.getTaskPoint(j));
+
+      break;
     }
-    tpv.set_mode_optional(false);
-    task.tp_CAccept(tpv);
+
+    case TaskInterface::ABORT: {
+      const AbortTask &abort_task = (const AbortTask &)task;
+
+      tpv.set_mode_optional(false);
+      for (unsigned j = 0, end = abort_task.task_size(); j < end; ++j)
+        tpv.Draw(abort_task.GetAlternate(j));
+
+      break;
+    }
+
+    case TaskInterface::GOTO:
+      tpv.set_mode_optional(false);
+      tpv.Draw(*task.getActiveTaskPoint());
+      break;
+    }
   }
 }
 
