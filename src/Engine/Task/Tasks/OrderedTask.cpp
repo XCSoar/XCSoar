@@ -47,6 +47,9 @@
 
 #include "Waypoint/Waypoints.hpp"
 
+#include "Navigation/Flat/FlatBoundingBox.hpp"
+#include "Geo/GeoBounds.hpp"
+
 void
 OrderedTask::update_geometry() 
 {
@@ -1094,4 +1097,33 @@ OrderedTask::get_tp(const unsigned position) const
     return NULL;
 
   return tps[position];
+}
+
+FlatBoundingBox 
+OrderedTask::get_bounding_box(const GeoBounds& bounds) const
+{
+  if (!task_size()) {
+    // undefined!
+    return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
+  }
+  FlatGeoPoint ll = task_projection.project(GeoPoint(bounds.west, bounds.south));
+  FlatGeoPoint lr = task_projection.project(GeoPoint(bounds.east, bounds.south));
+  FlatGeoPoint ul = task_projection.project(GeoPoint(bounds.west, bounds.north));
+  FlatGeoPoint ur = task_projection.project(GeoPoint(bounds.east, bounds.north));
+  FlatGeoPoint fmin(min(ll.Longitude,ul.Longitude), min(ll.Latitude,lr.Latitude));
+  FlatGeoPoint fmax(max(lr.Longitude,ur.Longitude), max(ul.Latitude,ur.Latitude));
+  // note +/- 1 to ensure rounding keeps bb valid 
+  fmin.Longitude-= 1; fmin.Latitude-= 1;
+  fmax.Longitude+= 1; fmax.Latitude+= 1;
+  return FlatBoundingBox (fmin, fmax);
+}
+
+FlatBoundingBox 
+OrderedTask::get_bounding_box(const GeoPoint& point) const
+{
+  if (!task_size()) {
+    // undefined!
+    return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
+  }
+  return FlatBoundingBox (task_projection.project(point), 1);
 }

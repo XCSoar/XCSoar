@@ -57,7 +57,8 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
    ozv(_ozv),
    m_active_index(0),
    m_layer(RENDER_TASK_OZ_SHADE),
-   m_location(location)
+   m_location(location),
+   bb_screen(FlatGeoPoint(0,0),0) // uninitialised!
 {
 }
 
@@ -76,7 +77,9 @@ RenderTaskPoint::Visit(const UnorderedTaskPoint& tp)
 void 
 RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp) 
 {
-  if (m_layer == RENDER_TASK_OZ_SHADE) {
+  const bool visible = tp.boundingbox_overlaps(bb_screen);
+
+  if (visible && (m_layer == RENDER_TASK_OZ_SHADE)) {
     // draw shaded part of observation zone
     draw_oz_background(tp);
   }
@@ -88,7 +91,7 @@ RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp)
     m_last_point = tp.get_location_remaining();
   }
   
-  if (m_layer == RENDER_TASK_OZ_OUTLINE) {
+  if (visible && (m_layer == RENDER_TASK_OZ_OUTLINE)) {
     draw_oz_foreground(tp);
   }
 }

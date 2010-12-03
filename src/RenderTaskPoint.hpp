@@ -24,6 +24,7 @@ Copyright_License {
 #define XCSOAR_RENDER_TASK_POINT_HPP
 
 #include "Navigation/GeoPoint.hpp"
+#include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Screen/Pen.hpp"
 #include "MapCanvas.hpp"
@@ -73,6 +74,10 @@ public:
 
   void set_active_index(unsigned active_index) {
     m_active_index = active_index;
+  }
+
+  void set_bounding_box(const FlatBoundingBox& bb) {
+    bb_screen = bb;
   }
 
 protected:
@@ -131,6 +136,7 @@ protected:
   unsigned m_active_index;
   RenderTaskLayer m_layer;
   const GeoPoint m_location;
+  FlatBoundingBox bb_screen;
 };
 
 

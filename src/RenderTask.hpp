@@ -24,6 +24,7 @@ Copyright_License {
 #define XCSOAR_RENDER_TASK_HPP
 
 #include "Task/Visitors/TaskVisitor.hpp"
+#include "Geo/GeoBounds.hpp"
 
 class RenderTaskPoint;
 class AbstractTask;
@@ -35,13 +36,14 @@ class RenderTask:
   public TaskVisitor
 {
 public:
-  RenderTask(RenderTaskPoint& _tpv);
+  RenderTask(RenderTaskPoint& _tpv, GeoBounds _screen_bounds);
   void Visit(const AbortTask& task);
   void Visit(const OrderedTask& task);
   void Visit(const GotoTask& task);
 protected:
   void draw_layers(const AbstractTask& task);
   RenderTaskPoint &tpv;
+  GeoBounds screen_bounds;
 };
 
 #endif

@@ -398,7 +398,7 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
   RenderTaskPoint tpv(canvas, proj, settings_map,
                       task.get_task_projection(),
                       ozv, false, nmea_info.Location);
-  ::RenderTask dv(tpv);
+  ::RenderTask dv(tpv, proj.GetScreenBounds());
   dv.Visit(task);
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.Location);

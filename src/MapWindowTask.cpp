@@ -83,7 +83,7 @@ MapWindow::DrawTask(Canvas &canvas)
                          task_manager->get_ordered_task().get_task_projection(),
                          ozv, draw_bearing,
                          Basic().Location);
-  RenderTask dv(tpv);
+  RenderTask dv(tpv, render_projection.GetScreenBounds());
   task_manager->CAccept(dv);
 }
 

@@ -28,8 +28,10 @@ Copyright_License {
 #include "Task/Tasks/AbortTask.hpp"
 #include "RenderTaskPoint.hpp"
 
-RenderTask::RenderTask(RenderTaskPoint& _tpv)
-  :tpv(_tpv)
+RenderTask::RenderTask(RenderTaskPoint& _tpv,
+                       GeoBounds _screen_bounds)
+  :tpv(_tpv),
+   screen_bounds(_screen_bounds)
 {
 }
 
@@ -52,6 +54,7 @@ RenderTask::Visit(const AbortTask& task)
 void 
 RenderTask::Visit(const OrderedTask& task) 
 {
+  tpv.set_bounding_box(task.get_bounding_box(screen_bounds));
   tpv.set_active_index(task.getActiveIndex());
   draw_layers(task);
 }

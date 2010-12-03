@@ -38,6 +38,9 @@ class TaskPointVisitor;
 class AbstractTaskFactory;
 class Waypoints;
 class AATPoint;
+class FlatBoundingBox;
+struct GeoBounds;
+
 /**
  * A task comprising an ordered sequence of task points, each with
  * observation zones.  A valid OrderedTask has a StartPoint, zero or more
@@ -402,6 +405,18 @@ public:
    * data during task construction.
    */
   void update_geometry();
+
+  /**
+   * Convert a GeoBounds into a flat bounding box projected
+   * according to the task projection.
+   */
+  FlatBoundingBox get_bounding_box(const GeoBounds& bounds) const;
+
+  /**
+   * Convert a GeoPoint into a flat bounding box projected
+   * according to the task projection.
+   */
+  FlatBoundingBox get_bounding_box(const GeoPoint& point) const;
 
 protected:
   bool is_scored() const;

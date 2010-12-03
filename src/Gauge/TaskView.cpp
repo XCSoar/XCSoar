@@ -45,7 +45,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
   RenderTaskPoint tpv(canvas, projection, settings_map,
                       task.get_task_projection(),
                       ozv, false, location);
-  RenderTask dv(tpv);
+  RenderTask dv(tpv, projection.GetScreenBounds());
   dv.Visit(task);
 }
 
