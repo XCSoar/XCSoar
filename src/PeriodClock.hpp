@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_PERIOD_CLOCK_HPP
 #define XCSOAR_PERIOD_CLOCK_HPP
 
-#ifdef HAVE_POSIX
+#if defined(HAVE_POSIX) && !defined(__CYGWIN__)
 #include <time.h>
 #else /* !HAVE_POSIX */
 #include <windows.h>
@@ -36,7 +36,7 @@ Copyright_License {
  */
 class PeriodClock {
 protected:
-#ifdef HAVE_POSIX
+#if defined(HAVE_POSIX) && !defined(__CYGWIN__)
   typedef unsigned stamp_t;
 #else /* !HAVE_POSIX */
   typedef DWORD stamp_t;
@@ -56,7 +56,7 @@ public:
 
 protected:
   static stamp_t get_now() {
-#ifdef HAVE_POSIX
+#if defined(HAVE_POSIX) && !defined(__CYGWIN__)
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     return ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
