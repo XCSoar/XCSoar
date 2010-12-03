@@ -58,7 +58,13 @@ public:
     return *files[i];
   }
 
-  void ScanVisibility(const WindowProjection &m_projection);
+  /**
+   * @param max_update the maximum number of files updated in this
+   * call
+   * @return the number of files which were updated
+   */
+  unsigned ScanVisibility(const WindowProjection &m_projection,
+                          unsigned max_update=1024);
 
   void Load(NLineReader &reader, const TCHAR *Directory,
             struct zzip_dir *zdir=NULL);

@@ -30,16 +30,25 @@ Copyright_License {
 
 #include <windef.h> // for MAX_PATH
 
-void
-TopologyStore::ScanVisibility(const WindowProjection &m_projection)
+unsigned
+TopologyStore::ScanVisibility(const WindowProjection &m_projection,
+                              unsigned max_update)
 {
   // check if any needs to have cache updates because wasnt
   // visible previously when bounds moved
 
   // we will make sure we update at least one cache per call
   // to make sure eventually everything gets refreshed
-  for (unsigned i = 0; i < files.size(); ++i)
-    files[i]->updateCache(m_projection);
+  unsigned num_updated = 0;
+  for (unsigned i = 0; i < files.size(); ++i) {
+    if (files[i]->updateCache(m_projection)) {
+      ++num_updated;
+      if (num_updated >= max_update)
+        break;
+    }
+  }
+
+  return num_updated;
 }
 
 TopologyStore::~TopologyStore()

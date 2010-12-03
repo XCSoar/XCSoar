@@ -97,21 +97,21 @@ TopologyFile::ConvertRect(const GeoBounds &br)
   return dest;
 }
 
-void
+bool
 TopologyFile::updateCache(const WindowProjection &map_projection)
 {
   if (!shapefileopen)
-    return;
+    return false;
 
   if (map_projection.GetMapScale() > scaleThreshold)
     /* not visible, don't update cache now */
-    return;
+    return false;
 
   const GeoBounds screenRect =
     map_projection.GetScreenBounds();
   if (cache_bounds.inside(screenRect))
     /* the cache is still fresh */
-    return;
+    return false;
 
   cache_bounds = map_projection.GetScreenBounds().scale(fixed_two);
 
@@ -125,7 +125,7 @@ TopologyFile::updateCache(const WindowProjection &map_projection)
   if (!shpfile.status) {
     // ... clear the whole buffer
     ClearCache();
-    return;
+    return false;
   }
 
   // Iterate through the shapefile entries
@@ -141,6 +141,8 @@ TopologyFile::updateCache(const WindowProjection &map_projection)
       shpCache[i] = new XShape(&shpfile, i, label_field);
     }
   }
+
+  return true;
 }
 
 unsigned

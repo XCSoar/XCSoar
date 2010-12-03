@@ -100,7 +100,10 @@ public:
   gcc_pure
   unsigned GetSkipSteps(fixed map_scale) const;
 
-  void updateCache(const WindowProjection &map_projection);
+  /**
+   * @return true if new data from the topology file has been loaded
+   */
+  bool updateCache(const WindowProjection &map_projection);
 
   /**
    * The threshold value for the visibility check. If the current scale

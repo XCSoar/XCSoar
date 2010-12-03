@@ -203,7 +203,7 @@ public:
   virtual void Render(Canvas &canvas, const RECT &rc);
 
 protected:
-  void UpdateTopology();
+  unsigned UpdateTopology(unsigned max_update=1024);
   void UpdateTerrain();
   void UpdateWeather();
 
