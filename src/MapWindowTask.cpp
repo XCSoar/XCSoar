@@ -56,7 +56,7 @@ protected:
 
     RasterPoint sc;
     if (m_proj.GeoToScreenIfVisible(tp.get_location_remaining(), sc))
-      Graphics::hBmpTarget.draw(m_buffer, sc.x, sc.y);
+      Graphics::hBmpTarget.draw(canvas, sc.x, sc.y);
   }
 };
 

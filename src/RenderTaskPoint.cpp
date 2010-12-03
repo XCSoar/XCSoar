@@ -44,7 +44,7 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
                                  RenderObservationZone &_ozv,
                                  const bool draw_bearing,
                                  const GeoPoint &location)
-  :m_canvas(_canvas), m_buffer(_canvas), m_proj(_projection),
+  :canvas(_canvas), m_proj(_projection),
    map_canvas(_canvas, _projection),
    m_settings_map(_settings_map),
    task_projection(_task_projection),
@@ -171,7 +171,7 @@ RenderTaskPoint::draw_bearing(const TaskPoint &tp)
   if (!do_draw_bearing(tp)) 
     return;
 
-  m_buffer.select(Graphics::hpBearing);
+  canvas.select(Graphics::hpBearing);
   map_canvas.line(m_location, tp.get_location_remaining());
 }
 
@@ -185,10 +185,10 @@ RenderTaskPoint::draw_target(const TaskPoint &tp)
 void 
 RenderTaskPoint::draw_task_line(const GeoPoint& start, const GeoPoint& end) 
 {
-  m_buffer.select(leg_active() ? pen_leg_active : pen_leg_inactive);
-  m_buffer.background_transparent();
+  canvas.select(leg_active() ? pen_leg_active : pen_leg_inactive);
+  canvas.background_transparent();
   map_canvas.line(start, end);
-  m_buffer.background_opaque();
+  canvas.background_opaque();
   
   // draw small arrow along task direction
   RasterPoint p_p;
@@ -205,8 +205,8 @@ RenderTaskPoint::draw_task_line(const GeoPoint& start, const GeoPoint& end)
   Arrow[2] = Arrow[1];
   Arrow[1] = p_p;
   
-  m_buffer.select(pen_leg_arrow);
-  m_buffer.polyline(Arrow, 3);
+  canvas.select(pen_leg_arrow);
+  canvas.polyline(Arrow, 3);
 }
 
 void 
@@ -232,9 +232,9 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
       screen[i] = m_proj.GeoToScreen(ga);
     }
 
-    m_buffer.select(pen_isoline);
-    m_buffer.hollow_brush();
-    m_buffer.polygon(screen, 20);
+    canvas.select(pen_isoline);
+    canvas.hollow_brush();
+    canvas.polygon(screen, 20);
   }
 }
 
@@ -245,16 +245,16 @@ RenderTaskPoint::draw_deadzone(const AATPoint& tp)
     return;
   }
   /*
-    m_buffer.set_text_color(Graphics::Colours[m_settings_map.
+    canvas.set_text_color(Graphics::Colours[m_settings_map.
     iAirspaceColour[1]]);
     // get brush, can be solid or a 1bpp bitmap
-    m_buffer.select(Graphics::hAirspaceBrushes[m_settings_map.
+    canvas.select(Graphics::hAirspaceBrushes[m_settings_map.
     iAirspaceBrush[1]]);
     */
 
   // erase where aircraft has been
-  m_buffer.white_brush();
-  m_buffer.white_pen();
+  canvas.white_brush();
+  canvas.white_pen();
   
   if (point_current()) {
     // scoring deadzone should include the area to the next destination
@@ -270,9 +270,9 @@ RenderTaskPoint::draw_oz_background(const OrderedTaskPoint& tp)
 {
   ozv.set_layer(RenderObservationZone::LAYER_SHADE);
 
-  if (ozv.draw_style(m_canvas, m_settings_map, m_index - m_active_index)) {
-    ozv.Draw(m_canvas, m_proj, *tp.get_oz());
-    ozv.un_draw_style(m_canvas);
+  if (ozv.draw_style(canvas, m_settings_map, m_index - m_active_index)) {
+    ozv.Draw(canvas, m_proj, *tp.get_oz());
+    ozv.un_draw_style(canvas);
   }
 }
 
@@ -280,15 +280,15 @@ void
 RenderTaskPoint::draw_oz_foreground(const OrderedTaskPoint& tp) 
 {
   ozv.set_layer(RenderObservationZone::LAYER_INACTIVE);
-  if (ozv.draw_style(m_canvas, m_settings_map, m_index - m_active_index)) {
-    ozv.Draw(m_canvas, m_proj, *tp.get_oz());
-    ozv.un_draw_style(m_canvas);
+  if (ozv.draw_style(canvas, m_settings_map, m_index - m_active_index)) {
+    ozv.Draw(canvas, m_proj, *tp.get_oz());
+    ozv.un_draw_style(canvas);
   }
 
   ozv.set_layer(RenderObservationZone::LAYER_ACTIVE);
-  if (ozv.draw_style(m_canvas, m_settings_map, m_index - m_active_index)) {
-    ozv.Draw(m_canvas, m_proj, *tp.get_oz());
-    ozv.un_draw_style(m_canvas);
+  if (ozv.draw_style(canvas, m_settings_map, m_index - m_active_index)) {
+    ozv.Draw(canvas, m_proj, *tp.get_oz());
+    ozv.un_draw_style(canvas);
   }
 }
 
