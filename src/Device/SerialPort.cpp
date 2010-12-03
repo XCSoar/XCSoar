@@ -212,26 +212,19 @@ SerialPort::run()
   Flush();
 
   // Specify a set of events to be monitored for the port.
-  if (is_embedded())
-    SetCommMask(hPort, EV_RXCHAR);
+  ::SetCommMask(hPort, EV_RXCHAR);
 
   while (!is_stopped()) {
-
-    if (is_embedded()) {
-      // Wait for an event to occur for the port.
-      if (!WaitCommEvent(hPort, &dwCommModemStatus, 0)) {
-        // error reading from port
-        Sleep(100);
-        continue;
-      }
-
-      if ((dwCommModemStatus & EV_RXCHAR) == 0)
-        /* no data available */
-        continue;
-    } else {
-      Sleep(50); // ToDo rewrite the whole driver to use overlaped IO
-      // on W2K or higher
+    // Wait for an event to occur for the port.
+    if (!::WaitCommEvent(hPort, &dwCommModemStatus, 0)) {
+      // error reading from port
+      Sleep(100);
+      continue;
     }
+
+    if ((dwCommModemStatus & EV_RXCHAR) == 0)
+      /* no data available */
+      continue;
 
     // Read the data from the serial port.
     if (!ReadFile(hPort, inbuf, 1024, &dwBytesTransferred, NULL)) {
@@ -324,13 +317,10 @@ SerialPort::StopRxThread()
   stop();
 
 #ifndef HAVE_POSIX
-  if (is_embedded()) {
-    Flush();
+  Flush();
 
-    // this will cancel any WaitCommEvent!
-    // this is a documented CE trick to cancel the WaitCommEvent
-    SetCommMask(hPort, 0);
-  }
+  /* this will cancel WaitCommEvent() */
+  ::SetCommMask(hPort, 0);
 #endif /* !HAVE_POSIX */
 
   // Stop the thread
