@@ -115,29 +115,8 @@ private:
   const fixed m_start_time;
 };
 
-/**
- * Utility class to draw task leg entry lines of ordered task
- */
-class ChartTaskHelper:
-  public TaskVisitor
-{
-public:
-  ChartTaskHelper(Chart& chart, const fixed start_time):
-    m_leg_visitor(chart, start_time) {}
-
-  void Visit(const AbortTask& task) {}
-  void Visit(const GotoTask& task) {}
-  void Visit(const OrderedTask& task) {
-    task.tp_CAccept(m_leg_visitor);
-  }
-
-private:
-  ChartLegHelper m_leg_visitor;
-};
-
-
 static void DrawLegs(Chart& chart,
-                     const TaskManager &task,
+                     const TaskManager &task_manager,
                      const NMEA_INFO& basic,
                      const DERIVED_INFO& calculated,
                      const bool task_relative)
@@ -149,8 +128,10 @@ static void DrawLegs(Chart& chart,
     ? basic.Time - calculated.common_stats.task_time_elapsed
     : basic.flight.TakeOffTime;
 
-  ChartTaskHelper visitor(chart, start_time);
-  task.ordered_CAccept(visitor);
+  const OrderedTask &task = task_manager.get_ordered_task();
+
+  ChartLegHelper leg_visitor(chart, start_time);
+  task.tp_CAccept(leg_visitor);
 }
 
 void
