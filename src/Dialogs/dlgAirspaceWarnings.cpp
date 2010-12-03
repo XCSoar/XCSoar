@@ -307,7 +307,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
     canvas.set_text_color(old_text_color);
 }
 
-static bool
+static void
 update_list()
 {
   unsigned Count = airspace_warnings.warning_size();
@@ -326,8 +326,6 @@ update_list()
       AirspaceWarningCursorCallback(wAirspaceList->GetCursorIndex());
 
     wAirspaceList->invalidate();
-
-    return true;
   } else {
     wAirspaceList->SetLength(1);
 
@@ -338,8 +336,6 @@ update_list()
       Hide();
     else
       wAirspaceList->invalidate();
-
-    return false;
   }
 }
 
