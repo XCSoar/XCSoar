@@ -79,7 +79,7 @@ protected:
 
 #endif /* WIN32 */
 
-#ifdef WIN32
+#if defined(WIN32) && !defined(__CYGWIN__)
 class FileSource : public WindowsFileSource {
 public:
   FileSource(const char *path):WindowsFileSource(path) {}
