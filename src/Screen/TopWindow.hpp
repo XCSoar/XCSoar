@@ -83,6 +83,39 @@ public:
   void set(const TCHAR *cls, const TCHAR *text,
            int left, int top, unsigned width, unsigned height);
 
+#if !defined(ENABLE_SDL) && !defined(_WIN32_WCE)
+  gcc_pure
+  const RECT get_client_rect() const {
+    if (::IsIconic(hWnd)) {
+      /* for a minimized window, GetClientRect() returns the
+         dimensions of the icon, which is not what we want */
+      WINDOWPLACEMENT placement;
+      if (::GetWindowPlacement(hWnd, &placement) &&
+          (placement.showCmd == SW_MINIMIZE ||
+           placement.showCmd == SW_SHOWMINIMIZED)) {
+        placement.rcNormalPosition.right -= placement.rcNormalPosition.left;
+        placement.rcNormalPosition.bottom -= placement.rcNormalPosition.top;
+        placement.rcNormalPosition.left = 0;
+        placement.rcNormalPosition.top = 0;
+        return placement.rcNormalPosition;
+      }
+    }
+
+    return ContainerWindow::get_client_rect();
+  }
+
+  gcc_pure
+  const SIZE get_size() const {
+    /* this is implemented again because Window::get_size() would call
+       Window::get_client_rect() (method is not virtual) */
+    RECT rc = get_client_rect();
+    SIZE s;
+    s.cx = rc.right;
+    s.cy = rc.bottom;
+    return s;
+  }
+#endif
+
   void set_active() {
     assert_none_locked();
 
