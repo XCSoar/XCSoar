@@ -213,7 +213,7 @@ SerialPort::run()
 
   // Specify a set of events to be monitored for the port.
   if (is_embedded())
-    SetCommMask(hPort, EV_RXFLAG | EV_CTS | EV_DSR | EV_RING | EV_RXCHAR);
+    SetCommMask(hPort, EV_RXCHAR);
 
   while (!is_stopped()) {
 
