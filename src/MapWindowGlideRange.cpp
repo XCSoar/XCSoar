@@ -47,7 +47,8 @@ void MapWindow::CalculateScreenPositionsGroundline(void) {
 void
 MapWindow::DrawTerrainAbove(Canvas &canvas)
 {
-  if (!Basic().flight.Flying || SettingsMap().EnablePan)
+  if (Basic().gps.NAVWarning || !Basic().flight.Flying ||
+      SettingsMap().EnablePan)
     return;
 
 #ifdef ENABLE_OPENGL
@@ -93,6 +94,10 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 void
 MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 {
+  if (Basic().gps.NAVWarning)
+    /* don't draw this if we don't know our own position */
+    return;
+
   if (SettingsComputer().FinalGlideTerrain) {
     canvas.hollow_brush();
 
