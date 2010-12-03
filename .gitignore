@@ -34,3 +34,5 @@ debian/xcsoar
 mapgen/data/*/*
 mapgen/tmp/*
 *.pyc
+
+rasp/data
