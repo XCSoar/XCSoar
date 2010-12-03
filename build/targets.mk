@@ -32,6 +32,7 @@ endif
 
 ifeq ($(TARGET),CYGWIN)
   CONFIG_CYGWIN := y
+  WINHOST := y
 else
   CONFIG_CYGWIN := n
 endif
