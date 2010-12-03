@@ -334,6 +334,9 @@ TracePointVector
 Trace::find_within_range(const GeoPoint &loc, const fixed range,
                          const unsigned mintime, const fixed resolution) const
 {
+  if (empty()) 
+    return TracePointVector();
+  
   TracePoint bb_target(loc);
   bb_target.project(task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
