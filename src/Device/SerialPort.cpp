@@ -142,9 +142,6 @@ SerialPort::Open()
     CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
 
-    if (!is_embedded())
-      Sleep(2000); // needed for windows bug
-
     // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
     SerialPort_StatusMessage(MB_OK, _("Error"),
@@ -172,9 +169,6 @@ SerialPort::Open()
     CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
 #endif /* !HAVE_POSIX */
-
-    if (!is_embedded())
-      Sleep(2000); // needed for windows bug
 
     return false;
   }
