@@ -83,12 +83,17 @@ HasWarning()
 }
 
 static void
+Hide()
+{
+  wf->hide();
+  wf->SetModalResult(mrOK);
+}
+
+static void
 AutoHide()
 {
-  if (!HasWarning()) {
-    wf->hide();
-    wf->SetModalResult(mrOK);
-  }
+  if (!HasWarning())
+    Hide();
 }
 
 /** ack inside */
@@ -151,9 +156,7 @@ static void
 OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
-
-  wf->hide();
-  wf->SetModalResult(mrOK);
+  Hide();
 }
 
 static bool
@@ -416,10 +419,8 @@ dlgAirspaceWarningInit(SingleWindow &parent)
 void
 dlgAirspaceWarningDeInit()
 {
-  if (dlgAirspaceWarningVisible()) {
-    wf->hide();
-    wf->SetModalResult(mrOK);
-  }
+  if (dlgAirspaceWarningVisible())
+    Hide();
 
   delete wf;
 }
