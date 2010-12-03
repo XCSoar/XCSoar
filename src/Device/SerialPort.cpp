@@ -65,7 +65,6 @@ SerialPort::SerialPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler
    fd(-1),
 #else
    hPort(INVALID_HANDLE_VALUE),
-   dwMask(0),
 #endif
    buffer(NMEA_BUF_SIZE)
 {
@@ -213,10 +212,8 @@ SerialPort::run()
   Flush();
 
   // Specify a set of events to be monitored for the port.
-  dwMask = EV_RXFLAG | EV_CTS | EV_DSR | EV_RING | EV_RXCHAR;
-
   if (is_embedded())
-    SetCommMask(hPort, dwMask);
+    SetCommMask(hPort, EV_RXFLAG | EV_CTS | EV_DSR | EV_RING | EV_RXCHAR);
 
   while (!is_stopped()) {
 
@@ -332,7 +329,7 @@ SerialPort::StopRxThread()
 
     // this will cancel any WaitCommEvent!
     // this is a documented CE trick to cancel the WaitCommEvent
-    SetCommMask(hPort, dwMask);
+    SetCommMask(hPort, 0);
   }
 #endif /* !HAVE_POSIX */
 

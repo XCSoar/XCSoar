@@ -91,7 +91,6 @@ private:
   int fd;
 #else /* !HAVE_POSIX */
   HANDLE hPort;
-  DWORD dwMask;
 #endif /* !HAVE_POSIX */
 
   /** Name of the serial port */
