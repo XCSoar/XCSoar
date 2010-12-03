@@ -69,7 +69,7 @@ GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
 bool
 GlueMapWindow::Idle()
 {
-  bool still_dirty=false;
+  bool still_dirty;
   bool topology_dirty = true; /* scan topology in every Idle() call */
   bool terrain_dirty = true;
   bool weather_dirty = true;
@@ -94,11 +94,12 @@ GlueMapWindow::Idle()
       break;
     }
 
+    still_dirty = terrain_dirty || topology_dirty || weather_dirty;
   } while (RenderTimeAvailable() &&
 #ifndef ENABLE_OPENGL
            !draw_thread->is_triggered() &&
 #endif
-           (still_dirty = terrain_dirty || topology_dirty || weather_dirty));
+           still_dirty);
 
   return still_dirty;
 }
