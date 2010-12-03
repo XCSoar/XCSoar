@@ -41,6 +41,7 @@ static Brush hBrushInsideBk;
 static Brush hBrushNearBk;
 static Brush hBrushInsideAckBk;
 static Brush hBrushNearAckBk;
+static bool AutoClose = true;
 
 static const AbstractAirspace* CursorAirspace = NULL; // Current list cursor airspace
 static const AbstractAirspace* FocusAirspace = NULL;  // Current action airspace
@@ -85,6 +86,9 @@ HasWarning()
 static void
 Hide()
 {
+  // Reset AutoClose setting
+  dlgAirspaceWarningSetAutoClose(true);
+
   wf->hide();
   wf->SetModalResult(mrOK);
 }
@@ -92,7 +96,8 @@ Hide()
 static void
 AutoHide()
 {
-  if (!HasWarning())
+  // Close the dialog if no warning exists and AutoClose is set
+  if (!HasWarning() && AutoClose)
     Hide();
 }
 
@@ -324,25 +329,25 @@ update_list()
     if (i < 0)
       /* the selection may have changed, update CursorAirspace */
       AirspaceWarningCursorCallback(wAirspaceList->GetCursorIndex());
-
-    wAirspaceList->invalidate();
   } else {
     wAirspaceList->SetLength(1);
-
     CursorAirspace = NULL;
-
-    if (wf && wf->is_visible())
-      // auto close
-      Hide();
-    else
-      wAirspaceList->invalidate();
   }
+  wAirspaceList->invalidate();
+
+  AutoHide();
 }
 
 static void
 OnTimer(WndForm &Sender)
 {
   update_list();
+}
+
+void
+dlgAirspaceWarningSetAutoClose(bool _autoclose)
+{
+  AutoClose = _autoclose;
 }
 
 bool

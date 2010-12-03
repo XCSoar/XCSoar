@@ -53,6 +53,7 @@ dlgAirspaceWarningInit(SingleWindow &parent);
 void dlgAirspaceWarningDeInit();
 bool dlgAirspaceWarningIsEmpty();
 bool dlgAirspaceWarningVisible();
+void dlgAirspaceWarningSetAutoClose(bool _autoclose);
 void dlgAirspaceDetails(const AbstractAirspace& the_airspace);
 int dlgAirspaceColoursShowModal();
 int dlgAirspacePatternsShowModal();
