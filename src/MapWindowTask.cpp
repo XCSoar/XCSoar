@@ -68,7 +68,8 @@ MapWindow::DrawTask(Canvas &canvas)
     return;
 
   ProtectedTaskManager::Lease task_manager(*task);
-  if (!task_manager->check_task())
+  const AbstractTask *task = task_manager->get_active_task();
+  if (task == NULL || !task->check_task())
     return;
 
   /* RLD bearing is invalid if GPS not connected and in non-sim mode,
@@ -84,7 +85,7 @@ MapWindow::DrawTask(Canvas &canvas)
                          ozv, draw_bearing,
                          Basic().Location);
   RenderTask dv(tpv, render_projection.GetScreenBounds());
-  task_manager->CAccept(dv);
+  ((TaskVisitor &)dv).Visit(*task);
 }
 
 
