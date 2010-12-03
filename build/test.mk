@@ -262,7 +262,7 @@ DEBUG_PROGRAM_NAMES = \
 	WriteProfileString WriteProfileInt \
 	ReadGRecord VerifyGRecord AppendGRecord \
 	KeyCodeDumper \
-	LoadTopology \
+	LoadTopology LoadTerrain \
 	RunInputParser \
 	RunWayPointParser RunAirspaceParser RunDeviceDriver \
 	RunIGCWriter \
@@ -461,6 +461,27 @@ LOAD_TOPOLOGY_LDADD = \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
 $(LOAD_TOPOLOGY_BIN): $(LOAD_TOPOLOGY_OBJS) $(LOAD_TOPOLOGY_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+LOAD_TERRAIN_SOURCES = \
+	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterBuffer.cpp \
+	$(SRC)/Terrain/RasterProjection.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/PathName.cpp \
+	$(SRC)/Engine/Math/Earth.cpp \
+	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
+	$(TEST_SRC_DIR)/LoadTerrain.cpp
+LOAD_TERRAIN_OBJS = $(call SRC_TO_OBJ,$(LOAD_TERRAIN_SOURCES))
+LOAD_TERRAIN_BIN = $(TARGET_BIN_DIR)/LoadTerrain$(TARGET_EXEEXT)
+LOAD_TERRAIN_LDADD = \
+	$(MATH_LIBS) \
+	$(IO_LIBS) \
+	$(JASPER_LIBS) \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
+$(LOAD_TERRAIN_BIN): $(LOAD_TERRAIN_OBJS) $(LOAD_TERRAIN_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
