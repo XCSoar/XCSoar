@@ -47,14 +47,15 @@ class RenderTaskPoint:
   public TaskPointConstVisitor
 {
 protected:
-  Canvas &canvas;
+  Canvas &canvas, *buffer;
   const WindowProjection &m_proj;
   MapCanvas map_canvas;
   const SETTINGS_MAP &m_settings_map;
   const TaskProjection &task_projection;
 
 public:
-  RenderTaskPoint(Canvas &_canvas, const WindowProjection &_projection,
+  RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
+                  const WindowProjection &_projection,
                   const SETTINGS_MAP &_settings_map,
                   const TaskProjection &_task_projection,
                   RenderObservationZone &_ozv,

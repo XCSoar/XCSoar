@@ -37,13 +37,15 @@ Copyright_License {
 class RenderTaskPointMap: public RenderTaskPoint
 {
 public:
-  RenderTaskPointMap(Canvas &_canvas, const WindowProjection &_projection,
+  RenderTaskPointMap(Canvas &_canvas, Canvas *_buffer,
+                     const WindowProjection &_projection,
                      const SETTINGS_MAP &_settings_map,
                      const TaskProjection &_task_projection,
                      RenderObservationZone &_ozv,
                      const bool draw_bearing,
                      const GeoPoint &location):
-    RenderTaskPoint(_canvas, _projection, _settings_map, _task_projection,
+    RenderTaskPoint(_canvas, _buffer, _projection,
+                    _settings_map, _task_projection,
                     _ozv, draw_bearing, location)
     {};
 
@@ -77,7 +79,16 @@ MapWindow::DrawTask(Canvas &canvas)
   const bool draw_bearing = Basic().gps.Connected;
 
   RenderObservationZone ozv;
-  RenderTaskPointMap tpv(canvas, render_projection, SettingsMap(),
+  RenderTaskPointMap tpv(canvas,
+#ifdef ENABLE_OPENGL
+                         /* OpenGL doesn't have the BufferCanvas
+                            class */
+                         NULL,
+#else
+                         &buffer_canvas,
+#endif
+                         render_projection,
+                         SettingsMap(),
                          /* we're accessing the OrderedTask here,
                             which may be invalid at this point, but it
                             will be used only if active, so it's ok */

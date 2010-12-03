@@ -42,7 +42,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
   background.Draw(canvas, projection, settings_map);
 
   RenderObservationZone ozv;
-  RenderTaskPoint tpv(canvas, projection, settings_map,
+  RenderTaskPoint tpv(canvas, NULL, projection, settings_map,
                       task.get_task_projection(),
                       ozv, false, location);
   RenderTask dv(tpv, projection.GetScreenBounds());
