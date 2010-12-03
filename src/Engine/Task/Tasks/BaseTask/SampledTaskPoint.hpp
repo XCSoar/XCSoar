@@ -100,7 +100,7 @@ public:
   virtual void update_oz(const TaskProjection &projection);
 
   /**
-   * Check if aircraft is within observation zone, and if so,
+   * Check if aircraft is within observation zone if near, and if so,
    * update the interior sample polygon.
    *
    * @param state Aircraft state
@@ -108,9 +108,21 @@ public:
    *
    * @return True if internal state changed
    */
-  virtual bool update_sample(const AIRCRAFT_STATE& state,
-                             TaskEvents &task_events,
-                             const TaskProjection &projection);
+  virtual bool update_sample_near(const AIRCRAFT_STATE& state,
+                                  TaskEvents &task_events,
+                                  const TaskProjection &projection);
+
+  /**
+   * Perform updates to samples as required if known to be far from the OZ
+   *
+   * @param state Aircraft state
+   * @param task_events Callback class for feedback
+   *
+   * @return True if internal state changed
+   */
+  virtual bool update_sample_far(const AIRCRAFT_STATE& state,
+                                  TaskEvents &task_events,
+                                 const TaskProjection &projection) { return false; }
 
   /**
    * Test if the task point has recorded presence of the aircraft

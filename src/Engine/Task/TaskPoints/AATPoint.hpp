@@ -81,19 +81,30 @@ public:
   }
   
 /** 
- * Update sample, specialisation to move target for active
- * task point based on task behaviour rules.
- * Only does the target move checks when this task point
- * is currently active.
+ * Update sample if nearby
  *
  * @param state Aircraft state
  * @param task_events Callback class for feedback
  * 
  * @return True if internal state changed
  */
-  bool update_sample(const AIRCRAFT_STATE& state,
-                     TaskEvents &task_events,
-                     const TaskProjection &projection);
+  bool update_sample_near(const AIRCRAFT_STATE& state,
+                          TaskEvents &task_events,
+                          const TaskProjection &projection);
+
+/** 
+ * Update sample even if far, specialisation to move target for active
+ * task point based on task behaviour rules.  Only does the target
+ * move checks when this task point is currently active.
+ *
+ * @param state Aircraft state
+ * @param task_events Callback class for feedback
+ * 
+ * @return True if internal state changed
+ */
+  bool update_sample_far(const AIRCRAFT_STATE& state,
+                         TaskEvents &task_events,
+                         const TaskProjection &projection);
 
 /** 
  * Lock/unlock the target from automatic shifts
@@ -225,10 +236,11 @@ private:
  * within or outside the observation zone.
  * 
  * @param state Current aircraft state
+ * @param known_outside set to true if known to be outside the sector
  * 
  * @return True if target was moved
  */
-  bool check_target(const AIRCRAFT_STATE& state);
+  bool check_target(const AIRCRAFT_STATE& state, bool known_outside);
 
 /** 
  * Check whether target needs to be moved and if so, to

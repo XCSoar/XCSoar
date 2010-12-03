@@ -38,9 +38,9 @@ SampledTaskPoint::SampledTaskPoint(enum type _type,
 // SAMPLES
 
 bool 
-SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state,
-                                TaskEvents &task_events,
-                                const TaskProjection &projection)
+SampledTaskPoint::update_sample_near(const AIRCRAFT_STATE& state,
+                                     TaskEvents &task_events,
+                                     const TaskProjection &projection)
 {
   if (isInSector(state)) {
     // if sample is inside sample polygon

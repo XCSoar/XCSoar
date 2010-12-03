@@ -42,12 +42,12 @@ AATPoint::get_location_remaining() const
 }
 
 bool 
-AATPoint::update_sample(const AIRCRAFT_STATE& state,
-                        TaskEvents &task_events,
-                        const TaskProjection &projection)
+AATPoint::update_sample_near(const AIRCRAFT_STATE& state,
+                             TaskEvents &task_events,
+                             const TaskProjection &projection)
 {
-  bool retval = OrderedTaskPoint::update_sample(state, task_events,
-                                                projection);
+  bool retval = OrderedTaskPoint::update_sample_near(state, task_events,
+                                                     projection);
 
   if (retval) {
     // deadzone must be updated
@@ -65,18 +65,33 @@ AATPoint::update_sample(const AIRCRAFT_STATE& state,
     prune_interior(m_deadzone);
   }
 
-  if ((getActiveState() == CURRENT_ACTIVE) && (!m_target_locked)) {
-    retval |= check_target(state);
-  }
+  retval |= check_target(state, false);
 
   return retval;
 }
 
-bool
-AATPoint::check_target(const AIRCRAFT_STATE& state) 
+
+bool 
+AATPoint::update_sample_far(const AIRCRAFT_STATE& state,
+                            TaskEvents &task_events,
+                            const TaskProjection &projection)
 {
+  // the orderedtaskpoint::update_sample_far does nothing for now
+  // but we are calling this in case that changes.
+  return OrderedTaskPoint::update_sample_far(state, task_events,
+                                             projection)
+    || check_target(state, true);
+}
+
+
+bool
+AATPoint::check_target(const AIRCRAFT_STATE& state, const bool known_outside) 
+{
+  if ((getActiveState() == CURRENT_ACTIVE) && (!m_target_locked)) {
+    return false;
+  }
   bool moved = false;
-  if (isInSector(state)) {
+  if (!known_outside && isInSector(state)) {
     moved = check_target_inside(state);
   } else {
     moved = check_target_outside(state);

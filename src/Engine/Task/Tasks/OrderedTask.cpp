@@ -228,6 +228,9 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   if (!n_task)
     return false;
 
+  FlatBoundingBox bb_last(task_projection.project(state_last.Location),1);
+  FlatBoundingBox bb_now(task_projection.project(state.Location),1);
+
   bool last_started = task_started();
   const bool last_finished = task_finished();
 
@@ -236,14 +239,17 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   bool full_update = false;
 
   for (int i = t_min; i <= t_max; i++) {
+
+    const bool nearby = tps[i]->boundingbox_overlaps(bb_now) || tps[i]->boundingbox_overlaps(bb_last);
+
     bool transition_enter = false;
-    if (tps[i]->transition_enter(state, state_last)) {
+    if (nearby && tps[i]->transition_enter(state, state_last)) {
       transition_enter = true;
       task_events.transition_enter(*tps[i]);
     }
 
     bool transition_exit = false;
-    if (tps[i]->transition_exit(state, state_last, task_projection)) {
+    if (nearby && tps[i]->transition_exit(state, state_last, task_projection)) {
       transition_exit = true;
       task_events.transition_exit(*tps[i]);
       
@@ -255,8 +261,13 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
     if ((activeTaskPoint == 0) && (i == 0))
       update_start_transition(state);
 
-    if (tps[i]->update_sample(state, task_events, task_projection))
-      full_update = true;
+    if (nearby) {
+      if (tps[i]->update_sample_near(state, task_events, task_projection))
+        full_update = true;
+    } else {
+      if (tps[i]->update_sample_far(state, task_events, task_projection))
+        full_update = true;
+    }
 
     if (i == (int)activeTaskPoint) {
       const bool last_request_armed = task_advance.request_armed();
