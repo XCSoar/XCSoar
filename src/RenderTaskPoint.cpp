@@ -81,7 +81,7 @@ RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp)
 
   if (visible && (m_layer == RENDER_TASK_OZ_SHADE)) {
     // draw shaded part of observation zone
-    draw_oz_background(tp);
+    draw_oz_background(canvas, tp);
   }
   
   if (m_layer == RENDER_TASK_LEG) {
@@ -266,7 +266,7 @@ RenderTaskPoint::draw_deadzone(const AATPoint& tp)
 }
 
 void 
-RenderTaskPoint::draw_oz_background(const OrderedTaskPoint& tp) 
+RenderTaskPoint::draw_oz_background(Canvas &canvas, const OrderedTaskPoint& tp)
 {
   ozv.set_layer(RenderObservationZone::LAYER_SHADE);
 

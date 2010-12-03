@@ -123,7 +123,7 @@ protected:
    * @param tp
    */
   void draw_deadzone(const AATPoint& tp);
-  void draw_oz_background(const OrderedTaskPoint& tp);
+  void draw_oz_background(Canvas &canvas, const OrderedTaskPoint& tp);
   void draw_oz_foreground(const OrderedTaskPoint& tp);
   const bool m_draw_bearing;
   const Pen pen_leg_active;
