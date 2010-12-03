@@ -79,14 +79,14 @@ DrawThread::run()
       trigger.wait();
 
     if (!bounds_dirty || trigger.wait(MIN_WAIT_TIME)) {
-      trigger.reset();
-
       // take control (or wait for the resume())
       running.wait();
 
       /* got the "stop" trigger? */
       if (is_stopped())
         break;
+
+      trigger.reset();
 
       // Get data from the DeviceBlackboard
       ExchangeBlackboard();
