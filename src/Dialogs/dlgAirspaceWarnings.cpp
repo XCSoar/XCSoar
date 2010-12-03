@@ -335,7 +335,7 @@ update_list()
 
     if (wf && wf->is_visible())
       // auto close
-      OnCloseClicked(*(WndButton *)NULL);
+      Hide();
     else
       wAirspaceList->invalidate();
 
