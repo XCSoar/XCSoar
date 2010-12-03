@@ -27,6 +27,7 @@
 #include "TaskLeg.hpp"
 #include "ScoredTaskPoint.hpp"
 #include "ObservationZoneClient.hpp"
+#include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Util/Serialisable.hpp"
 #include "Compiler.h"
 
@@ -200,11 +201,21 @@ public:
   virtual bool equals(const OrderedTaskPoint* other) const;
 
 /** 
- * Update a TaskProjection to include this taskpoint and observation zone
+ * Update a TaskProjection to include this taskpoint and observation zone.
  * 
  * @param task_projection Projection to update
  */
   void scan_projection(TaskProjection& task_projection) const;
+
+  /**
+   * Update the bounding box in flat projected coordinates
+   */
+  void update_boundingbox(const TaskProjection& task_projection);
+
+  /**
+   * Test whether a boundingbox overlaps with this oz
+   */
+  bool boundingbox_overlaps(const FlatBoundingBox& bb) const;
 
 protected:
 
@@ -234,6 +245,7 @@ private:
 
   OrderedTaskPoint* tp_previous;
 
+  FlatBoundingBox flat_bb;
 };
 
 

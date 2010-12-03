@@ -44,7 +44,8 @@ OrderedTaskPoint::OrderedTaskPoint(enum type _type, ObservationZonePoint* _oz,
   m_ordered_task_behaviour(to),
   m_active_state(NOTFOUND_ACTIVE),
   tp_next(NULL),
-  tp_previous(NULL)
+  tp_previous(NULL),
+  flat_bb(FlatGeoPoint(0,0),0) // empty, not initialised!
 {
 }
 
@@ -184,4 +185,36 @@ OrderedTaskPoint::scan_projection(TaskProjection& task_projection) const
   for (fixed t=fixed_zero; t<= fixed_one; t+= fixed_steps) {
     task_projection.scan_location(get_boundary_parametric(t));
   }
+}
+
+void
+OrderedTaskPoint::update_boundingbox(const TaskProjection& task_projection)
+{
+  FlatGeoPoint fmin;
+  FlatGeoPoint fmax;
+  bool empty = true;
+
+  for (fixed t=fixed_zero; t<= fixed_one; t+= fixed_steps) {
+    FlatGeoPoint f = task_projection.project(get_boundary_parametric(t));
+    if (empty) {
+      empty = false;
+      fmin = f;
+      fmax = f;
+    } else {
+      fmin.Longitude = min(fmin.Longitude, f.Longitude);
+      fmin.Latitude = min(fmin.Latitude, f.Latitude);
+      fmax.Longitude = max(fmax.Longitude, f.Longitude);
+      fmax.Latitude = max(fmax.Latitude, f.Latitude);
+    }
+  }
+  // note +/- 1 to ensure rounding keeps bb valid 
+  fmin.Longitude-= 1; fmin.Latitude-= 1;
+  fmax.Longitude+= 1; fmax.Latitude+= 1;
+  flat_bb = FlatBoundingBox(fmin,fmax);
+}
+
+bool
+OrderedTaskPoint::boundingbox_overlaps(const FlatBoundingBox &that) const
+{
+  return flat_bb.overlaps(that);
 }

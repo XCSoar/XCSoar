@@ -147,6 +147,12 @@ public:
   gcc_pure
   FlatGeoPoint get_center() const;
 
+  /**
+   * Determine whether these bounding boxes overlap
+   */
+  gcc_pure
+  bool overlaps(const FlatBoundingBox& other) const;
+
 private:
   FlatGeoPoint bb_ll;
   FlatGeoPoint bb_ur;

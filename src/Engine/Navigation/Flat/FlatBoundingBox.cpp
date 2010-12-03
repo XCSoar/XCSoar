@@ -96,3 +96,13 @@ FlatBoundingBox::get_center() const
   c.Latitude = (bb_ll.Latitude+bb_ur.Latitude)/2;
   return c;
 }
+
+bool
+FlatBoundingBox::overlaps(const FlatBoundingBox& other) const
+{
+  if(bb_ll.Longitude > other.bb_ur.Longitude) return false;
+  if(bb_ur.Longitude < other.bb_ll.Longitude) return false;
+  if(bb_ll.Latitude > other.bb_ur.Latitude) return false;
+  if(bb_ur.Latitude < other.bb_ll.Latitude) return false;
+  return true;
+}

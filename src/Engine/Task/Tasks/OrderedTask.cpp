@@ -66,6 +66,12 @@ OrderedTask::update_geometry()
   for (OrderedTaskPointVector::iterator it = tps.begin(); it!= tps.end(); it++)
     (*it)->update_oz(task_projection);
 
+  // now that the task projection is stable, and oz is stable,
+  // calculate the bounding box in projected coordinates
+  for (unsigned i = 0; i < tps.size(); ++i) {
+    tps[i]->update_boundingbox(task_projection);
+  }
+
   if (has_start()) {
     // update stats so data can be used during task construction
     /// @todo this should only be done if not flying! (currently done with has_entered)
