@@ -65,7 +65,7 @@ main(int argc, char **argv)
     if ((x < 0) && (x > -1.0e-8))
       x = -1.0e-8;
 
-#ifdef HAVE_MSVCRT
+#if defined(HAVE_MSVCRT) && !defined(__CYGWIN__)
     // Due to non-standard behavior of the microsoft implementation
     // this hack is needed to compile on windows machines
     printf("  %I64dLL,\n",
