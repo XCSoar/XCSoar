@@ -40,7 +40,7 @@ namespace InfoBoxFactory
     char next, previous;
   };
 
-  static const unsigned NUM_TYPES = 76;
+  static const unsigned NUM_TYPES = 77;
 
   extern const InfoBoxMetaData MetaData[NUM_TYPES];
 

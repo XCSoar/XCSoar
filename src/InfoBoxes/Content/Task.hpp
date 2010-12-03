@@ -75,6 +75,12 @@ public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
+class InfoBoxContentNextAltitudeArrival : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
 class InfoBoxContentNextLD: public InfoBoxContent
 {
 public:

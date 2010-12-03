@@ -72,6 +72,8 @@ InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
 {
+  // use proper non-terminal next task stats
+
   const Waypoint* way_point = protected_task_manager.getActiveWaypoint();
 
   if (!way_point) {
@@ -137,6 +139,8 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
 {
+  // use proper non-terminal next task stats
+
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -156,6 +160,8 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentNextETE::Update(InfoBoxWindow &infobox)
 {
+  // use proper non-terminal next task stats
+
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       !XCSoarInterface::Calculated().task_stats.current_leg.achievable() ||
       !positive(XCSoarInterface::Calculated().task_stats.
@@ -193,6 +199,8 @@ InfoBoxContentNextETE::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentNextETA::Update(InfoBoxWindow &infobox)
 {
+  // use proper non-terminal next task stats
+
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       !XCSoarInterface::Calculated().task_stats.current_leg.achievable()) {
     infobox.SetInvalid();
@@ -220,6 +228,8 @@ InfoBoxContentNextETA::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
 {
+  // pilots want this to be assuming terminal flight to this wp
+
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -228,7 +238,7 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserAltitude(task_stats.current_leg.solution_remaining.AltitudeDifference,
+  Units::FormatUserAltitude(XCSoarInterface::Calculated().common_stats.next_solution.AltitudeDifference,
                             tmp, 32, false);
   infobox.SetValue(tmp);
 
@@ -239,6 +249,8 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
 {
+  // pilots want this to be assuming terminal flight to this wp
+
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     infobox.SetInvalid();
@@ -247,7 +259,7 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserAltitude(task_stats.current_leg.solution_remaining.AltitudeRequired,
+  Units::FormatUserAltitude(XCSoarInterface::Calculated().common_stats.next_solution.AltitudeRequired,
                             tmp, 32, false);
   infobox.SetValue(tmp);
 
@@ -256,8 +268,34 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
 }
 
 void
+InfoBoxContentNextAltitudeArrival::Update(InfoBoxWindow &infobox)
+{
+  // pilots want this to be assuming terminal flight to this wp
+
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const GlideResult next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
+  if (!task_stats.task_valid || !next_solution.glide_reachable(true)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  TCHAR tmp[32];
+  fixed alt = XCSoarInterface::Basic().NavAltitude-next_solution.HeightGlide;
+  Units::FormatUserAltitude(alt, tmp, 32, false);
+  infobox.SetValue(tmp);
+
+  // Set Unit
+  infobox.SetValueUnit(Units::AltitudeUnit);
+}
+
+
+void
 InfoBoxContentNextLD::Update(InfoBoxWindow &infobox)
 {
+  // pilots want this to be assuming terminal flight to this wp, and this
+  // is what current_leg gradient does.
+
   if (!XCSoarInterface::Calculated().task_stats.task_valid) {
     infobox.SetInvalid();
     return;
@@ -281,6 +319,7 @@ InfoBoxContentNextLD::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
 {
+
   if (!XCSoarInterface::Calculated().task_stats.task_valid) {
     infobox.SetInvalid();
     return;

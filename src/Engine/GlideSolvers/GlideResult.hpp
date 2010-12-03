@@ -146,6 +146,11 @@ struct GlideResult {
    */
   fixed destination_angle_ground() const;
 
+  /**
+   * Reset/clear the solution
+   */
+  void reset();
+
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
                                    const GlideResult& gl);

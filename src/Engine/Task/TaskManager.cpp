@@ -22,6 +22,8 @@
 #include "TaskManager.hpp"
 #include "Visitors/TaskPointVisitor.hpp"
 #include "Sizes.h"
+#include "Tasks/TaskSolvers/TaskSolution.hpp"
+#include "Tasks/BaseTask/UnorderedTaskPoint.hpp"
 
 // uses delegate pattern
 
@@ -164,6 +166,16 @@ TaskManager::update_common_stats_waypoints(const AIRCRAFT_STATE &state)
   */
 
   common_stats.landable_reachable = task_abort.has_landable_reachable();
+
+  common_stats.next_solution.reset();
+  if (active_task) {
+    const TaskPoint* tp= active_task->getActiveTaskPoint();
+    if (tp != NULL) {
+      // must make an UnorderedTaskPoint here so we pick up arrival height requirements
+      UnorderedTaskPoint fp(tp->get_waypoint(), task_behaviour);
+      common_stats.next_solution = TaskSolution::glide_solution_remaining(fp, state, m_glide_polar);
+    }
+  }
 }
 
 void

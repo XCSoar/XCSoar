@@ -164,3 +164,9 @@ GlideResult::location_at_final(const GeoPoint &location) const
 {
   return Vector.intermediate_point(location, DistanceToFinal);
 }
+
+void
+GlideResult::reset()
+{
+  Solution = RESULT_NOSOLUTION;
+}

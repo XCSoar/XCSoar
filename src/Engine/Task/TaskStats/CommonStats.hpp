@@ -4,6 +4,7 @@
 #include "Math/fixed.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Task/TaskStats/ContestResult.hpp"
+#include "GlideSolvers/GlideResult.hpp"
 
 #ifdef DO_PRINT
 #include <iostream>
@@ -82,7 +83,11 @@ public:
   /** Ballast setting at last update */
   fixed current_ballast;
 
+  /** Results of olc optimisation */
   ContestResult olc;
+
+  /** Glide solution flying terminally to active waypoint */
+  GlideResult next_solution;
 
   /**
    * Reset the stats as if never flown

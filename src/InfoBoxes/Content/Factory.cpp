@@ -724,6 +724,15 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("CPU load consumed by XCSoar averaged over 5 seconds."),
     8, 2,
   },
+
+  // 76 //
+  {
+    N_("Next Altitude Arrival"),
+    N_("WP AltA"),
+    N_("Absolute arrival altitude at the next waypoint in final glide."),
+    13, // WP AltR
+    11, // WP Dist
+  },
 };
 
 InfoBoxContent*
@@ -882,6 +891,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentExperimental2();
   case 75:
     return new InfoBoxContentCPULoad();
+  case 76:
+    return new InfoBoxContentNextAltitudeArrival();
   }
 
   return NULL;
