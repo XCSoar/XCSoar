@@ -72,11 +72,6 @@ DrawThread::run()
   map.repaint();
 
   bool bounds_dirty = true;
-  while (bounds_dirty)
-    bounds_dirty = map.Idle();
-
-  // second time draw
-  map.repaint();
 
   // circle until application is closed
   while (true) {
