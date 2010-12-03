@@ -20,7 +20,6 @@
 }
  */
 #include "TaskManager.hpp"
-#include "Visitors/TaskVisitor.hpp"
 #include "Visitors/TaskPointVisitor.hpp"
 #include "Sizes.h"
 
@@ -330,32 +329,6 @@ TaskManager::check_task() const
     return active_task->check_task();
 
   return false;
-}
-
-void
-TaskManager::CAccept(TaskVisitor &visitor) const
-{
-  if (active_task != NULL)
-    visitor.Visit(*active_task);
-}
-
-void
-TaskManager::ordered_CAccept(TaskVisitor &visitor) const
-{
-  visitor.Visit(task_ordered);
-}
-
-void
-TaskManager::Accept(TaskVisitor &visitor)
-{
-  if (active_task != NULL)
-    visitor.Visit(*active_task);
-}
-
-void
-TaskManager::ordered_Accept(TaskVisitor &visitor)
-{
-  visitor.Visit(task_ordered);
 }
 
 void
