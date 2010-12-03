@@ -171,6 +171,9 @@ void
 PrintHelper::abstracttask_print(AbstractTask& task, const AIRCRAFT_STATE &state) 
 {
   std::ofstream fs("results/res-stats-all.txt");
+  if (!task.stats.task_valid)
+    return;
+
   fs << task.stats;
 
   static std::ofstream f6("results/res-stats.txt");
@@ -217,6 +220,8 @@ void
 PrintHelper::orderedtask_print(OrderedTask& task, const AIRCRAFT_STATE &state) 
 {
   abstracttask_print(task, state);
+  if (!task.stats.task_valid)
+    return;
 
   std::ofstream fi("results/res-isolines.txt");
   for (unsigned i=0; i<task.tps.size(); i++) {
