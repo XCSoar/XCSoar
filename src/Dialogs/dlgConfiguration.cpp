@@ -1513,7 +1513,10 @@ void dlgConfigurationShowModal(void)
 {
   PrepareConfigurationDialog();
 
-  wf->ShowModal();
+  if (wf->ShowModal() != mrOK) {
+    delete wf;
+    return;
+  }
 
   /* save page number for next time this dialog is opened */
   current_page = (config_page)configuration_tabbed->GetCurrentPage();
