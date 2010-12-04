@@ -113,10 +113,10 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   if (!m_background.DrawSpotHeights(canvas, label_block))
     DrawTaskOffTrackIndicator(canvas);
 
-  RenderMarks(canvas);
-
   // Render the snail trail
   RenderTrail(canvas, aircraft_pos);
+
+  RenderMarks(canvas);
 
   // Render estimate of thermal location
   DrawThermalEstimate(canvas);
