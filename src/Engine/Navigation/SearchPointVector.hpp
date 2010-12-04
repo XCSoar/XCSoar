@@ -30,6 +30,15 @@ typedef std::vector<SearchPoint> SearchPointVector;
 bool prune_interior(SearchPointVector& spv);
 bool is_convex(const SearchPointVector& spv);
 
+/**
+ * Apply convex pruning algorithm with increasing tolerance
+ * until the trace is smaller than the given size
+ *
+ * @return True if input was modified
+ */
+bool
+thin_to_size(SearchPointVector& spv, const unsigned max_size);
+
 void project(SearchPointVector& spv, const TaskProjection& tp);
 
 FlatGeoPoint nearest_point(const SearchPointVector& spv, 

@@ -31,6 +31,20 @@ prune_interior(SearchPointVector& spv)
   return gs.prune_interior();
 }
 
+bool
+thin_to_size(SearchPointVector& spv, const unsigned max_size)
+{
+  const fixed tolerance = fixed(1.0e-8);
+  unsigned i=2;
+  bool retval = false;
+  while (spv.size()> max_size) {
+    GrahamScan gs(spv, tolerance*i);
+    retval|= gs.prune_interior();
+    i*= i;
+  }
+  return retval;
+}
+
 bool 
 is_convex(const SearchPointVector& spv)
 {

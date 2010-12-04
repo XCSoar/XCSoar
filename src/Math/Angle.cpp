@@ -32,6 +32,14 @@ Copyright_License {
 #endif
 
 int
+Angle::sign(const fixed& tolerance) const
+{
+  if ((m_value> tolerance)) return 1;
+  if ((m_value< -tolerance)) return -1;
+  return 0;
+}
+
+int
 Angle::sign() const
 {
   if (positive(m_value)) return 1;

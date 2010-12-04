@@ -35,8 +35,9 @@ sortleft (const SearchPoint& sp1, const SearchPoint& sp2)
   return sp1.sort(sp2);
 }
 
-GrahamScan::GrahamScan(SearchPointVector& sps):
-  raw_points(sps.begin(), sps.end()), raw_vector(sps), size(sps.size())
+GrahamScan::GrahamScan(SearchPointVector& sps, const fixed sign_tolerance):
+  raw_points(sps.begin(), sps.end()), raw_vector(sps), size(sps.size()),
+  tolerance(sign_tolerance)
 {
 }
 
@@ -86,7 +87,7 @@ void GrahamScan::partition_points()
       loclast = (*i).get_location();
 
       int dir = direction( left->get_location(), right->get_location(), 
-                           (*i).get_location() );
+                           (*i).get_location(), tolerance );
       SearchPoint* sp = &(*i);
       if ( dir < 0 )
         upper_partition_points.push_back( sp );
@@ -156,7 +157,8 @@ void GrahamScan::build_half_hull( std::vector< SearchPoint* > input,
 
       if ( factor * direction( output[ end - 2 ]->get_location(), 
                                output[ end ]->get_location(), 
-                               output[ end - 1 ]->get_location() ) <= 0 ) {
+                               output[ end - 1 ]->get_location(),
+                               tolerance) <= 0 ) {
         output.erase( output.begin() + end - 1 );
       }
       else
@@ -178,10 +180,11 @@ void GrahamScan::build_half_hull( std::vector< SearchPoint* > input,
 
 int GrahamScan::direction( const GeoPoint& p0,
                            const GeoPoint& p1,
-                           const GeoPoint& p2 )
+                           const GeoPoint& p2,
+                           const fixed& tolerance)
 {
   return (( (p0.Longitude - p1.Longitude ) * (p2.Latitude - p1.Latitude ) )
-          - ( (p2.Longitude - p1.Longitude ) * (p0.Latitude - p1.Latitude ) )).sign();
+          - ( (p2.Longitude - p1.Longitude ) * (p0.Latitude - p1.Latitude ) )).sign(tolerance);
 }
 
 

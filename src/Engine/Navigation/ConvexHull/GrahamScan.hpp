@@ -40,7 +40,7 @@ public :
  * 
  * @param sps Input vector of points (may be unordered)
  */
-  GrahamScan(SearchPointVector& sps);
+  GrahamScan(SearchPointVector& sps, const fixed sign_tolerance = fixed(1.0e-8));
 
 /** 
  * Perform convex hull transformation
@@ -59,7 +59,8 @@ private :
   gcc_pure
   static int direction(const GeoPoint& p0,
                        const GeoPoint& p1,
-                       const GeoPoint& p2);
+                       const GeoPoint& p2,
+                       const fixed& _tolerance);
 
   std::list< SearchPoint > raw_points;
   SearchPoint *left;
@@ -70,6 +71,7 @@ private :
   std::vector< SearchPoint* > upper_hull;
   SearchPointVector &raw_vector;
   const unsigned size;
+  const fixed tolerance;
 };
 
 
