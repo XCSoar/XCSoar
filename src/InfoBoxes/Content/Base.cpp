@@ -40,6 +40,9 @@ void FillInfoBoxWaypointName(InfoBoxWindow& infobox, const Waypoint* way_point,
     if (XCSoarInterface::SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE) {
       _tcsncpy(tmp, way_point->Name.c_str(), 3);
       tmp[3] = '\0';
+    } else if (XCSoarInterface::SettingsMap().DisplayTextType == DISPLAYFIRSTFIVE) {
+      _tcsncpy(tmp, way_point->Name.c_str(), 5);
+      tmp[5] = '\0';
     } else if (XCSoarInterface::SettingsMap().DisplayTextType == DISPLAYNUMBER) {
       _stprintf(tmp, _T("%d"), way_point->id);
     } else {
