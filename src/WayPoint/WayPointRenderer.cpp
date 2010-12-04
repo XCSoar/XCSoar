@@ -265,8 +265,10 @@ public:
 static void
 MapWaypointLabelRender(Canvas &canvas, const RECT &MapRect,
                        LabelBlock &label_block,
-                       const WayPointLabelList &labels)
+                       WayPointLabelList &labels)
 {
+  labels.Sort();
+
   // first draw task waypoints
   for (unsigned i = 0; i < labels.size(); i++) {
     const WayPointLabelList::Label *E = &labels[i];
@@ -336,7 +338,6 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
   way_points->visit_within_range(projection.GetGeoLocation(),
                                  projection.GetScreenDistanceMeters(), v);
 
-  v.labels.Sort();
   MapWaypointLabelRender(canvas, projection.GetMapRect(),
                          label_block, v.labels);
 }
