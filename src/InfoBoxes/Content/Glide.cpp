@@ -38,9 +38,7 @@ InfoBoxContentLDInstant::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)XCSoarInterface::Calculated().LD);
-  infobox.SetValue(tmp);
+  SetValueFromFixed(infobox, _T("%2.0f"), XCSoarInterface::Calculated().LD);
 }
 
 void
@@ -52,9 +50,7 @@ InfoBoxContentLDCruise::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)XCSoarInterface::Calculated().CruiseLD);
-  infobox.SetValue(tmp);
+  SetValueFromFixed(infobox, _T("%2.0f"), XCSoarInterface::Calculated().CruiseLD);
 }
 
 void
@@ -70,11 +66,9 @@ InfoBoxContentLDAvg::Update(InfoBoxWindow &infobox)
     infobox.SetValue(_T("^^^"));
   else if (XCSoarInterface::Calculated().AverageLD >= 999)
     infobox.SetValue(_T("+++"));
-  else {
-    TCHAR tmp[32];
-    _stprintf(tmp, _T("%2.0f"), (double)XCSoarInterface::Calculated().AverageLD);
-    infobox.SetValue(tmp);
-  }
+  else
+    SetValueFromFixed(infobox, _T("%2.0f"),
+                      fixed(XCSoarInterface::Calculated().AverageLD));
 }
 
 void
@@ -88,7 +82,5 @@ InfoBoxContentLDVario::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)XCSoarInterface::Calculated().LDvario);
-  infobox.SetValue(tmp);
+  SetValueFromFixed(infobox, _T("%2.0f"), XCSoarInterface::Calculated().LDvario);
 }

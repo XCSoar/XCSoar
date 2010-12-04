@@ -41,18 +41,15 @@ InfoBoxContentGLoad::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.2f"),
-            (double)XCSoarInterface::Basic().acceleration.Gload);
-  infobox.SetValue(tmp);
+  SetValueFromFixed(infobox, _T("%2.2f"),
+                    XCSoarInterface::Basic().acceleration.Gload);
 }
 
 void
 InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
 {
-  TCHAR tmp[32];
-
 #ifdef HAVE_BATTERY
+  TCHAR tmp[32];
 
   bool DisplaySupplyVoltageAsValue=false;
   switch (Power::External::Status) {
@@ -64,9 +61,8 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
         infobox.SetComment(_("AC ON"));
       else{
         DisplaySupplyVoltageAsValue = true;
-        _stprintf(tmp, _T("%2.1fV"),
-                  (double)XCSoarInterface::Basic().SupplyBatteryVoltage);
-        infobox.SetValue(tmp);
+        SetValueFromFixed(infobox, _T("%2.1fV"),
+                          XCSoarInterface::Basic().SupplyBatteryVoltage);
       }
       break;
     case Power::External::UNKNOWN:
@@ -103,9 +99,8 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
 #endif
 
   if (!negative(XCSoarInterface::Basic().SupplyBatteryVoltage)) {
-    _stprintf(tmp, _T("%2.1fV"),
-              (double)XCSoarInterface::Basic().SupplyBatteryVoltage);
-    infobox.SetValue(tmp);
+    SetValueFromFixed(infobox, _T("%2.1fV"),
+                      XCSoarInterface::Basic().SupplyBatteryVoltage);
     return;
   }
 
@@ -116,10 +111,8 @@ void
 InfoBoxContentExperimental1::Update(InfoBoxWindow &infobox)
 {
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%-2.1f"),
-            (double)XCSoarInterface::Calculated().Experimental);
-  infobox.SetValue(tmp);
+  SetValueFromFixed(infobox, _T("%-2.1f"),
+                    XCSoarInterface::Calculated().Experimental);
 }
 
 void

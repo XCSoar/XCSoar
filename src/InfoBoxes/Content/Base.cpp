@@ -96,6 +96,15 @@ InfoBoxContent::SetCommentFromWaypointName(InfoBoxWindow &infobox,
 }
 
 void
+InfoBoxContent::SetValueFromFixed(InfoBoxWindow &infobox,
+                                  const TCHAR* format, fixed value)
+{
+  TCHAR tmp[32];
+  _stprintf(tmp, format, (double)value);
+  infobox.SetValue(tmp);
+}
+
+void
 InfoBoxContent::SetValueFromDistance(InfoBoxWindow &infobox, fixed distance)
 {
   TCHAR tmp[32];

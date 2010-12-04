@@ -54,6 +54,9 @@ public:
   static void SetCommentFromWaypointName(InfoBoxWindow &infobox,
                                          const Waypoint* waypoint);
 
+  static void SetValueFromFixed(InfoBoxWindow &infobox,
+                                const TCHAR* format, fixed value);
+
   static void SetValueBearingDifference(InfoBoxWindow &infobox, Angle delta);
   static void SetValueFromDistance(InfoBoxWindow &infobox, fixed distance);
 };

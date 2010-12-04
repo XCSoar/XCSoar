@@ -121,10 +121,7 @@ InfoBoxContentSpeedIndicated::HandleKey(const InfoBoxKeyCodes keycode)
                         : _("Calibrate OFF"));
     return true;
 
-  case ibkLeft:
-  case ibkDown:
-  case ibkUp:
-  case ibkRight:
+  default:
     break;
   }
 
@@ -162,10 +159,7 @@ InfoBoxContentSpeed::HandleKey(const InfoBoxKeyCodes keycode)
                         _("Calibrate OFF"));
     return true;
 
-  case ibkUp:
-  case ibkDown:
-  case ibkLeft:
-  case ibkRight:
+  default:
     break;
   }
 

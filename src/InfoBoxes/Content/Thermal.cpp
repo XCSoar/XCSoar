@@ -195,10 +195,8 @@ void
 InfoBoxContentThermalRatio::Update(InfoBoxWindow &infobox)
 {
   // Set Value
-  TCHAR sTmp[32];
-  _stprintf(sTmp, _T("%2.0f%%"),
-            (double)XCSoarInterface::Calculated().PercentCircling);
-  infobox.SetValue(sTmp);
+  SetValueFromFixed(infobox, _T("%2.0f%%"),
+                    XCSoarInterface::Calculated().PercentCircling);
 }
 
 void

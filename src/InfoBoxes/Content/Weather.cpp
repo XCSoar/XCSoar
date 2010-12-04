@@ -48,20 +48,16 @@ InfoBoxContentTemperature::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.1f")_T(DEG),
-            (double)Units::ToUserTemperature(
-                XCSoarInterface::Basic().OutsideAirTemperature));
-  infobox.SetValue(tmp);
+  SetValueFromFixed(infobox, _T("%2.1f")_T(DEG),
+      Units::ToUserTemperature(XCSoarInterface::Basic().OutsideAirTemperature));
 }
 
 void
 InfoBoxContentTemperatureForecast::Update(InfoBoxWindow &infobox)
 {
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.1f")_T(DEG), CuSonde::maxGroundTemperature);
-  infobox.SetValue(tmp);
+  SetValueFromFixed(infobox, _T("%2.1f")_T(DEG),
+                    fixed(CuSonde::maxGroundTemperature));
 }
 
 bool
@@ -76,9 +72,7 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
     CuSonde::adjustForecastTemperature(-0.5);
     return true;
 
-  case ibkLeft:
-  case ibkRight:
-  case ibkEnter:
+  default:
     break;
   }
 
@@ -89,10 +83,8 @@ void
 InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
 {
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
-  infobox.SetValue(tmp);
+  SetValueFromFixed(infobox, _T("%2.0f"),
+                    Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
 
   // Set Unit
   infobox.SetValueUnit(Units::WindSpeedUnit);

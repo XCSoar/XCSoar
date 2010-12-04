@@ -438,10 +438,8 @@ InfoBoxContentTaskSpeed::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()));
-  infobox.SetValue(tmp);
+  SetValueFromFixed(infobox, _T("%2.0f"),
+                    Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()));
 
   // Set Unit
   infobox.SetValueUnit(Units::TaskSpeedUnit);
@@ -457,10 +455,8 @@ InfoBoxContentTaskSpeedAchieved::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()));
-  infobox.SetValue(tmp);
+  SetValueFromFixed(infobox, _T("%2.0f"),
+                    Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()));
 
   // Set Unit
   infobox.SetValueUnit(Units::TaskSpeedUnit);
@@ -476,11 +472,9 @@ InfoBoxContentTaskSpeedInstant::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"),
-            (double)Units::ToUserTaskSpeed(task_stats.total.remaining_effective.
+  SetValueFromFixed(infobox, _T("%2.0f"),
+                    Units::ToUserTaskSpeed(task_stats.total.remaining_effective.
                                            get_speed_incremental()));
-  infobox.SetValue(tmp);
 
   // Set Unit
   infobox.SetValueUnit(Units::TaskSpeedUnit);
@@ -714,10 +708,8 @@ InfoBoxContentTaskAASpeed::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserTaskSpeed(
-      common_stats.aat_speed_remaining));
-  infobox.SetValue(tmp);
+  SetValueFromFixed(infobox, _T("%2.0f"),
+                    Units::ToUserTaskSpeed(common_stats.aat_speed_remaining));
 
   // Set Unit
   infobox.SetValueUnit(Units::TaskSpeedUnit);
@@ -735,10 +727,8 @@ InfoBoxContentTaskAASpeedMax::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserTaskSpeed(
-      common_stats.aat_speed_max));
-  infobox.SetValue(tmp);
+  SetValueFromFixed(infobox, _T("%2.0f"),
+                    Units::ToUserTaskSpeed(common_stats.aat_speed_max));
 
   // Set Unit
   infobox.SetValueUnit(Units::TaskSpeedUnit);
@@ -756,10 +746,8 @@ InfoBoxContentTaskAASpeedMin::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  _stprintf(tmp, _T("%2.0f"), (double)Units::ToUserTaskSpeed(
-      common_stats.aat_speed_min));
-  infobox.SetValue(tmp);
+  SetValueFromFixed(infobox, _T("%2.0f"),
+                    Units::ToUserTaskSpeed(common_stats.aat_speed_min));
 
   // Set Unit
   infobox.SetValueUnit(Units::TaskSpeedUnit);
