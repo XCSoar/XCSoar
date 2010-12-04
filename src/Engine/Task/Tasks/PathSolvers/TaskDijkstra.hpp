@@ -83,6 +83,14 @@ public:
 
 protected:
   const SearchPoint &get_point(const ScanTaskPoint &sp) const;
+  void calculate_sizes();
+
+
+  void add_start_edges(DijkstraTaskPoint &dijkstra,
+                 const SearchPoint &loc);
+
+  OrderedTask& task;
+  unsigned active_stage;
 
 private:
   unsigned get_size(const unsigned stage) const;
@@ -90,17 +98,7 @@ private:
   void add_edges(DijkstraTaskPoint &dijkstra,
                  const ScanTaskPoint &curNode);
 
-  void add_start_edges(DijkstraTaskPoint &dijkstra,
-                 const SearchPoint &loc);
-
-  void save_max();
-  void save_min();
-
-  void calculate_sizes();
-
-  OrderedTask& task;
-  std::vector<unsigned> sp_sizes;
-  unsigned active_stage;
+  unsigned sp_sizes[MAX_STAGES];
 };
 
 #endif

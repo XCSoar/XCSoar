@@ -24,7 +24,8 @@
 #include "Task/TaskEvents.hpp"
 #include "Task/TaskAdvance.hpp"
 #include "BaseTask/OrderedTaskPoint.hpp"
-#include "PathSolvers/TaskDijkstra.hpp"
+#include "PathSolvers/TaskDijkstraMin.hpp"
+#include "PathSolvers/TaskDijkstraMax.hpp"
 #include "TaskSolvers/TaskMacCreadyTravelled.hpp"
 #include "TaskSolvers/TaskMacCreadyRemaining.hpp"
 #include "TaskSolvers/TaskMacCreadyTotal.hpp"
@@ -116,7 +117,7 @@ OrderedTask::scan_distance_min(const GeoPoint &location, bool full)
 {
   if (full) {
     SearchPoint ac(location, task_projection);
-    TaskDijkstra dijkstra_min(*this);
+    TaskDijkstraMin dijkstra_min(*this);
     dijkstra_min.distance_min(ac);
     m_location_min_last = location;
   }
@@ -139,7 +140,7 @@ OrderedTask::scan_distance_max()
     activeTaskPoint--;
     ts->scan_active(tps[activeTaskPoint]);
   }
-  TaskDijkstra dijkstra_max(*this);
+  TaskDijkstraMax dijkstra_max(*this);
   dijkstra_max.distance_max();
 
   if (atp) {

@@ -28,7 +28,6 @@ TaskDijkstra::TaskDijkstra(OrderedTask& _task) :
   task(_task),
   active_stage(_task.getActiveTaskPointIndex())
 {
-  sp_sizes.reserve(num_stages);
 }
 
 void
@@ -48,65 +47,6 @@ const SearchPoint &
 TaskDijkstra::get_point(const ScanTaskPoint &sp) const
 {
   return task.get_tp_search_points(sp.first)[sp.second];
-}
-
-bool
-TaskDijkstra::distance_max()
-{
-  if (num_stages < 2)
-    return 0;
-
-  calculate_sizes();
-
-  const ScanTaskPoint start(0, 0);
-  
-  // dont reserve queue size because this is temporary
-  DijkstraTaskPoint dijkstra(start, false, 0);
-
-  const bool retval = distance_general(dijkstra);
-  if (retval)
-    save_max();
-
-  return retval;
-}
-
-bool
-TaskDijkstra::distance_min(const SearchPoint &currentLocation)
-{
-  if (num_stages < 2)
-    return 0;
-
-  calculate_sizes();
-
-  const ScanTaskPoint start(max(1, (int)active_stage) - 1, 0);
-
-  // dont reserve queue size because this is temporary
-  DijkstraTaskPoint dijkstra(start, true, 0);
-  if (active_stage)
-    add_start_edges(dijkstra, currentLocation);
-
-  const bool retval = distance_general(dijkstra);
-  if (retval)
-    save_min();
-
-  return retval;
-}
-
-void
-TaskDijkstra::save_min()
-{
-  for (unsigned j = active_stage; j != num_stages; ++j)
-    task.set_tp_search_min(j, solution[j]);
-}
-
-void
-TaskDijkstra::save_max()
-{
-  for (unsigned j = 0; j != num_stages; ++j) {
-    task.set_tp_search_max(j, solution[j]);
-    if (j <= active_stage)
-      task.set_tp_search_achieved(j, solution[j]);
-  }
 }
 
 void
