@@ -428,13 +428,58 @@ protected:
   }
 };
 
+
+class ConditionMonitorLandableReachable: public ConditionMonitor
+{
+public:
+  ConditionMonitorLandableReachable():last_reachable(false)
+  {
+    Interval_Notification = 60 * 5;
+    Interval_Check = 1;
+  }
+
+protected:
+  bool
+  CheckCondition(const GlideComputer& cmp)
+  {
+    if (!cmp.Basic().flight.Flying) 
+      return false;
+
+    now_reachable = cmp.Calculated().common_stats.landable_reachable;
+
+    if (!now_reachable && last_reachable) {
+      // warn when becoming unreachable
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void
+  Notify(void)
+  {
+    InputEvents::processGlideComputer(GCE_LANDABLE_UNREACHABLE);
+  }
+
+  void
+  SaveLast(void)
+  {
+    last_reachable = now_reachable;
+  }
+
+private:
+  bool last_reachable;
+  bool now_reachable;
+};
+
+
 ConditionMonitorWind cm_wind;
 ConditionMonitorFinalGlide cm_finalglide;
 ConditionMonitorSunset cm_sunset;
 ConditionMonitorAATTime cm_aattime;
 ConditionMonitorStartRules cm_startrules;
 ConditionMonitorGlideTerrain cm_glideterrain;
-
+ConditionMonitorLandableReachable cm_landablereachable;
 void
 ConditionMonitorsUpdate(const GlideComputer& cmp)
 {
@@ -444,4 +489,5 @@ ConditionMonitorsUpdate(const GlideComputer& cmp)
   cm_aattime.Update(cmp);
   cm_startrules.Update(cmp);
   cm_glideterrain.Update(cmp);
+  cm_landablereachable.Update(cmp);
 }

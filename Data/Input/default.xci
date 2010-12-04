@@ -163,6 +163,10 @@ type=gce
 data=FLIGHTMODE_FINALGLIDE_TERRAIN
 event=StatusMessage Final Glide Through Terrain
 
+mode=default
+type=gce
+data=LANDABLE_UNREACHABLE
+event=Beep 1
 
 # ------------
 # mode=default
