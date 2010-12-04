@@ -30,8 +30,7 @@ AbstractContest::AbstractContest(const Trace &_trace,
                                  const unsigned finish_alt_diff):
   trace_master(_trace),
   contest_handicap(_handicap),
-  m_finish_alt_diff(finish_alt_diff),
-  best_result()
+  m_finish_alt_diff(finish_alt_diff)
 {
   reset();
 }

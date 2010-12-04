@@ -12,12 +12,6 @@ struct ContestResult
   /** Speed (m/s) of optimised OLC path */
   fixed speed;
 
-  ContestResult() :
-    score(fixed_zero),
-    distance(fixed_zero),
-    time(fixed_zero),
-    speed(fixed_zero) {}
-
   void reset() {
     score = fixed_zero;
     distance = fixed_zero;
