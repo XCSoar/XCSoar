@@ -110,12 +110,9 @@ InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
 {
   SetVSpeed(infobox, XCSoarInterface::Calculated().Average30s);
 
-  if (XCSoarInterface::Calculated().Average30s <
-      fixed_half * XCSoarInterface::Calculated().common_stats.current_risk_mc)
-    // red
-    infobox.SetColor(1);
-  else
-    infobox.SetColor(0);
+  // Set Color (red/black)
+  infobox.SetColor(XCSoarInterface::Calculated().Average30s * fixed_two <
+      XCSoarInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
 }
 
 void
@@ -176,12 +173,9 @@ InfoBoxContentThermalAvg::Update(InfoBoxWindow &infobox)
 {
   SetVSpeed(infobox, XCSoarInterface::Calculated().ThermalAverage);
 
-  if (XCSoarInterface::Calculated().ThermalAverage <
-      fixed_two_thirds * XCSoarInterface::Calculated().common_stats.current_risk_mc)
-    // red
-    infobox.SetColor(1);
-  else
-    infobox.SetColor(0);
+  // Set Color (red/black)
+  infobox.SetColor(XCSoarInterface::Calculated().ThermalAverage * fixed(1.5) <
+      XCSoarInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
 }
 
 void
@@ -218,11 +212,7 @@ InfoBoxContentVarioDistance::Update(InfoBoxWindow &infobox)
   SetVSpeed(infobox,
             XCSoarInterface::Calculated().task_stats.total.vario.get_value());
 
-  // Set Color
-  if (negative(XCSoarInterface::Calculated().task_stats.total.vario.get_value()))
-    // Red
-    infobox.SetColor(1);
-  else
-    // Black
-    infobox.SetColor(0);
+  // Set Color (red/black)
+  infobox.SetColor(negative(
+      XCSoarInterface::Calculated().task_stats.total.vario.get_value()) ? 1 : 0);
 }
