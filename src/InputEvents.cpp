@@ -164,12 +164,8 @@ apply_defaults(const TCHAR *const* default_modes,
     input_config.append_mode(*default_modes++);
 
   input_config.Events_count = num_default_events + 1;
-  for ( unsigned i = 0; i < num_default_events; i++ )
-  {
-    input_config.Events[i+1].event = default_events[i].event;
-    input_config.Events[i+1].misc  = gettext(default_events[i].misc);
-    input_config.Events[i+1].next  = default_events[i].next;
-  }
+  std::copy(default_events, default_events + num_default_events,
+            input_config.Events + 1);
 
   while (default_key2event->event > 0) {
     input_config.Key2Event[default_key2event->mode][default_key2event->key] =

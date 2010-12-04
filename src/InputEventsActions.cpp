@@ -692,7 +692,8 @@ InputEvents::eventGotoLookup(const TCHAR *misc)
 void
 InputEvents::eventStatusMessage(const TCHAR *misc)
 {
-  Message::AddMessage(misc);
+  if (misc != NULL)
+    Message::AddMessage(gettext(misc));
 }
 
 // Plays a sound from the filename
