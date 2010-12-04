@@ -728,12 +728,12 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
     const GlidePolar &safety_polar = calculated.glide_polar_safety;
 
     UnorderedTaskPoint t(way_point, settings_computer);
-    GlideResult r;
 
     // alt reqd at current mc
 
     const AIRCRAFT_STATE aircraft_state = ToAircraftState(basic, calculated);
-    r = TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
+    GlideResult r = TaskSolution::glide_solution_remaining(t, aircraft_state,
+                                                           glide_polar);
     wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
     if (wp) {
       _stprintf(sTmp, _T("%.0f %s"),

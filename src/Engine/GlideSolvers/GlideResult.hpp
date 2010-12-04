@@ -49,12 +49,9 @@ struct GlideResult {
   };
 
   /**
-   * Dummy constructor for null result.  Used as default
-   * return value for failed/trivial tasks
-   *
-   * @return Initialised null result
+   * Construct an uninitialised object.
    */
-  GlideResult();
+  GlideResult() {}
 
   /**
    * Constructor with partial initialisation for a particular

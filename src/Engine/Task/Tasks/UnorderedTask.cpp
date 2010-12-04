@@ -74,7 +74,9 @@ UnorderedTask::glide_solution_remaining(const AIRCRAFT_STATE &state,
   if (tp) {
     res = TaskSolution::glide_solution_remaining(*tp, state, polar);
     res.calc_deferred(state);
-  }
+  } else
+    res.reset();
+
   total = res;
   leg = res;
 }
@@ -85,6 +87,7 @@ UnorderedTask::glide_solution_travelled(const AIRCRAFT_STATE &state,
                                         GlideResult &leg)
 {
   GlideResult null_res;
+  null_res.reset();
   total = null_res;
   leg = null_res;
 }

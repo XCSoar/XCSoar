@@ -25,23 +25,6 @@
 #include <math.h>
 #include "Navigation/Aircraft.hpp"
 
-GlideResult::GlideResult():
-    Vector(fixed_zero),
-    DistanceToFinal(fixed_zero),
-    CruiseTrackBearing(Angle::native(fixed_zero)),
-    VOpt(fixed_zero),
-    HeightClimb(fixed_zero),
-    HeightGlide(fixed_zero),
-    TimeElapsed(fixed_zero),
-    TimeVirtual(fixed_zero),
-    AltitudeDifference(fixed_zero),
-    EffectiveWindSpeed(fixed_zero),
-    EffectiveWindAngle(Angle::native(fixed_zero)),
-    Solution(RESULT_NOSOLUTION),
-    MinHeight(fixed_zero)
-{
-}
-
 GlideResult::GlideResult(const GlideState &task, const fixed V):
   Vector(task.Vector),
   DistanceToFinal(task.Vector.Distance),
