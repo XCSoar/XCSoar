@@ -2003,7 +2003,6 @@ void dlgConfigurationShowModal(void)
       Profile::Set(szProfileAppCompassAppearance,
                     Appearance.CompassAppearance);
       changed = true;
-      requirerestart = true;
     }
   }
 
