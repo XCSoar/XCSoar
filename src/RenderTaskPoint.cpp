@@ -260,7 +260,6 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
     }
 
     canvas.select(pen_isoline);
-    canvas.hollow_brush();
     canvas.polyline(screen, 20);
   }
 }
