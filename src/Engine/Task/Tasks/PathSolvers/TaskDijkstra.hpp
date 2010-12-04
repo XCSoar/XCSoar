@@ -83,8 +83,11 @@ public:
 
 protected:
   const SearchPoint &get_point(const ScanTaskPoint &sp) const;
-  void calculate_sizes();
 
+  /**
+   * Update internal details required from the task
+   */
+  bool refresh_task();
 
   void add_start_edges(DijkstraTaskPoint &dijkstra,
                  const SearchPoint &loc);
@@ -93,6 +96,7 @@ protected:
   unsigned active_stage;
 
 private:
+  void calculate_sizes();
   unsigned get_size(const unsigned stage) const;
 
   void add_edges(DijkstraTaskPoint &dijkstra,

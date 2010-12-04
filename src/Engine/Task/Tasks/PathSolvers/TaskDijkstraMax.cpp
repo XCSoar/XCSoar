@@ -31,10 +31,8 @@ TaskDijkstraMax::TaskDijkstraMax(OrderedTask& _task) :
 bool
 TaskDijkstraMax::distance_max()
 {
-  if (num_stages < 2)
-    return 0;
-
-  calculate_sizes();
+  if (!refresh_task())
+    return false;
 
   const ScanTaskPoint start(0, 0);
   

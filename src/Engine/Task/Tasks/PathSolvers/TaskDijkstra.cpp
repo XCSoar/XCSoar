@@ -24,10 +24,21 @@
 #include "Task/Tasks/OrderedTask.hpp"
 
 TaskDijkstra::TaskDijkstra(OrderedTask& _task) :
-  NavDijkstra<SearchPoint> (_task.task_size()),
-  task(_task),
-  active_stage(_task.getActiveTaskPointIndex())
+  NavDijkstra<SearchPoint> (MAX_STAGES),
+  task(_task)
 {
+}
+
+bool
+TaskDijkstra::refresh_task()
+{
+  set_stages(task.task_size());
+  if (num_stages < 2)
+    return false;
+
+  active_stage = task.getActiveTaskPointIndex();
+  calculate_sizes();
+  return true;
 }
 
 void
@@ -75,17 +86,3 @@ TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
                   distance(destination, currentLocation));
 }
 
-/**
- * @todo
- * - only scan parts that are required, and prune out points
- *   that become irrelevant (strictly under-performing) 
- * - if in sector, prune out all default points that result in
- *   lower distance than current achieved max
- *
- * - if searching min 
- *   first search max actual up to current
- *     (taking into account aircraft location?)
- *   then search min after that from aircraft location
- *
- * - also update saved rank for potential pruning operations
- */

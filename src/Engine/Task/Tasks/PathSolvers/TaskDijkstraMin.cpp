@@ -31,10 +31,8 @@ TaskDijkstraMin::TaskDijkstraMin(OrderedTask& _task) :
 bool
 TaskDijkstraMin::distance_min(const SearchPoint &currentLocation)
 {
-  if (num_stages < 2)
-    return 0;
-
-  calculate_sizes();
+  if (!refresh_task())
+    return false;
 
   const ScanTaskPoint start(max(1, (int)active_stage) - 1, 0);
 
