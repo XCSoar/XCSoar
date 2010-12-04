@@ -147,16 +147,9 @@ dlgAirspaceShowModal(bool coloredit)
 {
   colormode = coloredit;
 
-  if (!Layout::landscape)
-    wf = LoadDialog(CallBackTable,
-        XCSoarInterface::main_window, _T("IDR_XML_AIRSPACE_L"));
-  else
-    wf = LoadDialog(CallBackTable,
-        XCSoarInterface::main_window, _T("IDR_XML_AIRSPACE"));
-
-  if (!wf)
-    return;
-
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                  !Layout::landscape ? _T("IDR_XML_AIRSPACE_L") :
+                                       _T("IDR_XML_AIRSPACE"));
   assert(wf != NULL);
 
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
@@ -181,6 +174,4 @@ dlgAirspaceShowModal(bool coloredit)
   }
 
   delete wf;
-
-  wf = NULL;
 }
