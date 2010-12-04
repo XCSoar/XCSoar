@@ -57,7 +57,12 @@ SampledTaskPoint::update_sample_near(const AIRCRAFT_STATE& state,
       SearchPoint sp(state.Location, projection);
       m_sampled_points.push_back(sp);
       // only return true if hull changed 
-      return prune_interior(m_sampled_points);
+
+      bool retval = prune_interior(m_sampled_points);
+      return thin_to_size(m_sampled_points, 64) || retval;
+
+      // thin to size is used here to ensure the sampled points vector
+      // size is bounded to reasonable values for AAT calculations. 
     }
   }
   return false;
