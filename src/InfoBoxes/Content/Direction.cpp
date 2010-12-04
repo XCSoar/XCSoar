@@ -47,6 +47,8 @@ InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode)
 {
   if (!is_simulator())
     return false;
+  if (XCSoarInterface::Basic().gps.Replay)
+    return false;
 
   const Angle a5 = Angle::degrees(fixed(5));
   switch (keycode) {
