@@ -99,13 +99,13 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
   // the reachability.
 
   std::priority_queue<Divert, DivertVector, AlternateRank> q;
+  const fixed dist_straight = state_now.get_location().distance(destination);
 
   for (AlternateTaskVector::const_iterator 
          i= tps.begin(); i!= tps.end(); ++i) {
 
     const TaskPoint& tp = *i->first;
     const Waypoint& wp_alt = tp.get_waypoint();
-    const fixed dist_straight = state_now.get_location().distance(destination);
     const fixed dist_divert = ::DoubleDistance(state_now.get_location(),
                                                wp_alt.Location,
                                                destination);
