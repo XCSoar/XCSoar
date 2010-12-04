@@ -32,7 +32,7 @@ TaskDijkstra::TaskDijkstra(OrderedTask& _task) :
 }
 
 void
-TaskDijkstra::get_sizes()
+TaskDijkstra::calculate_sizes()
 {
   for (unsigned stage = 0; stage != num_stages; ++stage)
     sp_sizes[stage] = task.get_tp_search_points(stage).size();
@@ -56,7 +56,7 @@ TaskDijkstra::distance_max()
   if (num_stages < 2)
     return 0;
 
-  get_sizes();
+  calculate_sizes();
 
   const ScanTaskPoint start(0, 0);
   
@@ -76,7 +76,7 @@ TaskDijkstra::distance_min(const SearchPoint &currentLocation)
   if (num_stages < 2)
     return 0;
 
-  get_sizes();
+  calculate_sizes();
 
   const ScanTaskPoint start(max(1, (int)active_stage) - 1, 0);
 

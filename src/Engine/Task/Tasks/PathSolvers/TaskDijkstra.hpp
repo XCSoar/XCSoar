@@ -96,7 +96,7 @@ private:
   void save_max();
   void save_min();
 
-  void get_sizes();
+  void calculate_sizes();
 
   OrderedTask& task;
   std::vector<unsigned> sp_sizes;
