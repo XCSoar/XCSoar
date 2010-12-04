@@ -31,6 +31,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "MainWindow.hpp"
 
+#include <stdio.h>
+
 static AbortTask::AlternateVector alternates;
 
 static void
