@@ -26,15 +26,25 @@
 
 #include "Screen/PaintWindow.hpp"
 
+class Airspaces;
+
 /**
  * A Window which renders a terrain and airspace cross-section
  */
 class CrossSectionWindow : public PaintWindow {
 public:
+  CrossSectionWindow();
+
   void Paint(Canvas &canvas);
+
+  void set_airspaces(Airspaces *_airspace_database) {
+    airspace_database = _airspace_database;
+  }
 
 protected:
   virtual void on_paint(Canvas &canvas);
+
+  Airspaces *airspace_database;
 };
 
 #endif

@@ -114,6 +114,9 @@ private:
   const AIRCRAFT_STATE& m_state;
 };
 
+CrossSectionWindow::CrossSectionWindow() :
+  airspace_database(NULL) {}
+
 void
 CrossSectionWindow::Paint(Canvas &canvas)
 {
@@ -137,8 +140,10 @@ CrossSectionWindow::Paint(Canvas &canvas)
   chart.ScaleYFromValue(hmax);
 
   // draw airspaces
-  AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, p_start, ToAircraftState(nmea_info));
-  airspace_database.visit_intersecting(p_start, vec, ivisitor);
+  if (airspace_database != NULL) {
+    AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, p_start, ToAircraftState(nmea_info));
+    airspace_database->visit_intersecting(p_start, vec, ivisitor);
+  }
 
   // draw terrain
   if (terrain != NULL) {

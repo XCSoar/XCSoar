@@ -382,6 +382,7 @@ OnCreateCrossSectionWindow(ContainerWindow &parent, int left, int top,
 {
   csw = new CrossSectionWindow();
   csw->set(parent, left, top, width, height, style);
+  csw->set_airspaces(&airspace_database);
   return csw;
 }
 
