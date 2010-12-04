@@ -427,11 +427,21 @@ UpdateValuesRules(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartPoint"));
   assert(wp != NULL);
-  ProtectedTaskManager::Lease task_manager(protected_task_manager);
-  if (task_manager->get_mode() == TaskManager::MODE_ORDERED)
-    wp->SetText(task_manager->get_ordered_taskpoint_name(0));
-  else
-    wp->SetText(_T(""));
+
+  TCHAR name[64];
+  {
+    ProtectedTaskManager::Lease task_manager(protected_task_manager);
+    const TCHAR *name2 = task_manager->get_mode() == TaskManager::MODE_ORDERED
+      ? task_manager->get_ordered_taskpoint_name(0)
+      : NULL;
+    if (name2 != NULL) {
+      _tcsncpy(name, name2, 63);
+      name[63] = _T('\0');
+    } else
+      name[0] = _T('\0');
+  }
+
+  wp->SetText(name);
 }
 
 static void
