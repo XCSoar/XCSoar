@@ -32,11 +32,10 @@ extern long count_dijkstra_links;
 
 #define MINMAX_OFFSET 134217727
 
+#define DIJKSTRA_QUEUE_SIZE 50000
+
 //uncomment this line to reserve space in queue
 #define USE_RESERVABLE
-#ifdef USE_RESERVABLE
-#define DIJKSTRA_QUEUE_SIZE 50000
-#endif
 
 /**
  * Dijkstra search algorithm.
@@ -50,9 +49,9 @@ public:
    *
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  Dijkstra(const bool is_min = true) :
+  Dijkstra(const bool is_min = true, unsigned reserve_default=DIJKSTRA_QUEUE_SIZE) :
     m_min(is_min) {
-    reserve();
+    reserve(reserve_default);
   }
 
   /**
@@ -61,10 +60,10 @@ public:
    * @param n Node to start
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  Dijkstra(const Node &node, const bool is_min = true) :
+  Dijkstra(const Node &node, const bool is_min = true, unsigned reserve_default=DIJKSTRA_QUEUE_SIZE) :
     m_min(is_min) { 
     push(node, node, 0);
-    reserve();
+    reserve(reserve_default);
   }
 
   /**
@@ -159,13 +158,16 @@ public:
       return (it->second); 
   }
 
-private:
-
-  void reserve() {
+  /**
+   * Reserve queue size (if available)
+   */
+  void reserve(unsigned size) {
 #ifdef USE_RESERVABLE
-    q.reserve(DIJKSTRA_QUEUE_SIZE);
+    q.reserve(size);
 #endif
   }
+
+private:
 
   /** 
    * Return edge value adjusted for flipping if maximim is sought ---

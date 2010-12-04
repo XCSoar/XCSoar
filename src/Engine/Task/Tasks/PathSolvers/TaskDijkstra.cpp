@@ -59,7 +59,9 @@ TaskDijkstra::distance_max()
   get_sizes();
 
   const ScanTaskPoint start(0, 0);
-  DijkstraTaskPoint dijkstra(start, false);
+  
+  // dont reserve queue size because this is temporary
+  DijkstraTaskPoint dijkstra(start, false, 0);
 
   const bool retval = distance_general(dijkstra);
   if (retval)
@@ -77,7 +79,9 @@ TaskDijkstra::distance_min(const SearchPoint &currentLocation)
   get_sizes();
 
   const ScanTaskPoint start(max(1, (int)active_stage) - 1, 0);
-  DijkstraTaskPoint dijkstra(start, true);
+
+  // dont reserve queue size because this is temporary
+  DijkstraTaskPoint dijkstra(start, true, 0);
   if (active_stage)
     add_start_edges(dijkstra, currentLocation);
 
