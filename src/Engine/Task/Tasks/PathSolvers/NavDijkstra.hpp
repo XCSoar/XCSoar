@@ -39,11 +39,9 @@ public:
    * 
    * @return Initialised object
    */
-  NavDijkstra(const unsigned _num_stages):
-    num_stages(_num_stages)
+  NavDijkstra(const unsigned _num_stages)
   {
-    assert(num_stages <= MAX_STAGES);
-    std::fill(solution, solution + num_stages, T());
+    set_stages(_num_stages);
   }
 
   /**
@@ -61,7 +59,18 @@ public:
     return a1.flat_distance(a2)> dist_threshold;
   }
 
+  /** 
+   * Set the number of stages to search for, and clear the solution
+   * array
+   */
+  void set_stages(const unsigned _num_stages) {
+    assert(num_stages <= MAX_STAGES);
+    num_stages =_num_stages;
+    std::fill(solution, solution + num_stages, T());
+  }
+
 protected:
+
   /** 
    * Determine whether a finished path is valid
    * 
