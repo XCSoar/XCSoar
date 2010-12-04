@@ -86,7 +86,7 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
   assert(item_height > 0);
   assert(paint_callback != NULL);
 
-  wf = LoadDialog(CallBackTable, parent, !Layout::landscape
+  wf = LoadDialog(CallBackTable, parent, Layout::landscape
                   ? _T("IDR_XML_COMBOPICKER_L")
                   : _T("IDR_XML_COMBOPICKER"));
   assert(wf != NULL);

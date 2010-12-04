@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 
-<Form Name="frmComboPopup" Width="240" Height="320" Caption="Picker">
-  <Button Name="cmdClose" Caption="Select" X="5" Y="-37" Width="70" Height="35" OnClick="OnCloseClicked"/>
+<Form Name="frmComboPopup" Width="320" Height="240" Caption="Picker">
+  <Button Name="cmdClose" Caption="Select" X="5" Y="100" Width="70" Height="35" OnClick="OnCloseClicked"/>
 
-  <Button Name="cmdCancel" Caption="Cancel" X="82" Y="-37" Width="70" Height="35" OnClick="OnCancelClicked"/>
+  <Button Name="cmdCancel" Caption="Cancel" X="5" Y="140" Width="70" Height="35" OnClick="OnCancelClicked"/>
 
-  <Button Name="cmdHelp" Caption="Help" X="160" Y="-37" Width="70" Height="35" OnClick="OnHelpClicked"/>
+  <Button Name="cmdHelp" Caption="Help" X="5" Y="180" Width="70" Height="35" OnClick="OnHelpClicked"/>
 
-  <List Name="frmComboPopupList" X="1" Y="1" Width="-1" Height="-39" ItemHeight="18"/>
+  <List Name="frmComboPopupList" X="80" Y="1" Width="-1" Height="-1" ItemHeight="18"/>
 </Form>
