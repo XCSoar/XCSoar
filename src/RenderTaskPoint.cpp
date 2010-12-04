@@ -261,7 +261,7 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
 
     canvas.select(pen_isoline);
     canvas.hollow_brush();
-    canvas.polygon(screen, 20);
+    canvas.polyline(screen, 20);
   }
 }
 
