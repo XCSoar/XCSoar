@@ -424,7 +424,7 @@ FormKeyDown(WndForm &Sender, unsigned key_code){
 
 #endif /* GNAV */
 
-static CallBackTableEntry CallBackTable[]={
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnFilterName),
   DeclareCallBackEntry(OnFilterDistance),
   DeclareCallBackEntry(OnFilterDirection),
@@ -437,30 +437,20 @@ PrepareAirspaceSelectDialog()
 {
   gcc_unused ScopeBusyIndicator busy;
 
-  if (!Layout::landscape) {
-    wf = LoadDialog(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_AIRSPACESELECT_L"));
-  } else {
-    wf = LoadDialog(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_AIRSPACESELECT"));
-  }
-
-  if (!wf) return;
-
-  assert(wf!=NULL);
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                  !Layout::landscape ? _T("IDR_XML_AIRSPACESELECT_L") :
+                                       _T("IDR_XML_AIRSPACESELECT"));
+  assert(wf != NULL);
 
 #ifdef GNAV
   wf->SetKeyDownNotify(FormKeyDown);
 #endif
 
-  ((WndButton *)wf->
-   FindByName(_T("cmdClose")))->
-    SetOnClickNotify(OnWPSCloseClicked);
+  ((WndButton *)wf->FindByName(_T("cmdClose")))->
+      SetOnClickNotify(OnWPSCloseClicked);
 
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
-  assert(wAirspaceList!=NULL);
+  assert(wAirspaceList != NULL);
   wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
   wAirspaceList->SetPaintItemCallback(OnPaintListItem);
 
