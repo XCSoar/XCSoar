@@ -126,7 +126,9 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
   int Offset0;
   int i;
 
-  if (Calculated().task_stats.task_valid) {
+  if (Calculated().task_stats.task_valid &&
+      Calculated().task_stats.total.solution_remaining.defined() &&
+      Calculated().task_stats.total.solution_mc0.defined()) {
     const int y0 = ((rc.bottom - rc.top) / 2) + rc.top;
 
     // 60 units is size, div by 8 means 60*8 = 480 meters.
@@ -294,7 +296,8 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
 {
   RasterPoint GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
 
-  if ((Calculated().task_stats.total.solution_remaining.AltitudeDifference > fixed(50))
+  if (Calculated().task_stats.total.solution_remaining.defined() &&
+      Calculated().task_stats.total.solution_remaining.AltitudeDifference > fixed(50)
       && GetDisplayMode() == dmFinalGlide)
     return;
 

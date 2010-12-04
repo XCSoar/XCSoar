@@ -98,10 +98,12 @@ RefreshCalculator(void)
     }
   }
 
-  fixed rPlanned = XCSoarInterface::Calculated().task_stats.total.solution_planned.Vector.Distance;
+  fixed rPlanned = XCSoarInterface::Calculated().task_stats.total.solution_planned.defined()
+    ? XCSoarInterface::Calculated().task_stats.total.solution_planned.Vector.Distance
+    : fixed_zero;
 
   wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
-  if (wp) {
+  if (wp != NULL && positive(rPlanned)) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(Units::ToUserDistance(rPlanned));
     df.SetUnits(Units::GetDistanceName());
@@ -125,7 +127,7 @@ RefreshCalculator(void)
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
-  if (wp) {
+  if (wp != NULL && positive(rPlanned)) {
     wp->RefreshDisplay();
     fixed rMax = XCSoarInterface::Calculated().task_stats.distance_max;
     fixed rMin = XCSoarInterface::Calculated().task_stats.distance_min;

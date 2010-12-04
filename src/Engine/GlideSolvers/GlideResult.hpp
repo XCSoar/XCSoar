@@ -69,6 +69,10 @@ struct GlideResult {
    */
   GlideResult(const GlideState &task, const fixed V);
 
+  bool defined() const {
+    return Solution != RESULT_NOSOLUTION;
+  }
+
   /**
    * Calculate additional items (CruiseTrackBearing and AltitudeRequired) that were
    * deferred.

@@ -84,8 +84,9 @@ GlideComputerTask::ProcessMoreTask()
   else
     SetCalculated().V_stf = Calculated().common_stats.V_dolphin;
 
-  SetCalculated().AutoZoomDistance = 
-    Calculated().task_stats.current_leg.solution_remaining.Vector.Distance;
+  if (Calculated().task_stats.current_leg.solution_remaining.defined())
+    SetCalculated().AutoZoomDistance =
+      Calculated().task_stats.current_leg.solution_remaining.Vector.Distance;
 }
 
 void

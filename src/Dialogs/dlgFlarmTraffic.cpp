@@ -532,7 +532,8 @@ Update()
               XCSoarInterface::Basic().flarm,
               XCSoarInterface::SettingsComputer());
 
-  wdf->UpdateTaskDirection(XCSoarInterface::Calculated().task_stats.task_valid,
+  wdf->UpdateTaskDirection(XCSoarInterface::Calculated().task_stats.task_valid &&
+                           XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.defined(),
                            XCSoarInterface::Calculated().task_stats.
                            current_leg.solution_remaining.CruiseTrackBearing);
 }

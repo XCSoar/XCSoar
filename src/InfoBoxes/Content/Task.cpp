@@ -38,33 +38,34 @@ Copyright_License {
 void
 InfoBoxContentBearing::Update(InfoBoxWindow &infobox)
 {
+  const GlideResult &solution_remaining =
+    XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.
-      Vector.Distance <= fixed(10)) {
+      !solution_remaining.defined() ||
+      solution_remaining.Vector.Distance <= fixed(10)) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  infobox.SetValue(XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing,
-                   _T("T"));
+  infobox.SetValue(solution_remaining.Vector.Bearing, _T("T"));
 }
 
 void
 InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
 {
+  const GlideResult &solution_remaining =
+    XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.
-      Vector.Distance <= fixed(10)) {
+      !solution_remaining.defined() ||
+      solution_remaining. Vector.Distance <= fixed(10)) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   Angle Value =
-      (XCSoarInterface::Calculated().task_stats.current_leg.
-       solution_remaining.Vector.Bearing - XCSoarInterface::Basic().
-       TrackBearing);
+    solution_remaining.Vector.Bearing - XCSoarInterface::Basic().TrackBearing;
 
   SetValueBearingDifference(infobox, Value);
 }
@@ -83,18 +84,18 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
   }
   SetTitleFromWaypointName(infobox, way_point);
 
+  const GlideResult &solution_remaining =
+    XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.
-      Vector.Distance <= fixed(10)) {
+      !solution_remaining.defined() ||
+      solution_remaining.Vector.Distance <= fixed(10)) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   Angle Value =
-      (XCSoarInterface::Calculated().task_stats.current_leg.
-       solution_remaining.Vector.Bearing - XCSoarInterface::Basic().
-       TrackBearing);
+    solution_remaining.Vector.Bearing - XCSoarInterface::Basic().TrackBearing;
 
   SetValueBearingDifference(infobox, Value);
 
@@ -102,8 +103,7 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
   infobox.SetComment(way_point->Comment.c_str());
 
   // Set Color
-  if (XCSoarInterface::Calculated().task_stats.current_leg.
-      solution_remaining.is_final_glide())
+  if (solution_remaining.is_final_glide())
     // blue
     infobox.SetColor(2);
   else
@@ -142,14 +142,16 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
   // use proper non-terminal next task stats
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  const GlideResult &solution_remaining =
+    XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
+  if (!task_stats.task_valid || !solution_remaining.defined()) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserDistance(task_stats.current_leg.solution_remaining.Vector.Distance,
+  Units::FormatUserDistance(solution_remaining.Vector.Distance,
                             tmp, 32, false);
   infobox.SetValue(tmp);
 
@@ -231,15 +233,15 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
   // pilots want this to be assuming terminal flight to this wp
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  const GlideResult &next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
+  if (!task_stats.task_valid || !next_solution.defined()) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserAltitude(XCSoarInterface::Calculated().common_stats.next_solution.AltitudeDifference,
-                            tmp, 32, false);
+  Units::FormatUserAltitude(next_solution.AltitudeDifference, tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -252,15 +254,15 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
   // pilots want this to be assuming terminal flight to this wp
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  const GlideResult &next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
+  if (!task_stats.task_valid || !next_solution.defined()) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserAltitude(XCSoarInterface::Calculated().common_stats.next_solution.AltitudeRequired,
-                            tmp, 32, false);
+  Units::FormatUserAltitude(next_solution.AltitudeRequired, tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -319,14 +321,15 @@ InfoBoxContentNextLD::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
 {
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  if (!task_stats.task_valid ||
+      !task_stats.current_leg.solution_remaining.defined()) {
     infobox.SetInvalid();
     return;
   }
 
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
   // Set Value
   TCHAR tmp[32];
@@ -406,7 +409,8 @@ void
 InfoBoxContentFinalAltitudeDiff::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  if (!task_stats.task_valid ||
+      !task_stats.total.solution_remaining.defined()) {
     infobox.SetInvalid();
     return;
   }
@@ -425,7 +429,8 @@ void
 InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  if (!task_stats.task_valid ||
+      !task_stats.total.solution_remaining.defined()) {
     infobox.SetInvalid();
     return;
   }

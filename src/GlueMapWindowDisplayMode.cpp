@@ -149,7 +149,8 @@ GlueMapWindow::UpdateScreenAngle()
       (GetDisplayMode() == dmCircling) ?
           settings.OrientationCircling : settings.OrientationCruise;
 
-  if (orientation == TARGETUP)
+  if (orientation == TARGETUP &&
+      Calculated().task_stats.current_leg.solution_remaining.defined())
     visible_projection.SetScreenAngle(Calculated().task_stats.current_leg.
                                       solution_remaining.Vector.Bearing);
   else if (orientation == NORTHUP)
