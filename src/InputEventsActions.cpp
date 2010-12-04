@@ -1300,6 +1300,8 @@ InputEvents::eventSetup(const TCHAR *misc)
     dlgTeamCodeShowModal();
   else if (_tcscmp(misc, _T("Target")) == 0)
     dlgTargetShowModal();
+  else if (_tcscmp(misc, _T("Alternates")) == 0)
+    dlgAlternatesListShowModal(XCSoarInterface::main_window);
 
   trigger_redraw();
 }
