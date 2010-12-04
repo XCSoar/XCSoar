@@ -115,7 +115,7 @@ private:
 };
 
 CrossSectionWindow::CrossSectionWindow() :
-  airspace_database(NULL) {}
+  terrain(NULL), airspace_database(NULL) {}
 
 void
 CrossSectionWindow::Paint(Canvas &canvas)

@@ -27,6 +27,7 @@
 #include "Screen/PaintWindow.hpp"
 
 class Airspaces;
+class RasterTerrain;
 
 /**
  * A Window which renders a terrain and airspace cross-section
@@ -40,10 +41,14 @@ public:
   void set_airspaces(Airspaces *_airspace_database) {
     airspace_database = _airspace_database;
   }
+  void set_terrain(RasterTerrain *_terrain) {
+    terrain = _terrain;
+  }
 
 protected:
   virtual void on_paint(Canvas &canvas);
 
+  RasterTerrain *terrain;
   Airspaces *airspace_database;
 };
 
