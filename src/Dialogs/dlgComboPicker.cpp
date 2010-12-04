@@ -55,7 +55,7 @@ ComboPicker(SingleWindow &parent, const TCHAR *caption,
                     combo_list.size(),
                     combo_list.ComboPopupItemSavedIndex,
                     Layout::Scale(18),
-                    OnPaintComboPopupListItem,
+                    OnPaintComboPopupListItem, false,
                     help_callback);
 }
 

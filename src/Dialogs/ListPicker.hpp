@@ -38,7 +38,7 @@ typedef void (*ListHelpCallback_t)(unsigned item);
 int
 ListPicker(SingleWindow &parent, const TCHAR *caption,
            unsigned num_items, unsigned initial_value, unsigned item_height,
-           WndListFrame::PaintItemCallback_t paint_callback,
+           WndListFrame::PaintItemCallback_t paint_callback, bool update = false,
            ListHelpCallback_t help_callback = NULL);
 
 #endif

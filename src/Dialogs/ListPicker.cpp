@@ -69,6 +69,13 @@ OnCancelClicked(WndButton &Sender)
   wf->SetModalResult(mrCancel);
 }
 
+static void
+OnTimerNotify(WndForm &Sender)
+{
+  (void)Sender;
+  list_control->invalidate();
+}
+
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnCancelClicked),
@@ -78,7 +85,7 @@ static CallBackTableEntry CallBackTable[] = {
 int
 ListPicker(SingleWindow &parent, const TCHAR *caption,
            unsigned num_items, unsigned initial_value, unsigned item_height,
-           WndListFrame::PaintItemCallback_t paint_callback,
+           WndListFrame::PaintItemCallback_t paint_callback, bool update,
            ListHelpCallback_t _help_callback)
 {
   assert(num_items <= 0x7fffffff);
@@ -110,6 +117,9 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
     help_button->SetOnClickNotify(OnHelpClicked);
   else
     help_button->hide();
+
+  if (update)
+    wf->SetTimerNotify(OnTimerNotify);
 
   int result = wf->ShowModal() == mrOK
     ? (int)list_control->GetCursorIndex()
