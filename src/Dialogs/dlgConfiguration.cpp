@@ -2137,20 +2137,17 @@ void dlgConfigurationShowModal(void)
     SaveFormProperty(*wf, _T("prpAppInfoBoxColors"),
                      szProfileAppInfoBoxColors, Appearance.InfoBoxColors);
 
-  changed |= requirerestart |=
-    SaveFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
-                     szProfileAppGaugeVarioSpeedToFly,
-                     XCSoarInterface::main_window.vario->ShowSpeedToFly);
+  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
+                              szProfileAppGaugeVarioSpeedToFly,
+                              XCSoarInterface::main_window.vario->ShowSpeedToFly);
 
-  changed |= requirerestart |=
-    SaveFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
-                     szProfileAppGaugeVarioAvgText,
-                     XCSoarInterface::main_window.vario->ShowAvgText);
+  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
+                              szProfileAppGaugeVarioAvgText,
+                              XCSoarInterface::main_window.vario->ShowAvgText);
 
-  changed |= requirerestart |=
-    SaveFormProperty(*wf, _T("prpAppGaugeVarioGross"),
-                     szProfileAppGaugeVarioGross,
-                     XCSoarInterface::main_window.vario->ShowGross);
+  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioGross"),
+                              szProfileAppGaugeVarioGross,
+                              XCSoarInterface::main_window.vario->ShowGross);
 
   changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioMc"),
                               szProfileAppGaugeVarioMc,
