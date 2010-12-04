@@ -656,7 +656,7 @@ type=key
 data=0
 event=Setup Replay
 event=Mode default
-label=Logger\nReplay$(CheckReplay)
+label=Replay$(CheckReplay)
 location=9
 
 # -------------

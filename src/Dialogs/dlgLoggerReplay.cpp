@@ -43,7 +43,7 @@ OnStartClicked(WndButton &Sender)
 {
 	(void)Sender;
   WndProperty* wp;
-  wp = (WndProperty*)wf->FindByName(_T("prpIGCFile"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
@@ -101,7 +101,7 @@ dlgLoggerReplayShowModal(void)
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpIGCFile"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
