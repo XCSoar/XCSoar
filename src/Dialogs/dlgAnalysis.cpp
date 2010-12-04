@@ -267,6 +267,8 @@ Update(void)
 
   switch (page) {
   case ANALYSIS_PAGE_AIRSPACE:
+    csw->ReadBlackboard(XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
+                        XCSoarInterface::SettingsMap());
     csw->show();
     wGrid->hide();
     break;
@@ -384,6 +386,8 @@ OnCreateCrossSectionWindow(ContainerWindow &parent, int left, int top,
   csw->set(parent, left, top, width, height, style);
   csw->set_airspaces(&airspace_database);
   csw->set_terrain(terrain);
+  csw->ReadBlackboard(XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
+                      XCSoarInterface::SettingsMap());
   return csw;
 }
 

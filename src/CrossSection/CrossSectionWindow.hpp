@@ -25,6 +25,8 @@
 #define CROSS_SECTION_WINDOW_HPP
 
 #include "Screen/PaintWindow.hpp"
+#include "Blackboard.hpp"
+#include "SettingsMapBlackboard.hpp"
 
 class Airspaces;
 class RasterTerrain;
@@ -32,9 +34,17 @@ class RasterTerrain;
 /**
  * A Window which renders a terrain and airspace cross-section
  */
-class CrossSectionWindow : public PaintWindow {
+class CrossSectionWindow :
+  public PaintWindow,
+  public BaseBlackboard,
+  public SettingsMapBlackboard
+{
 public:
   CrossSectionWindow();
+
+  void ReadBlackboard(const NMEA_INFO &_gps_info,
+                      const DERIVED_INFO &_calculated_info,
+                      const SETTINGS_MAP &_settings_map);
 
   void Paint(Canvas &canvas);
 

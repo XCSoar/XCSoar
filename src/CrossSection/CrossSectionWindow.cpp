@@ -118,17 +118,24 @@ CrossSectionWindow::CrossSectionWindow() :
   terrain(NULL), airspace_database(NULL) {}
 
 void
+CrossSectionWindow::ReadBlackboard(const NMEA_INFO &_gps_info,
+                                   const DERIVED_INFO &_calculated_info,
+                                   const SETTINGS_MAP &_settings_map)
+{
+  gps_info = _gps_info;
+  calculated_info = _calculated_info;
+  settings_map = _settings_map;
+}
+
+void
 CrossSectionWindow::Paint(Canvas &canvas)
 {
   const RECT rc = get_client_rect();
-  const NMEA_INFO &nmea_info = XCSoarInterface::Basic();
-  const DERIVED_INFO &derived = XCSoarInterface::Calculated();
-  const SETTINGS_MAP &settings_map = XCSoarInterface::SettingsMap();
 
-  fixed hmin = max(fixed_zero, nmea_info.GPSAltitude - fixed(3300));
-  fixed hmax = max(fixed(3300), nmea_info.GPSAltitude + fixed(1000));
-  const GeoPoint p_start = nmea_info.Location;
-  const GeoVector vec(fixed(50000), nmea_info.TrackBearing);
+  fixed hmin = max(fixed_zero, gps_info.GPSAltitude - fixed(3300));
+  fixed hmax = max(fixed(3300), gps_info.GPSAltitude + fixed(1000));
+  const GeoPoint p_start = gps_info.Location;
+  const GeoVector vec(fixed(50000), gps_info.TrackBearing);
   const GeoPoint p_end = vec.end_point(p_start);
 
   Chart chart(canvas, rc);
@@ -140,7 +147,7 @@ CrossSectionWindow::Paint(Canvas &canvas)
 
   // draw airspaces
   if (airspace_database != NULL) {
-    AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, p_start, ToAircraftState(nmea_info));
+    AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, p_start, ToAircraftState(gps_info));
     airspace_database->visit_intersecting(p_start, vec, ivisitor);
   }
 
@@ -191,10 +198,10 @@ CrossSectionWindow::Paint(Canvas &canvas)
   }
 
   // draw aircraft trend line
-  if (nmea_info.GroundSpeed > fixed(10)) {
-    fixed t = vec.Distance / nmea_info.GroundSpeed;
-    chart.DrawLine(fixed_zero, nmea_info.GPSAltitude, vec.Distance,
-                   nmea_info.GPSAltitude + derived.Average30s * t,
+  if (gps_info.GroundSpeed > fixed(10)) {
+    fixed t = vec.Distance / gps_info.GroundSpeed;
+    chart.DrawLine(fixed_zero, gps_info.GPSAltitude, vec.Distance,
+                   gps_info.GPSAltitude + calculated_info.Average30s * t,
                    Chart::STYLE_BLUETHIN);
   }
 
@@ -205,7 +212,7 @@ CrossSectionWindow::Paint(Canvas &canvas)
 
     RasterPoint line[4];
     line[0].x = chart.screenX(fixed_zero);
-    line[0].y = chart.screenY(nmea_info.GPSAltitude);
+    line[0].y = chart.screenY(gps_info.GPSAltitude);
     line[1].x = rc.left;
     line[1].y = line[0].y;
     line[2].x = line[1].x;
