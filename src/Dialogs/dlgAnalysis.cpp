@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "CrossSection/CrossSectionWindow.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "SettingsComputer.hpp"
 #include "Math/FastMath.h"
@@ -58,6 +59,7 @@ static WndForm *wf = NULL;
 static WndOwnerDrawFrame *wGrid = NULL;
 static WndFrame *wInfo;
 static WndButton *wCalc = NULL;
+static CrossSectionWindow *csw = NULL;
 
 static void
 SetCalcVisibility(const bool visible)
@@ -133,12 +135,6 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
                    XCSoarInterface::SettingsMap(),
                    task->get_contest_solution(), task->get_trace_points());
     }
-    break;
-  case ANALYSIS_PAGE_AIRSPACE:
-    fs.RenderAirspace(canvas, rcgfx, XCSoarInterface::Basic(),
-                      XCSoarInterface::Calculated(),
-                      XCSoarInterface::SettingsMap(),
-                      airspace_database, terrain);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     if (protected_task_manager != NULL) {
@@ -269,10 +265,17 @@ Update(void)
     break;
   }
 
-  wGrid->set_visible(page < ANALYSIS_PAGE_COUNT);
-
-  if (wGrid != NULL)
+  switch (page) {
+  case ANALYSIS_PAGE_AIRSPACE:
+    csw->show();
+    wGrid->hide();
+    break;
+  default:
+    csw->hide();
+    wGrid->show();
     wGrid->invalidate();
+    break;
+  }
 }
 
 static void
@@ -372,7 +375,18 @@ OnCalcClicked(WndButton &Sender)
   Update();
 }
 
+static Window *
+OnCreateCrossSectionWindow(ContainerWindow &parent, int left, int top,
+                           unsigned width, unsigned height,
+                           const WindowStyle style)
+{
+  csw = new CrossSectionWindow();
+  csw->set(parent, left, top, width, height, style);
+  return csw;
+}
+
 static CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnCreateCrossSectionWindow),
   DeclareCallBackEntry(OnAnalysisPaint),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
