@@ -98,6 +98,16 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 using std::min;
 using std::max;
 
+static void
+trigger_redraw()
+{
+#ifdef ENABLE_OPENGL
+  CommonInterface::main_window.map.invalidate();
+#else
+  draw_thread->trigger_redraw();
+#endif
+}
+
 // -----------------------------------------------------------------------
 // Execution - list of things you can do
 // -----------------------------------------------------------------------
@@ -115,11 +125,7 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
                         XCSoarInterface::SettingsComputer().EnableSoundModes);
   }
 
-#ifdef ENABLE_OPENGL
-  CommonInterface::main_window.map.invalidate();
-#else
-  draw_thread->trigger_redraw();
-#endif
+  trigger_redraw();
 }
 
 void
