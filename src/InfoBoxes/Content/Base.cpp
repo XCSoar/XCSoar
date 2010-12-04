@@ -26,6 +26,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Math/Angle.hpp"
+#include "Units.hpp"
 
 #include <stdio.h>
 
@@ -87,10 +88,19 @@ InfoBoxContent::SetTitleFromWaypointName(InfoBoxWindow &infobox,
   FillInfoBoxWaypointName(infobox, waypoint, true);
 }
 
-
 void
 InfoBoxContent::SetCommentFromWaypointName(InfoBoxWindow &infobox,
                                            const Waypoint* waypoint)
 {
   FillInfoBoxWaypointName(infobox, waypoint, false);
+}
+
+void
+InfoBoxContent::SetValueFromDistance(InfoBoxWindow &infobox, fixed distance)
+{
+  TCHAR tmp[32];
+  Units::FormatUserDistance(distance, tmp, 32, false);
+  infobox.SetValue(tmp);
+
+  infobox.SetValueUnit(Units::DistanceUnit);
 }

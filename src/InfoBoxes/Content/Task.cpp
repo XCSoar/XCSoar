@@ -150,13 +150,7 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserDistance(solution_remaining.Vector.Distance,
-                            tmp, 32, false);
-  infobox.SetValue(tmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::DistanceUnit);
+  SetValueFromDistance(infobox, solution_remaining.Vector.Distance);
 }
 
 void
@@ -332,15 +326,9 @@ InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserDistance(common_stats.task_finished
-                            ? task_stats.current_leg.solution_remaining.Vector.Distance
-                            : task_stats.total.remaining.get_distance(),
-                            tmp, 32, false);
-  infobox.SetValue(tmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::DistanceUnit);
+  SetValueFromDistance(infobox, common_stats.task_finished ?
+                                task_stats.current_leg.solution_remaining.Vector.Distance :
+                                task_stats.total.remaining.get_distance());
 }
 
 void
@@ -557,12 +545,7 @@ InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserDistance(common_stats.vector_home.Distance, tmp, 32, false);
-  infobox.SetValue(tmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::DistanceUnit);
+  SetValueFromDistance(infobox, common_stats.vector_home.Distance);
 
   infobox.SetComment(common_stats.vector_home.Bearing);
 }
@@ -579,15 +562,11 @@ InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserDistance(common_stats.olc.distance, tmp, 32, false);
-  infobox.SetValue(tmp);
+  SetValueFromDistance(infobox, common_stats.olc.distance);
 
+  TCHAR tmp[32];
   _stprintf(tmp, _T("%.1f pts"), (double)common_stats.olc.score);
   infobox.SetComment(tmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::DistanceUnit);
 }
 
 bool
@@ -598,17 +577,12 @@ InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
     dlgAnalysisShowModal(XCSoarInterface::main_window, 7);
     return true;
 
-  case ibkUp:
-  case ibkDown:
-  case ibkLeft:
-  case ibkRight:
+  default:
     break;
   }
 
   return false;
 }
-
-
 
 void
 InfoBoxContentTaskAATime::Update(InfoBoxWindow &infobox)
@@ -711,13 +685,7 @@ InfoBoxContentTaskAADistance::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserDistance(task_stats.total.planned.get_distance(),
-                            tmp, 32, false);
-  infobox.SetValue(tmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::DistanceUnit);
+  SetValueFromDistance(infobox, task_stats.total.planned.get_distance());
 }
 
 void
@@ -730,13 +698,7 @@ InfoBoxContentTaskAADistanceMax::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserDistance(task_stats.distance_max,
-                            tmp, 32, false);
-  infobox.SetValue(tmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::DistanceUnit);
+  SetValueFromDistance(infobox, task_stats.distance_max);
 }
 
 void
@@ -749,13 +711,7 @@ InfoBoxContentTaskAADistanceMin::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserDistance(task_stats.distance_min,
-                            tmp, 32, false);
-  infobox.SetValue(tmp);
-
-  // Set Unit
-  infobox.SetValueUnit(Units::DistanceUnit);
+  SetValueFromDistance(infobox, task_stats.distance_min);
 }
 
 void

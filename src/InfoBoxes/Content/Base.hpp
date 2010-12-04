@@ -26,6 +26,7 @@ Copyright_License {
 
 #include <tchar.h>
 #include "Language.hpp"
+#include "fixed.hpp"
 
 class InfoBoxWindow;
 class Waypoint;
@@ -54,6 +55,7 @@ public:
                                          const Waypoint* waypoint);
 
   static void SetValueBearingDifference(InfoBoxWindow &infobox, Angle delta);
+  static void SetValueFromDistance(InfoBoxWindow &infobox, fixed distance);
 };
 
 #endif
