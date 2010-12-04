@@ -157,7 +157,7 @@ bool parse_args(int argc, char** argv)
       };
     /* getopt_long stores the option index here. */
     int option_index = 0;
-    
+
     int c = getopt_long (argc, argv, "s:v:i:n:t:r:a:f:x:",
                          long_options, &option_index);
     /* Detect the end of the options. */
@@ -211,6 +211,23 @@ bool parse_args(int argc, char** argv)
       break;
     case '?':
       /* getopt_long already printed an error message. */
+
+      for (unsigned i=0; i+1< sizeof(long_options)/sizeof(option); i++) {
+        switch (long_options[i].has_arg) {
+        case 0:
+          printf(" --%s %c\n", long_options[i].name, 
+                 long_options[i].val);
+          break;
+        case 1:
+          printf(" --%s -%c value\n", long_options[i].name, 
+                 long_options[i].val);
+          break;
+        case 2:
+          printf(" --%s -%c [value]\n", long_options[i].name, 
+                 long_options[i].val);
+        }
+      }
+      abort();
       return false;
       break;      
     default:
