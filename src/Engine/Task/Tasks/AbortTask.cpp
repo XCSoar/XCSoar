@@ -151,7 +151,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
                           const bool only_airfield,
                           const bool final_glide)
 {
-  if (task_full()) {
+  if (task_full() || approx_waypoints.empty()) {
     return false;
   }
   bool found_final_glide = false;
@@ -250,7 +250,7 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
 
   WaypointVisitorVector wvv(approx_waypoints);
   waypoints.visit_within_radius(state.Location, abort_range(state), wvv);
-  if (!approx_waypoints.size()) {
+  if (approx_waypoints.empty()) {
     /**
      * \todo
      * - increase range
