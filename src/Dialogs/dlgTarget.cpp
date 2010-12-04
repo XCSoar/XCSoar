@@ -298,7 +298,7 @@ RefreshCalculator()
   wp = (WndProperty*)wf->FindByName(_T("prpAATDelta")); // same as infobox
   if (wp) {
     DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
-    df->Set((aatTime - aattimeEst) / fixed(60));
+    df->Set((aattimeEst - aatTime) / fixed(60));
     wp->RefreshDisplay();
   }
 
