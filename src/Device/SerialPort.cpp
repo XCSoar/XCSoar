@@ -221,18 +221,14 @@ SerialPort::run()
       continue;
 
     // Read the data from the serial port.
-    if (!ReadFile(hPort, inbuf, 1024, &dwBytesTransferred, NULL)) {
-      // ignore everything until started
+    if (!ReadFile(hPort, inbuf, 1024, &dwBytesTransferred, NULL) ||
+        dwBytesTransferred == 0) {
       Sleep(100);
       continue;
     }
 
     for (unsigned int j = 0; j < dwBytesTransferred; j++)
       ProcessChar(inbuf[j]);
-
-    Sleep(50); // JMW20070515: give port some time to
-    // fill... prevents ReadFile from causing the
-    // thread to take up too much CPU
   }
 #endif /* !HAVE_POSIX */
 
