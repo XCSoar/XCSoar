@@ -825,6 +825,9 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
       ProgressGlue::SetValue(reader.tell() * 1024 / file_size);
   }
 
+  if (LineCount == 0)
+    return false;
+
   if (filetype == ftUnknown) {
     MessageBoxX(_("Unknown Filetype."), _("Airspace"), MB_OK);
     return false;
