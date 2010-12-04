@@ -57,13 +57,8 @@ InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
 
   SetValueBearingDifference(infobox, Value);
 
-  // Set Color
-  if (solution.glide_reachable(true))
-    // blue if reachable in final glide
-    infobox.SetColor(2);
-  else
-    // black
-    infobox.SetColor(0);
+  // Set Color (blue/black)
+  infobox.SetColor(solution.glide_reachable(true) ? 2 : 0);
 }
 
 bool
@@ -120,13 +115,9 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
   } else {
     infobox.SetInvalid();
   }
-  // Set Color
-  if (solution.glide_reachable(true))
-    // blue if reachable in final glide
-    infobox.SetColor(2);
-  else
-    // black
-    infobox.SetColor(0);
+
+  // Set Color (blue/black)
+  infobox.SetColor(solution.glide_reachable(true) ? 2 : 0);
 }
 
 bool
