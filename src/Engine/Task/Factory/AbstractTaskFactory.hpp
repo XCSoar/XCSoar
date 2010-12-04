@@ -112,6 +112,27 @@ public:
   typedef std::vector<LegalPointType_t> LegalPointVector;
 
   /**
+   * Task Validation Error Types
+   */
+enum TaskValidationErrorType_t {
+  NO_VALID_START,
+  NO_VALID_FINISH,
+  TASK_NOT_CLOSED,
+  TASK_NOT_HOMOGENEOUS,
+  INCORRECT_NUMBER_TURNPOINTS,
+  EXCEEDS_MAX_TURNPOINTS,
+  UNDER_MIN_TURNPOINTS,
+  TURNPOINTS_NOT_UNIQUE,
+  INVALID_FAI_TRIANGLE_GEOMETRY,
+  EMPTY_TASK
+};
+
+  /**
+   * Vector of errors returned by validation routine
+   */
+typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
+
+  /**
    * Replace taskpoint in ordered task.
    * May fail if the candidate is the wrong type.
    * Does nothing (but returns true) if replacement is equivalent
@@ -343,12 +364,11 @@ public:
 
   /**
    * Check whether task is complete and valid according to factory rules
+   * Adds error types to m_validation_errors
    *
    * @return True if task is valid according to factory rules
    */
-  gcc_pure
-  virtual bool validate() const = 0;
-
+  virtual bool validate();
   /**
    * Retrieve settings from task
    *
@@ -464,6 +484,14 @@ public:
    */
   bool mutate_tps_to_task_type();
 
+  /**
+  * Call to validate() populates this vector
+  * @return returns vector of errors for current task
+  */
+  gcc_pure
+  TaskValidationErrorVector getValidationErrors();
+
+
 protected:
 
   /**
@@ -489,6 +517,8 @@ protected:
   LegalPointVector m_intermediate_types;
   /** list of valid finish types, for specialisation */
   LegalPointVector m_finish_types;
+  /** list of errors returned by task validation */
+  TaskValidationErrorVector m_validation_errors;
 
   /** 
    * Check whether the supplied position can be a StartPoint
@@ -521,6 +551,13 @@ protected:
   gcc_pure
   bool is_position_finish(const unsigned position) const;
 
+  /**
+   * Inserts the validation error type into the vector of validation errors
+   *
+   * @param e The validation error type to be added
+   */
+  void addValidationError(TaskValidationErrorType_t e);
+
 
 private:
   /**
@@ -532,7 +569,14 @@ private:
    *
    * @return True if task is changed
    */
-  bool mutate_closed_finish_per_task_type();
+   bool mutate_closed_finish_per_task_type();
+
+  /**
+  * Clears the vector of validation errors for the current task
+  */
+  void clearValidationErrors();
+
+
 };
 
 #endif

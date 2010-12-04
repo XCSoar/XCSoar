@@ -581,6 +581,71 @@ AbstractTaskFactory::getValidTypes(unsigned position) const
   return v;
 }
 
+void
+AbstractTaskFactory::addValidationError(TaskValidationErrorType_t e)
+{
+  m_validation_errors.push_back(e);
+}
+
+void
+AbstractTaskFactory::clearValidationErrors()
+{
+  m_validation_errors.clear();
+}
+
+AbstractTaskFactory::TaskValidationErrorVector
+AbstractTaskFactory::getValidationErrors()
+{
+  return m_validation_errors;
+}
+
+bool
+AbstractTaskFactory::validate()
+{
+  clearValidationErrors();
+
+  bool valid = true;
+
+  if (!m_task.has_start()) {
+    addValidationError(NO_VALID_START);
+    valid = false;
+  }
+  if (!m_task.has_finish()) {
+    addValidationError(NO_VALID_FINISH);
+    valid = false;
+  }
+
+  if (get_ordered_task_behaviour().is_closed && !is_closed()) {
+    addValidationError(TASK_NOT_CLOSED);
+    valid = false;
+  }
+
+  if (get_ordered_task_behaviour().is_fixed_size()) {
+    if (m_task.task_size() != get_ordered_task_behaviour().max_points) {
+      addValidationError(INCORRECT_NUMBER_TURNPOINTS);
+      valid = false;
+    }
+  } else {
+    if (m_task.task_size() < get_ordered_task_behaviour().min_points) {
+      addValidationError(UNDER_MIN_TURNPOINTS);
+      valid = false;
+    }
+    if (m_task.task_size() > get_ordered_task_behaviour().max_points) {
+      addValidationError(EXCEEDS_MAX_TURNPOINTS);
+      valid = false;
+    }
+  }
+
+  /*Todo implement is_homogeneous
+   if (get_ordered_task_behaviour().homogeneous_tps &&
+   !is_homogeneous()) {
+   addValidationError(TASK_NOT_HOMOGENEOUS);
+   valid = false;
+   }
+   */
+  return valid;
+}
+
 AbstractTaskFactory::LegalPointVector 
 AbstractTaskFactory::getValidIntermediateTypes(unsigned position) const
 {
