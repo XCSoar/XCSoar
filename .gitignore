@@ -1,5 +1,6 @@
 results/res-*
 .stgit*
+.together/*
 .deps
 *.gcov
 *~
@@ -29,4 +30,10 @@ debian/stamp-*
 debian/tmp
 debian/*.substvars
 debian/xcsoar
+*.pyc
 rasp/data
+.#*
+callgrind.out.*
+tmp/
+.gdbinit
+test/data/private
