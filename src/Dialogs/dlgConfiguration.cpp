@@ -124,7 +124,6 @@ static const unsigned num_port_types =
 static bool changed = false;
 static bool taskchanged = false;
 static bool requirerestart = false;
-static bool utcchanged = false;
 static bool waypointneedsave = false;
 static config_page current_page;
 static WndForm *wf = NULL;
@@ -454,20 +453,17 @@ SetLocalTime(void)
 static void
 OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
-  DataFieldFloat &df = *(DataFieldFloat *)Sender;
-  //  WndProperty* wp;
-  int ival;
-
-  switch(Mode){
+  switch(Mode) {
   case DataField::daChange:
-    ival = iround(df.GetAsFixed() * 3600);
-    if (XCSoarInterface::SettingsComputer().UTCOffset != ival) {
+  {
+    DataFieldFloat &df = *(DataFieldFloat *)Sender;
+    int ival = iround(df.GetAsFixed() * 3600);
+    if (XCSoarInterface::SettingsComputer().UTCOffset != ival)
       XCSoarInterface::SetSettingsComputer().UTCOffset = ival;
-      utcchanged = true;
-    }
+
     SetLocalTime();
     break;
-
+  }
   case DataField::daInc:
   case DataField::daDec:
   case DataField::daSpecial:
@@ -1510,7 +1506,6 @@ PrepareConfigurationDialog()
   changed = false;
   taskchanged = false;
   requirerestart = false;
-  utcchanged = false;
   waypointneedsave = false;
 }
 
@@ -1633,7 +1628,7 @@ void dlgConfigurationShowModal(void)
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     int ival = iround(df.GetAsFixed() * 3600);
-    if ((settings_computer.UTCOffset != ival) || (utcchanged)) {
+    if (settings_computer.UTCOffset != ival) {
       settings_computer.UTCOffset = ival;
 
       // have to do this because registry variables can't be negative!
