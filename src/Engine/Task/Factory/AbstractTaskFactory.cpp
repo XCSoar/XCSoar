@@ -636,13 +636,10 @@ AbstractTaskFactory::validate()
     }
   }
 
-  /*Todo implement is_homogeneous
-   if (get_ordered_task_behaviour().homogeneous_tps &&
-   !is_homogeneous()) {
-   addValidationError(TASK_NOT_HOMOGENEOUS);
-   valid = false;
-   }
-   */
+   if (get_ordered_task_behaviour().homogeneous_tps && !is_homogeneous()) {
+    addValidationError(TASK_NOT_HOMOGENEOUS);
+    valid = false;
+  }
   return valid;
 }
 
@@ -701,6 +698,30 @@ AbstractTaskFactory::is_unique() const
   return true;
 }
 
+bool
+AbstractTaskFactory::is_homogeneous() const
+{
+  bool valid = true;
+
+  const unsigned size = m_task.task_size();
+
+  if (size > 2) {
+    LegalPointType_t homogtype = getType(m_task.get_tp(1));
+
+    for (unsigned i = 2; i < size; i++) {
+      OrderedTaskPoint *tp = m_task.get_tp(i);
+      if ((tp->type == TaskPoint::FINISH)) {
+        ; // don't check a valid finish point
+      } else {
+        if (getType(tp) != homogtype) {
+          valid = false;
+          break;
+        }
+      }
+    }
+  }
+  return valid;
+}
 
 bool
 AbstractTaskFactory::mutate_tps_to_task_type()

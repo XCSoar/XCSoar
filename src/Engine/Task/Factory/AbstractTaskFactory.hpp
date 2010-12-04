@@ -442,6 +442,14 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
   bool is_unique() const;
 
   /**
+   * Determines whether a task's intermediate points are homogeneous
+   *
+   * @return true if points are homogeneous
+  */
+  gcc_pure
+  bool is_homogeneous() const;
+
+  /**
    * Determine if a type is valid for a FinishPoint
    *
    * @param type Type to check
