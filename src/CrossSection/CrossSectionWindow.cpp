@@ -201,7 +201,6 @@ CrossSectionWindow::Paint(Canvas &canvas)
 
   // draw aircraft
   {
-    int delta;
     canvas.white_pen();
     canvas.white_brush();
 
@@ -210,9 +209,8 @@ CrossSectionWindow::Paint(Canvas &canvas)
     line[0].y = chart.screenY(nmea_info.GPSAltitude);
     line[1].x = rc.left;
     line[1].y = line[0].y;
-    delta = (line[0].x - line[1].x);
     line[2].x = line[1].x;
-    line[2].y = line[0].y - delta / 2;
+    line[2].y = line[0].y - (line[0].x - line[1].x) / 2;
     line[3].x = (line[1].x + line[0].x) / 2;
     line[3].y = line[0].y;
     canvas.polygon(line, 4);
