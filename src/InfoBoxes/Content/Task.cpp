@@ -102,13 +102,8 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
   // Set Comment
   infobox.SetComment(way_point->Comment.c_str());
 
-  // Set Color
-  if (solution_remaining.is_final_glide())
-    // blue
-    infobox.SetColor(2);
-  else
-    // black
-    infobox.SetColor(0);
+  // Set Color (blue/black)
+  infobox.SetColor(solution_remaining.is_final_glide() ? 2 : 0);
 }
 
 bool
@@ -662,17 +657,10 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
     infobox.SetComment(_T(""));
   }
 
-  // Set Color
-  if (negative(diff))
-    // Red
-    infobox.SetColor(1);
-  else if (task_stats.total.TimeRemaining <
-           common_stats.aat_time_remaining + fixed(5))
-    // Blue
-    infobox.SetColor(2);
-  else
-    // Black
-    infobox.SetColor(0);
+  // Set Color (red/blue/black)
+  infobox.SetColor(negative(diff) ? 1 :
+                   task_stats.total.TimeRemaining <
+                       common_stats.aat_time_remaining + fixed(5) ? 2 : 0);
 }
 
 void
