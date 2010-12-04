@@ -43,10 +43,7 @@ CommonStats::reset()
   current_bugs = fixed_one;
   current_ballast = fixed_zero;
 
-  olc.score = fixed_zero;
-  olc.distance = fixed_zero;
-  olc.time = fixed_zero;
-  olc.speed = fixed_zero;
+  olc.reset();
 
   reset_task();
 }
