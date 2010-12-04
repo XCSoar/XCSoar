@@ -21,11 +21,13 @@
  */
 #include "GrahamScan.hpp"
 
+/*
 static bool
 operator==(const SearchPoint& s1, const SearchPoint& s2)
 {
   return s1.equals(s2);
 }
+*/
 
 static bool
 sortleft (const SearchPoint& sp1, const SearchPoint& sp2)
@@ -33,8 +35,8 @@ sortleft (const SearchPoint& sp1, const SearchPoint& sp2)
   return sp1.sort(sp2);
 }
 
-GrahamScan::GrahamScan(const SearchPointVector& sps):
-  raw_points(sps.begin(), sps.end()), raw_vector(sps)
+GrahamScan::GrahamScan(SearchPointVector& sps):
+  raw_points(sps.begin(), sps.end()), raw_vector(sps), size(sps.size())
 {
 }
 
@@ -73,8 +75,8 @@ void GrahamScan::partition_points()
 
   GeoPoint loclast = left->get_location();
 
-  upper_partition_points.reserve(raw_vector.size());
-  lower_partition_points.reserve(raw_vector.size());
+  upper_partition_points.reserve(size);
+  lower_partition_points.reserve(size);
 
   for (std::list<SearchPoint>::iterator i = raw_points.begin(); 
        i != raw_points.end(); ) {
@@ -183,18 +185,16 @@ int GrahamScan::direction( const GeoPoint& p0,
 }
 
 
-SearchPointVector GrahamScan::prune_interior(bool *changed)
+bool 
+GrahamScan::prune_interior()
 {
   SearchPointVector res;
-  res.reserve(raw_vector.size());
+  res.reserve(size);
 
-  if (raw_points.size()<3) {
+  if (size<3) {
     std::copy(raw_points.begin(), raw_points.end(),
               std::back_inserter(res));
-    if (changed) {
-      *changed = true;
-    }
-    return res;
+    return false;
     // nothing to do
   }
 
@@ -208,12 +208,14 @@ SearchPointVector GrahamScan::prune_interior(bool *changed)
     res.push_back(*upper_hull[i]);
   }
 
-  if (changed) {
-    *changed = res.size() != raw_vector.size();
-    if (!*changed) {
-      *changed = !std::equal( res.begin(), res.end(), raw_vector.begin() );
-    }
-  }
+// if (!has_changed) {
+//      *changed = !std::equal(res.begin(), res.end(), raw_vector.begin() );
+//    }
 
-  return res;
+  if (res.size() != size) {
+    raw_vector.swap(res);
+    return true;
+  } else {
+    return false;
+  }
 }

@@ -27,21 +27,16 @@
 bool 
 prune_interior(SearchPointVector& spv)
 {
-  bool changed=false;
   GrahamScan gs(spv);
-  spv = gs.prune_interior(&changed);
-  return changed;
+  return gs.prune_interior();
 }
 
 bool 
 is_convex(const SearchPointVector& spv)
 {
-  bool changed=false;
-  GrahamScan gs(spv);
-  size_t size_before = spv.size();
-  SearchPointVector res;
-  res = gs.prune_interior(&changed);
-  return res.size() != size_before;
+  SearchPointVector copy = spv;
+  GrahamScan gs(copy);
+  return !gs.prune_interior();
 }
 
 void 

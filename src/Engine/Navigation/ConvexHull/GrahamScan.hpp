@@ -40,16 +40,14 @@ public :
  * 
  * @param sps Input vector of points (may be unordered)
  */
-  GrahamScan(const SearchPointVector& sps);
+  GrahamScan(SearchPointVector& sps);
 
 /** 
  * Perform convex hull transformation
  * 
- * @param changed If supplied, will return status as to whether input vector was altered (pruned) or not
- * 
- * @return Vector representing convex hull of input
+ * @return changed Return status as to whether input vector was altered (pruned) or not
  */
-  SearchPointVector prune_interior(bool *changed=NULL);
+  bool prune_interior();
 
 private :
   void partition_points();
@@ -70,7 +68,8 @@ private :
   std::vector< SearchPoint* > lower_partition_points;
   std::vector< SearchPoint* > lower_hull;
   std::vector< SearchPoint* > upper_hull;
-  const SearchPointVector &raw_vector;
+  SearchPointVector &raw_vector;
+  const unsigned size;
 };
 
 
