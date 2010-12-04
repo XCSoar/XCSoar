@@ -84,8 +84,6 @@ bool AIRSPACE_ALT::is_below  (const AIRCRAFT_STATE& state,
 }
 
 fixed AIRSPACE_ALT::get_altitude(const AIRCRAFT_STATE& state) const {
-  if (Base== abAGL) {
-    return AGL + (state.NavAltitude-state.AltitudeAGL);
-  }
-  return Altitude;
+  return (Base == abAGL) ?
+         AGL + (state.NavAltitude - state.AltitudeAGL) : Altitude;
 }
