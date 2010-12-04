@@ -160,13 +160,10 @@ CrossSectionWindow::Paint(Canvas &canvas)
 
     RasterPoint points[2 + AIRSPACE_SCANSIZE_X];
 
-    RasterPoint pf0, pf1;
-    pf0.x = chart.screenX(vec.Distance);
-    pf0.y = chart.screenY(fixed_zero);
-    points[0] = pf0;
-    pf1.x = chart.screenX(fixed_zero);
-    pf1.y = chart.screenY(fixed_zero);
-    points[1] = pf1;
+    points[0].x = chart.screenX(vec.Distance);
+    points[0].y = chart.screenY(fixed_zero);
+    points[1].x = chart.screenX(fixed_zero);
+    points[1].y = chart.screenY(fixed_zero);
 
     unsigned i = 2;
     for (unsigned j = 0; j < AIRSPACE_SCANSIZE_X; ++j) {
