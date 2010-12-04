@@ -60,6 +60,8 @@ int dlgAirspacePatternsShowModal();
 void dlgAirspaceShowModal(bool colored);
 void dlgAirspaceSelect();
 
+void dlgAlternatesListShowModal(SingleWindow &parent);
+
 const Waypoint *
 dlgWayPointSelect(SingleWindow &parent,
                   const GeoPoint &location);
