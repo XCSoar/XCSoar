@@ -136,7 +136,6 @@ CrossSectionWindow::Paint(Canvas &canvas)
   fixed hmax = max(fixed(3300), gps_info.GPSAltitude + fixed(1000));
   const GeoPoint p_start = gps_info.Location;
   const GeoVector vec(fixed(50000), gps_info.TrackBearing);
-  const GeoPoint p_end = vec.end_point(p_start);
 
   Chart chart(canvas, rc);
   chart.ResetScale();
@@ -153,6 +152,8 @@ CrossSectionWindow::Paint(Canvas &canvas)
 
   // draw terrain
   if (terrain != NULL) {
+    const GeoPoint p_end = vec.end_point(p_start);
+
     RasterTerrain::Lease map(*terrain);
 
     RasterPoint points[2 + AIRSPACE_SCANSIZE_X];
