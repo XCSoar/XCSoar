@@ -125,17 +125,16 @@ CrossSectionWindow::Paint(Canvas &canvas)
   const DERIVED_INFO &derived = XCSoarInterface::Calculated();
   const SETTINGS_MAP &settings_map = XCSoarInterface::SettingsMap();
 
-  static const fixed range(50000);
   fixed hmin = max(fixed_zero, nmea_info.GPSAltitude - fixed(3300));
   fixed hmax = max(fixed(3300), nmea_info.GPSAltitude + fixed(1000));
   const GeoPoint p_start = nmea_info.Location;
-  const GeoVector vec(range, nmea_info.TrackBearing);
+  const GeoVector vec(fixed(50000), nmea_info.TrackBearing);
   const GeoPoint p_end = vec.end_point(p_start);
 
   Chart chart(canvas, rc);
   chart.ResetScale();
   chart.ScaleXFromValue(fixed_zero);
-  chart.ScaleXFromValue(range);
+  chart.ScaleXFromValue(vec.Distance);
   chart.ScaleYFromValue(hmin);
   chart.ScaleYFromValue(hmax);
 
@@ -152,7 +151,7 @@ CrossSectionWindow::Paint(Canvas &canvas)
     RasterPoint points[2 + AIRSPACE_SCANSIZE_X];
 
     RasterPoint pf0, pf1;
-    pf0.x = chart.screenX(range);
+    pf0.x = chart.screenX(vec.Distance);
     pf0.y = chart.screenY(fixed_zero);
     points[0] = pf0;
     pf1.x = chart.screenX(fixed_zero);
@@ -176,7 +175,7 @@ CrossSectionWindow::Paint(Canvas &canvas)
       }
 
       RasterPoint p;
-      p.x = chart.screenX(t_this * range);
+      p.x = chart.screenX(t_this * vec.Distance);
       p.y = chart.screenY(fixed(h));
 
       points[i++] = p;
@@ -193,8 +192,8 @@ CrossSectionWindow::Paint(Canvas &canvas)
 
   // draw aircraft trend line
   if (nmea_info.GroundSpeed > fixed(10)) {
-    fixed t = range / nmea_info.GroundSpeed;
-    chart.DrawLine(fixed_zero, nmea_info.GPSAltitude, range,
+    fixed t = vec.Distance / nmea_info.GroundSpeed;
+    chart.DrawLine(fixed_zero, nmea_info.GPSAltitude, vec.Distance,
                    nmea_info.GPSAltitude + derived.Average30s * t,
                    Chart::STYLE_BLUETHIN);
   }
