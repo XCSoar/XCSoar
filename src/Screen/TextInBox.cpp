@@ -79,9 +79,7 @@ RenderShadowedText(Canvas &canvas, const TCHAR* text, int x, int y)
 
   canvas.set_text_color(Color::WHITE);
   canvas.text(x + 1, y, text);
-  canvas.text(x + 2, y, text);
   canvas.text(x - 1, y, text);
-  canvas.text(x - 2, y, text);
   canvas.text(x, y + 1, text);
   canvas.text(x, y - 1, text);
 
