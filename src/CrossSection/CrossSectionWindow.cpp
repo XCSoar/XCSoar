@@ -35,6 +35,8 @@
 #include "Terrain/RasterTerrain.hpp"
 #include "Units.hpp"
 
+#define AIRSPACE_SCANSIZE_X 16
+
 class AirspaceIntersectionVisitorSlice: public AirspaceIntersectionVisitor
 {
 public:
