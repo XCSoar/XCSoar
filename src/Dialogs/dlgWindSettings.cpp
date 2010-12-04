@@ -122,7 +122,7 @@ dlgWindSettingsShowModal(void)
     if (wp != NULL) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
       XCSoarInterface::SetSettingsComputer().ManualWind.norm =
-        Units::ToSysSpeed(df.GetAsFixed());
+        Units::ToSysWindSpeed(df.GetAsFixed());
     }
 
     wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
