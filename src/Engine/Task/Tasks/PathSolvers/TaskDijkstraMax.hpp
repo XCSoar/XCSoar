@@ -45,7 +45,7 @@ public:
   bool distance_max();
 
 private:
-  void save();
+  virtual void save();
 };
 
 #endif

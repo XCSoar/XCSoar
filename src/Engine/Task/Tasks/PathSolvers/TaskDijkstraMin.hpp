@@ -50,7 +50,7 @@ public:
   bool distance_min(const SearchPoint& location);
 
 private:
-  void save();
+  virtual void save();
 };
 
 #endif

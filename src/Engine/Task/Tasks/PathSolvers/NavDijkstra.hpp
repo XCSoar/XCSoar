@@ -64,9 +64,11 @@ public:
    * array
    */
   void set_stages(const unsigned _num_stages) {
-    assert(num_stages <= MAX_STAGES);
+    assert(_num_stages <= MAX_STAGES);
     num_stages =_num_stages;
-    std::fill(solution, solution + num_stages, T());
+    if (num_stages) {
+      std::fill(solution, solution + num_stages, T());
+    }
   }
 
 protected:

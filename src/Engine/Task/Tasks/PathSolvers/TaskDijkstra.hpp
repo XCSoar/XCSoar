@@ -53,8 +53,9 @@ public:
    * Constructor
    *
    * @param _task The task to find max/min distances for
+   * @param is_min Whether this will be used to minimise or maximise distances
    */
-  TaskDijkstra(OrderedTask& _task);
+  TaskDijkstra(OrderedTask& _task, const bool is_min);
 
   /**
    * Search task points for targets within OZs to produce the
@@ -83,6 +84,8 @@ public:
 
 protected:
   const SearchPoint &get_point(const ScanTaskPoint &sp) const;
+  bool run();
+  virtual void save() = 0;
 
   /**
    * Update internal details required from the task
@@ -94,6 +97,8 @@ protected:
 
   OrderedTask& task;
   unsigned active_stage;
+
+  DijkstraTaskPoint dijkstra;
 
 private:
   void calculate_sizes();

@@ -24,8 +24,6 @@
 #include "Task/TaskEvents.hpp"
 #include "Task/TaskAdvance.hpp"
 #include "BaseTask/OrderedTaskPoint.hpp"
-#include "PathSolvers/TaskDijkstraMin.hpp"
-#include "PathSolvers/TaskDijkstraMax.hpp"
 #include "TaskSolvers/TaskMacCreadyTravelled.hpp"
 #include "TaskSolvers/TaskMacCreadyRemaining.hpp"
 #include "TaskSolvers/TaskMacCreadyTotal.hpp"
@@ -117,7 +115,6 @@ OrderedTask::scan_distance_min(const GeoPoint &location, bool full)
 {
   if (full) {
     SearchPoint ac(location, task_projection);
-    TaskDijkstraMin dijkstra_min(*this);
     dijkstra_min.distance_min(ac);
     m_location_min_last = location;
   }
@@ -140,7 +137,6 @@ OrderedTask::scan_distance_max()
     activeTaskPoint--;
     ts->scan_active(tps[activeTaskPoint]);
   }
-  TaskDijkstraMax dijkstra_max(*this);
   dijkstra_max.distance_max();
 
   if (atp) {
@@ -714,7 +710,9 @@ OrderedTask::OrderedTask(TaskEvents &te,
   factory_mode(FACTORY_FAI_GENERAL),
   active_factory(NULL),
   m_ordered_behaviour(tb.ordered_defaults),
-  task_advance(m_ordered_behaviour)
+  task_advance(m_ordered_behaviour),
+  dijkstra_min(*this),
+  dijkstra_max(*this)
 {
   active_factory = new FAITaskFactory(*this, task_behaviour);
   active_factory->update_ordered_task_behaviour(m_ordered_behaviour);

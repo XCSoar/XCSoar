@@ -23,9 +23,10 @@
 #include "TaskDijkstra.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 
-TaskDijkstra::TaskDijkstra(OrderedTask& _task) :
-  NavDijkstra<SearchPoint> (MAX_STAGES),
-  task(_task)
+TaskDijkstra::TaskDijkstra(OrderedTask& _task, bool is_min) :
+  NavDijkstra<SearchPoint> (0),
+  task(_task),
+  dijkstra(is_min)
 {
 }
 
@@ -86,3 +87,12 @@ TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
                   distance(destination, currentLocation));
 }
 
+bool
+TaskDijkstra::run()
+{
+  const bool retval = distance_general(dijkstra);
+  if (retval)
+    save();
+  dijkstra.clear();
+  return retval;
+}

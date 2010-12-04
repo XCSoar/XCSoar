@@ -24,7 +24,7 @@
 #include "Task/Tasks/OrderedTask.hpp"
 
 TaskDijkstraMin::TaskDijkstraMin(OrderedTask& _task) :
-  TaskDijkstra(_task)
+  TaskDijkstra(_task, true)
 {
 }
 
@@ -36,16 +36,10 @@ TaskDijkstraMin::distance_min(const SearchPoint &currentLocation)
 
   const ScanTaskPoint start(max(1, (int)active_stage) - 1, 0);
 
-  // dont reserve queue size because this is temporary
-  DijkstraTaskPoint dijkstra(start, true, 0);
+  dijkstra.restart(start);
   if (active_stage)
     add_start_edges(dijkstra, currentLocation);
-
-  const bool retval = distance_general(dijkstra);
-  if (retval)
-    save();
-
-  return retval;
+  return run();
 }
 
 

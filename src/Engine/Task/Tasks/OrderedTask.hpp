@@ -30,7 +30,8 @@
 #include <vector>
 #include "Util/Serialisable.hpp"
 #include "GlideSolvers/MacCready.hpp"
-
+#include "PathSolvers/TaskDijkstraMin.hpp"
+#include "PathSolvers/TaskDijkstraMax.hpp"
 #include "Task/TaskAdvanceSmart.hpp"
 
 class OrderedTaskPoint;
@@ -699,6 +700,8 @@ private:
   AbstractTaskFactory* active_factory;
   OrderedTaskBehaviour m_ordered_behaviour;
   TaskAdvanceSmart task_advance;
+  TaskDijkstraMin dijkstra_min;
+  TaskDijkstraMax dijkstra_max;
 
   bool allow_incremental_boundary_stats(const AIRCRAFT_STATE &state) const;
 

@@ -24,7 +24,7 @@
 #include "Task/Tasks/OrderedTask.hpp"
 
 TaskDijkstraMax::TaskDijkstraMax(OrderedTask& _task) :
-  TaskDijkstra(_task)
+  TaskDijkstra(_task, false)
 {
 }
 
@@ -35,15 +35,8 @@ TaskDijkstraMax::distance_max()
     return false;
 
   const ScanTaskPoint start(0, 0);
-  
-  // dont reserve queue size because this is temporary
-  DijkstraTaskPoint dijkstra(start, false, 0);
-
-  const bool retval = distance_general(dijkstra);
-  if (retval)
-    save();
-
-  return retval;
+  dijkstra.restart(start);
+  return run();
 }
 
 
