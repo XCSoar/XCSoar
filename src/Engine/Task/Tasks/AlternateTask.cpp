@@ -27,7 +27,7 @@
 
 #include <limits.h>
 
-const unsigned AlternateTask::max_alternates = 3;
+const unsigned AlternateTask::max_alternates = 6;
 
 AlternateTask::AlternateTask(TaskEvents &te, 
                              const TaskBehaviour &tb,
