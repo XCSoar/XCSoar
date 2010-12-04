@@ -70,13 +70,8 @@ bool
 InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
-  case ibkUp:
-  case ibkDown:
-  case ibkLeft:
-  case ibkRight:
-    break;
-
   case ibkEnter:
+  {
     const AbortTask::AlternateVector alternates =
         protected_task_manager.getAlternates();
     const Waypoint *wp = (alternates.size() > index) ?
@@ -85,6 +80,9 @@ InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
       dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *wp);
       return true;
     }
+    break;
+  }
+  default:
     break;
   }
 
@@ -135,13 +133,8 @@ bool
 InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
-  case ibkUp:
-  case ibkDown:
-  case ibkLeft:
-  case ibkRight:
-    break;
-
   case ibkEnter:
+  {
     const AbortTask::AlternateVector alternates =
         protected_task_manager.getAlternates();
     const Waypoint *wp = (alternates.size() > index) ?
@@ -150,6 +143,9 @@ InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
       dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *wp);
       return true;
     }
+    break;
+  }
+  default:
     break;
   }
 
