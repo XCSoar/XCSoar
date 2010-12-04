@@ -35,7 +35,6 @@ struct DERIVED_INFO;
 struct SETTINGS_COMPUTER;
 struct SETTINGS_MAP;
 class Canvas;
-class OLCOptimizer;
 class WindStore;
 class Airspaces;
 class RasterTerrain;
