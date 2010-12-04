@@ -66,17 +66,8 @@ InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkEnter:
-  {
-    const AbortTask::AlternateVector alternates =
-        protected_task_manager.getAlternates();
-    const Waypoint *wp = (alternates.size() > index) ?
-                         &alternates[index].first : NULL;
-    if (wp) {
-      dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *wp);
-      return true;
-    }
+    dlgAlternatesListShowModal(XCSoarInterface::main_window);
     break;
-  }
   default:
     break;
   }
@@ -125,17 +116,8 @@ InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkEnter:
-  {
-    const AbortTask::AlternateVector alternates =
-        protected_task_manager.getAlternates();
-    const Waypoint *wp = (alternates.size() > index) ?
-                         &alternates[index].first : NULL;
-    if (wp) {
-      dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *wp);
-      return true;
-    }
-    break;
-  }
+      dlgAlternatesListShowModal(XCSoarInterface::main_window);
+      break;
   default:
     break;
   }
