@@ -37,17 +37,25 @@ void FillInfoBoxWaypointName(InfoBoxWindow& infobox, const Waypoint* way_point,
   if (!way_point) {
     tmp[0] = '\0';
   } else {
-    if (XCSoarInterface::SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE) {
+    switch(XCSoarInterface::SettingsMap().DisplayTextType) {
+    case DISPLAYFIRSTTHREE:
       _tcsncpy(tmp, way_point->Name.c_str(), 3);
       tmp[3] = '\0';
-    } else if (XCSoarInterface::SettingsMap().DisplayTextType == DISPLAYFIRSTFIVE) {
+      break;
+
+    case DISPLAYFIRSTFIVE:
       _tcsncpy(tmp, way_point->Name.c_str(), 5);
       tmp[5] = '\0';
-    } else if (XCSoarInterface::SettingsMap().DisplayTextType == DISPLAYNUMBER) {
+      break;
+
+    case DISPLAYNUMBER:
       _stprintf(tmp, _T("%d"), way_point->id);
-    } else {
+      break;
+
+    default:
       _tcsncpy(tmp, way_point->Name.c_str(), (sizeof(tmp) / sizeof(TCHAR)) - 1);
       tmp[(sizeof(tmp) / sizeof(TCHAR)) - 1] = '\0';
+      break;
     }
   }
   if (title) {
