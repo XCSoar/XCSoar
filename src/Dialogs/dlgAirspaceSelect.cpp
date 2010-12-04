@@ -484,11 +484,6 @@ dlgAirspaceSelect()
   UpdateList();
 
   wf->ShowModal();
-
   delete wf;
-
-  wf = NULL;
-
-  return;
 }
 
