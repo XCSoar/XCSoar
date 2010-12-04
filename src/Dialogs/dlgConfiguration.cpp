@@ -1465,16 +1465,9 @@ PrepareConfigurationDialog()
 
   WndProperty *wp;
 
-  if (Layout::landscape) {
-    wf = LoadDialog(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_CONFIGURATION_L"));
-  } else {
-    wf = LoadDialog(CallBackTable,
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_CONFIGURATION"));
-  }
-
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                  Layout::landscape ? _T("IDR_XML_CONFIGURATION_L") :
+                                      _T("IDR_XML_CONFIGURATION"));
   if (wf == NULL)
     return;
 
