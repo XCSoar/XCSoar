@@ -406,7 +406,7 @@ protected:
       return false;
 
     const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
-    if (!res.is_final_glide()) {
+    if (!res.is_final_glide() || !res.glide_reachable(true)) {
       // only give message about terrain warnings if above final glide
       return false;
     }
