@@ -150,7 +150,7 @@ public:
                          _("Airspaces at this location"),
                          airspaces.size(), 0,
                          Layout::Scale(30),
-                         PaintListItem, NULL);
+                         PaintListItem);
       assert(i >= -1 && i < (int)airspaces.size());
       if (i >= 0)
         dlgAirspaceDetails(*airspaces[i]);

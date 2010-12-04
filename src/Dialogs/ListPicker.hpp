@@ -39,6 +39,6 @@ int
 ListPicker(SingleWindow &parent, const TCHAR *caption,
            unsigned num_items, unsigned initial_value, unsigned item_height,
            WndListFrame::PaintItemCallback_t paint_callback,
-           ListHelpCallback_t help_callback);
+           ListHelpCallback_t help_callback = NULL);
 
 #endif

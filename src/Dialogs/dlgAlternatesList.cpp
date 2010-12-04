@@ -81,7 +81,7 @@ dlgAlternatesListShowModal(SingleWindow &parent)
 {
   alternates = protected_task_manager.getAlternates();
   int i = ListPicker(parent, _("Best landing options"), alternates.size(), 0,
-                     Layout::Scale(30), PaintListItem, NULL);
+                     Layout::Scale(30), PaintListItem);
 
   if (i < 0 || (unsigned)i >= alternates.size())
     return;
