@@ -35,7 +35,7 @@ public:
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 
 private:
-  const unsigned index;
+  unsigned index;
 };
 
 class InfoBoxContentAlternateGR : public InfoBoxContent
@@ -47,7 +47,7 @@ public:
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 
 private:
-  const unsigned index;
+  unsigned index;
 };
 
 #endif

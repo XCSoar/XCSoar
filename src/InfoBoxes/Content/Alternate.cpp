@@ -36,11 +36,15 @@ Copyright_License {
 void
 InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
 {
+  const AbortTask::AlternateVector alternates = protected_task_manager.getAlternates();
+
+  if (alternates.size() > 0 && index >= alternates.size())
+    index = alternates.size() - 1;
+
   TCHAR tmp[32];
   _stprintf(tmp, _T("Altrn %d"), index+1);
   infobox.SetTitle(tmp);
 
-  const AbortTask::AlternateVector alternates = protected_task_manager.getAlternates();
   const Waypoint* way_point = (alternates.size()>index) ? &alternates[index].first : NULL;
 
   SetCommentFromWaypointName(infobox, way_point);
@@ -68,21 +72,32 @@ InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
   case ibkEnter:
     dlgAlternatesListShowModal(XCSoarInterface::main_window);
     break;
-  default:
+  case ibkLeft:
+    if (index > 0)
+      index--;
     break;
+  case ibkRight:
+    index++;
+    break;
+  default:
+    return false;
   }
 
-  return false;
+  return true;
 }
 
 void
 InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
 {
+  const AbortTask::AlternateVector alternates = protected_task_manager.getAlternates();
+
+  if (alternates.size() > 0 && index >= alternates.size())
+    index = alternates.size() - 1;
+
   TCHAR tmp[32];
   _stprintf(tmp, _T("Altrn %d GR"), index+1);
   infobox.SetTitle(tmp);
 
-  const AbortTask::AlternateVector alternates = protected_task_manager.getAlternates();
   const Waypoint* way_point = (alternates.size()>index) ? &alternates[index].first : NULL;
 
   SetCommentFromWaypointName(infobox, way_point);
@@ -116,11 +131,18 @@ InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkEnter:
-      dlgAlternatesListShowModal(XCSoarInterface::main_window);
-      break;
-  default:
+    dlgAlternatesListShowModal(XCSoarInterface::main_window);
     break;
+  case ibkLeft:
+    if (index > 0)
+      index--;
+    break;
+  case ibkRight:
+    index++;
+    break;
+  default:
+    return false;
   }
 
-  return false;
+  return true;
 }
