@@ -120,12 +120,9 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
   // Set Unit
   infobox.SetValueUnit(Units::AltitudeUnit);
 
-  if (XCSoarInterface::Basic().AltitudeAGL <
-      XCSoarInterface::SettingsComputer().safety_height_terrain)
-    // red
-    infobox.SetColor(1);
-  else
-    infobox.SetColor(0);
+  // Set Color (red/black)
+  infobox.SetColor(XCSoarInterface::Basic().AltitudeAGL <
+      XCSoarInterface::SettingsComputer().safety_height_terrain ? 1 : 0);
 }
 
 void
