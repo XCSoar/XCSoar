@@ -27,6 +27,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Util/Gradient.hpp"
+#include "Dialogs/Dialogs.h"
+#include "MainWindow.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -62,6 +64,31 @@ InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
   else
     // black
     infobox.SetColor(0);
+}
+
+bool
+InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
+{
+  switch (keycode) {
+  case ibkUp:
+  case ibkDown:
+  case ibkLeft:
+  case ibkRight:
+    break;
+
+  case ibkEnter:
+    const AbortTask::AlternateVector alternates =
+        protected_task_manager.getAlternates();
+    const Waypoint *wp = (alternates.size() > index) ?
+                         &alternates[index].first : NULL;
+    if (wp) {
+      dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *wp);
+      return true;
+    }
+    break;
+  }
+
+  return false;
 }
 
 void
@@ -104,3 +131,27 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
     infobox.SetColor(0);
 }
 
+bool
+InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
+{
+  switch (keycode) {
+  case ibkUp:
+  case ibkDown:
+  case ibkLeft:
+  case ibkRight:
+    break;
+
+  case ibkEnter:
+    const AbortTask::AlternateVector alternates =
+        protected_task_manager.getAlternates();
+    const Waypoint *wp = (alternates.size() > index) ?
+                         &alternates[index].first : NULL;
+    if (wp) {
+      dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *wp);
+      return true;
+    }
+    break;
+  }
+
+  return false;
+}

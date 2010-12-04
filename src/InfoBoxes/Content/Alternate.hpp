@@ -32,6 +32,8 @@ public:
   InfoBoxContentAlternateName(const unsigned _index):
     InfoBoxContent(), index(_index) {}
   virtual void Update(InfoBoxWindow &infobox);
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
+
 private:
   const unsigned index;
 };
@@ -42,6 +44,8 @@ public:
   InfoBoxContentAlternateGR(const unsigned _index):
     InfoBoxContent(), index(_index) {}
   virtual void Update(InfoBoxWindow &infobox);
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
+
 private:
   const unsigned index;
 };
