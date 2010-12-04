@@ -179,6 +179,8 @@ InputEvents::eventSnailTrail(const TCHAR *misc)
     if (XCSoarInterface::SettingsMap().TrailActive == 3)
       Message::AddMessage(_("SnailTrail ON Full"));
   }
+
+  trigger_redraw();
 }
 
 // VENTA3
@@ -208,6 +210,8 @@ InputEvents::eventAirSpace(const TCHAR *misc)
     if (XCSoarInterface::SetSettingsMap().EnableAirspace)
       Message::AddMessage(_("Show Airspace ON"));
   }
+
+  trigger_redraw();
 }
 
 void
@@ -253,6 +257,8 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   } else {
     Pages::Next();
   }
+
+  trigger_redraw();
 }
 
 // eventAutoZoom - Turn on|off|toggle AutoZoom
@@ -673,8 +679,10 @@ InputEvents::eventGotoLookup(const TCHAR *misc)
 {
   const Waypoint* wp = dlgWayPointSelect(XCSoarInterface::main_window,
                                          XCSoarInterface::Basic().Location);
-  if (wp)
+  if (wp != NULL) {
     protected_task_manager.do_goto(*wp);
+    trigger_redraw();
+  }
 }
 
 // StatusMessage
@@ -910,6 +918,8 @@ InputEvents::eventAdjustWaypoint(const TCHAR *misc)
     task_manager->incrementActiveTaskPoint(-1); // previous
   else if (_tcscmp(misc, _T("previouswrap")) == 0)
     task_manager->incrementActiveTaskPoint(-1); // previous with wrap
+
+  trigger_redraw();
 }
 
 // AbortTask
@@ -962,6 +972,8 @@ InputEvents::eventAbortTask(const TCHAR *misc)
       break;
     }
   }
+
+  trigger_redraw();
 }
 
 // Bugs
@@ -1196,6 +1208,8 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
     LocalPath(buffer, misc);
     protected_task_manager.task_load(buffer, &way_points);
   }
+
+  trigger_redraw();
 }
 
 // TaskSave
@@ -1285,6 +1299,8 @@ InputEvents::eventSetup(const TCHAR *misc)
     dlgTeamCodeShowModal();
   else if (_tcscmp(misc, _T("Target")) == 0)
     dlgTargetShowModal();
+
+  trigger_redraw();
 }
 
 // AdjustForecastTemperature
@@ -1346,6 +1362,8 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
     else
       Message::AddMessage(_("Map labels OFF"));
   }
+
+  trigger_redraw();
 }
 
 void
@@ -1392,6 +1410,8 @@ InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
     XCSoarInterface::SetSettingsComputer().AltitudeMode = ALLBELOW;
   else if (_tcscmp(misc, _T("off")) == 0)
     XCSoarInterface::SetSettingsComputer().AltitudeMode = ALLOFF;
+
+  trigger_redraw();
 }
 
 void
@@ -1405,6 +1425,8 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
       way_points.append(edit_waypoint);
     }
   }
+
+  trigger_redraw();
 }
 
 void
@@ -1426,6 +1448,8 @@ InputEvents::eventOrientation(const TCHAR *misc)
     XCSoarInterface::SetSettingsMap().OrientationCruise = TRACKUP;
     XCSoarInterface::SetSettingsMap().OrientationCircling = TARGETUP;
   }
+
+  trigger_redraw();
 }
 
 // JMW TODO enhancement: have all inputevents return bool, indicating whether
@@ -1540,6 +1564,8 @@ InputEvents::sub_TerrainTopology(int vswitch)
                XCSoarInterface::SettingsMap().EnableTopology);
   Profile::Set(szProfileDrawTerrain,
                XCSoarInterface::SettingsMap().EnableTerrain);
+
+  XCSoarInterface::SendSettingsMap(true);
 }
 
 /**
