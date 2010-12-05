@@ -41,6 +41,12 @@ static WndFrame* wTaskView = NULL;
 static OrderedTask* ordered_task = NULL;
 static bool task_modified = false;
 
+/**
+ * Validates task and prompts if change or error
+ * Commits task if no error
+ * @return True if task manager should close
+ *          False if window should remain open
+ */
 static bool
 CommitTaskChanges()
 {
@@ -57,10 +63,15 @@ CommitTaskChanges()
 
     task_modified = false;
     return true;
-  } else if (MessageBoxX(_("Task not valid. Changes will be lost."),
+  } else {
+    MessageBoxX(getTaskValidationErrors(
+        ordered_task->get_factory().getValidationErrors()),
+        _("Validation Errors"), MB_ICONEXCLAMATION);
+    if (MessageBoxX(_("Task not valid. Changes will be lost."),
                          _("Task Manager"),
                          MB_YESNO | MB_ICONQUESTION) == IDYES) {
-    return true;
+      return true;
+    }
   }
   return false;
 }
@@ -106,6 +117,10 @@ OnSaveClicked(WndButton &Sender)
 {
   (void)Sender;
   if (!ordered_task->check_task()) {
+    MessageBoxX(getTaskValidationErrors(
+           ordered_task->get_factory().getValidationErrors()),
+           _("Validation Errors"),
+           MB_ICONEXCLAMATION);
     MessageBoxX (_("Task invalid.  Not saved."),
                  _T("Task Edit"), MB_OK);
     return;
