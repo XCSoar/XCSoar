@@ -130,10 +130,8 @@ CrossSectionWindow::ReadBlackboard(const NMEA_INFO &_gps_info,
 }
 
 void
-CrossSectionWindow::Paint(Canvas &canvas)
+CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
 {
-  const RECT rc = get_client_rect();
-
   fixed hmin = max(fixed_zero, gps_info.GPSAltitude - fixed(3300));
   fixed hmax = max(fixed(3300), gps_info.GPSAltitude + fixed(1000));
   const GeoPoint p_start = gps_info.Location;
@@ -247,5 +245,7 @@ CrossSectionWindow::on_paint(Canvas &canvas)
   canvas.set_text_color(Color::WHITE);
   canvas.select(Fonts::Map);
 
-  Paint(canvas);
+  const RECT rc = get_client_rect();
+
+  Paint(canvas, rc);
 }

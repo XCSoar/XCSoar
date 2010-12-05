@@ -46,7 +46,7 @@ public:
                       const DERIVED_INFO &_calculated_info,
                       const SETTINGS_MAP &_settings_map);
 
-  void Paint(Canvas &canvas);
+  void Paint(Canvas &canvas, const RECT rc);
 
   void set_airspaces(Airspaces *_airspace_database) {
     airspace_database = _airspace_database;
