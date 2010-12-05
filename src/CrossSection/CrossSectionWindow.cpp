@@ -195,16 +195,20 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
     }
   }
 
-  // draw aircraft trend line
+  PaintGlide(chart, vec.Distance);
+  PaintAircraft(canvas, chart, rc);
+  PaintGrid(canvas, chart);
+}
+
+void
+CrossSectionWindow::PaintGlide(Chart &chart, fixed range)
+{
   if (gps_info.GroundSpeed > fixed(10)) {
-    fixed t = vec.Distance / gps_info.GroundSpeed;
-    chart.DrawLine(fixed_zero, gps_info.GPSAltitude, vec.Distance,
+    fixed t = range / gps_info.GroundSpeed;
+    chart.DrawLine(fixed_zero, gps_info.GPSAltitude, range,
                    gps_info.GPSAltitude + calculated_info.Average30s * t,
                    Chart::STYLE_BLUETHIN);
   }
-
-  PaintAircraft(canvas, chart, rc);
-  PaintGrid(canvas, chart);
 }
 
 void
