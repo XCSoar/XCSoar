@@ -234,11 +234,9 @@ CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
 {
   canvas.set_text_color(Color(0xff, 0xff, 0xff));
 
-  chart.DrawXGrid(Units::ToSysUnit(fixed(5), Units::DistanceUnit),
-                  fixed_zero,
+  chart.DrawXGrid(Units::ToSysDistance(fixed(5)), fixed_zero,
                   Chart::STYLE_THINDASHPAPER, fixed(5), true);
-  chart.DrawYGrid(Units::ToSysUnit(fixed(1000), Units::AltitudeUnit),
-                  fixed_zero,
+  chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)), fixed_zero,
                   Chart::STYLE_THINDASHPAPER, fixed(1000), true);
 
   chart.DrawXLabel(_T("D"));
