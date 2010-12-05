@@ -231,8 +231,6 @@ CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
 void
 CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
 {
-  canvas.white_pen();
-  canvas.white_brush();
   canvas.set_text_color(Color(0xff, 0xff, 0xff));
 
   chart.DrawXGrid(Units::ToSysUnit(fixed(5), Units::DistanceUnit),
