@@ -49,8 +49,10 @@ public:
   }
 
   void
-  Render(const AbstractAirspace& as, int type)
+  Render(const AbstractAirspace& as)
   {
+    int type = as.get_type();
+
     if (m_intersections.empty())
       return;
 
@@ -91,9 +93,8 @@ public:
   void
   render(const AbstractAirspace& as)
   {
-    int type = as.get_type();
-    if (type >= 0)
-      Render(as, type);
+    if (as.get_type() >= 0)
+      Render(as);
   }
 
   void
