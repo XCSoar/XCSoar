@@ -724,9 +724,22 @@ AbstractTaskFactory::is_homogeneous() const
 }
 
 bool
-AbstractTaskFactory::mutate_tps_to_task_type()
+AbstractTaskFactory::remove_excess_tps_per_task_type()
 {
   bool changed = false;
+  int maxtp = get_ordered_task_behaviour().max_points;
+  for (unsigned int i = maxtp; i < m_task.task_size(); i++) {
+    remove(i);
+    changed = true;
+  }
+  return changed;
+}
+
+bool
+AbstractTaskFactory::mutate_tps_to_task_type()
+{
+  bool changed = remove_excess_tps_per_task_type();
+
   for (unsigned int i = 0; i < m_task.task_size(); i++) {
     OrderedTaskPoint *tp = m_task.get_tp(i);
     if (!validType(tp, i)) {

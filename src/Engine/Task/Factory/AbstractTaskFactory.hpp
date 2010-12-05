@@ -479,6 +479,13 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
   gcc_pure
   bool validIntermediateType(LegalPointType_t type) const;
 
+  /**
+   * removes excess turnpoints from end of task if the
+   * max number of tps in the task type is less
+   *
+   * @return True if task is changed
+   */
+  bool remove_excess_tps_per_task_type();
 
   /**
    * Sets / verifies all tps for the task type.
