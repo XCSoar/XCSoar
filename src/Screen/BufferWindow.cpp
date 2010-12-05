@@ -64,6 +64,7 @@ BufferWindow::on_paint(Canvas &canvas)
   /* paint directly on OpenGL */
   on_paint_buffer(canvas);
 #else
+  on_paint_buffer(buffer);
   canvas.copy(buffer);
 #endif
 }

@@ -110,7 +110,7 @@ ThermalAssistantWindow::Update(const Angle &_direction,
   UpdateLiftMax();
   UpdateLiftPoints();
 
-  repaint();
+  invalidate();
 }
 
 void

@@ -40,7 +40,7 @@ InstrumentThread::tick()
   vario.ReadSettingsComputer(device_blackboard.SettingsComputer());
   mutexBlackboard.Unlock();
 
-  vario.repaint(); // TODO: only render if not hidden
+  vario.invalidate(); // TODO: only render if not hidden
 }
 
 

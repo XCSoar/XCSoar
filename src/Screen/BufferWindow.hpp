@@ -39,17 +39,6 @@ private:
   BufferCanvas buffer;
 #endif
 
-public:
-  /**
-   * Repaints the buffer, and copies it onto the physical screen.
-   */
-  void repaint() {
-#ifndef ENABLE_OPENGL
-    on_paint_buffer(buffer);
-#endif
-    invalidate();
-  }
-
 protected:
 #ifndef ENABLE_OPENGL
   virtual bool on_create();
