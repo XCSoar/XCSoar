@@ -34,9 +34,8 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 
 #if defined(ENABLE_OPENGL) && defined(ANDROID)
-extern "C" {
-  int SDL_ANDROID_CallJavaSwapBuffers();
-};
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 #endif
 
 class TopCanvas : public Canvas {
@@ -48,7 +47,7 @@ public:
   void flip() {
 #ifdef ENABLE_OPENGL
 #ifdef ANDROID
-    ::SDL_ANDROID_CallJavaSwapBuffers();
+    native_view->swap();
 #else
     ::SDL_GL_SwapBuffers();
 #endif

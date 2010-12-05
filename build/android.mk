@@ -31,11 +31,11 @@ JARSIGNER += -verbose
 endif
 
 JAVA_PACKAGE = org.xcsoar
-CLASS_NAME = $(JAVA_PACKAGE).DemoRenderer
+CLASS_NAME = $(JAVA_PACKAGE).NativeView
 CLASS_SOURCE = $(subst .,/,$(CLASS_NAME)).java
 CLASS_CLASS = $(patsubst %.java,%.class,$(CLASS_SOURCE))
 
-NATIVE_CLASSES = DemoRenderer EventBridge
+NATIVE_CLASSES = NativeView EventBridge
 NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
 NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 

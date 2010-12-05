@@ -33,12 +33,42 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 
+#if defined(ANDROID)
+/* temporary hack */
+extern "C" {
+  int SDL_StartEventLoop(Uint32 flags);
+}
+struct SDL_VideoDevice {
+  char dummy[0xbc];
+  void (*InitOSKeymap)(void *dummy);
+};
+extern SDL_VideoDevice *current_video;
+static void Dummy(void *dummy) {}
+#endif
+
 ScreenGlobalInit::ScreenGlobalInit()
 {
+#if defined(ANDROID)
+  /* temporary hack */
+  SDL_VideoDevice dummy;
+  void *p = &dummy;
+  char *q = (char *)p;
+  for (unsigned i = 0; i < sizeof(dummy); ++i)
+    q[i] = (unsigned char)i;
+  dummy.InitOSKeymap = Dummy;
+  current_video = &dummy;
+  if (::SDL_Init(SDL_INIT_TIMER) != 0 ||
+      ::SDL_StartEventLoop(0) != 0) {
+    fprintf(stderr, "SDL_Init() has failed\n");
+    exit(EXIT_FAILURE);
+  }
+  current_video = NULL;
+#else
   if (::SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) != 0) {
     fprintf(stderr, "SDL_Init() has failed\n");
     exit(EXIT_FAILURE);
   }
+#endif
 
 #if defined(ENABLE_OPENGL) && !defined(ANDROID)
   ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);

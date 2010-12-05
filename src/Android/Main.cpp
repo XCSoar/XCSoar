@@ -21,6 +21,8 @@ Copyright_License {
 }
 */
 
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Fonts.hpp"
 #include "Simulator.hpp"
@@ -28,15 +30,23 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
-#include "org_xcsoar_DemoRenderer.h"
+#include "org_xcsoar_NativeView.h"
+
+#include <assert.h>
+
+NativeView *native_view;
 
 /**
  * This function is called by the Java glue code.  It replaces the
  * standard C function main().
  */
 JNIEXPORT void JNICALL
-Java_org_xcsoar_DemoRenderer_nativeInit(JNIEnv *env, jobject obj)
+Java_org_xcsoar_NativeView_run(JNIEnv *env, jobject obj,
+                               jint width, jint height)
 {
+  assert(native_view == NULL);
+  native_view = new NativeView(env, obj, width, height);
+
   /* force simulatior mode until GPS support has been implemented */
   global_simulator_flag = true;
   sim_set_in_cmd_line_flag = true;
@@ -53,4 +63,6 @@ Java_org_xcsoar_DemoRenderer_nativeInit(JNIEnv *env, jobject obj)
   CommonInterface::main_window.reset();
 
   Fonts::Deinitialize();
+
+  delete native_view;
 };

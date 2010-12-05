@@ -74,6 +74,10 @@ TopCanvas::set()
 #endif /* !ENABLE_OPENGL */
 
   if (is_embedded()) {
+#if defined(ANDROID)
+    width = native_view->get_width();
+    height = native_view->get_height();
+#else
     flags |= SDL_FULLSCREEN;
 
     /* select a full-screen video mode */
@@ -83,6 +87,7 @@ TopCanvas::set()
 
     width = modes[0]->w;
     height = modes[0]->h;
+#endif
   }
 
 #ifdef ENABLE_OPENGL
@@ -178,7 +183,8 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
   const char *text2 = text;
 #endif
 
-  ::SDL_WM_SetCaption(text2, NULL);
+  if (!is_android())
+    ::SDL_WM_SetCaption(text2, NULL);
 #else /* !ENABLE_SDL */
   Window::set(NULL, cls, text, left, top, width, height, style);
 #endif /* !ENABLE_SDL */

@@ -32,6 +32,8 @@ import android.widget.TextView;
 import android.os.Build;
 
 public class XCSoar extends Activity {
+    private static NativeView nativeView;
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -62,54 +64,52 @@ public class XCSoar extends Activity {
         if (!Loader.loaded)
             return;
 
-        mGLView = new DemoGLSurfaceView(this);
-        setContentView(mGLView);
+        nativeView = new NativeView(this);
+        setContentView(nativeView);
         // Receive keyboard events
-        mGLView.setFocusableInTouchMode(true);
-        mGLView.setFocusable(true);
-        mGLView.requestFocus();
+        nativeView.setFocusableInTouchMode(true);
+        nativeView.setFocusable(true);
+        nativeView.requestFocus();
     }
 
     @Override protected void onPause() {
-        if( mGLView != null )
-            mGLView.onPause();
+        if (nativeView != null)
+            nativeView.onPause();
         super.onPause();
     }
 
     @Override protected void onResume() {
         super.onResume();
-        if( mGLView != null )
-            mGLView.onResume();
+        if (nativeView != null)
+            nativeView.onResume();
         else
             initSDL();
     }
 
     @Override protected void onDestroy()
     {
-        if( mGLView != null )
-            mGLView.exitApp();
+        if (nativeView != null)
+            nativeView.exitApp();
         super.onDestroy();
         System.exit(0);
     }
 
     @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
         // Overrides Back key to use in our app
-        if( mGLView != null )
-            mGLView.onKeyDown(keyCode, event);
+        if (nativeView != null)
+            nativeView.onKeyDown(keyCode, event);
         return true;
     }
 
     @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
-        if( mGLView != null )
-            mGLView.onKeyUp(keyCode, event);
+        if (nativeView != null)
+            nativeView.onKeyUp(keyCode, event);
         return true;
     }
 
     @Override public boolean dispatchTouchEvent(final MotionEvent ev) {
-        if(mGLView != null)
-            mGLView.onTouchEvent(ev);
+        if (nativeView != null)
+            nativeView.onTouchEvent(ev);
         return true;
     }
-
-    private static DemoGLSurfaceView mGLView = null;
 }
