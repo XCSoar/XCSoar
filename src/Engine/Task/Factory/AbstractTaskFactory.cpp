@@ -166,8 +166,9 @@ AbstractTaskFactory::getType(const OrderedTaskPoint &point) const
     break;
 
   case TaskPoint::UNORDERED:
+  case TaskPoint::ROUTE:
     /* obviously, when we check the type of an OrderedTaskPoint, we
-       should never get type==UNORDERED. */
+       should never get type==UNORDERED or ROUTE. */
     assert(false);
     break;
   } 
@@ -529,8 +530,9 @@ AbstractTaskFactory::validType(const OrderedTaskPoint &new_tp,
         validFinishType(getType(new_tp));
 
   case TaskPoint::UNORDERED:
+  case TaskPoint::ROUTE:
     /* obviously, when we check the type of an OrderedTaskPoint, we
-       should never get type==UNORDERED. */
+       should never get type==UNORDERED or ROUTE */
     assert(false);
     break;
   }

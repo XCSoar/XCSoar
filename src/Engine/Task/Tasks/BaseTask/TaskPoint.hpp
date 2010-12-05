@@ -49,6 +49,7 @@ public:
     AST,
     AAT,
     FINISH,
+    ROUTE
   };
 
   const enum type type;

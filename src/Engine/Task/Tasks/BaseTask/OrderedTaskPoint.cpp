@@ -169,7 +169,8 @@ OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
                            ordered_task_behaviour);
 
   case UNORDERED:
-    /* an OrderedTaskPoint must never be UNORDERED */
+  case ROUTE:
+    /* an OrderedTaskPoint must never be UNORDERED or ROUTE */
     assert(false);
     break;
   }
