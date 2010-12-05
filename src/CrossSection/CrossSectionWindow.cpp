@@ -194,17 +194,17 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
     }
   }
 
-  PaintGlide(chart, vec.Distance);
+  PaintGlide(chart);
   PaintAircraft(canvas, chart, rc);
   PaintGrid(canvas, chart);
 }
 
 void
-CrossSectionWindow::PaintGlide(Chart &chart, fixed range)
+CrossSectionWindow::PaintGlide(Chart &chart)
 {
   if (gps_info.GroundSpeed > fixed(10)) {
-    fixed t = range / gps_info.GroundSpeed;
-    chart.DrawLine(fixed_zero, gps_info.GPSAltitude, range,
+    fixed t = vec.Distance / gps_info.GroundSpeed;
+    chart.DrawLine(fixed_zero, gps_info.GPSAltitude, vec.Distance,
                    gps_info.GPSAltitude + calculated_info.Average30s * t,
                    Chart::STYLE_BLUETHIN);
   }
