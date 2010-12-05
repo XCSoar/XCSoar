@@ -30,11 +30,10 @@ FAITriangleTaskFactory::FAITriangleTaskFactory(OrderedTask& _task,
 }
 
 bool 
-FAITriangleTaskFactory::validate() const
+FAITriangleTaskFactory::validate()
 {
-  if (!FAITaskFactory::validate()) {
-    return false;
-  }
+
+  bool valid = FAITaskFactory::validate();
 
   if (m_task.task_size()==4) {
     const fixed d1 = m_task.getTaskPoint(1)->get_vector_planned().Distance;
@@ -48,24 +47,26 @@ FAITriangleTaskFactory::validate() const
      * side is less than 25% or larger than 45% of the total length
      * (totallength >= 750km).
      */
- 
+    bool geometryok = false;
+
     if (d_wp < fixed(750000) && d1 >= fixed(0.28) * d_wp &&
         d2 >= fixed(0.28) * d_wp && d3 >= fixed(0.28) * d_wp)
       // small FAI
-      return true;
+      geometryok =  true;
     else if (d_wp >= fixed(750000) &&
              d1 > d_wp / 4 && d2 > d_wp / 4 && d3 > d_wp / 4 &&
              d1 <= fixed(0.45) * d_wp && d2 <= fixed(0.45) * d_wp &&
              d3 <= fixed(0.45) * d_wp )
       // large FAI
-      return true;
+      geometryok = true;
 
-    // distances out of limits
-    return false;
+    if (!geometryok) {
+      addValidationError(INVALID_FAI_TRIANGLE_GEOMETRY);
+      valid = false;
+    }
   }
 
-  // unknown task...
-  return true;
+  return valid;
 }
 
 void 

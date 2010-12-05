@@ -38,17 +38,15 @@ RTTaskFactory::RTTaskFactory(OrderedTask& _task,
 }
 
 bool 
-RTTaskFactory::validate() const
+RTTaskFactory::validate()
 {
+  bool valid = AbstractTaskFactory::validate();
 
-  if (!m_task.has_start() || !m_task.has_finish()) {
-    return false;
+  if (!is_unique()) {
+   addValidationError(TURNPOINTS_NOT_UNIQUE);
+   valid = false;
   }
-  if (!is_unique())
-    return false;
-
-  // unknown task...
-  return true;
+  return valid;
 }
 
 void 

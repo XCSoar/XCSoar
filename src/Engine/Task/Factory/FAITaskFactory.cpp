@@ -35,21 +35,16 @@ FAITaskFactory::FAITaskFactory(OrderedTask& _task,
   m_finish_types.push_back(FINISH_LINE);
 }
 
-bool 
-FAITaskFactory::validate() const
+bool
+FAITaskFactory::validate()
 {
+  bool valid = AbstractTaskFactory::validate();
 
-  if (!m_task.has_start() || !m_task.has_finish()) {
-    return false;
+  if (!is_unique()) {
+    addValidationError(TURNPOINTS_NOT_UNIQUE);
+    valid = false;
   }
-
-  if ((m_task.task_size()>2) && (!is_closed()))
-    return false;
-
-  if (!is_unique())
-    return false;
-
-  return true;
+  return valid;
 }
 
 void 
