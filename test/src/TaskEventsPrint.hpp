@@ -35,21 +35,21 @@ public:
     TaskEvents(),
     verbose(_verbose) {};
 
-  void transition_enter(const TaskPoint& tp);
+  void transition_enter(const TaskWayPoint& tp);
 
-  void transition_exit(const TaskPoint &tp);
+  void transition_exit(const TaskWayPoint &tp);
 
   void transition_alternate();
 
-  void active_advanced(const TaskPoint &tp, const int i);
+  void active_advanced(const TaskWayPoint &tp, const int i);
 
-  void active_changed(const TaskPoint &tp);
+  void active_changed(const TaskWayPoint &tp);
 
   void warning_start_speed();
   
   void construction_error(const char* error);
 
-  void request_arm(const TaskPoint &tp);
+  void request_arm(const TaskWayPoint &tp);
 
   void task_start();
 

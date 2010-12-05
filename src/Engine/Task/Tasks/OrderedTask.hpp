@@ -167,7 +167,7 @@ public:
    * @return Active task point
    */
   gcc_pure
-  TaskPoint* getActiveTaskPoint() const;
+  TaskWayPoint* getActiveTaskPoint() const;
 
   /**
    * Retrieves the active task point index.

@@ -102,7 +102,7 @@ public:
    * @return TaskPoint of active task point, and 0 if no active task
    */
   gcc_pure
-  TaskPoint* getActiveTaskPoint() const;
+  TaskWayPoint* getActiveTaskPoint() const;
 
   /**
    * Get a random point in the task OZ (for testing simulation route)

@@ -37,7 +37,7 @@ GotoTask::~GotoTask()
   delete tp;
 }
 
-TaskPoint* 
+TaskWayPoint*
 GotoTask::getActiveTaskPoint() const
 { 
   return tp;

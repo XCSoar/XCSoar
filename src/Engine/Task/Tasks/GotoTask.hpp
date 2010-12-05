@@ -62,7 +62,7 @@ public:
  * 
  * @return Index of active task point sequence
  */
-  TaskPoint* getActiveTaskPoint() const;
+  TaskWayPoint* getActiveTaskPoint() const;
 
 /** 
  * Set active task point index
@@ -118,7 +118,7 @@ protected:
                          const AIRCRAFT_STATE& state_last);
 
 private:    
-  TaskPoint* tp;
+  TaskWayPoint* tp;
 public:
 /** 
  * Accept a task point visitor; makes the visitor visit
