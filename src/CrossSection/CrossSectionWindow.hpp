@@ -56,6 +56,13 @@ public:
     terrain = _terrain;
   }
 
+  void set_range(fixed range) {
+    vec.Distance = range;
+  }
+  void set_direction(Angle bearing) {
+    vec.Bearing = bearing;
+  }
+
 protected:
   void PaintGlide(Chart &chart, fixed range);
   void PaintAircraft(Canvas &canvas, const Chart &chart, const RECT rc);
@@ -68,6 +75,8 @@ protected:
 
   RasterTerrain *terrain;
   Airspaces *airspace_database;
+
+  GeoVector vec;
 };
 
 #endif

@@ -117,7 +117,8 @@ private:
 };
 
 CrossSectionWindow::CrossSectionWindow() :
-  terrain(NULL), airspace_database(NULL) {}
+  terrain(NULL), airspace_database(NULL),
+  vec(fixed(50000), Angle::native(fixed_zero)) {}
 
 void
 CrossSectionWindow::ReadBlackboard(const NMEA_INFO &_gps_info,
@@ -135,7 +136,6 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
   fixed hmin = max(fixed_zero, gps_info.GPSAltitude - fixed(3300));
   fixed hmax = max(fixed(3300), gps_info.GPSAltitude + fixed(1000));
   const GeoPoint p_start = gps_info.Location;
-  const GeoVector vec(fixed(50000), gps_info.TrackBearing);
 
   Chart chart(canvas, rc);
   chart.ResetScale();

@@ -269,6 +269,7 @@ Update(void)
   case ANALYSIS_PAGE_AIRSPACE:
     csw->ReadBlackboard(XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
                         XCSoarInterface::SettingsMap());
+    csw->set_direction(XCSoarInterface::Basic().TrackBearing);
     csw->show();
     wGrid->hide();
     break;
@@ -388,6 +389,7 @@ OnCreateCrossSectionWindow(ContainerWindow &parent, int left, int top,
   csw->set_terrain(terrain);
   csw->ReadBlackboard(XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
                       XCSoarInterface::SettingsMap());
+  csw->set_direction(XCSoarInterface::Basic().TrackBearing);
   return csw;
 }
 
