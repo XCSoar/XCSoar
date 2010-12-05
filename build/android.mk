@@ -34,7 +34,10 @@ JAVA_PACKAGE = org.xcsoar
 CLASS_NAME = $(JAVA_PACKAGE).DemoRenderer
 CLASS_SOURCE = $(subst .,/,$(CLASS_NAME)).java
 CLASS_CLASS = $(patsubst %.java,%.class,$(CLASS_SOURCE))
-CLASS_HEADER = $(subst .,_,$(CLASS_NAME)).h
+
+NATIVE_CLASSES = DemoRenderer
+NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
+NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 
 JAVA_SOURCES = $(wildcard android/src/*.java)
 JAVA_CLASSES = $(patsubst android/src/%.java,bin/classes/org/xcsoar/%.class,$(JAVA_SOURCES))
@@ -54,7 +57,7 @@ $(ANDROID_BUILD)/build.xml: android/AndroidManifest.xml $(ANDROID_BUILD)/res/dra
 	@touch $@
 
 # add dependency to this source file
-$(TARGET_OUTPUT_DIR)/$(SRC)/Android/Main.o: $(TARGET_OUTPUT_DIR)/include/$(CLASS_HEADER)
+$(TARGET_OUTPUT_DIR)/$(SRC)/Android/Main.o: $(NATIVE_HEADERS)
 
 $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libapplication.so: $(TARGET_OUTPUT_DIR)/bin/xcsoar.so | $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/dirstamp
 	cp $< $@
@@ -70,9 +73,9 @@ $(ANDROID_BIN)/classes/$(CLASS_CLASS): $(JAVA_SOURCES) $(ANDROID_BUILD)/build.xm
 	@$(NQ)echo "  ANT     $@"
 	$(Q)cd $(ANDROID_BUILD) && $(ANT) compile
 
-$(TARGET_OUTPUT_DIR)/include/$(CLASS_HEADER): $(ANDROID_BIN)/classes/$(CLASS_CLASS)
+$(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES)): $(NATIVE_PREFIX)%.h: $(ANDROID_BIN)/classes/$(CLASS_CLASS)
 	@$(NQ)echo "  JAVAH   $@"
-	$(Q)javah -classpath $(ANDROID_BIN)/classes -d $(@D) $(CLASS_NAME)
+	$(Q)javah -classpath $(ANDROID_BIN)/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
 
 $(ANDROID_BIN)/XCSoar-unsigned.apk: $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libapplication.so $(ANDROID_SO_FILES) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png android/src/*.java
 	@$(NQ)echo "  ANT     $@"
