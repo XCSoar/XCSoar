@@ -67,6 +67,7 @@ public:
   }
 
 protected:
+  void PaintTerrain(Canvas &canvas, Chart &chart);
   void PaintGlide(Chart &chart);
   void PaintAircraft(Canvas &canvas, const Chart &chart, const RECT rc);
   void PaintGrid(Canvas &canvas, Chart &chart);

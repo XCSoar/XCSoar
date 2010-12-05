@@ -151,52 +151,57 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
     airspace_database->visit_intersecting(start, vec, ivisitor);
   }
 
-  // draw terrain
-  if (terrain != NULL) {
-    const GeoPoint p_diff = vec.end_point(start) - start;
-
-    RasterTerrain::Lease map(*terrain);
-
-    RasterPoint points[2 + AIRSPACE_SCANSIZE_X];
-
-    points[0].x = chart.screenX(vec.Distance);
-    points[0].y = chart.screenY(fixed_zero);
-    points[1].x = chart.screenX(fixed_zero);
-    points[1].y = chart.screenY(fixed_zero);
-
-    unsigned i = 2;
-    for (unsigned j = 0; j < AIRSPACE_SCANSIZE_X; ++j) {
-      const fixed t_this = fixed(j) / (AIRSPACE_SCANSIZE_X - 1);
-      const GeoPoint p_this = start + p_diff * t_this;
-
-      short h = map->GetField(p_this);
-      if (RasterBuffer::is_special(h)) {
-        if (RasterBuffer::is_water(h))
-          /* water is at 0m MSL */
-          /* XXX paint in blue? */
-          h = 0;
-        else
-          /* skip "unknown" values */
-          continue;
-      }
-
-      RasterPoint p;
-      p.x = chart.screenX(t_this * vec.Distance);
-      p.y = chart.screenY(fixed(h));
-
-      points[i++] = p;
-    }
-
-    if (i >= 4) {
-      canvas.null_pen();
-      canvas.select(bTerrain);
-      canvas.polygon(&points[0], i);
-    }
-  }
-
+  PaintTerrain(canvas, chart);
   PaintGlide(chart);
   PaintAircraft(canvas, chart, rc);
   PaintGrid(canvas, chart);
+}
+
+void
+CrossSectionWindow::PaintTerrain(Canvas &canvas, Chart &chart)
+{
+  if (terrain == NULL)
+    return;
+
+  const GeoPoint p_diff = vec.end_point(start) - start;
+
+  RasterTerrain::Lease map(*terrain);
+
+  RasterPoint points[2 + AIRSPACE_SCANSIZE_X];
+
+  points[0].x = chart.screenX(vec.Distance);
+  points[0].y = chart.screenY(fixed_zero);
+  points[1].x = chart.screenX(fixed_zero);
+  points[1].y = chart.screenY(fixed_zero);
+
+  unsigned i = 2;
+  for (unsigned j = 0; j < AIRSPACE_SCANSIZE_X; ++j) {
+    const fixed t_this = fixed(j) / (AIRSPACE_SCANSIZE_X - 1);
+    const GeoPoint p_this = start + p_diff * t_this;
+
+    short h = map->GetField(p_this);
+    if (RasterBuffer::is_special(h)) {
+      if (RasterBuffer::is_water(h))
+        /* water is at 0m MSL */
+        /* XXX paint in blue? */
+        h = 0;
+      else
+        /* skip "unknown" values */
+        continue;
+    }
+
+    RasterPoint p;
+    p.x = chart.screenX(t_this * vec.Distance);
+    p.y = chart.screenY(fixed(h));
+
+    points[i++] = p;
+  }
+
+  if (i >= 4) {
+    canvas.null_pen();
+    canvas.select(bTerrain);
+    canvas.polygon(&points[0], i);
+  }
 }
 
 void
