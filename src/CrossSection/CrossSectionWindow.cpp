@@ -243,7 +243,7 @@ CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
 void
 CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
 {
-  canvas.set_text_color(Color(0xff, 0xff, 0xff));
+  canvas.set_text_color(Color::WHITE);
 
   chart.DrawXGrid(Units::ToSysDistance(fixed(5)), fixed_zero,
                   Chart::STYLE_THINDASHPAPER, fixed(5), true);
