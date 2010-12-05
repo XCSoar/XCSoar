@@ -152,7 +152,7 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
 
   // draw terrain
   if (terrain != NULL) {
-    const GeoPoint p_end = vec.end_point(p_start);
+    const GeoPoint p_diff = vec.end_point(p_start) - p_start;
 
     RasterTerrain::Lease map(*terrain);
 
@@ -166,7 +166,7 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
     unsigned i = 2;
     for (unsigned j = 0; j < AIRSPACE_SCANSIZE_X; ++j) {
       const fixed t_this = fixed(j) / (AIRSPACE_SCANSIZE_X - 1);
-      const GeoPoint p_this = p_start + (p_end - p_start) * t_this;
+      const GeoPoint p_this = p_start + p_diff * t_this;
 
       short h = map->GetField(p_this);
       if (RasterBuffer::is_special(h)) {
