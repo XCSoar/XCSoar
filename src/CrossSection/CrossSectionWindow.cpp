@@ -145,16 +145,22 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
   chart.ScaleYFromValue(hmin);
   chart.ScaleYFromValue(hmax);
 
-  // draw airspaces
-  if (airspace_database != NULL) {
-    AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, start, ToAircraftState(gps_info));
-    airspace_database->visit_intersecting(start, vec, ivisitor);
-  }
-
+  PaintAirspaces(canvas, chart);
   PaintTerrain(canvas, chart);
   PaintGlide(chart);
   PaintAircraft(canvas, chart, rc);
   PaintGrid(canvas, chart);
+}
+
+void
+CrossSectionWindow::PaintAirspaces(Canvas &canvas, Chart &chart)
+{
+  if (airspace_database == NULL)
+    return;
+
+  AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map,
+                                            start, ToAircraftState(gps_info));
+  airspace_database->visit_intersecting(start, vec, ivisitor);
 }
 
 void
