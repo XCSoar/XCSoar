@@ -155,6 +155,7 @@ UpdateCrossSection()
   csw->ReadBlackboard(XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
                       XCSoarInterface::SettingsMap());
   csw->set_direction(XCSoarInterface::Basic().TrackBearing);
+  csw->set_start(XCSoarInterface::Basic().Location);
 }
 
 static void

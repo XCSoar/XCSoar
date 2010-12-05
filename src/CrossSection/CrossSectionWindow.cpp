@@ -119,6 +119,7 @@ private:
 
 CrossSectionWindow::CrossSectionWindow() :
   terrain(NULL), airspace_database(NULL),
+  start(Angle::native(fixed_zero), Angle::native(fixed_zero)),
   vec(fixed(50000), Angle::native(fixed_zero)) {}
 
 void
@@ -136,7 +137,6 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
 {
   fixed hmin = max(fixed_zero, gps_info.GPSAltitude - fixed(3300));
   fixed hmax = max(fixed(3300), gps_info.GPSAltitude + fixed(1000));
-  const GeoPoint p_start = gps_info.Location;
 
   Chart chart(canvas, rc);
   chart.ResetScale();
@@ -147,13 +147,13 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
 
   // draw airspaces
   if (airspace_database != NULL) {
-    AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, p_start, ToAircraftState(gps_info));
-    airspace_database->visit_intersecting(p_start, vec, ivisitor);
+    AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, start, ToAircraftState(gps_info));
+    airspace_database->visit_intersecting(start, vec, ivisitor);
   }
 
   // draw terrain
   if (terrain != NULL) {
-    const GeoPoint p_diff = vec.end_point(p_start) - p_start;
+    const GeoPoint p_diff = vec.end_point(start) - start;
 
     RasterTerrain::Lease map(*terrain);
 
@@ -167,7 +167,7 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
     unsigned i = 2;
     for (unsigned j = 0; j < AIRSPACE_SCANSIZE_X; ++j) {
       const fixed t_this = fixed(j) / (AIRSPACE_SCANSIZE_X - 1);
-      const GeoPoint p_this = p_start + p_diff * t_this;
+      const GeoPoint p_this = start + p_diff * t_this;
 
       short h = map->GetField(p_this);
       if (RasterBuffer::is_special(h)) {

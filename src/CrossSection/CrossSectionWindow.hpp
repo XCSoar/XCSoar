@@ -62,6 +62,9 @@ public:
   void set_direction(Angle bearing) {
     vec.Bearing = bearing;
   }
+  void set_start(GeoPoint _start) {
+    start = _start;
+  }
 
 protected:
   void PaintGlide(Chart &chart, fixed range);
@@ -76,6 +79,7 @@ protected:
   RasterTerrain *terrain;
   Airspaces *airspace_database;
 
+  GeoPoint start;
   GeoVector vec;
 };
 
