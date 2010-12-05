@@ -73,17 +73,17 @@ AIRSPACE_ALT::get_as_text(const bool concise) const
 }
 
 
-bool AIRSPACE_ALT::is_above  (const AIRCRAFT_STATE& state,
+bool AIRSPACE_ALT::is_above  (const ALTITUDE_STATE& state,
                               const fixed margin) const {
   return get_altitude(state) >= state.AirspaceAltitude - margin;
 }
 
-bool AIRSPACE_ALT::is_below  (const AIRCRAFT_STATE& state,
+bool AIRSPACE_ALT::is_below  (const ALTITUDE_STATE& state,
                               const fixed margin) const {
   return get_altitude(state) <= state.AirspaceAltitude + margin;
 }
 
-fixed AIRSPACE_ALT::get_altitude(const AIRCRAFT_STATE& state) const {
+fixed AIRSPACE_ALT::get_altitude(const ALTITUDE_STATE& state) const {
   return (Base == abAGL) ?
          AGL + (state.NavAltitude - state.AltitudeAGL) : Altitude;
 }

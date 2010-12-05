@@ -5,13 +5,13 @@
 #include "Math/fixed.hpp"
 
 struct SETTINGS_COMPUTER;
-struct AIRCRAFT_STATE;
+struct ALTITUDE_STATE;
 
 class AirspaceVisible: public AirspacePredicate
 {
 public:
   AirspaceVisible(const SETTINGS_COMPUTER& _settings,
-                  const AIRCRAFT_STATE& _state):
+                  const ALTITUDE_STATE& _state):
     m_settings(_settings),
     m_state(_state)
     {};
@@ -50,7 +50,7 @@ public:
 
 protected:
   const SETTINGS_COMPUTER &m_settings;
-  const AIRCRAFT_STATE& m_state;
+  const ALTITUDE_STATE& m_state;
 };
 
 

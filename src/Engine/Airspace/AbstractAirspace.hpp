@@ -33,6 +33,7 @@
 #endif
 
 struct AIRCRAFT_STATE;
+struct ALTITUDE_STATE;
 struct GeoVector;
 class AtmosphericPressure;
 class AirspaceAircraftPerformance;
@@ -188,7 +189,7 @@ public:
  * 
  * @return Altitude AMSL (m) of base
  */
-  fixed get_base_altitude(const AIRCRAFT_STATE& state) const {
+  fixed get_base_altitude(const ALTITUDE_STATE& state) const {
     return m_base.get_altitude(state);
   }
 
@@ -197,7 +198,7 @@ public:
  * 
  * @return Altitude AMSL (m) of top
  */
-  fixed get_top_altitude(const AIRCRAFT_STATE& state) const {
+  fixed get_top_altitude(const ALTITUDE_STATE& state) const {
     return m_top.get_altitude(state);
   }
 
