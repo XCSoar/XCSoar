@@ -393,3 +393,58 @@ OrderedTaskSave(const OrderedTask& task, bool noask)
   protected_task_manager.task_save(path, task);
   return true;
 }
+
+const TCHAR*
+getTaskValidationErrors(const AbstractTaskFactory::TaskValidationErrorVector v)
+{
+
+  static TCHAR err[MAX_PATH];
+  err[0] = '\0';
+
+  for (unsigned i = 0; i < v.size(); i++) {
+
+    if ((_tcslen(err) + _tcslen(TaskValidationError(v[i]))) < MAX_PATH) {
+      _tcscat(err, TaskValidationError(v[i]));
+    }
+  }
+  return err;
+  //  _tcscat(err, OrderedTaskFactory_OneValidationError(v[i]);
+}
+const TCHAR*
+TaskValidationError(AbstractTaskFactory::TaskValidationErrorType_t type)
+{
+  switch (type) {
+  case AbstractTaskFactory::NO_VALID_START:
+    return _T("No valid start.\n");
+    break;
+  case AbstractTaskFactory::NO_VALID_FINISH:
+    return _T("No valid finish.\n");
+    break;
+  case AbstractTaskFactory::TASK_NOT_CLOSED:
+    return _T("Task not closed.\n");
+    break;
+  case AbstractTaskFactory::TASK_NOT_HOMOGENEOUS:
+    return _T("All turnpoints not the same type.\n");
+    break;
+  case AbstractTaskFactory::INCORRECT_NUMBER_TURNPOINTS:
+    return _T("Incorrect number of turnpoints.\n");
+    break;
+  case AbstractTaskFactory::EXCEEDS_MAX_TURNPOINTS:
+    return _T("Exceeds max number turnpoints.\n");
+    break;
+  case AbstractTaskFactory::UNDER_MIN_TURNPOINTS:
+    return _T("Under min number turnpoints.\n");
+    break;
+  case AbstractTaskFactory::TURNPOINTS_NOT_UNIQUE:
+    return _T("Turnpoints not unique.\n");
+    break;
+  case AbstractTaskFactory::INVALID_FAI_TRIANGLE_GEOMETRY:
+    return _T("Invalid FAI triangle shape.\n");
+    break;
+  case AbstractTaskFactory::EMPTY_TASK:
+    return _T("Empty task.\n");
+    break;
+  }
+
+  return _T("");
+}
