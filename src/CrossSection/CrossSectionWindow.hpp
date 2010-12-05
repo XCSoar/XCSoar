@@ -57,6 +57,7 @@ public:
   }
 
 protected:
+  void PaintAircraft(Canvas &canvas, const Chart &chart, const RECT rc);
   void PaintGrid(Canvas &canvas, Chart &chart);
 
   virtual void on_paint(Canvas &canvas);

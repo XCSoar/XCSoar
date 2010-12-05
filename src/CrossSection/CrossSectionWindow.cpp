@@ -203,24 +203,27 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
                    Chart::STYLE_BLUETHIN);
   }
 
-  // draw aircraft
-  {
-    canvas.white_pen();
-    canvas.white_brush();
-
-    RasterPoint line[4];
-    line[0].x = chart.screenX(fixed_zero);
-    line[0].y = chart.screenY(gps_info.GPSAltitude);
-    line[1].x = rc.left;
-    line[1].y = line[0].y;
-    line[2].x = line[1].x;
-    line[2].y = line[0].y - (line[0].x - line[1].x) / 2;
-    line[3].x = (line[1].x + line[0].x) / 2;
-    line[3].y = line[0].y;
-    canvas.polygon(line, 4);
-  }
-
+  PaintAircraft(canvas, chart, rc);
   PaintGrid(canvas, chart);
+}
+
+void
+CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
+                                  const RECT rc)
+{
+  canvas.white_pen();
+  canvas.white_brush();
+
+  RasterPoint line[4];
+  line[0].x = chart.screenX(fixed_zero);
+  line[0].y = chart.screenY(gps_info.GPSAltitude);
+  line[1].x = rc.left;
+  line[1].y = line[0].y;
+  line[2].x = line[1].x;
+  line[2].y = line[0].y - (line[0].x - line[1].x) / 2;
+  line[3].x = (line[1].x + line[0].x) / 2;
+  line[3].y = line[0].y;
+  canvas.polygon(line, 4);
 }
 
 void
