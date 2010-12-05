@@ -150,6 +150,14 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 }
 
 static void
+UpdateCrossSection()
+{
+  csw->ReadBlackboard(XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
+                      XCSoarInterface::SettingsMap());
+  csw->set_direction(XCSoarInterface::Basic().TrackBearing);
+}
+
+static void
 Update(void)
 {
   TCHAR sTmp[1000];
@@ -267,9 +275,7 @@ Update(void)
 
   switch (page) {
   case ANALYSIS_PAGE_AIRSPACE:
-    csw->ReadBlackboard(XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
-                        XCSoarInterface::SettingsMap());
-    csw->set_direction(XCSoarInterface::Basic().TrackBearing);
+    UpdateCrossSection();
     csw->show();
     wGrid->hide();
     break;
@@ -387,9 +393,7 @@ OnCreateCrossSectionWindow(ContainerWindow &parent, int left, int top,
   csw->set(parent, left, top, width, height, style);
   csw->set_airspaces(&airspace_database);
   csw->set_terrain(terrain);
-  csw->ReadBlackboard(XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
-                      XCSoarInterface::SettingsMap());
-  csw->set_direction(XCSoarInterface::Basic().TrackBearing);
+  UpdateCrossSection();
   return csw;
 }
 
