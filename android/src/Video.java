@@ -8,6 +8,14 @@ import android.view.MotionEvent;
 import android.view.KeyEvent;
 import android.os.Build;
 
+class EventBridge {
+  public static native void onKeyDown(int keyCode);
+  public static native void onKeyUp(int keyCode);
+  public static native void onMouseDown(int x, int y);
+  public static native void onMouseUp(int x, int y);
+  public static native void onMouseMove(int x, int y);
+};
+
 abstract class DifferentTouchInput
 {
   public static DifferentTouchInput getInstance()
@@ -26,17 +34,12 @@ abstract class DifferentTouchInput
     }
     public void process(final MotionEvent event)
     {
-      int action = -1;
       if( event.getAction() == MotionEvent.ACTION_DOWN )
-        action = 0;
+        EventBridge.onMouseDown((int)event.getX(), (int)event.getY());
       if( event.getAction() == MotionEvent.ACTION_UP )
-        action = 1;
+        EventBridge.onMouseUp((int)event.getX(), (int)event.getY());
       if( event.getAction() == MotionEvent.ACTION_MOVE )
-        action = 2;
-      if ( action >= 0 )
-        DemoGLSurfaceView.nativeMouse( (int)event.getX(), (int)event.getY(), action, 0,
-                        (int)(event.getPressure() * 1000.0),
-                        (int)(event.getSize() * 1000.0) );
+        EventBridge.onMouseMove((int)event.getX(), (int)event.getY());
     }
   }
   private static class MultiTouchInput extends DifferentTouchInput
@@ -49,18 +52,11 @@ abstract class DifferentTouchInput
     {
         int action = -1;
         if( event.getAction() == MotionEvent.ACTION_DOWN )
-            action = 0;
+          EventBridge.onMouseDown((int)event.getX(), (int)event.getY());
         if( event.getAction() == MotionEvent.ACTION_UP )
-          action = 1;
+          EventBridge.onMouseUp((int)event.getX(), (int)event.getY());
         if( event.getAction() == MotionEvent.ACTION_MOVE )
-          action = 2;
-        if ( action >= 0 )
-            DemoGLSurfaceView.nativeMouse( (int)event.getX(),
-                                           (int)event.getY(),
-                                           action,
-                                           0,
-                                           (int)(event.getPressure() * 1000.0),
-                                           (int)(event.getSize() * 1000.0));
+          EventBridge.onMouseMove((int)event.getX(), (int)event.getY());
     }
   }
 }
@@ -97,18 +93,15 @@ class DemoGLSurfaceView extends GLSurfaceView_SDL {
   };
 
   @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
-    nativeKey( keyCode, 1 );
+    EventBridge.onKeyDown(keyCode);
     return true;
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
-    nativeKey( keyCode, 0 );
+    EventBridge.onKeyDown(keyCode);
     return true;
   }
 
   DemoRenderer mRenderer;
   DifferentTouchInput touchInput = null;
-
-  public static native void nativeMouse( int x, int y, int action, int pointerId, int pressure, int radius );
-  public static native void nativeKey( int keyCode, int down );
 }

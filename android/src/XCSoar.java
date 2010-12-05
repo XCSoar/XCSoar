@@ -95,13 +95,13 @@ public class XCSoar extends Activity {
     @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
         // Overrides Back key to use in our app
         if( mGLView != null )
-            mGLView.nativeKey( keyCode, 1 );
+            mGLView.onKeyDown(keyCode, event);
         return true;
     }
 
     @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
         if( mGLView != null )
-            mGLView.nativeKey( keyCode, 0 );
+            mGLView.onKeyUp(keyCode, event);
         return true;
     }
 

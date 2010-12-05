@@ -409,7 +409,9 @@ XCSOAR_SOURCES := \
 
 
 ifeq ($(TARGET),ANDROID)
-XCSOAR_SOURCES += $(SRC)/Android/Main.cpp
+XCSOAR_SOURCES += \
+	$(SRC)/Android/EventBridge.cpp \
+	$(SRC)/Android/Main.cpp
 else
 XCSOAR_SOURCES += $(SRC)/XCSoar.cpp
 endif
