@@ -43,7 +43,7 @@ public:
   AirspaceIntersectionVisitorSlice(Canvas &canvas, Chart &chart,
                                    const SETTINGS_MAP &settings,
                                    const GeoPoint start,
-                                   const AIRCRAFT_STATE& state) :
+                                   const ALTITUDE_STATE& state) :
     m_canvas(canvas), m_chart(chart), m_settings(settings), m_start(start), m_state(state)
   {
   }
@@ -113,7 +113,7 @@ private:
   Chart& m_chart;
   const SETTINGS_MAP& m_settings;
   const GeoPoint m_start;
-  const AIRCRAFT_STATE& m_state;
+  const ALTITUDE_STATE& m_state;
 };
 
 CrossSectionWindow::CrossSectionWindow() :
