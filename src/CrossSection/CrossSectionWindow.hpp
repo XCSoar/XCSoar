@@ -30,6 +30,7 @@
 
 class Airspaces;
 class RasterTerrain;
+class Chart;
 
 /**
  * A Window which renders a terrain and airspace cross-section
@@ -56,6 +57,8 @@ public:
   }
 
 protected:
+  void PaintGrid(Canvas &canvas, Chart &chart);
+
   virtual void on_paint(Canvas &canvas);
 
   RasterTerrain *terrain;

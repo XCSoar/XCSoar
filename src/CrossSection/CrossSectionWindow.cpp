@@ -220,22 +220,25 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
     canvas.polygon(line, 4);
   }
 
-  // draw grid
-  {
-    canvas.white_pen();
-    canvas.white_brush();
-    canvas.set_text_color(Color(0xff, 0xff, 0xff));
+  PaintGrid(canvas, chart);
+}
 
-    chart.DrawXGrid(Units::ToSysUnit(fixed(5), Units::DistanceUnit),
-                    fixed_zero,
-                    Chart::STYLE_THINDASHPAPER, fixed(5), true);
-    chart.DrawYGrid(Units::ToSysUnit(fixed(1000), Units::AltitudeUnit),
-                    fixed_zero,
-                    Chart::STYLE_THINDASHPAPER, fixed(1000), true);
+void
+CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
+{
+  canvas.white_pen();
+  canvas.white_brush();
+  canvas.set_text_color(Color(0xff, 0xff, 0xff));
 
-    chart.DrawXLabel(_T("D"));
-    chart.DrawYLabel(_T("h"));
-  }
+  chart.DrawXGrid(Units::ToSysUnit(fixed(5), Units::DistanceUnit),
+                  fixed_zero,
+                  Chart::STYLE_THINDASHPAPER, fixed(5), true);
+  chart.DrawYGrid(Units::ToSysUnit(fixed(1000), Units::AltitudeUnit),
+                  fixed_zero,
+                  Chart::STYLE_THINDASHPAPER, fixed(1000), true);
+
+  chart.DrawXLabel(_T("D"));
+  chart.DrawYLabel(_T("h"));
 }
 
 void
