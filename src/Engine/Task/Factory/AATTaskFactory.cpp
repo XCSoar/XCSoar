@@ -35,24 +35,6 @@ AATTaskFactory::AATTaskFactory(OrderedTask& _task, const TaskBehaviour &tb):
   m_finish_types.push_back(FINISH_CYLINDER);
 }
 
-bool 
-AATTaskFactory::validate() const
-{
-  /**
-   * @todo
-   * warn/fail on overlap since this is required by FAI rules
-   */
-
-  if (!m_task.has_start() || !m_task.has_finish())
-    return false;
-
-  // not enough turnpoints!
-  if (m_task.task_size()<3)
-    return false;
-
-  return true;
-}
-
 void 
 AATTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 {

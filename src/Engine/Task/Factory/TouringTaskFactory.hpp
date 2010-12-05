@@ -43,13 +43,6 @@ public:
   ~TouringTaskFactory() {};
 
   void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
-
-/** 
- * Check whether task is complete and valid according to factory rules
- * 
- * @return True if task is valid according to factory rules
- */
-  virtual bool validate() const;
 };
 
 #endif

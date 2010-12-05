@@ -40,20 +40,6 @@ MixedTaskFactory::MixedTaskFactory(OrderedTask& _task,
   m_finish_types.push_back(FINISH_CYLINDER);
 }
 
-bool 
-MixedTaskFactory::validate() const
-{
-  /**
-   * \todo like AATTaskFactory, warn on overlap?
-   */
-
-  if (!m_task.has_start() || !m_task.has_finish()) {
-    return false;
-  }
-
-  return true;
-}
-
 void 
 MixedTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 {

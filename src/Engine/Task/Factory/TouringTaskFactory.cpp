@@ -33,17 +33,6 @@ TouringTaskFactory::TouringTaskFactory(OrderedTask& _task,
   m_finish_types.push_back(FINISH_CYLINDER);
 }
 
-bool 
-TouringTaskFactory::validate() const
-{
-
-  if (!m_task.has_start() || !m_task.has_finish()) {
-    return false;
-  }
-  // unknown task...
-  return true;
-}
-
 void 
 TouringTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 {
