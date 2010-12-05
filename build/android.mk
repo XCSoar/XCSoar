@@ -44,7 +44,7 @@ $(ANDROID_BUILD)/res/drawable/icon.png: $(OUT)/data/graphics/xcsoarswiftsplash-1
 
 # symlink some important files to $(ANDROID_BUILD) and let the Android
 # SDK generate build.xml
-$(ANDROID_BUILD)/build.xml: android/AndroidManifest.xml $(ANDROID_BUILD)/res/drawable/icon.png
+$(ANDROID_BUILD)/build.xml: android/AndroidManifest.xml $(ANDROID_BUILD)/res/drawable/icon.png | $(TARGET_OUTPUT_DIR)/bin/dirstamp
 	@$(NQ)echo "  ANDROID $@"
 	$(Q)rm -f $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
 	$(Q)mkdir -p $(ANDROID_BUILD)/res
