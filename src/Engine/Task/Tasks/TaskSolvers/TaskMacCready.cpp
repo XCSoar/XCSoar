@@ -131,7 +131,7 @@ TaskMacCready::glide_sink(const AIRCRAFT_STATE &aircraft, const fixed S)
   GlideResult acc_gr;
 
   for (int i = m_start; i <= m_end; ++i) {
-    GlideResult gr = tp_sink(i, aircraft_predict, S);
+    const GlideResult gr = tp_sink(i, aircraft_predict, S);
 
     aircraft_predict.NavAltitude -= gr.HeightGlide;
     if (i == m_start)
