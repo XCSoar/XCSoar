@@ -373,19 +373,7 @@ OrderedTask::set_neighbours(unsigned position)
 bool
 OrderedTask::check_task() const
 {
-  if (!tps.size()) {
-    task_events.construction_error("Error! Empty task\n");
-    return false;
-  }
-  if (!has_start()) {
-    task_events.construction_error("Error! No start point\n");
-    return false;
-  }
-  if (!has_finish()) {
-    task_events.construction_error("Error! No finish point\n");
-    return false;
-  }
-  return true;
+  return this->get_factory().validate();
 }
 
 OrderedTaskPoint*
