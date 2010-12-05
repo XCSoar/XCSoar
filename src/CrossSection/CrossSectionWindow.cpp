@@ -187,10 +187,8 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
     }
 
     if (i >= 4) {
-      Brush a_brush(Chart::GROUND_COLOUR);
-
       canvas.null_pen();
-      canvas.select(a_brush);
+      canvas.select(bTerrain);
       canvas.polygon(&points[0], i);
     }
   }
@@ -246,6 +244,15 @@ CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
 
   chart.DrawXLabel(_T("D"));
   chart.DrawYLabel(_T("h"));
+}
+
+bool
+CrossSectionWindow::on_create() {
+  PaintWindow::on_create();
+
+  bTerrain.set(Chart::GROUND_COLOUR);
+
+  return true;
 }
 
 void

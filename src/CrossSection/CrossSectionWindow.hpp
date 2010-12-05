@@ -62,6 +62,9 @@ protected:
   void PaintGrid(Canvas &canvas, Chart &chart);
 
   virtual void on_paint(Canvas &canvas);
+  virtual bool on_create();
+
+  Brush bTerrain;
 
   RasterTerrain *terrain;
   Airspaces *airspace_database;
