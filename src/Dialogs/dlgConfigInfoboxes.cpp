@@ -101,25 +101,7 @@ OnInfoBoxHelp(WindowControl * Sender)
   WndProperty *wp = (WndProperty*)Sender;
   int type = wp->GetDataField()->GetAsInteger();
   TCHAR caption[100];
-  const TCHAR *mode_s;
-  switch (mode) {
-  case InfoBoxManager::MODE_CIRCLING:
-    mode_s = _("circling");
-    break;
-  case InfoBoxManager::MODE_CRUISE:
-    mode_s = _("cruise");
-    break;
-  case InfoBoxManager::MODE_FINAL_GLIDE:
-    mode_s = _("final glide");
-    break;
-  case InfoBoxManager::MODE_AUXILIARY:
-    mode_s = _("auxiliary");
-    break;
-  default:
-    return;
-  }
-  _stprintf(caption, _T("InfoBox %s in %s mode: %s"), wp->GetCaption(), mode_s,
-            InfoBoxFactory::GetName(type));
+  _stprintf(caption, _T("%s: %s"), _("InfoBox"), gettext(InfoBoxFactory::GetName(type)));
 
   const TCHAR* text = InfoBoxFactory::GetDescription(type);
   if (text)
@@ -144,7 +126,7 @@ SetInfoBoxSelector(unsigned item)
   DataFieldEnum* dfe;
   dfe = (DataFieldEnum*)wp->GetDataField();
   for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; i++)
-    dfe->addEnumText(gettext(InfoBoxManager::GetTypeDescription(i)));
+    dfe->addEnumText(InfoBoxManager::GetTypeDescription(i));
 
   dfe->Sort(0);
 
