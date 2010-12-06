@@ -21,13 +21,7 @@ public:
   }
 
   bool parent_condition(const AbstractAirspace& airspace) const {
-    if (!type_visible(airspace)) {
-      return false;
-    }
-    if (!altitude_visible(airspace)) {
-      return false;
-    }
-    return true;
+    return type_visible(airspace) && altitude_visible(airspace);
   }
 
 /** 
