@@ -126,7 +126,7 @@ SetInfoBoxSelector(unsigned item)
   DataFieldEnum* dfe;
   dfe = (DataFieldEnum*)wp->GetDataField();
   for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; i++)
-    dfe->addEnumText(InfoBoxManager::GetTypeDescription(i));
+    dfe->addEnumText(gettext(InfoBoxFactory::GetName(i)));
 
   dfe->Sort(0);
 

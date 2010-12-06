@@ -50,12 +50,6 @@ namespace InfoBoxManager
   void Event_Select(int i);
   void Event_Change(int i);
 
-  /**
-   * Get a localized human readable description to the box content.
-   * @param i The index to the info box according to InfoBoxFactory
-   */
-  const TCHAR *GetTypeDescription(unsigned i);
-
   void ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode);
   bool Click(InfoBoxWindow &ib);
 

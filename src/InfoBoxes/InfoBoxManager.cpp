@@ -416,12 +416,6 @@ InfoBoxManager::ProcessTimer()
   InfoBoxDrawIfDirty();
 }
 
-const TCHAR *
-InfoBoxManager::GetTypeDescription(unsigned i)
-{
-  return gettext(InfoBoxFactory::GetName(i));
-}
-
 void
 InfoBoxManager::Paint()
 {
@@ -547,7 +541,7 @@ InfoBoxManager::SetupFocused()
 
   DataFieldEnum *dfe = new DataFieldEnum(NULL);
   for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; i++)
-    dfe->addEnumText(GetTypeDescription(i));
+    dfe->addEnumText(gettext(InfoBoxFactory::GetName(i)));
   dfe->Sort(0);
   dfe->Set(old_type);
 
