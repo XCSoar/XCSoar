@@ -53,9 +53,11 @@ public:
   {
     int type = as.get_type();
 
+    // No intersections for this airspace
     if (m_intersections.empty())
       return;
 
+    // Select pens and brushes
     if (m_settings.bAirspaceBlackOutline)
       m_canvas.black_pen();
     else
@@ -65,12 +67,14 @@ public:
     m_canvas.set_text_color(Graphics::GetAirspaceColourByClass(type, m_settings));
 
     RECT rcd;
+    // Calculate top and bottom coordinate
     rcd.top = m_chart.screenY(as.get_top_altitude(m_state));
     if (as.is_base_terrain())
       rcd.bottom = m_chart.screenY(fixed_zero);
     else
       rcd.bottom = m_chart.screenY(as.get_base_altitude(m_state));
 
+    // Iterate through the intersections
     for (AirspaceIntersectionVector::const_iterator it = m_intersections.begin();
          it != m_intersections.end(); ++it) {
       const GeoPoint p_start = it->first;
@@ -78,6 +82,7 @@ public:
       const fixed distance_start = m_start.distance(p_start);
       const fixed distance_end = m_start.distance(p_end);
 
+      // Determine left and right coordinate
       rcd.left = m_chart.screenX(distance_start);
       rcd.right = m_chart.screenX(distance_end);
 
@@ -86,6 +91,7 @@ public:
         rcd.right = m_chart.screenX(m_chart.getXmax());
       }
 
+      // Draw the airspace
       m_canvas.rectangle(rcd.left, rcd.top, rcd.right, rcd.bottom);
     }
   }
