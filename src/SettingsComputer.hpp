@@ -172,8 +172,6 @@ struct SETTINGS_COMPUTER:
   public SETTINGS_FEATURES,
   public TaskBehaviour
 {
-  bool EnableCalibration;
-
   int EnableExternalTriggerCruise;
 
   short AverEffTime;

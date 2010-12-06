@@ -40,7 +40,6 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.SoundDeadband = 5;
   settings_computer.EnableNavBaroAltitude=false;
   settings_computer.EnableExternalTriggerCruise=false;
-  settings_computer.EnableCalibration = false;
   settings_computer.LoggerTimeStepCruise=5;
   settings_computer.LoggerTimeStepCircling=1;
   settings_computer.DisableAutoLogger = false;

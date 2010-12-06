@@ -278,14 +278,6 @@ PDVDS(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (GPS_INFO->NettoVarioAvailable)
     GPS_INFO->NettoVario = value / 10;
 
-  if (device_blackboard.SettingsComputer().EnableCalibration) {
-    LogDebug(_T("%g %g %g %g %g %g #te net"),
-               (double)GPS_INFO->IndicatedAirspeed,
-               (double)GPS_INFO->BaroAltitude,
-               (double)GPS_INFO->TotalEnergyVario,
-               (double)GPS_INFO->NettoVario,
-               AccelX, AccelZ);
-  }
   GPS_INFO->TotalEnergyVarioAvailable = true;
   //hasVega = true;
 

@@ -110,26 +110,6 @@ InfoBoxContentSpeedIndicated::Update(InfoBoxWindow &infobox)
   infobox.SetValueUnit(Units::SpeedUnit);
 }
 
-bool
-InfoBoxContentSpeedIndicated::HandleKey(const InfoBoxKeyCodes keycode)
-{
-  switch (keycode) {
-  case ibkEnter:
-    XCSoarInterface::SetSettingsComputer().EnableCalibration
-        = !XCSoarInterface::SettingsComputer().EnableCalibration;
-
-    Message::AddMessage(XCSoarInterface::SettingsComputer().EnableCalibration
-                        ? _("Calibrate ON")
-                        : _("Calibrate OFF"));
-    return true;
-
-  default:
-    break;
-  }
-
-  return false;
-}
-
 void
 InfoBoxContentSpeed::Update(InfoBoxWindow &infobox)
 {
@@ -146,26 +126,6 @@ InfoBoxContentSpeed::Update(InfoBoxWindow &infobox)
 
   // Set Unit
   infobox.SetValueUnit(Units::SpeedUnit);
-}
-
-bool
-InfoBoxContentSpeed::HandleKey(const InfoBoxKeyCodes keycode)
-{
-  switch (keycode) {
-  case ibkEnter:
-    XCSoarInterface::SetSettingsComputer().EnableCalibration
-        = !XCSoarInterface::SettingsComputer().EnableCalibration;
-
-    Message::AddMessage(XCSoarInterface::SettingsComputer().EnableCalibration ?
-                        _("Calibrate ON") :
-                        _("Calibrate OFF"));
-    return true;
-
-  default:
-    break;
-  }
-
-  return false;
 }
 
 void
