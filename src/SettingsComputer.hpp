@@ -137,14 +137,6 @@ struct SETTINGS_VOICE {
  * Options for tracking places of interest as alternates
  */
 struct SETTINGS_PLACES_OF_INTEREST {
-  bool EnableBestAlternate;
-  bool EnableAlternate1;
-  bool EnableAlternate2;
-
-  /** Array index of the first alternate waypoint */
-  int Alternate1;
-  /** Array index of the second alternate waypoint */
-  int Alternate2;
   /** Array index of the home waypoint */
   int HomeWaypoint;
 };

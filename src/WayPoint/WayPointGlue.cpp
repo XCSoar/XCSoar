@@ -71,14 +71,6 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
       settings.HomeWaypoint = wp->id;
   }
 
-  // reset Alternates
-  if (reset || way_points.empty() ||
-      !way_points.lookup_id(settings.Alternate1) ||
-      !way_points.lookup_id(settings.Alternate2)) {
-    settings.Alternate1 = -1;
-    settings.Alternate2 = -1;
-  }
-
   // check invalid task ref waypoint or forced reset due to file change
   if (reset || way_points.empty() ||
       !way_points.lookup_id(settings.TeamCodeRefWaypoint))
@@ -104,8 +96,6 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
   // VENTA3> this is probably useless, since HomeWayPoint &c were currently
   //         just loaded from registry.
   Profile::Set(szProfileHomeWaypoint,settings.HomeWaypoint);
-  Profile::Set(szProfileAlternate1,settings.Alternate1);
-  Profile::Set(szProfileAlternate2,settings.Alternate2);
   Profile::Set(szProfileTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
 }
 

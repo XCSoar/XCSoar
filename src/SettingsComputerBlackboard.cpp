@@ -45,9 +45,6 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.LoggerTimeStepCircling=1;
   settings_computer.DisableAutoLogger = false;
   settings_computer.LoggerShortName = false;
-  settings_computer.EnableBestAlternate=false;
-  settings_computer.EnableAlternate1=false;
-  settings_computer.EnableAlternate2=false;
   settings_computer.BallastTimerActive = false;
   settings_computer.BallastSecsToEmpty = 120;
   settings_computer.UTCOffset = 0;
@@ -57,8 +54,6 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.TeamFlarmIdTarget.clear();
 
   settings_computer.HomeWaypoint = -1;
-  settings_computer.Alternate1 = -1;
-  settings_computer.Alternate2 = -1;
 
   settings_computer.EnableVoiceClimbRate = false;
   settings_computer.EnableVoiceTerrain = false;

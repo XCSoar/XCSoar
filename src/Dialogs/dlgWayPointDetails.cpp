@@ -287,42 +287,6 @@ OnNewHomeClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
-// VENTA3
-static void 
-OnSetAlternate1Clicked(gcc_unused WndButton &button)
-{
-  assert(selected_waypoint != NULL);
-
-  XCSoarInterface::SetSettingsComputer().Alternate1 = selected_waypoint->id;
-  Profile::Set(szProfileAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
-  wf->SetModalResult(mrOK);
-}
-
-static void 
-OnSetAlternate2Clicked(gcc_unused WndButton &button)
-{
-  assert(selected_waypoint != NULL);
-
-  XCSoarInterface::SetSettingsComputer().Alternate2 = selected_waypoint->id;
-  Profile::Set(szProfileAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
-  wf->SetModalResult(mrOK);
-}
-
-static void
-OnClearAlternatesClicked(gcc_unused WndButton &button)
-{
-  XCSoarInterface::SetSettingsComputer().Alternate1 = -1;
-  XCSoarInterface::SetSettingsComputer().EnableAlternate1 = false;
-  XCSoarInterface::SetSettingsComputer().Alternate2 = -1;
-  XCSoarInterface::SetSettingsComputer().EnableAlternate2 = false;
-  Profile::Set(szProfileAlternate1,
-      XCSoarInterface::SettingsComputer().Alternate1);
-  Profile::Set(szProfileAlternate2,
-      XCSoarInterface::SettingsComputer().Alternate2);
-
-  wf->SetModalResult(mrOK);
-}
-
 static void
 OnTeamCodeClicked(gcc_unused WndButton &button)
 {
@@ -680,18 +644,6 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   wb = ((WndButton *)wf->FindByName(_T("cmdNewHome")));
   if (wb)
     wb->SetOnClickNotify(OnNewHomeClicked);
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdSetAlternate1")));
-  if (wb)
-    wb->SetOnClickNotify(OnSetAlternate1Clicked);
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdSetAlternate2")));
-  if (wb)
-    wb->SetOnClickNotify(OnSetAlternate2Clicked);
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdClearAlternates")));
-  if (wb)
-    wb->SetOnClickNotify(OnClearAlternatesClicked);
 
   wb = ((WndButton *)wf->FindByName(_T("cmdTeamCode")));
   if (wb)
