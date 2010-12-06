@@ -64,7 +64,6 @@ static WndForm *wf = NULL;
 static WndListFrame *wDetails = NULL;
 static WndFrame *wInfo = NULL;
 static WndFrame *wCommand = NULL;
-static WndFrame *wSpecial = NULL; // VENTA3
 static WndOwnerDrawFrame *wImage = NULL;
 static BOOL hasimage1 = false;
 static BOOL hasimage2 = false;
@@ -89,8 +88,8 @@ NextPage(int Step)
 
   do {
     if (page < 0)
-      page = 5;
-    if (page > 5)
+      page = 4;
+    if (page > 4)
       page = 0;
 
     switch (page) {
@@ -110,11 +109,7 @@ NextPage(int Step)
       page_ok = true;
       break;
 
-    case 3: // VENTA3
-      page_ok = true;
-      break;
-
-    case 4:
+    case 3:
       if (!hasimage1)
         page += Step;
       else
@@ -122,7 +117,7 @@ NextPage(int Step)
 
       break;
 
-    case 5:
+    case 4:
       if (!hasimage2)
         page += Step;
       else
@@ -141,8 +136,7 @@ NextPage(int Step)
   wInfo->set_visible(page == 0);
   wDetails->set_visible(page == 1);
   wCommand->set_visible(page == 2);
-  wSpecial->set_visible(page == 3);
-  wImage->set_visible(page >= 4);
+  wImage->set_visible(page >= 3);
 }
 
 static void
@@ -607,28 +601,19 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
 
   wInfo = ((WndFrame *)wf->FindByName(_T("frmInfos")));
   wCommand = ((WndFrame *)wf->FindByName(_T("frmCommands")));
-  wSpecial = ((WndFrame *)wf->FindByName(_T("frmSpecial")));
   wImage = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmImage")));
   wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
   wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
 
   assert(wInfo != NULL);
   assert(wCommand != NULL);
-  assert(wSpecial != NULL);
   assert(wImage != NULL);
   assert(wDetails != NULL);
 
   nTextLines = TextToLineOffsets(way_point.Details.c_str(), LineOffsets, MAXLINES);
   wDetails->SetLength(nTextLines);
 
-  /*
-  TODO enhancement: wpdetails
-  wp = ((WndProperty *)wf->FindByName(_T("prpWpDetails")));
-  wp->SetText(way_point.Details);
-  */
-
   wCommand->hide();
-  wSpecial->hide();
   wImage->SetOnPaintNotify(OnImagePaint);
 
   WndButton *wb;
