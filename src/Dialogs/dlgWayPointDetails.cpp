@@ -486,17 +486,10 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
 {
   selected_waypoint = &way_point;
 
-  TCHAR sTmp[128];
-  int sunsethours;
-  int sunsetmins;
-  WndProperty *wp;
-
   wf = LoadDialog(CallBackTable, parent,
                   Layout::landscape ? _T("IDR_XML_WAYPOINTDETAILS_L") :
                                       _T("IDR_XML_WAYPOINTDETAILS"));
-
-  if (!wf)
-    return;
+  assert(wf != NULL);
 
   nTextLines = 0;
 
@@ -514,9 +507,11 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
            Directory,
            selected_waypoint->id+1);
 
+  TCHAR sTmp[128];
   _stprintf(sTmp, _T("%s: '%s'"), wf->GetCaption(), selected_waypoint->Name.c_str());
   wf->SetCaption(sTmp);
 
+  WndProperty *wp;
   wp = ((WndProperty *)wf->FindByName(_T("prpWpComment")));
   wp->SetText(selected_waypoint->Comment.c_str());
 
@@ -537,8 +532,8 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
                    XCSoarInterface::Basic().DateTime,
                    fixed(GetUTCOffset()) / 3600);
 
-  sunsethours = (int)sun.TimeOfSunSet;
-  sunsetmins = (int)((sun.TimeOfSunSet - fixed(sunsethours)) * 60);
+  int sunsethours = (int)sun.TimeOfSunSet;
+  int sunsetmins = (int)((sun.TimeOfSunSet - fixed(sunsethours)) * 60);
 
   _stprintf(sTmp, _T("%02d:%02d"), sunsethours, sunsetmins);
   ((WndProperty *)wf->FindByName(_T("prpSunset")))->SetText(sTmp);
@@ -656,6 +651,4 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   wf->ShowModal();
 
   delete wf;
-
-  wf = NULL;
 }
