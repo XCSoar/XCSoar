@@ -109,9 +109,9 @@ OnAirspaceListEnter(unsigned ItemIndex)
     SETTINGS_AIRSPACE &settings_airspace =
       XCSoarInterface::SetSettingsComputer();
 
-    bool display = settings_airspace.DisplayAirspaces[ItemIndex];
-    settings_airspace.DisplayAirspaces[ItemIndex] = !display;
-    if (display)
+    settings_airspace.DisplayAirspaces[ItemIndex] =
+        !settings_airspace.DisplayAirspaces[ItemIndex];
+    if (!settings_airspace.DisplayAirspaces[ItemIndex])
       settings_airspace.airspace_warnings.class_warnings[ItemIndex] =
         !settings_airspace.airspace_warnings.class_warnings[ItemIndex];
 
