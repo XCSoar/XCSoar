@@ -52,6 +52,8 @@ public:
   Render(const AbstractAirspace& as)
   {
     int type = as.get_type();
+    if (type <= 0)
+      return;
 
     // No intersections for this airspace
     if (m_intersections.empty())
@@ -97,22 +99,15 @@ public:
   }
 
   void
-  render(const AbstractAirspace& as)
-  {
-    if (as.get_type() >= 0)
-      Render(as);
-  }
-
-  void
   Visit(const AirspaceCircle& as)
   {
-    render(as);
+    Render(as);
   }
 
   void
   Visit(const AirspacePolygon& as)
   {
-    render(as);
+    Render(as);
   }
 
 private:
