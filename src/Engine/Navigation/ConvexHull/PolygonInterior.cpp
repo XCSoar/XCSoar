@@ -43,6 +43,21 @@ isLeft( const GeoPoint &P0, const GeoPoint &P1, const GeoPoint &P2 )
     return ( (P1.Longitude - P0.Longitude) * (P2.Latitude - P0.Latitude)
              - (P2.Longitude - P0.Longitude) * (P1.Latitude - P0.Latitude) ).sign();
 }
+
+inline static int
+isLeft( const FlatGeoPoint &P0, const FlatGeoPoint &P1, const FlatGeoPoint &P2 )
+{
+  int p = ( (P1.Longitude - P0.Longitude) * (P2.Latitude - P0.Latitude)
+            - (P2.Longitude - P0.Longitude) * (P1.Latitude - P0.Latitude) );
+  if (p>0) {
+    return 1;
+  }
+  if (p<0) {
+    return -1;
+  }
+  return 0;
+}
+
 //===================================================================
 
 // PolygonInterior(): winding number interior test for a point in a polygon
@@ -70,6 +85,33 @@ PolygonInterior( const GeoPoint &P, const std::vector<SearchPoint>& V)
     else {                       // start y > P.Latitude (no test needed)
       if (V[i+1].get_location().Latitude <= P.Latitude)     // a downward crossing
         if (isLeft( V[i].get_location(), V[i+1].get_location(), P)<0)  // P right of edge
+          --wn;            // have a valid down intersect
+    }
+  }
+  return wn != 0;
+}
+
+
+bool
+PolygonInterior( const FlatGeoPoint &P, const std::vector<SearchPoint>& V)
+{
+  int n = V.size()-1;
+  if (n<2) {
+    return false;
+  }
+
+  int    wn = 0;    // the winding number counter
+
+  // loop through all edges of the polygon
+  for (int i=0; i<n; i++) {   // edge from V[i] to V[i+1]
+    if (V[i].get_flatLocation().Latitude <= P.Latitude) {         // start y <= P.Latitude
+      if (V[i+1].get_flatLocation().Latitude > P.Latitude)      // an upward crossing
+        if (isLeft( V[i].get_flatLocation(), V[i+1].get_flatLocation(), P)>0)  // P left of edge
+          ++wn;            // have a valid up intersect
+    }
+    else {                       // start y > P.Latitude (no test needed)
+      if (V[i+1].get_flatLocation().Latitude <= P.Latitude)     // a downward crossing
+        if (isLeft( V[i].get_flatLocation(), V[i+1].get_flatLocation(), P)<0)  // P right of edge
           --wn;            // have a valid down intersect
     }
   }
