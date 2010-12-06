@@ -419,7 +419,7 @@ InfoBoxManager::ProcessTimer()
 const TCHAR *
 InfoBoxManager::GetTypeDescription(unsigned i)
 {
-  return InfoBoxFactory::GetName(i);
+  return gettext(InfoBoxFactory::GetName(i));
 }
 
 void
@@ -522,7 +522,7 @@ OnInfoBoxHelp(unsigned item)
   int type = (*info_box_combo_list)[item].DataFieldIndex;
 
   TCHAR caption[100];
-  _stprintf(caption, _T("%s: %s"), _("InfoBox"), InfoBoxFactory::GetName(type));
+  _stprintf(caption, _T("%s: %s"), _("InfoBox"), gettext(InfoBoxFactory::GetName(type)));
 
   const TCHAR* text = InfoBoxFactory::GetDescription(type);
   if (text)
@@ -547,7 +547,7 @@ InfoBoxManager::SetupFocused()
 
   DataFieldEnum *dfe = new DataFieldEnum(NULL);
   for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; i++)
-    dfe->addEnumText(gettext(GetTypeDescription(i)));
+    dfe->addEnumText(GetTypeDescription(i));
   dfe->Sort(0);
   dfe->Set(old_type);
 
@@ -556,8 +556,10 @@ InfoBoxManager::SetupFocused()
 
   /* let the user select */
 
+  TCHAR caption[20];
+  _stprintf(caption, _T("%s: %d"), _("InfoBox"), i + 1);
   info_box_combo_list = list;
-  int result = ComboPicker(XCSoarInterface::main_window, _("InfoBox"), *list,
+  int result = ComboPicker(XCSoarInterface::main_window, caption, *list,
                            OnInfoBoxHelp);
   if (result < 0) {
     delete list;
