@@ -68,15 +68,15 @@ isLeft( const FlatGeoPoint &P0, const FlatGeoPoint &P1, const FlatGeoPoint &P2 )
 bool
 PolygonInterior( const GeoPoint &P, const std::vector<SearchPoint>& V)
 {
-  int n = V.size()-1;
-  if (n<2) {
+  if (V.size()<3) {
     return false;
   }
+  const int n = V.size()-1;
 
   int    wn = 0;    // the winding number counter
 
   // loop through all edges of the polygon
-  for (int i=0; i<n; i++) {   // edge from V[i] to V[i+1]
+  for (int i=0; i<n; ++i) {   // edge from V[i] to V[i+1]
     if (V[i].get_location().Latitude <= P.Latitude) {         // start y <= P.Latitude
       if (V[i+1].get_location().Latitude > P.Latitude)      // an upward crossing
         if (isLeft( V[i].get_location(), V[i+1].get_location(), P)>0)  // P left of edge
@@ -95,15 +95,15 @@ PolygonInterior( const GeoPoint &P, const std::vector<SearchPoint>& V)
 bool
 PolygonInterior( const FlatGeoPoint &P, const std::vector<SearchPoint>& V)
 {
-  int n = V.size()-1;
-  if (n<2) {
+  if (V.size()<3) {
     return false;
   }
+  const int n = V.size()-1;
 
   int    wn = 0;    // the winding number counter
 
   // loop through all edges of the polygon
-  for (int i=0; i<n; i++) {   // edge from V[i] to V[i+1]
+  for (int i=0; i<n; ++i) {   // edge from V[i] to V[i+1]
     if (V[i].get_flatLocation().Latitude <= P.Latitude) {         // start y <= P.Latitude
       if (V[i+1].get_flatLocation().Latitude > P.Latitude)      // an upward crossing
         if (isLeft( V[i].get_flatLocation(), V[i+1].get_flatLocation(), P)>0)  // P left of edge

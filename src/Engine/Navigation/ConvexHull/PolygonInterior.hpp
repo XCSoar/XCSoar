@@ -26,6 +26,10 @@
 #include "Navigation/SearchPoint.hpp"
 #include "Compiler.h"
 
+/**
+ * Note that this expects the vector to be closed, that is, starting point
+ * and ending point are the same
+ */
 gcc_pure bool
 PolygonInterior( const GeoPoint &P, const std::vector<SearchPoint>& V);
 
