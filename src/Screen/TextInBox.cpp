@@ -139,15 +139,18 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
                            Layout::Scale(8), Layout::Scale(8));
 
     canvas.background_transparent();
+    canvas.set_text_color(Color::BLACK);
     canvas.text(x, y, Value);
     canvas.background_opaque();
   } else if (Mode.Mode == Filled) {
     canvas.set_background_color(Color::WHITE);
+    canvas.set_text_color(Color::BLACK);
     canvas.text_opaque(x, y, brect, Value);
   } else if (Mode.Mode == Outlined) {
     RenderShadowedText(canvas, Value, x, y);
   } else {
     canvas.background_transparent();
+    canvas.set_text_color(Color::BLACK);
     canvas.text(x, y, Value);
     canvas.background_opaque();
   }
