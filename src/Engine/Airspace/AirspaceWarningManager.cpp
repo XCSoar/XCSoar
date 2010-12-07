@@ -30,7 +30,6 @@
 
 
 AirspaceWarningManager::AirspaceWarningManager(const Airspaces& airspaces,
-                                               const AIRCRAFT_STATE &state,
                                                const TaskManager &task_manager,
                                                const fixed& prediction_time_glide,
                                                const fixed& prediction_time_filter):
@@ -38,7 +37,7 @@ AirspaceWarningManager::AirspaceWarningManager(const Airspaces& airspaces,
   m_prediction_time_glide(prediction_time_glide),
   m_prediction_time_filter(prediction_time_filter),
   m_perf_glide(task_manager.get_glide_polar()),
-  m_state_filter(state, prediction_time_filter),
+  m_state_filter(prediction_time_filter),
   m_perf_filter(m_state_filter),
   m_task(task_manager),
   m_glide_polar(task_manager.get_glide_polar())

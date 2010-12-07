@@ -64,7 +64,7 @@ static TaskManager task_manager(task_events, way_points);
 static Airspaces airspace_database;
 static AIRCRAFT_STATE ac_state; // dummy
 static AirspaceWarningManager airspace_warning(airspace_database,
-                                               ac_state, task_manager);
+                                               task_manager);
 
 ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
 

@@ -38,7 +38,8 @@ int main(int argc, char** argv) {
   }
 
   AIRCRAFT_STATE dummy;
-  aircraft_filter = new AircraftStateFilter(dummy, fixed(120));
+  aircraft_filter = new AircraftStateFilter(fixed(120));
+  aircraft_filter->reset(dummy);
 
   plan_tests(1);
   ok(test_flight(1,0,1.0,true),"basic flight test",0);

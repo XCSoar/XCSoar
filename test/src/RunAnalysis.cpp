@@ -117,12 +117,9 @@ static GlideComputerTaskEvents task_events;
 
 static TaskManager task_manager(task_events, way_points);
 
-static AIRCRAFT_STATE ac_state;
-
 Airspaces airspace_database;
 
 static AirspaceWarningManager airspace_warning(airspace_database,
-                                               ac_state,
                                                task_manager);
 
 static ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);

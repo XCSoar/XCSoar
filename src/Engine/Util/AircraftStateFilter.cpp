@@ -22,8 +22,7 @@
 #include "AircraftStateFilter.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-AircraftStateFilter::AircraftStateFilter(const AIRCRAFT_STATE& state,
-                                         const fixed cutoff_wavelength):
+AircraftStateFilter::AircraftStateFilter(const fixed cutoff_wavelength):
   m_df_x(fixed_zero),
   m_df_y(fixed_zero),
   m_df_alt(fixed_zero),
@@ -33,7 +32,6 @@ AircraftStateFilter::AircraftStateFilter(const AIRCRAFT_STATE& state,
   m_x(fixed_zero),
   m_y(fixed_zero)
 {
-  reset(state);
 }
 
 void 

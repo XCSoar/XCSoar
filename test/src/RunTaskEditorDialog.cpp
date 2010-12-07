@@ -90,9 +90,7 @@ static TaskManager task_manager(task_events, task_behaviour, way_points);
 
 static Airspaces airspace_database;
 
-static AIRCRAFT_STATE ac_state; // dummy
-
-static AirspaceWarningManager airspace_warning(airspace_database, ac_state,
+static AirspaceWarningManager airspace_warning(airspace_database,
                                                task_manager);
 
 AirspaceClientUI airspace_ui(airspace_database, airspace_warning);

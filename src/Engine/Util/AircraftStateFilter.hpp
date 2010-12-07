@@ -37,11 +37,9 @@ public:
   /** 
    * Constructor
    * 
-   * @param state Start state
    * @param cutoff_wavelength -3db cutoff wavelength (s) of filters
    */
-  AircraftStateFilter(const AIRCRAFT_STATE& state,
-                      const fixed cutoff_wavelength=fixed_ten);
+  AircraftStateFilter(const fixed cutoff_wavelength=fixed_ten);
 
 /** 
  * Reset filters to initial state

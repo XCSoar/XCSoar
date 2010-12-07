@@ -118,12 +118,9 @@ ProtectedTaskManager protected_task_manager(task_manager,
                                             XCSoarInterface::SettingsComputer(),
                                             task_events);
 
-AIRCRAFT_STATE ac_state;
-
 Airspaces airspace_database;
 
 static AirspaceWarningManager airspace_warning(airspace_database,
-                                               ac_state,
                                                task_manager);
 
 ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);

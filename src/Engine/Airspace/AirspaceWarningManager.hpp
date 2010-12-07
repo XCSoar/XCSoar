@@ -54,7 +54,6 @@ public:
    * Default constructor
    * 
    * @param airspaces Store of airspaces
-   * @param state Initial state of aircraft
    * @param task_manager Task manager holding task
    * @param prediction_time_glide Time (s) of glide predictor (default 15 s)
    * @param prediction_time_filter Time (s) of state filter predictor (default 60 s)
@@ -62,7 +61,6 @@ public:
    * @return Initialised object
    */
   AirspaceWarningManager(const Airspaces& airspaces,
-                         const AIRCRAFT_STATE &state,
                          const TaskManager &task_manager,
                          const fixed& prediction_time_glide=fixed(15.0),
                          const fixed& prediction_time_filter=fixed(60.0));

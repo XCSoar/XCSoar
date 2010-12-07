@@ -108,9 +108,11 @@ bool run_flight(TaskManager &task_manager,
   if (aircraft_filter)
     aircraft_filter->reset(ac.get_state());
 
-  if (airspaces)
+  if (airspaces) {
     airspace_warnings =
-        new AirspaceWarningManager(*airspaces, ac.get_state(),task_manager);
+        new AirspaceWarningManager(*airspaces, task_manager);
+    airspace_warnings->reset(ac.get_state());
+  }
 
   do {
     if ((task_manager.getActiveTaskPointIndex() == 1) &&
