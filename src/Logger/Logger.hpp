@@ -35,6 +35,7 @@ struct SETTINGS_COMPUTER;
 
 class LoggerImpl;
 class OrderedTask;
+class ProtectedTaskManager;
 
 class Logger {
 private:
@@ -54,9 +55,11 @@ public:
   bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
   void guiStartLogger(const NMEA_INFO& gps_info,
                       const SETTINGS_COMPUTER& settings,
+                      const ProtectedTaskManager &protected_task_manager,
                       bool noAsk = false);
   void guiToggleLogger(const NMEA_INFO& gps_info,
                        const SETTINGS_COMPUTER& settings,
+                       const ProtectedTaskManager &protected_task_manager,
                        bool noAsk = false);
   void guiStopLogger(const NMEA_INFO &gps_info,
                      bool noAsk = false);

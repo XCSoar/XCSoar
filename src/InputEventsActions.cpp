@@ -1081,20 +1081,24 @@ InputEvents::eventLogger(const TCHAR *misc)
 
   if (_tcscmp(misc, _T("start ask")) == 0)
     logger.guiStartLogger(XCSoarInterface::Basic(),
-                          XCSoarInterface::SettingsComputer());
+                          XCSoarInterface::SettingsComputer(),
+                          protected_task_manager);
   else if (_tcscmp(misc, _T("start")) == 0)
     logger.guiStartLogger(XCSoarInterface::Basic(),
-                          XCSoarInterface::SettingsComputer(), true);
+                          XCSoarInterface::SettingsComputer(),
+                          protected_task_manager, true);
   else if (_tcscmp(misc, _T("stop ask")) == 0)
     logger.guiStopLogger(XCSoarInterface::Basic());
   else if (_tcscmp(misc, _T("stop")) == 0)
     logger.guiStopLogger(XCSoarInterface::Basic(), true);
   else if (_tcscmp(misc, _T("toggle ask")) == 0)
     logger.guiToggleLogger(XCSoarInterface::Basic(),
-                           XCSoarInterface::SettingsComputer());
+                           XCSoarInterface::SettingsComputer(),
+                           protected_task_manager);
   else if (_tcscmp(misc, _T("toggle")) == 0)
     logger.guiToggleLogger(XCSoarInterface::Basic(),
-                           XCSoarInterface::SettingsComputer(), true);
+                           XCSoarInterface::SettingsComputer(),
+                           protected_task_manager, true);
   else if (_tcscmp(misc, _T("nmea")) == 0) {
     EnableLogNMEA = !EnableLogNMEA;
     if (EnableLogNMEA) {

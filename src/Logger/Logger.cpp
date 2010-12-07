@@ -27,7 +27,6 @@
 #include "NMEA/Info.hpp"
 #include "Language.hpp"
 #include "Dialogs/Message.hpp"
-#include "Components.hpp"
 #include "LogFile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Asset.hpp"
@@ -106,6 +105,7 @@ Logger::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
 void
 Logger::guiStartLogger(const NMEA_INFO& gps_info,
                     const SETTINGS_COMPUTER& settings,
+                       const ProtectedTaskManager &protected_task_manager,
                     bool noAsk)
 {
   if (isLoggerActive() || gps_info.gps.Replay)
@@ -150,12 +150,13 @@ Logger::guiStartLogger(const NMEA_INFO& gps_info,
 void
 Logger::guiToggleLogger(const NMEA_INFO& gps_info,
                      const SETTINGS_COMPUTER& settings,
+                      const ProtectedTaskManager &protected_task_manager,
                      bool noAsk)
 {
   if (isLoggerActive()) {
     guiStopLogger(gps_info, noAsk);
   } else {
-    guiStartLogger(gps_info, settings, noAsk);
+    guiStartLogger(gps_info, settings, protected_task_manager, noAsk);
   }
 }
 
