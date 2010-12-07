@@ -334,6 +334,8 @@ Airspaces::synchronise_in_range(const Airspaces& master,
   AirspaceVector contents_self;
   contents_self.reserve(max(airspace_tree.size(), contents_master.size()));
 
+  task_projection = master.task_projection; // ensure these are up to date
+
   for (AirspaceTree::const_iterator t = airspace_tree.begin();
        t != airspace_tree.end(); ++t) {
     contents_self.push_back(*t);
