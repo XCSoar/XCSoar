@@ -38,7 +38,6 @@ Copyright_License {
 Trigger closeTriggerEvent(_T("mapCloseEvent"));
 Trigger globalRunningEvent(_T("globalRunning"));
 Trigger airspaceWarningEvent(_T("airspaceWarning"));
-Trigger targetManipEvent(_T("targetManip"));
 Trigger triggerClimbEvent(_T("triggerClimb"));
 
 Mutex mutexBlackboard;

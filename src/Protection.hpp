@@ -50,7 +50,6 @@ extern bool MapFileChanged;
 extern Trigger closeTriggerEvent;
 extern Trigger globalRunningEvent;
 extern Trigger airspaceWarningEvent;
-extern Trigger targetManipEvent;
 extern Trigger triggerClimbEvent;
 
 /**
