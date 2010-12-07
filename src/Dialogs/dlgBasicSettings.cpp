@@ -68,6 +68,12 @@ SetBallastTimer(bool active)
   if (active == XCSoarInterface::SettingsComputer().BallastTimerActive)
     return;
 
+  if (active && changed) {
+    /* apply the new ballast settings before starting the timer */
+    protected_task_manager.set_glide_polar(*glide_polar);
+    changed = false;
+  }
+
   XCSoarInterface::SetSettingsComputer().BallastTimerActive = active;
 
   SetButtons();
