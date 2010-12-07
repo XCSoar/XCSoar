@@ -40,13 +40,12 @@
 class AirspaceIntersectionVisitorSlice: public AirspaceIntersectionVisitor
 {
 public:
-  AirspaceIntersectionVisitorSlice(Canvas &canvas, Chart &chart,
-                                   const SETTINGS_MAP &settings,
-                                   const GeoPoint start,
-                                   const ALTITUDE_STATE& state) :
-    m_canvas(canvas), m_chart(chart), m_settings(settings), m_start(start), m_state(state)
-  {
-  }
+  AirspaceIntersectionVisitorSlice(Canvas &_canvas, Chart &_chart,
+                                   const SETTINGS_MAP &_settings_map,
+                                   const GeoPoint _start,
+                                   const ALTITUDE_STATE& _state) :
+    canvas(_canvas), chart(_chart), settings_map(_settings_map),
+    start(_start), state(_state) {}
 
   void
   Render(const AbstractAirspace& as)
@@ -60,41 +59,41 @@ public:
       return;
 
     // Select pens and brushes
-    if (m_settings.bAirspaceBlackOutline)
-      m_canvas.black_pen();
+    if (settings_map.bAirspaceBlackOutline)
+      canvas.black_pen();
     else
-      m_canvas.select(Graphics::hAirspacePens[type]);
+      canvas.select(Graphics::hAirspacePens[type]);
 
-    m_canvas.select(Graphics::GetAirspaceBrushByClass(type, m_settings));
-    m_canvas.set_text_color(Graphics::GetAirspaceColourByClass(type, m_settings));
+    canvas.select(Graphics::GetAirspaceBrushByClass(type, settings_map));
+    canvas.set_text_color(Graphics::GetAirspaceColourByClass(type, settings_map));
 
     RECT rcd;
     // Calculate top and bottom coordinate
-    rcd.top = m_chart.screenY(as.get_top_altitude(m_state));
+    rcd.top = chart.screenY(as.get_top_altitude(state));
     if (as.is_base_terrain())
-      rcd.bottom = m_chart.screenY(fixed_zero);
+      rcd.bottom = chart.screenY(fixed_zero);
     else
-      rcd.bottom = m_chart.screenY(as.get_base_altitude(m_state));
+      rcd.bottom = chart.screenY(as.get_base_altitude(state));
 
     // Iterate through the intersections
     for (AirspaceIntersectionVector::const_iterator it = m_intersections.begin();
          it != m_intersections.end(); ++it) {
       const GeoPoint p_start = it->first;
       const GeoPoint p_end = it->second;
-      const fixed distance_start = m_start.distance(p_start);
-      const fixed distance_end = m_start.distance(p_end);
+      const fixed distance_start = start.distance(p_start);
+      const fixed distance_end = start.distance(p_end);
 
       // Determine left and right coordinate
-      rcd.left = m_chart.screenX(distance_start);
-      rcd.right = m_chart.screenX(distance_end);
+      rcd.left = chart.screenX(distance_start);
+      rcd.right = chart.screenX(distance_end);
 
       // only one edge found, next edge must be beyond screen
       if ((rcd.left == rcd.right) && (p_start == p_end)) {
-        rcd.right = m_chart.screenX(m_chart.getXmax());
+        rcd.right = chart.screenX(chart.getXmax());
       }
 
       // Draw the airspace
-      m_canvas.rectangle(rcd.left, rcd.top, rcd.right, rcd.bottom);
+      canvas.rectangle(rcd.left, rcd.top, rcd.right, rcd.bottom);
     }
   }
 
@@ -111,11 +110,11 @@ public:
   }
 
 private:
-  Canvas& m_canvas;
-  Chart& m_chart;
-  const SETTINGS_MAP& m_settings;
-  const GeoPoint m_start;
-  const ALTITUDE_STATE& m_state;
+  Canvas& canvas;
+  Chart& chart;
+  const SETTINGS_MAP& settings_map;
+  const GeoPoint start;
+  const ALTITUDE_STATE& state;
 };
 
 CrossSectionWindow::CrossSectionWindow() :
