@@ -24,4 +24,4 @@ Copyright_License {
 #include "Thread/StoppableThread.hpp"
 
 StoppableThread::StoppableThread()
-  :stop_trigger(_T("StoppableThread::stop_trigger"), true) {}
+  :stop_trigger(true) {}

@@ -40,7 +40,7 @@ Copyright_License {
  * @param _glide_computer The GlideComputer used for the CalculationThread
  */
 CalculationThread::CalculationThread(GlideComputer &_glide_computer)
-  :gps_trigger(_T("gpsUpdatedTriggerEvent"), false),
+  :gps_trigger(false),
    glide_computer(_glide_computer) {}
 
 /**

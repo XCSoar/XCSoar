@@ -25,8 +25,7 @@ Copyright_License {
 #include "Thread/Trigger.hpp"
 
 WorkerThread::WorkerThread()
-  :event_trigger(_T("WorkerThread::event_trigger"), false),
-   running(_T("WorkerThread::running"), true) {
+  :event_trigger(false), running(true) {
   running.trigger();
 }
 

@@ -57,14 +57,14 @@ public:
    * @param _manual_reset whether trigger needs to be manually reset
    */
 #ifdef HAVE_POSIX
-  Trigger(const TCHAR *name, bool _manual_reset = true)
+  Trigger(bool _manual_reset = true)
     :manual_reset(_manual_reset), value(false) {
     pthread_mutex_init(&mutex, NULL);
     pthread_cond_init(&cond, NULL);
   }
 #else
-  Trigger(const TCHAR *name, bool _manual_reset = true)
-    :handle(::CreateEvent(NULL, _manual_reset, false, name)) {}
+  Trigger(bool _manual_reset = true)
+    :handle(::CreateEvent(NULL, _manual_reset, false, NULL)) {}
 #endif
 
   /**

@@ -35,10 +35,10 @@ Copyright_License {
 
 #include <assert.h>
 
-Trigger closeTriggerEvent(_T("mapCloseEvent"));
-Trigger globalRunningEvent(_T("globalRunning"));
-Trigger airspaceWarningEvent(_T("airspaceWarning"));
-Trigger triggerClimbEvent(_T("triggerClimb"));
+Trigger closeTriggerEvent;
+Trigger globalRunningEvent;
+Trigger airspaceWarningEvent;
+Trigger triggerClimbEvent;
 
 Mutex mutexBlackboard;
 // protect GPS_INFO, maccready etc,

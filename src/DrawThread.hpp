@@ -66,8 +66,7 @@ class DrawThread : public StoppableThread {
 public:
   DrawThread(GlueMapWindow &_map, GaugeFLARM *_flarm,
              GaugeThermalAssistant *_ta)
-    :running(_T("DrawThread::running"), true),
-     trigger(_T("DrawThread::trigger"), true),
+    :running(true), trigger(true),
      map(_map), flarm(_flarm), ta(_ta) {
   }
 
