@@ -134,7 +134,7 @@ public:
 
     TextInBoxMode_t text_mode;
     if (in_task)
-      text_mode.Mode = Outlined;
+      text_mode.Mode = OutlinedInverted;
 
     bool do_write_label = in_task || (settings_map.DeclutterLabels < 2);
     bool reachable = false;
