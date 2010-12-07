@@ -60,7 +60,8 @@ DeleteCalculationsPersist(void)
  * @param Calculated DERIVED_INFO the values should be loaded into
  */
 void
-LoadCalculationsPersist(DERIVED_INFO *Calculated)
+LoadCalculationsPersist(DERIVED_INFO *Calculated,
+                        GlideComputer &glide_computer)
 {
 
   return; // do nothing, this is broken for CommonStats
@@ -152,7 +153,8 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
  */
 void
 SaveCalculationsPersist(const NMEA_INFO &gps_info,
-    const DERIVED_INFO &Calculated)
+                        const DERIVED_INFO &Calculated,
+                        const GlideComputer &glide_computer)
 {
   unsigned size;
 

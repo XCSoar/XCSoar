@@ -81,6 +81,8 @@ SetCalcCaption(const TCHAR* caption)
 static void
 OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
+  assert(glide_computer != NULL);
+
   canvas.clear(Color(0x40, 0x40, 0x00));
   canvas.set_text_color(Color::WHITE);
   canvas.select(Fonts::Map);
@@ -89,7 +91,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 
   // background is painted in the base-class
 
-  const FlightStatistics &fs = glide_computer.GetFlightStats();
+  const FlightStatistics &fs = glide_computer->GetFlightStats();
   const GlidePolar glide_polar = protected_task_manager.get_glide_polar();
 
   switch (page) {
@@ -102,7 +104,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_WIND:
     fs.RenderWind(canvas, rcgfx, XCSoarInterface::Basic(),
-                  glide_computer.windanalyser.windstore);
+                  glide_computer->windanalyser.windstore);
     break;
   case ANALYSIS_PAGE_POLAR:
     fs.RenderGlidePolar(canvas, rcgfx, XCSoarInterface::Calculated(),
@@ -151,7 +153,9 @@ Update(void)
 {
   TCHAR sTmp[1000];
 
-  FlightStatistics &fs = glide_computer.GetFlightStats();
+  assert(glide_computer != NULL);
+
+  FlightStatistics &fs = glide_computer->GetFlightStats();
   GlidePolar polar = protected_task_manager.get_glide_polar();
   const CommonStats& stats = XCSoarInterface::Calculated().common_stats;
 

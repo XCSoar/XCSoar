@@ -67,22 +67,24 @@ void TriggerVarioUpdate()
 
 
 void CreateCalculationThread(void) {
+  assert(glide_computer != NULL);
+
   device_blackboard.ReadSettingsComputer(XCSoarInterface::SettingsComputer());
 
-  glide_computer.ReadBlackboard(device_blackboard.Basic());
-  glide_computer.ReadSettingsComputer(device_blackboard.SettingsComputer());
-  glide_computer.ProcessGPS();
+  glide_computer->ReadBlackboard(device_blackboard.Basic());
+  glide_computer->ReadSettingsComputer(device_blackboard.SettingsComputer());
+  glide_computer->ProcessGPS();
 
   XCSoarInterface::ExchangeBlackboard();
 
-  device_blackboard.ReadBlackboard(glide_computer.Calculated());
+  device_blackboard.ReadBlackboard(glide_computer->Calculated());
 
   GaugeVario *gauge_vario = XCSoarInterface::main_window.vario;
   if (gauge_vario != NULL)
     instrument_thread = new InstrumentThread(*gauge_vario);
 
   // Create a read thread for performing calculations
-  calculation_thread = new CalculationThread(glide_computer);
+  calculation_thread = new CalculationThread(*glide_computer);
 }
 
 void

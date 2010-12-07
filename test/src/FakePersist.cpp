@@ -23,7 +23,15 @@ Copyright_License {
 
 #include "Persist.hpp"
 
-void LoadCalculationsPersist(DERIVED_INFO *Calculated) {}
-void SaveCalculationsPersist(const NMEA_INFO &gps_info,
-                             const DERIVED_INFO &Calculated) {}
+void
+LoadCalculationsPersist(DERIVED_INFO *Calculated,
+                        GlideComputer &glide_computer)
+{}
+
+void
+SaveCalculationsPersist(const NMEA_INFO &gps_info,
+                        const DERIVED_INFO &Calculated,
+                        const GlideComputer &glide_computer)
+{}
+
 void DeleteCalculationsPersist() {}

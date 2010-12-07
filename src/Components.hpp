@@ -52,7 +52,7 @@ extern Marks *marks;
 extern TopologyStore *topology;
 extern RasterTerrain *terrain;
 extern RasterWeather RASP;
-extern GlideComputer glide_computer;
+extern GlideComputer *glide_computer;
 #ifndef ENABLE_OPENGL
 extern DrawThread *draw_thread;
 #endif

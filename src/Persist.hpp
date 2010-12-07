@@ -27,10 +27,17 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
+class GlideComputer;
 
-void LoadCalculationsPersist(DERIVED_INFO *Calculated);
-void SaveCalculationsPersist(const NMEA_INFO &gps_info,
-			     const DERIVED_INFO &Calculated);
+void
+LoadCalculationsPersist(DERIVED_INFO *Calculated,
+                        GlideComputer &glide_computer);
+
+void
+SaveCalculationsPersist(const NMEA_INFO &gps_info,
+                        const DERIVED_INFO &Calculated,
+                        const GlideComputer &glide_computer);
+
 void DeleteCalculationsPersist(void);
 
 

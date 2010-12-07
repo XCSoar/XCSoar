@@ -128,8 +128,7 @@ AirspaceWarningManager airspace_warning(airspace_database,
 
 ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
 
-GlideComputer glide_computer(protected_task_manager, airspace_warnings,
-                             task_events);
+GlideComputer *glide_computer;
 
 #ifdef GNAV
 AltairControl altair_control;
@@ -324,7 +323,9 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // Initialize main blackboard data
   task_manager.reset();
 
-  glide_computer.Initialise();
+  glide_computer = new GlideComputer(protected_task_manager, airspace_warnings,
+                                     task_events);
+  glide_computer->Initialise();
 
   // Load the EGM96 geoid data
   OpenGeoid();
@@ -566,7 +567,7 @@ XCSoarInterface::Shutdown(void)
   RawLoggerShutdown();
 
   // Save everything in the persistent memory file
-  SaveCalculationsPersist(Basic(), Calculated());
+  SaveCalculationsPersist(Basic(), Calculated(), *glide_computer);
 
   // Clear the FLARM database
   FlarmDetails::Reset();
@@ -584,6 +585,8 @@ XCSoarInterface::Shutdown(void)
 
   // Clear the EGM96 database
   CloseGeoid();
+
+  delete glide_computer;
 
   delete file_cache;
 
