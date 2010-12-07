@@ -24,6 +24,7 @@
 
 #include "FlatGeoPoint.hpp"
 #include "Math/fixed.hpp"
+#include <utility>
 #include "Compiler.h"
 
 /**
@@ -51,12 +52,12 @@ public:
 /** 
  * Test whether two rays intersect
  * 
- * @param oray Other ray to test intersection with
+ * @param that Other ray to test intersection with
  * 
  * @return Parameter [0,1] of vector on this ray that intersection occurs (or -1 if fail)
  */
   gcc_pure
-  fixed intersects(const FlatRay &oray) const;
+  fixed intersects(const FlatRay &that) const;
 
 /** 
  * Parametric form of ray
@@ -67,6 +68,17 @@ public:
  */
   gcc_pure
   FlatGeoPoint parametric(const fixed t) const;
+
+  /**
+   * Determine if two rays intersect away from their nodes
+   */
+  gcc_pure
+  bool
+  intersects_distinct(const FlatRay& that) const;
+
+private:
+  gcc_pure
+  std::pair<int, int> intersects_ratio(const FlatRay &that) const;
 };
 
 #endif
