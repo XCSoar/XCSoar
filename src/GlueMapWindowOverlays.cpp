@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Logger/Logger.hpp"
+#include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Appearance.hpp"
 #include "Screen/TextInBox.hpp"

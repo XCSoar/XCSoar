@@ -65,8 +65,4 @@ public:
   void clearBuffer();
 };
 
-extern Logger logger;
-
 #endif
-
-
