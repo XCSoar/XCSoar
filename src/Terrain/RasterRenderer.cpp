@@ -152,7 +152,7 @@ RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
           ? (h - min_height) * 254 / height_factor
           : min(254, h >> height_scale);
         *p++ = oColorBuf[h];
-      } else if (!RasterBuffer::is_water(h)) {
+      } else if (RasterBuffer::is_water(h)) {
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
       } else {
