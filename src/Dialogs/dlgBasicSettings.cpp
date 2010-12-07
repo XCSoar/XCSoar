@@ -181,7 +181,17 @@ OnTimerNotify(WndForm &Sender)
 {
   (void)Sender;
 
-  SetBallast();
+  if (XCSoarInterface::SettingsComputer().BallastTimerActive && !changed) {
+    /* get new GlidePolar values */
+    *glide_polar = protected_task_manager.get_glide_polar();
+
+    /* display the new values on the screen */
+    SetBallast();
+
+    /* SetBallast() may have set the "changed" flag, reset it */
+    changed = false;
+  }
+
   SetAltitude();
 }
 
