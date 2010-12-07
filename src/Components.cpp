@@ -122,9 +122,9 @@ AIRCRAFT_STATE ac_state;
 
 Airspaces airspace_database;
 
-AirspaceWarningManager airspace_warning(airspace_database,
-                                        ac_state,
-                                        task_manager);
+static AirspaceWarningManager airspace_warning(airspace_database,
+                                               ac_state,
+                                               task_manager);
 
 ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
 
