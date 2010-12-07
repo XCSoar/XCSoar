@@ -23,7 +23,6 @@
 #define AIRSPACEPOLYGON_HPP
 
 #include "AbstractAirspace.hpp"
-#include "Navigation/SearchPointVector.hpp"
 #include <vector>
 
 #ifdef DO_PRINT
@@ -49,16 +48,6 @@ public:
    */
   AirspacePolygon(const std::vector<GeoPoint>& pts,
     const bool prune = false);
-
-  /** 
-   * Compute bounding box enclosing the airspace.  Rounds up/down
-   * so discretisation ensures bounding box is indeed enclosing.
-   * 
-   * @param task_projection Projection used for flat-earth representation
-   * 
-   * @return Enclosing bounding box
-   */
-  const FlatBoundingBox get_bounding_box(const TaskProjection& task_projection);
 
 /** 
  * Get arbitrary center or reference point for use in determining
@@ -91,23 +80,6 @@ public:
                                         const GeoVector &vec) const;
 
   GeoPoint closest_point(const GeoPoint& loc) const;
-
-  /**
-   * Accessor for airspace shape
-   * @return border of airspace
-   */
-  const SearchPointVector& get_points() const {
-    return m_border;
-  }
-
-private:
-  SearchPointVector m_border;
-  bool m_is_convex;
-
-/** 
- * Project border.
- */
-  virtual void project(const TaskProjection& tp);
 
 public:
 #ifdef DO_PRINT

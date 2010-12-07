@@ -194,7 +194,9 @@ Airspaces::find_inside(const AIRCRAFT_STATE &state,
 void 
 Airspaces::optimise()
 {
-  if (task_projection.update_fast()) {
+  if (!m_owner || task_projection.update_fast()) {
+    // dont update task_projection if not owner!
+
     // task projection changed, so need to push items back onto stack
     // to re-build airspace envelopes
 
@@ -226,10 +228,12 @@ Airspaces::insert(AbstractAirspace* asp)
   // this allows for airspaces to be add at any time
   m_QNH = fixed_zero;
 
-  if (empty())
-    task_projection.reset(asp->get_center());
+  if (m_owner) {
+    if (empty())
+      task_projection.reset(asp->get_center());
 
-  task_projection.scan_location(asp->get_center());
+    task_projection.scan_location(asp->get_center());
+  }
 
   tmp_as.push_back(asp);
 }
@@ -239,16 +243,20 @@ Airspaces::clear()
 {
   // delete temporaries in case they were added without an optimise() call
   while (!tmp_as.empty()) {
-    AbstractAirspace *aa = tmp_as.front();
-    delete aa;
+    if (m_owner) {
+      AbstractAirspace *aa = tmp_as.front();
+      delete aa;
+    }
     tmp_as.pop_front();
   }
 
   // delete items in the tree
-  for (AirspaceTree::iterator v = airspace_tree.begin();
-       v != airspace_tree.end(); ++v) {
-    Airspace a = *v;
-    a.destroy();
+  if (m_owner) {
+    for (AirspaceTree::iterator v = airspace_tree.begin();
+         v != airspace_tree.end(); ++v) {
+      Airspace a = *v;
+      a.destroy();
+    }
   }
 
   // then delete the tree
@@ -295,4 +303,81 @@ Airspaces::AirspaceTree::const_iterator
 Airspaces::end() const
 {
   return airspace_tree.end();
+}
+
+Airspaces::Airspaces(const Airspaces& master,
+  bool owner):
+  m_QNH(master.m_QNH),
+  m_owner(owner),
+  task_projection(master.task_projection)
+{
+}
+
+void
+Airspaces::clear_clearances()
+{
+  for (AirspaceTree::iterator v = airspace_tree.begin();
+       v != airspace_tree.end(); ++v) {
+    v->clear_clearance();
+  }
+}
+
+
+void
+Airspaces::synchronise_in_range(const Airspaces& master,
+                                const GeoPoint &location,
+                                const fixed range,
+                                const AirspacePredicate &condition)
+{
+  bool changed = false;
+  const AirspaceVector contents_master = master.scan_range(location, range, condition);
+  AirspaceVector contents_self;
+  contents_self.reserve(max(airspace_tree.size(), contents_master.size()));
+
+  for (AirspaceTree::const_iterator t = airspace_tree.begin();
+       t != airspace_tree.end(); ++t) {
+    contents_self.push_back(*t);
+  }
+
+  // find items to add
+  for (AirspaceVector::const_iterator v = contents_master.begin(); v != contents_master.end(); ++v) {
+    const AbstractAirspace* other = v->get_airspace();
+
+    bool found = false;
+    for (AirspaceVector::iterator s = contents_self.begin(); s != contents_self.end(); ++s) {
+      const AbstractAirspace* self = s->get_airspace();
+      if (self == other) {
+        found = true;
+        contents_self.erase(s);
+        break;
+      }
+    }
+    if (!found) {
+      insert(v->get_airspace());
+      changed = true;
+    }
+  }
+  // anything left in the self list are items that were not in the query,
+  // so delete them --- including the clearances!
+  for (AirspaceVector::iterator v = contents_self.begin(); v != contents_self.end();) {
+    bool found = false;
+    for (AirspaceTree::iterator t = airspace_tree.begin();
+         t != airspace_tree.end(); ) {
+      if (t->get_airspace() == v->get_airspace()) {
+        AirspaceTree::const_iterator new_t = t;
+        new_t++;
+        airspace_tree.erase_exact(*t);
+        t = new_t;
+        found = true;
+      } else {
+        ++t;
+      }
+    }
+    assert(found);
+    v->clear_clearance();
+    v = contents_self.erase(v);
+    changed = true;
+  }
+  if (changed)
+    optimise();
 }

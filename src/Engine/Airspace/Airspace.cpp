@@ -83,6 +83,8 @@ Airspace::set_ground_level(const fixed alt) const
 {
   if (pimpl_airspace) 
     pimpl_airspace->set_ground_level(alt);
+  else
+    assert(1);
 }
 
 void 
@@ -90,5 +92,16 @@ Airspace::set_flight_level(const AtmosphericPressure &press) const
 {
   if (pimpl_airspace) 
     pimpl_airspace->set_flight_level(press);
+  else
+    assert(1);
 }
 
+
+void
+Airspace::clear_clearance() const
+{
+  if (pimpl_airspace)
+    pimpl_airspace->clear_clearance();
+  else
+    assert(1);
+}

@@ -165,6 +165,18 @@ public:
    */
   void set_flight_level(const AtmosphericPressure &press) const;
 
+  /**
+   * Clear the convex clearance polygon
+   */
+  void clear_clearance() const;
+
+  /**
+   * Equality operator, matches if contained airspace is the same
+   */
+  bool operator==(Airspace const& a) const {
+    return (get_airspace() == a.get_airspace());
+  }
+
 private:
 
   mutable AbstractAirspace *pimpl_airspace;

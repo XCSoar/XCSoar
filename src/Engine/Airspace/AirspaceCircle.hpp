@@ -47,16 +47,6 @@ public:
    */
   AirspaceCircle(const GeoPoint &loc, const fixed _radius);
 
-  /** 
-   * Compute bounding box enclosing the airspace.  Rounds up/down
-   * so discretisation ensures bounding box is indeed enclosing.
-   * 
-   * @param task_projection Projection used for flat-earth representation
-   * 
-   * @return Enclosing bounding box
-   */
-  const FlatBoundingBox get_bounding_box(const TaskProjection& task_projection);
-
   /**
    * Get arbitrary center or reference point for use in determining
    * overall center location of all airspaces
