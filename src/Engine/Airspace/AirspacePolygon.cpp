@@ -92,12 +92,9 @@ AirspacePolygon::intersects(const GeoPoint& start,
 
     const FlatRay r_seg(it->get_flatLocation(), 
                         (it+1)->get_flatLocation());
-
-    const fixed t = ray.intersects(r_seg);
-    
-    if (positive(t)) {
-      sorter.add(t, m_task_projection->unproject(ray.parametric(t)));
-    }
+    fixed t;
+    if (r_seg.intersects_distinct(ray, t))
+      sorter.add(t, m_task_projection->unproject(r_seg.parametric(t)));
   }
   return sorter.all();
 }

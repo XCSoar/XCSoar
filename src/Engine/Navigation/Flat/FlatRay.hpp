@@ -76,6 +76,10 @@ public:
   bool
   intersects_distinct(const FlatRay& that) const;
 
+  // as above, but if true, also calculates t parameter
+  bool
+  intersects_distinct(const FlatRay& that, fixed& t) const;
+
 private:
   gcc_pure
   std::pair<int, int> intersects_ratio(const FlatRay &that) const;

@@ -21,7 +21,7 @@
  */
 #include "FlatRay.hpp"
 
-#define sgn(x) (x>0? 1:-1)
+#define sgn(x) (x>=0? 1:-1)
 
 /*
  * Checks whether two lines 
@@ -80,5 +80,18 @@ bool
 FlatRay::intersects_distinct(const FlatRay& that) const
 {
   std::pair<int, int> r = intersects_ratio(that);
-  return (r.second!=0);
+  return (r.second!=0) && (sgn(r.second)*r.first>0) && (abs(r.first)<abs(r.second));
+}
+
+bool
+FlatRay::intersects_distinct(const FlatRay& that, fixed& t) const
+{
+  std::pair<int, int> r = intersects_ratio(that);
+  if ((r.second!=0) && (sgn(r.second)*r.first>0) && (abs(r.first)<abs(r.second))) {
+    t = ((fixed)r.first)/r.second;
+    return true;
+  } else {
+    t = -fixed_one;
+    return false;
+  }
 }
