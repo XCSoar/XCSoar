@@ -51,6 +51,7 @@ public:
 
   static const unsigned max_abort; /// max number of items in list
   static const fixed min_search_range; /// min search range in km
+  static const fixed max_search_range; /// max search range in km
 
   typedef std::pair < Waypoint, GlideResult > Alternate;
   typedef std::vector < Alternate > AlternateVector; 
