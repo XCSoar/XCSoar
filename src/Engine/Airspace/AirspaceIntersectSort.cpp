@@ -37,9 +37,14 @@ AirspaceIntersectSort::all()
 
   GeoPoint p_last = m_start;
   bool waiting = false;
+  bool start = true;
   while (!m_q.empty()) {
     const GeoPoint p_this = m_q.top().second; 
-    const GeoPoint p_mid = (p_this+p_last)*fixed_half;
+    const GeoPoint p_mid = start?
+      p_last: ((p_last+p_this)*fixed_half);
+
+    // when inside, checking midpoint is ok, otherwise we should
+    // check just beyond the last location
 
     if (m_airspace->inside(p_mid)) {    
       res.push_back(std::make_pair(p_last, p_this));
@@ -56,6 +61,7 @@ AirspaceIntersectSort::all()
     // advance
     p_last = p_this;
     m_q.pop();
+    start = false;
   }
 
   // fill last point if not matched 
