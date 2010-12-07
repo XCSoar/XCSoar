@@ -77,6 +77,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const RECT &rc,
 
   TextInBoxMode_t mode;
   mode.Mode = RoundedBlack;
+  mode.Bold = true;
 
   TextInBox(canvas, txt, x, y, mode, rc, NULL);
 }
@@ -257,6 +258,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
 
       TextInBoxMode_t TextInBoxMode;
       TextInBoxMode.Mode = RoundedBlack;
+      TextInBoxMode.Bold = true;
       TextInBox(canvas, Value, 0, (int)Offset, TextInBoxMode, rc);
 
     } else if (Appearance.IndFinalGlide == fgFinalGlideAltA) {

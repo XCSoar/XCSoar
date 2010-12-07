@@ -28,15 +28,9 @@
     <Button Name="cmdInserInTask" Caption="Insert in task" X="50" Width="150" Height="30" />
     <Button Name="cmdAppendInTask" Caption="Append to task" X="50" Width="150" Height="30" />
     <Button Name="cmdRemoveFromTask" Caption="Remove from task" X="50" Width="150" Height="30" />
+    <Button Name="cmdNewHome" Caption="Set as new home" X="50" Width="150" Height="30" />
+    <Button Name="cmdTeamCode" Caption="Set teamcode" X="50" Width="150" Height="30" />
   </Panel>
 
   <Canvas Name="frmImage" X="70" Y="0" Width="0" Height="222" Visible="0" Border="0"/>
-
-  <Panel Name="frmSpecial" X="70" Y="0" Width="246" Height="222" Visible="0" Border="0">
-    <Button Name="cmdSetAlternate1" Caption="Set as Alternate 1" X="50" Y="10" Width="150" Height="30" />
-    <Button Name="cmdSetAlternate2" Caption="Set as Alternate 2" X="50" Width="150" Height="30" />
-    <Button Name="cmdNewHome" Caption="Set as new home" X="50" Width="150" Height="30" />
-    <Button Name="cmdTeamCode" Caption="Set teamcode" X="50" Width="150" Height="30" />
-    <Button Name="cmdClearAlternates" Caption="Clear Alternates" X="50" Width="150" Height="30" />
-  </Panel>
 </Form>

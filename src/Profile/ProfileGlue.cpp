@@ -213,24 +213,6 @@ Profile::Use()
   Get(szProfileHomeWaypoint,
       settings_computer.HomeWaypoint);
 
-  if (Get(szProfileAlternate1, Temp)) {
-    // TODO: for portrait no need to force alternate calculations here.
-    // Infobox will trigger them on if visible..
-    settings_computer.Alternate1 = Temp;
-    settings_computer.EnableAlternate1 = true;
-  } else {
-    settings_computer.Alternate1 = -1;
-    settings_computer.EnableAlternate1 = false;
-  }
-
-  if (Get(szProfileAlternate2, Temp)) {
-    settings_computer.Alternate2 = Temp;
-    settings_computer.EnableAlternate2 = true;
-  } else {
-    settings_computer.Alternate2 = -1;
-    settings_computer.EnableAlternate2 = false;
-  }
-
   Get(szProfileSnailWidthScale,
       settings_map.SnailWidthScale);
 

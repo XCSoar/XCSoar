@@ -64,7 +64,6 @@ static WndForm *wf = NULL;
 static WndListFrame *wDetails = NULL;
 static WndFrame *wInfo = NULL;
 static WndFrame *wCommand = NULL;
-static WndFrame *wSpecial = NULL; // VENTA3
 static WndOwnerDrawFrame *wImage = NULL;
 static BOOL hasimage1 = false;
 static BOOL hasimage2 = false;
@@ -89,8 +88,8 @@ NextPage(int Step)
 
   do {
     if (page < 0)
-      page = 5;
-    if (page > 5)
+      page = 4;
+    if (page > 4)
       page = 0;
 
     switch (page) {
@@ -110,11 +109,7 @@ NextPage(int Step)
       page_ok = true;
       break;
 
-    case 3: // VENTA3
-      page_ok = true;
-      break;
-
-    case 4:
+    case 3:
       if (!hasimage1)
         page += Step;
       else
@@ -122,7 +117,7 @@ NextPage(int Step)
 
       break;
 
-    case 5:
+    case 4:
       if (!hasimage2)
         page += Step;
       else
@@ -141,8 +136,7 @@ NextPage(int Step)
   wInfo->set_visible(page == 0);
   wDetails->set_visible(page == 1);
   wCommand->set_visible(page == 2);
-  wSpecial->set_visible(page == 3);
-  wImage->set_visible(page >= 4);
+  wImage->set_visible(page >= 3);
 }
 
 static void
@@ -283,42 +277,6 @@ OnNewHomeClicked(gcc_unused WndButton &button)
                           XCSoarInterface::SetSettingsComputer(),
                           false, false);
   }
-
-  wf->SetModalResult(mrOK);
-}
-
-// VENTA3
-static void 
-OnSetAlternate1Clicked(gcc_unused WndButton &button)
-{
-  assert(selected_waypoint != NULL);
-
-  XCSoarInterface::SetSettingsComputer().Alternate1 = selected_waypoint->id;
-  Profile::Set(szProfileAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
-  wf->SetModalResult(mrOK);
-}
-
-static void 
-OnSetAlternate2Clicked(gcc_unused WndButton &button)
-{
-  assert(selected_waypoint != NULL);
-
-  XCSoarInterface::SetSettingsComputer().Alternate2 = selected_waypoint->id;
-  Profile::Set(szProfileAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
-  wf->SetModalResult(mrOK);
-}
-
-static void
-OnClearAlternatesClicked(gcc_unused WndButton &button)
-{
-  XCSoarInterface::SetSettingsComputer().Alternate1 = -1;
-  XCSoarInterface::SetSettingsComputer().EnableAlternate1 = false;
-  XCSoarInterface::SetSettingsComputer().Alternate2 = -1;
-  XCSoarInterface::SetSettingsComputer().EnableAlternate2 = false;
-  Profile::Set(szProfileAlternate1,
-      XCSoarInterface::SettingsComputer().Alternate1);
-  Profile::Set(szProfileAlternate2,
-      XCSoarInterface::SettingsComputer().Alternate2);
 
   wf->SetModalResult(mrOK);
 }
@@ -528,17 +486,10 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
 {
   selected_waypoint = &way_point;
 
-  TCHAR sTmp[128];
-  int sunsethours;
-  int sunsetmins;
-  WndProperty *wp;
-
   wf = LoadDialog(CallBackTable, parent,
                   Layout::landscape ? _T("IDR_XML_WAYPOINTDETAILS_L") :
                                       _T("IDR_XML_WAYPOINTDETAILS"));
-
-  if (!wf)
-    return;
+  assert(wf != NULL);
 
   nTextLines = 0;
 
@@ -556,9 +507,11 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
            Directory,
            selected_waypoint->id+1);
 
+  TCHAR sTmp[128];
   _stprintf(sTmp, _T("%s: '%s'"), wf->GetCaption(), selected_waypoint->Name.c_str());
   wf->SetCaption(sTmp);
 
+  WndProperty *wp;
   wp = ((WndProperty *)wf->FindByName(_T("prpWpComment")));
   wp->SetText(selected_waypoint->Comment.c_str());
 
@@ -579,8 +532,8 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
                    XCSoarInterface::Basic().DateTime,
                    fixed(GetUTCOffset()) / 3600);
 
-  sunsethours = (int)sun.TimeOfSunSet;
-  sunsetmins = (int)((sun.TimeOfSunSet - fixed(sunsethours)) * 60);
+  int sunsethours = (int)sun.TimeOfSunSet;
+  int sunsetmins = (int)((sun.TimeOfSunSet - fixed(sunsethours)) * 60);
 
   _stprintf(sTmp, _T("%02d:%02d"), sunsethours, sunsetmins);
   ((WndProperty *)wf->FindByName(_T("prpSunset")))->SetText(sTmp);
@@ -643,28 +596,19 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
 
   wInfo = ((WndFrame *)wf->FindByName(_T("frmInfos")));
   wCommand = ((WndFrame *)wf->FindByName(_T("frmCommands")));
-  wSpecial = ((WndFrame *)wf->FindByName(_T("frmSpecial")));
   wImage = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmImage")));
   wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
   wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
 
   assert(wInfo != NULL);
   assert(wCommand != NULL);
-  assert(wSpecial != NULL);
   assert(wImage != NULL);
   assert(wDetails != NULL);
 
   nTextLines = TextToLineOffsets(way_point.Details.c_str(), LineOffsets, MAXLINES);
   wDetails->SetLength(nTextLines);
 
-  /*
-  TODO enhancement: wpdetails
-  wp = ((WndProperty *)wf->FindByName(_T("prpWpDetails")));
-  wp->SetText(way_point.Details);
-  */
-
   wCommand->hide();
-  wSpecial->hide();
   wImage->SetOnPaintNotify(OnImagePaint);
 
   WndButton *wb;
@@ -680,18 +624,6 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   wb = ((WndButton *)wf->FindByName(_T("cmdNewHome")));
   if (wb)
     wb->SetOnClickNotify(OnNewHomeClicked);
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdSetAlternate1")));
-  if (wb)
-    wb->SetOnClickNotify(OnSetAlternate1Clicked);
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdSetAlternate2")));
-  if (wb)
-    wb->SetOnClickNotify(OnSetAlternate2Clicked);
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdClearAlternates")));
-  if (wb)
-    wb->SetOnClickNotify(OnClearAlternatesClicked);
 
   wb = ((WndButton *)wf->FindByName(_T("cmdTeamCode")));
   if (wb)
@@ -719,6 +651,4 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   wf->ShowModal();
 
   delete wf;
-
-  wf = NULL;
 }
