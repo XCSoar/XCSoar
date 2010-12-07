@@ -53,6 +53,7 @@ public:
   // TODO: make these const
   /** Returns the FlightStatistics object */
   FlightStatistics &GetFlightStats() { return flightstats; }
+  const FlightStatistics &GetFlightStats() const { return flightstats; }
 
   void OnStartTask();
   void OnFinishTask();
