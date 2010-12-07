@@ -102,7 +102,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
   // landable waypoint label inside white box
 
-  canvas.select(Mode.Mode == RoundedBlack ? Fonts::MapBold : Fonts::Map);
+  canvas.select(Mode.Bold ? Fonts::MapBold : Fonts::Map);
 
   SIZE tsize = canvas.text_size(Value);
 
