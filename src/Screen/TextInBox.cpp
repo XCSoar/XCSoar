@@ -73,17 +73,17 @@ TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
 }
 
 static void
-RenderShadowedText(Canvas &canvas, const TCHAR* text, int x, int y)
+RenderShadowedText(Canvas &canvas, const TCHAR* text, int x, int y, bool inverted)
 {
   canvas.background_transparent();
 
-  canvas.set_text_color(Color::WHITE);
+  canvas.set_text_color(inverted ? Color::BLACK : Color::WHITE);
   canvas.text(x + 1, y, text);
   canvas.text(x - 1, y, text);
   canvas.text(x, y + 1, text);
   canvas.text(x, y - 1, text);
 
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(inverted ? Color::WHITE : Color::BLACK);
   canvas.text(x, y, text);
 }
 
@@ -147,7 +147,9 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     canvas.set_text_color(Color::BLACK);
     canvas.text_opaque(x, y, brect, Value);
   } else if (Mode.Mode == Outlined) {
-    RenderShadowedText(canvas, Value, x, y);
+    RenderShadowedText(canvas, Value, x, y, false);
+  } else if (Mode.Mode == OutlinedInverted) {
+    RenderShadowedText(canvas, Value, x, y, true);
   } else {
     canvas.background_transparent();
     canvas.set_text_color(Color::BLACK);

@@ -41,6 +41,7 @@ enum RenderMode
   Simple,
   Filled,
   Outlined,
+  OutlinedInverted,
   RoundedWhite,
   RoundedBlack
 };
