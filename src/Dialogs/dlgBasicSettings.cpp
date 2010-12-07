@@ -63,14 +63,22 @@ OnCloseClicked(WndButton &Sender)
 }
 
 static void
+SetBallastTimer(bool active)
+{
+  if (active == XCSoarInterface::SettingsComputer().BallastTimerActive)
+    return;
+
+  XCSoarInterface::SetSettingsComputer().BallastTimerActive = active;
+
+  SetButtons();
+}
+
+static void
 OnBallastDump(WndButton &Sender)
 {
   (void)Sender;
 
-  XCSoarInterface::SetSettingsComputer().BallastTimerActive
-      = !XCSoarInterface::SettingsComputer().BallastTimerActive;
-
-  SetButtons();
+  SetBallastTimer(!XCSoarInterface::SettingsComputer().BallastTimerActive);
 }
 
 static void
@@ -178,13 +186,8 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daSpecial:
-    if (glide_polar->get_ballast() > fixed(0.01))
-      XCSoarInterface::SetSettingsComputer().BallastTimerActive =
-          !XCSoarInterface::SettingsComputer().BallastTimerActive;
-    else
-      XCSoarInterface::SetSettingsComputer().BallastTimerActive = false;
-
-    SetButtons();
+    SetBallastTimer(glide_polar->get_ballast() > fixed(0.01) &&
+                    !XCSoarInterface::SettingsComputer().BallastTimerActive);
     break;
   case DataField::daChange:
     glide_polar->set_ballast(df.GetAsFixed() / 100);
