@@ -48,6 +48,11 @@ public:
 
   WindStore windstore;
 
+  /**
+   * Clear as if never flown
+   */
+  void reset();
+
   // Signals
   /**
    * Send if a new windmeasurement has been made. The result is included in wind,

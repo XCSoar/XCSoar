@@ -100,6 +100,20 @@ WindAnalyser::~WindAnalyser()
 {
 }
 
+void
+WindAnalyser::reset()
+{
+  circleCount = 0;
+  circleLeft = false;
+  active = false;
+  startmarker = 0;
+  circleDeg = 0;
+  lastHeading = Angle::native(fixed_zero);
+  pastHalfway = false;
+  curModeOK = false;
+  windstore.reset();
+}
+
 static fixed
 Magnitude(Vector v)
 {

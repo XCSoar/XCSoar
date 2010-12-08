@@ -62,6 +62,10 @@ public:
 
   const Vector GetWind(fixed Time, fixed h, bool *found) const;
 
+  /**
+   * Clear as if never flown
+   */
+  void reset();
 private:
   Vector _lastWind;
   fixed _lastAltitude;

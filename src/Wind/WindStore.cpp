@@ -59,6 +59,16 @@ WindStore::~WindStore()
   delete windlist;
 }
 
+void
+WindStore::reset()
+{
+  delete windlist;
+  windlist = new WindMeasurementList();
+  updated = true;
+  _lastAltitude = fixed_zero;
+  _lastWind = Vector();
+}
+
 /**
  * Called with new measurements. The quality is a measure for how
  * good the measurement is. Higher quality measurements are more

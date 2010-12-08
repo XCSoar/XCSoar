@@ -87,6 +87,8 @@ GlideComputerAirData::ResetFlight(const bool full)
   ResetLiftDatabase();
 
   thermallocator.Reset();
+
+  windanalyser.reset();
 }
 
 /**
