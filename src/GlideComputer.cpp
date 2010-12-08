@@ -55,6 +55,7 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
   way_points(_way_points), protected_task_manager(task)
 {
   events.set_computer(*this);
+  idle_clock.update();
 }
 
 /**
@@ -129,7 +130,10 @@ GlideComputer::ProcessGPS()
 
   SetCalculated().time_process_gps = clock.elapsed();
 
-  return true;
+  if (idle_clock.check_update(500)) {
+    return true;
+  } else 
+    return false;
 }
 
 /**

@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Audio/VegaVoice.h"
 #include "GPSClock.hpp"
+#include "PeriodClock.hpp"
 #include "GlideComputerAirData.hpp"
 #include "GlideComputerStats.hpp"
 #include "GlideComputerTask.hpp"
@@ -61,6 +62,7 @@ public:
   void OnTransitionEnter();
 
 protected:
+  PeriodClock idle_clock;
   VegaVoice    vegavoice;
   virtual void OnTakeoff();
   virtual void OnLanding();
