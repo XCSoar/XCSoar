@@ -255,7 +255,7 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
         last_started = false;
     }
 
-    if ((activeTaskPoint == 0) && (i == 0))
+    if (i==0) 
       update_start_transition(state);
 
     if (nearby) {
@@ -836,17 +836,14 @@ OrderedTask::getActiveIndex() const
 void
 OrderedTask::update_start_transition(const AIRCRAFT_STATE &state)
 {
-  if (ts->has_exited())
-    return;
-
-  if (ts->isInSector(state)) {
-    // @todo find boundary point that produces shortest
+  if (activeTaskPoint == 0) {
+    // find boundary point that produces shortest
     // distance from state to that point to next tp point
     ts->find_best_start(state, *tps[1], task_projection);
-  } else {
+  } else if (!ts->has_exited() && !(ts->isInSector(state))) {
+    ts->reset();
     // reset on invalid transition to outside
     // point to nominal start point
-    ts->reset();
   }
 }
 
