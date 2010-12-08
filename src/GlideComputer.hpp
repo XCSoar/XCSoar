@@ -38,7 +38,8 @@ class GlideComputerTaskEvents;
 // OR: just make them static?
 
 class GlideComputer:
-    public GlideComputerAirData, GlideComputerTask, GlideComputerStats
+    public GlideComputerAirData, GlideComputerTask,
+    public GlideComputerStats
 {
 public:
   GlideComputer(ProtectedTaskManager& task,
@@ -49,11 +50,6 @@ public:
   void Initialise();
   bool ProcessGPS(); // returns true if idle needs processing
   virtual void ProcessIdle();
-
-  // TODO: make these const
-  /** Returns the FlightStatistics object */
-  FlightStatistics &GetFlightStats() { return flightstats; }
-  const FlightStatistics &GetFlightStats() const { return flightstats; }
 
   void OnStartTask();
   void OnFinishTask();

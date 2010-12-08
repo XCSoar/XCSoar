@@ -37,6 +37,10 @@ public:
   GlideComputerStats(ProtectedTaskManager &task);
   FlightStatistics flightstats;
 
+  /** Returns the FlightStatistics object */
+  FlightStatistics &GetFlightStats() { return flightstats; }
+  const FlightStatistics &GetFlightStats() const { return flightstats; }
+
 protected:
   void ResetFlight(const bool full = true);
   void StartTask();
