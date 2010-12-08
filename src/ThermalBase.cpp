@@ -74,7 +74,7 @@ EstimateThermalBase(const GeoPoint location, const fixed altitude,
 
   GeoPoint loc = location;
 
-  for (fixed h = altitude; h >= 0; h -= dh) {
+  for (fixed h = altitude; !negative(h); h -= dh) {
     // Time to descend to this height
     fixed t = (altitude-h)/average;
 
