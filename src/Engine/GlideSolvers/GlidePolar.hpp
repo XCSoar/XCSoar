@@ -56,6 +56,11 @@ class GlidePolar
 
 public:
   /**
+   * Constructs an uninitialized object.
+   */
+  GlidePolar() {}
+
+  /**
    * Constructor.  Performs search for best LD at instantiation
    *
    * @param _mc MacCready value at construction

@@ -41,7 +41,7 @@ static WndForm *wf = NULL;
 
 static bool changed = false;
 
-static GlidePolar *glide_polar = NULL;
+static GlidePolar glide_polar;
 
 static void
 SetButtons()
@@ -49,7 +49,7 @@ SetButtons()
   WndButton* wb;
 
   if ((wb = (WndButton *)wf->FindByName(_T("cmdDump"))) != NULL) {
-    wb->set_visible(glide_polar->is_ballastable());
+    wb->set_visible(glide_polar.is_ballastable());
     wb->SetCaption(XCSoarInterface::SettingsComputer().BallastTimerActive ?
         _("Stop") : _("Dump"));
   }
@@ -70,7 +70,7 @@ SetBallastTimer(bool active)
 
   if (active && changed) {
     /* apply the new ballast settings before starting the timer */
-    protected_task_manager.set_glide_polar(*glide_polar);
+    protected_task_manager.set_glide_polar(glide_polar);
     changed = false;
   }
 
@@ -140,9 +140,9 @@ SetBallast(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpBallastPercent"));
   if (wp) {
-    if (glide_polar->is_ballastable()) {
+    if (glide_polar.is_ballastable()) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-      df.SetAsFloat(glide_polar->get_ballast() * 100);
+      df.SetAsFloat(glide_polar.get_ballast() * 100);
     } else
       wp->hide();
 
@@ -150,9 +150,9 @@ SetBallast(void)
   }
   wp = (WndProperty*)wf->FindByName(_T("prpBallastLitres"));
   if (wp) {
-    if (glide_polar->is_ballastable()) {
+    if (glide_polar.is_ballastable()) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-      df.SetAsFloat(glide_polar->get_ballast_litres());
+      df.SetAsFloat(glide_polar.get_ballast_litres());
     } else
       wp->hide();
 
@@ -160,7 +160,7 @@ SetBallast(void)
   }
   wp = (WndProperty*)wf->FindByName(_T("prpWingLoading"));
   if (wp) {
-    const fixed wl = glide_polar->get_wing_loading();
+    const fixed wl = glide_polar.get_wing_loading();
     if (wl > fixed_zero) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
       df.SetAsFloat(wl);
@@ -183,7 +183,7 @@ OnTimerNotify(WndForm &Sender)
 
   if (XCSoarInterface::SettingsComputer().BallastTimerActive && !changed) {
     /* get new GlidePolar values */
-    *glide_polar = protected_task_manager.get_glide_polar();
+    glide_polar = protected_task_manager.get_glide_polar();
 
     /* display the new values on the screen */
     SetBallast();
@@ -202,11 +202,11 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daSpecial:
-    SetBallastTimer(glide_polar->get_ballast() > fixed(0.01) &&
+    SetBallastTimer(glide_polar.get_ballast() > fixed(0.01) &&
                     !XCSoarInterface::SettingsComputer().BallastTimerActive);
     break;
   case DataField::daChange:
-    glide_polar->set_ballast(df.GetAsFixed() / 100);
+    glide_polar.set_ballast(df.GetAsFixed() / 100);
     changed = true;
     SetBallast();
     break;
@@ -224,7 +224,7 @@ OnBugsData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daChange:
-    glide_polar->set_bugs(Sender->GetAsFixed() / 100);
+    glide_polar.set_bugs(Sender->GetAsFixed() / 100);
     changed = true;
     break;
 
@@ -265,8 +265,7 @@ static CallBackTableEntry CallBackTable[] = {
 void
 dlgBasicSettingsShowModal()
 {
-  GlidePolar gp_copy = protected_task_manager.get_glide_polar();
-  glide_polar = &gp_copy;
+  glide_polar = protected_task_manager.get_glide_polar();
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                       _T("IDR_XML_BASICSETTINGS"));
@@ -280,7 +279,7 @@ dlgBasicSettingsShowModal()
 
   SetButtons();
 
-  LoadFormProperty(*wf, _T("prpBugs"), glide_polar->get_bugs() * 100);
+  LoadFormProperty(*wf, _T("prpBugs"), glide_polar.get_bugs() * 100);
   LoadFormProperty(*wf, _T("prpQNH"),
                    XCSoarInterface::Basic().pressure.get_QNH());
 
@@ -302,7 +301,7 @@ dlgBasicSettingsShowModal()
   }
 
   if ((wf->ShowModal() == mrOK) && changed)
-    protected_task_manager.set_glide_polar(gp_copy);
+    protected_task_manager.set_glide_polar(glide_polar);
 
   delete wf;
 }
