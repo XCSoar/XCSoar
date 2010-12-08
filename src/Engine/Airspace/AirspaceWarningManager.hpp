@@ -40,7 +40,8 @@ class AirspaceWarningVisitor;
  * Several types of airspace checks are performed:
  * - Interior (whether aircraft is inside the airspace)
  * - Glide polar (short range predicted warning based on MacCready performance)
- * - Filter (longer range predicted warning based on low pass filtered state)
+ * - Cruise Filter (medium range predicted warning based on low pass filtered state)
+ * - Climb Filter (longer range predicted warning based on low pass filtered state)
  * - Task (longer range predicted warning based on current leg of task)
  *
  */
@@ -215,15 +216,17 @@ private:
   fixed m_prediction_time_filter;
 
   AirspaceAircraftPerformanceGlide m_perf_glide;
-  AircraftStateFilter m_state_filter;
-  AirspaceAircraftPerformanceStateFilter m_perf_filter;  
+  AircraftStateFilter m_cruise_filter;
+  AircraftStateFilter m_circling_filter;
+  AirspaceAircraftPerformanceStateFilter m_perf_cruise;  
+  AirspaceAircraftPerformanceStateFilter m_perf_circling;  
 
   const TaskManager& m_task;
 
   const GlidePolar& m_glide_polar;
 
   bool update_task(const AIRCRAFT_STATE& state);
-  bool update_filter(const AIRCRAFT_STATE& state);
+  bool update_filter(const AIRCRAFT_STATE& state, const bool circling);
   bool update_glide(const AIRCRAFT_STATE& state);
   bool update_inside(const AIRCRAFT_STATE& state);
 
