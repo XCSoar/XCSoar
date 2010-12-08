@@ -35,6 +35,11 @@ class GlideComputerStats:
 {
   FlightStatistics flightstats;
 
+  GPSClock log_clock;
+  GPSClock stats_clock;
+  /** number of points to log at high rate */
+  unsigned FastLogNum;
+
 public:
   GlideComputerStats(ProtectedTaskManager &task);
 
@@ -52,12 +57,6 @@ protected:
   virtual void OnClimbBase(fixed StartAlt);
   virtual void OnClimbCeiling();
   virtual void OnDepartedThermal();
-
-private:
-  GPSClock log_clock;
-  GPSClock stats_clock;
-  /** number of points to log at high rate */
-  unsigned FastLogNum;
 };
 
 #endif
