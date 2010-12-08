@@ -35,14 +35,14 @@ public class XCSoar extends Activity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!Native.loaded) {
+        if (!Loader.loaded) {
             TextView tv = new TextView(this);
             tv.setText("Failed to load the native XCSoar libary.\n" +
                        "Report this problem to us, and include the following information:\n" +
                        "ABI=" + Build.CPU_ABI + "\n" +
                        "PRODUCT=" + Build.PRODUCT + "\n" +
                        "FINGERPRINT=" + Build.FINGERPRINT + "\n" +
-                       "error=" + Native.error);
+                       "error=" + Loader.error);
             setContentView(tv);
             return;
         }
@@ -59,7 +59,7 @@ public class XCSoar extends Activity {
 
     public void initSDL()
     {
-        if (!Native.loaded)
+        if (!Loader.loaded)
             return;
 
         mGLView = new DemoGLSurfaceView(this);

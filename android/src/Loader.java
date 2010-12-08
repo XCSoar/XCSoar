@@ -25,7 +25,7 @@ package org.xcsoar;
 
 import android.util.Log;
 
-public class Native {
+public class Loader {
     private static final String TAG = "XCSoar";
 
     public static boolean loaded = false;
