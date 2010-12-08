@@ -21,6 +21,7 @@
  */
 #include "AircraftStateFilter.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
+#include <assert.h>
 
 AircraftStateFilter::AircraftStateFilter(const fixed cutoff_wavelength):
   m_df_x(fixed_zero),
@@ -101,6 +102,7 @@ AircraftStateFilter::design(const fixed cutoff_wavelength)
   ok &= m_lpf_x.design(cutoff_wavelength);
   ok &= m_lpf_y.design(cutoff_wavelength);
   ok &= m_lpf_alt.design(cutoff_wavelength);
+  assert(ok);
   return ok;
 }
 
