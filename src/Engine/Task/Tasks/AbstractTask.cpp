@@ -36,7 +36,7 @@ AbstractTask::AbstractTask(enum type _type, TaskEvents &te,
   task_events(te),
   task_behaviour(tb),
   glide_polar(gp),
-  mc_lpf(fixed_ten),
+  mc_lpf(fixed(8)),
   ce_lpf(fixed(60)),
   em_lpf(fixed(60)),
   trigger_auto(false) {}
