@@ -29,7 +29,6 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "Logger/Logger.hpp"
 #include "GlideComputer.hpp"
-#include "Components.hpp"
 #include "Asset.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "OS/FileUtil.hpp"
@@ -154,7 +153,8 @@ void
 SaveCalculationsPersist(const NMEA_INFO &gps_info,
                         const DERIVED_INFO &Calculated,
                         const ProtectedTaskManager &protected_task_manager,
-                        const GlideComputer &glide_computer)
+                        const GlideComputer &glide_computer,
+                        Logger &logger)
 {
   unsigned size;
 

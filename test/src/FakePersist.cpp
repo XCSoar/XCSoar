@@ -33,7 +33,8 @@ void
 SaveCalculationsPersist(const NMEA_INFO &gps_info,
                         const DERIVED_INFO &Calculated,
                         const ProtectedTaskManager &protected_task_manager,
-                        const GlideComputer &glide_computer)
+                        const GlideComputer &glide_computer,
+                        Logger &logger)
 {}
 
 void DeleteCalculationsPersist() {}
