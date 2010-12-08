@@ -46,16 +46,19 @@ OnAcknowledgeClicked(WndButton &Sender)
 
   assert(airspace);
 
+  if (airspace_warnings == NULL)
+    return;
+
   int answer;
   answer = MessageBoxX(airspace->get_name_text(true).c_str(), 
                        _("Acknowledge for day?"),
                        MB_YESNOCANCEL | MB_ICONQUESTION);
 
   if (answer == IDYES) {
-    airspace_warnings.acknowledge_day(*airspace, true);
+    airspace_warnings->acknowledge_day(*airspace, true);
     wf->SetModalResult(mrOK);
   } else if (answer == IDNO) {
-    airspace_warnings.acknowledge_day(*airspace, false);
+    airspace_warnings->acknowledge_day(*airspace, false);
     wf->SetModalResult(mrOK);
   }
 }

@@ -49,7 +49,7 @@ static const AbstractAirspace* FocusAirspace = NULL;  // Current action airspace
 static void
 AirspaceWarningCursorCallback(unsigned i)
 {
-  ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
+  ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
   const AirspaceWarning *warning = lease->get_warning(i);
   CursorAirspace = (warning != NULL)
     ? &warning->get_airspace()
@@ -73,7 +73,7 @@ GetSelectedAirspace()
 static bool
 HasWarning()
 {
-  ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
+  ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
   for (unsigned i = 0; i < lease->size(); ++i) {
     const AirspaceWarning *warning = lease->get_warning(i);
     if (warning != NULL && warning->get_ack_expired())
@@ -109,7 +109,7 @@ OnAckClicked(WndButton &Sender)
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_warnings.acknowledge_inside(*airspace, true);
+    airspace_warnings->acknowledge_inside(*airspace, true);
     wAirspaceList->invalidate();
     AutoHide();
   }
@@ -123,7 +123,7 @@ OnAck1Clicked(WndButton &Sender)
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_warnings.acknowledge_warning(*airspace, true);
+    airspace_warnings->acknowledge_warning(*airspace, true);
     wAirspaceList->invalidate();
     AutoHide();
   }
@@ -137,7 +137,7 @@ OnAck2Clicked(WndButton &Sender)
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_warnings.acknowledge_day(*airspace, true);
+    airspace_warnings->acknowledge_day(*airspace, true);
     wAirspaceList->invalidate();
     AutoHide();
   }
@@ -151,8 +151,8 @@ OnEnableClicked(WndButton &Sender)
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_warnings.acknowledge_warning(*airspace, false);
-    airspace_warnings.acknowledge_day(*airspace, false);
+    airspace_warnings->acknowledge_warning(*airspace, false);
+    airspace_warnings->acknowledge_day(*airspace, false);
     wAirspaceList->invalidate();
   }
 }
@@ -205,7 +205,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 {
   TCHAR sTmp[128];
 
-  ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
+  ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
   if (lease->empty()) {
     assert(i == 0);
 
@@ -318,13 +318,13 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 static void
 update_list()
 {
-  unsigned Count = airspace_warnings.warning_size();
+  unsigned Count = airspace_warnings->warning_size();
   if (Count > 0) {
     wAirspaceList->SetLength(Count);
 
     int i = -1;
     if (CursorAirspace != NULL) {
-      i = airspace_warnings.get_warning_index(*CursorAirspace);
+      i = airspace_warnings->get_warning_index(*CursorAirspace);
       if (i >= 0)
         wAirspaceList->SetCursorIndex(i);
     }
@@ -362,7 +362,7 @@ dlgAirspaceWarningVisible()
 bool
 dlgAirspaceWarningIsEmpty()
 {
-  return airspace_warnings.warning_empty();
+  return airspace_warnings->warning_empty();
 }
 
 void
@@ -399,6 +399,8 @@ static CallBackTableEntry CallBackTable[] = {
 void
 dlgAirspaceWarningInit(SingleWindow &parent)
 {
+  assert(airspace_warnings != NULL);
+
   wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_AIRSPACEWARNING"));
   assert(wf != NULL);
 

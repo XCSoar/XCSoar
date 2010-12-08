@@ -423,8 +423,8 @@ InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc)
 {
   (void)misc;
 
-  if (!airspace_warnings.warning_empty()) {
-    airspace_warnings.clear_warnings();
+  if (airspace_warnings != NULL && !airspace_warnings->warning_empty()) {
+    airspace_warnings->clear_warnings();
     return;
   }
   // Else toggle TerrainTopology - and show the results
@@ -438,7 +438,8 @@ InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc)
 void
 InputEvents::eventClearAirspaceWarnings(const TCHAR *misc)
 {
-  airspace_warnings.clear_warnings();
+  if (airspace_warnings != NULL)
+    airspace_warnings->clear_warnings();
 }
 
 // ClearStatusMessages

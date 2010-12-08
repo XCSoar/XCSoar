@@ -45,7 +45,7 @@ class Logger;
 // other global objects
 extern FileCache *file_cache;
 extern Airspaces airspace_database;
-extern ProtectedAirspaceWarningManager airspace_warnings;
+extern ProtectedAirspaceWarningManager *airspace_warnings;
 extern Waypoints way_points;
 extern ProtectedTaskManager protected_task_manager;
 extern Replay replay;

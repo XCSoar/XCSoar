@@ -120,10 +120,8 @@ ProtectedTaskManager protected_task_manager(task_manager,
 
 Airspaces airspace_database;
 
-static AirspaceWarningManager airspace_warning(airspace_database,
-                                               task_manager);
-
-ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
+static AirspaceWarningManager *airspace_warning;
+ProtectedAirspaceWarningManager *airspace_warnings;
 
 GlideComputer *glide_computer;
 
@@ -320,8 +318,12 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // Initialize main blackboard data
   task_manager.reset();
 
+  airspace_warning = new AirspaceWarningManager(airspace_database,
+                                                task_manager);
+  airspace_warnings = new ProtectedAirspaceWarningManager(*airspace_warning);
+
   glide_computer = new GlideComputer(way_points, protected_task_manager,
-                                     airspace_warnings,
+                                     *airspace_warnings,
                                      task_events);
   glide_computer->SetLogger(&logger);
   glide_computer->Initialise();
@@ -373,8 +375,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   const AIRCRAFT_STATE aircraft_state =
     ToAircraftState(device_blackboard.Basic());
-  airspace_warning.reset(aircraft_state);
-  airspace_warning.set_config(XCSoarInterface::SettingsComputer().airspace_warnings);
+  airspace_warning->reset(aircraft_state);
+  airspace_warning->set_config(XCSoarInterface::SettingsComputer().airspace_warnings);
 
   // Read the FLARM details file
   FlarmDetails::Load();
@@ -405,7 +407,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   main_window.map.set_way_points(&way_points);
   main_window.map.set_task(&protected_task_manager);
-  main_window.map.set_airspaces(&airspace_database, &airspace_warnings);
+  main_window.map.set_airspaces(&airspace_database, airspace_warnings);
 
   main_window.map.set_topology(topology);
   main_window.map.set_terrain(terrain);
@@ -537,7 +539,7 @@ XCSoarInterface::Shutdown(void)
 
   // Clear airspace database
   LogStartUp(_T("Close airspace"));
-  airspace_warnings.clear();
+  airspace_warnings->clear();
   airspace_database.clear();
 
   // Clear waypoint database
@@ -588,6 +590,8 @@ XCSoarInterface::Shutdown(void)
   CloseGeoid();
 
   delete glide_computer;
+  delete airspace_warnings;
+  delete airspace_warning;
 
   delete file_cache;
 

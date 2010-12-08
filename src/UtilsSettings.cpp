@@ -141,7 +141,8 @@ SettingsLeave()
   }
 
   if (AirspaceFileChanged) {
-    airspace_warnings.clear();
+    if (airspace_warnings != NULL)
+      airspace_warnings->clear();
     airspace_database.clear();
     ReadAirspace(airspace_database, terrain,
                  XCSoarInterface::Basic().pressure);

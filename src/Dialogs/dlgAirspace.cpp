@@ -164,8 +164,8 @@ dlgAirspaceShowModal(bool coloredit)
 
   // now retrieve back the properties...
   if (changed) {
-    if (!colormode) {
-      ProtectedAirspaceWarningManager::ExclusiveLease awm(airspace_warnings);
+    if (!colormode && airspace_warnings != NULL) {
+      ProtectedAirspaceWarningManager::ExclusiveLease awm(*airspace_warnings);
       awm->set_config(XCSoarInterface::SetSettingsComputer().airspace_warnings);
     }
 
