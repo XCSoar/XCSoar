@@ -53,30 +53,55 @@ GlideComputerTask::ProcessBasicTask()
 
   task->set_task_behaviour(SettingsComputer());
 
-  if (!SettingsComputer().auto_mc) {
-    GlidePolar glide_polar = task->get_glide_polar();
-    glide_polar.set_mc(basic.MacCready);
-    task->set_glide_polar(glide_polar);
-  }
+  // even if we are in auto mode, force the value in the computer.
+  // if in auto mode, the value will get propagated out via the mechanism
+  // below.
+  GlidePolar glide_polar = task->get_glide_polar();
+  glide_polar.set_mc(basic.MacCready);
+  task->set_glide_polar(glide_polar);
+
+  bool auto_updated = false;
 
   if (basic.Time != LastBasic().Time && !basic.gps.NAVWarning) {
     const AIRCRAFT_STATE current_as = ToAircraftState(Basic());
     const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic());
 
     task->update(current_as, last_as);
-    task->update_auto_mc(current_as, std::max(
-        Calculated().LastThermalAverageSmooth, fixed_zero));
+    auto_updated = task->update_auto_mc(current_as, std::max(
+                                          Calculated().LastThermalAverageSmooth, fixed_zero));
   }
 
   SetCalculated().task_stats = task->get_stats();
   SetCalculated().common_stats = task->get_common_stats();
+
+
+/* JMW @todo 
+
+   sending the risk mc to devices and global is
+   disabled temporarily as this sets a feedback loop through devices,
+   and the set mc call in ProcessBasicTask(), winding the mc down to
+   zero
+
+  SetMC(Calculated().common_stats.current_risk_mc);
+
+  see ticket #583 for symptoms.
+
+  this now also only changes mc if in auto mode and the computer has
+  changed the value.  this may have a bearing on #498.
+*/
+  if (SettingsComputer().auto_mc && auto_updated) {
+    // in auto mode, check for changes forced by the computer
+    const fixed mc_computer = 
+      task->get_glide_polar().get_mc();
+    if (fabs(mc_computer-basic.MacCready)>fixed(0.01)) {
+      SetMC(mc_computer);
+    }
+  }
 }
 
 void
 GlideComputerTask::ProcessMoreTask()
 {
-  SetMC(Calculated().common_stats.current_risk_mc);
-
   TerrainWarning();
 
   if (SettingsComputer().EnableBlockSTF)
