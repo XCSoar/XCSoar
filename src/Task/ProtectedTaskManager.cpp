@@ -138,7 +138,7 @@ ProtectedTaskManager::set_target(const unsigned TPindex, const fixed range,
 
 bool
 ProtectedTaskManager::get_target_range_radial(const unsigned TPindex, fixed &range,
-   fixed &radial)
+                                              fixed &radial) const
 {
   Lease lease(*this);
   return lease->get_target_range_radial(TPindex, range, radial);
@@ -167,7 +167,7 @@ ProtectedTaskManager::get_ordered_taskpoint_radius(const unsigned TPindex) const
 }
 
 const TCHAR*
-ProtectedTaskManager::get_ordered_taskpoint_name(const unsigned TPindex)
+ProtectedTaskManager::get_ordered_taskpoint_name(const unsigned TPindex) const
 {
  Lease lease(*this);
  return lease->get_ordered_taskpoint_name(TPindex);
@@ -202,7 +202,7 @@ ProtectedTaskManager::get_finish_height() const
 }
 
 OrderedTask*
-ProtectedTaskManager::task_clone()
+ProtectedTaskManager::task_clone() const
 {
   Lease lease(*this);
   return lease->clone(task_events, task_behaviour,
@@ -210,14 +210,14 @@ ProtectedTaskManager::task_clone()
 }
 
 OrderedTask* 
-ProtectedTaskManager::task_copy(const OrderedTask& that)
+ProtectedTaskManager::task_copy(const OrderedTask& that) const
 {
   Lease lease(*this);
   return that.clone(task_events, task_behaviour, lease->get_glide_polar());
 }
 
 OrderedTask* 
-ProtectedTaskManager::task_blank()
+ProtectedTaskManager::task_blank() const
 {
   Lease lease(*this);
   return new OrderedTask(task_events, task_behaviour, lease->get_glide_polar());
@@ -253,7 +253,7 @@ ProtectedTaskManager::task_save(const TCHAR* path)
 
 OrderedTask* 
 ProtectedTaskManager::task_create(const TCHAR* path,
-                                  const Waypoints *waypoints)
+                                  const Waypoints *waypoints) const
 {
   DataNode* root = DataNodeXML::load(path);
   if (!root)

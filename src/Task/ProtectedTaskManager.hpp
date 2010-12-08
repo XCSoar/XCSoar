@@ -28,6 +28,7 @@
 #include "Task/TaskManager.hpp"
 #include "Task/TaskAdvance.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
+#include "Compiler.h"
 
 class TaskStats;
 class CommonStats;
@@ -77,8 +78,11 @@ public:
   AIRCRAFT_STATE get_start_state() const;
   fixed get_finish_height() const;
 
-  OrderedTask* task_clone();
-  OrderedTask* task_blank();
+  gcc_malloc
+  OrderedTask* task_clone() const;
+
+  gcc_malloc
+  OrderedTask* task_blank() const;
 
   /**
    * Copy task into this task
@@ -92,8 +96,13 @@ public:
   bool task_load(const TCHAR* path, const Waypoints *waypoints);
   bool task_save_default();
   bool task_load_default(const Waypoints *waypoints);
-  OrderedTask* task_copy(const OrderedTask& that);
-  OrderedTask* task_create(const TCHAR* path, const Waypoints *waypoints);
+
+  gcc_malloc
+  OrderedTask* task_copy(const OrderedTask& that) const;
+
+  gcc_malloc
+  OrderedTask *task_create(const TCHAR *path,
+                           const Waypoints *waypoints) const;
   bool task_save(const TCHAR* path, const OrderedTask& task);
 
   /** Reset the tasks (as if never flown) */
@@ -173,7 +182,7 @@ public:
    * the target in the sector in polar coordinates
    */
   bool get_target_range_radial(const unsigned TPindex, fixed &range,
-     fixed &radial);
+                               fixed &radial) const;
 
   /**
    * Lock/unlock the target from automatic shifts of specified tp
@@ -188,7 +197,7 @@ public:
    *
    * @param TPindex index of ordered tp in task
    */
-  const TCHAR* get_ordered_taskpoint_name(const unsigned TPindex);
+  const TCHAR* get_ordered_taskpoint_name(const unsigned TPindex) const;
 
   /**
    * Accessor for location of specified ordered tp
