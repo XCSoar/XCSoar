@@ -148,15 +148,15 @@ SettingsLeave()
                  XCSoarInterface::Basic().pressure);
   }
 
-  if (PolarFileChanged) {
-    GlidePolar gp = protected_task_manager.get_glide_polar();
+  if (PolarFileChanged && protected_task_manager != NULL) {
+    GlidePolar gp = protected_task_manager->get_glide_polar();
     if (LoadPolarById(XCSoarInterface::SettingsComputer(), gp)) {
-      protected_task_manager.set_glide_polar(gp);
+      protected_task_manager->set_glide_polar(gp);
     }
   }
 
-  {
-    ProtectedTaskManager::ExclusiveLease lease(protected_task_manager);
+  if (protected_task_manager != NULL) {
+    ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
     lease->set_contest(XCSoarInterface::SettingsComputer().contest);
   }
 

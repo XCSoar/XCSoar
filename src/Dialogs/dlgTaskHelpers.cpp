@@ -378,6 +378,8 @@ OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
 bool
 OrderedTaskSave(const OrderedTask& task, bool noask)
 {
+  assert(protected_task_manager != NULL);
+
   if (!noask
       && MessageBoxX(_("Save task?"), _("Task Selection"),
                      MB_YESNO | MB_ICONQUESTION) != IDYES)
@@ -390,7 +392,7 @@ OrderedTaskSave(const OrderedTask& task, bool noask)
   TCHAR path[MAX_PATH];
   _tcscat(fname, _T(".tsk"));
   LocalPath(path, fname);
-  protected_task_manager.task_save(path, task);
+  protected_task_manager->task_save(path, task);
   return true;
 }
 

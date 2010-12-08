@@ -2255,10 +2255,10 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  if (PolarFileChanged) {
-    GlidePolar gp = protected_task_manager.get_glide_polar();
+  if (PolarFileChanged && protected_task_manager != NULL) {
+    GlidePolar gp = protected_task_manager->get_glide_polar();
     if (LoadPolarById(settings_computer, gp))
-      protected_task_manager.set_glide_polar(gp);
+      protected_task_manager->set_glide_polar(gp);
   }
 
   if (DevicePortChanged)

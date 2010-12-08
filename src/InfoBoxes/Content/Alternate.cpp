@@ -36,7 +36,13 @@ Copyright_License {
 void
 InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
 {
-  const AbortTask::AlternateVector alternates = protected_task_manager.getAlternates();
+  if (protected_task_manager == NULL) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  const AbortTask::AlternateVector alternates =
+    protected_task_manager->getAlternates();
 
   if (alternates.size() > 0 && index >= alternates.size())
     index = alternates.size() - 1;
@@ -89,7 +95,13 @@ InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
 {
-  const AbortTask::AlternateVector alternates = protected_task_manager.getAlternates();
+  if (protected_task_manager == NULL) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  const AbortTask::AlternateVector alternates =
+    protected_task_manager->getAlternates();
 
   if (alternates.size() > 0 && index >= alternates.size())
     index = alternates.size() - 1;

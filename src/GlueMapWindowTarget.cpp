@@ -39,10 +39,12 @@ GlueMapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
 bool
 GlueMapWindow::TargetDragged(const int x, const int y)
 {
+  assert(protected_task_manager != NULL);
+
   GeoPoint gp = visible_projection.ScreenToGeo(x, y);
-  if (protected_task_manager.target_is_locked(
+  if (protected_task_manager->target_is_locked(
                              XCSoarInterface::SettingsMap().TargetPanIndex)) {
-    protected_task_manager.set_target(
+    protected_task_manager->set_target(
                            XCSoarInterface::SettingsMap().TargetPanIndex, gp, true);
     return true;
   }
@@ -52,13 +54,16 @@ GlueMapWindow::TargetDragged(const int x, const int y)
 bool
 GlueMapWindow::isClickOnTarget(const RasterPoint pc)
 {
+  if (protected_task_manager == NULL)
+    return false;
+
   if (XCSoarInterface::SettingsMap().TargetPan) {
-    if (!protected_task_manager.target_is_locked(
+    if (!protected_task_manager->target_is_locked(
                                 XCSoarInterface::SettingsMap().TargetPanIndex))
       return false;
 
     const GeoPoint gnull(Angle::native(fixed_zero), Angle::native(fixed_zero));
-    const GeoPoint& t = protected_task_manager.get_location_target(
+    const GeoPoint& t = protected_task_manager->get_location_target(
         XCSoarInterface::SettingsMap().TargetPanIndex, gnull);
 
     if (t == gnull)
@@ -75,11 +80,13 @@ GlueMapWindow::isClickOnTarget(const RasterPoint pc)
 bool
 GlueMapWindow::isInSector(const int x, const int y)
 {
+  assert(protected_task_manager != NULL);
+
   if (XCSoarInterface::SettingsMap().TargetPan) {
     GeoPoint gp = visible_projection.ScreenToGeo(x, y);
     AIRCRAFT_STATE a;
     a.Location = gp;
-    return protected_task_manager.isInSector(
+    return protected_task_manager->isInSector(
                                   XCSoarInterface::SettingsMap().TargetPanIndex, a);
   }
   return false;

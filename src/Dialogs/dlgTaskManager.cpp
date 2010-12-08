@@ -58,8 +58,8 @@ CommitTaskChanges()
                 _T("Task Manager"), MB_OK);
 
     ordered_task->check_duplicate_waypoints(way_points);
-    protected_task_manager.task_commit(*ordered_task);
-    protected_task_manager.task_save_default();
+    protected_task_manager->task_commit(*ordered_task);
+    protected_task_manager->task_save_default();
 
     task_modified = false;
     return true;
@@ -153,6 +153,9 @@ static CallBackTableEntry CallBackTable[] = {
 void
 dlgTaskManagerShowModal(SingleWindow &parent)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   parent_window = &parent;
 
   if (Layout::landscape)
@@ -167,7 +170,7 @@ dlgTaskManagerShowModal(SingleWindow &parent)
   if (!wf)
     return;
 
-  ordered_task = protected_task_manager.task_clone();
+  ordered_task = protected_task_manager->task_clone();
   task_modified = false;
 
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));

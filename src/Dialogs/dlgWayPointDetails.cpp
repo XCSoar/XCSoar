@@ -207,9 +207,12 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 static void
 OnGotoClicked(gcc_unused WndButton &button)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   assert(selected_waypoint != NULL);
 
-  protected_task_manager.do_goto(*selected_waypoint);
+  protected_task_manager->do_goto(*selected_waypoint);
   wf->SetModalResult(mrOK);
 
 #ifdef ENABLE_OPENGL
@@ -222,7 +225,8 @@ OnGotoClicked(gcc_unused WndButton &button)
 static task_edit_result
 replace_in_task(const Waypoint &wp)
 {
-  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  assert(protected_task_manager != NULL);
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEvents task_events;
   GlidePolar glide_polar(task_manager->get_glide_polar());
   std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
@@ -246,9 +250,12 @@ replace_in_task(const Waypoint &wp)
 static void
 OnReplaceClicked(gcc_unused WndButton &button)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   switch (replace_in_task(*selected_waypoint)) {
   case SUCCESS:
-    protected_task_manager.task_save_default();
+    protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
     break;
 
@@ -297,7 +304,8 @@ OnTeamCodeClicked(gcc_unused WndButton &button)
 static task_edit_result
 insert_in_task(const Waypoint &wp)
 {
-  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  assert(protected_task_manager != NULL);
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEvents task_events;
   GlidePolar glide_polar(task_manager->get_glide_polar());
   std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
@@ -337,9 +345,12 @@ insert_in_task(const Waypoint &wp)
 static void
 OnInsertInTaskClicked(gcc_unused WndButton &button)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   switch (insert_in_task(*selected_waypoint)) {
   case SUCCESS:
-    protected_task_manager.task_save_default();
+    protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
     break;
 
@@ -354,7 +365,8 @@ OnInsertInTaskClicked(gcc_unused WndButton &button)
 static task_edit_result
 append_to_task(const Waypoint &wp)
 {
-  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  assert(protected_task_manager != NULL);
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEvents task_events;
   GlidePolar glide_polar(task_manager->get_glide_polar());
   std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
@@ -396,9 +408,12 @@ append_to_task(const Waypoint &wp)
 static void
 OnAppendInTaskClicked(gcc_unused WndButton &button)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   switch (append_to_task(*selected_waypoint)) {
   case SUCCESS:
-    protected_task_manager.task_save_default();
+    protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
     break;
 
@@ -413,7 +428,8 @@ OnAppendInTaskClicked(gcc_unused WndButton &button)
 static task_edit_result
 remove_from_task(const Waypoint &wp)
 {
-  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  assert(protected_task_manager != NULL);
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEvents task_events;
   GlidePolar glide_polar(task_manager->get_glide_polar());
   std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
@@ -445,9 +461,12 @@ remove_from_task(const Waypoint &wp)
 static void
 OnRemoveFromTaskClicked(gcc_unused WndButton &button)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   switch (remove_from_task(*selected_waypoint)) {
   case SUCCESS:
-    protected_task_manager.task_save_default();
+    protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
     break;
 
@@ -548,46 +567,48 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   _stprintf(sTmp, _T("%d")_T(DEG), iround(gv.Bearing.value_degrees()));
   ((WndProperty *)wf->FindByName(_T("prpBearing"))) ->SetText(sTmp);
 
-  GlidePolar glide_polar = protected_task_manager.get_glide_polar();
-  GlidePolar safety_polar = protected_task_manager.get_safety_polar();
+  if (protected_task_manager != NULL) {
+    GlidePolar glide_polar = protected_task_manager->get_glide_polar();
+    GlidePolar safety_polar = protected_task_manager->get_safety_polar();
 
-  UnorderedTaskPoint t(way_point, XCSoarInterface::SettingsComputer());
-  GlideResult r;
+    UnorderedTaskPoint t(way_point, XCSoarInterface::SettingsComputer());
+    GlideResult r;
 
-  // alt reqd at current mc
+    // alt reqd at current mc
 
-  const AIRCRAFT_STATE aircraft_state =
-    ToAircraftState(XCSoarInterface::Basic());
-  r = TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
-  wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
-  if (wp) {
-    _stprintf(sTmp, _T("%.0f %s"),
-              (double)Units::ToUserAltitude(r.AltitudeDifference),
-              Units::GetAltitudeName());
-    wp->SetText(sTmp);
-  }
+    const AIRCRAFT_STATE aircraft_state =
+      ToAircraftState(XCSoarInterface::Basic());
+    r = TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
+    wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
+    if (wp) {
+      _stprintf(sTmp, _T("%.0f %s"),
+                (double)Units::ToUserAltitude(r.AltitudeDifference),
+                Units::GetAltitudeName());
+      wp->SetText(sTmp);
+    }
 
-  // alt reqd at mc 0
+    // alt reqd at mc 0
 
-  glide_polar.set_mc(fixed_zero);
-  r = TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
-  wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
-  if (wp) {
-    _stprintf(sTmp, _T("%.0f %s"),
-              (double)Units::ToUserAltitude(r.AltitudeDifference),
-              Units::GetAltitudeName());
-    wp->SetText(sTmp);
-  }
+    glide_polar.set_mc(fixed_zero);
+    r = TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
+    wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
+    if (wp) {
+      _stprintf(sTmp, _T("%.0f %s"),
+                (double)Units::ToUserAltitude(r.AltitudeDifference),
+                Units::GetAltitudeName());
+      wp->SetText(sTmp);
+    }
 
-  // alt reqd at safety mc
+    // alt reqd at safety mc
 
-  r = TaskSolution::glide_solution_remaining(t, aircraft_state, safety_polar);
-  wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
-  if (wp) {
-    _stprintf(sTmp, _T("%.0f %s"),
-              (double)Units::ToUserAltitude(r.AltitudeDifference),
-              Units::GetAltitudeName());
-    wp->SetText(sTmp);
+    r = TaskSolution::glide_solution_remaining(t, aircraft_state, safety_polar);
+    wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
+    if (wp) {
+      _stprintf(sTmp, _T("%.0f %s"),
+                (double)Units::ToUserAltitude(r.AltitudeDifference),
+                Units::GetAltitudeName());
+      wp->SetText(sTmp);
+    }
   }
 
   wf->SetKeyDownNotify(FormKeyDown);

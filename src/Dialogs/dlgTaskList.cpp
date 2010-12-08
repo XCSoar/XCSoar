@@ -169,7 +169,7 @@ OnLoad()
     return;
 
   delete active_task;
-  active_task = protected_task_manager.task_copy(*orig);
+  active_task = protected_task_manager->task_copy(*orig);
   RefreshView();
   task_modified = true;
 
@@ -300,6 +300,9 @@ static CallBackTableEntry CallBackTable[] = {
 bool
 dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
 {
+  if (protected_task_manager == NULL)
+    return false;
+
   parent_window = &parent;
   
   active_task = *task;

@@ -92,7 +92,9 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   // background is painted in the base-class
 
   const FlightStatistics &fs = glide_computer->GetFlightStats();
-  const GlidePolar glide_polar = protected_task_manager.get_glide_polar();
+  GlidePolar glide_polar(fixed_zero);
+  if (protected_task_manager != NULL)
+    glide_polar = protected_task_manager->get_glide_polar();
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -114,21 +116,23 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   case ANALYSIS_PAGE_TEMPTRACE:
     fs.RenderTemperature(canvas, rcgfx);
     break;
-  case ANALYSIS_PAGE_TASK: {
-    ProtectedTaskManager::Lease task(protected_task_manager);
-    fs.RenderTask(canvas, rcgfx, XCSoarInterface::Basic(),
-                  XCSoarInterface::SettingsComputer(),
-                  XCSoarInterface::SettingsMap(),
-                  task);
-  }
+  case ANALYSIS_PAGE_TASK:
+    if (protected_task_manager != NULL) {
+      ProtectedTaskManager::Lease task(*protected_task_manager);
+      fs.RenderTask(canvas, rcgfx, XCSoarInterface::Basic(),
+                    XCSoarInterface::SettingsComputer(),
+                    XCSoarInterface::SettingsMap(),
+                    task);
+    }
     break;
-  case ANALYSIS_PAGE_OLC: {
-    ProtectedTaskManager::Lease task(protected_task_manager);
-    fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
-                 XCSoarInterface::SettingsComputer(),
-                 XCSoarInterface::SettingsMap(),
-                 task->get_contest_solution(), task->get_trace_points());
-  }
+  case ANALYSIS_PAGE_OLC:
+    if (protected_task_manager != NULL) {
+      ProtectedTaskManager::Lease task(*protected_task_manager);
+      fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
+                   XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::SettingsMap(),
+                   task->get_contest_solution(), task->get_trace_points());
+    }
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     fs.RenderAirspace(canvas, rcgfx, XCSoarInterface::Basic(),
@@ -136,11 +140,12 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
                       XCSoarInterface::SettingsMap(),
                       airspace_database, terrain);
     break;
-  case ANALYSIS_PAGE_TASK_SPEED: {
-    ProtectedTaskManager::Lease task(protected_task_manager);
-    fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Basic(), 
-                   XCSoarInterface::Calculated(), task);
-  }
+  case ANALYSIS_PAGE_TASK_SPEED:
+    if (protected_task_manager != NULL) {
+      ProtectedTaskManager::Lease task(*protected_task_manager);
+      fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Basic(),
+                     XCSoarInterface::Calculated(), task);
+    }
     break;
   default:
     // should never get here!
@@ -156,7 +161,9 @@ Update(void)
   assert(glide_computer != NULL);
 
   FlightStatistics &fs = glide_computer->GetFlightStats();
-  GlidePolar polar = protected_task_manager.get_glide_polar();
+  GlidePolar polar(fixed_zero);
+  if (protected_task_manager != NULL)
+    polar = protected_task_manager->get_glide_polar();
   const CommonStats& stats = XCSoarInterface::Calculated().common_stats;
 
   switch (page) {

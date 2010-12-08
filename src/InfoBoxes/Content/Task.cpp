@@ -75,7 +75,9 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
 {
   // use proper non-terminal next task stats
 
-  const Waypoint* way_point = protected_task_manager.getActiveWaypoint();
+  const Waypoint* way_point = protected_task_manager != NULL
+    ? protected_task_manager->getActiveWaypoint()
+    : NULL;
 
   if (!way_point) {
     infobox.SetTitle(_("Next"));
@@ -109,19 +111,22 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
 bool
 InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
 {
+  if (protected_task_manager == NULL)
+    return false;
+
   switch (keycode) {
   case ibkRight:
   case ibkUp:
-    protected_task_manager.incrementActiveTaskPoint(1);
+    protected_task_manager->incrementActiveTaskPoint(1);
     return true;
 
   case ibkLeft:
   case ibkDown:
-    protected_task_manager.incrementActiveTaskPoint(-1);
+    protected_task_manager->incrementActiveTaskPoint(-1);
     return true;
 
   case ibkEnter:
-    const Waypoint *wp = protected_task_manager.getActiveWaypoint();
+    const Waypoint *wp = protected_task_manager->getActiveWaypoint();
     if (wp) {
       dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *wp);
       return true;

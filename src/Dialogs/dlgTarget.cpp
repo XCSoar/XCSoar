@@ -224,7 +224,7 @@ RefreshCalculator()
 {
   WndProperty* wp = NULL;
   bool nodisplay = false;
-  bool bAAT = protected_task_manager.has_target(target_point);
+  bool bAAT = protected_task_manager->has_target(target_point);
 
   if (btnIsLocked)
     btnIsLocked->set_enabled(bAAT);
@@ -233,8 +233,8 @@ RefreshCalculator()
     nodisplay = true;
     IsLocked = false;
   } else {
-    protected_task_manager.get_target_range_radial(target_point, Range, Radial);
-    IsLocked = protected_task_manager.target_is_locked(target_point);
+    protected_task_manager->get_target_range_radial(target_point, Range, Radial);
+    IsLocked = protected_task_manager->target_is_locked(target_point);
   }
 
   LockCalculatorUI();
@@ -287,7 +287,7 @@ RefreshCalculator()
 
   fixed aattimeEst = XCSoarInterface::Calculated().common_stats.task_time_remaining +
       XCSoarInterface::Calculated().common_stats.task_time_elapsed;
-  fixed aatTime = protected_task_manager.get_ordered_task_behaviour().aat_min_time;
+  fixed aatTime = protected_task_manager->get_ordered_task_behaviour().aat_min_time;
 
   wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));// Same as infobox
   if (wp) {
@@ -342,7 +342,7 @@ OnIsLockedClicked(WndButton &Sender)
 {
   (void)Sender;
   IsLocked = !IsLocked;
-  protected_task_manager.target_lock(target_point, IsLocked);
+  protected_task_manager->target_lock(target_point, IsLocked);
   RefreshCalculator();
 }
 
@@ -356,8 +356,8 @@ OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
     if (target_point >= ActiveTaskPointOnEntry) {
       const fixed RangeNew = df.GetAsFixed() / fixed(100);
       if (RangeNew != Range) {
-        protected_task_manager.set_target(target_point, RangeNew, Radial);
-        protected_task_manager.get_target_range_radial(target_point, Range, Radial);
+        protected_task_manager->set_target(target_point, RangeNew, Radial);
+        protected_task_manager->get_target_range_radial(target_point, Range, Radial);
       }
     }
     break;
@@ -392,7 +392,7 @@ OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
         RadialNew = rTemp;
       }
       if (Radial != RadialNew) {
-        protected_task_manager.set_target(target_point, Range, RadialNew);
+        protected_task_manager->set_target(target_point, Range, RadialNew);
         Radial = RadialNew;
       }
     }
@@ -409,7 +409,7 @@ static void
 SetZoom(void)
 {
   const fixed Radius =
-      protected_task_manager.get_ordered_taskpoint_radius(target_point) * fixed(2);
+      protected_task_manager->get_ordered_taskpoint_radius(target_point) * fixed(2);
   XCSoarInterface::SetSettingsMap().TargetZoomDistance = Radius;
 }
 
@@ -421,7 +421,7 @@ RefreshTargetPoint(void)
 {
   if (target_point < TaskSize && target_point >= ActiveTaskPointOnEntry) {
     if (XCSoarInterface::SetSettingsMap().TargetPanIndex != target_point) {
-      const GeoPoint t = protected_task_manager.get_ordered_taskpoint_location(
+      const GeoPoint t = protected_task_manager->get_ordered_taskpoint_location(
               target_point,
               XCSoarInterface::Basic().Location);
       if (t == XCSoarInterface::Basic().Location)
@@ -433,7 +433,7 @@ RefreshTargetPoint(void)
 
     fixed range = fixed_zero;
     fixed radial = fixed_zero;
-    protected_task_manager.get_target_range_radial(target_point, range, radial);
+    protected_task_manager->get_target_range_radial(target_point, range, radial);
     SetZoom();
     RefreshCalculator();
   } else {
@@ -477,7 +477,7 @@ static CallBackTableEntry CallBackTable[] = {
 static void
 GetTaskData()
 {
-  ProtectedTaskManager::Lease task_manager(protected_task_manager);
+  ProtectedTaskManager::Lease task_manager(*protected_task_manager);
   const AbstractTask *at = task_manager->get_active_task();
 
   ActiveTaskPointOnEntry = task_manager->getActiveTaskPointIndex();
@@ -507,7 +507,7 @@ InitTargetPoints()
 
   target_point = max(0, min((int)target_point, (int)TaskSize - 1));
   for (unsigned i = ActiveTaskPointOnEntry; i < TaskSize; i++) {
-    _tcsncpy(tp_short, protected_task_manager.get_ordered_taskpoint_name(i), 20);
+    _tcsncpy(tp_short, protected_task_manager->get_ordered_taskpoint_name(i), 20);
     tp_short[20] = 0;
     _stprintf(tp_label, _T("%d %s"), i, tp_short);
     dfe->addEnumText(tp_label);
@@ -515,7 +515,7 @@ InitTargetPoints()
   dfe->Set(max(0, (int)target_point - (int)ActiveTaskPointOnEntry));
 
   if (TaskSize > target_point) {
-    const GeoPoint t = protected_task_manager.get_ordered_taskpoint_location(target_point,
+    const GeoPoint t = protected_task_manager->get_ordered_taskpoint_location(target_point,
         XCSoarInterface::Basic().Location);
     SetZoom();
     XCSoarInterface::SetSettingsMap().TargetPan = true;
@@ -529,8 +529,8 @@ InitTargetPoints()
 void
 dlgTargetShowModal()
 {
-
-  if (protected_task_manager.get_mode() != TaskManager::MODE_ORDERED)
+  if (protected_task_manager == NULL ||
+      protected_task_manager->get_mode() != TaskManager::MODE_ORDERED)
     return;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,

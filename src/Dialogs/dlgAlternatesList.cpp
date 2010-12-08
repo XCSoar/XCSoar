@@ -38,7 +38,7 @@ static AbortTask::AlternateVector alternates;
 static void
 PaintListItem(Canvas &canvas, const RECT rc, unsigned index)
 {
-  alternates = protected_task_manager.getAlternates();
+  alternates = protected_task_manager->getAlternates();
   assert(index < alternates.size());
 
   const unsigned line_height = rc.bottom - rc.top;
@@ -82,7 +82,10 @@ PaintListItem(Canvas &canvas, const RECT rc, unsigned index)
 void
 dlgAlternatesListShowModal(SingleWindow &parent)
 {
-  alternates = protected_task_manager.getAlternates();
+  if (protected_task_manager == NULL)
+    return;
+
+  alternates = protected_task_manager->getAlternates();
   int i = ListPicker(parent, _("Alternates"), alternates.size(), 0,
                      Layout::Scale(30), PaintListItem, true);
 

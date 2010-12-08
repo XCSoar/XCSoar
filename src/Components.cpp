@@ -112,11 +112,8 @@ Waypoints way_points;
 
 GlideComputerTaskEvents task_events;
 
-static TaskManager task_manager(task_events, way_points);
-
-ProtectedTaskManager protected_task_manager(task_manager,
-                                            XCSoarInterface::SettingsComputer(),
-                                            task_events);
+static TaskManager *task_manager;
+ProtectedTaskManager *protected_task_manager;
 
 Airspaces airspace_database;
 
@@ -205,9 +202,9 @@ XCSoarInterface::AfterStartup()
   }
 
   SetSettingsComputer().enable_olc = true;
-  protected_task_manager.task_load_default(&way_points);
+  protected_task_manager->task_load_default(&way_points);
 
-  task_manager.resume();
+  task_manager->resume();
 
   LogStartUp(_T("CloseProgressDialog"));
   ProgressGlue::Close();
@@ -316,13 +313,19 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 #endif
 
   // Initialize main blackboard data
-  task_manager.reset();
+  task_manager = new TaskManager(task_events, way_points);
+  task_manager->reset();
+
+  protected_task_manager =
+    new ProtectedTaskManager(*task_manager,
+                             XCSoarInterface::SettingsComputer(),
+                             task_events);
 
   airspace_warning = new AirspaceWarningManager(airspace_database,
-                                                task_manager);
+                                                *task_manager);
   airspace_warnings = new ProtectedAirspaceWarningManager(*airspace_warning);
 
-  glide_computer = new GlideComputer(way_points, protected_task_manager,
+  glide_computer = new GlideComputer(way_points, *protected_task_manager,
                                      *airspace_warnings,
                                      task_events);
   glide_computer->SetLogger(&logger);
@@ -331,11 +334,11 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // Load the EGM96 geoid data
   OpenGeoid();
 
-  GlidePolar gp = task_manager.get_glide_polar();
+  GlidePolar gp = task_manager->get_glide_polar();
   if (LoadPolarById(SettingsComputer(), gp))
-    task_manager.set_glide_polar(gp);
+    task_manager->set_glide_polar(gp);
 
-  task_manager.set_contest(SettingsComputer().contest);
+  task_manager->set_contest(SettingsComputer().contest);
 
   // Read the topology file(s)
   topology = new TopologyStore();
@@ -406,7 +409,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   ProgressGlue::Create(_("Initialising display"));
 
   main_window.map.set_way_points(&way_points);
-  main_window.map.set_task(&protected_task_manager);
+  main_window.map.set_task(protected_task_manager);
   main_window.map.set_airspaces(&airspace_database, airspace_warnings);
 
   main_window.map.set_topology(topology);
@@ -535,7 +538,7 @@ XCSoarInterface::Shutdown(void)
   ProgressGlue::Create(_("Shutdown, saving task..."));
 
   LogStartUp(_T("Save default task"));
-  protected_task_manager.task_save_default();
+  protected_task_manager->task_save_default();
 
   // Clear airspace database
   LogStartUp(_T("Close airspace"));
@@ -569,8 +572,11 @@ XCSoarInterface::Shutdown(void)
 
   // Save everything in the persistent memory file
   SaveCalculationsPersist(Basic(), Calculated(),
-                          protected_task_manager, *glide_computer,
+                          *protected_task_manager, *glide_computer,
                           logger);
+
+  delete protected_task_manager;
+  delete task_manager;
 
   // Clear the FLARM database
   FlarmDetails::Reset();

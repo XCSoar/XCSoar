@@ -64,9 +64,9 @@ GetCruiseEfficiency(void)
 
 static void
 SetMC(fixed mc) {
-  GlidePolar polar = protected_task_manager.get_glide_polar();
+  GlidePolar polar = protected_task_manager->get_glide_polar();
   polar.set_mc(mc);
-  protected_task_manager.set_glide_polar(polar);
+  protected_task_manager->set_glide_polar(polar);
   device_blackboard.SetMC(mc);
 }
 
@@ -91,7 +91,7 @@ RefreshCalculator(void)
     if (XCSoarInterface::Calculated().task_stats.has_targets) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
       df.SetAsFloat(
-          protected_task_manager.get_ordered_task_behaviour().aat_min_time / 60);
+          protected_task_manager->get_ordered_task_behaviour().aat_min_time / 60);
       wp->RefreshDisplay();
     } else {
       wp->hide();
@@ -114,7 +114,7 @@ RefreshCalculator(void)
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetUnits(Units::GetVerticalSpeedName());
-    df.Set(Units::ToUserVSpeed(protected_task_manager.get_glide_polar().get_mc()));
+    df.Set(Units::ToUserVSpeed(protected_task_manager->get_glide_polar().get_mc()));
     wp->RefreshDisplay();
   }
 
@@ -218,7 +218,7 @@ static void
 OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
-  fixed clast = protected_task_manager.get_glide_polar().get_cruise_efficiency();
+  fixed clast = protected_task_manager->get_glide_polar().get_cruise_efficiency();
   (void)clast; // unused for now
 
   switch (Mode) {
@@ -260,6 +260,9 @@ static CallBackTableEntry CallBackTable[] = {
 void
 dlgTaskCalculatorShowModal(SingleWindow &parent)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   if (!Layout::landscape) {
     wf = LoadDialog(CallBackTable,
                         parent,
@@ -272,10 +275,10 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
   if (!wf)
     return;
 
-  GlidePolar polar = protected_task_manager.get_glide_polar();
+  GlidePolar polar = protected_task_manager->get_glide_polar();
 
   fixed CRUISE_EFFICIENCY_enter = polar.get_cruise_efficiency();
-  fixed MACCREADY_enter = protected_task_manager.get_glide_polar().get_mc();
+  fixed MACCREADY_enter = protected_task_manager->get_glide_polar().get_mc();
 
   emc = XCSoarInterface::Calculated().task_stats.effective_mc;
 

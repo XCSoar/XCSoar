@@ -366,6 +366,9 @@ UpdateValuesFlight(void)
 static void
 UpdateValuesRules(void)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   WndProperty *wp;
   TCHAR Temp[80];
 
@@ -384,7 +387,7 @@ UpdateValuesRules(void)
   else
     wp->SetText(_("FALSE"));
 
-  AIRCRAFT_STATE start_state = protected_task_manager.get_start_state();
+  AIRCRAFT_STATE start_state = protected_task_manager->get_start_state();
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartTime"));
   assert(wp != NULL);
@@ -421,7 +424,7 @@ UpdateValuesRules(void)
   wp = (WndProperty*)wf->FindByName(_T("prpFinishAlt"));
   assert(wp != NULL);
   _stprintf(Temp, _T("%.0f %s"),
-            (double)Units::ToUserAltitude(protected_task_manager.get_finish_height()),
+            (double)Units::ToUserAltitude(protected_task_manager->get_finish_height()),
             Units::GetAltitudeName());
   wp->SetText(Temp);
 
@@ -430,7 +433,7 @@ UpdateValuesRules(void)
 
   TCHAR name[64];
   {
-    ProtectedTaskManager::Lease task_manager(protected_task_manager);
+    ProtectedTaskManager::Lease task_manager(*protected_task_manager);
     const TCHAR *name2 = task_manager->get_mode() == TaskManager::MODE_ORDERED
       ? task_manager->get_ordered_taskpoint_name(0)
       : NULL;
@@ -447,11 +450,14 @@ UpdateValuesRules(void)
 static void
 UpdateValuesTask(void)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   WndProperty *wp;
   TCHAR Temp[80];
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskTime"));
-  Units::TimeToText(Temp, protected_task_manager.get_ordered_task_behaviour().aat_min_time);
+  Units::TimeToText(Temp, protected_task_manager->get_ordered_task_behaviour().aat_min_time);
   assert(wp != NULL);
   if (XCSoarInterface::Calculated().task_stats.has_targets)
     wp->SetText(Temp);

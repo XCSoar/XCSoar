@@ -84,7 +84,7 @@ TaskStore::TaskStoreItem::get_task()
     return task;
 
   if (valid)
-    task = protected_task_manager.task_create(filename.c_str(), &way_points);
+    task = protected_task_manager->task_create(filename.c_str(), &way_points);
 
   if (task == NULL)
     valid = false;

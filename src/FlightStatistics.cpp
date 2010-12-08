@@ -138,7 +138,7 @@ void
 FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
                                   const NMEA_INFO &nmea_info,
                                   const DERIVED_INFO &derived_info,
-                                  const ProtectedTaskManager &_task) const
+                                  const ProtectedTaskManager *_task) const
 {
   Chart chart(canvas, rc);
 
@@ -153,8 +153,8 @@ FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
   chart.ScaleXFromValue(Altitude.x_min + fixed_one); // in case no data
   chart.ScaleXFromValue(Altitude.x_min);
 
-  {
-    ProtectedTaskManager::Lease task(_task);
+  if (_task != NULL) {
+    ProtectedTaskManager::Lease task(*_task);
     DrawLegs(chart, task, nmea_info, derived_info, false);
   }
 

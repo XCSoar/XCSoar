@@ -86,8 +86,11 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                  const DERIVED_INFO &calculated,
                  const SETTINGS_COMPUTER &settings_computer)
 {
+  if (protected_task_manager == NULL)
+    return true;
+
   bool invalid = false;
-  ProtectedTaskManager::Lease task_manager(protected_task_manager);
+  ProtectedTaskManager::Lease task_manager(*protected_task_manager);
 
   if (_tcsstr(OutBuffer, _T("$(CheckTaskResumed)"))) {
     // TODO code: check, does this need to be set with temporary task?

@@ -509,7 +509,10 @@ InputEvents::eventChangeInfoBoxType(const TCHAR *misc)
 void
 InputEvents::eventArmAdvance(const TCHAR *misc)
 {
-  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  if (protected_task_manager == NULL)
+    return;
+
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   const TaskAdvance::TaskAdvanceState_t mode =
     task_manager->get_task_advance().get_advance_state();
   
@@ -661,8 +664,10 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
   const Waypoint* wp = NULL;
 
   if (_tcscmp(misc, _T("current")) == 0) {
+    if (protected_task_manager == NULL)
+      return;
 
-    wp = protected_task_manager.getActiveWaypoint();
+    wp = protected_task_manager->getActiveWaypoint();
     if (!wp) {
       Message::AddMessage(_("No Active Waypoint!"));
       return;
@@ -678,10 +683,13 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
 void
 InputEvents::eventGotoLookup(const TCHAR *misc)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   const Waypoint* wp = dlgWayPointSelect(XCSoarInterface::main_window,
                                          XCSoarInterface::Basic().Location);
   if (wp != NULL) {
-    protected_task_manager.do_goto(*wp);
+    protected_task_manager->do_goto(*wp);
     trigger_redraw();
   }
 }
@@ -710,18 +718,21 @@ InputEvents::eventPlaySound(const TCHAR *misc)
 void
 InputEvents::eventMacCready(const TCHAR *misc)
 {
-  GlidePolar polar = protected_task_manager.get_glide_polar();
+  if (protected_task_manager == NULL)
+    return;
+
+  GlidePolar polar = protected_task_manager->get_glide_polar();
   fixed mc = polar.get_mc();
 
   if (_tcscmp(misc, _T("up")) == 0) {
     mc = std::min(mc + fixed_one / 10, fixed(5));
     polar.set_mc(mc);
-    protected_task_manager.set_glide_polar(polar);
+    protected_task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
   } else if (_tcscmp(misc, _T("down")) == 0) {
     mc = std::max(mc - fixed_one / 10, fixed_zero);
     polar.set_mc(mc);
-    protected_task_manager.set_glide_polar(polar);
+    protected_task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
   } else if (_tcscmp(misc, _T("auto toggle")) == 0) {
     XCSoarInterface::SetSettingsComputer().auto_mc =
@@ -911,7 +922,10 @@ InputEvents::eventAudioDeadband(const TCHAR *misc)
 void
 InputEvents::eventAdjustWaypoint(const TCHAR *misc)
 {
-  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  if (protected_task_manager == NULL)
+    return;
+
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   if (_tcscmp(misc, _T("next")) == 0)
     task_manager->incrementActiveTaskPoint(1); // next
   else if (_tcscmp(misc, _T("nextwrap")) == 0)
@@ -933,7 +947,10 @@ InputEvents::eventAdjustWaypoint(const TCHAR *misc)
 void
 InputEvents::eventAbortTask(const TCHAR *misc)
 {
-  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  if (protected_task_manager == NULL)
+    return;
+
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
 
   if (_tcscmp(misc, _T("abort")) == 0)
     task_manager->abort();
@@ -988,7 +1005,10 @@ InputEvents::eventAbortTask(const TCHAR *misc)
 void
 InputEvents::eventBugs(const TCHAR *misc)
 {
-  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  if (protected_task_manager == NULL)
+    return;
+
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   GlidePolar polar = task_manager->get_glide_polar();
   fixed BUGS = polar.get_bugs();
   fixed oldBugs = BUGS;
@@ -1027,7 +1047,10 @@ InputEvents::eventBugs(const TCHAR *misc)
 void
 InputEvents::eventBallast(const TCHAR *misc)
 {
-  ProtectedTaskManager::ExclusiveLease task_manager(protected_task_manager);
+  if (protected_task_manager == NULL)
+    return;
+
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   GlidePolar polar = task_manager->get_glide_polar();
   fixed BALLAST = polar.get_ballast();
   fixed oldBallast = BALLAST;
@@ -1077,17 +1100,20 @@ InputEvents::eventAutoLogger(const TCHAR *misc)
 void
 InputEvents::eventLogger(const TCHAR *misc)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   // TODO feature: start logger without requiring feedback
   // start stop toggle addnote
 
   if (_tcscmp(misc, _T("start ask")) == 0)
     logger.guiStartLogger(XCSoarInterface::Basic(),
                           XCSoarInterface::SettingsComputer(),
-                          protected_task_manager);
+                          *protected_task_manager);
   else if (_tcscmp(misc, _T("start")) == 0)
     logger.guiStartLogger(XCSoarInterface::Basic(),
                           XCSoarInterface::SettingsComputer(),
-                          protected_task_manager, true);
+                          *protected_task_manager, true);
   else if (_tcscmp(misc, _T("stop ask")) == 0)
     logger.guiStopLogger(XCSoarInterface::Basic());
   else if (_tcscmp(misc, _T("stop")) == 0)
@@ -1095,11 +1121,11 @@ InputEvents::eventLogger(const TCHAR *misc)
   else if (_tcscmp(misc, _T("toggle ask")) == 0)
     logger.guiToggleLogger(XCSoarInterface::Basic(),
                            XCSoarInterface::SettingsComputer(),
-                           protected_task_manager);
+                           *protected_task_manager);
   else if (_tcscmp(misc, _T("toggle")) == 0)
     logger.guiToggleLogger(XCSoarInterface::Basic(),
                            XCSoarInterface::SettingsComputer(),
-                           protected_task_manager, true);
+                           *protected_task_manager, true);
   else if (_tcscmp(misc, _T("nmea")) == 0) {
     EnableLogNMEA = !EnableLogNMEA;
     if (EnableLogNMEA) {
@@ -1155,7 +1181,9 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
       ToAircraftState(XCSoarInterface::Basic());
   AirspaceVisible visible(XCSoarInterface::SettingsComputer(),
                           ToAircraftState(XCSoarInterface::Basic()));
-  GlidePolar polar = protected_task_manager.get_glide_polar();
+  GlidePolar polar(fixed_zero);
+  if (protected_task_manager != NULL)
+    polar = protected_task_manager->get_glide_polar();
   polar.set_mc(max(polar.get_mc(),fixed_one));
   AirspaceAircraftPerformanceGlide perf(polar);
   AirspaceSoonestSort ans(aircraft_state, perf, fixed(1800), visible);
@@ -1208,10 +1236,13 @@ InputEvents::eventNull(const TCHAR *misc)
 void
 InputEvents::eventTaskLoad(const TCHAR *misc)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   if (!string_is_empty(misc)) {
     TCHAR buffer[MAX_PATH];
     LocalPath(buffer, misc);
-    protected_task_manager.task_load(buffer, &way_points);
+    protected_task_manager->task_load(buffer, &way_points);
   }
 
   trigger_redraw();
@@ -1222,10 +1253,13 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
 void
 InputEvents::eventTaskSave(const TCHAR *misc)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   if (!string_is_empty(misc)) {
     TCHAR buffer[MAX_PATH];
     LocalPath(buffer, misc);
-    protected_task_manager.task_save(buffer);
+    protected_task_manager->task_save(buffer);
   }
 }
 
@@ -1703,8 +1737,11 @@ InputEvents::sub_ScaleZoom(int vswitch)
 void
 InputEvents::eventTaskTransition(const TCHAR *misc)
 {
+  if (protected_task_manager == NULL)
+    return;
+
   if (_tcscmp(misc, _T("start")) == 0) {
-    AIRCRAFT_STATE start_state = protected_task_manager.get_start_state();
+    AIRCRAFT_STATE start_state = protected_task_manager->get_start_state();
 
     TCHAR TempTime[40];
     TCHAR TempAlt[40];
