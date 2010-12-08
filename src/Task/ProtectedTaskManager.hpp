@@ -53,29 +53,40 @@ public:
      task_behaviour(tb), task_events(te) {}
 
   // common accessors for ui and calc clients
+  gcc_pure
   GlidePolar get_glide_polar() const;
   void set_glide_polar(const GlidePolar& glide_polar);
 
+  gcc_pure
   TaskManager::TaskMode_t get_mode() const;
 
   // trace points
+  gcc_pure
   TracePointVector find_trace_points(const GeoPoint &loc, 
                                      const fixed range,
                                      const unsigned mintime, 
                                      const fixed resolution) const;
 
+  gcc_pure
   const OrderedTaskBehaviour get_ordered_task_behaviour() const;
 
+  gcc_pure
   GlidePolar get_safety_polar() const;
 
+  gcc_pure
   const Waypoint* getActiveWaypoint() const;
+
+  gcc_pure
   const AbortTask::AlternateVector getAlternates() const;
 
   void incrementActiveTaskPoint(int offset);
 
   bool do_goto(const Waypoint & wp);
 
+  gcc_pure
   AIRCRAFT_STATE get_start_state() const;
+
+  gcc_pure
   fixed get_finish_height() const;
 
   gcc_malloc
@@ -116,6 +127,7 @@ public:
    *
    * @return True if reference point is inside sector
    */
+  gcc_pure
   bool isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref) const;
 
   /**
@@ -126,6 +138,7 @@ public:
    * @return Target location or fallback_location if TPindex is
    *    invalid or has no target
    */
+  gcc_pure
   const GeoPoint& get_location_target(const unsigned TPindex,
      const GeoPoint& fallback_location) const;
 
@@ -136,6 +149,7 @@ public:
    *
    * @return True if target is locked or tp location if has no target
    */
+  gcc_pure
   bool target_is_locked(const unsigned TPindex) const;
 
   /**
@@ -145,6 +159,7 @@ public:
    *
    * @return True if task point has a target (can have range set)
    */
+  gcc_pure
   bool has_target(const unsigned TPindex) const;
 
   /**
@@ -197,6 +212,7 @@ public:
    *
    * @param TPindex index of ordered tp in task
    */
+  gcc_pure
   const TCHAR* get_ordered_taskpoint_name(const unsigned TPindex) const;
 
   /**
@@ -207,6 +223,7 @@ public:
    * @return location of tp or fallback_location if
    * TPindex is invalid
    */
+  gcc_pure
   const GeoPoint& get_ordered_taskpoint_location(const unsigned TPindex,
      const GeoPoint& fallback_location) const;
 
@@ -218,6 +235,7 @@ public:
    * @return oz radius or 0 if
    * TPindex is invalid
    */
+  gcc_pure
   fixed get_ordered_taskpoint_radius(const unsigned TPindex) const;
 
 };
