@@ -213,10 +213,12 @@ protected:
  * pure glide solution for the remainder of the task.
  * 
  * @param state_now Aircraft state
- * 
- * @return Best MC value found (m/s)
+ * @param best Best MC value found (m/s)
+ *
+ * @return true if solution is valid
  */
-  virtual fixed calc_mc_best(const AIRCRAFT_STATE &state_now) const = 0;
+  virtual bool calc_mc_best(const AIRCRAFT_STATE &state_now,
+                            fixed &best) const = 0;
 
 /** 
  * Calculate virtual sink rate of aircraft that allows a pure glide solution

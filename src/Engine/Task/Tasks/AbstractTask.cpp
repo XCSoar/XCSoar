@@ -55,20 +55,30 @@ AbstractTask::update_auto_mc(GlidePolar &glide_polar,
   }
 
   if (task_behaviour.auto_mc_mode == TaskBehaviour::AUTOMC_CLIMBAVERAGE) {
+    stats.mc_best = mc_lpf.reset(fallback_mc);
     trigger_auto = false;
-  } else {
-    const fixed mc_found = calc_mc_best(state);
+    return false;
+  } 
+
+  fixed mc_found;
+  if (calc_mc_best(state, mc_found)) {
+
+    // improved solution found, activate auto fg mode
     if (mc_found > stats.mc_best)
       trigger_auto = true;
-
-    if (trigger_auto) {
-      stats.mc_best = mc_lpf.update(mc_found);
-      glide_polar.set_mc(stats.mc_best);
-    }
+  } else {
+    // no solution even at mc=0, deactivate auto fg mode
+    trigger_auto = false;
   }
 
-  if (!trigger_auto)
+  if (trigger_auto) {
+    // smooth out updates
+    stats.mc_best = mc_lpf.update(mc_found);
+    glide_polar.set_mc(stats.mc_best);
+  } else {
+    // reset lpf so will be smooth next time it becomes active
     stats.mc_best = mc_lpf.reset(fallback_mc);
+  }
 
   return trigger_auto;
 }

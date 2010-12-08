@@ -593,12 +593,12 @@ OrderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft) const
   return bgr.search(fixed_zero);
 }
 
-fixed
-OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft) const
+bool
+OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft, fixed& best) const
 {
   // note setting of lower limit on mc
   TaskBestMc bmc(tps,activeTaskPoint, aircraft, glide_polar);
-  return bmc.search(glide_polar.get_mc());
+  return bmc.search(glide_polar.get_mc(), best);
 }
 
 

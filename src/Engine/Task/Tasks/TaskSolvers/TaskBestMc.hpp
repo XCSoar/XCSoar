@@ -83,6 +83,9 @@ public:
  * @return Best MC value found or default value if no solution
  */
   virtual fixed search(const fixed mc);
+
+  virtual bool search(const fixed mc, fixed& result);
+
 private:
   TaskMacCreadyRemaining tm;
   GlideResult res;

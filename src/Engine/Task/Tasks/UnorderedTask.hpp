@@ -52,7 +52,7 @@ protected:
 
   bool check_task() const;
 
-  fixed calc_mc_best(const AIRCRAFT_STATE &state_now) const;
+  bool calc_mc_best(const AIRCRAFT_STATE &state_now, fixed& best) const;
 
   fixed calc_glide_required(const AIRCRAFT_STATE &state_now) const;
 

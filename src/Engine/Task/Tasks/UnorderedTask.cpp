@@ -33,15 +33,16 @@ UnorderedTask::UnorderedTask(const enum type _type, TaskEvents &te,
 }
 
 
-fixed 
-UnorderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft) const
+bool 
+UnorderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft, fixed& best) const
 {
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {
-    return glide_polar.get_mc();
+    best = glide_polar.get_mc();
+    return false;
   }
   TaskBestMc bmc(tp, aircraft, glide_polar);
-  return bmc.search(glide_polar.get_mc());
+  return bmc.search(glide_polar.get_mc(), best);
 }
 
 bool

@@ -76,3 +76,20 @@ TaskBestMc::search(const fixed mc)
   }
   return mc;
 }
+
+bool 
+TaskBestMc::search(const fixed mc, fixed& result) 
+{
+  // only search if mc zero is valid
+  f(fixed_zero);
+  if (valid(fixed_zero)) {
+    fixed a = find_zero(mc);
+    if (valid(a)) {
+      result = a;
+      return true;
+    }
+  }
+  result = mc;
+  return false;
+}
+
