@@ -1207,9 +1207,8 @@ InputEvents::eventNull(const TCHAR *misc)
 void
 InputEvents::eventTaskLoad(const TCHAR *misc)
 {
-  TCHAR buffer[MAX_PATH];
-
   if (!string_is_empty(misc)) {
+    TCHAR buffer[MAX_PATH];
     LocalPath(buffer, misc);
     protected_task_manager.task_load(buffer, &way_points);
   }
@@ -1222,9 +1221,8 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
 void
 InputEvents::eventTaskSave(const TCHAR *misc)
 {
-  TCHAR buffer[MAX_PATH];
-
   if (!string_is_empty(misc)) {
+    TCHAR buffer[MAX_PATH];
     LocalPath(buffer, misc);
     protected_task_manager.task_save(buffer);
   }
