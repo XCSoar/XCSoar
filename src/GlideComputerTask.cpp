@@ -60,13 +60,15 @@ GlideComputerTask::ProcessBasicTask()
   glide_polar.set_mc(basic.MacCready);
   task->set_glide_polar(glide_polar);
 
+  bool auto_updated = false;
+
   if (basic.Time != LastBasic().Time && !basic.gps.NAVWarning) {
     const AIRCRAFT_STATE current_as = ToAircraftState(Basic());
     const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic());
 
     task->update(current_as, last_as);
-    task->update_auto_mc(current_as, std::max(
-        Calculated().LastThermalAverageSmooth, fixed_zero));
+    auto_updated = task->update_auto_mc(current_as, std::max(
+                                          Calculated().LastThermalAverageSmooth, fixed_zero));
   }
 
   SetCalculated().task_stats = task->get_stats();
@@ -87,7 +89,7 @@ GlideComputerTask::ProcessBasicTask()
   this now also only changes mc if in auto mode and the computer has
   changed the value.  this may have a bearing on #498.
 */
-  if (SettingsComputer().auto_mc) {
+  if (SettingsComputer().auto_mc && auto_updated) {
     // in auto mode, check for changes forced by the computer
     const fixed mc_computer = 
       task->get_glide_polar().get_mc();
