@@ -565,7 +565,8 @@ XCSoarInterface::Shutdown(void)
   RawLoggerShutdown();
 
   // Save everything in the persistent memory file
-  SaveCalculationsPersist(Basic(), Calculated(), *glide_computer);
+  SaveCalculationsPersist(Basic(), Calculated(),
+                          protected_task_manager, *glide_computer);
 
   // Clear the FLARM database
   FlarmDetails::Reset();

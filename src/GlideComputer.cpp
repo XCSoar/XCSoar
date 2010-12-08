@@ -79,7 +79,7 @@ GlideComputer::Initialise()
   GlideComputerTask::Initialise();
   ResetFlight(true);
 
-  LoadCalculationsPersist(&SetCalculated(), *this);
+  LoadCalculationsPersist(&SetCalculated(), protected_task_manager, *this);
   DeleteCalculationsPersist();
   // required to allow fail-safe operation
   // if the persistent file is corrupt and causes a crash
