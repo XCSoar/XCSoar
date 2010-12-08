@@ -30,6 +30,7 @@ Copyright_License {
 #include "GlideComputerStats.hpp"
 #include "GlideComputerTask.hpp"
 
+class Waypoints;
 class ProtectedTaskManager;
 class GlideComputerTaskEvents;
 
@@ -41,8 +42,12 @@ class GlideComputer:
     public GlideComputerAirData, GlideComputerTask,
     public GlideComputerStats
 {
+  const Waypoints &way_points;
+  ProtectedTaskManager &protected_task_manager;
+
 public:
-  GlideComputer(ProtectedTaskManager& task,
+  GlideComputer(const Waypoints &_way_points,
+                ProtectedTaskManager& task,
                 ProtectedAirspaceWarningManager &_awm,
                 GlideComputerTaskEvents& events);
 

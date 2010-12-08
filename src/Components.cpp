@@ -320,7 +320,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // Initialize main blackboard data
   task_manager.reset();
 
-  glide_computer = new GlideComputer(protected_task_manager, airspace_warnings,
+  glide_computer = new GlideComputer(way_points, protected_task_manager,
+                                     airspace_warnings,
                                      task_events);
   glide_computer->SetLogger(&logger);
   glide_computer->Initialise();

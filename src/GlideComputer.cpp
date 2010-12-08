@@ -29,7 +29,6 @@ Copyright_License {
 #include "Persist.hpp"
 #include "ConditionMonitor.hpp"
 #include "TeamCodeCalculation.h"
-#include "Components.hpp"
 #include "PeriodClock.hpp"
 #include "GlideComputerInterface.hpp"
 #include "InputEvents.hpp"
@@ -45,13 +44,15 @@ static PeriodClock last_team_code_update;
  * Constructor of the GlideComputer class
  * @return
  */
-GlideComputer::GlideComputer(ProtectedTaskManager &task,
+GlideComputer::GlideComputer(const Waypoints &_way_points,
+                             ProtectedTaskManager &task,
                              ProtectedAirspaceWarningManager &airspace,
                              GlideComputerTaskEvents& events):
   GlideComputerBlackboard(task),
   GlideComputerAirData(airspace, task),
   GlideComputerTask(task),
-  GlideComputerStats(task)
+  GlideComputerStats(task),
+  way_points(_way_points), protected_task_manager(task)
 {
   events.set_computer(*this);
 }

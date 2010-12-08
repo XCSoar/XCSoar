@@ -128,7 +128,8 @@ ProtectedTaskManager protected_task_manager(task_manager,
                                             XCSoarInterface::SettingsComputer(),
                                             task_events);
 
-GlideComputer glide_computer(protected_task_manager, airspace_warnings,
+GlideComputer glide_computer(way_points, protected_task_manager,
+                             airspace_warnings,
                              task_events);
 
 RasterTerrain *terrain;
