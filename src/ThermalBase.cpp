@@ -44,41 +44,55 @@ EstimateThermalBase(const GeoPoint location, const fixed altitude,
                     const fixed average, const SpeedVector wind,
                     GeoPoint &ground_location, fixed &ground_alt)
 {
-  if (!positive(average))
+  if (!positive(average) || !positive(altitude)) {    
+    ground_location = location;
+    ground_alt = fixed_zero;
     return;
+  }
 
-  // Time spent in last thermal
-  fixed Tmax = altitude / average;
+  // Max time the thermal could have risen for if ground
+  // elevation is zero
+  const fixed Tmax = altitude / average;
 
   // Shortcut if no terrain available
   if (terrain == NULL) {
-    ground_location = FindLatitudeLongitude(location, wind.bearing,
+    ground_location = FindLatitudeLongitude(location, 
+                                            wind.bearing,
                                             wind.norm * Tmax);
     ground_alt = fixed_zero;
     return;
   }
 
-  // Time of the 10 calculation intervals
-  fixed dt = Tmax / 10;
-
   RasterTerrain::Lease map(*terrain);
 
-  GeoPoint loc;
-  // Iterate over 10 time-based calculation intervals
-  for (fixed t = fixed_zero; t <= Tmax; t += dt) {
-    // Calculate position
-    loc = FindLatitudeLongitude(location, wind.bearing, wind.norm * t);
-    // Calculate altitude
-    fixed hthermal = altitude - average * t;
-    // Calculate altitude above ground
-    fixed dh = hthermal - GetElevation(map, loc);
+  // Height step of the 10 calculation intervals
+  const fixed dh = altitude / 10;
 
-    // Below ground level
-    if (negative(dh)) {
+  // Iterate over 10 altitude-based calculation intervals
+  // We do this because the terrain elevation may shift
+  // as we trace the thermal back to its source
+
+  GeoPoint loc = location;
+
+  for (fixed h = altitude; h >= 0; h -= dh) {
+    // Time to descend to this height
+    fixed t = (altitude-h)/average;
+
+    // Calculate position
+    loc = FindLatitudeLongitude(location, wind.bearing, 
+                                wind.norm * t);
+
+    // Calculate altitude above ground
+    fixed dh = h - GetElevation(map, loc);
+
+    // At or below ground level, use linear interpolation
+    // to estimate intersection
+    if (!positive(dh)) {
       // Calculate time when we passed the ground level
-      t = t + dh / average;
+      t += dh / average;
       // Calculate position
-      loc = FindLatitudeLongitude(location, wind.bearing, wind.norm * t);
+      loc = FindLatitudeLongitude(location, wind.bearing, 
+                                  wind.norm * t);
       break;
     }
   }
