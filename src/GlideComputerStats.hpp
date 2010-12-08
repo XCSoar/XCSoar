@@ -33,9 +33,10 @@ class ProtectedTaskManager;
 class GlideComputerStats:
   virtual public GlideComputerBlackboard
 {
+  FlightStatistics flightstats;
+
 public:
   GlideComputerStats(ProtectedTaskManager &task);
-  FlightStatistics flightstats;
 
   /** Returns the FlightStatistics object */
   FlightStatistics &GetFlightStats() { return flightstats; }
