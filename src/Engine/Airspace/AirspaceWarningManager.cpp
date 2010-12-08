@@ -74,8 +74,8 @@ void
 AirspaceWarningManager::set_prediction_time_filter(const fixed& the_time)
 {
   m_prediction_time_filter = the_time;
-  m_cruise_filter.design(m_prediction_time_filter*CRUISE_FILTER_FACT);
-  m_circling_filter.design(m_prediction_time_filter);
+  m_cruise_filter.design(max(fixed(10),m_prediction_time_filter*CRUISE_FILTER_FACT));
+  m_circling_filter.design(max(fixed(10),m_prediction_time_filter));
 }
 
 AirspaceWarning& 
