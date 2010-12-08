@@ -107,24 +107,37 @@ AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
 
   AirspaceInterceptSolution solution_this;
 
-  // need to scan three sides, top, far, bottom (if not terrain)
+  // need to scan at least three sides, top, far, bottom (if not terrain)
 
   AirspaceInterceptSolution solution_candidate;
-  solution_candidate = intercept_vertical(state, perf, distance_end);
+  solution_candidate = intercept_vertical(state, perf, distance_start);
+  // search near wall
   if (solution_candidate.valid() && 
       ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
        negative(solution_this.elapsed_time))) {
-    
     solution_this = solution_candidate;
   }
 
+  if (distance_end != distance_start) {
+    // need to search far wall also
+    solution_candidate = intercept_vertical(state, perf, distance_end);
+    if (solution_candidate.valid() && 
+        ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
+         negative(solution_this.elapsed_time))) {
+      
+      solution_this = solution_candidate;
+    }
+  }
+
   solution_candidate = intercept_horizontal(state, perf, distance_start, distance_end, false);
+  // search top wall
   if (solution_candidate.valid() && 
       ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
        negative(solution_this.elapsed_time))) {
     solution_this = solution_candidate;
   }
   
+  // search bottom wall
   if (!m_base.is_terrain()) {
     solution_candidate = intercept_horizontal(state, perf, distance_start, distance_end, true);
     if (solution_candidate.valid() && 
