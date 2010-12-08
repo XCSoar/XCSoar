@@ -322,6 +322,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   glide_computer = new GlideComputer(protected_task_manager, airspace_warnings,
                                      task_events);
+  glide_computer->SetLogger(&logger);
   glide_computer->Initialise();
 
   // Load the EGM96 geoid data

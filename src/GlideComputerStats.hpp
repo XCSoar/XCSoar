@@ -28,20 +28,32 @@ Copyright_License {
 #include "FlightStatistics.hpp"
 #include "GPSClock.hpp"
 
+#include <assert.h>
+
+class Logger;
 class ProtectedTaskManager;
 
 class GlideComputerStats:
   virtual public GlideComputerBlackboard
 {
   FlightStatistics flightstats;
-
   GPSClock log_clock;
   GPSClock stats_clock;
   /** number of points to log at high rate */
   unsigned FastLogNum;
 
+protected:
+  Logger *logger;
+
 public:
   GlideComputerStats(ProtectedTaskManager &task);
+
+  void SetLogger(Logger *_logger) {
+    assert(logger == NULL);
+    assert(_logger != NULL);
+
+    logger = _logger;
+  }
 
   /** Returns the FlightStatistics object */
   FlightStatistics &GetFlightStats() { return flightstats; }

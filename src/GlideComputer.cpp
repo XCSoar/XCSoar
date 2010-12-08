@@ -302,14 +302,18 @@ GlideComputer::OnStartTask()
 {
   GlideComputerBlackboard::StartTask();
   GlideComputerStats::StartTask();
-  logger.LogStartEvent(Basic());
+
+  if (logger != NULL)
+    logger->LogStartEvent(Basic());
 }
 
 void 
 GlideComputer::OnFinishTask()
 {
   SaveFinish();
-  logger.LogFinishEvent(Basic());
+
+  if (logger != NULL)
+    logger->LogFinishEvent(Basic());
 }
 
 void

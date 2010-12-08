@@ -34,7 +34,8 @@ Copyright_License {
 GlideComputerStats::GlideComputerStats(ProtectedTaskManager &task) :
   GlideComputerBlackboard(task),
   log_clock(fixed(5)),
-  stats_clock(fixed(60)) {}
+  stats_clock(fixed(60)),
+  logger(NULL) {}
 
 void
 GlideComputerStats::ResetFlight(const bool full)
@@ -74,7 +75,8 @@ GlideComputerStats::DoLogging()
   }
 
   if (log_clock.check_advance(Basic().Time)) {
-    logger.LogPoint(Basic());
+    if (logger != NULL)
+      logger->LogPoint(Basic());
     gps_info.gps.Simulator = false; // reset for next fix (set by NMEA parsing)
   }
 
