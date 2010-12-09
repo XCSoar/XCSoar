@@ -75,6 +75,9 @@ public:
   void set_terrain_color(Color color) {
     terrain_brush.set(color);
   }
+  void set_grid_pen(enum Pen::style style, unsigned width, const Color color) {
+    grid_pen.set(style, width, color);
+  }
 
 protected:
   void PaintAirspaces(Canvas &canvas, Chart &chart);
@@ -87,6 +90,7 @@ protected:
   virtual bool on_create();
 
   Brush terrain_brush;
+  Pen grid_pen;
 
   RasterTerrain *terrain;
   Airspaces *airspace_database;

@@ -119,6 +119,7 @@ private:
 
 CrossSectionWindow::CrossSectionWindow() :
   terrain_brush(Chart::GROUND_COLOUR),
+  grid_pen(Pen::DASH, 1, Color(0x60, 0x60, 0x60)),
   terrain(NULL), airspace_database(NULL),
   start(Angle::native(fixed_zero), Angle::native(fixed_zero)),
   vec(fixed(50000), Angle::native(fixed_zero)),
@@ -251,9 +252,9 @@ CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
   canvas.set_text_color(text_color);
 
   chart.DrawXGrid(Units::ToSysDistance(fixed(5)), fixed_zero,
-                  Chart::STYLE_THINDASHPAPER, fixed(5), true);
+                  grid_pen, fixed(5), true);
   chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)), fixed_zero,
-                  Chart::STYLE_THINDASHPAPER, fixed(1000), true);
+                  grid_pen, fixed(1000), true);
 
   chart.DrawXLabel(_T("D"));
   chart.DrawYLabel(_T("h"));
