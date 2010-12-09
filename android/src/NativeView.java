@@ -196,6 +196,8 @@ class NativeView extends SurfaceView
 
     android.graphics.Rect r = getHolder().getSurfaceFrame();
     run(r.width(), r.height());
+
+    ((Activity)getContext()).finish();
   }
 
   protected native void run(int width, int height);
