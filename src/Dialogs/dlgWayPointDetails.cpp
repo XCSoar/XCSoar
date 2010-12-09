@@ -376,11 +376,11 @@ append_to_task(const Waypoint &wp)
   int i = task->task_size() - 1;
   /* skip all finish points */
   while (i >= 0) {
-    const TaskPoint *tp = task->get_tp(i);
+    const OrderedTaskPoint *tp = task->get_tp(i);
     if (tp == NULL)
       break;
 
-    if (tp->is_intermediate()) {
+    if (tp->successor_allowed()) {
       ++i;
       break;
     }

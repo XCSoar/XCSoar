@@ -94,6 +94,20 @@ public:
    */
   void update_geometry();
 
+  /**
+   * Is it possible to insert a task point before this one?
+   */
+  bool predecessor_allowed() const {
+    return type != START;
+  }
+
+  /**
+   * Is it possible to insert a task point after this one?
+   */
+  bool successor_allowed() const {
+    return type != FINISH;
+  }
+
 /** 
  * Set previous/next task points.
  * 

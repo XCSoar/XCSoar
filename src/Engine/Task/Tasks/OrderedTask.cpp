@@ -451,6 +451,12 @@ OrderedTask::remove(const unsigned position)
 bool 
 OrderedTask::append(OrderedTaskPoint* new_tp)
 {
+  if (/* is the new_tp allowed in this context? */
+      (!tps.empty() && !new_tp->predecessor_allowed()) ||
+      /* can a tp be appended after the last one? */
+      (tps.size() >= 1 && !tps[tps.size() - 1]->successor_allowed()))
+    return false;
+
   tps.push_back(new_tp);
   if (tps.size() > 1)
     set_neighbours(tps.size() - 2);
@@ -470,6 +476,14 @@ OrderedTask::insert(OrderedTaskPoint* new_tp,
 {
   if (position >= tps.size())
     return append(new_tp);
+
+  if (/* is the new_tp allowed in this context? */
+      (position > 0 && !new_tp->predecessor_allowed()) ||
+      !new_tp->successor_allowed() ||
+      /* can a tp be inserted at this position? */
+      (position > 0 && !tps[position - 1]->successor_allowed()) ||
+      !tps[position]->predecessor_allowed())
+    return false;
 
   if (activeTaskPoint >= position)
     activeTaskPoint++;
@@ -496,6 +510,11 @@ OrderedTask::replace(OrderedTaskPoint* new_tp,
   if (tps[position]->equals(new_tp))
     // nothing to do
     return true;
+
+  /* is the new_tp allowed in this context? */
+  if ((position > 0 && !new_tp->predecessor_allowed()) ||
+      (position + 1 < tps.size() && !new_tp->successor_allowed()))
+    return false;
 
   delete tps[position];
   tps[position] = new_tp;
