@@ -57,31 +57,6 @@ public:
    */
   TaskDijkstra(OrderedTask& _task, const bool is_min);
 
-  /**
-   * Search task points for targets within OZs to produce the
-   * maximum-distance task.  Saves the max-distance solution
-   * in the corresponding task points for later accurate distance
-   * measurement.
-   *
-   * @return True if succeeded
-   */
-  bool distance_max();
-
-  /**
-   * Search task points for targets within OZs to produce the
-   * minimum-distance task.  Saves the minimum-distance solution
-   * in the corresponding task points for later accurate distance
-   * measurement.
-   *
-   * Note that the minimum distance task is the minimum distance
-   * remaining and is therefore sensitive to the specified aircraft
-   * location.
-   *
-   * @param location Location of aircraft
-   * @return True if succeeded
-   */
-  bool distance_min(const SearchPoint& location);
-
 protected:
   const SearchPoint &get_point(const ScanTaskPoint &sp) const;
   bool run();
