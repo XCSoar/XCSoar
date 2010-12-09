@@ -222,6 +222,10 @@ Airspaces::insert(AbstractAirspace* asp)
     // nothing to add
     return;
 
+  // reset QNH to zero so set_pressure_levels will be triggered next update
+  // this allows for airspaces to be add at any time
+  m_QNH = fixed_zero;
+
   if (empty())
     task_projection.reset(asp->get_center());
 
