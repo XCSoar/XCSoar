@@ -58,7 +58,7 @@ OrderedTaskFactoryName(OrderedTask::Factory_t type)
   case OrderedTask::FACTORY_AAT:
     return _T("AAT");
   case OrderedTask::FACTORY_MIXED:
-    return _T("Mixed AAT");
+    return _T("Mixed");
   case OrderedTask::FACTORY_TOURING:
     return _T("Touring");
   default:
@@ -86,7 +86,7 @@ OrderedTaskFactoryDescription(OrderedTask::Factory_t type)
   case OrderedTask::FACTORY_MIXED:
     return _T("Racing task with a mix of assigned areas and turnpoints, minimum task time applies");
   case OrderedTask::FACTORY_TOURING:
-    return _T("Casual touring task");
+    return _T("Casual touring task, uses start and finish cylinders and FAI sector turnpoints");
   default:
     assert(1);
   }
