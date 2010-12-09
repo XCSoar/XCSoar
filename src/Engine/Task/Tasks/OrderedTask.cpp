@@ -468,13 +468,13 @@ bool
 OrderedTask::insert(OrderedTaskPoint* new_tp, 
                     const unsigned position)
 {
+  if (position >= tps.size())
+    return append(new_tp);
+
   if (activeTaskPoint >= position)
     activeTaskPoint++;
 
-  if (position < tps.size())
-    tps.insert(tps.begin() + position, new_tp);
-  else
-    return append(new_tp);
+  tps.insert(tps.begin() + position, new_tp);
 
   if (position)
     set_neighbours(position - 1);
