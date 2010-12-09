@@ -72,6 +72,9 @@ public:
   void set_text_color(Color color) {
     text_color = color;
   }
+  void set_terrain_color(Color color) {
+    bTerrain.set(color);
+  }
 
 protected:
   void PaintAirspaces(Canvas &canvas, Chart &chart);

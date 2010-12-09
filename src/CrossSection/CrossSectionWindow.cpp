@@ -118,6 +118,7 @@ private:
 };
 
 CrossSectionWindow::CrossSectionWindow() :
+  bTerrain(Chart::GROUND_COLOUR),
   terrain(NULL), airspace_database(NULL),
   start(Angle::native(fixed_zero), Angle::native(fixed_zero)),
   vec(fixed(50000), Angle::native(fixed_zero)),
@@ -261,9 +262,6 @@ CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
 bool
 CrossSectionWindow::on_create() {
   PaintWindow::on_create();
-
-  bTerrain.set(Chart::GROUND_COLOUR);
-
   return true;
 }
 
