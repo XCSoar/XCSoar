@@ -278,7 +278,7 @@ Chart::DrawTrendN(const LeastSquares &lsdata, enum Style Style)
 
 void
 Chart::DrawLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, enum Style Style)
+                const fixed xmax, const fixed ymax, Pen &pen)
 {
   if (unscaled_x || unscaled_y)
     return;
@@ -289,7 +289,15 @@ Chart::DrawLine(const fixed xmin, const fixed ymin,
   line[1].x = (int)((xmax - x_min) * xscale) + rc.left + BORDER_X;
   line[1].y = (int)((y_max - ymax) * yscale) + rc.top;
 
-  StyleLine(line[0], line[1], Style);
+  StyleLine(line[0], line[1], pen);
+}
+
+void
+Chart::DrawLine(const fixed xmin, const fixed ymin,
+                const fixed xmax, const fixed ymax, enum Style Style)
+{
+  assert((unsigned)Style < sizeof(pens) / sizeof(pens[0]));
+  DrawLine(xmin, ymin, xmax, ymax, pens[(unsigned)Style]);
 }
 
 void

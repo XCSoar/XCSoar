@@ -65,6 +65,8 @@ public:
   void DrawTrend(const LeastSquares &lsdata, enum Style Style);
   void DrawTrendN(const LeastSquares &lsdata, enum Style Style);
   void DrawLine(const fixed xmin, const fixed ymin,
+                const fixed xmax, const fixed ymax, Pen &pen);
+  void DrawLine(const fixed xmin, const fixed ymin,
                 const fixed xmax, const fixed ymax, enum Style Style);
 
   void ScaleYFromData(const LeastSquares &lsdata);
