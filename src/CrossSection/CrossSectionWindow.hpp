@@ -66,6 +66,13 @@ public:
     start = _start;
   }
 
+  void set_background_color(Color color) {
+    background_color = color;
+  }
+  void set_text_color(Color color) {
+    text_color = color;
+  }
+
 protected:
   void PaintAirspaces(Canvas &canvas, Chart &chart);
   void PaintTerrain(Canvas &canvas, Chart &chart);
@@ -83,6 +90,8 @@ protected:
 
   GeoPoint start;
   GeoVector vec;
+
+  Color background_color, text_color;
 };
 
 #endif

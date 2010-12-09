@@ -120,7 +120,8 @@ private:
 CrossSectionWindow::CrossSectionWindow() :
   terrain(NULL), airspace_database(NULL),
   start(Angle::native(fixed_zero), Angle::native(fixed_zero)),
-  vec(fixed(50000), Angle::native(fixed_zero)) {}
+  vec(fixed(50000), Angle::native(fixed_zero)),
+  background_color(Color::WHITE), text_color(Color::BLACK) {}
 
 void
 CrossSectionWindow::ReadBlackboard(const NMEA_INFO &_gps_info,
@@ -225,8 +226,11 @@ void
 CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
                                   const RECT rc)
 {
-  canvas.white_pen();
-  canvas.white_brush();
+  Brush brush(text_color);
+  canvas.select(brush);
+
+  Pen pen(1, text_color);
+  canvas.select(pen);
 
   RasterPoint line[4];
   line[0].x = chart.screenX(fixed_zero);
@@ -243,7 +247,7 @@ CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
 void
 CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
 {
-  canvas.set_text_color(Color::WHITE);
+  canvas.set_text_color(text_color);
 
   chart.DrawXGrid(Units::ToSysDistance(fixed(5)), fixed_zero,
                   Chart::STYLE_THINDASHPAPER, fixed(5), true);
@@ -266,8 +270,8 @@ CrossSectionWindow::on_create() {
 void
 CrossSectionWindow::on_paint(Canvas &canvas)
 {
-  canvas.clear(Color(0x40, 0x40, 0x00));
-  canvas.set_text_color(Color::WHITE);
+  canvas.clear(background_color);
+  canvas.set_text_color(text_color);
   canvas.select(Fonts::Map);
 
   const RECT rc = get_client_rect();

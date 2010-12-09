@@ -394,6 +394,8 @@ OnCreateCrossSectionWindow(ContainerWindow &parent, int left, int top,
   csw->set(parent, left, top, width, height, style);
   csw->set_airspaces(&airspace_database);
   csw->set_terrain(terrain);
+  csw->set_background_color(Color(0x40, 0x40, 0x00));
+  csw->set_text_color(Color::WHITE);
   UpdateCrossSection();
   return csw;
 }
