@@ -199,11 +199,9 @@ CrossSectionWindow::PaintTerrain(Canvas &canvas, Chart &chart)
         continue;
     }
 
-    RasterPoint p;
-    p.x = chart.screenX(t_this * vec.Distance);
-    p.y = chart.screenY(fixed(h));
-
-    points[i++] = p;
+    points[i].x = chart.screenX(t_this * vec.Distance);
+    points[i].y = chart.screenY(fixed(h));
+    i++;
   }
 
   if (i >= 4) {
