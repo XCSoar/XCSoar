@@ -4,6 +4,7 @@
 #include "Util/NonCopyable.hpp"
 #include "Dijkstra.hpp"
 #include "ScanTaskPoint.hpp"
+#include "Compiler.h"
 
 #include <algorithm>
 #include <assert.h>
@@ -54,6 +55,7 @@ public:
    *
    * @return True if distance is significant
    */
+  gcc_pure
   static bool distance_is_significant(const T& a1, const T& a2,
                                       const unsigned dist_threshold = 1) {
     return a1.flat_distance(a2)> dist_threshold;
@@ -109,6 +111,7 @@ protected:
    * 
    * @return True if point is terminal
    */
+  gcc_pure
   bool is_final(const ScanTaskPoint &sp) const {
     assert(num_stages <= MAX_STAGES);
     return sp.first + 1 == num_stages;
@@ -121,6 +124,7 @@ protected:
    * 
    * @return True if point is in first layer
    */
+  gcc_pure
   bool is_first(const ScanTaskPoint &sp) const {
     return sp.first == 0;
   }
@@ -171,6 +175,7 @@ protected:
    * 
    * @return Distance (flat) from origin to destination
    */
+  gcc_pure
   unsigned distance(const ScanTaskPoint &curNode,
                     const T &currentLocation) const {
     return get_point(curNode).flat_distance(currentLocation);
@@ -184,6 +189,7 @@ protected:
    * 
    * @return Distance (flat) from origin to destination
    */
+  gcc_pure
   unsigned distance(const ScanTaskPoint &s1, const ScanTaskPoint &s2) const {
     return get_point(s1).flat_distance(get_point(s2));
   }
