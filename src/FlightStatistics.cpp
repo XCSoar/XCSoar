@@ -867,29 +867,18 @@ FlightStatistics::CaptionClimb(TCHAR* sTmp)
 void
 FlightStatistics::CaptionPolar(TCHAR *sTmp, const GlidePolar& glide_polar) const
 {
-  if (Layout::landscape) {
-    _stprintf(sTmp, _T("%s:\r\n  %d\r\n  at %d %s\r\n\r\n%s:\r\n  %3.2f %s\r\n  at %d %s"),
-              _("Best LD"),
-              (int)glide_polar.get_bestLD(),
-              (int)Units::ToUserSpeed(glide_polar.get_VbestLD()),
-              Units::GetSpeedName(),
-              _("Min sink"),
-              (double)Units::ToUserVSpeed(glide_polar.get_Smin()),
-              Units::GetVerticalSpeedName(),
-              (int)Units::ToUserSpeed(glide_polar.get_Vmin()),
-              Units::GetSpeedName());
-  } else {
-    _stprintf(sTmp, _T("%s:\r\n  %d at %d %s\r\n%s:\r\n  %3.2f %s at %d %s"),
-              _("Best LD"),
-              (int)glide_polar.get_bestLD(),
-              (int)Units::ToUserSpeed(glide_polar.get_VbestLD()),
-              Units::GetSpeedName(),
-              _("Min sink"),
-              (double)Units::ToUserVSpeed(glide_polar.get_Smin()),
-              Units::GetVerticalSpeedName(),
-              (int)Units::ToUserSpeed(glide_polar.get_Vmin()),
-              Units::GetSpeedName());
-  }
+  _stprintf(sTmp, Layout::landscape ?
+                  _T("%s:\r\n  %d\r\n  at %d %s\r\n\r\n%s:\r\n  %3.2f %s\r\n  at %d %s") :
+                  _T("%s:\r\n  %d at %d %s\r\n%s:\r\n  %3.2f %s at %d %s"),
+            _("Best LD"),
+            (int)glide_polar.get_bestLD(),
+            (int)Units::ToUserSpeed(glide_polar.get_VbestLD()),
+            Units::GetSpeedName(),
+            _("Min sink"),
+            (double)Units::ToUserVSpeed(glide_polar.get_Smin()),
+            Units::GetVerticalSpeedName(),
+            (int)Units::ToUserSpeed(glide_polar.get_Vmin()),
+            Units::GetSpeedName());
 }
 
 void
