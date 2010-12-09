@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2011 The XCSoar Project
+  Copyright (C) 2000-2010 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -19,8 +19,8 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef DIJKSTRA_HPP
-#define DIJKSTRA_HPP
+#ifndef ASTAR_HPP
+#define ASTAR_HPP
 
 #include <map>
 #include "Util/queue.hpp"
@@ -28,30 +28,59 @@
 #include "Compiler.h"
 
 #ifdef INSTRUMENT_TASK
-extern long count_dijkstra_links;
+extern long count_astar_links;
 #endif
 
-#define MINMAX_OFFSET 134217727
+#define ASTAR_MINMAX_OFFSET 134217727
 
-#define DIJKSTRA_QUEUE_SIZE 50000
+#define ASTAR_QUEUE_SIZE 50000
 
-//uncomment this line to reserve space in queue
-#define USE_RESERVABLE
+struct AStarPriorityValue {
+  AStarPriorityValue(unsigned _g=0):g(_g),h(0) {
+  }
+  AStarPriorityValue(const unsigned _g, const unsigned _h):g(_g),h(_h) {
+  }
+  gcc_pure
+  AStarPriorityValue adjust(const bool is_min) const {
+    return is_min ? *this : AStarPriorityValue(ASTAR_MINMAX_OFFSET - g,
+                                               ASTAR_MINMAX_OFFSET - h);
+  }
+  unsigned g; /** Actual edge value */
+  unsigned h; /** Heuristic cost to goal */
+
+  gcc_pure
+  unsigned f() const {
+    return g+h;
+  }
+  gcc_pure
+  AStarPriorityValue operator+(const AStarPriorityValue& other) const {
+    AStarPriorityValue n(*this);
+    n.g+= other.g;
+    n.h = other.h;
+    return n;
+  }
+  gcc_pure
+  bool operator>(const AStarPriorityValue& other) const {
+    return g>other.g;
+  }
+};
 
 /**
- * Dijkstra search algorithm.
+ * AStar search algorithm, based on Dijkstra algorithm
  * Modifications by John Wharington to track optimal solution
  * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
  */
-template <class Node> class Dijkstra {
+template <class Node> class AStar {
 public:
+
   /**
    * Default constructor
    *
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  Dijkstra(const bool is_min = true, unsigned reserve_default=DIJKSTRA_QUEUE_SIZE) :
-    m_min(is_min) {
+  AStar(const bool is_min = true, unsigned reserve_default=ASTAR_QUEUE_SIZE):
+    m_min(is_min)
+  {
     reserve(reserve_default);
   }
 
@@ -61,9 +90,10 @@ public:
    * @param n Node to start
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  Dijkstra(const Node &node, const bool is_min = true, unsigned reserve_default=DIJKSTRA_QUEUE_SIZE) :
-    m_min(is_min) { 
-    push(node, node, 0);
+  AStar(const Node &node, const bool is_min = true, unsigned reserve_default=ASTAR_QUEUE_SIZE) :
+    m_min(is_min)
+  {
+    push(node, node, AStarPriorityValue(0));
     reserve(reserve_default);
   }
 
@@ -74,10 +104,10 @@ public:
    */
   void restart(const Node &node) {
     clear();
-    push(node, node, 0);
+    push(node, node, AStarPriorityValue(0));
   }
 
-  /** 
+  /**
    * Clears the queues
    */
   void clear() {
@@ -119,9 +149,10 @@ public:
   const Node &pop() {
     cur = q.top().second;
 
-    do
+    do // remove this item
       q.pop();
-    while (!q.empty() && q.top().second->second < q.top().first);
+    while (!q.empty() && q.top().second->second.g < q.top().first.g);
+    // and all lower rank than this
 
     return cur->first;
   }
@@ -133,11 +164,12 @@ public:
    * @param pn Predecessor of destination node
    * @param e Edge distance
    */
-  void link(const Node &node, const Node &parent, const unsigned &edge_value = 1) {
+  void link(const Node &node, const Node &parent, const AStarPriorityValue &edge_value) {
 #ifdef INSTRUMENT_TASK
-    count_dijkstra_links++;
+    count_astar_links++;
 #endif
-    push(node, parent, cur->second + adjust_edge_value(edge_value)); 
+    push(node, parent, cur->second + edge_value.adjust(m_min));
+    // note order of + here is important!
   }
 
   /**
@@ -159,16 +191,14 @@ public:
     else
       // If the node was found
       // -> Return the parent node
-      return (it->second); 
+      return (it->second);
   }
 
   /**
    * Reserve queue size (if available)
    */
   void reserve(unsigned size) {
-#ifdef USE_RESERVABLE
     q.reserve(size);
-#endif
   }
 
   /**
@@ -176,25 +206,16 @@ public:
    * Returns 0 on failure to find the node.
    */
   gcc_pure
-  unsigned get_node_value(const Node &node) const {
+  AStarPriorityValue get_node_value(const Node &node) const {
     node_value_iterator it = node_values.find(node);
     if (it == node_values.end()) {
-      return 0;
+      return AStarPriorityValue(0);
     } else {
       return it->second;
     }
   }
 
 private:
-
-  /** 
-   * Return edge value adjusted for flipping if maximim is sought ---
-   * result is metric to be minimised
-   */
-  gcc_pure
-  unsigned adjust_edge_value(const unsigned edge_value) const {
-    return m_min ? edge_value : MINMAX_OFFSET - edge_value;
-  }
 
   /**
    * Add node to search queue
@@ -203,7 +224,8 @@ private:
    * @param pn Previous node
    * @param e Edge distance (previous to this)
    */
-  void push(const Node &node, const Node &parent, const unsigned &edge_value = 0) {
+  void push(const Node &node, const Node &parent,
+            const AStarPriorityValue &edge_value) {
     // Try to find the given node n in the node_value_map
     node_value_iterator it = node_values.find(node);
     if (it == node_values.end()) {
@@ -223,7 +245,7 @@ private:
       // Remember the new parent node
       set_predecessor(node, parent);
     } else
-      // If the node was found but the new value is higher or equal
+      // If the node was found but the value is higher or equal
       // -> Don't use this new leg
       return;
 
@@ -241,22 +263,22 @@ private:
     else
       // If the node was found
       // -> Replace the according parent node with the new one
-      it->second = parent; 
+      it->second = parent;
   }
 
-  typedef std::map<Node, unsigned> node_value_map;
+  typedef std::map<Node, AStarPriorityValue> node_value_map;
   typedef typename node_value_map::iterator node_value_iterator;
 
   typedef std::map<Node, Node> node_parent_map;
   typedef typename node_parent_map::iterator node_parent_iterator;
   typedef typename node_parent_map::const_iterator node_parent_const_iterator;
 
-  typedef std::pair<unsigned, node_value_iterator> Value;
+  typedef std::pair<AStarPriorityValue, node_value_iterator> NodeValue;
 
-  struct Rank : public std::binary_function<Value, Value, bool> {
+  struct Rank : public std::binary_function<NodeValue, NodeValue, bool> {
     gcc_pure
-    bool operator()(const Value& x, const Value& y) const {
-      return x.first > y.first;
+    bool operator()(const NodeValue& x, const NodeValue& y) const {
+      return x.first.f() > y.first.f();
     }
   };
 
@@ -275,11 +297,7 @@ private:
   /**
    * A sorted list of all possible node paths, lowest distance first.
    */
-#ifdef USE_RESERVABLE
-  reservable_priority_queue<Value, std::vector<Value>, Rank> q;
-#else
-  std::priority_queue<Value, std::vector<Value>, Rank> q;
-#endif
+  reservable_priority_queue<NodeValue, std::vector<NodeValue>, Rank> q;
 
   node_value_iterator cur;
   const bool m_min;
