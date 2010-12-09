@@ -73,6 +73,7 @@ public:
   void ScaleXFromValue(const fixed val);
   void ScaleMakeSquare();
 
+  void StyleLine(const RasterPoint l1, const RasterPoint l2, Pen &pen);
   void StyleLine(const RasterPoint l1, const RasterPoint l2, enum Style Style);
 
   void ResetScale();

@@ -155,7 +155,14 @@ void
 Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, enum Style Style)
 {
   assert((unsigned)Style < sizeof(pens) / sizeof(pens[0]));
-  canvas.select(pens[(unsigned)Style]);
+  StyleLine(l1, l2, pens[(unsigned)Style]);
+}
+
+void
+Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, Pen &pen)
+{
+  assert(pen.defined());
+  canvas.select(pen);
   canvas.line(l1, l2);
 }
 
