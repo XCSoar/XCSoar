@@ -52,6 +52,10 @@
 
 #include "xmlParser.hpp"
 #include "Compatibility/string.h"
+#include "IO/TextWriter.hpp"
+#include "IO/FileLineReader.hpp"
+#include "Util/StringUtil.hpp"
+#include "Util/tstring.hpp"
 
 #include <assert.h>
 #include <memory.h>
@@ -79,7 +83,7 @@ typedef enum TokenTypeTag
     eTokenError
 } TokenTypeTag;
 
-#define INDENTCHAR _T('\t')
+#define INDENTCHAR '\t'
 
 // Main structure used for parsing XML
 typedef struct XML
@@ -115,88 +119,32 @@ typedef enum Status
     eOutsideTag
 } Status;
 
-static LPTSTR
-toXMLString(LPTSTR dest, LPCTSTR source)
+static void
+write_xml_string(TextWriter &writer, const TCHAR *source)
 {
-  LPTSTR dd = dest;
   while (*source) {
     switch (*source) {
     case '<':
-      _tcscpy(dest, _T("&lt;"));
-      dest += 4;
+      writer.write("&lt;");
       break;
     case '>':
-      _tcscpy(dest, _T("&gt;"));
-      dest += 4;
+      writer.write("&gt;");
       break;
     case '&':
-      _tcscpy(dest, _T("&amp;"));
-      dest += 5;
+      writer.write("&amp;");
       break;
     case '\'':
-      _tcscpy(dest, _T("&apos;"));
-      dest += 6;
+      writer.write("&apos;");
       break;
     case '"':
-      _tcscpy(dest, _T("&quot;"));
-      dest += 6;
+      writer.write("&quot;");
       break;
     default:
-      *dest = *source;
-      dest++;
+      writer.write(*source);
       break;
     }
     source++;
   }
-  *dest = 0;
-  return dd;
-}
-
-static int
-lengthXMLString(LPCTSTR source)
-{
-  int r = 0;
-  while (*source) {
-    switch (*source) {
-    case '<':
-      r += 3;
-      break;
-    case '>':
-      r += 3;
-      break;
-    case '&':
-      r += 4;
-      break;
-    case '\'':
-      r += 5;
-      break;
-    case '"':
-      r += 5;
-      break;
-    }
-    source++;
-    r++;
-  }
-  return r;
-}
-
-LPTSTR
-toXMLString(LPCTSTR source)
-{
-  LPTSTR dest = (LPTSTR)malloc((lengthXMLString(source) + 1) * sizeof(TCHAR));
-  assert(dest);
-  return toXMLString(dest, source);
-}
-
-LPTSTR
-toXMLStringFast(LPTSTR *dest, int *destSz, LPCTSTR source)
-{
-  int l = lengthXMLString(source) + 1;
-  if (l > *destSz) {
-    *destSz = l;
-    *dest = (LPTSTR)realloc(*dest, l * sizeof(TCHAR));
-  }
-  return toXMLString(*dest, source);
 }
 
 static LPTSTR
@@ -1218,6 +1166,26 @@ XMLNode::parseString(LPCTSTR lpszXML, XMLResults *pResults)
   return xnode;
 }
 
+static bool
+read_text_file(const char *path, tstring &buffer)
+{
+  FileLineReader reader(path);
+  if (reader.error())
+    return false;
+
+  const TCHAR *line;
+  while ((line = reader.read()) != NULL) {
+    if (buffer.length() > 65536)
+      /* too long */
+      return false;
+
+    buffer.append(line);
+    buffer.append(_T("\n"));
+  }
+
+  return true;
+}
+
 /**
 * Opens the file given by the filepath in lpszXML and returns the main node.
 * (Includes error handling)
@@ -1230,10 +1198,11 @@ XMLNode
 XMLNode::parseFile(const char *filename, XMLResults *pResults)
 {
   // Open the file for reading
-  FILE *f = fopen(filename, "rb");
+  tstring buffer;
+  buffer.reserve(16384);
 
   // If file can't be read
-  if (f == NULL) {
+  if (!read_text_file(filename, buffer)) {
     // If XMLResults object exists
     if (pResults) {
       // -> Save the error type into it
@@ -1246,49 +1215,8 @@ XMLNode::parseFile(const char *filename, XMLResults *pResults)
     return emptyXMLNode;
   }
 
-  // Get filelength (l)
-  fseek(f, 0, SEEK_END);
-  int l = ftell(f);
-
-  // Read the whole(!) file into a buffer string
-  fseek(f, 0, SEEK_SET);
-  char *raw = new char[l + 1];
-  fread(raw, l, 1, f);
-
-  // Close the file
-  fclose(f);
-
-  TCHAR *text;
-#ifdef _UNICODE
-  text = new TCHAR[l + 1];
-  l = MultiByteToWideChar(CP_ACP, // code page
-                          MB_PRECOMPOSED, // character-type options
-                          raw, // string to map
-                          l, // number of bytes in string
-                          text, // wide-character buffer
-                          l); // size of buffer
-  delete[] raw;
-
-  if (l <= 0) {
-    /* conversion has failed */
-    delete[] text;
-    return emptyXMLNode;
-  }
-#else
-  text = raw;
-#endif
-
-  // Terminate the buffer string
-  text[l] = 0;
-
   // Parse the string and get the main XMLNode
-  XMLNode x = parseString(text, pResults);
-
-  // Free the buffer memory
-  delete[] text;
-
-  // Return the main XMLNode
-  return x;
+  return parseString(buffer.c_str(), pResults);
 }
 
 /**
@@ -1389,18 +1317,22 @@ charmemset(LPTSTR dest, TCHAR c, int l)
     *(dest++) = c;
 }
 
+static void
+write_indent(TextWriter &writer, unsigned n)
+{
+  while (n-- > 0)
+    writer.write(INDENTCHAR);
+}
+
 // Creates an user friendly XML string from a given element with
 // appropriate white space and carriage returns.
 //
 // This recurses through all subnodes then adds contents of the nodes to the
 // string.
-int
-XMLNode::CreateXMLStringR(const XMLNodeData *pEntry, LPTSTR lpszMarker,
-                          int nFormat)
+void
+XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
 {
-  int nResult = 0;
   int cb;
-  int cbElement;
   int nIndex;
   int nChildFormat = -1;
   int bHasChildren = FALSE;
@@ -1409,90 +1341,49 @@ XMLNode::CreateXMLStringR(const XMLNodeData *pEntry, LPTSTR lpszMarker,
 
   assert(pEntry);
 
-#define LENSTR(lpsz) (lpsz ? _tcslen(lpsz) : 0)
-
   // If the element has no name then assume this is the head node.
-  cbElement = (int)LENSTR(pEntry->lpszName);
-
-  if (cbElement) {
+  if (!string_is_empty(pEntry->lpszName)) {
     // "<elementname "
     cb = nFormat == -1 ? 0 : nFormat;
 
-    if (lpszMarker) {
-      if (cb)
-        charmemset(lpszMarker, INDENTCHAR, sizeof(TCHAR) * cb);
-      nResult = cb;
-      lpszMarker[nResult++] = _T('<');
-      if (pEntry->isDeclaration)
-        lpszMarker[nResult++] = _T('?');
-      _tcscpy(&lpszMarker[nResult], pEntry->lpszName);
-      nResult += cbElement;
-      lpszMarker[nResult++] = _T(' ');
-
-    } else {
-      nResult += cbElement + 2 + cb;
-      if (pEntry->isDeclaration)
-        nResult++;
-    }
+    write_indent(writer, cb);
+    writer.write('<');
+    if (pEntry->isDeclaration)
+      writer.write('?');
+    writer.write(pEntry->lpszName);
 
     // Enumerate attributes and add them to the string
     nIndex = pEntry->nAttribute;
     pAttr = pEntry->pAttribute;
     for (i = 0; i < nIndex; i++) {
-      // "Attrib
-      cb = (int)LENSTR(pAttr->lpszName);
-      if (cb) {
-        if (lpszMarker)
-          _tcscpy(&lpszMarker[nResult], pAttr->lpszName);
-        nResult += cb;
-        // "Attrib=Value "
-        cb = (int)lengthXMLString(pAttr->lpszValue);
-        if (cb) {
-          if (lpszMarker) {
-            lpszMarker[nResult] = _T('=');
-            lpszMarker[nResult + 1] = _T('"');
-            toXMLString(&lpszMarker[nResult + 2], pAttr->lpszValue);
-            lpszMarker[nResult + cb + 2] = _T('"');
-          }
-          nResult += cb + 3;
-        }
-        if (lpszMarker)
-          lpszMarker[nResult] = _T(' ');
-        nResult++;
-      }
+      writer.write(' ');
+      writer.write(pAttr->lpszName);
+      writer.write('=');
+      writer.write('"');
+      write_xml_string(writer, pAttr->lpszValue);
+      writer.write('"');
       pAttr++;
     }
 
     bHasChildren = (pEntry->nAttribute != nElement(pEntry));
     if (pEntry->isDeclaration) {
-      if (lpszMarker) {
-        lpszMarker[nResult - 1] = _T('?');
-        lpszMarker[nResult] = _T('>');
-      }
-      nResult++;
-      if (nFormat != -1) {
-        if (lpszMarker)
-          lpszMarker[nResult] = _T('\n');
-        nResult++;
-      }
+      writer.write('?');
+      writer.write('>');
+      if (nFormat != -1)
+        writer.newline();
     } else
     // If there are child nodes we need to terminate the start tag
     if (bHasChildren) {
-      if (lpszMarker)
-        lpszMarker[nResult - 1] = _T('>');
-      if (nFormat != -1) {
-        if (lpszMarker)
-          lpszMarker[nResult] = _T('\n');
-        nResult++;
-      }
-    } else
-      nResult--;
+      writer.write('>');
+      if (nFormat != -1)
+        writer.newline();
+    }
   }
 
   // Calculate the child format for when we recurse.  This is used to
   // determine the number of spaces used for prefixes.
   if (nFormat != -1) {
-    if (cbElement)
+    if (string_is_empty(pEntry->lpszName))
       nChildFormat = nFormat + 1;
     else
       nChildFormat = nFormat;
@@ -1508,20 +1399,13 @@ XMLNode::CreateXMLStringR(const XMLNodeData *pEntry, LPTSTR lpszMarker,
     // Text nodes
     case eNodeText:
       // "Text"
-      cb = (int)lengthXMLString((LPTSTR)pChild);
-      if (cb) {
+      if (!string_is_empty((const TCHAR *)pChild)) {
         if (nFormat != -1) {
-          if (lpszMarker) {
-            charmemset(&lpszMarker[nResult], INDENTCHAR,
-                       sizeof(TCHAR) * (nFormat + 1));
-            toXMLString(&lpszMarker[nResult + nFormat + 1], (LPTSTR)pChild);
-            lpszMarker[nResult + nFormat + 1 + cb] = _T('\n');
-          }
-          nResult += cb + nFormat + 2;
+          write_indent(writer, nFormat + 1);
+          write_xml_string(writer, (const TCHAR *)pChild);
+          writer.newline();
         } else {
-          if (lpszMarker)
-            toXMLString(&lpszMarker[nResult], (LPTSTR)pChild);
-          nResult += cb;
+          write_xml_string(writer, (const TCHAR *)pChild);
         }
       }
       break;
@@ -1530,9 +1414,7 @@ XMLNode::CreateXMLStringR(const XMLNodeData *pEntry, LPTSTR lpszMarker,
     case eNodeChild:
 
       // Recursively add child nodes
-      nResult += CreateXMLStringR((XMLNodeData*)pChild,
-                                  lpszMarker ? lpszMarker + nResult : 0,
-                                  nChildFormat);
+      serialiseR((const XMLNodeData*)pChild, writer, nChildFormat);
       break;
 
     default:
@@ -1540,60 +1422,29 @@ XMLNode::CreateXMLStringR(const XMLNodeData *pEntry, LPTSTR lpszMarker,
     }
   }
 
-  if ((cbElement) && (!pEntry->isDeclaration)) {
+  if (!string_is_empty(pEntry->lpszName) && !pEntry->isDeclaration) {
     // If we have child entries we need to use long XML notation for
     // closing the element - "<elementname>blah blah blah</elementname>"
     if (bHasChildren) {
       // "</elementname>\0"
-      if (lpszMarker) {
-        if (nFormat != -1) {
-          if (nFormat) {
-            charmemset(&lpszMarker[nResult], INDENTCHAR, sizeof(TCHAR)
-                * nFormat);
-            nResult += nFormat;
-          }
-        }
+      if (nFormat != -1)
+        write_indent(writer, nFormat);
 
-        _tcscpy(&lpszMarker[nResult], _T("</"));
-        nResult += 2;
-        _tcscpy(&lpszMarker[nResult], pEntry->lpszName);
-        nResult += cbElement;
+      writer.write("</");
+      writer.write(pEntry->lpszName);
 
-        if (nFormat == -1) {
-          _tcscpy(&lpszMarker[nResult], _T(">"));
-          nResult++;
-        } else {
-          _tcscpy(&lpszMarker[nResult], _T(">\n"));
-          nResult += 2;
-        }
-      } else {
-        if (nFormat != -1)
-          nResult += cbElement + 4 + nFormat;
-        else
-          nResult += cbElement + 3;
-      }
+      writer.write('>');
     } else {
       // If there are no children we can use shorthand XML notation -
       // "<elementname/>"
       // "/>\0"
-      if (lpszMarker) {
-        if (nFormat == -1) {
-          _tcscpy(&lpszMarker[nResult], _T("/>"));
-          nResult += 2;
-        } else {
-          _tcscpy(&lpszMarker[nResult], _T("/>\n"));
-          nResult += 3;
-        }
-      } else {
-        nResult += nFormat == -1 ? 2 : 3;
-      }
+      writer.write("/>");
     }
+
+    if (nFormat != -1)
+      writer.newline();
   }
-
-  return nResult;
 }
-
-#undef LENSTR
 
 // Create an XML string from the head element.
 // @param       XMLElement * pHead      - head element
@@ -1606,30 +1457,11 @@ XMLNode::CreateXMLStringR(const XMLNodeData *pEntry, LPTSTR lpszMarker,
 //
 // @return      LPTSTR                  - Allocated XML string, you must free
 //                                        this with free().
-LPTSTR
-XMLNode::createXMLString(int nFormat, int *pnSize)
+void
+XMLNode::serialise(TextWriter &writer, int nFormat) const
 {
-  if (!d) {
-    if (pnSize)
-      *pnSize = 0;
-    return NULL;
-  }
-
-  LPTSTR lpszResult = NULL;
-  int cbStr;
-
-  // Recursively Calculate the size of the XML string
   nFormat = nFormat ? 0 : -1;
-  cbStr = CreateXMLStringR(d, 0, nFormat);
-  assert(cbStr);
-  // Alllocate memory for the XML string + the NULL terminator and
-  // create the recursively XML string.
-  lpszResult = (LPTSTR)malloc((cbStr + 1) * sizeof(TCHAR));
-  assert(lpszResult);
-  CreateXMLStringR(d, lpszResult, nFormat);
-  if (pnSize)
-    *pnSize = cbStr;
-  return lpszResult;
+  serialiseR(d, writer, nFormat);
 }
 
 XMLNode::~XMLNode()

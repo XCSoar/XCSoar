@@ -22,6 +22,7 @@
 
 #include "DataNodeXML.hpp"
 #include "OS/PathName.hpp"
+#include "IO/TextWriter.hpp"
 #include "xmlParser.hpp"
 
 #include <stdio.h>
@@ -59,11 +60,10 @@ DataNodeXML::createRoot(const tstring &node_name)
   return new DataNodeXML(new_root);
 }
 
-const tstring
-DataNodeXML::serialise()
+void
+DataNodeXML::serialise(TextWriter &writer)
 {
-  LPTSTR text = m_xml_node->createXMLString(1, NULL);
-  return tstring(text);
+  m_xml_node->serialise(writer, true);
 }
 
 const tstring
@@ -120,23 +120,10 @@ bool
 DataNodeXML::save(const TCHAR* path)
 {
   /// @todo make xml writing portable (unicode etc)
-  NarrowPathName buf(path);
-  FILE* file = fopen(buf, "wt");
-  if (file == NULL)
+  TextWriter writer(path);
+  if (writer.error())
     return false;
 
-  const tstring str = serialise();
-  const TCHAR* text = str.c_str();
-
-#ifdef _UNICODE
-  char text2[_tcslen(text) * 4];
-  ::WideCharToMultiByte(CP_ACP, 0, text, -1, text2, sizeof(text2), NULL, NULL);
-  fprintf(file, "%s", text2);
-#else
-  fprintf(file, "%s", text);
-#endif
-
-  fclose(file);
-
+  serialise(writer);
   return true;
 }

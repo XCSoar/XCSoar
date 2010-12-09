@@ -64,7 +64,7 @@ public:
    */
   static DataNodeXML* createRoot(const tstring &node_name);
 
-  const tstring serialise();
+  virtual void serialise(TextWriter &writer);
 
   /**
    * Save tree canonically to file

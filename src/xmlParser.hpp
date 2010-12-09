@@ -168,7 +168,7 @@ public:
   LPCTSTR getAttribute(LPCTSTR name, int *i = NULL) const; // return next attribute content with specific name
                                                     //     (return a NULL if failing)
   int nAttribute() const;                           // nbr of attribute
-  LPTSTR createXMLString(int nFormat, int *pnSize); // create XML string starting from current XMLNode
+  void serialise(TextWriter &writer, int nFormat) const; // write XML to file
   XMLNodeContents enumContents(int i) const;        // enumerate all the different contents (child,text,
                                                     //     clear,attribute) of the current XMLNode. The order
                                                     //     is reflecting the order of the original file/string
@@ -201,7 +201,8 @@ private:
   // these are functions used internally (don't bother about them):
   int ParseXMLElement(void *pXML);
   void addToOrder(int index, int type);
-  static int CreateXMLStringR(const XMLNodeData *pEntry, LPTSTR lpszMarker, int nFormat);
+  static void serialiseR(const XMLNodeData *pEntry, TextWriter &writer,
+                         int nFormat);
   static const void *enumContent(const XMLNodeData *pEntry, int i,
                                  XMLElementType *nodeType);
 
@@ -222,16 +223,6 @@ typedef struct XMLNodeContents
   XMLAttribute attrib;
   LPCTSTR text;
 } XMLNodeContents;
-
-// The 2 following functions are processing strings so that all the characters
-// &,",',<,> are replaced by their XML equivalent: &amp;, &quot;, &apos;, &lt;, &gt;.
-// The second function ("toXMLStringFast") allows you to re-use the same output
-// buffer for all the conversions so that only a few memory allocations are performed.
-// If the output buffer is too small to contain the resulting string, it will
-// be enlarged. These 2 functions are useful when creating from scratch an
-// XML file using printf.
-LPTSTR toXMLString(LPCTSTR source);
-LPTSTR toXMLStringFast(LPTSTR *destBuffer,int *destSz, LPCTSTR source);
 
 // duplicate (copy in a new allocated buffer) the source string
 LPTSTR stringDup(LPCTSTR source, int cbData = 0);

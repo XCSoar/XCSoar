@@ -27,6 +27,8 @@
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 
+class TextWriter;
+
 /**
  * Class used as generic node for tree-structured data.
  * 
@@ -72,11 +74,12 @@ public:
   virtual DataNode* get_child_by_name(const tstring name, const unsigned i=0) const = 0;
 
   /**
-   * Generate canonical serialised form of this node
+   * Writes the canonical serialised form of this node to a
+   * TextWriter.
    *
-   * @return Text representing the node
+   * @param writer the destination file
    */
-  virtual const tstring serialise() = 0;
+  virtual void serialise(TextWriter &writer) = 0;
 
   /**
    * Set named attribute value
