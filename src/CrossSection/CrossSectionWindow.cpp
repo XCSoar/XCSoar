@@ -118,7 +118,7 @@ private:
 };
 
 CrossSectionWindow::CrossSectionWindow() :
-  bTerrain(Chart::GROUND_COLOUR),
+  terrain_brush(Chart::GROUND_COLOUR),
   terrain(NULL), airspace_database(NULL),
   start(Angle::native(fixed_zero), Angle::native(fixed_zero)),
   vec(fixed(50000), Angle::native(fixed_zero)),
@@ -207,7 +207,7 @@ CrossSectionWindow::PaintTerrain(Canvas &canvas, Chart &chart)
 
   if (i >= 4) {
     canvas.null_pen();
-    canvas.select(bTerrain);
+    canvas.select(terrain_brush);
     canvas.polygon(&points[0], i);
   }
 }

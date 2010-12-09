@@ -73,7 +73,7 @@ public:
     text_color = color;
   }
   void set_terrain_color(Color color) {
-    bTerrain.set(color);
+    terrain_brush.set(color);
   }
 
 protected:
@@ -86,7 +86,7 @@ protected:
   virtual void on_paint(Canvas &canvas);
   virtual bool on_create();
 
-  Brush bTerrain;
+  Brush terrain_brush;
 
   RasterTerrain *terrain;
   Airspaces *airspace_database;
