@@ -67,7 +67,7 @@ CommitTaskChanges()
     MessageBoxX(getTaskValidationErrors(
         ordered_task->get_factory().getValidationErrors()),
         _("Validation Errors"), MB_ICONEXCLAMATION);
-    if (MessageBoxX(_("Task not valid. Changes will be lost."),
+    if (MessageBoxX(_("Task not valid. Changes will be lost.\nContinue?"),
                          _("Task Manager"),
                          MB_YESNO | MB_ICONQUESTION) == IDYES) {
       return true;
