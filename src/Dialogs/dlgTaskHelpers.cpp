@@ -97,14 +97,20 @@ void
 OrderedTaskSummary(OrderedTask* task, TCHAR* text)
 {
   const TaskStats &stats = task->get_stats();
+  TCHAR invalid [15];
+  if (task->check_task())
+    invalid[0] = '\0';
+  else
+    _tcscpy(invalid,_T(" (invalid)"));
 
   if (!task->task_size()) {
     _stprintf(text, _T("%s\nTask is empty"),
               OrderedTaskFactoryName(task->get_factory_type()));
   } else {
     if (task->has_targets())
-      _stprintf(text, _T("%s\nNominal dist: %.0f %s\nMax dist: %.0f %s\nMin dist: %.0f %s"), 
+      _stprintf(text, _T("%s%s\nNominal dist: %.0f %s\nMax dist: %.0f %s\nMin dist: %.0f %s"),
                 OrderedTaskFactoryName(task->get_factory_type()),
+                invalid,
                 (double)Units::ToUserDistance(stats.distance_nominal),
                 Units::GetDistanceName(),
                 (double)Units::ToUserDistance(stats.distance_max),
@@ -112,8 +118,9 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text)
                 (double)Units::ToUserDistance(stats.distance_min),
                 Units::GetDistanceName());
     else
-      _stprintf(text, _T("%s\nDistance: %.0f %s"), 
+      _stprintf(text, _T("%s%s\nDistance: %.0f %s"),
                 OrderedTaskFactoryName(task->get_factory_type()),
+                invalid,
                 (double)Units::ToUserDistance(stats.distance_nominal),
                 Units::GetDistanceName());
   }
