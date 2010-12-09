@@ -257,6 +257,7 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
 {
   int i;
   Chart chart(canvas, rc);
+  Pen blue_pen(2, Color::BLUE);
 
   chart.ScaleYFromValue(fixed_zero);
   chart.ScaleYFromValue(-glide_polar.get_Smax() * fixed(1.1));
@@ -283,7 +284,7 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
       v1 = derived.AverageClimbRate[i] / derived.AverageClimbRateN[i];
 
       if (v0valid)
-        chart.DrawLine(fixed(i0), v0, fixed(i), v1, Chart::STYLE_DASHGREEN);
+        chart.DrawLine(fixed(i0), v0, fixed(i), v1, blue_pen);
 
       v0 = v1;
       i0 = i;
