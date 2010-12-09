@@ -120,6 +120,8 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   if (!parseAngle(params[iLongitude], location.Longitude, false))
     return false;
 
+  location.normalize(); // ensure longitude is within -180:180
+
   Waypoint new_waypoint(location);
   new_waypoint.FileNum = file_num;
 

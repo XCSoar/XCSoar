@@ -77,6 +77,7 @@ IntermediatePoint(GeoPoint loc1, GeoPoint loc2, fixed dthis, fixed dtotal)
   GeoPoint loc3;
   loc3.Latitude = Angle::radians(atan2(z, hypot(x, y)));
   loc3.Longitude = Angle::radians(atan2(y, x));
+  loc3.normalize(); // ensure longitude is within -180:180
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;
@@ -299,10 +300,10 @@ FindLatitudeLongitude(GeoPoint loc, Angle Bearing,
     // note that asin is not supported by fixed.hpp!
     result = loc.Longitude.value_radians() + 
       asin(sinBearing * sinDistance / cosLatitude);
-    result = fmod((result + fixed_pi), fixed_two_pi) - fixed_pi;
   }
 
   loc_out.Longitude = Angle::radians(result);
+  loc_out.normalize(); // ensure longitude is within -180:180
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;

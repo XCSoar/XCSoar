@@ -328,7 +328,8 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
 
   if ((*Stop == 'W') || (*Stop == 'w'))
     point.Longitude.flip();
-  point.Longitude = point.Longitude.as_bearing();
+
+  point.normalize(); // ensure longitude is within -180:180
   return true;
 }
 
@@ -626,7 +627,7 @@ ParseCoordsTNP(const TCHAR *Text, GeoPoint &point)
   if (negative)
     point.Longitude.flip();
 
-  point.Longitude = point.Longitude.as_bearing();
+  point.normalize(); // ensure longitude is within -180:180
 
   return true;
 }

@@ -55,6 +55,8 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
   if (!parseAngle(line + 21, location.Longitude, false))
     return false;
 
+  location.normalize(); // ensure longitude is within -180:180
+
   Waypoint new_waypoint(location);
   new_waypoint.FileNum = file_num;
 

@@ -62,6 +62,7 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
   // Longitude (e.g. 00715.900W)
   if (!parseAngle(params[2], location.Longitude, false))
     return false;
+  location.normalize(); // ensure longitude is within -180:180
 
   Waypoint new_waypoint(location);
   new_waypoint.FileNum = file_num;
