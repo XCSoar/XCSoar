@@ -32,13 +32,15 @@ class NativeView {
 
   unsigned width, height;
 
-  jmethodID swap_method;
+  jmethodID swap_method, load_resource_texture_method;
 
 public:
   NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height)
     :env(_env), obj(_obj), width(_width), height(_height) {
     jclass cls = env->FindClass("org/xcsoar/NativeView");
     swap_method = env->GetMethodID(cls, "swap", "()V");
+    load_resource_texture_method = env->GetMethodID(cls, "loadResourceTexture",
+                                                    "(Ljava/lang/String;[I)Z");
   }
 
   unsigned get_width() const { return width; }
@@ -46,6 +48,21 @@ public:
 
   void swap() {
     env->CallVoidMethod(obj, swap_method);
+  }
+
+  bool loadResourceTexture(const char *name, jint *result) {
+    jstring name2 = env->NewStringUTF(name);
+    jintArray result2 = env->NewIntArray(3);
+
+    bool success = env->CallBooleanMethod(obj, load_resource_texture_method,
+                                          name2, result2);
+    if (success)
+      env->GetIntArrayRegion(result2, 0, 3, result);
+
+    env->DeleteLocalRef(result2);
+    env->DeleteLocalRef(name2);
+
+    return success;
   }
 };
 

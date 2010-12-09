@@ -63,6 +63,17 @@ $(TARGET_OUTPUT_DIR)/include/resource_data.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
 	$(Q)$(PERL) tools/GenerateResources.pl $< >$@.tmp
 	@mv $@.tmp $@
 
+$(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
+	$(RESOURCE_FILES) \
+	tools/GenerateAndroidResources.pl | $(TARGET_OUTPUT_DIR)/include/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(PERL) tools/GenerateAndroidResources.pl $< >$@.tmp
+	@mv $@.tmp $@
+
 $(TARGET_OUTPUT_DIR)/$(SRC)/ResourceLoader.o: $(TARGET_OUTPUT_DIR)/include/resource_data.h
+
+ifeq ($(TARGET),ANDROID)
+$(TARGET_OUTPUT_DIR)/$(SRC)/Screen/OpenGL/Bitmap.o: $(TARGET_OUTPUT_DIR)/include/android_drawable.h
+endif
 
 endif

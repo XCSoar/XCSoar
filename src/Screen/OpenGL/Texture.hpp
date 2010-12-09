@@ -42,6 +42,11 @@ class GLTexture {
   unsigned width, height;
 
 public:
+#ifdef ANDROID
+  GLTexture(GLuint _id, unsigned _width, unsigned _height)
+    :id(_id), width(_width), height(_height) {}
+#endif
+
   /**
    * Create a texture with undefined content.
    */

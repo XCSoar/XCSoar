@@ -42,12 +42,32 @@ NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 JAVA_SOURCES = $(wildcard android/src/*.java)
 JAVA_CLASSES = $(patsubst android/src/%.java,bin/classes/org/xcsoar/%.class,$(JAVA_SOURCES))
 
+DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
+
 $(ANDROID_BUILD)/res/drawable/icon.png: $(OUT)/data/graphics/xcsoarswiftsplash_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
 	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
 
+PNG1 := $(patsubst Data/bitmaps/%.bmp,$(DRAWABLE_DIR)/%.png,$(wildcard Data/bitmaps/*.bmp))
+$(PNG1): $(DRAWABLE_DIR)/%.png: Data/bitmaps/%.bmp | $(DRAWABLE_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $< $@
+
+PNG2 := $(patsubst output/data/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_LAUNCH_FLY_224) $(BMP_LAUNCH_SIM_224))
+$(PNG2): $(DRAWABLE_DIR)/%.png: output/data/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $< $@
+
+PNG3 := $(patsubst output/data/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_SPLASH_80) $(BMP_SPLASH_160) $(BMP_TITLE_110) $(BMP_TITLE_320))
+$(PNG3): $(DRAWABLE_DIR)/%.png: output/data/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $< $@
+
+PNG4 := $(patsubst output/data/icons/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_ICONS) $(BMP_ICONS_160))
+$(PNG4): $(DRAWABLE_DIR)/%.png: output/data/icons/%.bmp | $(DRAWABLE_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $< $@
+
+PNG_FILES = $(DRAWABLE_DIR)/icon.png $(PNG1) $(PNG2) $(PNG3) $(PNG4)
+
 # symlink some important files to $(ANDROID_BUILD) and let the Android
 # SDK generate build.xml
-$(ANDROID_BUILD)/build.xml: android/AndroidManifest.xml $(ANDROID_BUILD)/res/drawable/icon.png | $(TARGET_OUTPUT_DIR)/bin/dirstamp
+$(ANDROID_BUILD)/build.xml: android/AndroidManifest.xml $(PNG_FILES) | $(TARGET_OUTPUT_DIR)/bin/dirstamp
 	@$(NQ)echo "  ANDROID $@"
 	$(Q)rm -f $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
 	$(Q)mkdir -p $(ANDROID_BUILD)/res

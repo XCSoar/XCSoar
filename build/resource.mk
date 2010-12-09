@@ -125,11 +125,15 @@ $(BMP_LAUNCH_SIM_224): %_2.bmp: %.png
 	@$(NQ)echo "  BMP     $(@:1.bmp=2.bmp)"
 	$(Q)$(IM_PREFIX)convert $< -background blue -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
 
-RESOURCE_FILES = $(wildcard Data/Dialogs/*.xml) $(wildcard Data/bitmaps/*.bmp)
+RESOURCE_FILES = $(wildcard Data/Dialogs/*.xml)
+
+ifneq ($(TARGET),ANDROID)
+RESOURCE_FILES += $(wildcard Data/bitmaps/*.bmp)
 RESOURCE_FILES += $(BMP_ICONS) $(BMP_ICONS_160) 
 RESOURCE_FILES += $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_TITLE_320) $(BMP_TITLE_110)
 RESOURCE_FILES += $(BMP_LAUNCH_FLY_224) $(BMP_LAUNCH_SIM_224)
+endif
 
 ifeq ($(HAVE_WIN32),y)
 
