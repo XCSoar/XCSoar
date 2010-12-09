@@ -92,20 +92,16 @@ protected:
    */
   bool refresh_task();
 
-  void add_start_edges(DijkstraTaskPoint &dijkstra,
-                 const SearchPoint &loc);
+  void add_start_edges(const SearchPoint &loc);
 
   OrderedTask& task;
   unsigned active_stage;
-
-  DijkstraTaskPoint dijkstra;
 
 private:
   void calculate_sizes();
   unsigned get_size(const unsigned stage) const;
 
-  void add_edges(DijkstraTaskPoint &dijkstra,
-                 const ScanTaskPoint &curNode);
+  void add_edges(const ScanTaskPoint &curNode);
 
   unsigned sp_sizes[MAX_STAGES];
 };

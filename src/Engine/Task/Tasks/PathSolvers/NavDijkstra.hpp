@@ -16,8 +16,8 @@ extern long count_dijkstra_queries;
 typedef Dijkstra<ScanTaskPoint> DijkstraTaskPoint;
 
 /**
- * Abstract class for Dijsktra searches of nav points, managing edges in multiple 
- * stages (corresponding to turn points).
+ * Abstract class for A* /Dijkstra searches of nav points, managing
+ * edges in multiple stages (corresponding to turn points).
  *
  * Expected running time, see http://www.avglab.com/andrew/pub/neci-tr-96-062.ps
  *
@@ -40,7 +40,9 @@ public:
    * 
    * @return Initialised object
    */
-  NavDijkstra(const unsigned _num_stages)
+  NavDijkstra(const bool is_min, const unsigned _num_stages):
+    dijkstra(is_min),
+    solution_valid(false)
   {
     set_stages(_num_stages);
   }
@@ -75,6 +77,8 @@ public:
 
 protected:
 
+  DijkstraTaskPoint dijkstra;
+
   /** 
    * Determine whether a finished path is valid
    * 
@@ -98,11 +102,9 @@ protected:
   /** 
    * Add edges from an origin node
    * 
-   * @param dijkstra Dijkstra structure to add edges to
    * @param curNode Origin node to add edges from
    */
-  virtual void add_edges(DijkstraTaskPoint &dijkstra,
-                         const ScanTaskPoint &curNode) = 0;
+  virtual void add_edges(const ScanTaskPoint &curNode) = 0;
 
   /** 
    * Determine whether a point is terminal (no further edges)
@@ -137,8 +139,7 @@ protected:
    * 
    * @return True if algorithm returns a terminal path or no path found
    */
-  bool distance_general(DijkstraTaskPoint &dijkstra, 
-                        unsigned max_steps = 0 - 1) {
+  bool distance_general(unsigned max_steps = 0 - 1) {
 #ifdef INSTRUMENT_TASK
     count_dijkstra_queries++;
 #endif
@@ -147,13 +148,14 @@ protected:
       const ScanTaskPoint destination = dijkstra.pop();
 
       if (is_final(destination)) {
-        find_solution(dijkstra, destination);
+        find_solution(destination);
         if (finish_satisfied(destination)) {
+          solution_valid = true;
           dijkstra.clear();
           return true;
         }
       } else {
-        add_edges(dijkstra, destination);
+        add_edges(destination);
         if (dijkstra.empty())
           return true; // error, no way to reach final
       }
@@ -197,11 +199,9 @@ protected:
   /** 
    * Determine optimal solution by backtracing the Dijkstra tree
    * 
-   * @param dijkstra Dijkstra structure to retrieve solution from
    * @param destination Terminal point to query
    */
-  void find_solution(const DijkstraTaskPoint &dijkstra, 
-                     const ScanTaskPoint &destination) {
+  void find_solution(const ScanTaskPoint &destination) {
     ScanTaskPoint p(destination); 
     ScanTaskPoint p_last(p);
 
@@ -215,6 +215,7 @@ protected:
   /** Number of stages in search */
   unsigned num_stages;
   T solution[MAX_STAGES];
+  bool solution_valid;
 };
 
 #endif

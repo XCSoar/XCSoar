@@ -38,7 +38,7 @@ TaskDijkstraMin::distance_min(const SearchPoint &currentLocation)
 
   dijkstra.restart(start);
   if (active_stage)
-    add_start_edges(dijkstra, currentLocation);
+    add_start_edges(currentLocation);
   return run();
 }
 

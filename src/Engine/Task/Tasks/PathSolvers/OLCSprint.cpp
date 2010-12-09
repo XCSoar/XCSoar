@@ -88,7 +88,7 @@ OLCSprint::add_start_edges()
   assert(num_stages <= MAX_STAGES);
   assert(num_stages > 0);
   assert(n_points > 0);
-  m_dijkstra.pop();
+  dijkstra.pop();
 
   const ScanTaskPoint start(0, find_start());
   const ScanTaskPoint finish(num_stages - 1, n_points - 1);
@@ -96,16 +96,15 @@ OLCSprint::add_start_edges()
   solution[0] = get_point(start);
 
   if (admit_candidate(finish))
-    m_dijkstra.link(start, start, 0);
+    dijkstra.link(start, start, 0);
 }
 
 void 
-OLCSprint::add_edges(DijkstraTaskPoint &dijkstra,
-                     const ScanTaskPoint &origin)
+OLCSprint::add_edges(const ScanTaskPoint &origin)
 {
   const ScanTaskPoint destination(origin.first + 1, n_points - 1);
   if (!is_final(destination)) {
-    ContestDijkstra::add_edges(dijkstra, origin);
+    ContestDijkstra::add_edges(origin);
     return;
   }
   /*

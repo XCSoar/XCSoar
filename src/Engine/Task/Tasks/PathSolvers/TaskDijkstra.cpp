@@ -24,9 +24,8 @@
 #include "Task/Tasks/OrderedTask.hpp"
 
 TaskDijkstra::TaskDijkstra(OrderedTask& _task, bool is_min) :
-  NavDijkstra<SearchPoint> (0),
-  task(_task),
-  dijkstra(is_min)
+  NavDijkstra<SearchPoint> (is_min, 0),
+  task(_task)
 {
 }
 
@@ -62,8 +61,7 @@ TaskDijkstra::get_point(const ScanTaskPoint &sp) const
 }
 
 void
-TaskDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
-                        const ScanTaskPoint& curNode)
+TaskDijkstra::add_edges(const ScanTaskPoint& curNode)
 {
   ScanTaskPoint destination(curNode.first + 1, 0);
   const unsigned dsize = get_size(destination.first);
@@ -73,8 +71,7 @@ TaskDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
 }
 
 void 
-TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
-                              const SearchPoint &currentLocation)
+TaskDijkstra::add_start_edges(const SearchPoint &currentLocation)
 {
   // need to remove dummy first point
   dijkstra.pop();
@@ -90,7 +87,7 @@ TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
 bool
 TaskDijkstra::run()
 {
-  const bool retval = distance_general(dijkstra);
+  const bool retval = distance_general();
   if (retval)
     save();
   dijkstra.clear();

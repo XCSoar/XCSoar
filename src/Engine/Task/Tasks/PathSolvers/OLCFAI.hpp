@@ -49,8 +49,7 @@ protected:
   unsigned second_leg_distance(const ScanTaskPoint &dest,
     unsigned &best) const;
 
-  void add_edges(DijkstraTaskPoint &dijkstra,
-                 const ScanTaskPoint &curNode);
+  void add_edges(const ScanTaskPoint &curNode);
 
   bool is_closed;
   bool is_complete;
