@@ -675,7 +675,7 @@ AbstractTaskFactory::is_closed() const
   const Waypoint& wp_finish =
       m_task.get_tp(m_task.task_size() - 1)->get_waypoint();
 
-  return (wp_start == wp_finish);
+  return (wp_start.Location == wp_finish.Location);
 }
 
 bool 
