@@ -1626,6 +1626,7 @@ InputEvents::sub_Pan(int vswitch)
     // supertoogle, toogle pan mode and fullscreen
     XCSoarInterface::SetSettingsMap().EnablePan =
         !XCSoarInterface::SettingsMap().EnablePan;
+    XCSoarInterface::main_window.SetFullScreen(true);
   } else if (vswitch == -1)
     // toogle, toogle pan mode only
     XCSoarInterface::SetSettingsMap().EnablePan =
@@ -1642,6 +1643,7 @@ InputEvents::sub_Pan(int vswitch)
       setMode(MODE_PAN);
     } else {
       setMode(MODE_DEFAULT);
+      Pages::Update();
     }
   }
 }
