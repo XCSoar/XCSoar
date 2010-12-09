@@ -10,6 +10,8 @@ set style line 6 lt 4 lc rgb "green" lw 1
 set style line 7 lt 4 lc rgb "cyan" lw 1
 set style line 8 lt 2 lc rgb "red" lw 2
 
+set terminal png
+set output 'results/plotres-1.png'
 set xlabel "Longitude (deg)"
 set ylabel "Latitude (deg)"
 plot \
@@ -20,12 +22,12 @@ plot \
      'results/res-rem.txt' using 1:2 with linespoints ls 5 title "remaining", \
      'results/res-sample.txt' using 2:3 with lines ls 1 title "sample", \
      'results/res-isolines.txt' using 1:2 with lines ls 4 title "isolines"
-pause -1
 
 set size noratio
 set autoscale
 unset xrange
 unset yrange
+set output 'results/plotres-2.png'
 set multiplot layout 3, 1
 
 set xlabel "t (s)"
@@ -46,8 +48,8 @@ plot \
      'results/res-stats.txt' using 1:10 with lines title "Effective instantaneous"
 
 unset multiplot
-pause -1
 
+set output 'results/plotres-3.png'
 set multiplot layout 2, 1
 
 set autoscale
@@ -66,5 +68,4 @@ plot \
      'results/res-stats.txt' using 1:3 with lines title "Auto mc"
 
 unset multiplot
-pause -1
 
