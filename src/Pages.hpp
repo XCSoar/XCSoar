@@ -87,6 +87,8 @@ namespace Pages
   void SaveToProfile();
   void LoadFromProfile();
   void LoadDefault();
+
+  void Update();
 }
 
 #endif

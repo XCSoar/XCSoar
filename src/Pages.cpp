@@ -36,8 +36,6 @@ namespace Pages
   int Current = 0;
   PageLayout pages[8];
 
-  void Update();
-
   bool MakeProfileKey(TCHAR* buffer, int page);
   bool MakeProfileValue(TCHAR* buffer, int page);
   bool ParseProfileValue(TCHAR* buffer, int page);
