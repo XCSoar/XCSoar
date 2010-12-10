@@ -39,7 +39,7 @@ def main():
         return
 
     generator = Generator(dir_data=app_dir + '/data',
-                          dir_temp=app_dir + '/tmp')
+                          dir_temp='/tmp/mapgen-' + str(os.getpid()))
     if wp != None:
         generator.add_waypoint_file(wp)
         generator.set_bounds_by_waypoint_file(wp)

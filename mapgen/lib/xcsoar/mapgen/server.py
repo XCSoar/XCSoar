@@ -9,8 +9,6 @@ from xcsoar.mapgen.georect import GeoRect
 class Server(object):
     def __init__(self, dir_jobs):
         self.__dir_jobs = os.path.abspath(dir_jobs)
-        if not os.path.exists(self.__dir_jobs):
-            os.mkdir(self.__dir_jobs)
 
     @cherrypy.expose
     @view.output('index.html')
