@@ -27,6 +27,7 @@
 #include "Interface.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Chart.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/Graphics.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
 #include "Airspace/AirspaceCircle.hpp"
@@ -34,6 +35,10 @@
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Units.hpp"
+
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
 
 #define AIRSPACE_SCANSIZE_X 16
 
@@ -48,6 +53,61 @@ public:
     start(_start), state(_state) {}
 
   void
+  RenderBox(const RECT rc, const Brush &brush, bool black, int type)
+  {
+#ifdef ENABLE_OPENGL
+    GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#elif !defined(ENABLE_SDL)
+    canvas.mix_mask();
+#endif /* GDI */
+
+    canvas.select(brush);
+    canvas.null_pen();
+
+    int border_width = Layout::Scale(10);
+    if ((rc.right - rc.left) > border_width * 2 &&
+        (rc.bottom - rc.top) > border_width * 2) {
+      RECT rc_brush = rc;
+
+      rc_brush.right = rc.left + border_width;
+      canvas.rectangle(rc_brush.left, rc_brush.top,
+                       rc_brush.right, rc_brush.bottom);
+      rc_brush.right = rc.right;
+
+      rc_brush.left = rc.right - border_width;
+      canvas.rectangle(rc_brush.left, rc_brush.top,
+                       rc_brush.right, rc_brush.bottom);
+      rc_brush.left = rc.left;
+
+      rc_brush.top = rc.bottom - border_width;
+      canvas.rectangle(rc_brush.left, rc_brush.top,
+                       rc_brush.right, rc_brush.bottom);
+      rc_brush.top = rc.top;
+
+      rc_brush.bottom = rc.top + border_width;
+      canvas.rectangle(rc_brush.left, rc_brush.top,
+                       rc_brush.right, rc_brush.bottom);
+      rc_brush.bottom = rc.bottom;
+    } else {
+      canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+    }
+
+#ifdef ENABLE_OPENGL
+    glDisable(GL_BLEND);
+#elif !defined(ENABLE_SDL)
+    canvas.mix_copy();
+#endif /* GDI */
+
+    canvas.hollow_brush();
+    if (black)
+      canvas.black_pen();
+    else
+      canvas.select(Graphics::hAirspacePens[type]);
+
+    canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
+  }
+
+  void
   Render(const AbstractAirspace& as)
   {
     int type = as.get_type();
@@ -59,12 +119,7 @@ public:
       return;
 
     // Select pens and brushes
-    if (settings_map.bAirspaceBlackOutline)
-      canvas.black_pen();
-    else
-      canvas.select(Graphics::hAirspacePens[type]);
-
-    canvas.select(Graphics::GetAirspaceBrushByClass(type, settings_map));
+    const Brush &brush = Graphics::GetAirspaceBrushByClass(type, settings_map);
     canvas.set_text_color(Graphics::GetAirspaceColourByClass(type, settings_map));
 
     RECT rcd;
@@ -93,7 +148,7 @@ public:
       }
 
       // Draw the airspace
-      canvas.rectangle(rcd.left, rcd.top, rcd.right, rcd.bottom);
+      RenderBox(rcd, brush, settings_map.bAirspaceBlackOutline, type);
     }
   }
 
