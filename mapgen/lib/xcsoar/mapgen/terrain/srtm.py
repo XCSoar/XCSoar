@@ -7,11 +7,10 @@ from zipfile import ZipFile, BadZipfile
 from xcsoar.mapgen.georect import GeoRect
 from xcsoar.mapgen.filelist import FileList
 
-cmd_gdal_warp = "gdalwarp"
-cmd_geojasper = "geojasper"
-gather_from_server = "http://download.xcsoar.org/mapgen/data/srtm3/"
-
-use_world_file = True
+__cmd_gdal_warp = "gdalwarp"
+__cmd_geojasper = "geojasper"
+__server_path = "http://download.xcsoar.org/mapgen/data/srtm3/"
+__use_world_file = True
 
 '''
  1) Gather tiles
@@ -27,7 +26,7 @@ def __get_tile_name(lat, lon):
 def __download_tile(path_tile_zip, filename):
     socket.setdefaulttimeout(10)
     try:
-        urllib.urlretrieve(gather_from_server + filename + ".zip",
+        urllib.urlretrieve(__server_path + filename + ".zip",
                            path_tile_zip)
     except IOError:
         print "Download of tile " + filename + " failed!"
@@ -64,7 +63,7 @@ def __gather_tile(dir_data, dir_temp, lat, lon):
     path_tile_zip = os.path.join(dir_data, filename + ".zip")
     for i in range(1, 4):
         # if the ZIP file doesn't exist in the data folder try to download it
-        if gather_from_server != None:
+        if __server_path != None:
             if not os.path.exists(path_tile_zip):
                 print "Downloading tile " + filename + " from the internet ..."
                 __download_tile(path_tile_zip, filename)
@@ -149,14 +148,14 @@ def __create(dir_temp, tiles, arcseconds_per_pixel, bounds):
 
     degree_per_pixel = float(arcseconds_per_pixel) / 3600.0
 
-    args = [cmd_gdal_warp,
+    args = [__cmd_gdal_warp,
             "-r", "cubic",
             "-tr", str(degree_per_pixel), str(degree_per_pixel),
             "-wt", "Int16",
             "-dstnodata", "-31744",
             "-multi"]
 
-    if use_world_file == True:
+    if __use_world_file == True:
         args.extend(["-co", "TFW=YES"])
 
     args.extend(["-te", str(bounds.left),
@@ -178,7 +177,7 @@ def __create(dir_temp, tiles, arcseconds_per_pixel, bounds):
 
 '''
  3) Convert to GeoJP2 with GeoJasPer
-    cmd_geojasper
+    geojasper
     -f blabla_cropped.tif
         (Input file name)
     -F terrain.jp2
@@ -200,7 +199,7 @@ def __convert(dir_temp, input_file, rc):
     if os.path.exists(output_file):
         os.unlink(output_file)
 
-    args = [cmd_geojasper,
+    args = [__cmd_geojasper,
             "-f", input_file,
             "-F", output_file,
             "-T", "jp2",
@@ -208,7 +207,7 @@ def __convert(dir_temp, input_file, rc):
             "-O", "tilewidth=256",
             "-O", "tileheight=256"]
 
-    if not use_world_file:
+    if not __use_world_file:
         args.extend(["-O", "xcsoar=1",
                      "-O", "lonmin=" + str(rc.left),
                      "-O", "lonmax=" + str(rc.right),
@@ -228,7 +227,7 @@ def __convert(dir_temp, input_file, rc):
 
     world_file_tiff = os.path.join(dir_temp, "terrain.tfw")
     world_file = os.path.join(dir_temp, "terrain.j2w")
-    if use_world_file and os.path.exists(world_file_tiff):
+    if __use_world_file and os.path.exists(world_file_tiff):
         os.rename(world_file_tiff, world_file)
         output.add(world_file, True)
 
