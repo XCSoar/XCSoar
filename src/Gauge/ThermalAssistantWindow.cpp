@@ -262,5 +262,4 @@ ThermalAssistantWindow::on_paint_buffer(Canvas &canvas)
   PaintRadarPlane(canvas);
   PaintPoints(canvas);
   PaintAdvisor(canvas);
-  invalidate();
 }
