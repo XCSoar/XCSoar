@@ -61,7 +61,6 @@
 bool XMLNode::GlobalError = false;
 
 XMLNode XMLNode::emptyXMLNode;
-XMLClear XMLNode::emptyXMLClear = { NULL, NULL, NULL };
 XMLAttribute XMLNode::emptyXMLAttribute = { NULL, NULL };
 
 inline int mmin(const int t1, const int t2) { return t1 < t2 ? t1 : t2; }
@@ -77,17 +76,10 @@ typedef enum TokenTypeTag
     eTokenEquals,           /* "="            */
     eTokenDeclaration,      /* "<?"           */
     eTokenShortHandClose,   /* "/>"           */
-    eTokenClear,
     eTokenError
 } TokenTypeTag;
 
 #define INDENTCHAR _T('\t')
-
-typedef struct ClearTag
-{
-    LPCTSTR lpszOpen;
-    LPCTSTR lpszClose;
-} ClearTag;
 
 // Main structure used for parsing XML
 typedef struct XML
@@ -100,12 +92,10 @@ typedef struct XML
     LPCTSTR lpNewElement;
     int cbNewElement;
     int nFirst;
-    ClearTag *pClrTags;
 } XML;
 
 typedef struct
 {
-    ClearTag *pClr;
     LPCTSTR pStr;
 } NextToken;
 
@@ -393,11 +383,7 @@ GetNextToken(XML *pXML, int *pcbToken, enum TokenTypeTag *pType)
   int nFoundMatch;
   int nExit;
   int n;
-  LPCTSTR lpszOpen;
-  int cbOpen;
   int nIsText = FALSE;
-
-  result.pClr = NULL; // avoid compiler warning for uninitialised variable
 
   // Find next non-white space character
   ch = FindNonWhiteSpace(pXML);
@@ -406,32 +392,7 @@ GetNextToken(XML *pXML, int *pcbToken, enum TokenTypeTag *pType)
     // Cache the current string pointer
     lpXML = pXML->lpXML;
     result.pStr = &lpXML[pXML->nIndex - 1];
-
-    // First check whether the token is in the clear tag list (meaning it
-    // does not need formatting).
-    n = 0;
-
-    while (TRUE) {
-      // Obtain the name of the open part of the clear tag
-      lpszOpen = pXML->pClrTags[n].lpszOpen;
-
-      if (lpszOpen) {
-        // Compare the open tag with the current token
-        cbOpen = (int)_tcslen(lpszOpen);
-        // if (myTagCompare(lpszOpen, result.pStr) == 0)
-        if (_tcsnicmp(lpszOpen, result.pStr, cbOpen) == 0) {
-          result.pClr = &pXML->pClrTags[n];
-          pXML->nIndex += (int)(_tcslen(lpszOpen) - 1);
-          *pType = eTokenClear;
-          return result;
-        }
-        n++;
-      } else
-        break;
-    }
-    // If we didn't find a clear tag then check for standard tokens
     chTemp = 0;
-    lpXML = pXML->lpXML;
 
     switch (ch) {
     // Check for quotes
@@ -647,7 +608,6 @@ XMLNode::XMLNode(XMLNode *pParent, LPCTSTR lpszName, int isDeclaration)
 
   d->nChild = 0;
   d->nText = 0;
-  d->nClear = 0;
   d->nAttribute = 0;
 
   d->isDeclaration = isDeclaration;
@@ -655,7 +615,6 @@ XMLNode::XMLNode(XMLNode *pParent, LPCTSTR lpszName, int isDeclaration)
   d->pParent = pParent;
   d->pChild = NULL;
   d->pText = NULL;
-  d->pClear = NULL;
   d->pAttribute = NULL;
   d->pOrder = NULL;
 }
@@ -737,24 +696,6 @@ LPCTSTR XMLNode::AddText(LPCTSTR lpszValue)
   return d->pText[nt];
 }
 
-// Add clear (unformatted) text to the element.
-XMLClear *XMLNode::AddClear(LPCTSTR lpszValue, LPCTSTR lpszOpen, LPCTSTR lpszClose)
-{
-  if (!lpszValue)
-    return &emptyXMLClear;
-
-  int nc = d->nClear;
-  d->pClear = (XMLClear *)myRealloc(d->pClear, (nc + 1), memoryIncrease,
-                                    sizeof(XMLClear));
-  XMLClear *pNewClear = d->pClear + nc;
-  pNewClear->lpszValue = lpszValue;
-  pNewClear->lpszOpenTag = lpszOpen;
-  pNewClear->lpszCloseTag = lpszClose;
-  addToOrder(nc, eNodeClear);
-  d->nClear++;
-  return pNewClear;
-}
-
 // Trim the end of the text to remove white space characters.
 static void
 FindEndOfText(LPCTSTR lpszToken, int *pcbText)
@@ -798,37 +739,6 @@ stringDup(LPCTSTR lpszData, int cbData)
     lpszNew[cbData] = (TCHAR)NULL;
   }
   return lpszNew;
-}
-
-// Parse a clear (unformatted) type node.
-int
-XMLNode::ParseClearTag(void *px, void *pa)
-{
-  XML *pXML = (XML *)px;
-  ClearTag *pClear = (ClearTag *)pa;
-  int cbTemp = 0;
-  LPCTSTR lpszTemp;
-  LPCTSTR lpszXML = &pXML->lpXML[pXML->nIndex];
-
-  // Find the closing tag
-  lpszTemp = _tcsstr(lpszXML, pClear->lpszClose);
-
-  // Iterate through the tokens until we find the closing tag.
-  if (lpszTemp) {
-    // Cache the size and increment the index
-    cbTemp = (int)(lpszTemp - lpszXML);
-
-    pXML->nIndex += cbTemp;
-    pXML->nIndex += (int)_tcslen(pClear->lpszClose);
-
-    // Add the clear node to the current element
-    AddClear(stringDup(lpszXML, cbTemp), pClear->lpszOpen, pClear->lpszClose);
-    return TRUE;
-  }
-
-  // If we failed to find the end tag
-  pXML->error = eXMLErrorUnmatchedEndTag;
-  return FALSE;
 }
 
 // Recursively parse an XML element.
@@ -941,10 +851,6 @@ XMLNode::ParseXMLElement(void *pa)
                 if (d->nText > 0)
                   d->pText = (LPCTSTR*)myRealloc(d->pText, d->nText,
                                                  memoryIncrease, sizeof(LPTSTR));
-                if (d->nClear > 0)
-                  d->pClear = (XMLClear *)myRealloc(d->pClear, d->nClear,
-                                                    memoryIncrease,
-                                                    sizeof(XMLClear));
                 return FALSE;
               } else {
                 // If the call to recurse this function
@@ -1034,21 +940,6 @@ XMLNode::ParseXMLElement(void *pa)
           // Return to the caller
           return TRUE;
 
-        // If we found a clear (unformatted) token
-        case eTokenClear:
-          // If we have node text then add this to the element
-          if (lpszText) {
-            cbTemp = (int)(token.pStr - lpszText);
-            FindEndOfText(lpszText, &cbTemp);
-            AddText(stringDup(lpszText, cbTemp));
-            lpszText = NULL;
-          }
-
-          if (!ParseClearTag(pXML, token.pClr)) {
-            return FALSE;
-          }
-          break;
-
         // Errors...
         case eTokenCloseTag: /* '>'         */
         case eTokenShortHandClose: /* '/>'        */
@@ -1096,7 +987,6 @@ XMLNode::ParseXMLElement(void *pa)
           case eTokenTagEnd: /* '</'           */
           case eTokenEquals: /* '='            */
           case eTokenDeclaration: /* '<?'           */
-          case eTokenClear:
             pXML->error = eXMLErrorUnexpectedToken;
             return FALSE;
           default:
@@ -1153,7 +1043,6 @@ XMLNode::ParseXMLElement(void *pa)
           case eTokenTagStart: /* 'Attribute <'            */
           case eTokenTagEnd: /* 'Attribute </'           */
           case eTokenDeclaration: /* 'Attribute <?'           */
-          case eTokenClear:
             pXML->error = eXMLErrorUnexpectedToken;
             return FALSE;
           default:
@@ -1197,7 +1086,6 @@ XMLNode::ParseXMLElement(void *pa)
           case eTokenShortHandClose: /* "Attr = />"         */
           case eTokenEquals: /* 'Attr = ='          */
           case eTokenDeclaration: /* 'Attr = <?'         */
-          case eTokenClear:
             pXML->error = eXMLErrorUnexpectedToken;
             return FALSE;
             break;
@@ -1260,21 +1148,11 @@ XMLNode::parseString(LPCTSTR lpszXML, XMLResults *pResults)
     return emptyXMLNode;
   }
 
-  static struct ClearTag tags[] = {
-      { _T("<![CDATA["), _T("]]>") },
-      { _T("<PRE>"),     _T("</PRE>") },
-      { _T("<Script>"),  _T("</Script>") },
-      { _T("<!--"),      _T("-->") },
-      { _T("<!DOCTYPE"), _T(">") },
-      { NULL,            NULL }
-  };
-
   enum XMLError error;
   XMLNode xnode(NULL, NULL, FALSE);
-  struct XML xml = { NULL, 0, eXMLErrorNone, NULL, 0, NULL, 0, TRUE, NULL };
+  struct XML xml = { NULL, 0, eXMLErrorNone, NULL, 0, NULL, 0, TRUE, };
 
   xml.lpXML = lpszXML;
-  xml.pClrTags = tags;
 
   // Fill the XMLNode xnode with the parsed data of xml
   // note: xnode is now the document node, not the main XMLNode
@@ -1472,9 +1350,6 @@ XMLNode::enumContents(int i)
   case eNodeText:
     c.text = d->pText[i];
     break;
-  case eNodeClear:
-    c.clear = d->pClear[i];
-    break;
   default:
     break;
   }
@@ -1494,8 +1369,6 @@ XMLNode::enumContent(XMLNodeData *pEntry, int i, XMLElementType *nodeType)
     return pEntry->pAttribute + i;
   case eNodeText:
     return (void*)(pEntry->pText[i]);
-  case eNodeClear:
-    return pEntry->pClear + i;
   default:
     break;
   }
@@ -1505,7 +1378,7 @@ XMLNode::enumContent(XMLNodeData *pEntry, int i, XMLElementType *nodeType)
 int
 XMLNode::nElement(XMLNodeData *pEntry)
 {
-  return pEntry->nChild + pEntry->nText + pEntry->nClear + pEntry->nAttribute;
+  return pEntry->nChild + pEntry->nText + pEntry->nAttribute;
 }
 
 static inline void
@@ -1651,49 +1524,6 @@ XMLNode::CreateXMLStringR(XMLNodeData *pEntry, LPTSTR lpszMarker, int nFormat)
       }
       break;
 
-    // Clear type nodes
-    case eNodeClear:
-      // "OpenTag"
-      cb = (int)LENSTR(((XMLClear*)pChild)->lpszOpenTag);
-      if (cb) {
-        if (nFormat != -1) {
-          if (lpszMarker) {
-            charmemset(&lpszMarker[nResult], INDENTCHAR,
-                       sizeof(TCHAR) * (nFormat + 1));
-            _tcscpy(&lpszMarker[nResult + nFormat + 1],
-                    ((XMLClear*)pChild)->lpszOpenTag);
-          }
-          nResult += cb + nFormat + 1;
-        } else {
-          if (lpszMarker)
-            _tcscpy(&lpszMarker[nResult], ((XMLClear*)pChild)->lpszOpenTag);
-          nResult += cb;
-        }
-      }
-
-      // "OpenTag Value"
-      cb = (int)LENSTR(((XMLClear*)pChild)->lpszValue);
-      if (cb) {
-        if (lpszMarker)
-          _tcscpy(&lpszMarker[nResult], ((XMLClear*)pChild)->lpszValue);
-        nResult += cb;
-      }
-
-      // "OpenTag Value CloseTag"
-      cb = (int)LENSTR(((XMLClear*)pChild)->lpszCloseTag);
-      if (cb) {
-        if (lpszMarker)
-          _tcscpy(&lpszMarker[nResult], ((XMLClear*)pChild)->lpszCloseTag);
-        nResult += cb;
-      }
-
-      if (nFormat != -1) {
-        if (lpszMarker)
-          lpszMarker[nResult] = _T('\n');
-        nResult++;
-      }
-      break;
-
       // Element nodes
     case eNodeChild:
 
@@ -1833,9 +1663,6 @@ XMLNode::destroyCurrentBuffer(XMLNodeData *d)
     for (i = 0; i < d->nText; i++)
       free((void*)d->pText[i]);
     free(d->pText);
-    for (i = 0; i < d->nClear; i++)
-      free((void*)d->pClear[i].lpszValue);
-    free(d->pClear);
     for (i = 0; i < d->nAttribute; i++) {
       free((void*)d->pAttribute[i].lpszName);
       if (d->pAttribute[i].lpszValue)
@@ -2010,26 +1837,6 @@ XMLNode::nAttribute() const
   return d->nAttribute;
 }
 
-int
-XMLNode::nClear() const
-{
-  if (!d)
-    return 0;
-
-  return d->nClear;
-}
-
-XMLClear
-XMLNode::getClear(int i)
-{
-  if (!d)
-    return emptyXMLClear;
-  if (i >= d->nClear)
-    return emptyXMLClear;
-
-  return d->pClear[i];
-}
-
 XMLAttribute
 XMLNode::getAttribute(int i)
 {
@@ -2084,5 +1891,5 @@ XMLNode::nElement()
   if (!d)
     return 0;
 
-  return d->nChild + d->nText + d->nClear + d->nAttribute;
+  return d->nChild + d->nText + d->nAttribute;
 }

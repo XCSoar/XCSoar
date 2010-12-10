@@ -31,6 +31,8 @@
 #include <stdlib.h>
 #include <tchar.h>
 
+class TextWriter;
+
 // Some common types for char set portable code
 #ifdef _UNICODE
     #ifndef LPCTSTR
@@ -82,7 +84,6 @@ typedef enum XMLElementType
   eNodeChild = 0,
   eNodeAttribute = 1,
   eNodeText = 2,
-  eNodeClear = 3,
   eNodeNULL = 4
 } XMLElementType;
 
@@ -92,13 +93,6 @@ typedef struct XMLResults
   enum XMLError error;
   int nLine, nColumn;
 } XMLResults;
-
-/** Structure for XML clear (unformatted) node (usually comments) */
-typedef struct {
-  LPCTSTR lpszOpenTag;
-  LPCTSTR lpszValue;
-  LPCTSTR lpszCloseTag;
-} XMLClear;
 
 /** Structure for XML attribute. */
 typedef struct
@@ -118,15 +112,13 @@ protected:
       LPCTSTR       lpszName;        // Element name (=NULL if root)
       int           nChild,          // Num of child nodes
                     nText,           // Num of text fields
-                    nClear,          // Num of Clear fields (comments)
                     nAttribute,      // Num of attributes
                     isDeclaration;   // Whether node is an XML declaration - '<?xml ?>'
       XMLNode       *pParent;        // Pointer to parent element (=NULL if root)
       XMLNode       *pChild;         // Array of child nodes
       LPCTSTR       *pText;          // Array of text fields
-      XMLClear      *pClear;         // Array of clear fields
       XMLAttribute  *pAttribute;     // Array of attributes
-      int           *pOrder;         // order in which the child_nodes,text_fields,clear_fields and
+      int           *pOrder;         // order in which the child_nodes,text_fields and
       int  ref_count;
   } XMLNodeData;
   XMLNodeData *d;
@@ -174,8 +166,6 @@ public:
   LPCTSTR getAttribute(LPCTSTR name, int *i = NULL) const; // return next attribute content with specific name
                                                     //     (return a NULL if failing)
   int nAttribute() const;                           // nbr of attribute
-  XMLClear getClear(int i);                         // return ith clear field (comment)
-  int nClear() const;                               // nbr of clear field
   LPTSTR createXMLString(int nFormat, int *pnSize); // create XML string starting from current XMLNode
   XMLNodeContents enumContents(int i);              // enumerate all the different contents (child,text,
                                                     //     clear,attribute) of the current XMLNode. The order
@@ -192,18 +182,15 @@ public:
 
   XMLNode(): d(NULL) {}
   static XMLNode emptyXMLNode;
-  static XMLClear emptyXMLClear;
   static XMLAttribute emptyXMLAttribute;
 
   // The strings given as parameters for these 4 methods will be free'd by the XMLNode class:
   XMLNode AddChild(LPCTSTR lpszName, int isDeclaration);
   XMLAttribute *AddAttribute(LPCTSTR lpszName, LPCTSTR lpszValuev);
   LPCTSTR AddText(LPCTSTR lpszValue);
-  XMLClear *AddClear(LPCTSTR lpszValue, LPCTSTR lpszOpen, LPCTSTR lpszClose);
 
 private:
   // these are functions used internally (don't bother about them):
-  int ParseClearTag(void *pXML, void *pClear);
   int ParseXMLElement(void *pXML);
   void addToOrder(int index, int type);
   static int CreateXMLStringR(XMLNodeData *pEntry, LPTSTR lpszMarker, int nFormat);
@@ -222,7 +209,6 @@ typedef struct XMLNodeContents
   XMLNode child;
   XMLAttribute attrib;
   LPCTSTR text;
-  XMLClear clear;
 } XMLNodeContents;
 
 // The 2 following functions are processing strings so that all the characters
