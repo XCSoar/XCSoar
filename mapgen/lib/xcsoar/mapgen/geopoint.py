@@ -1,9 +1,5 @@
-from xcsoar.mapgen.angle import Angle
-
 class GeoPoint:
-    def __init__(self,
-                 lon = Angle.degrees(0),
-                 lat = Angle.degrees(0)):
+    def __init__(self, lon, lat):
         self.lon = lon
         self.lat = lat
 

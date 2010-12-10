@@ -41,10 +41,10 @@ class Generator:
         f.write("author: " + author + "\n")
         f.write("creation time: " + time.strftime("%d.%m.%Y %H:%M:%S") +
                 " (" + str(time.time()) + ")\n")
-        f.write("latitude range: " + str(self.__bounds.bottom.value_degrees()) +
-                " to " + str(self.__bounds.top.value_degrees()) + "\n")
-        f.write("longitude range: " + str(self.__bounds.left.value_degrees()) +
-                " to " + str(self.__bounds.right.value_degrees()) + "\n")
+        f.write("latitude range: " + str(self.__bounds.bottom) +
+                " to " + str(self.__bounds.top) + "\n")
+        f.write("longitude range: " + str(self.__bounds.left) +
+                " to " + str(self.__bounds.right) + "\n")
 
         for credit in credits:
             f.write("credits: " + credit + "\n")

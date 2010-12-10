@@ -1,15 +1,13 @@
 from xcsoar.mapgen.georect import GeoRect
-from xcsoar.mapgen.angle import Angle
 from xcsoar.mapgen.geopoint import GeoPoint
 
-class Waypoint:
+class Waypoint(GeoPoint):
     def __init__(self):
-        self.location = GeoPoint()
         self.altitude = 0
         self.name = ""
 
     def __str__(self):
-        return str(self.name) + ", " + str(self.location) + ", " + str(self.altitude)
+        return str(self.name) + ", " + super() + ", " + str(self.altitude)
 
 class WaypointList:
     def __init__(self):
@@ -30,16 +28,12 @@ class WaypointList:
         self.__list.append(wp)
 
     def get_bounds(self):
-        rc = GeoRect()
-        rc.left = Angle.degrees(180)
-        rc.right = Angle.degrees(-180)
-        rc.top = Angle.degrees(-90)
-        rc.bottom = Angle.degrees(90)
+        rc = GeoRect(180, -180, -90, 90)
         for wp in self.__list:
-            rc.left = min(rc.left, wp.location.lon)
-            rc.right = max(rc.right, wp.location.lon)
-            rc.top = max(rc.top, wp.location.lat)
-            rc.bottom = min(rc.bottom, wp.location.lat)
+            rc.left = min(rc.left, wp.lon)
+            rc.right = max(rc.right, wp.lon)
+            rc.top = max(rc.top, wp.lat)
+            rc.bottom = min(rc.bottom, wp.lat)
         return rc
 
     def parse(self, lines, type = 'WinPilot'):
@@ -59,8 +53,8 @@ class WaypointList:
                 continue
 
             wp = Waypoint()
-            wp.location.lat = self.__parse_winpilot_coordinate(fields[1]);
-            wp.location.lon = self.__parse_winpilot_coordinate(fields[2]);
+            wp.lat = self.__parse_winpilot_coordinate(fields[1]);
+            wp.lon = self.__parse_winpilot_coordinate(fields[2]);
             wp.altitude = self.__parse_winpilot_altitude(fields[3]);
             wp.name = fields[5].strip();
             self.append(wp)
@@ -83,8 +77,8 @@ class WaypointList:
         if len(str) < 2:
             return None
 
-        a = Angle.dms(int(str[0]), float(str[1]))
+        # degrees + minutes / 60
+        a = int(str[0]) + float(str[1]) / 60
         if (negative):
-            a.flip()
-
+            a *= -1
         return a
