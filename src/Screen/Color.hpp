@@ -34,4 +34,10 @@ Copyright_License {
 #include "Screen/GDI/Color.hpp"
 #endif /* !SDL */
 
+/**
+ * Returns a lighter version of the specified color, adequate for
+ * SRCAND filtering.
+ */
+Color light_color(Color c);
+
 #endif
