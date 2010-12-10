@@ -28,7 +28,7 @@ class Job:
             self.uuid = self.__generate_uuid()
             self.dir = os.path.join(dir_jobs, self.uuid + '.locked')
             if not os.path.exists(self.dir):
-                os.mkdir(self.dir)
+                os.makedirs(self.dir)
 
     def enqueue(self):
         f = open(self.__job_file(), 'wb')
@@ -103,26 +103,27 @@ class Job:
 
     @staticmethod
     def get_next(dir_jobs):
-        for file in os.listdir(dir_jobs):
-            dir = os.path.join(dir_jobs, file)
+        if os.path.exists(dir_jobs):
+            for file in os.listdir(dir_jobs):
+                dir = os.path.join(dir_jobs, file)
 
-            # Only directories can be jobs
-            if not os.path.isdir(dir):
-                continue
+                # Only directories can be jobs
+                if not os.path.isdir(dir):
+                    continue
 
-            # Check if the job is locked by the creator
-            # or if there is already a worker working on it
-            if dir.endswith('.locked') or dir.endswith('.working'):
-                Job.delete_expired(dir, 60*60)
-                continue
+                # Check if the job is locked by the creator
+                # or if there is already a worker working on it
+                if dir.endswith('.locked') or dir.endswith('.working'):
+                    Job.delete_expired(dir, 60*60)
+                    continue
 
-            # Find an enqueued job
-            if dir.endswith('.queued'):
-                job = Job(dir, True)
-                job.__move('.working')
-                return job
+                # Find an enqueued job
+                if dir.endswith('.queued'):
+                    job = Job(dir, True)
+                    job.__move('.working')
+                    return job
 
-            # Delete if download is expired
-            Job.delete_expired(dir, 24*7*60*60)
+                # Delete if download is expired
+                Job.delete_expired(dir, 24*7*60*60)
 
         return None

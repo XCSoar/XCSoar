@@ -10,7 +10,6 @@ from xcsoar.mapgen.worker import Worker
 def main():
     worker = Worker(dir_jobs=app_dir + '/jobs',
                     dir_data=app_dir + '/data',
-		    dir_temp=app_dir + '/tmp',
 	            mail_server='localhost')
     worker.run()
 

@@ -8,19 +8,9 @@ from xcsoar.mapgen.job import Job
 from xcsoar.mapgen.generator import Generator
 
 class Worker:
-    def __init__(self, dir_jobs, dir_data, dir_temp, mail_server):
+    def __init__(self, dir_jobs, dir_data, mail_server):
         self.__dir_jobs = os.path.abspath(dir_jobs)
-        if not os.path.exists(self.__dir_jobs):
-            os.mkdir(self.__dir_jobs)
-
         self.__dir_data = os.path.abspath(dir_data)
-        if not os.path.exists(self.__dir_data):
-            os.mkdir(self.__dir_data)
-
-        self.__dir_temp = os.path.abspath(dir_temp)
-        if not os.path.exists(self.__dir_temp):
-            os.mkdir(self.__dir_temp)
-
         self.__mail_server = mail_server
         self.__run = False
 
@@ -51,7 +41,7 @@ class Worker:
                 job.delete()
                 return
 
-            generator = Generator(self.__dir_data, self.__dir_temp)
+            generator = Generator(self.__dir_data, job.file_path('tmp'))
 
             if description.waypoint_file:
                 job.update_status('Adding waypoint file...')
@@ -80,8 +70,10 @@ class Worker:
 
             job.update_status('Creating map file...')
 
-            generator.create(job.map_file())
-            generator.cleanup()
+            try:
+                generator.create(job.map_file())
+            finally:
+                generator.cleanup()
 
             job.done()
         except Exception, e:
