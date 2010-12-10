@@ -42,10 +42,6 @@ RTTaskFactory::validate()
 {
   bool valid = AbstractTaskFactory::validate();
 
-  if (!is_unique()) {
-   addValidationError(TURNPOINTS_NOT_UNIQUE);
-   valid = false;
-  }
   return valid;
 }
 
