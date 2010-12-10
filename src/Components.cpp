@@ -513,11 +513,15 @@ XCSoarInterface::Shutdown(void)
 
   // Wait for the calculations thread to finish
   calculation_thread->join();
+  delete calculation_thread;
   LogStartUp(_T("- calculation thread returned"));
 
   //  Wait for the instruments thread to finish
-  if (instrument_thread != NULL)
+  if (instrument_thread != NULL) {
     instrument_thread->join();
+    delete instrument_thread;
+  }
+
   LogStartUp(_T("- instrument thread returned"));
 
   //  Wait for the drawing thread to finish
