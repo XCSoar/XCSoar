@@ -418,10 +418,10 @@ DeviceBlackboard::tick(const GlidePolar& glide_polar)
 
   tick_fast(glide_polar);
 
+  TurnRate();
   if (Basic().Time!= LastBasic().Time) {
 
     if (Basic().Time > LastBasic().Time) {
-      TurnRate();
       Dynamics();
     }
 
@@ -559,6 +559,9 @@ DeviceBlackboard::TurnRate()
 
   if (!Basic().flight.Flying) {
     SetBasic().TurnRate = fixed_zero;
+    return;
+  }
+  if (!positive(dT)) {
     return;
   }
 
