@@ -203,7 +203,7 @@ protected:
       solution[p.first] = get_point(p);
       p_last = p;
       p = dijkstra.get_predecessor(p);
-    } while ((p.second != p_last.second) || (p.first != p_last.first));
+    } while (p.first != p_last.first);
   }
 
   /** Number of stages in search */
