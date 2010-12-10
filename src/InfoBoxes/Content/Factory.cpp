@@ -74,7 +74,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("TC 30s"),
     N_("A 30 second rolling average climb rate based of the reported GPS altitude, or vario if available."),
     7, // TL Avg
-    44, // Netto
+    64, // D Vario
   },
 
   // 3
@@ -92,7 +92,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("L/D Inst"),
     N_("Instantaneous glide ratio, given by the ground speed divided by the vertical speed (GPS speed) over the last 20 seconds. Negative values indicate climbing cruise. If the vertical speed is close to zero, the displayed value is '---'."),
     5, // LD Cruise
-    53, // LD Vario
+    71, // LD Avg
   },
 
   // 5
@@ -155,7 +155,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("WP Dist"),
     N_("The distance to the currently selected waypoint. For AAT tasks, this is the distance to the target within the AAT sector."),
     12, // WP AltD
-    31,
+    73, // OLC
   },
 
   // 12
@@ -226,7 +226,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Final LD"),
     N_("Fin LD"),
     N_("The required glide ratio to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival altitude. Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'. Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds."),
-    38, // Next LD
+    66, // Final GR
     5, // LD Cruise
   },
 
@@ -253,7 +253,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Thermal Gain"),
     N_("TC Gain"),
     N_("The altitude gained/lost in the current thermal."),
-    24, // Vario
+    63, // TC All
     21, // TC Avg
   },
 
@@ -272,7 +272,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Vario"),
     N_("Instantaneous vertical speed, as reported by the GPS, or the intelligent vario total energy vario value if connected to one."),
     44, // Netto
-    22, // TC Gain
+    63, // TC All
   },
 
   // 25
@@ -298,7 +298,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("AA Time"),
     N_("AA Time"),
     N_("Assigned Area Task time remaining. Goes red when time remaining has expired."),
-    28, // AA Dmax
+    62, // AA dTime
     18, // Fin Dis
   },
 
@@ -308,7 +308,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("AA Dmax"),
     N_("Assigned Area Task maximum distance possible for remainder of task."),
     29, // AA Dmin
-    27, // AA Time
+    62, // AA dTime
   },
 
   // 29
@@ -398,7 +398,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("WP LD"),
     N_("The required glide ratio to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival altitude. Negative values indicate a climb is necessary to reach the waypoint. If the height required is close to zero, the displayed value is '---'.   Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds."),
     53, // LD Vario
-    19, // Final LD
+    66, // Final GR
   },
 
   // 39
@@ -451,7 +451,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Netto Vario"),
     N_("Netto"),
     N_("Instantaneous vertical speed of air-mass, equal to vario value less the glider's estimated sink rate. Best used if airspeed, accelerometers and vario are connected, otherwise calculations are based on GPS measurements and wind estimates."),
-    2, // TC 30s
+    64, // D Vario
     24, // Vario
   },
 
@@ -532,7 +532,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("L/D vario"),
     N_("L/D vario"),
     N_("Instantaneous glide ratio, given by the indicated airspeed divided by the total energy vertical speed, when connected to an intelligent variometer. Negative values indicate climbing cruise. If the total energy vario speed is close to zero, the displayed value is '---'."),
-    4, // LD Inst
+    71, // LD Avg
     38, // Next LD
   },
 
@@ -595,7 +595,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Distance Home"),
     N_("Home Dis"),
     N_("Distance to home waypoint (if defined)."),
-    11, // WP Dist
+    73, // OLC
     52, // AA Vtgt
   },
 
@@ -613,7 +613,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("AA Delta Time"),
     N_("AA dT"),
     N_("Difference between estimated task time and AAT minimum time. Colored red if negative (expected arrival too early), or blue if in sector and can turn now with estimated arrival time greater than AAT time plus 5 minutes."),
-    28, 18,
+    28, // AA Dmax
+    27, // AA Time
   },
 
   // 63
@@ -621,7 +622,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Thermal All"),
     N_("TC All"),
     N_("Time-average climb rate in all thermals."),
-    8, 2,
+    24, // Vario
+    22, // TC Gain
   },
 
   // 64
@@ -629,7 +631,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Distance Vario"),
     N_("D Vario"),
     NULL,
-    8, 2,
+    2, // TC 30s
+    44, // Netto
   },
 
   // 65
@@ -641,7 +644,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 #endif
     N_("Battery"),
     N_("Displays percentage of device battery remaining (where applicable) and status/voltage of external power supply."),
-    49, 26,
+    75, // CPU
+    75, // CPU
   },
 
   // 66
@@ -649,7 +653,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Final GR"),
     N_("Fin GR"),
     N_("Geometric gradient to the arrival height above the final waypoint. This is not adjusted for total energy."),
-    38, 5,
+    38, // Next LD
+    19, // Fin LD
   },
 
   // 67
@@ -657,7 +662,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Alternate1 name"),
     N_("Altrn 1"),
     N_("Displays name and bearing to the best alternate landing location."),
-    36, 46,
+    68, // Altern2 name
+    69, // Altern1 GR
   },
 
   // 68
@@ -665,7 +671,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Alternate2 name"),
     N_("Altrn 2"),
     N_("Displays name and bearing to the second alternate landing location."),
-    36, 46,
+    69, // Altern1 GR
+    67, // Altern1 name
   },
 
   // 69 
@@ -673,7 +680,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Alternate1 GR"),
     N_("Altrn1 GR"),
     N_("Geometric gradient to the arrival height above the best alternate. This is not adjusted for total energy."),
-    36, 46,
+    67, // Altern1 name
+    68, // Altern2 name
   },
 
   // 70
@@ -685,47 +693,52 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     33, // H Baro
   },
 
-  // 71 TODO FIX those 19,4 values
+  // 71
   {
     N_("L/D Average"),
     N_("L/D Avg"),
     N_("The distance made in the configured period of time , divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of LD the value is shown as +++ . You can configure the period of averaging in the Special config menu. Suggested values for this configuration are 60, 90 or 120: lower values will be closed to LD INST, and higher values will be closed to LD Cruise. Notice that the distance is NOT the straight line between your old and current position: it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling. "),
-    19, 4,
+    4, // LD Inst
+    53, // LD Vario
   },
 
-  // 72 //
+  // 72
   {
     N_("Experimental1"),
     N_("Exp1"),
     NULL,
-    8, 2,
+    74, // Exp2
+    74, // Exp2
   },
 
-  // 73 //
+  // 73
   {
     N_("Online Contest Distance"),
     N_("OLC"),
     NULL,
-    8, 2,
+    11, // WP Dist
+    60, // Home Dis
   },
 
-  // 74 //
+  // 74
   {
     N_("Experimental2"),
     N_("Exp2"),
     NULL,
-    8, 2,
+    72, // Exp1
+    72, // Exp1
   },
 
-  // 75 //
+  // 75
   {
     N_("CPU Load"),
     N_("CPU"),
     N_("CPU load consumed by XCSoar averaged over 5 seconds."),
-    8, 2,
+    65, // Battery
+    65, // Battery
   },
 
-  // 76 //
+  // 76
   {
     N_("Next Altitude Arrival"),
     N_("WP AltA"),
