@@ -221,18 +221,17 @@ GlueMapWindow::on_mouse_up(int x, int y)
     break;
   }
 
-  if (!SettingsMap().TargetPan) {
-    if(!dragOverMinDist && (click_time < 1000) ) {
+  if (!dragOverMinDist && !SettingsMap().TargetPan) {
+    if (click_time < 1000) {
       // click less then one second -> open nearest waypoint details
       if (way_points != NULL &&
           PopupNearestWaypointDetails(*way_points, drag_start_geopoint,
                                       visible_projection.DistancePixelsToMeters(Layout::Scale(10)),
                                       true))
         return true;
-    }
-    else {
+    } else {
       // click more then one second -> open nearest airspace details
-      if (!dragOverMinDist && (airspace_database != NULL) &&
+      if (airspace_database != NULL &&
           AirspaceDetailsAtPoint(drag_start_geopoint))
         return true;
     }
