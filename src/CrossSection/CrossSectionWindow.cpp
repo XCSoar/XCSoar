@@ -120,7 +120,8 @@ public:
 
     // Select pens and brushes
     const Brush &brush = Graphics::GetAirspaceBrushByClass(type, settings_map);
-    canvas.set_text_color(Graphics::GetAirspaceColourByClass(type, settings_map));
+    canvas.set_text_color(light_color(
+        Graphics::GetAirspaceColourByClass(type, settings_map)));
 
     RECT rcd;
     // Calculate top and bottom coordinate
