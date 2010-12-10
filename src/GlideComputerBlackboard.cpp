@@ -62,6 +62,9 @@ GlideComputerBlackboard::ResetFlight(const bool full)
   */
 
   if (full) {
+    gps_info.Time = fixed_zero;
+    gps_info.BaroAltitudeAvailable = false;
+
     calculated_info.timeCruising = fixed_zero;
     calculated_info.timeCircling = fixed_zero;
     calculated_info.TotalHeightClimb = fixed_zero;
@@ -162,7 +165,7 @@ GlideComputerBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info)
 {
   _time_retreated = false;
 
-  if (nmea_info.Time < gps_info.Time) {
+  if (!positive(gps_info.Time) || nmea_info.Time < gps_info.Time) {
     // backwards in time, so reset last
     last_gps_info = nmea_info;
     last_calculated_info = calculated_info;
