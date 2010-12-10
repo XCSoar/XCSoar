@@ -1,3 +1,9 @@
+xcsoar (6.0~beta2) unstable; urgency=low
+
+  * new release
+
+ -- Max Kellermann <max@duempel.org>  Fri, 10 Dec 2010 18:00:23 +0100
+
 xcsoar (6.0~beta1) unstable; urgency=low
 
   * initial debian package
