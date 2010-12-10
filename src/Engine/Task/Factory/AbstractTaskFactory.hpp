@@ -144,7 +144,7 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    *
    * @return True on success
    */
-  bool replace(OrderedTaskPoint* tp, const unsigned position,
+  bool replace(const OrderedTaskPoint &tp, const unsigned position,
                const bool auto_mutate = true);
 
   /**
@@ -157,7 +157,7 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    *
    * @return True if operation successful
    */
-  bool append(OrderedTaskPoint *new_tp, const bool auto_mutate = true);
+  bool append(const OrderedTaskPoint &new_tp, const bool auto_mutate = true);
 
   /**
    * Insert taskpoint to ordered task.  It is the
@@ -170,7 +170,7 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    *
    * @return True if operation successful
    */
-  bool insert(OrderedTaskPoint *new_tp, const unsigned position, 
+  bool insert(const OrderedTaskPoint &new_tp, const unsigned position,
               const bool auto_mutate = true);
 
   /**
@@ -424,7 +424,7 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    * @return Type of supplied point
    */
   gcc_pure
-  LegalPointType_t getType(const OrderedTaskPoint* point) const;
+  LegalPointType_t getType(const OrderedTaskPoint &point) const;
 
   /**
    * Determines whether task is closed (finish same as start)
@@ -519,7 +519,8 @@ protected:
    * @return True if candidate is valid at the position
    */
   gcc_pure
-  virtual bool validType(OrderedTaskPoint *new_tp, unsigned position) const;
+  virtual bool validType(const OrderedTaskPoint &new_tp,
+                         unsigned position) const;
 
   /** task managed by this factory */
   OrderedTask &m_task;

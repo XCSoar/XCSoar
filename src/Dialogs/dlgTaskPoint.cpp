@@ -285,7 +285,7 @@ RefreshView()
   WndButton* wb;
   wb = ((WndButton*)wf->FindByName(_T("butType")));
   if (wb)
-    wb->SetCaption(OrderedTaskPointName(ordered_task->get_factory().getType(tp)));
+    wb->SetCaption(OrderedTaskPointName(ordered_task->get_factory().getType(*tp)));
   
   wb = ((WndButton*)wf->FindByName(_T("butDetails")));
   if (wb)

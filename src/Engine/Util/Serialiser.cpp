@@ -88,7 +88,8 @@ Serialiser::deserialise_point(OrderedTask& data)
   } 
 
   if (pt != NULL) {
-    fact.append(pt,false);
+    fact.append(*pt, false);
+    delete pt;
   }
 
   delete wp;

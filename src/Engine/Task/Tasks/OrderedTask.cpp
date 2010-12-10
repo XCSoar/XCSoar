@@ -449,20 +449,20 @@ OrderedTask::remove(const unsigned position)
 }
 
 bool 
-OrderedTask::append(OrderedTaskPoint* new_tp)
+OrderedTask::append(const OrderedTaskPoint &new_tp)
 {
   if (/* is the new_tp allowed in this context? */
-      (!tps.empty() && !new_tp->predecessor_allowed()) ||
+      (!tps.empty() && !new_tp.predecessor_allowed()) ||
       /* can a tp be appended after the last one? */
       (tps.size() >= 1 && !tps[tps.size() - 1]->successor_allowed()))
     return false;
 
-  tps.push_back(new_tp);
+  tps.push_back(new_tp.clone(task_behaviour, m_ordered_behaviour));
   if (tps.size() > 1)
     set_neighbours(tps.size() - 2);
   else {
     // give it a value when we have one tp so it is not uninitialised
-    m_location_min_last = new_tp->get_location();
+    m_location_min_last = new_tp.get_location();
   }
 
   set_neighbours(tps.size() - 1);
@@ -471,15 +471,15 @@ OrderedTask::append(OrderedTaskPoint* new_tp)
 }
 
 bool 
-OrderedTask::insert(OrderedTaskPoint* new_tp, 
+OrderedTask::insert(const OrderedTaskPoint &new_tp,
                     const unsigned position)
 {
   if (position >= tps.size())
     return append(new_tp);
 
   if (/* is the new_tp allowed in this context? */
-      (position > 0 && !new_tp->predecessor_allowed()) ||
-      !new_tp->successor_allowed() ||
+      (position > 0 && !new_tp.predecessor_allowed()) ||
+      !new_tp.successor_allowed() ||
       /* can a tp be inserted at this position? */
       (position > 0 && !tps[position - 1]->successor_allowed()) ||
       !tps[position]->predecessor_allowed())
@@ -488,7 +488,8 @@ OrderedTask::insert(OrderedTaskPoint* new_tp,
   if (activeTaskPoint >= position)
     activeTaskPoint++;
 
-  tps.insert(tps.begin() + position, new_tp);
+  tps.insert(tps.begin() + position,
+             new_tp.clone(task_behaviour, m_ordered_behaviour));
 
   if (position)
     set_neighbours(position - 1);
@@ -501,23 +502,23 @@ OrderedTask::insert(OrderedTaskPoint* new_tp,
 }
 
 bool 
-OrderedTask::replace(OrderedTaskPoint* new_tp, 
+OrderedTask::replace(const OrderedTaskPoint &new_tp,
                      const unsigned position)
 {
   if (position >= tps.size())
     return false;
 
-  if (tps[position]->equals(new_tp))
+  if (tps[position]->equals(&new_tp))
     // nothing to do
     return true;
 
   /* is the new_tp allowed in this context? */
-  if ((position > 0 && !new_tp->predecessor_allowed()) ||
-      (position + 1 < tps.size() && !new_tp->successor_allowed()))
+  if ((position > 0 && !new_tp.predecessor_allowed()) ||
+      (position + 1 < tps.size() && !new_tp.successor_allowed()))
     return false;
 
   delete tps[position];
-  tps[position] = new_tp;
+  tps[position] = new_tp.clone(task_behaviour, m_ordered_behaviour);
 
   if (position)
     set_neighbours(position - 1);
@@ -934,7 +935,7 @@ OrderedTask::clone(TaskEvents &te,
 
   new_task->set_factory(factory_mode);
   for (unsigned i = 0; i < tps.size(); ++i) {
-    new_task->append(tps[i]->clone(tb, new_task->m_ordered_behaviour));
+    new_task->append(*tps[i]);
   }
   new_task->activeTaskPoint = activeTaskPoint;
   new_task->update_geometry();
@@ -949,7 +950,7 @@ OrderedTask::check_duplicate_waypoints(Waypoints& waypoints)
     Waypoint wp(tps[i]->get_waypoint());
     bool this_changed = !waypoints.find_duplicate(wp);
     changed |= this_changed;
-    replace(tps[i]->clone(task_behaviour, m_ordered_behaviour, &wp), i);
+    replace(*tps[i], i);
   }
 
   if (changed)
@@ -978,11 +979,11 @@ OrderedTask::commit(const OrderedTask& that)
   for (unsigned i = 0; i < that.task_size(); ++i) {
     if (i >= task_size()) {
       // that task is larger than this
-      append(that.tps[i]->clone(task_behaviour, m_ordered_behaviour));
+      append(*that.tps[i]);
       modified = true;
     } else if (!tps[i]->equals(that.tps[i])) {
       // that task point is changed
-      replace(that.tps[i]->clone(task_behaviour, m_ordered_behaviour), i);
+      replace(*that.tps[i], i);
       modified = true;
     }
   }
@@ -1005,7 +1006,9 @@ OrderedTask::relocate(const unsigned position, const Waypoint& waypoint)
   OrderedTaskPoint *new_tp = tps[position]->clone(task_behaviour,
                                                   m_ordered_behaviour,
                                                   &waypoint);
-  return replace(new_tp, position);
+  bool success = replace(*new_tp, position);
+  delete new_tp;
+  return success;
 }
 
 OrderedTask::Factory_t 

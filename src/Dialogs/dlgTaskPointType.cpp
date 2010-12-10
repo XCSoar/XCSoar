@@ -51,7 +51,7 @@ static void OnCloseClicked(WndButton &Sender)
 static AbstractTaskFactory::LegalPointType_t
 get_point_type() 
 {
-  return ordered_task->get_factory().getType(point);
+  return ordered_task->get_factory().getType(*point);
 }
 
 
@@ -113,8 +113,12 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type)
 
     if (point) {
       point = factory.createPoint(type, point->get_waypoint());
-      if (factory.replace(point, active_index, true))
+      if (point == NULL)
+        return false;
+
+      if (factory.replace(*point, active_index, true))
         task_modified = true;
+      delete point;
     } else {
       if (factory.validFinishType(type) &&
           ordered_task->get_ordered_task_behaviour().is_closed)
@@ -130,8 +134,13 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type)
         return false;
 
       point = factory.createPoint(type, *way_point);
-      if (point && factory.append(point, true))
+      if (point == NULL)
+        return false;
+
+      if (factory.append(*point, true))
         task_modified = true;
+
+      delete point;
     }
     return true;
   }

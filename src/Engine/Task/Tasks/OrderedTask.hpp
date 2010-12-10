@@ -234,7 +234,7 @@ public:
    *
    * @return True on success
    */
-  bool insert(OrderedTaskPoint* tp, const unsigned position);
+  bool insert(const OrderedTaskPoint &tp, const unsigned position);
 
   /**
    * Replace taskpoint.
@@ -247,7 +247,7 @@ public:
    *
    * @return True on success
    */
-  bool replace(OrderedTaskPoint* tp, const unsigned position);
+  bool replace(const OrderedTaskPoint &tp, const unsigned position);
 
   /**
    * Append taskpoint to end of task.  May fail if the candidate
@@ -259,7 +259,7 @@ public:
    *
    * @return True on success
    */
-  bool append(OrderedTaskPoint* tp);
+  bool append(const OrderedTaskPoint &tp);
 
   /**
    * Remove task point at specified position.  Note that

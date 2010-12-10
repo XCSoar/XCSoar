@@ -330,10 +330,10 @@ insert_in_task(const Waypoint &wp)
   if (tp == NULL)
     return UNMODIFIED;
 
-  if (!task->insert(tp, i)) {
-    delete tp;
+  bool success = task->insert(*tp, i);
+  delete tp;
+  if (!success)
     return UNMODIFIED;
-  }
 
   if (!task->check_task())
     return INVALID;
@@ -393,10 +393,11 @@ append_to_task(const Waypoint &wp)
   if (tp == NULL)
     return UNMODIFIED;
 
-  if (!(i >= 0 ? task->insert(tp, i) : task->append(tp))) {
-    delete tp;
+  bool success = i >= 0 ? task->insert(*tp, i) : task->append(*tp);
+  delete tp;
+
+  if (!success)
     return UNMODIFIED;
-  }
 
   if (!task->check_task())
     return INVALID;

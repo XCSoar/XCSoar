@@ -76,7 +76,7 @@ IntermediatePoint*
 AbstractTaskFactory::createIntermediate(const Waypoint &wp) const
 {
   if (get_ordered_task_behaviour().homogeneous_tps && (m_task.task_size()>1)) {
-    LegalPointType_t type = getType(m_task.get_tp(1));
+    LegalPointType_t type = getType(*m_task.get_tp(1));
     if (validIntermediateType(type))
       return createIntermediate(type, wp);
   }
@@ -90,11 +90,11 @@ AbstractTaskFactory::createFinish(const Waypoint &wp) const
 }
 
 AbstractTaskFactory::LegalPointType_t 
-AbstractTaskFactory::getType(const OrderedTaskPoint* point) const
+AbstractTaskFactory::getType(const OrderedTaskPoint &point) const
 {
-  const ObservationZonePoint* oz = point->get_oz();
+  const ObservationZonePoint* oz = point.get_oz();
 
-  switch (point->type) {
+  switch (point.type) {
   case TaskPoint::START:
     switch (oz->shape) {
     case ObservationZonePoint::FAI_SECTOR:
@@ -246,10 +246,9 @@ AbstractTaskFactory::createFinish(const LegalPointType_t type,
 }
 
 bool 
-AbstractTaskFactory::append(OrderedTaskPoint *new_tp, const bool auto_mutate)
+AbstractTaskFactory::append(const OrderedTaskPoint &new_tp,
+                            const bool auto_mutate)
 {
-  if (!new_tp)
-    return false;
   if (m_task.is_max_size())
     return false;
 
@@ -261,10 +260,10 @@ AbstractTaskFactory::append(OrderedTaskPoint *new_tp, const bool auto_mutate)
         return m_task.append(new_tp);
       } else {
         // candidate must be transformed into a startpoint
-        StartPoint* sp = createStart(new_tp->get_waypoint());
-        // delete original since we own it now
-        delete new_tp;
-        return m_task.append(sp);
+        StartPoint* sp = createStart(new_tp.get_waypoint());
+        bool success = m_task.append(*sp);
+        delete sp;
+        return success;
       }
     }
 
@@ -275,7 +274,8 @@ AbstractTaskFactory::append(OrderedTaskPoint *new_tp, const bool auto_mutate)
       IntermediatePoint* sp = createIntermediate(m_task.getTaskPoint(
           m_task.task_size() - 1)->get_waypoint());
 
-      m_task.replace(sp, m_task.task_size()-1);
+      m_task.replace(*sp, m_task.task_size()-1);
+      delete sp;
     }
 
     if (validType(new_tp, m_task.task_size()))
@@ -283,59 +283,51 @@ AbstractTaskFactory::append(OrderedTaskPoint *new_tp, const bool auto_mutate)
       return m_task.append(new_tp);
 
     // this point must be mutated into a finish
-    FinishPoint* sp = createFinish(new_tp->get_waypoint());
-    // delete original since we own it now
-    delete new_tp;
-    return m_task.append(sp);
+    FinishPoint* sp = createFinish(new_tp.get_waypoint());
+    bool success = m_task.append(*sp);
+    delete sp;
+    return success;
   }
 
   return m_task.append(new_tp);
 }
 
 bool 
-AbstractTaskFactory::replace(OrderedTaskPoint *new_tp, const unsigned position,
+AbstractTaskFactory::replace(const OrderedTaskPoint &new_tp,
+                             const unsigned position,
                              const bool auto_mutate)
 {
-  if (!new_tp)
-    return false;
-
   if (auto_mutate) {
     if (validType(new_tp, position))
       // ok to replace directly
       return m_task.replace(new_tp, position);
 
     // will need to convert type of candidate
+    OrderedTaskPoint *tp;
     if (position == 0) {
       // candidate must be transformed into a startpoint
-      StartPoint* sp = createStart(new_tp->get_waypoint());
-      // delete original since we own it now
-      delete new_tp;
-      return m_task.replace(sp, position);
+      tp = createStart(new_tp.get_waypoint());
     } else if (is_position_finish(position) && (position + 1 == m_task.task_size())) {
       // this point must be mutated into a finish
-      FinishPoint* sp = createFinish(new_tp->get_waypoint());
-      // delete original since we own it now
-      delete new_tp;
-      return m_task.replace(sp, position);
+      tp = createFinish(new_tp.get_waypoint());
     } else {
       // this point must be mutated into an intermediate
-      IntermediatePoint* sp = createIntermediate(new_tp->get_waypoint());
-      // delete original since we own it now
-      delete new_tp;
-      return m_task.replace(sp, position);
+      tp = createIntermediate(new_tp.get_waypoint());
     }
+
+    bool success = m_task.replace(*tp, position);
+    delete tp;
+    return success;
   }
 
   return m_task.replace(new_tp, position);
 }
 
 bool 
-AbstractTaskFactory::insert(OrderedTaskPoint *new_tp, const unsigned position,
+AbstractTaskFactory::insert(const OrderedTaskPoint &new_tp,
+                            const unsigned position,
                             const bool auto_mutate)
 {
-  if (!new_tp)
-    return false;
-
   if (position >= m_task.task_size())
     return append(new_tp, auto_mutate);
 
@@ -345,27 +337,28 @@ AbstractTaskFactory::insert(OrderedTaskPoint *new_tp, const unsigned position,
         // old start must be mutated into an intermediate point
         IntermediatePoint* sp =
             createIntermediate(m_task.getTaskPoint(0)->get_waypoint());
-        m_task.replace(sp, 0);
+        m_task.replace(*sp, 0);
+        delete sp;
       }
       if (validType(new_tp, 0)) {
         return m_task.insert(new_tp, 0);
       } else {
         // candidate must be transformed into a startpoint
-        StartPoint* sp = createStart(new_tp->get_waypoint());
-        // delete original since we own it now
-        delete new_tp;
-        return m_task.insert(sp, 0);
+        StartPoint* sp = createStart(new_tp.get_waypoint());
+        bool success = m_task.insert(*sp, 0);
+        delete sp;
+        return success;
       }
     } else {
-      if (new_tp->is_intermediate()) {
+      if (new_tp.is_intermediate()) {
         // candidate ok for direct insertion
         return m_task.insert(new_tp, position);
       } else {
         // candidate must be transformed into a intermediatepoint
-        IntermediatePoint* sp = createIntermediate(new_tp->get_waypoint());
-        // delete original since we own it now
-        delete new_tp;
-        return m_task.insert(sp, position);
+        IntermediatePoint* sp = createIntermediate(new_tp.get_waypoint());
+        bool success = m_task.insert(*sp, position);
+        delete sp;
+        return success;
       }
     }
   }
@@ -388,13 +381,18 @@ AbstractTaskFactory::remove(const unsigned position,
       } else {
         // create new start point from next point
         StartPoint* sp = createStart(m_task.getTaskPoint(1)->get_waypoint());
-        return m_task.remove(0) && m_task.replace(sp, 0);
+        bool success = m_task.remove(0) && m_task.replace(*sp, 0);
+        delete sp;
+        return success;
       }
     } else if (is_position_finish(position - 1) && (position + 1 == m_task.task_size())) {
       // create new finish from previous point
       FinishPoint* sp = createFinish(
           m_task.getTaskPoint(position - 1)->get_waypoint());
-      return m_task.remove(position) && m_task.replace(sp, position - 1);
+      bool success = m_task.remove(position) &&
+        m_task.replace(*sp, position - 1);
+      delete sp;
+      return success;
     } else {
       // intermediate point deleted, nothing special to do
       return m_task.remove(position);
@@ -422,14 +420,10 @@ AbstractTaskFactory::swap(const unsigned position, const bool auto_mutate)
     return false;
 
   const OrderedTaskPoint* orig = m_task.getTaskPoint(position+1);
-  OrderedTaskPoint* copy = orig->clone(m_behaviour, 
-                                       get_ordered_task_behaviour(),
-                                       NULL);
-  bool retval = insert(copy, position, auto_mutate);
-  if (!retval) {
-    delete copy;
+  bool retval = insert(*orig, position, auto_mutate);
+  if (!retval)
     return false;
-  }
+
   return remove(position+2, auto_mutate);
 }
 
@@ -514,9 +508,10 @@ AbstractTaskFactory::validAbstractType(LegalAbstractPointType_t type,
 }
 
 bool 
-AbstractTaskFactory::validType(OrderedTaskPoint *new_tp, unsigned position) const
+AbstractTaskFactory::validType(const OrderedTaskPoint &new_tp,
+                               unsigned position) const
 {
-  switch (new_tp->type) {
+  switch (new_tp.type) {
   case TaskPoint::START:
     return validAbstractType(POINT_START, position) &&
         validStartType(getType(new_tp));
@@ -653,7 +648,7 @@ AbstractTaskFactory::getValidIntermediateTypes(unsigned position) const
 
   if (get_ordered_task_behaviour().homogeneous_tps 
       && (position>1) && (m_task.task_size()>1)) {
-    LegalPointType_t type = getType(m_task.get_tp(1));
+    LegalPointType_t type = getType(*m_task.get_tp(1));
     if (validIntermediateType(type)) {
       v.push_back(type);
       return v;
@@ -706,14 +701,14 @@ AbstractTaskFactory::is_homogeneous() const
   const unsigned size = m_task.task_size();
 
   if (size > 2) {
-    LegalPointType_t homogtype = getType(m_task.get_tp(1));
+    LegalPointType_t homogtype = getType(*m_task.get_tp(1));
 
     for (unsigned i = 2; i < size; i++) {
       OrderedTaskPoint *tp = m_task.get_tp(i);
       if ((tp->type == TaskPoint::FINISH)) {
         ; // don't check a valid finish point
       } else {
-        if (getType(tp) != homogtype) {
+        if (getType(*tp) != homogtype) {
           valid = false;
           break;
         }
@@ -742,21 +737,19 @@ AbstractTaskFactory::mutate_tps_to_task_type()
 
   for (unsigned int i = 0; i < m_task.task_size(); i++) {
     OrderedTaskPoint *tp = m_task.get_tp(i);
-    if (!validType(tp, i)) {
+    if (!validType(*tp, i)) {
       if ((tp->type == TaskPoint::FINISH) &&
           (i == m_task.task_size() - 1) && is_position_finish(i)) {
         FinishPoint *fp = createFinish(tp->get_waypoint());
         assert(fp);
-        if (replace(fp, i, false))
+        if (replace(*fp, i, false))
           changed = true;
-        else
-          delete fp;
+        delete fp;
       } else {
         OrderedTaskPoint *tpnew = createIntermediate(tp->get_waypoint());
-        if (replace(tpnew, i, true))
+        if (replace(*tpnew, i, true))
           changed = true;
-        else
-          delete tpnew;
+        delete tpnew;
       }
     }
   }
@@ -784,7 +777,8 @@ AbstractTaskFactory::mutate_closed_finish_per_task_type()
         FinishPoint *fp = createFinish(m_task.get_tp(0)->get_waypoint());
         assert(fp);
         remove(m_task.task_size() - 1, false);
-        append(fp, false);
+        append(*fp, false);
+        delete fp;
         changed = true;
       }
     }
