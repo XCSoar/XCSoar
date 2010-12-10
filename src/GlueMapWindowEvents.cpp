@@ -69,6 +69,9 @@ GlueMapWindow::on_mouse_double(int x, int y)
 bool
 GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
 {
+  if (!dragOverMinDist &&
+      (fabs(drag_start.x - x) + fabs(drag_start.y - y)) > Layout::Scale(10))
+    dragOverMinDist = true;
 
   switch (drag_mode) {
   case DRAG_NONE:
@@ -83,10 +86,6 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
     return true;
 
   case DRAG_PAN:
-
-    if (!dragOverMinDist &&
-        (fabs(drag_start.x - x) + fabs(drag_start.y - y)) > Layout::Scale(10))
-      dragOverMinDist = true;
     XCSoarInterface::SetSettingsMap().PanLocation =
       drag_projection.GetGeoLocation() + drag_start_geopoint
       - drag_projection.ScreenToGeo(x, y);
