@@ -101,10 +101,10 @@ def __gather_tiles(dir_data, dir_temp, bounds):
     print "Gathering terrain tiles ..."
 
     # Calculate rounded bounds
-    lat_start = int(math.floor(bounds.bottom.value_degrees() / 5.0)) * 5
-    lon_start = int(math.floor(bounds.left.value_degrees() / 5.0)) * 5
-    lat_end = int(math.ceil(bounds.top.value_degrees() / 5.0)) * 5
-    lon_end = int(math.ceil(bounds.right.value_degrees() / 5.0)) * 5
+    lat_start = int(math.floor(bounds.bottom / 5.0)) * 5
+    lon_start = int(math.floor(bounds.left / 5.0)) * 5
+    lat_end = int(math.ceil(bounds.top / 5.0)) * 5
+    lon_end = int(math.ceil(bounds.right / 5.0)) * 5
 
     tiles = []
     # Iterate through latitude and longitude in 5 degree interval
@@ -159,10 +159,10 @@ def __create(dir_temp, tiles, arcseconds_per_pixel, bounds):
     if use_world_file == True:
         args.extend(["-co", "TFW=YES"])
 
-    args.extend(["-te", str(bounds.left.value_degrees()),
-                str(bounds.bottom.value_degrees()),
-                str(bounds.right.value_degrees()),
-                str(bounds.top.value_degrees())])
+    args.extend(["-te", str(bounds.left),
+                str(bounds.bottom),
+                str(bounds.right),
+                str(bounds.top)])
 
     args.extend(tiles)
     args.append(output_file)
@@ -210,10 +210,10 @@ def __convert(dir_temp, input_file, rc):
 
     if not use_world_file:
         args.extend(["-O", "xcsoar=1",
-                     "-O", "lonmin=" + str(rc.left.value_degrees()),
-                     "-O", "lonmax=" + str(rc.right.value_degrees()),
-                     "-O", "latmax=" + str(rc.top.value_degrees()),
-                     "-O", "latmin=" + str(rc.bottom.value_degrees())])
+                     "-O", "lonmin=" + str(rc.left),
+                     "-O", "lonmax=" + str(rc.right),
+                     "-O", "latmax=" + str(rc.top),
+                     "-O", "latmin=" + str(rc.bottom)])
 
 
     try:
@@ -241,10 +241,8 @@ def __cleanup(dir_temp):
             os.unlink(os.path.join(dir_temp, file))
 
 def create(bounds, arcseconds_per_pixel, dir_data, dir_temp):
-    dir_data = os.path.abspath(os.path.join(dir_data, "srtm"))
-    dir_temp = os.path.abspath(dir_temp)
-
-    if not os.access(dir_data, os.X_OK):
+    dir_data = os.path.join(dir_data, "srtm")
+    if not os.path.exists(dir_data):
         os.makedirs(dir_data)
 
     # Make sure the tiles are available

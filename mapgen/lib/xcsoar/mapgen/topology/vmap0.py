@@ -75,10 +75,10 @@ def __create_layer_from_map(bounds, layer, map_name, overwrite, dir_data, dir_te
     arg.extend(["-select", layer[3]])
 
     arg.extend(["-spat",
-                str(bounds.left.value_degrees()),
-                str(bounds.bottom.value_degrees()),
-                str(bounds.right.value_degrees()),
-                str(bounds.top.value_degrees())])
+                str(bounds.left),
+                str(bounds.bottom),
+                str(bounds.right),
+                str(bounds.top)])
 
     arg.append(dir_temp)
     arg.append(os.path.join(dir_data, map_name))
