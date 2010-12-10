@@ -73,7 +73,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const RECT &rc,
   int y = rc.bottom - Layout::FastScale(35);
   icon->draw(canvas, x, y);
 
-  x += icon->get_size().cx + Layout::FastScale(2);
+  x += icon->get_size().cx + Layout::FastScale(4);
   y = rc.bottom - Layout::FastScale(34);
 
   TextInBoxMode_t mode;
