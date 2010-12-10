@@ -50,7 +50,7 @@
                      // to handle unicode files
 #endif
 
-#include "xmlParser.h"
+#include "xmlParser.hpp"
 #include "Compatibility/string.h"
 
 #include <assert.h>
