@@ -1331,7 +1331,7 @@ XMLNode::openFileHelper(const char *lpszXML)
 }
 
 XMLNodeContents
-XMLNode::enumContents(int i)
+XMLNode::enumContents(int i) const
 {
   XMLNodeContents c;
   if (!d) {
@@ -1356,8 +1356,9 @@ XMLNode::enumContents(int i)
   return c;
 }
 
-void *
-XMLNode::enumContent(XMLNodeData *pEntry, int i, XMLElementType *nodeType)
+const void *
+XMLNode::enumContent(const XMLNodeData *pEntry, int i,
+                     XMLElementType *nodeType)
 {
   XMLElementType j = (XMLElementType)(pEntry->pOrder[i] & 3);
   *nodeType = j;
@@ -1376,7 +1377,7 @@ XMLNode::enumContent(XMLNodeData *pEntry, int i, XMLElementType *nodeType)
 }
 
 int
-XMLNode::nElement(XMLNodeData *pEntry)
+XMLNode::nElement(const XMLNodeData *pEntry)
 {
   return pEntry->nChild + pEntry->nText + pEntry->nAttribute;
 }
@@ -1394,7 +1395,8 @@ charmemset(LPTSTR dest, TCHAR c, int l)
 // This recurses through all subnodes then adds contents of the nodes to the
 // string.
 int
-XMLNode::CreateXMLStringR(XMLNodeData *pEntry, LPTSTR lpszMarker, int nFormat)
+XMLNode::CreateXMLStringR(const XMLNodeData *pEntry, LPTSTR lpszMarker,
+                          int nFormat)
 {
   int nResult = 0;
   int cb;
@@ -1403,7 +1405,7 @@ XMLNode::CreateXMLStringR(XMLNodeData *pEntry, LPTSTR lpszMarker, int nFormat)
   int nChildFormat = -1;
   int bHasChildren = FALSE;
   int i;
-  XMLAttribute * pAttr;
+  const XMLAttribute *pAttr;
 
   assert(pEntry);
 
@@ -1499,7 +1501,7 @@ XMLNode::CreateXMLStringR(XMLNodeData *pEntry, LPTSTR lpszMarker, int nFormat)
   // Enumerate through remaining children
   nIndex = nElement(pEntry);
   XMLElementType nodeType;
-  void *pChild;
+  const void *pChild;
   for (i = 0; i < nIndex; i++) {
     pChild = enumContent(pEntry, i, &nodeType);
     switch (nodeType) {
@@ -1870,8 +1872,8 @@ XMLNode::getChildNode(int i)
   return d->pChild[i];
 }
 
-char
-XMLNode::isDeclaration()
+bool
+XMLNode::isDeclaration() const
 {
   if (!d)
     return (char)0;
@@ -1879,14 +1881,14 @@ XMLNode::isDeclaration()
   return d->isDeclaration;
 }
 
-char
-XMLNode::isEmpty()
+bool
+XMLNode::isEmpty() const
 {
   return (d == NULL);
 }
 
 int
-XMLNode::nElement()
+XMLNode::nElement() const
 {
   if (!d)
     return 0;

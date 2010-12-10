@@ -28,6 +28,8 @@
 #ifndef __INCLUDE_XML_NODE__
 #define __INCLUDE_XML_NODE__
 
+#include "Compiler.h"
+
 #include <stdlib.h>
 #include <tchar.h>
 
@@ -167,12 +169,18 @@ public:
                                                     //     (return a NULL if failing)
   int nAttribute() const;                           // nbr of attribute
   LPTSTR createXMLString(int nFormat, int *pnSize); // create XML string starting from current XMLNode
-  XMLNodeContents enumContents(int i);              // enumerate all the different contents (child,text,
+  XMLNodeContents enumContents(int i) const;        // enumerate all the different contents (child,text,
                                                     //     clear,attribute) of the current XMLNode. The order
                                                     //     is reflecting the order of the original file/string
-  int nElement();                                   // nbr of different contents for current node
-  char isEmpty();                                   // is this node Empty?
-  char isDeclaration();
+
+  gcc_pure
+  int nElement() const;                             // nbr of different contents for current node
+
+  gcc_pure
+  bool isEmpty() const;                             // is this node Empty?
+
+  gcc_pure
+  bool isDeclaration() const;
 
   // to allow shallow copy:
   ~XMLNode();
@@ -193,9 +201,13 @@ private:
   // these are functions used internally (don't bother about them):
   int ParseXMLElement(void *pXML);
   void addToOrder(int index, int type);
-  static int CreateXMLStringR(XMLNodeData *pEntry, LPTSTR lpszMarker, int nFormat);
-  static void *enumContent(XMLNodeData *pEntry,int i, XMLElementType *nodeType);
-  static int nElement(XMLNodeData *pEntry);
+  static int CreateXMLStringR(const XMLNodeData *pEntry, LPTSTR lpszMarker, int nFormat);
+  static const void *enumContent(const XMLNodeData *pEntry, int i,
+                                 XMLElementType *nodeType);
+
+  gcc_pure
+  static int nElement(const XMLNodeData *pEntry);
+
   static void removeOrderElement(XMLNodeData *d, XMLElementType t, int index);
 } XMLNode;
 
