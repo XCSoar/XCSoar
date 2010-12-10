@@ -209,6 +209,7 @@ DeviceBlackboard::ProcessSimulation()
   ScopeLock protect(mutexBlackboard);
 
   SetBasic().gps.Simulator = true;
+  SetBasic().gps.MovementDetected = false;
 
   SetNAVWarning(false);
   SetBasic().Location = FindLatitudeLongitude(Basic().Location,
