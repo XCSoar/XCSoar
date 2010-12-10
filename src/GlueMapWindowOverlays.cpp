@@ -86,13 +86,13 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const RECT &rc,
 void
 GlueMapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
 {
-  int offset = -1;
+  int offset = 0;
 
   if (logger.isLoggerActive()) {
-    offset -= 7;
     bool flip = (Basic().DateTime.second % 2) == 0;
     MaskedIcon &icon = flip ? Graphics::hLogger : Graphics::hLoggerOff;
-    icon.draw(canvas, rc.right + IBLSCALE(offset), rc.bottom + IBLSCALE(-7));
+    offset = icon.get_size().cx;
+    icon.draw(canvas, rc.right - offset, rc.bottom - icon.get_size().cy);
   }
 
   MaskedIcon *bmp;
@@ -106,10 +106,10 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
   else
     bmp = &Graphics::hCruise;
 
-  offset -= 25;
+  offset += bmp->get_size().cx + Layout::Scale(6);
 
-  bmp->draw(canvas, rc.right + IBLSCALE(offset),
-            rc.bottom + IBLSCALE(-21));
+  bmp->draw(canvas, rc.right - offset,
+            rc.bottom - bmp->get_size().cy - Layout::Scale(4));
 }
 
 void
