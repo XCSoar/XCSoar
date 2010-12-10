@@ -9,12 +9,7 @@ from xcsoar.mapgen.filelist import FileList
 
 cmd_gdal_warp = "gdalwarp"
 cmd_geojasper = "geojasper"
-#gather_from_server = None
-#gather_from_server = "ftp://srtm.csi.cgiar.org/SRTM_V41/SRTM_Data_GeoTiff/"
-#gather_from_server = "http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_V41/SRTM_Data_GeoTiff/"
-#gather_from_server = "http://droppr.org/srtm/v4.1/6_5x5_TIFs/"
-gather_from_server = "ftp://xftp.jrc.it/pub/srtmV4/tiff/"
-#gather_from_server = "http://webbuster.dyndns.info/xcsoar/mapgen_data/terrain/srtm/"
+gather_from_server = "http://download.xcsoar.org/mapgen/data/srtm3/"
 
 use_world_file = True
 

@@ -10,9 +10,7 @@ cmd_ogr2ogr = "ogr2ogr"
 cmd_7zip = "7za"
 cmd_shptree = "shptree"
 
-#gather_from_server = None
-gather_from_server = "http://gis-lab.info/data/vmap0/"
-#gather_from_server = "http://webbuster.dyndns.info/xcsoar/mapgen_data/topo/vmap0/"
+gather_from_server = "http://download.xcsoar.org/mapgen/data/vmap0/"
 
 __maps = [["eur", GeoRect(-35, 180, 90, 30)],
           ["noa", GeoRect(-180, 0, 90, -40)],
