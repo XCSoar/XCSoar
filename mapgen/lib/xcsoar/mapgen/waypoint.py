@@ -1,6 +1,6 @@
-from georect import GeoRect
-from angle import Angle
-from geopoint import GeoPoint
+from xcsoar.mapgen.georect import GeoRect
+from xcsoar.mapgen.angle import Angle
+from xcsoar.mapgen.geopoint import GeoPoint
 
 class Waypoint:
     def __init__(self):
@@ -26,6 +26,9 @@ class WaypointList:
 
     def entries(self):
         return self.__list
+
+    def append(self, wp):
+        self.__list.append(wp)
 
     def get_bounds(self):
         rc = GeoRect()
@@ -59,7 +62,7 @@ class WaypointList:
             wp.location.lon = self.__parse_winpilot_coordinate(fields[2]);
             wp.altitude = self.__parse_winpilot_altitude(fields[3]);
             wp.name = fields[5].strip();
-            self.__list.append(wp)
+            self.append(wp)
 
     def __parse_winpilot_altitude(self, str):
         str = str.lower()
@@ -72,12 +75,8 @@ class WaypointList:
 
     def __parse_winpilot_coordinate(self, str):
         str = str.lower()
-        if str.endswith("s") or str.endswith("w"):
-            negative = True;
-            str = str.rstrip("sw")
-        else:
-            negative = False;
-            str = str.rstrip("ne")
+        negative = str.endswith("s") or str.endswith("w")
+        str = str.rstrip("sw") if negative else str.rstrip("ne")
 
         str = str.split(":")
         if len(str) < 2:

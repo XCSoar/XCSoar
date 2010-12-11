@@ -5,7 +5,7 @@ from genshi.output import encode, get_serializer
 from genshi.template import Context, TemplateLoader
 
 loader = TemplateLoader(
-    os.path.join(os.path.dirname(__file__), 'templates'),
+    os.path.join(os.path.dirname(__file__), 'views'),
     auto_reload=True
 )
 

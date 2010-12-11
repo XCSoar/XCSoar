@@ -7,20 +7,24 @@ class Angle:
     @staticmethod
     def degrees(value):
         return Angle(value)
+
     @staticmethod
     def radians(value):
         return Angle(value / math.pi * 180)
+
     @staticmethod
     def dms(degrees, minutes, seconds = 0):
         return Angle(degrees + minutes / 60 + seconds / 3600)
 
     def set_degrees(self, value):
         self.__value = value
+
     def set_radians(self, value):
         self.__value = value / math.pi * 180;
 
     def value_degrees(self):
         return self.__value
+
     def value_radians(self):
         return self.__value / 180 * math.pi;
 

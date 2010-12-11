@@ -3,7 +3,8 @@ import os
 import subprocess
 import socket
 
-from georect import GeoRect
+from xcsoar.mapgen.georect import GeoRect
+from xcsoar.mapgen.filelist import FileList
 
 cmd_ogr2ogr = "ogr2ogr"
 cmd_7zip = "7za"
@@ -40,28 +41,26 @@ def __gather_map(dir_data, map_name):
         urllib.urlretrieve(gather_from_server + map_name + ".7z", zip_file)
 
     if not os.path.exists(zip_file):
-        return False
+        raise RuntimeError, "Failed to download " + map_name
 
     print "Decompressing map file " + map_name + ".7z ..."
     arg = [cmd_7zip, "x", "-o" + dir_data, zip_file]
-    p = subprocess.Popen(arg)
-    p.wait()
+
+    try:
+        p = subprocess.Popen(arg)
+        p.wait()
+    except Exception, e:
+        print "Executing " + str(arg) + " failed"
+        raise
 
     os.unlink(zip_file)
 
-    return True
-
-
-def __check_map(dir_data, map_name):
-    return os.path.exists(os.path.join(dir_data, map_name))
-
 def __create_layer_from_map(bounds, layer, map_name, overwrite, dir_data, dir_temp):
     if not isinstance(bounds, GeoRect):
-        return False
+        raise TypeError
 
-    if not __check_map(dir_data, map_name):
-        if not __gather_map(dir_data, map_name):
-            return False
+    if not os.path.exists(os.path.join(dir_data, map_name)):
+        __gather_map(dir_data, map_name)
 
     print "Reading map " + map_name + " ..."
     arg = [cmd_ogr2ogr]
@@ -91,23 +90,12 @@ def __create_layer_from_map(bounds, layer, map_name, overwrite, dir_data, dir_te
 
     try:
         p = subprocess.Popen(arg)
-    except OSError, WindowsError:
-        print ("There has been a problem running the ogr2ogr application "+
-               "that extracts the wanted topology features from the "
-               "source shapefiles!")
-        print ("Please check the \"cmd_ogr2ogr\" variable in the "+
-               "topology_vmap0 module and modify it if necessary.")
-        print "Current value: \""+cmd_ogr2ogr+"\""
-        return False
-
-    p.wait()
-
-    return True
+        p.wait()
+    except Exception, e:
+        print "Executing " + str(arg) + " failed"
+        raise
 
 def __create_layer_index(layer, dir_temp):
-    if not os.path.exists(os.path.join(dir_temp, layer[1] + ".shp")):
-        return False
-
     print "Generating index file for layer " + layer[1] + " ..."
     arg = [cmd_shptree]
 
@@ -115,17 +103,10 @@ def __create_layer_index(layer, dir_temp):
 
     try:
         p = subprocess.Popen(arg)
-    except OSError, WindowsError:
-        print ("There has been a problem running the shptree application "+
-               "that generates the topology index files!")
-        print ("Please check the \"cmd_shptree\" variable in the "+
-               "topology_vmap0 module and modify it if necessary.")
-        print "Current value: \""+cmd_shptree+"\""
-        return False
-
-    p.wait()
-
-    return True
+        p.wait()
+    except Exception, e:
+        print "Executing " + str(arg) + " failed"
+        raise
 
 def __create_layer(bounds, layer, maps, dir_data, dir_temp):
     print "Creating topology layer " + layer[1] + " ..."
@@ -134,22 +115,22 @@ def __create_layer(bounds, layer, maps, dir_data, dir_temp):
         __create_layer_from_map(bounds, layer, maps[i][0],
                                 i == 0, dir_data, dir_temp)
 
-    __create_layer_index(layer, dir_temp)
-
-    files = []
+    files = FileList()
     if os.path.exists(os.path.join(dir_temp, layer[1] + ".shp")):
-        files.append([os.path.join(dir_temp, layer[1] + ".shp"), False])
-        files.append([os.path.join(dir_temp, layer[1] + ".shx"), False])
-        files.append([os.path.join(dir_temp, layer[1] + ".dbf"), False])
-        files.append([os.path.join(dir_temp, layer[1] + ".prj"), False])
+        __create_layer_index(layer, dir_temp)
+
+        files.add(os.path.join(dir_temp, layer[1] + ".shp"), False)
+        files.add(os.path.join(dir_temp, layer[1] + ".shx"), False)
+        files.add(os.path.join(dir_temp, layer[1] + ".dbf"), False)
+        files.add(os.path.join(dir_temp, layer[1] + ".prj"), False)
 
     if os.path.exists(os.path.join(dir_temp, layer[1] + ".qix")):
-        files.append([os.path.join(dir_temp, layer[1] + ".qix"), False])
+        files.add(os.path.join(dir_temp, layer[1] + ".qix"), False)
 
     return files
 
 def __create_layers(bounds, maps, dir_data, dir_temp):
-    files = []
+    files = FileList()
     for layer in __layers:
         files.extend(__create_layer(bounds, layer, maps, dir_data, dir_temp))
 
@@ -176,6 +157,6 @@ def create(bounds, dir_data = "../data/", dir_temp = "../tmp/"):
 
     maps = __filter_maps(bounds)
     files = __create_layers(bounds, maps, dir_data, dir_temp)
-    files.append([__create_index_file(dir_temp), False])
+    files.add(__create_index_file(dir_temp), False)
 
     return files

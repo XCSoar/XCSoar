@@ -1,14 +1,15 @@
 import os.path
 import shutil
 from zipfile import ZipFile, ZIP_DEFLATED, ZIP_STORED
-from georect import GeoRect
-from waypoint_list import WaypointList
-import terrain_srtm
-import topology_vmap0
 import time
+from xcsoar.mapgen.terrain import srtm
+from xcsoar.mapgen.topology import vmap0
+from xcsoar.mapgen.georect import GeoRect
+from xcsoar.mapgen.waypoint import WaypointList
+from xcsoar.mapgen.filelist import FileList
 
-class MapGenerator:
-    def __init__(self, dir_data = "../data/", dir_temp = "../tmp/"):
+class Generator:
+    def __init__(self, dir_data, dir_temp):
         '''
         Constructor of the MapGenerator class
         @param dir_data: Path of the data folder
@@ -23,9 +24,7 @@ class MapGenerator:
             os.mkdir(self.__dir_temp)
 
         self.__bounds = None
-        self.__files = []
-
-        print "MapGenerator created"
+        self.__files = FileList()
 
     def add_information_file(self, title, author = "Unknown", credits = []):
         '''
@@ -33,8 +32,7 @@ class MapGenerator:
         '''
 
         if self.__bounds == None:
-            print "Please set bounds before calling add_information_file() !"
-            return False
+            raise RuntimeError, "Please set bounds before calling add_information_file() !"
 
         dst = os.path.abspath(self.__dir_temp + "/info.txt")
 
@@ -53,121 +51,87 @@ class MapGenerator:
 
         f.close()
 
-        self.__files.append([dst, True])
-
-        return True
+        self.__files.add(dst, True)
 
     def add_waypoint_file(self, filename):
         '''
         Adds a waypoint file to the map
         @param filename: The file that should be added
         '''
-        print "Adding waypoint file ..."
+        print "Adding waypoint file..."
         if not os.path.exists(filename):
-            print "failed! (" + filename + " not found!)"
-            return False
+            raise RuntimeError, "Waypoint file " + filename + " not found!"
 
         dst = os.path.abspath(self.__dir_temp + "/waypoints.xcw")
         shutil.copy(filename, dst)
         if not os.path.exists(dst):
-            print ("failed! (Copying " + os.path.basename(filename) +
-                   " to " + dst + " not possible!)")
-            return False
+            raise RuntimeError, "Copying " + os.path.basename(filename) + " to " + dst + " failed!"
 
-        self.__files.append([dst, True])
-
-        return True
+        self.__files.add(dst, True)
 
     def add_waypoint_details_file(self, filename):
         '''
         Adds a waypoint details file to the map
         @param filename: The file that should be added
         '''
-        print "Adding waypoint details file ..."
+        print "Adding waypoint details file..."
         if not os.path.exists(filename):
-            print "failed! (" + filename + " not found!)"
-            return False
+            raise RuntimeError, "Waypoint details file " + filename + " not found!"
 
         dst = os.path.abspath(self.__dir_temp + "/airfields.txt")
         shutil.copy(filename, dst)
         if not os.path.exists(dst):
-            print ("failed! (Copying " + os.path.basename(filename) +
-                   " to " + dst + " not possible!)")
-            return False
+            raise RuntimeError, "Copying " + os.path.basename(filename) + " to " + dst + " failed!"
 
-        self.__files.append([dst, True])
-
-        return True
+        self.__files.add(dst, True)
 
     def add_airspace_file(self, filename):
         '''
         Adds a airspace file to the map
         @param filename: The file that should be added
         '''
-        print "Adding airspace file ..."
+        print "Adding airspace file..."
         if not os.path.exists(filename):
-            print "failed! (" + filename + " not found!)"
-            return False
+            raise RuntimeError, "Airspace file " + filename + " not found!"
 
         dst = os.path.abspath(self.__dir_temp + "/airspace.txt")
         shutil.copy(filename, dst)
         if not os.path.exists(dst):
-            print ("failed! (Copying " + os.path.basename(filename) +
-                   " to " + dst + " not possible!)")
-            return False
+            raise RuntimeError, "Copying " + os.path.basename(filename) + " to " + dst + " failed!"
 
-        self.__files.append([dst, True])
-
-        return True
+        self.__files.add(dst, True)
 
     def add_topology(self, bounds = None):
-        print "Adding topology ..."
+        print "Adding topology..."
 
         if bounds == None:
             if self.__bounds == None:
-                print "failed! (Boundaries undefined!)"
-                return False
+                raise RuntimeError, "Boundaries undefined!"
 
             bounds = self.__bounds
 
-        topology_files = topology_vmap0.create(bounds, self.__dir_data,
-                                               self.__dir_temp)
-        if topology_files == None:
-            print "Topology creation failed!"
-            return False
-
-        self.__files.extend(topology_files)
-        return True
+        self.__files.extend(vmap0.create(bounds, self.__dir_data, self.__dir_temp))
 
     def add_terrain(self, arcseconds_per_pixel = 9.0, bounds = None):
-        print "Adding terrain ..."
+        print "Adding terrain..."
 
         if bounds == None:
             if self.__bounds == None:
-                print "failed! (Boundaries undefined!)"
-                return False
+                raise RuntimeError, "Boundaries undefined!"
 
             bounds = self.__bounds
 
-        terrain_files = terrain_srtm.create(bounds, arcseconds_per_pixel,
-                                           self.__dir_data, self.__dir_temp)
-        if terrain_files == None:
-            print "Terrain creation failed!"
-            return False
-
-        self.__files.extend(terrain_files)
-        return True
+        self.__files.extend(srtm.create(bounds, arcseconds_per_pixel,
+                                        self.__dir_data, self.__dir_temp))
 
     def set_bounds(self, bounds):
-        print "Setting map boundaries ..."
+        print "Setting map boundaries..."
 
         if not isinstance(bounds, GeoRect):
-            print "failed! (GeoRect expected)"
-            return False
+            raise RuntimeError, "GeoRect expected!"
 
         self.__bounds = bounds
         print "(", self.__bounds, ")"
-        return True
 
     def set_bounds_separatly(self, latmin, latmax, lonmin, lonmax):
         self.__bounds = GeoRect()
@@ -177,23 +141,21 @@ class MapGenerator:
         self.__bounds.bottom = latmin
 
     def set_bounds_by_waypoint_file(self, filename):
-        print "Setting map boundaries to match waypoint file contents ..."
+        print "Setting map boundaries to match waypoint file contents..."
 
-        print "Reading waypoint file ..."
+        print "Reading waypoint file..."
         if not isinstance(filename, basestring):
-            print "failed! (String expected)"
-            return False
+            raise "String expected!"
 
         if not os.path.exists(filename):
-            print "failed! (" + filename + " not found!)"
-            return False
+            raise RuntimeError, "Waypoint file " + filename + " not found!"
 
         f = open(filename, "r")
         wplist = WaypointList()
         wplist.parse(f)
         f.close()
 
-        return self.set_bounds(wplist.get_bounds())
+        self.set_bounds(wplist.get_bounds())
 
     def create(self, filename, attach = False):
         '''
@@ -203,40 +165,20 @@ class MapGenerator:
 
         # Open the zip file
         if attach:
-            print "Adding MapGenerator data to map file ..."
+            print "Adding MapGenerator data to map file..."
             attach = "a"
         else:
-            print "Creating map file ..."
+            print "Creating map file..."
             attach = "w"
 
         z = ZipFile(filename, attach, ZIP_DEFLATED)
         for file in self.__files:
-            # Make sure we have a list
-            if not isinstance(file, list):
-                # ... or at least a filename string
-                if not isinstance(file, str):
-                    continue
-                # Convert string to list (default = compress)
-                file = [file, True]
-
-            # Make sure the list has at least two entries
-            if len(file) < 2:
-                continue
-
-            # Make sure the file exists
-            if not os.path.isfile(file[0]):
-                continue
-
-            # Check if we should compress the file
-            if file[1] == False:
-                z.write(file[0], os.path.basename(file[0]), ZIP_STORED)
-            else:
-                z.write(file[0], os.path.basename(file[0]), ZIP_DEFLATED)
+            if os.path.isfile(file[0]):
+                # file[1] is the flag if we should compress the file
+                z.write(file[0], os.path.basename(file[0]), ZIP_STORED if file[1] else ZIP_DEFLATED)
         z.close()
 
     def cleanup(self):
         for file in self.__files:
-            if isinstance(file, list):
-                file = file[0]
-            os.unlink(file)
-        self.__files = []
+            os.unlink(file[0])
+        self.__files.clear()

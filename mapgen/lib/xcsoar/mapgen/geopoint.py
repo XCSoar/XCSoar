@@ -1,4 +1,4 @@
-from angle import Angle
+from xcsoar.mapgen.angle import Angle
 
 class GeoPoint:
     def __init__(self,

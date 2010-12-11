@@ -3,9 +3,9 @@ import math
 import subprocess
 import urllib
 import socket
-
-from georect import GeoRect
 from zipfile import ZipFile, BadZipfile
+from xcsoar.mapgen.georect import GeoRect
+from xcsoar.mapgen.filelist import FileList
 
 cmd_gdal_warp = "gdalwarp"
 cmd_geojasper = "geojasper"
@@ -101,7 +101,7 @@ def __gather_tiles(dir_data, dir_temp, bounds):
     @return: The list of tile files
     '''
     if not isinstance(bounds, GeoRect):
-        return None
+        raise TypeError
 
     print "Gathering terrain tiles ..."
 
@@ -174,15 +174,10 @@ def __create(dir_temp, tiles, arcseconds_per_pixel, bounds):
 
     try:
         p = subprocess.Popen(args)
-    except OSError, WindowsError:
-        print ("There has been a problem running the gdalwarp application "+
-               "that creates the appropriate GeoTIFF terrain file!")
-        print ("Please check the \"cmd_gdal_warp\" variable in the "+
-               "terrain_srtm module and modify it if necessary.")
-        print "Current value: \""+cmd_gdal_warp+"\""
-        return None
-
-    p.wait()
+        p.wait()
+    except Exception, e:
+        print "Executing " + str(arg) + " failed"
+        raise
 
     return output_file
 
@@ -225,25 +220,22 @@ def __convert(dir_temp, input_file, rc):
                      "-O", "latmax=" + str(rc.top.value_degrees()),
                      "-O", "latmin=" + str(rc.bottom.value_degrees())])
 
+
     try:
         p = subprocess.Popen(args)
-    except OSError, WindowsError:
-        print ("There has been a problem running the geojasper application "+
-               "that converts the GeoTIFF terrain file to GeoJP2!")
-        print ("Please check the \"cmd_geojasper\" variable in the "+
-               "terrain_srtm module and modify it if necessary.")
-        print "Current value: \""+cmd_geojasper+"\""
-        return None
+        p.wait()
+    except Exception, e:
+        print "Executing " + str(arg) + " failed"
+        raise
 
-    p.wait()
-
-    output = [[output_file, False]]
+    output = FileList()
+    output.add(output_file, False)
 
     world_file_tiff = os.path.join(dir_temp, "terrain.tfw")
     world_file = os.path.join(dir_temp, "terrain.j2w")
     if use_world_file and os.path.exists(world_file_tiff):
         os.rename(world_file_tiff, world_file)
-        output.append([world_file, True])
+        output.add(world_file, True)
 
     return output
 
@@ -253,8 +245,7 @@ def __cleanup(dir_temp):
                                        file.startswith("terrain")):
             os.unlink(os.path.join(dir_temp, file))
 
-def create(bounds, arcseconds_per_pixel = 9.0,
-           dir_data = "../data/", dir_temp = "../tmp/"):
+def create(bounds, arcseconds_per_pixel, dir_data, dir_temp):
     dir_data = os.path.abspath(os.path.join(dir_data, "srtm"))
     dir_temp = os.path.abspath(dir_temp)
 
@@ -264,16 +255,10 @@ def create(bounds, arcseconds_per_pixel = 9.0,
     # Make sure the tiles are available
     tiles = __gather_tiles(dir_data, dir_temp, bounds)
     if len(tiles) < 1:
-        return None
+        return FileList()
 
-    terrain_file = __create(dir_temp, tiles, arcseconds_per_pixel, bounds)
-    if terrain_file == None:
-        return None
-
-    final_files = __convert(dir_temp, terrain_file, bounds)
-    if final_files == None:
-        return None
-
-    __cleanup(dir_temp)
-
-    return final_files
+    try:
+        terrain_file = __create(dir_temp, tiles, arcseconds_per_pixel, bounds)
+        return __convert(dir_temp, terrain_file, bounds)
+    finally:
+        __cleanup(dir_temp)
