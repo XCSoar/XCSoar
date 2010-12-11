@@ -149,7 +149,6 @@ public:
   };
 
   friend class SDLTimer;
-  friend class WindowCanvas;
   typedef SDLTimer *timer_t;
 #else
   typedef UINT_PTR timer_t;
