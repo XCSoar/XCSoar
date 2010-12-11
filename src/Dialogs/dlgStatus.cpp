@@ -56,7 +56,6 @@ static const TCHAR *const captions[] = {
 
 static WndForm *wf = NULL;
 static TabbedControl *tabbed;
-static bool multi_page = false;
 static int status_page = 0;
 
 static void
@@ -528,9 +527,7 @@ dlgStatusShowModal(int start_page)
   tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(tabbed != NULL);
 
-  multi_page = (start_page == -1);
-
-  if (!multi_page) {
+  if (start_page != -1) {
     status_page = start_page;
 
     WndButton *wb;
@@ -561,6 +558,4 @@ dlgStatusShowModal(int start_page)
   status_page = tabbed->GetCurrentPage();
 
   delete wf;
-
-  wf = NULL;
 }
