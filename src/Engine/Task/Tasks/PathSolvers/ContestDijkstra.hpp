@@ -128,8 +128,6 @@ protected:
 private:
   bool solution_found;
   bool trace_dirty;
-  unsigned min_distance_trace;
-  unsigned min_delta_t_trace;
   virtual void add_start_edges();
   TracePoint last_point;
   bool master_is_updated();

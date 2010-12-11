@@ -4,6 +4,7 @@
 #include "SearchPoint.hpp"
 #include "Aircraft.hpp"
 #include "Compiler.h"
+#include "FastMath.h"
 
 #include <vector>
 
@@ -72,7 +73,7 @@ public:
    */
   gcc_pure
   unsigned approx_dist(const TracePoint& tp) const {
-    return (unsigned)sqrt(approx_sq_dist(tp));
+    return (unsigned)isqrt4(approx_sq_dist(tp));
   }
 
   /** 

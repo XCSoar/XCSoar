@@ -31,8 +31,8 @@
 TaskManager::TaskManager(TaskEvents &te,
                          const Waypoints &wps): 
   m_glide_polar(fixed_zero),
-  trace_full(),
-  trace_sprint(9000, 300),
+  trace_full(60),
+  trace_sprint(0, 9000, 300),
   task_ordered(te, task_behaviour, m_glide_polar),
   task_goto(te, task_behaviour, m_glide_polar),
   task_abort(te, task_behaviour, m_glide_polar, wps),

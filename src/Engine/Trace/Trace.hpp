@@ -110,10 +110,13 @@ public:
   /**
    * Constructor.  Task projection is updated after first call to append().
    *
+   * @param no_thin_time Time window in seconds in which points most recent
+       wont be trimmed
    * @param max_time Time window size (seconds), null_time for unlimited
    * @param max_points Maximum number of points that can be stored
    */
-  Trace(const unsigned max_time = null_time,
+  Trace(const unsigned no_thin_time = 0,
+        const unsigned max_time = null_time,
         const unsigned max_points = 1000);
 
   /**
@@ -208,17 +211,17 @@ private:
      */
     static bool DeltaRank (const TraceDelta& x, const TraceDelta& y) {
       // distance is king
-      if (x.delta_distance < y.delta_distance) {
+      if (x.elim_distance < y.elim_distance) {
         return true;
       }
-      if (x.delta_distance > y.delta_distance) {
+      if (x.elim_distance > y.elim_distance) {
         return false;
       }
       // distance is equal, so go by time error
-      if (x.delta_time < y.delta_time) {
+      if (x.elim_time < y.elim_time) {
         return true;
       }
-      if (x.delta_time > y.delta_time) {
+      if (x.elim_time > y.elim_time) {
         return false;
       }
       // all else fails, go by age
@@ -246,8 +249,9 @@ private:
     {
       p_time = p.time;
       leaf = _leaf;
-      delta_distance = null_delta;
-      delta_time = null_time;
+      elim_distance = null_delta;
+      elim_time = null_time;
+      delta_distance = 0;
     }
 
     TraceDelta(const TracePoint& p_last,
@@ -256,14 +260,16 @@ private:
                const TraceTree::const_iterator &_leaf)
     {
       p_time = p.time;
-      delta_distance = distance_metric(p_last, p, p_next);
-      delta_time = time_metric(p_last, p, p_next);
+      elim_distance = distance_metric(p_last, p, p_next);
+      elim_time = time_metric(p_last, p, p_next);
+      delta_distance = p.approx_dist(p_last);
       leaf = _leaf;
-      assert (delta_distance != null_delta);
+      assert (elim_distance != null_delta);
     }
 
     unsigned p_time;
-    unsigned delta_time;
+    unsigned elim_time;
+    unsigned elim_distance;
     unsigned delta_distance;
 
     // these items are mutable only so we can get around the const
@@ -275,6 +281,10 @@ private:
 
     void set_times(const TracePoint &p) {
       p_time = p.time;
+    }
+
+    unsigned delta_time() const {
+      return p_time - prev->p_time;
     }
 
     /**
@@ -410,7 +420,6 @@ private:
       assert(tree.size() == list.size());
       return it;
     }
-
 
     /**
      * Update links from tree leaves to the delta list.
@@ -632,6 +641,36 @@ private:
       return list.empty();
     }
 
+    unsigned calc_average_delta_distance(const unsigned no_thin) const {
+      unsigned r = get_recent_time(no_thin);
+      unsigned acc = 0;
+      unsigned counter = 0;
+      for (TraceDelta::const_iterator i= list.begin();
+           i!= list.end(); ++i, ++counter) {
+        if (i->p_time < r) {
+          acc += i->delta_distance;
+        }
+      }
+      if (counter)
+        return acc/counter;
+      return 0;
+    }
+
+    unsigned calc_average_delta_time(const unsigned no_thin) const {
+      unsigned r = get_recent_time(no_thin);
+      unsigned acc = 0;
+      unsigned counter = 0;
+      for (TraceDelta::const_iterator i= list.begin();
+           i!= list.end(); ++i, ++counter) {
+        if (i->p_time < r) {
+          acc += i->delta_time();
+        }
+      }
+      if (counter)
+        return acc/counter;
+      return 0;
+    }
+
   private:
 
     TraceDelta::List list;
@@ -660,8 +699,8 @@ private:
       bool last = (i_start->next == i_start);
       TraceDelta td_start = *i_start;
       list.erase(i_start);
-      td_start.delta_distance = null_delta;
-      td_start.delta_time = null_time;
+      td_start.elim_distance = null_delta;
+      td_start.elim_time = null_time;
       TraceDelta::iterator i_new = merge_insert(td_start);
       i_new->prev = i_new;
       if (last) {
@@ -727,8 +766,12 @@ private:
   TracePoint m_last_point;
 
   const unsigned m_max_time;
+  const unsigned no_thin_time;
   const unsigned m_max_points;
   const unsigned m_opt_points;
+
+  unsigned m_average_delta_time;
+  unsigned m_average_delta_distance;
 
   gcc_pure
   unsigned get_min_time() const;
@@ -737,6 +780,18 @@ private:
 
 public:
   static const unsigned null_time;
+
+  unsigned is_recent(const TracePoint& p) const {
+    return m_last_point.time - p.time > delta_list.get_recent_time(no_thin_time);
+  }
+
+  unsigned average_delta_distance() const {
+    return m_average_delta_distance;
+  }
+
+  unsigned average_delta_time() const {
+    return m_average_delta_time;
+  }
 
   /**
    * Check if this point is invalid

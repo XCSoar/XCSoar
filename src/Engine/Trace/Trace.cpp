@@ -5,9 +5,11 @@
 const unsigned Trace::null_delta = 0 - 1;
 const unsigned Trace::null_time = 0 - 1;
 
-Trace::Trace(const unsigned max_time,
+Trace::Trace(const unsigned _no_thin_time,
+             const unsigned max_time,
              const unsigned max_points) :
   m_max_time(max_time),
+  no_thin_time(_no_thin_time),
   m_max_points(max_points),
   m_opt_points((3*max_points)/4)
 {
@@ -21,7 +23,8 @@ Trace::clear()
   trace_tree.clear();
   trace_tree.optimize();
   m_last_point.time = null_time;
-
+  m_average_delta_distance = 0;
+  m_average_delta_time = 0;
   delta_list.clear();
 }
 
@@ -79,7 +82,7 @@ Trace::optimise_if_old()
 
     if (trace_tree.size()>= m_opt_points) {
       // if still too big, remove points based on line simplification
-      updated |= delta_list.erase_delta(m_opt_points, trace_tree, 30);
+      updated |= delta_list.erase_delta(m_opt_points, trace_tree, no_thin_time);
     }
 
     if (!updated)
@@ -97,6 +100,9 @@ Trace::optimise_if_old()
   // must have had change if got this far, so must re-balance tree
   trace_tree.optimize();
   delta_list.update_leaves(trace_tree);
+  m_average_delta_distance = delta_list.calc_average_delta_distance(no_thin_time);
+  m_average_delta_time = delta_list.calc_average_delta_time(no_thin_time);
+
   return true;
 }
 
@@ -290,8 +296,8 @@ Trace::get_trace_edges(TracePointVector& iov) const
     void print(const TraceDelta& td) {
       printf("%d (%d,%d) %d %d\n",
              td.p_time, td.prev->p_time,
-             td.next->p_time, td.delta_distance,
-             td.delta_time);
+             td.next->p_time, td.elim_distance,
+             td.elim_time);
     }
 
 */
