@@ -26,26 +26,13 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 
-#ifdef ANDROID
-#include "Android/Main.hpp"
-#include "Android/NativeView.hpp"
-#endif
-
 class TopCanvas : public Canvas {
 public:
   void set();
 
   void full_screen();
 
-  void flip() {
-#ifdef ANDROID
-    native_view->swap();
-#elif defined(ENABLE_OPENGL)
-    ::SDL_GL_SwapBuffers();
-#else
-    ::SDL_Flip(surface);
-#endif
-  }
+  void flip();
 };
 
 #endif

@@ -28,6 +28,11 @@ Copyright_License {
 #include "Screen/OpenGL/Globals.hpp"
 #endif
 
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
+#endif
+
 #include <assert.h>
 
 void
@@ -115,5 +120,17 @@ TopCanvas::full_screen()
 {
 #if 0 /* disabled for now, for easier development */
   ::SDL_WM_ToggleFullScreen(surface);
+#endif
+}
+
+void
+TopCanvas::flip()
+{
+#ifdef ANDROID
+  native_view->swap();
+#elif defined(ENABLE_OPENGL)
+  ::SDL_GL_SwapBuffers();
+#else
+  ::SDL_Flip(surface);
 #endif
 }
