@@ -33,7 +33,7 @@ Copyright_License {
 #ifdef ENABLE_SDL
 #include "Thread/Mutex.hpp"
 
-#if defined(ENABLE_OPENGL) && defined(ANDROID)
+#ifdef ANDROID
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 #endif
@@ -45,12 +45,10 @@ public:
   void full_screen();
 
   void flip() {
-#ifdef ENABLE_OPENGL
 #ifdef ANDROID
     native_view->swap();
-#else
+#elif defined(ENABLE_OPENGL)
     ::SDL_GL_SwapBuffers();
-#endif
 #else
     ::SDL_Flip(surface);
 #endif
