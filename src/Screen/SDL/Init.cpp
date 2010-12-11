@@ -57,8 +57,7 @@ ScreenGlobalInit::ScreenGlobalInit()
     q[i] = (unsigned char)i;
   dummy.InitOSKeymap = Dummy;
   current_video = &dummy;
-  if (::SDL_Init(SDL_INIT_TIMER) != 0 ||
-      ::SDL_StartEventLoop(0) != 0) {
+  if (::SDL_StartEventLoop(0) != 0) {
     fprintf(stderr, "SDL_Init() has failed\n");
     exit(EXIT_FAILURE);
   }

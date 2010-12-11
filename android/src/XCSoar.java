@@ -49,6 +49,8 @@ public class XCSoar extends Activity {
             return;
         }
 
+        Timer.Initialize();
+
         // fullscreen mode
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,

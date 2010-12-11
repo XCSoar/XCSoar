@@ -29,7 +29,9 @@ Copyright_License {
 #include "Thread/Debug.hpp"
 #include "Compiler.h"
 
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+#include "Android/Timer.hpp"
+#elif defined(ENABLE_SDL)
 #include "Screen/SDL/Timer.hpp"
 #endif /* ENABLE_SDL */
 
@@ -152,8 +154,12 @@ public:
     EVENT_TIMER,
   };
 
+#ifdef ANDROID
+  typedef AndroidTimer *timer_t;
+#else /* !ANDROID */
   friend class SDLTimer;
   typedef SDLTimer *timer_t;
+#endif /* !ANDROID */
 #else
   typedef UINT_PTR timer_t;
 #endif
@@ -555,7 +561,9 @@ public:
   {
     assert_thread();
 
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+    return new AndroidTimer(*this, ms);
+#elif defined(ENABLE_SDL)
     return new SDLTimer(*this, ms);
 #else
     ::SetTimer(hWnd, id, ms, NULL);
@@ -567,7 +575,9 @@ public:
   {
     assert_thread();
 
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+    id->disable();
+#elif defined(ENABLE_SDL)
     delete id;
 #else
     ::KillTimer(hWnd, id);
@@ -764,7 +774,7 @@ public:
 #endif /* !ENABLE_SDL */
   }
 
-#ifdef ENABLE_SDL
+#if defined(ENABLE_SDL) && !defined(ANDROID)
   void send_timer(SDLTimer *timer) {
     SDL_Event event;
     event.user.type = EVENT_TIMER;

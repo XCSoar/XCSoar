@@ -35,7 +35,7 @@ CLASS_NAME = $(JAVA_PACKAGE).NativeView
 CLASS_SOURCE = $(subst .,/,$(CLASS_NAME)).java
 CLASS_CLASS = $(patsubst %.java,%.class,$(CLASS_SOURCE))
 
-NATIVE_CLASSES = NativeView EventBridge
+NATIVE_CLASSES = NativeView EventBridge Timer
 NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
 NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 
@@ -79,6 +79,7 @@ $(ANDROID_BUILD)/build.xml: android/AndroidManifest.xml $(PNG_FILES) | $(TARGET_
 # add dependency to this source file
 $(TARGET_OUTPUT_DIR)/$(SRC)/Android/Main.o: $(NATIVE_HEADERS)
 $(TARGET_OUTPUT_DIR)/$(SRC)/Android/EventBridge.o: $(NATIVE_HEADERS)
+$(TARGET_OUTPUT_DIR)/$(SRC)/Android/Timer.o: $(NATIVE_HEADERS)
 
 $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libapplication.so: $(TARGET_OUTPUT_DIR)/bin/xcsoar.so | $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/dirstamp
 	cp $< $@

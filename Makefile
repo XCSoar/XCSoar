@@ -411,6 +411,7 @@ XCSOAR_SOURCES := \
 ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \
 	$(SRC)/Java/Global.cpp \
+	$(SRC)/Android/Timer.cpp \
 	$(SRC)/Android/EventBridge.cpp \
 	$(SRC)/Android/Main.cpp
 else
