@@ -36,7 +36,7 @@ AIRSPACE_ALT::get_as_text_units(const bool concise) const
       _tcscpy(buffer, _T("GND"));
     } else {
       _stprintf(buffer, _T("%d %s AGL"),
-                (int)Units::ToUserAltitude(AGL), Units::GetAltitudeName());
+                iround(Units::ToUserAltitude(AGL)), Units::GetAltitudeName());
     }
     break;
   case abFL:
@@ -44,7 +44,7 @@ AIRSPACE_ALT::get_as_text_units(const bool concise) const
     break;
   case abMSL:
     _stprintf(buffer, _T("%d %s"),
-              (int)Units::ToUserAltitude(Altitude), Units::GetAltitudeName());
+              iround(Units::ToUserAltitude(Altitude)), Units::GetAltitudeName());
     break;
   case abUndef:
   default:
@@ -54,7 +54,7 @@ AIRSPACE_ALT::get_as_text_units(const bool concise) const
   if (!concise && Base!=abMSL && positive(Altitude)) {
     TCHAR second[64];
     _stprintf(second, _T(" %d %s"),
-              (int)Units::ToUserAltitude(Altitude), Units::GetAltitudeName());
+              iround(Units::ToUserAltitude(Altitude)), Units::GetAltitudeName());
     return tstring(buffer) + second;
   } else
     return tstring(buffer);

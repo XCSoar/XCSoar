@@ -22,7 +22,7 @@
 #include "AirspaceAltitude.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Navigation/Aircraft.hpp"
-
+#include "FastMath.h"
 #include <stdio.h>
 
 void 
@@ -50,14 +50,14 @@ AIRSPACE_ALT::get_as_text(const bool concise) const
     if (!positive(AGL)) {
       _tcscpy(buffer, _T("GND"));
     } else {
-      _stprintf(buffer, _T("%d AGL"), (int)AGL);
+      _stprintf(buffer, _T("%d AGL"), iround(AGL));
     }
     break;
   case abFL:
-    _stprintf(buffer, _T("FL%d"), (int)FL);
+    _stprintf(buffer, _T("FL%d"), iround(FL));
     break;
   case abMSL:
-    _stprintf(buffer, _T("%d"), (int)Altitude);
+    _stprintf(buffer, _T("%d"), iround(Altitude));
     break;
   case abUndef:
   default:
@@ -66,7 +66,7 @@ AIRSPACE_ALT::get_as_text(const bool concise) const
   };
   if (!concise && Base!=abMSL && positive(Altitude)) {
     TCHAR second[64];
-    _stprintf(second, _T(" %d"), (int)Altitude);
+    _stprintf(second, _T(" %d"), iround(Altitude));
     return tstring(buffer) + second;
   } else
     return tstring(buffer);
