@@ -24,12 +24,23 @@ Copyright_License {
 #ifndef XCSOAR_JAVA_GLOBAL_HPP
 #define XCSOAR_JAVA_GLOBAL_HPP
 
+#include "Compiler.h"
+
 #include <jni.h>
+#include <stddef.h>
 
 namespace Java {
   extern JavaVM *jvm;
 
   void Init(JNIEnv *env);
+
+  static inline gcc_pure
+  JNIEnv *GetEnv()
+  {
+    JNIEnv *env;
+    jvm->AttachCurrentThread(&env, NULL);
+    return env;
+  }
 }
 
 #endif

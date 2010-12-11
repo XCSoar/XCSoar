@@ -59,7 +59,7 @@ Font::set(const TCHAR *facename, int height, bool bold, bool italic)
 
   if (env == NULL) {
     // initialize static jvm
-    Java::jvm->AttachCurrentThread(&env, NULL);
+    env = Java::GetEnv();
   }
 
   textUtilClass = env->FindClass("org/xcsoar/TextUtil");
