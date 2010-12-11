@@ -24,12 +24,13 @@ def __get_tile_name(lat, lon):
     return "srtm_%02d_%02d" % (col, row)
 
 def __download_tile(path_tile_zip, filename):
+    url = __server_path + filename + '.zip'
+    print "Downloading tile " + url + ".zip ..."
     socket.setdefaulttimeout(10)
     try:
-        urllib.urlretrieve(__server_path + filename + ".zip",
-                           path_tile_zip)
+        urllib.urlretrieve(url, path_tile_zip)
     except IOError:
-        print "Download of tile " + filename + " failed!"
+        print "Download of tile " + url + " failed!"
 
 def __extract_tile(path_tile_zip, dir_temp, filename):
     try:
@@ -65,7 +66,6 @@ def __gather_tile(dir_data, dir_temp, lat, lon):
         # if the ZIP file doesn't exist in the data folder try to download it
         if __server_path != None:
             if not os.path.exists(path_tile_zip):
-                print "Downloading tile " + filename + " from the internet ..."
                 __download_tile(path_tile_zip, filename)
 
         # check if the ZIP file exists in the data folder

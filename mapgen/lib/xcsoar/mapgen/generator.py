@@ -129,7 +129,7 @@ class Generator:
             raise RuntimeError, "GeoRect expected!"
 
         self.__bounds = bounds
-        print "(", self.__bounds, ")"
+        print self.__bounds
 
     def set_bounds_by_waypoint_file(self, filename):
         print "Setting map boundaries to match waypoint file contents..."
