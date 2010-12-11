@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 
 #ifdef ANDROID
-#include "Android/Main.hpp"
+#include "Java/Global.hpp"
 #include <assert.h>
 
 JNIEnv *Font::env(NULL);
@@ -59,7 +59,7 @@ Font::set(const TCHAR *facename, int height, bool bold, bool italic)
 
   if (env == NULL) {
     // initialize static jvm
-    jvm->AttachCurrentThread(&env, NULL);
+    Java::jvm->AttachCurrentThread(&env, NULL);
   }
 
   textUtilClass = env->FindClass("org/xcsoar/TextUtil");

@@ -21,13 +21,15 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_MAIN_HPP
-#define XCSOAR_ANDROID_MAIN_HPP
+#ifndef XCSOAR_JAVA_GLOBAL_HPP
+#define XCSOAR_JAVA_GLOBAL_HPP
 
 #include <jni.h>
 
-class NativeView;
+namespace Java {
+  extern JavaVM *jvm;
 
-extern NativeView *native_view;
+  void Init(JNIEnv *env);
+}
 
 #endif

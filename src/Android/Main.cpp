@@ -30,11 +30,11 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
+#include "Java/Global.hpp"
 #include "org_xcsoar_NativeView.h"
 
 #include <assert.h>
 
-JavaVM *jvm = NULL;
 NativeView *native_view;
 
 static ScreenGlobalInit *screen_init;
@@ -43,7 +43,7 @@ JNIEXPORT jboolean JNICALL
 Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jint width, jint height)
 {
-  env->GetJavaVM(&jvm);
+  Java::Init(env);
 
   assert(native_view == NULL);
   native_view = new NativeView(env, obj, width, height);
