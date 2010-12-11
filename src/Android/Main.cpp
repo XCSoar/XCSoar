@@ -37,13 +37,11 @@ Copyright_License {
 JavaVM *jvm = NULL;
 NativeView *native_view;
 
-/**
- * This function is called by the Java glue code.  It replaces the
- * standard C function main().
- */
-JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeView_run(JNIEnv *env, jobject obj,
-                               jint width, jint height)
+static ScreenGlobalInit *screen_init;
+
+JNIEXPORT jboolean JNICALL
+Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
+                                            jint width, jint height)
 {
   env->GetJavaVM(&jvm);
 
@@ -58,14 +56,24 @@ Java_org_xcsoar_NativeView_run(JNIEnv *env, jobject obj,
 
   Profile::SetFiles(_T(""));
 
-  ScreenGlobalInit screen_init;
+  /* temporary hack */
+  screen_init = new ScreenGlobalInit();
 
-  if (XCSoarInterface::Startup(NULL))
-    CommonInterface::main_window.event_loop();
+  return XCSoarInterface::Startup(NULL);
+}
 
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
+{
+  CommonInterface::main_window.event_loop();
+}
+
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
+{
   CommonInterface::main_window.reset();
-
   Fonts::Deinitialize();
+  delete screen_init;
 
   delete native_view;
-};
+}

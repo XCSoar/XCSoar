@@ -204,12 +204,16 @@ class NativeView extends SurfaceView
     initGL(getHolder());
 
     android.graphics.Rect r = getHolder().getSurfaceFrame();
-    run(r.width(), r.height());
+    if (initializeNative(r.width(), r.height()))
+        runNative();
+    deinitializeNative();
 
     ((Activity)getContext()).finish();
   }
 
-  protected native void run(int width, int height);
+  protected native boolean initializeNative(int width, int height);
+  protected native void runNative();
+  protected native void deinitializeNative();
 
   private int findConfigAttrib(EGLConfig config, int attribute,
                                int defaultValue) {
