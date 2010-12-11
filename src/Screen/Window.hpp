@@ -33,6 +33,10 @@ Copyright_License {
 #include "Screen/SDL/Timer.hpp"
 #endif /* ENABLE_SDL */
 
+#ifdef ENABLE_SDL
+#include <SDL_events.h>
+#endif
+
 class Canvas;
 class ContainerWindow;
 
