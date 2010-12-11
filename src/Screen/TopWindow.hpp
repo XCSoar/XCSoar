@@ -32,28 +32,7 @@ Copyright_License {
 
 #ifdef ENABLE_SDL
 #include "Thread/Mutex.hpp"
-
-#ifdef ANDROID
-#include "Android/Main.hpp"
-#include "Android/NativeView.hpp"
-#endif
-
-class TopCanvas : public Canvas {
-public:
-  void set();
-
-  void full_screen();
-
-  void flip() {
-#ifdef ANDROID
-    native_view->swap();
-#elif defined(ENABLE_OPENGL)
-    ::SDL_GL_SwapBuffers();
-#else
-    ::SDL_Flip(surface);
-#endif
-  }
-};
+#include "Screen/SDL/TopCanvas.hpp"
 #endif
 
 /**
