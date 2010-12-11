@@ -3,7 +3,7 @@ import shutil
 from zipfile import ZipFile, ZIP_DEFLATED, ZIP_STORED
 import time
 from xcsoar.mapgen.terrain import srtm
-from xcsoar.mapgen.topology import vmap0
+from xcsoar.mapgen.topology import shapefiles
 from xcsoar.mapgen.georect import GeoRect
 from xcsoar.mapgen.waypoint import WaypointList
 from xcsoar.mapgen.filelist import FileList
@@ -107,10 +107,9 @@ class Generator:
         if bounds == None:
             if self.__bounds == None:
                 raise RuntimeError, "Boundaries undefined!"
-
             bounds = self.__bounds
 
-        self.__files.extend(vmap0.create(bounds, self.__dir_data, self.__dir_temp))
+        self.__files.extend(shapefiles.create(bounds, self.__dir_data, self.__dir_temp))
 
     def add_terrain(self, arcseconds_per_pixel = 9.0, bounds = None):
         print "Adding terrain..."
@@ -118,7 +117,6 @@ class Generator:
         if bounds == None:
             if self.__bounds == None:
                 raise RuntimeError, "Boundaries undefined!"
-
             bounds = self.__bounds
 
         self.__files.extend(srtm.create(bounds, arcseconds_per_pixel,
