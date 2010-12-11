@@ -75,10 +75,12 @@ ScreenGlobalInit::ScreenGlobalInit()
   ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
 #endif
 
+#ifndef ANDROID
   if (::TTF_Init() != 0) {
     fprintf(stderr, "TTF_Init() has failed\n");
     exit(EXIT_FAILURE);
   }
+#endif
 }
 
 ScreenGlobalInit::~ScreenGlobalInit()
@@ -87,6 +89,8 @@ ScreenGlobalInit::~ScreenGlobalInit()
   TextCache::flush();
 #endif
 
+#ifndef ANDROID
   ::TTF_Quit();
+#endif
   ::SDL_Quit();
 }

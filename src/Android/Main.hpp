@@ -24,8 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_MAIN_HPP
 #define XCSOAR_ANDROID_MAIN_HPP
 
+#include <jni.h>
+
 class NativeView;
 
+extern JavaVM *jvm;
 extern NativeView *native_view;
 
 #endif

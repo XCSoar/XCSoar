@@ -38,6 +38,7 @@ Copyright_License {
  * This class represents an OpenGL texture.
  */
 class GLTexture {
+protected:
   GLuint id;
   unsigned width, height;
 

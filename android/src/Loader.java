@@ -42,7 +42,6 @@ public class Loader {
                    failure to load it is not critical */
             }
 
-            System.loadLibrary("sdl_ttf");
             System.loadLibrary("application");
             loaded = true;
         } catch (UnsatisfiedLinkError e) {

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
+#include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/Cache.hpp"

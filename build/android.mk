@@ -16,7 +16,7 @@ ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux_x86
 ANDROID_ABI = armeabi
 ANDROID_LIB_DIR = /opt/android/libs/$(ANDROID_ABI)
 
-ANDROID_LIB_NAMES = sdl-1.2 sdl_ttf
+ANDROID_LIB_NAMES = sdl-1.2
 ifeq ($(OPENGL),n)
 ANDROID_LIB_NAMES += sdl_gfx
 endif

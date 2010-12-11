@@ -34,6 +34,7 @@ Copyright_License {
 
 #include <assert.h>
 
+JavaVM *jvm = NULL;
 NativeView *native_view;
 
 /**
@@ -44,6 +45,8 @@ JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_run(JNIEnv *env, jobject obj,
                                jint width, jint height)
 {
+  env->GetJavaVM(&jvm);
+
   assert(native_view == NULL);
   native_view = new NativeView(env, obj, width, height);
 

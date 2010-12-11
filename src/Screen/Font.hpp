@@ -26,9 +26,15 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 
+#ifdef ANDROID
+#include <jni.h>
+#include "Util/tstring.hpp"
+#include "Screen/Color.hpp"
+#else  // !ANDROID
 #ifdef ENABLE_SDL
 #include <SDL_ttf.h>
 #endif
+#endif // !ANDROID
 
 #include <windows.h>
 
@@ -37,42 +43,63 @@ Copyright_License {
  */
 class Font : private NonCopyable {
 protected:
+  #ifdef ANDROID
+  static JNIEnv *env;
+  static jmethodID midTextUtil, midGetFontMetrics, midGetTextBounds;
+  static jmethodID midGetTextTextureGL;
+  jobject textUtilObject;
+
+  unsigned line_spacing, style;
+  tstring facename;
+  #else // !ANDROID
   #ifdef ENABLE_SDL
   TTF_Font *font;
   #else
   HFONT font;
   #endif
+  #endif
 
   unsigned height, ascent_height, capital_height;
 
   void calculate_heights();
+  #ifndef ANDROID
+  #ifdef ENABLE_SDL
+  bool _set(const char *file, int ptsize, bool bold = false,
+            bool italic = false);
+  #endif
+  #endif
 
 public:
+  #ifdef ANDROID
+  Font():textUtilObject(NULL) {}
+  #else
   Font():font(NULL) {}
+  #endif
   ~Font() { reset(); }
 
 public:
   bool
-  defined() const
-  {
+  defined() const {
+    #ifdef ANDROID
+    return textUtilObject != NULL;
+    #else
     return font != NULL;
+    #endif
   }
 
-  #ifdef ENABLE_SDL
-  bool set(const char *file, int ptsize, bool bold = false,
-           bool italic = false);
-#ifdef _UNICODE
   bool set(const TCHAR *facename, int height, bool bold = false,
            bool italic = false);
-#endif
-  #else
-  bool set(const TCHAR* facename, int height, bool bold = false,
-           bool italic = false);
-  #endif
   bool set(const LOGFONT &log_font);
-
   void reset();
 
+  #ifdef ANDROID
+  void text_width(const TCHAR *text, int &width, int &height) const;
+  void text_width(const TCHAR *text, SIZE &size) const
+    { text_width(text, size.cx, size.cy); }
+
+  int text_texture_gl(const TCHAR *text, SIZE &size,
+                      const Color &fg, const Color &bg) const;
+  #else // !ANDROID
   #ifdef ENABLE_SDL
   TTF_Font*
   native() const {
@@ -84,18 +111,28 @@ public:
     return font;
   }
   #endif
+  #endif // !ANDROID
 
   unsigned get_height() const {
     return height;
   }
-
   unsigned get_ascent_height() const {
     return ascent_height;
   }
-
   unsigned get_capital_height() const {
     return capital_height;
   }
+  #ifdef ANDROID
+  unsigned get_line_spacing() const {
+    return line_spacing;
+  }
+  unsigned get_style() const {
+    return style;
+  }
+  const TCHAR *get_facename() const {
+    return facename.c_str();
+  }
+  #endif
 };
 
 #endif

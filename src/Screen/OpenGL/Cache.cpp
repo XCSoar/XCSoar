@@ -37,26 +37,45 @@ struct RenderedText : public ListHead {
   std::string key;
   GLTexture texture;
 
+#ifdef ANDROID
+  RenderedText(const char *_key, int id, unsigned width, unsigned height)
+    :key(_key), texture(id, width, height) {}
+#else
   RenderedText(const char *_key, SDL_Surface *surface)
     :key(_key), texture(surface) {}
+#endif
 };
 
 static std::map<std::string,RenderedText*> text_cache_map;
 static ListHead text_cache_head = { &text_cache_head, &text_cache_head };
 static unsigned text_cache_size = 0;
 
+#ifdef ANDROID
+GLTexture *
+TextCache::get(const Font *font, Color background_color, Color text_color,
+               const char *text)
+#else
 GLTexture *
 TextCache::get(TTF_Font *font, Color background_color, Color text_color,
                const char *text)
+#endif
 {
   assert(font != NULL);
   assert(text != NULL);
 
   char key[4096];
-  snprintf(key, sizeof(key), "%s_%s_%u_%02x%02x%02x_%02x%02x%02x_%s",
+  snprintf(key, sizeof(key),
+#ifdef ANDROID
+           "%s_%u_%u_%02x%02x%02x_%02x%02x%02x_%s",
+           font->get_facename(),
+           font->get_style(),
+           font->get_height(),
+#else  // !ANDROID
+           "%s_%s_%u_%02x%02x%02x_%02x%02x%02x_%s",
            TTF_FontFaceFamilyName(font),
            TTF_FontFaceStyleName(font),
            TTF_FontHeight(font),
+#endif
            background_color.red(),
            background_color.green(),
            background_color.blue(),
@@ -87,6 +106,11 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
 
   /* render the text into a OpenGL texture */
 
+#ifdef ANDROID
+  SIZE size;
+  int texture_id = font->text_texture_gl(text, size, text_color, background_color);
+  RenderedText *rt = new RenderedText(key, texture_id, size.cx, size.cy);
+#else
   SDL_Surface *surface = ::TTF_RenderUTF8_Solid(font, text, Color::BLACK);
   if (surface == NULL)
     return NULL;
@@ -102,6 +126,7 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
 
   RenderedText *rt = new RenderedText(key, surface);
   SDL_FreeSurface(surface);
+#endif
 
   rt->next = text_cache_head.next;
   rt->next->prev = rt;

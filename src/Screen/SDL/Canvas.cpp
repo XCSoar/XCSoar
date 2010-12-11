@@ -155,6 +155,9 @@ Canvas::text_size(const TCHAR *text) const
   if (font == NULL)
     return size;
 
+#ifdef ANDROID
+  font->text_width(text, size);
+#else // !ANDROID
   int ret, w, h;
 #ifdef UNICODE
   ret = ::TTF_SizeUNICODE(font, (const Uint16 *)text, &w, &h);
@@ -165,6 +168,7 @@ Canvas::text_size(const TCHAR *text) const
     size.cx = w;
     size.cy = h;
   }
+#endif // !ANDROID
 
   return size;
 }
@@ -240,7 +244,11 @@ Canvas::formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
     }
   }
 
+#ifdef ANDROID
+  skip = font->get_line_spacing();
+#else
   skip = ::TTF_FontLineSkip(font);
+#endif
   y = (format & DT_VCENTER) ? (rc->top + rc->bottom - lines*skip)/2 : rc->top;
   for (i = 0; i < len; i += tcslen(duplicated + i) + 1) {
     if (duplicated[i] != _T('\0')) {

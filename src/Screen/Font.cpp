@@ -23,10 +23,183 @@ Copyright_License {
 
 #include "Screen/Font.hpp"
 
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include <assert.h>
+
+JNIEnv *Font::env(NULL);
+jmethodID Font::midTextUtil(NULL);
+jmethodID Font::midGetFontMetrics(NULL);
+jmethodID Font::midGetTextBounds(NULL);
+jmethodID Font::midGetTextTextureGL(NULL);
+
+
+bool
+Font::set(const LOGFONT &log)
+{
+  return set(log.lfFaceName, (int) log.lfHeight,
+             log.lfWeight > 600, log.lfItalic != 0);
+}
+
+/*
+ * create a new instance of org.xcsoar.TextUtil and store it with a global
+ * reference in textUtilObject member.
+ */
+bool
+Font::set(const TCHAR *facename, int height, bool bold, bool italic)
+{
+  jclass textUtilClass;
+  jobject localObject;
+  jstring paramFamilyName;
+  jint paramStyle, paramTextSize;
+  jintArray metricsArray;
+  jint metrics[5];
+
+  reset();
+
+  if (env == NULL) {
+    // initialize static jvm
+    jvm->AttachCurrentThread(&env, NULL);
+  }
+
+  textUtilClass = env->FindClass("org/xcsoar/TextUtil");
+
+  if (midTextUtil == NULL) {
+    // initialize static method ID's once
+    midTextUtil         = env->GetMethodID(textUtilClass, "<init>",
+                                           "(Ljava/lang/String;II)V");
+    midGetFontMetrics   = env->GetMethodID(textUtilClass, "getFontMetrics",
+                                           "([I)V");
+    midGetTextBounds    = env->GetMethodID(textUtilClass, "getTextBounds",
+                                           "(Ljava/lang/String;[I)V");
+    midGetTextTextureGL = env->GetMethodID(textUtilClass, "getTextTextureGL",
+                                           "(Ljava/lang/String;IIIIII)I");
+  }
+
+#ifdef UNICODE
+  paramFamilyName = env->NewString(facename, wcslen(facename));
+#else
+  paramFamilyName = env->NewStringUTF(facename);
+#endif
+  paramStyle = 0;
+  if (bold)
+    paramStyle |= 1;
+  if (italic)
+    paramStyle |= 2;
+  paramTextSize = height;
+
+  // construct org.xcsoar.TextUtil object
+  localObject = env->NewObject(textUtilClass, midTextUtil, paramFamilyName,
+                               paramStyle, paramTextSize);
+  if (!localObject)
+    return false;
+
+  textUtilObject = env->NewGlobalRef(localObject);
+  if (!textUtilObject)
+    return false;
+
+  // get height, ascent_height and capital_height
+  assert(midGetFontMetrics);
+  metricsArray = env->NewIntArray(5);
+  env->CallVoidMethod(textUtilObject, midGetFontMetrics, metricsArray);
+  env->GetIntArrayRegion(metricsArray, 0, 5, metrics);
+  height = metrics[0];
+  style = metrics[1];
+  ascent_height = metrics[2];
+  capital_height = metrics[3];
+  line_spacing = metrics[4];
+
+  // store face name. android API does not provide ways to query it.
+  Font::facename = facename;
+
+  // free local references
+  env->DeleteLocalRef(metricsArray);
+  env->DeleteLocalRef(localObject);
+  env->DeleteLocalRef(textUtilClass);
+  env->DeleteLocalRef(paramFamilyName);
+
+  return true;
+}
+
+void
+Font::reset()
+{
+  if (textUtilObject) {
+    env->DeleteGlobalRef(textUtilObject);
+    textUtilObject = NULL;
+  }
+}
+
+void
+Font::text_width(const TCHAR *text, int &width, int &height) const
+{
+  jstring paramText;
+  jintArray paramExtent;
+  jint extent[2];
+
+  if (!textUtilObject)
+    return;
+
+#ifdef UNICODE
+  paramText = env->NewString(text, wcslen(text));
+#else
+  paramText = env->NewStringUTF(text);
+#endif
+  paramExtent = env->NewIntArray(2);
+
+  env->CallVoidMethod(textUtilObject, midGetTextBounds,
+                      paramText, paramExtent);
+  env->GetIntArrayRegion(paramExtent, 0, 2, extent);
+
+  width = extent[0];
+  height = extent[1];
+
+  // free local references
+  env->DeleteLocalRef(paramText);
+  env->DeleteLocalRef(paramExtent);
+}
+
+int
+Font::text_texture_gl(const TCHAR *text, SIZE &size,
+                      const Color &fg, const Color &bg) const
+{
+  jstring paramText;
+  jint jfg[3] = { fg.red(), fg.green(), fg.blue() };
+  jint jbg[3] = { bg.red(), bg.green(), bg.blue() };
+  jint textureID;
+
+  if (!textUtilObject)
+    return NULL;
+
+  size.cx = size.cy = 0;
+  text_width(text, size);
+  if (size.cx == 0 || size.cy == 0)
+    return NULL;
+
+#ifdef UNICODE
+  paramText = env->NewString(text, wcslen(text));
+#else
+  paramText = env->NewStringUTF(text);
+#endif
+
+  textureID = env->CallIntMethod(textUtilObject, midGetTextTextureGL,
+                                 paramText,
+                                 jfg[0], jfg[1], jfg[2],
+                                 jbg[0], jbg[1], jbg[2]);
+
+  // free local references
+  env->DeleteLocalRef(paramText);
+
+  return textureID;
+}
+
+
+#else // !ANDROID
+
 #ifdef ENABLE_SDL
 
 bool
-Font::set(const char *file, int ptsize, bool bold, bool italic)
+Font::_set(const char *file, int ptsize, bool bold, bool italic)
 {
   reset();
 
@@ -46,7 +219,6 @@ Font::set(const char *file, int ptsize, bool bold, bool italic)
   return true;
 }
 
-#ifdef _UNICODE
 bool
 Font::set(const TCHAR *facename, int height, bool bold, bool italic)
 {
@@ -56,7 +228,6 @@ Font::set(const TCHAR *facename, int height, bool bold, bool italic)
   lf.lfItalic = italic;
   return set(lf);
 }
-#endif
 
 bool
 Font::set(const LOGFONT &log_font)
@@ -69,9 +240,9 @@ Font::set(const LOGFONT &log_font)
   dejavu_ttf = "/system/fonts/DroidSans.ttf";
 #endif
 
-  return set(dejavu_ttf, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
-             log_font.lfWeight >= 700,
-             log_font.lfItalic);
+  return _set(dejavu_ttf, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
+              log_font.lfWeight >= 700,
+              log_font.lfItalic);
 }
 
 void
@@ -197,3 +368,4 @@ Font::reset()
 }
 
 #endif /* !ENABLE_SDL */
+#endif /* !ANDROID */

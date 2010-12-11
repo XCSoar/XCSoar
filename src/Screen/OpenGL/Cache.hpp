@@ -27,12 +27,12 @@ Copyright_License {
 #include "Compiler.h"
 
 #ifdef ANDROID
+#include "Screen/Font.hpp"
 #include <GLES/gl.h>
 #else
 #include <SDL_opengl.h>
-#endif
-
 #include <SDL_ttf.h>
+#endif
 
 class GLTexture;
 class Font;
@@ -40,8 +40,13 @@ struct Color;
 
 namespace TextCache {
   gcc_pure
+#ifdef ANDROID
+  GLTexture *get(const Font *font, Color background_color, Color text_color,
+                 const char *text);
+#else
   GLTexture *get(TTF_Font *font, Color background_color, Color text_color,
                  const char *text);
+#endif
 
   void flush();
 };
