@@ -42,10 +42,6 @@ RTTaskFactory::validate()
 {
   bool valid = AbstractTaskFactory::validate();
 
-  if (!is_unique()) {
-   addValidationError(TURNPOINTS_NOT_UNIQUE);
-   valid = false;
-  }
   return valid;
 }
 
@@ -55,7 +51,7 @@ RTTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
   to.task_scored = true;
   to.fai_finish = false;  
   to.homogeneous_tps = true;
-  to.is_closed = true;
+  to.is_closed = false;
   to.min_points = 4;
   to.max_points = 10;
   to.start_requires_arm = true;

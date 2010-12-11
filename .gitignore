@@ -1,4 +1,3 @@
-
 results/res-*
 .stgit*
 .deps
@@ -24,15 +23,15 @@ Doc/cloc.txt
 output
 perf.data
 perf.data.old
-
 debian/files
 debian/stamp-*
 debian/tmp
 debian/*.substvars
 debian/xcsoar
-
-mapgen/data/*/*
-mapgen/tmp/*
+mapgen/data
+mapgen/tmp
+mapgen/jobs
 *.pyc
 
 rasp/data
+.#*

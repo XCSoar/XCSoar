@@ -58,6 +58,6 @@ class Angle:
 
     def __str__(self):
         return str(self.__value)
-    
+
     def __sub__(self, other):
         return Angle.degrees(self.value_degrees() - other.value_degrees())

@@ -27,37 +27,37 @@ class MapGenerator:
 
         print "MapGenerator created"
 
-    def AddInformationFile(self, title, author = "Unknown", credits = []):
+    def add_information_file(self, title, author = "Unknown", credits = []):
         '''
         Adds an information file to the map
         '''
 
         if self.__bounds == None:
-            print "Please set bounds before calling AddInformationFile() !"
+            print "Please set bounds before calling add_information_file() !"
             return False
 
         dst = os.path.abspath(self.__dir_temp + "/info.txt")
-        
+
         f = open(dst, "w")
         f.write("map name: " + title + "\n")
         f.write("author: " + author + "\n")
-        f.write("creation time: " + time.strftime("%d.%m.%Y %H:%M:%S") + 
+        f.write("creation time: " + time.strftime("%d.%m.%Y %H:%M:%S") +
                 " (" + str(time.time()) + ")\n")
-        f.write("latitude range: " + str(self.__bounds.bottom.value_degrees()) + 
+        f.write("latitude range: " + str(self.__bounds.bottom.value_degrees()) +
                 " to " + str(self.__bounds.top.value_degrees()) + "\n")
-        f.write("longitude range: " + str(self.__bounds.left.value_degrees()) + 
+        f.write("longitude range: " + str(self.__bounds.left.value_degrees()) +
                 " to " + str(self.__bounds.right.value_degrees()) + "\n")
-        
+
         for credit in credits:
             f.write("credits: " + credit + "\n")
-        
+
         f.close()
-        
+
         self.__files.append([dst, True])
-        
+
         return True
-            
-    def AddWaypointFile(self, filename):
+
+    def add_waypoint_file(self, filename):
         '''
         Adds a waypoint file to the map
         @param filename: The file that should be added
@@ -75,10 +75,10 @@ class MapGenerator:
             return False
 
         self.__files.append([dst, True])
-        
+
         return True
-            
-    def AddWaypointDetailsFile(self, filename):
+
+    def add_waypoint_details_file(self, filename):
         '''
         Adds a waypoint details file to the map
         @param filename: The file that should be added
@@ -87,7 +87,7 @@ class MapGenerator:
         if not os.path.exists(filename):
             print "failed! (" + filename + " not found!)"
             return False
-            
+
         dst = os.path.abspath(self.__dir_temp + "/airfields.txt")
         shutil.copy(filename, dst)
         if not os.path.exists(dst):
@@ -96,10 +96,10 @@ class MapGenerator:
             return False
 
         self.__files.append([dst, True])
-        
+
         return True
-            
-    def AddAirspaceFile(self, filename):
+
+    def add_airspace_file(self, filename):
         '''
         Adds a airspace file to the map
         @param filename: The file that should be added
@@ -108,7 +108,7 @@ class MapGenerator:
         if not os.path.exists(filename):
             print "failed! (" + filename + " not found!)"
             return False
-            
+
         dst = os.path.abspath(self.__dir_temp + "/airspace.txt")
         shutil.copy(filename, dst)
         if not os.path.exists(dst):
@@ -117,20 +117,20 @@ class MapGenerator:
             return False
 
         self.__files.append([dst, True])
-        
+
         return True
-            
-    def AddTopology(self, bounds = None):
+
+    def add_topology(self, bounds = None):
         print "Adding topology ..."
 
-        if bounds == None: 
+        if bounds == None:
             if self.__bounds == None:
                 print "failed! (Boundaries undefined!)"
                 return False
-            
+
             bounds = self.__bounds
 
-        topology_files = topology_vmap0.Create(bounds, self.__dir_data,
+        topology_files = topology_vmap0.create(bounds, self.__dir_data,
                                                self.__dir_temp)
         if topology_files == None:
             print "Topology creation failed!"
@@ -139,17 +139,17 @@ class MapGenerator:
         self.__files.extend(topology_files)
         return True
 
-    def AddTerrain(self, arcseconds_per_pixel = 9.0, bounds = None):
+    def add_terrain(self, arcseconds_per_pixel = 9.0, bounds = None):
         print "Adding terrain ..."
 
-        if bounds == None: 
+        if bounds == None:
             if self.__bounds == None:
                 print "failed! (Boundaries undefined!)"
                 return False
-            
+
             bounds = self.__bounds
 
-        terrain_files = terrain_srtm.Create(bounds, arcseconds_per_pixel,
+        terrain_files = terrain_srtm.create(bounds, arcseconds_per_pixel,
                                            self.__dir_data, self.__dir_temp)
         if terrain_files == None:
             print "Terrain creation failed!"
@@ -158,7 +158,7 @@ class MapGenerator:
         self.__files.extend(terrain_files)
         return True
 
-    def SetBounds(self, bounds):
+    def set_bounds(self, bounds):
         print "Setting map boundaries ..."
 
         if not isinstance(bounds, GeoRect):
@@ -169,14 +169,14 @@ class MapGenerator:
         print "(", self.__bounds, ")"
         return True
 
-    def SetBoundsSeperatly(self, latmin, latmax, lonmin, lonmax):
+    def set_bounds_separatly(self, latmin, latmax, lonmin, lonmax):
         self.__bounds = GeoRect()
         self.__bounds.left = lonmin
         self.__bounds.right = lonmax
         self.__bounds.top = latmax
         self.__bounds.bottom = latmin
 
-    def SetBoundsByWaypointFile(self, filename):
+    def set_bounds_by_waypoint_file(self, filename):
         print "Setting map boundaries to match waypoint file contents ..."
 
         print "Reading waypoint file ..."
@@ -193,14 +193,14 @@ class MapGenerator:
         wplist.parse(f)
         f.close()
 
-        return self.SetBounds(wplist.get_bounds())
+        return self.set_bounds(wplist.get_bounds())
 
-    def Create(self, filename, attach = False):
+    def create(self, filename, attach = False):
         '''
         Creates the map at the given location
         @param filename: Location of the map file that should be created
         '''
-        
+
         # Open the zip file
         if attach:
             print "Adding MapGenerator data to map file ..."
@@ -233,8 +233,8 @@ class MapGenerator:
             else:
                 z.write(file[0], os.path.basename(file[0]), ZIP_DEFLATED)
         z.close()
-        
-    def Cleanup(self):
+
+    def cleanup(self):
         for file in self.__files:
             if isinstance(file, list):
                 file = file[0]
