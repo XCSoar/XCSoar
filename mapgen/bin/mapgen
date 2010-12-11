@@ -1,9 +1,15 @@
-import sys
-from map_generator import MapGenerator
+#!/usr/bin/python
+
+import sys, os
+
+app_dir = os.path.abspath(__file__ + '/../..')
+sys.path.append(app_dir + '/lib')
+
+from xcsoar.mapgen.generator import Generator
 
 def print_help():
-    print "Usage:   generate_map.py [Options] -wpf waypoint_file output_file"
-    print "         generate_map.py [Options] -b latmin latmax lonmin lonmax output_file"
+    print "Usage:   mapgen [Options] -wpf waypoint_file output_file"
+    print "         mapgen [Options] -b latmin latmax lonmin lonmax output_file"
     print ""
     print "Options: -r resolution (terrain resolution, arcseconds per pixel)"
 
@@ -31,16 +37,17 @@ def main():
         print_help()
         return
 
-    m = MapGenerator()
+    generator = Generator(dir_data=app_dir + '/data',
+                          dir_temp=app_dir + '/tmp')
     if wp != None:
-        m.add_waypoint_file(wp)
-        m.set_bounds_by_waypoint_file(wp)
+        generator.add_waypoint_file(wp)
+        generator.set_bounds_by_waypoint_file(wp)
     if latmin != None:
-        m.set_bounds_separatly(latmin, latmax, lonmin, lonmax)
-    m.add_topology()
-    m.add_terrain(res)
-    m.create(output_file)
-    m.cleanup()
+        generator.set_bounds_separatly(latmin, latmax, lonmin, lonmax)
+    generator.add_topology()
+    generator.add_terrain(res)
+    generator.create(output_file)
+    generator.cleanup()
 
 if __name__ == "__main__":
     main()
