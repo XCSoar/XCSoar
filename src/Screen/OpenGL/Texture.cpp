@@ -59,6 +59,8 @@ validate_texture_size(GLsizei i)
   return allow_unaligned_textures() ? i : next_power_of_two(i);
 }
 
+#ifndef ANDROID
+
 /**
  * Load data into the current texture.  Fixes alignment to the next
  * power of two if needed.
@@ -133,6 +135,8 @@ load_surface_into_texture(const SDL_Surface *surface)
   return true;
 }
 
+#endif
+
 GLTexture::GLTexture(unsigned _width, unsigned _height)
   :width(_width), height(_height)
 {
@@ -142,6 +146,8 @@ GLTexture::GLTexture(unsigned _width, unsigned _height)
                validate_texture_size(width), validate_texture_size(height),
                0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 }
+
+#ifndef ANDROID
 
 void
 GLTexture::load(SDL_Surface *src)
@@ -189,6 +195,8 @@ GLTexture::load(SDL_Surface *src)
     SDL_FreeSurface(surface);
   }
 }
+
+#endif
 
 void
 GLTexture::draw(int dest_x, int dest_y,

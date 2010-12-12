@@ -26,11 +26,10 @@ Copyright_License {
 
 #include "Asset.hpp"
 
-#include <SDL.h>
-
 #ifdef ANDROID
 #include <GLES/gl.h>
 #else
+#include <SDL.h>
 #include <SDL_opengl.h>
 #endif
 
@@ -53,10 +52,12 @@ public:
    */
   GLTexture(unsigned _width, unsigned _height);
 
+#ifndef ANDROID
   GLTexture(SDL_Surface *surface) {
     init();
     load(surface);
   }
+#endif
 
   ~GLTexture() {
     glDeleteTextures(1, &id);
@@ -87,7 +88,9 @@ protected:
     }
   }
 
+#ifndef ANDROID
   void load(SDL_Surface *surface);
+#endif
 
 public:
   void bind() {
