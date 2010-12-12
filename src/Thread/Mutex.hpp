@@ -60,6 +60,8 @@ class Mutex : private NonCopyable {
   CRITICAL_SECTION handle;
 #endif
 
+  friend class Cond;
+
 public:
   /**
    * Initializes the Mutex
