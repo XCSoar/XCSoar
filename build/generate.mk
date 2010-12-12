@@ -63,7 +63,11 @@ $(TARGET_OUTPUT_DIR)/include/resource_data.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
 	$(Q)$(PERL) tools/GenerateResources.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-$(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
+$(TARGET_OUTPUT_DIR)/XCSoar-drawable.rc: Data/XCSoar.rc src/resource.h | $(TARGET_OUTPUT_DIR)/dirstamp
+	@$(NQ)echo "  CPP     $@"
+	$(Q)$(HOSTCPP) -o $@ $< -I$(SRC) $(TARGET_CPPFLAGS) -DANDROID_DRAWABLE
+
+$(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/XCSoar-drawable.rc \
 	$(RESOURCE_FILES) \
 	tools/GenerateAndroidResources.pl | $(TARGET_OUTPUT_DIR)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"

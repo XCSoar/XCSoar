@@ -5,7 +5,7 @@ HI_RES_AWARE CEUX {1}
 #include "resource.h"
 
 // on Android, these are included as drawable resources (PNG)
-#ifndef ANDROID
+#if !defined(ANDROID) || defined(ANDROID_DRAWABLE)
 
 // --- Icons ---
 
