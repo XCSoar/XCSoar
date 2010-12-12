@@ -63,7 +63,7 @@ EventLoop::dispatch(SDL_Event &event)
     window->on_timer(timer);
 #endif /* !ANDROID */
   } else
-    ((Window &)top_window).on_event(event);
+    top_window.on_event(event);
 }
 
 void

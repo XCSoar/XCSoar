@@ -460,15 +460,7 @@ Window::on_paint(Canvas &canvas, const RECT &dirty)
   on_paint(canvas);
 }
 
-#ifdef ENABLE_SDL
-
-bool
-Window::on_event(const SDL_Event &event)
-{
-  return false;
-}
-
-#else /* !ENABLE_SDL */
+#ifndef ENABLE_SDL
 
 LRESULT
 Window::on_unhandled_message(HWND hWnd, UINT message,

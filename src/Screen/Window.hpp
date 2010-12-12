@@ -803,10 +803,7 @@ public:
   virtual void on_paint(Canvas &canvas);
   virtual void on_paint(Canvas &canvas, const RECT &dirty);
 
-#ifdef ENABLE_SDL
-  virtual bool on_event(const SDL_Event &event);
-
-#else /* !ENABLE_SDL */
+#ifndef ENABLE_SDL
   /**
    * Called by on_message() when the message was not handled by any
    * virtual method.  Calls the default handler.  This function is
