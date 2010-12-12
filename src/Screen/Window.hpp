@@ -749,17 +749,6 @@ public:
   }
 #endif
 
-  void send_command(const Window &from) {
-    assert_none_locked();
-    assert_thread();
-
-#ifdef ENABLE_SDL
-    // XXX
-#else /* !ENABLE_SDL */
-    ::SendMessage(hWnd, WM_COMMAND, (WPARAM)0, (LPARAM)from.hWnd);
-#endif /* !ENABLE_SDL */
-  }
-
   void send_user(unsigned id) {
 #ifdef ENABLE_SDL
     SDL_Event event;
