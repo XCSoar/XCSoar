@@ -27,7 +27,10 @@ Copyright_License {
 #include <jni.h>
 
 class NativeView;
+class EventQueue;
 
 extern NativeView *native_view;
+
+extern EventQueue *event_queue;
 
 #endif

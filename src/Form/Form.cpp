@@ -32,7 +32,10 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Util/StringUtil.hpp"
 
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+#include "Screen/Android/Event.hpp"
+#include "Android/Main.hpp"
+#elif defined(ENABLE_SDL)
 #include "Screen/SDL/Event.hpp"
 #else
 #include "Screen/GDI/Event.hpp"
@@ -314,7 +317,16 @@ int WndForm::ShowModal(bool bEnableMap) {
 
   main_window.add_dialog(this);
 
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+
+  update();
+
+  EventLoop loop(*event_queue, *(TopWindow *)get_root_owner());
+  Event event;
+  while (mModalResult == 0 && loop.get(event))
+    loop.dispatch(event);
+
+#elif defined(ENABLE_SDL)
 
   update();
 

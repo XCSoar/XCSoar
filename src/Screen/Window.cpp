@@ -26,7 +26,10 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "Asset.hpp"
 
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+#include "Screen/Android/Event.hpp"
+#include "Android/Main.hpp"
+#elif defined(ENABLE_SDL)
 #include "Screen/SDL/Event.hpp"
 #else
 #include "Screen/GDI/Event.hpp"
@@ -268,6 +271,14 @@ Window::bring_to_top()
 void
 Window::send_user(unsigned id)
 {
+#ifdef ANDROID
+  Event event;
+  event.type = Event::USER;
+  event.param = id;
+  event.ptr = this;
+
+  event_queue->push(event);
+#else
   SDL_Event event;
   event.user.type = EVENT_USER;
   event.user.code = (int)id;
@@ -275,6 +286,7 @@ Window::send_user(unsigned id)
   event.user.data2 = NULL;
 
   ::SDL_PushEvent(&event);
+#endif
 }
 
 #ifndef ANDROID
@@ -311,7 +323,11 @@ Window::on_destroy()
     parent = NULL;
   }
 
+#ifdef ANDROID
+  event_queue->purge(*this);
+#else
   EventQueue::purge(*this);
+#endif
 #else /* !ENABLE_SDL */
   assert(hWnd != NULL);
 

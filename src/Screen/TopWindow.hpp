@@ -35,6 +35,10 @@ Copyright_License {
 #include "Screen/SDL/TopCanvas.hpp"
 #endif
 
+#ifdef ANDROID
+struct Event;
+#endif
+
 /**
  * A top-level full-screen window.
  */
@@ -132,7 +136,9 @@ public:
 #endif
   }
 
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+  bool on_event(const Event &event);
+#elif defined(ENABLE_SDL)
   bool on_event(const SDL_Event &event);
 #endif
 

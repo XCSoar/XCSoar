@@ -22,71 +22,56 @@ Copyright_License {
 */
 
 #include "org_xcsoar_EventBridge.h"
-
-#include <SDL_events.h>
-
-static SDL_keysym
-translate_key_code(jint key_code)
-{
-  /* XXX implement */
-  SDL_keysym keysym;
-  keysym.sym = (SDLKey)key_code;
-  return keysym;
-}
+#include "Screen/Android/Event.hpp"
+#include "Android/Main.hpp"
 
 void
 Java_org_xcsoar_EventBridge_onKeyDown(JNIEnv *env, jclass cls, jint key_code)
 {
-  SDL_Event event;
-  event.type = SDL_KEYDOWN;
-  event.key.state = SDL_PRESSED;
-  event.key.keysym = translate_key_code(key_code);
-  SDL_PushEvent(&event);
+  Event event;
+  event.type = Event::KEY_DOWN;
+  event.param = key_code;
+  event_queue->push(event);
 }
 
 void
 Java_org_xcsoar_EventBridge_onKeyUp(JNIEnv *env, jclass cls, jint key_code)
 {
-  SDL_Event event;
-  event.type = SDL_KEYUP;
-  event.key.state = SDL_RELEASED;
-  event.key.keysym = translate_key_code(key_code);
-  SDL_PushEvent(&event);
+  Event event;
+  event.type = Event::KEY_UP;
+  event.param = key_code;
+  event_queue->push(event);
 }
 
 void
 Java_org_xcsoar_EventBridge_onMouseDown(JNIEnv *env, jclass cls,
                                         jint x, jint y)
 {
-  SDL_Event event;
-  event.type = SDL_MOUSEBUTTONDOWN;
-  event.button.button = SDL_BUTTON_LEFT;
-  event.button.state = SDL_PRESSED;
-  event.button.x = x;
-  event.button.y = y;
-  SDL_PushEvent(&event);
+  Event event;
+  event.type = Event::MOUSE_DOWN;
+  event.x = x;
+  event.y = y;
+  event_queue->push(event);
 }
 
 void
 Java_org_xcsoar_EventBridge_onMouseUp(JNIEnv *env, jclass cls,
                                         jint x, jint y)
 {
-  SDL_Event event;
-  event.type = SDL_MOUSEBUTTONUP;
-  event.button.button = SDL_BUTTON_LEFT;
-  event.button.state = SDL_RELEASED;
-  event.button.x = x;
-  event.button.y = y;
-  SDL_PushEvent(&event);
+  Event event;
+  event.type = Event::MOUSE_UP;
+  event.x = x;
+  event.y = y;
+  event_queue->push(event);
 }
 
 void
 Java_org_xcsoar_EventBridge_onMouseMove(JNIEnv *env, jclass cls,
                                         jint x, jint y)
 {
-  SDL_Event event;
-  event.type = SDL_MOUSEMOTION;
-  event.motion.x = x;
-  event.motion.y = y;
-  SDL_PushEvent(&event);
+  Event event;
+  event.type = Event::MOUSE_MOTION;
+  event.x = x;
+  event.y = y;
+  event_queue->push(event);
 }

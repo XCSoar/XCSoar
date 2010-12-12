@@ -27,12 +27,15 @@ SCREEN_SOURCES = \
 
 ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/SDL/Init.cpp \
-	$(SCREEN_SRC_DIR)/SDL/Event.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp
-ifneq ($(TARGET),ANDROID)
+ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/Android/Event.cpp
+else
+SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/SDL/Init.cpp \
+	$(SCREEN_SRC_DIR)/SDL/Event.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Timer.cpp
 endif
 ifeq ($(OPENGL),y)

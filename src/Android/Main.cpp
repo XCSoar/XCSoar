@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
-#include "Screen/Init.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Android/Event.hpp"
 #include "Simulator.hpp"
 #include "Asset.hpp"
 #include "Profile/Profile.hpp"
@@ -37,7 +37,7 @@ Copyright_License {
 
 NativeView *native_view;
 
-static ScreenGlobalInit *screen_init;
+EventQueue *event_queue;
 
 JNIEXPORT jboolean JNICALL
 Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
@@ -56,8 +56,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   Profile::SetFiles(_T(""));
 
-  /* temporary hack */
-  screen_init = new ScreenGlobalInit();
+  event_queue = new EventQueue();
 
   return XCSoarInterface::Startup(NULL);
 }
@@ -73,7 +72,6 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 {
   CommonInterface::main_window.reset();
   Fonts::Deinitialize();
-  delete screen_init;
-
+  delete event_queue;
   delete native_view;
 }

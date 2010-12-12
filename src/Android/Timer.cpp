@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "Android/Timer.hpp"
+#include "Android/Main.hpp"
 #include "Java/Global.hpp"
 #include "Screen/Window.hpp"
-#include "Screen/SDL/Event.hpp"
+#include "Screen/Android/Event.hpp"
 #include "org_xcsoar_Timer.h"
 
-#include <SDL_events.h>
 #include <assert.h>
 
 AndroidTimer::Bridge::Bridge(JNIEnv *env, jlong ptr, jint period)
@@ -57,15 +57,14 @@ AndroidTimer::AndroidTimer(Window &_window, unsigned ms)
 }
 
 static bool
-match_timer(const SDL_Event &event, void *ctx)
+match_timer(const Event &event, void *ctx)
 {
-  return event.type == Window::EVENT_TIMER && event.user.data1 == ctx;
+  return event.type == Event::TIMER && event.ptr == ctx;
 }
 
 AndroidTimer::~AndroidTimer()
 {
-  EventQueue::purge(SDL_EVENTMASK(Window::EVENT_TIMER),
-                    match_timer, (void *)this);
+  event_queue->purge(match_timer, (void *)this);
 }
 
 void
@@ -100,10 +99,8 @@ Java_org_xcsoar_Timer_run(JNIEnv *env, jobject obj, jlong ptr)
 {
   AndroidTimer *timer = (AndroidTimer *)(void *)ptr;
 
-  SDL_Event event;
-  event.type = Window::EVENT_TIMER;
-  event.user.code = 0;
-  event.user.data1 = timer;
-  event.user.data2 = NULL;
-  ::SDL_PushEvent(&event);
+  Event event;
+  event.type = Event::TIMER;
+  event.ptr = (void *)timer;
+  event_queue->push(event);
 }

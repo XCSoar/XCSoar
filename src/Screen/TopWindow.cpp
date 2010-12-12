@@ -28,7 +28,11 @@ Copyright_License {
 #include "Screen/OpenGL/Globals.hpp"
 #endif
 
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+#include "Screen/Android/Event.hpp"
+#include "Android/Main.hpp"
+#include "PeriodClock.hpp"
+#elif defined(ENABLE_SDL)
 #include "Screen/SDL/Event.hpp"
 #include "PeriodClock.hpp"
 #else
@@ -135,6 +139,11 @@ TopWindow::invalidate()
   invalidated_lock.Unlock();
 
   /* wake up the event loop */
+#ifdef ANDROID
+  Event event;
+  event.type = Event::NOP;
+  event_queue->push(event);
+#else
   /* note that SDL_NOEVENT is not documented, but since we just want
      to wake up without actually sending an event, I hope this works
      on all future SDL versions; if SDL_NOEVENT ever gets remove, I'll
@@ -142,6 +151,7 @@ TopWindow::invalidate()
   SDL_Event event;
   event.type = SDL_NOEVENT;
   ::SDL_PushEvent(&event);
+#endif
 }
 
 void
@@ -199,7 +209,11 @@ TopWindow::on_deactivate()
 void
 TopWindow::post_quit()
 {
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+  Event event;
+  event.type = Event::QUIT;
+  event_queue->push(event);
+#elif defined(ENABLE_SDL)
   SDL_Event event;
   event.type = SDL_QUIT;
   ::SDL_PushEvent(&event);
@@ -208,7 +222,52 @@ TopWindow::post_quit()
 #endif
 }
 
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+
+bool
+TopWindow::on_event(const Event &event)
+{
+  switch (event.type) {
+    Window *w;
+
+  case Event::NOP:
+  case Event::QUIT:
+  case Event::TIMER:
+  case Event::USER:
+    break;
+
+  case Event::KEY_DOWN:
+    w = get_focused_window();
+    if (w == NULL)
+      w = this;
+
+    return w->on_key_down(event.param);
+
+  case Event::KEY_UP:
+    w = get_focused_window();
+    if (w == NULL)
+      w = this;
+
+    return w->on_key_up(event.param);
+
+  case Event::MOUSE_MOTION:
+    // XXX keys
+    return on_mouse_move(event.x, event.y, 0);
+
+  case Event::MOUSE_DOWN:
+    static PeriodClock double_click;
+    return double_click.check_always_update(300)
+      ? on_mouse_down(event.x, event.y)
+      : on_mouse_double(event.x, event.y);
+
+  case Event::MOUSE_UP:
+    return on_mouse_up(event.x, event.y);
+  }
+
+  return false;
+}
+
+#elif defined(ENABLE_SDL)
 
 bool
 TopWindow::on_event(const SDL_Event &event)
@@ -282,7 +341,17 @@ LRESULT TopWindow::on_message(HWND _hWnd, UINT message,
 int
 TopWindow::event_loop()
 {
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+  update();
+
+  EventLoop loop(*event_queue, *this);
+  Event event;
+  while (loop.get(event))
+    loop.dispatch(event);
+
+  return 0;
+
+#elif defined(ENABLE_SDL)
   update();
 
   EventLoop loop(*this);

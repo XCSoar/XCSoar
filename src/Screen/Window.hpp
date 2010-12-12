@@ -35,7 +35,9 @@ Copyright_License {
 #include "Screen/SDL/Timer.hpp"
 #endif /* ENABLE_SDL */
 
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+struct Event;
+#elif defined(ENABLE_SDL)
 #include <SDL_events.h>
 #endif
 
@@ -148,18 +150,16 @@ class Window : private NonCopyable {
   friend class ContainerWindow;
 
 public:
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+  typedef AndroidTimer *timer_t;
+#elif defined(ENABLE_SDL)
   enum {
     EVENT_USER = SDL_USEREVENT,
     EVENT_TIMER,
   };
 
-#ifdef ANDROID
-  typedef AndroidTimer *timer_t;
-#else /* !ANDROID */
   friend class SDLTimer;
   typedef SDLTimer *timer_t;
-#endif /* !ANDROID */
 #else
   typedef UINT_PTR timer_t;
 #endif

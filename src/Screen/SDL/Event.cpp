@@ -54,14 +54,9 @@ EventLoop::dispatch(SDL_Event &event)
     Window *window = (Window *)event.user.data1;
     window->on_user(event.user.code);
   } else if (event.type == Window::EVENT_TIMER && event.user.data1 != NULL) {
-#ifdef ANDROID
-    AndroidTimer *timer = (AndroidTimer *)event.user.data1;
-    timer->run();
-#else /* !ANDROID */
     Window *window = (Window *)event.user.data1;
     SDLTimer *timer = (SDLTimer *)event.user.data2;
     window->on_timer(timer);
-#endif /* !ANDROID */
   } else
     top_window.on_event(event);
 }
