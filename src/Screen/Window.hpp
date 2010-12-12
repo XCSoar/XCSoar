@@ -749,30 +749,16 @@ public:
   }
 #endif
 
-  void send_user(unsigned id) {
 #ifdef ENABLE_SDL
-    SDL_Event event;
-    event.user.type = EVENT_USER;
-    event.user.code = (int)id;
-    event.user.data1 = this;
-    event.user.data2 = NULL;
-
-    ::SDL_PushEvent(&event);
-#else /* !ENABLE_SDL */
+  void send_user(unsigned id);
+#else
+  void send_user(unsigned id) {
     ::PostMessage(hWnd, WM_USER + id, (WPARAM)0, (LPARAM)0);
-#endif /* !ENABLE_SDL */
   }
+#endif
 
 #if defined(ENABLE_SDL) && !defined(ANDROID)
-  void send_timer(SDLTimer *timer) {
-    SDL_Event event;
-    event.user.type = EVENT_TIMER;
-    event.user.code = 0;
-    event.user.data1 = this;
-    event.user.data2 = timer;
-
-    ::SDL_PushEvent(&event);
-  }
+  void send_timer(SDLTimer *timer);
 #endif
 
 protected:

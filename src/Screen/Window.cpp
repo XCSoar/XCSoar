@@ -265,6 +265,35 @@ Window::bring_to_top()
   parent->bring_child_to_top(*this);
 }
 
+void
+Window::send_user(unsigned id)
+{
+  SDL_Event event;
+  event.user.type = EVENT_USER;
+  event.user.code = (int)id;
+  event.user.data1 = this;
+  event.user.data2 = NULL;
+
+  ::SDL_PushEvent(&event);
+}
+
+#ifndef ANDROID
+
+void
+Window::send_timer(SDLTimer *timer)
+{
+  SDL_Event event;
+  event.user.type = EVENT_TIMER;
+  event.user.code = 0;
+  event.user.data1 = this;
+  event.user.data2 = timer;
+
+  ::SDL_PushEvent(&event);
+}
+
+#endif /* !ANDROID */
+
+
 #endif /* ENABLE_SDL */
 
 bool
