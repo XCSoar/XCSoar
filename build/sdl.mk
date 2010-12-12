@@ -8,7 +8,7 @@ else
 ifeq ($(TARGET),ANDROID)
 OPENGL = y
 SDL_CPPFLAGS := -I/opt/android/include/SDL
-SDL_LDLIBS := -L$(ANDROID_LIB_DIR) -lsdl-1.2
+SDL_LDLIBS :=
 else
 OPENGL ?= n
 SDL_CPPFLAGS := -I/usr/local/i586-mingw32msvc/include/SDL

@@ -33,7 +33,6 @@ public class Loader {
 
     static {
         try {
-            System.loadLibrary("sdl-1.2");
             System.loadLibrary("application");
             loaded = true;
         } catch (UnsatisfiedLinkError e) {
