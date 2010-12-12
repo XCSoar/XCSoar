@@ -52,8 +52,8 @@ namespace Java {
      * Sets the object, ignoring the previous value.  This is only
      * allowed once after the default constructor was used.
      */
-    void set(jobject _obj) {
-      obj = _obj;
+    void set(JNIEnv *env, jobject _obj) {
+      obj = env->NewGlobalRef(_obj);
     }
 
     jobject get() const {
