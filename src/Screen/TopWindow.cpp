@@ -81,6 +81,7 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
 
   ContainerWindow::set(NULL, cls, 0, 0, width, height, style);
 
+#ifndef ANDROID
 #ifdef _UNICODE
   char text2[_tcslen(text) * 4];
   ::WideCharToMultiByte(CP_UTF8, 0, text, -1, text2, sizeof(text2),
@@ -89,8 +90,8 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
   const char *text2 = text;
 #endif
 
-  if (!is_android())
-    ::SDL_WM_SetCaption(text2, NULL);
+  ::SDL_WM_SetCaption(text2, NULL);
+#endif
 #else /* !ENABLE_SDL */
   Window::set(NULL, cls, text, left, top, width, height, style);
 #endif /* !ENABLE_SDL */
