@@ -4,6 +4,8 @@ HI_RES_AWARE CEUX {1}
 
 #include "resource.h"
 
+// on Android, these are included as drawable resources (PNG)
+#ifndef ANDROID
 
 // --- Icons ---
 
@@ -112,6 +114,8 @@ IDR_WAV_BEEPBWEEP       WAVE    DISCARDABLE     "sound/beep-bweep.wav"
 IDR_WAV_CLEAR           WAVE    DISCARDABLE     "sound/beep-clear.wav"
 IDR_WAV_DRIP            WAVE    DISCARDABLE     "sound/beep-drip.wav"
 #endif
+
+#endif // !ANDROID
 
 // --- XML Dialogs ---
 IDR_XML_AIRSPACE        XMLDIALOG DISCARDABLE   "Dialogs/dlgAirspace.xml"
