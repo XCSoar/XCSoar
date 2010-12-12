@@ -95,9 +95,7 @@ protected:
 
 #ifdef ENABLE_OPENGL
   mutable GLTexture texture;
-#endif
-
-#ifdef ENABLE_SDL
+#elif defined(ENABLE_SDL)
   SDL_Surface *surface;
 #else
   BITMAPINFO bi;
