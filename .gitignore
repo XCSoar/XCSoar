@@ -8,6 +8,7 @@ results/res-*
 *.shp
 *.shx
 \#*#
+.#*
 *.orig
 *.rej
 *.log
@@ -28,10 +29,4 @@ debian/stamp-*
 debian/tmp
 debian/*.substvars
 debian/xcsoar
-mapgen/data
-mapgen/tmp
-mapgen/jobs
-*.pyc
-
 rasp/data
-.#*
