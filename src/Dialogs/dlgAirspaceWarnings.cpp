@@ -207,10 +207,13 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 
   ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
   if (lease->empty()) {
-    assert(i == 0);
-
-    canvas.text(paint_rc.left + IBLSCALE(2),
-                paint_rc.top + IBLSCALE(2), _("No Warnings"));
+    // the warnings were emptied between the opening of the dialog
+    // and this refresh, so only need to display "No Warnings" for
+    // top item, otherwise exit immediately
+    if (i==0) {
+      canvas.text(paint_rc.left + IBLSCALE(2),
+                  paint_rc.top + IBLSCALE(2), _("No Warnings"));
+    }
     return;
   }
 
