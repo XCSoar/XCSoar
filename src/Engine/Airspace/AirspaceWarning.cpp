@@ -111,9 +111,6 @@ AirspaceWarning::changed_state() const
   if ((m_state_last < WARNING_INSIDE) && (m_state == WARNING_INSIDE)) {
     return get_ack_expired();
   }
-  if ((m_state_last < WARNING_GLIDE) && (m_state == WARNING_GLIDE)) {
-    return true;
-  }
 
   return false;
 }
