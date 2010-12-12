@@ -34,14 +34,6 @@ public class Loader {
     static {
         try {
             System.loadLibrary("sdl-1.2");
-
-            try {
-                System.loadLibrary("sdl_gfx");
-            } catch (UnsatisfiedLinkError e) {
-                /* this library is not needed for the OpenGL renderer,
-                   failure to load it is not critical */
-            }
-
             System.loadLibrary("application");
             loaded = true;
         } catch (UnsatisfiedLinkError e) {

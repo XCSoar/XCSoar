@@ -17,10 +17,6 @@ ANDROID_ABI = armeabi
 ANDROID_LIB_DIR = /opt/android/libs/$(ANDROID_ABI)
 
 ANDROID_LIB_NAMES = sdl-1.2
-ifeq ($(OPENGL),n)
-ANDROID_LIB_NAMES += sdl_gfx
-endif
-
 ANDROID_LIB_FILES = $(patsubst %,$(ANDROID_LIB_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
 ANDROID_SO_FILES = $(patsubst %,$(ANDROID_BUILD)/libs/$(ANDROID_ABI)/lib%.so,$(ANDROID_LIB_NAMES))
 
