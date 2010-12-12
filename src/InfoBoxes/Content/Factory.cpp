@@ -41,14 +41,18 @@ Copyright_License {
 #include <stddef.h>
 
 // Groups:
-//   Altitude 0,1,20,33
+//   Altitude 0,1,20,33,70
 //   Aircraft info 3,6,23,32,37,47,54
-//   LD 4,5,19,38,53,66
-//   Vario 2,7,8,9,21,22,24,44
+//   LD 4,5,19,66,38,53,71
+//   Vario 2,7,8,9,21,22,63,24,44,64
 //   Wind 25,26,48,49,50
 //   MacCready 10,34,35,43
-//   Nav 11,12,13,15,16,17,18,27,28,29,30,31
+//   Nav 11,12,76,13,15,16,17,59,61,18,27,28,29,30,31,51,52,60,73
 //   Waypoint 14,36,39,40,41,42,45,46
+//   Team 55,56,57,58
+//   Gadget 65,75
+//   Alternates 67,68,69
+//   Experimental 72,74
 const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // 0
   {
@@ -163,7 +167,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Next Altitude Difference"),
     N_("WP AltD"),
     N_("Arrival altitude at the next waypoint relative to the safety arrival altitude."),
-    13, // WP AltR
+    76, // WP AltA
     11, // WP Dist
   },
 
@@ -587,7 +591,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("V Tsk Ins"),
     N_("Instantaneous cross country speed while on current task, compensated for altitude."),
     61, // V Task Ach
-    16, // Fin AltR
+    17, // V Task Av
   },
 
   // 60
@@ -744,7 +748,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("WP AltA"),
     N_("Absolute arrival altitude at the next waypoint in final glide."),
     13, // WP AltR
-    11, // WP Dist
+    12, // WP AltD
   },
 };
 
