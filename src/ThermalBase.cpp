@@ -90,6 +90,12 @@ EstimateThermalBase(const GeoPoint location, const fixed altitude,
     if (!positive(dh)) {
       // Calculate time when we passed the ground level
       t += dh / average;
+
+      if (!positive(t))
+        /* can happen when the terrain at this location is higher than
+           the aircraft's current altitude; bail out */
+        break;
+
       // Calculate position
       loc = FindLatitudeLongitude(location, wind.bearing, 
                                   wind.norm * t);
