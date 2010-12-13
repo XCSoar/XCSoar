@@ -52,8 +52,12 @@ public:
 
   // only the device blackboard can write to gps
   friend class DeviceDescriptor;
+
+#ifndef ANDROID
 protected:
+#endif
   NMEA_INFO& SetBasic() { return gps_info; }
+
 public:
   void SetStartupLocation(const GeoPoint &loc, const fixed alt);
   void SetLocation(const GeoPoint &loc, const fixed speed, const Angle bearing,

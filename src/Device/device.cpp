@@ -46,6 +46,13 @@ Copyright_License {
 #include "Config/Registry.hpp"
 #endif
 
+#ifdef ANDROID
+#include "Android/NativeView.hpp"
+#include "Android/Main.hpp"
+#include "Java/Object.hpp"
+#include "Java/Global.hpp"
+#endif
+
 #include <assert.h>
 
 // A note about locking.
@@ -84,6 +91,10 @@ static const DWORD dwSpeed[] = {
   115200
 };
 
+#ifdef ANDROID
+static Java::Object *internal_gps;
+#endif
+
 // This function is used to determine whether a generic
 // baro source needs to be used if available
 bool
@@ -95,6 +106,8 @@ devHasBaroSource(void)
 
   return false;
 }
+
+#ifndef ANDROID
 
 /**
  * Attempt to detect the GPS device.
@@ -189,9 +202,34 @@ SetPipeTo(DeviceDescriptor &out)
   }
 }
 
+#endif /* !ANDROID */
+
 void
 devStartup()
 {
+#ifdef ANDROID
+  assert(internal_gps == NULL);
+
+  if (is_simulator())
+    return;
+
+  jobject context = native_view->get_context();
+
+  JNIEnv *env = Java::GetEnv();
+  jclass cls = env->FindClass("org/xcsoar/InternalGPS");
+  assert(cls != NULL);
+
+  jmethodID cid = env->GetMethodID(cls, "<init>",
+                                   "(Landroid/content/Context;)V");
+  assert(cid != NULL);
+
+  jobject obj = env->NewObject(cls, cid, context);
+  assert(obj != NULL);
+  env->DeleteLocalRef(context);
+
+  internal_gps = new Java::Object(env, obj);
+  env->DeleteLocalRef(obj);
+#else /* !ANDROID */
   LogStartUp(_T("Register serial devices"));
 
   DeviceDescriptor *pDevNmeaOut = NULL;
@@ -216,6 +254,7 @@ devStartup()
 
   if (pDevNmeaOut != NULL)
     SetPipeTo(*pDevNmeaOut);
+#endif /* !ANDROID */
 }
 
 bool
@@ -302,6 +341,10 @@ devVarioFindVega(void)
 void
 devShutdown()
 {
+#ifdef ANDROID
+  delete internal_gps;
+  internal_gps = NULL;
+#else
   int i;
 
   // Stop COM devices
@@ -310,6 +353,7 @@ devShutdown()
   for (i = 0; i < NUMDEV; i++) {
     DeviceList[i].Close();
   }
+#endif
 }
 
 void

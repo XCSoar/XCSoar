@@ -184,7 +184,7 @@ DeviceBlackboard::LowerConnection()
   ScopeLock protect(mutexBlackboard);
   GPS_STATE &gps = SetBasic().gps;
 
-  if (gps.Connected)
+  if (!is_android() && gps.Connected)
     gps.Connected--;
 
   return gps.Connected > 0;

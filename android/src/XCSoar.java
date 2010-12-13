@@ -50,6 +50,7 @@ public class XCSoar extends Activity {
         }
 
         Timer.Initialize();
+        InternalGPS.Initialize();
 
         // fullscreen mode
         requestWindowFeature(Window.FEATURE_NO_TITLE);

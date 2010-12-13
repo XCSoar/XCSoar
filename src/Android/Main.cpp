@@ -47,11 +47,6 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   assert(native_view == NULL);
   native_view = new NativeView(env, obj, width, height);
-
-  /* force simulatior mode until GPS support has been implemented */
-  global_simulator_flag = true;
-  sim_set_in_cmd_line_flag = true;
-
   InitAsset();
 
   Profile::SetFiles(_T(""));
