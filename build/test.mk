@@ -53,7 +53,7 @@ TEST_NAMES = \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
 	TestColorRamp \
-	test_replay_task
+	test_replay_task TestProjection
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
 
@@ -82,6 +82,17 @@ TEST_GEO_BOUNDS_SOURCES = \
 TEST_GEO_BOUNDS_OBJS = $(call SRC_TO_OBJ,$(TEST_GEO_BOUNDS_SOURCES))
 TEST_GEO_BOUNDS_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestGeoBounds$(TARGET_EXEEXT): $(TEST_GEO_BOUNDS_OBJS) $(TEST_GEO_BOUNDS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_PROJECTION_SOURCES = \
+	$(SRC)/Projection.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestProjection.cpp
+TEST_PROJECTION_OBJS = $(call SRC_TO_OBJ,$(TEST_PROJECTION_SOURCES))
+TEST_PROJECTION_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestProjection$(TARGET_EXEEXT): $(TEST_PROJECTION_OBJS) $(TEST_PROJECTION_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
