@@ -96,6 +96,17 @@ FlarmTrafficWindow::on_create()
 }
 
 bool
+FlarmTrafficWindow::on_destroy()
+{
+  hfNoTraffic.reset();
+  hfLabels.reset();
+  hfSideInfo.reset();
+
+  PaintWindow::on_destroy();
+  return true;
+}
+
+bool
 FlarmTrafficWindow::on_resize(unsigned width, unsigned height)
 {
   PaintWindow::on_resize(width, height);

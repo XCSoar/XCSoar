@@ -82,6 +82,16 @@ ThermalAssistantWindow::on_create()
 }
 
 bool
+ThermalAssistantWindow::on_destroy()
+{
+  hfNoTraffic.reset();
+  hfLabels.reset();
+
+  BufferWindow::on_destroy();
+  return true;
+}
+
+bool
 ThermalAssistantWindow::on_resize(unsigned width, unsigned height)
 {
   BufferWindow::on_resize(width, height);
