@@ -112,6 +112,7 @@ WindAnalyser::reset()
   pastHalfway = false;
   curModeOK = false;
   windstore.reset();
+  numwindsamples = 0;
 }
 
 static fixed
