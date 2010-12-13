@@ -29,9 +29,6 @@ Copyright_License {
 void
 Profile::LoadUnits()
 {
-  unsigned Speed = 0;
-  unsigned Distance = 0;
-  unsigned TaskSpeed = 0;
   unsigned Lift = 0;
   unsigned Altitude = 0;
   unsigned Temperature = 0;
@@ -40,6 +37,7 @@ Profile::LoadUnits()
   if (Get(szProfileLatLonUnits, Temp))
     Units::SetCoordinateFormat((CoordinateFormats_t)Temp);
 
+  unsigned Speed = 1;
   Get(szProfileSpeedUnitsValue, Speed);
   switch (Speed) {
   case 0:
@@ -57,6 +55,7 @@ Profile::LoadUnits()
     break;
   }
 
+  unsigned TaskSpeed = 2;
   Get(szProfileTaskSpeedUnitsValue, TaskSpeed);
   switch (TaskSpeed) {
   case 0:
@@ -71,6 +70,7 @@ Profile::LoadUnits()
     break;
   }
 
+  unsigned Distance = 2;
   Get(szProfileDistanceUnitsValue,Distance);
   switch (Distance) {
   case 0:
