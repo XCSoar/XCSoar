@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_NATIVE_VIEW_HPP
 #define XCSOAR_ANDROID_NATIVE_VIEW_HPP
 
-#include <jni.h>
+#include "Java/Object.hpp"
 
 class NativeView {
   JNIEnv *env;
-  jobject obj;
+  Java::Object obj;
 
   unsigned width, height;
 
@@ -36,7 +36,7 @@ class NativeView {
 
 public:
   NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height)
-    :env(_env), obj(_obj), width(_width), height(_height) {
+    :env(_env), obj(env, _obj), width(_width), height(_height) {
     jclass cls = env->FindClass("org/xcsoar/NativeView");
     swap_method = env->GetMethodID(cls, "swap", "()V");
     load_resource_texture_method = env->GetMethodID(cls, "loadResourceTexture",
