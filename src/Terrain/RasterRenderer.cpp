@@ -98,7 +98,16 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
   // set resolution
 
   fixed map_pixel_size = map.pixel_distance(Gmid, 1);
-  quantisation_effective = (int)ceil(map_pixel_size / pixel_size);
+  fixed q = map_pixel_size / pixel_size;
+  if (q > fixed_half) {
+    quantisation_effective = (int)iround(q);
+    if (quantisation_effective > 25)
+      /* disable slope shading when zoomed in very near (not enough
+         terrain resolution to make a useful slope calculation) */
+      quantisation_effective = 0;
+  } else
+    /* disable slope shading when zoomed out very far (too tiny) */
+    quantisation_effective = 0;
 
   height_matrix.Fill(map, projection, quantisation_pixels,
                      pixel_size * 3 < map_pixel_size * 2);
@@ -118,8 +127,7 @@ RasterRenderer::GenerateImage(bool is_terrain, bool do_shading,
                           height_matrix.get_height());
   }
 
-  if (quantisation_effective > min(height_matrix.get_width(),
-                                   height_matrix.get_height()) / 4)
+  if (quantisation_effective == 0)
     do_shading = false;
 
   if (do_shading)
@@ -173,6 +181,8 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
                                    int contrast,
                                    const int sx, const int sy, const int sz)
 {
+  assert(quantisation_effective > 0);
+
   RECT border;
   border.left = quantisation_effective;
   border.top = quantisation_effective;

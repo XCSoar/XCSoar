@@ -39,7 +39,10 @@ class RasterRenderer : private NonCopyable {
   /** screen dimensions in coarse pixels */
   unsigned quantisation_pixels;
 
-  /** step size used for slope calculations */
+  /**
+   * Step size used for slope calculations.  Slope shading is disabled
+   * when this attribute is 0.
+   */
   unsigned quantisation_effective;
 
   HeightMatrix height_matrix;
