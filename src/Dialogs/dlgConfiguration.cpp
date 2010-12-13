@@ -882,10 +882,7 @@ setVariables()
   LoadFormProperty(*wf, _T("prpHandicap"),
                    settings_computer.contest_handicap);
 
-  if(!Profile::Get(szProfileSpeedUnitsValue,Speed)) {
-    Profile::Set(szProfileSpeedUnitsValue, Speed);
-    changed = true;
-  }
+  Profile::Get(szProfileSpeedUnitsValue, Speed);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsSpeed"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -914,10 +911,7 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  if(!Profile::Get(szProfileTaskSpeedUnitsValue,TaskSpeed)) {
-    Profile::Set(szProfileTaskSpeedUnitsValue, TaskSpeed);
-    changed = true;
-  }
+  Profile::Get(szProfileTaskSpeedUnitsValue, TaskSpeed);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsTaskSpeed"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -929,10 +923,7 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  if(!Profile::Get(szProfileDistanceUnitsValue,Distance)) {
-    Profile::Set(szProfileDistanceUnitsValue, Distance);
-    changed = true;
-  }
+  Profile::Get(szProfileDistanceUnitsValue, Distance);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsDistance"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -944,10 +935,7 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  if(!Profile::Get(szProfileAltitudeUnitsValue,Altitude)) {
-    Profile::Set(szProfileAltitudeUnitsValue, Altitude);
-    changed = true;
-  }
+  Profile::Get(szProfileAltitudeUnitsValue, Altitude);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsAltitude"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -958,10 +946,7 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  if(!Profile::Get(szProfileTemperatureUnitsValue,Temperature)) {
-    Profile::Set(szProfileTemperatureUnitsValue, Temperature);
-    changed = true;
-  }
+  Profile::Get(szProfileTemperatureUnitsValue, Temperature);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsTemperature"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -972,10 +957,7 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  if(!Profile::Get(szProfileLiftUnitsValue,Lift)) {
-    Profile::Set(szProfileLiftUnitsValue, Lift);
-    changed = true;
-  }
+  Profile::Get(szProfileLiftUnitsValue, Lift);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsLift"));
   if (wp) {
     DataFieldEnum* dfe;
