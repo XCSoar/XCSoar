@@ -58,7 +58,7 @@ import_label(const char *src)
 #ifdef _UNICODE
   size_t length = strlen(src);
   TCHAR *dest = new TCHAR[length + 1];
-  if (::MultiByteToWideChar(CP_ACP, 0, src, -1, dest, length + 1) <= 0) {
+  if (::MultiByteToWideChar(CP_UTF8, 0, src, -1, dest, length + 1) <= 0) {
     delete[] dest;
     return NULL;
   }
