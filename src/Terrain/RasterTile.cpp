@@ -271,11 +271,11 @@ void
 RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
                                  double _lat_min, double _lat_max)
 {
-
   bounds.west = Angle::degrees(fixed(min(_lon_min, _lon_max)));
   bounds.east = Angle::degrees(fixed(max(_lon_min, _lon_max)));
   bounds.north = Angle::degrees(fixed(max(_lat_min, _lat_max)));
   bounds.south = Angle::degrees(fixed(min(_lat_min, _lat_max)));
+  bounds_initialised = true;
 }
 
 void
@@ -284,6 +284,7 @@ RasterTileCache::Reset()
   width = 0;
   height = 0;
   initialised = false;
+  bounds_initialised = false;
   segments.clear();
   scan_overview = true;
 
@@ -442,7 +443,7 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file)
   if (initialised && world_file != NULL)
     LoadWorldFile(world_file);
 
-  if (initialised && bounds.empty())
+  if (initialised && !bounds_initialised)
     initialised = false;
 
   if (!initialised)
@@ -465,6 +466,8 @@ RasterTileCache::SaveCache(FILE *file) const
 {
   if (!initialised)
     return false;
+
+  assert(bounds_initialised);
 
   /* save metadata */
   CacheHeader header;
@@ -519,6 +522,7 @@ RasterTileCache::LoadCache(FILE *file)
 
   SetSize(header.width, header.height);
   bounds = header.bounds;
+  bounds_initialised = true;
 
   /* load segments */
   for (unsigned i = 0; i < header.num_marker_segments; ++i) {

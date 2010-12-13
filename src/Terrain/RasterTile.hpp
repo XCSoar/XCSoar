@@ -7,6 +7,7 @@
 #include "Util/ActiveList.hpp"
 #include "Util/StaticArray.hpp"
 
+#include <assert.h>
 #include <tchar.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -124,6 +125,10 @@ public:
 
 private:
   bool initialised;
+
+  /** is the "bounds" attribute valid? */
+  bool bounds_initialised;
+
   RasterTile tiles[MAX_RTC_TILES];
   mutable ActiveList<const RasterTile, MAX_ACTIVE_TILES> ActiveTiles;
   RasterBuffer Overview;
@@ -162,6 +167,8 @@ public:
   void Reset();
 
   const GeoBounds &GetBounds() const {
+    assert(bounds_initialised);
+
     return bounds;
   }
 
