@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Java/Object.hpp"
 
+#include <assert.h>
+
 class NativeView {
   JNIEnv *env;
   Java::Object obj;
@@ -45,6 +47,15 @@ public:
 
   unsigned get_width() const { return width; }
   unsigned get_height() const { return height; }
+
+  jobject get_context() {
+    jclass cls = env->FindClass("android/view/View");
+    assert(cls != NULL);
+    jmethodID mid = env->GetMethodID(cls, "getContext",
+                                     "()Landroid/content/Context;");
+    assert(mid != NULL);
+    return env->CallObjectMethod(obj, mid);
+  }
 
   void swap() {
     env->CallVoidMethod(obj, swap_method);
