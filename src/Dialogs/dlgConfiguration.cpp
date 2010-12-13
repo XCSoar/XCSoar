@@ -890,7 +890,7 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Statue"));
+    dfe->addEnumText(_("Statute"));
     dfe->addEnumText(_("Nautical"));
     dfe->addEnumText(_("Metric"));
     dfe->Set(Speed);
