@@ -1,8 +1,8 @@
-FIXED ?= $(call bool_or,$(DEBUG),$(call bool_not,$(HAVE_FPU)))
 RADIANS ?= y
 GREEN_MENU ?= y
 PROFILE_NO_FILE ?= n
 
+FIXED ?= $(call bool_not,$(HAVE_FPU))
 ifeq ($(FIXED),y)
 TARGET_CPPFLAGS += -DFIXED_MATH
 endif
