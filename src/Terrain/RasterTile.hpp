@@ -118,8 +118,7 @@ class RasterTileCache : private NonCopyable {
   StaticArray<MarkerSegmentInfo, 8192> segments;
 
 public:
-  RasterTileCache()
-    :scan_overview(true) {
+  RasterTileCache() {
     Reset();
   }
 
