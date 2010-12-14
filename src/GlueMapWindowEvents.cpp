@@ -70,7 +70,7 @@ bool
 GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
 {
   if (!dragOverMinDist &&
-      (fabs(drag_start.x - x) + fabs(drag_start.y - y)) > Layout::Scale(10))
+      (abs(drag_start.x - x) + abs(drag_start.y - y)) > Layout::Scale(10))
     dragOverMinDist = true;
 
   switch (drag_mode) {
