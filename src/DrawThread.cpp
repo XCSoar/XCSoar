@@ -68,9 +68,6 @@ DrawThread::run()
   // Get data from the DeviceBlackboard
   ExchangeBlackboard();
 
-  // first time draw
-  map.repaint();
-
   bool bounds_dirty = true;
 
   // circle until application is closed
