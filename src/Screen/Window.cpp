@@ -81,6 +81,7 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
   this->height = height;
 
   visible = window_style.visible;
+  text_style = window_style.text_style;
 
   if (parent != NULL)
     parent->add_child(*this);

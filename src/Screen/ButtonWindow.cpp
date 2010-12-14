@@ -67,13 +67,13 @@ ButtonWindow::on_mouse_up(int x, int y)
 void
 ButtonWindow::on_paint(Canvas &canvas)
 {
+  RECT rc = { 2, 2, canvas.get_width()-4, canvas.get_height()-4 };
+
   canvas.draw_button(get_client_rect(), down);
 
   canvas.set_text_color(Color::BLACK);
   canvas.background_transparent();
-  SIZE size = canvas.text_size(text.c_str());
-  canvas.text((get_width() - size.cx) / 2 + down,
-              (get_height() - size.cy) / 2 + down, text.c_str());
+  canvas.formatted_text(&rc, text.c_str(), get_text_style());
 }
 
 bool

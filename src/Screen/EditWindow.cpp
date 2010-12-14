@@ -43,11 +43,13 @@ EditWindow::set(ContainerWindow &parent, int left, int top,
 void
 EditWindow::on_paint(Canvas &canvas)
 {
+  RECT rc = { 2, 2, canvas.get_width()-4, canvas.get_height()-4 };
+
   canvas.clear_white();
 
   canvas.set_text_color(Color::BLACK);
   canvas.background_transparent();
-  canvas.text(1, 1, value.c_str());
+  canvas.formatted_text(&rc, value.c_str(), get_text_style());
 }
 
 #endif /* ENABLE_SDL */

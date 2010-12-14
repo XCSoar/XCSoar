@@ -53,9 +53,10 @@ class WindowStyle {
 protected:
   bool visible;
   bool double_clicks;
+  int text_style;
 
 public:
-  WindowStyle():visible(true), double_clicks(false) {}
+  WindowStyle():visible(true), double_clicks(false), text_style(0) {}
 
 #else /* !ENABLE_SDL */
 protected:
@@ -174,6 +175,7 @@ private:
 
 private:
   const Font *font;
+  int text_style;
 
   bool visible;
   bool focused;
@@ -280,6 +282,10 @@ public:
 
   int get_vmiddle() const {
     return (get_top() + get_bottom()) / 2;
+  }
+
+  int get_text_style() const {
+    return text_style;
   }
 #else /* !ENABLE_SDL */
   unsigned get_width() const {

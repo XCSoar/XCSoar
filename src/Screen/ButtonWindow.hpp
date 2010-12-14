@@ -30,13 +30,17 @@ Copyright_License {
 class ButtonWindowStyle : public WindowStyle {
 public:
   ButtonWindowStyle() {
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+    text_style |= DT_CENTER | DT_VCENTER | DT_WORDBREAK;
+#else
     style |= BS_PUSHBUTTON | BS_CENTER | BS_VCENTER;
 #endif
   }
 
   ButtonWindowStyle(const WindowStyle other):WindowStyle(other) {
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+    text_style |= DT_CENTER | DT_VCENTER;
+#else
     style |= BS_PUSHBUTTON | BS_CENTER | BS_VCENTER;
 #endif
   }

@@ -34,13 +34,17 @@ Copyright_License {
 class EditWindowStyle : public WindowStyle {
 public:
   EditWindowStyle() {
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+    text_style |= DT_LEFT | DT_VCENTER;
+#else
     style |= ES_LEFT | ES_AUTOHSCROLL;
 #endif
   }
 
   EditWindowStyle(const WindowStyle other):WindowStyle(other) {
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+    text_style |= DT_LEFT | DT_VCENTER;
+#else
     style |= ES_LEFT | ES_AUTOHSCROLL;
 #endif
   }
@@ -52,14 +56,20 @@ public:
   }
 
   void multiline() {
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+    text_style &= ~DT_VCENTER;
+    text_style |= DT_WORDBREAK;
+#else
     style &= ~ES_AUTOHSCROLL;
     style |= ES_MULTILINE;
 #endif
   }
 
   void center() {
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+    text_style &= DT_LEFT;
+    text_style |= DT_CENTER;
+#else
     style &= ~ES_LEFT;
     style |= ES_CENTER;
 #endif
@@ -83,7 +93,14 @@ public:
     assert_none_locked();
 
 #ifdef ENABLE_SDL
-    return 1; // XXX
+    const TCHAR *str = value.c_str();
+    int row_count = 1;
+
+    while ((str = strchr(str, _T('\n'))) != NULL) {
+      str++;
+      row_count++;
+    }
+    return row_count;
 #else /* !ENABLE_SDL */
     return ::SendMessage(hWnd, EM_GETLINECOUNT, 0, 0);
 #endif /* !ENABLE_SDL */
