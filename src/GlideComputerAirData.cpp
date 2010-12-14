@@ -406,6 +406,7 @@ GlideComputerAirData::TerrainHeight()
 {
   if (terrain == NULL) {
     SetCalculated().TerrainValid = false;
+    SetCalculated().TerrainAlt = fixed_zero;
     return;
   }
 
@@ -416,6 +417,7 @@ GlideComputerAirData::TerrainHeight()
       Alt = 0;
     else {
       SetCalculated().TerrainValid = false;
+      SetCalculated().TerrainAlt = fixed_zero;
       return;
     }
   }
