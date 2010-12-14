@@ -179,11 +179,11 @@ GetCaption(const XMLNode &Node)
   const TCHAR* tmp =
       StringToStringDflt(Node.getAttribute(_T("Caption")), _T(""));
 
-  const TCHAR *translated = gettext(tmp);
-  if (translated != tmp)
-    return translated;
+  // don't translate empty strings, it would query gettext metadata
+  if (tmp[0] == _T('\0'))
+    return tmp;
 
-  return tmp;
+  return gettext(tmp);
 }
 
 static ControlPosition
