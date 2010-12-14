@@ -279,6 +279,14 @@ SerialPort::Write(const void *data, unsigned length)
 #else /* !HAVE_POSIX */
   if (hPort == INVALID_HANDLE_VALUE)
     return;
+
+  if (is_embedded())
+    /* this is needed to work around a driver bug on the HP31x -
+       without it, the second consecutive write without a task switch
+       will hang the whole PNA; this Sleep() call enforces a task
+       switch */
+    Sleep(100);
+
   DWORD NumberOfBytesWritten;
   // lpNumberOfBytesWritten : This parameter can be NULL only when the lpOverlapped parameter is not NULL.
   ::WriteFile(hPort, data, length, &NumberOfBytesWritten, NULL);
