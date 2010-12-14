@@ -99,11 +99,10 @@ public:
       timeout.tv_sec = timeout_ms / 1000;
       timeout.tv_nsec = (timeout_ms % 1000) * 1000000;
 
-      value = pthread_cond_timedwait(&cond, &mutex, &timeout) == 0 || value;
+      ret = pthread_cond_timedwait(&cond, &mutex, &timeout) == 0 || value;
     } else
-      value = false;
+      ret = true;
 
-    ret = value;
     if (!manual_reset)
       value = false;
 
