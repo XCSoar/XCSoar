@@ -38,8 +38,18 @@ Copyright_License {
  */
 class SerialPort : public Port, protected StoppableThread
 {
-protected:
+  /** Name of the serial port */
+  TCHAR sPortName[64];
+
   unsigned baud_rate;
+
+#ifdef HAVE_POSIX
+  int fd;
+#else /* !HAVE_POSIX */
+  HANDLE hPort;
+#endif /* !HAVE_POSIX */
+
+  FifoBuffer<char> buffer;
 
 public:
   /**
@@ -85,18 +95,6 @@ protected:
    * Entry point for the receive thread
    */
   virtual void run();
-
-private:
-#ifdef HAVE_POSIX
-  int fd;
-#else /* !HAVE_POSIX */
-  HANDLE hPort;
-#endif /* !HAVE_POSIX */
-
-  /** Name of the serial port */
-  TCHAR sPortName[64];
-
-  FifoBuffer<char> buffer;
 };
 
 #endif
