@@ -91,8 +91,9 @@ PopupMessage::singleMessage::AppendTo(TCHAR *buffer, int now)
     return false;
   }
 
+  if (buffer[0] != _T('\0'))
+    _tcscat(buffer, _T("\r\n"));
   _tcscat(buffer, text);
-  _tcscat(buffer, _T("\r\n"));
   return true;
 }
 
@@ -222,7 +223,7 @@ bool PopupMessage::Render() {
   // text box
 
   doresize = true;
-  msgText[0]= 0;
+  msgText[0]= _T('\0');
   nvisible=0;
   for (unsigned i = 0; i < MAXMESSAGES; ++i)
     if (messages[i].AppendTo(msgText, fpsTime))
