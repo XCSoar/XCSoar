@@ -294,26 +294,8 @@ GlueMapWindow::on_mouse_gesture(const char* gesture)
   return false;
 }
 
-#if defined(GNAV)
-
 bool
 GlueMapWindow::on_key_down(unsigned key_code)
-{
-  return on_key_press(key_code) || MapWindow::on_key_down(key_code);
-}
-
-#else
-
-bool
-GlueMapWindow::on_key_up(unsigned key_code)
-{
-  return on_key_press(key_code) || MapWindow::on_key_up(key_code);
-}
-
-#endif
-
-bool
-GlueMapWindow::on_key_press(unsigned key_code)
 {
   if (is_altair() && key_code == 0xF5) {
     XCSoarInterface::SignalShutdown(false);
