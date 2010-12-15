@@ -31,7 +31,7 @@
 extern long count_dijkstra_links;
 #endif
 
-#define MINMAX_OFFSET 134217727
+#define DIJKSTRA_MINMAX_OFFSET 134217727
 
 #define DIJKSTRA_QUEUE_SIZE 50000
 
@@ -193,7 +193,7 @@ private:
    */
   gcc_pure
   unsigned adjust_edge_value(const unsigned edge_value) const {
-    return m_min ? edge_value : MINMAX_OFFSET - edge_value;
+    return m_min ? edge_value : DIJKSTRA_MINMAX_OFFSET - edge_value;
   }
 
   /**

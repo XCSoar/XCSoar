@@ -34,6 +34,7 @@ Copyright_License {
 class Waypoints;
 class ProtectedTaskManager;
 class GlideComputerTaskEvents;
+class Airspaces;
 
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
@@ -50,7 +51,8 @@ public:
   GlideComputer(const Waypoints &_way_points,
                 ProtectedTaskManager& task,
                 ProtectedAirspaceWarningManager &_awm,
-                GlideComputerTaskEvents& events);
+                GlideComputerTaskEvents& events,
+                Airspaces& airspaces);
 
   void ResetFlight(const bool full=true);
   void Initialise();

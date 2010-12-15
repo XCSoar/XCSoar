@@ -27,6 +27,8 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/GlideTerrain.hpp"
 #include "Components.hpp"
+#include "Airspace/Airspaces.hpp"
+#include "Airspace/AirspaceVisibility.hpp"
 
 #include <algorithm>
 
@@ -35,8 +37,9 @@ using std::max;
 // JMW TODO: abstract up to higher layer so a base copy of this won't
 // call any event
 
-GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task): 
-  GlideComputerBlackboard(task) {}
+GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task,
+                                     Airspaces &_airspaces):
+  GlideComputerBlackboard(task),m_airspaces(_airspaces),m_route(_airspaces) {}
 
 void
 GlideComputerTask::ResetFlight(const bool full)
@@ -97,6 +100,8 @@ GlideComputerTask::ProcessBasicTask()
       SetMC(mc_computer);
     }
   }
+
+  m_route.get_solution(SetCalculated().common_stats.planned_route);
 }
 
 void
@@ -109,17 +114,32 @@ GlideComputerTask::ProcessMoreTask()
   else
     SetCalculated().V_stf = Calculated().common_stats.V_dolphin;
 
-  if (Calculated().task_stats.current_leg.solution_remaining.defined())
-    SetCalculated().AutoZoomDistance =
-      Calculated().task_stats.current_leg.solution_remaining.Vector.Distance;
+  if (Calculated().task_stats.current_leg.solution_remaining.defined()) {
+    const GeoVector &v = Calculated().task_stats.current_leg.solution_remaining.Vector;
+    SetCalculated().AutoZoomDistance = v.Distance;
+  }
 }
 
 void
 GlideComputerTask::ProcessIdle()
 {
   const AIRCRAFT_STATE as = ToAircraftState(Basic());
-  ProtectedTaskManager::ExclusiveLease task(m_task);
-  task->update_idle(as);
+  {
+    ProtectedTaskManager::ExclusiveLease task(m_task);
+    task->update_idle(as);
+  }
+  {
+    if (Calculated().task_stats.current_leg.solution_remaining.defined()) {
+      const GeoVector &v = Calculated().task_stats.current_leg.solution_remaining.Vector;
+      const GeoPoint start = as.get_location();
+      const GeoPoint dest = v.end_point(start);
+
+      AirspaceVisible predicate(SettingsComputer(), as);
+
+      m_route.synchronise(m_airspaces, start, dest, predicate);
+      m_route.solve(start, dest);
+    }
+  }
 }
 
 void

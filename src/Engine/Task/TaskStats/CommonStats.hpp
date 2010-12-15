@@ -5,6 +5,7 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Task/TaskStats/ContestResult.hpp"
 #include "GlideSolvers/GlideResult.hpp"
+#include "Route/AirspaceRoute.hpp"
 
 #ifdef DO_PRINT
 #include <iostream>
@@ -88,6 +89,9 @@ public:
 
   /** Glide solution flying terminally to active waypoint */
   GlideResult next_solution;
+
+  /** Route plan for current leg avoiding airspace */
+  Route planned_route;
 
   /**
    * Reset the stats as if never flown

@@ -233,9 +233,9 @@ public:
    * @param range distance in meters of search radius
    * @param condition condition to be applied to matches
    *
-   * @return Airspaces object containing matches
+   * @return True on change
    */
-  void synchronise_in_range(const Airspaces& master,
+  bool synchronise_in_range(const Airspaces& master,
                             const GeoPoint &location,
                             const fixed range,
                             const AirspacePredicate &condition

@@ -681,3 +681,54 @@ std::ostream& operator<< (std::ostream& o, const Angle& a)
   o << a.value_degrees();
   return o;
 } 
+
+
+void write_point(const SearchPoint& sp, const FlatGeoPoint& p, const char* name)
+{
+  printf("%g %g %d %d # %s\n",
+         (double)sp.get_location().Longitude.value_degrees(),
+         (double)sp.get_location().Latitude.value_degrees(),
+         p.Longitude,
+         p.Latitude,
+         name);
+  fflush(stdout);
+}
+
+void write_spv (const SearchPointVector& spv)
+{
+  for (std::vector<SearchPoint>::const_iterator v = spv.begin();
+       v != spv.end(); ++v) {
+    write_point(*v, v->get_flatLocation(), "spv");
+  }
+  printf("spv\n");
+  fflush(stdout);
+}
+
+void write_border (const AbstractAirspace& as)
+{
+  const SearchPointVector& spv = as.get_points();
+  for (std::vector<SearchPoint>::const_iterator v = spv.begin();
+       v != spv.end(); ++v) {
+    write_point(*v, v->get_flatLocation(), "polygon");
+  }
+  printf("polygon\n");
+  write_spv(as.get_clearance());
+  fflush(stdout);
+}
+
+#include "Route/AirspaceRoute.hpp"
+
+void PrintHelper::print_route(AirspaceRoute& r)
+{
+  for (Route::const_iterator i = r.solution_route.begin();
+       i!= r.solution_route.end(); ++i) {
+    printf("%g %g # solution\n",
+           (double)i->Longitude.value_degrees(),
+           (double)i->Latitude.value_degrees());
+  }
+  printf("# solution\n");
+  printf("# stats\n");
+  printf("# unique links %d\n", (int)r.count_unique);
+  printf("# airspace queries %d\n", (int)r.count_airspace);
+  printf("# dijkstra links %d\n", (int)r.count_dij);
+}

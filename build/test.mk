@@ -1,4 +1,5 @@
 TESTFAST = \
+	$(TARGET_BIN_DIR)/test_route$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_fixed$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_waypoints$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_pressure$(TARGET_EXEEXT) \
@@ -53,6 +54,7 @@ TEST_NAMES = \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
 	TestColorRamp TestGeoPoint \
+	test_route \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
@@ -297,6 +299,7 @@ TEST_OLC_SOURCES = \
 	$(SRC)/Math/Angle.cpp \
 	$(SRC)/Math/FastMath.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
+	$(SRC)/Util/StringUtil.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TestOLC.cpp 
 TEST_OLC_OBJS = $(call SRC_TO_OBJ,$(TEST_OLC_SOURCES))
@@ -312,6 +315,7 @@ TEST_TRACE_SOURCES = \
 	$(SRC)/Math/Angle.cpp \
 	$(SRC)/Math/FastMath.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
+	$(SRC)/Util/StringUtil.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TestTrace.cpp 
 TEST_TRACE_OBJS = $(call SRC_TO_OBJ,$(TEST_TRACE_SOURCES))
@@ -1046,6 +1050,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceGlue.cpp \
+	$(SRC)/Airspace/AirspaceVisibility.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/IO/ConfiguredFile.cpp \

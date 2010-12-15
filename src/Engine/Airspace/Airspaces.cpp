@@ -323,7 +323,7 @@ Airspaces::clear_clearances()
 }
 
 
-void
+bool
 Airspaces::synchronise_in_range(const Airspaces& master,
                                 const GeoPoint &location,
                                 const fixed range,
@@ -382,4 +382,5 @@ Airspaces::synchronise_in_range(const Airspaces& master,
   }
   if (changed)
     optimise();
+  return changed;
 }

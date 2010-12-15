@@ -76,7 +76,18 @@ MapWindow::DrawTask(Canvas &canvas)
 
   /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
-  const bool draw_bearing = Basic().gps.Connected;
+  bool draw_bearing = Basic().gps.Connected;
+  bool draw_route = draw_bearing;
+
+  const Route& route = Calculated().common_stats.planned_route;
+
+  if (draw_bearing) {
+    if (route.size()>0) {
+      draw_bearing = false;
+    } else {
+      draw_route = false;
+    }
+  }
 
   RenderObservationZone ozv;
   RenderTaskPointMap tpv(canvas,
@@ -97,6 +108,15 @@ MapWindow::DrawTask(Canvas &canvas)
                          Basic().Location);
   RenderTask dv(tpv, render_projection.GetScreenBounds());
   ((TaskVisitor &)dv).Visit(*task);
+
+  if (draw_route) {
+    canvas.select(Graphics::hpBearing);
+    for (Route::const_iterator i = route.begin(); i+1< route.end(); i++) {
+      RasterPoint p0 = render_projection.GeoToScreen(*i);
+      RasterPoint p1 = render_projection.GeoToScreen(*(i+1));
+      canvas.line(p0, p1);
+    }
+  }
 }
 
 

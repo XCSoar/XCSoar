@@ -25,16 +25,21 @@ Copyright_License {
 #define XCSOAR_GLIDECOMPUTER_TASK_HPP
 
 #include "GlideComputerBlackboard.hpp"
+#include "Route/AirspaceRoute.hpp"
 
 class ProtectedTaskManager;
+class Airspaces;
 
 class GlideComputerTask: 
   virtual public GlideComputerBlackboard 
 {
 public:
-  GlideComputerTask(ProtectedTaskManager& task);
+  GlideComputerTask(ProtectedTaskManager& task,
+                    Airspaces &airspaces);
 
 protected:
+  Airspaces &m_airspaces;
+
   void Initialise() {}
   void ProcessBasicTask();
   void ProcessMoreTask();
@@ -42,6 +47,7 @@ protected:
 
 private:
   void TerrainWarning();
+  AirspaceRoute m_route;
 
 protected:
   virtual void ProcessIdle();

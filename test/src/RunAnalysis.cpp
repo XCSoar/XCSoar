@@ -124,7 +124,8 @@ ProtectedTaskManager protected_task_manager(task_manager,
 
 GlideComputer glide_computer(way_points, protected_task_manager,
                              airspace_warnings,
-                             task_events);
+                             task_events,
+                             airspace_database);
 
 RasterTerrain *terrain;
 
