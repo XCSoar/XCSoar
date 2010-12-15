@@ -34,7 +34,7 @@ TaskManager::TaskManager(TaskEvents &te,
   trace_full(60),
   trace_sprint(0, 9000, 300),
   task_ordered(te, task_behaviour, m_glide_polar),
-  task_goto(te, task_behaviour, m_glide_polar),
+  task_goto(te, task_behaviour, m_glide_polar, wps),
   task_abort(te, task_behaviour, m_glide_polar, wps),
   contest_manager(task_behaviour.contest, 
                   task_behaviour.contest_handicap,
@@ -270,6 +270,13 @@ TaskManager::update(const AIRCRAFT_STATE &state,
   if (task_ordered.task_size() > 1) {
     // always update ordered task
     retval |= task_ordered.update(state, state_last);
+  }
+
+  // check if we can create a goto task on takeoff
+  if (!active_task) {
+    if (task_goto.check_takeoff(state, state_last)) {
+      retval |= set_mode(MODE_GOTO);
+    }
   }
 
   // inform the abort task whether it is running as the task or not  

@@ -24,7 +24,7 @@
 #define GOTOTASK_H
 
 #include "UnorderedTask.hpp"
-class Waypoint;
+#include "Waypoint/Waypoints.hpp"
 
 /**
  * Class providing ability to go to a single task point
@@ -41,13 +41,15 @@ public:
    * @param te Task events callback class (shared among all tasks) 
    * @param tb Global task behaviour settings
    * @param gp Global glide polar used for navigation calculations
+   * @param wps Waypoints container to be scanned for takeoff
    * 
    * @return Initialised object (with no waypoint to go to)
    */
 
   GotoTask(TaskEvents &te, 
            const TaskBehaviour &tb,
-           const GlidePolar &gp);
+           const GlidePolar &gp,
+           const Waypoints &wps);
   ~GotoTask();
 
 /** 
@@ -104,6 +106,18 @@ public:
  */
   bool update_sample(const AIRCRAFT_STATE &state_now, 
                      const bool full_update);
+
+  /**
+   * Check if on takeoff, we can create a default goto task
+   *
+   * @param state_now Aircraft state at this time step
+   * @param state_last Aircraft state at previous time step
+   *
+   * @return True if default task was created
+   */
+  bool check_takeoff(const AIRCRAFT_STATE& state_now, 
+                     const AIRCRAFT_STATE& state_last);
+
 protected:
 /** 
  * Test whether (and how) transitioning into/out of task points should occur, typically
@@ -119,6 +133,7 @@ protected:
 
 private:    
   TaskWayPoint* tp;
+  const Waypoints &waypoints;
 public:
 /** 
  * Accept a task point visitor; makes the visitor visit
