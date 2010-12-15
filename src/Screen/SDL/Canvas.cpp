@@ -219,6 +219,11 @@ Canvas::formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
   p = duplicated = _tcsdup(text);
   len = tcslen(duplicated);
   while ((p = _tcschr(p, _T('\n'))) != NULL) {
+#ifndef ANDROID
+    // hide \r chars. this is a HACK! centered text will be missplaced.
+    if (p > duplicated && p[-1] == _T('\r'))
+      p[-1] = _T(' ');
+#endif
     *p++ = _T('\0');
     lines++;
   }
