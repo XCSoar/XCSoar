@@ -39,6 +39,7 @@ Copyright_License {
 #include "Device/Descriptor.hpp"
 #include "Screen/Busy.hpp"
 #include "Screen/Blank.hpp"
+#include "Screen/Key.h"
 #include "Form/CheckBox.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"

@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "Screen/GDI/Event.hpp"
+#include "Screen/GDI/Key.h"
 #include "Thread/Debug.hpp"
 #include "Asset.hpp"
-#include "Compatibility/vk.h"
 
 bool
 EventLoop::get(MSG &msg)

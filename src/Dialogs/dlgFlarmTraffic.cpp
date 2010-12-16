@@ -34,6 +34,7 @@
 #include "Screen.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 #include "Form/CheckBox.hpp"
 #include "MainWindow.hpp"
 #include "Profile/Profile.hpp"

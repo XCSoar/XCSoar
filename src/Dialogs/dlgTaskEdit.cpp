@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 #include "Components.hpp"
 #include "Gauge/TaskView.hpp"
 

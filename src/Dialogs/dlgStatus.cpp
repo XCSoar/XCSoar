@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Screen/Key.h"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
 #include "Math/Earth.hpp"

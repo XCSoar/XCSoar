@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Key.h"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "SettingsMap.hpp"

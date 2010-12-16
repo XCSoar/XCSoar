@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Form/Button.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Key.h"
 
 WndButton::WndButton(ContainerWindow &parent,
     const TCHAR *Caption, int X, int Y, int Width, int Height,

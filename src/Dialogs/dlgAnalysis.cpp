@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 #include "MainWindow.hpp"
 #include "GlideComputer.hpp"
 #include "Atmosphere.h"

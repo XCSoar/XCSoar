@@ -25,7 +25,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
-#include "Compatibility/vk.h"
+#include "Screen/Key.h"
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"

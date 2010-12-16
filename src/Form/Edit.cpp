@@ -26,6 +26,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 #include "Dialogs/Dialogs.h"
 #include "resource.h"
 

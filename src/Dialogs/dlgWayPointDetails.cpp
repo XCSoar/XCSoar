@@ -35,6 +35,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "Components.hpp"

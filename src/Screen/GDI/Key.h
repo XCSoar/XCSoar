@@ -21,20 +21,26 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPATIBILITY_VK_H
-#define XCSOAR_COMPATIBILITY_VK_H
+#ifndef XCSOAR_SCREEN_GDI_KEY_H
+#define XCSOAR_SCREEN_GDI_KEY_H
 
-#ifndef WIN32
+#ifdef __WINE__
+/* the WINE 1.1.32 headers are broken, the definition of
+   LPSECURITY_ATTRIBUTES is missing in winuser.h */
+#include <windows.h>
+#endif
 
-#elif !defined(_WIN32_WCE)
+#include <winuser.h>
 
-#define VK_APP1 0x31
-#define VK_APP2 0x32
-#define VK_APP3 0x33
-#define VK_APP4 0x34
-#define VK_APP5 0x35
-#define VK_APP6 0x36
-
+#ifndef _WIN32_WCE
+enum {
+  VK_APP1 = '1',
+  VK_APP2 = '2',
+  VK_APP3 = '3',
+  VK_APP4 = '4',
+  VK_APP5 = '5',
+  VK_APP6 = '6',
+};
 #endif
 
 #endif

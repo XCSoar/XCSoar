@@ -26,39 +26,6 @@ Copyright_License {
 
 #include <windef.h>
 
-#include <SDL_keysym.h>
-
-enum {
-  VK_SPACE = SDLK_SPACE,
-  VK_UP = SDLK_UP,
-  VK_DOWN = SDLK_DOWN,
-  VK_LEFT = SDLK_LEFT,
-  VK_RIGHT = SDLK_RIGHT,
-  VK_RETURN = SDLK_RETURN,
-  VK_F1 = SDLK_F1,
-  VK_F2 = SDLK_F2,
-  VK_F3 = SDLK_F3,
-  VK_F4 = SDLK_F4,
-  VK_F5 = SDLK_F5,
-  VK_F6 = SDLK_F6,
-  VK_F7 = SDLK_F7,
-  VK_F8 = SDLK_F8,
-  VK_F9 = SDLK_F9,
-  VK_F10 = SDLK_F10,
-  VK_F11 = SDLK_F11,
-  VK_F12 = SDLK_F12,
-  VK_ESCAPE = SDLK_ESCAPE,
-  VK_TAB = SDLK_TAB,
-  VK_BACK = SDLK_BACKSPACE,
-  VK_APP1,
-  VK_APP2,
-  VK_APP3,
-  VK_APP4,
-  VK_APP5,
-  VK_APP6,
-  VK_F23,
-};
-
 enum {
   IDOK = 1,
   IDCANCEL,

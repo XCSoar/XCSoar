@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "MainWindow.hpp"
