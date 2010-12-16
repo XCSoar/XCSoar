@@ -36,6 +36,7 @@ enum {
   VK_TAB = 0x3d,
   VK_SPACE = 0x3e,
   VK_RETURN = 0x42,
+  VK_MENU = 0x52,
 
   VK_DUMMY = 0x80,
   VK_BACK,

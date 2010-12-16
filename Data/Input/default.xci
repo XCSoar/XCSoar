@@ -244,6 +244,11 @@ location=9
 
 mode=default
 type=key
+data=MENU
+event=Mode Menu
+
+mode=default
+type=key
 data=APP1
 event=Mode Nav1
 
