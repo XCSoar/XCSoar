@@ -1240,9 +1240,9 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Winpilot"));
-    dfe->addEnumText(_("Alternate"));
-    dfe->addEnumText(_("Green/Orange"));
+    dfe->addEnumText(_("Purple Circle"));
+    dfe->addEnumText(_("B/W Icon"));
+    dfe->addEnumText(_("Orange Icon"));
     dfe->Set(Appearance.IndLandable);
     wp->RefreshDisplay();
   }
