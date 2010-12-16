@@ -26,7 +26,7 @@ Copyright_License {
 struct Appearance Appearance = {
   apCompassAltA,
   fgFinalGlideDefault,
-  wpLandableDefault,
+  wpLandableWinPilot,
   false,
   smAlignCenter,
   tiDefault,

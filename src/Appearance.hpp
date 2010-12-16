@@ -37,7 +37,7 @@ typedef enum {
 } IndFinalGlide_t;
 
 typedef enum {
-  wpLandableDefault = 0,
+  wpLandableWinPilot = 0,
   wpLandableAltA,
   wpLandableAltB,
 } IndLandable_t;

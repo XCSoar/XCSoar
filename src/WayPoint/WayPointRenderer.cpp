@@ -207,7 +207,7 @@ public:
       _stprintf(Buffer + length, _T("%d%s"), AltArrivalAGL, sAltUnit);
     }
 
-    if (reachable && Appearance.IndLandable == wpLandableDefault)
+    if (reachable && Appearance.IndLandable == wpLandableWinPilot)
       // make space for the green circle
       sc.x += 5;
 

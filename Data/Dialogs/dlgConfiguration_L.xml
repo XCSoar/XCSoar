@@ -164,7 +164,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </Edit>
 
       <Edit Name="prpAppIndLandable" Caption="Landable fields" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Two styles are available: WinPilot style (green and purple circles) or a high visibility (monochrome) style.">
+        Help="Three styles are available: Purple circles (WinPilot style), a high contrast (monochrome) style with icons, or orange icons. The icons differ for landable field and airport. All styles mark the waypoints within reach green.">
         <DataField DataType="enum" />
       </Edit>
 

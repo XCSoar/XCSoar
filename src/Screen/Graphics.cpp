@@ -288,7 +288,7 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 void
 Graphics::InitLandableIcons()
 {
-  if (Appearance.IndLandable == wpLandableDefault) {
+  if (Appearance.IndLandable == wpLandableWinPilot) {
     AirportReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_HD);
     AirportUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_HD);
     FieldReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_HD);
