@@ -41,7 +41,7 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-#define fixed_75 fixed(7.5)
+#define fixed_7_5 fixed(7.5)
 
 enum asFileType {
   ftUnknown,
@@ -348,7 +348,7 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
     EndBearing += Angle::degrees(fixed_360);
 
   GeoPoint TempPoint;
-  while ((EndBearing - StartBearing).magnitude_degrees() > fixed_75) {
+  while ((EndBearing - StartBearing).magnitude_degrees() > fixed_7_5) {
     StartBearing = StartBearing.as_bearing();
     TempPoint = FindLatitudeLongitude(temp_area.Center, StartBearing, Radius);
     temp_area.points.push_back(TempPoint);
@@ -384,7 +384,7 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
   GeoPoint TempPoint = Start;
   temp_area.points.push_back(TempPoint);
 
-  while ((EndBearing - StartBearing).magnitude_degrees() > fixed_75) {
+  while ((EndBearing - StartBearing).magnitude_degrees() > fixed_7_5) {
     StartBearing += BearingStep;
     StartBearing = StartBearing.as_bearing();
     TempPoint = FindLatitudeLongitude(temp_area.Center, StartBearing, Radius);
@@ -669,7 +669,7 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
   bearing_to = Bearing(temp_area.Center, to);
 
   GeoPoint TempPoint;
-  while ((bearing_to - bearing_from).magnitude_degrees() > fixed_75) {
+  while ((bearing_to - bearing_from).magnitude_degrees() > fixed_7_5) {
     bearing_from += BearingStep;
     bearing_from = bearing_from.as_bearing();
     TempPoint = FindLatitudeLongitude(temp_area.Center, bearing_from, radius);
