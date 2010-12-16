@@ -336,17 +336,19 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
 static void
 CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
 {
-  fixed Radius;
-  TCHAR *Stop;
+  // 5 or -5, depending on direction
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
-  Radius = Units::ToSysUnit(fixed(_tcstod(&Text[2], &Stop)), unNauticalMiles);
+  // Determine radius and start/end bearing
+  TCHAR *Stop;
+  fixed Radius = Units::ToSysUnit(fixed(_tcstod(&Text[2], &Stop)), unNauticalMiles);
   Angle StartBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
   Angle EndBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
 
   if (EndBearing < StartBearing)
     EndBearing += Angle::degrees(fixed_360);
 
+  // Add intermediate polygon points
   GeoPoint TempPoint;
   while ((EndBearing - StartBearing).magnitude_degrees() > fixed_7_5) {
     StartBearing = StartBearing.as_bearing();
@@ -355,6 +357,7 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
     StartBearing += BearingStep;
   }
 
+  // Add last polygon point
   TempPoint = FindLatitudeLongitude(temp_area.Center, EndBearing, Radius);
   temp_area.points.push_back(TempPoint);
 }
