@@ -86,8 +86,10 @@ dlgAlternatesListShowModal(SingleWindow &parent)
     return;
 
   alternates = protected_task_manager->getAlternates();
+  unsigned line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
+                         Fonts::MapLabel.get_height();
   int i = ListPicker(parent, _("Alternates"), alternates.size(), 0,
-                     Layout::Scale(30), PaintListItem, true);
+                     line_height, PaintListItem, true);
 
   if (i < 0 || (unsigned)i >= alternates.size())
     return;
