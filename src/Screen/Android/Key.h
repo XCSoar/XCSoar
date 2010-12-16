@@ -21,15 +21,43 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_KEY_H
-#define XCSOAR_SCREEN_KEY_H
+#ifndef XCSOAR_SCREEN_ANDROID_KEY_H
+#define XCSOAR_SCREEN_ANDROID_KEY_H
 
-#ifdef ANDROID
-#include "Screen/Android/Key.h"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Key.h"
-#else
-#include "Screen/GDI/Key.h"
-#endif
+/**
+ * @see http://developer.android.com/reference/android/view/KeyEvent.html
+ */
+enum {
+  VK_ESCAPE = 0x04,
+  VK_UP = 0x13,
+  VK_DOWN = 0x14,
+  VK_LEFT = 0x15,
+  VK_RIGHT = 0x16,
+  VK_TAB = 0x3d,
+  VK_SPACE = 0x3e,
+  VK_RETURN = 0x42,
+
+  VK_DUMMY = 0x80,
+  VK_BACK,
+  VK_F1,
+  VK_F2,
+  VK_F3,
+  VK_F4,
+  VK_F5,
+  VK_F6,
+  VK_F7,
+  VK_F8,
+  VK_F9,
+  VK_F10,
+  VK_F11,
+  VK_F12,
+  VK_APP1,
+  VK_APP2,
+  VK_APP3,
+  VK_APP4,
+  VK_APP5,
+  VK_APP6,
+  VK_F23,
+};
 
 #endif
