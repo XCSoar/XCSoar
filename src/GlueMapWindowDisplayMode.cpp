@@ -24,10 +24,11 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 
 #include "Profile/Profile.hpp"
+#include "Screen/Layout.hpp"
 
 ZoomClimb_t::ZoomClimb_t():
-  CruiseScale(fixed_ten),
-  ClimbScale(fixed(0.25)),
+  CruiseScale(fixed_one / 60),
+  ClimbScale(fixed_one / 2),
   last_isclimb(false),
   last_targetpan(false) {}
 
@@ -53,8 +54,13 @@ GlueMapWindow::LoadDisplayModeScales()
   fixed tmp;
   if (Profile::Get(szProfileClimbMapScale, tmp))
     zoomclimb.ClimbScale = tmp / 10000;
+  else
+    zoomclimb.ClimbScale = fixed_one / Layout::FastScale(2);
+
   if (Profile::Get(szProfileCruiseMapScale, tmp))
     zoomclimb.CruiseScale = tmp / 10000;
+  else
+    zoomclimb.CruiseScale = fixed_one / Layout::FastScale(60);
 }
 
 void
