@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/GDI/Event.hpp"
 #include "Thread/Debug.hpp"
 #include "Asset.hpp"
+#include "Compatibility/vk.h"
 
 bool
 EventLoop::get(MSG &msg)
@@ -137,6 +138,18 @@ TranscodeKey(unsigned key_code)
     }
   } else if (is_altair()){  // handles new keypad driver button codes
     switch(key_code) {
+    case VK_F1:
+      return VK_APP1;
+
+    case VK_F2:
+      return VK_APP2;
+
+    case VK_F3:
+      return VK_APP3;
+
+    case VK_F4:
+      return VK_APP4;
+
     case VK_F5:
       key_code = '6';
       break;
