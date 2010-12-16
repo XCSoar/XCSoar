@@ -364,26 +364,37 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
 {
   GeoPoint Start(Angle::native(fixed_zero), Angle::native(fixed_zero));
   GeoPoint End(Angle::native(fixed_zero), Angle::native(fixed_zero));
-  Angle StartBearing;
-  fixed Radius;
   const TCHAR *Comma = NULL;
+
+  // 5 or -5, depending on direction
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
+  // Read start coordinates
   if (!ReadCoords(&Text[3], Start))
     return;
 
+  // Skip comma character
   Comma = _tcschr(Text, ',');
   if (!Comma)
     return;
 
+  // Read end coordinates
   if (!ReadCoords(&Comma[1], End))
     return;
 
+  // Determine start bearing and radius
+  Angle StartBearing;
+  fixed Radius;
   temp_area.Center.distance_bearing(Start, Radius, StartBearing);
+
+  // Determine end bearing
   Angle EndBearing = Bearing(temp_area.Center, End);
+
+  // Add first polygon point
   GeoPoint TempPoint = Start;
   temp_area.points.push_back(TempPoint);
 
+  // Add intermediate polygon points
   while ((EndBearing - StartBearing).magnitude_degrees() > fixed_7_5) {
     StartBearing += BearingStep;
     StartBearing = StartBearing.as_bearing();
@@ -391,6 +402,7 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
     temp_area.points.push_back(TempPoint);
   }
 
+  // Add last polygon point
   TempPoint = End;
   temp_area.points.push_back(TempPoint);
 }
