@@ -342,19 +342,15 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
   // Determine radius and start/end bearing
   TCHAR *Stop;
   fixed Radius = Units::ToSysUnit(fixed(_tcstod(&Text[2], &Stop)), unNauticalMiles);
-  Angle StartBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
-  Angle EndBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop)));
-
-  if (EndBearing < StartBearing)
-    EndBearing += Angle::degrees(fixed_360);
+  Angle StartBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop))).as_bearing();
+  Angle EndBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop))).as_bearing();
 
   // Add intermediate polygon points
   GeoPoint TempPoint;
   while ((EndBearing - StartBearing).magnitude_degrees() > fixed_7_5) {
-    StartBearing = StartBearing.as_bearing();
     TempPoint = FindLatitudeLongitude(temp_area.Center, StartBearing, Radius);
     temp_area.points.push_back(TempPoint);
-    StartBearing += BearingStep;
+    StartBearing = (StartBearing + BearingStep).as_bearing();
   }
 
   // Add last polygon point
