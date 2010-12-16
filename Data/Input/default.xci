@@ -172,7 +172,7 @@ event=Beep 1
 # mode=default
 # ------------
 
-mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Config3 Info1 Info2 Info3 Exit Menu Vario1 Vario2
+mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Config3 Info1 Info2 Info3 Menu Vario1 Vario2
 type=key
 data=ESCAPE
 event=Mode default
@@ -898,15 +898,8 @@ location=6
 
 
 # -------------
-# mode=Exit
+# mode=Menu
 # -------------
-
-mode=Exit
-type=key
-data=APP1
-event=Mode Menu
-label=Menu
-location=1
 
 mode=Menu
 type=key

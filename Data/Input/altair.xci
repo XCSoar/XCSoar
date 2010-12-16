@@ -67,7 +67,7 @@ event=AutoLogger stop
 # mode=default
 # ------------
 
-mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Config3 Info1 Info2 Info3 Vario1 Vario2
+mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Config3 Info1 Info2 Info3 Menu Vario1 Vario2
 type=key
 data=ESCAPE
 event=Mode default
