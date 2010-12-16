@@ -394,8 +394,7 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
 
   // Add intermediate polygon points
   while ((EndBearing - StartBearing).magnitude_degrees() > fixed_7_5) {
-    StartBearing += BearingStep;
-    StartBearing = StartBearing.as_bearing();
+    StartBearing = (StartBearing + BearingStep).as_bearing();
     TempPoint = FindLatitudeLongitude(temp_area.Center, StartBearing, Radius);
     temp_area.points.push_back(TempPoint);
   }
