@@ -362,23 +362,21 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
 static void
 CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
 {
-  GeoPoint Start(Angle::native(fixed_zero), Angle::native(fixed_zero));
-  GeoPoint End(Angle::native(fixed_zero), Angle::native(fixed_zero));
-  const TCHAR *Comma = NULL;
-
   // 5 or -5, depending on direction
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
   // Read start coordinates
+  GeoPoint Start;
   if (!ReadCoords(&Text[3], Start))
     return;
 
   // Skip comma character
-  Comma = _tcschr(Text, ',');
+  const TCHAR* Comma = _tcschr(Text, ',');
   if (!Comma)
     return;
 
   // Read end coordinates
+  GeoPoint End;
   if (!ReadCoords(&Comma[1], End))
     return;
 
