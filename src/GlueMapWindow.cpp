@@ -37,7 +37,7 @@ GlueMapWindow::set(ContainerWindow &parent, const RECT &rc)
   MapWindow::set(parent, rc);
 
   LoadDisplayModeScales();
-  visible_projection.SetScale(zoomclimb.CruiseMapScale);
+  visible_projection.SetScale(zoomclimb.CruiseScale);
 }
 
 void

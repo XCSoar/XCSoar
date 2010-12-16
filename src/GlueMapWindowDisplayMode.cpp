@@ -26,8 +26,8 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 
 ZoomClimb_t::ZoomClimb_t():
-  CruiseMapScale(fixed_ten),
-  ClimbMapScale(fixed(0.25)),
+  CruiseScale(fixed_ten),
+  ClimbScale(fixed(0.25)),
   last_isclimb(false),
   last_targetpan(false) {}
 
@@ -39,9 +39,9 @@ GlueMapWindow::SetMapScale(const fixed x)
   if (!SettingsMap().TargetPan) {
     if (GetDisplayMode() == dmCircling && SettingsMap().CircleZoom)
       // save cruise scale
-      zoomclimb.ClimbMapScale = visible_projection.GetScale();
+      zoomclimb.ClimbScale = visible_projection.GetScale();
     else
-      zoomclimb.CruiseMapScale = visible_projection.GetScale();
+      zoomclimb.CruiseScale = visible_projection.GetScale();
 
     SaveDisplayModeScales();
   }
@@ -52,16 +52,16 @@ GlueMapWindow::LoadDisplayModeScales()
 {
   fixed tmp;
   if (Profile::Get(szProfileClimbMapScale, tmp))
-    zoomclimb.ClimbMapScale = tmp / 10000;
+    zoomclimb.ClimbScale = tmp / 10000;
   if (Profile::Get(szProfileCruiseMapScale, tmp))
-    zoomclimb.CruiseMapScale = tmp / 10000;
+    zoomclimb.CruiseScale = tmp / 10000;
 }
 
 void
 GlueMapWindow::SaveDisplayModeScales()
 {
-  Profile::Set(szProfileClimbMapScale, (int)(zoomclimb.ClimbMapScale * 10000));
-  Profile::Set(szProfileCruiseMapScale, (int)(zoomclimb.CruiseMapScale * 10000));
+  Profile::Set(szProfileClimbMapScale, (int)(zoomclimb.ClimbScale * 10000));
+  Profile::Set(szProfileCruiseMapScale, (int)(zoomclimb.CruiseScale * 10000));
 }
 
 void
@@ -75,15 +75,15 @@ GlueMapWindow::SwitchZoomClimb()
     if (my_target_pan) {
       // save starting values
       if (isclimb)
-        zoomclimb.ClimbMapScale = visible_projection.GetScale();
+        zoomclimb.ClimbScale = visible_projection.GetScale();
       else
-        zoomclimb.CruiseMapScale = visible_projection.GetScale();
+        zoomclimb.CruiseScale = visible_projection.GetScale();
     } else {
       // restore scales
       if (isclimb)
-        visible_projection.SetScale(zoomclimb.ClimbMapScale);
+        visible_projection.SetScale(zoomclimb.ClimbScale);
       else
-        visible_projection.SetScale(zoomclimb.CruiseMapScale);
+        visible_projection.SetScale(zoomclimb.CruiseScale);
     }
     zoomclimb.last_targetpan = my_target_pan;
     return;
@@ -93,15 +93,15 @@ GlueMapWindow::SwitchZoomClimb()
     if (isclimb != zoomclimb.last_isclimb) {
       if (isclimb) {
         // save cruise scale
-        zoomclimb.CruiseMapScale = visible_projection.GetScale();
+        zoomclimb.CruiseScale = visible_projection.GetScale();
         // switch to climb scale
-        visible_projection.SetScale(zoomclimb.ClimbMapScale);
+        visible_projection.SetScale(zoomclimb.ClimbScale);
       } else {
         // leaving climb
         // save cruise scale
-        zoomclimb.ClimbMapScale = visible_projection.GetScale();
+        zoomclimb.ClimbScale = visible_projection.GetScale();
         // switch to climb scale
-        visible_projection.SetScale(zoomclimb.CruiseMapScale);
+        visible_projection.SetScale(zoomclimb.CruiseScale);
       }
 
       SaveDisplayModeScales();

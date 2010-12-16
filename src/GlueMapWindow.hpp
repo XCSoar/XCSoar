@@ -30,8 +30,8 @@ Copyright_License {
 
 struct ZoomClimb_t
 {
-  fixed CruiseMapScale;
-  fixed ClimbMapScale;
+  fixed CruiseScale;
+  fixed ClimbScale;
   bool last_isclimb;
   bool last_targetpan;
 
