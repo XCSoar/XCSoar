@@ -71,7 +71,7 @@ PaintListItem(Canvas &canvas, const RECT rc, unsigned index)
   TCHAR tmp[255], dist[20], alt[20];
   Units::FormatUserDistance(solution.Vector.Distance, dist, 20, true);
   Units::FormatUserArrival(solution.AltitudeDifference, alt, 20, true);
-  _stprintf(tmp, _T("Distance: %s - Arrival Altitude: %s"), dist, alt);
+  _stprintf(tmp, _T("Distance: %s - Arrival Alt: %s"), dist, alt);
 
   canvas.select(small_font);
   canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
