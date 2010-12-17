@@ -40,10 +40,10 @@ unsigned SystemLoadCPU()
   static unsigned kernelTime_last= 0;
   static unsigned tick_last = 0;
 
-  uint64_t  creationTime, exitTime, kernelTime, userTime; 
-  bool ok = ::GetProcessTimes( ::GetCurrentProcess(), 
-                               (FILETIME*)&creationTime, (FILETIME*)&exitTime, 
-                               (FILETIME*)&kernelTime, (FILETIME*)&userTime ); 
+  uint64_t  creationTime, exitTime, kernelTime, userTime;
+  bool ok = ::GetProcessTimes( ::GetCurrentProcess(),
+                               (FILETIME*)&creationTime, (FILETIME*)&exitTime,
+                               (FILETIME*)&kernelTime, (FILETIME*)&userTime );
 
   if (ok) {
 
@@ -63,7 +63,7 @@ unsigned SystemLoadCPU()
     userTime_last = userTime;
     kernelTime_last = kernelTime;
   }
-  
+
   return retval;
 }
 
