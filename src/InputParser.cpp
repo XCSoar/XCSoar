@@ -26,6 +26,7 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "IO/LineReader.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StaticString.hpp"
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "Compatibility/string.h" /* for _ttoi() */
@@ -49,18 +50,33 @@ parse_assignment(TCHAR *buffer, const TCHAR *&key, const TCHAR *&value)
   return true;
 }
 
+struct EventBuilder {
+  unsigned event_id, location;
+  StaticString<1024> mode;
+  StaticString<256> type, data, label;
+
+  void clear() {
+    event_id = 0;
+    location = 0;
+    mode.clear();
+    type.clear();
+    data.clear();
+    label.clear();
+  }
+
+  bool empty() const {
+    return mode.empty();
+  }
+};
+
 void
 ParseInputFile(InputConfig &config, TLineReader &reader)
 {
   // TODO code - Safer sizes, strings etc - use C++ (can scanf restrict length?)
 
   // Multiple modes (so large string)
-  TCHAR d_mode[1024] = _T("");
-  TCHAR d_type[256] = _T("");
-  TCHAR d_data[256] = _T("");
-  unsigned event_id = 0;
-  TCHAR d_label[256] = _T("");
-  int d_location = 0;
+  EventBuilder current;
+  current.clear();
 
   int line = 0;
 
@@ -79,16 +95,16 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
     } else if (buffer[0] == _T('\0')) {
       // Check valid line? If not valid, assume next record (primative, but works ok!)
       // General checks before continue...
-      if (!string_is_empty(d_mode)) {
+      if (!current.empty()) {
 
         TCHAR *token;
 
         // For each mode
-        token = _tcstok(d_mode, _T(" "));
+        token = current.mode.first_token(_T(" "));
 
         // General errors - these should be true
-        assert(d_location >= 0);
-        assert(d_location < 1024);
+        assert(current.location < 1024);
+        assert(current.mode != NULL);
 
         const TCHAR *new_label = NULL;
         while (token != NULL) {
@@ -99,64 +115,64 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
 
           // Make label event
           // TODO code: Consider Reuse existing entries...
-          if (d_location > 0) {
+          if (current.location > 0) {
             // Only copy this once per object - save string space
             if (!new_label) {
-              new_label = StringMallocParse(d_label);
+              new_label = StringMallocParse(current.label);
             }
 
-            config.append_menu(mode_id, new_label, d_location, event_id);
+            config.append_menu(mode_id, new_label,
+                               current.location, current.event_id);
           }
 
           // Make key (Keyboard input)
           // key - Hardware key or keyboard
-          if (_tcscmp(d_type, _T("key")) == 0) {
+          if (current.type.equals(_T("key"))) {
             // Get the int key (eg: APP1 vs 'a')
-            unsigned key = InputEvents::findKey(d_data);
+            unsigned key = InputEvents::findKey(current.data);
             if (key > 0)
-              config.Key2Event[mode_id][key] = event_id;
+              config.Key2Event[mode_id][key] = current.event_id;
             else
-              LogStartUp(_T("Invalid key data: %s at %i"), d_data, line);
+              LogStartUp(_T("Invalid key data: %s at %i"),
+                         current.data.c_str(), line);
 
           // Make gce (Glide Computer Event)
           // GCE - Glide Computer Event
-          } else if (_tcscmp(d_type, _T("gce")) == 0) {
+          } else if (current.type.equals(_T("gce"))) {
             // Get the int key (eg: APP1 vs 'a')
-            int key = InputEvents::findGCE(d_data);
+            int key = InputEvents::findGCE(current.data);
             if (key >= 0)
-              config.GC2Event[mode_id][key] = event_id;
+              config.GC2Event[mode_id][key] = current.event_id;
             else
-              LogStartUp(_T("Invalid GCE data: %s at %i"), d_data, line);
+              LogStartUp(_T("Invalid GCE data: %s at %i"),
+                         current.data.c_str(), line);
 
           // Make ne (NMEA Event)
           // NE - NMEA Event
-          } else if (_tcscmp(d_type, _T("ne")) == 0) {
+          } else if (current.type.equals(_T("ne"))) {
             // Get the int key (eg: APP1 vs 'a')
-            int key = InputEvents::findNE(d_data);
+            int key = InputEvents::findNE(current.data);
             if (key >= 0)
-              config.N2Event[mode_id][key] = event_id;
+              config.N2Event[mode_id][key] = current.event_id;
             else
-              LogStartUp(_T("Invalid GCE data: %s at %i"), d_data, line);
+              LogStartUp(_T("Invalid GCE data: %s at %i"),
+                         current.data.c_str(), line);
 
           // label only - no key associated (label can still be touch screen)
-          } else if (_tcscmp(d_type, _T("label")) == 0) {
+          } else if (current.type.equals(_T("label"))) {
             // Nothing to do here...
 
           } else {
-            LogStartUp(_T("Invalid type: %s at %i"), d_type, line);
+            LogStartUp(_T("Invalid type: %s at %i"),
+                       current.type.c_str(), line);
           }
 
-          token = _tcstok(NULL, _T(" "));
+          token = current.mode.next_token(_T(" "));
         }
       }
 
       // Clear all data.
-      _tcscpy(d_mode, _T(""));
-      _tcscpy(d_type, _T(""));
-      _tcscpy(d_data, _T(""));
-      event_id = 0;
-      _tcscpy(d_label, _T(""));
-      d_location = 0;
+      current.clear();
 
     } else if (string_is_empty(buffer) || buffer[0] == _T('#')) {
       // Do nothing - we probably just have a comment line
@@ -164,15 +180,11 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
 
     } else if (parse_assignment(buffer, key, value)) {
       if (_tcscmp(key, _T("mode")) == 0) {
-        if (_tcslen(value) < 1024) {
-          _tcscpy(d_mode, value);
-        }
+        current.mode = value;
       } else if (_tcscmp(key, _T("type")) == 0) {
-        if (_tcslen(value) < 256)
-          _tcscpy(d_type, value);
+        current.type = value;
       } else if (_tcscmp(key, _T("data")) == 0) {
-        if (_tcslen(value) < 256)
-          _tcscpy(d_data, value);
+        current.data = value;
       } else if (_tcscmp(key, _T("event")) == 0) {
         if (_tcslen(value) < 256) {
           TCHAR d_event[256] = _T("");
@@ -201,7 +213,8 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
             pt2Event event = InputEvents::findEvent(d_event);
             if (event) {
               TCHAR *allocated = StringMallocParse(d_misc);
-              event_id = config.append_event(event, allocated, event_id);
+              current.event_id = config.append_event(event, allocated,
+                                                     current.event_id);
 
               /* not freeing the string, because
                  InputConfig::append_event() stores the string point
@@ -220,9 +233,9 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
           }
         }
       } else if (_tcscmp(key, _T("label")) == 0) {
-        _tcscpy(d_label, value);
+        current.label = value;
       } else if (_tcscmp(key, _T("location")) == 0) {
-        d_location = _ttoi(value);
+        current.location = _ttoi(value);
 
       } else {
         LogStartUp(_T("Invalid key/value pair %s=%s at %i"), key, value, line);
