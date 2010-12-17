@@ -58,8 +58,6 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
 
   // Init first entry
 
-  // Did we find some in the last loop...
-  bool some_data = false;
   // Multiple modes (so large string)
   TCHAR d_mode[1024] = _T("");
   TCHAR d_type[256] = _T("");
@@ -90,7 +88,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
     } else if (buffer[0] == _T('\0')) {
       // Check valid line? If not valid, assume next record (primative, but works ok!)
       // General checks before continue...
-      if (some_data && (d_mode != NULL) && (_tcscmp(d_mode, _T("")) != 0)) {
+      if (!string_is_empty(d_mode)) {
 
         TCHAR *token;
 
@@ -169,7 +167,6 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
       }
 
       // Clear all data.
-      some_data = false;
       _tcscpy(d_mode, _T(""));
       _tcscpy(d_type, _T(""));
       _tcscpy(d_data, _T(""));
@@ -186,7 +183,6 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
     } else if (parse_assignment(buffer, key, value)) {
       if (_tcscmp(key, _T("mode")) == 0) {
         if (_tcslen(value) < 1024) {
-          some_data = true; // Success, we have a real entry
           _tcscpy(d_mode, value);
         }
       } else if (_tcscmp(key, _T("type")) == 0) {
