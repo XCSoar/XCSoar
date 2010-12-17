@@ -31,9 +31,6 @@ class GlidePolar;
 enum {
   /** if this polar is selected use the winpilot file */
   POLARUSEWINPILOTFILE = 6,
-
-  /** number of in-built polars */
-  NUMPOLARS = 7,
 };
 
 bool
