@@ -177,8 +177,7 @@ void PopupMessage::Resize() {
     move(rthis.left, rthis.top,
          rthis.right - rthis.left,
          rthis.bottom - rthis.top);
-    bring_to_top();
-    show();
+    show_on_top();
   }
 
 }
