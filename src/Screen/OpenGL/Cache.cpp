@@ -112,7 +112,6 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
 
   if (text_cache_size >= 256) {
     RenderedText *rt = (RenderedText *)text_cache_head.prev;
-    printf("remove '%s'\n", rt->key.c_str());
     text_cache_map.erase(rt->key);
     rt->next->prev = rt->prev;
     rt->prev->next = rt->next;
