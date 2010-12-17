@@ -2,7 +2,7 @@
 
 <Form Name="frmTaskProperties" Width="240" Height="320" Caption="Task Properties">
   <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" OnClick="OnCloseClicked"/>
-  <Button Name="butType" Caption="Type" X="102" Y="2" Width="98" Height="22" OnClick="OnTypeClicked"/>
+  <Button Name="butType" Caption="Type" X="102" Y="2" Width="-2" Height="22" OnClick="OnTypeClicked"/>
 
   <Panel Name="frmProperties" X="2" Y="24">
 
