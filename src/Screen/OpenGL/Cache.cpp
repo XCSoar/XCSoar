@@ -88,9 +88,25 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
 
   std::map<std::string,RenderedText*>::const_iterator i =
     text_cache_map.find(key);
-  if (i != text_cache_map.end())
+  if (i != text_cache_map.end()) {
     /* found in the cache */
-    return &i->second->texture;
+    RenderedText *rt = i->second;
+
+    /* move to the front, so it gets flushed last */
+    if (rt->prev != &text_cache_head) {
+      /* remove */
+      rt->next->prev = rt->prev;
+      rt->prev->next = rt->next;
+
+      /* insert */
+      rt->next = text_cache_head.next;
+      rt->next->prev = rt;
+      rt->prev = &text_cache_head;
+      text_cache_head.next = rt;
+    }
+
+    return &rt->texture;
+  }
 
   /* remove old entries from cache */
 
