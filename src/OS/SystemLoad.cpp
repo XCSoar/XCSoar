@@ -76,6 +76,62 @@ unsigned SystemLoadCPU()
 
 #endif
 
+#elif defined(__linux__) || defined(ANDROID)
+
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
+
+unsigned
+SystemLoadCPU()
+{
+  int fd = open("/proc/stat", O_RDONLY|O_NOCTTY);
+  if (fd < 0)
+    return (unsigned)-1;
+
+  char line[256];
+  ssize_t nbytes = read(fd, line, sizeof(line) - 1);
+  close(fd);
+  if (nbytes <= 0)
+    return (unsigned)-1;
+
+  line[nbytes] = 0;
+
+  struct cpu {
+    long busy, idle;
+  };
+
+  static cpu last;
+
+  cpu current;
+  long user, nice, system;
+  int n = sscanf(line, "cpu  %ld %ld %ld %ld ", &user, &nice, &system,
+                 &current.idle);
+  if (n != 4)
+    return (unsigned)-1;
+
+  current.busy = user + nice + system;
+
+  if (last.idle == 0) {
+    /* first run */
+    last = current;
+    return (unsigned)-1;
+  }
+
+  const cpu diff = {
+    current.busy - last.busy,
+    current.idle - last.idle,
+  };
+
+  last = current;
+
+  long total = diff.busy + diff.idle;
+  if (total <= 0)
+    return (unsigned)-1;
+
+  return (unsigned)(diff.busy * 100 / total);
+}
+
 #else /* !WIN32 */
 
 ///@todo implement for non-win32
