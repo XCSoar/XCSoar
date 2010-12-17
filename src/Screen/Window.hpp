@@ -398,7 +398,8 @@ public:
     show();
 #else
     ::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
-                   SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+                   SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE|
+                   SWP_NOACTIVATE|SWP_NOOWNERZORDER);
 #endif
   }
 
