@@ -26,9 +26,6 @@ Copyright_License {
 
 #include <assert.h>
 
-typedef double PolarCoefficients_t[3];
-typedef double WeightCoefficients_t[3];
-
 const TCHAR *PolarLabels[] = {
   _T("Vintage - Ka6"),
   _T("Club - ASW19"),
