@@ -67,6 +67,80 @@ struct EventBuilder {
   bool empty() const {
     return mode.empty();
   }
+
+  void commit(InputConfig &config, unsigned line) {
+    if (empty())
+      return;
+
+    TCHAR *token;
+
+    // For each mode
+    token = mode.first_token(_T(" "));
+
+    // General errors - these should be true
+    assert(location < 1024);
+    assert(mode != NULL);
+
+    const TCHAR *new_label = NULL;
+    while (token != NULL) {
+
+      // All modes are valid at this point
+      int mode_id = config.make_mode(token);
+      assert(mode_id >= 0);
+
+      // Make label event
+      // TODO code: Consider Reuse existing entries...
+      if (location > 0) {
+        // Only copy this once per object - save string space
+        if (!new_label) {
+          new_label = StringMallocParse(label);
+        }
+
+        config.append_menu(mode_id, new_label,
+                           location, event_id);
+      }
+
+      // Make key (Keyboard input)
+      // key - Hardware key or keyboard
+      if (type.equals(_T("key"))) {
+        // Get the int key (eg: APP1 vs 'a')
+        unsigned key = InputEvents::findKey(data);
+        if (key > 0)
+          config.Key2Event[mode_id][key] = event_id;
+        else
+          LogStartUp(_T("Invalid key data: %s at %u"), data.c_str(), line);
+
+        // Make gce (Glide Computer Event)
+        // GCE - Glide Computer Event
+      } else if (type.equals(_T("gce"))) {
+        // Get the int key (eg: APP1 vs 'a')
+        int key = InputEvents::findGCE(data);
+        if (key >= 0)
+          config.GC2Event[mode_id][key] = event_id;
+        else
+          LogStartUp(_T("Invalid GCE data: %s at %u"), data.c_str(), line);
+
+        // Make ne (NMEA Event)
+        // NE - NMEA Event
+      } else if (type.equals(_T("ne"))) {
+        // Get the int key (eg: APP1 vs 'a')
+        int key = InputEvents::findNE(data);
+        if (key >= 0)
+          config.N2Event[mode_id][key] = event_id;
+        else
+          LogStartUp(_T("Invalid GCE data: %s at %u"), data.c_str(), line);
+
+        // label only - no key associated (label can still be touch screen)
+      } else if (type.equals(_T("label"))) {
+        // Nothing to do here...
+
+      } else {
+        LogStartUp(_T("Invalid type: %s at %u"), type.c_str(), line);
+      }
+
+      token = mode.next_token(_T(" "));
+    }
+  }
 };
 
 void
@@ -95,81 +169,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
     } else if (buffer[0] == _T('\0')) {
       // Check valid line? If not valid, assume next record (primative, but works ok!)
       // General checks before continue...
-      if (!current.empty()) {
-
-        TCHAR *token;
-
-        // For each mode
-        token = current.mode.first_token(_T(" "));
-
-        // General errors - these should be true
-        assert(current.location < 1024);
-        assert(current.mode != NULL);
-
-        const TCHAR *new_label = NULL;
-        while (token != NULL) {
-
-          // All modes are valid at this point
-          int mode_id = config.make_mode(token);
-          assert(mode_id >= 0);
-
-          // Make label event
-          // TODO code: Consider Reuse existing entries...
-          if (current.location > 0) {
-            // Only copy this once per object - save string space
-            if (!new_label) {
-              new_label = StringMallocParse(current.label);
-            }
-
-            config.append_menu(mode_id, new_label,
-                               current.location, current.event_id);
-          }
-
-          // Make key (Keyboard input)
-          // key - Hardware key or keyboard
-          if (current.type.equals(_T("key"))) {
-            // Get the int key (eg: APP1 vs 'a')
-            unsigned key = InputEvents::findKey(current.data);
-            if (key > 0)
-              config.Key2Event[mode_id][key] = current.event_id;
-            else
-              LogStartUp(_T("Invalid key data: %s at %i"),
-                         current.data.c_str(), line);
-
-          // Make gce (Glide Computer Event)
-          // GCE - Glide Computer Event
-          } else if (current.type.equals(_T("gce"))) {
-            // Get the int key (eg: APP1 vs 'a')
-            int key = InputEvents::findGCE(current.data);
-            if (key >= 0)
-              config.GC2Event[mode_id][key] = current.event_id;
-            else
-              LogStartUp(_T("Invalid GCE data: %s at %i"),
-                         current.data.c_str(), line);
-
-          // Make ne (NMEA Event)
-          // NE - NMEA Event
-          } else if (current.type.equals(_T("ne"))) {
-            // Get the int key (eg: APP1 vs 'a')
-            int key = InputEvents::findNE(current.data);
-            if (key >= 0)
-              config.N2Event[mode_id][key] = current.event_id;
-            else
-              LogStartUp(_T("Invalid GCE data: %s at %i"),
-                         current.data.c_str(), line);
-
-          // label only - no key associated (label can still be touch screen)
-          } else if (current.type.equals(_T("label"))) {
-            // Nothing to do here...
-
-          } else {
-            LogStartUp(_T("Invalid type: %s at %i"),
-                       current.type.c_str(), line);
-          }
-
-          token = current.mode.next_token(_T(" "));
-        }
-      }
+      current.commit(config, line);
 
       // Clear all data.
       current.clear();
