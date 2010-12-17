@@ -7,7 +7,7 @@ SDL_LDLIBS := $(shell pkg-config --libs sdl 2>/dev/null)
 else
 ifeq ($(TARGET),ANDROID)
 OPENGL = y
-SDL_CPPFLAGS := -I/opt/android/include/SDL
+SDL_CPPFLAGS :=
 SDL_LDLIBS :=
 else
 OPENGL ?= n

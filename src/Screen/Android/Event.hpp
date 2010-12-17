@@ -28,9 +28,6 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Thread/Cond.hpp"
 
-#include <SDL_version.h>
-#include <SDL_events.h>
-
 #include <queue>
 
 class TopWindow;

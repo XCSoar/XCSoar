@@ -30,7 +30,9 @@ Copyright_License {
 #include <SDL/SDL_opengl.h>
 #endif
 
+#ifndef ANDROID
 #include <SDL_video.h> // for SDL_Color
+#endif
 
 /**
  * This class represents a color in the RGB color space.  This is used
@@ -97,6 +99,7 @@ struct Color {
 #endif
   }
 
+#ifndef ANDROID
   /**
    * Convert this object to a SDL_Color.
    *
@@ -111,6 +114,7 @@ struct Color {
     color.unused = SDL_ALPHA_OPAQUE;
     return color;
   }
+#endif
 
   Color
   with_alpha(GLubyte alpha) const {

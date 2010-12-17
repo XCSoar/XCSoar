@@ -39,10 +39,14 @@ void
 TopCanvas::set()
 {
   unsigned width = 640, height = 480;
+#ifndef ANDROID
   Uint32 flags = SDL_ANYFORMAT;
+#endif
 
 #ifdef ENABLE_OPENGL
+#ifndef ANDROID
   flags |= SDL_OPENGL;
+#endif
 #else /* !ENABLE_OPENGL */
   /* double buffering temporarily disabled on Android because
      Android's SDL port doesn't allow locking it then (which we need

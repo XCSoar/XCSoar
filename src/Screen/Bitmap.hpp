@@ -26,7 +26,9 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 
-#ifdef ENABLE_SDL
+#ifdef ANDROID
+#include <windef.h>
+#elif defined(ENABLE_SDL)
 #include <SDL_video.h>
 #include <windef.h>
 #else
@@ -97,8 +99,10 @@ public:
   }
 #endif
 
+#ifndef ANDROID
 #ifdef ENABLE_SDL
   bool load(SDL_Surface *_surface);
+#endif
 #endif
 
   bool load(unsigned id);
