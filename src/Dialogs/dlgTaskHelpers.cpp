@@ -439,10 +439,10 @@ TaskValidationError(AbstractTaskFactory::TaskValidationErrorType_t type)
     return _T("Incorrect number of turnpoints.\n");
     break;
   case AbstractTaskFactory::EXCEEDS_MAX_TURNPOINTS:
-    return _T("Exceeds max number turnpoints.\n");
+    return _T("Too many turnpoints.\n");
     break;
   case AbstractTaskFactory::UNDER_MIN_TURNPOINTS:
-    return _T("Under min number turnpoints.\n");
+    return _T("Not enough turnpoints.\n");
     break;
   case AbstractTaskFactory::TURNPOINTS_NOT_UNIQUE:
     return _T("Turnpoints not unique.\n");
