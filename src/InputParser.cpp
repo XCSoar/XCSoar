@@ -54,8 +54,6 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
 {
   // TODO code - Safer sizes, strings etc - use C++ (can scanf restrict length?)
 
-  TCHAR *new_label = NULL;
-
   // Init first entry
 
   // Multiple modes (so large string)
@@ -107,6 +105,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
         // assert(_tcslen(d_type) < 1024);
         // assert(_tcslen(d_label) < 1024);
 
+        const TCHAR *new_label = NULL;
         while (token != NULL) {
 
           // All modes are valid at this point
@@ -173,7 +172,6 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
       event_id = 0;
       _tcscpy(d_label, _T(""));
       d_location = 0;
-      new_label = NULL;
 
     } else if (string_is_empty(buffer) || buffer[0] == _T('#')) {
       // Do nothing - we probably just have a comment line
