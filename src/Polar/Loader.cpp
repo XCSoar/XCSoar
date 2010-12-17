@@ -28,6 +28,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Language.hpp"
 #include "Dialogs/Message.hpp"
+#include "SettingsComputer.hpp"
 
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Polar/Polar.hpp"
