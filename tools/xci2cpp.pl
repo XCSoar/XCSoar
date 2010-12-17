@@ -112,6 +112,8 @@ while (<>) {
 
 }
 
+commit(%rec, $line);
+
 sub c_string($) {
     my $value = shift;
     return 'NULL' unless defined $value;

@@ -245,4 +245,6 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
     }
 
   }
+
+  current.commit(config, line);
 }
