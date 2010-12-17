@@ -1343,8 +1343,13 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Standard Vario"));
-    dfe->addEnumText(_("SeeYou Vario"));
+    TCHAR tmp_text[30];
+    _tcscpy(tmp_text, _("Vario"));
+    _tcscat(tmp_text, _T(" #1"));
+    dfe->addEnumText(tmp_text);
+    _tcscpy(tmp_text, _("Vario"));
+    _tcscat(tmp_text, _T(" #2"));
+    dfe->addEnumText(tmp_text);
     dfe->addEnumText(_("Altitude"));
     dfe->Set((int)XCSoarInterface::SettingsMap().SnailType);
     wp->RefreshDisplay();
