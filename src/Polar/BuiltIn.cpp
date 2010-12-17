@@ -182,7 +182,7 @@ ReadWinPilotPolarInternal(unsigned i, Polar &polar)
   POLARW[0] = WinPilotPolars[i].w0;
   POLARW[1] = WinPilotPolars[i].w1;
   POLARW[2] = WinPilotPolars[i].w2;
-  PolarWinPilot2XCSoar(polar, POLARV, POLARW, ww, WinPilotPolars[i].wing_area);
+  ConvertWinPilotPolar(polar, POLARV, POLARW, ww, WinPilotPolars[i].wing_area);
 
   return true;
 }

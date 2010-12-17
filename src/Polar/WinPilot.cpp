@@ -38,7 +38,7 @@ Copyright_License {
  * @param ww dry mass, maximum takeoff weight
  */
 void
-PolarWinPilot2XCSoar(class Polar &polar, double POLARV[3], double POLARW[3],
+ConvertWinPilotPolar(class Polar &polar, double POLARV[3], double POLARW[3],
                      double ww[2], double wing_area)
 {
   double d;
@@ -120,7 +120,7 @@ ReadWinPilotPolar(Polar &polar, const TCHAR *line)
   if (*p != _T(','))
     return false;
 
-  PolarWinPilot2XCSoar(polar, POLARV, POLARW, ww);
+  ConvertWinPilotPolar(polar, POLARV, POLARW, ww);
   return true;
 }
 

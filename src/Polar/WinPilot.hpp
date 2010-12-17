@@ -27,7 +27,7 @@ Copyright_License {
 class Polar;
 
 void
-PolarWinPilot2XCSoar(class Polar &polar, double POLARV[3], double POLARW[3],
+ConvertWinPilotPolar(class Polar &polar, double POLARV[3], double POLARW[3],
                      double ww[2], double wing_area = 0.0);
 
 bool
