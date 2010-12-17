@@ -24,6 +24,63 @@ sub get_mode($) {
     return $i;
 }
 
+sub commit(\%$) {
+    my ($rec, $line) = @_;
+
+    return unless $rec->{type};
+
+    # Make event
+    my $event_id = 0;
+    foreach my $e (@{$rec->{event}}) {
+        my ($handler, $misc) = split(/ /, $e, 2);
+        my $e = [ $handler, $misc, $event_id ];
+        my $dump = Dumper($e);
+        $event_id = $events2{$dump};
+        unless (defined $event_id) {
+            push @events, $e;
+            $event_id = @events;
+            $events2{$dump} = $event_id;
+        }
+    }
+
+    my $mode = $rec->{mode} || die "Invalid entry near $line - no mode\n";
+    foreach my $m (split(/ /, $mode)) {
+        my $mode_id = get_mode($m);
+        my $label = $rec->{label};
+        $label =~ s|\\([^rn\\])|\\\\$1|g if ($label);
+        $label = '' unless defined $label;
+        my $location = $rec->{location};
+        push @labels, [ $mode_id, $label, $location, $event_id ]
+          if defined $location;
+
+        next unless $event_id > 0;
+
+				# Key output
+        if ($rec->{type} eq "key") {
+            my $data = $rec->{data} ;
+            if (length($data)<1) {
+                die "Invalid entry near $line - no key\n";
+            }
+            if (length($data) == 1) {
+                $data = uc($data);
+                $data = qq{(int)'$data'};
+            } else {
+                $data = "VK_$data";
+            }
+
+            push @keys, [ $mode_id, $data, $event_id ];
+        } elsif ($rec->{type} eq "gce") {
+            my $data = $rec->{data} || die "Invalid entry near $line - no GCE data\n";
+            push @gc, [ $mode_id, $data, $event_id ];
+        } elsif ($rec->{type} eq "ne") {
+            my $data = $rec->{data} || die "Invalid entry near $line - no NE data\n";
+            push @nmea, [ $mode_id, $data, $event_id ];
+        } elsif ($rec->{type} ne "none") {
+            die "Invalid record near $line - No valid type";
+        }
+    }
+}
+
 my %rec = ();
 my $line = 0;
 
@@ -35,58 +92,7 @@ while (<>) {
     next if (/^#/);
 
     if (/^\s*$/) {
-        if ($rec{type}) {
-            # Make event
-            my $event_id = 0;
-            foreach my $e (@{$rec{event}}) {
-                my ($handler, $misc) = split(/ /, $e, 2);
-                my $e = [ $handler, $misc, $event_id ];
-                my $dump = Dumper($e);
-                $event_id = $events2{$dump};
-                unless (defined $event_id) {
-                    push @events, $e;
-                    $event_id = @events;
-                    $events2{$dump} = $event_id;
-                }
-            }
-
-            my $mode = $rec{mode} || die "Invalid entry near $line - no mode\n";
-            foreach my $m (split(/ /, $mode)) {
-                my $mode_id = get_mode($m);
-                my $label = $rec{label};
-                $label =~ s|\\([^rn\\])|\\\\$1|g if ($label);
-                $label = '' unless defined $label;
-                my $location = $rec{location};
-                push @labels, [ $mode_id, $label, $location, $event_id ]
-                  if defined $location;
-
-                next unless $event_id > 0;
-
-				# Key output
-                if ($rec{type} eq "key") {
-                    my $data = $rec{data} ;
-                    if (length($data)<1) {
-                        die "Invalid entry near $line - no key\n";
-                    }
-                    if (length($data) == 1) {
-                        $data = uc($data);
-                        $data = qq{(int)'$data'};
-                    } else {
-                        $data = "VK_$data";
-                    }
-
-                    push @keys, [ $mode_id, $data, $event_id ];
-                } elsif ($rec{type} eq "gce") {
-                    my $data = $rec{data} || die "Invalid entry near $line - no GCE data\n";
-                    push @gc, [ $mode_id, $data, $event_id ];
-                } elsif ($rec{type} eq "ne") {
-                    my $data = $rec{data} || die "Invalid entry near $line - no NE data\n";
-                    push @nmea, [ $mode_id, $data, $event_id ];
-                } elsif ($rec{type} ne "none") {
-                    die "Invalid record near $line - No valid type";
-                }
-            }
-        }
+        commit(%rec, $line);
         %rec = ();
         $rec{event} = [];
 
