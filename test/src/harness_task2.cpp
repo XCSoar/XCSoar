@@ -55,7 +55,7 @@ bool test_task_bad(TaskManager& task_manager,
   ok (!bfact.createIntermediate(s,*wp),"bad intermediate type (after task change)",0);
 
   bfact.remove(1);
-  ok (!bfact.validate(),"ok with one tp",0);
+  ok (bfact.validate(),"ok with one tp",0);
 
   bfact.remove(1);
   ok (!bfact.validate(),"insufficient tps for aat",0);
