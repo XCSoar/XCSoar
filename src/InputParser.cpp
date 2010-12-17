@@ -61,8 +61,6 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
   unsigned event_id = 0;
   TCHAR d_label[256] = _T("");
   int d_location = 0;
-  TCHAR d_event[256] = _T("");
-  TCHAR d_misc[256] = _T("");
 
   int line = 0;
 
@@ -177,8 +175,8 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
           _tcscpy(d_data, value);
       } else if (_tcscmp(key, _T("event")) == 0) {
         if (_tcslen(value) < 256) {
-          _tcscpy(d_event, _T(""));
-          _tcscpy(d_misc, _T(""));
+          TCHAR d_event[256] = _T("");
+          TCHAR d_misc[256] = _T("");
           int ef;
 
           #if defined(__BORLANDC__)
