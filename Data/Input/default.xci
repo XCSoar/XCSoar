@@ -950,6 +950,3 @@ event=Exit system
 event=Mode default
 label=Quit
 location=9
-
-
-
