@@ -25,6 +25,11 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Canvas.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Texture.hpp"
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 void
 MaskedIcon::load_big(unsigned id, unsigned big_id, bool center)
 {
@@ -56,8 +61,24 @@ MaskedIcon::draw(Canvas &canvas, int x, int y) const
 {
   assert(defined());
 
+#ifdef ENABLE_OPENGL
+  GLTexture &texture = *bitmap.native();
+
+  GLEnable scope(GL_TEXTURE_2D);
+  texture.bind();
+  glColor4f(1.0, 1.0, 1.0, 1.0);
+
+  GLLogicOp logic_op(GL_OR);
+  texture.draw(x - origin.x, y - origin.y, size.cx, size.cy,
+               0, 0, size.cx, size.cy);
+
+  logic_op.set(GL_AND);
+  texture.draw(x - origin.x, y - origin.y, size.cx, size.cy,
+               size.cx, 0, size.cx, size.cy);
+#else
   canvas.copy_or(x - origin.x, y - origin.y, size.cx, size.cy,
                  bitmap, 0, 0);
   canvas.copy_and(x - origin.x, y - origin.y, size.cx, size.cy,
                   bitmap, size.cx, 0);
+#endif
 }
