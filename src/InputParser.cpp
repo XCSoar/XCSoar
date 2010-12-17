@@ -54,8 +54,6 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
 {
   // TODO code - Safer sizes, strings etc - use C++ (can scanf restrict length?)
 
-  // Init first entry
-
   // Multiple modes (so large string)
   TCHAR d_mode[1024] = _T("");
   TCHAR d_type[256] = _T("");
@@ -69,9 +67,6 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
   int line = 0;
 
   // Read from the file
-  // TODO code: What about \r - as in \r\n ?
-  // TODO code: Note that ^# does not allow # in key - might be required (probably not)
-  //   Better way is to separate the check for # and the scanf
   TCHAR *buffer;
   while ((buffer = reader.read()) != NULL) {
     TrimRight(buffer);
@@ -95,15 +90,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
 
         // General errors - these should be true
         assert(d_location >= 0);
-        assert(d_location < 1024); // Scott arbitrary limit
-        assert(d_mode != NULL);
-        assert(d_type != NULL);
-        assert(d_label != NULL);
-
-        // These could indicate bad data - thus not an ASSERT (debug only)
-        // assert(_tcslen(d_mode) < 1024);
-        // assert(_tcslen(d_type) < 1024);
-        // assert(_tcslen(d_label) < 1024);
+        assert(d_location < 1024);
 
         const TCHAR *new_label = NULL;
         while (token != NULL) {
@@ -175,7 +162,6 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
 
     } else if (string_is_empty(buffer) || buffer[0] == _T('#')) {
       // Do nothing - we probably just have a comment line
-      // JG removed "void;" - causes warning (void is declaration and needs variable)
       // NOTE: Do NOT display buffer to user as it may contain an invalid stirng !
 
     } else if (parse_assignment(buffer, key, value)) {
@@ -209,15 +195,6 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
           #if defined(__BORLANDC__)
           }
           #endif
-
-          // TODO code: Can't use token here - breaks
-          // other token - damn C - how about
-          // C++ String class ?
-
-          // TCHAR *eventtoken;
-          // eventtoken = _tcstok(value, _T(" "));
-          // d_event = token;
-          // eventtoken = _tcstok(value, _T(" "));
 
           if ((ef == 1) || (ef == 2)) {
 
@@ -256,5 +233,5 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
       LogStartUp(_T("Invalid line at %i"), line);
     }
 
-  } // end while
+  }
 }
