@@ -36,7 +36,9 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
    position(0)
 {
   RECT rc = parent.get_client_rect();
-  set(parent, rc.left, rc.top, rc.right, rc.bottom);
+  WindowStyle style;
+  style.hide();
+  set(parent, rc.left, rc.top, rc.right, rc.bottom, style);
 
   unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
 
@@ -77,7 +79,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   set_step(50);
 
   // Show dialog
-  bring_to_top();
+  show_on_top();
   update();
 }
 
