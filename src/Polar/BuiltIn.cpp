@@ -27,7 +27,7 @@ Copyright_License {
 /**
  * Struct for internally stored WinPilot-like polars 
  */
-struct WinPilotPolarInternal 
+struct WinPilotPolar 
 {
   const TCHAR *name;            /**< Name of the glider type */
   double ww0;                   /**< Mass dry gross (kg) */
@@ -44,7 +44,7 @@ struct WinPilotPolarInternal
 /**
  *  Note: new items should be added to bottom, otherwise saved index is lost
  */
-static const WinPilotPolarInternal WinPilotPolars[] =
+static const WinPilotPolar WinPilotPolars[] =
 {
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8},
   { _T("604 Kestrel"), 570, 100, 112.97, -0.72, 150.64, -1.42, 207.13, -4.1, 16.26},
@@ -162,7 +162,7 @@ static const WinPilotPolarInternal WinPilotPolars[] =
  */
 const TCHAR* GetWinPilotPolarInternalName(unsigned i)
 {
-  if (i>=sizeof(WinPilotPolars)/sizeof(WinPilotPolarInternal)) {
+  if (i>=sizeof(WinPilotPolars)/sizeof(WinPilotPolar)) {
     return NULL; // error
   }
   return WinPilotPolars[i].name;
