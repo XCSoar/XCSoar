@@ -38,8 +38,8 @@ Copyright_License {
  * @param ww dry mass, maximum takeoff weight
  */
 void
-PolarWinPilot2XCSoar(class Polar &polar,
-                     double POLARV[3], double POLARW[3], double ww[2])
+PolarWinPilot2XCSoar(class Polar &polar, double POLARV[3], double POLARW[3],
+                     double ww[2], double wing_area)
 {
   double d;
   double v1,v2,v3;
@@ -73,7 +73,7 @@ PolarWinPilot2XCSoar(class Polar &polar,
   polar.POLAR[0] = polar.POLAR[0] * sqrt(polar.WEIGHTS[0] + polar.WEIGHTS[1]);
   polar.POLAR[2] = polar.POLAR[2] / sqrt(polar.WEIGHTS[0] + polar.WEIGHTS[1]);
 
-  polar.WingArea = 0.0;
+  polar.WingArea = wing_area;
 }
 
 static bool
