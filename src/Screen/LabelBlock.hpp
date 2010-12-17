@@ -29,7 +29,7 @@ Copyright_License {
 
 class LabelBlock {
   enum {
-    MAXLABELBLOCKS = 100
+    MAXLABELBLOCKS = 256
   };
 
 public:
