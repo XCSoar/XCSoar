@@ -83,8 +83,11 @@ Thread::join(unsigned timeout_ms)
   assert(handle != NULL);
 
   bool result = ::WaitForSingleObject(handle, timeout_ms) == WAIT_OBJECT_0;
-  ::CloseHandle(handle);
-  handle = NULL;
+  if (result) {
+    ::CloseHandle(handle);
+    handle = NULL;
+  }
+
   return result;
 #endif
 }
