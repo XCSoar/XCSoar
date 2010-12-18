@@ -67,12 +67,6 @@ static const Polar historical_polars[] = {
 bool
 LoadHistoricalPolar(unsigned id, Polar &polar)
 {
-  /* Weights:
-     0 Pilot Weight?
-     1 Glider Weight
-     2 BallastWeight
-  */
-
   assert(id < sizeof(historical_polars) / sizeof(historical_polars[0]));
 
   polar = historical_polars[id];
