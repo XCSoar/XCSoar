@@ -314,15 +314,28 @@ SerialPort::StopRxThread()
 
   stop();
 
-#ifndef HAVE_POSIX
+#ifdef HAVE_POSIX
+  Thread::join();
+#else
   Flush();
 
   /* this will cancel WaitCommEvent() */
   ::SetCommMask(hPort, 0);
+
+  if (!Thread::join(2000)) {
+    /* On Dell Axim x51v, the Bluetooth RFCOMM driver seems to be
+       bugged: when the peer gets disconnected (e.g. switched off),
+       the function WaitCommEvent() does not get cancelled by
+       SetCommMask(), but it should be according to MSDN.  As a
+       workaround, we force WaitCommEvent() to abort by destroying the
+       handle.  That seems to do the trick. */
+    ::CloseHandle(hPort);
+    hPort = INVALID_HANDLE_VALUE;
+
+    Thread::join();
+  }
 #endif /* !HAVE_POSIX */
 
-  // Stop the thread
-  Thread::join();
   return true;
 }
 
