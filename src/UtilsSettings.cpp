@@ -150,7 +150,7 @@ SettingsLeave()
 
   if (PolarFileChanged && protected_task_manager != NULL) {
     GlidePolar gp = protected_task_manager->get_glide_polar();
-    if (LoadPolarById(XCSoarInterface::SettingsComputer(), gp)) {
+    if (LoadPolarById(XCSoarInterface::SettingsComputer().POLARID, gp)) {
       protected_task_manager->set_glide_polar(gp);
     }
   }

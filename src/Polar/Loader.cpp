@@ -28,7 +28,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Language.hpp"
 #include "Dialogs/Message.hpp"
-#include "SettingsComputer.hpp"
 
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Polar/Polar.hpp"
@@ -64,10 +63,10 @@ setGlidePolar(const Polar &polar, GlidePolar& gp)
 
 
 static bool
-LoadPolarById_internal(Polar& polar, const SETTINGS_POLAR &settings)
+LoadPolarById_internal(Polar& polar, unsigned id)
 {
   LogStartUp(_T("Load polar"));
-  if (LoadPolarById2(settings.POLARID, polar))
+  if (LoadPolarById2(id, polar))
     return true;
 
   MessageBoxX(_("Error loading Polar file!\nUse LS8 Polar."),
@@ -78,10 +77,10 @@ LoadPolarById_internal(Polar& polar, const SETTINGS_POLAR &settings)
 
 
 bool
-LoadPolarById(const SETTINGS_POLAR &settings, GlidePolar& gp)
+LoadPolarById(unsigned id, GlidePolar& gp)
 {
   Polar polar;
-  if (LoadPolarById_internal(polar, settings)) {
+  if (LoadPolarById_internal(polar, id)) {
     setGlidePolar(polar, gp);
     return true;
   } else {

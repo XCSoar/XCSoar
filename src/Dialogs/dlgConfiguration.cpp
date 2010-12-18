@@ -2245,7 +2245,7 @@ void dlgConfigurationShowModal(void)
 
   if (PolarFileChanged && protected_task_manager != NULL) {
     GlidePolar gp = protected_task_manager->get_glide_polar();
-    if (LoadPolarById(settings_computer, gp))
+    if (LoadPolarById(settings_computer.POLARID, gp))
       protected_task_manager->set_glide_polar(gp);
   }
 
