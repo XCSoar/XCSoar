@@ -29,13 +29,8 @@ Copyright_License {
  */
 class Polar {
 public:
-  enum {
-    POLARSIZE = 3,
-  };
-
-public:
-  double POLAR[POLARSIZE];  // a*sqrt(W),b,c/sqrt(W)
-  double WEIGHTS[POLARSIZE]; // Pilot mass, glider empty mass, ballast mass
+  double POLAR[3];  // a*sqrt(W),b,c/sqrt(W)
+  double WEIGHTS[3]; // Pilot mass, glider empty mass, ballast mass
   double WingArea;
 };
 
