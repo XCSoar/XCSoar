@@ -125,8 +125,6 @@ ReadWinPilotPolar(Polar &polar, const TCHAR *line)
     return false;
 
   POLARW[2] = _tcstod(p + 1, NULL);
-  if (*p != _T(','))
-    return false;
 
   ConvertWinPilotPolar(polar, POLARV, POLARW, ww);
   return true;
