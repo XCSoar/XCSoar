@@ -80,10 +80,9 @@ bool
 LoadPolarById(unsigned id, GlidePolar& gp)
 {
   Polar polar;
-  if (LoadPolarById_internal(polar, id)) {
-    setGlidePolar(polar, gp);
-    return true;
-  } else {
+  if (!LoadPolarById_internal(polar, id))
     return false;
-  }
+
+  setGlidePolar(polar, gp);
+  return true;
 }
