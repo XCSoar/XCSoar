@@ -42,32 +42,36 @@ ConvertWinPilotPolar(class Polar &polar, double POLARV[3], double POLARW[3],
                      double ww[2], double wing_area)
 {
   double d;
-  double v1,v2,v3;
-  double w1,w2,w3;
+  double v1, v2, v3;
+  double w1, w2, w3;
 
-  v1 = POLARV[0]/3.6; v2 = POLARV[1]/3.6; v3 = POLARV[2]/3.6;
-  //	w1 = -POLARV[0]/POLARLD[0];
-  //    w2 = -POLARV[1]/POLARLD[1];
-  //    w3 = -POLARV[2]/POLARLD[2];
-  w1 = POLARW[0]; w2 = POLARW[1]; w3 = POLARW[2];
+  v1 = POLARV[0] / 3.6;
+  v2 = POLARV[1] / 3.6;
+  v3 = POLARV[2] / 3.6;
+  w1 = POLARW[0];
+  w2 = POLARW[1];
+  w3 = POLARW[2];
 
-  d = v1*v1*(v2-v3)+v2*v2*(v3-v1)+v3*v3*(v1-v2);
+  d = v1 * v1 * (v2 - v3) + v2 * v2 * (v3 - v1) + v3 * v3 * (v1 - v2);
   if (d == 0.0)
     polar.POLAR[0] = 0;
   else
     polar.POLAR[0] = ((v2 - v3) * (w1 - w3) + (v3 - v1) * (w2 - w3)) / d;
 
-  d = v2-v3;
+  d = v2 - v3;
   if (d == 0.0)
     polar.POLAR[1] = 0;
   else
     polar.POLAR[1] = (w2 - w3 - polar.POLAR[0] * (v2 * v2 - v3 * v3)) / d;
 
-  polar.WEIGHTS[0] = 70; // Pilot weight
-  polar.WEIGHTS[1] = ww[0] - polar.WEIGHTS[0]; // Glider empty weight
-  polar.WEIGHTS[2] = ww[1]; // Ballast weight
-
   polar.POLAR[2] = w3 - polar.POLAR[0] * v3 * v3 - polar.POLAR[1] * v3;
+
+  // Pilot weight
+  polar.WEIGHTS[0] = 70;
+  // Glider empty weight
+  polar.WEIGHTS[1] = ww[0] - polar.WEIGHTS[0];
+  // Ballast weight
+  polar.WEIGHTS[2] = ww[1];
 
   // now scale off weight
   polar.POLAR[0] = polar.POLAR[0] * sqrt(polar.WEIGHTS[0] + polar.WEIGHTS[1]);
@@ -79,6 +83,10 @@ ConvertWinPilotPolar(class Polar &polar, double POLARV[3], double POLARW[3],
 static bool
 ReadWinPilotPolar(Polar &polar, const TCHAR *line)
 {
+  // Example:
+  // *LS-3  WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
+  // 403, 101, 115.03, -0.86, 174.04, -1.76, 212.72,  -3.4
+
   if (line[0] == _T('*'))
     /* a comment */
     return false;
@@ -135,9 +143,6 @@ ReadWinPilotPolar(Polar &polar, TLineReader &reader)
   return false;
 }
 
-// Example:
-// *LS-3  WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
-// 403, 101, 115.03, -0.86, 174.04, -1.76, 212.72,  -3.4
 /**
  * Reads the WinPilor polar file specified in the registry
  * @return True if parsing was successful, False otherwise
