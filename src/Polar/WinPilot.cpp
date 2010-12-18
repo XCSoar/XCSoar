@@ -73,10 +73,6 @@ ConvertWinPilotPolar(class Polar &polar, double POLARV[3], double POLARW[3],
   // Ballast weight
   polar.WEIGHTS[2] = ww[1];
 
-  // now scale off weight
-  polar.POLAR[0] = polar.POLAR[0] * sqrt(polar.WEIGHTS[0] + polar.WEIGHTS[1]);
-  polar.POLAR[2] = polar.POLAR[2] / sqrt(polar.WEIGHTS[0] + polar.WEIGHTS[1]);
-
   polar.WingArea = wing_area;
 }
 

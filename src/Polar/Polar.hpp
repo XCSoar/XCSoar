@@ -29,7 +29,7 @@ Copyright_License {
  */
 class Polar {
 public:
-  double POLAR[3];  // a*sqrt(W),b,c/sqrt(W)
+  double POLAR[3];  // a, b, c
   double WEIGHTS[3]; // Pilot mass, glider empty mass, ballast mass
   double WingArea;
 };
