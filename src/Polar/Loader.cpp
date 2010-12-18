@@ -61,27 +61,19 @@ setGlidePolar(const Polar &polar, GlidePolar& gp)
   gp.update();
 }
 
-
-static bool
-LoadPolarById_internal(Polar& polar, unsigned id)
-{
-  LogStartUp(_T("Load polar"));
-  if (LoadPolarById2(id, polar))
-    return true;
-
-  MessageBoxX(_("Error loading Polar file!\nUse LS8 Polar."),
-              _("Warning"),
-              MB_OK|MB_ICONERROR);
-  return LoadHistoricalPolar(2, polar);
-}
-
-
 bool
 LoadPolarById(unsigned id, GlidePolar& gp)
 {
+  LogStartUp(_T("Load polar"));
+
   Polar polar;
-  if (!LoadPolarById_internal(polar, id))
-    return false;
+  if (!LoadPolarById2(id, polar)) {
+    MessageBoxX(_("Error loading Polar file!\nUsing LS8 Polar."),
+                _("Warning"), MB_OK | MB_ICONERROR);
+
+    if (!LoadHistoricalPolar(2, polar))
+      return false;
+  }
 
   setGlidePolar(polar, gp);
   return true;
