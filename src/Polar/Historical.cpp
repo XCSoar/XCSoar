@@ -33,7 +33,7 @@ const TCHAR *PolarLabels[] = {
   _T("15M - ASW27"),
   _T("18M - LS6C"),
   _T("Open - ASW22"),
-  _T("WinPilot File"),
+  _T("External Polar File"),
   NULL
 };
 
