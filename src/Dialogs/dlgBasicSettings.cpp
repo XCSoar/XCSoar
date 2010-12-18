@@ -284,6 +284,7 @@ dlgBasicSettingsShowModal()
 
   SetButtons();
 
+  SetBallast();
   LoadFormProperty(*wf, _T("prpBugs"), glide_polar.get_bugs() * 100);
   LoadFormProperty(*wf, _T("prpQNH"),
                    XCSoarInterface::Basic().pressure.get_QNH());
