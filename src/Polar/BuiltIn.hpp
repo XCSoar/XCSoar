@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-class Polar;
+struct Polar;
 
 gcc_const
 const TCHAR *GetWinPilotPolarInternalName(unsigned i);

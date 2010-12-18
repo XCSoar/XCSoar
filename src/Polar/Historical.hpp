@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-class Polar;
+struct Polar;
 
 extern const TCHAR *PolarLabels[];
 

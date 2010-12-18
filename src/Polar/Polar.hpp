@@ -27,8 +27,8 @@ Copyright_License {
 /**
  * This class describes the performance of a glider.
  */
-class Polar {
-public:
+struct Polar
+{
   double POLAR[3];  // a, b, c
   double WEIGHTS[3]; // Pilot mass, glider empty mass, ballast mass
   double WingArea;

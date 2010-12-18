@@ -24,10 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_WINPILOT_HPP
 #define XCSOAR_POLAR_WINPILOT_HPP
 
-class Polar;
+struct Polar;
 
 void
-ConvertWinPilotPolar(class Polar &polar, double POLARV[3], double POLARW[3],
+ConvertWinPilotPolar(Polar &polar, double POLARV[3], double POLARW[3],
                      double ww[2], double wing_area = 0.0);
 
 bool
