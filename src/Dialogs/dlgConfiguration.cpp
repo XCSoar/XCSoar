@@ -1012,17 +1012,12 @@ setVariables()
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumTexts(PolarLabels);
 
-    unsigned i = 0;
-    bool ok = true;
-    while (ok) {
-      const TCHAR *name;
-      name = GetWinPilotPolarInternalName(i);
-      if (!name) {
-        ok=false;
-      } else {
-        dfe->addEnumText(name);
-      }
-      i++;
+    for(unsigned i = 0;; i++) {
+      const TCHAR *name = GetWinPilotPolarInternalName(i);
+      if (name == NULL)
+        break;
+
+      dfe->addEnumText(name);
     }
     dfe->Sort();
     dfe->Set(settings_computer.POLARID);
