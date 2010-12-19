@@ -39,7 +39,7 @@ public:
 
   ButtonWindowStyle(const WindowStyle other):WindowStyle(other) {
 #ifdef ENABLE_SDL
-    text_style |= DT_CENTER | DT_VCENTER;
+    text_style |= DT_CENTER | DT_VCENTER | DT_WORDBREAK;
 #else
     style |= BS_PUSHBUTTON | BS_CENTER | BS_VCENTER;
 #endif
