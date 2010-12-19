@@ -418,4 +418,7 @@ dlgAirspaceWarningDeInit()
     Hide();
 
   delete wf;
+
+  // Needed for dlgAirspaceWarningVisible()
+  wf = NULL;
 }
