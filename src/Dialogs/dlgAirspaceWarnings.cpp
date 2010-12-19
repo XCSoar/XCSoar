@@ -350,7 +350,7 @@ OnTimer(WndForm &Sender)
 bool
 dlgAirspaceWarningVisible()
 {
-  return wf && wf->is_visible();
+  return (wf != NULL);
 }
 
 static CallBackTableEntry CallBackTable[] = {
