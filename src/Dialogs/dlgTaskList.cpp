@@ -246,13 +246,13 @@ UpdateButtons()
     return;
 
   if (cursor_at_active_task()) {
-    wbLoadSave->SetCaption(_T("Save"));
+    wbLoadSave->SetCaption(_("Save"));
     wbDelete->set_enabled(false);
     wbRename->set_enabled(false);
     return;
   }
 
-  wbLoadSave->SetCaption(_T("Load"));
+  wbLoadSave->SetCaption(_("Load"));
   wbDelete->set_enabled(true);
   wbRename->set_enabled(true);
 }
