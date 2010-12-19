@@ -2,19 +2,18 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Changes from 5.2.4:
-Max Kellermann:
-- Moved the compilation suite from Visual C++ to gcc
-- Code cleanup
-Tobias Bieniek:
-- FLARM Radar screen
-- Support for SeeYou waypoint files
-- Support for Zander waypoint files
-- Support for TNP airspace files
-- Mouse Gestures
-John Wharington:
-- Calculation engine rewrite
-- New task editor
+Changes to version 6.0 (since 5.2.4):
+* build system
+  - compile with gcc / mingw32 / mingw32ce instead of Visual C++
+* data files
+  - support for SeeYou and Zander waypoint files
+  - support for TNP airspace files
+* user interface
+  - mouse gestures
+* gauges
+  - new FLARM radar screen
+* task
+  - full rewrite of the engine, new task editor
 
 Changes from 5.2.2:
 PAOLO:
