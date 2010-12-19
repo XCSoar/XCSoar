@@ -8,12 +8,39 @@ Changes to version 6.0 (since 5.2.4):
 * data files
   - support for SeeYou and Zander waypoint files
   - support for TNP airspace files
+  - when started from SD card, XCSoarData is stored on SD card, too
+  - when a XCSoarData directory exists on SD card, it is preferred
+* devices
+  - Altair Pro: task declaration
+  - new drivers:
+    - Flymaster F1
+    - Flytec
+    - ILEC SN10
+    - Leonardo
+  - NMEA logger and NMEA replay
+* terrain / topology
+  - cached terrain load during startup (faster)
+  - incremental (faster) terrain/topology updates
+  - faster terrain/topology rendering
+  - slope shading can be turned off
+  - auto-scale terrain colors
 * user interface
   - mouse gestures
+  - translation compatible with gettext / libintl
+  - language auto-detection
+  - configurable temperature unit (Fahrenheit)
+  - configurable trail colors
 * gauges
   - new FLARM radar screen
+  - thermal assistant
 * task
   - full rewrite of the engine, new task editor
+  - support more task types
+  - saved tasks are XML
+  - alternates list
+  - instant OLC score
+  - OLC plus rules
+  - instant AAT optimization
 
 Changes from 5.2.2:
 PAOLO:
