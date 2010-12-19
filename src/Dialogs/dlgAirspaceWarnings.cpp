@@ -86,9 +86,6 @@ HasWarning()
 static void
 Hide()
 {
-  // Reset AutoClose setting
-  dlgAirspaceWarningSetAutoClose(true);
-
   wf->hide();
   wf->SetModalResult(mrOK);
 }
@@ -369,11 +366,12 @@ dlgAirspaceWarningIsEmpty()
 }
 
 void
-dlgAirspaceWarningShowDlg()
+dlgAirspaceWarningShowDlg(bool auto_close)
 {
   assert(wf != NULL);
   assert(wAirspaceList != NULL);
 
+  AutoClose = auto_close;
   update_list();
 
   if (wf->is_visible()) {

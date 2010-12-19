@@ -379,10 +379,8 @@ OnCalcClicked(WndButton &Sender)
     wf->show();
   }
 
-  if (page == ANALYSIS_PAGE_AIRSPACE) {
-    dlgAirspaceWarningSetAutoClose(false);
+  if (page == ANALYSIS_PAGE_AIRSPACE)
     dlgAirspaceWarningShowDlg();
-  }
 
   Update();
 }
