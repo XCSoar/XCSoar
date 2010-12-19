@@ -353,12 +353,6 @@ dlgAirspaceWarningVisible()
   return wf && wf->is_visible();
 }
 
-bool
-dlgAirspaceWarningIsEmpty()
-{
-  return airspace_warnings->warning_empty();
-}
-
 void
 dlgAirspaceWarningShowDlg(bool auto_close)
 {
