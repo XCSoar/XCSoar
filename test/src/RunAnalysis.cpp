@@ -82,8 +82,6 @@ void Logger::LogPoint(const NMEA_INFO &gps_info) {}
 LoggerImpl::LoggerImpl() {}
 LoggerImpl::~LoggerImpl() {}
 
-void dlgAirspaceWarningSetAutoClose(bool _autoclose) {}
-
 ThermalLocator::ThermalLocator() {}
 void ThermalLocator::Reset() {}
 

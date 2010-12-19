@@ -347,12 +347,6 @@ OnTimer(WndForm &Sender)
   update_list();
 }
 
-void
-dlgAirspaceWarningSetAutoClose(bool _autoclose)
-{
-  AutoClose = _autoclose;
-}
-
 bool
 dlgAirspaceWarningVisible()
 {
