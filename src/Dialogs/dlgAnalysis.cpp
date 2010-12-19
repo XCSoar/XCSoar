@@ -381,7 +381,7 @@ OnCalcClicked(WndButton &Sender)
 
   if (page == ANALYSIS_PAGE_AIRSPACE) {
     dlgAirspaceWarningSetAutoClose(false);
-    airspaceWarningEvent.trigger();
+    dlgAirspaceWarningShowDlg();
   }
 
   Update();

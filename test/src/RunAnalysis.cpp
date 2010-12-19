@@ -68,6 +68,7 @@ Trigger triggerClimbEvent(_T("triggerClimb"));
 void dlgBasicSettingsShowModal() {}
 void dlgTaskCalculatorShowModal(SingleWindow &parent) {}
 void dlgWindSettingsShowModal() {}
+void dlgAirspaceWarningShowDlg() {}
 
 void ConditionMonitorsUpdate(const GlideComputer &cmp) {}
 
