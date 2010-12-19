@@ -353,29 +353,6 @@ dlgAirspaceWarningVisible()
   return wf && wf->is_visible();
 }
 
-void
-dlgAirspaceWarningShowDlg(bool auto_close)
-{
-  assert(wf != NULL);
-  assert(wAirspaceList != NULL);
-
-  AutoClose = auto_close;
-  update_list();
-
-  if (wf->is_visible()) {
-    return;
-  } else {
-    // JMW need to deselect everything on new reopening of dialog
-    CursorAirspace = NULL;
-    FocusAirspace = NULL;
-
-    wf->SetTimerNotify(OnTimer);
-    wAirspaceList->SetCursorIndex(0);
-    wf->ShowModal();
-    wf->SetTimerNotify(NULL);
-  }
-}
-
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnAckClicked),
   DeclareCallBackEntry(OnAck1Clicked),
@@ -386,7 +363,7 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgAirspaceWarningInit(SingleWindow &parent)
+dlgAirspaceWarningShowDlg(SingleWindow &parent, bool auto_close)
 {
   assert(airspace_warnings != NULL);
 
@@ -409,13 +386,18 @@ dlgAirspaceWarningInit(SingleWindow &parent)
     /* on platforms without a pointing device (e.g. ALTAIR), allow
        "focusing" an airspace by pressing enter */
     wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
-}
 
-void
-dlgAirspaceWarningDeInit()
-{
-  if (dlgAirspaceWarningVisible())
-    Hide();
+  AutoClose = auto_close;
+  update_list();
+
+  // JMW need to deselect everything on new reopening of dialog
+  CursorAirspace = NULL;
+  FocusAirspace = NULL;
+
+  wf->SetTimerNotify(OnTimer);
+  wAirspaceList->SetCursorIndex(0);
+  wf->ShowModal();
+  wf->SetTimerNotify(NULL);
 
   delete wf;
 

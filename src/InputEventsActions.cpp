@@ -1172,7 +1172,7 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
     // Prevent the dialog from closing itself without active warning
     // This is relevant if there are only acknowledged airspaces in the list
     // AutoClose will be reset when the dialog is closed again by hand
-    dlgAirspaceWarningShowDlg();
+    dlgAirspaceWarningShowDlg(XCSoarInterface::main_window);
     return;
   }
 

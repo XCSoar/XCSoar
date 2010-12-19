@@ -45,12 +45,7 @@ class OrderedTaskPoint;
 
 void StartupScreen();
 
-void dlgAirspaceWarningShowDlg(bool auto_close = false);
-
-void
-dlgAirspaceWarningInit(SingleWindow &parent);
-
-void dlgAirspaceWarningDeInit();
+void dlgAirspaceWarningShowDlg(SingleWindow &parent, bool auto_close = false);
 bool dlgAirspaceWarningVisible();
 void dlgAirspaceDetails(const AbstractAirspace& the_airspace);
 int dlgAirspaceColoursShowModal();

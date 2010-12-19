@@ -435,10 +435,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   LogStartUp(_T("CreateCalculationThread"));
   CreateCalculationThread();
 
-  // Initialise the airspace warning dialog
-  LogStartUp(_T("dlgAirspaceWarningInit"));
-  dlgAirspaceWarningInit(main_window);
-
   // Find unique ID of this PDA
   ReadAssetNumber();
 
@@ -530,10 +526,6 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(_T("- draw thread returned"));
   delete draw_thread;
 #endif
-
-  // Close the AirspaceWarning dialog if still open
-  LogStartUp(_T("dlgAirspaceWarningDeInit"));
-  dlgAirspaceWarningDeInit();
 
   LogStartUp(_T("delete MapWindow"));
   main_window.map.reset();
