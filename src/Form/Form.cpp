@@ -113,12 +113,12 @@ WndForm::WndForm(SingleWindow &_main_window,
 }
 
 void
-WndForm::SetTimerNotify(TimerNotifyCallback_t OnTimerNotify)
+WndForm::SetTimerNotify(TimerNotifyCallback_t OnTimerNotify, unsigned ms)
 {
   if (mOnTimerNotify != NULL && OnTimerNotify == NULL)
     kill_timer(cbTimerID);
   else if (mOnTimerNotify == NULL && OnTimerNotify != NULL)
-    cbTimerID = set_timer(1001, 500);
+    cbTimerID = set_timer(1001, ms);
 
   mOnTimerNotify = OnTimerNotify;
 }

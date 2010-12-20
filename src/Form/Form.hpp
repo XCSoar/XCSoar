@@ -236,7 +236,7 @@ public:
     mOnKeyDownNotify = KeyDownNotify;
   }
 
-  void SetTimerNotify(TimerNotifyCallback_t OnTimerNotify);
+  void SetTimerNotify(TimerNotifyCallback_t OnTimerNotify, unsigned ms = 500);
 
   void SetCommandCallback(ClientAreaWindow::CommandCallback_t CommandCallback) {
     client_area.mCommandCallback = CommandCallback;
