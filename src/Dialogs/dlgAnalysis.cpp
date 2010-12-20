@@ -281,9 +281,11 @@ Update(void)
   switch (page) {
   case ANALYSIS_PAGE_AIRSPACE:
     UpdateCrossSection();
+    csw->invalidate();
     csw->show();
     wGrid->hide();
     break;
+
   default:
     csw->hide();
     wGrid->show();
