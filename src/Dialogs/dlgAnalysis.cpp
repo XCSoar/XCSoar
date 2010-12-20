@@ -402,6 +402,12 @@ OnCreateCrossSectionWindow(ContainerWindow &parent, int left, int top,
   return csw;
 }
 
+static void
+OnTimer(WndForm &Sender)
+{
+  Update();
+}
+
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCreateCrossSectionWindow),
   DeclareCallBackEntry(OnAnalysisPaint),
@@ -441,6 +447,7 @@ dlgAnalysisShowModal(SingleWindow &_parent, int _page)
 
   Update();
 
+  wf->SetTimerNotify(OnTimer, 2500);
   wf->ShowModal();
 
   delete wf;
