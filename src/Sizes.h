@@ -42,8 +42,6 @@
 #define NUMAIRSPACECOLORS 16
 #define NUMAIRSPACEBRUSHES 8
 
-#define AIRSPACE_SCANSIZE_X 16
-
 // Size of Status message cache - Note 1000 messages may not be enough...
 // TODO If we continue with the reading one at a time - then consider using
 // a pointer structure and build on the fly, thus no limit, but also only

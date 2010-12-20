@@ -66,10 +66,13 @@ public:
   /** 
    * Constructor.
    * Note this class can't safely be copied (yet)
-   * 
+   *
+   * If m_owner, this instance will be responsible for deleting objects
+   * on destruction.
+   *
    * @return empty Airspaces class.
    */
-  Airspaces():m_QNH(0)
+  Airspaces():m_QNH(0), m_owner(true)
     {
     };
 
@@ -82,7 +85,8 @@ public:
 
   /** 
    * Add airspace to the internal airspace tree.  
-   * The airspace is not copied; ownership is transferred to this class.
+   * The airspace is not copied; ownership is transferred to this class if
+   * m_owner is true
    * 
    * @param asp New airspace to be added.
    */
@@ -96,7 +100,7 @@ public:
   void optimise();
 
 /** 
- * Clear the airspace store
+ * Clear the airspace store, deleting airspace objects if m_owner is true
  * 
  */
   void clear();
@@ -212,9 +216,47 @@ public:
   void lock() const {};
   void unlock() const {};
 
+  const TaskProjection& get_task_projection() const {
+    return task_projection;
+  }
+
+  /**
+   * Empty clearance polygons of all airspaces in this database
+   */
+  void clear_clearances();
+
+  /**
+   * Copy/delete objects in this database based on query of master
+   *
+   * @param master Airspaces object to copy from
+   * @param location location of aircraft, from which to search
+   * @param range distance in meters of search radius
+   * @param condition condition to be applied to matches
+   *
+   * @return Airspaces object containing matches
+   */
+  void synchronise_in_range(const Airspaces& master,
+                            const GeoPoint &location,
+                            const fixed range,
+                            const AirspacePredicate &condition
+                            =AirspacePredicate::always_true);
+
+  /**
+   * Make a non-owning copy of the airspaces master info
+   * Initialises to empty!
+   */
+//  Airspaces copy_meta() const;
+
+
+  /**
+   * Make a copy of the airspaces metadata
+   */
+  Airspaces(const Airspaces& master, bool is_master);
+
 private:
 
   fixed m_QNH;
+  bool m_owner;
 
   AirspaceTree airspace_tree;
   TaskProjection task_projection;

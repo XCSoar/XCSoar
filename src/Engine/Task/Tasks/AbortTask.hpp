@@ -85,7 +85,7 @@ public:
  * 
  * @return Index of active task point sequence
  */
-  TaskPoint* getActiveTaskPoint() const;
+  TaskWayPoint* getActiveTaskPoint() const;
 
 /** 
  * Retrieves the active task point index.
@@ -237,7 +237,7 @@ protected:
                       const bool final_glide);
 
 protected:
-  typedef std::vector<std::pair<TaskPoint*, GlideResult> > AlternateTaskVector;
+  typedef std::vector<std::pair<TaskWayPoint*, GlideResult> > AlternateTaskVector;
   AlternateTaskVector tps;
 
   bool is_active; /// whether the AbortTask is the master or running in background

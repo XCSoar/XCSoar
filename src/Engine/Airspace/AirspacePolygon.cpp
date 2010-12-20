@@ -22,8 +22,8 @@
 #include "AirspacePolygon.hpp"
 #include "Math/Earth.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
-#include "Navigation/ConvexHull/PolygonInterior.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
+#include "Navigation/ConvexHull/PolygonInterior.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "AirspaceIntersectSort.hpp"
 
@@ -60,13 +60,6 @@ AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint>& pts,
 }
 
 
-void
-AirspacePolygon::project(const TaskProjection &task_projection)
-{
-  ::project(m_border, task_projection);
-}
-
-
 const GeoPoint 
 AirspacePolygon::get_center() const
 {
@@ -74,40 +67,6 @@ AirspacePolygon::get_center() const
     return GeoPoint(Angle::native(fixed_zero), Angle::native(fixed_zero));
   } else {
     return m_border[0].get_location();
-  }
-}
-
-
-const FlatBoundingBox 
-AirspacePolygon::get_bounding_box(const TaskProjection& task_projection)
-{
-  FlatGeoPoint fmin;
-  FlatGeoPoint fmax;
-
-  project(task_projection);
-
-  bool empty=true;
-  for (SearchPointVector::const_iterator v = m_border.begin();
-       v != m_border.end(); ++v) {
-    FlatGeoPoint f = v->get_flatLocation();
-    if (empty) {
-      empty = false;
-      fmin = f; 
-      fmax = f; 
-    } else {
-      fmin.Longitude = min(fmin.Longitude, f.Longitude);
-      fmin.Latitude = min(fmin.Latitude, f.Latitude);
-      fmax.Longitude = max(fmax.Longitude, f.Longitude);
-      fmax.Latitude = max(fmax.Latitude, f.Latitude);
-    }
-  }
-  if (!empty) {
-    // note +/- 1 to ensure rounding keeps bb valid 
-    fmin.Longitude-= 1; fmin.Latitude-= 1;
-    fmax.Longitude+= 1; fmax.Latitude+= 1;
-    return FlatBoundingBox(fmin,fmax);
-  } else {
-    return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
   }
 }
 
@@ -133,12 +92,9 @@ AirspacePolygon::intersects(const GeoPoint& start,
 
     const FlatRay r_seg(it->get_flatLocation(), 
                         (it+1)->get_flatLocation());
-
-    const fixed t = ray.intersects(r_seg);
-    
-    if (t>=fixed_zero) {
-      sorter.add(t, m_task_projection->unproject(ray.parametric(t)));
-    }
+    fixed t;
+    if (r_seg.intersects_distinct(ray, t))
+      sorter.add(t, m_task_projection->unproject(r_seg.parametric(t)));
   }
   return sorter.all();
 }

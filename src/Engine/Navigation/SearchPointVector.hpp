@@ -24,6 +24,8 @@
 
 #include "SearchPoint.hpp"
 #include <vector>
+class FlatRay;
+class FlatBoundingBox;
 
 typedef std::vector<SearchPoint> SearchPointVector;
 
@@ -44,5 +46,30 @@ void project(SearchPointVector& spv, const TaskProjection& tp);
 FlatGeoPoint nearest_point(const SearchPointVector& spv, 
                             const FlatGeoPoint &p,
                             const bool is_convex=false);
+
+/**
+ * Find iterator of nearest point, assuming polygon is convex
+ */
+SearchPointVector::const_iterator
+nearest_index_convex(const SearchPointVector& spv,
+                     const FlatGeoPoint &p);
+
+bool intersects(const SearchPointVector& spv,
+                const FlatRay& ray);
+
+FlatBoundingBox
+compute_boundingbox(const SearchPointVector& spv);
+
+/**
+ * increment iterator, wrapping around to start if required
+ */
+void
+circular_next(SearchPointVector::const_iterator &i, const SearchPointVector& spv);
+
+/**
+ * decreement iterator, wrapping around to last item if required
+ */
+void
+circular_previous(SearchPointVector::const_iterator &i, const SearchPointVector& spv);
 
 #endif

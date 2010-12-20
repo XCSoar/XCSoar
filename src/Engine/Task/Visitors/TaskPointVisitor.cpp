@@ -26,11 +26,17 @@
 #include "Task/TaskPoints/FinishPoint.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
+#include <assert.h>
 
 void
 TaskPointConstVisitor::Visit(const TaskPoint &tp)
 {
   switch (tp.type) {
+
+  case TaskPoint::ROUTE:
+    assert(1); // not supported yet
+    break;
+
   case TaskPoint::UNORDERED:
     Visit((const UnorderedTaskPoint &)tp);
     break;
@@ -57,6 +63,11 @@ void
 TaskPointVisitor::Visit(TaskPoint &tp)
 {
   switch (tp.type) {
+
+  case TaskPoint::ROUTE:
+    assert(1); // not supported yet
+    break;
+
   case TaskPoint::UNORDERED:
     Visit((UnorderedTaskPoint &)tp);
     break;

@@ -30,6 +30,7 @@ struct GeoPoint;
 struct GeoVector;
 
 class TaskStats;
+class TaskWayPoint;
 class TaskPoint;
 
 /**
@@ -72,7 +73,7 @@ public:
  * @return Active task point
  */  
   gcc_pure
-  virtual TaskPoint* getActiveTaskPoint() const = 0;
+  virtual TaskWayPoint* getActiveTaskPoint() const = 0;
 
 /**
  * Determine whether active task point optionally shifted points to

@@ -27,7 +27,6 @@
 
 #include "Compiler.h"
 #include "Navigation/ReferencePoint.hpp"
-#include "Waypoint/Waypoint.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Task/TaskBehaviour.hpp"
@@ -50,6 +49,7 @@ public:
     AST,
     AAT,
     FINISH,
+    ROUTE
   };
 
   const enum type type;
@@ -63,18 +63,17 @@ public:
  * as the task point's reference values; a copy of the waypoint
  * is also stored to facilitate user-feedback.
  * 
- * @param wp Waypoint to be used as task point origin
  * @param tb Task Behaviour defining options (esp safety heights)
  * 
  * @return Initialised object
  */
   TaskPoint(enum type _type,
-            const Waypoint & wp,
-            const TaskBehaviour &tb) : ReferencePoint(wp.Location),
+            const GeoPoint& location,
+            const fixed elevation,
+            const TaskBehaviour &tb) : ReferencePoint(location),
                                        type(_type),
-                                       m_elevation(wp.Altitude),
-                                       m_task_behaviour(tb),
-                                       m_waypoint(wp)
+                                       m_elevation(elevation),
+                                       m_task_behaviour(tb)
     { }
 
 /**
@@ -89,7 +88,9 @@ public:
  * @return Location 
  */
   gcc_pure
-  virtual const GeoPoint& get_location_remaining() const;
+  virtual const GeoPoint& get_location_remaining() const {
+    return get_location();
+  }
 
 /** 
  * Calculate vector from aircraft to destination
@@ -180,18 +181,6 @@ public:
   virtual const AIRCRAFT_STATE& get_state_entered() const = 0;
 
 /** 
- * Recall waypoint associated with this task point.  
- * Can be used for user feedback (e.g. queries on details of active 
- * task point)
- * 
- * @return Copy of waypoint associated with this task point
- */
-  gcc_pure
-  const Waypoint& get_waypoint() const {
-    return m_waypoint;
-  }
-
-/** 
  * Retrieve elevation of taskpoint, taking into account
  * rules and safety margins.  
  * 
@@ -203,8 +192,6 @@ public:
 protected:
   const fixed m_elevation; /**< Altitude (AMSL, m) of task point terrain */
   const TaskBehaviour &m_task_behaviour; /**< Reference to task behaviour (for options) */
-private:
-  const Waypoint m_waypoint; /**< local copy of waypoint */
 };
 
 #endif

@@ -196,7 +196,7 @@ private:
       // Remember the parent node
       set_predecessor(node, parent);
     } else if (it->second > edge_value) {
-      // If the node was found and the value is smaller
+      // If the node was found and the new value is smaller
       // -> Replace the value with the new one
       it->second = edge_value;
       // replace, it's bigger
@@ -204,7 +204,7 @@ private:
       // Remember the new parent node
       set_predecessor(node, parent);
     } else
-      // If the node was found but the value is higher or equal
+      // If the node was found but the new value is higher or equal
       // -> Don't use this new leg
       return;
 

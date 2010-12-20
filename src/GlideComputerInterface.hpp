@@ -11,13 +11,13 @@ class GlideComputerTaskEvents:
 public:
   void set_computer(GlideComputer& computer);
 
-  void transition_enter(const TaskPoint& tp);
+  void transition_enter(const TaskWayPoint& tp);
 
   void transition_alternate();
 
-  void active_advanced(const TaskPoint &tp, const int i);
+  void active_advanced(const TaskWayPoint &tp, const int i);
 
-  void request_arm(const TaskPoint &tp);
+  void request_arm(const TaskWayPoint &tp);
 
   void task_start();
 

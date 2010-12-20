@@ -21,7 +21,7 @@
  */
 #include "FlatRay.hpp"
 
-#define sgn(x) (x>0? 1:-1)
+#define sgn(x) (x>=0? 1:-1)
 
 /*
  * Checks whether two lines 
@@ -30,28 +30,31 @@
  * adapted from line_line_intersection
  *
  */
-fixed
-FlatRay::intersects (const FlatRay &that) const
+std::pair<int, int>
+FlatRay::intersects_ratio(const FlatRay &that) const
 {
-  const int denom = vector.cross(that.vector);
-  if (denom == 0) {
+  std::pair<int, int> r;
+  r.second = vector.cross(that.vector);
+  if (r.second == 0) {
     // lines are parallel
-    return -fixed_one;
+    return r;
   }
   const FlatGeoPoint delta = that.point-point;
-  const int ua = delta.cross(that.vector);
-  if ((sgn(ua)*sgn(denom)<0) || (abs(ua)>abs(denom))) {
+  r.first = delta.cross(that.vector);
+  if ((sgn(r.first)*sgn(r.second)<0) || (abs(r.first)>abs(r.second))) {
     // outside first line
-    return -fixed_one;
-  } 
+    r.second = 0;
+    return r;
+  }
   const int ub = delta.cross(vector);
-  if ((sgn(ub)*sgn(denom)<0) || (abs(ub)>abs(denom))) {
+  if ((sgn(ub)*sgn(r.second)<0) || (abs(ub)>abs(r.second))) {
     // outside second line
-    return -fixed_one;
+    r.second = 0;
+    return r;
   }  
 
   // inside both lines
-  return ((fixed)ua)/denom;
+  return r;
 }
 
 
@@ -62,4 +65,33 @@ FlatRay::parametric(const fixed t) const
   p.Longitude += (int)(vector.Longitude*FIXED_DOUBLE(t));
   p.Latitude += (int)(vector.Latitude*FIXED_DOUBLE(t));
   return p;
+}
+
+fixed
+FlatRay::intersects (const FlatRay &that) const
+{
+  std::pair<int, int> r = intersects_ratio(that);
+  if (r.second==0)
+    return -fixed_one;
+  return ((fixed)r.first)/r.second;
+}
+
+bool
+FlatRay::intersects_distinct(const FlatRay& that) const
+{
+  std::pair<int, int> r = intersects_ratio(that);
+  return (r.second!=0) && (sgn(r.second)*r.first>0) && (abs(r.first)<abs(r.second));
+}
+
+bool
+FlatRay::intersects_distinct(const FlatRay& that, fixed& t) const
+{
+  std::pair<int, int> r = intersects_ratio(that);
+  if ((r.second!=0) && (sgn(r.second)*r.first>0) && (abs(r.first)<abs(r.second))) {
+    t = ((fixed)r.first)/r.second;
+    return true;
+  } else {
+    t = -fixed_one;
+    return false;
+  }
 }

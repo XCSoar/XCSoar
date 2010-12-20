@@ -21,6 +21,8 @@
  */
 #include "SearchPointVector.hpp"
 #include "Navigation/ConvexHull/GrahamScan.hpp"
+#include "Navigation/Flat/FlatRay.hpp"
+#include "Navigation/Flat/FlatBoundingBox.hpp"
 #include <algorithm>
 #include <functional>
 
@@ -117,8 +119,8 @@ nearest_point_nonconvex(const SearchPointVector& spv, const FlatGeoPoint &p3)
   return i_best->get_flatLocation();
 }
 
-static FlatGeoPoint
-nearest_point_convex(const SearchPointVector& spv, const FlatGeoPoint &p3)
+SearchPointVector::const_iterator
+nearest_index_convex(const SearchPointVector& spv, const FlatGeoPoint &p3)
 {
   unsigned distance_min = 0-1;
 
@@ -134,6 +136,18 @@ nearest_point_convex(const SearchPointVector& spv, const FlatGeoPoint &p3)
       i_best = i;
     }
   }
+  return i_best;
+}
+
+
+static
+FlatGeoPoint
+nearest_point_convex(const SearchPointVector& spv, const FlatGeoPoint &p3)
+{
+  unsigned distance_min = 0-1;
+
+  SearchPointVector::const_iterator i_best =
+    nearest_index_convex(spv, p3);
 
   FlatGeoPoint pc = i_best->get_flatLocation();
 
@@ -184,5 +198,69 @@ FlatGeoPoint nearest_point(const SearchPointVector& spv,
     return nearest_point_convex(spv,p3);
   } else {
     return nearest_point_nonconvex(spv,p3);
+  }
+}
+
+bool intersects(const SearchPointVector& spv,
+                const FlatRay& ray)
+{
+  for (SearchPointVector::const_iterator it= spv.begin();
+       it+1 != spv.end(); ++it) {
+
+    const FlatRay r_seg(it->get_flatLocation(),
+                        (it+1)->get_flatLocation());
+
+    if (r_seg.intersects_distinct(ray))
+      return true;
+  }
+  return false;
+}
+
+FlatBoundingBox
+compute_boundingbox(const SearchPointVector& spv)
+{
+  FlatGeoPoint fmin;
+  FlatGeoPoint fmax;
+  bool empty=true;
+  for (SearchPointVector::const_iterator v = spv.begin();
+       v != spv.end(); ++v) {
+    FlatGeoPoint f = v->get_flatLocation();
+    if (empty) {
+      empty = false;
+      fmin = f;
+      fmax = f;
+    } else {
+      fmin.Longitude = min(fmin.Longitude, f.Longitude);
+      fmin.Latitude = min(fmin.Latitude, f.Latitude);
+      fmax.Longitude = max(fmax.Longitude, f.Longitude);
+      fmax.Latitude = max(fmax.Latitude, f.Latitude);
+    }
+  }
+  if (!empty) {
+    // note +/- 1 to ensure rounding keeps bb valid
+    fmin.Longitude-= 1; fmin.Latitude-= 1;
+    fmax.Longitude+= 1; fmax.Latitude+= 1;
+    return FlatBoundingBox(fmin,fmax);
+  } else {
+    return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
+  }
+}
+
+
+void
+circular_next(SearchPointVector::const_iterator &i, const SearchPointVector& spv)
+{
+  i++;
+  if (i==spv.end())
+    i= spv.begin();
+}
+
+void
+circular_previous(SearchPointVector::const_iterator &i, const SearchPointVector& spv)
+{
+  if (i== spv.begin()) {
+    i = spv.begin()+spv.size()-1;
+  } else {
+    i--;
   }
 }

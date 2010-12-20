@@ -4,6 +4,7 @@
 #include "SearchPoint.hpp"
 #include "Aircraft.hpp"
 #include "Compiler.h"
+#include "FastMath.h"
 
 #include <vector>
 
@@ -43,7 +44,7 @@ public:
   TracePoint(const AIRCRAFT_STATE &state);
 
   unsigned time; /**< Time of sample */
-  unsigned last_time; /**< Time of sample prior to this */
+  mutable unsigned last_time; /**< Time of sample prior to this --- mutable for kdtree update efficiency */
   fixed drift_factor; /**< Thermal drift factor: 1 indicates drift
                        * rate equal to wind speed, 0 indicates no
                        * drift.*/
@@ -72,7 +73,7 @@ public:
    */
   gcc_pure
   unsigned approx_dist(const TracePoint& tp) const {
-    return (unsigned)sqrt(approx_sq_dist(tp));
+    return (unsigned)isqrt4(approx_sq_dist(tp));
   }
 
   /** 
@@ -129,7 +130,7 @@ public:
    * 
    * @return True if time matches
    */
-  bool operator==(TracePoint const& a) { 
+  bool operator==(TracePoint const& a) const {
     return time == a.time; 
   }
 

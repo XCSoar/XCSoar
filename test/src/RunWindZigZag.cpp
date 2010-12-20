@@ -153,21 +153,25 @@ int main(int argc, char **argv)
 
   printf("# time quality wind_bearing (deg) wind_speed (m/s) grndspeed (m/s) tas (m/s) bearing (deg)\n");
   char buffer[1024];
+
+  fixed speed(0);
+  Angle bearing = Angle::native(fixed(0));
+
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
     device.LineReceived(buffer);
 
     device_blackboard.tick(*(const GlidePolar *)NULL);
 
-    fixed speed;
-    Angle bearing;
     int quality = WindZigZagUpdate(device_blackboard.Basic(),
                                    device_blackboard.Calculated(),
                                    speed, bearing);
     if (quality > 0)
-      printf("%d %d %d %d %d %d %d\n", (int)device_blackboard.Basic().Time, quality,
-             (int)bearing.value_degrees(), (int)speed, 
-             (int)device_blackboard.Basic().GroundSpeed,
-             (int)device_blackboard.Basic().TrueAirspeed,
+      printf("%d %d %d %g %g %g %d\n", (int)device_blackboard.Basic().Time, quality,
+             (int)bearing.value_degrees(),
+             (double)speed,
+             (double)device_blackboard.Basic().GroundSpeed,
+             (double)device_blackboard.Basic().TrueAirspeed,
              (int)device_blackboard.Basic().TrackBearing.value_degrees());
   }
 }
+

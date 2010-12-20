@@ -43,8 +43,7 @@ public:
   fixed calc_score() const;
 
 protected:
-  void add_edges(DijkstraTaskPoint &dijkstra,
-                 const ScanTaskPoint &origin);
+  void add_edges(const ScanTaskPoint &origin);
 
   virtual void update_trace();
 

@@ -22,7 +22,7 @@
 
 #include "AbstractTask.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "BaseTask/TaskPoint.hpp"
+#include "BaseTask/TaskWayPoint.hpp"
 #include "Util/Gradient.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskEvents.hpp"
@@ -257,7 +257,7 @@ fixed
 AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft) const
 {
   // Get next turnpoint
-  TaskPoint *tp = getActiveTaskPoint();
+  const TaskWayPoint *tp = getActiveTaskPoint();
   if (!tp)
     return fixed_zero;
 

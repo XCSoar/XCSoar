@@ -151,19 +151,6 @@ public:
   }
 
 private:
-  static unsigned char light_color(unsigned char c) {
-    return ((c ^ 0xff) >> 1) ^ 0xff;
-  }
-
-  /**
-   * Returns a lighter version of the specified color, adequate for
-   * SRCAND filtering.
-   */
-  static Color light_color(Color c) {
-    return Color(light_color(c.red()), light_color(c.green()),
-                 light_color(c.blue()));
-  }
-
   void set_buffer_pens(const AbstractAirspace &airspace) {
 #ifdef ENABLE_OPENGL
     Color color = Graphics::Colours[m_settings_map.iAirspaceColour[airspace.get_type()]];

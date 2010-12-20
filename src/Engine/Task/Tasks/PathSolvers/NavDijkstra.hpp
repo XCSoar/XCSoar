@@ -4,6 +4,7 @@
 #include "Util/NonCopyable.hpp"
 #include "Dijkstra.hpp"
 #include "ScanTaskPoint.hpp"
+#include "Compiler.h"
 
 #include <algorithm>
 #include <assert.h>
@@ -15,8 +16,8 @@ extern long count_dijkstra_queries;
 typedef Dijkstra<ScanTaskPoint> DijkstraTaskPoint;
 
 /**
- * Abstract class for Dijsktra searches of nav points, managing edges in multiple 
- * stages (corresponding to turn points).
+ * Abstract class for A* /Dijkstra searches of nav points, managing
+ * edges in multiple stages (corresponding to turn points).
  *
  * Expected running time, see http://www.avglab.com/andrew/pub/neci-tr-96-062.ps
  *
@@ -39,7 +40,9 @@ public:
    * 
    * @return Initialised object
    */
-  NavDijkstra(const unsigned _num_stages)
+  NavDijkstra(const bool is_min, const unsigned _num_stages):
+    dijkstra(is_min),
+    solution_valid(false)
   {
     set_stages(_num_stages);
   }
@@ -54,6 +57,7 @@ public:
    *
    * @return True if distance is significant
    */
+  gcc_pure
   static bool distance_is_significant(const T& a1, const T& a2,
                                       const unsigned dist_threshold = 1) {
     return a1.flat_distance(a2)> dist_threshold;
@@ -72,6 +76,8 @@ public:
   }
 
 protected:
+
+  DijkstraTaskPoint dijkstra;
 
   /** 
    * Determine whether a finished path is valid
@@ -96,11 +102,9 @@ protected:
   /** 
    * Add edges from an origin node
    * 
-   * @param dijkstra Dijkstra structure to add edges to
    * @param curNode Origin node to add edges from
    */
-  virtual void add_edges(DijkstraTaskPoint &dijkstra,
-                         const ScanTaskPoint &curNode) = 0;
+  virtual void add_edges(const ScanTaskPoint &curNode) = 0;
 
   /** 
    * Determine whether a point is terminal (no further edges)
@@ -109,6 +113,7 @@ protected:
    * 
    * @return True if point is terminal
    */
+  gcc_pure
   bool is_final(const ScanTaskPoint &sp) const {
     assert(num_stages <= MAX_STAGES);
     return sp.first + 1 == num_stages;
@@ -121,6 +126,7 @@ protected:
    * 
    * @return True if point is in first layer
    */
+  gcc_pure
   bool is_first(const ScanTaskPoint &sp) const {
     return sp.first == 0;
   }
@@ -133,8 +139,7 @@ protected:
    * 
    * @return True if algorithm returns a terminal path or no path found
    */
-  bool distance_general(DijkstraTaskPoint &dijkstra, 
-                        unsigned max_steps = 0 - 1) {
+  bool distance_general(unsigned max_steps = 0 - 1) {
 #ifdef INSTRUMENT_TASK
     count_dijkstra_queries++;
 #endif
@@ -143,13 +148,14 @@ protected:
       const ScanTaskPoint destination = dijkstra.pop();
 
       if (is_final(destination)) {
-        find_solution(dijkstra, destination);
+        find_solution(destination);
         if (finish_satisfied(destination)) {
+          solution_valid = true;
           dijkstra.clear();
           return true;
         }
       } else {
-        add_edges(dijkstra, destination);
+        add_edges(destination);
         if (dijkstra.empty())
           return true; // error, no way to reach final
       }
@@ -171,6 +177,7 @@ protected:
    * 
    * @return Distance (flat) from origin to destination
    */
+  gcc_pure
   unsigned distance(const ScanTaskPoint &curNode,
                     const T &currentLocation) const {
     return get_point(curNode).flat_distance(currentLocation);
@@ -184,6 +191,7 @@ protected:
    * 
    * @return Distance (flat) from origin to destination
    */
+  gcc_pure
   unsigned distance(const ScanTaskPoint &s1, const ScanTaskPoint &s2) const {
     return get_point(s1).flat_distance(get_point(s2));
   }
@@ -191,11 +199,9 @@ protected:
   /** 
    * Determine optimal solution by backtracing the Dijkstra tree
    * 
-   * @param dijkstra Dijkstra structure to retrieve solution from
    * @param destination Terminal point to query
    */
-  void find_solution(const DijkstraTaskPoint &dijkstra, 
-                     const ScanTaskPoint &destination) {
+  void find_solution(const ScanTaskPoint &destination) {
     ScanTaskPoint p(destination); 
     ScanTaskPoint p_last(p);
 
@@ -209,6 +215,7 @@ protected:
   /** Number of stages in search */
   unsigned num_stages;
   T solution[MAX_STAGES];
+  bool solution_valid;
 };
 
 #endif

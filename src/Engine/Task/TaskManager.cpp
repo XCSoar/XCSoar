@@ -31,10 +31,10 @@
 TaskManager::TaskManager(TaskEvents &te,
                          const Waypoints &wps): 
   m_glide_polar(fixed_zero),
-  trace_full(),
-  trace_sprint(9000, 2, 300),
+  trace_full(60),
+  trace_sprint(0, 9000, 300),
   task_ordered(te, task_behaviour, m_glide_polar),
-  task_goto(te, task_behaviour, m_glide_polar),
+  task_goto(te, task_behaviour, m_glide_polar, wps),
   task_abort(te, task_behaviour, m_glide_polar, wps),
   contest_manager(task_behaviour.contest, 
                   task_behaviour.contest_handicap,
@@ -102,7 +102,7 @@ TaskManager::incrementActiveTaskPoint(int offset)
   }
 }
 
-TaskPoint* 
+TaskWayPoint*
 TaskManager::getActiveTaskPoint() const
 {
   if (active_task) 
@@ -169,7 +169,7 @@ TaskManager::update_common_stats_waypoints(const AIRCRAFT_STATE &state)
 
   common_stats.next_solution.reset();
   if (active_task) {
-    const TaskPoint* tp= active_task->getActiveTaskPoint();
+    const TaskWayPoint* tp= active_task->getActiveTaskPoint();
     if (tp != NULL) {
       // must make an UnorderedTaskPoint here so we pick up arrival height requirements
       UnorderedTaskPoint fp(tp->get_waypoint(), task_behaviour);
@@ -270,6 +270,13 @@ TaskManager::update(const AIRCRAFT_STATE &state,
   if (task_ordered.task_size() > 1) {
     // always update ordered task
     retval |= task_ordered.update(state, state_last);
+  }
+
+  // check if we can create a goto task on takeoff
+  if (!active_task) {
+    if (task_goto.check_takeoff(state, state_last)) {
+      retval |= set_mode(MODE_GOTO);
+    }
   }
 
   // inform the abort task whether it is running as the task or not  
@@ -589,7 +596,7 @@ TaskManager::get_ordered_taskpoint_location(const unsigned TPindex,
   if (!check_ordered_task())
     return fallback_location;
 
-  TaskPoint *tp = task_ordered.get_ordered_task_point(TPindex);
+  TaskWayPoint *tp = task_ordered.get_ordered_task_point(TPindex);
   if (tp)
     return tp->get_location();
 

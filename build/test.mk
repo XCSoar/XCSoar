@@ -952,6 +952,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/dlgComboPicker.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
+	$(SRC)/CrossSection/CrossSectionWindow.cpp \
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/GlideRatio.cpp \
 	$(SRC)/GlideComputer.cpp \

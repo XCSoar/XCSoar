@@ -34,3 +34,12 @@ const Color
   Color::YELLOW(0xff, 0xff, 0),
   Color::CYAN(0, 0xff, 0xff),
   Color::MAGENTA(0xff, 0, 0xff);
+
+static unsigned char light_color(unsigned char c) {
+  return ((c ^ 0xff) >> 1) ^ 0xff;
+}
+
+Color light_color(Color c) {
+  return Color(light_color(c.red()), light_color(c.green()),
+               light_color(c.blue()));
+}

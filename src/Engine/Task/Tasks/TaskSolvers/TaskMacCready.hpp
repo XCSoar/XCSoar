@@ -72,6 +72,15 @@ public:
   TaskMacCready(TaskPoint* tp,
                 const GlidePolar &gp);
 
+/**
+ * Constructor for sequence of task points, starting from first point
+ *
+ * @param _tps Vector of ordered task points comprising the task
+ * @param gp Glide polar to copy for calculations
+ */
+  TaskMacCready(const std::vector<TaskPoint*> &_tps,
+                const GlidePolar &gp);
+
   virtual ~TaskMacCready() {};
 
 /** 

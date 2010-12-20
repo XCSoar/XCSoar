@@ -26,6 +26,7 @@
 #include "AirspaceAltitude.hpp"
 #include "AirspaceClass.hpp"
 #include "Navigation/GeoPoint.hpp"
+#include "Navigation/SearchPointVector.hpp"
 #include "Compiler.h"
 
 #ifdef DO_PRINT
@@ -69,8 +70,8 @@ public:
    * 
    * @return Enclosing bounding box
    */
-  virtual const FlatBoundingBox 
-    get_bounding_box(const TaskProjection& task_projection) = 0;
+  const FlatBoundingBox
+    get_bounding_box(const TaskProjection& task_projection);
 
 /** 
  * Set task projection for internal use
@@ -292,12 +293,41 @@ public:
  */
   const tstring get_top_text(const bool concise=false) const;
 
+  /**
+   * Accessor for airspace shape
+   *
+   * For polygon airspaces, this is the actual boundary,
+   * for circle airspaces, this is a simplified shape
+   *
+   * @return border of airspace
+   */
+  const SearchPointVector& get_points() const {
+    return m_border;
+  }
+
+  /**
+   * On-demand access of clearance border.  Generated on call,
+   * to deallocate, call clear_clearance().  Uses mutable object
+   * and const methods to allow visitors to generate them on demand
+   * from within a visit method.
+   */
+  const SearchPointVector& get_clearance() const;
+  void clear_clearance() const;
+
 protected:
   AIRSPACE_ALT m_base; /**< Base of airspace */
   AIRSPACE_ALT m_top; /**< Top of airspace */
   tstring Name; /**< Airspace name (identifier) */
   AirspaceClass_t Type; /**< Airspace class */
   const TaskProjection* m_task_projection; /**< Task projection (owned by container) that can be used for query speedups */
+  SearchPointVector m_border; /**< Actual border */
+  mutable SearchPointVector m_clearance; /**< Convex clearance border */
+  bool m_is_convex;
+
+/**
+ * Project border.
+ */
+  virtual void project(const TaskProjection& tp);
 
 private:
 

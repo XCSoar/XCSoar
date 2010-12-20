@@ -26,9 +26,11 @@
 
 GotoTask::GotoTask(TaskEvents &te, 
                    const TaskBehaviour &tb,
-                   const GlidePolar &gp):
+                   const GlidePolar &gp,
+                   const Waypoints &wps):
   UnorderedTask(GOTO, te,tb,gp),
-  tp(NULL) 
+  tp(NULL),
+  waypoints(wps)
 {
 }
 
@@ -37,7 +39,7 @@ GotoTask::~GotoTask()
   delete tp;
 }
 
-TaskPoint* 
+TaskWayPoint*
 GotoTask::getActiveTaskPoint() const
 { 
   return tp;
@@ -108,4 +110,19 @@ GotoTask::reset()
 {
   delete tp;
   UnorderedTask::reset();
+}
+
+
+bool 
+GotoTask::check_takeoff(const AIRCRAFT_STATE& state_now, 
+                        const AIRCRAFT_STATE& state_last)
+{
+  if (state_now.Flying && !state_last.Flying && !tp) {
+    const Waypoint* wp = waypoints.lookup_location(state_now.Location,
+                                                   fixed(1000));
+    if (wp) {
+      return do_goto(*wp);
+    }
+  }
+  return false;
 }

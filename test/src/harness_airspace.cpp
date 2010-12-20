@@ -22,6 +22,7 @@
 
 #include "Printing.hpp"
 #include "harness_airspace.hpp"
+#include "test_debug.hpp"
 #include <stdlib.h>
 #include <fstream>
 #include <iostream>
@@ -57,7 +58,11 @@ bool test_airspace_extra(Airspaces &airspaces) {
 }
 
 void setup_airspaces(Airspaces& airspaces, const unsigned n) {
-  std::ofstream fin("results/res-bb-in.txt");
+  std::ofstream *fin = NULL;
+
+  if (verbose)
+    fin = new std::ofstream("results/res-bb-in.txt");
+
   for (unsigned i=0; i<n; i++) {
     AbstractAirspace* as;
     if (rand()%4!=0) {
@@ -86,8 +91,11 @@ void setup_airspaces(Airspaces& airspaces, const unsigned n) {
     }
     airspace_random_properties(*as);
     airspaces.insert(as);
-    fin << *as;
+    if (fin)
+      *fin << *as;
   }
+
+  delete fin;
 
   // try inserting nothing
   airspaces.insert(NULL);
@@ -207,24 +215,31 @@ public:
   AirspaceVisitorClosest(const char* fname,
                          const AIRCRAFT_STATE &_state,
                          const AirspaceAircraftPerformance &perf):
+    fout(NULL),
     state(_state),
     m_perf(perf)
-    {      
-      fout = new std::ofstream(fname);
+    {
+      if (verbose)
+        fout = new std::ofstream(fname);
     };
   ~AirspaceVisitorClosest() {
-    delete fout;
+    if (fout)
+      delete fout;
   }
   virtual void closest(const AbstractAirspace& as) {
     GeoPoint c = as.closest_point(state.Location);
-    *fout << "# closest point\n";
-    *fout << c.Longitude << " " << c.Latitude << " " << "\n";
-    *fout << state.Location.Longitude << " " << state.Location.Latitude << " " << "\n\n";
+    if (fout) {
+      *fout << "# closest point\n";
+      *fout << c.Longitude << " " << c.Latitude << " " << "\n";
+      *fout << state.Location.Longitude << " " << state.Location.Latitude << " " << "\n\n";
+    }
     AirspaceInterceptSolution solution;
     GeoVector vec(state.Location, c);
     vec.Distance = fixed(20000); // set big distance (for testing)
     if (as.intercept(state, vec, m_perf, solution)) {
-      *fout << "# intercept in " << solution.elapsed_time << " h " << solution.altitude << "\n";
+      if (fout) {
+        *fout << "# intercept in " << solution.elapsed_time << " h " << solution.altitude << "\n";
+      }
     }
   }
   virtual void Visit(const AirspaceCircle& as) {

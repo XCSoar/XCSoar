@@ -55,7 +55,7 @@ struct WaypointFlags {
 
 /**
  * Class for waypoints.  
- * This is small enough currently to be used with local copies (e.g. in a TaskPoint),
+ * This is small enough currently to be used with local copies (e.g. in a TaskWayPoint),
  * but this may change if we include airfield details inside.
  *
  * @todo

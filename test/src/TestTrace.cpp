@@ -91,7 +91,8 @@ IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
 
   }
 // get the trace, just so it's included in timing
-  TracePointVector v = trace.get_trace_points(1000);
+  TracePointVector v;
+  trace.get_trace_points(v);
   if (trace.size()>1) {
 //    assert(abs(v.size()-trace.size())<2);
   }

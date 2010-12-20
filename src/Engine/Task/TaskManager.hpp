@@ -102,7 +102,7 @@ public:
    * @return TaskPoint of active task point, and 0 if no active task
    */
   gcc_pure
-  TaskPoint* getActiveTaskPoint() const;
+  TaskWayPoint* getActiveTaskPoint() const;
 
   /**
    * Get a random point in the task OZ (for testing simulation route)
@@ -394,11 +394,10 @@ public:
   /**
    * Retrieve olc trace vector
    *
-   * @return Vector of trace points reduced for OLC
+   * @param iov Vector of trace points reduced for OLC
    */
-  gcc_pure
-  TracePointVector get_trace_points() const {
-    return trace_full.get_trace_points(300);
+  void get_trace_points(TracePointVector &iov) const {
+    trace_full.get_trace_points(iov);
   }
 
   /**

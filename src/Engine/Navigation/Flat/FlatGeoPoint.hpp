@@ -151,6 +151,19 @@ struct FlatGeoPoint {
   bool operator== (const FlatGeoPoint &other) const {
     return (Longitude == other.Longitude) && (Latitude == other.Latitude);
   };
+
+  /**
+   * Operator is required when SearchPoints are used in sets.
+   */
+  gcc_pure
+  bool operator< (const FlatGeoPoint &sp) const {
+    if (Longitude < sp.Longitude)
+      return false;
+    else if (Longitude == sp.Longitude)
+      return Latitude > sp.Latitude;
+    else
+      return true;
+  }
 };
 
 #endif

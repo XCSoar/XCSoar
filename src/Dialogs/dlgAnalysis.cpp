@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "CrossSection/CrossSectionWindow.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "SettingsComputer.hpp"
 #include "Math/FastMath.h"
@@ -59,6 +60,8 @@ static WndForm *wf = NULL;
 static WndOwnerDrawFrame *wGrid = NULL;
 static WndFrame *wInfo;
 static WndButton *wCalc = NULL;
+static CrossSectionWindow *csw = NULL;
+static SingleWindow *parent = NULL;
 
 static void
 SetCalcVisibility(const bool visible)
@@ -129,17 +132,13 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   case ANALYSIS_PAGE_OLC:
     if (protected_task_manager != NULL) {
       ProtectedTaskManager::Lease task(*protected_task_manager);
+      TracePointVector trace;
+      task->get_trace_points(trace);
       fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
                    XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::SettingsMap(),
-                   task->get_contest_solution(), task->get_trace_points());
+                   task->get_contest_solution(), trace);
     }
-    break;
-  case ANALYSIS_PAGE_AIRSPACE:
-    fs.RenderAirspace(canvas, rcgfx, XCSoarInterface::Basic(),
-                      XCSoarInterface::Calculated(),
-                      XCSoarInterface::SettingsMap(),
-                      airspace_database, terrain);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     if (protected_task_manager != NULL) {
@@ -152,6 +151,15 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
     // should never get here!
     break;
   }
+}
+
+static void
+UpdateCrossSection()
+{
+  csw->ReadBlackboard(XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
+                      XCSoarInterface::SettingsMap());
+  csw->set_direction(XCSoarInterface::Basic().TrackBearing);
+  csw->set_start(XCSoarInterface::Basic().Location);
 }
 
 static void
@@ -270,10 +278,18 @@ Update(void)
     break;
   }
 
-  wGrid->set_visible(page < ANALYSIS_PAGE_COUNT);
-
-  if (wGrid != NULL)
+  switch (page) {
+  case ANALYSIS_PAGE_AIRSPACE:
+    UpdateCrossSection();
+    csw->show();
+    wGrid->hide();
+    break;
+  default:
+    csw->hide();
+    wGrid->show();
     wGrid->invalidate();
+    break;
+  }
 }
 
 static void
@@ -365,15 +381,29 @@ OnCalcClicked(WndButton &Sender)
     wf->show();
   }
 
-  if (page == ANALYSIS_PAGE_AIRSPACE) {
-    dlgAirspaceWarningSetAutoClose(false);
-    airspaceWarningEvent.trigger();
-  }
+  if (page == ANALYSIS_PAGE_AIRSPACE)
+    dlgAirspaceWarningShowDlg(*parent);
 
   Update();
 }
 
+static Window *
+OnCreateCrossSectionWindow(ContainerWindow &parent, int left, int top,
+                           unsigned width, unsigned height,
+                           const WindowStyle style)
+{
+  csw = new CrossSectionWindow();
+  csw->set(parent, left, top, width, height, style);
+  csw->set_airspaces(&airspace_database);
+  csw->set_terrain(terrain);
+  csw->set_background_color(Color(0x40, 0x40, 0x00));
+  csw->set_text_color(Color::WHITE);
+  UpdateCrossSection();
+  return csw;
+}
+
 static CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnCreateCrossSectionWindow),
   DeclareCallBackEntry(OnAnalysisPaint),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
@@ -382,18 +412,20 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgAnalysisShowModal(SingleWindow &parent, int _page)
+dlgAnalysisShowModal(SingleWindow &_parent, int _page)
 {
   wf = NULL;
   wGrid = NULL;
   wInfo = NULL;
   wCalc = NULL;
 
-  wf = LoadDialog(CallBackTable, parent,
+  wf = LoadDialog(CallBackTable, _parent,
                   Layout::landscape ? _T("IDR_XML_ANALYSIS_L") :
                                       _T("IDR_XML_ANALYSIS"));
   if (!wf)
     return;
+
+  parent = &_parent;
 
   wf->SetKeyDownNotify(FormKeyDown);
 

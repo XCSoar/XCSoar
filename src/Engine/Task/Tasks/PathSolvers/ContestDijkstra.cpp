@@ -39,8 +39,7 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
   AbstractContest(_trace, _handicap, finish_alt_diff),
-  NavDijkstra<TracePoint>(n_legs + 1),
-  m_dijkstra(false),
+  NavDijkstra<TracePoint>(false, n_legs + 1),
   solution_found(false)
 {
   reset();
@@ -74,16 +73,18 @@ ContestDijkstra::master_is_updated()
 {
   assert(num_stages <= MAX_STAGES);
 
+  // find min distance and time step within this trace
+  const unsigned threshold_delta_t_trace = trace_master.average_delta_time();
+  const unsigned threshold_distance_trace = trace_master.average_delta_distance();
+
   const bool insufficient = (n_points < num_stages);
   const TracePoint& last_master = trace_master.get_last_point();
 
-  // update trace if time and distance are greater than previous deltas,
-  // or if time is greater than at least 30 seconds greater than previous
+  // update trace if time and distance are greater than significance thresholds
 
   const bool updated = 
-    ((last_master.time >= last_point.time + min_delta_t_trace)
-     && (last_master.approx_sq_dist(last_point) >= min_distance_trace))
-    || (last_master.time >= last_point.time + max((unsigned)30, min_delta_t_trace));
+    ((last_master.time > last_point.time + threshold_delta_t_trace)
+     && (last_master.approx_dist(last_point) > threshold_distance_trace));
 
   // need an update if there's insufficient data in the buffer, or if
   // the update was significant
@@ -110,31 +111,20 @@ ContestDijkstra::update_trace()
   if (!master_is_updated()) 
     return;
 
-  trace = trace_master.get_trace_points(max_contest_trace);
+  trace_master.get_trace_points(trace);
   n_points = trace.size();
   trace_dirty = true;
 
   count_olc_trace++;
 
   if (n_points<2) return;
-
-  // find min distance and time step within this trace
-  min_delta_t_trace = UINT_MAX;
-  min_distance_trace = UINT_MAX;
-  for (TracePointVector::const_iterator it = trace.begin();
-       it+1 != trace.end(); ++it) {
-    const TracePoint &p0 = *it;
-    const TracePoint &p1 = *(it+1);
-    min_distance_trace = min(p0.approx_sq_dist(p1), min_distance_trace);
-    min_delta_t_trace = min(p1.time-p0.time, min_delta_t_trace);
-  }
 }
 
 
 bool
 ContestDijkstra::solve()
 {
-  if (m_dijkstra.empty()) {
+  if (dijkstra.empty()) {
     set_weightings();
   }
 
@@ -144,7 +134,7 @@ ContestDijkstra::solve()
     return true;
   }
 
-  if (m_dijkstra.empty()) {
+  if (dijkstra.empty()) {
 
     update_trace();
     if (n_points < num_stages)
@@ -156,36 +146,34 @@ ContestDijkstra::solve()
     }
     trace_dirty = false;
 
-    m_dijkstra.restart(ScanTaskPoint(0, 0));
+    dijkstra.restart(ScanTaskPoint(0, 0));
     start_search();
     add_start_edges();
-    if (m_dijkstra.empty()) {
+    if (dijkstra.empty()) {
       return true;
     }
   }
 
   count_olc_solve++;
-  count_olc_size = max(count_olc_size, m_dijkstra.queue_size());
+  count_olc_size = max(count_olc_size, dijkstra.queue_size());
 
-  if (distance_general(m_dijkstra, 25)) {
+  if (distance_general(25)) {
     save_solution();
     update_trace();
     return true;
   }
 
-  return !m_dijkstra.empty();
+  return !dijkstra.empty();
 }
 
 void
 ContestDijkstra::reset()
 {
   solution_found = false;
-  m_dijkstra.clear();
+  dijkstra.clear();
   clear_trace();
   last_point.time = Trace::null_time;
   AbstractContest::reset();
-  min_distance_trace = UINT_MAX;
-  min_delta_t_trace = UINT_MAX;
 
   count_olc_solve = 0;
   count_olc_trace = 0;
@@ -235,7 +223,7 @@ ContestDijkstra::calc_score() const
 void
 ContestDijkstra::add_start_edges()
 {
-  m_dijkstra.pop();
+  dijkstra.pop();
 
   assert(num_stages <= MAX_STAGES);
   assert(n_points > 0);
@@ -247,17 +235,17 @@ ContestDijkstra::add_start_edges()
     // only add points that are valid for the finish
     solution[0] = get_point(destination);
     if (admit_candidate(end)) {
-      m_dijkstra.link(destination, destination, 0);
+      dijkstra.link(destination, destination, 0);
     }
   }
 }
 
 void
-ContestDijkstra::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
+ContestDijkstra::add_edges(const ScanTaskPoint& origin)
 {
   ScanTaskPoint destination(origin.first + 1, origin.second);
 
-  find_solution(dijkstra, origin);
+  find_solution(origin);
 
   // only add last point!
   if (is_final(destination)) {

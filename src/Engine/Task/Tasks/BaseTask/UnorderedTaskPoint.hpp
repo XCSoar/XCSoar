@@ -25,13 +25,14 @@
 #ifndef UNORDEREDTASKPOINT_HPP
 #define UNORDEREDTASKPOINT_HPP
 
-#include "TaskPoint.hpp"
+#include "TaskWayPoint.hpp"
+
 /**
  * Class for unordered task points (e.g. goto and abort)
  *
  */
 class UnorderedTaskPoint : 
-  public TaskPoint
+  public TaskWayPoint
 {
 public:
   /**
@@ -42,7 +43,7 @@ public:
    */
   UnorderedTaskPoint(const Waypoint & wp,
                      const TaskBehaviour &tb)
-    :TaskPoint(UNORDERED, wp, tb) {}
+    :TaskWayPoint(UNORDERED, wp, tb) {}
 
   const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const;
 

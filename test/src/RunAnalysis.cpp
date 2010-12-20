@@ -68,6 +68,7 @@ Trigger triggerClimbEvent(_T("triggerClimb"));
 void dlgBasicSettingsShowModal() {}
 void dlgTaskCalculatorShowModal(SingleWindow &parent) {}
 void dlgWindSettingsShowModal() {}
+void dlgAirspaceWarningShowDlg(SingleWindow &parent, bool auto_close) {}
 
 void ConditionMonitorsUpdate(const GlideComputer &cmp) {}
 
@@ -80,8 +81,6 @@ void Logger::LogFinishEvent(const NMEA_INFO &gps_info) {}
 void Logger::LogPoint(const NMEA_INFO &gps_info) {}
 LoggerImpl::LoggerImpl() {}
 LoggerImpl::~LoggerImpl() {}
-
-void dlgAirspaceWarningSetAutoClose(bool _autoclose) {}
 
 ThermalLocator::ThermalLocator() {}
 void ThermalLocator::Reset() {}

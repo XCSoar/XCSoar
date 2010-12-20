@@ -52,7 +52,9 @@ OLCLeague::reset()
 bool
 OLCLeague::solve()
 {
-  TracePointVector trace = trace_master.get_trace_points(2);
+  TracePointVector trace;
+  trace_master.get_trace_edges(trace);
+
   if (trace.size()!=2) {
     return false;
   }

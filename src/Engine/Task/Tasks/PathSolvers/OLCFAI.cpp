@@ -192,14 +192,14 @@ OLCFAI::add_start_edges()
   // use last point as single start,
   // this is out of order but required
 
-  m_dijkstra.pop();
+  dijkstra.pop();
   ScanTaskPoint destination(0, n_points-1);
-  m_dijkstra.link(destination, destination, 0);
+  dijkstra.link(destination, destination, 0);
 }
 
 
 void 
-OLCFAI::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
+OLCFAI::add_edges(const ScanTaskPoint& origin)
 {
   assert(origin.second < n_points);
   ScanTaskPoint destination(origin.first+1, origin.second+1);
@@ -219,7 +219,7 @@ OLCFAI::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
     }
     break;
   case 2:
-    find_solution(dijkstra, origin);
+    find_solution(origin);
 
     // give first leg points to penultimate node
     for (; destination.second < n_points-1; ++destination.second) {

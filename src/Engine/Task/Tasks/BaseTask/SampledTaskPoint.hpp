@@ -25,7 +25,7 @@
 
 #include "Navigation/SearchPointVector.hpp"
 #include "ObservationZone.hpp"
-#include "TaskPoint.hpp"
+#include "TaskWayPoint.hpp"
 #include "Compiler.h"
 
 class TaskEvents;
@@ -43,7 +43,7 @@ struct GeoPoint;
  *   zone is modified (e.g. due to previous/next taskpoint moving) in update_oz
  */
 class SampledTaskPoint
-  : public TaskPoint, public virtual ObservationZone
+  : public TaskWayPoint, public virtual ObservationZone
 {
 public:
   friend class OrderedTask;

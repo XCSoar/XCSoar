@@ -217,6 +217,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Wind/WindStore.cpp \
 	$(SRC)/Wind/WindZigZag.cpp \
 	\
+	$(SRC)/CrossSection/CrossSectionWindow.cpp \
+	\
 	$(SRC)/Gauge/ThermalAssistantWindow.cpp \
 	$(SRC)/Gauge/FlarmTrafficWindow.cpp \
 	$(SRC)/Gauge/GaugeFLARM.cpp \

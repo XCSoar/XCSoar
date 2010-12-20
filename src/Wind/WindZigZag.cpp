@@ -47,529 +47,427 @@ Copyright_License {
 #define NUM_SAMPLES 20
 
 /**
- * one sample is updated per n seconds
+ * time to not add points after flight condition is false
  */
-#define SAMPLE_RATE fixed_int_constant(4)
+#define BLACKOUT_TIME 3
+
+/*
+  Unconstrained LSQ problem
+    min S(beta)
+      S(beta) = sum_k=1..K (y_k-Phi(x_k, beta))^2
+              = sum_k=1..K f(x_k,y_k, beta)^2
+
+    f(y_k,x_k, beta) = y_k-Phi(x_k, beta)^2
+    y = Phi(x, beta) is model function
+
+    n = dim(beta)
+    K = number of data points
+
+    y: true airspeed
+    x: vector of gps ground speed north, east
+    beta: vector of wind speed north, east
+    Phi: sqrt( (x_north+beta_north)^2 + (x_east+beta_east)^2 )
+*/
+
+#include <list>
+#include "Math/newuoa.hh"
 
 /**
- * minimum number of seconds between
- * recalculating estimate
+ * This class provides a mechanism to estimate the wind speed and bearing
+ * for an aircraft assumed to be flying level such that the airspeed vector
+ * is in the horizontal plane, and has access to true airspeed and GPS speed
+ * measurements.  No compass information is required by the algorithm.
+ *
+ * In order to resolve reasonable estimates, and in particular to
+ * avoid an ambiguity regarding the hidden state variable of aircraft
+ * heading, it is necessary that the aircraft performs bearing
+ * adjustments during the sampling.  One way of achieving this is to
+ * fly a zig-zag manoeuver; although the aircraft can perform any manoeuver in
+ * which the bearing changes.
+ *
+ * However, due to the condition requiring the airspeed vector to be
+ * predominantly in the horizontal plane, it is necessary to filter
+ * out observations during high G-loading manoeuvers since for these
+ * states the condition cannot be reliably assured.  Consequently,
+ * this implementation uses a 'blackout' of a few seconds, in which no
+ * samples are accepted, whenever the load magnitude deviates from one
+ * by more than 0.3 g.
+ *
+ * The true airspeed measurements are assumed to be affected by noise
+ * of zero mean; if the noise is not zero mean, then the resulting
+ * wind estimate will be biased if the samples do not cover a large
+ * variation of bearings.
+ *
+ * The algorithm also checks linearity of the estimated TAS against the
+ * measured TAS.  The Pearson correlation coefficient, r (indicating linearity),
+ * is used to reject solutions if r is low; secondly, the slope of the
+ * TAS to estimated TAS is determined.  This could be used to provide a linear
+ * calibration coefficient for the TAS (currently unused).
+ *
+ * This algorithm was developed by John Wharington.
  */
-#define UPDATE_RATE fixed_int_constant(20)
-
-/** 20 m/s = 40 knots max approx */
-static const int V_SCALE = 20;
-
-/** resolution on V search (0.5 m/s) */
-#define NUM_V_POINTS 41
-
-/** resolution on theta search (ten degrees) */
-#define NUM_THETA_POINTS (36)
-
-static int
-VtoI(const fixed V)
-{
-  return min(NUM_V_POINTS - 1, iround(V * (NUM_V_POINTS - 1) / V_SCALE));
-}
-
-static fixed
-ItoV(const int i)
-{
-  return fixed(V_SCALE*max(0, min(i, NUM_V_POINTS - 1))) / (NUM_V_POINTS - 1);
-}
-
-/**
- * Class for points used in ZigZag wind algorithm
- */
-class ZigZagPoint
-{
+class WindZigZag {
 public:
-  ZigZagPoint() :
-    time(-1)
-  {
-    for (int i = 0; i < NUM_V_POINTS; i++)
-      theta_west_ok[i] = false;
+
+  WindZigZag() {
+    reset();
   }
 
-  fixed V_tas;
-  fixed V_gps;
-  Angle theta_gps;
-  fixed time;
-
-  void
-  Set(fixed t, fixed aV_tas, fixed aV_gps, Angle atheta_gps)
-  {
-    V_tas = aV_tas;
-    V_gps = aV_gps;
-    time = t;
-    theta_gps = atheta_gps;
-    CalculateThetaWEst();
+  /**
+   * Clear as if never used
+   */
+  void reset() {
+    obs.clear();
+    time_blackout = (unsigned)-1;
   }
 
-  Angle theta_west_1[NUM_V_POINTS];
-  Angle theta_west_2[NUM_V_POINTS];
-  bool theta_west_ok[NUM_V_POINTS];
-
-  fixed cos_theta_gps;
-  fixed sin_theta_gps;
-
-private:
-  int V_gps_x;
-  int V_gps_y;
-  int V_tas_l;
-
-  void
-  CalculateThetaWEst()
-  {
-    int i;
-    for (i = 0; i < NUM_V_POINTS; i++) {
-      fixed Vwest = ItoV(i);
-      theta_west_ok[i] = EstimateW0(Vwest, i);
+  struct ZZX {
+    ZZX(const fixed mag, const Angle ang) {
+      ang.sin_cos(gps_east, gps_north);
+      gps_north *= mag;
+      gps_east *= mag;
     }
+    fixed gps_north;
+    fixed gps_east;
+  };
 
-    cos_theta_gps = theta_gps.cos();
-    sin_theta_gps = theta_gps.sin();
+  struct ZZY {
+    ZZY(const fixed _tas): tas(_tas) {};
+    const fixed tas;
+  };
 
-    V_gps_x = iround(100 * V_gps * cos_theta_gps);
-    V_gps_y = iround(100 * V_gps * sin_theta_gps);
-    V_tas_l = iround(100 * V_tas);
+  struct ZZBeta {
+    ZZBeta(fixed _north, fixed _east):north(_north),east(_east) {};
+    const fixed north;
+    const fixed east;
+  };
+
+  struct ZZObs {
+    ZZObs(const unsigned _time, const fixed gps_mag, const Angle _gps_ang,
+          const fixed tas):
+      time(_time), x(gps_mag, _gps_ang), y(tas), gps_ang(_gps_ang)
+      {}
+
+    const unsigned time;
+    const ZZX x;
+    const ZZY y;
+    const Angle gps_ang;
+
+    fixed Phi(const ZZBeta& beta) const {
+      return sqrt(sqr(x.gps_north+beta.north)+sqr(x.gps_east+beta.east));
+    };
+    fixed f(const ZZBeta& beta) const {
+      return y.tas-Phi(beta);
+    };
+    fixed mag() const {
+      return y.tas;
+    }
+  };
+
+  /**
+   * Find optimal value
+   */
+  ZZBeta optimise(int &res_quality, const SpeedVector start,
+                  const bool circling) {
+    double x[] = {start.bearing.sin()*start.norm, start.bearing.cos()*start.norm};
+    min_newuoa<double, WindZigZag>(2, x, *this, 100.0, 0.0001, 100);
+
+    const ZZBeta beta((fixed)x[0], (fixed)x[1]);
+    res_quality = quality(beta, circling);
+
+    std::pair<fixed, fixed> c = correlation(beta);
+    prune_worst(beta);
+
+    /*
+       if linear correlation coefficient is low, then TAS does not fit est TAS
+       across the samples, so fit is poor and should be rejected due to bad
+       estimate or bad samples.
+    */
+    if (c.first < fixed(0.9)) {
+      res_quality = 0;
+    } else {
+      if (res_quality>0) {
+//        std::cerr << c.first << " " << c.second << "\n";
+      }
+    }
+    return beta;
+  };
+
+  /**
+   * Operator used by newuoa optimiser to evaluate function to be
+   * minimised
+   */
+  double operator()(int n, double* x) const {
+    return fmin(ZZBeta((fixed)x[0], (fixed)x[1]));
   }
 
-  bool
-  EstimateW0(fixed Vwest, int i)
-  {
-    fixed west_rat = Vwest / V_tas;
-    fixed gps_rat = V_gps / V_tas;
+protected:
 
-    if (gps_rat < fixed(0.001))
-      // speed too small
+  bool full() const {
+    return obs.size()== NUM_SAMPLES;
+  }
+
+  /**
+   *
+   */
+  bool back_in_time(const unsigned time) {
+    if (obs.empty()) {
       return false;
-
-    if (gps_rat + west_rat < fixed_one)
-      // wind too weak
-      return false;
-
-    if ((Vwest > V_gps) && (Vwest > V_tas))
-      // wind too strong
-      return false;
-
-    if (west_rat < fixed(0.001)) {
-      // wind speed too small
-      theta_west_1[i] = Angle::native(fixed_zero);
-      theta_west_2[i] = Angle::native(fixed_zero);
+    }
+    if (time < obs.back().time) {
+      reset();
       return true;
     }
+    return false;
+  }
 
-    fixed cosgamma = (west_rat * west_rat + gps_rat * gps_rat - fixed_one)
-                      / (2 * west_rat * gps_rat);
-
-    if (fabs(cosgamma) > fixed_one)
+  /**
+   * Determine whether the time and angle satisfy criterion for
+   * adding it to the list
+   */
+  bool do_append(const unsigned time, const Angle &ang) const {
+    // never add if during manoeuvering blackout
+    if (time < time_blackout + BLACKOUT_TIME) {
       return false;
-
-    Angle gamma = Angle::radians(acos(cosgamma));
-    theta_west_1[i] = (Angle::radians(fixed_pi) - theta_gps - gamma).as_delta().flipped();
-    theta_west_2[i] = (Angle::radians(fixed_pi) - theta_gps + gamma).as_delta().flipped();
-
+    }
+    // add if empty
+    if (!size()) {
+      return true;
+    }
+    // dont add if same time
+    if (time == obs.back().time) {
+      return false;
+    }
+    // dont add if no angle spread
+    if ((ang-obs.back().gps_ang).as_delta().magnitude_degrees() < fixed(10)) {
+      return false;
+    }
+    // ok to add
     return true;
   }
 
-public:
-  int
-  EstimateW1(int V_west_x, int V_west_y)
-  {
-    int v_tas_x = V_gps_x + V_west_x;
-    int v_tas_y = V_gps_y + V_west_y;
-    long vv = isqrt4(v_tas_x * v_tas_x + v_tas_y * v_tas_y);
-    long vdiff = (long)V_tas_l - vv;
-    int err = (1000 * max(vdiff, -vdiff)) / V_tas_l;
-    // returns error in tenths of percent
-    return err;
-  }
-};
-
-class ZigZag
-{
-public:
-  ZigZagPoint points[NUM_SAMPLES];
-
-  ZigZag()
-  {
-    for (int i = 0; i < NUM_SAMPLES; i++)
-      points[i].time = fixed_minus_one;
-
-    for (int k = 0; k < NUM_THETA_POINTS; k++)
-      thetalist[k] = Angle::radians(k * fixed_two_pi / NUM_THETA_POINTS).as_delta();
+  /**
+   * Set blackout timer
+   */
+  void blackout(const unsigned time) {
+    time_blackout = time;
   }
 
-  void
-  AddPoint(fixed t, fixed V_tas, fixed V_gps, Angle theta_gps)
-  {
-    // find oldest point
-    fixed toldest = fixed_zero;
-    int ioldest = 0;
-    int i;
-
-    for (i = 0; i < NUM_SAMPLES; i++)
-      if (t < points[i].time)
-        points[i].time = fixed_minus_one;
-
-    for (i = 0; i < NUM_SAMPLES; i++) {
-      if ((points[i].time < toldest) || (i == 0) || (t < points[i].time)) {
-        toldest = points[i].time;
-        ioldest = i;
-      }
+  /**
+   * Add observation (dropping out oldest if necessary), and reset
+   * blackout timer.
+   */
+  void append(ZZObs o) {
+    if (full()) {
+      obs.pop_front();
     }
-
-    i = ioldest;
-    points[i].Set(t, V_tas, V_gps, theta_gps);
-  }
-
-  fixed
-  CheckValidity(fixed t)
-  {
-    // requires:
-    // -- all points to be initialised
-    // -- all points to be within last 10 minutes
-    int nf = 0;
-    fixed ctg = fixed_zero;
-    fixed stg = fixed_zero;
-    int i;
-
-    for (i = 0; i < NUM_SAMPLES; i++) {
-      if (positive(points[i].time)) {
-        nf++;
-        if (t - points[i].time > fixed(10 * 60)) {
-          // clear point so it gets filled next time
-          points[i].time = fixed_minus_one;
-          return fixed_minus_one;
-        }
-        ctg += points[i].cos_theta_gps;
-        stg += points[i].sin_theta_gps;
-      }
-    }
-
-    if (nf < NUM_SAMPLES)
-      return fixed_minus_one;
-
-    Angle theta_av = Angle::radians(atan2(stg, ctg));
-    fixed dtheta_max = fixed_zero;
-    fixed dtheta_min = fixed_zero;
-
-    for (i = 0; i < NUM_SAMPLES; i++) {
-      fixed da = (points[i].theta_gps - theta_av).as_delta().value_radians();
-
-      if (da > dtheta_max)
-        dtheta_max = da;
-
-      if (da < dtheta_min)
-        dtheta_min = da;
-    }
-
-    return dtheta_max - dtheta_min;
-  }
-
-  bool
-  CheckSpread(fixed time, fixed error)
-  {
-    fixed spread = CheckValidity(time);
-    if (negative(spread))
-      return false;
-
-    spread /= fixed_deg_to_rad;
-    fixed minspread;
-
-    minspread = fixed(10 + 30) / (fixed_one + error * error / 30);
-    // nominal spread required is 40 degrees, smaller if large
-    // error is detected
-
-    if ((spread > fixed_360) || (spread < minspread))
-      // invalid if really circling or if not enough zig-zag
-      return false;
-
-    return true;
+    obs.push_back(o);
+    time_blackout = (unsigned)-1;
   }
 
 private:
-  Angle thetalist[NUM_THETA_POINTS];
 
-  // search all points for error against theta at wind speed index j
-  fixed
-  AngleError(Angle theta, int j)
-  {
-    fixed de = fixed_zero;
-    int nf = 0;
+  typedef std::list<ZZObs> ObsList;
 
-    for (int i = 0; i < NUM_SAMPLES; i++) {
-      if (points[i].theta_west_ok[j]) {
-        fixed e1 = (theta - points[i].theta_west_1[j]).
-            as_delta().magnitude_radians();
-        fixed e2 = (theta - points[i].theta_west_2[j]).
-            as_delta().magnitude_radians();
-        if (e1 <= e2)
-          de += e1 * e1;
-        else
-          de += e2 * e2;
+  ObsList obs;
+  unsigned time_blackout;
 
-        nf++;
-      }
+  unsigned size() const {
+    return obs.size();
+  }
+
+  /**
+   * Remove items which have high relative error (leaving at least some items).
+   * This is to remove outliers which are likely to be caused by manoeuvering.
+   * On average, more outliers than useful values are likely to be removed
+   * by this algorithm.
+   */
+  void prune_worst(const ZZBeta &beta) {
+    if (!obs.empty()) {
+      // always remove one old point, otherwise we may end up rejecting
+      // all new points, ending up with a very old data set.
+      obs.pop_front();
     }
+    while ((size()>5)
+           && ((relative_error(beta)) >fixed(0.05))) {
+      remove_worst(beta);
+    }
+  }
 
-    if (nf > 0)
-      return de / nf;
+  std::pair<fixed, fixed> correlation(const ZZBeta& beta) const {
+    fixed x_av(0);
+    fixed y_av(0);
+    unsigned n=0;
+    for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
+      fixed x = it->Phi(beta);
+      fixed y = it->mag();
+      x_av += x;
+      y_av += y;
+      n++;
+    }
+    if (!n)
+      return std::make_pair(fixed_zero, fixed_one);
+
+    x_av /= n;
+    y_av /= n;
+
+    fixed acc_xy(0);
+    fixed acc_xx(0);
+    fixed acc_yy(0);
+    for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
+      fixed xd = it->Phi(beta)-y_av;
+      fixed yd = it->mag()-x_av;
+      acc_xy += xd*yd;
+      acc_xx += xd*xd;
+      acc_yy += yd*yd;
+    }
+    if (!positive(acc_xx) || !positive(acc_yy))
+      return std::make_pair(fixed_zero, fixed_one);
+    fixed r = acc_xy/(sqrt(acc_xx)*sqrt(acc_yy));
+    fixed slope = y_av/x_av;
+
+    return std::make_pair(r, slope);
+  }
+
+  /**
+   * Convenience routine, return squared value
+   */
+  static fixed sqr(const fixed &v) {
+    return v*v;
+  }
+
+  /**
+   * Function to be optimised (minimised)
+   * This is the sum of squared errors between TAS and estimated TAS
+   */
+  fixed fmin(const ZZBeta& beta) const {
+    fixed acc(0);
+    for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
+      acc += sqr(it->f(beta)/it->mag());
+    }
+    return acc;
+  }
+
+  /**
+   * Remove item which has worst error.
+   */
+  void remove_worst(const ZZBeta& beta) {
+    ObsList::iterator i_worst = find_worst(beta);
+    if (i_worst != obs.end()) {
+      obs.erase(i_worst);
+    }
+  }
+
+  /**
+   * Find error
+   */
+  fixed relative_error(const ZZBeta& beta) const {
+    return sqrt(fmin(beta));
+  }
+
+  /**
+   * Calculate quality of fit of wind estimate beta in
+   * XCSoar's wind quality measure (0-5)
+   */
+  int quality(const ZZBeta& beta, const bool circling) const {
+    const fixed v = relative_error(beta);
+    const int quality = min(fixed(5.0),max(fixed(1.0),-log(v)));
+    if (circling)
+      return max(1, quality / 2); // de-value updates in circling mode
     else
-      return fixed_minus_one;
+      return quality;
   }
 
-  // search for theta to give best match at wind speed index i
-  bool
-  FindBestAngle(int i, Angle &theta_best)
-  {
-    fixed debest(1000000);
-    bool ok = false;
+  /**
+   * Find item in list with worst squared error
+   */
+  ObsList::iterator find_worst(const ZZBeta& beta) {
+    fixed worst(0);
 
-    for (int k = 0; k < NUM_THETA_POINTS; k++) {
-      fixed ae = AngleError(thetalist[k], i);
-      if (negative(ae))
-        continue;
-
-      ok = true;
-      if (ae < debest) {
-        debest = ae;
-        theta_best = thetalist[k];
+    ObsList::iterator i_worst = obs.end();
+    for (ObsList::iterator it = obs.begin(); it != obs.end(); ++it) {
+      fixed fthis = sqr(it->f(beta)/it->mag());
+      if (fthis > worst) {
+        i_worst = it;
+        worst = fthis;
       }
     }
-
-    return ok;
-  }
-
-  // find average error in true airspeed given wind estimate
-  int
-  VError(int V_west_x, int V_west_y)
-  {
-    int verr = 0;
-    int nf = 0;
-
-    for (int j = 0; j < NUM_SAMPLES; j++) {
-      if (points[j].time >= fixed_zero) {
-        verr += points[j].EstimateW1(V_west_x, V_west_y);
-        nf++;
-      }
-    }
-
-    if (nf > 0)
-      return verr / nf;
-    else
-      return 1000;
-  }
-
-  bool
-  UpdateSearch_Inner(fixed V_west, Angle theta_best)
-  {
-    // given wind speed and direction, find TAS error
-    int V_west_x = iround(100 * V_west * theta_best.cos());
-    int V_west_y = iround(100 * V_west * theta_best.sin());
-    int verr = VError(V_west_x, V_west_y);
-
-    // search for minimum error
-    // (this is not monotonous)
-    if (verr >= error_best)
-      return false;
-
-    error_best = verr;
-    V_west_best = V_west;
-    theta_west_best = theta_best;
-
-    return true;
-  }
-
-  bool
-  UpdateSearch(fixed V_west)
-  {
-    int i = VtoI(V_west);
-
-    // find best angle estimate for this assumed wind speed i
-    Angle theta = Angle::native(fixed(0));
-    if (!FindBestAngle(i, theta))
-      theta = theta_west_best;
-
-    return (UpdateSearch_Inner(V_west, theta)
-            || UpdateSearch_Inner(V_west, theta_west_best));
-  }
-
-public:
-  int error_best;
-  fixed V_west_best;
-  Angle theta_west_best;
-
-  fixed
-  StartSearch(fixed V_start, Angle theta_start)
-  {
-    V_west_best = V_start;
-    theta_west_best = theta_start;
-    error_best = 100000000; // big enough to always be bad
-    UpdateSearch(V_start);
-    V_west_best = V_start;
-    theta_west_best = theta_start;
-    return fixed(error_best) / 10;
-  }
-
-  bool
-  Estimate(fixed &V_westb, Angle &theta_westb, fixed &error)
-  {
-    int i;
-
-    bool scanned[NUM_V_POINTS];
-    for (i = 0; i < NUM_V_POINTS; i++)
-      scanned[i] = false;
-
-    // scan for 6 points around current best estimate.
-    // if a better estimate is found, keep scanning around
-    // that point, and don't repeat scans
-
-    bool improved = false;
-    bool continue_search = true;
-    bool full_search = false;
-
-    V_west_best = V_westb;
-    theta_west_best = theta_westb;
-
-    while (continue_search) {
-      continue_search = false;
-
-      int il, ih;
-      if (full_search) {
-        il = 0;
-        ih = NUM_V_POINTS - 1;
-      } else {
-        const int ib = VtoI(V_west_best);
-        il = max(0, ib - 3);
-        ih = min(NUM_V_POINTS - 1, ib + 3);
-      }
-
-      for (int i = il; i <= ih; ++i) {
-        if (scanned[i]) {
-          continue;
-        } else {
-          scanned[i] = true;
-          // see if we can find a better estimate
-          const fixed V_west = ItoV(i);
-          if (UpdateSearch(V_west)) {
-            improved = true;
-            if ((i==il) || (i==ih)) {
-              // improved on edge, expand search
-              continue_search = true;
-            }
-          }
-        }
-      }
-
-      if (!continue_search && !improved && !full_search && (error_best > 100)) {
-        full_search = true;
-        continue_search = true;
-        // if no improvement and still large error,
-        // try searching all speeds that haven't been checked yet.
-      }
-    }
-
-    // return true if estimate was improved
-    V_westb = V_west_best;
-    theta_westb = theta_west_best.as_bearing();
-
-    error = fixed(error_best) / 10;
-    return improved;
+    return i_worst;
   }
 };
 
-ZigZag myzigzag;
-
-static bool
-WindZigZagCheckAirData(const NMEA_INFO &basic)
+class WindZigZagGlue: public WindZigZag
 {
-  static fixed tLast(-1);
-  static Angle bearingLast = Angle::native(fixed_zero);
+public:
 
-  if (!basic.flight.Flying ||
-      fabs(basic.TurnRate) > fixed(20) ||
-      fabs(basic.GroundSpeed) < fixed(2.5) ||
-      fabs(basic.acceleration.Gload - fixed_one) > fixed(0.3)) {
-    tLast = basic.Time; // blackout for SAMPLE_RATE seconds
-    return false;
-  }
+  SpeedVector optimises(int &res_quality, const SpeedVector start,
+                        const bool circling) {
+    const ZZBeta beta = optimise(res_quality, start, circling);
+    SpeedVector wind(beta.east, beta.north);
+    return wind;
+  };
 
-  if (basic.Time < tLast + SAMPLE_RATE &&
-      (bearingLast - basic.TrackBearing).as_delta().magnitude_degrees() < fixed(10))
-    return false;
+  int Update(const NMEA_INFO &basic, const DERIVED_INFO &derived,
+             fixed &zzwindspeed, Angle &zzwindbearing) {
 
-  tLast = basic.Time;
-  bearingLast = basic.TrackBearing;
+    // @todo accuracy: correct TAS for vertical speed if dynamic pullup
 
-  return true;
-}
+    // reset if flight hasnt started or airspeed instrument not available
+    if (!basic.flight.Flying ||
+        !basic.AirspeedAvailable) {
+
+      reset();
+      return 0;
+    }
+
+    // ensure system is reset if time retreats
+    if (back_in_time(basic.Time)) {
+      return 0;
+    }
+
+    // temporary manoeuvering, dont append this point
+    if ((fabs(basic.TurnRate) > fixed(20)) ||
+        (fabs(basic.acceleration.Gload - fixed_one) > fixed(0.3))) {
+
+      blackout(basic.Time);
+      return 0;
+    }
+
+    // is this point able to be added?
+    if (!do_append(basic.Time, basic.TrackBearing))
+      return 0;
+
+    // ok to add a point
+
+    append(ZZObs(basic.Time,
+                 basic.GroundSpeed, basic.TrackBearing,
+                 basic.TrueAirspeed));
+
+    //
+    if (!full())
+      return 0;
+
+    int quality;
+    const SpeedVector wind = optimises(quality, basic.wind,
+                                       derived.Circling);
+    if (quality) {
+      zzwindspeed = wind.norm;
+      zzwindbearing = wind.bearing;
+    }
+    return quality;
+  };
+};
+
+
+
+/////////////////////////////////////////////
+
+static WindZigZagGlue wind_zig_zag;
+
 
 int
 WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
                  fixed &zzwindspeed, Angle &zzwindbearing)
 {
-  static fixed tLastEstimate(-1);
-
-  if (!basic.AirspeedAvailable)
-    return 0;
-
-  // TODO accuracy: correct TAS for vertical speed if dynamic pullup
-
-  if ((basic.Time <= tLastEstimate) || (tLastEstimate == fixed_minus_one))
-    tLastEstimate = basic.Time - UPDATE_RATE;
-
-  if (!WindZigZagCheckAirData(basic))
-    return 0;
-
-  // ok to add a point
-
-  myzigzag.AddPoint(basic.Time,
-                    basic.TrueAirspeed, basic.GroundSpeed,
-                    basic.TrackBearing);
-
-  // don't update wind from zigzag more often than
-  // every UPDATE_RATE seconds, so it is balanced with respect
-  // to circling
-  if (basic.Time < tLastEstimate + UPDATE_RATE)
-    return 0;
-
-  fixed V_wind_estimate = basic.wind.norm;
-  Angle theta_wind_estimate = basic.wind.bearing;
-  fixed percent_error = myzigzag.StartSearch(V_wind_estimate,
-                                             theta_wind_estimate);
-
-  // Check spread of zig-zag manoeuver
-  if (!myzigzag.CheckSpread(basic.Time, percent_error))
-    return 0;
-
-  fixed v_error = percent_error * basic.TrueAirspeed / 100;
-
-  if (v_error < fixed_half)
-    // don't refine search if error is small
-    return 0;
-
-  if (myzigzag.Estimate(V_wind_estimate, theta_wind_estimate, percent_error)) {
-    // ok, we have made an update
-    tLastEstimate = basic.Time;
-
-    zzwindspeed = V_wind_estimate;
-    zzwindbearing = theta_wind_estimate;
-
-    // calculate error quality
-    int quality;
-
-    //double pes = v_error/(V_SCALE/NUM_V_POINTS);
-    //quality = iround(0.5+4.5/(1.0+percent_error*percent_error/30.0));
-
-    quality = max(1, 5 - iround(percent_error / 2));
-    if (derived.Circling)
-      quality = max(1, quality / 2); // de-value updates in circling mode
-
-    return quality;
-  }
-
-  return 0;
+  return wind_zig_zag.Update(basic, derived, zzwindspeed, zzwindbearing);
 }
-

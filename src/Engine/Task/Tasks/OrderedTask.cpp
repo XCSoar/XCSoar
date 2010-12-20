@@ -544,7 +544,7 @@ OrderedTask::setActiveTaskPoint(unsigned index)
   }
 }
 
-TaskPoint* 
+TaskWayPoint*
 OrderedTask::getActiveTaskPoint() const
 {
   if (activeTaskPoint < tps.size())

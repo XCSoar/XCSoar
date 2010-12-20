@@ -43,6 +43,16 @@ TaskMacCready::TaskMacCready(TaskPoint* tp, const GlidePolar &gp):
   m_end(0),
   m_glide_polar(gp) {}
 
+TaskMacCready::TaskMacCready(const std::vector<TaskPoint*> &_tps,
+                             const GlidePolar &gp):
+  m_tps(_tps.begin(), _tps.end()),
+  m_gs(_tps.size()),
+  m_minHs(_tps.size(), fixed_zero),
+  m_activeTaskPoint(0),
+  m_start(0),
+  m_end(max((int)_tps.size(), 1) - 1),
+  m_glide_polar(gp) {}
+
 void
 TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
 {

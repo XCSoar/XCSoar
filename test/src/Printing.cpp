@@ -585,7 +585,8 @@ PrintHelper::contestmanager_print(const ContestManager& man)
 {
   {
     std::ofstream fs("results/res-olc-trace.txt");
-    TracePointVector v = man.trace_full.get_trace_points(-1);
+    TracePointVector v;
+    man.trace_full.get_trace_points(v);
 
     for (TracePointVector::const_iterator it = v.begin();
          it != v.end(); ++it) {
@@ -598,7 +599,8 @@ PrintHelper::contestmanager_print(const ContestManager& man)
   {
     std::ofstream fs("results/res-olc-trace_sprint.txt");
 
-    TracePointVector v = man.trace_sprint.get_trace_points(-1);
+    TracePointVector v;
+    man.trace_sprint.get_trace_points(v);
 
     for (TracePointVector::const_iterator it = v.begin();
          it != v.end(); ++it) {

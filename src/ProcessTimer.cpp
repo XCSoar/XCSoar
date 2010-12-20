@@ -77,7 +77,7 @@ ProcessTimer::AirspaceProcessTimer()
 #ifndef GNAV
     PlayResource(_T("IDR_WAV_BEEPBWEEP"));
 #endif
-    dlgAirspaceWarningShowDlg();
+    dlgAirspaceWarningShowDlg(XCSoarInterface::main_window, true);
   }
 }
 

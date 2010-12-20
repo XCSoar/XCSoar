@@ -31,33 +31,17 @@
 AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const fixed _radius):
   AbstractAirspace(CIRCLE),
   m_center(loc), 
-  m_radius(_radius) {}
-
-const FlatBoundingBox 
-AirspaceCircle::get_bounding_box(const TaskProjection& task_projection) 
+  m_radius(_radius)
 {
-  static const Angle a225 = Angle::degrees(fixed(225));
-  static const Angle a135 = Angle::degrees(fixed(135));
-  static const Angle a045 = Angle::degrees(fixed(045));
-  static const Angle a315 = Angle::degrees(fixed(315));
+  m_is_convex = true;
 
-  const fixed eradius = m_radius * fixed(1.42);
-  const GeoPoint ll = GeoVector(eradius, a225).end_point(m_center);
-  const GeoPoint lr = GeoVector(eradius, a135).end_point(m_center);
-  const GeoPoint ur = GeoVector(eradius, a045).end_point(m_center);
-  const GeoPoint ul = GeoVector(eradius, a315).end_point(m_center);
-
-  FlatGeoPoint fll = task_projection.project(ll);
-  FlatGeoPoint flr = task_projection.project(lr);
-  FlatGeoPoint ful = task_projection.project(ul);
-  FlatGeoPoint fur = task_projection.project(ur);
-
-  // note +/- 1 to ensure rounding keeps bb valid 
-
-  return FlatBoundingBox(FlatGeoPoint(min(fll.Longitude, ful.Longitude) - 1,
-                                      min(fll.Latitude, flr.Latitude) - 1),
-                         FlatGeoPoint(max(flr.Longitude, fur.Longitude) + 1,
-                                      max(ful.Latitude, fur.Latitude) + 1));
+  // @todo: find better enclosing radius as fn of NUM_SEGMENTS
+  #define NUM_SEGMENTS 12
+  for (unsigned i=0; i<=12; ++i) {
+    const Angle angle = Angle::degrees(fixed(i*360/NUM_SEGMENTS));
+    const GeoPoint p = GeoVector(m_radius*fixed(1.1), angle).end_point(m_center);
+    m_border.push_back(SearchPoint(p));
+  }
 }
 
 bool 

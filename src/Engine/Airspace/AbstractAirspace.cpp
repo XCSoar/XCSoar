@@ -24,6 +24,7 @@
 #include "Navigation/Aircraft.hpp"
 #include "AirspaceAircraftPerformance.hpp"
 #include "AirspaceInterceptSolution.hpp"
+#include "Navigation/Flat/FlatBoundingBox.hpp"
 
 #include <assert.h>
 
@@ -215,4 +216,58 @@ AbstractAirspace::get_vertical_text() const
   return 
     _T("Base: ") + m_base.get_as_text(false) +
     _T(" Top: ") + m_top.get_as_text(false);
+}
+
+
+void
+AbstractAirspace::project(const TaskProjection &task_projection)
+{
+  ::project(m_border, task_projection);
+}
+
+
+const FlatBoundingBox
+AbstractAirspace::get_bounding_box(const TaskProjection& task_projection)
+{
+  project(task_projection);
+  return compute_boundingbox(m_border);
+}
+
+
+const SearchPointVector&
+AbstractAirspace::get_clearance() const
+{
+  #define RADIUS 5
+
+  if (!m_clearance.empty())
+    return m_clearance;
+
+  assert(m_task_projection != NULL);
+
+  m_clearance = m_border;
+  if (!m_is_convex) {
+    prune_interior(m_clearance);
+  }
+
+  FlatBoundingBox bb = ::compute_boundingbox(m_clearance);
+  FlatGeoPoint center = bb.get_center();
+
+  for (SearchPointVector::iterator i= m_clearance.begin();
+       i != m_clearance.end(); ++i) {
+    FlatGeoPoint p = i->get_flatLocation();
+    FlatRay r(center, p);
+    int mag = sqrt(r.vector.Longitude*r.vector.Longitude+
+                   r.vector.Latitude*r.vector.Latitude);
+    int mag_new = mag+RADIUS;
+    p = r.parametric((fixed)mag_new/mag);
+    *i = SearchPoint(m_task_projection->unproject(p));
+    i->project(*m_task_projection);
+  }
+  return m_clearance;
+}
+
+void
+AbstractAirspace::clear_clearance() const
+{
+  m_clearance.clear();
 }

@@ -19,11 +19,5 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#include "TaskPoint.hpp"
 
-const GeoPoint &
-TaskPoint::get_location_remaining() const
-{
-  return get_location();
-}
-
+// nothing here

@@ -97,8 +97,7 @@ protected:
   const TracePoint &get_point(const ScanTaskPoint &sp) const;
 
 
-  virtual void add_edges(DijkstraTaskPoint &dijkstra,
-                         const ScanTaskPoint &curNode);
+  virtual void add_edges(const ScanTaskPoint &curNode);
 
   /**
    * Set weightings of each leg.  Default is constant weighting.
@@ -107,9 +106,6 @@ protected:
 
   /** Weightings applied to each leg distance */
   unsigned m_weightings[MAX_STAGES];
-
-  /** Dijkstra search algorithm */
-  DijkstraTaskPoint m_dijkstra;
 
   /**
    * Retrieve weighting of specified leg
@@ -128,8 +124,6 @@ protected:
 private:
   bool solution_found;
   bool trace_dirty;
-  unsigned min_distance_trace;
-  unsigned min_delta_t_trace;
   virtual void add_start_edges();
   TracePoint last_point;
   bool master_is_updated();

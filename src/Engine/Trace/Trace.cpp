@@ -5,241 +5,16 @@
 const unsigned Trace::null_delta = 0 - 1;
 const unsigned Trace::null_time = 0 - 1;
 
-Trace::Trace(const unsigned max_time,
-             const unsigned recent_time,
+Trace::Trace(const unsigned _no_thin_time,
+             const unsigned max_time,
              const unsigned max_points) :
-  m_optimise_time(null_time),
-  m_recent_time(recent_time),
   m_max_time(max_time),
-  m_max_points(max_points)
+  no_thin_time(_no_thin_time),
+  m_max_points(max_points),
+  m_opt_points((3*max_points)/4)
 {
-}
-
-void
-Trace::append(const AIRCRAFT_STATE& state)
-{
-  if (empty()) {
-    task_projection.reset(state.get_location());
-    task_projection.update_fast();
-    m_last_point.time = null_time;
-  } else if (trace_tree.size() > 0 && state.Time < fixed(m_last_point.time)) {
-    clear();
-    return;
-  }
-
-  TracePoint tp(state);
-  if ((tp.time - m_last_point.time) < 2)
-    return;
-
-  tp.project(task_projection);
-  tp.last_time = m_last_point.time;
-  TraceTree::const_iterator it_this = trace_tree.insert(tp);
-  m_last_point = tp;
-
-  // update deltas.  Last point is always high delta
-  delta_map[tp.time].distance = null_delta;
-  delta_map[tp.time].time = null_time;
-
-  TraceTree::const_iterator it_prev = find_prev(tp);
-  if (it_prev != end())
-    update_delta(find_prev(*it_prev), it_prev, it_this);
-}
-
-void 
-Trace::update_delta(TraceTree::const_iterator it_prev,
-                    TraceTree::const_iterator it,
-                    TraceTree::const_iterator it_next)
-{
-  if ((it == end()) || (it_prev == end()) || (it_next == end()))
-    return;
-
-  const unsigned d_this = it_prev->approx_dist(*it) + it->approx_dist(*it_next);
-  const unsigned d_rem = it_prev->approx_dist(*it_next);
-  const unsigned delta = d_this - d_rem;
-  delta_map[it->time].distance = delta;
-  delta_map[it->time].time = std::max(it->dt(), it_next->dt());
-}
-
-bool
-Trace::inside_recent_time(unsigned time) const
-{
-  if (m_last_point.time == null_time)
-    return true;
-
-  return (time + m_recent_time >= m_last_point.time);
-}
-
-bool
-Trace::inside_time_window(unsigned time) const
-{
-  if (m_last_point.time == null_time)
-    return true;
-
-  return inside_recent_time(time) || (time + m_max_time >= m_last_point.time);
-}
-
-unsigned
-Trace::lowest_delta() const
-{
-  // note this won't calculate delta for recent
-
-  unsigned lowest = null_delta;
-
-  TraceDeltaMap::const_iterator it = delta_map.begin();
-  for (++it; it != delta_map.end(); ++it) {
-    if (inside_recent_time(it->first))
-      return lowest;
-
-    if (it->second.distance < lowest)
-      lowest = it->second.distance;
-  }
-  return lowest;
-}
-
-void 
-Trace::erase_earlier_than(unsigned min_time)
-{
-  // note: this is slow but currently kdtree++ doesn't return a valid
-  // iterator after erase() so there's no easier way
-
-  bool found = false;
-  do {
-    found = false;
-    for (TraceTree::const_iterator tr = trace_tree.begin();
-         tr != trace_tree.end(); ++tr) {
-      if (tr->time < min_time) {
-        trace_tree.erase(tr);
-        found = true;
-        break;
-      }
-    }
-  } while (found);
-
-  delta_map.erase(delta_map.begin(), 
-                  delta_map.lower_bound(min_time));
-}
-
-void
-Trace::trim_point_time()
-{
-  for (TraceDeltaMap::const_iterator it = delta_map.begin(); 
-       it != delta_map.end(); ++it) {
-    const unsigned this_time = it->first;
-
-    if (inside_time_window(this_time)) {
-      erase_earlier_than(this_time);
-      delta_map[this_time].distance = null_delta;
-      delta_map[this_time].time = null_time;
-
-      return;
-    }
-  }
-}
-
-void
-Trace::trim_point_delta()
-{
-  // note this won't trim if recent
-
-  // if several points exist with equal deltas, this will remove the one
-  // with the smallest time step
-
-  unsigned delta = lowest_delta();
-  unsigned lowest_dt = null_time;
-  TraceTree::const_iterator candidate = trace_tree.end();
-
-#ifndef NDEBUG
-  const unsigned min_time = delta_map.begin()->first;
-#endif
-
-  for (TraceTree::const_iterator it = trace_tree.begin();
-       it != trace_tree.end(); ++it) {
-    const unsigned this_time = it->time;
-    assert(this_time >= min_time);
-    const TraceDelta& this_delta = delta_map[this_time];
-
-    if (!inside_recent_time(this_time) &&
-        this_delta.distance == delta) {
-      if (this_delta.time < lowest_dt) {
-        lowest_dt = this_delta.time;
-        candidate = it;
-      }
-    }
-  }
-
-  if (candidate != trace_tree.end())
-    erase(candidate);
-}
-
-void
-Trace::optimise()
-{
-  // first remove points outside max time range
-  if (m_max_time != null_time)
-    trim_point_time();
-
-  // if still too big, remove points based on line simplification
-  while (trace_tree.size()> m_max_points)
-    trim_point_delta();
-
-  // re-balance tree 
-  trace_tree.optimize();
-  m_optimise_time = m_last_point.time;
-}
-
-Trace::TraceTree::const_iterator
-Trace::find_prev(const TracePoint& tp) const
-{
-  for (TraceTree::const_iterator it = trace_tree.begin();
-       it != trace_tree.end(); ++it)
-    if (it->time == tp.last_time)
-      return it;
-
-  return end();
-}
-
-Trace::TraceTree::const_iterator
-Trace::find_next(const TracePoint& tp) const
-{
-  for (TraceTree::const_iterator it = trace_tree.begin();
-       it != trace_tree.end(); ++it)
-    if (it->last_time == tp.time)
-      return it;
-
-  return end();
-}
-
-void
-Trace::erase(TraceTree::const_iterator& rit)
-{
-  /// @todo merge data for erased point?
-  if (rit == trace_tree.end())
-    return;
-
-  TraceTree::const_iterator it_prev = find_prev(*rit);
-  TraceTree::const_iterator it_next = find_next(*rit);
-
-  // don't erase if last or first point in tree
-  if ((it_prev == trace_tree.end()) || (it_next == trace_tree.end()))
-    return;
-
-  // create new point representing the next point since this is merged with it
-  TracePoint tp_next = *it_next;
-  tp_next.last_time = it_prev->time;
-
-  // remove erased point from the delta map
-  delta_map.erase(rit->time);
-
-  // remove current (deletion), and next (to be replaced)
-  trace_tree.erase(rit);
-  trace_tree.erase(it_next);
-
-  // insert point replacement
-  it_next = trace_tree.insert(tp_next);
-
-  // recompute data for previous and replacement point
-  update_delta(find_prev(*it_prev), it_prev, it_next);
-  update_delta(it_prev, it_next, find_next(*it_next));
+  m_last_point.time = null_time;
+  assert(max_points>=4);
 }
 
 void
@@ -247,11 +22,90 @@ Trace::clear()
 {
   trace_tree.clear();
   trace_tree.optimize();
-  m_optimise_time = null_time;
   m_last_point.time = null_time;
-
-  delta_map.clear();
+  m_average_delta_distance = 0;
+  m_average_delta_time = 0;
+  delta_list.clear();
 }
+
+
+void
+Trace::append(const AIRCRAFT_STATE& state)
+{
+  if (empty()) {
+    // first point determines origin for flat projection
+    task_projection.reset(state.get_location());
+    task_projection.update_fast();
+    m_last_point.time = null_time;
+  } else if (trace_tree.size() > 0 && state.Time < fixed(m_last_point.time)) {
+    // gone back in time, must reset. (shouldn't get here!)
+    assert(1);
+    clear();
+    return;
+  }
+
+  TracePoint tp(state);
+  tp.project(task_projection);
+
+  // only add one item per two seconds
+  if ((tp.time - m_last_point.time) < 2)
+    return;
+
+  tp.project(task_projection);
+  tp.last_time = m_last_point.time;
+  m_last_point = tp;
+
+  delta_list.append(tp, trace_tree);
+}
+
+
+unsigned
+Trace::get_min_time() const
+{
+  if (m_last_point.time == null_time) {
+    return 0;
+  } else if (m_max_time == null_time) {
+    return 0;
+  } else {
+    return std::max(0, (int)m_last_point.time - (int)m_max_time);
+  }
+}
+
+
+bool
+Trace::optimise_if_old()
+{
+  if (trace_tree.size() >= m_max_points) {
+
+    // first remove points outside max time range
+    bool updated = delta_list.erase_earlier_than(get_min_time(), trace_tree);
+
+    if (trace_tree.size()>= m_opt_points) {
+      // if still too big, remove points based on line simplification
+      updated |= delta_list.erase_delta(m_opt_points, trace_tree, no_thin_time);
+    }
+
+    if (!updated)
+      return false;
+  } else if (trace_tree.size()*2 == m_max_points) {
+
+    // half size, appropriate time to remove old points
+    if (!delta_list.erase_earlier_than(get_min_time(), trace_tree)) {
+      return false;
+    }
+  } else {
+    return false;
+  }
+
+  // must have had change if got this far, so must re-balance tree
+  trace_tree.optimize();
+  delta_list.update_leaves(trace_tree);
+  m_average_delta_distance = delta_list.calc_average_delta_distance(no_thin_time);
+  m_average_delta_time = delta_list.calc_average_delta_time(no_thin_time);
+
+  return true;
+}
+
 
 unsigned
 Trace::size() const
@@ -262,20 +116,17 @@ Trace::size() const
 bool
 Trace::empty() const
 {
-  return trace_tree.empty();
+  return delta_list.empty();
 }
 
-Trace::TraceTree::const_iterator
-Trace::begin() const
+bool
+Trace::is_null(const TracePoint& tp)
 {
-  return trace_tree.begin();
+  return tp.time == null_time;
 }
 
-Trace::TraceTree::const_iterator
-Trace::end() const
-{
-  return trace_tree.end();
-}
+/////////////////////////////////////////////
+
 
 /**
  * Utility class to add tracepoints satisfying a time range to a set
@@ -330,6 +181,7 @@ private:
   unsigned min_time;
 };
 
+
 TracePointVector
 Trace::find_within_range(const GeoPoint &loc, const fixed range,
                          const unsigned mintime, const fixed resolution) const
@@ -346,34 +198,16 @@ Trace::find_within_range(const GeoPoint &loc, const fixed range,
   TracePointSetFilterInserter filter(tset, mintime);
   trace_tree.find_within_range(bb_target, mrange, filter);
 
-  /*
-  // std::inserter(tset, tset.begin()));
-  if (mintime>0) {
-    TracePointSet::iterator tit = tset.lower_bound(bb_target);
-    tset.erase(tset.begin(), tit);
-  }
-  */
-
   if (positive(resolution)) {
     const unsigned rrange = task_projection.project_range(loc, resolution);
     TracePointList tlist(tset.begin(), tset.end());
-    thin_trace(tlist, rrange * rrange);
+    thin_trace_resolution(tlist, rrange * rrange);
     return TracePointVector(tlist.begin(), tlist.end());
   } else {
     return TracePointVector(tset.begin(), tset.end());
   }
 }
 
-bool
-Trace::optimise_if_old()
-{
-  if (m_last_point.time > m_optimise_time + 60) {
-    optimise();
-    return true;
-  }
-
-  return false;
-}
 
 static void
 adjust_links(const TracePoint& previous, const TracePoint& obj,
@@ -383,74 +217,87 @@ adjust_links(const TracePoint& previous, const TracePoint& obj,
     next.last_time = previous.time;
 }
 
+
 void 
-Trace::thin_trace(TracePointList& tlist, const unsigned mrange_sq)
+Trace::thin_trace_resolution(TracePointList& tlist, const unsigned mrange_sq)
 {
   if (tlist.size() < 2)
     return;
 
-  TracePointList::iterator it_prev = tlist.begin();
+  TracePointList::iterator it_last = tlist.begin();
   TracePointList::iterator it = tlist.begin();
   ++it;
   TracePointList::iterator it_next = it;
   ++it_next;
 
   for (; it_next != tlist.end();) {
-    if (it->approx_sq_dist(*it_prev) < mrange_sq) {
-      adjust_links(*it_prev, *it, *it_next);
+    if (it->approx_sq_dist(*it_last) < mrange_sq) {
+      adjust_links(*it_last, *it, *it_next);
       it = tlist.erase(it);
       it_next = it;
       ++it_next;
     } else {
       ++it;
       ++it_next;
-      ++it_prev;
+      ++it_last;
     }
   }
 }
 
-TracePointVector
-Trace::get_trace_points(const unsigned max_points) const
+
+bool
+Trace::inside_time_window(unsigned time) const
 {
-  if (max_points == 2) {
-    if (trace_tree.size()<2) {
-      return TracePointVector();
+  if (m_last_point.time == null_time)
+    return true;
+
+  return time + m_max_time >= m_last_point.time;
+}
+
+
+void
+Trace::get_trace_edges(TracePointVector& iov) const
+{
+  if (trace_tree.size()<2) {
+    iov.clear();
+    return;
+//    return TracePointVector().swap(iov);
+  }
+  // special case - just look for points within time range
+  TracePoint p;
+  unsigned tmin = null_time;
+  TraceTree::const_iterator tend = trace_tree.end();
+  for (TraceTree::const_iterator tr = trace_tree.begin();
+       tr != tend; ++tr) {
+    if ((tr->time< tmin) && inside_time_window(tr->time)) {
+      p = *tr;
+      tmin = tr->time;
     }
-    // special case - just look for points within time range
-    TracePoint p;
-    unsigned tmin = (unsigned)-1;
-    for (TraceTree::const_iterator tr = trace_tree.begin();
-         tr != trace_tree.end(); ++tr) {
-      if (inside_time_window(tr->time) && (tr->time< tmin)) {
-        p = *tr;
-        tmin = tr->time;
-      }
-    }
+  }
+  if ((tmin != null_time) && (m_last_point.time != null_time)) {
     TracePointVector v;
     v.push_back(p);
     v.push_back(m_last_point);
-    return v;
+    v.swap(iov);
+  } else {
+    iov.clear();
   }
-
-  TracePointSet tset(begin(), end());
-
-  if (tset.empty())
-    return TracePointVector();
-
-  TracePointList tlist(tset.begin(), tset.end());
-
-  unsigned mrange = 3;
-
-  while (tlist.size() > max_points) {
-    thin_trace(tlist, mrange);
-    mrange = (mrange * 4) / 3;
-  }
-
-  return TracePointVector(tlist.begin(), tlist.end());
 }
 
-bool
-Trace::is_null(const TracePoint& tp)
-{
-  return tp.time == null_time;
-}
+/*
+    void printall() {
+      for (TraceDelta::iterator it = list.begin();
+           it != list.end(); ++it) {
+        print(*it);
+      }
+      printf("\n");
+    }
+
+    void print(const TraceDelta& td) {
+      printf("%d (%d,%d) %d %d\n",
+             td.p_time, td.prev->p_time,
+             td.next->p_time, td.elim_distance,
+             td.elim_time);
+    }
+
+*/

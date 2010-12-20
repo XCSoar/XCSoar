@@ -86,9 +86,6 @@ HasWarning()
 static void
 Hide()
 {
-  // Reset AutoClose setting
-  dlgAirspaceWarningSetAutoClose(true);
-
   wf->hide();
   wf->SetModalResult(mrOK);
 }
@@ -350,44 +347,10 @@ OnTimer(WndForm &Sender)
   update_list();
 }
 
-void
-dlgAirspaceWarningSetAutoClose(bool _autoclose)
-{
-  AutoClose = _autoclose;
-}
-
 bool
 dlgAirspaceWarningVisible()
 {
-  return wf && wf->is_visible();
-}
-
-bool
-dlgAirspaceWarningIsEmpty()
-{
-  return airspace_warnings->warning_empty();
-}
-
-void
-dlgAirspaceWarningShowDlg()
-{
-  assert(wf != NULL);
-  assert(wAirspaceList != NULL);
-
-  update_list();
-
-  if (wf->is_visible()) {
-    return;
-  } else {
-    // JMW need to deselect everything on new reopening of dialog
-    CursorAirspace = NULL;
-    FocusAirspace = NULL;
-
-    wf->SetTimerNotify(OnTimer);
-    wAirspaceList->SetCursorIndex(0);
-    wf->ShowModal();
-    wf->SetTimerNotify(NULL);
-  }
+  return (wf != NULL);
 }
 
 static CallBackTableEntry CallBackTable[] = {
@@ -400,7 +363,7 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgAirspaceWarningInit(SingleWindow &parent)
+dlgAirspaceWarningShowDlg(SingleWindow &parent, bool auto_close)
 {
   assert(airspace_warnings != NULL);
 
@@ -423,13 +386,21 @@ dlgAirspaceWarningInit(SingleWindow &parent)
     /* on platforms without a pointing device (e.g. ALTAIR), allow
        "focusing" an airspace by pressing enter */
     wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
-}
 
-void
-dlgAirspaceWarningDeInit()
-{
-  if (dlgAirspaceWarningVisible())
-    Hide();
+  AutoClose = auto_close;
+  update_list();
+
+  // JMW need to deselect everything on new reopening of dialog
+  CursorAirspace = NULL;
+  FocusAirspace = NULL;
+
+  wf->SetTimerNotify(OnTimer);
+  wAirspaceList->SetCursorIndex(0);
+  wf->ShowModal();
+  wf->SetTimerNotify(NULL);
 
   delete wf;
+
+  // Needed for dlgAirspaceWarningVisible()
+  wf = NULL;
 }

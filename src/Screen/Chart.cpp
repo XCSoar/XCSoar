@@ -370,6 +370,14 @@ void
 Chart::DrawXGrid(const fixed tic_step, const fixed zero, enum Style Style,
                  const fixed unit_step, bool draw_units)
 {
+  assert((unsigned)Style < sizeof(pens) / sizeof(pens[0]));
+  DrawXGrid(tic_step, zero, pens[(unsigned)Style], unit_step, draw_units);
+}
+
+void
+Chart::DrawXGrid(const fixed tic_step, const fixed zero, Pen &pen,
+                 const fixed unit_step, bool draw_units)
+{
   if (!tic_step)
     return;
 
@@ -394,7 +402,7 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, enum Style Style,
 
     // STYLE_THINDASHPAPER
     if ((xval < x_max) && (xmin >= rc.left + BORDER_X) && (xmin <= rc.right)) {
-      StyleLine(line[0], line[1], Style);
+      StyleLine(line[0], line[1], pen);
 
       if (draw_units && xmin >= next_text) {
         TCHAR unit_text[MAX_PATH];
@@ -421,7 +429,7 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, enum Style Style,
     // STYLE_THINDASHPAPER
 
     if ((xval > x_min) && (xmin >= rc.left + BORDER_X) && (xmin <= rc.right)) {
-      StyleLine(line[0], line[1], Style);
+      StyleLine(line[0], line[1], pen);
 
       if (draw_units) {
         TCHAR unit_text[MAX_PATH];
@@ -436,6 +444,14 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, enum Style Style,
 
 void
 Chart::DrawYGrid(const fixed tic_step, const fixed zero, enum Style Style,
+                 const fixed unit_step, bool draw_units)
+{
+  assert((unsigned)Style < sizeof(pens) / sizeof(pens[0]));
+  DrawXGrid(tic_step, zero, pens[(unsigned)Style], unit_step, draw_units);
+}
+
+void
+Chart::DrawYGrid(const fixed tic_step, const fixed zero, Pen &pen,
                  const fixed unit_step, bool draw_units)
 {
   if (!tic_step)
@@ -457,7 +473,7 @@ Chart::DrawYGrid(const fixed tic_step, const fixed zero, enum Style Style,
 
     // STYLE_THINDASHPAPER
     if ((yval < y_max) && (ymin >= rc.top) && (ymin <= rc.bottom - BORDER_Y)) {
-      StyleLine(line[0], line[1], Style);
+      StyleLine(line[0], line[1], pen);
 
       if (draw_units) {
         TCHAR unit_text[MAX_PATH];
@@ -481,7 +497,7 @@ Chart::DrawYGrid(const fixed tic_step, const fixed zero, enum Style Style,
 
     // STYLE_THINDASHPAPER
     if ((yval > y_min) && (ymin >= rc.top) && (ymin <= rc.bottom - BORDER_Y)) {
-      StyleLine(line[0], line[1], Style);
+      StyleLine(line[0], line[1], pen);
 
       if (draw_units) {
         TCHAR unit_text[MAX_PATH];

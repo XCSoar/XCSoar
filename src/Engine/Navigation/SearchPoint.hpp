@@ -128,6 +128,13 @@ public:
     return get_location().sort(other.get_location());
   }
 
+  /**
+   * Operator is required when SearchPoints are used in sets.
+   */
+  gcc_pure
+  bool operator< (const SearchPoint &other) const {
+    return sort(other);
+  }
 private:
   FlatGeoPoint flatLocation;
 };
