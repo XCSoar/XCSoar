@@ -63,8 +63,8 @@ FlatGeoPoint
 FlatRay::parametric(const fixed t) const
 {
   FlatGeoPoint p = point;
-  p.Longitude += iround(vector.Longitude*FIXED_DOUBLE(t));
-  p.Latitude += iround(vector.Latitude*FIXED_DOUBLE(t));
+  p.Longitude += iround(vector.Longitude * t);
+  p.Latitude += iround(vector.Latitude * t);
   return p;
 }
 
