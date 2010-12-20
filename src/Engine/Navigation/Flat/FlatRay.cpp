@@ -20,6 +20,7 @@
 }
  */
 #include "FlatRay.hpp"
+#include "Math/FastMath.h"
 
 #define sgn(x) (x>=0? 1:-1)
 
@@ -62,8 +63,8 @@ FlatGeoPoint
 FlatRay::parametric(const fixed t) const
 {
   FlatGeoPoint p = point;
-  p.Longitude += (int)(vector.Longitude*FIXED_DOUBLE(t));
-  p.Latitude += (int)(vector.Latitude*FIXED_DOUBLE(t));
+  p.Longitude += iround(vector.Longitude*FIXED_DOUBLE(t));
+  p.Latitude += iround(vector.Latitude*FIXED_DOUBLE(t));
   return p;
 }
 
