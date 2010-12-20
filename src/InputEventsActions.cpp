@@ -1326,7 +1326,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (_tcscmp(misc, _T("Weather")) == 0)
     dlgWeatherShowModal();
   else if (_tcscmp(misc, _T("Replay")) == 0) {
-    if (!XCSoarInterface::Basic().gps.MovementDetected || replay.NmeaReplayEnabled())
+    if (!XCSoarInterface::Basic().gps.MovementDetected || (replay && replay->NmeaReplayEnabled()))
       dlgLoggerReplayShowModal();
   } else if (_tcscmp(misc, _T("Switches")) == 0)
     dlgSwitchesShowModal();

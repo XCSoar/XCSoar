@@ -175,10 +175,10 @@ ProcessTimer::Process(void)
     itimeout++;
 
     // also service replay logger
-    if (replay.Update()) {
+    if (replay && replay->Update()) {
       if (CommonInterface::Basic().gps.MovementDetected &&
-          !replay.NmeaReplayEnabled())
-        replay.Stop();
+          !replay->NmeaReplayEnabled())
+        replay->Stop();
 
       device_blackboard.RaiseConnection();
       device_blackboard.SetNAVWarning(false);
@@ -193,7 +193,7 @@ ProcessTimer::Process(void)
     if (m_clock.elapsed() < 0)
       m_clock.update();
 
-    if (replay.Update()) {
+    if (replay && replay->Update()) {
       m_clock.update();
     } else if (m_clock.elapsed() >= 1000) {
       m_clock.update();

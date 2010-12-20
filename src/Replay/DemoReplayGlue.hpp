@@ -21,49 +21,33 @@ Copyright_License {
 }
 */
 
-#ifndef REPLAY_HPP
-#define REPLAY_HPP
+#ifndef DEMO_REPLAY_GLUE_HPP
+#define DEMO_REPLAY_GLUE_HPP
 
-#include "Replay/IgcReplayGlue.hpp"
-#include "Replay/NmeaReplayGlue.hpp"
-#include "Replay/DemoReplayGlue.hpp"
-
-#include <tchar.h>
-#include <windef.h> /* for MAX_PATH */
-#include <stdio.h>
+#include "Replay/DemoReplay.hpp"
+#include "PeriodClock.hpp"
 
 class ProtectedTaskManager;
 
-class Replay
+class DemoReplayGlue:
+  public DemoReplay
 {
 public:
-  Replay(ProtectedTaskManager& task_manager):
-    mode(MODE_NULL),
-    Demo(task_manager) {}
+  DemoReplayGlue(ProtectedTaskManager& task_manager):
+    m_task_manager(&task_manager) {};
 
-  bool Update();
-  void Stop();
-  void Start();
-  const TCHAR* GetFilename();
-  void SetFilename(const TCHAR *name);
-
-  fixed GetTimeScale();
-  void SetTimeScale(const fixed TimeScale);
-
-  bool NmeaReplayEnabled();
-
+  virtual void Start();
+  virtual bool Update();
+protected:
+  virtual bool update_time();
+  virtual void reset_time();
+  virtual void on_advance(const GeoPoint &loc,
+                          const fixed speed, const Angle bearing,
+                          const fixed alt, const fixed baroalt, const fixed t);
+  virtual void on_stop();
 private:
-  enum ReplayMode {
-    MODE_NULL,
-    MODE_IGC,
-    MODE_NMEA,
-    MODE_DEMO
-  };
-
-  ReplayMode mode;
-  IgcReplayGlue Igc;
-  NmeaReplayGlue Nmea;
-  DemoReplayGlue Demo;
+  PeriodClock clock;
+  ProtectedTaskManager* m_task_manager;
 };
 
 #endif

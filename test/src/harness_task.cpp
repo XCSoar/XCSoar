@@ -130,7 +130,7 @@ void task_report(TaskManager& task_manager, const char* text)
     PrintHelper::taskmanager_print(task_manager, ac);
   }
   if (interactive>1) {
-    wait_prompt(0);
+    wait_prompt();
   }
 }
 

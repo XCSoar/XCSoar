@@ -89,6 +89,7 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
     return true;
 
   case DRAG_PAN:
+
     XCSoarInterface::SetSettingsMap().PanLocation =
       drag_projection.GetGeoLocation() + drag_start_geopoint
       - drag_projection.ScreenToGeo(x, y);
@@ -133,7 +134,8 @@ GlueMapWindow::on_mouse_down(int x, int y)
   }
 
   if (is_simulator() && !Basic().gps.Replay &&
-      !replay.NmeaReplayEnabled() && drag_mode == DRAG_NONE)
+      replay &&
+      !replay->NmeaReplayEnabled() && drag_mode == DRAG_NONE)
     if (!XCSoarInterface::SettingsComputer().EnableGestures ||
         compare_squared(visible_projection.GetScreenOrigin().x - x,
                         visible_projection.GetScreenOrigin().y - y,
@@ -224,7 +226,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
     break;
   }
 
-  if (!dragOverMinDist && !SettingsMap().TargetPan) {
+  if(!dragOverMinDist && !SettingsMap().TargetPan) {
     if (click_time < 1000) {
       // click less then one second -> open nearest waypoint details
       if (way_points != NULL &&

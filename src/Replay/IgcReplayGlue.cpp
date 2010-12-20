@@ -76,7 +76,9 @@ IgcReplayGlue::ScanBuffer(const TCHAR* buffer, fixed &Time,
 bool
 IgcReplayGlue::update_time()
 {
-  if (!clock.check(1000))
+  // Allow for poor time slicing, we never get called more
+  // than 4 times per second, so this will yield 1 second updates
+  if (!clock.check(760))
     return false;
 
   t_simulation += TimeScale * max(clock.elapsed(), 0) / 1000;

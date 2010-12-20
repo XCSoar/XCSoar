@@ -33,36 +33,19 @@ extern "C" {
 }
 
 #include "Math/fixed.hpp"
+#include "Replay/TaskAutoPilot.hpp"
 
 extern int n_samples;
 void distance_counts();
 void print_queries(unsigned n, std::ostream &fout);
-char wait_prompt(const double time);
+char wait_prompt();
 extern int interactive;
 extern int verbose;
 extern int output_skip;
 
-struct AutopilotParameters {
-  AutopilotParameters():
-    bearing_noise( 40.0),
-    target_noise(0.2),
-    turn_speed(25.0),
-    sink_factor(1.0),
-    climb_factor(1.0),
-    start_alt(1500.0) {};
-
-  fixed bearing_noise;
-  fixed target_noise;
-  fixed turn_speed;
-  fixed sink_factor;
-  fixed climb_factor;
-  fixed start_alt;
-};
-
 extern AutopilotParameters autopilot_parms;
 
 extern int terrain_height;
-extern bool enable_bestcruisetrack;
 const char* test_name(const char* in, int task_num, int wind_num);
 extern std::string replay_file;
 extern std::string task_file;

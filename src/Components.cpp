@@ -106,7 +106,7 @@ CalculationThread *calculation_thread;
 InstrumentThread *instrument_thread;
 
 Logger logger;
-Replay replay;
+Replay *replay;
 
 Waypoints way_points;
 
@@ -330,6 +330,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
                                      task_events);
   glide_computer->SetLogger(&logger);
   glide_computer->Initialise();
+
+  replay = new Replay(*protected_task_manager);
 
   // Load the EGM96 geoid data
   OpenGeoid();
@@ -565,6 +567,8 @@ XCSoarInterface::Shutdown(void)
   devShutdown();
 
   RawLoggerShutdown();
+
+  delete replay;
 
   // Save everything in the persistent memory file
   SaveCalculationsPersist(Basic(), Calculated(),

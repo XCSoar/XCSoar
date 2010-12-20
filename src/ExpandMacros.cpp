@@ -291,7 +291,8 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
   if (_tcsstr(OutBuffer, _T("$(CheckReplay)"))) {
     if (!Basic().gps.Replay
-        && !replay.NmeaReplayEnabled()
+        && (replay!=NULL)
+        && !replay->NmeaReplayEnabled()
         && Basic().gps.MovementDetected)
       invalid = true;
 

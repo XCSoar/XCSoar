@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2010 The XCSoar Project
@@ -20,50 +19,47 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+#ifndef AIRCRAFT_SIM_HPP
+#define AIRCRAFT_SIM_HPP
 
-#ifndef REPLAY_HPP
-#define REPLAY_HPP
+#include "Navigation/Aircraft.hpp"
 
-#include "Replay/IgcReplayGlue.hpp"
-#include "Replay/NmeaReplayGlue.hpp"
-#include "Replay/DemoReplayGlue.hpp"
-
-#include <tchar.h>
-#include <windef.h> /* for MAX_PATH */
-#include <stdio.h>
-
-class ProtectedTaskManager;
-
-class Replay
-{
+class AircraftSim {
 public:
-  Replay(ProtectedTaskManager& task_manager):
-    mode(MODE_NULL),
-    Demo(task_manager) {}
+  AircraftSim();
 
-  bool Update();
+  const AIRCRAFT_STATE& get_state() const {
+    return state;
+  }
+  const AIRCRAFT_STATE& get_state_last() const {
+    return state_last;
+  }
+  AIRCRAFT_STATE& get_state() {
+    return state;
+  }
+
+  void set_wind(const fixed speed, const Angle direction);
+
+  void Start(const GeoPoint& location_start,
+             const GeoPoint& location_last,
+             const fixed& altitude);
+
   void Stop();
-  void Start();
-  const TCHAR* GetFilename();
-  void SetFilename(const TCHAR *name);
 
-  fixed GetTimeScale();
-  void SetTimeScale(const fixed TimeScale);
+  bool Update(const Angle &heading, const fixed timestep=fixed_one);
 
-  bool NmeaReplayEnabled();
+  fixed time() const {
+    return state.Time;
+  }
 
 private:
-  enum ReplayMode {
-    MODE_NULL,
-    MODE_IGC,
-    MODE_NMEA,
-    MODE_DEMO
-  };
+  void integrate(const Angle& heading, const fixed timestep);
 
-  ReplayMode mode;
-  IgcReplayGlue Igc;
-  NmeaReplayGlue Nmea;
-  DemoReplayGlue Demo;
+  GeoPoint endpoint(const Angle& heading, const fixed timestep) const;
+
+  AIRCRAFT_STATE state, state_last;
+
+  fixed random_mag;
 };
 
 #endif

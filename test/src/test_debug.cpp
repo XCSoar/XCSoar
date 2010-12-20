@@ -30,14 +30,13 @@
 int n_samples = 0;
 int interactive = 0;
 int verbose = 0;
-int output_skip = 1;
+int output_skip = 5;
 
 AutopilotParameters autopilot_parms;
 
 int terrain_height = 1;
 std::string replay_file = "test/data/0asljd01.igc";
 std::string task_file = "";
-bool enable_bestcruisetrack = false;
 
 #ifdef INSTRUMENT_TASK
 extern long count_mc;
@@ -111,9 +110,9 @@ void print_queries(unsigned n, std::ostream &fout) {
  * 
  * @return character received by keyboard
  */
-char wait_prompt(const double time) {
+char wait_prompt() {
   if (interactive) {
-    printf("# %g [enter to continue]\n",time);
+    puts("# [enter to continue]");
     return getchar();
   }
   return 0;

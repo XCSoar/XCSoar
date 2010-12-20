@@ -48,7 +48,7 @@ extern Airspaces airspace_database;
 extern ProtectedAirspaceWarningManager *airspace_warnings;
 extern Waypoints way_points;
 extern ProtectedTaskManager *protected_task_manager;
-extern Replay replay;
+extern Replay *replay;
 extern Marks *marks;
 extern TopologyStore *topology;
 extern RasterTerrain *terrain;

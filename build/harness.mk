@@ -1,5 +1,7 @@
 TEST_SRC = \
 	$(SRC)/Replay/IgcReplay.cpp \
+	$(SRC)/Replay/TaskAutoPilot.cpp \
+	$(SRC)/Replay/AircraftSim.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/test_debug.cpp \

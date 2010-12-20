@@ -221,8 +221,6 @@ test_replay(const Contests olc_type,
 
 int main(int argc, char** argv) 
 {
-  output_skip = 60;
-
   if (!parse_args(argc,argv)) {
     return 0;
   }

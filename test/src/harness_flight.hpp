@@ -30,7 +30,6 @@
 #include "harness_task.hpp"
 
 bool run_flight(TaskManager &task_manager,
-                const bool goto_target,
                 const AutopilotParameters &parms,
                 const int n_wind,
                 const double speed_factor=1.0);

@@ -29,52 +29,98 @@
 void
 Replay::Stop()
 {
-  if (UseIgcReplay)
+  switch (mode) {
+  case MODE_IGC:
     Igc.Stop();
-  else
+    break;
+  case MODE_NMEA:
     Nmea.Stop();
+    break;
+  case MODE_DEMO:
+    Demo.Stop();
+    mode = MODE_NULL;
+    break;
+  case MODE_NULL:
+    break;
+  };
 }
 
 void
 Replay::Start()
 {
-  if (UseIgcReplay)
+  switch (mode) {
+  case MODE_IGC:
     Igc.Start();
-  else
+    break;
+  case MODE_NMEA:
     Nmea.Start();
+    break;
+  case MODE_DEMO:
+    Demo.Start();
+    break;
+  case MODE_NULL:
+    Demo.Start();
+    mode = MODE_DEMO;
+    break;
+  };
 }
 
 const TCHAR*
 Replay::GetFilename()
 {
-  return (UseIgcReplay ? Igc.GetFilename() : Nmea.GetFilename());
+  return (mode== MODE_IGC ? Igc.GetFilename() : Nmea.GetFilename());
 }
 
 void
 Replay::SetFilename(const TCHAR *name)
 {
-  if (!name || string_is_empty(name))
+  if (!name || string_is_empty(name)) {
+    mode = MODE_DEMO;
     return;
+  }
 
   Stop();
 
-  UseIgcReplay = MatchesExtension(name, _T(".igc"));
-  if (UseIgcReplay)
+  if (MatchesExtension(name, _T(".igc"))) {
+    mode = MODE_IGC;
     Igc.SetFilename(name);
-  else
+  } else {
+    mode = MODE_NMEA;
     Nmea.SetFilename(name);
+  }
 }
+
 
 bool
 Replay::Update()
 {
-  return (UseIgcReplay ? Igc.Update() : Nmea.Update());
+  switch (mode) {
+  case MODE_IGC:
+    return Igc.Update();
+  case MODE_NMEA:
+    return Nmea.Update();
+  case MODE_DEMO:
+    return Demo.Update();
+  case MODE_NULL:
+    break;
+  };
+  return false;
 }
 
 fixed
 Replay::GetTimeScale()
 {
-  return (UseIgcReplay ? Igc.TimeScale : Nmea.TimeScale);
+  switch (mode) {
+  case MODE_IGC:
+    return Igc.TimeScale;
+  case MODE_NMEA:
+    return Nmea.TimeScale;
+  case MODE_DEMO:
+    return Demo.TimeScale;
+  case MODE_NULL:
+    break;
+  };
+  return fixed_one;
 }
 
 void
@@ -82,10 +128,11 @@ Replay::SetTimeScale(const fixed TimeScale)
 {
   Igc.TimeScale = TimeScale;
   Nmea.TimeScale = TimeScale;
+  Demo.TimeScale = TimeScale;
 }
 
 bool
 Replay::NmeaReplayEnabled()
 {
-  return (!UseIgcReplay && Nmea.IsEnabled());
+  return ((mode == MODE_NMEA) && Nmea.IsEnabled());
 }

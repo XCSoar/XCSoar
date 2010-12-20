@@ -28,10 +28,7 @@ extern AircraftStateFilter *aircraft_filter;
 
 int main(int argc, char** argv) {
   // default arguments
-  autopilot_parms.bearing_noise=fixed(0);
-  autopilot_parms.target_noise=fixed(0.1);
-  autopilot_parms.turn_speed=fixed(5.0);
-  output_skip = 5;
+  autopilot_parms.realistic();
 
   if (!parse_args(argc,argv)) {
     return 0;

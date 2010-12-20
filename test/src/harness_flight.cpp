@@ -24,6 +24,8 @@
 #include "harness_airspace.hpp"
 #include "TaskEventsPrint.hpp"
 #include "Util/AircraftStateFilter.hpp"
+#include "Replay/TaskAutoPilot.hpp"
+#include "Replay/AircraftSim.hpp"
 #include <fstream>
 
 Airspaces *airspaces = NULL;
@@ -76,18 +78,123 @@ wind_name(int n_wind)
 }
 
 
+//////////////////////////////////////////////////////////////
+#include "Task/TaskManager.hpp"
+#include "Task/Factory/AbstractTaskFactory.hpp"
+
+#define fixed_300 fixed(300)
+
+class DirectTaskAccessor: public TaskAccessor {
+public:
+  DirectTaskAccessor(TaskManager& _task_manager):
+    task_manager(_task_manager) {};
+
+  bool is_ordered() const {
+    return task_manager.task_size()>1;
+  }
+  bool is_empty() const {
+    return task_manager.task_size()==0;
+  }
+  bool is_finished() const {
+    return task_manager.get_common_stats().task_finished;
+  }
+  bool is_started() const {
+    return task_manager.get_common_stats().task_started;
+  }
+  GeoPoint random_oz_point(unsigned index, const fixed noise) const {
+    return task_manager.random_point_in_task(index, noise);
+  }
+  unsigned size() const {
+    return task_manager.task_size();
+  }
+  GeoPoint getActiveTaskPointLocation() const {
+    return task_manager.getActiveTaskPoint()->get_location();
+  }
+  bool has_entered(unsigned index) const {
+    AbstractTaskFactory &fact = task_manager.get_factory();
+    return fact.has_entered(index);
+  }
+  const ElementStat leg_stats() const {
+    return task_manager.get_stats().current_leg;
+  }
+  fixed target_height() const {
+    if (task_manager.getActiveTaskPoint()) {
+      return max(fixed_300, task_manager.getActiveTaskPoint()->get_elevation());
+    } else {
+      return fixed_300;
+    }
+  }
+  fixed distance_to_final() const {
+    return task_manager.get_stats().total.solution_remaining.DistanceToFinal;
+  }
+  fixed remaining_alt_difference() const {
+    return task_manager.get_stats().total.solution_remaining.AltitudeDifference;
+  }
+  GlidePolar get_glide_polar() const {
+    return task_manager.get_glide_polar();
+  }
+  void setActiveTaskPoint(unsigned index) {
+    task_manager.setActiveTaskPoint(index);
+  }
+  unsigned getActiveTaskPointIndex() const {
+    return task_manager.getActiveTaskPointIndex();
+  }
+private:
+  TaskManager& task_manager;
+};
+
+//////////////////////////////////////////////////////////////
+
+
+class PrintTaskAutoPilot: public TaskAutoPilot
+{
+public:
+  PrintTaskAutoPilot(const AutopilotParameters &_parms):
+    TaskAutoPilot(_parms) {};
+
+protected:
+  virtual void on_manual_advance() {
+    if (verbose>1) {
+      printf("# manual advance to %d\n",awp);
+    }
+  }
+  virtual void on_mode_change() {
+    if (verbose>1) {
+      switch (acstate) {
+      case Cruise:
+        puts("# mode cruise");
+        break;
+      case Climb:
+        puts("# mode climb");
+        break;
+      case FinalGlide:
+        puts("# mode fg");
+        break;
+      }
+    }
+  }
+  virtual void on_close() {
+    wait_prompt();
+  }
+};
+
+
 bool run_flight(TaskManager &task_manager,
-                const bool goto_target,
                 const AutopilotParameters &parms,
                 const int n_wind,
                 const double speed_factor) 
 {
-  AircraftSim ac(0, task_manager, parms, goto_target);
+  DirectTaskAccessor ta(task_manager);
+  PrintTaskAutoPilot autopilot(parms);
+  AircraftSim aircraft;
+
+  autopilot.set_default_location(GeoPoint(Angle::degrees(fixed(1.0)), Angle::degrees(fixed(0.0))));
+
   unsigned print_counter=0;
   if (n_wind)
-    ac.set_wind(wind_to_mag(n_wind), wind_to_dir(n_wind));
+    aircraft.set_wind(wind_to_mag(n_wind), wind_to_dir(n_wind));
 
-  ac.set_speed_factor(fixed(speed_factor));
+  autopilot.set_speed_factor(fixed(speed_factor));
 
   std::ofstream f4("results/res-sample.txt");
   std::ofstream f5("results/res-sample-filtered.txt");
@@ -106,15 +213,20 @@ bool run_flight(TaskManager &task_manager,
   AirspaceAircraftPerformanceGlide perf(task_manager.get_glide_polar());
 
   if (aircraft_filter)
-    aircraft_filter->reset(ac.get_state());
+    aircraft_filter->reset(aircraft.get_state());
+
+  autopilot.Start(ta);
+  aircraft.Start(autopilot.location_start, autopilot.location_previous,
+                 parms.start_alt);
 
   if (airspaces) {
     airspace_warnings =
         new AirspaceWarningManager(*airspaces, task_manager);
-    airspace_warnings->reset(ac.get_state());
+    airspace_warnings->reset(aircraft.get_state());
   }
 
   do {
+
     if ((task_manager.getActiveTaskPointIndex() == 1) &&
         first && (task_manager.get_stats().total.TimeElapsed > fixed_10)) {
       time_remaining = task_manager.get_stats().total.TimeRemaining;
@@ -129,8 +241,14 @@ bool run_flight(TaskManager &task_manager,
     }
 
     if (do_print) {
-      PrintHelper::taskmanager_print(task_manager, ac.get_state());
-      ac.print(f4);
+      PrintHelper::taskmanager_print(task_manager, aircraft.get_state());
+
+      const AIRCRAFT_STATE state = aircraft.get_state();
+      f4 << state.Time << " "
+         <<  state.Location.Longitude << " "
+         <<  state.Location.Latitude << " "
+         <<  state.NavAltitude << "\n";
+
       f4.flush();
       if (aircraft_filter) {
         f5 << aircraft_filter->get_speed() << " " 
@@ -141,19 +259,19 @@ bool run_flight(TaskManager &task_manager,
     }
 
     if (airspaces) {
-      scan_airspaces(ac.get_state(), *airspaces, perf,
+      scan_airspaces(aircraft.get_state(), *airspaces, perf,
                      do_print, 
-                     ac.target());
+                     autopilot.target(ta));
     }
     if (airspace_warnings) {
       if (verbose > 1) {
-        bool warnings_updated = airspace_warnings->update(ac.get_state(), 
+        bool warnings_updated = airspace_warnings->update(aircraft.get_state(),
                                                           false);
         if (warnings_updated) {
           printf("# airspace warnings updated, size %d\n",
                  (int)airspace_warnings->size());
           print_warnings();
-          wait_prompt(ac.get_state().Time);
+          wait_prompt();
         }
       }
     }
@@ -163,18 +281,37 @@ bool run_flight(TaskManager &task_manager,
     do_print = (++print_counter % output_skip == 0) && verbose;
 
     if (aircraft_filter)
-      aircraft_filter->update(ac.get_state());
+      aircraft_filter->update(aircraft.get_state());
 
-  } while (ac.Update());
+    autopilot.update_state(ta, aircraft.get_state());
+    aircraft.Update(autopilot.heading);
+
+    {
+      const AIRCRAFT_STATE state = aircraft.get_state();
+      const AIRCRAFT_STATE state_last = aircraft.get_state_last();
+      task_manager.update(state, state_last);
+      task_manager.update_idle(state);
+      task_manager.update_auto_mc(state, fixed_zero);
+    }
+
+  } while (autopilot.update_autopilot(ta, aircraft.get_state(), aircraft.get_state_last()));
+
+  aircraft.Stop();
+  autopilot.Stop();
 
   if (verbose) {
-    PrintHelper::taskmanager_print(task_manager, ac.get_state());
-    ac.print(f4);
+    PrintHelper::taskmanager_print(task_manager, aircraft.get_state());
+
+    const AIRCRAFT_STATE state = aircraft.get_state();
+    f4 << state.Time << " "
+       <<  state.Location.Longitude << " "
+       <<  state.Location.Latitude << " "
+       <<  state.NavAltitude << "\n";
     f4 << "\n";
     f4.flush();
     task_report(task_manager, "end of task\n");
   }
-  wait_prompt(0);
+  wait_prompt();
 
   time_elapsed = task_manager.get_stats().total.TimeElapsed;
   time_planned = task_manager.get_stats().total.TimePlanned;
@@ -227,12 +364,12 @@ test_flight(int test_num, int n_wind, const double speed_factor,
     goto_target = true;
     break;
   };
-
+  autopilot_parms.goto_target = goto_target;
   test_task(task_manager, waypoints, test_num);
 
   waypoints.clear(); // clear waypoints so abort wont do anything
 
-  return run_flight(task_manager, goto_target, autopilot_parms, n_wind,
+  return run_flight(task_manager, autopilot_parms, n_wind,
                     speed_factor);
 }
 

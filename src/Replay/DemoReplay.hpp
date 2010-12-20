@@ -21,49 +21,29 @@ Copyright_License {
 }
 */
 
-#ifndef REPLAY_HPP
-#define REPLAY_HPP
+#ifndef DEMO_REPLAY_HPP
+#define DEMO_REPLAY_HPP
 
-#include "Replay/IgcReplayGlue.hpp"
-#include "Replay/NmeaReplayGlue.hpp"
-#include "Replay/DemoReplayGlue.hpp"
+#include "AbstractReplay.hpp"
+#include "TaskAutoPilot.hpp"
+#include "AircraftSim.hpp"
 
-#include <tchar.h>
-#include <windef.h> /* for MAX_PATH */
-#include <stdio.h>
-
-class ProtectedTaskManager;
-
-class Replay
+class DemoReplay: public AbstractReplay
 {
 public:
-  Replay(ProtectedTaskManager& task_manager):
-    mode(MODE_NULL),
-    Demo(task_manager) {}
-
-  bool Update();
+  DemoReplay();
+  virtual void Start() = 0;
+  virtual bool Update() = 0;
   void Stop();
-  void Start();
-  const TCHAR* GetFilename();
-  void SetFilename(const TCHAR *name);
-
-  fixed GetTimeScale();
-  void SetTimeScale(const fixed TimeScale);
-
-  bool NmeaReplayEnabled();
-
-private:
-  enum ReplayMode {
-    MODE_NULL,
-    MODE_IGC,
-    MODE_NMEA,
-    MODE_DEMO
-  };
-
-  ReplayMode mode;
-  IgcReplayGlue Igc;
-  NmeaReplayGlue Nmea;
-  DemoReplayGlue Demo;
+protected:
+  virtual void on_stop() = 0;
+  void Start(const TaskAccessor& task, const GeoPoint& default_location);
+  bool Update(TaskAccessor& task);
+  virtual bool update_time();
+  virtual void reset_time();
+  AutopilotParameters parms;
+  TaskAutoPilot autopilot;
+  AircraftSim aircraft;
 };
 
 #endif

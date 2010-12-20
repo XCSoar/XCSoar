@@ -203,6 +203,10 @@ XCSOAR_SOURCES := \
 	$(SRC)/Replay/IgcReplayGlue.cpp \
 	$(SRC)/Replay/NmeaReplay.cpp \
 	$(SRC)/Replay/NmeaReplayGlue.cpp \
+	$(SRC)/Replay/DemoReplay.cpp \
+	$(SRC)/Replay/DemoReplayGlue.cpp \
+	$(SRC)/Replay/TaskAutoPilot.cpp \
+	$(SRC)/Replay/AircraftSim.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \
 	$(SRC)/ThermalLocator.cpp \
 	$(SRC)/ThermalBase.cpp \

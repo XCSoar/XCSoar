@@ -69,14 +69,13 @@ bool test_cruise_efficiency(int test_num, int n_wind)
 
   double ce0, ce1, ce2, ce3, ce4, ce5, ce6;
 
-  autopilot_parms.bearing_noise = fixed(0.0);
-  autopilot_parms.target_noise = fixed(0.1);
+  autopilot_parms.ideal();
 
   test_flight(test_num, n_wind);
   ce0 = calc_cruise_efficiency;
 
   // wandering
-  autopilot_parms.bearing_noise = fixed(40.0);
+  autopilot_parms.realistic();
   test_flight(test_num, n_wind);
   ce1 = calc_cruise_efficiency;
   // cruise efficiency of this should be lower than nominal
@@ -86,7 +85,7 @@ bool test_cruise_efficiency(int test_num, int n_wind)
   ok (ce0>ce1, test_name("ce wandering",test_num, n_wind),0);
 
   // flying too slow
-  autopilot_parms.bearing_noise = fixed(0.0);
+  autopilot_parms.ideal();
   test_flight(test_num, n_wind, 0.8);
   ce2 = calc_cruise_efficiency;
   // cruise efficiency of this should be lower than nominal
@@ -96,7 +95,7 @@ bool test_cruise_efficiency(int test_num, int n_wind)
   ok (ce0>ce2, test_name("ce speed slow",test_num, n_wind),0);
 
   // flying too fast
-  autopilot_parms.bearing_noise = fixed(0.0);
+  autopilot_parms.ideal();
   test_flight(test_num, n_wind, 1.2);
   ce3 = calc_cruise_efficiency;
   // cruise efficiency of this should be lower than nominal
@@ -176,8 +175,6 @@ bool test_aat(int test_num, int n_wind)
 
 bool test_automc(int test_num, int n_wind) 
 {
-  autopilot_parms.target_noise = fixed(0.1);
-
   // test whether flying by automc (starting above final glide)
   // arrives home faster than without
 
@@ -205,14 +202,14 @@ bool test_bestcruisetrack(int test_num, int n_wind)
 
   // this test allows for a small error margin
 
-  enable_bestcruisetrack = false;
+  autopilot_parms.enable_bestcruisetrack = false;
   test_flight(test_num, n_wind);
   double t0 = time_elapsed;
 
-  enable_bestcruisetrack = true;
+  autopilot_parms.enable_bestcruisetrack = true;
   test_flight(test_num, n_wind);
   double t1 = time_elapsed;
-  enable_bestcruisetrack = false;
+  autopilot_parms.enable_bestcruisetrack = false;
 
   bool fine = (t1/t0<1.01);
   ok(fine,test_name("faster flying with bestcruisetrack",test_num, n_wind),0);
@@ -249,9 +246,10 @@ bool test_abort(int n_wind)
   task_manager.abort();
   task_report(task_manager, "abort");
 
-  return run_flight(task_manager, true, autopilot_parms, n_wind);
-
+  autopilot_parms.goto_target = true;
+  return run_flight(task_manager, autopilot_parms, n_wind);
 }
+
 
 bool test_goto(int n_wind, unsigned id, bool auto_mc)
 {
@@ -281,7 +279,8 @@ bool test_goto(int n_wind, unsigned id, bool auto_mc)
 
   waypoints.clear(); // clear waypoints so abort wont do anything
 
-  return run_flight(task_manager, true, autopilot_parms, n_wind);
+  autopilot_parms.goto_target = true;
+  return run_flight(task_manager, autopilot_parms, n_wind);
 }
 
 
@@ -309,7 +308,8 @@ bool test_null()
 
   waypoints.clear(); // clear waypoints so abort wont do anything
 
-  return run_flight(task_manager, true, autopilot_parms, 0);
+  autopilot_parms.goto_target = true;
+  return run_flight(task_manager, autopilot_parms, 0);
 }
 
 
@@ -330,14 +330,13 @@ bool test_effective_mc(int test_num, int n_wind)
 
   double ce0, ce1, ce2, ce3, ce4, ce5, ce6;
 
-  autopilot_parms.bearing_noise = fixed(0.0);
-  autopilot_parms.target_noise = fixed(0.1);
+  autopilot_parms.ideal();
 
   test_flight(test_num, n_wind);
   ce0 = calc_effective_mc;
 
   // wandering
-  autopilot_parms.bearing_noise = fixed(40.0);
+  autopilot_parms.realistic();
   test_flight(test_num, n_wind);
   ce1 = calc_effective_mc;
   // effective mc of this should be lower than nominal
@@ -347,7 +346,7 @@ bool test_effective_mc(int test_num, int n_wind)
   ok (ce0>ce1, test_name("emc wandering",test_num, n_wind),0);
 
   // flying too slow
-  autopilot_parms.bearing_noise = fixed(0.0);
+  autopilot_parms.ideal();
   test_flight(test_num, n_wind, 0.8);
   ce2 = calc_effective_mc;
   // effective mc of this should be lower than nominal
@@ -357,7 +356,7 @@ bool test_effective_mc(int test_num, int n_wind)
   ok (ce0>ce2, test_name("emc speed slow",test_num, n_wind),0);
 
   // flying too fast
-  autopilot_parms.bearing_noise = fixed(0.0);
+  autopilot_parms.ideal();
   test_flight(test_num, n_wind, 1.2);
   ce3 = calc_effective_mc;
   // effective mc of this should be lower than nominal
@@ -441,5 +440,6 @@ bool test_olc(int n_wind, Contests olc_type)
 
   waypoints.clear(); // clear waypoints so abort wont do anything
 
-  return run_flight(task_manager, true, autopilot_parms, n_wind);
+  autopilot_parms.goto_target = true;
+  return run_flight(task_manager, autopilot_parms, n_wind);
 }

@@ -35,7 +35,7 @@ static void
 OnStopClicked(WndButton &Sender)
 {
 	(void)Sender;
-  replay.Stop();
+  replay->Stop();
 }
 
 static void
@@ -47,9 +47,9 @@ OnStartClicked(WndButton &Sender)
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    replay.SetFilename(dfe->GetPathFile());
+    replay->SetFilename(dfe->GetPathFile());
   }
-  replay.Start();
+  replay->Start();
 }
 
 static void
@@ -66,7 +66,7 @@ OnRateData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daChange:
-    replay.SetTimeScale(df.GetAsFixed());
+    replay->SetTimeScale(df.GetAsFixed());
     break;
 
   case DataField::daInc:
@@ -97,7 +97,7 @@ dlgLoggerReplayShowModal(void)
   wp = (WndProperty*)wf->FindByName(_T("prpRate"));
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(replay.GetTimeScale());
+    df.SetAsFloat(replay->GetTimeScale());
     wp->RefreshDisplay();
   }
 
@@ -108,7 +108,7 @@ dlgLoggerReplayShowModal(void)
     dfe->ScanDirectoryTop(_T("xcsoar-nmea.log"));
     dfe->ScanDirectoryTop(_T("*.nmea"));
     dfe->ScanDirectoryTop(_T("*.igc"));
-    dfe->Lookup(replay.GetFilename());
+    dfe->Lookup(replay->GetFilename());
     wp->RefreshDisplay();
   }
 

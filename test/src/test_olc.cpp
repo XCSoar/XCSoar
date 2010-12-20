@@ -27,9 +27,8 @@
 int main(int argc, char** argv) {
   
   // default arguments
-  autopilot_parms.target_noise= fixed(0.1);
+  autopilot_parms.realistic();
   autopilot_parms.start_alt = fixed(400);
-  output_skip = 5;
 
   if (!parse_args(argc,argv)) {
     return 0;
