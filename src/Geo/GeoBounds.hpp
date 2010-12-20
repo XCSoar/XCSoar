@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_GEO_RECT_HPP
 
 #include "Navigation/GeoPoint.hpp"
+#include "Compiler.h"
 
 /**
  * A rectangle on earth's surface with very simple semantics.  Similar
@@ -69,6 +70,25 @@ struct GeoBounds {
   bool inside(const GeoBounds &interior) const {
     return inside(interior.west, interior.north) &&
       inside(interior.east, interior.south);
+  }
+
+protected:
+  /**
+   * Does the range a1..a2 overlap with b1..b2?
+   */
+  gcc_const
+  static bool overlaps(Angle a1, Angle a2, Angle b1, Angle b2) {
+    return a1.between(b1, b2) || b1.between(a1, a2);
+  }
+
+public:
+  /**
+   * Does this GeoBounds instance overlap with the specified one?
+   */
+  gcc_pure
+  bool overlaps(const GeoBounds &other) const {
+    return overlaps(west, east, other.west, other.east) &&
+      overlaps(south, north, other.south, other.north);
   }
 
   GeoPoint center() const {
