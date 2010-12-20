@@ -25,6 +25,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "shapelib/map.h"
 
+#include <algorithm>
 #include <tchar.h>
 #include <ctype.h>
 #include <string.h>
@@ -72,26 +73,48 @@ import_label(const char *src)
 XShape::XShape(shapefileObj *shpfile, int i, int label_field)
   :label(NULL)
 {
+  shapeObj shape;
   msInitShape(&shape);
   msSHPReadShape(shpfile->hSHP, i, &shape);
 
-#ifdef RADIANS
-  for (int tt = 0; tt < shape.numlines; ++tt) {
-    for (int jj = 0; jj < shape.line[tt].numpoints; ++jj) {
-      shape.line[tt].point[jj].x *= DEG_TO_RAD;
-      shape.line[tt].point[jj].y *= DEG_TO_RAD;
-    }
+  bounds.west = Angle::degrees(fixed(shape.bounds.minx));
+  bounds.south = Angle::degrees(fixed(shape.bounds.miny));
+  bounds.east = Angle::degrees(fixed(shape.bounds.maxx));
+  bounds.north = Angle::degrees(fixed(shape.bounds.maxy));
+
+  type = shape.type;
+
+  num_lines = std::min((unsigned)shape.numlines, (unsigned)MAX_LINES);
+
+  unsigned num_points = 0;
+  for (unsigned l = 0; l < num_lines; ++l) {
+    lines[l] = std::min(shape.line[l].numpoints, 16384);
+    num_points += lines[l];
   }
-#endif
+
+  /* convert all points of all lines to GeoPoints */
+
+  points = new GeoPoint[num_points];
+
+  GeoPoint *p = points;
+  for (unsigned l = 0; l < num_lines; ++l) {
+    const pointObj *src = shape.line[l].point;
+    num_points = lines[l];
+    for (unsigned j = 0; j < num_points; ++j, ++src)
+      *p++ = GeoPoint(Angle::degrees(fixed(src->x)),
+                      Angle::degrees(fixed(src->y)));
+  }
 
   if (label_field >= 0) {
     const char *src = msDBFReadStringAttribute(shpfile->hDBF, i, label_field);
     label = import_label(src);
   }
+
+  msFreeShape(&shape);
 }
 
 XShape::~XShape()
 {
   free(label);
-  msFreeShape(&shape);
+  delete[] points;
 }

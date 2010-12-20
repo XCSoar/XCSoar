@@ -41,13 +41,6 @@ TopologyFileRenderer::TopologyFileRenderer(const TopologyFile &_file)
     icon.load_big(IDB_TOWN, IDB_TOWN_HD);
 }
 
-gcc_pure
-static GeoPoint
-point2GeoPoint(const pointObj& p)
-{
-  return GeoPoint(Angle::native(fixed(p.x)), Angle::native(fixed(p.y)));
-}
-
 gcc_const
 static rectObj
 ConvertRect(const GeoBounds br)
@@ -87,58 +80,50 @@ TopologyFileRenderer::Paint(Canvas &canvas,
     if (!cshape || !cshape->is_visible(file.get_label_field()))
       continue;
 
-    const shapeObj &shape = cshape->shape;
-
-    if (!msRectOverlap(&shape.bounds, &screenRect))
+    if (!projection.GetScreenBounds().overlaps(cshape->get_bounds()))
       continue;
 
-    switch (shape.type) {
+    const unsigned short *lines = cshape->get_lines();
+    const unsigned short *end_lines = lines + cshape->get_number_of_lines();
+    const GeoPoint *points = cshape->get_points();
+
+    switch (cshape->get_type()) {
     case MS_SHAPE_POINT:
       if (!icon.defined())
         break;
 
-      for (int tt = 0; tt < shape.numlines; ++tt) {
-        const lineObj &line = shape.line[tt];
-
-        for (int jj = 0; jj < line.numpoints; ++jj) {
+      for (; lines < end_lines; ++lines) {
+        const GeoPoint *end = points + *lines;
+        for (; points < end; ++points) {
           RasterPoint sc;
-          const GeoPoint l = point2GeoPoint(line.point[jj]);
-
-          if (projection.GeoToScreenIfVisible(l, sc))
+          if (projection.GeoToScreenIfVisible(*points, sc))
             icon.draw(canvas, sc.x, sc.y);
         }
       }
       break;
 
     case MS_SHAPE_LINE:
-      for (int tt = 0; tt < shape.numlines; ++tt) {
-        const lineObj &line = shape.line[tt];
-        unsigned msize = line.numpoints;
-
+      for (; lines < end_lines; ++lines) {
+        unsigned msize = *lines;
         shape_renderer.begin_shape(msize);
 
-        for (unsigned i = 0; i < msize; ++i) {
-          GeoPoint g = point2GeoPoint(line.point[i]);
-          shape_renderer.add_point_if_distant(projection.GeoToScreen(g));
-        }
+        const GeoPoint *end = points + msize;
+        for (; points < end; ++points)
+          shape_renderer.add_point_if_distant(projection.GeoToScreen(*points));
 
         shape_renderer.finish_polyline(canvas);
       }
       break;
 
     case MS_SHAPE_POLYGON:
-      for (int tt = 0; tt < shape.numlines; ++tt) {
-        const lineObj &line = shape.line[tt];
-        unsigned msize = line.numpoints / iskip;
+      for (; lines < end_lines; ++lines) {
+        unsigned msize = *lines;
+        shape_renderer.begin_shape(msize / iskip);
 
-        shape_renderer.begin_shape(msize);
-
-        const pointObj *in = line.point;
-        for (unsigned i = 0; i < msize; ++i) {
-          GeoPoint g = point2GeoPoint(*in);
-          in += iskip;
-          shape_renderer.add_point_if_distant(projection.GeoToScreen(g));
-        }
+        const GeoPoint *end = points + msize;
+        for (; points < end; points += iskip)
+          shape_renderer.add_point_if_distant(projection.GeoToScreen(*points));
+        points = end;
 
         shape_renderer.finish_polygon(canvas);
       }
@@ -188,27 +173,28 @@ TopologyFileRenderer::PaintLabels(Canvas &canvas,
     if (label == NULL)
       continue;
 
-    const shapeObj &shape = cshape->shape;
-
-    if (!msRectOverlap(&shape.bounds, &screenRect))
+    if (!projection.GetScreenBounds().overlaps(cshape->get_bounds()))
       continue;
 
-    for (int tt = 0; tt < shape.numlines; ++tt) {
-      const lineObj &line = shape.line[tt];
+    const unsigned short *lines = cshape->get_lines();
+    const unsigned short *end_lines = lines + cshape->get_number_of_lines();
+    const GeoPoint *points = cshape->get_points();
 
+    for (; lines < end_lines; ++lines) {
       int minx = canvas.get_width();
       int miny = canvas.get_height();
-      const pointObj *in = line.point;
-      for (unsigned i = 0; i < (unsigned)line.numpoints; i += iskip) {
-        GeoPoint g = point2GeoPoint(line.point[i]);
-        in += iskip;
-        RasterPoint pt = projection.GeoToScreen(g);
+
+      const GeoPoint *end = points + *lines;
+      for (; points < end; points += iskip) {
+        RasterPoint pt = projection.GeoToScreen(*points);
 
         if (pt.x <= minx) {
           minx = pt.x;
           miny = pt.y;
         }
       }
+
+      points = end;
 
       minx += 2;
       miny += 2;

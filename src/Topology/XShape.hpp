@@ -26,11 +26,39 @@ Copyright_License {
 #define TOPOLOGY_XSHAPE_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "shapelib/mapshape.h"
 
 #include <tchar.h>
+#include <assert.h>
 
 class XShape : private NonCopyable {
+  enum {
+    MAX_LINES = 32,
+  };
+
+  GeoBounds bounds;
+
+  int type;
+
+  /**
+   * The number of elements in the "lines" array.
+   */
+  unsigned num_lines;
+
+  /**
+   * An array which stores the number of points of each line.  This is
+   * a fixed-size array to reduce the number of allocations at
+   * runtime.
+   */
+  unsigned short lines[MAX_LINES];
+
+  /**
+   * All points of all lines.
+   */
+  GeoPoint *points;
+
   TCHAR *label;
 
 public:
@@ -41,11 +69,29 @@ public:
     return label_field < 0 || label != NULL;
   }
 
+  const GeoBounds &get_bounds() const {
+    return bounds;
+  }
+
+  int get_type() const {
+    return type;
+  }
+
+  unsigned get_number_of_lines() const {
+    return num_lines;
+  }
+
+  const unsigned short *get_lines() const {
+    return lines;
+  }
+
+  const GeoPoint *get_points() const {
+    return points;
+  }
+
   const TCHAR *get_label() const {
     return label;
   }
-
-  shapeObj shape;
 };
 
 #endif
