@@ -11,49 +11,46 @@
  */
 class AirspaceIntersectSort {
 public:
-/** 
- * Constructor
- * 
- * @param start Location of start point
- * @param end Location of end point
- * @param the_airspace Airspace to test for intersections
- */
-  AirspaceIntersectSort(const GeoPoint &start,
-                        const GeoPoint &end,
+  /**
+   * Constructor
+   *
+   * @param start Location of start point
+   * @param end Location of end point
+   * @param the_airspace Airspace to test for intersections
+   */
+  AirspaceIntersectSort(const GeoPoint &start, const GeoPoint &end,
                         const AbstractAirspace &the_airspace):
-    m_start(start),
-    m_end(end),
-    m_airspace(&the_airspace) {}
+    m_start(start), m_end(end), m_airspace(&the_airspace) {}
 
-/** 
- * Add point to queue
- * 
- * @param t Ray parameter [0,1]
- * @param p Point of intersection
- */
+  /**
+   * Add point to queue
+   *
+   * @param t Ray parameter [0,1]
+   * @param p Point of intersection
+   */
   void add(const fixed t, const GeoPoint &p);
 
-/** 
- * Determine if no points are found
- * 
- * @return True if no points added
- */
+  /**
+   * Determine if no points are found
+   *
+   * @return True if no points added
+   */
   bool empty() const;
 
-/** 
- * Return closest intercept point (or location if inside)
- * 
- * @param p Point to set if any
- * 
- * @return True if an intercept was found
- */
+  /**
+   * Return closest intercept point (or location if inside)
+   *
+   * @param p Point to set if any
+   *
+   * @return True if an intercept was found
+   */
   bool top(GeoPoint &p) const;
 
-/** 
- * Return vector of pairs of enter/exit intersections.
- * 
- * @return vector
- */
+  /**
+   * Return vector of pairs of enter/exit intersections.
+   *
+   * @return vector
+   */
   AirspaceIntersectionVector all();
 
 private:
