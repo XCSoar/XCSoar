@@ -23,49 +23,57 @@
 #include <algorithm>
 #include <math.h>
 
-fixed 
-FlatPoint::cross(const FlatPoint& p2) const {
-  return x*p2.y-p2.x*y;
+fixed
+FlatPoint::cross(const FlatPoint &p2) const
+{
+  return x * p2.y - p2.x * y;
 }
 
-void 
-FlatPoint::mul_y(const fixed a) {
-  y*= a;
+void
+FlatPoint::mul_y(const fixed a)
+{
+  y *= a;
 }
- 
-void 
-FlatPoint::sub(const FlatPoint&p2) {
+
+void
+FlatPoint::sub(const FlatPoint &p2)
+{
   x -= p2.x;
   y -= p2.y;
 }
 
-void 
-FlatPoint::add(const FlatPoint&p2) {
+void
+FlatPoint::add(const FlatPoint &p2)
+{
   x += p2.x;
   y += p2.y;
 }
 
-void 
-FlatPoint::rotate(const Angle angle) {
+void
+FlatPoint::rotate(const Angle angle)
+{
   const fixed _x = x;
   const fixed _y = y;
   fixed sa, ca;
   angle.sin_cos(sa, ca);
-  x = _x*ca-_y*sa;
-  y = _x*sa+_y*ca;
+  x = _x * ca - _y * sa;
+  y = _x * sa + _y * ca;
 }
 
-fixed 
-FlatPoint::d(const FlatPoint &p) const {
+fixed
+FlatPoint::d(const FlatPoint &p) const
+{
   return hypot(p.x - x, p.y - y);
 }
 
 fixed
-FlatPoint::mag_sq() const {
-  return x*x+y*y;
+FlatPoint::mag_sq() const
+{
+  return x * x + y * y;
 }
 
 fixed
-FlatPoint::mag() const {
+FlatPoint::mag() const
+{
   return hypot(x, y);
 }

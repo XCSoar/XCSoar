@@ -31,167 +31,177 @@
  */
 struct FlatPoint 
 {
-/** 
- * Constructor given known location
- * 
- * @param _x X position
- * @param _y Y position
- * 
- * @return Initialised object
- */
-  FlatPoint(const fixed _x, const fixed _y): x(_x),y(_y) {};
+  /**
+   * Constructor given known location
+   *
+   * @param _x X position
+   * @param _y Y position
+   *
+   * @return Initialised object
+   */
+  FlatPoint(const fixed _x, const fixed _y): x(_x), y(_y) {}
 
-/** 
- * Constructor at origin
- * 
- * @return Initialised object
- */
-  FlatPoint(): x(fixed_zero),y(fixed_zero) {};
+  /**
+   * Constructor at origin
+   *
+   * @return Initialised object
+   */
+  FlatPoint(): x(fixed_zero), y(fixed_zero) {}
 
-  fixed x; /**< X location */
-  fixed y; /**< Y location */
+  /** X location */
+  fixed x;
+  /** Y location */
+  fixed y;
 
-/** 
- * Calculate cross product of two points
- * 
- * @param p2 Other point
- * 
- * @return Cross product
- */
+  /**
+   * Calculate cross product of two points
+   *
+   * @param p2 Other point
+   *
+   * @return Cross product
+   */
   gcc_pure
-  fixed cross(const FlatPoint& p2) const;
+  fixed cross(const FlatPoint &p2) const;
 
-/** 
- * Multiply Y value of point
- * 
- * @param a Value to multiply
- */
+  /**
+   * Multiply Y value of point
+   *
+   * @param a Value to multiply
+   */
   void mul_y(const fixed a);
 
-/** 
- * Subtract delta from this point
- * 
- * @param p2 Point to subtract
- */
-  void sub(const FlatPoint&p2);
+  /**
+   * Subtract delta from this point
+   *
+   * @param p2 Point to subtract
+   */
+  void sub(const FlatPoint &p2);
 
-/** 
- * Add delta to this point
- * 
- * @param p2 Point to add
- */
-  void add(const FlatPoint&p2);
+  /**
+   * Add delta to this point
+   *
+   * @param p2 Point to add
+   */
+  void add(const FlatPoint &p2);
 
-/** 
- * Rotate point clockwise around origin
- * 
- * @param angle Angle (deg) to rotate point clockwise
- */
+  /**
+   * Rotate point clockwise around origin
+   *
+   * @param angle Angle (deg) to rotate point clockwise
+   */
   void rotate(const Angle angle);
 
-/** 
- * Calculate distance between two points
- * 
- * @param p Other point
- * 
- * @return Distance
- */
+  /**
+   * Calculate distance between two points
+   *
+   * @param p Other point
+   *
+   * @return Distance
+   */
   gcc_pure
   fixed d(const FlatPoint &p) const;
 
-/** 
- * Find dx*dx+dy*dy
- * @return Magnitude squared
- */
+  /**
+   * Find dx * dx + dy * dy
+   * @return Magnitude squared
+   */
   gcc_pure
   fixed mag_sq() const;
 
-/** 
- * Find sqrt(dx*dx+dy*dy)
- * @return Magnitude 
- */
+  /**
+   * Find sqrt(dx * dx + dy * dy)
+   * @return Magnitude
+   */
   gcc_pure
   fixed mag() const;
 
-/** 
- * Test whether two points are co-located
- * 
- * @param other Point to compare
- * 
- * @return True if coincident
- */
+  /**
+   * Test whether two points are co-located
+   *
+   * @param other Point to compare
+   *
+   * @return True if coincident
+   */
   bool operator== (const FlatPoint &other) const {
     return (x == other.x) && (y == other.y);
-  };
+  }
 
-/** 
- * Calculate dot product of one point with another
- * 
- * @param other That point
- * 
- * @return Dot product
- */
+  /**
+   * Calculate dot product of one point with another
+   *
+   * @param other That point
+   *
+   * @return Dot product
+   */
   fixed dot(const FlatPoint &other) const {
     return x*other.x+y*other.y;
   }
 
-/** 
- * Scale a point
- * 
- * @param p Scale
- * 
- * @return Scaled point
- */
+  /**
+   * Scale a point
+   *
+   * @param p Scale
+   *
+   * @return Scaled point
+   */
   gcc_pure
-  FlatPoint operator* (const fixed &p) const {
-    FlatPoint res= *this;
+  FlatPoint
+  operator* (const fixed &p) const
+  {
+    FlatPoint res = *this;
     res.x *= p;
     res.y *= p;
     return res;
-  };
+  }
 
-/** 
- * Add one point to another
- * 
- * @param p2 Point to add
- * 
- * @return Added value
- */
+  /**
+   * Add one point to another
+   *
+   * @param p2 Point to add
+   *
+   * @return Added value
+   */
   gcc_pure
-  FlatPoint operator+ (const FlatPoint &p2) const {
-    FlatPoint res= *this;
+  FlatPoint
+  operator+ (const FlatPoint &p2) const
+  {
+    FlatPoint res = *this;
     res.x += p2.x;
     res.y += p2.y;
     return res;
-  };
+  }
 
-/** 
- * Add one point to self
- * 
- * @param p2 Point to add
- * 
- * @return Added value
- */
-  FlatPoint operator+= (const FlatPoint &p2) {
+  /**
+   * Add one point to self
+   *
+   * @param p2 Point to add
+   *
+   * @return Added value
+   */
+  FlatPoint
+  operator+= (const FlatPoint &p2)
+  {
     x += p2.x;
     y += p2.y;
     return *this;
-  };
+  }
 
-/** 
- * Subtract one point from another
- * 
- * @param p2 Point to subtract
- * 
- * @return Subtracted value
- */
+  /**
+   * Subtract one point from another
+   *
+   * @param p2 Point to subtract
+   *
+   * @return Subtracted value
+   */
   gcc_pure
-  FlatPoint operator- (const FlatPoint &p2) const {
-    FlatPoint res= *this;
+  FlatPoint
+  operator- (const FlatPoint &p2) const
+  {
+    FlatPoint res = *this;
     res.x -= p2.x;
     res.y -= p2.y;
     return res;
-  };
+  }
 };
 
 #endif
