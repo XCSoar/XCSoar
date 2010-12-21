@@ -31,22 +31,22 @@
  */
 struct FlatLine 
 {
-/** 
- * Constructor given known start/end points
- * 
- * @param _p1 Start of line
- * @param _p2 End of line
- * 
- * @return Initialised object
- */
+  /**
+   * Constructor given known start/end points
+   *
+   * @param _p1 Start of line
+   * @param _p2 End of line
+   *
+   * @return Initialised object
+   */
   FlatLine(const FlatPoint _p1,
            const FlatPoint _p2):p1(_p1),p2(_p2) {};
 
-/** 
- * Constructor default
- * 
- * @return Initialised object at origin
- */
+  /**
+   * Constructor default
+   *
+   * @return Initialised object at origin
+   */
   FlatLine() {};
 
   /** 
@@ -76,78 +76,78 @@ struct FlatLine
   bool intersect_circle(const fixed r, const FlatPoint c,
                         FlatPoint &i1, FlatPoint &i2) const;
 
-/** 
- * Find center point of this line
- * 
- * @return Center point
- */
+  /**
+   * Find center point of this line
+   *
+   * @return Center point
+   */
   gcc_pure
   FlatPoint ave() const;
 
-/** 
- * Find angle of this line
- * 
- * @return Angle (deg)
- */
+  /**
+   * Find angle of this line
+   *
+   * @return Angle (deg)
+   */
   gcc_pure
   Angle angle() const;
 
-/** 
- * Calculate squared length of line
- * 
- * @return Squared length
- */
+  /**
+   * Calculate squared length of line
+   *
+   * @return Squared length
+   */
   gcc_pure
   fixed dsq() const;
 
-/** 
- * Calculate length of line
- * 
- * @return Length
- */
+  /**
+   * Calculate length of line
+   *
+   * @return Length
+   */
   gcc_pure
   fixed d() const;
 
-/** 
- * Subtract a delta from the line (both start and end points)
- * 
- * @param p Point to subtract
- */
+  /**
+   * Subtract a delta from the line (both start and end points)
+   *
+   * @param p Point to subtract
+   */
   void sub(const FlatPoint&p);
 
-/** 
- * Add a delta to the line (both start and end points)
- * 
- * @param p Point to add
- */
+  /**
+   * Add a delta to the line (both start and end points)
+   *
+   * @param p Point to add
+   */
   void add(const FlatPoint&p);
 
-/** 
- * Rotate line clockwise around origin
- * 
- * @param angle Angle (deg) to rotate line clockwise
- */
+  /**
+   * Rotate line clockwise around origin
+   *
+   * @param angle Angle (deg) to rotate line clockwise
+   */
   void rotate(const Angle angle);
 
-/** 
- * Scale line in Y direction
- * 
- * @param a Scale ratio
- */
+  /**
+   * Scale line in Y direction
+   *
+   * @param a Scale ratio
+   */
   void mul_y(const fixed a);
 
-/**
- * Return dot product of two lines (vectors)
- * @param that other line to take dot product of 
- * @return Dot product
- */
+  /**
+   * Return dot product of two lines (vectors)
+   * @param that other line to take dot product of
+   * @return Dot product
+   */
   gcc_pure
   fixed dot(const FlatLine& that) const;
 
-/**
- * Return magnitude squared of this line
- * @return distance of line squared
- */
+  /**
+   * Return magnitude squared of this line
+   * @return distance of line squared
+   */
   gcc_pure
   fixed mag_sq() const;
 
