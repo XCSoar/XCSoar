@@ -46,7 +46,7 @@ OrderedTaskFactoryName(OrderedTask::Factory_t type)
 {
   switch(type) {
   case OrderedTask::FACTORY_RT:
-    return _("RT");
+    return _("Racing");
   case OrderedTask::FACTORY_FAI_GENERAL:
     return _("FAI generic");
   case OrderedTask::FACTORY_FAI_TRIANGLE:
