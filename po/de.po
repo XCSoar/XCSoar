@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-19 20:54+0100\n"
-"PO-Revision-Date: 2010-12-20 01:17+0000\n"
+"PO-Revision-Date: 2010-12-23 08:01+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-22 09:32+0000\n"
-"X-Generator: Launchpad (build 12093)\n"
+"X-Launchpad-Export-Date: 2010-12-23 11:04+0000\n"
+"X-Generator: Launchpad (build 12138)\n"
 "Language: de\n"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:391
@@ -3186,7 +3186,7 @@ msgstr "Wendepunkt"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:49
 msgid "RT"
-msgstr ""
+msgstr "RT"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:51
 msgid "FAI generic"
@@ -3301,11 +3301,11 @@ msgstr "Schlüsselloch"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:149
 msgid "BGAFixedCourse"
-msgstr ""
+msgstr "BGAFestgelegterKurs"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:155
 msgid "BGAEnhancedOption"
-msgstr ""
+msgstr "BGAErweiterteOption"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:161
 msgid "Sector"
@@ -3321,11 +3321,11 @@ msgstr "FAI"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:198
 msgid "DAe"
-msgstr ""
+msgstr "DAeC"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:204
 msgid "BGA"
-msgstr ""
+msgstr "BGA"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:210
 msgid "BGAE"
@@ -3333,11 +3333,11 @@ msgstr "BGAE"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:318
 msgid "Cross corner edge from inside area to start"
-msgstr ""
+msgstr "Überquere Begrenzung von innerhalb der Area als Abflug"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:320
 msgid "Cross line from inside area to start"
-msgstr ""
+msgstr "Überquere Linie von innerhalb der Area als Abflug"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:322
 msgid "Exit area to start"
@@ -3364,7 +3364,7 @@ msgstr "Innerhalb der Area wird gewertet"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:338
 msgid "Cross corner edge to finish"
-msgstr ""
+msgstr "Überquere die Begrenzung als Ziel"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:340
 msgid "Cross line into area to finish"
@@ -3392,15 +3392,15 @@ msgstr "Wendepunkt FAI Sektor"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:362
 msgid "Keyhole sector (DAe)"
-msgstr ""
+msgstr "Schlüssellochsektor (DAeC)"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:364
 msgid "BGA Fixed Course sector"
-msgstr ""
+msgstr "BGA festgelegter Kurssektor"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:366
 msgid "BGA Enhanced Option Fixed Course sector"
-msgstr ""
+msgstr "BGA Erweiterterungsoption festgelegter Kurssektor"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:368
 msgid "Turnpoint cylinder"
@@ -5710,6 +5710,8 @@ msgid ""
 "When External Polar File is the polar type, this is the name of the file "
 "containing the glide polar data (in WinPilot format)."
 msgstr ""
+"Wenn \"Externe Polare\" als Polarentyp ausgewählt ist, muss hier die Datei "
+"mit der Polare im WinPilot Format ausgewählte werden."
 
 #: Data/Dialogs/dlgConfigFonts_L.xml:22 Data/Dialogs/dlgConfigFonts.xml:22
 msgid "Dialog boxes"
