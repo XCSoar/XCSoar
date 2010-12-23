@@ -25,10 +25,9 @@
 #include "DateTime.hpp"
 #include "TestUtil.hpp"
 
-int main(int argc, char **argv)
+static void
+test_times()
 {
-  plan_tests(5);
-
   const GeoPoint location(Angle::degrees(fixed(7.7061111111111114)),
                           Angle::degrees(fixed(51.051944444444445)));
   BrokenDateTime dt;
@@ -47,6 +46,13 @@ int main(int argc, char **argv)
   ok1(between(sun.TimeOfSunSet, 19.36, 19.40));
   ok1(between(sun.TimeOfSunRise, 7.32, 7.41));
   ok1(between(sun.EveningTwilight, 19.81, 19.82));
+}
+
+int main(int argc, char **argv)
+{
+  plan_tests(5);
+
+  test_times();
 
   return exit_status();
 }
