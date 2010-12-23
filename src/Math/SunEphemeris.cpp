@@ -121,6 +121,27 @@ SunEphemeris::GetMeanSunLongitude(fixed d)
 }
 
 /**
+ * Calculates the sun's azimuth at a given location and time
+ * @param Location azimuth at what location
+ * @param time azimuth at what time
+ * @param dec precalculated declination angle
+ * @return sun's azimuth
+ * @see http://www.providence.edu/mcs/rbg/java/sungraph.htm
+ */
+static Angle
+CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
+                 const fixed TimeZone, const Angle dec)
+{
+  fixed T = fixed(time.hour) + fixed(time.minute) / 60 +
+            fixed(time.second) / 3600 - fixed(12) + TimeZone;
+  Angle t = Angle::degrees(fixed(15)) * T;
+
+  return Angle::radians(-atan2(dec.cos() * t.sin(),
+                               Location.Latitude.cos() * dec.sin() -
+                               Location.Latitude.sin() * dec.cos() * t.cos()));
+}
+
+/**
  * Calculates all sun-related important times
  * depending on time of year and location
  * @param Location Location to be used in calculation
@@ -158,6 +179,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
 
   Angle HourAngle = GetHourAngle(Location.Latitude, Delta);
   Angle HourAngleTwilight = GetHourAngleTwilight(Location.Latitude, Delta);
+
+  Azimuth = CalculateAzimuth(Location, date_time, TimeZone, Delta);
 
   // length of twilight in hours
   fixed TwilightHours = (HourAngleTwilight - HourAngle).value_hours();

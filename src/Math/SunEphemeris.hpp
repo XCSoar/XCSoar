@@ -24,11 +24,11 @@ Copyright_License {
 #define SUN_EPHEMERIS_HPP
 
 #include "Math/fixed.hpp"
+#include "Math/Angle.hpp"
 #include "Compiler.h"
 
 struct GeoPoint;
 struct BrokenDateTime;
-class Angle;
 
 /**
  * Sun ephemeris model, used largely for calculations of sunset times
@@ -52,6 +52,7 @@ class SunEphemeris {
  public:
   fixed DayLength, MorningTwilight, EveningTwilight;
   fixed TimeOfNoon, TimeOfSunSet, TimeOfSunRise;
+  Angle Azimuth;
 
   void CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
                     fixed TimeZone);
