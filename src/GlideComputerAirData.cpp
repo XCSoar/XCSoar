@@ -899,6 +899,7 @@ GlideComputerAirData::ProcessSun()
   sun.CalcSunTimes(Basic().Location, Basic().DateTime,
                    fixed(GetUTCOffset()) / 3600);
   SetCalculated().TimeSunset = fixed(sun.TimeOfSunSet);
+  SetCalculated().SunAzimuth = sun.Azimuth;
 }
 
 GlidePolar 

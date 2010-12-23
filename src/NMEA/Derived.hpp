@@ -264,6 +264,8 @@ struct DERIVED_INFO:
   fixed AutoZoomDistance; /**< Distance to zoom to for autozoom */
 
   fixed TimeSunset; /**< Local time of sunset */
+  /** Sun's azimuth at the current location and time */
+  Angle SunAzimuth;
 
   TaskStats task_stats; /**< Copy of task statistics data for active task */
   CommonStats common_stats; /**< Copy of common task statistics data */
