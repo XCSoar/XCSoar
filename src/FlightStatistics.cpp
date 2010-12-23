@@ -387,8 +387,7 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
   ::RenderTask dv(tpv, proj.GetScreenBounds());
   dv.Visit(task);
 
-  TracePointVector trace;
-  task_manager.get_trace_points(trace);
+  TracePointVector trace = task_manager.get_trace_points();
   DrawTrace(chart, proj, trace, Chart::STYLE_MEDIUMBLACK);
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.Location);
