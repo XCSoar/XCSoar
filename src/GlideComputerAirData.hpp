@@ -48,7 +48,6 @@ public:
                        ProtectedTaskManager &_task);
 
   GlideRatioCalculator rotaryLD;
-  SunEphemeris sun;
   virtual void ProcessIdle();
 
   void SetWindEstimate(fixed wind_speed, Angle wind_bearing,
