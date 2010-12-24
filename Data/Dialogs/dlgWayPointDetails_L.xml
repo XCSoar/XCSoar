@@ -30,6 +30,7 @@
     <Button Name="cmdRemoveFromTask" Caption="Remove from task" X="50" Width="150" Height="30" />
     <Button Name="cmdNewHome" Caption="Set as new home" X="50" Width="150" Height="30" />
     <Button Name="cmdTeamCode" Caption="Set teamcode" X="50" Width="150" Height="30" />
+    <Button Name="cmdActivatePan" Caption="Pan to waypoint" X="50" Width="150" Height="30" />
   </Panel>
 
   <Canvas Name="frmImage" X="70" Y="0" Width="0" Height="222" Visible="0" Border="0"/>

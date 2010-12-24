@@ -48,6 +48,7 @@ Copyright_License {
 #include "WayPoint/WayPointGlue.hpp"
 #include "Compiler.h"
 #include "Compatibility/path.h"
+#include "InputEvents.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -485,6 +486,16 @@ OnRemoveFromTaskClicked(gcc_unused WndButton &button)
 }
 
 static void
+OnActivatePanClicked(gcc_unused WndButton &button)
+{
+  XCSoarInterface::SetSettingsMap().PanLocation = selected_waypoint->Location;
+  XCSoarInterface::SetSettingsMap().EnablePan = true;
+  XCSoarInterface::main_window.SetFullScreen(true);
+  InputEvents::setMode(InputEvents::MODE_PAN);
+  wf->SetModalResult(mrOK);
+}
+
+static void
 OnImagePaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   (void)Sender;
@@ -663,6 +674,10 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   wb = ((WndButton *)wf->FindByName(_T("cmdRemoveFromTask")));
   if (wb)
     wb->SetOnClickNotify(OnRemoveFromTaskClicked);
+
+  wb = ((WndButton *)wf->FindByName(_T("cmdActivatePan")));
+  if (wb)
+    wb->SetOnClickNotify(OnActivatePanClicked);
 
   hasimage1 = jpgimage1.load_file(path_modis);
   hasimage2 = jpgimage2.load_file(path_google);
