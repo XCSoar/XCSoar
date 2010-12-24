@@ -85,9 +85,9 @@ struct FlatPoint
   void add(const FlatPoint &p2);
 
   /**
-   * Rotate point clockwise around origin
+   * Rotate point counter-clockwise around origin
    *
-   * @param angle Angle (deg) to rotate point clockwise
+   * @param angle Angle (deg) to rotate point counter-clockwise
    */
   void rotate(const Angle angle);
 
