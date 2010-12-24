@@ -53,6 +53,8 @@ public:
 
   void sun_from_wind(const WindowProjection& proj,
                      const SpeedVector& wind);
+  void set_sun_angle(const WindowProjection& proj,
+                     const Angle &angle);
   void reset();
   void set_terrain(const RasterTerrain *terrain);
   void set_weather(const RasterWeather *weather);

@@ -116,6 +116,13 @@ BackgroundDrawHelper::sun_from_wind(const WindowProjection& projection,
 }
 
 void
+BackgroundDrawHelper::set_sun_angle(const WindowProjection& projection,
+                                    const Angle& angle)
+{
+  m_sun_azimuth = projection.GetScreenAngle() + angle;
+}
+
+void
 BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas, LabelBlock &block,
                                      const TCHAR *Buffer, POINT pt)
 {
