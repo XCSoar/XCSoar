@@ -39,29 +39,12 @@ Canvas::clipped_polygon(const RasterPoint *lppt, unsigned cPoints)
 }
 
 void
-Canvas::clipped_polyline(const RasterPoint *lppt, unsigned cPoints)
-{
-  assert(defined());
-
-  ::ClipPolygon(*this, lppt, cPoints, false);
-}
-
-void
 Canvas::autoclip_polygon(const RasterPoint *lppt, unsigned cPoints)
 {
   if (need_clipping())
     clipped_polygon(lppt, cPoints);
   else
     polygon(lppt, cPoints);
-}
-
-void
-Canvas::autoclip_polyline(const RasterPoint *lppt, unsigned cPoints)
-{
-  if (need_clipping())
-    clipped_polyline(lppt, cPoints);
-  else
-    polyline(lppt, cPoints);
 }
 
 void
