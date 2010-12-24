@@ -85,7 +85,7 @@ struct FlatLine
   FlatPoint ave() const;
 
   /**
-   * Find angle of this line
+   * Find angle of this line starting from the x-axis counter-clockwise
    *
    * @return Angle (deg)
    */
