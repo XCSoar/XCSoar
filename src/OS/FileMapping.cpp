@@ -64,8 +64,17 @@ FileMapping::FileMapping(const TCHAR *path)
 
   madvise(m_data, m_size, MADV_WILLNEED);
 #else /* !HAVE_POSIX */
+#if defined(_WIN32_WCE) && _WIN32_WCE < 0x0500
+  /* old Windows CE versions need a HANDLE returned from
+     CreateFileForMapping(); this system is not needed with WM5, and
+     it is deprecated in WM6 */
+  hFile = ::CreateFileForMapping(path, GENERIC_READ, 0,
+                                 NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
+                                 NULL);
+#else
   hFile = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ,
                        NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+#endif
   if (gcc_unlikely(hFile == INVALID_HANDLE_VALUE))
     return;
 
@@ -91,6 +100,10 @@ FileMapping::FileMapping(const TCHAR *path)
   hMapping = ::CreateFileMapping(hFile, NULL, PAGE_READONLY,
                                  i.fi.nFileSizeHigh, i.fi.nFileSizeLow,
                                  NULL);
+#if defined(_WIN32_WCE) && _WIN32_WCE < 0x0500
+  /* CreateFileForMapping() automatically closes the file handle */
+  hFile = INVALID_HANDLE_VALUE;
+#endif
   if (gcc_unlikely(hMapping == NULL))
     return;
 
