@@ -167,7 +167,8 @@ public:
   }
 
 private:
-  RasterPoint Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS];
+  RasterPoint Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS * 3];
+  unsigned GroundlineLength;
 
   // display element functions
   void CalculateScreenPositionsGroundline();
