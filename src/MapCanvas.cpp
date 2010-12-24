@@ -27,16 +27,16 @@ Copyright_License {
 #include "Asset.hpp"
 
 void
-MapCanvas::line(const GeoPoint &a, const GeoPoint &b)
+MapCanvas::line(GeoPoint a, GeoPoint b)
 {
+  if (!clip.clip_line(a, b))
+    return;
+
   RasterPoint pts[2];
   pts[0] = projection.GeoToScreen(a);
   pts[1] = projection.GeoToScreen(b);
 
-  if (need_clipping())
-    canvas.autoclip_polyline(pts, 2);
-  else
-    canvas.line(pts[0], pts[1]);
+  canvas.line(pts[0], pts[1]);
 }
 
 void

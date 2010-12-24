@@ -722,6 +722,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/WindowProjection.cpp \
+	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \
 	$(SRC)/MapWindow.cpp \
@@ -931,6 +932,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/RenderTask.cpp \
 	$(SRC)/RenderTaskPoint.cpp \
 	$(SRC)/RenderObservationZone.cpp \
+	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapCanvas.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/Appearance.cpp \

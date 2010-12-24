@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Navigation/SearchPointVector.hpp"
 #include "Screen/Point.hpp"
+#include "Geo/GeoClip.hpp"
 
 class Canvas;
 class Projection;
@@ -39,12 +40,14 @@ class MapCanvas {
 public:
   Canvas &canvas;
   const Projection &projection;
+  const GeoClip clip;
 
 public:
-  MapCanvas(Canvas &_canvas, const Projection &_projection)
-    :canvas(_canvas), projection(_projection) {}
+  MapCanvas(Canvas &_canvas, const Projection &_projection,
+            const GeoClip &_clip)
+    :canvas(_canvas), projection(_projection), clip(_clip) {}
 
-  void line(const GeoPoint &a, const GeoPoint &b);
+  void line(GeoPoint a, GeoPoint b);
   void circle(const GeoPoint &center, fixed radius);
 
   /**
