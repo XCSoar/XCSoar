@@ -48,7 +48,8 @@ MapCanvas::circle(const GeoPoint &center, fixed radius)
 }
 
 void
-MapCanvas::project(const SearchPointVector &points, RasterPoint *screen) const
+MapCanvas::project(const Projection &projection,
+                   const SearchPointVector &points, RasterPoint *screen)
 {
   for (SearchPointVector::const_iterator it = points.begin();
        it != points.end(); ++it)
@@ -69,7 +70,8 @@ update_bounds(RECT &bounds, const RasterPoint &pt)
 }
 
 bool
-MapCanvas::visible(const RasterPoint *screen, unsigned num)
+MapCanvas::visible(const Canvas &canvas,
+                   const RasterPoint *screen, unsigned num)
 {
   RECT bounds;
   bounds.left = 0x7fff;
