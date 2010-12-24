@@ -161,18 +161,23 @@ detect_language()
   /* the GetUserDefaultUILanguage() prototype is missing on
      mingw32ce, we have to look it up dynamically */
   DynamicLibrary coreloc_dll(_T("coredll"));
-  if (!coreloc_dll.defined())
+  if (!coreloc_dll.defined()) {
+    LogStartUp(_T("Language: coredll.dll not found"));
     return NULL;
+  }
 
   typedef LANGID WINAPI (*GetUserDefaultUILanguage_t)();
   GetUserDefaultUILanguage_t GetUserDefaultUILanguage =
     (GetUserDefaultUILanguage_t)
     coreloc_dll.lookup(_T("GetUserDefaultUILanguage"));
-  if (GetUserDefaultUILanguage == NULL)
+  if (GetUserDefaultUILanguage == NULL) {
+    LogStartUp(_T("Language: GetUserDefaultUILanguage() not available"));
     return NULL;
+  }
 #endif
 
   LANGID lang_id = GetUserDefaultUILanguage();
+  LogStartUp(_T("Language: GetUserDefaultUILanguage()=0x%x"), (int)lang_id);
   if (lang_id == 0)
     return NULL;
 
@@ -186,12 +191,17 @@ ReadResourceLanguageFile(const TCHAR *resource)
     /* refuse to load resources which are not in the language table */
     return false;
 
+  LogStartUp(_T("Language: loading resource '%s'"), resource);
+
   ResourceLoader::Data data = ResourceLoader::Load(resource, _T("MO"));
-  if (data.first == NULL)
+  if (data.first == NULL) {
+    LogStartUp(_T("Language: resource '%s' not found"), resource);
     return false;
+  }
 
   mo_loader.reset(new MOLoader(data.first, data.second));
   if (mo_loader->error()) {
+    LogStartUp(_T("Language: could not load resource '%s'"), resource);
     mo_loader.reset();
     return false;
   }
@@ -250,8 +260,11 @@ LoadLanguageFile(const TCHAR *path)
 
 #else /* !HAVE_POSIX */
 
+  LogStartUp(_T("Language: loading file '%s'"), path);
+
   mo_loader.reset(new MOLoader(path));
   if (mo_loader->error()) {
+    LogStartUp(_T("Language: could not load file '%s'"), path);
     mo_loader.reset();
     return false;
   }
