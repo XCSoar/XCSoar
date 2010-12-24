@@ -19,12 +19,13 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "OLCPlus.hpp"
+
 #include "Trace/Trace.hpp"
 #include <assert.h>
 
-OLCPlus::OLCPlus(const Trace &_trace,
-                 const unsigned &_handicap):
+OLCPlus::OLCPlus(const Trace &_trace, const unsigned &_handicap):
   AbstractContest(_trace, _handicap, 0)
 {
   reset();
@@ -55,20 +56,18 @@ OLCPlus::copy_solution(TracePointVector &vec) const
     vec.push_back(solution_classic[i]);
 }
 
-
 fixed 
 OLCPlus::calc_distance() const 
 {
   return result_classic.distance;
 }
 
-
 fixed 
 OLCPlus::calc_score() const
 {
-  return apply_handicap((result_classic.distance + fixed(0.3)*result_fai.distance)*fixed(0.001));
+  return apply_handicap((result_classic.distance +
+                         fixed(0.3) * result_fai.distance) * fixed(0.001));
 }
-
 
 fixed 
 OLCPlus::calc_time() const
