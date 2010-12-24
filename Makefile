@@ -256,6 +256,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Message.cpp \
 	$(SRC)/LogFile.cpp \
 	\
+	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapCanvas.cpp \
 	$(SRC)/MapDrawHelper.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \

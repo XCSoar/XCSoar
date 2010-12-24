@@ -49,7 +49,7 @@ TEST_NAMES = \
 	test_pressure \
 	test_task \
 	TestAngle TestUnits TestEarth TestSunEphemeris \
-	TestRadixTree TestGeoBounds \
+	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
 	TestColorRamp \
@@ -82,6 +82,16 @@ TEST_GEO_BOUNDS_SOURCES = \
 TEST_GEO_BOUNDS_OBJS = $(call SRC_TO_OBJ,$(TEST_GEO_BOUNDS_SOURCES))
 TEST_GEO_BOUNDS_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestGeoBounds$(TARGET_EXEEXT): $(TEST_GEO_BOUNDS_OBJS) $(TEST_GEO_BOUNDS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_GEO_CLIP_SOURCES = \
+	$(SRC)/Geo/GeoClip.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestGeoClip.cpp
+TEST_GEO_CLIP_OBJS = $(call SRC_TO_OBJ,$(TEST_GEO_CLIP_SOURCES))
+TEST_GEO_CLIP_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestGeoClip$(TARGET_EXEEXT): $(TEST_GEO_CLIP_OBJS) $(TEST_GEO_CLIP_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
