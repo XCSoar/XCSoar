@@ -26,8 +26,8 @@
 #include "Compiler.h"
 
 /**
- * Defines a line in real-valued cartesian coordinates, with intersection
- * methods.
+ * Defines an infinite line in real-valued cartesian coordinates,
+ * with intersection methods.
  */
 struct FlatLine 
 {
