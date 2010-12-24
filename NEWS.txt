@@ -2,6 +2,14 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Changes to version 6.0.1 (since 6.0):
+* user interface
+  - Language: translation updates
+  - dialog "Switches": portrait mode layout fixed
+  - dialog "Statistics": draw trace on task page
+* terrain / topology
+  - minor memory leak fixed
+
 Changes to version 6.0 (since 5.2.4):
 * build system
   - compile with gcc / mingw32 / mingw32ce instead of Visual C++
