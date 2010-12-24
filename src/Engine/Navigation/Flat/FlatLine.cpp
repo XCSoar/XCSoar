@@ -137,9 +137,3 @@ FlatLine::dot(const FlatLine& that) const
 {
   return (p2 - p1).dot(that.p2 - that.p1);
 }
-
-fixed
-FlatLine::mag_sq() const
-{
-  return (p2 - p1).mag_sq();
-}

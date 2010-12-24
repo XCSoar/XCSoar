@@ -144,13 +144,6 @@ struct FlatLine
   gcc_pure
   fixed dot(const FlatLine& that) const;
 
-  /**
-   * Return magnitude squared of this line
-   * @return distance of line squared
-   */
-  gcc_pure
-  fixed mag_sq() const;
-
 private:
   FlatPoint p1;
   FlatPoint p2;

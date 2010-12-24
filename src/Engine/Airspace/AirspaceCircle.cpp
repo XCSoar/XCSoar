@@ -67,7 +67,7 @@ AirspaceCircle::intersects(const GeoPoint& start, const GeoVector &vec) const
 
   FlatPoint f_p1, f_p2;
   if (line.intersect_circle(f_radius, f_center, f_p1, f_p2)) {
-    const fixed mag = line.mag_sq();
+    const fixed mag = line.dsq();
     if (positive(mag)) {
       fixed inv_mag = -fixed_one;
       const fixed t1 = FlatLine(f_start, f_p1).dot(line);
