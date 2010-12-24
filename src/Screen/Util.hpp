@@ -39,8 +39,7 @@ enum {
 };
 
 void ClipPolygon(Canvas &canvas, const RasterPoint *m_ptin,
-                 unsigned int inLength,
-                 bool fill);
+                 unsigned int inLength);
 
 bool
 Segment(Canvas &canvas, long x, long y, int radius,

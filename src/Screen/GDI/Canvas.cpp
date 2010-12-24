@@ -35,7 +35,7 @@ Canvas::clipped_polygon(const RasterPoint *lppt, unsigned cPoints)
 {
   assert(defined());
 
-  ::ClipPolygon(*this, lppt, cPoints, true);
+  ::ClipPolygon(*this, lppt, cPoints);
 }
 
 void
