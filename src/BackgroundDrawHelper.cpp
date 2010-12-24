@@ -108,11 +108,10 @@ BackgroundDrawHelper::sun_from_wind(const WindowProjection& projection,
                                     const SpeedVector& wind)
 {
   // draw sun from constant angle if very low wind speed
-  if (wind.norm < fixed_half) {
-    m_sun_azimuth = projection.GetScreenAngle() - Angle::degrees(fixed(45.0));
-  } else {
-    m_sun_azimuth = projection.GetScreenAngle() + wind.bearing;
-  }
+  if (wind.norm < fixed_half)
+    set_sun_angle(projection, Angle::degrees(fixed(-45.0)));
+  else
+    set_sun_angle(projection, wind.bearing);
 }
 
 void
