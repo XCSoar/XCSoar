@@ -295,13 +295,10 @@ ReadLanguageFile()
   if (base == value) {
     LocalPath(second_buffer, value);
     value = second_buffer;
-
-    if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base))
-      AutoDetectLanguage();
-  } else {
-    if (!LoadLanguageFile(value))
-      AutoDetectLanguage();
   }
+
+  if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base))
+    AutoDetectLanguage();
 
 #endif /* !ANDROID */
 }
