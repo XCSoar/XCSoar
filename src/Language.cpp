@@ -130,6 +130,7 @@ const struct builtin_language language_table[] = {
   { 0, NULL }
 };
 
+gcc_pure
 static const TCHAR *
 find_language(WORD language)
 {
@@ -138,6 +139,19 @@ find_language(WORD language)
       return language_table[i].resource;
 
   return NULL;
+}
+
+gcc_pure
+static unsigned
+find_language(const TCHAR *resource)
+{
+  assert(resource != NULL);
+
+  for (unsigned i = 0; language_table[i].resource != NULL; ++i)
+    if (_tcscmp(language_table[i].resource, resource) == 0)
+      return language_table[i].language;
+
+  return 0;
 }
 
 static const TCHAR *
@@ -168,6 +182,10 @@ detect_language()
 static bool
 ReadResourceLanguageFile(const TCHAR *resource)
 {
+  if (!find_language(resource))
+    /* refuse to load resources which are not in the language table */
+    return false;
+
   ResourceLoader::Data data = ResourceLoader::Load(resource, _T("MO"));
   if (data.first == NULL)
     return false;
