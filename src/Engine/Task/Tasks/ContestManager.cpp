@@ -71,7 +71,8 @@ ContestManager::update_idle()
     retval = run_contest(olc_classic, olc_plus.get_result_classic(), olc_plus.get_solution_classic());
     retval |= run_contest(olc_fai, olc_plus.get_result_fai(), olc_plus.get_solution_fai());
     if (retval) 
-      retval |= run_contest(olc_plus, result, solution);
+      run_contest(olc_plus, result, solution);
+
     break;
   };
 
