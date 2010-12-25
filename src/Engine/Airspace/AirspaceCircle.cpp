@@ -69,7 +69,7 @@ AirspaceCircle::intersects(const GeoPoint& start, const GeoVector &vec) const
   if (line.intersect_circle(f_radius, f_center, f_p1, f_p2)) {
     const fixed mag = line.dsq();
     if (positive(mag)) {
-      fixed inv_mag = -fixed_one;
+      const fixed inv_mag = fixed_one / mag;
       const fixed t1 = FlatLine(f_start, f_p1).dot(line);
       const fixed t2 = (f_p1 == f_p2) ?
                        -fixed_one : FlatLine(f_start, f_p2).dot(line);
@@ -77,19 +77,11 @@ AirspaceCircle::intersects(const GeoPoint& start, const GeoVector &vec) const
       const bool in_range = (t1 < mag) || (t2 < mag);
       // if at least one point is within range, capture both points
 
-      if ((t1 >= fixed_zero) && in_range) {
-        if (negative(inv_mag))
-          inv_mag = fixed_one / mag;
-
+      if ((t1 >= fixed_zero) && in_range)
         sorter.add(t1 * inv_mag, m_task_projection->funproject(f_p1));
-      }
 
-      if ((t2 >= fixed_zero) && in_range) {
-        if (negative(inv_mag))
-          inv_mag = fixed_one / mag;
-
+      if ((t2 >= fixed_zero) && in_range)
         sorter.add(t2 * inv_mag, m_task_projection->funproject(f_p2));
-      }
     }
   }
 
