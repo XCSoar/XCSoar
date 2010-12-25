@@ -53,7 +53,7 @@ TEST_NAMES = \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
 	TestColorRamp \
-	test_replay_task TestProjection TestFlatPoint
+	test_replay_task TestProjection TestFlatPoint TestFlatLine
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
 
@@ -113,6 +113,17 @@ TEST_FLAT_POINT_SOURCES = \
 TEST_FLAT_POINT_OBJS = $(call SRC_TO_OBJ,$(TEST_FLAT_POINT_SOURCES))
 TEST_FLAT_POINT_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestFlatPoint$(TARGET_EXEEXT): $(TEST_FLAT_POINT_OBJS) $(TEST_FLAT_POINT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_FLAT_LINE_SOURCES = \
+	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatPoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatLine.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFlatLine.cpp
+TEST_FLAT_LINE_OBJS = $(call SRC_TO_OBJ,$(TEST_FLAT_LINE_SOURCES))
+TEST_FLAT_LINE_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestFlatLine$(TARGET_EXEEXT): $(TEST_FLAT_LINE_OBJS) $(TEST_FLAT_LINE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
