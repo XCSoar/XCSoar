@@ -364,12 +364,6 @@ CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
   chart.DrawYLabel(_T("h"));
 }
 
-bool
-CrossSectionWindow::on_create() {
-  PaintWindow::on_create();
-  return true;
-}
-
 void
 CrossSectionWindow::on_paint(Canvas &canvas)
 {

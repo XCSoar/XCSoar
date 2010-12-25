@@ -138,7 +138,6 @@ protected:
    * @param canvas Canvas to draw to
    */
   virtual void on_paint(Canvas &canvas);
-  virtual bool on_create();
 
   /** Brush used to draw the terrain polygon */
   Brush terrain_brush;
