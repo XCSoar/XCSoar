@@ -53,7 +53,7 @@ TEST_NAMES = \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
 	TestColorRamp \
-	test_replay_task TestProjection TestFlatPoint TestFlatLine
+	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
 
@@ -113,6 +113,16 @@ TEST_FLAT_POINT_SOURCES = \
 TEST_FLAT_POINT_OBJS = $(call SRC_TO_OBJ,$(TEST_FLAT_POINT_SOURCES))
 TEST_FLAT_POINT_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestFlatPoint$(TARGET_EXEEXT): $(TEST_FLAT_POINT_OBJS) $(TEST_FLAT_POINT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_FLAT_GEO_POINT_SOURCES = \
+	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFlatGeoPoint.cpp
+TEST_FLAT_GEO_POINT_OBJS = $(call SRC_TO_OBJ,$(TEST_FLAT_GEO_POINT_SOURCES))
+TEST_FLAT_GEO_POINT_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestFlatGeoPoint$(TARGET_EXEEXT): $(TEST_FLAT_GEO_POINT_OBJS) $(TEST_FLAT_GEO_POINT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
