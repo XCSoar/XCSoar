@@ -79,6 +79,14 @@ public:
   AirspaceIntersectionVector intersects(const GeoPoint& g1, 
                                         const GeoVector &vec) const;
 
+  /**
+   * Returns the GeoPoint inside the AirspaceCircle, that is closest
+   * to the given GeoPoint loc
+   *
+   * @param loc GeoPoint that should be calculated with
+   *
+   * @return Closest GeoPoint in the AirspaceCircle
+   */
   GeoPoint closest_point(const GeoPoint& loc) const;
 
   /**

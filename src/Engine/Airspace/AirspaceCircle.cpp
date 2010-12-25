@@ -91,9 +91,14 @@ AirspaceCircle::intersects(const GeoPoint& start, const GeoVector &vec) const
 GeoPoint 
 AirspaceCircle::closest_point(const GeoPoint& loc) const
 {
+  // Calculate distance from center point
   const fixed d = loc.distance(m_center);
+
+  // If loc is INSIDE the circle return loc itself
   if (d <= m_radius)
     return loc;
-  else
-    return m_center.intermediate_point(loc, m_radius);
+
+  // Otherwise calculate point on the circle in
+  // the direction from center to loc
+  return m_center.intermediate_point(loc, m_radius);
 }
