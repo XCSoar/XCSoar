@@ -10,7 +10,7 @@ AirspacePredicateAircraftInside::AirspacePredicateAircraftInside(const AIRCRAFT_
 }
 
 bool 
-AirspacePredicateAircraftInside::operator()( const AbstractAirspace& t ) const
+AirspacePredicateAircraftInside::operator()(const AbstractAirspace& t) const
 {
   return t.inside(m_state);
 }
