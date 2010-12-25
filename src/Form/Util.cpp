@@ -334,7 +334,7 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
     return false;
 
   value = new_value;
-  Profile::Set(registry_name, iround(new_value));
+  Profile::Set(registry_name, new_value);
   return true;
 }
 
