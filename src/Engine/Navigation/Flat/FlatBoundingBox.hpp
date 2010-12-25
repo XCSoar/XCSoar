@@ -35,24 +35,24 @@
  */
 class FlatBoundingBox {
 public:
-/** 
- * Constructor given bounds
- * 
- * @param ll Lower left location
- * @param ur Upper right location
- */
+  /**
+   * Constructor given bounds
+   *
+   * @param ll Lower left location
+   * @param ur Upper right location
+   */
   FlatBoundingBox(const FlatGeoPoint &ll,
                   const FlatGeoPoint &ur):
     bb_ll(ll.Longitude,ll.Latitude),
     bb_ur(ur.Longitude,ur.Latitude) {};
 
-/** 
- * Constructor given center point and radius
- * (produces a box enclosing a circle of given radius at center point)
- * 
- * @param loc Location of center point
- * @param range Radius in projected units
- */
+  /**
+   * Constructor given center point and radius
+   * (produces a box enclosing a circle of given radius at center point)
+   *
+   * @param loc Location of center point
+   * @param range Radius in projected units
+   */
   FlatBoundingBox(const FlatGeoPoint &loc,
                   const unsigned range=0):
     bb_ll(loc.Longitude-range,loc.Latitude-range),
@@ -61,13 +61,13 @@ public:
 
   }
 
-/** 
- * Calculate non-overlapping distance from one box to another.
- * 
- * @param f That box
- * 
- * @return Distance in projected units (or zero if overlapping)
- */
+  /**
+   * Calculate non-overlapping distance from one box to another.
+   *
+   * @param f That box
+   *
+   * @return Distance in projected units (or zero if overlapping)
+   */
   gcc_pure
   unsigned distance(const FlatBoundingBox &f) const;
 
@@ -75,15 +75,17 @@ public:
    * Function object used by kd-tree to index coordinates 
    */
   struct kd_get_bounds {
-    typedef int result_type; /**< Used by kd-tree */
-/** 
- * Retrieve coordinate value given coordinate index and object
- *
- * @param d Object being stored in kd-tree
- * @param k Index of coordinate
- * 
- * @return Coordinate value
- */
+    /** Used by kd-tree */
+    typedef int result_type;
+
+    /**
+     * Retrieve coordinate value given coordinate index and object
+     *
+     * @param d Object being stored in kd-tree
+     * @param k Index of coordinate
+     *
+     * @return Coordinate value
+     */
     int operator() ( const FlatBoundingBox &d, const unsigned k) const {
       switch(k) {
       case 0:
@@ -107,15 +109,15 @@ public:
   struct kd_distance {
     typedef BBDist distance_type; /**< Distance operator for overlap functionality */
 
-/** 
- * \todo document this!
- *
- * @param a
- * @param b
- * @param dim
- *
- * @return Distance on axis
- */
+  /**
+   * \todo document this!
+   *
+   * @param a
+   * @param b
+   * @param dim
+   *
+   * @return Distance on axis
+   */
     distance_type operator() (const int &a, const int &b, 
                               const size_t dim) const 
       {
@@ -129,21 +131,21 @@ public:
       }
   };
 
-/** 
- * Test ray-box intersection
- * 
- * @param ray Ray to test for intersection
- * 
- * @return True if ray intersects with this bounding box
- */
+  /**
+   * Test ray-box intersection
+   *
+   * @param ray Ray to test for intersection
+   *
+   * @return True if ray intersects with this bounding box
+   */
   gcc_pure
   bool intersects(const FlatRay& ray) const;
 
-/**
- * Get center of bounding box
- *
- * @return Center in flat coordinates
- */
+  /**
+   * Get center of bounding box
+   *
+   * @return Center in flat coordinates
+   */
   gcc_pure
   FlatGeoPoint get_center() const;
 
