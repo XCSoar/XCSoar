@@ -71,28 +71,27 @@ public:
 #define TITHRESHOLD -1.6
 
 /**
- * Class to provide simple estimates of thermal heights from lapse rates
+ * Namespaces that provides simple estimates of thermal heights from lapse rates
  * derived from temperature trace obtained during flight.
- * 
  */
-class CuSonde {
-public:
+namespace CuSonde
+{
   /** Expected temperature maximum on the ground */
-  static double maxGroundTemperature;
+  extern double maxGroundTemperature;
   /** Height of ground above MSL */
-  static double hGround;
-  static unsigned short last_level;
-  static void updateMeasurements(const NMEA_INFO &basic);
-  static CuSondeLevel cslevels[CUSONDE_NUMLEVELS];
-  static void findCloudBase(unsigned short level);
-  static void findThermalHeight(unsigned short level);
-  static void adjustForecastTemperature(double delta);
-  static void setForecastTemperature(double val);
+  extern double hGround;
+  extern unsigned short last_level;
+  void updateMeasurements(const NMEA_INFO &basic);
+  extern CuSondeLevel cslevels[CUSONDE_NUMLEVELS];
+  void findCloudBase(unsigned short level);
+  void findThermalHeight(unsigned short level);
+  void adjustForecastTemperature(double delta);
+  void setForecastTemperature(double val);
 
   /** Estimated ThermailHeight */
-  static double thermalHeight;
+  extern double thermalHeight;
   /** Estimated CloudBase */
-  static double cloudBase;
+  extern double cloudBase;
 };
 
 #endif
