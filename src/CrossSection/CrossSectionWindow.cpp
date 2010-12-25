@@ -42,9 +42,20 @@
 
 #define AIRSPACE_SCANSIZE_X 16
 
+/**
+ * Local visitor class used for rendering airspaces in the CrossSectionWindow
+ */
 class AirspaceIntersectionVisitorSlice: public AirspaceIntersectionVisitor
 {
 public:
+  /**
+   * Constructor of the AirspaceIntersectionVisitorSlice class
+   * @param _canvas The canvas to draw to
+   * @param _chart Chart instance for scaling coordinates
+   * @param _settings_map SettingsMap for colors, pens and brushes
+   * @param _start GeoPoint at the left of the CrossSection
+   * @param _state AltitudeState instance used for AGL-based airspaces
+   */
   AirspaceIntersectionVisitorSlice(Canvas &_canvas, Chart &_chart,
                                    const SETTINGS_MAP &_settings_map,
                                    const GeoPoint _start,
@@ -52,61 +63,83 @@ public:
     canvas(_canvas), chart(_chart), settings_map(_settings_map),
     start(_start), state(_state) {}
 
+  /**
+   * Render an airspace box to the canvas
+   * @param rc On-screen coordinates of the box
+   * @param brush Brush to use
+   * @param black Use black pen?
+   * @param type Airspace class
+   */
   void
   RenderBox(const RECT rc, const Brush &brush, bool black, int type)
   {
+    // Enable "transparency" effect
 #ifdef ENABLE_OPENGL
     GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 #elif !defined(ENABLE_SDL)
     canvas.mix_mask();
 #endif /* GDI */
 
+    // Use filling brush without outline
     canvas.select(brush);
     canvas.null_pen();
 
+    // Draw thick brushed outlines
     int border_width = Layout::Scale(10);
     if ((rc.right - rc.left) > border_width * 2 &&
         (rc.bottom - rc.top) > border_width * 2) {
       RECT rc_brush = rc;
 
+      // Left border
       rc_brush.right = rc.left + border_width;
       canvas.rectangle(rc_brush.left, rc_brush.top,
                        rc_brush.right, rc_brush.bottom);
       rc_brush.right = rc.right;
 
+      // Right border
       rc_brush.left = rc.right - border_width;
       canvas.rectangle(rc_brush.left, rc_brush.top,
                        rc_brush.right, rc_brush.bottom);
       rc_brush.left = rc.left;
 
+      // Bottom border
       rc_brush.top = rc.bottom - border_width;
       canvas.rectangle(rc_brush.left, rc_brush.top,
                        rc_brush.right, rc_brush.bottom);
       rc_brush.top = rc.top;
 
+      // Top border
       rc_brush.bottom = rc.top + border_width;
       canvas.rectangle(rc_brush.left, rc_brush.top,
                        rc_brush.right, rc_brush.bottom);
       rc_brush.bottom = rc.bottom;
     } else {
+      // .. or fill the entire rect if the outlines would overlap
       canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
     }
 
+    // Disable "transparency" effect
 #ifdef ENABLE_OPENGL
     glDisable(GL_BLEND);
 #elif !defined(ENABLE_SDL)
     canvas.mix_copy();
 #endif /* GDI */
 
+    // Use transparent brush and type-dependent pen for the outlines
     canvas.hollow_brush();
     if (black)
       canvas.black_pen();
     else
       canvas.select(Graphics::hAirspacePens[type]);
 
+    // Draw thin outlines
     canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
   }
 
+  /**
+   * Renders the AbstractAirspace on the canvas
+   * @param as AbstractAirspace to render
+   */
   void
   Render(const AbstractAirspace& as)
   {
@@ -153,12 +186,20 @@ public:
     }
   }
 
+  /**
+   * Visitor function for intersectingAirspaceCircle objects
+   * @param as Intersecting AirspaceCircle instance
+   */
   void
   Visit(const AirspaceCircle& as)
   {
     Render(as);
   }
 
+  /**
+   * Visitor function for intersecting AirspacePolygon objects
+   * @param as Intersecting AirspacePolygon instance
+   */
   void
   Visit(const AirspacePolygon& as)
   {
@@ -166,10 +207,15 @@ public:
   }
 
 private:
+  /** Canvas to draw on */
   Canvas& canvas;
+  /** Chart for scaling the airspace CrossSection */
   Chart& chart;
+  /** SettingsMap for reading airspace colors, pen and brushes */
   const SETTINGS_MAP& settings_map;
+  /** GeoPoint at the left of the CrossSection */
   const GeoPoint start;
+  /** AltitudeState instance used for AGL-based airspaces */
   const ALTITUDE_STATE& state;
 };
 
@@ -214,11 +260,15 @@ CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
 void
 CrossSectionWindow::PaintAirspaces(Canvas &canvas, Chart &chart)
 {
+  // Quit early if no airspace database available
   if (airspace_database == NULL)
     return;
 
+  // Create IntersectionVisitor to render to the canvas
   AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map,
                                             start, ToAircraftState(gps_info));
+
+  // Call visitor with intersecting airspaces
   airspace_database->visit_intersecting(start, vec, ivisitor);
 }
 
