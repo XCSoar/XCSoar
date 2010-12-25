@@ -303,20 +303,21 @@ GeoClip::clip_polygon(GeoPoint *dest,
   if (src_length < 3)
     return 0;
 
-  GeoPoint tmp[src_length * 3], *p = tmp + src_length * 2;
+  GeoPoint *imported = dest + src_length * 2;
   for (unsigned i = 0; i < src_length; ++i)
-    p[i] = import_point(src[i]);
+    imported[i] = import_point(src[i]);
 
+  GeoPoint *first_stage = dest + src_length;
   unsigned n = clip_polygon_longitude(Angle::native(fixed_zero), width,
-                                      tmp + src_length, p, src_length);
+                                      first_stage, imported, src_length);
   if (n < 3)
     return 0;
 
-  n = clip_polygon_latitude(south, north, tmp, tmp + src_length, n);
+  n = clip_polygon_latitude(south, north, dest, first_stage, n);
   if (n < 3)
     return 0;
 
   for (unsigned i = 0; i < n; ++i)
-    dest[i] = export_point(tmp[i]);
+    dest[i] = export_point(dest[i]);
   return n;
 }
