@@ -32,12 +32,12 @@
  */
 class FlatRay {
 public:
-/** 
- * Constructor given start/end locations
- * 
- * @param from Origin of ray
- * @param to End point of ray
- */
+  /**
+   * Constructor given start/end locations
+   *
+   * @param from Origin of ray
+   * @param to End point of ray
+   */
   FlatRay(const FlatGeoPoint& from,
           const FlatGeoPoint& to):
     point(from),vector(to-from),
@@ -49,23 +49,23 @@ public:
   const fixed fx; /**< speedups for box intersection test */
   const fixed fy; /**< speedups for box intersection test */
 
-/** 
- * Test whether two rays intersect
- * 
- * @param that Other ray to test intersection with
- * 
- * @return Parameter [0,1] of vector on this ray that intersection occurs (or -1 if fail)
- */
+  /**
+   * Test whether two rays intersect
+   *
+   * @param that Other ray to test intersection with
+   *
+   * @return Parameter [0,1] of vector on this ray that intersection occurs (or -1 if fail)
+   */
   gcc_pure
   fixed intersects(const FlatRay &that) const;
 
 /** 
- * Parametric form of ray
- * 
- * @param t Parameter [0,1] of ray
- * 
- * @return Location of end point
- */
+   * Parametric form of ray
+   *
+   * @param t Parameter [0,1] of ray
+   *
+   * @return Location of end point
+   */
   gcc_pure
   FlatGeoPoint parametric(const fixed t) const;
 

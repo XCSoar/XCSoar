@@ -19,45 +19,45 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "FlatRay.hpp"
+
 #include "Math/FastMath.h"
 
-#define sgn(x) (x>=0? 1:-1)
+#define sgn(x) (x >= 0 ? 1 : -1)
 
 /*
- * Checks whether two lines 
- * intersect or not
+ * Checks whether two lines intersect or not
  * @see http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
  * adapted from line_line_intersection
- *
  */
 std::pair<int, int>
 FlatRay::intersects_ratio(const FlatRay &that) const
 {
   std::pair<int, int> r;
   r.second = vector.cross(that.vector);
-  if (r.second == 0) {
+  if (r.second == 0)
     // lines are parallel
     return r;
-  }
-  const FlatGeoPoint delta = that.point-point;
+
+  const FlatGeoPoint delta = that.point - point;
   r.first = delta.cross(that.vector);
-  if ((sgn(r.first)*sgn(r.second)<0) || (abs(r.first)>abs(r.second))) {
+  if ((sgn(r.first) * sgn(r.second) < 0) || (abs(r.first) > abs(r.second))) {
     // outside first line
     r.second = 0;
     return r;
   }
+
   const int ub = delta.cross(vector);
-  if ((sgn(ub)*sgn(r.second)<0) || (abs(ub)>abs(r.second))) {
+  if ((sgn(ub) * sgn(r.second) < 0) || (abs(ub) > abs(r.second))) {
     // outside second line
     r.second = 0;
     return r;
-  }  
+  }
 
   // inside both lines
   return r;
 }
-
 
 FlatGeoPoint
 FlatRay::parametric(const fixed t) const
@@ -69,30 +69,34 @@ FlatRay::parametric(const fixed t) const
 }
 
 fixed
-FlatRay::intersects (const FlatRay &that) const
+FlatRay::intersects(const FlatRay &that) const
 {
   std::pair<int, int> r = intersects_ratio(that);
-  if (r.second==0)
+  if (r.second == 0)
     return -fixed_one;
-  return ((fixed)r.first)/r.second;
+  return ((fixed)r.first) / r.second;
 }
 
 bool
 FlatRay::intersects_distinct(const FlatRay& that) const
 {
   std::pair<int, int> r = intersects_ratio(that);
-  return (r.second!=0) && (sgn(r.second)*r.first>0) && (abs(r.first)<abs(r.second));
+  return (r.second != 0) &&
+         (sgn(r.second) * r.first > 0) &&
+         (abs(r.first) < abs(r.second));
 }
 
 bool
 FlatRay::intersects_distinct(const FlatRay& that, fixed& t) const
 {
   std::pair<int, int> r = intersects_ratio(that);
-  if ((r.second!=0) && (sgn(r.second)*r.first>0) && (abs(r.first)<abs(r.second))) {
-    t = ((fixed)r.first)/r.second;
+  if (r.second != 0 &&
+      sgn(r.second) * r.first > 0 &&
+      abs(r.first) < abs(r.second)) {
+    t = ((fixed)r.first) / r.second;
     return true;
-  } else {
-    t = -fixed_one;
-    return false;
   }
+
+  t = -fixed_one;
+  return false;
 }
