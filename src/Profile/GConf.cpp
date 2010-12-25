@@ -25,7 +25,7 @@ Copyright_License {
 #include "Config/GConf.hpp"
 
 bool
-ProfileGConf::Get(const TCHAR *szRegValue, int &pPos)
+ProfileGConf::_Get(const TCHAR *szRegValue, int &pPos)
 {
   int value;
   if (!GConf().get(szRegValue, value))
@@ -33,12 +33,6 @@ ProfileGConf::Get(const TCHAR *szRegValue, int &pPos)
 
   pPos = value;
   return true;
-}
-
-bool
-ProfileGConf::Set(const TCHAR *szRegValue, int Pos)
-{
-  return GConf().set(szRegValue, Pos);
 }
 
 /**

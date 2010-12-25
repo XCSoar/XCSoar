@@ -34,40 +34,12 @@ Profile::SetFiles(const TCHAR* override)
 {
 }
 
-#if defined(WIN32) && !defined(USE_PROFILE_MAP)
-bool
-ProfileImpl::Get(const TCHAR *key, DWORD &value_r)
-{
-  return false;
-}
-#else
-bool
-ProfileImpl::Get(const TCHAR *key, int &value_r)
-{
-  return false;
-}
-#endif
-
 bool
 ProfileImpl::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
 {
   pPos[0] = _T('\0');
   return false;
 }
-
-#if defined(WIN32) && !defined(USE_PROFILE_MAP)
-bool
-ProfileImpl::Set(const TCHAR *key, DWORD value)
-{
-  return false;
-}
-#else
-bool
-ProfileImpl::Set(const TCHAR *key, int value)
-{
-  return false;
-}
-#endif
 
 bool
 ProfileImpl::Set(const TCHAR *szRegValue, const TCHAR *Pos)

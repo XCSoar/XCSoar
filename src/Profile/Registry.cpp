@@ -39,19 +39,11 @@ const static size_t nMaxKeyNameSize = MAX_PATH + 6;
 // NOTE: all registry variables are unsigned!
 //
 bool
-Registry::Get(const TCHAR *szRegValue, DWORD &pPos)
+Registry::_Get(const TCHAR *szRegValue, DWORD &pPos)
 {
   RegistryKey registry(HKEY_CURRENT_USER, szProfileKey, true);
   return !registry.error() &&
     registry.get_value(szRegValue, pPos);
-}
-
-bool
-Registry::Set(const TCHAR *szRegValue, DWORD Pos)
-{
-  RegistryKey registry(HKEY_CURRENT_USER, szProfileKey, false);
-  return !registry.error() &&
-    registry.set_value(szRegValue, Pos);
 }
 
 /**

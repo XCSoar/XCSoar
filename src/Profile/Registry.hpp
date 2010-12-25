@@ -28,90 +28,167 @@ Copyright_License {
 
 #include <windef.h>
 #include <tchar.h>
+#include <cstdio>
 
 class ProfileWriter;
 
 namespace Registry {
-  bool Get(const TCHAR *szRegValue, DWORD &pPos);
+  bool _Get(const TCHAR *szRegValue, DWORD &pPos);
+
+  bool Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize);
+  bool Set(const TCHAR *szRegValue, const TCHAR *Pos);
 
   static inline bool Get(const TCHAR *key, int &value)
   {
+    // Try to read the registry key as a string
+    TCHAR str[50];
+    if (Get(key, str, 50)) {
+      // Parse the string for a number
+      TCHAR *endptr;
+      int tmp = _tcstol(str, &endptr, 0);
+      if (endptr != str) {
+        // Save parsed value to output parameter value and return success
+        value = tmp;
+        return true;
+      }
+    }
+
+    // Try to read the registry key as a DWORD
     DWORD temp;
-    if (!Get(key, temp))
+    if (!_Get(key, temp))
       return false;
 
+    // Save the read DWORD as output parameter and return success
     value = temp;
     return true;
   }
 
   static inline bool Get(const TCHAR *key, short &value)
   {
+    // Try to read the registry key as a string
+    TCHAR str[50];
+    if (Get(key, str, 50)) {
+      // Parse the string for a number
+      TCHAR *endptr;
+      short tmp = _tcstol(str, &endptr, 0);
+      if (endptr != str) {
+        // Save parsed value to output parameter value and return success
+        value = tmp;
+        return true;
+      }
+    }
+
+    // Try to read the registry key as a DWORD
     DWORD temp;
-    if (!Get(key, temp))
+    if (!_Get(key, temp))
       return false;
 
+    // Save the read DWORD as output parameter and return success
     value = (short)temp;
     return true;
   }
 
   static inline bool Get(const TCHAR *key, bool &value)
   {
+    // Try to read the registry key as a string
+    TCHAR str[5];
+    if (Get(key, str, 5)) {
+      value = (str[0] != '0');
+      return true;
+    }
+
+    // Try to read the registry key as a DWORD
     DWORD temp;
-    if (!Get(key, temp))
+    if (!_Get(key, temp))
       return false;
 
+    // Save the read DWORD as output parameter and return success
     value = temp > 0;
     return true;
   }
 
-#if !defined(HAVE_POSIX) || defined(__CYGWIN__) /* DWORD==unsigned on WINE, would be duplicate */
   static inline bool Get(const TCHAR *key, unsigned &value)
   {
+    // Try to read the registry key as a string
+    TCHAR str[50];
+    if (Get(key, str, 50)) {
+      // Parse the string for an unsigned number
+      TCHAR *endptr;
+      unsigned tmp = _tcstoul(str, &endptr, 0);
+      if (endptr != str) {
+        // Save parsed value to output parameter value and return success
+        value = tmp;
+        return true;
+      }
+    }
+
+    // Try to read the registry key as a DWORD
     DWORD temp;
-    if (!Get(key, temp))
+    if (!_Get(key, temp))
       return false;
 
+    // Save the read DWORD as output parameter and return success
     value = temp;
     return true;
   }
-#endif
 
   static inline bool Get(const TCHAR *key, fixed &value)
   {
+    // Try to read the registry key as a string
+    TCHAR str[50];
+    if (Get(key, str, 50)) {
+      // Parse the string for a floating point number
+      TCHAR *endptr;
+      double tmp = _tcstod(str, &endptr);
+      if (endptr != str) {
+        // Save parsed value to output parameter value and return success
+        value = fixed(tmp);
+        return true;
+      }
+    }
+
+    // Try to read the registry key as a DWORD
     DWORD temp;
-    if (!Get(key, temp))
+    if (!_Get(key, temp))
       return false;
 
+    // Save the read DWORD as output parameter and return success
     value = fixed(temp);
     return true;
   }
 
-  bool Set(const TCHAR *szRegValue, DWORD Pos);
-
   static inline bool Set(const TCHAR *key, bool value)
   {
-    return Set(key, value ? DWORD(1) : DWORD(0));
+    return Set(key, value ? _T("1") : _T("0"));
   }
 
   static inline bool Set(const TCHAR *key, int value)
   {
-    return Set(key, DWORD(value));
+    TCHAR tmp[50];
+    _sntprintf(tmp, 50, _T("%d"), value);
+    return Set(key, tmp);
   }
 
   static inline bool Set(const TCHAR *key, long value)
   {
-    return Set(key, DWORD(value));
+    TCHAR tmp[50];
+    _sntprintf(tmp, 50, _T("%ld"), value);
+    return Set(key, tmp);
   }
 
-  #if !defined(HAVE_POSIX) || defined(__CYGWIN__) /* DWORD==unsigned on WINE, would be duplicate */
   static inline bool Set(const TCHAR *key, unsigned value)
   {
-    return Set(key, DWORD(value));
+    TCHAR tmp[50];
+    _sntprintf(tmp, 50, _T("%u"), value);
+    return Set(key, tmp);
   }
-  #endif
 
-  bool Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize);
-  bool Set(const TCHAR *szRegValue, const TCHAR *Pos);
+  static inline bool Set(const TCHAR *key, fixed value)
+  {
+    TCHAR tmp[50];
+    _sntprintf(tmp, 50, _T("%f"), (double)value);
+    return Set(key, tmp);
+  }
 
   void Export(ProfileWriter &writer);
 }
