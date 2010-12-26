@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Navigation/SearchPointVector.hpp"
 #include "Screen/Point.hpp"
+#include "Geo/GeoClip.hpp"
 
 class Canvas;
 class Projection;
@@ -39,12 +40,14 @@ class MapCanvas {
 public:
   Canvas &canvas;
   const Projection &projection;
+  const GeoClip clip;
 
 public:
-  MapCanvas(Canvas &_canvas, const Projection &_projection)
-    :canvas(_canvas), projection(_projection) {}
+  MapCanvas(Canvas &_canvas, const Projection &_projection,
+            const GeoClip &_clip)
+    :canvas(_canvas), projection(_projection), clip(_clip) {}
 
-  void line(const GeoPoint &a, const GeoPoint &b);
+  void line(GeoPoint a, GeoPoint b);
   void circle(const GeoPoint &center, fixed radius);
 
   /**
@@ -54,7 +57,13 @@ public:
    * @param screen a RasterPoint array allocated by the caller, large enough
    * to hold all points of the #SearchPointVector
    */
-  void project(const SearchPointVector &points, RasterPoint *screen) const;
+  static void project(const Projection &projection,
+                      const SearchPointVector &points,
+                      RasterPoint *screen);
+
+  void project(const SearchPointVector &points, RasterPoint *screen) const {
+    project(projection, points, screen);
+  }
 
   /**
    * Determines whether the polygon is visible, or off-screen.
@@ -64,7 +73,14 @@ public:
    * and this function aims to reduce the overhead for off-screen
    * airspaces.
    */
-  bool visible(const RasterPoint *screen, unsigned num);
+  gcc_pure
+  static bool visible(const Canvas &canvas,
+                      const RasterPoint *screen, unsigned num);
+
+  gcc_pure
+  bool visible(const RasterPoint *screen, unsigned num) const {
+    return visible(canvas, screen, num);
+  }
 
   void draw(const SearchPointVector &points);
 };

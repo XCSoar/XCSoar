@@ -6,6 +6,20 @@ Changes to version 6.1 (since 6.0):
 * user interface
   - "pan to" button in waypoint dialog
 
+Changes to version 6.0.1 (since 6.0):
+* map
+  - task, glide terrain: fix rendering bugs
+* user interface
+  - Language: translation updates
+  - Language: always fall back to resource data
+  - Language: enable translation on PPC2000/PPC2003
+  - dialog "Switches": portrait mode layout fixed
+  - dialog "Statistics": draw trace on task page
+* terrain / topology
+  - minor memory leak fixed
+* glide computer
+  - new built-in polars: IS28B2 and SZD30
+
 Changes to version 6.0 (since 5.2.4):
 * build system
   - compile with gcc / mingw32 / mingw32ce instead of Visual C++

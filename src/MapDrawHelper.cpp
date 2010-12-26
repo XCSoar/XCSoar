@@ -76,11 +76,9 @@ MapDrawHelper::draw_search_point_vector(Canvas& the_canvas,
     return;
   }
 
-  MapCanvas map_canvas(the_canvas, m_proj);
   RasterPoint screen[size];
-  map_canvas.project(points, screen);
-
-  if (!map_canvas.visible(screen, size))
+  MapCanvas::project(m_proj, points, screen);
+  if (!MapCanvas::visible(the_canvas, screen, size))
     return;
 
   the_canvas.polygon(&screen[0], size);

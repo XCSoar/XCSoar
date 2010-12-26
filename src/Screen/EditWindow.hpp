@@ -67,7 +67,7 @@ public:
 
   void center() {
 #ifdef ENABLE_SDL
-    text_style &= DT_LEFT;
+    text_style &= ~DT_LEFT;
     text_style |= DT_CENTER;
 #else
     style &= ~ES_LEFT;

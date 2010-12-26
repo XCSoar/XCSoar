@@ -198,6 +198,7 @@ DBFHandle msDBFOpen(struct zzip_dir *zdir, const char *pszFilename,
     /* -------------------------------------------------------------------- */
     psDBF = (DBFHandle) calloc( 1, sizeof(DBFInfo) );
     psDBF->zfp = zzip_open_rb(zdir, pszDBFFilename);
+    free( pszDBFFilename );
     if( psDBF->zfp == NULL )
         return( NULL );
 
@@ -211,8 +212,6 @@ DBFHandle msDBFOpen(struct zzip_dir *zdir, const char *pszFilename,
 
     psDBF->pszStringField = NULL;
     psDBF->nStringFieldLen = 0;    
-
-    free( pszDBFFilename );
 
     /* -------------------------------------------------------------------- */
     /*  Read Table Header info                                              */

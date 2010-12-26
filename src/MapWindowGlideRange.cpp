@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
+#include "Geo/GeoClip.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
 
@@ -32,9 +33,19 @@ Copyright_License {
 #include <stdio.h>
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
-  if (SettingsComputer().FinalGlideTerrain)
-    for (unsigned i = 0; i < TERRAIN_ALT_INFO::NUMTERRAINSWEEPS; ++i)
-      Groundline[i] = render_projection.GeoToScreen(Calculated().GlideFootPrint[i]);
+  if (!SettingsComputer().FinalGlideTerrain)
+    return;
+
+  const GeoClip clip(render_projection.GetScreenBounds().scale(fixed(1.1)));
+  GeoPoint clipped[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS * 3];
+  GroundlineLength =
+    clip.clip_polygon(clipped, Calculated().GlideFootPrint,
+                      TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
+  if (GroundlineLength < 3)
+    return;
+
+  for (unsigned i = 0; i < GroundlineLength; ++i)
+    Groundline[i] = render_projection.GeoToScreen(clipped[i]);
 }
 
 /**
@@ -48,7 +59,7 @@ void
 MapWindow::DrawTerrainAbove(Canvas &canvas)
 {
   if (Basic().gps.NAVWarning || !Basic().flight.Flying ||
-      SettingsMap().EnablePan)
+      SettingsMap().EnablePan || GroundlineLength < 3)
     return;
 
 #ifdef ENABLE_OPENGL
@@ -61,7 +72,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   glStencilFunc(GL_ALWAYS, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-  canvas.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
+  canvas.polygon(Groundline, GroundlineLength);
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glStencilFunc(GL_NOTEQUAL, 1, 1);
@@ -84,7 +95,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   buffer.null_pen();
   buffer.white_brush();
-  buffer.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
+  buffer.polygon(Groundline, GroundlineLength);
 
   canvas.copy_transparent_white(buffer);
 #endif
@@ -98,16 +109,16 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
     /* don't draw this if we don't know our own position */
     return;
 
-  if (SettingsComputer().FinalGlideTerrain) {
+  if (SettingsComputer().FinalGlideTerrain && GroundlineLength >= 3) {
     canvas.hollow_brush();
 
 #ifndef ENABLE_OPENGL
     canvas.select(Graphics::hpTerrainLineBg);
-    canvas.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
+    canvas.polygon(Groundline, GroundlineLength);
 #endif
 
     canvas.select(Graphics::hpTerrainLine);
-    canvas.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
+    canvas.polygon(Groundline, GroundlineLength);
   }
 
   if (!Basic().flight.Flying)

@@ -307,11 +307,9 @@ public:
 
 private:
   void clipped_polygon(const RasterPoint *lppt, unsigned cPoints);
-  void clipped_polyline(const RasterPoint *lppt, unsigned cPoints);
 
 public:
   void autoclip_polygon(const RasterPoint *lppt, unsigned cPoints);
-  void autoclip_polyline(const RasterPoint *lppt, unsigned cPoints);
 
   void line(int ax, int ay, int bx, int by);
   void line(const RasterPoint a, const RasterPoint b) {

@@ -139,31 +139,23 @@ ClipEdge(const bool &s_inside,
          RasterPoint *outVertexArray,
          const RasterPoint *s,
          const RasterPoint *p,
-         unsigned int *outLength,
-         const bool fill)
+         unsigned int *outLength)
 {
-  if (fill) {
-    if (p_inside && s_inside) {
-      // case 1, save endpoint p
-      return true;
-    } else if (p_inside != s_inside) {
-      RasterPoint i;
-      if (Intersect(*s, *p, clipBoundary, &i)) {
-        Output(&i, outLength, outVertexArray);
-      }
-      // case 4, save intersection and endpoint
-      // case 2, exit visible, save intersection i
-      return p_inside;
-    } else {
-      // case 3, both outside, save nothing
-      return false;
+  if (p_inside && s_inside) {
+    // case 1, save endpoint p
+    return true;
+  } else if (p_inside != s_inside) {
+    RasterPoint i;
+    if (Intersect(*s, *p, clipBoundary, &i)) {
+      Output(&i, outLength, outVertexArray);
     }
+    // case 4, save intersection and endpoint
+    // case 2, exit visible, save intersection i
+    return p_inside;
   } else {
-    if (p_inside) {
-      return true;
-    }
+    // case 3, both outside, save nothing
+    return false;
   }
-  return false;
 }
 
 /**
@@ -173,7 +165,6 @@ ClipEdge(const bool &s_inside,
  * @param outVertexArray
  * @param inLength Number of points in the inVertexArray
  * @param clipBoundary Clipping Boundary
- * @param fill
  * @param mode
  * @return
  * @see http://en.wikipedia.org/wiki/Sutherland-Hodgman_clipping_algorithm
@@ -183,7 +174,6 @@ SutherlandHodgmanPolygoClip (RasterPoint* inVertexArray,
                              RasterPoint* outVertexArray,
                              const unsigned int inLength,
                              const RasterPoint *clipBoundary,
-                             const bool fill,
                              const int mode)
 {
   // Start, end point of current polygon edge
@@ -207,7 +197,7 @@ SutherlandHodgmanPolygoClip (RasterPoint* inVertexArray,
       p_inside = INSIDE_LEFT_EDGE(p,clipBoundary);
       // Now s and p correspond to the vertices
       if (ClipEdge(s_inside, p_inside, clipBoundary, outVertexArray, s, p,
-          &outLength, fill || (p != inVertexArray))) {
+          &outLength)) {
         Output(p, &outLength, outVertexArray);
       }
       // Advance to next pair of vertices
@@ -220,7 +210,7 @@ SutherlandHodgmanPolygoClip (RasterPoint* inVertexArray,
       s_inside = INSIDE_BOTTOM_EDGE(s,clipBoundary);
       p_inside = INSIDE_BOTTOM_EDGE(p,clipBoundary);
       if (ClipEdge(s_inside, p_inside, clipBoundary, outVertexArray, s, p,
-          &outLength, fill || (p != inVertexArray))) {
+          &outLength)) {
         Output(p, &outLength, outVertexArray);
       }
       s = p;
@@ -232,7 +222,7 @@ SutherlandHodgmanPolygoClip (RasterPoint* inVertexArray,
       s_inside = INSIDE_RIGHT_EDGE(s,clipBoundary);
       p_inside = INSIDE_RIGHT_EDGE(p,clipBoundary);
       if (ClipEdge(s_inside, p_inside, clipBoundary, outVertexArray, s, p,
-          &outLength, fill || (p != inVertexArray))) {
+          &outLength)) {
         Output(p, &outLength, outVertexArray);
       }
       s = p;
@@ -244,7 +234,7 @@ SutherlandHodgmanPolygoClip (RasterPoint* inVertexArray,
       s_inside = INSIDE_TOP_EDGE(s,clipBoundary);
       p_inside = INSIDE_TOP_EDGE(p,clipBoundary);
       if (ClipEdge(s_inside, p_inside, clipBoundary, outVertexArray, s, p,
-          &outLength, fill || (p != inVertexArray))) {
+          &outLength)) {
         Output(p, &outLength, outVertexArray);
       }
       s = p;
@@ -262,11 +252,9 @@ SutherlandHodgmanPolygoClip (RasterPoint* inVertexArray,
  * @param m_ptin
  * @param inLength
  * @param rc
- * @param fill
  */
 void
-ClipPolygon(Canvas &canvas, const RasterPoint *m_ptin, unsigned int inLength,
-            bool fill)
+ClipPolygon(Canvas &canvas, const RasterPoint *m_ptin, unsigned int inLength)
 {
   unsigned int outLength = 0;
 
@@ -283,12 +271,10 @@ ClipPolygon(Canvas &canvas, const RasterPoint *m_ptin, unsigned int inLength,
   // add extra point for final point if it doesn't equal the first
   // this is required to close some airspace areas that have missing
   // final point
-  if (fill) {
-    if ((m_ptin[inLength - 1].x != m_ptin[0].x)
-        && (m_ptin[inLength - 1].y != m_ptin[0].y)) {
-      clip_ptin[inLength] = clip_ptin[0];
-      inLength++;
-    }
+  if ((m_ptin[inLength - 1].x != m_ptin[0].x)
+      && (m_ptin[inLength - 1].y != m_ptin[0].y)) {
+    clip_ptin[inLength] = clip_ptin[0];
+    inLength++;
   }
 
   RECT rc;
@@ -304,19 +290,12 @@ ClipPolygon(Canvas &canvas, const RasterPoint *m_ptin, unsigned int inLength,
   RasterPoint clip_ptout[inLength * 16];
   for (int step = 0; step < 4; step++) {
     outLength = SutherlandHodgmanPolygoClip(clip_ptin, clip_ptout, inLength,
-        edge + step, fill, step);
+        edge + step, step);
     OutputToInput(&inLength, clip_ptin, &outLength, clip_ptout);
   }
 
-  if (fill) {
-    if (outLength > 2) {
-      canvas.polygon(clip_ptout, outLength);
-    }
-  } else {
-    if (outLength > 1) {
-      canvas.polyline(clip_ptout, outLength);
-    }
-  }
+  if (outLength > 2)
+    canvas.polygon(clip_ptout, outLength);
 }
 
 /**

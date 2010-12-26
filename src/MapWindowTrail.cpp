@@ -61,7 +61,7 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
   if (!SettingsMap().TrailActive || task == NULL)
     return;
 
-  const MapWindowProjection &projection = render_projection;
+  const WindowProjection &projection = render_projection;
 
   TracePointVector trace =
     task->find_trace_points(projection.GetGeoLocation(),
