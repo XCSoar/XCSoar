@@ -34,8 +34,6 @@ struct GeoVector;
  * Geodetic coordinate expressed as Longitude and Latitude angles.
  */
 struct GeoPoint {
-  friend class Serialiser;
-
   /**
    * Constructor (origin)
    *
