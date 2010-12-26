@@ -136,8 +136,6 @@ GlideComputerTask::TerrainWarning()
   const TaskStats& stats = Calculated().task_stats;
   const GlideResult& current = stats.current_leg.solution_remaining;
 
-  SetCalculated().TerrainWarningLocation = null_point;
-
   TerrainIntersection its(null_point);
 
   if (!stats.task_valid) {
@@ -148,6 +146,7 @@ GlideComputerTask::TerrainWarning()
     its = g_terrain.find_intersection(state, current, polar);
   }
 
+  SetCalculated().TerrainWarning = !its.out_of_range;
   if (!its.out_of_range)
     SetCalculated().TerrainWarningLocation = its.location;
 }
