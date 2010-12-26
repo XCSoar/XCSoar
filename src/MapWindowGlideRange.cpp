@@ -124,7 +124,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
   if (!Basic().flight.Flying)
     return;
 
-  if (!Calculated().TerrainWarning) {
+  if (!Calculated().TerrainWarningLocation.is_null()) {
     RasterPoint sc;
     if (render_projection.GeoToScreenIfVisible(Calculated().TerrainWarningLocation,
                                                  sc))
