@@ -19,16 +19,17 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "FlatGeoPoint.hpp"
 #include "Math/FastMath.h"
 
-unsigned 
+unsigned
 FlatGeoPoint::distance_to(const FlatGeoPoint &sp) const
 {
   return isqrt4(distance_sq_to(sp));
 }
 
-unsigned 
+unsigned
 FlatGeoPoint::distance_sq_to(const FlatGeoPoint &sp) const
 {
   const FlatGeoPoint delta = *this - sp;
