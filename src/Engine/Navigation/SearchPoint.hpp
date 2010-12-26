@@ -65,64 +65,63 @@ public:
 #endif
   {}
 
-/** 
- * Constructor
- * 
- * @param loc Location of search point
- * @param tp Projection used
- */
+  /**
+   * Constructor
+   *
+   * @param loc Location of search point
+   * @param tp Projection used
+   */
   SearchPoint(const GeoPoint &loc, const TaskProjection& tp);
 
-/** 
- * Calculate projected value of geodetic coordinate
- * 
- * @param tp Projection used
- */
+  /**
+   * Calculate projected value of geodetic coordinate
+   *
+   * @param tp Projection used
+   */
   void project(const TaskProjection& tp);
 
-/** 
- * Accessor for flat projected coordinate
- * 
- * 
- * @return Flat projected coordinate
- */
+  /**
+   * Accessor for flat projected coordinate
+   *
+   * @return Flat projected coordinate
+   */
   const FlatGeoPoint& get_flatLocation() const {
     assert(projected);
 
     return flatLocation;
-  };
+  }
 
-/** 
- * Test whether two points are coincident (by their geodetic coordinates)
- * 
- * @param sp Point to compare with
- * 
- * @return True if points coincident
- */
+  /**
+   * Test whether two points are coincident (by their geodetic coordinates)
+   *
+   * @param sp Point to compare with
+   *
+   * @return True if points coincident
+   */
   gcc_pure
   bool equals(const SearchPoint& sp) const {
     return sp.get_location() == get_location();
   }
 
-/** 
- * Calculate flat earth distance between two points
- * 
- * @param sp Point to measure distance from
- * 
- * @return Distance in projected units
- */
+  /**
+   * Calculate flat earth distance between two points
+   *
+   * @param sp Point to measure distance from
+   *
+   * @return Distance in projected units
+   */
   gcc_pure
   unsigned flat_distance(const SearchPoint& sp) const {
     return flatLocation.distance_to(sp.flatLocation);
   }
 
-/** 
- * Rank two points according to longitude, then latitude
- * 
- * @param other Point to compare to
- * 
- * @return True if this point is further left (or if equal, lower) than the other
- */
+  /**
+   * Rank two points according to longitude, then latitude
+   *
+   * @param other Point to compare to
+   *
+   * @return True if this point is further left (or if equal, lower) than the other
+   */
   gcc_pure
   bool sort (const SearchPoint &other) const {
     return get_location().sort(other.get_location());
@@ -135,6 +134,7 @@ public:
   bool operator< (const SearchPoint &other) const {
     return sort(other);
   }
+
 private:
   FlatGeoPoint flatLocation;
 };
