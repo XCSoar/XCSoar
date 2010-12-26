@@ -3,9 +3,10 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Changes to version 6.0.1 (since 6.0):
+* map
+  - task, glide terrain: fix rendering bugs
 * user interface
   - Language: translation updates
-  - Language: enable file mapping on PPC2000/PPC2002
   - Language: always fall back to resource data
   - Language: enable translation on PPC2000/PPC2003
   - dialog "Switches": portrait mode layout fixed
