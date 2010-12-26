@@ -264,8 +264,7 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
   };
 
   int iwidth;
-  int minwidth =
-      max(Layout::Scale(2), Layout::Scale(settings_map.SnailWidthScale) / 16);
+  int minwidth = Layout::Scale(2);
 
   for (int i = 0; i < NUMSNAILCOLORS; i++) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
@@ -275,11 +274,13 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
                   ColorRampLookup(ih, snail_colors_vario2, 4) :
                   ColorRampLookup(ih, snail_colors_vario, 3);
 
-    if (i < NUMSNAILCOLORS / 2 || settings_map.SnailType == stAltitude)
+    if (i < NUMSNAILCOLORS / 2 ||
+        settings_map.SnailType == stAltitude ||
+        !settings_map.SnailScaling)
       iwidth = minwidth;
     else
-      iwidth = max(minwidth, (i - NUMSNAILCOLORS / 2)
-          * Layout::Scale(settings_map.SnailWidthScale) / NUMSNAILCOLORS);
+      iwidth = max(minwidth, (i - NUMSNAILCOLORS / 2) *
+                             Layout::Scale(16) / NUMSNAILCOLORS);
 
     hpSnailVario[i].set(iwidth, color);
   }

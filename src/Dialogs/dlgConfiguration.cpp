@@ -1332,7 +1332,7 @@ setVariables()
   LoadFormProperty(*wf, _T("prpLoggerTimeStepCircling"),
                    settings_computer.LoggerTimeStepCircling);
   LoadFormProperty(*wf, _T("prpSnailWidthScale"),
-                   XCSoarInterface::SettingsMap().SnailWidthScale);
+                   XCSoarInterface::SettingsMap().SnailScaling);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
   if (wp) {
@@ -2217,16 +2217,13 @@ void dlgConfigurationShowModal(void)
   if (DevicePortChanged)
     changed = true;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSnailWidthScale"));
-  if (wp) {
-    if (XCSoarInterface::SettingsMap().SnailWidthScale != wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().SnailWidthScale = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileSnailWidthScale,
-                    XCSoarInterface::SettingsMap().SnailWidthScale);
-      changed = true;
-      Graphics::InitSnailTrail(XCSoarInterface::SettingsMap());
-    }
-  }
+  bool snailscaling_changed =
+      SaveFormProperty(*wf, _T("prpSnailWidthScale"),
+                       szProfileSnailWidthScale,
+                       XCSoarInterface::SetSettingsMap().SnailScaling);
+  changed |= snailscaling_changed;
+  if (snailscaling_changed)
+    Graphics::InitSnailTrail(XCSoarInterface::SettingsMap());
 
   wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
   if (wp) {

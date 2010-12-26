@@ -89,7 +89,7 @@ struct SETTINGS_MAP {
 
   /** Automatic zoom when closing in on waypoint */
   bool AutoZoom;
-  int SnailWidthScale;
+  bool SnailScaling;
   /** 0: standard, 1: seeyou colors */
   SnailType_t SnailType;
   int WindArrowStyle;

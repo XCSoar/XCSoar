@@ -214,7 +214,7 @@ Profile::Use()
       settings_computer.HomeWaypoint);
 
   Get(szProfileSnailWidthScale,
-      settings_map.SnailWidthScale);
+      settings_map.SnailScaling);
 
   if (Get(szProfileSnailType, Temp))
     settings_map.SnailType = (SnailType_t)Temp;

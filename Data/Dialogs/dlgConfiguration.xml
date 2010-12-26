@@ -133,9 +133,9 @@
         <DataField DataType="enum" />
       </Edit>
       
-      <Edit Name="prpSnailWidthScale" Caption="Trail width*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Sets the width of the snail trail display.">
-        <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="2" Max="50" Step="1"/>
+      <Edit Name="prpSnailWidthScale" Caption="Trail scaled*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="If set to ON the snail trail width is scaled according to the vario signal.">
+        <DataField DataType="boolean"/>
       </Edit>
 
       <Edit Name="prpDetourCostMarker" Caption="Detour cost markers*" X="2" Width="-2" Height="22" CaptionWidth="150"
