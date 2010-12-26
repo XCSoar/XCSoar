@@ -1,8 +1,9 @@
 xcsoar (6.0.1) unstable; urgency=low
 
+  * new release
   * build-depend on ImageMagick 6.4
 
- --
+ -- Max Kellermann <max@duempel.org>  Sun, 26 Dec 2010 21:40:09 +0100
 
 xcsoar (6.0) unstable; urgency=low
 
