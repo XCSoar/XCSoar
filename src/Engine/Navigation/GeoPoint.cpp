@@ -93,3 +93,10 @@ GeoPoint::intermediate_point(const GeoPoint &destination,
 {
   return ::IntermediatePoint(*this, destination, distance);
 }
+
+bool
+GeoPoint::is_null() const
+{
+  return (Longitude.value_degrees() == fixed_zero) &&
+         (Latitude.value_degrees() == fixed_zero);
+}

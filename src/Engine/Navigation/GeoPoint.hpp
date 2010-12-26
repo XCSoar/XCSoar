@@ -233,6 +233,14 @@ struct GeoPoint {
    */
   gcc_pure
   bool sort (const GeoPoint &other) const;
+
+  /**
+   * Test whether the point is exactly at (0, 0)
+   *
+   * @return True if Lat = Lon = 0
+   */
+  gcc_pure
+  bool is_null() const;
 };
 
 #endif
