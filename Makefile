@@ -132,7 +132,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgStatus.cpp \
 	$(SRC)/Dialogs/dlgSwitches.cpp \
 	\
-	$(SRC)/Dialogs/dlgTaskManager.cpp \
 	$(SRC)/Dialogs/dlgTaskEdit.cpp \
 	$(SRC)/Dialogs/dlgTaskProperties.cpp \
 	$(SRC)/Dialogs/dlgTaskList.cpp \

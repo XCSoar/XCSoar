@@ -11,7 +11,12 @@
 
   <Button Name="cmdNew" Caption="New" X="2" Y="158" Width="77" Height="22" OnClick="OnNewClicked"/>
   <Button Name="cmdProperties" Caption="Properties" X="81" Y="158" Width="77" Height="22" OnClick="OnPropertiesClicked"/>
-  <Button Name="cmdClear" Caption="Clear" X="160" Y="158" Width="77" Height="22" OnClick="OnClearClicked"/>
+  <Button Name="cmdMore" Caption="More ..." X="160" Y="158" Width="77" Height="22" OnClick="OnMoreClicked"/>
+  <Panel Name="frmMore" X="2" Y="181" Width="236" Height="22" Border="0" Visible="0">
+    <Button Name="cmdList" Caption="Browse" X="0" Y="0" Width="77" Height="22" OnClick="OnListClicked"/>
+    <Button Name="cmdDeclare" Caption="Declare" X="79" Y="0" Width="77" Height="22" OnClick="OnDeclareClicked"/>
+    <Button Name="cmdSave" Caption="Save as" X="158" Y="0" Width="77" Height="22" OnClick="OnSaveClicked"/>
+  </Panel>
 
   <Label Name="frmSummary" X="119" Y="184" Width="-2" Height="118" Border="1"/>
 </Form>

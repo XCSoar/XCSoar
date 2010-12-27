@@ -27,6 +27,8 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Components.hpp"
 #include "Gauge/TaskView.hpp"
+#include "Logger/Logger.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -35,16 +37,59 @@ static SingleWindow *parent_window;
 static WndForm *wf = NULL;
 static WndOwnerDrawFrame* wTaskView = NULL;
 static RECT TaskViewRect;
+static RECT TaskPointsRect;
+static RECT TaskSummaryRect;
 static bool fullscreen;
 static WndListFrame* wTaskPoints = NULL;
 static OrderedTask* ordered_task = NULL;
 static bool task_modified = false;
+static bool show_more = false;
 
+
+/**
+ * Validates task and prompts if change or error
+ * Commits task if no error
+ * @return True if task manager should close
+ *          False if window should remain open
+ */
+static bool
+CommitTaskChanges()
+{
+  if (!task_modified)
+    return true;
+
+  if (!ordered_task->task_size() || ordered_task->check_task()) {
+    MessageBoxX(_("Active task modified"),
+                _T("Task Manager"), MB_OK);
+
+    ordered_task->check_duplicate_waypoints(way_points);
+    protected_task_manager->task_commit(*ordered_task);
+    protected_task_manager->task_save_default();
+
+    task_modified = false;
+    return true;
+  } else {
+    MessageBoxX(getTaskValidationErrors(
+        ordered_task->get_factory().getValidationErrors()),
+        _("Validation Errors"), MB_ICONEXCLAMATION);
+    if (MessageBoxX(_("Task not valid. Changes will be lost.\nContinue?"),
+                         _("Task Manager"),
+                         MB_YESNO | MB_ICONQUESTION) == IDYES) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Todo add OnCancel
+ */
 static void
 OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
-  wf->SetModalResult(mrCancel);
+  if (CommitTaskChanges())
+    wf->SetModalResult(mrOK);
 }
 
 static void
@@ -90,6 +135,103 @@ OnNewClicked(WndButton &Sender)
 }
 
 static void
+ToggleMore()
+{
+  RECT taskviewrect = TaskViewRect;
+  RECT tasksummaryrect = TaskSummaryRect;
+  RECT taskpointsrect = TaskPointsRect;
+
+  WndButton* wbMore = ((WndButton*)wf->FindByName(_T("cmdMore")));
+  WndFrame* wMore = ((WndFrame*)wf->FindByName(_T("frmMore")));
+  WndFrame* wSummary = (WndFrame *)wf->FindByName(_T("frmSummary"));
+
+
+  if (wbMore && wMore && wSummary) {
+    const unsigned int h = wMore->get_height();
+    show_more = !show_more;
+    if (show_more) {
+      wbMore->set_text(_T("... Less"));
+      wMore->show();
+      if(Layout::landscape) {
+        taskpointsrect.bottom = taskpointsrect.bottom - h;
+      }
+      else {
+        taskviewrect.top = taskviewrect.top + h;
+        tasksummaryrect.top = tasksummaryrect.top + h;
+      }
+    }
+    else {
+      wbMore->set_text(_T("More ..."));
+      wMore->hide();
+    }
+    if(Layout::landscape) {
+      wTaskPoints->move(taskpointsrect.left, taskpointsrect.top,
+          taskpointsrect.right - taskpointsrect.left,
+          taskpointsrect.bottom - taskpointsrect.top);
+    }
+    else {
+      wTaskView->move(taskviewrect.left, taskviewrect.top,
+          taskviewrect.right - taskviewrect.left,
+          taskviewrect.bottom - taskviewrect.top);
+
+      wSummary->move(tasksummaryrect.left, tasksummaryrect.top,
+          tasksummaryrect.right - tasksummaryrect.left,
+          tasksummaryrect.bottom - tasksummaryrect.top);
+    }
+  }
+}
+
+static void
+OnMoreClicked(WndButton &Sender)
+{
+  (void)Sender;
+  ToggleMore();
+  RefreshView();
+}
+
+static void
+OnListClicked(WndButton &Sender)
+{
+  (void)Sender;
+  task_modified |= dlgTaskListShowModal(*parent_window, &ordered_task);
+  OnMoreClicked(Sender);
+  RefreshView();
+}
+
+static void
+OnDeclareClicked(WndButton &Sender)
+{
+  (void)Sender;
+  logger.LoggerDeviceDeclare(*ordered_task);
+  OnMoreClicked(Sender);
+}
+
+static void
+OnSaveClicked(WndButton &Sender)
+{
+  (void)Sender;
+  if (!ordered_task->check_task()) {
+    MessageBoxX(getTaskValidationErrors(
+           ordered_task->get_factory().getValidationErrors()),
+           _("Validation Errors"),
+           MB_ICONEXCLAMATION);
+    MessageBoxX (_("Task invalid.  Not saved."),
+                 _T("Task Edit"), MB_OK);
+    OnMoreClicked(Sender);
+    return;
+  }
+
+  if (OrderedTaskSave(*ordered_task, true)) {
+    MessageBoxX (_("Task saved"),
+                 _T("Task Edit"), MB_OK);
+  }
+  OnMoreClicked(Sender);
+}
+
+/**
+ * Todo: combine OnClear with OnNew.  in 6.1 they will be the same.
+ */
+static void
 OnClearClicked(WndButton &Sender)
 {
   (void)Sender;
@@ -101,6 +243,7 @@ OnClearClicked(WndButton &Sender)
     ordered_task->clear();
     ordered_task->set_factory(ordered_task->get_factory_type());
     task_modified = true;
+    OnMoreClicked(Sender);
     RefreshView();
   }
 }
@@ -217,6 +360,8 @@ static bool
 OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
 {
   if (!fullscreen) {
+    if(show_more)
+      ToggleMore();
     wTaskView->move(0, 0, wf->GetClientAreaWindow().get_width(),
                     wf->GetClientAreaWindow().get_height());
     fullscreen = true;
@@ -252,15 +397,22 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnMoveUpClicked),
   DeclareCallBackEntry(OnMoveDownClicked),
   DeclareCallBackEntry(OnTaskPaint),
+  DeclareCallBackEntry(OnMoreClicked),
+  DeclareCallBackEntry(OnListClicked),
+  DeclareCallBackEntry(OnDeclareClicked),
+  DeclareCallBackEntry(OnSaveClicked),
   DeclareCallBackEntry(NULL)
 };
 
-bool
-dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
+void
+dlgTaskEditShowModal(SingleWindow &parent)
 {
-  ordered_task = *task;
+  if (protected_task_manager == NULL)
+    return;
+
   parent_window = &parent;
   task_modified = false;
+  show_more = false;
 
   if (Layout::landscape)
     wf = LoadDialog(CallBackTable,
@@ -271,10 +423,14 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
 
   assert(wf != NULL);
   if (!wf)
-    return false;
+    return;
+
+  ordered_task = protected_task_manager->task_clone();
+  task_modified = false;
 
   wTaskPoints = (WndListFrame*)wf->FindByName(_T("frmTaskPoints"));
   assert(wTaskPoints != NULL);
+  TaskPointsRect = wTaskPoints->get_position();
 
   wTaskView = (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskView"));
   assert(wTaskView != NULL);
@@ -282,6 +438,10 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
   TaskViewRect = wTaskView->get_position();
   wTaskView->SetOnMouseDownNotify(OnTaskViewClick);
   fullscreen = false;
+
+  WndFrame* wTaskSummary = (WndFrame*)wf->FindByName(_T("frmSummary"));
+  assert(wTaskSummary != NULL);
+  TaskSummaryRect = wTaskSummary->get_position();
 
   wTaskPoints->SetActivateCallback(OnTaskListEnter);
   wTaskPoints->SetPaintItemCallback(OnTaskPaintListItem);
@@ -292,11 +452,5 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
 
   wf->ShowModal();
   delete wf;
-
-  if (*task != ordered_task) {
-    *task = ordered_task;
-    task_modified = true;
-  }
-
-  return task_modified;
+  delete ordered_task;
 }
