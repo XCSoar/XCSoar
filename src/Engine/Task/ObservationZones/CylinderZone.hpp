@@ -38,24 +38,24 @@ protected:
     ObservationZonePoint(_shape, loc),
     Radius(_radius)
   {
-  };
+  }
 
 public:
-/** 
- * Constructor.
- * 
- * @param loc Location of center
- * @param _radius Radius (m) of cylinder
- * 
- * @return Initialised object
- */
+  /**
+   * Constructor.
+   *
+   * @param loc Location of center
+   * @param _radius Radius (m) of cylinder
+   *
+   * @return Initialised object
+   */
   CylinderZone(const GeoPoint &loc, const fixed _radius=fixed(10000.0)):
     ObservationZonePoint(CYLINDER, loc),
     Radius(_radius)
   {
-  };
+  }
 
-  virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const {
+  virtual ObservationZonePoint* clone(const GeoPoint * _location = 0) const {
     if (_location) {
       return new CylinderZone(*_location, Radius);
     } else {
@@ -73,75 +73,75 @@ public:
     return distance(ref.Location)<=Radius;
   }  
 
-/** 
- * Get point on boundary from parametric representation
- * 
- * @param t T value [0,1]
- * 
- * @return Point on boundary
- */
+  /**
+   * Get point on boundary from parametric representation
+   *
+   * @param t T value [0,1]
+   *
+   * @return Point on boundary
+   */
   GeoPoint get_boundary_parametric(fixed t) const;
 
-/** 
- * Distance reduction for scoring when outside this OZ
- * 
- * @return Distance (m) to subtract from score
- */
+  /**
+   * Distance reduction for scoring when outside this OZ
+   *
+   * @return Distance (m) to subtract from score
+   */
   virtual fixed score_adjustment() const;
 
-/** 
- * Check transition constraints (always true for cylinders)
- * 
- * @param ref_now Current aircraft state
- * @param ref_last Previous aircraft state
- * 
- * @return True if constraints are satisfied
- */
+  /**
+   * Check transition constraints (always true for cylinders)
+   *
+   * @param ref_now Current aircraft state
+   * @param ref_last Previous aircraft state
+   *
+   * @return True if constraints are satisfied
+   */
   virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
                                      const AIRCRAFT_STATE & ref_last) const {
     return true;
   }
 
-/** 
- * Set radius property
- * 
- * @param new_radius Radius (m) of cylinder
- */
+  /**
+   * Set radius property
+   *
+   * @param new_radius Radius (m) of cylinder
+   */
   virtual void setRadius(fixed new_radius) {
     assert(positive(new_radius));
     Radius = new_radius;
   }
 
-/** 
- * Get radius property value
- * 
- * @return Radius (m) of cylinder
- */
+  /**
+   * Get radius property value
+   *
+   * @return Radius (m) of cylinder
+   */
   fixed getRadius() const {
     return Radius;
   }
 
-/** 
- * Test whether an OZ is equivalent to this one
- * 
- * @param other OZ to compare to
- * 
- * @return True if same type and OZ parameters
- */
-
+  /**
+   * Test whether an OZ is equivalent to this one
+   *
+   * @param other OZ to compare to
+   *
+   * @return True if same type and OZ parameters
+   */
   virtual bool equals(const ObservationZonePoint* other) const;
 
-/** 
- * Generate a random location inside the OZ (to be used for testing)
- * 
- * @param mag proportional magnitude of error from center (0-1)
- *
- * @return Location of point
- */
+  /**
+   * Generate a random location inside the OZ (to be used for testing)
+   *
+   * @param mag proportional magnitude of error from center (0-1)
+   *
+   * @return Location of point
+   */
   virtual GeoPoint randomPointInSector(const fixed mag) const;
 
 protected:
-  fixed Radius; /**< radius (m) of OZ */
+  /** radius (m) of OZ */
+  fixed Radius;
 };
 
 #endif
