@@ -86,11 +86,7 @@ SectorZone::setEndRadial(const Angle x)
 bool
 SectorZone::angleInSector(const Angle b) const
 {
-  if (StartRadial < EndRadial) {
-    return ((b <= EndRadial) && (b >= StartRadial));
-  } else {
-    return ((b <= EndRadial) || (b >= StartRadial));
-  }
+  return b.between(StartRadial, EndRadial);
 }
 
 bool
