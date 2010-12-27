@@ -87,7 +87,6 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/SectorZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/LineSectorZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/SymmetricSectorZone.cpp \
-	$(ENGINE_SRC_DIR)/Task/ObservationZones/FAISectorZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/KeyholeZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/BGAFixedCourseZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/BGAEnhancedOptionZone.cpp \
