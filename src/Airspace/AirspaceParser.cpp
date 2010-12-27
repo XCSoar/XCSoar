@@ -473,6 +473,13 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
         temp_area.Name = value;
       break;
 
+    case _T('R'):
+    case _T('r'):
+      value = value_after_space(line + 2);
+      if (value != NULL)
+        temp_area.Radio = value;
+      break;
+
     case _T('L'):
     case _T('l'):
       value = value_after_space(line + 2);
