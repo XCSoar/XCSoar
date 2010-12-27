@@ -162,6 +162,16 @@ public:
     Type = _Type;
     m_base = _base;
     m_top = _top;
+    Radio = _T("");
+  }
+
+  /**
+   * Set radio frequency of airspace
+   *
+   * @param _Radio Radio frequency of airspace
+   */
+  void set_radio(const tstring &_Radio) {
+    Radio = _Radio;
   }
 
   /** 
@@ -266,6 +276,13 @@ public:
  */
   const tstring get_name_text(const bool concise=false) const;
 
+  /**
+   * Produce text version of radio frequency.
+   *
+   * @return Text version of radio frequency
+   */
+  const tstring get_radio_text() const;
+
 /** 
  * Produce text version of base+top altitude (no units).
  * 
@@ -318,6 +335,7 @@ protected:
   AIRSPACE_ALT m_base; /**< Base of airspace */
   AIRSPACE_ALT m_top; /**< Top of airspace */
   tstring Name; /**< Airspace name (identifier) */
+  tstring Radio; /**< Radio frequency (optional) */
   AirspaceClass_t Type; /**< Airspace class */
   const TaskProjection* m_task_projection; /**< Task projection (owned by container) that can be used for query speedups */
   SearchPointVector m_border; /**< Actual border */

@@ -211,6 +211,12 @@ AbstractAirspace::get_name_text(const bool concise) const
 }
 
 const tstring 
+AbstractAirspace::get_radio_text() const
+{
+  return Radio;
+}
+
+const tstring
 AbstractAirspace::get_vertical_text() const
 {
   return 
