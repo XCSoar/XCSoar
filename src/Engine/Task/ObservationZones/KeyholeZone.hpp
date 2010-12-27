@@ -27,8 +27,8 @@
 #include "SymmetricSectorZone.hpp"
 
 /**
- *  A 90 degree 10km sector centered at the bisector of incoming/outgoing legs,
- *  with 500m cylinder
+ * A 90 degree 10km sector centered at the bisector of incoming/outgoing legs,
+ * with 500m cylinder
  */
 class KeyholeZone: 
   public SymmetricSectorZone 
@@ -48,7 +48,7 @@ public:
     updateSector();
   }
 
-  ObservationZonePoint* clone(const GeoPoint * _location=0) const {
+  ObservationZonePoint* clone(const GeoPoint * _location = 0) const {
     if (_location) {
       return new KeyholeZone(*_location);
     } else {
@@ -63,20 +63,20 @@ public:
    */
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
 
-/** 
- * Get point on boundary from parametric representation
- * 
- * @param t T value [0,1]
- * 
- * @return Point on boundary
- */
+  /**
+   * Get point on boundary from parametric representation
+   *
+   * @param t T value [0,1]
+   *
+   * @return Point on boundary
+   */
   GeoPoint get_boundary_parametric(fixed t) const;  
 
-/** 
- * Distance reduction for scoring when outside this OZ
- * 
- * @return Distance (m) to subtract from score
- */
+  /**
+   * Distance reduction for scoring when outside this OZ
+   *
+   * @return Distance (m) to subtract from score
+   */
   virtual fixed score_adjustment() const;
 };
 
