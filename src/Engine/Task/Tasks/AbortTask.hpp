@@ -19,13 +19,15 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef ABORTTASK_H
 #define ABORTTASK_H
 
 #include "UnorderedTask.hpp"
-#include <vector>
 #include "Waypoint/Waypoints.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+
+#include <vector>
 
 /**
  * Abort task provides automatic management of a sorted list of task points
@@ -49,13 +51,16 @@ class AbortTask :
 public:
   friend class PrintHelper;
 
-  static const unsigned max_abort; /// max number of items in list
-  static const fixed min_search_range; /// min search range in km
-  static const fixed max_search_range; /// max search range in km
+  /** max number of items in list */
+  static const unsigned max_abort;
+  /** min search range in km */
+  static const fixed min_search_range;
+  /** max search range in km */
+  static const fixed max_search_range;
 
-  typedef std::pair < Waypoint, GlideResult > Alternate;
-  typedef std::vector < Alternate > AlternateVector; 
-     /**< Vector of waypoints and solutions used to store candidates */
+  typedef std::pair <Waypoint, GlideResult> Alternate;
+  /** Vector of waypoints and solutions used to store candidates */
+  typedef std::vector <Alternate> AlternateVector;
 
   /** 
    * Base constructor.
@@ -67,169 +72,164 @@ public:
    * 
    * @return Initialised object (with nothing in task)
    */
-  AbortTask(TaskEvents &te, 
-            const TaskBehaviour &tb,
-            const GlidePolar &gp,
+  AbortTask(TaskEvents &te, const TaskBehaviour &tb, const GlidePolar &gp,
             const Waypoints &wps);
   ~AbortTask();
 
-/** 
- * Size of task
- * 
- * @return Number of taskpoints in task
- */
+  /**
+   * Size of task
+   *
+   * @return Number of taskpoints in task
+   */
   unsigned task_size() const;
 
-/** 
- * Retrieves the active task point sequence.
- * 
- * @return Index of active task point sequence
- */
+  /**
+   * Retrieves the active task point sequence.
+   *
+   * @return Index of active task point sequence
+   */
   TaskWayPoint* getActiveTaskPoint() const;
 
-/** 
- * Retrieves the active task point index.
- * 
- * @return Index of active task point sequence
- */
+  /**
+   * Retrieves the active task point index.
+   *
+   * @return Index of active task point sequence
+   */
   unsigned getActiveIndex() const {
     return activeTaskPoint;
   }
 
-/** 
- * Set active task point index
- * 
- * @param index Desired active index of task sequence
- */
+  /**
+   * Set active task point index
+   *
+   * @param index Desired active index of task sequence
+   */
   void setActiveTaskPoint(unsigned index);
 
-/**
- * Determine whether active task point optionally shifted points to
- * a valid task point.
- *
- * @param index_offset offset (default 0)
- */
-  bool validTaskPoint(const int index_offset=0) const;
+  /**
+   * Determine whether active task point optionally shifted points to
+   * a valid task point.
+   *
+   * @param index_offset offset (default 0)
+   */
+  bool validTaskPoint(const int index_offset = 0) const;
 
-/** 
- * Update internal states when aircraft state advances.
- * This performs a scan of reachable waypoints.
- * 
- * \todo
- * - check tracking of active waypoint
- *
- * @param state_now Aircraft state at this time step
- * @param full_update Force update due to task state change
- *
- * @return True if internal state changes
- */
+  /**
+   * Update internal states when aircraft state advances.
+   * This performs a scan of reachable waypoints.
+   *
+   * \todo
+   * - check tracking of active waypoint
+   *
+   * @param state_now Aircraft state at this time step
+   * @param full_update Force update due to task state change
+   *
+   * @return True if internal state changes
+   */
   bool update_sample(const AIRCRAFT_STATE &state_now, 
                      const bool full_update);
 
 
-/** 
- * Update internal states when aircraft state advances.
- * (for when system is inactive, to determine landable reachability)
- * 
- * \todo
- * - should use find_nearest_iterative for speed
- *
- * @param state_now Aircraft state at this time step
- *
- */
+  /**
+   * Update internal states when aircraft state advances.
+   * (for when system is inactive, to determine landable reachability)
+   *
+   * \todo
+   * - should use find_nearest_iterative for speed
+   *
+   * @param state_now Aircraft state at this time step
+   *
+   */
   void update_offline(const AIRCRAFT_STATE &state_now);
 
-/** 
- * Determine if any landable reachable waypoints were found in the 
- * last update.
- * 
- * @return True if a landable waypoint was found
- */
+  /**
+   * Determine if any landable reachable waypoints were found in the
+   * last update.
+   *
+   * @return True if a landable waypoint was found
+   */
   bool has_landable_reachable() const {
     return m_landable_reachable;
   }
 
   virtual void reset();
 
-/** 
- * Calculate vector to home waypoint
- * 
- * @param state State of aircraft
- * @return Vector to home waypoint
- */
+  /**
+   * Calculate vector to home waypoint
+   *
+   * @param state State of aircraft
+   * @return Vector to home waypoint
+   */
   GeoVector get_vector_home(const AIRCRAFT_STATE &state) const;
 
-/** 
- * Retrieve copy of safety glide polar used by task system
- * 
- * @return Copy of safety glide polar 
- */
+  /**
+   * Retrieve copy of safety glide polar used by task system
+   *
+   * @return Copy of safety glide polar
+   */
   GlidePolar get_safety_polar() const;
 
   GeoPoint get_task_center(const GeoPoint& fallback_location) const;
   fixed get_task_radius(const GeoPoint& fallback_location) const;
 
 protected:
-
   gcc_pure
-  bool is_reachable(const GlideResult &result,
-                    const bool final_glide) const;
+  bool is_reachable(const GlideResult &result, const bool final_glide) const;
 
-/** 
- * Test whether (and how) transitioning into/out of task points should occur, typically
- * according to task_advance mechanism.  This also may call the task_event callbacks.
- * 
- * @param state_now Aircraft state at this time step
- * @param state_last Aircraft state at previous time step
- * 
- * @return True if transition occurred
- */
+  /**
+   * Test whether (and how) transitioning into/out of task points should occur, typically
+   * according to task_advance mechanism.  This also may call the task_event callbacks.
+   *
+   * @param state_now Aircraft state at this time step
+   * @param state_last Aircraft state at previous time step
+   *
+   * @return True if transition occurred
+   */
   bool check_transitions(const AIRCRAFT_STATE& state_now, 
                          const AIRCRAFT_STATE& state_last);
 
-/** 
- * Clears task points in list
- * 
- */
+  /**
+   * Clears task points in list
+   *
+   */
   virtual void clear();
 
-/** 
- * Check whether abort task list is full
- * 
- * @return True if no more task points can be added
- */
+  /**
+   * Check whether abort task list is full
+   *
+   * @return True if no more task points can be added
+   */
   gcc_pure
   bool task_full() const;
 
-/** 
- * Calculate distance to search for landable waypoints for aircraft.
- * 
- * @param state_now Aircraft state
- * 
- * @return Distance (m) of approximate glide range of aircraft
- */
+  /**
+   * Calculate distance to search for landable waypoints for aircraft.
+   *
+   * @param state_now Aircraft state
+   *
+   * @return Distance (m) of approximate glide range of aircraft
+   */
   gcc_pure
   fixed abort_range(const AIRCRAFT_STATE &state_now) const;
 
-/** 
- * Propagate changes to safety glide polar from global glide polar. 
- * 
- */
+  /**
+   * Propagate changes to safety glide polar from global glide polar.
+   */
   void update_polar();
 
-/** 
- * Fill abort task list with candidate waypoints given a list of
- * waypoints satisfying approximate range queries.  Can be used
- * to add airfields only, or landpoints.
- *
- * @param state Aircraft state
- * @param approx_waypoints List of candidate waypoints
- * @param polar Polar used for tests
- * @param only_airfield If true, only add waypoints that are airfields.
- * @param final_glide Whether solution must be glide only or climb allowed
- *
- * @return True if a landpoint within final glide was found
- */
+  /**
+   * Fill abort task list with candidate waypoints given a list of
+   * waypoints satisfying approximate range queries.  Can be used
+   * to add airfields only, or landpoints.
+   *
+   * @param state Aircraft state
+   * @param approx_waypoints List of candidate waypoints
+   * @param polar Polar used for tests
+   * @param only_airfield If true, only add waypoints that are airfields.
+   * @param final_glide Whether solution must be glide only or climb allowed
+   *
+   * @return True if a landpoint within final glide was found
+   */
   bool fill_reachable(const AIRCRAFT_STATE &state,
                       AlternateVector &approx_waypoints,
                       const GlidePolar &polar,
@@ -240,7 +240,8 @@ protected:
   typedef std::vector<std::pair<TaskWayPoint*, GlideResult> > AlternateTaskVector;
   AlternateTaskVector tps;
 
-  bool is_active; /// whether the AbortTask is the master or running in background
+  /** whether the AbortTask is the master or running in background */
+  bool is_active;
 
   /**
    * This is called by update_sample after the turnpoint list has 
@@ -252,11 +253,11 @@ protected:
                              const bool reachable);
 
 public:
-/**
- * Specify whether the task is active or not.  If it's active, it will
- * notify the user about the abort task point being changed via the events.
- *
- */
+  /**
+   * Specify whether the task is active or not.  If it's active, it will
+   * notify the user about the abort task point being changed via the events.
+   *
+   */
   void set_active(const bool _active) { is_active = _active; }
 
 private:
@@ -266,26 +267,25 @@ private:
   bool m_landable_reachable;
 
 public:
-/** 
- * Accept a const task point visitor; makes the visitor visit
- * all TaskPoint in the task
- * 
- * @param visitor Visitor to accept
- * @param reverse Visit task points in reverse order 
- *
- */
+  /**
+   * Accept a const task point visitor; makes the visitor visit
+   * all TaskPoint in the task
+   *
+   * @param visitor Visitor to accept
+   * @param reverse Visit task points in reverse order
+   *
+   */
   void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
 
-/** 
- * Accept a task point visitor; makes the visitor visit
- * all TaskPoint in the task
- * 
- * @param visitor Visitor to accept
- * @param reverse Visit task points in reverse order 
- *
- */
+  /**
+   * Accept a task point visitor; makes the visitor visit
+   * all TaskPoint in the task
+   *
+   * @param visitor Visitor to accept
+   * @param reverse Visit task points in reverse order
+   *
+   */
   void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) {};
-
 };
 
-#endif //ABORTTASK_H
+#endif
