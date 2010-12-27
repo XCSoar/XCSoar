@@ -30,6 +30,7 @@ class CylinderZone;
 class KeyholeZone;
 class BGAFixedCourseZone;
 class BGAEnhancedOptionZone;
+class BGAStartSectorZone;
 
 /**
  * Generic const visitor for observation zones (for double-dispatch)
@@ -43,6 +44,7 @@ protected:
   virtual void Visit(const KeyholeZone &z) = 0;
   virtual void Visit(const BGAFixedCourseZone &z) = 0;
   virtual void Visit(const BGAEnhancedOptionZone &z) = 0;
+  virtual void Visit(const BGAStartSectorZone &z) = 0;
 
 public:
   void Visit(const ObservationZonePoint &ozp);
@@ -60,6 +62,7 @@ protected:
   virtual void Visit(KeyholeZone &z) = 0;
   virtual void Visit(BGAFixedCourseZone &z) = 0;
   virtual void Visit(BGAEnhancedOptionZone &z) = 0;
+  virtual void Visit(BGAStartSectorZone &z) = 0;
 
 public:
   void Visit(ObservationZonePoint &ozp);

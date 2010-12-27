@@ -47,7 +47,8 @@ public:
     FAI_SECTOR,
     KEYHOLE,
     BGAFIXEDCOURSE,
-    BGAENHANCEDOPTION
+    BGAENHANCEDOPTION,
+    BGA_START,
   };
 
   const enum shape shape;

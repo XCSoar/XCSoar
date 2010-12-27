@@ -57,6 +57,9 @@ public:
   virtual void Visit(const BGAEnhancedOptionZone &oz) {
     printf("# bga enhanded option zone\n");
   }
+  virtual void Visit(const BGAStartSectorZone &oz) {
+    printf("# bga start sector zone\n");
+  }
 
   void Visit(const ObservationZonePoint &oz) {
     ObservationZoneConstVisitor::Visit(oz);

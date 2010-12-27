@@ -30,6 +30,7 @@
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
+#include "Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 
 #include <algorithm>
@@ -109,6 +110,9 @@ AbstractTaskFactory::getType(const OrderedTaskPoint &point) const
     case ObservationZonePoint::BGAFIXEDCOURSE:
     case ObservationZonePoint::BGAENHANCEDOPTION:
       return START_CYLINDER;
+
+    case ObservationZonePoint::BGA_START:
+      return START_BGA;
     }
     break;
 
@@ -119,6 +123,7 @@ AbstractTaskFactory::getType(const OrderedTaskPoint &point) const
     case ObservationZonePoint::KEYHOLE:
     case ObservationZonePoint::BGAFIXEDCOURSE:
     case ObservationZonePoint::BGAENHANCEDOPTION:
+    case ObservationZonePoint::BGA_START:
     case ObservationZonePoint::LINE:
       return AAT_SEGMENT;
 
@@ -141,6 +146,7 @@ AbstractTaskFactory::getType(const OrderedTaskPoint &point) const
     case ObservationZonePoint::BGAENHANCEDOPTION:
       return BGAENHANCEDOPTION_SECTOR;
 
+    case ObservationZonePoint::BGA_START:
     case ObservationZonePoint::CYLINDER:
     case ObservationZonePoint::SECTOR:
     case ObservationZonePoint::LINE:
@@ -150,6 +156,7 @@ AbstractTaskFactory::getType(const OrderedTaskPoint &point) const
 
   case TaskPoint::FINISH:
     switch (oz->shape) {
+    case ObservationZonePoint::BGA_START:
     case ObservationZonePoint::FAI_SECTOR:
       return FINISH_SECTOR;
 
@@ -190,6 +197,8 @@ AbstractTaskFactory::createPoint(const LegalPointType_t type,
     return createStart(new LineSectorZone(wp.Location, (fixed)1000), wp);
   case START_CYLINDER:
     return createStart(new CylinderZone(wp.Location, (fixed)1000), wp);
+  case START_BGA:
+    return createStart(new BGAStartSectorZone(wp.Location), wp);
   case FAI_SECTOR:
     return createAST(new FAISectorZone(wp.Location, true), wp);
   case KEYHOLE_SECTOR:

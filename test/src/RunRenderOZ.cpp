@@ -42,6 +42,7 @@ Copyright_License {
 #include "Engine/Task/ObservationZones/KeyholeZone.hpp"
 #include "Engine/Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Engine/Task/ObservationZones/BGAEnhancedOptionZone.hpp"
+#include "Engine/Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Projection.hpp"
 #include "SettingsMap.hpp"
 #include "ResourceLoader.hpp"
@@ -126,6 +127,10 @@ public:
 
     case ObservationZonePoint::BGAENHANCEDOPTION:
       oz = new BGAEnhancedOptionZone(location);
+      break;
+
+    case ObservationZonePoint::BGA_START:
+      oz = new BGAStartSectorZone(location);
       break;
     }
 

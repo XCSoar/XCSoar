@@ -96,6 +96,15 @@ public:
   }
 
   void
+  Visit(const BGAStartSectorZone& oz)
+  {
+    hide_all();
+    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAStartSector")));
+    if (wp)
+      wp->show();
+  }
+
+  void
   Visit(const SectorZone& oz)
   {
     hide_all();
@@ -156,6 +165,10 @@ private:
     if (wp)
       wp->hide();
 
+    wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAStartSector")));
+    if (wp)
+      wp->hide();
+
     wp = ((WndFrame *)wf->FindByName(_T("frmOZLine")));
     if (wp)
       wp->hide();
@@ -192,6 +205,10 @@ public:
   }
   void
   Visit(BGAEnhancedOptionZone& oz)
+  {
+  }
+  void
+  Visit(BGAStartSectorZone& oz)
   {
   }
   void

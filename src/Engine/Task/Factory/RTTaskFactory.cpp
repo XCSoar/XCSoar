@@ -29,6 +29,7 @@ RTTaskFactory::RTTaskFactory(OrderedTask& _task,
 {
   m_start_types.push_back(START_LINE);
   m_start_types.push_back(START_CYLINDER);
+  m_start_types.push_back(START_BGA);
   m_intermediate_types.push_back(AST_CYLINDER);
   m_intermediate_types.push_back(KEYHOLE_SECTOR);
   m_intermediate_types.push_back(BGAFIXEDCOURSE_SECTOR);

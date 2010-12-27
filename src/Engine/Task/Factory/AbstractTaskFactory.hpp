@@ -103,7 +103,8 @@ public:
     AAT_SEGMENT,
     FINISH_SECTOR,
     FINISH_LINE,
-    FINISH_CYLINDER
+    FINISH_CYLINDER,
+    START_BGA,
   };
 
   /**

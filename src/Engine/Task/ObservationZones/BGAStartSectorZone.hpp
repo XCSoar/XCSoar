@@ -1,5 +1,5 @@
 /*
-Copyright_License {
+  Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2010 The XCSoar Project
@@ -19,31 +19,41 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
+*/
+
+#ifndef BGA_START_SECTOR_ZONE_HPP
+#define BGA_START_SECTOR_ZONE_HPP
+
+#include "SymmetricSectorZone.hpp"
+
+/**
+ * A 180 degree sector centered at the inverse of the outgoing leg
+ * @see http://www.gliding.co.uk/forms/competitionrules2010.pdf - page 11
  */
-
-#include "AATTaskFactory.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
-
-AATTaskFactory::AATTaskFactory(OrderedTask& _task, const TaskBehaviour &tb):
-  AbstractTaskFactory(_task, tb)
+class BGAStartSectorZone:
+  public SymmetricSectorZone 
 {
-  m_start_types.push_back(START_LINE);
-  m_start_types.push_back(START_CYLINDER);
-  m_start_types.push_back(START_BGA);
-  m_intermediate_types.push_back(AAT_CYLINDER);
-  m_intermediate_types.push_back(AAT_SEGMENT);
-  m_finish_types.push_back(FINISH_LINE);
-  m_finish_types.push_back(FINISH_CYLINDER);
-}
+public:  
+  /** 
+   * Constructor
+   * 
+   * @param loc Center point of sector
+   * 
+   * @return Initialised object
+   */
+  BGAStartSectorZone(const GeoPoint loc):
+    SymmetricSectorZone(BGA_START, loc, fixed(5000.0), Angle::radians(fixed_pi))
+  {
+    updateSector();
+  }
 
-void 
-AATTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
-{
-  to.task_scored = true;
-  to.fai_finish = false;  
-  to.homogeneous_tps = false;
-  to.is_closed = false;
-  to.min_points = 3;
-  to.max_points = 10;
-  to.start_requires_arm = true;
-}
+  ObservationZonePoint* clone(const GeoPoint * _location = 0) const {
+    if (_location) {
+      return new BGAStartSectorZone(*_location);
+    } else {
+      return new BGAStartSectorZone(get_location());
+    }
+  }
+};
+
+#endif

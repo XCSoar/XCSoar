@@ -139,6 +139,7 @@ RenderObservationZone::Draw(Canvas &canvas, const Projection &projection,
     break;
   }
 
+  case ObservationZonePoint::BGA_START:
   case ObservationZonePoint::SECTOR: {
     const SectorZone &oz = (const SectorZone &)_oz;
 

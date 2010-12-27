@@ -156,6 +156,12 @@ public:
   }
 
   void
+  Visit(const BGAStartSectorZone& oz)
+  {
+    _stprintf(text, _("BGA start sector"));
+  }
+
+  void
   Visit(const SectorZone& oz)
   {
     _stprintf(text, _("Sector"));
@@ -208,6 +214,12 @@ public:
   Visit(const BGAEnhancedOptionZone& oz)
   {
     _stprintf(radius,_("BGAE"));
+  }
+
+  void
+  Visit(const BGAStartSectorZone& oz)
+  {
+    _stprintf(radius,_("BGA-S"));
   }
 
   void
@@ -320,6 +332,8 @@ OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
     return _("Cross line from inside area to start");
   case AbstractTaskFactory::START_CYLINDER:
     return _("Exit area to start");
+  case AbstractTaskFactory::START_BGA:
+    return _("Exit area in any direction to start");
   case AbstractTaskFactory::FAI_SECTOR:
     return _("Any point within area scored from corner point");
   case AbstractTaskFactory::AST_CYLINDER:
@@ -356,6 +370,8 @@ OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
     return _("Start line");
   case AbstractTaskFactory::START_CYLINDER:
     return _("Start cylinder");
+  case AbstractTaskFactory::START_BGA:
+    return _("BGA start sector");
   case AbstractTaskFactory::FAI_SECTOR:
     return _("Turnpoint FAI sector");
   case AbstractTaskFactory::KEYHOLE_SECTOR:

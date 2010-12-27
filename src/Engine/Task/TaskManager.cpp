@@ -621,6 +621,7 @@ TaskManager::get_ordered_taskpoint_radius(const unsigned TPindex) const
     case ObservationZonePoint::KEYHOLE:
     case ObservationZonePoint::BGAFIXEDCOURSE:
     case ObservationZonePoint::BGAENHANCEDOPTION:
+    case ObservationZonePoint::BGA_START:
       CylinderZone *cz = (CylinderZone *) ozp;
       if (cz)
         return cz->getRadius();
