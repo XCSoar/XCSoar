@@ -131,6 +131,7 @@ struct WaypointSelectInfoVector :
 };
 
 static WaypointSelectInfoVector WayPointSelectInfo;
+static std::vector<unsigned int> LastUsedWaypointNames;
 
 static TCHAR *
 GetDirectionData(int DirectionFilterIdx)
@@ -316,10 +317,33 @@ FillList(WaypointSelectInfoVector &dest, const Waypoints &src,
 }
 
 static void
+FillLastUsedList(WaypointSelectInfoVector &dest, const std::vector<unsigned int> src,
+                 const Waypoints &waypoints, GeoPoint location)
+{
+  dest.clear();
+
+  if (src.empty())
+    return;
+
+  for (std::vector<unsigned int>::const_reverse_iterator it = src.rbegin();
+       it < src.rend(); it++) {
+    const Waypoint* wp = waypoints.lookup_id(*it);
+    if (wp == NULL)
+      continue;
+
+    dest.push_back(*wp, location);
+  }
+}
+
+static void
 UpdateList()
 {
   FillList(WayPointSelectInfo, way_points, g_location,
            XCSoarInterface::Basic().Heading, filter_data);
+
+  if (WayPointSelectInfo.empty())
+    FillLastUsedList(WayPointSelectInfo, LastUsedWaypointNames,
+                     way_points, g_location);
 
   wWayPointList->SetLength(std::max(1, (int)WayPointSelectInfo.size()));
   wWayPointList->SetOrigin(0);
@@ -610,5 +634,14 @@ dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location)
     return NULL;
 
   delete wf;
-  return WayPointSelectInfo[ItemIndex].way_point;
+
+  const Waypoint* retval = NULL;
+
+  if (ItemIndex < WayPointSelectInfo.size())
+    retval = WayPointSelectInfo[ItemIndex].way_point;
+
+  if (retval != NULL)
+    LastUsedWaypointNames.push_back(retval->id);
+
+  return retval;
 }

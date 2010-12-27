@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Changes to version 6.1 (since 6.0):
 * user interface
   - "pan to" button in waypoint dialog
+  - waypoint selection screen shows last used waypoints if no filter is set
 
 Changes to version 6.0.1 (since 6.0):
 * map
