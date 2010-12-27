@@ -33,14 +33,11 @@ struct FlatGeoPoint;
  * Class for performing Lambert Conformal Conic projections from
  * ellipsoidal Earth points to and from projected points.  Has
  * converters for projected coordinates in integer and double types.
+ *
+ * Needs to be initialized with reset() before first use.
  */
 class TaskProjection {
 public:
-  /** 
-   * Constructor; initialises at origin (0,0)
-   */
-  TaskProjection();
-  
   /**
    * Reset search bounds
    *

@@ -35,11 +35,6 @@ static const int fixed_scale = 57296;
 static const int fixed_scale = 1000;
 #endif
 
-TaskProjection::TaskProjection()
-{
-  reset(GeoPoint(Angle::native(fixed_zero), Angle::native(fixed_zero)));
-}
-
 void 
 TaskProjection::reset(const GeoPoint &ref) 
 {
