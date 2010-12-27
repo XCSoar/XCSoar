@@ -92,6 +92,7 @@ struct TempAirspaceType
 
   // General
   tstring Name;
+  tstring Radio;
   AirspaceClass_t Type;
   AIRSPACE_ALT Base;
   AIRSPACE_ALT Top;
@@ -109,6 +110,7 @@ struct TempAirspaceType
   void
   reset()
   {
+    Radio = _T("");
     Type = OTHER;
     points.clear();
     Center.Longitude = Angle::native(fixed_zero);
@@ -123,6 +125,7 @@ struct TempAirspaceType
   {
     AbstractAirspace *as = new AirspacePolygon(points);
     as->set_properties(Name, Type, Base, Top);
+    as->set_radio(Radio);
     airspace_database.insert(as);
   }
 
@@ -131,6 +134,7 @@ struct TempAirspaceType
   {
     AbstractAirspace *as = new AirspaceCircle(Center, Radius);
     as->set_properties(Name, Type, Base, Top);
+    as->set_radio(Radio);
     airspace_database.insert(as);
   }
 };
@@ -726,6 +730,8 @@ ParseLineTNP(Airspaces &airspace_database, const TCHAR *line,
 
   if ((parameter = string_after_prefix_ci(line, _T("TITLE="))) != NULL) {
     temp_area.Name = parameter;
+  } else if ((parameter = string_after_prefix_ci(line, _T("RADIO="))) != NULL) {
+    temp_area.Radio = parameter;
   } else if ((parameter = string_after_prefix_ci(line, _T("TYPE="))) != NULL) {
     if (!temp_area.Waiting)
       temp_area.AddPolygon(airspace_database);
