@@ -45,8 +45,8 @@ Copyright_License {
 
 static GeoPoint g_location;
 
-static WndForm *wf=NULL;
-static WndListFrame *wWayPointList=NULL;
+static WndForm *wf = NULL;
+static WndListFrame *wWayPointList = NULL;
 static WndButton *wbName;
 static WndProperty *wpDistance;
 static WndProperty *wpDirection;
@@ -59,7 +59,9 @@ static const fixed DistanceFilter[] = {
 };
 
 #define DirHDG -1
-static int DirectionFilter[] = {0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330};
+static int DirectionFilter[] = {
+  0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
+};
 
 static Angle last_heading = Angle::native(fixed_zero);
 
@@ -82,13 +84,12 @@ enum {
   NAMEFILTERLEN = 10,
 };
 
-struct WayPointFilterData {
+struct WayPointFilterData
+{
   TCHAR name[NAMEFILTERLEN + 1];
 
   int distance_index;
-
   int direction_index;
-
   type_filter type_index;
 
   bool defined() const {
@@ -102,13 +103,19 @@ static WayPointFilterData filter_data;
 /**
  * Structure to hold Waypoint sorting information
  */
-struct WayPointSelectInfo {
-  const Waypoint* way_point; /**< Pointer to actual waypoint (unprotected!) */
-  fixed Distance; /**< Distance in user units from observer to waypoint */
-  Angle Direction; /**< Bearing (deg true north) from observer to waypoint */
+struct WayPointSelectInfo
+{
+  /** Pointer to actual waypoint (unprotected!) */
+  const Waypoint* way_point;
+  /** Distance in user units from observer to waypoint */
+  fixed Distance;
+  /** Bearing (deg true north) from observer to waypoint */
+  Angle Direction;
 };
 
-struct WaypointSelectInfoVector : public std::vector<WayPointSelectInfo> {
+struct WaypointSelectInfoVector :
+  public std::vector<WayPointSelectInfo>
+{
   void push_back(const Waypoint &way_point, const GeoPoint &Location) {
     WayPointSelectInfo info;
 
@@ -130,13 +137,13 @@ GetDirectionData(int DirectionFilterIdx)
 {
   static TCHAR sTmp[12];
 
-  if (DirectionFilterIdx == 0) {
+  if (DirectionFilterIdx == 0)
     _stprintf(sTmp, _T("%c"), '*');
-  } else if (DirectionFilterIdx == 1) {
+  else if (DirectionFilterIdx == 1)
     _stprintf(sTmp, _T("HDG(%u")_T(DEG)_T(")"),
               uround(XCSoarInterface::Basic().Heading.as_bearing().value_degrees()));
-  } else
-  _stprintf(sTmp, _T("%d")_T(DEG), DirectionFilter[DirectionFilterIdx]);
+  else
+    _stprintf(sTmp, _T("%d")_T(DEG), DirectionFilter[DirectionFilterIdx]);
 
   return sTmp;
 }
@@ -144,17 +151,19 @@ GetDirectionData(int DirectionFilterIdx)
 static void
 InitializeDirection(bool bOnlyHeading)
 {
-  if (wpDirection) {  // initialize datafieldenum for Direction
+  // initialize datafieldenum for Direction
+  if (wpDirection) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wpDirection->GetDataField();
     if (!bOnlyHeading) {
-      for (unsigned int i=0; i < sizeof(DirectionFilter) / sizeof(DirectionFilter[0]); i++) {
+      for (unsigned int i = 0;
+           i < sizeof(DirectionFilter) / sizeof(DirectionFilter[0]); i++)
         dfe->addEnumText(GetDirectionData(i));
-      }
 
       dfe->SetAsInteger(filter_data.direction_index);
     }
-    dfe->replaceEnumText(1,GetDirectionData(1)); // update heading value to current heading
+    // update heading value to current heading
+    dfe->replaceEnumText(1,GetDirectionData(1));
     wpDirection->RefreshDisplay();
   }
 }
@@ -168,13 +177,14 @@ PrepareData(void)
 
   wbName->SetCaption(_T("*"));
 
-  if (wpDistance) {  // initialize datafieldenum for Distance
+  // initialize datafieldenum for Distance
+  if (wpDistance) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wpDistance->GetDataField();
     dfe->addEnumText(_T("*"));
-    for (unsigned i = 1; i < sizeof(DistanceFilter) / sizeof(DistanceFilter[0]); i++) {
-      _stprintf(sTmp, _T("%.0f%s"),
-                (double)DistanceFilter[i],
+    for (unsigned i = 1;
+         i < sizeof(DistanceFilter) / sizeof(DistanceFilter[0]); i++) {
+      _stprintf(sTmp, _T("%.0f%s"), (double)DistanceFilter[i],
                 Units::GetDistanceName());
       dfe->addEnumText(sTmp);
     }
@@ -184,7 +194,8 @@ PrepareData(void)
 
   InitializeDirection(false);
 
-  if (wpType) {  // initialize datafieldenum for Type
+  // initialize datafieldenum for Type
+  if (wpType) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wpType->GetDataField();
     dfe->addEnumTexts(TypeFilter);
@@ -246,9 +257,8 @@ private:
       return true;
 
     int a = DirectionFilter[filter_data.direction_index];
-    Angle angle = a == DirHDG
-      ? last_heading = heading
-      : Angle::degrees(fixed(a));
+    Angle angle = (a == DirHDG) ?
+                  last_heading = heading : Angle::degrees(fixed(a));
 
     const GeoVector vec(location, wp.Location);
     fixed DirectionErr = (vec.Bearing - angle).as_delta().magnitude_degrees();
@@ -340,7 +350,7 @@ OnFilterNameButton(gcc_unused WndButton &button)
 
     newNameFilter[i] = 0;
     i--;
-  };
+  }
 
   _tcsncpy(filter_data.name, newNameFilter, NAMEFILTERLEN);
 
