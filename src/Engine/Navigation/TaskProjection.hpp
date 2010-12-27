@@ -37,93 +37,92 @@ class TaskProjection {
 public:
   /** 
    * Constructor; initialises at origin (0,0)
-   * 
    */
   TaskProjection();
   
-/** 
- * Reset search bounds
- * 
- * @param ref Default value for initial search bounds
- */
+  /**
+   * Reset search bounds
+   *
+   * @param ref Default value for initial search bounds
+   */
   void reset(const GeoPoint &ref);
 
-/** 
- * Check a location against bounds and update them if outside.
- * This does not update the projection itself.
- * 
- * @param ref Point to check against bounds
- */
+  /**
+   * Check a location against bounds and update them if outside.
+   * This does not update the projection itself.
+   *
+   * @param ref Point to check against bounds
+   */
   void scan_location(const GeoPoint &ref);
 
-/** 
- * Update projection.
- *
- * @return True if projection changed
- */
+  /**
+   * Update projection.
+   *
+   * @return True if projection changed
+   */
   bool update_fast();
 
-/** 
- * Project a Geodetic point to an integer 2-d representation
- * 
- * @param tp Point to project
- * 
- * @return Projected point
- */
+  /**
+   * Project a Geodetic point to an integer 2-d representation
+   *
+   * @param tp Point to project
+   *
+   * @return Projected point
+   */
   gcc_pure
   FlatGeoPoint project(const GeoPoint& tp) const;
 
-/** 
- * Projects an integer 2-d representation to a Geodetic point
- * 
- * @param tp Point to project
- * 
- * @return Projected point
- */
+  /**
+   * Projects an integer 2-d representation to a Geodetic point
+   *
+   * @param tp Point to project
+   *
+   * @return Projected point
+   */
   gcc_pure
   GeoPoint unproject(const FlatGeoPoint& tp) const;
 
-/** 
- * Project a Geodetic point to an floating point 2-d representation
- * 
- * @param tp Point to project
- * 
- * @return Projected point
- */
+  /**
+   * Project a Geodetic point to an floating point 2-d representation
+   *
+   * @param tp Point to project
+   *
+   * @return Projected point
+   */
   gcc_pure
   FlatPoint fproject(const GeoPoint& tp) const;
 
-/** 
- * Projects an integer 2-d representation to a Geodetic point
- * 
- * @param tp Point to project
- * 
- * @return Projected point
- */
+  /**
+   * Projects an integer 2-d representation to a Geodetic point
+   *
+   * @param tp Point to project
+   *
+   * @return Projected point
+   */
   gcc_pure
   GeoPoint funproject(const FlatPoint& tp) const;
 
-/** 
- * Calculates the integer flat earth distance from an actual distance
- * from a Geodetic point.  Note this is approximate.
- * 
- * @param tp Point to project
- * @param range Distance (m) from the Geodetic point
- * 
- * @return Distance in flat earth projected units
- */
+  /**
+   * Calculates the integer flat earth distance from an actual distance
+   * from a Geodetic point.  Note this is approximate.
+   *
+   * @param tp Point to project
+   * @param range Distance (m) from the Geodetic point
+   *
+   * @return Distance in flat earth projected units
+   */
   gcc_pure
   unsigned project_range(const GeoPoint &tp, const fixed range) const;
 
-/** 
- * Calculates the floating point flat earth distance from an actual distance
- * from a Geodetic point.  Note this is approximate.
- * 
- * @param tp Point to project
- * @param range Distance (m) from the Geodetic point
- * 
- * @return Distance in flat earth projected units
- */
+  /**
+   * Calculates the floating point flat earth distance from an actual distance
+   * from a Geodetic point.  Note this is approximate.
+   *
+   * @param tp Point to project
+   * @param range Distance (m) from the Geodetic point
+   *
+   * @return Distance in flat earth projected units
+   */
   gcc_pure
   fixed fproject_range(const GeoPoint &tp, const fixed range) const;
 
@@ -151,10 +150,14 @@ public:
 #endif
 
 private:
-  GeoPoint location_min; /**< Lower left corner found in scan */
-  GeoPoint location_max; /**< Upper right corner found in scan */
-  GeoPoint location_mid; /**< Midpoint of boundary, used as projection center point */
-  fixed cos_midloc;      /**< Cosine of the midpoint */
+  /** Lower left corner found in scan */
+  GeoPoint location_min;
+  /** Upper right corner found in scan */
+  GeoPoint location_max;
+  /** Midpoint of boundary, used as projection center point */
+  GeoPoint location_mid;
+  /** Cosine of the midpoint */
+  fixed cos_midloc;
 };
 
-#endif //TASKPROJECTION_H
+#endif
