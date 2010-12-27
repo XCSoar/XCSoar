@@ -385,7 +385,7 @@ AbortTask::get_task_radius(const GeoPoint& fallback_location) const
       task_projection.scan_location(tps[i].first->get_location());
     }
     task_projection.update_fast();
-    return task_projection.get_radius();
+    return task_projection.ApproxRadius();
   }
 }
 

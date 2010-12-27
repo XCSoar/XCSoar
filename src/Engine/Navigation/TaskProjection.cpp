@@ -127,10 +127,8 @@ TaskProjection::project_range(const GeoPoint &tp, const fixed range) const
 }
 
 fixed
-TaskProjection::get_radius() const
+TaskProjection::ApproxRadius() const
 {
-  /// @todo this is approximate (probably ok for rendering purposes)
-
   return max(location_mid.distance(location_max),
              location_mid.distance(location_min));
 }

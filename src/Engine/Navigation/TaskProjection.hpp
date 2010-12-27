@@ -140,10 +140,13 @@ public:
   /** 
    * Calculate radius of points used in task projection
    * 
+   * note: this is an approximation that should only
+   * be used for rendering purposes
+   *
    * @return Radius (m) from center to edge
    */
   gcc_pure
-  fixed get_radius() const; 
+  fixed ApproxRadius() const; 
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 

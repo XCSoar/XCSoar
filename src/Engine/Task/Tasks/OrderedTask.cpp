@@ -921,7 +921,7 @@ OrderedTask::get_task_radius(const GeoPoint& fallback_location) const
   if (!has_start() || !tps[0])
     return fixed_zero;
 
-  return task_projection.get_radius();
+  return task_projection.ApproxRadius();
 }
 
 OrderedTask* 

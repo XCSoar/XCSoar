@@ -48,7 +48,7 @@ ChartProjection::ChartProjection(const RECT &rc,
 {
   const TaskProjection proj = get_bounds(trace, fallback_loc);
   const GeoPoint center = proj.get_center();
-  const fixed radius = max(fixed(10000), proj.get_radius());
+  const fixed radius = max(fixed(10000), proj.ApproxRadius());
   set_projection(rc, center, radius);
 }
 
@@ -72,6 +72,6 @@ ChartProjection::ChartProjection(const RECT &rc,
   point.scan_projection(task_projection);
 
   const GeoPoint center = task_projection.get_center();
-  const fixed radius = max(fixed(10000), task_projection.get_radius());
+  const fixed radius = max(fixed(10000), task_projection.ApproxRadius());
   set_projection(rc, center, radius * fixed(1.3));
 }
