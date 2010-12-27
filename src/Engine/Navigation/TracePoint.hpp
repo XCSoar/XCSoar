@@ -18,36 +18,42 @@ class TracePoint:
   public VARIO_STATE
 {
 public:
-/** 
- * Dummy constructor for null object
- * 
- * @return Null object
- */
-  TracePoint():time(0-1),last_time(0-1) {};
+  /**
+   * Dummy constructor for null object
+   *
+   * @return Null object
+   */
+  TracePoint():
+    time(0 - 1), last_time(0 - 1) {};
 
   /**
    * Constructor for a TracePoint which is only used as parameter to
    * TraceTree::find_within_range().  It initializes only the
    * SearchPoint base class.
    */
-  TracePoint(const GeoPoint &location)
-    :SearchPoint(location) {}
+  TracePoint(const GeoPoint &location):
+    SearchPoint(location) {}
 
-/** 
- * Constructor for actual trace points
- * 
- * @param state State of aircraft
- * @param tp Projection used internally
- * 
- * @return Initialised object
- */  
+  /**
+   * Constructor for actual trace points
+   *
+   * @param state State of aircraft
+   * @param tp Projection used internally
+   *
+   * @return Initialised object
+   */
   TracePoint(const AIRCRAFT_STATE &state);
 
-  unsigned time; /**< Time of sample */
-  mutable unsigned last_time; /**< Time of sample prior to this --- mutable for kdtree update efficiency */
-  fixed drift_factor; /**< Thermal drift factor: 1 indicates drift
-                       * rate equal to wind speed, 0 indicates no
-                       * drift.*/
+  /** Time of sample */
+  unsigned time;
+  /** Time of sample prior to this --- mutable for kdtree update efficiency */
+  mutable unsigned last_time;
+  /**
+   * Thermal drift factor:
+   * 1 indicates drift rate equal to wind speed
+   * 0 indicates no drift.
+   */
+  fixed drift_factor;
 
   /** 
    * Calculate approximate squared (flat projected) distance between this point
@@ -59,8 +65,8 @@ public:
    */
   gcc_pure
   unsigned approx_sq_dist(const TracePoint& tp) const {
-    return dsqr(get_flatLocation().Longitude-tp.get_flatLocation().Longitude)+
-      dsqr(get_flatLocation().Latitude-tp.get_flatLocation().Latitude);
+    return dsqr(get_flatLocation().Longitude - tp.get_flatLocation().Longitude) +
+      dsqr(get_flatLocation().Latitude - tp.get_flatLocation().Latitude);
   }
 
   /** 
@@ -83,7 +89,7 @@ public:
    */
   gcc_pure
   unsigned dt() const {
-    return time-last_time;
+    return time - last_time;
   }
 
   /**
@@ -106,7 +112,7 @@ public:
         return d.get_flatLocation().Latitude;
       };
       return 0; 
-    };
+    }
   };
 
   /**
@@ -130,14 +136,14 @@ public:
    * 
    * @return True if time matches
    */
-  bool operator==(TracePoint const& a) const {
+  bool operator==(TracePoint const &a) const {
     return time == a.time; 
   }
 
 private:
   gcc_const
   static inline unsigned dsqr(const int d) {
-    return d*d;
+    return d * d;
   }
 };
 
