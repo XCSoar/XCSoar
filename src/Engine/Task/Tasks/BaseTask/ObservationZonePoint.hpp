@@ -23,6 +23,7 @@
 
 #ifndef OBSERVATIONZONEPOINT_HPP
 #define OBSERVATIONZONEPOINT_HPP
+
 #include "Navigation/ReferencePoint.hpp"
 #include "ObservationZone.hpp"
 #include "Util/NonCopyable.hpp"
@@ -33,9 +34,10 @@ struct GeoPoint;
  * \todo 
  * - add arc type for future use
  */
-class ObservationZonePoint : public ReferencePoint, 
-                             public ObservationZone,
-                             public NonCopyable
+class ObservationZonePoint:
+  public ReferencePoint,
+  public ObservationZone,
+  public NonCopyable
 {
 public:
   friend class Serialiser;
@@ -53,53 +55,51 @@ public:
 
   const enum shape shape;
 
-/** 
- * Constructor
- * 
- * @param _location Location used as reference point for this OZ
- * 
- * @return Initialised object
- */
+  /**
+   * Constructor
+   *
+   * @param _location Location used as reference point for this OZ
+   *
+   * @return Initialised object
+   */
   ObservationZonePoint(enum shape _shape, const GeoPoint & _location)
     :ReferencePoint(_location), shape(_shape) {}
 
-/** 
- * Update geometry when previous/next legs are modified.
- * 
- * @param previous Previous task point (origin of inbound leg)
- * @param current Taskpoint this is located at
- * @param next Following task point (destination of outbound leg)
- */
-  virtual void set_legs(const GeoPoint *previous,
-                        const GeoPoint *current,
+  /**
+   * Update geometry when previous/next legs are modified.
+   *
+   * @param previous Previous task point (origin of inbound leg)
+   * @param current Taskpoint this is located at
+   * @param next Following task point (destination of outbound leg)
+   */
+  virtual void set_legs(const GeoPoint *previous, const GeoPoint *current,
                         const GeoPoint *next) {};
 
-/** 
- * Test whether an OZ is equivalent to this one
- * 
- * @param other OZ to compare to
- * 
- * @return True if same location and OZ
- */
-
+  /**
+   * Test whether an OZ is equivalent to this one
+   *
+   * @param other OZ to compare to
+   *
+   * @return True if same location and OZ
+   */
   virtual bool equals(const ObservationZonePoint* other) const;
 
-/** 
- * Generate a random location inside the OZ (to be used for testing)
- * 
- * @param mag proportional magnitude of error from center (0-1)
- *
- * @return Location of point
- */
+  /**
+   * Generate a random location inside the OZ (to be used for testing)
+   *
+   * @param mag proportional magnitude of error from center (0-1)
+   *
+   * @return Location of point
+   */
   virtual GeoPoint randomPointInSector(const fixed mag) const = 0;
 
-/** 
- * Clone this object with optional shift
- *
- * @param _location New location, or if NULL, uses object's location 
- * @return Cloned object
- */
-  virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const = 0;
+  /**
+   * Clone this object with optional shift
+   *
+   * @param _location New location, or if NULL, uses object's location
+   * @return Cloned object
+   */
+  virtual ObservationZonePoint* clone(const GeoPoint* _location = 0) const = 0;
 };
 
 #endif
