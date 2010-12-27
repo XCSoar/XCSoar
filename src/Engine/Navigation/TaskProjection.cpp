@@ -19,8 +19,13 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "TaskProjection.hpp"
+
+#include "Flat/FlatGeoPoint.hpp"
+#include "Flat/FlatPoint.hpp"
 #include "Math/Earth.hpp"
+
 #include <algorithm>
 
 // scaling for flat earth integer representation, gives approximately 50m resolution

@@ -24,9 +24,10 @@
 #define TASKPROJECTION_H
 
 #include "GeoPoint.hpp"
-#include "Flat/FlatGeoPoint.hpp"
-#include "Flat/FlatPoint.hpp"
 #include "Compiler.h"
+
+struct FlatPoint;
+struct FlatGeoPoint;
 
 /**
  * Class for performing Lambert Conformal Conic projections from
