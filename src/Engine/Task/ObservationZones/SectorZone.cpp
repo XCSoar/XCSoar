@@ -25,25 +25,26 @@
 
 GeoPoint 
 SectorZone::get_boundary_parametric(fixed t) const
-{ 
+{
   const Angle half = StartRadial.HalfAngle(EndRadial);
-  const Angle angle = (half+Angle::radians(t*fixed_two_pi)).as_bearing();
-  if (angleInSector(angle)) {
+  const Angle angle = (half + Angle::radians(t * fixed_two_pi)).as_bearing();
+  if (angleInSector(angle))
     return GeoVector(Radius, angle).end_point(get_location());
+
+  const fixed sweep = ((Angle::radians(fixed_two_pi) -
+      (EndRadial - StartRadial).as_bearing()) * fixed_half).value_native();
+
+  const fixed d_start =
+      (StartRadial - angle).as_bearing().value_native() / sweep;
+  const fixed d_end =
+      (angle - EndRadial).as_bearing().value_native() / sweep;
+
+  if (d_start < d_end) {
+    return GeoVector(Radius * (fixed_one - d_start),
+                     StartRadial).end_point(get_location());
   } else {
-    const fixed sweep = ((Angle::radians(fixed_two_pi)-
-                         (EndRadial-StartRadial).as_bearing())*fixed_half).value_native();
-
-    const fixed d_start = (StartRadial-angle).as_bearing().value_native()/sweep;
-    const fixed d_end = (angle-EndRadial).as_bearing().value_native()/sweep;
-
-    if (d_start< d_end) {
-      return GeoVector(Radius*(fixed_one-d_start), 
-                       StartRadial).end_point(get_location());
-    } else {
-      return GeoVector(Radius*(fixed_one-d_end), 
-                       EndRadial).end_point(get_location());
-    }
+    return GeoVector(Radius * (fixed_one - d_end),
+                     EndRadial).end_point(get_location());
   }
 }
 
@@ -60,36 +61,35 @@ SectorZone::updateSector()
   SectorEnd = GeoVector(Radius, EndRadial).end_point(get_location());
 }
 
-
 bool 
 SectorZone::isInSector(const AIRCRAFT_STATE &ref) const
 {
   GeoVector f(get_location(), ref.Location);
 
-  return (f.Distance<=Radius) && angleInSector(f.Bearing);
+  return (f.Distance <= Radius) && angleInSector(f.Bearing);
 }
 
-void 
-SectorZone::setStartRadial(const Angle x) 
+void
+SectorZone::setStartRadial(const Angle x)
 {
   StartRadial = x;
   updateSector();
 }
 
-void 
-SectorZone::setEndRadial(const Angle x) 
+void
+SectorZone::setEndRadial(const Angle x)
 {
   EndRadial = x;
   updateSector();
-}  
+}
 
-bool 
+bool
 SectorZone::angleInSector(const Angle b) const
 {
-  if (StartRadial<EndRadial) {
-    return ((b<=EndRadial) && (b>=StartRadial));
+  if (StartRadial < EndRadial) {
+    return ((b <= EndRadial) && (b >= StartRadial));
   } else {
-    return ((b<=EndRadial) || (b>=StartRadial));
+    return ((b <= EndRadial) || (b >= StartRadial));
   }
 }
 
@@ -99,6 +99,6 @@ SectorZone::equals(const ObservationZonePoint* other) const
   const SectorZone *z = (const SectorZone *)other;
 
   return CylinderZone::equals(other) &&
-    StartRadial == z->getStartRadial() &&
-    EndRadial == z->getEndRadial();
+         StartRadial == z->getStartRadial() &&
+         EndRadial == z->getEndRadial();
 }

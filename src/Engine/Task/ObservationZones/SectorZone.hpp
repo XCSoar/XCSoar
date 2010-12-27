@@ -34,36 +34,36 @@ class SectorZone:
 {
 protected:
   SectorZone(enum shape _shape, const GeoPoint &loc,
-             const fixed _radius=fixed(10000.0),
-             const Angle _startRadial=Angle::native(fixed_zero),
-             const Angle _endRadial=Angle::radians(fixed_two_pi)):
+             const fixed _radius = fixed(10000.0),
+             const Angle _startRadial = Angle::native(fixed_zero),
+             const Angle _endRadial = Angle::radians(fixed_two_pi)):
     CylinderZone(_shape, loc, _radius),
     StartRadial(_startRadial),
     EndRadial(_endRadial) 
     {
-    };
+    }
 
 public:
-/** 
- * Constructor
- * 
- * @param loc Location of tip of sector
- * @param _radius Radius of sector (m)
- * @param _startRadial Start radial (degrees), most counter-clockwise
- * @param _endRadial End radial (degrees), most clockwise
- * 
- * @return Initialised object
- */
+  /**
+   * Constructor
+   *
+   * @param loc Location of tip of sector
+   * @param _radius Radius of sector (m)
+   * @param _startRadial Start radial (degrees), most counter-clockwise
+   * @param _endRadial End radial (degrees), most clockwise
+   *
+   * @return Initialised object
+   */
   SectorZone(const GeoPoint &loc, 
              const fixed _radius=fixed(10000.0),
-             const Angle _startRadial=Angle::native(fixed_zero),
-             const Angle _endRadial=Angle::radians(fixed_two_pi)):
+             const Angle _startRadial = Angle::native(fixed_zero),
+             const Angle _endRadial = Angle::radians(fixed_two_pi)):
     CylinderZone(SECTOR, loc, _radius),
     StartRadial(_startRadial),
     EndRadial(_endRadial) 
-    {
-      updateSector();
-    };
+  {
+    updateSector();
+  }
 
   virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {
@@ -73,43 +73,43 @@ public:
     }
   }
 
-/** 
- * Set start angle (most counter-clockwise) of sector
- * 
- * @param x Angle (deg) of radial
- */
+  /**
+   * Set start angle (most counter-clockwise) of sector
+   *
+   * @param x Angle (deg) of radial
+   */
   virtual void setStartRadial(const Angle x); 
 
-/** 
- * Set end angle (most clockwise) of sector
- * 
- * @param x Angle (deg) of radial
- */
+  /**
+   * Set end angle (most clockwise) of sector
+   *
+   * @param x Angle (deg) of radial
+   */
   virtual void setEndRadial(const Angle x); 
 
-/** 
- * Get start radial property value
- * 
- * @return Angle (deg) of radial
- */
+  /**
+   * Get start radial property value
+   *
+   * @return Angle (deg) of radial
+   */
   Angle getStartRadial() const {
     return StartRadial;
   }
 
-/** 
- * Get end radial property value
- * 
- * @return Angle (deg) of radial
- */
+  /**
+   * Get end radial property value
+   *
+   * @return Angle (deg) of radial
+   */
   Angle getEndRadial() const {
     return EndRadial;
   }
 
-/** 
- * Set radius property
- * 
- * @param new_radius Radius (m) of cylinder
- */
+  /**
+   * Set radius property
+   *
+   * @param new_radius Radius (m) of cylinder
+   */
   virtual void setRadius(fixed new_radius) {
     CylinderZone::setRadius(new_radius);
     updateSector();
@@ -122,30 +122,29 @@ public:
    */
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
 
-/** 
- * Get point on boundary from parametric representation
- * 
- * @param t T value [0,1]
- * 
- * @return Point on boundary
- */
+  /**
+   * Get point on boundary from parametric representation
+   *
+   * @param t T value [0,1]
+   *
+   * @return Point on boundary
+   */
   GeoPoint get_boundary_parametric(fixed t) const;  
 
-/** 
- * Distance reduction for scoring when outside this OZ
- * 
- * @return Distance (m) to subtract from score
- */
+  /**
+   * Distance reduction for scoring when outside this OZ
+   *
+   * @return Distance (m) to subtract from score
+   */
   virtual fixed score_adjustment() const;
 
-/** 
- * Test whether an OZ is equivalent to this one
- * 
- * @param other OZ to compare to
- * 
- * @return True if same type and OZ parameters
- */
-
+  /**
+   * Test whether an OZ is equivalent to this one
+   *
+   * @param other OZ to compare to
+   *
+   * @return True if same type and OZ parameters
+   */
   virtual bool equals(const ObservationZonePoint* other) const;
 
   /** 
@@ -167,27 +166,28 @@ public:
   }
 
 protected:
-/** 
- * Updates sector parameters; call this if geometry changes to recalculate
- * SectorStart and SectorEnd etc.
- * 
- */
+  /**
+   * Updates sector parameters; call this if geometry changes to recalculate
+   * SectorStart and SectorEnd etc.
+   *
+   */
   virtual void updateSector();
 
-/** 
- * Test whether an angle is inside the sector limits
- * 
- * @param that Angle to test (deg)
- * 
- * @return True if that is within the start/end radials
- */
+  /**
+   * Test whether an angle is inside the sector limits
+   *
+   * @param that Angle to test (deg)
+   *
+   * @return True if that is within the start/end radials
+   */
   virtual bool angleInSector(const Angle that) const;
 
-  GeoPoint SectorStart; /**< Location of far end point of start radial */
-  GeoPoint SectorEnd; /**< Location of far end point of end radial */
+  /** Location of far end point of start radial */
+  GeoPoint SectorStart;
+  /** Location of far end point of end radial */
+  GeoPoint SectorEnd;
 
 private:
-
   Angle StartRadial;
   Angle EndRadial;
 };
