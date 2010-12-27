@@ -21,18 +21,18 @@
 */
 
 #include "TaskLeg.hpp"
+
 #include "OrderedTaskPoint.hpp"
+
 #include <assert.h>
 #include <algorithm>
 
-
 TaskLeg::TaskLeg(OrderedTaskPoint &_destination):
-    vector_travelled(fixed_zero),
-    vector_remaining(fixed_zero),
-    vector_planned(fixed_zero),
-    destination(_destination)
+  vector_travelled(fixed_zero),
+  vector_remaining(fixed_zero),
+  vector_planned(fixed_zero),
+  destination(_destination)
 {
-
 }
 
 const OrderedTaskPoint* 
@@ -58,27 +58,25 @@ TaskLeg::leg_vector_planned() const
   }
 }
 
-
 GeoVector 
 TaskLeg::leg_vector_remaining(const GeoPoint &ref) const
 {
   switch (destination.getActiveState()) {
   case OrderedTaskPoint::AFTER_ACTIVE:
-    if (!origin()) {
+    if (!origin())
       return GeoVector(fixed_zero);
-    }
+
     // this leg totally included
     return memo_remaining.calc(origin()->get_location_remaining(), 
                                destination.get_location_remaining());
     break;
   case OrderedTaskPoint::CURRENT_ACTIVE:
-    if (!origin()) {
+    if (!origin())
       return GeoVector(fixed_zero, 
                        ref.bearing(destination.get_location_remaining()));
-    }
+
     // this leg partially included
-    return memo_remaining.calc(ref, 
-                               destination.get_location_remaining());
+    return memo_remaining.calc(ref, destination.get_location_remaining());
     break;
   case OrderedTaskPoint::BEFORE_ACTIVE:
     // this leg not included
@@ -88,54 +86,48 @@ TaskLeg::leg_vector_remaining(const GeoPoint &ref) const
   };
 }
 
-
 GeoVector
 TaskLeg::leg_vector_travelled(const GeoPoint &ref) const
 {
   switch (destination.getActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:
-    if (!origin()) {
+    if (!origin())
       return GeoVector(fixed_zero);
-    }
+
     // this leg totally included
     return memo_travelled.calc(origin()->get_location_travelled(), 
                                destination.get_location_travelled());
     break;
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
-    if (!origin()) {
+    if (!origin())
       return GeoVector(fixed_zero, 
                        ref.bearing(destination.get_location_remaining()));
-    }
+
     if (destination.has_entered()) {
       return memo_travelled.calc(origin()->get_location_travelled(), 
                                  destination.get_location_travelled());
     } else {
-      return memo_travelled.calc(origin()->get_location_travelled(), 
-                                 ref);
+      return memo_travelled.calc(origin()->get_location_travelled(), ref);
     }
     break;
   case OrderedTaskPoint::AFTER_ACTIVE:
-    if (!origin()) {
+    if (!origin())
       return GeoVector(fixed_zero);
-    }
+
     // this leg may be partially included
-    if (origin()->has_entered()) {
-      return memo_travelled.calc(origin()->get_location_travelled(), 
-                                 ref);
-    }
+    if (origin()->has_entered())
+      return memo_travelled.calc(origin()->get_location_travelled(), ref);
   default:
     return GeoVector(fixed_zero);
   };
 }
 
-
 fixed 
 TaskLeg::leg_distance_scored(const GeoPoint &ref) const
 {
-  if (!origin()) {
+  if (!origin())
     return fixed_zero;
-  }
 
   switch (destination.getActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:
@@ -176,95 +168,81 @@ TaskLeg::leg_distance_scored(const GeoPoint &ref) const
   return fixed_zero;
 }
 
-
 fixed 
 TaskLeg::leg_distance_nominal() const
 {
-  if (origin()) {
+  if (origin())
     return memo_nominal.Distance(origin()->get_location(), 
                                  destination.get_location());
-  } else {
-    return fixed_zero; 
-  }
+  return fixed_zero;
 }
-
 
 fixed 
 TaskLeg::leg_distance_max() const
 {
-  if (origin()) {
+  if (origin())
     return memo_max.Distance(origin()->get_location_max(), 
                              destination.get_location_max());
-  } else {
-    return fixed_zero; 
-  }
+  return fixed_zero;
 }
-
 
 fixed 
 TaskLeg::leg_distance_min() const
 {
-  if (origin()) {
+  if (origin())
     return memo_min.Distance(origin()->get_location_min(), 
                              destination.get_location_min());
-  } else {
-    return fixed_zero; 
-  }
+  return fixed_zero;
 }
 
 fixed 
 TaskLeg::scan_distance_travelled(const GeoPoint &ref) 
 {
   vector_travelled = leg_vector_travelled(ref);
-  return vector_travelled.Distance 
-    +(next()? next()->scan_distance_travelled(ref):fixed_zero);
+  return vector_travelled.Distance +
+         (next() ? next()->scan_distance_travelled(ref) : fixed_zero);
 }
-
 
 fixed 
 TaskLeg::scan_distance_remaining(const GeoPoint &ref) 
 {
   vector_remaining = leg_vector_remaining(ref);
-  return vector_remaining.Distance 
-    +(next()? next()->scan_distance_remaining(ref):fixed_zero);
+  return vector_remaining.Distance +
+         (next() ? next()->scan_distance_remaining(ref) : fixed_zero);
 }
-
 
 fixed 
 TaskLeg::scan_distance_planned() 
 {
   vector_planned = leg_vector_planned();
-  return vector_planned.Distance 
-    +(next()? next()->scan_distance_planned():fixed_zero);
+  return vector_planned.Distance +
+         (next() ? next()->scan_distance_planned() : fixed_zero);
 }
-
 
 fixed 
 TaskLeg::scan_distance_max() const
 {
-  return leg_distance_max()
-    +(next()? next()->scan_distance_max():fixed_zero);
+  return leg_distance_max() +
+         (next() ? next()->scan_distance_max() : fixed_zero);
 }
-
 
 fixed 
 TaskLeg::scan_distance_min() const
 {
-  return leg_distance_min()
-    +(next()? next()->scan_distance_min():fixed_zero);
+  return leg_distance_min() +
+         (next() ? next()->scan_distance_min() : fixed_zero);
 }
-
 
 fixed 
 TaskLeg::scan_distance_nominal() const
 {
-  return leg_distance_nominal()
-    +(next()? next()->scan_distance_nominal():fixed_zero);
+  return leg_distance_nominal() +
+         (next() ? next()->scan_distance_nominal() : fixed_zero);
 }
 
 fixed 
 TaskLeg::scan_distance_scored(const GeoPoint &ref) const
 {
-  return leg_distance_scored(ref)
-    +(next()? next()->scan_distance_scored(ref):fixed_zero);
+  return leg_distance_scored(ref) +
+         (next() ? next()->scan_distance_scored(ref) : fixed_zero);
 }
