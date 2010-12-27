@@ -89,6 +89,12 @@ SetValues(void)
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(_T("prpRadio"));
+  if (wp) {
+    wp->SetText(airspace->get_radio_text().c_str());
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpType"));
   if (wp) {
     wp->SetText(airspace->get_type_text());

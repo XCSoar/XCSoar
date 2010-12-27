@@ -7,6 +7,8 @@
 
   <Edit Name="prpName" Caption="Name" X="2" Y="40" Width="238" Height="22" CaptionWidth="50" ReadOnly="1" />
 
+  <Edit Name="prpRadio" Caption="Radio" X="2" Width="238" Height="22" CaptionWidth="50" ReadOnly="1" />
+
   <Edit Name="prpType" Caption="Type" X="2" Width="238" Height="22" CaptionWidth="50" ReadOnly="1" />
 
   <Edit Name="prpTop" Caption="Top" X="2" Width="238" Height="22" CaptionWidth="50" ReadOnly="1" />
