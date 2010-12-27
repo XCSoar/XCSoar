@@ -596,9 +596,9 @@ dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location)
   }
 
   unsigned ItemIndex = wWayPointList->GetCursorIndex();
-  if (ItemIndex >= WayPointSelectInfo.size())
-    return NULL;
 
   delete wf;
-  return WayPointSelectInfo[ItemIndex].way_point;
+
+  return (ItemIndex >= WayPointSelectInfo.size()) ?
+         NULL : WayPointSelectInfo[ItemIndex].way_point;
 }
