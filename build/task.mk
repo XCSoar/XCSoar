@@ -75,7 +75,6 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/SampledTaskPoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/ScoredTaskPoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/TaskLeg.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/TaskPoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/UnorderedTaskPoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskPoints/StartPoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskPoints/FinishPoint.cpp \
