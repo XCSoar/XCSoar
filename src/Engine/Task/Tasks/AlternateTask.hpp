@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef ALTERNATETASK_HPP
 #define ALTERNATETASK_HPP
 
@@ -34,8 +35,8 @@ class AlternateTask :
   public AbortTask 
 {
 public:
-  typedef std::pair < Alternate, fixed > Divert;
-  typedef std::vector < Divert > DivertVector; 
+  typedef std::pair<Alternate, fixed> Divert;
+  typedef std::vector<Divert> DivertVector;
 
   static const unsigned max_alternates; /// number of alternates
 
@@ -49,10 +50,8 @@ public:
    * 
    * @return Initialised object (with nothing in task)
    */
-  AlternateTask(TaskEvents &te, 
-                const TaskBehaviour &tb,
-                const GlidePolar &gp,
-                const Waypoints &wps);
+  AlternateTask(TaskEvents &te, const TaskBehaviour &tb,
+                const GlidePolar &gp, const Waypoints &wps);
 
   void reset();
 

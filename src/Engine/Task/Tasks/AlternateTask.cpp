@@ -19,25 +19,24 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "AlternateTask.hpp"
-#include <queue>
+
 #include "BaseTask/TaskWayPoint.hpp"
 #include "Math/Earth.hpp"
 #include "Task/TaskEvents.hpp"
 
 #include <limits.h>
+#include <queue>
 
 const unsigned AlternateTask::max_alternates = 6;
 
-AlternateTask::AlternateTask(TaskEvents &te, 
-                             const TaskBehaviour &tb,
-                             const GlidePolar &gp,
-                             const Waypoints &wps):
+AlternateTask::AlternateTask(TaskEvents &te, const TaskBehaviour &tb,
+                             const GlidePolar &gp, const Waypoints &wps):
   AbortTask(te, tb, gp, wps),
   best_alternate_id(UINT_MAX)
 {
 }
-
 
 void
 AlternateTask::reset()
@@ -47,7 +46,6 @@ AlternateTask::reset()
   best_alternate_id = UINT_MAX;
 }
 
-
 void
 AlternateTask::clear()
 {
@@ -55,12 +53,13 @@ AlternateTask::clear()
   alternates.clear();
 }
 
-
 /**
  * Function object used to rank waypoints by arrival time
  */
-struct AlternateRank : public std::binary_function<AlternateTask::Divert, 
-                                                   AlternateTask::Divert, bool> {
+struct AlternateRank:
+  public std::binary_function<AlternateTask::Divert,
+                              AlternateTask::Divert, bool>
+{
   /**
    * Condition, ranks by distance diversion 
    */
@@ -70,24 +69,22 @@ struct AlternateRank : public std::binary_function<AlternateTask::Divert,
   }
 };
 
-
 void
 AlternateTask::check_alternate_changed()
 {
   // remember previous value (or invalid)
   unsigned id;
-  if (alternates.size()) {
+  if (alternates.size())
     id = alternates[0].first.id;
-  } else {
+  else
     id = UINT_MAX;
-  }
+
   // send notification on change
   if (best_alternate_id != id) {
     best_alternate_id = id;
     task_events.transition_alternate();
   }
 }
-
 
 void 
 AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
@@ -101,21 +98,18 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
   std::priority_queue<Divert, DivertVector, AlternateRank> q;
   const fixed dist_straight = state_now.get_location().distance(destination);
 
-  for (AlternateTaskVector::const_iterator 
-         i= tps.begin(); i!= tps.end(); ++i) {
-
+  for (AlternateTaskVector::const_iterator i = tps.begin(); i != tps.end(); ++i) {
     const TaskWayPoint& tp = *i->first;
     const Waypoint& wp_alt = tp.get_waypoint();
-    const fixed dist_divert = ::DoubleDistance(state_now.get_location(),
-                                               wp_alt.Location,
-                                               destination);
-    const fixed delta = dist_straight-dist_divert;
+    const fixed dist_divert =
+        ::DoubleDistance(state_now.get_location(), wp_alt.Location, destination);
+    const fixed delta = dist_straight - dist_divert;
 
     q.push(std::make_pair(std::make_pair(wp_alt, i->second), delta));
   }
 
   // now push results onto the list, best first.
-  while (!q.empty() && alternates.size()< max_alternates) {
+  while (!q.empty() && alternates.size() < max_alternates) {
     const Alternate top = q.top().first;
 
     // only add if not already in the list (from previous stage in two
@@ -131,18 +125,16 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
   check_alternate_changed();
 }
 
-
 void 
 AlternateTask::set_task_destination(const AIRCRAFT_STATE &state_now,
                                     const TaskPoint* _target) 
 {
   // if we have a target, use that, otherwise use the aircraft location
   // (which ends up equivalent to sorting by distance)
-  if (_target) {
+  if (_target)
     destination = _target->get_location_remaining();
-  } else {
+  else
     destination = state_now.get_location();
-  }
 }
 
 const AbortTask::AlternateVector
@@ -155,10 +147,9 @@ bool
 AlternateTask::is_waypoint_in_alternates(const Waypoint& waypoint) const
 {
   for (AlternateVector::const_iterator it = alternates.begin();
-       it != alternates.end(); ++it) {
-    if (it->first == waypoint) {
+       it != alternates.end(); ++it)
+    if (it->first == waypoint)
       return true;
-    }
-  }
+
   return false;
 }
