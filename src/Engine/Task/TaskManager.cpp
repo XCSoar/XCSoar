@@ -267,17 +267,13 @@ TaskManager::update(const AIRCRAFT_STATE &state,
       trace_sprint.append(state);
   }
 
-  if (task_ordered.task_size() > 1) {
+  if (task_ordered.task_size() > 1)
     // always update ordered task
     retval |= task_ordered.update(state, state_last);
-  }
 
   // check if we can create a goto task on takeoff
-  if (!active_task) {
-    if (task_goto.check_takeoff(state, state_last)) {
-      retval |= set_mode(MODE_GOTO);
-    }
-  }
+  if (!active_task && task_goto.check_takeoff(state, state_last))
+    retval |= set_mode(MODE_GOTO);
 
   // inform the abort task whether it is running as the task or not  
   task_abort.set_active(active_task == &task_abort);
