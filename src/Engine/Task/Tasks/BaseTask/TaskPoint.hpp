@@ -21,7 +21,6 @@
 }
 */
 
-
 #ifndef TASKPOINT_HPP
 #define TASKPOINT_HPP
 
@@ -33,13 +32,10 @@
 
 /**
  * Base class for all task points 
- *
  */
-
 class TaskPoint : 
   public ReferencePoint
 {
-
 public:
   friend class PrintHelper;
 
@@ -58,140 +54,138 @@ public:
     return type == AST || type == AAT;
   }
 
-/** 
- * Constructor.  Location and elevation of waypoint is used
- * as the task point's reference values; a copy of the waypoint
- * is also stored to facilitate user-feedback.
- * 
- * @param tb Task Behaviour defining options (esp safety heights)
- * 
- * @return Initialised object
- */
-  TaskPoint(enum type _type,
-            const GeoPoint& location,
-            const fixed elevation,
-            const TaskBehaviour &tb) : ReferencePoint(location),
-                                       type(_type),
-                                       m_elevation(elevation),
-                                       m_task_behaviour(tb)
-    { }
+  /**
+   * Constructor.  Location and elevation of waypoint is used
+   * as the task point's reference values; a copy of the waypoint
+   * is also stored to facilitate user-feedback.
+   *
+   * @param tb Task Behaviour defining options (esp safety heights)
+   *
+   * @return Initialised object
+   */
+  TaskPoint(enum type _type, const GeoPoint& location,
+            const fixed elevation, const TaskBehaviour &tb) :
+    ReferencePoint(location), type(_type),
+    m_elevation(elevation), m_task_behaviour(tb) {}
 
-/**
- * Destructor.  Does nothing yet.
- */
+  /**
+   * Destructor.  Does nothing yet.
+   */
   virtual ~TaskPoint() {};
 
-/** 
- * Retrieve location to be used for remaining task
- * (for a pure TaskPoint, this is the reference location)
- * 
- * @return Location 
- */
+  /**
+   * Retrieve location to be used for remaining task
+   * (for a pure TaskPoint, this is the reference location)
+   *
+   * @return Location
+   */
   gcc_pure
   virtual const GeoPoint& get_location_remaining() const {
     return get_location();
   }
 
-/** 
- * Calculate vector from aircraft to destination
- * 
- * @return Vector for task leg
- */  
+  /**
+   * Calculate vector from aircraft to destination
+   *
+   * @return Vector for task leg
+   */
   gcc_pure
   virtual const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const = 0;
 
-/** 
- * Calculate vector from aircraft to destination
- * 
- * @return Vector for task leg
- */  
+  /**
+   * Calculate vector from aircraft to destination
+   *
+   * @return Vector for task leg
+   */
   gcc_pure
   virtual const GeoVector get_vector_planned() const = 0;
 
-/** 
- * Calculate vector travelled along this leg
- * 
- * @return Vector for task leg
- */  
+  /**
+   * Calculate vector travelled along this leg
+   *
+   * @return Vector for task leg
+   */
   gcc_pure
   virtual const GeoVector get_vector_travelled(const AIRCRAFT_STATE &) const = 0;
 
-/** 
- * Dummy null method.
- * Set target to parametric value between min and max locations.
- * Targets are only moved for current or after taskpoints, unless
- * force_if_current is true.
- * 
- * @param p Parametric range (0:1) to set target
- * @param force_if_current If current active, force range move (otherwise ignored)
- *
- * @return True if target was moved
- */
+  /**
+   * Dummy null method.
+   * Set target to parametric value between min and max locations.
+   * Targets are only moved for current or after taskpoints, unless
+   * force_if_current is true.
+   *
+   * @param p Parametric range (0:1) to set target
+   * @param force_if_current If current active, force range move (otherwise ignored)
+   *
+   * @return True if target was moved
+   */
   virtual bool set_range(const fixed p, const bool force_if_current) {
     return false;
-  };
+  }
 
-/**
-  * If this TaskPoint has the capability to adjust the
-  * target/range, this indicates whether it is locked from
-  * being updated by the optimizer
-  * Only valid for TaskPoints where has_target() returns true
-  *
-  * @return True if target is locked
-  *    or False if target is unlocked or tp has no target
-  */
-   gcc_pure
-   virtual bool target_is_locked() const {
-     return false;
-   };
+  /**
+   * If this TaskPoint has the capability to adjust the
+   * target/range, this indicates whether it is locked from
+   * being updated by the optimizer
+   * Only valid for TaskPoints where has_target() returns true
+   *
+   * @return True if target is locked
+   *    or False if target is unlocked or tp has no target
+   */
+  gcc_pure
+  virtual bool target_is_locked() const {
+    return false;
+  }
 
-/** 
- * Capability of this TaskPoint to have adjustable range/target
- * 
- * @return True if task point has a target (can have range set)
- */
+  /**
+   * Capability of this TaskPoint to have adjustable range/target
+   *
+   * @return True if task point has a target (can have range set)
+   */
   gcc_pure
   virtual bool has_target() const {
     return false;
-  };
+  }
 
-/**
- * Save local copy of target in case optimisation fails
- */
-  virtual void target_save() {};
-/**
- * Restore target from local copy
- */
-  virtual void target_restore() {};
+  /**
+   * Save local copy of target in case optimisation fails
+   */
+  virtual void target_save() {}
+  /**
+   * Restore target from local copy
+   */
+  virtual void target_restore() {}
 
-/** 
- * Check whether aircraft has entered the observation zone.
- * 
- * @return True if observation zone has been entered
- */
+  /**
+   * Check whether aircraft has entered the observation zone.
+   *
+   * @return True if observation zone has been entered
+   */
   gcc_pure
   virtual bool has_entered() const = 0;
 
-/** 
- * Recall aircraft state where it entered the observation zone.
- * 
- * @return State at entry, or null if never entered
- */
+  /**
+   * Recall aircraft state where it entered the observation zone.
+   *
+   * @return State at entry, or null if never entered
+   */
   gcc_pure
   virtual const AIRCRAFT_STATE& get_state_entered() const = 0;
 
-/** 
- * Retrieve elevation of taskpoint, taking into account
- * rules and safety margins.  
- * 
- * @return Minimum allowable elevation of task point
- */
+  /**
+   * Retrieve elevation of taskpoint, taking into account
+   * rules and safety margins.
+   *
+   * @return Minimum allowable elevation of task point
+   */
   gcc_pure
   virtual fixed get_elevation() const = 0;
 
 protected:
-  const fixed m_elevation; /**< Altitude (AMSL, m) of task point terrain */
-  const TaskBehaviour &m_task_behaviour; /**< Reference to task behaviour (for options) */
+  /** Altitude (AMSL, m) of task point terrain */
+  const fixed m_elevation;
+  /** Reference to task behaviour (for options) */
+  const TaskBehaviour &m_task_behaviour;
 };
 
 #endif
