@@ -73,11 +73,7 @@ void
 AlternateTask::check_alternate_changed()
 {
   // remember previous value (or invalid)
-  unsigned id;
-  if (alternates.size())
-    id = alternates[0].first.id;
-  else
-    id = UINT_MAX;
+  unsigned id = (alternates.empty() ? UINT_MAX : alternates[0].first.id);
 
   // send notification on change
   if (best_alternate_id != id) {
