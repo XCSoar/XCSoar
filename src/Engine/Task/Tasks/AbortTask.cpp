@@ -61,13 +61,13 @@ AbortTask::setActiveTaskPoint(unsigned index)
 TaskWayPoint*
 AbortTask::getActiveTaskPoint() const
 {
-  if (activeTaskPoint<tps.size())
+  if (activeTaskPoint < tps.size())
     return tps[activeTaskPoint].first;
 
   return NULL;
 }
 
-bool 
+bool
 AbortTask::validTaskPoint(const int index_offset) const
 {
   unsigned index = activeTaskPoint + index_offset;
@@ -80,10 +80,11 @@ AbortTask::task_size() const
   return tps.size();
 }
 
-void 
-AbortTask::clear() {
+void
+AbortTask::clear()
+{
   for (AlternateTaskVector::iterator v = tps.begin(); v != tps.end();) {
-    delete (v->first); 
+    delete (v->first);
     tps.erase(v);
   }
   m_landable_reachable = false;
