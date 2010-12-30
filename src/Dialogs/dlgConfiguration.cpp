@@ -821,6 +821,7 @@ setVariables()
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Simple"));
     dfe->addEnumText(_("Task"));
+    dfe->addEnumText(_("Home"));
     dfe->Set(settings_computer.abort_task_mode);
     wp->RefreshDisplay();
   }

@@ -133,6 +133,18 @@ AlternateTask::set_task_destination(const AIRCRAFT_STATE &state_now,
     destination = state_now.get_location();
 }
 
+void
+AlternateTask::set_task_destination_home(const AIRCRAFT_STATE &state_now)
+{
+  // if we have a home, use that, otherwise use the aircraft location
+  // (which ends up equivalent to sorting by distance)
+  const Waypoint* home_waypoint = waypoints.find_home();
+  if (home_waypoint)
+    destination = home_waypoint->Location;
+  else
+    destination = state_now.get_location();
+}
+
 const AbortTask::AlternateVector
 AlternateTask::getAlternates() const
 {

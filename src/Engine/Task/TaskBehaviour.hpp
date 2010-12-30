@@ -31,6 +31,7 @@ struct AIRCRAFT_STATE;
 enum AbortTaskMode {
   atmSimple,
   atmTask,
+  atmHome,
 };
 
 /**
@@ -113,6 +114,7 @@ public:
    * How should the Abort/Alternate task work like:
    * atmSimple: sort only by arrival height and wp type
    * atmTask: sort also by deflection from current turnpoint
+   * atmHome: sort also by deflection from home
    */
   AbortTaskMode abort_task_mode;
 

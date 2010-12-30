@@ -280,6 +280,8 @@ TaskManager::update(const AIRCRAFT_STATE &state,
   // and tell it where the task destination is (if any)
   if (task_behaviour.abort_task_mode == atmSimple)
     task_abort.set_task_destination(state, NULL);
+  else if (task_behaviour.abort_task_mode == atmHome)
+    task_abort.set_task_destination_home(state);
   else
     task_abort.set_task_destination(state, getActiveTaskPoint());
 
