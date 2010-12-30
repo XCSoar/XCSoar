@@ -266,21 +266,3 @@ Trace::get_trace_edges(TracePointVector& iov) const
     iov.clear();
   }
 }
-
-/*
-    void printall() {
-      for (TraceDelta::iterator it = list.begin();
-           it != list.end(); ++it) {
-        print(*it);
-      }
-      printf("\n");
-    }
-
-    void print(const TraceDelta& td) {
-      printf("%d (%d,%d) %d %d\n",
-             td.p_time, td.prev->p_time,
-             td.next->p_time, td.elim_distance,
-             td.elim_time);
-    }
-
-*/

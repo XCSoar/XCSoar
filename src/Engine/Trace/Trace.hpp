@@ -789,9 +789,6 @@ public:
   const TracePoint& get_last_point() const {
     return m_last_point;
   }
-
-public:
-  void print(const GeoPoint &loc) const;
 };
 
 #endif
