@@ -41,7 +41,8 @@ TaskBehaviour::TaskBehaviour():
     safety_height_arrival(300.0),
     start_max_speed_margin(0.0),
     start_max_height_margin(0),
-    enable_trace(true) {}
+    enable_trace(true),
+    abort_task_mode(atmTask) {}
 
 void
 TaskBehaviour::all_off()

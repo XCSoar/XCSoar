@@ -28,6 +28,11 @@
 
 struct AIRCRAFT_STATE;
 
+enum AbortTaskMode {
+  atmSimple,
+  atmTask,
+};
+
 /**
  *  Class defining options for task system.
  *  Typical uses might be default values, and simple aspects of task behaviour.
@@ -103,6 +108,13 @@ public:
 
   /** Whether to maintain a thinned trace of the flight.  This is overridden by enable_olc. */
   bool enable_trace;
+
+  /**
+   * How should the Abort/Alternate task work like:
+   * atmSimple: sort only by arrival height and wp type
+   * atmTask: sort also by deflection from current turnpoint
+   */
+  AbortTaskMode abort_task_mode;
 
   /**
    * Convenience function (used primarily for testing) to disable

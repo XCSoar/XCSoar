@@ -378,6 +378,9 @@ Profile::Use()
   if (Get(szProfileSafetyMacCready, Temp))
     settings_computer.safety_mc = fixed(Temp) / 10;
 
+  if (Get(szProfileAbortTaskMode, Temp))
+    settings_computer.abort_task_mode = (AbortTaskMode)Temp;
+
   if (Get(szProfileRiskGamma, Temp))
     settings_computer.risk_gamma = fixed(Temp) / 10;
 

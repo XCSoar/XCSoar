@@ -815,6 +815,16 @@ setVariables()
   LoadFormProperty(*wf, _T("prpSafetyAltitudeTerrain"), ugAltitude,
                    settings_computer.safety_height_terrain);
 
+  wp = (WndProperty*)wf->FindByName(_T("prpAbortTaskMode"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Simple"));
+    dfe->addEnumText(_("Task"));
+    dfe->Set(settings_computer.abort_task_mode);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpFinalGlideTerrain"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1520,6 +1530,17 @@ void dlgConfigurationShowModal(void)
                                      settings_computer.DisableAutoLogger);
 
   WndProperty *wp;
+
+  wp = (WndProperty*)wf->FindByName(_T("prpAbortTaskMode"));
+  if (wp) {
+    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
+    if ((int)settings_computer.abort_task_mode != df.GetAsInteger()) {
+      settings_computer.abort_task_mode = (AbortTaskMode)df.GetAsInteger();
+      Profile::Set(szProfileAbortTaskMode,
+                   (unsigned)settings_computer.abort_task_mode);
+      changed = true;
+    }
+  }
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {

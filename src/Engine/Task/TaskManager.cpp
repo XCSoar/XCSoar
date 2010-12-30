@@ -278,7 +278,10 @@ TaskManager::update(const AIRCRAFT_STATE &state,
   // inform the abort task whether it is running as the task or not  
   task_abort.set_active(active_task == &task_abort);
   // and tell it where the task destination is (if any)
-  task_abort.set_task_destination(state, getActiveTaskPoint());
+  if (task_behaviour.abort_task_mode == atmSimple)
+    task_abort.set_task_destination(state, NULL);
+  else
+    task_abort.set_task_destination(state, getActiveTaskPoint());
 
   retval |= task_abort.update(state, state_last);
 
