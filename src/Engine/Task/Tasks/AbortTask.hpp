@@ -260,9 +260,11 @@ public:
    */
   void set_active(const bool _active) { is_active = _active; }
 
+protected:
+  const Waypoints &waypoints;
+
 private:
   unsigned active_waypoint;
-  const Waypoints &waypoints;
   GlidePolar polar_safety;
   bool m_landable_reachable;
 

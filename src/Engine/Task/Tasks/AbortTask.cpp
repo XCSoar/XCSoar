@@ -38,8 +38,8 @@ const fixed AbortTask::max_search_range(100000.0);
 AbortTask::AbortTask(TaskEvents &te, const TaskBehaviour &tb,
                      const GlidePolar &gp, const Waypoints &wps):
   UnorderedTask(ABORT, te, tb, gp),
-  active_waypoint(0),
   waypoints(wps),
+  active_waypoint(0),
   polar_safety(gp)
 {
 }
