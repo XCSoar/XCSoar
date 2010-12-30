@@ -68,6 +68,7 @@ typedef std::list<TracePoint> TracePointList;
  *
  * Insertion:
  *   O(log(n)) for set + O(log(n)) for kdtree
+ *   = O(log(n))
  *
  * Erasing an item
  *   O(1) for set + O(log(n)) for kdtree + O(log(n)) neighbours
@@ -77,26 +78,26 @@ typedef std::list<TracePoint> TracePointList;
  *   O(n) erasures
  *   + O(n log^2 n) tree optimisation
  *   + O(n2) leaf reassignment
- *   = O(n+n2 + n log^2 n) per n steps
- *   = O(n+log^2 n)
+ *   = O(n + n2 + n log^2 n) per n steps
+ *   = O(n + log^2 n)
  *
  * Retrieval of trace in time sequence:
  *   O(n)
  *
  * Geospatial find within range (k items within range):
- *   O(sqrt(n)+k)
+ *   O(sqrt(n) + k)
  *
  * Conclusion:
  *   main overhead is due to leaf reassignment and tree construction;
  *   potential benefits if kdtree is modified to use a median-finding algorithm,
- *   and only updates parts of the tree it needs to rather than constructing afresh
- *   each time.
+ *   and only updates parts of the tree it needs to rather than constructing
+ *   afresh each time.
  *
- *   With current solution, we are using O(n+log^2 n) operations extra to save
- *   O(n)-O(sqrt(n)) operations in range searches.
+ *   With current solution, we are using O(n + log^2 n) operations extra to save
+ *   O(n) - O(sqrt(n)) operations in range searches.
  *
  *   Total cost
- *      O(n+log^2 n) + O(sqrt(n)) < O(n) ? no!
+ *      O(n + log^2 n) + O(sqrt(n)) < O(n) ? no!
  *   But first part is done in idle time, so real question is:
  *      O(sqrt(n)) < O(n) ? yes!
  *
@@ -111,7 +112,7 @@ public:
    * Constructor.  Task projection is updated after first call to append().
    *
    * @param no_thin_time Time window in seconds in which points most recent
-       wont be trimmed
+   * wont be trimmed
    * @param max_time Time window size (seconds), null_time for unlimited
    * @param max_points Maximum number of points that can be stored
    */
@@ -129,7 +130,6 @@ public:
 
   /**
    * Clear the trace store
-   *
    */
   void clear();
 
@@ -185,11 +185,10 @@ public:
    *
    */
   void get_trace_points(TracePointVector& iov) const {
-    if (delta_list.size()<3) {
+    if (delta_list.size() < 3)
       get_trace_edges(iov);
-    } else {
+    else
       delta_list.get_trace(iov, get_min_time());
-    }
   }
 
   /**
@@ -200,9 +199,7 @@ public:
   void get_trace_edges(TracePointVector& iov) const;
 
 private:
-
   struct TraceDelta {
-
     /**
      * Function used to points for sorting by deltas.
      * Ranking is primarily by distance delta; for equal distances, rank by
@@ -211,28 +208,28 @@ private:
      */
     static bool DeltaRank (const TraceDelta& x, const TraceDelta& y) {
       // distance is king
-      if (x.elim_distance < y.elim_distance) {
+      if (x.elim_distance < y.elim_distance)
         return true;
-      }
-      if (x.elim_distance > y.elim_distance) {
+
+      if (x.elim_distance > y.elim_distance)
         return false;
-      }
+
       // distance is equal, so go by time error
-      if (x.elim_time < y.elim_time) {
+      if (x.elim_time < y.elim_time)
         return true;
-      }
-      if (x.elim_time > y.elim_time) {
+
+      if (x.elim_time > y.elim_time)
         return false;
-      }
+
       // all else fails, go by age
-      if (x.p_time < y.p_time) {
+      if (x.p_time < y.p_time)
         return true;
-      }
-      if (x.p_time > y.p_time) {
+
+      if (x.p_time > y.p_time)
         return false;
-      }
+
       return false;
-    };
+    }
 
     struct DeltaRankOp {
       bool operator()(const TraceDelta& s1, const TraceDelta& s2) {
@@ -254,10 +251,8 @@ private:
       delta_distance = 0;
     }
 
-    TraceDelta(const TracePoint& p_last,
-               const TracePoint& p,
-               const TracePoint& p_next,
-               const TraceTree::const_iterator &_leaf)
+    TraceDelta(const TracePoint& p_last, const TracePoint& p,
+               const TracePoint& p_next, const TraceTree::const_iterator &_leaf)
     {
       p_time = p.time;
       elim_distance = distance_metric(p_last, p, p_next);
@@ -317,17 +312,15 @@ private:
      *
      * @return Time delta if this node is thinned
      */
-    static unsigned time_metric(const TracePoint& last,
-                                const TracePoint& node,
+    static unsigned time_metric(const TracePoint& last, const TracePoint& node,
                                 const TracePoint& next) {
-      return (next.time-last.time)-
-        std::min(next.time-node.time, node.time-last.time);
+      return (next.time - last.time) -
+             std::min(next.time - node.time, node.time - last.time);
     }
   };
 
   class DeltaList {
   public:
-
     /**
      * Append new point to tree and list in sorted order.
      * It is expected this will be called in increasing time order,
@@ -348,7 +341,7 @@ private:
         TraceDelta::iterator new_it = last();
         link(new_it, new_it);
         link(old_back, new_it);
-        if (list.size()>2) {
+        if (list.size() > 2) {
           TraceDelta::iterator new_back = update_delta(old_back, tree);
           link(new_back, new_it);
         }
@@ -368,17 +361,18 @@ private:
       return list.size();
     }
 
-    void get_trace(TracePointVector& iov, const unsigned min_time= 0) const {
-      if (list.size()<3)
+    void get_trace(TracePointVector& iov, const unsigned min_time = 0) const {
+      if (list.size() < 3)
         return TracePointVector().swap(iov);
+
       TracePointVector v; v.reserve(list.size());
       TraceDelta::const_iterator it = first();
       assert(it != last());
       do {
         const TraceDelta &tit = *it;
-        if (tit.p_time >= min_time) {
+        if (tit.p_time >= min_time)
           v.push_back(*(tit.leaf));
-        }
+
         it = tit.next;
       } while (it->next != it);
       v.push_back(*(it->leaf));
@@ -398,12 +392,9 @@ private:
                                       TraceTree& tree) {
       assert(it != list.end());
 
-      const TraceDelta::neighbours ne = std::make_pair(it->prev,
-                                                       it->next);
-
-      if ((ne.second == it) || (ne.first == it)) {
+      const TraceDelta::neighbours ne = std::make_pair(it->prev, it->next);
+      if ((ne.second == it) || (ne.first == it))
         return it;
-      }
 
       TraceDelta td (*(ne.first->leaf), *it->leaf, *(ne.second->leaf), it->leaf);
 
@@ -468,10 +459,8 @@ private:
      * @return Neighbours
      */
     TraceDelta::neighbours erase(TraceDelta::iterator it) {
-
       assert(it != list.end());
-      const TraceDelta::neighbours ne = std::make_pair(it->prev,
-                                                       it->next);
+      const TraceDelta::neighbours ne = std::make_pair(it->prev, it->next);
       assert(ne.first != it);
       assert(ne.second != it);
 
@@ -507,10 +496,9 @@ private:
      *
      * @return True if items were erased
      */
-    bool erase_delta(const unsigned target_size,
-                     TraceTree& tree,
-                     const unsigned recent=0) {
-      if (size()<2)
+    bool erase_delta(const unsigned target_size, TraceTree& tree,
+                     const unsigned recent = 0) {
+      if (size() < 2)
         return false;
 
       bool modified = false;
@@ -520,12 +508,11 @@ private:
 
       TraceDelta::const_iterator lfirst = first();
       TraceDelta::iterator candidate = begin();
-      while (lsize> target_size) {
-
-        if (candidate == lfirst) {
+      while (lsize > target_size) {
+        if (candidate == lfirst)
           // exhausted non-recent candidates!
           return modified;
-        }
+
         if (candidate->p_time < recent_time) {
           erase_inside(candidate, tree);
           lsize--;
@@ -550,10 +537,10 @@ private:
      * @return True if items were erased
      */
     bool erase_earlier_than(const unsigned p_time, TraceTree& tree) {
-      if (!p_time) {
+      if (!p_time)
         // there will be nothing to remove
         return false;
-      }
+
       bool modified = false;
       unsigned start_time = null_time;
       TraceDelta::iterator new_start = list.begin();
@@ -573,9 +560,9 @@ private:
       }
       // need to set deltas for first point, only one of these
       // will occur (have to search for this point)
-      if (modified && !list.empty()) {
+      if (modified && !list.empty())
         erase_start(new_start);
-      }
+
       assert(tree.size() == list.size());
       return modified;
     }
@@ -589,15 +576,14 @@ private:
      * @return Recent time
      */
     unsigned get_recent_time(const unsigned t) const {
-      if (empty()) {
+      if (empty())
         return 0;
-      }
+
       TraceDelta::iterator d_last = last();
-      if (d_last->p_time> t) {
+      if (d_last->p_time> t)
         return d_last->p_time-t;
-      } else {
-        return 0;
-      }
+
+      return 0;
     }
 
     /**
@@ -611,9 +597,9 @@ private:
         TraceDelta::const_iterator i = list.end();
         --i;
         return i;
-      } else {
-        return list.end();
       }
+
+      return list.end();
     }
 
     /**
@@ -622,7 +608,7 @@ private:
      * @return Iterator to first (earliest) item
      */
     TraceDelta::iterator first() const {
-      if (size()>1) {
+      if (size() > 1) {
         TraceDelta::const_iterator i = last();
         --i;
         return i;
@@ -647,12 +633,12 @@ private:
       unsigned counter = 0;
       for (TraceDelta::const_iterator i= list.begin();
            i!= list.end(); ++i, ++counter) {
-        if (i->p_time < r) {
+        if (i->p_time < r)
           acc += i->delta_distance;
-        }
       }
       if (counter)
-        return acc/counter;
+        return acc / counter;
+
       return 0;
     }
 
@@ -662,17 +648,16 @@ private:
       unsigned counter = 0;
       for (TraceDelta::const_iterator i= list.begin();
            i!= list.end(); ++i, ++counter) {
-        if (i->p_time < r) {
+        if (i->p_time < r)
           acc += i->delta_time();
-        }
       }
       if (counter)
-        return acc/counter;
+        return acc / counter;
+
       return 0;
     }
 
   private:
-
     TraceDelta::List list;
 
     void insert(const TraceDelta &td) {
@@ -685,8 +670,7 @@ private:
      * @param from From item
      * @param to To item
      */
-    static void link(TraceDelta::iterator from,
-                     TraceDelta::iterator to) {
+    static void link(TraceDelta::iterator from, TraceDelta::iterator to) {
       to->prev = from;
       from->next = to;
     }
@@ -703,11 +687,10 @@ private:
       td_start.elim_time = null_time;
       TraceDelta::iterator i_new = merge_insert(td_start);
       i_new->prev = i_new;
-      if (last) {
+      if (last)
         link(i_new, i_new);
-      } else {
+      else
         link(i_new, i_next);
-      }
     }
 
     /**
@@ -742,18 +725,14 @@ private:
      */
     TraceDelta::iterator find_time(const unsigned p_time) {
       TraceDelta::const_iterator lend = list.end();
-      for (TraceDelta::iterator i= list.begin(); i!= lend; ++i) {
-        if (i->p_time== p_time) {
+      for (TraceDelta::iterator i= list.begin(); i!= lend; ++i)
+        if (i->p_time== p_time)
           return i;
-        }
-      }
+
       assert(0);
       return list.end();
     }
-
   };
-
-  ///////
 
   static void thin_trace_resolution(TracePointList& vec, const unsigned range_sq);
 
@@ -810,6 +789,7 @@ public:
   const TracePoint& get_last_point() const {
     return m_last_point;
   }
+
 public:
   void print(const GeoPoint &loc) const;
 };
