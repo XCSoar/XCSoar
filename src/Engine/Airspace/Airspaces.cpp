@@ -367,7 +367,7 @@ Airspaces::synchronise_in_range(const Airspaces& master,
          t != airspace_tree.end(); ) {
       if (t->get_airspace() == v->get_airspace()) {
         AirspaceTree::const_iterator new_t = t;
-        new_t++;
+        ++new_t;
         airspace_tree.erase_exact(*t);
         t = new_t;
         found = true;
