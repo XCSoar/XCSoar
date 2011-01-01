@@ -100,10 +100,8 @@ AutoHide()
 
 /** ack inside */
 static void
-OnAckClicked(WndButton &Sender)
+Ack()
 {
-  (void)Sender;
-
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
     airspace_warnings->acknowledge_inside(*airspace, true);
@@ -112,12 +110,17 @@ OnAckClicked(WndButton &Sender)
   }
 }
 
-/** ack warn */
 static void
-OnAck1Clicked(WndButton &Sender)
+OnAckClicked(WndButton &Sender)
 {
   (void)Sender;
+  Ack();
+}
 
+/** ack warn */
+static void
+Ack1()
+{
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
     airspace_warnings->acknowledge_warning(*airspace, true);
@@ -126,12 +129,17 @@ OnAck1Clicked(WndButton &Sender)
   }
 }
 
-/** ack day */
 static void
-OnAck2Clicked(WndButton &Sender)
+OnAck1Clicked(WndButton &Sender)
 {
   (void)Sender;
+  Ack1();
+}
 
+/** ack day */
+static void
+Ack2()
+{
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
     airspace_warnings->acknowledge_day(*airspace, true);
@@ -140,18 +148,30 @@ OnAck2Clicked(WndButton &Sender)
   }
 }
 
-/** unack */
 static void
-OnEnableClicked(WndButton &Sender)
+OnAck2Clicked(WndButton &Sender)
 {
   (void)Sender;
+  Ack2();
+}
 
+/** unack */
+static void
+Enable()
+{
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
     airspace_warnings->acknowledge_warning(*airspace, false);
     airspace_warnings->acknowledge_day(*airspace, false);
     wAirspaceList->invalidate();
   }
+}
+
+static void
+OnEnableClicked(WndButton &Sender)
+{
+  (void)Sender;
+  Enable();
 }
 
 static void
@@ -166,28 +186,28 @@ OnKeyDown(WndForm &Sender, unsigned key_code)
 {
   switch (key_code){
     case VK_ESCAPE:
-      OnCloseClicked(*(WndButton *)NULL);
+      Hide();
     return true;
 
 #ifdef GNAV
     case VK_APP1:
     case '6':
-      OnAckClicked(*(WndButton *)NULL);
+      Ack();
     return true;
 
     case VK_APP2:
     case '7':
-      OnAck1Clicked(*(WndButton *)NULL);
+      Ack1();
     return true;
 
     case VK_APP3:
     case '8':
-      OnAck2Clicked(*(WndButton *)NULL);
+      Ack2();
     return true;
 
     case VK_APP4:
     case '9':
-      OnEnableClicked(*(WndButton *)NULL);
+      Enable();
     return true;
 #endif
 
