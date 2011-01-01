@@ -547,7 +547,8 @@ private:
 
       for (TraceDelta::iterator it = list.begin();
            it != list.end(); ) {
-        TraceDelta::iterator next = it; next++;
+        TraceDelta::iterator next = it; 
+        ++next;
         if (it->p_time < p_time) {
           tree.erase(it->leaf);
           list.erase(it);
