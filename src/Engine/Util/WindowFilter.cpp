@@ -19,7 +19,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "WindowFilter.hpp"
+
 #include <assert.h>
 
 bool
@@ -27,18 +29,17 @@ WindowFilter::update(const fixed x0)
 {
   assert(i < x.size());
 
-  x[i]= x0;
+  x[i] = x0;
   i = (i + 1) % x.size();
-  if (n < x.size()) {
+  if (n < x.size())
     n++;
-  }
+
   return n >= x.size();
 }
-
 
 void
 WindowFilter::reset()
 {
   AvFilter::reset();
-  i=0;
+  i = 0;
 }

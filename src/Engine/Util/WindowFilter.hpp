@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef WINDOW_FILTER_HPP
 #define WINDOW_FILTER_HPP
 
@@ -38,20 +39,19 @@ public:
   WindowFilter(const unsigned _n_max):AvFilter(_n_max)  {
   }
 
-/** 
- * Updates filter to add sample to buffer
- * 
- * @param x0 Input (pre-filtered) value at sample time
- *
- * @return True if buffer is full
- * 
- */
+  /**
+   * Updates filter to add sample to buffer
+   *
+   * @param x0 Input (pre-filtered) value at sample time
+   *
+   * @return True if buffer is full
+   *
+   */
   bool update(const fixed x0);
 
-/** 
- * Resets filter (zero samples)
- * 
- */
+  /**
+   * Resets filter (zero samples)
+   */
   void reset();
 
 private:
