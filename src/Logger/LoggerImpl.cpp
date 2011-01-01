@@ -361,16 +361,6 @@ DeleteOldestIGCFile(const NMEA_INFO &gps_info, const TCHAR *pathname)
 // JMW note: we want to clear up enough space to save the persistent
 // data (85 kb approx) and a new log file
 
-#ifdef DEBUG_IGCFILENAME
-static const TCHAR testtext1[] = _T("2007-11-05-XXX-AAA-01.IGC");
-static const TCHAR testtext2[] = _T("2007-11-05-XXX-AAA-02.IGC");
-static const TCHAR testtext3[] = _T("3BOA1VX2.IGC");
-static const TCHAR testtext4[] = _T("5BDX7B31.IGC");
-static const TCHAR testtext5[] = _T("3BOA1VX2.IGC");
-static const TCHAR testtext6[] = _T("9BDX7B31.IGC");
-static const TCHAR testtext7[] = _T("2008-01-05-XXX-AAA-01.IGC");
-#endif
-
 /**
  * Deletes old IGC files until at least LOGGER_MINFREESTORAGE KiB of space are
  * available
@@ -387,18 +377,6 @@ LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
   int numtries = 0;
 
   LocalPath(subpathname, _T("logs"));
-
-#ifdef DEBUG_IGCFILENAME
-  bool retval;
-  retval = LogFileIsOlder(testtext1,
-                          testtext2);
-  retval = LogFileIsOlder(testtext1,
-                          testtext3);
-  retval = LogFileIsOlder(testtext4,
-                          testtext5);
-  retval = LogFileIsOlder(testtext6,
-                          testtext7);
-#endif
 
   while (found && ((kbfree = FindFreeSpace(pathname)) < LOGGER_MINFREESTORAGE)
 	       && (numtries++ < 100)) {
