@@ -57,17 +57,6 @@ TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
   }
 }
 
-// map scale is approximately 2 points on the grid
-// therefore, want one to one mapping if mapscale is 0.5
-// there are approx 30 pixels in mapscale
-// 240/QUANTISATION_PIXELS resolution = 6 pixels per terrain
-// (mapscale/30)  km/pixels
-//        0.250   km/terrain
-// (0.25*30/mapscale) pixels/terrain
-//  mapscale/(0.25*30)
-//  mapscale/7.5 terrain units/pixel
-//
-// this is for TerrainInfo.StepSize = 0.0025;
 RasterRenderer::RasterRenderer()
   :quantisation_pixels(2),
    image(NULL)
