@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_WAY_POINT_RENDERER_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Screen/Point.hpp"
 
 #include <stddef.h>
 
@@ -51,6 +52,10 @@ public:
   void set_way_points(const Waypoints *_way_points) {
     way_points = _way_points;
   }
+
+  static void
+  DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
+                     bool reachable, bool airport);
 
   void render(Canvas &canvas, LabelBlock &label_block,
               const MapWindowProjection &projection,

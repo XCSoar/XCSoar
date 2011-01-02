@@ -141,12 +141,9 @@ public:
     bool do_write_label = in_task || (settings_map.DeclutterLabels < 2);
     bool reachable = false;
 
-    const MaskedIcon *icon = &Graphics::SmallIcon;
-
     int AltArrivalAGL = 0;
 
     if (way_point.is_landable()) {
-
       const UnorderedTaskPoint t(way_point, task_behaviour);
       const GlideResult r =
         TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
@@ -171,21 +168,20 @@ public:
           // decluttered screen.
           do_write_label = true;
         }
-
-        icon = way_point.Flags.Airport ? &Graphics::AirportReachableIcon :
-                                         &Graphics::FieldReachableIcon;
-      } else {
-        icon = way_point.Flags.Airport ? &Graphics::AirportUnreachableIcon :
-                                         &Graphics::FieldUnreachableIcon;
       }
 
+      WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable,
+                                           way_point.Flags.Airport);
     } else {
       // non landable turnpoint
+      const MaskedIcon *icon;
       if (projection.GetMapScale() <= fixed(4000))
         icon = &Graphics::TurnPointIcon;
-    }
+      else
+        icon = &Graphics::SmallIcon;
 
-    icon->draw(canvas, sc);
+      icon->draw(canvas, sc);
+    }
 
     TCHAR Buffer[32];
 
@@ -316,3 +312,20 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
   MapWaypointLabelRender(canvas, projection.GetMapRect(),
                          label_block, v.labels);
 }
+
+void
+WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
+                                     bool reachable, bool airport)
+{
+  const MaskedIcon *icon;
+
+  if (reachable)
+    icon = airport ? &Graphics::AirportReachableIcon :
+                     &Graphics::FieldReachableIcon;
+  else
+    icon = airport ? &Graphics::AirportUnreachableIcon :
+                     &Graphics::FieldUnreachableIcon;
+
+  icon->draw(canvas, pt);
+}
+
