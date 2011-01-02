@@ -30,6 +30,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "MainWindow.hpp"
+#include "WayPointRenderer.hpp"
 
 #include <stdio.h>
 
@@ -47,16 +48,12 @@ PaintListItem(Canvas &canvas, const RECT rc, unsigned index)
   const GlideResult& solution = alternates[index].second;
 
   // Draw icon
-  const MaskedIcon &icon =
-      positive(solution.AltitudeDifference) ?
-          way_point.Flags.Airport ? Graphics::AirportReachableIcon :
-                                    Graphics::FieldReachableIcon :
-          way_point.Flags.Airport ? Graphics::AirportUnreachableIcon :
-                                    Graphics::FieldUnreachableIcon;
-
   RasterPoint pt = { rc.left + line_height / 2,
                      rc.top + line_height / 2};
-  icon.draw(canvas, pt);
+
+  WayPointRenderer::DrawLandableSymbol(canvas, pt,
+                                       positive(solution.AltitudeDifference),
+                                       way_point.Flags.Airport);
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
