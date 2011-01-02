@@ -41,7 +41,6 @@ Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
   Flags.setDefaultFlags(is_turnpoint);
 }
 
-
 bool
 Waypoint::is_close_to(const GeoPoint &location, const fixed range) const
 {
