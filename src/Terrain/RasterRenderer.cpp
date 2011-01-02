@@ -75,12 +75,16 @@ RasterRenderer::~RasterRenderer()
 void
 RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection)
 {
+  // Coordinates of the MapWindow center
   unsigned x = projection.GetScreenWidth() / 2;
   unsigned y = projection.GetScreenHeight() / 2;
+  // GeoPoint corresponding to the MapWindow center
   GeoPoint Gmid = projection.ScreenToGeo(x, y);
+  // GeoPoint "next to" Gmid (depends on terrain resolution)
   GeoPoint Gneighbor = projection.ScreenToGeo(x + quantisation_pixels,
                                               y + quantisation_pixels);
 
+  // Geographical edge length of pixel in the MapWindow center in meters
   pixel_size = fixed_sqrt_half * Gmid.distance(Gneighbor);
 
   // set resolution
