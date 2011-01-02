@@ -28,7 +28,7 @@ Copyright_License {
 
 Color
 ColorRampLookup(const short h,
-                const COLORRAMP* ramp_colors,
+                const ColorRamp* ramp_colors,
                 const int numramp,
                 const unsigned char interp_levels)
 {

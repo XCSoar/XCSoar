@@ -299,7 +299,7 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
 }
 
 void
-RasterRenderer::ColorTable(const COLORRAMP *color_ramp, bool do_water,
+RasterRenderer::ColorTable(const ColorRamp *color_ramp, bool do_water,
                            unsigned height_scale, int interp_levels)
 {
   for (int i = 0; i < 256; i++) {

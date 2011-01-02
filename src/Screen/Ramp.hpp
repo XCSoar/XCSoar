@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/Color.hpp"
 
-struct COLORRAMP {
+struct ColorRamp {
   short h;
   unsigned char r;
   unsigned char g;
@@ -35,7 +35,7 @@ struct COLORRAMP {
 
 Color
 ColorRampLookup(short h,
-                const COLORRAMP* ramp_colors,
+                const ColorRamp* ramp_colors,
                 const int numramp,
                 const unsigned char interp_bits=6);
 

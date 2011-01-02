@@ -32,7 +32,7 @@ Copyright_License {
 class Canvas;
 class WindowProjection;
 class RasterTerrain;
-struct COLORRAMP;
+struct ColorRamp;
 
 class TerrainRenderer : private NonCopyable {
 protected:
@@ -48,7 +48,7 @@ public:
   short spot_min_val;
 
 protected:
-  const COLORRAMP *last_color_ramp;
+  const ColorRamp *last_color_ramp;
 
 private:
   const RasterTerrain *terrain;

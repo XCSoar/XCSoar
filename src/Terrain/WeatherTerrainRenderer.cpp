@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Ramp.hpp"
 #include "WindowProjection.hpp"
 
-const COLORRAMP weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
+const ColorRamp weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   { // Blue to red       // vertical speed
     {   0,       0,     0,     255}, // -200
     { 100,       0,     195,   255}, // -100
@@ -144,7 +144,7 @@ WeatherTerrainRenderer::Draw(Canvas &canvas,
   const int interp_levels = 5;
   const bool is_terrain = false;
   const bool do_shading = is_terrain;
-  const COLORRAMP *color_ramp;
+  const ColorRamp *color_ramp;
 
   switch (weather->GetParameter()) {
   case 1: // wstar

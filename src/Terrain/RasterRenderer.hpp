@@ -33,7 +33,7 @@ Copyright_License {
 class Canvas;
 class RasterMap;
 class WindowProjection;
-struct COLORRAMP;
+struct ColorRamp;
 
 class RasterRenderer : private NonCopyable {
   /** screen dimensions in coarse pixels */
@@ -75,7 +75,7 @@ public:
   /**
    * Generate the color table.
    */
-  void ColorTable(const COLORRAMP *color_ramp, bool do_water,
+  void ColorTable(const ColorRamp *color_ramp, bool do_water,
                   unsigned height_scale, int interp_levels);
 
   /**

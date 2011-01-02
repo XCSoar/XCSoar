@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <assert.h>
 
-const COLORRAMP terrain_colors[8][NUM_COLOR_RAMP_LEVELS] = {
+const ColorRamp terrain_colors[8][NUM_COLOR_RAMP_LEVELS] = {
   {
     {0,           0x70, 0xc0, 0xa7},
     {250,         0xca, 0xe7, 0xb9},
@@ -237,7 +237,7 @@ TerrainRenderer::Draw(Canvas &canvas,
   const bool is_terrain = true;
   const bool do_shading = is_terrain && SlopeShading;
 
-  const COLORRAMP *const color_ramp = &terrain_colors[TerrainRamp][0];
+  const ColorRamp *const color_ramp = &terrain_colors[TerrainRamp][0];
   if (color_ramp != last_color_ramp) {
     raster_renderer.ColorTable(color_ramp, do_water,
                                height_scale, interp_levels);
