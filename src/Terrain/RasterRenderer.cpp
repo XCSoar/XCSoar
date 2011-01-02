@@ -99,8 +99,8 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
 
   fixed map_pixel_size = map.pixel_distance(Gmid, 1);
   fixed q = map_pixel_size / pixel_size;
-  if (q > fixed_half) {
-    quantisation_effective = (int)iround(q);
+  if (pixel_size < fixed(3000)) {
+    quantisation_effective = (int)ceil(q);
     if (quantisation_effective > 25)
       /* disable slope shading when zoomed in very near (not enough
          terrain resolution to make a useful slope calculation) */
