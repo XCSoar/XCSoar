@@ -1222,15 +1222,8 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppCompassAppearance"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Normal"));
-    dfe->addEnumText(_("White outline"));
-    dfe->Set(Appearance.CompassAppearance);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpNorthArrow"),
+                   Appearance.NorthArrow);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppIndFinalGlide"));
   if (wp) {
@@ -1989,17 +1982,8 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppCompassAppearance"));
-  if (wp) {
-    if (Appearance.CompassAppearance != (CompassAppearance_t)
-        (wp->GetDataField()->GetAsInteger())) {
-      Appearance.CompassAppearance = (CompassAppearance_t)
-        (wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppCompassAppearance,
-                    Appearance.CompassAppearance);
-      changed = true;
-    }
-  }
+  changed |= SaveFormProperty(*wf, _T("prpNorthArrow"), szProfileNorthArrow,
+                              Appearance.NorthArrow);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
   if (wp) {

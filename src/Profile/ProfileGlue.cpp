@@ -282,8 +282,7 @@ Profile::Use()
   Get(szProfileAppInverseInfoBox,
 		  Appearance.InverseInfoBox);
 
-  if (Get(szProfileAppCompassAppearance, Temp))
-    Appearance.CompassAppearance = (CompassAppearance_t)Temp;
+  Get(szProfileNorthArrow, Appearance.NorthArrow);
 
   if (Get(szProfileAppInfoBoxBorder, Temp))
     Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;

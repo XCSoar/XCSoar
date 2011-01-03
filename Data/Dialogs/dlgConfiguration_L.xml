@@ -168,9 +168,9 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpAppCompassAppearance" Caption="North arrow*" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Two styles are available.  Normal, or with a white outline.">
-        <DataField DataType="enum" />
+      <Edit Name="prpNorthArrow" Caption="North arrow*" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="Enables or disables the North Arrow on the upper right corner of the map.">
+        <DataField DataType="boolean"/>
       </Edit>
 
       <Edit Name="prpWindArrowStyle" Caption="Wind arrow*" X="2" Width="-2" Height="22" CaptionWidth="100"

@@ -27,11 +27,6 @@ Copyright_License {
 #include <windef.h>
 
 typedef enum {
-  apCompassDefault = 0,
-  apCompassAltA
-} CompassAppearance_t;
-
-typedef enum {
   fgFinalGlideDefault = 0,
   fgFinalGlideAltA,
 } IndFinalGlide_t;
@@ -63,7 +58,7 @@ typedef enum {
 } InfoBoxBorderAppearance_t;
 
 struct Appearance {
-  CompassAppearance_t CompassAppearance;
+  bool NorthArrow;
   IndFinalGlide_t IndFinalGlide;
   IndLandable_t IndLandable;
   bool InverseInfoBox;

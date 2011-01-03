@@ -114,55 +114,22 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
 void
 MapWindow::DrawCompass(Canvas &canvas, const RECT &rc) const
 {
+  if (!Appearance.NorthArrow)
+    return;
+
   RasterPoint Start;
+  Start.y = IBLSCALE(19) + rc.top;
+  Start.x = rc.right - IBLSCALE(19);
 
-  if (Appearance.CompassAppearance == apCompassDefault) {
-    Start.y = IBLSCALE(19) + rc.top;
-    Start.x = rc.right - IBLSCALE(19);
+  RasterPoint Arrow[5] = { { 0, -13 }, { -6, 10 }, { 0, 4 }, { 6, 10 }, { 0, -13 } };
 
-    RasterPoint Arrow[5] = { { 0, -18 }, { -6, 10 }, { 0, 0 }, { 6, 10 }, { 0, -18 } };
+  canvas.select(Graphics::hpCompass);
+  canvas.select(Graphics::hbCompass);
 
-    canvas.select(Graphics::hpCompass);
-    canvas.select(Graphics::hbCompass);
-
-    // North arrow
-    PolygonRotateShift(Arrow, 5, Start.x, Start.y,
-                       Angle::native(fixed_zero) - render_projection.GetScreenAngle());
-    canvas.polygon(Arrow, 5);
-  } else if (Appearance.CompassAppearance == apCompassAltA) {
-
-    static Angle lastDisplayAngle = Angle::native(fixed_zero);
-    static int lastRcRight = 0;
-    static RasterPoint Arrow[5] = { { 0, -11 }, { -5, 9 }, { 0, 3 }, { 5, 9 }, { 0, -11 } };
-
-    if (lastDisplayAngle != render_projection.GetScreenAngle() ||
-        lastRcRight != rc.right) {
-      Arrow[0].x = 0;
-      Arrow[0].y = -11;
-      Arrow[1].x = -5;
-      Arrow[1].y = 9;
-      Arrow[2].x = 0;
-      Arrow[2].y = 3;
-      Arrow[3].x = 5;
-      Arrow[3].y = 9;
-      Arrow[4].x = 0;
-      Arrow[4].y = -11;
-
-      Start.y = rc.top + IBLSCALE(10);
-      Start.x = rc.right - IBLSCALE(11);
-
-      // North arrow
-      PolygonRotateShift(Arrow, 5, Start.x, Start.y,
-                         Angle::native(fixed_zero) - render_projection.GetScreenAngle());
-
-      lastDisplayAngle = render_projection.GetScreenAngle();
-      lastRcRight = rc.right;
-    }
-    canvas.polygon(Arrow, 5);
-
-    canvas.select(Graphics::hpCompass);
-    canvas.polygon(Arrow, 5);
-  }
+  // North arrow
+  PolygonRotateShift(Arrow, 5, Start.x, Start.y,
+                     Angle::native(fixed_zero) - render_projection.GetScreenAngle());
+  canvas.polygon(Arrow, 5);
 }
 
 void
