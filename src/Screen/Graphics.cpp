@@ -198,7 +198,7 @@ Graphics::Initialise()
   hBmpThermalSource.load_big(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
   hBmpTarget.load_big(IDB_TARGET, IDB_TARGET_HD);
 
-  hbCompass.set(has_colors() ? Color(0x40, 0x40, 0xFF) : Color::WHITE);
+  hbCompass.set(Color(207, 207, 207));
 
   hbThermalBand.set(Color(0x80, 0x80, 0xFF));
   hbBestCruiseTrack.set(Color::BLUE);
@@ -210,8 +210,7 @@ Graphics::Initialise()
 
   hpBearing.set(Layout::Scale(2), Color::BLACK);
   hpBestCruiseTrack.set(Layout::Scale(1), Color::BLUE);
-  hpCompass.set(Layout::Scale(1), has_colors()
-                ? Color(0xcf, 0xcf, 0xFF) : Color::BLACK);
+  hpCompass.set(Layout::Scale(1), Color(109, 109, 109));
   hpThermalBand.set(Layout::Scale(2), Color(0x40, 0x40, 0xFF));
   hpThermalBandGlider.set(Layout::Scale(2), Color(0x00, 0x00, 0x30));
 
