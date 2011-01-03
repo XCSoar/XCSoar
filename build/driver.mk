@@ -25,6 +25,7 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/Flytec.cpp \
 	$(DRIVER_SRC_DIR)/Generic.cpp \
 	$(DRIVER_SRC_DIR)/LX.cpp \
+	$(DRIVER_SRC_DIR)/LXNano.cpp \
 	$(DRIVER_SRC_DIR)/Leonardo.cpp \
 	$(DRIVER_SRC_DIR)/NmeaOut.cpp \
 	$(DRIVER_SRC_DIR)/PosiGraph.cpp \
