@@ -262,6 +262,7 @@ AbstractAirspace::get_clearance() const
        i != m_clearance.end(); ++i) {
     FlatGeoPoint p = i->get_flatLocation();
     FlatRay r(center, p);
+    // @todo JMW sqrt here is candidate for fast inv sqrt use
     int mag = sqrt(r.vector.Longitude*r.vector.Longitude+
                    r.vector.Latitude*r.vector.Latitude);
     int mag_new = mag+RADIUS;
