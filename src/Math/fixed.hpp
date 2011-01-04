@@ -69,7 +69,14 @@ half(fixed a)
 
 gcc_const
 inline fixed rsqrt(fixed a) {
+  // not fast
   return 1.0/sqrt(a);
+}
+
+gcc_const
+inline fixed fast_sqrt(fixed a) {
+  // not fast
+  return sqrt(a);
 }
 
 gcc_const
@@ -87,6 +94,11 @@ gcc_const
 inline fixed fast_mult(fixed a, fixed b, int b_bits)
 {
   return a * b;
+}
+
+gcc_const
+inline fixed accurate_half_sin(fixed a) {
+  return sin(a/2);
 }
 
 #else
@@ -115,6 +127,7 @@ public:
 
   static const unsigned resolution_shift = 28;
   static const value_t resolution = 1 << resolution_shift;
+  static const unsigned accurate_cordic_shift = 11;
 
 private:
     value_t m_nVal;
@@ -313,6 +326,9 @@ public:
   fixed sqrt() const;
 
   gcc_pure
+  fixed fast_sqrt() const;
+
+  gcc_pure
   fixed sqr() const;
 
   gcc_pure
@@ -485,12 +501,14 @@ public:
   fixed tan() const;
 
   gcc_pure
+  fixed accurate_half_sin() const;
+
+  gcc_pure
   fixed operator-() const;
 
   gcc_pure
   fixed abs() const;
 };
-
 
 inline bool fixed::positive() const
 {
@@ -745,26 +763,29 @@ inline fixed tan(fixed const& x)
 {
   return x.tan();
 }
-
-static inline fixed asin(fixed x)
-{
-  return fixed(asin((double)x));
-}
-
-static inline fixed acos(fixed x)
-{
-  return fixed(acos((double)x));
-}
-
 inline fixed atan(fixed const& x)
 {
     return x.atan();
+}
+inline fixed accurate_half_sin(fixed const& x)
+{
+  return x.accurate_half_sin();
 }
 
 gcc_pure
 inline fixed atan2(fixed const& y, fixed const& x)
 {
   return fixed::atan2(y,x);
+}
+
+static inline fixed asin(fixed x)
+{
+  return atan2(x, (fixed_one-x*x).sqrt());
+}
+
+static inline fixed acos(fixed x)
+{
+  return atan2((fixed_one-x*x).sqrt(), x);
 }
 
 gcc_pure

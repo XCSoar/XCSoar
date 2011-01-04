@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Math/Earth.hpp"
-
 #include <assert.h>
 
 // global, used for test harness
@@ -30,14 +29,26 @@ unsigned count_distbearing = 0;
 
 #define fixed_double_earth_r fixed(REARTH * 2)
 
+static inline
+fixed earth_asin(const fixed a) {
+  return asin(a);
+}
+
+static inline
+fixed earth_distance_function(const fixed a) {
+  if (!positive(a))
+    return fixed_zero;
+
 #ifdef FIXED_MATH
-  // need to expand range for meter accuracy
-  #define fixed_expand_xsq fixed(1e8)
-  #define fixed_expand_x fixed(1e4)
+  // static const fixed fixed_shrink(fixed_two/(1<<(EXPAND_BITS*2)));
+  // acos(1-x)/2 = asin(sqrt(x/2))
+  // acos(1-2*x)/2 = asin(sqrt(a))
+  //  return acos(fixed_one-fixed_shrink*a);
+  return fixed_two*earth_asin(fast_sqrt(a)/(1<<fixed::accurate_cordic_shift));
 #else
-#define fixed_expand_xsq 1.0
-#define fixed_expand_x 1.0
+  return acos(fixed_one-fixed_two*a);
 #endif
+}
 
 static GeoPoint
 IntermediatePoint(GeoPoint loc1, GeoPoint loc2, fixed dthis, fixed dtotal)
@@ -49,14 +60,13 @@ IntermediatePoint(GeoPoint loc1, GeoPoint loc2, fixed dthis, fixed dtotal)
   if (!positive(dtotal))
     return loc1;
 
-  const fixed f = dthis / dtotal;
-  assert((f <= fixed_one) && (f >= fixed_zero));
+  assert((dthis <= dtotal) && (dthis >= fixed_zero));
 
-  const fixed d = dtotal;
-  const fixed inv_sind = fixed_one / sin(d);
+  // const fixed inv_sind = fixed_one / sin(dtotal);
+  // JMW remove inv_sind?
 
-  const fixed A = sin((fixed_one - f) * d) * inv_sind;
-  const fixed B = sin(f * d) * inv_sind;
+  const fixed A = sin(dtotal-dthis);// * inv_sind;
+  const fixed B = sin(dthis);// * inv_sind;
 
   fixed sinLoc1Latitude, cosLoc1Latitude;
   loc1.Latitude.sin_cos(sinLoc1Latitude, cosLoc1Latitude);
@@ -118,14 +128,11 @@ DistanceBearingS(GeoPoint loc1, GeoPoint loc2, Angle *Distance, Angle *Bearing)
   const fixed dlon = (loc2.Longitude - loc1.Longitude).value_radians();
 
   if (Distance) {
-    const fixed s1 = ((loc2.Latitude - loc1.Latitude).half()).sin()
-        * fixed_expand_x;
-    const fixed s2 = sin(dlon / 2) * fixed_expand_x;
-    const fixed a = max(fixed_zero, 
-                        min(fixed_expand_xsq,
-                            s1 * s1 + cos_lat1 * cos_lat2 * s2 * s2));
+    const fixed s1 = (loc2.Latitude - loc1.Latitude).accurate_half_sin();
+    const fixed s2 = accurate_half_sin(dlon);
+    const fixed a = sqr(s1) + cos_lat1 * cos_lat2 * sqr(s2);
 
-    fixed distance2 = max(fixed_zero, 2 * atan2(sqrt(a), sqrt(fixed_expand_xsq - a)));
+    fixed distance2 = earth_distance_function(a);
     *Distance = Angle::radians(distance2);
   }
 
@@ -174,14 +181,14 @@ CrossTrackError(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3, GeoPoint *loc4)
 
   const fixed sindist_AD = dist_AD.sin();
   // cross track distance
-  const fixed XTD(asin(sindist_AD * (crs_AD - crs_AB).sin()));
+  const fixed XTD(earth_asin(sindist_AD * (crs_AD - crs_AB).sin()));
 
   if (loc4) {
     fixed sinXTD, cosXTD;
     sin_cos(XTD, &sinXTD, &cosXTD);
 
     // along track distance
-    const fixed ATD(asin(sqrt(sindist_AD * sindist_AD - sinXTD * sinXTD)
+    const fixed ATD(earth_asin(sqrt(sindist_AD * sindist_AD - sinXTD * sinXTD)
                          / cosXTD));
 
     *loc4 = IntermediatePoint(loc1, loc2, ATD, dist_AB.value_radians());
@@ -216,13 +223,13 @@ ProjectedDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3)
   // course towards B to the point abeam D
 
   const fixed sindist_AD = dist_AD.sin();
-  const fixed XTD(asin(sindist_AD * (crs_AD - crs_AB).sin())); // cross track distance
+  const fixed XTD(earth_asin(sindist_AD * (crs_AD - crs_AB).sin())); // cross track distance
 
   fixed sinXTD, cosXTD;
   sin_cos(XTD, &sinXTD, &cosXTD);
 
   // along track distance
-  const fixed ATD(asin(sqrt(sindist_AD * sindist_AD - sinXTD * sinXTD) / cosXTD));
+  const fixed ATD(earth_asin(sqrt(sindist_AD * sindist_AD - sinXTD * sinXTD) / cosXTD));
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;
@@ -238,34 +245,21 @@ DoubleDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3)
   const fixed cloc1Latitude = loc1.Latitude.cos();
   const fixed cloc2Latitude = loc2.Latitude.cos();
   const fixed cloc3Latitude = loc3.Latitude.cos();
-  const fixed dloc2Longitude1 = (loc2.Longitude - loc1.Longitude).value_radians();
-  const fixed dloc3Longitude2 = (loc3.Longitude - loc2.Longitude).value_radians();
 
-  const fixed s21 = ((loc2.Latitude - loc1.Latitude).half()).sin()
-      * fixed_expand_x;
+  const fixed s21 = (loc2.Latitude - loc1.Latitude).accurate_half_sin();
+  const fixed sl21 = (loc2.Longitude - loc1.Longitude).accurate_half_sin();
+  const fixed s32 = (loc3.Latitude - loc2.Latitude).accurate_half_sin();
+  const fixed sl32 = (loc3.Longitude - loc2.Longitude).accurate_half_sin();
 
-  const fixed sl21 = sin(half(dloc2Longitude1))
-      * fixed_expand_x;
-
-  const fixed s32 = ((loc3.Latitude - loc2.Latitude).half()).sin()
-      * fixed_expand_x;
-
-  const fixed sl32 = sin(half(dloc3Longitude2))
-      * fixed_expand_x;
-
-  const fixed a12 = max(fixed_zero, min(fixed_expand_xsq, s21 * s21
-      + cloc1Latitude * cloc2Latitude * sl21 * sl21));
-
-  const fixed a23 = max(fixed_zero, min(fixed_expand_xsq, s32 * s32
-      + cloc2Latitude * cloc3Latitude * sl32 * sl32));
+  const fixed a12 = sqr(s21) + cloc1Latitude * cloc2Latitude * sqr(sl21);
+  const fixed a23 = sqr(s32) + cloc2Latitude * cloc3Latitude * sqr(sl32);
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;
 #endif
 
-  return fixed_double_earth_r * (max(fixed_zero, atan2(sqrt(a12), sqrt(
-      fixed_expand_xsq - a12))) + max(fixed_zero, atan2(sqrt(a23), sqrt(
-      fixed_expand_xsq - a23))));
+  return fixed_double_earth_r * 
+    (earth_distance_function(a12) + earth_distance_function(a23));
 }
 
 /**
@@ -297,17 +291,16 @@ FindLatitudeLongitude(GeoPoint loc, Angle Bearing,
   fixed sinLatitude, cosLatitude;
   loc.Latitude.sin_cos(sinLatitude, cosLatitude);
 
-  loc_out.Latitude = Angle::radians((fixed)asin(sinLatitude * cosDistance + cosLatitude
-                                          * sinDistance * cosBearing));
+  loc_out.Latitude = Angle::radians(earth_asin(sinLatitude * cosDistance + cosLatitude
+                                         * sinDistance * cosBearing));
 
   fixed result;
 
   if (cosLatitude == fixed_zero)
     result = loc.Longitude.value_radians();
   else {
-    // note that asin is not supported by fixed.hpp!
     result = loc.Longitude.value_radians() + 
-      asin(sinBearing * sinDistance / cosLatitude);
+      earth_asin(sinBearing * sinDistance / cosLatitude);
   }
 
   loc_out.Longitude = Angle::radians(result);

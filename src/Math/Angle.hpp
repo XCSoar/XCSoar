@@ -109,6 +109,11 @@ public:
   }
 
   gcc_pure
+  inline fixed accurate_half_sin() const {
+    return ::accurate_half_sin(value_radians());
+  }
+
+  gcc_pure
   inline fixed cos() const {
     return ::cos(value_radians());
   }

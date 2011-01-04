@@ -273,7 +273,7 @@ fixed fixed::log() const
     res+=log_one_over_one_minus_two_power_minus_n[right_shift-1];
   }
 
-  return fixed(fixed::internal(), res);
+  return fixed(internal(), res);
 }
 
 namespace
@@ -291,14 +291,20 @@ namespace
     return (long)((((fixed::value_t)a)*cordic_scale_factor)>>31);
   }
 
+  long scale_cordic_result_accurate(long a)
+  {
+    long const cordic_scale_factor=0x22C2DD1C; /* 0.271572 * 2^31*/
+    return (long)((((fixed::value_t)a)*cordic_scale_factor)>>
+                  (31-fixed::accurate_cordic_shift));
+  }
+
   long right_shift(long val,int shift)
   {
     return (shift<0)?(val<<-shift):(val>>shift);
   }
 
-  void perform_cordic_rotation(long&px, long&py, long theta)
+  void perform_cordic_rotation_unscaled(long&x, long&y, long theta)
   {
-    long x = px, y = py;
     long const *arctanptr = arctantab;
 
     for (int i = -1; i <= (int)fixed::resolution_shift; ++i) {
@@ -314,12 +320,23 @@ namespace
         y += xshift;
         theta -= *arctanptr++;
       }
-    }
-
-    px = scale_cordic_result(x);
-    py = scale_cordic_result(y);
+    }    
   }
 
+  void perform_cordic_rotation(long&px, long&py, long theta)
+  {
+    perform_cordic_rotation_unscaled(px, py, theta);
+    px = scale_cordic_result(px);
+    py = scale_cordic_result(py);
+  }
+
+  long perform_cordic_rotation_accurate_sin(long theta)
+  {
+    long x_cos=1<<28;
+    long x_sin=0;
+    perform_cordic_rotation_unscaled(x_cos, x_sin, theta);
+    return scale_cordic_result_accurate(x_sin);
+  }
 
   void perform_cordic_polarization(long& argx, long&argy)
   {
@@ -344,6 +361,30 @@ namespace
     argx = scale_cordic_result(x);
     argy = theta;
   }
+}
+
+fixed
+fixed::accurate_half_sin() const
+{
+  value_t x= (m_nVal>>1) % internal_two_pi;
+  if( x < 0 )
+    x += internal_two_pi;
+
+  bool negate_sin=false;
+  
+  if( x > internal_pi )
+  {
+    x =internal_two_pi-x;
+    negate_sin=true;
+  }
+  if(x>internal_half_pi)
+  {
+    x=internal_pi-x;
+  }
+  
+  const long x_sin = perform_cordic_rotation_accurate_sin((long)x);
+  return fixed(fixed::internal(), 
+               (negate_sin? -x_sin:x_sin) );
 }
 
 void fixed::sin_cos(fixed const& theta,fixed* s,fixed*c)
@@ -467,13 +508,15 @@ fixed::rsqrt() const
   static const fixed threehalfs = fixed(1.5);
 
   fixed y(rsqrt_guess(*this));
+  if (y.m_nVal<2) return y;
+
   const fixed x2 = fixed(internal(), m_nVal>>1);
 #define tolerance (1<<10)
   value_t v_last= y.m_nVal;
   while (1) {
     y *= threehalfs-x2*y.sqr();
     const value_t err = y.m_nVal-v_last;
-    if ((err>0? err:-err) < tolerance)
+    if ((y.m_nVal<2) || ((err>0? err:-err) < tolerance))
       return y;
     v_last = y.m_nVal;
   }

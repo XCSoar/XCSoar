@@ -153,6 +153,7 @@ int main(int argc, char **argv)
   GeoPoint l1(Angle::native(fixed_zero), Angle::native(fixed_zero));
   GeoPoint l2(Angle::degrees(fixed(-0.3)), Angle::degrees(fixed(1.0)));
   GeoPoint l3(Angle::degrees(fixed(0.00001)), Angle::degrees(fixed_zero));
+  GeoPoint l4(Angle::degrees(fixed(10)), Angle::degrees(fixed_zero));
 
   fixed d;
   Angle b;
@@ -164,6 +165,9 @@ int main(int argc, char **argv)
   l1.distance_bearing(l3, d, b);
   printf("Dist %g bearing %d\n", FIXED_DOUBLE(d), FIXED_INT(b.value_degrees()));
   ok(positive(d) && d < fixed_two, "earth distance short", 0);
+
+  l1.distance_bearing(l4, d, b);
+  printf("Dist %g bearing %d\n",FIXED_DOUBLE(d),FIXED_INT(b.value_degrees()));
 
   return exit_status();
 }
