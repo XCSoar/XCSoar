@@ -159,6 +159,8 @@ private:
   GeoPoint location_mid;
   /** Cosine of the midpoint */
   fixed cos_midloc;
+  /**< Reciprocal of cosine of the midpoint */
+  fixed r_cos_midloc;
 };
 
 #endif
