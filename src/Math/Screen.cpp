@@ -25,7 +25,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Screen/Layout.hpp"
 #include "Screen/Point.hpp"
-
 #include <math.h>
 
 // note these use static vars! not thread-safe
@@ -41,12 +40,12 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
   v13x = p3.x - p1.x;
   v13y = p3.y - p1.y;
 
-  int mag12 = isqrt4(v12x * v12x + v12y * v12y);
-  if (mag12 > 1) {
+  const int mag = v12x * v12x + v12y * v12y;
+  if (mag > 1) {
+    const int mag12 = isqrt4(mag);
     // projection of v13 along v12 = v12.v13/|v12|
     int proj = (v12x * v13x + v12y * v13y) / mag12;
     // fractional distance
-    double f;
     if (offset > 0) {
       if (offset * 2 < mag12) {
         proj = max(0, min(proj, mag12));
@@ -55,8 +54,7 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
         proj = mag12 / 2;
       }
     }
-    f = min(1.0, max(0.0, (double)proj / mag12));
-
+    const fixed f = min(fixed_one, max(fixed_zero, fixed(proj)/mag12));
     // location of 'closest' point
     p4->x = lround(v12x * f) + p1.x;
     p4->y = lround(v12y * f) + p1.y;
