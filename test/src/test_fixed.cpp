@@ -26,7 +26,7 @@
 #include <stdio.h>
 
 int main(int argc, char** argv) {
-  plan_tests(19);
+  plan_tests(20);
 
   /* check the division operator */
   ok((fixed_one / fixed_one) * fixed(1000) == fixed(1000), "1/1", 0);
@@ -76,9 +76,15 @@ int main(int argc, char** argv) {
 
   GeoPoint l1(Angle::native(fixed_zero), Angle::native(fixed_zero));
   GeoPoint l2(Angle::degrees(fixed(-0.3)), Angle::degrees(fixed(1.0)));
+  GeoPoint l3(Angle::degrees(fixed(0.00001)), Angle::degrees(fixed_zero));
   fixed d; Angle b;
   l1.distance_bearing(l2, d, b);
   printf("Dist %g bearing %d\n",FIXED_DOUBLE(d),FIXED_INT(b.value_degrees()));
+  // 116090 @ 343
+
+  l1.distance_bearing(l3, d, b);
+  printf("Dist %g bearing %d\n",FIXED_DOUBLE(d),FIXED_INT(b.value_degrees()));
+  ok(positive(d) && (d<fixed_two), "earth distance short", 0);
 
   return exit_status();
 }
