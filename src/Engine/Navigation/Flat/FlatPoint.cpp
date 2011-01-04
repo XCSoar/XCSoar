@@ -67,9 +67,8 @@ FlatPoint::d(const FlatPoint &p) const
 }
 
 fixed
-FlatPoint::mag_sq() const
-{
-  return x * x + y * y;
+FlatPoint::mag_sq() const {
+  return sqr(x)+sqr(y);
 }
 
 fixed

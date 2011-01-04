@@ -28,7 +28,6 @@
 #include <algorithm>
 #include "Math/fixed.hpp"
 
-#define sqr(x) ((x)*(x))
 
 FlatEllipse::FlatEllipse(const FlatPoint &_f1,
                          const FlatPoint &_f2,

@@ -21,7 +21,6 @@
  */
 #include "FlatLine.hpp"
 
-#define sqr(x) ((x) * (x))
 #define sgn(x,y) (negative(x) ? -y : y)
 
 FlatPoint
