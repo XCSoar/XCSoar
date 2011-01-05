@@ -15,11 +15,9 @@ format.
 use strict;
 use warnings;
 
-use vars qw($path);
+use vars qw($path %strings);
 
 use XML::Parser;
-
-my %strings;
 
 sub handle_start {
     my $expat = shift;
