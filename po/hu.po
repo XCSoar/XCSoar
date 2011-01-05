@@ -5444,7 +5444,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid ""
-"(Altair only) Adjusts backlight.  When automatic backlight is enabled, this "
+"Adjusts backlight.  When automatic backlight is enabled, this "
 "biases the backlight algorithm. When the automatic backlight is disabled, "
 "this controls the backlight directly."
 msgstr ""
@@ -6022,7 +6022,7 @@ msgid "Valid start"
 msgstr ""
 
 #: Data/Dialogs/dlgBrightness.xml:6
-msgid " (Altair only) Enables automatic backlight, responsive to light sensor."
+msgid "Enables automatic backlight, responsive to light sensor."
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:156

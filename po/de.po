@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-19 20:54+0100\n"
-"PO-Revision-Date: 2010-12-23 08:01+0000\n"
+"PO-Revision-Date: 2011-01-05 22:41+0100\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -6202,13 +6202,10 @@ msgstr "Topologie"
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid ""
-"(Altair only) Adjusts backlight.  When automatic backlight is enabled, this "
+"Adjusts backlight.  When automatic backlight is enabled, this "
 "biases the backlight algorithm. When the automatic backlight is disabled, "
 "this controls the backlight directly."
-msgstr ""
-"(Nur für Altair) Anpassung der Anzeigenhintergrundbeleuchtung. Ist die "
-"Automatik aktiviert, wird hiermit der Algorithmus beeinflusst, ansonsten "
-"wird damit die Hintergrundbeleuchtung direkt eingestellt."
+msgstr "Anpassung der Anzeigenhintergrundbeleuchtung. Ist die Automatik aktiviert, wird hiermit der Algorithmus beeinflusst, ansonsten wird damit die Hintergrundbeleuchtung direkt eingestellt."
 
 #: Data/Dialogs/dlgFileSelect.xml:6
 msgid "File type"
@@ -6843,10 +6840,8 @@ msgstr "Gültiger Abflug"
 
 #: Data/Dialogs/dlgBrightness.xml:6
 msgid ""
-" (Altair only) Enables automatic backlight, responsive to light sensor."
-msgstr ""
-" (Nur Altair) Aktiviert die automatische Hintergrundbeleuchtung, "
-"entsprechend dem Lichtsensor."
+"Enables automatic backlight, responsive to light sensor."
+msgstr "Aktiviert die automatische Hintergrundbeleuchtung, entsprechend dem Lichtsensor."
 
 #: Data/Dialogs/dlgConfiguration_L.xml:176
 #: Data/Dialogs/dlgConfiguration.xml:176
