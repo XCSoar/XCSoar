@@ -18,12 +18,12 @@
       </Edit>
     
       <Edit Name="prpWaypointFile" Caption="Waypoints 1" X="2" Width="-2" Height="22" CaptionWidth="100"
-      Help="Primary waypoints file.  File must be in Cambridge format (.dat extension).">
+      Help="Primary waypoints file.  Supported file types are Cambridge/WinPilot files (.dat), Zander files (.wpz) or SeeYou files (.cup).">
         <DataField DataType="filereader" />
       </Edit>
     
       <Edit Name="prpAdditionalWaypointFile" Caption="Waypoints 2" X="2" Width="-2" Height="22" CaptionWidth="100"
-      Help="Secondary waypoints file.  This may be used to add waypoints for a competition.  File must be in Cambridge format (.dat extension).">
+      Help="Secondary waypoints file.  This may be used to add waypoints for a competition.">
         <DataField DataType="filereader" />
       </Edit>
     

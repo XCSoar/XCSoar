@@ -521,7 +521,7 @@ certain events occur.
 \item[Dialog windows] Larger dialog windows, usually containing graphics and
 buttons, are used to present detailed data to the pilot regarding waypoint
 details, statistics and analysis etc.
-\item[Main menu] The main menu is accessible by double clicking the map area or
+\item[Main menu] The main menu is accessible by double tapping the map area or
 infoboxes. If the menu buttons are not pressed after a specified time, they 
 disappear again so as to not obscure the map area.
 \end{description}
@@ -530,7 +530,8 @@ There are several ways to interact with XCSoar:
 \begin{itemize}
 \item Touching certain map elements
 \item Touching InfoBoxes and onscreen menu buttons
-\item `Dragging' the screen (touching the screen and moving before releasing)
+\item `Gesturing', by e.g. drawing a dash from the left to the right on the screen.
+\item `Dragging' the screen (touching the screen and moving before releasing).
 \item Pressing application buttons on the device.
 \item Pressing the cursor keys on the device.
 \item Pressing keys or switches on an instrument connected to XCSoar.
@@ -551,7 +552,6 @@ or hardware button presses.  Using buttons and the button menu is the primary
 way the user interacts with XCSoar.
 
 \begin{center}
-% TODO update screenshot
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/buttonmenu.png}
 \end{center}
 
@@ -567,7 +567,7 @@ inputs.
 
 For Altair, there are four major menus, activated by pressing one of
 the vertical strip of hardware buttons on the left of the display.
-When a menu is activated, a strip of onscreen buttons appear along the
+When a menu is activated, a strip of onscreen buttons appear along the 
 bottom of the display.  Pressing the particular menu button again will
 cycle through several pages of items.  Pressing the corresponding
 horizontal button will activate that item.  At the last page, pressing
@@ -581,27 +581,21 @@ strip of buttons.
 On the PDA version, the mode buttons are activated by the keys to the
 side of the joystick/rocker button.
 
-By convention, buttons labeled with a trailing slash,
-e.g.~\bmenu{NAV/} means that pressing the button will show more items.
-Buttons labeled with a leading slash, e.g.~\bmenu{/NAV} means that
-pressing the button will close that menu.
-
-If the user doesn't interact with the computer for a long time, the
+If the user doesn't interact with the computer for some time, the
 menu will close automatically.  This menu timeout is configurable.
 The escape key on PC, or the PWR/ESC button on Altair, can
 also be used to close the current menu.
 
-Menu button labels appear as grey text instead of black if the
-corresponding function is not available.  For example, the ``Waypoint
-lookup'' function will appear grey if there are no waypoints loaded.
+Menu buttons appear greyed out if the corresponding function is not available. 
+For example, the ``Waypoint lookup'' function will appear grey if there are no waypoints loaded.
 
 Several menu button labels have dynamic text based on context, in
 order to make it clearer as to what happens when the button is
 pressed.  The convention is used that a button's label describes what
 will happen when the button is pressed.  For example, if the button
-says \bmenu{Auto MC ON}, then pressing the button will turn auto
-MacCready on, and the button label will then change to \bmenu{Auto MC
-Off}.  In the menu list described below, generic labels are used.
+says \bmenu{MC Auto}, then pressing the button will turn on auto
+MacCready, and the button label will then change to \bmenu{MC Manual}. 
+In the menu list described below, generic labels are used.
 
 \subsection*{Menu overview}
 This section describes the default layout of the menu system on all
@@ -611,65 +605,69 @@ fully in following chapters.
 The primary menu buttons are activated by each of the vertical strip of buttons
 on Altair, from top to bottom:
 \begin{jspecs}
-\item[\bmenu{NAV}] Actions for navigation control, primarily cross-country
+\item[\bmenu{Nav}] Actions for navigation control, primarily cross-country
 gliding tasks.
-\item[\bmenu{DISPLAY}] Actions to control the display
-\item[\bmenu{CONFIG}] Configuration of XCSoar, connected devices, and in-flight
+\item[\bmenu{Display}] Actions to control the display
+\item[\bmenu{Config}] Configuration of XCSoar, connected devices, and in-flight
 settings
-\item[\bmenu{INFO}] Activates various informational dialog windows.
+\item[\bmenu{Info}] Activates various informational dialog windows.
 \end{jspecs}
 
-For the PC version, the keys 1, 2, 3 and 4 activate the NAV, DISPLAY,
-CONFIG, and INFO menus.
+For the PC version, the keys 1, 2, 3 and 4 activate the 
+corresponding menu.
 
-\subsection*{NAV menu}
-\jindent{\bmenut{Task}{Calc}}{ Displays the task calculator dialog }
-\jindent{\bmenut{Arm}{Advance}}{ Arms the automatic task waypoint trigger }
-\jindent{\bmenut{Previous}{turnpoint}}{ Selects the previous waypoint in the
-task }
-\jindent{\bmenut{Next}{turnpoint}}{ Selects the next waypoint in the task }
-\jindent{\bmenut{Waypoint}{List}}{ Displays the waypoint selector dialog }
-\jindent{\bmenut{Task}{Edit}}{ Displays the task editor }
+\subsection*{Navigation menu (Nav)}
+\jindent{\bmenut{Task}{Calc}}{ Displays the task calculator dialog. }
+\jindent{\bmenut{Advance}{(Auto)}}{ Todo \ldots Arms the automatic task
+waypoint trigger. }
+%	Todo add to dynamic buttons \jindent{\bmenut{Abort}{Start}}{ Abort the last
+%Start } 
+\jindent{\bmenut{Previous}{turnpoint}}{ Selects the previous/start waypoint in
+the task. }
+\jindent{\bmenut{Next}{turnpoint}}{ Selects the next/finish waypoint in the
+task. }
+\jindent{\bmenut{Waypoint}{List}}{ Displays the waypoint selector dialog. }
+\jindent{\bmenut{Task}{Edit}}{ Displays the task editor. }
 \jindent{\bmenus{GoTo}}{ Displays the waypoint selector dialog and activates
-the GoTo mode for the selected waypoint }
-\jindent{\bmenut{Task}{Abort}}{ Aborts/resumes the current task }
+the GoTo mode for the selected waypoint. }
+\jindent{\bmenut{Task}{Abort}}{ Aborts/resumes the current task. }
 \jindent{\bmenus{Target}}{ Displays the target dialog, which is
-important for modifying AAT tasks }
+important for modifying AAT tasks. }
 
-\subsection*{DISPLAY menu}
-\jindent{\bmenut{Zoom}{In}}{ Zooms in the map display }
-\jindent{\bmenut{Zoom}{Out}}{ Zooms out the map display }
-\jindent{\bmenut{Mark}{Drop}}{ Drops a marker at the current glider location }
-\jindent{\bmenut{Full}{Screen}}{ Switches between full screen and normal display } 
-\jindent{\bmenus{Pan}}{ Activates pan map mode }
-\jindent{\bmenut{Zoom}{Auto}}{ Toggles automatic zooming }
-\jindent{\bmenut{Snail}{Trail}}{ Toggles display of snail trail }
-\jindent{\bmenut{Terrain}{Toggle}}{ Toggles display of terrain and topology }
-\jindent{\bmenus{Bright}}{ Adjusts screen brightness (only for Altair) }
-\jindent{\bmenut{Declutter}{Labels}}{ Toggles display of topology and non-task 
-labels }
+\subsection*{Display menu}
+\jindent{\bmenut{Zoom}{In}}{ Zooms in the map display. }
+\jindent{\bmenut{Zoom}{Out}}{ Zooms out the map display. }
+\jindent{\bmenut{Mark}{Drop}}{ Drops a marker at the current glider location. }
+\jindent{\bmenut{Full Scrn}{On}}{ Toggles the full screen map display. }
+\jindent{\bmenut{Pan}{On}}{ Activates pan map mode. }
+\jindent{\bmenut{Zoom}{Auto}}{ Toggles automatic/manual zooming. }
+\jindent{\bmenut{Trail}{Full}}{ Selects a display option out of Full,
+Long, Short, Off. }
+\jindent{\bmenut{Terrain}{On}}{ Toggles display of terrain. }
+\jindent{\bmenut{Topology}{On}}{ Toggles display of topology. }
+\jindent{\bmenut{Labels}{On}}{ Displays map labels, MID lables, or none. }
 
-\subsection*{CONFIG menu}
-\jindent{\bmenut{MacCready}{$+$}}{ Increases MacCready value }
-\jindent{\bmenut{MacCready}{$-$}}{ Decreases MacCready value }
-\jindent{\bmenut{MacCready}{Auto}}{ Toggles automatic MacCready when in final
-glide. }
+\subsection*{Configuration menu (Config)}
+\jindent{\bmenut{MC}{$+$}}{ Increases MacCready value. }
+\jindent{\bmenut{MC}{$-$}}{ Decreases MacCready value. }
+\jindent{\bmenut{MC}{Auto}}{ Toggles automatic/manual MacCready (TODO when in
+final glide.?). }
 \jindent{\bmenut{Flight}{Setup}}{ Displays the basic settings (bugs/ballast/QNH)
-dialog }
-\jindent{\bmenut{Setup}{Wind}}{ Displays the wind settings dialog }
-\jindent{\bmenus{Vario/}}{ Control of Vega intelligent variometer, this 
+dialog. }
+\jindent{\bmenut{Setup}{Wind}}{ Displays the wind settings dialog. }
+\jindent{\bmenus{Vario}}{ Control of Vega intelligent variometer, this 
 comprises a sub-menu. }
-\jindent{\bmenut{Setup}{System}}{ Displays the XCSoar configuration dialog }
-\jindent{\bmenut{Settings}{Airspace}}{  Displays the airspace filter dialog }
+\jindent{\bmenut{Setup}{System}}{ Displays the XCSoar configuration dialog. }
+\jindent{\bmenut{Settings}{Airspace}}{  Displays the airspace filter dialog. }
 \jindent{\bmenut{Logger}{Start}}{ Turns on/off XCSoar's software IGC flight
-recorder } 
-\jindent{\bmenut{Logger}{Replay}}{ Displays the IGC/NMEA logger replay dialog }
+recorder. } 
+\jindent{\bmenus{Replay}}{ Displays the IGC/NMEA logger replay dialog. }
 \jindent{\bmenut{Raw}{Logger}}{ Activates the raw NMEA logger (usually only used
-for debugging) }
+for debugging). }
 
-\subsection*{INFO menu}
+\subsection*{Information menu (Info)}
 \jindent{\bmenut{Waypoint}{Details}}{ Displays the waypoint details dialog of
-the active task waypoint }
+the active task waypoint. }
 \jindent{\bmenut{Nearest}{Waypoint}}{ Displays the waypoint details dialog of
 the waypoint nearest to the aircraft. }
 \jindent{\bmenut{Nearest}{Airspace}}{ Displays details of the airspace nearest
@@ -678,37 +676,39 @@ to the aircraft. }
 \jindent{\bmenus{Analysis}}{ Displays the analysis/statistics dialog. }
 \jindent{\bmenus{Status}}{ Displays the status dialog. }
 \jindent{\bmenus{Weather}}{ Displays the weather forecast dialog. }
-\jindent{\bmenut{Team}{Code}}{ Opens the team code dialog }
+\jindent{\bmenut{Team}{Code}}{ Opens the team code dialog. }
 \jindent{\bmenut{Aux Info}{On}}{ Toggles the infobox display between normal
 (flight-mode specific) or auxiliary infobox display. }
 \jindent{\bmenut{Message}{Repeat}}{ Repeats the last status message. }
-\jindent{\bmenut{FLARM}{Radar}}{ Opens the full screen FLARM radar dialog }
+\jindent{\bmenut{FLARM}{Radar}}{ Opens the full screen FLARM radar dialog. }
 \jindent{\bmenut{Thermal}{Assistant}}{ Opens the full screen thermal assistant
-dialog }
+dialog. }
 
-\subsection*{VARIO sub-menu}
-The functions in this sub-menu require the Vega intelligent
-variometer.  
+\subsection*{Variometer sub-menu (Vario) of the Configuration menu}
+ The functions in this sub-menu require the Vega intelligent
+variometer. The menu can only be accessed if ``Vega'' is selected as the
+connected device.
 
-\jindent{\bmenut{Airframe}{Switches}}{ Displays airframe switch values }
+\jindent{\bmenut{Airframe}{Switches}}{ Displays airframe switch values. }
 \jindent{\bmenut{Setup}{Audio}}{ Adjusts volume of sounds produced by XCSoar as
 well as certain speech announcements by the Vega intelligent variometer. }
-\jindent{\bmenut{Manual}{Demo}}{ Activates Vega variometer manual tone demo }
-\jindent{\bmenut{Setup}{Stall}}{ Opens Vega stall monitor setup dialog }
-\jindent{\bmenut{Vario}{Test/}}{ Test/setup submenu }
+\jindent{\bmenut{Manual}{Demo}}{ Activates Vega variometer manual tone demo. }
+\jindent{\bmenut{Setup}{Stall}}{ Opens Vega stall monitor setup dialog. }
+\jindent{\bmenus{Accel}}{ Todo, what is that for? }
 \jindent{\bmenut{ASI}{Zero}}{ Zeros the airspeed indicator. }
 \jindent{\bmenut{Accel}{Zero}}{ Levels/zeros the accelerometers. }
-\jindent{\bmenus{Store}}{ Stores Vega settings to EEPROM }
-\jindent{\bmenut{Cruise}{Demo}}{ Activates Vega variometer cruise tone demo }
-\jindent{\bmenut{Climb}{Demo}}{ Activates Vega variometer climb tone demo }
+\jindent{\bmenus{Store}}{ Stores Vega settings to EEPROM. }
+\jindent{\bmenut{Cruise}{Demo}}{ Activates Vega variometer cruise tone demo. }
+\jindent{\bmenut{Climb}{Demo}}{ Activates Vega variometer climb tone demo. }
 
-\subsection*{Pan mode}
-\jindent{\bmenus{Pan}}{ Turns pan mode off }
-\jindent{\bmenut{Zoom}{In}}{ Zooms in the map display }
-\jindent{\bmenut{Zoom}{Out}}{ Zooms out the map display }
+\subsection*{Pan mode sub-menu of the Display menu}
+\jindent{\bmenut{Pan}{Off}}{ Turns pan mode off. }
+\jindent{\bmenut{Zoom}{in}}{ Zooms in the map display. }
+\jindent{\bmenut{Zoom}{out}}{ Zooms out the map display. }
 \jindent{\bmenut{Nearest}{Waypoint}}{ Displays the waypoint details dialog of 
-the waypoint nearest to the aircraft., or if in pan mode, nearest to the  
+the waypoint nearest to the aircraft, or if in pan mode, nearest to the  
 cross-hairs at the center of the screen. }
+\jindent{\bmenut{Marks}{clear}}{ Clear all previously propped marks. }
 
 \subsection*{Default buttons}
 
@@ -716,9 +716,10 @@ When no menu is active, (so-called default mode), the horizontal row
 of buttons in Altair perform the following functions (from left to right):
 
 \begin{center}
-\begin{tabular}{c c c c c}
- F6 & F7 & F8 & F9 & F0 \\
-\bmenut{Flight}{Setup} & \bmenut{Task}{Calc} & \bmenut{Task}{Edit} &
+\begin{tabular}{c c c c c c}
+ PC: & 6 & 7 & 8 & 9 & 0 \\
+ Altair: & F6 & F7 & F8 & F9 & F0 \\
+& \bmenut{Flight}{Setup} & \bmenut{Task}{Calc} & \bmenut{Task}{Edit} &
 \bmenut{Arm}{Advance} & \bmenut{Drop}{Mark} \\
 \end{tabular}
 \end{center}
@@ -731,7 +732,7 @@ the following functions:
 \item[Up key] Zoom in
 \item[Down key] Zoom out
 \item[Left key] Drop marker
-\item[Right key] Fullscreen toggle
+\item[Right key] Toggle through normal/aux. InfoBoxes and Fullscreen
 \item[Enter] Clear status message or suppres FLARM gauge if open and no warning
 active
 \end{jspecs}
@@ -770,33 +771,33 @@ out to indicate that selecting the menu item will not do anything.
 
 The convention used for dynamic menu labels is for the labels to display the
 action that will be performed once the menu item is selected. For example 
-``Lights ON'' will turn the lights on, and the menu will be updated to display
-``Lights OFF'', which would then if pressed turn the lights off. This
+``Lights On'' will turn the lights on, and the menu will be updated to display
+``Lights Off'', which would then if pressed turn the lights off. This
 convention is used throughout XCSoar.
 
 A selection of key dynamic menu items is presented below:
 \begin{description}
-\item[Next turnpoint]  
+\item[\bmenu{Next turnpoint}]  
   Greyed out if the task is cleared, or if the active turnpoint is the
   finish. If on the turnpoint prior to the finish, this displays
   ``Waypoint finish''.
-\item[Previous turnpoint]  
+\item[\bmenu{Previous turnpoint}]  
   Greyed out if the task is cleared, or if the active turnpoint is the
   start and there are no multiple start points.  If there are multiple
   start points and the active turnpoint is the start, then this
   displays ``Cycle start'' to allow selection between the various
   start points.  If on the first turnpoint after the start, this
   displays ``Waypoint Start''.
-\item[Labels]  
-  This now displays ``Labels ON'', ``Labels MID'' or ``Labels OFF''.
-\item[Task calculator]  
+\item[\bmenu{Labels}]  
+  This now displays ``Labels On'', ``Labels MID'' or ``Labels Off''.
+\item[\bmenu{Task calculator}]  
   Greyed out if the task is cleared or in task abort.
-\item[Arm Advance]  
+\item[\bmenu{Arm Advance}]  
   Greyed out if Auto or Manual advance mode is active.  Displays ``Arm
   start'' when the active turnpoint is the start and the trigger is
   not armed.  Displays ``Arm Cancel'' if the trigger is armed.
   Displays ``Arm turn'' if the active turnpoint is past the start.
-\item[Task Edit]
+\item[\bmenu{Task Edit}]
   Greyed out if in task abort or no waypoint database.
 \end{description}
 
@@ -814,7 +815,7 @@ Pocket PC in portrait mode, there are four {\InfoBox}es above and four
 InfoBoxes to the right of the map display.
 
 \begin{center}
-\includegraphics[angle=0,width=0.35\linewidth,keepaspectratio='true']{figures/infoboxes.pdf}
+\includegraphics[angle=0,width=0.35\linewidth,keepaspectratio='true']{figures/infoboxes.png}
 \end{center}
 
 \subsection*{Screen display modes}
@@ -968,52 +969,46 @@ knob on Altair) may be used to scroll through the text. Clicking the
 \button{$<$} and \button{$>$} buttons selects the previous/next checklist.
 
 \begin{center}
-% TODO update screenshot
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/checklist.png}
+\includegraphics[angle=0,width=7cm,keepaspectratio='true']{figures/checklist.png}
 \end{center}
 
 \subsection*{Status dialog}
 The status dialog is a multipage dialog giving overview information on the 
-aircraft, system, task, rules and times. Clicking the \button{$<$} and
+aircraft, system, task, rules and times. Pressing the \button{$<$} and
 \button{$>$} buttons select the previous/next page.
 
 This dialog is accessed via the menu under 
 \begin{quote}
-\bmenu{INFO}\blink\bmenu{Status}
+\bmenu{Info}\blink\bmenu{Status}
 \end{quote}
 
 \begin{description}
 \item[Flight] Shows the location of the aircraft, nearest waypoint and the
 maximum height gain.
 \begin{center}
-% TODO update screenshot
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/status-aircraft.png}
+\includegraphics[angle=0,width=5cm,keepaspectratio='true']{figures/status-aircraft.png}
 \end{center}
 
-\item[System] Shows the status of connected devices and battery levels
+\item[System] Shows the status of connected devices and battery levels.
 \begin{center}
-% TODO update screenshot
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/status-system.png}
+\includegraphics[angle=0,width=5cm,keepaspectratio='true']{figures/status-system.png}
 \end{center}
 
-\item[Task] Shows the task speeds, distances achieved and remaining and AAT
-times
+\item[Task] Shows the AAT times, distances achieved and remaining
+and the task speeds.
 \begin{center}
-% TODO update screenshot
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/status-task.png}
+\includegraphics[angle=0,width=5cm,keepaspectratio='true']{figures/status-task.png}
 \end{center}
 
-\item[Rules] Shows validity of start/finish according to the task rules
+\item[Rules] Shows validity of start/finish according to the task rules.
 \begin{center}
-% TODO update screenshot
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/status-rules.png}
+\includegraphics[angle=0,width=5cm,keepaspectratio='true']{figures/status-rules.png}
 \end{center}
 
 \item[Times]  Shows the local time, flight time, takeoff and landing time and
-the local sunset time
+the local sunset time.
 \begin{center}
-% TODO update screenshot
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/status-times.png}
+\includegraphics[angle=0,width=5cm,keepaspectratio='true']{figures/status-times.png}
 \end{center}
 \end{description}
 

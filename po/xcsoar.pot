@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-19 12:37+0100\n"
+"POT-Creation-Date: 2010-12-24 01:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -259,7 +259,7 @@ msgstr ""
 #: src/ExpandMacros.cpp:360 src/ExpandMacros.cpp:412
 #: src/InputEventsActions.cpp:1593 src/InputEventsActions.cpp:1596
 #: src/Dialogs/XML.cpp:504 src/Dialogs/dlgConfiguration.cpp:744
-#: src/Dialogs/dlgConfiguration.cpp:822 src/Dialogs/dlgConfiguration.cpp:1255
+#: src/Dialogs/dlgConfiguration.cpp:822 src/Dialogs/dlgConfiguration.cpp:1250
 #: src/Dialogs/dlgStatus.cpp:204
 msgid "OFF"
 msgstr ""
@@ -705,7 +705,7 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:275 src/InfoBoxes/Content/Factory.cpp:276
-#: src/Dialogs/dlgConfiguration.cpp:1347 src/Dialogs/dlgConfiguration.cpp:1350
+#: src/Dialogs/dlgConfiguration.cpp:1342 src/Dialogs/dlgConfiguration.cpp:1345
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:14
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14
 #: Data/Dialogs/dlgStatusSystem.xml:6 Data/Dialogs/dlgStatus.xml:22
@@ -1946,57 +1946,57 @@ msgstr ""
 msgid "Wing loading"
 msgstr ""
 
-#: src/FlightStatistics.cpp:834 src/FlightStatistics.cpp:840
+#: src/FlightStatistics.cpp:837 src/FlightStatistics.cpp:843
 msgid "Working band"
 msgstr ""
 
-#: src/FlightStatistics.cpp:844
+#: src/FlightStatistics.cpp:847
 msgid "Ceiling trend"
 msgstr ""
 
-#: src/FlightStatistics.cpp:858 src/FlightStatistics.cpp:863
+#: src/FlightStatistics.cpp:861 src/FlightStatistics.cpp:866
 msgid "Av climb"
 msgstr ""
 
-#: src/FlightStatistics.cpp:866
+#: src/FlightStatistics.cpp:869
 msgid "Climb trend"
 msgstr ""
 
-#: src/FlightStatistics.cpp:878
+#: src/FlightStatistics.cpp:881
 msgid "Best LD"
 msgstr ""
 
-#: src/FlightStatistics.cpp:882
+#: src/FlightStatistics.cpp:885
 msgid "Min sink"
 msgstr ""
 
-#: src/FlightStatistics.cpp:893
+#: src/FlightStatistics.cpp:896
 msgid "Thermal height"
 msgstr ""
 
-#: src/FlightStatistics.cpp:896
+#: src/FlightStatistics.cpp:899
 msgid "Cloud base"
 msgstr ""
 
-#: src/FlightStatistics.cpp:908
+#: src/FlightStatistics.cpp:911
 msgid "No task"
 msgstr ""
 
-#: src/FlightStatistics.cpp:919 src/FlightStatistics.cpp:929
-#: src/FlightStatistics.cpp:941
+#: src/FlightStatistics.cpp:922 src/FlightStatistics.cpp:932
+#: src/FlightStatistics.cpp:944
 msgid "Task to go"
 msgstr ""
 
-#: src/FlightStatistics.cpp:919 src/FlightStatistics.cpp:929
+#: src/FlightStatistics.cpp:922 src/FlightStatistics.cpp:932
 msgid "AAT to go"
 msgstr ""
 
-#: src/FlightStatistics.cpp:920 src/FlightStatistics.cpp:930
-#: src/FlightStatistics.cpp:941
+#: src/FlightStatistics.cpp:923 src/FlightStatistics.cpp:933
+#: src/FlightStatistics.cpp:944
 msgid "Distance to go"
 msgstr ""
 
-#: src/FlightStatistics.cpp:922 src/FlightStatistics.cpp:933
+#: src/FlightStatistics.cpp:925 src/FlightStatistics.cpp:936
 msgid "Target speed"
 msgstr ""
 
@@ -2022,13 +2022,13 @@ msgstr ""
 msgid "No data"
 msgstr ""
 
-#: src/Polar/Loader.cpp:73
+#: src/Polar/Loader.cpp:71
 msgid ""
 "Error loading Polar file!\n"
-"Use LS8 Polar."
+"Using LS8 Polar."
 msgstr ""
 
-#: src/Polar/Loader.cpp:74
+#: src/Polar/Loader.cpp:72
 msgid "Warning"
 msgstr ""
 
@@ -2409,7 +2409,7 @@ msgstr ""
 msgid "First 5"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:771 src/Dialogs/dlgConfiguration.cpp:1055
+#: src/Dialogs/dlgConfiguration.cpp:771 src/Dialogs/dlgConfiguration.cpp:1050
 msgid "None"
 msgstr ""
 
@@ -2541,203 +2541,203 @@ msgstr ""
 msgid "ft/min"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1054
+#: src/Dialogs/dlgConfiguration.cpp:1049
 msgid "Automatic"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1101
+#: src/Dialogs/dlgConfiguration.cpp:1096
 msgid "Center"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1102
+#: src/Dialogs/dlgConfiguration.cpp:1097
 msgid "Topleft"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1112 src/Dialogs/dlgConfiguration.cpp:1166
-#: src/Dialogs/dlgConfiguration.cpp:1234
+#: src/Dialogs/dlgConfiguration.cpp:1107 src/Dialogs/dlgConfiguration.cpp:1161
+#: src/Dialogs/dlgConfiguration.cpp:1229
 msgid "Default"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1113
+#: src/Dialogs/dlgConfiguration.cpp:1108
 msgid "Keyboard"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1114
+#: src/Dialogs/dlgConfiguration.cpp:1109
 msgid "HighScore Style"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1126
+#: src/Dialogs/dlgConfiguration.cpp:1121
 msgid "Full width"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1127
+#: src/Dialogs/dlgConfiguration.cpp:1122
 msgid "Scaled"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1128
+#: src/Dialogs/dlgConfiguration.cpp:1123
 msgid "Scaled centered"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1129
+#: src/Dialogs/dlgConfiguration.cpp:1124
 msgid "Fixed"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1138
+#: src/Dialogs/dlgConfiguration.cpp:1133
 msgid "Box"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1139
+#: src/Dialogs/dlgConfiguration.cpp:1134
 msgid "Tab"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1149
+#: src/Dialogs/dlgConfiguration.cpp:1144
 msgid "8 Top + Bottom (Portrait)"
 msgstr ""
 
 #. 0
-#: src/Dialogs/dlgConfiguration.cpp:1150
+#: src/Dialogs/dlgConfiguration.cpp:1145
 msgid "8 Bottom (Portrait)"
 msgstr ""
 
 #. 1
-#: src/Dialogs/dlgConfiguration.cpp:1151
+#: src/Dialogs/dlgConfiguration.cpp:1146
 msgid "8 Top (Portrait)"
 msgstr ""
 
 #. 2
-#: src/Dialogs/dlgConfiguration.cpp:1152
+#: src/Dialogs/dlgConfiguration.cpp:1147
 msgid "8 Left + Right (Landscape)"
 msgstr ""
 
 #. 3
-#: src/Dialogs/dlgConfiguration.cpp:1153
+#: src/Dialogs/dlgConfiguration.cpp:1148
 msgid "8 Left (Landscape)"
 msgstr ""
 
 #. 4
-#: src/Dialogs/dlgConfiguration.cpp:1154
+#: src/Dialogs/dlgConfiguration.cpp:1149
 msgid "8 Right (Landscape)"
 msgstr ""
 
 #. 5
-#: src/Dialogs/dlgConfiguration.cpp:1155
+#: src/Dialogs/dlgConfiguration.cpp:1150
 msgid "9 Right + Vario (Landscape)"
 msgstr ""
 
 #. 6
-#: src/Dialogs/dlgConfiguration.cpp:1156
+#: src/Dialogs/dlgConfiguration.cpp:1151
 msgid "5 Right (Square)"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1167
+#: src/Dialogs/dlgConfiguration.cpp:1162
 msgid "Portrait"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1168
+#: src/Dialogs/dlgConfiguration.cpp:1163
 msgid "Landscape"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1183
+#: src/Dialogs/dlgConfiguration.cpp:1178
 msgid "Generic"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1209
+#: src/Dialogs/dlgConfiguration.cpp:1204
 msgid "15 seconds"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1210
+#: src/Dialogs/dlgConfiguration.cpp:1205
 msgid "30 seconds"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1211
+#: src/Dialogs/dlgConfiguration.cpp:1206
 msgid "60 seconds"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1212
+#: src/Dialogs/dlgConfiguration.cpp:1207
 msgid "90 seconds"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1213
+#: src/Dialogs/dlgConfiguration.cpp:1208
 msgid "2 minutes"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1214
+#: src/Dialogs/dlgConfiguration.cpp:1209
 msgid "3 minutes"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1224
+#: src/Dialogs/dlgConfiguration.cpp:1219
 msgid "Normal"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1225
+#: src/Dialogs/dlgConfiguration.cpp:1220
 msgid "White outline"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1235
+#: src/Dialogs/dlgConfiguration.cpp:1230
 msgid "Alternate"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1244
+#: src/Dialogs/dlgConfiguration.cpp:1239
 msgid "Purple Circle"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1245
+#: src/Dialogs/dlgConfiguration.cpp:1240
 msgid "B/W Icon"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1246
+#: src/Dialogs/dlgConfiguration.cpp:1241
 msgid "Orange Icon"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1256
+#: src/Dialogs/dlgConfiguration.cpp:1251
 msgid "Flap"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1257
+#: src/Dialogs/dlgConfiguration.cpp:1252
 msgid "SC"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1275
+#: src/Dialogs/dlgConfiguration.cpp:1270
 msgid "Low lands"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1276
+#: src/Dialogs/dlgConfiguration.cpp:1271
 msgid "Mountainous"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1277
+#: src/Dialogs/dlgConfiguration.cpp:1272
 msgid "Imhof 7"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1278
+#: src/Dialogs/dlgConfiguration.cpp:1273
 msgid "Imhof 4"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1279
+#: src/Dialogs/dlgConfiguration.cpp:1274
 msgid "Imhof 12"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1280
+#: src/Dialogs/dlgConfiguration.cpp:1275
 msgid "Imhof Atlas"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1281
+#: src/Dialogs/dlgConfiguration.cpp:1276
 msgid "ICAO"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1282
+#: src/Dialogs/dlgConfiguration.cpp:1277
 msgid "Grey"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1324 src/Dialogs/dlgTaskProperties.cpp:62
+#: src/Dialogs/dlgConfiguration.cpp:1319 src/Dialogs/dlgTaskProperties.cpp:62
 msgid "AGL"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1325 src/Dialogs/dlgTaskProperties.cpp:63
+#: src/Dialogs/dlgConfiguration.cpp:1320 src/Dialogs/dlgTaskProperties.cpp:63
 msgid "MSL"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:1353 Data/Dialogs/dlgBasicSettings.xml:28
+#: src/Dialogs/dlgConfiguration.cpp:1348 Data/Dialogs/dlgBasicSettings.xml:28
 #: Data/Dialogs/dlgConfiguration_L.xml:382
 #: Data/Dialogs/dlgConfiguration.xml:384
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:13
@@ -2747,12 +2747,12 @@ msgstr ""
 msgid "Altitude"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:2263
+#: src/Dialogs/dlgConfiguration.cpp:2258
 #: src/Dialogs/dlgConfigInfoboxes.cpp:201 src/Dialogs/dlgVoice.cpp:109
 msgid "Changes to configuration saved."
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:2266 src/Dialogs/dlgConfigFonts.cpp:322
+#: src/Dialogs/dlgConfiguration.cpp:2261 src/Dialogs/dlgConfigFonts.cpp:322
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
 
