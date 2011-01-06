@@ -177,7 +177,7 @@ public:
     settings_map.DisplayTextType = DISPLAYNAME;
     settings_map.EnableTopology = true;
     settings_map.EnableTerrain = true;
-    settings_map.SlopeShading = true;
+    settings_map.SlopeShadingType = sstFixed;
   }
 };
 

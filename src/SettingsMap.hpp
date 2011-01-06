@@ -58,6 +58,13 @@ enum SnailType_t {
   stAltitude,
 };
 
+enum SlopeShadingType_t {
+  sstOff,
+  sstFixed,
+  sstSun,
+  sstWind,
+};
+
 // user interface options
 
 // where using these from Calculations or MapWindow thread, should
@@ -74,7 +81,7 @@ struct SETTINGS_MAP {
   /**
    * Apply slope shading to the terrain?
    */
-  bool SlopeShading;
+  SlopeShadingType_t SlopeShadingType;
 
   /**
    * 0: show all labels

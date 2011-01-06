@@ -190,9 +190,9 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpSlopeShading" Caption="Slope shading" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Draw shades among slopes, indicating the wind direction.">
-        <DataField DataType="boolean"/>
+      <Edit Name="prpSlopeShadingType" Caption="Slope shading" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="The terrain can be shaded among slopes to indicate either wind direction, sun position or a fixed shading from north-east.">
+        <DataField DataType="enum"/>
       </Edit>
 
       <Edit Name="prpTerrainContrast" Caption="Terrain contrast" X="2" Width="-2" Height="22" CaptionWidth="150"

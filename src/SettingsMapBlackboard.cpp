@@ -29,7 +29,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.CircleZoom = false;
   settings_map.EnableTopology = false;
   settings_map.EnableTerrain = false;
-  settings_map.SlopeShading = true;
+  settings_map.SlopeShadingType = sstWind;
   settings_map.DeclutterLabels = 0;
   settings_map.EnableTrailDrift = false;
   settings_map.EnableDetourCostMarker = false;

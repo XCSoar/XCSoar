@@ -129,6 +129,7 @@ const TCHAR szProfileOrientationCircling[] = CONF("OrientationCircling");
 const TCHAR szProfileDistanceUnitsValue[] = CONF("Distance");
 const TCHAR szProfileDrawTerrain[] = CONF("DrawTerrain");
 const TCHAR szProfileSlopeShading[] = CONF("SlopeShading");
+const TCHAR szProfileSlopeShadingType[] = CONF("SlopeShadingType");
 const TCHAR szProfileDrawTopology[] = CONF("DrawTopology");
 const TCHAR szProfileFinalGlideTerrain[] = CONF("FinalGlideTerrain");
 const TCHAR szProfileAutoWind[] = CONF("AutoWind");

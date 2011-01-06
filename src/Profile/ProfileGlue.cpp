@@ -195,8 +195,14 @@ Profile::Use()
   Get(szProfileDrawTerrain,
       settings_map.EnableTerrain);
 
-  Get(szProfileSlopeShading,
-      settings_map.SlopeShading);
+  Temp = settings_map.SlopeShadingType;
+  if (!Get(szProfileSlopeShadingType, Temp)) {
+    bool old_profile_setting = true;
+    if (Get(szProfileSlopeShading, old_profile_setting))
+      // 0: OFF, 3: Wind
+      Temp = old_profile_setting ? 3 : 0;
+  }
+  settings_map.SlopeShadingType = (SlopeShadingType_t)Temp;
 
   Get(szProfileFinalGlideTerrain,
       settings_computer.FinalGlideTerrain);

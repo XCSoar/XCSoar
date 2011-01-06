@@ -780,8 +780,19 @@ setVariables()
                    XCSoarInterface::SettingsMap().EnableTerrain);
   LoadFormProperty(*wf, _T("prpEnableTopology"),
                    XCSoarInterface::SettingsMap().EnableTopology);
-  LoadFormProperty(*wf, _T("prpSlopeShading"),
-                   XCSoarInterface::SettingsMap().SlopeShading);
+
+  wp = (WndProperty*)wf->FindByName(_T("prpSlopeShadingType"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("OFF"));
+    dfe->addEnumText(_("Fixed"));
+    dfe->addEnumText(_("Sun"));
+    dfe->addEnumText(_("Wind"));
+    dfe->Set(XCSoarInterface::SettingsMap().SlopeShadingType);
+    wp->RefreshDisplay();
+  }
+
   LoadFormProperty(*wf, _T("prpCirclingZoom"),
                    XCSoarInterface::SettingsMap().CircleZoom);
 
@@ -1673,9 +1684,17 @@ void dlgConfigurationShowModal(void)
                               szProfileDrawTopology,
                               XCSoarInterface::SetSettingsMap().EnableTopology);
 
-  changed |= SaveFormProperty(*wf, _T("prpSlopeShading"),
-                              szProfileSlopeShading,
-                              XCSoarInterface::SetSettingsMap().SlopeShading);
+  wp = (WndProperty*)wf->FindByName(_T("prpSlopeShadingType"));
+  if (wp) {
+    if (XCSoarInterface::SettingsMap().SlopeShadingType !=
+        wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsMap().SlopeShadingType =
+          (SlopeShadingType_t)wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileSlopeShadingType,
+                   XCSoarInterface::SettingsMap().SlopeShadingType);
+      changed = true;
+    }
+  }
 
   changed |= SaveFormProperty(*wf, _T("prpCirclingZoom"),
                               szProfileCircleZoom,
