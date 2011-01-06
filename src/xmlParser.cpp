@@ -191,6 +191,26 @@ fromXMLString(LPCTSTR ss, int lo)
       } else if (_tcsnicmp(ss, _T("quot;"), 5) == 0) {
         *(d++) = _T('"' );
         ss += 5;
+      } else if (*ss == '#') {
+        /* number entity */
+
+        ++ss;
+
+        TCHAR *endptr;
+        unsigned long i = _tcstoul(ss, &endptr, 10);
+        if (endptr == ss || endptr >= end || *endptr != ';') {
+          free(result);
+          XMLNode::GlobalError = true;
+          return NULL;
+        }
+
+        // XXX convert to UTF-8 if !_UNICODE
+        TCHAR ch = (TCHAR)i;
+        if (ch == 0)
+          ch = ' ';
+
+        *d++ = ch;
+        ss = endptr + 1;
       } else {
         free(result);
         XMLNode::GlobalError = true;
