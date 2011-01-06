@@ -26,9 +26,7 @@
   </Edit>
 
   <Edit Name="prpStartHeightRef" Caption="Start height ref" X="2" Width="-2" Height="22" CaptionWidth="140"
-    Help="Reference used for start max height rule
-[MSL] Reference is altitude above mean sea level
-[AGL] Reference is the height above the start point">
+    Help="Reference used for start max height rule&#10;[MSL] Reference is altitude above mean sea level&#10;[AGL] Reference is the height above the start point">
     <DataField DataType="enum"/>
   </Edit>
 

@@ -54,11 +54,7 @@
       <Button Name="cmdAirspaceColours" Caption="Colours" X="60" Y="2" Width="70" Height="22" OnClick="OnAirspaceColoursClicked" />
       <Button Name="cmdAirspaceMode" Caption="Filter" X="140" Y="2" Width="70" Height="22" OnClick="OnAirspaceModeClicked" />
   
-      <Edit Name="prpAirspaceDisplay" Caption="Airspace display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Controls filtering of airspace for display and warnings.  The airspace filter button also allows filtering of display and warnings independently for each airspace class.
-[All on] All is displayed.
-[Clip] Only airspace below the clip altitude.
-[Auto] All within a margin of the glider.
-[All below] All airspace below the glider.">
+      <Edit Name="prpAirspaceDisplay" Caption="Airspace display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Controls filtering of airspace for display and warnings.  The airspace filter button also allows filtering of display and warnings independently for each airspace class.&#10;[All on] All is displayed.&#10;[Clip] Only airspace below the clip altitude.&#10;[Auto] All within a margin of the glider.&#10;[All below] All airspace below the glider.">
         <DataField DataType="enum"/>
       </Edit>
   
@@ -89,14 +85,7 @@
     </Panel>
   
     <Panel Name="frmDisplay">
-      <Edit Name="prpWaypointLabels" Caption="Labels" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Determines how labels are displayed with each waypoint:
-[Names] The full name of each waypoint is displayed.
-[Numbers] The waypoint number of each waypoint is displayed.
-[None] No names are displayed with the waypoints.
-[Names in task] Names are only displayed for waypoints that are in the active task as well as the home airfield.
-[First 3] The first 3 letters of the waypoint name are displayed.
-[First 5] The first 5 letters of the waypoint name are displayed.
-[First word] The first word of the waypoint name is displayed.">
+      <Edit Name="prpWaypointLabels" Caption="Labels" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Determines how labels are displayed with each waypoint:&#10;[Names] The full name of each waypoint is displayed.&#10;[Numbers] The waypoint number of each waypoint is displayed.&#10;[None] No names are displayed with the waypoints.&#10;[Names in task] Names are only displayed for waypoints that are in the active task as well as the home airfield.&#10;[First 3] The first 3 letters of the waypoint name are displayed.&#10;[First 5] The first 5 letters of the waypoint name are displayed.&#10;[First word] The first word of the waypoint name is displayed.">
         <DataField DataType="enum"/>
       </Edit>
   
@@ -105,18 +94,12 @@
       </Edit>
   
       <Edit Name="prpOrientationCruise" Caption="Cruise Orientation" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Determines how the screen is rotated with the glider:
-  [North up] The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.
-  [Track up] The moving map display will be rotated so the glider's track is oriented up.
-  [Target up] The moving map display will be rotated so the navigation target is oriented up.">
+        Help="Determines how the screen is rotated with the glider:&#10;[North up] The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.&#10;[Track up] The moving map display will be rotated so the glider's track is oriented up.&#10;[Target up] The moving map display will be rotated so the navigation target is oriented up.">
         <DataField DataType="enum" />
       </Edit>
   
       <Edit Name="prpOrientationCircling" Caption="Circling Orientation" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Determines how the screen is rotated with the glider:
-  [North up] The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.
-  [Track up] The moving map display will be rotated so the glider's track is oriented up.
-  [Target up] The moving map display will be rotated so the navigation target is oriented up.">
+        Help="Determines how the screen is rotated with the glider:&#10;[North up] The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.&#10;[Track up] The moving map display will be rotated so the glider's track is oriented up.&#10;[Target up] The moving map display will be rotated so the navigation target is oriented up.">
         <DataField DataType="enum" />
       </Edit>
   
@@ -144,11 +127,7 @@
       </Edit>
 
       <Edit Name="prpEnableFLARMMap" Caption="FLARM map" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="This enables the display of FLARM traffic on the map window.
-[OFF] FLARM map display disabled
-[ON/Fixed] FLARM map display enabled with fixed scale.
-[ON/Scaled] FLARM map display enabled and auto scaled.
-When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.">
+        Help="This enables the display of FLARM traffic on the map window.&#10;[OFF] FLARM map display disabled&#10;[ON/Fixed] FLARM map display enabled with fixed scale.&#10;[ON/Scaled] FLARM map display enabled and auto scaled.&#10;When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.">
         <DataField DataType="enum"/>
       </Edit>
     </Panel>
@@ -174,9 +153,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </Edit>
 
       <Edit Name="prpWindArrowStyle" Caption="Wind arrow*" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Determines the way the wind arrow is drawn on the map.
-[Arrow head] Draws an arrow head only
-[Full arrow] Draws an arrow head with a dashed arrow line">
+        Help="Determines the way the wind arrow is drawn on the map.&#10;[Arrow head] Draws an arrow head only&#10;[Full arrow] Draws an arrow head with a dashed arrow line">
         <DataField DataType="enum"/>
       </Edit>
     </Panel>
@@ -213,18 +190,12 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
   
     <Panel Name="frmFinalGlide">
       <Edit Name="prpFinalGlideTerrain" Caption="Glide terrain line" X="2" Width="-2" Height="22" CaptionWidth="150"
-       Help="This determines whether the the glide terrain range is calculated and drawn as a line on the map area:
-[OFF] Disables display
-[Line] Draws a dashed line at the glide range
-[Shade] Shades terrain outside glide range">
+       Help="This determines whether the the glide terrain range is calculated and drawn as a line on the map area:&#10;[OFF] Disables display&#10;[Line] Draws a dashed line at the glide range&#10;[Shade] Shades terrain outside glide range">
        <DataField DataType="enum" />
      </Edit>
      
       <Edit Name="prpAutoWind" Caption="Auto wind" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="This allows switching on or off the automatic wind algorithm.  When the algorithm is switched off, the pilot is responsible for setting the wind estimate.
-[Circling] Requires only a GPS source
-[ZigZag] requires an intelligent vario with airspeed output.
-[Both] Use ZigZag and circling.">
+        Help="This allows switching on or off the automatic wind algorithm.  When the algorithm is switched off, the pilot is responsible for setting the wind estimate.&#10;[Circling] Requires only a GPS source&#10;[ZigZag] requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag and circling.">
         <DataField DataType="enum"/>
       </Edit>
     
@@ -234,10 +205,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </Edit>
 
       <Edit Name="prpAutoMcMode" Caption="Auto Mc mode" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="This option defines which auto MacCready algorithm is used.
-[Final glide] adjusts Mc for fastest arrival.  For OLC sprint tasks, the MacCready is adjusted in order to cover the greatest distance in the remaining time and reach the finish height.
-[Trending Average] sets Mc to the trending average climb rate based on all climbs.
-[Both] Uses trending average during task, then fastest arrival when in final glide mode.">
+        Help="This option defines which auto MacCready algorithm is used.&#10;[Final glide] adjusts Mc for fastest arrival.  For OLC sprint tasks, the MacCready is adjusted in order to cover the greatest distance in the remaining time and reach the finish height.&#10;[Trending Average] sets Mc to the trending average climb rate based on all climbs.&#10;[Both] Uses trending average during task, then fastest arrival when in final glide mode.">
         <DataField DataType="enum"/>
       </Edit>
     
@@ -550,9 +518,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </Edit>
     
       <Edit Name="prpStartHeightRef" Caption="Start height ref" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Reference used for start max height rule
-[MSL] Reference is altitude above mean sea level
-[AGL] Reference is the height above the start point">
+        Help="Reference used for start max height rule&#10;[MSL] Reference is altitude above mean sea level&#10;[AGL] Reference is the height above the start point">
           <DataField DataType="enum"/>
         </Edit>
     
@@ -562,10 +528,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </Edit>
     
       <Edit Name="prpContests" Caption="Online contest" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Rules used for calculating optimal points for OnLine Contest.
-[Sprint]: Conforms to FAI IGC League rules.  Up to 5 points including start and finish, maximum duration 2.5 hours, finish height must not be below start height.
-[Triangle]: Conforms to FAI OLC triangle rules.  Four points with common start and finish.  For tasks longer than 500km, no leg less than 25% or larger than 45%; otherwise no leg less than 28% of total.  Finish height must not be lower than start height less 1000 meters.
-[Classic]: Conforms to OLC classic rules.  Up to seven points including start and finish, finish height must not be lower than start height less 1000 meters.  Points awarded 80% on second last leg and 60% on last leg.">
+        Help="Rules used for calculating optimal points for OnLine Contest.&#10;[Sprint]: Conforms to FAI IGC League rules.  Up to 5 points including start and finish, maximum duration 2.5 hours, finish height must not be below start height.&#10;[Triangle]: Conforms to FAI OLC triangle rules.  Four points with common start and finish.  For tasks longer than 500km, no leg less than 25% or larger than 45%; otherwise no leg less than 28% of total.  Finish height must not be lower than start height less 1000 meters.&#10;[Classic]: Conforms to OLC classic rules.  Up to seven points including start and finish, finish height must not be lower than start height less 1000 meters.  Points awarded 80% on second last leg and 60% on last leg.">
         <DataField DataType="enum"/>
       </Edit>
     </Panel>
@@ -587,9 +550,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </Edit>
   
       <Edit Name="prpAppInfoBoxBorder" Caption="Infobox border*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Two styles for infobox borders are available:
-[Box]  Draws boxes around each infobox.
-[Tab]  Draws a tab at the top of the infobox across the title.">
+        Help="Two styles for infobox borders are available:&#10;[Box] Draws boxes around each infobox.&#10;[Tab] Draws a tab at the top of the infobox across the title.">
         <DataField DataType="enum"/>
       </Edit>
     </Panel>
