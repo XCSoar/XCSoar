@@ -11,7 +11,7 @@
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="2" OnDataAccess="OnVegaDemoV"/>
   </Edit>
 
-  <Edit Name="prpVegaDemoV" Caption="Circling" X="2" Width="155" Height="22" CaptionWidth="78" Help="This forces the variometer into circling or cruise mode">
+  <Edit Name="prpVegaDemoAudioClimb" Caption="Circling" X="2" Width="155" Height="22" CaptionWidth="78" Help="This forces the variometer into circling or cruise mode">
     <DataField DataType="boolean" OnDataAccess="OnVegaDemoAudioClimb"/>
   </Edit>
 
