@@ -156,66 +156,24 @@ write_xml_string(TextWriter &writer, const TCHAR *source)
  * internally by the XML Parser. All the calls to the XML library will
  * always gives you back "decoded" strings.
  *
- * @param s string
+ * @param ss string
  * @param lo length of string
  * @return new allocated string converted from xml
  */
 static LPTSTR
-fromXMLString(LPCTSTR s, int lo)
+fromXMLString(LPCTSTR ss, int lo)
 {
-  assert(s != NULL);
+  assert(ss != NULL);
 
-  int ll = 0;
-  LPTSTR d;
-  LPCTSTR ss = s;
-  while (((lo--) > 0) && (*s)) {
-    if (*s == _T('&')) {
-      s++;
-      if (_tcsnicmp(s, _T("lt;"), 3) == 0) {
-        s += 2;
-        lo -= 3;
-      } else if (_tcsnicmp(s, _T("gt;"), 3) == 0) {
-        s += 2;
-        lo -= 3;
-      } else if (_tcsnicmp(s, _T("amp;"), 4) == 0) {
-        s += 3;
-        lo -= 4;
-      } else if (_tcsnicmp(s, _T("apos;"), 5) == 0) {
-        s += 4;
-        lo -= 5;
-      } else if (_tcsnicmp(s, _T("quot;"), 5) == 0) {
-        s += 4;
-        lo -= 5;
-      } else {
-        ll = 0;
-        while (s[ll] && (s[ll] != _T(';')) && (ll < 10))
-          ll++;
-        ll++;
-        d = (LPTSTR)malloc((ll + 1) * sizeof(TCHAR));
-        assert(d);
-        d[ll] = 0;
-        while (ll--)
-          d[ll] = s[ll];
-#ifdef DUMP_XML_ERRORS
-#ifdef _UNICODE
-        printf("unknown escape character: '&%S'",d);
-#else
-        printf("unknown escape character: '&%s'", d);
-#endif
-#endif
-        free(d);
-        XMLNode::GlobalError = true;
-        return (LPTSTR)NULL;
-      }
-    }
-    ll++;
-    s++;
-  }
+  const TCHAR *end = ss + lo;
 
-  d = (LPTSTR)malloc((ll + 1) * sizeof(TCHAR));
+  /* allocate a buffer with the size of the input string; we know for
+     sure that this is enough, because resolving entities can only
+     shrink the string, but never grows */
+  TCHAR *d = (TCHAR *)malloc((_tcslen(ss) + 1) * sizeof(*d));
   assert(d);
   TCHAR *result = d;
-  while (ll--) {
+  while (ss < end && *ss) {
     if (*ss == _T('&')) {
       ss++;
       if (_tcsnicmp(ss, _T("lt;" ), 3) == 0) {
@@ -230,9 +188,13 @@ fromXMLString(LPCTSTR s, int lo)
       } else if (_tcsnicmp(ss, _T("apos;"), 5) == 0) {
         *(d++) = _T('\'');
         ss += 5;
-      } else {
+      } else if (_tcsnicmp(ss, _T("quot;"), 5) == 0) {
         *(d++) = _T('"' );
         ss += 5;
+      } else {
+        free(result);
+        XMLNode::GlobalError = true;
+        return NULL;
       }
     } else {
       *(d++) = *ss;
@@ -240,6 +202,13 @@ fromXMLString(LPCTSTR s, int lo)
     }
   }
   *d = 0;
+
+  /* shrink the memory allocation just in case we allocated too
+     much */
+  d = (TCHAR *)realloc(result, (d + 1 - result) * sizeof(*d));
+  if (d != NULL)
+    result = d;
+
   return result;
 }
 
