@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-07 00:40+0100\n"
-"PO-Revision-Date: 2011-01-05 22:41+0100\n"
+"POT-Creation-Date: 2011-01-07 00:56+0100\n"
+"PO-Revision-Date: 2011-01-07 00:56+0100\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -2321,7 +2321,7 @@ msgstr "Erneut versuchen"
 #: Data/Dialogs/dlgTaskType.xml:4 Data/Dialogs/dlgTaskType_L.xml:4
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:8
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:8
-#: Data/Dialogs/dlgWindSettings.xml:24 Data/Input/default.xci:941
+#: Data/Dialogs/dlgWindSettings.xml:21 Data/Input/default.xci:941
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -2417,8 +2417,8 @@ msgstr "Online Contest"
 
 #: src/Dialogs/dlgAnalysis.cpp:246 Data/Dialogs/dlgAirspaceSelect.xml:10
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:16
-#: Data/Dialogs/dlgConfiguration.xml:374
-#: Data/Dialogs/dlgConfiguration_L.xml:373
+#: Data/Dialogs/dlgConfiguration.xml:342
+#: Data/Dialogs/dlgConfiguration_L.xml:341
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:12
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:12 Data/Dialogs/dlgStatus.xml:16
 #: Data/Dialogs/dlgStatusAircraft.xml:11
@@ -2447,8 +2447,8 @@ msgstr "Zeit"
 msgid "Speed"
 msgstr "Geschw."
 
-#: src/Dialogs/dlgAnalysis.cpp:265 Data/Dialogs/dlgConfiguration.xml:74
-#: Data/Dialogs/dlgConfiguration_L.xml:74
+#: src/Dialogs/dlgAnalysis.cpp:265 Data/Dialogs/dlgConfiguration.xml:70
+#: Data/Dialogs/dlgConfiguration_L.xml:70
 msgid "Warnings"
 msgstr "Warnungen"
 
@@ -2557,8 +2557,8 @@ msgstr "(leer)"
 msgid "Pilot name"
 msgstr "Pilotenname"
 
-#: src/Dialogs/dlgConfiguration.cpp:157 Data/Dialogs/dlgVario.xml:355
-#: Data/Dialogs/dlgVario_L.xml:355
+#: src/Dialogs/dlgConfiguration.cpp:157 Data/Dialogs/dlgVario.xml:346
+#: Data/Dialogs/dlgVario_L.xml:347
 msgid "Aircraft type"
 msgstr "Flugzeugtyp"
 
@@ -2648,8 +2648,8 @@ msgid "Full arrow"
 msgstr "Ganzer Pfeil"
 
 #: src/Dialogs/dlgConfiguration.cpp:847 src/Dialogs/dlgConfigInfoboxes.cpp:53
-#: src/Dialogs/dlgWindSettings.cpp:101 Data/Dialogs/dlgConfiguration.xml:574
-#: Data/Dialogs/dlgConfiguration_L.xml:573 Data/Dialogs/dlgVegaDemo.xml:14
+#: src/Dialogs/dlgWindSettings.cpp:101 Data/Dialogs/dlgConfiguration.xml:537
+#: Data/Dialogs/dlgConfiguration_L.xml:536 Data/Dialogs/dlgVegaDemo.xml:14
 #, no-c-format
 msgid "Circling"
 msgstr "beim Kreisen"
@@ -2931,8 +2931,8 @@ msgid "MSL"
 msgstr "MSL"
 
 #: src/Dialogs/dlgConfiguration.cpp:1348 Data/Dialogs/dlgBasicSettings.xml:28
-#: Data/Dialogs/dlgConfiguration.xml:383
-#: Data/Dialogs/dlgConfiguration_L.xml:382
+#: Data/Dialogs/dlgConfiguration.xml:351
+#: Data/Dialogs/dlgConfiguration_L.xml:350
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:13
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:13
 #: Data/Dialogs/dlgStartTask.xml:8 Data/Dialogs/dlgStatus.xml:12
@@ -2951,20 +2951,20 @@ msgstr ""
 "Änderungen an der Konfiguration gespeichert. XCSoar neustarten um Änderungen "
 "zu übernehmen."
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:54 Data/Dialogs/dlgConfiguration.xml:575
-#: Data/Dialogs/dlgConfiguration_L.xml:574
+#: src/Dialogs/dlgConfigInfoboxes.cpp:54 Data/Dialogs/dlgConfiguration.xml:538
+#: Data/Dialogs/dlgConfiguration_L.xml:537
 #, no-c-format
 msgid "Cruise"
 msgstr "Vorflug"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:55 Data/Dialogs/dlgConfiguration.xml:576
-#: Data/Dialogs/dlgConfiguration_L.xml:575
+#: src/Dialogs/dlgConfigInfoboxes.cpp:55 Data/Dialogs/dlgConfiguration.xml:539
+#: Data/Dialogs/dlgConfiguration_L.xml:538
 #, no-c-format
 msgid "FinalGlide"
 msgstr "Endanflug"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:56 Data/Dialogs/dlgConfiguration.xml:577
-#: Data/Dialogs/dlgConfiguration_L.xml:576
+#: src/Dialogs/dlgConfigInfoboxes.cpp:56 Data/Dialogs/dlgConfiguration.xml:540
+#: Data/Dialogs/dlgConfiguration_L.xml:539
 #, no-c-format
 msgid "Auxiliary"
 msgstr "Zusätzlich"
@@ -3508,9 +3508,9 @@ msgstr "Von Aufgabe entfernen"
 #: src/Dialogs/dlgWaypointEdit.cpp:53 src/Dialogs/dlgWaypointEdit.cpp:56
 #: Data/Dialogs/dlgAirspaceDetails.xml:8 Data/Dialogs/dlgAirspaceSelect.xml:6
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:8
-#: Data/Dialogs/dlgConfiguration.xml:322 Data/Dialogs/dlgConfiguration.xml:340
-#: Data/Dialogs/dlgConfiguration_L.xml:322
-#: Data/Dialogs/dlgConfiguration_L.xml:340
+#: Data/Dialogs/dlgConfiguration.xml:290 Data/Dialogs/dlgConfiguration.xml:308
+#: Data/Dialogs/dlgConfiguration_L.xml:290
+#: Data/Dialogs/dlgConfiguration_L.xml:308
 #: Data/Dialogs/dlgWayPointSelect.xml:4 Data/Dialogs/dlgWayPointSelect_L.xml:4
 msgid "Name"
 msgstr "Name"
@@ -3554,15 +3554,15 @@ msgstr "Verbindung mit Volkslogger"
 msgid "Team"
 msgstr "Team"
 
-#: Data/Dialogs/dlgVario.xml:101 Data/Dialogs/dlgVario_L.xml:101
+#: Data/Dialogs/dlgVario.xml:92 Data/Dialogs/dlgVario_L.xml:93
 msgid ""
 "Mean volume level in cruise modes.  If set to zero, scales with airspeed."
 msgstr ""
 "Mittlere Lautstärke im Vorflugmodus. Auf Null gesetzt wird sie der "
 "Geschwindigkeit angepasst."
 
-#: Data/Dialogs/dlgConfiguration.xml:162
-#: Data/Dialogs/dlgConfiguration_L.xml:162
+#: Data/Dialogs/dlgConfiguration.xml:141
+#: Data/Dialogs/dlgConfiguration_L.xml:141
 msgid "Final glide bar"
 msgstr "Endanflug Linie"
 
@@ -3570,12 +3570,12 @@ msgstr "Endanflug Linie"
 msgid "Name: "
 msgstr "Name: "
 
-#: Data/Dialogs/dlgConfiguration.xml:537
-#: Data/Dialogs/dlgConfiguration_L.xml:536
+#: Data/Dialogs/dlgConfiguration.xml:505
+#: Data/Dialogs/dlgConfiguration_L.xml:504
 msgid "Start max speed margin"
 msgstr "Max. Abflug-Geschwindigkeitstoleranz"
 
-#: Data/Dialogs/dlgVario.xml:387 Data/Dialogs/dlgVario_L.xml:387
+#: Data/Dialogs/dlgVario.xml:378 Data/Dialogs/dlgVario_L.xml:379
 msgid "Radio com max delay"
 msgstr "Funkverbindung maximale Verzögerung"
 
@@ -3592,8 +3592,7 @@ msgstr "Endanflugradial zur OZ"
 msgid "TE mixing"
 msgstr "Total Energie Mischung"
 
-#: Data/Dialogs/dlgConfiguration.xml:107
-#: Data/Dialogs/dlgConfiguration_L.xml:107
+#: Data/Dialogs/dlgConfiguration.xml:96 Data/Dialogs/dlgConfiguration_L.xml:96
 msgid "Cruise Orientation"
 msgstr "Vorflug Ausrichtung"
 
@@ -3610,7 +3609,7 @@ msgstr "Erreichter MacCready"
 msgid "Screen Brightness"
 msgstr "Bildschirm-Helligkeit"
 
-#: Data/Dialogs/dlgVario.xml:337 Data/Dialogs/dlgVario_L.xml:337
+#: Data/Dialogs/dlgVario.xml:328 Data/Dialogs/dlgVario_L.xml:329
 msgid "Disable circling"
 msgstr "Kreisen ausschalten"
 
@@ -3628,8 +3627,8 @@ msgid ""
 msgstr ""
 "Aktiviere die Sprachausgabe der Höhe über/unter dem Gleitpfad im Endanflug."
 
-#: Data/Dialogs/dlgConfiguration.xml:302
-#: Data/Dialogs/dlgConfiguration_L.xml:302
+#: Data/Dialogs/dlgConfiguration.xml:270
+#: Data/Dialogs/dlgConfiguration_L.xml:270
 msgid "V rough air"
 msgstr "Manövergeschwindigkeit"
 
@@ -3641,8 +3640,8 @@ msgstr ""
 "Aktiviere den +5V Ausgang für PDA's etc. an der Vega Schnittstelle ~X2. Ist "
 "das Vega mit dem Altair verbunden muss diese Einstellung ausgeschaltet sein."
 
-#: Data/Dialogs/dlgConfiguration.xml:525
-#: Data/Dialogs/dlgConfiguration_L.xml:524
+#: Data/Dialogs/dlgConfiguration.xml:493
+#: Data/Dialogs/dlgConfiguration_L.xml:492
 msgid "ThermalAssistant"
 msgstr "Zentrierhilfe"
 
@@ -3654,13 +3653,13 @@ msgstr "Total Energie Düse"
 msgid "Task Status"
 msgstr "Aufgabenstatus"
 
-#: Data/Dialogs/dlgConfiguration.xml:369
-#: Data/Dialogs/dlgConfiguration_L.xml:368
+#: Data/Dialogs/dlgConfiguration.xml:337
+#: Data/Dialogs/dlgConfiguration_L.xml:336
 msgid "Aircraft/wind speed"
 msgstr "Flug- u. Windgeschwindigkeit"
 
-#: Data/Dialogs/dlgConfiguration.xml:542
-#: Data/Dialogs/dlgConfiguration_L.xml:541
+#: Data/Dialogs/dlgConfiguration.xml:510
+#: Data/Dialogs/dlgConfiguration_L.xml:509
 #: Data/Dialogs/dlgTaskProperties.xml:23
 #: Data/Dialogs/dlgTaskProperties_L.xml:23
 msgid "Start max height"
@@ -3670,8 +3669,8 @@ msgstr "Maximal Abflughöhe"
 msgid "Wind Settings"
 msgstr "Wind Einstellungen"
 
-#: Data/Dialogs/dlgConfiguration.xml:166
-#: Data/Dialogs/dlgConfiguration_L.xml:166
+#: Data/Dialogs/dlgConfiguration.xml:145
+#: Data/Dialogs/dlgConfiguration_L.xml:145
 msgid "Landable fields"
 msgstr "Landbare Felder"
 
@@ -3688,8 +3687,8 @@ msgstr "Helligkeit"
 msgid "Waypoint Info"
 msgstr "Wegpunkt Info"
 
-#: Data/Dialogs/dlgConfiguration.xml:441
-#: Data/Dialogs/dlgConfiguration_L.xml:440
+#: Data/Dialogs/dlgConfiguration.xml:409
+#: Data/Dialogs/dlgConfiguration_L.xml:408
 msgid "Menu timeout*"
 msgstr "Menü Zeitabschaltung*"
 
@@ -3707,8 +3706,25 @@ msgstr "Neu"
 msgid "Waypoints 1"
 msgstr "Wegpunkte 1"
 
-#: Data/Dialogs/dlgConfiguration.xml:208
-#: Data/Dialogs/dlgConfiguration_L.xml:208
+#: Data/Dialogs/dlgConfiguration.xml:197
+#: Data/Dialogs/dlgConfiguration_L.xml:197 Data/Dialogs/dlgWindSettings.xml:12
+msgid ""
+"This allows switching on or off the automatic wind algorithm.  When the "
+"algorithm is switched off, the pilot is responsible for setting the wind "
+"estimate.\n"
+"[Circling] Requires only a GPS source\n"
+"[ZigZag] requires an intelligent vario with airspeed output.\n"
+"[Both] Use ZigZag and circling."
+msgstr ""
+"Hiermit wird die automatische Windberechnung ein- und ausgeschaltet. Wenn "
+"ausgeschaltet, muss der Pilot selber für die richtige Windeinstellung Sorge "
+"tragen.\n"
+"[Beim Kreisen] benötigt nur eine GPS Quelle,\n"
+"[Zick-Zack] benötigt zusätzlich ein Geschwindigkeitssensor.\n"
+"[Beides] lässt beide Berechnungsmethoden zu."
+
+#: Data/Dialogs/dlgConfiguration.xml:185
+#: Data/Dialogs/dlgConfiguration_L.xml:185
 msgid "Defines the color ramp used in terrain rendering."
 msgstr "Auswahl der Farbpalette für die Geländedarstellung."
 
@@ -3716,12 +3732,25 @@ msgstr "Auswahl der Farbpalette für die Geländedarstellung."
 msgid "Info box values"
 msgstr "InfoBox Werte"
 
+#: Data/Dialogs/dlgConfiguration.xml:520
+#: Data/Dialogs/dlgConfiguration_L.xml:519
+#: Data/Dialogs/dlgTaskProperties.xml:28
+#: Data/Dialogs/dlgTaskProperties_L.xml:28
+msgid ""
+"Reference used for start max height rule\n"
+"[MSL] Reference is altitude above mean sea level\n"
+"[AGL] Reference is the height above the start point"
+msgstr ""
+"Referenz für die Regelung über die max. Abflughöhe.\n"
+"[MSL] Referenz bedeutet Höhe über mittlerem Meeres Niveau,\n"
+"[AGL] Referenz bedeutet Höhe über dem Abflugpunkt (Grund)."
+
 #: Data/Dialogs/dlgWeather.xml:3 Data/Dialogs/dlgWeather_L.xml:3
 msgid "Weather Forecast"
 msgstr "Wettervorhersage"
 
-#: Data/Dialogs/dlgConfiguration.xml:312
-#: Data/Dialogs/dlgConfiguration_L.xml:312
+#: Data/Dialogs/dlgConfiguration.xml:280
+#: Data/Dialogs/dlgConfiguration_L.xml:280
 msgid "Dump time"
 msgstr "Ballast Ablasszeit"
 
@@ -3729,12 +3758,12 @@ msgstr "Ballast Ablasszeit"
 msgid "In Sector"
 msgstr "Im Sektor"
 
-#: Data/Dialogs/dlgVario.xml:165 Data/Dialogs/dlgVario.xml:187
-#: Data/Dialogs/dlgVario.xml:209 Data/Dialogs/dlgVario.xml:231
-#: Data/Dialogs/dlgVario.xml:253 Data/Dialogs/dlgVario.xml:275
-#: Data/Dialogs/dlgVario_L.xml:165 Data/Dialogs/dlgVario_L.xml:187
-#: Data/Dialogs/dlgVario_L.xml:209 Data/Dialogs/dlgVario_L.xml:231
-#: Data/Dialogs/dlgVario_L.xml:253 Data/Dialogs/dlgVario_L.xml:275
+#: Data/Dialogs/dlgVario.xml:156 Data/Dialogs/dlgVario.xml:178
+#: Data/Dialogs/dlgVario.xml:200 Data/Dialogs/dlgVario.xml:222
+#: Data/Dialogs/dlgVario.xml:244 Data/Dialogs/dlgVario.xml:266
+#: Data/Dialogs/dlgVario_L.xml:157 Data/Dialogs/dlgVario_L.xml:179
+#: Data/Dialogs/dlgVario_L.xml:201 Data/Dialogs/dlgVario_L.xml:223
+#: Data/Dialogs/dlgVario_L.xml:245 Data/Dialogs/dlgVario_L.xml:267
 msgid "Period Scale"
 msgstr "Periodenskala"
 
@@ -3753,8 +3782,8 @@ msgstr ""
 msgid "Pilot"
 msgstr "Pilot"
 
-#: Data/Dialogs/dlgConfiguration.xml:532
-#: Data/Dialogs/dlgConfiguration_L.xml:531
+#: Data/Dialogs/dlgConfiguration.xml:500
+#: Data/Dialogs/dlgConfiguration_L.xml:499
 #: Data/Dialogs/dlgTaskProperties.xml:18
 #: Data/Dialogs/dlgTaskProperties_L.xml:18
 msgid "Start max speed"
@@ -3764,10 +3793,10 @@ msgstr "Maximale Abfluggeschwindigkeit"
 msgid "The file name of the primary airspace file."
 msgstr "Der Dateiname der primären Luftraumdatei."
 
-#: Data/Dialogs/dlgConfiguration.xml:559
-#: Data/Dialogs/dlgConfiguration_L.xml:558
-#: Data/Dialogs/dlgTaskProperties.xml:35
-#: Data/Dialogs/dlgTaskProperties_L.xml:35
+#: Data/Dialogs/dlgConfiguration.xml:525
+#: Data/Dialogs/dlgConfiguration_L.xml:524
+#: Data/Dialogs/dlgTaskProperties.xml:33
+#: Data/Dialogs/dlgTaskProperties_L.xml:33
 msgid ""
 "Minimum height above ground while finishing the task.  Set to 0 for no limit."
 msgstr ""
@@ -3778,13 +3807,13 @@ msgstr ""
 msgid "Start Anyway"
 msgstr "Trotzdem starten"
 
-#: Data/Dialogs/dlgConfiguration.xml:480
-#: Data/Dialogs/dlgConfiguration_L.xml:479
+#: Data/Dialogs/dlgConfiguration.xml:448
+#: Data/Dialogs/dlgConfiguration_L.xml:447
 msgid "Speed arrows"
 msgstr "Geschwindigkeitspfeile"
 
-#: Data/Dialogs/dlgConfiguration.xml:203
-#: Data/Dialogs/dlgConfiguration_L.xml:203
+#: Data/Dialogs/dlgConfiguration.xml:180
+#: Data/Dialogs/dlgConfiguration_L.xml:180
 msgid ""
 "Defines the brightness (whiteness) of the terrain rendering.  This controls "
 "the average illumination of the terrain."
@@ -3809,8 +3838,8 @@ msgstr "Minimale AAT Aufgabenzeit in Minuten."
 msgid "File"
 msgstr "Datei"
 
-#: Data/Dialogs/dlgConfiguration.xml:223
-#: Data/Dialogs/dlgConfiguration_L.xml:223 Data/Dialogs/dlgWindSettings.xml:12
+#: Data/Dialogs/dlgConfiguration.xml:197
+#: Data/Dialogs/dlgConfiguration_L.xml:197 Data/Dialogs/dlgWindSettings.xml:12
 msgid "Auto wind"
 msgstr "Windberech."
 
@@ -3826,8 +3855,8 @@ msgstr "A-"
 msgid "Configuration - Fonts"
 msgstr "Schrift Einstellung"
 
-#: Data/Dialogs/dlgConfiguration.xml:403
-#: Data/Dialogs/dlgConfiguration_L.xml:402
+#: Data/Dialogs/dlgConfiguration.xml:371
+#: Data/Dialogs/dlgConfiguration_L.xml:370
 msgid ""
 "The UTC offset field allows the UTC local time offset to be specified.  The "
 "local time is displayed below in order to make it easier to verify the "
@@ -3845,12 +3874,12 @@ msgstr ""
 msgid "Ok"
 msgstr "Ok"
 
-#: Data/Dialogs/dlgConfiguration.xml:598
-#: Data/Dialogs/dlgConfiguration_L.xml:597
+#: Data/Dialogs/dlgConfiguration.xml:559
+#: Data/Dialogs/dlgConfiguration_L.xml:558
 msgid "Time step cruise*"
 msgstr "Zeitintervall beim Vorflug*"
 
-#: Data/Dialogs/dlgVario.xml:123 Data/Dialogs/dlgVario_L.xml:123
+#: Data/Dialogs/dlgVario.xml:114 Data/Dialogs/dlgVario_L.xml:115
 msgid "Type of dead band used in circling mode."
 msgstr "Typ des Totbands im Steigmodus."
 
@@ -3861,20 +3890,20 @@ msgstr ""
 "Kalibrierfaktor der gemessenen Geschwindigkeit, um die angezeigte "
 "Geschwindigkeit zu berechnen."
 
-#: Data/Dialogs/dlgVario.xml:325 Data/Dialogs/dlgVario_L.xml:325
+#: Data/Dialogs/dlgVario.xml:316 Data/Dialogs/dlgVario_L.xml:317
 msgid "Max objects reported"
 msgstr "Max Objekte gemeldet"
 
-#: Data/Dialogs/dlgVario.xml:153 Data/Dialogs/dlgVario.xml:175
-#: Data/Dialogs/dlgVario.xml:197 Data/Dialogs/dlgVario.xml:219
-#: Data/Dialogs/dlgVario.xml:241 Data/Dialogs/dlgVario.xml:263
-#: Data/Dialogs/dlgVario_L.xml:153 Data/Dialogs/dlgVario_L.xml:175
-#: Data/Dialogs/dlgVario_L.xml:197 Data/Dialogs/dlgVario_L.xml:219
-#: Data/Dialogs/dlgVario_L.xml:241 Data/Dialogs/dlgVario_L.xml:263
+#: Data/Dialogs/dlgVario.xml:144 Data/Dialogs/dlgVario.xml:166
+#: Data/Dialogs/dlgVario.xml:188 Data/Dialogs/dlgVario.xml:210
+#: Data/Dialogs/dlgVario.xml:232 Data/Dialogs/dlgVario.xml:254
+#: Data/Dialogs/dlgVario_L.xml:145 Data/Dialogs/dlgVario_L.xml:167
+#: Data/Dialogs/dlgVario_L.xml:189 Data/Dialogs/dlgVario_L.xml:211
+#: Data/Dialogs/dlgVario_L.xml:233 Data/Dialogs/dlgVario_L.xml:255
 msgid "Pitch Scheme"
 msgstr "Neigungs Schema"
 
-#: Data/Dialogs/dlgVario.xml:295 Data/Dialogs/dlgVario_L.xml:295
+#: Data/Dialogs/dlgVario.xml:286 Data/Dialogs/dlgVario_L.xml:287
 msgid "Mute vario on voice"
 msgstr "Vario bei Sprache stilllegen"
 
@@ -3887,8 +3916,8 @@ msgstr "Was möchten Sie tun:"
 msgid "Own code:"
 msgstr "Eigener Kode:"
 
-#: Data/Dialogs/dlgConfiguration.xml:584
-#: Data/Dialogs/dlgConfiguration_L.xml:583
+#: Data/Dialogs/dlgConfiguration.xml:547
+#: Data/Dialogs/dlgConfiguration_L.xml:546
 msgid "Color infoboxes*"
 msgstr "Infobox Farbe*"
 
@@ -3905,7 +3934,7 @@ msgstr ""
 "der minimalen AAT Strecke. 0% ist die nominale AAT Strecke. +100% entspricht "
 "der maximalen AAT Strecke."
 
-#: Data/Dialogs/dlgVario.xml:391 Data/Dialogs/dlgVario_L.xml:391
+#: Data/Dialogs/dlgVario.xml:382 Data/Dialogs/dlgVario_L.xml:383
 msgid "Battery low delay"
 msgstr "Batterie leer Verzögerung"
 
@@ -3913,17 +3942,17 @@ msgstr "Batterie leer Verzögerung"
 msgid "File browser"
 msgstr "Dateibrowser"
 
-#: Data/Dialogs/dlgConfiguration.xml:463
-#: Data/Dialogs/dlgConfiguration_L.xml:462
+#: Data/Dialogs/dlgConfiguration.xml:431
+#: Data/Dialogs/dlgConfiguration_L.xml:430
 msgid "Infobox Geometry"
 msgstr "InfoBox Geometrie"
 
-#: Data/Dialogs/dlgVario.xml:351 Data/Dialogs/dlgVario_L.xml:351
+#: Data/Dialogs/dlgVario.xml:342 Data/Dialogs/dlgVario_L.xml:343
 msgid "Privacy"
 msgstr "Privatsphäre"
 
-#: Data/Dialogs/dlgConfiguration.xml:441
-#: Data/Dialogs/dlgConfiguration_L.xml:440
+#: Data/Dialogs/dlgConfiguration.xml:409
+#: Data/Dialogs/dlgConfiguration_L.xml:408
 msgid ""
 "This determines how long menus will appear on screen if the user does not "
 "make any button presses or interacts with the computer."
@@ -3935,17 +3964,17 @@ msgstr ""
 msgid "Speed remaining"
 msgstr "Verbleibende Geschwindigkeit"
 
-#: Data/Dialogs/dlgVario.xml:127 Data/Dialogs/dlgVario_L.xml:127
+#: Data/Dialogs/dlgVario.xml:118 Data/Dialogs/dlgVario_L.xml:119
 msgid "Circling hi cutoff"
 msgstr "Kreisen Abbruch hoch"
 
-#: Data/Dialogs/dlgConfiguration.xml:614
-#: Data/Dialogs/dlgConfiguration_L.xml:613
+#: Data/Dialogs/dlgConfiguration.xml:575
+#: Data/Dialogs/dlgConfiguration_L.xml:574
 msgid "Logger ID: "
 msgstr "Logger ID: "
 
-#: Data/Dialogs/dlgConfiguration.xml:198
-#: Data/Dialogs/dlgConfiguration_L.xml:198
+#: Data/Dialogs/dlgConfiguration.xml:175
+#: Data/Dialogs/dlgConfiguration_L.xml:175
 msgid "Terrain contrast"
 msgstr "Geländekontrast"
 
@@ -3956,8 +3985,8 @@ msgstr ""
 "Maximale Höhe beim Abflug zur Aufgabe. Auf 0 gesetzt  gibt es keine "
 "Beschränkung."
 
-#: Data/Dialogs/dlgConfiguration.xml:446
-#: Data/Dialogs/dlgConfiguration_L.xml:445
+#: Data/Dialogs/dlgConfiguration.xml:414
+#: Data/Dialogs/dlgConfiguration_L.xml:413
 msgid ""
 "This is the minimum interval between the system recognising key presses. Set "
 "this to a low value for a more responsive user interface; if it is too low, "
@@ -3967,13 +3996,13 @@ msgstr ""
 "einen Tastendruck akzeptiert. Ein kleiner Wert macht die Eingabe sehr "
 "reaktiv, dabei kann es aber zu einem ungewollten Mehrfach-Tastendruck kommen."
 
-#: Data/Dialogs/dlgConfiguration.xml:307
-#: Data/Dialogs/dlgConfiguration_L.xml:307
+#: Data/Dialogs/dlgConfiguration.xml:275
+#: Data/Dialogs/dlgConfiguration_L.xml:275
 msgid "The handicap factor used for OnLine Contest scoring."
 msgstr "Der Handicap-Faktor für die OnLine Contest Wertung."
 
-#: Data/Dialogs/dlgConfiguration.xml:307
-#: Data/Dialogs/dlgConfiguration_L.xml:307
+#: Data/Dialogs/dlgConfiguration.xml:275
+#: Data/Dialogs/dlgConfiguration_L.xml:275
 msgid "Handicap"
 msgstr "Handikap"
 
@@ -3996,8 +4025,8 @@ msgstr "Profil"
 msgid "Max height gain"
 msgstr "Max Höhengewinn"
 
-#: Data/Dialogs/dlgConfiguration.xml:463
-#: Data/Dialogs/dlgConfiguration_L.xml:462
+#: Data/Dialogs/dlgConfiguration.xml:431
+#: Data/Dialogs/dlgConfiguration_L.xml:430
 msgid ""
 "Geometry values range 0-7 but in landscape mode only some of them are really "
 "available."
@@ -4005,9 +4034,9 @@ msgstr ""
 "Die Werte für die Anordnung reichen von 0-7, allerdings sind im Querformat  "
 "nicht alle wirklich verfügbar."
 
-#: Data/Dialogs/dlgConfiguration.xml:403
-#: Data/Dialogs/dlgConfiguration_L.xml:402 Data/Dialogs/dlgVario.xml:281
-#: Data/Dialogs/dlgVario_L.xml:281
+#: Data/Dialogs/dlgConfiguration.xml:371
+#: Data/Dialogs/dlgConfiguration_L.xml:370 Data/Dialogs/dlgVario.xml:272
+#: Data/Dialogs/dlgVario_L.xml:273
 msgid "UTC Offset"
 msgstr "Zeitzonenverschiebung"
 
@@ -4022,20 +4051,8 @@ msgstr "Steigwert"
 msgid "Latitude"
 msgstr "Breitengrad"
 
-#: Data/Dialogs/dlgVario.xml:72
-msgid ""
-"Comparison method used to detect climb states (HIGH/LOW).   [NONE]: State "
-"LOW disabled   [MACCREADY]: State High if gross vario is greater than "
-"MacCready setting.   [AVERAGE]: State HIGH if gross vario value is greater "
-"than average gross vario value."
-msgstr ""
-"Methode zum Einstufen des Steigens (HOCH/GERING). [KEIN]: Stufe GERING "
-"deaktiviert [MACCREADY]: Stufe HOCH, falls das Bruttosteigen größer als die "
-"MacCready Einstellung ist. [DURCHSCHNITT]: Stufe HOCH, wenn das "
-"Bruttosteigen höher als das mittlere Bruttosteigen ist."
-
-#: Data/Dialogs/dlgConfiguration.xml:603
-#: Data/Dialogs/dlgConfiguration_L.xml:602
+#: Data/Dialogs/dlgConfiguration.xml:564
+#: Data/Dialogs/dlgConfiguration_L.xml:563
 msgid "This is the time interval between logged points when circling. "
 msgstr ""
 "Mit diesem Zeitintervall werden im Steigmodus GPS Positionen ins Logg "
@@ -4053,8 +4070,8 @@ msgstr "Deklaration"
 msgid "Clean"
 msgstr "Sauber"
 
-#: Data/Dialogs/dlgConfiguration.xml:451
-#: Data/Dialogs/dlgConfiguration_L.xml:450
+#: Data/Dialogs/dlgConfiguration.xml:419
+#: Data/Dialogs/dlgConfiguration_L.xml:418
 msgid "Text Input Style*"
 msgstr "Texteingabestil"
 
@@ -4072,7 +4089,7 @@ msgstr "Schriftgrad, Größe der Schrift. 65 ist groß. 20 ist sehr klein."
 msgid "Landing time"
 msgstr "Landezeit"
 
-#: Data/Dialogs/dlgConfiguration.xml:78 Data/Dialogs/dlgConfiguration_L.xml:78
+#: Data/Dialogs/dlgConfiguration.xml:74 Data/Dialogs/dlgConfiguration_L.xml:74
 msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
@@ -4089,7 +4106,7 @@ msgstr "FLARM Flugverkehr Details"
 msgid "The file name of the secondary airspace file."
 msgstr "Der Dateiname der sekundären Luftraumdatei."
 
-#: Data/Dialogs/dlgVario.xml:319 Data/Dialogs/dlgVario_L.xml:319
+#: Data/Dialogs/dlgVario.xml:310 Data/Dialogs/dlgVario_L.xml:311
 msgid "Urgent min volume"
 msgstr "Minimale Dringendlautstärke"
 
@@ -4097,13 +4114,13 @@ msgstr "Minimale Dringendlautstärke"
 msgid "delta T"
 msgstr "delta T, Zeitunterschied"
 
-#: Data/Dialogs/dlgConfiguration.xml:564
-#: Data/Dialogs/dlgConfiguration_L.xml:563
+#: Data/Dialogs/dlgConfiguration.xml:530
+#: Data/Dialogs/dlgConfiguration_L.xml:529
 msgid "Online contest"
 msgstr "Online Contest"
 
-#: Data/Dialogs/dlgConfiguration.xml:275
-#: Data/Dialogs/dlgConfiguration_L.xml:275
+#: Data/Dialogs/dlgConfiguration.xml:243
+#: Data/Dialogs/dlgConfiguration_L.xml:243
 msgid ""
 "When enabled, the current MacCready setting is used for determining arrival "
 "altitude during task abort mode."
@@ -4132,16 +4149,6 @@ msgstr "TE statische Kalibrierung"
 msgid "Enter Number"
 msgstr "Zahl eingeben"
 
-#: Data/Dialogs/dlgConfiguration.xml:176
-#: Data/Dialogs/dlgConfiguration_L.xml:176
-msgid ""
-"Determines the way the wind arrow is drawn on the map. [Arrow head] Draws an "
-"arrow head only [Full arrow] Draws an arrow head with a dashed arrow line"
-msgstr ""
-"Dies bestimmt die Art wie der Windpfeil auf der Karte angezeigt wird. "
-"[Pfeilspitze] zeigt nur die Spitze eines Pfeils [Ganzer Pfeil] zeigt einen "
-"Pfeil mit gestrichelter Linie."
-
 #: Data/Dialogs/dlgFontEdit.xml:23
 msgid "Reset"
 msgstr "Zurücksetzen"
@@ -4162,13 +4169,13 @@ msgstr ""
 "Die Flugplatzdatei kann auszugsweise unterwegs Unterstützung, oder andere "
 "hinzugefügte Informationen über einzelne Flugplätze enthalten."
 
-#: Data/Dialogs/dlgConfiguration.xml:408
-#: Data/Dialogs/dlgConfiguration_L.xml:407 Data/Dialogs/dlgStatus.xml:50
+#: Data/Dialogs/dlgConfiguration.xml:376
+#: Data/Dialogs/dlgConfiguration_L.xml:375 Data/Dialogs/dlgStatus.xml:50
 #: Data/Dialogs/dlgStatusAircraft.xml:7
 msgid "Local time"
 msgstr "Lokalzeit"
 
-#: Data/Dialogs/dlgVario.xml:131 Data/Dialogs/dlgVario_L.xml:131
+#: Data/Dialogs/dlgVario.xml:122 Data/Dialogs/dlgVario_L.xml:123
 msgid "Low limit of circling dead band"
 msgstr "Untergrenze des Todbands beim Kreisen."
 
@@ -4189,8 +4196,8 @@ msgstr ""
 "Abschätzung der Überlandeffizienz aus dem bisherigen Flug mit dem "
 "eingestellten Mc Wert."
 
-#: Data/Dialogs/dlgConfiguration.xml:616
-#: Data/Dialogs/dlgConfiguration_L.xml:615
+#: Data/Dialogs/dlgConfiguration.xml:577
+#: Data/Dialogs/dlgConfiguration_L.xml:576
 msgid ""
 "This determines whether the logger uses the short IGC file name or the long "
 "IGC file name. Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-"
@@ -4213,10 +4220,21 @@ msgstr "Schalter"
 msgid "Height"
 msgstr "Höhe"
 
-#: Data/Dialogs/dlgConfiguration.xml:485
-#: Data/Dialogs/dlgConfiguration_L.xml:484
+#: Data/Dialogs/dlgConfiguration.xml:453
+#: Data/Dialogs/dlgConfiguration_L.xml:452
 msgid "Show average"
 msgstr "Zeige Mittelwert"
+
+#: Data/Dialogs/dlgConfiguration.xml:155
+#: Data/Dialogs/dlgConfiguration_L.xml:155
+msgid ""
+"Determines the way the wind arrow is drawn on the map.\n"
+"[Arrow head] Draws an arrow head only\n"
+"[Full arrow] Draws an arrow head with a dashed arrow line"
+msgstr ""
+"Dies bestimmt die Art wie der Windpfeil auf der Karte angezeigt wird.\n"
+"[Pfeilspitze] zeigt nur die Spitze eines Pfeils\n"
+"[Ganzer Pfeil] zeigt einen Pfeil mit gestrichelter Linie."
 
 #: Data/Dialogs/dlgTaskCalculator.xml:21
 #: Data/Dialogs/dlgTaskCalculator_L.xml:23
@@ -4231,7 +4249,7 @@ msgstr ""
 "keinen Einfluss auf die Einstellung des Streckenrechners wenn der Dialog mit "
 "der Abbruch-Taste beendet wird."
 
-#: Data/Dialogs/dlgVario.xml:361 Data/Dialogs/dlgVario_L.xml:361
+#: Data/Dialogs/dlgVario.xml:352 Data/Dialogs/dlgVario_L.xml:353
 msgid "Interval, Info"
 msgstr "Interval, info"
 
@@ -4271,18 +4289,6 @@ msgstr "Ob der statische Druck angeschlossen ist."
 msgid "Vario circling"
 msgstr "Vario Kreisen"
 
-#: Data/Dialogs/dlgConfiguration.xml:552
-#: Data/Dialogs/dlgConfiguration_L.xml:551
-#: Data/Dialogs/dlgTaskProperties.xml:28
-#: Data/Dialogs/dlgTaskProperties_L.xml:28
-msgid ""
-"Reference used for start max height rule [MSL] Reference is altitude above "
-"mean sea level [AGL] Reference is the height above the start point"
-msgstr ""
-"Referenz für die Regelung über die max. Abflughöhe. [MSL] Referenz bedeutet "
-"Höhe über mittlerem Meeres Niveau, [AGL] Referenz bedeutet Höhe über dem "
-"Abflugpunkt (Grund)."
-
 #: Data/Dialogs/dlgTarget.xml:6 Data/Dialogs/dlgTarget_L.xml:6
 msgid "This sets the task point for review."
 msgstr "Das setzt den Wegpunkt für die Aufgabe zum Überprüfen."
@@ -4291,8 +4297,8 @@ msgstr "Das setzt den Wegpunkt für die Aufgabe zum Überprüfen."
 msgid "Edit Task"
 msgstr "Aufgabe bearbeiten"
 
-#: Data/Dialogs/dlgConfiguration.xml:621
-#: Data/Dialogs/dlgConfiguration_L.xml:620
+#: Data/Dialogs/dlgConfiguration.xml:582
+#: Data/Dialogs/dlgConfiguration_L.xml:581
 msgid ""
 "Enables the automatic starting and stopping of logger on takeoff and landing "
 "respectively. Disable when flying paragliders."
@@ -4304,7 +4310,7 @@ msgstr ""
 msgid "Enable voice warnings for airspace incursions."
 msgstr "Aktiviert die Sprachausgabe für Luftraumeinflug Warnungen."
 
-#: Data/Dialogs/dlgConfiguration.xml:65 Data/Dialogs/dlgConfiguration_L.xml:65
+#: Data/Dialogs/dlgConfiguration.xml:61 Data/Dialogs/dlgConfiguration_L.xml:61
 msgid ""
 "For clip airspace mode, this is the altitude below which airspace is "
 "displayed."
@@ -4312,16 +4318,16 @@ msgstr ""
 "Für die Luftraumanzeige \"bis max. Höhe\" werden bis zu dieser Höhe die "
 "Lufträume angezeigt."
 
-#: Data/Dialogs/dlgVario.xml:448 Data/Dialogs/dlgVario_L.xml:448
+#: Data/Dialogs/dlgVario.xml:439 Data/Dialogs/dlgVario_L.xml:440
 msgid "LED Bright"
 msgstr "LED Helligkeit"
 
-#: Data/Dialogs/dlgVario.xml:123 Data/Dialogs/dlgVario_L.xml:123
+#: Data/Dialogs/dlgVario.xml:114 Data/Dialogs/dlgVario_L.xml:115
 msgid "Circling deadband type"
 msgstr "Kreisflug Totbandtyp"
 
-#: Data/Dialogs/dlgConfiguration.xml:123
-#: Data/Dialogs/dlgConfiguration_L.xml:123
+#: Data/Dialogs/dlgConfiguration.xml:106
+#: Data/Dialogs/dlgConfiguration_L.xml:106
 msgid "Circling zoom"
 msgstr "Kreisflug Zoom"
 
@@ -4329,8 +4335,8 @@ msgstr "Kreisflug Zoom"
 msgid "ACK Warn"
 msgstr "Warnung Bestätigen"
 
-#: Data/Dialogs/dlgConfiguration.xml:473
-#: Data/Dialogs/dlgConfiguration_L.xml:472
+#: Data/Dialogs/dlgConfiguration.xml:441
+#: Data/Dialogs/dlgConfiguration_L.xml:440
 msgid "Determines display size of dialogs."
 msgstr "Bestimmt die Größe der Dialoge auf der Anzeige."
 
@@ -4342,13 +4348,27 @@ msgstr "Gesperrt"
 msgid "Font Face"
 msgstr "Schriftsatz"
 
-#: Data/Dialogs/dlgConfiguration.xml:92 Data/Dialogs/dlgConfiguration_L.xml:92
+#: Data/Dialogs/dlgConfiguration.xml:88 Data/Dialogs/dlgConfiguration_L.xml:88
 msgid "Labels"
 msgstr "Schriftfelder"
 
-#: Data/Dialogs/dlgVario.xml:438 Data/Dialogs/dlgVario_L.xml:438
+#: Data/Dialogs/dlgVario.xml:429 Data/Dialogs/dlgVario_L.xml:430
 msgid "Borgelt"
 msgstr "Borgelt"
+
+#: Data/Dialogs/dlgConfiguration.xml:192
+#: Data/Dialogs/dlgConfiguration_L.xml:192
+msgid ""
+"This determines whether the the glide terrain range is calculated and drawn "
+"as a line on the map area:\n"
+"[OFF] Disables display\n"
+"[Line] Draws a dashed line at the glide range\n"
+"[Shade] Shades terrain outside glide range"
+msgstr ""
+"Bestimmt ob der Gleitflugbereich berechnet und dargetellt wird.\n"
+"[AUS] schaltet die Darstellung aus,\n"
+"[Grenzlinie] zeichnet eine gestrichelte Linie um den Bereich,\n"
+"[Schattiert] verdunkelt das Gelände außerhalb des Gleitflugbereichs."
 
 #: Data/Dialogs/dlgTaskCalculator.xml:41
 #: Data/Dialogs/dlgTaskCalculator_L.xml:43
@@ -4360,12 +4380,12 @@ msgstr "Gleiteffizienz"
 msgid "Freq."
 msgstr "Freq."
 
-#: Data/Dialogs/dlgVario.xml:109 Data/Dialogs/dlgVario_L.xml:109
+#: Data/Dialogs/dlgVario.xml:100 Data/Dialogs/dlgVario_L.xml:101
 msgid "Variometer low pass filter time constant in circling mode."
 msgstr "Variometer Tiefpassfilter Zeitkonstante im Steigmodus."
 
-#: Data/Dialogs/dlgConfiguration.xml:458
-#: Data/Dialogs/dlgConfiguration_L.xml:457
+#: Data/Dialogs/dlgConfiguration.xml:426
+#: Data/Dialogs/dlgConfiguration_L.xml:425
 msgid "Rotate the display on devices that support it."
 msgstr "Dreht die Anzeige auf Geräten die das unterstützen."
 
@@ -4373,8 +4393,8 @@ msgstr "Dreht die Anzeige auf Geräten die das unterstützen."
 msgid "Airspace 2"
 msgstr "Luftraum 2"
 
-#: Data/Dialogs/dlgConfiguration.xml:185
-#: Data/Dialogs/dlgConfiguration_L.xml:185
+#: Data/Dialogs/dlgConfiguration.xml:162
+#: Data/Dialogs/dlgConfiguration_L.xml:162
 msgid ""
 "Draws digital elevation terrain on the map. This is shaded by the wind "
 "direction: upwind is brighter, downwind darker."
@@ -4382,12 +4402,12 @@ msgstr ""
 "Kennzeichnet digital die Hebungsgebiete auf der Karte. Diese werden aufgrund "
 "des Windvektors schattiert: Aufwind ist heller, Abwind dunkler dargestellt."
 
-#: Data/Dialogs/dlgConfiguration.xml:280
-#: Data/Dialogs/dlgConfiguration_L.xml:280
+#: Data/Dialogs/dlgConfiguration.xml:248
+#: Data/Dialogs/dlgConfiguration_L.xml:248
 msgid "Safety Mc*"
 msgstr "Sicherheits Mc*"
 
-#: Data/Dialogs/dlgVario.xml:101 Data/Dialogs/dlgVario_L.xml:101
+#: Data/Dialogs/dlgVario.xml:92 Data/Dialogs/dlgVario_L.xml:93
 msgid "Cruise volume"
 msgstr "Reise Lautstärke"
 
@@ -4396,8 +4416,8 @@ msgstr "Reise Lautstärke"
 msgid "Set teamcode"
 msgstr "Teamkode setzen"
 
-#: Data/Dialogs/dlgConfiguration.xml:480
-#: Data/Dialogs/dlgConfiguration_L.xml:479
+#: Data/Dialogs/dlgConfiguration.xml:448
+#: Data/Dialogs/dlgConfiguration_L.xml:447
 msgid ""
 "Whether to show speed command arrows on the Vario gauge.  When shown, in "
 "cruise mode, arrows point up to command slow down; arrows point down to "
@@ -4407,12 +4427,12 @@ msgstr ""
 "werden sollen. Wenn aktiviert weisen im Vorflugmodus Aufwärtspfeile zum "
 "Verlangsamen, und Abwärtspfeile zum Beschleunigen an."
 
-#: Data/Dialogs/dlgVario.xml:149 Data/Dialogs/dlgVario.xml:171
-#: Data/Dialogs/dlgVario.xml:193 Data/Dialogs/dlgVario.xml:215
-#: Data/Dialogs/dlgVario.xml:237 Data/Dialogs/dlgVario.xml:259
-#: Data/Dialogs/dlgVario_L.xml:149 Data/Dialogs/dlgVario_L.xml:171
-#: Data/Dialogs/dlgVario_L.xml:193 Data/Dialogs/dlgVario_L.xml:215
-#: Data/Dialogs/dlgVario_L.xml:237 Data/Dialogs/dlgVario_L.xml:259
+#: Data/Dialogs/dlgVario.xml:140 Data/Dialogs/dlgVario.xml:162
+#: Data/Dialogs/dlgVario.xml:184 Data/Dialogs/dlgVario.xml:206
+#: Data/Dialogs/dlgVario.xml:228 Data/Dialogs/dlgVario.xml:250
+#: Data/Dialogs/dlgVario_L.xml:141 Data/Dialogs/dlgVario_L.xml:163
+#: Data/Dialogs/dlgVario_L.xml:185 Data/Dialogs/dlgVario_L.xml:207
+#: Data/Dialogs/dlgVario_L.xml:229 Data/Dialogs/dlgVario_L.xml:251
 msgid "Beep type"
 msgstr "Piepston Typ"
 
@@ -4420,16 +4440,16 @@ msgstr "Piepston Typ"
 msgid "Point"
 msgstr "Punkt"
 
-#: Data/Dialogs/dlgConfiguration.xml:542
-#: Data/Dialogs/dlgConfiguration_L.xml:541
+#: Data/Dialogs/dlgConfiguration.xml:510
+#: Data/Dialogs/dlgConfiguration_L.xml:509
 msgid ""
 "Maximum height above ground while starting the task.  Set to 0 for no limit."
 msgstr ""
 "Maximale Höhe über dem Referenzniveau während des Abflugs. Auf 0 gesetzt "
 "gilt kein Einschränkung."
 
-#: Data/Dialogs/dlgConfiguration.xml:398
-#: Data/Dialogs/dlgConfiguration_L.xml:397
+#: Data/Dialogs/dlgConfiguration.xml:366
+#: Data/Dialogs/dlgConfiguration_L.xml:365
 msgid "Lat/Lon"
 msgstr "Breite/Länge"
 
@@ -4462,7 +4482,7 @@ msgstr ""
 "Flug\n"
 "Einstellung"
 
-#: Data/Dialogs/dlgVario.xml:93 Data/Dialogs/dlgVario_L.xml:93
+#: Data/Dialogs/dlgVario.xml:84 Data/Dialogs/dlgVario_L.xml:85
 msgid "Cruise averager scale"
 msgstr "Reise Mittelwert Skalierung"
 
@@ -4470,26 +4490,26 @@ msgstr "Reise Mittelwert Skalierung"
 msgid "Radius of the OZ sector."
 msgstr "Radius des OZ Sektors."
 
-#: Data/Dialogs/dlgConfiguration.xml:320
-#: Data/Dialogs/dlgConfiguration_L.xml:320
+#: Data/Dialogs/dlgConfiguration.xml:288
+#: Data/Dialogs/dlgConfiguration_L.xml:288
 msgid "Device A"
 msgstr "Gerät A"
 
-#: Data/Dialogs/dlgVario.xml:139 Data/Dialogs/dlgVario_L.xml:139
+#: Data/Dialogs/dlgVario.xml:130 Data/Dialogs/dlgVario_L.xml:131
 msgid "High limit of cruise dead band"
 msgstr "Obergrenze der Tonausblendung im Vorflug"
 
-#: Data/Dialogs/dlgConfiguration.xml:500
-#: Data/Dialogs/dlgConfiguration_L.xml:499
+#: Data/Dialogs/dlgConfiguration.xml:468
+#: Data/Dialogs/dlgConfiguration_L.xml:467
 msgid "Whether to show the ballast percentage."
 msgstr "Soll der Ballastprozentanteil angezeigt werden."
 
-#: Data/Dialogs/dlgConfiguration.xml:82 Data/Dialogs/dlgConfiguration_L.xml:82
+#: Data/Dialogs/dlgConfiguration.xml:78 Data/Dialogs/dlgConfiguration_L.xml:78
 msgid "Acknowledge time*"
 msgstr "Bestätigungszeit*"
 
-#: Data/Dialogs/dlgConfiguration.xml:510
-#: Data/Dialogs/dlgConfiguration_L.xml:509
+#: Data/Dialogs/dlgConfiguration.xml:478
+#: Data/Dialogs/dlgConfiguration_L.xml:477
 msgid "Averager needle*"
 msgstr "Mittelwert Zeiger"
 
@@ -4497,13 +4517,13 @@ msgstr "Mittelwert Zeiger"
 msgid "The name of the file containing digital elevation terrain data."
 msgstr "Der Name der Datei mit dem digitalisierten Gelände."
 
-#: Data/Dialogs/dlgConfiguration.xml:254
-#: Data/Dialogs/dlgConfiguration_L.xml:254
+#: Data/Dialogs/dlgConfiguration.xml:222
+#: Data/Dialogs/dlgConfiguration_L.xml:222
 msgid "Flap forces cruise*"
 msgstr "Wechsel Steig-/Vorflugmodus"
 
-#: Data/Dialogs/dlgConfiguration.xml:378
-#: Data/Dialogs/dlgConfiguration_L.xml:377
+#: Data/Dialogs/dlgConfiguration.xml:346
+#: Data/Dialogs/dlgConfiguration_L.xml:345
 msgid "Lift"
 msgstr "Vario"
 
@@ -4511,31 +4531,12 @@ msgstr "Vario"
 msgid "Status"
 msgstr "Status"
 
-#: Data/Dialogs/dlgConfiguration.xml:236
-#: Data/Dialogs/dlgConfiguration_L.xml:236
-msgid ""
-"This option defines which auto MacCready algorithm is used. [Final glide] "
-"adjusts Mc for fastest arrival.  For OLC sprint tasks, the MacCready is "
-"adjusted in order to cover the greatest distance in the remaining time and "
-"reach the finish height. [Trending Average] sets Mc to the trending average "
-"climb rate based on all climbs. [Both] Uses trending average during task, "
-"then fastest arrival when in final glide mode."
-msgstr ""
-"Diese Option legt fest, welcher MacCready Algorythmus benutzt wird. "
-"[Endanflug] stellt MacCready auf die schnellstmögliche Ankunft ein. Bei den "
-"OLC Sprint-Aufgaben sind die Einstellungen so, dass eine möglichst große "
-"Strecke innerhalb der verbleibenden Zeit beim erreichen der Ankunftshöhe im "
-"Ziel erreicht wird. [Erwartetes mittleres Steigen] stellt MacCready auf den "
-"Wert aller bisherigen Steigwerte. [Beide] nutzt [Erwartetes mittleres "
-"Steigen] während der Aufgabe und wechselt beim Endanflug automatisch auf "
-"[Endanflug]."
-
 #: Data/Dialogs/dlgTeamCode.xml:6 Data/Dialogs/dlgTeamCode_L.xml:6
 msgid "Mate code:"
 msgstr "Kameradenkode:"
 
-#: Data/Dialogs/dlgConfiguration.xml:322
-#: Data/Dialogs/dlgConfiguration_L.xml:322
+#: Data/Dialogs/dlgConfiguration.xml:290
+#: Data/Dialogs/dlgConfiguration_L.xml:290
 msgid ""
 "Type of primary device. The primary device should be the most reliable GPS "
 "data source."
@@ -4543,13 +4544,13 @@ msgstr ""
 "Der Typ der primär angeschlossenen GPS Quelle. Es sollte die zuverlässigste "
 "verfügbare GPS Quelle sein."
 
-#: Data/Dialogs/dlgConfiguration.xml:338
-#: Data/Dialogs/dlgConfiguration_L.xml:338
+#: Data/Dialogs/dlgConfiguration.xml:306
+#: Data/Dialogs/dlgConfiguration_L.xml:306
 msgid "Device B"
 msgstr "Gerät B"
 
-#: Data/Dialogs/dlgConfiguration.xml:436
-#: Data/Dialogs/dlgConfiguration_L.xml:435
+#: Data/Dialogs/dlgConfiguration.xml:404
+#: Data/Dialogs/dlgConfiguration_L.xml:403
 msgid ""
 "The status file can be used to define sounds to be played when certain "
 "events occur, and how long various status messages will appear on screen."
@@ -4565,39 +4566,34 @@ msgstr "Entfernen"
 msgid "Speed average"
 msgstr "Durchschnittsgeschwindigkeit"
 
-#: Data/Dialogs/dlgConfiguration.xml:564
-#: Data/Dialogs/dlgConfiguration_L.xml:563
-msgid ""
-"Rules used for calculating optimal points for OnLine Contest. [Sprint]: "
-"Conforms to FAI IGC League rules.  Up to 5 points including start and "
-"finish, maximum duration 2.5 hours, finish height must not be below start "
-"height. [Triangle]: Conforms to FAI OLC triangle rules.  Four points with "
-"common start and finish.  For tasks longer than 500km, no leg less than 25% "
-"or larger than 45%; otherwise no leg less than 28% of total.  Finish height "
-"must not be lower than start height less 1000 meters. [Classic]: Conforms to "
-"OLC classic rules.  Up to seven points including start and finish, finish "
-"height must not be lower than start height less 1000 meters.  Points awarded "
-"80% on second last leg and 60% on last leg."
-msgstr ""
-"Regeln zur Berechnung optimaler Wegpunkte für den OnLine Contest. [Sprint]: "
-"Gleich lautend zu den FAI IGC Liga Regeln. Bis zu 5 Wegpunkte Abflug und "
-"Ziel mit eingeschlossen, 2,5 Stunden maximale Flugzeit, die Höhe am Ziel "
-"darf nicht unter der Abflughöhe liegen. [Dreieck]: Gleich lautend zu den FAI "
-"OLC Dreieck Regeln. 4 Wegpunkte wobei Abflug und Ziel identisch sind. Bei "
-"Aufgaben über 500km: Es darf kein Schenkel kleiner 25%, oder größer als 45% "
-"sein; sonst: Kein Schenkel darf kürzer als 28% der Gesamtstrecke sein. Die "
-"Ankunftshöhe am Ziel darf nicht kleiner als 1000 Meter unter der Abflughöhe "
-"sein.  [Klassisch]: Gleich lautend zu den OLC Classic Regeln. Bis zu 7 "
-"Wegpunkte Abflug und Ziel eingeschlossen. Die Zielhöhe darf max. 1000 Meter "
-"unter dem Abflug liegen. Es werden 80% des zweitletzten Schenkels und nur "
-"60% des letzten Schenkels zuerkannt."
-
-#: Data/Dialogs/dlgConfiguration.xml:127
-#: Data/Dialogs/dlgConfiguration_L.xml:127 Data/Dialogs/dlgWindSettings.xml:19
+#: Data/Dialogs/dlgConfiguration.xml:110
+#: Data/Dialogs/dlgConfiguration_L.xml:110 Data/Dialogs/dlgWindSettings.xml:16
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
 "in circling mode."
 msgstr "Bestimmt ob die Flugspur im Steigmodus mit dem Wind verschoben wird."
+
+#: Data/Dialogs/dlgConfiguration.xml:207
+#: Data/Dialogs/dlgConfiguration_L.xml:207
+msgid ""
+"This option defines which auto MacCready algorithm is used.\n"
+"[Final glide] adjusts Mc for fastest arrival.  For OLC sprint tasks, the "
+"MacCready is adjusted in order to cover the greatest distance in the "
+"remaining time and reach the finish height.\n"
+"[Trending Average] sets Mc to the trending average climb rate based on all "
+"climbs.\n"
+"[Both] Uses trending average during task, then fastest arrival when in final "
+"glide mode."
+msgstr ""
+"Diese Option legt fest, welcher MacCready Algorythmus benutzt wird.\n"
+"[Endanflug] stellt MacCready auf die schnellstmögliche Ankunft ein. Bei den "
+"OLC Sprint-Aufgaben sind die Einstellungen so, dass eine möglichst große "
+"Strecke innerhalb der verbleibenden Zeit beim erreichen der Ankunftshöhe im "
+"Ziel erreicht wird.\n"
+"[Erwartetes mittleres Steigen] stellt MacCready auf den Wert aller\n"
+"bisherigen Steigwerte.\n"
+"[Beide] nutzt [Erwartetes mittleres Steigen] während der Aufgabe und "
+"wechselt beim Endanflug automatisch auf [Endanflug]."
 
 #: Data/Dialogs/dlgTaskManager.xml:11 Data/Dialogs/dlgTaskManager_L.xml:8
 msgid "Save as"
@@ -4607,13 +4603,13 @@ msgstr "Speichern unter"
 msgid "Vario Configuration"
 msgstr "Vario Einstellung"
 
-#: Data/Dialogs/dlgConfiguration.xml:249
-#: Data/Dialogs/dlgConfiguration_L.xml:249
+#: Data/Dialogs/dlgConfiguration.xml:217
+#: Data/Dialogs/dlgConfiguration_L.xml:217
 msgid "Nav by baro altitude*"
 msgstr "Nav. mit barometrischer Höhe*"
 
-#: Data/Dialogs/dlgConfiguration.xml:292
-#: Data/Dialogs/dlgConfiguration_L.xml:292
+#: Data/Dialogs/dlgConfiguration.xml:260
+#: Data/Dialogs/dlgConfiguration_L.xml:260
 msgid ""
 "This contains a selection of gliders of different performance classes, as "
 "well as a special entry for External Polar File."
@@ -4621,13 +4617,13 @@ msgstr ""
 "Die Liste enthält eine Auswahl von Segelflugzeugen mit unterschiedlicher "
 "Leistung, sowohl einen speziellen Eintrag für eine externe Polarendatei."
 
-#: Data/Dialogs/dlgConfiguration.xml:244
-#: Data/Dialogs/dlgConfiguration_L.xml:244
+#: Data/Dialogs/dlgConfiguration.xml:212
+#: Data/Dialogs/dlgConfiguration_L.xml:212
 msgid "Block speed to fly*"
 msgstr "Blockgeschwindigkeit*"
 
-#: Data/Dialogs/dlgConfiguration.xml:537
-#: Data/Dialogs/dlgConfiguration_L.xml:536
+#: Data/Dialogs/dlgConfiguration.xml:505
+#: Data/Dialogs/dlgConfiguration_L.xml:504
 msgid ""
 "Maximum speed above maximum start speed to tolerate.  Set to 0 for no "
 "tolerance."
@@ -4671,7 +4667,7 @@ msgstr "Teamkode"
 msgid "Italic"
 msgstr "Kursiv"
 
-#: Data/Dialogs/dlgVario.xml:89 Data/Dialogs/dlgVario_L.xml:89
+#: Data/Dialogs/dlgVario.xml:80 Data/Dialogs/dlgVario_L.xml:81
 msgid "Time scale used for vario averager."
 msgstr "Zeitdauer für die Vario Mittelwertbildung."
 
@@ -4693,11 +4689,11 @@ msgstr "FLARM Sperrung:"
 msgid "Assigned task time"
 msgstr "Zugeteilte Aufgabenzeit"
 
-#: Data/Dialogs/dlgVario.xml:105 Data/Dialogs/dlgVario_L.xml:105
+#: Data/Dialogs/dlgVario.xml:96 Data/Dialogs/dlgVario_L.xml:97
 msgid "Adjustment to base frequency of tones in all modes."
 msgstr "Einstellung der Basistonhöhe für alle Modi."
 
-#: Data/Dialogs/dlgVario.xml:439 Data/Dialogs/dlgVario_L.xml:439
+#: Data/Dialogs/dlgVario.xml:430 Data/Dialogs/dlgVario_L.xml:431
 msgid "Cambridge"
 msgstr "Cambridge"
 
@@ -4725,6 +4721,21 @@ msgstr ""
 "Der Name der Datei die Gelände, Topologie, optional Wegpunkte, "
 "Flugplatzdetails und Lufträume enthält."
 
+#: Data/Dialogs/dlgVario.xml:72 Data/Dialogs/dlgVario_L.xml:73
+msgid ""
+"Comparison method used to detect climb states (HIGH/LOW).\n"
+"[NONE]: State LOW disabled\n"
+"[MACCREADY]: State High if gross vario is greater than MacCready setting.\n"
+"[AVERAGE]: State HIGH if gross vario value is greater than average gross "
+"vario value."
+msgstr ""
+"Methode zum Einstufen des Steigens (HOCH/GERING).\n"
+"[KEIN]: Stufe GERING deaktiviert\n"
+"[MACCREADY]: Stufe HOCH, falls das Bruttosteigen größer als die MacCready "
+"Einstellung ist.\n"
+"[DURCHSCHNITT]: Stufe HOCH, wenn das Bruttosteigen höher als das mittlere "
+"Bruttosteigen ist."
+
 #: Data/Dialogs/dlgStartup.xml:10 Data/Dialogs/dlgStartup_L.xml:10
 #: Data/Input/default.xci:949
 msgid "Quit"
@@ -4735,9 +4746,9 @@ msgstr "Beenden"
 msgid "Simulator"
 msgstr "Simulator"
 
-#: Data/Dialogs/dlgConfiguration.xml:326 Data/Dialogs/dlgConfiguration.xml:345
-#: Data/Dialogs/dlgConfiguration_L.xml:326
-#: Data/Dialogs/dlgConfiguration_L.xml:344
+#: Data/Dialogs/dlgConfiguration.xml:294 Data/Dialogs/dlgConfiguration.xml:313
+#: Data/Dialogs/dlgConfiguration_L.xml:294
+#: Data/Dialogs/dlgConfiguration_L.xml:312
 msgid "Port"
 msgstr "Anschluss"
 
@@ -4757,8 +4768,8 @@ msgstr "Wölbklappen neutral"
 msgid "AAT Est Remaining Help"
 msgstr "Hilfe zu geschätzte verbleibende AAT"
 
-#: Data/Dialogs/dlgConfiguration.xml:547
-#: Data/Dialogs/dlgConfiguration_L.xml:546
+#: Data/Dialogs/dlgConfiguration.xml:515
+#: Data/Dialogs/dlgConfiguration_L.xml:514
 msgid ""
 "Maximum height above maximum start height to tolerate.  Set to 0 for no "
 "tolerance."
@@ -4766,7 +4777,7 @@ msgstr ""
 "Maximal tolerierte Höhe über der Höhenbegrenzung beim Abflug. Auf 0 gesetzt "
 "wird kein Überhöhen toleriert."
 
-#: Data/Dialogs/dlgVario.xml:89 Data/Dialogs/dlgVario_L.xml:89
+#: Data/Dialogs/dlgVario.xml:80 Data/Dialogs/dlgVario_L.xml:81
 msgid "Climb averager scale"
 msgstr "Steigwert Mittelwertzeitspanne"
 
@@ -4789,8 +4800,8 @@ msgstr "Suche"
 msgid "Speed Remaining Help"
 msgstr "Hilfe für: Verbleibende Geschwindigkeit."
 
-#: Data/Dialogs/dlgConfiguration.xml:446
-#: Data/Dialogs/dlgConfiguration_L.xml:445
+#: Data/Dialogs/dlgConfiguration.xml:414
+#: Data/Dialogs/dlgConfiguration_L.xml:413
 msgid "Debounce time*"
 msgstr "Entprellzeit"
 
@@ -4818,18 +4829,18 @@ msgstr "Höhenunterschied MC aktuell"
 msgid "Waypoints 2"
 msgstr "Wegpunkte 2"
 
-#: Data/Dialogs/dlgConfiguration.xml:131
-#: Data/Dialogs/dlgConfiguration_L.xml:131
+#: Data/Dialogs/dlgConfiguration.xml:114
+#: Data/Dialogs/dlgConfiguration_L.xml:114
 msgid "Sets the type of the snail trail display."
 msgstr "Setzt die Art der Spuranzeige fest."
 
-#: Data/Dialogs/dlgConfiguration.xml:393
-#: Data/Dialogs/dlgConfiguration_L.xml:392
+#: Data/Dialogs/dlgConfiguration.xml:361
+#: Data/Dialogs/dlgConfiguration_L.xml:360
 msgid "Units used for task speeds."
 msgstr "Einheiten für die Geschwindigkeiten bei einer Aufgabe."
 
-#: Data/Dialogs/dlgConfiguration.xml:608
-#: Data/Dialogs/dlgConfiguration_L.xml:607
+#: Data/Dialogs/dlgConfiguration.xml:569
+#: Data/Dialogs/dlgConfiguration_L.xml:568
 msgid "Pilot name: "
 msgstr "Pilotenname: "
 
@@ -4837,12 +4848,12 @@ msgstr "Pilotenname: "
 msgid "Radial"
 msgstr "Radial"
 
-#: Data/Dialogs/dlgVario.xml:143 Data/Dialogs/dlgVario_L.xml:143
+#: Data/Dialogs/dlgVario.xml:134 Data/Dialogs/dlgVario_L.xml:135
 msgid "Low limit of cruise dead band"
 msgstr "Untergrenze der Tonausblendung im Vorflug"
 
-#: Data/Dialogs/dlgConfiguration.xml:436
-#: Data/Dialogs/dlgConfiguration_L.xml:435
+#: Data/Dialogs/dlgConfiguration.xml:404
+#: Data/Dialogs/dlgConfiguration_L.xml:403
 msgid "Status message*"
 msgstr "Meldungen*"
 
@@ -4856,8 +4867,8 @@ msgstr "Radius"
 msgid "AAT Range"
 msgstr "AAT Bereich"
 
-#: Data/Dialogs/dlgConfiguration.xml:485
-#: Data/Dialogs/dlgConfiguration_L.xml:484
+#: Data/Dialogs/dlgConfiguration.xml:453
+#: Data/Dialogs/dlgConfiguration_L.xml:452
 msgid ""
 "Whether to show the average climb rate.  In cruise mode, this switches to "
 "showing the average netto airmass rate."
@@ -4869,8 +4880,8 @@ msgstr ""
 msgid "Whether the Stall pressure port is connected."
 msgstr "Ist der Überziehdrucksensor angeschlossen."
 
-#: Data/Dialogs/dlgConfiguration.xml:603
-#: Data/Dialogs/dlgConfiguration_L.xml:602
+#: Data/Dialogs/dlgConfiguration.xml:564
+#: Data/Dialogs/dlgConfiguration_L.xml:563
 msgid "Time step circling*"
 msgstr "Zeitintervall im Steigen"
 
@@ -4887,8 +4898,8 @@ msgstr "Auswählen"
 msgid "Achieved Speed"
 msgstr "Erreichte Geschwindigkeit"
 
-#: Data/Dialogs/dlgConfiguration.xml:203
-#: Data/Dialogs/dlgConfiguration_L.xml:203
+#: Data/Dialogs/dlgConfiguration.xml:180
+#: Data/Dialogs/dlgConfiguration_L.xml:180
 msgid "Terrain brightness"
 msgstr "Geländehelligkeit"
 
@@ -4900,8 +4911,8 @@ msgstr "Aufgabentyp"
 msgid "Task Properties"
 msgstr "Eigenschaften der Aufgabe"
 
-#: Data/Dialogs/dlgConfiguration.xml:141
-#: Data/Dialogs/dlgConfiguration_L.xml:141
+#: Data/Dialogs/dlgConfiguration.xml:124
+#: Data/Dialogs/dlgConfiguration_L.xml:124
 msgid ""
 "If the aircraft heading deviates from the current waypoint, markers are "
 "displayed at points ahead of the aircraft. The value of each marker is the "
@@ -4925,29 +4936,12 @@ msgstr "Aktualisieren"
 msgid "FLARM"
 msgstr "FLARM"
 
-#: Data/Dialogs/dlgVario.xml:79
-msgid ""
-"Comparison method used to detect cruise states for switching to lift tones "
-"during cruise.   [NONE]: LIFT tone disabled in cruise   [RELATIVE ZERO] LIFT "
-"tone when relative vario greater than zero.   [GROSS ZERO] LIFT tone when "
-"glider is climbing.   [RELATIVE MC/2] LIFT tone when relative vario greater "
-"than half MC.   [NET MC/2] LIFT tone when airmass velocity greater than half "
-"MC.    "
-msgstr ""
-"Wahl der Methode zur Entscheidung, ob während des Vorflugs auf Steigen-Töne "
-"geschaltet wird. [KEIN]: Steigen-Töne sind im Vorflug ausgeschaltet. "
-"[RELATIV NULL] Steigen-Töne, sobald das relativ Vario größer Null zeigt. "
-"[BRUTTO NULL] Steigen-Töne, wenn der Segler steigt. [RELATIV MC/2] Steigen-"
-"Töne, sobald das relativ Vario mehr als die Hälfte der MacCready Einstellung "
-"zeigt. [NET MC/2] Steigen-Töne, wenn das Steigen der Luftmasse größer als "
-"die Hälfte des MacCready ist.    "
-
 #: Data/Dialogs/dlgTaskPointType.xml:3 Data/Dialogs/dlgTaskPointType_L.xml:3
 msgid "Task Point Type"
 msgstr "Aufgaben Wegpunkttyp"
 
-#: Data/Dialogs/dlgConfiguration.xml:612
-#: Data/Dialogs/dlgConfiguration_L.xml:611
+#: Data/Dialogs/dlgConfiguration.xml:573
+#: Data/Dialogs/dlgConfiguration_L.xml:572
 msgid "Competition Id: "
 msgstr "Wettbewerbszeichen: "
 
@@ -4955,8 +4949,8 @@ msgstr "Wettbewerbszeichen: "
 msgid "Volume"
 msgstr "Volumen"
 
-#: Data/Dialogs/dlgConfiguration.xml:231
-#: Data/Dialogs/dlgConfiguration_L.xml:231
+#: Data/Dialogs/dlgConfiguration.xml:202
+#: Data/Dialogs/dlgConfiguration_L.xml:202
 msgid "External wind"
 msgstr "Externer Wind"
 
@@ -4975,8 +4969,8 @@ msgstr "Max. Temp"
 #: Data/Dialogs/dlgAirspaceDetails.xml:10
 #: Data/Dialogs/dlgAirspaceSelect.xml:18
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:12
-#: Data/Dialogs/dlgConfiguration.xml:292
-#: Data/Dialogs/dlgConfiguration_L.xml:292 Data/Dialogs/dlgTaskPoint.xml:12
+#: Data/Dialogs/dlgConfiguration.xml:260
+#: Data/Dialogs/dlgConfiguration_L.xml:260 Data/Dialogs/dlgTaskPoint.xml:12
 #: Data/Dialogs/dlgTaskPoint_L.xml:13 Data/Dialogs/dlgTaskProperties.xml:5
 #: Data/Dialogs/dlgTaskProperties_L.xml:5 Data/Dialogs/dlgWayPointSelect.xml:7
 #: Data/Dialogs/dlgWayPointSelect_L.xml:14 Data/Dialogs/dlgWaypointEdit.xml:60
@@ -4989,6 +4983,35 @@ msgid "Enables automatic backlight, responsive to light sensor."
 msgstr ""
 "Aktiviert die automatische Hintergrundbeleuchtung, entsprechend dem "
 "Lichtsensor."
+
+#: Data/Dialogs/dlgConfiguration.xml:530
+#: Data/Dialogs/dlgConfiguration_L.xml:529
+msgid ""
+"Rules used for calculating optimal points for OnLine Contest.\n"
+"[Sprint]: Conforms to FAI IGC League rules.  Up to 5 points including start "
+"and finish, maximum duration 2.5 hours, finish height must not be below "
+"start height.\n"
+"[Triangle]: Conforms to FAI OLC triangle rules.  Four points with common "
+"start and finish.  For tasks longer than 500km, no leg less than 25% or "
+"larger than 45%; otherwise no leg less than 28% of total.  Finish height "
+"must not be lower than start height less 1000 meters.\n"
+"[Classic]: Conforms to OLC classic rules.  Up to seven points including "
+"start and finish, finish height must not be lower than start height less "
+"1000 meters.  Points awarded 80% on second last leg and 60% on last leg."
+msgstr ""
+"Regeln zur Berechnung optimaler Wegpunkte für den OnLine Contest.\n"
+"[Sprint]: Gleich lautend zu den FAI IGC Liga Regeln. Bis zu 5 Wegpunkte "
+"Abflug und Ziel mit eingeschlossen, 2,5 Stunden maximale Flugzeit, die Höhe "
+"am Ziel darf nicht unter der Abflughöhe liegen.\n"
+"[Dreieck]: Gleich lautend zu den FAI OLC Dreieck Regeln. 4 Wegpunkte wobei "
+"Abflug und Ziel identisch sind. Bei Aufgaben über 500km: Es darf kein "
+"Schenkel kleiner 25%, oder größer als 45% sein; sonst: Kein Schenkel darf "
+"kürzer als 28% der Gesamtstrecke sein. Die Ankunftshöhe am Ziel darf nicht "
+"kleiner als 1000 Meter unter der Abflughöhe sein.\n"
+"[Klassisch]: Gleich lautend zu den OLC Classic Regeln. Bis zu 7 Wegpunkte "
+"Abflug und Ziel eingeschlossen. Die Zielhöhe darf max. 1000 Meter unter dem "
+"Abflug liegen. Es werden 80% des zweitletzten Schenkels und nur 60% des "
+"letzten Schenkels zuerkannt."
 
 #: Data/Dialogs/dlgStatus.xml:25 Data/Dialogs/dlgStatusSystem.xml:9
 msgid "Declared"
@@ -5015,35 +5038,38 @@ msgstr "v"
 msgid "Set speed remaining"
 msgstr "Setze restliche Geschwindigkeit"
 
-#: Data/Dialogs/dlgConfiguration.xml:628
-#: Data/Dialogs/dlgConfiguration_L.xml:627
+#: Data/Dialogs/dlgConfiguration.xml:589
+#: Data/Dialogs/dlgConfiguration_L.xml:588
 msgid "Device model"
 msgstr "Geräte Modell"
 
-#: Data/Dialogs/dlgVario.xml:333 Data/Dialogs/dlgVario_L.xml:333
+#: Data/Dialogs/dlgVario.xml:324 Data/Dialogs/dlgVario_L.xml:325
 msgid "Flarm interface"
 msgstr "Flarmverbindung"
-
-#: Data/Dialogs/dlgVario_L.xml:80
-msgid ""
-"Comparison method used to detect cruise states for switching to lift tones "
-"during cruise. [NONE]: LIFT tone disabled in cruise [RELATIVE ZERO] LIFT "
-"tone when relative vario greater than zero. [GROSS ZERO] LIFT tone when "
-"glider is climbing. [RELATIVE MC/2] LIFT tone when relative vario greater "
-"than half MC. [NET MC/2] LIFT tone when airmass velocity greater than half "
-"MC."
-msgstr ""
-"Wahl der Methode zur Entscheidung, ob während des Vorflugs auf Steigen-Töne "
-"geschaltet wird. [KEIN]: Steigen-Töne sind im Vorflug ausgeschaltet. "
-"[RELATIV NULL] Steigen-Töne, sobald das relativ Vario größer Null zeigt. "
-"[BRUTTO NULL] Steigen-Töne, wenn der Segler steigt. [RELATIV MC/2] Steigen-"
-"Töne, sobald das relativ Vario mehr als die Hälfte der MacCready Einstellung "
-"zeigt. [NET MC/2] Steigen-Töne, wenn das Steigen der Luftmasse größer als "
-"die Hälfte des MacCready ist."
 
 #: Data/Dialogs/dlgSwitches.xml:45
 msgid "User middle"
 msgstr "Benutzer Mittel"
+
+#: Data/Dialogs/dlgConfiguration.xml:96 Data/Dialogs/dlgConfiguration.xml:101
+#: Data/Dialogs/dlgConfiguration_L.xml:96
+#: Data/Dialogs/dlgConfiguration_L.xml:101
+msgid ""
+"Determines how the screen is rotated with the glider:\n"
+"[North up] The moving map display will always be orientated north to south "
+"and the glider icon will be rotated to show its course.\n"
+"[Track up] The moving map display will be rotated so the glider's track is "
+"oriented up.\n"
+"[Target up] The moving map display will be rotated so the navigation target "
+"is oriented up."
+msgstr ""
+"Bestimmt, wie die Anzeige zum Segler ausgerichtet ist:\n"
+"[Norden oben] Die Karte ist immer nach Norden ausgerichtet und das "
+"Selgersymbol dreht sich entsprechend dem Kurs.\n"
+"[Kurs nach oben] Die Kartendarstellung dreht sich unter dem Seglersymbol, "
+"sodass der Kurs immer nach oben gerichtet ist.\n"
+"[Ziel nach oben] zeigt die Karte so, dass das nächste Ziel nach oben "
+"gerichtet ist."
 
 #: Data/Dialogs/dlgLoggerReplay.xml:3 Data/Input/default.xci:664
 msgid "Replay"
@@ -5053,8 +5079,8 @@ msgstr "Wiedergabe"
 msgid "Airspace display"
 msgstr "Luftraumanzeige"
 
-#: Data/Dialogs/dlgConfiguration.xml:231
-#: Data/Dialogs/dlgConfiguration_L.xml:231
+#: Data/Dialogs/dlgConfiguration.xml:202
+#: Data/Dialogs/dlgConfiguration_L.xml:202
 msgid ""
 "If enabled, then the wind vector received from external devices overrides "
 "XCSoar's internal wind calculation."
@@ -5067,12 +5093,12 @@ msgstr ""
 msgid "Filter..."
 msgstr "Filter..."
 
-#: Data/Dialogs/dlgConfiguration.xml:458
-#: Data/Dialogs/dlgConfiguration_L.xml:457
+#: Data/Dialogs/dlgConfiguration.xml:426
+#: Data/Dialogs/dlgConfiguration_L.xml:425
 msgid "Display Orientation"
 msgstr "Ausrichtung der Anzeige"
 
-#: Data/Dialogs/dlgVario.xml:329 Data/Dialogs/dlgVario_L.xml:329
+#: Data/Dialogs/dlgVario.xml:320 Data/Dialogs/dlgVario_L.xml:321
 msgid "Max reported circling"
 msgstr "Max registriertes Kreisen"
 
@@ -5080,8 +5106,8 @@ msgstr "Max registriertes Kreisen"
 msgid "Valid finish"
 msgstr "Gültiger Endanflug"
 
-#: Data/Dialogs/dlgConfiguration.xml:312
-#: Data/Dialogs/dlgConfiguration_L.xml:312
+#: Data/Dialogs/dlgConfiguration.xml:280
+#: Data/Dialogs/dlgConfiguration_L.xml:280
 msgid "The time in seconds to dump full ballast."
 msgstr "Zeit in Sekunden um die komplett gefüllten Tanks zu entleeren."
 
@@ -5097,8 +5123,8 @@ msgstr "Endanflug Radial"
 msgid "Top"
 msgstr "Oben"
 
-#: Data/Dialogs/dlgConfiguration.xml:166
-#: Data/Dialogs/dlgConfiguration_L.xml:166
+#: Data/Dialogs/dlgConfiguration.xml:145
+#: Data/Dialogs/dlgConfiguration_L.xml:145
 msgid ""
 "Three styles are available: Purple circles (WinPilot style), a high contrast "
 "(monochrome) style with icons, or orange icons. The icons differ for "
@@ -5109,15 +5135,15 @@ msgstr ""
 "Symbolen. Es gibt unterschiedliche Symbole für Landewiese und Flugplatz. "
 "Alle Darstellungen markieren die erreichbaren Wegpunkte grün."
 
-#: Data/Dialogs/dlgConfiguration.xml:559
-#: Data/Dialogs/dlgConfiguration_L.xml:558
-#: Data/Dialogs/dlgTaskProperties.xml:35
-#: Data/Dialogs/dlgTaskProperties_L.xml:35
+#: Data/Dialogs/dlgConfiguration.xml:525
+#: Data/Dialogs/dlgConfiguration_L.xml:524
+#: Data/Dialogs/dlgTaskProperties.xml:33
+#: Data/Dialogs/dlgTaskProperties_L.xml:33
 msgid "Finish min height"
 msgstr "EA min. Flughöhe"
 
-#: Data/Dialogs/dlgConfiguration.xml:123
-#: Data/Dialogs/dlgConfiguration_L.xml:123
+#: Data/Dialogs/dlgConfiguration.xml:106
+#: Data/Dialogs/dlgConfiguration_L.xml:106
 msgid ""
 "If enabled, then the map will zoom in automatically when entering circling "
 "mode and zoom out automatically when leaving circling mode."
@@ -5126,8 +5152,8 @@ msgstr ""
 "auf den Steigmodus vergößert, und entsprechend für den Vorflugmodus wieder "
 "verkleinert."
 
-#: Data/Dialogs/dlgConfiguration.xml:362
-#: Data/Dialogs/dlgConfiguration_L.xml:361
+#: Data/Dialogs/dlgConfiguration.xml:330
+#: Data/Dialogs/dlgConfiguration_L.xml:329
 msgid ""
 "If your GPS device outputs invalid NMEA checksums, this will allow it's data "
 "to be used anyway"
@@ -5141,8 +5167,8 @@ msgstr ""
 msgid "Estimated task time"
 msgstr "Geschätzte Aufgabenzeit"
 
-#: Data/Dialogs/dlgConfiguration.xml:193
-#: Data/Dialogs/dlgConfiguration_L.xml:193
+#: Data/Dialogs/dlgConfiguration.xml:170
+#: Data/Dialogs/dlgConfiguration_L.xml:170
 msgid "Draw shades among slopes, indicating the wind direction."
 msgstr ""
 "Schattiere die Hänge entsprechend der Windrichtung. Die Seite zum Wind ist "
@@ -5152,7 +5178,7 @@ msgstr ""
 msgid "Aircraft Status"
 msgstr "Flugzeugstatus"
 
-#: Data/Dialogs/dlgConfiguration.xml:74 Data/Dialogs/dlgConfiguration_L.xml:74
+#: Data/Dialogs/dlgConfiguration.xml:70 Data/Dialogs/dlgConfiguration_L.xml:70
 msgid "Enable/disable all airspace warnings."
 msgstr "Aktivieren/Abschalten der Luftraumwarnungen."
 
@@ -5161,8 +5187,30 @@ msgstr "Aktivieren/Abschalten der Luftraumwarnungen."
 msgid "Select colour"
 msgstr "Farbauswahl"
 
-#: Data/Dialogs/dlgConfiguration.xml:520
-#: Data/Dialogs/dlgConfiguration_L.xml:519
+#: Data/Dialogs/dlgConfiguration.xml:88 Data/Dialogs/dlgConfiguration_L.xml:88
+msgid ""
+"Determines how labels are displayed with each waypoint:\n"
+"[Names] The full name of each waypoint is displayed.\n"
+"[Numbers] The waypoint number of each waypoint is displayed.\n"
+"[None] No names are displayed with the waypoints.\n"
+"[Names in task] Names are only displayed for waypoints that are in the "
+"active task as well as the home airfield.\n"
+"[First 3] The first 3 letters of the waypoint name are displayed.\n"
+"[First 5] The first 5 letters of the waypoint name are displayed.\n"
+"[First word] The first word of the waypoint name is displayed."
+msgstr ""
+"Bestimmt wie die Beschriftung auf der Karte dargestellt wird:\n"
+"[Namen] Der volle Namen von jedem Wegpunkt wird angezeigt.\n"
+"[Nummern] Es wird die Nummer des Wegpunktes gezeigt.\n"
+"[None] Die Beschriftung der Wegpunkte wird weggelassen.\n"
+"[Namen aus Aufgabe] Nur die Wegpunkte aus der Aufgabe und der Heimatplatz "
+"werden angezeigt.\n"
+"[Ersten 3] Die ersten drei Buchstaben des Wegpunkts werden angezeigt.\n"
+"[Ersten 5] Entsprechend mit fünf Buchstaben.\n"
+"[Erstes Wort] Nur das erste Wort aus dem Wegpunktname wird angezeigt."
+
+#: Data/Dialogs/dlgConfiguration.xml:488
+#: Data/Dialogs/dlgConfiguration_L.xml:487
 msgid "Auto close FLARM"
 msgstr "Schließe FLARM automatisch."
 
@@ -5178,7 +5226,7 @@ msgstr "Feld"
 msgid "TE vario"
 msgstr "TE Vario"
 
-#: Data/Dialogs/dlgVario.xml:425 Data/Dialogs/dlgVario_L.xml:425
+#: Data/Dialogs/dlgVario.xml:416 Data/Dialogs/dlgVario_L.xml:417
 msgid "V Airbrake"
 msgstr "V Bremsklappe"
 
@@ -5198,8 +5246,8 @@ msgstr ""
 "Zeitbeschleunigung bei der Flugwiedergabe. Auf 0 gesetzt pausiert, 1 für "
 "Echtzeit-Wiedergabe."
 
-#: Data/Dialogs/dlgConfiguration.xml:275
-#: Data/Dialogs/dlgConfiguration_L.xml:275
+#: Data/Dialogs/dlgConfiguration.xml:243
+#: Data/Dialogs/dlgConfiguration_L.xml:243
 msgid "Abort use current Mc*"
 msgstr "Behalte Mc Wert bei Abbruch*"
 
@@ -5211,16 +5259,16 @@ msgstr "Schriften anpassen"
 msgid "Vega Voice Extensions"
 msgstr "Vega Spracherweiterung"
 
-#: Data/Dialogs/dlgConfiguration.xml:495
-#: Data/Dialogs/dlgConfiguration_L.xml:494
+#: Data/Dialogs/dlgConfiguration.xml:463
+#: Data/Dialogs/dlgConfiguration_L.xml:462
 msgid "Show bugs*"
 msgstr "Zeige Mücken*"
 
-#: Data/Dialogs/dlgVario.xml:127 Data/Dialogs/dlgVario_L.xml:127
+#: Data/Dialogs/dlgVario.xml:118 Data/Dialogs/dlgVario_L.xml:119
 msgid "High limit of circling dead band"
 msgstr "Obergrenze der Tonausblendung im Kreisflug"
 
-#: Data/Dialogs/dlgVario.xml:299 Data/Dialogs/dlgVario_L.xml:299
+#: Data/Dialogs/dlgVario.xml:290 Data/Dialogs/dlgVario_L.xml:291
 msgid "Mute vario on radio"
 msgstr "Vario auf Radio stummschalten"
 
@@ -5228,8 +5276,8 @@ msgstr "Vario auf Radio stummschalten"
 msgid "Select Airspace"
 msgstr "Wähle Luftraum"
 
-#: Data/Dialogs/dlgConfiguration.xml:249
-#: Data/Dialogs/dlgConfiguration_L.xml:249
+#: Data/Dialogs/dlgConfiguration.xml:217
+#: Data/Dialogs/dlgConfiguration_L.xml:217
 msgid ""
 "When enabled and if connected to a barometric altimeter, barometric altitude "
 "is used for all navigation functions. Otherwise GPS altitude is used."
@@ -5238,8 +5286,8 @@ msgstr ""
 "wird die barometrische Höhe für alle Navigationsfunktionen verwendet. "
 "Ansonsten wird die GPS Höhe benutzt."
 
-#: Data/Dialogs/dlgConfiguration.xml:297
-#: Data/Dialogs/dlgConfiguration_L.xml:297
+#: Data/Dialogs/dlgConfiguration.xml:265
+#: Data/Dialogs/dlgConfiguration_L.xml:265
 msgid "Polar file"
 msgstr "Polare"
 
@@ -5253,18 +5301,18 @@ msgid ""
 "total energy."
 msgstr ""
 
-#: Data/Dialogs/dlgTaskProperties.xml:40
-#: Data/Dialogs/dlgTaskProperties_L.xml:40
+#: Data/Dialogs/dlgTaskProperties.xml:38
+#: Data/Dialogs/dlgTaskProperties_L.xml:38
 msgid "FAI finish height"
 msgstr "FAI Zielhöhe"
 
-#: Data/Dialogs/dlgConfiguration.xml:236
-#: Data/Dialogs/dlgConfiguration_L.xml:236
+#: Data/Dialogs/dlgConfiguration.xml:207
+#: Data/Dialogs/dlgConfiguration_L.xml:207
 msgid "Auto Mc mode"
 msgstr "MC Optimierung"
 
-#: Data/Dialogs/dlgConfiguration.xml:515
-#: Data/Dialogs/dlgConfiguration_L.xml:514
+#: Data/Dialogs/dlgConfiguration.xml:483
+#: Data/Dialogs/dlgConfiguration_L.xml:482
 msgid ""
 "This enables the display of the FLARM radar gauge. The track bearing of the "
 "target relative to the track bearing of the aircraft is displayed as an "
@@ -5296,13 +5344,13 @@ msgstr "Einstellung"
 msgid "Specifies the file defining the topological features."
 msgstr "Die Datei mit den topologischen Angaben."
 
-#: Data/Dialogs/dlgConfiguration.xml:500
-#: Data/Dialogs/dlgConfiguration_L.xml:499
+#: Data/Dialogs/dlgConfiguration.xml:468
+#: Data/Dialogs/dlgConfiguration_L.xml:467
 msgid "Show ballast*"
 msgstr "Zeige Ballast*"
 
-#: Data/Dialogs/dlgConfiguration.xml:115
-#: Data/Dialogs/dlgConfiguration_L.xml:115
+#: Data/Dialogs/dlgConfiguration.xml:101
+#: Data/Dialogs/dlgConfiguration_L.xml:101
 msgid "Circling Orientation"
 msgstr "Steigflug Ausrichtung"
 
@@ -5312,12 +5360,12 @@ msgstr ""
 "Aktiviere die Srachrückmeldung des MacCready Werts, nachdem er geändert "
 "wurde."
 
-#: Data/Dialogs/dlgConfiguration.xml:270
-#: Data/Dialogs/dlgConfiguration_L.xml:270
+#: Data/Dialogs/dlgConfiguration.xml:238
+#: Data/Dialogs/dlgConfiguration_L.xml:238
 msgid "The height above terrain that the glider must clear during final glide."
 msgstr "Höhe über Grund, die der Segler während des Endanflugs einhalten soll."
 
-#: Data/Dialogs/dlgVario.xml:109 Data/Dialogs/dlgVario_L.xml:109
+#: Data/Dialogs/dlgVario.xml:100 Data/Dialogs/dlgVario_L.xml:101
 msgid "Filter circling"
 msgstr "Filter Kreisen"
 
@@ -5326,29 +5374,17 @@ msgstr "Filter Kreisen"
 msgid "Goto"
 msgstr "Ziele auf"
 
-#: Data/Dialogs/dlgConfiguration.xml:362
-#: Data/Dialogs/dlgConfiguration_L.xml:361
+#: Data/Dialogs/dlgConfiguration.xml:330
+#: Data/Dialogs/dlgConfiguration_L.xml:329
 msgid "Ignore checksum*"
 msgstr "Prüfsumme ignorieren*"
 
-#: Data/Dialogs/dlgVario_L.xml:73
-msgid ""
-"Comparison method used to detect climb states (HIGH/LOW). [NONE]: State LOW "
-"disabled [MACCREADY]: State High if gross vario is greater than MacCready "
-"setting. [AVERAGE]: State HIGH if gross vario value is greater than average "
-"gross vario value."
-msgstr ""
-"Methode zum Einstufen des Steigens (HOCH/GERING). [KEIN]: Stufe GERING "
-"deaktiviert [MACCREADY]: Stufe HOCH, falls das Bruttosteigen größer als die "
-"MacCready Einstellung ist. [DURCHSCHNITT]: Stufe HOCH, wenn das "
-"Bruttosteigen höher als das mittlere Bruttosteigen ist."
-
-#: Data/Dialogs/dlgVario.xml:139 Data/Dialogs/dlgVario_L.xml:139
+#: Data/Dialogs/dlgVario.xml:130 Data/Dialogs/dlgVario_L.xml:131
 msgid "Cruise hi cutoff"
 msgstr "Ausblendung oben im Vorflug"
 
-#: Data/Dialogs/dlgConfiguration.xml:244
-#: Data/Dialogs/dlgConfiguration_L.xml:244
+#: Data/Dialogs/dlgConfiguration.xml:212
+#: Data/Dialogs/dlgConfiguration_L.xml:212
 msgid ""
 "If enabled, the command speed in cruise is set to the MacCready speed to fly "
 "in no vertical air-mass movement. If disabled, the command speed in cruise "
@@ -5360,8 +5396,8 @@ msgstr ""
 "Vorfluggeschwindigkeit empfohlen. Das heißt die MacCready Geschwindigkeit, "
 "die unter Berücksichtigung der vertikalen Luftbewegung gilt."
 
-#: Data/Dialogs/dlgConfiguration.xml:189
-#: Data/Dialogs/dlgConfiguration_L.xml:189
+#: Data/Dialogs/dlgConfiguration.xml:166
+#: Data/Dialogs/dlgConfiguration_L.xml:166
 msgid ""
 "Draw topological features (roads, rivers, lakes etc) on the map.  Requires "
 "the topology file to be specified."
@@ -5373,17 +5409,17 @@ msgstr ""
 msgid "ACK Day"
 msgstr "Best. Tag"
 
-#: Data/Dialogs/dlgConfiguration.xml:270
-#: Data/Dialogs/dlgConfiguration_L.xml:270
+#: Data/Dialogs/dlgConfiguration.xml:238
+#: Data/Dialogs/dlgConfiguration_L.xml:238
 msgid "Terrain height"
 msgstr "Geländefreiheit"
 
-#: Data/Dialogs/dlgVario.xml:315 Data/Dialogs/dlgVario_L.xml:315
+#: Data/Dialogs/dlgVario.xml:306 Data/Dialogs/dlgVario_L.xml:307
 msgid "Headset threshold"
 msgstr "Kopfhörer Lautstärke Schwelle"
 
-#: Data/Dialogs/dlgConfiguration.xml:584
-#: Data/Dialogs/dlgConfiguration_L.xml:583
+#: Data/Dialogs/dlgConfiguration.xml:547
+#: Data/Dialogs/dlgConfiguration_L.xml:546
 msgid ""
 "If true, certain InfoBoxes will have coloured text.  For example, the active "
 "waypoint infobox will be blue when the glider is above final glide."
@@ -5391,8 +5427,8 @@ msgstr ""
 "Wenn gesetzt haben bestimmte Infoboxen eingfärbten Text. Z.B. wird die "
 "Infobox \"Aktiver Wegpunkt\" blau, wenn die Endanflughöhe erreicht ist."
 
-#: Data/Dialogs/dlgConfiguration.xml:208
-#: Data/Dialogs/dlgConfiguration_L.xml:208
+#: Data/Dialogs/dlgConfiguration.xml:185
+#: Data/Dialogs/dlgConfiguration_L.xml:185
 msgid "Terrain colors"
 msgstr "Geländefarben"
 
@@ -5416,8 +5452,8 @@ msgstr ""
 "Aktiviert die FLARM Erkennung. Schalte dies nur ab, wenn das FLARM nicht "
 "genutzt wird, oder nicht angeschlossen ist."
 
-#: Data/Dialogs/dlgConfiguration.xml:258
-#: Data/Dialogs/dlgConfiguration_L.xml:259
+#: Data/Dialogs/dlgConfiguration.xml:226
+#: Data/Dialogs/dlgConfiguration_L.xml:227
 msgid "L/D Average period*"
 msgstr "Gleitzahl Mittelwertzeitintervall"
 
@@ -5425,17 +5461,17 @@ msgstr "Gleitzahl Mittelwertzeitintervall"
 msgid "Select Waypoint"
 msgstr "Wegpunktauswahl"
 
-#: Data/Dialogs/dlgConfiguration.xml:131
-#: Data/Dialogs/dlgConfiguration_L.xml:131
+#: Data/Dialogs/dlgConfiguration.xml:114
+#: Data/Dialogs/dlgConfiguration_L.xml:114
 msgid "Trail type*"
 msgstr "Spurtyp*"
 
-#: Data/Dialogs/dlgVario.xml:345 Data/Dialogs/dlgVario_L.xml:345
+#: Data/Dialogs/dlgVario.xml:336 Data/Dialogs/dlgVario_L.xml:337
 msgid "No aircraft type"
 msgstr "Kein Flugzeugtyp"
 
-#: Data/Dialogs/dlgConfiguration.xml:412
-#: Data/Dialogs/dlgConfiguration_L.xml:411
+#: Data/Dialogs/dlgConfiguration.xml:380
+#: Data/Dialogs/dlgConfiguration_L.xml:379
 msgid ""
 "This determines whether to blank the display after a long period of "
 "inactivity when operating on internal battery power."
@@ -5444,17 +5480,17 @@ msgstr ""
 "Einstellung fest, ob der Bildschirm nach eine längeren Zeit ohne Interaktion "
 "ausgeschaltet  wird, ."
 
-#: Data/Dialogs/dlgConfiguration.xml:431
-#: Data/Dialogs/dlgConfiguration_L.xml:430
+#: Data/Dialogs/dlgConfiguration.xml:399
+#: Data/Dialogs/dlgConfiguration_L.xml:398
 msgid "Language*"
 msgstr "Sprache*"
 
-#: Data/Dialogs/dlgVario.xml:161 Data/Dialogs/dlgVario.xml:183
-#: Data/Dialogs/dlgVario.xml:205 Data/Dialogs/dlgVario.xml:227
-#: Data/Dialogs/dlgVario.xml:249 Data/Dialogs/dlgVario.xml:271
-#: Data/Dialogs/dlgVario_L.xml:161 Data/Dialogs/dlgVario_L.xml:183
-#: Data/Dialogs/dlgVario_L.xml:205 Data/Dialogs/dlgVario_L.xml:227
-#: Data/Dialogs/dlgVario_L.xml:249 Data/Dialogs/dlgVario_L.xml:271
+#: Data/Dialogs/dlgVario.xml:152 Data/Dialogs/dlgVario.xml:174
+#: Data/Dialogs/dlgVario.xml:196 Data/Dialogs/dlgVario.xml:218
+#: Data/Dialogs/dlgVario.xml:240 Data/Dialogs/dlgVario.xml:262
+#: Data/Dialogs/dlgVario_L.xml:153 Data/Dialogs/dlgVario_L.xml:175
+#: Data/Dialogs/dlgVario_L.xml:197 Data/Dialogs/dlgVario_L.xml:219
+#: Data/Dialogs/dlgVario_L.xml:241 Data/Dialogs/dlgVario_L.xml:263
 msgid "Period Scheme"
 msgstr "Periodenschema"
 
@@ -5462,8 +5498,8 @@ msgstr "Periodenschema"
 msgid "Whether the Total Energy port is connected."
 msgstr "Ob ein Totalenergie-Sensor verbunden ist."
 
-#: Data/Dialogs/dlgConfiguration.xml:547
-#: Data/Dialogs/dlgConfiguration_L.xml:546
+#: Data/Dialogs/dlgConfiguration.xml:515
+#: Data/Dialogs/dlgConfiguration_L.xml:514
 msgid "Start max height margin"
 msgstr "Max. tolerierte Abflugüberhöhung"
 
@@ -5482,8 +5518,8 @@ msgstr "Längengrad"
 msgid "Acknowledge"
 msgstr "Bestätigen"
 
-#: Data/Dialogs/dlgConfiguration.xml:345
-#: Data/Dialogs/dlgConfiguration_L.xml:344
+#: Data/Dialogs/dlgConfiguration.xml:313
+#: Data/Dialogs/dlgConfiguration_L.xml:312
 msgid "Altair Pro users should set this to Port 1."
 msgstr "Altair Pro Nutzer sollten diese Einstellung auf Anschluss 1 stellen."
 
@@ -5491,8 +5527,8 @@ msgstr "Altair Pro Nutzer sollten diese Einstellung auf Anschluss 1 stellen."
 msgid "Free"
 msgstr "Frei"
 
-#: Data/Dialogs/dlgConfiguration.xml:610
-#: Data/Dialogs/dlgConfiguration_L.xml:609
+#: Data/Dialogs/dlgConfiguration.xml:571
+#: Data/Dialogs/dlgConfiguration_L.xml:570
 msgid "Aircraft type: "
 msgstr "Flugzeugtyp "
 
@@ -5505,23 +5541,9 @@ msgstr "Geschwindigkeit erreicht"
 msgid "Plane"
 msgstr "Flugzeug"
 
-#: Data/Dialogs/dlgVario.xml:97 Data/Dialogs/dlgVario_L.xml:97
+#: Data/Dialogs/dlgVario.xml:88 Data/Dialogs/dlgVario_L.xml:89
 msgid "Circling volume"
 msgstr "Kreisen Volumen"
-
-#: Data/Dialogs/dlgConfiguration_L.xml:146
-msgid ""
-"This enables the display of FLARM traffic on the map window [OFF] FLARM map "
-"display disabled [ON/Fixed] FLARM map display enabled with fixed scale. [ON/"
-"Scaled] FLARM map display enabled and auto scaled. When auto scaling is "
-"enabled, the FLARM targets on the map display are scaled so that when the "
-"map is at large zoom levels, targets are still visible."
-msgstr ""
-"Hiermit wird die Anzeige des FLARM-Flugverkehrs auf der Karte eingeschaltet. "
-"[AUS] die FLARM Anzeige ist ausgeschaltet. [EIN/Fix] die FLARM Anzeige ist "
-"mit fixer Skalierung eingeschaltet. [EIN/Skaliert] die FLARM Anzeige wird "
-"automatisch skaliert, d.h. der Flugverkehr wird auch bei vergrößerter Karte "
-"noch sichtbar dargestellt."
 
 #: Data/Dialogs/dlgAirspacePatterns.xml:3
 #: Data/Dialogs/dlgAirspacePatterns_L.xml:3
@@ -5532,14 +5554,14 @@ msgstr "Wähle ein Muster"
 msgid "Enable voice read-back of the average climb rate when circling."
 msgstr "Aktiviere die Sprachmeldung des mittleren Steigens im Steigmodus."
 
-#: Data/Dialogs/dlgConfiguration.xml:334 Data/Dialogs/dlgConfiguration.xml:354
-#: Data/Dialogs/dlgConfiguration_L.xml:334
-#: Data/Dialogs/dlgConfiguration_L.xml:353
+#: Data/Dialogs/dlgConfiguration.xml:302 Data/Dialogs/dlgConfiguration.xml:322
+#: Data/Dialogs/dlgConfiguration_L.xml:302
+#: Data/Dialogs/dlgConfiguration_L.xml:321
 msgid "Setup ..."
 msgstr "Setup ..."
 
-#: Data/Dialogs/dlgConfiguration.xml:495
-#: Data/Dialogs/dlgConfiguration_L.xml:494
+#: Data/Dialogs/dlgConfiguration.xml:463
+#: Data/Dialogs/dlgConfiguration_L.xml:462
 msgid "Whether to show the bugs percentage."
 msgstr "Ob die Profilsauberkeit in Prozent angezeigt werden soll."
 
@@ -5585,7 +5607,7 @@ msgstr "Ob die Profilsauberkeit in Prozent angezeigt werden soll."
 #: Data/Dialogs/dlgWayPointSelect.xml:20
 #: Data/Dialogs/dlgWayPointSelect_L.xml:19 Data/Dialogs/dlgWaypointEdit.xml:4
 #: Data/Dialogs/dlgWaypointEdit_L.xml:4 Data/Dialogs/dlgWeather.xml:4
-#: Data/Dialogs/dlgWeather_L.xml:4 Data/Dialogs/dlgWindSettings.xml:23
+#: Data/Dialogs/dlgWeather_L.xml:4 Data/Dialogs/dlgWindSettings.xml:20
 msgid "Close"
 msgstr "Schließen"
 
@@ -5593,7 +5615,7 @@ msgstr "Schließen"
 msgid "Stall port"
 msgstr "Überziehwarnung Port"
 
-#: Data/Dialogs/dlgVario.xml:420 Data/Dialogs/dlgVario_L.xml:420
+#: Data/Dialogs/dlgVario.xml:411 Data/Dialogs/dlgVario_L.xml:412
 msgid "V Manoeuvering"
 msgstr "Manövergeschwindigkeit"
 
@@ -5604,7 +5626,7 @@ msgstr ""
 "Aktiviere die Sprachmeldung der Distanz zum nächsten Wegpunkt im "
 "Vorflugmodus."
 
-#: Data/Dialogs/dlgVario.xml:410 Data/Dialogs/dlgVario_L.xml:410
+#: Data/Dialogs/dlgVario.xml:401 Data/Dialogs/dlgVario_L.xml:402
 msgid "V Terrain"
 msgstr "V Gelände"
 
@@ -5618,28 +5640,28 @@ msgstr "Höhenunterschied MC Sicherheit"
 msgid "Alt diff Mc 0"
 msgstr "Höhenunterschied MC 0"
 
-#: Data/Dialogs/dlgVario.xml:440 Data/Dialogs/dlgVario_L.xml:440
+#: Data/Dialogs/dlgVario.xml:431 Data/Dialogs/dlgVario_L.xml:432
 msgid "Zander"
 msgstr "Zander"
 
-#: Data/Dialogs/dlgVario.xml:131 Data/Dialogs/dlgVario_L.xml:131
-msgid "Circling low cutoff"
-msgstr "Untere Tonausblendung Steigen"
-
-#: Data/Dialogs/dlgConfiguration.xml:330 Data/Dialogs/dlgConfiguration.xml:349
-#: Data/Dialogs/dlgConfiguration_L.xml:330
-#: Data/Dialogs/dlgConfiguration_L.xml:348
+#: Data/Dialogs/dlgConfiguration.xml:298 Data/Dialogs/dlgConfiguration.xml:317
+#: Data/Dialogs/dlgConfiguration_L.xml:298
+#: Data/Dialogs/dlgConfiguration_L.xml:316
 msgid "Baudrate"
 msgstr "Baudrate"
 
-#: Data/Dialogs/dlgConfiguration.xml:330 Data/Dialogs/dlgConfiguration.xml:349
-#: Data/Dialogs/dlgConfiguration_L.xml:330
-#: Data/Dialogs/dlgConfiguration_L.xml:348
+#: Data/Dialogs/dlgConfiguration.xml:298 Data/Dialogs/dlgConfiguration.xml:317
+#: Data/Dialogs/dlgConfiguration_L.xml:298
+#: Data/Dialogs/dlgConfiguration_L.xml:316
 msgid "Altair Pro or Vega users should set this to 38400."
 msgstr ""
 "Altair Pro oder Vega Nutzer sollten diese Einstellung auf 38400 setzen."
 
-#: Data/Dialogs/dlgVario.xml:143 Data/Dialogs/dlgVario_L.xml:143
+#: Data/Dialogs/dlgVario.xml:122 Data/Dialogs/dlgVario_L.xml:123
+msgid "Circling low cutoff"
+msgstr "Untere Tonausblendung Steigen"
+
+#: Data/Dialogs/dlgVario.xml:134 Data/Dialogs/dlgVario_L.xml:135
 msgid "Cruise low cutoff"
 msgstr "Untere Tonausblendung Vorflug"
 
@@ -5654,8 +5676,8 @@ msgstr ""
 "werden Töne für die Geschwindigkeitsempfehlung erzeugt. Dazu ist es nötig "
 "realistische negative Werte einzustellen."
 
-#: Data/Dialogs/dlgConfiguration.xml:357
-#: Data/Dialogs/dlgConfiguration_L.xml:356
+#: Data/Dialogs/dlgConfiguration.xml:325
+#: Data/Dialogs/dlgConfiguration_L.xml:324
 msgid ""
 "option, if enabled sets the clock of the computer to the GPS time once a fix "
 "is set.  This is only necessary if your computer does not have a real-time "
@@ -5667,8 +5689,8 @@ msgstr ""
 "keine Batterie gepufferte Echtzeituhr verfügt, öfters ganz ohne "
 "Spannungsversorgung ist, oder aus anderen Gründen die Zeit verliert."
 
-#: Data/Dialogs/dlgConfiguration.xml:302
-#: Data/Dialogs/dlgConfiguration_L.xml:302
+#: Data/Dialogs/dlgConfiguration.xml:270
+#: Data/Dialogs/dlgConfiguration_L.xml:270
 msgid ""
 "The maximum manoeuvring speed can be entered on this page to prevent the "
 "glide computer from commanding unrealistic cruise speeds."
@@ -5677,18 +5699,18 @@ msgstr ""
 "ausgeschlagen werden dürfen (Handbuch des Seglers). Das hindert den Rechner "
 "daran unsinnige Vorfluggeschwindigkeiten vorzuschlagen."
 
-#: Data/Dialogs/dlgConfiguration.xml:468
-#: Data/Dialogs/dlgConfiguration_L.xml:467
+#: Data/Dialogs/dlgConfiguration.xml:436
+#: Data/Dialogs/dlgConfiguration_L.xml:435
 msgid "Msg window*"
 msgstr "Nachrichten Fenster*"
 
-#: Data/Dialogs/dlgConfiguration.xml:265
-#: Data/Dialogs/dlgConfiguration_L.xml:265
+#: Data/Dialogs/dlgConfiguration.xml:233
+#: Data/Dialogs/dlgConfiguration_L.xml:233
 msgid "Arrival height"
 msgstr "Ankunftshöhe"
 
-#: Data/Dialogs/dlgConfiguration.xml:280
-#: Data/Dialogs/dlgConfiguration_L.xml:280
+#: Data/Dialogs/dlgConfiguration.xml:248
+#: Data/Dialogs/dlgConfiguration_L.xml:248
 msgid ""
 "The MacCready setting used in task abort mode and for determining arrival "
 "altitude at airfields. "
@@ -5696,8 +5718,8 @@ msgstr ""
 "MacCready Wert, der nach einem Abbruch der Aufgabe, als auch für den "
 "Endanflug auf einen Flugplatz verwendet wird. "
 
-#: Data/Dialogs/dlgConfiguration.xml:297
-#: Data/Dialogs/dlgConfiguration_L.xml:297
+#: Data/Dialogs/dlgConfiguration.xml:265
+#: Data/Dialogs/dlgConfiguration_L.xml:265
 msgid ""
 "When External Polar File is the polar type, this is the name of the file "
 "containing the glide polar data (in WinPilot format)."
@@ -5713,8 +5735,8 @@ msgstr "Dialogbox"
 msgid "ACK Space"
 msgstr "Best. Luftraum"
 
-#: Data/Dialogs/dlgConfiguration.xml:579
-#: Data/Dialogs/dlgConfiguration_L.xml:578
+#: Data/Dialogs/dlgConfiguration.xml:542
+#: Data/Dialogs/dlgConfiguration_L.xml:541
 msgid "If true, the InfoBoxes are white on black, otherwise black on white."
 msgstr ""
 "Darstellung der Infoboxen invertiert, d.h. weiße Schrift auf schwarzem "
@@ -5724,8 +5746,8 @@ msgstr ""
 msgid "Set Mate code"
 msgstr "Kameradenkode setzen"
 
-#: Data/Dialogs/dlgConfiguration.xml:340
-#: Data/Dialogs/dlgConfiguration_L.xml:340
+#: Data/Dialogs/dlgConfiguration.xml:308
+#: Data/Dialogs/dlgConfiguration_L.xml:308
 msgid ""
 "Type of secondary device. The secondary device may be used as backup GPS "
 "data or other data e.g. from an intelligent variometer. Generic can be used "
@@ -5735,12 +5757,12 @@ msgstr ""
 "B. ein intelligentes Variometer sein. \"Generisch\" ist die Einstellung für "
 "eine GPS Quelle, FLARM eingeschlossen."
 
-#: Data/Dialogs/dlgVario.xml:307 Data/Dialogs/dlgVario_L.xml:307
+#: Data/Dialogs/dlgVario.xml:298 Data/Dialogs/dlgVario_L.xml:299
 msgid "Voice muting"
 msgstr "Stimme stummschalten"
 
-#: Data/Dialogs/dlgConfiguration.xml:490
-#: Data/Dialogs/dlgConfiguration_L.xml:489
+#: Data/Dialogs/dlgConfiguration.xml:458
+#: Data/Dialogs/dlgConfiguration_L.xml:457
 msgid "Show MacReady"
 msgstr "Zeige MacCready"
 
@@ -5750,10 +5772,28 @@ msgid ""
 "calculation. "
 msgstr "Kalibrierfaktor des Staudruck für die Totalenergieberechnung. "
 
-#: Data/Dialogs/dlgConfiguration.xml:473
-#: Data/Dialogs/dlgConfiguration_L.xml:472
+#: Data/Dialogs/dlgConfiguration.xml:441
+#: Data/Dialogs/dlgConfiguration_L.xml:440
 msgid "Dialog Style*"
 msgstr "Dialogstil*"
+
+#: Data/Dialogs/dlgConfiguration.xml:57 Data/Dialogs/dlgConfiguration_L.xml:57
+msgid ""
+"Controls filtering of airspace for display and warnings.  The airspace "
+"filter button also allows filtering of display and warnings independently "
+"for each airspace class.\n"
+"[All on] All is displayed.\n"
+"[Clip] Only airspace below the clip altitude.\n"
+"[Auto] All within a margin of the glider.\n"
+"[All below] All airspace below the glider."
+msgstr ""
+"Setzt den Filter für Lufträume die angezeigt, bzw. vor denen gewarnt wird. "
+"Zusätzlich kann mit der Filtertabelle jede Luftraumklasse unabhängig für "
+"Anzeige und Warnung ausgewählt werden.\n"
+"[Alles an] Alles wird gezeigt.\n"
+"[bis max. Höhe] Es werden nur Lufträume unter dieser Höhe gezeigt.\n"
+"[Auto] Alles in einem Höhenband um den Segler.\n"
+"[Alles unter mir] Alle Lufträume unter dem Segler."
 
 #: Data/Dialogs/dlgVario.xml:28 Data/Dialogs/dlgVario_L.xml:29
 msgid ""
@@ -5769,8 +5809,8 @@ msgstr ""
 msgid "Waypoint Editor"
 msgstr "Wegpunktbearbeitung"
 
-#: Data/Dialogs/dlgConfiguration.xml:589
-#: Data/Dialogs/dlgConfiguration_L.xml:588
+#: Data/Dialogs/dlgConfiguration.xml:552
+#: Data/Dialogs/dlgConfiguration_L.xml:551
 msgid "Infobox border*"
 msgstr "Infobox Rahmen*"
 
@@ -5778,8 +5818,8 @@ msgstr "Infobox Rahmen*"
 msgid "Waypts."
 msgstr "Wegpkte."
 
-#: Data/Dialogs/dlgConfiguration.xml:628
-#: Data/Dialogs/dlgConfiguration_L.xml:627
+#: Data/Dialogs/dlgConfiguration.xml:589
+#: Data/Dialogs/dlgConfiguration_L.xml:588
 msgid ""
 "Select your PNA model to make full use of its hardware capabilities. If it "
 "is not included, use Generic type."
@@ -5791,17 +5831,17 @@ msgstr ""
 msgid "PDA power"
 msgstr "PDA Strom"
 
-#: Data/Dialogs/dlgVario.xml:117 Data/Dialogs/dlgVario_L.xml:117
+#: Data/Dialogs/dlgVario.xml:108 Data/Dialogs/dlgVario_L.xml:109
 msgid "Tone pitch scale"
 msgstr "Tonanstieg"
 
-#: Data/Dialogs/dlgConfiguration.xml:422
-#: Data/Dialogs/dlgConfiguration_L.xml:421
+#: Data/Dialogs/dlgConfiguration.xml:390
+#: Data/Dialogs/dlgConfiguration_L.xml:389
 msgid "Gestures"
 msgstr "Gesten"
 
-#: Data/Dialogs/dlgConfiguration.xml:532
-#: Data/Dialogs/dlgConfiguration_L.xml:531
+#: Data/Dialogs/dlgConfiguration.xml:500
+#: Data/Dialogs/dlgConfiguration_L.xml:499
 #: Data/Dialogs/dlgTaskProperties.xml:18
 #: Data/Dialogs/dlgTaskProperties_L.xml:18
 msgid ""
@@ -5814,26 +5854,46 @@ msgstr ""
 msgid "TE dynamic cal"
 msgstr "TE dynamische Kalibrierung"
 
-#: Data/Dialogs/dlgVario.xml:405 Data/Dialogs/dlgVario_L.xml:405
+#: Data/Dialogs/dlgVario.xml:396 Data/Dialogs/dlgVario_L.xml:397
 msgid "VNE"
 msgstr "VNE"
 
-#: Data/Dialogs/dlgConfiguration.xml:141
-#: Data/Dialogs/dlgConfiguration_L.xml:141
+#: Data/Dialogs/dlgConfiguration.xml:124
+#: Data/Dialogs/dlgConfiguration_L.xml:124
 msgid "Detour cost markers*"
 msgstr "Angabe zu den Umwegkosten*"
 
-#: Data/Dialogs/dlgConfiguration.xml:127
-#: Data/Dialogs/dlgConfiguration_L.xml:127
+#: Data/Dialogs/dlgConfiguration.xml:110
+#: Data/Dialogs/dlgConfiguration_L.xml:110
 msgid "Trail drift*"
 msgstr "Spurdrift*"
+
+#: Data/Dialogs/dlgVario.xml:76 Data/Dialogs/dlgVario_L.xml:77
+msgid ""
+"Comparison method used to detect cruise states for switching to lift tones "
+"during cruise.\n"
+"[NONE]: LIFT tone disabled in cruise\n"
+"[RELATIVE ZERO] LIFT tone when relative vario greater than zero.\n"
+"[GROSS ZERO] LIFT tone when glider is climbing.\n"
+"[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.\n"
+"[NET MC/2] LIFT tone when airmass velocity greater than half MC."
+msgstr ""
+"Wahl der Methode zur Entscheidung, ob während des Vorflugs auf Steigen-Töne "
+"geschaltet wird.\n"
+"[KEIN]: Steigen-Töne sind im Vorflug ausgeschaltet.\n"
+"[RELATIV NULL] Steigen-Töne, sobald das relativ Vario größer Null zeigt.\n"
+"[BRUTTO NULL] Steigen-Töne, wenn der Segler steigt.\n"
+"[RELATIV MC/2] Steigen-Töne, sobald das relativ Vario mehr als die Hälfte "
+"der MacCready Einstellung zeigt.\n"
+"[NET MC/2] Steigen-Töne, wenn das Steigen der Luftmasse größer als die "
+"Hälfte des MacCready ist."
 
 #: Data/Dialogs/dlgFontEdit.xml:20
 msgid "my sample"
 msgstr "mein Muster"
 
-#: Data/Dialogs/dlgTaskProperties.xml:40
-#: Data/Dialogs/dlgTaskProperties_L.xml:40
+#: Data/Dialogs/dlgTaskProperties.xml:38
+#: Data/Dialogs/dlgTaskProperties_L.xml:38
 msgid ""
 "If enabled, this option requires the minimum height above ground for finish "
 "to be greater than 1000m below the start height."
@@ -5857,12 +5917,12 @@ msgstr ""
 "oder blau wenn im Sektor gewendet werden kann und die geschätzte "
 "Ankunftszeit mehr als 5 Minuten nach der AAT Zeit liegt."
 
-#: Data/Dialogs/dlgConfiguration.xml:505
-#: Data/Dialogs/dlgConfiguration_L.xml:504
+#: Data/Dialogs/dlgConfiguration.xml:473
+#: Data/Dialogs/dlgConfiguration_L.xml:472
 msgid "Whether to show the gross climb rate."
 msgstr "Ob das Bruttosteigen angezeigt werden soll."
 
-#: Data/Dialogs/dlgVario.xml:341 Data/Dialogs/dlgVario_L.xml:341
+#: Data/Dialogs/dlgVario.xml:332 Data/Dialogs/dlgVario_L.xml:333
 msgid "No mode reports"
 msgstr "Keine Modus Meldungen"
 
@@ -5870,7 +5930,7 @@ msgstr "Keine Modus Meldungen"
 msgid "Colours"
 msgstr "Farben"
 
-#: Data/Dialogs/dlgVario.xml:379 Data/Dialogs/dlgVario_L.xml:379
+#: Data/Dialogs/dlgVario.xml:370 Data/Dialogs/dlgVario_L.xml:371
 msgid "Gear off delay"
 msgstr "Verzögerung beim Ausfahren des Fahrwerks"
 
@@ -5882,8 +5942,8 @@ msgstr "Verbleibende Distanz"
 msgid "Radius of the OZ cylinder."
 msgstr "Radius des OZ Zylinders."
 
-#: Data/Dialogs/dlgConfiguration.xml:374
-#: Data/Dialogs/dlgConfiguration_L.xml:373
+#: Data/Dialogs/dlgConfiguration.xml:342
+#: Data/Dialogs/dlgConfiguration_L.xml:341
 msgid ""
 "Units used for horizontal distances e.g. range to waypoint, distance to go."
 msgstr ""
@@ -5899,8 +5959,8 @@ msgstr ""
 "benutzt werden um den Ton der Geschwindigkeitsempfehlung zu demonstrieren "
 "(nicht im Steigmodus)."
 
-#: Data/Dialogs/dlgConfiguration.xml:258
-#: Data/Dialogs/dlgConfiguration_L.xml:259
+#: Data/Dialogs/dlgConfiguration.xml:226
+#: Data/Dialogs/dlgConfiguration_L.xml:227
 msgid ""
 "Average efficiency is always calculated in REAL TIME. Here you can decide on "
 "how many seconds of flight this calculation must be done. The real distance "
@@ -5924,8 +5984,8 @@ msgstr "Beschleunigungsmesser"
 msgid "Range"
 msgstr "Reichweite"
 
-#: Data/Dialogs/dlgConfiguration.xml:157
-#: Data/Dialogs/dlgConfiguration_L.xml:157
+#: Data/Dialogs/dlgConfiguration.xml:136
+#: Data/Dialogs/dlgConfiguration_L.xml:136
 msgid ""
 "Defines the location of the glider drawn on the screen in percent from the "
 "bottom."
@@ -5944,13 +6004,13 @@ msgid "Enable warnings for final glide through terrain."
 msgstr ""
 "Aktiviert die Warnung für den Fall der Endanflug würde das Gelände schneiden."
 
-#: Data/Dialogs/dlgConfiguration.xml:383
-#: Data/Dialogs/dlgConfiguration_L.xml:382
+#: Data/Dialogs/dlgConfiguration.xml:351
+#: Data/Dialogs/dlgConfiguration_L.xml:350
 msgid "Units used for altitude and heights."
 msgstr "Einheiten für die Flughöhe und Höhen."
 
-#: Data/Dialogs/dlgConfiguration.xml:171
-#: Data/Dialogs/dlgConfiguration_L.xml:171
+#: Data/Dialogs/dlgConfiguration.xml:150
+#: Data/Dialogs/dlgConfiguration_L.xml:150
 msgid "Two styles are available.  Normal, or with a white outline."
 msgstr "Zwei Arten stehen zur Auswahl. Normal, oder mit weißer Kontur."
 
@@ -5971,17 +6031,17 @@ msgstr "Topologie Bezeichnungen"
 msgid "Insert in task"
 msgstr "In Aufgabe einfügen"
 
-#: Data/Dialogs/dlgConfiguration.xml:78 Data/Dialogs/dlgConfiguration_L.xml:78
+#: Data/Dialogs/dlgConfiguration.xml:74 Data/Dialogs/dlgConfiguration_L.xml:74
 msgid "Warning time*"
 msgstr "Vorwarnzeit*"
 
-#: Data/Dialogs/dlgConfiguration.xml:398
-#: Data/Dialogs/dlgConfiguration_L.xml:397
+#: Data/Dialogs/dlgConfiguration.xml:366
+#: Data/Dialogs/dlgConfiguration_L.xml:365
 msgid "Units used for latitude and longitude."
 msgstr "Einheiten für Breitengrad und Längengrad."
 
-#: Data/Dialogs/dlgConfiguration.xml:136
-#: Data/Dialogs/dlgConfiguration_L.xml:136
+#: Data/Dialogs/dlgConfiguration.xml:119
+#: Data/Dialogs/dlgConfiguration_L.xml:119
 msgid "Trail width*"
 msgstr "Spurbreite*"
 
@@ -5989,8 +6049,8 @@ msgstr "Spurbreite*"
 msgid "Browse"
 msgstr "Durchsuchen"
 
-#: Data/Dialogs/dlgConfiguration.xml:426
-#: Data/Dialogs/dlgConfiguration_L.xml:425
+#: Data/Dialogs/dlgConfiguration.xml:394
+#: Data/Dialogs/dlgConfiguration_L.xml:393
 msgid ""
 "The Input Events file defines the menu system and how XCSoar responds to "
 "button presses and events from external devices."
@@ -5998,13 +6058,13 @@ msgstr ""
 "Die Eingabeereignisdatei bestimmt das Menüsystem und wie XCSoar auf einen "
 "Knopfdruck oder einem Ereignis von einem externen Gerät reagiert."
 
-#: Data/Dialogs/dlgVario.xml:93 Data/Dialogs/dlgVario_L.xml:93
+#: Data/Dialogs/dlgVario.xml:84 Data/Dialogs/dlgVario_L.xml:85
 msgid "Time scale used for cruise speed command averager."
 msgstr ""
 "Zeitintervall für die Mittelung der empfohlenen Vorfluggeschwindigkeit."
 
-#: Data/Dialogs/dlgConfiguration.xml:520
-#: Data/Dialogs/dlgConfiguration_L.xml:519
+#: Data/Dialogs/dlgConfiguration.xml:488
+#: Data/Dialogs/dlgConfiguration_L.xml:487
 msgid ""
 "Setting this to \"ON\" will automatically close the FLARM dialog if there is "
 "no traffic. \"OFF\" will keep the dialog open even without current traffic."
@@ -6013,8 +6073,8 @@ msgstr ""
 "sobald kein Verkehr da ist. \"AUS\" belässt den Dialog offen, auch wenn kein "
 "Verkehr mehr da ist."
 
-#: Data/Dialogs/dlgConfiguration.xml:431
-#: Data/Dialogs/dlgConfiguration_L.xml:430
+#: Data/Dialogs/dlgConfiguration.xml:399
+#: Data/Dialogs/dlgConfiguration_L.xml:398
 msgid ""
 "The language file defines translations for XCSoar text in English to other "
 "languages.  If this field is left blank, then XCSoar uses English."
@@ -6022,8 +6082,8 @@ msgstr ""
 "Die Sprachdatei bestimmt die Übersetzung der Englischen XCSoar Texte in "
 "andere Sprachen. Bleibt dieses Feld leer benutzt XCSoar Englisch."
 
-#: Data/Dialogs/dlgConfiguration.xml:579
-#: Data/Dialogs/dlgConfiguration_L.xml:578
+#: Data/Dialogs/dlgConfiguration.xml:542
+#: Data/Dialogs/dlgConfiguration_L.xml:541
 msgid "Inverse infoboxes*"
 msgstr "Invertierte Infobox*"
 
@@ -6031,27 +6091,8 @@ msgstr "Invertierte Infobox*"
 msgid "Near"
 msgstr "Nahe"
 
-#: Data/Dialogs/dlgConfiguration.xml:92 Data/Dialogs/dlgConfiguration_L.xml:92
-msgid ""
-"Determines how labels are displayed with each waypoint: [Names] The full "
-"name of each waypoint is displayed. [Numbers] The waypoint number of each "
-"waypoint is displayed. [None] No names are displayed with the waypoints. "
-"[Names in task] Names are only displayed for waypoints that are in the "
-"active task as well as the home airfield. [First 3] The first 3 letters of "
-"the waypoint name are displayed. [First 5] The first 5 letters of the "
-"waypoint name are displayed. [First word] The first word of the waypoint "
-"name is displayed."
-msgstr ""
-"Bestimmt wie die Beschriftung auf der Karte dargestellt wird: [Namen] Der "
-"volle Namen von jedem Wegpunkt wird angezeigt. [Nummern] Es wird die Nummer "
-"des Wegpunktes gezeigt. [None] Die Beschriftung der Wegpunkte wird "
-"weggelassen. [Namen aus Aufgabe] Nur die Wegpunkte aus der Aufgabe und der "
-"Heimatplatz werden angezeigt. [Ersten 3] Die ersten drei Buchstaben des "
-"Wegpunkts werden angezeigt. [Ersten 5] Entsprechend mit fünf Buchstaben. "
-"[Erstes Wort] Nur das erste Wort aus dem Wegpunktname wird angezeigt."
-
-#: Data/Dialogs/dlgConfiguration.xml:616
-#: Data/Dialogs/dlgConfiguration_L.xml:615
+#: Data/Dialogs/dlgConfiguration.xml:577
+#: Data/Dialogs/dlgConfiguration_L.xml:576
 msgid "Short file name"
 msgstr "Datei Kurzname"
 
@@ -6059,7 +6100,7 @@ msgstr "Datei Kurzname"
 msgid "Flap landing"
 msgstr "Wölbklappe in Landestellung"
 
-#: Data/Dialogs/dlgVario.xml:303 Data/Dialogs/dlgVario_L.xml:303
+#: Data/Dialogs/dlgVario.xml:294 Data/Dialogs/dlgVario_L.xml:295
 msgid "Vario muting"
 msgstr "Vario Stummschaltung"
 
@@ -6071,26 +6112,26 @@ msgstr "Luftgeschwindigkeit"
 msgid "Gauges"
 msgstr "Anzeigen"
 
-#: Data/Dialogs/dlgConfiguration.xml:393
-#: Data/Dialogs/dlgConfiguration_L.xml:392
+#: Data/Dialogs/dlgConfiguration.xml:361
+#: Data/Dialogs/dlgConfiguration_L.xml:360
 msgid "Task Speed"
 msgstr "Überland-Geschwindigkeit"
 
-#: Data/Dialogs/dlgVario.xml:157 Data/Dialogs/dlgVario.xml:179
-#: Data/Dialogs/dlgVario.xml:201 Data/Dialogs/dlgVario.xml:223
-#: Data/Dialogs/dlgVario.xml:245 Data/Dialogs/dlgVario.xml:267
-#: Data/Dialogs/dlgVario_L.xml:157 Data/Dialogs/dlgVario_L.xml:179
-#: Data/Dialogs/dlgVario_L.xml:201 Data/Dialogs/dlgVario_L.xml:223
-#: Data/Dialogs/dlgVario_L.xml:245 Data/Dialogs/dlgVario_L.xml:267
+#: Data/Dialogs/dlgVario.xml:148 Data/Dialogs/dlgVario.xml:170
+#: Data/Dialogs/dlgVario.xml:192 Data/Dialogs/dlgVario.xml:214
+#: Data/Dialogs/dlgVario.xml:236 Data/Dialogs/dlgVario.xml:258
+#: Data/Dialogs/dlgVario_L.xml:149 Data/Dialogs/dlgVario_L.xml:171
+#: Data/Dialogs/dlgVario_L.xml:193 Data/Dialogs/dlgVario_L.xml:215
+#: Data/Dialogs/dlgVario_L.xml:237 Data/Dialogs/dlgVario_L.xml:259
 msgid "Pitch Scale"
 msgstr "Änderung"
 
-#: Data/Dialogs/dlgConfiguration.xml:146
-#: Data/Dialogs/dlgConfiguration_L.xml:146
+#: Data/Dialogs/dlgConfiguration.xml:129
+#: Data/Dialogs/dlgConfiguration_L.xml:129
 msgid "FLARM map"
 msgstr "FLARM Karte"
 
-#: Data/Dialogs/dlgVario.xml:437 Data/Dialogs/dlgVario_L.xml:437
+#: Data/Dialogs/dlgVario.xml:428 Data/Dialogs/dlgVario_L.xml:429
 msgid "Vega"
 msgstr "Vega"
 
@@ -6099,7 +6140,7 @@ msgstr "Vega"
 msgid "Target"
 msgstr "Ziel"
 
-#: Data/Dialogs/dlgConfiguration.xml:70 Data/Dialogs/dlgConfiguration_L.xml:70
+#: Data/Dialogs/dlgConfiguration.xml:66 Data/Dialogs/dlgConfiguration_L.xml:66
 msgid ""
 "For auto airspace mode, this is the altitude above/below which airspace is "
 "included."
@@ -6111,8 +6152,8 @@ msgstr ""
 msgid "Waypoint Distance"
 msgstr "Wegpunkt Distanz"
 
-#: Data/Dialogs/dlgConfiguration.xml:468
-#: Data/Dialogs/dlgConfiguration_L.xml:467
+#: Data/Dialogs/dlgConfiguration.xml:436
+#: Data/Dialogs/dlgConfiguration_L.xml:435
 msgid ""
 "Defines the alignment of the status message box, either centered or in the "
 "top left corner."
@@ -6120,7 +6161,7 @@ msgstr ""
 "Legt die Ausrichtung der Statusmeldung fest, entweder zentriert, oder "
 "linksoben in der Ecke."
 
-#: Data/Dialogs/dlgVario.xml:365 Data/Dialogs/dlgVario_L.xml:365
+#: Data/Dialogs/dlgVario.xml:356 Data/Dialogs/dlgVario_L.xml:357
 msgid "Interval, Caution"
 msgstr "Intervall, Vorsicht"
 
@@ -6129,8 +6170,8 @@ msgstr "Intervall, Vorsicht"
 msgid "Edit text"
 msgstr "Text bearbeiten"
 
-#: Data/Dialogs/dlgConfiguration.xml:490
-#: Data/Dialogs/dlgConfiguration_L.xml:489
+#: Data/Dialogs/dlgConfiguration.xml:458
+#: Data/Dialogs/dlgConfiguration_L.xml:457
 msgid "Whether to show the MacCready setting."
 msgstr "Ob der MacCready-Wert angezeigt werden soll."
 
@@ -6138,19 +6179,19 @@ msgstr "Ob der MacCready-Wert angezeigt werden soll."
 msgid "Enable"
 msgstr "Aktivieren"
 
-#: Data/Dialogs/dlgConfiguration.xml:598
-#: Data/Dialogs/dlgConfiguration_L.xml:597
+#: Data/Dialogs/dlgConfiguration.xml:559
+#: Data/Dialogs/dlgConfiguration_L.xml:558
 msgid "This is the time interval between logged points when not circling. "
 msgstr ""
 "Das Zeitintervall zwischen zwei Punkten im Logschrieb, wenn nicht im "
 "Steigmodus. "
 
-#: Data/Dialogs/dlgVario.xml:135 Data/Dialogs/dlgVario_L.xml:135
+#: Data/Dialogs/dlgVario.xml:126 Data/Dialogs/dlgVario_L.xml:127
 msgid "Cruise deadband type"
 msgstr "Vorflug Totbandtyp"
 
-#: Data/Dialogs/dlgConfiguration.xml:417
-#: Data/Dialogs/dlgConfiguration_L.xml:416
+#: Data/Dialogs/dlgConfiguration.xml:385
+#: Data/Dialogs/dlgConfiguration_L.xml:384
 msgid ""
 "This determines whether the configuration settings dialog is accessible "
 "during flight."
@@ -6162,33 +6203,16 @@ msgstr ""
 msgid "Previous"
 msgstr "Vorheriger"
 
-#: Data/Dialogs/dlgConfiguration.xml:107 Data/Dialogs/dlgConfiguration.xml:115
-#: Data/Dialogs/dlgConfiguration_L.xml:107
-#: Data/Dialogs/dlgConfiguration_L.xml:115
-msgid ""
-"Determines how the screen is rotated with the glider:   [North up] The "
-"moving map display will always be orientated north to south and the glider "
-"icon will be rotated to show its course.   [Track up] The moving map display "
-"will be rotated so the glider's track is oriented up.   [Target up] The "
-"moving map display will be rotated so the navigation target is oriented up."
-msgstr ""
-"Bestimmt, wie die Anzeige zum Segler ausgerichtet ist: [Norden oben] Die "
-"Karte ist immer nach Norden ausgerichtet und das Selgersymbol dreht sich "
-"entsprechend dem Kurs. [Kurs nach oben] Die Kartendarstellung dreht sich "
-"unter dem Seglersymbol, sodass der Kurs immer nach oben gerichtet ist. [Ziel "
-"nach oben]  zeigt die Karte so, dass das nächste Ziel nach oben gerichtet "
-"ist."
-
 #: Data/Dialogs/dlgVario.xml:16 Data/Dialogs/dlgVario_L.xml:17
 msgid "Whether the Pitot port is connected."
 msgstr "Ob der Pitot-Anschluss verbunden ist."
 
-#: Data/Dialogs/dlgVario.xml:395 Data/Dialogs/dlgVario_L.xml:395
+#: Data/Dialogs/dlgVario.xml:386 Data/Dialogs/dlgVario_L.xml:387
 msgid "Battery empty delay"
 msgstr "Batterie leer Verzögerung"
 
-#: Data/Dialogs/dlgConfiguration.xml:189
-#: Data/Dialogs/dlgConfiguration_L.xml:189
+#: Data/Dialogs/dlgConfiguration.xml:166
+#: Data/Dialogs/dlgConfiguration_L.xml:166
 msgid "Topology display"
 msgstr "Topologie"
 
@@ -6196,37 +6220,23 @@ msgstr "Topologie"
 msgid "File type"
 msgstr "Dateityp"
 
-#: Data/Dialogs/dlgConfiguration.xml:223
-#: Data/Dialogs/dlgConfiguration_L.xml:223 Data/Dialogs/dlgWindSettings.xml:12
-msgid ""
-"This allows switching on or off the automatic wind algorithm.  When the "
-"algorithm is switched off, the pilot is responsible for setting the wind "
-"estimate. [Circling] Requires only a GPS source [ZigZag] requires an "
-"intelligent vario with airspeed output. [Both] Use ZigZag and circling."
-msgstr ""
-"Hiermit wird die automatische Windberechnung ein- und ausgeschaltet. Wenn "
-"ausgeschaltet, muss der Pilot selber für die richtige Windeinstellung Sorge "
-"tragen. [Beim Kreisen] benötigt nur eine GPS Quelle, [Zick-Zack] benötigt "
-"zusätzlich ein Geschwindigkeitssensor. [Beides] lässt beide "
-"Berechnungsmethoden zu."
-
-#: Data/Dialogs/dlgConfiguration.xml:65 Data/Dialogs/dlgConfiguration_L.xml:65
+#: Data/Dialogs/dlgConfiguration.xml:61 Data/Dialogs/dlgConfiguration_L.xml:61
 msgid "Clip altitude"
 msgstr "Max. Höhe"
 
-#: Data/Dialogs/dlgConfiguration.xml:552
-#: Data/Dialogs/dlgConfiguration_L.xml:551
+#: Data/Dialogs/dlgConfiguration.xml:520
+#: Data/Dialogs/dlgConfiguration_L.xml:519
 #: Data/Dialogs/dlgTaskProperties.xml:28
 #: Data/Dialogs/dlgTaskProperties_L.xml:28
 msgid "Start height ref"
 msgstr "Abflughöhe bezogen auf"
 
-#: Data/Dialogs/dlgConfiguration.xml:326
-#: Data/Dialogs/dlgConfiguration_L.xml:326
+#: Data/Dialogs/dlgConfiguration.xml:294
+#: Data/Dialogs/dlgConfiguration_L.xml:294
 msgid "Altair Pro users should set this to Port 3"
 msgstr "Altair Pro Nutzer müssen dies auf Anschluss 3 stellen."
 
-#: Data/Dialogs/dlgConfiguration.xml:86 Data/Dialogs/dlgConfiguration_L.xml:86
+#: Data/Dialogs/dlgConfiguration.xml:82 Data/Dialogs/dlgConfiguration_L.xml:82
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color"
 msgstr ""
@@ -6256,7 +6266,7 @@ msgstr "Zentrierhilfe"
 msgid "Static port"
 msgstr "Statischer Port"
 
-#: Data/Dialogs/dlgVario.xml:135 Data/Dialogs/dlgVario_L.xml:135
+#: Data/Dialogs/dlgVario.xml:126 Data/Dialogs/dlgVario_L.xml:127
 msgid "Type of dead band used in cruise mode."
 msgstr "Type des Tonausblendung für den Vorflugmodus."
 
@@ -6264,47 +6274,18 @@ msgstr "Type des Tonausblendung für den Vorflugmodus."
 msgid "Ack Day"
 msgstr "Best. Tag"
 
-#: Data/Dialogs/dlgWindSettings.xml:19
+#: Data/Dialogs/dlgWindSettings.xml:16
 msgid "Trail drift"
 msgstr "Spurdrift"
 
-#: Data/Dialogs/dlgConfiguration.xml:426
-#: Data/Dialogs/dlgConfiguration_L.xml:425
+#: Data/Dialogs/dlgConfiguration.xml:394
+#: Data/Dialogs/dlgConfiguration_L.xml:393
 msgid "Events*"
 msgstr "Ereignisse"
 
-#: Data/Dialogs/dlgConfiguration.xml:146
-msgid ""
-"This enables the display of FLARM traffic on the map window. [OFF] FLARM map "
-"display disabled [ON/Fixed] FLARM map display enabled with fixed scale. [ON/"
-"Scaled] FLARM map display enabled and auto scaled. When auto scaling is "
-"enabled, the FLARM targets on the map display are scaled so that when the "
-"map is at large zoom levels, targets are still visible."
-msgstr ""
-"Hiermit wird die Anzeige des FLARM-Flugverkehrs auf der Karte eingeschaltet. "
-"[AUS] die FLARM Anzeige ist ausgeschaltet. [EIN/Fix] die FLARM Anzeige ist "
-"mit fixer Skalierung eingeschaltet. [EIN/Skaliert] die FLARM Anzeige wird "
-"automatisch skaliert, d.h. der Flugverkehr wird auch bei vergrößerter Karte "
-"noch sichtbar dargestellt."
-
-#: Data/Dialogs/dlgVario.xml:117 Data/Dialogs/dlgVario_L.xml:117
+#: Data/Dialogs/dlgVario.xml:108 Data/Dialogs/dlgVario_L.xml:109
 msgid "Adjustment to base pitch scale of tones in all modes."
 msgstr "Einstellung der Grund-Tonlage für alle Modi."
-
-#: Data/Dialogs/dlgConfiguration.xml:57 Data/Dialogs/dlgConfiguration_L.xml:57
-msgid ""
-"Controls filtering of airspace for display and warnings.  The airspace "
-"filter button also allows filtering of display and warnings independently "
-"for each airspace class. [All on] All is displayed. [Clip] Only airspace "
-"below the clip altitude. [Auto] All within a margin of the glider. [All "
-"below] All airspace below the glider."
-msgstr ""
-"Setzt den Filter für Lufträume die angezeigt, bzw. vor denen gewarnt wird. "
-"Zusätzlich kann mit der Filtertabelle jede Luftraumklasse unabhängig für "
-"Anzeige und Warnung ausgewählt werden. [Alles an] Alles wird gezeigt. [bis "
-"max. Höhe] Es werden nur Lufträume unter dieser Höhe gezeigt. [Auto] Alles "
-"in einem Höhenband um den Segler. [Alles unter mir] Alle Lufträume unter dem "
-"Segler."
 
 #: Data/Dialogs/dlgTaskEdit.xml:13 Data/Dialogs/dlgTaskEdit_L.xml:9
 msgid "Properties"
@@ -6326,8 +6307,8 @@ msgstr ""
 msgid "Start radial"
 msgstr "Abflug Radial"
 
-#: Data/Dialogs/dlgConfiguration.xml:505
-#: Data/Dialogs/dlgConfiguration_L.xml:504
+#: Data/Dialogs/dlgConfiguration.xml:473
+#: Data/Dialogs/dlgConfiguration_L.xml:472
 msgid "Show gross*"
 msgstr "Zeige Brutto*"
 
@@ -6344,8 +6325,8 @@ msgstr "Zeige Brutto*"
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: Data/Dialogs/dlgConfiguration.xml:285
-#: Data/Dialogs/dlgConfiguration_L.xml:285
+#: Data/Dialogs/dlgConfiguration.xml:253
+#: Data/Dialogs/dlgConfiguration_L.xml:253
 msgid ""
 "The STF risk factor reduces the MacCready setting used to calculate speed to "
 "fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for "
@@ -6356,13 +6337,12 @@ msgstr ""
 "Auf 0,0 gesetzt gibt es kein Ausgleich, 1,0 berechnet einen Ausgleich linear "
 "zur Höhe."
 
-#: Data/Dialogs/dlgConfiguration.xml:103
-#: Data/Dialogs/dlgConfiguration_L.xml:103
+#: Data/Dialogs/dlgConfiguration.xml:92 Data/Dialogs/dlgConfiguration_L.xml:92
 msgid "Trail length"
 msgstr "Spurlänge"
 
-#: Data/Dialogs/dlgConfiguration.xml:510
-#: Data/Dialogs/dlgConfiguration_L.xml:509
+#: Data/Dialogs/dlgConfiguration.xml:478
+#: Data/Dialogs/dlgConfiguration_L.xml:477
 msgid ""
 "If true, the vario gauge will display a hollow averager needle.  During "
 "cruise, this needle displays the average netto value.  During circling, this "
@@ -6376,8 +6356,8 @@ msgstr ""
 msgid "Map file"
 msgstr "Landkarte"
 
-#: Data/Dialogs/dlgConfiguration.xml:285
-#: Data/Dialogs/dlgConfiguration_L.xml:285
+#: Data/Dialogs/dlgConfiguration.xml:253
+#: Data/Dialogs/dlgConfiguration_L.xml:253
 msgid "STF risk factor*"
 msgstr "STF Risiko Faktor*"
 
@@ -6389,7 +6369,7 @@ msgstr "A+"
 msgid "QNH"
 msgstr "QNH"
 
-#: Data/Dialogs/dlgVario.xml:79 Data/Dialogs/dlgVario_L.xml:80
+#: Data/Dialogs/dlgVario.xml:76 Data/Dialogs/dlgVario_L.xml:77
 msgid "Cruise lift trigger"
 msgstr "Steigen Umschaltauslösung"
 
@@ -6401,12 +6381,12 @@ msgstr "Wegpunkt"
 msgid "Repeat"
 msgstr "Wiederholen"
 
-#: Data/Dialogs/dlgVario.xml:113 Data/Dialogs/dlgVario_L.xml:113
+#: Data/Dialogs/dlgVario.xml:104 Data/Dialogs/dlgVario_L.xml:105
 msgid "Variometer low pass filter time constant in cruise mode."
 msgstr "Variometer Tiefpassfilter Zeitkonstante in Vorflugmodus."
 
-#: Data/Dialogs/dlgConfiguration.xml:388
-#: Data/Dialogs/dlgConfiguration_L.xml:387 Data/Dialogs/dlgVario.xml:32
+#: Data/Dialogs/dlgConfiguration.xml:356
+#: Data/Dialogs/dlgConfiguration_L.xml:355 Data/Dialogs/dlgVario.xml:32
 #: Data/Dialogs/dlgVario_L.xml:33
 msgid "Temperature"
 msgstr "Temperatur"
@@ -6415,8 +6395,8 @@ msgstr "Temperatur"
 msgid "ASI cal"
 msgstr "IAS Kalib."
 
-#: Data/Dialogs/dlgConfiguration.xml:357
-#: Data/Dialogs/dlgConfiguration_L.xml:356
+#: Data/Dialogs/dlgConfiguration.xml:325
+#: Data/Dialogs/dlgConfiguration_L.xml:324
 msgid "Use GPS time"
 msgstr "Benutze GPS-Zeit"
 
@@ -6424,12 +6404,12 @@ msgstr "Benutze GPS-Zeit"
 msgid "Flight time"
 msgstr "Flugzeit"
 
-#: Data/Dialogs/dlgVario.xml:289 Data/Dialogs/dlgVario_L.xml:289
+#: Data/Dialogs/dlgVario.xml:280 Data/Dialogs/dlgVario_L.xml:281
 msgid "Logger interval"
 msgstr "Logger interval"
 
-#: Data/Dialogs/dlgConfiguration.xml:254
-#: Data/Dialogs/dlgConfiguration_L.xml:254
+#: Data/Dialogs/dlgConfiguration.xml:222
+#: Data/Dialogs/dlgConfiguration_L.xml:222
 msgid ""
 "When Vega variometer is connected and this option is true, the positive flap "
 "setting switches the flight mode between circling and cruise."
@@ -6437,8 +6417,8 @@ msgstr ""
 "Wenn ein Vega Variometer angeschlossen und [Wölbklappe] gewählt ist, wird "
 "mit der Wölbklappe zwischen Kreis- und Vorflug umgeschaltet."
 
-#: Data/Dialogs/dlgConfiguration.xml:369
-#: Data/Dialogs/dlgConfiguration_L.xml:368
+#: Data/Dialogs/dlgConfiguration.xml:337
+#: Data/Dialogs/dlgConfiguration_L.xml:336
 msgid ""
 "Units used for airspeed and ground speed.  A separate unit is available for "
 "task speeds."
@@ -6469,18 +6449,18 @@ msgstr "Zahl: "
 msgid "Relocate"
 msgstr "Versetzen"
 
-#: Data/Dialogs/dlgConfiguration.xml:185
-#: Data/Dialogs/dlgConfiguration_L.xml:185
+#: Data/Dialogs/dlgConfiguration.xml:162
+#: Data/Dialogs/dlgConfiguration_L.xml:162
 msgid "Terrain display"
 msgstr "Gelände"
 
-#: Data/Dialogs/dlgConfiguration.xml:515
-#: Data/Dialogs/dlgConfiguration_L.xml:514
+#: Data/Dialogs/dlgConfiguration.xml:483
+#: Data/Dialogs/dlgConfiguration_L.xml:482
 msgid "FLARM radar"
 msgstr "FLARM Radar"
 
-#: Data/Dialogs/dlgConfiguration.xml:193
-#: Data/Dialogs/dlgConfiguration_L.xml:193
+#: Data/Dialogs/dlgConfiguration.xml:170
+#: Data/Dialogs/dlgConfiguration_L.xml:170
 msgid "Slope shading"
 msgstr "Hangschattierung"
 
@@ -6488,22 +6468,22 @@ msgstr "Hangschattierung"
 msgid "Start time"
 msgstr "Startzeit"
 
-#: Data/Dialogs/dlgConfiguration.xml:215
-#: Data/Dialogs/dlgConfiguration_L.xml:215
+#: Data/Dialogs/dlgConfiguration.xml:192
+#: Data/Dialogs/dlgConfiguration_L.xml:192
 msgid "Glide terrain line"
 msgstr "Gleitflugbereich als"
 
-#: Data/Dialogs/dlgConfiguration.xml:417
-#: Data/Dialogs/dlgConfiguration_L.xml:416
+#: Data/Dialogs/dlgConfiguration.xml:385
+#: Data/Dialogs/dlgConfiguration_L.xml:384
 msgid "Safety lock"
 msgstr "Sicherheitssperre"
 
-#: Data/Dialogs/dlgVario.xml:399 Data/Dialogs/dlgVario_L.xml:399
+#: Data/Dialogs/dlgVario.xml:390 Data/Dialogs/dlgVario_L.xml:391
 msgid "Interval, battery"
 msgstr "interval, Batterie"
 
-#: Data/Dialogs/dlgConfiguration.xml:171
-#: Data/Dialogs/dlgConfiguration_L.xml:171
+#: Data/Dialogs/dlgConfiguration.xml:150
+#: Data/Dialogs/dlgConfiguration_L.xml:150
 msgid "North arrow*"
 msgstr "Nordpfeil*"
 
@@ -6524,17 +6504,16 @@ msgstr "Gelände*"
 msgid "Move"
 msgstr "Verschieben"
 
-#: Data/Dialogs/dlgConfiguration.xml:525
-#: Data/Dialogs/dlgConfiguration_L.xml:524
+#: Data/Dialogs/dlgConfiguration.xml:493
+#: Data/Dialogs/dlgConfiguration_L.xml:492
 msgid "This enables the display of the ThermalAssistant gauge."
 msgstr "Aktiviert die Anzeige des Thermikassistenten."
 
-#: Data/Dialogs/dlgConfiguration.xml:86 Data/Dialogs/dlgConfiguration_L.xml:86
+#: Data/Dialogs/dlgConfiguration.xml:82 Data/Dialogs/dlgConfiguration_L.xml:82
 msgid "Use black outline*"
 msgstr "Benutze schwarze Kontur"
 
-#: Data/Dialogs/dlgConfiguration.xml:103
-#: Data/Dialogs/dlgConfiguration_L.xml:103
+#: Data/Dialogs/dlgConfiguration.xml:92 Data/Dialogs/dlgConfiguration_L.xml:92
 msgid ""
 "Determines whether and how long a snail trail is drawn behind the glider"
 msgstr ""
@@ -6545,11 +6524,11 @@ msgstr ""
 msgid "Lon"
 msgstr "Länge"
 
-#: Data/Dialogs/dlgVario.xml:369 Data/Dialogs/dlgVario_L.xml:369
+#: Data/Dialogs/dlgVario.xml:360 Data/Dialogs/dlgVario_L.xml:361
 msgid "Interval, Warning"
 msgstr "Intervall, Warnung"
 
-#: Data/Dialogs/dlgVario.xml:97 Data/Dialogs/dlgVario_L.xml:97
+#: Data/Dialogs/dlgVario.xml:88 Data/Dialogs/dlgVario_L.xml:89
 msgid "Mean volume level in circling modes."
 msgstr "Mittlere Lautstärke im Kreisflug."
 
@@ -6565,16 +6544,6 @@ msgstr ""
 "Wie sauber ist der Segler. Setze auf 100% für komplett sauber, niedrigere "
 "Eingaben sobald Mücken an den Flügeln kleben oder der Segler nass wird. 50% "
 "bedeutet dass der Segler mit doppelter Rate sinkt."
-
-#: Data/Dialogs/dlgConfiguration.xml:589
-#: Data/Dialogs/dlgConfiguration_L.xml:588
-msgid ""
-"Two styles for infobox borders are available: [Box]  Draws boxes around each "
-"infobox. [Tab]  Draws a tab at the top of the infobox across the title."
-msgstr ""
-"Zwei Arten der InfoBox Umrandung können gewählt werden: [Kasten] zeichnet "
-"eine Linie um jede InfoBox. [Tab] zeichnet nur einen Tabulator oberhalb der "
-"InfoBox über den Titel."
 
 #: Data/Dialogs/dlgTaskProperties.xml:13
 #: Data/Dialogs/dlgTaskProperties_L.xml:13 Data/Dialogs/dlgWeather.xml:10
@@ -6601,8 +6570,8 @@ msgstr "TE Sondenkalibrierung"
 msgid "Base"
 msgstr "Untergrenze"
 
-#: Data/Dialogs/dlgConfiguration.xml:265
-#: Data/Dialogs/dlgConfiguration_L.xml:265
+#: Data/Dialogs/dlgConfiguration.xml:233
+#: Data/Dialogs/dlgConfiguration_L.xml:233
 msgid ""
 "The height above terrain that the glider should arrive at for a safe landing."
 msgstr ""
@@ -6624,11 +6593,11 @@ msgid ""
 "dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
 
-#: Data/Dialogs/dlgVario.xml:375 Data/Dialogs/dlgVario_L.xml:375
+#: Data/Dialogs/dlgVario.xml:366 Data/Dialogs/dlgVario_L.xml:367
 msgid "Gear on delay"
 msgstr "Verzögerung beim Einfahren des Fahrwerks"
 
-#: Data/Dialogs/dlgConfiguration.xml:82 Data/Dialogs/dlgConfiguration_L.xml:82
+#: Data/Dialogs/dlgConfiguration.xml:78 Data/Dialogs/dlgConfiguration_L.xml:78
 msgid ""
 "This is the time period in which an acknowledged airspace warning will not "
 "be repeated."
@@ -6640,21 +6609,32 @@ msgstr ""
 msgid "Bearing:"
 msgstr "Peilung:"
 
-#: Data/Dialogs/dlgConfiguration.xml:621
-#: Data/Dialogs/dlgConfiguration_L.xml:620
+#: Data/Dialogs/dlgConfiguration.xml:582
+#: Data/Dialogs/dlgConfiguration_L.xml:581
 msgid "Auto logger*"
 msgstr "Auto Logger*"
+
+#: Data/Dialogs/dlgConfiguration.xml:552
+#: Data/Dialogs/dlgConfiguration_L.xml:551
+msgid ""
+"Two styles for infobox borders are available:\n"
+"[Box] Draws boxes around each infobox.\n"
+"[Tab] Draws a tab at the top of the infobox across the title."
+msgstr ""
+"Zwei Arten der InfoBox Umrandung können gewählt werden:\n"
+"[Kasten] zeichnet eine Linie um jede InfoBox.\n"
+"[Tab] zeichnet nur einen Tabulator oberhalb der InfoBox über den Titel."
 
 #: Data/Dialogs/dlgWayPointDetails.xml:31
 #: Data/Dialogs/dlgWayPointDetails_L.xml:31
 msgid "Set as new home"
 msgstr "Setze als neuer Heimatplatz"
 
-#: Data/Dialogs/dlgVario.xml:285 Data/Dialogs/dlgVario_L.xml:285
+#: Data/Dialogs/dlgVario.xml:276 Data/Dialogs/dlgVario_L.xml:277
 msgid "IGC logging"
 msgstr "IGC Logging"
 
-#: Data/Dialogs/dlgVario.xml:311 Data/Dialogs/dlgVario_L.xml:311
+#: Data/Dialogs/dlgVario.xml:302 Data/Dialogs/dlgVario_L.xml:303
 msgid "Speaker threshold"
 msgstr "Lautsprecher Schwellwert"
 
@@ -6670,7 +6650,7 @@ msgstr "FLARM Flugverkehr"
 msgid "Vario Demo"
 msgstr "Vario Demo"
 
-#: Data/Dialogs/dlgVario.xml:383 Data/Dialogs/dlgVario_L.xml:383
+#: Data/Dialogs/dlgVario.xml:374 Data/Dialogs/dlgVario_L.xml:375
 msgid "Interval, gear"
 msgstr "Intervall, Fahrwerk"
 
@@ -6700,12 +6680,12 @@ msgstr "V ach"
 msgid "Task Calculator"
 msgstr "Aufgaben-Rechner"
 
-#: Data/Dialogs/dlgVario.xml:105 Data/Dialogs/dlgVario_L.xml:105
+#: Data/Dialogs/dlgVario.xml:96 Data/Dialogs/dlgVario_L.xml:97
 msgid "Base frequency"
 msgstr "Basis Frequenz"
 
-#: Data/Dialogs/dlgConfiguration.xml:136
-#: Data/Dialogs/dlgConfiguration_L.xml:136
+#: Data/Dialogs/dlgConfiguration.xml:119
+#: Data/Dialogs/dlgConfiguration_L.xml:119
 msgid "Sets the width of the snail trail display."
 msgstr "Stellt die Breite der angezeigten Flugspur ein."
 
@@ -6713,12 +6693,12 @@ msgstr "Stellt die Breite der angezeigten Flugspur ein."
 msgid "Range:"
 msgstr "Reichweite:"
 
-#: Data/Dialogs/dlgVario.xml:113 Data/Dialogs/dlgVario_L.xml:113
+#: Data/Dialogs/dlgVario.xml:104 Data/Dialogs/dlgVario_L.xml:105
 msgid "Filter cruise"
 msgstr "Filter Reise/Gleiten"
 
-#: Data/Dialogs/dlgConfiguration.xml:378
-#: Data/Dialogs/dlgConfiguration_L.xml:377
+#: Data/Dialogs/dlgConfiguration.xml:346
+#: Data/Dialogs/dlgConfiguration_L.xml:345
 msgid "Units used for vertical speeds (variometer)"
 msgstr "Einheiten für vertikale Geschwindigkeiten (Variometer)."
 
@@ -6726,20 +6706,8 @@ msgstr "Einheiten für vertikale Geschwindigkeiten (Variometer)."
 msgid "Bold font"
 msgstr "Fette Schrift"
 
-#: Data/Dialogs/dlgConfiguration.xml:215
-#: Data/Dialogs/dlgConfiguration_L.xml:215
-msgid ""
-"This determines whether the the glide terrain range is calculated and drawn "
-"as a line on the map area: [OFF] Disables display [Line] Draws a dashed line "
-"at the glide range [Shade] Shades terrain outside glide range"
-msgstr ""
-"Bestimmt ob der Gleitflugbereich berechnet und dargetellt wird. [AUS] "
-"schaltet die Darstellung aus, [Grenzlinie] zeichnet eine gestrichelte Linie "
-"um den Bereich, [Schattiert] verdunkelt das Gelände außerhalb des "
-"Gleitflugbereichs."
-
-#: Data/Dialogs/dlgConfiguration.xml:198
-#: Data/Dialogs/dlgConfiguration_L.xml:198
+#: Data/Dialogs/dlgConfiguration.xml:175
+#: Data/Dialogs/dlgConfiguration_L.xml:175
 msgid ""
 "Defines the amount of phong shading in the terrain rendering.  Use large "
 "values to emphasise terrain slope, smaller values if flying in steep "
@@ -6772,23 +6740,23 @@ msgstr "Umbenennen"
 msgid "Info box values small"
 msgstr "infoBox Werte klein"
 
-#: Data/Dialogs/dlgVario.xml:430 Data/Dialogs/dlgVario_L.xml:430
+#: Data/Dialogs/dlgVario.xml:421 Data/Dialogs/dlgVario_L.xml:422
 msgid "V Flap"
 msgstr "V Wölbklappe"
 
-#: Data/Dialogs/dlgConfiguration.xml:451
-#: Data/Dialogs/dlgConfiguration_L.xml:450
+#: Data/Dialogs/dlgConfiguration.xml:419
+#: Data/Dialogs/dlgConfiguration_L.xml:418
 msgid ""
 "Determines how the user is prompted for text input (filename, teamcode etc.)"
 msgstr ""
 "Bestimmt, wie der Benutzer zur Texteingabe aufgefordert wird (Dateiname, "
 "Teamkode, usw.)."
 
-#: Data/Dialogs/dlgVario.xml:444 Data/Dialogs/dlgVario_L.xml:444
+#: Data/Dialogs/dlgVario.xml:435 Data/Dialogs/dlgVario_L.xml:436
 msgid "Needle gauge type"
 msgstr "Zeiger Anzeigetyp"
 
-#: Data/Dialogs/dlgVario.xml:415 Data/Dialogs/dlgVario_L.xml:415
+#: Data/Dialogs/dlgVario.xml:406 Data/Dialogs/dlgVario_L.xml:407
 msgid "Height terrain"
 msgstr "Geländehöhe"
 
@@ -6804,22 +6772,40 @@ msgstr ""
 "Angabe der Datei zur Wiedergabe. Es kann eine IGC Datei, oder ein Roh-NMEA "
 "Logschrieb sein. Ohne Angabe wird das Demo abgespielt."
 
-#: Data/Dialogs/dlgConfiguration.xml:157
-#: Data/Dialogs/dlgConfiguration_L.xml:157
+#: Data/Dialogs/dlgConfiguration.xml:129
+#: Data/Dialogs/dlgConfiguration_L.xml:129
+msgid ""
+"This enables the display of FLARM traffic on the map window.\n"
+"[OFF] FLARM map display disabled\n"
+"[ON/Fixed] FLARM map display enabled with fixed scale.\n"
+"[ON/Scaled] FLARM map display enabled and auto scaled.\n"
+"When auto scaling is enabled, the FLARM targets on the map display are "
+"scaled so that when the map is at large zoom levels, targets are still "
+"visible."
+msgstr ""
+"Hiermit wird die Anzeige des FLARM-Flugverkehrs auf der Karte "
+"eingeschaltet.\n"
+"[AUS] die FLARM Anzeige ist ausgeschaltet.\n"
+"[EIN/Fix] die FLARM Anzeige ist mit fixer Skalierung eingeschaltet.\n"
+"[EIN/Skaliert] die FLARM Anzeige wird automatisch skaliert, d.h. der "
+"Flugverkehr wird auch bei vergrößerter Karte noch sichtbar dargestellt."
+
+#: Data/Dialogs/dlgConfiguration.xml:136
+#: Data/Dialogs/dlgConfiguration_L.xml:136
 msgid "Glider position"
 msgstr "Flugzeug Position"
 
-#: Data/Dialogs/dlgConfiguration.xml:412
-#: Data/Dialogs/dlgConfiguration_L.xml:411
+#: Data/Dialogs/dlgConfiguration.xml:380
+#: Data/Dialogs/dlgConfiguration_L.xml:379
 msgid "Auto Blank"
 msgstr "Auto Blank"
 
-#: Data/Dialogs/dlgConfiguration.xml:70 Data/Dialogs/dlgConfiguration_L.xml:70
+#: Data/Dialogs/dlgConfiguration.xml:66 Data/Dialogs/dlgConfiguration_L.xml:66
 msgid "Margin"
 msgstr "Auto Höhenband"
 
-#: Data/Dialogs/dlgConfiguration.xml:388
-#: Data/Dialogs/dlgConfiguration_L.xml:387
+#: Data/Dialogs/dlgConfiguration.xml:356
+#: Data/Dialogs/dlgConfiguration_L.xml:355
 msgid "Units used for temperature."
 msgstr "Einheiten für die Temperatur."
 
@@ -6827,8 +6813,8 @@ msgstr "Einheiten für die Temperatur."
 msgid "Valid start"
 msgstr "Gültiger Abflug"
 
-#: Data/Dialogs/dlgConfiguration.xml:176
-#: Data/Dialogs/dlgConfiguration_L.xml:176
+#: Data/Dialogs/dlgConfiguration.xml:155
+#: Data/Dialogs/dlgConfiguration_L.xml:155
 msgid "Wind arrow*"
 msgstr "Windpfeil"
 
@@ -7234,19 +7220,6 @@ msgstr ""
 msgid "Landing"
 msgstr "Gelandet"
 
-#~ msgid "Shutdown, saving Profile/Profile..."
-#~ msgstr "Auschalten, sichere Profile/Profil..."
-
-#~ msgid ""
-#~ "Type of secondary device.             The secondary device may be used as "
-#~ "backup GPS data or other data e.g. from an intelligent "
-#~ "variometer.             Generic can be used for GPS sources including "
-#~ "FLARM."
-#~ msgstr ""
-#~ "Typ des zusätzlichen Geräts. Es kann ein Ersatz-GPS, oder für andere "
-#~ "Daten z.B. ein intelligentes Variometer sein. \"Generisch\" ist die "
-#~ "Einstellung für eine GPS Quelle, FLARM eingeschlossen."
-
 #~ msgid "RT"
 #~ msgstr "RT"
 
@@ -7415,129 +7388,6 @@ msgstr "Gelandet"
 
 #~ msgid "Clear Alternates"
 #~ msgstr "Lösche Alternativen"
-
-#~ msgid ""
-#~ "[Height GPS]\r\n"
-#~ "This is the height above mean sea level reported by the GPS.\r\n"
-#~ "Touchscreen/PC only: in simulation mode, this value is adjustable with "
-#~ "the up/down arrow keys and the right/left arrow keys also cause the "
-#~ "glider to turn."
-#~ msgstr ""
-#~ "[GPS Höhe]\r\n"
-#~ "Dies ist die vom GPS ermittelte Höhe über mittlerem Meeresspiegel. \r\n"
-#~ "Nur bei Touchscreen und PC: Dieser Wert kann im Simulationsmodus mit den "
-#~ "auf/ab Pfeiltasten verändert werden. Rechts/links dreht das Flugzeug."
-
-#~ msgid ""
-#~ "[Last Thermal Time]\r\n"
-#~ "Time spent circling in the last thermal."
-#~ msgstr ""
-#~ "[Zeit letzte Thermik]\r\n"
-#~ "Gesamtzeit, die in der letzten Thermik gekreist wurde."
-
-#~ msgid ""
-#~ "[Last Thermal Gain]\r\n"
-#~ "Total altitude gain/loss in the last thermal."
-#~ msgstr ""
-#~ "[Höhengewinn letzte Thermik]\r\n"
-#~ "Gesamter Höhengewinn in der letzten Thermik."
-
-#~ msgid ""
-#~ "[Last Thermal Average]\r\n"
-#~ "Total altitude gain/loss in the last thermal divided by the time spent "
-#~ "circling."
-#~ msgstr ""
-#~ "[Letztes mittleres Steigen]\r\n"
-#~ "Gesamte Höhenänderung in der letzten Thermik geteilt durch die Dauer des "
-#~ "Kreisens."
-
-#~ msgid ""
-#~ "[Wind Bearing]\r\n"
-#~ "Wind bearing estimated by XCSoar.  (Touchscreen/PC only) Manual "
-#~ "adjustment is possible by pressing the up/down cursor keys to adjust "
-#~ "bearing when the infobox is active."
-#~ msgstr ""
-#~ "[Windrichtung]\r\n"
-#~ "Von XCSoar geschätzte Windgeschwindigkeit. Nur Touchscreen und PC: Wenn "
-#~ "diese Infobox aktiv ist, kann mit den Pfeiltasten auf/ab die Windrichtung "
-#~ "eingegeben werden."
-
-#~ msgid ""
-#~ "[Wind Speed]\r\n"
-#~ "Wind speed estimated by XCSoar.  (Touchscreen/PC only) Manual adjustment "
-#~ "is possible by pressing the up/down cursor keys to adjust magnitude and "
-#~ "left/right cursor keys to adjust bearing when the infobox is active.  "
-#~ "Pressing the enter cursor key saves the wind value as the initial value "
-#~ "when XCSoar next starts."
-#~ msgstr ""
-#~ "[Windgeschwindigkeit]\r\n"
-#~ "Von XCSoar geschätzte Windgeschwindigkeit. Nur Touchscreen und PC: Wenn "
-#~ "diese Infobox aktiv ist, kann mit den Pfeiltasten auf/ab die Winstärke "
-#~ "und rechts/links die Windrichtung eingegeben werden. Drücken von Eingabe "
-#~ "sichert den eingestellten Wert als Ausgangswert für den nächsten Start "
-#~ "von XCSoar."
-
-#~ msgid ""
-#~ "[Vario]\r\n"
-#~ "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
-#~ "vario total energy vario value if connected to one."
-#~ msgstr ""
-#~ "[Vario]\r\n"
-#~ "Momentane Höhenänderung nach GPS oder dem energiekompensierten Vario, "
-#~ "wenn verfügbar."
-
-#~ msgid ""
-#~ "[Track]\r\n"
-#~ "Magnetic track reported by the GPS.  (Touchscreen/PC only) If this "
-#~ "infobox is active in simulation mode, pressing the up and down  arrows "
-#~ "adjusts the track."
-#~ msgstr ""
-#~ "[Kurs]\r\n"
-#~ "Kompasskurs nach GPS. Nur Touchscreen und PC: Wenn diese Infobox im "
-#~ "Simulationsmodus aktiv ist, kann mit den Pfeitasten auf/ab der Kurs "
-#~ "eingestellt werden."
-
-#~ msgid ""
-#~ "[Thermal Gain]\r\n"
-#~ "The altitude gained/lost in the current thermal."
-#~ msgstr ""
-#~ "[Bart gesamt]\r\n"
-#~ "Gesamte Höhenänderung im aktuellen Bart."
-
-#~ msgid ""
-#~ "[Thermal Average]\r\n"
-#~ "Altitude gained/lost in the current thermal, divided by time spent "
-#~ "thermaling."
-#~ msgstr ""
-#~ "[Bart integriert]\r\n"
-#~ "Höhenänderung im aktuellen Bart, geteilt durch die Kurbelzeit."
-
-#~ msgid ""
-#~ "[Terrain Elevation]\r\n"
-#~ "This is the elevation of the terrain above mean sea level, obtained from "
-#~ "the terrain file at the current GPS location."
-#~ msgstr ""
-#~ "[Geländehöhe]\r\n"
-#~ "Dies ist die Höhe des Geländes über mittlerem Meeresspiegel, entsprechend "
-#~ "der Geländedatei an der aktuellen GPS-Position."
-
-#~ msgid ""
-#~ "[Final Distance]\r\n"
-#~ "Distance to finish around remaining turn points."
-#~ msgstr ""
-#~ "[Endanflug Entfernung]\r\n"
-#~ "Distanz zum Ziel um verbleibende Wendepunkte."
-
-#~ msgid ""
-#~ "[Height AGL]\r\n"
-#~ "This is the navigation altitude minus the terrain height obtained from "
-#~ "the terrain file.  The value is coloured red when the glider is below the "
-#~ "terrain safety clearance height."
-#~ msgstr ""
-#~ "[Höhe AGL]\r\n"
-#~ "Dies ist die GPS Höhe abzüglich der Geländehöhe, ermittelt aus der "
-#~ "Geländedatei. Der Wert wird rot dargestellt, wenn sich das Flugzeug "
-#~ "unterhalb der Sicherheitshöhe befindet."
 
 #~ msgid "cruise"
 #~ msgstr "Vorflug"
@@ -7764,26 +7614,6 @@ msgstr "Gelandet"
 #~ msgstr "Automatische Einstellung der maximalen Lautstärke."
 
 #~ msgid ""
-#~ "Determines how the screen is rotated with the glider:   [North up] The "
-#~ "moving map display will always be orientated north to south and the "
-#~ "glider icon will be rotated to show its course.   [Track up] The moving "
-#~ "map display will be rotated so the glider's track is oriented up.   "
-#~ "[North up when circling] Track-up in cruise and north-up when circling.   "
-#~ "[Target up when circling] Track-up in cruise and the bearing to next "
-#~ "waypoint up when circling.   [North/track] North-up in cruise, glider "
-#~ "track-track up in circling   "
-#~ msgstr ""
-#~ "Bestimmt, wie die Anzeige zum Segler ausgerichtet ist: [Norden oben] Die "
-#~ "Karte ist immer nach Norden ausgerichtet und das Selgersymbol dreht sich "
-#~ "entsprechend dem Kurs. [Kurs nach oben] Die Kartendarstellung dreht sich "
-#~ "unter dem Seglersymbol, sodass der Kurs immer nach oben gerichtet ist. "
-#~ "[Norden oben, wenn kreisend] stellt auf Kurs-nach-oben im Vorflug und auf "
-#~ "Norden-oben im Kreisflug. [Ziel oben, wenn kreisend]  stellt auf Norden-"
-#~ "oben im Vorflug und richtet im Kreisflug das nächste Ziel nach oben aus. "
-#~ "[Norden im Vorflug/Kurs kreisend] stellt auf Norden-oben im Vorflug und "
-#~ "im Kreisflug auf die Kursrichtung.   "
-
-#~ msgid ""
 #~ "Set automatic backlight for this device. Max brightness and no timeout if "
 #~ "on external power, otherwise max brightneess and a 5 minutes timeout on "
 #~ "batteries. After timeout screen blanks to save energy."
@@ -7814,22 +7644,6 @@ msgstr "Gelandet"
 #~ msgid "North/track"
 #~ msgstr "Norden im Vorflug/Kurs kreisend"
 
-#~ msgid ""
-#~ "This option defines which auto MacCready algorithm is used. [Final glide] "
-#~ "adjusts Mc for fastest arrival.  For OLC sprint tasks, the MacCready is "
-#~ "adjusted in order to cover the greatest distance in the remaining time "
-#~ "and reach the finish height. [Average] sets Mc to the average climb rate "
-#~ "across all climbs. [Both] Uses average during task, then fastest arrival "
-#~ "when in final glide mode."
-#~ msgstr ""
-#~ "Dies wählt den Algorithmus zur automatischen MacCready Einstellung. "
-#~ "[Endanflug] berechnet den Mc Wert um am schnellsten ans Ziel zu gelangen. "
-#~ "Für OLC Sprintaufgaben wird der Mc so optimiert, dass in der gegebenen "
-#~ "Zeit die größte Strecke zurückgelegt, und die Zielhöhe erreicht wird. "
-#~ "[Mittelwert] setzt den Mc Wert anhand des über alle Steigen gemittelten "
-#~ "Steigwerts. [Beides] Nutzt den gemittelten Wert während der Aufgabe und "
-#~ "den schnellsten Wert für den Endanflug."
-
 #~ msgid "Set as Alternate 1"
 #~ msgstr "Als Alternative 1 setzen"
 
@@ -7844,26 +7658,6 @@ msgstr "Gelandet"
 #~ "Diese Einstellung legt fest wie mit Wegpunkten außerhalb des "
 #~ "Geländeumfangs umgegangen wird: Der Benutzer kann jedes mal gefragt "
 #~ "werden, oder die Punkte können immer aus- oder eingeschlossen werden."
-
-#~ msgid ""
-#~ "Determines how the screen is rotated with the glider: [North up] The "
-#~ "moving map display will always be orientated north to south and the "
-#~ "glider icon will be rotated to show its course. [Track up] The moving map "
-#~ "display will be rotated so the glider's track is oriented up. [North up "
-#~ "when circling] Track-up in cruise and north-up when circling. [Target up "
-#~ "when circling] Track-up in cruise and the bearing to next waypoint up "
-#~ "when circling. [North/track] North-up in cruise, glider track-track up in "
-#~ "circling"
-#~ msgstr ""
-#~ "Bestimmt, wie die Anzeige zum Segler ausgerichtet ist: [Norden oben] Die "
-#~ "Karte ist immer nach Norden ausgerichtet und das Selgersymbol dreht sich "
-#~ "entsprechend dem Kurs. [Kurs nach oben] Die Kartendarstellung dreht sich "
-#~ "unter dem Seglersymbol, sodass der Kurs immer nach oben gerichtet ist. "
-#~ "[Norden oben, wenn kreisend] stellt auf Kurs-nach-oben im Vorflug und auf "
-#~ "Norden-oben im Kreisflug. [Ziel oben, wenn kreisend] stellt auf Norden-"
-#~ "oben im Vorflug und richtet im Kreisflug das nächste Ziel nach oben aus. "
-#~ "[Norden im Vorflug/Kurs kreisend] stellt auf Norden-oben im Vorflug und "
-#~ "im Kreisflug auf die Kursrichtung."
 
 #~ msgid ""
 #~ "Auto-zoom changes the zoom level during flight so that the map zooms in "

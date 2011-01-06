@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-07 00:40+0100\n"
-"PO-Revision-Date: 2011-01-03 01:57+0000\n"
+"POT-Creation-Date: 2011-01-07 00:56+0100\n"
+"PO-Revision-Date: 2011-01-07 00:53+0100\n"
 "Last-Translator: Roman Stoklasa <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
@@ -2299,7 +2299,7 @@ msgstr "Znovu"
 #: Data/Dialogs/dlgTaskType.xml:4 Data/Dialogs/dlgTaskType_L.xml:4
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:8
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:8
-#: Data/Dialogs/dlgWindSettings.xml:24 Data/Input/default.xci:941
+#: Data/Dialogs/dlgWindSettings.xml:21 Data/Input/default.xci:941
 msgid "Cancel"
 msgstr "Zrušiť"
 
@@ -2395,8 +2395,8 @@ msgstr "OLC"
 
 #: src/Dialogs/dlgAnalysis.cpp:246 Data/Dialogs/dlgAirspaceSelect.xml:10
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:16
-#: Data/Dialogs/dlgConfiguration.xml:374
-#: Data/Dialogs/dlgConfiguration_L.xml:373
+#: Data/Dialogs/dlgConfiguration.xml:342
+#: Data/Dialogs/dlgConfiguration_L.xml:341
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:12
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:12 Data/Dialogs/dlgStatus.xml:16
 #: Data/Dialogs/dlgStatusAircraft.xml:11
@@ -2425,8 +2425,8 @@ msgstr "Čas"
 msgid "Speed"
 msgstr "Rýchlosť"
 
-#: src/Dialogs/dlgAnalysis.cpp:265 Data/Dialogs/dlgConfiguration.xml:74
-#: Data/Dialogs/dlgConfiguration_L.xml:74
+#: src/Dialogs/dlgAnalysis.cpp:265 Data/Dialogs/dlgConfiguration.xml:70
+#: Data/Dialogs/dlgConfiguration_L.xml:70
 msgid "Warnings"
 msgstr "Upozornenia"
 
@@ -2535,8 +2535,8 @@ msgstr "(prázdne)"
 msgid "Pilot name"
 msgstr "Meno pilota"
 
-#: src/Dialogs/dlgConfiguration.cpp:157 Data/Dialogs/dlgVario.xml:355
-#: Data/Dialogs/dlgVario_L.xml:355
+#: src/Dialogs/dlgConfiguration.cpp:157 Data/Dialogs/dlgVario.xml:346
+#: Data/Dialogs/dlgVario_L.xml:347
 msgid "Aircraft type"
 msgstr "Typ lietadla"
 
@@ -2626,8 +2626,8 @@ msgid "Full arrow"
 msgstr "Celá šípka"
 
 #: src/Dialogs/dlgConfiguration.cpp:847 src/Dialogs/dlgConfigInfoboxes.cpp:53
-#: src/Dialogs/dlgWindSettings.cpp:101 Data/Dialogs/dlgConfiguration.xml:574
-#: Data/Dialogs/dlgConfiguration_L.xml:573 Data/Dialogs/dlgVegaDemo.xml:14
+#: src/Dialogs/dlgWindSettings.cpp:101 Data/Dialogs/dlgConfiguration.xml:537
+#: Data/Dialogs/dlgConfiguration_L.xml:536 Data/Dialogs/dlgVegaDemo.xml:14
 #, no-c-format
 msgid "Circling"
 msgstr "V krúžení"
@@ -2909,8 +2909,8 @@ msgid "MSL"
 msgstr "MSL"
 
 #: src/Dialogs/dlgConfiguration.cpp:1348 Data/Dialogs/dlgBasicSettings.xml:28
-#: Data/Dialogs/dlgConfiguration.xml:383
-#: Data/Dialogs/dlgConfiguration_L.xml:382
+#: Data/Dialogs/dlgConfiguration.xml:351
+#: Data/Dialogs/dlgConfiguration_L.xml:350
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:13
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:13
 #: Data/Dialogs/dlgStartTask.xml:8 Data/Dialogs/dlgStatus.xml:12
@@ -2927,20 +2927,20 @@ msgstr "Zmeny konfigurácie uložené."
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr "Zmeny konfigurácie uložené. Reštartuj XCsoar pre ich aplikáciu."
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:54 Data/Dialogs/dlgConfiguration.xml:575
-#: Data/Dialogs/dlgConfiguration_L.xml:574
+#: src/Dialogs/dlgConfigInfoboxes.cpp:54 Data/Dialogs/dlgConfiguration.xml:538
+#: Data/Dialogs/dlgConfiguration_L.xml:537
 #, no-c-format
 msgid "Cruise"
 msgstr "Preskok"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:55 Data/Dialogs/dlgConfiguration.xml:576
-#: Data/Dialogs/dlgConfiguration_L.xml:575
+#: src/Dialogs/dlgConfigInfoboxes.cpp:55 Data/Dialogs/dlgConfiguration.xml:539
+#: Data/Dialogs/dlgConfiguration_L.xml:538
 #, no-c-format
 msgid "FinalGlide"
 msgstr "Doklz"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:56 Data/Dialogs/dlgConfiguration.xml:577
-#: Data/Dialogs/dlgConfiguration_L.xml:576
+#: src/Dialogs/dlgConfigInfoboxes.cpp:56 Data/Dialogs/dlgConfiguration.xml:540
+#: Data/Dialogs/dlgConfiguration_L.xml:539
 #, no-c-format
 msgid "Auxiliary"
 msgstr "Prídavné"
@@ -3486,9 +3486,9 @@ msgstr "Odobrať z úlohy"
 #: src/Dialogs/dlgWaypointEdit.cpp:53 src/Dialogs/dlgWaypointEdit.cpp:56
 #: Data/Dialogs/dlgAirspaceDetails.xml:8 Data/Dialogs/dlgAirspaceSelect.xml:6
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:8
-#: Data/Dialogs/dlgConfiguration.xml:322 Data/Dialogs/dlgConfiguration.xml:340
-#: Data/Dialogs/dlgConfiguration_L.xml:322
-#: Data/Dialogs/dlgConfiguration_L.xml:340
+#: Data/Dialogs/dlgConfiguration.xml:290 Data/Dialogs/dlgConfiguration.xml:308
+#: Data/Dialogs/dlgConfiguration_L.xml:290
+#: Data/Dialogs/dlgConfiguration_L.xml:308
 #: Data/Dialogs/dlgWayPointSelect.xml:4 Data/Dialogs/dlgWayPointSelect_L.xml:4
 msgid "Name"
 msgstr "Názov"
@@ -3532,15 +3532,15 @@ msgstr "Komunikácia s Volkslogger-om"
 msgid "Team"
 msgstr "Tím"
 
-#: Data/Dialogs/dlgVario.xml:101 Data/Dialogs/dlgVario_L.xml:101
+#: Data/Dialogs/dlgVario.xml:92 Data/Dialogs/dlgVario_L.xml:93
 msgid ""
 "Mean volume level in cruise modes.  If set to zero, scales with airspeed."
 msgstr ""
 "Priemerná úroveň hlasitosti v móde preskoku. Ak je nastavená na nulu, "
 "zväčšuje sa so zvyšujúcou sa rýchlosťou."
 
-#: Data/Dialogs/dlgConfiguration.xml:162
-#: Data/Dialogs/dlgConfiguration_L.xml:162
+#: Data/Dialogs/dlgConfiguration.xml:141
+#: Data/Dialogs/dlgConfiguration_L.xml:141
 msgid "Final glide bar"
 msgstr "Ukazovateľ doklzu"
 
@@ -3548,12 +3548,12 @@ msgstr "Ukazovateľ doklzu"
 msgid "Name: "
 msgstr "Názov: "
 
-#: Data/Dialogs/dlgConfiguration.xml:537
-#: Data/Dialogs/dlgConfiguration_L.xml:536
+#: Data/Dialogs/dlgConfiguration.xml:505
+#: Data/Dialogs/dlgConfiguration_L.xml:504
 msgid "Start max speed margin"
 msgstr "Tolerancia max. rýchlosti štartu"
 
-#: Data/Dialogs/dlgVario.xml:387 Data/Dialogs/dlgVario_L.xml:387
+#: Data/Dialogs/dlgVario.xml:378 Data/Dialogs/dlgVario_L.xml:379
 msgid "Radio com max delay"
 msgstr "Max. odmlka rádiokomunikácie"
 
@@ -3570,8 +3570,7 @@ msgstr ""
 msgid "TE mixing"
 msgstr "TE zmiešavač"
 
-#: Data/Dialogs/dlgConfiguration.xml:107
-#: Data/Dialogs/dlgConfiguration_L.xml:107
+#: Data/Dialogs/dlgConfiguration.xml:96 Data/Dialogs/dlgConfiguration_L.xml:96
 msgid "Cruise Orientation"
 msgstr "Orientácia preskoku"
 
@@ -3588,7 +3587,7 @@ msgstr "Dosiahnutá MacCready hodnota"
 msgid "Screen Brightness"
 msgstr "Jas Displeja"
 
-#: Data/Dialogs/dlgVario.xml:337 Data/Dialogs/dlgVario_L.xml:337
+#: Data/Dialogs/dlgVario.xml:328 Data/Dialogs/dlgVario_L.xml:329
 msgid "Disable circling"
 msgstr "Zakázať krúženie"
 
@@ -3606,8 +3605,8 @@ msgid ""
 msgstr ""
 "Povoliť hlasové upozornenie na výšku nad/pod doklzovou výškou počas doklzu."
 
-#: Data/Dialogs/dlgConfiguration.xml:302
-#: Data/Dialogs/dlgConfiguration_L.xml:302
+#: Data/Dialogs/dlgConfiguration.xml:270
+#: Data/Dialogs/dlgConfiguration_L.xml:270
 msgid "V rough air"
 msgstr "R. manévrovacia"
 
@@ -3619,8 +3618,8 @@ msgstr ""
 "Povolí výstup napätia +5V pre PDA a pod. na Vega konektore~X2. Ak je Vega "
 "pripojená k Altair-u, mala by byť táto voľba nastavená na \"NEPLATÍ\" (FALSE)"
 
-#: Data/Dialogs/dlgConfiguration.xml:525
-#: Data/Dialogs/dlgConfiguration_L.xml:524
+#: Data/Dialogs/dlgConfiguration.xml:493
+#: Data/Dialogs/dlgConfiguration_L.xml:492
 msgid "ThermalAssistant"
 msgstr "Pomocník v stupáku"
 
@@ -3632,13 +3631,13 @@ msgstr "TE port"
 msgid "Task Status"
 msgstr "Stav úlohy"
 
-#: Data/Dialogs/dlgConfiguration.xml:369
-#: Data/Dialogs/dlgConfiguration_L.xml:368
+#: Data/Dialogs/dlgConfiguration.xml:337
+#: Data/Dialogs/dlgConfiguration_L.xml:336
 msgid "Aircraft/wind speed"
 msgstr "Rýchlosť Lietadla/Vetra"
 
-#: Data/Dialogs/dlgConfiguration.xml:542
-#: Data/Dialogs/dlgConfiguration_L.xml:541
+#: Data/Dialogs/dlgConfiguration.xml:510
+#: Data/Dialogs/dlgConfiguration_L.xml:509
 #: Data/Dialogs/dlgTaskProperties.xml:23
 #: Data/Dialogs/dlgTaskProperties_L.xml:23
 msgid "Start max height"
@@ -3648,8 +3647,8 @@ msgstr "Maximálna výška štartu"
 msgid "Wind Settings"
 msgstr "Vietor Nastavenia"
 
-#: Data/Dialogs/dlgConfiguration.xml:166
-#: Data/Dialogs/dlgConfiguration_L.xml:166
+#: Data/Dialogs/dlgConfiguration.xml:145
+#: Data/Dialogs/dlgConfiguration_L.xml:145
 msgid "Landable fields"
 msgstr "Pristávacie plochy"
 
@@ -3666,8 +3665,8 @@ msgstr "Jas"
 msgid "Waypoint Info"
 msgstr "OtBod info"
 
-#: Data/Dialogs/dlgConfiguration.xml:441
-#: Data/Dialogs/dlgConfiguration_L.xml:440
+#: Data/Dialogs/dlgConfiguration.xml:409
+#: Data/Dialogs/dlgConfiguration_L.xml:408
 msgid "Menu timeout*"
 msgstr "Časový limit menu*"
 
@@ -3685,8 +3684,19 @@ msgstr "Nový"
 msgid "Waypoints 1"
 msgstr "Otočné body 1"
 
-#: Data/Dialogs/dlgConfiguration.xml:208
-#: Data/Dialogs/dlgConfiguration_L.xml:208
+#: Data/Dialogs/dlgConfiguration.xml:197
+#: Data/Dialogs/dlgConfiguration_L.xml:197 Data/Dialogs/dlgWindSettings.xml:12
+msgid ""
+"This allows switching on or off the automatic wind algorithm.  When the "
+"algorithm is switched off, the pilot is responsible for setting the wind "
+"estimate.\n"
+"[Circling] Requires only a GPS source\n"
+"[ZigZag] requires an intelligent vario with airspeed output.\n"
+"[Both] Use ZigZag and circling."
+msgstr ""
+
+#: Data/Dialogs/dlgConfiguration.xml:185
+#: Data/Dialogs/dlgConfiguration_L.xml:185
 msgid "Defines the color ramp used in terrain rendering."
 msgstr "Definuje farebný prechod použitý pri vykreslovaní terénu."
 
@@ -3694,12 +3704,25 @@ msgstr "Definuje farebný prechod použitý pri vykreslovaní terénu."
 msgid "Info box values"
 msgstr "Hodnoty info-okien"
 
+#: Data/Dialogs/dlgConfiguration.xml:520
+#: Data/Dialogs/dlgConfiguration_L.xml:519
+#: Data/Dialogs/dlgTaskProperties.xml:28
+#: Data/Dialogs/dlgTaskProperties_L.xml:28
+msgid ""
+"Reference used for start max height rule\n"
+"[MSL] Reference is altitude above mean sea level\n"
+"[AGL] Reference is the height above the start point"
+msgstr ""
+"Referencia pre pravidlo max výšky štartu.\n"
+"[MSL] Referencia znamená výšku nad strednou morskou hladinou;\n"
+"[AGL] Referencia znamená výšku nad štartovým bodom (zem)."
+
 #: Data/Dialogs/dlgWeather.xml:3 Data/Dialogs/dlgWeather_L.xml:3
 msgid "Weather Forecast"
 msgstr "Predpoveď počasia"
 
-#: Data/Dialogs/dlgConfiguration.xml:312
-#: Data/Dialogs/dlgConfiguration_L.xml:312
+#: Data/Dialogs/dlgConfiguration.xml:280
+#: Data/Dialogs/dlgConfiguration_L.xml:280
 msgid "Dump time"
 msgstr "Doba vypúštania"
 
@@ -3707,12 +3730,12 @@ msgstr "Doba vypúštania"
 msgid "In Sector"
 msgstr "V sektore"
 
-#: Data/Dialogs/dlgVario.xml:165 Data/Dialogs/dlgVario.xml:187
-#: Data/Dialogs/dlgVario.xml:209 Data/Dialogs/dlgVario.xml:231
-#: Data/Dialogs/dlgVario.xml:253 Data/Dialogs/dlgVario.xml:275
-#: Data/Dialogs/dlgVario_L.xml:165 Data/Dialogs/dlgVario_L.xml:187
-#: Data/Dialogs/dlgVario_L.xml:209 Data/Dialogs/dlgVario_L.xml:231
-#: Data/Dialogs/dlgVario_L.xml:253 Data/Dialogs/dlgVario_L.xml:275
+#: Data/Dialogs/dlgVario.xml:156 Data/Dialogs/dlgVario.xml:178
+#: Data/Dialogs/dlgVario.xml:200 Data/Dialogs/dlgVario.xml:222
+#: Data/Dialogs/dlgVario.xml:244 Data/Dialogs/dlgVario.xml:266
+#: Data/Dialogs/dlgVario_L.xml:157 Data/Dialogs/dlgVario_L.xml:179
+#: Data/Dialogs/dlgVario_L.xml:201 Data/Dialogs/dlgVario_L.xml:223
+#: Data/Dialogs/dlgVario_L.xml:245 Data/Dialogs/dlgVario_L.xml:267
 msgid "Period Scale"
 msgstr ""
 
@@ -3731,8 +3754,8 @@ msgstr ""
 msgid "Pilot"
 msgstr "Pilot"
 
-#: Data/Dialogs/dlgConfiguration.xml:532
-#: Data/Dialogs/dlgConfiguration_L.xml:531
+#: Data/Dialogs/dlgConfiguration.xml:500
+#: Data/Dialogs/dlgConfiguration_L.xml:499
 #: Data/Dialogs/dlgTaskProperties.xml:18
 #: Data/Dialogs/dlgTaskProperties_L.xml:18
 msgid "Start max speed"
@@ -3742,10 +3765,10 @@ msgstr "Maximálna rýchlosť štartu"
 msgid "The file name of the primary airspace file."
 msgstr "Názov súboru s primárnym vzdušným priestorom."
 
-#: Data/Dialogs/dlgConfiguration.xml:559
-#: Data/Dialogs/dlgConfiguration_L.xml:558
-#: Data/Dialogs/dlgTaskProperties.xml:35
-#: Data/Dialogs/dlgTaskProperties_L.xml:35
+#: Data/Dialogs/dlgConfiguration.xml:525
+#: Data/Dialogs/dlgConfiguration_L.xml:524
+#: Data/Dialogs/dlgTaskProperties.xml:33
+#: Data/Dialogs/dlgTaskProperties_L.xml:33
 msgid ""
 "Minimum height above ground while finishing the task.  Set to 0 for no limit."
 msgstr "Minimálna výška nad zemou pre doklz. Nastav 0 pre neobmedzenú výšku."
@@ -3754,13 +3777,13 @@ msgstr "Minimálna výška nad zemou pre doklz. Nastav 0 pre neobmedzenú výšk
 msgid "Start Anyway"
 msgstr "Odštartovať aj tak"
 
-#: Data/Dialogs/dlgConfiguration.xml:480
-#: Data/Dialogs/dlgConfiguration_L.xml:479
+#: Data/Dialogs/dlgConfiguration.xml:448
+#: Data/Dialogs/dlgConfiguration_L.xml:447
 msgid "Speed arrows"
 msgstr "Ukazateľe rýchlosti"
 
-#: Data/Dialogs/dlgConfiguration.xml:203
-#: Data/Dialogs/dlgConfiguration_L.xml:203
+#: Data/Dialogs/dlgConfiguration.xml:180
+#: Data/Dialogs/dlgConfiguration_L.xml:180
 msgid ""
 "Defines the brightness (whiteness) of the terrain rendering.  This controls "
 "the average illumination of the terrain."
@@ -3784,8 +3807,8 @@ msgstr "Minimálna AAT doba v minútach."
 msgid "File"
 msgstr "Súbor"
 
-#: Data/Dialogs/dlgConfiguration.xml:223
-#: Data/Dialogs/dlgConfiguration_L.xml:223 Data/Dialogs/dlgWindSettings.xml:12
+#: Data/Dialogs/dlgConfiguration.xml:197
+#: Data/Dialogs/dlgConfiguration_L.xml:197 Data/Dialogs/dlgWindSettings.xml:12
 msgid "Auto wind"
 msgstr "Automatický výpočet vetra"
 
@@ -3801,8 +3824,8 @@ msgstr "A-"
 msgid "Configuration - Fonts"
 msgstr "Nastavenie - Písma"
 
-#: Data/Dialogs/dlgConfiguration.xml:403
-#: Data/Dialogs/dlgConfiguration_L.xml:402
+#: Data/Dialogs/dlgConfiguration.xml:371
+#: Data/Dialogs/dlgConfiguration_L.xml:370
 msgid ""
 "The UTC offset field allows the UTC local time offset to be specified.  The "
 "local time is displayed below in order to make it easier to verify the "
@@ -3820,12 +3843,12 @@ msgstr ""
 msgid "Ok"
 msgstr "Ok"
 
-#: Data/Dialogs/dlgConfiguration.xml:598
-#: Data/Dialogs/dlgConfiguration_L.xml:597
+#: Data/Dialogs/dlgConfiguration.xml:559
+#: Data/Dialogs/dlgConfiguration_L.xml:558
 msgid "Time step cruise*"
 msgstr "Časový krok pri preskoku*"
 
-#: Data/Dialogs/dlgVario.xml:123 Data/Dialogs/dlgVario_L.xml:123
+#: Data/Dialogs/dlgVario.xml:114 Data/Dialogs/dlgVario_L.xml:115
 msgid "Type of dead band used in circling mode."
 msgstr "Druh mŕtveho pásma v móde stúpania."
 
@@ -3836,20 +3859,20 @@ msgstr ""
 "Kalibračný faktor nameranej rýchlosti použitý pri výpočte indikovanej "
 "rýchlosti."
 
-#: Data/Dialogs/dlgVario.xml:325 Data/Dialogs/dlgVario_L.xml:325
+#: Data/Dialogs/dlgVario.xml:316 Data/Dialogs/dlgVario_L.xml:317
 msgid "Max objects reported"
 msgstr "Max. hlásených objektov"
 
-#: Data/Dialogs/dlgVario.xml:153 Data/Dialogs/dlgVario.xml:175
-#: Data/Dialogs/dlgVario.xml:197 Data/Dialogs/dlgVario.xml:219
-#: Data/Dialogs/dlgVario.xml:241 Data/Dialogs/dlgVario.xml:263
-#: Data/Dialogs/dlgVario_L.xml:153 Data/Dialogs/dlgVario_L.xml:175
-#: Data/Dialogs/dlgVario_L.xml:197 Data/Dialogs/dlgVario_L.xml:219
-#: Data/Dialogs/dlgVario_L.xml:241 Data/Dialogs/dlgVario_L.xml:263
+#: Data/Dialogs/dlgVario.xml:144 Data/Dialogs/dlgVario.xml:166
+#: Data/Dialogs/dlgVario.xml:188 Data/Dialogs/dlgVario.xml:210
+#: Data/Dialogs/dlgVario.xml:232 Data/Dialogs/dlgVario.xml:254
+#: Data/Dialogs/dlgVario_L.xml:145 Data/Dialogs/dlgVario_L.xml:167
+#: Data/Dialogs/dlgVario_L.xml:189 Data/Dialogs/dlgVario_L.xml:211
+#: Data/Dialogs/dlgVario_L.xml:233 Data/Dialogs/dlgVario_L.xml:255
 msgid "Pitch Scheme"
 msgstr ""
 
-#: Data/Dialogs/dlgVario.xml:295 Data/Dialogs/dlgVario_L.xml:295
+#: Data/Dialogs/dlgVario.xml:286 Data/Dialogs/dlgVario_L.xml:287
 msgid "Mute vario on voice"
 msgstr "Stíš vário pri hlase"
 
@@ -3862,8 +3885,8 @@ msgstr "Čo chceš urobiť:"
 msgid "Own code:"
 msgstr "Vlastný kód:"
 
-#: Data/Dialogs/dlgConfiguration.xml:584
-#: Data/Dialogs/dlgConfiguration_L.xml:583
+#: Data/Dialogs/dlgConfiguration.xml:547
+#: Data/Dialogs/dlgConfiguration_L.xml:546
 msgid "Color infoboxes*"
 msgstr "Farebné info-okná*"
 
@@ -3881,7 +3904,7 @@ msgstr ""
 "minimálnu možnú dĺžku AAT úlohy, 0% označuje nominálnu dĺžku a +100% "
 "maximálnu."
 
-#: Data/Dialogs/dlgVario.xml:391 Data/Dialogs/dlgVario_L.xml:391
+#: Data/Dialogs/dlgVario.xml:382 Data/Dialogs/dlgVario_L.xml:383
 msgid "Battery low delay"
 msgstr "Oneskorenie oznamu nízkeho napätia"
 
@@ -3889,17 +3912,17 @@ msgstr "Oneskorenie oznamu nízkeho napätia"
 msgid "File browser"
 msgstr "Prehliadač súborov"
 
-#: Data/Dialogs/dlgConfiguration.xml:463
-#: Data/Dialogs/dlgConfiguration_L.xml:462
+#: Data/Dialogs/dlgConfiguration.xml:431
+#: Data/Dialogs/dlgConfiguration_L.xml:430
 msgid "Infobox Geometry"
 msgstr "Geometria info-okien"
 
-#: Data/Dialogs/dlgVario.xml:351 Data/Dialogs/dlgVario_L.xml:351
+#: Data/Dialogs/dlgVario.xml:342 Data/Dialogs/dlgVario_L.xml:343
 msgid "Privacy"
 msgstr "Súkromie"
 
-#: Data/Dialogs/dlgConfiguration.xml:441
-#: Data/Dialogs/dlgConfiguration_L.xml:440
+#: Data/Dialogs/dlgConfiguration.xml:409
+#: Data/Dialogs/dlgConfiguration_L.xml:408
 msgid ""
 "This determines how long menus will appear on screen if the user does not "
 "make any button presses or interacts with the computer."
@@ -3911,17 +3934,17 @@ msgstr ""
 msgid "Speed remaining"
 msgstr "Zostávajúca rýchlosť"
 
-#: Data/Dialogs/dlgVario.xml:127 Data/Dialogs/dlgVario_L.xml:127
+#: Data/Dialogs/dlgVario.xml:118 Data/Dialogs/dlgVario_L.xml:119
 msgid "Circling hi cutoff"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:614
-#: Data/Dialogs/dlgConfiguration_L.xml:613
+#: Data/Dialogs/dlgConfiguration.xml:575
+#: Data/Dialogs/dlgConfiguration_L.xml:574
 msgid "Logger ID: "
 msgstr "Logger ID: "
 
-#: Data/Dialogs/dlgConfiguration.xml:198
-#: Data/Dialogs/dlgConfiguration_L.xml:198
+#: Data/Dialogs/dlgConfiguration.xml:175
+#: Data/Dialogs/dlgConfiguration_L.xml:175
 msgid "Terrain contrast"
 msgstr "Kontrast terénu"
 
@@ -3930,8 +3953,8 @@ msgstr "Kontrast terénu"
 msgid "Maximum height while starting the task.  Set to 0 for no limit."
 msgstr "Maximálna výška štartu úlohy. Nastavte na 0 pre žiadny limit."
 
-#: Data/Dialogs/dlgConfiguration.xml:446
-#: Data/Dialogs/dlgConfiguration_L.xml:445
+#: Data/Dialogs/dlgConfiguration.xml:414
+#: Data/Dialogs/dlgConfiguration_L.xml:413
 msgid ""
 "This is the minimum interval between the system recognising key presses. Set "
 "this to a low value for a more responsive user interface; if it is too low, "
@@ -3942,13 +3965,13 @@ msgstr ""
 "uživateľské rozhranie - ak ale bude nastavená príliž nízko, môžu nastať "
 "nechcené viacnásobné stlačenia tlačítok."
 
-#: Data/Dialogs/dlgConfiguration.xml:307
-#: Data/Dialogs/dlgConfiguration_L.xml:307
+#: Data/Dialogs/dlgConfiguration.xml:275
+#: Data/Dialogs/dlgConfiguration_L.xml:275
 msgid "The handicap factor used for OnLine Contest scoring."
 msgstr "Znevýhodnujúci faktor používaný pre bodovaní OnLine Contest súťaže."
 
-#: Data/Dialogs/dlgConfiguration.xml:307
-#: Data/Dialogs/dlgConfiguration_L.xml:307
+#: Data/Dialogs/dlgConfiguration.xml:275
+#: Data/Dialogs/dlgConfiguration_L.xml:275
 msgid "Handicap"
 msgstr "Hendikep"
 
@@ -3971,8 +3994,8 @@ msgstr "Profil"
 msgid "Max height gain"
 msgstr "Maximálne získaná výška"
 
-#: Data/Dialogs/dlgConfiguration.xml:463
-#: Data/Dialogs/dlgConfiguration_L.xml:462
+#: Data/Dialogs/dlgConfiguration.xml:431
+#: Data/Dialogs/dlgConfiguration_L.xml:430
 msgid ""
 "Geometry values range 0-7 but in landscape mode only some of them are really "
 "available."
@@ -3980,9 +4003,9 @@ msgstr ""
 "Hodnoty pre usporiadanie s rozsahom 0-7, v horizontálnom móde sú niektoré "
 "neprístupné."
 
-#: Data/Dialogs/dlgConfiguration.xml:403
-#: Data/Dialogs/dlgConfiguration_L.xml:402 Data/Dialogs/dlgVario.xml:281
-#: Data/Dialogs/dlgVario_L.xml:281
+#: Data/Dialogs/dlgConfiguration.xml:371
+#: Data/Dialogs/dlgConfiguration_L.xml:370 Data/Dialogs/dlgVario.xml:272
+#: Data/Dialogs/dlgVario_L.xml:273
 msgid "UTC Offset"
 msgstr "Posun UTC"
 
@@ -3997,16 +4020,8 @@ msgstr "Rýchlosť stúpania"
 msgid "Latitude"
 msgstr "Zemepisná šírka"
 
-#: Data/Dialogs/dlgVario.xml:72
-msgid ""
-"Comparison method used to detect climb states (HIGH/LOW).   [NONE]: State "
-"LOW disabled   [MACCREADY]: State High if gross vario is greater than "
-"MacCready setting.   [AVERAGE]: State HIGH if gross vario value is greater "
-"than average gross vario value."
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:603
-#: Data/Dialogs/dlgConfiguration_L.xml:602
+#: Data/Dialogs/dlgConfiguration.xml:564
+#: Data/Dialogs/dlgConfiguration_L.xml:563
 msgid "This is the time interval between logged points when circling. "
 msgstr "Toto je časový interval zápisu GPS bodov v móde krúženia. "
 
@@ -4022,8 +4037,8 @@ msgstr "Deklarovať"
 msgid "Clean"
 msgstr "Čistý"
 
-#: Data/Dialogs/dlgConfiguration.xml:451
-#: Data/Dialogs/dlgConfiguration_L.xml:450
+#: Data/Dialogs/dlgConfiguration.xml:419
+#: Data/Dialogs/dlgConfiguration_L.xml:418
 msgid "Text Input Style*"
 msgstr "Štýl vkladania textov*"
 
@@ -4041,7 +4056,7 @@ msgstr "Výška písma. 65 je veľké, 20 veľmi malé."
 msgid "Landing time"
 msgstr "Čas pristánia"
 
-#: Data/Dialogs/dlgConfiguration.xml:78 Data/Dialogs/dlgConfiguration_L.xml:78
+#: Data/Dialogs/dlgConfiguration.xml:74 Data/Dialogs/dlgConfiguration_L.xml:74
 msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
@@ -4058,7 +4073,7 @@ msgstr ""
 msgid "The file name of the secondary airspace file."
 msgstr "Názov súboru sekundárneho vzušného priestoru."
 
-#: Data/Dialogs/dlgVario.xml:319 Data/Dialogs/dlgVario_L.xml:319
+#: Data/Dialogs/dlgVario.xml:310 Data/Dialogs/dlgVario_L.xml:311
 msgid "Urgent min volume"
 msgstr "Súrna hlasitosť - minimum"
 
@@ -4066,13 +4081,13 @@ msgstr "Súrna hlasitosť - minimum"
 msgid "delta T"
 msgstr "delta T"
 
-#: Data/Dialogs/dlgConfiguration.xml:564
-#: Data/Dialogs/dlgConfiguration_L.xml:563
+#: Data/Dialogs/dlgConfiguration.xml:530
+#: Data/Dialogs/dlgConfiguration_L.xml:529
 msgid "Online contest"
 msgstr "OLC"
 
-#: Data/Dialogs/dlgConfiguration.xml:275
-#: Data/Dialogs/dlgConfiguration_L.xml:275
+#: Data/Dialogs/dlgConfiguration.xml:243
+#: Data/Dialogs/dlgConfiguration_L.xml:243
 msgid ""
 "When enabled, the current MacCready setting is used for determining arrival "
 "altitude during task abort mode."
@@ -4101,16 +4116,6 @@ msgstr "TE statická kalibrácia"
 msgid "Enter Number"
 msgstr "Napíš číslo"
 
-#: Data/Dialogs/dlgConfiguration.xml:176
-#: Data/Dialogs/dlgConfiguration_L.xml:176
-msgid ""
-"Determines the way the wind arrow is drawn on the map. [Arrow head] Draws an "
-"arrow head only [Full arrow] Draws an arrow head with a dashed arrow line"
-msgstr ""
-"Určuje spôsob, akým je vykreslený indikátor vetra na mape. [Hlava šípky] "
-"Vykreslí len hlavu šípky [Celá šípka] Vykreslí hlavu šípky spolu s "
-"čiarkovanou nožičkou."
-
 #: Data/Dialogs/dlgFontEdit.xml:23
 msgid "Reset"
 msgstr "Zresetovať"
@@ -4129,13 +4134,13 @@ msgid ""
 "contributed information about individual airfields."
 msgstr "Súbor s letiskami môže obsahovať podrobnosti o jednotlivých letiskách."
 
-#: Data/Dialogs/dlgConfiguration.xml:408
-#: Data/Dialogs/dlgConfiguration_L.xml:407 Data/Dialogs/dlgStatus.xml:50
+#: Data/Dialogs/dlgConfiguration.xml:376
+#: Data/Dialogs/dlgConfiguration_L.xml:375 Data/Dialogs/dlgStatus.xml:50
 #: Data/Dialogs/dlgStatusAircraft.xml:7
 msgid "Local time"
 msgstr "Miestny čas"
 
-#: Data/Dialogs/dlgVario.xml:131 Data/Dialogs/dlgVario_L.xml:131
+#: Data/Dialogs/dlgVario.xml:122 Data/Dialogs/dlgVario_L.xml:123
 msgid "Low limit of circling dead band"
 msgstr ""
 
@@ -4156,8 +4161,8 @@ msgstr ""
 "základe aktuálnej histórie letu s danou Mc hodnotou. Výpočet začína po "
 "štarte úlohy."
 
-#: Data/Dialogs/dlgConfiguration.xml:616
-#: Data/Dialogs/dlgConfiguration_L.xml:615
+#: Data/Dialogs/dlgConfiguration.xml:577
+#: Data/Dialogs/dlgConfiguration_L.xml:576
 msgid ""
 "This determines whether the logger uses the short IGC file name or the long "
 "IGC file name. Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-"
@@ -4178,10 +4183,21 @@ msgstr "Prepínače"
 msgid "Height"
 msgstr "Výška"
 
-#: Data/Dialogs/dlgConfiguration.xml:485
-#: Data/Dialogs/dlgConfiguration_L.xml:484
+#: Data/Dialogs/dlgConfiguration.xml:453
+#: Data/Dialogs/dlgConfiguration_L.xml:452
 msgid "Show average"
 msgstr "Zobraz priemer"
+
+#: Data/Dialogs/dlgConfiguration.xml:155
+#: Data/Dialogs/dlgConfiguration_L.xml:155
+msgid ""
+"Determines the way the wind arrow is drawn on the map.\n"
+"[Arrow head] Draws an arrow head only\n"
+"[Full arrow] Draws an arrow head with a dashed arrow line"
+msgstr ""
+"Určuje spôsob, akým je vykreslený indikátor vetra na mape.\n"
+"[Hlava šípky] Vykreslí len hlavu šípky\n"
+"[Celá šípka] Vykreslí hlavu šípky spolu s čiarkovanou nožičkou."
 
 #: Data/Dialogs/dlgTaskCalculator.xml:21
 #: Data/Dialogs/dlgTaskCalculator_L.xml:23
@@ -4195,7 +4211,7 @@ msgstr ""
 "na predpokladanú dobu úlohy. Táto hodnota nezmení hlavný výpočet ak je "
 "dialóg ukončený príkazom zruš."
 
-#: Data/Dialogs/dlgVario.xml:361 Data/Dialogs/dlgVario_L.xml:361
+#: Data/Dialogs/dlgVario.xml:352 Data/Dialogs/dlgVario_L.xml:353
 msgid "Interval, Info"
 msgstr "Interval, Info"
 
@@ -4231,18 +4247,6 @@ msgstr "Či je pripojený statický tlak."
 msgid "Vario circling"
 msgstr "Vário v krúžení"
 
-#: Data/Dialogs/dlgConfiguration.xml:552
-#: Data/Dialogs/dlgConfiguration_L.xml:551
-#: Data/Dialogs/dlgTaskProperties.xml:28
-#: Data/Dialogs/dlgTaskProperties_L.xml:28
-msgid ""
-"Reference used for start max height rule [MSL] Reference is altitude above "
-"mean sea level [AGL] Reference is the height above the start point"
-msgstr ""
-"Referencia pre pravidlo max výšky štartu. [MSL] Referencia znamená výšku nad "
-"strednou morskou hladinou; [AGL] Referencia znamená výšku nad štartovým "
-"bodom (zem)."
-
 #: Data/Dialogs/dlgTarget.xml:6 Data/Dialogs/dlgTarget_L.xml:6
 msgid "This sets the task point for review."
 msgstr ""
@@ -4251,8 +4255,8 @@ msgstr ""
 msgid "Edit Task"
 msgstr "Uprav úlohu"
 
-#: Data/Dialogs/dlgConfiguration.xml:621
-#: Data/Dialogs/dlgConfiguration_L.xml:620
+#: Data/Dialogs/dlgConfiguration.xml:582
+#: Data/Dialogs/dlgConfiguration_L.xml:581
 msgid ""
 "Enables the automatic starting and stopping of logger on takeoff and landing "
 "respectively. Disable when flying paragliders."
@@ -4262,22 +4266,22 @@ msgstr ""
 msgid "Enable voice warnings for airspace incursions."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:65 Data/Dialogs/dlgConfiguration_L.xml:65
+#: Data/Dialogs/dlgConfiguration.xml:61 Data/Dialogs/dlgConfiguration_L.xml:61
 msgid ""
 "For clip airspace mode, this is the altitude below which airspace is "
 "displayed."
 msgstr ""
 
-#: Data/Dialogs/dlgVario.xml:448 Data/Dialogs/dlgVario_L.xml:448
+#: Data/Dialogs/dlgVario.xml:439 Data/Dialogs/dlgVario_L.xml:440
 msgid "LED Bright"
 msgstr "LED jas"
 
-#: Data/Dialogs/dlgVario.xml:123 Data/Dialogs/dlgVario_L.xml:123
+#: Data/Dialogs/dlgVario.xml:114 Data/Dialogs/dlgVario_L.xml:115
 msgid "Circling deadband type"
 msgstr "Druh mŕtveho pásma v krúžení"
 
-#: Data/Dialogs/dlgConfiguration.xml:123
-#: Data/Dialogs/dlgConfiguration_L.xml:123
+#: Data/Dialogs/dlgConfiguration.xml:106
+#: Data/Dialogs/dlgConfiguration_L.xml:106
 msgid "Circling zoom"
 msgstr "Zoom pri krúžení"
 
@@ -4285,8 +4289,8 @@ msgstr "Zoom pri krúžení"
 msgid "ACK Warn"
 msgstr "UZNAJ varovanie"
 
-#: Data/Dialogs/dlgConfiguration.xml:473
-#: Data/Dialogs/dlgConfiguration_L.xml:472
+#: Data/Dialogs/dlgConfiguration.xml:441
+#: Data/Dialogs/dlgConfiguration_L.xml:440
 msgid "Determines display size of dialogs."
 msgstr "Určuje veľkosť zobrazenia dialógov."
 
@@ -4298,13 +4302,23 @@ msgstr "Zamknuté"
 msgid "Font Face"
 msgstr "Rez písma"
 
-#: Data/Dialogs/dlgConfiguration.xml:92 Data/Dialogs/dlgConfiguration_L.xml:92
+#: Data/Dialogs/dlgConfiguration.xml:88 Data/Dialogs/dlgConfiguration_L.xml:88
 msgid "Labels"
 msgstr "Popisky"
 
-#: Data/Dialogs/dlgVario.xml:438 Data/Dialogs/dlgVario_L.xml:438
+#: Data/Dialogs/dlgVario.xml:429 Data/Dialogs/dlgVario_L.xml:430
 msgid "Borgelt"
 msgstr "Borgelt"
+
+#: Data/Dialogs/dlgConfiguration.xml:192
+#: Data/Dialogs/dlgConfiguration_L.xml:192
+msgid ""
+"This determines whether the the glide terrain range is calculated and drawn "
+"as a line on the map area:\n"
+"[OFF] Disables display\n"
+"[Line] Draws a dashed line at the glide range\n"
+"[Shade] Shades terrain outside glide range"
+msgstr ""
 
 #: Data/Dialogs/dlgTaskCalculator.xml:41
 #: Data/Dialogs/dlgTaskCalculator_L.xml:43
@@ -4316,12 +4330,12 @@ msgstr "Efektívita preskoku"
 msgid "Freq."
 msgstr "Frek."
 
-#: Data/Dialogs/dlgVario.xml:109 Data/Dialogs/dlgVario_L.xml:109
+#: Data/Dialogs/dlgVario.xml:100 Data/Dialogs/dlgVario_L.xml:101
 msgid "Variometer low pass filter time constant in circling mode."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:458
-#: Data/Dialogs/dlgConfiguration_L.xml:457
+#: Data/Dialogs/dlgConfiguration.xml:426
+#: Data/Dialogs/dlgConfiguration_L.xml:425
 msgid "Rotate the display on devices that support it."
 msgstr "Otočí displej na zariadeniach ktoré to podporujú."
 
@@ -4329,8 +4343,8 @@ msgstr "Otočí displej na zariadeniach ktoré to podporujú."
 msgid "Airspace 2"
 msgstr "Vzdušný priestor 2"
 
-#: Data/Dialogs/dlgConfiguration.xml:185
-#: Data/Dialogs/dlgConfiguration_L.xml:185
+#: Data/Dialogs/dlgConfiguration.xml:162
+#: Data/Dialogs/dlgConfiguration_L.xml:162
 msgid ""
 "Draws digital elevation terrain on the map. This is shaded by the wind "
 "direction: upwind is brighter, downwind darker."
@@ -4338,12 +4352,12 @@ msgstr ""
 "Vykreslí na mapu digitálnu výšku terénu. Táto je tieňovaná podľa smeru "
 "vetra: Návetrie je svetlejšie, závetrie tmavšie."
 
-#: Data/Dialogs/dlgConfiguration.xml:280
-#: Data/Dialogs/dlgConfiguration_L.xml:280
+#: Data/Dialogs/dlgConfiguration.xml:248
+#: Data/Dialogs/dlgConfiguration_L.xml:248
 msgid "Safety Mc*"
 msgstr "Bezpečné Mc*"
 
-#: Data/Dialogs/dlgVario.xml:101 Data/Dialogs/dlgVario_L.xml:101
+#: Data/Dialogs/dlgVario.xml:92 Data/Dialogs/dlgVario_L.xml:93
 msgid "Cruise volume"
 msgstr "Hlasitosť na preskoku"
 
@@ -4352,20 +4366,20 @@ msgstr "Hlasitosť na preskoku"
 msgid "Set teamcode"
 msgstr "Nastaviť tímový kód"
 
-#: Data/Dialogs/dlgConfiguration.xml:480
-#: Data/Dialogs/dlgConfiguration_L.xml:479
+#: Data/Dialogs/dlgConfiguration.xml:448
+#: Data/Dialogs/dlgConfiguration_L.xml:447
 msgid ""
 "Whether to show speed command arrows on the Vario gauge.  When shown, in "
 "cruise mode, arrows point up to command slow down; arrows point down to "
 "command speed up."
 msgstr ""
 
-#: Data/Dialogs/dlgVario.xml:149 Data/Dialogs/dlgVario.xml:171
-#: Data/Dialogs/dlgVario.xml:193 Data/Dialogs/dlgVario.xml:215
-#: Data/Dialogs/dlgVario.xml:237 Data/Dialogs/dlgVario.xml:259
-#: Data/Dialogs/dlgVario_L.xml:149 Data/Dialogs/dlgVario_L.xml:171
-#: Data/Dialogs/dlgVario_L.xml:193 Data/Dialogs/dlgVario_L.xml:215
-#: Data/Dialogs/dlgVario_L.xml:237 Data/Dialogs/dlgVario_L.xml:259
+#: Data/Dialogs/dlgVario.xml:140 Data/Dialogs/dlgVario.xml:162
+#: Data/Dialogs/dlgVario.xml:184 Data/Dialogs/dlgVario.xml:206
+#: Data/Dialogs/dlgVario.xml:228 Data/Dialogs/dlgVario.xml:250
+#: Data/Dialogs/dlgVario_L.xml:141 Data/Dialogs/dlgVario_L.xml:163
+#: Data/Dialogs/dlgVario_L.xml:185 Data/Dialogs/dlgVario_L.xml:207
+#: Data/Dialogs/dlgVario_L.xml:229 Data/Dialogs/dlgVario_L.xml:251
 msgid "Beep type"
 msgstr "Typ pípnutia"
 
@@ -4373,15 +4387,15 @@ msgstr "Typ pípnutia"
 msgid "Point"
 msgstr "Bod"
 
-#: Data/Dialogs/dlgConfiguration.xml:542
-#: Data/Dialogs/dlgConfiguration_L.xml:541
+#: Data/Dialogs/dlgConfiguration.xml:510
+#: Data/Dialogs/dlgConfiguration_L.xml:509
 msgid ""
 "Maximum height above ground while starting the task.  Set to 0 for no limit."
 msgstr ""
 "Maximálna výška nad zemou počas odletu na trať. Nastav 0 pre neobmedzene."
 
-#: Data/Dialogs/dlgConfiguration.xml:398
-#: Data/Dialogs/dlgConfiguration_L.xml:397
+#: Data/Dialogs/dlgConfiguration.xml:366
+#: Data/Dialogs/dlgConfiguration_L.xml:365
 msgid "Lat/Lon"
 msgstr "Šírka/Dĺžka"
 
@@ -4414,7 +4428,7 @@ msgstr ""
 "Nastavenie\n"
 "Letu"
 
-#: Data/Dialogs/dlgVario.xml:93 Data/Dialogs/dlgVario_L.xml:93
+#: Data/Dialogs/dlgVario.xml:84 Data/Dialogs/dlgVario_L.xml:85
 msgid "Cruise averager scale"
 msgstr ""
 
@@ -4422,26 +4436,26 @@ msgstr ""
 msgid "Radius of the OZ sector."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:320
-#: Data/Dialogs/dlgConfiguration_L.xml:320
+#: Data/Dialogs/dlgConfiguration.xml:288
+#: Data/Dialogs/dlgConfiguration_L.xml:288
 msgid "Device A"
 msgstr "Zariadenie A"
 
-#: Data/Dialogs/dlgVario.xml:139 Data/Dialogs/dlgVario_L.xml:139
+#: Data/Dialogs/dlgVario.xml:130 Data/Dialogs/dlgVario_L.xml:131
 msgid "High limit of cruise dead band"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:500
-#: Data/Dialogs/dlgConfiguration_L.xml:499
+#: Data/Dialogs/dlgConfiguration.xml:468
+#: Data/Dialogs/dlgConfiguration_L.xml:467
 msgid "Whether to show the ballast percentage."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:82 Data/Dialogs/dlgConfiguration_L.xml:82
+#: Data/Dialogs/dlgConfiguration.xml:78 Data/Dialogs/dlgConfiguration_L.xml:78
 msgid "Acknowledge time*"
 msgstr "Platnosť odsúhlasenia*"
 
-#: Data/Dialogs/dlgConfiguration.xml:510
-#: Data/Dialogs/dlgConfiguration_L.xml:509
+#: Data/Dialogs/dlgConfiguration.xml:478
+#: Data/Dialogs/dlgConfiguration_L.xml:477
 msgid "Averager needle*"
 msgstr "Ukazovateľ integrátora*"
 
@@ -4449,13 +4463,13 @@ msgstr "Ukazovateľ integrátora*"
 msgid "The name of the file containing digital elevation terrain data."
 msgstr "Názov súboru obsahujúceho výškové údaje terénu."
 
-#: Data/Dialogs/dlgConfiguration.xml:254
-#: Data/Dialogs/dlgConfiguration_L.xml:254
+#: Data/Dialogs/dlgConfiguration.xml:222
+#: Data/Dialogs/dlgConfiguration_L.xml:222
 msgid "Flap forces cruise*"
 msgstr "Klapky vynútia preskok*"
 
-#: Data/Dialogs/dlgConfiguration.xml:378
-#: Data/Dialogs/dlgConfiguration_L.xml:377
+#: Data/Dialogs/dlgConfiguration.xml:346
+#: Data/Dialogs/dlgConfiguration_L.xml:345
 msgid "Lift"
 msgstr "Stúpanie"
 
@@ -4463,30 +4477,12 @@ msgstr "Stúpanie"
 msgid "Status"
 msgstr "Stav"
 
-#: Data/Dialogs/dlgConfiguration.xml:236
-#: Data/Dialogs/dlgConfiguration_L.xml:236
-msgid ""
-"This option defines which auto MacCready algorithm is used. [Final glide] "
-"adjusts Mc for fastest arrival.  For OLC sprint tasks, the MacCready is "
-"adjusted in order to cover the greatest distance in the remaining time and "
-"reach the finish height. [Trending Average] sets Mc to the trending average "
-"climb rate based on all climbs. [Both] Uses trending average during task, "
-"then fastest arrival when in final glide mode."
-msgstr ""
-"Toto nastavenie určuje, aký automatický MacCready algoritmus je použitý. "
-"[Doklz] upravý Mc hodnotu pre čo najrýchlejší príet. Pre lety typu OLC "
-"šprint je Mc hodnota nastavená za účelom pokrytia čo najväčšej vzdialenosti "
-"vo zvyšnom čase a pre dosiahnutie cieľovej výšky.  [Priemerné stúpanie] "
-"nastaví Mc hodnotu na priemerné stúpanie zo všetkých stupákov.  [Oba] počas "
-"úlohy sa bude používať priemerná hodnota stúpania a na doklze hodnota pre "
-"najrýchlejší prílet."
-
 #: Data/Dialogs/dlgTeamCode.xml:6 Data/Dialogs/dlgTeamCode_L.xml:6
 msgid "Mate code:"
 msgstr "Kód priateľa:"
 
-#: Data/Dialogs/dlgConfiguration.xml:322
-#: Data/Dialogs/dlgConfiguration_L.xml:322
+#: Data/Dialogs/dlgConfiguration.xml:290
+#: Data/Dialogs/dlgConfiguration_L.xml:290
 msgid ""
 "Type of primary device. The primary device should be the most reliable GPS "
 "data source."
@@ -4494,13 +4490,13 @@ msgstr ""
 "Typ primárneho GPS zariadenia. Primárne by malo byt najspoľahlivejšie "
 "zdrojové GPS zariadenie."
 
-#: Data/Dialogs/dlgConfiguration.xml:338
-#: Data/Dialogs/dlgConfiguration_L.xml:338
+#: Data/Dialogs/dlgConfiguration.xml:306
+#: Data/Dialogs/dlgConfiguration_L.xml:306
 msgid "Device B"
 msgstr "Zariadenie B"
 
-#: Data/Dialogs/dlgConfiguration.xml:436
-#: Data/Dialogs/dlgConfiguration_L.xml:435
+#: Data/Dialogs/dlgConfiguration.xml:404
+#: Data/Dialogs/dlgConfiguration_L.xml:403
 msgid ""
 "The status file can be used to define sounds to be played when certain "
 "events occur, and how long various status messages will appear on screen."
@@ -4517,29 +4513,35 @@ msgstr "Odstrániť"
 msgid "Speed average"
 msgstr "Priemerná rýchlosť"
 
-#: Data/Dialogs/dlgConfiguration.xml:564
-#: Data/Dialogs/dlgConfiguration_L.xml:563
-msgid ""
-"Rules used for calculating optimal points for OnLine Contest. [Sprint]: "
-"Conforms to FAI IGC League rules.  Up to 5 points including start and "
-"finish, maximum duration 2.5 hours, finish height must not be below start "
-"height. [Triangle]: Conforms to FAI OLC triangle rules.  Four points with "
-"common start and finish.  For tasks longer than 500km, no leg less than 25% "
-"or larger than 45%; otherwise no leg less than 28% of total.  Finish height "
-"must not be lower than start height less 1000 meters. [Classic]: Conforms to "
-"OLC classic rules.  Up to seven points including start and finish, finish "
-"height must not be lower than start height less 1000 meters.  Points awarded "
-"80% on second last leg and 60% on last leg."
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:127
-#: Data/Dialogs/dlgConfiguration_L.xml:127 Data/Dialogs/dlgWindSettings.xml:19
+#: Data/Dialogs/dlgConfiguration.xml:110
+#: Data/Dialogs/dlgConfiguration_L.xml:110 Data/Dialogs/dlgWindSettings.xml:16
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
 "in circling mode."
 msgstr ""
 "Určuje, či čiara trajektórie lietadla bude počas módu krúženia posúvaná "
 "vplyvom vetra."
+
+#: Data/Dialogs/dlgConfiguration.xml:207
+#: Data/Dialogs/dlgConfiguration_L.xml:207
+msgid ""
+"This option defines which auto MacCready algorithm is used.\n"
+"[Final glide] adjusts Mc for fastest arrival.  For OLC sprint tasks, the "
+"MacCready is adjusted in order to cover the greatest distance in the "
+"remaining time and reach the finish height.\n"
+"[Trending Average] sets Mc to the trending average climb rate based on all "
+"climbs.\n"
+"[Both] Uses trending average during task, then fastest arrival when in final "
+"glide mode."
+msgstr ""
+"Toto nastavenie určuje, aký automatický MacCready algoritmus je použitý.\n"
+"[Doklz] upravý Mc hodnotu pre čo najrýchlejší príet. Pre lety typu OLC "
+"šprint je Mc hodnota nastavená za účelom pokrytia čo najväčšej vzdialenosti "
+"vo zvyšnom čase a pre dosiahnutie cieľovej výšky.\n"
+"[Priemerné stúpanie] nastaví Mc hodnotu na priemerné stúpanie zo všetkých "
+"stupákov.\n"
+"[Oba] počas úlohy sa bude používať priemerná hodnota stúpania a na doklze "
+"hodnota pre najrýchlejší prílet."
 
 #: Data/Dialogs/dlgTaskManager.xml:11 Data/Dialogs/dlgTaskManager_L.xml:8
 msgid "Save as"
@@ -4549,13 +4551,13 @@ msgstr "Uložiť ako"
 msgid "Vario Configuration"
 msgstr "Nastavenie vária"
 
-#: Data/Dialogs/dlgConfiguration.xml:249
-#: Data/Dialogs/dlgConfiguration_L.xml:249
+#: Data/Dialogs/dlgConfiguration.xml:217
+#: Data/Dialogs/dlgConfiguration_L.xml:217
 msgid "Nav by baro altitude*"
 msgstr "Navigovať podľa tlakovej výšky*"
 
-#: Data/Dialogs/dlgConfiguration.xml:292
-#: Data/Dialogs/dlgConfiguration_L.xml:292
+#: Data/Dialogs/dlgConfiguration.xml:260
+#: Data/Dialogs/dlgConfiguration_L.xml:260
 msgid ""
 "This contains a selection of gliders of different performance classes, as "
 "well as a special entry for External Polar File."
@@ -4563,13 +4565,13 @@ msgstr ""
 "Táto voľba obsahuje na výber typy vetroňov z rozličných výkonnostných tried "
 "rovnako ako jednu špeciálnu položku pre externý súbor s polárou."
 
-#: Data/Dialogs/dlgConfiguration.xml:244
-#: Data/Dialogs/dlgConfiguration_L.xml:244
+#: Data/Dialogs/dlgConfiguration.xml:212
+#: Data/Dialogs/dlgConfiguration_L.xml:212
 msgid "Block speed to fly*"
 msgstr "Stála rýchlosť na preskoku"
 
-#: Data/Dialogs/dlgConfiguration.xml:537
-#: Data/Dialogs/dlgConfiguration_L.xml:536
+#: Data/Dialogs/dlgConfiguration.xml:505
+#: Data/Dialogs/dlgConfiguration_L.xml:504
 msgid ""
 "Maximum speed above maximum start speed to tolerate.  Set to 0 for no "
 "tolerance."
@@ -4607,7 +4609,7 @@ msgstr "Tímový kód"
 msgid "Italic"
 msgstr "Kurzíva"
 
-#: Data/Dialogs/dlgVario.xml:89 Data/Dialogs/dlgVario_L.xml:89
+#: Data/Dialogs/dlgVario.xml:80 Data/Dialogs/dlgVario_L.xml:81
 msgid "Time scale used for vario averager."
 msgstr "Časová konštanta pre priemerné vário."
 
@@ -4629,11 +4631,11 @@ msgstr "Flarm zámok:"
 msgid "Assigned task time"
 msgstr "Určený čas úlohy"
 
-#: Data/Dialogs/dlgVario.xml:105 Data/Dialogs/dlgVario_L.xml:105
+#: Data/Dialogs/dlgVario.xml:96 Data/Dialogs/dlgVario_L.xml:97
 msgid "Adjustment to base frequency of tones in all modes."
 msgstr ""
 
-#: Data/Dialogs/dlgVario.xml:439 Data/Dialogs/dlgVario_L.xml:439
+#: Data/Dialogs/dlgVario.xml:430 Data/Dialogs/dlgVario_L.xml:431
 msgid "Cambridge"
 msgstr "Cambridge"
 
@@ -4661,6 +4663,15 @@ msgstr ""
 "Názov súboru obsahujúceho terén, topológiu a voliteľne aj otočné body, "
 "detaily o letiskách a vzdušný priestor."
 
+#: Data/Dialogs/dlgVario.xml:72 Data/Dialogs/dlgVario_L.xml:73
+msgid ""
+"Comparison method used to detect climb states (HIGH/LOW).\n"
+"[NONE]: State LOW disabled\n"
+"[MACCREADY]: State High if gross vario is greater than MacCready setting.\n"
+"[AVERAGE]: State HIGH if gross vario value is greater than average gross "
+"vario value."
+msgstr ""
+
 #: Data/Dialogs/dlgStartup.xml:10 Data/Dialogs/dlgStartup_L.xml:10
 #: Data/Input/default.xci:949
 msgid "Quit"
@@ -4671,9 +4682,9 @@ msgstr "Ukončiť"
 msgid "Simulator"
 msgstr "Simulátor"
 
-#: Data/Dialogs/dlgConfiguration.xml:326 Data/Dialogs/dlgConfiguration.xml:345
-#: Data/Dialogs/dlgConfiguration_L.xml:326
-#: Data/Dialogs/dlgConfiguration_L.xml:344
+#: Data/Dialogs/dlgConfiguration.xml:294 Data/Dialogs/dlgConfiguration.xml:313
+#: Data/Dialogs/dlgConfiguration_L.xml:294
+#: Data/Dialogs/dlgConfiguration_L.xml:312
 msgid "Port"
 msgstr "Port"
 
@@ -4693,8 +4704,8 @@ msgstr "Neutrálne klapky"
 msgid "AAT Est Remaining Help"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:547
-#: Data/Dialogs/dlgConfiguration_L.xml:546
+#: Data/Dialogs/dlgConfiguration.xml:515
+#: Data/Dialogs/dlgConfiguration_L.xml:514
 msgid ""
 "Maximum height above maximum start height to tolerate.  Set to 0 for no "
 "tolerance."
@@ -4702,7 +4713,7 @@ msgstr ""
 "Hodnota tolerancie pre porušenie maximálnej výšky štartu. Nastavte na 0 pre "
 "žiadnu toleranciu."
 
-#: Data/Dialogs/dlgVario.xml:89 Data/Dialogs/dlgVario_L.xml:89
+#: Data/Dialogs/dlgVario.xml:80 Data/Dialogs/dlgVario_L.xml:81
 msgid "Climb averager scale"
 msgstr "Stupnica integrátora stúpania"
 
@@ -4725,8 +4736,8 @@ msgstr "Vyhľadať"
 msgid "Speed Remaining Help"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:446
-#: Data/Dialogs/dlgConfiguration_L.xml:445
+#: Data/Dialogs/dlgConfiguration.xml:414
+#: Data/Dialogs/dlgConfiguration_L.xml:413
 msgid "Debounce time*"
 msgstr "Opakovanie stlačenia klávesy po*"
 
@@ -4755,18 +4766,18 @@ msgstr "Výškový rozdiel MC akt."
 msgid "Waypoints 2"
 msgstr "Otočné body 2"
 
-#: Data/Dialogs/dlgConfiguration.xml:131
-#: Data/Dialogs/dlgConfiguration_L.xml:131
+#: Data/Dialogs/dlgConfiguration.xml:114
+#: Data/Dialogs/dlgConfiguration_L.xml:114
 msgid "Sets the type of the snail trail display."
 msgstr "Nastaví typ zobrazovania trajektórie letu."
 
-#: Data/Dialogs/dlgConfiguration.xml:393
-#: Data/Dialogs/dlgConfiguration_L.xml:392
+#: Data/Dialogs/dlgConfiguration.xml:361
+#: Data/Dialogs/dlgConfiguration_L.xml:360
 msgid "Units used for task speeds."
 msgstr "Jednotky použité pre rýchlosti úlohy."
 
-#: Data/Dialogs/dlgConfiguration.xml:608
-#: Data/Dialogs/dlgConfiguration_L.xml:607
+#: Data/Dialogs/dlgConfiguration.xml:569
+#: Data/Dialogs/dlgConfiguration_L.xml:568
 msgid "Pilot name: "
 msgstr "Meno pilota: "
 
@@ -4774,12 +4785,12 @@ msgstr "Meno pilota: "
 msgid "Radial"
 msgstr ""
 
-#: Data/Dialogs/dlgVario.xml:143 Data/Dialogs/dlgVario_L.xml:143
+#: Data/Dialogs/dlgVario.xml:134 Data/Dialogs/dlgVario_L.xml:135
 msgid "Low limit of cruise dead band"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:436
-#: Data/Dialogs/dlgConfiguration_L.xml:435
+#: Data/Dialogs/dlgConfiguration.xml:404
+#: Data/Dialogs/dlgConfiguration_L.xml:403
 msgid "Status message*"
 msgstr "Stavové správy*"
 
@@ -4793,8 +4804,8 @@ msgstr "Polomer"
 msgid "AAT Range"
 msgstr "AAT vzdialenosť"
 
-#: Data/Dialogs/dlgConfiguration.xml:485
-#: Data/Dialogs/dlgConfiguration_L.xml:484
+#: Data/Dialogs/dlgConfiguration.xml:453
+#: Data/Dialogs/dlgConfiguration_L.xml:452
 msgid ""
 "Whether to show the average climb rate.  In cruise mode, this switches to "
 "showing the average netto airmass rate."
@@ -4806,8 +4817,8 @@ msgstr ""
 msgid "Whether the Stall pressure port is connected."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:603
-#: Data/Dialogs/dlgConfiguration_L.xml:602
+#: Data/Dialogs/dlgConfiguration.xml:564
+#: Data/Dialogs/dlgConfiguration_L.xml:563
 msgid "Time step circling*"
 msgstr "Časový krok v krúžení*"
 
@@ -4824,8 +4835,8 @@ msgstr "Vybrať"
 msgid "Achieved Speed"
 msgstr "Dosiahnutá rýchlosť"
 
-#: Data/Dialogs/dlgConfiguration.xml:203
-#: Data/Dialogs/dlgConfiguration_L.xml:203
+#: Data/Dialogs/dlgConfiguration.xml:180
+#: Data/Dialogs/dlgConfiguration_L.xml:180
 msgid "Terrain brightness"
 msgstr "Svetlosť terénu"
 
@@ -4837,8 +4848,8 @@ msgstr "Typ úlohy"
 msgid "Task Properties"
 msgstr "Vlastnosti úlohy"
 
-#: Data/Dialogs/dlgConfiguration.xml:141
-#: Data/Dialogs/dlgConfiguration_L.xml:141
+#: Data/Dialogs/dlgConfiguration.xml:124
+#: Data/Dialogs/dlgConfiguration_L.xml:124
 msgid ""
 "If the aircraft heading deviates from the current waypoint, markers are "
 "displayed at points ahead of the aircraft. The value of each marker is the "
@@ -4864,22 +4875,12 @@ msgstr "Obnoviť"
 msgid "FLARM"
 msgstr "FLARM"
 
-#: Data/Dialogs/dlgVario.xml:79
-msgid ""
-"Comparison method used to detect cruise states for switching to lift tones "
-"during cruise.   [NONE]: LIFT tone disabled in cruise   [RELATIVE ZERO] LIFT "
-"tone when relative vario greater than zero.   [GROSS ZERO] LIFT tone when "
-"glider is climbing.   [RELATIVE MC/2] LIFT tone when relative vario greater "
-"than half MC.   [NET MC/2] LIFT tone when airmass velocity greater than half "
-"MC.    "
-msgstr ""
-
 #: Data/Dialogs/dlgTaskPointType.xml:3 Data/Dialogs/dlgTaskPointType_L.xml:3
 msgid "Task Point Type"
 msgstr "Typ otočných bodov úlohy"
 
-#: Data/Dialogs/dlgConfiguration.xml:612
-#: Data/Dialogs/dlgConfiguration_L.xml:611
+#: Data/Dialogs/dlgConfiguration.xml:573
+#: Data/Dialogs/dlgConfiguration_L.xml:572
 msgid "Competition Id: "
 msgstr "Súťažný znak: "
 
@@ -4887,8 +4888,8 @@ msgstr "Súťažný znak: "
 msgid "Volume"
 msgstr "Objem"
 
-#: Data/Dialogs/dlgConfiguration.xml:231
-#: Data/Dialogs/dlgConfiguration_L.xml:231
+#: Data/Dialogs/dlgConfiguration.xml:202
+#: Data/Dialogs/dlgConfiguration_L.xml:202
 msgid "External wind"
 msgstr "Externý vietor"
 
@@ -4907,8 +4908,8 @@ msgstr "Max. teplota"
 #: Data/Dialogs/dlgAirspaceDetails.xml:10
 #: Data/Dialogs/dlgAirspaceSelect.xml:18
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:12
-#: Data/Dialogs/dlgConfiguration.xml:292
-#: Data/Dialogs/dlgConfiguration_L.xml:292 Data/Dialogs/dlgTaskPoint.xml:12
+#: Data/Dialogs/dlgConfiguration.xml:260
+#: Data/Dialogs/dlgConfiguration_L.xml:260 Data/Dialogs/dlgTaskPoint.xml:12
 #: Data/Dialogs/dlgTaskPoint_L.xml:13 Data/Dialogs/dlgTaskProperties.xml:5
 #: Data/Dialogs/dlgTaskProperties_L.xml:5 Data/Dialogs/dlgWayPointSelect.xml:7
 #: Data/Dialogs/dlgWayPointSelect_L.xml:14 Data/Dialogs/dlgWaypointEdit.xml:60
@@ -4918,6 +4919,22 @@ msgstr "Typ"
 
 #: Data/Dialogs/dlgBrightness.xml:6
 msgid "Enables automatic backlight, responsive to light sensor."
+msgstr ""
+
+#: Data/Dialogs/dlgConfiguration.xml:530
+#: Data/Dialogs/dlgConfiguration_L.xml:529
+msgid ""
+"Rules used for calculating optimal points for OnLine Contest.\n"
+"[Sprint]: Conforms to FAI IGC League rules.  Up to 5 points including start "
+"and finish, maximum duration 2.5 hours, finish height must not be below "
+"start height.\n"
+"[Triangle]: Conforms to FAI OLC triangle rules.  Four points with common "
+"start and finish.  For tasks longer than 500km, no leg less than 25% or "
+"larger than 45%; otherwise no leg less than 28% of total.  Finish height "
+"must not be lower than start height less 1000 meters.\n"
+"[Classic]: Conforms to OLC classic rules.  Up to seven points including "
+"start and finish, finish height must not be lower than start height less "
+"1000 meters.  Points awarded 80% on second last leg and 60% on last leg."
 msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:25 Data/Dialogs/dlgStatusSystem.xml:9
@@ -4943,28 +4960,31 @@ msgstr "v"
 msgid "Set speed remaining"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:628
-#: Data/Dialogs/dlgConfiguration_L.xml:627
+#: Data/Dialogs/dlgConfiguration.xml:589
+#: Data/Dialogs/dlgConfiguration_L.xml:588
 msgid "Device model"
 msgstr "Model zariadenia"
 
-#: Data/Dialogs/dlgVario.xml:333 Data/Dialogs/dlgVario_L.xml:333
+#: Data/Dialogs/dlgVario.xml:324 Data/Dialogs/dlgVario_L.xml:325
 msgid "Flarm interface"
 msgstr "Rozhranie Flarmu"
-
-#: Data/Dialogs/dlgVario_L.xml:80
-msgid ""
-"Comparison method used to detect cruise states for switching to lift tones "
-"during cruise. [NONE]: LIFT tone disabled in cruise [RELATIVE ZERO] LIFT "
-"tone when relative vario greater than zero. [GROSS ZERO] LIFT tone when "
-"glider is climbing. [RELATIVE MC/2] LIFT tone when relative vario greater "
-"than half MC. [NET MC/2] LIFT tone when airmass velocity greater than half "
-"MC."
-msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:45
 msgid "User middle"
 msgstr "Uzivatel stred"
+
+#: Data/Dialogs/dlgConfiguration.xml:96 Data/Dialogs/dlgConfiguration.xml:101
+#: Data/Dialogs/dlgConfiguration_L.xml:96
+#: Data/Dialogs/dlgConfiguration_L.xml:101
+msgid ""
+"Determines how the screen is rotated with the glider:\n"
+"[North up] The moving map display will always be orientated north to south "
+"and the glider icon will be rotated to show its course.\n"
+"[Track up] The moving map display will be rotated so the glider's track is "
+"oriented up.\n"
+"[Target up] The moving map display will be rotated so the navigation target "
+"is oriented up."
+msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:3 Data/Input/default.xci:664
 msgid "Replay"
@@ -4974,8 +4994,8 @@ msgstr "Opakované prehranie"
 msgid "Airspace display"
 msgstr "Zobrazenie vzduš. priestoru"
 
-#: Data/Dialogs/dlgConfiguration.xml:231
-#: Data/Dialogs/dlgConfiguration_L.xml:231
+#: Data/Dialogs/dlgConfiguration.xml:202
+#: Data/Dialogs/dlgConfiguration_L.xml:202
 msgid ""
 "If enabled, then the wind vector received from external devices overrides "
 "XCSoar's internal wind calculation."
@@ -4988,12 +5008,12 @@ msgstr ""
 msgid "Filter..."
 msgstr "Filter..."
 
-#: Data/Dialogs/dlgConfiguration.xml:458
-#: Data/Dialogs/dlgConfiguration_L.xml:457
+#: Data/Dialogs/dlgConfiguration.xml:426
+#: Data/Dialogs/dlgConfiguration_L.xml:425
 msgid "Display Orientation"
 msgstr "Orientácia displeja"
 
-#: Data/Dialogs/dlgVario.xml:329 Data/Dialogs/dlgVario_L.xml:329
+#: Data/Dialogs/dlgVario.xml:320 Data/Dialogs/dlgVario_L.xml:321
 msgid "Max reported circling"
 msgstr "Max zaznamenané stúpanie"
 
@@ -5001,8 +5021,8 @@ msgstr "Max zaznamenané stúpanie"
 msgid "Valid finish"
 msgstr "Platné ukončenie úlohy"
 
-#: Data/Dialogs/dlgConfiguration.xml:312
-#: Data/Dialogs/dlgConfiguration_L.xml:312
+#: Data/Dialogs/dlgConfiguration.xml:280
+#: Data/Dialogs/dlgConfiguration_L.xml:280
 msgid "The time in seconds to dump full ballast."
 msgstr "Doba v sekundách potrebná na vypustenie celej príťaže."
 
@@ -5018,8 +5038,8 @@ msgstr "Polomer cieľu"
 msgid "Top"
 msgstr "Hore"
 
-#: Data/Dialogs/dlgConfiguration.xml:166
-#: Data/Dialogs/dlgConfiguration_L.xml:166
+#: Data/Dialogs/dlgConfiguration.xml:145
+#: Data/Dialogs/dlgConfiguration_L.xml:145
 msgid ""
 "Three styles are available: Purple circles (WinPilot style), a high contrast "
 "(monochrome) style with icons, or orange icons. The icons differ for "
@@ -5030,15 +5050,15 @@ msgstr ""
 "a pre pristávacie plochy. Vo všetkých štýloch sa ikonky ofarbujú do zelena, "
 "ak sú v dosahu doletu."
 
-#: Data/Dialogs/dlgConfiguration.xml:559
-#: Data/Dialogs/dlgConfiguration_L.xml:558
-#: Data/Dialogs/dlgTaskProperties.xml:35
-#: Data/Dialogs/dlgTaskProperties_L.xml:35
+#: Data/Dialogs/dlgConfiguration.xml:525
+#: Data/Dialogs/dlgConfiguration_L.xml:524
+#: Data/Dialogs/dlgTaskProperties.xml:33
+#: Data/Dialogs/dlgTaskProperties_L.xml:33
 msgid "Finish min height"
 msgstr "Minimálna výška príletu"
 
-#: Data/Dialogs/dlgConfiguration.xml:123
-#: Data/Dialogs/dlgConfiguration_L.xml:123
+#: Data/Dialogs/dlgConfiguration.xml:106
+#: Data/Dialogs/dlgConfiguration_L.xml:106
 msgid ""
 "If enabled, then the map will zoom in automatically when entering circling "
 "mode and zoom out automatically when leaving circling mode."
@@ -5046,8 +5066,8 @@ msgstr ""
 "Ak je táto voľba povolená, tak sa mapa automaticky priblíži keď sa zapne mód "
 "krúženia - a opäť oddiali keď bude tento mód opustený."
 
-#: Data/Dialogs/dlgConfiguration.xml:362
-#: Data/Dialogs/dlgConfiguration_L.xml:361
+#: Data/Dialogs/dlgConfiguration.xml:330
+#: Data/Dialogs/dlgConfiguration_L.xml:329
 msgid ""
 "If your GPS device outputs invalid NMEA checksums, this will allow it's data "
 "to be used anyway"
@@ -5061,8 +5081,8 @@ msgstr ""
 msgid "Estimated task time"
 msgstr "Odhadovaná doba na úlohu"
 
-#: Data/Dialogs/dlgConfiguration.xml:193
-#: Data/Dialogs/dlgConfiguration_L.xml:193
+#: Data/Dialogs/dlgConfiguration.xml:170
+#: Data/Dialogs/dlgConfiguration_L.xml:170
 msgid "Draw shades among slopes, indicating the wind direction."
 msgstr "Vykreslí tieňovanie v rámci svahov, čím indikuje smer vetra."
 
@@ -5070,7 +5090,7 @@ msgstr "Vykreslí tieňovanie v rámci svahov, čím indikuje smer vetra."
 msgid "Aircraft Status"
 msgstr "Stav lietadla"
 
-#: Data/Dialogs/dlgConfiguration.xml:74 Data/Dialogs/dlgConfiguration_L.xml:74
+#: Data/Dialogs/dlgConfiguration.xml:70 Data/Dialogs/dlgConfiguration_L.xml:70
 msgid "Enable/disable all airspace warnings."
 msgstr "Povoliť/zakázať všetky varovania vzdušných priestorov."
 
@@ -5079,8 +5099,21 @@ msgstr "Povoliť/zakázať všetky varovania vzdušných priestorov."
 msgid "Select colour"
 msgstr "Vyber farbu"
 
-#: Data/Dialogs/dlgConfiguration.xml:520
-#: Data/Dialogs/dlgConfiguration_L.xml:519
+#: Data/Dialogs/dlgConfiguration.xml:88 Data/Dialogs/dlgConfiguration_L.xml:88
+msgid ""
+"Determines how labels are displayed with each waypoint:\n"
+"[Names] The full name of each waypoint is displayed.\n"
+"[Numbers] The waypoint number of each waypoint is displayed.\n"
+"[None] No names are displayed with the waypoints.\n"
+"[Names in task] Names are only displayed for waypoints that are in the "
+"active task as well as the home airfield.\n"
+"[First 3] The first 3 letters of the waypoint name are displayed.\n"
+"[First 5] The first 5 letters of the waypoint name are displayed.\n"
+"[First word] The first word of the waypoint name is displayed."
+msgstr ""
+
+#: Data/Dialogs/dlgConfiguration.xml:488
+#: Data/Dialogs/dlgConfiguration_L.xml:487
 msgid "Auto close FLARM"
 msgstr ""
 
@@ -5096,7 +5129,7 @@ msgstr "Pole"
 msgid "TE vario"
 msgstr "TE vario"
 
-#: Data/Dialogs/dlgVario.xml:425 Data/Dialogs/dlgVario_L.xml:425
+#: Data/Dialogs/dlgVario.xml:416 Data/Dialogs/dlgVario_L.xml:417
 msgid "V Airbrake"
 msgstr "Rýchlosť na brzdách"
 
@@ -5116,8 +5149,8 @@ msgstr ""
 "Zrýchlenie času pri prehrávaní. Nastavte 0 pre pauzu, 1 pre prehrávanie "
 "skutočnou rýchlosťou."
 
-#: Data/Dialogs/dlgConfiguration.xml:275
-#: Data/Dialogs/dlgConfiguration_L.xml:275
+#: Data/Dialogs/dlgConfiguration.xml:243
+#: Data/Dialogs/dlgConfiguration_L.xml:243
 msgid "Abort use current Mc*"
 msgstr "Po prerušení posledné Mc*"
 
@@ -5129,16 +5162,16 @@ msgstr "Prispôsobenie písma"
 msgid "Vega Voice Extensions"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:495
-#: Data/Dialogs/dlgConfiguration_L.xml:494
+#: Data/Dialogs/dlgConfiguration.xml:463
+#: Data/Dialogs/dlgConfiguration_L.xml:462
 msgid "Show bugs*"
 msgstr "Zobraziť znečistenie*"
 
-#: Data/Dialogs/dlgVario.xml:127 Data/Dialogs/dlgVario_L.xml:127
+#: Data/Dialogs/dlgVario.xml:118 Data/Dialogs/dlgVario_L.xml:119
 msgid "High limit of circling dead band"
 msgstr ""
 
-#: Data/Dialogs/dlgVario.xml:299 Data/Dialogs/dlgVario_L.xml:299
+#: Data/Dialogs/dlgVario.xml:290 Data/Dialogs/dlgVario_L.xml:291
 msgid "Mute vario on radio"
 msgstr "Ztlm vário pri rádiopríjme"
 
@@ -5146,8 +5179,8 @@ msgstr "Ztlm vário pri rádiopríjme"
 msgid "Select Airspace"
 msgstr "Zvoľte vzdušný priestor"
 
-#: Data/Dialogs/dlgConfiguration.xml:249
-#: Data/Dialogs/dlgConfiguration_L.xml:249
+#: Data/Dialogs/dlgConfiguration.xml:217
+#: Data/Dialogs/dlgConfiguration_L.xml:217
 msgid ""
 "When enabled and if connected to a barometric altimeter, barometric altitude "
 "is used for all navigation functions. Otherwise GPS altitude is used."
@@ -5156,8 +5189,8 @@ msgstr ""
 "používať tlaková výška pre všetky navigačné funkcie. V opačnom prípade bude "
 "použitá GPS výška."
 
-#: Data/Dialogs/dlgConfiguration.xml:297
-#: Data/Dialogs/dlgConfiguration_L.xml:297
+#: Data/Dialogs/dlgConfiguration.xml:265
+#: Data/Dialogs/dlgConfiguration_L.xml:265
 msgid "Polar file"
 msgstr "Dáta poláry"
 
@@ -5171,18 +5204,18 @@ msgid ""
 "total energy."
 msgstr ""
 
-#: Data/Dialogs/dlgTaskProperties.xml:40
-#: Data/Dialogs/dlgTaskProperties_L.xml:40
+#: Data/Dialogs/dlgTaskProperties.xml:38
+#: Data/Dialogs/dlgTaskProperties_L.xml:38
 msgid "FAI finish height"
 msgstr "FAI výška cieľa"
 
-#: Data/Dialogs/dlgConfiguration.xml:236
-#: Data/Dialogs/dlgConfiguration_L.xml:236
+#: Data/Dialogs/dlgConfiguration.xml:207
+#: Data/Dialogs/dlgConfiguration_L.xml:207
 msgid "Auto Mc mode"
 msgstr "Mód automatického Mc výpočtu"
 
-#: Data/Dialogs/dlgConfiguration.xml:515
-#: Data/Dialogs/dlgConfiguration_L.xml:514
+#: Data/Dialogs/dlgConfiguration.xml:483
+#: Data/Dialogs/dlgConfiguration_L.xml:482
 msgid ""
 "This enables the display of the FLARM radar gauge. The track bearing of the "
 "target relative to the track bearing of the aircraft is displayed as an "
@@ -5210,13 +5243,13 @@ msgstr "Nastavenie"
 msgid "Specifies the file defining the topological features."
 msgstr "Určuje súbor s definíciou topológie."
 
-#: Data/Dialogs/dlgConfiguration.xml:500
-#: Data/Dialogs/dlgConfiguration_L.xml:499
+#: Data/Dialogs/dlgConfiguration.xml:468
+#: Data/Dialogs/dlgConfiguration_L.xml:467
 msgid "Show ballast*"
 msgstr "Zobraziť záťaž*"
 
-#: Data/Dialogs/dlgConfiguration.xml:115
-#: Data/Dialogs/dlgConfiguration_L.xml:115
+#: Data/Dialogs/dlgConfiguration.xml:101
+#: Data/Dialogs/dlgConfiguration_L.xml:101
 msgid "Circling Orientation"
 msgstr ""
 
@@ -5224,13 +5257,13 @@ msgstr ""
 msgid "Enable voice read-back of MacReady setting after it is adjusted."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:270
-#: Data/Dialogs/dlgConfiguration_L.xml:270
+#: Data/Dialogs/dlgConfiguration.xml:238
+#: Data/Dialogs/dlgConfiguration_L.xml:238
 msgid "The height above terrain that the glider must clear during final glide."
 msgstr ""
 "Minimálna výška nad terénom, ktorú musí mať klzák na doklze ako rezervu."
 
-#: Data/Dialogs/dlgVario.xml:109 Data/Dialogs/dlgVario_L.xml:109
+#: Data/Dialogs/dlgVario.xml:100 Data/Dialogs/dlgVario_L.xml:101
 msgid "Filter circling"
 msgstr "Filtruj krúženie"
 
@@ -5239,25 +5272,17 @@ msgstr "Filtruj krúženie"
 msgid "Goto"
 msgstr "Ísť na"
 
-#: Data/Dialogs/dlgConfiguration.xml:362
-#: Data/Dialogs/dlgConfiguration_L.xml:361
+#: Data/Dialogs/dlgConfiguration.xml:330
+#: Data/Dialogs/dlgConfiguration_L.xml:329
 msgid "Ignore checksum*"
 msgstr "Ignorovať kontrolný súčet*"
 
-#: Data/Dialogs/dlgVario_L.xml:73
-msgid ""
-"Comparison method used to detect climb states (HIGH/LOW). [NONE]: State LOW "
-"disabled [MACCREADY]: State High if gross vario is greater than MacCready "
-"setting. [AVERAGE]: State HIGH if gross vario value is greater than average "
-"gross vario value."
-msgstr ""
-
-#: Data/Dialogs/dlgVario.xml:139 Data/Dialogs/dlgVario_L.xml:139
+#: Data/Dialogs/dlgVario.xml:130 Data/Dialogs/dlgVario_L.xml:131
 msgid "Cruise hi cutoff"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:244
-#: Data/Dialogs/dlgConfiguration_L.xml:244
+#: Data/Dialogs/dlgConfiguration.xml:212
+#: Data/Dialogs/dlgConfiguration_L.xml:212
 msgid ""
 "If enabled, the command speed in cruise is set to the MacCready speed to fly "
 "in no vertical air-mass movement. If disabled, the command speed in cruise "
@@ -5270,8 +5295,8 @@ msgstr ""
 "\"delfínovacia rýchlosť\", čiže určená podľa MacCreadyho teórie pre vzdušnú "
 "masu s vertikálnymi pohybmi."
 
-#: Data/Dialogs/dlgConfiguration.xml:189
-#: Data/Dialogs/dlgConfiguration_L.xml:189
+#: Data/Dialogs/dlgConfiguration.xml:166
+#: Data/Dialogs/dlgConfiguration_L.xml:166
 msgid ""
 "Draw topological features (roads, rivers, lakes etc) on the map.  Requires "
 "the topology file to be specified."
@@ -5283,17 +5308,17 @@ msgstr ""
 msgid "ACK Day"
 msgstr "UZNAJ dnes"
 
-#: Data/Dialogs/dlgConfiguration.xml:270
-#: Data/Dialogs/dlgConfiguration_L.xml:270
+#: Data/Dialogs/dlgConfiguration.xml:238
+#: Data/Dialogs/dlgConfiguration_L.xml:238
 msgid "Terrain height"
 msgstr "Výška nad terénom"
 
-#: Data/Dialogs/dlgVario.xml:315 Data/Dialogs/dlgVario_L.xml:315
+#: Data/Dialogs/dlgVario.xml:306 Data/Dialogs/dlgVario_L.xml:307
 msgid "Headset threshold"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:584
-#: Data/Dialogs/dlgConfiguration_L.xml:583
+#: Data/Dialogs/dlgConfiguration.xml:547
+#: Data/Dialogs/dlgConfiguration_L.xml:546
 msgid ""
 "If true, certain InfoBoxes will have coloured text.  For example, the active "
 "waypoint infobox will be blue when the glider is above final glide."
@@ -5301,8 +5326,8 @@ msgstr ""
 "Ak aktivované niektoré Info-okná budú mať farebný text. Napríklad aktívny "
 "otočný bod bude modrý ak je vetroň nad doklzom."
 
-#: Data/Dialogs/dlgConfiguration.xml:208
-#: Data/Dialogs/dlgConfiguration_L.xml:208
+#: Data/Dialogs/dlgConfiguration.xml:185
+#: Data/Dialogs/dlgConfiguration_L.xml:185
 msgid "Terrain colors"
 msgstr "Farebný profil terénu"
 
@@ -5326,8 +5351,8 @@ msgstr ""
 "Povolí detekciu FLARM-u. Vypnite to len keď FLARM nepoužívate alebo je "
 "odpojený."
 
-#: Data/Dialogs/dlgConfiguration.xml:258
-#: Data/Dialogs/dlgConfiguration_L.xml:259
+#: Data/Dialogs/dlgConfiguration.xml:226
+#: Data/Dialogs/dlgConfiguration_L.xml:227
 msgid "L/D Average period*"
 msgstr ""
 
@@ -5335,17 +5360,17 @@ msgstr ""
 msgid "Select Waypoint"
 msgstr "Vyber otočný bod"
 
-#: Data/Dialogs/dlgConfiguration.xml:131
-#: Data/Dialogs/dlgConfiguration_L.xml:131
+#: Data/Dialogs/dlgConfiguration.xml:114
+#: Data/Dialogs/dlgConfiguration_L.xml:114
 msgid "Trail type*"
 msgstr "Typ stopy"
 
-#: Data/Dialogs/dlgVario.xml:345 Data/Dialogs/dlgVario_L.xml:345
+#: Data/Dialogs/dlgVario.xml:336 Data/Dialogs/dlgVario_L.xml:337
 msgid "No aircraft type"
 msgstr "Nevyplnený typ lietadla"
 
-#: Data/Dialogs/dlgConfiguration.xml:412
-#: Data/Dialogs/dlgConfiguration_L.xml:411
+#: Data/Dialogs/dlgConfiguration.xml:380
+#: Data/Dialogs/dlgConfiguration_L.xml:379
 msgid ""
 "This determines whether to blank the display after a long period of "
 "inactivity when operating on internal battery power."
@@ -5353,17 +5378,17 @@ msgstr ""
 "Táto voľba určí, či sa má po určitej dobe neaktivity vypnúť display ak "
 "zariadenie je napájané z vnútornej baterky."
 
-#: Data/Dialogs/dlgConfiguration.xml:431
-#: Data/Dialogs/dlgConfiguration_L.xml:430
+#: Data/Dialogs/dlgConfiguration.xml:399
+#: Data/Dialogs/dlgConfiguration_L.xml:398
 msgid "Language*"
 msgstr "Jazyk*"
 
-#: Data/Dialogs/dlgVario.xml:161 Data/Dialogs/dlgVario.xml:183
-#: Data/Dialogs/dlgVario.xml:205 Data/Dialogs/dlgVario.xml:227
-#: Data/Dialogs/dlgVario.xml:249 Data/Dialogs/dlgVario.xml:271
-#: Data/Dialogs/dlgVario_L.xml:161 Data/Dialogs/dlgVario_L.xml:183
-#: Data/Dialogs/dlgVario_L.xml:205 Data/Dialogs/dlgVario_L.xml:227
-#: Data/Dialogs/dlgVario_L.xml:249 Data/Dialogs/dlgVario_L.xml:271
+#: Data/Dialogs/dlgVario.xml:152 Data/Dialogs/dlgVario.xml:174
+#: Data/Dialogs/dlgVario.xml:196 Data/Dialogs/dlgVario.xml:218
+#: Data/Dialogs/dlgVario.xml:240 Data/Dialogs/dlgVario.xml:262
+#: Data/Dialogs/dlgVario_L.xml:153 Data/Dialogs/dlgVario_L.xml:175
+#: Data/Dialogs/dlgVario_L.xml:197 Data/Dialogs/dlgVario_L.xml:219
+#: Data/Dialogs/dlgVario_L.xml:241 Data/Dialogs/dlgVario_L.xml:263
 msgid "Period Scheme"
 msgstr ""
 
@@ -5371,8 +5396,8 @@ msgstr ""
 msgid "Whether the Total Energy port is connected."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:547
-#: Data/Dialogs/dlgConfiguration_L.xml:546
+#: Data/Dialogs/dlgConfiguration.xml:515
+#: Data/Dialogs/dlgConfiguration_L.xml:514
 msgid "Start max height margin"
 msgstr "Tolerancia max. výšky štartu"
 
@@ -5391,8 +5416,8 @@ msgstr "Zemepisná dĺžka"
 msgid "Acknowledge"
 msgstr "Potvrdiť"
 
-#: Data/Dialogs/dlgConfiguration.xml:345
-#: Data/Dialogs/dlgConfiguration_L.xml:344
+#: Data/Dialogs/dlgConfiguration.xml:313
+#: Data/Dialogs/dlgConfiguration_L.xml:312
 msgid "Altair Pro users should set this to Port 1."
 msgstr ""
 "Používatelia zariadenia Altair Pro by túto voľbu mali nastavi´t na Port 1."
@@ -5401,8 +5426,8 @@ msgstr ""
 msgid "Free"
 msgstr "Volný"
 
-#: Data/Dialogs/dlgConfiguration.xml:610
-#: Data/Dialogs/dlgConfiguration_L.xml:609
+#: Data/Dialogs/dlgConfiguration.xml:571
+#: Data/Dialogs/dlgConfiguration_L.xml:570
 msgid "Aircraft type: "
 msgstr "Typ lietadla: "
 
@@ -5415,18 +5440,9 @@ msgstr "Dosiahnutá rýchlosť"
 msgid "Plane"
 msgstr "Lietadlo"
 
-#: Data/Dialogs/dlgVario.xml:97 Data/Dialogs/dlgVario_L.xml:97
+#: Data/Dialogs/dlgVario.xml:88 Data/Dialogs/dlgVario_L.xml:89
 msgid "Circling volume"
 msgstr "Hlasitosť v krúžení"
-
-#: Data/Dialogs/dlgConfiguration_L.xml:146
-msgid ""
-"This enables the display of FLARM traffic on the map window [OFF] FLARM map "
-"display disabled [ON/Fixed] FLARM map display enabled with fixed scale. [ON/"
-"Scaled] FLARM map display enabled and auto scaled. When auto scaling is "
-"enabled, the FLARM targets on the map display are scaled so that when the "
-"map is at large zoom levels, targets are still visible."
-msgstr ""
 
 #: Data/Dialogs/dlgAirspacePatterns.xml:3
 #: Data/Dialogs/dlgAirspacePatterns_L.xml:3
@@ -5437,14 +5453,14 @@ msgstr "Zvoľte vzor"
 msgid "Enable voice read-back of the average climb rate when circling."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:334 Data/Dialogs/dlgConfiguration.xml:354
-#: Data/Dialogs/dlgConfiguration_L.xml:334
-#: Data/Dialogs/dlgConfiguration_L.xml:353
+#: Data/Dialogs/dlgConfiguration.xml:302 Data/Dialogs/dlgConfiguration.xml:322
+#: Data/Dialogs/dlgConfiguration_L.xml:302
+#: Data/Dialogs/dlgConfiguration_L.xml:321
 msgid "Setup ..."
 msgstr "Nastavenie ..."
 
-#: Data/Dialogs/dlgConfiguration.xml:495
-#: Data/Dialogs/dlgConfiguration_L.xml:494
+#: Data/Dialogs/dlgConfiguration.xml:463
+#: Data/Dialogs/dlgConfiguration_L.xml:462
 msgid "Whether to show the bugs percentage."
 msgstr "Určuje, či sa má zobrazovať znečistenie krídel."
 
@@ -5490,7 +5506,7 @@ msgstr "Určuje, či sa má zobrazovať znečistenie krídel."
 #: Data/Dialogs/dlgWayPointSelect.xml:20
 #: Data/Dialogs/dlgWayPointSelect_L.xml:19 Data/Dialogs/dlgWaypointEdit.xml:4
 #: Data/Dialogs/dlgWaypointEdit_L.xml:4 Data/Dialogs/dlgWeather.xml:4
-#: Data/Dialogs/dlgWeather_L.xml:4 Data/Dialogs/dlgWindSettings.xml:23
+#: Data/Dialogs/dlgWeather_L.xml:4 Data/Dialogs/dlgWindSettings.xml:20
 msgid "Close"
 msgstr "Zavrieť"
 
@@ -5498,7 +5514,7 @@ msgstr "Zavrieť"
 msgid "Stall port"
 msgstr "Port varovania pádu"
 
-#: Data/Dialogs/dlgVario.xml:420 Data/Dialogs/dlgVario_L.xml:420
+#: Data/Dialogs/dlgVario.xml:411 Data/Dialogs/dlgVario_L.xml:412
 msgid "V Manoeuvering"
 msgstr "V manévrovacia"
 
@@ -5507,7 +5523,7 @@ msgid ""
 "Enable voice read-back of the distance to next waypoint when in cruise mode."
 msgstr ""
 
-#: Data/Dialogs/dlgVario.xml:410 Data/Dialogs/dlgVario_L.xml:410
+#: Data/Dialogs/dlgVario.xml:401 Data/Dialogs/dlgVario_L.xml:402
 msgid "V Terrain"
 msgstr "V terén"
 
@@ -5521,29 +5537,29 @@ msgstr "Výškový rozdiel s bezpečným MC"
 msgid "Alt diff Mc 0"
 msgstr "Výškový rozdiel Mc 0"
 
-#: Data/Dialogs/dlgVario.xml:440 Data/Dialogs/dlgVario_L.xml:440
+#: Data/Dialogs/dlgVario.xml:431 Data/Dialogs/dlgVario_L.xml:432
 msgid "Zander"
 msgstr "Zander"
 
-#: Data/Dialogs/dlgVario.xml:131 Data/Dialogs/dlgVario_L.xml:131
-msgid "Circling low cutoff"
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:330 Data/Dialogs/dlgConfiguration.xml:349
-#: Data/Dialogs/dlgConfiguration_L.xml:330
-#: Data/Dialogs/dlgConfiguration_L.xml:348
+#: Data/Dialogs/dlgConfiguration.xml:298 Data/Dialogs/dlgConfiguration.xml:317
+#: Data/Dialogs/dlgConfiguration_L.xml:298
+#: Data/Dialogs/dlgConfiguration_L.xml:316
 msgid "Baudrate"
 msgstr "Baudrate"
 
-#: Data/Dialogs/dlgConfiguration.xml:330 Data/Dialogs/dlgConfiguration.xml:349
-#: Data/Dialogs/dlgConfiguration_L.xml:330
-#: Data/Dialogs/dlgConfiguration_L.xml:348
+#: Data/Dialogs/dlgConfiguration.xml:298 Data/Dialogs/dlgConfiguration.xml:317
+#: Data/Dialogs/dlgConfiguration_L.xml:298
+#: Data/Dialogs/dlgConfiguration_L.xml:316
 msgid "Altair Pro or Vega users should set this to 38400."
 msgstr ""
 "Používatelia zariadenia Altair Pro alebo Vega by túto voľbu mali nastaviť na "
 "38400."
 
-#: Data/Dialogs/dlgVario.xml:143 Data/Dialogs/dlgVario_L.xml:143
+#: Data/Dialogs/dlgVario.xml:122 Data/Dialogs/dlgVario_L.xml:123
+msgid "Circling low cutoff"
+msgstr ""
+
+#: Data/Dialogs/dlgVario.xml:134 Data/Dialogs/dlgVario_L.xml:135
 msgid "Cruise low cutoff"
 msgstr ""
 
@@ -5554,8 +5570,8 @@ msgid ""
 "set this to a realistic negative value so speed command tones are produced."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:357
-#: Data/Dialogs/dlgConfiguration_L.xml:356
+#: Data/Dialogs/dlgConfiguration.xml:325
+#: Data/Dialogs/dlgConfiguration_L.xml:324
 msgid ""
 "option, if enabled sets the clock of the computer to the GPS time once a fix "
 "is set.  This is only necessary if your computer does not have a real-time "
@@ -5563,8 +5579,8 @@ msgid ""
 "power or otherwise loses time."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:302
-#: Data/Dialogs/dlgConfiguration_L.xml:302
+#: Data/Dialogs/dlgConfiguration.xml:270
+#: Data/Dialogs/dlgConfiguration_L.xml:270
 msgid ""
 "The maximum manoeuvring speed can be entered on this page to prevent the "
 "glide computer from commanding unrealistic cruise speeds."
@@ -5572,18 +5588,18 @@ msgstr ""
 "Na tejto stránke je možné zadať maximálnu manévrovaciu rýchlosť, aby sa "
 "zabránilo doklzovému počítaču diktovať nerealisticky vysoké rýchlosti."
 
-#: Data/Dialogs/dlgConfiguration.xml:468
-#: Data/Dialogs/dlgConfiguration_L.xml:467
+#: Data/Dialogs/dlgConfiguration.xml:436
+#: Data/Dialogs/dlgConfiguration_L.xml:435
 msgid "Msg window*"
 msgstr "Okno s hlásením*"
 
-#: Data/Dialogs/dlgConfiguration.xml:265
-#: Data/Dialogs/dlgConfiguration_L.xml:265
+#: Data/Dialogs/dlgConfiguration.xml:233
+#: Data/Dialogs/dlgConfiguration_L.xml:233
 msgid "Arrival height"
 msgstr "Príletová výška"
 
-#: Data/Dialogs/dlgConfiguration.xml:280
-#: Data/Dialogs/dlgConfiguration_L.xml:280
+#: Data/Dialogs/dlgConfiguration.xml:248
+#: Data/Dialogs/dlgConfiguration_L.xml:248
 msgid ""
 "The MacCready setting used in task abort mode and for determining arrival "
 "altitude at airfields. "
@@ -5591,8 +5607,8 @@ msgstr ""
 "Nastavenie MacCready používané v móde prerušenej úlohy pre odhad výšky "
 "príletu na letiská. "
 
-#: Data/Dialogs/dlgConfiguration.xml:297
-#: Data/Dialogs/dlgConfiguration_L.xml:297
+#: Data/Dialogs/dlgConfiguration.xml:265
+#: Data/Dialogs/dlgConfiguration_L.xml:265
 msgid ""
 "When External Polar File is the polar type, this is the name of the file "
 "containing the glide polar data (in WinPilot format)."
@@ -5609,8 +5625,8 @@ msgstr "Dialógové okná"
 msgid "ACK Space"
 msgstr "UZNAJ priesor"
 
-#: Data/Dialogs/dlgConfiguration.xml:579
-#: Data/Dialogs/dlgConfiguration_L.xml:578
+#: Data/Dialogs/dlgConfiguration.xml:542
+#: Data/Dialogs/dlgConfiguration_L.xml:541
 msgid "If true, the InfoBoxes are white on black, otherwise black on white."
 msgstr ""
 "Ak aktivované info-okná budú invertované, biele písmo na čiernom podklade."
@@ -5619,8 +5635,8 @@ msgstr ""
 msgid "Set Mate code"
 msgstr "Nastav kód kolegu"
 
-#: Data/Dialogs/dlgConfiguration.xml:340
-#: Data/Dialogs/dlgConfiguration_L.xml:340
+#: Data/Dialogs/dlgConfiguration.xml:308
+#: Data/Dialogs/dlgConfiguration_L.xml:308
 msgid ""
 "Type of secondary device. The secondary device may be used as backup GPS "
 "data or other data e.g. from an intelligent variometer. Generic can be used "
@@ -5631,12 +5647,12 @@ msgstr ""
 "inteligentného variometra). \"Všeobecné\" (Generic) zariadenie môže byť "
 "zvolené pre zdroj GPS dát vrátane FLARM-u."
 
-#: Data/Dialogs/dlgVario.xml:307 Data/Dialogs/dlgVario_L.xml:307
+#: Data/Dialogs/dlgVario.xml:298 Data/Dialogs/dlgVario_L.xml:299
 msgid "Voice muting"
 msgstr "Stlmenie hlasitosti"
 
-#: Data/Dialogs/dlgConfiguration.xml:490
-#: Data/Dialogs/dlgConfiguration_L.xml:489
+#: Data/Dialogs/dlgConfiguration.xml:458
+#: Data/Dialogs/dlgConfiguration_L.xml:457
 msgid "Show MacReady"
 msgstr "Zobraz MacCready"
 
@@ -5648,10 +5664,21 @@ msgstr ""
 "Kalibračný faktor dynamického tlaku použitý pri výpočtoch s celkovou "
 "energiou. "
 
-#: Data/Dialogs/dlgConfiguration.xml:473
-#: Data/Dialogs/dlgConfiguration_L.xml:472
+#: Data/Dialogs/dlgConfiguration.xml:441
+#: Data/Dialogs/dlgConfiguration_L.xml:440
 msgid "Dialog Style*"
 msgstr "Dialógové okno *"
+
+#: Data/Dialogs/dlgConfiguration.xml:57 Data/Dialogs/dlgConfiguration_L.xml:57
+msgid ""
+"Controls filtering of airspace for display and warnings.  The airspace "
+"filter button also allows filtering of display and warnings independently "
+"for each airspace class.\n"
+"[All on] All is displayed.\n"
+"[Clip] Only airspace below the clip altitude.\n"
+"[Auto] All within a margin of the glider.\n"
+"[All below] All airspace below the glider."
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:28 Data/Dialogs/dlgVario_L.xml:29
 msgid ""
@@ -5667,8 +5694,8 @@ msgstr ""
 msgid "Waypoint Editor"
 msgstr "Úprava otočných bodov"
 
-#: Data/Dialogs/dlgConfiguration.xml:589
-#: Data/Dialogs/dlgConfiguration_L.xml:588
+#: Data/Dialogs/dlgConfiguration.xml:552
+#: Data/Dialogs/dlgConfiguration_L.xml:551
 msgid "Infobox border*"
 msgstr "Okraj info-okien"
 
@@ -5676,8 +5703,8 @@ msgstr "Okraj info-okien"
 msgid "Waypts."
 msgstr "Tr.body"
 
-#: Data/Dialogs/dlgConfiguration.xml:628
-#: Data/Dialogs/dlgConfiguration_L.xml:627
+#: Data/Dialogs/dlgConfiguration.xml:589
+#: Data/Dialogs/dlgConfiguration_L.xml:588
 msgid ""
 "Select your PNA model to make full use of its hardware capabilities. If it "
 "is not included, use Generic type."
@@ -5689,17 +5716,17 @@ msgstr ""
 msgid "PDA power"
 msgstr "Napätie PDA"
 
-#: Data/Dialogs/dlgVario.xml:117 Data/Dialogs/dlgVario_L.xml:117
+#: Data/Dialogs/dlgVario.xml:108 Data/Dialogs/dlgVario_L.xml:109
 msgid "Tone pitch scale"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:422
-#: Data/Dialogs/dlgConfiguration_L.xml:421
+#: Data/Dialogs/dlgConfiguration.xml:390
+#: Data/Dialogs/dlgConfiguration_L.xml:389
 msgid "Gestures"
 msgstr "Gestá"
 
-#: Data/Dialogs/dlgConfiguration.xml:532
-#: Data/Dialogs/dlgConfiguration_L.xml:531
+#: Data/Dialogs/dlgConfiguration.xml:500
+#: Data/Dialogs/dlgConfiguration_L.xml:499
 #: Data/Dialogs/dlgTaskProperties.xml:18
 #: Data/Dialogs/dlgTaskProperties_L.xml:18
 msgid ""
@@ -5712,26 +5739,37 @@ msgstr ""
 msgid "TE dynamic cal"
 msgstr "TE dynamická kalibrácia"
 
-#: Data/Dialogs/dlgVario.xml:405 Data/Dialogs/dlgVario_L.xml:405
+#: Data/Dialogs/dlgVario.xml:396 Data/Dialogs/dlgVario_L.xml:397
 msgid "VNE"
 msgstr "VNE"
 
-#: Data/Dialogs/dlgConfiguration.xml:141
-#: Data/Dialogs/dlgConfiguration_L.xml:141
+#: Data/Dialogs/dlgConfiguration.xml:124
+#: Data/Dialogs/dlgConfiguration_L.xml:124
 msgid "Detour cost markers*"
 msgstr "Značenie ceny obchádzky*"
 
-#: Data/Dialogs/dlgConfiguration.xml:127
-#: Data/Dialogs/dlgConfiguration_L.xml:127
+#: Data/Dialogs/dlgConfiguration.xml:110
+#: Data/Dialogs/dlgConfiguration_L.xml:110
 msgid "Trail drift*"
 msgstr "Unášanie stopy*"
+
+#: Data/Dialogs/dlgVario.xml:76 Data/Dialogs/dlgVario_L.xml:77
+msgid ""
+"Comparison method used to detect cruise states for switching to lift tones "
+"during cruise.\n"
+"[NONE]: LIFT tone disabled in cruise\n"
+"[RELATIVE ZERO] LIFT tone when relative vario greater than zero.\n"
+"[GROSS ZERO] LIFT tone when glider is climbing.\n"
+"[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.\n"
+"[NET MC/2] LIFT tone when airmass velocity greater than half MC."
+msgstr ""
 
 #: Data/Dialogs/dlgFontEdit.xml:20
 msgid "my sample"
 msgstr "Moja vzorka"
 
-#: Data/Dialogs/dlgTaskProperties.xml:40
-#: Data/Dialogs/dlgTaskProperties_L.xml:40
+#: Data/Dialogs/dlgTaskProperties.xml:38
+#: Data/Dialogs/dlgTaskProperties_L.xml:38
 msgid ""
 "If enabled, this option requires the minimum height above ground for finish "
 "to be greater than 1000m below the start height."
@@ -5751,12 +5789,12 @@ msgid ""
 "minutes."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:505
-#: Data/Dialogs/dlgConfiguration_L.xml:504
+#: Data/Dialogs/dlgConfiguration.xml:473
+#: Data/Dialogs/dlgConfiguration_L.xml:472
 msgid "Whether to show the gross climb rate."
 msgstr "Či sa má zobrazovať hrubá rýchlosť stúpania."
 
-#: Data/Dialogs/dlgVario.xml:341 Data/Dialogs/dlgVario_L.xml:341
+#: Data/Dialogs/dlgVario.xml:332 Data/Dialogs/dlgVario_L.xml:333
 msgid "No mode reports"
 msgstr ""
 
@@ -5764,7 +5802,7 @@ msgstr ""
 msgid "Colours"
 msgstr "Farby"
 
-#: Data/Dialogs/dlgVario.xml:379 Data/Dialogs/dlgVario_L.xml:379
+#: Data/Dialogs/dlgVario.xml:370 Data/Dialogs/dlgVario_L.xml:371
 msgid "Gear off delay"
 msgstr ""
 
@@ -5776,8 +5814,8 @@ msgstr "Zostávajúca vzdialenosť"
 msgid "Radius of the OZ cylinder."
 msgstr "Polomer cylindra pozorovacej oblasti."
 
-#: Data/Dialogs/dlgConfiguration.xml:374
-#: Data/Dialogs/dlgConfiguration_L.xml:373
+#: Data/Dialogs/dlgConfiguration.xml:342
+#: Data/Dialogs/dlgConfiguration_L.xml:341
 msgid ""
 "Units used for horizontal distances e.g. range to waypoint, distance to go."
 msgstr ""
@@ -5792,8 +5830,8 @@ msgstr ""
 "Toto vytvorí falošnú vzdušnú rýchlosť. Môže to byť použité k demonštrovaniu "
 "tónov \"speed commander\"-u, keď sa klzák nenachádza v móde krúženia."
 
-#: Data/Dialogs/dlgConfiguration.xml:258
-#: Data/Dialogs/dlgConfiguration_L.xml:259
+#: Data/Dialogs/dlgConfiguration.xml:226
+#: Data/Dialogs/dlgConfiguration_L.xml:227
 msgid ""
 "Average efficiency is always calculated in REAL TIME. Here you can decide on "
 "how many seconds of flight this calculation must be done. The real distance "
@@ -5817,8 +5855,8 @@ msgstr "Akcelerometer"
 msgid "Range"
 msgstr "Rozsah"
 
-#: Data/Dialogs/dlgConfiguration.xml:157
-#: Data/Dialogs/dlgConfiguration_L.xml:157
+#: Data/Dialogs/dlgConfiguration.xml:136
+#: Data/Dialogs/dlgConfiguration_L.xml:136
 msgid ""
 "Defines the location of the glider drawn on the screen in percent from the "
 "bottom."
@@ -5838,13 +5876,13 @@ msgstr ""
 msgid "Enable warnings for final glide through terrain."
 msgstr "Aktivuj varovania pre doklz cez terén."
 
-#: Data/Dialogs/dlgConfiguration.xml:383
-#: Data/Dialogs/dlgConfiguration_L.xml:382
+#: Data/Dialogs/dlgConfiguration.xml:351
+#: Data/Dialogs/dlgConfiguration_L.xml:350
 msgid "Units used for altitude and heights."
 msgstr "Jednotky použité pre letovú výšku a výšky."
 
-#: Data/Dialogs/dlgConfiguration.xml:171
-#: Data/Dialogs/dlgConfiguration_L.xml:171
+#: Data/Dialogs/dlgConfiguration.xml:150
+#: Data/Dialogs/dlgConfiguration_L.xml:150
 msgid "Two styles are available.  Normal, or with a white outline."
 msgstr "Na výber sú dve možnosti. Normálna alebo s bielou kontúrou."
 
@@ -5865,17 +5903,17 @@ msgstr "Popisky topológie"
 msgid "Insert in task"
 msgstr "Vlož do úlohy"
 
-#: Data/Dialogs/dlgConfiguration.xml:78 Data/Dialogs/dlgConfiguration_L.xml:78
+#: Data/Dialogs/dlgConfiguration.xml:74 Data/Dialogs/dlgConfiguration_L.xml:74
 msgid "Warning time*"
 msgstr "Predstih upozornenia"
 
-#: Data/Dialogs/dlgConfiguration.xml:398
-#: Data/Dialogs/dlgConfiguration_L.xml:397
+#: Data/Dialogs/dlgConfiguration.xml:366
+#: Data/Dialogs/dlgConfiguration_L.xml:365
 msgid "Units used for latitude and longitude."
 msgstr "Jednotky pre zemepisnú výšku a šírku."
 
-#: Data/Dialogs/dlgConfiguration.xml:136
-#: Data/Dialogs/dlgConfiguration_L.xml:136
+#: Data/Dialogs/dlgConfiguration.xml:119
+#: Data/Dialogs/dlgConfiguration_L.xml:119
 msgid "Trail width*"
 msgstr "Šírka stopy*"
 
@@ -5883,8 +5921,8 @@ msgstr "Šírka stopy*"
 msgid "Browse"
 msgstr "Prehľadávať"
 
-#: Data/Dialogs/dlgConfiguration.xml:426
-#: Data/Dialogs/dlgConfiguration_L.xml:425
+#: Data/Dialogs/dlgConfiguration.xml:394
+#: Data/Dialogs/dlgConfiguration_L.xml:393
 msgid ""
 "The Input Events file defines the menu system and how XCSoar responds to "
 "button presses and events from external devices."
@@ -5892,19 +5930,19 @@ msgstr ""
 "Súbor \"vstupných udalostí\" definuje menu a tiež to, ako XCSoar reaguje na "
 "stlačenie tlačítok a na udalosti z externých zariadení."
 
-#: Data/Dialogs/dlgVario.xml:93 Data/Dialogs/dlgVario_L.xml:93
+#: Data/Dialogs/dlgVario.xml:84 Data/Dialogs/dlgVario_L.xml:85
 msgid "Time scale used for cruise speed command averager."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:520
-#: Data/Dialogs/dlgConfiguration_L.xml:519
+#: Data/Dialogs/dlgConfiguration.xml:488
+#: Data/Dialogs/dlgConfiguration_L.xml:487
 msgid ""
 "Setting this to \"ON\" will automatically close the FLARM dialog if there is "
 "no traffic. \"OFF\" will keep the dialog open even without current traffic."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:431
-#: Data/Dialogs/dlgConfiguration_L.xml:430
+#: Data/Dialogs/dlgConfiguration.xml:399
+#: Data/Dialogs/dlgConfiguration_L.xml:398
 msgid ""
 "The language file defines translations for XCSoar text in English to other "
 "languages.  If this field is left blank, then XCSoar uses English."
@@ -5912,8 +5950,8 @@ msgstr ""
 "Jazykový súbor definuje, ktorá sada prekložených textov bude použitá. Ak je "
 "toto políčko ponechané prázdne, XCSoar bude zobrazovať texty v angličtine."
 
-#: Data/Dialogs/dlgConfiguration.xml:579
-#: Data/Dialogs/dlgConfiguration_L.xml:578
+#: Data/Dialogs/dlgConfiguration.xml:542
+#: Data/Dialogs/dlgConfiguration_L.xml:541
 msgid "Inverse infoboxes*"
 msgstr "Inverzné info-okná*"
 
@@ -5921,20 +5959,8 @@ msgstr "Inverzné info-okná*"
 msgid "Near"
 msgstr "Blízko"
 
-#: Data/Dialogs/dlgConfiguration.xml:92 Data/Dialogs/dlgConfiguration_L.xml:92
-msgid ""
-"Determines how labels are displayed with each waypoint: [Names] The full "
-"name of each waypoint is displayed. [Numbers] The waypoint number of each "
-"waypoint is displayed. [None] No names are displayed with the waypoints. "
-"[Names in task] Names are only displayed for waypoints that are in the "
-"active task as well as the home airfield. [First 3] The first 3 letters of "
-"the waypoint name are displayed. [First 5] The first 5 letters of the "
-"waypoint name are displayed. [First word] The first word of the waypoint "
-"name is displayed."
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:616
-#: Data/Dialogs/dlgConfiguration_L.xml:615
+#: Data/Dialogs/dlgConfiguration.xml:577
+#: Data/Dialogs/dlgConfiguration_L.xml:576
 msgid "Short file name"
 msgstr "Skrátený názov súboru"
 
@@ -5942,7 +5968,7 @@ msgstr "Skrátený názov súboru"
 msgid "Flap landing"
 msgstr "Pristávacie klapky"
 
-#: Data/Dialogs/dlgVario.xml:303 Data/Dialogs/dlgVario_L.xml:303
+#: Data/Dialogs/dlgVario.xml:294 Data/Dialogs/dlgVario_L.xml:295
 msgid "Vario muting"
 msgstr "Vário umlčať"
 
@@ -5954,26 +5980,26 @@ msgstr "Vzdušná rýchlosť"
 msgid "Gauges"
 msgstr "Ukazatele"
 
-#: Data/Dialogs/dlgConfiguration.xml:393
-#: Data/Dialogs/dlgConfiguration_L.xml:392
+#: Data/Dialogs/dlgConfiguration.xml:361
+#: Data/Dialogs/dlgConfiguration_L.xml:360
 msgid "Task Speed"
 msgstr "Rýchlosť úlohy"
 
-#: Data/Dialogs/dlgVario.xml:157 Data/Dialogs/dlgVario.xml:179
-#: Data/Dialogs/dlgVario.xml:201 Data/Dialogs/dlgVario.xml:223
-#: Data/Dialogs/dlgVario.xml:245 Data/Dialogs/dlgVario.xml:267
-#: Data/Dialogs/dlgVario_L.xml:157 Data/Dialogs/dlgVario_L.xml:179
-#: Data/Dialogs/dlgVario_L.xml:201 Data/Dialogs/dlgVario_L.xml:223
-#: Data/Dialogs/dlgVario_L.xml:245 Data/Dialogs/dlgVario_L.xml:267
+#: Data/Dialogs/dlgVario.xml:148 Data/Dialogs/dlgVario.xml:170
+#: Data/Dialogs/dlgVario.xml:192 Data/Dialogs/dlgVario.xml:214
+#: Data/Dialogs/dlgVario.xml:236 Data/Dialogs/dlgVario.xml:258
+#: Data/Dialogs/dlgVario_L.xml:149 Data/Dialogs/dlgVario_L.xml:171
+#: Data/Dialogs/dlgVario_L.xml:193 Data/Dialogs/dlgVario_L.xml:215
+#: Data/Dialogs/dlgVario_L.xml:237 Data/Dialogs/dlgVario_L.xml:259
 msgid "Pitch Scale"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:146
-#: Data/Dialogs/dlgConfiguration_L.xml:146
+#: Data/Dialogs/dlgConfiguration.xml:129
+#: Data/Dialogs/dlgConfiguration_L.xml:129
 msgid "FLARM map"
 msgstr "FLARM mapa"
 
-#: Data/Dialogs/dlgVario.xml:437 Data/Dialogs/dlgVario_L.xml:437
+#: Data/Dialogs/dlgVario.xml:428 Data/Dialogs/dlgVario_L.xml:429
 msgid "Vega"
 msgstr "Vega"
 
@@ -5982,7 +6008,7 @@ msgstr "Vega"
 msgid "Target"
 msgstr "Cieľ"
 
-#: Data/Dialogs/dlgConfiguration.xml:70 Data/Dialogs/dlgConfiguration_L.xml:70
+#: Data/Dialogs/dlgConfiguration.xml:66 Data/Dialogs/dlgConfiguration_L.xml:66
 msgid ""
 "For auto airspace mode, this is the altitude above/below which airspace is "
 "included."
@@ -5992,8 +6018,8 @@ msgstr ""
 msgid "Waypoint Distance"
 msgstr "Vzdialenosť otoč. bodu"
 
-#: Data/Dialogs/dlgConfiguration.xml:468
-#: Data/Dialogs/dlgConfiguration_L.xml:467
+#: Data/Dialogs/dlgConfiguration.xml:436
+#: Data/Dialogs/dlgConfiguration_L.xml:435
 msgid ""
 "Defines the alignment of the status message box, either centered or in the "
 "top left corner."
@@ -6001,7 +6027,7 @@ msgstr ""
 "Určuje zarovnanie boxu pre zobrazenie stavových správ - buď sa môžu "
 "zobrazovať centrovane, alebo zarovnané k ľavému hornému rohu."
 
-#: Data/Dialogs/dlgVario.xml:365 Data/Dialogs/dlgVario_L.xml:365
+#: Data/Dialogs/dlgVario.xml:356 Data/Dialogs/dlgVario_L.xml:357
 msgid "Interval, Caution"
 msgstr "Interval, Výstraha"
 
@@ -6010,8 +6036,8 @@ msgstr "Interval, Výstraha"
 msgid "Edit text"
 msgstr "Upraviť text"
 
-#: Data/Dialogs/dlgConfiguration.xml:490
-#: Data/Dialogs/dlgConfiguration_L.xml:489
+#: Data/Dialogs/dlgConfiguration.xml:458
+#: Data/Dialogs/dlgConfiguration_L.xml:457
 msgid "Whether to show the MacCready setting."
 msgstr ""
 
@@ -6019,17 +6045,17 @@ msgstr ""
 msgid "Enable"
 msgstr "Povoliť"
 
-#: Data/Dialogs/dlgConfiguration.xml:598
-#: Data/Dialogs/dlgConfiguration_L.xml:597
+#: Data/Dialogs/dlgConfiguration.xml:559
+#: Data/Dialogs/dlgConfiguration_L.xml:558
 msgid "This is the time interval between logged points when not circling. "
 msgstr "Toto je časový interval pre zápis GPS bodov mimo krúženia. "
 
-#: Data/Dialogs/dlgVario.xml:135 Data/Dialogs/dlgVario_L.xml:135
+#: Data/Dialogs/dlgVario.xml:126 Data/Dialogs/dlgVario_L.xml:127
 msgid "Cruise deadband type"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:417
-#: Data/Dialogs/dlgConfiguration_L.xml:416
+#: Data/Dialogs/dlgConfiguration.xml:385
+#: Data/Dialogs/dlgConfiguration_L.xml:384
 msgid ""
 "This determines whether the configuration settings dialog is accessible "
 "during flight."
@@ -6039,27 +6065,16 @@ msgstr ""
 msgid "Previous"
 msgstr "Predošlý"
 
-#: Data/Dialogs/dlgConfiguration.xml:107 Data/Dialogs/dlgConfiguration.xml:115
-#: Data/Dialogs/dlgConfiguration_L.xml:107
-#: Data/Dialogs/dlgConfiguration_L.xml:115
-msgid ""
-"Determines how the screen is rotated with the glider:   [North up] The "
-"moving map display will always be orientated north to south and the glider "
-"icon will be rotated to show its course.   [Track up] The moving map display "
-"will be rotated so the glider's track is oriented up.   [Target up] The "
-"moving map display will be rotated so the navigation target is oriented up."
-msgstr ""
-
 #: Data/Dialogs/dlgVario.xml:16 Data/Dialogs/dlgVario_L.xml:17
 msgid "Whether the Pitot port is connected."
 msgstr ""
 
-#: Data/Dialogs/dlgVario.xml:395 Data/Dialogs/dlgVario_L.xml:395
+#: Data/Dialogs/dlgVario.xml:386 Data/Dialogs/dlgVario_L.xml:387
 msgid "Battery empty delay"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:189
-#: Data/Dialogs/dlgConfiguration_L.xml:189
+#: Data/Dialogs/dlgConfiguration.xml:166
+#: Data/Dialogs/dlgConfiguration_L.xml:166
 msgid "Topology display"
 msgstr "Zobrazenie topológie"
 
@@ -6067,32 +6082,23 @@ msgstr "Zobrazenie topológie"
 msgid "File type"
 msgstr "Typ súboru"
 
-#: Data/Dialogs/dlgConfiguration.xml:223
-#: Data/Dialogs/dlgConfiguration_L.xml:223 Data/Dialogs/dlgWindSettings.xml:12
-msgid ""
-"This allows switching on or off the automatic wind algorithm.  When the "
-"algorithm is switched off, the pilot is responsible for setting the wind "
-"estimate. [Circling] Requires only a GPS source [ZigZag] requires an "
-"intelligent vario with airspeed output. [Both] Use ZigZag and circling."
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:65 Data/Dialogs/dlgConfiguration_L.xml:65
+#: Data/Dialogs/dlgConfiguration.xml:61 Data/Dialogs/dlgConfiguration_L.xml:61
 msgid "Clip altitude"
 msgstr "Ignoruj vp nad"
 
-#: Data/Dialogs/dlgConfiguration.xml:552
-#: Data/Dialogs/dlgConfiguration_L.xml:551
+#: Data/Dialogs/dlgConfiguration.xml:520
+#: Data/Dialogs/dlgConfiguration_L.xml:519
 #: Data/Dialogs/dlgTaskProperties.xml:28
 #: Data/Dialogs/dlgTaskProperties_L.xml:28
 msgid "Start height ref"
 msgstr "Štartová výška ref."
 
-#: Data/Dialogs/dlgConfiguration.xml:326
-#: Data/Dialogs/dlgConfiguration_L.xml:326
+#: Data/Dialogs/dlgConfiguration.xml:294
+#: Data/Dialogs/dlgConfiguration_L.xml:294
 msgid "Altair Pro users should set this to Port 3"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:86 Data/Dialogs/dlgConfiguration_L.xml:86
+#: Data/Dialogs/dlgConfiguration.xml:82 Data/Dialogs/dlgConfiguration_L.xml:82
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color"
 msgstr ""
@@ -6117,7 +6123,7 @@ msgstr "Centrovací pomocník"
 msgid "Static port"
 msgstr "Statický port"
 
-#: Data/Dialogs/dlgVario.xml:135 Data/Dialogs/dlgVario_L.xml:135
+#: Data/Dialogs/dlgVario.xml:126 Data/Dialogs/dlgVario_L.xml:127
 msgid "Type of dead band used in cruise mode."
 msgstr ""
 
@@ -6125,35 +6131,17 @@ msgstr ""
 msgid "Ack Day"
 msgstr "Uznaj dnes"
 
-#: Data/Dialogs/dlgWindSettings.xml:19
+#: Data/Dialogs/dlgWindSettings.xml:16
 msgid "Trail drift"
 msgstr "Unášanie stopy"
 
-#: Data/Dialogs/dlgConfiguration.xml:426
-#: Data/Dialogs/dlgConfiguration_L.xml:425
+#: Data/Dialogs/dlgConfiguration.xml:394
+#: Data/Dialogs/dlgConfiguration_L.xml:393
 msgid "Events*"
 msgstr "Udalosti*"
 
-#: Data/Dialogs/dlgConfiguration.xml:146
-msgid ""
-"This enables the display of FLARM traffic on the map window. [OFF] FLARM map "
-"display disabled [ON/Fixed] FLARM map display enabled with fixed scale. [ON/"
-"Scaled] FLARM map display enabled and auto scaled. When auto scaling is "
-"enabled, the FLARM targets on the map display are scaled so that when the "
-"map is at large zoom levels, targets are still visible."
-msgstr ""
-
-#: Data/Dialogs/dlgVario.xml:117 Data/Dialogs/dlgVario_L.xml:117
+#: Data/Dialogs/dlgVario.xml:108 Data/Dialogs/dlgVario_L.xml:109
 msgid "Adjustment to base pitch scale of tones in all modes."
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:57 Data/Dialogs/dlgConfiguration_L.xml:57
-msgid ""
-"Controls filtering of airspace for display and warnings.  The airspace "
-"filter button also allows filtering of display and warnings independently "
-"for each airspace class. [All on] All is displayed. [Clip] Only airspace "
-"below the clip altitude. [Auto] All within a margin of the glider. [All "
-"below] All airspace below the glider."
 msgstr ""
 
 #: Data/Dialogs/dlgTaskEdit.xml:13 Data/Dialogs/dlgTaskEdit_L.xml:9
@@ -6174,8 +6162,8 @@ msgstr ""
 msgid "Start radial"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:505
-#: Data/Dialogs/dlgConfiguration_L.xml:504
+#: Data/Dialogs/dlgConfiguration.xml:473
+#: Data/Dialogs/dlgConfiguration_L.xml:472
 msgid "Show gross*"
 msgstr "Ukazuj brutto*"
 
@@ -6192,21 +6180,20 @@ msgstr "Ukazuj brutto*"
 msgid "Edit"
 msgstr "Upraviť"
 
-#: Data/Dialogs/dlgConfiguration.xml:285
-#: Data/Dialogs/dlgConfiguration_L.xml:285
+#: Data/Dialogs/dlgConfiguration.xml:253
+#: Data/Dialogs/dlgConfiguration_L.xml:253
 msgid ""
 "The STF risk factor reduces the MacCready setting used to calculate speed to "
 "fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for "
 "no compensation, 1.0 scales Mc linearly with height."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:103
-#: Data/Dialogs/dlgConfiguration_L.xml:103
+#: Data/Dialogs/dlgConfiguration.xml:92 Data/Dialogs/dlgConfiguration_L.xml:92
 msgid "Trail length"
 msgstr "Dĺžka stopy"
 
-#: Data/Dialogs/dlgConfiguration.xml:510
-#: Data/Dialogs/dlgConfiguration_L.xml:509
+#: Data/Dialogs/dlgConfiguration.xml:478
+#: Data/Dialogs/dlgConfiguration_L.xml:477
 msgid ""
 "If true, the vario gauge will display a hollow averager needle.  During "
 "cruise, this needle displays the average netto value.  During circling, this "
@@ -6217,8 +6204,8 @@ msgstr ""
 msgid "Map file"
 msgstr "Súbor s mapou"
 
-#: Data/Dialogs/dlgConfiguration.xml:285
-#: Data/Dialogs/dlgConfiguration_L.xml:285
+#: Data/Dialogs/dlgConfiguration.xml:253
+#: Data/Dialogs/dlgConfiguration_L.xml:253
 msgid "STF risk factor*"
 msgstr "Koeficient rizika STF*"
 
@@ -6230,7 +6217,7 @@ msgstr "A+"
 msgid "QNH"
 msgstr "QNH"
 
-#: Data/Dialogs/dlgVario.xml:79 Data/Dialogs/dlgVario_L.xml:80
+#: Data/Dialogs/dlgVario.xml:76 Data/Dialogs/dlgVario_L.xml:77
 msgid "Cruise lift trigger"
 msgstr ""
 
@@ -6242,12 +6229,12 @@ msgstr "Otočný bod"
 msgid "Repeat"
 msgstr "Opakovať"
 
-#: Data/Dialogs/dlgVario.xml:113 Data/Dialogs/dlgVario_L.xml:113
+#: Data/Dialogs/dlgVario.xml:104 Data/Dialogs/dlgVario_L.xml:105
 msgid "Variometer low pass filter time constant in cruise mode."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:388
-#: Data/Dialogs/dlgConfiguration_L.xml:387 Data/Dialogs/dlgVario.xml:32
+#: Data/Dialogs/dlgConfiguration.xml:356
+#: Data/Dialogs/dlgConfiguration_L.xml:355 Data/Dialogs/dlgVario.xml:32
 #: Data/Dialogs/dlgVario_L.xml:33
 msgid "Temperature"
 msgstr "Teplota"
@@ -6256,8 +6243,8 @@ msgstr "Teplota"
 msgid "ASI cal"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:357
-#: Data/Dialogs/dlgConfiguration_L.xml:356
+#: Data/Dialogs/dlgConfiguration.xml:325
+#: Data/Dialogs/dlgConfiguration_L.xml:324
 msgid "Use GPS time"
 msgstr "Použiť GPS čas"
 
@@ -6265,19 +6252,19 @@ msgstr "Použiť GPS čas"
 msgid "Flight time"
 msgstr "Dĺžka letu"
 
-#: Data/Dialogs/dlgVario.xml:289 Data/Dialogs/dlgVario_L.xml:289
+#: Data/Dialogs/dlgVario.xml:280 Data/Dialogs/dlgVario_L.xml:281
 msgid "Logger interval"
 msgstr "Interval logovania"
 
-#: Data/Dialogs/dlgConfiguration.xml:254
-#: Data/Dialogs/dlgConfiguration_L.xml:254
+#: Data/Dialogs/dlgConfiguration.xml:222
+#: Data/Dialogs/dlgConfiguration_L.xml:222
 msgid ""
 "When Vega variometer is connected and this option is true, the positive flap "
 "setting switches the flight mode between circling and cruise."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:369
-#: Data/Dialogs/dlgConfiguration_L.xml:368
+#: Data/Dialogs/dlgConfiguration.xml:337
+#: Data/Dialogs/dlgConfiguration_L.xml:336
 msgid ""
 "Units used for airspeed and ground speed.  A separate unit is available for "
 "task speeds."
@@ -6306,18 +6293,18 @@ msgstr "Číslo: "
 msgid "Relocate"
 msgstr "Premiestniť"
 
-#: Data/Dialogs/dlgConfiguration.xml:185
-#: Data/Dialogs/dlgConfiguration_L.xml:185
+#: Data/Dialogs/dlgConfiguration.xml:162
+#: Data/Dialogs/dlgConfiguration_L.xml:162
 msgid "Terrain display"
 msgstr "Zobrazenie terénu"
 
-#: Data/Dialogs/dlgConfiguration.xml:515
-#: Data/Dialogs/dlgConfiguration_L.xml:514
+#: Data/Dialogs/dlgConfiguration.xml:483
+#: Data/Dialogs/dlgConfiguration_L.xml:482
 msgid "FLARM radar"
 msgstr "FLARM radar"
 
-#: Data/Dialogs/dlgConfiguration.xml:193
-#: Data/Dialogs/dlgConfiguration_L.xml:193
+#: Data/Dialogs/dlgConfiguration.xml:170
+#: Data/Dialogs/dlgConfiguration_L.xml:170
 msgid "Slope shading"
 msgstr ""
 
@@ -6325,22 +6312,22 @@ msgstr ""
 msgid "Start time"
 msgstr "Čas štartu"
 
-#: Data/Dialogs/dlgConfiguration.xml:215
-#: Data/Dialogs/dlgConfiguration_L.xml:215
+#: Data/Dialogs/dlgConfiguration.xml:192
+#: Data/Dialogs/dlgConfiguration_L.xml:192
 msgid "Glide terrain line"
 msgstr "Hranica doletu"
 
-#: Data/Dialogs/dlgConfiguration.xml:417
-#: Data/Dialogs/dlgConfiguration_L.xml:416
+#: Data/Dialogs/dlgConfiguration.xml:385
+#: Data/Dialogs/dlgConfiguration_L.xml:384
 msgid "Safety lock"
 msgstr "Bezpečnostný zámok"
 
-#: Data/Dialogs/dlgVario.xml:399 Data/Dialogs/dlgVario_L.xml:399
+#: Data/Dialogs/dlgVario.xml:390 Data/Dialogs/dlgVario_L.xml:391
 msgid "Interval, battery"
 msgstr "Interval, baterka"
 
-#: Data/Dialogs/dlgConfiguration.xml:171
-#: Data/Dialogs/dlgConfiguration_L.xml:171
+#: Data/Dialogs/dlgConfiguration.xml:150
+#: Data/Dialogs/dlgConfiguration_L.xml:150
 msgid "North arrow*"
 msgstr "Ukazovateľ severu*"
 
@@ -6361,17 +6348,16 @@ msgstr "Súbor s terénom*"
 msgid "Move"
 msgstr "Presunúť"
 
-#: Data/Dialogs/dlgConfiguration.xml:525
-#: Data/Dialogs/dlgConfiguration_L.xml:524
+#: Data/Dialogs/dlgConfiguration.xml:493
+#: Data/Dialogs/dlgConfiguration_L.xml:492
 msgid "This enables the display of the ThermalAssistant gauge."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:86 Data/Dialogs/dlgConfiguration_L.xml:86
+#: Data/Dialogs/dlgConfiguration.xml:82 Data/Dialogs/dlgConfiguration_L.xml:82
 msgid "Use black outline*"
 msgstr "Použiť čierne orámovanie*"
 
-#: Data/Dialogs/dlgConfiguration.xml:103
-#: Data/Dialogs/dlgConfiguration_L.xml:103
+#: Data/Dialogs/dlgConfiguration.xml:92 Data/Dialogs/dlgConfiguration_L.xml:92
 msgid ""
 "Determines whether and how long a snail trail is drawn behind the glider"
 msgstr ""
@@ -6380,11 +6366,11 @@ msgstr ""
 msgid "Lon"
 msgstr "Dlz"
 
-#: Data/Dialogs/dlgVario.xml:369 Data/Dialogs/dlgVario_L.xml:369
+#: Data/Dialogs/dlgVario.xml:360 Data/Dialogs/dlgVario_L.xml:361
 msgid "Interval, Warning"
 msgstr "Interval, Varovanie"
 
-#: Data/Dialogs/dlgVario.xml:97 Data/Dialogs/dlgVario_L.xml:97
+#: Data/Dialogs/dlgVario.xml:88 Data/Dialogs/dlgVario_L.xml:89
 msgid "Mean volume level in circling modes."
 msgstr ""
 
@@ -6396,13 +6382,6 @@ msgstr "Odhadovaná rýchlosť"
 msgid ""
 "How clean the glider is. Set to 100% for clean, lower numbers as the wings "
 "pick up bugs or get wet.  50% indicates the glider's sink rate is doubled."
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:589
-#: Data/Dialogs/dlgConfiguration_L.xml:588
-msgid ""
-"Two styles for infobox borders are available: [Box]  Draws boxes around each "
-"infobox. [Tab]  Draws a tab at the top of the infobox across the title."
 msgstr ""
 
 #: Data/Dialogs/dlgTaskProperties.xml:13
@@ -6430,8 +6409,8 @@ msgstr ""
 msgid "Base"
 msgstr "Základňa"
 
-#: Data/Dialogs/dlgConfiguration.xml:265
-#: Data/Dialogs/dlgConfiguration_L.xml:265
+#: Data/Dialogs/dlgConfiguration.xml:233
+#: Data/Dialogs/dlgConfiguration_L.xml:233
 msgid ""
 "The height above terrain that the glider should arrive at for a safe landing."
 msgstr ""
@@ -6451,11 +6430,11 @@ msgid ""
 "dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
 
-#: Data/Dialogs/dlgVario.xml:375 Data/Dialogs/dlgVario_L.xml:375
+#: Data/Dialogs/dlgVario.xml:366 Data/Dialogs/dlgVario_L.xml:367
 msgid "Gear on delay"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:82 Data/Dialogs/dlgConfiguration_L.xml:82
+#: Data/Dialogs/dlgConfiguration.xml:78 Data/Dialogs/dlgConfiguration_L.xml:78
 msgid ""
 "This is the time period in which an acknowledged airspace warning will not "
 "be repeated."
@@ -6465,21 +6444,29 @@ msgstr ""
 msgid "Bearing:"
 msgstr "Kurz:"
 
-#: Data/Dialogs/dlgConfiguration.xml:621
-#: Data/Dialogs/dlgConfiguration_L.xml:620
+#: Data/Dialogs/dlgConfiguration.xml:582
+#: Data/Dialogs/dlgConfiguration_L.xml:581
 msgid "Auto logger*"
 msgstr "Automatický logger*"
+
+#: Data/Dialogs/dlgConfiguration.xml:552
+#: Data/Dialogs/dlgConfiguration_L.xml:551
+msgid ""
+"Two styles for infobox borders are available:\n"
+"[Box] Draws boxes around each infobox.\n"
+"[Tab] Draws a tab at the top of the infobox across the title."
+msgstr ""
 
 #: Data/Dialogs/dlgWayPointDetails.xml:31
 #: Data/Dialogs/dlgWayPointDetails_L.xml:31
 msgid "Set as new home"
 msgstr "Nastav ako nový domov"
 
-#: Data/Dialogs/dlgVario.xml:285 Data/Dialogs/dlgVario_L.xml:285
+#: Data/Dialogs/dlgVario.xml:276 Data/Dialogs/dlgVario_L.xml:277
 msgid "IGC logging"
 msgstr "IGC logovanie"
 
-#: Data/Dialogs/dlgVario.xml:311 Data/Dialogs/dlgVario_L.xml:311
+#: Data/Dialogs/dlgVario.xml:302 Data/Dialogs/dlgVario_L.xml:303
 msgid "Speaker threshold"
 msgstr ""
 
@@ -6495,7 +6482,7 @@ msgstr ""
 msgid "Vario Demo"
 msgstr ""
 
-#: Data/Dialogs/dlgVario.xml:383 Data/Dialogs/dlgVario_L.xml:383
+#: Data/Dialogs/dlgVario.xml:374 Data/Dialogs/dlgVario_L.xml:375
 msgid "Interval, gear"
 msgstr "Interval, podvozok"
 
@@ -6525,12 +6512,12 @@ msgstr ""
 msgid "Task Calculator"
 msgstr "Výpočet úlohy"
 
-#: Data/Dialogs/dlgVario.xml:105 Data/Dialogs/dlgVario_L.xml:105
+#: Data/Dialogs/dlgVario.xml:96 Data/Dialogs/dlgVario_L.xml:97
 msgid "Base frequency"
 msgstr "Základná frekvencia"
 
-#: Data/Dialogs/dlgConfiguration.xml:136
-#: Data/Dialogs/dlgConfiguration_L.xml:136
+#: Data/Dialogs/dlgConfiguration.xml:119
+#: Data/Dialogs/dlgConfiguration_L.xml:119
 msgid "Sets the width of the snail trail display."
 msgstr "Nastaví šírku zobrazenej stopy letu."
 
@@ -6538,12 +6525,12 @@ msgstr "Nastaví šírku zobrazenej stopy letu."
 msgid "Range:"
 msgstr "Rozsah:"
 
-#: Data/Dialogs/dlgVario.xml:113 Data/Dialogs/dlgVario_L.xml:113
+#: Data/Dialogs/dlgVario.xml:104 Data/Dialogs/dlgVario_L.xml:105
 msgid "Filter cruise"
 msgstr "Filtruj preskok"
 
-#: Data/Dialogs/dlgConfiguration.xml:378
-#: Data/Dialogs/dlgConfiguration_L.xml:377
+#: Data/Dialogs/dlgConfiguration.xml:346
+#: Data/Dialogs/dlgConfiguration_L.xml:345
 msgid "Units used for vertical speeds (variometer)"
 msgstr "Jednotky pre vertikálne rýchlosti (variometer)"
 
@@ -6551,16 +6538,8 @@ msgstr "Jednotky pre vertikálne rýchlosti (variometer)"
 msgid "Bold font"
 msgstr "Tučné písmo"
 
-#: Data/Dialogs/dlgConfiguration.xml:215
-#: Data/Dialogs/dlgConfiguration_L.xml:215
-msgid ""
-"This determines whether the the glide terrain range is calculated and drawn "
-"as a line on the map area: [OFF] Disables display [Line] Draws a dashed line "
-"at the glide range [Shade] Shades terrain outside glide range"
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:198
-#: Data/Dialogs/dlgConfiguration_L.xml:198
+#: Data/Dialogs/dlgConfiguration.xml:175
+#: Data/Dialogs/dlgConfiguration_L.xml:175
 msgid ""
 "Defines the amount of phong shading in the terrain rendering.  Use large "
 "values to emphasise terrain slope, smaller values if flying in steep "
@@ -6587,21 +6566,21 @@ msgstr "Premenovať"
 msgid "Info box values small"
 msgstr "Hodnoty v info-oknách malé"
 
-#: Data/Dialogs/dlgVario.xml:430 Data/Dialogs/dlgVario_L.xml:430
+#: Data/Dialogs/dlgVario.xml:421 Data/Dialogs/dlgVario_L.xml:422
 msgid "V Flap"
 msgstr "Max. rýchlosť s klapkami"
 
-#: Data/Dialogs/dlgConfiguration.xml:451
-#: Data/Dialogs/dlgConfiguration_L.xml:450
+#: Data/Dialogs/dlgConfiguration.xml:419
+#: Data/Dialogs/dlgConfiguration_L.xml:418
 msgid ""
 "Determines how the user is prompted for text input (filename, teamcode etc.)"
 msgstr ""
 
-#: Data/Dialogs/dlgVario.xml:444 Data/Dialogs/dlgVario_L.xml:444
+#: Data/Dialogs/dlgVario.xml:435 Data/Dialogs/dlgVario_L.xml:436
 msgid "Needle gauge type"
 msgstr ""
 
-#: Data/Dialogs/dlgVario.xml:415 Data/Dialogs/dlgVario_L.xml:415
+#: Data/Dialogs/dlgVario.xml:406 Data/Dialogs/dlgVario_L.xml:407
 msgid "Height terrain"
 msgstr "Výška terénu"
 
@@ -6615,22 +6594,34 @@ msgid ""
 "blank, runs the demo."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:157
-#: Data/Dialogs/dlgConfiguration_L.xml:157
+#: Data/Dialogs/dlgConfiguration.xml:129
+#: Data/Dialogs/dlgConfiguration_L.xml:129
+msgid ""
+"This enables the display of FLARM traffic on the map window.\n"
+"[OFF] FLARM map display disabled\n"
+"[ON/Fixed] FLARM map display enabled with fixed scale.\n"
+"[ON/Scaled] FLARM map display enabled and auto scaled.\n"
+"When auto scaling is enabled, the FLARM targets on the map display are "
+"scaled so that when the map is at large zoom levels, targets are still "
+"visible."
+msgstr ""
+
+#: Data/Dialogs/dlgConfiguration.xml:136
+#: Data/Dialogs/dlgConfiguration_L.xml:136
 msgid "Glider position"
 msgstr "Pozícia vetroňa"
 
-#: Data/Dialogs/dlgConfiguration.xml:412
-#: Data/Dialogs/dlgConfiguration_L.xml:411
+#: Data/Dialogs/dlgConfiguration.xml:380
+#: Data/Dialogs/dlgConfiguration_L.xml:379
 msgid "Auto Blank"
 msgstr "Automatické vypínanie"
 
-#: Data/Dialogs/dlgConfiguration.xml:70 Data/Dialogs/dlgConfiguration_L.xml:70
+#: Data/Dialogs/dlgConfiguration.xml:66 Data/Dialogs/dlgConfiguration_L.xml:66
 msgid "Margin"
 msgstr "Zobraz vp od"
 
-#: Data/Dialogs/dlgConfiguration.xml:388
-#: Data/Dialogs/dlgConfiguration_L.xml:387
+#: Data/Dialogs/dlgConfiguration.xml:356
+#: Data/Dialogs/dlgConfiguration_L.xml:355
 msgid "Units used for temperature."
 msgstr "Jednotky použité pre teplotu."
 
@@ -6638,8 +6629,8 @@ msgstr "Jednotky použité pre teplotu."
 msgid "Valid start"
 msgstr "Platný štart"
 
-#: Data/Dialogs/dlgConfiguration.xml:176
-#: Data/Dialogs/dlgConfiguration_L.xml:176
+#: Data/Dialogs/dlgConfiguration.xml:155
+#: Data/Dialogs/dlgConfiguration_L.xml:155
 msgid "Wind arrow*"
 msgstr "Ukazovateľ vetra*"
 
