@@ -718,7 +718,7 @@ of buttons in Altair perform the following functions (from left to right):
 \begin{center}
 \begin{tabular}{c c c c c c}
  PC: & 6 & 7 & 8 & 9 & 0 \\
- Altair: & F6 & F7 & F8 & F9 & F0 \\
+ Altair: F5 & F6 & F7 & F8 & F9 \\
 & \bmenut{Flight}{Setup} & \bmenut{Task}{Calc} & \bmenut{Task}{Edit} &
 \bmenut{Arm}{Advance} & \bmenut{Drop}{Mark} \\
 \end{tabular}
@@ -827,26 +827,27 @@ a full-screen map.  The screen mode can be toggled between the following:
 \item Small map area, showing auxiliary {\InfoBox}es.
 \item Full-screen map area, with {\InfoBox}es hidden.
 \end{itemize}
+
 This is performed by selecting the menu:
 \begin{quote}
-\bmenu{DISPLAY}\blink\bmenu{Full screen}
+\bmenu{Display}\blink\bmenu{Full Scrn On}
 \end{quote}
-
 At any time the InfoBoxes may be toggled between auxiliary and normal from
 the menu:
 \begin{quote}
-\bmenu{INFO}\blink\bmenu{Aux Info On}
+\bmenu{Info}\blink\bmenu{Aux Info On}
 \end{quote}
-
+\gesture{Right} 
+If a touchscreen is available, you also can switch through the three display
+modes by gesture.
 When auxiliary {\InfoBox}es are displayed, the word `AUX' appears at the
 lower left corner of the map area.
 
 \subsection*{Modifying {\InfoBox} values}
-(This section applies only when the hardware has
-a touchscreen or mouse.)
+(This section applies only when a touchscreen or mouse is present.)
 
 Some {\InfoBox} values can be changed by the user by selecting the
-infobox with the touchscreen or mouse.  Examples of InfoBoxes that can
+{\InfoBox} with the touchscreen or mouse.  Examples of InfoBoxes that can
 be adjusted include the MacCready setting, and the wind speed.
 The procedure for adjusting {\InfoBox} values is as follows:
 \begin{enumerate}
@@ -862,7 +863,7 @@ will be deactivated so there is no risk of accidental adjustment later.
 
 \subsection*{Changing {\InfoBox}es}
 {\InfoBox}es can either be changed by calling the configuration dialog from the
-menu \bmenu{CONFIG}\blink\bmenu{Setup System} or by performing a long press on
+menu \bmenu{Config}\blink\bmenu{Setup System} or by performing a long press on
 the {\InfoBox} that should be changed. In the second case a list dialog opens,
 giving you all available {\InfoBox}es to choose from.
 
@@ -928,6 +929,7 @@ has been opened, the menu buttons are disabled until the dialog is closed.
 In some dialogs, items that are not relevant or valid (such as AAT details when
 flying a non-AAT task) are not displayed.
 
+ToDo: that list of dialog explanations should move else where
 A summary of the major dialogs is presented below.
 \begin{description}
 \item[Flight setup] Used to modify the polar of the glider both before and
@@ -1011,6 +1013,7 @@ the local sunset time.
 \includegraphics[angle=0,width=5cm,keepaspectratio='true']{figures/status-times.png}
 \end{center}
 \end{description}
+ToDo: end of that list of dialog explanations should move else where
 
 \subsection*{Text entry}
 A text entry dialog is used for entering text.  This is used for team
@@ -1027,13 +1030,16 @@ cursor left/right.
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/textentry.png}
 \end{center}
 
-To enter text with the touch screen keyboard, press the letters of choice one after the other. In some dialogs (e.g. waypoint editing) only the next letters matching to an entry in the database will be shown. For deleting the last letter use the \button{$<-$} button.
+To enter text with the touch screen keyboard, press the letters of choice one after the other. 
+In some dialogs (e.g. waypoint editing) only the next letters matching to an entry in the database 
+will be shown. For deleting the last letter use the \button{$<-$} button. The
+\button{Clear} button deletes all input.
 
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/textentry_keyboard.png}
 \end{center}
 
-Press enter or close to exit.
+Press \button{Ok} to take over, or \button{Cancel} to exit.
 
 \section{Sounds}
 
@@ -1059,7 +1065,7 @@ For some hardware platforms, the control of the screen hardware
 brightness can be controlled from the brightness dialog
 accessible from the menu:
 \begin{quote}
-\bmenu{DISPLAY}\blink\bmenu{Bright}
+\bmenu{Display}\blink\bmenu{Bright}
 \end{quote}
 
 Refer to the {\em Altair User's Manual} for details of the brightness
@@ -1077,7 +1083,8 @@ dialog.
 
 \section{Gestures}
   As of version 6.0, XCSoar supports so-called mouse gestures. To activate 
-  this feature go to the configuration dialog (Setup System) and enable it.
+  this feature go to the configuration dialog (Setup System / Interface) and
+  enable it.
 
   To use this feature hold down the mouse button or put the finger on the 
   touchscreen, draw a certain figure and release the mouse 
@@ -1086,8 +1093,9 @@ dialog.
   shown below. A figure is defined by movements of the 
   cursor in the four directions Up, Down, Left and Right. This means if 
   you hold down the mouse button, drag the mouse to the left 
-  and afterwards to the top, the gesture "LU" is detected, which 
-  stands for "Left-Up".
+  and afterwards to the top, \gesture{Left-Up} the gesture "LU" is detected,
+  which stands for "Left-Up". The manual indicates an available gesture as shown
+  here on the left side of the text body.
 
 
   Gestures available on the map screen:
