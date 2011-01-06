@@ -44,7 +44,7 @@ public:
 
 protected:
   RECT bounds;
-  Label labels[50];
+  Label labels[128];
   unsigned num_labels;
 
 public:
