@@ -534,7 +534,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </Edit>
     
       <Edit Name="prpStartMaxSpeedMargin" Caption="Start max speed margin" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Maximum speed to above maximum start speed to tolerate.  Set to 0 for no tolerance.">
+        Help="Maximum speed above maximum start speed to tolerate.  Set to 0 for no tolerance.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5" />
       </Edit>
     

@@ -310,7 +310,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </Edit>
     
       <Edit Name="prpBallastSecsToEmpty" Caption="Dump time" X="2" Width="-2" Height="22" CaptionWidth="120"
-        Help="The time in seconds to empty full ballast.">
+        Help="The time in seconds to dump full ballast.">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="300" Step="5"/>
       </Edit>
     </Panel>
@@ -465,7 +465,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
         <DataField DataType="enum"/>
       </Edit>
 
-      <Edit Name="prpAppStatusMessageAlignment" Caption="Msg window" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAppStatusMessageAlignment" Caption="Msg window*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Defines the alignment of the status message box, either centered or in the top left corner.">
         <DataField DataType="enum"/>
       </Edit>
