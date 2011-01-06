@@ -38,6 +38,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 
 #include <algorithm>
+#include <list>
 
 #include <assert.h>
 #include <stdlib.h>
@@ -131,7 +132,7 @@ struct WaypointSelectInfoVector :
 };
 
 static WaypointSelectInfoVector WayPointSelectInfo;
-static std::vector<unsigned int> LastUsedWaypointNames;
+static std::list<unsigned int> LastUsedWaypointNames;
 
 static TCHAR *
 GetDirectionData(int DirectionFilterIdx)
@@ -317,16 +318,17 @@ FillList(WaypointSelectInfoVector &dest, const Waypoints &src,
 }
 
 static void
-FillLastUsedList(WaypointSelectInfoVector &dest, const std::vector<unsigned int> src,
-                 const Waypoints &waypoints, GeoPoint location)
+FillLastUsedList(WaypointSelectInfoVector &dest,
+                 const std::list<unsigned int> src, const Waypoints &waypoints,
+                 GeoPoint location)
 {
   dest.clear();
 
   if (src.empty())
     return;
 
-  for (std::vector<unsigned int>::const_reverse_iterator it = src.rbegin();
-       it < src.rend(); it++) {
+  for (std::list<unsigned int>::const_reverse_iterator it = src.rbegin();
+       it != src.rend(); it++) {
     const Waypoint* wp = waypoints.lookup_id(*it);
     if (wp == NULL)
       continue;
