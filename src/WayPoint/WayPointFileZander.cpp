@@ -166,30 +166,27 @@ WayPointFileZander::parseFlags(const TCHAR* src, WaypointFlags& dest)
   if ((src[0] == 'W' || src[0] == 'w') &&
       (src[1] == 'P' || src[1] == 'p')) {
     dest.TurnPoint = true;
-  }
-  else if ((src[0] == 'H' || src[0] == 'h') &&
-           (src[1] == 'A' || src[1] == 'a')) {
+  } else if ((src[0] == 'H' || src[0] == 'h') &&
+             (src[1] == 'A' || src[1] == 'a')) {
     dest.TurnPoint = true;
     dest.Airport = true;
     dest.Home = true;
-  }
-  else if ((src[0] == 'W' || src[0] == 'w') &&
-           (src[1] == 'A' || src[1] == 'a')) {
+  } else if ((src[0] == 'W' || src[0] == 'w') &&
+             (src[1] == 'A' || src[1] == 'a')) {
     dest.TurnPoint = true;
     dest.Airport = true;
-  }
-  else if ((src[0] == 'L' || src[0] == 'l') &&
-           (src[1] == 'F' || src[1] == 'f')) {
+  } else if ((src[0] == 'L' || src[0] == 'l') &&
+             (src[1] == 'F' || src[1] == 'f')) {
     dest.LandPoint = true;
-  }
-  else if ((src[0] == 'W' || src[0] == 'w') &&
-           (src[1] == 'L' || src[1] == 'l')) {
+  } else if ((src[0] == 'W' || src[0] == 'w') &&
+             (src[1] == 'L' || src[1] == 'l')) {
     dest.TurnPoint = true;
     dest.LandPoint = true;
-  }
-  else if ((src[0] == 'R' || src[0] == 'r') &&
-           (src[1] == 'A' || src[1] == 'a')) {
+  } else if ((src[0] == 'R' || src[0] == 'r') &&
+             (src[1] == 'A' || src[1] == 'a')) {
     dest.Restricted = true;
+  } else {
+    return false;
   }
 
   return true;
