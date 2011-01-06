@@ -589,6 +589,7 @@ static CallBackTableEntry CallBackTable[] = {
 void
 dlgWayPointSelectAddToLastUsed(const Waypoint &wp)
 {
+  LastUsedWaypointNames.remove(wp.id);
   LastUsedWaypointNames.push_back(wp.id);
 }
 
