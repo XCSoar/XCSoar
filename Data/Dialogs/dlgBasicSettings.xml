@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Name="frmBasicSettingRegular" X="5" Y="5" Width="173" Height="220" Caption="Flight Setup">
-  <Button name="cmdClose" Caption="Close" X="2" Y="2" Width="70" Height="22" OnClick="OnCloseClicked" />
+  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="70" Height="22" OnClick="OnCloseClicked" />
 
-  <Button name="cmdDump" Caption="Dump" X="80" Y="2" Width="70" Height="22" OnClick="OnBallastDump" />
+  <Button Name="cmdDump" Caption="Dump" X="80" Y="2" Width="70" Height="22" OnClick="OnBallastDump" />
 
   <Edit Name="prpBallastPercent" Caption="Ballast" X="2" Width="-2" Height="22" CaptionWidth="78" Help="Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).  Press ENTER on this field to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings.">
     <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min="0" Max="100" Step="5" OnDataAccess="OnBallastData" />
