@@ -75,7 +75,8 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
 
   // Flags (Characters 45-49)
   if (len < 46 || !parseFlags(line + 45, new_waypoint.Flags))
-    new_waypoint.Flags.TurnPoint = true;
+    if (len < 36 || !parseFlagsFromDescription(line + 35, new_waypoint.Flags))
+      new_waypoint.Flags.TurnPoint = true;
 
   add_waypoint(way_points, new_waypoint);
   return true;
@@ -188,4 +189,20 @@ WayPointFileZander::parseFlags(const TCHAR* src, WaypointFlags& dest)
   }
 
   return true;
+}
+
+bool
+WayPointFileZander::parseFlagsFromDescription(const TCHAR* src,
+                                              WaypointFlags& dest)
+{
+  // If the description starts with 1 the waypoint is an airport
+  // (usually the description of an airport is the frequency)
+
+  if (src[0] == '1') {
+    dest.TurnPoint = true;
+    dest.Airport = true;
+    return true;
+  }
+
+  return false;
 }
