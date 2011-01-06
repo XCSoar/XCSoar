@@ -584,6 +584,12 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
+void
+dlgWayPointSelectAddToLastUsed(const Waypoint &wp)
+{
+  LastUsedWaypointNames.push_back(wp.id);
+}
+
 const Waypoint*
 dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location)
 {
@@ -641,7 +647,7 @@ dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location)
     retval = WayPointSelectInfo[ItemIndex].way_point;
 
   if (retval != NULL)
-    LastUsedWaypointNames.push_back(retval->id);
+    dlgWayPointSelectAddToLastUsed(*retval);
 
   return retval;
 }
