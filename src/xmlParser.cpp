@@ -1381,7 +1381,7 @@ XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
   // Calculate the child format for when we recurse.  This is used to
   // determine the number of spaces used for prefixes.
   if (nFormat != -1) {
-    if (string_is_empty(pEntry->lpszName))
+    if (!string_is_empty(pEntry->lpszName))
       nChildFormat = nFormat + 1;
     else
       nChildFormat = nFormat;
