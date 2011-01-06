@@ -278,6 +278,7 @@ DEBUG_PROGRAM_NAMES = \
 	TestOLC \
 	BenchmarkProjection \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
+	RunXMLParser \
 	ReadMO \
 	ReadProfileString ReadProfileInt \
 	WriteProfileString WriteProfileInt \
@@ -347,6 +348,16 @@ RUN_TEXT_WRITER_LDADD = \
 	$(IO_LIBS) \
 	$(ZZIP_LIBS)
 $(TARGET_BIN_DIR)/RunTextWriter$(TARGET_EXEEXT): $(RUN_TEXT_WRITER_OBJS) $(RUN_TEXT_WRITER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_XML_PARSER_SOURCES = \
+	$(SRC)/xmlParser.cpp \
+	$(TEST_SRC_DIR)/RunXMLParser.cpp
+RUN_XML_PARSER_OBJS = $(call SRC_TO_OBJ,$(RUN_XML_PARSER_SOURCES))
+RUN_XML_PARSER_LDADD = \
+	$(IO_LIBS)
+$(TARGET_BIN_DIR)/RunXMLParser$(TARGET_EXEEXT): $(RUN_XML_PARSER_OBJS) $(RUN_XML_PARSER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
