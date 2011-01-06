@@ -69,7 +69,7 @@ XMLAttribute XMLNode::emptyXMLAttribute = { NULL, NULL };
 
 inline int mmin(const int t1, const int t2) { return t1 < t2 ? t1 : t2; }
 
-// Enumeration used to decipher what type a token is
+/** Enumeration used to decipher what type a token is. */
 typedef enum TokenTypeTag
 {
     eTokenText = 0,
@@ -85,7 +85,7 @@ typedef enum TokenTypeTag
 
 #define INDENTCHAR '\t'
 
-// Main structure used for parsing XML
+/** Main structure used for parsing XML. */
 typedef struct XML
 {
     LPCTSTR lpXML;
@@ -103,7 +103,7 @@ typedef struct
     LPCTSTR pStr;
 } NextToken;
 
-// Enumeration used when parsing attributes
+/** Enumeration used when parsing attributes. */
 typedef enum Attrib
 {
     eAttribName = 0,
@@ -111,8 +111,10 @@ typedef enum Attrib
     eAttribValue
 } Attrib;
 
-// Enumeration used when parsing elements to dictate whether we are currently
-// inside a tag
+/**
+ * Enumeration used when parsing elements to dictate whether we are
+ * currently inside a tag.
+ */
 typedef enum Status
 {
     eInsideTag = 0,
@@ -147,18 +149,22 @@ write_xml_string(TextWriter &writer, const TCHAR *source)
   }
 }
 
+/**
+ * This function is the opposite of the function "toXMLString". It
+ * decodes the escape sequences &amp;, &quot;, &apos;, &lt;, &gt; and
+ * replace them by the characters &,",',<,>. This function is used
+ * internally by the XML Parser. All the calls to the XML library will
+ * always gives you back "decoded" strings.
+ *
+ * @param s string
+ * @param lo length of string
+ * @return new allocated string converted from xml
+ */
 static LPTSTR
 fromXMLString(LPCTSTR s, int lo)
 {
-  // This function is the opposite of the function "toXMLString". It decodes the escape
-  // sequences &amp;, &quot;, &apos;, &lt;, &gt; and replace them by the characters
-  // &,",',<,>. This function is used internally by the XML Parser. All the calls to
-  // the XML library will always gives you back "decoded" strings.
-  //
-  // in: string (s) and length (lo) of string
-  // out:  new allocated string converted from xml
   if (!s)
-  return NULL;
+    return NULL;
 
   int ll = 0;
   LPTSTR d;
@@ -238,12 +244,14 @@ fromXMLString(LPCTSTR s, int lo)
   return result;
 }
 
+/**
+ * !!!! WARNING strange convention&:
+ *
+ * @return 0 if equals, 1 if different
+ */
 static char
 myTagCompare(LPCTSTR cclose, LPCTSTR copen)
 {
-  // !!!! WARNING strange convention&:
-  // return 0 if equals
-  // return 1 if different
   if (!cclose)
     return 1;
   int l = (int)_tcslen(cclose);
@@ -264,7 +272,6 @@ myTagCompare(LPCTSTR cclose, LPCTSTR copen)
   return 1;
 }
 
-// update "order" information when deleting a content of a XMLNode
 void
 XMLNode::removeOrderElement(XMLNodeData *d, XMLElementType t, int index)
 {
@@ -282,7 +289,9 @@ XMLNode::removeOrderElement(XMLNodeData *d, XMLElementType t, int index)
   // Anyway, at the end, it will be free'd completely at once.
 }
 
-// Obtain the next character from the string.
+/**
+ * Obtain the next character from the string.
+ */
 static inline TCHAR
 getNextChar(XML *pXML)
 {
@@ -292,7 +301,9 @@ getNextChar(XML *pXML)
   return ch;
 }
 
-// Find next non-white space character.
+/**
+ * Find next non-white space character.
+ */
 static TCHAR
 FindNonWhiteSpace(XML *pXML)
 {
@@ -318,8 +329,11 @@ FindNonWhiteSpace(XML *pXML)
   return ch;
 }
 
-// Find the next token in a string.
-// pcbToken contains the number of characters that have been read.
+/**
+ * Find the next token in a string.
+ *
+ * @param pcbToken contains the number of characters that have been read
+ */
 static NextToken
 GetNextToken(XML *pXML, int *pcbToken, enum TokenTypeTag *pType)
 {
@@ -509,7 +523,6 @@ GetNextToken(XML *pXML, int *pcbToken, enum TokenTypeTag *pType)
   return result;
 }
 
-// Parse XML errors into a user friendly string.
 LPCTSTR XMLNode::getError(XMLError error)
 {
   switch (error) {
@@ -594,7 +607,6 @@ XMLNode::addToOrder(int index, int type)
   d->pOrder[n] = (index << 2) + type;
 }
 
-// Add a child node to the given element.
 XMLNode
 XMLNode::AddChild(LPCTSTR lpszName, int isDeclaration)
 {
@@ -611,7 +623,6 @@ XMLNode::AddChild(LPCTSTR lpszName, int isDeclaration)
   return d->pChild[nc];
 }
 
-// Add an attribute to an element.
 XMLAttribute *
 XMLNode::AddAttribute(LPCTSTR lpszName, LPCTSTR lpszValuev)
 {
@@ -629,7 +640,6 @@ XMLNode::AddAttribute(LPCTSTR lpszName, LPCTSTR lpszValuev)
   return pAttr;
 }
 
-// Add text to the element.
 LPCTSTR XMLNode::AddText(LPCTSTR lpszValue)
 {
   if (!lpszValue)
@@ -644,7 +654,9 @@ LPCTSTR XMLNode::AddText(LPCTSTR lpszValue)
   return d->pText[nt];
 }
 
-// Trim the end of the text to remove white space characters.
+/**
+ * Trim the end of the text to remove white space characters.
+ */
 static void
 FindEndOfText(LPCTSTR lpszToken, int *pcbText)
 {
@@ -670,7 +682,6 @@ FindEndOfText(LPCTSTR lpszToken, int *pcbText)
   }
 }
 
-// Duplicate a given string.
 LPTSTR
 stringDup(LPCTSTR lpszData, int cbData)
 {
@@ -689,7 +700,9 @@ stringDup(LPCTSTR lpszData, int cbData)
   return lpszNew;
 }
 
-// Recursively parse an XML element.
+/**
+ * Recursively parse an XML element.
+ */
 int
 XMLNode::ParseXMLElement(void *pa)
 {
@@ -1049,7 +1062,9 @@ XMLNode::ParseXMLElement(void *pa)
   }
 }
 
-// Count the number of lines and columns in an XML string.
+/**
+ * Count the number of lines and columns in an XML string.
+ */
 static void
 CountLinesAndColumns(LPCTSTR lpXML, int nUpto, XMLResults *pResults)
 {
@@ -1324,11 +1339,6 @@ write_indent(TextWriter &writer, unsigned n)
     writer.write(INDENTCHAR);
 }
 
-// Creates an user friendly XML string from a given element with
-// appropriate white space and carriage returns.
-//
-// This recurses through all subnodes then adds contents of the nodes to the
-// string.
 void
 XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
 {
@@ -1446,17 +1456,6 @@ XMLNode::serialiseR(const XMLNodeData *pEntry, TextWriter &writer, int nFormat)
   }
 }
 
-// Create an XML string from the head element.
-// @param       XMLElement * pHead      - head element
-// @param       int nFormat             - 0 if no formatting is required
-//                                        otherwise nonzero for formatted text
-//                                        with carriage returns and indentation.
-// @param       int *pnSize             - [out] pointer to the size of the
-//                                        returned string not including the
-//                                        NULL terminator.
-//
-// @return      LPTSTR                  - Allocated XML string, you must free
-//                                        this with free().
 void
 XMLNode::serialise(TextWriter &writer, int nFormat) const
 {
@@ -1512,7 +1511,6 @@ XMLNode::destroyCurrentBuffer(XMLNodeData *d)
 XMLNode&
 XMLNode::operator=(const XMLNode& A)
 {
-  // shallow copy
   if (this != &A) {
     destroyCurrentBuffer(d);
     d = A.d;
@@ -1524,7 +1522,6 @@ XMLNode::operator=(const XMLNode& A)
 
 XMLNode::XMLNode(const XMLNode &A)
 {
-  // shallow copy
   d = A.d;
   if (d)
     (d->ref_count)++;
@@ -1582,7 +1579,6 @@ XMLNode::getChildNode(LPCTSTR name, int j)
   return getChildNode(name, &i);
 }
 
-// Find an attribute on an node.
 LPCTSTR XMLNode::getAttribute(LPCTSTR lpszAttrib, int *j) const
 {
   if (!d)

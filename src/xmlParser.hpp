@@ -149,6 +149,10 @@ public:
   // you can have a detailed explanation of the parsing error with this function:
 
   static bool GlobalError;
+
+  /**
+   * Parse XML errors into a user friendly string.
+   */
   static LPCTSTR getError(XMLError error);
 
   LPCTSTR getName() const;                          // name of the node
@@ -168,7 +172,16 @@ public:
   LPCTSTR getAttribute(LPCTSTR name, int *i = NULL) const; // return next attribute content with specific name
                                                     //     (return a NULL if failing)
   int nAttribute() const;                           // nbr of attribute
-  void serialise(TextWriter &writer, int nFormat) const; // write XML to file
+
+  /**
+   * Create an XML file from the head element.
+   *
+   * @param writer the stream to write the XML text to
+
+   * @param nFormat 0 if no formatting is required, otherwise nonzero
+   * for formatted text with carriage returns and indentation.
+   */
+  void serialise(TextWriter &writer, int nFormat) const;
   XMLNodeContents enumContents(int i) const;        // enumerate all the different contents (child,text,
                                                     //     clear,attribute) of the current XMLNode. The order
                                                     //     is reflecting the order of the original file/string
@@ -184,8 +197,17 @@ public:
 
   // to allow shallow copy:
   ~XMLNode();
+
+  /**
+   * Shallow copy.
+   */
   XMLNode(const XMLNode &A);
+
+  /**
+   * Shallow copy.
+   */
   XMLNode& operator=(const XMLNode& A);
+
   static void destroyCurrentBuffer(XMLNodeData *d);
 
   XMLNode(): d(NULL) {}
@@ -193,14 +215,34 @@ public:
   static XMLAttribute emptyXMLAttribute;
 
   // The strings given as parameters for these 4 methods will be free'd by the XMLNode class:
+
+  /**
+   * Add a child node to the given element.
+   */
   XMLNode AddChild(LPCTSTR lpszName, int isDeclaration);
+
+  /**
+   * Add an attribute to an element.
+   */
   XMLAttribute *AddAttribute(LPCTSTR lpszName, LPCTSTR lpszValuev);
+
+  /**
+   * Add text to the element.
+   */
   LPCTSTR AddText(LPCTSTR lpszValue);
 
 private:
   // these are functions used internally (don't bother about them):
   int ParseXMLElement(void *pXML);
   void addToOrder(int index, int type);
+
+  /**
+   * Creates an user friendly XML string from a given element with
+   * appropriate white space and carriage returns.
+   *
+   * This recurses through all subnodes then adds contents of the
+   * nodes to the string.
+   */
   static void serialiseR(const XMLNodeData *pEntry, TextWriter &writer,
                          int nFormat);
   static const void *enumContent(const XMLNodeData *pEntry, int i,
@@ -209,6 +251,9 @@ private:
   gcc_pure
   static int nElement(const XMLNodeData *pEntry);
 
+  /**
+   * Update "order" information when deleting a content of a XMLNode.
+   */
   static void removeOrderElement(XMLNodeData *d, XMLElementType t, int index);
 } XMLNode;
 
@@ -224,7 +269,9 @@ typedef struct XMLNodeContents
   LPCTSTR text;
 } XMLNodeContents;
 
-// duplicate (copy in a new allocated buffer) the source string
+/**
+ * Duplicate (copy in a new allocated buffer) the source string.
+ */
 LPTSTR stringDup(LPCTSTR source, int cbData = 0);
 
 #endif
