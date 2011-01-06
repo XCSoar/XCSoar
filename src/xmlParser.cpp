@@ -163,8 +163,7 @@ write_xml_string(TextWriter &writer, const TCHAR *source)
 static LPTSTR
 fromXMLString(LPCTSTR s, int lo)
 {
-  if (!s)
-    return NULL;
+  assert(s != NULL);
 
   int ll = 0;
   LPTSTR d;
