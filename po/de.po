@@ -2023,7 +2023,7 @@ msgstr ""
 #: src/Terrain/RasterWeather.cpp:65
 #, no-c-format
 msgid "H bl"
-msgstr "H bl"
+msgstr "H AS"
 
 #: src/Terrain/RasterWeather.cpp:66
 #, no-c-format
@@ -2063,7 +2063,7 @@ msgid ""
 "the max. thermalling height for dry consitions.) In the presence of clouds "
 "the maximum thermalling height may instead be limited by the cloud base.  "
 "Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr "k"
+msgstr ""
 
 #: src/Terrain/RasterWeather.cpp:75
 #, no-c-format
@@ -2126,7 +2126,7 @@ msgstr ""
 #: src/Terrain/RasterWeather.cpp:90
 #, no-c-format
 msgid "wblmaxmin"
-msgstr "wblmaxmin"
+msgstr ""
 
 #: src/Terrain/RasterWeather.cpp:91
 #, no-c-format
@@ -2141,7 +2141,7 @@ msgstr ""
 #: src/Terrain/RasterWeather.cpp:95
 #, no-c-format
 msgid "blcwbase"
-msgstr "blcwbase"
+msgstr ""
 
 #: src/FlightStatistics.cpp:308 src/Dialogs/dlgAnalysis.cpp:199
 msgid "Mass"
