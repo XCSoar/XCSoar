@@ -39,6 +39,8 @@ ToBrokenDateTime(const struct tm &tm)
   dt.year = tm.tm_year + 1900;
   dt.month = tm.tm_mon + 1;
   dt.day = tm.tm_mday;
+  dt.day_of_week = tm.tm_wday;
+
   dt.hour = tm.tm_hour;
   dt.minute = tm.tm_min;
   dt.second = tm.tm_sec;
@@ -56,6 +58,8 @@ ToBrokenDateTime(const SYSTEMTIME st)
   dt.year = st.wYear;
   dt.month = st.wMonth;
   dt.day = st.wDay;
+  dt.day_of_week = st.wDayOfWeek;
+
   dt.hour = st.wHour;
   dt.minute = st.wMinute;
   dt.second = st.wSecond;

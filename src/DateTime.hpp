@@ -44,6 +44,11 @@ struct BrokenDate {
    * Day of month, 1-31.
    */
   uint8_t day;
+
+  /**
+   * Day of the week (0-6, 0: sunday)
+   */
+  unsigned char day_of_week;
 };
 
 /**
