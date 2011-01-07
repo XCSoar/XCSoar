@@ -84,6 +84,4 @@ Copyright_License {
 
 #endif /* ! GCC_UNUSED >= 40300 */
 
-#undef GCC_VERSION
-
 #endif

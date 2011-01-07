@@ -21,8 +21,10 @@ Copyright_License {
 }
 */
 
+#include "Compiler.h"
 #include "Compatibility/string.h"
 
+#if GCC_VERSION < 40500
 #ifdef HAVE_MSVCRT
 
 #include <stdlib.h>
@@ -32,4 +34,5 @@ int _wtoi(const wchar_t *ptr)
 	return wcstol(ptr, NULL, 10);
 }
 
+#endif
 #endif
