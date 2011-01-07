@@ -105,21 +105,44 @@ typedef struct XMLNode
 protected:
   typedef struct // to allow shallow copy and "intelligent/smart" pointers (automatic delete):
   {
-      LPCTSTR       lpszName;        // Element name (=NULL if root)
-      unsigned      nChild,          // Num of child nodes
-                    nText,           // Num of text fields
-                    nAttribute;      // Num of attributes
-    bool isDeclaration;   // Whether node is an XML declaration - '<?xml ?>'
-      XMLNode       *pParent;        // Pointer to parent element (=NULL if root)
-      XMLNode       *pChild;         // Array of child nodes
-      LPCTSTR       *pText;          // Array of text fields
-      XMLAttribute  *pAttribute;     // Array of attributes
-      unsigned      *pOrder;         // order in which the child_nodes,text_fields and
-      unsigned ref_count;
+    /** Element name (=NULL if root) */
+    LPCTSTR       lpszName;
+
+    /** Num of child nodes */
+    unsigned nChild;
+
+    /** Num of text fields */
+    unsigned nText;
+
+    /** Num of attributes */
+    unsigned nAttribute;
+
+    /** Whether node is an XML declaration - '<?xml ?>' */
+    bool isDeclaration;
+
+    /** Pointer to parent element (=NULL if root) */
+    XMLNode *pParent;
+
+    /** Array of child nodes */
+    XMLNode *pChild;
+
+    /** Array of text fields */
+    LPCTSTR *pText;
+
+    /** Array of attributes */
+    XMLAttribute *pAttribute;
+
+    /** order in which the child_nodes,text_fields,clear_fields and */
+    unsigned *pOrder;
+
+    unsigned ref_count;
   } XMLNodeData;
   XMLNodeData *d;
 
-  // protected constructor: use "parse" functions to get your first instance of XMLNode
+  /**
+   * Protected constructor: use "parse" functions to get your first
+   * instance of XMLNode.
+   */
   XMLNode(XMLNode *pParent, LPCTSTR lpszName, bool isDeclaration);
 
 public:
@@ -149,22 +172,55 @@ public:
    */
   static LPCTSTR getError(XMLError error);
 
-  LPCTSTR getName() const;                          // name of the node
-  LPCTSTR getText(unsigned i = 0) const;            // return ith text field
-  unsigned nText() const;                           // nbr of text field
-  XMLNode getChildNode(unsigned i);                 // return ith child node
-  XMLNode getChildNode(LPCTSTR name, unsigned i);   // return ith child node with specific name
-                                                    //     (return an empty node if failing)
-  XMLNode getChildNode(LPCTSTR name, unsigned *i=NULL);// return next child node with specific name
-                                                    //     (return an empty node if failing)
-  unsigned nChildNode(LPCTSTR name) const;          // return the number of child node with specific name
-  unsigned nChildNode() const;                      // nbr of child node
-  XMLAttribute getAttribute(unsigned i);            // return ith attribute
-  bool isAttributeSet(LPCTSTR name) const;          // test if an attribute with a specific name is given
-  LPCTSTR getAttribute(LPCTSTR name, unsigned i) const;  // return ith attribute content with specific name
-                                                    //     (return a NULL if failing)
-  LPCTSTR getAttribute(LPCTSTR name, unsigned *i=NULL) const; // return next attribute content with specific name
-                                                    //     (return a NULL if failing)
+  /**
+   * name of the node
+   */
+  LPCTSTR getName() const;
+
+  /** @return ith text field */
+  LPCTSTR getText(unsigned i = 0) const;
+
+  /** nbr of text field */
+  unsigned nText() const;
+
+  /** @return ith child node */
+  XMLNode getChildNode(unsigned i);
+
+  /**
+   * @return ith child node with specific name (return an empty node
+   * if failing)
+   */
+  XMLNode getChildNode(LPCTSTR name, unsigned i);
+
+  /**
+   * @return next child node with specific name (return an empty node
+   * if failing)
+   */
+  XMLNode getChildNode(LPCTSTR name, unsigned *i=NULL);
+
+  /** @return the number of child node with specific name */
+  unsigned nChildNode(LPCTSTR name) const;
+
+  /** nbr of child node */
+  unsigned nChildNode() const;
+
+  /** @return ith attribute */
+  XMLAttribute getAttribute(unsigned i);
+
+  /** test if an attribute with a specific name is given */
+  bool isAttributeSet(LPCTSTR name) const;
+
+  /**
+   * @return ith attribute content with specific name (return a NULL
+   * if failing)
+   */
+  LPCTSTR getAttribute(LPCTSTR name, unsigned i) const;
+
+  /**
+   * @return next attribute content with specific name (return a NULL
+   * if failing)
+   */
+  LPCTSTR getAttribute(LPCTSTR name, unsigned *i=NULL) const;
 
   /**
    * nbr of attribute
@@ -180,9 +236,13 @@ public:
    * for formatted text with carriage returns and indentation.
    */
   void serialise(TextWriter &writer, int nFormat) const;
-  XMLNodeContents enumContents(unsigned i) const;   // enumerate all the different contents (child,text,
-                                                    //     clear,attribute) of the current XMLNode. The order
-                                                    //     is reflecting the order of the original file/string
+
+  /**
+   * Enumerate all the different contents (child, text, clear,
+   * attribute) of the current XMLNode. The order is reflecting the
+   * order of the original file/string.
+   */
+  XMLNodeContents enumContents(unsigned i) const;
 
   /**
    * nbr of different contents for current node
@@ -190,8 +250,9 @@ public:
   gcc_pure
   unsigned nElement() const;
 
+  /** is this node empty? */
   gcc_pure
-  bool isEmpty() const;                             // is this node Empty?
+  bool isEmpty() const;
 
   gcc_pure
   bool isDeclaration() const;
