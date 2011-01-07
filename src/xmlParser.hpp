@@ -30,6 +30,7 @@
 
 #include "Compiler.h"
 
+#include <assert.h>
 #include <stdlib.h>
 #include <tchar.h>
 
@@ -152,13 +153,21 @@ public:
   /**
    * name of the node
    */
-  const TCHAR *getName() const;
+  const TCHAR *getName() const {
+    assert(d != NULL);
+
+    return d->lpszName;
+  }
 
   /** @return ith text field */
   const TCHAR *getText(unsigned i = 0) const;
 
   /** nbr of text field */
-  unsigned nText() const;
+  unsigned nText() const {
+    assert(d != NULL);
+
+    return d->nText;
+  }
 
   /** @return ith child node */
   XMLNode getChildNode(unsigned i);
@@ -202,7 +211,11 @@ public:
   /**
    * nbr of attribute
    */
-  unsigned nAttribute() const;
+  unsigned nAttribute() const {
+    assert(d != NULL);
+
+    return d->nAttribute;
+  }
 
   /**
    * Create an XML file from the head element.
@@ -225,14 +238,24 @@ public:
    * nbr of different contents for current node
    */
   gcc_pure
-  unsigned nElement() const;
+  unsigned nElement() const {
+    assert(d != NULL);
+
+    return d->nChild + d->nText + d->nAttribute;
+  }
 
   /** is this node empty? */
   gcc_pure
-  bool isEmpty() const;
+  bool isEmpty() const {
+    return d == NULL;
+  }
 
   gcc_pure
-  bool isDeclaration() const;
+  bool isDeclaration() const {
+    assert(d != NULL);
+
+    return d->isDeclaration;
+  }
 
   // to allow shallow copy:
   ~XMLNode();

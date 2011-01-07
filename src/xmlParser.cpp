@@ -1623,24 +1623,6 @@ XMLNode::getAttribute(const TCHAR *name, unsigned j) const
   return getAttribute(name, &i);
 }
 
-const TCHAR *
-XMLNode::getName() const
-{
-  if (!d)
-    return NULL;
-
-  return d->lpszName;
-}
-
-unsigned
-XMLNode::nText() const
-{
-  if (!d)
-    return 0;
-
-  return d->nText;
-}
-
 unsigned
 XMLNode::nChildNode() const
 {
@@ -1648,15 +1630,6 @@ XMLNode::nChildNode() const
     return 0;
 
   return d->nChild;
-}
-
-unsigned
-XMLNode::nAttribute() const
-{
-  if (!d)
-    return 0;
-
-  return d->nAttribute;
 }
 
 XMLAttribute
@@ -1690,28 +1663,4 @@ XMLNode::getChildNode(unsigned i)
     return emptyXMLNode;
 
   return d->pChild[i];
-}
-
-bool
-XMLNode::isDeclaration() const
-{
-  if (!d)
-    return (char)0;
-
-  return d->isDeclaration;
-}
-
-bool
-XMLNode::isEmpty() const
-{
-  return (d == NULL);
-}
-
-unsigned
-XMLNode::nElement() const
-{
-  if (!d)
-    return 0;
-
-  return d->nChild + d->nText + d->nAttribute;
 }
