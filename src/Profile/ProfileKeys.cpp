@@ -208,7 +208,6 @@ const TCHAR szProfileUTCOffset[] = CONF("UTCOffset");
 const TCHAR szProfileBlockSTF[] = CONF("BlockSpeedToFly");
 const TCHAR szProfileAutoZoom[] = CONF("AutoZoom");
 const TCHAR szProfileMenuTimeout[] = CONF("MenuTimeout");
-const TCHAR szProfileLockSettingsInFlight[] = CONF("LockSettingsInFlight");
 const TCHAR szProfileTerrainContrast[] = CONF("TerrainContrast");
 const TCHAR szProfileTerrainBrightness[] = CONF("TerrainBrightness");
 const TCHAR szProfileTerrainRamp[] = CONF("TerrainRamp");

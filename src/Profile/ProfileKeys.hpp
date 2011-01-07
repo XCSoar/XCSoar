@@ -126,7 +126,6 @@ extern const TCHAR szProfileUTCOffset[];
 extern const TCHAR szProfileBlockSTF[];
 extern const TCHAR szProfileAutoZoom[];
 extern const TCHAR szProfileMenuTimeout[];
-extern const TCHAR szProfileLockSettingsInFlight[];
 extern const TCHAR szProfileTerrainContrast[];
 extern const TCHAR szProfileTerrainBrightness[];
 extern const TCHAR szProfileTerrainRamp[];

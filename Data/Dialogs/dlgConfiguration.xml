@@ -388,11 +388,6 @@
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpLockSettingsInFlight" Caption="Safety lock" X="2" Width="-2" Height="22" CaptionWidth="110"
-        Help="This determines whether the configuration settings dialog is accessible during flight.">
-        <DataField DataType="boolean"/>
-      </Edit>
-    
       <Edit Name="prpGestures" Caption="Gestures" X="2" Width="-2" Height="22" CaptionWidth="110">
         <DataField DataType="boolean"/>
       </Edit>

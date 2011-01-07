@@ -320,8 +320,6 @@ Profile::Use()
       settings_map.AutoZoom);
   Get(szProfileMenuTimeout,
       XCSoarInterface::MenuTimeoutMax);
-  Get(szProfileLockSettingsInFlight,
-      XCSoarInterface::LockSettingsInFlight);
   Get(szProfileLoggerShort,
       settings_computer.LoggerShortName);
   Get(szProfileEnableFLARMMap,

@@ -732,8 +732,6 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpAirspaceOutline"),
                    settings_map.bAirspaceBlackOutline);
-  LoadFormProperty(*wf, _T("prpLockSettingsInFlight"),
-                   XCSoarInterface::LockSettingsInFlight);
   LoadFormProperty(*wf, _T("prpLoggerShortName"),
                    settings_computer.LoggerShortName);
   LoadFormProperty(*wf, _T("prpDebounceTimeout"),
@@ -1605,10 +1603,6 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpAirspaceDisplay"),
                               szProfileAltMode, tmp);
   settings_computer.AltitudeMode = (AirspaceDisplayMode_t)tmp;
-
-  changed |= SaveFormProperty(*wf, _T("prpLockSettingsInFlight"),
-                              szProfileLockSettingsInFlight,
-                              XCSoarInterface::LockSettingsInFlight);
 
   changed |= SaveFormProperty(*wf, _T("prpLoggerShortName"),
                               szProfileLoggerShort,
