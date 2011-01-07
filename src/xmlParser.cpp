@@ -677,13 +677,9 @@ FindEndOfText(const TCHAR *lpszToken, size_t *pcbText)
 static TCHAR *
 stringDup(const TCHAR *lpszData, size_t cbData)
 {
-  if (lpszData == NULL)
-    return NULL;
+  assert(lpszData != NULL);
 
-  TCHAR *lpszNew;
-  if (cbData == 0)
-    cbData = _tcslen(lpszData);
-  lpszNew = (TCHAR *)malloc((cbData + 1) * sizeof(TCHAR));
+  TCHAR *lpszNew = (TCHAR *)malloc((cbData + 1) * sizeof(TCHAR));
   assert(lpszNew);
   if (lpszNew) {
     memcpy(lpszNew, lpszData, (cbData) * sizeof(TCHAR));
