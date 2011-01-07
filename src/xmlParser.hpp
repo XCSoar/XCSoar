@@ -57,12 +57,6 @@ class TextWriter;
         #define TCHAR char
     #endif /* TCHAR */
 #endif
-#ifndef FALSE
-    #define FALSE 0
-#endif /* FALSE */
-#ifndef TRUE
-    #define TRUE 1
-#endif /* TRUE */
 
 /** Enumeration for XML parse errors. */
 typedef enum XMLError
@@ -114,8 +108,8 @@ protected:
       LPCTSTR       lpszName;        // Element name (=NULL if root)
       unsigned      nChild,          // Num of child nodes
                     nText,           // Num of text fields
-                    nAttribute,      // Num of attributes
-                    isDeclaration;   // Whether node is an XML declaration - '<?xml ?>'
+                    nAttribute;      // Num of attributes
+    bool isDeclaration;   // Whether node is an XML declaration - '<?xml ?>'
       XMLNode       *pParent;        // Pointer to parent element (=NULL if root)
       XMLNode       *pChild;         // Array of child nodes
       LPCTSTR       *pText;          // Array of text fields
@@ -126,7 +120,7 @@ protected:
   XMLNodeData *d;
 
   // protected constructor: use "parse" functions to get your first instance of XMLNode
-  XMLNode(XMLNode *pParent, LPCTSTR lpszName, int isDeclaration);
+  XMLNode(XMLNode *pParent, LPCTSTR lpszName, bool isDeclaration);
 
 public:
   // You must create your first instance of XMLNode with these 3 parse functions:
@@ -166,7 +160,7 @@ public:
   unsigned nChildNode(LPCTSTR name) const;          // return the number of child node with specific name
   unsigned nChildNode() const;                      // nbr of child node
   XMLAttribute getAttribute(unsigned i);            // return ith attribute
-  char isAttributeSet(LPCTSTR name) const;          // test if an attribute with a specific name is given
+  bool isAttributeSet(LPCTSTR name) const;          // test if an attribute with a specific name is given
   LPCTSTR getAttribute(LPCTSTR name, unsigned i) const;  // return ith attribute content with specific name
                                                     //     (return a NULL if failing)
   LPCTSTR getAttribute(LPCTSTR name, unsigned *i=NULL) const; // return next attribute content with specific name
@@ -226,7 +220,7 @@ public:
   /**
    * Add a child node to the given element.
    */
-  XMLNode AddChild(LPCTSTR lpszName, int isDeclaration);
+  XMLNode AddChild(LPCTSTR lpszName, bool isDeclaration);
 
   /**
    * Add an attribute to an element.
@@ -240,7 +234,7 @@ public:
 
 private:
   // these are functions used internally (don't bother about them):
-  int ParseXMLElement(void *pXML);
+  bool ParseXMLElement(void *pXML);
   void addToOrder(unsigned index, unsigned type);
 
   /**
