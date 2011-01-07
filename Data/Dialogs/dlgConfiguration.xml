@@ -259,12 +259,12 @@
     <Panel Name="frmPolar">
       <Edit Name="prpPolarType" Caption="Type" X="2" Width="-2" Height="22" CaptionWidth="70"
         Help="This contains a selection of gliders of different performance classes, as well as a special entry for External Polar File.">
-        <DataField DataType="enum"/>
+        <DataField DataType="enum" OnDataAccess="OnPolarTypeData" />
       </Edit>
   
       <Edit Name="prpPolarFile" Caption="Polar file" X="2" Width="-2" Height="22" CaptionWidth="70"
         Help="When External Polar File is the polar type, this is the name of the file containing the glide polar data (in WinPilot format).">
-        <DataField DataType="filereader"/>
+        <DataField DataType="filereader" OnDataAccess="OnPolarFileData" />
       </Edit>
     
       <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" X="2" Width="-2" Height="22" CaptionWidth="120"
