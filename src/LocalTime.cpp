@@ -43,8 +43,8 @@ TimeLocal(int localtime)
 int
 DetectCurrentTime(const NMEA_INFO *Basic)
 {
-  int localtime = (int)(Basic->Time);
-  return TimeLocal(localtime);
+  int utc_time = (int)(Basic->Time);
+  return TimeLocal(utc_time);
 }
 
 
