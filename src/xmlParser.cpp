@@ -330,176 +330,176 @@ GetNextToken(XML *pXML, size_t *pcbToken, enum TokenTypeTag *pType)
 
   // Find next non-white space character
   ch = FindNonWhiteSpace(pXML);
-
-  if (ch) {
-    // Cache the current string pointer
-    lpXML = pXML->lpXML;
-    result.pStr = &lpXML[pXML->nIndex - 1];
-    chTemp = 0;
-
-    switch (ch) {
-    // Check for quotes
-    case _T('\''):
-    case _T('\"'):
-      // Type of token
-      *pType = eTokenQuotedText;
-      chTemp = ch;
-      n = pXML->nIndex;
-
-      // Set the size
-      nSize = 1;
-      nFoundMatch = false;
-
-      // Search through the string to find a matching quote
-      while (((ch = getNextChar(pXML))) != 0) {
-        nSize++;
-        if (ch == chTemp) {
-          nFoundMatch = true;
-          break;
-        }
-        if (ch == _T('<'))
-          break;
-      }
-
-      // If we failed to find a matching quote
-      if (!nFoundMatch) {
-        pXML->nIndex = n - 1;
-        ch = getNextChar(pXML);
-        nIsText = true;
-        break;
-      }
-
-      //  4.02.2002
-      if (FindNonWhiteSpace(pXML)) {
-        pXML->nIndex--;
-      }
-
-      break;
-
-    // Equals (used with attribute values)
-    case _T('='):
-      nSize = 1;
-      *pType = eTokenEquals;
-      break;
-
-    // Close tag
-    case _T('>'):
-      nSize = 1;
-      *pType = eTokenCloseTag;
-      break;
-
-    // Check for tag start and tag end
-    case _T('<'):
-
-      // Peek at the next character to see if we have an end tag '</',
-      // or an xml declaration '<?'
-      chTemp = pXML->lpXML[pXML->nIndex];
-
-      // If we have a tag end...
-      if (chTemp == _T('/')) {
-        // Set the type and ensure we point at the next character
-        getNextChar(pXML);
-        *pType = eTokenTagEnd;
-        nSize = 2;
-      }
-
-      // If we have an XML declaration tag
-      else if (chTemp == _T('?')) {
-
-        // Set the type and ensure we point at the next character
-        getNextChar(pXML);
-        *pType = eTokenDeclaration;
-        nSize = 2;
-      }
-
-      // Otherwise we must have a start tag
-      else {
-        *pType = eTokenTagStart;
-        nSize = 1;
-      }
-      break;
-
-    // Check to see if we have a short hand type end tag ('/>').
-    case _T('/'):
-
-            // Peek at the next character to see if we have a short end tag '/>'
-      chTemp = pXML->lpXML[pXML->nIndex];
-
-      // If we have a short hand end tag...
-      if (chTemp == _T('>')) {
-        // Set the type and ensure we point at the next character
-        getNextChar(pXML);
-        *pType = eTokenShortHandClose;
-        nSize = 2;
-        break;
-      }
-
-      // If we haven't found a short hand closing tag then drop into the
-      // text process
-
-      // Other characters
-    default:
-      nIsText = true;
-    }
-
-    // If this is a TEXT node
-    if (nIsText) {
-      // Indicate we are dealing with text
-      *pType = eTokenText;
-      nSize = 1;
-      nExit = false;
-
-      while (!nExit && ((ch = getNextChar(pXML)) != 0)) {
-        switch (ch) {
-        // Break when we find white space
-        case _T('\n'):
-        case _T(' '):
-        case _T('\t'):
-        case _T('\r'):
-          nExit = true;
-          break;
-
-        // If we find a slash then this maybe text or a short hand end tag.
-        case _T('/'):
-
-          // Peek at the next character to see it we have short hand end tag
-          chTemp = pXML->lpXML[pXML->nIndex];
-
-          // If we found a short hand end tag then we need to exit the loop
-          if (chTemp == _T('>')) {
-            pXML->nIndex--; //  03.02.2002
-            nExit = true;
-          } else {
-            nSize++;
-          }
-          break;
-
-        // Break when we find a terminator and decrement the index and
-        // column count so that we are pointing at the right character
-        // the next time we are called.
-        case _T('<'):
-        case _T('>'):
-        case _T('='):
-          pXML->nIndex--;
-          nExit = true;
-          break;
-
-        case 0:
-          nExit = true;
-          break;
-
-        default:
-          nSize++;
-        }
-      }
-    }
-    *pcbToken = nSize;
-  } else {
+  if (gcc_unlikely(ch == 0)) {
     // If we failed to obtain a valid character
     *pcbToken = 0;
     *pType = eTokenError;
     result.pStr = NULL;
+    return result;
   }
+
+  // Cache the current string pointer
+  lpXML = pXML->lpXML;
+  result.pStr = &lpXML[pXML->nIndex - 1];
+  chTemp = 0;
+
+  switch (ch) {
+    // Check for quotes
+  case _T('\''):
+  case _T('\"'):
+    // Type of token
+    *pType = eTokenQuotedText;
+    chTemp = ch;
+    n = pXML->nIndex;
+
+    // Set the size
+    nSize = 1;
+    nFoundMatch = false;
+
+    // Search through the string to find a matching quote
+    while (((ch = getNextChar(pXML))) != 0) {
+      nSize++;
+      if (ch == chTemp) {
+        nFoundMatch = true;
+        break;
+      }
+      if (ch == _T('<'))
+        break;
+    }
+
+    // If we failed to find a matching quote
+    if (!nFoundMatch) {
+      pXML->nIndex = n - 1;
+      ch = getNextChar(pXML);
+      nIsText = true;
+      break;
+    }
+
+    //  4.02.2002
+    if (FindNonWhiteSpace(pXML)) {
+      pXML->nIndex--;
+    }
+
+    break;
+
+    // Equals (used with attribute values)
+  case _T('='):
+    nSize = 1;
+    *pType = eTokenEquals;
+    break;
+
+    // Close tag
+  case _T('>'):
+    nSize = 1;
+    *pType = eTokenCloseTag;
+    break;
+
+    // Check for tag start and tag end
+  case _T('<'):
+
+    // Peek at the next character to see if we have an end tag '</',
+    // or an xml declaration '<?'
+    chTemp = pXML->lpXML[pXML->nIndex];
+
+    // If we have a tag end...
+    if (chTemp == _T('/')) {
+      // Set the type and ensure we point at the next character
+      getNextChar(pXML);
+      *pType = eTokenTagEnd;
+      nSize = 2;
+    }
+
+    // If we have an XML declaration tag
+    else if (chTemp == _T('?')) {
+
+      // Set the type and ensure we point at the next character
+      getNextChar(pXML);
+      *pType = eTokenDeclaration;
+      nSize = 2;
+    }
+
+    // Otherwise we must have a start tag
+    else {
+      *pType = eTokenTagStart;
+      nSize = 1;
+    }
+    break;
+
+    // Check to see if we have a short hand type end tag ('/>').
+  case _T('/'):
+
+    // Peek at the next character to see if we have a short end tag '/>'
+    chTemp = pXML->lpXML[pXML->nIndex];
+
+    // If we have a short hand end tag...
+    if (chTemp == _T('>')) {
+      // Set the type and ensure we point at the next character
+      getNextChar(pXML);
+      *pType = eTokenShortHandClose;
+      nSize = 2;
+      break;
+    }
+
+    // If we haven't found a short hand closing tag then drop into the
+    // text process
+
+    // Other characters
+  default:
+    nIsText = true;
+  }
+
+  // If this is a TEXT node
+  if (nIsText) {
+    // Indicate we are dealing with text
+    *pType = eTokenText;
+    nSize = 1;
+    nExit = false;
+
+    while (!nExit && ((ch = getNextChar(pXML)) != 0)) {
+      switch (ch) {
+        // Break when we find white space
+      case _T('\n'):
+      case _T(' '):
+      case _T('\t'):
+      case _T('\r'):
+        nExit = true;
+      break;
+
+      // If we find a slash then this maybe text or a short hand end tag.
+      case _T('/'):
+
+        // Peek at the next character to see it we have short hand end tag
+        chTemp = pXML->lpXML[pXML->nIndex];
+
+        // If we found a short hand end tag then we need to exit the loop
+        if (chTemp == _T('>')) {
+          pXML->nIndex--; //  03.02.2002
+          nExit = true;
+        } else {
+          nSize++;
+        }
+        break;
+
+        // Break when we find a terminator and decrement the index and
+        // column count so that we are pointing at the right character
+        // the next time we are called.
+      case _T('<'):
+      case _T('>'):
+      case _T('='):
+        pXML->nIndex--;
+      nExit = true;
+      break;
+
+      case 0:
+        nExit = true;
+        break;
+
+      default:
+        nSize++;
+      }
+    }
+  }
+  *pcbToken = nSize;
 
   return result;
 }
@@ -716,178 +716,222 @@ XMLNode::ParseXMLElement(XML *pXML)
   while (true) {
     // Obtain the next token
     token = GetNextToken(pXML, &cbToken, &type);
+    if (gcc_unlikely(type == eTokenError))
+      return false;
 
-    if (type != eTokenError) {
-      // Check the current status
-      switch (status) {
+    // Check the current status
+    switch (status) {
       // If we are outside of a tag definition
-      case eOutsideTag:
+    case eOutsideTag:
 
-        // Check what type of token we obtained
-        switch (type) {
+      // Check what type of token we obtained
+      switch (type) {
         // If we have found text or quoted text
-        case eTokenText:
-        case eTokenQuotedText:
-        case eTokenEquals:
-          if (!lpszText)
-            lpszText = token.pStr;
+      case eTokenText:
+      case eTokenQuotedText:
+      case eTokenEquals:
+        if (!lpszText)
+          lpszText = token.pStr;
 
-          break;
+        break;
 
         // If we found a start tag '<' and declarations '<?'
-        case eTokenTagStart:
-        case eTokenDeclaration:
-          // Cache whether this new element is a declaration or not
-          nDeclaration = type == eTokenDeclaration;
+      case eTokenTagStart:
+      case eTokenDeclaration:
+        // Cache whether this new element is a declaration or not
+        nDeclaration = type == eTokenDeclaration;
 
-          // If we have node text then add this to the element
-          if (lpszText) {
-            cbTemp = token.pStr - lpszText;
-            FindEndOfText(lpszText, &cbTemp);
-            AddText(stringDup(lpszText, cbTemp));
-            lpszText = NULL;
-          }
+        // If we have node text then add this to the element
+        if (lpszText) {
+          cbTemp = token.pStr - lpszText;
+          FindEndOfText(lpszText, &cbTemp);
+          AddText(stringDup(lpszText, cbTemp));
+          lpszText = NULL;
+        }
 
-          // Find the name of the tag
-          token = GetNextToken(pXML, &cbToken, &type);
+        // Find the name of the tag
+        token = GetNextToken(pXML, &cbToken, &type);
 
-          // Return an error if we couldn't obtain the next token or
-          // it wasnt text
-          if (type != eTokenText) {
-            pXML->error = eXMLErrorMissingTagName;
-            return false;
-          }
+        // Return an error if we couldn't obtain the next token or
+        // it wasnt text
+        if (type != eTokenText) {
+          pXML->error = eXMLErrorMissingTagName;
+          return false;
+        }
 
-          // If we found a new element which is the same as this
-          // element then we need to pass this back to the caller..
+        // If we found a new element which is the same as this
+        // element then we need to pass this back to the caller..
 
 #ifdef APPROXIMATE_PARSING
-          if (d->lpszName && myTagCompare(d->lpszName, token.pStr) == 0) {
-            // Indicate to the caller that it needs to create a
-            // new element.
-            pXML->lpNewElement = token.pStr;
-            pXML->cbNewElement = cbToken;
-            return true;
-          } else
+        if (d->lpszName && myTagCompare(d->lpszName, token.pStr) == 0) {
+          // Indicate to the caller that it needs to create a
+          // new element.
+          pXML->lpNewElement = token.pStr;
+          pXML->cbNewElement = cbToken;
+          return true;
+        }
 #endif
-          {
-            // If the name of the new element differs from the name of
-            // the current element we need to add the new element to
-            // the current one and recurse
-            pNew = AddChild(stringDup(token.pStr, cbToken), nDeclaration);
 
-            while (!pNew.isEmpty()) {
-              // Callself to process the new node.  If we return
-              // FALSE this means we dont have any more
-              // processing to do...
+        // If the name of the new element differs from the name of
+        // the current element we need to add the new element to
+        // the current one and recurse
+        pNew = AddChild(stringDup(token.pStr, cbToken), nDeclaration);
 
-              if (!pNew.ParseXMLElement(pXML)) {
-                d->pOrder = (unsigned *)myRealloc(d->pOrder, nElement(),
-                                                  memoryIncrease * 3,
-                                                  sizeof(unsigned));
-                d->pChild = (XMLNode*)myRealloc(d->pChild, d->nChild,
-                                                memoryIncrease, sizeof(XMLNode));
-                if (d->nAttribute > 0)
-                  d->pAttribute = (XMLAttribute*)myRealloc(d->pAttribute,
-                                                           d->nAttribute,
-                                                           memoryIncrease,
-                                                           sizeof(XMLAttribute));
-                if (d->nText > 0)
-                  d->pText = (const TCHAR **)myRealloc(d->pText, d->nText,
+        while (!pNew.isEmpty()) {
+          // Callself to process the new node.  If we return
+          // FALSE this means we dont have any more
+          // processing to do...
+
+          if (!pNew.ParseXMLElement(pXML)) {
+            d->pOrder = (unsigned *)myRealloc(d->pOrder, nElement(),
+                                              memoryIncrease * 3,
+                                              sizeof(unsigned));
+            d->pChild = (XMLNode*)myRealloc(d->pChild, d->nChild,
+                                            memoryIncrease, sizeof(XMLNode));
+            if (d->nAttribute > 0)
+              d->pAttribute = (XMLAttribute*)myRealloc(d->pAttribute,
+                                                       d->nAttribute,
                                                        memoryIncrease,
-                                                       sizeof(const TCHAR *));
+                                                       sizeof(XMLAttribute));
+            if (d->nText > 0)
+              d->pText = (const TCHAR **)myRealloc(d->pText, d->nText,
+                                                   memoryIncrease,
+                                                   sizeof(const TCHAR *));
+            return false;
+          } else {
+            // If the call to recurse this function
+            // evented in a end tag specified in XML then
+            // we need to unwind the calls to this
+            // function until we find the appropriate node
+            // (the element name and end tag name must
+            // match)
+            if (pXML->cbEndTag) {
+              // If we are back at the root node then we
+              // have an unmatched end tag
+              if (!d->lpszName) {
+                pXML->error = eXMLErrorUnmatchedEndTag;
                 return false;
-              } else {
-                // If the call to recurse this function
-                // evented in a end tag specified in XML then
-                // we need to unwind the calls to this
-                // function until we find the appropriate node
-                // (the element name and end tag name must
-                // match)
-                if (pXML->cbEndTag) {
-                  // If we are back at the root node then we
-                  // have an unmatched end tag
-                  if (!d->lpszName) {
-                    pXML->error = eXMLErrorUnmatchedEndTag;
-                    return false;
-                  }
-
-                  // If the end tag matches the name of this
-                  // element then we only need to unwind
-                  // once more...
-
-                  if (myTagCompare(d->lpszName, pXML->lpEndTag) == 0) {
-                    pXML->cbEndTag = 0;
-                  }
-
-                  return true;
-                } else if (pXML->cbNewElement) {
-                  // If the call indicated a new element is to
-                  // be created on THIS element.
-
-                  // If the name of this element matches the
-                  // name of the element we need to create
-                  // then we need to return to the caller
-                  // and let it process the element.
-
-                  if (myTagCompare(d->lpszName, pXML->lpNewElement) == 0)
-                    return true;
-
-                  // Add the new element and recurse
-                  pNew = AddChild(stringDup(pXML->lpNewElement,
-                                            pXML->cbNewElement), false);
-                  pXML->cbNewElement = 0;
-                } else {
-                  // If we didn't have a new element to create
-                  pNew = emptyXMLNode;
-                }
               }
+
+              // If the end tag matches the name of this
+              // element then we only need to unwind
+              // once more...
+
+              if (myTagCompare(d->lpszName, pXML->lpEndTag) == 0) {
+                pXML->cbEndTag = 0;
+              }
+
+              return true;
+            } else if (pXML->cbNewElement) {
+              // If the call indicated a new element is to
+              // be created on THIS element.
+
+              // If the name of this element matches the
+              // name of the element we need to create
+              // then we need to return to the caller
+              // and let it process the element.
+
+              if (myTagCompare(d->lpszName, pXML->lpNewElement) == 0)
+                return true;
+
+              // Add the new element and recurse
+              pNew = AddChild(stringDup(pXML->lpNewElement,
+                                        pXML->cbNewElement), false);
+              pXML->cbNewElement = 0;
+            } else {
+              // If we didn't have a new element to create
+              pNew = emptyXMLNode;
             }
           }
-          break;
+        }
+        break;
 
         // If we found an end tag
-        case eTokenTagEnd:
+      case eTokenTagEnd:
 
-          // If we have node text then add this to the element
-          if (lpszText) {
-            cbTemp = token.pStr - lpszText;
-            FindEndOfText(lpszText, &cbTemp);
-            AddText(fromXMLString(lpszText, cbTemp));
-            lpszText = NULL;
-          }
+        // If we have node text then add this to the element
+        if (lpszText) {
+          cbTemp = token.pStr - lpszText;
+          FindEndOfText(lpszText, &cbTemp);
+          AddText(fromXMLString(lpszText, cbTemp));
+          lpszText = NULL;
+        }
 
-          // Find the name of the end tag
-          token = GetNextToken(pXML, &cbTemp, &type);
+        // Find the name of the end tag
+        token = GetNextToken(pXML, &cbTemp, &type);
 
-          // The end tag should be text
-          if (type != eTokenText) {
-            pXML->error = eXMLErrorMissingEndTagName;
-            return false;
-          }
-          lpszTemp = token.pStr;
+        // The end tag should be text
+        if (type != eTokenText) {
+          pXML->error = eXMLErrorMissingEndTagName;
+          return false;
+        }
+        lpszTemp = token.pStr;
 
-          // After the end tag we should find a closing tag
-          token = GetNextToken(pXML, &cbToken, &type);
-          if (type != eTokenCloseTag) {
-            pXML->error = eXMLErrorMissingEndTagName;
-            return false;
-          }
+        // After the end tag we should find a closing tag
+        token = GetNextToken(pXML, &cbToken, &type);
+        if (type != eTokenCloseTag) {
+          pXML->error = eXMLErrorMissingEndTagName;
+          return false;
+        }
 
-          // We need to return to the previous caller.  If the name
-          // of the tag cannot be found we need to keep returning to
-          // caller until we find a match
-          if (myTagCompare(d->lpszName, lpszTemp) != 0) {
-            pXML->lpEndTag = lpszTemp;
-            pXML->cbEndTag = cbTemp;
-          }
+        // We need to return to the previous caller.  If the name
+        // of the tag cannot be found we need to keep returning to
+        // caller until we find a match
+        if (myTagCompare(d->lpszName, lpszTemp) != 0) {
+          pXML->lpEndTag = lpszTemp;
+          pXML->cbEndTag = cbTemp;
+        }
 
-          // Return to the caller
-          return true;
+        // Return to the caller
+        return true;
 
         // Errors...
-        case eTokenCloseTag: /* '>'         */
-        case eTokenShortHandClose: /* '/>'        */
+      case eTokenCloseTag: /* '>'         */
+      case eTokenShortHandClose: /* '/>'        */
+        pXML->error = eXMLErrorUnexpectedToken;
+        return false;
+      default:
+        break;
+      }
+      break;
+
+      // If we are inside a tag definition we need to search for attributes
+    case eInsideTag:
+      // Check what part of the attribute (name, equals, value) we
+      // are looking for.
+      switch (attrib) {
+        // If we are looking for a new attribute
+      case eAttribName:
+        // Check what the current token type is
+        switch (type) {
+          // If the current type is text...
+          // Eg.  'attribute'
+        case eTokenText:
+          // Cache the token then indicate that we are next to
+          // look for the equals
+          lpszTemp = token.pStr;
+          cbTemp = cbToken;
+          attrib = eAttribEquals;
+          break;
+
+          // If we found a closing tag...
+          // Eg.  '>'
+        case eTokenCloseTag:
+          // We are now outside the tag
+          status = eOutsideTag;
+          break;
+
+          // If we found a short hand '/>' closing tag then we can
+          // return to the caller
+        case eTokenShortHandClose:
+          return true;
+
+          // Errors...
+        case eTokenQuotedText: /* '"SomeText"'   */
+        case eTokenTagStart: /* '<'            */
+        case eTokenTagEnd: /* '</'           */
+        case eTokenEquals: /* '='            */
+        case eTokenDeclaration: /* '<?'           */
           pXML->error = eXMLErrorUnexpectedToken;
           return false;
         default:
@@ -895,153 +939,105 @@ XMLNode::ParseXMLElement(XML *pXML)
         }
         break;
 
-      // If we are inside a tag definition we need to search for attributes
-      case eInsideTag:
-        // Check what part of the attribute (name, equals, value) we
-        // are looking for.
-        switch (attrib) {
-        // If we are looking for a new attribute
-        case eAttribName:
-          // Check what the current token type is
-          switch (type) {
-          // If the current type is text...
-          // Eg.  'attribute'
-          case eTokenText:
-            // Cache the token then indicate that we are next to
-            // look for the equals
-            lpszTemp = token.pStr;
-            cbTemp = cbToken;
-            attrib = eAttribEquals;
-            break;
-
-          // If we found a closing tag...
-          // Eg.  '>'
-          case eTokenCloseTag:
-            // We are now outside the tag
-            status = eOutsideTag;
-            break;
-
-          // If we found a short hand '/>' closing tag then we can
-          // return to the caller
-          case eTokenShortHandClose:
-            return true;
-
-          // Errors...
-          case eTokenQuotedText: /* '"SomeText"'   */
-          case eTokenTagStart: /* '<'            */
-          case eTokenTagEnd: /* '</'           */
-          case eTokenEquals: /* '='            */
-          case eTokenDeclaration: /* '<?'           */
-            pXML->error = eXMLErrorUnexpectedToken;
-            return false;
-          default:
-            break;
-          }
-          break;
-
         // If we are looking for an equals
-        case eAttribEquals:
-          // Check what the current token type is
-          switch (type) {
+      case eAttribEquals:
+        // Check what the current token type is
+        switch (type) {
           // If the current type is text...
           // Eg.  'Attribute AnotherAttribute'
-          case eTokenText:
-            // Add the unvalued attribute to the list
-            AddAttribute(stringDup(lpszTemp, cbTemp), NULL);
-            // Cache the token then indicate.  We are next to
-            // look for the equals attribute
-            lpszTemp = token.pStr;
-            cbTemp = cbToken;
-            break;
+        case eTokenText:
+          // Add the unvalued attribute to the list
+          AddAttribute(stringDup(lpszTemp, cbTemp), NULL);
+          // Cache the token then indicate.  We are next to
+          // look for the equals attribute
+          lpszTemp = token.pStr;
+          cbTemp = cbToken;
+          break;
 
           // If we found a closing tag 'Attribute >' or a short hand
           // closing tag 'Attribute />'
-          case eTokenShortHandClose:
-          case eTokenCloseTag:
-            // If we are a declaration element '<?' then we need
-            // to remove extra closing '?' if it exists
-            if (d->isDeclaration && (lpszTemp[cbTemp - 1]) == _T('?'))
-              cbTemp--;
+        case eTokenShortHandClose:
+        case eTokenCloseTag:
+          // If we are a declaration element '<?' then we need
+          // to remove extra closing '?' if it exists
+          if (d->isDeclaration && (lpszTemp[cbTemp - 1]) == _T('?'))
+            cbTemp--;
 
-            if (cbTemp)
-              // Add the unvalued attribute to the list
-              AddAttribute(stringDup(lpszTemp, cbTemp), NULL);
+          if (cbTemp)
+            // Add the unvalued attribute to the list
+            AddAttribute(stringDup(lpszTemp, cbTemp), NULL);
 
-            // If this is the end of the tag then return to the caller
-            if (type == eTokenShortHandClose)
-              return true;
+          // If this is the end of the tag then return to the caller
+          if (type == eTokenShortHandClose)
+            return true;
 
-            // We are now outside the tag
-            status = eOutsideTag;
-            break;
+          // We are now outside the tag
+          status = eOutsideTag;
+          break;
 
           // If we found the equals token...
           // Eg.  'Attribute ='
-          case eTokenEquals:
-            // Indicate that we next need to search for the value
-            // for the attribute
-            attrib = eAttribValue;
-            break;
-
-          // Errors...
-          case eTokenQuotedText: /* 'Attribute "InvalidAttr"'*/
-          case eTokenTagStart: /* 'Attribute <'            */
-          case eTokenTagEnd: /* 'Attribute </'           */
-          case eTokenDeclaration: /* 'Attribute <?'           */
-            pXML->error = eXMLErrorUnexpectedToken;
-            return false;
-          default:
-            break;
-          }
+        case eTokenEquals:
+          // Indicate that we next need to search for the value
+          // for the attribute
+          attrib = eAttribValue;
           break;
 
+          // Errors...
+        case eTokenQuotedText: /* 'Attribute "InvalidAttr"'*/
+        case eTokenTagStart: /* 'Attribute <'            */
+        case eTokenTagEnd: /* 'Attribute </'           */
+        case eTokenDeclaration: /* 'Attribute <?'           */
+          pXML->error = eXMLErrorUnexpectedToken;
+          return false;
+        default:
+          break;
+        }
+        break;
+
         // If we are looking for an attribute value
-        case eAttribValue:
-          // Check what the current token type is
-          switch (type) {
+      case eAttribValue:
+        // Check what the current token type is
+        switch (type) {
           // If the current type is text or quoted text...
           // Eg.  'Attribute = "Value"' or 'Attribute = Value' or
           // 'Attribute = 'Value''.
-          case eTokenText:
-          case eTokenQuotedText:
-            // If we are a declaration element '<?' then we need
-            // to remove extra closing '?' if it exists
-            if (d->isDeclaration && (token.pStr[cbToken - 1]) == _T('?')) {
-              cbToken--;
-            }
+        case eTokenText:
+        case eTokenQuotedText:
+          // If we are a declaration element '<?' then we need
+          // to remove extra closing '?' if it exists
+          if (d->isDeclaration && (token.pStr[cbToken - 1]) == _T('?')) {
+            cbToken--;
+          }
 
-            if (cbTemp) {
-              // Add the valued attribute to the list
-              if (type == eTokenQuotedText) {
-                token.pStr++;
-                cbToken -= 2;
-              }
-              AddAttribute(stringDup(lpszTemp, cbTemp), fromXMLString(
-                  token.pStr, cbToken));
+          if (cbTemp) {
+            // Add the valued attribute to the list
+            if (type == eTokenQuotedText) {
+              token.pStr++;
+              cbToken -= 2;
             }
+            AddAttribute(stringDup(lpszTemp, cbTemp), fromXMLString(
+                                                                    token.pStr, cbToken));
+          }
 
-            // Indicate we are searching for a new attribute
-            attrib = eAttribName;
-            break;
+          // Indicate we are searching for a new attribute
+          attrib = eAttribName;
+          break;
 
           // Errors...
-          case eTokenTagStart: /* 'Attr = <'          */
-          case eTokenTagEnd: /* 'Attr = </'         */
-          case eTokenCloseTag: /* 'Attr = >'          */
-          case eTokenShortHandClose: /* "Attr = />"         */
-          case eTokenEquals: /* 'Attr = ='          */
-          case eTokenDeclaration: /* 'Attr = <?'         */
-            pXML->error = eXMLErrorUnexpectedToken;
-            return false;
-          default:
-            break;
-          }
+        case eTokenTagStart: /* 'Attr = <'          */
+        case eTokenTagEnd: /* 'Attr = </'         */
+        case eTokenCloseTag: /* 'Attr = >'          */
+        case eTokenShortHandClose: /* "Attr = />"         */
+        case eTokenEquals: /* 'Attr = ='          */
+        case eTokenDeclaration: /* 'Attr = <?'         */
+          pXML->error = eXMLErrorUnexpectedToken;
+          return false;
+        default:
+          break;
         }
       }
     }
-    // If we failed to obtain the next token
-    else
-      return false;
   }
 }
 
