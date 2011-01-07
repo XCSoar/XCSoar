@@ -288,14 +288,12 @@ getNextChar(XML *pXML)
 static TCHAR
 FindNonWhiteSpace(XML *pXML)
 {
-  TCHAR ch = 0; // VENTA3 fix initialize
-  bool nExit = false;
-
   assert(pXML);
 
     // Iterate through characters in the string until we find a NULL or a
   // non-white space character
-  while (!nExit && ((ch = getNextChar(pXML)) != 0)) {
+  TCHAR ch;
+  while ((ch = getNextChar(pXML)) != 0) {
     switch (ch) {
     // Ignore white space
     case _T('\n'):
@@ -304,10 +302,10 @@ FindNonWhiteSpace(XML *pXML)
     case _T('\r'):
       continue;
     default:
-      nExit = true;
+      return ch;
     }
   }
-  return ch;
+  return 0;
 }
 
 /**
