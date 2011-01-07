@@ -1,13 +1,23 @@
 #!/usr/bin/perl
 
+=head1 SYNOPSIS
+
+B<xml2po.pl> I<inputfiles.xml>
+
+=head1 DESCRIPTION
+
+This program extracts translatable strings from dialog XML files
+(Data/Dialogs/*.xml) and prints them to stdout in the gettext PO
+format.
+
+=cut
+
 use strict;
 use warnings;
 
-use vars qw($path);
+use vars qw($path %strings);
 
 use XML::Parser;
-
-my %strings;
 
 sub handle_start {
     my $expat = shift;

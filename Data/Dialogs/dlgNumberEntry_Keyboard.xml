@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmTextEntry_Keyboard" Width="240" Height="320" Caption="Enter number">
+<Form Name="frmTextEntry_Keyboard" Width="240" Height="320" Caption="Enter Number">
   <Edit Name="prpText"  Caption="Number: "   X="2" Y="20" Width="200" Height="22" CaptionWidth="70" ReadOnly="1" />
 
   <Button   Caption="9"    X="40" Y="65" Width="40"  Height="40" OnClick="OnKey"/>

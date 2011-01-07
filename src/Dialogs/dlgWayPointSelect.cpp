@@ -639,8 +639,6 @@ dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location)
   }
 
   unsigned ItemIndex = wWayPointList->GetCursorIndex();
-  if (ItemIndex >= WayPointSelectInfo.size())
-    return NULL;
 
   delete wf;
 

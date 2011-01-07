@@ -21,46 +21,29 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MAP_WINDOW_LABELS_HPP
-#define XCSOAR_MAP_WINDOW_LABELS_HPP
+#include "xmlParser.hpp"
+#include "IO/TextWriter.hpp"
 
-#include "Screen/TextInBox.hpp"
-#include "Util/NonCopyable.hpp"
-#include "Sizes.h" /* for NAME_SIZE */
+#include <stdio.h>
+#include <stdlib.h>
 
-#include <tchar.h>
-
-class WayPointLabelList : private NonCopyable {
-public:
-  struct Label{
-    TCHAR Name[NAME_SIZE+1];
-    POINT Pos;
-    TextInBoxMode_t Mode;
-    int AltArivalAGL;
-    bool inTask;
-    bool isLandable;
-    bool isAirport;
-  };
-
-protected:
-  RECT bounds;
-  Label labels[128];
-  unsigned num_labels;
-
-public:
-  WayPointLabelList(const RECT &_bounds):bounds(_bounds), num_labels(0) {}
-
-  void Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
-           int AltArivalAGL, bool inTask, bool isLandable, bool isAirport);
-  void Sort();
-
-  unsigned size() const {
-    return num_labels;
+int main(int argc, char **argv)
+{
+  if (argc != 2) {
+    fprintf(stderr, "Usage: RunXMLParser FILE\n");
+    return EXIT_FAILURE;
   }
 
-  const Label &operator[](unsigned i) const {
-    return labels[i];
+  XMLNode node = XMLNode::parseFile(argv[1]);
+  if (node.isEmpty()) {
+    fprintf(stderr, "XML parser failed\n");
+    return EXIT_FAILURE;
   }
-};
 
+#ifndef WIN32
+  TextWriter writer("/dev/stdout");
+  node.serialise(writer, true);
 #endif
+
+  return EXIT_SUCCESS;
+}

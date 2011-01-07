@@ -46,7 +46,7 @@ OrderedTaskFactoryName(OrderedTask::Factory_t type)
 {
   switch(type) {
   case OrderedTask::FACTORY_RT:
-    return _("RT");
+    return _("Racing");
   case OrderedTask::FACTORY_FAI_GENERAL:
     return _("FAI generic");
   case OrderedTask::FACTORY_FAI_TRIANGLE:
@@ -339,11 +339,11 @@ OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
   case AbstractTaskFactory::AST_CYLINDER:
     return _("Any point within area scored from center");
   case AbstractTaskFactory::KEYHOLE_SECTOR:
-    return _("(As used in German rules) Any point within area scored from center");
+    return _("(German rules) Any point within 1/2 km of center or 10km of a 90 degree sector");
   case AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR:
-    return _("Any point within area scored from center");
+    return _("(British rules) Any point within 1/2 km of center or 20km of a 90 degree sector");
   case AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR:
-    return _("Any point within area scored from center");
+    return _("(British rules) Any point within 1/2 km of center or 10km of a 180 degree sector");
   case AbstractTaskFactory::AAT_CYLINDER:
     return _("Scored inside area");
   case AbstractTaskFactory::AAT_SEGMENT:

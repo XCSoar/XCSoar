@@ -791,8 +791,10 @@ VLA_ERROR VLAPI::read_igcfile(char *filename, int index, int secmode) {
     return VLA_ERR_FILE;
 
   VLA_ERROR err = stillconnect();
-  if(err != VLA_ERR_NOERR)
+  if(err != VLA_ERR_NOERR) {
+    fclose(outfile);
     return err;
+  }
 
   byte logbuffer[VLAPI_LOG_MEMSIZE];
   if (flightget(logbuffer, sizeof(logbuffer), index, secmode)>0)

@@ -70,19 +70,11 @@
     </Panel>
   
     <Panel Name="frmAudioModes">
-      <Edit Name="prpToneClimbComparisonType" Caption="Climb fast trigger" X="2" Width="235" Height="22" CaptionWidth="150" Help="Comparison method used to detect climb states (HIGH/LOW).
-[NONE]: State LOW disabled
-[MACCREADY]: State High if gross vario is greater than MacCready setting.
-[AVERAGE]: State HIGH if gross vario value is greater than average gross vario value.">
+      <Edit Name="prpToneClimbComparisonType" Caption="Climb fast trigger" X="2" Width="235" Height="22" CaptionWidth="150" Help="Comparison method used to detect climb states (HIGH/LOW).&#10;[NONE]: State LOW disabled&#10;[MACCREADY]: State High if gross vario is greater than MacCready setting.&#10;[AVERAGE]: State HIGH if gross vario value is greater than average gross vario value.">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseLiftDetectionType" Caption="Cruise lift trigger" X="2" Width="235" Height="22" CaptionWidth="150" Help="Comparison method used to detect cruise states for switching to lift tones during cruise.
-[NONE]: LIFT tone disabled in cruise
-[RELATIVE ZERO] LIFT tone when relative vario greater than zero.
-[GROSS ZERO] LIFT tone when glider is climbing.
-[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.
-[NET MC/2] LIFT tone when airmass velocity greater than half MC.">
+      <Edit Name="prpToneCruiseLiftDetectionType" Caption="Cruise lift trigger" X="2" Width="235" Height="22" CaptionWidth="150" Help="Comparison method used to detect cruise states for switching to lift tones during cruise.&#10;[NONE]: LIFT tone disabled in cruise&#10;[RELATIVE ZERO] LIFT tone when relative vario greater than zero.&#10;[GROSS ZERO] LIFT tone when glider is climbing.&#10;[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.&#10;[NET MC/2] LIFT tone when airmass velocity greater than half MC.">
         <DataField DataType="enum"/>
       </Edit>
   

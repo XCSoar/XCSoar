@@ -484,7 +484,7 @@ XCSoarInterface::Shutdown(void)
   logger.guiStopLogger(Basic(), true);
 
   // Save settings to profile
-  ProgressGlue::Create(_("Shutdown, saving Profile/Profile..."));
+  ProgressGlue::Create(_("Shutdown, saving profile..."));
   Profile::Save();
 
   // Stop sound
