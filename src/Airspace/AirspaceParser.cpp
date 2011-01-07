@@ -96,6 +96,7 @@ struct TempAirspaceType
   AirspaceClass_t Type;
   AIRSPACE_ALT Base;
   AIRSPACE_ALT Top;
+  enum AbstractAirspace::active Active;
 
   // Polygon
   std::vector<GeoPoint> points;
@@ -110,6 +111,7 @@ struct TempAirspaceType
   void
   reset()
   {
+    Active = AbstractAirspace::EVERYDAY;
     Radio = _T("");
     Type = OTHER;
     points.clear();
@@ -126,6 +128,7 @@ struct TempAirspaceType
     AbstractAirspace *as = new AirspacePolygon(points);
     as->set_properties(Name, Type, Base, Top);
     as->set_radio(Radio);
+    as->set_active(Active);
     airspace_database.insert(as);
   }
 
@@ -135,6 +138,7 @@ struct TempAirspaceType
     AbstractAirspace *as = new AirspaceCircle(Center, Radius);
     as->set_properties(Name, Type, Base, Top);
     as->set_radio(Radio);
+    as->set_active(Active);
     airspace_database.insert(as);
   }
 };
@@ -739,6 +743,11 @@ ParseLineTNP(Airspaces &airspace_database, const TCHAR *line,
     temp_area.Name = parameter;
   } else if ((parameter = string_after_prefix_ci(line, _T("RADIO="))) != NULL) {
     temp_area.Radio = parameter;
+  } else if ((parameter = string_after_prefix_ci(line, _T("ACTIVE="))) != NULL) {
+    if (_tcsicmp(parameter, _T("WEEKEND")) == 0)
+      temp_area.Active = AbstractAirspace::WEEKEND;
+    else if (_tcsicmp(parameter, _T("WEEKDAY")) == 0)
+      temp_area.Active = AbstractAirspace::WEEKDAY;
   } else if ((parameter = string_after_prefix_ci(line, _T("TYPE="))) != NULL) {
     if (!temp_area.Waiting)
       temp_area.AddPolygon(airspace_database);
