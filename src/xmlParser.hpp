@@ -93,7 +93,7 @@ typedef enum XMLElementType
 typedef struct XMLResults
 {
   enum XMLError error;
-  int nLine, nColumn;
+  unsigned nLine, nColumn;
 } XMLResults;
 
 /** Structure for XML attribute. */
@@ -112,7 +112,7 @@ protected:
   typedef struct // to allow shallow copy and "intelligent/smart" pointers (automatic delete):
   {
       LPCTSTR       lpszName;        // Element name (=NULL if root)
-      int           nChild,          // Num of child nodes
+      unsigned      nChild,          // Num of child nodes
                     nText,           // Num of text fields
                     nAttribute,      // Num of attributes
                     isDeclaration;   // Whether node is an XML declaration - '<?xml ?>'
@@ -120,8 +120,8 @@ protected:
       XMLNode       *pChild;         // Array of child nodes
       LPCTSTR       *pText;          // Array of text fields
       XMLAttribute  *pAttribute;     // Array of attributes
-      int           *pOrder;         // order in which the child_nodes,text_fields and
-      int  ref_count;
+      unsigned      *pOrder;         // order in which the child_nodes,text_fields and
+      unsigned ref_count;
   } XMLNodeData;
   XMLNodeData *d;
 
@@ -156,22 +156,26 @@ public:
   static LPCTSTR getError(XMLError error);
 
   LPCTSTR getName() const;                          // name of the node
-  LPCTSTR getText(int i = 0) const;                 // return ith text field
-  int nText() const;                                // nbr of text field
-  XMLNode getChildNode(int i);                      // return ith child node
-  XMLNode getChildNode(LPCTSTR name, int i);        // return ith child node with specific name
+  LPCTSTR getText(unsigned i = 0) const;            // return ith text field
+  unsigned nText() const;                           // nbr of text field
+  XMLNode getChildNode(unsigned i);                 // return ith child node
+  XMLNode getChildNode(LPCTSTR name, unsigned i);   // return ith child node with specific name
                                                     //     (return an empty node if failing)
-  XMLNode getChildNode(LPCTSTR name, int *i = NULL);// return next child node with specific name
+  XMLNode getChildNode(LPCTSTR name, unsigned *i=NULL);// return next child node with specific name
                                                     //     (return an empty node if failing)
-  int nChildNode(LPCTSTR name) const;               // return the number of child node with specific name
-  int nChildNode() const;                           // nbr of child node
-  XMLAttribute getAttribute(int i);                 // return ith attribute
+  unsigned nChildNode(LPCTSTR name) const;          // return the number of child node with specific name
+  unsigned nChildNode() const;                      // nbr of child node
+  XMLAttribute getAttribute(unsigned i);            // return ith attribute
   char isAttributeSet(LPCTSTR name) const;          // test if an attribute with a specific name is given
-  LPCTSTR getAttribute(LPCTSTR name, int i) const;  // return ith attribute content with specific name
+  LPCTSTR getAttribute(LPCTSTR name, unsigned i) const;  // return ith attribute content with specific name
                                                     //     (return a NULL if failing)
-  LPCTSTR getAttribute(LPCTSTR name, int *i = NULL) const; // return next attribute content with specific name
+  LPCTSTR getAttribute(LPCTSTR name, unsigned *i=NULL) const; // return next attribute content with specific name
                                                     //     (return a NULL if failing)
-  int nAttribute() const;                           // nbr of attribute
+
+  /**
+   * nbr of attribute
+   */
+  unsigned nAttribute() const;
 
   /**
    * Create an XML file from the head element.
@@ -182,12 +186,15 @@ public:
    * for formatted text with carriage returns and indentation.
    */
   void serialise(TextWriter &writer, int nFormat) const;
-  XMLNodeContents enumContents(int i) const;        // enumerate all the different contents (child,text,
+  XMLNodeContents enumContents(unsigned i) const;   // enumerate all the different contents (child,text,
                                                     //     clear,attribute) of the current XMLNode. The order
                                                     //     is reflecting the order of the original file/string
 
+  /**
+   * nbr of different contents for current node
+   */
   gcc_pure
-  int nElement() const;                             // nbr of different contents for current node
+  unsigned nElement() const;
 
   gcc_pure
   bool isEmpty() const;                             // is this node Empty?
@@ -234,7 +241,7 @@ public:
 private:
   // these are functions used internally (don't bother about them):
   int ParseXMLElement(void *pXML);
-  void addToOrder(int index, int type);
+  void addToOrder(unsigned index, unsigned type);
 
   /**
    * Creates an user friendly XML string from a given element with
@@ -245,16 +252,17 @@ private:
    */
   static void serialiseR(const XMLNodeData *pEntry, TextWriter &writer,
                          int nFormat);
-  static const void *enumContent(const XMLNodeData *pEntry, int i,
+  static const void *enumContent(const XMLNodeData *pEntry, unsigned i,
                                  XMLElementType *nodeType);
 
   gcc_pure
-  static int nElement(const XMLNodeData *pEntry);
+  static unsigned nElement(const XMLNodeData *pEntry);
 
   /**
    * Update "order" information when deleting a content of a XMLNode.
    */
-  static void removeOrderElement(XMLNodeData *d, XMLElementType t, int index);
+  static void removeOrderElement(XMLNodeData *d, XMLElementType t,
+                                 unsigned index);
 } XMLNode;
 
 // This structure is given by the function "enumContents".
@@ -272,6 +280,6 @@ typedef struct XMLNodeContents
 /**
  * Duplicate (copy in a new allocated buffer) the source string.
  */
-LPTSTR stringDup(LPCTSTR source, int cbData = 0);
+LPTSTR stringDup(LPCTSTR source, size_t cbData = 0);
 
 #endif

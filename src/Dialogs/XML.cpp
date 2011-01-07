@@ -626,7 +626,7 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
     if (node.nChildNode(_T("DataField")) > 0){
       // -> Load the first DataField control
       DataField *data_field =
-        LoadDataField(node.getChildNode(_T("DataField"), 0),
+        LoadDataField(node.getChildNode(_T("DataField"), 0u),
                       LookUpTable, eDialogStyle);
 
       if (data_field != NULL)
