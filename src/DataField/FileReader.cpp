@@ -492,8 +492,10 @@ DataFieldFileReader::Set(int Value)
   else
     postponed_value[0] = _T('\0');
 
-  if ((unsigned)Value <= files.size())
+  if ((unsigned)Value <= files.size()) {
     mValue = Value;
+    (mOnDataAccess)(this, daChange);
+  }
 }
 
 void
