@@ -59,7 +59,15 @@ public:
 
   const enum shape shape;
 
-  AbstractAirspace(enum shape _shape):shape(_shape) {}
+  enum active {
+    EVERYDAY,
+    WEEKDAY,
+    WEEKEND,
+  };
+
+  enum active active;
+
+  AbstractAirspace(enum shape _shape):shape(_shape), active(EVERYDAY) {}
   virtual ~AbstractAirspace();
 
   /** 
@@ -172,6 +180,15 @@ public:
    */
   void set_radio(const tstring &_Radio) {
     Radio = _Radio;
+  }
+
+  /**
+   * Set activation setting of the airspace
+   *
+   * @param _active New activation setting of airspace
+   */
+  void set_active(const enum active _active) {
+    active = _active;
   }
 
   /** 
