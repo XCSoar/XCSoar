@@ -566,12 +566,12 @@ XMLNode::XMLNode(XMLNode *pParent, LPCTSTR lpszName, int isDeclaration)
   d->pOrder = NULL;
 }
 
-const int memoryIncrease = 50;
+static const size_t memoryIncrease = 50;
 
 static void *
-myRealloc(void *p, int newsize, int memInc, int sizeofElem)
+myRealloc(void *p, size_t newsize, size_t memInc, size_t sizeofElem)
 {
-  int blocks = newsize / memInc + 1;
+  size_t blocks = newsize / memInc + 1;
   if (p == NULL) {
     void* v = malloc(blocks * memInc * sizeofElem);
     assert(v);
