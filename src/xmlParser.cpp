@@ -68,8 +68,7 @@ XMLNode XMLNode::emptyXMLNode;
 XMLAttribute XMLNode::emptyXMLAttribute = { NULL, NULL };
 
 /** Enumeration used to decipher what type a token is. */
-typedef enum TokenTypeTag
-{
+enum TokenTypeTag {
     eTokenText = 0,
     eTokenQuotedText,
     eTokenTagStart,         /* "<"            */
@@ -79,13 +78,12 @@ typedef enum TokenTypeTag
     eTokenDeclaration,      /* "<?"           */
     eTokenShortHandClose,   /* "/>"           */
     eTokenError
-} TokenTypeTag;
+};
 
 #define INDENTCHAR '\t'
 
 /** Main structure used for parsing XML. */
-typedef struct XML
-{
+struct XML {
     const TCHAR *lpXML;
     unsigned nIndex;
     enum XMLError error;
@@ -94,30 +92,27 @@ typedef struct XML
     const TCHAR *lpNewElement;
     size_t cbNewElement;
     bool nFirst;
-} XML;
+};
 
-typedef struct
-{
+struct NextToken {
     const TCHAR *pStr;
-} NextToken;
+};
 
 /** Enumeration used when parsing attributes. */
-typedef enum Attrib
-{
+enum Attrib {
     eAttribName = 0,
     eAttribEquals,
     eAttribValue
-} Attrib;
+};
 
 /**
  * Enumeration used when parsing elements to dictate whether we are
  * currently inside a tag.
  */
-typedef enum Status
-{
+enum Status {
     eInsideTag = 0,
     eOutsideTag
-} Status;
+};
 
 static void
 write_xml_string(TextWriter &writer, const TCHAR *source)

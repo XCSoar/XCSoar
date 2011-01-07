@@ -36,8 +36,7 @@
 class TextWriter;
 
 /** Enumeration for XML parse errors. */
-typedef enum XMLError
-{
+enum XMLError {
   eXMLErrorNone = 0,
   eXMLErrorEmpty,
   eXMLErrorFirstNotStartTag,
@@ -49,39 +48,38 @@ typedef enum XMLError
   eXMLErrorInvalidTag,
   eXMLErrorNoElements,
   eXMLErrorFileNotFound
-} XMLError;
+};
 
 /** Enumeration used to manage type of data. Use in conjonction with structure XMLNodeContents */
-typedef enum XMLElementType
-{
+enum XMLElementType {
   eNodeChild = 0,
   eNodeAttribute = 1,
   eNodeText = 2,
   eNodeNULL = 4
-} XMLElementType;
+};
 
 /** Structure used to obtain error details if the parse fails. */
-typedef struct XMLResults
-{
+struct XMLResults {
   enum XMLError error;
   unsigned nLine, nColumn;
-} XMLResults;
+};
 
 /** Structure for XML attribute. */
-typedef struct
-{
+struct XMLAttribute {
   const TCHAR *lpszName;
   const TCHAR *lpszValue;
-} XMLAttribute;
+};
 
 struct XMLNodeContents;
 
-typedef struct XMLNode
-{
+struct XMLNode {
 //  friend class XMLNode;
 protected:
-  typedef struct // to allow shallow copy and "intelligent/smart" pointers (automatic delete):
-  {
+  /**
+   * To allow shallow copy and "intelligent/smart" pointers (automatic
+   * delete).
+   */
+  struct XMLNodeData {
     /** Element name (=NULL if root) */
     const TCHAR *lpszName;
 
@@ -113,7 +111,8 @@ protected:
     unsigned *pOrder;
 
     unsigned ref_count;
-  } XMLNodeData;
+  };
+
   XMLNodeData *d;
 
   /**
@@ -295,11 +294,10 @@ private:
    */
   static void removeOrderElement(XMLNodeData *d, XMLElementType t,
                                  unsigned index);
-} XMLNode;
+};
 
 // This structure is given by the function "enumContents".
-typedef struct XMLNodeContents
-{
+struct XMLNodeContents {
   // This dictates what's the content of the XMLNodeContent
   enum XMLElementType type;
   // should be an union to access the appropriate data.
@@ -307,6 +305,6 @@ typedef struct XMLNodeContents
   XMLNode child;
   XMLAttribute attrib;
   const TCHAR *text;
-} XMLNodeContents;
+};
 
 #endif
