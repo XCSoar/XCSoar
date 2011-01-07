@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef AIRSPACE_WARNING_HPP
 #define AIRSPACE_WARNING_HPP
 
@@ -48,134 +49,134 @@ public:
     WARNING_INSIDE /**< Warning that aircraft is currently inside airspace */
   };
 
-/** 
- * Constructor.  All warnings uniquely refer to an airspace. 
- * 
- * @param the_airspace Airspace that this object will manage warnings for
- */
+  /**
+   * Constructor.  All warnings uniquely refer to an airspace.
+   *
+   * @param the_airspace Airspace that this object will manage warnings for
+   */
   AirspaceWarning(const AbstractAirspace& the_airspace);
 
-/** 
- * Save warning state prior to performing update
- * 
- */
+  /**
+   * Save warning state prior to performing update
+   */
   void save_state();
 
-/** 
- * Update warning state and solution vector
- * 
- * @param state New warning state
- * @param solution Intercept vector (to outside if currently inside, otherwise to inside)
- */
+  /**
+   * Update warning state and solution vector
+   *
+   * @param state New warning state
+   * @param solution Intercept vector (to outside if currently inside,
+   * otherwise to inside)
+   */
   void update_solution(const AirspaceWarningState state,
                        AirspaceInterceptSolution& solution);
 
-/** 
- * Determine whether accepting a warning of the supplied state
- * will upgraded or equal the severity of the warning.
- * 
- * @param state New warning state
- */
+  /**
+   * Determine whether accepting a warning of the supplied state
+   * will upgraded or equal the severity of the warning.
+   *
+   * @param state New warning state
+   */
   gcc_pure
   bool state_accepted(const AirspaceWarningState state) const;
 
-/** 
- * Determine whether during last update, the state of this warning
- * changed.
- * 
- * @return True if state upgraded/downgraded
- */
+  /**
+   * Determine whether during last update, the state of this warning
+   * changed.
+   *
+   * @return True if state upgraded/downgraded
+   */
   gcc_pure
   bool changed_state() const;
 
-/** 
- * Access airspace managed by this object
- * 
- * @return Airspace 
- */
+  /**
+   * Access airspace managed by this object
+   *
+   * @return Airspace
+   */
   const AbstractAirspace& get_airspace() const {
     return m_airspace;
   }
 
-/** 
- * Access warning state
- * 
- * @return Warning state
- */
+  /**
+   * Access warning state
+   *
+   * @return Warning state
+   */
   const AirspaceWarningState& get_warning_state() const {
     return m_state;
   }
 
-/** 
- * Update warnings, calculate whether this airspace still needs to
- * have warnings managed.
- * 
- * @param ack_time Lifetime of acknowledgements
- *
- * @return True if warning is still active
- */
+  /**
+   * Update warnings, calculate whether this airspace still needs to
+   * have warnings managed.
+   *
+   * @param ack_time Lifetime of acknowledgements
+   *
+   * @return True if warning is still active
+   */
   bool warning_live(const unsigned ack_time);
 
-/** 
- * Determine if airspace warning was a dummy one created for testing but otherwise
- * can be removed without reporting.  This also applies to warnings that have
- * expired.
- * 
- * @return True if airspace warning has effectively always been clear.
- */
+  /**
+   * Determine if airspace warning was a dummy one created for testing but otherwise
+   * can be removed without reporting.  This also applies to warnings that have
+   * expired.
+   *
+   * @return True if airspace warning has effectively always been clear.
+   */
   bool trivial() const;
 
-/** 
- * Access solution (nearest to enter, if outside, or to exit, if inside)
- * 
- * @return Reference to solution
- */
+  /**
+   * Access solution (nearest to enter, if outside, or to exit, if inside)
+   *
+   * @return Reference to solution
+   */
   const AirspaceInterceptSolution& get_solution() const {
     return m_solution;
   }
 
-/** 
- * Determine if acknowledgement is expired (warning is current)
- * 
- * @return True if acknowledgement is expired
- */
+  /**
+   * Determine if acknowledgement is expired (warning is current)
+   *
+   * @return True if acknowledgement is expired
+   */
   gcc_pure
   bool get_ack_expired() const;
 
-/** 
- * Determine if acknowledgement is acknowledged for whole day
- * 
- * @return True if acknowledged
- */
+  /**
+   * Determine if acknowledgement is acknowledged for whole day
+   *
+   * @return True if acknowledged
+   */
   gcc_pure
   bool get_ack_day() const;
 
-/** 
- * Acknowledge an airspace warning
- * 
- * @param set Whether to set or cancel acknowledgement
- */
+  /**
+   * Acknowledge an airspace warning
+   *
+   * @param set Whether to set or cancel acknowledgement
+   */
   void acknowledge_warning(const bool set=true);
 
-/** 
- * Acknowledge an airspace inside
- * 
- * @param set Whether to set or cancel acknowledgement
- */
+  /**
+   * Acknowledge an airspace inside
+   *
+   * @param set Whether to set or cancel acknowledgement
+   */
   void acknowledge_inside(const bool set=true);
 
-/** 
- * Acknowledge all warnings for airspace for whole day
- * 
- * @param set Whether to set or cancel acknowledgement
- */
+  /**
+   * Acknowledge all warnings for airspace for whole day
+   *
+   * @param set Whether to set or cancel acknowledgement
+   */
   void acknowledge_day(const bool set=true);
 
-/**
- * Ranking operator for warnings
- * 
- * @return True if this is more severe than that
- */
+  /**
+   * Ranking operator for warnings
+   *
+   * @return True if this is more severe than that
+   */
   gcc_pure
   bool operator < (const AirspaceWarning& that);
 
@@ -194,9 +195,8 @@ private:
 
   static const unsigned null_acktime;
 
-public:
-
 #ifdef DO_PRINT
+public:
   friend std::ostream& operator<< (std::ostream& f, 
                                    const AirspaceWarning& aw);
 #endif

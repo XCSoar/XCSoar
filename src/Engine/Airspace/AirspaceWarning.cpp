@@ -39,9 +39,7 @@ AirspaceWarning::AirspaceWarning(const AbstractAirspace& the_airspace):
   m_expired(true),
   m_expired_last(true)
 {
-
 }
-
 
 void AirspaceWarning::save_state()
 {
@@ -65,38 +63,33 @@ bool
 AirspaceWarning::warning_live(const unsigned ack_time)
 {
   // propagate settings from manager
-  if (m_acktime_warning == null_acktime) {
+  if (m_acktime_warning == null_acktime)
     m_acktime_warning = ack_time;
-  }
-  if (m_acktime_inside == null_acktime) {
+
+  if (m_acktime_inside == null_acktime)
     m_acktime_inside = ack_time;
-  }
 
   if ((m_state != WARNING_CLEAR) 
       && (m_state < m_state_last) 
-      && (m_state_last == WARNING_INSIDE)) 
-  {
+      && (m_state_last == WARNING_INSIDE))
     // if inside was acknowledged, consider warning to be acknowledged
     m_acktime_warning = max(m_acktime_warning, m_acktime_inside);
-  }
 
-  if (m_acktime_warning) {
+  if (m_acktime_warning)
     m_acktime_warning--;
-  }
-  if (m_acktime_inside) {
+
+  if (m_acktime_inside)
     m_acktime_inside--;
-  }
-  if (m_debouncetime) {
+
+  if (m_debouncetime)
     m_debouncetime--;
-  }
 
   m_expired = get_ack_expired();
 
-  if (m_state == WARNING_CLEAR) {
+  if (m_state == WARNING_CLEAR)
     return !m_expired;
-  } else { 
-    return true;
-  }
+
+  return true;
 }
 
 bool
@@ -108,9 +101,8 @@ AirspaceWarning::changed_state() const
   if ((m_state_last == WARNING_CLEAR) && (m_state > WARNING_CLEAR)) 
     return get_ack_expired();
 
-  if ((m_state_last < WARNING_INSIDE) && (m_state == WARNING_INSIDE)) {
+  if ((m_state_last < WARNING_INSIDE) && (m_state == WARNING_INSIDE))
     return get_ack_expired();
-  }
 
   return false;
 }
@@ -118,15 +110,16 @@ AirspaceWarning::changed_state() const
 bool 
 AirspaceWarning::state_accepted(const AirspaceWarningState state) const
 {
-  return (state>= m_state);
+  return (state >= m_state);
 }
 
 bool
 AirspaceWarning::get_ack_expired() const
 {
-  if (m_ack_day) {
-    return false; // these ones persist
-  }
+  if (m_ack_day)
+    // these ones persist
+    return false;
+
   switch (m_state) {
   case WARNING_CLEAR:
   case WARNING_TASK:
@@ -144,21 +137,19 @@ AirspaceWarning::get_ack_expired() const
 void 
 AirspaceWarning::acknowledge_inside(const bool set)
 {
-  if (set) {
+  if (set)
     m_acktime_inside = null_acktime;
-  } else {
+  else
     m_acktime_inside = 0;
-  }
 }
 
 void 
 AirspaceWarning::acknowledge_warning(const bool set)
 {
-  if (set) {
+  if (set)
     m_acktime_warning = null_acktime;
-  } else {
+  else
     m_acktime_warning = 0;
-  }
 }
 
 void 
@@ -176,27 +167,24 @@ AirspaceWarning::get_ack_day() const
 bool 
 AirspaceWarning::trivial() const 
 {
-  return (m_state==WARNING_CLEAR) 
-    && (m_state_last==WARNING_CLEAR) 
+  return (m_state == WARNING_CLEAR)
+    && (m_state_last == WARNING_CLEAR)
     && get_ack_expired()
     && (!m_debouncetime);
 }
-
 
 bool 
 AirspaceWarning::operator < (const AirspaceWarning& other)
 {
   // compare bother.ack
-  if (get_ack_expired() != other.get_ack_expired()) {
+  if (get_ack_expired() != other.get_ack_expired())
     // least expired top
     return get_ack_expired() > other.get_ack_expired();
-  }
 
   // compare bother.state
-  if (get_warning_state() != other.get_warning_state()) {
+  if (get_warning_state() != other.get_warning_state())
     // most severe top
     return get_warning_state() > other.get_warning_state();
-  }
 
   // state and ack equal, compare bother.time to intersect
   return get_solution().elapsed_time < other.get_solution().elapsed_time;
