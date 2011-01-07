@@ -642,13 +642,12 @@ XMLNode::AddText(const TCHAR *lpszValue)
 static void
 FindEndOfText(const TCHAR *lpszToken, size_t *pcbText)
 {
-  TCHAR ch;
-  size_t cbText;
   assert(lpszToken);
   assert(pcbText);
-  cbText = (*pcbText) - 1;
+
+  size_t cbText = (*pcbText) - 1;
   while (1) {
-    ch = lpszToken[cbText];
+    TCHAR ch = lpszToken[cbText];
     switch (ch) {
     case _T('\r'):
     case _T('\n'):
@@ -687,9 +686,6 @@ stringDup(const TCHAR *lpszData, size_t cbData)
 bool
 XMLNode::ParseXMLElement(XML *pXML)
 {
-  size_t cbToken;
-  enum TokenTypeTag type;
-  NextToken token;
   const TCHAR *lpszTemp = NULL;
   size_t cbTemp;
   unsigned nDeclaration;
@@ -713,7 +709,9 @@ XMLNode::ParseXMLElement(XML *pXML)
   // Iterate through the tokens in the document
   while (true) {
     // Obtain the next token
-    token = GetNextToken(pXML, &cbToken, &type);
+    size_t cbToken;
+    enum TokenTypeTag type;
+    NextToken token = GetNextToken(pXML, &cbToken, &type);
     if (gcc_unlikely(type == eTokenError))
       return false;
 
@@ -1045,16 +1043,13 @@ XMLNode::ParseXMLElement(XML *pXML)
 static void
 CountLinesAndColumns(const TCHAR *lpXML, size_t nUpto, XMLResults *pResults)
 {
-  TCHAR ch;
-  size_t n;
-
   assert(lpXML);
   assert(pResults);
 
   pResults->nLine = 1;
   pResults->nColumn = 1;
-  for (n = 0; n < nUpto; n++) {
-    ch = lpXML[n];
+  for (size_t n = 0; n < nUpto; n++) {
+    TCHAR ch = lpXML[n];
     assert(ch);
     if (ch == _T('\n')) {
       pResults->nLine++;
@@ -1517,9 +1512,9 @@ XMLNode::nChildNode(const TCHAR *name) const
   if (!d)
     return 0;
 
-  unsigned i, j = 0, n = d->nChild;
+  unsigned j = 0, n = d->nChild;
   XMLNode *pc = d->pChild;
-  for (i = 0; i < n; i++) {
+  for (unsigned i = 0; i < n; i++) {
     if (_tcsicmp(pc->d->lpszName, name) == 0)
       j++;
     pc++;
