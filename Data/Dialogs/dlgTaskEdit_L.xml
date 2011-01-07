@@ -5,7 +5,7 @@
 
   <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" OnClick="OnCloseClicked"/>
 
-  <Button Name="cmdNew" Caption="New" X="2" Y="128" Width="98" Height="22" OnClick="OnNewClicked"/>
+  <Button Name="cmdNew" Caption="New task" X="2" Y="128" Width="98" Height="22" OnClick="OnNewClicked"/>
   <Button Name="cmdProperties" Caption="Properties" X="2" Width="98" Height="22" OnClick="OnPropertiesClicked"/>
   <Button Name="cmdMore" Caption="More ..." X="2" Width="98" Height="22" OnClick="OnMoreClicked"/>
   <Panel Name="frmMore" X="102" Y="141" Width="-2" Height="22" Border="0" Visible="0">

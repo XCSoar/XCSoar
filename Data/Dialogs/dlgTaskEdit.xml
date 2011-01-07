@@ -9,7 +9,7 @@
 
   <List Name="frmTaskPoints" X="2" Y="26" Width="234" Height="129" ItemHeight="18"/>
 
-  <Button Name="cmdNew" Caption="New" X="2" Y="158" Width="77" Height="22" OnClick="OnNewClicked"/>
+  <Button Name="cmdNew" Caption="New task" X="2" Y="158" Width="77" Height="22" OnClick="OnNewClicked"/>
   <Button Name="cmdProperties" Caption="Properties" X="81" Y="158" Width="77" Height="22" OnClick="OnPropertiesClicked"/>
   <Button Name="cmdMore" Caption="More ..." X="160" Y="158" Width="77" Height="22" OnClick="OnMoreClicked"/>
   <Panel Name="frmMore" X="2" Y="181" Width="236" Height="22" Border="0" Visible="0">
