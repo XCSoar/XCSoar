@@ -30,7 +30,7 @@
 static TCHAR *
 stringDup(const tstring text)
 {
-  return stringDup(text.c_str());
+  return _tcsdup(text.c_str());
 }
 
 DataNodeXML::DataNodeXML(const XMLNode &the_node)

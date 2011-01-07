@@ -309,10 +309,4 @@ typedef struct XMLNodeContents
   const TCHAR *text;
 } XMLNodeContents;
 
-/**
- * Duplicate (copy in a new allocated buffer) the source string.
- */
-TCHAR *
-stringDup(const TCHAR *source, size_t cbData=0);
-
 #endif

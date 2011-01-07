@@ -670,7 +670,11 @@ FindEndOfText(const TCHAR *lpszToken, size_t *pcbText)
   }
 }
 
-TCHAR *
+
+/**
+ * Duplicate (copy in a new allocated buffer) the source string.
+ */
+static TCHAR *
 stringDup(const TCHAR *lpszData, size_t cbData)
 {
   if (lpszData == NULL)
