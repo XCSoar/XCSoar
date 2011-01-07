@@ -8,6 +8,7 @@
 \usepackage{fancyvrb}
 \usepackage{listings}
 \usepackage{setspace}
+\usepackage{todonotes}
 \makeatletter
 \def\trdvvs{Vega}
 \usepackage{fancyhdr}
@@ -22,6 +23,9 @@
 % Define command to insert warning image
 \newcommand{\warning}[0]{\marginlabel{\parbox{1.3cm}{\includegraphics[width=1.2cm]{figures/warn_general_sign.pdf}}}}
 \newcommand{\InfoBox}[0]{{InfoBox}}
+\newcounter{todocounter}
+\newcommand{\todonum}[2][]
+{\stepcounter{todocounter}\todo[#1]{\thetodocounter: #2}}
 \maxipagerulefalse
 % Include XCSoar header and footer settings
 \input{xcsoar-headers.sty}

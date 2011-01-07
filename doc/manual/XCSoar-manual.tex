@@ -5,6 +5,15 @@
 \begin{document}
 \maketitle
 
+%%%%%%%%%%%%%%%%%%%%%%
+\listoftodos
+
+\todonum[inline]{support more task types}
+\todonum[inline]{alternates list}
+\todonum[inline]{instant OLC score}
+\todonum[inline]{OLC plus rules}
+\todonum[inline]{instant AAT optimization}
+  
 \begingroup
 \setlength{\parskip}{0.1\baselineskip}
 \tableofcontents
@@ -177,7 +186,7 @@ location of this directory is determined with the following method:
 \item[Windows PC]
 \texttt{XCSoarData} is always located in your personal folder (``\texttt{My
 Documents}'')
-\item[Windows Mobile PDA]
+\item[Windows Mobile PDA (PNA)]
 \begin{itemize}
 \item If you start XCSoar from a SD card, it is always in the root of
   that SD card (e.g. ``\texttt{/SD Card/XCSoarData}'')
@@ -618,10 +627,11 @@ corresponding menu.
 
 \subsection*{Navigation menu (Nav)}
 \jindent{\bmenut{Task}{Calc}}{ Displays the task calculator dialog. }
-\jindent{\bmenut{Advance}{(Auto)}}{ Todo \ldots Arms the automatic task
+\todonum{verify} \jindent{\bmenut{Advance}{(Auto)}}{ Arms the automatic task 
 waypoint trigger. }
-%	Todo add to dynamic buttons \jindent{\bmenut{Abort}{Start}}{ Abort the last
-%Start } 
+\todonum[inline]
+{add (or not?) to dynamic buttons: {Abort}{Start} - { Abort the
+last Start } } 
 \jindent{\bmenut{Previous}{turnpoint}}{ Selects the previous/start waypoint in
 the task. }
 \jindent{\bmenut{Next}{turnpoint}}{ Selects the next/finish waypoint in the
@@ -631,6 +641,7 @@ task. }
 \jindent{\bmenus{GoTo}}{ Displays the waypoint selector dialog and activates
 the GoTo mode for the selected waypoint. }
 \jindent{\bmenut{Task}{Abort}}{ Aborts/resumes the current task. }
+\todonum{explain} \jindent{\bmenus{Alternates}}{  }
 \jindent{\bmenus{Target}}{ Displays the target dialog, which is
 important for modifying AAT tasks. }
 
@@ -650,8 +661,8 @@ Long, Short, Off. }
 \subsection*{Configuration menu (Config)}
 \jindent{\bmenut{MC}{$+$}}{ Increases MacCready value. }
 \jindent{\bmenut{MC}{$-$}}{ Decreases MacCready value. }
-\jindent{\bmenut{MC}{Auto}}{ Toggles automatic/manual MacCready (TODO when in
-final glide.?). }
+\todonum{verify restriction to final glide} \jindent{\bmenut{MC}{Auto}}{ Toggles
+automatic/manual MacCready when in final glide. }
 \jindent{\bmenut{Flight}{Setup}}{ Displays the flight settings
 (bugs/ballast/QNH) dialog. }
 \jindent{\bmenut{Setup}{Wind}}{ Displays the wind settings dialog. }
@@ -683,6 +694,7 @@ to the aircraft. }
 \jindent{\bmenut{FLARM}{Radar}}{ Opens the full screen FLARM radar dialog. }
 \jindent{\bmenut{Thermal}{Assistant}}{ Opens the full screen thermal assistant
 dialog. }
+\todonum{the thermal assistant should beexplained somewhere}
 
 \subsection*{Variometer sub-menu (Vario) of the Configuration menu}
  The functions in this sub-menu require the Vega intelligent
@@ -694,7 +706,7 @@ connected device.
 well as certain speech announcements by the Vega intelligent variometer. }
 \jindent{\bmenut{Manual}{Demo}}{ Activates Vega variometer manual tone demo. }
 \jindent{\bmenut{Setup}{Stall}}{ Opens Vega stall monitor setup dialog. }
-\jindent{\bmenus{Accel}}{ Todo, what is that for? }
+\todonum{what is that for?}\jindent{\bmenus{Accel}}{  }
 \jindent{\bmenut{ASI}{Zero}}{ Zeros the airspeed indicator. }
 \jindent{\bmenut{Accel}{Zero}}{ Levels/zeros the accelerometers. }
 \jindent{\bmenus{Store}}{ Stores Vega settings to EEPROM. }
@@ -718,7 +730,7 @@ of buttons in Altair perform the following functions (from left to right):
 \begin{center}
 \begin{tabular}{c c c c c c}
  PC: & 6 & 7 & 8 & 9 & 0 \\
- Altair: F5 & F6 & F7 & F8 & F9 \\
+ Altair: & F5 & F6 & F7 & F8 & F9 \\
 & \bmenut{Flight}{Setup} & \bmenut{Task}{Calc} & \bmenut{Task}{Edit} &
 \bmenut{Arm}{Advance} & \bmenut{Drop}{Mark} \\
 \end{tabular}
@@ -929,8 +941,9 @@ has been opened, the menu buttons are disabled until the dialog is closed.
 In some dialogs, items that are not relevant or valid (such as AAT details when
 flying a non-AAT task) are not displayed.
 
-ToDo: that list of dialog explanations should move else where
-A summary of the major dialogs is presented below.
+\todonum[inline]{This list of dialog explanations (up to 'Text entry') should
+move somewhere else, because it does not explain the interface.} A summary of the
+major dialogs is presented below.
 \begin{description}
 \item[Flight setup] Used to modify the polar of the glider both before and
 during flight, as well as to set the QNH pressure
@@ -1013,7 +1026,6 @@ the local sunset time.
 \includegraphics[angle=0,width=5cm,keepaspectratio='true']{figures/status-times.png}
 \end{center}
 \end{description}
-ToDo: end of that list of dialog explanations should move else where
 
 \subsection*{Text entry}
 A text entry dialog is used for entering text.  This is used for team
@@ -1207,9 +1219,8 @@ There is a facility to have two zoom settings; one when the glider is
 in circling flight mode, and one in the cruise or final glide flight
 mode.  This is the "Circling zoom" option in the configuration
 settings.  
-%By default, the cruise/final glide zoom is 5 km and the
-%circling zoom is 0.3 km.
-%\marginpar{XXX TODO Check these}
+By default, the cruise/final glide zoom is \todonum{check} 5 km and the
+circling zoom is \todonum{check}0.3 km.
 When the user zooms in or out, it affects the current
 mode's zoom setting only, so when leaving the mode the previous mode's
 zoom setting is used.  If `Circling Zoom' is not enabled, there is
@@ -1709,6 +1720,7 @@ This is accessed via the menu
 \end{quote} 
 
 The task editor's primary page is the Task Overview page which
+\todonum{update}
 comprises a list of task waypoints on the right side of the form.
 Below the list of waypoints, a Total line is displayed that shows
 the total distance of the task.
@@ -2156,10 +2168,14 @@ The typical use of targets in flying AAT is as follows:
 The task calculator therefore allows the pilot to make (and help to
 answer) `what if?' questions, for example:
 \begin{itemize}
-\item What will happen if the conditions improve?  The MacCready setting can be increased and the pilot can see if there is sufficient adjustment to targets in order to be able to extend the planned task.
-\item What will happen if the conditions deteriorate?  The MacCready setting can be decreased and the pilot can see how much the task can be shortened and still finish the task later than the assigned minimum time.
+\item What will happen if the conditions improve?  The MacCready setting can be 
+increased and the pilot can see if there is sufficient adjustment to targets in 
+order to be able to extend the planned task.
+\item What will happen if the conditions deteriorate?  The MacCready setting can 
+be decreased and the pilot can see how much the task can be shortened and still 
+finish the task later than the assigned minimum time.
 \item What will happen if I leave the AAT area now?
-%XXX TODO: need a bit more functionality here.
+\todonum{Needs a bit more functionality here}
 \end{itemize}
 
 \subsection*{Target projection}
@@ -2362,7 +2378,7 @@ Several flight loggers are accessible via XCSoar:
 \item The PRO version of Altair has an internal IGC certified logger device.
   XCSoar communicates with the logger as if it were an external serial device.
 
-%  XXX TODO: Describe how XCSoar interfaces with it..
+\todonum[inline]{Describe how XCSoar interfaces with it\ldots}
 
 \item XCSoar can also send declarations to some external logger devices,
   such as the EW logger.  For this to work, the device name must be specified
@@ -2617,7 +2633,7 @@ glider's performance.  For example, at 100\% bugs value, the glider
 performs as a clean glider, and at 50\% bugs value, the glider's sink
 rate is doubled when compared to a clean glider.
 
-%\marginpar{XXX TODO: How to judge bugs?}
+\todonum{How to judge bugs?}
 
 %{\it DIAGRAM SHOWING GLIDE POLAR, 100\% BUGS AND 50\% BUGS}
 
@@ -2643,7 +2659,7 @@ This is accessed via the menu under
 \end{quote}
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-basicsettings.png}
+\includegraphics[angle=0,width=4cm,keepaspectratio='true']{figures/dialog-basicsettings.png}
 \end{center}
 
 The bugs setting ('clean') determines the amount the polar is degraded
@@ -3253,12 +3269,17 @@ the pilot.
 
 Currently XCSoar supports the triadis Engineering Vega intelligent
 variometer, the Cambridge 302 DDV, Borgelt B50/B500, LX Navigation
-LX1600 variometers, Zander, and Tasman Instruments variometer.  Note
-that the level of support for each device varies, and not all
+LX1600 variometers, Zander, and Tasman Instruments variometer. 
+\todonum{add Flymaster F1
+    - Flytec
+    - ILEC SN10
+    - Leonardo}
+Note that the level of support for each device varies, and not all
 manufacturers release their protocols to allow the XCSoar developers
 to provide full support.  Barometric altitude is also read from
 certain GPS units and loggers, including the Volkslogger and
-Posigraph. % JMW check
+Posigraph.
+\todonum{JMW check}
 
 For Vega, a small icon displaying a circling glider is displayed when
 the variometer is in climb audio mode.
@@ -4053,6 +4074,7 @@ than 2000 meters is drawn at the 2000 meter ring.
 
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/flarmrose.png}
+\todonum{update screenshot}
 \end{center}
 
 The FLARM gauge display shows FLARM traffic in colours according to
@@ -4973,6 +4995,7 @@ airspace file.
 The terrain file is the digital elevation model used for terrain
 calculations and for display of terrain elevation with slope shading
 on the map area.  This file is optional but highly recommended.
+\todonum{update}
 
 There are two ways of specifying the terrain/topology files.  The old
 method requires each to be separate files and to be specified
@@ -5066,13 +5089,11 @@ This page provides options relating to the map display.
 \begin{description}
 \item[Labels] This setting determines the label displayed with each waypoint. There are 7 options:
 
-%TODO: what is a ``waypoint number''?
-%TODO: tail drift: measuring unit?
-%TODO: ``idle blank screen'' still necessary?
 
 \begin{description}
 \item[Names] The full name of each waypoint is displayed.
-\item[Numbers] The waypoint number of each waypoint is displayed.
+\todonum{what is a ``waypoint number''?}\item[Numbers] The waypoint number of
+each waypoint is displayed.
 \item[None] No names are displayed with the waypoints.
 \item[Names in task] Names are only displayed for waypoints that are in the active task as well as the home airfield.
 \item[First 3] The first 3 letters of the waypoint name are displayed.
@@ -5087,13 +5108,15 @@ This page provides options relating to the map display.
 \item[Full] A trail for the entire flight is drawn
 \end{description}
 \item[Orientation]  This determines how the screen is rotated with the glider.
-
+\todonum{update}
 \begin{description}
-\item[North up] The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.
+\item[North up] The moving map display will always be orientated north to south and the glider icon 
+will be rotated to show its course.
 \item[Track up] The moving map display will be rotated so the glider's track
  is oriented up.
 \item[North circling] This is equivalent to track-up in cruise and north-up when circling.
-\item[Target circling] This is equivalent to track-up in cruise and the bearing to next waypoint up when circling.
+\item[Target circling] This is equivalent to track-up in cruise and the bearing to next waypoint up 
+when circling.
 \item[North/track] North-up in cruise, glider track-track up in circling
 \end{description}
 \item[Auto zoom] Determines whether auto-zoom is enabled.  Auto-zoom changes
@@ -5104,7 +5127,11 @@ will be maintained for circling and cruise modes.  If unchecked, there
 is only one zoom.  If enabled, then the map will zoom in automatically
 when entering circling mode and zoom out automatically when leaving
 circling mode.
-\item[Trail drift*] Determines whether the snail trail is drifted with the wind when displayed in circling mode.  When OFF, the snail trail is uncompensated for wind draft.
+\item[Trail drift*] Determines whether the
+snail trail is drifted with the wind when displayed in circling mode.  When OFF, the snail trail is 
+\todonum{trail drift: measuring unit?}
+uncompensated for wind draft.
+\item[Trail type*] \todonum{explain}
 \item[Trail width*] Sets the width of the snail trail display.
 \item[Idle blank screen] (PDA only)
 This determines whether the display should be blanked after 60 seconds
@@ -5118,10 +5145,8 @@ on again by pressing any button.
 \end{description}
 \end{description}
 
-%XXXX TODO
-%The check boxes in this section determine whether the compass
-%indicator will be displayed in cruise/final glide modes and circling
-%mode.
+\todonum[inline]{The check boxes in this section determine whether the compass
+indicator will be displayed in cruise/final glide modes and circling mode.}
 
 \clearpage
 \section{Terrain display}\label{sec:terrain-display}
@@ -5135,16 +5160,22 @@ This page sets how terrain and topology is drawn on the map window.
 \begin{description}
 \item[Terrain display] Draws digital elevation terrain on the map
 \item[Topology display] Draws topological features (roads, rivers, lakes) on the map
-\item[Terrain contrast]  Defines the amount of phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.
-\item[Terrain brightness]  Defines the brightness (whiteness) of the terrain rendering.  This controls the average illumination of the terrain.
-\item[Terrain colors]  Defines the color ramp used in terrain rendering.  Various schemes are available, which works best for you will depend on how mountainous your region is.
+\item[Slope shading]  \todonum{explain}
+\item[Terrain contrast]  Defines the amount of phong shading in the terrain rendering.  Use large values 
+to emphasise terrain slope, smaller values if flying in steep mountains.
+\item[Terrain brightness]  Defines the brightness (whiteness) of the terrain rendering.  This controls the 
+average illumination of the terrain.
+\item[Terrain colors]  Defines the color ramp used in terrain rendering.  Various schemes are available, 
+which works best for you will depend on how mountainous your region is.
+\todonum{auto-scale terrain colors}
 \end{description}
 
 
 \begin{maxipage}
 The available terrain color schemes are illustrated in the table below.
 
-%TODO: scheme ``grey'' is missing; ``flatlands'' is displayed ``lowlands''
+\todonum[inline]{ scheme ``grey'' is missing; ``flatlands'' is displayed
+``lowlands''}
 
 \begin{longtable}{c c c}
 \includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-flatlands.png}&
@@ -5337,14 +5368,15 @@ set.
 \clearpage
 \section{Interface}\label{sec:interface}
 
-%TODO: dialog style: description of values
+\todonum[inline]{dialog style: description of values}
 
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-8.png}
 \end{center}
 
 \begin{description}
-\item[Auto Blank] This determines whether to blank the display after a long period of inactivity when operating on internal battery power (for PDA only).
+\item[Auto Blank] This determines whether to blank the display after a long period 
+of inactivity when operating on internal battery power (for PDA only).
 \item[Safety lock]
 This determines whether the configuration settings dialog is
 accessible during flight.
@@ -5354,8 +5386,8 @@ The Input Events file defines the menu system and how XCSoar responds
 to button presses and events from external devices.
 \item[Language*]
 The language file defines translations for XCSoar text in English to
-other languages.  If this field is left blank, then XCSoar uses
-English.
+other languages.  If this field is left blank, \todonum{update, language
+auto-detection} then XCSoar uses English.
 \item[Status message*]
 The status message file can be used to define sounds to be played when certain
 events occur, and how long various status messages will appear on screen.
@@ -5649,8 +5681,6 @@ in the XCM file.
 \clearpage
 \section{Experimental features}
 
-%TODO: gestures
-
 This page provides experimental features which are not finished yet.
 
 \begin{center}
@@ -5659,10 +5689,12 @@ This page provides experimental features which are not finished yet.
 
 The following functions are provided:
 \begin{description}
-\item[Gestures] Enables gesture control. Useful for devices without hardware keys such as PNAs.
-\item[L/D Average period] Average glide ratio is always calculated in real time. Here you can decide on how many seconds of flight this calculation must be done.
-\item[Extended Visual Glide] If you want Visual Glide to display also moving circles or arcs, in addition to the steady mode then select Extended.
-\item[GPS Height Offset] Adjust GPS height with a fixed offset. Should be manually set each time as it will not be saved to the registry.
+\item[L/D Average period] Average glide ratio is always calculated in real time. Here you can decide 
+on how many seconds of flight this calculation must be done.
+\item[Extended Visual Glide] If you want Visual Glide to display also moving circles or arcs, in 
+addition to the steady mode then select Extended.
+\item[GPS Height Offset] Adjust GPS height with a fixed offset. Should be manually set each time 
+as it will not be saved to the registry.
 \end{description}
 
 
@@ -5714,11 +5746,16 @@ SD Card/XCSoarData
 IPAQ File Store/XCSoarData
 \end{verbatim}
 
-%XXX TODO: Explain where files are generated to and search paths.
+\todonum[inline]{Explain where files are generated to and search paths.}
 
 Note that due to limitations in the Pocket PC and Windows Mobile
 operating system, additional subdirectories under ``My
 Documents/XCSoarData'' are not allowed.
+
+\section{Composed Mapfile}
+
+\todonum[inline]{What is the new xcm file format capable, and what does it
+replace}
 
 \section{Terrain}
 
@@ -5727,6 +5764,7 @@ model represented as an array of elevations in meters on a
 latitude/longitude grid.  The format used is unique to XCSoar as it
 contains a header containing the grid geometry followed by the raster
 array.
+\todonum{xcm impact?}
 
 Terrain files for various regions can be obtained from the XCSoar website.
 Additional terrain files can be produced upon request.
@@ -5744,6 +5782,7 @@ be customised, for example to add or remove specific layers.  Details
 on the file format will be provided in a separate document.  The
 topology data itself uses ERSI Shape files which are generated from the
 freely available VMAP0 database.
+\todonum{xcm impact?}
 
 Topology files for various regions can be obtained from the XCSoar
 website.  Additional topology files can be produced upon request.
@@ -5753,7 +5792,7 @@ website.  Additional topology files can be produced upon request.
 XCSoar uses waypoint files written in the format designed by Cambridge
 Aero Instruments for their C302 instrument.  The file extension should
 be \verb|.dat|.
-
+\todonum{add new waypoint formats}
 Files are available from the Soaring Turn-points section of the
 Soaring Server\footnote{Mirrors to this website exist, google search
 for ``worldwide soaring turnpoint exchange'' if the main server is
@@ -5775,6 +5814,8 @@ of the widely distributed OpenAir format. Files are available from the
 Special Use Airspace section of the Soaring Server:
 
 \verb|http://acro.harvard.edu/SOARING/JL/SUA|
+
+\todonum[inline]{support for TNP airspace files}
 
 The following are the list of supported airspace types: Class A, Class
 B, Class C, Class D, Class E, Class F, Prohibited areas, Danger areas,
@@ -6023,11 +6064,12 @@ such as the default profile.  Copy the file, give it a logical name,
 and then when XCSoar starts next time the new profile can be selected
 and customised through the configuration settings dialogs.
 
-%XXX TODO: describe use of profile files at startup (new selector)
-%  and how to create a new profile for shared aircraft; or for aircraft
-%  with different configurations (wingtips etc.)
+\todonum[inline]{ describe use of profile files at startup (new selector)
+  and how to create a new profile for shared aircraft; or for aircraft
+  with different configurations (wingtips etc.)}
 
-%When a profile is selected at startup, it becomes the default profile?
+\todonum[inline]{When a profile is selected at startup, it becomes the default
+profile?}
 
 \section{Checklist}
 
@@ -6068,7 +6110,7 @@ according to the long naming convention described in the FAI
 document {\em Technical Specification for IGC-Approved GNSS Flight Recorders}.  
 These files can be imported into other programs for analysis after flight.
 
-%XXX TODO: Describe use of FPLT to add events to the replay.
+\todonum[inline]{Describe use of FPLT to add events to the replay.}
 The flight logs replay facility allows the files to include 
 embedded commands to control XCSoar as if the user was interacting
 with the program.  It does this by defining a special use for the
@@ -6200,9 +6242,9 @@ Refer to the {\em XCSoar Advanced Configuration Guide} for more details.
 \chapter{History and Development}\label{cha:history-development}
 
 \section{Product history}
-%XXX TODO: Describe background of XCSoar and its developers,
-% development process, get on board!  If you want something, ask (nicely)
-%
+\todonum[inline]{Describe background of XCSoar and its developers,
+ development process, get on board!  If you want something, ask (nicely)}
+
 XCSoar started as a commercial product developed by Mike Roberts (UK),
 where it enjoyed a successful share of the market for several years
 and going though several releases, the last being {\bf Version~2}.
@@ -6244,6 +6286,8 @@ incorporating JPG2000 compression, online contest support, additional
 supported devices, FLARM radar screen, and overall improved stability,
 reliability and accuracy of task calculations.  Many feature requests
 from users have been incorporated into this release.
+
+\todo[inline]{What happened in the three years up to Version 6.0}
 
 \section{Get involved}
 
