@@ -45,7 +45,7 @@ static OrderedTask* ordered_task = NULL;
 static bool task_modified = false;
 static bool show_more = false;
 
-
+static void ToggleMore();
 /**
  * Validates task and prompts if change or error
  * Commits task if no error
@@ -129,6 +129,8 @@ OnNewClicked(WndButton &Sender)
     ordered_task->clear();
     ordered_task->set_factory(new_type);
     task_modified = true;
+    if (show_more)
+      ToggleMore();
   }
 
   RefreshView();
@@ -194,7 +196,6 @@ OnListClicked(WndButton &Sender)
 {
   (void)Sender;
   task_modified |= dlgTaskListShowModal(*parent_window, &ordered_task);
-  OnMoreClicked(Sender);
   RefreshView();
 }
 
@@ -203,7 +204,6 @@ OnDeclareClicked(WndButton &Sender)
 {
   (void)Sender;
   logger.LoggerDeviceDeclare(*ordered_task);
-  OnMoreClicked(Sender);
 }
 
 static void
@@ -217,7 +217,6 @@ OnSaveClicked(WndButton &Sender)
            MB_ICONEXCLAMATION);
     MessageBoxX (_("Task invalid.  Not saved."),
                  _T("Task Edit"), MB_OK);
-    OnMoreClicked(Sender);
     return;
   }
 
@@ -225,7 +224,6 @@ OnSaveClicked(WndButton &Sender)
     MessageBoxX (_("Task saved"),
                  _T("Task Edit"), MB_OK);
   }
-  OnMoreClicked(Sender);
 }
 
 /**
