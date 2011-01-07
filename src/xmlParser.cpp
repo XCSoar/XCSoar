@@ -86,19 +86,19 @@ typedef enum TokenTypeTag
 /** Main structure used for parsing XML. */
 typedef struct XML
 {
-    LPCTSTR lpXML;
+    const TCHAR *lpXML;
     unsigned nIndex;
     enum XMLError error;
-    LPCTSTR lpEndTag;
+    const TCHAR *lpEndTag;
     size_t cbEndTag;
-    LPCTSTR lpNewElement;
+    const TCHAR *lpNewElement;
     size_t cbNewElement;
     bool nFirst;
 } XML;
 
 typedef struct
 {
-    LPCTSTR pStr;
+    const TCHAR *pStr;
 } NextToken;
 
 /** Enumeration used when parsing attributes. */
@@ -158,8 +158,8 @@ write_xml_string(TextWriter &writer, const TCHAR *source)
  * @param lo length of string
  * @return new allocated string converted from xml
  */
-static LPTSTR
-fromXMLString(LPCTSTR ss, size_t lo)
+static TCHAR *
+fromXMLString(const TCHAR *ss, size_t lo)
 {
   assert(ss != NULL);
 
@@ -236,7 +236,7 @@ fromXMLString(LPCTSTR ss, size_t lo)
  * @return 0 if equals, 1 if different
  */
 static char
-myTagCompare(LPCTSTR cclose, LPCTSTR copen)
+myTagCompare(const TCHAR *cclose, const TCHAR *copen)
 {
   if (!cclose)
     return 1;
@@ -324,7 +324,7 @@ static NextToken
 GetNextToken(XML *pXML, size_t *pcbToken, enum TokenTypeTag *pType)
 {
   NextToken result;
-  LPCTSTR lpXML;
+  const TCHAR *lpXML;
   TCHAR ch;
   TCHAR chTemp;
   size_t nSize;
@@ -509,7 +509,8 @@ GetNextToken(XML *pXML, size_t *pcbToken, enum TokenTypeTag *pType)
   return result;
 }
 
-LPCTSTR XMLNode::getError(XMLError error)
+const TCHAR *
+XMLNode::getError(XMLError error)
 {
   switch (error) {
   case eXMLErrorNone:
@@ -540,12 +541,12 @@ LPCTSTR XMLNode::getError(XMLError error)
 }
 
 
-XMLNode XMLNode::createRoot(LPCTSTR lpszName)
+XMLNode XMLNode::createRoot(const TCHAR *lpszName)
 {
   return XMLNode(NULL, lpszName, false);
 }
 
-XMLNode::XMLNode(XMLNode *pParent, LPCTSTR lpszName, bool isDeclaration)
+XMLNode::XMLNode(XMLNode *pParent, const TCHAR *lpszName, bool isDeclaration)
 {
   d = (XMLNodeData*)malloc(sizeof(XMLNodeData));
   assert(d);
@@ -595,7 +596,7 @@ XMLNode::addToOrder(unsigned index, unsigned type)
 }
 
 XMLNode
-XMLNode::AddChild(LPCTSTR lpszName, bool isDeclaration)
+XMLNode::AddChild(const TCHAR *lpszName, bool isDeclaration)
 {
   if (!lpszName)
     return emptyXMLNode;
@@ -611,7 +612,7 @@ XMLNode::AddChild(LPCTSTR lpszName, bool isDeclaration)
 }
 
 XMLAttribute *
-XMLNode::AddAttribute(LPCTSTR lpszName, LPCTSTR lpszValuev)
+XMLNode::AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev)
 {
   if (!lpszName)
     return &emptyXMLAttribute;
@@ -627,14 +628,15 @@ XMLNode::AddAttribute(LPCTSTR lpszName, LPCTSTR lpszValuev)
   return pAttr;
 }
 
-LPCTSTR XMLNode::AddText(LPCTSTR lpszValue)
+const TCHAR *
+XMLNode::AddText(const TCHAR *lpszValue)
 {
   if (!lpszValue)
     return NULL;
 
   unsigned nt = d->nText;
-  d->pText = (LPCTSTR*)myRealloc(d->pText, (nt + 1), memoryIncrease,
-                                 sizeof(LPTSTR));
+  d->pText = (const TCHAR **)myRealloc(d->pText, (nt + 1), memoryIncrease,
+                                       sizeof(const TCHAR *));
   d->pText[nt] = lpszValue;
   addToOrder(nt, eNodeText);
   d->nText++;
@@ -645,7 +647,7 @@ LPCTSTR XMLNode::AddText(LPCTSTR lpszValue)
  * Trim the end of the text to remove white space characters.
  */
 static void
-FindEndOfText(LPCTSTR lpszToken, size_t *pcbText)
+FindEndOfText(const TCHAR *lpszToken, size_t *pcbText)
 {
   TCHAR ch;
   size_t cbText;
@@ -668,16 +670,16 @@ FindEndOfText(LPCTSTR lpszToken, size_t *pcbText)
   }
 }
 
-LPTSTR
-stringDup(LPCTSTR lpszData, size_t cbData)
+TCHAR *
+stringDup(const TCHAR *lpszData, size_t cbData)
 {
   if (lpszData == NULL)
     return NULL;
 
-  LPTSTR lpszNew;
+  TCHAR *lpszNew;
   if (cbData == 0)
     cbData = _tcslen(lpszData);
-  lpszNew = (LPTSTR)malloc((cbData + 1) * sizeof(TCHAR));
+  lpszNew = (TCHAR *)malloc((cbData + 1) * sizeof(TCHAR));
   assert(lpszNew);
   if (lpszNew) {
     memcpy(lpszNew, lpszData, (cbData) * sizeof(TCHAR));
@@ -696,10 +698,10 @@ XMLNode::ParseXMLElement(void *pa)
   size_t cbToken;
   enum TokenTypeTag type;
   NextToken token;
-  LPCTSTR lpszTemp = NULL;
+  const TCHAR *lpszTemp = NULL;
   size_t cbTemp;
   unsigned nDeclaration;
-  LPCTSTR lpszText = NULL;
+  const TCHAR *lpszText = NULL;
   XMLNode pNew;
   enum Status status; // inside or outside a tag
   enum Attrib attrib = eAttribName;
@@ -797,8 +799,9 @@ XMLNode::ParseXMLElement(void *pa)
                                                            memoryIncrease,
                                                            sizeof(XMLAttribute));
                 if (d->nText > 0)
-                  d->pText = (LPCTSTR*)myRealloc(d->pText, d->nText,
-                                                 memoryIncrease, sizeof(LPTSTR));
+                  d->pText = (const TCHAR **)myRealloc(d->pText, d->nText,
+                                                       memoryIncrease,
+                                                       sizeof(const TCHAR *));
                 return false;
               } else {
                 // If the call to recurse this function
@@ -1052,7 +1055,7 @@ XMLNode::ParseXMLElement(void *pa)
  * Count the number of lines and columns in an XML string.
  */
 static void
-CountLinesAndColumns(LPCTSTR lpXML, size_t nUpto, XMLResults *pResults)
+CountLinesAndColumns(const TCHAR *lpXML, size_t nUpto, XMLResults *pResults)
 {
   TCHAR ch;
   size_t n;
@@ -1081,7 +1084,7 @@ CountLinesAndColumns(LPCTSTR lpXML, size_t nUpto, XMLResults *pResults)
  * @return The main XMLNode or empty XMLNode on error
  */
 XMLNode
-XMLNode::parseString(LPCTSTR lpszXML, XMLResults *pResults)
+XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
 {
   // If String is empty
   if (!lpszXML) {
@@ -1319,7 +1322,7 @@ XMLNode::nElement(const XMLNodeData *pEntry)
 }
 
 static inline void
-charmemset(LPTSTR dest, TCHAR c, size_t l)
+charmemset(TCHAR *dest, TCHAR c, size_t l)
 {
   while (l--)
     *(dest++) = c;
@@ -1521,7 +1524,7 @@ XMLNode::XMLNode(const XMLNode &A)
 }
 
 unsigned
-XMLNode::nChildNode(LPCTSTR name) const
+XMLNode::nChildNode(const TCHAR *name) const
 {
   if (!d)
     return 0;
@@ -1538,7 +1541,7 @@ XMLNode::nChildNode(LPCTSTR name) const
 }
 
 XMLNode
-XMLNode::getChildNode(LPCTSTR name, unsigned *j)
+XMLNode::getChildNode(const TCHAR *name, unsigned *j)
 {
   if (!d)
     return emptyXMLNode;
@@ -1560,7 +1563,7 @@ XMLNode::getChildNode(LPCTSTR name, unsigned *j)
 }
 
 XMLNode
-XMLNode::getChildNode(LPCTSTR name, unsigned j)
+XMLNode::getChildNode(const TCHAR *name, unsigned j)
 {
   if (!d)
     return emptyXMLNode;
@@ -1572,8 +1575,8 @@ XMLNode::getChildNode(LPCTSTR name, unsigned j)
   return getChildNode(name, &i);
 }
 
-LPCTSTR
-XMLNode::getAttribute(LPCTSTR lpszAttrib, unsigned *j) const
+const TCHAR *
+XMLNode::getAttribute(const TCHAR *lpszAttrib, unsigned *j) const
 {
   if (!d)
     return NULL;
@@ -1596,7 +1599,7 @@ XMLNode::getAttribute(LPCTSTR lpszAttrib, unsigned *j) const
 }
 
 bool
-XMLNode::isAttributeSet(LPCTSTR lpszAttrib) const
+XMLNode::isAttributeSet(const TCHAR *lpszAttrib) const
 {
   if (!d)
     return false;
@@ -1613,8 +1616,8 @@ XMLNode::isAttributeSet(LPCTSTR lpszAttrib) const
   return false;
 }
 
-LPCTSTR
-XMLNode::getAttribute(LPCTSTR name, unsigned j) const
+const TCHAR *
+XMLNode::getAttribute(const TCHAR *name, unsigned j) const
 {
   if (!d)
     return NULL;
@@ -1626,7 +1629,7 @@ XMLNode::getAttribute(LPCTSTR name, unsigned j) const
   return getAttribute(name, &i);
 }
 
-LPCTSTR
+const TCHAR *
 XMLNode::getName() const
 {
   if (!d)
@@ -1673,7 +1676,7 @@ XMLNode::getAttribute(unsigned i)
   return d->pAttribute[i];
 }
 
-LPCTSTR
+const TCHAR *
 XMLNode::getText(unsigned i) const
 {
   if (!d)

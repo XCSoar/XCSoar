@@ -35,29 +35,6 @@
 
 class TextWriter;
 
-// Some common types for char set portable code
-#ifdef _UNICODE
-    #ifndef LPCTSTR
-        #define LPCTSTR const TCHAR *
-    #endif /* LPCTSTR */
-    #ifndef LPTSTR
-        #define LPTSTR TCHAR *
-    #endif /* LPTSTR */
-    #ifndef TCHAR
-        #define TCHAR TCHAR
-    #endif /* TCHAR */
-#else
-    #ifndef LPCTSTR
-        #define LPCTSTR const char *
-    #endif /* LPCTSTR */
-    #ifndef LPTSTR
-        #define LPTSTR char *
-    #endif /* LPTSTR */
-    #ifndef TCHAR
-        #define TCHAR char
-    #endif /* TCHAR */
-#endif
-
 /** Enumeration for XML parse errors. */
 typedef enum XMLError
 {
@@ -93,8 +70,8 @@ typedef struct XMLResults
 /** Structure for XML attribute. */
 typedef struct
 {
-  LPCTSTR lpszName;
-  LPCTSTR lpszValue;
+  const TCHAR *lpszName;
+  const TCHAR *lpszValue;
 } XMLAttribute;
 
 struct XMLNodeContents;
@@ -106,7 +83,7 @@ protected:
   typedef struct // to allow shallow copy and "intelligent/smart" pointers (automatic delete):
   {
     /** Element name (=NULL if root) */
-    LPCTSTR       lpszName;
+    const TCHAR *lpszName;
 
     /** Num of child nodes */
     unsigned nChild;
@@ -127,7 +104,7 @@ protected:
     XMLNode *pChild;
 
     /** Array of text fields */
-    LPCTSTR *pText;
+    const TCHAR **pText;
 
     /** Array of attributes */
     XMLAttribute *pAttribute;
@@ -143,15 +120,15 @@ protected:
    * Protected constructor: use "parse" functions to get your first
    * instance of XMLNode.
    */
-  XMLNode(XMLNode *pParent, LPCTSTR lpszName, bool isDeclaration);
+  XMLNode(XMLNode *pParent, const TCHAR *lpszName, bool isDeclaration);
 
 public:
   // You must create your first instance of XMLNode with these 3 parse functions:
   // (see complete explanation of parameters below)
 
-  static XMLNode createRoot(LPCTSTR lpszName);
+  static XMLNode createRoot(const TCHAR *lpszName);
 
-  static XMLNode parseString   (LPCTSTR     lpszXML, XMLResults *pResults=NULL);
+  static XMLNode parseString(const TCHAR *lpszXML, XMLResults *pResults=NULL);
   static XMLNode parseFile     (const char *lpszXML, XMLResults *pResults=NULL);
   static XMLNode openFileHelper(const char *lpszXML);
 
@@ -170,15 +147,15 @@ public:
   /**
    * Parse XML errors into a user friendly string.
    */
-  static LPCTSTR getError(XMLError error);
+  static const TCHAR *getError(XMLError error);
 
   /**
    * name of the node
    */
-  LPCTSTR getName() const;
+  const TCHAR *getName() const;
 
   /** @return ith text field */
-  LPCTSTR getText(unsigned i = 0) const;
+  const TCHAR *getText(unsigned i = 0) const;
 
   /** nbr of text field */
   unsigned nText() const;
@@ -190,16 +167,16 @@ public:
    * @return ith child node with specific name (return an empty node
    * if failing)
    */
-  XMLNode getChildNode(LPCTSTR name, unsigned i);
+  XMLNode getChildNode(const TCHAR *name, unsigned i);
 
   /**
    * @return next child node with specific name (return an empty node
    * if failing)
    */
-  XMLNode getChildNode(LPCTSTR name, unsigned *i=NULL);
+  XMLNode getChildNode(const TCHAR *name, unsigned *i=NULL);
 
   /** @return the number of child node with specific name */
-  unsigned nChildNode(LPCTSTR name) const;
+  unsigned nChildNode(const TCHAR *name) const;
 
   /** nbr of child node */
   unsigned nChildNode() const;
@@ -208,19 +185,19 @@ public:
   XMLAttribute getAttribute(unsigned i);
 
   /** test if an attribute with a specific name is given */
-  bool isAttributeSet(LPCTSTR name) const;
+  bool isAttributeSet(const TCHAR *name) const;
 
   /**
    * @return ith attribute content with specific name (return a NULL
    * if failing)
    */
-  LPCTSTR getAttribute(LPCTSTR name, unsigned i) const;
+  const TCHAR *getAttribute(const TCHAR *name, unsigned i) const;
 
   /**
    * @return next attribute content with specific name (return a NULL
    * if failing)
    */
-  LPCTSTR getAttribute(LPCTSTR name, unsigned *i=NULL) const;
+  const TCHAR *getAttribute(const TCHAR *name, unsigned *i=NULL) const;
 
   /**
    * nbr of attribute
@@ -281,17 +258,17 @@ public:
   /**
    * Add a child node to the given element.
    */
-  XMLNode AddChild(LPCTSTR lpszName, bool isDeclaration);
+  XMLNode AddChild(const TCHAR *lpszName, bool isDeclaration);
 
   /**
    * Add an attribute to an element.
    */
-  XMLAttribute *AddAttribute(LPCTSTR lpszName, LPCTSTR lpszValuev);
+  XMLAttribute *AddAttribute(const TCHAR *lpszName, const TCHAR *lpszValuev);
 
   /**
    * Add text to the element.
    */
-  LPCTSTR AddText(LPCTSTR lpszValue);
+  const TCHAR *AddText(const TCHAR *lpszValue);
 
 private:
   // these are functions used internally (don't bother about them):
@@ -329,12 +306,13 @@ typedef struct XMLNodeContents
   // compiler does not allow union of object with constructor... too bad.
   XMLNode child;
   XMLAttribute attrib;
-  LPCTSTR text;
+  const TCHAR *text;
 } XMLNodeContents;
 
 /**
  * Duplicate (copy in a new allocated buffer) the source string.
  */
-LPTSTR stringDup(LPCTSTR source, size_t cbData = 0);
+TCHAR *
+stringDup(const TCHAR *source, size_t cbData=0);
 
 #endif
