@@ -1176,6 +1176,14 @@ read_text_file(const char *path, tstring &buffer)
   if (reader.error())
     return false;
 
+  long size = reader.size();
+  if (size > 65536)
+    return false;
+  else if (size < 0)
+    size = 4096;
+
+  buffer.reserve(size);
+
   const TCHAR *line;
   while ((line = reader.read()) != NULL) {
     if (buffer.length() > 65536)
@@ -1202,7 +1210,6 @@ XMLNode::parseFile(const char *filename, XMLResults *pResults)
 {
   // Open the file for reading
   tstring buffer;
-  buffer.reserve(16384);
 
   // If file can't be read
   if (!read_text_file(filename, buffer)) {
