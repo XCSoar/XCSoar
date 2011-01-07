@@ -67,8 +67,6 @@ bool XMLNode::GlobalError = false;
 XMLNode XMLNode::emptyXMLNode;
 XMLAttribute XMLNode::emptyXMLAttribute = { NULL, NULL };
 
-inline int mmin(const int t1, const int t2) { return t1 < t2 ? t1 : t2; }
-
 /** Enumeration used to decipher what type a token is. */
 typedef enum TokenTypeTag
 {
