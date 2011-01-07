@@ -91,6 +91,7 @@ ReadWinPilotPolar(Polar &polar, const TCHAR *line)
   double POLARV[3];
   double POLARW[3];
   double ww[2];
+  double wing_area;
 
   ww[0] = _tcstod(line, &p);
   if (*p != _T(','))
@@ -120,9 +121,14 @@ ReadWinPilotPolar(Polar &polar, const TCHAR *line)
   if (*p != _T(','))
     return false;
 
-  POLARW[2] = _tcstod(p + 1, NULL);
+  POLARW[2] = _tcstod(p + 1, &p);
 
-  ConvertWinPilotPolar(polar, POLARV, POLARW, ww);
+  if (*p != _T(','))
+    wing_area = 0.0;
+  else
+    wing_area = _tcstod(p + 1, &p);
+
+  ConvertWinPilotPolar(polar, POLARV, POLARW, ww, wing_area);
   return true;
 }
 
