@@ -687,9 +687,8 @@ stringDup(const TCHAR *lpszData, size_t cbData)
  * Recursively parse an XML element.
  */
 bool
-XMLNode::ParseXMLElement(void *pa)
+XMLNode::ParseXMLElement(XML *pXML)
 {
-  XML *pXML = (XML *)pa;
   size_t cbToken;
   enum TokenTypeTag type;
   NextToken token;

@@ -70,6 +70,7 @@ struct XMLAttribute {
   const TCHAR *lpszValue;
 };
 
+struct XML;
 struct XMLNodeContents;
 
 struct XMLNode {
@@ -271,7 +272,7 @@ public:
 
 private:
   // these are functions used internally (don't bother about them):
-  bool ParseXMLElement(void *pXML);
+  bool ParseXMLElement(XML *pXML);
   void addToOrder(unsigned index, unsigned type);
 
   /**
