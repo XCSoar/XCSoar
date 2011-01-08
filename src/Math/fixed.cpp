@@ -9,8 +9,12 @@
 
 void sin_cos(const double&theta, double*s, double*c)
 {
+#ifdef _GNU_SOURCE
+  sincos(theta, s, c);
+#else
   *s = sin(theta);
   *c = cos(theta);
+#endif
 }
 
 #else
