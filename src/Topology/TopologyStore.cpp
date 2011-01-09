@@ -121,13 +121,6 @@ TopologyStore::Load(NLineReader &reader, const TCHAR *Directory,
     // Blue component of line / shading colour
     blue = (BYTE)strtol(p + 1, NULL, 10);
 
-    if ((red == 64) && (green == 96) && (blue == 240)) {
-      // JMW update colours to ICAO standard
-      red = 85; // water colours
-      green = 160;
-      blue = 255;
-    }
-
     files.append(new TopologyFile(zdir, ShapeFilename,
                                   fixed(ShapeRange) * 1000,
                                   Color(red, green, blue),
