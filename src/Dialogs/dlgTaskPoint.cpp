@@ -255,16 +255,16 @@ public:
 
   void Visit(const UnorderedTaskPoint& tp) {}
   void Visit(const StartPoint& tp) {    
-    _stprintf(text, _T("Start point: %s"), tp.get_waypoint().Name.c_str());
+    _stprintf(text, _T("%s: %s"), _("Start point"), tp.get_waypoint().Name.c_str());
   }
   void Visit(const FinishPoint& tp) {
-    _stprintf(text, _T("Finish point: %s"), tp.get_waypoint().Name.c_str());
+    _stprintf(text, _T("%s: %s"), _("Finish point"), tp.get_waypoint().Name.c_str());
   }
   void Visit(const AATPoint& tp) {
-    _stprintf(text, _T("Assigned area point: %s"), tp.get_waypoint().Name.c_str());
+    _stprintf(text, _T("%s: %s"), _("Assigned area point"), tp.get_waypoint().Name.c_str());
   }
   void Visit(const ASTPoint& tp) {
-    _stprintf(text, _T("Task point: %s"), tp.get_waypoint().Name.c_str());
+    _stprintf(text, _T("%s: %s"), _("Task point"), tp.get_waypoint().Name.c_str());
   }
   TCHAR* text;
 };
