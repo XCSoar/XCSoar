@@ -47,6 +47,9 @@ Font Fonts::MapBold;
 Font Fonts::CDI;
 /// Flarm Traffic draweing and stats, map labels in italic
 Font Fonts::MapLabel;
+/// font labels for important labels (e.g. big/medium cities)
+Font Fonts::MapLabelImportant;
+
 
 // these are the non-custom parameters
 LOGFONT LogInfoBox;
@@ -56,6 +59,7 @@ LOGFONT LogInfoBoxSmall;
 LOGFONT LogMapBold;
 LOGFONT LogCDI;
 LOGFONT LogMapLabel;
+LOGFONT LogMapLabelImportant;
 
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
@@ -158,6 +162,10 @@ InitialiseLogFonts()
   InitialiseLogfont(&LogMapLabel, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.39), false, true);
 
+  // new font for map labels big/medium cities
+  InitialiseLogfont(&LogMapLabelImportant, Fonts::GetStandardFontFace(),
+                    (int)(FontHeight * 0.39), true, true);
+
   // new font for map labels
   InitialiseLogfont(&LogMap, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.507));
@@ -179,6 +187,7 @@ Fonts::Initialize()
   Title.set(LogTitle);
   CDI.set(LogCDI);
   MapLabel.set(LogMapLabel);
+  MapLabelImportant.set(LogMapLabelImportant);
   Map.set(LogMap);
   MapBold.set(LogMapBold);
 }
@@ -199,6 +208,7 @@ Fonts::LoadCustom()
   LoadCustomFont(&Title, szProfileFontTitleWindowFont);
   LoadCustomFont(&CDI, szProfileFontCDIWindowFont);
   LoadCustomFont(&MapLabel, szProfileFontMapLabelFont);
+  LoadCustomFont(&MapLabelImportant, szProfileFontMapLabelImportantFont);
   LoadCustomFont(&Map, szProfileFontMapWindowFont);
   LoadCustomFont(&MapBold, szProfileFontMapWindowBoldFont);
 }
@@ -213,6 +223,7 @@ Fonts::Deinitialize()
   MapBold.reset();
   CDI.reset();
   MapLabel.reset();
+  MapLabelImportant.reset();
 }
 
 const TCHAR*

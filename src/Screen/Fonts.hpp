@@ -37,6 +37,7 @@ namespace Fonts
   extern Font MapBold;
   extern Font CDI;
   extern Font MapLabel;
+  extern Font MapLabelImportant;
 
   void Initialize();
   void SizeInfoboxFont();

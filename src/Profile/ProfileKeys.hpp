@@ -185,6 +185,7 @@ extern const TCHAR szProfileFontTitleSmallWindowFont[];
 extern const TCHAR szProfileFontMapWindowBoldFont[];
 extern const TCHAR szProfileFontCDIWindowFont[];
 extern const TCHAR szProfileFontMapLabelFont[];
+extern const TCHAR szProfileFontMapLabelImportantFont[];
 extern const TCHAR szProfileFontStatisticsFont[];
 extern const TCHAR szProfileFontBugsBallastFont[];
 extern const TCHAR szProfileFontAirspacePressFont[];

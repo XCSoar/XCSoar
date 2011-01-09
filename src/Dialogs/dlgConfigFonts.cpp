@@ -40,6 +40,7 @@ static Font TempTitleSmallWindowFont;
 static Font TempMapWindowBoldFont;
 static Font TempCDIWindowFont;
 static Font TempMapLabelFont;
+static Font TempMapLabelImportantFont;
 
 extern LOGFONT LogInfoBox;
 extern LOGFONT LogTitle;
@@ -48,6 +49,7 @@ extern LOGFONT LogInfoBoxSmall;
 extern LOGFONT LogMapBold;
 extern LOGFONT LogCDI;
 extern LOGFONT LogMapLabel;
+extern LOGFONT LogMapLabelImportant;
 
 static bool changed = false;
 static bool FontRegistryChanged = false;
@@ -81,6 +83,8 @@ ResetFonts(bool bUseCustom)
             szProfileFontCDIWindowFont, LogCDI);
   ResetFont(TempMapLabelFont, bUseCustom,
             szProfileFontMapLabelFont, LogMapLabel);
+  ResetFont(TempMapLabelImportantFont, bUseCustom,
+            szProfileFontMapLabelImportantFont, LogMapLabelImportant);
 }
 
 static void
@@ -112,6 +116,10 @@ ShowFontEditButtons(bool bVisible)
     wp->set_visible(bVisible);
 
   wp = (WndProperty*)wf->FindByName(_T("cmdMapLabelFont"));
+  if (wp)
+    wp->set_visible(bVisible);
+
+  wp = (WndProperty*)wf->FindByName(_T("cmdMapLabelImportantFont"));
   if (wp)
     wp->set_visible(bVisible);
 }
@@ -159,6 +167,10 @@ RefreshFonts()
   sample = (WndFrame *)wf->FindByName(_T("prpMapLabelFont"));
   if (sample)
     sample->SetFont(TempMapLabelFont);
+
+  sample = (WndFrame *)wf->FindByName(_T("prpMapLabelImportantFont"));
+  if (sample)
+    sample->SetFont(TempMapLabelImportantFont);
 
   // now fix the rest of the dlgConfiguration fonts:
   wf->SetTitleFont(TempMapWindowBoldFont);
@@ -253,6 +265,13 @@ OnEditMapLabelFontClicked(gcc_unused WndButton &button)
 }
 
 static void
+OnEditMapLabelImportantFontClicked(gcc_unused WndButton &button)
+{
+  EditFont(_T("prpMapLabelImportantFont"), szProfileFontMapLabelImportantFont,
+           LogMapLabelImportant);
+}
+
+static void
 OnCloseClicked(gcc_unused WndButton &button)
 {
   wf->SetModalResult(mrOK);
@@ -267,6 +286,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnEditMapWindowBoldFontClicked),
   DeclareCallBackEntry(OnEditCDIWindowFontClicked),
   DeclareCallBackEntry(OnEditMapLabelFontClicked),
+  DeclareCallBackEntry(OnEditMapLabelImportantFontClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -315,6 +335,7 @@ void dlgConfigFontsShowModal()
   TempMapWindowBoldFont.reset();
   TempCDIWindowFont.reset();
   TempMapLabelFont.reset();
+  TempMapLabelImportantFont.reset();
 
   if (changed) {
     Profile::Save();
