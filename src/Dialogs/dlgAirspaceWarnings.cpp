@@ -387,7 +387,7 @@ dlgAirspaceWarningShowDlg(SingleWindow &parent, bool auto_close)
 {
   assert(airspace_warnings != NULL);
 
-  wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_AIRSPACEWARNING"));
+  wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_AIRSPACEWARNINGS"));
   assert(wf != NULL);
 
   wf->SetKeyDownNotify(OnKeyDown);
