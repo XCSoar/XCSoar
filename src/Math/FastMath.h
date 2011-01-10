@@ -131,6 +131,13 @@ void i_normalise_fast(int &x,
                       int &y);
 
 /**
+ * calculate normalised value of lesser of x and y scaled
+ * to 3 bits without using sqrt or div operator
+ */
+unsigned i_normalise_sine(unsigned x,
+                          unsigned y);
+
+/**
  * normalise a vector scaled to NORMALISE_BITS (slow)
  */
 void i_normalise(int &x,

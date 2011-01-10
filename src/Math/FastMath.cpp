@@ -207,6 +207,18 @@ void i_normalise_fast(int &x,
   y= (y*r)>> NORMALISE_BITS;
 }
 
+unsigned i_normalise_sine(unsigned x,
+                          unsigned y)
+{
+  const uint32_t m_max = x>y? x:y;
+  const uint32_t m_min = x>y? y:x;
+  if (!m_max)
+    return 0;
+  const uint64_t r = i_rsqrt((unsigned long)x*x+(unsigned long)y*y, normalise_hint2(m_max));
+  return (m_min*r)>> (NORMALISE_BITS*2-3);
+}
+
+
 void i_normalise(int &x,
                  int &y) {
   const unsigned m_max = std::max(abs(x), abs(y));
