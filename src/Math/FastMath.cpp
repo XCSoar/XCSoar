@@ -228,3 +228,18 @@ void i_normalise(int &x,
   x= (x<<NORMALISE_BITS)/mag;
   y= (y<<NORMALISE_BITS)/mag;
 }
+
+void mag_rmag(const fixed x,
+              const fixed y,
+              fixed& s,
+              fixed& is)
+{
+  const fixed mag_sq = sqr(x)+sqr(y);
+  if (!positive(mag_sq)) {
+    s = fixed_zero;
+    is = fixed_zero;
+    return;
+  }
+  is = rsqrt(mag_sq);
+  s = is*mag_sq;
+}

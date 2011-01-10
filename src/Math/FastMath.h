@@ -164,6 +164,14 @@ int i_normalise_mag2(const int mag,
                      const int x,
                      const int y);
 
+/**
+ * Find magnitude and reciprocal magnitude simultaneously
+ */
+void mag_rmag(const fixed x,
+              const fixed y,
+              fixed& s,
+              fixed& is);
+
 fixed thermal_recency_fn(unsigned x);
 
 inline unsigned int
