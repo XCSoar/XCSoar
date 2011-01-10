@@ -31,6 +31,8 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "shapelib/map.h"
+#include "Util/AllocatedArray.hpp"
+#include "Geo/GeoClip.hpp"
 
 #include <algorithm>
 
@@ -82,6 +84,9 @@ TopologyFileRenderer::Paint(Canvas &canvas,
   const rectObj screenRect =
     ConvertRect(projection.GetScreenBounds());
 
+  const GeoClip clip(projection.GetScreenBounds().scale(fixed(1.1)));
+  AllocatedArray<GeoPoint> geo_points;
+
   for (unsigned i = 0; i < file.size(); ++i) {
     const XShape *cshape = file[i];
     if (!cshape || !cshape->is_visible(file.get_label_field()))
@@ -131,12 +136,24 @@ TopologyFileRenderer::Paint(Canvas &canvas,
         const lineObj &line = shape.line[tt];
         unsigned msize = line.numpoints / iskip;
 
-        shape_renderer.begin_shape(msize);
+        /* copy all polygon points into the geo_points array and clip
+           them, to avoid integer overflows (as RasterPoint may store
+           only 16 bit integers on some platforms) */
+
+        geo_points.grow_discard(msize * 3);
 
         const pointObj *in = line.point;
+        for (unsigned i = 0; i < msize; ++i, in += iskip)
+          geo_points[i] = point2GeoPoint(*in);
+
+        msize = clip.clip_polygon(geo_points.begin(),
+                                  geo_points.begin(), msize);
+
+        /* now draw the clipped polygon */
+
+        shape_renderer.begin_shape(msize);
         for (unsigned i = 0; i < msize; ++i) {
-          GeoPoint g = point2GeoPoint(*in);
-          in += iskip;
+          GeoPoint g = geo_points[i];
           shape_renderer.add_point_if_distant(projection.GeoToScreen(g));
         }
 
