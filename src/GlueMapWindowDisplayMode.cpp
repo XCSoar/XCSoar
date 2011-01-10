@@ -173,7 +173,7 @@ GlueMapWindow::IsOriginCentered()
       (GetDisplayMode() == dmCircling) ?
           settings_map.OrientationCircling : settings_map.OrientationCruise;
 
-  return (orientation != TRACKUP);
+  return (orientation == NORTHUP);
 }
 
 void
