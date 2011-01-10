@@ -438,6 +438,10 @@ XCSOAR_LDADD = \
 	$(UTIL_LIBS) \
 	$(MATH_LIBS) \
 	$(RESOURCE_BINARY)
+XCSOAR_LDFLAGS = \
+	$(PROFILE_LDLIBS) \
+	$(SCREEN_LDLIBS) \
+	$(ZZIP_LDFLAGS)
 
 include $(topdir)/build/gettext.mk
 include $(topdir)/build/cab.mk
@@ -483,7 +487,7 @@ endif
 $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
-	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(SCREEN_LDLIBS) $(PROFILE_LDLIBS) -o $@
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(XCSOAR_LDFLAGS) -o $@
 
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 
