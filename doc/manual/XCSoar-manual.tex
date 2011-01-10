@@ -83,8 +83,10 @@ are available from
 
 \section{Organisation of this manual}
 
-This manual is broadly organised into the major functions of the
-software from a pilot's perspective.  The remainder of this chapter
+\todonum[inline]{Write about the manual crossref hinting icons and the yellow
+color. The Quickstart will be readable also without those links available} 
+This manual is broadly
+organised into the major functions of the software from a pilot's perspective.  The remainder of this chapter
 deals with how to download, install and run the software on various
 platforms.  Chapter~\ref{cha:interface} introduces the user interface
 concepts and gives an overview of the display.
@@ -500,6 +502,8 @@ Good practice in the use of XCSoar includes:
 This chapter describes the fundamental user interface concepts used by
 XCSoar, and is intended as an overview.  More detailed descriptions
 are given in following chapters.
+
+\todonum[inline]{explain the principle display modes}
 
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/plain.png}
@@ -1166,65 +1170,55 @@ The glider symbol shows the position of the glider on the map.  The
 orientation of the glider indicates the estimated heading of the
 glider.
 
-The map is oriented in one of two ways, depending on the flight mode
-and the configuration settings:
-\begin{description}
-\item[North-up]  Here the map is always oriented with true north up.
-  The glider symbol is rotated according to its track corrected for wind.
-\item[Track-up]  Here the map is oriented so that the glider's track
-  made good is up.  The north arrow symbol points to true north.  
-  The glider symbol may be shown rotated according to the computed
-  heading of the glider taking wind into account.
-\end{description}
-
-Configuration settings can be used to further specify north or
-target-up when in circling mode.  These are useful to prevent
+The map is oriented in one of three ways: North up,
+Track up, or Target up.  Configuration settings \config{orientation} can be used
+to specify a different map orientation when in circling mode. This is useful to prevent
 disorientation when looking at the map while circling.  Target-up when
 circling makes it easy to determine which direction to exit the
 thermal.
 
-When in North or target-up in circling modes, the glider symbol is
-centered on the screen.  Otherwise the glider symbol is positioned
-20\% from the bottom of the screen, giving a good view of the map
-ahead of the glider.  This position is adjustable in the configuration
-settings.
-
-A fifth mode has north-up during cruise and track-up in circling.
+When Track-up is used in circling mode, the glider symbol is
+centered on the screen, even if the symbol position is configured differently.
+In cruise mode the Track up orientation allows the glider symbol to be 
+positioned (e.g.) 20\% from the bottom of the screen, giving a good view of the
+map ahead of the glider.  This position is adjustable in the configuration
+\config{gliderposition} settings.
 
 \section{Zoom and map scale}
 
-To change the scale of the map, for PC or Pocket PC:
+To change the scale of the map, for PC, PNA, or Pocket PC:
 \begin{enumerate}
-\item Tap on a blank part of the map to highlight the map if it is not already selected.
-\item Then use the Pocket PC up/down key to either zoom in or out.
-\end{enumerate}
-
-On Altair, the rotary knob can be used to zoom in and out, or select
-from the menus:
+\item Tap/click on a blank part of the map to highlight the map if it is not
+already selected.
+Then use mouse wheel, or the Pocket PC up/down key to either zoom
+in or out.
+\item You can also gesture to change the zoom level. Gesture \gesture{Up
+and Down} ``up'' zooms in, ``Down'' zooms out.
+\item A PNA with a button wheel let you also change the zoom. 
+\item Or select the function from the menus:
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Zoom in} and \bmenu{Display}\blink\bmenu{Zoom out}
+\bmenu{Display}\blink\bmenu{Zoom In} and \bmenu{Display}\blink\bmenu{Zoom Out}
 \end{quote}
+\end{enumerate}
+On Altair, the rotary knob can be used to zoom in and out.
 
 The map scale is displayed in the lower left corner of the moving map
-display, and as a striped bar on the right side of the map area.  The
-alternating colours in the striped bar represent the distance
-measurement in a decimal scale, (e.g.\ 0.1 km, 1 km, 10 km, 100 km)
-depending on the zoom level.
+display. The incicated distance is measured from the left to the right boarder
+of the map display.
 \marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoom.png}}
 
 Compaq Aero Users. If you enable the Compaq Aero Game Keys (On the
 Q-menu) the centre two front buttons become the up/down keys.
 
 There is a facility to have two zoom settings; one when the glider is
-in circling flight mode, and one in the cruise or final glide flight
-mode.  This is the "Circling zoom" option in the configuration
-settings.  
+in circling mode, and one in the cruise or final mode.  This is the "Circling zoom" 
+option in the configuration settings.  
 By default, the cruise/final glide zoom is \todonum{check} 5 km and the
-circling zoom is \todonum{check}0.3 km.
+circling zoom is \todonum{check}2.5 km.
 When the user zooms in or out, it affects the current
 mode's zoom setting only, so when leaving the mode the previous mode's
-zoom setting is used.  If `Circling Zoom' is not enabled, there is
-only a single zoom level.
+zoom setting is used.  If `Circling Zoom' \config{circlingzoom} is not enabled,
+there is only a single zoom level.
 
 Auto-zoom automatically zooms in when approaching a waypoint to keep
 the waypoint at a reasonable screen distance.  The user can still zoom
@@ -1234,7 +1228,7 @@ map scale.
 
 To turn auto zoom on or off, select from the menu
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Zoom Auto} 
+\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Zoom Auto} 
 \end{quote}
 
 When a waypoint changes (automatically, via the task selector, or by
@@ -5076,7 +5070,6 @@ The filter function is described in Section~\ref{sec:airsp-filt-dial}.
 %button \button{Colours}
 
 %%%%%%%%%%%%%%%%%%
-
 \clearpage
 \section{Map Display}\label{sec:map-display}
 
@@ -5089,7 +5082,6 @@ This page provides options relating to the map display.
 \begin{description}
 \item[Labels] This setting determines the label displayed with each waypoint. There are 7 options:
 
-
 \begin{description}
 \item[Names] The full name of each waypoint is displayed.
 \todonum{what is a ``waypoint number''?}\item[Numbers] The waypoint number of
@@ -5100,6 +5092,7 @@ each waypoint is displayed.
 \item[First 5] The first 5 letters of the waypoint name are displayed.
 \item[First word] Only the first word (up to the first space) of the waypoint name is displayed.
 \end{description}
+
 \item[Trail length] Determines whether and how long a snail trail is drawn behind the glider.
 \begin{description}
 \item[Off] No trail is drawn
@@ -5107,23 +5100,22 @@ each waypoint is displayed.
 \item[Short] A short trail is drawn (approx 10 minutes) 
 \item[Full] A trail for the entire flight is drawn
 \end{description}
-\item[Orientation]  This determines how the screen is rotated with the glider.
-\todonum{update}
+
+\item[Cruise/Circling Orientation] \label{conf:orientation} This determines how
+the screen is rotated with the glider, depending on it's current display mode.
 \begin{description}
-\item[North up] The moving map display will always be orientated north to south and the glider icon 
-will be rotated to show its course.
+\item[North up] The moving map display will always be orientated true north to
+south and the glider icon will be rotated to show its course (corrected for
+wind).
 \item[Track up] The moving map display will be rotated so the glider's track
- is oriented up.
-\item[North circling] This is equivalent to track-up in cruise and north-up when circling.
-\item[Target circling] This is equivalent to track-up in cruise and the bearing to next waypoint up 
-when circling.
-\item[North/track] North-up in cruise, glider track-track up in circling
+ is oriented up. The north arrow symbol points to true north. The glider symbol 
+ may be shown rotated according to the computed heading of the glider taking wind into account.
+\item[Target up] The moving map display will be rotated so the current target
+direction is oriented up.
 \end{description}
-\item[Auto zoom] Determines whether auto-zoom is enabled.  Auto-zoom changes
-the zoom level during flight so that the map zooms in as the active waypoint
-is approached.  After passing a waypoint, the map zooms out to the next waypoint.  
-\item[Circling zoom]  This determines whether separate zoom levels
-will be maintained for circling and cruise modes.  If unchecked, there
+
+\item[Circling zoom] \label{conf:circlingzoom} This determines whether separate
+zoom levels will be maintained for circling and cruise modes.  If unchecked, there
 is only one zoom.  If enabled, then the map will zoom in automatically
 when entering circling mode and zoom out automatically when leaving
 circling mode.
@@ -5148,6 +5140,20 @@ on again by pressing any button.
 \todonum[inline]{The check boxes in this section determine whether the compass
 indicator will be displayed in cruise/final glide modes and circling mode.}
 
+%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Symbols}\label{sec:symbols}
+\todonum[inline]{Complete Symbols page.}
+
+This page provides options relating to the display items overlayed map.
+
+\begin{description}
+\item[Glider position] \label{conf:gliderposition} Defines the location of the
+glider drawn on the screen in percent from the bottom. 
+
+\end{description}
+
+%%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Terrain display}\label{sec:terrain-display}
 
@@ -5425,12 +5431,10 @@ This page defines various display styles used by symbols and InfoBoxes.
 \end{center}
 
 \begin{description}
-\item[Glider position]  Defines the location of the glider drawn on the screen
-in percent from the bottom.
+
 \item[Final glide bar] Two styles are available: Default and Alternate.  The differences between these styles is cosmetic.  Alternate displays the height difference to the right of the final glide bar; default displays the height difference above/below the final glide bar and inside a rounded box.
 \item[Landable fields] Two styles are available: WinPilot style (green and
   purple circles) or a high visibility style.
-\item[Default map zoom*]
 \item[North arrow*]  Two styles are available.  Normal, or with a white
  outline.
 \item[Inverse InfoBoxes*]  If true, the InfoBoxes are white on black, otherwise black on white.
@@ -5816,6 +5820,7 @@ Special Use Airspace section of the Soaring Server:
 \verb|http://acro.harvard.edu/SOARING/JL/SUA|
 
 \todonum[inline]{support for TNP airspace files}
+\todonum[inline]{interference, preference to airspace data in xcm file?}
 
 The following are the list of supported airspace types: Class A, Class
 B, Class C, Class D, Class E, Class F, Prohibited areas, Danger areas,
