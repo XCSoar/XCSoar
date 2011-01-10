@@ -145,6 +145,14 @@ public:
   gcc_pure
   fixed ApproxRadius() const; 
 
+  /**
+   * Return approximate grid to flat earth scale in meters
+   */
+  gcc_pure
+  fixed get_approx_scale() const {
+    return approx_scale;
+  }
+
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
                                    const TaskProjection& task_projection);
@@ -161,6 +169,9 @@ private:
   fixed cos_midloc;
   /**< Reciprocal of cosine of the midpoint */
   fixed r_cos_midloc;
+
+  /**< Approximate scale (m) of grid spacing at center */
+  fixed approx_scale;
 };
 
 #endif
