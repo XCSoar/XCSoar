@@ -122,7 +122,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   if (Appearance.UseCustomFonts)
     Fonts::LoadCustom();
 
-  dlgAirspaceWarningShowDlg(main_window);
+  dlgAirspaceWarningsShowModal(main_window);
 
   Fonts::Deinitialize();
 

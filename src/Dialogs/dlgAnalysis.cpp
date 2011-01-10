@@ -384,7 +384,7 @@ OnCalcClicked(WndButton &Sender)
   }
 
   if (page == ANALYSIS_PAGE_AIRSPACE)
-    dlgAirspaceWarningShowDlg(*parent);
+    dlgAirspaceWarningsShowModal(*parent);
 
   Update();
 }

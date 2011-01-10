@@ -383,7 +383,7 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgAirspaceWarningShowDlg(SingleWindow &parent, bool auto_close)
+dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close)
 {
   assert(airspace_warnings != NULL);
 
