@@ -288,8 +288,6 @@ Profile::Use()
   Get(szProfileAppInverseInfoBox,
 		  Appearance.InverseInfoBox);
 
-  Get(szProfileNorthArrow, settings_map.NorthArrow);
-
   if (Get(szProfileAppInfoBoxBorder, Temp))
     Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;
 

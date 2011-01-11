@@ -147,11 +147,6 @@
         <DataField DataType="enum"/>
       </Edit>
 
-      <Edit Name="prpNorthArrow" Caption="North arrow*" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Enables or disables the North Arrow on the upper right corner of the map.">
-        <DataField DataType="boolean"/>
-      </Edit>
-
       <Edit Name="prpWindArrowStyle" Caption="Wind arrow*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Determines the way the wind arrow is drawn on the map.&#10;[Arrow head] Draws an arrow head only&#10;[Full arrow] Draws an arrow head with a dashed arrow line">
         <DataField DataType="enum"/>

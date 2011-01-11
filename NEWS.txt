@@ -6,6 +6,8 @@ Changes to version 6.1 (since 6.0):
 * user interface
   - "pan to" button in waypoint dialog
   - waypoint selection screen shows last used waypoints if no filter is set
+* map
+  - north arrow is automatically hidden in north-up mode
 
 Changes to version 6.0.2 (since 6.0.1):
 * user interface

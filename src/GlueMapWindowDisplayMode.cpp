@@ -164,6 +164,8 @@ GlueMapWindow::UpdateScreenAngle()
   else
     // normal, glider forward
     visible_projection.SetScreenAngle(Basic().TrackBearing);
+
+  settings_map.NorthArrow = (orientation != NORTHUP);
 }
 
 bool
