@@ -78,6 +78,8 @@ struct SETTINGS_MAP {
   /** Map will show terrain */
   bool EnableTerrain;
 
+  bool NorthArrow;
+
   /**
    * Apply slope shading to the terrain?
    */

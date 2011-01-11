@@ -1234,8 +1234,7 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(*wf, _T("prpNorthArrow"),
-                   Appearance.NorthArrow);
+  LoadFormProperty(*wf, _T("prpNorthArrow"), settings_map.NorthArrow);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppIndFinalGlide"));
   if (wp) {
@@ -2003,7 +2002,7 @@ void dlgConfigurationShowModal(void)
   }
 
   changed |= SaveFormProperty(*wf, _T("prpNorthArrow"), szProfileNorthArrow,
-                              Appearance.NorthArrow);
+                              XCSoarInterface::SetSettingsMap().NorthArrow);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
   if (wp) {

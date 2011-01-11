@@ -58,7 +58,6 @@ typedef enum {
 } InfoBoxBorderAppearance_t;
 
 struct Appearance {
-  bool NorthArrow;
   IndFinalGlide_t IndFinalGlide;
   IndLandable_t IndLandable;
   bool InverseInfoBox;
