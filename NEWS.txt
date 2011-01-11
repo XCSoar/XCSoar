@@ -8,6 +8,19 @@ Changes to version 6.1 (since 6.0):
   - waypoint selection screen shows last used waypoints if no filter is set
 * map
   - north arrow is automatically hidden in north-up mode
+  - added configurable slope shading (off/fixed/wind/sun)
+* data files
+  - wing area field is read from extended polar files if available
+  - zander files: description field is used for additional airport detection
+  - added frequency parsing for airspace files
+    - TNP: RADIO field
+    - OpenAir: AR command
+* task
+  - added BGA start point sector
+  - configurable alternate sorting 
+    - by arrival altitude
+    - along task direction
+    - along home direction
 
 Changes to version 6.0.2 (since 6.0.1):
 * user interface
