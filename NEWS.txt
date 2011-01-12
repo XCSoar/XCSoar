@@ -8,6 +8,7 @@ Changes to version 6.0.2 (since 6.0.1):
 * map
   - Waypoints: more reliable waypoint decluttering
   - Topology: fix rendering bug
+  - Terrain: load more raster tiles on modern devices
 * data files
   - Fixed potential crash while reading airfields files
 
