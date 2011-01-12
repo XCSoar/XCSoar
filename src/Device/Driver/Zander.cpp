@@ -43,11 +43,9 @@ PZAN1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
     return true;
 
   fixed baro_altitude;
-  if (line.read_checked(baro_altitude)) {
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude =
-      GPS_INFO->pressure.AltitudeToQNHAltitude(baro_altitude);
-  }
+  if (line.read_checked(baro_altitude))
+    GPS_INFO->ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_ZANDER,
+                                      baro_altitude);
 
   return true;
 }

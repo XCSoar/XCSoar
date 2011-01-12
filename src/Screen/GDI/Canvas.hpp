@@ -305,12 +305,6 @@ public:
     ::Polygon(dc, lppt, cPoints);
   }
 
-private:
-  void clipped_polygon(const RasterPoint *lppt, unsigned cPoints);
-
-public:
-  void autoclip_polygon(const RasterPoint *lppt, unsigned cPoints);
-
   void line(int ax, int ay, int bx, int by);
   void line(const RasterPoint a, const RasterPoint b) {
     line(a.x, a.y, b.x, b.y);

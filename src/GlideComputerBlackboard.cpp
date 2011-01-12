@@ -64,6 +64,7 @@ GlideComputerBlackboard::ResetFlight(const bool full)
   if (full) {
     gps_info.Time = fixed_zero;
     gps_info.BaroAltitudeAvailable = false;
+    gps_info.BaroAltitudeOrigin = NMEA_INFO::BARO_ALTITUDE_UNKNOWN;
 
     calculated_info.timeCruising = fixed_zero;
     calculated_info.timeCircling = fixed_zero;

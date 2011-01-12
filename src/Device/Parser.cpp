@@ -71,8 +71,6 @@ NMEAParser::Reset(void)
   isFlarm = false;
   activeGPS = true;
   GGAAvailable = false;
-  RMZAvailable = false;
-  RMAAvailable = false;
   LastTime = fixed_zero;
 }
 
@@ -539,18 +537,6 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     GPS_INFO->TrackBearing = Angle::degrees(TrackBearing).as_bearing();
   }
 
-  if (!gps.Replay) {
-    if (RMZAvailable) {
-      // JMW changed from Altitude to BaroAltitude
-      GPS_INFO->BaroAltitudeAvailable = true;
-      GPS_INFO->BaroAltitude = RMZAltitude;
-    } else if (RMAAvailable) {
-      // JMW changed from Altitude to BaroAltitude
-      GPS_INFO->BaroAltitudeAvailable = true;
-      GPS_INFO->BaroAltitude = RMAAltitude;
-    }
-  }
-
   if (!GGAAvailable) {
     // update SatInUse, some GPS receiver don't emit GGA sentence
     if (!gpsValid)
@@ -644,14 +630,6 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   gps.HDOP = line.read(fixed_zero);
 
-  if (RMZAvailable) {
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = RMZAltitude;
-  } else if (RMAAvailable) {
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = RMAAltitude;
-  }
-
   // VENTA3 CONDOR ALTITUDE
   // "Altitude" should always be GPS Altitude.
 
@@ -689,7 +667,8 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 }
 
 /**
- * Parses a RMZ sentence
+ * Parses a PGRMZ sentence (Garmin proprietary).
+ *
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
@@ -700,53 +679,12 @@ bool
 NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   //JMW?  RMZAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(RMZAltitude);
-  RMZAvailable = ReadAltitude(line, RMZAltitude);
 
-  if (RMZAvailable && !devHasBaroSource() && !GPS_INFO->gps.Replay) {
+  fixed value;
+  if (!devHasBaroSource() && !GPS_INFO->gps.Replay &&
+      ReadAltitude(line, value))
     // JMW no in-built baro sources, so use this generic one
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = RMZAltitude;
-  }
-
-  return true;
-}
-
-/**
- * Parses a RMA sentence
- * (not in use and maybe faulty(?))
- *
- * $--RMA,A,llll.ll,a,yyyyy.yy,a,x.x,x.x,x.x,x.x,x.x,a*hh
- *
- * Field Number:
- *  1) Blink Warning
- *  2) Latitude
- *  3) N or S
- *  4) Longitude
- *  5) E or W
- *  6) Time Difference A, uS
- *  7) Time Difference B, uS
- *  8) Speed Over Ground, Knots
- *  9) Track Made Good, degrees true
- * 10) Magnetic Variation, degrees
- * 11) E or W
- * 12) Checksum
- * @param String Input string
- * @param params Parameter array
- * @param nparams Number of parameters
- * @param GPS_INFO GPS_INFO struct to parse into
- * @return Parsing success
- */
-bool
-NMEAParser::RMA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
-{
-  //JMW?  RMAAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(RMAAltitude);
-  RMAAvailable = ReadAltitude(line, RMAAltitude);
-
-  if (RMAAvailable && !devHasBaroSource() && !GPS_INFO->gps.Replay) {
-    // JMW no in-built baro sources, so use this generic one
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = RMAAltitude;
-  }
+    GPS_INFO->ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_GARMIN, value);
 
   return true;
 }
@@ -764,32 +702,19 @@ NMEAParser::NMEAChecksum(const char *String)
     return true;
 
   unsigned char ReadCheckSum, CalcCheckSum;
-  char c1, c2;
-  unsigned char v1 = 0, v2 = 0;
   const char *pEnd;
 
-  pEnd = strchr(String, '*');
+  pEnd = strrchr(String, '*');
   if(pEnd == NULL)
     return false;
 
-  if (strlen(pEnd) < 3)
+  const char *checksum_string = pEnd + 1;
+  char *endptr;
+  unsigned long ReadCheckSum2 = strtoul(checksum_string, &endptr, 16);
+  if (endptr == checksum_string || *endptr != 0 || ReadCheckSum2 >= 0x100)
     return false;
 
-  c1 = pEnd[1], c2 = pEnd[2];
-
-  // what's this for?
-  // iswdigit('0');
-
-  if (_istdigit(c1))
-    v1 = (unsigned char)(c1 - '0');
-  if (_istdigit(c2))
-    v2 = (unsigned char)(c2 - '0');
-  if (_istalpha(c1))
-    v1 = (unsigned char)(c1 - 'A' + 10);
-  if (_istalpha(c2))
-    v2 = (unsigned char)(c2 - 'A' + 10);
-
-  ReadCheckSum = (unsigned char)((v1 << 4) + v2);
+  ReadCheckSum = (unsigned char)ReadCheckSum2;
   CalcCheckSum = ::NMEAChecksum(String + 1, pEnd - String - 1);
 
   if (CalcCheckSum == ReadCheckSum)
@@ -799,7 +724,8 @@ NMEAParser::NMEAChecksum(const char *String)
 }
 
 /**
- * Parses a PTAS1 sentence
+ * Parses a PTAS1 sentence (Tasman Instruments proprietary).
+ *
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
@@ -824,8 +750,7 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     baralt = max(fixed_zero, Units::ToSysUnit(baralt - fixed(2000), unFeet));
     valid_baralt = true;
 
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(baralt);
+    GPS_INFO->ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_TASMAN, baralt);
   }
 
   fixed vtas;
@@ -992,67 +917,4 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
                                                         flarm_slot->Altitude);
 
   return true;
-}
-
-/**
- * This function creates some simulated traffic for FLARM debugging
- * @param GPS_INFO Pointer to the NMEA_INFO struct
- */
-void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
-  static int i = 90;
-
-  i++;
-  if (i > 255)
-    i = 0;
-
-  if (i > 80)
-    return;
-
-  const Angle angle = Angle::degrees(fixed((i * 360) / 255)).as_bearing();
-
-  // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
-  //   <RelativeVertical>,<RelativeDistance>(,<ID>)
-  int h1;
-  int n1;
-  int e1;
-  int t1;
-  unsigned l;
-  h1 = (angle.ifastsine()) / 7;
-  n1 = (angle.ifastsine()) / 2 - 200;
-  e1 = (angle.ifastcosine()) / 1.5;
-  t1 = -angle.as_bearing().value_degrees();
-
-  l = (i % 30 > 13 ? 0 : (i % 30 > 5 ? 2 : 1));
-  int h2;
-  int n2;
-  int e2;
-  int t2;
-  Angle dangle = (angle + Angle::degrees(fixed(120))).as_bearing();
-  Angle hangle = dangle.flipped().as_bearing();
-
-  h2 = (angle.ifastcosine()) / 10;
-  n2 = (dangle.ifastsine()) / 1.20 + 300;
-  e2 = (dangle.ifastcosine()) + 500;
-  t2 = hangle.value_degrees();
-
-  // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
-  //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
-  char t_laa1[50];
-  sprintf(t_laa1, "%d,%d,%d,%d,2,DDA85C,%d,0,35,0,1", l, n1, e1, h1, t1);
-  char t_laa2[50];
-  sprintf(t_laa2, "0,%d,%d,%d,2,AA9146,%d,0,27,0,1", n2, e2, h2, t2);
-
-  char t_lau[50];
-  sprintf(t_lau, "2,1,2,1,%d", l);
-
-  GPS_INFO->flarm.FLARM_Available = true;
-
-  NMEAInputLine line(t_lau);
-  PFLAU(line, GPS_INFO->flarm);
-
-  line = NMEAInputLine(t_laa1);
-  PFLAA(line, GPS_INFO);
-
-  line = NMEAInputLine(t_laa2);
-  PFLAA(line, GPS_INFO);
 }

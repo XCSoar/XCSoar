@@ -94,10 +94,9 @@ GPWIN(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   line.skip(2);
 
   fixed value;
-  if (enable_baro && line.read_checked(value)) {
-    GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(value / 10);
-    GPS_INFO->BaroAltitudeAvailable = true;
-  }
+  if (enable_baro && line.read_checked(value))
+    GPS_INFO->ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_POSIGRAPH,
+                                      value / 10);
 
   return false;
 }

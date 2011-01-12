@@ -80,10 +80,8 @@ vl_PGCS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
          at QNH ~2000 hPa */
       altitude -= 65535;
 
-    GPS_INFO->BaroAltitude =
-      GPS_INFO->pressure.AltitudeToQNHAltitude(fixed(altitude));
-
-    GPS_INFO->BaroAltitudeAvailable = true;
+    GPS_INFO->ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_VOLKSLOGGER,
+                                      fixed(altitude));
   }
 
   // ExtractParameter(String,ctemp,3);

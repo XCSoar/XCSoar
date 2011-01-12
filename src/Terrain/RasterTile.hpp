@@ -80,10 +80,24 @@ public:
   bool VisibilityChanged(int view_x, int view_y);
 };
 
-#define MAX_ACTIVE_TILES 16
-
 class RasterTileCache : private NonCopyable {
   static const unsigned MAX_RTC_TILES = 4096;
+
+  /**
+   * The maximum number of tiles which are loaded at a time.  This
+   * must be limited because the amount of memory is finite.
+   */
+#if !defined(_WIN32_WCE) && !defined(ANDROID)
+  // desktop: use a lot of memory
+  static const unsigned MAX_ACTIVE_TILES = 64;
+#elif !defined(_WIN32_WCE) || _WIN32_WCE >= 0x0400
+  // embedded: use less memory
+  static const unsigned MAX_ACTIVE_TILES = 32;
+#else
+  // old Windows CE: use only little memory
+  static const unsigned MAX_ACTIVE_TILES = 16;
+#endif
+
   static const unsigned RTC_SUBSAMPLING = 16;
 
   struct MarkerSegmentInfo {

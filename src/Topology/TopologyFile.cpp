@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Topology/TopologyFile.hpp"
 #include "Topology/XShape.hpp"
-#include "Screen/Util.hpp"
 #include "WindowProjection.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/LabelBlock.hpp"

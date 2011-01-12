@@ -1,7 +1,8 @@
 ifeq ($(TARGET),UNIX)
 
 # use the native zlib on UNIX
-ZLIB_LIBS = /usr/lib/libz.a
+ZLIB_LIBS =
+ZLIB_LDFLAGS = -lz
 ZLIB_INCLUDES =
 
 else
@@ -21,6 +22,7 @@ ZLIB_SOURCES = \
 	$(ZLIB_SRC_DIR)/zutil.c
 
 ZLIB_LIBS = $(TARGET_OUTPUT_DIR)/zlib.a
+ZLIB_LDFLAGS =
 ZLIB_INCLUDES = -I$(ZLIB_SRC_DIR)
 
 $(ZLIB_LIBS): CPPFLAGS += -DNO_VIZ -DHAVE_UNISTD_H

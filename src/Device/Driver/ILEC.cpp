@@ -70,10 +70,9 @@ ParsePDA1(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 {
   // altitude [m]
   int altitude;
-  if (line.read_checked(altitude) && enable_baro) {
-    info.BaroAltitude = fixed(altitude);
-    info.BaroAltitudeAvailable = true;
-  }
+  if (line.read_checked(altitude) && enable_baro)
+    info.ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_ILEC,
+                                 fixed(altitude));
 
   // total energy vario [m/s]
   info.TotalEnergyVarioAvailable = line.read_checked(info.TotalEnergyVario);

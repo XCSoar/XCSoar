@@ -101,7 +101,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader)
       Details.clear();
 
       // extract name
-      for (i = 1; i <= 201; i++) {
+      for (i = 1; i < 201; i++) {
         if (TempString[i] == ']')
           break;
 

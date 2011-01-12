@@ -235,6 +235,88 @@ struct NMEA_INFO {
    * @see BaroAltitude
    */
   bool BaroAltitudeAvailable;
+
+  /**
+   * Specifies the last-known source for the barometric altitude.
+   * This is used to define a priority of sources.
+   */
+  enum BaroAltitudeOrigin {
+    /**
+     * Unknown origin or not available.  This is the initial value.
+     */
+    BARO_ALTITUDE_UNKNOWN,
+
+    /**
+     * Parsed from proprietary Garmin sentence "PGRMZ".
+     */
+    BARO_ALTITUDE_GARMIN,
+
+    /**
+     * Parsed from proprietary Volkslogger sentence "PGCS1".
+     */
+    BARO_ALTITUDE_VOLKSLOGGER,
+
+    /**
+     * Parsed from proprietary Tasman Instruments sentence "PTAS1".
+     */
+    BARO_ALTITUDE_TASMAN,
+
+    /**
+     * Parsed from proprietary Ilec sentence "PDA1".
+     */
+    BARO_ALTITUDE_ILEC,
+
+    /**
+     * Parsed from proprietary Leonardo sentence "C".
+     */
+    BARO_ALTITUDE_LEONARDO,
+
+    /**
+     * Parsed from proprietary Flytec sentence "VMVABD".
+     */
+    BARO_ALTITUDE_FLYTEC,
+
+    /**
+     * Parsed from proprietary Flymaster sentence "VARIO".
+     */
+    BARO_ALTITUDE_FLYMASTER,
+
+    /**
+     * Parsed from proprietary PosiGraph sentence "GPWIN".
+     */
+    BARO_ALTITUDE_POSIGRAPH,
+
+    /**
+     * Parsed from proprietary LX sentence "LXWP0".
+     */
+    BARO_ALTITUDE_LX,
+
+    /**
+     * Parsed from proprietary Triadis sentence "PGRMZ" (Altair Pro).
+     */
+    BARO_ALTITUDE_TRIADIS_PGRMZ,
+
+    /**
+     * Parsed from proprietary Triadis sentence "PDVDV" (Vega).
+     */
+    BARO_ALTITUDE_TRIADIS_PDVDV,
+
+    /**
+     * Parsed from the Zander sentence "PZAN1".
+     */
+    BARO_ALTITUDE_ZANDER,
+
+    /**
+     * Parsed from the Cambridge CAI302 sentence "PCAID".
+     */
+    BARO_ALTITUDE_CAI302_PCAID,
+
+    /**
+     * Parsed from the Cambridge CAI302 sentence "!w".
+     */
+    BARO_ALTITUDE_CAI302_W,
+  } BaroAltitudeOrigin;
+
   /**
    * Barometric altitude (if available)
    * @see BaroAltitudeAvailable
@@ -384,6 +466,41 @@ struct NMEA_INFO {
   FLARM_STATE flarm;
 
   /**
+   * Sets the "true" barometric altitude (i.e. above NN, not above
+   * 1013 hPa).
+   */
+  void SetBaroAltitudeTrue(enum BaroAltitudeOrigin origin, fixed value) {
+    BaroAltitude = value;
+    BaroAltitudeOrigin = origin;
+    BaroAltitudeAvailable = true;
+  }
+
+  /**
+   * Sets the barometric altitude above 1013 hPa.
+   */
+  void SetBaroAltitude1013(enum BaroAltitudeOrigin origin, fixed value) {
+    SetBaroAltitudeTrue(origin, pressure.AltitudeToQNHAltitude(value));
+  }
+
+  /**
+   * Provide a "true" barometric altitude, but only use it if the
+   * previous altitude was not present or the same/lower priority.
+   */
+  void ProvideBaroAltitudeTrue(enum BaroAltitudeOrigin origin, fixed value) {
+    if (!BaroAltitudeAvailable || BaroAltitudeOrigin <= origin)
+      SetBaroAltitudeTrue(origin, value);
+  }
+
+  /**
+   * Provide barometric altitude above 1013 hPa, but only use it if
+   * the previous altitude was not present or the same/lower priority.
+   */
+  void ProvideBaroAltitude1013(enum BaroAltitudeOrigin origin, fixed value) {
+    if (!BaroAltitudeAvailable || BaroAltitudeOrigin <= origin)
+      SetBaroAltitude1013(origin, value);
+  }
+
+  /**
    * Returns the barometric altitude, and falls back to the GPS
    * altitude.
    */
@@ -426,8 +543,12 @@ struct NMEA_INFO {
     /* calculated: Heading, TurnRateWind, TurnRate */
     /* calculated: TrueAirspeedEstimated */
 
-    if (!BaroAltitudeAvailable && add.BaroAltitudeAvailable) {
+    if ((!BaroAltitudeAvailable ||
+         (BaroAltitudeOrigin <= BARO_ALTITUDE_UNKNOWN &&
+          add.BaroAltitudeOrigin > BaroAltitudeOrigin)) &&
+        add.BaroAltitudeAvailable) {
       BaroAltitude = add.BaroAltitude;
+      BaroAltitudeOrigin = add.BaroAltitudeOrigin;
       BaroAltitudeAvailable = true;
     }
 

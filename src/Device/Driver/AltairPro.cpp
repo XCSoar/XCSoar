@@ -94,10 +94,9 @@ AltairProDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
 
   if (strcmp(type, "$PGRMZ") == 0) {
     bool available = ReadAltitude(line, lastAlt);
-    if (enable_baro && available) {
-      GPS_INFO->BaroAltitudeAvailable = true;
-      GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(lastAlt);
-    }
+    if (enable_baro && available)
+      GPS_INFO->ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_TRIADIS_PGRMZ,
+                                        lastAlt);
 
     last_enable_baro = enable_baro;
 

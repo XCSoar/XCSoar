@@ -44,11 +44,11 @@ Copyright_License {
 //   Altitude 0,1,20,33,70
 //   Aircraft info 3,6,23,32,37,47,54
 //   LD 4,5,19,66,38,53,71
-//   Vario 2,7,8,9,21,22,63,24,44,64
+//   Vario 2,7,8,9,21,22,63,24,44
 //   Wind 25,26,48,49,50
 //   MacCready 10,34,35,43
 //   Nav 11,12,76,13,15,16,17,59,61,18,27,28,29,30,31,51,52,60,73
-//   Waypoint 14,36,39,40,41,42,45,46
+//   Waypoint 14,36,39,40,41,42,45,46,64
 //   Team 55,56,57,58
 //   Gadget 65,75
 //   Alternates 67,68,69
@@ -78,7 +78,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("TC 30s"),
     N_("A 30 second rolling average climb rate based of the reported GPS altitude, or vario if available."),
     7, // TL Avg
-    64, // D Vario
+    44, // Netto
   },
 
   // 3
@@ -186,7 +186,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Next"),
     N_("The name of the currently selected turn point. When this infobox is active, using the up/down cursor keys selects the next/previous waypoint in the task. (Touchscreen/PC only) Pressing the enter cursor key brings up the waypoint details."),
     36, // Time flt
-    46, // WP ETA
+    64, // RH Trend
   },
 
   // 15
@@ -455,7 +455,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Netto Vario"),
     N_("Netto"),
     N_("Instantaneous vertical speed of air-mass, equal to vario value less the glider's estimated sink rate. Best used if airspeed, accelerometers and vario are connected, otherwise calculations are based on GPS measurements and wind estimates."),
-    64, // D Vario
+    2, // TC 30s
     24, // Vario
   },
 
@@ -473,7 +473,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Next Arrival Time"),
     N_("WP ETA"),
     N_("Estimated arrival local time at next waypoint, assuming performance of ideal MacCready cruise/climb cycle."),
-    14, // Next
+    64, // RH Trend
     45, // Fin ETA
   },
 
@@ -632,11 +632,11 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // 64
   {
-    N_("Distance Vario"),
-    N_("D Vario"),
-    NULL,
-    2, // TC 30s
-    44, // Netto
+    N_("Task Req. Total Height Trend"),
+    N_("RH Trend"),
+    N_("Trend (or neg. of the variation) of the total required height to complete the task."),
+    14, // Next
+    46, // WP ETA
   },
 
   // 65

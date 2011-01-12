@@ -415,7 +415,7 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
   // Determine the dialog size
   const TCHAR* Caption = GetCaption(node);
   const RECT rc = Parent.get_client_rect();
-  ControlPosition pos = GetPosition(node, rc);
+  ControlPosition pos = GetPosition(node, rc, 0);
   ControlSize size = GetSize(node, rc, pos);
 
   InitScaleWidth(size, rc, dialog_style);

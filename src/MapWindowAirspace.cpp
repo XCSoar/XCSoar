@@ -189,7 +189,8 @@ class AirspaceOutlineRenderer : public AirspaceVisitor, protected MapCanvas {
 public:
   AirspaceOutlineRenderer(Canvas &_canvas, const WindowProjection &_projection,
                           bool _black)
-    :MapCanvas(_canvas, _projection, _projection.GetScreenBounds()),
+    :MapCanvas(_canvas, _projection,
+               _projection.GetScreenBounds().scale(fixed(1.1))),
      black(_black) {
     if (black)
       canvas.black_pen();

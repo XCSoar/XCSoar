@@ -169,10 +169,14 @@ $PCAID,<1>,<2>,<3>,<4>*hh<CR><LF>
 *hh Checksum, XOR of all bytes of the sentence after the ‘$’ and before the ‘*’
 */
 static bool
-cai_PCAID(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+cai_PCAID(NMEAInputLine &line, NMEA_INFO &data, bool enable_baro)
 {
-  (void)line;
-  (void)GPS_INFO;
+  line.skip();
+
+  fixed value;
+  if (line.read_checked(value) && enable_baro)
+    data.ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_CAI302_PCAID, value);
+
   return true;
 }
 
@@ -191,7 +195,7 @@ CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
     return cai_PCAIB(line, GPS_INFO);
 
   if (strcmp(type, "$PCAID") == 0)
-    return cai_PCAID(line, GPS_INFO);
+    return cai_PCAID(line, *GPS_INFO, enable_baro);
 
   if (strcmp(type, "!w") == 0)
     return cai_w(line, GPS_INFO, enable_baro);
@@ -552,10 +556,9 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   line.skip(2);
 
   fixed value;
-  if (line.read_checked(value) && enable_baro) {
-    GPS_INFO->BaroAltitude = value - fixed(1000);
-    GPS_INFO->BaroAltitudeAvailable = true;
-  }
+  if (line.read_checked(value) && enable_baro)
+    GPS_INFO->ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_CAI302_W,
+                                      value - fixed(1000));
 
   line.skip();
   // GPS_INFO->pressure.set_QNH(_tcstod(ctemp, NULL) - 1000); ?

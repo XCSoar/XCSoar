@@ -171,11 +171,11 @@ GlueMapWindow::UpdateScreenAngle()
 bool
 GlueMapWindow::IsOriginCentered()
 {
-  DisplayOrientation_t orientation =
-      (GetDisplayMode() == dmCircling) ?
-          settings_map.OrientationCircling : settings_map.OrientationCruise;
+  if (GetDisplayMode() == dmCircling)
+    return true;
 
-  return (orientation != TRACKUP);
+  DisplayOrientation_t orientation = settings_map.OrientationCruise;
+  return (orientation == NORTHUP);
 }
 
 void

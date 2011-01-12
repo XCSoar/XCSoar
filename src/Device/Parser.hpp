@@ -64,9 +64,7 @@ private:
   bool GSAAvailable;
   bool GGAAvailable;
   bool RMZAvailable;
-  bool RMAAvailable;
   fixed RMZAltitude;
-  fixed RMAAltitude;
   fixed LastTime;
 
   bool TimeHasAdvanced(fixed ThisTime, NMEA_INFO *GPS_INFO);
@@ -77,7 +75,6 @@ private:
   bool GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
   bool RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
   static bool RMB(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-  bool RMA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
   bool RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 
   static bool WP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
