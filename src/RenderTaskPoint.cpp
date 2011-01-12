@@ -45,7 +45,8 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
                                  const bool draw_bearing,
                                  const GeoPoint &location)
   :canvas(_canvas), buffer(_buffer), m_proj(_projection),
-   map_canvas(_canvas, _projection, _projection.GetScreenBounds()),
+   map_canvas(_canvas, _projection,
+              _projection.GetScreenBounds().scale(fixed(1.1))),
    m_settings_map(_settings_map),
    task_projection(_task_projection),
    m_draw_bearing(draw_bearing),
@@ -149,7 +150,8 @@ RenderTaskPoint::Visit(const AATPoint& tp)
       /* now erase the dead zone by drawing a white polygon over it */
       buffer->null_pen();
       buffer->white_brush();
-      MapCanvas map_canvas(*buffer, m_proj, m_proj.GetScreenBounds());
+      MapCanvas map_canvas(*buffer, m_proj,
+                           m_proj.GetScreenBounds().scale(fixed(1.1)));
       map_canvas.draw(dead_zone);
 
       /* copy the result into the canvas */
