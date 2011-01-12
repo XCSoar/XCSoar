@@ -89,13 +89,28 @@ MapCanvas::visible(const Canvas &canvas,
 void
 MapCanvas::draw(const SearchPointVector &points)
 {
-  const unsigned num_points = points.size();
+  unsigned num_points = points.size();
   if (num_points < 3)
     return;
 
-  RasterPoint pts[num_points];
-  project(points, pts);
+  /* copy all SearchPointVector elements to geo_points */
+  geo_points.grow_discard(num_points * 3);
+  for (unsigned i = 0; i < num_points; ++i)
+    geo_points[i] = points[i].get_location();
 
+  /* clip them */
+  num_points = clip.clip_polygon(geo_points.begin(),
+                                 geo_points.begin(), num_points);
+  if (num_points < 3)
+    /* it's completely outside the screen */
+    return;
+
+  /* project all GeoPoints to screen coordinates */
+  RasterPoint pts[num_points];
+  for (unsigned i = 0; i < num_points; ++i)
+    pts[i] = projection.GeoToScreen(geo_points[i]);
+
+  /* draw it all */
   if (visible(pts, num_points))
-    canvas.autoclip_polygon(pts, num_points);
+    canvas.polygon(pts, num_points);
 }

@@ -27,6 +27,7 @@ Copyright_License {
 #include "Navigation/SearchPointVector.hpp"
 #include "Screen/Point.hpp"
 #include "Geo/GeoClip.hpp"
+#include "Util/AllocatedArray.hpp"
 
 class Canvas;
 class Projection;
@@ -41,6 +42,11 @@ public:
   Canvas &canvas;
   const Projection &projection;
   const GeoClip clip;
+
+  /**
+   * A variable-length buffer for clipped GeoPoints.
+   */
+  AllocatedArray<GeoPoint> geo_points;
 
 public:
   MapCanvas(Canvas &_canvas, const Projection &_projection,
