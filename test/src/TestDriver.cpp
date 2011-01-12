@@ -139,6 +139,7 @@ TestCAI302()
 
   NMEA_INFO nmea_info;
   memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.pressure.set_QNH(fixed(1013.25));
 
   /* baro altitude disabled */
   device->ParseNMEA("!w,000,000,0000,500,01287,01020,-0668,191,199,191,000,000,100*44",
@@ -146,6 +147,14 @@ TestCAI302()
   ok1(!nmea_info.BaroAltitudeAvailable);
   ok1(nmea_info.AirspeedAvailable);
   ok1(nmea_info.TotalEnergyVarioAvailable);
+
+  device->ParseNMEA("$PCAID,N,500,0,*14", &nmea_info, false);
+  ok1(!nmea_info.BaroAltitudeAvailable);
+
+  /* baro altitude enabled (PCAID) */
+  device->ParseNMEA("$PCAID,N,500,0,*14", &nmea_info, true);
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(between(nmea_info.BaroAltitude, 499, 501));
 
   /* baro altitude enabled */
   device->ParseNMEA("!w,000,000,0000,500,01287,01020,-0668,191,199,191,000,000,100*44",
@@ -156,6 +165,11 @@ TestCAI302()
   ok1(equals(nmea_info.TrueAirspeed, -6.68));
   ok1(nmea_info.TotalEnergyVarioAvailable);
   ok1(equals(nmea_info.TotalEnergyVario, -0.463));
+
+  /* PCAID should not override !w */
+  device->ParseNMEA("$PCAID,N,500,0,*14", &nmea_info, true);
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 287));
 
   /* check if RMZ overrides CAI's baro altitude */
   parser.ParseNMEAString_Internal("$PGRMZ,100,m,3*11", &nmea_info);
@@ -232,7 +246,7 @@ TestILEC()
 
 int main(int argc, char **argv)
 {
-  plan_tests(57);
+  plan_tests(62);
 
   TestGeneric();
   TestCAI302();

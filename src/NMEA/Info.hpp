@@ -307,6 +307,11 @@ struct NMEA_INFO {
     BARO_ALTITUDE_ZANDER,
 
     /**
+     * Parsed from the Cambridge CAI302 sentence "PCAID".
+     */
+    BARO_ALTITUDE_CAI302_PCAID,
+
+    /**
      * Parsed from the Cambridge CAI302 sentence "!w".
      */
     BARO_ALTITUDE_CAI302_W,
