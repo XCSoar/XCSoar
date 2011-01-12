@@ -723,7 +723,8 @@ NMEAParser::NMEAChecksum(const char *String)
 }
 
 /**
- * Parses a PTAS1 sentence
+ * Parses a PTAS1 sentence (Tasman Instruments proprietary).
+ *
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
