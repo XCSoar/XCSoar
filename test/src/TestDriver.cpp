@@ -55,10 +55,12 @@ HaveCondorDevice()
   return false;
 }
 
+static bool has_baro_source;
+
 bool
 devHasBaroSource()
 {
-  return false;
+  return has_baro_source;
 }
 
 size_t
@@ -132,6 +134,9 @@ TestGeneric()
 static void
 TestCAI302()
 {
+  NMEAParser parser;
+  has_baro_source = true;
+
   Device *device = cai302Device.CreateOnPort(NULL);
   ok1(device != NULL);
 
@@ -155,7 +160,14 @@ TestCAI302()
   ok1(nmea_info.TotalEnergyVarioAvailable);
   ok1(equals(nmea_info.TotalEnergyVario, -0.463));
 
+  /* check if RMZ overrides CAI's baro altitude */
+  parser.ParseNMEAString_Internal("$PGRMZ,100,m,3*11", &nmea_info);
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 287));
+
   delete device;
+
+  has_baro_source = false;
 }
 
 static void
@@ -225,7 +237,7 @@ TestILEC()
 
 int main(int argc, char **argv)
 {
-  plan_tests(55);
+  plan_tests(57);
 
   TestGeneric();
   TestCAI302();
