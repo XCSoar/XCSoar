@@ -53,11 +53,7 @@ struct GLRectangleVertices : public GLVertexArray<4> {
   }
 };
 
-struct GLCircleVertices : public GLVertexArray<34> {
-  enum {
-    OUTLINE_SIZE = SIZE - 2,
-  };
-
+struct GLCircleVertices : public GLVertexArray<32> {
   GLCircleVertices(GLvalue center_x, GLvalue center_y, GLvalue radius);
 };
 

@@ -125,7 +125,13 @@ Canvas::circle(int x, int y, unsigned radius)
 
   if (pen_over_brush()) {
     pen.set();
-    glDrawArrays(GL_LINE_LOOP, 2, vertices.OUTLINE_SIZE);
+    glDrawArrays(GL_LINE_LOOP, 0, vertices.SIZE);
+#ifndef ANDROID
+    if (pen.get_width() > 1) {
+      glPointSize(pen.get_width());
+      glDrawArrays(GL_POINTS, 0, vertices.SIZE);
+    }
+#endif
   }
 }
 
