@@ -72,7 +72,6 @@ NMEAParser::Reset(void)
   activeGPS = true;
   GGAAvailable = false;
   RMZAvailable = false;
-  RMAAvailable = false;
   LastTime = fixed_zero;
 }
 
@@ -544,10 +543,6 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
       // JMW changed from Altitude to BaroAltitude
       GPS_INFO->BaroAltitudeAvailable = true;
       GPS_INFO->BaroAltitude = RMZAltitude;
-    } else if (RMAAvailable) {
-      // JMW changed from Altitude to BaroAltitude
-      GPS_INFO->BaroAltitudeAvailable = true;
-      GPS_INFO->BaroAltitude = RMAAltitude;
     }
   }
 
@@ -647,9 +642,6 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (RMZAvailable) {
     GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = RMZAltitude;
-  } else if (RMAAvailable) {
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = RMAAltitude;
   }
 
   // VENTA3 CONDOR ALTITUDE
@@ -706,46 +698,6 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     // JMW no in-built baro sources, so use this generic one
     GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = RMZAltitude;
-  }
-
-  return true;
-}
-
-/**
- * Parses a RMA sentence
- * (not in use and maybe faulty(?))
- *
- * $--RMA,A,llll.ll,a,yyyyy.yy,a,x.x,x.x,x.x,x.x,x.x,a*hh
- *
- * Field Number:
- *  1) Blink Warning
- *  2) Latitude
- *  3) N or S
- *  4) Longitude
- *  5) E or W
- *  6) Time Difference A, uS
- *  7) Time Difference B, uS
- *  8) Speed Over Ground, Knots
- *  9) Track Made Good, degrees true
- * 10) Magnetic Variation, degrees
- * 11) E or W
- * 12) Checksum
- * @param String Input string
- * @param params Parameter array
- * @param nparams Number of parameters
- * @param GPS_INFO GPS_INFO struct to parse into
- * @return Parsing success
- */
-bool
-NMEAParser::RMA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
-{
-  //JMW?  RMAAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(RMAAltitude);
-  RMAAvailable = ReadAltitude(line, RMAAltitude);
-
-  if (RMAAvailable && !devHasBaroSource() && !GPS_INFO->gps.Replay) {
-    // JMW no in-built baro sources, so use this generic one
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = RMAAltitude;
   }
 
   return true;
