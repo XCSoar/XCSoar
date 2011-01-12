@@ -135,7 +135,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   SetBasic().TrackBearing = bearing;
   SetBasic().AirspeedAvailable = false;
   SetBasic().GPSAltitude = alt;
-  SetBasic().SetBaroAltitudeTrue(baroalt);
+  SetBasic().SetBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, baroalt);
   SetBasic().Time = t;
   SetBasic().TotalEnergyVarioAvailable = false;
   SetBasic().NettoVarioAvailable = false;

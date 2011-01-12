@@ -55,12 +55,10 @@ HaveCondorDevice()
   return false;
 }
 
-static bool has_baro_source;
-
 bool
 devHasBaroSource()
 {
-  return has_baro_source;
+  return false;
 }
 
 size_t
@@ -135,7 +133,6 @@ static void
 TestCAI302()
 {
   NMEAParser parser;
-  has_baro_source = true;
 
   Device *device = cai302Device.CreateOnPort(NULL);
   ok1(device != NULL);
@@ -166,8 +163,6 @@ TestCAI302()
   ok1(equals(nmea_info.BaroAltitude, 287));
 
   delete device;
-
-  has_baro_source = false;
 }
 
 static void

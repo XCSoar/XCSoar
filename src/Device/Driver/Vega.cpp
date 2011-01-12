@@ -242,7 +242,8 @@ PDVDV(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   GPS_INFO->AirspeedAvailable = true;
 
   if (enable_baro)
-    GPS_INFO->SetBaroAltitude1013(line.read(fixed_zero));
+    GPS_INFO->ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_TRIADIS_PDVDV,
+                                      line.read(fixed_zero));
 
   TriggerVarioUpdate();
 
