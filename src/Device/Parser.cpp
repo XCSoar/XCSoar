@@ -768,7 +768,7 @@ NMEAParser::NMEAChecksum(const char *String)
   unsigned char v1 = 0, v2 = 0;
   const char *pEnd;
 
-  pEnd = strchr(String, '*');
+  pEnd = strrchr(String, '*');
   if(pEnd == NULL)
     return false;
 
