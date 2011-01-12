@@ -680,10 +680,11 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   //JMW?  RMZAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(RMZAltitude);
 
+  fixed value;
   if (!devHasBaroSource() && !GPS_INFO->gps.Replay &&
-      ReadAltitude(line, GPS_INFO->BaroAltitude))
+      ReadAltitude(line, value))
     // JMW no in-built baro sources, so use this generic one
-    GPS_INFO->BaroAltitudeAvailable = true;
+    GPS_INFO->SetBaroAltitudeTrue(value);
 
   return true;
 }
@@ -749,8 +750,7 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     baralt = max(fixed_zero, Units::ToSysUnit(baralt - fixed(2000), unFeet));
     valid_baralt = true;
 
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(baralt);
+    GPS_INFO->SetBaroAltitude1013(baralt);
   }
 
   fixed vtas;
