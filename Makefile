@@ -397,6 +397,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/All.cpp \
 	$(SRC)/Device/Geoid.cpp \
 	$(SRC)/Device/Parser.cpp \
+	$(SRC)/Device/Simulator.cpp \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/NullPort.cpp \
 	$(SRC)/Device/SerialPort.cpp \
