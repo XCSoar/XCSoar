@@ -122,11 +122,14 @@ TopologyFileRenderer::Paint(Canvas &canvas,
 
         shape_renderer.begin_shape(msize);
 
-        // TODO: make sure we always draw the first and last point
+        --msize;
         for (unsigned i = 0; i < msize; ++i) {
           GeoPoint g = point2GeoPoint(line.point[i]);
           shape_renderer.add_point_if_distant(projection.GeoToScreen(g));
         }
+
+        // make sure we always draw the last point
+        shape_renderer.add_point(projection.GeoToScreen(point2GeoPoint(line.point[msize])));
 
         shape_renderer.finish_polyline(canvas);
       }
