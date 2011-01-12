@@ -156,7 +156,7 @@ public:
   fixed
   f(const fixed V)
   {
-    return polar.MSinkRate(V) / V;
+    return -V/polar.MSinkRate(V);
   }
 
 private:
