@@ -71,7 +71,6 @@ NMEAParser::Reset(void)
   isFlarm = false;
   activeGPS = true;
   GGAAvailable = false;
-  RMZAvailable = false;
   LastTime = fixed_zero;
 }
 
@@ -538,14 +537,6 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     GPS_INFO->TrackBearing = Angle::degrees(TrackBearing).as_bearing();
   }
 
-  if (!gps.Replay) {
-    if (RMZAvailable) {
-      // JMW changed from Altitude to BaroAltitude
-      GPS_INFO->BaroAltitudeAvailable = true;
-      GPS_INFO->BaroAltitude = RMZAltitude;
-    }
-  }
-
   if (!GGAAvailable) {
     // update SatInUse, some GPS receiver don't emit GGA sentence
     if (!gpsValid)
@@ -639,11 +630,6 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   gps.HDOP = line.read(fixed_zero);
 
-  if (RMZAvailable) {
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = RMZAltitude;
-  }
-
   // VENTA3 CONDOR ALTITUDE
   // "Altitude" should always be GPS Altitude.
 
@@ -692,13 +678,11 @@ bool
 NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   //JMW?  RMZAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(RMZAltitude);
-  RMZAvailable = ReadAltitude(line, RMZAltitude);
 
-  if (RMZAvailable && !devHasBaroSource() && !GPS_INFO->gps.Replay) {
+  if (!devHasBaroSource() && !GPS_INFO->gps.Replay &&
+      ReadAltitude(line, GPS_INFO->BaroAltitude))
     // JMW no in-built baro sources, so use this generic one
     GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = RMZAltitude;
-  }
 
   return true;
 }
