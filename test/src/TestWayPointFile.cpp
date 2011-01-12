@@ -124,6 +124,7 @@ TestSeeYouWayPoint(const Waypoint org_wp, const Waypoint *wp)
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
   ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
   ok1(wp->Flags.Restricted == org_wp.Flags.Restricted);
+  ok1(wp->Comment == org_wp.Comment);
 }
 
 static void
@@ -194,6 +195,7 @@ CreateOriginalWaypoints()
   Waypoint wp(loc);
   wp.Altitude = fixed(488);
   wp.Name = _T("Bergneustadt");
+  wp.Comment = _T("123.650 0° 0.0m 123.650 MHz");
 
   wp.Flags.Airport = true;
   wp.Flags.TurnPoint = true;
@@ -211,6 +213,7 @@ CreateOriginalWaypoints()
   Waypoint wp2(loc);
   wp2.Altitude = fixed(6962);
   wp2.Name = _T("Aconcagua");
+  wp2.Comment = _T("Highest mountain in south-america");
 
   wp2.Flags.Airport = false;
   wp2.Flags.TurnPoint = true;
@@ -228,6 +231,7 @@ CreateOriginalWaypoints()
   Waypoint wp3(loc);
   wp3.Altitude = fixed(227);
   wp3.Name = _T("Golden Gate Bridge");
+  wp3.Comment = _T("");
 
   wp3.Flags.Airport = false;
   wp3.Flags.TurnPoint = true;
@@ -245,6 +249,7 @@ CreateOriginalWaypoints()
   Waypoint wp4(loc);
   wp4.Altitude = fixed(123);
   wp4.Name = _T("Red Square");
+  wp4.Comment = _T("0° 0.0m");
 
   wp4.Flags.Airport = false;
   wp4.Flags.TurnPoint = true;
@@ -262,6 +267,7 @@ CreateOriginalWaypoints()
   Waypoint wp5(loc);
   wp5.Altitude = fixed(5);
   wp5.Name = _T("Sydney Opera");
+  wp5.Comment = _T("");
 
   wp5.Flags.Airport = false;
   wp5.Flags.TurnPoint = true;
@@ -279,7 +285,7 @@ int main(int argc, char **argv)
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(3 * 4 + (10 + 9 + 10) * org_wp.size());
+  plan_tests(3 * 4 + (10 + 10 + 10) * org_wp.size());
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);

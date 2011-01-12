@@ -135,11 +135,6 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
     parseAltitude(params[iElevation], new_waypoint.Altitude);
   check_altitude(new_waypoint, terrain, alt_ok);
 
-  // Description (e.g. "Some Turnpoint", with quotes)
-  /// @todo include frequency and rwdir/len
-  if (iDescription < n_params)
-    parseString(params[iDescription], new_waypoint.Comment);
-
   // Style (e.g. 5)
   /// @todo include peaks with peak symbols etc.
   if (iStyle < n_params)
@@ -160,11 +155,50 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
     }
   }
 
+  // Frequency & runway direction/length (for airports and landables)
+  // and description (e.g. "Some Turnpoint", with quotes)
+  tstring s;
+  if (new_waypoint.is_landable()) {
+    if (iFrequency < n_params && parseString(params[iFrequency], s) > 0)
+      appendStringWithSeperator(new_waypoint.Comment, s);
+
+    if (iRWDir < n_params && parseString(params[iRWDir], s) > 0) {
+      s += _T("°");
+      appendStringWithSeperator(new_waypoint.Comment, s);
+    }
+
+    if (iRWLen < n_params && parseString(params[iRWLen], s) > 0)
+      appendStringWithSeperator(new_waypoint.Comment, s);
+  }
+  if (iDescription < n_params && parseString(params[iDescription], s) > 0)
+    appendStringWithSeperator(new_waypoint.Comment, s);
+
   add_waypoint(way_points, new_waypoint);
   return true;
 }
 
-bool
+/**
+  * Append string to another inserting seperator character if dest is not empty
+  * @param dest result string
+  * @param src the string to append
+  * @param seperator character (default: ' ')
+  */
+void
+WayPointFileSeeYou::appendStringWithSeperator(tstring &dest, const tstring& src,
+                                              const TCHAR seperator)
+{
+  if (dest.length() > 0)
+    dest += seperator;
+  dest += src;
+}
+
+/**
+  * Parse a string. Remove (optional) quotes and trim whitespace
+  * @param src The line to parse
+  * @param dest result string
+  * @return length of result or -1 if parsing error occurred
+  */
+int
 WayPointFileSeeYou::parseString(const TCHAR* src, tstring& dest)
 {
   dest.assign(src);
@@ -175,7 +209,7 @@ WayPointFileSeeYou::parseString(const TCHAR* src, tstring& dest)
     dest = dest.substr(1, len - 2);
 
   trim_inplace(dest);
-  return true;
+  return dest.length();
 }
 
 bool
