@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Changes to version 6.0.2 (since 6.0.1):
+* devices
+  - more robust NMEA checksum parser
 * user interface
   - Language: translation updates
 * map

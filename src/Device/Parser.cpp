@@ -764,32 +764,19 @@ NMEAParser::NMEAChecksum(const char *String)
     return true;
 
   unsigned char ReadCheckSum, CalcCheckSum;
-  char c1, c2;
-  unsigned char v1 = 0, v2 = 0;
   const char *pEnd;
 
   pEnd = strrchr(String, '*');
   if(pEnd == NULL)
     return false;
 
-  if (strlen(pEnd) < 3)
+  const char *checksum_string = pEnd + 1;
+  char *endptr;
+  unsigned long ReadCheckSum2 = strtoul(checksum_string, &endptr, 16);
+  if (endptr == checksum_string || *endptr != 0 || ReadCheckSum2 >= 0x100)
     return false;
 
-  c1 = pEnd[1], c2 = pEnd[2];
-
-  // what's this for?
-  // iswdigit('0');
-
-  if (_istdigit(c1))
-    v1 = (unsigned char)(c1 - '0');
-  if (_istdigit(c2))
-    v2 = (unsigned char)(c2 - '0');
-  if (_istalpha(c1))
-    v1 = (unsigned char)(c1 - 'A' + 10);
-  if (_istalpha(c2))
-    v2 = (unsigned char)(c2 - 'A' + 10);
-
-  ReadCheckSum = (unsigned char)((v1 << 4) + v2);
+  ReadCheckSum = (unsigned char)ReadCheckSum2;
   CalcCheckSum = ::NMEAChecksum(String + 1, pEnd - String - 1);
 
   if (CalcCheckSum == ReadCheckSum)
