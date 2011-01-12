@@ -90,8 +90,9 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
   bool available = line.read_checked_compare(value, "M");
   if (enable_baro) {
     if (available)
-      info.BaroAltitude = value;
-    info.BaroAltitudeAvailable = available;
+      info.SetBaroAltitudeTrue(value);
+    else
+      info.BaroAltitudeAvailable = false;
   }
 
   // 4-7 = integrated vario, unit

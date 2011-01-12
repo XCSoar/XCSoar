@@ -71,10 +71,8 @@ LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
   fixed value;
 
   // 0 = altitude [m]
-  if (line.read_checked(value) && enable_baro) {
-    info.BaroAltitude = value;
-    info.BaroAltitudeAvailable = true;
-  }
+  if (line.read_checked(value) && enable_baro)
+    info.SetBaroAltitudeTrue(value);
 
   // 1 = vario [dm/s]
   info.TotalEnergyVarioAvailable = line.read_checked(value);

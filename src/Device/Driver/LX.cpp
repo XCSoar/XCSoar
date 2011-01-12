@@ -82,10 +82,9 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
       GPS_INFO->TrueAirspeed / AtmosphericPressure::AirDensityRatio(alt);
   }
 
-  if (enable_baro) {
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = alt; // ToDo check if QNH correction is needed!
-  }
+  if (enable_baro)
+    // ToDo check if QNH correction is needed!
+    GPS_INFO->SetBaroAltitudeTrue(alt);
 
   GPS_INFO->TotalEnergyVarioAvailable =
     line.read_checked(GPS_INFO->TotalEnergyVario);

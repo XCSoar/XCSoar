@@ -75,11 +75,8 @@ VARIO(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   // $VARIO,fPressure,fVario,Bat1Volts,Bat2Volts,BatBank,TempSensor1,TempSensor2*CS
 
   fixed value;
-  if (line.read_checked(value)) {
-    GPS_INFO->BaroAltitude =
-      GPS_INFO->pressure.StaticPressureToQNHAltitude(value * 100);
-    GPS_INFO->BaroAltitudeAvailable = true;
-  }
+  if (line.read_checked(value))
+    GPS_INFO->SetBaroAltitude1013(value * 100);
 
   if (line.read_checked(value)) {
     // vario is in dm/s

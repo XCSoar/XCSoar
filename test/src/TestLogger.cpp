@@ -103,8 +103,7 @@ int main(int argc, char **argv)
   i.DateTime.second = 33;
   i.Location = home;
   i.GPSAltitude = fixed(487);
-  i.BaroAltitude = fixed(490);
-  i.BaroAltitudeAvailable = true;
+  i.SetBaroAltitudeTrue(fixed(490));
 
   IGCWriter writer(path, i);
 

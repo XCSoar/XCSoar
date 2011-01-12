@@ -384,6 +384,22 @@ struct NMEA_INFO {
   FLARM_STATE flarm;
 
   /**
+   * Sets the "true" barometric altitude (i.e. above NN, not above
+   * 1013 hPa).
+   */
+  void SetBaroAltitudeTrue(fixed value) {
+    BaroAltitude = value;
+    BaroAltitudeAvailable = true;
+  }
+
+  /**
+   * Sets the barometric altitude above 1013 hPa.
+   */
+  void SetBaroAltitude1013(fixed value) {
+    SetBaroAltitudeTrue(pressure.AltitudeToQNHAltitude(value));
+  }
+
+  /**
    * Returns the barometric altitude, and falls back to the GPS
    * altitude.
    */

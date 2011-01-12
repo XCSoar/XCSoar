@@ -552,10 +552,8 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   line.skip(2);
 
   fixed value;
-  if (line.read_checked(value) && enable_baro) {
-    GPS_INFO->BaroAltitude = value - fixed(1000);
-    GPS_INFO->BaroAltitudeAvailable = true;
-  }
+  if (line.read_checked(value) && enable_baro)
+    GPS_INFO->SetBaroAltitudeTrue(value - fixed(1000));
 
   line.skip();
   // GPS_INFO->pressure.set_QNH(_tcstod(ctemp, NULL) - 1000); ?

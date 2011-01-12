@@ -241,13 +241,8 @@ PDVDV(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   //hasVega = true;
   GPS_INFO->AirspeedAvailable = true;
 
-  if (enable_baro){
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = GPS_INFO->pressure.
-      AltitudeToQNHAltitude(line.read(fixed_zero));
-    // JMW 20080716 bug
-      // was alt;    // ToDo check if QNH correction is needed!
-  }
+  if (enable_baro)
+    GPS_INFO->SetBaroAltitude1013(line.read(fixed_zero));
 
   TriggerVarioUpdate();
 
