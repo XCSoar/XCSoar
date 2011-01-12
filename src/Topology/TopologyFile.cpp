@@ -41,11 +41,11 @@ Copyright_License {
 TopologyFile::TopologyFile(struct zzip_dir *_dir, const char *filename,
                            fixed _threshold,
                            const Color thecolor,
-                           int _label_field, int _icon)
+                           int _label_field, int _icon,
+                           int _pen_width)
   :dir(_dir), label_field(_label_field), icon(_icon),
-   color(thecolor),
-   scaleThreshold(_threshold),
-  shapefileopen(false)
+   pen_width(_pen_width), color(thecolor), scaleThreshold(_threshold),
+   shapefileopen(false)
 {
   if (msSHPOpenFile(&shpfile, "rb", dir, filename) == -1)
     return;

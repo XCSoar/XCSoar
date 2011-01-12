@@ -119,12 +119,23 @@ TopologyStore::Load(NLineReader &reader, const TCHAR *Directory,
       continue;
 
     // Blue component of line / shading colour
-    blue = (BYTE)strtol(p + 1, NULL, 10);
+    blue = (BYTE)strtol(p + 1, &p, 10);
+
+    // Pen width of lines
+    int pen_width=1;
+    if (*p == _T(',')) {
+      pen_width = strtol(p + 1, &p, 10);
+      if (pen_width<0)
+        pen_width=1;
+      else if (pen_width>31)
+        pen_width=31;
+    }
 
     files.append(new TopologyFile(zdir, ShapeFilename,
                                   fixed(ShapeRange) * 1000,
                                   Color(red, green, blue),
-                                  ShapeField, ShapeIcon));
+                                  ShapeField, ShapeIcon,
+                                  pen_width));
   }
 }
 

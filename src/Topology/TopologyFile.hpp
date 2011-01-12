@@ -31,6 +31,7 @@ Copyright_License {
 #include "Util/AllocatedArray.hpp"
 #include "Math/fixed.hpp"
 #include "Screen/Color.hpp"
+#include "Screen/Fonts.hpp"
 
 struct GeoPoint;
 class Canvas;
@@ -46,7 +47,7 @@ class TopologyFile : private NonCopyable {
 
   AllocatedArray<XShape *> shpCache;
 
-  int label_field, icon;
+  int label_field, icon, pen_width;
 
   Color color;
 
@@ -58,11 +59,13 @@ public:
    * @param thecolor The color to use for drawing
    * @param label_field The field in which the labels should be searched
    * @param icon the resource id of the icon, 0 for no icon
+   * @param pen_width The pen width used for line drawing
    * @return
    */
   TopologyFile(struct zzip_dir *dir, const char *shpname,
                fixed threshold, const Color color,
-               int label_field=-1, int icon=0);
+               int label_field=-1, int icon=0,
+               int pen_width=1);
 
   /**
    * The destructor clears the cache and closes the shapefile
@@ -83,6 +86,10 @@ public:
 
   Color get_color() const {
     return color;
+  }
+
+  int get_pen_width() const {
+    return pen_width;
   }
 
   bool empty() const {
