@@ -667,7 +667,8 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 }
 
 /**
- * Parses a RMZ sentence
+ * Parses a PGRMZ sentence (Garmin proprietary).
+ *
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
