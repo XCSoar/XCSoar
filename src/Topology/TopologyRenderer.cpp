@@ -122,6 +122,7 @@ TopologyFileRenderer::Paint(Canvas &canvas,
 
         shape_renderer.begin_shape(msize);
 
+        // TODO: make sure we always draw the first and last point
         for (unsigned i = 0; i < msize; ++i) {
           GeoPoint g = point2GeoPoint(line.point[i]);
           shape_renderer.add_point_if_distant(projection.GeoToScreen(g));
@@ -134,6 +135,8 @@ TopologyFileRenderer::Paint(Canvas &canvas,
     case MS_SHAPE_POLYGON:
       for (int tt = 0; tt < shape.numlines; ++tt) {
         const lineObj &line = shape.line[tt];
+        // TODO: removing random points from polygons can cause overlapping
+        //       edges, which may cause triangulation to fail
         unsigned msize = line.numpoints / iskip;
 
         /* copy all polygon points into the geo_points array and clip

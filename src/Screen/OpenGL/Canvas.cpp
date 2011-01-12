@@ -58,13 +58,13 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
 
   glVertexPointer(2, GL_VALUE, 0, lppt);
 
-  if (!brush.is_hollow()) {
+  if (!brush.is_hollow() && cPoints >= 3) {
     brush.get_color().set();
-#ifdef ANDROID
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, cPoints);
-#else
-    glDrawArrays(GL_POLYGON, 0, cPoints);
-#endif
+    GLushort *triangles = new GLushort[3*(cPoints-2)];
+    int idx_count = polygon_to_triangle(lppt, cPoints, triangles);
+    if (idx_count > 0)
+      glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT, triangles);
+    delete triangles;
   }
 
   if (pen_over_brush()) {

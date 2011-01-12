@@ -28,14 +28,8 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/AllocatedArray.hpp"
-
-#ifdef ENABLE_OPENGL
-class Canvas;
-class Brush;
-#else
 #include "Screen/Canvas.hpp"
 #include "Screen/Brush.hpp"
-#endif
 
 #include <assert.h>
 
@@ -107,13 +101,14 @@ public:
 
   void finish_polygon(Canvas &canvas) {
 #ifdef ENABLE_OPENGL
-    glVertexPointer(2, GL_VALUE, 0, &points[0].x);
-#ifdef ANDROID
-    // XXX
-    glDrawArrays(GL_TRIANGLES, 0, num_points / 3);
-#else
-    glDrawArrays(GL_POLYGON, 0, num_points);
-#endif
+    if (num_points >= 3) {
+      GLushort *triangles = new GLushort[3*(num_points-2)];
+      int idx_count = polygon_to_triangle(points.begin(), num_points, triangles);
+      glVertexPointer(2, GL_VALUE, 0, &points[0].x);
+      if (idx_count > 0)
+        glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT, triangles);
+      delete triangles;
+    }
 #else
     if (mode != SOLID) {
       canvas.null_pen();

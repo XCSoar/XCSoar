@@ -32,6 +32,7 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/OpenGL/Color.hpp"
 #include "Screen/OpenGL/Point.hpp"
+#include "Screen/OpenGL/Triangulate.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
