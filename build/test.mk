@@ -194,15 +194,19 @@ $(TARGET_BIN_DIR)/TestLogger$(TARGET_EXEEXT): $(TEST_LOGGER_OBJS) $(TEST_LOGGER_
 TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/NullPort.cpp \
+	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Driver/CAI302.cpp \
 	$(SRC)/Device/Driver/LX.cpp \
 	$(SRC)/Device/Driver/ILEC.cpp \
+	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Math/Angle.cpp \
 	$(SRC)/Units.cpp \
-	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/ClimbAverageCalculator.cpp \
+	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestDriver.cpp

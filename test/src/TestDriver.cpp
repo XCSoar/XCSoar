@@ -20,20 +20,29 @@
 }
 */
 
+#include "Device/Driver/Generic.hpp"
 #include "Device/Driver/CAI302.hpp"
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
+#include "Device/Geoid.h"
+#include "Device/device.hpp"
 #include "NMEA/Info.hpp"
 #include "TestUtil.hpp"
 #include "Protection.hpp"
+#include "InputEvents.hpp"
 
 #include <string.h>
 
-static bool vario_updated;
+static bool gps_updated, vario_updated;
 
 FLYING_STATE::FLYING_STATE() {}
+
+void TriggerGPSUpdate()
+{
+  gps_updated = true;
+}
 
 void TriggerVarioUpdate()
 {
@@ -41,15 +50,83 @@ void TriggerVarioUpdate()
 }
 
 bool
-NMEAParser::NMEAChecksum(const char *p)
+HaveCondorDevice()
 {
-  return true;
+  return false;
+}
+
+bool
+devHasBaroSource()
+{
+  return false;
 }
 
 size_t
 Declaration::size() const
 {
   return 0;
+}
+
+/*
+ * Fake Device/Geoid.cpp
+ */
+
+fixed
+LookupGeoidSeparation(const GeoPoint pt)
+{
+  return fixed_zero;
+}
+
+/*
+ * Fake InputEvents.cpp
+ */
+
+bool
+InputEvents::processGlideComputer(unsigned gce_id)
+{
+  return true;
+}
+
+/*
+ * Unit tests
+ */
+
+static void
+TestGeneric()
+{
+  NMEAParser parser;
+
+  NMEA_INFO nmea_info;
+  memset(&nmea_info, 0, sizeof(nmea_info));
+
+  /* no GPS reception */
+  parser.ParseNMEAString_Internal("$GPRMC,082310,V,,,,,230610*3f",
+                                  &nmea_info);
+  ok1(nmea_info.gps.Connected == 2);
+  ok1(nmea_info.gps.NAVWarning);
+  ok1(nmea_info.DateTime.year == 2010);
+  ok1(nmea_info.DateTime.month == 6);
+  ok1(nmea_info.DateTime.day == 23);
+  ok1(nmea_info.DateTime.hour == 8);
+  ok1(nmea_info.DateTime.minute == 23);
+  ok1(nmea_info.DateTime.second == 10);
+
+  /* got a GPS fix */
+  parser.ParseNMEAString_Internal("$GPRMC,082311,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*6C",
+                                  &nmea_info);
+  ok1(nmea_info.gps.Connected == 2);
+  ok1(!nmea_info.gps.NAVWarning);
+  ok1(nmea_info.DateTime.hour == 8);
+  ok1(nmea_info.DateTime.minute == 23);
+  ok1(nmea_info.DateTime.second == 11);
+  ok1(equals(nmea_info.Location.Longitude, 7.693));
+  ok1(equals(nmea_info.Location.Latitude, 51.059));
+  ok1(!nmea_info.BaroAltitudeAvailable);
+
+  /* baro altitude (proprietary Garmin sentence) */
+  parser.ParseNMEAString_Internal("$PGRMZ,100,m,3*11", &nmea_info);
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 100));
 }
 
 static void
@@ -148,8 +225,9 @@ TestILEC()
 
 int main(int argc, char **argv)
 {
-  plan_tests(37);
+  plan_tests(55);
 
+  TestGeneric();
   TestCAI302();
   TestLX();
   TestILEC();
