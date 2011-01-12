@@ -148,6 +148,8 @@ TopologyFileRenderer::Paint(Canvas &canvas,
 
         msize = clip.clip_polygon(geo_points.begin(),
                                   geo_points.begin(), msize);
+        if (msize < 3)
+          continue;
 
         /* now draw the clipped polygon */
 
