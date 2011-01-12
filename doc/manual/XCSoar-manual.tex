@@ -1177,10 +1177,10 @@ disorientation when looking at the map while circling.  Target-up when
 circling makes it easy to determine which direction to exit the
 thermal.
 
-When Track-up is used in circling mode, the glider symbol is
+When Track or Target-up is used in circling mode, the glider symbol is
 centered on the screen, even if the symbol position is configured differently.
-In cruise mode the Track up orientation allows the glider symbol to be 
-positioned (e.g.) 20\% from the bottom of the screen, giving a good view of the
+In cruise mode the Track and the Target-up orientation allows the glider
+symbol to be positioned (e.g.) 20\% from the bottom of the screen, giving a good view of the
 map ahead of the glider.  This position is adjustable in the configuration
 \config{gliderposition} settings.
 
@@ -1211,13 +1211,12 @@ Compaq Aero Users. If you enable the Compaq Aero Game Keys (On the
 Q-menu) the centre two front buttons become the up/down keys.
 
 There is a facility to have two zoom settings; one when the glider is
-in circling mode, and one in the cruise or final mode.  This is the "Circling zoom" 
-option in the configuration settings.  
-By default, the cruise/final glide zoom is \todonum{check} 5 km and the
-circling zoom is \todonum{check}2.5 km.
-When the user zooms in or out, it affects the current
+in circling mode, and one in the cruise or final mode.  This is the ``Circling
+zoom'' option in the \config{circlingzoom} configuration settings.  
+By default, the circling zoom is set to about 2.5 km - 5.0 km, depending on the
+display size. When the user zooms in or out, it affects the current
 mode's zoom setting only, so when leaving the mode the previous mode's
-zoom setting is used.  If `Circling Zoom' \config{circlingzoom} is not enabled,
+zoom setting is used.  If ``Circling Zoom'' is not enabled,
 there is only a single zoom level.
 
 Auto-zoom automatically zooms in when approaching a waypoint to keep
@@ -1239,12 +1238,6 @@ approaching a waypoint, the system automatically zooms in.  When
 passing the waypoint, the system goes back to the previous cruise zoom
 level in effect.
 
-%\begin{center}
-%
-%{\it DIAGRAM SHOWING MAP SCALE AND AUTOZOOM SYMBOL (CUTOUT OF MAIN MAPAREA)}
-%\end{center}
-%
-%{\it DIAGRAM SHOWING HOW AUTOZOOM WORKS AS YOU APPROACH AND PASS A WAYPOINT}
 
 \section{Panning the map}
 
@@ -1253,20 +1246,21 @@ is particularly useful when task planning.
 \begin{enumerate}
 \item Enable pan mode by pressing 
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Pan}
+\bmenu{Display}\blink\bmenu{Pan On}
 \end{quote}
 
 \item The map can then be panned by dragging the screen or using the cursor
   keys.  For Altair, panning is performed with the inner/outer rotary knob.
-\item When done, pan mode should be disabled, by activating the menu again:
+\item When done, pan mode has to be disabled manually, by pressing:
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Pan}
+\bmenu{Display}\blink\bmenu{Pan Off}
 \end{quote}
 
 \end{enumerate} 
 
-When pan is active, the text 'PAN' appears next to the map scale.  The
-location of focus moves and rotates with the glider when panning.  
+When pan is active, the text 'PAN' appears next to the map scale.  While
+pannig the location of the focus stays in the middle of the display under the
+cross hairs.
 
 A special menu of buttons in pan mode is also displayed when in pan
 mode.
@@ -1280,30 +1274,45 @@ Waypoints are displayed with different symbols depending on the
 waypoint type; the major distinction being landable and non-landable
 waypoints.
 
-The waypoint symbols are drawn as shown below:
-\begin{itemize}
-\item Non-landable waypoints are small black hollow circles.
-\item Unreachable airfields are purple filled circles.
-\item Reachable airfields in purple filled circles with a green band.
-\end{itemize}
-At large zoom scales, all waypoints are drawn as small black crosses.
+The waypoint symbols are drawn as shown below There are three icon sets for
+landable waypoints. \config{waypointicons}
 
-%\begin{center}
-\marginpar{\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/cut-waypoints.png}}
+\begin{tabular}{c|c|cc|cc|}
+Icon set &\begin{sideways}Simple waypoint\end{sideways}
+&\begin{sideways}Landable field\end{sideways}
+&\begin{sideways}reachable\end{sideways}
+&\begin{sideways}Aerfield\end{sideways}
+&\begin{sideways}reachable\end{sideways}\\
+\hline
+Purple Circle & \includegraphics{generated/icons/map_turnpoint.png} 
+& \includegraphics{generated/icons/winpilot_landable.png} 
+& \includegraphics{generated/icons/winpilot_reachable.png}
+& \includegraphics{generated/icons/winpilot_landable.png} 
+& \includegraphics{generated/icons/winpilot_reachable.png} \\
+\hline
+B/W Icon & \includegraphics{generated/icons/map_turnpoint.png} 
+& \includegraphics{generated/icons/alt_landable_field.png} 
+& \includegraphics{generated/icons/alt_reachable_field.png} 
+& \includegraphics{generated/icons/alt_landable_airport.png} 
+& \includegraphics{generated/icons/alt_reachable_airport.png} \\
+\hline
+Orange Icon & \includegraphics{generated/icons/map_turnpoint.png} 
+& \includegraphics{generated/icons/alt2_landable_field.png} 
+& \includegraphics{generated/icons/alt_reachable_field.png} 
+& \includegraphics{generated/icons/alt2_landable_airport.png} 
+& \includegraphics{generated/icons/alt_reachable_airport.png} \\
+\hline
+\end{tabular}
 
-%{\it DIAGRAM SHOWING DIFFERENT WAYPOINT SYMBOLS ON A MAP: NORMAL WAYPOINTS, 
-% LANDABLE AIRFIELDS, REACHABLE LANDABLE AIRFIELDS.  FULLSCREEN, NO TASK}
-%\end{center}
 
 Waypoints are optionally labelled according to one of several
-abbreviation schemes.
+abbreviation schemes. \config{labels}
 
 XCSoar continually calculates which landing points are within gliding
 range using the current wind estimate.  The estimated arrival altitude
 {\em above the arrival safety height} of reachable landable points is
-optionally displayed next to the waypoint (see
-Section~\ref{sec:map-display} for these configuration options).  This
-arrival altitude is calculated at the MacCready setting of zero.
+displayed next to the waypoint.  This arrival altitude is calculated at the MacCready 
+setting of zero \todonum{verify MC 0}.
 
 \section{Active task}
 
@@ -5080,12 +5089,13 @@ This page provides options relating to the map display.
 \end{center}
 
 \begin{description}
-\item[Labels] This setting determines the label displayed with each waypoint. There are 7 options:
+\item[Labels] This setting \label{conf:labels} determines the label
+displayed with each waypoint. There are 7 options:
 
 \begin{description}
 \item[Names] The full name of each waypoint is displayed.
-\todonum{what is a ``waypoint number''?}\item[Numbers] The waypoint number of
-each waypoint is displayed.
+\item[Numbers] The waypoint enumeration of each waypoint is displayed, as read
+from the waypoint file.
 \item[None] No names are displayed with the waypoints.
 \item[Names in task] Names are only displayed for waypoints that are in the active task as well as the home airfield.
 \item[First 3] The first 3 letters of the waypoint name are displayed.
@@ -5151,6 +5161,11 @@ This page provides options relating to the display items overlayed map.
 \item[Glider position] \label{conf:gliderposition} Defines the location of the
 glider drawn on the screen in percent from the bottom. 
 
+\item[Final glide bar] \todonum{update} Two styles are available: Default and
+Alternate. The differences between these styles is cosmetic.  Alternate displays the height difference to the right of the final glide bar; default displays the height difference above/below the final glide bar and inside a rounded box.
+\item[Landable fields] \label{conf:waypointicons} Three styles are available:
+Purple circles (WinPilot style), a high contrast (monochrome) style with icons, or orange icons.
+
 \end{description}
 
 %%%%%%%%%%%%%%%%%%
@@ -5204,7 +5219,7 @@ The available terrain color schemes are illustrated in the table below.
 \end{longtable}
 \end{maxipage}
 
-
+%%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Glide computer}\label{sec:final-glide}
 
@@ -5290,6 +5305,8 @@ This page allows the safety heights and behaviour in abort mode to be defined.
 See Section~\ref{sec:safety-heights} for more details on the meanings
 of the safety heights.
 
+
+%%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Polar}
 
@@ -5352,6 +5369,7 @@ lists.
 \item[Ignore checksum*] If your GPS device outputs invalid NMEA checksums, this will allow it's data to be used anyway.
 \end{description}
 
+%%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Units}
 
@@ -5368,6 +5386,7 @@ The UTC offset field allows the UTC local time offset to be specified.
 The local time is displayed below in order to make it easier to verify
 the correct offset has been entered.  Offsets to the half-hour may be
 set.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -5421,6 +5440,7 @@ that is detected by XCSoar, to alleviate this problem.  If this value
 is set very high, then the user interface will feel unresponsive; if
 the value is set too low, then bouncing may occur.
 
+%%%%%%%%%%
 \clearpage
 \section{Appearance}
 
