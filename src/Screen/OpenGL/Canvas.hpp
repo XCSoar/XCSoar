@@ -250,11 +250,6 @@ public:
   void polyline(const RasterPoint *points, unsigned num_points);
   void polygon(const RasterPoint *points, unsigned num_points);
 
-  void autoclip_polygon(const RasterPoint *lppt, unsigned cPoints) {
-    // XXX clip
-    polygon(lppt, cPoints);
-  }
-
   void line(int ax, int ay, int bx, int by) {
     pen.get_color().set();
 

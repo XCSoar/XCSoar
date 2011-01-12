@@ -27,26 +27,6 @@ Copyright_License {
 #include "Compatibility/gdi.h"
 #include "Asset.hpp" /* for needclipping */
 
-// TODO: ClipPolygon is not thread safe (uses a static array)!
-// We need to make it so.
-
-void
-Canvas::clipped_polygon(const RasterPoint *lppt, unsigned cPoints)
-{
-  assert(defined());
-
-  ::ClipPolygon(*this, lppt, cPoints);
-}
-
-void
-Canvas::autoclip_polygon(const RasterPoint *lppt, unsigned cPoints)
-{
-  if (need_clipping())
-    clipped_polygon(lppt, cPoints);
-  else
-    polygon(lppt, cPoints);
-}
-
 void
 Canvas::line(int ax, int ay, int bx, int by)
 {

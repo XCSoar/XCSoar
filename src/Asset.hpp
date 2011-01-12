@@ -141,19 +141,6 @@ is_android()
 }
 
 /**
- * Flag to activate extra clipping for some PNAs.
- * @return True if extra clipping needs to be done, False otherwise
- */
-static inline bool
-need_clipping()
-{
-  if (!is_old_ce())
-    return false;
-
-  return model_is_hp31x() || model_is_medion_p5();
-}
-
-/**
  * Does this device have a pointer device? (mouse or touch screen)
  * @return True if a touch screen or mouse is assumed for the hardware
  * that XCSoar is running on, False if the hardware has only buttons
