@@ -24,7 +24,7 @@
 #define FlatGeoPoint_HPP
 
 #include "fixed.hpp"
-
+#include "FastMath.h"
 #include "Compiler.h"
 
 /**
@@ -114,8 +114,8 @@ struct FlatGeoPoint {
   gcc_pure
   FlatGeoPoint operator* (const fixed t) const {
     FlatGeoPoint res= *this;
-    res.Longitude = (int)(res.Longitude*t);
-    res.Latitude = (int)(res.Latitude*t);
+    res.Longitude = iround(res.Longitude*t);
+    res.Latitude = iround(res.Latitude*t);
     return res;
   }
 
@@ -152,14 +152,24 @@ struct FlatGeoPoint {
    */
   gcc_pure
   bool operator== (const FlatGeoPoint &other) const {
-    return (Longitude == other.Longitude) && (Latitude == other.Latitude);
-  }
+    return FlatGeoPoint::equals(other);
+  };
 
   /**
    * Operator is required when SearchPoints are used in sets.
    */
   gcc_pure
   bool operator< (const FlatGeoPoint &sp) const {
+    return sort(sp);
+  }
+
+  gcc_pure
+  bool equals(const FlatGeoPoint& sp) const {
+    return (Longitude == sp.Longitude) && (Latitude == sp.Latitude);
+  }
+
+  gcc_pure
+  bool sort(const FlatGeoPoint& sp) const {
     if (Longitude < sp.Longitude)
       return false;
     else if (Longitude == sp.Longitude)
