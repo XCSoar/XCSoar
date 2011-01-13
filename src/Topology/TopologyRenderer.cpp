@@ -167,13 +167,16 @@ TopologyFileRenderer::PaintLabels(Canvas &canvas,
   fixed map_scale = projection.GetMapScale();
   if (!file.is_visible(map_scale))
     return;
+  if (!file.is_label_visible(map_scale))
+    return;
 
   // TODO code: only draw inside screen!
   // this will save time with rendering pixmaps especially
   // we already do an outer visibility test, but may need a test
   // in screen coords
 
-  canvas.select(Fonts::MapLabel);
+  canvas.select(file.is_label_important(map_scale) ?
+                Fonts::MapLabelImportant : Fonts::MapLabel);
   canvas.set_text_color(Color(0x20, 0x20, 0x20));
   canvas.background_transparent();
 
