@@ -60,10 +60,15 @@ public:
    * @param label_field The field in which the labels should be searched
    * @param icon the resource id of the icon, 0 for no icon
    * @param pen_width The pen width used for line drawing
+   * @param labelThreshold the zoom threshold for label rendering
+   * @param labelImportantThreshold labels below this zoom threshold will
+   * be renderd in default style
    * @return
    */
   TopologyFile(struct zzip_dir *dir, const char *shpname,
-               fixed threshold, const Color color,
+               fixed threshold, fixed labelThreshold,
+               fixed labelImportantThreshold,
+               const Color color,
                int label_field=-1, int icon=0,
                int pen_width=1);
 
@@ -74,6 +79,14 @@ public:
 
   bool is_visible(fixed map_scale) const {
     return map_scale <= scaleThreshold;
+  }
+
+  bool is_label_visible(fixed map_scale) const {
+    return map_scale <= labelThreshold;
+  }
+
+  bool is_label_important(fixed map_scale) const {
+    return map_scale <= labelImportantThreshold;
   }
 
   int get_label_field() const {
@@ -117,6 +130,19 @@ public:
    * is below this value the contents of this TopologyFile will be drawn.
    */
   fixed scaleThreshold;
+
+  /**
+   * The threshold value for label rendering. If the current scale
+   * is below this value no labels of this TopologyFile will be drawn.
+   */
+  fixed labelThreshold;
+
+  /**
+   * The threshold value for label rendering in important style . If the current
+   * scale is below this value labels of this TopologyFile will be drawn
+   * in standard style
+   */
+  fixed labelImportantThreshold;
 
 private:
   /**

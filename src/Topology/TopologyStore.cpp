@@ -131,8 +131,20 @@ TopologyStore::Load(NLineReader &reader, const TCHAR *Directory,
         pen_width=31;
     }
 
+    // range for displaying labels
+    double labelRange = ShapeRange;
+    if (*p == _T(','))
+      labelRange = strtod(p + 1, &p);
+
+    // range for displaying labels with "important" rendering style
+    double labelImportantRange = 0;
+    if (*p == _T(','))
+      labelImportantRange = strtod(p + 1, &p);
+
     files.append(new TopologyFile(zdir, ShapeFilename,
                                   fixed(ShapeRange) * 1000,
+                                  fixed(labelRange) * 1000,
+                                  fixed(labelImportantRange) * 1000,
                                   Color(red, green, blue),
                                   ShapeField, ShapeIcon,
                                   pen_width));
