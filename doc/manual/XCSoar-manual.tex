@@ -1467,8 +1467,8 @@ Markers are dropped by the menu:
 
 \section{Glide range line}
 
-A reachable glide `footprint' is displayed on the map display as a
-dashed line, indicating where the glider would descend through the
+A reachable glide `footprint' is displayed on the map display as a black and
+white dashed line, indicating where the glider would descend through the
 terrain clearance height.  This glide range line is calculated for
 tracks extending in all directions.  This feature is useful in
 assessing range with respect to topology when searching low for lift,
@@ -1476,24 +1476,17 @@ and when flying in mountainous areas.
 
 \begin{center}
 \includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/cut-footprint.png}
-
 %{\it DIAGRAM CUTOUT SHOWING GLIDE RANGE FOOTPRINT.  NO TOPOLOGY,
 %FULLSCREEN, NO TASK.}
-
 \end{center}
 
-The final glide path is checked for whether the glider clears terrain
+The display can be configured to additionally blur the not reachable area
+outside the glide range. \config{gliderange}
+The final glide path is checked for whether the glider clears terrain ahead
 by the terrain clearance height.  If clearance is not attained, a red
-cross appears on the map at the point where the violation occurs.  No
-icon is drawn if there is no task defined.
+cross appears on the map at the point where the violation occurs. If a target is
+defined the calculation is done along the path to the target. 
 
-\begin{center}
-\includegraphics[angle=0,width=0.6\linewidth,keepaspectratio='true']{figures/cut-fgtt.png}
-%
-%{\it DIAGRAM CUTOUT SHOWING FINAL GLIDE THROUGH TERRAIN WARNING
-%SYMBOL.  NO TOPOLOGY, FULLSCREEN, FINAL GLIDE TASK}
-%
-\end{center}
 
 \section{Status dialog}\label{sec:aircr-stat-dial}
 
@@ -1515,7 +1508,7 @@ giving position reports.
 
 This is accessed via the menu under: 
 \begin{quote}
-\bmenu{Info}\blink\bmenu{Status}.
+\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Status}.
 \end{quote}
 and then selecting the page `Aircraft'.
 
@@ -5257,7 +5250,7 @@ This page allows glide computer algorithms to be configured.
 \end{center}
 
 \begin{description}
-\item[Glide terrain line]  This determines whether the
+\item[Glide terrain line]  \label{conf:gliderange} This determines whether the
 glide terrain range is calculated and drawn as a line resp. a shade on the map area.
 \item[Auto wind] This allows switching on or off the automatic wind algorithm.
  \begin{description}
