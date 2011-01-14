@@ -1397,10 +1397,8 @@ labels and non-task waypoint labels by toggling:
 \section{Trail}\label{sec:trail}
 
 An optional 'snail trail' is drawn on the map showing the glider's
-path history.  The colour and thickness of the trail depends on the
-variometer value; with lift areas being presented in green and thicker
-lines, sink areas being presented in red with thin lines.  Zero lift
-is presented as a grey line.
+path history.  The colour and thickness of the trail depends on the height or
+on the variometer value. \config{snailtype} 
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/snail.pdf}
@@ -1409,18 +1407,19 @@ is presented as a grey line.
 If Vega or an intelligent variometer is connected with Netto output,
 the Netto vario value is used; hence the colours and thickness of the
 trail indicates the air-mass vertical movement rather than the glider's
-vertical movement.
+vertical movement \todonum{verify}.
 
 The snail trail display can be toggled between off, a short trail
 (about ten minutes), a long trail (about one hour) or a full trail
 which displays the entire flight.  This can be performed permanently
-through the configuration settings or temporarily by the menu:
+through the configuration \config{snailtrail} settings or temporarily by the
+menu:
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Snail trail}
+\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Snail trail}
 \end{quote}
 
 Note that each of these all modes, the snail trail is short in
-circling mode in order to reduce screen clutter.
+circling mode in order to \todonum{verify} reduce screen clutter.
 
 In order to assist centering thermals in the presence of wind, the
 snail trail can be artificially drifted with the wind as it is
@@ -1439,8 +1438,8 @@ circling in a column rather than an elongated spiral (left picture).
 \end{center}
 
 Enabling trail drift compensation is performed through the
-configuration settings.  The compensation is only performed whilst in
-circling mode; the display of the trail in cruise mode is unaffected.
+configuration settings \config{traildrift}.  The compensation is only performed
+whilst in circling mode; the display of the trail in cruise mode is unaffected.
 This can also be performed from the wind settings dialog:
 \begin{quote}
 \bmenu{Config}\blink\bmenu{Setup Wind}
@@ -1449,8 +1448,7 @@ This can also be performed from the wind settings dialog:
 The trail drift display is useful also to show more clearly when thermals
 are cranked due to wind shear.
 
-The trail width can be adjusted in the configuration settings (see
-Section~\ref{sec:map-display}).
+The trail width can be adjusted in the configuration settings \config{trailwidth}.
 
 \section{Markers}
 
@@ -5108,7 +5106,8 @@ from the waypoint file.
 \item[First word] Only the first word (up to the first space) of the waypoint name is displayed.
 \end{description}
 
-\item[Trail length] Determines whether and how long a snail trail is drawn behind the glider.
+\item[Trail length] \label{conf:snailtrail} Determines whether and how long a
+snail trail is drawn behind the glider.
 \begin{description}
 \item[Off] No trail is drawn
 \item[Long] A long trail is drawn (approx 60 minutes)
@@ -5134,13 +5133,35 @@ zoom levels will be maintained for circling and cruise modes.  If unchecked, the
 is only one zoom.  If enabled, then the map will zoom in automatically
 when entering circling mode and zoom out automatically when leaving
 circling mode.
-\item[Trail drift*] Determines whether the
+
+\item[Trail drift*] \label{conf:traildrift} Determines whether the
 snail trail is drifted with the wind when displayed in circling mode.  When OFF, the snail trail is 
 \todonum{trail drift: measuring unit?}
 uncompensated for wind draft.
-\item[Trail type*] \todonum{explain}
-\item[Trail width*] Sets the width of the snail trail display.
-\item[Idle blank screen] (PDA only)
+
+\item[Trail type*] \label{conf:snailtype} Sets the type of the snail trail
+display.
+\begin{description}
+\item[Vario \#1]  Within lift areas lines get displayed green and
+thicker, while sinking lines are shown red and thin.  Zero lift
+is presented as a grey line.
+\item[Vario \#2]  The climb color for this scheme is orange to red, sinking is
+displayed as light blue to dark blue. Zero lift
+is presented as a yellow line.
+\item[Altitude] The color scheme corresponds to the height.
+\end{description}
+
+\item[Trail width*] \label{conf:trailwidth} Sets the width of the snail trail
+display.
+\item[Detour cost]
+\item[FLARM map] This enables the display of FLARM traffic on the map window as well as the pop-up radar-like display.
+\begin{description}
+\item[OFF] FLARM map display disabled
+\item[ON/Fixed] FLARM map display enabled with fixed scale.
+\item[ON/Scaled] FLARM map display enabled and auto scaled.
+\end{description}
+
+\item[Idle blank screen] (PDA only) \todonum{move}
 This determines whether the display should be blanked after 60 seconds
 of inactivity when running on batteries.  Blanked screens have a
 significantly reduced drain on the battery.  The screen can be turned
@@ -5504,12 +5525,6 @@ When shown, in cruise mode, arrows point up to command slow down; arrows point d
 \item[Show ballast*] Whether to show the ballast percentage.
 \item[Show gross*] Whether to show the gross vario value
 \item[Averager needle*] If true, the vario gauge will display a hollow averager needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.
-\item[FLARM map] This enables the display of FLARM traffic on the map window as well as the pop-up radar-like display.
-\begin{description}
-\item[OFF] FLARM map display disabled
-\item[ON/Fixed] FLARM map display enabled with fixed scale.
-\item[ON/Scaled] FLARM map display enabled and auto scaled.
-\end{description}
 When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.
 \item[FLARM radar] Enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. 
 \item[ThermalAssistant] Enables the display of the ThermalAssistant gauge.
