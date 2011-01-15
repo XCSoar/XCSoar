@@ -41,9 +41,16 @@ typedef enum {
   DISPLAYFIRSTFIVE,
   DISPLAYNONE,
   DISPLAYFIRSTTHREE,
-  DISPLAYNAMEIFINTASK,
+  OBSOLETE_DONT_USE_DISPLAYNAMEIFINTASK,
   DISPLAYUNTILSPACE
 } DisplayTextType_t;
+
+typedef enum {
+  wlsAllWayPoints,
+  wlsTaskAndLandableWayPoints,
+  wlsTaskWayPoints,
+  wlsNoWayPoints
+} WayPointLabelSelection_t;
 
 typedef enum {
   dmNone,
@@ -104,6 +111,9 @@ struct SETTINGS_MAP {
   int WindArrowStyle;
   /** What type of text to draw next to the waypoint icon */
   DisplayTextType_t DisplayTextType;
+  /** What type of waypoint labels to render */
+  WayPointLabelSelection_t WayPointLabelSelection;
+
   int TrailActive;
   /** Airspaces are drawn with black border (otherwise in airspace color) */
   bool bAirspaceBlackOutline;

@@ -51,6 +51,7 @@ extern const TCHAR szProfileDisplayUpValue[];
 extern const TCHAR szProfileOrientationCruise[];
 extern const TCHAR szProfileOrientationCircling[];
 extern const TCHAR szProfileDisplayText[];
+extern const TCHAR szProfileWayPointLabelSelection[];
 extern const TCHAR szProfileSafetyAltitudeArrival[];
 extern const TCHAR szProfileSafetyAltitudeTerrain[];
 extern const TCHAR szProfileSafteySpeed[];

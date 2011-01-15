@@ -84,7 +84,6 @@ public:
     Buffer[0] = _T('\0');
 
     switch (pDisplayTextType) {
-    case DISPLAYNAMEIFINTASK:
     case DISPLAYNAME:
       _tcscpy(Buffer, way_point.Name.c_str());
       break;
@@ -132,13 +131,6 @@ public:
     if (!projection.WaypointInScaleFilter(way_point) && !in_task)
       return;
 
-    TextInBoxMode_t text_mode;
-    if (in_task) {
-      text_mode.Mode = OutlinedInverted;
-      text_mode.Bold = true;
-    }
-
-    bool do_write_label = in_task || (settings_map.DeclutterLabels < 2);
     bool reachable = false;
 
     int AltArrivalAGL = 0;
@@ -150,24 +142,8 @@ public:
 
       if (r.glide_reachable()) {
         reachable = true;
-
-        if ((settings_map.DeclutterLabels < 1) || in_task) {
-          AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
-                                                 Units::AltitudeUnit);
-
-          // show all reachable landing field altitudes unless we want a
-          // decluttered screen.
-        } 
-        if ((settings_map.DeclutterLabels < 2) || in_task) {
-          if (in_task || (settings_map.DeclutterLabels < 1)) {
-            text_mode.Mode = RoundedBlack;
-            text_mode.Bold = true;
-          }
-
-          // show all reachable landing field labels unless we want a
-          // decluttered screen.
-          do_write_label = true;
-        }
+        AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
+                                               Units::AltitudeUnit);
       }
 
       WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable,
@@ -183,17 +159,28 @@ public:
       icon->draw(canvas, sc);
     }
 
-    TCHAR Buffer[32];
-
-    if (!in_task && (pDisplayTextType == DISPLAYNAMEIFINTASK)) {
-      if (task_valid || !(way_point.is_landable() || (way_point.is_airport())))
+    int pWayPointLabelSelection = settings_map.WayPointLabelSelection;
+    if (pWayPointLabelSelection == wlsNoWayPoints)
+      return;
+    if (!in_task && task_valid) {
+      if (pWayPointLabelSelection == wlsTaskWayPoints)
+        return;
+      if (pWayPointLabelSelection == wlsTaskAndLandableWayPoints &&
+          !way_point.is_landable())
         return;
     }
 
-    if (do_write_label)
-      FormatTitle(Buffer, way_point, in_task);
-    else
-      Buffer[0] = _T('\0');
+    TextInBoxMode_t text_mode;
+    if (reachable && way_point.is_landable()) {
+      text_mode.Mode = RoundedBlack;
+      text_mode.Bold = true;
+    } else if (in_task) {
+      text_mode.Mode = OutlinedInverted;
+      text_mode.Bold = true;
+    }
+
+    TCHAR Buffer[32];
+    FormatTitle(Buffer, way_point, in_task);
 
     if (AltArrivalAGL != 0) {
       size_t length = _tcslen(Buffer);

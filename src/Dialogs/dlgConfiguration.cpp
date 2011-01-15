@@ -73,6 +73,7 @@ enum config_page {
   PAGE_SITE,
   PAGE_AIRSPACE,
   PAGE_MAP,
+  PAGE_WAYPOINTS,
   PAGE_SYMBOLS,
   PAGE_TERRAIN,
   PAGE_GLIDE_COMPUTER,
@@ -93,6 +94,7 @@ static const TCHAR *const captions[] = {
   N_("Site"),
   N_("Airspace"),
   N_("Map Display"),
+  N_("Waypoint Display"),
   N_("Symbols"),
   N_("Terrain Display"),
   N_("Glide Computer"),
@@ -765,14 +767,25 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Names"));
-    dfe->addEnumText(_("Numbers"));
-    dfe->addEnumText(_("First 5"));
-    dfe->addEnumText(_("None"));
-    dfe->addEnumText(_("First 3"));
-    dfe->addEnumText(_("Names in task"));
-    dfe->addEnumText(_("First word"));
+    dfe->addEnumText(_("Names"), DISPLAYNAME);
+    dfe->addEnumText(_("Numbers"), DISPLAYNUMBER);
+    dfe->addEnumText(_("First 5"), DISPLAYFIRSTFIVE);
+    dfe->addEnumText(_("None"), DISPLAYNONE);
+    dfe->addEnumText(_("First 3"), DISPLAYFIRSTTHREE);
+    dfe->addEnumText(_("First word"), DISPLAYUNTILSPACE);
     dfe->Set(XCSoarInterface::SettingsMap().DisplayTextType);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpWayPointLabelSelection"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("All"));
+    dfe->addEnumText(_("Task Waypoints & Landables"));
+    dfe->addEnumText(_("Task Waypoints"));
+    dfe->addEnumText(_("None"));
+    dfe->Set(XCSoarInterface::SettingsMap().WayPointLabelSelection);
     wp->RefreshDisplay();
   }
 
@@ -1672,6 +1685,10 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpWaypointLabels"),
                               szProfileDisplayText,
                               XCSoarInterface::SetSettingsMap().DisplayTextType);
+
+  changed |= SaveFormProperty(*wf, _T("prpWayPointLabelSelection"),
+                              szProfileWayPointLabelSelection,
+                              XCSoarInterface::SetSettingsMap().WayPointLabelSelection);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableTerrain"),
                               szProfileDrawTerrain,

@@ -129,31 +129,25 @@ Profile::Use()
     }
   }
 
+  // NOTE: settings_map.WayPointLabelSelection must be loaded after this code
   Temp = settings_map.DisplayTextType;
   Get(szProfileDisplayText, Temp);
-  switch (Temp) {
-  case 0:
+  settings_map.DisplayTextType = (DisplayTextType_t) Temp;
+  if (settings_map.DisplayTextType == OBSOLETE_DONT_USE_DISPLAYNAMEIFINTASK) {
+    // pref migration. The migrated value of DisplayTextType and
+    // WayPointLabelSelection will not be written to the config file
+    // unless the user explicitly changes the corresponding setting manually.
+    // This requires ordering because a manually changed WayPointLabelSelection
+    // may be overwritten by the following migration code.
     settings_map.DisplayTextType = DISPLAYNAME;
-    break;
-  case 1:
-    settings_map.DisplayTextType = DISPLAYNUMBER;
-    break;
-  case 2:
-    settings_map.DisplayTextType = DISPLAYFIRSTFIVE;
-    break;
-  case 3:
-    settings_map.DisplayTextType = DISPLAYNONE;
-    break;
-  case 4:
-    settings_map.DisplayTextType = DISPLAYFIRSTTHREE;
-    break;
-  case 5:
-    settings_map.DisplayTextType = DISPLAYNAMEIFINTASK;
-    break;
-  case 6:
-    settings_map.DisplayTextType = DISPLAYUNTILSPACE;
-    break;
+    settings_map.WayPointLabelSelection = wlsTaskWayPoints;
   }
+
+  // NOTE: settings_map.DisplayTextType must be loaded before this code
+  //       due to pref migration dependencies!
+  Temp = settings_map.WayPointLabelSelection;
+  Get(szProfileWayPointLabelSelection, Temp);
+  settings_map.WayPointLabelSelection = (WayPointLabelSelection_t) Temp;
 
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();

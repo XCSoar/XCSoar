@@ -150,4 +150,12 @@ bool
 SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
                  DisplayTextType_t &value);
 
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *field,
+                 WayPointLabelSelection_t &value);
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+                 WayPointLabelSelection_t &value);
+
 #endif

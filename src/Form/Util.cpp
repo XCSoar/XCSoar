@@ -361,3 +361,30 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
     return false;
   }
 }
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *field,
+                      WayPointLabelSelection_t &value)
+{
+  const WndProperty *wp = (const WndProperty *)form.FindByName(field);
+  if (wp) {
+    if ((int)value != wp->GetDataField()->GetAsInteger()) {
+      value = (WayPointLabelSelection_t)wp->GetDataField()->GetAsInteger();
+      return true;
+    }
+  }
+  return false;
+}
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+                         WayPointLabelSelection_t &value) {
+  if (SaveFormProperty(form, field, value)) {
+    Profile::Set(reg, value);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
