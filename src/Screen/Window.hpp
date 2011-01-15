@@ -517,15 +517,6 @@ public:
 #endif
   }
 
-  gcc_pure
-  bool has_capture() const {
-#ifdef ENABLE_SDL
-    return false; // XXX
-#else
-    return ::GetCapture() == hWnd;
-#endif
-  }
-
   void set_capture() {
     assert_none_locked();
     assert_thread();
