@@ -34,6 +34,24 @@ Copyright_License {
 #include <assert.h>
 
 void
+Canvas::rectangle(int left, int top, int right, int bottom)
+{
+  GLRectangleVertices vertices(left, top, right, bottom);
+  vertices.bind();
+
+  if (!brush.is_hollow()) {
+    brush.get_color().set();
+    GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
+  }
+
+  if (pen_over_brush()) {
+    pen.get_color().set();
+    glDrawArrays(GL_LINE_LOOP, 0, 4);
+  }
+}
+
+void
 Canvas::fill_rectangle(int left, int top, int right, int bottom,
                        const Color color)
 {

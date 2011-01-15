@@ -170,26 +170,7 @@ public:
     background_mode = TRANSPARENT;
   }
 
-  void outline_rectangle(int left, int top, int right, int bottom,
-                         Color color) {
-    pen.get_color().set();
-
-    const GLvalue v[] = {
-      left, top,
-      right, top,
-      right, bottom,
-      left, bottom,
-    };
-    glVertexPointer(2, GL_VALUE, 0, v);
-    glDrawArrays(GL_LINE_LOOP, 0, 4);
-  }
-
-  void rectangle(int left, int top, int right, int bottom) {
-    fill_rectangle(left, top, right, bottom, brush);
-
-    if (pen_over_brush())
-      outline_rectangle(left, top, right, bottom, pen.get_color());
-  }
+  void rectangle(int left, int top, int right, int bottom);
 
   void fill_rectangle(int left, int top, int right, int bottom,
                       const Color color);
