@@ -27,6 +27,8 @@ SCREEN_SOURCES = \
 
 ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/SDL/Window.cpp \
+	$(SCREEN_SRC_DIR)/SDL/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp
 ifeq ($(TARGET),ANDROID)
