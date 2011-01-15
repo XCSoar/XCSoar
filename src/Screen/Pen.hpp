@@ -149,6 +149,12 @@ public:
    */
   void set() const {
     color.set();
+
+#ifdef ANDROID
+    glLineWidthx(width << 16);
+#else
+    glLineWidth(width);
+#endif
   }
 #endif /* OPENGL */
 };
