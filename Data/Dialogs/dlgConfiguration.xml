@@ -12,26 +12,26 @@
 
   <Tabbed Name="tabbed" X="0" Y="0" Width="0" Height="222">
     <Panel Name="frmSite">
-      <Edit Name="prpMapFile" Caption="Map file" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="The name of the file containing terrain, topology, and optionally waypoints, airfield details and airspace.">
+      <Edit Name="prpMapFile" Caption="Map Database" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="The name of the file (.xcm) containing terrain, topology, and optionally waypoints, their details and airspaces.">
         <DataField DataType="filereader"/>
       </Edit>
     
-      <Edit Name="prpWaypointFile" Caption="Waypoints 1" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpWaypointFile" Caption="Waypoints" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Primary waypoints file.  Supported file types are Cambridge/WinPilot files (.dat), Zander files (.wpz) or SeeYou files (.cup).">
         <DataField DataType="filereader"/>
       </Edit>
     
-      <Edit Name="prpAdditionalWaypointFile" Caption="Waypoints 2" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAdditionalWaypointFile" Caption="More Waypoints" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Secondary waypoints file.  This may be used to add waypoints for a competition.">
         <DataField DataType="filereader"/>
       </Edit>
     
-      <Edit Name="prpAirspaceFile" Caption="Airspace 1" X="2" Width="-2" Height="22" CaptionWidth="100" Help="The file name of the primary airspace file.">
+      <Edit Name="prpAirspaceFile" Caption="Airspaces" X="2" Width="-2" Height="22" CaptionWidth="100" Help="The file name of the primary airspace file.">
         <DataField DataType="filereader"/>
       </Edit>
     
-      <Edit Name="prpAdditionalAirspaceFile" Caption="Airspace 2" X="2" Width="-2" Height="22" CaptionWidth="100" Help="The file name of the secondary airspace file.">
+      <Edit Name="prpAdditionalAirspaceFile" Caption="More Airspaces" X="2" Width="-2" Height="22" CaptionWidth="100" Help="The file name of the secondary airspace file.">
         <DataField DataType="filereader"/>
       </Edit>
     
@@ -44,8 +44,8 @@
         <DataField DataType="filereader"/>
       </Edit>
     
-      <Edit Name="prpAirfieldFile" Caption="Airfields file*" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="The airfields file may contain extracts from Enroute Supplements or other contributed information about individual airfields.">
+      <Edit Name="prpAirfieldFile" Caption="Waypoint Details*" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="The file may contain extracts from enroute supplements or other contributed information about individual waypoints and airfields.">
         <DataField DataType="filereader"/>
       </Edit>
     </Panel>

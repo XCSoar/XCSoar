@@ -142,6 +142,21 @@ public:
    */
   HPEN native() const { return pen; }
   #endif
+
+#ifdef ENABLE_OPENGL
+  /**
+   * Configures this pen in the OpenGL context.
+   */
+  void set() const {
+    color.set();
+
+#ifdef ANDROID
+    glLineWidthx(width << 16);
+#else
+    glLineWidth(width);
+#endif
+  }
+#endif /* OPENGL */
 };
 
 #endif

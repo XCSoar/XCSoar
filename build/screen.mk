@@ -46,7 +46,8 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Draw.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Cache.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Canvas.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Texture.cpp
+	$(SCREEN_SRC_DIR)/OpenGL/Texture.cpp \
+	$(SCREEN_SRC_DIR)/OpenGL/Triangulate.cpp
 else
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \

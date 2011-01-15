@@ -310,6 +310,10 @@ public:
     line(a.x, a.y, b.x, b.y);
   }
 
+  void line_piece(const RasterPoint a, const RasterPoint b) {
+    line(a.x, a.y, b.x, b.y);
+  }
+
   void two_lines(int ax, int ay, int bx, int by, int cx, int cy);
   void two_lines(const RasterPoint a, const RasterPoint b,
                  const RasterPoint c) {

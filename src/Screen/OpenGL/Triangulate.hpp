@@ -21,40 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_VERTEX_ARRAY_HPP
-#define XCSOAR_SCREEN_OPENGL_VERTEX_ARRAY_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
+#define XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
 
 #include "Screen/OpenGL/Point.hpp"
 
-template<unsigned n>
-struct GLVertexArray {
-  enum {
-    SIZE = n,
-  };
-
-  RasterPoint v[SIZE];
-
-  void bind() const {
-    glVertexPointer(2, GL_VALUE, 0, v);
-  }
-};
-
-struct GLRectangleVertices : public GLVertexArray<4> {
-  GLRectangleVertices(GLvalue left, GLvalue top,
-                      GLvalue right, GLvalue bottom) {
-    v[0].x = left;
-    v[0].y = top;
-    v[1].x = right;
-    v[1].y = top;
-    v[2].x = right;
-    v[2].y = bottom;
-    v[3].x = left;
-    v[3].y = bottom;
-  }
-};
-
-struct GLCircleVertices : public GLVertexArray<32> {
-  GLCircleVertices(GLvalue center_x, GLvalue center_y, GLvalue radius);
-};
+unsigned
+polygon_to_triangle(const RasterPoint *points, unsigned num_points,
+                    GLushort *triangles);
 
 #endif

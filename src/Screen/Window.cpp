@@ -91,11 +91,6 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
 #else /* !ENABLE_SDL */
   DWORD style = window_style.style, ex_style = window_style.ex_style;
 
-  if (model_is_hp31x() && (style & WS_BORDER) != 0) {
-    ex_style |= WS_EX_CLIENTEDGE;
-    style |= WS_THICKFRAME;
-  }
-
   if (window_style.custom_painting)
     enable_custom_painting();
 

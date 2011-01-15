@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-01-07 00:56+0100\n"
-"PO-Revision-Date: 2011-01-03 14:12+0000\n"
-"Last-Translator: Michal Jezierski <Unknown>\n"
+"PO-Revision-Date: 2011-01-13 21:48+0000\n"
+"Last-Translator: Mateusz Zakrzewski <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
-"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-05 06:48+0000\n"
-"X-Generator: Launchpad (build 12138)\n"
+"X-Launchpad-Export-Date: 2011-01-14 06:04+0000\n"
+"X-Generator: Launchpad (build 12190)\n"
+"Language: pl\n"
 
 #: src/Airspace/AirspaceGlue.cpp:40
 msgid "Loading Airspace File..."
@@ -793,16 +793,16 @@ msgstr "Prędkość wiatru"
 #: src/InfoBoxes/Content/Factory.cpp:285
 #, no-c-format
 msgid "Wind V"
-msgstr ""
+msgstr "V wiatru"
 
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
 msgid ""
 "Wind speed estimated by XCSoar. (Touchscreen/PC only) Manual adjustment is "
-"possible by pressing the up/down cursor keys to adjust magnitude and left/"
-"right cursor keys to adjust bearing when the infobox is active. Pressing the "
-"enter cursor key saves the wind value as the initial value when XCSoar next "
-"starts."
+"possible by pressing the up/down cursor keys to adjust magnitude and "
+"left/right cursor keys to adjust bearing when the infobox is active. "
+"Pressing the enter cursor key saves the wind value as the initial value when "
+"XCSoar next starts."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:293
@@ -910,8 +910,11 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
-msgid "Indicated Airspeed reported by a supported external intelligent vario."
+msgid ""
+"Indicated Airspeed reported by a supported external intelligent vario."
 msgstr ""
+"Wskazywana prędkość dostarczana przez wspierany, zewnętrzny, inteligentny "
+"wariometr."
 
 #: src/InfoBoxes/Content/Factory.cpp:356
 #, no-c-format
@@ -938,7 +941,7 @@ msgstr "Szybkość wg MacCready"
 #: src/InfoBoxes/Content/Factory.cpp:366
 #, no-c-format
 msgid "V Mc"
-msgstr ""
+msgstr "V Mc"
 
 #: src/InfoBoxes/Content/Factory.cpp:367
 #, no-c-format
@@ -1013,8 +1016,8 @@ msgid ""
 "The required glide ratio to reach the next waypoint, given by the distance "
 "to next waypoint divided by the height required to arrive at the safety "
 "arrival altitude. Negative values indicate a climb is necessary to reach the "
-"waypoint. If the height required is close to zero, the displayed value is "
-"'---'.   Note that this calculation may be optimistic because it reduces the "
+"waypoint. If the height required is close to zero, the displayed value is '--"
+"-'.   Note that this calculation may be optimistic because it reduces the "
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
@@ -1208,6 +1211,8 @@ msgid ""
 "Outside air temperature measured by a probe if supported by a connected "
 "intelligent variometer."
 msgstr ""
+"Temperatura na zewnątrz, mierzona przez czujnik podłączony do inteligentnego "
+"wariometru."
 
 #: src/InfoBoxes/Content/Factory.cpp:500
 #, no-c-format
@@ -1257,7 +1262,8 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:520
 #, no-c-format
-msgid "Assigned Area Task distance around target points for remainder of task."
+msgid ""
+"Assigned Area Task distance around target points for remainder of task."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:527
@@ -1335,7 +1341,8 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:565
 #, no-c-format
-msgid "The bearing to the team aircraft location at the last team code report."
+msgid ""
+"The bearing to the team aircraft location at the last team code report."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:572
@@ -1367,7 +1374,8 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:583
 #, no-c-format
-msgid "The range to the team aircraft location at the last reported team code."
+msgid ""
+"The range to the team aircraft location at the last reported team code."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:590
@@ -2103,13 +2111,10 @@ msgid "No data"
 msgstr "Brak danych"
 
 #: src/Polar/Loader.cpp:71
-#, fuzzy
 msgid ""
 "Error loading Polar file!\n"
 "Using LS8 Polar."
 msgstr ""
-"Błąd podczas ładowania pliku biegunowej!\n"
-"Użyta zostanie biegunowa LS8."
 
 #: src/Polar/Loader.cpp:72
 msgid "Warning"
@@ -2129,13 +2134,13 @@ msgstr "Skanowanie pogody"
 msgid "Starting devices"
 msgstr "Uruchamianie urządzeń"
 
-#.
+#. 
 #. -- Reset polar in case devices need the data
 #. LogStartUp(_T("GlidePolar::UpdatePolar"));
 #. GlidePolar::UpdatePolar(true, SettingsComputer());
-#.
+#. 
 #. This should be done inside devStartup if it is really required
-#.
+#. 
 #: src/Components.cpp:409
 msgid "Initialising display"
 msgstr "Inicjowanie wyświetlacza"
@@ -4267,9 +4272,8 @@ msgid "New Waypoint"
 msgstr "Nowy punkt"
 
 #: Data/Dialogs/dlgBasicSettings.xml:3
-#, fuzzy
 msgid "Flight Setup"
-msgstr "Odtwarzanie lotu"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:84 Data/Dialogs/dlgVario_L.xml:85
 msgid "Cruise averager scale"
@@ -5053,7 +5057,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:238
 #: Data/Dialogs/dlgConfiguration_L.xml:238
-msgid "The height above terrain that the glider must clear during final glide."
+msgid ""
+"The height above terrain that the glider must clear during final glide."
 msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:100 Data/Dialogs/dlgVario_L.xml:101
@@ -6166,8 +6171,8 @@ msgstr "Wysokość"
 
 #: Data/Dialogs/dlgConfiguration.xml:20 Data/Dialogs/dlgConfiguration_L.xml:20
 msgid ""
-"Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
-"dat), Zander files (.wpz) or SeeYou files (.cup)."
+"Primary waypoints file.  Supported file types are Cambridge/WinPilot files "
+"(.dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:366 Data/Dialogs/dlgVario_L.xml:367
@@ -6289,8 +6294,8 @@ msgstr ""
 #: Data/Dialogs/dlgBasicSettings.xml:8
 msgid ""
 "Ballast of the glider.  Increase this value if the pilot/cockpit load is "
-"greater than the reference pilot weight of the glide polar (typically "
-"75kg).  Press ENTER on this field to toggle count-down of the ballast volume "
+"greater than the reference pilot weight of the glide polar (typically 75kg). "
+" Press ENTER on this field to toggle count-down of the ballast volume "
 "according to the dump rate specified in the configuration settings."
 msgstr ""
 
@@ -6718,9 +6723,11 @@ msgstr ""
 #~ msgid "Calibrate OFF"
 #~ msgstr "Wyłącz kalibrację"
 
+#, no-c-format
 #~ msgid "Alternate2 GR"
 #~ msgstr "Gradient do alternatywnego2"
 
+#, no-c-format
 #~ msgid "Best Alternate"
 #~ msgstr "Najlepsze lądowisko awaryjne"
 
@@ -6918,8 +6925,10 @@ msgstr ""
 #~ msgid "Extended Visual Glide*"
 #~ msgstr "Rozszerzony zasięg szybowania*"
 
+#, no-c-format
 #~ msgid "Altitude required to reach the next turn point."
 #~ msgstr "Wysokość wymagana do osiągnięcia następnego punktu zwrotnego."
 
+#, no-c-format
 #~ msgid "Altitude required to finish the task."
 #~ msgstr "Wysokość wymagana do zakończenia trasy"

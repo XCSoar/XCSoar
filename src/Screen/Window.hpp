@@ -105,12 +105,7 @@ public:
 
   void border() {
 #ifndef ENABLE_SDL
-    /* WS_BORDER on PPC2000 creates a sunken edge, which looks bad on
-       a low-res screen (tested with iPaq H3900) - let's disable it
-       globally on PPC2000 */
-#if !defined(_WIN32_WCE) || _WIN32_WCE > 0x300
     style |= WS_BORDER;
-#endif
 #endif
   }
 

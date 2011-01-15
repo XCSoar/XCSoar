@@ -1284,23 +1284,26 @@ Icon set &\begin{sideways}Simple waypoint\end{sideways}
 &\begin{sideways}Aerfield\end{sideways}
 &\begin{sideways}reachable\end{sideways}\\
 \hline
-Purple Circle & \includegraphics{generated/icons/map_turnpoint.png} 
-& \includegraphics{generated/icons/winpilot_landable.png} 
-& \includegraphics{generated/icons/winpilot_reachable.png}
-& \includegraphics{generated/icons/winpilot_landable.png} 
-& \includegraphics{generated/icons/winpilot_reachable.png} \\
+Purple Circle &
+\includegraphics[width=0.5cm]{generated/icons/map_turnpoint.png} &
+\includegraphics[width=0.8cm]{generated/icons/winpilot_landable.png} &
+\includegraphics[width=0.8cm]{generated/icons/winpilot_reachable.png} &
+\colorbox{white}{\includegraphics[width=0.8cm]{generated/icons/winpilot_landable.png}}
+& \includegraphics[width=0.8cm]{generated/icons/winpilot_reachable.png} \\
 \hline
-B/W Icon & \includegraphics{generated/icons/map_turnpoint.png} 
-& \includegraphics{generated/icons/alt_landable_field.png} 
-& \includegraphics{generated/icons/alt_reachable_field.png} 
-& \includegraphics{generated/icons/alt_landable_airport.png} 
-& \includegraphics{generated/icons/alt_reachable_airport.png} \\
+B/W Icon & 
+\includegraphics[width=0.5cm]{generated/icons/map_turnpoint.png} &
+\includegraphics[width=0.9cm]{generated/icons/alt_landable_field.png} &
+\includegraphics[width=0.9cm]{generated/icons/alt_reachable_field.png} &
+\colorbox[rgb]{0.94,0.94,0.94}{\includegraphics[width=0.9cm]{generated/icons/alt_landable_airport.png}}
+& \includegraphics[width=0.9cm]{generated/icons/alt_reachable_airport.png} \\
 \hline
-Orange Icon & \includegraphics{generated/icons/map_turnpoint.png} 
-& \includegraphics{generated/icons/alt2_landable_field.png} 
-& \includegraphics{generated/icons/alt_reachable_field.png} 
-& \includegraphics{generated/icons/alt2_landable_airport.png} 
-& \includegraphics{generated/icons/alt_reachable_airport.png} \\
+Orange Icon & 
+\includegraphics[width=0.5cm]{generated/icons/map_turnpoint.png} &
+\includegraphics[width=0.9cm]{generated/icons/alt2_landable_field.png} &
+\includegraphics[width=0.9cm]{generated/icons/alt_reachable_field.png} & 
+\colorbox{white}{\includegraphics[width=0.9cm]{generated/icons/alt2_landable_airport.png}}
+& \includegraphics[width=0.9cm]{generated/icons/alt_reachable_airport.png} \\
 \hline
 \end{tabular}
 
@@ -1311,15 +1314,17 @@ abbreviation schemes. \config{labels}
 XCSoar continually calculates which landing points are within gliding
 range using the current wind estimate.  The estimated arrival altitude
 {\em above the arrival safety height} of reachable landable points is
-displayed next to the waypoint.  This arrival altitude is calculated at the MacCready 
-setting of zero \todonum{verify MC 0}.
+displayed next to the waypoint.  This arrival altitude is calculated on a
+minimum MacCready setting \todonum{explain somewhere else in detail: the MC value scaled according to your alitude compared with the cloud base
+altitude
+}.
+
 
 \section{Active task}
 
 The active task course is drawn on the map as a green dashed line.
-Assigned area tasks also show the task sectors or areas as a shaded
-region.  The start and finish waypoint additionally show black circles
-and grey lines representing the start and finish zones or lines.
+Assigned area tasks also show the task sectors or areas as a yellow shaded
+region.  
 Circles are always drawn around start and finish points, lines are
 only drawn if the start/finish points are of line type.  Task
 observation sectors are drawn as segments.
@@ -1330,12 +1335,13 @@ waypoint in the task.
 \begin{center}
 
 \begin{tabular}{c c c}
-{\it Start/finish} & {\it Sector} & {\it Barrel} \\
+{\it Start/finish} & {\it Sector} & {\it Cylinder} \\
 \includegraphics[angle=0,width=0.3\linewidth,keepaspectratio='true']{figures/cut-startfinish.png} &
 \includegraphics[angle=0,width=0.3\linewidth,keepaspectratio='true']{figures/cut-sector.png} &
 \includegraphics[angle=0,width=0.3\linewidth,keepaspectratio='true']{figures/cut-barrel.png} \\
 \end{tabular}
 \end{center}
+
 
 \section{Terrain and Topology}
 
@@ -1353,18 +1359,18 @@ Terrain is coloured according to height, and optionally shaded by sun
 direction or lift-generating slope.  Invalid terrain, or terrain below
 sea level is coloured blue.
 
-Terrain is phong-shaded to improve visibility.  Currently the shading
+Terrain is shaded to improve visibility.  Currently the shading
 is set up so that the virtual lighting position is the wind bearing,
 thus brighter areas are on the upwind side of hills and dark areas in
-the lee of the hill.  The amount of phong shading and overall terrain
+the lee of the hill.  The amount of shading and overall terrain
 brightness is configurable.  Support for a sun ephemeris is underway.
-Terrain shading and brightness can be adjusted in the configuration
-settings.
+Terrain shading and brightness can be configured \config{shading}.
 
 Both terrain and topology display can be switched on or off from the
 menu:
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Terrain toggle}
+\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Terrain On} \\
+\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Topology On}
 \end{quote}
 
 \begin{center}
@@ -1374,28 +1380,25 @@ Topology & Terrain \\
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/cut-terrain.png} \\
 \end{tabular}
 
-%{\it DIAGRAMS SHOWING TOPOLOGY AND TERRAIN, SHADING. FULLSCREEN, NO TASK}
 \end{center}
 
-If the terrain file is not specified (or terrain display is turned
+If the terrain data is not available (or terrain display is turned
 off), the background colour of the map window is white.  All terrain
 below mean sea level is coloured blue.  If you are flying outside the
-terrain region, the background colour will also be blue.
+terrain region, the background colour will be white.
 
 The screen can be de-cluttered, turning off the display of topology
 labels and non-task waypoint labels by toggling:
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Declutter labels}
+\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Labels Off}
 \end{quote}
 
 
 \section{Trail}\label{sec:trail}
 
 An optional 'snail trail' is drawn on the map showing the glider's
-path history.  The colour and thickness of the trail depends on the
-variometer value; with lift areas being presented in green and thicker
-lines, sink areas being presented in red with thin lines.  Zero lift
-is presented as a grey line.
+path history.  The colour and thickness of the trail depends on the height or
+on the variometer value. \config{snailtype} 
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/snail.pdf}
@@ -1404,18 +1407,19 @@ is presented as a grey line.
 If Vega or an intelligent variometer is connected with Netto output,
 the Netto vario value is used; hence the colours and thickness of the
 trail indicates the air-mass vertical movement rather than the glider's
-vertical movement.
+vertical movement \todonum{verify}.
 
 The snail trail display can be toggled between off, a short trail
 (about ten minutes), a long trail (about one hour) or a full trail
 which displays the entire flight.  This can be performed permanently
-through the configuration settings or temporarily by the menu:
+through the configuration \config{snailtrail} settings or temporarily by the
+menu:
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Snail trail}
+\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Snail trail}
 \end{quote}
 
 Note that each of these all modes, the snail trail is short in
-circling mode in order to reduce screen clutter.
+circling mode in order to \todonum{verify} reduce screen clutter.
 
 In order to assist centering thermals in the presence of wind, the
 snail trail can be artificially drifted with the wind as it is
@@ -1434,8 +1438,8 @@ circling in a column rather than an elongated spiral (left picture).
 \end{center}
 
 Enabling trail drift compensation is performed through the
-configuration settings.  The compensation is only performed whilst in
-circling mode; the display of the trail in cruise mode is unaffected.
+configuration settings \config{traildrift}.  The compensation is only performed
+whilst in circling mode; the display of the trail in cruise mode is unaffected.
 This can also be performed from the wind settings dialog:
 \begin{quote}
 \bmenu{Config}\blink\bmenu{Setup Wind}
@@ -1444,8 +1448,7 @@ This can also be performed from the wind settings dialog:
 The trail drift display is useful also to show more clearly when thermals
 are cranked due to wind shear.
 
-The trail width can be adjusted in the configuration settings (see
-Section~\ref{sec:map-display}).
+The trail width can be adjusted in the configuration settings \config{trailwidth}.
 
 \section{Markers}
 
@@ -1464,8 +1467,8 @@ Markers are dropped by the menu:
 
 \section{Glide range line}
 
-A reachable glide `footprint' is displayed on the map display as a
-dashed line, indicating where the glider would descend through the
+A reachable glide `footprint' is displayed on the map display as a black and
+white dashed line, indicating where the glider would descend through the
 terrain clearance height.  This glide range line is calculated for
 tracks extending in all directions.  This feature is useful in
 assessing range with respect to topology when searching low for lift,
@@ -1473,24 +1476,17 @@ and when flying in mountainous areas.
 
 \begin{center}
 \includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/cut-footprint.png}
-
 %{\it DIAGRAM CUTOUT SHOWING GLIDE RANGE FOOTPRINT.  NO TOPOLOGY,
 %FULLSCREEN, NO TASK.}
-
 \end{center}
 
-The final glide path is checked for whether the glider clears terrain
+The display can be configured to additionally blur the not reachable area
+outside the glide range. \config{gliderange}
+The final glide path is checked for whether the glider clears terrain ahead
 by the terrain clearance height.  If clearance is not attained, a red
-cross appears on the map at the point where the violation occurs.  No
-icon is drawn if there is no task defined.
+cross appears on the map at the point where the violation occurs. If a target is
+defined the calculation is done along the path to the target. 
 
-\begin{center}
-\includegraphics[angle=0,width=0.6\linewidth,keepaspectratio='true']{figures/cut-fgtt.png}
-%
-%{\it DIAGRAM CUTOUT SHOWING FINAL GLIDE THROUGH TERRAIN WARNING
-%SYMBOL.  NO TOPOLOGY, FULLSCREEN, FINAL GLIDE TASK}
-%
-\end{center}
 
 \section{Status dialog}\label{sec:aircr-stat-dial}
 
@@ -1512,7 +1508,7 @@ giving position reports.
 
 This is accessed via the menu under: 
 \begin{quote}
-\bmenu{Info}\blink\bmenu{Status}.
+\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Status}.
 \end{quote}
 and then selecting the page `Aircraft'.
 
@@ -1564,14 +1560,15 @@ cross-country flying in groups, as one person can distribute the task
 file to others, thereby saving the group the job of editing the task
 themselves.
 
-\tip If no task is present at startup, a task is created automatically,
-  containing one waypoint to home.
+%\tip If no task is present at startup, a task is created automatically,
+%  containing one waypoint to home.
+% There will be a 6.1 feature like this.
 
 XCSoar saves the current task when shutting down and loads it at
 startup, thereby allowing the task to be entered early in the day,
 then turning off the glide computer until ready for flight.
 
-As of version 5.1.2, task waypoints are preserved even if the waypoint
+Task waypoints are preserved even if the waypoint
 file is changed.  This means, if you save a task, then change the
 waypoint file, then load the task again, new waypoints are generated
 for any waypoints that are missing in the new waypoint file.
@@ -1588,13 +1585,13 @@ for any waypoints that are missing in the new waypoint file.
 %The display will now show the waypoint details dialog.
 
 The waypoint details dialog describes a waypoint in detail and has
-navigation functions such as GOTO, Insert.
+navigation functions such as GoTo, Insert.
 
 This may be accessed several ways:
 \begin{itemize}
 \item
-From the task editor, menu \bmenu{Nav}\blink\bmenu{Task Edit} and select
-a waypoint, then select the \button{Details} button.
+From the task editor, menu \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Edit}
+and select a waypoint, then press the button with waypoints name on it.
 
 \item 
 From the menu \bmenu{Info}\blink\bmenu{Waypoint details} to show the
@@ -1607,18 +1604,17 @@ nearest the pan cursor.
 
 \item
 From the waypoint selector, menu \bmenu{Nav}\blink\bmenu{Waypoint
-look-up} and select a waypoint to show the details of that waypoint.
+List} and select a waypoint to show the details of that waypoint.
 \end{itemize}
 
-The waypoint details dialog contains several pages (accessed via the
-\button{$>$} and \button{$<$} buttons).
-
-Depending on the configuration files specified in the settings, not
-all of these pages may be available.
+The waypoint details dialog contains two major pages (accessed via the
+\button{$>$} and \button{$<$} buttons). Depending on the availability of further
+details to the waypoint they will by shown on extra pages.
 
 \subsection*{Waypoint details}
 This page contains text describing the waypoint's location, elevation
-and local sunset.  
+and local sunset. Last not least a button \button{GoTo} to directly initiate
+navigating to this waypoint. The button cancels the current task. 
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails0.png}
 \end{center}
@@ -1635,8 +1631,6 @@ the corresponding waypoint:
 \subsection*{Task menu}  
 This page contains a column of buttons allowing various actions to be performed:
 \begin{description}
-\item[\button{Goto (and clear task)}] cancels the current task and sets the waypoint as the
-  single active waypoint in the task.
 \item[\button{Replace in task}] replaces the active waypoint in the task.
 \item[\button{Insert in task}] inserts the waypoint before the active waypoint in
   the task.
@@ -1654,7 +1648,7 @@ of whether a GPS fix is received.  If no home is set, then XCSoar
 starts in the center of the terrain map.
 
 \subsection*{Airfield information}
-This page may contain relevant text from the Enroute Supplement about
+This page may contain relevant text from the enroute supplement about
 the airfield, including runways, radio frequencies, traffic patterns,
 contacts.
 \begin{center}
@@ -1676,9 +1670,9 @@ from a potentially large database.
 
 This may be accessed several ways:
 \begin{itemize}
-\item From the menu \bmenu{Nav}\blink\bmenu{Waypoint lookup}
-\item From the task editor, menu \bmenu{Nav}\blink\bmenu{Task Edit} and select
- a waypoint, then select the \button{Select} button.
+\item From the menu \bmenu{Nav}\blink\bmenu{Waypoint List}
+\item From the task editor, menu \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task
+Edit} and selecting a waypoint and open the details.
 \end{itemize}
 
 The waypoint selector comprises a set of optional filters on the left
@@ -1689,47 +1683,68 @@ individually or not at all.
 \item[Name] Filtering based on the matching the first letter in the waypoint name. 
 \item[Distance] Filters out waypoints further that a specified distance to the aircraft.
 \item[Direction] Filters out waypoints that are not in a specified direction from the aircraft. 
-   An additional special direction ``HD360'' filters waypoints within 30 degrees to either side of the 
-   heading of the glider.  This allows the pilot to point the glider at a group of
+   An additional special direction ``HDG(0°)'' filters waypoints within 30
+   degrees to either side of the heading of the glider.  This allows the pilot to point the glider at a group of
   waypoints and quickly find them.
-\item[Type] Filters out waypoints that are not of the specified type (Landpoint, Airport or Turnpoint) or
-   that appear in the specified File~1 or File~2 (primary or secondary waypoint file respectively).
+\item[Type] Filters out waypoints that are not of the specified type
+(Landable point, Airport or Turnpoint) or that appear in the specified File~1 or
+File~2 (primary or secondary waypoint file respectively).
 \end{description}
-When filtering by name, the distance and direction filters are reset,
-and the list of matching waypoints is sorted by name.  When filtering
-by distance or direction, the name filter is reset, and the list
-of matching waypoints is sorted by distance.
+When filtering by name and type, the list of matching waypoints is
+sorted by name. When (in addition) filtering by distance or direction,
+ the list of matching waypoints is sorted by distance.
 
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-waypointselect.png}
 \end{center}
 
 The list can be scrolled if there is more than one screen full of
-matching waypoints.  To scroll through the list, simply move to the
-bottom (or top) of the list with the cursor.  
+matching waypoints.  To scroll through the list, simply drag with the finger, or
+move to the bottom (or top) of the list with the cursor.   
 
-Pressing the Enter button will select the item in the list under the
-cursor.  Selecting an item will result in different behaviour
+Selecting an item will result in different behaviour
 depending on what function opened the waypoint selector.  In typical
 use it brings up the waypoint details dialog for the selected
 waypoint.
 
-\section{Task editor dialog}\label{sec:task-editor-dialog}
-The task editor is used to edit and view cross country tasks.
-
-This is accessed via the menu
+\section{Task manager}\label{sec:task-manager-dialog}
+The task manager is used to edit, view, load, save to file, and declare cross
+country tasks. It is accessed via the menu
 \begin{quote}
-\bmenu{Nav}\blink\bmenu{Task Edit}
+\bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Edit}
 \end{quote} 
 
-The task editor's primary page is the Task Overview page which
-\todonum{update}
-comprises a list of task waypoints on the right side of the form.
-Below the list of waypoints, a Total line is displayed that shows
-the total distance of the task.
+\begin{it}The task manager is target of major rework and thus the description
+possibly comes short compared to its functionallity. Version 6.1 of XCSoar will hopefully
+leverage the rate of change at the task editor and the manual will be more
+complete at this point.\end{it}
+
+The task manager's primary page is an overview. It gives a graphical
+view of the active task, lets you enter into the task editor, or task browser.
+Further you can backup the current task with the \button{Save as} button, and 
+send the task to a connected intelligent logger device with the \button{Declare}
+button.
+
+The \button{Edit} button enters the task editor. It comprises a list of 
+waypoints on the right side of the form. All means to add, change, or
+delete waypoints to the list composing the task are accessable through the right
+side of this form. 
+Below the list the type of task and the total distance of the task is shown.
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-taskedit0.png}
 \end{center}
+
+The left side of the form gives all means to manipulate the task entirely. You
+can create a new one, review the task properties, and clear the task entirely. A
+graphical fullscreen overview is shown by taping on the task thumbnail view.
+
+The up and down button below allow to reorder the waypoint list. This is handy
+to e.g. flip the round trip direction of a triangle course by changing the
+turning point sequence.
+
+
+
+\todonum[inline]{this all will go}
 The ETE field displays the estimated time on task in minutes for the
 current wind estimate and MacCready setting.
 
@@ -1829,6 +1844,7 @@ The use of targets is described further in Section~\ref{sec:aat-tasks}.
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-taskedit4.png}
 \end{center}
+\todonum[inline]{up to here}
 
 \section{Advancing and restarting tasks}\label{sec:advanc-rest-tasks}
 
@@ -2144,7 +2160,7 @@ The targets can be modified in two ways:
  Section~\ref{sec:task-calc-dial}), the \button{Range} field adjusts the
  targets of all remaining waypoints in the task.
 \item From the task editor dialog (see 
- Section~\ref{sec:task-editor-dialog}), the range of each waypoint may
+ Section~\ref{sec:task-manager-dialog}), the range of each waypoint may
  be individually adjusted.
 \end{itemize}
 
@@ -5103,7 +5119,8 @@ from the waypoint file.
 \item[First word] Only the first word (up to the first space) of the waypoint name is displayed.
 \end{description}
 
-\item[Trail length] Determines whether and how long a snail trail is drawn behind the glider.
+\item[Trail length] \label{conf:snailtrail} Determines whether and how long a
+snail trail is drawn behind the glider.
 \begin{description}
 \item[Off] No trail is drawn
 \item[Long] A long trail is drawn (approx 60 minutes)
@@ -5129,13 +5146,35 @@ zoom levels will be maintained for circling and cruise modes.  If unchecked, the
 is only one zoom.  If enabled, then the map will zoom in automatically
 when entering circling mode and zoom out automatically when leaving
 circling mode.
-\item[Trail drift*] Determines whether the
+
+\item[Trail drift*] \label{conf:traildrift} Determines whether the
 snail trail is drifted with the wind when displayed in circling mode.  When OFF, the snail trail is 
 \todonum{trail drift: measuring unit?}
 uncompensated for wind draft.
-\item[Trail type*] \todonum{explain}
-\item[Trail width*] Sets the width of the snail trail display.
-\item[Idle blank screen] (PDA only)
+
+\item[Trail type*] \label{conf:snailtype} Sets the type of the snail trail
+display.
+\begin{description}
+\item[Vario \#1]  Within lift areas lines get displayed green and
+thicker, while sinking lines are shown red and thin.  Zero lift
+is presented as a grey line.
+\item[Vario \#2]  The climb color for this scheme is orange to red, sinking is
+displayed as light blue to dark blue. Zero lift
+is presented as a yellow line.
+\item[Altitude] The color scheme corresponds to the height.
+\end{description}
+
+\item[Trail width*] \label{conf:trailwidth} Sets the width of the snail trail
+display.
+\item[Detour cost]
+\item[FLARM map] This enables the display of FLARM traffic on the map window as well as the pop-up radar-like display.
+\begin{description}
+\item[OFF] FLARM map display disabled
+\item[ON/Fixed] FLARM map display enabled with fixed scale.
+\item[ON/Scaled] FLARM map display enabled and auto scaled.
+\end{description}
+
+\item[Idle blank screen] (PDA only) \todonum{move}
 This determines whether the display should be blanked after 60 seconds
 of inactivity when running on batteries.  Blanked screens have a
 significantly reduced drain on the battery.  The screen can be turned
@@ -5181,7 +5220,8 @@ This page sets how terrain and topology is drawn on the map window.
 \begin{description}
 \item[Terrain display] Draws digital elevation terrain on the map
 \item[Topology display] Draws topological features (roads, rivers, lakes) on the map
-\item[Slope shading]  \todonum{explain}
+\item[Slope shading]  \label{conf:shading} Slopes faced to the wind get
+displayed brighter and the averted slopes get darker.
 \item[Terrain contrast]  Defines the amount of phong shading in the terrain rendering.  Use large values 
 to emphasise terrain slope, smaller values if flying in steep mountains.
 \item[Terrain brightness]  Defines the brightness (whiteness) of the terrain rendering.  This controls the 
@@ -5230,7 +5270,7 @@ This page allows glide computer algorithms to be configured.
 \end{center}
 
 \begin{description}
-\item[Glide terrain line]  This determines whether the
+\item[Glide terrain line]  \label{conf:gliderange} This determines whether the
 glide terrain range is calculated and drawn as a line resp. a shade on the map area.
 \item[Auto wind] This allows switching on or off the automatic wind algorithm.
  \begin{description}
@@ -5498,12 +5538,6 @@ When shown, in cruise mode, arrows point up to command slow down; arrows point d
 \item[Show ballast*] Whether to show the ballast percentage.
 \item[Show gross*] Whether to show the gross vario value
 \item[Averager needle*] If true, the vario gauge will display a hollow averager needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.
-\item[FLARM map] This enables the display of FLARM traffic on the map window as well as the pop-up radar-like display.
-\begin{description}
-\item[OFF] FLARM map display disabled
-\item[ON/Fixed] FLARM map display enabled with fixed scale.
-\item[ON/Scaled] FLARM map display enabled and auto scaled.
-\end{description}
 When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.
 \item[FLARM radar] Enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. 
 \item[ThermalAssistant] Enables the display of the ThermalAssistant gauge.

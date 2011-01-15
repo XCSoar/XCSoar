@@ -345,7 +345,6 @@ Graphics::DrawAircraft(Canvas &canvas,
     {-13, 0},
     {0, 0},
     {0, -5},
-    {1, -5},
   };
 
   int n = sizeof(Aircraft) / sizeof(Aircraft[0]);

@@ -32,6 +32,7 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/OpenGL/Color.hpp"
 #include "Screen/OpenGL/Point.hpp"
+#include "Screen/OpenGL/Triangulate.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -169,26 +170,7 @@ public:
     background_mode = TRANSPARENT;
   }
 
-  void outline_rectangle(int left, int top, int right, int bottom,
-                         Color color) {
-    pen.get_color().set();
-
-    const GLvalue v[] = {
-      left, top,
-      right, top,
-      right, bottom,
-      left, bottom,
-    };
-    glVertexPointer(2, GL_VALUE, 0, v);
-    glDrawArrays(GL_LINE_LOOP, 0, 4);
-  }
-
-  void rectangle(int left, int top, int right, int bottom) {
-    fill_rectangle(left, top, right, bottom, brush);
-
-    if (pen_over_brush())
-      outline_rectangle(left, top, right, bottom, pen.get_color());
-  }
+  void rectangle(int left, int top, int right, int bottom);
 
   void fill_rectangle(int left, int top, int right, int bottom,
                       const Color color);
@@ -251,7 +233,7 @@ public:
   void polygon(const RasterPoint *points, unsigned num_points);
 
   void line(int ax, int ay, int bx, int by) {
-    pen.get_color().set();
+    pen.set();
 
     const GLvalue v[] = { ax, ay, bx, by };
     glVertexPointer(2, GL_VALUE, 0, v);
@@ -260,6 +242,25 @@ public:
 
   void line(const RasterPoint a, const RasterPoint b) {
     line(a.x, a.y, b.x, b.y);
+  }
+
+  /**
+   * Draw a line from a to b. A point will be drawn at position b, if the
+   * pen-size > 1 to hide gaps between consecutive lines.
+   */
+  void line_piece(const RasterPoint a, const RasterPoint b) {
+    pen.set();
+
+    const GLvalue v[] = { a.x, a.y, b.x, b.y };
+    glVertexPointer(2, GL_VALUE, 0, v);
+    glDrawArrays(GL_LINE_STRIP, 0, 2);
+
+#ifndef ANDROID
+    if (pen.get_width() > 1) {
+      glPointSize(pen.get_width());
+      glDrawArrays(GL_POINTS, 1, 1);
+    }
+#endif
   }
 
   void two_lines(int ax, int ay, int bx, int by, int cx, int cy);

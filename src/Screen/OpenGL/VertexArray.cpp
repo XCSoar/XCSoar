@@ -29,17 +29,9 @@ GLCircleVertices::GLCircleVertices(GLvalue center_x, GLvalue center_y,
 {
   RasterPoint *p = v;
 
-  /* center (only needed for filling) */
-  p->x = center_x;
-  p->y = center_y;
-  p += 2;
-
-  for (unsigned i = 0; i < OUTLINE_SIZE; ++i) {
-    p->x = center_x + ICOSTABLE[i * 4096 / OUTLINE_SIZE] * (int)radius / 1024.;
-    p->y = center_y + ISINETABLE[i * 4096 / OUTLINE_SIZE] * (int)radius / 1024.;
+  for (unsigned i = 0; i < SIZE; ++i) {
+    p->x = center_x + ICOSTABLE[i * 4096 / SIZE] * (int)radius / 1024.;
+    p->y = center_y + ISINETABLE[i * 4096 / SIZE] * (int)radius / 1024.;
     ++p;
   }
-
-  /* end point == start point (only needed for filling) */
-  v[1] = p[-1];
 }

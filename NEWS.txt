@@ -27,6 +27,7 @@ Changes to version 6.0.2 (since 6.0.1):
   - more robust NMEA checksum parser
 * user interface
   - Language: translation updates
+  - Window: disable sunken window edges on HP31x
 * map
   - Waypoints: more reliable waypoint decluttering
   - Topology: fix rendering bug
