@@ -244,6 +244,25 @@ public:
     line(a.x, a.y, b.x, b.y);
   }
 
+  /**
+   * Draw a line from a to b. A point will be drawn at position b, if the
+   * pen-size > 1 to hide gaps between consecutive lines.
+   */
+  void line_piece(const RasterPoint a, const RasterPoint b) {
+    pen.set();
+
+    const GLvalue v[] = { a.x, a.y, b.x, b.y };
+    glVertexPointer(2, GL_VALUE, 0, v);
+    glDrawArrays(GL_LINE_STRIP, 0, 2);
+
+#ifndef ANDROID
+    if (pen.get_width() > 1) {
+      glPointSize(pen.get_width());
+      glDrawArrays(GL_POINTS, 1, 1);
+    }
+#endif
+  }
+
   void two_lines(int ax, int ay, int bx, int by, int cx, int cy);
   void two_lines(const RasterPoint a, const RasterPoint b,
                  const RasterPoint c);
