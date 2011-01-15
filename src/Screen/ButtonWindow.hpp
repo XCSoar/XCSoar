@@ -98,6 +98,10 @@ public:
     return text;
   }
 
+protected:
+  void set_down(bool _down);
+
+public:
   bool is_down() const {
     return down;
   }

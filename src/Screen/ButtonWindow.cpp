@@ -39,11 +39,20 @@ ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
   this->id = id;
 }
 
+void
+ButtonWindow::set_down(bool _down)
+{
+  if (_down == down)
+    return;
+
+  down = _down;
+  invalidate();
+}
+
 bool
 ButtonWindow::on_mouse_down(int x, int y)
 {
-  down = true;
-  invalidate();
+  set_down(true);
   return true;
 }
 
@@ -53,8 +62,7 @@ ButtonWindow::on_mouse_up(int x, int y)
   if (!down)
     return true;
 
-  down = false;
-  invalidate();
+  set_down(false);
 
   if (parent != NULL) {
     if (!on_clicked())
