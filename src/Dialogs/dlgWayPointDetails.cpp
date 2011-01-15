@@ -290,19 +290,6 @@ OnNewHomeClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
-static void
-OnTeamCodeClicked(gcc_unused WndButton &button)
-{
-  assert(selected_waypoint != NULL);
-
-  XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint =
-      selected_waypoint->id;
-  Profile::Set(szProfileTeamcodeRefWaypoint,
-      XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint);
-
-  wf->SetModalResult(mrOK);
-}
-
 static task_edit_result
 insert_in_task(const Waypoint &wp)
 {
@@ -658,10 +645,6 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   wb = ((WndButton *)wf->FindByName(_T("cmdNewHome")));
   if (wb)
     wb->SetOnClickNotify(OnNewHomeClicked);
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdTeamCode")));
-  if (wb)
-    wb->SetOnClickNotify(OnTeamCodeClicked);
 
   wb = ((WndButton *)wf->FindByName(_T("cmdInserInTask")));
   if (wb)
