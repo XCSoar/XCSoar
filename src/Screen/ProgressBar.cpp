@@ -28,8 +28,6 @@ Copyright_License {
 #include <commctrl.h>
 #else
 #include "Screen/Canvas.hpp"
-
-static const TCHAR*const PROGRESS_CLASS = NULL;
 #endif
 
 void
@@ -53,7 +51,10 @@ ProgressBar::set(ContainerWindow &parent,
                  int left, int top, unsigned width, unsigned height,
                  const ProgressBarStyle style)
 {
-  Window::set(&parent, PROGRESS_CLASS, NULL,
+  Window::set(&parent,
+#ifndef ENABLE_SDL
+              PROGRESS_CLASS, NULL,
+#endif
               left, top, width, height,
               style);
 }

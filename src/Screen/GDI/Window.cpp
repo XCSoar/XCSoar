@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Window.hpp"
+#include "Screen/ContainerWindow.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/GDI/Event.hpp"
 #include "Screen/GDI/PaintCanvas.hpp"
@@ -29,6 +30,34 @@ Copyright_License {
 
 #include <assert.h>
 #include <windowsx.h>
+
+void
+Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
+            int left, int top, unsigned width, unsigned height,
+            const WindowStyle window_style)
+{
+  assert(width > 0);
+  assert(width < 0x1000000);
+  assert(height > 0);
+  assert(height < 0x1000000);
+
+  double_clicks = window_style.double_clicks;
+
+  DWORD style = window_style.style, ex_style = window_style.ex_style;
+
+  if (window_style.custom_painting)
+    enable_custom_painting();
+
+  hWnd = ::CreateWindowEx(ex_style, cls, text, style,
+                          left, top, width, height,
+                          parent != NULL ? parent->hWnd : NULL,
+                          NULL, NULL, this);
+
+  /* this isn't good error handling, but this only happens if
+     out-of-memory (we can't do anything useful) or if we passed wrong
+     arguments - which is a bug */
+  assert(hWnd != NULL);
+}
 
 void
 Window::created(HWND _hWnd)

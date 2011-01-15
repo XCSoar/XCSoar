@@ -23,7 +23,9 @@ Copyright_License {
 
 #include "Screen/TextWindow.hpp"
 
+#ifndef ENABLE_SDL
 #include <commctrl.h>
+#endif
 
 void
 TextWindow::set(ContainerWindow &parent, const TCHAR *_text,
@@ -37,7 +39,10 @@ TextWindow::set(ContainerWindow &parent, const TCHAR *_text,
     text.clear();
 #endif
 
-  Window::set(&parent, WC_STATIC, _text,
+  Window::set(&parent,
+#ifndef ENABLE_SDL
+              WC_STATIC, _text,
+#endif
               left, top, width, height,
               style);
 }

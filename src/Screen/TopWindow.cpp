@@ -83,7 +83,7 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
   width = screen.get_width();
   height = screen.get_height();
 
-  ContainerWindow::set(NULL, cls, 0, 0, width, height, style);
+  ContainerWindow::set(NULL, 0, 0, width, height, style);
 
 #ifndef ANDROID
 #ifdef _UNICODE

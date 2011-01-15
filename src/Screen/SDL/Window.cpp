@@ -32,6 +32,34 @@ Copyright_License {
 #endif /* ENABLE_SDL */
 
 void
+Window::set(ContainerWindow *parent,
+            int left, int top, unsigned width, unsigned height,
+            const WindowStyle window_style)
+{
+  assert(width > 0);
+  assert(width < 0x1000000);
+  assert(height > 0);
+  assert(height < 0x1000000);
+
+  double_clicks = window_style.double_clicks;
+
+  this->parent = parent;
+  this->left = left;
+  this->top = top;
+  this->width = width;
+  this->height = height;
+
+  visible = window_style.visible;
+  text_style = window_style.text_style;
+
+  if (parent != NULL)
+    parent->add_child(*this);
+
+  on_create();
+  on_resize(width, height);
+}
+
+void
 Window::to_screen(RECT &rc) const
 {
   for (const Window *p = parent; p != NULL; p = p->parent) {

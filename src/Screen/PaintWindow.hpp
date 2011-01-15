@@ -47,6 +47,19 @@ public:
 
   static bool register_class(HINSTANCE hInstance);
 
+#ifdef ENABLE_SDL
+  void set(ContainerWindow *parent,
+           int left, int top, unsigned width, unsigned height,
+           const WindowStyle style=WindowStyle()) {
+    Window::set(parent, left, top, width, height, style);
+  }
+
+  void set(ContainerWindow &parent,
+           int left, int top, unsigned width, unsigned height,
+           const WindowStyle style=WindowStyle()) {
+    set(&parent, left, top, width, height, style);
+  }
+#else /* !SDL */
   void set(ContainerWindow *parent, const TCHAR *cls,
            int left, int top, unsigned width, unsigned height,
            const WindowStyle style=WindowStyle()) {
@@ -65,6 +78,7 @@ public:
            const WindowStyle style=WindowStyle()) {
     set(parent, _T("PaintWindow"), left, top, width, height, style);
   }
+#endif /* !SDL */
 
   int get_left() const {
     return 0;

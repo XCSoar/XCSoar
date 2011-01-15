@@ -298,9 +298,15 @@ public:
   }
 #endif
 
+#ifdef ENABLE_SDL
+  void set(ContainerWindow *parent,
+           int left, int top, unsigned width, unsigned height,
+           const WindowStyle window_style=WindowStyle());
+#else
   void set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
            int left, int top, unsigned width, unsigned height,
            const WindowStyle window_style=WindowStyle());
+#endif
 
 #ifndef ENABLE_SDL
   void created(HWND _hWnd);

@@ -23,17 +23,18 @@ Copyright_License {
 
 #include "Screen/EditWindow.hpp"
 
+#ifndef ENABLE_SDL
 #include <commctrl.h>
-
-#if defined(ENABLE_SDL) && !defined(WC_EDIT)
-#define WC_EDIT _T("Edit")
 #endif
 
 void
 EditWindow::set(ContainerWindow &parent, int left, int top,
                 unsigned width, unsigned height,
                 const EditWindowStyle style) {
-  Window::set(&parent, WC_EDIT, NULL,
+  Window::set(&parent,
+#ifndef ENABLE_SDL
+              WC_EDIT, NULL,
+#endif
               left, top, width, height, style);
 }
 
