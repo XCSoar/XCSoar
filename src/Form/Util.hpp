@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_FORM_UTIL_HPP
 
 #include "Units.hpp"
-#include "SettingsMap.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -142,20 +141,30 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
                  UnitGroup_t unit_group, fixed &value,
                  const TCHAR *registry_name);
 
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *field,
-                 DisplayTextType_t &value);
+template<typename T>
+static inline bool
+SaveFormPropertyEnum(const WndForm &form, const TCHAR *field,
+                     T &value)
+{
+  int value2 = (int)value;
+  if (!SaveFormProperty(form, field, value2))
+    return false;
 
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
-                 DisplayTextType_t &value);
+  value = (T)value2;
+  return true;
+}
 
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *field,
-                 WayPointLabelSelection_t &value);
+template<typename T>
+static inline bool
+SaveFormPropertyEnum(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+                     T &value)
+{
+  int value2 = (int)value;
+  if (!SaveFormProperty(form, field, reg, value2))
+    return false;
 
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
-                 WayPointLabelSelection_t &value);
+  value = (T)value2;
+  return true;
+}
 
 #endif

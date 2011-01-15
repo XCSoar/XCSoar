@@ -1682,13 +1682,13 @@ void dlgConfigurationShowModal(void)
                               szProfileAcknowledgementTime,
                               settings_computer.airspace_warnings.AcknowledgementTime);
 
-  changed |= SaveFormProperty(*wf, _T("prpWaypointLabels"),
-                              szProfileDisplayText,
-                              XCSoarInterface::SetSettingsMap().DisplayTextType);
+  changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabels"),
+                                  szProfileDisplayText,
+                                  XCSoarInterface::SetSettingsMap().DisplayTextType);
 
-  changed |= SaveFormProperty(*wf, _T("prpWayPointLabelSelection"),
-                              szProfileWayPointLabelSelection,
-                              XCSoarInterface::SetSettingsMap().WayPointLabelSelection);
+  changed |= SaveFormPropertyEnum(*wf, _T("prpWayPointLabelSelection"),
+                                  szProfileWayPointLabelSelection,
+                                  XCSoarInterface::SetSettingsMap().WayPointLabelSelection);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableTerrain"),
                               szProfileDrawTerrain,
