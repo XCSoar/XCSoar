@@ -739,16 +739,8 @@ setVariables()
   LoadFormProperty(*wf, _T("prpDebounceTimeout"),
                    XCSoarInterface::debounceTimeout);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpEnableFLARMMap"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("OFF"));
-    dfe->addEnumText(_("ON/Fixed"));
-    dfe->addEnumText(_("ON/Scaled"));
-    dfe->Set(XCSoarInterface::SettingsMap().EnableFLARMMap);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpEnableFLARMMap"),
+                   XCSoarInterface::SettingsMap().EnableFLARMMap);
 
   LoadFormProperty(*wf, _T("prpEnableFLARMGauge"),
                    XCSoarInterface::SettingsMap().EnableFLARMGauge);

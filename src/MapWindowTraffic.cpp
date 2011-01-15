@@ -61,10 +61,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   // Create point array that will form that arrow polygon
   RasterPoint Arrow[5];
 
-  // Determine scale factor for use in Scaled mode
-  fixed screenrange = projection.GetScreenDistanceMeters();
-  fixed scalefact = screenrange / 6000;
-
   // Circle through the FLARM targets
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
     const FLARM_TRAFFIC &traffic = flarm.FLARM_Traffic[i];
@@ -75,15 +71,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
     // Save the location of the FLARM target
     GeoPoint target_loc = traffic.Location;
-
-    // If Scaled mode is chosen, recalculate the
-    // targets virtual position using the scale factor
-    if ((SettingsMap().EnableFLARMMap == 2) && (scalefact > fixed_one)) {
-      GeoVector gv = Basic().Location.distance_bearing(target_loc);
-
-      target_loc= FindLatitudeLongitude(Basic().Location, gv.Bearing,
-                                        gv.Distance * scalefact);
-    }
 
     // Points for the screen coordinates for the icon, name and average climb
     RasterPoint sc, sc_name, sc_av;

@@ -136,7 +136,7 @@ struct SETTINGS_MAP {
   bool AutoCloseFlarmDialog;
   /** Show ThermalAssistant if circling */
   bool EnableTAGauge;
-  unsigned EnableFLARMMap;
+  bool EnableFLARMMap;
   bool ScreenBlanked;
   bool EnableAutoBlank;
   /** Show vario gauge */
