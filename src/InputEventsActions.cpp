@@ -1383,24 +1383,27 @@ InputEvents::eventRun(const TCHAR *misc)
 void
 InputEvents::eventDeclutterLabels(const TCHAR *misc)
 {
-  static const TCHAR *msg[] = {_("Waypoint Labels: ALL"),
-                               _("Waypoint Labels: Task & Landables"),
-                               _("Waypoint Labels: Task"),
-                               _("Waypoint Labels: NONE")};
-  static const int n=sizeof(msg)/sizeof(msg[0]);
-  static const TCHAR *actions[n] = {_T("all"),
-                                    _T("task+landables"),
-                                    _T("task"),
-                                    _T("none")};
+  static const TCHAR *const msg[] = {N_("ALL"),
+                                     N_("Task & Landables"),
+                                     N_("Task"),
+                                     N_("NONE")};
+  static const unsigned int n=sizeof(msg)/sizeof(msg[0]);
+  static const TCHAR *const actions[n] = {_T("all"),
+                                          _T("task+landables"),
+                                          _T("task"),
+                                          _T("none")};
 
   WayPointLabelSelection_t& wls = XCSoarInterface::SetSettingsMap()
                                   .WayPointLabelSelection;
   if (_tcscmp(misc, _T("toggle")) == 0)
     wls = (WayPointLabelSelection_t) ((wls + 1) %  n);
-  else if (_tcscmp(misc, _T("show")) == 0)
-    Message::AddMessage(msg[wls]);
+  else if (_tcscmp(misc, _T("show")) == 0 && (unsigned int) wls < n) {
+    TCHAR tbuf[64];
+    _stprintf(tbuf, _T("%s: %s"), _("Waypoint Labels"), gettext(msg[wls]));
+    Message::AddMessage(tbuf);
+  }
   else {
-    for (int i=0; i<n; i++)
+    for (unsigned int i=0; i<n; i++)
       if (_tcscmp(misc, actions[i]) == 0)
         wls = (WayPointLabelSelection_t) i;
   }
