@@ -121,7 +121,7 @@ Segment(Canvas &canvas, long x, long y, int radius,
     npoly++;
   }
 
-  assert(npoly<66);
+  assert(npoly <= 66);
   if (npoly) {
     canvas.polygon(pt, npoly);
   }
