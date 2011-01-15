@@ -61,6 +61,24 @@ Window::set_focus()
 }
 
 void
+Window::set_capture()
+{
+  assert_none_locked();
+  assert_thread();
+
+  // XXX
+}
+
+void
+Window::release_capture()
+{
+  assert_none_locked();
+  assert_thread();
+
+  // XX
+}
+
+void
 Window::setup(Canvas &canvas)
 {
   if (font != NULL)

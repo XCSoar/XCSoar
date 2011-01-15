@@ -517,29 +517,25 @@ public:
 #endif
   }
 
+#ifdef ENABLE_SDL
+  void set_capture();
+  void release_capture();
+#else /* !ENABLE_SDL */
+
   void set_capture() {
     assert_none_locked();
     assert_thread();
 
-#ifdef ENABLE_SDL
-    // XXX
-#else
     ::SetCapture(hWnd);
-#endif
   }
 
   void release_capture() {
     assert_none_locked();
     assert_thread();
 
-#ifdef ENABLE_SDL
-    // XXX
-#else
     ::ReleaseCapture();
-#endif
   }
 
-#ifndef ENABLE_SDL
   WNDPROC set_wndproc(WNDPROC wndproc)
   {
     assert_thread();
