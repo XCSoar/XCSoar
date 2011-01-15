@@ -166,6 +166,9 @@ bool
 Window::on_destroy()
 {
 #ifdef ENABLE_SDL
+  if (capture)
+    release_capture();
+
   if (parent != NULL) {
     parent->remove_child(*this);
     parent = NULL;
@@ -260,6 +263,10 @@ Window::on_command(unsigned id, unsigned code)
 bool
 Window::on_cancel_mode()
 {
+#ifdef ENABLE_SDL
+  release_capture();
+#endif
+
   return false;
 }
 
@@ -281,6 +288,10 @@ Window::on_killfocus()
 {
 #ifdef ENABLE_SDL
   assert(focused);
+
+#ifdef ENABLE_SDL
+  release_capture();
+#endif
 
   focused = false;
   return true;

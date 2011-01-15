@@ -27,7 +27,7 @@ Copyright_License {
 #include <assert.h>
 
 ContainerWindow::ContainerWindow()
-  :active_child(NULL)
+  :active_child(NULL), capture_child(NULL)
 {
 }
 
@@ -56,7 +56,7 @@ ContainerWindow::on_destroy()
 bool
 ContainerWindow::on_mouse_move(int x, int y, unsigned keys)
 {
-  Window *child = child_at(x, y);
+  Window *child = event_child_at(x, y);
   if (child != NULL) {
     child->on_mouse_move(x - child->get_left(), y - child->get_top(), keys);
     return true;
@@ -68,7 +68,7 @@ ContainerWindow::on_mouse_move(int x, int y, unsigned keys)
 bool
 ContainerWindow::on_mouse_down(int x, int y)
 {
-  Window *child = child_at(x, y);
+  Window *child = event_child_at(x, y);
   if (child != NULL) {
     child->on_mouse_down(x - child->get_left(), y - child->get_top());
     return true;
@@ -80,7 +80,7 @@ ContainerWindow::on_mouse_down(int x, int y)
 bool
 ContainerWindow::on_mouse_up(int x, int y)
 {
-  Window *child = child_at(x, y);
+  Window *child = event_child_at(x, y);
   if (child != NULL) {
     child->on_mouse_up(x - child->get_left(), y - child->get_top());
     return true;
@@ -92,7 +92,7 @@ ContainerWindow::on_mouse_up(int x, int y)
 bool
 ContainerWindow::on_mouse_double(int x, int y)
 {
-  Window *child = child_at(x, y);
+  Window *child = event_child_at(x, y);
   if (child != NULL) {
     child->on_mouse_double(x - child->get_left(), y - child->get_top());
     return true;
@@ -141,7 +141,6 @@ ContainerWindow::on_paint(Canvas &canvas)
   assert(full == NULL);
 }
 
-
 Window *
 ContainerWindow::child_at(int x, int y)
 {
@@ -155,6 +154,17 @@ ContainerWindow::child_at(int x, int y)
   }
 
   return NULL;
+}
+
+Window *
+ContainerWindow::event_child_at(int x, int y)
+{
+  if (capture)
+    return NULL;
+  else if (capture_child != NULL)
+    return capture_child;
+  else
+    return child_at(x, y);
 }
 
 void
@@ -184,4 +194,47 @@ ContainerWindow::get_focused_window()
     return active_child->get_focused_window();
 
   return NULL;
+}
+
+void
+ContainerWindow::set_child_capture(Window *window)
+{
+  assert(window != NULL);
+  assert(window->parent == this);
+
+  if (capture_child == window)
+    return;
+
+  if (capture_child != NULL)
+    clear_capture();
+
+  capture_child = window;
+  if (parent != NULL)
+    parent->set_child_capture(this);
+}
+
+void
+ContainerWindow::release_child_capture(Window *window)
+{
+  assert(window != NULL);
+  assert(window->parent == this);
+
+  if (capture_child != window)
+    return;
+
+  capture_child = NULL;
+
+  if (parent != NULL)
+    parent->release_child_capture(this);
+}
+
+void
+ContainerWindow::clear_capture()
+{
+  Window::clear_capture();
+
+  if (capture_child != NULL) {
+    capture_child->clear_capture();
+    capture_child = NULL;
+  }
 }

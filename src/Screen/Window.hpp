@@ -179,6 +179,7 @@ private:
 
   bool visible;
   bool focused;
+  bool capture;
 #else
   HWND hWnd;
 
@@ -195,7 +196,7 @@ public:
   Window()
     :parent(NULL), width(0), height(0),
      font(NULL),
-     visible(true), focused(false),
+     visible(true), focused(false), capture(false),
      double_clicks(false) {}
 #else
   Window():hWnd(NULL), prev_wndproc(NULL),
@@ -520,6 +521,7 @@ public:
 #ifdef ENABLE_SDL
   void set_capture();
   void release_capture();
+  virtual void clear_capture();
 #else /* !ENABLE_SDL */
 
   void set_capture() {

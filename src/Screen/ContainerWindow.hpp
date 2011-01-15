@@ -47,6 +47,11 @@ protected:
    */
   Window *active_child;
 
+  /**
+   * The child window which captures the mouse.
+   */
+  Window *capture_child;
+
 public:
   ContainerWindow();
   virtual ~ContainerWindow();
@@ -92,6 +97,13 @@ public:
   gcc_pure
   Window *child_at(int x, int y);
 
+  /**
+   * Locates the child which should get a mouse event.  Prefers the
+   * captured child.
+   */
+  gcc_pure
+  Window *event_child_at(int x, int y);
+
   void set_active_child(Window &child);
 
   /**
@@ -100,6 +112,10 @@ public:
    */
   gcc_pure
   virtual Window *get_focused_window();
+
+  void set_child_capture(Window *window);
+  void release_child_capture(Window *window);
+  virtual void clear_capture();
 #endif /* ENABLE_SDL */
 
   /**

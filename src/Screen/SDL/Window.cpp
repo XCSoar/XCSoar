@@ -66,7 +66,10 @@ Window::set_capture()
   assert_none_locked();
   assert_thread();
 
-  // XXX
+  if (parent != NULL)
+    parent->set_child_capture(this);
+
+  capture = true;
 }
 
 void
@@ -75,7 +78,16 @@ Window::release_capture()
   assert_none_locked();
   assert_thread();
 
-  // XX
+  capture = false;
+
+  if (parent != NULL)
+    parent->release_child_capture(this);
+}
+
+void
+Window::clear_capture()
+{
+  capture = false;
 }
 
 void
