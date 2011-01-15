@@ -1560,14 +1560,15 @@ cross-country flying in groups, as one person can distribute the task
 file to others, thereby saving the group the job of editing the task
 themselves.
 
-\tip If no task is present at startup, a task is created automatically,
-  containing one waypoint to home.
+%\tip If no task is present at startup, a task is created automatically,
+%  containing one waypoint to home.
+% There will be a 6.1 feature like this.
 
 XCSoar saves the current task when shutting down and loads it at
 startup, thereby allowing the task to be entered early in the day,
 then turning off the glide computer until ready for flight.
 
-As of version 5.1.2, task waypoints are preserved even if the waypoint
+Task waypoints are preserved even if the waypoint
 file is changed.  This means, if you save a task, then change the
 waypoint file, then load the task again, new waypoints are generated
 for any waypoints that are missing in the new waypoint file.
@@ -1584,13 +1585,13 @@ for any waypoints that are missing in the new waypoint file.
 %The display will now show the waypoint details dialog.
 
 The waypoint details dialog describes a waypoint in detail and has
-navigation functions such as GOTO, Insert.
+navigation functions such as GoTo, Insert.
 
 This may be accessed several ways:
 \begin{itemize}
 \item
-From the task editor, menu \bmenu{Nav}\blink\bmenu{Task Edit} and select
-a waypoint, then select the \button{Details} button.
+From the task editor, menu \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Edit}
+and select a waypoint, then press the button with waypoints name on it.
 
 \item 
 From the menu \bmenu{Info}\blink\bmenu{Waypoint details} to show the
@@ -1603,18 +1604,17 @@ nearest the pan cursor.
 
 \item
 From the waypoint selector, menu \bmenu{Nav}\blink\bmenu{Waypoint
-look-up} and select a waypoint to show the details of that waypoint.
+List} and select a waypoint to show the details of that waypoint.
 \end{itemize}
 
-The waypoint details dialog contains several pages (accessed via the
-\button{$>$} and \button{$<$} buttons).
-
-Depending on the configuration files specified in the settings, not
-all of these pages may be available.
+The waypoint details dialog contains two major pages (accessed via the
+\button{$>$} and \button{$<$} buttons). Depending on the availability of further
+details to the waypoint they will by shown on extra pages.
 
 \subsection*{Waypoint details}
 This page contains text describing the waypoint's location, elevation
-and local sunset.  
+and local sunset. Last not least a button \button{GoTo} to directly initiate
+navigating to this waypoint. The button cancels the current task. 
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails0.png}
 \end{center}
@@ -1631,8 +1631,6 @@ the corresponding waypoint:
 \subsection*{Task menu}  
 This page contains a column of buttons allowing various actions to be performed:
 \begin{description}
-\item[\button{Goto (and clear task)}] cancels the current task and sets the waypoint as the
-  single active waypoint in the task.
 \item[\button{Replace in task}] replaces the active waypoint in the task.
 \item[\button{Insert in task}] inserts the waypoint before the active waypoint in
   the task.
@@ -1650,7 +1648,7 @@ of whether a GPS fix is received.  If no home is set, then XCSoar
 starts in the center of the terrain map.
 
 \subsection*{Airfield information}
-This page may contain relevant text from the Enroute Supplement about
+This page may contain relevant text from the enroute supplement about
 the airfield, including runways, radio frequencies, traffic patterns,
 contacts.
 \begin{center}
@@ -1672,9 +1670,9 @@ from a potentially large database.
 
 This may be accessed several ways:
 \begin{itemize}
-\item From the menu \bmenu{Nav}\blink\bmenu{Waypoint lookup}
-\item From the task editor, menu \bmenu{Nav}\blink\bmenu{Task Edit} and select
- a waypoint, then select the \button{Select} button.
+\item From the menu \bmenu{Nav}\blink\bmenu{Waypoint List}
+\item From the task editor, menu \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task
+Edit} and selecting a waypoint and open the details.
 \end{itemize}
 
 The waypoint selector comprises a set of optional filters on the left
@@ -1685,47 +1683,68 @@ individually or not at all.
 \item[Name] Filtering based on the matching the first letter in the waypoint name. 
 \item[Distance] Filters out waypoints further that a specified distance to the aircraft.
 \item[Direction] Filters out waypoints that are not in a specified direction from the aircraft. 
-   An additional special direction ``HD360'' filters waypoints within 30 degrees to either side of the 
-   heading of the glider.  This allows the pilot to point the glider at a group of
+   An additional special direction ``HDG(0°)'' filters waypoints within 30
+   degrees to either side of the heading of the glider.  This allows the pilot to point the glider at a group of
   waypoints and quickly find them.
-\item[Type] Filters out waypoints that are not of the specified type (Landpoint, Airport or Turnpoint) or
-   that appear in the specified File~1 or File~2 (primary or secondary waypoint file respectively).
+\item[Type] Filters out waypoints that are not of the specified type
+(Landable point, Airport or Turnpoint) or that appear in the specified File~1 or
+File~2 (primary or secondary waypoint file respectively).
 \end{description}
-When filtering by name, the distance and direction filters are reset,
-and the list of matching waypoints is sorted by name.  When filtering
-by distance or direction, the name filter is reset, and the list
-of matching waypoints is sorted by distance.
+When filtering by name and type, the list of matching waypoints is
+sorted by name. When (in addition) filtering by distance or direction,
+ the list of matching waypoints is sorted by distance.
 
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-waypointselect.png}
 \end{center}
 
 The list can be scrolled if there is more than one screen full of
-matching waypoints.  To scroll through the list, simply move to the
-bottom (or top) of the list with the cursor.  
+matching waypoints.  To scroll through the list, simply drag with the finger, or
+move to the bottom (or top) of the list with the cursor.   
 
-Pressing the Enter button will select the item in the list under the
-cursor.  Selecting an item will result in different behaviour
+Selecting an item will result in different behaviour
 depending on what function opened the waypoint selector.  In typical
 use it brings up the waypoint details dialog for the selected
 waypoint.
 
-\section{Task editor dialog}\label{sec:task-editor-dialog}
-The task editor is used to edit and view cross country tasks.
-
-This is accessed via the menu
+\section{Task manager}\label{sec:task-manager-dialog}
+The task manager is used to edit, view, load, save to file, and declare cross
+country tasks. It is accessed via the menu
 \begin{quote}
-\bmenu{Nav}\blink\bmenu{Task Edit}
+\bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Edit}
 \end{quote} 
 
-The task editor's primary page is the Task Overview page which
-\todonum{update}
-comprises a list of task waypoints on the right side of the form.
-Below the list of waypoints, a Total line is displayed that shows
-the total distance of the task.
+\begin{it}The task manager is target of major rework and thus the description
+possibly comes short compared to its functionallity. Version 6.1 of XCSoar will hopefully
+leverage the rate of change at the task editor and the manual will be more
+complete at this point.\end{it}
+
+The task manager's primary page is an overview. It gives a graphical
+view of the active task, lets you enter into the task editor, or task browser.
+Further you can backup the current task with the \button{Save as} button, and 
+send the task to a connected intelligent logger device with the \button{Declare}
+button.
+
+The \button{Edit} button enters the task editor. It comprises a list of 
+waypoints on the right side of the form. All means to add, change, or
+delete waypoints to the list composing the task are accessable through the right
+side of this form. 
+Below the list the type of task and the total distance of the task is shown.
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-taskedit0.png}
 \end{center}
+
+The left side of the form gives all means to manipulate the task entirely. You
+can create a new one, review the task properties, and clear the task entirely. A
+graphical fullscreen overview is shown by taping on the task thumbnail view.
+
+The up and down button below allow to reorder the waypoint list. This is handy
+to e.g. flip the round trip direction of a triangle course by changing the
+turning point sequence.
+
+
+
+\todonum[inline]{this all will go}
 The ETE field displays the estimated time on task in minutes for the
 current wind estimate and MacCready setting.
 
@@ -1825,6 +1844,7 @@ The use of targets is described further in Section~\ref{sec:aat-tasks}.
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-taskedit4.png}
 \end{center}
+\todonum[inline]{up to here}
 
 \section{Advancing and restarting tasks}\label{sec:advanc-rest-tasks}
 
@@ -2140,7 +2160,7 @@ The targets can be modified in two ways:
  Section~\ref{sec:task-calc-dial}), the \button{Range} field adjusts the
  targets of all remaining waypoints in the task.
 \item From the task editor dialog (see 
- Section~\ref{sec:task-editor-dialog}), the range of each waypoint may
+ Section~\ref{sec:task-manager-dialog}), the range of each waypoint may
  be individually adjusted.
 \end{itemize}
 
