@@ -23,10 +23,6 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 
-#ifndef ENABLE_SDL
-#include "Screen/ButtonWindow.hpp"
-#endif
-
 #include <assert.h>
 
 #ifdef ENABLE_SDL
@@ -203,58 +199,7 @@ ContainerWindow::get_focused_window()
   return NULL;
 }
 
-#else /* !ENABLE_SDL */
-
-LRESULT
-ContainerWindow::on_message(HWND hWnd, UINT message,
-                            WPARAM wParam, LPARAM lParam)
-{
-  switch (message) {
-  case WM_CTLCOLORSTATIC:
-  case WM_CTLCOLORBTN:
-    {
-      Window *window = Window::get((HWND)lParam);
-      if (window == NULL)
-        break;
-
-      Canvas canvas((HDC)wParam, 1, 1);
-      Brush *brush = on_color(*window, canvas);
-      if (brush == NULL)
-        break;
-
-      return (LRESULT)brush->native();
-    }
-
-  case WM_DRAWITEM:
-    /* forward WM_DRAWITEM to the child window who sent this
-       message */
-    {
-      const DRAWITEMSTRUCT *di = (const DRAWITEMSTRUCT *)lParam;
-
-      Window *window = Window::get(di->hwndItem);
-      if (window == NULL)
-        break;
-
-      Canvas canvas(di->hDC, di->rcItem.right - di->rcItem.left,
-                    di->rcItem.bottom - di->rcItem.top);
-      window->on_paint(canvas);
-      return TRUE;
-    }
-
-  case WM_COMMAND:
-    if (wParam == MAKEWPARAM(BaseButtonWindow::COMMAND_BOUNCE_ID, BN_CLICKED)) {
-      /* forward this message to ButtonWindow::on_clicked() */
-      BaseButtonWindow *window = (BaseButtonWindow *)Window::get((HWND)lParam);
-      if (window != NULL && window->on_clicked())
-        return true;
-    }
-    break;
-  };
-
-  return PaintWindow::on_message(hWnd, message, wParam, lParam);
-}
-
-#endif /* !ENABLE_SDL */
+#endif /* ENABLE_SDL */
 
 void
 ContainerWindow::focus_first_control()
