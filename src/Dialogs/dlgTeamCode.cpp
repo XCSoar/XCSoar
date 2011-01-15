@@ -32,6 +32,7 @@
 #include "StringUtil.hpp"
 #include "TeamCodeCalculation.h"
 #include "Compiler.h"
+#include "Profile/Profile.hpp"
 
 #include <stdio.h>
 
@@ -98,6 +99,17 @@ Update()
     wp->SetText(XCSoarInterface::SettingsComputer().TeamFlarmTracking ?
                 XCSoarInterface::SettingsComputer().TeamFlarmCNTarget : _T(""));
     wp->RefreshDisplay();
+  }
+}
+
+static void
+OnSetWaypointClicked(gcc_unused WndButton &button)
+{
+  const Waypoint* wp = dlgWayPointSelect(XCSoarInterface::main_window,
+                                         XCSoarInterface::Basic().Location);
+  if (wp != NULL) {
+    XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint = wp->id;
+    Profile::Set(szProfileTeamcodeRefWaypoint, wp->id);
   }
 }
 
@@ -198,10 +210,14 @@ dlgTeamCodeShowModal(void)
   if (!wf)
     return;
 
-  // set event for button
+  // set event for buttons
   buttonCode = ((WndButton *)wf->FindByName(_T("cmdSetCode")));
   if (buttonCode)
     buttonCode->SetOnClickNotify(OnCodeClicked);
+
+  WndButton* cmdSetWaypoint = ((WndButton *)wf->FindByName(_T("cmdSetWaypoint")));
+  assert(cmdSetWaypoint != NULL);
+  cmdSetWaypoint->SetOnClickNotify(OnSetWaypointClicked);
 
   // Set unit for range
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
