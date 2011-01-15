@@ -123,6 +123,7 @@ const TCHAR szProfileTemperatureUnitsValue[] = CONF("Temperature");
 const TCHAR szProfileCircleZoom[] = CONF("CircleZoom");
 const TCHAR szProfileClipAlt[] = CONF("ClipAlt");
 const TCHAR szProfileDisplayText[] = CONF("DisplayText");
+const TCHAR szProfileWayPointLabelSelection[] = CONF("WayPointLabelSelection");
 const TCHAR szProfileDisplayUpValue[] = CONF("DisplayUp");
 const TCHAR szProfileOrientationCruise[] = CONF("OrientationCruise");
 const TCHAR szProfileOrientationCircling[] = CONF("OrientationCircling");

@@ -84,7 +84,6 @@ public:
     Buffer[0] = _T('\0');
 
     switch (pDisplayTextType) {
-    case DISPLAYNAMEIFINTASK:
     case DISPLAYNAME:
       _tcscpy(Buffer, way_point.Name.c_str());
       break;
@@ -183,12 +182,18 @@ public:
       icon->draw(canvas, sc);
     }
 
-    TCHAR Buffer[32];
-
-    if (!in_task && (pDisplayTextType == DISPLAYNAMEIFINTASK)) {
-      if (task_valid || !(way_point.is_landable() || (way_point.is_airport())))
+    int pWayPointLabelSelection = settings_map.WayPointLabelSelection;
+    if (pWayPointLabelSelection == wlsNoWayPoints)
+      return;
+    if (!in_task && task_valid) {
+      if (pWayPointLabelSelection == wlsTaskWayPoints)
+        return;
+      if (pWayPointLabelSelection == wlsTaskAndLandableWayPoints &&
+          !way_point.is_landable())
         return;
     }
+
+    TCHAR Buffer[32];
 
     if (do_write_label)
       FormatTitle(Buffer, way_point, in_task);
