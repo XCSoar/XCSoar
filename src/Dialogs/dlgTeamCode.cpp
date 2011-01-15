@@ -191,27 +191,22 @@ dlgTeamCodeShowModal(void)
   WndProperty* wp = NULL;
   WndButton *buttonCode = NULL;
 
-  if (Layout::landscape)
-    wf = LoadDialog(CallBackTable,
-        XCSoarInterface::main_window, _T("IDR_XML_TEAMCODE_L"));
-  else
-    wf = LoadDialog(CallBackTable,
-        XCSoarInterface::main_window, _T("IDR_XML_TEAMCODE"));
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                  Layout::landscape ? _T("IDR_XML_TEAMCODE_L") :
+                                      _T("IDR_XML_TEAMCODE"));
 
   if (!wf)
     return;
 
   // set event for button
   buttonCode = ((WndButton *)wf->FindByName(_T("cmdSetCode")));
-  if (buttonCode) {
+  if (buttonCode)
     buttonCode->SetOnClickNotify(OnCodeClicked);
-  }
 
   // Set unit for range
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
-  if (wp) {
+  if (wp)
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
-  }
 
   Update();
 
