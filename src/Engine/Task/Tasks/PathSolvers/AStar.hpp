@@ -151,7 +151,7 @@ public:
 
     do // remove this item
       q.pop();
-    while (!q.empty() && q.top().second->second.g < q.top().first.g);
+    while (!q.empty() && (q.top().first > q.top().second->second));
     // and all lower rank than this
 
     return cur->first;
@@ -168,7 +168,7 @@ public:
 #ifdef INSTRUMENT_TASK
     count_astar_links++;
 #endif
-    push(node, parent, cur->second + edge_value.adjust(m_min));
+    push(node, parent, get_node_value(parent) + edge_value.adjust(m_min));
     // note order of + here is important!
   }
 
@@ -208,6 +208,8 @@ public:
   gcc_pure
   AStarPriorityValue get_node_value(const Node &node) const {
     node_value_const_iterator it = node_values.find(node);
+    if (cur->first == node)
+      return cur->second;
     if (it == node_values.end()) {
       return AStarPriorityValue(0);
     } else {
