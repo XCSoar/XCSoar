@@ -92,12 +92,6 @@ struct SETTINGS_MAP {
    */
   SlopeShadingType_t SlopeShadingType;
 
-  /**
-   * 0: show all labels
-   * 1: show decluttered labels
-   * 2: show no labels
-   */
-  unsigned char DeclutterLabels;
   /** Snailtrail wind drifting in circling mode */
   bool EnableTrailDrift;
   /** Indicate extra distance reqd. if deviating from target heading */

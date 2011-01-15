@@ -161,9 +161,6 @@ TopologyFileRenderer::PaintLabels(Canvas &canvas,
                                   LabelBlock &label_block,
                                   const SETTINGS_MAP &settings_map) const
 {
-  if (settings_map.DeclutterLabels >= 2)
-    return;
-
   fixed map_scale = projection.GetMapScale();
   if (!file.is_visible(map_scale))
     return;

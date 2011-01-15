@@ -1383,23 +1383,26 @@ InputEvents::eventRun(const TCHAR *misc)
 void
 InputEvents::eventDeclutterLabels(const TCHAR *misc)
 {
-  if (_tcscmp(misc, _T("toggle")) == 0) {
-    XCSoarInterface::SetSettingsMap().DeclutterLabels++;
-    XCSoarInterface::SetSettingsMap().DeclutterLabels =
-        XCSoarInterface::SettingsMap().DeclutterLabels % 3;
-  } else if (_tcscmp(misc, _T("on")) == 0)
-    XCSoarInterface::SetSettingsMap().DeclutterLabels = 2;
-  else if (_tcscmp(misc, _T("off")) == 0)
-    XCSoarInterface::SetSettingsMap().DeclutterLabels = 0;
-  else if (_tcscmp(misc, _T("mid")) == 0)
-    XCSoarInterface::SetSettingsMap().DeclutterLabels = 1;
-  else if (_tcscmp(misc, _T("show")) == 0) {
-    if (XCSoarInterface::SettingsMap().DeclutterLabels == 0)
-      Message::AddMessage(_("Map labels ON"));
-    else if (XCSoarInterface::SettingsMap().DeclutterLabels == 1)
-      Message::AddMessage(_("Map labels MID"));
-    else
-      Message::AddMessage(_("Map labels OFF"));
+  static const TCHAR *msg[] = {_("Waypoint Labels: ALL"),
+                               _("Waypoint Labels: Task & Landables"),
+                               _("Waypoint Labels: Task"),
+                               _("Waypoint Labels: NONE")};
+  static const int n=sizeof(msg)/sizeof(msg[0]);
+  static const TCHAR *actions[n] = {_T("all"),
+                                    _T("task+landables"),
+                                    _T("task"),
+                                    _T("none")};
+
+  WayPointLabelSelection_t& wls = XCSoarInterface::SetSettingsMap()
+                                  .WayPointLabelSelection;
+  if (_tcscmp(misc, _T("toggle")) == 0)
+    wls = (WayPointLabelSelection_t) ((wls + 1) %  n);
+  else if (_tcscmp(misc, _T("show")) == 0)
+    Message::AddMessage(msg[wls]);
+  else {
+    for (int i=0; i<n; i++)
+      if (_tcscmp(misc, actions[i]) == 0)
+        wls = (WayPointLabelSelection_t) i;
   }
 
   trigger_redraw();

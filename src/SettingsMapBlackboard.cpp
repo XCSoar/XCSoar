@@ -31,7 +31,6 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.EnableTerrain = false;
   settings_map.NorthArrow = true;
   settings_map.SlopeShadingType = sstWind;
-  settings_map.DeclutterLabels = 0;
   settings_map.EnableTrailDrift = false;
   settings_map.EnableDetourCostMarker = false;
   settings_map.AutoZoom = false;

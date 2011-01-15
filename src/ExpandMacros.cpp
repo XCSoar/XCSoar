@@ -403,20 +403,14 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       _("Off"), _("On"), Size);
 
   if (_tcsstr(OutBuffer, _T("$(MapLabelsToggleActionName)"))) {
-    switch(SettingsMap().DeclutterLabels) {
-    case 0:
-      ReplaceInString(OutBuffer, _T("$(MapLabelsToggleActionName)"),
-                      _("MID"), Size);
-      break;
-    case 1:
-      ReplaceInString(OutBuffer, _T("$(MapLabelsToggleActionName)"),
-                      _("OFF"), Size);
-      break;
-    case 2:
-      ReplaceInString(OutBuffer, _T("$(MapLabelsToggleActionName)"),
-                      _("ON"), Size);
-      break;
-    }
+    static const TCHAR *labels[] = { _("All"),
+                                     _("Task & Landables"),
+                                     _("Task"),
+                                     _("None") };
+    static const int n = sizeof(labels)/sizeof(labels[0]);
+    int i = SettingsMap().WayPointLabelSelection;
+    ReplaceInString(OutBuffer, _T("$(MapLabelsToggleActionName)"),
+                    labels[(i + 1) % n], Size);
   }
 
   CondReplaceInString(SettingsComputer().auto_mc,
