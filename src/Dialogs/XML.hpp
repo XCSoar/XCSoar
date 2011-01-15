@@ -26,8 +26,10 @@ Copyright_License {
 
 #include <tchar.h>
 
+class Window;
 class WndForm;
 class SingleWindow;
+class ContainerWindow;
 
 /**
  * Class to hold callback entries for dialogs
@@ -54,6 +56,12 @@ enum DialogStyle
 };
 
 extern DialogStyle DialogStyleSetting;
+
+Window *
+LoadWindow(CallBackTableEntry *LookUpTable,
+              WndForm *form,
+              ContainerWindow &parent,
+              const TCHAR* resource);
 
 WndForm *
 LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,

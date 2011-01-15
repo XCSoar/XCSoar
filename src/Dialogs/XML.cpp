@@ -57,6 +57,9 @@ static int dialog_width_scale = 1024;
 // to full width of screen
 DialogStyle DialogStyleSetting = dsFullWidth;
 
+// used when loading stand-alone XML file with no form control
+static DialogStyle dialog_style_last = dsFullWidth;
+
 struct ControlSize: public SIZE
 {
   bool no_scaling;
@@ -74,6 +77,12 @@ typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
                                           int left, int top,
                                           unsigned width, unsigned height,
                                           const WindowStyle style);
+
+static Window *
+LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
+          CallBackTableEntry *LookUpTable,
+          XMLNode node, const DialogStyle eDialogStyle,
+          int bottom_most=0);
 
 static void
 LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
@@ -373,6 +382,57 @@ InitScaleWidth(const SIZE size, const RECT rc, const DialogStyle eDialogStyle)
 }
 
 /**
+ * Loads a stand-alone XML file as a single top-level XML node
+ * into an existing WndForm object and sets its parent to the parent parameter
+ * Ignores additional top-level XML nodes.
+ * Scales based on the DialogStyle of the last XML form loaded by XCSoar.
+ * The Window is destroyed by its Form's destructor
+ *
+ * @param LookUpTable The CallBackTable
+ * @param form The WndForm into which the Window is added
+ * @param parent The parent window of the control being created
+ *    set parent to "form-get_client_rect()" to make top level control
+ *    or to a PanelControl to add it to a tab window
+ * @param FileName The XML filename
+ * @return the pointer to the Window added to the form
+ */
+Window *
+LoadWindow(CallBackTableEntry *LookUpTable,
+              WndForm *form, ContainerWindow &parent,
+              const TCHAR* resource)
+{
+  if (!form)
+    return NULL;
+
+  XMLNode node = xmlOpenResourceHelper(resource);
+
+  if (node.isEmpty()) {
+    ShowXMLError();
+    return NULL;
+  }
+
+  if (node.isEmpty()) {
+    ShowXMLError();
+    return NULL;
+  }
+
+  // use style of last form loaded
+  DialogStyle dialog_style = dialog_style_last;
+
+  // load only one top-level control.
+  Window *window = LoadChild(*form, parent, form->GetBackColor(), LookUpTable,
+                             node, dialog_style,
+                             0);
+
+  if (XMLNode::GlobalError) {
+    ShowXMLError();
+    delete form;
+    return NULL;
+  }
+  return window;
+}
+
+/**
  * This function returns a WndForm created either from the ressources or
  * from the XML file in XCSoarData(if found)
  * @param LookUpTable The CallBackTable
@@ -411,6 +471,7 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
 
   // Determine the dialog style of the dialog
   DialogStyle dialog_style = GetDialogStyle(node);
+  dialog_style_last = dialog_style;
 
   // Determine the dialog size
   const TCHAR* Caption = GetCaption(node);
@@ -531,7 +592,7 @@ static Window *
 LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
           CallBackTableEntry *LookUpTable,
           XMLNode node, const DialogStyle eDialogStyle,
-          int bottom_most=0)
+          int bottom_most)
 {
   Window *window = NULL;
 
