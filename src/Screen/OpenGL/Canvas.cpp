@@ -40,13 +40,13 @@ Canvas::rectangle(int left, int top, int right, int bottom)
   vertices.bind();
 
   if (!brush.is_hollow()) {
-    brush.get_color().set();
+    brush.set();
     GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
   }
 
   if (pen_over_brush()) {
-    pen.get_color().set();
+    pen.set();
     glDrawArrays(GL_LINE_LOOP, 0, 4);
   }
 }
@@ -64,7 +64,7 @@ Canvas::polyline(const RasterPoint *lppt, unsigned cPoints)
 {
   glVertexPointer(2, GL_VALUE, 0, lppt);
 
-  pen.get_color().set();
+  pen.set();
   glDrawArrays(GL_LINE_STRIP, 0, cPoints);
 }
 
@@ -77,7 +77,7 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
   glVertexPointer(2, GL_VALUE, 0, lppt);
 
   if (!brush.is_hollow() && cPoints >= 3) {
-    brush.get_color().set();
+    brush.set();
     GLushort *triangles = new GLushort[3*(cPoints-2)];
     int idx_count = polygon_to_triangle(lppt, cPoints, triangles);
     if (idx_count > 0)
@@ -86,7 +86,7 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
   }
 
   if (pen_over_brush()) {
-    pen.get_color().set();
+    pen.set();
     glDrawArrays(GL_LINE_LOOP, 0, cPoints);
   }
 }
@@ -94,7 +94,7 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
 void
 Canvas::two_lines(int ax, int ay, int bx, int by, int cx, int cy)
 {
-  pen.get_color().set();
+  pen.set();
 
   const GLvalue v[] = { ax, ay, bx, by, cx, cy };
   glVertexPointer(2, GL_VALUE, 0, v);
@@ -105,7 +105,7 @@ void
 Canvas::two_lines(const RasterPoint a, const RasterPoint b,
                   const RasterPoint c)
 {
-  pen.get_color().set();
+  pen.set();
 
   const RasterPoint v[] = { a, b, c };
   glVertexPointer(2, GL_VALUE, 0, v);
@@ -119,12 +119,12 @@ Canvas::circle(int x, int y, unsigned radius)
   vertices.bind();
 
   if (!brush.is_hollow()) {
-    brush.get_color().set();
+    brush.set();
     glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.SIZE);
   }
 
   if (pen_over_brush()) {
-    pen.get_color().set();
+    pen.set();
     glDrawArrays(GL_LINE_LOOP, 2, vertices.OUTLINE_SIZE);
   }
 }

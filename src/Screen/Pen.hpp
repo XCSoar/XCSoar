@@ -142,6 +142,15 @@ public:
    */
   HPEN native() const { return pen; }
   #endif
+
+#ifdef ENABLE_OPENGL
+  /**
+   * Configures this pen in the OpenGL context.
+   */
+  void set() const {
+    color.set();
+  }
+#endif /* OPENGL */
 };
 
 #endif

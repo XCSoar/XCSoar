@@ -50,7 +50,7 @@ class ShapeRenderer : private NonCopyable {
 public:
   void configure(const Pen *_pen, const Brush *_brush) {
 #ifdef ENABLE_OPENGL
-    _pen->get_color().set();
+    _pen->set();
 #else
     pen = _pen;
     brush = _brush;

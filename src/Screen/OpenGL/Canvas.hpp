@@ -233,7 +233,7 @@ public:
   void polygon(const RasterPoint *points, unsigned num_points);
 
   void line(int ax, int ay, int bx, int by) {
-    pen.get_color().set();
+    pen.set();
 
     const GLvalue v[] = { ax, ay, bx, by };
     glVertexPointer(2, GL_VALUE, 0, v);

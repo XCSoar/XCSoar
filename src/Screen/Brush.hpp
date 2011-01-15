@@ -107,6 +107,15 @@ public:
     return brush;
   }
   #endif
+
+#ifdef ENABLE_OPENGL
+  /**
+   * Configures this brush in the OpenGL context.
+   */
+  void set() const {
+    color.set();
+  }
+#endif /* OPENGL */
 };
 
 #endif
