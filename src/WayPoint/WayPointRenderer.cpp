@@ -79,7 +79,7 @@ public:
   }
 
   void
-  FormatTitle(TCHAR* Buffer, const Waypoint &way_point, bool in_task)
+  FormatTitle(TCHAR* Buffer, const Waypoint &way_point)
   {
     Buffer[0] = _T('\0');
 
@@ -180,7 +180,7 @@ public:
     }
 
     TCHAR Buffer[32];
-    FormatTitle(Buffer, way_point, in_task);
+    FormatTitle(Buffer, way_point);
 
     if (AltArrivalAGL != 0) {
       size_t length = _tcslen(Buffer);
