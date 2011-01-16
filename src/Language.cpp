@@ -121,6 +121,7 @@ gettext(const TCHAR* text)
 
 const struct builtin_language language_table[] = {
   { LANG_GERMAN, _T("de.mo") },
+  { LANG_SPANISH, _T("es.mo") },
   { LANG_FRENCH, _T("fr.mo") },
   { LANG_HUNGARIAN, _T("hu.mo") },
   { LANG_DUTCH, _T("nl.mo") },

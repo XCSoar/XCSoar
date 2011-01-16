@@ -209,6 +209,7 @@ IDR_XML_TASKPOINTTYPE_L XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskPointType_L.xml"
 
 // translations
 de.mo MO DISCARDABLE "../output/po/de.mo"
+es.mo MO DISCARDABLE "../output/po/es.mo"
 fr.mo MO DISCARDABLE "../output/po/fr.mo"
 hu.mo MO DISCARDABLE "../output/po/hu.mo"
 nl.mo MO DISCARDABLE "../output/po/nl.mo"
