@@ -11,6 +11,7 @@ Changes to version 6.0.2 (since 6.0.1):
 * map
   - Waypoints: more reliable waypoint decluttering
   - Topology: fix rendering bug
+  - Terrain: reduce slope shading artefacts
   - Terrain: load more raster tiles on modern devices
   - Task: fix crash when drawing deformed sectors
 * data files
