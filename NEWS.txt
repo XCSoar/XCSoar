@@ -8,6 +8,7 @@ Changes to version 6.0.2 (since 6.0.1):
 * user interface
   - Language: translation updates
   - Language: add Spanish translation
+  - Language: add Russian translation
   - Window: disable sunken window edges on HP31x
 * map
   - Waypoints: more reliable waypoint decluttering
