@@ -120,14 +120,6 @@ public:
 
   static bool register_class(HINSTANCE hInstance);
 
-#ifdef WIN32
-  /**
-   * Identifies the HWND: if the handle is a MapWindow instance, this
-   * function returns true.
-   */
-  static bool identify(HWND hWnd);
-#endif
-
   virtual void set(ContainerWindow &parent, const RECT &rc);
 
   void set_way_points(const Waypoints *_way_points) {

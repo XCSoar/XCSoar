@@ -558,7 +558,7 @@ dlgTargetShowModal()
 
   wf->SetTimerNotify(OnTimerNotify);
 
-  wf->ShowModal(true); // enable map
+  wf->ShowModal(&XCSoarInterface::main_window.map); // enable map
   XCSoarInterface::SetSettingsMap().EnablePan = oldEnablePan;
   XCSoarInterface::SetSettingsMap().PanLocation = oldPanLocation;
   XCSoarInterface::SetSettingsMap().TargetPan = false;

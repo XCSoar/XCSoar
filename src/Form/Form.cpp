@@ -26,7 +26,6 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "Asset.hpp"
 #include "Interface.hpp"
-#include "MapWindow.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
@@ -238,17 +237,18 @@ WndForm::SetTitleFont(const Font &font)
 #ifndef ENABLE_SDL
 
 static bool
-is_allowed_map_message(UINT message)
+is_allowed_mouse_message(UINT message)
 {
   return message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ||
     message == WM_MOUSEMOVE;
 }
 
 static bool
-is_allowed_map(HWND hWnd, UINT message, bool enable_map)
+is_allowed_mouse(HWND hWnd, UINT message, Window *allowed_mouse)
 {
-  return !is_altair() && enable_map && MapWindow::identify(hWnd) &&
-    is_allowed_map_message(message);
+  return !is_altair() && allowed_mouse != NULL &&
+    (HWND)*allowed_mouse == hWnd &&
+    is_allowed_mouse_message(message);
 }
 
 /**
@@ -285,7 +285,9 @@ check_special_key(const MSG &msg)
 
 #endif /* !ENABLE_SDL */
 
-int WndForm::ShowModal(bool bEnableMap) {
+int
+WndForm::ShowModal(Window *mouse_allowed)
+{
   assert_none_locked();
 
 #define OPENCLOSESUPPRESSTIME 500
@@ -352,7 +354,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 
     if (is_user_input(msg.message)
         && !identify_descendant(msg.hwnd) // not current window or child
-        && !is_allowed_map(msg.hwnd, msg.message, bEnableMap))
+        && !is_allowed_mouse(msg.hwnd, msg.message, mouse_allowed))
       continue;   // make it modal
 
     // hack to stop exiting immediately

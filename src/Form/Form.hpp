@@ -210,7 +210,11 @@ public:
   /** Set the font of the titlebar */
   void SetTitleFont(const Font &font);
 
-  int ShowModal(bool bEnableMap = false);
+  /**
+   * @param mouse_allowed a Window which is allowed to get mouse
+   * input, even though the dialog is modal (a hack for dlgTarget)
+   */
+  int ShowModal(Window *mouse_allowed=NULL);
 
   const TCHAR *GetCaption() const {
     return mCaption;
