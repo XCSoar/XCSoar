@@ -60,7 +60,7 @@ MapWindow::set(ContainerWindow &parent, const RECT &rc)
 {
   WindowStyle style;
   style.enable_double_clicks();
-  DoubleBufferWindow::set(parent, _T("XCSoarMap"), rc.left, rc.top,
+  DoubleBufferWindow::set(parent, rc.left, rc.top,
                           rc.right - rc.left, rc.bottom - rc.top,
                           style);
 
@@ -154,29 +154,6 @@ MapWindow::on_paint_buffer(Canvas &canvas)
   buffer_projection = render_projection;
   buffer_generation = render_generation;
 #endif
-}
-
-bool
-MapWindow::register_class(HINSTANCE hInstance)
-{
-#ifdef ENABLE_SDL
-  return true;
-#else /* !ENABLE_SDL */
-  WNDCLASS wc;
-
-  wc.hInstance = hInstance;
-  wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
-  wc.lpfnWndProc = MapWindow::WndProc;
-  wc.cbClsExtra = 0;
-  wc.cbWndExtra = 0 ;
-  wc.hIcon = (HICON)NULL;
-  wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-  wc.hbrBackground = (HBRUSH)GetStockObject (WHITE_BRUSH);
-  wc.lpszMenuName = 0;
-  wc.lpszClassName = _T("XCSoarMap");
-
-  return (RegisterClass(&wc)!= FALSE);
-#endif /* !ENABLE_SDL */
 }
 
 void

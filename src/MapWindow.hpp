@@ -118,8 +118,6 @@ public:
   MapWindow();
   ~MapWindow();
 
-  static bool register_class(HINSTANCE hInstance);
-
   virtual void set(ContainerWindow &parent, const RECT &rc);
 
   void set_way_points(const Waypoints *_way_points) {

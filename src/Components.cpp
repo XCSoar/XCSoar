@@ -244,7 +244,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // Register window classes
   PaintWindow::register_class(hInstance);
   MainWindow::register_class(hInstance);
-  MapWindow::register_class(hInstance);
 
   // Send the SettingsMap to the DeviceBlackboard
   SendSettingsMap();

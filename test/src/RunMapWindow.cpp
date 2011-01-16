@@ -274,7 +274,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   ResourceLoader::Init(hInstance);
 
   TestWindow::register_class(hInstance);
-  MapWindow::register_class(hInstance);
+  PaintWindow::register_class(hInstance);
 #endif
 
   TestWindow window;
