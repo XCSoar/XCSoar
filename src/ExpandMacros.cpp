@@ -401,13 +401,17 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
   if (_tcsstr(OutBuffer, _T("$(MapLabelsToggleActionName)"))) {
     static const TCHAR *const labels[] = { N_("All"),
-                                           N_("Task + Landables"),
+                                           N_("Task & Landables"),
                                            N_("Task"),
                                            N_("None") };
     static const unsigned int n = sizeof(labels)/sizeof(labels[0]);
     unsigned int i = SettingsMap().WayPointLabelSelection;
     ReplaceInString(OutBuffer, _T("$(MapLabelsToggleActionName)"),
                     gettext(labels[(i + 1) % n]), Size);
+#if defined(WIN32) && !defined(GREEN_MENU)
+    if (i + 1 == 1)
+      ReplaceInString(OutBuffer, _T(" & "), _T(" && "), Size);
+#endif
   }
 
   CondReplaceInString(SettingsComputer().auto_mc,
