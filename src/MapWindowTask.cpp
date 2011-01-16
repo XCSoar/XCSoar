@@ -171,18 +171,9 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
       TCHAR Buffer[5];
       _stprintf(Buffer, _T("%d"), idist);
       RasterPoint sc = render_projection.GeoToScreen(dloc);
-      RECT brect;
       SIZE tsize = canvas.text_size(Buffer);
-      
-      brect.left = sc.x - 4;
-      brect.right = brect.left + tsize.cx + 4;
-      brect.top = sc.y - 4;
-      brect.bottom = brect.top + tsize.cy + 4;
-      
-      if (label_block.check(brect)) {
-        canvas.text(sc.x - tsize.cx / 2, sc.y - tsize.cy / 2, Buffer);
-        ilast = idist;
-      }
+      canvas.text(sc.x - tsize.cx / 2, sc.y - tsize.cy / 2, Buffer);
+      ilast = idist;
     }
   }
 }
