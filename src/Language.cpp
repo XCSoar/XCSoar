@@ -111,7 +111,10 @@ gettext(const TCHAR* text)
   translations[text2] = translation2;
   return translations[text2].c_str();
 #else
-  return mo_file->lookup(text);
+  const char *translation = mo_file->lookup(text);
+  return translation != NULL && *translation != 0
+    ? translation
+    : text;
 #endif
 }
 
