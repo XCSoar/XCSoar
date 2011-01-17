@@ -3495,10 +3495,6 @@ msgstr ""
 msgid "Final glide bar"
 msgstr ""
 
-#: Data/Dialogs/dlgWaypointEdit.xml:6 Data/Dialogs/dlgWaypointEdit_L.xml:6
-msgid "Name: "
-msgstr ""
-
 #: Data/Dialogs/dlgConfiguration.xml:505
 #: Data/Dialogs/dlgConfiguration_L.xml:504
 msgid "Start max speed margin"
@@ -3813,7 +3809,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgSimulatorPrompt.xml:4
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:4
-msgid "What do you want to do:"
+msgid "What do you want to do?"
 msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:4 Data/Dialogs/dlgTeamCode_L.xml:4
@@ -3864,11 +3860,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:118 Data/Dialogs/dlgVario_L.xml:119
 msgid "Circling hi cutoff"
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:575
-#: Data/Dialogs/dlgConfiguration_L.xml:574
-msgid "Logger ID: "
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:175
@@ -3944,7 +3935,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:564
 #: Data/Dialogs/dlgConfiguration_L.xml:563
-msgid "This is the time interval between logged points when circling. "
+msgid "This is the time interval between logged points when circling."
 msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:7 Data/Dialogs/dlgVario_L.xml:8
@@ -4649,11 +4640,6 @@ msgstr ""
 msgid "Units used for task speeds."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:569
-#: Data/Dialogs/dlgConfiguration_L.xml:568
-msgid "Pilot name: "
-msgstr ""
-
 #: Data/Dialogs/dlgTarget.xml:15 Data/Dialogs/dlgTarget_L.xml:19
 msgid "Radial"
 msgstr ""
@@ -4742,11 +4728,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgTaskPointType.xml:3 Data/Dialogs/dlgTaskPointType_L.xml:3
 msgid "Task Point Type"
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:573
-#: Data/Dialogs/dlgConfiguration_L.xml:572
-msgid "Competition Id: "
 msgstr ""
 
 #: Data/Dialogs/dlgBasicSettings.xml:12
@@ -5261,11 +5242,6 @@ msgstr ""
 msgid "Free"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:571
-#: Data/Dialogs/dlgConfiguration_L.xml:570
-msgid "Aircraft type: "
-msgstr ""
-
 #: Data/Dialogs/dlgStatusTask.xml:11
 msgid "Speed achieved"
 msgstr ""
@@ -5433,7 +5409,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:248
 msgid ""
 "The MacCready setting used in task abort mode and for determining arrival "
-"altitude at airfields. "
+"altitude at airfields."
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:265
@@ -5480,7 +5456,7 @@ msgstr ""
 #: Data/Dialogs/dlgVario.xml:66 Data/Dialogs/dlgVario_L.xml:67
 msgid ""
 "Calibration factor applied to dynamic pressure used in total energy "
-"calculation. "
+"calculation."
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:441
@@ -5649,7 +5625,7 @@ msgid ""
 "that in this case could be almost zero! Normally for gliders a good value is "
 "90-120 seconds, and for paragliders 15 seconds. Lower values will give as a "
 "result pretty much the same as LD Instant , while higher values will look "
-"like LD Cruise. Other commercial instruments and software use 2 minutes. "
+"like LD Cruise. Other commercial instruments and software use 2 minutes."
 msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:28 Data/Dialogs/dlgVario_L.xml:29
@@ -5671,7 +5647,7 @@ msgstr ""
 #: Data/Dialogs/dlgVario.xml:62 Data/Dialogs/dlgVario_L.xml:63
 msgid ""
 "Calibration factor applied to static pressure used in total energy "
-"calculation. "
+"calculation."
 msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:10
@@ -5843,7 +5819,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:559
 #: Data/Dialogs/dlgConfiguration_L.xml:558
-msgid "This is the time interval between logged points when not circling. "
+msgid "This is the time interval between logged points when not circling."
 msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:126 Data/Dialogs/dlgVario_L.xml:127
@@ -6070,11 +6046,6 @@ msgstr ""
 msgid "Ballast"
 msgstr ""
 
-#: Data/Dialogs/dlgConfigInfoboxes.xml:3
-#: Data/Dialogs/dlgConfigInfoboxes_L.xml:3
-msgid "Configuration - InfoBoxes - "
-msgstr ""
-
 #: Data/Dialogs/dlgTaskProperties.xml:13
 #: Data/Dialogs/dlgTaskProperties_L.xml:13
 msgid "Task scoring"
@@ -6125,10 +6096,6 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:150
 #: Data/Dialogs/dlgConfiguration_L.xml:150
 msgid "North arrow*"
-msgstr ""
-
-#: Data/Dialogs/dlgWaypointEdit.xml:8 Data/Dialogs/dlgWaypointEdit_L.xml:8
-msgid "Comment: "
 msgstr ""
 
 #: Data/Dialogs/dlgSimulatorPrompt.xml:5

@@ -224,7 +224,7 @@
       </Edit>
     
       <Edit Name="prpAverEffTime" Caption="L/D Average period*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Average efficiency is always calculated in REAL TIME. Here you can decide on how many seconds of flight this calculation must be done. The real distance covered second by second in this period is divided by the final difference of altitude.  So if for example you go and return back to the same point after 2 minutes, and you have set 2 minutes as period, averageLD will consider the total distance covered in those two minutes , and NOT the distance between your position 2 minutes before and your current position, that in this case could be almost zero! Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds. Lower values will give as a result pretty much the same as LD Instant , while higher values will look like LD Cruise. Other commercial instruments and software use 2 minutes. ">
+        Help="Average efficiency is always calculated in REAL TIME. Here you can decide on how many seconds of flight this calculation must be done. The real distance covered second by second in this period is divided by the final difference of altitude.  So if for example you go and return back to the same point after 2 minutes, and you have set 2 minutes as period, averageLD will consider the total distance covered in those two minutes , and NOT the distance between your position 2 minutes before and your current position, that in this case could be almost zero! Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds. Lower values will give as a result pretty much the same as LD Instant , while higher values will look like LD Cruise. Other commercial instruments and software use 2 minutes.">
         <DataField DataType="enum"/>
       </Edit>      
     </Panel>
@@ -246,7 +246,7 @@
       </Edit>
     
       <Edit Name="prpSafetyMacCready" Caption="Safety Mc*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="The MacCready setting used in task abort mode and for determining arrival altitude at airfields. ">
+        Help="The MacCready setting used in task abort mode and for determining arrival altitude at airfields.">
         <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="10" Step="0.1"/>
       </Edit>
 
@@ -557,22 +557,22 @@
   
     <Panel Name="frmLogger">
       <Edit Name="prpLoggerTimeStepCruise" Caption="Time step cruise*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="This is the time interval between logged points when not circling. ">
+        Help="This is the time interval between logged points when not circling.">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="30" Step="1"/>
       </Edit>
   
       <Edit Name="prpLoggerTimeStepCircling" Caption="Time step circling*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="This is the time interval between logged points when circling. ">
+        Help="This is the time interval between logged points when circling.">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="30" Step="1"/>
       </Edit>
   
-      <Button Name="cmdPilotName" Caption="Pilot name: " X="2" Width="-2" Height="22" />
+      <Button Name="cmdPilotName" Caption="Pilot name" X="2" Width="-2" Height="22" />
     
-      <Button Name="cmdAircraftType" Caption="Aircraft type: " X="2" Width="-2" Height="22" />
+      <Button Name="cmdAircraftType" Caption="Aircraft type" X="2" Width="-2" Height="22" />
     
-      <Button Name="cmdAircraftRego" Caption="Competition Id: " X="2" Width="-2" Height="22" />
+      <Button Name="cmdAircraftRego" Caption="Competition Id" X="2" Width="-2" Height="22" />
     
-      <Button Name="cmdLoggerID" Caption="Logger ID: " X="2" Width="-2" Height="22" />
+      <Button Name="cmdLoggerID" Caption="Logger ID" X="2" Width="-2" Height="22" />
     
       <Edit Name="prpLoggerShortName" Caption="Short file name" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="This determines whether the logger uses the short IGC file name or the long IGC file name. Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).">
