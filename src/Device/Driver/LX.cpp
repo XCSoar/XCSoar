@@ -174,6 +174,6 @@ LXCreateOnPort(Port *com_port)
 
 const struct DeviceRegister lxDevice = {
   _T("LX"),
-  drfGPS | drfBaroAlt | drfSpeed | drfVario,
+  drfBaroAlt,
   LXCreateOnPort,
 };

@@ -339,6 +339,6 @@ LXNanoCreateOnPort(Port *com_port)
 
 const struct DeviceRegister lxNanoDevice = {
   _T("LX Nano"),
-  drfGPS | drfLogger | drfBaroAlt,
+  drfLogger | drfBaroAlt,
   LXNanoCreateOnPort,
 };

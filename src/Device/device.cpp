@@ -273,12 +273,6 @@ devIsLogger(const DeviceDescriptor &d)
 }
 
 bool
-devIsGPSSource(const DeviceDescriptor &d)
-{
-  return d.IsGPSSource();
-}
-
-bool
 devIsBaroSource(const DeviceDescriptor &d)
 {
   return d.IsBaroSource();

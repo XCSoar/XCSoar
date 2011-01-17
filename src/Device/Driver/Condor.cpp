@@ -122,6 +122,6 @@ CondorCreateOnPort(Port *com_port)
 
 const struct DeviceRegister condorDevice = {
   _T("Condor"),
-  drfGPS | drfBaroAlt | drfSpeed | drfVario,
+  drfBaroAlt,
   CondorCreateOnPort,
 };

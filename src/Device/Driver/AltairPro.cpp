@@ -340,6 +340,6 @@ AltairProCreateOnPort(Port *com_port)
 
 const struct DeviceRegister atrDevice = {
   _T("Altair RU"),
-  drfGPS | drfBaroAlt | drfLogger,
+  drfBaroAlt | drfLogger,
   AltairProCreateOnPort,
 };

@@ -313,6 +313,6 @@ VolksloggerCreateOnPort(Port *com_port)
 
 const struct DeviceRegister vlDevice = {
   _T("Volkslogger"),
-  drfGPS | drfLogger | drfBaroAlt,
+  drfLogger | drfBaroAlt,
   VolksloggerCreateOnPort,
 };

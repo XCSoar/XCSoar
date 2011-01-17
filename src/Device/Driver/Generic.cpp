@@ -35,6 +35,6 @@ GenericCreateOnPort(Port *com_port)
 
 const struct DeviceRegister genDevice = {
   _T("Generic"),
-  drfGPS,
+  0,
   GenericCreateOnPort,
 };

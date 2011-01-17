@@ -134,6 +134,6 @@ FlytecCreateOnPort(Port *com_port)
 
 const struct DeviceRegister flytec_device_driver = {
   _T("Flytec"),
-  drfGPS | drfBaroAlt | drfSpeed | drfVario,
+  drfBaroAlt,
   FlytecCreateOnPort,
 };

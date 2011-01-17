@@ -113,14 +113,6 @@ DeviceDescriptor::IsLogger() const
 }
 
 bool
-DeviceDescriptor::IsGPSSource() const
-{
-  return Driver != NULL &&
-    ((Driver->Flags & drfGPS) != 0 ||
-     (device != NULL && device->IsGPSSource()));
-}
-
-bool
 DeviceDescriptor::IsBaroSource() const
 {
   return Driver != NULL &&

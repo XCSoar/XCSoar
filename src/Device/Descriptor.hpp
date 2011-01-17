@@ -66,7 +66,6 @@ public:
   bool IsDriver(const TCHAR *name) const;
 
   bool IsLogger() const;
-  bool IsGPSSource() const;
   bool IsBaroSource() const;
   bool IsRadio() const;
 

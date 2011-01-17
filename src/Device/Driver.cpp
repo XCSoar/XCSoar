@@ -43,12 +43,6 @@ AbstractDevice::IsLogger()
 }
 
 bool
-AbstractDevice::IsGPSSource()
-{
-  return false;
-}
-
-bool
 AbstractDevice::IsBaroSource()
 {
   return false;

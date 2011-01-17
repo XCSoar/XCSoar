@@ -439,6 +439,6 @@ VegaCreateOnPort(Port *com_port)
 
 const struct DeviceRegister vgaDevice = {
   _T("Vega"),
-  drfGPS | drfBaroAlt | drfSpeed | drfVario, // drfLogger if FLARM connected
+  drfBaroAlt, // drfLogger if FLARM connected
   VegaCreateOnPort,
 };

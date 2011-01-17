@@ -147,6 +147,6 @@ B50CreateOnPort(Port *com_port)
 
 const struct DeviceRegister b50Device = {
   _T("Borgelt B50"),
-  drfGPS,
+  0,
   B50CreateOnPort,
 };

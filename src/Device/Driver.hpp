@@ -44,7 +44,6 @@ public:
   virtual void LinkTimeout() = 0;
 
   virtual bool IsLogger() = 0;
-  virtual bool IsGPSSource() = 0;
   virtual bool IsBaroSource() = 0;
 
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
@@ -75,7 +74,6 @@ public:
   virtual void LinkTimeout();
 
   virtual bool IsLogger();
-  virtual bool IsGPSSource();
   virtual bool IsBaroSource();
 
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
@@ -96,24 +94,14 @@ public:
 };
 
 typedef enum {
-  dfGPS,
   dfLogger,
-  dfSpeed,
-  dfVario,
   dfBaroAlt,
-  dfWind,
-  dfVoice,
   dfNmeaOut,
   dfRadio,
 } DeviceFlags_t;
 
-#define drfGPS		(1l << dfGPS)
 #define drfLogger	(1l << dfLogger)
-#define drfSpeed	(1l << dfSpeed)
-#define drfVario	(1l << dfVario)
 #define drfBaroAlt	(1l << dfBaroAlt)
-#define drfWind		(1l << dfWind)
-#define drfVoice	(1l << dfVoice)
 #define drfNmeaOut	(1l << dfNmeaOut)
 #define drfRadio	(1l << dfRadio)
 

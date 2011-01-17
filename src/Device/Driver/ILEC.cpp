@@ -113,6 +113,6 @@ ILECCreateOnPort(Port *com_port)
 
 const struct DeviceRegister ilec_device_driver = {
   _T("ILEC SN10"),
-  drfGPS | drfBaroAlt | drfVario,
+  drfBaroAlt,
   ILECCreateOnPort,
 };
