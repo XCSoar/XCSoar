@@ -23,38 +23,7 @@ Copyright_License {
 
 #include "Screen/Util.hpp"
 #include "Screen/Canvas.hpp"
-
-/**
- * Coordinates of the sine-function (x-Coordinates of a circle)
- * Even though this data is available from the fast(co)sine, it is faster to have a local small array since we will
- * be iterating through this directly.  Iterating through fast(co)sine requires more operations.
- */
-static const double xcoords[64] = {
-  0,			0.09801714,		0.195090322,	0.290284677,	0.382683432,	0.471396737,	0.555570233,	0.634393284,
-  0.707106781,	0.773010453,	0.831469612,	0.881921264,	0.923879533,	0.956940336,	0.98078528,		0.995184727,
-  1,			0.995184727,	0.98078528,		0.956940336,	0.923879533,	0.881921264,	0.831469612,	0.773010453,
-  0.707106781,	0.634393284,	0.555570233,	0.471396737,	0.382683432,	0.290284677,	0.195090322,	0.09801714,
-  0,			-0.09801714,	-0.195090322,	-0.290284677,	-0.382683432,	-0.471396737,	-0.555570233,	-0.634393284,
-  -0.707106781,	-0.773010453,	-0.831469612,	-0.881921264,	-0.923879533,	-0.956940336,	-0.98078528,	-0.995184727,
-  -1,			-0.995184727,	-0.98078528,	-0.956940336,	-0.923879533,	-0.881921264,	-0.831469612,	-0.773010453,
-  -0.707106781,	-0.634393284,	-0.555570233,	-0.471396737,	-0.382683432,	-0.290284677,	-0.195090322,	-0.09801714
-};
-
-/**
- * Coordinates of the cosine-function (y-Coordinates of a circle)
- */
-static const double ycoords[64] = {
-  1,			0.995184727,	0.98078528,		0.956940336,	0.923879533,	0.881921264,	0.831469612,	0.773010453,
-  0.707106781,	0.634393284,	0.555570233,	0.471396737,	0.382683432,	0.290284677,	0.195090322,	0.09801714,
-  0,			-0.09801714,	-0.195090322,	-0.290284677,	-0.382683432,	-0.471396737,	-0.555570233,	-0.634393284,
-  -0.707106781,	-0.773010453,	-0.831469612,	-0.881921264,	-0.923879533,	-0.956940336,	-0.98078528,	-0.995184727,
-  -1,			-0.995184727,	-0.98078528,	-0.956940336,	-0.923879533,	-0.881921264,	-0.831469612,	-0.773010453,
-  -0.707106781,	-0.634393284,	-0.555570233,	-0.471396737,	-0.382683432,	-0.290284677,	-0.195090322,	-0.09801714,
-  0,			0.09801714,		0.195090322,	0.290284677,	0.382683432,	0.471396737,	0.555570233,	0.634393284,
-  0.707106781,	0.773010453,	0.831469612,	0.881921264,	0.923879533,	0.956940336,	0.98078528,		0.995184727
-};
-
-static const fixed seg_steps_degrees(64/ 360.0);
+#include "Math/FastMath.h"
 
 bool
 Segment(Canvas &canvas, long x, long y, int radius,
@@ -67,21 +36,8 @@ Segment(Canvas &canvas, long x, long y, int radius,
   if (!IntersectRect(&bounds, &bounds, &rc))
     return false;
 
-  start = start.as_bearing();
-  end = end.as_bearing();
-
-  int istart = iround(start.value_degrees()*seg_steps_degrees);
-  int iend = iround(end.value_degrees()*seg_steps_degrees);
-
-  // adjust for wraparound
-  if (istart > iend) {
-    iend+= 64;
-  }
-  // we want accurate placement of start/end, so we draw those with
-  // accurate calculation, the rest use the table
-  // skip to next 
-  istart++;
-  iend--;
+  const int istart = NATIVE_TO_INT(start.value_native());
+  const int iend = NATIVE_TO_INT(end.value_native());
 
   int npoly = 0;
   RasterPoint pt[66];
@@ -94,24 +50,25 @@ Segment(Canvas &canvas, long x, long y, int radius,
   }
 
   // add start node
-  pt[npoly].x = x + (long)(radius * start.fastsine());
-  pt[npoly].y = y - (long)(radius * start.fastcosine());
+  pt[npoly].x = x + ISINETABLE[istart] * radius / 1024;
+  pt[npoly].y = y - ICOSTABLE[istart] * radius / 1024;
   npoly++;
-    
-  if (istart<iend) {
-    // add intermediate nodes (if any)
-    for (int i = istart; i <= iend; ++i) {
-      pt[npoly].x = x + (long)(radius * xcoords[i % 64]);
-      pt[npoly].y = y - (long)(radius * ycoords[i % 64]);
-      if ((pt[npoly].x != pt[npoly-1].x) || (pt[npoly].y != pt[npoly-1].y)) {
-        npoly++;
-      }
+
+  // add intermediate nodes (if any)
+  int ilast = istart < iend ? iend : iend + 4096;
+  for (int i = istart + 4096 / 64; i < ilast; i += 4096 / 64) {
+    int angle = i & 0xfff;
+    pt[npoly].x = x + ISINETABLE[angle] * radius / 1024;
+    pt[npoly].y = y - ICOSTABLE[angle] * radius / 1024;
+
+    if ((pt[npoly].x != pt[npoly-1].x) || (pt[npoly].y != pt[npoly-1].y)) {
+      npoly++;
     }
   }
 
   // and end node
-  pt[npoly].x = x + (long)(radius * end.fastsine());
-  pt[npoly].y = y - (long)(radius * end.fastcosine());
+  pt[npoly].x = x + ISINETABLE[iend] * radius / 1024;
+  pt[npoly].y = y - ICOSTABLE[iend] * radius / 1024;
   npoly++;
 
   assert(npoly <= 66);
