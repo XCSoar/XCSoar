@@ -39,6 +39,10 @@ Copyright_License {
 #include "OS/DynamicLibrary.hpp"
 #endif
 
+#ifdef ANDROID
+#include "Java/Global.hpp"
+#endif
+
 #include <windef.h> /* for MAX_PATH */
 
 #if defined(HAVE_POSIX) && !defined(ANDROID)
@@ -186,7 +190,58 @@ detect_language()
 {
 #ifdef ANDROID
 
-  return NULL; // XXX
+  JNIEnv *env = Java::GetEnv();
+
+  jclass cls = env->FindClass("java/util/Locale");
+  assert(cls != NULL);
+
+  /* call Locale.getDefault() */
+
+  jmethodID cid = env->GetStaticMethodID(cls, "getDefault",
+                                         "()Ljava/util/Locale;");
+  assert(cid != NULL);
+
+  jobject obj = env->CallStaticObjectMethod(cls, cid);
+  if (obj == NULL) {
+    env->DeleteLocalRef(cls);
+    return NULL;
+  }
+
+  /* call Locale.getLanguage() */
+
+  cid = env->GetMethodID(cls, "getLanguage", "()Ljava/lang/String;");
+  assert(cid != NULL);
+
+  env->DeleteLocalRef(cls);
+
+  jstring language = (jstring)env->CallObjectMethod(obj, cid);
+  if (language == NULL) {
+    env->DeleteLocalRef(obj);
+    return NULL;
+  }
+
+  env->DeleteLocalRef(obj);
+
+  const char *language2 = env->GetStringUTFChars(language, NULL);
+  if (language2 == NULL) {
+    env->DeleteLocalRef(language);
+    return NULL;
+  }
+
+  /* generate the resource name */
+
+  const char *language3 = language2;
+  if (strcmp(language3, "pt") == 0)
+    /* hack */
+    language3 = "pt_BR";
+
+  static char language_buffer[16];
+  snprintf(language_buffer, sizeof(language_buffer), "%s.mo", language3);
+
+  env->ReleaseStringUTFChars(language, language2);
+  env->DeleteLocalRef(language);
+
+  return language_buffer;
 
 #else /* !ANDROID */
 
