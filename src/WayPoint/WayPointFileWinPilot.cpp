@@ -35,6 +35,7 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
 {
   TCHAR ctemp[255];
   const TCHAR *params[20];
+  static const unsigned int max_params=sizeof(params)/sizeof(params[0]);
   size_t n_params;
 
   // If (end-of-file or comment)
@@ -51,7 +52,7 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
   GeoPoint location;
 
   // Get fields
-  n_params = extractParameters(line, ctemp, params, 20);
+  n_params = extractParameters(line, ctemp, params, max_params, true);
   if (n_params < 6)
     return false;
 
@@ -68,8 +69,9 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
   new_waypoint.FileNum = file_num;
 
   // Name (e.g. KAMPLI)
-  if (!parseString(params[5], new_waypoint.Name))
+  if (*params[5] == _T('\0'))
     return false;
+  new_waypoint.Name=params[5];
 
   // Altitude (e.g. 458M)
   /// @todo configurable behaviour
@@ -78,7 +80,7 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
 
   if (n_params > 6) {
     // Description (e.g. 119.750 Airport)
-    parseString(params[6], new_waypoint.Comment);
+    new_waypoint.Comment=params[6];
   }
 
   // Waypoint Flags (e.g. AT)
