@@ -90,16 +90,6 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
   return true;
 }
 
-
-bool
-WayPointFileWinPilot::parseString(const TCHAR* src, tstring& dest)
-{
-  // Just assign and trim it
-  dest.assign(src);
-  trim_inplace(dest);
-  return true;
-}
-
 bool
 WayPointFileWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {
