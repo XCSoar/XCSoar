@@ -160,7 +160,6 @@ void dlgFlarmTrafficShowModal();
 void dlgFlarmTrafficDetailsShowModal(FlarmId id);
 bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0,
                                    AllowedCharactersCallback_t accb=NULL);
-void dlgNumberEntryKeyboardShowModal(int *value, int width = 0);
 
 int
 ComboPicker(SingleWindow &parent, const TCHAR *caption,
