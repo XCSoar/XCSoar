@@ -69,7 +69,7 @@ TestExtractParameters()
   ok1(_tcscmp(params[2], _T("\"bar\"")) == 0);
 
   n = WayPointFile::extractParameters(_T("\"foo,comma\",\"bar\""),
-                                      buffer, params, 64, _T('"'));
+                                      buffer, params, 64, false, _T('"'));
   ok1(n == 2);
   ok1(_tcscmp(params[0], _T("foo,comma")) == 0);
   ok1(_tcscmp(params[1], _T("bar")) == 0);
@@ -242,7 +242,7 @@ CreateOriginalWaypoints()
   Waypoint wp(loc);
   wp.Altitude = fixed(488);
   wp.Name = _T("Bergneustadt");
-  wp.Comment = _T("123.650 0° 0.0m Caution, parachuters");
+  wp.Comment = _T("123.650 0° 0.0m Rabbit holes, 20\" ditch south end of rwy");
 
   wp.Flags.Airport = true;
   wp.Flags.TurnPoint = true;
