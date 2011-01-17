@@ -195,26 +195,6 @@ WayPointFileSeeYou::appendStringWithSeperator(tstring &dest,
   dest += src;
 }
 
-/**
-  * Parse a string. Remove (optional) quotes and trim whitespace
-  * @param src The line to parse
-  * @param dest result string
-  * @return length of result or -1 if parsing error occurred
-  */
-int
-WayPointFileSeeYou::parseString(const TCHAR* src, tstring& dest)
-{
-  dest.assign(src);
-
-  // Strip quote characters
-  int len = dest.length();
-  if ((src[0] == '"' || src[0] == '\'') && len >= 2)
-    dest = dest.substr(1, len - 2);
-
-  trim_inplace(dest);
-  return dest.length();
-}
-
 bool
 WayPointFileSeeYou::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {

@@ -50,7 +50,6 @@ protected:
 private:
   static void appendStringWithSeperator(tstring &dest, const TCHAR *src,
                                         const TCHAR seperator=' ');
-  static int parseString(const TCHAR* src, tstring& dest);
   static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
   static bool parseAltitude(const TCHAR* src, fixed& dest);
   static bool parseFlags(const TCHAR* src, WaypointFlags& dest);
