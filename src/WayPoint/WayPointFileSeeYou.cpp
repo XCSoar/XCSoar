@@ -125,9 +125,10 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   Waypoint new_waypoint(location);
   new_waypoint.FileNum = file_num;
 
-  // Name (e.g. "Some Turnpoint", with quotes)
-  if (!parseString(params[iName], new_waypoint.Name))
+  // Name (e.g. "Some Turnpoint")
+  if (*params[iName] == _T('\0'))
     return false;
+  new_waypoint.Name = params[iName];
 
   // Elevation (e.g. 458.0m)
   /// @todo configurable behaviour
@@ -156,22 +157,21 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   }
 
   // Frequency & runway direction/length (for airports and landables)
-  // and description (e.g. "Some Turnpoint", with quotes)
-  tstring s;
+  // and description (e.g. "Some Description")
   if (new_waypoint.is_landable()) {
-    if (iFrequency < n_params && parseString(params[iFrequency], s) > 0)
-      appendStringWithSeperator(new_waypoint.Comment, s);
+    if (iFrequency < n_params)
+      appendStringWithSeperator(new_waypoint.Comment, params[iFrequency]);
 
-    if (iRWDir < n_params && parseString(params[iRWDir], s) > 0) {
-      s += _T("°");
-      appendStringWithSeperator(new_waypoint.Comment, s);
+    if (iRWDir < n_params && *params[iRWDir]) {
+      appendStringWithSeperator(new_waypoint.Comment, params[iRWDir]);
+      new_waypoint.Comment += _T("°");
     }
 
-    if (iRWLen < n_params && parseString(params[iRWLen], s) > 0)
-      appendStringWithSeperator(new_waypoint.Comment, s);
+    if (iRWLen < n_params)
+      appendStringWithSeperator(new_waypoint.Comment, params[iRWLen]);
   }
-  if (iDescription < n_params && parseString(params[iDescription], s) > 0)
-    appendStringWithSeperator(new_waypoint.Comment, s);
+  if (iDescription < n_params)
+    appendStringWithSeperator(new_waypoint.Comment, params[iDescription]);
 
   add_waypoint(way_points, new_waypoint);
   return true;
@@ -184,9 +184,12 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   * @param seperator character (default: ' ')
   */
 void
-WayPointFileSeeYou::appendStringWithSeperator(tstring &dest, const tstring& src,
+WayPointFileSeeYou::appendStringWithSeperator(tstring &dest,
+                                              const TCHAR* src,
                                               const TCHAR seperator)
 {
+  if (*src == _T('\0'))
+    return;
   if (dest.length() > 0)
     dest += seperator;
   dest += src;
