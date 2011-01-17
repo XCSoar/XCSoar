@@ -206,6 +206,7 @@ IDR_XML_TASKPOINTTYPE   XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskPointType.xml"
 IDR_XML_TASKPOINTTYPE_L XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskPointType_L.xml"
 
 // translations
+#ifdef WIN32
 de.mo MO DISCARDABLE "../output/po/de.mo"
 es.mo MO DISCARDABLE "../output/po/es.mo"
 fr.mo MO DISCARDABLE "../output/po/fr.mo"
@@ -215,6 +216,7 @@ pl.mo MO DISCARDABLE "../output/po/pl.mo"
 pt_BR.mo MO DISCARDABLE "../output/po/pt_BR.mo"
 ru.mo MO DISCARDABLE "../output/po/ru.mo"
 sk.mo MO DISCARDABLE "../output/po/sk.mo"
+#endif
 
 // --- EGM96 Raster Data --- 
 

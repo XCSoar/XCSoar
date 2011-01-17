@@ -26,9 +26,12 @@ while (<>) {
     if (/^\s*(\d+)\s+BITMAP\s+DISCARDABLE\s+"(.*?)"\s*$/) {
         push @numeric, $1;
         generate_blob("resource_$1", "Data/$2");
-    } elsif (/^\s*(\w+)\s+XMLDIALOG\s+DISCARDABLE\s+"(.*?)"\s*$/) {
+    } elsif (/^\s*([.\w]+)\s+(?:XMLDIALOG|MO)\s+DISCARDABLE\s+"(.*?)"\s*$/) {
         push @named, $1;
-        generate_blob("resource_$1", "Data/$2");
+        my $path = $2;
+        my $variable = "resource_$1";
+        $variable =~ s,\.,_,g;
+        generate_blob($variable, "Data/$path");
     }
 }
 
@@ -52,7 +55,9 @@ print "  const void *data;\n";
 print "  size_t size;\n";
 print "} named_resources[] = {";
 foreach my $i (@named) {
-    print "  { _T(\"$i\"), resource_$i, sizeof(resource_$i) },\n";
+    my $variable = "resource_$i";
+    $variable =~ s,\.,_,g;
+    print "  { _T(\"$i\"), $variable, sizeof($variable) },\n";
 }
 print "  { 0, NULL, 0 }\n";
 print "};\n";
