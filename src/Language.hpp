@@ -59,7 +59,7 @@ const TCHAR* gettext(const TCHAR* text);
 
 void ReadLanguageFile(void);
 
-#if defined(WIN32) && !defined(HAVE_POSIX)
+#if (defined(WIN32) && !defined(HAVE_POSIX)) || defined(ANDROID)
 #define HAVE_BUILTIN_LANGUAGES
 
 struct builtin_language {

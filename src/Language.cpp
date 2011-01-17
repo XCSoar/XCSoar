@@ -31,7 +31,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Sizes.h"
 
-#ifdef WIN32
+#ifdef HAVE_BUILTIN_LANGUAGES
 #include "ResourceLoader.hpp"
 #endif
 
@@ -120,6 +120,26 @@ gettext(const TCHAR* text)
 
 #ifdef HAVE_BUILTIN_LANGUAGES
 
+#ifdef ANDROID
+/**
+ * Several fake WIN32 constants.  These are not used on Android, but
+ * we need them or we have to have a separate version of
+ * #language_table on Android.
+ */
+enum {
+  LANG_NULL,
+  LANG_GERMAN,
+  LANG_SPANISH,
+  LANG_FRENCH,
+  LANG_HUNGARIAN,
+  LANG_DUTCH,
+  LANG_POLISH,
+  LANG_PORTUGUESE,
+  LANG_RUSSIAN,
+  LANG_SLOVAK,
+};
+#endif
+
 const struct builtin_language language_table[] = {
   { LANG_GERMAN, _T("de.mo") },
   { LANG_SPANISH, _T("es.mo") },
@@ -133,6 +153,8 @@ const struct builtin_language language_table[] = {
   { 0, NULL }
 };
 
+#ifdef WIN32
+
 gcc_pure
 static const TCHAR *
 find_language(WORD language)
@@ -143,6 +165,8 @@ find_language(WORD language)
 
   return NULL;
 }
+
+#endif
 
 gcc_pure
 static unsigned
@@ -160,6 +184,12 @@ find_language(const TCHAR *resource)
 static const TCHAR *
 detect_language()
 {
+#ifdef ANDROID
+
+  return NULL; // XXX
+
+#else /* !ANDROID */
+
 #if defined(_WIN32_WCE)
   /* the GetUserDefaultUILanguage() prototype is missing on
      mingw32ce, we have to look it up dynamically */
@@ -185,6 +215,8 @@ detect_language()
     return NULL;
 
   return find_language(PRIMARYLANGID(lang_id));
+
+#endif /* !ANDROID */
 }
 
 static bool
