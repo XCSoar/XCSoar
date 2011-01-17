@@ -27,13 +27,18 @@ Changes to version 6.0.2 (since 6.0.1):
   - more robust NMEA checksum parser
 * user interface
   - Language: translation updates
+  - Language: add Spanish translation
+  - Language: add Russian translation
   - Window: disable sunken window edges on HP31x
 * map
   - Waypoints: more reliable waypoint decluttering
   - Topology: fix rendering bug
+  - Terrain: reduce slope shading artefacts
   - Terrain: load more raster tiles on modern devices
+  - Task: fix crash when drawing deformed sectors
 * data files
   - Fixed potential crash while reading airfields files
+  - Added more polars (Hang gliders, DG1000, Blanik, Jantar, ...)
 
 Changes to version 6.0.1 (since 6.0):
 * map

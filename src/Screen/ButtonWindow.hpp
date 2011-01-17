@@ -70,10 +70,10 @@ class ButtonWindow : public PaintWindow
 {
   tstring text;
   unsigned id;
-  bool down;
+  bool dragging, down;
 
 public:
-  ButtonWindow():down(false) {}
+  ButtonWindow():dragging(false), down(false) {}
 
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
@@ -98,6 +98,10 @@ public:
     return text;
   }
 
+protected:
+  void set_down(bool _down);
+
+public:
   bool is_down() const {
     return down;
   }
@@ -108,8 +112,10 @@ public:
   virtual bool on_clicked();
 
 protected:
+  virtual bool on_mouse_move(int x, int y, unsigned keys);
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
+  virtual bool on_cancel_mode();
   virtual void on_paint(Canvas &canvas);
 };
 

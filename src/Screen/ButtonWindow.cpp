@@ -39,27 +39,66 @@ ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
   this->id = id;
 }
 
+void
+ButtonWindow::set_down(bool _down)
+{
+  if (_down == down)
+    return;
+
+  down = _down;
+  invalidate();
+}
+
+bool
+ButtonWindow::on_mouse_move(int x, int y, unsigned keys)
+{
+  if (dragging) {
+    set_down(x >= 0 && y >= 0 &&
+             (unsigned)x < get_width() && (unsigned)y < get_height());
+    return true;
+  } else
+    return PaintWindow::on_mouse_move(x, y, keys);
+}
+
 bool
 ButtonWindow::on_mouse_down(int x, int y)
 {
-  down = true;
-  invalidate();
+  set_down(true);
+  set_capture();
+  dragging = true;
   return true;
 }
 
 bool
 ButtonWindow::on_mouse_up(int x, int y)
 {
+  if (!dragging)
+    return true;
+
+  dragging = false;
+  release_capture();
+
   if (!down)
     return true;
 
-  down = false;
-  invalidate();
+  set_down(false);
 
   if (parent != NULL) {
     if (!on_clicked())
       parent->on_command(id, 0);
   }
+
+  return true;
+}
+
+bool
+ButtonWindow::on_cancel_mode()
+{
+  release_capture();
+  dragging = false;
+  down = false;
+
+  PaintWindow::on_cancel_mode();
 
   return true;
 }

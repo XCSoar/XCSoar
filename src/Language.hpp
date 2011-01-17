@@ -24,14 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LANGUAGE_HPP
 #define XCSOAR_LANGUAGE_HPP
 
-#ifdef ANDROID
-
-/* disable i18n on Android for now */
-#define _(x) (x)
-#define N_(x) (x)
-#define gettext(x) (x)
-
-#elif defined(HAVE_POSIX)
+#if defined(HAVE_POSIX) && !defined(ANDROID)
 
 #include <libintl.h>
 
@@ -66,7 +59,7 @@ const TCHAR* gettext(const TCHAR* text);
 
 void ReadLanguageFile(void);
 
-#if defined(WIN32) && !defined(HAVE_POSIX)
+#if (defined(WIN32) && !defined(HAVE_POSIX)) || defined(ANDROID)
 #define HAVE_BUILTIN_LANGUAGES
 
 struct builtin_language {

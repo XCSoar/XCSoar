@@ -283,7 +283,16 @@ public:
     ay += y_offset;
     by += y_offset;
 
-    ::lineColor(surface, ax, ay, bx, by, pen.get_color().gfx_color());
+#if SDL_GFXPRIMITIVES_MAJOR > 2 || \
+  (SDL_GFXPRIMITIVES_MAJOR == 2 && (SDL_GFXPRIMITIVES_MINOR > 0 || \
+                                    SDL_GFXPRIMITIVES_MICRO >= 22))
+    /* thickLineColor() was added in SDL_gfx 2.0.22 */
+    if (pen.get_width() > 1)
+      ::thickLineColor(surface, ax, ay, bx, by,
+                       pen.get_width(), pen.get_color().gfx_color());
+    else
+#endif
+      ::lineColor(surface, ax, ay, bx, by, pen.get_color().gfx_color());
   }
 
   void line(const RasterPoint a, const RasterPoint b) {

@@ -31,7 +31,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Sizes.h"
 
-#ifdef WIN32
+#ifdef HAVE_BUILTIN_LANGUAGES
 #include "ResourceLoader.hpp"
 #endif
 
@@ -39,11 +39,13 @@ Copyright_License {
 #include "OS/DynamicLibrary.hpp"
 #endif
 
+#ifdef ANDROID
+#include "Java/Global.hpp"
+#endif
+
 #include <windef.h> /* for MAX_PATH */
 
-#ifdef ANDROID
-
-#elif defined(HAVE_POSIX)
+#if defined(HAVE_POSIX) && !defined(ANDROID)
 
 #include <locale.h>
 
@@ -111,7 +113,10 @@ gettext(const TCHAR* text)
   translations[text2] = translation2;
   return translations[text2].c_str();
 #else
-  return mo_file->lookup(text);
+  const char *translation = mo_file->lookup(text);
+  return translation != NULL && *translation != 0
+    ? translation
+    : text;
 #endif
 }
 
@@ -119,16 +124,40 @@ gettext(const TCHAR* text)
 
 #ifdef HAVE_BUILTIN_LANGUAGES
 
+#ifdef ANDROID
+/**
+ * Several fake WIN32 constants.  These are not used on Android, but
+ * we need them or we have to have a separate version of
+ * #language_table on Android.
+ */
+enum {
+  LANG_NULL,
+  LANG_GERMAN,
+  LANG_SPANISH,
+  LANG_FRENCH,
+  LANG_HUNGARIAN,
+  LANG_DUTCH,
+  LANG_POLISH,
+  LANG_PORTUGUESE,
+  LANG_RUSSIAN,
+  LANG_SLOVAK,
+};
+#endif
+
 const struct builtin_language language_table[] = {
   { LANG_GERMAN, _T("de.mo") },
+  { LANG_SPANISH, _T("es.mo") },
   { LANG_FRENCH, _T("fr.mo") },
   { LANG_HUNGARIAN, _T("hu.mo") },
   { LANG_DUTCH, _T("nl.mo") },
   { LANG_POLISH, _T("pl.mo") },
   { LANG_PORTUGUESE, _T("pt_BR.mo") },
+  { LANG_RUSSIAN, _T("ru.mo") },
   { LANG_SLOVAK, _T("sk.mo") },
   { 0, NULL }
 };
+
+#ifdef WIN32
 
 gcc_pure
 static const TCHAR *
@@ -140,6 +169,8 @@ find_language(WORD language)
 
   return NULL;
 }
+
+#endif
 
 gcc_pure
 static unsigned
@@ -157,6 +188,63 @@ find_language(const TCHAR *resource)
 static const TCHAR *
 detect_language()
 {
+#ifdef ANDROID
+
+  JNIEnv *env = Java::GetEnv();
+
+  jclass cls = env->FindClass("java/util/Locale");
+  assert(cls != NULL);
+
+  /* call Locale.getDefault() */
+
+  jmethodID cid = env->GetStaticMethodID(cls, "getDefault",
+                                         "()Ljava/util/Locale;");
+  assert(cid != NULL);
+
+  jobject obj = env->CallStaticObjectMethod(cls, cid);
+  if (obj == NULL) {
+    env->DeleteLocalRef(cls);
+    return NULL;
+  }
+
+  /* call Locale.getLanguage() */
+
+  cid = env->GetMethodID(cls, "getLanguage", "()Ljava/lang/String;");
+  assert(cid != NULL);
+
+  env->DeleteLocalRef(cls);
+
+  jstring language = (jstring)env->CallObjectMethod(obj, cid);
+  if (language == NULL) {
+    env->DeleteLocalRef(obj);
+    return NULL;
+  }
+
+  env->DeleteLocalRef(obj);
+
+  const char *language2 = env->GetStringUTFChars(language, NULL);
+  if (language2 == NULL) {
+    env->DeleteLocalRef(language);
+    return NULL;
+  }
+
+  /* generate the resource name */
+
+  const char *language3 = language2;
+  if (strcmp(language3, "pt") == 0)
+    /* hack */
+    language3 = "pt_BR";
+
+  static char language_buffer[16];
+  snprintf(language_buffer, sizeof(language_buffer), "%s.mo", language3);
+
+  env->ReleaseStringUTFChars(language, language2);
+  env->DeleteLocalRef(language);
+
+  return language_buffer;
+
+#else /* !ANDROID */
+
 #if defined(_WIN32_WCE)
   /* the GetUserDefaultUILanguage() prototype is missing on
      mingw32ce, we have to look it up dynamically */
@@ -182,6 +270,8 @@ detect_language()
     return NULL;
 
   return find_language(PRIMARYLANGID(lang_id));
+
+#endif /* !ANDROID */
 }
 
 static bool
@@ -228,12 +318,10 @@ ReadResourceLanguageFile(const TCHAR *resource)
 
 #endif /* !HAVE_BUILTIN_LANGUAGES */
 
-#ifndef ANDROID
-
 static void
 AutoDetectLanguage()
 {
-#if defined(HAVE_POSIX)
+#if defined(HAVE_POSIX) && !defined(ANDROID)
 
   setlocale(LC_ALL, "");
   // allways use a dot as decimal point in printf/scanf.
@@ -253,7 +341,7 @@ AutoDetectLanguage()
 static bool
 LoadLanguageFile(const TCHAR *path)
 {
-#if defined(HAVE_POSIX)
+#if defined(HAVE_POSIX) && !defined(ANDROID)
 
   /* not supported on UNIX */
   return false;
@@ -277,8 +365,6 @@ LoadLanguageFile(const TCHAR *path)
 #endif /* !HAVE_POSIX */
 }
 
-#endif /* !ANDROID */
-
 /**
  * Reads the selected LanguageFile into the cache
  */
@@ -286,8 +372,6 @@ void
 ReadLanguageFile()
 {
   LogStartUp(_T("Loading language file"));
-
-#ifndef ANDROID
 
   TCHAR buffer[MAX_PATH], second_buffer[MAX_PATH];
   const TCHAR *value = Profile::GetPath(szProfileLanguageFile, buffer)
@@ -312,6 +396,4 @@ ReadLanguageFile()
 
   if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base))
     AutoDetectLanguage();
-
-#endif /* !ANDROID */
 }

@@ -29,6 +29,9 @@ sub handle_start {
         if ($name eq 'Caption' or $name eq 'Help') {
             next unless $value =~ /[a-zA-Z]/;
 
+            die "Malformed attribute at $path:" . $expat->current_line
+              if $value =~ /^\s|\s$|\t| \n| \r|\n /s;
+
             $strings{$value} ||= [];
             push @{$strings{$value}}, $path . ":" . $expat->current_line;
         }

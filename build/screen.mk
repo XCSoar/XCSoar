@@ -27,6 +27,8 @@ SCREEN_SOURCES = \
 
 ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/SDL/Window.cpp \
+	$(SCREEN_SRC_DIR)/SDL/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp
 ifeq ($(TARGET),ANDROID)
@@ -59,6 +61,8 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Init.cpp \
+	$(SCREEN_SRC_DIR)/GDI/Window.cpp \
+	$(SCREEN_SRC_DIR)/GDI/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Event.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \

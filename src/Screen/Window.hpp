@@ -179,6 +179,7 @@ private:
 
   bool visible;
   bool focused;
+  bool capture;
 #else
   HWND hWnd;
 
@@ -195,7 +196,7 @@ public:
   Window()
     :parent(NULL), width(0), height(0),
      font(NULL),
-     visible(true), focused(false),
+     visible(true), focused(false), capture(false),
      double_clicks(false) {}
 #else
   Window():hWnd(NULL), prev_wndproc(NULL),
@@ -517,38 +518,26 @@ public:
 #endif
   }
 
-  gcc_pure
-  bool has_capture() const {
 #ifdef ENABLE_SDL
-    return false; // XXX
-#else
-    return ::GetCapture() == hWnd;
-#endif
-  }
+  void set_capture();
+  void release_capture();
+  virtual void clear_capture();
+#else /* !ENABLE_SDL */
 
   void set_capture() {
     assert_none_locked();
     assert_thread();
 
-#ifdef ENABLE_SDL
-    // XXX
-#else
     ::SetCapture(hWnd);
-#endif
   }
 
   void release_capture() {
     assert_none_locked();
     assert_thread();
 
-#ifdef ENABLE_SDL
-    // XXX
-#else
     ::ReleaseCapture();
-#endif
   }
 
-#ifndef ENABLE_SDL
   WNDPROC set_wndproc(WNDPROC wndproc)
   {
     assert_thread();

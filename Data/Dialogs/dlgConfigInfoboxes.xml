@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmConfigInfoBoxes" Width="240" Height="320" Caption="Configuration - InfoBoxes - ">
+<Form Name="frmConfigInfoBoxes" Width="240" Height="320" Caption="InfoBoxes">
   <Button Name="cmdClose" Caption="Close" X="5" Y="270" Width="60" Height="28" />
 
   <Button Name="cmdCopy" Caption="Copy" X="75" Y="240" Width="60" Height="28" />

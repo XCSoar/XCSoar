@@ -23,15 +23,23 @@ Copyright_License {
 
 #include "Screen/OpenGL/VertexArray.hpp"
 #include "Math/FastMath.h"
+#include <assert.h>
 
 GLCircleVertices::GLCircleVertices(GLvalue center_x, GLvalue center_y,
                                    GLvalue radius)
 {
-  RasterPoint *p = v;
+  assert(4096 % SIZE == 0);  // implies: assert(SIZE % 2 == 0)
+  RasterPoint *p = v, *p2 = v + (SIZE/2);
 
-  for (unsigned i = 0; i < SIZE; ++i) {
-    p->x = center_x + ICOSTABLE[i * 4096 / SIZE] * (int)radius / 1024.;
-    p->y = center_y + ISINETABLE[i * 4096 / SIZE] * (int)radius / 1024.;
+  for (unsigned i = 0; i < SIZE/2; ++i) {
+    int offset_x = ICOSTABLE[i * (4096 / SIZE)] * (int)radius / 1024.;
+    int offset_y = ISINETABLE[i * (4096 / SIZE)] * (int)radius / 1024.;
+
+    p->x = center_x + offset_x;
+    p->y = center_y + offset_y;
     ++p;
+    p2->x = center_x - offset_x;
+    p2->y = center_y - offset_y;
+    ++p2;
   }
 }

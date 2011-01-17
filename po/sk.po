@@ -3548,10 +3548,6 @@ msgstr ""
 msgid "Final glide bar"
 msgstr "Ukazovateľ doklzu"
 
-#: Data/Dialogs/dlgWaypointEdit.xml:6 Data/Dialogs/dlgWaypointEdit_L.xml:6
-msgid "Name: "
-msgstr "Názov: "
-
 #: Data/Dialogs/dlgConfiguration.xml:505
 #: Data/Dialogs/dlgConfiguration_L.xml:504
 msgid "Start max speed margin"
@@ -3882,8 +3878,8 @@ msgstr "Stíš vário pri hlase"
 
 #: Data/Dialogs/dlgSimulatorPrompt.xml:4
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:4
-msgid "What do you want to do:"
-msgstr "Čo chceš urobiť:"
+msgid "What do you want to do?"
+msgstr "Čo chceš urobiť?"
 
 #: Data/Dialogs/dlgTeamCode.xml:4 Data/Dialogs/dlgTeamCode_L.xml:4
 msgid "Own code:"
@@ -3941,11 +3937,6 @@ msgstr "Zostávajúca rýchlosť"
 #: Data/Dialogs/dlgVario.xml:118 Data/Dialogs/dlgVario_L.xml:119
 msgid "Circling hi cutoff"
 msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:575
-#: Data/Dialogs/dlgConfiguration_L.xml:574
-msgid "Logger ID: "
-msgstr "Logger ID: "
 
 #: Data/Dialogs/dlgConfiguration.xml:175
 #: Data/Dialogs/dlgConfiguration_L.xml:175
@@ -4026,8 +4017,8 @@ msgstr "Zemepisná šírka"
 
 #: Data/Dialogs/dlgConfiguration.xml:564
 #: Data/Dialogs/dlgConfiguration_L.xml:563
-msgid "This is the time interval between logged points when circling. "
-msgstr "Toto je časový interval zápisu GPS bodov v móde krúženia. "
+msgid "This is the time interval between logged points when circling."
+msgstr "Toto je časový interval zápisu GPS bodov v móde krúženia."
 
 #: Data/Dialogs/dlgVario.xml:7 Data/Dialogs/dlgVario_L.xml:8
 msgid "Demo"
@@ -4779,11 +4770,6 @@ msgstr "Nastaví typ zobrazovania trajektórie letu."
 msgid "Units used for task speeds."
 msgstr "Jednotky použité pre rýchlosti úlohy."
 
-#: Data/Dialogs/dlgConfiguration.xml:569
-#: Data/Dialogs/dlgConfiguration_L.xml:568
-msgid "Pilot name: "
-msgstr "Meno pilota: "
-
 #: Data/Dialogs/dlgTarget.xml:15 Data/Dialogs/dlgTarget_L.xml:19
 msgid "Radial"
 msgstr ""
@@ -4881,11 +4867,6 @@ msgstr "FLARM"
 #: Data/Dialogs/dlgTaskPointType.xml:3 Data/Dialogs/dlgTaskPointType_L.xml:3
 msgid "Task Point Type"
 msgstr "Typ otočných bodov úlohy"
-
-#: Data/Dialogs/dlgConfiguration.xml:573
-#: Data/Dialogs/dlgConfiguration_L.xml:572
-msgid "Competition Id: "
-msgstr "Súťažný znak: "
 
 #: Data/Dialogs/dlgBasicSettings.xml:12
 msgid "Volume"
@@ -5430,11 +5411,6 @@ msgstr ""
 msgid "Free"
 msgstr "Volný"
 
-#: Data/Dialogs/dlgConfiguration.xml:571
-#: Data/Dialogs/dlgConfiguration_L.xml:570
-msgid "Aircraft type: "
-msgstr "Typ lietadla: "
-
 #: Data/Dialogs/dlgStatusTask.xml:11
 msgid "Speed achieved"
 msgstr "Dosiahnutá rýchlosť"
@@ -5606,7 +5582,7 @@ msgstr "Príletová výška"
 #: Data/Dialogs/dlgConfiguration_L.xml:248
 msgid ""
 "The MacCready setting used in task abort mode and for determining arrival "
-"altitude at airfields. "
+"altitude at airfields."
 msgstr ""
 "Nastavenie MacCready používané v móde prerušenej úlohy pre odhad výšky "
 "príletu na letiská. "
@@ -5663,10 +5639,10 @@ msgstr "Zobraz MacCready"
 #: Data/Dialogs/dlgVario.xml:66 Data/Dialogs/dlgVario_L.xml:67
 msgid ""
 "Calibration factor applied to dynamic pressure used in total energy "
-"calculation. "
+"calculation."
 msgstr ""
 "Kalibračný faktor dynamického tlaku použitý pri výpočtoch s celkovou "
-"energiou. "
+"energiou."
 
 #: Data/Dialogs/dlgConfiguration.xml:441
 #: Data/Dialogs/dlgConfiguration_L.xml:440
@@ -5847,7 +5823,7 @@ msgid ""
 "that in this case could be almost zero! Normally for gliders a good value is "
 "90-120 seconds, and for paragliders 15 seconds. Lower values will give as a "
 "result pretty much the same as LD Instant , while higher values will look "
-"like LD Cruise. Other commercial instruments and software use 2 minutes. "
+"like LD Cruise. Other commercial instruments and software use 2 minutes."
 msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:28 Data/Dialogs/dlgVario_L.xml:29
@@ -5871,10 +5847,10 @@ msgstr ""
 #: Data/Dialogs/dlgVario.xml:62 Data/Dialogs/dlgVario_L.xml:63
 msgid ""
 "Calibration factor applied to static pressure used in total energy "
-"calculation. "
+"calculation."
 msgstr ""
 "Kalibračný faktor statického tlaku použitý pri výpočtoch s celkovou "
-"energiou. "
+"energiou."
 
 #: Data/Dialogs/dlgVoice.xml:10
 msgid "Enable warnings for final glide through terrain."
@@ -6051,8 +6027,8 @@ msgstr "Povoliť"
 
 #: Data/Dialogs/dlgConfiguration.xml:559
 #: Data/Dialogs/dlgConfiguration_L.xml:558
-msgid "This is the time interval between logged points when not circling. "
-msgstr "Toto je časový interval pre zápis GPS bodov mimo krúženia. "
+msgid "This is the time interval between logged points when not circling."
+msgstr "Toto je časový interval pre zápis GPS bodov mimo krúženia."
 
 #: Data/Dialogs/dlgVario.xml:126 Data/Dialogs/dlgVario_L.xml:127
 msgid "Cruise deadband type"
@@ -6278,11 +6254,6 @@ msgstr ""
 msgid "Ballast"
 msgstr "Vodná záťaž"
 
-#: Data/Dialogs/dlgConfigInfoboxes.xml:3
-#: Data/Dialogs/dlgConfigInfoboxes_L.xml:3
-msgid "Configuration - InfoBoxes - "
-msgstr "Nastavenie - Info-okná - "
-
 #: Data/Dialogs/dlgTaskProperties.xml:13
 #: Data/Dialogs/dlgTaskProperties_L.xml:13
 msgid "Task scoring"
@@ -6334,10 +6305,6 @@ msgstr "Interval, baterka"
 #: Data/Dialogs/dlgConfiguration_L.xml:150
 msgid "North arrow*"
 msgstr "Ukazovateľ severu*"
-
-#: Data/Dialogs/dlgWaypointEdit.xml:8 Data/Dialogs/dlgWaypointEdit_L.xml:8
-msgid "Comment: "
-msgstr "Komentár: "
 
 #: Data/Dialogs/dlgSimulatorPrompt.xml:5
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:5

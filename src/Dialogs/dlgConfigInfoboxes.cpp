@@ -164,6 +164,7 @@ void dlgConfigInfoboxesShowModal(InfoBoxManager::mode _mode)
 
   TCHAR caption[100];
   _tcscpy(caption, wf->GetCaption());
+  _tcscat(caption, _T(": "));
   _tcscat(caption, gettext(info_box_mode_names[(int)mode]));
   wf->SetCaption(caption);
 

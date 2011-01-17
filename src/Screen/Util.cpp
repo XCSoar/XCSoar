@@ -114,14 +114,7 @@ Segment(Canvas &canvas, long x, long y, int radius,
   pt[npoly].y = y - (long)(radius * end.fastcosine());
   npoly++;
 
-  // add start point to close
-  if (npoly) {
-    pt[npoly].x = pt[0].x;
-    pt[npoly].y = pt[0].y;
-    npoly++;
-  }
-
-  assert(npoly<66);
+  assert(npoly <= 66);
   if (npoly) {
     canvas.polygon(pt, npoly);
   }
