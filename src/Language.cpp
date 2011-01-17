@@ -41,9 +41,7 @@ Copyright_License {
 
 #include <windef.h> /* for MAX_PATH */
 
-#ifdef ANDROID
-
-#elif defined(HAVE_POSIX)
+#if defined(HAVE_POSIX) && !defined(ANDROID)
 
 #include <locale.h>
 
@@ -233,12 +231,10 @@ ReadResourceLanguageFile(const TCHAR *resource)
 
 #endif /* !HAVE_BUILTIN_LANGUAGES */
 
-#ifndef ANDROID
-
 static void
 AutoDetectLanguage()
 {
-#if defined(HAVE_POSIX)
+#if defined(HAVE_POSIX) && !defined(ANDROID)
 
   setlocale(LC_ALL, "");
   // allways use a dot as decimal point in printf/scanf.
@@ -258,7 +254,7 @@ AutoDetectLanguage()
 static bool
 LoadLanguageFile(const TCHAR *path)
 {
-#if defined(HAVE_POSIX)
+#if defined(HAVE_POSIX) && !defined(ANDROID)
 
   /* not supported on UNIX */
   return false;
@@ -282,8 +278,6 @@ LoadLanguageFile(const TCHAR *path)
 #endif /* !HAVE_POSIX */
 }
 
-#endif /* !ANDROID */
-
 /**
  * Reads the selected LanguageFile into the cache
  */
@@ -291,8 +285,6 @@ void
 ReadLanguageFile()
 {
   LogStartUp(_T("Loading language file"));
-
-#ifndef ANDROID
 
   TCHAR buffer[MAX_PATH], second_buffer[MAX_PATH];
   const TCHAR *value = Profile::GetPath(szProfileLanguageFile, buffer)
@@ -317,6 +309,4 @@ ReadLanguageFile()
 
   if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base))
     AutoDetectLanguage();
-
-#endif /* !ANDROID */
 }
