@@ -31,6 +31,7 @@
 #include "Device/Driver/PosiGraph.hpp"
 #include "Device/Driver/Vega.hpp"
 #include "Device/Driver/Volkslogger.hpp"
+#include "Device/Driver/Westerboer.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Geoid.h"
@@ -253,6 +254,33 @@ TestILEC()
   delete device;
 }
 
+static void
+TestWesterboer()
+{
+  Device *device = westerboer_device_driver.CreateOnPort(NULL);
+  ok1(device != NULL);
+
+  NMEA_INFO nmea_info;
+  memset(&nmea_info, 0, sizeof(nmea_info));
+
+  device->ParseNMEA("$PWES0,20,-25,25,-22,2,-100,589,589,1260,1296,128,295*01",
+                    &nmea_info, true);
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 589));
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, -2.5));
+  ok1(nmea_info.NettoVarioAvailable);
+  ok1(equals(nmea_info.NettoVario, -2.2));
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.IndicatedAirspeed, 35));
+  ok1(equals(nmea_info.TrueAirspeed, 36));
+  ok1(equals(nmea_info.SupplyBatteryVoltage, 12.8));
+  ok1(nmea_info.TemperatureAvailable);
+  ok1(equals(nmea_info.OutsideAirTemperature, 29.5));
+
+  delete device;
+}
+
 Declaration::Declaration(OrderedTask const*) {}
 
 static void
@@ -288,13 +316,14 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(91);
+  plan_tests(104);
 
   TestGeneric();
   TestCAI302();
   TestLX(lxDevice);
   TestLX(condorDevice);
   TestILEC();
+  TestWesterboer();
 
   /* XXX the Triadis drivers have too many dependencies, not enabling
      for now */

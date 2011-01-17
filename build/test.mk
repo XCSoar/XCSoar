@@ -247,6 +247,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver/EWMicroRecorder.cpp \
 	$(SRC)/Device/Driver/LX.cpp \
 	$(SRC)/Device/Driver/ILEC.cpp \
+	$(SRC)/Device/Driver/Westerboer.cpp \
 	$(SRC)/Device/Driver/PosiGraph.cpp \
 	$(SRC)/Device/Driver/Volkslogger.cpp \
 	$(VOLKSLOGGER_SOURCES) \

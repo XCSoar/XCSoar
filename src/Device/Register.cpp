@@ -43,6 +43,7 @@ Copyright_License {
 #include "Device/Driver/Leonardo.hpp"
 #include "Device/Driver/Flytec.hpp"
 #include "Device/Driver/ILEC.hpp"
+#include "Device/Driver/Westerboer.hpp"
 
 /** NULL terminated array of available device drivers. */
 static const struct DeviceRegister *const DeviceRegister[] = {
@@ -67,6 +68,7 @@ static const struct DeviceRegister *const DeviceRegister[] = {
   &flytec_device_driver,
   &ilec_device_driver,
   &lxNanoDevice,
+  &westerboer_device_driver,
   NULL
 };
 
