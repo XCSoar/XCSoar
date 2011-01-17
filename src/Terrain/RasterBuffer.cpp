@@ -61,13 +61,10 @@ RasterBuffer::get_interpolated(unsigned lx, unsigned ly,
       is_special(tm[dy]) || is_special(tm[dx + dy]))
     return *tm;
 
-  if (ix > iy) {
-    // lower triangle
-    return *tm + ((ix * (tm[dx] - *tm) - iy * (tm[dx] - tm[dx + dy])) >> 8);
-  } else {
-    // upper triangle
-    return *tm + ((iy * (tm[dy] - *tm) - ix * (tm[dy] - tm[dx + dy])) >> 8);
-  }
+  unsigned kx = 0x100 - ix;
+  unsigned ky = 0x100 - iy;
+
+  return (*tm * kx * ky + tm[dx] * ix * ky + tm[dy] * kx * iy + tm[dx + dy] * ix * iy) >> 16;
 }
 
 short
