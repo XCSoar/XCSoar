@@ -1,65 +1,65 @@
 <?xml version="1.0"?>
 
 <Form Name="frmWaypointEdit" Width="240" Height="320" Caption="Waypoint Editor">
-  <Button Caption="Close" X="5" Y="270" Width="60" Height="28" OnClick="OnCloseClicked"/>
+  <Button Caption="Close" X="2" Y="-30" Width="80" Height="28" OnClick="OnCloseClicked"/>
 
-  <Button Name="cmdName" Caption="Name" X="2" Y="0" Width="230" Height="28" />
+  <Button Name="cmdName" Caption="Name" X="2" Y="0" Height="28" />
 
-  <Button Name="cmdComment" Caption="Comment" X="2" Width="230" Height="28" />
+  <Button Name="cmdComment" Caption="Comment" X="2" Height="28" />
 
-  <Edit Name="prpLongitudeSign" Caption="Lon" X="2" Y="70" Width="65" Height="28" CaptionWidth="28">
+  <Edit Name="prpLongitudeSign" Caption="Lon" Y="70" Width="65" Height="28" CaptionWidth="28">
     <DataField DataType="enum"/>
   </Edit>
 
-  <Edit Name="prpLongitudeD" Caption=" " X="65" Y="70" Width="60" Height="28" CaptionWidth="10">
+  <Edit Name="prpLongitudeD" X="65" Y="70" Width="60" Height="28">
     <DataField DataType="double" DisplayFormat="%.0fd" EditFormat="%.0f" Min="0" Max="179" Step="1"/>
   </Edit>
 
-  <Edit Name="prpLongitudeM" Caption=" " X="125" Y="70" Width="60" Height="28" CaptionWidth="10">
+  <Edit Name="prpLongitudeM" X="125" Y="70" Width="60" Height="28">
     <DataField DataType="double" DisplayFormat="%.0fm" EditFormat="%.0f" Min="0" Max="59" Step="1"/>
   </Edit>
 
-  <Edit Name="prpLongitudeDDDD" Caption=" " X="125" Y="70" Width="90" Height="28" CaptionWidth="10">
+  <Edit Name="prpLongitudeDDDD" X="125" Y="70" Height="28">
     <DataField DataType="double" DisplayFormat="%.0fm" EditFormat="%.0f" Min="0" Max="9999" Step="1"/>
   </Edit>
 
-  <Edit Name="prpLongitudeS" Caption=" " X="185" Y="70" Width="60" Height="28" CaptionWidth="10">
+  <Edit Name="prpLongitudeS" X="185" Y="70" Height="28">
     <DataField DataType="double" DisplayFormat="%.0fs" EditFormat="%.0f" Min="0" Max="59" Step="1"/>
   </Edit>
 
-  <Edit Name="prpLongitudemmm" Caption=" " X="185" Y="70" Width="80" Height="28" CaptionWidth="10">
+  <Edit Name="prpLongitudemmm" X="185" Y="70" Height="28">
     <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="999" Step="1"/>
   </Edit>
 
-  <Edit Name="prpLatitudeSign" Caption="Lat" X="2" Y="100" Width="65" Height="28" CaptionWidth="28">
+  <Edit Name="prpLatitudeSign" Caption="Lat" Y="100" Width="65" Height="28" CaptionWidth="28">
     <DataField DataType="enum"/>
   </Edit>
 
-  <Edit Name="prpLatitudeD" Caption=" " X="65" Y="100" Width="60" Height="28" CaptionWidth="10">
+  <Edit Name="prpLatitudeD" X="65" Y="100" Width="60" Height="28">
     <DataField DataType="double" DisplayFormat="%.0fd" EditFormat="%.0f" Min="0" Max="89" Step="1"/>
   </Edit>
 
-  <Edit Name="prpLatitudeM" Caption=" " X="125" Y="100" Width="60" Height="28" CaptionWidth="10">
+  <Edit Name="prpLatitudeM" X="125" Y="100" Width="60" Height="28">
     <DataField DataType="double" DisplayFormat="%.0fm" EditFormat="%.0f" Min="0" Max="59" Step="1"/>
   </Edit>
 
-  <Edit Name="prpLatitudeDDDD" Caption=" " X="125" Y="100" Width="90" Height="28" CaptionWidth="10">
+  <Edit Name="prpLatitudeDDDD" X="125" Y="100" Height="28">
     <DataField DataType="double" DisplayFormat="%.0fm" EditFormat="%.0f" Min="0" Max="9999" Step="1"/>
   </Edit>
 
-  <Edit Name="prpLatitudeS" Caption=" " X="185" Y="100" Width="60" Height="28" CaptionWidth="10">
+  <Edit Name="prpLatitudeS" X="185" Y="100" Height="28">
     <DataField DataType="double" DisplayFormat="%.0fs" EditFormat="%.0f" Min="0" Max="59" Step="1"/>
   </Edit>
 
-  <Edit Name="prpLatitudemmm" Caption=" " X="185" Y="100" Width="80" Height="28" CaptionWidth="10">
+  <Edit Name="prpLatitudemmm" X="185" Y="100" Height="28">
     <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="999" Step="1"/>
   </Edit>
 
-  <Edit Name="prpAltitude" Caption="Altitude" X="2" Width="180" Height="28" CaptionWidth="90">
+  <Edit Name="prpAltitude" Caption="Altitude" Height="28" CaptionWidth="90">
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="30000" Step="5"/>
   </Edit>
 
-  <Edit Name="prpFlags" Caption="Type" X="2" Width="180" Height="28" CaptionWidth="90">
+  <Edit Name="prpFlags" Caption="Type" Height="28" CaptionWidth="90">
     <DataField DataType="enum" />
   </Edit>
 </Form>

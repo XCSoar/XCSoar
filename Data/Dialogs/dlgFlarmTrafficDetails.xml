@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 
 <Form Name="frmFlarmTrafficDetails" Width="240" Height="320" Caption="FLARM Traffic Details">
-  <Button Name="cmdCallsign" Caption="..." X="184" Y="20" Width="36" Height="22"/>
+  <Button Name="cmdCallsign" Caption="..." X="-38" Y="20" Width="36" Height="22"/>
 
-  <Button Name="cmdClose" Caption="Close" X="3" Y="272" Width="58" Height="28"/>
-  <Button Name="cmdSetAsTeamMate" Caption="Team" X="63" Y="272" Width="58" Height="28"/>
+  <Button Name="cmdClose" Caption="Close" X="3" Y="-30" Width="58" Height="28"/>
+  <Button Name="cmdSetAsTeamMate" Caption="Team" X="63" Y="-30" Width="58" Height="28"/>
 
-  <Edit Name="prpCallsign" Caption="Comp. ID" X="10" Y="20" Width="190" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpDirectionH" Caption=" " X="154" Y="50" Width="83" Height="22" CaptionWidth="1" ReadOnly="1" />
-  <Edit Name="prpDirectionV" Caption=" " X="154" Y="70" Width="83" Height="22" CaptionWidth="1" ReadOnly="1" />
-  <Edit Name="prpDistance" Caption="Distance" X="10" Y="50" Width="160" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpAltitude" Caption="Altitude" X="10" Y="70" Width="160" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpVSpeed" Caption="Vario" X="10" Y="90" Width="227" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpPilot" Caption="Pilot" X="10" Y="120" Width="227" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpAirport" Caption="Airport" X="10" Y="140" Width="227" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpFrequency" Caption="Freq." X="10" Y="160" Width="227" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpPlaneType" Caption="Plane" X="10" Y="180" Width="227" Height="22" CaptionWidth="70" ReadOnly="1" />
+  <Edit Name="prpCallsign" Caption="Comp. ID" X="10" Y="20" Width="-38" Height="22" CaptionWidth="70" ReadOnly="1" />
+  <Edit Name="prpDirectionH" Caption=" " X="-83" Y="50" Height="22" CaptionWidth="1" ReadOnly="1" />
+  <Edit Name="prpDirectionV" Caption=" " X="-83" Y="70" Height="22" CaptionWidth="1" ReadOnly="1" />
+  <Edit Name="prpDistance" Caption="Distance" X="10" Y="50" Width="-83" Height="22" CaptionWidth="70" ReadOnly="1" />
+  <Edit Name="prpAltitude" Caption="Altitude" X="10" Y="70" Width="-83" Height="22" CaptionWidth="70" ReadOnly="1" />
+  <Edit Name="prpVSpeed" Caption="Vario" X="10" Y="90" Height="22" CaptionWidth="70" ReadOnly="1" />
+  <Edit Name="prpPilot" Caption="Pilot" X="10" Y="120" Height="22" CaptionWidth="70" ReadOnly="1" />
+  <Edit Name="prpAirport" Caption="Airport" X="10" Y="140" Height="22" CaptionWidth="70" ReadOnly="1" />
+  <Edit Name="prpFrequency" Caption="Freq." X="10" Y="160" Height="22" CaptionWidth="70" ReadOnly="1" />
+  <Edit Name="prpPlaneType" Caption="Plane" X="10" Y="180" Height="22" CaptionWidth="70" ReadOnly="1" />
 </Form>
