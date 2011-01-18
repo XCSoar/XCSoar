@@ -322,15 +322,13 @@ cai302DeclAddWayPoint(Port *port, const Waypoint &way_point)
   return true;
 }
 
-bool
-CAI302Device::Declare(const Declaration *decl)
+static bool
+DeclareInner(Port *port, const Declaration *decl)
 {
   const int ASYNCPAUSE302 = 700;
-  nDeclErrorCode = 0;
-
-  port->StopRxThread();
 
   port->SetRxTimeout(500);
+
   port->Write('\x03');
 
   /* empty rx buffer (searching for pattern that never occur) */
@@ -484,6 +482,18 @@ CAI302Device::Declare(const Declaration *decl)
     // todo error checking
   }
 
+  return nDeclErrorCode == 0;
+}
+
+bool
+CAI302Device::Declare(const Declaration *decl)
+{
+  nDeclErrorCode = 0;
+
+  port->StopRxThread();
+
+  bool success = DeclareInner(port, decl);
+
   port->SetRxTimeout(500);
 
   port->Write('\x03');
@@ -494,7 +504,7 @@ CAI302Device::Declare(const Declaration *decl)
   port->SetRxTimeout(0);
   port->StartRxThread();
 
-  return (nDeclErrorCode == 0);
+  return success;
 }
 
 static Device *
