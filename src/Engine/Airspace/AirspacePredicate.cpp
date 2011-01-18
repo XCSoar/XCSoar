@@ -14,3 +14,10 @@ AirspacePredicateAircraftInside::operator()(const AbstractAirspace& t) const
 {
   return t.inside(m_state);
 }
+
+bool
+AirspacePredicateHeightRange::operator()(const AbstractAirspace& t) const
+{
+  return (int)t.get_top().Altitude >= h_min &&
+    (int)t.get_base().Altitude <= h_max;
+}
