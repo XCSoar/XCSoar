@@ -28,6 +28,8 @@ void
 EditWindow::set(ContainerWindow &parent, int left, int top,
                 unsigned width, unsigned height,
                 const EditWindowStyle style) {
+  read_only = style.is_read_only;
+
   Window::set(&parent, NULL, NULL, left, top, width, height, style);
 }
 

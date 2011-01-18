@@ -33,24 +33,32 @@ Copyright_License {
 
 class EditWindowStyle : public WindowStyle {
 public:
-  EditWindowStyle() {
+  bool is_read_only;
+
+public:
 #ifdef ENABLE_SDL
+  EditWindowStyle():is_read_only(false) {
     text_style |= DT_LEFT | DT_VCENTER;
+  }
+
+  EditWindowStyle(const WindowStyle other)
+    :WindowStyle(other), is_read_only(false) {
+    text_style |= DT_LEFT | DT_VCENTER;
+  }
 #else
+  EditWindowStyle() {
     style |= ES_LEFT | ES_AUTOHSCROLL;
-#endif
   }
 
   EditWindowStyle(const WindowStyle other):WindowStyle(other) {
-#ifdef ENABLE_SDL
-    text_style |= DT_LEFT | DT_VCENTER;
-#else
     style |= ES_LEFT | ES_AUTOHSCROLL;
-#endif
   }
+#endif
 
   void read_only() {
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+    is_read_only = true;
+#else
     style |= ES_READONLY;
 #endif
   }
@@ -81,6 +89,8 @@ public:
  */
 class EditWindow : public Window {
 #ifdef ENABLE_SDL
+  bool read_only;
+
   tstring value;
 #endif
 
@@ -140,7 +150,7 @@ public:
 
   bool is_read_only() const {
 #ifdef ENABLE_SDL
-    return false; // XXX
+    return read_only;
 #else /* !ENABLE_SDL */
     return (get_window_style() & ES_READONLY) != 0;
 #endif
