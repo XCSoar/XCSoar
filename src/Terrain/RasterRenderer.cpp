@@ -102,7 +102,7 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
   if (pixel_size < fixed(3000)) {
     /* round down to reduce slope shading artefacts (caused by
        RasterBuffer interpolation) */
-    quantisation_effective = (int)q;
+    quantisation_effective = std::max(1, (int)q);
 
     if (quantisation_effective > 25)
       /* disable slope shading when zoomed in very near (not enough
