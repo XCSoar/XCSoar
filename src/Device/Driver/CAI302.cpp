@@ -207,7 +207,7 @@ bool
 CAI302Device::PutMacCready(double MacCready)
 {
   char szTmp[32];
-  sprintf(szTmp, "!g,m%d\r\n",
+  sprintf(szTmp, "!g,m%d\r",
           iround(Units::ToUserUnit(fixed(MacCready) * 10, unKnots)));
 
   port->Write(szTmp);
@@ -220,7 +220,7 @@ bool
 CAI302Device::PutBugs(double Bugs)
 {
   char szTmp[32];
-  sprintf(szTmp, "!g,u%d\r\n", int((Bugs * 100) + 0.5));
+  sprintf(szTmp, "!g,u%d\r", int((Bugs * 100) + 0.5));
 
   port->Write(szTmp);
 
@@ -232,7 +232,7 @@ bool
 CAI302Device::PutBallast(double Ballast)
 {
   char szTmp[32];
-  sprintf(szTmp, "!g,b%d\r\n", int((Ballast * 10) + 0.5));
+  sprintf(szTmp, "!g,b%d\r", int((Ballast * 10) + 0.5));
 
   port->Write(szTmp);
 
