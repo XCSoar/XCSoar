@@ -274,7 +274,7 @@
     
       <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" X="2" Width="-2" Height="22" CaptionWidth="110"
         Help="The maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.">
-        <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="1" />
+        <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5" />
       </Edit>
     
       <Edit Name="prpHandicap" Caption="Handicap" X="2" Width="-2" Height="22" CaptionWidth="110"
