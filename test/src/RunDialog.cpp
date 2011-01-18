@@ -102,16 +102,22 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   if (argc < 2) {
-    fprintf(stderr, "Usage: RunDialog XMLFILE\n");
+    fprintf(stderr, "Usage: RunDialog XMLFILE [-portrait]\n");
     return 1;
+  }
+
+  unsigned screen_width = 320, screen_height = 240;
+  if (argc > 2 && _tcscmp(argv[2], _T("-portrait")) == 0) {
+    screen_width = 240;
+    screen_height = 320;
   }
 
   ScreenGlobalInit screen_init;
 
-  Layout::Initialize(320,240);
+  Layout::Initialize(screen_width, screen_height);
   SingleWindow main_window;
   main_window.set(_T("STATIC"), _T("RunDialog"),
-                  0, 0, 320, 240);
+                  0, 0, screen_width, screen_height);
   main_window.show();
 
   WndForm *form = LoadDialog(NULL, main_window, argv[1]);
