@@ -1847,7 +1847,7 @@ The use of targets is described further in Section~\ref{sec:aat-tasks}.
 \todonum[inline]{up to here}
 
 \section{Advancing and restarting tasks}\label{sec:advanc-rest-tasks}
-
+\todonum[inline]{Entire section outdated}
 At all times one waypoint in the task is designated as the active
 waypoint.  The active waypoint is used for calculation and display of
 navigation information, that is, the pilot is directed to fly towards
@@ -1865,7 +1865,7 @@ Changing the active waypoint can be performed automatically and
 manually in the following ways.
 \begin{description}
 \item[Auto advance mode]
-Once the aircraft enters the turn point observation zone and satisfies
+Once the aircraft enters the turn point observation zone (OZ) and satisfies
 the turn point rules, the software will automatically select the next
 task turn point.
 
@@ -1873,7 +1873,7 @@ The active waypoint is advanced through the list of waypoints in the
 task automatically: the start waypoint is advanced when the starting
 conditions are met (such as flying through a start line or leaving a
 start cylinder); intermediate waypoints are advanced when the glider
-passes through the observation zone (for AAT tasks, the waypoint is
+passes through the observation zone for AAT tasks, the waypoint is
 advanced when the glider enters the AAT area).
 \item[Arm auto advance]
 This is similar to the Auto method, but it requires the pilot to arm a
@@ -1925,7 +1925,7 @@ needs to activate ARM to re-start.
 
 When selecting 'previous waypoint', the trigger that detects
 auto-advance for that waypoint is cleared; meaning that the task
-computer expects the aircraft wants to fly to that observation zone
+computer expects the aircraft wants to fly to that observation zone (OZ)
 again before continuing the task.  The pilot may still select 'next
 waypoint' to advance to the next task waypoint.
 
@@ -1962,37 +1962,52 @@ respectively.
 
 Sector turn-points are 90 degree segments aligned to the bisection of
 the previous and next waypoints, as commonly used in FAI tasks.
-There is also support for German DAe sectors.
+There is also support for British BGA, and German DAeC sectors.
 
-Automatic advancement of the start task depends on the type of start:
+The conditions to meet for a valid start depending on the type of start:
 \begin{description}
-\item[Cylinder] When the glider leaves the cylinder area.
-\item[Line] When the glider crosses the start line.
-\item[FAI 90 sector] When the glider crosses the start sector lines.
+\item[Start Cylinder] When the glider leaves the cylinder area.
+\item[Start Line] When the glider crosses the start line.
 \end{description}
 
-Automatic advancement of intermediate waypoints depends on their type:
+The conditions to meet for a valid intermediate waypoints depending on their
+ type:
 \begin{description}
-\item[FAI Sector] When the glider has entered the observation zone, defined 
+\item[FAI Sector] When the glider has entered the observation zone (OZ), defined 
 by a segment and radial distance from the waypoint.  The segment is
 defined by a 90 degree arc centered about the bisector of inbound and
 outbound legs, with a distance of 20 km.
-\item[DAe 0.5/10 sector] When the glider has entered the observation zone, 
-defined by a segment and radial distance from the waypoint.  The segment is
+\item[Keyhole Sector (DAeC 0.5/10 sector)] When the glider has entered the
+observation zone, defined by a segment and radial distance from the waypoint.  The segment is
 defined by a 90 degree arc centered about the bisector of inbound and
 outbound legs, with a distance of 10 km.  The observation zone also includes
 a cylinder of 500 m.
-\item[Cylinder]  When the glider has entered the observation zone defined
-by a radial distance from the waypoint.
-\item[AAT] When the glider has entered the observation zone defined by the
-radial distance from the waypoint, and segment for sector areas.
+\item[Turnpoint Cylinder]  When the glider has entered the observation zone
+defined by a radial distance from the waypoint.
+\item[BGA Fixed Course Sector]  When the glider has entered the
+observation zone defined by a segment and radial distance from the
+waypoint. The segment is defined by a 90 degree arc centered about the
+bisector of inbound and outbound legs, with a distance of 20 km.
+The observation zone also includes a cylinder of 500 m (British rules).
+\item[BGA Enhanced Option Fixed Course Sector]  When the glider has entered the
+observation zone defined by a segment and radial distance from the
+waypoint. The segment is defined by a 180 degree arc centered about the
+bisector of inbound and outbound legs, with a distance of 10 km.
+The observation zone also includes a cylinder of 500 m (British rules).
+\item[Area Zylinder (AAT)]  and
+\item[Area Sector (AAT)]  When the glider has entered the observation zone
+defined by the radial distance from the waypoint, and segment for sector areas.
 \end{description}
 
 Task completion depends on the finish type:
 \begin{description}
-\item[Cylinder] When the glider enters the cylinder area.
-\item[Line] When the glider crosses the finish line.
+\item[Finish Cylinder] When the glider enters the cylinder area.
+\item[Finish Line] When the glider crosses the finish line.
 \end{description}
+
+Automatic advancement is triggered whenever a condition is met. To start an AAT,
+mixed task, or Racing task the start has to be armed before. 
+
 
 \tip Competition rules may be defined in a profile file for
 distribution to a group of pilots or task-setters, so all competitors
@@ -2001,15 +2016,18 @@ are playing by the same rules!
 Additional task rules for valid starts and finishes may also be
 specified.  Starts may have a defined maximum altitude above ground,
 and a maximum speed.  Finishes may have a minimum altitude above
-ground.  These parameters are defined in the page ``Task Rules'' in
-the configuration settings.  If any of the values are zero, the
-corresponding limit rule is not applied.
+ground.  These parameters are defined in the page ``Default Task Rules'' in
+the configuration \config{taskrules} settings.
 
 For non-AAT tasks, an option is available to set the minimum finish
 altitude according to the FAI rule, whereby the minimum finish
 altitude is above 1000 meters below the start altitude.
 
 \section{Alternate starts}\label{sec:alternate-starts}
+
+\todonum[inline]{Alternate start points are skipped for XCsoar 6.0, but
+will potentially brought back in a next release. This section can thus be
+treated as obsolete. }
 
 The task system allows alternate start sectors to be defined.
   
@@ -2068,10 +2086,8 @@ This may be accessed several ways:
 \begin{quote}
 \bmenu{Nav}\blink\bmenu{Task calc}
 \end{quote}
-\item From the task editor, menu \bmenu{Nav}\blink\bmenu{Task Edit} and select
- the button \button{Advanced} then \button{Calc}
 \item From the analysis dialog, menu \bmenu{Info}\blink\bmenu{Analysis} and select
- the button \button{Calc}
+ the button \button{Task Calc}
 \end{itemize}
 
 \begin{center}
@@ -2090,21 +2106,26 @@ This may be accessed several ways:
 \item[Set speed remaining]  This field displays the estimated speed for the
  remainder of the task at the provided MacCready setting.
 \item[Achieved MacCready]  This field displays the achieved MacCready value.
+\item[Cruise efficiency]  100 indicates perfect MacCready performance, greater 
+than 100 indicates better than MacCready performance is achieved through flying
+in streets. Less than 100 is appropriate if you fly considerably off-track. This 
+value estimates your cruise efficiency according to the current flight history 
+with the set Mc value. Calculation begins after task is started.
 \end{description}
 See Section~\ref{sec:task-speed-estim} for more details on task speed
 and achieved MacCready calculations.
 
-If the \button{OK} button is pressed, the value entered in the ``Set
-MacCready'' field is used as the MacCready setting.  If the
-\button{Cancel} button is pressed, the MacCready setting is
+On closing the dialog the entered MacCready value is used as the MacCready 
+setting. If the \button{Cancel} button is pressed, the MacCready setting is 
 unaffected.
 
-The \button{Optimise} button, for AAT tasks, adjusts the range
+The \button{Target} button, for AAT tasks, adjusts the range
 (increases or decreases) so that the estimated task time exceeds the
-assigned task time by less than five minutes.  In typical use, using
-this button means the pilot does not have to manually adjust the range
-to find the course for arrival at the assigned task time, thereby
-reducing pilot workload.
+assigned task time by less than five minutes.  The range is adjusted
+target-wise. In typical use, all targets are set to ``aouto" that means the pilot 
+does not have to manually adjust the range to find the course for arrival at 
+the assigned task time, thereby reducing pilot workload.
+
 
 \section{Task status dialog}
 
@@ -2117,9 +2138,9 @@ task.
 
 This is accessed via the menu:
 \begin{quote}
-\bmenu{Info}\blink\bmenu{Status}
+\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Status}
 \end{quote}
-and then selecting the page `Task', or `Rules'.
+the pages `Task' and the following are of interest.
 
 \section{Assigned Area Tasks}\label{sec:aat-tasks}
 
@@ -2138,7 +2159,7 @@ Automatic task waypoint advancement normally triggers when entering an
 AAT area, so if the pilot wishes to fly to the targets, either the
 `arm start', `arm' or `manual' advancement modes should be used when
 flying AAT tasks.  See Section~\ref{sec:advanc-rest-tasks} for
-details.
+details. \todonum{not correct, research and updated}
 
 \subsection*{Manually moving targets}
 
@@ -2154,15 +2175,11 @@ Zero range yields a nominal task distance: for sectors the target is
 half way along the bisector radial; for cylinders the target is in the
 center of the cylinder.
 
-The targets can be modified in two ways:
-\begin{itemize}
-\item From the task calculator dialog (see 
- Section~\ref{sec:task-calc-dial}), the \button{Range} field adjusts the
- targets of all remaining waypoints in the task.
-\item From the task editor dialog (see 
- Section~\ref{sec:task-manager-dialog}), the range of each waypoint may
- be individually adjusted.
-\end{itemize}
+The task calculator dialog (see Section~\ref{sec:task-calc-dial}), shows the
+average percentage over all turns in the AAT Range field.
+The targets can be individually modified from the target dialog of the task
+calculator.
+
 
 \subsection*{AAT targets and the Task Calculator}
 
@@ -2284,18 +2301,13 @@ Best scored targets found &  \\
 
   The analysis dialog contains a page `OnLine Contest' which can be
   used to show the optimal path and estimated score.  The
-  configuration settings (task rules page) allows the selection of
-  which set of rules to be used for the OLC optimisation:
-\begin{description}
-\item[Sprint] Conforms to FAI IGC League rules.  Up to 5 points including start and finish, maximum duration 2.5 hours, finish height must not be below start height.
-\item[Triangle] Conforms to FAI OLC triangle rules.  Four points with common start and finish.  For tasks longer than 500km, no leg less than 25\% or larger than 45\%; otherwise no leg less than 28\% of total.  Finish height must not be lower than start height less 1000 meters.
-\item[Classic] Conforms to OLC classic rules.  Up to seven points including start and finish, finish height must not be lower than start height less 1000 meters.  Points awarded 80\% on second last leg and 60\% on last leg.
-\end{description}
+  configuration settings \config{taskrules} (task rules page) allows the
+  selection of which set of rules to be used for the OLC optimisation.
 
   The Sprint rules require the start altitude to be the lowest
   altitude in the flight after release from tow.  The detection
-  of this start point can be enabled in the task editor, selecting the
-  start point and turn `OLC' to ON.
+  of this start point can be \todonum{update} enabled in the task editor,
+  selecting the start point and turn `OLC' to ON.
 
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/shot-olc.png}
@@ -2336,10 +2348,10 @@ then help you reach a safe landing site.
 
 To abort/resume the task, press
 \begin{quote}
-\bmenu{Nav}\blink\bmenu{Abort task}
+\bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Abort}
 \end{quote}
 
-When in abort mode, whatever cross-country task was being flown is
+Once aborted, whatever cross-country task was being flown is
 discarded.  The task waypoint list is then filled with nearby landing
 points, ordered by the estimated arrival altitude at best glide angle
 with the safety MacCready ring setting, adjusted for wind.  The
@@ -5564,11 +5576,11 @@ In all FLARM environment, the color of the target indicates the threat level.
 %\item[Start type]  Line, cylinder, or 90 degree FAI sector.
 %\item[Start radius]  Radius of the start cylinder or half-length of the 
 %  start line.
-%\item[Sector type]  Cylinder, FAI sector or German (DAe 0.5/10) sector
+%\item[Sector type]  Cylinder, FAI sector or German (DAeC 0.5/10) sector
 %\begin{description}
 %\item[Cylinder]  Barrel cylinder of specified radius.
 %\item[FAI sector]  90 degree sector centered at bisector, at specified range
-%\item[DAe 0.5/10] German national sector type, equivalent to 0.5 km radius barrel and 10 km FAI sector.
+%\item[DAeC 0.5/10] German national sector type, equivalent to 0.5 km radius barrel and 10 km FAI sector.
 %\end{description}
 %\item[Sector radius]  Radius of the observation area.
 %\item[Finish type]  Line, cylinder, or 90 degree FAI sector.
@@ -5580,7 +5592,7 @@ In all FLARM environment, the color of the target indicates the threat level.
 \clearpage
 \section{Default Task Rules}
 Task rules may be defined to limit valid starts according to competition
-rules.
+rules. \label{conf:taskrules}
 
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-12.png}
@@ -5600,9 +5612,16 @@ rules.
 %\item[FAI finish height]  If enabled, this option requires the minimum height above ground for finish to be greater than 1000m below the start height.
 \item[Online contest] Determines the rules used to optimise On-Line Contest paths. 
 \begin{description}
-\item[Sprint]  Conforms to FAI IGC League rules.  Up to 5 points including start and finish, maximum duration 2.5 hours, finish height must not be below start height.
-\item[Triangle FAI]  Conforms to FAI OLC triangle rules.  Four points with common start and finish.  For tasks longer than 500km, no leg less than 25\% or larger than 45\%; otherwise no leg less than 28\% of total.  Finish height must not be lower than start height less 1000 meters.
-\item[Classic]  Conforms to OLC classic rules.  Up to seven points including start and finish, finish height must not be lower than start height less 1000 meters.  Points awarded 80\% on second last leg and 60\% on last leg.
+\item[OLC Sprint]  \todonum{update}Conforms to FAI IGC League rules.  Up to 5
+points including start and finish, maximum duration 2.5 hours, finish height must not be below start height.
+\item[OLC FAI]  \todonum{update}Conforms to FAI OLC triangle rules.  Four points
+with common start and finish.  For tasks longer than 500km, no leg less than 25\% or larger than 45\%; otherwise 
+no leg less than 28\% of total.  Finish height must not be lower than start height less 1000 meters.
+\item[OLC Classic]  \todonum{update}Conforms to OLC classic rules.  Up to seven
+points including start and finish, finish height must not be lower than start height less 1000 meters.  
+Points awarded 80\% on second last leg and 60\% on last leg.
+\item[OLC League]
+\item[OLC Plus]  \todonum{explaine}
 \end{description}
 \end{description}
 
