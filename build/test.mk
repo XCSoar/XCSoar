@@ -196,6 +196,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Driver/CAI302.cpp \
+	$(SRC)/Device/Driver/Condor.cpp \
 	$(SRC)/Device/Driver/EW.cpp \
 	$(SRC)/Device/Driver/EWMicroRecorder.cpp \
 	$(SRC)/Device/Driver/LX.cpp \

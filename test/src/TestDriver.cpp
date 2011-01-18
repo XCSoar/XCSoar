@@ -23,6 +23,7 @@
 #include "Device/Driver/Generic.hpp"
 #include "Device/Driver/AltairPro.hpp"
 #include "Device/Driver/CAI302.hpp"
+#include "Device/Driver/Condor.hpp"
 #include "Device/Driver/EW.hpp"
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/LX.hpp"
@@ -188,9 +189,9 @@ TestCAI302()
 }
 
 static void
-TestLX()
+TestLX(const struct DeviceRegister &driver)
 {
-  Device *device = lxDevice.CreateOnPort(NULL);
+  Device *device = driver.CreateOnPort(NULL);
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
@@ -287,11 +288,12 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(77);
+  plan_tests(91);
 
   TestGeneric();
   TestCAI302();
-  TestLX();
+  TestLX(lxDevice);
+  TestLX(condorDevice);
   TestILEC();
 
   /* XXX the Triadis drivers have too many dependencies, not enabling
