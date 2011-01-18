@@ -94,7 +94,7 @@ ButtonWindow::on_cancel_mode()
 {
   release_capture();
   dragging = false;
-  down = false;
+  set_down(false);
 
   PaintWindow::on_cancel_mode();
 
