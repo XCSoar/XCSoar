@@ -311,6 +311,11 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     ReplaceInString(OutBuffer, _T("$(CheckSettingsLockout)"), _T(""), Size);
   }
 
+  if (_tcsstr(OutBuffer, _T("$(CheckLogger)"))) {
+    invalid |= Basic().gps.Replay;
+    ReplaceInString(OutBuffer, _T("$(CheckLogger)"), _T(""), Size);
+  }
+
   if (_tcsstr(OutBuffer, _T("$(CheckFLARM)"))) {
     if (!Basic().flarm.FLARM_Available)
       invalid = true;
