@@ -557,7 +557,7 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   if (line.read_checked(value)) {
     GPS_INFO->Ballast = value / 100;
-    if (BugsUpdateTimeout <= 0) {
+    if (BallastUpdateTimeout <= 0) {
       /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
       ///    oldGlidePolar::SetBallast(GPS_INFO->Ballast);
     } else
