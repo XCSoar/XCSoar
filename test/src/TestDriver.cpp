@@ -21,9 +21,15 @@
 */
 
 #include "Device/Driver/Generic.hpp"
+#include "Device/Driver/AltairPro.hpp"
 #include "Device/Driver/CAI302.hpp"
+#include "Device/Driver/EW.hpp"
+#include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/ILEC.hpp"
+#include "Device/Driver/PosiGraph.hpp"
+#include "Device/Driver/Vega.hpp"
+#include "Device/Driver/Volkslogger.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Geoid.h"
@@ -32,6 +38,8 @@
 #include "TestUtil.hpp"
 #include "Protection.hpp"
 #include "InputEvents.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
+#include "FaultInjectionPort.hpp"
 
 #include <string.h>
 
@@ -244,14 +252,57 @@ TestILEC()
   delete device;
 }
 
+Declaration::Declaration(OrderedTask const*) {}
+
+static void
+TestDeclare(const struct DeviceRegister &driver)
+{
+  FaultInjectionPort port(*(Port::Handler *)NULL);
+  Device *device = cai302Device.CreateOnPort(&port);
+  ok1(device != NULL);
+
+  Declaration declaration(NULL);
+  _tcscpy(declaration.PilotName, _T("Foo Bar"));
+  _tcscpy(declaration.AircraftType, _T("Cirrus"));
+  _tcscpy(declaration.AircraftRego, _T("D-3003"));
+  const GeoPoint gp(Angle::degrees(fixed(7.7061111111111114)),
+                    Angle::degrees(fixed(51.051944444444445)));
+  declaration.waypoints.push_back(Waypoint(gp));
+  declaration.waypoints.push_back(Waypoint(gp));
+  declaration.waypoints.push_back(Waypoint(gp));
+  declaration.waypoints.push_back(Waypoint(gp));
+
+  for (unsigned i = 0; i < 1024; ++i) {
+    inject_port_fault = i;
+    bool success = device->Declare(&declaration);
+    if (success || !port.running || port.timeout != 0)
+      break;
+  }
+
+  ok1(port.running);
+  ok1(port.timeout == 0);
+
+  delete device;
+}
+
 int main(int argc, char **argv)
 {
-  plan_tests(62);
+  plan_tests(77);
 
   TestGeneric();
   TestCAI302();
   TestLX();
   TestILEC();
+
+  /* XXX the Triadis drivers have too many dependencies, not enabling
+     for now */
+  //TestDeclare(atrDevice);
+  TestDeclare(cai302Device);
+  TestDeclare(ewDevice);
+  TestDeclare(ewMicroRecorderDevice);
+  TestDeclare(pgDevice);
+  //TestDeclare(vgaDevice);
+  TestDeclare(vlDevice);
 
   return exit_status();
 }
