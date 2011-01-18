@@ -24,8 +24,6 @@ Copyright_License {
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/ContainerWindow.hpp"
 
-#ifdef ENABLE_SDL
-
 void
 ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
                   int left, int top, unsigned width, unsigned height,
@@ -120,42 +118,3 @@ ButtonWindow::on_clicked()
 {
   return false;
 }
-
-#else /* !ENABLE_SDL */
-
-#include <commctrl.h>
-
-void
-BaseButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-                      int left, int top, unsigned width, unsigned height,
-                      const WindowStyle style)
-{
-  Window::set(&parent, WC_BUTTON, text,
-              left, top, width, height,
-              style);
-
-  ::SetWindowLong(hWnd, GWL_ID, id);
-
-  install_wndproc();
-}
-
-bool
-BaseButtonWindow::on_clicked()
-{
-  return false;
-}
-
-const tstring
-ButtonWindow::get_text() const
-{
-  assert_none_locked();
-  assert_thread();
-
-  TCHAR buffer[256]; /* should be large enough for buttons */
-
-  int length = GetWindowText(hWnd, buffer,
-                             sizeof(buffer) / sizeof(buffer[0]));
-  return tstring(buffer, length);
-}
-
-#endif /* !ENABLE_SDL */
