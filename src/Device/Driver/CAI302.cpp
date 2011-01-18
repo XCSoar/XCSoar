@@ -250,7 +250,6 @@ CAI302Device::Open()
 }
 
 static int DeclIndex = 128;
-static int nDeclErrorCode;
 
 static void
 convert_string(char *dest, size_t size, const TCHAR *src)
@@ -277,9 +276,6 @@ cai302DeclAddWayPoint(Port *port, const Waypoint &way_point)
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
   char NoS, EoW;
-
-  if (nDeclErrorCode != 0)
-    return false;
 
   tmp = way_point.Location.Latitude.value_degrees();
   NoS = 'N';
@@ -314,12 +310,7 @@ cai302DeclAddWayPoint(Port *port, const Waypoint &way_point)
 
   port->Write(szTmp);
 
-  if (!port->ExpectString("dn>")) {
-    nDeclErrorCode = 1;
-    return false;
-  }
-
-  return true;
+  return port->ExpectString("dn>");
 }
 
 static bool
@@ -335,16 +326,12 @@ DeclareInner(Port *port, const Declaration *decl)
   port->ExpectString("$$$");
 
   port->Write('\x03');
-  if (!port->ExpectString("cmd>")) {
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("cmd>"))
     return false;
-  }
 
   port->Write("upl 1\r");
-  if (!port->ExpectString("up>")) {
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("up>"))
     return false;
-  }
 
   port->ExpectString("$$$");
 
@@ -353,10 +340,8 @@ DeclareInner(Port *port, const Declaration *decl)
 
   cai302_OdataNoArgs_t cai302_OdataNoArgs;
   port->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
-  if (!port->ExpectString("up>")) {
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("up>"))
     return false;
-  }
 
   port->Write("O 0\r"); // 0=active pilot
   Sleep(ASYNCPAUSE302);
@@ -364,10 +349,8 @@ DeclareInner(Port *port, const Declaration *decl)
   cai302_OdataPilot_t cai302_OdataPilot;
   port->Read(&cai302_OdataPilot, min(sizeof(cai302_OdataPilot),
                                        (size_t)cai302_OdataNoArgs.PilotRecordSize+3));
-  if (!port->ExpectString("up>")) {
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("up>"))
     return false;
-  }
 
   swap(cai302_OdataPilot.ApproachRadius);
   swap(cai302_OdataPilot.ArrivalRadius);
@@ -383,20 +366,16 @@ DeclareInner(Port *port, const Declaration *decl)
 
   cai302_GdataNoArgs_t cai302_GdataNoArgs;
   port->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
-  if (!port->ExpectString("up>")) {
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("up>"))
     return false;
-  }
 
   port->Write("G 0\r");
   Sleep(ASYNCPAUSE302);
 
   cai302_Gdata_t cai302_Gdata;
   port->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
-  if (!port->ExpectString("up>")) {
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("up>"))
     return false;
-  }
 
   swap(cai302_Gdata.WeightInLiters);
   swap(cai302_Gdata.BallastCapacity);
@@ -406,16 +385,12 @@ DeclareInner(Port *port, const Declaration *decl)
   port->SetRxTimeout(1500);
 
   port->Write('\x03');
-  if (!port->ExpectString("cmd>")) {
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("cmd>"))
     return false;
-  }
 
   port->Write("dow 1\r");
-  if (!port->ExpectString("dn>")) {
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("dn>"))
     return false;
-  }
 
   char PilotName[25], GliderType[13], GliderID[13];
   convert_string(PilotName, sizeof(PilotName), decl->PilotName);
@@ -443,10 +418,8 @@ DeclareInner(Port *port, const Declaration *decl)
           cai302_OdataPilot.MarginHeight);
 
   port->Write(szTmp);
-  if (!port->ExpectString("dn>")) {
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("dn>"))
     return false;
-  }
 
   sprintf(szTmp, "G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d,%d\r",
           GliderType,
@@ -462,34 +435,23 @@ DeclareInner(Port *port, const Declaration *decl)
           cai302_Gdata.WingArea);
 
   port->Write(szTmp);
-  if (!port->ExpectString("dn>")) {
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("dn>"))
     return false;
-  }
 
   DeclIndex = 128;
 
   for (unsigned i = 0; i < decl->size(); ++i)
-    cai302DeclAddWayPoint(port, decl->waypoints[i]);
+    if (!cai302DeclAddWayPoint(port, decl->waypoints[i]))
+      return false;
 
-  if (nDeclErrorCode == 0){
-    port->Write("D,255\r");
-    port->SetRxTimeout(1500); // D,255 takes more than 800ms
-    if (!port->ExpectString("dn>")) {
-      nDeclErrorCode = 1;
-    }
-
-    // todo error checking
-  }
-
-  return nDeclErrorCode == 0;
+  port->Write("D,255\r");
+  port->SetRxTimeout(1500); // D,255 takes more than 800ms
+  return port->ExpectString("dn>");
 }
 
 bool
 CAI302Device::Declare(const Declaration *decl)
 {
-  nDeclErrorCode = 0;
-
   port->StopRxThread();
 
   bool success = DeclareInner(port, decl);
