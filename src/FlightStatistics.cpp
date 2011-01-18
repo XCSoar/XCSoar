@@ -293,8 +293,8 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
   }
 
   fixed MACCREADY = glide_polar.get_mc();
-  fixed sb = -glide_polar.SinkRate(derived.common_stats.V_block);
-  fixed ff = (sb - MACCREADY) / derived.common_stats.V_block;
+  fixed sb = -glide_polar.get_SbestLD();
+  fixed ff = (sb - MACCREADY) / glide_polar.get_VbestLD();
 
   chart.DrawLine(fixed_zero, MACCREADY, glide_polar.get_Vmax(),
                  MACCREADY + ff * glide_polar.get_Vmax(), Chart::STYLE_REDTHICK);
