@@ -49,10 +49,8 @@ dlgHelpShowModal(SingleWindow &parent,
   if (!Caption || !HelpText)
     return;
 
-  if (!Layout::landscape)
-    wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_HELP_L"));
-  else
-    wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_HELP"));
+  wf = LoadDialog(CallBackTable, parent,
+                  Layout::landscape ? _T("IDR_XML_HELP_L"): _T("IDR_XML_HELP"));
 
   if (wf == NULL)
     return;
