@@ -3,7 +3,6 @@
 SCREEN_SRC_DIR = $(SRC)/Screen
 
 SCREEN_SOURCES = \
-	$(SCREEN_SRC_DIR)/CheckBox.cpp \
 	$(SCREEN_SRC_DIR)/ProgressBar.cpp \
 	$(SCREEN_SRC_DIR)/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/Util.cpp \
@@ -29,6 +28,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Window.cpp \
 	$(SCREEN_SRC_DIR)/SDL/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/ButtonWindow.cpp \
+	$(SCREEN_SRC_DIR)/SDL/CheckBox.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp
 ifeq ($(TARGET),ANDROID)

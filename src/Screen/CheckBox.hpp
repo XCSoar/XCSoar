@@ -51,30 +51,42 @@ public:
 #ifdef ENABLE_SDL
 
 #include "Screen/PaintWindow.hpp"
+#include "Util/tstring.hpp"
 
 class CheckBox : public PaintWindow {
+  tstring text;
+  unsigned id;
+  bool checked, dragging, pressed;
+
 public:
+  CheckBox():checked(false), dragging(false), pressed(false) {}
+
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
            int left, int top, unsigned width, unsigned height,
-           const CheckBoxStyle style=CheckBoxStyle()) {
-    // XXX
-    PaintWindow::set(parent, left, top, width, height);
-  }
+           const CheckBoxStyle style=CheckBoxStyle());
 
   void set(ContainerWindow &parent, const TCHAR *text,
            int left, int top, unsigned width, unsigned height,
            const CheckBoxStyle style=CheckBoxStyle()) {
-    // XXX
-    PaintWindow::set(parent, left, top, width, height);
+    set(parent, text, 0, left, top, width, height, style);
   }
 
   bool get_checked() const {
-    return false; // XXX
+    return checked;
   }
 
-  void set_checked(bool value) {
-    // XXX
-  }
+  void set_checked(bool value);
+
+protected:
+  void set_pressed(bool value);
+
+  virtual bool on_mouse_move(int x, int y, unsigned keys);
+  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_cancel_mode();
+  virtual void on_paint(Canvas &canvas);
+
+  virtual bool on_clicked();
 };
 
 #else /* !ENABLE_SDL */
