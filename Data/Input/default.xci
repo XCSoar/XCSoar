@@ -637,7 +637,7 @@ type=key
 data=7
 event=Setup System
 event=Mode default
-label=Setup\nSystem$(CheckSettingsLockout)
+label=Setup\nSystem
 location=6
 
 mode=Config2

@@ -304,14 +304,6 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     ReplaceInString(OutBuffer, _T("$(CheckWaypointFile)"), _T(""), Size);
   }
 
-  if (_tcsstr(OutBuffer, _T("$(CheckSettingsLockout)"))) {
-    if (!is_simulator() && XCSoarInterface::LockSettingsInFlight &&
-        Basic().flight.Flying)
-      invalid = true;
-
-    ReplaceInString(OutBuffer, _T("$(CheckSettingsLockout)"), _T(""), Size);
-  }
-
   if (_tcsstr(OutBuffer, _T("$(CheckFLARM)"))) {
     if (!Basic().flarm.FLARM_Available)
       invalid = true;

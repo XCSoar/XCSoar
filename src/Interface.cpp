@@ -48,7 +48,6 @@ StatusMessageList CommonInterface::status_messages;
 MainWindow CommonInterface::main_window(status_messages);
 
 // settings used only by interface thread scope
-bool ActionInterface::LockSettingsInFlight = true;
 unsigned XCSoarInterface::debounceTimeout = 250;
 unsigned ActionInterface::MenuTimeoutMax = MENUTIMEOUTMAX;
 
