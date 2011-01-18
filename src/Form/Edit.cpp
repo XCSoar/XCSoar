@@ -216,7 +216,7 @@ WndProperty::SetFont(const Font &Value)
 void
 WndProperty::UpdateLayout()
 {
-  mBitmapSize = mDialogStyle ? 0 : Layout::Scale(16);
+  mBitmapSize = mDialogStyle || edit.is_read_only() ? 0 : Layout::Scale(16);
 
   const SIZE size = get_size();
 
