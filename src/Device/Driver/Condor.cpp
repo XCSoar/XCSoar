@@ -38,6 +38,22 @@ public:
 };
 
 static bool
+ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
+{
+  fixed bearing, norm;
+
+  bool bearing_valid = line.read_checked(bearing);
+  bool norm_valid = line.read_checked(norm);
+
+  if (bearing_valid && norm_valid) {
+    value_r.bearing = Angle::degrees(bearing);
+    value_r.norm = Units::ToSysUnit(norm, unKiloMeterPerHour);
+    return true;
+  } else
+    return false;
+}
+
+static bool
 cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   /*
@@ -72,6 +88,11 @@ cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   GPS_INFO->TotalEnergyVarioAvailable =
     line.read_checked(GPS_INFO->TotalEnergyVario);
+
+  line.skip(6);
+
+  GPS_INFO->ExternalWindAvailable =
+    ReadSpeedVector(line, GPS_INFO->ExternalWind);
 
   TriggerVarioUpdate();
 
