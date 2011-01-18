@@ -25,10 +25,6 @@ Copyright_License {
 
 #include <commctrl.h>
 
-#if defined(ENABLE_SDL) && !defined(WC_EDIT)
-#define WC_EDIT _T("Edit")
-#endif
-
 void
 EditWindow::set(ContainerWindow &parent, int left, int top,
                 unsigned width, unsigned height,
@@ -36,20 +32,3 @@ EditWindow::set(ContainerWindow &parent, int left, int top,
   Window::set(&parent, WC_EDIT, NULL,
               left, top, width, height, style);
 }
-
-#ifdef ENABLE_SDL
-#include "Screen/Canvas.hpp"
-
-void
-EditWindow::on_paint(Canvas &canvas)
-{
-  RECT rc = { 2, 2, canvas.get_width()-4, canvas.get_height()-4 };
-
-  canvas.clear_white();
-
-  canvas.set_text_color(Color::BLACK);
-  canvas.background_transparent();
-  canvas.formatted_text(&rc, value.c_str(), get_text_style());
-}
-
-#endif /* ENABLE_SDL */
