@@ -142,6 +142,9 @@ Profile::Use()
     settings_map.DisplayTextType = DISPLAYNAME;
     settings_map.WayPointLabelSelection = wlsTaskWayPoints;
   }
+  else if (settings_map.DisplayTextType == OBSOLETE_DONT_USE_DISPLAYNUMBER)
+    settings_map.DisplayTextType = DISPLAYNAME;
+
 
   // NOTE: settings_map.DisplayTextType must be loaded before this code
   //       due to pref migration dependencies!

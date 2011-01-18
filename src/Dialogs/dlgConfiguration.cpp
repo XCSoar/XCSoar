@@ -757,12 +757,11 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Names"), DISPLAYNAME);
-    dfe->addEnumText(_("Numbers"), DISPLAYNUMBER);
-    dfe->addEnumText(_("First 5"), DISPLAYFIRSTFIVE);
+    dfe->addEnumText(_("Full Name"), DISPLAYNAME);
+    dfe->addEnumText(_("First Word of Name"), DISPLAYUNTILSPACE);
+    dfe->addEnumText(_("First 3 Letters"), DISPLAYFIRSTTHREE);
+    dfe->addEnumText(_("First 5 Letters"), DISPLAYFIRSTFIVE);
     dfe->addEnumText(_("None"), DISPLAYNONE);
-    dfe->addEnumText(_("First 3"), DISPLAYFIRSTTHREE);
-    dfe->addEnumText(_("First word"), DISPLAYUNTILSPACE);
     dfe->Set(XCSoarInterface::SettingsMap().DisplayTextType);
     wp->RefreshDisplay();
   }

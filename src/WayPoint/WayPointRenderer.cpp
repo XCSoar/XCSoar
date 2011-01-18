@@ -88,10 +88,6 @@ public:
       _tcscpy(Buffer, way_point.Name.c_str());
       break;
 
-    case DISPLAYNUMBER:
-      _stprintf(Buffer, _T("%d"), way_point.id);
-      break;
-
     case DISPLAYFIRSTFIVE:
       _tcsncpy(Buffer, way_point.Name.c_str(), 5);
       Buffer[5] = '\0';
@@ -112,7 +108,6 @@ public:
       tmp = _tcsstr(Buffer, _T(" "));
       if (tmp != NULL)
         tmp[0] = '\0';
-
       break;
 
     default:
