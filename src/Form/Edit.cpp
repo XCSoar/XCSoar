@@ -152,7 +152,7 @@ WndProperty::WndProperty(ContainerWindow &parent,
                          const WindowStyle style,
                          const EditWindowStyle edit_style,
                          DataChangeCallback_t DataChangeNotify)
-  :mDialogStyle(false), edit(this),
+  :mDialogStyle(true), edit(this),
    mBitmapSize(Layout::Scale(32) / 2), mCaptionWidth(CaptionWidth),
    mDownDown(false), mUpDown(false),
    mOnDataChangeNotify(DataChangeNotify),
