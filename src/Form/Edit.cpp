@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2010 The XCSoar Project
+  Copyright (C) 2000-2011 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -152,7 +152,7 @@ WndProperty::WndProperty(ContainerWindow &parent,
                          const WindowStyle style,
                          const EditWindowStyle edit_style,
                          DataChangeCallback_t DataChangeNotify)
-  :mDialogStyle(false), edit(this),
+  :mDialogStyle(true), edit(this),
    mBitmapSize(Layout::Scale(32) / 2), mCaptionWidth(CaptionWidth),
    mDownDown(false), mUpDown(false),
    mOnDataChangeNotify(DataChangeNotify),
@@ -216,22 +216,15 @@ WndProperty::SetFont(const Font &Value)
 void
 WndProperty::UpdateLayout()
 {
-  mBitmapSize = mDialogStyle ? 0 : Layout::Scale(16);
+  mBitmapSize = mDialogStyle || edit.is_read_only() ? 0 : Layout::Scale(16);
 
   const SIZE size = get_size();
 
-  if (mCaptionWidth != 0) {
-    mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1)
-        - mBitmapSize;
-    mEditSize.y = size.cy - 2 * (DEFAULTBORDERPENWIDTH + 1);
-    mEditPos.x = mCaptionWidth;
-    mEditPos.y = (DEFAULTBORDERPENWIDTH + 1);
-  } else {
-    mEditSize.x = size.cx - 2 * (DEFAULTBORDERPENWIDTH + 1 + mBitmapSize);
-    mEditSize.y = size.cy / 2;
-    mEditPos.x = mBitmapSize + (DEFAULTBORDERPENWIDTH + 2);
-    mEditPos.y = size.cy / 2 - 2 * (DEFAULTBORDERPENWIDTH + 1);
-  }
+  mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1)
+    - mBitmapSize;
+  mEditSize.y = size.cy - 2 * (DEFAULTBORDERPENWIDTH + 1);
+  mEditPos.x = mCaptionWidth;
+  mEditPos.y = (DEFAULTBORDERPENWIDTH + 1);
 
   mHitRectDown.left = mEditPos.x - mBitmapSize;
   mHitRectDown.top = mEditPos.y + (mEditSize.y) / 2 - (mBitmapSize / 2);

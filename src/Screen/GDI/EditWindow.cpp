@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2010 The XCSoar Project
+  Copyright (C) 2000-2011 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,34 +23,12 @@ Copyright_License {
 
 #include "Screen/EditWindow.hpp"
 
-#ifndef ENABLE_SDL
 #include <commctrl.h>
-#endif
 
 void
 EditWindow::set(ContainerWindow &parent, int left, int top,
                 unsigned width, unsigned height,
                 const EditWindowStyle style) {
-  Window::set(&parent,
-#ifndef ENABLE_SDL
-              WC_EDIT, NULL,
-#endif
+  Window::set(&parent, WC_EDIT, NULL,
               left, top, width, height, style);
 }
-
-#ifdef ENABLE_SDL
-#include "Screen/Canvas.hpp"
-
-void
-EditWindow::on_paint(Canvas &canvas)
-{
-  RECT rc = { 2, 2, canvas.get_width()-4, canvas.get_height()-4 };
-
-  canvas.clear_white();
-
-  canvas.set_text_color(Color::BLACK);
-  canvas.background_transparent();
-  canvas.formatted_text(&rc, value.c_str(), get_text_style());
-}
-
-#endif /* ENABLE_SDL */
