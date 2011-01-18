@@ -81,10 +81,8 @@ ButtonWindow::on_mouse_up(int x, int y)
 
   set_down(false);
 
-  if (parent != NULL) {
-    if (!on_clicked())
-      parent->on_command(id, 0);
-  }
+  if (!on_clicked() && id != 0 && parent != NULL)
+    parent->on_command(id, 0);
 
   return true;
 }
