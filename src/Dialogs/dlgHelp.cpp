@@ -28,54 +28,46 @@ Copyright_License {
 
 #include <stdio.h>
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 
-static void OnCloseClicked(WndButton &Sender){
-	(void)Sender;
+static void
+OnCloseClicked(WndButton &Sender)
+{
+  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
-
-static CallBackTableEntry CallBackTable[]={
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
-
-
 
 void
 dlgHelpShowModal(SingleWindow &parent,
                  const TCHAR* Caption, const TCHAR* HelpText)
 {
-  if (!Caption || !HelpText) {
+  if (!Caption || !HelpText)
     return;
-  }
 
-  if (!Layout::landscape) {
-    wf = LoadDialog(CallBackTable,
-                        parent,
-                        _T("IDR_XML_HELP_L"));
-  } else {
-    wf = LoadDialog(CallBackTable,
-                        parent,
-                        _T("IDR_XML_HELP"));
-  }
+  if (!Layout::landscape)
+    wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_HELP_L"));
+  else
+    wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_HELP"));
 
   if (wf == NULL)
     return;
 
-  WndProperty* wp;
-
   TCHAR fullcaption[100];
   _stprintf(fullcaption,_T("%s: %s"), _("Help"), Caption);
-
   wf->SetCaption(fullcaption);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpHelpText"));
+  WndProperty* wp = (WndProperty*)wf->FindByName(_T("prpHelpText"));
   if (wp) {
     wp->SetText(HelpText);
     wp->RefreshDisplay();
   }
+
   wf->ShowModal();
+
   delete wf;
 }
