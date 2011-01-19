@@ -29,7 +29,7 @@ $(OUT)/po/xml.pot: $(GETTEXT_DIALOGS) | $(OUT)/po/dirstamp
 	$(Q)$(PERL) $(topdir)/tools/xml2po.pl $^ >$@.tmp
 	$(Q)mv $@.tmp $@
 
-$(OUT)/po/event.pot: $(GETTEXT_EVENTS) | $(OUT)/include/dirstamp
+$(OUT)/po/event.pot: $(GETTEXT_EVENTS) | $(OUT)/po/dirstamp
 	$(Q)$(PERL) $(topdir)/tools/xci2po.pl $^ >$@.tmp
 	$(Q)mv $@.tmp $@
 
