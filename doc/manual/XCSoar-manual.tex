@@ -1623,9 +1623,9 @@ This page also shows three forms of altitude difference (additional
 altitude required to reach the waypoint at the safety altitude) for
 the corresponding waypoint:
 \begin{description}
-\item[Alt diff Mc 0] Altitude difference at Mc setting of 0
-\item[Alt diff Mc safety] Altitude difference at the abort/safety MacCready setting
-\item[Alt diff Mc current] Altitude difference at the current MacCready setting
+\item[Alt diff MC 0] Altitude difference at MC setting of 0
+\item[Alt diff MC safety] Altitude difference at the abort/safety MacCready setting
+\item[Alt diff MC current] Altitude difference at the current MacCready setting
 \end{description}
 
 \subsection*{Task menu}  
@@ -2110,7 +2110,7 @@ This may be accessed several ways:
 than 100 indicates better than MacCready performance is achieved through flying
 in streets. Less than 100 is appropriate if you fly considerably off-track. This 
 value estimates your cruise efficiency according to the current flight history 
-with the set Mc value. Calculation begins after task is started.
+with the set MC value. Calculation begins after task is started.
 \end{description}
 See Section~\ref{sec:task-speed-estim} for more details on task speed
 and achieved MacCready calculations.
@@ -2357,10 +2357,10 @@ points, ordered by the estimated arrival altitude at best glide angle
 with the safety MacCready ring setting, adjusted for wind.  The
 first waypoint in the list is therefore the most reachable waypoint.
 
-The configuration option `Abort use current Mc' determines whether
+The configuration option `Abort use current MC' determines whether
 waypoint arrival heights in abort mode uses the MacCready value prior
 to aborting the task, or if the safety MacCready value is used.  If
-this is false, the Mc value used to calculate arrival heights in abort
+this is false, the MC value used to calculate arrival heights in abort
 mode is the safety MacCready value.  Default is to use the safety
 MacCready value.  When switching to abort mode, the MacCready setting
 is set to the safety value if it is lower than the current setting.
@@ -2573,18 +2573,18 @@ cruise mode.
 
 The cruise modes are further divided into final glide and normal
 cruise.  Final glide is active when the last waypoint in the task is
-active, or when the task is in abort mode.
+active, or when the task is aborted.
 
 \begin{description}
 \item[Cruise]   The glider is not circling and there is either no task
   active, or the task waypoint is not the finish point.
 \item[Circling]  The glider is circling (though it may not be climbing).
 \item[Final glide]  The glider is not circling and the active waypoint is the
- final one in the task.
+ final one in the task, or the gliders height is above the final glide path.
 \end{description}
 
 The specific computations performed by XCSoar are of course dependent
-on this flight mode.  The display changes in each mode, principally,
+on this flight mode.  The display changes according to each mode, principally,
 the InfoBoxes may be set up differently for each mode; secondly there
 is a facility to automatically change zoom between circling and other
 flight modes (this is called `circling zoom').
@@ -2604,24 +2604,19 @@ be displayed in any flight mode.  This is useful if the pilot has
 information he wants to be able to view no matter what mode the
 computer is in.  This is accessed from the menu
 \begin{quote}
-\bmenu{Info}\blink\bmenu{Auxiliary infobox}
+\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Aux Info On}
 \end{quote}
 
-which toggles between the normal mode-specific display and
-the auxiliary display.
+which toggles between the normal mode-specific InfoBoxes and
+the auxiliary set of InfoBoxes.
 
-Final glide mode can also be forced even if the active waypoint is not
-the final waypoint, by selecting the menu option:
-\begin{quote}
-\bmenu{Nav}\blink\bmenu{Force final}
-\end{quote}
-This toggles between forced final glide, and normal (automatic) operation.
-
-Final glide mode can also be forced automatically if at any stage in
-the flight the aircraft is above the final glide height.  This is a
-configuration option called `Auto Force Final Glide', disabled by
-default.  This option is useful when flying short tasks in which the
-aircraft may well be above final glide turning the penultimate
+Final glide mode replaces the Cruise mode as soon as the glider is above the
+final glide path. The required hight depends most important on the adjusted MC
+value, but also the ground clearance is respected. On entering a thermal while
+in Final mode XCSoar will switch to the Circling display and back to the Final
+display once the thermal is left again and the final gllide condition is still
+met. The potential of having the Final glide mode is obvious when
+flying short tasks in which the aircraft may well be above final glide turning the penultimate
 waypoint.
 
 \section{MacCready setting}
@@ -2645,12 +2640,12 @@ Section~\ref{sec:auto-maccready}.
 
 \section{Glide polar}
 
-The glide polar specifications of a small selection of glider types,
-representing major classes of gliders, are built into XCSoar, and
-these may be used as an approximation for other gliders if no better
-glide polar can be found.  However, for most accurate results, it is
-advisable to use the correct glide polar for your particular aircraft
-type.
+The glide polar specifications of a wide selection of glider types,
+representing major classes of gliders, are built into XCSoar.
+If your glider type is not listed, these may be used as an approximation for  
+if no better glide polar can be found.  However, for most accurate results, it is
+advisable to use the correct glide polar for your particular
+\config{polar} aircraft type. 
 
 The glide polar is adjusted in flight by XCSoar to account for
 degraded performance due to bugs and ballast.
@@ -2659,13 +2654,17 @@ The build-up of bugs on the wing's leading edge, as well as rain
 droplets on the wing, affect the aerodynamic performance.  It is the
 pilot's responsibility to judge and update the bugs value during
 flight.  The bugs value is expressed as a percentage of the clean
-glider's performance.  For example, at 100\% bugs value, the glider
-performs as a clean glider, and at 50\% bugs value, the glider's sink
-rate is doubled when compared to a clean glider.
+glider's performance.  For example, at 100\% bugs value (left side), the glider
+performs as a clean glider, and at 50\% bugs value (right side), the glider's
+sink rate is doubled when compared to a clean glider. 
 
-\todonum{How to judge bugs?}
-
-%{\it DIAGRAM SHOWING GLIDE POLAR, 100\% BUGS AND 50\% BUGS}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/cut-clean-dirty-polar.png}
+\end{center}
+Knowing this a meaningfull setting for a worst-case bug polluted wing could
+scale down the polar by 30\% to 70\%. Last not least this setting is a bit of 
+trial and error, because gliders performance suffer not the same way from type
+to type.
 
 The ballast value is expressed as a percentage of the glider's total
 ballast capacity.  Depending on the specific construction of the glide
@@ -2689,7 +2688,7 @@ This is accessed via the menu under
 \end{quote}
 
 \begin{center}
-\includegraphics[angle=0,width=4cm,keepaspectratio='true']{figures/dialog-basicsettings.png}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/dialog-basicsettings.png}
 \end{center}
 
 The bugs setting ('clean') determines the amount the polar is degraded
@@ -2782,7 +2781,7 @@ this optimum speed value.
   MacCready setting used for calculating the speed to fly (in both
   Block or Dolphin modes) is reduced as the glider gets low.
 
-  Many pilots typically wind down the Mc as they get low --- this
+  Many pilots typically wind down the MC as they get low --- this
   feature performs this automatically.  The theory governing how this
   is implemented in XCSoar is based loosely on the paper by John
   Cochrane, ``MacCready Theory with Uncertain Lift and Limited
@@ -2792,7 +2791,7 @@ this optimum speed value.
 
   A configuration parameter $\gamma$ (`STF risk factor', in the
   configuration settings under page `Glide Computer') controls how the
-  risk Mc value is calculated.  The $\gamma$ factor determines the
+  risk MC value is calculated.  The $\gamma$ factor determines the
   fraction of the current MacCready setting as a function of the
   height fraction.  The height fraction used in this calculation is
   the ratio of the height above the break-off height above terrain
@@ -2800,10 +2799,10 @@ this optimum speed value.
   above terrain ($h_{top}$).
 
   For the default value, $\gamma=0.0$, there is no compensation ---
-  the risk Mc is the same as the Mc setting.  For $\gamma=1.0$, the
-  risk Mc is scaled linearly with the height fraction $h/h_{top}$.
-  For intermediate values of $\gamma$, the risk Mc varies smoothly
-  with the height fraction, such that the risk Mc is small only when
+  the risk MC is the same as the MC setting.  For $\gamma=1.0$, the
+  risk MC is scaled linearly with the height fraction $h/h_{top}$.
+  For intermediate values of $\gamma$, the risk MC varies smoothly
+  with the height fraction, such that the risk MC is small only when
   low.
 
   Low values of $\gamma$ are best when pilots do not want to slow down
@@ -2841,7 +2840,7 @@ The safety heights are:
  it is recommended for pilots to consider the cross-country task
  failed and to concentrate on finding a suitable field to land in.
  Currently this break-off height does not affect XCSoar in any way but
- it is reserved for future use to provide warnings etc.
+ it is referenced in the manual.
 \end{description}
 
 \begin{maxipage}
@@ -2862,7 +2861,7 @@ specified in the waypoint file, from the terrain file.
 
 The estimated arrival altitude displayed next to landable waypoints is
 calculated for best glide angle at zero MacCready ring setting
-(Mc$=0$), adjusted for wind.
+(MC$=0$), adjusted for wind.
 
 Landable fields are only marked as reachable if the estimated arrival
 elevation above ground is above the arrival altitude safety height,
@@ -2964,7 +2963,7 @@ Examples of the appearance in various configurations is shown below:
 
 \begin{description}
 
-\item[Above final glide at Mc$=M$ and Mc$=0$]
+\item[Above final glide at MC$=M$ and MC$=0$]
   Here the display shows that at the current MacCready setting, the aircraft
   is above final glide (filled arrow).  The hollow arrow shows the additional
   excess height.
@@ -2973,10 +2972,10 @@ Examples of the appearance in various configurations is shown below:
 \includegraphics[angle=0,width=1.6cm,keepaspectratio='true']{figures/fig-finalglide-allabove.png}
 \end{center}
 
-\item[Below final glide at Mc$=M$, and above at Mc$=0$]
+\item[Below final glide at MC$=M$, and above at MC$=0$]
   Here the display shows that at the current MacCready setting, the aircraft
   is below final glide (filled red arrow).  The hollow green arrow
-  shows that at Mc$=0$, the aircraft is above final glide.
+  shows that at MC$=0$, the aircraft is above final glide.
 
   In this situation, if the glider is climbing, the pilot can assess
   whether to leave the thermal early and commence a final glide
@@ -2991,7 +2990,7 @@ Examples of the appearance in various configurations is shown below:
 \includegraphics[angle=0,width=1.6cm,keepaspectratio='true']{figures/fig-finalglide-halfabove.png}
 \end{center}
 
-\item[Below final glide at Mc$=M$, and just below at Mc$=0$]
+\item[Below final glide at MC$=M$, and just below at MC$=0$]
   Here the display shows that at the current MacCready setting, the aircraft
   is below final glide (filled red arrow).  The hollow red arrow
   shows that by reducing the MacCready setting to zero, the aircraft is
@@ -3000,10 +2999,10 @@ Examples of the appearance in various configurations is shown below:
 \includegraphics[angle=0,width=2cm,keepaspectratio='true']{figures/fig-finalglide-littlebelow.png}
 \end{center}
 
-\item[Below final glide at Mc$=M$, and at Mc$=0$]
+\item[Below final glide at MC$=M$, and at MC$=0$]
   Here the display shows that at the current MacCready setting, the aircraft
   is below final glide (filled red arrow).  No hollow red arrow
-  shows that even at Mc$=0$ the aircraft is well below final glide.
+  shows that even at MC$=0$ the aircraft is well below final glide.
 \begin{center}
 \includegraphics[angle=0,width=2cm,keepaspectratio='true']{figures/fig-finalglide-allbelow.png}
 \end{center}
@@ -3029,9 +3028,9 @@ the task according to MacCready theory.
 \item[Task speed achieved]  This is the task speed to date, compensated
 for altitude differences from the task start altitude.
 \item[Task speed average]  This is the task speed to date compensated
-for altitude required to complete the task.
+for altitude required to complete the task. \todonum{explain better}
 \item[Task speed remaining]  This is the task speed estimated for the
-  remainder of the task.
+  remainder of the task.\todonum{doublicate definition, explain better}
 \item[Task speed instantaneous]  This is the instantaneous estimated speed 
 along the task.  When climbing at the MacCready setting, this number
 will be similar to the estimated task speed.  When climbing slowly or
@@ -3136,17 +3135,20 @@ Additionally, both methods may be used, so that before reaching final glide,
 the MacCready setting is adjusted to the average climb rate, and during final
 glide it adjusts the setting to give minimum time to arrival.
 
-The method that is used is defined in the configuration settings dialog 
-as the field `Auto Mc Mode'.  The default setting is `final glide'.
+The method that is used is defined in the configuration settings dialog as the
+field ``Auto MC Mode''.  The default setting is ``Both''.
 
 To enable/disable Auto MacCready, use the menu
 \begin{quote}
-\bmenu{Config}\blink\bmenu{MacCready Auto}
+\bmenu{Config}\blink\bmenu{MC Auto}
 \end{quote}
 
 When Auto MacCready is enabled, the MacCready infobox displays `AUTO'
 instead of `MANUAL'; and the MacCready indicator in the variometer
-gauge displays `AutoMc' instead of `Mc'.
+gauge displays `AutoMC' instead of `MC'.
+%To benefit at max from the automatic MC adjustment XCSoar propagates the MC
+%value to the connected inteligent variometer (if it supports).
+% to be enabled for 6.1 
 
 The Auto MacCready methods are described in further detail below.
 
@@ -3478,9 +3480,7 @@ how this affects the display of the snail trail.
 Statistics on climb rates in thermals are collected and displayed in a
 thermal band meter.  This is shown above the final glide difference
 bar on the left side of the map display.  It is not shown when the
-glider is above final glide.  It is also not shown when the glider is
-below the break-off height, as you should then be focused on just
-staying airborne or finding an outlanding field.
+glider is above final glide.  
 
 %\begin{center}
 \vskip 1cm
@@ -3488,8 +3488,8 @@ staying airborne or finding an outlanding field.
 %\end{center}
 
 The thermal band meter shows a graph, where the vertical axis is
-height above the break-off height, and is scaled according to the
-maximum height achieved.  The horizontal axis is the average climb
+height above the break-off \todonum{update} height, and is scaled according to
+the maximum height achieved.  The horizontal axis is the average climb
 rate achieved at a particular height band.  The horizontal axis is
 scaled according to the MacCready setting, and an arrow indicating this
 setting, and the glider's current height is overlaid on the shaded
@@ -4816,7 +4816,7 @@ temperature.}
 also shows whether MacCready is manual or auto. Touchscreen/PC only: Also used
 to adjust the MacCready Setting if the infobox is active, by using the up/down
 cursor keys. Pressing the enter cursor key toggles Auto MacCready mode.}
-\ibi{Speed MacCready}{V Mc}{The MacCready speed-to-fly for optimal flight to the
+\ibi{Speed MacCready}{V MC}{The MacCready speed-to-fly for optimal flight to the
 next waypoint. In cruise flight mode, this speed-to-fly is calculated for
 maintaining altitude. In final glide mode, this speed-to-fly is calculated for
 descent.}
@@ -5291,10 +5291,11 @@ glide terrain range is calculated and drawn as a line resp. a shade on the map a
 \item[ZigZag]  ZigZag requires an intelligent vario with airspeed output.
 \item[Both] Uses Circling and ZigZag.
 \end{description}
-\item[Auto Mc mode] This option defines which auto MacCready algorithm is used.
+\item[Auto MC mode] This option defines which auto MacCready algorithm is used.
+For more details see Section~\ref{sec:auto-maccready}.
  \begin{description}
-\item[Final glide] Final glide adjusts Mc for fastest arrival.
-\item[Average climb]  Average climb sets Mc to the average climb rate across all climbs.
+\item[Final glide] Final glide adjusts MC for fastest arrival.
+\item[Average climb]  Average climb sets MC to the average climb rate across all climbs.
 \item[Both] Uses average during task, then fastest arrival when in final glide mode.
 \end{description}
 %\item[Lift center]  Controls display of the thermal locator.
@@ -5327,7 +5328,7 @@ glide terrain range is calculated and drawn as a line resp. a shade on the map a
 \item[STF risk factor*] 
   The STF risk factor reduces the MacCready setting used to calculate
   speed to fly as the glider gets low, in order to compensate for
-  risk.  Set to 0.0 for no compensation, 1.0 scales Mc linearly with
+  risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with
   height.  See Section~\ref{sec:speed-fly-with} for more details.
 \end{description}
 See Section~\ref{sec:safety-heights} for more details on the meanings
@@ -5344,13 +5345,11 @@ This page allows the safety heights and behaviour in abort mode to be defined.
 \begin{description}
 \item[Arrival height]  The height above terrain that the glider
   should arrive at for a safe landing.
-%\item[Break-off height]  This is the height above terrain, below which
-%the pilot should abort the task and prepare for an outlanding.
 \item[Terrain height] The height above terrain that the glider must
   clear during final glide.
-\item[Abort use current Mc*]  When enabled, the current MacCready setting
+\item[Abort use current MC*]  When enabled, the current MacCready setting
   is used for determining arrival altitude during task abort mode.
-\item[Safety Mc*]  The MacCready setting used in task abort mode and
+\item[Safety MC*]  The MacCready setting used in task abort mode and
   for determining arrival altitude at airfields. 
 \end{description}
 See Section~\ref{sec:safety-heights} for more details on the meanings
@@ -5368,11 +5367,11 @@ This page allows the glide polar to be defined.
 \end{center}
 
 \begin{description}
-\item[Type] 
-This contains a selection of gliders of different performance
-classes, as well as a special entry for `WinPilot File'.  
-\item[Polar file]  When `WinPilot File' is the polar type, 
- this is the name of the file containing the glide polar data.
+\item[Type]  \label{conf:polar} This contains a selection of gliders of
+different performance classes, as well as a special entry for ``External Polar File''.  
+\item[Polar file]  When ``External Polar File'' is the polar type, 
+ this is the name of the file containing the glide polar data in WinPilot
+ format.
 \item[V rough air] The maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.
 \item[Handicap] The handicap factor used for OnLine Contest scoring.
 %\item[Auto logger] Enables the automatic starting and stopping of logger on takeoff and landing respectively.  Disable when flying paragliders to prevent the low ground speeds from triggering the automatic logger.
