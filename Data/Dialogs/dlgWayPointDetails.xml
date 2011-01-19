@@ -1,36 +1,36 @@
 <?xml version="1.0"?>
 
 <Form Name="frmWayPointInfo" Width="240" Height="320" Caption="Waypoint Info">
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="8" Y="270" Width="35" Height="28" OnClick="OnPrevClicked" />
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="48" Y="270" Width="35" Height="28" OnClick="OnNextClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="2" Y="-30" Width="35" Height="28" OnClick="OnPrevClicked" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="39" Y="-30" Width="35" Height="28" OnClick="OnNextClicked" />
   
-  <Button Name="cmdGoto" Caption="Goto" X="88" Y="270" Width="60" Height="28" />
+  <Button Name="cmdGoto" Caption="Goto" X="88" Y="-30" Width="60" Height="28" />
 
-  <Button Name="cmdClose" Caption="Close" X="172" Y="270" Width="60" Height="28" />
+  <Button Name="cmdClose" Caption="Close" X="-62" Y="-30" Width="60" Height="28" />
 
-  <Panel Name="frmInfos" X="0" Y="0" Width="0" Height="255" Border="0">
-    <Edit Name="prpWpComment" Caption="Comment" X="2" Y="10" Width="230" Height="40" CaptionWidth="100" ReadOnly="1" />
-    <Edit Name="prpLatitude" Caption="Latitude" X="2" Width="230" Height="22" CaptionWidth="100" ReadOnly="1" />
-    <Edit Name="prpLongitude" Caption="Longitude" X="2" Width="230" Height="22" CaptionWidth="100" ReadOnly="1" />
-    <Edit Name="prpAltitude" Caption="Elevation" X="2" Width="230" Height="22" CaptionWidth="150" ReadOnly="1" />
-    <Edit Name="prpSunset" Caption="Sunset" X="2" Width="230" Height="22" CaptionWidth="150" ReadOnly="1" />
-    <Edit Name="prpDistance" Caption="Distance" X="2" Width="230" Height="22" CaptionWidth="150" ReadOnly="1" />
-    <Edit Name="prpBearing" Caption="Bearing" X="2" Width="230" Height="22" CaptionWidth="150" ReadOnly="1" />
-    <Edit Name="prpMc0" Caption="Alt diff Mc 0" X="2" Width="230" Height="22" CaptionWidth="150" ReadOnly="1" />
-    <Edit Name="prpMc1" Caption="Alt diff Mc safety" X="2" Width="230" Height="22" CaptionWidth="150" ReadOnly="1" />
-    <Edit Name="prpMc2" Caption="Alt diff Mc current" X="2" Width="230" Height="22" CaptionWidth="150" ReadOnly="1" />
+  <Panel Name="frmInfos" X="0" Y="0" Height="-32">
+    <Edit Name="prpWpComment" Caption="Comment" X="2" Y="2" Height="40" CaptionWidth="100" ReadOnly="1" />
+    <Edit Name="prpLatitude" Caption="Latitude" X="2" Height="22" CaptionWidth="100" ReadOnly="1" />
+    <Edit Name="prpLongitude" Caption="Longitude" X="2" Height="22" CaptionWidth="100" ReadOnly="1" />
+    <Edit Name="prpAltitude" Caption="Elevation" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+    <Edit Name="prpSunset" Caption="Sunset" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+    <Edit Name="prpDistance" Caption="Distance" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+    <Edit Name="prpBearing" Caption="Bearing" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+    <Edit Name="prpMc0" Caption="Alt diff Mc 0" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+    <Edit Name="prpMc1" Caption="Alt diff Mc safety" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+    <Edit Name="prpMc2" Caption="Alt diff Mc current" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
   </Panel>
 
-  <List Name="frmDetails" X="0" Y="0" Width="0" Height="255" ItemHeight="18"/>
+  <List Name="frmDetails" X="0" Y="0" Height="-32" ItemHeight="18"/>
 
-  <Panel Name="frmCommands" X="0" Y="0" Width="240" Height="255" Visible="0" Border="0">
-    <Button Name="cmdReplace" Caption="Replace in task" X="50" Y="10" Width="150" Height="30" />
-    <Button Name="cmdInserInTask" Caption="Insert in task" X="50" Width="150" Height="30" />
-    <Button Name="cmdAppendInTask" Caption="Append to task" X="50" Width="150" Height="30" />
-    <Button Name="cmdRemoveFromTask" Caption="Remove from task" X="50" Width="150" Height="30" />
-    <Button Name="cmdNewHome" Caption="Set as new home" X="50" Width="150" Height="30" />
-    <Button Name="cmdTeamCode" Caption="Set teamcode" X="50" Width="150" Height="30" />
+  <Panel Name="frmCommands" X="0" Y="0" Height="-32" Visible="0">
+    <Button Name="cmdReplace" Caption="Replace in task" X="40" Y="10" Width="-40" Height="30" />
+    <Button Name="cmdInserInTask" Caption="Insert in task" X="40" Width="-40" Height="30" />
+    <Button Name="cmdAppendInTask" Caption="Append to task" X="40" Width="-40" Height="30" />
+    <Button Name="cmdRemoveFromTask" Caption="Remove from task" X="40" Width="-40" Height="30" />
+    <Button Name="cmdNewHome" Caption="Set as new home" X="40" Width="-40" Height="30" />
+    <Button Name="cmdTeamCode" Caption="Set teamcode" X="40" Width="-40" Height="30" />
   </Panel>
 
-  <Canvas Name="frmImage" X="0" Y="0" Width="0" Height="255" Visible="0" Border="0"/>
+  <Canvas Name="frmImage" X="0" Y="0" Height="-32" Visible="0"/>
 </Form>
