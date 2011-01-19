@@ -312,6 +312,10 @@ RasterWeather::_Close()
 void
 RasterWeather::SetViewCenter(const GeoPoint &location)
 {
+  if (_parameter == 0)
+    // will be drawing terrain
+    return;
+
   Poco::ScopedRWLock protect(lock, true);
 
   /* only update the RasterMap if the center was moved far enough */
