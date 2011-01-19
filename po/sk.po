@@ -951,8 +951,8 @@ msgstr "Rýchlosť MacCready"
 
 #: src/InfoBoxes/Content/Factory.cpp:366
 #, no-c-format
-msgid "V Mc"
-msgstr "R Mc"
+msgid "V MC"
+msgstr "R MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:367
 #, no-c-format
@@ -4161,14 +4161,14 @@ msgid ""
 "than 100 indicates better than MacCready performance is achieved through "
 "flying in streets.  Less than 100 is appropriate if you fly considerably off-"
 "track.  This value estimates your cruise efficiency according to the current "
-"flight history with the set Mc value.  Calculation begins after task is "
+"flight history with the set MC value.  Calculation begins after task is "
 "started."
 msgstr ""
 "Efektivita kĺzania. Hodnota 100 indikuje presne taký výkon, aký sa očakával "
 "podľa MacCready nastavenia, väčšia než 100 indikuje lepší výkon než "
 "zodpovedá danému MacCready nastaveniu. Menej ako 100 je primeraný, ak ste "
 "leteli značne mimo trasu. Táto hodnota odhaduje vašu efektivitu kĺzania na "
-"základe aktuálnej histórie letu s danou Mc hodnotou. Výpočet začína po "
+"základe aktuálnej histórie letu s danou MC hodnotou. Výpočet začína po "
 "štarte úlohy."
 
 #: Data/Dialogs/dlgConfiguration.xml:577
@@ -4212,12 +4212,12 @@ msgstr ""
 #: Data/Dialogs/dlgTaskCalculator.xml:21
 #: Data/Dialogs/dlgTaskCalculator_L.xml:23
 msgid ""
-"Adjusts Mc value used in the calculator.  Use this to determine the effect "
+"Adjusts MC value used in the calculator.  Use this to determine the effect "
 "on estimated task time due to changes in conditions.  This value will not "
 "affect the main computer's setting if the dialog is exited with the Cancel "
 "button."
 msgstr ""
-"Nastavenie hodnoty Mc pre výpočet. Vhodné na zistenie dopadu zmien podmienok "
+"Nastavenie hodnoty MC pre výpočet. Vhodné na zistenie dopadu zmien podmienok "
 "na predpokladanú dobu úlohy. Táto hodnota nezmení hlavný výpočet ak je "
 "dialóg ukončený príkazom zruš."
 
@@ -4366,8 +4366,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:248
 #: Data/Dialogs/dlgConfiguration_L.xml:248
-msgid "Safety Mc*"
-msgstr "Bezpečné Mc*"
+msgid "Safety MC*"
+msgstr "Bezpečné MC*"
 
 #: Data/Dialogs/dlgVario.xml:92 Data/Dialogs/dlgVario_L.xml:93
 msgid "Cruise volume"
@@ -4533,19 +4533,19 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:207
 msgid ""
 "This option defines which auto MacCready algorithm is used.\n"
-"[Final glide] adjusts Mc for fastest arrival.  For OLC sprint tasks, the "
+"[Final glide] adjusts MC for fastest arrival.  For OLC sprint tasks, the "
 "MacCready is adjusted in order to cover the greatest distance in the "
 "remaining time and reach the finish height.\n"
-"[Trending Average] sets Mc to the trending average climb rate based on all "
+"[Trending Average] sets MC to the trending average climb rate based on all "
 "climbs.\n"
 "[Both] Uses trending average during task, then fastest arrival when in final "
 "glide mode."
 msgstr ""
 "Toto nastavenie určuje, aký automatický MacCready algoritmus je použitý.\n"
-"[Doklz] upravý Mc hodnotu pre čo najrýchlejší príet. Pre lety typu OLC "
-"šprint je Mc hodnota nastavená za účelom pokrytia čo najväčšej vzdialenosti "
+"[Doklz] upravý MC hodnotu pre čo najrýchlejší príet. Pre lety typu OLC "
+"šprint je MC hodnota nastavená za účelom pokrytia čo najväčšej vzdialenosti "
 "vo zvyšnom čase a pre dosiahnutie cieľovej výšky.\n"
-"[Priemerné stúpanie] nastaví Mc hodnotu na priemerné stúpanie zo všetkých "
+"[Priemerné stúpanie] nastaví MC hodnotu na priemerné stúpanie zo všetkých "
 "stupákov.\n"
 "[Oba] počas úlohy sa bude používať priemerná hodnota stúpania a na doklze "
 "hodnota pre najrýchlejší prílet."
@@ -4754,7 +4754,7 @@ msgstr "Podrobnosti"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:21
 #: Data/Dialogs/dlgWayPointDetails_L.xml:21
-msgid "Alt diff Mc current"
+msgid "Alt diff MC current"
 msgstr "Výškový rozdiel MC akt."
 
 #: Data/Dialogs/dlgConfiguration.xml:573
@@ -5161,8 +5161,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:243
 #: Data/Dialogs/dlgConfiguration_L.xml:243
-msgid "Abort use current Mc*"
-msgstr "Po prerušení posledné Mc*"
+msgid "Abort use current MC*"
+msgstr "Po prerušení posledné MC*"
 
 #: Data/Dialogs/dlgConfigFonts.xml:6 Data/Dialogs/dlgConfigFonts_L.xml:6
 msgid "Customize Fonts"
@@ -5221,8 +5221,8 @@ msgstr "FAI výška cieľa"
 
 #: Data/Dialogs/dlgConfiguration.xml:207
 #: Data/Dialogs/dlgConfiguration_L.xml:207
-msgid "Auto Mc mode"
-msgstr "Mód automatického Mc výpočtu"
+msgid "Auto MC mode"
+msgstr "Mód automatického MC výpočtu"
 
 #: Data/Dialogs/dlgConfiguration.xml:483
 #: Data/Dialogs/dlgConfiguration_L.xml:482
@@ -5543,13 +5543,13 @@ msgstr "V terén"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:20
 #: Data/Dialogs/dlgWayPointDetails_L.xml:20
-msgid "Alt diff Mc safety"
+msgid "Alt diff MC safety"
 msgstr "Výškový rozdiel s bezpečným MC"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:19
 #: Data/Dialogs/dlgWayPointDetails_L.xml:19
-msgid "Alt diff Mc 0"
-msgstr "Výškový rozdiel Mc 0"
+msgid "Alt diff MC 0"
+msgstr "Výškový rozdiel MC 0"
 
 #: Data/Dialogs/dlgVario.xml:431 Data/Dialogs/dlgVario_L.xml:432
 msgid "Zander"
@@ -6176,7 +6176,7 @@ msgstr "Upraviť"
 msgid ""
 "The STF risk factor reduces the MacCready setting used to calculate speed to "
 "fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for "
-"no compensation, 1.0 scales Mc linearly with height."
+"no compensation, 1.0 scales MC linearly with height."
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:92 Data/Dialogs/dlgConfiguration_L.xml:92

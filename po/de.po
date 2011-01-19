@@ -954,8 +954,8 @@ msgstr "MacCready - Sollfahrt"
 
 #: src/InfoBoxes/Content/Factory.cpp:366
 #, no-c-format
-msgid "V Mc"
-msgstr "V Mc"
+msgid "V MC"
+msgstr "V MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:367
 #, no-c-format
@@ -4196,7 +4196,7 @@ msgid ""
 "than 100 indicates better than MacCready performance is achieved through "
 "flying in streets.  Less than 100 is appropriate if you fly considerably off-"
 "track.  This value estimates your cruise efficiency according to the current "
-"flight history with the set Mc value.  Calculation begins after task is "
+"flight history with the set MC value.  Calculation begins after task is "
 "started."
 msgstr ""
 "Effizienz beim Überlandflug. 100 entspricht der perfekten MacCready "
@@ -4204,7 +4204,7 @@ msgstr ""
 "unter Wolkenstraßen erreicht werden. Weniger als 100 zeigt das Du um einiges "
 "neben der idealen Spur fliegst. Die ENTER-Taste in diesem Dialog startet die "
 "Abschätzung der Überlandeffizienz aus dem bisherigen Flug mit dem "
-"eingestellten Mc Wert."
+"eingestellten MC Wert."
 
 #: Data/Dialogs/dlgConfiguration.xml:577
 #: Data/Dialogs/dlgConfiguration_L.xml:576
@@ -4249,12 +4249,12 @@ msgstr ""
 #: Data/Dialogs/dlgTaskCalculator.xml:21
 #: Data/Dialogs/dlgTaskCalculator_L.xml:23
 msgid ""
-"Adjusts Mc value used in the calculator.  Use this to determine the effect "
+"Adjusts MC value used in the calculator.  Use this to determine the effect "
 "on estimated task time due to changes in conditions.  This value will not "
 "affect the main computer's setting if the dialog is exited with the Cancel "
 "button."
 msgstr ""
-"Einstellung des Mc Werts für den Rechner. Dies ist geschickt, um den "
+"Einstellung des MC Werts für den Rechner. Dies ist geschickt, um den "
 "Einfluss auf die geschätzte Aufgebanzeit fest zu stellen. Der Wert hat "
 "keinen Einfluss auf die Einstellung des Streckenrechners wenn der Dialog mit "
 "der Abbruch-Taste beendet wird."
@@ -4418,8 +4418,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:248
 #: Data/Dialogs/dlgConfiguration_L.xml:248
-msgid "Safety Mc*"
-msgstr "Sicherheits Mc*"
+msgid "Safety MC*"
+msgstr "Sicherheits MC*"
 
 #: Data/Dialogs/dlgVario.xml:92 Data/Dialogs/dlgVario_L.xml:93
 msgid "Cruise volume"
@@ -4586,10 +4586,10 @@ msgstr "Bestimmt ob die Flugspur im Steigmodus mit dem Wind verschoben wird."
 #: Data/Dialogs/dlgConfiguration_L.xml:207
 msgid ""
 "This option defines which auto MacCready algorithm is used.\n"
-"[Final glide] adjusts Mc for fastest arrival.  For OLC sprint tasks, the "
+"[Final glide] adjusts MC for fastest arrival.  For OLC sprint tasks, the "
 "MacCready is adjusted in order to cover the greatest distance in the "
 "remaining time and reach the finish height.\n"
-"[Trending Average] sets Mc to the trending average climb rate based on all "
+"[Trending Average] sets MC to the trending average climb rate based on all "
 "climbs.\n"
 "[Both] Uses trending average during task, then fastest arrival when in final "
 "glide mode."
@@ -4818,7 +4818,7 @@ msgstr "Details"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:21
 #: Data/Dialogs/dlgWayPointDetails_L.xml:21
-msgid "Alt diff Mc current"
+msgid "Alt diff MC current"
 msgstr "Höhenunterschied MC aktuell"
 
 #: Data/Dialogs/dlgConfiguration.xml:573
@@ -5257,8 +5257,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:243
 #: Data/Dialogs/dlgConfiguration_L.xml:243
-msgid "Abort use current Mc*"
-msgstr "Behalte Mc Wert bei Abbruch*"
+msgid "Abort use current MC*"
+msgstr "Behalte MC Wert bei Abbruch*"
 
 #: Data/Dialogs/dlgConfigFonts.xml:6 Data/Dialogs/dlgConfigFonts_L.xml:6
 msgid "Customize Fonts"
@@ -5317,7 +5317,7 @@ msgstr "FAI Zielhöhe"
 
 #: Data/Dialogs/dlgConfiguration.xml:207
 #: Data/Dialogs/dlgConfiguration_L.xml:207
-msgid "Auto Mc mode"
+msgid "Auto MC mode"
 msgstr "MC Optimierung"
 
 #: Data/Dialogs/dlgConfiguration.xml:483
@@ -5647,12 +5647,12 @@ msgstr "V Gelände"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:20
 #: Data/Dialogs/dlgWayPointDetails_L.xml:20
-msgid "Alt diff Mc safety"
+msgid "Alt diff MC safety"
 msgstr "Höhenunterschied MC Sicherheit"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:19
 #: Data/Dialogs/dlgWayPointDetails_L.xml:19
-msgid "Alt diff Mc 0"
+msgid "Alt diff MC 0"
 msgstr "Höhenunterschied MC 0"
 
 #: Data/Dialogs/dlgVario.xml:431 Data/Dialogs/dlgVario_L.xml:432
@@ -6322,7 +6322,7 @@ msgstr "Bearbeiten"
 msgid ""
 "The STF risk factor reduces the MacCready setting used to calculate speed to "
 "fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for "
-"no compensation, 1.0 scales Mc linearly with height."
+"no compensation, 1.0 scales MC linearly with height."
 msgstr ""
 "Der STF Risikofaktor reduziert die MacCready Einstellung für die empfohlene "
 "Vorfluggeschwindigkeit wenn man tiefer fliegt um das Risiko auszugleichen. "
@@ -7739,7 +7739,7 @@ msgstr "Gelandet"
 #~ "greater than 100 indicates better than MacCready performance is achieved "
 #~ "through flying in streets.  Less than 100 is appropriate if you fly "
 #~ "considerably off-track.  Pressing ENTER on this dialog will estimate the "
-#~ "cruise efficiency according to the current flight history with the set Mc "
+#~ "cruise efficiency according to the current flight history with the set MC "
 #~ "value."
 #~ msgstr ""
 #~ "Effizienz beim Überlandflug. 100 entspricht der perfekten MacCready "
@@ -7747,7 +7747,7 @@ msgstr "Gelandet"
 #~ "unter Wolkenstraßen erreicht werden. Weniger als 100 zeigt das Du um "
 #~ "einiges neben der idealen Spur fliegst. Die ENTER-Taste in diesem Dialog "
 #~ "startet die Abschätzung der Überlandeffizienz aus dem bisherigen Flug mit "
-#~ "dem eingestellten Mc Wert."
+#~ "dem eingestellten MC Wert."
 
 #~ msgid "Set as Alternate 2"
 #~ msgstr "Als Alternative 2 setzen"
@@ -7909,17 +7909,17 @@ msgstr "Gelandet"
 
 #~ msgid ""
 #~ "This option defines which auto MacCready algorithm is used. [Final glide] "
-#~ "adjusts Mc for fastest arrival.  For OLC sprint tasks, the MacCready is "
+#~ "adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is "
 #~ "adjusted in order to cover the greatest distance in the remaining time "
-#~ "and reach the finish height. [Average] sets Mc to the average climb rate "
+#~ "and reach the finish height. [Average] sets MC to the average climb rate "
 #~ "across all climbs. [Both] Uses average during task, then fastest arrival "
 #~ "when in final glide mode."
 #~ msgstr ""
 #~ "Dies wählt den Algorithmus zur automatischen MacCready Einstellung. "
-#~ "[Endanflug] berechnet den Mc Wert um am schnellsten ans Ziel zu gelangen. "
-#~ "Für OLC Sprintaufgaben wird der Mc so optimiert, dass in der gegebenen "
+#~ "[Endanflug] berechnet den MC Wert um am schnellsten ans Ziel zu gelangen. "
+#~ "Für OLC Sprintaufgaben wird der MC so optimiert, dass in der gegebenen "
 #~ "Zeit die größte Strecke zurückgelegt, und die Zielhöhe erreicht wird. "
-#~ "[Mittelwert] setzt den Mc Wert anhand des über alle Steigen gemittelten "
+#~ "[Mittelwert] setzt den MC Wert anhand des über alle Steigen gemittelten "
 #~ "Steigwerts. [Beides] Nutzt den gemittelten Wert während der Aufgabe und "
 #~ "den schnellsten Wert für den Endanflug."
 
@@ -8216,9 +8216,9 @@ msgstr "Gelandet"
 
 #~ msgid ""
 #~ "This option defines which auto MacCready algorithm is used. [Final glide] "
-#~ "adjusts Mc for fastest arrival.  For OLC sprint tasks, the MacCready is "
+#~ "adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is "
 #~ "adjusted in order to cover the greatest distance in the remaining time "
-#~ "and reach the finish height. [Trending Average] sets Mc to the trending "
+#~ "and reach the finish height. [Trending Average] sets MC to the trending "
 #~ "average climb rate based on all climbs. [Both] Uses trending average "
 #~ "during task, then fastest arrival when in final glide mode."
 #~ msgstr ""
