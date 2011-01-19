@@ -25,6 +25,8 @@ Copyright_License {
 #include "MenuBar.hpp"
 #include "Language.hpp"
 
+#include <algorithm>
+
 MenuBar *ButtonLabel::bar;
 
 void
@@ -48,9 +50,21 @@ ButtonLabel::Destroy()
 void
 ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
 {
+  const TCHAR *dollar;
+
   if ((text == NULL) || (*text == _T('\0')) || (*text == _T(' '))) {
     bar->HideButton(index);
+  } else if ((dollar = _tcschr(text, '$')) == NULL) {
+    /* no macro, we can just translate the text */
+    bar->ShowButton(index, true, gettext(text));
   } else {
+    const TCHAR *macros = dollar;
+    /* backtrack until the first non-whitespace character, because we
+       don't want to translate whitespace between the text and the
+       macro */
+    while (macros > text && _istspace(macros[-1]))
+      --macros;
+
     TCHAR s[100];
 
     bool greyed = ExpandMacros(text, s, sizeof(s) / sizeof(s[0]));
@@ -58,7 +72,20 @@ ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
     if ((s[0] == _T('\0')) || (s[0] == _T(' '))) {
       bar->HideButton(index);
     } else {
-      bar->ShowButton(index, !greyed, gettext(s));
+      /* copy the text (without trailing whitespace) to a new buffer
+         and translate it */
+      TCHAR translatable[256];
+      std::copy(text, macros, translatable);
+      translatable[macros - text] = _T('\0');
+
+      const TCHAR *translated = gettext(translatable);
+
+      /* concatenate the translated text and the macro output */
+      TCHAR buffer[256];
+      _tcscpy(buffer, translated);
+      _tcscat(buffer, s + (macros - text));
+
+      bar->ShowButton(index, !greyed, buffer);
     }
   }
 }
