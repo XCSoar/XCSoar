@@ -90,11 +90,7 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
     }
   }
 
-  //
   // Save the home waypoint number in the resgistry
-  //
-  // VENTA3> this is probably useless, since HomeWayPoint &c were currently
-  //         just loaded from registry.
   Profile::Set(szProfileHomeWaypoint,settings.HomeWaypoint);
   Profile::Set(szProfileTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
 }
