@@ -1,4 +1,5 @@
 TESTFAST = \
+	$(TARGET_BIN_DIR)/test_normalise$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_route$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_fixed$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_waypoints$(TARGET_EXEEXT) \
@@ -46,6 +47,7 @@ $(HARNESS_PROGRAMS): $(TARGET_BIN_DIR)/%$(TARGET_EXEEXT): $(TARGET_OUTPUT_DIR)/t
 
 TEST_NAMES = \
 	test_fixed \
+	test_normalise \
 	test_waypoints \
 	test_pressure \
 	test_task \

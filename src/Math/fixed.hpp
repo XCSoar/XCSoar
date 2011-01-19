@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include "Constants.h"
+#include <assert.h>
 using std::max;
 using std::min;
 
@@ -58,6 +59,16 @@ void sin_cos(const double&theta, double*s, double*c);
 #define positive(x) (x > 0)
 #define negative(x) (x < 0)
 #define sigmoid(x) (2.0 / (1.0 + exp(-x)) - 1.0)
+
+gcc_const
+inline fixed rsqrt(fixed a) {
+  return 1.0/sqrt(a);
+}
+
+gcc_const
+inline fixed sqr(fixed a) {
+  return a*a;
+}
 
 gcc_const
 inline fixed fast_mult(fixed a, int a_bits, fixed b, int b_bits)
@@ -288,6 +299,12 @@ public:
 
   gcc_pure
   fixed sqrt() const;
+
+  gcc_pure
+  fixed sqr() const;
+
+  gcc_pure
+  fixed rsqrt() const;
 
   gcc_pure
   fixed exp() const;
@@ -739,15 +756,36 @@ inline fixed atan2(fixed const& y, fixed const& x)
 }
 
 gcc_pure
+inline fixed sqr(fixed const& x)
+{
+  return x.sqr();
+}
+
+gcc_pure
 inline fixed sqrt(fixed const& x)
 {
   return x.sqrt();
 }
 
+gcc_pure
+inline fixed fast_sqrt(fixed const& x)
+{
+  assert(!x.negative());
+  if (!x.positive())
+    return fixed_zero;
+  return x.rsqrt()*x;
+}
+
+gcc_pure
+inline fixed rsqrt(fixed const& x)
+{
+  return x.rsqrt();
+}
+
 gcc_const
 inline fixed hypot(fixed x, fixed y)
 {
-  return sqrt(x * x + y * y);
+  return sqrt(sqr(x) + sqr(y));
 }
 
 gcc_pure

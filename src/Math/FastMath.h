@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Math/Constants.h"
 #include <math.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 
@@ -119,6 +120,42 @@ fastcosine(fixed x)
   return COSTABLE[NATIVE_TO_INT(x)];
 #endif
 }
+
+#define NORMALISE_BITS 7
+
+/**
+ * normalise a vector scaled to NORMALISE_BITS without
+ * using sqrt or div operator
+ */
+void i_normalise_fast(int &x,
+                      int &y);
+
+/**
+ * normalise a vector scaled to NORMALISE_BITS (slow)
+ */
+void i_normalise(int &x,
+                 int &y);
+
+/**
+ * normalise a magnitude based on a 3-vector to NORMALISE_BITS
+ * without using sqrt or div
+ *
+ * result = mag/sqrt(x*x+y*y+z*z)
+ */
+int i_normalise_mag3(const int mag,
+                     const int x,
+                     const int y,
+                     const int z);
+
+/**
+ * normalise a magnitude based on a 2-vector to NORMALISE_BITS
+ * without using sqrt or div
+ *
+ * result = mag/sqrt(x*x+y*y)
+ */
+int i_normalise_mag2(const int mag,
+                     const int x,
+                     const int y);
 
 fixed thermal_recency_fn(unsigned x);
 

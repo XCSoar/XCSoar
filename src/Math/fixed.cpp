@@ -426,4 +426,53 @@ void fixed::to_polar(fixed const& x,fixed const& y,fixed* r,fixed* theta)
     }
 }
 
+
+fixed fixed::sqr() const
+{
+  uvalue_t const self=(m_nVal<0)?-m_nVal:m_nVal;
+  
+  fixed res;
+  uvalue_t const self_upper=(self>>32);
+  if (self_upper)
+    res.m_nVal = (self_upper * self) << (32 - resolution_shift);
+  else
+    res.m_nVal = 0;
+
+  if (uvalue_t const self_lower = (self&0xffffffff)) {
+    uvalue_t const lower_upper=self_lower*self_upper;
+    uvalue_t const lower_lower=self_lower*self_lower;
+    res.m_nVal+=
+      (lower_upper<<(32-resolution_shift))
+      +(lower_lower>>resolution_shift);
+  }
+  return res;
+}
+
+
+static inline
+fixed rsqrt_guess(fixed x) {
+  union { double f; uint64_t u; } y = {x.as_float()};
+  y.u = 0x5fe6ec85e7de30daLL - (y.u>>1);
+  return fixed(y.f);
+}
+
+
+fixed
+fixed::rsqrt() const
+{
+  static const fixed threehalfs = fixed(1.5);
+
+  fixed y(rsqrt_guess(*this));
+  const fixed x2 = fixed(internal(), m_nVal>>1);
+#define tolerance (1<<10)
+  value_t v_last= y.m_nVal;
+  while (1) {
+    y *= threehalfs-x2*y.sqr();
+    const value_t err = y.m_nVal-v_last;
+    if ((err>0? err:-err) < tolerance)
+      return y;
+    v_last = y.m_nVal;
+  }
+}
+
 #endif

@@ -25,6 +25,7 @@ Copyright_License {
 #include "Math/Constants.h"
 
 #include "MathTables.h"
+#include <assert.h>
 
 int
 compare_squared(int a, int b, int c)
@@ -95,4 +96,123 @@ fixed
 thermal_recency_fn(unsigned x)
 {
   return (x+1< THERMALRECENCY_SIZE)? THERMALRECENCY[x]: fixed_zero;
+}
+
+// find inverse sqrt of x scaled to NORMALISE_BITS^2 by using
+// bisector search
+gcc_pure
+static inline
+unsigned i_rsqrt(const uint64_t x, const uint64_t yhint)
+{
+  int64_t y_last=yhint, y= yhint;
+  while (1) {
+    y= ((((int64_t)3<<(4*NORMALISE_BITS))-x*y*y)*y)>>(1+4*NORMALISE_BITS);
+    if (y_last==y)
+      return y;
+    y_last = y;
+  }
+}
+
+static inline
+unsigned log2_fast(const unsigned v)
+{
+  static const char LogTable256[256] = {
+#define L8(n) n, n, n, n, n, n, n, n
+#define L16(n) L8(n), L8(n)
+    -1, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
+    L16(4), L16(5), L16(5), L16(6), L16(6), L16(6), L16(6),
+    L16(7), L16(7), L16(7), L16(7), L16(7), L16(7), L16(7), L16(7)
+  };
+  register unsigned int t, tt; // temporaries
+
+  if ((tt = v >> 16))
+    {
+      return (t = (tt >> 8)) ? 24 + LogTable256[t] : 16 + LogTable256[tt];
+    }
+  else
+    {
+      return (t = (v >> 8)) ? 8 + LogTable256[t] : LogTable256[v];
+    }
+}
+
+gcc_pure
+static inline
+uint64_t normalise_hint2(const uint32_t x)
+{
+  static const uint64_t hint2_limit = sqrt((uint64_t)3<<(NORMALISE_BITS*4-1));
+
+  // taking x as maximum individual value of a size 2 vector,
+  // this provides an initial estimate of 1/sqrt(vector)
+  // scaled by NORMALISE_BITS^2.
+  //
+  // based on algorithm for computing log2 from
+  // http://www-graphics.stanford.edu/~seander/bithacks.html
+
+  uint64_t y = 1<< (NORMALISE_BITS*2-log2_fast(x));
+  while (x*y > hint2_limit)
+    y= y>>1;
+
+  return y;
+}
+
+
+gcc_pure
+static inline
+uint64_t normalise_hint3(const uint32_t x)
+{
+  // as normalise_hint2 but for size 3 vector
+
+  static const uint64_t hint3_limit = (sqrt((uint64_t)3<<(NORMALISE_BITS*4))/sqrt(3));
+
+  uint64_t y = 1<< (NORMALISE_BITS*2-log2_fast(x));
+  while (x*y > hint3_limit)
+    y= y>>1;
+
+  return y;
+}
+
+
+int i_normalise_mag2(const int mag,
+                     const int x,
+                     const int y)
+{
+  const uint32_t m_max = abs(x) | abs(y);
+  assert(m_max);
+  const uint64_t m = (long)x*x+(long)y*y;
+  const uint64_t r = i_rsqrt(m, normalise_hint2(m_max));
+  return (mag*r) >> (2*NORMALISE_BITS);
+}
+
+int i_normalise_mag3(const int mag,
+                     const int x,
+                     const int y,
+                     const int z)
+{
+  const uint32_t m_max = abs(x) | abs(y) | abs(z);
+  assert(m_max);
+  const uint64_t m = (long)x*x+(long)y*y+(long)z*z;
+  const uint64_t r = i_rsqrt(m, normalise_hint3(m_max));
+  return (mag*r) >> (2*NORMALISE_BITS);
+}
+
+
+void i_normalise_fast(int &x,
+                      int &y) {
+  const uint32_t m_max = abs(x) | abs(y);
+  if (!m_max)
+    return;
+  const uint64_t r = i_rsqrt((long)x*x+(long)y*y, normalise_hint2(m_max));
+
+  x= (x*r)>> NORMALISE_BITS;
+  y= (y*r)>> NORMALISE_BITS;
+}
+
+void i_normalise(int &x,
+                 int &y) {
+  const unsigned m_max = std::max(abs(x), abs(y));
+  if (!m_max)
+    return;
+  const int mag = isqrt4(x*x+y*y);
+  x= (x<<NORMALISE_BITS)/mag;
+  y= (y<<NORMALISE_BITS)/mag;
 }
