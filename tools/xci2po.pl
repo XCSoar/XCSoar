@@ -31,8 +31,7 @@ while ( <@ARGV> ) {
 
         if ( /^label=([^\$]+)/ ) {
             $msges{ $1 } .= "#: $filename:$line\n";
-        }
-	elsif ( /^event=StatusMessage ([^\$]+)/ ) {
+        } elsif (/^event=StatusMessage\s+(\S.*\S)\s*$/) {
             $msges{ $1 } .= "#: $filename:$line\n";
         } 
     }
