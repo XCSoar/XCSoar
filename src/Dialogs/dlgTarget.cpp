@@ -40,7 +40,6 @@ using std::min;
 using std::max;
 
 static WndForm *wf = NULL;
-static WndButton *btnMove = NULL;
 static WndButton *btnIsLocked = NULL;
 static unsigned ActiveTaskPointOnEntry = 0;
 unsigned TaskSize = 0;
@@ -51,7 +50,6 @@ GeoPoint oldPanLocation;
 static fixed Range = fixed_zero;
 static fixed Radial = fixed_zero;
 static unsigned target_point = 0;
-static bool TargetMoveMode = false;
 static bool IsLocked = true;
 
 static void
@@ -173,26 +171,6 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
     return true;
   }
 
-  if (TargetMoveMode) {
-    switch (key_code) {
-    case VK_UP:
-      MoveTarget(0);
-      return true;
-
-    case VK_DOWN:
-      MoveTarget(180);
-      return true;
-
-    case VK_LEFT:
-      MoveTarget(270);
-      return true;
-
-    case VK_RIGHT:
-      MoveTarget(90);
-      return true;
-    }
-  }
-
   return false;
 }
 
@@ -204,8 +182,6 @@ static void
 LockCalculatorUI()
 {
   WndProperty* wp;
-  if (btnMove)
-    btnMove->set_enabled(IsLocked);
 
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp)
@@ -262,22 +238,6 @@ RefreshCalculator()
     wp->set_visible(!nodisplay);
   }
 
-  if (btnMove) {
-    btnMove->set_visible(false);
-    // todo add functionality for a cursor/move button
-    if (nodisplay)
-      TargetMoveMode = false;
-  }
-  nodisplay = nodisplay || TargetMoveMode;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
-  if (wp)
-    wp->set_visible(!TargetMoveMode);
-
-  WndButton *wc = (WndButton *)wf->FindByName(_T("btnOK"));
-  if (wc)
-    wc->set_visible(!TargetMoveMode);
-
   if (btnIsLocked) {
     btnIsLocked->SetCaption(IsLocked ? _T("Locked") : _T("Auto"));
     btnIsLocked->set_visible(!nodisplay);
@@ -325,16 +285,6 @@ static void
 OnTimerNotify(WndForm &Sender)
 {
   (void)Sender;
-  RefreshCalculator();
-}
-
-static void
-OnMoveClicked(WndButton &Sender)
-{
-  (void)Sender;
-  TargetMoveMode = !TargetMoveMode;
-  if (btnMove)
-    btnMove->SetCaption(TargetMoveMode ? _T("Cursor") : _T("Move"));
   RefreshCalculator();
 }
 
@@ -470,7 +420,6 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnRangeData),
   DeclareCallBackEntry(OnRadialData),
   DeclareCallBackEntry(OnOKClicked),
-  DeclareCallBackEntry(OnMoveClicked),
   DeclareCallBackEntry(OnIsLockedClicked),
   DeclareCallBackEntry(NULL)
 };
@@ -545,11 +494,6 @@ dlgTargetShowModal()
 
   InitTargetPoints();
 
-  TargetMoveMode = false;
-
-  btnMove = (WndButton*)wf->FindByName(_T("btnMove"));
-  if (btnMove)
-    btnMove->set_visible(false); // todo enable move buttons
   btnIsLocked = (WndButton*)wf->FindByName(_T("btnIsLocked"));
 
   assert(btnIsLocked != NULL);
