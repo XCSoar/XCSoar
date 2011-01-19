@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-19 09:51+0100\n"
-"PO-Revision-Date: 2011-01-19 09:52+0100\n"
+"POT-Creation-Date: 2011-01-19 10:19+0100\n"
+"PO-Revision-Date: 2011-01-19 10:20+0100\n"
 "Last-Translator: Alex Caldwell <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -2298,6 +2298,7 @@ msgid "Task speed"
 msgstr ""
 
 #: src/Dialogs/dlgAnalysis.cpp:226 src/Dialogs/dlgStatus.cpp:53
+#: Data/Input/default.xci:449
 #, no-c-format
 msgid "Task"
 msgstr ""
@@ -2424,7 +2425,7 @@ msgid "InfoBoxes"
 msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:108 Data/Dialogs/dlgStatus.xml:24
-#: Data/Dialogs/dlgStatusSystem.xml:8
+#: Data/Dialogs/dlgStatusSystem.xml:8 Data/Input/default.xci:656
 #, no-c-format
 msgid "Logger"
 msgstr ""
@@ -4151,6 +4152,7 @@ msgid "Font Face"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:88 Data/Dialogs/dlgConfiguration_L.xml:88
+#: Data/Input/default.xci:565
 msgid "Labels"
 msgstr ""
 
@@ -6366,10 +6368,6 @@ msgid ""
 "+"
 msgstr ""
 
-#: Data/Input/default.xci:565
-msgid "Labels\n"
-msgstr ""
-
 #: Data/Input/default.xci:413
 msgid ""
 "Waypoint\n"
@@ -6417,15 +6415,19 @@ msgid ""
 "Demo"
 msgstr ""
 
+#: Data/Input/default.xci:543
+msgid "Trail"
+msgstr "Camino"
+
 #: Data/Input/default.xci:722
 msgid ""
 "Setup\n"
 "Stall"
 msgstr ""
 
-#: Data/Input/default.xci:656
-msgid "Logger\n"
-msgstr ""
+#: Data/Input/default.xci:869
+msgid "Aux Info"
+msgstr "Info Aux"
 
 #: Data/Input/default.xci:820
 msgid ""
@@ -6477,10 +6479,6 @@ msgstr ""
 "Pan\n"
 "Off"
 
-#: Data/Input/default.xci:869
-msgid "Aux Info\n"
-msgstr "Info Aux\n"
-
 #: Data/Input/default.xci:240
 msgid ""
 "Marks\n"
@@ -6488,14 +6486,6 @@ msgid ""
 msgstr ""
 "Marcas\n"
 "limpiar"
-
-#: Data/Input/default.xci:535
-msgid "Zoom\n"
-msgstr "Zoom\n"
-
-#: Data/Input/default.xci:508
-msgid "Full Scrn\n"
-msgstr "Pantalla Completa\n"
 
 #: Data/Input/default.xci:812
 msgid ""
@@ -6532,6 +6522,10 @@ msgstr ""
 msgid "FLARM Radar"
 msgstr ""
 
+#: Data/Input/default.xci:535
+msgid "Zoom"
+msgstr "Zoom"
+
 #: Data/Input/default.xci:747
 msgid "Vario ASI zeroed"
 msgstr ""
@@ -6543,6 +6537,10 @@ msgstr ""
 #: Data/Input/default.xci:441
 msgid "GoTo"
 msgstr ""
+
+#: Data/Input/default.xci:508
+msgid "Full Scrn"
+msgstr "Pantalla Completa"
 
 #: Data/Input/default.xci:120
 msgid "Restarting Comm Ports"
@@ -6594,10 +6592,6 @@ msgstr ""
 
 #: Data/Input/default.xci:729
 msgid "Accel"
-msgstr ""
-
-#: Data/Input/default.xci:449
-msgid "Task\n"
 msgstr ""
 
 #: Data/Input/default.xci:490
@@ -6666,10 +6660,6 @@ msgid ""
 msgstr ""
 "Equipo\n"
 "Código"
-
-#: Data/Input/default.xci:543
-msgid "Trail\n"
-msgstr "Camino\n"
 
 #: Data/Input/default.xci:382
 msgid ""

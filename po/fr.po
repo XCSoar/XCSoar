@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-19 09:51+0100\n"
-"PO-Revision-Date: 2011-01-19 09:53+0100\n"
+"POT-Creation-Date: 2011-01-19 10:19+0100\n"
+"PO-Revision-Date: 2011-01-19 10:21+0100\n"
 "Last-Translator: Sylvain BURGER <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -2237,6 +2237,7 @@ msgid "Task speed"
 msgstr ""
 
 #: src/Dialogs/dlgAnalysis.cpp:226 src/Dialogs/dlgStatus.cpp:53
+#: Data/Input/default.xci:449
 #, no-c-format
 msgid "Task"
 msgstr "Circuit"
@@ -2363,7 +2364,7 @@ msgid "InfoBoxes"
 msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:108 Data/Dialogs/dlgStatus.xml:24
-#: Data/Dialogs/dlgStatusSystem.xml:8
+#: Data/Dialogs/dlgStatusSystem.xml:8 Data/Input/default.xci:656
 #, no-c-format
 msgid "Logger"
 msgstr ""
@@ -4120,6 +4121,7 @@ msgid "Font Face"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:88 Data/Dialogs/dlgConfiguration_L.xml:88
+#: Data/Input/default.xci:565
 msgid "Labels"
 msgstr "Étiquettes"
 
@@ -6371,11 +6373,6 @@ msgid ""
 "+"
 msgstr ""
 
-#: Data/Input/default.xci:565
-#, fuzzy
-msgid "Labels\n"
-msgstr "Étiquettes"
-
 #: Data/Input/default.xci:413
 #, fuzzy
 msgid ""
@@ -6426,16 +6423,19 @@ msgid ""
 "Demo"
 msgstr "Manuel"
 
+#: Data/Input/default.xci:543
+msgid "Trail"
+msgstr ""
+
 #: Data/Input/default.xci:722
 msgid ""
 "Setup\n"
 "Stall"
 msgstr ""
 
-#: Data/Input/default.xci:656
-#, fuzzy
-msgid "Logger\n"
-msgstr "Enregistrement ON"
+#: Data/Input/default.xci:869
+msgid "Aux Info"
+msgstr ""
 
 #: Data/Input/default.xci:820
 #, fuzzy
@@ -6487,22 +6487,10 @@ msgid ""
 "Off"
 msgstr ""
 
-#: Data/Input/default.xci:869
-msgid "Aux Info\n"
-msgstr ""
-
 #: Data/Input/default.xci:240
 msgid ""
 "Marks\n"
 "clear"
-msgstr ""
-
-#: Data/Input/default.xci:535
-msgid "Zoom\n"
-msgstr ""
-
-#: Data/Input/default.xci:508
-msgid "Full Scrn\n"
 msgstr ""
 
 #: Data/Input/default.xci:812
@@ -6544,6 +6532,10 @@ msgstr "Paramètres..."
 msgid "FLARM Radar"
 msgstr "FLARM"
 
+#: Data/Input/default.xci:535
+msgid "Zoom"
+msgstr ""
+
 #: Data/Input/default.xci:747
 #, fuzzy
 msgid "Vario ASI zeroed"
@@ -6556,6 +6548,10 @@ msgstr "Acceleromètre"
 
 #: Data/Input/default.xci:441
 msgid "GoTo"
+msgstr ""
+
+#: Data/Input/default.xci:508
+msgid "Full Scrn"
 msgstr ""
 
 #: Data/Input/default.xci:120
@@ -6613,11 +6609,6 @@ msgstr ""
 #, fuzzy
 msgid "Accel"
 msgstr "Accepter"
-
-#: Data/Input/default.xci:449
-#, fuzzy
-msgid "Task\n"
-msgstr "Circuit"
 
 #: Data/Input/default.xci:490
 msgid ""
@@ -6681,10 +6672,6 @@ msgid ""
 "Code"
 msgstr "Équipe"
 
-#: Data/Input/default.xci:543
-msgid "Trail\n"
-msgstr ""
-
 #: Data/Input/default.xci:382
 #, fuzzy
 msgid ""
@@ -6702,6 +6689,18 @@ msgstr ""
 #, fuzzy
 msgid "Landing"
 msgstr "Heure de posé"
+
+#, fuzzy
+#~ msgid "Labels\n"
+#~ msgstr "Étiquettes"
+
+#, fuzzy
+#~ msgid "Logger\n"
+#~ msgstr "Enregistrement ON"
+
+#, fuzzy
+#~ msgid "Task\n"
+#~ msgstr "Circuit"
 
 #, fuzzy
 #~ msgid "Terrain "

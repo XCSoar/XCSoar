@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-19 09:51+0100\n"
-"PO-Revision-Date: 2011-01-19 09:56+0100\n"
+"POT-Creation-Date: 2011-01-19 10:19+0100\n"
+"PO-Revision-Date: 2011-01-19 10:26+0100\n"
 "Last-Translator: Roman Stoklasa <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
@@ -2392,6 +2392,7 @@ msgid "Task speed"
 msgstr "Rýchlosť úlohy"
 
 #: src/Dialogs/dlgAnalysis.cpp:226 src/Dialogs/dlgStatus.cpp:53
+#: Data/Input/default.xci:449
 #, no-c-format
 msgid "Task"
 msgstr "Úloha"
@@ -2518,7 +2519,7 @@ msgid "InfoBoxes"
 msgstr "Info okná"
 
 #: src/Dialogs/dlgConfiguration.cpp:108 Data/Dialogs/dlgStatus.xml:24
-#: Data/Dialogs/dlgStatusSystem.xml:8
+#: Data/Dialogs/dlgStatusSystem.xml:8 Data/Input/default.xci:656
 #, no-c-format
 msgid "Logger"
 msgstr "Logger"
@@ -4317,6 +4318,7 @@ msgid "Font Face"
 msgstr "Rez písma"
 
 #: Data/Dialogs/dlgConfiguration.xml:88 Data/Dialogs/dlgConfiguration_L.xml:88
+#: Data/Input/default.xci:565
 msgid "Labels"
 msgstr "Popisky"
 
@@ -6637,10 +6639,6 @@ msgstr ""
 "MC\n"
 "+"
 
-#: Data/Input/default.xci:565
-msgid "Labels\n"
-msgstr "Označenie\n"
-
 #: Data/Input/default.xci:413
 msgid ""
 "Waypoint\n"
@@ -6692,15 +6690,19 @@ msgid ""
 "Demo"
 msgstr ""
 
+#: Data/Input/default.xci:543
+msgid "Trail"
+msgstr "Stopa"
+
 #: Data/Input/default.xci:722
 msgid ""
 "Setup\n"
 "Stall"
 msgstr ""
 
-#: Data/Input/default.xci:656
-msgid "Logger\n"
-msgstr "Logger\n"
+#: Data/Input/default.xci:869
+msgid "Aux Info"
+msgstr ""
 
 #: Data/Input/default.xci:820
 msgid ""
@@ -6756,25 +6758,11 @@ msgstr ""
 "Posun\n"
 "vypnutý"
 
-#: Data/Input/default.xci:869
-msgid "Aux Info\n"
-msgstr ""
-
 #: Data/Input/default.xci:240
 msgid ""
 "Marks\n"
 "clear"
 msgstr ""
-
-#: Data/Input/default.xci:535
-msgid "Zoom\n"
-msgstr "Lupa\n"
-
-#: Data/Input/default.xci:508
-msgid "Full Scrn\n"
-msgstr ""
-"Celá\n"
-"obrazovka\n"
 
 #: Data/Input/default.xci:812
 msgid ""
@@ -6817,6 +6805,11 @@ msgstr "Nastavenie zvuku"
 msgid "FLARM Radar"
 msgstr "FLARM Radar"
 
+#: Data/Input/default.xci:535
+#, fuzzy
+msgid "Zoom"
+msgstr "Lupa\n"
+
 #: Data/Input/default.xci:747
 msgid "Vario ASI zeroed"
 msgstr ""
@@ -6828,6 +6821,13 @@ msgstr ""
 #: Data/Input/default.xci:441
 msgid "GoTo"
 msgstr "Choď na"
+
+#: Data/Input/default.xci:508
+#, fuzzy
+msgid "Full Scrn"
+msgstr ""
+"Celá\n"
+"obrazovka\n"
 
 #: Data/Input/default.xci:120
 msgid "Restarting Comm Ports"
@@ -6889,10 +6889,6 @@ msgstr "Oddiaľ"
 msgid "Accel"
 msgstr ""
 
-#: Data/Input/default.xci:449
-msgid "Task\n"
-msgstr "Úloha\n"
-
 #: Data/Input/default.xci:490
 msgid ""
 "Zoom\n"
@@ -6952,10 +6948,6 @@ msgid ""
 "Code"
 msgstr ""
 
-#: Data/Input/default.xci:543
-msgid "Trail\n"
-msgstr "Stopa\n"
-
 #: Data/Input/default.xci:382
 msgid ""
 "Task\n"
@@ -6973,6 +6965,15 @@ msgstr "Priblíž"
 #: Data/Input/default.xci:148
 msgid "Landing"
 msgstr ""
+
+#~ msgid "Labels\n"
+#~ msgstr "Označenie\n"
+
+#~ msgid "Logger\n"
+#~ msgstr "Logger\n"
+
+#~ msgid "Task\n"
+#~ msgstr "Úloha\n"
 
 #~ msgid "Distance Vario"
 #~ msgstr "Vário vzdialenosti"
