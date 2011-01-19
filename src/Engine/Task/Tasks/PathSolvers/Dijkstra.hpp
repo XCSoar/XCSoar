@@ -210,7 +210,7 @@ private:
       // first entry
       // If the node wasn't found
       // -> Insert a new node into the node_value_map
-      it = node_values.insert(make_pair(node, edge_value)).first;
+      it = node_values.insert(std::make_pair(node, edge_value)).first;
 
       // Remember the parent node
       set_predecessor(node, parent);
@@ -227,7 +227,7 @@ private:
       // -> Don't use this new leg
       return;
 
-    q.push(make_pair(edge_value, it));
+    q.push(std::make_pair(edge_value, it));
   }
 
   void set_predecessor(const Node &node, const Node &parent) {

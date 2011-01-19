@@ -207,7 +207,7 @@ public:
    */
   gcc_pure
   AStarPriorityValue get_node_value(const Node &node) const {
-    node_value_iterator it = node_values.find(node);
+    node_value_const_iterator it = node_values.find(node);
     if (it == node_values.end()) {
       return AStarPriorityValue(0);
     } else {
@@ -232,7 +232,7 @@ private:
       // first entry
       // If the node wasn't found
       // -> Insert a new node into the node_value_map
-      it = node_values.insert(make_pair(node, edge_value)).first;
+      it = node_values.insert(std::make_pair(node, edge_value)).first;
 
       // Remember the parent node
       set_predecessor(node, parent);
@@ -249,7 +249,7 @@ private:
       // -> Don't use this new leg
       return;
 
-    q.push(make_pair(edge_value, it));
+    q.push(std::make_pair(edge_value, it));
   }
 
   void set_predecessor(const Node &node, const Node &parent) {
@@ -259,7 +259,7 @@ private:
       // first entry
       // If the node wasn't found
       // -> Insert a new node into the node_parent_map
-      node_parents.insert(make_pair(node, parent));
+      node_parents.insert(std::make_pair(node, parent));
     else
       // If the node was found
       // -> Replace the according parent node with the new one
@@ -268,6 +268,7 @@ private:
 
   typedef std::map<Node, AStarPriorityValue> node_value_map;
   typedef typename node_value_map::iterator node_value_iterator;
+  typedef typename node_value_map::const_iterator node_value_const_iterator;
 
   typedef std::map<Node, Node> node_parent_map;
   typedef typename node_parent_map::iterator node_parent_iterator;
