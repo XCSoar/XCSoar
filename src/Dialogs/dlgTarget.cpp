@@ -42,10 +42,7 @@ using std::max;
 static WndForm *wf = NULL;
 static WndButton *btnIsLocked = NULL;
 static unsigned ActiveTaskPointOnEntry = 0;
-unsigned TaskSize = 0;
-
-bool oldEnablePan = false;
-GeoPoint oldPanLocation;
+static unsigned TaskSize = 0;
 
 static fixed Range = fixed_zero;
 static fixed Radial = fixed_zero;
@@ -489,8 +486,8 @@ dlgTargetShowModal()
   if (!wf)
     return;
 
-  oldEnablePan = XCSoarInterface::SetSettingsMap().EnablePan;
-  oldPanLocation = XCSoarInterface::SetSettingsMap().PanLocation;
+  bool oldEnablePan = XCSoarInterface::SetSettingsMap().EnablePan;
+  GeoPoint oldPanLocation = XCSoarInterface::SetSettingsMap().PanLocation;
 
   InitTargetPoints();
 
