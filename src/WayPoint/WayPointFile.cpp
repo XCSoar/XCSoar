@@ -49,7 +49,7 @@ size_t
 WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
                                 const TCHAR **arr, size_t sz)
 {
-  TCHAR c, *p;
+  TCHAR *p;
   size_t i = 0;
 
   _tcscpy(dst, src);
@@ -60,9 +60,8 @@ WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
     p = _tcschr(p, _T(','));
     if (!p)
       break;
-    c = *p;
     *p++ = _T('\0');
-  } while (i != sz && c != _T('\0'));
+  } while (i != sz);
 
   return i;
 }
