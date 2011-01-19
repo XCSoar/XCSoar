@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<Form Name="frmTarget" X="1" Y="1" Width="240" Height="90" Caption="Target" Popup="1">
+<Form Name="frmTarget" Height="90" Caption="Target" Popup="1">
   <Button Name="btnOK" Caption="Close" X="2" Y="2" Width="60" Height="29" OnClick="OnOKClicked" />
 
-  <Edit Name="prpTaskPoint" Caption="Point" X="55" Y="2" Width="180" Height="27" CaptionWidth="40"
+  <Edit Name="prpTaskPoint" Caption="Point" X="62" Y="0" Height="27" CaptionWidth="40"
   Help="This sets the task point for review.">
     <DataField DataType="enum" OnDataAccess="OnTaskPointData"/>
   </Edit>
 
-  <Edit Name="prpRange" Caption="Range" X="64" Y="42" Width="80" Height="27" CaptionWidth="32" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
+  <Edit Name="prpRange" Caption="Range" X="62" Y="42" Width="86" Height="27" CaptionWidth="35" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
     <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min="-100" Max="100" Step="5" OnDataAccess="OnRangeData"/>
   </Edit>
 
-  <Edit Name="prpRadial" Caption="Radial" X="150" Y="42" Width="80" Height="27" CaptionWidth="32" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
+  <Edit Name="prpRadial" Caption="Radial" X="150" Y="42" Height="27" CaptionWidth="32" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
     <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-92" Max="92" Step="5" OnDataAccess="OnRadialData"/>
   </Edit>
 
