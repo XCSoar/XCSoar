@@ -28,6 +28,40 @@
 
 #include <vector>
 
+void
+TestExtractParameters()
+{
+  TCHAR buffer[1024];
+  const TCHAR *params[64];
+  unsigned n;
+
+  n = WayPointFile::extractParameters(_T("foo"), buffer, params, 64);
+  ok1(n == 1);
+  ok1(_tcscmp(params[0], _T("foo")) == 0);
+
+  n = WayPointFile::extractParameters(_T("foo,bar"), buffer, params, 64);
+  ok1(n == 2);
+  ok1(_tcscmp(params[0], _T("foo")) == 0);
+  ok1(_tcscmp(params[1], _T("bar")) == 0);
+
+  n = WayPointFile::extractParameters(_T("foo,bar"), buffer, params, 1);
+  ok1(n == 1);
+  ok1(_tcscmp(params[0], _T("foo")) == 0);
+
+  n = WayPointFile::extractParameters(_T("foo,bar,"), buffer, params, 64);
+  ok1(n == 3);
+  ok1(_tcscmp(params[0], _T("foo")) == 0);
+  ok1(_tcscmp(params[1], _T("bar")) == 0);
+  ok1(_tcscmp(params[2], _T("")) == 0);
+
+  n = WayPointFile::extractParameters(_T("foo,bar,,"), buffer, params, 64);
+  ok1(n == 4);
+  ok1(_tcscmp(params[0], _T("foo")) == 0);
+  ok1(_tcscmp(params[1], _T("bar")) == 0);
+  ok1(_tcscmp(params[2], _T("")) == 0);
+  ok1(_tcscmp(params[3], _T("")) == 0);
+}
+
 typedef std::vector<Waypoint> wp_vector;
 
 short
@@ -279,7 +313,9 @@ int main(int argc, char **argv)
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(3 * 4 + (10 + 9 + 10) * org_wp.size());
+  plan_tests(16 + 3 * 4 + (10 + 9 + 10) * org_wp.size());
+
+  TestExtractParameters();
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);

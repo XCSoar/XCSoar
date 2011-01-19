@@ -97,6 +97,8 @@ protected:
 
   static size_t extractParameters(const TCHAR *src, TCHAR *dst,
                                   const TCHAR **arr, size_t sz);
+
+  friend void TestExtractParameters();
 };
 
 #endif
