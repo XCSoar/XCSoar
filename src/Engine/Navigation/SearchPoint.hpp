@@ -74,6 +74,14 @@ public:
   SearchPoint(const GeoPoint &loc, const TaskProjection& tp);
 
   /**
+   * Constructor
+   *
+   * @param floc Location of search point
+   * @param tp Projection used
+   */
+  SearchPoint(const FlatGeoPoint &floc, const TaskProjection& tp);
+
+  /**
    * Calculate projected value of geodetic coordinate
    *
    * @param tp Projection used
