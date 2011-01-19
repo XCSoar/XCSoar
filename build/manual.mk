@@ -1,7 +1,4 @@
-.PHONY: manual clean-manual doco
-
 MANUAL_OUTPUT_DIR = $(OUT)/all/manual
-DOXYGEN_OUTPUT_DIR = $(OUT)/doc
 SOURCES = $(DOC)/manual/*.tex $(DOC)/manual/*.sty
 FIGURES = $(DOC)/manual/figures/*.png
 SVG_ICON_LIST = \
@@ -17,6 +14,7 @@ SVG_ICON_LIST = \
 	map_turnpoint
 SVG_ICONS = $(patsubst %,$(DOC)/manual/generated/icons/%.png,$(SVG_ICON_LIST))
 
+.PHONY: manual
 manual: $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(SOURCES) $(FIGURES) $(SVG_ICONS) $(MANUAL_OUTPUT_DIR)/dirstamp
@@ -26,9 +24,3 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(SOURCES) $(FIGURES) $(SVG_ICONS) $(MAN
 
 $(SVG_ICONS): $(DOC)/manual/generated/icons/%.png: $(topdir)/Data/icons/%.svg | $(DOC)/manual/generated/icons/dirstamp
 	rsvg-convert -a -w 32 $< -o $@
-
-doco: FORCE
-#	$(topdir)/ex/tools/cloc --exclude-lang=D src > doc/cloc.txt
-	rm -rf $(DOXYGEN_OUTPUT_DIR)
-	mkdir -p $(DOXYGEN_OUTPUT_DIR)
-	cd $(DOC) && doxygen XCSoar.doxyfile
