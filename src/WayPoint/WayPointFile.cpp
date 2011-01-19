@@ -36,6 +36,8 @@ Copyright_License {
 #include "IO/ZipLineReader.hpp"
 #include "IO/TextWriter.hpp"
 
+#include <assert.h>
+
 WayPointFile::WayPointFile(const TCHAR* file_name, const int _file_num,
                            const bool _compressed): 
   file_num(_file_num),
@@ -49,6 +51,11 @@ size_t
 WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
                                 const TCHAR **arr, size_t sz)
 {
+  assert(src != NULL);
+  assert(dst != NULL);
+  assert(arr != NULL);
+  assert(sz > 0);
+
   TCHAR *p;
   size_t i = 0;
 
