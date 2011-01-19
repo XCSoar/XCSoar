@@ -3270,9 +3270,6 @@ the gross variometer measurement.  Chevrons pointing up indicate
 slowing down is recommended.  Chevrons pointing down indicates that
 speeding up is recommended.  
 
-The vario gauge is customisable as to what is displayed along with the
-gross value, see Chapter~\ref{cha:configuration} for more details.
-
 When the averager value is displayed, the value shown is the average
 gross climb rate over the previous 30 seconds when in circling mode,
 and the netto (airmass) vertical speed over the previous 30 seconds
@@ -3282,9 +3279,8 @@ when in cruise mode.
 
 The average value can also be displayed as an optional additional
 needle (caret).
-
-See Section~\ref{sec:vario-gauge} for details on customising the variometer
-gauge.
+The vario gauge is customisable \config{variogauge} as to what is displayed
+along with the gross value etc.
 
 When an intelligent variometer is connected to XCSoar, the needle
 displays data from the instrument; otherwise it produces variometer
@@ -3301,17 +3297,14 @@ the pilot.
 
 Currently XCSoar supports the triadis Engineering Vega intelligent
 variometer, the Cambridge 302 DDV, Borgelt B50/B500, LX Navigation
-LX1600 variometers, Zander, and Tasman Instruments variometer. 
-\todonum{add Flymaster F1
-    - Flytec
-    - ILEC SN10
-    - Leonardo}
+LX1600 variometers, Zander, ILEC SN10, Tasman Instruments variometer, Flymaster
+F1, Flytec, amd Leonardo. 
 Note that the level of support for each device varies, and not all
 manufacturers release their protocols to allow the XCSoar developers
 to provide full support.  Barometric altitude is also read from
 certain GPS units and loggers, including the Volkslogger and
 Posigraph.
-\todonum{JMW check}
+\todonum{check for completness}
 
 For Vega, a small icon displaying a circling glider is displayed when
 the variometer is in climb audio mode.
@@ -3386,8 +3379,8 @@ also do this by highlighting the wind {\InfoBox} and using the cursor
 keys (up and down increase and decrease the magnitude, left and right
 rotate the wind direction).
 
-The configuration settings dialog allows control of which estimation 
-method is used for wind updates, via the field `Auto Wind':
+The configuration \config{autowind} settings dialog allows control of which
+estimation method is used for wind updates, via the field `Auto Wind':
 \begin{itemize}
 \item Manual
 \item Circling
@@ -3455,16 +3448,12 @@ This is accessed via the menu under:
 \end{quote}
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-wind2.png}
+\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/dialog-wind2.png}
 \end{center}
 
-The wind value can be saved so that the estimate is restored next time
-XCSoar starts.
-
 At any time during flight, the pilot can make corrections to the wind
-estimate by entering the correction in the wind settings dialog and
-pressing the \button{Save} button.  Once the \button{Save} button is
-pressed, the internal estimate is ignored until a new internal
+estimate by entering the correction in the wind settings dialog.  Once the
+dialog get closed , the internal estimate is ignored until a new internal
 estimate is obtained from the circling or zigzag algorithm.
 
 The automatic wind algorithm may also be switched on or off (or
@@ -3482,10 +3471,8 @@ thermal band meter.  This is shown above the final glide difference
 bar on the left side of the map display.  It is not shown when the
 glider is above final glide.  
 
-%\begin{center}
-\vskip 1cm
-\marginpar{\hbox{\vbox{\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/thermalprofile.pdf}}}}
-%\end{center}
+\vskip 2cm
+\marginpar{\hbox{\vbox{\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/thermalprofile.png}}}}
 
 The thermal band meter shows a graph, where the vertical axis is
 height above the break-off \todonum{update} height, and is scaled according to
@@ -3506,22 +3493,14 @@ taking even a weak thermal.
 
 \section{Thermal locator}
   An algorithm estimates the center of the lift when circling.  The
-  thermal marker symbol is a green circle with a `T' in the center.
-  From the configuration menu (Setup System), Display Page, the option
-  `Lift center' determines how this is used:
-\begin{description}
-\item[OFF] Lift center locator disabled.
-\item[Circle at center]  A thermal marker is displayed at the center of lift.
+  thermal marker symbol is a green circle with a spiral.
 
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/shot-tlocator-circling.png}
 \end{center}
 
-\item[Pan to center] A marker is displayed at the center of lift, 
- and when circling, the display is panned to this lift center.
-\end{description}
-  When the thermal locator is enabled, the location of the last 20
-  thermals is marked on the map with the thermal marker during cruise.
+  The thermal locator markes the location of the last 20
+  thermals on the map with the thermal symbol during cruise.
 
   This location is calculated to compensate for the thermal drift at
   the glider's height.  This means that internally XCSoar remembers
@@ -3625,7 +3604,7 @@ functionality; the reader is referred to the RASP website
 The forecast overlays are accessed by the weather dialog.  This is
 performed by selecting the menu:
 \begin{quote}
-\bmenu{Info}\blink\bmenu{Weather}
+\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Weather}
 \end{quote}
 
 \begin{center}
@@ -3647,7 +3626,7 @@ The fields available to display are as follows:
 \begin{description}
 \item[Terrain] Display terrain on map, no weather data displayed.
 
-\item[Wstar] 
+\item[W*] 
 Average dry thermal updraft strength near mid-BL height.  Subtract
 glider descent rate to get average vario reading for cloudless
 thermals.  Updraft strengths will be stronger than this forecast if
@@ -3694,7 +3673,7 @@ consitions.) In the presence of clouds the maximum thermalling height
 may instead be limited by the cloud base.  Being for ``dry'' thermals,
 this parameter omits the effect of ``cloudsuck''.
 
-\item[bl cloudpct]  
+\item[bl cloud]  
 This parameter provides an additional means of evaluating the
 formation of clouds within the BL and might be used either in
 conjunction with or instead of the other cloud prediction parameters.
@@ -3729,6 +3708,7 @@ the BL as created by horizontal wind convergence. Positive convergence
 is associated with local small-scale convergence lines.  Negative
 convergence (divergence) produces subsiding vertical motion, creating
 low-level inversions which limit thermalling heights.
+\item[blcwbase] \todonum{describe}  
 \end{description}
 
 \begin{maxipage}
@@ -5283,14 +5263,19 @@ This page allows glide computer algorithms to be configured.
 \begin{description}
 \item[Glide terrain line]  \label{conf:gliderange} This determines whether the
 glide terrain range is calculated and drawn as a line resp. a shade on the map area.
-\item[Auto wind] This allows switching on or off the automatic wind algorithm.
+\item[Auto wind]  \label{conf:autowind} This allows switching on or off the
+automatic wind algorithm.
  \begin{description}
-\item[Manual] When the algorithm is switched off, the pilot is responsible for
+\item[Manual]  When the algorithm is switched off, the pilot is responsible for
   setting the wind estimate.
-\item[Circling] Circling mode requires only a GPS source, 
+\item[Circling]  Circling mode requires only a GPS source, 
 \item[ZigZag]  ZigZag requires an intelligent vario with airspeed output.
-\item[Both] Uses Circling and ZigZag.
+\item[Both]  Uses Circling and ZigZag.
 \end{description}
+
+\item[External wind]  If enabled, the wind vector received from external
+devices overrides XCSoar's internal wind calculation.
+
 \item[Auto MC mode] This option defines which auto MacCready algorithm is used.
 For more details see Section~\ref{sec:auto-maccready}.
  \begin{description}
@@ -5305,17 +5290,16 @@ For more details see Section~\ref{sec:auto-maccready}.
 %\item[Pan to center] A marker is displayed at the center of lift, 
 % and when circling, the display is panned to this lift center.
 %\end{description}
+
 \item[Block speed to fly*] If enabled, the command speed in cruise
   is set to the MacCready speed to fly in no vertical air-mass movement.
   If disabled, the command speed in cruise is set to the dolphin speed to fly,
   equivalent to the MacCready speed with vertical air-mass movement.
-%\item[Auto Force Final Glide] This option enables automatic forcing of final
-% glide mode if the aircraft is above final glide prior to reaching the
-% penultimate waypoint. Forcing final glide early can also be performed manually
-% from the task menu.
+
 \item[Nav by baro altitude*] When enabled and if connected to a barometric
   altimeter, barometric altitude is used for all navigation functions. Otherwise
   GPS altitude is used.
+
 \item[Flap forces cruise*]
   When this option is enabled, causes the flap switches in Vega to
   force cruise mode when the flap is not positive.  This means that
@@ -5325,14 +5309,9 @@ For more details see Section~\ref{sec:auto-maccready}.
   Similarly, for Borgelt B50 systems, the speed command switch forces
   XCSoar's climb or cruise mode.
 
-\item[STF risk factor*] 
-  The STF risk factor reduces the MacCready setting used to calculate
-  speed to fly as the glider gets low, in order to compensate for
-  risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with
-  height.  See Section~\ref{sec:speed-fly-with} for more details.
+\item[L/D Average period] Average glide ratio is always calculated in real time. Here you can decide 
+on how many seconds of flight this calculation must be done.
 \end{description}
-See Section~\ref{sec:safety-heights} for more details on the meanings
-of the safety heights.
 
 \section{Safety factors}
 
@@ -5351,6 +5330,11 @@ This page allows the safety heights and behaviour in abort mode to be defined.
   is used for determining arrival altitude during task abort mode.
 \item[Safety MC*]  The MacCready setting used in task abort mode and
   for determining arrival altitude at airfields. 
+\item[STF risk factor*] 
+  The STF risk factor reduces the MacCready setting used to calculate
+  speed to fly as the glider gets low, in order to compensate for
+  risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with
+  height.  See Section~\ref{sec:speed-fly-with} for more details.
 \end{description}
 See Section~\ref{sec:safety-heights} for more details on the meanings
 of the safety heights.
@@ -5538,7 +5522,7 @@ If customisation is disabled, default fonts will be used.
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-10.png}
 \end{center}
-
+\label{conf:variogauge}
 \begin{description}
 \item[Speed arrows] Whether to show speed command arrows on the Vario gauge.
 When shown, in cruise mode, arrows point up to command slow down; arrows point down to command speed up.
@@ -5550,7 +5534,8 @@ When shown, in cruise mode, arrows point up to command slow down; arrows point d
 \item[Averager needle*] If true, the vario gauge will display a hollow averager needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.
 When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.
 \item[FLARM radar] Enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. 
-\item[ThermalAssistant] Enables the display of the ThermalAssistant gauge.
+\item[ThermalAssistant] \label{conf:thermalassistant} Enables the display of the
+ThermalAssistant gauge.
 \end{description}
 In all FLARM environment, the color of the target indicates the threat level.
 
@@ -5764,8 +5749,6 @@ This page provides experimental features which are not finished yet.
 
 The following functions are provided:
 \begin{description}
-\item[L/D Average period] Average glide ratio is always calculated in real time. Here you can decide 
-on how many seconds of flight this calculation must be done.
 \item[Extended Visual Glide] If you want Visual Glide to display also moving circles or arcs, in 
 addition to the steady mode then select Extended.
 \item[GPS Height Offset] Adjust GPS height with a fixed offset. Should be manually set each time 
