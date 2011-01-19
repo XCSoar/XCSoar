@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-19 09:47+0100\n"
-"PO-Revision-Date: 2010-09-25 15:46+0200\n"
+"POT-Creation-Date: 2011-01-19 09:51+0100\n"
+"PO-Revision-Date: 2011-01-19 09:54+0100\n"
 "Last-Translator: Hans <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "Language: nl\n"
@@ -1914,7 +1914,7 @@ msgid "Loading Topology File..."
 msgstr "topologiebestand laden"
 
 #: src/Terrain/RasterWeather.cpp:50 src/Dialogs/dlgWeather.cpp:104
-#: Data/Dialogs/dlgVoice.xml:10
+#: Data/Dialogs/dlgVoice.xml:10 Data/Input/default.xci:550
 #, no-c-format
 msgid "Terrain"
 msgstr "terrein"
@@ -6638,6 +6638,10 @@ msgstr ""
 msgid "Raw Logger"
 msgstr "Logger"
 
+#: Data/Input/default.xci:557
+msgid "Topology"
+msgstr "Topokaart"
+
 #: Data/Input/default.xci:615
 msgid ""
 "Setup\n"
@@ -6812,11 +6816,6 @@ msgstr "Opdracht ingelezen"
 msgid "Waiting for GPS Fix"
 msgstr "GPS wacht op fix"
 
-#: Data/Input/default.xci:550
-#, fuzzy
-msgid "Terrain "
-msgstr "terrein"
-
 #: Data/Input/default.xci:777
 #, fuzzy
 msgid ""
@@ -6830,11 +6829,6 @@ msgid ""
 "Message\n"
 "Repeat"
 msgstr "Herhaal"
-
-#: Data/Input/default.xci:557
-#, fuzzy
-msgid "Topology "
-msgstr "Topokaart aan"
 
 #: Data/Input/default.xci:483
 msgid ""
@@ -6890,6 +6884,10 @@ msgstr ""
 #, fuzzy
 msgid "Landing"
 msgstr "Landingstijd"
+
+#, fuzzy
+#~ msgid "Terrain "
+#~ msgstr "terrein"
 
 #~ msgid "Distance Vario"
 #~ msgstr "afstand vario"

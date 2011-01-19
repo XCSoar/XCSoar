@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-19 09:47+0100\n"
-"PO-Revision-Date: 2011-01-17 01:57+0000\n"
+"POT-Creation-Date: 2011-01-19 09:51+0100\n"
+"PO-Revision-Date: 2011-01-19 09:52+0100\n"
 "Last-Translator: Alex Caldwell <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -1880,7 +1880,7 @@ msgid "Loading Topology File..."
 msgstr ""
 
 #: src/Terrain/RasterWeather.cpp:50 src/Dialogs/dlgWeather.cpp:104
-#: Data/Dialogs/dlgVoice.xml:10
+#: Data/Dialogs/dlgVoice.xml:10 Data/Input/default.xci:550
 #, no-c-format
 msgid "Terrain"
 msgstr ""
@@ -6449,6 +6449,10 @@ msgstr ""
 msgid "Raw Logger"
 msgstr ""
 
+#: Data/Input/default.xci:557
+msgid "Topology"
+msgstr "Topología"
+
 #: Data/Input/default.xci:615
 msgid ""
 "Setup\n"
@@ -6610,10 +6614,6 @@ msgstr ""
 msgid "Waiting for GPS Fix"
 msgstr ""
 
-#: Data/Input/default.xci:550
-msgid "Terrain "
-msgstr "Terreno "
-
 #: Data/Input/default.xci:777
 msgid ""
 "Climb\n"
@@ -6629,10 +6629,6 @@ msgid ""
 msgstr ""
 "Mensaje\n"
 "Repetir"
-
-#: Data/Input/default.xci:557
-msgid "Topology "
-msgstr "Topología "
 
 #: Data/Input/default.xci:483
 msgid ""
@@ -6694,6 +6690,9 @@ msgstr ""
 #: Data/Input/default.xci:148
 msgid "Landing"
 msgstr "Aterrizaje"
+
+#~ msgid "Terrain "
+#~ msgstr "Terreno "
 
 #~ msgid ""
 #~ "Error occured,\r\n"

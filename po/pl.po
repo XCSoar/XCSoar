@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-19 09:47+0100\n"
-"PO-Revision-Date: 2011-01-13 21:48+0000\n"
+"POT-Creation-Date: 2011-01-19 09:51+0100\n"
+"PO-Revision-Date: 2011-01-19 09:55+0100\n"
 "Last-Translator: Mateusz Zakrzewski <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -1887,7 +1887,7 @@ msgid "Loading Topology File..."
 msgstr "Ładowanie pliku topografii..."
 
 #: src/Terrain/RasterWeather.cpp:50 src/Dialogs/dlgWeather.cpp:104
-#: Data/Dialogs/dlgVoice.xml:10
+#: Data/Dialogs/dlgVoice.xml:10 Data/Input/default.xci:550
 #, no-c-format
 msgid "Terrain"
 msgstr "Teren"
@@ -6461,6 +6461,10 @@ msgstr ""
 msgid "Raw Logger"
 msgstr ""
 
+#: Data/Input/default.xci:557
+msgid "Topology"
+msgstr "Topografię"
+
 #: Data/Input/default.xci:615
 msgid ""
 "Setup\n"
@@ -6618,10 +6622,6 @@ msgstr ""
 msgid "Waiting for GPS Fix"
 msgstr ""
 
-#: Data/Input/default.xci:550
-msgid "Terrain "
-msgstr ""
-
 #: Data/Input/default.xci:777
 msgid ""
 "Climb\n"
@@ -6632,10 +6632,6 @@ msgstr ""
 msgid ""
 "Message\n"
 "Repeat"
-msgstr ""
-
-#: Data/Input/default.xci:557
-msgid "Topology "
 msgstr ""
 
 #: Data/Input/default.xci:483

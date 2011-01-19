@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-19 09:47+0100\n"
-"PO-Revision-Date: 2010-09-25 15:46+0200\n"
+"POT-Creation-Date: 2011-01-19 09:51+0100\n"
+"PO-Revision-Date: 2011-01-19 09:53+0100\n"
 "Last-Translator: Sylvain BURGER <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -1814,7 +1814,7 @@ msgid "Loading Topology File..."
 msgstr ""
 
 #: src/Terrain/RasterWeather.cpp:50 src/Dialogs/dlgWeather.cpp:104
-#: Data/Dialogs/dlgVoice.xml:10
+#: Data/Dialogs/dlgVoice.xml:10 Data/Input/default.xci:550
 #, no-c-format
 msgid "Terrain"
 msgstr "Relief"
@@ -6461,6 +6461,10 @@ msgstr ""
 msgid "Raw Logger"
 msgstr "Début d'enregistrement"
 
+#: Data/Input/default.xci:557
+msgid "Topology"
+msgstr "Topologie"
+
 #: Data/Input/default.xci:615
 msgid ""
 "Setup\n"
@@ -6630,11 +6634,6 @@ msgstr "Circuit déclaré"
 msgid "Waiting for GPS Fix"
 msgstr ""
 
-#: Data/Input/default.xci:550
-#, fuzzy
-msgid "Terrain "
-msgstr "Relief"
-
 #: Data/Input/default.xci:777
 #, fuzzy
 msgid ""
@@ -6648,11 +6647,6 @@ msgid ""
 "Message\n"
 "Repeat"
 msgstr "Répéter"
-
-#: Data/Input/default.xci:557
-#, fuzzy
-msgid "Topology "
-msgstr "Fond de carte / Relief"
 
 #: Data/Input/default.xci:483
 msgid ""
@@ -6708,6 +6702,10 @@ msgstr ""
 #, fuzzy
 msgid "Landing"
 msgstr "Heure de posé"
+
+#, fuzzy
+#~ msgid "Terrain "
+#~ msgstr "Relief"
 
 #~ msgid "Waypoints 1"
 #~ msgstr "Point de virage 1"
