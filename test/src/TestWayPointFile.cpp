@@ -60,6 +60,19 @@ TestExtractParameters()
   ok1(_tcscmp(params[1], _T("bar")) == 0);
   ok1(_tcscmp(params[2], _T("")) == 0);
   ok1(_tcscmp(params[3], _T("")) == 0);
+
+  n = WayPointFile::extractParameters(_T("\"foo,comma\",\"bar\""),
+                                      buffer, params, 64);
+  ok1(n == 3);
+  ok1(_tcscmp(params[0], _T("\"foo")) == 0);
+  ok1(_tcscmp(params[1], _T("comma\"")) == 0);
+  ok1(_tcscmp(params[2], _T("\"bar\"")) == 0);
+
+  n = WayPointFile::extractParameters(_T("\"foo,comma\",\"bar\""),
+                                      buffer, params, 64, _T('"'));
+  ok1(n == 2);
+  ok1(_tcscmp(params[0], _T("foo,comma")) == 0);
+  ok1(_tcscmp(params[1], _T("bar")) == 0);
 }
 
 typedef std::vector<Waypoint> wp_vector;
@@ -313,7 +326,7 @@ int main(int argc, char **argv)
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(16 + 3 * 4 + (10 + 9 + 10) * org_wp.size());
+  plan_tests(23 + 3 * 4 + (10 + 9 + 10) * org_wp.size());
 
   TestExtractParameters();
 

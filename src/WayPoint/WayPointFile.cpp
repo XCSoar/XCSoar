@@ -49,7 +49,8 @@ WayPointFile::WayPointFile(const TCHAR* file_name, const int _file_num,
 
 size_t
 WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
-                                const TCHAR **arr, size_t sz)
+                                const TCHAR **arr, size_t sz,
+                                const TCHAR quote_char)
 {
   assert(src != NULL);
   assert(dst != NULL);
@@ -63,6 +64,19 @@ WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
   p = dst;
 
   do {
+    TCHAR *end;
+    if (quote_char != 0 && *p == quote_char &&
+        (end = _tcschr(p + 1, quote_char)) != NULL &&
+        (end[1] == ',' || end[1] == 0)) {
+      arr[i++] = p + 1;
+      *end++ = 0;
+      if (*end == 0)
+        break;
+
+      p = end + 1;
+      continue;
+    }
+
     arr[i++] = p;
     p = _tcschr(p, _T(','));
     if (!p)
