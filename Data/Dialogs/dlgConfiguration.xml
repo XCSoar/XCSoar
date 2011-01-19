@@ -204,8 +204,8 @@
         <DataField DataType="boolean"/>
       </Edit>
 
-      <Edit Name="prpAutoMcMode" Caption="Auto Mc mode" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="This option defines which auto MacCready algorithm is used.&#10;[Final glide] adjusts Mc for fastest arrival.  For OLC sprint tasks, the MacCready is adjusted in order to cover the greatest distance in the remaining time and reach the finish height.&#10;[Trending Average] sets Mc to the trending average climb rate based on all climbs.&#10;[Both] Uses trending average during task, then fastest arrival when in final glide mode.">
+      <Edit Name="prpAutoMcMode" Caption="Auto MC mode" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="This option defines which auto MacCready algorithm is used.&#10;[Final glide] adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is adjusted in order to cover the greatest distance in the remaining time and reach the finish height.&#10;[Trending Average] sets MC to the trending average climb rate based on all climbs.&#10;[Both] Uses trending average during task, then fastest arrival when in final glide mode.">
         <DataField DataType="enum"/>
       </Edit>
     
@@ -240,18 +240,18 @@
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="100"/>
       </Edit>
     
-      <Edit Name="prpAbortSafetyUseCurrent" Caption="Abort use current Mc*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpAbortSafetyUseCurrent" Caption="Abort use current MC*" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="When enabled, the current MacCready setting is used for determining arrival altitude during task abort mode.">
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpSafetyMacCready" Caption="Safety Mc*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpSafetyMacCready" Caption="Safety MC*" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The MacCready setting used in task abort mode and for determining arrival altitude at airfields.">
         <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="10" Step="0.1"/>
       </Edit>
 
       <Edit Name="prpRiskGamma" Caption="STF risk factor*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="The STF risk factor reduces the MacCready setting used to calculate speed to fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for no compensation, 1.0 scales Mc linearly with height.">
+        Help="The STF risk factor reduces the MacCready setting used to calculate speed to fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with height.">
         <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="1" Step="0.1"/>
       </Edit>
     </Panel>

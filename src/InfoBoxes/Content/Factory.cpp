@@ -363,7 +363,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // 34
   {
     N_("Speed MacCready"),
-    N_("V Mc"),
+    N_("V MC"),
     N_("The MacCready speed-to-fly for optimal flight to the next waypoint. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent."),
     35, // % Climb
     10, // MC

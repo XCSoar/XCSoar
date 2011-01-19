@@ -18,7 +18,7 @@
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f"/>
   </Edit>
 
-  <Edit Name="prpMacCready" Caption="Set MacCready" X="2" Height="22" CaptionWidth="150" Help="Adjusts Mc value used in the calculator.  Use this to determine the effect on estimated task time due to changes in conditions.  This value will not affect the main computer's setting if the dialog is exited with the Cancel button.">
+  <Edit Name="prpMacCready" Caption="Set MacCready" X="2" Height="22" CaptionWidth="150" Help="Adjusts MC value used in the calculator.  Use this to determine the effect on estimated task time due to changes in conditions.  This value will not affect the main computer's setting if the dialog is exited with the Cancel button.">
     <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="10" Step="0.1" OnDataAccess="OnMacCreadyData"/>
   </Edit>
 
@@ -38,7 +38,7 @@
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f"/>
   </Edit>
 
-  <Edit Name="prpCruiseEfficiency" Caption="Cruise efficiency" X="2" Height="22" ReadOnly="1" CaptionWidth="150" Help="Efficiency of cruise.  100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets.  Less than 100 is appropriate if you fly considerably off-track.  This value estimates your cruise efficiency according to the current flight history with the set Mc value.  Calculation begins after task is started.">
+  <Edit Name="prpCruiseEfficiency" Caption="Cruise efficiency" X="2" Height="22" ReadOnly="1" CaptionWidth="150" Help="Efficiency of cruise.  100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets.  Less than 100 is appropriate if you fly considerably off-track.  This value estimates your cruise efficiency according to the current flight history with the set MC value.  Calculation begins after task is started.">
     <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f"/>
   </Edit>
 </Form>
