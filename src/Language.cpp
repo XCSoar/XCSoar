@@ -132,28 +132,40 @@ gettext(const TCHAR* text)
  */
 enum {
   LANG_NULL,
+  LANG_CZECH,
   LANG_GERMAN,
+  LANG_GREEK,
   LANG_SPANISH,
   LANG_FRENCH,
+  LANG_CROATIAN,
   LANG_HUNGARIAN,
+  LANG_ITALIAN,
   LANG_DUTCH,
   LANG_POLISH,
   LANG_PORTUGUESE,
   LANG_RUSSIAN,
   LANG_SLOVAK,
+  LANG_SERBIAN,
+  LANG_SWEDISH,
 };
 #endif
 
 const struct builtin_language language_table[] = {
+  { LANG_CZECH, _T("cz.mo") },
   { LANG_GERMAN, _T("de.mo") },
+  { LANG_GREEK, _T("el.mo") },
   { LANG_SPANISH, _T("es.mo") },
   { LANG_FRENCH, _T("fr.mo") },
+  { LANG_CROATIAN, _T("hr.mo") },
   { LANG_HUNGARIAN, _T("hu.mo") },
+  { LANG_ITALIAN, _T("it.mo") },
   { LANG_DUTCH, _T("nl.mo") },
   { LANG_POLISH, _T("pl.mo") },
   { LANG_PORTUGUESE, _T("pt_BR.mo") },
   { LANG_RUSSIAN, _T("ru.mo") },
   { LANG_SLOVAK, _T("sk.mo") },
+  { LANG_SERBIAN, _T("sr.mo") },
+  { LANG_SWEDISH, _T("sv.mo") },
   { 0, NULL }
 };
 

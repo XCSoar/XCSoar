@@ -1866,9 +1866,8 @@ msgstr "Odejście na trasę"
 msgid "Task Finish"
 msgstr "Meta trasy"
 
-#: src/InputEventsActions.cpp:1767
 msgid "In sector, arm advance when ready"
-msgstr ""
+msgstr "Jesteś wewnątrz strefy obserwacyjnej, uzbrój PZ jak będziesz gotowy"
 
 #: src/GlueMapWindowAirspace.cpp:151
 msgid "Airspaces at this location"
@@ -2029,9 +2028,8 @@ msgstr ""
 msgid "blcwbase"
 msgstr ""
 
-#: src/FlightStatistics.cpp:308 src/Dialogs/dlgAnalysis.cpp:199
 msgid "Mass"
-msgstr ""
+msgstr "Masa"
 
 #: src/FlightStatistics.cpp:315 Data/Dialogs/dlgBasicSettings.xml:16
 msgid "Wing loading"
@@ -2041,9 +2039,8 @@ msgstr "Obciążenie powierzchni nośnej"
 msgid "Working band"
 msgstr "Przedział wysokości"
 
-#: src/FlightStatistics.cpp:847
 msgid "Ceiling trend"
-msgstr ""
+msgstr "Trend puł."
 
 #: src/FlightStatistics.cpp:861 src/FlightStatistics.cpp:866
 msgid "Av climb"
@@ -2078,9 +2075,8 @@ msgstr "Brak trasy"
 msgid "Task to go"
 msgstr "Pozostały czas trasy"
 
-#: src/FlightStatistics.cpp:922 src/FlightStatistics.cpp:932
 msgid "AAT to go"
-msgstr ""
+msgstr "AAT"
 
 #: src/FlightStatistics.cpp:923 src/FlightStatistics.cpp:933
 #: src/FlightStatistics.cpp:944
@@ -2310,9 +2306,8 @@ msgstr "Prędkość trasy"
 msgid "Task"
 msgstr "Zadanie"
 
-#: src/Dialogs/dlgAnalysis.cpp:235
 msgid "OnLine Contest"
-msgstr ""
+msgstr "OLC"
 
 #: src/Dialogs/dlgAnalysis.cpp:246 Data/Dialogs/dlgAirspaceSelect.xml:10
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:16
@@ -2328,9 +2323,8 @@ msgstr ""
 msgid "Distance"
 msgstr "Odległość"
 
-#: src/Dialogs/dlgAnalysis.cpp:248
 msgid "Score"
-msgstr ""
+msgstr "Wynik"
 
 #: src/Dialogs/dlgAnalysis.cpp:250
 msgid "pts"
@@ -2853,11 +2847,8 @@ msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
 "Zapisano zmiany w konfiguracji. Ponownie uruchom XCSoar, aby je zastosować."
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:54 Data/Dialogs/dlgConfiguration.xml:538
-#: Data/Dialogs/dlgConfiguration_L.xml:537
-#, no-c-format
 msgid "Cruise"
-msgstr ""
+msgstr "Przelot"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:55 Data/Dialogs/dlgConfiguration.xml:539
 #: Data/Dialogs/dlgConfiguration_L.xml:538
@@ -2875,9 +2866,8 @@ msgstr ""
 msgid "Overwrite?"
 msgstr "Zastąpić?"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:80
 msgid "InfoBox paste"
-msgstr ""
+msgstr "Wklej okno info."
 
 #: src/Dialogs/dlgConfigWaypoints.cpp:79
 msgid "Waypoint not editable"
@@ -2948,10 +2938,8 @@ msgstr ""
 msgid "System"
 msgstr ""
 
-#: src/Dialogs/dlgStatus.cpp:54
-#, no-c-format
 msgid "Task Rules"
-msgstr ""
+msgstr "Reguły"
 
 #: src/Dialogs/dlgStatus.cpp:55
 #, no-c-format
@@ -3181,9 +3169,8 @@ msgid ""
 "Distance: %.0f %s"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:137
 msgid "FAI Sector"
-msgstr ""
+msgstr "Sektor FAI"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:143
 msgid "Keyhole"
@@ -3197,9 +3184,8 @@ msgstr ""
 msgid "BGAEnhancedOption"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:161
 msgid "Sector"
-msgstr ""
+msgstr "Sektor"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:173
 msgid "Cylinder"
@@ -3450,9 +3436,8 @@ msgstr ""
 msgid "Font not found."
 msgstr ""
 
-#: src/Dialogs/dlgFontEdit.cpp:122 Data/Dialogs/dlgFontEdit.xml:3
 msgid "Edit Font"
-msgstr ""
+msgstr "Edytuj Czcionkę"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:7
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:5
@@ -3495,9 +3480,8 @@ msgstr ""
 msgid "Cruise Orientation"
 msgstr ""
 
-#: Data/Dialogs/dlgLoggerReplay.xml:14
 msgid "Rate"
-msgstr ""
+msgstr "Tempo "
 
 #: Data/Dialogs/dlgTaskCalculator.xml:33
 #: Data/Dialogs/dlgTaskCalculator_L.xml:35
@@ -3545,9 +3529,8 @@ msgstr "Asystent kominów"
 msgid "TE port"
 msgstr ""
 
-#: Data/Dialogs/dlgStatusTask.xml:3
 msgid "Task Status"
-msgstr ""
+msgstr "Status zadania"
 
 #: Data/Dialogs/dlgConfiguration.xml:337
 #: Data/Dialogs/dlgConfiguration_L.xml:336
@@ -3561,9 +3544,8 @@ msgstr "Prędkość szybowca/wiatru"
 msgid "Start max height"
 msgstr "Maks. wys. odejścia na trasę"
 
-#: Data/Dialogs/dlgWindSettings.xml:3
 msgid "Wind Settings"
-msgstr ""
+msgstr "Ustawienia Wiatru"
 
 #: Data/Dialogs/dlgConfiguration.xml:145
 #: Data/Dialogs/dlgConfiguration_L.xml:145
@@ -3578,10 +3560,8 @@ msgstr "Filtruj"
 msgid "Brightness"
 msgstr "Jasność"
 
-#: Data/Dialogs/dlgWayPointDetails.xml:3
-#: Data/Dialogs/dlgWayPointDetails_L.xml:3
 msgid "Waypoint Info"
-msgstr ""
+msgstr "Informacje o PZ"
 
 #: Data/Dialogs/dlgConfiguration.xml:409
 #: Data/Dialogs/dlgConfiguration_L.xml:408
@@ -3628,9 +3608,8 @@ msgid ""
 "[AGL] Reference is the height above the start point"
 msgstr ""
 
-#: Data/Dialogs/dlgWeather.xml:3 Data/Dialogs/dlgWeather_L.xml:3
 msgid "Weather Forecast"
-msgstr ""
+msgstr "Prognoza pogody"
 
 #: Data/Dialogs/dlgConfiguration.xml:280
 #: Data/Dialogs/dlgConfiguration_L.xml:280
@@ -3681,9 +3660,8 @@ msgid ""
 "Minimum height above ground while finishing the task.  Set to 0 for no limit."
 msgstr ""
 
-#: Data/Dialogs/dlgStartTask.xml:12
 msgid "Start Anyway"
-msgstr ""
+msgstr "Zatwierdź start mimo tego"
 
 #: Data/Dialogs/dlgConfiguration.xml:448
 #: Data/Dialogs/dlgConfiguration_L.xml:447
@@ -3802,9 +3780,8 @@ msgstr ""
 msgid "Battery low delay"
 msgstr ""
 
-#: Data/Dialogs/dlgFileSelect.xml:3
 msgid "File browser"
-msgstr ""
+msgstr "Przeglądarka plików"
 
 #: Data/Dialogs/dlgConfiguration.xml:431
 #: Data/Dialogs/dlgConfiguration_L.xml:430
@@ -3822,9 +3799,8 @@ msgid ""
 "make any button presses or interacts with the computer."
 msgstr ""
 
-#: Data/Dialogs/dlgStatusTask.xml:10
 msgid "Speed remaining"
-msgstr ""
+msgstr "Speed remaining_EOL"
 
 #: Data/Dialogs/dlgVario.xml:118 Data/Dialogs/dlgVario_L.xml:119
 msgid "Circling hi cutoff"
@@ -3955,10 +3931,8 @@ msgstr ""
 msgid "delta T"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:530
-#: Data/Dialogs/dlgConfiguration_L.xml:529
 msgid "Online contest"
-msgstr ""
+msgstr "OLC"
 
 #: Data/Dialogs/dlgConfiguration.xml:243
 #: Data/Dialogs/dlgConfiguration_L.xml:243
@@ -3993,9 +3967,8 @@ msgstr "Przywróć standardowe"
 msgid "Manual adjustment of wind direction."
 msgstr ""
 
-#: Data/Dialogs/dlgComboPicker.xml:3 Data/Dialogs/dlgComboPicker_L.xml:3
 msgid "Picker"
-msgstr ""
+msgstr "Wybieracz"
 
 #: Data/Dialogs/dlgConfiguration.xml:376
 #: Data/Dialogs/dlgConfiguration_L.xml:375 Data/Dialogs/dlgStatus.xml:50
@@ -4087,9 +4060,8 @@ msgstr "Napięcie zasilania"
 msgid "Continue"
 msgstr ""
 
-#: Data/Dialogs/dlgAirspaceWarnings.xml:3
 msgid "Airspace Warnings"
-msgstr ""
+msgstr "Ostrzeżenia Strefy"
 
 #: Data/Dialogs/dlgTarget.xml:11 Data/Dialogs/dlgTarget_L.xml:13
 msgid ""
@@ -4181,10 +4153,8 @@ msgid ""
 "[Shade] Shades terrain outside glide range"
 msgstr ""
 
-#: Data/Dialogs/dlgTaskCalculator.xml:41
-#: Data/Dialogs/dlgTaskCalculator_L.xml:43
 msgid "Cruise efficiency"
-msgstr ""
+msgstr "Efektywność lotu"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:17
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:17
@@ -4265,9 +4235,8 @@ msgstr "Wyczyść"
 msgid "Set MacCready"
 msgstr "Ustaw MacCready"
 
-#: Data/Dialogs/dlgStatusSystem.xml:3
 msgid "System Status"
-msgstr ""
+msgstr "Status Systemu"
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "New Waypoint"
@@ -4429,9 +4398,8 @@ msgstr ""
 msgid "Task Altitude Difference"
 msgstr "Różnica wysokości na trasie"
 
-#: Data/Dialogs/dlgTeamCode.xml:3 Data/Dialogs/dlgTeamCode_L.xml:3
 msgid "Team code"
-msgstr ""
+msgstr "Kody zespołowe"
 
 #: Data/Dialogs/dlgFontEdit.xml:16
 msgid "Italic"
@@ -4561,9 +4529,8 @@ msgid ""
 "sector."
 msgstr ""
 
-#: Data/Dialogs/dlgTarget_L.xml:29
 msgid "V rem"
-msgstr ""
+msgstr "V poz."
 
 #: Data/Dialogs/dlgFlarmTraffic.xml:4 Data/Dialogs/dlgFlarmTraffic_L.xml:4
 #: Data/Dialogs/dlgTaskPoint.xml:11 Data/Dialogs/dlgTaskPoint_L.xml:12
@@ -4804,10 +4771,8 @@ msgid ""
 "XCSoar's internal wind calculation."
 msgstr ""
 
-#: Data/Dialogs/dlgAirspaceSelect.xml:4 Data/Dialogs/dlgAirspaceSelect_L.xml:4
-#: Data/Dialogs/dlgWayPointSelect.xml:2 Data/Dialogs/dlgWayPointSelect_L.xml:2
 msgid "Filter..."
-msgstr ""
+msgstr "Filtr..."
 
 #: Data/Dialogs/dlgConfiguration.xml:426
 #: Data/Dialogs/dlgConfiguration_L.xml:425
@@ -4818,9 +4783,8 @@ msgstr ""
 msgid "Max reported circling"
 msgstr ""
 
-#: Data/Dialogs/dlgStatus.xml:46
 msgid "Valid finish"
-msgstr ""
+msgstr "Prawidł. finisz"
 
 #: Data/Dialogs/dlgConfiguration.xml:280
 #: Data/Dialogs/dlgConfiguration_L.xml:280
@@ -4895,18 +4859,15 @@ msgstr ""
 msgid "Draw shades among slopes, indicating the wind direction."
 msgstr ""
 
-#: Data/Dialogs/dlgStatusAircraft.xml:3
 msgid "Aircraft Status"
-msgstr ""
+msgstr "Stan Statku"
 
 #: Data/Dialogs/dlgConfiguration.xml:70 Data/Dialogs/dlgConfiguration_L.xml:70
 msgid "Enable/disable all airspace warnings."
 msgstr ""
 
-#: Data/Dialogs/dlgAirspaceColours.xml:3
-#: Data/Dialogs/dlgAirspaceColours_L.xml:3
 msgid "Select colour"
-msgstr ""
+msgstr "Wybierz kolor"
 
 #: Data/Dialogs/dlgConfiguration.xml:88 Data/Dialogs/dlgConfiguration_L.xml:88
 msgid ""
@@ -4930,9 +4891,8 @@ msgstr ""
 msgid "Gear down"
 msgstr "Podwozie wypuszczone"
 
-#: Data/Dialogs/dlgWeather.xml:6 Data/Dialogs/dlgWeather_L.xml:6
 msgid "Field"
-msgstr ""
+msgstr "Pole"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid "TE vario"
@@ -4982,9 +4942,8 @@ msgstr ""
 msgid "Mute vario on radio"
 msgstr ""
 
-#: Data/Dialogs/dlgAirspaceSelect.xml:3 Data/Dialogs/dlgAirspaceSelect_L.xml:3
 msgid "Select Airspace"
-msgstr ""
+msgstr "Wybierz Strefę"
 
 #: Data/Dialogs/dlgConfiguration.xml:217
 #: Data/Dialogs/dlgConfiguration_L.xml:217
@@ -5037,11 +4996,8 @@ msgstr ""
 msgid "Copy"
 msgstr "Kopiuj"
 
-#: Data/Dialogs/dlgConfigWaypoints.xml:3
-#: Data/Dialogs/dlgConfigWaypoints_L.xml:3 Data/Dialogs/dlgConfiguration.xml:3
-#: Data/Dialogs/dlgConfiguration_L.xml:3
 msgid "Configuration"
-msgstr ""
+msgstr "Konfiguracja"
 
 #: Data/Dialogs/dlgConfiguration.xml:43 Data/Dialogs/dlgConfiguration_L.xml:43
 msgid "Specifies the file defining the topological features."
@@ -5153,9 +5109,8 @@ msgstr ""
 msgid "L/D Average period*"
 msgstr ""
 
-#: Data/Dialogs/dlgWayPointSelect.xml:1 Data/Dialogs/dlgWayPointSelect_L.xml:1
 msgid "Select Waypoint"
-msgstr ""
+msgstr "Wybierz PZ"
 
 #: Data/Dialogs/dlgConfiguration.xml:114
 #: Data/Dialogs/dlgConfiguration_L.xml:114
@@ -5238,10 +5193,8 @@ msgstr "Płaszczyzna"
 msgid "Circling volume"
 msgstr ""
 
-#: Data/Dialogs/dlgAirspacePatterns.xml:3
-#: Data/Dialogs/dlgAirspacePatterns_L.xml:3
 msgid "Select pattern"
-msgstr ""
+msgstr "Wybierz wzór"
 
 #: Data/Dialogs/dlgVoice.xml:6
 msgid "Enable voice read-back of the average climb rate when circling."
@@ -5452,9 +5405,8 @@ msgid ""
 "correct alignment."
 msgstr ""
 
-#: Data/Dialogs/dlgWaypointEdit.xml:3 Data/Dialogs/dlgWaypointEdit_L.xml:3
 msgid "Waypoint Editor"
-msgstr ""
+msgstr "Edytor PZ"
 
 #: Data/Dialogs/dlgConfiguration.xml:552
 #: Data/Dialogs/dlgConfiguration_L.xml:551
@@ -5742,10 +5694,8 @@ msgstr "Mapa FLARM"
 msgid "Vega"
 msgstr "Vega"
 
-#: Data/Dialogs/dlgTarget.xml:3 Data/Dialogs/dlgTarget_L.xml:3
-#: Data/Dialogs/dlgTaskCalculator.xml:7 Data/Dialogs/dlgTaskCalculator_L.xml:5
 msgid "Target"
-msgstr ""
+msgstr "Cel"
 
 #: Data/Dialogs/dlgConfiguration.xml:66 Data/Dialogs/dlgConfiguration_L.xml:66
 msgid ""
@@ -5768,10 +5718,8 @@ msgstr ""
 msgid "Interval, Caution"
 msgstr ""
 
-#: Data/Dialogs/dlgTextEntry.xml:3 Data/Dialogs/dlgTextEntry_Keyboard.xml:3
-#: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:3
 msgid "Edit text"
-msgstr ""
+msgstr "Edytuj tekst"
 
 #: Data/Dialogs/dlgConfiguration.xml:458
 #: Data/Dialogs/dlgConfiguration_L.xml:457
@@ -5958,9 +5906,8 @@ msgstr ""
 msgid "What do you want to do?"
 msgstr ""
 
-#: Data/Dialogs/dlgTaskPoint.xml:3 Data/Dialogs/dlgTaskPoint_L.xml:3
 msgid "Waypoint"
-msgstr ""
+msgstr "PZ"
 
 #: Data/Dialogs/dlgSwitches.xml:31
 msgid "Repeat"
@@ -6134,9 +6081,8 @@ msgid ""
 "The height above terrain that the glider should arrive at for a safe landing."
 msgstr ""
 
-#: Data/Dialogs/dlgTaskProperties.xml:9 Data/Dialogs/dlgTaskProperties_L.xml:9
 msgid "AAT min time"
-msgstr ""
+msgstr "Min. czas AAT"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:15
 #: Data/Dialogs/dlgWayPointDetails_L.xml:15
@@ -6225,9 +6171,8 @@ msgstr ""
 msgid "V ach"
 msgstr "V ach"
 
-#: Data/Dialogs/dlgTaskCalculator.xml:3 Data/Dialogs/dlgTaskCalculator_L.xml:3
 msgid "Task Calculator"
-msgstr ""
+msgstr "Kalkulator zadania"
 
 #: Data/Dialogs/dlgVario.xml:96 Data/Dialogs/dlgVario_L.xml:97
 msgid "Base frequency"
@@ -6263,9 +6208,8 @@ msgid ""
 "mountains."
 msgstr ""
 
-#: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
-msgstr ""
+msgstr "Detale Strefy"
 
 #: Data/Dialogs/dlgBasicSettings.xml:8
 msgid ""
@@ -6447,9 +6391,8 @@ msgid ""
 "list"
 msgstr ""
 
-#: Data/Input/default.xci:159
 msgid "Below Final Glide"
-msgstr ""
+msgstr "Poniżej linii dolotu"
 
 #: Data/Input/default.xci:854
 msgid "Weather"
@@ -6473,9 +6416,8 @@ msgid ""
 "Wind"
 msgstr ""
 
-#: Data/Input/default.xci:115
 msgid "Waiting for GPS Connection"
-msgstr ""
+msgstr "Oczekiwanie na sygnał GPS"
 
 #: Data/Input/default.xci:701
 msgid ""
@@ -6518,9 +6460,8 @@ msgstr ""
 msgid "Info"
 msgstr ""
 
-#: Data/Input/default.xci:154
 msgid "Above Final Glide"
-msgstr ""
+msgstr "Powyżej linii dolotu"
 
 #: Data/Input/default.xci:708
 msgid "Setup Audio"
@@ -6550,9 +6491,8 @@ msgstr ""
 msgid "Full Scrn"
 msgstr ""
 
-#: Data/Input/default.xci:120
 msgid "Restarting Comm Ports"
-msgstr ""
+msgstr "Restartowanie Portów COM"
 
 #: Data/Input/default.xci:516
 msgid ""
@@ -6560,9 +6500,8 @@ msgid ""
 "On"
 msgstr ""
 
-#: Data/Input/default.xci:143
 msgid "Takeoff"
-msgstr ""
+msgstr "Start Ziemny"
 
 #: Data/Input/default.xci:748
 msgid ""
@@ -6608,13 +6547,11 @@ msgid ""
 "Out"
 msgstr ""
 
-#: Data/Input/default.xci:238
 msgid "Marks cleared"
-msgstr ""
+msgstr "Oznaczenia miejsc usunięte"
 
-#: Data/Input/default.xci:125
 msgid "Waiting for GPS Fix"
-msgstr ""
+msgstr "Oczekiwanie na Fix GPS"
 
 #: Data/Input/default.xci:777
 msgid ""
@@ -6649,9 +6586,8 @@ msgstr ""
 msgid "Store"
 msgstr ""
 
-#: Data/Input/default.xci:164
 msgid "Final Glide Through Terrain"
-msgstr ""
+msgstr "Linia dolotu przecina teren!"
 
 #: Data/Input/default.xci:862
 msgid ""
@@ -6671,9 +6607,8 @@ msgid ""
 "in"
 msgstr ""
 
-#: Data/Input/default.xci:148
 msgid "Landing"
-msgstr ""
+msgstr "Lądowanie"
 
 #~ msgid "Comms with Volkslogger"
 #~ msgstr "Komunikacja z Volksloggerem"

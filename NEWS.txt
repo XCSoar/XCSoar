@@ -11,6 +11,8 @@ Version 6.0.2 - not yet released
   - Language: translation updates
   - Language: add Spanish translation
   - Language: add Russian translation
+  - Language: translations Czech, Greek, Croatian, Italian, Serbian,
+    Swedish imported from LK8000
   - Window: disable sunken window edges on HP31x
 * map
   - Waypoints: more reliable waypoint decluttering
