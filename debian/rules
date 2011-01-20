@@ -18,7 +18,7 @@ build: debian/stamp-build
 debian/stamp-build:
 	dh_testdir
 
-	$(MAKE) $(OPTIONS) all mo output/all/manual/XCSoar-manual.pdf
+	$(MAKE) $(OPTIONS) all mo manual
 
 	touch $@
 
