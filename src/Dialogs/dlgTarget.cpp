@@ -357,7 +357,7 @@ static void
 SetZoom(void)
 {
   const fixed Radius =
-      protected_task_manager->get_ordered_taskpoint_radius(target_point) * fixed(2);
+      protected_task_manager->get_ordered_taskpoint_radius(target_point) * fixed(1.5);
   XCSoarInterface::SetSettingsMap().TargetZoomDistance = Radius;
 }
 
