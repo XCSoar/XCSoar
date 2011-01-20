@@ -499,10 +499,20 @@ dlgTargetShowModal()
 
   wf->SetTimerNotify(OnTimerNotify);
 
+  RECT dialog_rect = wf->get_position();
+  RECT map_rect = XCSoarInterface::main_window.get_client_rect();
+  if (Layout::landscape)
+    map_rect.right = dialog_rect.left;
+  else
+    map_rect.top = dialog_rect.bottom;
+  XCSoarInterface::main_window.SetCustomView(map_rect);
+
   wf->ShowModal(true); // enable map
   XCSoarInterface::SetSettingsMap().EnablePan = oldEnablePan;
   XCSoarInterface::SetSettingsMap().PanLocation = oldPanLocation;
   XCSoarInterface::SetSettingsMap().TargetPan = false;
+
+  XCSoarInterface::main_window.LeaveCustomView();
 
   delete wf;
   wf = NULL;
