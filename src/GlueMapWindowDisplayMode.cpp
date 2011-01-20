@@ -184,7 +184,7 @@ GlueMapWindow::UpdateMapScale()
     // across the screen
     fixed wpd = SettingsMap().TargetZoomDistance;
     wpd = max(fixed_int_constant(50), min(fixed_int_constant(160000), wpd / 4));
-    visible_projection.SetMapScale(wpd);
+    visible_projection.SetFreeMapScale(wpd);
     return;
   }
 
