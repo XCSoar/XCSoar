@@ -1,4 +1,5 @@
 MANUAL_OUTPUT_DIR = $(OUT)/all/manual
+GENERATED_DIR = $(OUT)/all/tex
 TEX_INCLUDES = $(wildcard $(DOC)/manual/*.sty)
 FIGURES = $(DOC)/manual/figures/*.png
 SVG_ICON_LIST = \
@@ -12,7 +13,7 @@ SVG_ICON_LIST = \
 	winpilot_marginal \
 	winpilot_reachable \
 	map_turnpoint
-SVG_ICONS = $(patsubst %,$(DOC)/manual/generated/icons/%.png,$(SVG_ICON_LIST))
+SVG_ICONS = $(patsubst %,$(GENERATED_DIR)/icons/%.png,$(SVG_ICON_LIST))
 
 TEX_FLAGS = -halt-on-error -interaction=nonstopmode
 
@@ -25,5 +26,5 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/XCSoar-manual.tex $(TEX_IN
 	cd $(<D) && pdflatex $(TEX_FLAGS) -output-directory $(abspath $(@D)) $(<F)
 	cd $(<D) && pdflatex $(TEX_FLAGS) -output-directory $(abspath $(@D)) $(<F)
 
-$(SVG_ICONS): $(DOC)/manual/generated/icons/%.png: $(topdir)/Data/icons/%.svg | $(DOC)/manual/generated/icons/dirstamp
+$(SVG_ICONS): $(GENERATED_DIR)/icons/%.png: $(topdir)/Data/icons/%.svg | $(GENERATED_DIR)/icons/dirstamp
 	rsvg-convert -a -w 32 $< -o $@
