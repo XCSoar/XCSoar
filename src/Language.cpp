@@ -147,6 +147,7 @@ enum {
   LANG_SLOVAK,
   LANG_SERBIAN,
   LANG_SWEDISH,
+  LANG_TURKISH,
 };
 #endif
 
@@ -166,6 +167,7 @@ const struct builtin_language language_table[] = {
   { LANG_SLOVAK, _T("sk.mo") },
   { LANG_SERBIAN, _T("sr.mo") },
   { LANG_SWEDISH, _T("sv.mo") },
+  { LANG_TURKISH, _T("tr.mo") },
   { 0, NULL }
 };
 

@@ -222,6 +222,7 @@ ru.mo MO DISCARDABLE "../output/po/ru.mo"
 sk.mo MO DISCARDABLE "../output/po/sk.mo"
 sr.mo MO DISCARDABLE "../output/po/sr.mo"
 sv.mo MO DISCARDABLE "../output/po/sv.mo"
+tr.mo MO DISCARDABLE "../output/po/tr.mo"
 #endif
 
 // --- EGM96 Raster Data --- 
