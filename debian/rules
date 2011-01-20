@@ -2,7 +2,7 @@
 # -*- mode: makefile; coding: utf-8 -*-
 
 CFLAGS = -Wall -g
-OPTIONS = TARGET=UNIX FIXED=n GREEN_MENU=n
+OPTIONS = TARGET=UNIX FIXED=n GREEN_MENU=n OPENGL=y
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
   CFLAGS += -O0
@@ -18,7 +18,7 @@ build: debian/stamp-build
 debian/stamp-build:
 	dh_testdir
 
-	$(MAKE) $(OPTIONS) all mo output/all/manual/XCSoar-manual.pdf
+	$(MAKE) $(OPTIONS) all mo manual
 
 	touch $@
 

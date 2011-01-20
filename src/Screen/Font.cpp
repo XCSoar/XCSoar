@@ -103,7 +103,7 @@ Font::set(const TCHAR *facename, int height, bool bold, bool italic)
   metricsArray = env->NewIntArray(5);
   env->CallVoidMethod(textUtilObject, midGetFontMetrics, metricsArray);
   env->GetIntArrayRegion(metricsArray, 0, 5, metrics);
-  height = metrics[0];
+  this->height = metrics[0];
   style = metrics[1];
   ascent_height = metrics[2];
   capital_height = metrics[3];

@@ -1,8 +1,9 @@
 xcsoar (6.0.2) unstable; urgency=low
 
   * new release
+  * enable OpenGL
 
- --
+ -- Max Kellermann <max@duempel.org>  Thu, 20 Jan 2011 08:46:55 +0100
 
 xcsoar (6.0.1) unstable; urgency=low
 

@@ -653,7 +653,7 @@ type=key
 data=9
 event=Logger show
 event=Logger toggle ask
-label=Logger\n$(LoggerActive)
+label=Logger\n$(LoggerActive)$(CheckLogger)
 location=8
 
 mode=Config2

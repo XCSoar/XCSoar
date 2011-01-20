@@ -98,6 +98,12 @@ MapWindowProjection::FindMapScale(const fixed Value) const
 }
 
 void
+MapWindowProjection::SetFreeMapScale(const fixed x)
+{
+  SetScale(fixed(GetMapResolutionFactor()) / x);
+}
+
+void
 MapWindowProjection::SetMapScale(const fixed x)
 {
   SetScale(fixed(GetMapResolutionFactor()) / LimitMapScale(x));

@@ -36,6 +36,8 @@ Copyright_License {
 #include "IO/ZipLineReader.hpp"
 #include "IO/TextWriter.hpp"
 
+#include <assert.h>
+
 WayPointFile::WayPointFile(const TCHAR* file_name, const int _file_num,
                            const bool _compressed): 
   file_num(_file_num),
@@ -47,22 +49,40 @@ WayPointFile::WayPointFile(const TCHAR* file_name, const int _file_num,
 
 size_t
 WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
-                                const TCHAR **arr, size_t sz)
+                                const TCHAR **arr, size_t sz,
+                                const TCHAR quote_char)
 {
-  TCHAR c, *p;
+  assert(src != NULL);
+  assert(dst != NULL);
+  assert(arr != NULL);
+  assert(sz > 0);
+
+  TCHAR *p;
   size_t i = 0;
 
   _tcscpy(dst, src);
   p = dst;
 
   do {
+    TCHAR *end;
+    if (quote_char != 0 && *p == quote_char &&
+        (end = _tcschr(p + 1, quote_char)) != NULL &&
+        (end[1] == ',' || end[1] == 0)) {
+      arr[i++] = p + 1;
+      *end++ = 0;
+      if (*end == 0)
+        break;
+
+      p = end + 1;
+      continue;
+    }
+
     arr[i++] = p;
     p = _tcschr(p, _T(','));
     if (!p)
       break;
-    c = *p;
     *p++ = _T('\0');
-  } while (i != sz && c != _T('\0'));
+  } while (i != sz);
 
   return i;
 }

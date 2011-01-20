@@ -34,6 +34,12 @@ class MapWindowProjection:
   public WindowProjection
 {
 public:
+  /**
+   * Sets a map scale which is not affected by the hard-coded scale
+   * list.
+   */
+  void SetFreeMapScale(const fixed x);
+
   void SetMapScale(const fixed x);
 
 public:

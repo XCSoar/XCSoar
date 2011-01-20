@@ -205,15 +205,22 @@ IDR_XML_TASKPOINTTYPE_L XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskPointType_L.xml"
 
 // translations
 #if defined(WIN32) || defined(ANDROID)
+cz.mo MO DISCARDABLE "../output/po/cz.mo"
 de.mo MO DISCARDABLE "../output/po/de.mo"
+el.mo MO DISCARDABLE "../output/po/el.mo"
 es.mo MO DISCARDABLE "../output/po/es.mo"
 fr.mo MO DISCARDABLE "../output/po/fr.mo"
+hr.mo MO DISCARDABLE "../output/po/hr.mo"
 hu.mo MO DISCARDABLE "../output/po/hu.mo"
+it.mo MO DISCARDABLE "../output/po/it.mo"
 nl.mo MO DISCARDABLE "../output/po/nl.mo"
 pl.mo MO DISCARDABLE "../output/po/pl.mo"
 pt_BR.mo MO DISCARDABLE "../output/po/pt_BR.mo"
 ru.mo MO DISCARDABLE "../output/po/ru.mo"
 sk.mo MO DISCARDABLE "../output/po/sk.mo"
+sr.mo MO DISCARDABLE "../output/po/sr.mo"
+sv.mo MO DISCARDABLE "../output/po/sv.mo"
+tr.mo MO DISCARDABLE "../output/po/tr.mo"
 #endif
 
 // --- EGM96 Raster Data --- 

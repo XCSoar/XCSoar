@@ -229,6 +229,10 @@ MainWindow::SetFullScreen(bool _full_screen)
 
   FullScreen = _full_screen;
 
+  if (CustomView)
+    /* target dialog is active */
+    return;
+
   if (FullScreen)
     InfoBoxManager::Hide();
   else
@@ -237,4 +241,23 @@ MainWindow::SetFullScreen(bool _full_screen)
   const RECT rc = FullScreen ? get_client_rect() : map_rect;
   map.fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
   // the repaint will be triggered by the DrawThread
+}
+
+void
+MainWindow::SetCustomView(RECT rc)
+{
+  CustomView = true;
+
+  InfoBoxManager::Hide();
+  map.fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+}
+
+void
+MainWindow::LeaveCustomView()
+{
+  CustomView = false;
+
+  /* quick hack to force SetFullScreen() to update the MapWindow */
+  FullScreen = !FullScreen;
+  SetFullScreen(!FullScreen);
 }

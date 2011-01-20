@@ -29,10 +29,11 @@ while ( <@ARGV> ) {
 
         next if (/^#/);
 
-        if ( /^label=([^\$]+)/ ) {
-            $msges{ $1 } .= "#: $filename:$line\n";
-        }
-	elsif ( /^event=StatusMessage ([^\$]+)/ ) {
+        if (/^label=([^\$]*[^\$\s])\s*(?:\$.*)?/) {
+            my $msg = $1;
+            $msg =~ s,\s*\\[nr]$,,g;
+            $msges{$msg} .= "#: $filename:$line\n";
+        } elsif (/^event=StatusMessage\s+(\S.*\S)\s*$/) {
             $msges{ $1 } .= "#: $filename:$line\n";
         } 
     }

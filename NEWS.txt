@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Changes to version 6.1 (since 6.0):
+Version 6.1 - not yet released
 * user interface
   - "pan to" button in waypoint dialog
   - waypoint selection screen shows last used waypoints if no filter is set
@@ -22,14 +22,19 @@ Changes to version 6.1 (since 6.0):
     - along task direction
     - along home direction
 
-Changes to version 6.0.2 (since 6.0.1):
+Version 6.0.2 - not yet released
 * devices
   - more robust NMEA checksum parser
+  - CAI302: restart I/O thread after declaration failure
+  - Condor: read wind from LXWP0
 * user interface
   - Language: translation updates
   - Language: add Spanish translation
   - Language: add Russian translation
+  - Language: translations Czech, Greek, Croatian, Italian, Serbian,
+    Swedish imported from LK8000
   - Window: disable sunken window edges on HP31x
+  - Target: adjust map layout
 * map
   - Waypoints: more reliable waypoint decluttering
   - Topology: fix rendering bug
@@ -40,7 +45,7 @@ Changes to version 6.0.2 (since 6.0.1):
   - Fixed potential crash while reading airfields files
   - Added more polars (Hang gliders, DG1000, Blanik, Jantar, ...)
 
-Changes to version 6.0.1 (since 6.0):
+Version 6.0.1 - 2010/12/26
 * map
   - task, glide terrain: fix rendering bugs
 * user interface
@@ -54,7 +59,7 @@ Changes to version 6.0.1 (since 6.0):
 * glide computer
   - new built-in polars: IS28B2 and SZD30
 
-Changes to version 6.0 (since 5.2.4):
+Version 6.0 - 2010/12/19
 * build system
   - compile with gcc / mingw32 / mingw32ce instead of Visual C++
 * data files

@@ -30,7 +30,6 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
 #include "ProgressGlue.hpp"
-#include "Language.hpp"
 #include "UtilsText.hpp"
 #include "Device/Volkslogger/vlapi2.h"
 #include "Device/Volkslogger/vlapihlp.h"
@@ -140,7 +139,7 @@ CopyToNarrowBuffer(char *dest, size_t max_size, const TCHAR *src)
 bool
 VolksloggerDevice::Declare(const Declaration *decl)
 {
-  ProgressGlue::Create(_("Comms with Volkslogger"));
+  ProgressGlue::Create(_T("Comms with Volkslogger"));
 
   vl.set_port(port);
   nturnpoints = 0;

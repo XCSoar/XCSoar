@@ -95,8 +95,20 @@ protected:
 
   // Helper functions
 
+  /**
+   * Split line (comma separated fields) in individual fields.
+   * @param src The source line of comma separated fields
+   * @param dst Destination buffer containing processed '\0' separated fields.
+   * @param arr Array of pointers pointing to individual fields of dst
+   * @param quote_char Optional character used for quoting of individual fields.
+   * @return number of fields returned. Note: an empty src returns 1 for
+   * for consistency (i.e. "" -> 1, "," -> 2)
+   */
   static size_t extractParameters(const TCHAR *src, TCHAR *dst,
-                                  const TCHAR **arr, size_t sz);
+                                  const TCHAR **arr, size_t sz,
+                                  const TCHAR quote_char = _T('\0'));
+
+  friend void TestExtractParameters();
 };
 
 #endif

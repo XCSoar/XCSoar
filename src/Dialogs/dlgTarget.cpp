@@ -40,18 +40,13 @@ using std::min;
 using std::max;
 
 static WndForm *wf = NULL;
-static WndButton *btnMove = NULL;
 static WndButton *btnIsLocked = NULL;
 static unsigned ActiveTaskPointOnEntry = 0;
-unsigned TaskSize = 0;
-
-bool oldEnablePan = false;
-GeoPoint oldPanLocation;
+static unsigned TaskSize = 0;
 
 static fixed Range = fixed_zero;
 static fixed Radial = fixed_zero;
 static unsigned target_point = 0;
-static bool TargetMoveMode = false;
 static bool IsLocked = true;
 
 static void
@@ -173,26 +168,6 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
     return true;
   }
 
-  if (TargetMoveMode) {
-    switch (key_code) {
-    case VK_UP:
-      MoveTarget(0);
-      return true;
-
-    case VK_DOWN:
-      MoveTarget(180);
-      return true;
-
-    case VK_LEFT:
-      MoveTarget(270);
-      return true;
-
-    case VK_RIGHT:
-      MoveTarget(90);
-      return true;
-    }
-  }
-
   return false;
 }
 
@@ -204,8 +179,6 @@ static void
 LockCalculatorUI()
 {
   WndProperty* wp;
-  if (btnMove)
-    btnMove->set_enabled(IsLocked);
 
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp)
@@ -262,22 +235,6 @@ RefreshCalculator()
     wp->set_visible(!nodisplay);
   }
 
-  if (btnMove) {
-    btnMove->set_visible(false);
-    // todo add functionality for a cursor/move button
-    if (nodisplay)
-      TargetMoveMode = false;
-  }
-  nodisplay = nodisplay || TargetMoveMode;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
-  if (wp)
-    wp->set_visible(!TargetMoveMode);
-
-  WndButton *wc = (WndButton *)wf->FindByName(_T("btnOK"));
-  if (wc)
-    wc->set_visible(!TargetMoveMode);
-
   if (btnIsLocked) {
     btnIsLocked->SetCaption(IsLocked ? _T("Locked") : _T("Auto"));
     btnIsLocked->set_visible(!nodisplay);
@@ -325,16 +282,6 @@ static void
 OnTimerNotify(WndForm &Sender)
 {
   (void)Sender;
-  RefreshCalculator();
-}
-
-static void
-OnMoveClicked(WndButton &Sender)
-{
-  (void)Sender;
-  TargetMoveMode = !TargetMoveMode;
-  if (btnMove)
-    btnMove->SetCaption(TargetMoveMode ? _T("Cursor") : _T("Move"));
   RefreshCalculator();
 }
 
@@ -410,7 +357,8 @@ static void
 SetZoom(void)
 {
   const fixed Radius =
-      protected_task_manager->get_ordered_taskpoint_radius(target_point) * fixed(2);
+    std::max(protected_task_manager->get_ordered_taskpoint_radius(target_point) * fixed(1.5),
+             fixed(10000));
   XCSoarInterface::SetSettingsMap().TargetZoomDistance = Radius;
 }
 
@@ -470,7 +418,6 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnRangeData),
   DeclareCallBackEntry(OnRadialData),
   DeclareCallBackEntry(OnOKClicked),
-  DeclareCallBackEntry(OnMoveClicked),
   DeclareCallBackEntry(OnIsLockedClicked),
   DeclareCallBackEntry(NULL)
 };
@@ -540,16 +487,11 @@ dlgTargetShowModal()
   if (!wf)
     return;
 
-  oldEnablePan = XCSoarInterface::SetSettingsMap().EnablePan;
-  oldPanLocation = XCSoarInterface::SetSettingsMap().PanLocation;
+  bool oldEnablePan = XCSoarInterface::SetSettingsMap().EnablePan;
+  GeoPoint oldPanLocation = XCSoarInterface::SetSettingsMap().PanLocation;
 
   InitTargetPoints();
 
-  TargetMoveMode = false;
-
-  btnMove = (WndButton*)wf->FindByName(_T("btnMove"));
-  if (btnMove)
-    btnMove->set_visible(false); // todo enable move buttons
   btnIsLocked = (WndButton*)wf->FindByName(_T("btnIsLocked"));
 
   assert(btnIsLocked != NULL);
@@ -558,10 +500,21 @@ dlgTargetShowModal()
 
   wf->SetTimerNotify(OnTimerNotify);
 
+  RECT dialog_rect = wf->get_position();
+  RECT map_rect = XCSoarInterface::main_window.get_client_rect();
+  if (Layout::landscape)
+    map_rect.right = dialog_rect.left;
+  else
+    map_rect.top = dialog_rect.bottom;
+  XCSoarInterface::main_window.SetCustomView(map_rect);
+
   wf->ShowModal(&XCSoarInterface::main_window.map); // enable map
+
   XCSoarInterface::SetSettingsMap().EnablePan = oldEnablePan;
   XCSoarInterface::SetSettingsMap().PanLocation = oldPanLocation;
   XCSoarInterface::SetSettingsMap().TargetPan = false;
+
+  XCSoarInterface::main_window.LeaveCustomView();
 
   delete wf;
   wf = NULL;
