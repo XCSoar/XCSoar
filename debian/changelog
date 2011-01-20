@@ -1,6 +1,7 @@
 xcsoar (6.0.2) unstable; urgency=low
 
   * new release
+  * enable OpenGL
 
  --
 
