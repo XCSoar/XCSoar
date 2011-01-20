@@ -50,10 +50,15 @@ private:
   RECT map_rect;
   bool FullScreen;
 
+  /**
+   * True enables the use of a custom map rect.  Used by dlgTarget.
+   */
+  bool CustomView;
+
 public:
   MainWindow(const StatusMessageList &status_messages)
     :vario(NULL), flarm(NULL), ta(NULL), popup(status_messages, *this),
-     FullScreen(false) {}
+     FullScreen(false), CustomView(false) {}
   virtual ~MainWindow();
 
   static bool find(const TCHAR *text) {
@@ -78,6 +83,9 @@ public:
   }
 
   void SetFullScreen(bool _full_screen);
+
+  void SetCustomView(RECT rc);
+  void LeaveCustomView();
 
 protected:
   bool on_activate();
