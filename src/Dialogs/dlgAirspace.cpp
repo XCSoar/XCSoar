@@ -56,11 +56,15 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 
   if (colormode) {
     canvas.white_pen();
+#ifdef ENABLE_SDL
+    canvas.select(Brush(Graphics::Colours[XCSoarInterface::SettingsMap().iAirspaceColour[i]]));
+#else
     canvas.set_text_color(Graphics::GetAirspaceColourByClass(i,
         XCSoarInterface::SettingsMap()));
     canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
     canvas.select(Graphics::GetAirspaceBrushByClass(i,
         XCSoarInterface::SettingsMap()));
+#endif
     canvas.rectangle(rc.left + x0, rc.top + Layout::FastScale(2),
         rc.right - Layout::FastScale(2), rc.bottom - Layout::FastScale(2));
   } else {
