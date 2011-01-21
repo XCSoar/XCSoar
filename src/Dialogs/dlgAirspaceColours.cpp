@@ -38,7 +38,6 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
   assert(i < NUMAIRSPACECOLORS);
 
-  canvas.white_brush();
   canvas.black_pen();
   canvas.set_background_color(Color::WHITE);
   canvas.select(Graphics::GetAirspaceBrush(1)); // this is the solid brush
