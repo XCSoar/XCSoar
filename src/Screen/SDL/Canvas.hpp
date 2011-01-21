@@ -49,6 +49,8 @@ Copyright_License {
 #undef OPAQUE
 #undef TRANSPARENT
 
+class Bitmap;
+
 /**
  * Base drawable canvas class
  * 

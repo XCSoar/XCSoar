@@ -44,6 +44,7 @@ Copyright_License {
 #include <SDL/SDL_opengl.h>
 #endif
 
+class Bitmap;
 class GLTexture;
 
 /**

@@ -36,16 +36,16 @@ Brush::set(const Color c)
   #endif
 }
 
+#ifndef ENABLE_SDL
+
 void
 Brush::set(const Bitmap &bitmap)
 {
-  #ifdef ENABLE_SDL
-  // TODO
-  #else
   reset();
   brush = ::CreatePatternBrush(bitmap.native());
-  #endif
 }
+
+#endif
 
 void
 Brush::reset()
