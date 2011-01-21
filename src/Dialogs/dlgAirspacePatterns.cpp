@@ -28,6 +28,9 @@ Copyright_License {
 
 #include <assert.h>
 
+/* brush patterns are only available on GDI */
+#ifndef ENABLE_SDL
+
 static WndForm *wf = NULL;
 
 static void
@@ -99,3 +102,5 @@ int dlgAirspacePatternsShowModal(void){
 
   return result;
 }
+
+#endif /* !OPENGL */

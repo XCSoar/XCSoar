@@ -98,6 +98,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
       Graphics::InitAirspacePens(XCSoarInterface::SettingsMap());
     }
 
+#ifndef ENABLE_SDL
     int p = dlgAirspacePatternsShowModal();
     if (p >= 0) {
       XCSoarInterface::SetSettingsMap().iAirspaceBrush[ItemIndex] = p;
@@ -105,6 +106,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
           XCSoarInterface::SettingsMap().iAirspaceBrush[ItemIndex]);
       changed = true;
     }
+#endif
   } else {
     SETTINGS_AIRSPACE &settings_airspace =
       XCSoarInterface::SetSettingsComputer();
