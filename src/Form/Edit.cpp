@@ -220,11 +220,18 @@ WndProperty::UpdateLayout()
 
   const SIZE size = get_size();
 
-  mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1)
-    - mBitmapSize;
-  mEditSize.y = size.cy - 2 * (DEFAULTBORDERPENWIDTH + 1);
-  mEditPos.x = mCaptionWidth;
-  mEditPos.y = (DEFAULTBORDERPENWIDTH + 1);
+  if (mCaptionWidth != 0) {
+    mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1)
+        - mBitmapSize;
+    mEditSize.y = size.cy - 2 * (DEFAULTBORDERPENWIDTH + 1);
+    mEditPos.x = mCaptionWidth;
+    mEditPos.y = (DEFAULTBORDERPENWIDTH + 1);
+  } else {
+    mEditSize.x = size.cx - 2 * (DEFAULTBORDERPENWIDTH + 1 + mBitmapSize);
+    mEditSize.y = size.cy / 2;
+    mEditPos.x = mBitmapSize + (DEFAULTBORDERPENWIDTH + 2);
+    mEditPos.y = size.cy / 2 - 2 * (DEFAULTBORDERPENWIDTH + 1);
+  }
 
   mHitRectDown.left = mEditPos.x - mBitmapSize;
   mHitRectDown.top = mEditPos.y + (mEditSize.y) / 2 - (mBitmapSize / 2);
