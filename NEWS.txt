@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.0.3 - not yet released
+
 Version 6.0.2 - 2011/01/20
 * devices
   - more robust NMEA checksum parser
