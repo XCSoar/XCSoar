@@ -86,7 +86,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   glDisable(GL_BLEND);
   glDisable(GL_STENCIL_TEST);
-#else
+#elif !defined(ENABLE_SDL)
   Canvas &buffer = buffer_canvas;
 
   buffer.set_background_color(Color::WHITE);
