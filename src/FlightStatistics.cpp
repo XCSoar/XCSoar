@@ -572,8 +572,16 @@ public:
     else
       m_canvas.select(Graphics::hAirspacePens[type]);
 
+#ifdef ENABLE_SDL
+    Color color = Graphics::Colours[m_settings.iAirspaceColour[as.get_type()]];
+#ifdef ENABLE_OPENGL
+    color = color.with_alpha(48);
+#endif
+    m_canvas.select(Brush(color));
+#else
     m_canvas.select(Graphics::GetAirspaceBrushByClass(type, m_settings));
     m_canvas.set_text_color(Graphics::GetAirspaceColourByClass(type, m_settings));
+#endif
 
     RECT rcd;
     rcd.top = m_chart.screenY(as.get_top_altitude(m_state));
