@@ -40,13 +40,19 @@ Copyright_License {
 #include "LogFile.hpp"
 
 Pen Graphics::hAirspacePens[AIRSPACECLASSCOUNT];
+
+#ifndef ENABLE_SDL
 Brush Graphics::hAirspaceBrushes[NUMAIRSPACEBRUSHES];
 Bitmap Graphics::hAirspaceBitmap[NUMAIRSPACEBRUSHES];
+#endif
 
 Pen Graphics::hpSnailVario[NUMSNAILCOLORS];
 
+#ifndef ENABLE_SDL
 Bitmap Graphics::hAboveTerrainBitmap;
 Brush Graphics::hAboveTerrainBrush;
+#endif
+
 MaskedIcon Graphics::hAirspaceInterceptBitmap;
 MaskedIcon Graphics::hTerrainWarning;
 MaskedIcon Graphics::hFLARMTraffic;
@@ -100,11 +106,13 @@ Graphics::GetAirspaceColour(const int i)
   return Colours[i];
 }
 
+#ifndef ENABLE_SDL
 const Brush &
 Graphics::GetAirspaceBrush(const int i)
 {
   return hAirspaceBrushes[i];
 }
+#endif
 
 const Color
 Graphics::GetAirspaceColourByClass(const int i, const SETTINGS_MAP &settings)
@@ -112,12 +120,13 @@ Graphics::GetAirspaceColourByClass(const int i, const SETTINGS_MAP &settings)
   return GetAirspaceColour(settings.iAirspaceColour[i]);
 }
 
+#ifndef ENABLE_SDL
 const Brush &
 Graphics::GetAirspaceBrushByClass(const int i, const SETTINGS_MAP &settings)
 {
   return GetAirspaceBrush(settings.iAirspaceBrush[i]);
 }
-
+#endif
 
 const Color Graphics::inv_redColor = Color(0xff, 0x70, 0x70);
 const Color Graphics::inv_blueColor = Color(0x90, 0x90, 0xff);
@@ -173,6 +182,7 @@ Graphics::Initialise()
   hAbort.load_big(IDB_ABORT, IDB_ABORT_HD, false);
 
   // airspace brushes and colors
+#ifndef ENABLE_SDL
   hAirspaceBitmap[0].load(IDB_AIRSPACE0);
   hAirspaceBitmap[1].load(IDB_AIRSPACE1);
   hAirspaceBitmap[2].load(IDB_AIRSPACE2);
@@ -181,14 +191,18 @@ Graphics::Initialise()
   hAirspaceBitmap[5].load(IDB_AIRSPACE5);
   hAirspaceBitmap[6].load(IDB_AIRSPACE6);
   hAirspaceBitmap[7].load(IDB_AIRSPACE7);
+#endif
+
   hAirspaceInterceptBitmap.load_big(IDB_AIRSPACEI, IDB_AIRSPACEI_HD);
 
+#ifndef ENABLE_SDL
   hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
 
   for (int i = 0; i < NUMAIRSPACEBRUSHES; i++)
     hAirspaceBrushes[i].set(hAirspaceBitmap[i]);
 
   hAboveTerrainBrush.set(hAboveTerrainBitmap);
+#endif
 
   hbWind.set(Color::GRAY);
 
