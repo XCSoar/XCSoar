@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-22 14:28+0100\n"
-"PO-Revision-Date: 2011-01-19 10:22+0100\n"
-"Last-Translator: Gabor LIPTAK <liptakgabor@freemail.hu>\n"
+"POT-Creation-Date: 2011-01-22 17:57+0100\n"
+"PO-Revision-Date: 2011-01-22 16:11+0000\n"
+"Last-Translator: Gabor LIPTAK <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-01-22 16:56+0000\n"
+"X-Generator: Launchpad (build 12214)\n"
 
 #: src/Airspace/AirspaceGlue.cpp:40
 msgid "Loading Airspace File..."
@@ -22,7 +24,7 @@ msgstr "Légtér (Airspace) file betöltése..."
 
 #: src/Airspace/AirspaceParser.cpp:143
 msgid "Parse Error at Line"
-msgstr "Hiba a következõ sorban: "
+msgstr "Hiba a következõ sorban:"
 
 #: src/Airspace/AirspaceParser.cpp:144
 msgid "Line skipped."
@@ -547,9 +549,9 @@ msgid "WP AltR"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:178
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Additional altitude required to reach the next turn point."
-msgstr "Szükséges magasság a követkeő fordulóponthoz."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
@@ -599,9 +601,9 @@ msgid "Fin AltR"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:205
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr "Szükséges magasság a feladat befejezéséhez."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:212
 #, no-c-format
@@ -1572,9 +1574,9 @@ msgid "CPU load consumed by XCSoar averaged over 5 seconds."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:747
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next Altitude Arrival"
-msgstr "Következő szükséges magasság"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:748
 #, no-c-format
@@ -2993,9 +2995,8 @@ msgid "Start point"
 msgstr "Start pont"
 
 #: src/Dialogs/dlgTaskPoint.cpp:261
-#, fuzzy
 msgid "Finish point"
-msgstr "Végső fordulópont"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:264
 msgid "Assigned area point"
@@ -3203,19 +3204,16 @@ msgid "Enter area to finish"
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:354
-#, fuzzy
 msgid "Start sector"
-msgstr "Logger indul"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:356
-#, fuzzy
 msgid "Start line"
-msgstr "Körözés kezdőpontja"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:358
-#, fuzzy
 msgid "Start cylinder"
-msgstr "Körözés kezdőpontja"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:360
 msgid "Turnpoint FAI sector"
@@ -3234,9 +3232,8 @@ msgid "BGA Enhanced Option Fixed Course sector"
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:368
-#, fuzzy
 msgid "Turnpoint cylinder"
-msgstr "Körözés kezdőpontja"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:370
 msgid "Area cylinder"
@@ -3247,14 +3244,12 @@ msgid "Area sector"
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:374
-#, fuzzy
 msgid "Finish sector"
-msgstr "Végső fordulópont"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:376
-#, fuzzy
 msgid "Finish line"
-msgstr "Végső fordulópont"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:378
 msgid "Finish cylinder"
@@ -3277,9 +3272,8 @@ msgid "No valid finish.\n"
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:433
-#, fuzzy
 msgid "Task not closed.\n"
-msgstr "Feladat beállítva"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:436
 msgid "All turnpoints not the same type.\n"
@@ -3290,14 +3284,12 @@ msgid "Incorrect number of turnpoints.\n"
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:442
-#, fuzzy
 msgid "Too many turnpoints.\n"
-msgstr "Kezdő fordulópont"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:445
-#, fuzzy
 msgid "Not enough turnpoints.\n"
-msgstr "Következő fordulópont"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:448
 msgid "Turnpoints not unique.\n"
@@ -4208,9 +4200,8 @@ msgid "New Waypoint"
 msgstr "Új Fordulópont"
 
 #: Data/Dialogs/dlgBasicSettings.xml:3
-#, fuzzy
 msgid "Flight Setup"
-msgstr "Visszajátszás"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:84 Data/Dialogs/dlgVario_L.xml:85
 msgid "Cruise averager scale"
@@ -4883,7 +4874,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:6 Data/Dialogs/dlgConfigFonts_L.xml:6
 msgid "Customize Fonts"
-msgstr "Testreszabás "
+msgstr "Testreszabás"
 
 #: Data/Dialogs/dlgVoice.xml:3
 msgid "Vega Voice Extensions"
@@ -5045,9 +5036,8 @@ msgid "ETE"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:20 Data/Dialogs/dlgConfiguration_L.xml:20
-#, fuzzy
 msgid "Waypoints"
-msgstr "Fordulópontok betöltése..."
+msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:11
 msgid "Flap positive"
@@ -5515,9 +5505,8 @@ msgid "Enable warnings for final glide through terrain."
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:25 Data/Dialogs/dlgConfiguration_L.xml:25
-#, fuzzy
 msgid "More Waypoints"
-msgstr "Fordulópontok betöltése..."
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:351
 #: Data/Dialogs/dlgConfiguration_L.xml:350
@@ -5616,9 +5605,8 @@ msgid "Airspeed"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:30 Data/Dialogs/dlgConfiguration_L.xml:30
-#, fuzzy
 msgid "Airspaces"
-msgstr "Légtér"
+msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:28 Data/Dialogs/dlgConfigFonts_L.xml:28
 msgid "Gauges"
@@ -6139,7 +6127,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:21 Data/Dialogs/dlgStatusSystem.xml:5
 msgid "Satellites in view"
-msgstr "Műholdak "
+msgstr "Műholdak"
 
 #: Data/Dialogs/dlgTeamCode.xml:20 Data/Dialogs/dlgTeamCode_L.xml:20
 msgid "Flarm Lock"
@@ -6301,9 +6289,8 @@ msgid "A. Zoom"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:34 Data/Dialogs/dlgConfiguration_L.xml:34
-#, fuzzy
 msgid "More Airspaces"
-msgstr "Légtér"
+msgstr ""
 
 #: Data/Dialogs/dlgFlarmTraffic.xml:7 Data/Dialogs/dlgFlarmTraffic_L.xml:16
 msgid "Avg/Alt"
@@ -6431,11 +6418,10 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:812
-#, fuzzy
 msgid ""
 "Nearest\n"
 "Airspace"
-msgstr "Légtér"
+msgstr ""
 
 #: Data/Input/default.xci:607
 msgid ""
@@ -6576,11 +6562,10 @@ msgid "Nav"
 msgstr ""
 
 #: Data/Input/default.xci:648
-#, fuzzy
 msgid ""
 "Settings\n"
 "Airspace"
-msgstr "Légtér"
+msgstr ""
 
 #: Data/Input/default.xci:763
 msgid "Store"
@@ -6611,7 +6596,3 @@ msgstr ""
 #: Data/Input/default.xci:148
 msgid "Landing"
 msgstr "Leszállás"
-
-#, fuzzy
-#~ msgid "Terrain "
-#~ msgstr "Domborzat magasság"
