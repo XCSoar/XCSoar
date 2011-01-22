@@ -3258,7 +3258,6 @@ particular, when out-landing in fields, the pilot should look for
 indicators on the ground to confirm wind strength and direction.
 
 \section{Variometer}
-%\subsection{Variometer}
 
 (Landscape display mode only)
 
@@ -3295,16 +3294,8 @@ adjusting the MacCready setting on one device should be kept in sync
 with the other, by the software and to not require additional input from
 the pilot.
 
-Currently XCSoar supports the triadis Engineering Vega intelligent
-variometer, the Cambridge 302 DDV, Borgelt B50/B500, LX Navigation
-LX1600 variometers, Zander, ILEC SN10, Tasman Instruments variometer, Flymaster
-F1, Flytec, amd Leonardo. 
-Note that the level of support for each device varies, and not all
-manufacturers release their protocols to allow the XCSoar developers
-to provide full support.  Barometric altitude is also read from
-certain GPS units and loggers, including the Volkslogger and
-Posigraph.
-\todonum{check for completness}
+A list of supported variometers is maintained in
+Section~\ref{sec:supported-varios}.
 
 For Vega, a small icon displaying a circling glider is displayed when
 the variometer is in climb audio mode.
@@ -4329,7 +4320,8 @@ Manual} for more details on switch inputs and how they may be used.
 A dialog displaying switch states for the Vega variometer
 is available from the menu:
 \begin{quote}
-\bmenu{Config}\blink\bmenu{Vario}\blink\bmenu{Switches}
+\bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Vario}\blink\bmenu{Airframe
+Switches}
 \end{quote}
 
 This dialog is updated in real-time, allowing the pilot
@@ -4368,12 +4360,18 @@ Applications of this technology include:
 \item Team flying, and to assist lead and follow training
 \end{itemize}
 
-\section{Supported variometers}
+\section{Supported variometers}\label{sec:supported-varios}
 
-XCSoar supports inputs from Triadis Engineering's Vega variometer and
-TR-DVS digital voice system, Cambridge Aero Instruments 302 DDV and
-GPSNAV, Borgelt B50/B500, LX Navigation LX1600 variometers, Zander
-variometers, and Tasman Instruments variometer.
+Currently XCSoar supports inputs from triadis Engineering Vega intelligent
+variometer, TR-DVS digital voice system, the Cambridge Aero Instruments 302 (and
+302A) DDV and GPSNAV, Borgelt B50/B500, LX Navigation LX1600 variometers,
+Zander variometers, ILEC SN10 variometer, Tasman Instruments variometer,
+Flymaster F1, Flytec, amd Leonardo. 
+
+Note that the level of support for each device varies, and not all manufacturers
+release their protocols to allow the XCSoar developers to provide full support. 
+Barometric altitude is also read from certain GPS units and loggers, including
+the Volkslogger and Posigraph.
 
 \section{Other avionics devices}
 
@@ -4446,7 +4444,7 @@ connected devices are performing.
 
 This is accessed via the menu under 
 \begin{quote}
-\bmenu{Info}\blink\bmenu{Status}
+\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Status}
 \end{quote}
 and then selecting the page `System'.
 
