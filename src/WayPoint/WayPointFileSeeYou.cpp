@@ -34,6 +34,7 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
 {
   TCHAR ctemp[255];
   const TCHAR *params[20];
+  static const unsigned int max_params=sizeof(params)/sizeof(params[0]);
   size_t n_params;
 
   static unsigned iName = 0, iCode = 1, iCountry = 2;
@@ -59,7 +60,7 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   /// (not ignored) line, not just line 0
   if (linenum == 0) {
     // Get fields
-    n_params = extractParameters(line, ctemp, params, 20, _T('"'));
+    n_params = extractParameters(line, ctemp, params, max_params, true, _T('"'));
 
     // Iterate through fields and save the field order
     for (unsigned i = 0; i < n_params; i++) {
@@ -100,7 +101,7 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
     return true;
 
   // Get fields
-  n_params = extractParameters(line, ctemp, params, 20, _T('"'));
+  n_params = extractParameters(line, ctemp, params, max_params, true, _T('"'));
 
   // Check if the basic fields are provided
   if (iName >= n_params)
