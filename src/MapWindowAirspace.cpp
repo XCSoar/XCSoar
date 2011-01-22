@@ -156,7 +156,10 @@ private:
     Color color = Graphics::Colours[m_settings_map.iAirspaceColour[airspace.get_type()]];
     m_buffer.select(Brush(color.with_alpha(48)));
     m_buffer.null_pen();
-#else /* !OPENGL */
+#elif defined(ENABLE_SDL)
+    Color color = Graphics::Colours[m_settings_map.iAirspaceColour[airspace.get_type()]];
+    m_buffer.select(Brush(color));
+#else /* !SDL */
 
     // this color is used as the black bit
     m_buffer.set_text_color(light_color(Graphics::Colours[m_settings_map.

@@ -19,6 +19,7 @@ my %languages = (
     CZE => 'cz',
     ESP => 'es',
     HRV => 'hr',
+    HUN => 'hu',
     ITA => 'it',
     NED => 'nl',
     POL => 'pl',

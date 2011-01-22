@@ -51,18 +51,30 @@ namespace Graphics {
 
   // airspace brushes/colours
   const Color GetAirspaceColour(const int i);
+
+#ifndef ENABLE_SDL
   const Brush &GetAirspaceBrush(const int i);
+#endif
+
   const Color GetAirspaceColourByClass(const int i, const SETTINGS_MAP &settings);
+
+#ifndef ENABLE_SDL
   const Brush &GetAirspaceBrushByClass(const int i, const SETTINGS_MAP &settings);
+#endif
 
   extern Pen hAirspacePens[AIRSPACECLASSCOUNT];
+#ifndef ENABLE_SDL
   extern Brush hAirspaceBrushes[NUMAIRSPACEBRUSHES];
   extern Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
+#endif
 
   extern Pen hpSnailVario[NUMSNAILCOLORS];
 
+#ifndef ENABLE_SDL
   extern Bitmap hAboveTerrainBitmap;
   extern Brush hAboveTerrainBrush;
+#endif
+
   extern MaskedIcon hAirspaceInterceptBitmap;
   extern MaskedIcon hTerrainWarning;
   extern MaskedIcon hFLARMTraffic;

@@ -163,6 +163,9 @@ Waypoints::lookup_name(const TCHAR *name) const
 const Waypoint*
 Waypoints::lookup_location(const GeoPoint &loc, const fixed range) const
 {
+  if (empty())
+    return NULL;
+
   WaypointEnvelope bb_target(loc, task_projection);
   std::pair<WaypointTree::const_iterator, double> found =
       waypoint_tree.find_nearest(bb_target);
@@ -270,6 +273,9 @@ void
 Waypoints::visit_within_range(const GeoPoint &loc, const fixed range,
     WaypointVisitor& visitor) const
 {
+  if (empty())
+    return;
+
   WaypointEnvelope bb_target(loc, task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
 
@@ -314,6 +320,9 @@ void
 Waypoints::visit_within_radius(const GeoPoint &loc, const fixed range,
     WaypointVisitor& visitor) const
 {
+  if (empty())
+    return;
+
   const unsigned mrange = task_projection.project_range(loc, range);
   WaypointEnvelope bb_target(loc, task_projection);
 

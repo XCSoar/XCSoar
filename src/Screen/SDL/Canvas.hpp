@@ -44,10 +44,14 @@ Copyright_License {
 
 #include <SDL_gfxPrimitives.h>
 
+#ifdef WIN32
 /* those are WIN32 macros - undefine, or Canvas::background_mode will
    break */
 #undef OPAQUE
 #undef TRANSPARENT
+#endif
+
+class Bitmap;
 
 /**
  * Base drawable canvas class

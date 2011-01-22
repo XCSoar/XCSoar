@@ -27,7 +27,9 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Screen/Color.hpp"
 
+#ifndef ENABLE_SDL
 class Bitmap;
+#endif
 
 /**
  * A Brush is used for drawing filled circles, rectangles and so on
@@ -70,11 +72,15 @@ public:
    */
   void set(const Color c);
 
+#ifndef ENABLE_SDL
+
   /**
    * Creates a bitmap-based Brush
    * @param bitmap The bitmap the new Brush will be based on
    */
   void set(const Bitmap &bitmap);
+
+#endif
 
   /**
    * Resets the Brush to NULL

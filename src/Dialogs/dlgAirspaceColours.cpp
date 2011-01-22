@@ -38,11 +38,15 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
   assert(i < NUMAIRSPACECOLORS);
 
-  canvas.white_brush();
   canvas.black_pen();
+#ifdef ENABLE_SDL
+  Color color = Graphics::GetAirspaceColour(i);
+  canvas.select(Brush(color));
+#else
   canvas.set_background_color(Color::WHITE);
   canvas.select(Graphics::GetAirspaceBrush(1)); // this is the solid brush
   canvas.set_text_color(Graphics::GetAirspaceColour(i));
+#endif
   canvas.rectangle(rc.left + Layout::FastScale(2),
                    rc.top + Layout::FastScale(2),
                    rc.right - Layout::FastScale(2),

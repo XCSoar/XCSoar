@@ -152,9 +152,18 @@ public:
       return;
 
     // Select pens and brushes
+#ifdef ENABLE_SDL
+    Color color =
+      Graphics::GetAirspaceColour(settings_map.iAirspaceColour[type]);
+#ifdef ENABLE_OPENGL
+    color = color.with_alpha(48);
+#endif
+    Brush brush(color);
+#else
     const Brush &brush = Graphics::GetAirspaceBrushByClass(type, settings_map);
     canvas.set_text_color(light_color(
         Graphics::GetAirspaceColourByClass(type, settings_map)));
+#endif
 
     RECT rcd;
     // Calculate top and bottom coordinate

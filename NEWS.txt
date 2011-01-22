@@ -22,7 +22,11 @@ Version 6.1 - not yet released
     - along task direction
     - along home direction
 
-Version 6.0.2 - not yet released
+Version 6.0.3 - not yet released
+* user interface
+  - Language: translation updates
+
+Version 6.0.2 - 2011/01/20
 * devices
   - more robust NMEA checksum parser
   - CAI302: restart I/O thread after declaration failure

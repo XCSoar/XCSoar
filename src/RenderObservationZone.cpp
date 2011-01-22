@@ -58,11 +58,11 @@ RenderObservationZone::draw_style(Canvas &canvas,
 
     Color color = Graphics::Colours[settings_map.iAirspaceColour[AATASK]];
     canvas.select(Brush(color.with_alpha(64)));
-#else /* !OPENGL */
-
-#ifndef ENABLE_SDL
+#elif defined(ENABLE_SDL)
+    Color color = Graphics::Colours[settings_map.iAirspaceColour[AATASK]];
+    canvas.select(Brush(color));
+#else /* !SDL */
     canvas.mix_mask();
-#endif
 
     // this color is used as the black bit
     canvas.set_text_color(Graphics::Colours[settings_map.
@@ -70,7 +70,7 @@ RenderObservationZone::draw_style(Canvas &canvas,
     // get brush, can be solid or a 1bpp bitmap
     canvas.select(Graphics::hAirspaceBrushes[settings_map.
                                             iAirspaceBrush[AATASK]]);
-#endif /* !OPENGL */
+#endif /* !SDL */
 
     canvas.null_pen();
     

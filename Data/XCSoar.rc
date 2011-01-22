@@ -15,13 +15,19 @@ IDI_XCSOAR              ICON    DISCARDABLE     "bitmaps/xcsoarswift.ico"
 
 IDB_ABORT               BITMAP  DISCARDABLE     "../output/data/icons/mode_abort.bmp"
 IDB_ABORT_HD            BITMAP  DISCARDABLE     "../output/data/icons/mode_abort_160.bmp"
+
+#ifndef ENABLE_SDL
 IDB_ABOVETERRAIN        BITMAP  DISCARDABLE     "bitmaps/aboveterrain.bmp"
+#endif
+
 IDB_AIRPORT_REACHABLE   BITMAP  DISCARDABLE     "../output/data/icons/alt_reachable_airport.bmp"
 IDB_AIRPORT_REACHABLE_HD BITMAP DISCARDABLE     "../output/data/icons/alt_reachable_airport_160.bmp"
 IDB_AIRPORT_UNREACHABLE BITMAP  DISCARDABLE     "../output/data/icons/alt_landable_airport.bmp"
 IDB_AIRPORT_UNREACHABLE_HD BITMAP DISCARDABLE   "../output/data/icons/alt_landable_airport_160.bmp"
 IDB_AIRPORT_UNREACHABLE2 BITMAP DISCARDABLE     "../output/data/icons/alt2_landable_airport.bmp"
 IDB_AIRPORT_UNREACHABLE2_HD BITMAP DISCARDABLE  "../output/data/icons/alt2_landable_airport_160.bmp"
+
+#ifndef ENABLE_SDL
 IDB_AIRSPACE0           BITMAP  DISCARDABLE     "bitmaps/airspace0.bmp"
 IDB_AIRSPACE1           BITMAP  DISCARDABLE     "bitmaps/airspace1.bmp"
 IDB_AIRSPACE2           BITMAP  DISCARDABLE     "bitmaps/airspace2.bmp"
@@ -30,6 +36,8 @@ IDB_AIRSPACE4           BITMAP  DISCARDABLE     "bitmaps/airspace4.bmp"
 IDB_AIRSPACE5           BITMAP  DISCARDABLE     "bitmaps/airspace5.bmp"
 IDB_AIRSPACE6           BITMAP  DISCARDABLE     "bitmaps/airspace6.bmp"
 IDB_AIRSPACE7           BITMAP  DISCARDABLE     "bitmaps/airspace7.bmp"
+#endif
+
 IDB_AIRSPACEI           BITMAP  DISCARDABLE     "../output/data/icons/airspace_intercept.bmp"
 IDB_AIRSPACEI_HD        BITMAP  DISCARDABLE     "../output/data/icons/airspace_intercept_160.bmp"
 IDB_CRUISE              BITMAP  DISCARDABLE     "../output/data/icons/mode_cruise.bmp"
