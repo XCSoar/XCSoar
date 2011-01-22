@@ -31,8 +31,8 @@ SectorZone::get_boundary_parametric(fixed t) const
   if (angleInSector(angle))
     return GeoVector(Radius, angle).end_point(get_location());
 
-  const fixed sweep = ((Angle::radians(fixed_two_pi) -
-      (EndRadial - StartRadial).as_bearing()) * fixed_half).value_native();
+  const fixed sweep = (Angle::radians(fixed_two_pi) -
+                       (EndRadial - StartRadial).as_bearing()).half().value_native();
 
   const fixed d_start =
       (StartRadial - angle).as_bearing().value_native() / sweep;

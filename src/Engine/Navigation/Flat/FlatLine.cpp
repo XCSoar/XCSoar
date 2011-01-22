@@ -26,7 +26,7 @@
 FlatPoint
 FlatLine::ave() const
 {
-  return (p1 + p2) * fixed_half;
+  return (p1 + p2).half();
 }
 
 fixed

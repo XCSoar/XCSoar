@@ -202,6 +202,11 @@ struct FlatPoint
     res.y -= p2.y;
     return res;
   }
+
+  gcc_pure
+  FlatPoint half() const {
+    return FlatPoint(::half(x), ::half(y));
+  }
 };
 
 #endif

@@ -325,7 +325,7 @@ WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
   // attempt to fit cycloid
 
   fixed phase;
-  fixed mag = fixed_half * (windsamples[jmax].mag - windsamples[jmin].mag);
+  fixed mag = half(windsamples[jmax].mag - windsamples[jmin].mag);
   fixed wx, wy;
   fixed cmag;
   fixed rthis = fixed_zero;

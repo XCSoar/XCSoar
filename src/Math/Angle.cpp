@@ -122,14 +122,14 @@ Angle::HalfAngle(const Angle &End) const
     return Reciprocal();
   } else if (m_value > End.m_value) {
     if ((m_value - End.m_value) < fixed_half_circle)
-      return Angle((m_value + End.m_value) * fixed_half).Reciprocal();
+      return (*this + End).half().Reciprocal();
     else
-      return Angle((m_value + End.m_value) * fixed_half);
+      return (*this + End).half();
   } else {
     if ((End.m_value - m_value) < fixed_half_circle)
-      return Angle((m_value + End.m_value) * fixed_half).Reciprocal();
+      return (*this + End).half().Reciprocal();
     else
-      return Angle((m_value + End.m_value) * fixed_half);
+      return (*this + End).half();
   }
 }
 

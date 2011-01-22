@@ -45,7 +45,7 @@ public:
  * @return Initialised object
  */
   LineSectorZone(const GeoPoint loc, const fixed length=fixed(1000.0)):
-    SymmetricSectorZone(LINE, loc, length * fixed_half,
+    SymmetricSectorZone(LINE, loc, half(length),
                         Angle::radians(fixed_pi))
   {
     updateSector();
@@ -88,7 +88,7 @@ public:
  * @param new_length Length (m) of line
  */
   void setLength(const fixed new_length) {
-    setRadius(new_length*fixed_half);
+    setRadius(half(new_length));
   }
   
 /** 

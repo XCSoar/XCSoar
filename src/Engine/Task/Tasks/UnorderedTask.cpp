@@ -196,6 +196,6 @@ UnorderedTask::get_task_radius(const GeoPoint& fallback_location) const
   if (!tp) {
     return fixed_zero;
   } else {
-    return tp->get_location().distance(fallback_location)*fixed_half;
+    return half(tp->get_location().distance(fallback_location));
   }
 }

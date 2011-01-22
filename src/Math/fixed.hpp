@@ -61,6 +61,13 @@ void sin_cos(const double&theta, double*s, double*c);
 #define sigmoid(x) (2.0 / (1.0 + exp(-x)) - 1.0)
 
 gcc_const
+static inline fixed
+half(fixed a)
+{
+  return a * 0.5;
+}
+
+gcc_const
 inline fixed rsqrt(fixed a) {
   return 1.0/sqrt(a);
 }
@@ -281,6 +288,11 @@ public:
 
   gcc_pure
   bool negative() const;
+
+  gcc_pure
+  fixed half() const {
+    return fixed(internal(), m_nVal >> 1);
+  }
 
   gcc_pure
   fixed trunc() const {
@@ -941,6 +953,13 @@ inline bool positive(const fixed&f) {
 gcc_pure
 inline bool negative(const fixed&f) {
   return f.negative();
+}
+
+gcc_const
+static inline fixed
+half(fixed a)
+{
+  return a.half();
 }
 
 #endif

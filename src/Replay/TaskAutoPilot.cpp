@@ -134,7 +134,9 @@ TaskAutoPilot::target(const TaskAccessor& task) const
 Angle
 TaskAutoPilot::heading_deviation()
 {
-  fixed noise_mag = (acstate==Climb)? parms.bearing_noise*fixed_half: parms.bearing_noise;
+  fixed noise_mag = acstate==Climb
+    ? half(parms.bearing_noise)
+    : parms.bearing_noise;
   fixed r = (fixed_two * rand() / RAND_MAX)-fixed_one;
   fixed deviation = fixed(heading_filt.update(noise_mag*r));
   return Angle::degrees(deviation).as_delta();

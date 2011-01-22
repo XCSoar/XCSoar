@@ -43,7 +43,7 @@ GeoVector::mid_point(const GeoPoint &source) const
   if (!positive(Distance)) {
     return source;
   } else {
-    return ::FindLatitudeLongitude(source, Bearing, Distance * fixed_half);
+    return ::FindLatitudeLongitude(source, Bearing, half(Distance));
   }
 }
 

@@ -174,6 +174,15 @@ public:
   Angle as_bearing() const;
 
   /**
+   * Returns half of this angle.  This is only useful (and valid) when
+   * the angle has been normalized with as_delta().
+   */
+  gcc_pure
+  Angle half() const {
+    return Angle(::half(m_value));
+  }
+
+  /**
    * Rotate angle by 180 degrees and limit to 0 - 360 degrees
    * @return Output angle (0 - 360 degrees)
    */

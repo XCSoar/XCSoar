@@ -118,7 +118,7 @@ DistanceBearingS(GeoPoint loc1, GeoPoint loc2, Angle *Distance, Angle *Bearing)
   const fixed dlon = (loc2.Longitude - loc1.Longitude).value_radians();
 
   if (Distance) {
-    const fixed s1 = ((loc2.Latitude - loc1.Latitude) * fixed_half).sin()
+    const fixed s1 = ((loc2.Latitude - loc1.Latitude).half()).sin()
         * fixed_expand_x;
     const fixed s2 = sin(dlon / 2) * fixed_expand_x;
     const fixed a = max(fixed_zero, 
@@ -233,16 +233,16 @@ DoubleDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3)
   const fixed dloc2Longitude1 = (loc2.Longitude - loc1.Longitude).value_radians();
   const fixed dloc3Longitude2 = (loc3.Longitude - loc2.Longitude).value_radians();
 
-  const fixed s21 = ((loc2.Latitude - loc1.Latitude) * fixed_half).sin()
+  const fixed s21 = ((loc2.Latitude - loc1.Latitude).half()).sin()
       * fixed_expand_x;
 
-  const fixed sl21 = sin(dloc2Longitude1 * fixed_half)
+  const fixed sl21 = sin(half(dloc2Longitude1))
       * fixed_expand_x;
 
-  const fixed s32 = ((loc3.Latitude - loc2.Latitude) * fixed_half).sin()
+  const fixed s32 = ((loc3.Latitude - loc2.Latitude).half()).sin()
       * fixed_expand_x;
 
-  const fixed sl32 = sin(dloc3Longitude2 * fixed_half)
+  const fixed sl32 = sin(half(dloc3Longitude2))
       * fixed_expand_x;
 
   const fixed a12 = max(fixed_zero, min(fixed_expand_xsq, s21 * s21

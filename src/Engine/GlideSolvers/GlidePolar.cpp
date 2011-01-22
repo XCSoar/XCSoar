@@ -119,7 +119,7 @@ fixed
 GlidePolar::SinkRate(const fixed V, const fixed n) const
 {
   const fixed w0 = SinkRate(V);
-  const fixed vl = VbestLD / max(VbestLD * fixed_half, V);
+  const fixed vl = VbestLD / max(half(VbestLD), V);
   return max(fixed_zero,
              w0 + (V / (fixed_two * bestLD)) * (n * n - fixed_one) * vl * vl);
 }
@@ -394,7 +394,7 @@ GlidePolar::mc_risk(const fixed height_fraction, const fixed riskGamma) const
 fixed
 GlidePolar::get_Vtakeoff() const
 {
-  return fixed_half * get_Vmin();
+  return half(get_Vmin());
 }
 
 fixed

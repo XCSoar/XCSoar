@@ -43,8 +43,8 @@ void SymmetricSectorZone::set_legs(const GeoPoint *previous,
     biSector = Angle::native(fixed_zero);
   }
 
-  setStartRadial((biSector-SectorAngle*fixed_half).as_bearing());
-  setEndRadial((biSector+SectorAngle*fixed_half).as_bearing());
+  setStartRadial((biSector - SectorAngle.half()).as_bearing());
+  setEndRadial((biSector + SectorAngle.half()).as_bearing());
 }
 
 
