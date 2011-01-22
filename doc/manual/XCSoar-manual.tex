@@ -3517,6 +3517,9 @@ taking even a weak thermal.
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/shot-tlocator-cruise.png}
 \end{center}
 
+\section{Thermal assistant}
+\todonum[inline]{explaine the thermal assistant}
+
 \section{Convection forecast}\label{sec:convection-forecast}
 
 If the glider is equipped with an outside temperature and humidity
@@ -3756,10 +3759,9 @@ computer.
 Local special use airspace regions are drawn on the map as shaded
 areas with thick borders.  The colour and pattern of the areas are
 specific to different airspace categories and may be configured by the
-user.  Depending on the settings, the user may choose to display no
-airspace, only airspace above, only airspace within a particular
-height separation, or automatic display where XCSoar decides when it
-is important to display the regions.
+user.  Depending on the settings, the user may choose to display all
+airspaces, only airspaces below a certain altitude, only airspace within a
+particular height separation, or only airspace below the glider.
 
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/airspace.png}
@@ -3836,35 +3838,29 @@ Altair or the PDA.  When there are no more airspace regions at warning
 levels above 0, the dialog disappears automatically.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/airspacewarning_2.png}
+\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/airspacewarning_2.png}
 \end{center}
 
 \section{Airspace warning dialog}
 
 The airspace warning dialog contains a list of up to 4 individual
 warnings.  The list item backgrounds are coloured RED if the glider is
-inside, and YELLOW if outside.  If the warning is acknowledged, the
+inside, and YELLOW if near.  If the warning is acknowledged, the
 text is greyed out.
 
 Each list item occupies two rows, and includes the following details:
 
-\begin{maxipage}
-\begin{center}
 \begin{verbatim}
-<NAME>   <TOP,in user units> <TOP,in alt units> <Base info>
-
-<Inside> <Class> <distance if outside> ...  
-    <TOP,in user units> <BASE,in alt units> <Base info>
+<NAME>                <TOP>   <Inside>
+<distance if outside> <BASE>
 \end{verbatim} 
-\end{center}
-\end{maxipage}
 
 The values in the list are continuously updated. 
 
 An example follows:
 \begin{verbatim}
-Bern TMA      FL100 2950m
-< D H 1300m   1750m ????ft
+Bern TMA Class D     FL100     near
+dist 1300            1750m 
 \end{verbatim}
 
 This means that the aircraft is 1300m horizontally separated from the Class D airspace
@@ -3872,8 +3868,8 @@ This means that the aircraft is 1300m horizontally separated from the Class D ai
 
 Another example:
 \begin{verbatim}
-Bern CTRgld   SFC
-> C           1350m ????ft
+Bern CTRgld Class C 1350m	    inside
+                    SFC
 \end{verbatim}
 
 This means that the aircraft is inside the Class C airspace `Bern
@@ -3884,8 +3880,9 @@ the menu:
 
 \bmenu{Info}\blink\bmenu{Nearest Airspace}
 
-If well outside all airspace, this menu item just displays a simple
-status message indicating details on the nearest airspace.
+If there were airspace warnings and you are not well outside all airspace, this
+menu item redisplays the dialog with the list of airspace warnings.
+
 
 \section{Airspace warning acknowlegement}
 
@@ -3974,7 +3971,7 @@ details of the nearest airspace region.
 \bmenu{Info}\blink\bmenu{Nearest airspace}
 \end{quote}
 This returns at most a single airspace region.  The search is limited
-to 100 km range.
+to \todo{verify range} 100 km range.
 
 If the glider is outside the airspace, it also describes the distance
 and bearing to the nearest point on the airspace perimeter to the
@@ -3988,10 +3985,11 @@ or disabled for each class of airspace.
 
 This may be accessed several ways:
 \begin{itemize}
-\item From the menu \bmenu{Config}\blink\bmenu{Settings airspace}
+\item From the menu \bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Settings
+Airspace}
 \item From the configuration dialog, menu under
-\bmenu{Config}\blink\bmenu{Setup system} then in the Airspace page, select the
-button \button{Filter}
+\bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Setup System} then in the
+Airspace page, select the button \button{Filter}
 \end{itemize}
 
 To use the dialog, move up or down the list and the enter key will
@@ -4031,7 +4029,7 @@ visualise complex layering of airspace.
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/analysis-airspace.png}
 \end{center}
 
-The `Nearest' button opens the airspace warning dialog if close to
+The ``Warnings'' button opens the airspace warning dialog if close to
 airspace.
 
 \section{FLARM traffic display}
@@ -4050,16 +4048,16 @@ a poor aid at helping to locate the traffic.
 
 \subsection*{FLARM map display}
 
-The FLARM targets on the map are drawn as red discs and also have
-black arrow heads to indicate the direction the FLARM target is
-heading.  Note that these arrow heads are oriented according to the
-display orientation.  For example, if the orientation is track-up,
-then the arrows show the relative track bearing of the target to the
-aircraft.  If the orientation is north-up, then the arrows show the
+The FLARM targets on the map are drawn as red circles and have colored 
+arrow heads to indicate the direction the FLARM target is
+heading, as well as the collision risk \config{flarm-on-map}.  Note that these
+arrow heads are oriented according to the display orientation.  For example, if 
+the orientation is track-up, then the arrows show the relative track bearing of
+the target to the aircraft.  If the orientation is north-up, then the arrows show the
 absolute track bearing of the target.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/flarmmap.png}
+\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/flarmmap.png}
 \end{center}
 
 Display on the map FLARM of aircraft registration or pilot name is
@@ -4073,61 +4071,31 @@ any identification displayed.
 To remedy this situation, when FLARM traffic is received, the lower
 right corner of the screen shows a small radar-style view of the FLARM
 traffic from the perspective of the aircraft.  FLARM traffic is
-displayed as coloured squares.
+displayed in identical style.
 
 This FLARM display is oriented track-up and a small glider icon
 clearly shows that the display is oriented as such.  The scale of the
-display is nonlinear (expanded close to the aircraft).  On the
-background there are three rings; the first is 500 meters, the second
-is 1000 meters and the third is 2000 meters.  Traffic further away
-than 2000 meters is drawn at the 2000 meter ring.
+display is linear up to maximum distance of 2000 meters.  On the
+background there are two rings; the first is 1000 meters and the second 
+is 2000 meters.  Traffic further away than 2000 meters is drawn at the 2000 meter ring.
+\marginpar{\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/flarmrose.png}}
 
-\begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/flarmrose.png}
-\todonum{update screenshot}
-\end{center}
-
-The FLARM gauge display shows FLARM traffic in colours according to
-the threat level.  Previously all traffic was shown in red. The
-traffic is coloured:
+All the FLARM displays shows FLARM traffic in colours according to
+the threat level, or team and dialog status.  The traffic is coloured:
 \begin{itemize}
-\item Green for level 0 
-\item Yellow for level 1
-\item Red for level 2 and 3
+\definecolor{warning}{rgb}{1,0.64,0}
+\definecolor{teammate}{rgb}{0.45,1,0}
+\item \textcolor{black} {No color for level 0, no threat.} 
+\item \textcolor{warning} { Yellow for level 1, warning.}
+\item \textcolor{red} {Red for level 2 and 3, alert.}
+\item \textcolor{teammate} {Green for the team mate.}
+\item \textcolor{blue} {Blue is the selected target.}
 \end{itemize}
 
-The style of the FLARM radar can be customised with the `FLARM
-symbols' configuration option (in Setup System, page 10 Vario Gauge
-and FLARM). % JMW edit
-
-This controls the symbols used to display FLARM targets on the radar
-display.
-\begin{description}
-\item[Relative altitude] 
-The relative altitude of the target is represented as a shape that
-becomes triangular for extreme above/below heights, square at the same
-altitude.  An arrow pointing up indicates the target is above the
-aircraft.
-
-Square shapes indicate similar altitude; a triangle pointing up
-indicate the traffic is very high; a triangle pointing down indicates
-the traffic is very low.  Similarly, intermediate trapezoids indicate
-relative height in a similar way proportionally: thinner at the top
-indicates the traffic is higher, thinner at the base indicates the
-traffic is lower.
-
-\begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/flarmmap-alt2.png}
-\end{center}
-
-\item[Bearing] The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head.
-In all modes, the color of the target indicates the threat level.
-
-\begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/flarmmap-alt.png}
-\end{center}
-
-\end{description}
+For every target above threat level 1 the rough relative hight is shown. The
+supplied figure is the absolute hight difference rounded by 100.  A small
+triangle indicates that the target is higher or lower than you. The example
+radar shows a target approximately 100 meter (for metric altitude) higher.
 
 The FLARM radar-like display, when enabled, can be suppressed when
 visible by pressing the enter button (rotary knob on Altair).  If the
@@ -4142,9 +4110,64 @@ radar.  This is done to make it easier to see at a glance which
 direction the target is relative to the glider, since when a collision
 warning is active, typically the target will be close to the glider.
 
-\tip It is possible to configure XCSoar to change the map display zoom
-level or announce arrival and departure of FLARM traffic with status
+\subsection*{FLARM Traffic dialog}
+Once FLARM has reported traffic and the small radar-style view of the FLARM
+traffic gets activated  \config{flarmdisplay} you can tap on the FLARM radar to
+enlarge the view to fullscreen size.  This is also accessed via the menu under
+\begin{quote}
+\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{FLARM Radar}
+\end{quote}
+The fullscreen FLARM display offers all available information
+about the FLARM traffic and depending on the setup it closes by itself, when all
+traffic has been gone.
+
+\begin{center}
+\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-flarm1.png}
+\end{center}
+
+Only a few controls are on the dialog, from top down:
+\begin{description}
+\item[North up]  If checked the radar screen is oriented North up, if not the
+orientation is Track up.
+\item[A. Zoom]  Automatic zoom scales the radar screen so that the targets are
+perfectly visible. If not checked, the screen must be zoomed manually.
+\item[Avg/Alt]  The button toggles in-between average vario and altitude
+displayed next to the target.
+\item[Details]  Through the button a separate dialog with all details to the
+selected target is accessed. 
+\item[+/-]  Manually change the zoom from min. 500 meter to max. 10000
+meter radar range.
+\item[$\triangleleft$/$\triangleright$]  Select the previous or
+next target on the radar.
+\end{description}
+
+\begin{center}
+\begin{tabular}{c c}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/cut-flarm2.png}&
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/cut-flarm3.png}\\
+\end{tabular}
+\end{center}
+The three screenshots are taken in a sequence and demonstrate a typical near
+pass of e.g. two FLARM equippped gliders. The extra information is colour-coded
+in the already mentioned way. In the four corners of the radar screen is
+additional info to the selected target displayed:
+
+\begin{description}
+\item[Top left]  If available the FLARM Id of the selected target. 
+\item[Top right]  Vario of the target, derived from the consecutive altitude
 messages.
+\item[Bottom left]  The distance to the target.
+\item[Bottom right]  The relative hight of the target. 
+\end{description}
+
+From the first to the second FLARM snapshot were passed about 15 seconds. The
+selected blue target was climbing with 3.4 m/s and had a not as threat
+recognized course relation.  Then in the mean time the ``DC'' has turned more to
+the left, became an alerting threat and gets now displayed red.  The FLARM
+radar switched the zoom from 1000 meter to 500 meter. In snapshot three the
+continuously climbing target becomes classified to thread level 1, gets yellow 
+coloured and seams to no longer a threat.  
+
 
 \section{Team flying}
 
@@ -4165,11 +4188,7 @@ messages.
 
   The teamcode dialog is accessed via the menu:
 
-   \bmenu{Nav}\blink\bmenu{Team Code}
-
-\begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/fig-teamcode1.png}
-\end{center}
+   \bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Team Code}
 
   During flight, the pilot can read out his `Own code' from the team
   code dialog to his team mate, in order to report his position.  When
@@ -4178,15 +4197,13 @@ messages.
   mate's code.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/fig-teamcode2.png}
+\includegraphics[angle=0,width=0.6\linewidth,keepaspectratio='true']{figures/fig-teamcode1.png}
 \end{center}
 
-  Refer to the `text entry dialog' description below for how to edit
-  the text.  After entering the mate's code, the relative distance and
+  After entering the mate's code, the relative distance and
   bearing to the mate is calculated and updated in the dialog.
+  \todonum{explain Flarm Lock}
 
-  New infoboxes are available to give the relative range, bearing and relative
-  bearing to the team mate.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -5157,8 +5174,9 @@ is presented as a yellow line.
 
 \item[Trail width*] \label{conf:trailwidth} Sets the width of the snail trail
 display.
-\item[Detour cost]
-\item[FLARM map] This enables the display of FLARM traffic on the map window as well as the pop-up radar-like display.
+\item[Detour cost]  \todonum{explain}
+\item[FLARM map]  \label{conf:flarm-on-map}This enables the display of FLARM
+traffic on the map window as well as the pop-up radar-like display.
 \begin{description}
 \item[OFF] FLARM map display disabled
 \item[ON/Fixed] FLARM map display enabled with fixed scale.
@@ -5533,9 +5551,13 @@ When shown, in cruise mode, arrows point up to command slow down; arrows point d
 \item[Show gross*] Whether to show the gross vario value
 \item[Averager needle*] If true, the vario gauge will display a hollow averager needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.
 When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.
-\item[FLARM radar] Enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. 
-\item[ThermalAssistant] \label{conf:thermalassistant} Enables the display of the
-ThermalAssistant gauge.
+\item[FLARM radar]  \label{conf:flarmdisplay} Enables the display of the FLARM
+radar gauge. The track bearing of the target relative to the track bearing of the aircraft 
+is displayed as an arrow head.
+\item[Auto close FLARM]  This will close the FLARM radar view when all
+FLARM traffic has gone.
+\item[ThermalAssistant] \label{conf:thermalassistant}
+Enables the display of the ThermalAssistant gauge.
 \end{description}
 In all FLARM environment, the color of the target indicates the threat level.
 
