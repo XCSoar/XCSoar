@@ -188,20 +188,18 @@ GlueMapWindow::UpdateMapScale()
     return;
   }
 
+  if (GetDisplayMode() == dmCircling)
+    return;
+
   fixed wpd = Calculated().AutoZoomDistance;
   if (SettingsMap().AutoZoom && positive(wpd)) {
     fixed AutoZoomFactor = IsOriginCentered() ? fixed(2.5) : fixed_four;
 
-    if (wpd < AutoZoomFactor * visible_projection.GetMapScale()) {
-      // waypoint is too close, so zoom in
-
-      // set scale exactly so that waypoint distance is the zoom factor
-      // across the screen
-      wpd = max(fixed_int_constant(440), min(fixed_int_constant(160000),
-                                             wpd / AutoZoomFactor));
-
-      visible_projection.SetMapScale(wpd);
-    }
+    // set scale exactly so that waypoint distance is the zoom factor
+    // across the screen
+    wpd = max(fixed_int_constant(440), min(fixed_int_constant(160000),
+                                            wpd / AutoZoomFactor));
+    visible_projection.SetMapScale(wpd);
   }
 }
 
