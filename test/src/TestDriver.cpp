@@ -259,7 +259,7 @@ static void
 TestDeclare(const struct DeviceRegister &driver)
 {
   FaultInjectionPort port(*(Port::Handler *)NULL);
-  Device *device = cai302Device.CreateOnPort(&port);
+  Device *device = driver.CreateOnPort(&port);
   ok1(device != NULL);
 
   Declaration declaration(NULL);
