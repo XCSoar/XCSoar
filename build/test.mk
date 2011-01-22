@@ -343,6 +343,7 @@ DEBUG_PROGRAM_NAMES = \
 	ReadProfileString ReadProfileInt \
 	WriteProfileString WriteProfileInt \
 	ReadGRecord VerifyGRecord AppendGRecord \
+	AddChecksum \
 	KeyCodeDumper \
 	LoadTopology LoadTerrain \
 	RunInputParser \
@@ -510,6 +511,14 @@ APPEND_GRECORD_SOURCES = \
 APPEND_GRECORD_OBJS = $(call SRC_TO_OBJ,$(APPEND_GRECORD_SOURCES))
 APPEND_GRECORD_LDADD = $(IO_LIBS)
 $(TARGET_BIN_DIR)/AppendGRecord$(TARGET_EXEEXT): $(APPEND_GRECORD_OBJS) $(APPEND_GRECORD_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+ADD_CHECKSUM_SOURCES = \
+	$(TEST_SRC_DIR)/AddChecksum.cpp
+ADD_CHECKSUM_OBJS = $(call SRC_TO_OBJ,$(ADD_CHECKSUM_SOURCES))
+ADD_CHECKSUM_LDADD = $(IO_LIBS)
+$(TARGET_BIN_DIR)/AddChecksum$(TARGET_EXEEXT): $(ADD_CHECKSUM_OBJS) $(ADD_CHECKSUM_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
