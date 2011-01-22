@@ -122,7 +122,8 @@ SettingsLeave()
     if (WaypointFileChanged || TerrainFileChanged) {
       WayPointGlue::SetHome(way_points, terrain,
                             XCSoarInterface::SetSettingsComputer(),
-                            WaypointFileChanged, false);
+                            WaypointFileChanged,
+                            !XCSoarInterface::Basic().flight.Flying);
     }
 
     if (terrain != NULL) {
