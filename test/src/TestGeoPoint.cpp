@@ -32,7 +32,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(58);
+  plan_tests(59);
 
   // test constructor
   GeoPoint p1(Angle::degrees(fixed(345.32)), Angle::degrees(fixed(-6.332)));
@@ -148,6 +148,22 @@ int main(int argc, char **argv)
   ok1(equals(p8.projected_distance(p7, p2), 100000));
   ok1(equals(p4.projected_distance(p1, p3), 619599.304393));
   ok1(equals((p2 * fixed_two).projected_distance(p2, p6), 248567.832772));
+
+  // Tests moved here from test_fixed.cpp
+  GeoPoint l1(Angle::native(fixed_zero), Angle::native(fixed_zero));
+  GeoPoint l2(Angle::degrees(fixed(-0.3)), Angle::degrees(fixed(1.0)));
+  GeoPoint l3(Angle::degrees(fixed(0.00001)), Angle::degrees(fixed_zero));
+
+  fixed d;
+  Angle b;
+
+  l1.distance_bearing(l2, d, b);
+  printf("Dist %g bearing %d\n", FIXED_DOUBLE(d), FIXED_INT(b.value_degrees()));
+  // 116090 @ 343
+
+  l1.distance_bearing(l3, d, b);
+  printf("Dist %g bearing %d\n", FIXED_DOUBLE(d), FIXED_INT(b.value_degrees()));
+  ok(positive(d) && d < fixed_two, "earth distance short", 0);
 
   return exit_status();
 }
