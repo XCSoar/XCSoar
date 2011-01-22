@@ -6541,7 +6541,7 @@ msgstr "Bewerk Keerpunt"
 #: Data/Input/default.xci:576 Data/Input/default.xci:625
 #: Data/Input/default.xci:674 Data/Input/default.xci:927
 msgid "Config"
-msgstr ""
+msgstr "Instelling"
 
 #: Data/Input/default.xci:130
 msgid ""
@@ -6583,7 +6583,7 @@ msgstr "Handmatig"
 
 #: Data/Input/default.xci:543
 msgid "Trail"
-msgstr ""
+msgstr "Spoor"
 
 #: Data/Input/default.xci:722
 msgid ""
@@ -6608,7 +6608,7 @@ msgstr "Beneden Final Glide"
 
 #: Data/Input/default.xci:854
 msgid "Weather"
-msgstr ""
+msgstr "Weer"
 
 #: Data/Input/default.xci:497
 msgid "Dropped marker"
@@ -6806,7 +6806,7 @@ msgstr ""
 #: Data/Input/default.xci:374 Data/Input/default.xci:424
 #: Data/Input/default.xci:913
 msgid "Nav"
-msgstr ""
+msgstr "Navigatie"
 
 #: Data/Input/default.xci:648
 #, fuzzy

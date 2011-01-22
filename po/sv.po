@@ -2151,7 +2151,7 @@ msgstr "Varn"
 #: Data/Input/default.xci:475 Data/Input/default.xci:527
 #: Data/Input/default.xci:920
 msgid "Display"
-msgstr ""
+msgstr "Visning"
 
 #: src/Dialogs/dlgAirspace.cpp:179
 msgid "Configuration saved"
@@ -6295,7 +6295,7 @@ msgstr ""
 #: Data/Input/default.xci:576 Data/Input/default.xci:625
 #: Data/Input/default.xci:674 Data/Input/default.xci:927
 msgid "Config"
-msgstr ""
+msgstr "Konfig"
 
 #: Data/Input/default.xci:130
 msgid ""
@@ -6335,7 +6335,7 @@ msgstr ""
 
 #: Data/Input/default.xci:543
 msgid "Trail"
-msgstr ""
+msgstr "Spår"
 
 #: Data/Input/default.xci:722
 msgid ""
@@ -6359,7 +6359,7 @@ msgstr "Under Glidbanan!"
 
 #: Data/Input/default.xci:854
 msgid "Weather"
-msgstr ""
+msgstr "Väder"
 
 #: Data/Input/default.xci:497
 msgid "Dropped marker"
@@ -6371,7 +6371,7 @@ msgstr ""
 
 #: Data/Input/default.xci:557
 msgid "Topology"
-msgstr ""
+msgstr "Topologi"
 
 #: Data/Input/default.xci:615
 msgid ""

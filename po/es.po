@@ -6377,7 +6377,7 @@ msgstr ""
 #: Data/Input/default.xci:576 Data/Input/default.xci:625
 #: Data/Input/default.xci:674 Data/Input/default.xci:927
 msgid "Config"
-msgstr ""
+msgstr "Configurar"
 
 #: Data/Input/default.xci:130
 msgid ""
@@ -6441,7 +6441,7 @@ msgstr "DEBAJO del Planeo Final"
 
 #: Data/Input/default.xci:854
 msgid "Weather"
-msgstr ""
+msgstr "Meteo"
 
 #: Data/Input/default.xci:497
 msgid "Dropped marker"

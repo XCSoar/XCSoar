@@ -6320,7 +6320,7 @@ msgstr ""
 #: Data/Input/default.xci:576 Data/Input/default.xci:625
 #: Data/Input/default.xci:674 Data/Input/default.xci:927
 msgid "Config"
-msgstr ""
+msgstr "Config."
 
 #: Data/Input/default.xci:130
 msgid ""
@@ -6360,7 +6360,7 @@ msgstr ""
 
 #: Data/Input/default.xci:543
 msgid "Trail"
-msgstr ""
+msgstr "Trace"
 
 #: Data/Input/default.xci:722
 msgid ""
@@ -6384,7 +6384,7 @@ msgstr "Sous le plan d'arrivée"
 
 #: Data/Input/default.xci:854
 msgid "Weather"
-msgstr ""
+msgstr "Météo"
 
 #: Data/Input/default.xci:497
 msgid "Dropped marker"

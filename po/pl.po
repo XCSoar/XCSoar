@@ -6389,7 +6389,7 @@ msgstr ""
 #: Data/Input/default.xci:576 Data/Input/default.xci:625
 #: Data/Input/default.xci:674 Data/Input/default.xci:927
 msgid "Config"
-msgstr ""
+msgstr "Konfig"
 
 #: Data/Input/default.xci:130
 msgid ""
@@ -6429,7 +6429,7 @@ msgstr ""
 
 #: Data/Input/default.xci:543
 msgid "Trail"
-msgstr ""
+msgstr "Ślad"
 
 #: Data/Input/default.xci:722
 msgid ""
@@ -6453,7 +6453,7 @@ msgstr "Poniżej linii dolotu"
 
 #: Data/Input/default.xci:854
 msgid "Weather"
-msgstr ""
+msgstr "Pogoda"
 
 #: Data/Input/default.xci:497
 msgid "Dropped marker"
@@ -6637,7 +6637,7 @@ msgstr ""
 #: Data/Input/default.xci:374 Data/Input/default.xci:424
 #: Data/Input/default.xci:913
 msgid "Nav"
-msgstr ""
+msgstr "Naw"
 
 #: Data/Input/default.xci:648
 msgid ""

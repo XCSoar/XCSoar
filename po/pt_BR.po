@@ -6482,7 +6482,7 @@ msgstr ""
 
 #: Data/Input/default.xci:543
 msgid "Trail"
-msgstr ""
+msgstr "Trilha"
 
 #: Data/Input/default.xci:722
 msgid ""
@@ -6506,7 +6506,7 @@ msgstr "Abaixo do Planeio Final"
 
 #: Data/Input/default.xci:854
 msgid "Weather"
-msgstr ""
+msgstr "Meteoro"
 
 #: Data/Input/default.xci:497
 msgid "Dropped marker"

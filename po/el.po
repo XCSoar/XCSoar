@@ -2151,7 +2151,7 @@ msgstr "Προειδοποίηση"
 #: Data/Input/default.xci:475 Data/Input/default.xci:527
 #: Data/Input/default.xci:920
 msgid "Display"
-msgstr ""
+msgstr "Οθόνη"
 
 #: src/Dialogs/dlgAirspace.cpp:179
 msgid "Configuration saved"
@@ -5635,7 +5635,7 @@ msgstr ""
 #: Data/Dialogs/dlgTarget.xml:3 Data/Dialogs/dlgTarget_L.xml:3
 #: Data/Dialogs/dlgTaskCalculator.xml:7 Data/Dialogs/dlgTaskCalculator_L.xml:5
 msgid "Target"
-msgstr ""
+msgstr "Προορισμός (Goal)"
 
 #: Data/Dialogs/dlgConfiguration.xml:66 Data/Dialogs/dlgConfiguration_L.xml:66
 msgid ""
@@ -6295,7 +6295,7 @@ msgstr ""
 #: Data/Input/default.xci:576 Data/Input/default.xci:625
 #: Data/Input/default.xci:674 Data/Input/default.xci:927
 msgid "Config"
-msgstr ""
+msgstr "Εγκατ/ση"
 
 #: Data/Input/default.xci:130
 msgid ""
@@ -6335,7 +6335,7 @@ msgstr ""
 
 #: Data/Input/default.xci:543
 msgid "Trail"
-msgstr ""
+msgstr "Ίχνος"
 
 #: Data/Input/default.xci:722
 msgid ""
@@ -6359,7 +6359,7 @@ msgstr "Κάτωθεν Final Glide"
 
 #: Data/Input/default.xci:854
 msgid "Weather"
-msgstr ""
+msgstr "Καιρός"
 
 #: Data/Input/default.xci:497
 msgid "Dropped marker"
@@ -6371,7 +6371,7 @@ msgstr ""
 
 #: Data/Input/default.xci:557
 msgid "Topology"
-msgstr ""
+msgstr "Τοπολογία"
 
 #: Data/Input/default.xci:615
 msgid ""
@@ -6422,7 +6422,7 @@ msgstr ""
 #: Data/Input/default.xci:787 Data/Input/default.xci:838
 #: Data/Input/default.xci:887 Data/Input/default.xci:934
 msgid "Info"
-msgstr ""
+msgstr "Πληρ/ρίες"
 
 #: Data/Input/default.xci:154
 msgid "Above Final Glide"
@@ -6438,7 +6438,7 @@ msgstr ""
 
 #: Data/Input/default.xci:535
 msgid "Zoom"
-msgstr ""
+msgstr "Μεγέθυνση"
 
 #: Data/Input/default.xci:747
 msgid "Vario ASI zeroed"
@@ -6543,7 +6543,7 @@ msgstr ""
 #: Data/Input/default.xci:374 Data/Input/default.xci:424
 #: Data/Input/default.xci:913
 msgid "Nav"
-msgstr ""
+msgstr "Πλοήγηση"
 
 #: Data/Input/default.xci:648
 msgid ""

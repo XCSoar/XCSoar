@@ -6294,7 +6294,7 @@ msgstr ""
 #: Data/Input/default.xci:576 Data/Input/default.xci:625
 #: Data/Input/default.xci:674 Data/Input/default.xci:927
 msgid "Config"
-msgstr ""
+msgstr "Nastavení"
 
 #: Data/Input/default.xci:130
 msgid ""
@@ -6334,7 +6334,7 @@ msgstr ""
 
 #: Data/Input/default.xci:543
 msgid "Trail"
-msgstr ""
+msgstr "Stopa"
 
 #: Data/Input/default.xci:722
 msgid ""
@@ -6358,7 +6358,7 @@ msgstr "Výška nestačí na dokluz"
 
 #: Data/Input/default.xci:854
 msgid "Weather"
-msgstr ""
+msgstr "Počasí"
 
 #: Data/Input/default.xci:497
 msgid "Dropped marker"
@@ -6370,7 +6370,7 @@ msgstr ""
 
 #: Data/Input/default.xci:557
 msgid "Topology"
-msgstr ""
+msgstr "Topologie"
 
 #: Data/Input/default.xci:615
 msgid ""

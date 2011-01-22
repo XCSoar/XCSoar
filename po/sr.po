@@ -6296,7 +6296,7 @@ msgstr ""
 #: Data/Input/default.xci:576 Data/Input/default.xci:625
 #: Data/Input/default.xci:674 Data/Input/default.xci:927
 msgid "Config"
-msgstr ""
+msgstr "Konfig."
 
 #: Data/Input/default.xci:130
 msgid ""
@@ -6336,7 +6336,7 @@ msgstr ""
 
 #: Data/Input/default.xci:543
 msgid "Trail"
-msgstr ""
+msgstr "Staza"
 
 #: Data/Input/default.xci:722
 msgid ""
@@ -6361,6 +6361,8 @@ msgstr "Ispod Finaklnog klizanja"
 #: Data/Input/default.xci:854
 msgid "Weather"
 msgstr ""
+"Vremens.\n"
+"Prognoza"
 
 #: Data/Input/default.xci:497
 msgid "Dropped marker"
@@ -6372,7 +6374,7 @@ msgstr ""
 
 #: Data/Input/default.xci:557
 msgid "Topology"
-msgstr ""
+msgstr "Topolog."
 
 #: Data/Input/default.xci:615
 msgid ""
@@ -6423,7 +6425,7 @@ msgstr ""
 #: Data/Input/default.xci:787 Data/Input/default.xci:838
 #: Data/Input/default.xci:887 Data/Input/default.xci:934
 msgid "Info"
-msgstr ""
+msgstr "CIA brate"
 
 #: Data/Input/default.xci:154
 msgid "Above Final Glide"
@@ -6439,7 +6441,7 @@ msgstr ""
 
 #: Data/Input/default.xci:535
 msgid "Zoom"
-msgstr ""
+msgstr "Uvećanje"
 
 #: Data/Input/default.xci:747
 msgid "Vario ASI zeroed"
@@ -6544,7 +6546,7 @@ msgstr ""
 #: Data/Input/default.xci:374 Data/Input/default.xci:424
 #: Data/Input/default.xci:913
 msgid "Nav"
-msgstr ""
+msgstr "Navigac."
 
 #: Data/Input/default.xci:648
 msgid ""
