@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-19 23:01+0100\n"
+"POT-Creation-Date: 2011-01-23 14:57+0100\n"
 "PO-Revision-Date: 2011-01-19 10:25+0100\n"
 "Last-Translator: Luis Fernando Rigato Vasconcellos <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -141,7 +141,7 @@ msgid "Loading Airfield Details File..."
 msgstr "Carregando arquivo de detalhes do aeródromo..."
 
 #: src/ExpandMacros.cpp:117 src/ExpandMacros.cpp:158
-#: src/InputEventsActions.cpp:1763
+#: src/InputEventsActions.cpp:1764
 msgid "Next turnpoint"
 msgstr "Próximo ponto de virada"
 
@@ -1794,7 +1794,7 @@ msgstr "Modo de Tela Normal"
 msgid "AutoZoom ON"
 msgstr "ZoomAuto LIGADO"
 
-#: src/InputEventsActions.cpp:295 src/InputEventsActions.cpp:1699
+#: src/InputEventsActions.cpp:295 src/InputEventsActions.cpp:1700
 msgid "AutoZoom OFF"
 msgstr "ZoomAuto DESLIGADO"
 
@@ -1914,15 +1914,15 @@ msgstr "Rótulos mapa DES"
 msgid "Topology / Terrain"
 msgstr "Topologia / Terreno"
 
-#: src/InputEventsActions.cpp:1761 Data/Dialogs/dlgStartTask.xml:3
+#: src/InputEventsActions.cpp:1762 Data/Dialogs/dlgStartTask.xml:3
 msgid "Task Start"
 msgstr "Iniciar Tarefa"
 
-#: src/InputEventsActions.cpp:1765
+#: src/InputEventsActions.cpp:1766
 msgid "Task Finish"
 msgstr "Finalizar Tarefa"
 
-#: src/InputEventsActions.cpp:1767
+#: src/InputEventsActions.cpp:1768
 msgid "In sector, arm advance when ready"
 msgstr "No setor, arme o avanço quando pronto"
 
@@ -2093,57 +2093,57 @@ msgstr "Massa"
 msgid "Wing loading"
 msgstr ""
 
-#: src/FlightStatistics.cpp:837 src/FlightStatistics.cpp:843
+#: src/FlightStatistics.cpp:845 src/FlightStatistics.cpp:851
 msgid "Working band"
 msgstr "Banda de trabalho"
 
-#: src/FlightStatistics.cpp:847
+#: src/FlightStatistics.cpp:855
 msgid "Ceiling trend"
 msgstr "Tendênc teto"
 
-#: src/FlightStatistics.cpp:861 src/FlightStatistics.cpp:866
+#: src/FlightStatistics.cpp:869 src/FlightStatistics.cpp:874
 msgid "Av climb"
 msgstr "Subid méd"
 
-#: src/FlightStatistics.cpp:869
+#: src/FlightStatistics.cpp:877
 msgid "Climb trend"
 msgstr "Tendênc subida"
 
-#: src/FlightStatistics.cpp:881
+#: src/FlightStatistics.cpp:889
 msgid "Best LD"
 msgstr "Melhor LD"
 
-#: src/FlightStatistics.cpp:885
+#: src/FlightStatistics.cpp:893
 msgid "Min sink"
 msgstr "Afund mín"
 
-#: src/FlightStatistics.cpp:896
+#: src/FlightStatistics.cpp:904
 msgid "Thermal height"
 msgstr "Altura térmica"
 
-#: src/FlightStatistics.cpp:899
+#: src/FlightStatistics.cpp:907
 msgid "Cloud base"
 msgstr "Base nuvens"
 
-#: src/FlightStatistics.cpp:911
+#: src/FlightStatistics.cpp:919
 msgid "No task"
 msgstr "Nenhuma prova"
 
-#: src/FlightStatistics.cpp:922 src/FlightStatistics.cpp:932
-#: src/FlightStatistics.cpp:944
+#: src/FlightStatistics.cpp:930 src/FlightStatistics.cpp:940
+#: src/FlightStatistics.cpp:952
 msgid "Task to go"
 msgstr "Prova rest"
 
-#: src/FlightStatistics.cpp:922 src/FlightStatistics.cpp:932
+#: src/FlightStatistics.cpp:930 src/FlightStatistics.cpp:940
 msgid "AAT to go"
 msgstr "AAT rest"
 
-#: src/FlightStatistics.cpp:923 src/FlightStatistics.cpp:933
-#: src/FlightStatistics.cpp:944
+#: src/FlightStatistics.cpp:931 src/FlightStatistics.cpp:941
+#: src/FlightStatistics.cpp:952
 msgid "Distance to go"
 msgstr "Distância a percorrer"
 
-#: src/FlightStatistics.cpp:925 src/FlightStatistics.cpp:936
+#: src/FlightStatistics.cpp:933 src/FlightStatistics.cpp:944
 msgid "Target speed"
 msgstr ""
 
@@ -2283,17 +2283,17 @@ msgstr "Cancelar"
 msgid "Ignore"
 msgstr "Ignorar"
 
-#: src/Dialogs/dlgAirspace.cpp:53 src/Dialogs/dlgAirspace.cpp:72
+#: src/Dialogs/dlgAirspace.cpp:53 src/Dialogs/dlgAirspace.cpp:76
 msgid "Warn"
 msgstr "Alrt"
 
-#: src/Dialogs/dlgAirspace.cpp:54 src/Dialogs/dlgAirspace.cpp:76
+#: src/Dialogs/dlgAirspace.cpp:54 src/Dialogs/dlgAirspace.cpp:80
 #: Data/Input/default.xci:475 Data/Input/default.xci:527
 #: Data/Input/default.xci:920
 msgid "Display"
 msgstr "Mostrar"
 
-#: src/Dialogs/dlgAirspace.cpp:173
+#: src/Dialogs/dlgAirspace.cpp:179
 msgid "Configuration saved"
 msgstr "Configuração salva"
 

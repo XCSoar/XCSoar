@@ -6,11 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-01-19 20:49+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-01-23 14:57+0100\n"
 "PO-Revision-Date: 2011-01-20 00:43+0000\n"
 "Last-Translator: zeugma <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -138,7 +139,7 @@ msgid "Loading Airfield Details File..."
 msgstr ""
 
 #: src/ExpandMacros.cpp:117 src/ExpandMacros.cpp:158
-#: src/InputEventsActions.cpp:1763
+#: src/InputEventsActions.cpp:1764
 msgid "Next turnpoint"
 msgstr ""
 
@@ -735,10 +736,10 @@ msgstr ""
 #, no-c-format
 msgid ""
 "Wind speed estimated by XCSoar. (Touchscreen/PC only) Manual adjustment is "
-"possible by pressing the up/down cursor keys to adjust magnitude and "
-"left/right cursor keys to adjust bearing when the infobox is active. "
-"Pressing the enter cursor key saves the wind value as the initial value when "
-"XCSoar next starts."
+"possible by pressing the up/down cursor keys to adjust magnitude and left/"
+"right cursor keys to adjust bearing when the infobox is active. Pressing the "
+"enter cursor key saves the wind value as the initial value when XCSoar next "
+"starts."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:293
@@ -846,8 +847,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
-msgid ""
-"Indicated Airspeed reported by a supported external intelligent vario."
+msgid "Indicated Airspeed reported by a supported external intelligent vario."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:356
@@ -950,8 +950,8 @@ msgid ""
 "The required glide ratio to reach the next waypoint, given by the distance "
 "to next waypoint divided by the height required to arrive at the safety "
 "arrival altitude. Negative values indicate a climb is necessary to reach the "
-"waypoint. If the height required is close to zero, the displayed value is '--"
-"-'.   Note that this calculation may be optimistic because it reduces the "
+"waypoint. If the height required is close to zero, the displayed value is "
+"'---'.   Note that this calculation may be optimistic because it reduces the "
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
@@ -1178,8 +1178,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:520
 #, no-c-format
-msgid ""
-"Assigned Area Task distance around target points for remainder of task."
+msgid "Assigned Area Task distance around target points for remainder of task."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:527
@@ -1257,8 +1256,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:565
 #, no-c-format
-msgid ""
-"The bearing to the team aircraft location at the last team code report."
+msgid "The bearing to the team aircraft location at the last team code report."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:572
@@ -1290,8 +1288,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:583
 #, no-c-format
-msgid ""
-"The range to the team aircraft location at the last reported team code."
+msgid "The range to the team aircraft location at the last reported team code."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:590
@@ -1658,7 +1655,7 @@ msgstr ""
 msgid "AutoZoom ON"
 msgstr ""
 
-#: src/InputEventsActions.cpp:295 src/InputEventsActions.cpp:1699
+#: src/InputEventsActions.cpp:295 src/InputEventsActions.cpp:1700
 msgid "AutoZoom OFF"
 msgstr ""
 
@@ -1778,15 +1775,15 @@ msgstr ""
 msgid "Topology / Terrain"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1761 Data/Dialogs/dlgStartTask.xml:3
+#: src/InputEventsActions.cpp:1762 Data/Dialogs/dlgStartTask.xml:3
 msgid "Task Start"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1765
+#: src/InputEventsActions.cpp:1766
 msgid "Task Finish"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1767
+#: src/InputEventsActions.cpp:1768
 msgid "In sector, arm advance when ready"
 msgstr ""
 
@@ -1957,57 +1954,57 @@ msgstr ""
 msgid "Wing loading"
 msgstr ""
 
-#: src/FlightStatistics.cpp:837 src/FlightStatistics.cpp:843
+#: src/FlightStatistics.cpp:845 src/FlightStatistics.cpp:851
 msgid "Working band"
 msgstr ""
 
-#: src/FlightStatistics.cpp:847
+#: src/FlightStatistics.cpp:855
 msgid "Ceiling trend"
 msgstr ""
 
-#: src/FlightStatistics.cpp:861 src/FlightStatistics.cpp:866
+#: src/FlightStatistics.cpp:869 src/FlightStatistics.cpp:874
 msgid "Av climb"
 msgstr ""
 
-#: src/FlightStatistics.cpp:869
+#: src/FlightStatistics.cpp:877
 msgid "Climb trend"
 msgstr ""
 
-#: src/FlightStatistics.cpp:881
+#: src/FlightStatistics.cpp:889
 msgid "Best LD"
 msgstr ""
 
-#: src/FlightStatistics.cpp:885
+#: src/FlightStatistics.cpp:893
 msgid "Min sink"
 msgstr ""
 
-#: src/FlightStatistics.cpp:896
+#: src/FlightStatistics.cpp:904
 msgid "Thermal height"
 msgstr ""
 
-#: src/FlightStatistics.cpp:899
+#: src/FlightStatistics.cpp:907
 msgid "Cloud base"
 msgstr ""
 
-#: src/FlightStatistics.cpp:911
+#: src/FlightStatistics.cpp:919
 msgid "No task"
 msgstr ""
 
-#: src/FlightStatistics.cpp:922 src/FlightStatistics.cpp:932
-#: src/FlightStatistics.cpp:944
+#: src/FlightStatistics.cpp:930 src/FlightStatistics.cpp:940
+#: src/FlightStatistics.cpp:952
 msgid "Task to go"
 msgstr ""
 
-#: src/FlightStatistics.cpp:922 src/FlightStatistics.cpp:932
+#: src/FlightStatistics.cpp:930 src/FlightStatistics.cpp:940
 msgid "AAT to go"
 msgstr ""
 
-#: src/FlightStatistics.cpp:923 src/FlightStatistics.cpp:933
-#: src/FlightStatistics.cpp:944
+#: src/FlightStatistics.cpp:931 src/FlightStatistics.cpp:941
+#: src/FlightStatistics.cpp:952
 msgid "Distance to go"
 msgstr ""
 
-#: src/FlightStatistics.cpp:925 src/FlightStatistics.cpp:936
+#: src/FlightStatistics.cpp:933 src/FlightStatistics.cpp:944
 msgid "Target speed"
 msgstr ""
 
@@ -2057,13 +2054,13 @@ msgstr ""
 msgid "Starting devices"
 msgstr ""
 
-#. 
+#.
 #. -- Reset polar in case devices need the data
 #. LogStartUp(_T("GlidePolar::UpdatePolar"));
 #. GlidePolar::UpdatePolar(true, SettingsComputer());
-#. 
+#.
 #. This should be done inside devStartup if it is really required
-#. 
+#.
 #: src/Components.cpp:409
 msgid "Initialising display"
 msgstr ""
@@ -2147,17 +2144,17 @@ msgstr ""
 msgid "Ignore"
 msgstr ""
 
-#: src/Dialogs/dlgAirspace.cpp:53 src/Dialogs/dlgAirspace.cpp:72
+#: src/Dialogs/dlgAirspace.cpp:53 src/Dialogs/dlgAirspace.cpp:76
 msgid "Warn"
 msgstr ""
 
-#: src/Dialogs/dlgAirspace.cpp:54 src/Dialogs/dlgAirspace.cpp:76
+#: src/Dialogs/dlgAirspace.cpp:54 src/Dialogs/dlgAirspace.cpp:80
 #: Data/Input/default.xci:475 Data/Input/default.xci:527
 #: Data/Input/default.xci:920
 msgid "Display"
 msgstr ""
 
-#: src/Dialogs/dlgAirspace.cpp:173
+#: src/Dialogs/dlgAirspace.cpp:179
 msgid "Configuration saved"
 msgstr ""
 
@@ -4957,8 +4954,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:238
 #: Data/Dialogs/dlgConfiguration_L.xml:238
-msgid ""
-"The height above terrain that the glider must clear during final glide."
+msgid "The height above terrain that the glider must clear during final glide."
 msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:100 Data/Dialogs/dlgVario_L.xml:101
@@ -6052,8 +6048,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:20 Data/Dialogs/dlgConfiguration_L.xml:20
 msgid ""
-"Primary waypoints file.  Supported file types are Cambridge/WinPilot files "
-"(.dat), Zander files (.wpz) or SeeYou files (.cup)."
+"Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
+"dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:66 Data/Dialogs/dlgVario_L.xml:67
@@ -6182,8 +6178,8 @@ msgstr ""
 #: Data/Dialogs/dlgBasicSettings.xml:8
 msgid ""
 "Ballast of the glider.  Increase this value if the pilot/cockpit load is "
-"greater than the reference pilot weight of the glide polar (typically 75kg). "
-" Press ENTER on this field to toggle count-down of the ballast volume "
+"greater than the reference pilot weight of the glide polar (typically "
+"75kg).  Press ENTER on this field to toggle count-down of the ballast volume "
 "according to the dump rate specified in the configuration settings."
 msgstr ""
 
