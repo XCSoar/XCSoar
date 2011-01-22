@@ -20,7 +20,7 @@
 }
 */
 
-#include "Math/Earth.hpp"
+#include "Math/fixed.hpp"
 #include "TestUtil.hpp"
 
 #include <stdio.h>
