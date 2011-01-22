@@ -56,35 +56,39 @@ int main(int argc, char** argv) {
   fixed a(da);
   fixed sina(sin(a));
 
-  printf("a=%g, sin(a)=%g\n",FIXED_DOUBLE(a),FIXED_DOUBLE(sina));
-  printf("a=%g, sin(a)=%g\n",da, dsina);
+  printf("a=%g, sin(a)=%g\n", FIXED_DOUBLE(a), FIXED_DOUBLE(sina));
+  printf("a=%g, sin(a)=%g\n", da, dsina);
 
-  ok(fabs(sina-fixed(dsina))<fixed(1.0e5),"sin(a)",0);
+  ok(fabs(sina - fixed(dsina)) < fixed(1.0e5), "sin(a)", 0);
 
-  double dx=-0.3;
-  double dy=0.6;
-  double dt=atan2(dy,dx);
+  double dx = -0.3;
+  double dy = 0.6;
+  double dt = atan2(dy, dx);
 
   fixed x(dx);
   fixed y(dy);
   fixed t(atan2(y, x));
 
-  printf("x=%g, y=%g atan(y,x)=%g\n",FIXED_DOUBLE(x),FIXED_DOUBLE(y),FIXED_DOUBLE(t));
-  printf("x=%g, y=%g atan(y,x)=%g\n",dx,dy,dt);
+  printf("x=%g, y=%g atan(y,x)=%g\n",
+         FIXED_DOUBLE(x), FIXED_DOUBLE(y), FIXED_DOUBLE(t));
+  printf("x=%g, y=%g atan(y,x)=%g\n", dx, dy, dt);
 
-  ok(fabs(t-fixed(dt))<fixed(1.0e5),"atan(y,x)",0);
+  ok(fabs(t - fixed(dt)) < fixed(1.0e5), "atan(y,x)", 0);
 
   GeoPoint l1(Angle::native(fixed_zero), Angle::native(fixed_zero));
   GeoPoint l2(Angle::degrees(fixed(-0.3)), Angle::degrees(fixed(1.0)));
   GeoPoint l3(Angle::degrees(fixed(0.00001)), Angle::degrees(fixed_zero));
-  fixed d; Angle b;
+
+  fixed d;
+  Angle b;
+
   l1.distance_bearing(l2, d, b);
-  printf("Dist %g bearing %d\n",FIXED_DOUBLE(d),FIXED_INT(b.value_degrees()));
+  printf("Dist %g bearing %d\n", FIXED_DOUBLE(d), FIXED_INT(b.value_degrees()));
   // 116090 @ 343
 
   l1.distance_bearing(l3, d, b);
-  printf("Dist %g bearing %d\n",FIXED_DOUBLE(d),FIXED_INT(b.value_degrees()));
-  ok(positive(d) && (d<fixed_two), "earth distance short", 0);
+  printf("Dist %g bearing %d\n", FIXED_DOUBLE(d), FIXED_INT(b.value_degrees()));
+  ok(positive(d) && (d < fixed_two), "earth distance short", 0);
 
   return exit_status();
 }
