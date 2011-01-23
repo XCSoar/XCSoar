@@ -408,10 +408,6 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     unsigned int i = SettingsMap().WayPointLabelSelection;
     ReplaceInString(OutBuffer, _T("$(MapLabelsToggleActionName)"),
                     gettext(labels[(i + 1) % n]), Size);
-#if defined(WIN32) && !defined(GREEN_MENU)
-    if (i + 1 == 1)
-      ReplaceInString(OutBuffer, _T(" & "), _T(" && "), Size);
-#endif
   }
 
   CondReplaceInString(SettingsComputer().auto_mc,
