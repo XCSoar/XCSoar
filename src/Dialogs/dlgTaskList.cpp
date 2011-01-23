@@ -135,7 +135,7 @@ RefreshView()
 }
 
 static void
-OnSave()
+SaveTask()
 {
   if (!cursor_at_active_task())
     return;
@@ -148,7 +148,7 @@ OnSave()
 }
 
 static void
-OnLoad()
+LoadTask()
 {
   if (cursor_at_active_task())
     return;
@@ -175,16 +175,16 @@ OnLoad()
 }
 
 static void
-OnLoadSave()
+LoadOrSaveTask()
 {
   if (cursor_at_active_task())
-    OnSave();
+    SaveTask();
   else
-    OnLoad();
+    LoadTask();
 }
 
 static void
-OnDelete()
+DeleteTask()
 {
   if (cursor_at_active_task())
     return;
@@ -208,7 +208,7 @@ OnDelete()
 }
 
 static void
-OnRename()
+RenameTask()
 {
   if (cursor_at_active_task())
     return;
@@ -255,25 +255,25 @@ UpdateButtons()
 static void 
 OnLoadSaveClicked(WndButton &Sender)
 {
-  OnLoadSave();
+  LoadOrSaveTask();
 }
 
 static void
 OnDeleteClicked(WndButton &Sender)
 {
-  OnDelete();
+  DeleteTask();
 }
 
 static void
 OnRenameClicked(WndButton &Sender)
 {
-  OnRename();
+  RenameTask();
 }
 
 static void
 OnTaskListEnter(unsigned ItemIndex)
 {
-  OnLoadSave();
+  LoadOrSaveTask();
 }
 
 static void
