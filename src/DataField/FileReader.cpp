@@ -220,14 +220,9 @@ DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
       !IsInternalFile(FindFileData.cFileName)) {
     _tcscat(FileName, FindFileData.cFileName);
 
-    if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+    if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
       // we have found a directory, recurse
-      //      if (!IsSystemDirectory(FileName)) {
-      if (!ScanDirectories(FileName, filter)) {
-        // none deeper
-      }
-      //      }
-    }
+      ScanDirectories(FileName, filter);
   }
   _tcscpy(FileName, DirPath);
 
@@ -241,11 +236,7 @@ DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
       if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
         // we have found a directory, recurse
         _tcscat(FileName, FindFileData.cFileName);
-        //	if (!IsSystemDirectory(FileName)) {
-        if (!ScanDirectories(FileName, filter)) {
-          // none deeper
-        }
-        //	}
+        ScanDirectories(FileName, filter);
       }
       _tcscpy(FileName, DirPath);
     } else {
