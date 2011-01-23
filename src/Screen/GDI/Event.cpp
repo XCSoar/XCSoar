@@ -86,6 +86,12 @@ DialogEventLoop::dispatch(MSG &msg)
 unsigned
 TranscodeKey(unsigned key_code)
 {
+#ifdef _WIN32_WCE
+  /* VK_F23 is the "action" key on some iPaqs */
+  if (key_code == VK_F23)
+    return VK_RETURN;
+#endif
+
   if (GlobalModelType == MODELTYPE_PNA_HP31X) {
     if (key_code == 0x7b)
       key_code = 0x1b;

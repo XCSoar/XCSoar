@@ -55,7 +55,6 @@ enum {
   VK_APP4,
   VK_APP5,
   VK_APP6,
-  VK_F23,
 };
 
 #endif

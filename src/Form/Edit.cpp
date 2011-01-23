@@ -73,7 +73,7 @@ bool
 WndProperty::Editor::on_key_down(unsigned key_code)
 {
   // If return key pressed (Compaq uses VKF23)
-  if (key_code == VK_RETURN || key_code == VK_F23)
+  if (key_code == VK_RETURN)
     // if it's an Combopicker field
     if (parent->mDialogStyle)
       // call the combopicker routine
@@ -84,7 +84,7 @@ WndProperty::Editor::on_key_down(unsigned key_code)
   // tmep hack, do not process nav keys
   if (KeyTimer(true, key_code)) {
     // Activate Help dialog
-    if (key_code == VK_RETURN || key_code == VK_F23) {
+    if (key_code == VK_RETURN) {
       if (parent->OnHelp())
         return true;
     }
@@ -107,7 +107,7 @@ WndProperty::Editor::on_key_up(unsigned key_code)
 {
   if (KeyTimer(false, key_code)) {
     // activate tool tips if hit return for long time
-    if (key_code == VK_RETURN || key_code == VK_F23) { // Compaq uses VKF23
+    if (key_code == VK_RETURN) {
       if (parent->OnHelp())
         return true;
     }
