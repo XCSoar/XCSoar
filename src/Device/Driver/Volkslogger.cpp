@@ -115,8 +115,6 @@ VolksloggerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
     return false;
 }
 
-static VLAPI vl;
-
 static unsigned nturnpoints = 0;
 
 static void
@@ -142,7 +140,7 @@ CopyWaypoint(VLAPI_DATA::WPT &dest, const Waypoint &src)
 }
 
 static bool
-VLDeclAddWayPoint(const Waypoint &way_point)
+VLDeclAddWayPoint(VLAPI &vl, const Waypoint &way_point)
 {
   if (nturnpoints == 0) {
     CopyWaypoint(vl.declaration.task.startpoint, way_point);
@@ -162,6 +160,7 @@ VolksloggerDevice::Declare(const Declaration *decl)
 {
   ProgressGlue::Create(_T("Comms with Volkslogger"));
 
+  VLAPI vl;
   vl.set_port(port);
   nturnpoints = 0;
 
@@ -209,7 +208,7 @@ VolksloggerDevice::Declare(const Declaration *decl)
 
   unsigned i;
   for (i = 0; i < decl->size(); i++)
-    VLDeclAddWayPoint(decl->waypoints[i]);
+    VLDeclAddWayPoint(vl, decl->waypoints[i]);
 
   vl.declaration.task.nturnpoints = (nturnpoints<=2)? 0: std::min(nturnpoints-2, (unsigned)12);
 
