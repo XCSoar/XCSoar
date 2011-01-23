@@ -189,9 +189,6 @@ DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
 
   closedir(dir);
 #else /* !HAVE_POSIX */
-  HANDLE hFind; // file handle
-  WIN32_FIND_DATA FindFileData;
-
   TCHAR DirPath[MAX_PATH];
   TCHAR FileName[MAX_PATH];
 
@@ -208,35 +205,25 @@ DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
   _tcscat(DirPath, _T(DIR_SEPARATOR_S));
   _tcscat(FileName, _T(DIR_SEPARATOR_S "*"));
 
-  hFind = FindFirstFile(FileName, &FindFileData); // find the first file
+  WIN32_FIND_DATA FindFileData;
+  HANDLE hFind = FindFirstFile(FileName, &FindFileData); // find the first file
   if (hFind == INVALID_HANDLE_VALUE)
     return false;
 
   _tcscpy(FileName, DirPath);
 
-  if (!IsDots(FindFileData.cFileName) &&
-      !IsInternalFile(FindFileData.cFileName) &&
-      (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-    // we have found a directory, recurse
-    _tcscat(FileName, FindFileData.cFileName);
-    ScanDirectories(FileName, filter);
-  }
-  _tcscpy(FileName, DirPath);
-
   bool bSearch = true;
-  while (bSearch) { // until we finds an entry
-    if (FindNextFile(hFind, &FindFileData)) {
-      if (IsDots(FindFileData.cFileName))
-        continue;
-      if (IsInternalFile(FindFileData.cFileName))
-        continue;
-      if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-        // we have found a directory, recurse
-        _tcscat(FileName, FindFileData.cFileName);
-        ScanDirectories(FileName, filter);
-      }
-      _tcscpy(FileName, DirPath);
-    } else {
+  do { // until we finds an entry
+    if (!IsDots(FindFileData.cFileName) &&
+        !IsInternalFile(FindFileData.cFileName) &&
+        (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+      // we have found a directory, recurse
+      _tcscat(FileName, FindFileData.cFileName);
+      ScanDirectories(FileName, filter);
+    }
+    _tcscpy(FileName, DirPath);
+
+    if (!FindNextFile(hFind, &FindFileData)) {
       if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
         bSearch = false;
       else {
@@ -245,7 +232,7 @@ DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
         return false;
       }
     }
-  }
+  } while (bSearch);
   FindClose(hFind); // closing file handle
 
 #endif /* !HAVE_POSIX */
