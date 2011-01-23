@@ -120,9 +120,8 @@ RefreshView()
   wTasks->SetLength(task_store.size() + 1);
   wTaskView->invalidate();
 
-  WndFrame* wSummary = (WndFrame *)wf->FindByName(_T("frmSummary"));
-  if (!wSummary)
-    return;
+  WndFrame* wSummary = (WndFrame*)wf->FindByName(_T("frmSummary"));
+  assert(wSummary != NULL);
 
   OrderedTask* ordered_task = get_cursor_task();
   if (ordered_task == NULL) {
