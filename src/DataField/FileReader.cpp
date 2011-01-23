@@ -378,9 +378,6 @@ DataFieldFileReader::checkFilter(const TCHAR *filename, const TCHAR *filter)
   // filter = e.g. "*.igc" or "config/*.prf"
   // todo: make filters like "config/*.prf" work
 
-  const TCHAR *ptr;
-  TCHAR upfilter[MAX_PATH];
-
   // if invalid or short filter "*" -> return true
   // todo: check for asterisk
   if (!filter || string_is_empty(filter + 1))
@@ -389,33 +386,25 @@ DataFieldFileReader::checkFilter(const TCHAR *filename, const TCHAR *filter)
   // Copy filter without first char into upfilter
   // *.igc         ->  .igc
   // config/*.prf  ->  onfig/*.prf
+  TCHAR upfilter[MAX_PATH];
   _tcscpy(upfilter, filter + 1);
 
   // Search for upfilter in filename (e.g. ".igc" in "934CFAE1.igc") and
   //   save the position of the first occurence in ptr
-  ptr = _tcsstr(filename, upfilter);
-  if (ptr) {
-    // If upfilter was found
-    if (_tcslen(ptr) == _tcslen(upfilter)) {
-      // If upfilter was found at the very end of filename
-      // -> filename matches filter
-      return true;
-    }
-  }
+  const TCHAR *ptr = _tcsstr(filename, upfilter);
+  if (ptr != NULL && _tcslen(ptr) == _tcslen(upfilter))
+    // If upfilter was found at the very end of filename
+    // -> filename matches filter
+    return true;
 
   // Convert upfilter to uppercase
   _tcsupr(upfilter);
 
   // And do it all again
   ptr = _tcsstr(filename, upfilter);
-  if (ptr) {
-    if (_tcslen(ptr) == _tcslen(upfilter)) {
-      return true;
-    }
-  }
 
   // If still no match found -> filename does not match the filter
-  return false;
+  return (ptr != NULL && _tcslen(ptr) == _tcslen(upfilter));
 }
 #endif /* !HAVE_POSIX */
 
