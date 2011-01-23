@@ -272,14 +272,8 @@ DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter)
     DirPath[0] = 0;
 
   _tcscat(DirPath, _T(DIR_SEPARATOR_S));
+  _tcscpy(FileName, DirPath);
   _tcscat(DirPath, filter);
-
-  if (sPath)
-    _tcscpy(FileName, sPath);
-  else
-    FileName[0] = 0;
-
-  _tcscat(FileName, _T(DIR_SEPARATOR_S));
 
   hFind = FindFirstFile(DirPath, &FindFileData); // find the first file
   if (hFind == INVALID_HANDLE_VALUE)
