@@ -719,7 +719,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Online Contest Distance"),
     N_("OLC"),
-    NULL,
+    N_("Instantaneous evaluation of the flown distance according to the configured Online-Contest rule set."),
     11, // WP Dist
     60, // Home Dis
   },
