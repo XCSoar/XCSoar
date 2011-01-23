@@ -323,13 +323,7 @@ dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
   wf->ShowModal();
   delete wf;
   
-  bool retval = false;
-  if (*task != active_task) {
-    *task = active_task;
-    retval = true;
-  }
-
   task_store.clear();
 
-  return retval || task_modified;
+  return task_modified;
 }
