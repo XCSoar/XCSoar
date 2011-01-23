@@ -96,7 +96,11 @@ fixed
 thermal_recency_fn(unsigned x)
 {
   return x < THERMALRECENCY_SIZE
+#ifdef FIXED_MATH
+    ? fixed(fixed::internal(), THERMALRECENCY[x])
+#else
     ? THERMALRECENCY[x]
+#endif
     : fixed_zero;
 }
 

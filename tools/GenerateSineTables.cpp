@@ -97,9 +97,15 @@ main(int argc, char **argv)
   puts("};");
 
   printf("#define THERMALRECENCY_SIZE %d\n", TLOCATOR_NMAX);
+  puts("#ifdef FIXED_MATH");
+  printf("const unsigned THERMALRECENCY[] = {\n");
+  for (unsigned i = 0; i < TLOCATOR_NMAX; i++)
+    printf("  %u,\n", (unsigned)(thermal_fn(i) * (double)fixed::resolution));
+  puts("#else");
   printf("const fixed THERMALRECENCY[%d] = {", TLOCATOR_NMAX);
   for (unsigned i = 0; i < TLOCATOR_NMAX; i++)
     printf("  fixed(%.20e),\n", thermal_fn(i));
+  puts("#endif");
   puts("};");
 
   return 0;
