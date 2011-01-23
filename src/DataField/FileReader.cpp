@@ -215,12 +215,11 @@ DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
   _tcscpy(FileName, DirPath);
 
   if (!IsDots(FindFileData.cFileName) &&
-      !IsInternalFile(FindFileData.cFileName)) {
+      !IsInternalFile(FindFileData.cFileName) &&
+      (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+    // we have found a directory, recurse
     _tcscat(FileName, FindFileData.cFileName);
-
-    if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
-      // we have found a directory, recurse
-      ScanDirectories(FileName, filter);
+    ScanDirectories(FileName, filter);
   }
   _tcscpy(FileName, DirPath);
 
