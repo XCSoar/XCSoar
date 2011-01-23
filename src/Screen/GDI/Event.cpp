@@ -86,8 +86,6 @@ DialogEventLoop::dispatch(MSG &msg)
 unsigned
 TranscodeKey(unsigned key_code)
 {
-  // VENTA-ADDON HARDWARE KEYS TRANSCODING
-
   if (GlobalModelType == MODELTYPE_PNA_HP31X) {
     if (key_code == 0x7b)
       key_code = 0x1b;
