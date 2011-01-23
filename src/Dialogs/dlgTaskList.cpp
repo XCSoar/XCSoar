@@ -34,8 +34,8 @@ Copyright_License {
 #include <assert.h>
 
 static SingleWindow *parent_window;
-static WndForm *wf=NULL;
-static WndListFrame* wTasks= NULL;
+static WndForm *wf = NULL;
+static WndListFrame* wTasks = NULL;
 static WndFrame* wTaskView = NULL;
 static TaskStore task_store;
 static OrderedTask* active_task = NULL;
@@ -111,8 +111,7 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
     name = task_store.get_name(DrawListIndex-1);
 
   canvas.text(rc.left + Layout::FastScale(2),
-              rc.top + Layout::FastScale(2),
-              name);
+              rc.top + Layout::FastScale(2), name);
 }
 
 static void
@@ -239,22 +238,19 @@ OnRename()
 static void
 UpdateButtons()
 {
+  bool at_active_task = cursor_at_active_task();
+
   WndButton* wbLoadSave = (WndButton*)wf->FindByName(_T("cmdLoadSave"));
+  assert(wbLoadSave != NULL);
+  wbLoadSave->SetCaption(at_active_task ?_("Save") : _("Load"));
+
   WndButton* wbDelete = (WndButton*)wf->FindByName(_T("cmdDelete"));
+  assert(wbDelete != NULL);
+  wbDelete->set_enabled(!at_active_task);
+
   WndButton* wbRename = (WndButton*)wf->FindByName(_T("cmdRename"));
-  if (!wbLoadSave || !wbDelete || !wbRename)
-    return;
-
-  if (cursor_at_active_task()) {
-    wbLoadSave->SetCaption(_("Save"));
-    wbDelete->set_enabled(false);
-    wbRename->set_enabled(false);
-    return;
-  }
-
-  wbLoadSave->SetCaption(_("Load"));
-  wbDelete->set_enabled(true);
-  wbRename->set_enabled(true);
+  assert(wbRename != NULL);
+  wbRename->set_enabled(!at_active_task);
 }
 
 static void 
