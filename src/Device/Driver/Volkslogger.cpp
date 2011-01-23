@@ -119,9 +119,6 @@ static VLAPI vl;
 
 static unsigned nturnpoints = 0;
 
-static bool
-VLDeclAddWayPoint(const Waypoint &way_point);
-
 static void
 CopyToNarrowBuffer(char *dest, size_t max_size, const TCHAR *src)
 {
@@ -134,6 +131,30 @@ CopyToNarrowBuffer(char *dest, size_t max_size, const TCHAR *src)
     strncpy(dest, src, max_size - 1);
     dest[max_size - 1] = 0;
 #endif
+}
+
+static void
+CopyWaypoint(VLAPI_DATA::WPT &dest, const Waypoint &src)
+{
+  CopyToNarrowBuffer(dest.name, sizeof(dest.name), src.Name.c_str());
+  dest.lon = src.Location.Longitude.value_degrees();
+  dest.lat = src.Location.Latitude.value_degrees();
+}
+
+static bool
+VLDeclAddWayPoint(const Waypoint &way_point)
+{
+  if (nturnpoints == 0) {
+    CopyWaypoint(vl.declaration.task.startpoint, way_point);
+    nturnpoints++;
+  } else {
+    CopyWaypoint(vl.declaration.task.turnpoints[nturnpoints-1], way_point);
+    nturnpoints++;
+  }
+
+  CopyWaypoint(vl.declaration.task.finishpoint, way_point);
+
+  return true;
 }
 
 bool
@@ -277,32 +298,6 @@ VolksloggerDevice::Declare(const Declaration *decl)
 
   return ok;
 }
-
-static void
-CopyWaypoint(VLAPI_DATA::WPT &dest, const Waypoint &src)
-{
-  CopyToNarrowBuffer(dest.name, sizeof(dest.name), src.Name.c_str());
-  dest.lon = src.Location.Longitude.value_degrees();
-  dest.lat = src.Location.Latitude.value_degrees();
-}
-
-static bool
-VLDeclAddWayPoint(const Waypoint &way_point)
-{
-  if (nturnpoints == 0) {
-    CopyWaypoint(vl.declaration.task.startpoint, way_point);
-    nturnpoints++;
-  } else {
-    CopyWaypoint(vl.declaration.task.turnpoints[nturnpoints-1], way_point);
-    nturnpoints++;
-  }
-
-  CopyWaypoint(vl.declaration.task.finishpoint, way_point);
-
-  return true;
-
-}
-
 
 static Device *
 VolksloggerCreateOnPort(Port *com_port)
