@@ -58,9 +58,7 @@ DataFieldFileReader::Item::~Item()
 static bool
 IsDots(const TCHAR* str)
 {
-  if (_tcscmp(str, _T(".")) && _tcscmp(str, _T("..")))
-    return false;
-  return true;
+  return !(_tcscmp(str, _T(".")) && _tcscmp(str, _T("..")));
 }
 
 /**
