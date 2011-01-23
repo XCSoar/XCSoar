@@ -49,6 +49,9 @@ private:
 public:
   VolksloggerDevice(Port *_port):port(_port) {}
 
+protected:
+  bool DeclareInner(VLAPI &vl, const struct Declaration *declaration);
+
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
@@ -156,12 +159,8 @@ VLDeclAddWayPoint(VLAPI &vl, const Waypoint &way_point)
 }
 
 bool
-VolksloggerDevice::Declare(const Declaration *decl)
+VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
 {
-  ProgressGlue::Create(_T("Comms with Volkslogger"));
-
-  VLAPI vl;
-  vl.set_port(port);
   nturnpoints = 0;
 
   int err;
@@ -290,12 +289,24 @@ VolksloggerDevice::Declare(const Declaration *decl)
 #endif
 
   bool ok = (vl.write_db_and_declaration() == VLA_ERR_NOERR);
+  return ok;
+}
+
+bool
+VolksloggerDevice::Declare(const Declaration *decl)
+{
+  ProgressGlue::Create(_T("Comms with Volkslogger"));
+
+  VLAPI vl;
+  vl.set_port(port);
+
+  bool success = DeclareInner(vl, decl);
 
   vl.close(1);
 
   ProgressGlue::Close();
 
-  return ok;
+  return success;
 }
 
 static Device *
