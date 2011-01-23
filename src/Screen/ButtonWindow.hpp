@@ -182,12 +182,7 @@ public:
     return (Button_GetState(hWnd) & BST_PUSHED) != 0;
   }
 
-  void set_text(const TCHAR *text) {
-    assert_none_locked();
-    assert_thread();
-
-    ::SetWindowText(hWnd, text);
-  }
+  void set_text(const TCHAR *text);
 
   const tstring get_text() const;
 };
