@@ -296,23 +296,31 @@ dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
 {
   (void)parent;
 
+  // If there is no task manager available
+  // we can't load or browse any tasks
   if (protected_task_manager == NULL)
     return false;
 
+  // Save the current task
   active_task = *task;
   task_modified = false;
 
+  // Scan XCSoarData for available tasks
   task_store.scan();
 
+  // Load the dialog
   wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
                   _T("IDR_XML_TASKLIST_L") : _T("IDR_XML_TASKLIST"));
   assert(wf != NULL);
 
+  // Save important control pointers
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
   assert(wTaskView != NULL);
 
   wTasks = (WndListFrame*)wf->FindByName(_T("frmTasks"));
   assert(wTasks != NULL);
+
+  // Set callbacks
   wTasks->SetActivateCallback(OnTaskListEnter);
   wTasks->SetPaintItemCallback(OnTaskPaintListItem);
   wTasks->SetCursorCallback(OnTaskCursorCallback);
@@ -320,9 +328,11 @@ dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
   UpdateButtons();
   RefreshView();
 
+  // Show the dialog
   wf->ShowModal();
   delete wf;
   
+  // Clear the task list memory again
   task_store.clear();
 
   return task_modified;
