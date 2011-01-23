@@ -102,14 +102,6 @@ public:
   void addFile(const TCHAR *fname, const TCHAR *fpname);
 
   /**
-   * Checks whether the given filename (fname) matches the given filter
-   * @param fname The filename to check
-   * @param filter The filter used for checking
-   * @return True if file matches the filter, False otherwise
-   */
-  bool checkFilter(const TCHAR *fname, const TCHAR* filter);
-
-  /**
    * Returns the number of files in the list
    * @return The number of files in the list
    */
@@ -175,10 +167,7 @@ public:
   unsigned size() const;
   const TCHAR *getItem(unsigned index) const;
 
- protected:
-  bool ScanFiles(const TCHAR *pattern, const TCHAR *filter);
-  bool ScanDirectories(const TCHAR *pattern, const TCHAR *filter);
-
+protected:
   void EnsureLoaded();
 
   /**

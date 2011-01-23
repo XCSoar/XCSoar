@@ -26,8 +26,8 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "Compatibility/string.h"
-#include "Compatibility/path.h"
 #include "OS/PathName.hpp"
+#include "OS/FileUtil.hpp"
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
 #include "OS/FlashCardEnumerator.hpp"
@@ -36,30 +36,6 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 #include <assert.h>
 #include <stdlib.h>
-
-#ifdef HAVE_POSIX
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <unistd.h>
-#include <fnmatch.h>
-#endif
-
-DataFieldFileReader::Item::~Item()
-{
-  free(mTextPathFile);
-}
-
-/**
- * Checks whether the given string str equals "." or ".."
- * @param str The string to check
- * @return True if string equals "." or ".."
- */
-static bool
-IsDots(const TCHAR* str)
-{
-  return !(_tcscmp(str, _T(".")) && _tcscmp(str, _T("..")));
-}
 
 /**
  * Checks whether the given string str equals a xcsoar internal file's filename
@@ -84,6 +60,27 @@ IsInternalFile(const TCHAR* str)
       return true;
 
   return false;
+}
+
+class FileVisitor: public File::Visitor
+{
+private:
+  DataFieldFileReader &datafield;
+
+public:
+  FileVisitor(DataFieldFileReader &_datafield) : datafield(_datafield) {}
+
+  void
+  Visit(const TCHAR* path, const TCHAR* filename)
+  {
+    if (!IsInternalFile(filename))
+      datafield.addFile(filename, path);
+  }
+};
+
+DataFieldFileReader::Item::~Item()
+{
+  free(mTextPathFile);
 }
 
 DataFieldFileReader::DataFieldFileReader(DataAccessCallback_t OnDataAccess)
@@ -128,14 +125,16 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
       EnsureLoaded();
   }
 
+  FileVisitor fv(*this);
+
   const TCHAR *data_path = GetPrimaryDataPath();
-  ScanDirectories(data_path, filter);
+  Directory::VisitSpecificFiles(data_path, filter, fv, true);
 
   {
     TCHAR buffer[MAX_PATH];
     const TCHAR *home_path = GetHomeDataPath(buffer);
     if (home_path != NULL && _tcscmp(data_path, home_path) != 0)
-      ScanDirectories(home_path, filter);
+      Directory::VisitSpecificFiles(home_path, filter, fv, true);
   }
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
@@ -148,149 +147,12 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
       /* don't scan primary data path twice */
       continue;
 
-    ScanDirectories(FlashPath, filter);
+    Directory::VisitSpecificFiles(FlashPath, filter, fv, true);
   }
 #endif /* _WIN32_WCE && !GNAV*/
 
   Sort();
 }
-
-bool
-DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
-{
-#ifdef HAVE_POSIX
-  DIR *dir = opendir(sPath);
-  if (dir == NULL)
-    return false;
-
-  TCHAR FileName[MAX_PATH];
-  _tcscpy(FileName, sPath);
-  size_t FileNameLength = _tcslen(FileName);
-  FileName[FileNameLength++] = '/';
-
-  struct dirent *ent;
-  while ((ent = readdir(dir)) != NULL) {
-    if (IsDots(ent->d_name))
-      continue;
-    if (IsInternalFile(ent->d_name))
-      continue;
-
-    _tcscpy(FileName + FileNameLength, ent->d_name);
-
-    struct stat st;
-    if (stat(FileName, &st) < 0)
-      continue;
-
-    if (S_ISDIR(st.st_mode))
-      ScanDirectories(FileName, filter);
-    else if (S_ISREG(st.st_mode) && fnmatch(filter, ent->d_name, 0) == 0)
-      addFile(ent->d_name, FileName);
-  }
-
-  closedir(dir);
-#else /* !HAVE_POSIX */
-  TCHAR DirPath[MAX_PATH];
-  TCHAR FileName[MAX_PATH];
-
-  if (sPath) {
-    _tcscpy(DirPath, sPath);
-    _tcscpy(FileName, sPath);
-  } else {
-    DirPath[0] = 0;
-    FileName[0] = 0;
-  }
-
-  ScanFiles(FileName, filter);
-
-  _tcscat(DirPath, _T(DIR_SEPARATOR_S));
-  _tcscat(FileName, _T(DIR_SEPARATOR_S "*"));
-
-  WIN32_FIND_DATA FindFileData;
-  HANDLE hFind = FindFirstFile(FileName, &FindFileData); // find the first file
-  if (hFind == INVALID_HANDLE_VALUE)
-    return false;
-
-  _tcscpy(FileName, DirPath);
-
-  bool bSearch = true;
-  do { // until we finds an entry
-    if (!IsDots(FindFileData.cFileName) &&
-        !IsInternalFile(FindFileData.cFileName) &&
-        (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-      // we have found a directory, recurse
-      _tcscat(FileName, FindFileData.cFileName);
-      ScanDirectories(FileName, filter);
-    }
-    _tcscpy(FileName, DirPath);
-
-    if (!FindNextFile(hFind, &FindFileData)) {
-      if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
-        bSearch = false;
-      else {
-        // some error occured, close the handle and return false
-        FindClose(hFind);
-        return false;
-      }
-    }
-  } while (bSearch);
-  FindClose(hFind); // closing file handle
-
-#endif /* !HAVE_POSIX */
-
-  return true;
-}
-
-#ifndef HAVE_POSIX
-bool
-DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter)
-{
-  HANDLE hFind; // file handle
-  WIN32_FIND_DATA FindFileData;
-
-  TCHAR DirPath[MAX_PATH];
-  TCHAR FileName[MAX_PATH];
-
-  if (sPath)
-    _tcscpy(DirPath, sPath);
-  else
-    DirPath[0] = 0;
-
-  _tcscat(DirPath, _T(DIR_SEPARATOR_S));
-  _tcscpy(FileName, DirPath);
-  _tcscat(DirPath, filter);
-
-  hFind = FindFirstFile(DirPath, &FindFileData); // find the first file
-  if (hFind == INVALID_HANDLE_VALUE)
-    return false;
-
-  _tcscpy(DirPath, FileName);
-
-  bool bSearch = true;
-  do { // until we finds an entry
-    if (!IsDots(FindFileData.cFileName) &&
-        !IsInternalFile(FindFileData.cFileName) &&
-        !(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
-        checkFilter(FindFileData.cFileName, filter)) {
-      _tcscat(FileName, FindFileData.cFileName);
-      addFile(FindFileData.cFileName, FileName);
-    }
-    _tcscpy(FileName, DirPath);
-
-    if (!FindNextFile(hFind, &FindFileData)) {
-      if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
-        bSearch = false;
-      else {
-        // some error occured, close the handle and return false
-        FindClose(hFind);
-        return false;
-      }
-    }
-  } while (bSearch);
-  FindClose(hFind); // closing file handle
-
-  return true;
-}
-#endif /* !HAVE_POSIX */
 
 void
 DataFieldFileReader::Lookup(const TCHAR *Text)
@@ -333,43 +195,6 @@ DataFieldFileReader::GetPathFile(void) const
 
   return _T("");
 }
-
-#ifndef HAVE_POSIX /* we use fnmatch() on POSIX */
-bool
-DataFieldFileReader::checkFilter(const TCHAR *filename, const TCHAR *filter)
-{
-  // filter = e.g. "*.igc" or "config/*.prf"
-  // todo: make filters like "config/*.prf" work
-
-  // if invalid or short filter "*" -> return true
-  // todo: check for asterisk
-  if (!filter || string_is_empty(filter + 1))
-    return true;
-
-  // Copy filter without first char into upfilter
-  // *.igc         ->  .igc
-  // config/*.prf  ->  onfig/*.prf
-  TCHAR upfilter[MAX_PATH];
-  _tcscpy(upfilter, filter + 1);
-
-  // Search for upfilter in filename (e.g. ".igc" in "934CFAE1.igc") and
-  //   save the position of the first occurence in ptr
-  const TCHAR *ptr = _tcsstr(filename, upfilter);
-  if (ptr != NULL && _tcslen(ptr) == _tcslen(upfilter))
-    // If upfilter was found at the very end of filename
-    // -> filename matches filter
-    return true;
-
-  // Convert upfilter to uppercase
-  _tcsupr(upfilter);
-
-  // And do it all again
-  ptr = _tcsstr(filename, upfilter);
-
-  // If still no match found -> filename does not match the filter
-  return (ptr != NULL && _tcslen(ptr) == _tcslen(upfilter));
-}
-#endif /* !HAVE_POSIX */
 
 void
 DataFieldFileReader::addFile(const TCHAR *Text, const TCHAR *PText)

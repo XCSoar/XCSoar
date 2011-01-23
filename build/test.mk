@@ -922,6 +922,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/OS/PathName.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
