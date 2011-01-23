@@ -292,14 +292,10 @@ DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter)
       !IsInternalFile(FindFileData.cFileName)) {
     _tcscat(FileName, FindFileData.cFileName);
 
-    if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-      // do nothing
-    } else {
-      // DO SOMETHING WITH FileName
-      if (checkFilter(FindFileData.cFileName, filter)) {
-        addFile(FindFileData.cFileName, FileName);
-      }
-    }
+    if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
+        checkFilter(FindFileData.cFileName, filter))
+      addFile(FindFileData.cFileName, FileName);
+
     _tcscpy(FileName, DirPath);
   }
 
@@ -312,14 +308,10 @@ DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter)
         continue;
       _tcscat(FileName, FindFileData.cFileName);
 
-      if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-        // do nothing
-      } else {
-        // DO SOMETHING WITH FileName
-        if (checkFilter(FindFileData.cFileName, filter)) {
-          addFile(FindFileData.cFileName, FileName);
-        }
-      }
+      if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
+          checkFilter(FindFileData.cFileName, filter))
+        addFile(FindFileData.cFileName, FileName);
+
       _tcscpy(FileName, DirPath);
     } else {
       if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
