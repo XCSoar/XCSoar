@@ -51,6 +51,7 @@ TEST_NAMES = \
 	test_waypoints \
 	test_pressure \
 	test_task \
+	TestMathTables \
 	TestAngle TestUnits TestEarth TestSunEphemeris \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestDriver \
@@ -68,6 +69,15 @@ TEST_REPLAY_TASK_SOURCES = \
 TEST_REPLAY_TASK_OBJS = $(call SRC_TO_OBJ,$(TEST_REPLAY_TASK_SOURCES))
 TEST_REPLAY_TASK_LDADD = $(TESTLIBS)
 $(TARGET_BIN_DIR)/test_replay_task$(TARGET_EXEEXT): $(TEST_REPLAY_TASK_OBJS) $(TEST_REPLAY_TASK_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_MATH_TABLES_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestMathTables.cpp
+TEST_MATH_TABLES_OBJS = $(call SRC_TO_OBJ,$(TEST_MATH_TABLES_SOURCES))
+TEST_MATH_TABLES_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestMathTables$(TARGET_EXEEXT): $(TEST_MATH_TABLES_OBJS) $(TEST_MATH_TABLES_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
