@@ -33,7 +33,6 @@ Copyright_License {
 
 #include <assert.h>
 
-static SingleWindow *parent_window;
 static WndForm *wf = NULL;
 static WndListFrame* wTasks = NULL;
 static WndFrame* wTaskView = NULL;
@@ -295,11 +294,11 @@ static CallBackTableEntry CallBackTable[] = {
 bool
 dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
 {
+  (void)parent;
+
   if (protected_task_manager == NULL)
     return false;
 
-  parent_window = &parent;
-  
   active_task = *task;
   task_modified = false;
 
