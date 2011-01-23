@@ -134,6 +134,7 @@ void i_normalise_fast(int &x,
  * calculate normalised value of lesser of x and y scaled
  * to 3 bits without using sqrt or div operator
  */
+gcc_const
 unsigned i_normalise_sine(unsigned x,
                           unsigned y);
 
@@ -149,6 +150,7 @@ void i_normalise(int &x,
  *
  * result = mag/sqrt(x*x+y*y+z*z)
  */
+gcc_const
 int i_normalise_mag3(const int mag,
                      const int x,
                      const int y,
@@ -160,6 +162,7 @@ int i_normalise_mag3(const int mag,
  *
  * result = mag/sqrt(x*x+y*y)
  */
+gcc_const
 int i_normalise_mag2(const int mag,
                      const int x,
                      const int y);
@@ -172,6 +175,7 @@ void mag_rmag(const fixed x,
               fixed& s,
               fixed& is);
 
+gcc_const
 fixed thermal_recency_fn(unsigned x);
 
 inline unsigned int
