@@ -27,12 +27,16 @@
 
 class FaultInjectionPort : public Port {
 public:
+  enum {
+    DEFAULT_BAUD_RATE = 1234,
+  };
+
   bool running;
   int timeout;
   unsigned long baud_rate;
 
   FaultInjectionPort(Handler &_handler)
-    :Port(_handler), running(true), timeout(0), baud_rate(4800) {}
+    :Port(_handler), running(true), timeout(0), baud_rate(DEFAULT_BAUD_RATE) {}
 
   void Flush() {}
   void Write(const void *data, unsigned length) {}

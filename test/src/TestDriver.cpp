@@ -276,19 +276,21 @@ TestDeclare(const struct DeviceRegister &driver)
   for (unsigned i = 0; i < 1024; ++i) {
     inject_port_fault = i;
     bool success = device->Declare(&declaration);
-    if (success || !port.running || port.timeout != 0)
+    if (success || !port.running || port.timeout != 0 ||
+        port.baud_rate != FaultInjectionPort::DEFAULT_BAUD_RATE)
       break;
   }
 
   ok1(port.running);
   ok1(port.timeout == 0);
+  ok1(port.baud_rate == FaultInjectionPort::DEFAULT_BAUD_RATE);
 
   delete device;
 }
 
 int main(int argc, char **argv)
 {
-  plan_tests(91);
+  plan_tests(96);
 
   TestGeneric();
   TestCAI302();
