@@ -56,6 +56,7 @@ public:
 protected:
   bool TryConnect();
   bool AddWayPoint(const Waypoint &way_point);
+  bool DeclareInner(const struct Declaration *declaration);
 
 public:
   virtual void LinkTimeout();
@@ -109,19 +110,12 @@ convert_string(char *dest, size_t size, const TCHAR *src)
 }
 
 bool
-EWDevice::Declare(const struct Declaration *decl)
+EWDevice::DeclareInner(const struct Declaration *decl)
 {
   char sTmp[72];
 
   nDeclErrorCode = 0;
   ewDecelTpIndex = 0;
-  fDeclarationPending = true;
-
-  port->StopRxThread();
-
-  lLastBaudrate = port->SetBaudrate(9600L);    // change to IO Mode baudrate
-
-  port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
   if (!TryConnect())
     return false;
@@ -200,6 +194,22 @@ EWDevice::Declare(const struct Declaration *decl)
   for (unsigned j = 0; j < decl->size(); ++j)
     AddWayPoint(decl->waypoints[j]);
 
+  return nDeclErrorCode == 0; // return true on success
+}
+
+bool
+EWDevice::Declare(const struct Declaration *decl)
+{
+  fDeclarationPending = true;
+
+  port->StopRxThread();
+
+  lLastBaudrate = port->SetBaudrate(9600L);    // change to IO Mode baudrate
+
+  port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+
+  bool success = DeclareInner(decl);
+
   port->Write("NMEA\r\n"); // switch to NMEA mode
 
   port->SetBaudrate(lLastBaudrate);            // restore baudrate
@@ -209,8 +219,7 @@ EWDevice::Declare(const struct Declaration *decl)
 
   fDeclarationPending = false;                    // clear decl pending flag
 
-  return nDeclErrorCode == 0; // return true on success
-
+  return success;
 }
 
 

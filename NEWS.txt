@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.0.3 - not yet released
+* devices
+  - EW: restart I/O thread after declaration failure
 * user interface
   - Language: translation updates
 
