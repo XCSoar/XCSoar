@@ -592,25 +592,22 @@ VLA_ERROR VLAPI::open(boolean connectit, int timeout,
                       boolean quiet, int32 sbaudrate) {
   noninteractive = quiet;
   VLA_ERROR err;
-  // aquire port from OS
-  if ((err = serial_open_port()) == VLA_ERR_NOERR) {
-    // setup port
-    if ((err = serial_set_baudrate(commandbaud)) == VLA_ERR_NOERR) {
-      set_databaud(sbaudrate);
-      // connect
-      if(connectit) {
-        if((err = connect(timeout,quiet)) == VLA_ERR_NOERR) {
-          vlpresent = 1;
-          // nach erfolgreichem Connect
-          // noninteractive wieder auf "Still" setzen
-          //noninteractive = 1;
-        }
-      }
-    }
-  }
 
-  if(err == VLA_ERR_COMM)
-    serial_close_port();
+  // setup port
+  if ((err = serial_set_baudrate(commandbaud)) != VLA_ERR_NOERR)
+    return err;
+
+  set_databaud(sbaudrate);
+  // connect
+  if (connectit) {
+    if ((err = connect(timeout,quiet)) != VLA_ERR_NOERR)
+      return err;
+
+    vlpresent = 1;
+    // nach erfolgreichem Connect
+    // noninteractive wieder auf "Still" setzen
+    //noninteractive = 1;
+  }
 
   return err;
 }
@@ -623,7 +620,6 @@ void VLAPI::close(boolean reset) {
     if(reset) {
       sendcommand(cmd_RST,0,0);
     }
-    serial_close_port();
     vlpresent = 0;
   }
 }

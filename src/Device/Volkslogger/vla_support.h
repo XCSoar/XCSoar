@@ -58,8 +58,6 @@ protected:
   int32 get_timer_s();
 
 	// serial port functions
-	VLA_ERROR serial_open_port();
-  VLA_ERROR serial_close_port();
   VLA_ERROR serial_set_baudrate(const int32 baudrate);
   VLA_ERROR serial_out(const byte outbyte);
 	VLA_ERROR serial_in(byte *inbyte);

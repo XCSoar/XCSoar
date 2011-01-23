@@ -29,6 +29,7 @@ Copyright_License {
 #include "Device/Driver/Volkslogger.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Port.hpp"
 #include "ProgressGlue.hpp"
 #include "UtilsText.hpp"
 #include "Device/Volkslogger/vlapi2.h"
@@ -297,12 +298,24 @@ VolksloggerDevice::Declare(const Declaration *decl)
 {
   ProgressGlue::Create(_T("Comms with Volkslogger"));
 
+  port->StopRxThread();
+  port->SetRxTimeout(500);
+
+  // change to IO mode baud rate
+  unsigned long lLastBaudrate = port->SetBaudrate(9600L);
+
+  ProgressGlue::SetStep(1);
+
   VLAPI vl;
   vl.set_port(port);
 
   bool success = DeclareInner(vl, decl);
 
   vl.close(1);
+
+  port->SetBaudrate(lLastBaudrate); // restore baudrate
+  port->SetRxTimeout(0); // clear timeout
+  port->StartRxThread(); // restart RX thread
 
   ProgressGlue::Close();
 
