@@ -306,16 +306,8 @@ dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
 
   task_store.scan();
 
-  if (Layout::landscape)
-    wf = LoadDialog(CallBackTable,
-                        parent, _T("IDR_XML_TASKLIST_L"));
-  else
-    wf = LoadDialog(CallBackTable,
-                        parent, _T("IDR_XML_TASKLIST"));
-
-  if (!wf)
-    return false;
-
+  wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
+                  _T("IDR_XML_TASKLIST_L") : _T("IDR_XML_TASKLIST"));
   assert(wf != NULL);
 
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
