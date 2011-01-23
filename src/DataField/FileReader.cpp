@@ -265,33 +265,18 @@ DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter)
 
   _tcscpy(DirPath, FileName);
 
-  // found first one
-  if (!IsDots(FindFileData.cFileName) &&
-      !IsInternalFile(FindFileData.cFileName)) {
-    _tcscat(FileName, FindFileData.cFileName);
-
-    if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
-        checkFilter(FindFileData.cFileName, filter))
-      addFile(FindFileData.cFileName, FileName);
-
-    _tcscpy(FileName, DirPath);
-  }
-
   bool bSearch = true;
-  while (bSearch) { // until we finds an entry
-    if (FindNextFile(hFind, &FindFileData)) {
-      if (IsDots(FindFileData.cFileName))
-        continue;
-      if (IsInternalFile(FindFileData.cFileName))
-        continue;
+  do { // until we finds an entry
+    if (!IsDots(FindFileData.cFileName) &&
+        !IsInternalFile(FindFileData.cFileName) &&
+        !(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
+        checkFilter(FindFileData.cFileName, filter)) {
       _tcscat(FileName, FindFileData.cFileName);
+      addFile(FindFileData.cFileName, FileName);
+    }
+    _tcscpy(FileName, DirPath);
 
-      if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
-          checkFilter(FindFileData.cFileName, filter))
-        addFile(FindFileData.cFileName, FileName);
-
-      _tcscpy(FileName, DirPath);
-    } else {
+    if (!FindNextFile(hFind, &FindFileData)) {
       if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
         bSearch = false;
       else {
@@ -300,7 +285,7 @@ DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter)
         return false;
       }
     }
-  }
+  } while (bSearch);
   FindClose(hFind); // closing file handle
 
   return true;
