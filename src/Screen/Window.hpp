@@ -239,6 +239,12 @@ protected:
   void assert_thread() const;
 #endif
 
+#ifndef ENABLE_SDL
+  bool get_custom_painting() const {
+    return custom_painting;
+  }
+#endif
+
 public:
   bool defined() const {
 #ifdef ENABLE_SDL

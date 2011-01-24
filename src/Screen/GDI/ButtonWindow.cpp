@@ -50,6 +50,11 @@ ButtonWindow::set_text(const TCHAR *_text) {
   assert_none_locked();
   assert_thread();
 
+  if (get_custom_painting() || _tcschr(_text, _T('&')) == NULL) {
+    ::SetWindowText(hWnd, _text);
+    return;
+  }
+
   TCHAR buffer[256]; /* should be large enough for buttons */
   static unsigned const int buffer_size=sizeof(buffer)/sizeof(buffer[0]);
 
