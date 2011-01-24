@@ -15,6 +15,7 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/ScrollBar.cpp \
 	$(FORM_SRC_DIR)/Edit.cpp \
 	$(FORM_SRC_DIR)/Tabbed.cpp \
+	$(FORM_SRC_DIR)/TabBar.cpp \
 	$(FORM_SRC_DIR)/Keyboard.cpp \
 	$(FORM_SRC_DIR)/Util.cpp
 

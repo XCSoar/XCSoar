@@ -41,6 +41,7 @@ Copyright_License {
 #include "Form/Draw.hpp"
 #include "Form/List.hpp"
 #include "Form/Tabbed.hpp"
+#include "Form/TabBar.hpp"
 #include "Form/Panel.hpp"
 #include "Form/Keyboard.hpp"
 #include "Form/CheckBox.hpp"
@@ -843,6 +844,16 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
         tabbed->AddClient(child);
         continue;
     }
+  // TabBarControl (TabBar)
+  } else if (_tcscmp(node.getName(), _T("TabBar")) == 0) {
+    // Create the TabBarControl
+
+    style.control_parent();
+    TabBarControl *tabbar = new TabBarControl(parent,
+                                              pos.x, pos.y, size.cx, size.cy,
+                                              style);
+    window = tabbar;
+
   } else if (_tcscmp(node.getName(), _T("Custom")) == 0) {
     // Create a custom Window object with a callback
     CreateWindowCallback_t create =
