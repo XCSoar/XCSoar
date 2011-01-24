@@ -33,12 +33,12 @@ class OrderedTask;
 class Waypoint;
 
 struct Declaration {
-public:
-  Declaration(const OrderedTask* task);
   TCHAR PilotName[64];
   TCHAR AircraftType[32];
   TCHAR AircraftRego[32];
   std::vector<Waypoint> waypoints;
+
+  Declaration(const OrderedTask* task);
   const TCHAR* get_name(const unsigned i) const;
   const GeoPoint& get_location(const unsigned i) const;
   size_t size() const;
