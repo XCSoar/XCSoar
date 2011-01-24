@@ -1,6 +1,8 @@
 #ifndef AIRSPACE_PREDICATE_HPP
 #define AIRSPACE_PREDICATE_HPP
 
+#include "Compiler.h"
+
 class AbstractAirspace;
 class AirspacePredicateTrue;
 struct AIRCRAFT_STATE;
@@ -16,6 +18,7 @@ public:
    * @param t Airspace to test
    * @return True if condition met
    */
+  gcc_pure
   virtual bool operator()(const AbstractAirspace& t) const = 0;
 
   /**
@@ -23,6 +26,7 @@ public:
    * @param t Airspace to test
    * @return True if condition met
    */
+  gcc_pure
   bool condition(const AbstractAirspace&t) const {
     return (*this)(t);
   }
