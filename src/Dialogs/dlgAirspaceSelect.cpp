@@ -31,6 +31,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Components.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
+#include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Busy.hpp"
 #include "Compiler.h"

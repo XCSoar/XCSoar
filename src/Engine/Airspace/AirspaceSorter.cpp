@@ -1,5 +1,6 @@
 #include "AirspaceSorter.hpp"
 #include "Airspace/Airspaces.hpp"
+#include "AbstractAirspace.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
 #include <algorithm>

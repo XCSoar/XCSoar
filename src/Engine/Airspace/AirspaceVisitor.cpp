@@ -21,6 +21,7 @@
  */
 #include "AirspaceVisitor.hpp"
 #include "Airspace.hpp"
+#include "AbstractAirspace.hpp"
 
 void
 AirspaceVisitor::Visit(const AbstractAirspace &aa)

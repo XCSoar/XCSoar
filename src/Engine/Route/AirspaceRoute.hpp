@@ -29,6 +29,7 @@
 #include "Navigation/SearchPoint.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
+#include "Navigation/SearchPointVector.hpp"
 
 typedef std::vector<GeoPoint> Route;
 

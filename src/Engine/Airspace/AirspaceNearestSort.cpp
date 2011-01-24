@@ -1,6 +1,7 @@
 #include "AirspaceNearestSort.hpp"
 #include "Airspaces.hpp"
 #include "AirspaceVisitor.hpp"
+#include "AbstractAirspace.hpp"
 
 void 
 AirspaceNearestSort::populate_queue(const Airspaces &airspaces,

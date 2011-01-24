@@ -23,14 +23,18 @@
 #define AIRSPACE_HPP
 
 #include "Navigation/Flat/FlatBoundingBox.hpp"
-#include "AbstractAirspace.hpp"
 #include "Compiler.h"
 
 #ifdef DO_PRINT
 #include <iostream>
 #endif
 
+struct AIRCRAFT_STATE;
 class AtmosphericPressure;
+class AbstractAirspace;
+
+#include <vector>
+typedef std::vector< std::pair<GeoPoint,GeoPoint> > AirspaceIntersectionVector;
 
 /**
  * Single object container for actual airspaces, to be stored in Airspaces object
