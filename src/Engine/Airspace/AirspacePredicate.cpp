@@ -2,7 +2,7 @@
 #include "Navigation/Aircraft.hpp"
 #include "AbstractAirspace.hpp"
 
-AirspacePredicateTrue AirspacePredicate::always_true;
+const AirspacePredicateTrue AirspacePredicate::always_true;
 
 AirspacePredicateAircraftInside::AirspacePredicateAircraftInside(const AIRCRAFT_STATE& state):
   m_state(state) 

@@ -32,7 +32,7 @@ public:
   }
 
   /** Convenience condition, useful for default conditions */
-  static AirspacePredicateTrue always_true;
+  static const AirspacePredicateTrue always_true;
 };
 
 /**
