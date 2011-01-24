@@ -46,6 +46,9 @@ IDB_CLIMB               BITMAP  DISCARDABLE     "../output/data/icons/mode_climb
 IDB_CLIMB_HD            BITMAP  DISCARDABLE     "../output/data/icons/mode_climb_160.bmp"
 IDB_CLIMBSMALL          BITMAP  DISCARDABLE     "bitmaps/climb_12.bmp"
 IDB_CLIMBSMALLINV       BITMAP  DISCARDABLE     "bitmaps/climb_12inv.bmp"
+#ifdef EYE_CANDY
+IDB_DIALOGTITLE         BITMAP  DISCARDABLE     "bitmaps/dialog_title.bmp"
+#endif
 IDB_DLGBUTTONLEFT32     BITMAP  DISCARDABLE     "bitmaps/dialog_button_left_32x32.bmp"
 IDB_DLGBUTTONRIGHT32    BITMAP  DISCARDABLE     "bitmaps/dialog_button_right_32x32.bmp"
 IDB_FINALGLIDE          BITMAP  DISCARDABLE     "../output/data/icons/mode_finalglide.bmp"

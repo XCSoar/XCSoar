@@ -40,6 +40,11 @@ Copyright_License {
 #include "Screen/GDI/Event.hpp"
 #endif
 
+#ifdef EYE_CANDY
+#include "Screen/Bitmap.hpp"
+#include "resource.h"
+#endif
+
 bool
 WndForm::ClientAreaWindow::on_command(unsigned id, unsigned code)
 {
@@ -427,7 +432,10 @@ WndForm::on_paint(Canvas &canvas)
 
   // Set the colors
   canvas.set_text_color(Color::WHITE);
+
+#ifndef EYE_CANDY
   canvas.set_background_color(mColorTitle);
+#endif
   canvas.background_transparent();
 
   // Set the titlebar font and font-size
@@ -435,9 +443,22 @@ WndForm::on_paint(Canvas &canvas)
 
   // JMW todo add here icons?
 
+#ifdef EYE_CANDY
+  Bitmap bitmap_title;
+  assert(bitmap_title.load(IDB_DIALOGTITLE));
+  SIZE bitmap_title_size = bitmap_title.get_size();
+  canvas.stretch(mTitleRect.left, mTitleRect.top,
+                 mTitleRect.right - mTitleRect.left,
+                 mTitleRect.bottom - mTitleRect.top,
+                 bitmap_title, 0, 0,
+                 bitmap_title_size.cx, bitmap_title_size.cy);
+
   // Draw titlebar text
+  canvas.text(mTitleRect.left + Layout::FastScale(2), mTitleRect.top, mCaption);
+#else
   canvas.text_opaque(mTitleRect.left + Layout::FastScale(2),
                      mTitleRect.top, mTitleRect, mCaption);
+#endif
 }
 
 void

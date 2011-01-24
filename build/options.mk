@@ -16,6 +16,12 @@ ifeq ($(GREEN_MENU),y)
 TARGET_CPPFLAGS += -DGREEN_MENU
 endif
 
+# shall we paint with some eye candy?
+ifneq ($(EYE_CANDY),n)
+TARGET_CPPFLAGS += -DEYE_CANDY
+WINDRESFLAGS += -DEYE_CANDY
+endif
+
 # shall the profile be loaded from file into the registry?
 ifeq ($(PROFILE_NO_FILE),y)
 TARGET_CPPFLAGS += -DPROFILE_NO_FILE

@@ -97,12 +97,13 @@
 #define IDB_TITLE_HD                    339
 #define IDB_MAPSCALE_LEFT               340
 #define IDB_MAPSCALE_RIGHT              341
+#define IDB_DIALOGTITLE                 342
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        342
+#define _APS_NEXT_RESOURCE_VALUE        343
 #define _APS_NEXT_COMMAND_VALUE         40025
 #define _APS_NEXT_CONTROL_VALUE         1264
 #define _APS_NEXT_SYMED_VALUE           102
