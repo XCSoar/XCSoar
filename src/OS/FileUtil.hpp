@@ -34,28 +34,69 @@ Copyright_License {
 
 namespace File
 {
+  /**
+   * Base class for a FileVisitor that is used by Directory::VisitFiles()
+   */
   class Visitor
   {
   public:
+    /**
+     * The function that is called when the visitor is visiting a specific file
+     * @param path Complete path of the file (e.g. "xyz/abc/bla.txt")
+     * @param filename Base name of the file (e.g. "bla.txt")
+     */
     virtual void Visit(const TCHAR* path, const TCHAR* filename) = 0;
   };
 }
 
 namespace Directory
 {
+  /**
+   * Returns whether the given folder exists and is a folder (not a file)
+   * @param path File system path to check
+   * @return True if the folder exists
+   */
   bool Exists(const TCHAR* path);
+  /**
+   * Creates a new folder at the given path
+   * @param path Path to the folder that should be created
+   */
   void Create(const TCHAR* path);
 
+  /**
+   * Visit all the files of a specific directory with the given visitor
+   * @param path Path to visit
+   * @param visitor Visitor that should be used
+   * @param recursive If true all subfolders will be visited too
+   */
   void VisitFiles(const TCHAR* path, File::Visitor &visitor,
                   bool recursive = false);
+  /**
+   * Visit all the files of a specific directory that match the given
+   * filename pattern with the given visitor
+   * @param path Path to visit
+   * @param filter Filename pattern that should be searched for
+   * @param visitor Visitor that should be used
+   * @param recursive If true all subfolders will be visited too
+   */
   void VisitSpecificFiles(const TCHAR* path, const TCHAR* filter,
                           File::Visitor &visitor, bool recursive = false);
 }
 
 namespace File
 {
+  /**
+   * Returns whether the given file exists and is a file (not a folder)
+   * @param path File system path to check
+   * @return True if the file exists
+   */
   bool Exists(const TCHAR* path);
 
+  /**
+   * Deletes the given file
+   * @param path Path to the file that should be deleted
+   * @return True if the file was successfully deleted
+   */
   static inline bool
   Delete(const TCHAR *path)
   {
