@@ -114,47 +114,62 @@ static bool
 ScanFiles(File::Visitor &visitor, const TCHAR* sPath,
           const TCHAR* filter = _T("*"))
 {
-  HANDLE hFind; // file handle
-  WIN32_FIND_DATA FindFileData;
-
   TCHAR DirPath[MAX_PATH];
   TCHAR FileName[MAX_PATH];
 
   if (sPath)
+    // e.g. "/test/data/something"
     _tcscpy(DirPath, sPath);
   else
     DirPath[0] = 0;
 
+  // "/test/data/something/"
   _tcscat(DirPath, _T(DIR_SEPARATOR_S));
   _tcscpy(FileName, DirPath);
+
+  // "/test/data/something/*.igc"
   _tcscat(DirPath, filter);
 
-  hFind = FindFirstFile(DirPath, &FindFileData); // find the first file
+  // Find the first matching file
+  WIN32_FIND_DATA FindFileData;
+  HANDLE hFind = FindFirstFile(DirPath, &FindFileData);
+
+  // If no matching file found -> return false
   if (hFind == INVALID_HANDLE_VALUE)
     return false;
 
+  // "/test/data/something/"
   _tcscpy(DirPath, FileName);
 
+  // Loop through remaining matching files
   while (true) {
     if (!IsDots(FindFileData.cFileName) &&
         !(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         checkFilter(FindFileData.cFileName, filter)) {
+      // "/test/data/something/blubb.txt"
       _tcscat(FileName, FindFileData.cFileName);
+      // Call visitor with the file that was found
       visitor.Visit(FileName, FindFileData.cFileName);
     }
+    // "/test/data/something/"
     _tcscpy(FileName, DirPath);
 
+    // Look for next matching file
     if (!FindNextFile(hFind, &FindFileData)) {
-      if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
+      if (GetLastError() == ERROR_NO_MORE_FILES)
+        // No more files/folders
+        // -> Jump out of the loop
         break;
       else {
-        // some error occured, close the handle and return false
+        // Some error occured
+        // -> Close the handle and return false
         FindClose(hFind);
         return false;
       }
     }
   }
-  FindClose(hFind); // closing file handle
+  // Close the file handle
+  FindClose(hFind);
 
   return true;
 }
@@ -197,6 +212,7 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
   TCHAR FileName[MAX_PATH];
 
   if (sPath) {
+    // e.g. "/test/data/something"
     _tcscpy(DirPath, sPath);
     _tcscpy(FileName, sPath);
   } else {
@@ -204,39 +220,55 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
     FileName[0] = 0;
   }
 
+  // Scan for files in "/test/data/something"
   ScanFiles(visitor, FileName, filter);
 
+  // If we are not scanning recursive we are done now
   if (!recursive)
     return true;
 
+  // "test/data/something/"
   _tcscat(DirPath, _T(DIR_SEPARATOR_S));
+  // "test/data/something/*"
   _tcscat(FileName, _T(DIR_SEPARATOR_S "*"));
 
+  // Find the first file
   WIN32_FIND_DATA FindFileData;
-  HANDLE hFind = FindFirstFile(FileName, &FindFileData); // find the first file
+  HANDLE hFind = FindFirstFile(FileName, &FindFileData);
+
+  // If no file found -> return false
   if (hFind == INVALID_HANDLE_VALUE)
     return false;
 
+  // Loop through remaining files
   while (true) {
+    // "test/data/something/"
     _tcscpy(FileName, DirPath);
+
     if (!IsDots(FindFileData.cFileName) &&
         (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-      // we have found a directory, recurse
+      // "test/data/something/SUBFOLDER"
       _tcscat(FileName, FindFileData.cFileName);
+      // Scan subfolder for matching files too
       ScanDirectories(visitor, true, FileName, filter);
     }
 
+    // Look for next file/folder
     if (!FindNextFile(hFind, &FindFileData)) {
-      if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
+      if (GetLastError() == ERROR_NO_MORE_FILES)
+        // No more files/folders
+        // -> Jump out of the loop
         break;
       else {
-        // some error occured, close the handle and return false
+        // Some error occured
+        // -> Close the handle and return false
         FindClose(hFind);
         return false;
       }
     }
   }
-  FindClose(hFind); // closing file handle
+  // Close the file handle
+  FindClose(hFind);
 
 #endif /* !HAVE_POSIX */
 
