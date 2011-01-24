@@ -36,21 +36,3 @@ Declaration::Declaration(const OrderedTask* task)
     for (unsigned i = 0; i < task->task_size(); i++)
       waypoints.push_back(task->get_tp(i)->get_waypoint());
 }
-
-const TCHAR* 
-Declaration::get_name(const unsigned i) const
-{
-  return waypoints[i].Name.c_str();
-}
-
-const GeoPoint& 
-Declaration::get_location(const unsigned i) const
-{
-  return waypoints[i].Location;
-}
-
-size_t 
-Declaration::size() const
-{
-  return waypoints.size();
-}

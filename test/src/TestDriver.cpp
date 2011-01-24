@@ -70,12 +70,6 @@ devHasBaroSource()
   return false;
 }
 
-size_t
-Declaration::size() const
-{
-  return 0;
-}
-
 /*
  * Fake Device/Geoid.cpp
  */

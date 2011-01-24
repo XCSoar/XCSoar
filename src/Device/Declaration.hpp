@@ -52,9 +52,17 @@ struct Declaration {
     return waypoints.back();
   }
 
-  const TCHAR* get_name(const unsigned i) const;
-  const GeoPoint& get_location(const unsigned i) const;
-  size_t size() const;
+  const TCHAR *get_name(const unsigned i) const {
+    return waypoints[i].Name.c_str();
+  }
+
+  const GeoPoint &get_location(const unsigned i) const {
+    return waypoints[i].Location;
+  }
+
+  size_t size() const {
+    return waypoints.size();
+  }
 };
 
 #endif
