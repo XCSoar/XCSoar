@@ -33,9 +33,8 @@ Copyright_License {
 
 #include <assert.h>
 
-static SingleWindow *parent_window;
-static WndForm *wf=NULL;
-static WndListFrame* wTasks= NULL;
+static WndForm *wf = NULL;
+static WndListFrame* wTasks = NULL;
 static WndFrame* wTaskView = NULL;
 static TaskStore task_store;
 static OrderedTask* active_task = NULL;
@@ -111,8 +110,7 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
     name = task_store.get_name(DrawListIndex-1);
 
   canvas.text(rc.left + Layout::FastScale(2),
-              rc.top + Layout::FastScale(2),
-              name);
+              rc.top + Layout::FastScale(2), name);
 }
 
 static void
@@ -121,9 +119,8 @@ RefreshView()
   wTasks->SetLength(task_store.size() + 1);
   wTaskView->invalidate();
 
-  WndFrame* wSummary = (WndFrame *)wf->FindByName(_T("frmSummary"));
-  if (!wSummary)
-    return;
+  WndFrame* wSummary = (WndFrame*)wf->FindByName(_T("frmSummary"));
+  assert(wSummary != NULL);
 
   OrderedTask* ordered_task = get_cursor_task();
   if (ordered_task == NULL) {
@@ -137,7 +134,7 @@ RefreshView()
 }
 
 static void
-OnSave()
+SaveTask()
 {
   if (!cursor_at_active_task())
     return;
@@ -150,7 +147,7 @@ OnSave()
 }
 
 static void
-OnLoad()
+LoadTask()
 {
   if (cursor_at_active_task())
     return;
@@ -177,16 +174,16 @@ OnLoad()
 }
 
 static void
-OnLoadSave()
+LoadOrSaveTask()
 {
   if (cursor_at_active_task())
-    OnSave();
+    SaveTask();
   else
-    OnLoad();
+    LoadTask();
 }
 
 static void
-OnDelete()
+DeleteTask()
 {
   if (cursor_at_active_task())
     return;
@@ -210,7 +207,7 @@ OnDelete()
 }
 
 static void
-OnRename()
+RenameTask()
 {
   if (cursor_at_active_task())
     return;
@@ -239,46 +236,43 @@ OnRename()
 static void
 UpdateButtons()
 {
+  bool at_active_task = cursor_at_active_task();
+
   WndButton* wbLoadSave = (WndButton*)wf->FindByName(_T("cmdLoadSave"));
+  assert(wbLoadSave != NULL);
+  wbLoadSave->SetCaption(at_active_task ?_("Save") : _("Load"));
+
   WndButton* wbDelete = (WndButton*)wf->FindByName(_T("cmdDelete"));
+  assert(wbDelete != NULL);
+  wbDelete->set_enabled(!at_active_task);
+
   WndButton* wbRename = (WndButton*)wf->FindByName(_T("cmdRename"));
-  if (!wbLoadSave || !wbDelete || !wbRename)
-    return;
-
-  if (cursor_at_active_task()) {
-    wbLoadSave->SetCaption(_("Save"));
-    wbDelete->set_enabled(false);
-    wbRename->set_enabled(false);
-    return;
-  }
-
-  wbLoadSave->SetCaption(_("Load"));
-  wbDelete->set_enabled(true);
-  wbRename->set_enabled(true);
+  assert(wbRename != NULL);
+  wbRename->set_enabled(!at_active_task);
 }
 
 static void 
 OnLoadSaveClicked(WndButton &Sender)
 {
-  OnLoadSave();
+  LoadOrSaveTask();
 }
 
 static void
 OnDeleteClicked(WndButton &Sender)
 {
-  OnDelete();
+  DeleteTask();
 }
 
 static void
 OnRenameClicked(WndButton &Sender)
 {
-  OnRename();
+  RenameTask();
 }
 
 static void
 OnTaskListEnter(unsigned ItemIndex)
 {
-  OnLoadSave();
+  LoadOrSaveTask();
 }
 
 static void
@@ -300,33 +294,33 @@ static CallBackTableEntry CallBackTable[] = {
 bool
 dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
 {
+  (void)parent;
+
+  // If there is no task manager available
+  // we can't load or browse any tasks
   if (protected_task_manager == NULL)
     return false;
 
-  parent_window = &parent;
-  
+  // Save the current task
   active_task = *task;
   task_modified = false;
 
+  // Scan XCSoarData for available tasks
   task_store.scan();
 
-  if (Layout::landscape)
-    wf = LoadDialog(CallBackTable,
-                        parent, _T("IDR_XML_TASKLIST_L"));
-  else
-    wf = LoadDialog(CallBackTable,
-                        parent, _T("IDR_XML_TASKLIST"));
-
-  if (!wf)
-    return false;
-
+  // Load the dialog
+  wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
+                  _T("IDR_XML_TASKLIST_L") : _T("IDR_XML_TASKLIST"));
   assert(wf != NULL);
 
+  // Save important control pointers
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
   assert(wTaskView != NULL);
 
   wTasks = (WndListFrame*)wf->FindByName(_T("frmTasks"));
   assert(wTasks != NULL);
+
+  // Set callbacks
   wTasks->SetActivateCallback(OnTaskListEnter);
   wTasks->SetPaintItemCallback(OnTaskPaintListItem);
   wTasks->SetCursorCallback(OnTaskCursorCallback);
@@ -334,16 +328,12 @@ dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
   UpdateButtons();
   RefreshView();
 
+  // Show the dialog
   wf->ShowModal();
   delete wf;
   
-  bool retval = false;
-  if (*task != active_task) {
-    *task = active_task;
-    retval = true;
-  }
-
+  // Clear the task list memory again
   task_store.clear();
 
-  return retval || task_modified;
+  return task_modified;
 }

@@ -32,10 +32,24 @@ Copyright_License {
 #include <windows.h>
 #endif
 
+namespace File
+{
+  class Visitor
+  {
+  public:
+    virtual void Visit(const TCHAR* path, const TCHAR* filename) = 0;
+  };
+}
+
 namespace Directory
 {
   bool Exists(const TCHAR* path);
   void Create(const TCHAR* path);
+
+  void VisitFiles(const TCHAR* path, File::Visitor &visitor,
+                  bool recursive = false);
+  void VisitSpecificFiles(const TCHAR* path, const TCHAR* filter,
+                          File::Visitor &visitor, bool recursive = false);
 }
 
 namespace File
