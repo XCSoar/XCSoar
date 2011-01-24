@@ -135,8 +135,7 @@ ScanFiles(File::Visitor &visitor, const TCHAR* sPath,
 
   _tcscpy(DirPath, FileName);
 
-  bool done = false;
-  do { // until we finds an entry
+  while (true) {
     if (!IsDots(FindFileData.cFileName) &&
         !(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         checkFilter(FindFileData.cFileName, filter)) {
@@ -147,14 +146,14 @@ ScanFiles(File::Visitor &visitor, const TCHAR* sPath,
 
     if (!FindNextFile(hFind, &FindFileData)) {
       if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
-        done = true;
+        break;
       else {
         // some error occured, close the handle and return false
         FindClose(hFind);
         return false;
       }
     }
-  } while (!done);
+  }
   FindClose(hFind); // closing file handle
 
   return true;
@@ -218,8 +217,7 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
   if (hFind == INVALID_HANDLE_VALUE)
     return false;
 
-  bool done = false;
-  do { // until we finds an entry
+  while (true) {
     _tcscpy(FileName, DirPath);
     if (!IsDots(FindFileData.cFileName) &&
         (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
@@ -230,14 +228,14 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
 
     if (!FindNextFile(hFind, &FindFileData)) {
       if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
-        done = true;
+        break;
       else {
         // some error occured, close the handle and return false
         FindClose(hFind);
         return false;
       }
     }
-  } while (!done);
+  }
   FindClose(hFind); // closing file handle
 
 #endif /* !HAVE_POSIX */
