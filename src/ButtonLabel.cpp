@@ -24,6 +24,7 @@ Copyright_License {
 #include "ButtonLabel.hpp"
 #include "MenuBar.hpp"
 #include "Language.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <algorithm>
 
@@ -78,7 +79,8 @@ ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
       std::copy(text, macros, translatable);
       translatable[macros - text] = _T('\0');
 
-      const TCHAR *translated = gettext(translatable);
+      const TCHAR *translated = string_is_empty(translatable)
+	? _T("") : gettext(translatable);
 
       /* concatenate the translated text and the macro output */
       TCHAR buffer[256];
