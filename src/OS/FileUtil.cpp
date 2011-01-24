@@ -140,12 +140,11 @@ ScanFiles(File::Visitor &visitor, const TCHAR* sPath,
 
   // Loop through remaining matching files
   while (true) {
-    // "/test/data/something/"
-    _tcscpy(FileName, DirPath);
-
     if (!IsDots(FindFileData.cFileName) &&
         !(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         checkFilter(FindFileData.cFileName, filter)) {
+      // "/test/data/something/"
+      _tcscpy(FileName, DirPath);
       // "/test/data/something/blubb.txt"
       _tcscat(FileName, FindFileData.cFileName);
       // Call visitor with the file that was found
@@ -240,11 +239,10 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
 
   // Loop through remaining files
   while (true) {
-    // "test/data/something/"
-    _tcscpy(FileName, DirPath);
-
     if (!IsDots(FindFileData.cFileName) &&
         (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+      // "test/data/something/"
+      _tcscpy(FileName, DirPath);
       // "test/data/something/SUBFOLDER"
       _tcscat(FileName, FindFileData.cFileName);
       // Scan subfolder for matching files too
