@@ -43,7 +43,6 @@ class PGDevice : public AbstractDevice {
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
-  virtual bool Declare(const struct Declaration *declaration);
 };
 
 static bool
@@ -65,14 +64,6 @@ PGDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 
 }
 
-bool
-PGDevice::Declare(const struct Declaration *decl)
-{
-  (void)decl;
-
-  return true;
-}
-
 static Device *
 PGCreateOnPort(Port *com_port)
 {
@@ -81,7 +72,7 @@ PGCreateOnPort(Port *com_port)
 
 const struct DeviceRegister pgDevice = {
   _T("PosiGraph Logger"),
-  drfGPS | drfBaroAlt | drfLogger,
+  drfGPS | drfBaroAlt,
   PGCreateOnPort,
 };
 
