@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
+#include "Compiler.h"
 
 #include <vector>
 #include <tchar.h>
@@ -52,6 +53,7 @@ struct Declaration {
     return waypoints.back();
   }
 
+  gcc_pure
   const TCHAR *get_name(const unsigned i) const {
     return waypoints[i].Name.c_str();
   }
@@ -60,6 +62,7 @@ struct Declaration {
     return waypoints[i].Location;
   }
 
+  gcc_pure
   unsigned size() const {
     return waypoints.size();
   }
