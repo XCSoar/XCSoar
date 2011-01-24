@@ -32,43 +32,52 @@ Copyright_License {
 #include <tchar.h>
 
 class OrderedTask;
+class OrderedTaskPoint;
 
 struct Declaration {
+  struct TurnPoint {
+    Waypoint waypoint;
+
+    TurnPoint(const Waypoint &_waypoint)
+      :waypoint(_waypoint) {}
+    TurnPoint(const OrderedTaskPoint &tp);
+  };
+
   TCHAR PilotName[64];
   TCHAR AircraftType[32];
   TCHAR AircraftRego[32];
-  std::vector<Waypoint> waypoints;
+  std::vector<TurnPoint> TurnPoints;
 
   Declaration(const OrderedTask* task);
 
   void append(const Waypoint &waypoint) {
-    waypoints.push_back(waypoint);
+    TurnPoints.push_back(waypoint);
   }
 
   const Waypoint &get_waypoint(unsigned i) const {
-    return waypoints[i];
+    return TurnPoints[i].waypoint;
   }
 
   const Waypoint &get_first_waypoint() const {
-    return waypoints.front();
+    return TurnPoints.front().waypoint;
   }
 
   const Waypoint &get_last_waypoint() const {
-    return waypoints.back();
+    return TurnPoints.back().waypoint;
   }
 
   gcc_pure
   const TCHAR *get_name(const unsigned i) const {
-    return waypoints[i].Name.c_str();
+    return TurnPoints[i].waypoint.Name.c_str();
   }
 
   const GeoPoint &get_location(const unsigned i) const {
-    return waypoints[i].Location;
+    return TurnPoints[i].waypoint.Location;
   }
 
   gcc_pure
   unsigned size() const {
-    return waypoints.size();
+    return TurnPoints.size();
   }
 };
 

@@ -26,6 +26,11 @@ Copyright_License {
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Profile/Profile.hpp"
 
+Declaration::TurnPoint::TurnPoint(const OrderedTaskPoint &tp)
+  :waypoint(tp.get_waypoint())
+{
+}
+
 Declaration::Declaration(const OrderedTask* task)
 {
   Profile::Get(szProfilePilotName, PilotName, 64);
@@ -34,5 +39,5 @@ Declaration::Declaration(const OrderedTask* task)
 
   if (task)
     for (unsigned i = 0; i < task->task_size(); i++)
-      waypoints.push_back(task->get_tp(i)->get_waypoint());
+      TurnPoints.push_back(*task->get_tp(i));
 }
