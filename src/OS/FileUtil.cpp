@@ -128,21 +128,21 @@ ScanFiles(File::Visitor &visitor, const TCHAR* sPath,
   _tcscpy(FileName, DirPath);
 
   // "/test/data/something/*.igc"
-  _tcscat(DirPath, filter);
+  _tcscat(FileName, filter);
 
   // Find the first matching file
   WIN32_FIND_DATA FindFileData;
-  HANDLE hFind = FindFirstFile(DirPath, &FindFileData);
+  HANDLE hFind = FindFirstFile(FileName, &FindFileData);
 
   // If no matching file found -> return false
   if (hFind == INVALID_HANDLE_VALUE)
     return false;
 
-  // "/test/data/something/"
-  _tcscpy(DirPath, FileName);
-
   // Loop through remaining matching files
   while (true) {
+    // "/test/data/something/"
+    _tcscpy(FileName, DirPath);
+
     if (!IsDots(FindFileData.cFileName) &&
         !(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         checkFilter(FindFileData.cFileName, filter)) {
@@ -151,8 +151,6 @@ ScanFiles(File::Visitor &visitor, const TCHAR* sPath,
       // Call visitor with the file that was found
       visitor.Visit(FileName, FindFileData.cFileName);
     }
-    // "/test/data/something/"
-    _tcscpy(FileName, DirPath);
 
     // Look for next matching file
     if (!FindNextFile(hFind, &FindFileData)) {
