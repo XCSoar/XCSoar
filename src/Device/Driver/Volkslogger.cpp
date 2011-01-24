@@ -164,47 +164,33 @@ VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
 {
   nturnpoints = 0;
 
-  int err;
-  if((err = vl.open(1, 20, 1, 38400L)) != VLA_ERR_NOERR) {
-    //    _isConnected = false;
-  }
-  else {
-    //    _isConnected = true;
-  }
+  if (vl.open(1, 20, 1, 38400L) != VLA_ERR_NOERR ||
+      vl.read_info() != VLA_ERR_NOERR)
+    return false;
 
-  if (err == VLA_ERR_NOERR) {
-    if ((err = vl.read_info()) == VLA_ERR_NOERR) {
-      //      vl.read_db_and_declaration();
-    }
+  CopyToNarrowBuffer(vl.declaration.flightinfo.pilot,
+		     sizeof(vl.declaration.flightinfo.pilot),
+		     decl->PilotName);
 
-    CopyToNarrowBuffer(vl.declaration.flightinfo.pilot,
-                       sizeof(vl.declaration.flightinfo.pilot),
-                       decl->PilotName);
+  CopyToNarrowBuffer(vl.declaration.flightinfo.competitionid,
+		     sizeof(vl.declaration.flightinfo.competitionid),
+		     decl->AircraftRego);
 
-    CopyToNarrowBuffer(vl.declaration.flightinfo.competitionid,
-                       sizeof(vl.declaration.flightinfo.competitionid),
-                       decl->AircraftRego);
-
-    CopyToNarrowBuffer(vl.declaration.flightinfo.competitionclass,
-                       sizeof(vl.declaration.flightinfo.competitionclass),
-                       decl->AircraftType);
+  CopyToNarrowBuffer(vl.declaration.flightinfo.competitionclass,
+		     sizeof(vl.declaration.flightinfo.competitionclass),
+		     decl->AircraftType);
 
 #ifdef OLD_TASK
-    if (way_points.verify_index(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
-      const WAYPOINT &way_point = way_points.get(XCSoarInterface::SettingsComputer().HomeWaypoint);
+  if (way_points.verify_index(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
+    const WAYPOINT &way_point = way_points.get(XCSoarInterface::SettingsComputer().HomeWaypoint);
 
-      sprintf(temp, "%S", way_point.Name);
+    sprintf(temp, "%S", way_point.Name);
 
-      strncpy(vl.declaration.flightinfo.homepoint.name, temp, 6);
-      vl.declaration.flightinfo.homepoint.lon = way_point.Location.Longitude;
-      vl.declaration.flightinfo.homepoint.lat = way_point.Location.Latitude;
-    }
-#endif
-
+    strncpy(vl.declaration.flightinfo.homepoint.name, temp, 6);
+    vl.declaration.flightinfo.homepoint.lon = way_point.Location.Longitude;
+    vl.declaration.flightinfo.homepoint.lat = way_point.Location.Latitude;
   }
-
-  if (err != VLA_ERR_NOERR)
-    return false;
+#endif
 
   unsigned i;
   for (i = 0; i < decl->size(); i++)
@@ -289,8 +275,7 @@ VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
   vl.declaration.task.finishpoint.ws = 360;
 #endif
 
-  bool ok = (vl.write_db_and_declaration() == VLA_ERR_NOERR);
-  return ok;
+  return vl.write_db_and_declaration() == VLA_ERR_NOERR;
 }
 
 bool
