@@ -29,6 +29,7 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Device/Geoid.h"
 #include "Engine/Navigation/GeoPoint.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
 #include "Thread/Trigger.hpp"
 #include "DeviceBlackboard.hpp"
@@ -36,6 +37,8 @@ Copyright_License {
 #include "Protection.hpp"
 
 #include <stdio.h>
+
+Waypoints way_points;
 
 DeviceBlackboard device_blackboard;
 

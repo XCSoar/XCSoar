@@ -36,11 +36,12 @@
 #include "Device/Geoid.h"
 #include "Device/device.hpp"
 #include "NMEA/Info.hpp"
-#include "TestUtil.hpp"
 #include "Protection.hpp"
 #include "InputEvents.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 #include "FaultInjectionPort.hpp"
+#include "TestUtil.hpp"
 
 #include <string.h>
 
@@ -68,6 +69,21 @@ bool
 devHasBaroSource()
 {
   return false;
+}
+
+/*
+ * Fake Waypoints
+ */
+
+Waypoints way_points;
+
+TaskProjection::TaskProjection() {}
+Waypoints::Waypoints() {}
+
+const Waypoint*
+Waypoints::find_home() const
+{
+  return NULL;
 }
 
 /*
