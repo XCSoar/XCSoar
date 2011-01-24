@@ -208,7 +208,7 @@ VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
 
   unsigned i;
   for (i = 0; i < decl->size(); i++)
-    VLDeclAddWayPoint(vl, decl->waypoints[i]);
+    VLDeclAddWayPoint(vl, decl->get_waypoint(i));
 
   vl.declaration.task.nturnpoints = (nturnpoints<=2)? 0: std::min(nturnpoints-2, (unsigned)12);
 

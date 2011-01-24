@@ -441,7 +441,7 @@ DeclareInner(Port *port, const Declaration *decl)
   DeclIndex = 128;
 
   for (unsigned i = 0; i < decl->size(); ++i)
-    if (!cai302DeclAddWayPoint(port, decl->waypoints[i]))
+    if (!cai302DeclAddWayPoint(port, decl->get_waypoint(i)))
       return false;
 
   port->Write("D,255\r");

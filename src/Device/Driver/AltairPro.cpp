@@ -154,15 +154,15 @@ AltairProDevice::DeclareInternal(const struct Declaration *decl)
     PutTurnPoint(_T("DeclTakeoff"), NULL);
     PutTurnPoint(_T("DeclLanding"), NULL);
 
-    PutTurnPoint(_T("DeclStart"), &decl->waypoints[0]);
-    PutTurnPoint(_T("DeclFinish"), &decl->waypoints[decl->size()-1]);
+    PutTurnPoint(_T("DeclStart"), &decl->get_first_waypoint());
+    PutTurnPoint(_T("DeclFinish"), &decl->get_last_waypoint());
 
     for (unsigned int index=1; index <= 10; index++){
       TCHAR TurnPointPropertyName[32];
       _stprintf(TurnPointPropertyName, _T("DeclTurnPoint%d"), index);
 
       if (index < decl->size()-1){
-        PutTurnPoint(TurnPointPropertyName, &decl->waypoints[index]);
+        PutTurnPoint(TurnPointPropertyName, &decl->get_waypoint(index));
       } else {
         PutTurnPoint(TurnPointPropertyName, NULL);
       }

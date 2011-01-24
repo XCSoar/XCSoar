@@ -25,12 +25,12 @@ Copyright_License {
 #define XCSOAR_DEVICE_DECLARATION_HPP
 
 #include "Navigation/GeoPoint.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 
 #include <vector>
 #include <tchar.h>
 
 class OrderedTask;
-class Waypoint;
 
 struct Declaration {
   TCHAR PilotName[64];
@@ -39,6 +39,19 @@ struct Declaration {
   std::vector<Waypoint> waypoints;
 
   Declaration(const OrderedTask* task);
+
+  const Waypoint &get_waypoint(unsigned i) const {
+    return waypoints[i];
+  }
+
+  const Waypoint &get_first_waypoint() const {
+    return waypoints.front();
+  }
+
+  const Waypoint &get_last_waypoint() const {
+    return waypoints.back();
+  }
+
   const TCHAR* get_name(const unsigned i) const;
   const GeoPoint& get_location(const unsigned i) const;
   size_t size() const;

@@ -178,7 +178,7 @@ EWDevice::DeclareInner(const struct Declaration *decl)
       return false;
   }
   for (unsigned j = 0; j < decl->size(); ++j)
-    if (!AddWayPoint(decl->waypoints[j]))
+    if (!AddWayPoint(decl->get_waypoint(j)))
       return false;
 
   return true;
