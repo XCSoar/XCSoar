@@ -36,10 +36,20 @@ class OrderedTaskPoint;
 
 struct Declaration {
   struct TurnPoint {
+    enum shape {
+      CYLINDER,
+      SECTOR,
+      LINE,
+    };
+
     Waypoint waypoint;
 
+    enum shape shape;
+
+    unsigned radius;
+
     TurnPoint(const Waypoint &_waypoint)
-      :waypoint(_waypoint) {}
+      :waypoint(_waypoint), shape(CYLINDER), radius(1500) {}
     TurnPoint(const OrderedTaskPoint &tp);
   };
 

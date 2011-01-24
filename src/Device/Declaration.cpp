@@ -22,12 +22,45 @@ Copyright_License {
 */
 
 #include "Declaration.hpp"
-
+#include "Engine/Task/Tasks/BaseTask/ObservationZonePoint.hpp"
+#include "Engine/Task/ObservationZones/CylinderZone.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Profile/Profile.hpp"
 
+gcc_pure
+static enum Declaration::TurnPoint::shape
+get_shape(const OrderedTaskPoint &tp)
+{
+  const ObservationZonePoint *oz = tp.get_oz();
+  if (oz == NULL)
+    return Declaration::TurnPoint::SECTOR;
+
+  switch (oz->shape) {
+  case ObservationZonePoint::LINE:
+    return Declaration::TurnPoint::LINE;
+
+  case ObservationZonePoint::CYLINDER:
+    return Declaration::TurnPoint::CYLINDER;
+
+  default:
+    return Declaration::TurnPoint::SECTOR;
+  }
+}
+
+gcc_pure
+static unsigned
+get_radius(const OrderedTaskPoint &tp)
+{
+  const ObservationZonePoint *oz = tp.get_oz();
+  if (oz == NULL)
+    return Declaration::TurnPoint::SECTOR;
+
+  return (unsigned)((const CylinderZone *)oz)->getRadius();
+}
+
 Declaration::TurnPoint::TurnPoint(const OrderedTaskPoint &tp)
-  :waypoint(tp.get_waypoint())
+  :waypoint(tp.get_waypoint()),
+   shape(get_shape(tp)), radius(get_radius(tp))
 {
 }
 
