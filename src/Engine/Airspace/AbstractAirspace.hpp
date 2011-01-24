@@ -96,6 +96,7 @@ public:
  * 
  * @return Location of reference point
  */
+  gcc_pure
   virtual const GeoPoint get_center() const = 0;
 
   /** 
@@ -106,6 +107,7 @@ public:
    * 
    * @return true if observer is inside airspace boundary
    */
+  gcc_pure
   virtual bool inside(const GeoPoint &loc) const = 0;
 
   /** 
@@ -116,6 +118,7 @@ public:
    * 
    * @return true if aircraft is inside airspace boundaries
    */
+  gcc_pure
   virtual bool inside(const AIRCRAFT_STATE& state) const;
 
   /** 
@@ -127,6 +130,7 @@ public:
    * 
    * @return Vector of intersection pairs if the line intersects the airspace
    */
+  gcc_pure
   virtual AirspaceIntersectionVector intersects(const GeoPoint& g1, 
                                                 const GeoVector &vec) const = 0;
 
@@ -137,6 +141,7 @@ public:
  * 
  * @return Location of closest point of boundary to reference 
  */
+  gcc_pure
   virtual GeoPoint closest_point(const GeoPoint& loc) const
     = 0;
 
@@ -291,6 +296,7 @@ public:
  * 
  * @return Text version of name/type
  */
+  gcc_pure
   const tstring get_name_text(const bool concise=false) const;
 
   /**
@@ -298,6 +304,7 @@ public:
    *
    * @return Text version of radio frequency
    */
+  gcc_pure
   const tstring get_radio_text() const;
 
 /** 
@@ -307,6 +314,7 @@ public:
  * 
  * @return Text version of base altitude
  */
+  gcc_pure
   const tstring get_vertical_text() const;
 
 /** 
@@ -316,6 +324,7 @@ public:
  * 
  * @return Text version of base altitude
  */
+  gcc_pure
   const tstring get_base_text(const bool concise=false) const;
 
 /** 
@@ -325,6 +334,7 @@ public:
  * 
  * @return Text version of top altitude
  */
+  gcc_pure
   const tstring get_top_text(const bool concise=false) const;
 
   /**
@@ -345,6 +355,7 @@ public:
    * and const methods to allow visitors to generate them on demand
    * from within a visit method.
    */
+  gcc_pure
   const SearchPointVector& get_clearance() const;
   void clear_clearance() const;
 
@@ -377,6 +388,7 @@ private:
  * @param distance Distance from aircraft to boundary 
  * @return Solution of intercept 
  */
+  gcc_pure
   AirspaceInterceptSolution intercept_vertical(const AIRCRAFT_STATE &state,
                                                const AirspaceAircraftPerformance& perf,
                                                const fixed& distance) const;
@@ -394,6 +406,7 @@ private:
  * @param lower If true, examines lower boundary, otherwise upper boundary
  * @return Solution of intercept 
  */
+  gcc_pure
   AirspaceInterceptSolution intercept_horizontal(const AIRCRAFT_STATE &state,
                                                  const AirspaceAircraftPerformance& perf,
                                                  const fixed& distance_start,

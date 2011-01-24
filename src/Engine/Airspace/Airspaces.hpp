@@ -26,6 +26,8 @@
 #include "AirspacePredicate.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Navigation/TaskProjection.hpp"
+#include "Compiler.h"
+
 #include <deque>
 
 class RasterTerrain;
@@ -111,6 +113,7 @@ public:
  * 
  * @return Number of airspaces in tree
  */
+  gcc_pure
   unsigned size() const;
 
 /** 
@@ -118,6 +121,7 @@ public:
  * 
  * @return True if no airspace stored
  */
+  gcc_pure
   bool empty() const;
 
   /** 
@@ -170,6 +174,7 @@ public:
    * 
    * @return vector of airspaces intersecting search radius
    */
+  gcc_pure
   const AirspaceVector scan_range(const GeoPoint &location,
                                   const fixed range,
                                   const AirspacePredicate &condition
@@ -183,6 +188,7 @@ public:
    * 
    * @return single nearest airspace if external, or all airspaces enclosing the aircraft
    */
+  gcc_pure
   const AirspaceVector scan_nearest(const GeoPoint &location,
                                     const AirspacePredicate &condition
                                     =AirspacePredicate::always_true) const;
@@ -195,6 +201,7 @@ public:
    * 
    * @return airspaces enclosing the aircraft
    */
+  gcc_pure
   const AirspaceVector find_inside(const AIRCRAFT_STATE &state,
                                    const AirspacePredicate &condition
                                    =AirspacePredicate::always_true) const;
@@ -204,6 +211,7 @@ public:
  * 
  * @return First airspace in store
  */
+  gcc_pure
   AirspaceTree::const_iterator begin() const;
 
 /** 
@@ -211,6 +219,7 @@ public:
  * 
  * @return End airspace in store
  */
+  gcc_pure
   AirspaceTree::const_iterator end() const;
 
   void lock() const {};

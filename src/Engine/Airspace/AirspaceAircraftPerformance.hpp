@@ -4,6 +4,7 @@
 #include "Math/fixed.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Util/AircraftStateFilter.hpp"
+#include "Compiler.h"
 
 /**
  *  Class used for simplified/idealised performace
@@ -35,6 +36,7 @@ public:
  * 
  * @return Nominal cruise speed (m/s)
  */
+  gcc_pure
   virtual fixed get_cruise_speed() const = 0;
 
 /** 
@@ -42,6 +44,7 @@ public:
  * 
  * @return Nominal descent speed (m/s, positive down)
  */
+  gcc_pure
   virtual fixed get_cruise_descent() const = 0;
 
 /** 
@@ -49,6 +52,7 @@ public:
  * 
  * @return Max descent speed (m/s, positive down)
  */
+  gcc_pure
   virtual fixed get_descent_rate() const = 0;
 
 /** 
@@ -56,6 +60,7 @@ public:
  * 
  * @return Max climb rate (m/s, positive up)
  */
+  gcc_pure
   virtual fixed get_climb_rate() const = 0;
 
 /** 
@@ -63,6 +68,7 @@ public:
  * 
  * @return Speed (m/s)
  */
+  gcc_pure
   virtual fixed get_max_speed() const = 0;
 
 /** 
@@ -73,6 +79,7 @@ public:
  * 
  * @return Time to intercept (s) or -1 if failed
  */
+  gcc_pure
   virtual fixed solution_general(const fixed& distance,
                                  const fixed& dh) const;
 
@@ -114,6 +121,7 @@ protected:
   fixed m_tolerance_vertical; /**< Tolerance in vertical max speeds (m/s) */
 
 private:
+  gcc_pure
   virtual bool solution_exists(const fixed& distance_min,
                                const fixed& distance_max,
                                const fixed& h_min,

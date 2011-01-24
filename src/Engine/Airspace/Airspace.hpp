@@ -24,6 +24,7 @@
 
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "AbstractAirspace.hpp"
+#include "Compiler.h"
 
 #ifdef DO_PRINT
 #include <iostream>
@@ -101,6 +102,7 @@ public:
    * 
    * @return true if aircraft is inside airspace
    */
+  gcc_pure
   bool inside(const AIRCRAFT_STATE &loc) const;
 
   /** 
@@ -110,6 +112,7 @@ public:
    * 
    * @return true if location is inside airspace
    */
+  gcc_pure
   bool inside(const GeoPoint &loc) const;
 
   /** 
@@ -120,6 +123,7 @@ public:
    * 
    * @return true if ray intersects or wholly enclosed by airspace
    */
+  gcc_pure
   bool intersects(const FlatRay& ray) const;
 
   /** 
@@ -131,6 +135,7 @@ public:
    * 
    * @return true if the line intersects the airspace
    */
+  gcc_pure
   AirspaceIntersectionVector intersects(const GeoPoint& g1, const GeoVector &vec) const;
 
   /** 
