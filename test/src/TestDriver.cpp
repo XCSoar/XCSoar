@@ -262,10 +262,13 @@ TestDeclare(const struct DeviceRegister &driver)
   _tcscpy(declaration.AircraftRego, _T("D-3003"));
   const GeoPoint gp(Angle::degrees(fixed(7.7061111111111114)),
                     Angle::degrees(fixed(51.051944444444445)));
-  declaration.append(Waypoint(gp));
-  declaration.append(Waypoint(gp));
-  declaration.append(Waypoint(gp));
-  declaration.append(Waypoint(gp));
+  Waypoint wp(gp);
+  wp.Name = _T("Foo");
+  wp.Altitude = fixed(123);
+  declaration.append(wp);
+  declaration.append(wp);
+  declaration.append(wp);
+  declaration.append(wp);
 
   for (unsigned i = 0; i < 1024; ++i) {
     inject_port_fault = i;
