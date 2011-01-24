@@ -135,7 +135,7 @@ ScanFiles(File::Visitor &visitor, const TCHAR* sPath,
 
   _tcscpy(DirPath, FileName);
 
-  bool bSearch = true;
+  bool done = false;
   do { // until we finds an entry
     if (!IsDots(FindFileData.cFileName) &&
         !(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
@@ -147,14 +147,14 @@ ScanFiles(File::Visitor &visitor, const TCHAR* sPath,
 
     if (!FindNextFile(hFind, &FindFileData)) {
       if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
-        bSearch = false;
+        done = true;
       else {
         // some error occured, close the handle and return false
         FindClose(hFind);
         return false;
       }
     }
-  } while (bSearch);
+  } while (!done);
   FindClose(hFind); // closing file handle
 
   return true;
@@ -220,7 +220,7 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
 
   _tcscpy(FileName, DirPath);
 
-  bool bSearch = true;
+  bool done = false;
   do { // until we finds an entry
     if (!IsDots(FindFileData.cFileName) &&
         (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
@@ -232,14 +232,14 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
 
     if (!FindNextFile(hFind, &FindFileData)) {
       if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
-        bSearch = false;
+        done = true;
       else {
         // some error occured, close the handle and return false
         FindClose(hFind);
         return false;
       }
     }
-  } while (bSearch);
+  } while (!done);
   FindClose(hFind); // closing file handle
 
 #endif /* !HAVE_POSIX */
