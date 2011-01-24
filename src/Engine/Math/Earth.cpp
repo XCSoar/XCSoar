@@ -200,9 +200,17 @@ ProjectedDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3)
 {
   Angle dist_AD; Angle crs_AD;
   DistanceBearingS(loc1, loc3, &dist_AD, &crs_AD);
+  if (!positive(dist_AD.value_native()))
+    /* workaround: new sine implementation may return small non-zero
+       values for sin(0) */
+    return fixed_zero;
 
   Angle dist_AB; Angle crs_AB;
   DistanceBearingS(loc1, loc2, &dist_AB, &crs_AB);
+  if (!positive(dist_AB.value_native()))
+    /* workaround: new sine implementation may return small non-zero
+       values for sin(0) */
+    return fixed_zero;
 
   // The "along track distance", ATD, the distance from A along the
   // course towards B to the point abeam D
