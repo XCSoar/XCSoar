@@ -87,7 +87,7 @@ WndForm::WndForm(SingleWindow &_main_window,
                  const WindowStyle style):
   main_window(_main_window),
   mModalResult(0),
-  mColorTitle(Color::YELLOW),
+  mColorTitle(Color(0, 77, 124)),
   mhTitleFont(&Fonts::MapBold),
   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL)
 {
@@ -97,7 +97,7 @@ WndForm::WndForm(SingleWindow &_main_window,
 
   // Create ClientWindow
 
-  SetBackColor(Color(0xDA, 0xDB, 0xAB));
+  SetBackColor(Color(0xe2, 0xdc, 0xbe));
 
   WindowStyle client_style;
   client_style.control_parent();
@@ -426,7 +426,7 @@ WndForm::on_paint(Canvas &canvas)
   canvas.raised_edge(rcClient);
 
   // Set the colors
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(Color::WHITE);
   canvas.set_background_color(mColorTitle);
   canvas.background_transparent();
 
