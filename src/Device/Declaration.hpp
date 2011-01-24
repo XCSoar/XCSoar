@@ -60,7 +60,7 @@ struct Declaration {
     return waypoints[i].Location;
   }
 
-  size_t size() const {
+  unsigned size() const {
     return waypoints.size();
   }
 };
