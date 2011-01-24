@@ -57,7 +57,7 @@ TEST_NAMES = \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
 	TestColorRamp TestGeoPoint \
-	test_route \
+	test_route TestFileUtil \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
@@ -127,6 +127,16 @@ TEST_UNITS_SOURCES = \
 TEST_UNITS_OBJS = $(call SRC_TO_OBJ,$(TEST_UNITS_SOURCES))
 TEST_UNITS_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestUnits$(TARGET_EXEEXT): $(TEST_UNITS_OBJS) $(TEST_UNITS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_FILE_UTIL_SOURCES = \
+	$(SRC)/OS/FileUtil.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFileUtil.cpp
+TEST_FILE_UTIL_OBJS = $(call SRC_TO_OBJ,$(TEST_FILE_UTIL_SOURCES))
+TEST_FILE_UTIL_LDADD = 
+$(TARGET_BIN_DIR)/TestFileUtil$(TARGET_EXEEXT): $(TEST_FILE_UTIL_OBJS) $(TEST_FILE_UTIL_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
