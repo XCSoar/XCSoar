@@ -41,6 +41,10 @@ struct Declaration {
 
   Declaration(const OrderedTask* task);
 
+  void append(const Waypoint &waypoint) {
+    waypoints.push_back(waypoint);
+  }
+
   const Waypoint &get_waypoint(unsigned i) const {
     return waypoints[i];
   }
