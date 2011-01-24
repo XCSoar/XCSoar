@@ -40,6 +40,7 @@ Copyright_License {
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
+#include <assert.h>
 
 #ifdef _UNICODE
 #include <windows.h>
@@ -59,6 +60,8 @@ public:
 
 protected:
   bool TryConnect();
+
+  bool DeclareInner(const Declaration *declaration);
 
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
@@ -208,15 +211,11 @@ EWMicroRecorderWriteWayPoint(Port *port,
 }
 
 bool
-EWMicroRecorderDevice::Declare(const Declaration *decl)
+EWMicroRecorderDevice::DeclareInner(const Declaration *decl)
 {
-  // Must have at least two, max 12 waypoints
-  if (decl->size() < 2 || decl->size() > 12)
-    return false;
-
-  port->StopRxThread();
-
-  port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+  assert(decl != NULL);
+  assert(decl->size() >= 2);
+  assert(decl->size() <= 12);
 
   if (!TryConnect())
     return false;
@@ -252,7 +251,21 @@ EWMicroRecorderDevice::Declare(const Declaration *decl)
 
   port->Write('\x03');         // finish sending user file
 
-  bool success = port->ExpectString("uploaded successfully");
+  return port->ExpectString("uploaded successfully");
+}
+
+bool
+EWMicroRecorderDevice::Declare(const Declaration *decl)
+{
+  // Must have at least two, max 12 waypoints
+  if (decl->size() < 2 || decl->size() > 12)
+    return false;
+
+  port->StopRxThread();
+
+  port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+
+  bool success = DeclareInner(decl);
 
   port->Write("!!\r\n");         // go back to NMEA mode
 
