@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "Device/FLARM.hpp"
-
 #include "Device/device.hpp"
 #include "Device/Port.hpp"
+#include "Device/Declaration.hpp"
 
 #include <assert.h>
 #include <tchar.h>

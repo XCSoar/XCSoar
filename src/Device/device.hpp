@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DEVICE_HPP
 #define XCSOAR_DEVICE_DEVICE_HPP
 
-#include "Device/Declaration.hpp"
-
 #include <tchar.h>
 #include <stdio.h>
 
+struct Declaration;
 class Mutex;
 class DeviceDescriptor;
 

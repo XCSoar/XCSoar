@@ -26,6 +26,7 @@
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Device/device.hpp"
+#include "Device/Declaration.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/List.hpp"
 
