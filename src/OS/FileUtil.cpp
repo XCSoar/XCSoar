@@ -218,17 +218,15 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
   if (hFind == INVALID_HANDLE_VALUE)
     return false;
 
-  _tcscpy(FileName, DirPath);
-
   bool done = false;
   do { // until we finds an entry
+    _tcscpy(FileName, DirPath);
     if (!IsDots(FindFileData.cFileName) &&
         (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
       // we have found a directory, recurse
       _tcscat(FileName, FindFileData.cFileName);
       ScanDirectories(visitor, true, FileName, filter);
     }
-    _tcscpy(FileName, DirPath);
 
     if (!FindNextFile(hFind, &FindFileData)) {
       if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
