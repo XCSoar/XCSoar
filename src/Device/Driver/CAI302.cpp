@@ -40,6 +40,7 @@ Copyright_License {
 #include <tchar.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 
 #define CtrlC 0x03
 #define swap(x) x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
@@ -314,6 +315,22 @@ cai302DeclAddWayPoint(Port *port, const Waypoint &way_point)
 }
 
 static bool
+ReadBlock(Port &port, void *dest, size_t max_length, size_t length)
+{
+  assert(dest != NULL);
+  assert(max_length > 0);
+
+  if (length > max_length)
+    length = max_length;
+
+  if (length == 0)
+    return true;
+
+  int nbytes = port.Read(dest, length);
+  return nbytes > 0 && (size_t)nbytes == length;
+}
+
+static bool
 DeclareInner(Port *port, const Declaration *decl)
 {
   const int ASYNCPAUSE302 = 700;
@@ -339,17 +356,18 @@ DeclareInner(Port *port, const Declaration *decl)
   Sleep(ASYNCPAUSE302);
 
   cai302_OdataNoArgs_t cai302_OdataNoArgs;
-  port->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
-  if (!port->ExpectString("up>"))
+  if (!ReadBlock(*port, &cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs),
+                 sizeof(cai302_OdataNoArgs)) ||
+      !port->ExpectString("up>"))
     return false;
 
   port->Write("O 0\r"); // 0=active pilot
   Sleep(ASYNCPAUSE302);
 
   cai302_OdataPilot_t cai302_OdataPilot;
-  port->Read(&cai302_OdataPilot, min(sizeof(cai302_OdataPilot),
-                                       (size_t)cai302_OdataNoArgs.PilotRecordSize+3));
-  if (!port->ExpectString("up>"))
+  if (!ReadBlock(*port, &cai302_OdataPilot, sizeof(cai302_OdataPilot),
+                 cai302_OdataNoArgs.PilotRecordSize + 3) ||
+      !port->ExpectString("up>"))
     return false;
 
   swap(cai302_OdataPilot.ApproachRadius);
@@ -365,16 +383,18 @@ DeclareInner(Port *port, const Declaration *decl)
   Sleep(ASYNCPAUSE302);
 
   cai302_GdataNoArgs_t cai302_GdataNoArgs;
-  port->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
-  if (!port->ExpectString("up>"))
+  if (!ReadBlock(*port, &cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs),
+                 sizeof(cai302_GdataNoArgs)) ||
+      !port->ExpectString("up>"))
     return false;
 
   port->Write("G 0\r");
   Sleep(ASYNCPAUSE302);
 
   cai302_Gdata_t cai302_Gdata;
-  port->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
-  if (!port->ExpectString("up>"))
+  if (!ReadBlock(*port, &cai302_Gdata, sizeof(cai302_Gdata),
+                 cai302_GdataNoArgs.GliderRecordSize + 3) ||
+      !port->ExpectString("up>"))
     return false;
 
   swap(cai302_Gdata.WeightInLiters);

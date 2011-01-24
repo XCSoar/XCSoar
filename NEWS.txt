@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.0.3 - not yet released
 * devices
   - EW, Volkslogger: restart I/O thread after declaration failure
+  - CAI302: check for I/O errors during declaration
 * user interface
   - Language: translation updates
   - Auto zoom: don't disable in circling mode
