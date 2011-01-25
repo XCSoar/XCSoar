@@ -18,7 +18,6 @@
 #include "Device/Volkslogger/vla_support.h"
 #include "Device/Port.hpp"
 #include "ProgressGlue.hpp"
-#include "OS/Sleep.h"
 
 #include <stdio.h>
 #if defined(HAVE_POSIX) || !defined(_WIN32_WCE)
@@ -32,14 +31,6 @@ int noninteractive=1;
  * vlapi_sys
  *
  **********************************************************************/
-
-
-/** wait a specified amount of milliseconds (t) */
-void VLA_SYS::wait_ms(const int32 t)  {
-  if (t>0) {
-    Sleep(t);
-  }
-}
 
 
 /** serial output of single character to the VL */
