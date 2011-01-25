@@ -32,6 +32,45 @@ ZoomClimb_t::ZoomClimb_t():
   last_isclimb(false),
   last_targetpan(false) {}
 
+
+const RasterPoint OffsetHistory::zeroPoint = {0, 0};
+
+void
+OffsetHistory::reset()
+{
+  for (unsigned int i = 0; i < historySize; i++)
+    offsets[i] = zeroPoint;
+}
+
+void
+OffsetHistory::add(int x, int y)
+{
+  RasterPoint point;
+  point.x = x;
+  point.y = y;
+  offsets[pos] = point;
+  pos = (pos + 1) % historySize;
+}
+
+RasterPoint
+OffsetHistory::average() const
+{
+  int x = 0;
+  int y = 0;
+
+  for (unsigned int i = 0; i < historySize; i++) {
+    x += offsets[i].x;
+    y += offsets[i].y;
+  }
+
+  RasterPoint avg;
+  avg.x = x / (int) historySize;
+  avg.y = y / (int) historySize;
+
+  return avg;
+}
+
+
 void
 GlueMapWindow::SetMapScale(const fixed x)
 {
@@ -135,6 +174,9 @@ GlueMapWindow::UpdateDisplayMode()
 {
   DisplayMode_t new_mode = GetNewDisplayMode(SettingsMap(), Calculated());
 
+  if (DisplayMode != new_mode && new_mode == dmCircling)
+    offsetHistory.reset();
+
   DisplayMode = new_mode;
   SwitchZoomClimb();
 }
@@ -174,8 +216,7 @@ GlueMapWindow::IsOriginCentered()
   if (GetDisplayMode() == dmCircling)
     return true;
 
-  DisplayOrientation_t orientation = settings_map.OrientationCruise;
-  return (orientation == NORTHUP);
+  return false;
 }
 
 void
@@ -213,12 +254,29 @@ GlueMapWindow::UpdateProjection()
   const RECT rc = get_client_rect();
   const SETTINGS_MAP &settings_map = SettingsMap();
 
+  RasterPoint center;
+  center.x = (rc.left + rc.right) / 2;
+  center.y = (rc.top + rc.bottom) / 2;
+
   if (IsOriginCentered() || settings_map.EnablePan)
-    visible_projection.SetScreenOrigin((rc.left + rc.right) / 2,
-                                       (rc.bottom + rc.top) / 2);
-  else
-    visible_projection.SetScreenOrigin(
-        (rc.left + rc.right) / 2,
+    visible_projection.SetScreenOrigin(center.x, center.y);
+  else if (settings_map.OrientationCruise == NORTHUP) {
+    RasterPoint offset;
+    if (Basic().GroundSpeed < fixed(8))  /* 8 m/s ~ 30 km/h */
+      offset=OffsetHistory::zeroPoint;
+    else {
+      fixed x, y;
+      Basic().TrackBearing.Reciprocal().sin_cos(x, y);
+      fixed gspFactor = (fixed) (50 - settings_map.GliderScreenPosition) / 100;
+      offset.x = x * (rc.right - rc.left) * gspFactor;
+      offset.y = y * (rc.top - rc.bottom) * gspFactor;
+    }
+    offsetHistory.add(offset);
+    offset = offsetHistory.average();
+
+    visible_projection.SetScreenOrigin(center.x + offset.x, center.y + offset.y);
+  } else
+    visible_projection.SetScreenOrigin(center.x,
         ((rc.top - rc.bottom) * settings_map.GliderScreenPosition / 100) + rc.bottom);
 
   if (settings_map.EnablePan)

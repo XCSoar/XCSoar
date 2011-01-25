@@ -38,6 +38,27 @@ struct ZoomClimb_t
   ZoomClimb_t();
 };
 
+
+class OffsetHistory {
+
+protected:
+  OffsetHistory() : pos(0) { reset(); }
+  void reset();
+  void add(int x, int y);
+  void add(const RasterPoint &p) { add(p.x, p.y); }
+  RasterPoint average() const;
+
+  static const RasterPoint zeroPoint;
+
+private:
+  static const unsigned int historySize = 30;
+  unsigned int pos;
+  RasterPoint offsets[historySize];
+
+  friend class GlueMapWindow;
+};
+
+
 class GlueMapWindow : public MapWindow {
   unsigned idle_robin;
 
@@ -177,6 +198,9 @@ public:
 
 protected:
   DisplayMode_t DisplayMode;
+
+private:
+  OffsetHistory offsetHistory;
 };
 
 #endif
