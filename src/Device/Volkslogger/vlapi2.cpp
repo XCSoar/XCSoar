@@ -19,6 +19,7 @@
 #include "Device/Volkslogger/dbbconv.h"
 #include "Device/Volkslogger/grecord.h"
 #include "Device/Volkslogger/utils.h"
+#include "PeriodClock.hpp"
 
 #include <memory.h>
 #include <string.h>
@@ -116,8 +117,6 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
   const int16   d = 2;  //Verzögerungszeit 2ms
   byte 		cmdarray[8];
   word          crc16 = 0;
-  int32	 	t1;
-  int16         timeout = 4;
   // alte Zeichen verwerfen
   wait_ms(100);
   serial_empty_io_buffers();
@@ -150,12 +149,18 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
   serial_out(crc16%256);
   wait_ms(d);
   // Kommandobestätigung abwarten, aber höchstens timeout Sekunden
-  t1 = get_timer_s()+timeout;
-  while( serial_in(&c) && (get_timer_s()<t1) )
+  const unsigned timeout_ms = 4000;
+  PeriodClock clock;
+  clock.update();
+  while (serial_in(&c) != VLA_ERR_NOERR) {
+    if (clock.check(timeout_ms)) {
+      showwait(VLS_TXT_NOFR);
+      return -1;
+    }
+
     progress_set(VLS_TXT_SENDCMD);
-  // Timeoutbehandlung
-  if (get_timer_s() >= t1)
-    c = 255;
+  }
+
   // Fehler (timeout oder Fehlercode vom VL) im Klartext ausgeben
   switch (c) {
   case 0:
@@ -166,9 +171,6 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
     break;
   case 2:
     showwait(VLS_TXT_WRONGFR);
-    break;
-  case 255:
-    showwait(VLS_TXT_NOFR);
     break;
   }
   // Fehlercode als Rückgabewert der Funktion benutzen
@@ -182,19 +184,23 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
 //
 int16 VLA_XFR::wait4ack() {
   byte	c;
-  int32 t1;
-  int16 timeout = 180;
   // Anfangszeit merken
-  t1 = get_timer_s();
+  const unsigned timeout_ms = 180000;
+  PeriodClock clock;
+  clock.update();
   // Auf Beendigungscode vom Logger warten
-  while ( !test_user_break() && serial_in(&c) && get_timer_s()<t1+timeout )
+  while (!test_user_break() && serial_in(&c) != VLA_ERR_NOERR) {
+    if (clock.check(timeout_ms))
+      return 255;
+
     progress_set(VLS_TXT_WTCMD);
+  }
+
   if (test_user_break()) {
     if (clear_user_break() == 1)
       return 255;
   }
-  else if (get_timer_s() >= t1+timeout)
-    return 255;
+
   return c;
 }
 
@@ -485,7 +491,6 @@ long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secm
 VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   int16 l_count = 0;
   int16 timeout = 0;
-  int32 stoptime;
   int16 i;
   VLA_ERROR rc = VLA_ERR_NOERR;
   byte c;
@@ -502,12 +507,14 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   c = 0;
   timeout = 0;
 
-  stoptime = get_timer_s() + waittime;
+  const unsigned timeout_ms = waittime * 1000;
+  PeriodClock clock;
 
   do { // Solange R's aussenden, bis ein L zurückkommt
     serial_out('R');
     wait_ms(30);
-    if (get_timer_s() >= stoptime)
+
+    if (clock.check(timeout_ms))
       timeout = 1;
   } while ( (!timeout) && (serial_in(&c) || c != 'L' ));
 
@@ -527,7 +534,8 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
           break;
         }
       }
-      if (get_timer_s() >= stoptime)
+
+      if (clock.check(timeout_ms))
         timeout = 1;
     } while ( !timeout && !serial_in(&c) );
     if (timeout)

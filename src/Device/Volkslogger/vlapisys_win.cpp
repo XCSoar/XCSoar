@@ -41,15 +41,6 @@ void VLA_SYS::wait_ms(const int32 t)  {
   }
 }
 
-/** read value of a continous running seconds-timer */
-int32 VLA_SYS::get_timer_s()  {
-#if defined(HAVE_POSIX) || !defined(_WIN32_WCE)
-  return time(NULL);
-#else
-  return GetTickCount()/1000;
-#endif
-}
-
 
 /** serial output of single character to the VL */
 VLA_ERROR VLA_SYS::serial_out(const byte outbyte)

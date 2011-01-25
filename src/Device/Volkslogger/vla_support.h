@@ -55,7 +55,6 @@ protected:
 
 	// Timer functions
   void wait_ms(const int32 t);
-  int32 get_timer_s();
 
 	// serial port functions
   VLA_ERROR serial_set_baudrate(const int32 baudrate);
