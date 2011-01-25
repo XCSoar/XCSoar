@@ -236,13 +236,18 @@ GlueMapWindow::UpdateMapScale()
 
   fixed wpd = Calculated().AutoZoomDistance;
   if (SettingsMap().AutoZoom && positive(wpd)) {
-    fixed AutoZoomFactor = IsOriginCentered() ? fixed(2.5) : fixed_four;
-
-    // set scale exactly so that waypoint distance is the zoom factor
-    // across the screen
-    wpd = max(fixed_int_constant(525),
-              min(fixed_int_constant(16000), wpd / AutoZoomFactor));
-    visible_projection.SetMapScale(wpd);
+    // Calculate distance percentage between plane symbol and map edge
+    // 50: centered  100: at edge of map
+    int AutoZoomFactor = IsOriginCentered() ?
+                                 50 : 100 - SettingsMap().GliderScreenPosition;
+    // Leave 5% of full distance for target display
+    AutoZoomFactor -= 5;
+    // Adjust to account for map scale units
+    AutoZoomFactor *= 8;
+    wpd = wpd / ((fixed) AutoZoomFactor / fixed_int_constant(100));
+    // Clip map auto zoom range to reasonable values
+    wpd = max(fixed_int_constant(525), min(fixed_int_constant(16000), wpd));
+    visible_projection.SetFreeMapScale(wpd);
   }
 }
 
