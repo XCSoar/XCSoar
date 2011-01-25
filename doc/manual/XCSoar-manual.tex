@@ -84,7 +84,7 @@ are available from
 \section{Organisation of this manual}
 
 \todonum[inline]{Write about the manual crossref hinting icons and the yellow
-color. The Quickstart will be readable also without those links available} 
+colour. The Quickstart will be readable also without those links available} 
 This manual is broadly
 organised into the major functions of the software from a pilot's perspective.  The remainder of this chapter
 deals with how to download, install and run the software on various
@@ -351,7 +351,7 @@ When XCSoar starts up, it will check for existing profiles. If multiple
 profiles are detected it will displays a small window asking you which profile
 to load. To proceed, choose the desired profile and press Enter. If no
 profile is chosen the settings from the last session are loaded again. Profiles
-can be usefull for example in the following cases:
+can be useful for example in the following cases:
 \begin{itemize}
 \item Different pilots
 \item Competition versus casual flying
@@ -361,7 +361,7 @@ can be usefull for example in the following cases:
 
 \subsection*{Splash screen}
 When XCSoar starts up, shuts down, or loads large files, such as airspace,
-waypoints, terrain, etc, a progress screen is presented while the data is being
+waypoints, terrain, etc., a progress screen is presented while the data is being
 loaded. This screen has a progress bar which indicates the data loading
 activity, and a short line of text describing the action that is being performed.
 
@@ -403,7 +403,7 @@ information about the XCSoar mailing lists on our website:
 
 A log file of the startup progress of XCSoar is generated in the file
 \verb|xcsoar-startup.log|. This can be sent to the XCSoar developers
-to help determine the cause of any startup-related problems.
+to help determine the cause of any startup related problems.
 
 For Altair users, the startup file is transferred to the `FromAltair'
 directory by AltairSync if a USB drive is plugged in when Altair is
@@ -535,8 +535,8 @@ certain events occur.
 buttons, are used to present detailed data to the pilot regarding waypoint
 details, statistics and analysis etc.
 \item[Main menu] The main menu is accessible by double tapping the map area or
-infoboxes. If the menu buttons are not pressed after a specified time, they 
-disappear again so as to not obscure the map area.
+infoboxes as well as through gesture\gesture{Down - Up}. If the menu buttons are
+not pressed after a specified time, they disappear again so as to not obscure the map area.
 \end{description}
 
 There are several ways to interact with XCSoar:
@@ -631,11 +631,8 @@ corresponding menu.
 
 \subsection*{Navigation menu (Nav)}
 \jindent{\bmenut{Task}{Calc}}{ Displays the task calculator dialog. }
-\todonum{verify} \jindent{\bmenut{Advance}{(Auto)}}{ Arms the automatic task 
+\jindent{\bmenut{Arm}{Start}}{ Arms the automatic task 
 waypoint trigger. }
-\todonum[inline]
-{add (or not?) to dynamic buttons: {Abort}{Start} - { Abort the
-last Start } } 
 \jindent{\bmenut{Previous}{turnpoint}}{ Selects the previous/start waypoint in
 the task. }
 \jindent{\bmenut{Next}{turnpoint}}{ Selects the next/finish waypoint in the
@@ -645,7 +642,8 @@ task. }
 \jindent{\bmenus{GoTo}}{ Displays the waypoint selector dialog and activates
 the GoTo mode for the selected waypoint. }
 \jindent{\bmenut{Task}{Abort}}{ Aborts/resumes the current task. }
-\todonum{explain} \jindent{\bmenus{Alternates}}{  }
+\jindent{\bmenus{Alternates}}{ Shows a list to landable alternates sorted by
+distance in the near.} 
 \jindent{\bmenus{Target}}{ Displays the target dialog, which is
 important for modifying AAT tasks. }
 
@@ -660,13 +658,12 @@ important for modifying AAT tasks. }
 Long, Short, Off. }
 \jindent{\bmenut{Terrain}{On}}{ Toggles display of terrain. }
 \jindent{\bmenut{Topology}{On}}{ Toggles display of topology. }
-\jindent{\bmenut{Labels}{On}}{ Displays map labels, MID lables, or none. }
+\jindent{\bmenut{Labels}{On}}{ Displays map labels, MID labels, or none. }
 
 \subsection*{Configuration menu (Config)}
 \jindent{\bmenut{MC}{$+$}}{ Increases MacCready value. }
 \jindent{\bmenut{MC}{$-$}}{ Decreases MacCready value. }
-\todonum{verify restriction to final glide} \jindent{\bmenut{MC}{Auto}}{ Toggles
-automatic/manual MacCready when in final glide. }
+\jindent{\bmenut{MC}{Auto}}{ Toggles automatic/manual MacCready. }
 \jindent{\bmenut{Flight}{Setup}}{ Displays the flight settings
 (bugs/ballast/QNH) dialog. }
 \jindent{\bmenut{Setup}{Wind}}{ Displays the wind settings dialog. }
@@ -698,7 +695,6 @@ to the aircraft. }
 \jindent{\bmenut{FLARM}{Radar}}{ Opens the full screen FLARM radar dialog. }
 \jindent{\bmenut{Thermal}{Assistant}}{ Opens the full screen thermal assistant
 dialog. }
-\todonum{the thermal assistant should beexplained somewhere}
 
 \subsection*{Variometer sub-menu (Vario) of the Configuration menu}
  The functions in this sub-menu require the Vega intelligent
@@ -749,7 +745,7 @@ the following functions:
 \item[Down key] Zoom out
 \item[Left key] Drop marker
 \item[Right key] Toggle through normal/aux. InfoBoxes and Fullscreen
-\item[Enter] Clear status message or suppres FLARM gauge if open and no warning
+\item[Enter] Clear status message or suppress FLARM gauge if open and no warning
 active
 \end{jspecs}
 
@@ -851,7 +847,7 @@ This is performed by selecting the menu:
 At any time the InfoBoxes may be toggled between auxiliary and normal from
 the menu:
 \begin{quote}
-\bmenu{Info}\blink\bmenu{Aux Info On}
+\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Aux Info On}
 \end{quote}
 \gesture{Right} 
 If a touchscreen is available, you also can switch through the three display
@@ -879,8 +875,8 @@ will be deactivated so there is no risk of accidental adjustment later.
 
 \subsection*{Changing {\InfoBox}es}
 {\InfoBox}es can either be changed by calling the configuration dialog from the
-menu \bmenu{Config}\blink\bmenu{Setup System} or by performing a long press on
-the {\InfoBox} that should be changed. In the second case a list dialog opens,
+menu \bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Setup System} or by
+performing a long press on the {\InfoBox} that should be changed. In the second case a list dialog opens,
 giving you all available {\InfoBox}es to choose from.
 
 \section{Status messages}
@@ -988,7 +984,7 @@ knob on Altair) may be used to scroll through the text. Clicking the
 \button{$<$} and \button{$>$} buttons selects the previous/next checklist.
 
 \begin{center}
-\includegraphics[angle=0,width=7cm,keepaspectratio='true']{figures/checklist.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/checklist.png}
 \end{center}
 
 \subsection*{Status dialog}
@@ -1005,29 +1001,29 @@ This dialog is accessed via the menu under
 \item[Flight] Shows the location of the aircraft, nearest waypoint and the
 maximum height gain.
 \begin{center}
-\includegraphics[angle=0,width=5cm,keepaspectratio='true']{figures/status-aircraft.png}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-aircraft.png}
 \end{center}
 
 \item[System] Shows the status of connected devices and battery levels.
 \begin{center}
-\includegraphics[angle=0,width=5cm,keepaspectratio='true']{figures/status-system.png}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-system.png}
 \end{center}
 
 \item[Task] Shows the AAT times, distances achieved and remaining
 and the task speeds.
 \begin{center}
-\includegraphics[angle=0,width=5cm,keepaspectratio='true']{figures/status-task.png}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-task.png}
 \end{center}
 
 \item[Rules] Shows validity of start/finish according to the task rules.
 \begin{center}
-\includegraphics[angle=0,width=5cm,keepaspectratio='true']{figures/status-rules.png}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-rules.png}
 \end{center}
 
 \item[Times]  Shows the local time, flight time, takeoff and landing time and
 the local sunset time.
 \begin{center}
-\includegraphics[angle=0,width=5cm,keepaspectratio='true']{figures/status-times.png}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-times.png}
 \end{center}
 \end{description}
 
@@ -1043,7 +1039,7 @@ cursor (underlined character). Clicking the \button{$<$} and \button{$>$} button
 cursor left/right.  
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/textentry.png}
+\includegraphics[angle=0,width=0.6\linewidth,keepaspectratio='true']{figures/textentry.png}
 \end{center}
 
 To enter text with the touch screen keyboard, press the letters of choice one after the other. 
@@ -1052,7 +1048,7 @@ will be shown. For deleting the last letter use the \button{$<-$} button. The
 \button{Clear} button deletes all input.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/textentry_keyboard.png}
+\includegraphics[angle=0,width=0.6\linewidth,keepaspectratio='true']{figures/textentry_keyboard.png}
 \end{center}
 
 Press \button{Ok} to take over, or \button{Cancel} to exit.
@@ -1081,7 +1077,7 @@ For some hardware platforms, the control of the screen hardware
 brightness can be controlled from the brightness dialog
 accessible from the menu:
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Bright}
+\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Bright}
 \end{quote}
 
 Refer to the {\em Altair User's Manual} for details of the brightness
@@ -1145,7 +1141,7 @@ map display.
 \section{Map display elements}
 
 \begin{maxipage}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/fig-map.png}
+\includegraphics[angle=0,width=0.9\linewidth,keepaspectratio='true']{figures/fig-map.png}
 \end{maxipage}
 
 The moving map shows:
@@ -1178,7 +1174,7 @@ circling makes it easy to determine which direction to exit the
 thermal.
 
 When Track or Target-up is used in circling mode, the glider symbol is
-centered on the screen, even if the symbol position is configured differently.
+centred on the screen, even if the symbol position is configured differently.
 In cruise mode the Track and the Target-up orientation allows the glider
 symbol to be positioned (e.g.) 20\% from the bottom of the screen, giving a good view of the
 map ahead of the glider.  This position is adjustable in the configuration
@@ -1192,8 +1188,8 @@ To change the scale of the map, for PC, PNA, or Pocket PC:
 already selected.
 Then use mouse wheel, or the Pocket PC up/down key to either zoom
 in or out.
-\item You can also gesture to change the zoom level. Gesture \gesture{Up
-and Down} ``up'' zooms in, ``Down'' zooms out.
+\item You can also gesture to change the zoom level. Gesture \gesture{Up/Down}
+``Up'' zooms in, ``Down'' zooms out.
 \item A PNA with a button wheel let you also change the zoom. 
 \item Or select the function from the menus:
 \begin{quote}
@@ -1249,7 +1245,7 @@ is particularly useful when task planning.
   keys.  For Altair, panning is performed with the inner/outer rotary knob.
 \item When done, pan mode has to be disabled manually, by pressing:
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Pan Off}
+\bmenu{Pan Off}
 \end{quote}
 
 \end{enumerate} 
@@ -1262,7 +1258,7 @@ A special menu of buttons in pan mode is also displayed when in pan
 mode.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/pan.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/pan.png}
 \end{center}
 
 \section{Waypoints} \label{sec:waypoint-schemes}
@@ -1311,8 +1307,8 @@ XCSoar continually calculates which landing points are within gliding
 range using the current wind estimate.  The estimated arrival altitude
 {\em above the arrival safety height} of reachable landable points is
 displayed next to the waypoint.  This arrival altitude is calculated on a
-minimum MacCready setting \todonum{explain somewhere else in detail: the MC value scaled according to your alitude compared with the cloud base
-altitude
+minimum MacCready setting \todonum{explain somewhere else in detail: the MC
+value scaled according to your altitude compared with the cloud base altitude
 }.
 
 
@@ -1403,7 +1399,7 @@ on the variometer value. \config{snailtype}
 If Vega or an intelligent variometer is connected with Netto output,
 the Netto vario value is used; hence the colours and thickness of the
 trail indicates the air-mass vertical movement rather than the glider's
-vertical movement \todonum{verify}.
+vertical movement	.
 
 The snail trail display can be toggled between off, a short trail
 (about ten minutes), a long trail (about one hour) or a full trail
@@ -1456,9 +1452,9 @@ simple way of showing all thermals encountered.
 Markers are not preserved after XCSoar is exited, however the location
 of all marks are appended to the file \verb|xcsoar-marks.txt|.
 
-Markers are dropped by the menu: 
+Markers are dropped by the menu, or by gesture \gesture{Left}: 
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Mark drop}
+\bmenu{Display}\blink\bmenu{Mark Drop}
 \end{quote}
 
 \section{Glide range line}
@@ -1612,7 +1608,7 @@ This page contains text describing the waypoint's location, elevation
 and local sunset. Last not least a button \button{GoTo} to directly initiate
 navigating to this waypoint. The button cancels the current task. 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails0.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails0.png}
 \end{center}
 
 This page also shows three forms of altitude difference (additional
@@ -1648,7 +1644,7 @@ This page may contain relevant text from the enroute supplement about
 the airfield, including runways, radio frequencies, traffic patterns,
 contacts.
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails1.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails1.png}
 \end{center}
 
 \subsection*{Satellite image}
@@ -1656,7 +1652,7 @@ This page shows a satellite image of the
 waypoint.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails2.pdf}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails2.pdf}
 \end{center}
 
 
@@ -1666,9 +1662,10 @@ from a potentially large database.
 
 This may be accessed several ways:
 \begin{itemize}
-\item From the menu \bmenu{Nav}\blink\bmenu{Waypoint List}
-\item From the task editor, menu \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task
+\item  From the menu \bmenu{Nav}\blink\bmenu{Waypoint List}
+\item  From the task editor, menu \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task
 Edit} and selecting a waypoint and open the details.
+\item  Or just by gesture\gesture{Down - Right}.
 \end{itemize}
 
 The waypoint selector comprises a set of optional filters on the left
@@ -1691,7 +1688,7 @@ sorted by name. When (in addition) filtering by distance or direction,
  the list of matching waypoints is sorted by distance.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-waypointselect.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointselect.png}
 \end{center}
 
 The list can be scrolled if there is more than one screen full of
@@ -1711,7 +1708,7 @@ country tasks. It is accessed via the menu
 \end{quote} 
 
 \begin{it}The task manager is target of major rework and thus the description
-possibly comes short compared to its functionallity. Version 6.1 of XCSoar will hopefully
+possibly comes short compared to its functionality. Version 6.1 of XCSoar will hopefully
 leverage the rate of change at the task editor and the manual will be more
 complete at this point.\end{it}
 
@@ -1723,11 +1720,11 @@ button.
 
 The \button{Edit} button enters the task editor. It comprises a list of 
 waypoints on the right side of the form. All means to add, change, or
-delete waypoints to the list composing the task are accessable through the right
+delete waypoints to the list composing the task are accessible through the right
 side of this form. 
 Below the list the type of task and the total distance of the task is shown.
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-taskedit0.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit0.png}
 \end{center}
 
 The left side of the form gives all means to manipulate the task entirely. You
@@ -1749,7 +1746,7 @@ assigned time, the nominal task distance, and the task distance around
 the user-specified targets within the AAT areas.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-taskedit1.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit1.png}
 \end{center}
 
 Pressing the \button{Advanced} button exposes (or hides) several more
@@ -1763,7 +1760,7 @@ fields.  Pressing it again hides the fields.
 \end{description} 
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-taskedit2.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit2.png}
 \end{center}
 
 
@@ -1785,7 +1782,8 @@ left side of the form:
  changed.  If the Close button or ESC button in the waypoint selector
  is pressed, the task waypoint will be unchanged.
 \item[\button{Remove}] Removes the waypoint from the task
-\item[\button{Details}] Opens the waypoint details dialog to give more detailed information on the waypoint location.  
+\item[\button{Details}] Opens the waypoint details dialog to give more detailed information on the 
+waypoint location.  
 This can be useful to verify the waypoint coordinates are correct.
 \item[\button{Move up}] Moves the waypoint to earlier in the task.
 \item[\button{Move down}] Moves the waypoint to later in the task.
@@ -1799,7 +1797,9 @@ The task waypoint dialogs for start points contain several fields:
  for non-AAT tasks.
 \item[Sector radius] Sector radius for non-AAT tasks.
 \item[AAT] Determines whether this task is AAT or not.
-\item[Min time] Specifies the AAT minimum task time.  During flight, if the expected task time is less than the AAT minimum task time, a status message notificatio of this is issued.
+\item[Min time] Specifies the AAT minimum task time.  During flight, if the expected task time is 
+less than the AAT minimum task time, a status message notification of this is
+issued.
 \item[OnLine Contest]  Specifies whether the detection of start is based
   on the start sector or minimum altitude after launch (required for
   Sprint tasks).
@@ -1808,7 +1808,7 @@ The task waypoint dialogs for start points contain several fields:
 \end{description}
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-taskedit3.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit3.png}
 \end{center}
 
 The \button{Edit start points} button allows editing of alternate
@@ -1838,7 +1838,7 @@ The use of targets is described further in Section~\ref{sec:aat-tasks}.
   start to finish radial.
 \end{description}
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-taskedit4.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit4.png}
 \end{center}
 \todonum[inline]{up to here}
 
@@ -2021,56 +2021,59 @@ altitude is above 1000 meters below the start altitude.
 
 \section{Alternate starts}\label{sec:alternate-starts}
 
-\todonum[inline]{Alternate start points are skipped for XCsoar 6.0, but
-will potentially brought back in a next release. This section can thus be
-treated as obsolete. }
+Alternate start points are skipped for XCsoar 6.0, but
+will potentially brought back in a next release. 
 
-The task system allows alternate start sectors to be defined.
+%\todonum[inline]{Alternate start points are skipped for XCsoar 6.0, but
+%will potentially brought back in a next release. This section can thus be
+%treated as obsolete. }
+
+%The task system allows alternate start sectors to be defined.
   
-To use it, on the task edit page, select the start point, then turn on
-the `Alternate start points' property.  Then press the button 'Edit
-alternate start points'.
+%To use it, on the task edit page, select the start point, then turn on
+%the `Alternate start points' property.  Then press the button 'Edit
+%alternate start points'.
 
-\begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-startpoint2.png}
-\end{center}
+%\begin{center}
+%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-startpoint2.png}
+%\end{center}
   
-  To edit the start points, move the cursor to an item in the list on
-  the right side of the dialog, and press enter.  This opens the
-  waypoint selector dialog, to allow selection of the waypoint.  This
-  process can be repeated several times for several alternate start
-  waypoints.  Press the `clear' button to clear all alternate start
-  points.
+%  To edit the start points, move the cursor to an item in the list on
+%  the right side of the dialog, and press enter.  This opens the
+%  waypoint selector dialog, to allow selection of the waypoint.  This
+%  process can be repeated several times for several alternate start
+%  waypoints.  Press the `clear' button to clear all alternate start
+%  points.
 
-  Each start sector is fixed to the same type (line/cylinder) and size
-  (start radius) defined in the task waypoint page.
+%  Each start sector is fixed to the same type (line/cylinder) and size
+%  (start radius) defined in the task waypoint page.
 
-  Note that the task start point should be included in the alternate
-  start location list. 
+%  Note that the task start point should be included in the alternate
+%  start location list. 
 
-\begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-startpoint3.png}
-\end{center}
+%\begin{center}
+%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-startpoint3.png}
+%\end{center}
 
-\begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-startpoint4.png}
-\end{center}
+%\begin{center}
+%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-startpoint4.png}
+%\end{center}
 
-  In flight, any time you cross a start line (or exit a start
-  cylinder), this will start the task at that particular alternate
-  start.  Task statistics are recalculated for the start sector you
-  last flew through.  All alternate start sectors are shown on the
-  map.  You can re-start simply by flying through the start sector
-  again or another start sector.  This automatic re-start will only
-  happen if the active waypoint is the first turnpoint after the
-  start, or the start itself.
+%  In flight, any time you cross a start line (or exit a start
+%  cylinder), this will start the task at that particular alternate
+%  start.  Task statistics are recalculated for the start sector you
+%  last flew through.  All alternate start sectors are shown on the
+%  map.  You can re-start simply by flying through the start sector
+%  again or another start sector.  This automatic re-start will only
+%  happen if the active waypoint is the first turnpoint after the
+%  start, or the start itself.
 
-  When the waypoint advance mode is `Arm' or `Arm Start', then a start
-  is only recognised by XCSoar if the advance trigger is armed.
+%  When the waypoint advance mode is `Arm' or `Arm Start', then a start
+%  is only recognised by XCSoar if the advance trigger is armed.
 
-  If desired, alternate start points may be selected as the active
-  waypoint by selecting the previous waypoint.  Continuing to select
-  the previous waypoint will cycle through all alternate start points.
+%  If desired, alternate start points may be selected as the active
+%  waypoint by selecting the previous waypoint.  Continuing to select
+%  the previous waypoint will cycle through all alternate start points.
 
 \section{Task calculator dialog}\label{sec:task-calc-dial}
 The task calculator dialog allows the pilot to see the effect of
@@ -2087,7 +2090,7 @@ This may be accessed several ways:
 \end{itemize}
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-taskcalc3.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskcalc3.png}
 \end{center}
 
 \begin{description}
@@ -2118,7 +2121,7 @@ unaffected.
 The \button{Target} button, for AAT tasks, adjusts the range
 (increases or decreases) so that the estimated task time exceeds the
 assigned task time by less than five minutes.  The range is adjusted
-target-wise. In typical use, all targets are set to ``aouto" that means the pilot 
+target-wise. In typical use, all targets are set to ``auto" that means the pilot 
 does not have to manually adjust the range to find the course for arrival at 
 the assigned task time, thereby reducing pilot workload.
 
@@ -2306,7 +2309,7 @@ Best scored targets found &  \\
   selecting the start point and turn `OLC' to ON.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/shot-olc.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/shot-olc.png}
 \end{center}
 
   When flying OLC, either AAT or non-AAT tasks may still be used to
@@ -2365,13 +2368,13 @@ When no land-point is reachable, then the nearest 10 landable points
 are shown. 
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/abort-low.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/abort-low.png}
 \end{center}
 
 When at least one land-point is reachable, then only the reachable land-points are shown.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/abort-high.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/abort-high.png}
 \end{center}
 
 If the task waypoint that was active, prior to aborting the task, is
@@ -2404,8 +2407,6 @@ Several flight loggers are accessible via XCSoar:
   certified.
 \item The PRO version of Altair has an internal IGC certified logger device.
   XCSoar communicates with the logger as if it were an external serial device.
-
-\todonum[inline]{Describe how XCSoar interfaces with it\ldots}
 
 \item XCSoar can also send declarations to some external logger devices. 
 For this to work, the device must be specified in the ``Devices'' 
@@ -2454,7 +2455,7 @@ menu:
 \end{quote}
 
 \begin{center}
-\includegraphics[angle=0,width=7cm,keepaspectratio='true']{figures/loggerreplay.png}
+\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/loggerreplay.png}
 \end{center}
 
 During replay, the word ``REPLAY'' appears at the lower left corner of
@@ -2502,7 +2503,7 @@ Several pages are of interest:
   (e.g.\ to adjust the QNH)
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/analysis-barograph.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-barograph.png}
 \end{center}
 
 \item[Climb history]
@@ -2517,7 +2518,7 @@ Several pages are of interest:
   (e.g.\ to adjust the MC value)
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/analysis-climb.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-climb.png}
 \end{center}
 
 \item[Task]
@@ -2530,7 +2531,7 @@ Several pages are of interest:
   (e.g.\ to adjust the AAT task range or MC value)
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/analysis-task.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-task.png}
 \end{center}
 
 \end{description}
@@ -2610,7 +2611,7 @@ Final glide mode replaces the Cruise mode as soon as the glider is above the
 final glide path. The required hight depends most important on the adjusted MC
 value, but also the ground clearance is respected. On entering a thermal while
 in Final mode XCSoar will switch to the Circling display and back to the Final
-display once the thermal is left again and the final gllide condition is still
+display once the thermal is left again and the final glide condition is still
 met. The potential of having the Final glide mode is obvious when
 flying short tasks in which the aircraft may well be above final glide turning the penultimate
 waypoint.
@@ -2657,7 +2658,7 @@ sink rate is doubled when compared to a clean glider.
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/cut-clean-dirty-polar.png}
 \end{center}
-Knowing this a meaningfull setting for a worst-case bug polluted wing could
+Knowing all this, a meaningful setting for a worst-case bug polluted wing could
 scale down the polar by 30\% to 70\%. Last not least this setting is a bit of 
 trial and error, because gliders performance suffer not the same way from type
 to type.
@@ -2684,7 +2685,7 @@ This is accessed via the menu under
 \end{quote}
 
 \begin{center}
-\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/dialog-basicsettings.png}
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/dialog-basicsettings.png}
 \end{center}
 
 The bugs setting ('clean') determines the amount the polar is degraded
@@ -2932,7 +2933,7 @@ If the glider is below the minimum height required, a red arrow bar is
 drawn below the box indicating the amount of height deficit.  If,
 however, there are landable waypoints within glide range, but the
 glider is below the minimum height required to complete the task, the
-bar is colored amber.
+bar is coloured amber.
 
 \begin{center}
 \begin{tabular}{c c}
@@ -3015,18 +3016,16 @@ sunset warnings.
 The glide computer assumes the glider's average cross-country speed is
 equal to that achievable under classic MacCready theory taking wind
 into account, with the current MacCready setting.  This method is used
-for estimatating arrival times and task finish time.
+for estimating arrival times and task finish time.
 
 The following task speed measures are defined:
 \begin{description}
-\item[Task speed remaining]  This is the estimated speed for the rest of
-the task according to MacCready theory.
 \item[Task speed achieved]  This is the task speed to date, compensated
 for altitude differences from the task start altitude.
 \item[Task speed average]  This is the task speed to date compensated
-for altitude required to complete the task. \todonum{explain better}
+for altitude required to complete the task.
 \item[Task speed remaining]  This is the task speed estimated for the
-  remainder of the task.\todonum{doublicate definition, explain better}
+  remainder of the task according to MacCready theory.
 \item[Task speed instantaneous]  This is the instantaneous estimated speed 
 along the task.  When climbing at the MacCready setting, this number
 will be similar to the estimated task speed.  When climbing slowly or
@@ -3059,13 +3058,6 @@ glider is inside an AAT area or when the AAT range or targets are
 adjusted by the pilot.  This is due to the task distance achieved and
 remaining when such events occur.
 
-%The next major release of XCSoar will allow several ways of calculating
-%time estimates:
-%\begin{itemize}
-%\item MacCready speed (as currently implemented)
-%\item Task average, the average speed achieved on this task.
-%\item Manual input, so the user can specify the expected average speed
-%\end{itemize}
 
 \section{Optimal cruise track}
 
@@ -3078,7 +3070,7 @@ according to classical MacCready theory.
 
 \begin{center}
 \begin{maxipage}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/fig-optcruise.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/fig-optcruise.png}
 \end{maxipage}
 \end{center}
 
@@ -3205,7 +3197,7 @@ it occurs.  The current aircraft all up weight is displayed in the
 title.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/analysis-glidepolar.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-glidepolar.png}
 \end{center}
 
 In this dialog page, the `Settings' button opens the flight settings
@@ -3226,7 +3218,7 @@ Data is collected only when in cruise mode and at G loading between
 smoothly with wings level.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/shot-glidepolar.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/shot-glidepolar.png}
 \end{center}
 
 \section{Flight notifications}
@@ -3333,7 +3325,7 @@ glide information.  It is possible to manually adjust the wind used in
 all calculations.
 
 \begin{center}
-\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/optwind.png}
+\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/optwind.png}
 
 %{\it DIAGRAM CUTOUT SHOWING WIND VECTOR AT GLIDER, MAYBE ALSO SHOW A
 %WINDSOCK NEXT TO THE DISPLAY TO MAKE THE DIRECTION OBVIOUS.  NO
@@ -3483,10 +3475,10 @@ taking even a weak thermal.
   thermal marker symbol is a green circle with a spiral.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/shot-tlocator-circling.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/shot-tlocator-circling.png}
 \end{center}
 
-  The thermal locator markes the location of the last 20
+  The thermal locator marks the location of the last 20
   thermals on the map with the thermal symbol during cruise.
 
   This location is calculated to compensate for the thermal drift at
@@ -3501,11 +3493,11 @@ taking even a weak thermal.
   at altitude will be projected downwind at the new wind estimate.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/shot-tlocator-cruise.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/shot-tlocator-cruise.png}
 \end{center}
 
 \section{Thermal assistant}
-\todonum[inline]{explaine the thermal assistant}
+\todonum[inline]{explain the thermal assistant}
 
 \section{Convection forecast}\label{sec:convection-forecast}
 
@@ -3560,7 +3552,7 @@ The `Set wind' button opens the wind settings dialog (e.g.\ to
 manually set the wind).
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/analysis-wind.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-wind.png}
 \end{center}
 
 \item[Temperature trace]
@@ -3572,7 +3564,7 @@ manually set the wind).
   and estimated cloud base.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/analysis-temptrace.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-temptrace.png}
 \end{center}
 
 \end{description}
@@ -3598,7 +3590,7 @@ performed by selecting the menu:
 \end{quote}
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-weather.png}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/dialog-weather.png}
 \end{center}
 
 The Field setting determines which data field is displayed on the map.
@@ -3625,7 +3617,7 @@ aloft (i.e. this neglects ``cloudsuck'').  This value depends upon both
 the surface heating and the BL depth.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/rasp-wstar.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/rasp-wstar.png}
 \end{center}
 
 \item[BL wind spd] 
@@ -3634,7 +3626,7 @@ prediction can be misleading if there is a large change in wind
 direction through the BL.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/rasp-blwindspd.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/rasp-blwindspd.png}
 \end{center}
 
 \item[H bl]  
@@ -3649,7 +3641,7 @@ turbulence rather than thermal mixing this parameter is not useful for
 glider flying.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/rasp-hbl.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/rasp-hbl.png}
 \end{center}
 
 \item[dwcrit]  
@@ -3673,7 +3665,7 @@ height is not predicted, but is expected to be below the BL Top
 height.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/rasp-blcloudpct.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/rasp-blcloudpct.png}
 \end{center}
 
 \item[Sfc temp] 
@@ -3702,7 +3694,7 @@ low-level inversions which limit thermalling heights.
 \end{description}
 
 \begin{maxipage}
-The color schemes used in rendering the RASP contours are illustrated
+The colour schemes used in rendering the RASP contours are illustrated
 in the table below.
 
 \begin{longtable}{c c c}
@@ -3751,7 +3743,7 @@ airspaces, only airspaces below a certain altitude, only airspace within a
 particular height separation, or only airspace below the glider.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/airspace.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/airspace.png}
 \end{center}
 
 The patterns used to display airspace areas include opaque,
@@ -3871,7 +3863,7 @@ If there were airspace warnings and you are not well outside all airspace, this
 menu item redisplays the dialog with the list of airspace warnings.
 
 
-\section{Airspace warning acknowlegement}
+\section{Airspace warning acknowledgement}
 
 When the warning dialog is visible and an airspace warning is active, the
 dialog can be closed by pressing ESC.  This has the effect of closing the
@@ -3983,7 +3975,7 @@ To use the dialog, move up or down the list and the enter key will
 cycle between the various warning and display options.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/airspacefilter.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/airspacefilter.png}
 \end{center}
 
 Pressing the ``Lookup'' button brings up the airspace select dialog.
@@ -3991,7 +3983,7 @@ This functions similarly to the waypoint lookup dialog, and allows
 search based on name, distance, direction, and type (class).  
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/airspacelookup.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/airspacelookup.png}
 \end{center}
 
 Once an airspace item has been located, selecting it will add it to
@@ -4013,7 +4005,7 @@ glider is indicated by a white arrow.  This page is useful to help
 visualise complex layering of airspace.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/analysis-airspace.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-airspace.png}
 \end{center}
 
 The ``Warnings'' button opens the airspace warning dialog if close to
@@ -4035,7 +4027,7 @@ a poor aid at helping to locate the traffic.
 
 \subsection*{FLARM map display}
 
-The FLARM targets on the map are drawn as red circles and have colored 
+The FLARM targets on the map are drawn as red circles and have coloured 
 arrow heads to indicate the direction the FLARM target is
 heading, as well as the collision risk \config{flarm-on-map}.  Note that these
 arrow heads are oriented according to the display orientation.  For example, if 
@@ -4109,23 +4101,24 @@ about the FLARM traffic and depending on the setup it closes by itself, when all
 traffic has been gone.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-flarm1.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-flarm1.png}
 \end{center}
 
 Only a few controls are on the dialog, from top down:
 \begin{description}
 \item[North up]  If checked the radar screen is oriented North up, if not the
 orientation is Track up.
-\item[A. Zoom]  Automatic zoom scales the radar screen so that the targets are
-perfectly visible. If not checked, the screen must be zoomed manually.
-\item[Avg/Alt]  The button toggles in-between average vario and altitude
-displayed next to the target.
-\item[Details]  Through the button a separate dialog with all details to the
-selected target is accessed. 
-\item[+/-]  Manually change the zoom from min. 500 meter to max. 10000
-meter radar range.
-\item[$\triangleleft$/$\triangleright$]  Select the previous or
-next target on the radar.
+\item[A. Zoom]  \gesture{Up - Down} Automatic zoom scales the radar screen so
+that the targets are perfectly visible. If not checked, the screen must be
+zoomed manually. The Up-Down gesture activates the automatic zoom. 
+\item[Avg/Alt]  \gesture{Right - Left} The button toggles in-between average
+vario and altitude displayed next to the target.
+\item[Details]  \gesture{Down - Right} Through the button a separate dialog with
+all details to the selected target is accessed. 
+\item[+/-]  \gesture{Up/Down} Manually change the zoom from 500 meter to
+10000 meter radar range. The zoom gestures also apply here.
+\item[$\triangleleft$/$\triangleright$]  \gesture{Left/Right} Select the
+previous or next target on the radar, gestures work in the same manner.
 \end{description}
 
 \begin{center}
@@ -4149,7 +4142,7 @@ messages.
 
 From the first to the second FLARM snapshot were passed about 15 seconds. The
 selected blue target was climbing with 3.4 m/s and had a not as threat
-recognized course relation.  Then in the mean time the ``DC'' has turned more to
+recognised course relation.  Then in the mean time the ``DC'' has turned more to
 the left, became an alerting threat and gets now displayed red.  The FLARM
 radar switched the zoom from 1000 meter to 500 meter. In snapshot three the
 continuously climbing target becomes classified to thread level 1, gets yellow 
@@ -4184,7 +4177,7 @@ coloured and seams to no longer a threat.
   mate's code.
 
 \begin{center}
-\includegraphics[angle=0,width=0.6\linewidth,keepaspectratio='true']{figures/fig-teamcode1.png}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/fig-teamcode1.png}
 \end{center}
 
   After entering the mate's code, the relative distance and
@@ -4224,7 +4217,7 @@ preserve the memory.  In addition, it can be set up to blank the
 screen after a period of inactivity, so that it can reduce the power
 consumption.  When the screen is blanked, pressing one of the hardware
 buttons on the PDA activates the screen again.  When a status message
-is issued by the system, the screen becomes unblanked.
+is issued by the system, the screen becomes activated.
 
 Another way to help conserve battery power is to reduce the
 computational load by turning off certain features.  Drawing terrain
@@ -4325,7 +4318,7 @@ to check the correct functioning of switches during daily
 inspection tests or before takeoff. 
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-switches.png}
+\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/dialog-switches.png}
 \end{center}
 
 \section{Aircraft radio transceiver}
@@ -4573,8 +4566,9 @@ required. Set the maximum forecast temperature.  Close the dialog.
 \button{New}. Select ``AAT'' as task type.
 \item  Once the task is created, move the cursor to the `add waypoint' item
 and press enter.  Add waypoints in the already described way. 
-\item  The AAT requires aditional input to the kind and size of the
-oberservation zone. Adjust AAT sector parameters for this waypoint and press close or escape.
+\item  The AAT requires additional input to the kind and size of the
+obserservation zone. Adjust AAT sector parameters for this waypoint and press
+close or escape.
 \item  Repeat the last two steps as required for additional waypoints.  The last
 waypoint is the finish waypoint.
 \item  The AAT task is now entered.  Open the \button{Properties} dialog
@@ -4589,7 +4583,7 @@ settings can be explored from the \button{Task Calc} dialog.  Adjusting the MacC
 \item  When the pilot is ready to start the task, press the \button{Arm
 Start} button.  The current waypoint will then advance automatically
 once, as the pilot flies through the start sector.  After this occurs, the advance trigger is disarmed.  
-\item  In order to re-start, the pilot needs to manunally revert to the
+\item  In order to re-start, the pilot needs to manually revert to the
 \button{Start Turnpoint} and again press the \button{Arm Start} button prior to
 flying through the start sector again.
 \item  After the task is started, the \button{Status} dialog can be opened to
@@ -4603,12 +4597,12 @@ distance and estimate the consequence in AAT time.
 
 The figure below shows the course around the targets at range set to $-100$\%.
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/aat-short.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/aat-short.png}
 \end{center}
 
 The figure below shows the course around the targets at range set to $100$\%.
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/aat-long.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/aat-long.png}
 \end{center}
 
 \item  At all times the black track arrow will point at the next target.  The
@@ -4779,7 +4773,7 @@ divided by the time spent circling.}
 \ibi{Last Thermal Gain}{TL Gain}{Total altitude gain/loss in the last thermal.}
 \ibi{Last Thermal Time}{TL Time}{Time spent circling in the last thermal.}
 \ibi{Thermal Average}{TC Avg}{Altitude gained/lost in the current thermal,
-divided by time spent thermaling.}
+divided by time spent thermalling.}
 \ibi{Thermal Gain}{TC Gain}{The altitude gained/lost in the current thermal.}
 \ibi{Thermal All}{TC All}{Time-average climb rate in all thermals.}
 \ibi{Vario }{Vario}{Instantaneous vertical speed, as reported by the GPS, or the
@@ -4974,12 +4968,12 @@ expert user level.
 
 Basic user level:
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-basic.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-basic.png}
 \end{center}
 
 Expert user level:
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-expert.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-expert.png}
 \end{center}
 
 \subsection*{Safety lock}
@@ -5004,7 +4998,7 @@ The dialog specifies most of the important files that must be
 configured when flying at a new site.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-site.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-site.png}
 \end{center}
 
 \begin{description}
@@ -5053,7 +5047,7 @@ This page is used to determine how the airspace information is
 displayed and how warnings are issued.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-airspace.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-airspace.png}
 \end{center}
 
 \begin{description}
@@ -5086,7 +5080,7 @@ airspace.
 First select the airspace type you wish to change.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-airspacecolors.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-airspacecolors.png}
 \end{center}
 
 Pressing the \button{Lookup} button brings up the airspace select dialog.
@@ -5094,7 +5088,7 @@ This functions similarly to the waypoint lookup dialog, and allows
 search based on name, distance, direction, and type (class).  
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/airspacelookup.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/airspacelookup.png}
 \end{center}
 
 Now select the colour and pattern you wish the selected airspace to be drawn in.
@@ -5118,7 +5112,7 @@ The filter function is described in Section~\ref{sec:airsp-filt-dial}.
 This page provides options relating to the map display.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-map.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-map.png}
 \end{center}
 
 \begin{description}
@@ -5128,7 +5122,7 @@ displayed with each waypoint. There are 7 options:
 \begin{description}
 \item[Names] The full name of each waypoint is displayed.
 \item[Numbers] The waypoint enumeration of each waypoint is displayed, as read
-from the waypoint file. Referring to this number is not relieable, thus the
+from the waypoint file. Referring to this number is not reliable, thus the
 feature will die soon.
 \item[None] No names are displayed with the waypoints.
 \item[Names in task] Names are only displayed for waypoints that are in the active task as well as the home airfield.
@@ -5174,10 +5168,10 @@ display.
 \item[Vario \#1]  Within lift areas lines get displayed green and
 thicker, while sinking lines are shown red and thin.  Zero lift
 is presented as a grey line.
-\item[Vario \#2]  The climb color for this scheme is orange to red, sinking is
+\item[Vario \#2]  The climb colour for this scheme is orange to red, sinking is
 displayed as light blue to dark blue. Zero lift
 is presented as a yellow line.
-\item[Altitude] The color scheme corresponds to the height.
+\item[Altitude] The colour scheme corresponds to the height.
 \end{description}
 
 \item[Trail width*] \label{conf:trailwidth} Sets the width of the snail trail
@@ -5190,16 +5184,11 @@ to target.
 \item[FLARM map]  \label{conf:flarm-on-map}This enables the display of FLARM
 traffic on the map window as well as the pop-up radar-like display.
 \begin{description}
-\item[OFF] FLARM map display disabled
-\item[ON/Fixed] FLARM map display enabled with fixed scale.
-\item[ON/Scaled] FLARM map display enabled and auto scaled.
+\item[OFF]  FLARM map display disabled
+\item[ON/Fixed]  FLARM map display enabled with fixed scale.
+\item[ON/Scaled]  FLARM map display enabled and auto scaled. The FLARM targets on the map display are 
+scaled so that when the map is at large zoom levels, targets are still visible.
 \end{description}
-	
-%\item[Idle blank screen] (PDA only) \todonum{move}
-%This determines whether the display should be blanked after 60 seconds
-%of inactivity when running on batteries.  Blanked screens have a
-%significantly reduced drain on the battery.  The screen can be turned
-%on again by pressing any button.
 \end{description}
 
 
@@ -5210,7 +5199,7 @@ traffic on the map window as well as the pop-up radar-like display.
 This page provides options relating to the items overlaying the map display.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-symbols.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-symbols.png}
 \end{center}
 
 \begin{description}
@@ -5240,7 +5229,7 @@ or orange icons. See Section~\ref{sec:waypoint-schemes} for details
 This page sets how terrain and topology is drawn on the map window.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-terrain.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-terrain.png}
 \end{center}
 
 \begin{description}
@@ -5253,13 +5242,13 @@ displayed brighter and the averted slopes get darker.
 to emphasise terrain slope, smaller values if flying in steep mountains.
 \item[Terrain brightness]  Defines the brightness (whiteness) of the terrain rendering.  This controls the 
 average illumination of the terrain.
-\item[Terrain colors]  Defines the color ramp used in terrain rendering.  Various schemes are available, 
+\item[Terrain colors]  Defines the colour ramp used in terrain rendering.  Various schemes are available, 
 which works best for you will depend on how mountainous your region is.
 \end{description}
 
 
 \begin{maxipage}
-The available terrain color schemes are illustrated in the table below.
+The available terrain colour schemes are illustrated in the table below.
 
 \todonum[inline]{ scheme ``grey'' is missing }
 
@@ -5291,7 +5280,7 @@ The available terrain color schemes are illustrated in the table below.
 This page allows glide computer algorithms to be configured.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-glidecomputer.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-glidecomputer.png}
 \end{center}
 
 \begin{description}
@@ -5347,7 +5336,7 @@ on how many seconds of flight this calculation must be done.
 This page allows the safety heights and behaviour in abort mode to be defined.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-safety.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-safety.png}
 \end{center}
 
 \begin{description}
@@ -5376,7 +5365,7 @@ of the safety heights.
 This page allows the glide polar to be defined.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-polar.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-polar.png}
 \end{center}
 
 \begin{description}
@@ -5387,13 +5376,11 @@ different performance classes, as well as a special entry for ``External Polar F
  format.
 \item[V rough air] The maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.
 \item[Handicap] The handicap factor used for OnLine Contest scoring.
-%\item[Auto logger] Enables the automatic starting and stopping of logger on takeoff and landing respectively.  Disable when flying paragliders to prevent the low ground speeds from triggering the automatic logger.
 \item[Dump time] The time in seconds needed for dumping full ballast.
 \end{description}
 
 \clearpage
-\section{Devices}
-%CEZoom_SettingsComm.png
+\section{Devices} \label{conf:comdevices}
 
 The Devices page is used to specify the ports used to communicate with
 the GPS and other serial devices. The default settings are COM1 and
@@ -5401,7 +5388,7 @@ the GPS and other serial devices. The default settings are COM1 and
 variometer, the settings should be COM1 and 38400.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-devices.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-devices.png}
 \end{center}
 
 Two COM devices are available (device A and device B), to allow, for
@@ -5439,7 +5426,7 @@ are available for speed, distance, lift rate, altitude, temperature, task
 speed and latitude/longitude.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-units.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-units.png}
 \end{center}
 
 The UTC offset field allows the UTC local time offset to be specified.
@@ -5457,12 +5444,14 @@ This page allows to customize the way the user controls and interacts with
 XCSoar.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-interface.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-interface.png}
 \end{center}
 
 \begin{description}
-%\item[Auto Blank] This determines whether to blank the display after a long
-%period of inactivity when operating on internal battery power (for PDA only).
+\item[Auto Blank] This determines whether to blank the display after a long
+period of inactivity when operating on internal battery power (visible for PDA
+only).
+
 \item[Safety lock]  This determines whether the configuration settings dialog is
 accessible during flight.
 \item[Gestures]  Enable this, if you run XCSoar on a touch-screen device and
@@ -5505,7 +5494,7 @@ Press the \button{Fonts} button to adjust the fonts XCSoar uses.
 This page enables customisation of fonts in various fields of the programm.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-fonts.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-fonts.png}
 \end{center}
 
 Once the customisation is enabled, the \button{Edit} buttons allow to change some parameters (Font 
@@ -5520,7 +5509,7 @@ If customisation is disabled, default fonts will be used.
 This page defines various display styles used by symbols and InfoBoxes.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-layout.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-layout.png}
 \end{center}
 
 \begin{description}
@@ -5538,7 +5527,7 @@ centered or in the top left corner.
 \section{FLARM and other gauges}\label{sec:vario-gauge}
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-othergauges.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-othergauges.png}
 \end{center}
 \label{conf:variogauge}
 \begin{description}
@@ -5561,7 +5550,7 @@ FLARM traffic has gone.
 ThermalAssistant gauge.
 \end{description}
 
-In all FLARM environment, the color of the target indicates the threat level.
+In all FLARM environment, the colour of the target indicates the threat level.
 
 %%%%%%%%%%
 
@@ -5571,7 +5560,7 @@ Task rules may be defined to limit valid starts according to competition
 rules. \label{conf:taskrules}
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-rules.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-rules.png}
 \end{center}
 
 \begin{description}
@@ -5611,7 +5600,7 @@ display mode (circling, cruise, final glide) and one auxiliary set.  See
 Section~\ref{cha:infobox} for a description of the infobox types and their meanings.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-infoboxes.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-infoboxes.png}
 \end{center}
 
 To arrange a set of InfoBoxes press one of the buttons labeled with the name
@@ -5663,7 +5652,7 @@ annotating XCSoar's IGC logger.
 % The fields available are the pilot's name, aircraft type, and aircraft registration.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-logger.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-logger.png}
 \end{center}
 
 \begin{description}
@@ -5676,7 +5665,8 @@ annotating XCSoar's IGC logger.
 \item[Logger ID]  This is the logger registration.
 \item[Short file name]  This determines whether the logger uses the short or the long IGC file name.
 \item[Auto logger*]  Enables the automatic starting and stopping of the logger
-on takeoff and landing respectively. Disable when flying paragliders.
+on takeoff and landing respectively. Disable when flying paragliders to prevent the low ground speeds from
+triggering the automatic logger.
 \end{description}
 
 %%%%%%%%%%
@@ -5687,10 +5677,13 @@ on takeoff and landing respectively. Disable when flying paragliders.
 This page provides experimental features which are not finished yet.
 
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/config-exp.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-exp.png}
 \end{center}
 
-
+\begin{description}
+\item[Device model] This setting allows the adaptation to specific hardware
+XCSoar runs on (visible for PDA only).
+\end{description}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Data Files}\label{cha:data-files}
