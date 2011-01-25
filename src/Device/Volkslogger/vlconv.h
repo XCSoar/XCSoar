@@ -18,11 +18,10 @@
 #ifndef VLCONV_H
 #define VLCONV_H
 
+#include "Device/Volkslogger/vlapityp.h"
+
 #include <stdio.h>
 #include <time.h>
-
-#include <memory.h>
-#include "Device/Volkslogger/vlapityp.h"
 
 /* Untertypen des Haupttyps Variabel */
 #define FLDPLT	     0x01

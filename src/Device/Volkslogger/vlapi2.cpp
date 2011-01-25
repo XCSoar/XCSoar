@@ -15,18 +15,14 @@
  **
  ***********************************************************************/
 
+#include "Device/Volkslogger/vlapi2.h"
+#include "Device/Volkslogger/dbbconv.h"
+#include "Device/Volkslogger/grecord.h"
+#include "Device/Volkslogger/utils.h"
+
 #include <memory.h>
 #include <string.h>
 #include <stdlib.h>
-
-
-#include "Device/Volkslogger/vlapi2.h"
-#include "Device/Volkslogger/vlapierr.h"
-#include "Device/Volkslogger/dbbconv.h"
-#include "Device/Volkslogger/vlconv.h"
-#include "Device/Volkslogger/grecord.h"
-
-#include "Device/Volkslogger/utils.h"
 
 extern int noninteractive;
 

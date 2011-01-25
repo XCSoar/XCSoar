@@ -15,13 +15,11 @@
 **
 ***********************************************************************/
 
-#include <stdio.h>
-#include <string.h>
-
 #include "Device/Volkslogger/grecord.h"
 #include "Device/Volkslogger/vlapihlp.h"
-#include "Device/Volkslogger/vlapityp.h"
 
+#include <stdio.h>
+#include <string.h>
 
 // base-64 functions
 //
