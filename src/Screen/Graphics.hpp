@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Sizes.h"
 #include "Airspace/AirspaceClass.hpp"
+#include "Screen/Point.hpp"
 
 class Bitmap;
 class MaskedIcon;
@@ -38,7 +39,6 @@ class LabelBlock;
 
 class Canvas;
 class Angle;
-#include "Screen/Point.hpp"
 
 #define NUMSNAILCOLORS 15
 
