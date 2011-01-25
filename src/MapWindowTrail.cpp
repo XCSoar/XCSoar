@@ -112,13 +112,17 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
         int index = (it->NavAltitude - value_min) / (value_max - value_min) *
                     (NUMSNAILCOLORS - 1);
         index = max(0, min(NUMSNAILCOLORS - 1, index));
-        canvas.select(Graphics::hpSnailVario[index]);
+        canvas.select(Graphics::hpSnail[index]);
       } else {
         const fixed colour_vario = negative(it->NettoVario) ?
                                    - it->NettoVario / value_min :
                                    it->NettoVario / value_max ;
 
-        canvas.select(Graphics::hpSnailVario[GetSnailColorIndex(colour_vario)]);
+        if (!settings_map.SnailScaling ||
+            projection.GetMapScale() > fixed_int_constant(6000))
+          canvas.select(Graphics::hpSnail[GetSnailColorIndex(colour_vario)]);
+        else
+          canvas.select(Graphics::hpSnailVario[GetSnailColorIndex(colour_vario)]);
       }
       canvas.line_piece(last_point, pt);
     }

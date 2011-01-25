@@ -70,6 +70,7 @@ namespace Graphics {
   extern Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
 #endif
 
+  extern Pen hpSnail[NUMSNAILCOLORS];
   extern Pen hpSnailVario[NUMSNAILCOLORS];
 
 #ifndef ENABLE_SDL

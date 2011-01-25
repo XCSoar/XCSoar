@@ -46,6 +46,7 @@ Brush Graphics::hAirspaceBrushes[NUMAIRSPACEBRUSHES];
 Bitmap Graphics::hAirspaceBitmap[NUMAIRSPACEBRUSHES];
 #endif
 
+Pen Graphics::hpSnail[NUMSNAILCOLORS];
 Pen Graphics::hpSnailVario[NUMSNAILCOLORS];
 
 #ifndef ENABLE_SDL
@@ -288,13 +289,13 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
                   ColorRampLookup(ih, snail_colors_vario, 3);
 
     if (i < NUMSNAILCOLORS / 2 ||
-        settings_map.SnailType == stAltitude ||
         !settings_map.SnailScaling)
       iwidth = minwidth;
     else
       iwidth = max(minwidth, (i - NUMSNAILCOLORS / 2) *
                              Layout::Scale(16) / NUMSNAILCOLORS);
 
+    hpSnail[i].set(minwidth, color);
     hpSnailVario[i].set(iwidth, color);
   }
 }
