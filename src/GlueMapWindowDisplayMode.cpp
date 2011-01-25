@@ -240,8 +240,8 @@ GlueMapWindow::UpdateMapScale()
 
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
-    wpd = max(fixed_int_constant(440), min(fixed_int_constant(160000),
-                                            wpd / AutoZoomFactor));
+    wpd = max(fixed_int_constant(525),
+              min(fixed_int_constant(16000), wpd / AutoZoomFactor));
     visible_projection.SetMapScale(wpd);
   }
 }
