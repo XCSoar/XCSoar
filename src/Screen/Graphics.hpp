@@ -40,6 +40,8 @@ class Canvas;
 class Angle;
 #include "Screen/Point.hpp"
 
+#define NUMSNAILCOLORS 15
+
 namespace Graphics {
   void Initialise();
   void InitialiseConfigured(const SETTINGS_MAP &settings_map);
