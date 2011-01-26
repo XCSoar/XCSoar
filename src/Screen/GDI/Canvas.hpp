@@ -31,6 +31,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Point.hpp"
+#include "Screen/GDI/AlphaBlend.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -455,6 +456,40 @@ public:
                const Bitmap &src);
 
   void stretch(const Bitmap &src);
+
+#ifdef HAVE_ALPHA_BLEND
+  void alpha_blend(int dest_x, int dest_y,
+                   unsigned dest_width, unsigned dest_height,
+                   HDC src,
+                   int src_x, int src_y,
+                   unsigned src_width, unsigned src_height,
+                   uint8_t alpha) {
+#ifdef HAVE_DYNAMIC_ALPHA_BLEND
+    assert(AlphaBlend != NULL);
+#endif
+
+    BLENDFUNCTION fn;
+    fn.BlendOp = AC_SRC_OVER;
+    fn.BlendFlags = 0;
+    fn.SourceConstantAlpha = alpha;
+    fn.AlphaFormat = 0;
+
+    ::AlphaBlend(dc, dest_x, dest_y, dest_width, dest_height,
+                 src, src_x, src_y, src_width, src_height,
+                 fn);
+  }
+
+  void alpha_blend(int dest_x, int dest_y,
+                   unsigned dest_width, unsigned dest_height,
+                   const Canvas &src,
+                   int src_x, int src_y,
+                   unsigned src_width, unsigned src_height,
+                   uint8_t alpha) {
+    alpha_blend(dest_x, dest_y, dest_width, dest_height,
+                src.dc, src_x, src_y, src_width, src_height,
+                alpha);
+  }
+#endif
 
   void copy_or(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,

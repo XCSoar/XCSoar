@@ -21,24 +21,41 @@ Copyright_License {
 }
 */
 
-#include "Screen/Init.hpp"
 #include "Screen/GDI/AlphaBlend.hpp"
 
-#include <windows.h>
-#include <commctrl.h>
-
-ScreenGlobalInit::ScreenGlobalInit()
-{
-  InitCommonControls();
-
 #ifdef HAVE_DYNAMIC_ALPHA_BLEND
-  AlphaBlendInit();
-#endif
+
+#include "OS/DynamicLibrary.hpp"
+
+#include <assert.h>
+
+static DynamicLibrary *coredll;
+
+AlphaBlend_t AlphaBlend;
+
+void
+AlphaBlendInit()
+{
+  assert(coredll == NULL);
+
+  coredll = new DynamicLibrary(_T("coredll"));
+  if (!coredll->defined()) {
+    delete coredll;
+    coredll = NULL;
+    return;
+  }
+
+  AlphaBlend = (AlphaBlend_t)coredll->lookup(_T("AlphaBlend"));
+  if (AlphaBlend == NULL) {
+    delete coredll;
+    coredll = NULL;
+  }
 }
 
-ScreenGlobalInit::~ScreenGlobalInit()
+void
+AlphaBlendDeinit()
 {
-#ifdef HAVE_DYNAMIC_ALPHA_BLEND
-  AlphaBlendDeinit();
-#endif
+  delete coredll;
 }
+
+#endif /* HAVE_DYNAMIC_ALPHA_BLEND */

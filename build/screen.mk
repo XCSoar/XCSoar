@@ -61,6 +61,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Init.cpp \
+	$(SCREEN_SRC_DIR)/GDI/AlphaBlend.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Window.cpp \
 	$(SCREEN_SRC_DIR)/GDI/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/ButtonWindow.cpp \
