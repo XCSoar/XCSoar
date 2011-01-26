@@ -25,23 +25,70 @@ Copyright_License {
 #define XCSOAR_DEVICE_DECLARATION_HPP
 
 #include "Navigation/GeoPoint.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
+#include "Compiler.h"
 
 #include <vector>
 #include <tchar.h>
 
 class OrderedTask;
-class Waypoint;
+class OrderedTaskPoint;
 
 struct Declaration {
-public:
-  Declaration(const OrderedTask* task);
+  struct TurnPoint {
+    enum shape {
+      CYLINDER,
+      SECTOR,
+      LINE,
+    };
+
+    Waypoint waypoint;
+
+    enum shape shape;
+
+    unsigned radius;
+
+    TurnPoint(const Waypoint &_waypoint)
+      :waypoint(_waypoint), shape(CYLINDER), radius(1500) {}
+    TurnPoint(const OrderedTaskPoint &tp);
+  };
+
   TCHAR PilotName[64];
   TCHAR AircraftType[32];
   TCHAR AircraftRego[32];
-  std::vector<Waypoint> waypoints;
-  const TCHAR* get_name(const unsigned i) const;
-  const GeoPoint& get_location(const unsigned i) const;
-  size_t size() const;
+  std::vector<TurnPoint> TurnPoints;
+
+  Declaration(const OrderedTask* task);
+
+  void append(const Waypoint &waypoint) {
+    TurnPoints.push_back(waypoint);
+  }
+
+  const Waypoint &get_waypoint(unsigned i) const {
+    return TurnPoints[i].waypoint;
+  }
+
+  const Waypoint &get_first_waypoint() const {
+    return TurnPoints.front().waypoint;
+  }
+
+  const Waypoint &get_last_waypoint() const {
+    return TurnPoints.back().waypoint;
+  }
+
+  gcc_pure
+  const TCHAR *get_name(const unsigned i) const {
+    return TurnPoints[i].waypoint.Name.c_str();
+  }
+
+  const GeoPoint &get_location(const unsigned i) const {
+    return TurnPoints[i].waypoint.Location;
+  }
+
+  gcc_pure
+  unsigned size() const {
+    return TurnPoints.size();
+  }
 };
 
 #endif

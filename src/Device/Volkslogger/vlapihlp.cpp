@@ -15,13 +15,13 @@
 **
 ***********************************************************************/
 
+#include "Device/Volkslogger/vlapihlp.h"
+#include "Device/Volkslogger/utils.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-
-#include "Device/Volkslogger/vlapihlp.h"
-#include "Device/Volkslogger/utils.h"
 
 /*
 Filtern einer Zeile:

@@ -73,13 +73,14 @@ TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
 }
 
 static void
-RenderShadowedText(Canvas &canvas, const TCHAR* text, int x, int y, bool inverted)
+RenderShadowedText(Canvas &canvas, const TCHAR* text, int x, int y,
+                   bool inverted)
 {
   canvas.background_transparent();
 
   canvas.set_text_color(inverted ? Color::BLACK : Color::WHITE);
-  canvas.text(x + 1, y, text);
-  canvas.text(x - 1, y, text);
+  canvas.text(x + Layout::FastScale(1), y, text);
+  canvas.text(x - Layout::FastScale(1), y, text);
   canvas.text(x, y + 1, text);
   canvas.text(x, y - 1, text);
 

@@ -28,20 +28,18 @@
  * from the binary directory format to the directory array
  */
 
-//#include <iostream>
-
-// C-Includes
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <memory.h>
-
 // VLAPI-Includes
 #include "Device/Volkslogger/vlconv.h"
 #include "Device/Volkslogger/vlapihlp.h"
 
 // redeclaration of itoa()
 #include "Device/Volkslogger/utils.h"
+
+// C-Includes
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+#include <memory.h>
 
 // Conversion-Constants
 

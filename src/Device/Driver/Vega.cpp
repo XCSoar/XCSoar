@@ -68,7 +68,6 @@ public:
                          bool enable_baro);
   virtual bool PutQNH(const AtmosphericPressure& pres);
   virtual bool PutVoice(const TCHAR *sentence);
-  virtual bool Declare(const struct Declaration *declaration);
   virtual void OnSysTicker();
 };
 
@@ -360,16 +359,6 @@ VegaDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
 }
 
 bool
-VegaDevice::Declare(const struct Declaration *decl)
-{
-  (void) decl;
-
-  // ToDo
-
-  return true;
-}
-
-bool
 VegaDevice::PutVoice(const TCHAR *Sentence)
 {
 #ifdef _UNICODE
@@ -439,6 +428,6 @@ VegaCreateOnPort(Port *com_port)
 
 const struct DeviceRegister vgaDevice = {
   _T("Vega"),
-  drfBaroAlt, // drfLogger if FLARM connected
+  drfBaroAlt,
   VegaCreateOnPort,
 };

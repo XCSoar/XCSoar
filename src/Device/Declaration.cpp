@@ -22,9 +22,47 @@ Copyright_License {
 */
 
 #include "Declaration.hpp"
-
+#include "Engine/Task/Tasks/BaseTask/ObservationZonePoint.hpp"
+#include "Engine/Task/ObservationZones/CylinderZone.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Profile/Profile.hpp"
+
+gcc_pure
+static enum Declaration::TurnPoint::shape
+get_shape(const OrderedTaskPoint &tp)
+{
+  const ObservationZonePoint *oz = tp.get_oz();
+  if (oz == NULL)
+    return Declaration::TurnPoint::SECTOR;
+
+  switch (oz->shape) {
+  case ObservationZonePoint::LINE:
+    return Declaration::TurnPoint::LINE;
+
+  case ObservationZonePoint::CYLINDER:
+    return Declaration::TurnPoint::CYLINDER;
+
+  default:
+    return Declaration::TurnPoint::SECTOR;
+  }
+}
+
+gcc_pure
+static unsigned
+get_radius(const OrderedTaskPoint &tp)
+{
+  const ObservationZonePoint *oz = tp.get_oz();
+  if (oz == NULL)
+    return Declaration::TurnPoint::SECTOR;
+
+  return (unsigned)((const CylinderZone *)oz)->getRadius();
+}
+
+Declaration::TurnPoint::TurnPoint(const OrderedTaskPoint &tp)
+  :waypoint(tp.get_waypoint()),
+   shape(get_shape(tp)), radius(get_radius(tp))
+{
+}
 
 Declaration::Declaration(const OrderedTask* task)
 {
@@ -34,23 +72,5 @@ Declaration::Declaration(const OrderedTask* task)
 
   if (task)
     for (unsigned i = 0; i < task->task_size(); i++)
-      waypoints.push_back(task->get_tp(i)->get_waypoint());
-}
-
-const TCHAR* 
-Declaration::get_name(const unsigned i) const
-{
-  return waypoints[i].Name.c_str();
-}
-
-const GeoPoint& 
-Declaration::get_location(const unsigned i) const
-{
-  return waypoints[i].Location;
-}
-
-size_t 
-Declaration::size() const
-{
-  return waypoints.size();
+      TurnPoints.push_back(*task->get_tp(i));
 }

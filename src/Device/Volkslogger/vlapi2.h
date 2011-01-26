@@ -18,11 +18,11 @@
 #ifndef VLAPI2_H
 #define VLAPI2_H
 
-
 #include "Device/Volkslogger/vlapierr.h"
 #include "Device/Volkslogger/vla_support.h"
-#include "Device/Volkslogger/dbbconv.h"
 #include "Device/Volkslogger/vlconv.h"
+
+class DBB;
 
 class VLAPI_DATA {
  public:

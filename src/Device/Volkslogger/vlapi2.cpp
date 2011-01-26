@@ -15,20 +15,19 @@
  **
  ***********************************************************************/
 
+#include "Device/Volkslogger/vlapi2.h"
+#include "Device/Volkslogger/dbbconv.h"
+#include "Device/Volkslogger/grecord.h"
+#include "Device/Volkslogger/utils.h"
+#include "PeriodClock.hpp"
+
 #include <memory.h>
 #include <string.h>
 #include <stdlib.h>
 
-
-#include "Device/Volkslogger/vlapi2.h"
-#include "Device/Volkslogger/vlapierr.h"
-#include "Device/Volkslogger/dbbconv.h"
-#include "Device/Volkslogger/vlconv.h"
-#include "Device/Volkslogger/grecord.h"
-
-#include "Device/Volkslogger/utils.h"
-
 extern int noninteractive;
+
+#include "OS/Sleep.h"
 
 // sizes of VL memory regions
 const int VLAPI_DBB_MEMSIZE = 16384;
@@ -120,16 +119,14 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
   const int16   d = 2;  //Verzögerungszeit 2ms
   byte 		cmdarray[8];
   word          crc16 = 0;
-  int32	 	t1;
-  int16         timeout = 4;
   // alte Zeichen verwerfen
-  wait_ms(100);
+  Sleep(100);
   serial_empty_io_buffers();
 
   // Kommandointerpreter im VL zurücksetzen
   for (unsigned i =0 ; i < 6; i++) {
     serial_out(CAN);
-    wait_ms(d);
+    Sleep(d);
   }
   // Kommandopaket aufbauen
 
@@ -143,23 +140,29 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
   cmdarray[7] = 0;
   // Kommando verschicken ( ENQ,Daten,CRC )
   serial_out(ENQ);
-  wait_ms(d);
+  Sleep(d);
   for (unsigned i = 0; i < sizeof(cmdarray); i++) {
     crc16 = UpdateCRC(cmdarray[i],crc16);
     serial_out(cmdarray[i]);
-    wait_ms(d);
+    Sleep(d);
   }
   serial_out(crc16/256);
-  wait_ms(d);
+  Sleep(d);
   serial_out(crc16%256);
-  wait_ms(d);
+  Sleep(d);
   // Kommandobestätigung abwarten, aber höchstens timeout Sekunden
-  t1 = get_timer_s()+timeout;
-  while( serial_in(&c) && (get_timer_s()<t1) )
+  const unsigned timeout_ms = 4000;
+  PeriodClock clock;
+  clock.update();
+  while (serial_in(&c) != VLA_ERR_NOERR) {
+    if (clock.check(timeout_ms)) {
+      showwait(VLS_TXT_NOFR);
+      return -1;
+    }
+
     progress_set(VLS_TXT_SENDCMD);
-  // Timeoutbehandlung
-  if (get_timer_s() >= t1)
-    c = 255;
+  }
+
   // Fehler (timeout oder Fehlercode vom VL) im Klartext ausgeben
   switch (c) {
   case 0:
@@ -170,9 +173,6 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
     break;
   case 2:
     showwait(VLS_TXT_WRONGFR);
-    break;
-  case 255:
-    showwait(VLS_TXT_NOFR);
     break;
   }
   // Fehlercode als Rückgabewert der Funktion benutzen
@@ -186,19 +186,23 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
 //
 int16 VLA_XFR::wait4ack() {
   byte	c;
-  int32 t1;
-  int16 timeout = 180;
   // Anfangszeit merken
-  t1 = get_timer_s();
+  const unsigned timeout_ms = 180000;
+  PeriodClock clock;
+  clock.update();
   // Auf Beendigungscode vom Logger warten
-  while ( !test_user_break() && serial_in(&c) && get_timer_s()<t1+timeout )
+  while (!test_user_break() && serial_in(&c) != VLA_ERR_NOERR) {
+    if (clock.check(timeout_ms))
+      return 255;
+
     progress_set(VLS_TXT_WTCMD);
+  }
+
   if (test_user_break()) {
     if (clear_user_break() == 1)
       return 255;
   }
-  else if (get_timer_s() >= t1+timeout)
-    return 255;
+
   return c;
 }
 
@@ -221,7 +225,7 @@ int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
   memset(puffer, 0xff, maxlen);
 
   p = puffer;
-  wait_ms(300);
+  Sleep(300);
   while(!ende) {
     // Zeichen anfordern und darauf warten
     serial_out(ACK);
@@ -236,7 +240,7 @@ int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
     if (test_user_break()) {
       if (clear_user_break() == 1) {
         ende = -1;
-        wait_ms(10);
+        Sleep(10);
         serial_out(CAN);
         serial_out(CAN);
         serial_out(CAN);
@@ -309,7 +313,7 @@ int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
     }
 
   }
-  wait_ms(100);
+  Sleep(100);
 
   if (ende == -1) {
     show(VLS_TXT_UIRQ);
@@ -364,7 +368,7 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   if (c != ACK)
     return VLA_ERR_MISC;
   // Schreiben der Datenbank
-  wait_ms(100);
+  Sleep(100);
   crc16 = 0;
   step = dbbsize / 400;
 
@@ -377,9 +381,9 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   }
 
   serial_out(crc16/256);
-  wait_ms(td);
+  Sleep(td);
   serial_out(crc16%256);
-  wait_ms(td);
+  Sleep(td);
   // auf Bestätigung warten
   while (serial_in(&c) && !test_user_break()) {}
   // Fehlerbehandlung
@@ -404,7 +408,7 @@ VLA_ERROR VLA_XFR::dbbget(lpb dbbbuffer, int32 dbbsize) {
   serial_set_baudrate(databaud);
   groesse = readlog(dbbbuffer,dbbsize);
   serial_set_baudrate(commandbaud);
-  wait_ms(300);
+  Sleep(300);
   if (groesse <= 0)
     return VLA_ERR_NODATA;
   // und Tschüß
@@ -433,7 +437,7 @@ VLA_ERROR VLA_XFR::all_logsget(lpb dbbbuffer, int32 dbbsize) {
   serial_set_baudrate(databaud);
   groesse = readlog(dbbbuffer,dbbsize);
   serial_set_baudrate(commandbaud);
-  wait_ms(300);
+  Sleep(300);
   if (groesse <= 0)
     return VLA_ERR_NODATA;
   // und Tschüß
@@ -469,7 +473,7 @@ long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secm
 
   // read signature
   serial_set_baudrate(commandbaud); // CMD-Baudrate einstellen
-  wait_ms(300);
+  Sleep(300);
   cret = sendcommand(cmd_SIG, 0,0);
 
   if (cret)
@@ -489,7 +493,6 @@ long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secm
 VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   int16 l_count = 0;
   int16 timeout = 0;
-  int32 stoptime;
   int16 i;
   VLA_ERROR rc = VLA_ERR_NOERR;
   byte c;
@@ -501,17 +504,19 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   // eventuell noch laufende Aktion im Logger abbrechen
   for (i=0; i<10; i++) {
     serial_out(CAN);
-    wait_ms(1);
+    Sleep(1);
   }
   c = 0;
   timeout = 0;
 
-  stoptime = get_timer_s() + waittime;
+  const unsigned timeout_ms = waittime * 1000;
+  PeriodClock clock;
 
   do { // Solange R's aussenden, bis ein L zurückkommt
     serial_out('R');
-    wait_ms(30);
-    if (get_timer_s() >= stoptime)
+    Sleep(30);
+
+    if (clock.check(timeout_ms))
       timeout = 1;
   } while ( (!timeout) && (serial_in(&c) || c != 'L' ));
 
@@ -531,7 +536,8 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
           break;
         }
       }
-      if (get_timer_s() >= stoptime)
+
+      if (clock.check(timeout_ms))
         timeout = 1;
     } while ( !timeout && !serial_in(&c) );
     if (timeout)
@@ -544,7 +550,7 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
     else
       show(VLS_TXT_CONN_FL);
   }
-  wait_ms(300);
+  Sleep(300);
   serial_empty_io_buffers();
   return rc;
 }
@@ -592,25 +598,22 @@ VLA_ERROR VLAPI::open(boolean connectit, int timeout,
                       boolean quiet, int32 sbaudrate) {
   noninteractive = quiet;
   VLA_ERROR err;
-  // aquire port from OS
-  if ((err = serial_open_port()) == VLA_ERR_NOERR) {
-    // setup port
-    if ((err = serial_set_baudrate(commandbaud)) == VLA_ERR_NOERR) {
-      set_databaud(sbaudrate);
-      // connect
-      if(connectit) {
-        if((err = connect(timeout,quiet)) == VLA_ERR_NOERR) {
-          vlpresent = 1;
-          // nach erfolgreichem Connect
-          // noninteractive wieder auf "Still" setzen
-          //noninteractive = 1;
-        }
-      }
-    }
-  }
 
-  if(err == VLA_ERR_COMM)
-    serial_close_port();
+  // setup port
+  if ((err = serial_set_baudrate(commandbaud)) != VLA_ERR_NOERR)
+    return err;
+
+  set_databaud(sbaudrate);
+  // connect
+  if (connectit) {
+    if ((err = connect(timeout,quiet)) != VLA_ERR_NOERR)
+      return err;
+
+    vlpresent = 1;
+    // nach erfolgreichem Connect
+    // noninteractive wieder auf "Still" setzen
+    //noninteractive = 1;
+  }
 
   return err;
 }
@@ -623,7 +626,6 @@ void VLAPI::close(boolean reset) {
     if(reset) {
       sendcommand(cmd_RST,0,0);
     }
-    serial_close_port();
     vlpresent = 0;
   }
 }

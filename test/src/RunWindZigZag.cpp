@@ -30,6 +30,7 @@ Copyright_License {
 #include "Device/Geoid.h"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
 #include "Thread/Trigger.hpp"
 #include "DeviceBlackboard.hpp"
@@ -38,6 +39,8 @@ Copyright_License {
 #include "Wind/WindZigZag.hpp"
 
 #include <stdio.h>
+
+Waypoints way_points;
 
 DeviceBlackboard device_blackboard;
 

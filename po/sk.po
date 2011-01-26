@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-19 10:19+0100\n"
+"POT-Creation-Date: 2011-01-23 14:57+0100\n"
 "PO-Revision-Date: 2011-01-19 10:26+0100\n"
 "Last-Translator: Roman Stoklasa <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
@@ -143,7 +143,7 @@ msgid "Loading Airfield Details File..."
 msgstr "Nahrávam súbor s detailami letísk..."
 
 #: src/ExpandMacros.cpp:117 src/ExpandMacros.cpp:158
-#: src/InputEventsActions.cpp:1763
+#: src/InputEventsActions.cpp:1764
 msgid "Next turnpoint"
 msgstr "Nasledujúci otočný bod"
 
@@ -1816,7 +1816,7 @@ msgstr "Normálny režim displeja"
 msgid "AutoZoom ON"
 msgstr "Automatický zoom ZAP"
 
-#: src/InputEventsActions.cpp:295 src/InputEventsActions.cpp:1699
+#: src/InputEventsActions.cpp:295 src/InputEventsActions.cpp:1700
 msgid "AutoZoom OFF"
 msgstr "Automatický zoom VYP"
 
@@ -1936,15 +1936,15 @@ msgstr "Nazvy v mape VYP"
 msgid "Topology / Terrain"
 msgstr "Topológia / Terén"
 
-#: src/InputEventsActions.cpp:1761 Data/Dialogs/dlgStartTask.xml:3
+#: src/InputEventsActions.cpp:1762 Data/Dialogs/dlgStartTask.xml:3
 msgid "Task Start"
 msgstr "Štart úlohy"
 
-#: src/InputEventsActions.cpp:1765
+#: src/InputEventsActions.cpp:1766
 msgid "Task Finish"
 msgstr "Cieľ úlohy"
 
-#: src/InputEventsActions.cpp:1767
+#: src/InputEventsActions.cpp:1768
 msgid "In sector, arm advance when ready"
 msgstr "V sektore, povol pokračovanie ak si pripravený"
 
@@ -2122,57 +2122,57 @@ msgstr "Hmotnosť"
 msgid "Wing loading"
 msgstr "Plošné zaťaženie"
 
-#: src/FlightStatistics.cpp:837 src/FlightStatistics.cpp:843
+#: src/FlightStatistics.cpp:845 src/FlightStatistics.cpp:851
 msgid "Working band"
 msgstr "Pracovné pásmo"
 
-#: src/FlightStatistics.cpp:847
+#: src/FlightStatistics.cpp:855
 msgid "Ceiling trend"
 msgstr "Trend základní"
 
-#: src/FlightStatistics.cpp:861 src/FlightStatistics.cpp:866
+#: src/FlightStatistics.cpp:869 src/FlightStatistics.cpp:874
 msgid "Av climb"
 msgstr "Priem. stúpanie"
 
-#: src/FlightStatistics.cpp:869
+#: src/FlightStatistics.cpp:877
 msgid "Climb trend"
 msgstr "Trend stúpania"
 
-#: src/FlightStatistics.cpp:881
+#: src/FlightStatistics.cpp:889
 msgid "Best LD"
 msgstr "Najlepšia kĺzavosť"
 
-#: src/FlightStatistics.cpp:885
+#: src/FlightStatistics.cpp:893
 msgid "Min sink"
 msgstr "Najmenšie opadanie"
 
-#: src/FlightStatistics.cpp:896
+#: src/FlightStatistics.cpp:904
 msgid "Thermal height"
 msgstr "Výška stúpavého prúdu"
 
-#: src/FlightStatistics.cpp:899
+#: src/FlightStatistics.cpp:907
 msgid "Cloud base"
 msgstr "Základňa mrakov"
 
-#: src/FlightStatistics.cpp:911
+#: src/FlightStatistics.cpp:919
 msgid "No task"
 msgstr "Žiadna trať"
 
-#: src/FlightStatistics.cpp:922 src/FlightStatistics.cpp:932
-#: src/FlightStatistics.cpp:944
+#: src/FlightStatistics.cpp:930 src/FlightStatistics.cpp:940
+#: src/FlightStatistics.cpp:952
 msgid "Task to go"
 msgstr "Zvyšok úlohy"
 
-#: src/FlightStatistics.cpp:922 src/FlightStatistics.cpp:932
+#: src/FlightStatistics.cpp:930 src/FlightStatistics.cpp:940
 msgid "AAT to go"
 msgstr "Zvyšok AAT úlohy"
 
-#: src/FlightStatistics.cpp:923 src/FlightStatistics.cpp:933
-#: src/FlightStatistics.cpp:944
+#: src/FlightStatistics.cpp:931 src/FlightStatistics.cpp:941
+#: src/FlightStatistics.cpp:952
 msgid "Distance to go"
 msgstr "Vzdialenosť do cieľa"
 
-#: src/FlightStatistics.cpp:925 src/FlightStatistics.cpp:936
+#: src/FlightStatistics.cpp:933 src/FlightStatistics.cpp:944
 msgid "Target speed"
 msgstr "Cieľová rýchlosť"
 
@@ -2314,17 +2314,17 @@ msgstr "Zrušiť"
 msgid "Ignore"
 msgstr "Ignorovať"
 
-#: src/Dialogs/dlgAirspace.cpp:53 src/Dialogs/dlgAirspace.cpp:72
+#: src/Dialogs/dlgAirspace.cpp:53 src/Dialogs/dlgAirspace.cpp:76
 msgid "Warn"
 msgstr "Varuj"
 
-#: src/Dialogs/dlgAirspace.cpp:54 src/Dialogs/dlgAirspace.cpp:76
+#: src/Dialogs/dlgAirspace.cpp:54 src/Dialogs/dlgAirspace.cpp:80
 #: Data/Input/default.xci:475 Data/Input/default.xci:527
 #: Data/Input/default.xci:920
 msgid "Display"
 msgstr "Zobraz"
 
-#: src/Dialogs/dlgAirspace.cpp:173
+#: src/Dialogs/dlgAirspace.cpp:179
 msgid "Configuration saved"
 msgstr "Nastavenie uložené"
 
@@ -3668,6 +3668,14 @@ msgstr "Rýchlosť Lietadla/Vetra"
 msgid "Start max height"
 msgstr "Maximálna výška štartu"
 
+#: Data/Dialogs/dlgConfiguration.xml:253
+#: Data/Dialogs/dlgConfiguration_L.xml:253
+msgid ""
+"The STF risk factor reduces the MacCready setting used to calculate speed to "
+"fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for "
+"no compensation, 1.0 scales MC linearly with height."
+msgstr ""
+
 #: Data/Dialogs/dlgWindSettings.xml:3
 msgid "Wind Settings"
 msgstr "Vietor Nastavenia"
@@ -3957,6 +3965,11 @@ msgstr "Zostávajúca rýchlosť"
 msgid "Circling hi cutoff"
 msgstr ""
 
+#: Data/Dialogs/dlgWayPointDetails.xml:19
+#: Data/Dialogs/dlgWayPointDetails_L.xml:19
+msgid "Alt diff MC 0"
+msgstr "Výškový rozdiel MC 0"
+
 #: Data/Dialogs/dlgConfiguration.xml:175
 #: Data/Dialogs/dlgConfiguration_L.xml:175
 msgid "Terrain contrast"
@@ -4050,6 +4063,23 @@ msgstr "Čistý"
 #: Data/Dialogs/dlgConfiguration_L.xml:418
 msgid "Text Input Style*"
 msgstr "Štýl vkladania textov*"
+
+#: Data/Dialogs/dlgTaskCalculator.xml:41
+#: Data/Dialogs/dlgTaskCalculator_L.xml:43
+msgid ""
+"Efficiency of cruise.  100 indicates perfect MacCready performance, greater "
+"than 100 indicates better than MacCready performance is achieved through "
+"flying in streets.  Less than 100 is appropriate if you fly considerably off-"
+"track.  This value estimates your cruise efficiency according to the current "
+"flight history with the set MC value.  Calculation begins after task is "
+"started."
+msgstr ""
+"Efektivita kĺzania. Hodnota 100 indikuje presne taký výkon, aký sa očakával "
+"podľa MacCready nastavenia, väčšia než 100 indikuje lepší výkon než "
+"zodpovedá danému MacCready nastaveniu. Menej ako 100 je primeraný, ak ste "
+"leteli značne mimo trasu. Táto hodnota odhaduje vašu efektivitu kĺzania na "
+"základe aktuálnej histórie letu s danou MC hodnotou. Výpočet začína po "
+"štarte úlohy."
 
 #: Data/Dialogs/dlgStatus.xml:54 Data/Dialogs/dlgStatusAircraft.xml:8
 #: Data/Dialogs/dlgWayPointDetails.xml:16
@@ -4154,23 +4184,6 @@ msgstr "Súbor s letiskami môže obsahovať podrobnosti o jednotlivých letisk�
 msgid "Low limit of circling dead band"
 msgstr ""
 
-#: Data/Dialogs/dlgTaskCalculator.xml:41
-#: Data/Dialogs/dlgTaskCalculator_L.xml:43
-msgid ""
-"Efficiency of cruise.  100 indicates perfect MacCready performance, greater "
-"than 100 indicates better than MacCready performance is achieved through "
-"flying in streets.  Less than 100 is appropriate if you fly considerably off-"
-"track.  This value estimates your cruise efficiency according to the current "
-"flight history with the set MC value.  Calculation begins after task is "
-"started."
-msgstr ""
-"Efektivita kĺzania. Hodnota 100 indikuje presne taký výkon, aký sa očakával "
-"podľa MacCready nastavenia, väčšia než 100 indikuje lepší výkon než "
-"zodpovedá danému MacCready nastaveniu. Menej ako 100 je primeraný, ak ste "
-"leteli značne mimo trasu. Táto hodnota odhaduje vašu efektivitu kĺzania na "
-"základe aktuálnej histórie letu s danou MC hodnotou. Výpočet začína po "
-"štarte úlohy."
-
 #: Data/Dialogs/dlgConfiguration.xml:577
 #: Data/Dialogs/dlgConfiguration_L.xml:576
 msgid ""
@@ -4208,18 +4221,6 @@ msgstr ""
 "Určuje spôsob, akým je vykreslený indikátor vetra na mape.\n"
 "[Hlava šípky] Vykreslí len hlavu šípky\n"
 "[Celá šípka] Vykreslí hlavu šípky spolu s čiarkovanou nožičkou."
-
-#: Data/Dialogs/dlgTaskCalculator.xml:21
-#: Data/Dialogs/dlgTaskCalculator_L.xml:23
-msgid ""
-"Adjusts MC value used in the calculator.  Use this to determine the effect "
-"on estimated task time due to changes in conditions.  This value will not "
-"affect the main computer's setting if the dialog is exited with the Cancel "
-"button."
-msgstr ""
-"Nastavenie hodnoty MC pre výpočet. Vhodné na zistenie dopadu zmien podmienok "
-"na predpokladanú dobu úlohy. Táto hodnota nezmení hlavný výpočet ak je "
-"dialóg ukončený príkazom zruš."
 
 #: Data/Dialogs/dlgConfiguration.xml:559
 #: Data/Dialogs/dlgConfiguration_L.xml:558
@@ -4363,11 +4364,6 @@ msgid ""
 msgstr ""
 "Vykreslí na mapu digitálnu výšku terénu. Táto je tieňovaná podľa smeru "
 "vetra: Návetrie je svetlejšie, závetrie tmavšie."
-
-#: Data/Dialogs/dlgConfiguration.xml:248
-#: Data/Dialogs/dlgConfiguration_L.xml:248
-msgid "Safety MC*"
-msgstr "Bezpečné MC*"
 
 #: Data/Dialogs/dlgVario.xml:92 Data/Dialogs/dlgVario_L.xml:93
 msgid "Cruise volume"
@@ -4528,27 +4524,6 @@ msgid ""
 msgstr ""
 "Určuje, či čiara trajektórie lietadla bude počas módu krúženia posúvaná "
 "vplyvom vetra."
-
-#: Data/Dialogs/dlgConfiguration.xml:207
-#: Data/Dialogs/dlgConfiguration_L.xml:207
-msgid ""
-"This option defines which auto MacCready algorithm is used.\n"
-"[Final glide] adjusts MC for fastest arrival.  For OLC sprint tasks, the "
-"MacCready is adjusted in order to cover the greatest distance in the "
-"remaining time and reach the finish height.\n"
-"[Trending Average] sets MC to the trending average climb rate based on all "
-"climbs.\n"
-"[Both] Uses trending average during task, then fastest arrival when in final "
-"glide mode."
-msgstr ""
-"Toto nastavenie určuje, aký automatický MacCready algoritmus je použitý.\n"
-"[Doklz] upravý MC hodnotu pre čo najrýchlejší príet. Pre lety typu OLC "
-"šprint je MC hodnota nastavená za účelom pokrytia čo najväčšej vzdialenosti "
-"vo zvyšnom čase a pre dosiahnutie cieľovej výšky.\n"
-"[Priemerné stúpanie] nastaví MC hodnotu na priemerné stúpanie zo všetkých "
-"stupákov.\n"
-"[Oba] počas úlohy sa bude používať priemerná hodnota stúpania a na doklze "
-"hodnota pre najrýchlejší prílet."
 
 #: Data/Dialogs/dlgTaskManager.xml:11 Data/Dialogs/dlgTaskManager_L.xml:8
 msgid "Save as"
@@ -4751,11 +4726,6 @@ msgstr ""
 #: Data/Dialogs/dlgTaskPoint.xml:11 Data/Dialogs/dlgTaskPoint_L.xml:12
 msgid "Details"
 msgstr "Podrobnosti"
-
-#: Data/Dialogs/dlgWayPointDetails.xml:21
-#: Data/Dialogs/dlgWayPointDetails_L.xml:21
-msgid "Alt diff MC current"
-msgstr "Výškový rozdiel MC akt."
 
 #: Data/Dialogs/dlgConfiguration.xml:573
 #: Data/Dialogs/dlgConfiguration_L.xml:572
@@ -5147,6 +5117,18 @@ msgstr "Rýchlosť na brzdách"
 msgid "Climb fast trigger"
 msgstr "Rýchle stúpanie-spúštač"
 
+#: Data/Dialogs/dlgTaskCalculator.xml:21
+#: Data/Dialogs/dlgTaskCalculator_L.xml:23
+msgid ""
+"Adjusts MC value used in the calculator.  Use this to determine the effect "
+"on estimated task time due to changes in conditions.  This value will not "
+"affect the main computer's setting if the dialog is exited with the Cancel "
+"button."
+msgstr ""
+"Nastavenie hodnoty MC pre výpočet. Vhodné na zistenie dopadu zmien podmienok "
+"na predpokladanú dobu úlohy. Táto hodnota nezmení hlavný výpočet ak je "
+"dialóg ukončený príkazom zruš."
+
 #: Data/Dialogs/dlgWindSettings.xml:4
 msgid "Manual adjustment of wind speed."
 msgstr "Manuálne nastavenie rýchlosti vetra."
@@ -5158,11 +5140,6 @@ msgid ""
 msgstr ""
 "Zrýchlenie času pri prehrávaní. Nastavte 0 pre pauzu, 1 pre prehrávanie "
 "skutočnou rýchlosťou."
-
-#: Data/Dialogs/dlgConfiguration.xml:243
-#: Data/Dialogs/dlgConfiguration_L.xml:243
-msgid "Abort use current MC*"
-msgstr "Po prerušení posledné MC*"
 
 #: Data/Dialogs/dlgConfigFonts.xml:6 Data/Dialogs/dlgConfigFonts_L.xml:6
 msgid "Customize Fonts"
@@ -5218,11 +5195,6 @@ msgstr ""
 #: Data/Dialogs/dlgTaskProperties_L.xml:38
 msgid "FAI finish height"
 msgstr "FAI výška cieľa"
-
-#: Data/Dialogs/dlgConfiguration.xml:207
-#: Data/Dialogs/dlgConfiguration_L.xml:207
-msgid "Auto MC mode"
-msgstr "Mód automatického MC výpočtu"
 
 #: Data/Dialogs/dlgConfiguration.xml:483
 #: Data/Dialogs/dlgConfiguration_L.xml:482
@@ -5540,16 +5512,6 @@ msgstr ""
 #: Data/Dialogs/dlgVario.xml:401 Data/Dialogs/dlgVario_L.xml:402
 msgid "V Terrain"
 msgstr "V terén"
-
-#: Data/Dialogs/dlgWayPointDetails.xml:20
-#: Data/Dialogs/dlgWayPointDetails_L.xml:20
-msgid "Alt diff MC safety"
-msgstr "Výškový rozdiel s bezpečným MC"
-
-#: Data/Dialogs/dlgWayPointDetails.xml:19
-#: Data/Dialogs/dlgWayPointDetails_L.xml:19
-msgid "Alt diff MC 0"
-msgstr "Výškový rozdiel MC 0"
 
 #: Data/Dialogs/dlgVario.xml:431 Data/Dialogs/dlgVario_L.xml:432
 msgid "Zander"
@@ -5977,6 +5939,27 @@ msgstr "Ukazatele"
 msgid "Task Speed"
 msgstr "Rýchlosť úlohy"
 
+#: Data/Dialogs/dlgConfiguration.xml:207
+#: Data/Dialogs/dlgConfiguration_L.xml:207
+msgid ""
+"This option defines which auto MacCready algorithm is used.\n"
+"[Final glide] adjusts MC for fastest arrival.  For OLC sprint tasks, the "
+"MacCready is adjusted in order to cover the greatest distance in the "
+"remaining time and reach the finish height.\n"
+"[Trending Average] sets MC to the trending average climb rate based on all "
+"climbs.\n"
+"[Both] Uses trending average during task, then fastest arrival when in final "
+"glide mode."
+msgstr ""
+"Toto nastavenie určuje, aký automatický MacCready algoritmus je použitý.\n"
+"[Doklz] upravý MC hodnotu pre čo najrýchlejší príet. Pre lety typu OLC "
+"šprint je MC hodnota nastavená za účelom pokrytia čo najväčšej vzdialenosti "
+"vo zvyšnom čase a pre dosiahnutie cieľovej výšky.\n"
+"[Priemerné stúpanie] nastaví MC hodnotu na priemerné stúpanie zo všetkých "
+"stupákov.\n"
+"[Oba] počas úlohy sa bude používať priemerná hodnota stúpania a na doklze "
+"hodnota pre najrýchlejší prílet."
+
 #: Data/Dialogs/dlgVario.xml:148 Data/Dialogs/dlgVario.xml:170
 #: Data/Dialogs/dlgVario.xml:192 Data/Dialogs/dlgVario.xml:214
 #: Data/Dialogs/dlgVario.xml:236 Data/Dialogs/dlgVario.xml:258
@@ -6068,6 +6051,11 @@ msgstr "Zobrazenie topológie"
 #: Data/Dialogs/dlgFileSelect.xml:6
 msgid "File type"
 msgstr "Typ súboru"
+
+#: Data/Dialogs/dlgConfiguration.xml:243
+#: Data/Dialogs/dlgConfiguration_L.xml:243
+msgid "Abort use current MC*"
+msgstr "Po prerušení posledné MC*"
 
 #: Data/Dialogs/dlgConfiguration.xml:61 Data/Dialogs/dlgConfiguration_L.xml:61
 msgid "Clip altitude"
@@ -6171,14 +6159,6 @@ msgstr "Ukazuj brutto*"
 msgid "Edit"
 msgstr "Upraviť"
 
-#: Data/Dialogs/dlgConfiguration.xml:253
-#: Data/Dialogs/dlgConfiguration_L.xml:253
-msgid ""
-"The STF risk factor reduces the MacCready setting used to calculate speed to "
-"fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for "
-"no compensation, 1.0 scales MC linearly with height."
-msgstr ""
-
 #: Data/Dialogs/dlgConfiguration.xml:92 Data/Dialogs/dlgConfiguration_L.xml:92
 msgid "Trail length"
 msgstr "Dĺžka stopy"
@@ -6190,6 +6170,11 @@ msgid ""
 "cruise, this needle displays the average netto value.  During circling, this "
 "needle displays the average gross value."
 msgstr ""
+
+#: Data/Dialogs/dlgWayPointDetails.xml:20
+#: Data/Dialogs/dlgWayPointDetails_L.xml:20
+msgid "Alt diff MC safety"
+msgstr "Výškový rozdiel s bezpečným MC"
 
 #: Data/Dialogs/dlgConfiguration.xml:253
 #: Data/Dialogs/dlgConfiguration_L.xml:253
@@ -6270,6 +6255,11 @@ msgstr "Vodná záťaž"
 #: Data/Dialogs/dlgTaskProperties_L.xml:13
 msgid "Task scoring"
 msgstr "Bodovanie úlohy"
+
+#: Data/Dialogs/dlgConfiguration.xml:207
+#: Data/Dialogs/dlgConfiguration_L.xml:207
+msgid "Auto MC mode"
+msgstr "Mód automatického MC výpočtu"
 
 #: Data/Dialogs/dlgTaskPoint.xml:6 Data/Dialogs/dlgTaskPoint_L.xml:9
 msgid "Relocate"
@@ -6363,6 +6353,11 @@ msgstr ""
 #: Data/Dialogs/dlgWeather_L.xml:10
 msgid "TODO"
 msgstr ""
+
+#: Data/Dialogs/dlgConfiguration.xml:248
+#: Data/Dialogs/dlgConfiguration_L.xml:248
+msgid "Safety MC*"
+msgstr "Bezpečné MC*"
 
 #: Data/Dialogs/dlgStatus.xml:33 Data/Dialogs/dlgStatusTask.xml:8
 #: Data/Dialogs/dlgTaskCalculator.xml:17
@@ -6489,6 +6484,11 @@ msgstr "Výpočet úlohy"
 #: Data/Dialogs/dlgVario.xml:96 Data/Dialogs/dlgVario_L.xml:97
 msgid "Base frequency"
 msgstr "Základná frekvencia"
+
+#: Data/Dialogs/dlgWayPointDetails.xml:21
+#: Data/Dialogs/dlgWayPointDetails_L.xml:21
+msgid "Alt diff MC current"
+msgstr "Výškový rozdiel MC akt."
 
 #: Data/Dialogs/dlgConfiguration.xml:119
 #: Data/Dialogs/dlgConfiguration_L.xml:119

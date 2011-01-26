@@ -18,7 +18,6 @@
 #include "Device/Volkslogger/vla_support.h"
 #include "Device/Port.hpp"
 #include "ProgressGlue.hpp"
-#include "OS/Sleep.h"
 
 #include <stdio.h>
 #if defined(HAVE_POSIX) || !defined(_WIN32_WCE)
@@ -32,59 +31,6 @@ int noninteractive=1;
  * vlapi_sys
  *
  **********************************************************************/
-
-
-/** wait a specified amount of milliseconds (t) */
-void VLA_SYS::wait_ms(const int32 t)  {
-  if (t>0) {
-    Sleep(t);
-  }
-}
-
-/** read value of a continous running seconds-timer */
-int32 VLA_SYS::get_timer_s()  {
-#if defined(HAVE_POSIX) || !defined(_WIN32_WCE)
-  return time(NULL);
-#else
-  return GetTickCount()/1000;
-#endif
-}
-
-static unsigned long lLastBaudrate = 0;
-
-/**
- * acquire serial port for communication with VL
- * returns 0 if port was successfully opened
- * otherwise != 0
- */
-VLA_ERROR VLA_SYS::serial_open_port()
-{
-
-  port->StopRxThread();    // JMW
-  port->SetRxTimeout(500); // set RX timeout to 500 [ms]
-
-  // port-configuration
-
-  lLastBaudrate = port->SetBaudrate(9600L); // change to IO
-                                                   // Mode baudrate
-
-  ProgressGlue::SetStep(1);
-
-  return VLA_ERR_NOERR;
-}
-
-
-/** release serial port on normal exit */
-VLA_ERROR VLA_SYS::serial_close_port()
-{
-
-  port->SetBaudrate(lLastBaudrate);            // restore baudrate
-
-  port->SetRxTimeout(0);                       // clear timeout
-  port->StartRxThread();                       // restart RX thread
-
-  return VLA_ERR_NOERR;
-}
 
 
 /** serial output of single character to the VL */

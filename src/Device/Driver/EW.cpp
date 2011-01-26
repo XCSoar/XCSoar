@@ -45,17 +45,17 @@ protected:
   Port *port;
   bool fDeclarationPending;
   unsigned long lLastBaudrate;
-  int nDeclErrorCode;
   int ewDecelTpIndex;
 
 public:
   EWDevice(Port *_port)
     :port(_port), fDeclarationPending(false),
-     lLastBaudrate(0), nDeclErrorCode(0), ewDecelTpIndex(0) {}
+     lLastBaudrate(0), ewDecelTpIndex(0) {}
 
 protected:
   bool TryConnect();
   bool AddWayPoint(const Waypoint &way_point);
+  bool DeclareInner(const struct Declaration *declaration);
 
 public:
   virtual void LinkTimeout();
@@ -85,7 +85,6 @@ EWDevice::TryConnect()
     port->ExpectString("$$$"); // empty input buffer
   }
 
-  nDeclErrorCode = 1;
   return false;
 }
 
@@ -109,19 +108,11 @@ convert_string(char *dest, size_t size, const TCHAR *src)
 }
 
 bool
-EWDevice::Declare(const struct Declaration *decl)
+EWDevice::DeclareInner(const struct Declaration *decl)
 {
   char sTmp[72];
 
-  nDeclErrorCode = 0;
   ewDecelTpIndex = 0;
-  fDeclarationPending = true;
-
-  port->StopRxThread();
-
-  lLastBaudrate = port->SetBaudrate(9600L);    // change to IO Mode baudrate
-
-  port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
   if (!TryConnect())
     return false;
@@ -148,11 +139,8 @@ EWDevice::Declare(const struct Declaration *decl)
   );
   port->Write(sTmp);
 
-  if (!port->ExpectString("OK\r")){
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("OK\r"))
     return false;
-  };
-
 
   /*
   sprintf(sTmp, "#SUI%02d", 0);           // send pilot name
@@ -161,10 +149,8 @@ EWDevice::Declare(const struct Declaration *decl)
   port->Write(PilotsName);
   port->Write('\r');
 
-  if (!port->ExpectString("OK\r")) {
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("OK\r"))
     return false;
-  };
 
   sprintf(sTmp, "#SUI%02d", 1);           // send type of aircraft
   WriteWithChecksum(port, sTmp);
@@ -172,10 +158,8 @@ EWDevice::Declare(const struct Declaration *decl)
   port->Write(Class);
   port->Write('\r');
 
-  if (!port->ExpectString("OK\r")) {
+  if (!port->ExpectString("OK\r"))
     nDeclErrorCode = 1;
-    return false;
-  };
 
   sprintf(sTmp, "#SUI%02d", 2);           // send aircraft ID
   WriteWithChecksum(port, sTmp);
@@ -183,22 +167,35 @@ EWDevice::Declare(const struct Declaration *decl)
   port->Write(ID);
   port->Write('\r');
 
-  if (!port->ExpectString("OK\r")) {
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("OK\r"))
     return false;
-  };
   */
 
   for (int i=0; i<6; i++){                        // clear all 6 TP's
     sprintf(sTmp, "#CTP%02d", i);
     WriteWithChecksum(port, sTmp);
-    if (!port->ExpectString("OK\r")) {
-      nDeclErrorCode = 1;
+    if (!port->ExpectString("OK\r"))
       return false;
-    };
   }
   for (unsigned j = 0; j < decl->size(); ++j)
-    AddWayPoint(decl->waypoints[j]);
+    if (!AddWayPoint(decl->get_waypoint(j)))
+      return false;
+
+  return true;
+}
+
+bool
+EWDevice::Declare(const struct Declaration *decl)
+{
+  fDeclarationPending = true;
+
+  port->StopRxThread();
+
+  lLastBaudrate = port->SetBaudrate(9600L);    // change to IO Mode baudrate
+
+  port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+
+  bool success = DeclareInner(decl);
 
   port->Write("NMEA\r\n"); // switch to NMEA mode
 
@@ -209,8 +206,7 @@ EWDevice::Declare(const struct Declaration *decl)
 
   fDeclarationPending = false;                    // clear decl pending flag
 
-  return nDeclErrorCode == 0; // return true on success
-
+  return success;
 }
 
 
@@ -223,9 +219,6 @@ EWDevice::AddWayPoint(const Waypoint &way_point)
   double tmp, MinLat, MinLon;
   char NoS, EoW;
   short EoW_Flag, NoS_Flag, EW_Flags;
-
-  if (nDeclErrorCode != 0)                        // check for error
-    return false;
 
   if (ewDecelTpIndex > 6){                        // check for max 6 TP's
     return false;
@@ -303,10 +296,8 @@ EWDevice::AddWayPoint(const Waypoint &way_point)
                       DegLon, (int)MinLon/10);
   WriteWithChecksum(port, EWRecord);
 
-  if (!port->ExpectString("OK\r")) { // wait for response
-    nDeclErrorCode = 1;
+  if (!port->ExpectString("OK\r")) // wait for response
     return false;
-  }
 
   ewDecelTpIndex = ewDecelTpIndex + 1;            // increase TP index
 

@@ -29,6 +29,7 @@ Copyright_License {
 #include "Device/Driver/Volkslogger.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Port.hpp"
 #include "ProgressGlue.hpp"
 #include "UtilsText.hpp"
 #include "Device/Volkslogger/vlapi2.h"
@@ -37,10 +38,13 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 
 #ifdef _UNICODE
 #include <windows.h>
 #endif
+
+#include <algorithm>
 
 class VolksloggerDevice : public AbstractDevice {
 private:
@@ -48,6 +52,9 @@ private:
 
 public:
   VolksloggerDevice(Port *_port):port(_port) {}
+
+protected:
+  bool DeclareInner(VLAPI &vl, const struct Declaration *declaration);
 
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
@@ -115,13 +122,6 @@ VolksloggerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
     return false;
 }
 
-static VLAPI vl;
-
-static unsigned nturnpoints = 0;
-
-static bool
-VLDeclAddWayPoint(const Waypoint &way_point);
-
 static void
 CopyToNarrowBuffer(char *dest, size_t max_size, const TCHAR *src)
 {
@@ -136,148 +136,6 @@ CopyToNarrowBuffer(char *dest, size_t max_size, const TCHAR *src)
 #endif
 }
 
-bool
-VolksloggerDevice::Declare(const Declaration *decl)
-{
-  ProgressGlue::Create(_T("Comms with Volkslogger"));
-
-  vl.set_port(port);
-  nturnpoints = 0;
-
-  int err;
-  if((err = vl.open(1, 20, 1, 38400L)) != VLA_ERR_NOERR) {
-    //    _isConnected = false;
-  }
-  else {
-    //    _isConnected = true;
-  }
-
-  if (err == VLA_ERR_NOERR) {
-    if ((err = vl.read_info()) == VLA_ERR_NOERR) {
-      //      vl.read_db_and_declaration();
-    }
-
-    CopyToNarrowBuffer(vl.declaration.flightinfo.pilot,
-                       sizeof(vl.declaration.flightinfo.pilot),
-                       decl->PilotName);
-
-    CopyToNarrowBuffer(vl.declaration.flightinfo.competitionid,
-                       sizeof(vl.declaration.flightinfo.competitionid),
-                       decl->AircraftRego);
-
-    CopyToNarrowBuffer(vl.declaration.flightinfo.competitionclass,
-                       sizeof(vl.declaration.flightinfo.competitionclass),
-                       decl->AircraftType);
-
-#ifdef OLD_TASK
-    if (way_points.verify_index(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
-      const WAYPOINT &way_point = way_points.get(XCSoarInterface::SettingsComputer().HomeWaypoint);
-
-      sprintf(temp, "%S", way_point.Name);
-
-      strncpy(vl.declaration.flightinfo.homepoint.name, temp, 6);
-      vl.declaration.flightinfo.homepoint.lon = way_point.Location.Longitude;
-      vl.declaration.flightinfo.homepoint.lat = way_point.Location.Latitude;
-    }
-#endif
-
-  }
-
-  if (err != VLA_ERR_NOERR)
-    return false;
-
-  unsigned i;
-  for (i = 0; i < decl->size(); i++)
-    VLDeclAddWayPoint(decl->waypoints[i]);
-
-  vl.declaration.task.nturnpoints = (nturnpoints<=2)? 0: std::min(nturnpoints-2, (unsigned)12);
-
-#ifdef OLD_TASK
-  const SETTINGS_TASK settings = task.getSettings();
-
-  // start..
-  switch(settings.StartType) {
-  case START_CIRCLE:
-    vl.declaration.task.startpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-    vl.declaration.task.startpoint.lw = min(1500,settings.StartRadius);
-    vl.declaration.task.startpoint.rz = min(1500,settings.StartRadius);
-    vl.declaration.task.startpoint.rs = 0;
-    break;
-  case START_LINE:
-    vl.declaration.task.startpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_LINE;
-    vl.declaration.task.startpoint.lw = min(1500,settings.StartRadius*2);
-    vl.declaration.task.startpoint.rs = 0;
-    vl.declaration.task.startpoint.rz = 0;
-    break;
-  case START_SECTOR:
-    vl.declaration.task.startpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-    vl.declaration.task.startpoint.lw = min(1500,settings.StartRadius);
-    vl.declaration.task.startpoint.rz = 0;
-    vl.declaration.task.startpoint.rs = min(1500,settings.StartRadius);
-    break;
-  }
-  vl.declaration.task.startpoint.ws = 360;
-
-  // rest of task...
-  for (i=0; i<nturnpoints; i++) {
-    // note this is for non-aat only!
-    switch (settings.SectorType) {
-    case 0: // cylinder
-      vl.declaration.task.turnpoints[i].oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-      vl.declaration.task.turnpoints[i].rz = settings.SectorRadius;
-      vl.declaration.task.turnpoints[i].rs = 0;
-      vl.declaration.task.turnpoints[i].lw = 0;
-      break;
-    case 1: // sector
-      vl.declaration.task.turnpoints[i].oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-      vl.declaration.task.turnpoints[i].rz = 0;
-      vl.declaration.task.turnpoints[i].rs = 15000;
-      vl.declaration.task.turnpoints[i].lw = 0;
-      break;
-    case 2: // German DAe 0.5/10
-      vl.declaration.task.turnpoints[i].oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-      vl.declaration.task.turnpoints[i].rz = 500;
-      vl.declaration.task.turnpoints[i].rs = 10000;
-      vl.declaration.task.turnpoints[i].lw = 0;
-      break;
-    };
-    vl.declaration.task.turnpoints[i].ws = 360; // auto direction
-
-  }
-
-  // Finish
-  switch(settings.FinishType) {
-  case FINISH_CIRCLE:
-    vl.declaration.task.finishpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-    vl.declaration.task.finishpoint.lw = min(1500,settings.FinishRadius);
-    vl.declaration.task.finishpoint.rz = min(1500,settings.FinishRadius);
-    vl.declaration.task.finishpoint.rs = 0;
-    break;
-  case FINISH_LINE:
-    vl.declaration.task.finishpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_LINE;
-    vl.declaration.task.finishpoint.lw = settings.FinishRadius*2;
-    vl.declaration.task.finishpoint.rz = 0;
-    vl.declaration.task.finishpoint.rs = 0;
-    break;
-  case FINISH_SECTOR:
-    vl.declaration.task.finishpoint.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-    vl.declaration.task.finishpoint.lw = min(1500,settings.FinishRadius);
-    vl.declaration.task.finishpoint.rz = 0;
-    vl.declaration.task.finishpoint.rs = min(1500,settings.FinishRadius);
-    break;
-  }
-  vl.declaration.task.finishpoint.ws = 360;
-#endif
-
-  bool ok = (vl.write_db_and_declaration() == VLA_ERR_NOERR);
-
-  vl.close(1);
-
-  ProgressGlue::Close();
-
-  return ok;
-}
-
 static void
 CopyWaypoint(VLAPI_DATA::WPT &dest, const Waypoint &src)
 {
@@ -286,23 +144,107 @@ CopyWaypoint(VLAPI_DATA::WPT &dest, const Waypoint &src)
   dest.lat = src.Location.Latitude.value_degrees();
 }
 
-static bool
-VLDeclAddWayPoint(const Waypoint &way_point)
+static void
+CopyTurnPoint(VLAPI_DATA::DCLWPT &dest, const Declaration::TurnPoint &src)
 {
-  if (nturnpoints == 0) {
-    CopyWaypoint(vl.declaration.task.startpoint, way_point);
-    nturnpoints++;
-  } else {
-    CopyWaypoint(vl.declaration.task.turnpoints[nturnpoints-1], way_point);
-    nturnpoints++;
+  CopyWaypoint(dest, src.waypoint);
+
+  switch (src.shape) {
+  case Declaration::TurnPoint::CYLINDER:
+    dest.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
+    dest.lw = dest.rz = src.radius;
+    dest.rs = 0;
+    break;
+
+  case Declaration::TurnPoint::SECTOR:
+    dest.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
+    dest.lw = dest.rs = src.radius;
+    dest.rz = 0;
+    break;
+
+  case Declaration::TurnPoint::LINE:
+    dest.oztyp = VLAPI_DATA::DCLWPT::OZTYP_LINE;
+    dest.lw = src.radius;
+    dest.rs = dest.rz = 0;
+    break;
   }
 
-  CopyWaypoint(vl.declaration.task.finishpoint, way_point);
-
-  return true;
-
+  /* auto direction */
+  dest.ws = 360;
 }
 
+bool
+VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
+{
+  assert(decl->size() >= 2);
+
+  if (vl.open(1, 20, 1, 38400L) != VLA_ERR_NOERR ||
+      vl.read_info() != VLA_ERR_NOERR)
+    return false;
+
+  CopyToNarrowBuffer(vl.declaration.flightinfo.pilot,
+		     sizeof(vl.declaration.flightinfo.pilot),
+		     decl->PilotName);
+
+  CopyToNarrowBuffer(vl.declaration.flightinfo.competitionid,
+		     sizeof(vl.declaration.flightinfo.competitionid),
+		     decl->AircraftRego);
+
+  CopyToNarrowBuffer(vl.declaration.flightinfo.competitionclass,
+		     sizeof(vl.declaration.flightinfo.competitionclass),
+		     decl->AircraftType);
+
+  const Waypoint *home = way_points.find_home();
+  if (home != NULL)
+    CopyWaypoint(vl.declaration.flightinfo.homepoint, *home);
+
+  // start..
+  CopyTurnPoint(vl.declaration.task.startpoint, decl->TurnPoints.front());
+
+  // rest of task...
+  const unsigned n = std::min(decl->size() - 2, 12u);
+  for (unsigned i = 0; i < n; ++i)
+    CopyTurnPoint(vl.declaration.task.turnpoints[i], decl->TurnPoints[i + 1]);
+
+  // Finish
+  CopyTurnPoint(vl.declaration.task.finishpoint, decl->TurnPoints.back());
+
+  vl.declaration.task.nturnpoints = n;
+
+  return vl.write_db_and_declaration() == VLA_ERR_NOERR;
+}
+
+bool
+VolksloggerDevice::Declare(const Declaration *decl)
+{
+  if (decl->size() < 2)
+    return false;
+
+  ProgressGlue::Create(_T("Comms with Volkslogger"));
+
+  port->StopRxThread();
+  port->SetRxTimeout(500);
+
+  // change to IO mode baud rate
+  unsigned long lLastBaudrate = port->SetBaudrate(9600L);
+
+  ProgressGlue::SetStep(1);
+
+  VLAPI vl;
+  vl.set_port(port);
+
+  bool success = DeclareInner(vl, decl);
+
+  vl.close(1);
+
+  port->SetBaudrate(lLastBaudrate); // restore baudrate
+  port->SetRxTimeout(0); // clear timeout
+  port->StartRxThread(); // restart RX thread
+
+  ProgressGlue::Close();
+
+  return success;
+}
 
 static Device *
 VolksloggerCreateOnPort(Port *com_port)
