@@ -22,10 +22,17 @@
 #ifndef ASTAR_HPP
 #define ASTAR_HPP
 
-#include <map>
 #include "Util/queue.hpp"
 #include <assert.h>
 #include "Compiler.h"
+
+//#define ASTAR_TR1
+
+#ifdef ASTAR_TR1
+#include <tr1/unordered_map>
+#else
+#include <map>
+#endif
 
 #ifdef INSTRUMENT_TASK
 extern long count_astar_links;
@@ -268,11 +275,21 @@ private:
       it->second = parent;
   }
 
+#ifdef ASTAR_TR1
+  typedef std::tr1::unordered_map<Node, AStarPriorityValue> node_value_map;
+#else
   typedef std::map<Node, AStarPriorityValue> node_value_map;
+#endif
+
   typedef typename node_value_map::iterator node_value_iterator;
   typedef typename node_value_map::const_iterator node_value_const_iterator;
 
+#ifdef ASTAR_TR1
+  typedef std::tr1::unordered_map<Node, Node> node_parent_map;
+#else
   typedef std::map<Node, Node> node_parent_map;
+#endif
+
   typedef typename node_parent_map::iterator node_parent_iterator;
   typedef typename node_parent_map::const_iterator node_parent_const_iterator;
 
