@@ -906,11 +906,11 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("OLC Sprint"));
-    dfe->addEnumText(_("OLC FAI"));
-    dfe->addEnumText(_("OLC Classic"));
-    dfe->addEnumText(_("OLC League"));
-    dfe->addEnumText(_("OLC Plus"));
+    dfe->addEnumText(_("OLC Sprint"), OLC_Sprint);
+    dfe->addEnumText(_("OLC FAI"), OLC_FAI);
+    dfe->addEnumText(_("OLC Classic"), OLC_Classic);
+    dfe->addEnumText(_("OLC League"), OLC_League);
+    dfe->addEnumText(_("OLC Plus"), OLC_Plus);
     dfe->Set(settings_computer.contest);
     wp->RefreshDisplay();
   }
