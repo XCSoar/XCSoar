@@ -37,7 +37,8 @@ GlideResult::GlideResult():
     AltitudeDifference(fixed_zero),
     EffectiveWindSpeed(fixed_zero),
     EffectiveWindAngle(Angle::native(fixed_zero)),
-    Solution(RESULT_NOSOLUTION)
+    Solution(RESULT_NOSOLUTION),
+    MinHeight(fixed_zero)
 {
 }
 
@@ -55,7 +56,8 @@ GlideResult::GlideResult(const GlideState &task, const fixed V):
   EffectiveWindSpeed(task.EffectiveWindSpeed),
   EffectiveWindAngle(task.EffectiveWindAngle),
   HeadWind(task.HeadWind),
-  Solution(RESULT_NOSOLUTION)
+  Solution(RESULT_NOSOLUTION),
+  MinHeight(task.MinHeight)
 {
 }
 

@@ -174,6 +174,7 @@ struct GlideResult {
   Angle EffectiveWindAngle;    /**< (internal) */
   fixed HeadWind;              /**< Head wind component (m/s) in cruise */
   GlideResult_t Solution;      /**< Solution validity */
+  fixed MinHeight;             /**< Height (m above MSL) of end */
 
 private:
   /**
