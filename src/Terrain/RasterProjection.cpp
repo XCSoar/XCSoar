@@ -60,3 +60,10 @@ RasterProjection::pixel_distance(const GeoPoint &location, unsigned pixels) cons
 
   return max(x, y) / FACTOR;
 }
+
+unsigned
+RasterProjection::distance_pixels(fixed distance) const
+{
+  Angle angle = Angle::radians(distance / REARTH);
+  return angle_to_height(angle);
+}
