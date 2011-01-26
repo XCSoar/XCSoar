@@ -116,10 +116,10 @@ RasterTile::CheckTileVisibility(const int view_x, const int view_y)
     return false;
   }
 
-  const unsigned int dx1 = abs(view_x - xstart);
-  const unsigned int dx2 = abs(xend - view_x);
-  const unsigned int dy1 = abs(view_y - ystart);
-  const unsigned int dy2 = abs(yend - view_y);
+  const unsigned int dx1 = abs(view_x - (int)xstart);
+  const unsigned int dx2 = abs((int)xend - view_x);
+  const unsigned int dy1 = abs(view_y - (int)ystart);
+  const unsigned int dy2 = abs((int)yend - view_y);
 
   if (min(dx1, dx2) * 2 < width * 3) {
     if (min(dy1, dy2) < height)
