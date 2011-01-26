@@ -316,7 +316,6 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
 
   const MarkerSegmentInfo *segment = FindMarkerSegment(file_offset);
   if (segment == NULL)
-  if (segment == NULL)
     /* past the end of the recorded segment list; shouldn't happen */
     return 0;
 
