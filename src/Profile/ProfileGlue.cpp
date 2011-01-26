@@ -129,6 +129,10 @@ Profile::Use()
     }
   }
 
+  Temp = MAP_SHIFT_BIAS_HEADING;
+  Get(szProfileMapShiftBias, Temp);
+  settings_map.MapShiftBias = (MapShiftBias_t) Temp;
+
   // NOTE: settings_map.WayPointLabelSelection must be loaded after this code
   Temp = settings_map.DisplayTextType;
   Get(szProfileDisplayText, Temp);

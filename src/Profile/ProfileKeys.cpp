@@ -127,6 +127,7 @@ const TCHAR szProfileWayPointLabelSelection[] = CONF("WayPointLabelSelection");
 const TCHAR szProfileDisplayUpValue[] = CONF("DisplayUp");
 const TCHAR szProfileOrientationCruise[] = CONF("OrientationCruise");
 const TCHAR szProfileOrientationCircling[] = CONF("OrientationCircling");
+const TCHAR szProfileMapShiftBias[] = CONF("MapShiftBias");
 const TCHAR szProfileDistanceUnitsValue[] = CONF("Distance");
 const TCHAR szProfileDrawTerrain[] = CONF("DrawTerrain");
 const TCHAR szProfileSlopeShading[] = CONF("SlopeShading");

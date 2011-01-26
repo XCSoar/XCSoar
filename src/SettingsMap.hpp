@@ -35,6 +35,11 @@ enum DisplayOrientation_t {
   TARGETUP
 };
 
+enum MapShiftBias_t {
+  MAP_SHIFT_BIAS_HEADING = 1,
+  MAP_SHIFT_BIAS_TARGET
+};
+
 typedef enum {
   DISPLAYNAME = 0,
   OBSOLETE_DONT_USE_DISPLAYNUMBER,
@@ -116,6 +121,9 @@ struct SETTINGS_MAP {
   /** Orientation of the map (North up, Track up, etc.) */
   DisplayOrientation_t OrientationCruise;
   DisplayOrientation_t OrientationCircling;
+
+  /** The bias for map shifting (Heading, Target, etc.) */
+  MapShiftBias_t MapShiftBias;
 
   /** Terrain contrast percentage */
   short TerrainContrast;

@@ -261,19 +261,24 @@ GlueMapWindow::UpdateProjection()
   if (IsOriginCentered() || settings_map.EnablePan)
     visible_projection.SetScreenOrigin(center.x, center.y);
   else if (settings_map.OrientationCruise == NORTHUP) {
-    RasterPoint offset;
-    if (Basic().GroundSpeed < fixed(8))  /* 8 m/s ~ 30 km/h */
-      offset=OffsetHistory::zeroPoint;
-    else {
-      fixed x, y;
-      Basic().TrackBearing.Reciprocal().sin_cos(x, y);
+    RasterPoint offset = OffsetHistory::zeroPoint;
+    if (settings_map.GliderScreenPosition != 50) {
+      fixed x = fixed_zero;
+      fixed y = fixed_zero;
+      if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_HEADING) {
+        if (Basic().GroundSpeed > fixed_int_constant(8)) /* 8 m/s ~ 30 km/h */
+          Basic().TrackBearing.Reciprocal().sin_cos(x, y);
+      } else if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_TARGET) {
+        if (Calculated().task_stats.current_leg.solution_remaining.defined())
+          Calculated().task_stats.current_leg.solution_remaining
+                      .Vector.Bearing.Reciprocal().sin_cos(x, y);
+      }
       fixed gspFactor = (fixed) (50 - settings_map.GliderScreenPosition) / 100;
       offset.x = x * (rc.right - rc.left) * gspFactor;
       offset.y = y * (rc.top - rc.bottom) * gspFactor;
+      offsetHistory.add(offset);
+      offset = offsetHistory.average();
     }
-    offsetHistory.add(offset);
-    offset = offsetHistory.average();
-
     visible_projection.SetScreenOrigin(center.x + offset.x, center.y + offset.y);
   } else
     visible_projection.SetScreenOrigin(center.x,

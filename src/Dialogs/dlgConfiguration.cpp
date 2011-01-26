@@ -820,6 +820,16 @@ setVariables()
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(_T("prpMapShiftBias"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Heading"), MAP_SHIFT_BIAS_HEADING);
+    dfe->addEnumText(_("Target"), MAP_SHIFT_BIAS_TARGET);
+    dfe->Set(XCSoarInterface::SettingsMap().MapShiftBias);
+    wp->RefreshDisplay();
+  }
+
   LoadFormProperty(*wf, _T("prpMenuTimeout"),
                    XCSoarInterface::MenuTimeoutMax / 2);
 
@@ -1715,6 +1725,16 @@ void dlgConfigurationShowModal(void)
       XCSoarInterface::SetSettingsMap().OrientationCircling = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
       Profile::Set(szProfileOrientationCircling,
                     XCSoarInterface::SettingsMap().OrientationCircling);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpMapShiftBias"));
+  if (wp) {
+    if (XCSoarInterface::SettingsMap().MapShiftBias != wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsMap().MapShiftBias = (MapShiftBias_t)wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileMapShiftBias,
+                   XCSoarInterface::SettingsMap().MapShiftBias);
       changed = true;
     }
   }
