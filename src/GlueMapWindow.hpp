@@ -155,7 +155,7 @@ protected:
    * @return True if the gesture was handled by the
    * event handler, False otherwise
    */
-  bool on_mouse_gesture(const char* gesture);
+  bool on_mouse_gesture(const TCHAR* gesture);
 
   virtual bool on_key_down(unsigned key_code);
 

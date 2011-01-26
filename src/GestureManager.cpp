@@ -38,15 +38,15 @@ static gcc_const char
 getDirection(int dx, int dy)
 {
   if (dy < 0 && -dy >= abs(dx) * 2)
-    return 'U';
+    return _T('U');
   if (dy > 0 && dy >= abs(dx) * 2)
-    return 'D';
+    return _T('D');
   if (dx > 0 && dx >= abs(dy) * 2)
-    return 'R';
+    return _T('R');
   if (dx < 0 && -dx >= abs(dy) * 2)
-    return 'L';
+    return _T('L');
 
-  return '\0';
+  return _T('\0');
 }
 
 void
@@ -72,11 +72,11 @@ GestureManager::Update(int x, int y)
     return;
 
   // Return if we are still in the same direction
-  size_t length = strlen(gesture);
+  size_t length = _tcslen(gesture);
   if (length < sizeof(gesture) / sizeof(gesture[0]) - 1 &&
       gesture[length - 1] != direction) {
     gesture[length] = direction;
-    gesture[length + 1] = '\0';
+    gesture[length + 1] = _T('\0');
   }
 }
 
@@ -88,13 +88,13 @@ GestureManager::Start(int x, int y, int _threshold)
   drag_last.y = y;
 
   // Reset gesture
-  strcpy(gesture, "");
+  _tcscpy(gesture, _T(""));
 
   // Set threshold
   threshold = _threshold;
 }
 
-const char*
+const TCHAR*
 GestureManager::Finish()
 {
   if (string_is_empty(gesture))

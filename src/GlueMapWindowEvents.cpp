@@ -219,7 +219,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
     break;
 
   case DRAG_GESTURE:
-    const char* gesture = gestures.Finish();
+    const TCHAR* gesture = gestures.Finish();
     if (gesture && on_mouse_gesture(gesture))
       return true;
 
@@ -262,34 +262,34 @@ GlueMapWindow::on_mouse_wheel(int delta)
 }
 
 bool
-GlueMapWindow::on_mouse_gesture(const char* gesture)
+GlueMapWindow::on_mouse_gesture(const TCHAR* gesture)
 {
   if (!XCSoarInterface::SettingsComputer().EnableGestures)
     return false;
 
-  if (strcmp(gesture, "U") == 0) {
+  if (_tcscmp(gesture, _T("U")) == 0) {
     InputEvents::processKey(VK_UP);
     return true;
   }
-  if (strcmp(gesture, "D") == 0) {
+  if (_tcscmp(gesture, _T("D")) == 0) {
     InputEvents::processKey(VK_DOWN);
     return true;
   }
-  if (strcmp(gesture, "L") == 0) {
+  if (_tcscmp(gesture, _T("L")) == 0) {
     InputEvents::processKey(VK_LEFT);
     return true;
   }
-  if (strcmp(gesture, "R") == 0) {
+  if (_tcscmp(gesture, _T("R")) == 0) {
     InputEvents::processKey(VK_RIGHT);
     return true;
   }
 
-  if (strcmp(gesture, "DU") == 0) {
+  if (_tcscmp(gesture, _T("DU")) == 0) {
     InputEvents::ShowMenu();
     return true;
   }
 
-  if (strcmp(gesture, "DR") == 0) {
+  if (_tcscmp(gesture, _T("DR")) == 0) {
     InputEvents::eventGotoLookup(_T(""));
     return true;
   }
