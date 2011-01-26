@@ -67,8 +67,9 @@ TabBarControl::GetButtonCaption(unsigned i)
 unsigned
 TabBarControl::AddClient(Window *w, const TCHAR* Caption,
     bool IsButtonOnly,
-    PreClickNotifyCallback_t PreClickFunction,
-    PostClickNotifyCallback_t PostClickFunction)
+    PreHideNotifyCallback_t PreHideFunction,
+    PreShowNotifyCallback_t PreShowFunction,
+    PostShowNotifyCallback_t PostShowFunction)
 {
   if (GetCurrentPage() != buttons.size())
     w->hide();
@@ -77,7 +78,8 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
   const RECT rc = get_client_rect();
   w->move(rc.left, rc.top + TabBarHeight, rc.right, rc.bottom  + TabBarHeight);
 
-  OneTabButton *b = new OneTabButton(Caption, IsButtonOnly, PreClickFunction, PostClickFunction);
+  OneTabButton *b = new OneTabButton(Caption, IsButtonOnly,
+      PreHideFunction, PreShowFunction, PostShowFunction);
 
   buttons.append(b);
 
@@ -87,17 +89,24 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
 void
 TabBarControl::SetCurrentPage(unsigned i)
 {
+  bool Continue = true;
   assert(i < buttons.size());
 
-  bool ok = true;
-  if (buttons[i]->PreClickFunction) {
-    ok = buttons[i]->PreClickFunction();
+  if (buttons[GetCurrentPage()]->PreHideFunction) {
+    if (!buttons[GetCurrentPage()]->PreHideFunction())
+        Continue = false;
   }
 
-  if (ok) {
+  if (Continue) {
+    if (buttons[i]->PreShowFunction) {
+      Continue = buttons[i]->PreShowFunction();
+    }
+  }
+
+  if (Continue) {
     TabbedControl::SetCurrentPage(i);
-    if (buttons[i]->PostClickFunction) {
-      buttons[i]->PostClickFunction();
+    if (buttons[i]->PostShowFunction) {
+      buttons[i]->PostShowFunction();
     }
   }
   theTabDisplay->trigger_invalidate();

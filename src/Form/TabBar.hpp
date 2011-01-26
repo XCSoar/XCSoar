@@ -41,8 +41,9 @@ class TabDisplay;
  */
 class TabBarControl : public TabbedControl {
 public:
-  typedef bool (*PreClickNotifyCallback_t)(void);
-  typedef void (*PostClickNotifyCallback_t)(void);
+  typedef bool (*PreHideNotifyCallback_t)(void);
+  typedef bool (*PreShowNotifyCallback_t)(void);
+  typedef void (*PostShowNotifyCallback_t)(void);
 
 public:
 /**
@@ -69,11 +70,13 @@ public:
   public:
     OneTabButton(const TCHAR* _Caption,
                 bool _IsButtonOnly,
-                PreClickNotifyCallback_t _PreClickFunction,
-                PostClickNotifyCallback_t _PostClickFunction):
+                PreHideNotifyCallback_t _PreHideFunction,
+                PreShowNotifyCallback_t _PreShowFunction,
+                PostShowNotifyCallback_t _PostShowFunction):
                   IsButtonOnly(_IsButtonOnly),
-                  PreClickFunction(_PreClickFunction),
-                  PostClickFunction(_PostClickFunction)
+                  PreHideFunction(_PreHideFunction),
+                  PreShowFunction(_PreShowFunction),
+                  PostShowFunction(_PostShowFunction)
     {
       _tcscpy(Caption, _Caption);
     };
@@ -81,8 +84,22 @@ public:
   public:
     TCHAR Caption[MAX_PATH];
     bool IsButtonOnly;
-    PreClickNotifyCallback_t PreClickFunction;
-    PostClickNotifyCallback_t PostClickFunction;
+  /**
+   * Called before the tab is hidden.
+   * @returns  True if ok and tab may change.  False if click should be ignored
+   */
+    PreHideNotifyCallback_t PreHideFunction;
+
+    /**
+     * Called immediately after tab is clicked, before it is displayed.
+     * @returns  True if ok and tab may change.  False if click should be ignored
+     */
+    PreShowNotifyCallback_t PreShowFunction;
+
+    /**
+     * Called immediately after tab is made active and shown
+     */
+    PostShowNotifyCallback_t PostShowFunction;
   };
 
 public:
@@ -90,14 +107,16 @@ public:
  * @param w. The window (e.g. created by LoadWindow()
  * @param Caption. Caption for the tab display
  * @param IsButtonOnly.  The tab button will resemble look/feel of a button
- * @param PreClickFunction client callback
- * @param PostClickFunction client callback
+ * @param PreHideFunction client callback
+ * @param PreShowFunction client callback
+ * @param PostShowFunction client callback
  * @return index of added tab
  */
   unsigned AddClient(Window *w, const TCHAR* Caption,
         bool IsButtonOnly = false,
-        PreClickNotifyCallback_t PreClickFunction = NULL,
-        PostClickNotifyCallback_t PostClickFunction = NULL);
+        PreHideNotifyCallback_t PreHideFunction = NULL,
+        PreShowNotifyCallback_t PreShowFunction = NULL,
+        PostShowNotifyCallback_t PostShowFunction = NULL);
 
 public:
   void SetCurrentPage(unsigned i);
