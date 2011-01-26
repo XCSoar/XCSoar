@@ -86,6 +86,7 @@ protected:
 
   RasterTerrain *terrain;
   GeoPoint terrain_center;
+  fixed terrain_radius;
 
   RasterWeather *weather;
 

@@ -11,6 +11,8 @@ Version 6.0.3 - not yet released
   - Language: translation updates
   - Auto zoom: don't disable in circling mode
   - more airspace rendering fixes for Android
+* map
+  - Terrain: load more raster tiles on modern devices (second try)
 
 Version 6.0.2 - 2011/01/20
 * devices

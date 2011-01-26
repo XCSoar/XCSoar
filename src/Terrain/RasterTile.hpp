@@ -17,8 +17,16 @@ class RasterTile : private NonCopyable {
     unsigned int xstart, ystart, xend, yend;
   };
 
+public:
   unsigned int xstart, ystart, xend, yend;
   unsigned int width, height;
+
+  /**
+   * The distance of this tile to the center of the screen.  This
+   * attribute is used to determine which tiles should be loaded.
+   */
+  unsigned distance;
+
   bool request;
 
   RasterBuffer buffer;
@@ -45,18 +53,26 @@ public:
     return width > 0 && height > 0;
   }
 
+  int get_distance() const {
+    return distance;
+  }
+
   bool is_requested() const {
     return request;
   }
 
-  void clear_requested() {
+  void set_request() {
+    request = true;
+  }
+
+  void clear_request() {
     request = false;
   }
 
   bool SaveCache(FILE *file) const;
   bool LoadCache(FILE *file);
 
-  bool CheckTileVisibility(const int view_x, const int view_y);
+  bool CheckTileVisibility(int view_x, int view_y, unsigned view_radius);
 
   void Disable() {
     buffer.reset();
@@ -81,7 +97,7 @@ public:
     return buffer.get_data();
   }
 
-  bool VisibilityChanged(int view_x, int view_y);
+  bool VisibilityChanged(int view_x, int view_y, unsigned view_radius);
 };
 
 class RasterTileCache : private NonCopyable {
@@ -103,6 +119,8 @@ class RasterTileCache : private NonCopyable {
 #endif
 
   static const unsigned RTC_SUBSAMPLING = 16;
+
+  friend struct RTDistanceSort;
 
   struct MarkerSegmentInfo {
     MarkerSegmentInfo() {}
@@ -135,6 +153,13 @@ class RasterTileCache : private NonCopyable {
   };
 
   StaticArray<MarkerSegmentInfo, 8192> segments;
+
+  /**
+   * An array that is used to sort the requested tiles by distance.
+   * This is only used by PollTiles() internally, but is stored in the
+   * class because it would be too large for the stack.
+   */
+  StaticArray<unsigned short, MAX_RTC_TILES> RequestTiles;
 
 public:
   RasterTileCache() {
@@ -178,7 +203,7 @@ public:
   bool SaveCache(FILE *file) const;
   bool LoadCache(FILE *file);
 
-  void UpdateTiles(const char *path, int x, int y);
+  void UpdateTiles(const char *path, int x, int y, unsigned radius);
 
   /**
    * Determines if there are still tiles scheduled to be loaded.  Call
@@ -229,7 +254,7 @@ public:
   }
 
 protected:
-  bool PollTiles(int x, int y);
+  bool PollTiles(int x, int y, unsigned radius);
 
 public:
   short GetMaxElevation() const {

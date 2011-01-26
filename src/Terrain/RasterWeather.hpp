@@ -56,7 +56,8 @@ public:
   void Close();
 
   void ValueToText(TCHAR* Buffer, short val) const;
-  void SetViewCenter(const GeoPoint &location);
+
+  void SetViewCenter(const GeoPoint &location, fixed radius);
 
   gcc_pure
   bool IsDirty() const;
