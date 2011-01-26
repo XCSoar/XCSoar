@@ -36,7 +36,8 @@ enum DisplayOrientation_t {
 };
 
 enum MapShiftBias_t {
-  MAP_SHIFT_BIAS_HEADING = 1,
+  MAP_SHIFT_BIAS_NONE = 0,
+  MAP_SHIFT_BIAS_HEADING,
   MAP_SHIFT_BIAS_TARGET
 };
 

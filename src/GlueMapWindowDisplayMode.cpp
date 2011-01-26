@@ -262,7 +262,8 @@ GlueMapWindow::UpdateProjection()
     visible_projection.SetScreenOrigin(center.x, center.y);
   else if (settings_map.OrientationCruise == NORTHUP) {
     RasterPoint offset = OffsetHistory::zeroPoint;
-    if (settings_map.GliderScreenPosition != 50) {
+    if (settings_map.GliderScreenPosition != 50 &&
+        settings_map.MapShiftBias != MAP_SHIFT_BIAS_NONE) {
       fixed x = fixed_zero;
       fixed y = fixed_zero;
       if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_HEADING) {

@@ -824,6 +824,7 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("None"), MAP_SHIFT_BIAS_NONE);
     dfe->addEnumText(_("Heading"), MAP_SHIFT_BIAS_HEADING);
     dfe->addEnumText(_("Target"), MAP_SHIFT_BIAS_TARGET);
     dfe->Set(XCSoarInterface::SettingsMap().MapShiftBias);
