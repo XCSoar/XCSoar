@@ -28,7 +28,14 @@ Copyright_License {
 
 const TCHAR* OrderedTaskFactoryDescription(OrderedTask::Factory_t type);
 const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type);
-void OrderedTaskSummary(OrderedTask* task, TCHAR* text);
+
+/**
+ *
+ * @param task The Task
+ * @param text A buffer written to
+ * @param linebreaks True if each summary item should be separated with a line break
+ */
+void OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks);
 void OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* name, TCHAR* radius);
 bool OrderedTaskSave(const OrderedTask& task, bool noask=false);
 

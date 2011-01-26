@@ -129,7 +129,7 @@ RefreshView()
   }
 
   TCHAR text[300];
-  OrderedTaskSummary(ordered_task, text);
+  OrderedTaskSummary(ordered_task, text, !Layout::landscape);
   wSummary->SetCaption(text);
 }
 

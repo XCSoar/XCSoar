@@ -94,7 +94,7 @@ OrderedTaskFactoryDescription(OrderedTask::Factory_t type)
 }
 
 void
-OrderedTaskSummary(OrderedTask* task, TCHAR* text)
+OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
 {
   const TaskStats &stats = task->get_stats();
   TCHAR invalid [15];
@@ -103,24 +103,38 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text)
   else
     _tcscpy(invalid,_(" (invalid)"));
 
+  TCHAR linebreak[3];
+  if (linebreaks) {
+    linebreak[0] = '\n';
+    linebreak[1] = 0;
+  } else {
+    linebreak[0] = ',';
+    linebreak[1] = ' ';
+    linebreak[2] = 0;
+  }
+
   if (!task->task_size()) {
-    _stprintf(text, _("%s\nTask is empty"),
-              OrderedTaskFactoryName(task->get_factory_type()));
+    _stprintf(text, _("%s%sTask is empty"),
+             OrderedTaskFactoryName(task->get_factory_type()), linebreak);
   } else {
     if (task->has_targets())
-      _stprintf(text, _("%s%s\nNominal dist: %.0f %s\nMax dist: %.0f %s\nMin dist: %.0f %s"),
+      _stprintf(text, _("%s%s%sNominal dist: %.0f %s%sMax dist: %.0f %s%sMin dist: %.0f %s"),
                 OrderedTaskFactoryName(task->get_factory_type()),
                 invalid,
+                linebreak,
                 (double)Units::ToUserDistance(stats.distance_nominal),
                 Units::GetDistanceName(),
+                linebreak,
                 (double)Units::ToUserDistance(stats.distance_max),
                 Units::GetDistanceName(),
+                linebreak,
                 (double)Units::ToUserDistance(stats.distance_min),
                 Units::GetDistanceName());
     else
-      _stprintf(text, _("%s%s\nDistance: %.0f %s"),
+      _stprintf(text, _("%s%s%sDistance: %.0f %s"),
                 OrderedTaskFactoryName(task->get_factory_type()),
                 invalid,
+                linebreak,
                 (double)Units::ToUserDistance(stats.distance_nominal),
                 Units::GetDistanceName());
   }
