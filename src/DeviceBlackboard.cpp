@@ -630,10 +630,11 @@ DeviceBlackboard::EnergyHeight()
 void
 DeviceBlackboard::WorkingBand()
 {
-  const fixed working_band_height = Basic().TEAltitude -
-                                    SettingsComputer().safety_height_terrain -
-                                    Calculated().TerrainBase;
- 
+  const fixed h_safety = SettingsComputer().safety_height_terrain +
+    Calculated().TerrainBase;
+
+    const fixed working_band_height = Basic().TEAltitude - h_safety;
+
   SetBasic().working_band_height = working_band_height;
     if (negative(Basic().working_band_height)) {
     SetBasic().working_band_fraction = fixed_zero;
@@ -645,6 +646,9 @@ DeviceBlackboard::WorkingBand()
     SetBasic().working_band_fraction = working_band_height / max_height;
   else
     SetBasic().working_band_fraction = fixed_one;
+
+  SetBasic().working_band_ceiling = std::max(max_height + h_safety, Basic().TEAltitude);
+
 }
 
 void

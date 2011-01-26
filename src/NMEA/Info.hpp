@@ -333,6 +333,9 @@ struct NMEA_INFO {
   /** Height above working band/safety (m) */
   fixed working_band_height;
 
+  /** Absolute ceiling of climbs (m) */
+  fixed working_band_ceiling;
+
   /** Altitude used for navigation (GPS or Baro) */
   fixed NavAltitude;
 
