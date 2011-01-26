@@ -78,6 +78,7 @@ enum config_page {
   PAGE_TERRAIN,
   PAGE_GLIDE_COMPUTER,
   PAGE_SAFETY_FACTORS,
+  PAGE_ROUTE,
   PAGE_POLAR,
   PAGE_DEVICES,
   PAGE_UNITS,
@@ -99,6 +100,7 @@ static const TCHAR *const captions[] = {
   N_("Terrain Display"),
   N_("Glide Computer"),
   N_("Safety factors"),
+  N_("Route"),
   N_("Polar"),
   N_("Devices"),
   N_("Units"),
@@ -1373,6 +1375,25 @@ setVariables()
     dfe->Set((int)XCSoarInterface::SettingsMap().SnailType);
     wp->RefreshDisplay();
   }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpRoutePlannerMode"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("None"));
+    dfe->addEnumText(_("Terrain"));
+    dfe->addEnumText(_("Airspace"));
+    dfe->addEnumText(_("Both"));
+    dfe->Set(settings_computer.route_planner.mode);
+    wp->RefreshDisplay();
+  }
+
+  LoadFormProperty(*wf, _T("prpRoutePlannerAllowClimb"),
+                   settings_computer.route_planner.allow_climb);
+
+  LoadFormProperty(*wf, _T("prpRoutePlannerUseCeiling"),
+                   settings_computer.route_planner.use_ceiling);
+
 }
 
 static bool
@@ -2275,6 +2296,25 @@ void dlgConfigurationShowModal(void)
       Graphics::InitSnailTrail(XCSoarInterface::SettingsMap());
     }
   }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpRoutePlannerMode"));
+  if (wp) {
+    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
+    if ((int)settings_computer.route_planner.mode != df.GetAsInteger()) {
+      settings_computer.route_planner.mode = (RoutePlannerConfig::Mode)df.GetAsInteger();
+      Profile::Set(szProfileRoutePlannerMode,
+                   (unsigned)settings_computer.route_planner.mode);
+      changed = true;
+    }
+  }
+
+  changed |= SaveFormProperty(*wf, _T("prpRoutePlannerAllowClimb"),
+                              szProfileRoutePlannerAllowClimb,
+                              settings_computer.route_planner.allow_climb);
+
+  changed |= SaveFormProperty(*wf, _T("prpRoutePlannerUseCeiling"),
+                              szProfileRoutePlannerUseCeiling,
+                              settings_computer.route_planner.use_ceiling);
 
   if (PolarFileChanged && protected_task_manager != NULL) {
     GlidePolar gp = protected_task_manager->get_glide_polar();

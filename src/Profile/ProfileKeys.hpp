@@ -205,4 +205,8 @@ extern const TCHAR szProfileDisplayOrientation[];
 extern const TCHAR szProfileClimbMapScale[];
 extern const TCHAR szProfileCruiseMapScale[];
 
+extern const TCHAR szProfileRoutePlannerMode[];
+extern const TCHAR szProfileRoutePlannerAllowClimb[];
+extern const TCHAR szProfileRoutePlannerUseCeiling[];
+
 #endif

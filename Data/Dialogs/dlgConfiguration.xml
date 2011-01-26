@@ -266,6 +266,25 @@
         <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="1" Step="0.1"/>
       </Edit>
     </Panel>
+
+    <Panel Name="frmRoute">
+
+      <Edit Name="prpRoutePlannerMode" Caption="Route mode" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="If set to &quot;None&quot;, neither airspace or terrain is used for route planning.  If set to &quot;Terrain&quot;, routes will avoid terrain; if set to &quot;Airspace&quot;, routes will avoid airspace.  If set to &quot;Both&quot;, routes will avoid airspace and terrain.">
+        <DataField DataType="enum" />
+      </Edit>
+
+      <Edit Name="prpRoutePlannerAllowClimb" Caption="Route climb" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="When enabled and Mc is positive, route planning allows climbs between the aircraft location and destination.">
+        <DataField DataType="boolean"/>
+      </Edit>
+
+      <Edit Name="prpRoutePlannerUseCeiling" Caption="Route ceiling" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="When enabled, route planning climbs are limited to ceiling defined by greater of current aircraft altitude plus 500 m and the thermal ceiling.  If disabled, climbs are unlimited.">
+        <DataField DataType="boolean"/>
+      </Edit>
+
+    </Panel>
   
     <Panel Name="frmPolar">
       <Edit Name="prpPolarType" Caption="Type" X="2" Width="-2" Height="22" CaptionWidth="70"

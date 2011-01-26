@@ -387,6 +387,15 @@ Profile::Use()
   if (Get(szProfileAbortTaskMode, Temp))
     settings_computer.abort_task_mode = (AbortTaskMode)Temp;
 
+  if (Get(szProfileRoutePlannerMode, Temp))
+    settings_computer.route_planner.mode = (RoutePlannerConfig::Mode)Temp;
+
+  Get(szProfileRoutePlannerAllowClimb,
+      settings_computer.route_planner.allow_climb);
+
+  Get(szProfileRoutePlannerUseCeiling,
+      settings_computer.route_planner.use_ceiling);
+
   if (Get(szProfileRiskGamma, Temp))
     settings_computer.risk_gamma = fixed(Temp) / 10;
 

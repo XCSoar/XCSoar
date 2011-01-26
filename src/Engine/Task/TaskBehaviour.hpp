@@ -34,6 +34,30 @@ enum AbortTaskMode {
   atmHome,
 };
 
+struct RoutePlannerConfig {
+  RoutePlannerConfig():
+    mode(rpBoth),
+    allow_climb(true),
+    use_ceiling(true) {}
+
+  enum Mode {
+    rpNone=0,
+    rpTerrain,
+    rpAirspace,
+    rpBoth
+  };
+  Mode mode;
+  bool allow_climb;
+  bool use_ceiling;
+
+  bool terrain_enabled() const {
+    return (mode== rpTerrain) || (mode== rpBoth);
+  }
+  bool airspace_enabled() const {
+    return (mode== rpAirspace) || (mode== rpBoth);
+  }
+};
+
 /**
  *  Class defining options for task system.
  *  Typical uses might be default values, and simple aspects of task behaviour.

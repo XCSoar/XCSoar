@@ -281,3 +281,7 @@ const TCHAR szProfileDisplayOrientation[] = CONF("DisplayOrientation");
 
 const TCHAR szProfileClimbMapScale[] = CONF("ClimbMapScale");
 const TCHAR szProfileCruiseMapScale[] = CONF("CruiseMapScale");
+
+const TCHAR szProfileRoutePlannerMode[] = CONF("RoutePlannerMode");
+const TCHAR szProfileRoutePlannerAllowClimb[] = CONF("RoutePlannerAllowClimb");
+const TCHAR szProfileRoutePlannerUseCeiling[] = CONF("RoutePlannerUseCeiling");
