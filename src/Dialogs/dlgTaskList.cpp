@@ -24,28 +24,27 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
+#include "Dialogs/dlgTaskManager.hpp"
 #include "TaskStore.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
 #include "Gauge/TaskView.hpp"
 #include "OS/FileUtil.hpp"
+#include "Logger/Logger.hpp"
 
 #include <assert.h>
 
 static WndForm *wf = NULL;
+static TabBarControl* wTabBar;
 static WndListFrame* wTasks = NULL;
 static WndFrame* wTaskView = NULL;
 static TaskStore task_store;
-static OrderedTask* active_task = NULL;
-static bool task_modified;
 
-static void
-OnCloseClicked(WndButton &Sender)
-{
-  (void)Sender;
-  wf->SetModalResult(mrCancel);
-}
+static OrderedTask** active_task = NULL;
+static bool* task_modified = NULL;
+bool lazy_loaded = false; // if store has been loaded first time tab displayed
+
 
 static unsigned
 get_cursor_index()
@@ -63,7 +62,7 @@ static OrderedTask*
 get_cursor_task()
 {
   if (cursor_at_active_task())
-    return active_task;
+    return *active_task;
 
   if (get_cursor_index() > task_store.size())
     return NULL;
@@ -83,8 +82,8 @@ get_cursor_name()
   return task_store.get_name(get_cursor_index() - 1);
 }
 
-static void
-OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+void
+dlgTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   RECT rc = Sender->get_client_rect();
 
@@ -98,8 +97,8 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
             XCSoarInterface::SettingsMap(), terrain);
 }
 
-static void
-OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
+void
+dlgTaskList::OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
   assert(DrawListIndex <= task_store.size());
 
@@ -119,7 +118,7 @@ RefreshView()
   wTasks->SetLength(task_store.size() + 1);
   wTaskView->invalidate();
 
-  WndFrame* wSummary = (WndFrame*)wf->FindByName(_T("frmSummary"));
+  WndFrame* wSummary = (WndFrame*)wf->FindByName(_T("frmSummary1"));
   assert(wSummary != NULL);
 
   OrderedTask* ordered_task = get_cursor_task();
@@ -139,7 +138,7 @@ SaveTask()
   if (!cursor_at_active_task())
     return;
 
-  if (!OrderedTaskSave(*active_task))
+  if (!OrderedTaskSave(**active_task))
     return;
 
   task_store.scan();
@@ -165,12 +164,14 @@ LoadTask()
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
-  delete active_task;
-  active_task = protected_task_manager->task_copy(*orig);
+  // create new task first to guarantee pointers are different
+  OrderedTask* temptask = protected_task_manager->task_copy(*orig);
+  delete *active_task;
+  *active_task = temptask;
   RefreshView();
-  task_modified = true;
+  *task_modified = true;
 
-  wf->SetModalResult(mrOK);
+  wTabBar->SetCurrentPage(0);
 }
 
 static void
@@ -249,91 +250,109 @@ UpdateButtons()
   WndButton* wbRename = (WndButton*)wf->FindByName(_T("cmdRename"));
   assert(wbRename != NULL);
   wbRename->set_enabled(!at_active_task);
+
+  WndButton* wbDeclare = (WndButton*)wf->FindByName(_T("cmdDeclare"));
+  assert(wbDeclare != NULL);
+  wbDeclare->set_enabled(at_active_task);
 }
 
-static void 
-OnLoadSaveClicked(WndButton &Sender)
+void
+dlgTaskList::OnLoadSaveClicked(WndButton &Sender)
 {
   LoadOrSaveTask();
 }
 
-static void
-OnDeleteClicked(WndButton &Sender)
+void
+dlgTaskList::OnDeleteClicked(WndButton &Sender)
 {
   DeleteTask();
 }
 
-static void
-OnRenameClicked(WndButton &Sender)
+void
+dlgTaskList::OnRenameClicked(WndButton &Sender)
 {
   RenameTask();
 }
 
-static void
-OnTaskListEnter(unsigned ItemIndex)
+void
+dlgTaskList::OnTaskListEnter(unsigned ItemIndex)
 {
   LoadOrSaveTask();
 }
 
-static void
-OnTaskCursorCallback(unsigned i)
+void
+dlgTaskList::OnTaskCursorCallback(unsigned i)
 {
   UpdateButtons();
   RefreshView();
 }
 
-static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnLoadSaveClicked),
-  DeclareCallBackEntry(OnDeleteClicked),
-  DeclareCallBackEntry(OnRenameClicked),
-  DeclareCallBackEntry(OnTaskPaint),
-  DeclareCallBackEntry(NULL)
-};
+bool
+dlgTaskList::OnDeclareClicked(WndButton &Sender)
+{
+  logger.LoggerDeviceDeclare(**active_task);
+  return false;
+}
 
 bool
-dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
+dlgTaskList::OnTabPreShow()
 {
-  (void)parent;
+  if (!lazy_loaded) {
+    lazy_loaded = true;
+    // Scan XCSoarData for available tasks
+    task_store.scan();
+  }
+  wTasks->SetCursorIndex(0); // so Save & Declare are always available
+  UpdateButtons();
+  RefreshView();
+  return true;
+}
 
-  // If there is no task manager available
-  // we can't load or browse any tasks
-  if (protected_task_manager == NULL)
-    return false;
+void
+dlgTaskList::DestroyTab()
+{
+  task_store.clear();
+}
 
-  // Save the current task
-  active_task = *task;
-  task_modified = false;
+Window*
+dlgTaskList::Load(SingleWindow &parent,
+                           TabBarControl* _wTabBar,
+                           WndForm* _wf,
+                           OrderedTask** task,
+                           bool* _task_modified)
+{
 
-  // Scan XCSoarData for available tasks
-  task_store.scan();
+  assert(_wTabBar);
+  wTabBar = _wTabBar;
+
+  assert(_wf);
+  wf = _wf;
+
+  assert(task);
+  active_task = task;
+
+  assert(_task_modified);
+  task_modified = _task_modified;
+
+  lazy_loaded = false;
 
   // Load the dialog
-  wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
-                  _T("IDR_XML_TASKLIST_L") : _T("IDR_XML_TASKLIST"));
-  assert(wf != NULL);
+  Window *wList = LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
+     Layout::landscape ? _T("IDR_XML_TASKLIST_L") : _T("IDR_XML_TASKLIST"));
+
+  assert(wList);
 
   // Save important control pointers
-  wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
+  wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView1"));
   assert(wTaskView != NULL);
 
   wTasks = (WndListFrame*)wf->FindByName(_T("frmTasks"));
   assert(wTasks != NULL);
 
   // Set callbacks
-  wTasks->SetActivateCallback(OnTaskListEnter);
-  wTasks->SetPaintItemCallback(OnTaskPaintListItem);
-  wTasks->SetCursorCallback(OnTaskCursorCallback);
+  wTasks->SetActivateCallback(dlgTaskList::OnTaskListEnter);
+  wTasks->SetPaintItemCallback(dlgTaskList::OnTaskPaintListItem);
+  wTasks->SetCursorCallback(dlgTaskList::OnTaskCursorCallback);
 
-  UpdateButtons();
-  RefreshView();
-
-  // Show the dialog
-  wf->ShowModal();
-  delete wf;
-  
-  // Clear the task list memory again
-  task_store.clear();
-
-  return task_modified;
+  return wList;
 }

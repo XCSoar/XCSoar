@@ -41,6 +41,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/Draw.hpp"
 #include "Form/Tabbed.hpp"
+#include "Form/TabBar.hpp"
 #include "Form/Util.hpp"
 #include "Language.hpp"
 #include "Interface.hpp"

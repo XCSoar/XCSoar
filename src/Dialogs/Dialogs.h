@@ -101,13 +101,7 @@ void dlgSwitchesShowModal();
 class OrderedTask;
 
 void
-dlgTaskEditShowModal(SingleWindow &parent);
-
-bool
-dlgTaskPropertiesShowModal(SingleWindow &parent, OrderedTask** task);
-
-bool
-dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task);
+dlgTaskManagerShowModal(SingleWindow &parent);
 
 /**
  *

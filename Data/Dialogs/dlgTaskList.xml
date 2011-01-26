@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 
-<Form Name="frmTaskList" Width="240" Height="320" Caption="Task Browser">
-  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="77" Height="22" OnClick="OnCloseClicked"/>
+<Panel Name="frmBrowse" Border="0">
+  <List Name="frmTasks" X="2" Y="0" Width="236" Height="129" ItemHeight="18"/>
 
-  <List Name="frmTasks" X="2" Y="26" Width="234" Height="129" ItemHeight="18"/>
+  <Button Name="cmdLoadSave" Caption="Load" X="3" Y="131" Width="57" Height="35" OnClick="dlgTaskList::OnLoadSaveClicked"/>
+  <Button Name="cmdDeclare" Caption="Declare" X="62" Y="131" Width="57" Height="35" OnClick="dlgTaskList::OnDeclareClicked"/>
+  <Button Name="cmdRename" Caption="Rename" X="121" Y="131" Width="57" Height="35" OnClick="dlgTaskList::OnRenameClicked"/>
+  <Button Name="cmdDelete" Caption="Delete" X="180" Y="131" Width="57" Height="35" OnClick="dlgTaskList::OnDeleteClicked"/>
 
-  <Button Name="cmdLoadSave" Caption="Load" X="2" Y="158" Width="77" Height="22" OnClick="OnLoadSaveClicked"/>
-  <Button Name="cmdRename" Caption="Rename" X="81" Y="158" Width="77" Height="22" OnClick="OnRenameClicked"/>
-  <Button Name="cmdDelete" Caption="Delete" X="160" Y="158" Width="77" Height="22" OnClick="OnDeleteClicked"/>
+  <Label Name="frmSummary1" X="121" Y="168" Width="117" Height="97" Border="1"/>
+  <Canvas Name="frmTaskView1" X="2" Y="168" Width="117" Height="97" Border="1" OnPaint="dlgTaskList::OnTaskPaint" />
 
-  <Canvas Name="frmTaskView" X="2" Y="182" Width="115" Height="-2" Border="1" OnPaint="OnTaskPaint" />
-  <Label Name="frmSummary" X="119" Y="182" Width="-2" Height="-2" Border="1"/>
-</Form>
+</Panel>

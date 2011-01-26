@@ -1,22 +1,15 @@
 <?xml version="1.0"?>
 
-<Form Name="frmTaskEdit" Width="240" Height="320" Caption="Edit Task">
-  <Canvas Name="frmTaskView" X="2" Y="184" Width="115" Height="118" Border="1" OnPaint="OnTaskPaint" />
+<Panel Name="frmTurnpoints" Border="0">
+  
+  <List Name="frmTaskPoints" X="2" Y="0" Width="236" Height="129" ItemHeight="18"/>
 
-  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="77" Height="22" OnClick="OnCloseClicked"/>
-  <SymbolButton Name="cmdDown" Caption="v" X="176" Y="2" Width="30" Height="22" OnClick="OnMoveDownClicked"/>
-  <SymbolButton Name="cmdUp" Caption="^" X="206" Y="2" Width="30" Height="22" OnClick="OnMoveUpClicked"/>
+  <SymbolButton Name="cmdDown" Caption="v" X="3" Y="131" Width="57" Height="35" OnClick="dlgTaskEdit::OnMoveDownClicked"/>
+  <SymbolButton Name="cmdUp" Caption="^" X="62" Y="131" Width="57" Height="35" OnClick="dlgTaskEdit::OnMoveUpClicked"/>
+  <Button Name="cmdEditTurnpoint" Caption="Edit point" X="121" Y="131" Width="57" Height="35" OnClick="dlgTaskEdit::OnEditTurnpointClicked"/>
+  <Button Name="cmdNew" Caption="Clear Task" X="180" Y="131" Width="57" Height="35" OnClick="dlgTaskEdit::OnNewClicked"/>
 
-  <List Name="frmTaskPoints" X="2" Y="26" Width="234" Height="129" ItemHeight="18"/>
+  <Label Name="frmSummary" X="121" Y="168" Width="117" Height="97" Border="1"/>
+  <Canvas Name="frmTaskView" X="2" Y="168" Width="115" Height="97" Border="1" OnPaint="dlgTaskEdit::OnTaskPaint" />
 
-  <Button Name="cmdNew" Caption="New task" X="2" Y="158" Width="77" Height="22" OnClick="OnNewClicked"/>
-  <Button Name="cmdProperties" Caption="Properties" X="81" Y="158" Width="77" Height="22" OnClick="OnPropertiesClicked"/>
-  <Button Name="cmdMore" Caption="More ..." X="160" Y="158" Width="77" Height="22" OnClick="OnMoreClicked"/>
-  <Panel Name="frmMore" X="2" Y="181" Width="236" Height="22" Border="0" Visible="0">
-    <Button Name="cmdList" Caption="Browse" X="0" Y="0" Width="77" Height="22" OnClick="OnListClicked"/>
-    <Button Name="cmdDeclare" Caption="Declare" X="79" Y="0" Width="77" Height="22" OnClick="OnDeclareClicked"/>
-    <Button Name="cmdSave" Caption="Save as" X="158" Y="0" Width="77" Height="22" OnClick="OnSaveClicked"/>
-  </Panel>
-
-  <Label Name="frmSummary" X="119" Y="184" Width="-2" Height="118" Border="1"/>
-</Form>
+</Panel>

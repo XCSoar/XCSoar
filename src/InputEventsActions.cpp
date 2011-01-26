@@ -1320,7 +1320,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (_tcscmp(misc, _T("System")) == 0)
     SystemConfiguration();
   else if (_tcscmp(misc, _T("Task")) == 0)
-    dlgTaskEditShowModal(XCSoarInterface::main_window);
+    dlgTaskManagerShowModal(XCSoarInterface::main_window);
   else if (_tcscmp(misc, _T("Airspace")) == 0)
     dlgAirspaceShowModal(false);
   else if (_tcscmp(misc, _T("Weather")) == 0)

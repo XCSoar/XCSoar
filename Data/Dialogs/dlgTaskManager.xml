@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+<Form Name="frmTaskEdit" Width="240" Height="320" Caption="Task Manager">
+  <TabBar Name="TabBar" X="0" Y="0" Width="240" Height="306">
+  </TabBar>
+</Form>
