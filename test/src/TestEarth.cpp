@@ -27,12 +27,14 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(8);
+  plan_tests(9);
 
   const GeoPoint a(Angle::degrees(fixed(7.7061111111111114)),
                    Angle::degrees(fixed(51.051944444444445)));
   const GeoPoint b(Angle::degrees(fixed(7.599444444444444)),
                    Angle::degrees(fixed(51.099444444444444)));
+  const GeoPoint c(Angle::degrees(fixed(4.599444444444444)),
+                   Angle::degrees(fixed(47.099444444444444)));
 
   fixed distance = Distance(a, b);
   ok1(distance > fixed(9130) && distance < fixed(9140));
@@ -54,6 +56,9 @@ int main(int argc, char **argv)
                         a.Latitude.Fraction(b.Latitude, fixed_half));
   distance = ProjectedDistance(a, b, middle);
   ok1(distance > fixed(9100/2) && distance < fixed(9140/2));
+
+  fixed big_distance = Distance(a, c);
+  ok1(big_distance > fixed(494000) && big_distance < fixed(495000));
 
   return exit_status();
 }
