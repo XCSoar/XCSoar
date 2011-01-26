@@ -171,14 +171,13 @@ bool
 RasterTileCache::PollTiles(int x, int y)
 {
   bool retval = false;
-  int i;
 
   if (scan_overview)
     return false;
 
   ActiveTiles.clear();
 
-  for (i = MAX_RTC_TILES - 1; --i >= 0;) {
+  for (int i = MAX_RTC_TILES - 1; i >= 0; --i) {
     if (tiles[i].VisibilityChanged(x, y))
       retval = true;
 
