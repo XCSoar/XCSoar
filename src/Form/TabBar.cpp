@@ -175,10 +175,7 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar,
 void
 TabDisplay::on_paint(Canvas &canvas)
 {
-  if (has_focus())
-    canvas.clear(Color::LIGHT_GRAY);
-  else
-    canvas.clear(Color::BLACK);
+  canvas.clear(Color::BLACK);
   canvas.select(Fonts::MapBold);
   const unsigned CaptionStyle = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;
@@ -222,6 +219,13 @@ TabDisplay::on_paint(Canvas &canvas)
     }
     canvas.formatted_text(&rcTextFinal, theTabBar.GetButtonCaption(i),
         CaptionStyle);
+  }
+  if (has_focus()) {
+    RECT rcFocus;
+    rcFocus.top = rcFocus.left = 0;
+    rcFocus.right = canvas.get_width();
+    rcFocus.bottom = canvas.get_height();
+    canvas.draw_focus(rcFocus);
   }
   this->show();
 }
