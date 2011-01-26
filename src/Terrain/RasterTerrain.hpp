@@ -40,6 +40,8 @@ class FileCache;
  */
 class RasterTerrain : public Guard<RasterMap> {
 public:
+  friend class RoutePlannerGlue;
+
   /** invalid value for terrain */
   static const short TERRAIN_INVALID = RasterBuffer::TERRAIN_INVALID;
 
@@ -69,6 +71,15 @@ public:
 
   GeoPoint GetTerrainCenter() const {
     return map.GetMapCenter();
+  }
+
+  gcc_pure
+  bool FirstIntersection(const GeoPoint &origin, const short h_origin,
+                         const GeoPoint &destination, const short h_destination,
+                         const short h_virt, const short h_ceiling,
+                         GeoPoint& intx, short &h) const {
+    Lease lease(*this);
+    return lease->FirstIntersection(origin, h_origin, destination, h_destination, h_virt, h_ceiling, intx, h);
   }
 };
 

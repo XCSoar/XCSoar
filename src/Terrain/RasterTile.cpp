@@ -26,9 +26,11 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "ProgressGlue.hpp"
+#include "Math/FastMath.h"
 
 #include <stdlib.h>
 #include <algorithm>
+#include <limits.h>
 
 using std::min;
 using std::max;
@@ -589,4 +591,216 @@ RasterTileCache::LoadCache(FILE *file)
   initialised = true;
   scan_overview = false;
   return true;
+}
+
+//#define DEBUG_TILE
+#ifdef DEBUG_TILE
+#include <stdio.h>
+#endif
+
+bool
+RasterTileCache::FirstIntersection(unsigned x0, unsigned y0,
+                                   unsigned x1, unsigned y1,
+                                   short h_origin,
+                                   short h_dest,
+                                   const long slope_fact, const short h_ceiling,
+                                   unsigned& _x, unsigned& _y, short &_h,
+                                   const bool can_climb) const
+{
+  if ((x0 >= width) || (y0 >= height))
+    // origin is outside overall bounds
+    return false;
+
+  // remember index of active tile, so we dont need to scan each each time
+  // (unless the guess fails)
+  int tile_index = -1;
+
+  h_origin = std::max(h_origin, GetFieldDirect(x0, y0, tile_index));
+  h_dest = std::max(h_dest, h_origin);
+
+  // line algorithm parameters
+  const int dx = abs((int)x1-(int)x0);
+  const int dy = abs((int)y1-(int)y0);
+  int err = dx-dy;
+  const int sx = (x0 < x1)? 1: -1;
+  const int sy = (y0 < y1)? 1: -1;
+
+  // calculate number of fine steps to produce a step on the overview field
+  int mx=dx, my=dy;
+  i_normalise(mx, my); // normalise vector components
+  const int step_coarse = (mx+my)>>3;  // number of steps for update to the
+                                       // overview map
+
+  unsigned step_counter = 0; // counter for steps to reach next position on the
+                             // field.
+  int total_steps = 0; // total counter of steps
+
+  int intersect_counter = 0;
+
+#ifdef DEBUG_TILE
+  printf("# fint %d\n", step_coarse);
+#endif
+
+  // early exit if origin is too high (should not occur)
+  if (h_origin> h_ceiling) {
+#ifdef DEBUG_TILE
+    printf("# fint start above ceiling %d %d\n", h_origin, h_ceiling);
+#endif
+    _x = x0;
+    _y = y0;
+    _h = h_origin;
+    return true;
+  }
+
+#ifdef DEBUG_TILE
+  printf("# fint width %d height %d\n", width, height);
+#endif
+  short h_terrain = 0;
+
+  unsigned x_int= x0, y_int= y0;
+  short h_int= h_origin;
+  // location of last point within ceiling limit that doesnt intersect
+  unsigned last_clear_x = x0;
+  unsigned last_clear_y = y0;
+  short last_clear_h = h_origin;
+
+  while (!RasterBuffer::is_invalid(h_terrain)) {
+
+    if (!step_counter) {
+      h_terrain = GetFieldDirect(x_int, y_int, tile_index);
+      step_counter = tile_index<0? step_coarse: 1;
+
+      // calculate height of glide so far
+      const short dh = (short)((total_steps*slope_fact)>>RASTER_SLOPE_FACT);
+
+      // current aircraft height
+      h_int = dh + h_origin;
+      if (can_climb) {
+        h_int = std::min(h_int, h_dest);
+      }
+
+#ifdef DEBUG_TILE
+      printf("%d %d %d %d %d # fint\n", x_int, y_int, h_int, h_terrain, h_ceiling);
+#endif
+
+      // this point has intersected if aircraft is below terrain height
+      const bool this_intersecting = (h_int< h_terrain);
+
+      if (this_intersecting) {
+        intersect_counter = 1;
+
+        // when intersecting, consider origin to have started higher
+        const short h_jump = h_terrain - h_int;
+        h_origin += h_jump;
+
+        if (can_climb) {
+          // if intersecting beyond desired destination height, allow dest height
+          // to be increased
+          if (h_terrain> h_dest)
+            h_dest = h_terrain;
+        } else {
+          // if can't climb, must jump so path is pure glide
+          h_dest += h_jump;
+        }
+        h_int = h_terrain;
+
+      }
+
+      if (h_int > h_ceiling) {
+        _x = last_clear_x;
+        _y = last_clear_y;
+        _h = last_clear_h;
+#ifdef DEBUG_TILE
+        printf("# fint reach ceiling\n");
+#endif
+        return true; // reached ceiling
+      }
+
+      if (!this_intersecting) {
+        if (intersect_counter) {
+          intersect_counter++;
+
+          // was intersecting, now cleared.
+          // exit with small height above terrain
+#ifdef DEBUG_TILE
+          printf("# fint int->clear\n");
+#endif
+          if (intersect_counter == 10) {
+            _x = x_int;
+            _y = y_int;
+            _h = h_int;
+            return true;
+          }
+        } else {
+          last_clear_x = x_int;
+          last_clear_y = y_int;
+          last_clear_h = h_int;
+        }
+      }
+    }
+
+    if (!intersect_counter && (x_int==x1) && (y_int==y1)) {
+#ifdef DEBUG_TILE
+      printf("# fint cleared\n");
+#endif
+      return false;
+    }
+
+    const int e2 = 2*err;
+    if (e2 > -dy) {
+      err -= dy;
+      x_int += sx;
+      if (step_counter)
+        step_counter--;
+      total_steps++;
+    }
+    if (e2 < dx) {
+      err += dx;
+      y_int += sy;
+      if (step_counter)
+        step_counter--;
+      total_steps++;
+    }
+  }
+
+  // early exit due to inability to find clearance after intersecting
+  if (intersect_counter) {
+    _x = last_clear_x;
+    _y = last_clear_y;
+    _h = last_clear_h;
+#ifdef DEBUG_TILE
+    printf("# fint early exit\n");
+#endif
+    return true;
+  }
+  return false;
+}
+
+#define ACCURATE_TERRAIN_INTERSECTION
+
+short
+RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_index) const
+{
+#ifdef ACCURATE_TERRAIN_INTERSECTION
+
+  // try at tile_index if possible
+  if (tile_index != -1) {
+    const short h = ActiveTiles[tile_index].GetField(px, py);
+    if (!RasterBuffer::is_invalid(h))
+      return h;
+  }
+
+  // failed, so try all active tiles
+  for (unsigned i = 0; i < ActiveTiles.length(); ++i) {
+    const short h = ActiveTiles[i].GetField(px, py);
+    if (!RasterBuffer::is_invalid(h)) {
+      tile_index = i;
+      return h;
+    }
+  }
+#endif
+
+  // still not found, so go to overview
+  tile_index = -1;
+  return Overview.get(px / RTC_SUBSAMPLING, py / RTC_SUBSAMPLING);
 }

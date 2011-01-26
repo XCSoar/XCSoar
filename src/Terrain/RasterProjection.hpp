@@ -60,10 +60,18 @@ public:
 
   gcc_pure std::pair<unsigned, unsigned>
   project(const GeoPoint &location) const {
-    unsigned x = (int)(location.Longitude.value_native() * x_scale) - left;
-    unsigned y = top - (int)(location.Latitude.value_native() * y_scale);
+    const unsigned x = ((int)(location.Longitude.value_native() * x_scale)) - left;
+    const unsigned y = top - ((int)(location.Latitude.value_native() * y_scale));
 
     return std::pair<unsigned, unsigned>(x, y);
+  }
+
+  gcc_pure
+  GeoPoint
+  unproject(const std::pair<unsigned, unsigned> coords) const {
+    const fixed x = fixed(((int)coords.first)+left)/x_scale;
+    const fixed y = fixed(top-((int)coords.second))/y_scale;
+    return GeoPoint(Angle::native(x),Angle::native(y));
   }
 
   /**

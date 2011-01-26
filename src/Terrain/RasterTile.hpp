@@ -1,3 +1,25 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000-2011 The XCSoar Project
+  A detailed list of copyright holders can be found in the file "AUTHORS".
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+*/
 #ifndef XCSOAR_RASTERTILE_HPP
 #define XCSOAR_RASTERTILE_HPP
 
@@ -11,6 +33,8 @@
 #include <tchar.h>
 #include <stddef.h>
 #include <stdio.h>
+
+#define RASTER_SLOPE_FACT 12
 
 class RasterTile : private NonCopyable {
   struct MetaData {
@@ -189,6 +213,14 @@ public:
   short GetFieldInterpolated(unsigned int lx,
                              unsigned int ly) const;
 
+  bool FirstIntersection(unsigned origin_x, unsigned origin_y,
+                         unsigned destination_x, unsigned destination_y,
+                         short h_origin,
+                         short h_dest,
+                         const long slope_fact, const short h_ceiling,
+                         unsigned& int_x, unsigned& int_y, short &h_int,
+                         const bool can_climb) const;
+
 protected:
   void LoadJPG2000(const char *path);
 
@@ -196,6 +228,14 @@ protected:
    * Load a world file (*.tfw or *.j2w).
    */
   bool LoadWorldFile(const TCHAR *path);
+
+  /**
+   * Get field (not interpolated) directly, without bringing tiles to front.
+   * @param px X position/256
+   * @param px Y position/256
+   * @param tile_index Remember position of active tile, or -1 for overview
+   */
+  short GetFieldDirect(const unsigned px, const unsigned py, int &tile_index) const;
 
 public:
   bool LoadOverview(const char *path, const TCHAR *world_file);

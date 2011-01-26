@@ -26,6 +26,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "IO/FileCache.hpp"
 
+#include <algorithm>
 #include <assert.h>
 #include <string.h>
 
@@ -104,4 +105,49 @@ RasterMap::GetFieldInterpolated(const GeoPoint &location) const
 {
   std::pair<unsigned, unsigned> xy = projection.project(location);
   return raster_tile_cache.GetFieldInterpolated(xy.first, xy.second);
+}
+
+bool
+RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
+                             const GeoPoint &destination, const short h_destination,
+                             const short h_virt, const short h_ceiling,
+                             GeoPoint& intx, short &h) const
+{
+  std::pair<unsigned, unsigned> c_origin = projection.project(origin);
+  std::pair<unsigned, unsigned> c_destination = projection.project(destination);
+  c_origin.first = (c_origin.first)>>8;
+  c_origin.second = (c_origin.second)>>8;
+  c_destination.first = (c_destination.first)>>8;
+  c_destination.second = (c_destination.second)>>8;
+  const long c_diff = abs((int)c_origin.first-(int)c_destination.first)+
+    abs((int)c_origin.second-(int)c_destination.second);
+  const bool can_climb = (h_destination< h_virt);
+
+  intx = destination; h = h_destination; // fallback, pass
+  if (c_diff==0) {
+    return false; // no distance
+  }
+
+  const long slope_fact = lround((((long)h_virt)<<RASTER_SLOPE_FACT)/c_diff);
+  const short vh_origin = std::max(h_origin, (short)(h_destination-
+                                                     ((c_diff*slope_fact)>>RASTER_SLOPE_FACT)));
+
+  std::pair<unsigned, unsigned> c_int= c_destination;
+  if (raster_tile_cache.FirstIntersection(c_origin.first, c_origin.second,
+                                          c_destination.first, c_destination.second,
+                                          vh_origin, h_destination,
+                                          slope_fact, h_ceiling,
+                                          c_int.first, c_int.second, h,
+                                          can_climb)) {
+    bool changed = (c_int != c_destination) || ((h > h_destination)&&(c_int == c_destination));
+    if (changed) {
+      c_int.first = (c_int.first<<8);
+      c_int.second = (c_int.second<<8);
+      intx = projection.unproject(c_int);
+      assert(h>= h_origin);
+    }
+    return changed;
+  } else {
+    return false;
+  }
 }

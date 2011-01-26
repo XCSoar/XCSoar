@@ -83,6 +83,12 @@ public:
 
   gcc_pure
   short GetFieldInterpolated(const GeoPoint &location) const;
+
+  gcc_pure
+  bool FirstIntersection(const GeoPoint &origin, const short h_origin,
+                         const GeoPoint &destination, const short h_destination,
+                         const short h_virt, const short h_ceiling,
+                         GeoPoint& intx, short &h) const;
 };
 
 
