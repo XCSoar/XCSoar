@@ -180,9 +180,13 @@ RasterTileCache::PollTiles(int x, int y)
   for (int i = MAX_RTC_TILES - 1; i >= 0; --i) {
     if (tiles[i].VisibilityChanged(x, y))
       retval = true;
-
-    if (tiles[i].IsEnabled() && !ActiveTiles.full())
+    else if (tiles[i].IsEnabled()) {
       ActiveTiles.append(tiles[i]);
+      if (ActiveTiles.full())
+        /* if the limit MAX_ACTIVE_TILES is already reached at this
+           point, don't bother to open the file */
+        return false;
+    }
   }
 
   return retval;
