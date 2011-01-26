@@ -133,6 +133,7 @@ DistanceBearingS(GeoPoint loc1, GeoPoint loc2, Angle *Distance, Angle *Bearing)
     const fixed a = sqr(s1) + cos_lat1 * cos_lat2 * sqr(s2);
 
     fixed distance2 = earth_distance_function(a);
+    assert(!negative(distance2));
     *Distance = Angle::radians(distance2);
   }
 

@@ -515,6 +515,7 @@ fixed::rsqrt() const
   value_t v_last= y.m_nVal;
   while (1) {
     y *= threehalfs-x2*y.sqr();
+    assert(y>= fixed_zero);
     const value_t err = y.m_nVal-v_last;
     if ((y.m_nVal<2) || ((err>0? err:-err) < tolerance))
       return y;
