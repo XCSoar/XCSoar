@@ -46,6 +46,10 @@ Brush Graphics::hAirspaceBrushes[NUMAIRSPACEBRUSHES];
 Bitmap Graphics::hAirspaceBitmap[NUMAIRSPACEBRUSHES];
 #endif
 
+#ifdef HAVE_ALPHA_BLEND
+Brush Graphics::solid_airspace_brushes[NUMAIRSPACECOLORS];
+#endif
+
 Pen Graphics::hpSnail[NUMSNAILCOLORS];
 Pen Graphics::hpSnailVario[NUMSNAILCOLORS];
 
@@ -219,6 +223,12 @@ Graphics::Initialise()
     hAirspaceBrushes[i].set(hAirspaceBitmap[i]);
 
   hAboveTerrainBrush.set(hAboveTerrainBitmap);
+#endif
+
+#ifdef HAVE_ALPHA_BLEND
+  if (AlphaBlendAvailable())
+    for (unsigned i = 0; i < NUMAIRSPACECOLORS; ++i)
+      solid_airspace_brushes[i].set(Colours[i]);
 #endif
 
   hbWind.set(Color::GRAY);
@@ -402,6 +412,12 @@ Graphics::Deinitialise()
 
   hAboveTerrainBrush.reset();
   hAboveTerrainBitmap.reset();
+#endif
+
+#ifdef HAVE_ALPHA_BLEND
+  if (AlphaBlendAvailable())
+    for (unsigned i = 0; i < NUMAIRSPACECOLORS; ++i)
+      solid_airspace_brushes[i].reset();
 #endif
 
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)

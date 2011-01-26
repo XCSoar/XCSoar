@@ -99,6 +99,7 @@ const TCHAR *szProfileAirspacePriority[] = {
 
 const TCHAR szProfileAirspaceWarning[] = _T("AirspaceWarn");
 const TCHAR szProfileAirspaceBlackOutline[] = _T("AirspaceBlackOutline");
+const TCHAR szProfileAirspaceTransparency[] = _T("AirspaceTransparency");
 const TCHAR szProfileAirspaceFillMode[] = _T("AirspaceFillMode");
 const TCHAR szProfileAltMargin[] = _T("AltMargin");
 const TCHAR szProfileAltMode[] = _T("AltitudeMode");

@@ -218,6 +218,8 @@ Profile::Use()
       settings_map.bAirspaceBlackOutline);
 
 #ifndef ENABLE_OPENGL
+  Get(szProfileAirspaceTransparency, settings_map.airspace_transparency);
+
   Temp = (unsigned)settings_map.AirspaceFillMode;
   Get(szProfileAirspaceFillMode, Temp);
   settings_map.AirspaceFillMode = (enum SETTINGS_MAP::AirspaceFillMode)Temp;

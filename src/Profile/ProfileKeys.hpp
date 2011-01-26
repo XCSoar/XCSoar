@@ -75,6 +75,7 @@ extern const TCHAR szProfileExternalWind[];
 extern const TCHAR *szProfileAirspacePriority[];
 extern const TCHAR szProfileAirspaceWarning[];
 extern const TCHAR szProfileAirspaceBlackOutline[];
+extern const TCHAR szProfileAirspaceTransparency[];
 extern const TCHAR szProfileAirspaceFillMode[];
 extern const TCHAR szProfileWarningTime[];
 extern const TCHAR szProfileAcknowledgementTime[];

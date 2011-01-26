@@ -143,6 +143,12 @@ struct SETTINGS_MAP {
 
 #ifndef ENABLE_OPENGL
   /**
+   * Should the airspace be rendered with a transparent brush instead
+   * of a pattern brush?
+   */
+  bool airspace_transparency;
+
+  /**
    * What portion of the airspace area should be filled with the
    * airspace brush?
    */

@@ -95,6 +95,11 @@
       <Edit Name="prpAirspaceFillMode" Caption="Airspace fill mode*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Specifies the mode for filling the airspace area.">
         <DataField DataType="enum"/>
       </Edit>
+
+      <Edit Name="prpAirspaceTransparency" Caption="Airspace transparency*" X="2" Width="-2" Height="22" CaptionWidth="150"
+            Help="If enabled, then airspaces are filled transparently.">
+        <DataField DataType="boolean"/>
+      </Edit>
     </Panel>
   
     <Panel Name="frmDisplay">

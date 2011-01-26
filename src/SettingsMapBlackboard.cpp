@@ -45,6 +45,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.TrailActive = 1;
   settings_map.bAirspaceBlackOutline = false;
 #ifndef ENABLE_OPENGL
+  settings_map.airspace_transparency = false;
   settings_map.AirspaceFillMode = SETTINGS_MAP::AS_FILL_DEFAULT;
 #endif
   settings_map.GliderScreenPosition = 20; // 20% from bottom

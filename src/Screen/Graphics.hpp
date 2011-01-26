@@ -27,6 +27,7 @@ Copyright_License {
 #include "Sizes.h"
 #include "Airspace/AirspaceClass.hpp"
 #include "Screen/Point.hpp"
+#include "Screen/Features.hpp"
 
 class Bitmap;
 class MaskedIcon;
@@ -69,6 +70,13 @@ namespace Graphics {
 #ifndef ENABLE_SDL
   extern Brush hAirspaceBrushes[NUMAIRSPACEBRUSHES];
   extern Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
+#endif
+
+#ifdef HAVE_ALPHA_BLEND
+  /**
+   * Non-pattern brushes used for transparent
+   */
+  extern Brush solid_airspace_brushes[NUMAIRSPACECOLORS];
 #endif
 
   extern Pen hpSnail[NUMSNAILCOLORS];

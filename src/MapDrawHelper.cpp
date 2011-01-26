@@ -112,7 +112,17 @@ MapDrawHelper::buffer_render_finish()
     if (m_use_stencil) {
       m_buffer.copy_transparent_black(m_stencil);
     }
-    m_canvas.copy_and(m_buffer);
+
+#ifdef HAVE_ALPHA_BLEND
+    if (m_settings_map.airspace_transparency && AlphaBlendAvailable())
+      m_canvas.alpha_blend(0, 0, m_canvas.get_width(), m_canvas.get_height(),
+                           m_buffer,
+                           0, 0, m_buffer.get_width(), m_buffer.get_height(),
+                           60);
+    else
+#endif
+      m_canvas.copy_and(m_buffer);
+
     m_buffer_drawn = false;
   }
 }

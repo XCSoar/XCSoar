@@ -323,12 +323,21 @@ private:
     m_buffer.select(Brush(color));
 #else /* !SDL */
 
-    // this color is used as the black bit
-    m_buffer.set_text_color(light_color(Graphics::Colours[color_index]));
+#ifdef HAVE_ALPHA_BLEND
+    if (m_settings_map.airspace_transparency && AlphaBlendAvailable()) {
+      m_buffer.select(Graphics::solid_airspace_brushes[color_index]);
+    } else {
+#endif
+      // this color is used as the black bit
+      m_buffer.set_text_color(light_color(Graphics::Colours[color_index]));
 
-    // get brush, can be solid or a 1bpp bitmap
-    m_buffer.select(Graphics::hAirspaceBrushes[m_settings_map.
-                                            iAirspaceBrush[airspace.get_type()]]);
+      // get brush, can be solid or a 1bpp bitmap
+      m_buffer.select(Graphics::hAirspaceBrushes[m_settings_map.
+                                                 iAirspaceBrush[airspace.get_type()]]);
+#ifdef HAVE_ALPHA_BLEND
+    }
+#endif
+
     m_buffer.null_pen();
 
     if (m_warnings.is_warning(airspace) || m_warnings.is_inside(airspace)) {

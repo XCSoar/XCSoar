@@ -104,6 +104,16 @@ AirspaceConfigPanel::Init(WndForm *_wf)
     wp->RefreshDisplay();
 #endif
   }
+
+#ifndef ENABLE_OPENGL
+#ifdef HAVE_ALPHA_BLEND
+  if (AlphaBlendAvailable())
+    LoadFormProperty(*wf, _T("prpAirspaceTransparency"),
+                     settings_map.airspace_transparency);
+  else
+#endif
+    wf->FindByName(_T("prpAirspaceTransparency"))->hide();
+#endif /* !OpenGL */
 }
 
 
@@ -148,7 +158,14 @@ AirspaceConfigPanel::Save()
   changed |= SaveFormProperty(*wf, _T("prpAirspaceFillMode"),
                               szProfileAirspaceFillMode, tmp);
   settings_map.AirspaceFillMode = (enum SETTINGS_MAP::AirspaceFillMode)tmp;
+
+#ifdef HAVE_ALPHA_BLEND
+  if (AlphaBlendAvailable())
+    changed |= SaveFormProperty(*wf, _T("prpAirspaceTransparency"),
+                                szProfileAirspaceTransparency,
+                                settings_map.airspace_transparency);
 #endif
+#endif /* !OpenGL */
 
   return changed;
 }
