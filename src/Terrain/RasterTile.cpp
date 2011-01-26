@@ -195,27 +195,17 @@ RasterTileCache::PollTiles(int x, int y)
 bool
 RasterTileCache::TileRequest(unsigned index)
 {
-  unsigned num_used = 0;
-
   if (index >= MAX_RTC_TILES) {
     // tile index too big!
     return false;
   }
 
-  if (!tiles[index].is_requested())
+  if (ActiveTiles.full() || !tiles[index].is_requested())
     return false;
 
-  for (unsigned i = 0; i < MAX_RTC_TILES; ++i)
-    if (tiles[i].IsEnabled())
-      num_used++;
-
-  if (num_used < MAX_ACTIVE_TILES) {
-    tiles[index].Enable();
-    ActiveTiles.append(tiles[index]);
-    return true; // want to load this one!
-  }
-
-  return false; // not enough memory for it or not visible anyway
+  tiles[index].Enable();
+  ActiveTiles.append(tiles[index]);
+  return true; // want to load this one!
 }
 
 short
