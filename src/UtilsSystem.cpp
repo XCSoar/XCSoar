@@ -119,11 +119,7 @@ unsigned long FindFreeSpace(const TCHAR *path) {
  */
 void CreateDirectoryIfAbsent(const TCHAR *filename) {
   TCHAR fullname[MAX_PATH];
-
   LocalPath(fullname, filename);
-  if (Directory::Exists(fullname))
-    return;
-
   Directory::Create(fullname);
 }
 
