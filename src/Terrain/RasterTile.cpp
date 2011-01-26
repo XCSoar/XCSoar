@@ -211,6 +211,7 @@ RasterTileCache::TileRequest(unsigned index)
 
   if (num_used < MAX_ACTIVE_TILES) {
     tiles[index].Enable();
+    ActiveTiles.append(tiles[index]);
     return true; // want to load this one!
   }
 
@@ -457,10 +458,8 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file)
 void
 RasterTileCache::UpdateTiles(const char *path, int x, int y)
 {
-  if (PollTiles(x, y)) {
+  if (PollTiles(x, y))
     LoadJPG2000(path);
-    PollTiles(x, y);
-  }
 }
 
 bool
