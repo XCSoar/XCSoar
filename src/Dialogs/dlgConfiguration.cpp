@@ -906,7 +906,6 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("OLC Sprint"), OLC_Sprint);
     dfe->addEnumText(_("OLC FAI"), OLC_FAI);
     dfe->addEnumText(_("OLC Classic"), OLC_Classic);
     dfe->addEnumText(_("OLC League"), OLC_League);

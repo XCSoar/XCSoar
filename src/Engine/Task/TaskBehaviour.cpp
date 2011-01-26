@@ -33,7 +33,7 @@ TaskBehaviour::TaskBehaviour():
     goto_nonlandable(true),
     risk_gamma(0.0),
     enable_olc(false),
-    contest(OLC_Sprint),
+    contest(OLC_League),
     contest_handicap(100),
     safety_mc(fixed_one),
     safety_mc_use_current(false),

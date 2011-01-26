@@ -309,7 +309,11 @@ Profile::Use()
       (TaskBehaviour::AutoMCMode_t)Temp;
 
   if (Get(szProfileOLCRules, Temp))
+  {
       settings_computer.contest = (Contests)Temp;
+      if ( settings_computer.contest == OLC_Sprint )
+        settings_computer.contest = OLC_League; // Handle out-dated Sprint rule in profile
+  }
 
   Get(szProfileHandicap,
       settings_computer.contest_handicap);
