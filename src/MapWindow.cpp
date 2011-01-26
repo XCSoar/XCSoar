@@ -103,30 +103,35 @@ MapWindow::UpdateTopology(unsigned max_update)
     return 0;
 }
 
-void
+bool
 MapWindow::UpdateTerrain()
 {
   if (terrain == NULL ||
       Distance(terrain_center, visible_projection.GetGeoLocation()) < fixed(1000))
-    return;
+    return false;
 
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations
   RasterTerrain::ExclusiveLease lease(*terrain);
   lease->SetViewCenter(visible_projection.GetGeoLocation());
-  terrain_center = visible_projection.GetGeoLocation();
+  if (!lease->IsDirty())
+    terrain_center = visible_projection.GetGeoLocation();
+
+  return lease->IsDirty();
 }
 
-void
+bool
 MapWindow::UpdateWeather()
 {
   // always service weather even if it's not used by the map,
   // because it's potentially used by other calculations
 
-  if (weather != NULL) {
-    weather->Reload((int)Basic().Time);
-    weather->SetViewCenter(visible_projection.GetGeoLocation());
-  }
+  if (weather == NULL)
+    return false;
+
+  weather->Reload((int)Basic().Time);
+  weather->SetViewCenter(visible_projection.GetGeoLocation());
+  return weather->IsDirty();
 }
 
 /**

@@ -84,13 +84,11 @@ GlueMapWindow::Idle()
       break;
 
     case 1:
-      UpdateTerrain();
-      terrain_dirty = false;
+      terrain_dirty = UpdateTerrain();
       break;
 
     case 2:
-      UpdateWeather();
-      weather_dirty = false;
+      weather_dirty = UpdateWeather();
       break;
     }
 

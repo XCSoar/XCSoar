@@ -49,6 +49,10 @@ public:
     return request;
   }
 
+  void clear_requested() {
+    request = false;
+  }
+
   bool SaveCache(FILE *file) const;
   bool LoadCache(FILE *file);
 
@@ -143,6 +147,8 @@ private:
   /** is the "bounds" attribute valid? */
   bool bounds_initialised;
 
+  bool dirty;
+
   RasterTile tiles[MAX_RTC_TILES];
   mutable ActiveList<const RasterTile, MAX_ACTIVE_TILES> ActiveTiles;
   RasterBuffer Overview;
@@ -173,6 +179,15 @@ public:
   bool LoadCache(FILE *file);
 
   void UpdateTiles(const char *path, int x, int y);
+
+  /**
+   * Determines if there are still tiles scheduled to be loaded.  Call
+   * this after UpdateTiles() to determine if UpdateTiles() should be
+   * called again soon.
+   */
+  bool IsDirty() const {
+    return dirty;
+  }
 
   bool GetInitialised() const {
     return initialised;

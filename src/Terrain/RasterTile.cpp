@@ -170,17 +170,26 @@ RasterTileCache::SetTile(unsigned index,
 bool
 RasterTileCache::PollTiles(int x, int y)
 {
-  bool retval = false;
-
   if (scan_overview)
     return false;
 
   ActiveTiles.clear();
+  dirty = false;
 
+  enum {
+    /**
+     * Maximum number of tiles loaded at a time, to reduce system load
+     * peaks.
+    */
+    MAX_ACTIVATE = MAX_ACTIVE_TILES > 32 ? 16 : MAX_ACTIVE_TILES / 2,
+  };
+
+  unsigned num_activate = 0;
   for (int i = MAX_RTC_TILES - 1; i >= 0; --i) {
-    if (tiles[i].VisibilityChanged(x, y))
-      retval = true;
-    else if (tiles[i].IsEnabled()) {
+    if (tiles[i].VisibilityChanged(x, y)) {
+      if (++num_activate > MAX_ACTIVATE)
+        tiles[i].clear_requested();
+    } else if (tiles[i].IsEnabled()) {
       ActiveTiles.append(tiles[i]);
       if (ActiveTiles.full())
         /* if the limit MAX_ACTIVE_TILES is already reached at this
@@ -189,7 +198,8 @@ RasterTileCache::PollTiles(int x, int y)
     }
   }
 
-  return retval;
+  dirty = num_activate > MAX_ACTIVATE;
+  return num_activate > 0;
 }
 
 bool

@@ -323,7 +323,18 @@ RasterWeather::SetViewCenter(const GeoPoint &location)
     return;
 
   weather_map->SetViewCenter(location);
-  center = location;
+  if (!weather_map->IsDirty())
+    center = location;
+}
+
+bool
+RasterWeather::IsDirty() const
+{
+  if (_parameter == 0 || weather_map == NULL)
+    return false;
+
+  Poco::ScopedRWLock protect(lock, false);
+  return weather_map->IsDirty();
 }
 
 const TCHAR*

@@ -57,6 +57,10 @@ public:
 
   void ValueToText(TCHAR* Buffer, short val) const;
   void SetViewCenter(const GeoPoint &location);
+
+  gcc_pure
+  bool IsDirty() const;
+
   gcc_const static const TCHAR *ItemLabel(unsigned i);
   gcc_const static const TCHAR *ItemHelp(unsigned i);
 

@@ -60,6 +60,15 @@ public:
   void SetViewCenter(const GeoPoint &location);
 
   /**
+   * Determines if SetViewCenter() should be called again to continue
+   * loading.
+   */
+  gcc_pure
+  bool IsDirty() const {
+    return raster_tile_cache.IsDirty();
+  }
+
+  /**
    * @see RasterProjection::pixel_distance()
    */
   gcc_pure fixed
