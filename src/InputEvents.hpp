@@ -59,8 +59,10 @@ namespace InputEvents
    * id.  Returns 0 if the key was not found.
    */
   unsigned key_to_event(mode mode, unsigned key_code);
+  unsigned gesture_to_event(mode mode, const TCHAR *data);
 
   bool processKey(unsigned key);
+  bool processGesture(const TCHAR *data);
   bool processNmea(unsigned key);
   bool processButton(unsigned bindex);
   bool processGlideComputer(unsigned gce_id);

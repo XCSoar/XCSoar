@@ -112,6 +112,12 @@ struct flat_label {
   const TCHAR *label;
 };
 
+struct flat_gesture_map {
+  unsigned char mode;
+  unsigned short event;
+  const TCHAR *data;
+};
+
 static InputConfig input_config;
 
 #define MAX_GCE_QUEUE 10
@@ -152,6 +158,7 @@ static void
 apply_defaults(const TCHAR *const* default_modes,
                const InputConfig::Event *default_events,
                unsigned num_default_events,
+               const flat_gesture_map *default_gesture2event,
                const flat_event_map *default_key2event,
                const flat_event_map *default_gc2event,
                const flat_event_map *default_n2event,
@@ -167,6 +174,11 @@ apply_defaults(const TCHAR *const* default_modes,
   std::copy(default_events, default_events + num_default_events,
             input_config.Events + 1);
 
+  while (default_gesture2event->event > 0) {
+    input_config.Gesture2Event[default_gesture2event->mode].add(default_gesture2event->data,default_gesture2event->event);
+    ++default_gesture2event;
+  }
+  
   while (default_key2event->event > 0) {
     input_config.Key2Event[default_key2event->mode][default_key2event->key] =
       default_key2event->event;
@@ -212,6 +224,7 @@ InputEvents::readFile()
       apply_defaults(default_modes,
                      default_events,
                      sizeof(default_events) / sizeof(default_events[0]),
+                     default_gesture2event,
                      default_key2event, default_gc2event, default_n2event,
                      default_labels);
     } else {
@@ -219,6 +232,7 @@ InputEvents::readFile()
       apply_defaults(default_modes,
                      default_events,
                      sizeof(default_events) / sizeof(default_events[0]),
+                     default_gesture2event,
                      default_key2event, default_gc2event, default_n2event,
                      default_labels);
     }
@@ -470,6 +484,31 @@ InputEvents::processKey(unsigned dWord)
   return true;
 }
 
+unsigned
+InputEvents::gesture_to_event(mode mode, const TCHAR *data)
+{
+  unsigned event_id = input_config.Gesture2Event[mode].get(data, 0);
+  if (event_id == 0)
+    /* not found in this mode - try the default binding */
+    event_id = input_config.Gesture2Event[0].get(data, 0);
+  
+  return event_id;
+}
+
+bool
+InputEvents::processGesture(const TCHAR *data)
+{
+  // get current mode
+  InputEvents::mode mode = InputEvents::getModeID();
+  unsigned event_id = gesture_to_event(mode, data);
+  if (event_id)
+  {
+    InputEvents::processGo(event_id);
+    return true;
+  }
+  return false;
+}
+
 bool
 InputEvents::processNmea(unsigned ne_id)
 {
@@ -614,7 +653,7 @@ InputEvents::processGo(unsigned eventid)
   }
   */
 
-  // evnentid 0 is special for "noop" - otherwise check event
+  // eventid 0 is special for "noop" - otherwise check event
   // exists (pointer to function)
   if (eventid) {
     if (input_config.Events[eventid].event) {

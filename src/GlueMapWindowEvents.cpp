@@ -267,34 +267,7 @@ GlueMapWindow::on_mouse_gesture(const TCHAR* gesture)
   if (!XCSoarInterface::SettingsComputer().EnableGestures)
     return false;
 
-  if (_tcscmp(gesture, _T("U")) == 0) {
-    InputEvents::processKey(VK_UP);
-    return true;
-  }
-  if (_tcscmp(gesture, _T("D")) == 0) {
-    InputEvents::processKey(VK_DOWN);
-    return true;
-  }
-  if (_tcscmp(gesture, _T("L")) == 0) {
-    InputEvents::processKey(VK_LEFT);
-    return true;
-  }
-  if (_tcscmp(gesture, _T("R")) == 0) {
-    InputEvents::processKey(VK_RIGHT);
-    return true;
-  }
-
-  if (_tcscmp(gesture, _T("DU")) == 0) {
-    InputEvents::ShowMenu();
-    return true;
-  }
-
-  if (_tcscmp(gesture, _T("DR")) == 0) {
-    InputEvents::eventGotoLookup(_T(""));
-    return true;
-  }
-
-  return false;
+  return InputEvents::processGesture(gesture);
 }
 
 bool

@@ -296,6 +296,38 @@ type=key
 data=RIGHT
 event=ScreenModes toggle
 
+# Gestures
+
+mode=default
+type=gesture
+data=U
+event=Zoom in
+
+mode=default
+type=gesture
+data=D
+event=Zoom out
+
+mode=default
+type=gesture
+data=L
+event=MarkLocation
+
+mode=default
+type=gesture
+data=R
+event=ScreenModes toggle
+
+mode=default
+type=gesture
+data=DR
+event=GotoLookup
+
+mode=default
+type=gesture
+data=DU
+event=Mode Menu
+
 ###
 
 mode=default

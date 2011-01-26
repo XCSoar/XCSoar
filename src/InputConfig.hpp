@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "InputEvents.hpp"
 #include "MenuData.hpp"
+#include "Util/RadixTree.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -62,6 +63,8 @@ struct InputConfig {
 
   // Key map to Event - Keys (per mode) mapped to events
   unsigned Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
+
+  RadixTree<unsigned> Gesture2Event[MAX_MODE];
 
   // Glide Computer Events
   unsigned GC2Event[MAX_MODE][GCE_COUNT];

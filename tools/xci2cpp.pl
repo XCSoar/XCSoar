@@ -11,6 +11,7 @@ my %mode_map = map { $_ => $i++ } @modes;
 my @events;
 my %events2;
 my @keys;
+my @gestures;
 my @gc;
 my @nmea;
 my @labels;
@@ -75,6 +76,9 @@ sub commit(\%$) {
         } elsif ($rec->{type} eq "ne") {
             my $data = $rec->{data} || die "Invalid entry near $line - no NE data\n";
             push @nmea, [ $mode_id, $data, $event_id ];
+        } elsif ($rec->{type} eq "gesture") {
+            my $data = $rec->{data} || die "Invalid entry near $line - no Gesture data\n";
+            push @gestures, [ $mode_id, $event_id, $data ];
         } elsif ($rec->{type} ne "none") {
             die "Invalid record near $line - No valid type";
         }
@@ -167,4 +171,12 @@ foreach my $l (@labels) {
     print qq|  { $mode, $location, $event, _T("$label") },\n|;
 }
 print "  { 0, 0, 0, NULL },\n";
+print "};\n";
+
+print "static const struct flat_gesture_map default_gesture2event[] = {\n";
+foreach my $g (@gestures) {
+    my ($mode, $event, $data) = @$g;
+    print "  { $mode, $event, _T(\"$data\") },\n";
+}
+print "  { 0, 0, NULL },\n";
 print "};\n";

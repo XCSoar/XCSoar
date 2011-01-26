@@ -120,6 +120,25 @@ struct EventBuilder {
         else
           LogStartUp(_T("Invalid GCE data: %s at %u"), data.c_str(), line);
 
+        // Make gesture (Gesture Event)
+        // Key - Key Event
+      } else if (type.equals(_T("gesture"))) {
+        // Check data for invalid characters:
+        bool valid = true;
+        for (const TCHAR* c = data; *c; c++)
+          if (*c != _T('U') &&
+              *c != _T('D') &&
+              *c != _T('R') &&
+              *c != _T('L'))
+            valid = false;
+        
+        if (valid) {
+          // One entry per key: delete old, create new
+          config.Gesture2Event[mode_id].remove(data.c_str());
+          config.Gesture2Event[mode_id].add(data.c_str(), event_id);
+        } else
+          LogStartUp(_T("Invalid gesture data: %s at %u"), data.c_str(), line);
+
         // Make ne (NMEA Event)
         // NE - NMEA Event
       } else if (type.equals(_T("ne"))) {
