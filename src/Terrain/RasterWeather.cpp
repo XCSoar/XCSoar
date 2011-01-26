@@ -312,7 +312,7 @@ RasterWeather::_Close()
 void
 RasterWeather::SetViewCenter(const GeoPoint &location)
 {
-  if (_parameter == 0)
+  if (_parameter == 0 || weather_map == NULL)
     // will be drawing terrain
     return;
 
@@ -322,10 +322,8 @@ RasterWeather::SetViewCenter(const GeoPoint &location)
   if (Distance(center, location) < fixed(1000))
     return;
 
+  weather_map->SetViewCenter(location);
   center = location;
-
-  if (weather_map != NULL)
-    weather_map->SetViewCenter(location);
 }
 
 const TCHAR*
