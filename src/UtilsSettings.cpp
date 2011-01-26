@@ -125,11 +125,6 @@ SettingsLeave()
                             WaypointFileChanged, false);
     }
 
-    if (terrain != NULL) {
-      RasterTerrain::UnprotectedLease lease(*terrain);
-      lease->SetViewCenter(XCSoarInterface::Basic().Location);
-    }
-
     XCSoarInterface::main_window.map.set_terrain(terrain);
   }
 
