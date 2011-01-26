@@ -247,5 +247,6 @@ void mag_rmag(const fixed x,
     return;
   }
   is = rsqrt(mag_sq);
+  assert(positive(is));
   s = is*mag_sq;
 }
