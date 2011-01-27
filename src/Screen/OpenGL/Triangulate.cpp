@@ -129,7 +129,7 @@ polygon_to_triangle(const RasterPoint *points, unsigned num_points,
   }
 
   // thinning
-  if (min_distance > 1) {
+  if (min_distance > 0) {
     for (unsigned a=start, b=next[a], c=next[b], heat=0;
          num_points > 3 && heat < num_points;
          a=b, b=c, c=next[c], heat++) {
