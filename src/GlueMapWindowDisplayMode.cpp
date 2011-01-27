@@ -191,6 +191,9 @@ GlueMapWindow::UpdateMapScale()
   if (GetDisplayMode() == dmCircling)
     return;
 
+  if (SettingsMap().EnablePan)
+    return;
+
   fixed wpd = Calculated().AutoZoomDistance;
   if (SettingsMap().AutoZoom && positive(wpd)) {
     fixed AutoZoomFactor = IsOriginCentered() ? fixed(2.5) : fixed_four;
