@@ -41,6 +41,18 @@ TabBarControl::TabBarControl(ContainerWindow &_parent,
   theTabDisplay = new TabDisplay(*this, TabBarHeight);
 }
 
+const RECT
+TabBarControl::get_client_rectangle()
+{
+  RECT rc;
+  rc.top = TabBarHeight;
+  rc.bottom = this->get_bottom();
+  rc.left = 0;
+  rc.right = this->get_width();
+
+  return rc;
+}
+
 bool
 TabBarControl::GetButtonIsButtonOnly(unsigned i)
 {

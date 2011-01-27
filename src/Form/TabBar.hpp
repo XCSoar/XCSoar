@@ -132,6 +132,7 @@ public:
   const RECT GetButtonSize(unsigned i);
   const TCHAR* GetButtonCaption(unsigned i);
   bool GetButtonIsButtonOnly(unsigned i);
+  const RECT get_client_rectangle();
 
 protected:
   TabDisplay * theTabDisplay;
