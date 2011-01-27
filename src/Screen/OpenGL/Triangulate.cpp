@@ -22,7 +22,9 @@ Copyright_License {
 */
 
 #include "Screen/OpenGL/Triangulate.hpp"
+#include "Screen/Point.hpp"
 
+#include <algorithm>
 #include <assert.h>
 
 /**
@@ -82,36 +84,38 @@ left_bend(const RasterPoint &a, const RasterPoint &b, const RasterPoint &c)
 }
 
 /**
- * cutting ears - simple and slow, no support for holes
+ * cutting ears - simple algorithm, no support for holes
+ * Optionally removes all points from a polygon that are too close together.
  *
  * @param points polygon coordinates
  * @param num_points numer of polygon vertices
  * @param triangles triangle indices, size: 3*(num_points-2)
+ * @param min_distance minimum distance a point should have from its neighbours
  *
  * @return Returns the number of triangle indices. Possible values:
  *         0: failure,
- *         3*(num_points-3): success with redundant start/end point
- *         3*(num_points-2): success,
+ *         3 to 3*(num_points-3): success
  */
 unsigned
 polygon_to_triangle(const RasterPoint *points, unsigned num_points,
-                    GLushort *triangles)
+                    GLushort *triangles, unsigned min_distance)
 {
-  if (num_points < 3)
-    return 0;
+  //const unsigned orig_num_points = num_points;
 
   // no redundant start/end please
-  if (points[0].x == points[num_points-1].x &&
+  if (num_points >= 1 &&
+      points[0].x == points[num_points-1].x &&
       points[0].y == points[num_points-1].y) {
     num_points--;
-    if (num_points < 3)
-      return 0;
   }
-  const int triangle_idx_count = 3*(num_points-2);
+
+  if (num_points < 3)
+    return 0;
 
   assert(num_points < 65536);
   GLushort *next = new GLushort[num_points];  // next vertex pointer
   GLushort *t = triangles;
+  GLushort start = 0;  // index of the first vertex
 
   // initialize next pointer counterclockwise
   if (polygon_rotates_left(points, num_points)) {
@@ -124,8 +128,44 @@ polygon_to_triangle(const RasterPoint *points, unsigned num_points,
       next[i] = i-1;
   }
 
-  unsigned heat = 0; // if polygon edges overlap we may loop endlessly
-  for (unsigned a=0, b=next[a], c=next[b]; num_points > 2; a=b, b=c, c=next[c]) {
+  // thinning
+  if (min_distance > 1) {
+    for (unsigned a=start, b=next[a], c=next[b], heat=0;
+         num_points > 3 && heat < num_points;
+         a=b, b=c, c=next[c], heat++) {
+      unsigned distance = manhattan_distance(points[a], points[b]);
+      if (distance < min_distance) {
+        bool point_removeable = true;
+        if (distance != 0) {
+          for (unsigned p = next[c]; p != a; p = next[p]) {
+            if (inside_triangle(points[p], points[a], points[b], points[c])) {
+              point_removeable = false;
+              break;
+            }
+          }
+        }
+        if (point_removeable) {
+          // remove node b from polygon
+          if (b == start)
+            start = std::min(a, c);  // keep track of the smallest index
+          next[a] = c;
+          num_points--;
+          // 'a' should stay the same in the next loop
+          b = a;
+          // reset heat
+          heat = 0;
+        }
+      }
+    }
+    //LogDebug(_T("polygon thinning (%u) removed %u of %u vertices"),
+    //         min_distance, orig_num_points-num_points, orig_num_points);
+  }
+
+  // triangulation
+  const int triangle_idx_count = 3*(num_points-2);
+  for (unsigned a=start, b=next[a], c=next[b], heat=0;
+       num_points > 2;
+       a=b, b=c, c=next[c]) {
     if (left_bend(points[a], points[b], points[c])) {
       bool ear_cuttable = true;
       for (unsigned p = next[c]; p != a; p = next[p]) {
@@ -147,6 +187,7 @@ polygon_to_triangle(const RasterPoint *points, unsigned num_points,
       }
     }
     if (heat++ > num_points) {
+      // if polygon edges overlap we may loop endlessly
       //LogDebug(_T("polygon_to_triangle: bad polygon"));
       delete next;
       return 0;
