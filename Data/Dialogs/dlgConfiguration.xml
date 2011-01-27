@@ -134,7 +134,7 @@
     </Panel>
 
     <Panel Name="frmWaypoints">
-      <Edit Name="prpWaypointLabels" Caption="Label format" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Determines how labels are displayed with each waypoint:&#10;[Names] The full name of each waypoint is displayed.&#10;[Numbers] The waypoint number of each waypoint is displayed.&#10;[None] No names are displayed with the waypoints.&#10;[Names in task] Names are only displayed for waypoints that are in the active task as well as the home airfield.&#10;[First 3] The first 3 letters of the waypoint name are displayed.&#10;[First 5] The first 5 letters of the waypoint name are displayed.&#10;[First word] The first word of the waypoint name is displayed.">
+      <Edit Name="prpWaypointLabels" Caption="Label format" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Determines how labels are displayed with each waypoint:&#10;[Full Name] The full name of each waypoint is displayed.&#10;[First Word of Name] The first word of the waypoint name is displayed.&#10;[First 3 Letters] The first 3 letters of the waypoint name are displayed.&#10;[First 5 Letters] The first 5 letters of the waypoint name are displayed.&#10;[None] No waypoint name is displayed.">
         <DataField DataType="enum"/>
       </Edit>
 
