@@ -43,6 +43,17 @@ polygon_rotates_left(const RasterPoint *points, unsigned num_points)
 }
 
 /**
+ * Test whether the area of a triangle is zero, or not.
+ */
+static inline bool
+triangle_empty(const RasterPoint &a, const RasterPoint &b,
+               const RasterPoint &c)
+{
+  return ((b.x-a.x) * (int)(c.y-b.y) -
+          (b.y-a.y) * (int)(c.x-b.x)) == 0;
+}
+
+/**
  * Test whether point p ist left of line (a,b) or not
  */
 static inline bool
@@ -133,28 +144,31 @@ polygon_to_triangle(const RasterPoint *points, unsigned num_points,
     for (unsigned a=start, b=next[a], c=next[b], heat=0;
          num_points > 3 && heat < num_points;
          a=b, b=c, c=next[c], heat++) {
-      unsigned distance = manhattan_distance(points[a], points[b]);
-      if (distance < min_distance) {
-        bool point_removeable = true;
-        if (distance != 0) {
-          for (unsigned p = next[c]; p != a; p = next[p]) {
-            if (inside_triangle(points[p], points[a], points[b], points[c])) {
-              point_removeable = false;
-              break;
+      bool point_removeable = triangle_empty(points[a], points[b], points[c]);
+      if (!point_removeable) {
+        unsigned distance = manhattan_distance(points[a], points[b]);
+        if (distance < min_distance) {
+          point_removeable = true;
+          if (distance != 0) {
+            for (unsigned p = next[c]; p != a; p = next[p]) {
+              if (inside_triangle(points[p], points[a], points[b], points[c])) {
+                point_removeable = false;
+                break;
+              }
             }
           }
         }
-        if (point_removeable) {
-          // remove node b from polygon
-          if (b == start)
-            start = std::min(a, c);  // keep track of the smallest index
-          next[a] = c;
-          num_points--;
-          // 'a' should stay the same in the next loop
-          b = a;
-          // reset heat
-          heat = 0;
-        }
+      }
+      if (point_removeable) {
+        // remove node b from polygon
+        if (b == start)
+          start = std::min(a, c);  // keep track of the smallest index
+        next[a] = c;
+        num_points--;
+        // 'a' should stay the same in the next loop
+        b = a;
+        // reset heat
+        heat = 0;
       }
     }
     //LogDebug(_T("polygon thinning (%u) removed %u of %u vertices"),
