@@ -66,8 +66,12 @@ public:
     height = _height;
 
 #ifdef ENABLE_OPENGL
-    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+#ifdef ANDROID
+    glTranslatex((GLfixed)relative_x << 16, (GLfixed)relative_y << 16, 0);
+#else
     glTranslatef(relative_x, relative_y, 0);
+#endif
 #endif
   }
 
@@ -81,8 +85,7 @@ public:
     OpenGL::translate_y -= relative_y;
 #endif
 
-    glMatrixMode(GL_PROJECTION);
-    glTranslatef(-relative_x, -relative_y, 0);
+    glPopMatrix();
 #endif
   }
 };

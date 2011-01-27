@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/LabelBlock.hpp"
+#include "Math/Matrix2D.hpp"
 #include "shapelib/map.h"
 #include "Util/AllocatedArray.hpp"
 #include "Geo/GeoClip.hpp"
@@ -73,31 +74,89 @@ TopologyFileRenderer::Paint(Canvas &canvas,
 
   // get drawing info
 
-  int iskip = file.GetSkipSteps(map_scale);
-
   const rectObj screenRect =
     ConvertRect(projection.GetScreenBounds());
 
+#ifdef ENABLE_OPENGL
+  const unsigned level = file.thinning_level(map_scale);
+  const unsigned min_distance = file.min_point_distance(level);
+
+#ifndef ANDROID
+  float opengl_matrix[16];
+  glGetFloatv(GL_MODELVIEW_MATRIX, opengl_matrix);
+#endif
+
+  glPushMatrix();
+#ifdef ANDROID
+#ifdef FIXED_MATH
+  GLfixed angle = projection.GetScreenAngle().value_degrees().as_glfixed();
+  GLfixed scale = projection.GetScale().as_glfixed_scale();
+#else
+  GLfixed angle = projection.GetScreenAngle().value_degrees() * (1<<16);
+  GLfixed scale = projection.GetScale() * (1LL<<32);
+#endif
+  glTranslatex((int)projection.GetScreenOrigin().x << 16,
+               (int)projection.GetScreenOrigin().y << 16, 0);
+  glRotatex(angle, 0, 0, -(1<<16));
+  glScalex(scale, scale, 1<<16);
+#else
+  glTranslatef(projection.GetScreenOrigin().x, projection.GetScreenOrigin().y, 0.);
+  glRotatef(projection.GetScreenAngle().value_degrees(), 0., 0., -1.);
+  glScalef(projection.GetScale(), projection.GetScale(), 1.);
+#endif
+#else // !ENABLE_OPENGL
   const GeoClip clip(projection.GetScreenBounds().scale(fixed(1.1)));
   AllocatedArray<GeoPoint> geo_points;
 
+  int iskip = file.GetSkipSteps(map_scale);
+#endif
+
   for (unsigned i = 0; i < file.size(); ++i) {
-    const XShape *cshape = file[i];
+    XShape *cshape = file[i];
     if (!cshape || !cshape->is_visible(file.get_label_field()))
       continue;
 
     if (!projection.GetScreenBounds().overlaps(cshape->get_bounds()))
       continue;
 
+#ifdef ENABLE_OPENGL
+    const ShapePoint *points = cshape->get_points();
+
+    const ShapePoint translation =
+      cshape->shape_translation(projection.GetGeoLocation());
+    glPushMatrix();
+#ifdef ANDROID
+    glTranslatex(translation.x, translation.y, 0);
+#else
+    glTranslatef(translation.x, translation.y, 0.);
+#endif
+#else // !ENABLE_OPENGL
     const unsigned short *lines = cshape->get_lines();
     const unsigned short *end_lines = lines + cshape->get_number_of_lines();
     const GeoPoint *points = cshape->get_points();
+#endif
 
     switch (cshape->get_type()) {
     case MS_SHAPE_POINT:
       if (!icon.defined())
         break;
 
+#ifdef ENABLE_OPENGL
+      // TODO: for now i assume there is only one point for point-XShapes
+      {
+        RasterPoint sc;
+        if (projection.GeoToScreenIfVisible(cshape->get_center(), sc)) {
+#ifndef ANDROID
+          glPushMatrix();
+          glLoadMatrixf(opengl_matrix);
+#endif
+          icon.draw(canvas, sc.x, sc.y);
+#ifndef ANDROID
+          glPopMatrix();
+#endif
+        }
+      }
+#else // !ENABLE_OPENGL
       for (; lines < end_lines; ++lines) {
         const GeoPoint *end = points + *lines;
         for (; points < end; ++points) {
@@ -106,9 +165,32 @@ TopologyFileRenderer::Paint(Canvas &canvas,
             icon.draw(canvas, sc.x, sc.y);
         }
       }
+#endif
       break;
 
     case MS_SHAPE_LINE:
+#ifdef ENABLE_OPENGL
+#ifdef ANDROID
+      glVertexPointer(2, GL_FIXED, 0, &points[0].x);
+#else
+      glVertexPointer(2, GL_INT, 0, &points[0].x);
+#endif
+
+      if (level == 0) {
+        const GLushort *count = cshape->get_lines();
+        const GLushort *end_count = count + cshape->get_number_of_lines();
+        for (int offset = 0; count < end_count; offset += *count++)
+          glDrawArrays(GL_LINE_STRIP, offset, *count);
+      } else {
+        const GLushort *index_count;
+        const GLushort *indices;
+        indices = cshape->get_indices(level, min_distance, index_count);
+        const GLushort *end_count = index_count + cshape->get_number_of_lines();
+        for (; index_count < end_count; indices += *index_count++)
+          glDrawElements(GL_LINE_STRIP, *index_count, GL_UNSIGNED_SHORT,
+                         indices);
+      }
+#else // !ENABLE_OPENGL
       for (; lines < end_lines; ++lines) {
         unsigned msize = *lines;
         shape_renderer.begin_shape(msize);
@@ -122,12 +204,26 @@ TopologyFileRenderer::Paint(Canvas &canvas,
 
         shape_renderer.finish_polyline(canvas);
       }
+#endif
       break;
 
     case MS_SHAPE_POLYGON:
+#ifdef ENABLE_OPENGL
+      {
+        const GLushort *index_count;
+        const GLushort *triangles = cshape->get_indices(level, min_distance,
+                                                        index_count);
+
+#ifdef ANDROID
+        glVertexPointer(2, GL_FIXED, 0, &points[0].x);
+#else
+        glVertexPointer(2, GL_INT, 0, &points[0].x);
+#endif
+        glDrawElements(GL_TRIANGLES, *index_count, GL_UNSIGNED_SHORT,
+                       triangles);
+      }
+#else // !ENABLE_OPENGL
       for (; lines < end_lines; ++lines) {
-        // TODO: removing random points from polygons can cause overlapping
-        //       edges, which may cause triangulation to fail
         unsigned msize = *lines / iskip;
 
         /* copy all polygon points into the geo_points array and clip
@@ -153,9 +249,16 @@ TopologyFileRenderer::Paint(Canvas &canvas,
 
         shape_renderer.finish_polygon(canvas);
       }
+#endif
       break;
     }
+#ifdef ENABLE_OPENGL
+    glPopMatrix();
+#endif
   }
+#ifdef ENABLE_OPENGL
+  glPopMatrix();
+#endif
 
   shape_renderer.commit();
 }
@@ -189,11 +292,17 @@ TopologyFileRenderer::PaintLabels(Canvas &canvas,
   rectObj screenRect =
     ConvertRect(projection.GetScreenBounds());
 
+#ifdef ENABLE_OPENGL
+  Matrix2D m1;
+  m1.Translate(projection.GetScreenOrigin());
+  m1.Rotate(projection.GetScreenAngle());
+  m1.Scale(projection.GetScale());
+#endif
+
   for (unsigned i = 0; i < file.size(); ++i) {
     const XShape *cshape = file[i];
     if (!cshape || !cshape->is_visible(file.get_label_field()))
       continue;
-
 
     const TCHAR *label = cshape->get_label();
     if (label == NULL)
@@ -204,15 +313,30 @@ TopologyFileRenderer::PaintLabels(Canvas &canvas,
 
     const unsigned short *lines = cshape->get_lines();
     const unsigned short *end_lines = lines + cshape->get_number_of_lines();
+#ifdef ENABLE_OPENGL
+    const ShapePoint *points = cshape->get_points();
+
+    Matrix2D m2(m1);
+    m2.Translatex(cshape->shape_translation(projection.GetGeoLocation()));
+#else
     const GeoPoint *points = cshape->get_points();
+#endif
 
     for (; lines < end_lines; ++lines) {
       int minx = canvas.get_width();
       int miny = canvas.get_height();
 
+#ifdef ENABLE_OPENGL
+      const ShapePoint *end = points + *lines;
+#else
       const GeoPoint *end = points + *lines;
+#endif
       for (; points < end; points += iskip) {
+#ifdef ENABLE_OPENGL
+        RasterPoint pt = m2.Apply(*points);
+#else
         RasterPoint pt = projection.GeoToScreen(*points);
+#endif
 
         if (pt.x <= minx) {
           minx = pt.x;

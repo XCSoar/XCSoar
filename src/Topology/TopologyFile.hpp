@@ -113,12 +113,24 @@ public:
     return shpCache.size();
   }
 
-  const XShape *operator[](unsigned i) const {
+  XShape *operator[](unsigned i) const {
     return shpCache[i];
   }
 
   gcc_pure
   unsigned GetSkipSteps(fixed map_scale) const;
+
+#ifdef ENABLE_OPENGL
+  /**
+   * @return thinning level, range: 0 .. XShape::THINNING_LEVELS-1
+   */
+  unsigned thinning_level(fixed map_scale) const;
+
+  /**
+   * @return minimum distance between points in ShapePoint coordinates
+   */
+  unsigned min_point_distance(unsigned level) const;
+#endif
 
   /**
    * @return true if new data from the topology file has been loaded

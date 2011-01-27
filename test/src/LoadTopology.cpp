@@ -36,6 +36,27 @@ Copyright_License {
 #include <stdio.h>
 #include <tchar.h>
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Triangulate.hpp"
+
+unsigned
+polygon_to_triangle(const RasterPoint *points, unsigned num_points,
+                    GLushort *triangles, unsigned min_distance)
+{
+  return 0;
+}
+
+#if RASTER_POINT_SIZE != SHAPE_POINT_SIZE
+unsigned
+polygon_to_triangle(const ShapePoint *points, unsigned num_points,
+                    GLushort *triangles, unsigned min_distance)
+{
+  return 0;
+}
+#endif
+
+#endif /* OpenGL */
+
 class TestProjection : public WindowProjection {
 public:
   TestProjection() {

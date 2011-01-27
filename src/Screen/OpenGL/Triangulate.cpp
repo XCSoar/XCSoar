@@ -30,8 +30,9 @@ Copyright_License {
 /**
  * Calculate signed area of the polygon to determine the rotary direction.
  */
+template <typename PT>
 static inline bool
-polygon_rotates_left(const RasterPoint *points, unsigned num_points)
+polygon_rotates_left(const PT *points, unsigned num_points)
 {
   int area = 0;
 
@@ -45,9 +46,9 @@ polygon_rotates_left(const RasterPoint *points, unsigned num_points)
 /**
  * Test whether the area of a triangle is zero, or not.
  */
+template <typename PT>
 static inline bool
-triangle_empty(const RasterPoint &a, const RasterPoint &b,
-               const RasterPoint &c)
+triangle_empty(const PT &a, const PT &b, const PT &c)
 {
   return ((b.x-a.x) * (int)(c.y-b.y) -
           (b.y-a.y) * (int)(c.x-b.x)) == 0;
@@ -56,9 +57,9 @@ triangle_empty(const RasterPoint &a, const RasterPoint &b,
 /**
  * Test whether point p ist left of line (a,b) or not
  */
+template <typename PT>
 static inline bool
-point_left_of_line(const RasterPoint &p, const RasterPoint &a,
-                   const RasterPoint &b)
+point_left_of_line(const PT &p, const PT &a, const PT &b)
 {
   // normal vector of the line
   int nx = a.y - b.y;
@@ -75,9 +76,9 @@ point_left_of_line(const RasterPoint &p, const RasterPoint &a,
  * Test whether point p is in inside triangle(a,b,c) or not. Triangle must be
  * counterclockwise, assuming (0,0) is the lower left.
  */
+template <typename PT>
 static inline bool
-inside_triangle(const RasterPoint &p, const RasterPoint &a,
-                const RasterPoint &b, const RasterPoint &c)
+inside_triangle(const PT &p, const PT &a, const PT &b, const PT &c)
 {
   return point_left_of_line(p, a, b) &&
          point_left_of_line(p, b, c) &&
@@ -87,8 +88,9 @@ inside_triangle(const RasterPoint &p, const RasterPoint &a,
 /**
  * Test whether the line a,b,c makes a bend to the left or not.
  */
+template <typename PT>
 static inline bool
-left_bend(const RasterPoint &a, const RasterPoint &b, const RasterPoint &c)
+left_bend(const PT &a, const PT &b, const PT &c)
 {
   return ((b.x-a.x) * (int)(c.y-b.y) -
           (b.y-a.y) * (int)(c.x-b.x)) > 0;
@@ -107,9 +109,16 @@ left_bend(const RasterPoint &a, const RasterPoint &b, const RasterPoint &c)
  *         0: failure,
  *         3 to 3*(num_points-3): success
  */
+#if RASTER_POINT_SIZE == SHAPE_POINT_SIZE
 unsigned
 polygon_to_triangle(const RasterPoint *points, unsigned num_points,
                     GLushort *triangles, unsigned min_distance)
+#else
+template <typename PT>
+static inline unsigned
+_polygon_to_triangle(const PT *points, unsigned num_points,
+                     GLushort *triangles, unsigned min_distance)
+#endif
 {
   //const unsigned orig_num_points = num_points;
 
@@ -211,3 +220,19 @@ polygon_to_triangle(const RasterPoint *points, unsigned num_points,
   delete next;
   return triangle_idx_count;
 }
+
+#if RASTER_POINT_SIZE != SHAPE_POINT_SIZE
+unsigned
+polygon_to_triangle(const RasterPoint *points, unsigned num_points,
+                    GLushort *triangles, unsigned min_distance)
+{
+  return _polygon_to_triangle(points, num_points, triangles, min_distance);
+}
+
+unsigned
+polygon_to_triangle(const ShapePoint *points, unsigned num_points,
+                    GLushort *triangles, unsigned min_distance)
+{
+  return _polygon_to_triangle(points, num_points, triangles, min_distance);
+}
+#endif

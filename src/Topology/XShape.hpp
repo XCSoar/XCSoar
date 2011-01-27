@@ -29,16 +29,24 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "shapelib/mapshape.h"
+#ifdef ENABLE_OPENGL
+#include "Screen/Point.hpp"
+#include "Topology/XShapePoint.hpp"
+#endif
 
 #include <tchar.h>
 #include <assert.h>
 
 class XShape : private NonCopyable {
-  enum {
-    MAX_LINES = 32,
-  };
+  enum { MAX_LINES = 32 };
+#ifdef ENABLE_OPENGL
+  enum { THINNING_LEVELS = 4 };
+#endif
 
   GeoBounds bounds;
+#ifdef ENABLE_OPENGL
+  GeoPoint center;
+#endif
 
   int type;
 
@@ -57,13 +65,35 @@ class XShape : private NonCopyable {
   /**
    * All points of all lines.
    */
+#ifdef ENABLE_OPENGL
+  ShapePoint *points;
+
+  /**
+   * Indices of polygon triangles or lines with reduced number of vertices.
+   */
+  unsigned short *indices[THINNING_LEVELS];
+
+  /**
+   * For polygons this will contain the total number of triangle vertices
+   * for each thinning level.
+   * For lines there will be an array of size num_lines for each thinning
+   * level, which contains the number of points for each line.
+   */
+  unsigned short *index_count[THINNING_LEVELS];
+#else // !ENABLE_OPENGL
   GeoPoint *points;
+#endif
 
   TCHAR *label;
 
 public:
   XShape(shapefileObj *shpfile, int i, int label_field=-1);
   ~XShape();
+
+#ifdef ENABLE_OPENGL
+  const unsigned short *get_indices(int thinning_level, unsigned min_distance,
+                                    const unsigned short *&count);
+#endif
 
   bool is_visible(int label_field) const {
     return label_field < 0 || label != NULL;
@@ -72,6 +102,12 @@ public:
   const GeoBounds &get_bounds() const {
     return bounds;
   }
+
+#ifdef ENABLE_OPENGL
+  const GeoPoint &get_center() const {
+    return center;
+  }
+#endif
 
   int get_type() const {
     return type;
@@ -85,13 +121,38 @@ public:
     return lines;
   }
 
+#ifdef ENABLE_OPENGL
+  const ShapePoint *get_points() const {
+#else
   const GeoPoint *get_points() const {
+#endif
     return points;
   }
 
   const TCHAR *get_label() const {
     return label;
   }
+
+#ifdef ENABLE_OPENGL
+  /**
+   * Convert a GeoPoint into a ShapePoint.
+   */
+  ShapePoint geo_to_shape(const GeoPoint &location) const {
+    return geo_to_shape(center, location);
+  }
+
+  /**
+   * Get the offset of the shape center from the screen center in ShapePoint
+   * scale.
+   */
+  ShapePoint shape_translation(const GeoPoint &screen_center) const {
+    return geo_to_shape(screen_center, center);
+  }
+
+private:
+  gcc_pure
+  ShapePoint geo_to_shape(const GeoPoint &origin, const GeoPoint &point) const;
+#endif
 };
 
 #endif

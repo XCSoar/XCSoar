@@ -1,8 +1,9 @@
 /*
+
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2011 The XCSoar Project
+  Copyright (C) 2000-2010 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,19 +22,29 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_POINT_HPP
-#define XCSOAR_SCREEN_OPENGL_POINT_HPP
+#ifndef TOPOLOGY_XSHAPE_POINT_HPP
+#define TOPOLOGY_XSHAPE_POINT_HPP
 
-#include "Screen/OpenGL/Types.hpp"
+#include "Screen/Point.hpp"
 
-#ifdef ANDROID
-#define RASTER_POINT_SIZE 4
+#define SHAPE_POINT_SIZE 8
+
+#if RASTER_POINT_SIZE == SHAPE_POINT_SIZE
+
+typedef RasterPoint ShapePoint;
+
 #else
-#define RASTER_POINT_SIZE 8
-#endif
 
-struct RasterPoint {
-  GLvalue x, y;
+struct ShapePoint {
+  int32_t x, y;
 };
+
+static inline unsigned
+manhattan_distance(ShapePoint a, ShapePoint b)
+{
+  return abs(a.x - b.x) + abs(a.y - b.y);
+}
+
+#endif
 
 #endif

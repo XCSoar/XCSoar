@@ -103,7 +103,7 @@ TopCanvas::set()
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 #ifdef ANDROID
-  glOrthof(0, get_width(), get_height(), 0, -1, 1);
+  glOrthox(0, get_width()<<16, get_height()<<16, 0, -(1<<16), 1<<16);
 #else
   glOrtho(0, get_width(), get_height(), 0, -1, 1);
 #endif

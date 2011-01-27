@@ -96,7 +96,7 @@ public:
    * @param g GeoPoint to convert
    */
   gcc_pure
-  RasterPoint GeoToScreen(const GeoPoint &location) const;
+  RasterPoint GeoToScreen(const GeoPoint &g) const;
 
   /**
    * Returns the origin/rotation center in screen coordinates

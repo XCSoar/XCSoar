@@ -24,10 +24,17 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
 #define XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
 
-#include "Screen/OpenGL/Point.hpp"
+#include "Screen/Point.hpp"
+#include "Topology/XShapePoint.hpp"
 
 unsigned
 polygon_to_triangle(const RasterPoint *points, unsigned num_points,
                     GLushort *triangles, unsigned min_distance=1);
+
+#if RASTER_POINT_SIZE != SHAPE_POINT_SIZE
+unsigned
+polygon_to_triangle(const ShapePoint *points, unsigned num_points,
+                    GLushort *triangles, unsigned min_distance=1);
+#endif
 
 #endif

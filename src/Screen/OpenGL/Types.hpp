@@ -28,6 +28,9 @@ Copyright_License {
 
 #include <GLES/gl.h>
 
+/**
+ * A position component in the OpenGL surface.
+ */
 typedef GLshort GLvalue;
 static const GLenum GL_VALUE = GL_SHORT;
 

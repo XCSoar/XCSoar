@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "SettingsMap.hpp"
 #include "Navigation/GeoPoint.hpp"
+#include "Screen/Layout.hpp"
 #include "shapelib/map.h"
 
 #include <zzip/lib.h>
@@ -158,6 +159,36 @@ TopologyFile::GetSkipSteps(fixed map_scale) const
     return 3;
   if (map_scale * 4 > scaleThreshold)
     return 2;
-
   return 1;
 }
+
+#ifdef ENABLE_OPENGL
+
+unsigned
+TopologyFile::thinning_level(fixed map_scale) const
+{
+  if (map_scale * 2 > scaleThreshold)
+    return 3;
+  if (map_scale * 3 > scaleThreshold)
+    return 2;
+  if (map_scale * 4 > scaleThreshold)
+    return 1;
+
+  return 0;
+}
+
+unsigned
+TopologyFile::min_point_distance(unsigned level) const
+{
+  switch (level) {
+    case 1:
+      return fixed(4) * scaleThreshold / Layout::Scale(30);
+    case 2:
+      return fixed(6) * scaleThreshold / Layout::Scale(30);
+    case 3:
+      return fixed(9) * scaleThreshold / Layout::Scale(30);
+  }
+  return 1;
+}
+
+#endif

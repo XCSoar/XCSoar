@@ -24,6 +24,11 @@ Copyright_License {
 #include "Topology/XShape.hpp"
 #include "Units.hpp"
 #include "shapelib/map.h"
+#ifdef ENABLE_OPENGL
+#include "Projection.hpp"
+#include "Math/Earth.hpp"
+#include "Screen/OpenGL/Triangulate.hpp"
+#endif
 
 #include <algorithm>
 #include <tchar.h>
@@ -73,6 +78,11 @@ import_label(const char *src)
 XShape::XShape(shapefileObj *shpfile, int i, int label_field)
   :label(NULL)
 {
+#ifdef ENABLE_OPENGL
+  for (unsigned l=0; l < THINNING_LEVELS; l++)
+    index_count[l] = indices[l] = NULL;
+#endif
+
   shapeObj shape;
   msInitShape(&shape);
   msSHPReadShape(shpfile->hSHP, i, &shape);
@@ -81,6 +91,9 @@ XShape::XShape(shapefileObj *shpfile, int i, int label_field)
   bounds.south = Angle::degrees(fixed(shape.bounds.miny));
   bounds.east = Angle::degrees(fixed(shape.bounds.maxx));
   bounds.north = Angle::degrees(fixed(shape.bounds.maxy));
+#ifdef ENABLE_OPENGL
+  center = bounds.center();
+#endif
 
   type = shape.type;
 
@@ -92,17 +105,37 @@ XShape::XShape(shapefileObj *shpfile, int i, int label_field)
     num_points += lines[l];
   }
 
+#ifdef ENABLE_OPENGL
+  /* OpenGL:
+   * Convert all points of all lines to ShapePoints, using a projection
+   * that assumes the center of the screen is also the center of the shape.
+   * Resolution is set to 1m per pixel. This enables us to use a simple matrix
+   * multiplication to draw the shape.
+   * This approximation should work well with shapes of limited size
+   * (<< 400km). Perceivable distortion will only happen, when the latitude of
+   * the actual center of the screen is far away from the latitude of the
+   * center of the shape and the shape has a big vertical size.
+   */
+
+  points = new ShapePoint[num_points];
+  ShapePoint *p = points;
+#else // !ENABLE_OPENGL
   /* convert all points of all lines to GeoPoints */
 
   points = new GeoPoint[num_points];
-
   GeoPoint *p = points;
+#endif
   for (unsigned l = 0; l < num_lines; ++l) {
     const pointObj *src = shape.line[l].point;
     num_points = lines[l];
     for (unsigned j = 0; j < num_points; ++j, ++src)
+#ifdef ENABLE_OPENGL
+      *p++ = geo_to_shape(GeoPoint(Angle::degrees(fixed(src->x)),
+                                   Angle::degrees(fixed(src->y))));
+#else
       *p++ = GeoPoint(Angle::degrees(fixed(src->x)),
                       Angle::degrees(fixed(src->y)));
+#endif
   }
 
   if (label_field >= 0) {
@@ -117,4 +150,95 @@ XShape::~XShape()
 {
   free(label);
   delete[] points;
+#ifdef ENABLE_OPENGL
+  // Note: index_count and indices share one buffer
+  for (int i=0; i < THINNING_LEVELS; i++)
+    delete index_count[i];
+#endif
 }
+
+#ifdef ENABLE_OPENGL
+
+const unsigned short *
+XShape::get_indices(int thinning_level, unsigned min_distance,
+                    const unsigned short *&count)
+{
+  if (indices[thinning_level] == NULL) {
+    unsigned short *idx, *idx_count;
+    unsigned num_points = 0;
+
+    for (unsigned i=0; i < num_lines; i++)
+      num_points += lines[i];
+
+    if (type == MS_SHAPE_LINE) {
+      index_count[thinning_level] = idx_count =
+        new GLushort[num_lines + num_points];
+      indices[thinning_level] = idx = idx_count + num_lines;
+
+      const unsigned short *end_l = lines + num_lines;
+      const ShapePoint *p = points;
+      unsigned i = 0;
+      for (const unsigned short *l = lines; l < end_l; l++) {
+        assert(*l >= 2);
+        const ShapePoint *end_p = p + *l - 1;
+        // always add first point
+        *idx++ = i;
+        p++; i++;
+        const unsigned short *after_first_idx = idx;
+        // add points if they are not too close to the previous point
+        for (; p < end_p; p++, i++)
+          if (manhattan_distance(points[idx[-1]], *p) >= min_distance)
+            *idx++ = i;
+        // remove points from behind if they are too close to the end point
+        while (idx > after_first_idx &&
+               manhattan_distance(points[idx[-1]], *p) < min_distance)
+          idx--;
+        // always add last point
+        *idx++ = i;
+        p++; i++;
+        *idx_count++ = idx - after_first_idx + 1;
+      }
+      // TODO: free memory saved by thinning (use malloc/realloc or some class?)
+    } else if (type == MS_SHAPE_POLYGON) {
+      index_count[thinning_level] = idx_count =
+        new GLushort[1 + 3*(num_points-2)];
+      indices[thinning_level] = idx = idx_count + 1;
+
+      *idx_count = 0;
+      const ShapePoint *pt = points;
+      for (unsigned i=0; i < num_lines; i++) {
+        unsigned count = polygon_to_triangle(pt, lines[i], idx + *idx_count,
+                                             min_distance);
+        if (i > 0) {
+          const GLushort offset = pt - points;
+          const unsigned max_idx_count = *idx_count + count;
+          for (unsigned j=*idx_count; j < max_idx_count; j++)
+            idx[j] += offset;
+        }
+        *idx_count += count;
+        pt += lines[i];
+      }
+      // TODO: free memory saved by thinning (use malloc/realloc or some class?)
+    } else {
+      assert(false);
+    }
+  }
+
+  count = index_count[thinning_level];
+  return indices[thinning_level];
+}
+
+ShapePoint
+XShape::geo_to_shape(const GeoPoint &origin, const GeoPoint &point) const
+{
+  const GeoPoint d = point-origin;
+
+  ShapePoint pt;
+  pt.x = fast_mult(point.Latitude.fastcosine(),
+                   fast_mult(d.Longitude.value_radians(), fixed_earth_r, 12),
+                   16);
+  pt.y = -fast_mult(d.Latitude.value_radians(), fixed_earth_r, 12);
+  return pt;
+}
+
+#endif // ENABLE_OPENGL

@@ -26,10 +26,10 @@ Copyright_License {
 
 #include <SDL.h>
 
-struct RasterPoint {
-  typedef Sint16 value_type;
+#define RASTER_POINT_SIZE 4
 
-  value_type x, y;
+struct RasterPoint {
+  Sint16 x, y;
 };
 
 #endif
