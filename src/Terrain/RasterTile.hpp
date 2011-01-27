@@ -221,6 +221,11 @@ public:
                          unsigned& int_x, unsigned& int_y, short &h_int,
                          const bool can_climb) const;
 
+  void Intersection(unsigned origin_x, unsigned origin_y,
+                    unsigned destination_x, unsigned destination_y,
+                    short h_origin, const long slope_fact,
+                    unsigned& int_x, unsigned& int_y) const;
+
 protected:
   void LoadJPG2000(const char *path);
 

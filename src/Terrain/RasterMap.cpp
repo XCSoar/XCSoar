@@ -151,3 +151,31 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
     return false;
   }
 }
+
+GeoPoint
+RasterMap::Intersection(const GeoPoint& origin, const short h_origin,
+                        const GeoPoint& destination) const
+{
+  std::pair<unsigned, unsigned> c_origin = projection.project(origin);
+  std::pair<unsigned, unsigned> c_destination = projection.project(destination);
+  c_origin.first = (c_origin.first)>>8;
+  c_origin.second = (c_origin.second)>>8;
+  c_destination.first = (c_destination.first)>>8;
+  c_destination.second = (c_destination.second)>>8;
+  const long c_diff = abs((int)c_origin.first-(int)c_destination.first)+
+    abs((int)c_origin.second-(int)c_destination.second);
+  if (c_diff==0) {
+    return destination; // no distance
+  }
+  const long slope_fact = lround((((long)h_origin)<<RASTER_SLOPE_FACT)/c_diff);
+
+  std::pair<unsigned, unsigned> c_int;
+  raster_tile_cache.Intersection(c_origin.first, c_origin.second,
+                                 c_destination.first, c_destination.second,
+                                 h_origin, slope_fact,
+                                 c_int.first, c_int.second);
+
+  c_int.first = (c_int.first<<8);
+  c_int.second = (c_int.second<<8);
+  return projection.unproject(c_int);
+}

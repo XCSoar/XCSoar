@@ -802,5 +802,94 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_
 
   // still not found, so go to overview
   tile_index = -1;
+
+  if ((px >= width) || (py >= height))
+    // outside overall bounds
+    return RasterBuffer::TERRAIN_INVALID;
+
   return Overview.get(px / RTC_SUBSAMPLING, py / RTC_SUBSAMPLING);
+}
+
+
+void
+RasterTileCache::Intersection(unsigned x0, unsigned y0,
+                              unsigned x1, unsigned y1,
+                              short h_origin,
+                              const long slope_fact,
+                              unsigned& _x, unsigned& _y) const
+{
+  _x = x0;
+  _y = y0;
+
+  if ((x0 >= width) || (y0 >= height)) {
+    // origin is outside overall bounds
+    return;
+  }
+
+  // remember index of active tile, so we dont need to scan each each time
+  // (unless the guess fails)
+  int tile_index = -1;
+
+  // line algorithm parameters
+  const int dx = abs((int)x1-(int)x0);
+  const int dy = abs((int)y1-(int)y0);
+  int err = dx-dy;
+  const int sx = (x0 < x1)? 1: -1;
+  const int sy = (y0 < y1)? 1: -1;
+
+  // calculate number of fine steps to produce a step on the overview field
+  int mx=dx, my=dy;
+  i_normalise(mx, my); // normalise vector components
+  const int step_coarse = (mx+my)>>3;  // number of steps for update to the
+                                       // overview map
+  unsigned step_counter = 0; // counter for steps to reach next position on the
+                             // field.
+  int total_steps = 0; // total counter of steps
+  short h_int= h_origin;
+  short h_terrain = 0;
+
+  while (!RasterBuffer::is_invalid(h_terrain)) {
+
+    if (!step_counter) {
+      h_terrain = GetFieldDirect(_x, _y, tile_index);
+      step_counter = tile_index<0? step_coarse: 1;
+
+      // calculate height of glide so far
+      const short dh = (short)((total_steps*slope_fact)>>RASTER_SLOPE_FACT);
+
+      // current aircraft height
+      h_int = h_origin-dh;
+
+      if (h_int < h_terrain)
+        return;
+      if (h_int <= 0) {
+        _x = x1;
+        _y = y1;
+        return; // reached max range
+      }
+    }
+
+    if ((_x==x1) && (_y==y1))
+      return;
+
+    const int e2 = 2*err;
+    if (e2 > -dy) {
+      err -= dy;
+      _x += sx;
+      if (step_counter)
+        step_counter--;
+      total_steps++;
+    }
+    if (e2 < dx) {
+      err += dx;
+      _y += sy;
+      if (step_counter)
+        step_counter--;
+      total_steps++;
+    }
+  }
+
+  // if we reached invalid terrain, assume we can hit MSL
+  _x = x1;
+  _y = y1;
 }

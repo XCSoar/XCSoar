@@ -89,6 +89,22 @@ public:
                          const GeoPoint &destination, const short h_destination,
                          const short h_virt, const short h_ceiling,
                          GeoPoint& intx, short &h) const;
+
+  /**
+   * Find location where aircraft hits the ground
+   * @todo margin
+   * If the search goes outside the terrain area, will return the destination location
+   *
+   * @param origin Start (aircraft) location
+   * @param h_origin Height of aircraft
+   * @param destination Location of aircraft at MSL
+   *
+   * @return Location of intersection, or if none, destination
+   */
+  gcc_pure
+  GeoPoint Intersection(const GeoPoint& origin, const short h_origin,
+                        const GeoPoint& destination) const;
+
 };
 
 
