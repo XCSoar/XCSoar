@@ -112,10 +112,21 @@ dlgTaskManager::CallBackTable[] = {
   DeclareCallBackEntry(dlgTaskList::OnTaskPaint),
   DeclareCallBackEntry(dlgTaskList::OnTabPreShow),
 
+  DeclareCallBackEntry(dlgTaskManagerClose::OnCloseClicked),
+  DeclareCallBackEntry(dlgTaskManagerClose::OnRevertClicked),
+
   DeclareCallBackEntry(NULL)
 };
 
-
+void
+dlgTaskManager::RevertTask()
+{
+  // create new task first to guarantee pointers are different
+  OrderedTask* temptask = protected_task_manager->task_clone();
+  delete active_task;
+  active_task = temptask;
+  task_modified = false;
+}
 
 void
 dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
@@ -130,6 +141,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   assert(wf != NULL);
   if (!wf)
     return;
+
 
   active_task = protected_task_manager->task_clone();
   task_modified = false;
@@ -168,11 +180,14 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   wTabBar->AddClient(wLst, _T("Browse declare"), false, NULL,dlgTaskList::OnTabPreShow);
 
 
-  PanelControl *tplClose = new PanelControl(*wTabBar,
-                               0, 0, (unsigned)240, (unsigned)50,
-                               wf->GetBackColor());
-  assert(tplClose);
-  wTabBar->AddClient(tplClose, _T("Close / Fly"), true, NULL, dlgTaskManager::OnClose);
+  Window* wClose = dlgTaskManagerClose::Load(parent,
+                        wTabBar,
+                        wf,
+                        &active_task,
+                        &task_modified);
+
+  assert(wClose);
+  wTabBar->AddClient(wClose, _T("Close"), false, NULL, dlgTaskManagerClose::OnTabPreShow);
 
 
   wTabBar->SetCurrentPage(0);

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+  <Panel Name="frmTaskClose" Border="0">
+
+  <Label Name="frmStatus" X="100" Y="70" Width="117" Height="20" Border="0"/>
+  <Button Name="cmdClose" Caption="Fly" X="143" Y="90" Width="117" Height="40" OnClick="dlgTaskManagerClose::OnCloseClicked"/>
+  <Button Name="cmdRevert" Caption="Revert Changes" X="143" Y="-1" Width="117" Height="35" OnClick="dlgTaskManagerClose::OnRevertClicked"/>
+
+  </Panel>

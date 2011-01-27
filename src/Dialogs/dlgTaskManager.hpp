@@ -44,6 +44,7 @@ public:
  */
   static bool OnClose();
   static void dlgTaskManagerShowModal(SingleWindow &parent);
+  static void RevertTask();
   static CallBackTableEntry CallBackTable[];
 };
 
@@ -199,5 +200,36 @@ public:
  */
   static void DestroyTab();
 };
+
+class dlgTaskManagerClose
+{
+public:
+
+/**
+ * creates the control from its XML file and does any init work
+ * @param parent
+ * @param task_modified Sets to True if changes it.
+ * @param wf
+ * @return Window* that points to the control created
+ */
+  static Window* Load(SingleWindow &parent,
+                              TabBarControl* wTabBar,
+                              WndForm* wf,
+                              OrderedTask** task,
+                              bool* _task_modified);
+
+  static void OnCloseClicked(WndButton &Sender);
+  static void OnRevertClicked(WndButton &Sender);
+
+  /**
+ * callback
+ * sets status and buttons per task edit status
+ * @return True
+ */
+  static bool OnTabPreShow();
+
+};
+
+
 
 #endif /* DLGTASKMANAGER_HPP */
