@@ -32,7 +32,8 @@ Copyright_License {
 
 #include <stdio.h>
 
-void MapWindow::CalculateScreenPositionsGroundline(void) {
+void MapWindow::CalculateScreenPositionsGroundline(void)
+{
   if (!SettingsComputer().FinalGlideTerrain)
     return;
 
@@ -63,15 +64,16 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     return;
 
 #ifdef ENABLE_OPENGL
-  glClearStencil(0);
+  glEnable(GL_STENCIL_TEST);
   glClear(GL_STENCIL_BUFFER_BIT);
 
   glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
-  glEnable(GL_STENCIL_TEST);
   glStencilFunc(GL_ALWAYS, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
+  canvas.null_pen();
+  canvas.white_brush();
   canvas.polygon(Groundline, GroundlineLength);
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
