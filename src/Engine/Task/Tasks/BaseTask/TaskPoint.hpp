@@ -25,7 +25,6 @@
 #define TASKPOINT_HPP
 
 #include "Compiler.h"
-#include "Navigation/ReferencePoint.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Task/TaskBehaviour.hpp"
@@ -33,8 +32,7 @@
 /**
  * Base class for all task points 
  */
-class TaskPoint : 
-  public ReferencePoint
+class TaskPoint
 {
 public:
   friend class PrintHelper;
@@ -65,7 +63,7 @@ public:
    */
   TaskPoint(enum type _type, const GeoPoint& location,
             const fixed elevation, const TaskBehaviour &tb) :
-    ReferencePoint(location), type(_type),
+    type(_type), reference(location),
     m_elevation(elevation), m_task_behaviour(tb) {}
 
   /**
@@ -81,7 +79,7 @@ public:
    */
   gcc_pure
   virtual const GeoPoint& get_location_remaining() const {
-    return get_location();
+    return reference;
   }
 
   /**
@@ -181,7 +179,22 @@ public:
   gcc_pure
   virtual fixed get_elevation() const = 0;
 
+  /**
+   * distance from this to the reference
+   */
+  fixed distance(const GeoPoint & ref) const {
+    return reference.distance(ref);
+  }
+
+  /**
+   * The actual location
+   */
+  const GeoPoint & get_location() const {
+    return reference;
+  }
+
 protected:
+  GeoPoint reference;
   /** Altitude (AMSL, m) of task point terrain */
   const fixed m_elevation;
   /** Reference to task behaviour (for options) */

@@ -24,7 +24,6 @@
 
 #include "GeoPoint.hpp"
 #include "Navigation/Flat/FlatGeoPoint.hpp"
-#include "Navigation/ReferencePoint.hpp"
 
 #include <assert.h>
 
@@ -33,8 +32,7 @@ class TaskProjection;
 /**
  * Class used to hold a geodetic point, its projected integer form.
  */
-class SearchPoint: 
-  public ReferencePoint 
+class SearchPoint
 {
 #ifndef NDEBUG
   bool projected;
@@ -59,10 +57,11 @@ public:
    * @param loc Location of search point
    * @param tp Projection used
    */
-  SearchPoint(const GeoPoint &loc):ReferencePoint(loc)
+  SearchPoint(const GeoPoint &loc) :
 #ifndef NDEBUG
-                                  , projected(false)
+    projected(false),
 #endif
+    reference(loc)
   {}
 
   /**
@@ -108,7 +107,7 @@ public:
    */
   gcc_pure
   bool equals(const SearchPoint& sp) const {
-    return sp.get_location() == get_location();
+    return sp.reference == reference;
   }
 
   /**
@@ -132,7 +131,7 @@ public:
    */
   gcc_pure
   bool sort (const SearchPoint &other) const {
-    return get_location().sort(other.get_location());
+    return reference.sort(other.reference);
   }
 
   /**
@@ -143,7 +142,22 @@ public:
     return sort(other);
   }
 
+  /**
+   * distance from this to the reference
+   */
+  fixed distance(const GeoPoint & ref) const {
+    return reference.distance(ref);
+  }
+
+  /**
+   * The actual location
+   */
+  const GeoPoint & get_location() const {
+    return reference;
+  }
+
 private:
+  GeoPoint reference;
   FlatGeoPoint flatLocation;
 };
 

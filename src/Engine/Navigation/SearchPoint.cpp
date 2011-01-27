@@ -24,20 +24,20 @@
 #include "Navigation/TaskProjection.hpp"
 
 SearchPoint::SearchPoint(const GeoPoint &loc, const TaskProjection& tp):
-  ReferencePoint(loc),
 #ifndef NDEBUG
   projected(true),
 #endif
+  reference(loc),
   flatLocation(tp.project(loc))
 {      
 }
 
 SearchPoint::SearchPoint(const FlatGeoPoint &floc,
                          const TaskProjection& tp):
-  ReferencePoint(tp.unproject(floc)),
 #ifndef NDEBUG
   projected(true),
 #endif
+  reference(tp.unproject(floc)),
   flatLocation(floc)
 {
 }
@@ -45,7 +45,7 @@ SearchPoint::SearchPoint(const FlatGeoPoint &floc,
 void 
 SearchPoint::project(const TaskProjection& tp) 
 {
-  flatLocation = tp.project(get_location());
+  flatLocation = tp.project(reference);
 
 #ifndef NDEBUG
   projected = true;

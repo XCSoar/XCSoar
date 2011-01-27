@@ -24,7 +24,6 @@
 #ifndef OBSERVATIONZONEPOINT_HPP
 #define OBSERVATIONZONEPOINT_HPP
 
-#include "Navigation/ReferencePoint.hpp"
 #include "ObservationZone.hpp"
 #include "Util/NonCopyable.hpp"
 
@@ -35,7 +34,6 @@ struct GeoPoint;
  * - add arc type for future use
  */
 class ObservationZonePoint:
-  public ReferencePoint,
   public ObservationZone,
   public NonCopyable
 {
@@ -63,7 +61,7 @@ public:
    * @return Initialised object
    */
   ObservationZonePoint(enum shape _shape, const GeoPoint & _location)
-    :ReferencePoint(_location), shape(_shape) {}
+    :shape(_shape), reference(_location) {}
 
   /**
    * Update geometry when previous/next legs are modified.
@@ -100,6 +98,23 @@ public:
    * @return Cloned object
    */
   virtual ObservationZonePoint* clone(const GeoPoint* _location = 0) const = 0;
+
+  /**
+   * distance from this to the reference
+   */
+  fixed distance(const GeoPoint & ref) const {
+    return reference.distance(ref);
+  }
+
+  /**
+   * The actual location
+   */
+  const GeoPoint & get_location() const {
+    return reference;
+  }
+
+private:
+  GeoPoint reference;
 };
 
 #endif
