@@ -64,7 +64,8 @@ int main(int argc, char **argv)
          (double)bounds.south.value_degrees());
 
   do {
-    rtc.UpdateTiles(jp2_path, rtc.GetWidth() / 2, rtc.GetHeight() / 2);
+    rtc.UpdateTiles(jp2_path, rtc.GetWidth() / 2, rtc.GetHeight() / 2,
+                    fixed(50000));
   } while (rtc.IsDirty());
 
   return EXIT_SUCCESS;

@@ -225,7 +225,9 @@ GenerateBlackboard(MapWindow &map)
 
   if (terrain != NULL) {
     RasterTerrain::UnprotectedLease lease(*terrain);
-    lease->SetViewCenter(nmea_info.Location);
+    do {
+      lease->SetViewCenter(nmea_info.Location, fixed(50000));
+    } while (lease->IsDirty());
   }
 
   std::fill(settings_computer.DisplayAirspaces,
