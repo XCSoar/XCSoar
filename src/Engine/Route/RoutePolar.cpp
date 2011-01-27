@@ -106,7 +106,7 @@ RoutePolars::msl_intercept(const int index, const AGeoPoint& p, const TaskProjec
   RoutePolar::index_to_dxdy(index, dx, dy);
   dx= (dx*steps)>>7;
   dy= (dy*steps)>>7;
-  const FlatGeoPoint dp(fp.Longitude-dx, fp.Latitude-dy);
+  const FlatGeoPoint dp(fp.Longitude+dx, fp.Latitude+dy);
   return (proj.unproject(dp)-(GeoPoint)p)+(GeoPoint)p;
 }
 
@@ -168,8 +168,8 @@ void
 RouteLink::calc_speedups(const TaskProjection& proj)
 {
   const fixed scale = proj.get_approx_scale();
-  const fixed dx = fixed(second.Longitude-first.Longitude);
-  const fixed dy = fixed(second.Latitude-first.Latitude);
+  const fixed dx = fixed(first.Longitude-second.Longitude);
+  const fixed dy = fixed(first.Latitude-second.Latitude);
   mag_rmag(dx, dy, d, inv_d);
   d*= scale;
   inv_d/= scale;
