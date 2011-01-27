@@ -316,7 +316,7 @@ bool test_null()
 bool test_airspace(const unsigned n_airspaces)
 {
   airspaces = new Airspaces;
-  setup_airspaces(*airspaces, n_airspaces);
+  setup_airspaces(*airspaces, GeoPoint(Angle::degrees(fixed_half), Angle::degrees(fixed_half)), n_airspaces);
   bool fine = test_flight(4,0);
   delete airspaces; airspaces = NULL;
   return fine;

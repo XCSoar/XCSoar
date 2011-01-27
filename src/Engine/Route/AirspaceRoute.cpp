@@ -28,9 +28,6 @@
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Math/FastMath.h"
-#include <limits.h>
-
-using std::make_pair;
 
 /////////// Airspace query helpers
 
@@ -40,13 +37,18 @@ using std::make_pair;
 class AIV: public AirspaceIntersectionVisitor
 {
 public:
-  typedef std::pair<const AbstractAirspace*, GeoPoint> AIVResult;
+  typedef std::pair<const AbstractAirspace*, RoutePoint> AIVResult;
 
-  AIV(const GeoPoint& _origin):
+  AIV(const RouteLink& _e,
+      const TaskProjection& _proj,
+      const RoutePolars& _rpolar):
     AirspaceIntersectionVisitor(),
-    origin(_origin),
+    link(_e),
     min_distance(-fixed_one),
-    nearest(NULL,_origin)
+    proj(_proj),
+    rpolar(_rpolar),
+    origin(proj.unproject(_e.first)),
+    nearest(NULL,_e.first)
     {
     }
   virtual void Visit(const AirspaceCircle &as) {
@@ -58,31 +60,31 @@ public:
   void visit_abstract(const AbstractAirspace &as) {
     assert(!m_intersections.empty());
 
-    fixed d;
     GeoPoint point = m_intersections[0].first;
-    d= point.distance(origin);
-    if (negative(min_distance) || (d < min_distance)) {
-      min_distance = d;
-      nearest = std::make_pair(&as, point);
-    }
-    if (m_intersections.size()>1) {
-      point = m_intersections[1].first;
-      fixed dd= point.distance(origin);
-      assert (dd>=d);
-      if (dd < min_distance) {
-        min_distance = dd;
-        nearest = std::make_pair(&as, point);
-      }
+
+    RouteLink l = rpolar.generate_intermediate(link.first,
+                                               RoutePoint(proj.project(point), link.second.altitude),
+                                               proj);
+
+    if ((l.second.altitude< (short)as.get_base().Altitude) ||
+        (l.second.altitude> (short)as.get_top().Altitude))
+      return;
+
+    if (negative(min_distance) || (l.d < min_distance)) {
+      min_distance = l.d;
+      nearest = std::make_pair(&as, l.second);
     }
   }
 
-  AIVResult get_nearest() const
-    {
-      return nearest;
-    }
+  AIVResult get_nearest() const {
+    return nearest;
+  }
 private:
-  const GeoPoint& origin;
+  const RouteLink& link;
   fixed min_distance;
+  const TaskProjection& proj;
+  const RoutePolars& rpolar;
+  const GeoPoint& origin;
   AIVResult nearest;
 };
 
@@ -111,30 +113,21 @@ private:
 };
 
 
-AirspaceRoute::RouteIntersection
-AirspaceRoute::first_intersecting(const GeoPoint& origin,
-                                  const GeoPoint& dest) const
+AirspaceRoute::RouteAirspaceIntersection
+AirspaceRoute::first_intersecting(const RouteLink& e) const
 {
+  const GeoPoint origin(task_projection.unproject(e.first));
+  const GeoPoint dest(task_projection.unproject(e.second));
   const GeoVector v(origin, dest);
-  AIV visitor(origin);
+  AIV visitor(e, task_projection, rpolars);
   m_airspaces.visit_intersecting(origin, v, visitor);
   const AIV::AIVResult res (visitor.get_nearest());
   count_airspace++;
-  return std::make_pair(res.first,
-                        SearchPoint(res.second,
-                                    m_airspaces.get_task_projection()).get_flatLocation());
-}
-
-AirspaceRoute::RouteIntersection
-AirspaceRoute::first_intersecting(const RouteLink& e) const
-{
-  const GeoPoint g1 = m_airspaces.get_task_projection().unproject(e.first);
-  const GeoPoint g2 = m_airspaces.get_task_projection().unproject(e.second);
-  return first_intersecting(g1, g2);
+  return std::make_pair(res.first, res.second);
 }
 
 const AbstractAirspace*
-AirspaceRoute::inside_others(const GeoPoint& origin) const
+AirspaceRoute::inside_others(const AGeoPoint& origin) const
 {
   AirspaceInsideOtherVisitor visitor;
   m_airspaces.visit_within_range(origin, fixed_one, visitor);
@@ -149,7 +142,7 @@ AirspaceRoute::ClearingPair
 AirspaceRoute::find_clearing_pair(const SearchPointVector& spv,
                                   const SearchPointVector::const_iterator start,
                                   const SearchPointVector::const_iterator end,
-                                  const RoutePoint dest) const
+                                  const RoutePoint &dest) const
 {
   bool backwards = false;
   ClearingPair p(dest, dest);
@@ -163,7 +156,7 @@ AirspaceRoute::find_clearing_pair(const SearchPointVector& spv,
 
   int j=0;
   while ((i != end)&&(j<2)) {
-    FlatGeoPoint pborder = i->get_flatLocation();
+    AFlatGeoPoint pborder(i->get_flatLocation(), dest.altitude); // @todo alt!
     const FlatRay ray(pborder, dest);
 
     if (intersects(spv, ray)) {
@@ -174,7 +167,7 @@ AirspaceRoute::find_clearing_pair(const SearchPointVector& spv,
         continue;
       }
     } else {
-      GeoPoint gborder = m_airspaces.get_task_projection().unproject(pborder);
+      AGeoPoint gborder(task_projection.unproject(pborder), dest.altitude); // @todo alt!
       if (!check_others || !inside_others(gborder)) {
         if (j==0) {
           found_left = true;
@@ -196,8 +189,8 @@ AirspaceRoute::find_clearing_pair(const SearchPointVector& spv,
 
 AirspaceRoute::ClearingPair
 AirspaceRoute::get_pairs(const SearchPointVector& spv,
-                         const RoutePoint start,
-                         const RoutePoint dest) const
+                         const RoutePoint &start,
+                         const RoutePoint &dest) const
 {
   SearchPointVector::const_iterator i_closest =
     nearest_index_convex(spv, start);
@@ -209,18 +202,19 @@ AirspaceRoute::get_pairs(const SearchPointVector& spv,
 
 AirspaceRoute::ClearingPair
 AirspaceRoute::get_backup_pairs(const SearchPointVector& spv,
-                         const RoutePoint intc) const
+                                const RoutePoint &_start,
+                                const RoutePoint &intc) const
 {
   SearchPointVector::const_iterator start = nearest_index_convex(spv, intc);
   ClearingPair p(intc, intc);
 
   SearchPointVector::const_iterator i_left = start;
   circular_next(i_left, spv);
-  p.first = i_left->get_flatLocation();
+  p.first = AFlatGeoPoint(i_left->get_flatLocation(), _start.altitude); // @todo alt!
 
   SearchPointVector::const_iterator i_right = start;
   circular_previous(i_right, spv);
-  p.second = i_right->get_flatLocation();
+  p.second = AFlatGeoPoint(i_right->get_flatLocation(), _start.altitude); // @todo alt!
 
   return p;
 }
@@ -234,9 +228,12 @@ AirspaceRoute::airspace_size() const
   return m_airspaces.size();
 }
 
-AirspaceRoute::AirspaceRoute(const Airspaces& master):
-  m_airspaces(master, false),
-  m_planner()
+AirspaceRoute::AirspaceRoute(const RasterMap& _terrain,
+                             const GlidePolar& polar,
+                             const SpeedVector& wind,
+                             const Airspaces& master):
+  RoutePlanner(_terrain, polar, wind),
+  m_airspaces(master, false)
 {
   reset();
 }
@@ -250,31 +247,23 @@ AirspaceRoute::~AirspaceRoute()
 void
 AirspaceRoute::reset()
 {
-  origin_last = FlatGeoPoint(0,0);
-  destination_last = FlatGeoPoint(0,0);
-  dirty = false;
+  RoutePlanner::reset();
   m_airspaces.clear_clearances();
   m_airspaces.clear();
-  solution_route.clear();
-  m_planner.clear();
-  m_unique.clear();
-}
-
-void
-AirspaceRoute::get_solution(Route& route) const
-{
-  route = solution_route;
 }
 
 void
 AirspaceRoute::synchronise(const Airspaces& master,
-                           const GeoPoint& origin,
-                           const GeoPoint& destination,
-                           const AirspacePredicate &condition)
+                           const AGeoPoint& origin,
+                           const AGeoPoint& destination)
 {
   // @todo: also synchronise with AirspaceWarningManager to filter out items that are
   // acknowledged.
   GeoVector vector(origin, destination);
+  h_min = std::min(origin.altitude, std::min(destination.altitude, h_min));
+  h_max = std::max(origin.altitude, std::max(destination.altitude, h_max));
+  // @todo: have margin for h_max to allow for climb
+  AirspacePredicateHeightRange condition(h_min, h_max);
   if (m_airspaces.synchronise_in_range(master, vector.mid_point(origin), vector.Distance/2, condition))
   {
     if (m_airspaces.size())
@@ -282,158 +271,86 @@ AirspaceRoute::synchronise(const Airspaces& master,
   }
 }
 
-bool
-AirspaceRoute::solve(const GeoPoint& origin,
-                     const GeoPoint& destination)
-{
-  const SearchPoint s_origin(origin, m_airspaces.get_task_projection());
-  const SearchPoint s_destination(destination, m_airspaces.get_task_projection());
-
-  if ((s_origin.get_flatLocation() == origin_last)
-      && (s_destination.get_flatLocation() == destination_last)
-      && !dirty) {
-    return false; // solution was not updated
-  }
-  if (!m_airspaces.size()) {
-    return false; // trivial solution
-  }
-
-  dirty = false;
-  origin_last = s_origin.get_flatLocation();
-  destination_last = s_destination.get_flatLocation();
-
-  solution_route.clear();
-  solution_route.push_back(origin);
-  solution_route.push_back(destination);
-
-  RoutePoint start(s_origin.get_flatLocation());
-  m_astar_goal = RoutePoint(s_destination.get_flatLocation());
-  RouteLink estart(start, m_astar_goal);
-
-  if (distance(estart)<= ROUTE_MIN_STEP)
-    return false;
-
-  count_dij=0;
-  count_airspace=0;
-
-  bool retval = false;
-  m_planner.restart(start);
-
-  unsigned best_d = UINT_MAX;
-
-  while (!m_planner.empty()) {
-    const RoutePoint node = m_planner.pop();
-
-    if (node == m_astar_goal)
-      retval = true;
-
-    { // copy improving solutions
-      Route this_solution;
-      unsigned d = find_solution(node, this_solution);
-      if ((d< best_d) || retval) {
-        best_d = d;
-        solution_route = this_solution;
-      }
-    }
-    if (retval)
-      break; // want top solution only
-
-    // shoot for final
-    add_candidate(RouteLink(node, m_astar_goal));
-    while (!m_links.empty()) {
-      add_edges(m_links.front());
-      m_links.pop();
-    }
-  }
-  count_unique = m_unique.size();
-
-  if (retval) {
-    // correct for rounding
-    if (solution_route.size()>0)
-      solution_route[0] = origin;
-    if (solution_route.size()>1)
-      solution_route[solution_route.size()-1] = destination;
-  }
-
-  m_planner.clear();
-  m_unique.clear();
-  return retval;
-}
-
-
-unsigned
-AirspaceRoute::find_solution(const RoutePoint &final, Route& this_route) const
-{
-  RoutePoint p(final);
-  RoutePoint p_last(p);
-  do {
-    p_last = p;
-    p = m_planner.get_predecessor(p);
-    this_route.insert(this_route.begin(),
-                      m_airspaces.get_task_projection().unproject(p_last));
-  } while (!(p == p_last));
-
-  return distance(RouteLink(final, m_astar_goal));
-}
-
-
-////////////////
+/////////////////////////////
 
 void
-AirspaceRoute::link_cleared(const RouteLink &e)
-{
-  count_dij++;
-  AStarPriorityValue v(distance(e),
-                       distance(RouteLink(e.second, m_astar_goal)));
-  m_planner.link(e.second, e.first, v);
-}
-
-void
-AirspaceRoute::add_candidate(const RouteLink e)
-{
-  if (!is_short(e)) {
-    if (m_unique.find(e) == m_unique.end()) {
-      m_links.push(e);
-      m_unique.insert(e);
-    }
-  }
-}
-
-void
-AirspaceRoute::add_nearby(const RouteIntersection &inx,
-                          const RouteLink &e)
+AirspaceRoute::add_nearby_airspace(const RouteAirspaceIntersection &inx,
+                                   const RouteLink &e)
 {
   const SearchPointVector& fat = inx.first->get_clearance();
-  ClearingPair p = get_pairs(fat, e.first, e.second);
-  ClearingPair pb = get_backup_pairs(fat, inx.second);
+  const ClearingPair p = get_pairs(fat, e.first, e.second);
+  const ClearingPair pb = get_backup_pairs(fat, e.first, inx.second);
 
-  // process both options
-  add_candidate(RouteLink(e.first, p.first));
-  add_candidate(RouteLink(e.first, p.second));
-  add_candidate(RouteLink(e.first, pb.first));
-  add_candidate(RouteLink(e.first, pb.second));
+  // process all options
+  add_candidate(RouteLinkBase(e.first, p.first));
+  add_candidate(RouteLinkBase(e.first, p.second));
+  add_candidate(RouteLinkBase(e.first, pb.first));
+  add_candidate(RouteLinkBase(e.first, pb.second));
+}
+
+void
+AirspaceRoute::add_nearby(const RouteLink &e)
+{
+  RoutePoint ptmp = m_inx.second;
+  if (m_inx.first == NULL)
+    add_nearby_terrain(ptmp, e);
+  else
+    add_nearby_airspace(m_inx, e);
+}
+
+bool
+AirspaceRoute::check_secondary(const RouteLink &e)
+{
+  if (!rpolars.airspace_enabled())
+    return true; // trivial
+
+  m_inx = first_intersecting(e);
+  if (m_inx.first!=NULL)  {
+    add_candidate(e);
+    return false;
+  };
+  return true;
+}
+
+
+bool
+AirspaceRoute::check_clearance(const RouteLink &e, RoutePoint& inp) const
+{
+  // attempt terrain clearance first
+
+  if (!check_clearance_terrain(e, inp)) {
+    m_inx.first = NULL;
+    m_inx.second = inp;
+    return false;
+  }
+
+  if (!rpolars.airspace_enabled())
+    return true; // trivial
+
+  // passes terrain, so now check airspace clearance
+
+  m_inx = first_intersecting(e);
+  if (m_inx.first!=NULL)  {
+    inp = m_inx.second;
+    return false;
+  }
+
+  // made it this far!
+  return true;
 }
 
 
 void
-AirspaceRoute::add_edges(const RouteLink &e)
+AirspaceRoute::on_solve(const AGeoPoint& origin,
+                        const AGeoPoint& destination)
 {
-  const RouteIntersection inx = first_intersecting(e);
-  const bool this_short = is_short(e);
-
-  if (inx.first==NULL) // does not intersect
-  {
-    if (!this_short)
-      link_cleared(e);
-
-    add_candidate(RouteLink(m_planner.get_predecessor(e.first), e.second));
-    return;
+  if (m_airspaces.empty()) {
+    task_projection.reset(origin);
+    task_projection.update_fast();
+  } else {
+    task_projection = m_airspaces.get_task_projection();
   }
-
-  if (!this_short)
-    add_nearby(inx, e);
 }
-
 
 /*
 consider pa: trying for pb
@@ -484,3 +401,4 @@ consider pa: trying for pb
   - this means we *do* own the airspaces
 
 */
+

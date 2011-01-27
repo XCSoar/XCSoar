@@ -40,7 +40,7 @@ class TaskProjection;
 struct AIRCRAFT_STATE;
 struct GeoPoint;
 struct ContestResult;
-class AirspaceRoute;
+class RoutePlanner;
 
 #ifdef FIXED_MATH
 #include "Math/fixed.hpp"
@@ -71,7 +71,7 @@ public:
   static void contestmanager_print(const ContestManager& cm);
   static void trace_print(const Trace& trace, const GeoPoint &loc);
   static void print(const ContestResult& result);
-  static void print_route(AirspaceRoute& r);
+  static void print_route(RoutePlanner& r);
 
 };
 

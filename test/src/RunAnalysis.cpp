@@ -118,15 +118,9 @@ static AirspaceWarningManager airspace_warning(airspace_database,
 
 static ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
 
-ProtectedTaskManager protected_task_manager(task_manager,
-                                            XCSoarInterface::SettingsComputer(),
-                                            task_events);
+ProtectedTaskManager *protected_task_manager;
 
-GlideComputer glide_computer(way_points, protected_task_manager,
-                             airspace_warnings,
-                             task_events,
-                             airspace_database);
-
+GlideComputer *glide_computer;
 RasterTerrain *terrain;
 
 static void
@@ -154,7 +148,17 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Profile::SetFiles(_T(""));
   Profile::Load();
 
+  protected_task_manager = new ProtectedTaskManager(task_manager,
+                                                    XCSoarInterface::SettingsComputer(),
+                                                    task_events);
+
   LoadFiles();
+
+  glide_computer = new GlideComputer(way_points, *protected_task_manager,
+                                     airspace_warnings,
+                                     task_events,
+                                     airspace_database,
+                                     *terrain);
 
   ScreenGlobalInit screen_init;
 
@@ -179,7 +183,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   Fonts::Deinitialize();
 
+  delete glide_computer;
   delete terrain;
+  delete protected_task_manager;
 
   return 0;
 }

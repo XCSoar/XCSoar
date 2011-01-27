@@ -48,10 +48,11 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
                              ProtectedTaskManager &task,
                              ProtectedAirspaceWarningManager &airspace,
                              GlideComputerTaskEvents& events,
-                             Airspaces& airspaces):
+                             Airspaces& airspaces,
+                             RasterTerrain& terrain):
   GlideComputerBlackboard(task),
   GlideComputerAirData(airspace, task),
-  GlideComputerTask(task, airspaces),
+  GlideComputerTask(task, airspaces, terrain),
   GlideComputerStats(task),
   way_points(_way_points), protected_task_manager(task)
 {

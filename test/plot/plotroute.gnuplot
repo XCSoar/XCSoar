@@ -1,3 +1,6 @@
+set terminal png size 1024,1024 crop
+set output '| display png:-'
+
 set size ratio -1
 set key outside right
 
@@ -9,17 +12,44 @@ set style line 5 lt 4 lc rgb "grey" lw 2
 set style line 6 lt 4 lc rgb "green" lw 1
 set style line 7 lt 4 lc rgb "cyan" lw 1
 set style line 8 lt 2 lc rgb "red" lw 2
+set style line 9 lt 2 lc rgb "#a0a0f0" lw 0.5
 
-#set terminal png
-#set output "route.png"
 plot \
-        "< test/tools/gnuplotitems.pl polygon results/route.txt" using 1:2 with filledcurve ls 5 title "as", \
+     "< test/tools/gnuplotitems.pl polygon results/route.txt" using 1:2 with filledcurve ls 5 title "as", \
      'results/res-bb-in.txt' using 1:2 with lines ls 3 title "all airspace", \
      "< test/tools/gnuplotitems.pl spv results/route.txt" using 1:2 with lines ls 6 title "clearance", \
      "< test/tools/gnuplotitems.pl clear results/route.txt" using 1:2 with lines ls 8 title "clear", \
      "< test/tools/gnuplotitems.pl path results/route.txt" using 1:2 with lines ls 7 title "path", \
      "< test/tools/gnuplotitems.pl solution results/route.txt" using 1:2 with lines ls 1 title "solution", \
+     "< test/tools/gnuplotitems.pl shortcut results/route.txt" using 1:2 with points ls 8 title "shortcut", \
      "< test/tools/gnuplotitems.pl terminal results/route.txt" using 1:2 with linespoints ls 2 title "terminal", \
      "< test/tools/gnuplotitems.pl check results/route.txt" using 1:2 with points ls 4 title "check"
 
+set pm3d map
+splot \
+      "results/terrain.txt" using 1:2:3 with pm3d notitle, \
+     'results/res-bb-in.txt' using 1:2:(0) with lines ls 3 title "all airspace", \
+     "< test/tools/gnuplotitems.pl solution results/route.txt" using 1:2:3 with lines ls 1 title "solution"
+
+#set pm3d explicit at s depthorder hidden3d 9
+set terminal wxt
+set output
+unset border
+unset key
+unset xtics
+unset ytics
+unset ztics
+unset xlabel
+unset ylabel
+unset colorbox
+set parametric
+#unset surface
+set hidden3d
+set view 28,306,1,0.2
+set palette rgbformulae 8, 9, 7
+
+splot \
+      "results/terrain.txt" using 1:2:3 with lines, \
+     'results/res-bb-in.txt' using 1:2:3 with lines ls 3 title "all airspace", \
+     "< test/tools/gnuplotitems.pl solution results/route.txt" using 1:2:($3+300) with linespoints ls 1 title "solution"
 pause -1

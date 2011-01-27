@@ -35,6 +35,7 @@ class Waypoints;
 class ProtectedTaskManager;
 class GlideComputerTaskEvents;
 class Airspaces;
+class RasterTerrain;
 
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
@@ -52,7 +53,8 @@ public:
                 ProtectedTaskManager& task,
                 ProtectedAirspaceWarningManager &_awm,
                 GlideComputerTaskEvents& events,
-                Airspaces& airspaces);
+                Airspaces& airspaces,
+                RasterTerrain& terrain);
 
   void ResetFlight(const bool full=true);
   void Initialise();

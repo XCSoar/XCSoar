@@ -1,6 +1,5 @@
 TESTFAST = \
 	$(TARGET_BIN_DIR)/test_normalise$(TARGET_EXEEXT) \
-	$(TARGET_BIN_DIR)/test_route$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_fixed$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_waypoints$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_pressure$(TARGET_EXEEXT) \
@@ -57,10 +56,60 @@ TEST_NAMES = \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
 	TestColorRamp TestGeoPoint \
-	test_route TestFileUtil \
+	test_route \
+	test_troute \
+	TestFileUtil \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
+
+TEST_TROUTE_SOURCES = \
+	$(SRC)/Engine/Util/DataNodeXML.cpp \
+	$(SRC)/xmlParser.cpp \
+	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterMap.cpp \
+	$(SRC)/Terrain/RasterBuffer.cpp \
+	$(SRC)/Terrain/RasterProjection.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/PathName.cpp \
+	$(SRC)/Engine/Math/Earth.cpp \
+	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
+	$(TEST_SRC_DIR)/test_troute.cpp
+TEST_TROUTE_OBJS = $(call SRC_TO_OBJ,$(TEST_TROUTE_SOURCES))
+TEST_TROUTE_BIN = $(TARGET_BIN_DIR)/test_troute$(TARGET_EXEEXT)
+TEST_TROUTE_LDADD = $(TESTLIBS) \
+	$(MATH_LIBS) \
+	$(IO_LIBS) \
+	$(JASPER_LIBS) \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
+$(TEST_TROUTE_BIN): $(TEST_TROUTE_OBJS) $(TEST_TROUTE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(ZZIP_LDFLAGS) $(ZZIP_LIBS) -o $@
+
+TEST_ROUTE_SOURCES = \
+	$(SRC)/Engine/Util/DataNodeXML.cpp \
+	$(SRC)/xmlParser.cpp \
+	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterMap.cpp \
+	$(SRC)/Terrain/RasterBuffer.cpp \
+	$(SRC)/Terrain/RasterProjection.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/PathName.cpp \
+	$(SRC)/Engine/Math/Earth.cpp \
+	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
+	$(TEST_SRC_DIR)/test_route.cpp
+TEST_ROUTE_OBJS = $(call SRC_TO_OBJ,$(TEST_ROUTE_SOURCES))
+TEST_ROUTE_BIN = $(TARGET_BIN_DIR)/test_route$(TARGET_EXEEXT)
+TEST_ROUTE_LDADD = $(TESTLIBS) \
+	$(MATH_LIBS) \
+	$(IO_LIBS) \
+	$(JASPER_LIBS) \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
+$(TEST_ROUTE_BIN): $(TEST_ROUTE_OBJS) $(TEST_ROUTE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(ZZIP_LDFLAGS) $(ZZIP_LIBS) -o $@
 
 TEST_REPLAY_TASK_SOURCES = \
 	$(SRC)/Engine/Util/DataNodeXML.cpp \
@@ -1022,6 +1071,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
+	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Atmosphere.cpp \
 	$(SRC)/Wind/WindAnalyser.cpp \

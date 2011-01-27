@@ -1,13 +1,14 @@
 #!/usr/bin/perl
 
 my $find = $ARGV[0];
-print "# $find\n";
-open(INFILE,"<$ARGV[1]");
+my $fname = $ARGV[1];
+print "# $find, $fname\n";
+open(INFILE,"<$fname");
 while (<INFILE>) {
   if (/(.*) # $find/) {
     print "$1\n";
   } else {
-    if (/$find/) {
+    if (/# $find/) {
       print "\n";
     }
   }

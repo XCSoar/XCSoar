@@ -18,28 +18,29 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#include "Math/FastMath.h"
-#include "harness_flight.hpp"
+#include "RoutePlannerGlue.hpp"
+#include "Thread/Guard.hpp"
+#include "Terrain/RasterTerrain.hpp"
+#include "Navigation/SpeedVector.hpp"
 
-int main(int argc, char** argv) 
+RoutePlannerGlue::RoutePlannerGlue(RasterTerrain& _terrain,
+                                   const GlidePolar& polar,
+                                   const Airspaces& master):
+  terrain(_terrain),
+  m_planner(_terrain.map, polar, SpeedVector(Angle::degrees(fixed_zero), fixed_zero), master)
 {
-  // default arguments
-  autopilot_parms.ideal();
-
-  if (!parse_args(argc,argv)) {
-    return 0;
-  }
-
-  plan_tests(3);
-
-  ok(test_airspace(20),"airspace 20",0);
-  ok(test_airspace(100),"airspace 100",0);
-  
-  Airspaces airspaces;
-  setup_airspaces(airspaces, GeoPoint(Angle::native(fixed_zero), Angle::native(fixed_zero)), 20);
-  ok(test_airspace_extra(airspaces),"airspace extra",0);
-
-  return exit_status();
+  RasterTerrain::ExclusiveLease lease(terrain);
 }
+
+bool
+RoutePlannerGlue::solve(const AGeoPoint& origin,
+                        const AGeoPoint& destination,
+                        const RoutePlannerConfig& config,
+                        const short h_ceiling)
+{
+  RasterTerrain::ExclusiveLease lease(terrain);
+  return m_planner.solve(origin, destination, config, h_ceiling);
+}
+

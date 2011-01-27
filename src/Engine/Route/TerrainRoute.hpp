@@ -18,28 +18,30 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
+#ifndef TERRAIN_ROUTE_HPP
+#define TERRAIN_ROUTE_HPP
 
-#include "Math/FastMath.h"
-#include "harness_flight.hpp"
+#include "RoutePlanner.hpp"
 
-int main(int argc, char** argv) 
-{
-  // default arguments
-  autopilot_parms.ideal();
+class RasterMap;
 
-  if (!parse_args(argc,argv)) {
-    return 0;
-  }
+class TerrainRoute: public RoutePlanner {
+public:
+  TerrainRoute(const RasterMap& terrain,
+               const GlidePolar& polar,
+               const SpeedVector& wind);
 
-  plan_tests(3);
+  friend class PrintHelper;
 
-  ok(test_airspace(20),"airspace 20",0);
-  ok(test_airspace(100),"airspace 100",0);
-  
-  Airspaces airspaces;
-  setup_airspaces(airspaces, GeoPoint(Angle::native(fixed_zero), Angle::native(fixed_zero)), 20);
-  ok(test_airspace_extra(airspaces),"airspace extra",0);
+protected:
 
-  return exit_status();
-}
+private:
+
+  bool check_clearance(const RouteLink &e, RoutePoint& inp) const;
+  void add_nearby(const RouteLink& e);
+
+  mutable RoutePoint m_inx_terrain;
+};
+
+#endif

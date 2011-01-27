@@ -504,11 +504,17 @@ TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
 std::ostream& operator<< (std::ostream& f, 
                           const AirspaceCircle& as)
 {
-  f << "# circle " << (int)as.get_base().Altitude << " " << (int)as.get_top().Altitude << "\n";
+  f << "# circle\n";
   for (double t=0; t<=360; t+= 30) {
     GeoPoint l = FindLatitudeLongitude(as.m_center, Angle::degrees(fixed(t)), as.m_radius);
-    f << l.Longitude << " " << l.Latitude << "\n";
+    f << l.Longitude << " " << l.Latitude << " " << as.get_base().Altitude << "\n";
   }
+  f << "\n";
+  for (double t=0; t<=360; t+= 30) {
+    GeoPoint l = FindLatitudeLongitude(as.m_center, Angle::degrees(fixed(t)), as.m_radius);
+    f << l.Longitude << " " << l.Latitude << " " << as.get_top().Altitude << "\n";
+  }
+  f << "\n";
   f << "\n";
   return f;
 }
@@ -518,13 +524,21 @@ std::ostream& operator<< (std::ostream& f,
 std::ostream& operator<< (std::ostream& f, 
                           const AirspacePolygon& as)
 {
-  f << "# polygon " << (int)as.get_base().Altitude << " " << (int)as.get_top().Altitude << "\n";
+  f << "# polygon\n";
   for (std::vector<SearchPoint>::const_iterator v = as.m_border.begin();
        v != as.m_border.end(); ++v) {
     GeoPoint l = v->get_location();
-    f << l.Longitude << " " << l.Latitude << "\n";
+    f << l.Longitude << " " << l.Latitude << " " << as.get_base().Altitude << "\n";
   }
   f << "\n";
+  for (std::vector<SearchPoint>::const_iterator v = as.m_border.begin();
+       v != as.m_border.end(); ++v) {
+    GeoPoint l = v->get_location();
+    f << l.Longitude << " " << l.Latitude << " " << as.get_top().Altitude << "\n";
+  }
+  f << "\n";
+  f << "\n";
+
   return f;
 }
 
@@ -718,17 +732,29 @@ void write_border (const AbstractAirspace& as)
 
 #include "Route/AirspaceRoute.hpp"
 
-void PrintHelper::print_route(AirspaceRoute& r)
+void PrintHelper::print_route(RoutePlanner& r)
 {
   for (Route::const_iterator i = r.solution_route.begin();
        i!= r.solution_route.end(); ++i) {
-    printf("%g %g # solution\n",
+    printf("%.6g %.6g %d # solution\n",
            (double)i->Longitude.value_degrees(),
-           (double)i->Latitude.value_degrees());
+           (double)i->Latitude.value_degrees(),
+           0);
   }
   printf("# solution\n");
-  printf("# stats\n");
-  printf("# unique links %d\n", (int)r.count_unique);
-  printf("# airspace queries %d\n", (int)r.count_airspace);
-  printf("# dijkstra links %d\n", (int)r.count_dij);
+  for (Route::const_iterator i = r.solution_route.begin();
+       i!= r.solution_route.end(); ++i) {
+    printf("%.6g %.6g %d # solution\n",
+           (double)i->Longitude.value_degrees(),
+           (double)i->Latitude.value_degrees(),
+           i->altitude);
+  }
+  printf("# solution\n");
+  printf("# solution\n");
+  printf("# stats:\n");
+  printf("#   dijkstra links %d\n", (int)r.count_dij);
+  printf("#   unique links %d\n", (int)r.count_unique);
+  printf("#   airspace queries %d\n", (int)r.count_airspace);
+  printf("#   terrain queries %d\n", (int)r.count_terrain);
+  printf("#   supressed %d\n", (int)r.count_supressed);
 }

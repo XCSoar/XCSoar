@@ -26,7 +26,6 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/GlideTerrain.hpp"
-#include "Components.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
 
@@ -38,8 +37,12 @@ using std::max;
 // call any event
 
 GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task,
-                                     Airspaces &_airspaces):
-  GlideComputerBlackboard(task),m_airspaces(_airspaces),m_route(_airspaces) {}
+                                     Airspaces &_airspaces,
+                                     RasterTerrain& _terrain):
+  GlideComputerBlackboard(task),m_airspaces(_airspaces),
+  m_route(_terrain, task.get_glide_polar(), _airspaces),
+  terrain(_terrain)
+{}
 
 void
 GlideComputerTask::ResetFlight(const bool full)
@@ -124,20 +127,23 @@ void
 GlideComputerTask::ProcessIdle()
 {
   const AIRCRAFT_STATE as = ToAircraftState(Basic());
-  {
-    ProtectedTaskManager::ExclusiveLease task(m_task);
-    task->update_idle(as);
-  }
+  ProtectedTaskManager::ExclusiveLease task(m_task);
+  task->update_idle(as);
   {
     if (Calculated().task_stats.current_leg.solution_remaining.defined()) {
       const GeoVector &v = Calculated().task_stats.current_leg.solution_remaining.Vector;
-      const GeoPoint start = as.get_location();
-      const GeoPoint dest = v.end_point(start);
+      const AGeoPoint start (as.get_location(), as.NavAltitude);
+      const AGeoPoint dest (v.end_point(start), Calculated().task_stats.current_leg.solution_remaining.MinHeight);
 
-      AirspaceVisible predicate(SettingsComputer(), as);
+      m_route.synchronise(m_airspaces, dest, start, task->get_glide_polar(), Basic().wind);
 
-      m_route.synchronise(m_airspaces, start, dest, predicate);
-      m_route.solve(start, dest);
+      short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
+                                        (int)Basic().working_band_ceiling);
+
+      m_route.solve(dest, start, SettingsComputer().route_planner, h_ceiling);
+
+      // allow at least 500m of climb above current altitude as ceiling, in case
+      // there are no actual working band stats.
     }
   }
 }
@@ -145,13 +151,10 @@ GlideComputerTask::ProcessIdle()
 void
 GlideComputerTask::TerrainWarning()
 {
-  if (terrain == NULL)
-    return;
-
   const AIRCRAFT_STATE state = ToAircraftState(Basic());
   GlidePolar polar = m_task.get_glide_polar();
 
-  GlideTerrain g_terrain(SettingsComputer(), *terrain);
+  GlideTerrain g_terrain(SettingsComputer(), terrain);
   GeoPoint null_point(Angle::native(fixed_zero), Angle::native(fixed_zero));
   const TaskStats& stats = Calculated().task_stats;
   const GlideResult& current = stats.current_leg.solution_remaining;

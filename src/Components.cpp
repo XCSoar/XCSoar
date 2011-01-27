@@ -324,10 +324,16 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
                                                 *task_manager);
   airspace_warnings = new ProtectedAirspaceWarningManager(*airspace_warning);
 
+  // Read the terrain file
+  ProgressGlue::Create(_("Loading Terrain File..."));
+  LogStartUp(_T("OpenTerrain"));
+  terrain = RasterTerrain::OpenTerrain(file_cache);
+
   glide_computer = new GlideComputer(way_points, *protected_task_manager,
                                      *airspace_warnings,
                                      task_events,
-                                     airspace_database);
+                                     airspace_database,
+                                     *terrain);
   glide_computer->SetLogger(&logger);
   glide_computer->Initialise();
 
@@ -345,11 +351,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // Read the topology file(s)
   topology = new TopologyStore();
   LoadConfiguredTopology(*topology);
-
-  // Read the terrain file
-  ProgressGlue::Create(_("Loading Terrain File..."));
-  LogStartUp(_T("OpenTerrain"));
-  terrain = RasterTerrain::OpenTerrain(file_cache);
 
   // Read the waypoint files
   WayPointGlue::ReadWaypoints(way_points, terrain);
