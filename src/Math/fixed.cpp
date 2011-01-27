@@ -291,11 +291,11 @@ namespace
     return (long)((((fixed::value_t)a)*cordic_scale_factor)>>31);
   }
 
-  long scale_cordic_result_accurate(long a)
+  fixed::value_t scale_cordic_result_accurate(long a)
   {
-    long const cordic_scale_factor=0x22C2DD1C; /* 0.271572 * 2^31*/
-    return (long)((((fixed::value_t)a)*cordic_scale_factor)>>
-                  (31-fixed::accurate_cordic_shift));
+    fixed::value_t const cordic_scale_factor=0x22C2DD1C; /* 0.271572 * 2^31*/
+    return (fixed::value_t)((((fixed::value_t)a)*cordic_scale_factor)>>
+                            (31-fixed::accurate_cordic_shift));
   }
 
   long right_shift(long val,int shift)
@@ -330,7 +330,7 @@ namespace
     py = scale_cordic_result(py);
   }
 
-  long perform_cordic_rotation_accurate_sin(long theta)
+  fixed::value_t perform_cordic_rotation_accurate_sin(long theta)
   {
     long x_cos=1<<28;
     long x_sin=0;
@@ -382,7 +382,7 @@ fixed::accurate_half_sin() const
     x=internal_pi-x;
   }
   
-  const long x_sin = perform_cordic_rotation_accurate_sin((long)x);
+  const value_t x_sin = perform_cordic_rotation_accurate_sin((long)x);
   return fixed(fixed::internal(), 
                (negate_sin? -x_sin:x_sin) );
 }
