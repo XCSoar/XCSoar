@@ -557,3 +557,13 @@ RoutePlanner::hull_extended(const RoutePoint& p)
   prune_interior(m_search_hull);
   return true;
 }
+
+void
+RoutePlanner::calc_footprint(const AGeoPoint& origin,
+                             GeoPoint fp[ROUTEPOLAR_POINTS]) const
+{
+  TaskProjection proj;
+  proj.reset(origin);
+  proj.update_fast();
+  rpolars.calc_footprint(origin, fp, terrain, proj);
+}

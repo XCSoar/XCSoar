@@ -154,6 +154,15 @@ GlideComputerTask::TerrainWarning()
   const AIRCRAFT_STATE state = ToAircraftState(Basic());
   GlidePolar polar = m_task.get_glide_polar();
 
+
+  if (SettingsComputer().FinalGlideTerrain) {
+    // @todo: update TerrainBase in new footprint calculations,
+    // remove TerrainFootprint function from GlideComputerAirData
+
+    const AGeoPoint start (state.get_location(), state.NavAltitude);
+    m_route.footprint(start, SetCalculated().GlideFootPrint);
+  }
+
   GlideTerrain g_terrain(SettingsComputer(), terrain);
   GeoPoint null_point(Angle::native(fixed_zero), Angle::native(fixed_zero));
   const TaskStats& stats = Calculated().task_stats;

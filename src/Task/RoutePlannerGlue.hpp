@@ -52,6 +52,9 @@ public:
     m_planner.get_solution(route);
   }
 
+  void footprint(const AGeoPoint& origin,
+                 GeoPoint p[ROUTEPOLAR_POINTS]) const;
+
 private:
   RasterTerrain& terrain;
   AirspaceRoute m_planner;

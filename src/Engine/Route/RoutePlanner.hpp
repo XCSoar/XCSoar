@@ -161,6 +161,15 @@ public:
    */
   virtual void reset();
 
+  /**
+   * Calculate terrain interception footprint.
+   *
+   * @param origin Aircraft location
+   * @param fp Array of intercept points
+   */
+  void calc_footprint(const AGeoPoint& origin,
+                      GeoPoint fp[ROUTEPOLAR_POINTS]) const;
+
   unsigned short verbose; /**< Used for debugging output. To be removed when
                            * code is stable. */
 

@@ -87,6 +87,16 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
     i++;
   }
 
+  {
+    std::ofstream fout ("results/footprint.txt");
+    GeoPoint p[ROUTEPOLAR_POINTS];
+    route.calc_footprint(AGeoPoint(origin, map.GetField(origin)+3000), p);
+    for (unsigned i=0; i< ROUTEPOLAR_POINTS; ++i) {
+      fout << p[i].Longitude.value_degrees() << " " << p[i].Latitude.value_degrees() << "\n";
+    }
+    fout << "\n";
+  }
+
   // polar.set_mc(fixed_zero);
   // route.update_polar(polar, wind);
 }
@@ -114,8 +124,8 @@ int main(int argc, char** argv) {
 
   plan_tests(16*3);
   test_troute(map, fixed_zero, fixed(0.1), 10000);
-  test_troute(map, fixed(5.0), fixed_one, 10000);
   test_troute(map, fixed_zero, fixed_zero, 10000);
+  test_troute(map, fixed(5.0), fixed_one, 10000);
 
   return exit_status();
 }

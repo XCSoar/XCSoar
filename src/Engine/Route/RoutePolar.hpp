@@ -280,6 +280,15 @@ public:
    */
   static int dxdy_to_index(const int dx, const int dy);
 
+  /**
+   * Calculate distances normalised to 128 corresponding to direction index
+   *
+   * @param index Direction index
+   * @param dx X distance units
+   * @param dy Y distance units
+   */
+  static void index_to_dxdy(const int index, int& dx, int& dy);
+
 private:
   GlideResult solve_task(const GlidePolar& polar, const SpeedVector& wind,
                          const Angle theta, const bool glide) const;
@@ -432,6 +441,19 @@ public:
     return config.terrain_enabled();
   }
 
+  /**
+   * Calculate terrain interception footprint
+   *
+   * @param o Aircraft location
+   * @param p Array of intercept points
+   * @param map RasterMap of terrain.
+   * @param proj Task projection
+   */
+  void calc_footprint(const AGeoPoint& o,
+                      GeoPoint p[ROUTEPOLAR_POINTS],
+                      const RasterMap& map,
+                      const TaskProjection& proj) const;
+
 private:
 
   RoutePolar polar_glide;
@@ -439,6 +461,8 @@ private:
   fixed inv_M; /**< Reciprocal of MacCready value (s/m) */
 
   RoutePlannerConfig config;
+
+  GeoPoint msl_intercept(const int index, const AGeoPoint& p, const TaskProjection& proj) const;
 };
 
 #endif

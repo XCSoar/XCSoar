@@ -514,11 +514,13 @@ GlideComputerAirData::TerrainFootprint(fixed screen_range)
 
   // initialise base
   SetCalculated().TerrainBase = Calculated().TerrainAlt;
+  // @todo: update TerrainBase in new footprint calculations
 
   // estimate max range (only interested in at most one screen
   // distance away) except we need to scan for terrain base, so 20km
   // search minimum is required
 
+/*
   GlidePolar glide_polar = m_task.get_glide_polar();
   glide_polar.set_mc(min(Calculated().common_stats.current_risk_mc,
                          SettingsComputer().safety_mc));
@@ -541,6 +543,8 @@ GlideComputerAirData::TerrainFootprint(fixed screen_range)
   } 
 
   SetCalculated().TerrainBase = g_terrain.get_terrain_base();
+*/
+
   SetCalculated().Experimental = Calculated().TerrainBase;
 }
 

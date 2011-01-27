@@ -24,6 +24,8 @@
 #include "Thread/Guard.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Navigation/SpeedVector.hpp"
+#include "NMEA/Derived.hpp"
+#include <assert.h>
 
 RoutePlannerGlue::RoutePlannerGlue(RasterTerrain& _terrain,
                                    const GlidePolar& polar,
@@ -44,3 +46,11 @@ RoutePlannerGlue::solve(const AGeoPoint& origin,
   return m_planner.solve(origin, destination, config, h_ceiling);
 }
 
+void
+RoutePlannerGlue::footprint(const AGeoPoint& origin,
+                            GeoPoint p[ROUTEPOLAR_POINTS]) const
+{
+  assert(ROUTEPOLAR_POINTS== TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
+  RasterTerrain::ExclusiveLease lease(terrain);
+  return m_planner.calc_footprint(origin, p);
+}

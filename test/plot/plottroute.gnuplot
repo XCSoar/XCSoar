@@ -23,7 +23,8 @@ plot \
      "< test/tools/gnuplotitems.pl cleared results/troute.txt" using 1:2 with linespoints ls 5 title "cleared", \
      "< test/tools/gnuplotitems.pl cand results/troute.txt" using 1:2 with linespoints ls 4 title "candidate", \
      "< test/tools/gnuplotitems.pl shortcut results/troute.txt" using 1:2 with linespoints ls 8 title "shortcut", \
-     "< test/tools/gnuplotitems.pl solution results/troute.txt" using 1:2 with linespoints ls 1 title "solution"
+     "< test/tools/gnuplotitems.pl solution results/troute.txt" using 1:2 with linespoints ls 1 title "solution", \
+     "results/footprint.txt" using 1:2 with linespoints ls 3 title "footprint"
 
 pause -1
 
