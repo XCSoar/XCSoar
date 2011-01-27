@@ -172,6 +172,7 @@ LoadTask()
   *task_modified = true;
 
   wTabBar->SetCurrentPage(0);
+  wTabBar->set_focus();
 }
 
 static void
