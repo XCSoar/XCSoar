@@ -447,7 +447,7 @@ Chart::DrawYGrid(const fixed tic_step, const fixed zero, enum Style Style,
                  const fixed unit_step, bool draw_units)
 {
   assert((unsigned)Style < sizeof(pens) / sizeof(pens[0]));
-  DrawXGrid(tic_step, zero, pens[(unsigned)Style], unit_step, draw_units);
+  DrawYGrid(tic_step, zero, pens[(unsigned)Style], unit_step, draw_units);
 }
 
 void
