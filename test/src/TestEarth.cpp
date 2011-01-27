@@ -25,9 +25,39 @@
 
 #include <assert.h>
 
+static void
+TestLinearDistance()
+{
+  const GeoPoint lon_start(Angle::degrees(fixed(90)),
+                           Angle::degrees(fixed_zero));
+  for (unsigned i = 0; i < 180; i += 5) {
+    const GeoPoint lon_end(lon_start.Longitude + Angle::degrees(fixed(i)),
+                           lon_start.Latitude);
+    fixed distance = Distance(lon_start, lon_end);
+
+    double min = 111100 * i;
+    double max = 111200 * i;
+
+    ok1(between(distance, min, max));
+  }
+
+  const GeoPoint lat_start(Angle::degrees(fixed_zero),
+                           Angle::degrees(fixed_zero));
+  for (unsigned i = 0; i < 90; i += 5) {
+    const GeoPoint lat_end(lat_start.Longitude,
+                           lat_start.Latitude + Angle::degrees(fixed(i)));
+    fixed distance = Distance(lat_start, lat_end);
+
+    double min = 111100 * i;
+    double max = 111200 * i;
+
+    ok1(between(distance, min, max));
+  }
+}
+
 int main(int argc, char **argv)
 {
-  plan_tests(9);
+  plan_tests(9 + 36 + 18);
 
   const GeoPoint a(Angle::degrees(fixed(7.7061111111111114)),
                    Angle::degrees(fixed(51.051944444444445)));
@@ -59,6 +89,8 @@ int main(int argc, char **argv)
 
   fixed big_distance = Distance(a, c);
   ok1(big_distance > fixed(494000) && big_distance < fixed(495000));
+
+  TestLinearDistance();
 
   return exit_status();
 }

@@ -57,7 +57,16 @@ public:
     return raster_tile_cache.GetBounds().center();
   }
 
-  void SetViewCenter(const GeoPoint &location);
+  void SetViewCenter(const GeoPoint &location, fixed radius);
+
+  /**
+   * Determines if SetViewCenter() should be called again to continue
+   * loading.
+   */
+  gcc_pure
+  bool IsDirty() const {
+    return raster_tile_cache.IsDirty();
+  }
 
   /**
    * @see RasterProjection::pixel_distance()

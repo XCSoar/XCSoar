@@ -40,7 +40,7 @@ MapWindow::MapWindow()
   :way_points(NULL),
    topology(NULL), topology_renderer(NULL),
    terrain(NULL),
-   terrain_center(Angle::native(fixed_zero), Angle::native(fixed_zero)),
+   terrain_radius(fixed_zero),
    weather(NULL),
    airspace_database(NULL), airspace_warnings(NULL), task(NULL),
    marks(NULL)
@@ -103,30 +103,44 @@ MapWindow::UpdateTopology(unsigned max_update)
     return 0;
 }
 
-void
+bool
 MapWindow::UpdateTerrain()
 {
-  if (terrain == NULL ||
+  if (terrain == NULL)
+    return false;
+
+  fixed radius = visible_projection.GetScreenWidthMeters() / 2;
+  if (terrain_radius >= radius &&
       Distance(terrain_center, visible_projection.GetGeoLocation()) < fixed(1000))
-    return;
+    return false;
 
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations
   RasterTerrain::ExclusiveLease lease(*terrain);
-  lease->SetViewCenter(visible_projection.GetGeoLocation());
-  terrain_center = visible_projection.GetGeoLocation();
+  lease->SetViewCenter(visible_projection.GetGeoLocation(), radius);
+  if (lease->IsDirty())
+    terrain_radius = fixed_zero;
+  else {
+    terrain_radius = radius;
+    terrain_center = visible_projection.GetGeoLocation();
+  }
+
+  return lease->IsDirty();
 }
 
-void
+bool
 MapWindow::UpdateWeather()
 {
   // always service weather even if it's not used by the map,
   // because it's potentially used by other calculations
 
-  if (weather != NULL) {
-    weather->Reload((int)Basic().Time);
-    weather->SetViewCenter(visible_projection.GetGeoLocation());
-  }
+  if (weather == NULL)
+    return false;
+
+  weather->Reload((int)Basic().Time);
+  weather->SetViewCenter(visible_projection.GetGeoLocation(),
+                         visible_projection.GetScreenWidthMeters() / 2);
+  return weather->IsDirty();
 }
 
 /**

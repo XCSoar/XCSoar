@@ -86,6 +86,7 @@ RefreshView()
     wp->set_visible(fai_types || racing_types);
     DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
     df.SetAsBoolean(p.task_scored);
+    wp->set_enabled(false);
     wp->RefreshDisplay();
   }
 

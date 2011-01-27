@@ -364,12 +364,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // ReSynchronise the blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());
 
-  if (terrain != NULL) {
-    ProgressGlue::Create(_("Loading Terrain File..."));
-    RasterTerrain::UnprotectedLease lease(*terrain);
-    lease->SetViewCenter(Basic().Location);
-  }
-
   // Scan for weather forecast
   ProgressGlue::Create(_("Scanning weather forecast"));
   LogStartUp(_T("RASP load"));

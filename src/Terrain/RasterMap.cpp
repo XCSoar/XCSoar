@@ -75,7 +75,7 @@ angle_to_pixel(Angle value, Angle start, Angle end, unsigned width)
 }
 
 void
-RasterMap::SetViewCenter(const GeoPoint &location)
+RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
 {
   if (!raster_tile_cache.GetInitialised())
     return;
@@ -88,7 +88,8 @@ RasterMap::SetViewCenter(const GeoPoint &location)
   int y = angle_to_pixel(location.Latitude, bounds.north, bounds.south,
                          raster_tile_cache.GetHeight());
 
-  raster_tile_cache.UpdateTiles(path, x, y);
+  raster_tile_cache.UpdateTiles(path, x, y,
+                                projection.distance_pixels(radius) / 256);
 }
 
 short

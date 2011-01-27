@@ -109,39 +109,27 @@ RasterTile::GetFieldInterpolated(unsigned lx, unsigned ly,
 }
 
 bool
-RasterTile::CheckTileVisibility(const int view_x, const int view_y)
+RasterTile::CheckTileVisibility(int view_x, int view_y, unsigned view_radius)
 {
   if (!width || !height) {
     Disable();
     return false;
   }
 
-  const unsigned int dx1 = abs(view_x - xstart);
-  const unsigned int dx2 = abs(xend - view_x);
-  const unsigned int dy1 = abs(view_y - ystart);
-  const unsigned int dy2 = abs(yend - view_y);
+  const unsigned int dx1 = abs(view_x - (int)xstart);
+  const unsigned int dx2 = abs((int)xend - view_x);
+  const unsigned int dy1 = abs(view_y - (int)ystart);
+  const unsigned int dy2 = abs((int)yend - view_y);
 
-  if (min(dx1, dx2) * 2 < width * 3) {
-    if (min(dy1, dy2) < height)
-      return true;
-  }
-  if (min(dy1, dy2) * 2 < height * 3) {
-    if (min(dx1, dx2) < width)
-      return true;
-  }
-  if (IsEnabled()) {
-    if ((max(dx1, dx2) > width * 2) || (max(dy1, dy2) > height * 2))
-      Disable();
-  }
-  return false;
+  distance = std::max(std::min(dx1, dx2), std::min(dy1, dy2));
+  return distance <= view_radius || IsEnabled();
 }
 
 bool
-RasterTile::VisibilityChanged(int view_x, int view_y)
+RasterTile::VisibilityChanged(int view_x, int view_y, unsigned view_radius)
 {
-  request = CheckTileVisibility(view_x, view_y) && IsDisabled();
-  // JMW note: order of these is important!
-  return request;
+  request = false;
+  return CheckTileVisibility(view_x, view_y, view_radius);
 }
 
 short*
@@ -167,51 +155,93 @@ RasterTileCache::SetTile(unsigned index,
   tiles[index].set(xstart, ystart, xend, yend);
 }
 
-bool
-RasterTileCache::PollTiles(int x, int y)
-{
-  bool retval = false;
-  int i;
+struct RTDistanceSort {
+  const RasterTileCache &rtc;
 
+  RTDistanceSort(RasterTileCache &_rtc):rtc(_rtc) {}
+
+  bool operator()(unsigned short ai, unsigned short bi) const {
+    const RasterTile &a = rtc.tiles[ai];
+    const RasterTile &b = rtc.tiles[bi];
+
+    return a.get_distance() < b.get_distance();
+  }
+};
+
+bool
+RasterTileCache::PollTiles(int x, int y, unsigned radius)
+{
   if (scan_overview)
     return false;
 
-  ActiveTiles.clear();
+  enum {
+    /**
+     * Maximum number of tiles loaded at a time, to reduce system load
+     * peaks.
+    */
+    MAX_ACTIVATE = MAX_ACTIVE_TILES > 32 ? 16 : MAX_ACTIVE_TILES / 2,
+  };
 
-  for (i = MAX_RTC_TILES - 1; --i >= 0;) {
-    if (tiles[i].VisibilityChanged(x, y))
-      retval = true;
+  /* query all tiles; all tiles which are either in range or already
+     loaded are added to RequestTiles */
 
-    if (tiles[i].IsEnabled() && !ActiveTiles.full())
-      ActiveTiles.append(tiles[i]);
+  RequestTiles.clear();
+  for (int i = MAX_RTC_TILES - 1; i >= 0; --i)
+    if (tiles[i].VisibilityChanged(x, y, radius))
+      RequestTiles.append(i);
+
+  /* reduce if there are too many */
+
+  if (RequestTiles.size() > MAX_ACTIVE_TILES) {
+    /* sort by distance */
+    const RTDistanceSort sort(*this);
+    std::sort(RequestTiles.begin(), RequestTiles.end(), sort);
+
+    /* dispose all tiles which are out of range */
+    for (unsigned i = MAX_ACTIVE_TILES; i < RequestTiles.size(); ++i) {
+      RasterTile &tile = tiles[RequestTiles[i]];
+      tile.Disable();
+    }
+
+    RequestTiles.shrink(MAX_ACTIVE_TILES);
   }
 
-  return retval;
+  /* fill ActiveTiles and request new tiles */
+
+  ActiveTiles.clear();
+  dirty = false;
+
+  unsigned num_activate = 0;
+  for (unsigned i = 0; i < RequestTiles.size(); ++i) {
+    RasterTile &tile = tiles[RequestTiles[i]];
+    if (tile.IsEnabled())
+      /* re-insert the tile in the ActiveTiles list */
+      ActiveTiles.append(tile);
+    else if (++num_activate <= MAX_ACTIVATE)
+      /* request the tile in the current iteration */
+      tile.set_request();
+    else
+      /* this tile will be loaded in the next iteration */
+      dirty = true;
+  }
+
+  return num_activate > 0;
 }
 
 bool
 RasterTileCache::TileRequest(unsigned index)
 {
-  unsigned num_used = 0;
-
   if (index >= MAX_RTC_TILES) {
     // tile index too big!
     return false;
   }
 
-  if (!tiles[index].is_requested())
+  if (ActiveTiles.full() || !tiles[index].is_requested())
     return false;
 
-  for (unsigned i = 0; i < MAX_RTC_TILES; ++i)
-    if (tiles[i].IsEnabled())
-      num_used++;
-
-  if (num_used < MAX_ACTIVE_TILES) {
-    tiles[index].Enable();
-    return true; // want to load this one!
-  }
-
-  return false; // not enough memory for it or not visible anyway
+  tiles[index].Enable();
+  ActiveTiles.append(tiles[index]);
+  return true; // want to load this one!
 }
 
 short
@@ -316,7 +346,6 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
 
   const MarkerSegmentInfo *segment = FindMarkerSegment(file_offset);
   if (segment == NULL)
-  if (segment == NULL)
     /* past the end of the recorded segment list; shouldn't happen */
     return 0;
 
@@ -337,10 +366,10 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
 void
 RasterTileCache::MarkerSegment(long file_offset, unsigned id)
 {
-  ProgressGlue::SetValue(file_offset / 65536);
-
   if (!scan_overview || segments.full())
     return;
+
+  ProgressGlue::SetValue(file_offset / 65536);
 
   int tile = -1;
   if (id == 0xff93 && !segments.empty())
@@ -366,7 +395,8 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
     return;
   }
 
-  ProgressGlue::SetRange(jas_stream_length(in) / 65536);
+  if (scan_overview)
+    ProgressGlue::SetRange(jas_stream_length(in) / 65536);
 
   jp2_decode(in, scan_overview ? "xcsoar=2" : "xcsoar=1");
   jas_stream_close(in);
@@ -453,12 +483,15 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file)
 }
 
 void
-RasterTileCache::UpdateTiles(const char *path, int x, int y)
+RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
 {
-  if (PollTiles(x, y)) {
+  if (radius < 256)
+    /* tiles are usually 256 pixels wide; with a radius smaller than
+       that, the (optimized) tile distance calculations may fail */
+    radius = 256;
+
+  if (PollTiles(x, y, radius))
     LoadJPG2000(path);
-    PollTiles(x, y);
-  }
 }
 
 bool

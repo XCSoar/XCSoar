@@ -56,6 +56,12 @@ public:
     return the_size;
   }
 
+  void shrink(unsigned _size) {
+    assert(_size <= the_size);
+
+    the_size = _size;
+  }
+
   bool empty() const {
     return the_size == 0;
   }

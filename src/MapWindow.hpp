@@ -86,6 +86,7 @@ protected:
 
   RasterTerrain *terrain;
   GeoPoint terrain_center;
+  fixed terrain_radius;
 
   RasterWeather *weather;
 
@@ -195,8 +196,16 @@ public:
 
 protected:
   unsigned UpdateTopology(unsigned max_update=1024);
-  void UpdateTerrain();
-  void UpdateWeather();
+
+  /**
+   * @return true if UpdateTerrain() should be called again
+   */
+  bool UpdateTerrain();
+
+  /**
+   * @return true if UpdateWeather() should be called again
+   */
+  bool UpdateWeather();
 
   void UpdateAll() {
     UpdateTopology();

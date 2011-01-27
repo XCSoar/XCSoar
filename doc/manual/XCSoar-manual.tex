@@ -10,8 +10,7 @@
 
 \todonum[inline]{support more task types}
 \todonum[inline]{alternates list}
-\todonum[inline]{instant OLC score}
-\todonum[inline]{OLC plus rules}
+
 \todonum[inline]{instant AAT optimization}
   
 \begingroup
@@ -2298,45 +2297,38 @@ Best scored targets found &  \\
 
 \section{OnLine Contest}
 
-  The analysis dialog contains a page `OnLine Contest' which can be
-  used to show the optimal path and estimated score.  The
-  configuration settings \config{taskrules} (task rules page) allows the
-  selection of which set of rules to be used for the OLC optimisation.
+The analysis dialog contains a page `OnLine Contest' which can be
+used to show the optimal path and estimated score.  The configuration settings \config{taskrules} 
+(task rules page) allows the selection of which set of rules to be used for the
+OLC optimisation.
 
-  The Sprint rules require the start altitude to be the lowest
-  altitude in the flight after release from tow.  The detection
-  of this start point can be \todonum{update} enabled in the task editor,
-  selecting the start point and turn `OLC' to ON.
+The optimisation is done continuously in the background and can be retrieved at
+any time. The analysis page shows a graphical overview of the optimisation
+result besides distance and score. A InfoBox is available which gives the
+instant OLC distance and score as well.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/shot-olc.png}
 \end{center}
 
-  When flying OLC, either AAT or non-AAT tasks may still be used to
-  manage the flight navigation.  During flight, if the `Optimise'
-  button in the OLC page of the analysis dialog is pressed, the
-  computer will optimise the current flight with respect to the
-  selected OLC rules.  
+When flying OLC, either AAT or non-AAT tasks may still be used to
+manage the flight navigation.  During flight, the computer will optimise the
+current flight with respect to the selected OLC rules.  
 
-  In the OLC analysis page, the aircraft track is shown as a thin
-  green line, and after optimisation, the optimal path is shown as a
-  thick red dashed line.
+In the OLC analysis page, the aircraft track is shown as a thin green line, the optimal 
+path is shown as a thick red dashed line.
 
-  If continued flight in final glide will result
-  in higher score, the displayed results are shown as `In progress'
-  and a blue line shows the projected path to improve the score.
-  For Sprint and Classic OLC types, this path is extended in the direction
-  to the current waypoint.  For Triangle OLC type, this path is extended
-  in the direction to produce the largest triangle.
+If continued flight in final glide will result in higher score, the displayed
+results are shown as ``In progress'' and a blue line shows the projected path 
+to improve the score. For Sprint and Classic OLC types, this path is extended in the direction 
+to the current waypoint. For Triangle OLC type, this path is extended in the direction to 
+produce the largest triangle. \todonum{still true?}
 
-  The score and computed optimal distance is approximate.
+The score and computed optimal distance is approximate.
 
-  If continued flight in final glide will not achieve a higher score,
-  or if the aircraft has landed, the displayed results are shown as
-  `Finished'.  
 
-  Depending on the duration of the flight, the time required to
-  calculate the optimum path may take up to 10 seconds.
+When the aircraft has landed, the displayed result gest not updated anymore.
+
 
 \section{Abort/resume task}
 
@@ -3113,9 +3105,9 @@ workload on the pilot.  Two methods of updating the MacCready ring setting
 are available:
 \begin{description}
 \item[Final glide]  During final glide, MacCready is adjusted in order to
- arrive at the finishing point in minimum time.  For OLC sprint tasks,
+ arrive at the finishing point in minimum time.  For OLC Sprint tasks,
  the MacCready is adjusted in order to cover the greatest distance in the remaining
- time and reach the finish height.
+ time and reach the finish height.\todonum{verfy}
 \item[Trending Average climb] When not in final glide, MacCready is adjusted
 to the trending average climb rate based on all thermals.
 \end{description}
@@ -5574,19 +5566,21 @@ rules. \label{conf:taskrules}
 \item[AGL] Reference is the height above the start point
 \end{description}
 \item[Finish min height]  Minimum height above ground while finishing the task.  Set to 0 for no limit. 
-%\item[FAI finish height]  If enabled, this option requires the minimum height above ground for finish to be greater than 1000m below the start height.
-\item[Online contest] Determines the rules used to optimise On-Line Contest paths. 
+\item[Online contest] Determines the rules used to optimise On-Line Contest
+paths.  The implementation  conforms to the official release 2010, Sept. 23.
 \begin{description}
-\item[OLC Sprint]  \todonum{update}Conforms to FAI IGC League rules.  Up to 5
-points including start and finish, maximum duration 2.5 hours, finish height must not be below start height.
-\item[OLC FAI]  \todonum{update}Conforms to FAI OLC triangle rules.  Four points
-with common start and finish.  For tasks longer than 500km, no leg less than 25\% or larger than 45\%; otherwise 
-no leg less than 28\% of total.  Finish height must not be lower than start height less 1000 meters.
-\item[OLC Classic]  \todonum{update}Conforms to OLC classic rules.  Up to seven
-points including start and finish, finish height must not be lower than start height less 1000 meters.  
-Points awarded 80\% on second last leg and 60\% on last leg.
-\item[OLC League]
-\item[OLC Plus]  \todonum{explaine}
+\item[OLC Sprint]  Up to 5 points including start and finish, maximum duration
+2.5 hours, finish height must not be below start height.
+\item[OLC FAI]  Four points with common start and finish.  For tasks longer than
+500km, no leg less than 25\% or larger than 45\%; otherwise no leg less than 28\% of total.  Finish height must 
+not be lower than start height less 1000 meters.
+\item[OLC Classic]  Up to seven points including start and finish, finish height
+must not be lower than start height less 1000 meters.
+\item[OLC League]  A contest on top of the classic task optimization, cutting
+a 2.5 hours segment over max. 3 of the turns. Finish height must not be below
+start height.
+\item[OLC Plus]  A combination of Classic and FAI rules. 30\% of the FAI score
+are added to the Classic score.
 \end{description}
 \end{description}
 

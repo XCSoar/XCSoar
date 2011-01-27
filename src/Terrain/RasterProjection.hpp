@@ -53,6 +53,11 @@ public:
     return Angle::native(fixed(pixels) / y_scale);
   }
 
+  gcc_pure
+  unsigned angle_to_height(Angle angle) const {
+    return angle.value_native() * y_scale;
+  }
+
   gcc_pure std::pair<unsigned, unsigned>
   project(const GeoPoint &location) const {
     unsigned x = (int)(location.Longitude.value_native() * x_scale) - left;
@@ -68,6 +73,14 @@ public:
    */
   gcc_pure fixed
   pixel_distance(const GeoPoint &location, unsigned pixels) const;
+
+  /**
+   * Converts a distance (in meters) to a pixel distance.
+   *
+   * @param pixels the pixel distance between two pixels
+   */
+  gcc_pure unsigned
+  distance_pixels(fixed distance) const;
 };
 
 #endif

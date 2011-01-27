@@ -47,7 +47,7 @@ RasterProjection::pixel_distance(const GeoPoint &location, unsigned pixels) cons
      * x_scale and y_scale are quite large numbers, and building their
      * reciprocals may lose a lot of precision.
      */
-    FACTOR = 4096,
+    FACTOR = 256,
   };
 
   Angle distance = width_to_angle(fixed_sqrt_two * FACTOR * pixels);
@@ -59,4 +59,11 @@ RasterProjection::pixel_distance(const GeoPoint &location, unsigned pixels) cons
   fixed y = Distance(location, p);
 
   return max(x, y) / FACTOR;
+}
+
+unsigned
+RasterProjection::distance_pixels(fixed distance) const
+{
+  Angle angle = Angle::radians(distance / REARTH);
+  return angle_to_height(angle);
 }
