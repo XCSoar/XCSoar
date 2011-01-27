@@ -61,22 +61,6 @@ protected:
 
   void ScanSpotHeights();
 
-  /**
-   * Convert the height matrix into the image, without shading.
-   */
-  void GenerateImage();
-
-  /**
-   * Convert the height matrix into the image, with slope shading.
-   */
-  void GenerateSlopeImage(const int sx, const int sy, const int sz);
-
-  /**
-   * Convert the height matrix into the image, with slope shading.
-   */
-  void GenerateSlopeImage(const Angle sunazimuth);
-
-  void ColorTable();
   void CopyTo(Canvas &canvas, unsigned width, unsigned height);
 
   virtual bool do_scan_spot();
