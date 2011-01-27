@@ -201,7 +201,7 @@ XShape::get_indices(int thinning_level, unsigned min_distance,
       // TODO: free memory saved by thinning (use malloc/realloc or some class?)
     } else if (type == MS_SHAPE_POLYGON) {
       index_count[thinning_level] = idx_count =
-        new GLushort[1 + 3*(num_points-2)];
+        new GLushort[1 + 3*(num_points-2) + 2*(num_lines-1)];
       indices[thinning_level] = idx = idx_count + 1;
 
       *idx_count = 0;
@@ -218,6 +218,7 @@ XShape::get_indices(int thinning_level, unsigned min_distance,
         *idx_count += count;
         pt += lines[i];
       }
+      *idx_count = triangle_to_strip(idx, *idx_count, num_points, num_lines);
       // TODO: free memory saved by thinning (use malloc/realloc or some class?)
     } else {
       assert(false);

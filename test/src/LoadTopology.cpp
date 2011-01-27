@@ -55,6 +55,13 @@ polygon_to_triangle(const ShapePoint *points, unsigned num_points,
 }
 #endif
 
+unsigned
+triangle_to_strip(GLushort *triangles, unsigned index_count,
+                  unsigned vertex_count, unsigned polygon_count)
+{
+  return 0;
+}
+
 #endif /* OpenGL */
 
 class TestProjection : public WindowProjection {

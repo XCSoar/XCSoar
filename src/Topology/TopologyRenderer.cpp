@@ -219,7 +219,7 @@ TopologyFileRenderer::Paint(Canvas &canvas,
 #else
         glVertexPointer(2, GL_INT, 0, &points[0].x);
 #endif
-        glDrawElements(GL_TRIANGLES, *index_count, GL_UNSIGNED_SHORT,
+        glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
                        triangles);
       }
 #else // !ENABLE_OPENGL

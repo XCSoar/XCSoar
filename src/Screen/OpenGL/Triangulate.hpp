@@ -37,4 +37,8 @@ polygon_to_triangle(const ShapePoint *points, unsigned num_points,
                     GLushort *triangles, unsigned min_distance=1);
 #endif
 
+unsigned
+triangle_to_strip(GLushort *triangles, unsigned index_count,
+                  unsigned vertex_count, unsigned polygon_count=1);
+
 #endif

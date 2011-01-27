@@ -236,3 +236,142 @@ polygon_to_triangle(const ShapePoint *points, unsigned num_points,
   return _polygon_to_triangle(points, num_points, triangles, min_distance);
 }
 #endif
+
+/**
+ * Pack triangle indices into a triangle strip.
+ * Empty triangles are inserted to connect individual strips. Thus we always
+ * get one "degenerated" triangle strip. The degenerated triangles should
+ * be discarded pretty early in the rendering pipeline. This saves a lot of
+ * OpenGL API calls.
+ * The triangle buffer must hold at least:
+ *   3*(triangle_count-2) + 2*(polygon_count-1) indices.
+ *
+ * @param triangles triangle indicies, which will be overwriten with the strip
+ * @param index_count number of triangle indices. (triangle_count*3)
+ * @param vertex_count number of vertices used: max(triangles[i])+1
+ * @param polygon_count number of unconnected polygons
+ *
+ * @return number of indices in the triangle strip
+ */
+unsigned
+triangle_to_strip(GLushort *triangles, unsigned index_count,
+                  unsigned vertex_count, unsigned polygon_count)
+{
+  // count the number of occurrences for each vertex
+  GLushort *vcount = new GLushort[vertex_count]();
+  GLushort *t = triangles;
+  GLushort *v;
+  const GLushort * const t_end = triangles + index_count;
+  for (v = t; v < t_end; v++)
+    vcount[*v]++;
+
+  const unsigned triangle_buffer_size = index_count + 2*(polygon_count-1);
+  GLushort *triangle_strip = new GLushort[triangle_buffer_size];
+  GLushort *strip = triangle_strip;
+
+  // search a start point with only one reference
+  for (v = t; v < t_end; v++)
+    if (vcount[*v] == 1)
+      break;
+  strip[0] = *v;
+  v = t + (v-t)/3*3;
+  strip[1] = (v[0] == strip[0]) ? v[1] : v[0];
+  strip[2] = (v[2] == strip[0]) ? v[1] : v[2];
+
+  unsigned strip_size = 0;
+  unsigned triangles_left = index_count/3;
+  while (triangles_left > 1) {
+    bool found_something = false;
+
+    vcount[v[0]]--;  vcount[v[1]]--;  vcount[v[2]]--;
+    // fill hole in triangle array
+    if (v != t) {
+      v[0] = t[0];
+      v[1] = t[1];
+      v[2] = t[2];
+    }
+    t += 3;
+    triangles_left--;
+
+    /* TODO: I'm almost sure this is true, but I can't prove it. Maybe there
+     *       are polygons, where the degenerated triangle strip is longer
+     *       than all triangle indices.
+     *       Use a higher polygon_count and bigger triangle buffer if you
+     *       hit this one.
+     */
+    assert(strip+4 <= triangle_strip+triangle_buffer_size);
+
+    // search for a shared edge
+    if (vcount[strip[1]] > 0 && vcount[strip[2]] > 0) {
+      for (v = t; v < t_end; v += 3) {
+        if ((strip[1] == v[0] || strip[1] == v[1] || strip[1] == v[2]) &&
+            (strip[2] == v[0] || strip[2] == v[1] || strip[2] == v[2])) {
+          // add triangle to strip
+          strip[3] = v[0] != strip[1] && v[0] != strip[2] ? v[0] :
+                     v[1] != strip[1] && v[1] != strip[2] ? v[1] : v[2];
+          strip++;
+          strip_size++;
+          found_something = true;
+          break;
+        }
+      }
+    }
+    if (found_something)
+      continue;
+
+    // search for a single shared vertex
+    if (vcount[strip[1]] + vcount[strip[2]] > 0) {
+      for (v = t; v < t_end; v++) {
+        if (strip[2] == *v) {
+          found_something = true;
+          break;
+        }
+        if (strip_size == 0 && strip[1] == *v) {
+          // swap the last two indices
+          GLushort tmp = strip[1];
+          strip[1] = strip[2];
+          strip[2] = tmp;
+          found_something = true;
+          break;
+        }
+      }
+    }
+
+    if (!found_something) {
+      // search for a vertex that has only one reference left
+      for (v = t; v < t_end; v++)
+        if (vcount[*v] == 1)
+          break;
+      assert(v != t_end);
+
+      // add two redundant points
+      assert(strip+5 <= triangle_strip+triangle_buffer_size);
+      strip += 2;
+      strip[1] = strip[0];
+      strip[2] = *v;
+    }
+
+    // add triangle to strip
+    assert(strip+6 <= triangle_strip+triangle_buffer_size);
+    strip += 3;
+    strip[0] = *v;
+    v = t + (v-t)/3*3;
+    strip[1] = (v[0] == strip[0]) ? v[1] : v[0];
+    strip[2] = (v[2] == strip[0]) ? v[1] : v[2];
+    strip_size = 0;
+  }
+  strip += 3;
+
+  // copy strip over triangles
+  for (t=triangles, v=triangle_strip; v < strip; v++, t++)
+    *t = *v;
+
+  //LogDebug(_T("triangle_to_strip: indices=%u strip indices=%u (%u%%)"),
+  //         index_count, strip - triangle_strip,
+  //         (strip - triangle_strip)*100/index_count);
+
+  delete triangle_strip;
+  delete vcount;
+
+  return strip - triangle_strip;
+}
