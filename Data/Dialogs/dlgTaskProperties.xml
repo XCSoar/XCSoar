@@ -11,7 +11,7 @@
     </Edit>
 
   <Edit Name="prpTaskScored" Caption="Task scoring" X="2" Width="-2" Height="22" CaptionWidth="140"
-    Help="TODO">
+    Help="Internal flag, which determines whether accurate scoring measurements of the task is required or not.">
     <DataField DataType="boolean"/>
   </Edit>
 
