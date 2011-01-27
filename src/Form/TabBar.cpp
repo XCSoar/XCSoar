@@ -186,7 +186,7 @@ TabDisplay::on_paint(Canvas &canvas)
       canvas.set_background_color(Color::BLACK);
 
     } else if ((int)i == downindex) {
-      canvas.set_text_color(Color::WHITE);
+      canvas.set_text_color(Color::BLACK);
       canvas.set_background_color(Color::YELLOW);
 
     } else {
