@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Polar/WinPilot.hpp"
+#include "Polar/Polar.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "Profile/ProfileKeys.hpp"

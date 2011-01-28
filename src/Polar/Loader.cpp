@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Polar/Loader.hpp"
-#include "Polar/WinPilot.hpp"
+#include "Polar/Polar.hpp"
 #include "Polar/BuiltIn.hpp"
 #include "LogFile.hpp"
 #include "Language.hpp"
