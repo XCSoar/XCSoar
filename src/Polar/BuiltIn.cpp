@@ -185,7 +185,7 @@ GetWinPilotPolarInternalName(unsigned i)
 bool
 ReadWinPilotPolarInternal(unsigned i, Polar &polar)
 {
-  if (!(i < sizeof(WinPilotPolars) / sizeof(WinPilotPolars[0])))
+  if (i >= sizeof(WinPilotPolars) / sizeof(WinPilotPolars[0]))
     return false;
 
   ConvertWinPilotPolar(polar, WinPilotPolars[i]);
