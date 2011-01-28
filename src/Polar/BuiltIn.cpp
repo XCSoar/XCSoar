@@ -24,6 +24,8 @@ Copyright_License {
 #include "Polar/BuiltIn.hpp"
 #include "Polar/WinPilot.hpp"
 
+#include <assert.h>
+
 /**
  *  Note: new items should be added to bottom, otherwise saved index is lost
  */
@@ -170,9 +172,7 @@ static const WinPilotPolar WinPilotPolars[] =
 const TCHAR*
 GetWinPilotPolarInternalName(unsigned i)
 {
-  if (i >= GetWinPilotPolarInternalCount())
-    return NULL;
-
+  assert(i < GetWinPilotPolarInternalCount());
   return WinPilotPolars[i].name;
 }
 
@@ -185,9 +185,7 @@ GetWinPilotPolarInternalName(unsigned i)
 bool
 ReadWinPilotPolarInternal(unsigned i, GlidePolar &polar)
 {
-  if (i >= GetWinPilotPolarInternalCount())
-    return false;
-
+  assert(i < GetWinPilotPolarInternalCount());
   ConvertWinPilotPolar(polar, WinPilotPolars[i]);
   return true;
 }
