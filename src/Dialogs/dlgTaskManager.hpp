@@ -124,7 +124,7 @@ public:
   static bool OnTabPreShow();
 };
 
-class dlgTaskProperties
+class pnlTaskProperties
 {
 public:
   /**

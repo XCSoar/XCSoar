@@ -194,7 +194,7 @@ ReadValues()
 }
 
 void
-dlgTaskProperties::OnTypeClicked(WndButton &Sender)
+pnlTaskProperties::OnTypeClicked(WndButton &Sender)
 {
   (void)Sender;
 
@@ -214,7 +214,7 @@ dlgTaskProperties::OnTypeClicked(WndButton &Sender)
 }
 
 bool
-dlgTaskProperties::OnTabPreShow()
+pnlTaskProperties::OnTabPreShow()
 {
   ordered_task = *ordered_task_pointer;
   RefreshView();
@@ -222,14 +222,14 @@ dlgTaskProperties::OnTabPreShow()
 }
 
 bool
-dlgTaskProperties::OnTabPreHide()
+pnlTaskProperties::OnTabPreHide()
 {
   ReadValues();
   return true;
 }
 
 Window*
-dlgTaskProperties::Load(SingleWindow &parent, TabBarControl* wTabBar,
+pnlTaskProperties::Load(SingleWindow &parent, TabBarControl* wTabBar,
                         WndForm* _wf, OrderedTask** task, bool* _task_modified)
 {
   parent_window = &parent;

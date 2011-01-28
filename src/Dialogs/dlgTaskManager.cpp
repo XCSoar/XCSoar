@@ -95,7 +95,7 @@ CallBackTableEntry dlgTaskManager::CallBackTable[] = {
   DeclareCallBackEntry(dlgTaskEdit::OnTaskPaint),
   DeclareCallBackEntry(dlgTaskEdit::OnTabPreShow),
 
-  DeclareCallBackEntry(dlgTaskProperties::OnTypeClicked),
+  DeclareCallBackEntry(pnlTaskProperties::OnTypeClicked),
 
   DeclareCallBackEntry(pnlTaskList::OnLoadSaveClicked),
   DeclareCallBackEntry(pnlTaskList::OnDeleteClicked),
@@ -150,11 +150,11 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
 
   Window* wProps =
-    dlgTaskProperties::Load(parent, wTabBar, wf, &active_task, &task_modified);
+    pnlTaskProperties::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wProps);
   wTabBar->AddClient(wProps, _T("Proper ties"), false,
-                     dlgTaskProperties::OnTabPreHide,
-                     dlgTaskProperties::OnTabPreShow);
+                     pnlTaskProperties::OnTabPreHide,
+                     pnlTaskProperties::OnTabPreShow);
 
   // ToDo: fix the label word wrap on PDAs to "Properties" wraps to two lines nicely
 

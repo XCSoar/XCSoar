@@ -37,7 +37,7 @@
     Help="If enabled, this option requires the minimum height above ground for finish to be greater than 1000m below the start height.">
     <DataField DataType="boolean"/>
   </Edit>
-  <Button Name="butType" Caption="Type" X="82" Width="98" Height="22" OnClick="dlgTaskProperties::OnTypeClicked"/>
+  <Button Name="butType" Caption="Type" X="82" Width="98" Height="22" OnClick="pnlTaskProperties::OnTypeClicked"/>
 
   </Panel>
 
