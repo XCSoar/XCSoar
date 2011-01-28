@@ -33,9 +33,9 @@ class GlidePolar;
  */
 struct SimplePolar
 {
-  const TCHAR *name;   /**< Name of the glider type */
-  double ww0;          /**< Mass dry gross (kg) */
-  double ww1;          /**< Max water ballast (l) */
+  const TCHAR* name;   /**< Name of the glider type */
+  double dry_mass;     /**< Mass dry gross (kg) */
+  double max_ballast;  /**< Max water ballast (l) */
   double v0;           /**< Speed (kph) of point 1 */
   double w0;           /**< Sink rate (negative, m/s) of point 1  */
   double v1;           /**< Speed (kph) of point 2 */

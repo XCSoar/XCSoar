@@ -67,9 +67,9 @@ ConvertWinPilotPolar(GlidePolar &polar, const SimplePolar &_polar)
       -(w3 + polar.ideal_polar_a * v3 * v3 + polar.ideal_polar_b * v3);
 
   // Glider empty weight
-  polar.dry_mass = fixed(_polar.ww0);
+  polar.dry_mass = fixed(_polar.dry_mass);
   // Ballast weight
-  polar.ballast_ratio = fixed(_polar.ww1) / polar.dry_mass;
+  polar.ballast_ratio = fixed(_polar.max_ballast) / polar.dry_mass;
 
   polar.wing_area = fixed(_polar.wing_area);
 
@@ -89,11 +89,11 @@ ReadPolarString(SimplePolar &polar, const TCHAR *line)
 
   TCHAR *p;
 
-  polar.ww0 = _tcstod(line, &p);
+  polar.dry_mass = _tcstod(line, &p);
   if (*p != _T(','))
     return false;
 
-  polar.ww1 = _tcstod(p + 1, &p);
+  polar.max_ballast = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
