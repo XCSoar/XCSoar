@@ -49,7 +49,7 @@ public:
 };
 
 
-class dlgTaskEdit
+class pnlTaskEdit
 {
 public:
   /**

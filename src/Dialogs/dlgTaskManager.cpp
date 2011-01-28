@@ -88,12 +88,12 @@ dlgTaskManagerShowModal(SingleWindow &parent)
 }
 
 CallBackTableEntry dlgTaskManager::CallBackTable[] = {
-  DeclareCallBackEntry(dlgTaskEdit::OnMoveUpClicked),
-  DeclareCallBackEntry(dlgTaskEdit::OnMoveDownClicked),
-  DeclareCallBackEntry(dlgTaskEdit::OnEditTurnpointClicked),
-  DeclareCallBackEntry(dlgTaskEdit::OnNewClicked),
-  DeclareCallBackEntry(dlgTaskEdit::OnTaskPaint),
-  DeclareCallBackEntry(dlgTaskEdit::OnTabPreShow),
+  DeclareCallBackEntry(pnlTaskEdit::OnMoveUpClicked),
+  DeclareCallBackEntry(pnlTaskEdit::OnMoveDownClicked),
+  DeclareCallBackEntry(pnlTaskEdit::OnEditTurnpointClicked),
+  DeclareCallBackEntry(pnlTaskEdit::OnNewClicked),
+  DeclareCallBackEntry(pnlTaskEdit::OnTaskPaint),
+  DeclareCallBackEntry(pnlTaskEdit::OnTabPreShow),
 
   DeclareCallBackEntry(pnlTaskProperties::OnTypeClicked),
 
@@ -143,10 +143,10 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
 
   Window* wEdit =
-    dlgTaskEdit::Load(parent, wTabBar, wf, &active_task, &task_modified);
+    pnlTaskEdit::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wEdit);
   wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL,
-                     dlgTaskEdit::OnTabPreShow);
+                     pnlTaskEdit::OnTabPreShow);
 
 
   Window* wProps =

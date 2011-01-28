@@ -47,7 +47,7 @@ static OrderedTask** ordered_task_pointer = NULL;
 static bool* task_modified = NULL;
 
 void
-dlgTaskEdit::RefreshView()
+pnlTaskEdit::RefreshView()
 {
   if (!ordered_task->is_max_size())
     wTaskPoints->SetLength(ordered_task->task_size()+1);
@@ -65,7 +65,7 @@ dlgTaskEdit::RefreshView()
 }
 
 void
-dlgTaskEdit::OnNewClicked(WndButton &Sender)
+pnlTaskEdit::OnNewClicked(WndButton &Sender)
 {
   (void)Sender;
 
@@ -81,7 +81,7 @@ dlgTaskEdit::OnNewClicked(WndButton &Sender)
 
 // ToDo: make this generic factory type and merge with OnNew
 void
-dlgTaskEdit::OnClearClicked(WndButton &Sender)
+pnlTaskEdit::OnClearClicked(WndButton &Sender)
 {
   (void)Sender;
 
@@ -96,7 +96,7 @@ dlgTaskEdit::OnClearClicked(WndButton &Sender)
 }
 
 void
-dlgTaskEdit::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+pnlTaskEdit::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   PaintTask(canvas, Sender->get_client_rect(), *ordered_task,
             XCSoarInterface::Basic().Location,
@@ -104,7 +104,7 @@ dlgTaskEdit::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 }
 
 void
-dlgTaskEdit::OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
+pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
   assert(DrawListIndex <= ordered_task->task_size());
 
@@ -151,13 +151,13 @@ dlgTaskEdit::OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawLis
 }
 
 void
-dlgTaskEdit::OnEditTurnpointClicked(WndButton &Sender)
+pnlTaskEdit::OnEditTurnpointClicked(WndButton &Sender)
 {
   OnTaskListEnter(wTaskPoints->GetCursorIndex());
 }
 
 void
-dlgTaskEdit::OnTaskListEnter(unsigned ItemIndex)
+pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
 {
   if (ItemIndex < ordered_task->task_size()) {
     if (dlgTaskPointShowModal(*parent_window, &ordered_task, ItemIndex)) {
@@ -173,7 +173,7 @@ dlgTaskEdit::OnTaskListEnter(unsigned ItemIndex)
 }
 
 void
-dlgTaskEdit::OnMoveUpClicked(WndButton &Sender)
+pnlTaskEdit::OnMoveUpClicked(WndButton &Sender)
 {
   if (!wTaskPoints)
     return;
@@ -191,7 +191,7 @@ dlgTaskEdit::OnMoveUpClicked(WndButton &Sender)
 }
 
 void
-dlgTaskEdit::OnMoveDownClicked(WndButton &Sender)
+pnlTaskEdit::OnMoveDownClicked(WndButton &Sender)
 {
   if (!wTaskPoints)
     return;
@@ -209,7 +209,7 @@ dlgTaskEdit::OnMoveDownClicked(WndButton &Sender)
 }
 
 bool
-dlgTaskEdit::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
+pnlTaskEdit::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
 {
   if (!fullscreen) {
     wTaskView->move(0, 0, wf->GetClientAreaWindow().get_width(),
@@ -227,7 +227,7 @@ dlgTaskEdit::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
 }
 
 bool
-dlgTaskEdit::OnKeyDown(WndForm &Sender, unsigned key_code)
+pnlTaskEdit::OnKeyDown(WndForm &Sender, unsigned key_code)
 {
   switch (key_code){
   case VK_ESCAPE:
@@ -242,7 +242,7 @@ dlgTaskEdit::OnKeyDown(WndForm &Sender, unsigned key_code)
 }
 
 bool
-dlgTaskEdit::OnTabPreShow()
+pnlTaskEdit::OnTabPreShow()
 {
   if (ordered_task != *ordered_task_pointer) {
     ordered_task = *ordered_task_pointer;
@@ -253,7 +253,7 @@ dlgTaskEdit::OnTabPreShow()
 }
 
 Window*
-dlgTaskEdit::Load(SingleWindow &parent, TabBarControl* wTabBar, WndForm* _wf,
+pnlTaskEdit::Load(SingleWindow &parent, TabBarControl* wTabBar, WndForm* _wf,
                   OrderedTask** task, bool* _task_modified)
 {
   assert(wTabBar);
