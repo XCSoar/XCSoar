@@ -567,3 +567,19 @@ RoutePlanner::calc_footprint(const AGeoPoint& origin,
   proj.update_fast();
   rpolars.calc_footprint(origin, fp, terrain, proj);
 }
+
+/*
+  @todo:
+  - check wind directions are correct
+  - check overflow/accuracy of slope factor in RasterTile::FirstIntersection
+  - graphical feedback on flight mode of Route in GUI
+  - ignore airspaces that start/end points are inside?
+  - promote stable solutions with rounding of time value
+  - adjustment to GlideSolution height/time in task manager according to path
+    variation required for terrain/airspace avoidance
+  - tr1::hash function portability between compiler versions
+  - AirspaceRoute synchronise method to disable/ignore airspaces that are
+    acknowledged in the airspace warning manager.
+  - more documentation
+  
+ */
