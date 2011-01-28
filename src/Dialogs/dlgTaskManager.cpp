@@ -54,8 +54,6 @@ dlgTaskManager::CommitTaskChanges()
     return true;
 
   if (!active_task->task_size() || active_task->check_task()) {
-    MessageBoxX(_("Active task modified"),
-                _T("Task Manager"), MB_OK);
 
     active_task->check_duplicate_waypoints(way_points);
     protected_task_manager->task_commit(*active_task);
