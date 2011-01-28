@@ -78,7 +78,7 @@ ConvertWinPilotPolar(Polar &polar, const WinPilotPolar &wp_polar)
 }
 
 static bool
-ReadWinPilotPolar(Polar &polar, const TCHAR *line)
+ReadWinPilotPolarFileLine(Polar &polar, const TCHAR *line)
 {
   WinPilotPolar wp_polar;
 
@@ -132,11 +132,11 @@ ReadWinPilotPolar(Polar &polar, const TCHAR *line)
 }
 
 static bool
-ReadWinPilotPolar(Polar &polar, TLineReader &reader)
+ReadWinPilotPolarFile(Polar &polar, TLineReader &reader)
 {
   const TCHAR *line;
   while ((line = reader.read()) != NULL)
-    if (ReadWinPilotPolar(polar, line))
+    if (ReadWinPilotPolarFileLine(polar, line))
       return true;
 
   return false;
@@ -153,7 +153,7 @@ ReadWinPilotPolar(Polar &polar)
   if (reader == NULL)
     return false;
 
-  bool success = ReadWinPilotPolar(polar, *reader);
+  bool success = ReadWinPilotPolarFile(polar, *reader);
   delete reader;
 
   return success;
