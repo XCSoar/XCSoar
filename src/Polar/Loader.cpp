@@ -54,9 +54,9 @@ setGlidePolar(const Polar &polar, GlidePolar& gp)
   gp.ballast_ratio = fixed(polar.MaximumMass) / gp.empty_mass;
   gp.wing_area = fixed(polar.WingArea);
 
-  gp.ideal_polar_a = -fixed(polar.POLAR[0]);
-  gp.ideal_polar_b = -fixed(polar.POLAR[1]);
-  gp.ideal_polar_c = -fixed(polar.POLAR[2]);
+  gp.ideal_polar_a = -fixed(polar.ACoefficient);
+  gp.ideal_polar_b = -fixed(polar.BCoefficient);
+  gp.ideal_polar_c = -fixed(polar.CCoefficient);
 
   gp.update();
 }

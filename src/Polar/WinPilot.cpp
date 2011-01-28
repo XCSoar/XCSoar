@@ -54,17 +54,19 @@ ConvertWinPilotPolar(Polar &polar, double POLARV[3], double POLARW[3],
 
   d = v1 * v1 * (v2 - v3) + v2 * v2 * (v3 - v1) + v3 * v3 * (v1 - v2);
   if (d == 0.0)
-    polar.POLAR[0] = 0;
+    polar.ACoefficient = 0;
   else
-    polar.POLAR[0] = ((v2 - v3) * (w1 - w3) + (v3 - v1) * (w2 - w3)) / d;
+    polar.ACoefficient = ((v2 - v3) * (w1 - w3) + (v3 - v1) * (w2 - w3)) / d;
 
   d = v2 - v3;
   if (d == 0.0)
-    polar.POLAR[1] = 0;
+    polar.BCoefficient = 0;
   else
-    polar.POLAR[1] = (w2 - w3 - polar.POLAR[0] * (v2 * v2 - v3 * v3)) / d;
+    polar.BCoefficient =
+        (w2 - w3 - polar.ACoefficient * (v2 * v2 - v3 * v3)) / d;
 
-  polar.POLAR[2] = w3 - polar.POLAR[0] * v3 * v3 - polar.POLAR[1] * v3;
+  polar.CCoefficient =
+      w3 - polar.ACoefficient * v3 * v3 - polar.BCoefficient * v3;
 
   // Pilot weight
   polar.PilotMass = 70;

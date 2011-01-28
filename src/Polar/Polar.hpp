@@ -29,7 +29,9 @@ Copyright_License {
  */
 struct Polar
 {
-  double POLAR[3];  // a, b, c
+  double ACoefficient;
+  double BCoefficient;
+  double CCoefficient;
 
   double PilotMass;
   double EmptyMass;
