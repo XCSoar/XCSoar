@@ -63,7 +63,7 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
   const WindowProjection &projection = render_projection;
 
   TracePointVector trace =
-    task->find_trace_points(projection.GetGeoLocation(),
+    task->find_trace_points(projection.GetGeoScreenCenter(),
                             projection.GetScreenDistanceMeters(),
                             min_time, projection.DistancePixelsToMeters(3));
 

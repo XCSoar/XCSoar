@@ -262,7 +262,7 @@ MapWindow::DrawAirspace(Canvas &canvas)
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 #endif
 
-  airspace_database->visit_within_range(render_projection.GetGeoLocation(),
+  airspace_database->visit_within_range(render_projection.GetGeoScreenCenter(),
                                         render_projection.GetScreenDistanceMeters(),
                                         v, visible);
 
@@ -274,7 +274,7 @@ MapWindow::DrawAirspace(Canvas &canvas)
 
   AirspaceOutlineRenderer outline_renderer(canvas, render_projection,
                                            SettingsMap().bAirspaceBlackOutline);
-  airspace_database->visit_within_range(render_projection.GetGeoLocation(),
+  airspace_database->visit_within_range(render_projection.GetGeoScreenCenter(),
                                         render_projection.GetScreenDistanceMeters(),
                                         outline_renderer, visible);
 

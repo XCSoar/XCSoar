@@ -288,7 +288,7 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
       task->tp_CAccept(v);
   }
 
-  way_points->visit_within_range(projection.GetGeoLocation(),
+  way_points->visit_within_range(projection.GetGeoScreenCenter(),
                                  projection.GetScreenDistanceMeters(), v);
 
   MapWaypointLabelRender(canvas, projection.GetMapRect(),

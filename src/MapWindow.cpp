@@ -109,20 +109,21 @@ MapWindow::UpdateTerrain()
   if (terrain == NULL)
     return false;
 
+  GeoPoint location = visible_projection.GetGeoScreenCenter();
   fixed radius = visible_projection.GetScreenWidthMeters() / 2;
   if (terrain_radius >= radius &&
-      Distance(terrain_center, visible_projection.GetGeoLocation()) < fixed(1000))
+      Distance(terrain_center, location) < fixed(1000))
     return false;
 
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations
   RasterTerrain::ExclusiveLease lease(*terrain);
-  lease->SetViewCenter(visible_projection.GetGeoLocation(), radius);
+  lease->SetViewCenter(location, radius);
   if (lease->IsDirty())
     terrain_radius = fixed_zero;
   else {
     terrain_radius = radius;
-    terrain_center = visible_projection.GetGeoLocation();
+    terrain_center = location;
   }
 
   return lease->IsDirty();
@@ -138,7 +139,7 @@ MapWindow::UpdateWeather()
     return false;
 
   weather->Reload((int)Basic().Time);
-  weather->SetViewCenter(visible_projection.GetGeoLocation(),
+  weather->SetViewCenter(visible_projection.GetGeoScreenCenter(),
                          visible_projection.GetScreenWidthMeters() / 2);
   return weather->IsDirty();
 }

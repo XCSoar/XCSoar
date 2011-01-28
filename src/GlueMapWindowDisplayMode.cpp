@@ -234,6 +234,9 @@ GlueMapWindow::UpdateMapScale()
   if (GetDisplayMode() == dmCircling)
     return;
 
+  if (SettingsMap().EnablePan)
+    return;
+
   fixed wpd = Calculated().AutoZoomDistance;
   if (SettingsMap().AutoZoom && positive(wpd)) {
     // Calculate distance percentage between plane symbol and map edge

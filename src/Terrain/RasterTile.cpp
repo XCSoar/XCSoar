@@ -176,6 +176,12 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius)
   if (scan_overview)
     return false;
 
+  /* tiles are usually 256 pixels wide; with a radius smaller than
+     that, the (optimized) tile distance calculations may fail;
+     additionally, this ensures that tiles which are slightly out of
+     the screen will be loaded in advance */
+  radius += 256;
+
   enum {
     /**
      * Maximum number of tiles loaded at a time, to reduce system load
@@ -487,11 +493,6 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file)
 void
 RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
 {
-  if (radius < 256)
-    /* tiles are usually 256 pixels wide; with a radius smaller than
-       that, the (optimized) tile distance calculations may fail */
-    radius = 256;
-
   if (PollTiles(x, y, radius))
     LoadJPG2000(path);
 }

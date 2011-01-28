@@ -28,6 +28,6 @@ Copyright_License {
 
 unsigned
 polygon_to_triangle(const RasterPoint *points, unsigned num_points,
-                    GLushort *triangles);
+                    GLushort *triangles, unsigned min_distance=1);
 
 #endif

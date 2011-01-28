@@ -103,6 +103,12 @@ public:
   gcc_pure
   fixed GetScreenDistanceMeters() const;
 
+  /**
+   * Returns the GeoPoint at the center of the screen.
+   */
+  gcc_pure
+  GeoPoint GetGeoScreenCenter() const;
+
   // used by terrain renderer, topology and airspace
   gcc_pure
   GeoBounds GetScreenBounds() const;
