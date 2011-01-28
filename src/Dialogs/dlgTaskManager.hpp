@@ -151,7 +151,7 @@ public:
   static bool OnTabPreShow();
 };
 
-class dlgTaskList
+class pnlTaskList
 {
 public:
   /**

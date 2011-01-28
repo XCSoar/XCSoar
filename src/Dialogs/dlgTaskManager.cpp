@@ -97,12 +97,12 @@ CallBackTableEntry dlgTaskManager::CallBackTable[] = {
 
   DeclareCallBackEntry(dlgTaskProperties::OnTypeClicked),
 
-  DeclareCallBackEntry(dlgTaskList::OnLoadSaveClicked),
-  DeclareCallBackEntry(dlgTaskList::OnDeleteClicked),
-  DeclareCallBackEntry(dlgTaskList::OnDeclareClicked),
-  DeclareCallBackEntry(dlgTaskList::OnRenameClicked),
-  DeclareCallBackEntry(dlgTaskList::OnTaskPaint),
-  DeclareCallBackEntry(dlgTaskList::OnTabPreShow),
+  DeclareCallBackEntry(pnlTaskList::OnLoadSaveClicked),
+  DeclareCallBackEntry(pnlTaskList::OnDeleteClicked),
+  DeclareCallBackEntry(pnlTaskList::OnDeclareClicked),
+  DeclareCallBackEntry(pnlTaskList::OnRenameClicked),
+  DeclareCallBackEntry(pnlTaskList::OnTaskPaint),
+  DeclareCallBackEntry(pnlTaskList::OnTabPreShow),
 
   DeclareCallBackEntry(dlgTaskManagerClose::OnCloseClicked),
   DeclareCallBackEntry(dlgTaskManagerClose::OnRevertClicked),
@@ -159,10 +159,10 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   // ToDo: fix the label word wrap on PDAs to "Properties" wraps to two lines nicely
 
   Window* wLst =
-    dlgTaskList::Load(parent, wTabBar, wf, &active_task, &task_modified);
+    pnlTaskList::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wLst);
   wTabBar->AddClient(wLst, _T("Browse declare"), false, NULL,
-                     dlgTaskList::OnTabPreShow);
+                     pnlTaskList::OnTabPreShow);
 
   Window* wClose =
     dlgTaskManagerClose::Load(parent, wTabBar, wf, &active_task, &task_modified);
@@ -174,7 +174,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
   wf->ShowModal();
 
-  dlgTaskList::DestroyTab();
+  pnlTaskList::DestroyTab();
 
   delete wf;
   delete active_task;

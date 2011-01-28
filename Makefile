@@ -139,7 +139,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgTaskManagerClose.cpp \
 	$(SRC)/Dialogs/dlgTaskEdit.cpp \
 	$(SRC)/Dialogs/dlgTaskProperties.cpp \
-	$(SRC)/Dialogs/dlgTaskList.cpp \
+	$(SRC)/Dialogs/pnlTaskList.cpp \
 	$(SRC)/Dialogs/dlgTaskType.cpp \
 	$(SRC)/Dialogs/dlgTaskPoint.cpp \
 	$(SRC)/Dialogs/dlgTaskPointType.cpp \

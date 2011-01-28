@@ -82,7 +82,7 @@ get_cursor_name()
 }
 
 void
-dlgTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+pnlTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   RECT rc = Sender->get_client_rect();
 
@@ -97,7 +97,7 @@ dlgTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 }
 
 void
-dlgTaskList::OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
+pnlTaskList::OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
   assert(DrawListIndex <= task_store.size());
 
@@ -257,45 +257,45 @@ UpdateButtons()
 }
 
 void
-dlgTaskList::OnLoadSaveClicked(WndButton &Sender)
+pnlTaskList::OnLoadSaveClicked(WndButton &Sender)
 {
   LoadOrSaveTask();
 }
 
 void
-dlgTaskList::OnDeleteClicked(WndButton &Sender)
+pnlTaskList::OnDeleteClicked(WndButton &Sender)
 {
   DeleteTask();
 }
 
 void
-dlgTaskList::OnRenameClicked(WndButton &Sender)
+pnlTaskList::OnRenameClicked(WndButton &Sender)
 {
   RenameTask();
 }
 
 void
-dlgTaskList::OnTaskListEnter(unsigned ItemIndex)
+pnlTaskList::OnTaskListEnter(unsigned ItemIndex)
 {
   LoadOrSaveTask();
 }
 
 void
-dlgTaskList::OnTaskCursorCallback(unsigned i)
+pnlTaskList::OnTaskCursorCallback(unsigned i)
 {
   UpdateButtons();
   RefreshView();
 }
 
 bool
-dlgTaskList::OnDeclareClicked(WndButton &Sender)
+pnlTaskList::OnDeclareClicked(WndButton &Sender)
 {
   logger.LoggerDeviceDeclare(**active_task);
   return false;
 }
 
 bool
-dlgTaskList::OnTabPreShow()
+pnlTaskList::OnTabPreShow()
 {
   if (!lazy_loaded) {
     lazy_loaded = true;
@@ -309,13 +309,13 @@ dlgTaskList::OnTabPreShow()
 }
 
 void
-dlgTaskList::DestroyTab()
+pnlTaskList::DestroyTab()
 {
   task_store.clear();
 }
 
 Window*
-dlgTaskList::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
+pnlTaskList::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
                   OrderedTask** task, bool* _task_modified)
 {
   assert(_wTabBar);
@@ -346,9 +346,9 @@ dlgTaskList::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
   assert(wTasks != NULL);
 
   // Set callbacks
-  wTasks->SetActivateCallback(dlgTaskList::OnTaskListEnter);
-  wTasks->SetPaintItemCallback(dlgTaskList::OnTaskPaintListItem);
-  wTasks->SetCursorCallback(dlgTaskList::OnTaskCursorCallback);
+  wTasks->SetActivateCallback(pnlTaskList::OnTaskListEnter);
+  wTasks->SetPaintItemCallback(pnlTaskList::OnTaskPaintListItem);
+  wTasks->SetCursorCallback(pnlTaskList::OnTaskCursorCallback);
 
   return wList;
 }
