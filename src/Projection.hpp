@@ -92,6 +92,16 @@ public:
   GeoPoint ScreenToGeo(int x, int y) const;
 
   /**
+   * Converts screen coordinates to a GeoPoint
+   * @param x x-Coordinate on the screen
+   * @param y y-Coordinate on the screen
+   */
+  gcc_pure
+  GeoPoint ScreenToGeo(const RasterPoint &pt) const {
+    return ScreenToGeo(pt.x, pt.y);
+  }
+
+  /**
    * Converts a GeoPoint to screen coordinates
    * @param g GeoPoint to convert
    */
