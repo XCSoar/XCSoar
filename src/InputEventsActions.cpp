@@ -1662,18 +1662,10 @@ InputEvents::sub_PanCursor(int dx, int dy)
   const WindowProjection &projection =
       XCSoarInterface::main_window.map.VisibleProjection();
 
-  const RECT &MapRect = projection.GetMapRect();
-  int X = (MapRect.right + MapRect.left) / 2;
-  int Y = (MapRect.bottom + MapRect.top) / 2;
-
-  const GeoPoint pstart = projection.ScreenToGeo(X, Y);
-
-  X += (MapRect.right - MapRect.left) * dx / 4;
-  Y += (MapRect.bottom - MapRect.top) * dy / 4;
-  const GeoPoint pnew = projection.ScreenToGeo(X, Y);
-
-  XCSoarInterface::SetSettingsMap().PanLocation.Longitude += pstart.Longitude - pnew.Longitude;
-  XCSoarInterface::SetSettingsMap().PanLocation.Latitude += pstart.Latitude - pnew.Latitude;
+  RasterPoint pt = projection.GetScreenOrigin();
+  pt.x -= dx * projection.GetScreenWidth() / 4;
+  pt.y -= dy * projection.GetScreenWidth() / 4;
+  XCSoarInterface::SetSettingsMap().PanLocation = projection.ScreenToGeo(pt);
 
   XCSoarInterface::main_window.map.QuickRedraw(XCSoarInterface::SettingsMap());
   XCSoarInterface::SendSettingsMap(true);
