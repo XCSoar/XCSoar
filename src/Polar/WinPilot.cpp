@@ -25,9 +25,7 @@ Copyright_License {
 #include "Polar/Polar.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Sizes.h"
 
-#include <math.h>
 #include <stdlib.h>
 
 /**
