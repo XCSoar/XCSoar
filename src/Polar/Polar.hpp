@@ -51,7 +51,9 @@ struct SimplePolar
    */
   bool ReadFileFromProfile();
   bool ReadFile(TLineReader &reader);
-  bool ReadString(const TCHAR *line);
+
+  bool ReadString(const TCHAR* line);
+  void GetString(TCHAR* line, size_t size);
 
   /**
    * Converts a WinPilot based SimplePolar to a XCSoar based GlidePolar

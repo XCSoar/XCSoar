@@ -28,6 +28,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 #include <stdlib.h>
+#include <cstdio>
 
 void
 SimplePolar::ConvertToGlidePolar(GlidePolar &polar) const
@@ -67,6 +68,13 @@ SimplePolar::ConvertToGlidePolar(GlidePolar &polar) const
   polar.wing_area = fixed(wing_area);
 
   polar.update();
+}
+
+void
+SimplePolar::GetString(TCHAR* line, size_t size)
+{
+  _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
+             dry_mass, max_ballast, v0, w0, v1, w1, v2, w2, wing_area);
 }
 
 bool
