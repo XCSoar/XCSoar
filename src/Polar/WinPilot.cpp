@@ -67,9 +67,9 @@ ConvertWinPilotPolar(GlidePolar &polar, const SimplePolar &_polar)
       -(w3 + polar.ideal_polar_a * v3 * v3 + polar.ideal_polar_b * v3);
 
   // Glider empty weight
-  polar.empty_mass = fixed(_polar.ww0);
+  polar.dry_mass = fixed(_polar.ww0);
   // Ballast weight
-  polar.ballast_ratio = fixed(_polar.ww1) / polar.empty_mass;
+  polar.ballast_ratio = fixed(_polar.ww1) / polar.dry_mass;
 
   polar.wing_area = fixed(_polar.wing_area);
 
