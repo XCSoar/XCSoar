@@ -24,10 +24,12 @@ Copyright_License {
 #include "Polar/BuiltIn.hpp"
 #include "Polar/WinPilot.hpp"
 
+#include <assert.h>
+
 /**
  *  Note: new items should be added to bottom, otherwise saved index is lost
  */
-static const WinPilotPolar WinPilotPolars[] =
+static const SimplePolar WinPilotPolars[] =
 {
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8},
   { _T("604 Kestrel"), 570, 100, 112.97, -0.72, 150.64, -1.42, 207.13, -4.1, 16.26},
@@ -170,9 +172,7 @@ static const WinPilotPolar WinPilotPolars[] =
 const TCHAR*
 GetWinPilotPolarInternalName(unsigned i)
 {
-  if (i >= sizeof(WinPilotPolars) / sizeof(WinPilotPolar))
-    return NULL;
-
+  assert(i < GetWinPilotPolarInternalCount());
   return WinPilotPolars[i].name;
 }
 
@@ -183,11 +183,14 @@ GetWinPilotPolarInternalName(unsigned i)
  * @param polar Polar to set
  */
 bool
-ReadWinPilotPolarInternal(unsigned i, Polar &polar)
+ReadWinPilotPolarInternal(unsigned i, GlidePolar &polar)
 {
-  if (!(i < sizeof(WinPilotPolars) / sizeof(WinPilotPolars[0])))
-    return false;
-
+  assert(i < GetWinPilotPolarInternalCount());
   ConvertWinPilotPolar(polar, WinPilotPolars[i]);
   return true;
+}
+
+unsigned GetWinPilotPolarInternalCount()
+{
+  return sizeof(WinPilotPolars) / sizeof(WinPilotPolars[0]);
 }

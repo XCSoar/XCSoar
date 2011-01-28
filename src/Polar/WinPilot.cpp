@@ -22,12 +22,11 @@ Copyright_License {
 */
 
 #include "Polar/WinPilot.hpp"
-#include "Polar/Polar.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Sizes.h"
+#include "Math/fixed.hpp"
 
-#include <math.h>
 #include <stdlib.h>
 
 /**
@@ -38,49 +37,49 @@ Copyright_License {
  * @param ww dry mass, maximum takeoff weight
  */
 void
-ConvertWinPilotPolar(Polar &polar, const WinPilotPolar &wp_polar)
+ConvertWinPilotPolar(GlidePolar &polar, const SimplePolar &_polar)
 {
-  double d;
-  double v1, v2, v3;
-  double w1, w2, w3;
+  fixed d;
+  fixed v1, v2, v3;
+  fixed w1, w2, w3;
 
-  v1 = wp_polar.v0 / 3.6;
-  v2 = wp_polar.v1 / 3.6;
-  v3 = wp_polar.v2 / 3.6;
-  w1 = wp_polar.w0;
-  w2 = wp_polar.w1;
-  w3 = wp_polar.w2;
+  v1 = fixed(_polar.v0 / 3.6);
+  v2 = fixed(_polar.v1 / 3.6);
+  v3 = fixed(_polar.v2 / 3.6);
+  w1 = fixed(_polar.w0);
+  w2 = fixed(_polar.w1);
+  w3 = fixed(_polar.w2);
 
   d = v1 * v1 * (v2 - v3) + v2 * v2 * (v3 - v1) + v3 * v3 * (v1 - v2);
-  if (d == 0.0)
-    polar.ACoefficient = 0;
+  if (d == fixed_zero)
+    polar.ideal_polar_a = fixed_zero;
   else
-    polar.ACoefficient = ((v2 - v3) * (w1 - w3) + (v3 - v1) * (w2 - w3)) / d;
+    polar.ideal_polar_a = -((v2 - v3) * (w1 - w3) + (v3 - v1) * (w2 - w3)) / d;
 
   d = v2 - v3;
-  if (d == 0.0)
-    polar.BCoefficient = 0;
+  if (d == fixed_zero)
+    polar.ideal_polar_b = fixed_zero;
   else
-    polar.BCoefficient =
-        (w2 - w3 - polar.ACoefficient * (v2 * v2 - v3 * v3)) / d;
+    polar.ideal_polar_b =
+        -(w2 - w3 + polar.ideal_polar_a * (v2 * v2 - v3 * v3)) / d;
 
-  polar.CCoefficient =
-      w3 - polar.ACoefficient * v3 * v3 - polar.BCoefficient * v3;
+  polar.ideal_polar_c =
+      -(w3 + polar.ideal_polar_a * v3 * v3 + polar.ideal_polar_b * v3);
 
-  // Pilot weight
-  polar.PilotMass = 70;
   // Glider empty weight
-  polar.EmptyMass = wp_polar.ww0 - polar.PilotMass;
+  polar.dry_mass = fixed(_polar.ww0);
   // Ballast weight
-  polar.MaximumMass = wp_polar.ww1;
+  polar.ballast_ratio = fixed(_polar.ww1) / polar.dry_mass;
 
-  polar.WingArea = wp_polar.wing_area;
+  polar.wing_area = fixed(_polar.wing_area);
+
+  polar.update();
 }
 
 static bool
-ReadWinPilotPolarFileLine(Polar &polar, const TCHAR *line)
+ReadWinPilotPolarFileLine(GlidePolar &polar, const TCHAR *line)
 {
-  WinPilotPolar wp_polar;
+  SimplePolar wp_polar;
 
   // Example:
   // *LS-3  WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
@@ -132,7 +131,7 @@ ReadWinPilotPolarFileLine(Polar &polar, const TCHAR *line)
 }
 
 static bool
-ReadWinPilotPolarFile(Polar &polar, TLineReader &reader)
+ReadWinPilotPolarFile(GlidePolar &polar, TLineReader &reader)
 {
   const TCHAR *line;
   while ((line = reader.read()) != NULL)
@@ -147,7 +146,7 @@ ReadWinPilotPolarFile(Polar &polar, TLineReader &reader)
  * @return True if parsing was successful, False otherwise
  */
 bool
-ReadWinPilotPolar(Polar &polar)
+ReadWinPilotPolar(GlidePolar &polar)
 {
   TLineReader *reader = OpenConfiguredTextFile(szProfilePolarFile);
   if (reader == NULL)

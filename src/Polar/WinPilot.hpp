@@ -26,12 +26,12 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct Polar;
+class GlidePolar;
 
 /**
  * Struct for internally stored WinPilot-like polars
  */
-struct WinPilotPolar
+struct SimplePolar
 {
   const TCHAR *name;   /**< Name of the glider type */
   double ww0;          /**< Mass dry gross (kg) */
@@ -46,9 +46,9 @@ struct WinPilotPolar
 };
 
 void
-ConvertWinPilotPolar(Polar &polar, const WinPilotPolar &wp_polar);
+ConvertWinPilotPolar(GlidePolar &polar, const SimplePolar &_polar);
 
 bool
-ReadWinPilotPolar(Polar &polar);
+ReadWinPilotPolar(GlidePolar &polar);
 
 #endif

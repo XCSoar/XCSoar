@@ -1047,11 +1047,9 @@ setVariables()
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_T("External Polar File"), 6);
 
-    for(unsigned i = 0;; i++) {
+    unsigned len = GetWinPilotPolarInternalCount();
+    for(unsigned i = 0; i < len; i++) {
       const TCHAR *name = GetWinPilotPolarInternalName(i);
-      if (name == NULL)
-        break;
-
       dfe->addEnumText(name, i + 7);
     }
     dfe->Sort();

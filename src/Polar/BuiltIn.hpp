@@ -28,12 +28,14 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct Polar;
+class GlidePolar;
 
 gcc_const
 const TCHAR *GetWinPilotPolarInternalName(unsigned i);
 
 bool
-ReadWinPilotPolarInternal(unsigned i, Polar &polar);
+ReadWinPilotPolarInternal(unsigned i, GlidePolar &polar);
+
+unsigned GetWinPilotPolarInternalCount();
 
 #endif

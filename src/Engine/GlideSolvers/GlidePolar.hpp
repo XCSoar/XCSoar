@@ -29,7 +29,7 @@ struct AIRCRAFT_STATE;
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
-class Polar;
+struct SimplePolar;
 
 /**
  * Class implementing basic glide polar performance model
@@ -52,7 +52,8 @@ class Polar;
  */
 class GlidePolar
 {
-  friend void setGlidePolar(const Polar& polar, GlidePolar& gp);
+  friend void ConvertWinPilotPolar(GlidePolar &polar,
+                                   const SimplePolar &wp_polar);
 
 public:
   /**
@@ -426,7 +427,7 @@ private:
   fixed polar_c;             /**< 'c' coefficient of glide polar at bug/ballast */
 
   fixed ballast_ratio;       /**< Ratio of mass of ballast to glider empty weight */
-  fixed empty_mass;          /**< Empty mass of glider, kg */
+  fixed dry_mass;            /**< Dry/unballasted mass of glider, kg */
   fixed wing_area;           /**< Reference wing area, m^2 */
 };
 
