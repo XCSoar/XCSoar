@@ -45,10 +45,18 @@ struct SimplePolar
   double w2;           /**< Sink rate (negative, m/s) of point 3  */
   double wing_area;    /**< Reference wing area (m^2) */
 
+  /**
+   * Reads the WinPilor polar file specified in the registry
+   * @return True if parsing was successful, False otherwise
+   */
   bool ReadFileFromProfile();
   bool ReadFile(TLineReader &reader);
   bool ReadString(const TCHAR *line);
 
+  /**
+   * Converts a WinPilot based SimplePolar to a XCSoar based GlidePolar
+   * @param polar Reference to the GlidePolar to save the data to
+   */
   void ConvertToGlidePolar(GlidePolar &polar) const;
 };
 

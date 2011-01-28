@@ -29,13 +29,6 @@ Copyright_License {
 
 #include <stdlib.h>
 
-/**
- * Converts a WinPilot based to a XCSoar based polar
- * @param polar The polar structure to convert
- * @param POLARV Speed1, Speed2 and Speed3
- * @param POLARW Sinkrate1, Sinkrate2 and Sinkrate3
- * @param ww dry mass, maximum takeoff weight
- */
 void
 SimplePolar::ConvertToGlidePolar(GlidePolar &polar) const
 {
@@ -138,10 +131,6 @@ SimplePolar::ReadFile(TLineReader &reader)
   return false;
 }
 
-/**
- * Reads the WinPilor polar file specified in the registry
- * @return True if parsing was successful, False otherwise
- */
 bool
 SimplePolar::ReadFileFromProfile()
 {
