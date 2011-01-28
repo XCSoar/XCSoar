@@ -185,7 +185,7 @@ public:
   static void DestroyTab();
 };
 
-class dlgTaskManagerClose
+class pnlTaskManagerClose
 {
 public:
   /**

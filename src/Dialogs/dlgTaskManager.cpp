@@ -104,8 +104,8 @@ CallBackTableEntry dlgTaskManager::CallBackTable[] = {
   DeclareCallBackEntry(pnlTaskList::OnTaskPaint),
   DeclareCallBackEntry(pnlTaskList::OnTabPreShow),
 
-  DeclareCallBackEntry(dlgTaskManagerClose::OnCloseClicked),
-  DeclareCallBackEntry(dlgTaskManagerClose::OnRevertClicked),
+  DeclareCallBackEntry(pnlTaskManagerClose::OnCloseClicked),
+  DeclareCallBackEntry(pnlTaskManagerClose::OnRevertClicked),
 
   DeclareCallBackEntry(NULL)
 };
@@ -165,10 +165,10 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                      pnlTaskList::OnTabPreShow);
 
   Window* wClose =
-    dlgTaskManagerClose::Load(parent, wTabBar, wf, &active_task, &task_modified);
+    pnlTaskManagerClose::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wClose);
   wTabBar->AddClient(wClose, _T("Close"), false, NULL,
-                     dlgTaskManagerClose::OnTabPreShow);
+                     pnlTaskManagerClose::OnTabPreShow);
 
   wTabBar->SetCurrentPage(0);
 

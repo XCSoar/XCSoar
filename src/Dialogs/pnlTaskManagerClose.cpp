@@ -45,14 +45,14 @@ RefreshStatus()
 }
 
 void
-dlgTaskManagerClose::OnCloseClicked(WndButton &Sender)
+pnlTaskManagerClose::OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   dlgTaskManager::OnClose();
 }
 
 void
-dlgTaskManagerClose::OnRevertClicked(WndButton &Sender)
+pnlTaskManagerClose::OnRevertClicked(WndButton &Sender)
 {
   (void)Sender;
   dlgTaskManager::RevertTask();
@@ -60,14 +60,14 @@ dlgTaskManagerClose::OnRevertClicked(WndButton &Sender)
 }
 
 bool
-dlgTaskManagerClose::OnTabPreShow()
+pnlTaskManagerClose::OnTabPreShow()
 {
   RefreshStatus();
   return true;
 }
 
 Window*
-dlgTaskManagerClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
+pnlTaskManagerClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
                           WndForm* _wf, OrderedTask** task, bool* _task_modified)
 {
   assert(wTabBar);
