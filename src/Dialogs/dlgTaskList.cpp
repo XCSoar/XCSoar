@@ -45,7 +45,6 @@ static OrderedTask** active_task = NULL;
 static bool* task_modified = NULL;
 bool lazy_loaded = false; // if store has been loaded first time tab displayed
 
-
 static unsigned
 get_cursor_index()
 {
@@ -316,13 +315,9 @@ dlgTaskList::DestroyTab()
 }
 
 Window*
-dlgTaskList::Load(SingleWindow &parent,
-                           TabBarControl* _wTabBar,
-                           WndForm* _wf,
-                           OrderedTask** task,
-                           bool* _task_modified)
+dlgTaskList::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
+                  OrderedTask** task, bool* _task_modified)
 {
-
   assert(_wTabBar);
   wTabBar = _wTabBar;
 
@@ -339,8 +334,8 @@ dlgTaskList::Load(SingleWindow &parent,
 
   // Load the dialog
   Window *wList = LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
-     Layout::landscape ? _T("IDR_XML_TASKLIST_L") : _T("IDR_XML_TASKLIST"));
-
+                             Layout::landscape ?
+                             _T("IDR_XML_TASKLIST_L") : _T("IDR_XML_TASKLIST"));
   assert(wList);
 
   // Save important control pointers
