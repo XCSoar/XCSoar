@@ -210,15 +210,6 @@ GlueMapWindow::UpdateScreenAngle()
   settings_map.NorthArrow = (orientation != NORTHUP);
 }
 
-bool
-GlueMapWindow::IsOriginCentered()
-{
-  if (GetDisplayMode() == dmCircling)
-    return true;
-
-  return false;
-}
-
 void
 GlueMapWindow::UpdateMapScale()
 {
@@ -241,7 +232,7 @@ GlueMapWindow::UpdateMapScale()
   if (SettingsMap().AutoZoom && positive(wpd)) {
     // Calculate distance percentage between plane symbol and map edge
     // 50: centered  100: at edge of map
-    int AutoZoomFactor = IsOriginCentered() ?
+    int AutoZoomFactor = (GetDisplayMode() == dmCircling) ?
                                  50 : 100 - SettingsMap().GliderScreenPosition;
     // Leave 5% of full distance for target display
     AutoZoomFactor -= 5;
@@ -264,7 +255,7 @@ GlueMapWindow::UpdateProjection()
   center.x = (rc.left + rc.right) / 2;
   center.y = (rc.top + rc.bottom) / 2;
 
-  if (IsOriginCentered() || settings_map.EnablePan)
+  if (GetDisplayMode() == dmCircling || settings_map.EnablePan)
     visible_projection.SetScreenOrigin(center.x, center.y);
   else if (settings_map.OrientationCruise == NORTHUP) {
     RasterPoint offset = OffsetHistory::zeroPoint;
