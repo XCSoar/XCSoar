@@ -76,7 +76,7 @@ ConvertWinPilotPolar(GlidePolar &polar, const SimplePolar &_polar)
   polar.update();
 }
 
-static bool
+bool
 ReadWinPilotPolarFileLine(SimplePolar &polar, const TCHAR *line)
 {
   // Example:

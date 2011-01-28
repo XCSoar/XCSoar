@@ -51,4 +51,7 @@ ConvertWinPilotPolar(GlidePolar &polar, const SimplePolar &_polar);
 bool
 ReadWinPilotPolar(SimplePolar &polar);
 
+bool
+ReadWinPilotPolarFileLine(SimplePolar &polar, const TCHAR *line);
+
 #endif
