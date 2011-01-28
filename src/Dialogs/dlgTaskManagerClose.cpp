@@ -38,10 +38,8 @@ static bool* task_modified = NULL;
 static void
 RefreshStatus()
 {
-  if (*task_modified)
-    wStatus->SetText(_T("Task has been modified"));
-  else
-    wStatus->SetText(_T("Task unchanged"));
+  wStatus->SetText(*task_modified ?
+                   _T("Task has been modified") : _T("Task unchanged"));
 
   cmdRevert->set_visible(*task_modified);
 }
