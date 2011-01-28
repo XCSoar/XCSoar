@@ -46,7 +46,6 @@ static OrderedTask* ordered_task = NULL;
 static OrderedTask** ordered_task_pointer = NULL;
 static bool* task_modified = NULL;
 
-
 void
 dlgTaskEdit::RefreshView()
 {
@@ -87,8 +86,7 @@ dlgTaskEdit::OnClearClicked(WndButton &Sender)
   (void)Sender;
 
   if ((ordered_task->task_size() < 2) ||
-      (MessageBoxX(_("Clear task?"),
-                   _("Task edit"),
+      (MessageBoxX(_("Clear task?"), _("Task edit"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
     ordered_task->clear();
     ordered_task->set_factory(ordered_task->get_factory_type());
@@ -119,7 +117,6 @@ dlgTaskEdit::OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawLis
                   rc.top + Layout::FastScale(2), sTmp);
     }
   } else {
-
     TCHAR sRad[10];
     TCHAR sDist[10];
     fixed fDist = fixed_zero;
@@ -256,11 +253,8 @@ dlgTaskEdit::OnTabPreShow()
 }
 
 Window*
-dlgTaskEdit::Load(SingleWindow &parent,
-                        TabBarControl* wTabBar,
-                        WndForm* _wf,
-                        OrderedTask** task,
-                        bool* _task_modified)
+dlgTaskEdit::Load(SingleWindow &parent, TabBarControl* wTabBar, WndForm* _wf,
+                  OrderedTask** task, bool* _task_modified)
 {
   assert(wTabBar);
   assert(_wf);
@@ -277,8 +271,10 @@ dlgTaskEdit::Load(SingleWindow &parent,
 
   parent_window = &parent;
 
-  Window *wTps = LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
-        Layout::landscape ? _T("IDR_XML_TASKEDIT_L") : _T("IDR_XML_TASKEDIT"));
+  Window *wTps =
+      LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
+                 Layout::landscape ?
+                 _T("IDR_XML_TASKEDIT_L") : _T("IDR_XML_TASKEDIT"));
   assert(wTps);
 
   wTaskPoints = (WndListFrame*)wf->FindByName(_T("frmTaskPoints"));
@@ -299,7 +295,7 @@ dlgTaskEdit::Load(SingleWindow &parent,
   wTaskPoints->SetActivateCallback(OnTaskListEnter);
   wTaskPoints->SetPaintItemCallback(OnTaskPaintListItem);
 
-//Todo: fix onkey down.  release on hiding?
+  //Todo: fix onkey down.  release on hiding?
   wf->SetKeyDownNotify(OnKeyDown);
 
   RefreshView();
