@@ -31,7 +31,7 @@ class GlidePolar;
 /**
  * Struct for internally stored WinPilot-like polars
  */
-struct WinPilotPolar
+struct SimplePolar
 {
   const TCHAR *name;   /**< Name of the glider type */
   double ww0;          /**< Mass dry gross (kg) */
@@ -46,7 +46,7 @@ struct WinPilotPolar
 };
 
 void
-ConvertWinPilotPolar(GlidePolar &polar, const WinPilotPolar &wp_polar);
+ConvertWinPilotPolar(GlidePolar &polar, const SimplePolar &_polar);
 
 bool
 ReadWinPilotPolar(GlidePolar &polar);

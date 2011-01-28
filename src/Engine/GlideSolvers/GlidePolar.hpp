@@ -29,7 +29,7 @@ struct AIRCRAFT_STATE;
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
-struct WinPilotPolar;
+struct SimplePolar;
 
 /**
  * Class implementing basic glide polar performance model
@@ -53,7 +53,7 @@ struct WinPilotPolar;
 class GlidePolar
 {
   friend void ConvertWinPilotPolar(GlidePolar &polar,
-                                   const WinPilotPolar &wp_polar);
+                                   const SimplePolar &wp_polar);
 
 public:
   /**

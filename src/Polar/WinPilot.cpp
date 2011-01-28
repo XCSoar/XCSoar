@@ -37,18 +37,18 @@ Copyright_License {
  * @param ww dry mass, maximum takeoff weight
  */
 void
-ConvertWinPilotPolar(GlidePolar &polar, const WinPilotPolar &wp_polar)
+ConvertWinPilotPolar(GlidePolar &polar, const SimplePolar &_polar)
 {
   fixed d;
   fixed v1, v2, v3;
   fixed w1, w2, w3;
 
-  v1 = fixed(wp_polar.v0 / 3.6);
-  v2 = fixed(wp_polar.v1 / 3.6);
-  v3 = fixed(wp_polar.v2 / 3.6);
-  w1 = fixed(wp_polar.w0);
-  w2 = fixed(wp_polar.w1);
-  w3 = fixed(wp_polar.w2);
+  v1 = fixed(_polar.v0 / 3.6);
+  v2 = fixed(_polar.v1 / 3.6);
+  v3 = fixed(_polar.v2 / 3.6);
+  w1 = fixed(_polar.w0);
+  w2 = fixed(_polar.w1);
+  w3 = fixed(_polar.w2);
 
   d = v1 * v1 * (v2 - v3) + v2 * v2 * (v3 - v1) + v3 * v3 * (v1 - v2);
   if (d == fixed_zero)
@@ -67,11 +67,11 @@ ConvertWinPilotPolar(GlidePolar &polar, const WinPilotPolar &wp_polar)
       -(w3 + polar.ideal_polar_a * v3 * v3 + polar.ideal_polar_b * v3);
 
   // Glider empty weight
-  polar.empty_mass = fixed(wp_polar.ww0);
+  polar.empty_mass = fixed(_polar.ww0);
   // Ballast weight
-  polar.ballast_ratio = fixed(wp_polar.ww1) / polar.empty_mass;
+  polar.ballast_ratio = fixed(_polar.ww1) / polar.empty_mass;
 
-  polar.wing_area = fixed(wp_polar.wing_area);
+  polar.wing_area = fixed(_polar.wing_area);
 
   polar.update();
 }
@@ -79,7 +79,7 @@ ConvertWinPilotPolar(GlidePolar &polar, const WinPilotPolar &wp_polar)
 static bool
 ReadWinPilotPolarFileLine(GlidePolar &polar, const TCHAR *line)
 {
-  WinPilotPolar wp_polar;
+  SimplePolar wp_polar;
 
   // Example:
   // *LS-3  WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3

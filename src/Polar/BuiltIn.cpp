@@ -29,7 +29,7 @@ Copyright_License {
 /**
  *  Note: new items should be added to bottom, otherwise saved index is lost
  */
-static const WinPilotPolar WinPilotPolars[] =
+static const SimplePolar WinPilotPolars[] =
 {
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8},
   { _T("604 Kestrel"), 570, 100, 112.97, -0.72, 150.64, -1.42, 207.13, -4.1, 16.26},
