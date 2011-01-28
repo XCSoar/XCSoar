@@ -170,7 +170,7 @@ static const WinPilotPolar WinPilotPolars[] =
 const TCHAR*
 GetWinPilotPolarInternalName(unsigned i)
 {
-  if (i >= sizeof(WinPilotPolars) / sizeof(WinPilotPolar))
+  if (i >= GetWinPilotPolarInternalCount())
     return NULL;
 
   return WinPilotPolars[i].name;
@@ -185,9 +185,14 @@ GetWinPilotPolarInternalName(unsigned i)
 bool
 ReadWinPilotPolarInternal(unsigned i, GlidePolar &polar)
 {
-  if (i >= sizeof(WinPilotPolars) / sizeof(WinPilotPolars[0]))
+  if (i >= GetWinPilotPolarInternalCount())
     return false;
 
   ConvertWinPilotPolar(polar, WinPilotPolars[i]);
   return true;
+}
+
+unsigned GetWinPilotPolarInternalCount()
+{
+  return sizeof(WinPilotPolars) / sizeof(WinPilotPolars[0]);
 }

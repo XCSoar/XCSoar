@@ -36,4 +36,6 @@ const TCHAR *GetWinPilotPolarInternalName(unsigned i);
 bool
 ReadWinPilotPolarInternal(unsigned i, GlidePolar &polar);
 
+unsigned GetWinPilotPolarInternalCount();
+
 #endif
