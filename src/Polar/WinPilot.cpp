@@ -77,7 +77,7 @@ ConvertWinPilotPolar(GlidePolar &polar, const SimplePolar &_polar)
 }
 
 bool
-ReadWinPilotPolarFileLine(SimplePolar &polar, const TCHAR *line)
+ReadPolarString(SimplePolar &polar, const TCHAR *line)
 {
   // Example:
   // *LS-3  WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
@@ -132,7 +132,7 @@ ReadWinPilotPolarFile(SimplePolar &polar, TLineReader &reader)
 {
   const TCHAR *line;
   while ((line = reader.read()) != NULL)
-    if (ReadWinPilotPolarFileLine(polar, line))
+    if (ReadPolarString(polar, line))
       return true;
 
   return false;

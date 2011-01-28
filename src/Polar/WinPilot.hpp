@@ -52,6 +52,6 @@ bool
 ReadWinPilotPolar(SimplePolar &polar);
 
 bool
-ReadWinPilotPolarFileLine(SimplePolar &polar, const TCHAR *line);
+ReadPolarString(SimplePolar &polar, const TCHAR *line);
 
 #endif
