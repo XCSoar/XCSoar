@@ -202,7 +202,7 @@ TabDisplay::on_paint(Canvas &canvas)
       canvas.set_text_color(Color::WHITE);
       canvas.set_background_color(Color::BLACK);
 
-    } else if ((int)i == downindex) {
+    } else if (((int)i == downindex) && (dragoffbutton == false)) {
       canvas.set_text_color(Color::BLACK);
       canvas.set_background_color(Color::YELLOW);
 
@@ -382,11 +382,31 @@ TabDisplay::on_mouse_up(int x, int y)
   }
 }
 
+bool
+TabDisplay::on_mouse_move(int x, int y, unsigned keys)
+{
+  if (downindex == -1)
+    return false;
+
+  const RECT rc = theTabBar.GetButtonSize(downindex);
+  POINT Pos;
+  Pos.x = x;
+  Pos.y = y;
+
+  const bool tmp = !PtInRect(&rc, Pos);
+  if (dragoffbutton != tmp) {
+    dragoffbutton = tmp;
+    invalidate(rc);
+  }
+  return true;
+}
+
 void
 TabDisplay::drag_end()
 {
   if (dragging) {
     dragging = false;
+    dragoffbutton = false;
     release_capture();
   }
 }

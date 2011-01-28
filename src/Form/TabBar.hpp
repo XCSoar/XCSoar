@@ -170,6 +170,7 @@ protected:
   TabBarControl& theTabBar;
   bool dragging; // tracks that mouse is down and captured
   int downindex; // index of tab where mouse down occurred
+  bool dragoffbutton; // set by mouse_move
 
 protected:
 /**
@@ -194,6 +195,7 @@ protected:
  */
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_move(int x, int y, unsigned keys);
   void drag_end();
 };
 #endif
