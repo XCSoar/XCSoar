@@ -50,8 +50,8 @@ LoadPolarById2(unsigned id, Polar &a_polar)
 void
 setGlidePolar(const Polar &polar, GlidePolar& gp)
 {
-  gp.empty_mass = fixed(polar.WEIGHTS[0] + polar.WEIGHTS[1]);
-  gp.ballast_ratio = fixed(polar.WEIGHTS[2]) / gp.empty_mass;
+  gp.empty_mass = fixed(polar.PilotMass + polar.EmptyMass);
+  gp.ballast_ratio = fixed(polar.MaximumMass) / gp.empty_mass;
   gp.wing_area = fixed(polar.WingArea);
 
   gp.ideal_polar_a = -fixed(polar.POLAR[0]);

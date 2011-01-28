@@ -67,11 +67,11 @@ ConvertWinPilotPolar(Polar &polar, double POLARV[3], double POLARW[3],
   polar.POLAR[2] = w3 - polar.POLAR[0] * v3 * v3 - polar.POLAR[1] * v3;
 
   // Pilot weight
-  polar.WEIGHTS[0] = 70;
+  polar.PilotMass = 70;
   // Glider empty weight
-  polar.WEIGHTS[1] = ww[0] - polar.WEIGHTS[0];
+  polar.EmptyMass = ww[0] - polar.PilotMass;
   // Ballast weight
-  polar.WEIGHTS[2] = ww[1];
+  polar.MaximumMass = ww[1];
 
   polar.WingArea = wing_area;
 }
