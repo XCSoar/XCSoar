@@ -183,7 +183,7 @@ GetWinPilotPolarInternalName(unsigned i)
  * @param polar Polar to set
  */
 bool
-ReadWinPilotPolarInternal(unsigned i, Polar &polar)
+ReadWinPilotPolarInternal(unsigned i, GlidePolar &polar)
 {
   if (i >= sizeof(WinPilotPolars) / sizeof(WinPilotPolars[0]))
     return false;

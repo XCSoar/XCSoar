@@ -49,7 +49,6 @@ Copyright_License {
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
-  #include "Polar/Polar.hpp"
 #endif
 
 bool DevicePortChanged = false;

@@ -27,45 +27,27 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Language.hpp"
 #include "Dialogs/Message.hpp"
-
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Polar/Polar.hpp"
 
 static bool
-LoadPolarById2(unsigned id, Polar &a_polar)
+LoadPolarById2(unsigned id, GlidePolar &polar)
 {
   if (id < POLARUSEWINPILOTFILE)
     // polar data from historical table
     return false;
   else if (id == POLARUSEWINPILOTFILE)
     // polar data from winpilot file
-    return ReadWinPilotPolar(a_polar);
+    return ReadWinPilotPolar(polar);
   else
     // polar data from built-in table
-    return ReadWinPilotPolarInternal(id - POLARUSEWINPILOTFILE - 1, a_polar);
-}
-
-
-void
-setGlidePolar(const Polar &polar, GlidePolar& gp)
-{
-  gp.empty_mass = fixed(polar.PilotMass + polar.EmptyMass);
-  gp.ballast_ratio = fixed(polar.MaximumMass) / gp.empty_mass;
-  gp.wing_area = fixed(polar.WingArea);
-
-  gp.ideal_polar_a = -fixed(polar.ACoefficient);
-  gp.ideal_polar_b = -fixed(polar.BCoefficient);
-  gp.ideal_polar_c = -fixed(polar.CCoefficient);
-
-  gp.update();
+    return ReadWinPilotPolarInternal(id - POLARUSEWINPILOTFILE - 1, polar);
 }
 
 bool
-LoadPolarById(unsigned id, GlidePolar& gp)
+LoadPolarById(unsigned id, GlidePolar &polar)
 {
   LogStartUp(_T("Load polar"));
 
-  Polar polar;
   if (!LoadPolarById2(id, polar)) {
     MessageBoxX(_("Error loading Polar file!\nUsing LS8 Polar."),
                 _("Warning"), MB_OK | MB_ICONERROR);
@@ -74,6 +56,5 @@ LoadPolarById(unsigned id, GlidePolar& gp)
       return false;
   }
 
-  setGlidePolar(polar, gp);
   return true;
 }

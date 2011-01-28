@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct Polar;
+class GlidePolar;
 
 /**
  * Struct for internally stored WinPilot-like polars
@@ -46,9 +46,9 @@ struct WinPilotPolar
 };
 
 void
-ConvertWinPilotPolar(Polar &polar, const WinPilotPolar &wp_polar);
+ConvertWinPilotPolar(GlidePolar &polar, const WinPilotPolar &wp_polar);
 
 bool
-ReadWinPilotPolar(Polar &polar);
+ReadWinPilotPolar(GlidePolar &polar);
 
 #endif
