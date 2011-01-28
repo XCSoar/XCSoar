@@ -27,6 +27,7 @@ Copyright_License {
 #include <tchar.h>
 
 class GlidePolar;
+class TLineReader;
 
 /**
  * Struct for internally stored WinPilot-like polars
@@ -43,15 +44,12 @@ struct SimplePolar
   double v2;           /**< Speed (kph) of point 3 */
   double w2;           /**< Sink rate (negative, m/s) of point 3  */
   double wing_area;    /**< Reference wing area (m^2) */
+
+  bool ReadFileFromProfile();
+  bool ReadFile(TLineReader &reader);
+  bool ReadString(const TCHAR *line);
+
+  void ConvertToGlidePolar(GlidePolar &polar) const;
 };
-
-void
-ConvertWinPilotPolar(GlidePolar &polar, const SimplePolar &_polar);
-
-bool
-ReadWinPilotPolar(SimplePolar &polar);
-
-bool
-ReadPolarString(SimplePolar &polar, const TCHAR *line);
 
 #endif

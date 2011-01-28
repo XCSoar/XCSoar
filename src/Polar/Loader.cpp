@@ -37,7 +37,7 @@ LoadPolarById2(unsigned id, SimplePolar &polar)
     return false;
   else if (id == POLARUSEWINPILOTFILE)
     // polar data from winpilot file
-    return ReadWinPilotPolar(polar);
+    return polar.ReadFileFromProfile();
   else
     // polar data from built-in table
     return ReadWinPilotPolarInternal(id - POLARUSEWINPILOTFILE - 1, polar);
@@ -57,6 +57,6 @@ LoadPolarById(unsigned id, GlidePolar &polar)
       return false;
   }
 
-  ConvertWinPilotPolar(polar, s_polar);
+  s_polar.ConvertToGlidePolar(polar);
   return true;
 }

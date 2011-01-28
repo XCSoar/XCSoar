@@ -52,8 +52,7 @@ struct SimplePolar;
  */
 class GlidePolar
 {
-  friend void ConvertWinPilotPolar(GlidePolar &polar,
-                                   const SimplePolar &wp_polar);
+  friend struct SimplePolar;
 
 public:
   /**

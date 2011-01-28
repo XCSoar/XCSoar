@@ -37,47 +37,47 @@ Copyright_License {
  * @param ww dry mass, maximum takeoff weight
  */
 void
-ConvertWinPilotPolar(GlidePolar &polar, const SimplePolar &_polar)
+SimplePolar::ConvertToGlidePolar(GlidePolar &polar) const
 {
   fixed d;
-  fixed v1, v2, v3;
-  fixed w1, w2, w3;
+  fixed V1, V2, V3;
+  fixed W1, W2, W3;
 
-  v1 = fixed(_polar.v0 / 3.6);
-  v2 = fixed(_polar.v1 / 3.6);
-  v3 = fixed(_polar.v2 / 3.6);
-  w1 = fixed(_polar.w0);
-  w2 = fixed(_polar.w1);
-  w3 = fixed(_polar.w2);
+  V1 = fixed(v0 / 3.6);
+  V2 = fixed(v1 / 3.6);
+  V3 = fixed(v2 / 3.6);
+  W1 = fixed(w0);
+  W2 = fixed(w1);
+  W3 = fixed(w2);
 
-  d = v1 * v1 * (v2 - v3) + v2 * v2 * (v3 - v1) + v3 * v3 * (v1 - v2);
+  d = V1 * V1 * (V2 - V3) + V2 * V2 * (V3 - V1) + V3 * V3 * (V1 - V2);
   if (d == fixed_zero)
     polar.ideal_polar_a = fixed_zero;
   else
-    polar.ideal_polar_a = -((v2 - v3) * (w1 - w3) + (v3 - v1) * (w2 - w3)) / d;
+    polar.ideal_polar_a = -((V2 - V3) * (W1 - W3) + (V3 - V1) * (W2 - W3)) / d;
 
-  d = v2 - v3;
+  d = V2 - V3;
   if (d == fixed_zero)
     polar.ideal_polar_b = fixed_zero;
   else
     polar.ideal_polar_b =
-        -(w2 - w3 + polar.ideal_polar_a * (v2 * v2 - v3 * v3)) / d;
+        -(W2 - W3 + polar.ideal_polar_a * (V2 * V2 - V3 * V3)) / d;
 
   polar.ideal_polar_c =
-      -(w3 + polar.ideal_polar_a * v3 * v3 + polar.ideal_polar_b * v3);
+      -(W3 + polar.ideal_polar_a * V3 * V3 + polar.ideal_polar_b * V3);
 
   // Glider empty weight
-  polar.dry_mass = fixed(_polar.dry_mass);
+  polar.dry_mass = fixed(dry_mass);
   // Ballast weight
-  polar.ballast_ratio = fixed(_polar.max_ballast) / polar.dry_mass;
+  polar.ballast_ratio = fixed(max_ballast) / polar.dry_mass;
 
-  polar.wing_area = fixed(_polar.wing_area);
+  polar.wing_area = fixed(wing_area);
 
   polar.update();
 }
 
 bool
-ReadPolarString(SimplePolar &polar, const TCHAR *line)
+SimplePolar::ReadString(const TCHAR *line)
 {
   // Example:
   // *LS-3  WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
@@ -89,50 +89,50 @@ ReadPolarString(SimplePolar &polar, const TCHAR *line)
 
   TCHAR *p;
 
-  polar.dry_mass = _tcstod(line, &p);
+  dry_mass = _tcstod(line, &p);
   if (*p != _T(','))
     return false;
 
-  polar.max_ballast = _tcstod(p + 1, &p);
+  max_ballast = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  polar.v0 = _tcstod(p + 1, &p);
+  v0 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  polar.w0 = _tcstod(p + 1, &p);
+  w0 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  polar.v1 = _tcstod(p + 1, &p);
+  v1 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  polar.w1 = _tcstod(p + 1, &p);
+  w1 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  polar.v2 = _tcstod(p + 1, &p);
+  v2 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  polar.w2 = _tcstod(p + 1, &p);
+  w2 = _tcstod(p + 1, &p);
 
   if (*p != _T(','))
-    polar.wing_area = 0.0;
+    wing_area = 0.0;
   else
-    polar.wing_area = _tcstod(p + 1, &p);
+    wing_area = _tcstod(p + 1, &p);
 
   return true;
 }
 
-static bool
-ReadWinPilotPolarFile(SimplePolar &polar, TLineReader &reader)
+bool
+SimplePolar::ReadFile(TLineReader &reader)
 {
   const TCHAR *line;
   while ((line = reader.read()) != NULL)
-    if (ReadPolarString(polar, line))
+    if (ReadString(line))
       return true;
 
   return false;
@@ -143,13 +143,13 @@ ReadWinPilotPolarFile(SimplePolar &polar, TLineReader &reader)
  * @return True if parsing was successful, False otherwise
  */
 bool
-ReadWinPilotPolar(SimplePolar &polar)
+SimplePolar::ReadFileFromProfile()
 {
   TLineReader *reader = OpenConfiguredTextFile(szProfilePolarFile);
   if (reader == NULL)
     return false;
 
-  bool success = ReadWinPilotPolarFile(polar, *reader);
+  bool success = ReadFile(*reader);
   delete reader;
 
   return success;
