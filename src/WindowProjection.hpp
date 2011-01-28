@@ -80,6 +80,17 @@ public:
     return MapRect.bottom - MapRect.top;
   }
 
+  /**
+   * Returns the raster coordinates at the center of the map.
+   */
+  gcc_pure
+  RasterPoint GetScreenCenter() const {
+    RasterPoint pt;
+    pt.x = GetScreenWidth() / 2;
+    pt.y = GetScreenHeight() / 2;
+    return pt;
+  }
+
   gcc_pure
   fixed DistancePixelsToMeters(const int x) const {
     return fixed(x) / GetScale();
