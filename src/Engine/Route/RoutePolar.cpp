@@ -100,7 +100,7 @@ RoutePolars::msl_intercept(const int index, const AGeoPoint& p, const TaskProjec
   const FlatGeoPoint fp = proj.project(p);
   const fixed d = p.altitude*polar_glide.get_point(index).inv_gradient;
   const fixed scale = proj.get_approx_scale();
-  const int steps = d/scale+1;
+  const int steps = int(d / scale) + 1;
   int dx;
   int dy;
   RoutePolar::index_to_dxdy(index, dx, dy);
