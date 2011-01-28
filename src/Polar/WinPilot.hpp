@@ -24,7 +24,26 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_WINPILOT_HPP
 #define XCSOAR_POLAR_WINPILOT_HPP
 
+#include <tchar.h>
+
 struct Polar;
+
+/**
+ * Struct for internally stored WinPilot-like polars
+ */
+struct WinPilotPolar
+{
+  const TCHAR *name;   /**< Name of the glider type */
+  double ww0;          /**< Mass dry gross (kg) */
+  double ww1;          /**< Max water ballast (l) */
+  double v0;           /**< Speed (kph) of point 1 */
+  double w0;           /**< Sink rate (negative, m/s) of point 1  */
+  double v1;           /**< Speed (kph) of point 2 */
+  double w1;           /**< Sink rate (negative, m/s) of point 2  */
+  double v2;           /**< Speed (kph) of point 3 */
+  double w2;           /**< Sink rate (negative, m/s) of point 3  */
+  double wing_area;    /**< Reference wing area (m^2) */
+};
 
 void
 ConvertWinPilotPolar(Polar &polar, double POLARV[3], double POLARW[3],
