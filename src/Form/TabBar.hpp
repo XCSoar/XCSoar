@@ -49,8 +49,8 @@ public:
 /**
  *
  * @param parent
- * @param x, y, width, height.  Location and size window including
- * both the TabBar and the display area
+ * @param x, y Location of the tab bar (unused)
+ * @param width, height.  Size of the tab bar
  * @param style
  * @return
  */
@@ -126,19 +126,23 @@ public:
 
 /**
  * calculates the size and position of ith button
+ * works in landscape or portrait mode
  * @param i index of button
  * @return Rectangle of button coordinates
  */
   const RECT GetButtonSize(unsigned i);
   const TCHAR* GetButtonCaption(unsigned i);
   bool GetButtonIsButtonOnly(unsigned i);
-  const RECT get_client_rectangle();
+  unsigned GetBarHeight() { return TabBarHeight; }
+  unsigned GetBarWidth() { return TabBarWidth; }
+
 
 protected:
   TabDisplay * theTabDisplay;
   StaticArray<OneTabButton *, 32> buttons;
-  unsigned int TabBarHeight;
-  unsigned int TabLineHeight;
+  const unsigned int TabBarHeight;
+  const unsigned int TabBarWidth;
+  const unsigned int TabLineHeight;
 
 };
 
@@ -157,7 +161,7 @@ public:
  * @param _theTabBar. An existing TabBar object
  * @param height the height to make the row of tabs the screen
  */
-  TabDisplay(TabBarControl& _theTabBar, unsigned height);
+  TabDisplay(TabBarControl& _theTabBar, unsigned width, unsigned height);
 
 public:
   void trigger_invalidate() { invalidate(); }

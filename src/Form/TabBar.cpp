@@ -31,26 +31,15 @@ Copyright_License {
 
 
 TabBarControl::TabBarControl(ContainerWindow &_parent,
-                int x, int y, unsigned width, unsigned height,
+                int x, int y, unsigned _width, unsigned _height,
                 const WindowStyle style):
-                TabbedControl(_parent, x, y, width, height, style),
-                theTabDisplay(NULL)
+                TabbedControl(_parent, 0, 0, _parent.get_width(), _parent.get_height(), style),
+                theTabDisplay(NULL),
+                TabBarHeight(_height),
+                TabBarWidth(_width),
+                TabLineHeight(Layout::Scale(TabLineHeightInitUnscaled))
 {
-  TabBarHeight = Layout::Scale(TabHeightInitUnscaled);
-  TabLineHeight = Layout::Scale(TabLineHeightInitUnscaled);
-  theTabDisplay = new TabDisplay(*this, TabBarHeight);
-}
-
-const RECT
-TabBarControl::get_client_rectangle()
-{
-  RECT rc;
-  rc.top = TabBarHeight;
-  rc.bottom = this->get_bottom();
-  rc.left = 0;
-  rc.right = this->get_width();
-
-  return rc;
+  theTabDisplay = new TabDisplay(*this, TabBarWidth, TabBarHeight);
 }
 
 bool
@@ -88,7 +77,10 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
 
   TabbedControl::AddClient(w);
   const RECT rc = get_client_rect();
-  w->move(rc.left, rc.top + TabBarHeight, rc.right, rc.bottom  + TabBarHeight);
+  if (Layout::landscape)
+    w->move(rc.left , rc.top, rc.right - rc.left , rc.bottom - rc.top);
+  else
+    w->move(rc.left, rc.top + TabBarHeight, rc.right - rc.left, rc.bottom - rc.top - TabBarHeight);
 
   OneTabButton *b = new OneTabButton(Caption, IsButtonOnly,
       PreHideFunction, PreShowFunction, PostShowFunction);
@@ -149,25 +141,44 @@ TabBarControl::PreviousPage()
 const RECT
 TabBarControl::GetButtonSize(unsigned i)
 {
-  const unsigned screenwidth = get_width();
   const unsigned margin = 1;
-  const unsigned but_width = (screenwidth - margin) / buttons.size() - margin;
+
+  bool partialTab = false;
+  if ( (Layout::landscape && TabBarHeight < get_height()) ||
+      (!Layout::landscape && TabBarWidth < get_width()) )
+    partialTab = true;
+
+  const unsigned finalmargin = partialTab ? TabLineHeight - 3 * margin : margin;
+
+  const unsigned but_width = Layout::landscape ? (TabBarHeight - finalmargin) / buttons.size() - margin
+       : (TabBarWidth - finalmargin) / buttons.size() - margin;
   RECT rc;
 
+  if (Layout::landscape) {
+    rc.left = 0;
+    rc.right = TabBarWidth - TabLineHeight;
+
+    rc.top = margin + (margin + but_width) * i;
+    rc.bottom = rc.top + but_width;
+    if (!partialTab && (i == buttons.size() - 1))
+      rc.bottom = TabBarHeight - margin - 1;
+
+  } else {
   rc.top = 0;
   rc.bottom = rc.top + TabBarHeight - TabLineHeight;
 
-  rc.left = margin + (margin + but_width) * i;
-  rc.right = rc.left + but_width;
-  if (i == buttons.size() - 1)
-    rc.right = screenwidth - margin - 1;
+    rc.left = margin + (margin + but_width) * i;
+    rc.right = rc.left + but_width;
+    if (!partialTab && (i == buttons.size() - 1))
+      rc.right = TabBarWidth - margin - 1;
+  }
 
   return rc;
 }
 
 // TabDisplay Functions
 TabDisplay::TabDisplay(TabBarControl& _theTabBar,
-    unsigned height) :
+    unsigned width, unsigned height) :
   PaintWindow(),
   theTabBar(_theTabBar),
   dragging(false),
@@ -175,7 +186,7 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar,
 {
   WindowStyle mystyle;
   mystyle.tab_stop();
-  set(theTabBar, 0, 0, theTabBar.get_width(), height, mystyle);
+  set(theTabBar, 0, 0, width, height, mystyle);
 }
 
 void
@@ -263,13 +274,29 @@ TabDisplay::on_key_check(unsigned key_code) const
     break;
 
   case VK_LEFT:
-    return (theTabBar.GetCurrentPage() > 0);
+    if (Layout::landscape)
+      return false;
+    else
+      return (theTabBar.GetCurrentPage() > 0);
 
   case VK_RIGHT:
-    return theTabBar.GetCurrentPage() < theTabBar.GetTabCount();
+    if (Layout::landscape)
+      return false;
+    else
+      return theTabBar.GetCurrentPage() < theTabBar.GetTabCount() - 1;
 
   case VK_DOWN:
+    if (Layout::landscape)
+      return theTabBar.GetCurrentPage() < theTabBar.GetTabCount() - 1;
+    else
+      return false;
+
   case VK_UP:
+    if (Layout::landscape)
+      return (theTabBar.GetCurrentPage() > 0);
+    else
+      return false;
+
   default:
     return false;
   }
@@ -287,18 +314,15 @@ TabDisplay::on_key_down(unsigned key_code)
   case VK_RETURN: //ToDo: support Return
     break;
 
+  case VK_DOWN:
   case VK_RIGHT:
-    if (theTabBar.GetCurrentPage() < theTabBar.GetTabCount()) {
-      theTabBar.NextPage();
-      return true;
-    }
-    break;
+    theTabBar.NextPage();
+    return true;
 
+  case VK_UP:
   case VK_LEFT:
-    if (theTabBar.GetCurrentPage() > 0) {
-      theTabBar.PreviousPage();
-      return true;
-    }
+    theTabBar.PreviousPage();
+    return true;
   }
 
   return PaintWindow::on_key_down(key_code);

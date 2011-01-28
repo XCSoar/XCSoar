@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/dlgTaskManager.hpp"
-
+#include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
 
 #include <assert.h>
@@ -97,14 +97,14 @@ dlgTaskManagerClose::Load(SingleWindow &parent,
   assert(cmdClose);
 
   // center for portrait or for landscape
-  const RECT r = wTabBar->get_client_rectangle();
-  unsigned CloseTop = (r.bottom - r.top) / 2 - cmdClose->get_height();
-  cmdClose->move((r.right - r.left - wStatus->get_width()) / 2,
-      CloseTop);
-  wStatus->move((r.right - r.left - wStatus->get_width()) / 2,
-      CloseTop - wStatus->get_height());
-  cmdRevert->move((r.right - r.left - wStatus->get_width()) / 2,
-      CloseTop + 2* cmdClose->get_height());
+  const RECT r = wTabBar->get_client_rect();
+  const unsigned CloseTop = (r.bottom - r.top -
+      (Layout::landscape ? 0 : wTabBar->GetBarHeight())) / 2 - cmdClose->get_height();
+  const unsigned CloseLeft = (r.right - r.left - cmdClose->get_width() +
+      (Layout::landscape ? wTabBar->GetBarWidth() : 0)) / 2;
+  cmdClose->move(CloseLeft, CloseTop);
+  wStatus->move(CloseLeft, CloseTop - wStatus->get_height());
+  cmdRevert->move(CloseLeft, CloseTop + 2* cmdClose->get_height());
 
   wStatus->SetAlignCenter();
   return wTaskManagerClose;
