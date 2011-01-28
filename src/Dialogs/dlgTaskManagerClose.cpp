@@ -69,22 +69,20 @@ dlgTaskManagerClose::OnTabPreShow()
 }
 
 Window*
-dlgTaskManagerClose::Load(SingleWindow &parent,
-                        TabBarControl* wTabBar,
-                        WndForm* _wf,
-                        OrderedTask** task,
-                        bool* _task_modified)
+dlgTaskManagerClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
+                          WndForm* _wf, OrderedTask** task, bool* _task_modified)
 {
   assert(wTabBar);
+
   assert(_wf);
   wf = _wf;
 
   assert(_task_modified);
   task_modified = _task_modified;
 
-
-  Window *wTaskManagerClose = LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
-        _T("IDR_XML_TASKMANAGERCLOSE"));
+  Window *wTaskManagerClose =
+      LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
+                 _T("IDR_XML_TASKMANAGERCLOSE"));
   assert(wTaskManagerClose);
 
   wStatus = (WndFrame *)wf->FindByName(_T("frmStatus"));
