@@ -47,7 +47,6 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "Math/FastMath.h"
 #include "Polar/BuiltIn.hpp"
-#include "Polar/Historical.hpp"
 #include "Polar/Loader.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
@@ -1046,14 +1045,14 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumTexts(PolarLabels);
+    dfe->addEnumText(_T("External Polar File"), 6);
 
     for(unsigned i = 0;; i++) {
       const TCHAR *name = GetWinPilotPolarInternalName(i);
       if (name == NULL)
         break;
 
-      dfe->addEnumText(name);
+      dfe->addEnumText(name, i + 7);
     }
     dfe->Sort();
     dfe->Set(settings_computer.POLARID);

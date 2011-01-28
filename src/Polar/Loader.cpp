@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Polar/Loader.hpp"
-#include "Polar/Historical.hpp"
 #include "Polar/WinPilot.hpp"
 #include "Polar/BuiltIn.hpp"
 #include "LogFile.hpp"
@@ -37,7 +36,7 @@ LoadPolarById2(unsigned id, Polar &a_polar)
 {
   if (id < POLARUSEWINPILOTFILE)
     // polar data from historical table
-    return LoadHistoricalPolar(id, a_polar);
+    return false;
   else if (id == POLARUSEWINPILOTFILE)
     // polar data from winpilot file
     return ReadWinPilotPolar(a_polar);
@@ -71,7 +70,7 @@ LoadPolarById(unsigned id, GlidePolar& gp)
     MessageBoxX(_("Error loading Polar file!\nUsing LS8 Polar."),
                 _("Warning"), MB_OK | MB_ICONERROR);
 
-    if (!LoadHistoricalPolar(2, polar))
+    if (!ReadWinPilotPolarInternal(56, polar))
       return false;
   }
 
