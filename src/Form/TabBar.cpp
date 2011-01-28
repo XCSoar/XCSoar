@@ -149,19 +149,13 @@ TabBarControl::PreviousPage()
 const RECT
 TabBarControl::GetButtonSize(unsigned i)
 {
-  const bool top = true;
   const unsigned screenwidth = get_width();
   const unsigned margin = 1;
   const unsigned but_width = (screenwidth - margin) / buttons.size() - margin;
   RECT rc;
 
-  if (top) {
-    rc.top = 0;
-    rc.bottom = rc.top + TabBarHeight - TabLineHeight;
-  } else {
-    rc.bottom = this->get_height();
-    rc.top = rc.bottom - TabBarHeight + TabLineHeight;
-  }
+  rc.top = 0;
+  rc.bottom = rc.top + TabBarHeight - TabLineHeight;
 
   rc.left = margin + (margin + but_width) * i;
   rc.right = rc.left + but_width;
