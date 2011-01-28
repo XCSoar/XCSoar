@@ -33,8 +33,8 @@ Copyright_License {
 #include <assert.h>
 
 static SingleWindow *parent_window;
-static WndForm *wf=NULL;
-static OrderedTask* ordered_task= NULL;
+static WndForm *wf = NULL;
+static OrderedTask* ordered_task = NULL;
 static bool* task_changed = NULL;
 static OrderedTask** ordered_task_pointer = NULL;
 
@@ -43,19 +43,16 @@ InitView()
 {
   WndProperty* wp;
   wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxSpeed")));
-  if (wp) {
+  if (wp)
     wp->GetDataField()->SetUnits(Units::GetSpeedName());
-  }
 
   wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxHeight")));
-  if (wp) {
+  if (wp)
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-  }
 
   wp = ((WndProperty*)wf->FindByName(_T("prpFinishMinHeight")));
-  if (wp) {
+  if (wp)
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-  }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
   if (wp) {
@@ -143,9 +140,8 @@ RefreshView()
 
   WndButton* wb;
   wb = ((WndButton*)wf->FindByName(_T("butType")));
-  if (wb) {
+  if (wb)
     wb->SetCaption(OrderedTaskFactoryName(ordered_task->get_factory_type()));
-  }
 
   // fixed aat_min_time
   // finish_min_height
@@ -197,7 +193,6 @@ ReadValues()
   }
 }
 
-
 void
 dlgTaskProperties::OnTypeClicked(WndButton &Sender)
 {
@@ -210,9 +205,12 @@ dlgTaskProperties::OnTypeClicked(WndButton &Sender)
      ordered_task->set_factory(new_type);
      if (new_type != OrderedTask::FACTORY_MIXED)
        ordered_task->get_factory().mutate_tps_to_task_type();
+
      *task_changed = true;
    }
- }  RefreshView();
+ }
+
+ RefreshView();
 }
 
 bool
@@ -231,11 +229,8 @@ dlgTaskProperties::OnTabPreHide()
 }
 
 Window*
-dlgTaskProperties::Load(SingleWindow &parent,
-                                      TabBarControl* wTabBar,
-                                      WndForm* _wf,
-                                      OrderedTask** task,
-                                      bool* _task_modified)
+dlgTaskProperties::Load(SingleWindow &parent, TabBarControl* wTabBar,
+                        WndForm* _wf, OrderedTask** task, bool* _task_modified)
 {
   parent_window = &parent;
   ordered_task_pointer = task;
@@ -247,8 +242,10 @@ dlgTaskProperties::Load(SingleWindow &parent,
   assert(_wf);
   wf = _wf;
 
-  Window *wProp = LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
-        Layout::landscape ? _T("IDR_XML_TASKPROPERTIES_L") : _T("IDR_XML_TASKPROPERTIES"));
+  Window *wProp =
+      LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
+                 Layout::landscape ?
+                 _T("IDR_XML_TASKPROPERTIES_L") : _T("IDR_XML_TASKPROPERTIES"));
 
   assert(wProp);
 
