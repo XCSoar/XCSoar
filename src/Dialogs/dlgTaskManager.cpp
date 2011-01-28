@@ -20,6 +20,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "Dialogs/dlgTaskManager.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
@@ -39,7 +40,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-
 static SingleWindow *parent_window;
 static WndForm *wf = NULL;
 
@@ -54,24 +54,20 @@ dlgTaskManager::CommitTaskChanges()
     return true;
 
   if (!active_task->task_size() || active_task->check_task()) {
-
     active_task->check_duplicate_waypoints(way_points);
     protected_task_manager->task_commit(*active_task);
     protected_task_manager->task_save_default();
 
     task_modified = false;
     return true;
-  } else {
-    MessageBoxX(getTaskValidationErrors(
-        active_task->get_factory().getValidationErrors()),
-        _("Validation Errors"), MB_ICONEXCLAMATION);
-    if (MessageBoxX(_("Task not valid. Changes will be lost.\nContinue?"),
-                         _("Task Manager"),
-                         MB_YESNO | MB_ICONQUESTION) == IDYES) {
-      return true;
-    }
   }
-  return false;
+
+  MessageBoxX(getTaskValidationErrors(
+    active_task->get_factory().getValidationErrors()),
+    _("Validation Errors"), MB_ICONEXCLAMATION);
+
+  return (MessageBoxX(_("Task not valid. Changes will be lost.\nContinue?"),
+                      _("Task Manager"), MB_YESNO | MB_ICONQUESTION) == IDYES);
 }
 
 bool
@@ -81,9 +77,8 @@ dlgTaskManager::OnClose()
     wf->SetModalResult(mrOK);
     return true;
   }
-  else {
-    return false;
-  }
+
+  return false;
 }
 
 void
@@ -92,8 +87,7 @@ dlgTaskManagerShowModal(SingleWindow &parent)
   dlgTaskManager::dlgTaskManagerShowModal(parent);
 }
 
-CallBackTableEntry
-dlgTaskManager::CallBackTable[] = {
+CallBackTableEntry dlgTaskManager::CallBackTable[] = {
   DeclareCallBackEntry(dlgTaskEdit::OnMoveUpClicked),
   DeclareCallBackEntry(dlgTaskEdit::OnMoveDownClicked),
   DeclareCallBackEntry(dlgTaskEdit::OnEditTurnpointClicked),
@@ -131,67 +125,57 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 {
   if (protected_task_manager == NULL)
     return;
+
   parent_window = &parent;
 
-  wf = LoadDialog(CallBackTable,
-                        parent, Layout::landscape ? _T("IDR_XML_TASKMANAGER_L") : _T("IDR_XML_TASKMANAGER"));
+  wf = LoadDialog(CallBackTable, parent,
+                  Layout::landscape ?
+                  _T("IDR_XML_TASKMANAGER_L") : _T("IDR_XML_TASKMANAGER"));
 
   assert(wf != NULL);
-  if (!wf)
-    return;
-
 
   active_task = protected_task_manager->task_clone();
   task_modified = false;
-
 
   // Load tabs
   wTabBar = (TabBarControl*)wf->FindByName(_T("TabBar"));
   assert(wTabBar != NULL);
 
 
-  Window* wEdit = dlgTaskEdit::Load(parent,
-                        wTabBar,
-                        wf,
-                        &active_task,
-                        &task_modified);
+  Window* wEdit =
+    dlgTaskEdit::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wEdit);
-  wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL,dlgTaskEdit::OnTabPreShow);
+  wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL,
+                     dlgTaskEdit::OnTabPreShow);
 
 
-  Window* wProps = dlgTaskProperties::Load(parent,
-                        wTabBar,
-                        wf,
-                        &active_task,
-                        &task_modified);
+  Window* wProps =
+    dlgTaskProperties::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wProps);
-  wTabBar->AddClient(wProps, _T("Proper ties"), false, dlgTaskProperties::OnTabPreHide,
-      dlgTaskProperties::OnTabPreShow);
-// ToDo: fix the label word wrap on PDAs to "Properties" wraps to two lines nicely
+  wTabBar->AddClient(wProps, _T("Proper ties"), false,
+                     dlgTaskProperties::OnTabPreHide,
+                     dlgTaskProperties::OnTabPreShow);
 
-  Window* wLst = dlgTaskList::Load(parent,
-                        wTabBar,
-                        wf,
-                        &active_task,
-                        &task_modified);
+  // ToDo: fix the label word wrap on PDAs to "Properties" wraps to two lines nicely
+
+  Window* wLst =
+    dlgTaskList::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wLst);
-  wTabBar->AddClient(wLst, _T("Browse declare"), false, NULL,dlgTaskList::OnTabPreShow);
+  wTabBar->AddClient(wLst, _T("Browse declare"), false, NULL,
+                     dlgTaskList::OnTabPreShow);
 
-
-  Window* wClose = dlgTaskManagerClose::Load(parent,
-                        wTabBar,
-                        wf,
-                        &active_task,
-                        &task_modified);
-
+  Window* wClose =
+    dlgTaskManagerClose::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wClose);
-  wTabBar->AddClient(wClose, _T("Close"), false, NULL, dlgTaskManagerClose::OnTabPreShow);
-
+  wTabBar->AddClient(wClose, _T("Close"), false, NULL,
+                     dlgTaskManagerClose::OnTabPreShow);
 
   wTabBar->SetCurrentPage(0);
 
   wf->ShowModal();
+
   dlgTaskList::DestroyTab();
+
   delete wf;
   delete active_task;
 }

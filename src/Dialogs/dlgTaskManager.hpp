@@ -31,17 +31,17 @@ class dlgTaskManager
 public:
   dlgTaskManager();
 
-/**
- * Validates task and prompts if change or error
- * Commits task if no error
- * @return True if task manager should close
- *          False if window should remain open
- */
+  /**
+   * Validates task and prompts if change or error
+   * Commits task if no error
+   * @return True if task manager should close
+   *          False if window should remain open
+   */
   static bool CommitTaskChanges();
 
-/**
- * @returns True if validated, False if window shall remain open
- */
+  /**
+   * @returns True if validated, False if window shall remain open
+   */
   static bool OnClose();
   static void dlgTaskManagerShowModal(SingleWindow &parent);
   static void RevertTask();
@@ -52,133 +52,117 @@ public:
 class dlgTaskEdit
 {
 public:
-
-/**
- * creates the control from its XML file and does any init work
- * @param parent
- * @param task_modified Sets to True if changes it.
- * @param wf
- * @return Window* that points to the control created
- */
-  static Window* Load(SingleWindow &parent,
-                              TabBarControl* wTabBar,
-                              WndForm* wf,
-                              OrderedTask** task,
-                              bool* _task_modified);
-
+  /**
+   * creates the control from its XML file and does any init work
+   * @param parent
+   * @param task_modified Sets to True if changes it.
+   * @param wf
+   * @return Window* that points to the control created
+   */
+  static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
+                      WndForm* wf, OrderedTask** task, bool* _task_modified);
 
   static void OnNewClicked(WndButton &Sender);
   /**
- * clears task points and properties
- * prompts if task has points already
- * @param Sender
- */
+   * clears task points and properties
+   * prompts if task has points already
+   * @param Sender
+   */
   static void OnClearClicked(WndButton &Sender);
   static void OnEditTurnpointClicked(WndButton &Sender);
 
-
   static void OnMoveUpClicked(WndButton &Sender);
 
-/**
- * moves the task point up (down) in the task point list
- * @param Sender
- */
+  /**
+   * moves the task point up (down) in the task point list
+   * @param Sender
+   */
   static void OnMoveDownClicked(WndButton &Sender);
   static bool OnKeyDown(WndForm &Sender, unsigned key_code);
 
-/**
- * Paints a single task list item in the listbox
- * @param canvas
- * @param rc
- * @param DrawListIndex
- */
+  /**
+   * Paints a single task list item in the listbox
+   * @param canvas
+   * @param rc
+   * @param DrawListIndex
+   */
   static void OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex);
 
-/**
- * shows dlgTaskPoint to edit point's properties
- * or adds new waypoint if (add waypoint) is clicked
- * @param ItemIndex index of item
- */
+  /**
+   * shows dlgTaskPoint to edit point's properties
+   * or adds new waypoint if (add waypoint) is clicked
+   * @param ItemIndex index of item
+   */
   static void OnTaskListEnter(unsigned ItemIndex);
 
-/**
- * updates TaskView, TaskPoints and TaskSummary
- * update
- */
+  /**
+   * updates TaskView, TaskPoints and TaskSummary
+   * update
+   */
   static void RefreshView();
 
-/**
- * paints the task int the frame
- * @param Sender the frame in which to paint the task
- * @param canvas the canvas in which to paint the task
- */
+  /**
+   * paints the task int the frame
+   * @param Sender the frame in which to paint the task
+   * @param canvas the canvas in which to paint the task
+   */
   static void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
 
-/**
- * toggles maximize or restore state of the TaskView frame
- * @param Sender
- * @param x
- * @param y
- * @return
- */
+  /**
+   * toggles maximize or restore state of the TaskView frame
+   * @param Sender
+   * @param x
+   * @param y
+   * @return
+   */
   static bool OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y);
-/**
- * callback to when tab is viewed
- * loads task, refreshes view
- * @return True
- */
+  /**
+   * callback to when tab is viewed
+   * loads task, refreshes view
+   * @return True
+   */
   static bool OnTabPreShow();
-
 };
 
 class dlgTaskProperties
 {
 public:
-
-/**
- * creates the control from its XML file and does any init work
- * @param parent
- * @param task_modified Sets to True if changes it.
- * @param wf
- * @return Window* that points to the control created
- */
-  static Window* Load(SingleWindow &parent,
-                              TabBarControl* wTabBar,
-                              WndForm* wf,
-                              OrderedTask** task,
-                              bool* _task_modified);
-
+  /**
+   * creates the control from its XML file and does any init work
+   * @param parent
+   * @param task_modified Sets to True if changes it.
+   * @param wf
+   * @return Window* that points to the control created
+   */
+  static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
+                      WndForm* wf, OrderedTask** task, bool* _task_modified);
 
   static void OnTypeClicked(WndButton &Sender);
-/**
- * copies values from form to ordered_task
- * @return true
- */
+  /**
+   * copies values from form to ordered_task
+   * @return true
+   */
   static bool OnTabPreHide();
 
-/**
- * copies values from ordered_task to form
- * @return true
- */
+  /**
+   * copies values from ordered_task to form
+   * @return true
+   */
   static bool OnTabPreShow();
 };
 
 class dlgTaskList
 {
 public:
-
-/**
- * creates the control from its XML file and does any init work
- * @param parent
- * @param task_modified Sets to True if changes it.
- * @param wf
- * @return Window* that points to the control created
- */
-  static Window* Load(SingleWindow &parent,
-                              TabBarControl* wTabBar,
-                              WndForm* wf,
-                              OrderedTask** task,
-                              bool* _task_modified);
+  /**
+   * creates the control from its XML file and does any init work
+   * @param parent
+   * @param task_modified Sets to True if changes it.
+   * @param wf
+   * @return Window* that points to the control created
+   */
+  static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
+                      WndForm* wf, OrderedTask** task, bool* _task_modified);
 
   static void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
   static void OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex);
@@ -188,48 +172,41 @@ public:
   static void OnRenameClicked(WndButton &Sender);
   static void OnTaskListEnter(unsigned ItemIndex);
   static void OnTaskCursorCallback(unsigned i);
-/**
- * callback for Tab being clicked
- * refreshes / reloads list
- * @return True
- */
+  /**
+   * callback for Tab being clicked
+   * refreshes / reloads list
+   * @return True
+   */
   static bool OnTabPreShow();
 
-/**
- *  called when parent dialog closes
- */
+  /**
+   *  called when parent dialog closes
+   */
   static void DestroyTab();
 };
 
 class dlgTaskManagerClose
 {
 public:
-
-/**
- * creates the control from its XML file and does any init work
- * @param parent
- * @param task_modified Sets to True if changes it.
- * @param wf
- * @return Window* that points to the control created
- */
-  static Window* Load(SingleWindow &parent,
-                              TabBarControl* wTabBar,
-                              WndForm* wf,
-                              OrderedTask** task,
-                              bool* _task_modified);
+  /**
+   * creates the control from its XML file and does any init work
+   * @param parent
+   * @param task_modified Sets to True if changes it.
+   * @param wf
+   * @return Window* that points to the control created
+   */
+  static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
+                      WndForm* wf, OrderedTask** task, bool* _task_modified);
 
   static void OnCloseClicked(WndButton &Sender);
   static void OnRevertClicked(WndButton &Sender);
 
   /**
- * callback
- * sets status and buttons per task edit status
- * @return True
- */
+   * callback
+   * sets status and buttons per task edit status
+   * @return True
+   */
   static bool OnTabPreShow();
-
 };
-
-
 
 #endif /* DLGTASKMANAGER_HPP */
