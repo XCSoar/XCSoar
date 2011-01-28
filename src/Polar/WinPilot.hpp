@@ -46,8 +46,7 @@ struct WinPilotPolar
 };
 
 void
-ConvertWinPilotPolar(Polar &polar, double POLARV[3], double POLARW[3],
-                     double ww[2], double wing_area = 0.0);
+ConvertWinPilotPolar(Polar &polar, const WinPilotPolar &wp_polar);
 
 bool
 ReadWinPilotPolar(Polar &polar);

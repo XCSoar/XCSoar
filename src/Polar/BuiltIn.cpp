@@ -180,22 +180,9 @@ GetWinPilotPolarInternalName(unsigned i)
 bool
 ReadWinPilotPolarInternal(unsigned i, Polar &polar)
 {
-  double POLARV[3];
-  double POLARW[3];
-  double ww[2];
-
   if (!(i < sizeof(WinPilotPolars) / sizeof(WinPilotPolars[0])))
     return false;
 
-  ww[0] = WinPilotPolars[i].ww0;
-  ww[1] = WinPilotPolars[i].ww1;
-  POLARV[0] = WinPilotPolars[i].v0;
-  POLARV[1] = WinPilotPolars[i].v1;
-  POLARV[2] = WinPilotPolars[i].v2;
-  POLARW[0] = WinPilotPolars[i].w0;
-  POLARW[1] = WinPilotPolars[i].w1;
-  POLARW[2] = WinPilotPolars[i].w2;
-  ConvertWinPilotPolar(polar, POLARV, POLARW, ww, WinPilotPolars[i].wing_area);
-
+  ConvertWinPilotPolar(polar, WinPilotPolars[i]);
   return true;
 }

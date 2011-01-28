@@ -38,19 +38,18 @@ Copyright_License {
  * @param ww dry mass, maximum takeoff weight
  */
 void
-ConvertWinPilotPolar(Polar &polar, double POLARV[3], double POLARW[3],
-                     double ww[2], double wing_area)
+ConvertWinPilotPolar(Polar &polar, const WinPilotPolar &wp_polar)
 {
   double d;
   double v1, v2, v3;
   double w1, w2, w3;
 
-  v1 = POLARV[0] / 3.6;
-  v2 = POLARV[1] / 3.6;
-  v3 = POLARV[2] / 3.6;
-  w1 = POLARW[0];
-  w2 = POLARW[1];
-  w3 = POLARW[2];
+  v1 = wp_polar.v0 / 3.6;
+  v2 = wp_polar.v1 / 3.6;
+  v3 = wp_polar.v2 / 3.6;
+  w1 = wp_polar.w0;
+  w2 = wp_polar.w1;
+  w3 = wp_polar.w2;
 
   d = v1 * v1 * (v2 - v3) + v2 * v2 * (v3 - v1) + v3 * v3 * (v1 - v2);
   if (d == 0.0)
@@ -71,16 +70,18 @@ ConvertWinPilotPolar(Polar &polar, double POLARV[3], double POLARW[3],
   // Pilot weight
   polar.PilotMass = 70;
   // Glider empty weight
-  polar.EmptyMass = ww[0] - polar.PilotMass;
+  polar.EmptyMass = wp_polar.ww0 - polar.PilotMass;
   // Ballast weight
-  polar.MaximumMass = ww[1];
+  polar.MaximumMass = wp_polar.ww1;
 
-  polar.WingArea = wing_area;
+  polar.WingArea = wp_polar.wing_area;
 }
 
 static bool
 ReadWinPilotPolar(Polar &polar, const TCHAR *line)
 {
+  WinPilotPolar wp_polar;
+
   // Example:
   // *LS-3  WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
   // 403, 101, 115.03, -0.86, 174.04, -1.76, 212.72,  -3.4
@@ -90,47 +91,43 @@ ReadWinPilotPolar(Polar &polar, const TCHAR *line)
     return false;
 
   TCHAR *p;
-  double POLARV[3];
-  double POLARW[3];
-  double ww[2];
-  double wing_area;
 
-  ww[0] = _tcstod(line, &p);
+  wp_polar.ww0 = _tcstod(line, &p);
   if (*p != _T(','))
     return false;
 
-  ww[1] = _tcstod(p + 1, &p);
+  wp_polar.ww1 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  POLARV[0] = _tcstod(p + 1, &p);
+  wp_polar.v0 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  POLARW[0] = _tcstod(p + 1, &p);
+  wp_polar.w0 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  POLARV[1] = _tcstod(p + 1, &p);
+  wp_polar.v1 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  POLARW[1] = _tcstod(p + 1, &p);
+  wp_polar.w1 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  POLARV[2] = _tcstod(p + 1, &p);
+  wp_polar.v2 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  POLARW[2] = _tcstod(p + 1, &p);
+  wp_polar.w2 = _tcstod(p + 1, &p);
 
   if (*p != _T(','))
-    wing_area = 0.0;
+    wp_polar.wing_area = 0.0;
   else
-    wing_area = _tcstod(p + 1, &p);
+    wp_polar.wing_area = _tcstod(p + 1, &p);
 
-  ConvertWinPilotPolar(polar, POLARV, POLARW, ww, wing_area);
+  ConvertWinPilotPolar(polar, wp_polar);
   return true;
 }
 
