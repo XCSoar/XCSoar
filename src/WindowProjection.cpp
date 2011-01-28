@@ -58,6 +58,12 @@ WindowProjection::GetScreenDistanceMeters() const
   return DistancePixelsToMeters(GetScreenDistance());
 }
 
+GeoPoint
+WindowProjection::GetGeoScreenCenter() const
+{
+  return ScreenToGeo(GetScreenWidth() / 2, GetScreenHeight() / 2);
+}
+
 void
 WindowProjection::UpdateScreenBounds()
 {
