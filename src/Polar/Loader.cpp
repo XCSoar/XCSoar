@@ -30,7 +30,7 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 
 static bool
-LoadPolarById2(unsigned id, GlidePolar &polar)
+LoadPolarById2(unsigned id, SimplePolar &polar)
 {
   if (id < POLARUSEWINPILOTFILE)
     // polar data from historical table
@@ -48,13 +48,15 @@ LoadPolarById(unsigned id, GlidePolar &polar)
 {
   LogStartUp(_T("Load polar"));
 
-  if (!LoadPolarById2(id, polar)) {
+  SimplePolar s_polar;
+  if (!LoadPolarById2(id, s_polar)) {
     MessageBoxX(_("Error loading Polar file!\nUsing LS8 Polar."),
                 _("Warning"), MB_OK | MB_ICONERROR);
 
-    if (!ReadWinPilotPolarInternal(56, polar))
+    if (!ReadWinPilotPolarInternal(56, s_polar))
       return false;
   }
 
+  ConvertWinPilotPolar(polar, s_polar);
   return true;
 }

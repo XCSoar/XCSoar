@@ -49,6 +49,6 @@ void
 ConvertWinPilotPolar(GlidePolar &polar, const SimplePolar &_polar);
 
 bool
-ReadWinPilotPolar(GlidePolar &polar);
+ReadWinPilotPolar(SimplePolar &polar);
 
 #endif

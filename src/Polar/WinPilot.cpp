@@ -77,10 +77,8 @@ ConvertWinPilotPolar(GlidePolar &polar, const SimplePolar &_polar)
 }
 
 static bool
-ReadWinPilotPolarFileLine(GlidePolar &polar, const TCHAR *line)
+ReadWinPilotPolarFileLine(SimplePolar &polar, const TCHAR *line)
 {
-  SimplePolar wp_polar;
-
   // Example:
   // *LS-3  WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
   // 403, 101, 115.03, -0.86, 174.04, -1.76, 212.72,  -3.4
@@ -91,47 +89,46 @@ ReadWinPilotPolarFileLine(GlidePolar &polar, const TCHAR *line)
 
   TCHAR *p;
 
-  wp_polar.ww0 = _tcstod(line, &p);
+  polar.ww0 = _tcstod(line, &p);
   if (*p != _T(','))
     return false;
 
-  wp_polar.ww1 = _tcstod(p + 1, &p);
+  polar.ww1 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  wp_polar.v0 = _tcstod(p + 1, &p);
+  polar.v0 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  wp_polar.w0 = _tcstod(p + 1, &p);
+  polar.w0 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  wp_polar.v1 = _tcstod(p + 1, &p);
+  polar.v1 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  wp_polar.w1 = _tcstod(p + 1, &p);
+  polar.w1 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  wp_polar.v2 = _tcstod(p + 1, &p);
+  polar.v2 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  wp_polar.w2 = _tcstod(p + 1, &p);
+  polar.w2 = _tcstod(p + 1, &p);
 
   if (*p != _T(','))
-    wp_polar.wing_area = 0.0;
+    polar.wing_area = 0.0;
   else
-    wp_polar.wing_area = _tcstod(p + 1, &p);
+    polar.wing_area = _tcstod(p + 1, &p);
 
-  ConvertWinPilotPolar(polar, wp_polar);
   return true;
 }
 
 static bool
-ReadWinPilotPolarFile(GlidePolar &polar, TLineReader &reader)
+ReadWinPilotPolarFile(SimplePolar &polar, TLineReader &reader)
 {
   const TCHAR *line;
   while ((line = reader.read()) != NULL)
@@ -146,7 +143,7 @@ ReadWinPilotPolarFile(GlidePolar &polar, TLineReader &reader)
  * @return True if parsing was successful, False otherwise
  */
 bool
-ReadWinPilotPolar(GlidePolar &polar)
+ReadWinPilotPolar(SimplePolar &polar)
 {
   TLineReader *reader = OpenConfiguredTextFile(szProfilePolarFile);
   if (reader == NULL)

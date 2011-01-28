@@ -183,10 +183,10 @@ GetWinPilotPolarInternalName(unsigned i)
  * @param polar Polar to set
  */
 bool
-ReadWinPilotPolarInternal(unsigned i, GlidePolar &polar)
+ReadWinPilotPolarInternal(unsigned i, SimplePolar &polar)
 {
   assert(i < GetWinPilotPolarInternalCount());
-  ConvertWinPilotPolar(polar, WinPilotPolars[i]);
+  polar = WinPilotPolars[i];
   return true;
 }
 
