@@ -33,4 +33,16 @@ extern NativeView *native_view;
 
 extern EventQueue *event_queue;
 
+/**
+ * Is the application currently paused?  While this flag is set, no
+ * OpenGL operations are allowed, because the OpenGL surface does not
+ * exist.
+ */
+extern bool android_paused;
+
+/**
+ * Was the application resumed, and OpenGL needs to be initialized?
+ */
+extern bool android_resumed;
+
 #endif

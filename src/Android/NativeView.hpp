@@ -34,12 +34,14 @@ class NativeView {
 
   unsigned width, height;
 
+  jmethodID init_surface_method;
   jmethodID swap_method, load_resource_texture_method;
 
 public:
   NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height)
     :env(_env), obj(env, _obj), width(_width), height(_height) {
     jclass cls = env->FindClass("org/xcsoar/NativeView");
+    init_surface_method = env->GetMethodID(cls, "initSurface", "()V");
     swap_method = env->GetMethodID(cls, "swap", "()V");
     load_resource_texture_method = env->GetMethodID(cls, "loadResourceTexture",
                                                     "(Ljava/lang/String;[I)Z");
@@ -55,6 +57,10 @@ public:
                                      "()Landroid/content/Context;");
     assert(mid != NULL);
     return env->CallObjectMethod(obj, mid);
+  }
+
+  void initSurface() {
+    env->CallVoidMethod(obj, init_surface_method);
   }
 
   void swap() {

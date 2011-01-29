@@ -31,6 +31,7 @@ Copyright_License {
 #ifdef ANDROID
 #include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 #include "PeriodClock.hpp"
 #elif defined(ENABLE_SDL)
 #include "Screen/SDL/Event.hpp"
@@ -163,6 +164,19 @@ TopWindow::expose() {
 void
 TopWindow::refresh()
 {
+#ifdef ANDROID
+  if (android_paused)
+    /* the application is paused/suspended, and we don't have an
+       OpenGL surface - ignore all drawing requests */
+    return;
+  else if (android_resumed) {
+    /* the application was just resumed */
+    android_resumed = false;
+    native_view->initSurface();
+    screen.set();
+  }
+#endif
+
   invalidated_lock.Lock();
   if (!invalidated) {
     invalidated_lock.Unlock();

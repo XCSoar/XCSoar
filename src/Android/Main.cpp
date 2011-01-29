@@ -39,6 +39,8 @@ NativeView *native_view;
 
 EventQueue *event_queue;
 
+bool android_paused, android_resumed;
+
 JNIEXPORT jboolean JNICALL
 Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jint width, jint height)
@@ -69,4 +71,20 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   Fonts::Deinitialize();
   delete event_queue;
   delete native_view;
+}
+
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
+{
+  android_paused = true;
+}
+
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
+{
+  android_paused = false;
+  android_resumed = true;
+
+  /* schedule a redraw */
+  CommonInterface::main_window.invalidate();
 }

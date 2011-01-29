@@ -16,6 +16,7 @@ Version 6.0.3 - not yet released
 * Android
   - keep display backlight on, don't suspend
   - support extra large displays (tablets)
+  - allow task switching
 
 Version 6.0.2 - 2011/01/20
 * devices
