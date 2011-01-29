@@ -80,6 +80,7 @@ SimplePolar::GetString(TCHAR* line, size_t size)
 bool
 SimplePolar::ReadString(const TCHAR *line)
 {
+  SimplePolar polar;
   // Example:
   // *LS-3  WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
   // 403, 101, 115.03, -0.86, 174.04, -1.76, 212.72,  -3.4
@@ -90,40 +91,38 @@ SimplePolar::ReadString(const TCHAR *line)
 
   TCHAR *p;
 
-  dry_mass = _tcstod(line, &p);
+  polar.dry_mass = _tcstod(line, &p);
   if (*p != _T(','))
     return false;
 
-  max_ballast = _tcstod(p + 1, &p);
+  polar.max_ballast = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  v1 = _tcstod(p + 1, &p);
+  polar.v1 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  w1 = _tcstod(p + 1, &p);
+  polar.w1 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  v2 = _tcstod(p + 1, &p);
+  polar.v2 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  w2 = _tcstod(p + 1, &p);
+  polar.w2 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  v3 = _tcstod(p + 1, &p);
+  polar.v3 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  w3 = _tcstod(p + 1, &p);
+  polar.w3 = _tcstod(p + 1, &p);
+  polar.wing_area = (*p != _T(',')) ? 0.0 : _tcstod(p + 1, &p);
 
-  if (*p != _T(','))
-    wing_area = 0.0;
-  else
-    wing_area = _tcstod(p + 1, &p);
+  *this = polar;
 
   return true;
 }
