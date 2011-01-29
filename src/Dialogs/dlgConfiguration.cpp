@@ -816,6 +816,9 @@ setVariables()
   LoadFormProperty(*wf, _T("prpCirclingZoom"),
                    XCSoarInterface::SettingsMap().CircleZoom);
 
+  LoadFormProperty(*wf, _T("prpMaxAutoZoomDistance"), ugDistance,
+                   XCSoarInterface::SettingsMap().MaxAutoZoomDistance);
+
   wp = (WndProperty*)wf->FindByName(_T("prpOrientationCruise"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1744,6 +1747,11 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpCirclingZoom"),
                               szProfileCircleZoom,
                               XCSoarInterface::SetSettingsMap().CircleZoom);
+
+  changed |= SaveFormProperty(*wf, _T("prpMaxAutoZoomDistance"),
+                              ugDistance,
+                              XCSoarInterface::SetSettingsMap().MaxAutoZoomDistance,
+                              szProfileMaxAutoZoomDistance);
 
   wp = (WndProperty*)wf->FindByName(_T("prpOrientationCruise"));
   if (wp) {

@@ -86,6 +86,7 @@ extern const TCHAR szProfileAirspaceBlackOutline[];
 extern const TCHAR szProfileWarningTime[];
 extern const TCHAR szProfileAcknowledgementTime[];
 extern const TCHAR szProfileCircleZoom[];
+extern const TCHAR szProfileMaxAutoZoomDistance[];
 extern const TCHAR szProfileHomeWaypoint[];
 extern const TCHAR szProfileAlternate1[];         // VENTA3
 extern const TCHAR szProfileAlternate2[];

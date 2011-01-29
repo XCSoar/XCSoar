@@ -240,7 +240,8 @@ GlueMapWindow::UpdateMapScale()
     AutoZoomFactor *= 8;
     wpd = wpd / ((fixed) AutoZoomFactor / fixed_int_constant(100));
     // Clip map auto zoom range to reasonable values
-    wpd = max(fixed_int_constant(525), min(fixed_int_constant(16000), wpd));
+    wpd = max(fixed_int_constant(525),
+              min(SettingsMap().MaxAutoZoomDistance / fixed_int_constant(10), wpd));
     visible_projection.SetFreeMapScale(wpd);
   }
 }

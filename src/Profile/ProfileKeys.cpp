@@ -121,6 +121,7 @@ const TCHAR szProfileAltMode[] = CONF("AltitudeMode");
 const TCHAR szProfileAltitudeUnitsValue[] = CONF("Altitude");
 const TCHAR szProfileTemperatureUnitsValue[] = CONF("Temperature");
 const TCHAR szProfileCircleZoom[] = CONF("CircleZoom");
+const TCHAR szProfileMaxAutoZoomDistance[] = CONF("MaxAutoZoomDistance");
 const TCHAR szProfileClipAlt[] = CONF("ClipAlt");
 const TCHAR szProfileDisplayText[] = CONF("DisplayText");
 const TCHAR szProfileWayPointLabelSelection[] = CONF("WayPointLabelSelection");

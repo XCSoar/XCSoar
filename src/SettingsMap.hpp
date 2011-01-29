@@ -86,6 +86,8 @@ enum SlopeShadingType_t {
 struct SETTINGS_MAP {
   /** Map zooms in on circling */
   bool CircleZoom;
+  /** Maximum distance limit for AutoZoom */
+  fixed MaxAutoZoomDistance;
   /** Map will show topology */
   bool EnableTopology;
   /** Map will show terrain */

@@ -109,6 +109,11 @@
         Help="If enabled, then the map will zoom in automatically when entering circling mode and zoom out automatically when leaving circling mode.">
         <DataField DataType="boolean"/>
       </Edit>
+
+      <Edit Name="prpMaxAutoZoomDistance" Caption="Max. Auto-Zoom Distance" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="The upper limit for Auto-Zoom distance.">
+        <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="20" Max="250" Step="10" />
+      </Edit>
     </Panel>
 
     <Panel Name="frmWaypoints">

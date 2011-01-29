@@ -215,6 +215,9 @@ Profile::Use()
   Get(szProfileCircleZoom,
       settings_map.CircleZoom);
 
+  Get(szProfileMaxAutoZoomDistance,
+      settings_map.MaxAutoZoomDistance);
+
   Get(szProfileHomeWaypoint,
       settings_computer.HomeWaypoint);
 
