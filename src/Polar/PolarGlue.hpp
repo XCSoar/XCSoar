@@ -35,7 +35,7 @@ namespace PolarGlue
   void LoadDefault(SimplePolar &polar);
   bool LoadFromFile(SimplePolar &polar, const TCHAR* path);
   bool LoadFromFile(SimplePolar &polar, TLineReader &reader);
-  void LoadFromProfile(SimplePolar &polar);
+  bool LoadFromProfile(SimplePolar &polar);
   void SaveToProfile(SimplePolar &polar);
 
   void LoadFromProfile(GlidePolar &gp);

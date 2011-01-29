@@ -105,19 +105,16 @@ PolarGlue::LoadFromOldProfile(SimplePolar &polar)
   return false;
 }
 
-void
+bool
 PolarGlue::LoadFromProfile(SimplePolar &polar)
 {
   TCHAR polar_string[255] = _T("\0");
   if (Profile::Get(szProfilePolar, polar_string, 255) &&
       polar_string[0] != 0 &&
       polar.ReadString(polar_string))
-    return;
+    return true;
 
-  if (LoadFromOldProfile(polar))
-    return;
-
-  LoadDefault(polar);
+  return LoadFromOldProfile(polar);
 }
 
 void
@@ -132,8 +129,7 @@ void
 PolarGlue::LoadFromProfile(GlidePolar &gp)
 {
   SimplePolar polar;
-  LoadFromProfile(polar);
-  if (!polar.CopyIntoGlidePolar(gp)) {
+  if (!LoadFromProfile(polar) || !polar.CopyIntoGlidePolar(gp)) {
     LoadDefault(polar);
     polar.CopyIntoGlidePolar(gp);
   }
