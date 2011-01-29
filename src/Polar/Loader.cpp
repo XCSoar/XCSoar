@@ -110,7 +110,7 @@ LoadPolarFromProfile(SimplePolar &polar)
         break;
       }
 
-      if (ReadWinPilotPolarInternal(Temp, polar))
+      if (PolarStore::Read(Temp, polar))
         return;
     }
   }

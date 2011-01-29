@@ -437,9 +437,9 @@ OnPolarLoadInteral(WndButton &button)
   /* XXX reimplement properly */
 
   DataFieldEnum *dfe = new DataFieldEnum(NULL);
-  unsigned len = GetWinPilotPolarInternalCount();
+  unsigned len = PolarStore::Count();
   for (unsigned i = 0; i < len; i++)
-    dfe->addEnumText(GetWinPilotPolarInternalName(i), i);
+    dfe->addEnumText(PolarStore::GetName(i), i);
 
   dfe->Sort();
   ComboList *list = dfe->CreateComboList();
@@ -449,7 +449,7 @@ OnPolarLoadInteral(WndButton &button)
   int result = ComboPicker(XCSoarInterface::main_window, _("Polar"), *list, NULL);
   if (result >= 0) {
     SimplePolar polar;
-    ReadWinPilotPolarInternal(dfe->getItem(result), polar);
+    PolarStore::Read(dfe->getItem(result), polar);
     UpdatePolarFields(polar);
   }
 
