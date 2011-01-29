@@ -219,3 +219,9 @@ DataFieldEnum::SetIndex(unsigned new_value)
   if (!GetDetachGUI())
     mOnDataAccess(this, daChange);
 }
+
+unsigned
+DataFieldEnum::getItem(unsigned index) const
+{
+  return entries[index].id;
+}

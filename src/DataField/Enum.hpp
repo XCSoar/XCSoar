@@ -85,6 +85,7 @@ public:
   unsigned Count() const {
     return entries.size();
   }
+  unsigned getItem(unsigned index) const;
 
 protected:
   /**
