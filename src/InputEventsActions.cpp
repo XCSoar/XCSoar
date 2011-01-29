@@ -1664,7 +1664,7 @@ InputEvents::sub_PanCursor(int dx, int dy)
 
   RasterPoint pt = projection.GetScreenOrigin();
   pt.x -= dx * projection.GetScreenWidth() / 4;
-  pt.y -= dy * projection.GetScreenWidth() / 4;
+  pt.y -= dy * projection.GetScreenHeight() / 4;
   XCSoarInterface::SetSettingsMap().PanLocation = projection.ScreenToGeo(pt);
 
   XCSoarInterface::main_window.map.QuickRedraw(XCSoarInterface::SettingsMap());
