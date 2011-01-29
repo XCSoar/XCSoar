@@ -224,6 +224,19 @@ SaveFormProperty(WndForm &form, const TCHAR *control_name, fixed &value)
   return true;
 }
 
+#ifdef FIXED_MATH
+bool
+SaveFormProperty(WndForm &form, const TCHAR *control_name, double &value)
+{
+  double new_value = (double)GetFormValueFixed(form, control_name);
+  if (new_value == value)
+    return false;
+
+  value = new_value;
+  return true;
+}
+#endif
+
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
                  bool &value, const TCHAR *registry_name)

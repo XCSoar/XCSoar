@@ -90,6 +90,11 @@ SaveFormProperty(const WndForm &form, const TCHAR* field, short &value);
 bool
 SaveFormProperty(WndForm &form, const TCHAR *control_name, fixed &value);
 
+#ifdef FIXED_MATH
+bool
+SaveFormProperty(WndForm &form, const TCHAR *control_name, double &value);
+#endif
+
 /**
  * Saves a form value into a variable and into the registry.
  *
