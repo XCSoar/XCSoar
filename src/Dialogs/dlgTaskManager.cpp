@@ -30,6 +30,7 @@ Copyright_License {
 #include "Gauge/TaskView.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Graphics.hpp"
 #include "TaskStore.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
@@ -145,14 +146,14 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   Window* wEdit =
     pnlTaskEdit::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wEdit);
-  wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL,
+  wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL, NULL,
                      pnlTaskEdit::OnTabPreShow);
 
 
   Window* wProps =
     pnlTaskProperties::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wProps);
-  wTabBar->AddClient(wProps, _T("Proper ties"), false,
+  wTabBar->AddClient(wProps, _T("Proper ties"), false, NULL,
                      pnlTaskProperties::OnTabPreHide,
                      pnlTaskProperties::OnTabPreShow);
 
@@ -161,13 +162,13 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   Window* wLst =
     pnlTaskList::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wLst);
-  wTabBar->AddClient(wLst, _T("Browse declare"), false, NULL,
+  wTabBar->AddClient(wLst, _T("Browse declare"), false, NULL, NULL,
                      pnlTaskList::OnTabPreShow);
 
   Window* wClose =
     pnlTaskManagerClose::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wClose);
-  wTabBar->AddClient(wClose, _T("Close"), false, NULL,
+  wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hFinalGlide*/, NULL,
                      pnlTaskManagerClose::OnTabPreShow);
 
   wTabBar->SetCurrentPage(0);

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
+#include "Screen/Icon.hpp"
 
 #include <assert.h>
 
@@ -65,9 +66,20 @@ TabBarControl::GetButtonCaption(unsigned i)
   return buttons[i]->Caption;
 }
 
+const MaskedIcon *
+TabBarControl::GetButtonIcon(unsigned i)
+{
+  assert(i < buttons.size());
+
+  if (i >= buttons.size())
+    return NULL;
+
+  return buttons[i]->bmp;
+}
+
 unsigned
 TabBarControl::AddClient(Window *w, const TCHAR* Caption,
-    bool IsButtonOnly,
+    bool IsButtonOnly, MaskedIcon *bmp,
     PreHideNotifyCallback_t PreHideFunction,
     PreShowNotifyCallback_t PreShowFunction,
     PostShowNotifyCallback_t PostShowFunction)
@@ -82,7 +94,7 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
   else
     w->move(rc.left, rc.top + TabBarHeight, rc.right - rc.left, rc.bottom - rc.top - TabBarHeight);
 
-  OneTabButton *b = new OneTabButton(Caption, IsButtonOnly,
+  OneTabButton *b = new OneTabButton(Caption, IsButtonOnly, bmp,
       PreHideFunction, PreShowFunction, PostShowFunction);
 
   buttons.append(b);
@@ -234,8 +246,16 @@ TabDisplay::on_paint(Canvas &canvas)
     } else {
       canvas.fill_rectangle(rc, canvas.get_background_color());
     }
-    canvas.formatted_text(&rcTextFinal, theTabBar.GetButtonCaption(i),
-        CaptionStyle);
+    if (theTabBar.GetButtonIcon(i) != NULL) {
+      const MaskedIcon *bmp = theTabBar.GetButtonIcon(i);
+      const int offsetx = (rc.right - rc.left - bmp->get_size().cx) / 2;
+      const int offsety = (rc.bottom - rc.top - bmp->get_size().cy) / 2;
+
+      bmp->draw(canvas, rc.left + offsetx, rc.top + offsety);
+    } else {
+      canvas.formatted_text(&rcTextFinal, theTabBar.GetButtonCaption(i),
+          CaptionStyle);
+    }
   }
   if (has_focus()) {
     RECT rcFocus;

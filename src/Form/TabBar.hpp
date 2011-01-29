@@ -28,6 +28,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Form/Tabbed.hpp"
 
+class MaskedIcon;
 class WndOwnerDrawFrame;
 class ContainerWindow;
 class TabDisplay;
@@ -70,10 +71,12 @@ public:
   public:
     OneTabButton(const TCHAR* _Caption,
                 bool _IsButtonOnly,
+                MaskedIcon *_bmp,
                 PreHideNotifyCallback_t _PreHideFunction,
                 PreShowNotifyCallback_t _PreShowFunction,
                 PostShowNotifyCallback_t _PostShowFunction):
                   IsButtonOnly(_IsButtonOnly),
+                  bmp(_bmp),
                   PreHideFunction(_PreHideFunction),
                   PreShowFunction(_PreShowFunction),
                   PostShowFunction(_PostShowFunction)
@@ -84,6 +87,7 @@ public:
   public:
     TCHAR Caption[MAX_PATH];
     bool IsButtonOnly;
+    MaskedIcon *bmp;
   /**
    * Called before the tab is hidden.
    * @returns  True if ok and tab may change.  False if click should be ignored
@@ -107,6 +111,7 @@ public:
  * @param w. The window (e.g. created by LoadWindow()
  * @param Caption. Caption for the tab display
  * @param IsButtonOnly.  The tab button will resemble look/feel of a button
+ * @param bmp.  Pointer to a MaskedIcon to display instead of caption on tab
  * @param PreHideFunction client callback
  * @param PreShowFunction client callback
  * @param PostShowFunction client callback
@@ -114,6 +119,7 @@ public:
  */
   unsigned AddClient(Window *w, const TCHAR* Caption,
         bool IsButtonOnly = false,
+        MaskedIcon *bmp = NULL,
         PreHideNotifyCallback_t PreHideFunction = NULL,
         PreShowNotifyCallback_t PreShowFunction = NULL,
         PostShowNotifyCallback_t PostShowFunction = NULL);
@@ -132,6 +138,7 @@ public:
  */
   const RECT GetButtonSize(unsigned i);
   const TCHAR* GetButtonCaption(unsigned i);
+  const MaskedIcon* GetButtonIcon(unsigned i);
   bool GetButtonIsButtonOnly(unsigned i);
   unsigned GetBarHeight() { return TabBarHeight; }
   unsigned GetBarWidth() { return TabBarWidth; }
