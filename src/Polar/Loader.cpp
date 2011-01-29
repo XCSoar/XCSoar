@@ -24,44 +24,8 @@ Copyright_License {
 #include "Polar/Loader.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/BuiltIn.hpp"
-#include "LogFile.hpp"
-#include "Language.hpp"
-#include "Dialogs/Message.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 #include "Profile/Profile.hpp"
 #include "IO/FileLineReader.hpp"
-
-static bool
-LoadPolarById2(unsigned id, SimplePolar &polar)
-{
-  if (id < POLARUSEWINPILOTFILE)
-    // polar data from historical table
-    return false;
-  else if (id == POLARUSEWINPILOTFILE)
-    // polar data from winpilot file
-    return polar.ReadFileFromProfile();
-  else
-    // polar data from built-in table
-    return ReadWinPilotPolarInternal(id - POLARUSEWINPILOTFILE - 1, polar);
-}
-
-bool
-LoadPolarById(unsigned id, GlidePolar &polar)
-{
-  LogStartUp(_T("Load polar"));
-
-  SimplePolar s_polar;
-  if (!LoadPolarById2(id, s_polar)) {
-    MessageBoxX(_("Error loading Polar file!\nUsing LS8 Polar."),
-                _("Warning"), MB_OK | MB_ICONERROR);
-
-    if (!ReadWinPilotPolarInternal(56, s_polar))
-      return false;
-  }
-
-  s_polar.ConvertToGlidePolar(polar);
-  return true;
-}
 
 bool
 LoadPolarFromFile(SimplePolar &polar, const TCHAR* path)

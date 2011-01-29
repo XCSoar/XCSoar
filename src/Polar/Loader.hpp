@@ -26,16 +26,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-class GlidePolar;
 struct SimplePolar;
-
-enum {
-  /** if this polar is selected use the winpilot file */
-  POLARUSEWINPILOTFILE = 6,
-};
-
-bool
-LoadPolarById(unsigned id, GlidePolar& gp);
 
 bool LoadPolarFromFile(SimplePolar &polar, const TCHAR* path);
 void LoadPolarFromProfile(SimplePolar &polar);
