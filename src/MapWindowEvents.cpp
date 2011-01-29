@@ -115,23 +115,22 @@ MapWindow::on_paint(Canvas &canvas)
 
     /* do the projection */
 
-    const RECT buffer_rect = buffer_projection.GetMapRect();
+    const unsigned buffer_width = buffer_projection.GetScreenWidth();
+    const unsigned buffer_height = buffer_projection.GetScreenHeight();
+
     const RasterPoint top_left =
-      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(buffer_rect.left,
-                                                                       buffer_rect.top));
+      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(0, 0));
     RasterPoint bottom_right =
-      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(buffer_rect.right,
-                                                                       buffer_rect.bottom));
+      visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(buffer_width,
+                                                                   buffer_height));
 
     /* compensate for rounding errors in destination area */
 
-    if (abs((buffer_rect.right - buffer_rect.left) -
-            (bottom_right.x - top_left.x)) < 5)
-      bottom_right.x = top_left.x + buffer_rect.right - buffer_rect.left;
+    if (abs(buffer_width - (bottom_right.x - top_left.x)) < 5)
+      bottom_right.x = top_left.x + buffer_width;
 
-    if (abs((buffer_rect.bottom - buffer_rect.top) -
-            (bottom_right.y - top_left.y)) < 5)
-      bottom_right.y = top_left.y + buffer_rect.bottom - buffer_rect.top;
+    if (abs(buffer_height - (bottom_right.y - top_left.y)) < 5)
+      bottom_right.y = top_left.y + buffer_height;
 
     /* clear the areas around the buffer */
 
@@ -158,9 +157,7 @@ MapWindow::on_paint(Canvas &canvas)
     const Canvas &src = get_visible_canvas();
     canvas.stretch(top_left.x, top_left.y,
                    bottom_right.x - top_left.x, bottom_right.y - top_left.y,
-                   src, buffer_rect.left, buffer_rect.top,
-                   buffer_rect.right - buffer_rect.left,
-                   buffer_rect.bottom - buffer_rect.top);
+                   src, 0, 0, buffer_width, buffer_height);
   } else
     /* the UI has changed since the last DrawThread iteration has
        started: the buffer has invalid data, paint a white window
