@@ -56,7 +56,7 @@ TEST_NAMES = \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
 	TestColorRamp TestGeoPoint \
-	TestFileUtil \
+	TestFileUtil TestPolars \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
@@ -174,6 +174,22 @@ TEST_UNITS_SOURCES = \
 TEST_UNITS_OBJS = $(call SRC_TO_OBJ,$(TEST_UNITS_SOURCES))
 TEST_UNITS_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestUnits$(TARGET_EXEEXT): $(TEST_UNITS_OBJS) $(TEST_UNITS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_POLARS_SOURCES = \
+	$(SRC)/Profile/ProfileKeys.cpp \
+	$(SRC)/Polar/Polar.cpp \
+	$(SRC)/Polar/PolarGlue.cpp \
+	$(SRC)/Polar/PolarStore.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/TestPolars.cpp
+TEST_POLARS_OBJS = $(call SRC_TO_OBJ,$(TEST_POLARS_SOURCES))
+TEST_POLARS_LDADD = $(MATH_LIBS) $(IO_LIBS)
+$(TARGET_BIN_DIR)/TestPolars$(TARGET_EXEEXT): $(TEST_POLARS_OBJS) $(TEST_POLARS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
