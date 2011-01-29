@@ -8,10 +8,9 @@
 %%%%%%%%%%%%%%%%%%%%%%
 \listoftodos
 
-\todonum[inline]{support more task types}
 \todonum[inline]{alternates list}
 
-\todonum[inline]{instant AAT optimization}
+
   
 \begingroup
 \setlength{\parskip}{0.1\baselineskip}
@@ -1655,7 +1654,7 @@ waypoint.
 \end{center}
 
 
-\section{Waypoint selector dialog}
+\section{Waypoint selector dialog}\label{sec:waypoint-selector-dialog}
 The waypoint selector is a dialog that allows waypoints to be easily selected
 from a potentially large database.
 
@@ -1700,16 +1699,16 @@ use it brings up the waypoint details dialog for the selected
 waypoint.
 
 \section{Task manager}\label{sec:task-manager-dialog}
+\begin{it}The task manager is target of major rework and thus the description
+possibly comes short compared to its functionality. Version 6.1 of XCSoar will hopefully
+leverage the rate of change at the task editor and the manual will be more
+complete at this point.\end{it}
+
 The task manager is used to edit, view, load, save to file, and declare cross
 country tasks. It is accessed via the menu
 \begin{quote}
 \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Edit}
 \end{quote} 
-
-\begin{it}The task manager is target of major rework and thus the description
-possibly comes short compared to its functionality. Version 6.1 of XCSoar will hopefully
-leverage the rate of change at the task editor and the manual will be more
-complete at this point.\end{it}
 
 The task manager's primary page is an overview. It gives a graphical
 view of the active task, lets you enter into the task editor, or task browser.
@@ -1717,11 +1716,42 @@ Further you can backup the current task with the \button{Save as} button, and
 send the task to a connected intelligent logger device with the \button{Declare}
 button.
 
+\subsection*{Task browser}
+The \button{Browse} button enters the task browser. On the left side it displays a thumbnail of
+the selected task, its type and task distance.  The right side lists all
+tasks XCSoar found on your system, including an item for the current active
+task. This could be handy to save the active task to a different file and thus
+make a backup before modifying it.  Not to mention, the active task can not be
+renamed or deleted. To remove any active task from XCSoar you have to enter the
+editor and ``clear'' it there.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskbrowser.png}
+\end{center}
+
+The task browser dialogs has the following buttons on the
+top of the form:
+\begin{description}
+\item[\button{Load}] Loads the selected task file and closes the dialog and
+returns to the task overview page.
+\item[\button{Rename}] Opens the text editor, allowing the
+file name to be changed.  If the Chancel button or ESC button in the
+text editor is pressed, the task will be unchanged.
+\item[\button{Delete}] Removes the task entirely from the system.
+\end{description}
+
+
+\subsection*{Task editor}
 The \button{Edit} button enters the task editor. It comprises a list of 
 waypoints on the right side of the form. All means to add, change, or
-delete waypoints to the list composing the task are accessible through the right
-side of this form. 
-Below the list the type of task and the total distance of the task is shown.
+delete waypoints to the list composing the task are accessible through this
+side of the form. By pressing the ``(add waypoint)'' a propor selection of
+waypoint types according to the task type is presented. Selecting a waypoint
+type leads directly to the already described waypoint selector dialog (see
+Section~\ref{sec:waypoint-selector-dialog}).
+
+The type of task and the total distance of the task is shown below the waypoint
+list.
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit0.png}
 \end{center}
@@ -1734,119 +1764,58 @@ The up and down button below allow to reorder the waypoint list. This is handy
 to e.g. flip the round trip direction of a triangle course by changing the
 turning point sequence.
 
-
-
-\todonum[inline]{this all will go}
-The ETE field displays the estimated time on task in minutes for the
-current wind estimate and MacCready setting.
-
-For Assigned Area Tasks (AAT) tasks, the Total line displays the AAT
-assigned time, the nominal task distance, and the task distance around
-the user-specified targets within the AAT areas.
-
+\subsection*{Task types}
+By pressing the \button{New} button a selction of task types is presented to
+choose  from.
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit1.png}
 \end{center}
+On the list of task types the type of the active task is marked with a ``*'' in
+fornt of it. The set of task types largly covers the typically used
+international FAI task set and also a ``Mixed'' type to describe virtually any
+intended flight. The ``Touring`` type is a simple way to enter as less
+as possible into the system and have a maximal casual cross country support by
+XCSoar.  On the left side of the form a short description is given to the
+selected task type.
 
-Pressing the \button{Advanced} button exposes (or hides) several more
-fields.  Pressing it again hides the fields.
-\begin{description}
-\item[\button{File}] This field defines the task file name to be used by save/load functions.  
-\item[\button{Save}] Saves the task to the specified file name.  If a blank file name is selected, then when pressing the Save button, the system will ask for a new file name to be entered.  If the file name already exists, the system will ask the user whether it is OK to over-write the old file.
-\item[\button{Load}] Loads the task from the specified file name.
-\item[\button{Calc}] Opens the task calculator dialog (see Section~\ref{sec:task-calc-dial}).
-\item[\button{Declare}] Sends the task declaration to the logger (if available).
-\end{description} 
+Since the manual does not intend to rephrase FAI rules or tasks you better refer
+to the online source  \url{http://www.fai.org}. 
+
+
+\subsection*{Task properties}
+By pressing the \button{Properties} button a summary with the important
+parameters of the task is reached.  If applicable values are taken from the
+default rules configuration page \config{taskrules}.  For FAI tasks only the
+finish height option applies. For the AAT the most important setting is the
+minimum task time, which can be set here.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit2.png}
 \end{center}
 
-
-Moving the cursor down to a task waypoint in the Task Overview page
-and pressing enter will select that waypoint for editing.  New
-waypoints can be added to the task by selecting the ``(add new
-waypoint)'' line.  Either the home waypoint or start waypoint is
-assigned to the new task waypoint, making it quick and easy to define
-triangular or out and return tasks.
-
-Once a waypoint is thus selected, a task waypoint dialog appears.
-These are different for Start, Turn-point and Finish points.
-
-Each of the task waypoint dialogs have the following buttons on the
-left side of the form:
+The task properies dialogs contain several fields:
 \begin{description}
-\item[\button{Close}] Closes the dialog and returns to the task overview page
-\item[\button{Select}] Opens the waypoint selector dialog, allowing the waypoint to be
- changed.  If the Close button or ESC button in the waypoint selector
- is pressed, the task waypoint will be unchanged.
-\item[\button{Remove}] Removes the waypoint from the task
-\item[\button{Details}] Opens the waypoint details dialog to give more detailed information on the 
-waypoint location.  
-This can be useful to verify the waypoint coordinates are correct.
-\item[\button{Move up}] Moves the waypoint to earlier in the task.
-\item[\button{Move down}] Moves the waypoint to later in the task.
+\item[AAT min time]  (Only for AAT) Minimum AAT task time in minutes.
+\item[Task scoring]  Internal flag, which determines whether accurate scoring
+measurements of the task is required or not. It can not be modified.
+\item[Start max speed]  Maximum speed allowed in start observation zone.  Set to
+0 for no limit.
+\item[Start max height]  Maximum height while starting the task.  Set to 0 for
+no limit.
+\item[Start height ref]  Reference used for start max height rule. ``MSL''
+reference is altitude above mean sea level, ``AGL'' reference is the height
+above ground at the start point.
+\item[Finish min height]  Minimum height above ground while finishing the task. 
+Set to 0 for no limit.
+\item[FAI finish height]  (Only for FAI tasks) If enabled, this option requires
+the minimum height above ground for finish to be greater than 1000m below the start height.
 \end{description}
-
-The task waypoint dialogs for start points contain several fields:
-\begin{description}
-\item[Start type] Line or cylinder
-\item[Start diameter] Diameter of the cylinder or length of the start line.
-\item[Sector type] Sector type (cylinder, FAI sector or German sector) 
- for non-AAT tasks.
-\item[Sector radius] Sector radius for non-AAT tasks.
-\item[AAT] Determines whether this task is AAT or not.
-\item[Min time] Specifies the AAT minimum task time.  During flight, if the expected task time is 
-less than the AAT minimum task time, a status message notification of this is
-issued.
-\item[OnLine Contest]  Specifies whether the detection of start is based
-  on the start sector or minimum altitude after launch (required for
-  Sprint tasks).
-\item[Auto advance] Controls the auto advance mode, as described in Section~\ref{sec:advanc-rest-tasks}.
-\item[Alternate start points]  Determines whether there are alternate start sectors at other start points as well as this waypoint.
-\end{description}
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit3.png}
-\end{center}
-
-The \button{Edit start points} button allows editing of alternate
-start points.  See Section~\ref{sec:alternate-starts} for more
-details.
-
-The task waypoint dialog for turn-points in non AAT-tasks do not
-contain any editable fields.  For both AAT and non AAT tasks, the
-finish waypoint dialog allows the finish type to be defined:
-\begin{description}
-\item[Finish type] Line or cylinder
-\item[Finish diameter] Diameter of the cylinder or length of the finish line.
-\end{description}
-
-
-For AAT tasks, the task waypoint dialog for turn-points allows the AAT
-areas to be defined.
-\begin{description}
-\item[Target distance]  This allows the target within the AAT area to be moved to produce the shortest (-100\%) to longest (100\%) task distance.
-The use of targets is described further in Section~\ref{sec:aat-tasks}.
-\item[Type] Cylinder or sector.
-\item[Circle radius] The radius of cylinder in meters for cylinder type.
-\item[Sector radius] The radius of the sector in meters for sector type.
-\item[Start radial] The start radial of the sector in degrees.
-\item[Finish radial] The finish radial of the sector in degrees.
- The convention is that the sector is defined in a clockwise direction from
-  start to finish radial.
-\end{description}
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit4.png}
-\end{center}
-\todonum[inline]{up to here}
 
 \section{Advancing and restarting tasks}\label{sec:advanc-rest-tasks}
-\todonum[inline]{Entire section outdated}
 At all times one waypoint in the task is designated as the active
 waypoint.  The active waypoint is used for calculation and display of
 navigation information, that is, the pilot is directed to fly towards
-the active waypoint (also referred to as the 'next waypoint' in the
+the active waypoint (also referred to as the ``next waypoint'' in the
 description of InfoBoxes as in Chapter~\ref{cha:infobox}).
 
 During flight a continuous display of the bearing of the next turn
@@ -1856,8 +1825,7 @@ The altitude required to complete the task is calculated from the
 glider's position to the active waypoint through to the final
 waypoint.
 
-Changing the active waypoint can be performed automatically and
-manually in the following ways.
+Changing the active waypoint is performed automatically by default in the following ways.
 \begin{description}
 \item[Auto advance mode]
 Once the aircraft enters the turn point observation zone (OZ) and satisfies
@@ -1876,27 +1844,28 @@ trigger.  Therefore, if the advancement conditions are met but the
 trigger is not armed, the waypoint is not advanced.  The `Arm' button can be 
 used to arm the trigger.  It is accessed via the menu
 \begin{quote}
-\bmenu{Nav}\blink\bmenu{Arm advance}
+\bmenu{Nav}\blink\bmenu{Arm Start/Turn}
 \end{quote}
-\item[Arm auto advance start]
-This is similar to the Auto method but the start must be armed.
-Therefore, the pilot must press the arm button before starting, and on
-subsequent waypoints the advancement is automatic.
-\item[Manual advance]
-Fully manual control.  No automatic advancement is performed at all.
+This is used for all waypoints with an variable target like the AAT observation
+zone with an obtimised target point, so that the minimum task time
+conditaion will be meet.
+%\item[Arm auto advance start]
+%This is similar to the Auto method but the start must be armed.
+%Therefore, the pilot must press the arm button before starting, and on
+%subsequent waypoints the advancement is automatic.
 \end{description}  
 
-Status messages are given in arm modes (``arm start'' or ``arm''
-modes) when inside the observation sector, as reminders to press arm
-when the pilot is ready to advance to the next waypoint.
-For starting, a warning is given that the glider is in the start
-cylinder or behind the start line, as a reminder to ARM if necessary.
+Status messages are given in arm modes when inside the observation sector, 
+as reminders to press arm when the pilot is ready to advance to the next
+waypoint. For starting, a warning is given that the glider is in the start
+cylinder or behind the start line, as a reminder to ``arm'' if necessary.
 
-In all auto advance modes, the pilot can adjust the current waypoint
+In any times, the pilot can override the current waypoint
 with the buttons:
 
 \begin{quote}
-\bmenu{Nav}\blink\bmenu{Waypoint next} and \bmenu{Nav}\blink\bmenu{Waypoint previous}
+\bmenu{Nav}\blink\bmenu{Previous turnpoint} and
+\bmenu{Nav}\blink\bmenu{Next turnpoint }
 \end{quote}
 
 For PC and Pocket PC with touchscreen versions only, the user may
@@ -1915,33 +1884,29 @@ waypoints to the start.
 
 In all modes, if the glider re-enters the start zone or crosses the
 start line within 10 minutes of the previous start, the task may be
-automatically restarted.  In ARM and ARM Start modes, the pilot still
-needs to activate ARM to re-start.
+automatically restarted.  In ``arm'' mode, the pilot still
+needs to activate ``arm'' to re-start.
 
-When selecting 'previous waypoint', the trigger that detects
+When selecting \button{Previous turnpoint}, the trigger that detects
 auto-advance for that waypoint is cleared; meaning that the task
 computer expects the aircraft wants to fly to that observation zone (OZ)
-again before continuing the task.  The pilot may still select 'next
-waypoint' to advance to the next task waypoint.
+again before continuing the task.  The pilot may still select \button{Next
+turnpoint} to advance to the next task waypoint.
 
 A system beep and message is given on task/waypoint advance.  The
 messages are given when the system advances the task waypoint
 automatically or, in arm modes, when the system is armed and the
 aircraft is in sector:
 \begin{itemize}
-\item[Task start] appears when the aircraft has crossed the start line or
- exited the start sector; if the advance system is automatic, or for
- arm modes, if the system is armed.  For arm modes, if the aircraft
- has already crossed the start line or exited the start sector,
- pressing arm will cause the message to appear to confirm a valid
- start.
-\item[Next turnpoint] appears when the aircraft has entered the observation
- sector for turnpoints; if the advance system is automatic, or for arm
- mode, if the system is armed.  For arm modes, if the aircraft has
+\item[Task start]  appears when the aircraft has crossed the start line or
+ exited the start sector. 
+\item[Next turnpoint]  appears when the aircraft has entered the observation
+ sector for turnpoints. Turns with variable target advance as soon as
+ \button{Arm turn} is pressed (arm auto advacne).  For arm modes, if the aircraft has 
  already entered the observation sector and left, pressing arm will
  cause the message to appear to confirm a valid advance to the next
  turnpoint.
-\item[Task finish] appears when the aircraft has crossed the finish line
+\item[Task finish]  appears when the aircraft has crossed the finish line
  or entered the finish cylinder.  This occurs in all advance modes. 
 \end{itemize}
 
@@ -2153,11 +2118,11 @@ When flying an AAT task, the navigation system directs the glider to
 the target, and statistics like distance to waypoint are also relative
 to the target rather than the waypoint of the AAT area itself.
 
-Automatic task waypoint advancement normally triggers when entering an
-AAT area, so if the pilot wishes to fly to the targets, either the
-`arm start', `arm' or `manual' advancement modes should be used when
-flying AAT tasks.  See Section~\ref{sec:advanc-rest-tasks} for
-details. \todonum{not correct, research and updated}
+Automatic task waypoint advancement does not trigger when entering an
+AAT area solely. The pilot has to arm the turn manually to advance to the next
+turn. When arming the AAT turn while flying through the OZ also the task
+optimiser is triggered to capture the realised AAT target and bring the target
+optimisation for the rest of the task up to date. See Section~\ref{sec:advanc-rest-tasks} for details.
 
 \subsection*{Manually moving targets}
 
@@ -2208,8 +2173,10 @@ order to be able to extend the planned task.
 \item What will happen if the conditions deteriorate?  The MacCready setting can 
 be decreased and the pilot can see how much the task can be shortened and still 
 finish the task later than the assigned minimum time.
-\item What will happen if I leave the AAT area now?
-\todonum{Needs a bit more functionality here}
+\item What will happen if I leave the AAT area now?  By pressing \button{Arm
+turn} the take over of the current position into the optimisation can
+be forced. The repositioning of subsequent turns can be reviewed in the task calculation
+dialog.
 \end{itemize}
 
 \subsection*{Target projection}
@@ -3029,6 +2996,11 @@ This measure, available as an {\InfoBox} is useful as a continuous
 indicator of the cross-country performance.  It is not used in any
 internal calculations.
 \end{description}
+
+For assigned area tasks at the same time a new task time estimation is
+calculated the target position is optimised. \tip For each variable target set
+to ``auto'' can XCSoar tweak the position so that the AAT will be completed not
+more than five minutes after the given task time.
 
 In addition, a measure called {\em achieved MacCready} is calculated.
 This is computed by finding the MacCready setting that under classical
