@@ -45,13 +45,6 @@ struct SimplePolar
   double w2;           /**< Sink rate (negative, m/s) of point 3  */
   double wing_area;    /**< Reference wing area (m^2) */
 
-  /**
-   * Reads the WinPilor polar file specified in the registry
-   * @return True if parsing was successful, False otherwise
-   */
-  bool ReadFileFromProfile();
-  bool ReadFile(TLineReader &reader);
-
   bool ReadString(const TCHAR* line);
   void GetString(TCHAR* line, size_t size);
 

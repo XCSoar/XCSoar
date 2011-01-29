@@ -26,6 +26,18 @@ Copyright_License {
 #include "Polar/BuiltIn.hpp"
 #include "Profile/Profile.hpp"
 #include "IO/FileLineReader.hpp"
+#include "IO/ConfiguredFile.hpp"
+
+static bool
+ReadFile(SimplePolar &polar, TLineReader &reader)
+{
+  const TCHAR *line;
+  while ((line = reader.read()) != NULL)
+    if (polar.ReadString(line))
+      return true;
+
+  return false;
+}
 
 bool
 LoadPolarFromFile(SimplePolar &polar, const TCHAR* path)
@@ -39,9 +51,22 @@ LoadPolarFromFile(SimplePolar &polar, const TCHAR* path)
     return false;
   }
 
-  polar.ReadFile(*reader);
+  ReadFile(polar, *reader);
   delete reader;
   return true;
+}
+
+static bool
+ReadPolarFileFromProfile(SimplePolar &polar)
+{
+  TLineReader *reader = OpenConfiguredTextFile(szProfilePolarFile);
+  if (reader == NULL)
+    return false;
+
+  bool success = ReadFile(polar, *reader);
+  delete reader;
+
+  return success;
 }
 
 void
@@ -56,7 +81,7 @@ LoadPolarFromProfile(SimplePolar &polar)
   unsigned Temp;
   if (Profile::Get(szProfilePolarID, Temp)) {
     if (Temp == 6) {
-      if (polar.ReadFileFromProfile())
+      if (ReadPolarFileFromProfile(polar))
         return;
     } else {
       switch (Temp) {
