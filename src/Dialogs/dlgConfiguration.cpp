@@ -2338,9 +2338,7 @@ void dlgConfigurationShowModal(void)
 
   if (PolarFileChanged && protected_task_manager != NULL) {
     GlidePolar gp = protected_task_manager->get_glide_polar();
-    SimplePolar polar;
-    PolarGlue::LoadFromProfile(polar);
-    polar.CopyIntoGlidePolar(gp);
+    PolarGlue::LoadFromProfile(gp);
     protected_task_manager->set_glide_polar(gp);
   }
 

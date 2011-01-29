@@ -127,3 +127,14 @@ PolarGlue::SaveToProfile(SimplePolar &polar)
   polar.GetString(polar_string, 255);
   Profile::Set(szProfilePolar, polar_string);
 }
+
+void
+PolarGlue::LoadFromProfile(GlidePolar &gp)
+{
+  SimplePolar polar;
+  LoadFromProfile(polar);
+  if (!polar.CopyIntoGlidePolar(gp)) {
+    LoadDefault(polar);
+    polar.CopyIntoGlidePolar(gp);
+  }
+}
