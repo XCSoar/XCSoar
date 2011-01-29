@@ -36,7 +36,8 @@ namespace PolarGlue
 void
 PolarGlue::LoadDefault(SimplePolar &polar)
 {
-  polar.ReadString(_T("325, 185, 70, -0.51, 115, -0.85, 173, -2.00, 10.5"));
+  // Load LS8 polar
+  PolarStore::Read(56, polar);
 }
 
 bool
