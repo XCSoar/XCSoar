@@ -19,6 +19,7 @@
 #include "Device/Volkslogger/dbbconv.h"
 #include "Device/Volkslogger/grecord.h"
 #include "Device/Volkslogger/utils.h"
+#include "Util.hpp"
 #include "PeriodClock.hpp"
 
 #include <memory.h>
@@ -847,13 +848,9 @@ void VLAPI_DATA::WPT::get(lpb p) {
 //
 void VLAPI_DATA::WPT::put(lpb p) {
   int32 llat,llon;
-  int16 i,l;
   // String, evtl. mit Blanks aufgefüllt, zurückschreiben
   strupr(name);
-  memcpy(p,name,6);
-  l = strlen((char *)p);
-  for(i=l; i<6; i++)
-    p[i] = ' ';
+  copy_padded(p, 6, name);
   // Koordinaten zurückschreiben
   llat = labs((long)(lat * 60000.0));
   llon = labs((long)(lon * 60000.0));
@@ -919,9 +916,7 @@ void VLAPI_DATA::ROUTE::get(lpb p) {
 void VLAPI_DATA::ROUTE::put(lpb p) {
 	int i;
   strupr(name);
-  memcpy(p,name,14);
-  for(i=strlen((char *)p); i<14; i++)
-    p[i] = ' ';
+  copy_padded(p, 14, name);
   // In the following line, we insertes "int"
   // (Florian Ehinger)
   for(i=0; i<10; i++)
@@ -937,10 +932,7 @@ void VLAPI_DATA::PILOT::get(lpb p) {
 void VLAPI_DATA::PILOT::put(lpb p) {
 
   strupr(name);
-  memcpy(p,name,16);
-  for(int i=strlen((char *)p); i<16; i++)
-    p[i] = ' ';
-
+  copy_padded(p, 15, name);
 }
 
 
