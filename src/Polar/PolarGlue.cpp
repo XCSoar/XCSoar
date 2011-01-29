@@ -28,8 +28,8 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "IO/ConfiguredFile.hpp"
 
-static bool
-ReadFile(SimplePolar &polar, TLineReader &reader)
+bool
+PolarGlue::LoadFromFile(SimplePolar &polar, TLineReader &reader)
 {
   const TCHAR *line;
   while ((line = reader.read()) != NULL)
@@ -51,7 +51,7 @@ PolarGlue::LoadFromFile(SimplePolar &polar, const TCHAR* path)
     return false;
   }
 
-  ReadFile(polar, *reader);
+  LoadFromFile(polar, *reader);
   delete reader;
   return true;
 }
@@ -63,7 +63,7 @@ ReadPolarFileFromProfile(SimplePolar &polar)
   if (reader == NULL)
     return false;
 
-  bool success = ReadFile(polar, *reader);
+  bool success = PolarGlue::LoadFromFile(polar, *reader);
   delete reader;
 
   return success;

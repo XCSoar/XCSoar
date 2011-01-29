@@ -27,10 +27,12 @@ Copyright_License {
 #include <tchar.h>
 
 struct SimplePolar;
+class TLineReader;
 
 namespace PolarGlue
 {
   bool LoadFromFile(SimplePolar &polar, const TCHAR* path);
+  bool LoadFromFile(SimplePolar &polar, TLineReader &reader);
   void LoadFromProfile(SimplePolar &polar);
   void SaveToProfile(SimplePolar &polar);
 }
