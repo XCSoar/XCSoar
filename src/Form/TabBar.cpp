@@ -38,7 +38,9 @@ TabBarControl::TabBarControl(ContainerWindow &_parent,
                 theTabDisplay(NULL),
                 TabBarHeight(_height),
                 TabBarWidth(_width),
-                TabLineHeight(Layout::Scale(TabLineHeightInitUnscaled))
+                TabLineHeight(Layout::landscape ?
+                    (Layout::Scale(TabLineHeightInitUnscaled) * 0.75) :
+                    Layout::Scale(TabLineHeightInitUnscaled))
 {
   theTabDisplay = new TabDisplay(*this, TabBarWidth, TabBarHeight);
 }
