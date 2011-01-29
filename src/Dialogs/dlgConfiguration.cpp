@@ -431,6 +431,24 @@ UpdatePolarFields(const SimplePolar &polar)
 }
 
 static void
+SetPolarTitle(const TCHAR* title)
+{
+  TCHAR caption[255];
+  _tcscpy(caption,  _("Polar"));
+  _tcscat(caption, _T(": "));
+  _tcscat(caption, title);
+  ((WndFrame *)wf->FindByName(_T("lblPolar")))->SetCaption(caption);
+}
+
+static void
+UpdatePolarTitle()
+{
+  TCHAR title[255];
+  if (Profile::Get(szProfilePolarName, title, 255))
+    SetPolarTitle(title);
+}
+
+static void
 OnPolarLoadInteral(WndButton &button)
 {
   /* create a fake WndProperty for dlgComboPicker() */
@@ -451,6 +469,9 @@ OnPolarLoadInteral(WndButton &button)
     SimplePolar polar;
     PolarStore::Read(dfe->getItem(result), polar);
     UpdatePolarFields(polar);
+
+    Profile::Set(szProfilePolarName, PolarStore::GetName(dfe->getItem(result)));
+    UpdatePolarTitle();
   }
 
   delete dfe;
@@ -477,10 +498,29 @@ OnPolarLoadFromFile(WndButton &button)
     SimplePolar polar;
     PolarGlue::LoadFromFile(polar, path);
     UpdatePolarFields(polar);
+
+    Profile::Set(szProfilePolarName, BaseName(path));
+    UpdatePolarTitle();
   }
 
   delete dfe;
   delete list;
+}
+
+static void
+OnPolarFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  switch (Mode) {
+  case DataField::daChange:
+    Profile::Set(szProfilePolarName, _T("Custom"));
+    UpdatePolarTitle();
+    break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
+  }
 }
 
 static bool
@@ -562,6 +602,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnDeviceBData),
   DeclareCallBackEntry(OnPolarLoadInteral),
   DeclareCallBackEntry(OnPolarLoadFromFile),
+  DeclareCallBackEntry(OnPolarFieldData),
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(NULL)
 };
@@ -1058,6 +1099,7 @@ setVariables()
   SimplePolar polar;
   PolarGlue::LoadFromProfile(polar);
   UpdatePolarFields(polar);
+  UpdatePolarTitle();
 
   LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
                    settings_computer.SafetySpeed);

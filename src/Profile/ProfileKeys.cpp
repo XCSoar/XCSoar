@@ -144,6 +144,7 @@ const TCHAR szProfileLiftUnitsValue[] = CONF("Lift");
 const TCHAR szProfileLatLonUnits[] = CONF("LatLonUnits");
 const TCHAR szProfilePolarID[] = CONF("Polar");
 const TCHAR szProfilePolar[] = CONF("PolarInformation");
+const TCHAR szProfilePolarName[] = CONF("PolarName");
 const TCHAR szProfileSafetyAltitudeArrival[] = CONF("SafetyAltitudeArrival");
 const TCHAR szProfileSafetyAltitudeTerrain[] = CONF("SafetyAltitudeTerrain");
 const TCHAR szProfileSafteySpeed[] = CONF("SafteySpeed");

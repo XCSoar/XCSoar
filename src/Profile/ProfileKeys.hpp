@@ -58,6 +58,7 @@ extern const TCHAR szProfileSafetyAltitudeTerrain[];
 extern const TCHAR szProfileSafteySpeed[];
 extern const TCHAR szProfilePolarID[];
 extern const TCHAR szProfilePolar[];
+extern const TCHAR szProfilePolarName[];
 extern const TCHAR szProfileWayPointFile[];
 extern const TCHAR szProfileAdditionalWayPointFile[];
 extern const TCHAR szProfileAirspaceFile[];
