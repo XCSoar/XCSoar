@@ -46,12 +46,14 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "LocalTime.hpp"
 #include "Math/FastMath.h"
-#include "Polar/BuiltIn.hpp"
-#include "Polar/Loader.hpp"
+#include "Polar/PolarStore.hpp"
+#include "Polar/PolarGlue.hpp"
+#include "Polar/Polar.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Float.hpp"
 #include "DataField/FileReader.hpp"
+#include "DataField/ComboList.hpp"
 #include "Asset.hpp"
 #include "GlideRatio.hpp"
 #include "Components.hpp"
@@ -411,6 +413,76 @@ OnWaypoints(gcc_unused WndButton &button)
   dlgConfigWaypointsShowModal();
 }
 
+static void
+UpdatePolarFields(const SimplePolar &polar)
+{
+  LoadFormProperty(*wf, _T("prpPolarV1"), fixed(polar.v0));
+  LoadFormProperty(*wf, _T("prpPolarV2"), fixed(polar.v1));
+  LoadFormProperty(*wf, _T("prpPolarV3"), fixed(polar.v2));
+
+  LoadFormProperty(*wf, _T("prpPolarW1"), fixed(polar.w0));
+  LoadFormProperty(*wf, _T("prpPolarW2"), fixed(polar.w1));
+  LoadFormProperty(*wf, _T("prpPolarW3"), fixed(polar.w2));
+
+  LoadFormProperty(*wf, _T("prpPolarMassDry"), fixed(polar.dry_mass));
+  LoadFormProperty(*wf, _T("prpPolarMaxBallast"), fixed(polar.max_ballast));
+
+  LoadFormProperty(*wf, _T("prpPolarWingArea"), fixed(polar.wing_area));
+}
+
+static void
+OnPolarLoadInteral(WndButton &button)
+{
+  /* create a fake WndProperty for dlgComboPicker() */
+  /* XXX reimplement properly */
+
+  DataFieldEnum *dfe = new DataFieldEnum(NULL);
+  unsigned len = PolarStore::Count();
+  for (unsigned i = 0; i < len; i++)
+    dfe->addEnumText(PolarStore::GetName(i), i);
+
+  dfe->Sort();
+  ComboList *list = dfe->CreateComboList();
+
+  /* let the user select */
+
+  int result = ComboPicker(XCSoarInterface::main_window, _("Polar"), *list, NULL);
+  if (result >= 0) {
+    SimplePolar polar;
+    PolarStore::Read(dfe->getItem(result), polar);
+    UpdatePolarFields(polar);
+  }
+
+  delete dfe;
+  delete list;
+}
+
+static void
+OnPolarLoadFromFile(WndButton &button)
+{
+  /* create a fake WndProperty for dlgComboPicker() */
+  /* XXX reimplement properly */
+
+  DataFieldFileReader *dfe = new DataFieldFileReader(NULL);
+  dfe->ScanDirectoryTop(_T("*.plr"));
+
+  ComboList *list = dfe->CreateComboList();
+
+  /* let the user select */
+
+  int result = ComboPicker(XCSoarInterface::main_window,
+                           _("Polar file"), *list, NULL);
+  if (result > 0) {
+    const TCHAR* path = dfe->getItem(result);
+    SimplePolar polar;
+    PolarGlue::LoadFromFile(polar, path);
+    UpdatePolarFields(polar);
+  }
+
+  delete dfe;
+  delete list;
+}
+
 static bool
 FormKeyDown(WndForm &Sender, unsigned key_code)
 {
@@ -475,61 +547,6 @@ OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-static int lastSelectedPolarFile = -1;
-
-static void
-OnPolarFileData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  WndProperty* wp;
-
-  switch(Mode){
-  case DataField::daChange:
-    if (Sender->GetAsString() != NULL && _tcscmp(Sender->GetAsString(), _T("")) != 0){
-      // then ... set Polar Tape to Winpilot
-      wp = (WndProperty *)wf->FindByName(_T("prpPolarType"));
-      assert(wp != NULL);
-
-      wp->GetDataField()->SetAsInteger(POLARUSEWINPILOTFILE);
-      wp->RefreshDisplay();
-    }
-    break;
-
-  case DataField::daInc:
-  case DataField::daDec:
-  case DataField::daSpecial:
-    return;
-  }
-}
-
-static void
-OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  WndProperty* wp;
-
-  switch(Mode){
-  case DataField::daChange:
-    wp = (WndProperty *)wf->FindByName(_T("prpPolarFile"));
-    assert(wp != NULL);
-
-    if (Sender->GetAsInteger() != POLARUSEWINPILOTFILE){
-      // then ... clear Winpilot File if Polar Type is not WinpilotFile
-      lastSelectedPolarFile = wp->GetDataField()->GetAsInteger();
-      wp->GetDataField()->SetAsInteger(-1);
-      wp->RefreshDisplay();
-    } else if (wp->GetDataField()->GetAsInteger() <= 0 &&
-               lastSelectedPolarFile > 0) {
-      wp->GetDataField()->SetAsInteger(lastSelectedPolarFile);
-      wp->RefreshDisplay();
-    }
-    break;
-
-  case DataField::daInc:
-  case DataField::daDec:
-  case DataField::daSpecial:
-    return;
-  }
-}
-
 extern void OnInfoBoxHelp(WindowControl * Sender);
 
 static CallBackTableEntry CallBackTable[] = {
@@ -541,10 +558,10 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnSetupDeviceAClicked),
   DeclareCallBackEntry(OnSetupDeviceBClicked),
   DeclareCallBackEntry(OnInfoBoxHelp),
-  DeclareCallBackEntry(OnPolarFileData),
-  DeclareCallBackEntry(OnPolarTypeData),
   DeclareCallBackEntry(OnDeviceAData),
   DeclareCallBackEntry(OnDeviceBData),
+  DeclareCallBackEntry(OnPolarLoadInteral),
+  DeclareCallBackEntry(OnPolarLoadFromFile),
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(NULL)
 };
@@ -1035,29 +1052,16 @@ setVariables()
     wp->RefreshDisplay();
   }
 
+  SimplePolar polar;
+  PolarGlue::LoadFromProfile(polar);
+  UpdatePolarFields(polar);
+
   LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
                    settings_computer.SafetySpeed);
 
   LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                    settings_computer.BallastSecsToEmpty);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpPolarType"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("External Polar File"), 6);
-
-    unsigned len = GetWinPilotPolarInternalCount();
-    for(unsigned i = 0; i < len; i++) {
-      const TCHAR *name = GetWinPilotPolarInternalName(i);
-      dfe->addEnumText(name, i + 7);
-    }
-    dfe->Sort();
-    dfe->Set(settings_computer.POLARID);
-    wp->RefreshDisplay();
-  }
-
-  InitFileField(*wf, _T("prpPolarFile"), szProfilePolarFile, _T("*.plr\0"));
   InitFileField(*wf, _T("prpAirspaceFile"),
                 szProfileAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
   InitFileField(*wf, _T("prpAdditionalAirspaceFile"),
@@ -1616,14 +1620,28 @@ void dlgConfigurationShowModal(void)
                               szProfileSnailTrail,
                               XCSoarInterface::SetSettingsMap().TrailActive);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpPolarType"));
-  if (wp) {
-    if (settings_computer.POLARID != (unsigned)wp->GetDataField()->GetAsInteger()) {
-      settings_computer.POLARID = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfilePolarID, (int &)settings_computer.POLARID);
-      PolarFileChanged = true;
-      changed = true;
-    }
+  SimplePolar polar;
+  PolarGlue::LoadFromProfile(polar);
+
+  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV1"), polar.v0);
+  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV2"), polar.v1);
+  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV3"), polar.v2);
+
+  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarW1"), polar.w0);
+  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarW2"), polar.w1);
+  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarW3"), polar.w2);
+
+  PolarFileChanged |=
+      SaveFormProperty(*wf, _T("prpPolarMassDry"), polar.dry_mass);
+  PolarFileChanged |=
+      SaveFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
+
+  PolarFileChanged |=
+      SaveFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
+
+  if (PolarFileChanged) {
+    PolarGlue::SaveToProfile(polar);
+    changed |= true;
   }
 
   short tmp = settings_computer.AltitudeMode;
@@ -1950,9 +1968,6 @@ void dlgConfigurationShowModal(void)
 
   changed |= SaveFormProperty(*wf, _T("prpHandicap"), szProfileHandicap,
                               settings_computer.contest_handicap);
-
-  PolarFileChanged |= FinishFileField(*wf, _T("prpPolarFile"),
-                                     szProfilePolarFile);
 
   WaypointFileChanged = WaypointFileChanged |
     FinishFileField(*wf, _T("prpWaypointFile"), szProfileWayPointFile) |
@@ -2315,8 +2330,10 @@ void dlgConfigurationShowModal(void)
 
   if (PolarFileChanged && protected_task_manager != NULL) {
     GlidePolar gp = protected_task_manager->get_glide_polar();
-    if (LoadPolarById(settings_computer.POLARID, gp))
-      protected_task_manager->set_glide_polar(gp);
+    SimplePolar polar;
+    PolarGlue::LoadFromProfile(polar);
+    polar.CopyIntoGlidePolar(gp);
+    protected_task_manager->set_glide_polar(gp);
   }
 
   if (DevicePortChanged)

@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Polar/BuiltIn.hpp"
+#include "Polar/PolarStore.hpp"
 #include "Polar/Polar.hpp"
 
 #include <assert.h>
@@ -170,9 +170,9 @@ static const SimplePolar WinPilotPolars[] =
  * @return The name of the polar
  */
 const TCHAR*
-GetWinPilotPolarInternalName(unsigned i)
+PolarStore::GetName(unsigned i)
 {
-  assert(i < GetWinPilotPolarInternalCount());
+  assert(i < Count());
   return WinPilotPolars[i].name;
 }
 
@@ -183,14 +183,15 @@ GetWinPilotPolarInternalName(unsigned i)
  * @param polar Polar to set
  */
 bool
-ReadWinPilotPolarInternal(unsigned i, SimplePolar &polar)
+PolarStore::Read(unsigned i, SimplePolar &polar)
 {
-  assert(i < GetWinPilotPolarInternalCount());
+  assert(i < Count());
   polar = WinPilotPolars[i];
   return true;
 }
 
-unsigned GetWinPilotPolarInternalCount()
+unsigned
+PolarStore::Count()
 {
   return sizeof(WinPilotPolars) / sizeof(WinPilotPolars[0]);
 }

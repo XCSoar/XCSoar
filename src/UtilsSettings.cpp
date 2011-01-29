@@ -33,7 +33,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Device/device.hpp"
 #include "Message.hpp"
-#include "Polar/Loader.hpp"
+#include "Polar/PolarGlue.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Language.hpp"
@@ -141,13 +141,6 @@ SettingsLeave()
     airspace_database.clear();
     ReadAirspace(airspace_database, terrain,
                  XCSoarInterface::Basic().pressure);
-  }
-
-  if (PolarFileChanged && protected_task_manager != NULL) {
-    GlidePolar gp = protected_task_manager->get_glide_polar();
-    if (LoadPolarById(XCSoarInterface::SettingsComputer().POLARID, gp)) {
-      protected_task_manager->set_glide_polar(gp);
-    }
   }
 
   if (protected_task_manager != NULL) {

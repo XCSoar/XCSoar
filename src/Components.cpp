@@ -57,7 +57,8 @@ Copyright_License {
 #include "Audio/VarioSound.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Busy.hpp"
-#include "Polar/Loader.hpp"
+#include "Polar/PolarGlue.hpp"
+#include "Polar/Polar.hpp"
 #include "Persist.hpp"
 #include "MainWindow.hpp"
 #include "resource.h"
@@ -343,8 +344,10 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   OpenGeoid();
 
   GlidePolar gp = task_manager->get_glide_polar();
-  if (LoadPolarById(SettingsComputer().POLARID, gp))
-    task_manager->set_glide_polar(gp);
+  SimplePolar polar;
+  PolarGlue::LoadFromProfile(polar);
+  polar.CopyIntoGlidePolar(gp);
+  task_manager->set_glide_polar(gp);
 
   task_manager->set_contest(SettingsComputer().contest);
 

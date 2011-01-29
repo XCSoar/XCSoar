@@ -175,39 +175,6 @@ Profile::Use()
   Get(szProfileSafteySpeed,
       settings_computer.SafetySpeed);
 
-
-  if (Get(szProfilePolarID, Temp)) {
-    switch (Temp) {
-    case 0: // Ka 6
-      settings_computer.POLARID = 52;
-      break;
-
-    case 1: // ASW 19
-      settings_computer.POLARID = 23;
-      break;
-
-    case 2: // LS 8
-      settings_computer.POLARID = 63;
-      break;
-
-    case 3: // ASW 27
-      settings_computer.POLARID = 26;
-      break;
-
-    case 4: // LS 6c
-      settings_computer.POLARID = 62;
-      break;
-
-    case 5: // ASW 22
-      settings_computer.POLARID = 125;
-      break;
-
-    default:
-      settings_computer.POLARID = Temp;
-      break;
-    }
-  }
-
   LoadAirspaceConfig();
 
   Get(szProfileAirspaceBlackOutline,

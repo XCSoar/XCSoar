@@ -23,15 +23,13 @@ Copyright_License {
 
 #include "Polar/Polar.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "IO/ConfiguredFile.hpp"
-#include "Profile/ProfileKeys.hpp"
 #include "Math/fixed.hpp"
 
 #include <stdlib.h>
 #include <cstdio>
 
 void
-SimplePolar::ConvertToGlidePolar(GlidePolar &polar) const
+SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
 {
   fixed d;
   fixed V1, V2, V3;
@@ -126,28 +124,4 @@ SimplePolar::ReadString(const TCHAR *line)
     wing_area = _tcstod(p + 1, &p);
 
   return true;
-}
-
-bool
-SimplePolar::ReadFile(TLineReader &reader)
-{
-  const TCHAR *line;
-  while ((line = reader.read()) != NULL)
-    if (ReadString(line))
-      return true;
-
-  return false;
-}
-
-bool
-SimplePolar::ReadFileFromProfile()
-{
-  TLineReader *reader = OpenConfiguredTextFile(szProfilePolarFile);
-  if (reader == NULL)
-    return false;
-
-  bool success = ReadFile(*reader);
-  delete reader;
-
-  return success;
 }

@@ -24,14 +24,17 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_LOADER_HPP
 #define XCSOAR_POLAR_LOADER_HPP
 
-class GlidePolar;
+#include <tchar.h>
 
-enum {
-  /** if this polar is selected use the winpilot file */
-  POLARUSEWINPILOTFILE = 6,
-};
+struct SimplePolar;
+class TLineReader;
 
-bool
-LoadPolarById(unsigned id, GlidePolar& gp);
+namespace PolarGlue
+{
+  bool LoadFromFile(SimplePolar &polar, const TCHAR* path);
+  bool LoadFromFile(SimplePolar &polar, TLineReader &reader);
+  void LoadFromProfile(SimplePolar &polar);
+  void SaveToProfile(SimplePolar &polar);
+}
 
 #endif

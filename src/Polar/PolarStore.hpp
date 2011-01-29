@@ -30,12 +30,14 @@ Copyright_License {
 
 struct SimplePolar;
 
-gcc_const
-const TCHAR *GetWinPilotPolarInternalName(unsigned i);
+namespace PolarStore
+{
+  gcc_const
+  const TCHAR *GetName(unsigned i);
 
-bool
-ReadWinPilotPolarInternal(unsigned i, SimplePolar &polar);
+  bool Read(unsigned i, SimplePolar &polar);
 
-unsigned GetWinPilotPolarInternalCount();
+  unsigned Count();
+}
 
 #endif
