@@ -58,6 +58,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Busy.hpp"
 #include "Polar/Loader.hpp"
+#include "Polar/Polar.hpp"
 #include "Persist.hpp"
 #include "MainWindow.hpp"
 #include "resource.h"
@@ -343,8 +344,10 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   OpenGeoid();
 
   GlidePolar gp = task_manager->get_glide_polar();
-  if (LoadPolarById(SettingsComputer().POLARID, gp))
-    task_manager->set_glide_polar(gp);
+  SimplePolar polar;
+  LoadPolarFromProfile(polar);
+  polar.ConvertToGlidePolar(gp);
+  task_manager->set_glide_polar(gp);
 
   task_manager->set_contest(SettingsComputer().contest);
 

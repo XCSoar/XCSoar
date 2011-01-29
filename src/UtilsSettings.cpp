@@ -143,13 +143,6 @@ SettingsLeave()
                  XCSoarInterface::Basic().pressure);
   }
 
-  if (PolarFileChanged && protected_task_manager != NULL) {
-    GlidePolar gp = protected_task_manager->get_glide_polar();
-    if (LoadPolarById(XCSoarInterface::SettingsComputer().POLARID, gp)) {
-      protected_task_manager->set_glide_polar(gp);
-    }
-  }
-
   if (protected_task_manager != NULL) {
     ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
     lease->set_contest(XCSoarInterface::SettingsComputer().contest);

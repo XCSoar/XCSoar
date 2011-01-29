@@ -24,7 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_LOADER_HPP
 #define XCSOAR_POLAR_LOADER_HPP
 
+#include <tchar.h>
+
 class GlidePolar;
+struct SimplePolar;
 
 enum {
   /** if this polar is selected use the winpilot file */
@@ -33,5 +36,9 @@ enum {
 
 bool
 LoadPolarById(unsigned id, GlidePolar& gp);
+
+bool LoadPolarFromFile(SimplePolar &polar, const TCHAR* path);
+void LoadPolarFromProfile(SimplePolar &polar);
+void SavePolarToProfile(SimplePolar &polar);
 
 #endif
