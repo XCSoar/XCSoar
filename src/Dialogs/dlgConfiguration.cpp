@@ -448,6 +448,25 @@ UpdatePolarTitle()
     SetPolarTitle(title);
 }
 
+static bool
+SaveFormToPolar(SimplePolar &polar)
+{
+  bool changed = SaveFormProperty(*wf, _T("prpPolarV1"), polar.v1);
+  changed |= SaveFormProperty(*wf, _T("prpPolarV2"), polar.v2);
+  changed |= SaveFormProperty(*wf, _T("prpPolarV3"), polar.v3);
+
+  changed |= SaveFormProperty(*wf, _T("prpPolarW1"), polar.w1);
+  changed |= SaveFormProperty(*wf, _T("prpPolarW2"), polar.w2);
+  changed |= SaveFormProperty(*wf, _T("prpPolarW3"), polar.w3);
+
+  changed |= SaveFormProperty(*wf, _T("prpPolarMassDry"), polar.dry_mass);
+  changed |= SaveFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
+
+  changed |= SaveFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
+
+  return changed;
+}
+
 static void
 OnPolarLoadInteral(WndButton &button)
 {
@@ -1667,22 +1686,7 @@ void dlgConfigurationShowModal(void)
 
   SimplePolar polar;
   PolarGlue::LoadFromProfile(polar);
-
-  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV1"), polar.v1);
-  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV2"), polar.v2);
-  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV3"), polar.v3);
-
-  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarW1"), polar.w1);
-  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarW2"), polar.w2);
-  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarW3"), polar.w3);
-
-  PolarFileChanged |=
-      SaveFormProperty(*wf, _T("prpPolarMassDry"), polar.dry_mass);
-  PolarFileChanged |=
-      SaveFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
-
-  PolarFileChanged |=
-      SaveFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
+  PolarFileChanged |= SaveFormToPolar(polar);
 
   if (PolarFileChanged) {
     PolarGlue::SaveToProfile(polar);
