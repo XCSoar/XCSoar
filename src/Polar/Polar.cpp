@@ -23,14 +23,15 @@ Copyright_License {
 
 #include "Polar/Polar.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Math/fixed.hpp"
 
 #include <stdlib.h>
 #include <cstdio>
 
-bool
-SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
+PolarCoefficients
+SimplePolar::CalculateCoefficients() const
 {
+  PolarCoefficients pc;
+
   fixed d;
   fixed V1, V2, V3;
   fixed W1, W2, W3;
@@ -43,21 +44,29 @@ SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
   W3 = fixed(w3);
 
   d = V1 * V1 * (V2 - V3) + V2 * V2 * (V3 - V1) + V3 * V3 * (V1 - V2);
-  fixed a = (d == fixed_zero) ? fixed_zero :
-            -((V2 - V3) * (W1 - W3) + (V3 - V1) * (W2 - W3)) / d;
+  pc.a = (d == fixed_zero) ? fixed_zero :
+         -((V2 - V3) * (W1 - W3) + (V3 - V1) * (W2 - W3)) / d;
 
   d = V2 - V3;
-  fixed b = (d == fixed_zero) ? fixed_zero:
-            -(W2 - W3 + a * (V2 * V2 - V3 * V3)) / d;
+  pc.b = (d == fixed_zero) ? fixed_zero:
+         -(W2 - W3 + pc.a * (V2 * V2 - V3 * V3)) / d;
 
-  fixed c = -(W3 + a * V3 * V3 + b * V3);
+  pc.c = -(W3 + pc.a * V3 * V3 + pc.b * V3);
 
-  if (negative(a) || positive(b) || negative(c))
+  return pc;
+}
+
+bool
+SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
+{
+  PolarCoefficients pc = CalculateCoefficients();
+
+  if (negative(pc.a) || positive(pc.b) || negative(pc.c))
     return false;
 
-  polar.ideal_polar_a = a;
-  polar.ideal_polar_b = b;
-  polar.ideal_polar_c = c;
+  polar.ideal_polar_a = pc.a;
+  polar.ideal_polar_b = pc.b;
+  polar.ideal_polar_c = pc.c;
 
   // Glider empty weight
   polar.dry_mass = fixed(dry_mass);

@@ -24,10 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_WINPILOT_HPP
 #define XCSOAR_POLAR_WINPILOT_HPP
 
+#include "Math/fixed.hpp"
 #include <tchar.h>
 
 class GlidePolar;
 class TLineReader;
+
+struct PolarCoefficients
+{
+  fixed a, b, c;
+};
 
 /**
  * Struct for internally stored WinPilot-like polars
@@ -53,6 +59,8 @@ struct SimplePolar
    * @param polar Reference to the GlidePolar to save the data to
    */
   bool CopyIntoGlidePolar(GlidePolar &polar) const;
+
+  PolarCoefficients CalculateCoefficients() const;
 };
 
 #endif
