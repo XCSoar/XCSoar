@@ -43,13 +43,8 @@ WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, RasterPoint &sc) con
 bool
 WindowProjection::ScreenVisible(const RasterPoint &P) const
 {
-  if ((P.x >= MapRect.left) &&
-      (P.x <= MapRect.right) &&
-      (P.y >= MapRect.top) &&
-      (P.y <= MapRect.bottom))
-    return true;
-
-  return false;
+  return P.x >= 0 && (unsigned)P.x < screen_width &&
+    P.y >= 0 && (unsigned)P.y < screen_height;
 }
 
 fixed
@@ -67,10 +62,10 @@ WindowProjection::GetGeoScreenCenter() const
 void
 WindowProjection::UpdateScreenBounds()
 {
-  GeoBounds sb(ScreenToGeo(MapRect.left, MapRect.top));
-  sb.merge(ScreenToGeo(MapRect.right, MapRect.top));
-  sb.merge(ScreenToGeo(MapRect.right, MapRect.bottom));
-  sb.merge(ScreenToGeo(MapRect.left, MapRect.bottom));
+  GeoBounds sb(ScreenToGeo(0, 0));
+  sb.merge(ScreenToGeo(screen_width, 0));
+  sb.merge(ScreenToGeo(screen_width, screen_height));
+  sb.merge(ScreenToGeo(0, screen_height));
 
   screenbounds_latlon = sb;
 }

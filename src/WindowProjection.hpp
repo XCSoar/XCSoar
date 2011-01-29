@@ -32,6 +32,8 @@ Copyright_License {
 class WindowProjection:
   public Projection
 {
+  unsigned screen_width, screen_height;
+
 public:
   /**
    * Converts a geographical location to a screen coordinate if the
@@ -58,26 +60,27 @@ public:
   gcc_pure
   bool ScreenVisible(const RasterPoint &P) const;
 
-  const RECT &GetMapRect() const {
-    return MapRect;
+  void SetScreenSize(unsigned width, unsigned height) {
+    screen_width = width;
+    screen_height = height;
   }
 
   void SetMapRect(const RECT &rc) {
-    MapRect = rc;
+    SetScreenSize(rc.right - rc.left, rc.bottom - rc.top);
   }
 
   /**
    * Returns the width of the map area in pixels.
    */
   unsigned GetScreenWidth() const {
-    return MapRect.right - MapRect.left;
+    return screen_width;
   }
 
   /**
    * Returns the height of the map area in pixels.
    */
   unsigned GetScreenHeight() const {
-    return MapRect.bottom - MapRect.top;
+    return screen_height;
   }
 
   /**
@@ -126,9 +129,6 @@ public:
 
   /** Updates the cached screenbounds_latlon member */
   void UpdateScreenBounds();
-
-protected:
-  RECT MapRect;
 
 private:
   /**

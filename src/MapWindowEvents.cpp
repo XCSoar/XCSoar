@@ -42,7 +42,7 @@ MapWindow::on_resize(unsigned width, unsigned height)
   stencil_canvas.grow(width, height);
 #endif
 
-  visible_projection.SetMapRect(get_client_rect());
+  visible_projection.SetScreenSize(width, height);
   visible_projection.UpdateScreenBounds();
 
   return true;

@@ -71,10 +71,7 @@ public:
     SetScale(fixed(640) / (fixed(100) * 2));
     SetGeoLocation(GeoPoint(Angle::degrees(fixed(7.7061111111111114)),
                             Angle::degrees(fixed(51.051944444444445))));
-    MapRect.left = 0;
-    MapRect.top = 0;
-    MapRect.right = 640;
-    MapRect.bottom = 480;
+    SetScreenSize(640, 480);
     UpdateScreenBounds();
   }
 };
