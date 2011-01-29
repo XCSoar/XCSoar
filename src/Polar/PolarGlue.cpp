@@ -28,6 +28,11 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "IO/ConfiguredFile.hpp"
 
+namespace PolarGlue
+{
+  bool LoadFromOldProfile(SimplePolar &polar);
+}
+
 bool
 PolarGlue::LoadFromFile(SimplePolar &polar, TLineReader &reader)
 {
@@ -69,20 +74,14 @@ ReadPolarFileFromProfile(SimplePolar &polar)
   return success;
 }
 
-void
-PolarGlue::LoadFromProfile(SimplePolar &polar)
+bool
+PolarGlue::LoadFromOldProfile(SimplePolar &polar)
 {
-  TCHAR polar_string[255] = _T("\0");
-  if (Profile::Get(szProfilePolar, polar_string, 255) &&
-      polar_string[0] != 0 &&
-      polar.ReadString(polar_string))
-    return;
-
   unsigned Temp;
   if (Profile::Get(szProfilePolarID, Temp)) {
     if (Temp == 6) {
       if (ReadPolarFileFromProfile(polar))
-        return;
+        return true;
     } else {
       switch (Temp) {
       case 0: // Ka 6
@@ -111,9 +110,23 @@ PolarGlue::LoadFromProfile(SimplePolar &polar)
       }
 
       if (PolarStore::Read(Temp, polar))
-        return;
+        return true;
     }
   }
+  return false;
+}
+
+void
+PolarGlue::LoadFromProfile(SimplePolar &polar)
+{
+  TCHAR polar_string[255] = _T("\0");
+  if (Profile::Get(szProfilePolar, polar_string, 255) &&
+      polar_string[0] != 0 &&
+      polar.ReadString(polar_string))
+    return;
+
+  if (LoadFromOldProfile(polar))
+    return;
 
   polar.ReadString(_T("325, 185, 70, -0.51, 115, -0.85, 173, -2.00, 10.5"));
 }
