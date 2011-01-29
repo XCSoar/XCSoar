@@ -61,6 +61,9 @@ struct SimplePolar
   bool CopyIntoGlidePolar(GlidePolar &polar) const;
 
   PolarCoefficients CalculateCoefficients() const;
+
+  bool IsValid() const;
+  static bool IsValid(const PolarCoefficients &coeff);
 };
 
 #endif

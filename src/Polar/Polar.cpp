@@ -57,11 +57,23 @@ SimplePolar::CalculateCoefficients() const
 }
 
 bool
+SimplePolar::IsValid(const PolarCoefficients &coeff)
+{
+  return positive(coeff.a) && negative(coeff.b) && positive(coeff.c);
+}
+
+bool
+SimplePolar::IsValid() const
+{
+  PolarCoefficients pc = CalculateCoefficients();
+  return IsValid(pc);
+}
+
+bool
 SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
 {
   PolarCoefficients pc = CalculateCoefficients();
-
-  if (negative(pc.a) || positive(pc.b) || negative(pc.c))
+  if (!IsValid(pc))
     return false;
 
   polar.ideal_polar_a = pc.a;
