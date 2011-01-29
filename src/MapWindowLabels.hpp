@@ -43,12 +43,14 @@ public:
   };
 
 protected:
+  unsigned width, height;
   RECT bounds;
   Label labels[128];
   unsigned num_labels;
 
 public:
-  WayPointLabelList(const RECT &_bounds):bounds(_bounds), num_labels(0) {}
+  WayPointLabelList(unsigned _width, unsigned _height)
+    :width(_width), height(_height), num_labels(0) {}
 
   void Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
            int AltArivalAGL, bool inTask, bool isLandable, bool isAirport);

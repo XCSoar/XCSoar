@@ -65,10 +65,10 @@ WayPointLabelList::Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
                        int AltArivalAGL, bool inTask,
                        bool isLandable, bool isAirport)
 {
-  if ((X < bounds.left - WPCIRCLESIZE)
-      || (X > bounds.right + (WPCIRCLESIZE * 3))
-      || (Y < bounds.top - WPCIRCLESIZE)
-      || (Y > bounds.bottom + WPCIRCLESIZE))
+  if ((X < - WPCIRCLESIZE)
+      || (X > (int)width + (WPCIRCLESIZE * 3))
+      || (Y < - WPCIRCLESIZE)
+      || (Y > (int)height + WPCIRCLESIZE))
     return;
 
   if (num_labels >= sizeof(labels) / sizeof(labels[0]))

@@ -173,6 +173,5 @@ TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
   rc.right = screen_width;
   rc.bottom = screen_height;
 
-  return TextInBox(canvas, Value, x, y, Mode,
-                   screen_width, screen_height, label_block);
+  return TextInBox(canvas, Value, x, y, Mode, rc, label_block);
 }

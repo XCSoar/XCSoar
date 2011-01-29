@@ -68,7 +68,7 @@ public:
     canvas(_canvas),
     glide_polar(polar),
     task_valid(false),
-    labels(projection.GetMapRect())
+    labels(projection.GetScreenWidth(), projection.GetScreenHeight())
   {
     // if pan mode, show full names
     pDisplayTextType = settings_map.DisplayTextType;
@@ -245,7 +245,7 @@ public:
 };
 
 static void
-MapWaypointLabelRender(Canvas &canvas, const RECT &MapRect,
+MapWaypointLabelRender(Canvas &canvas, unsigned width, unsigned height,
                        LabelBlock &label_block,
                        WayPointLabelList &labels)
 {
@@ -253,7 +253,8 @@ MapWaypointLabelRender(Canvas &canvas, const RECT &MapRect,
 
   for (unsigned i = 0; i < labels.size(); i++) {
     const WayPointLabelList::Label *E = &labels[i];
-    TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode, MapRect, &label_block);
+    TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode,
+              width, height, &label_block);
   }
 }
 
@@ -291,7 +292,9 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
   way_points->visit_within_range(projection.GetGeoScreenCenter(),
                                  projection.GetScreenDistanceMeters(), v);
 
-  MapWaypointLabelRender(canvas, projection.GetMapRect(),
+  MapWaypointLabelRender(canvas,
+                         projection.GetScreenWidth(),
+                         projection.GetScreenHeight(),
                          label_block, v.labels);
 }
 
