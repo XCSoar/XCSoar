@@ -435,68 +435,6 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
   }
 }
 
-static fixed
-findMapScaleBarSize(const RECT &rc, const MapWindowProjection &projection)
-{
-  // units/pixel
-  fixed pixelsize = Units::ToUserDistance(projection.DistancePixelsToMeters(1));
-  fixed half_displaysize = Units::ToUserDistance(
-      projection.DistancePixelsToMeters((rc.bottom - rc.top) / 2));
-
-  // find largest bar size that will fit two of (black and white) in display
-  if (half_displaysize > fixed(100))
-    return fixed(100) / pixelsize;
-
-  if (half_displaysize > fixed_ten)
-    return fixed_ten / pixelsize;
-
-  if (half_displaysize > fixed_one)
-    return fixed_one / pixelsize;
-
-  return fixed_one / 10 / pixelsize;
-}
-
-void
-GlueMapWindow::DrawMapScaleBar(Canvas &canvas, const RECT &rc,
-                               const MapWindowProjection &projection) const
-{
-  canvas.select(Graphics::hpMapScale);
-
-  RasterPoint Start, End = { rc.right - 1, 0 };
-
-  int barsize = iround(findMapScaleBarSize(rc, projection));
-
-  bool color = false;
-  End.y = projection.GetScreenOrigin().y;
-  Start = End;
-  for (Start.y += barsize; Start.y < rc.bottom + barsize; Start.y += barsize) {
-    if (color)
-      canvas.white_pen();
-    else
-      canvas.black_pen();
-
-    canvas.line(Start, End);
-
-    End = Start;
-    color = !color;
-  }
-
-  color = true;
-  End.y = projection.GetScreenOrigin().y;
-  Start = End;
-  for (Start.y -= barsize; Start.y > rc.top - barsize; Start.y -= barsize) {
-    if (color)
-      canvas.white_pen();
-    else
-      canvas.black_pen();
-
-    canvas.line(Start, End);
-
-    End = Start;
-    color = !color;
-  }
-}
-
 void
 GlueMapWindow::DrawMapScale(Canvas &canvas, const RECT &rc,
                             const MapWindowProjection &projection) const

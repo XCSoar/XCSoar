@@ -167,8 +167,6 @@ protected:
 private:
   void DrawMapScale(Canvas &canvas, const RECT &rc,
                     const MapWindowProjection &projection) const;
-  void DrawMapScaleBar(Canvas &canvas, const RECT &rc,
-                     const MapWindowProjection &projection) const;
   void DrawFlightMode(Canvas &canvas, const RECT &rc) const;
   void DrawGPSStatus(Canvas &canvas, const RECT &rc, const GPS_STATE &gps) const;
   void DrawCrossHairs(Canvas &canvas) const;

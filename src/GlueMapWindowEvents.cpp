@@ -313,8 +313,6 @@ GlueMapWindow::on_paint(Canvas &canvas)
 
   const RECT rc = get_client_rect();
 
-  DrawMapScaleBar(canvas, rc, render_projection);
-
   // Draw center screen cross hair in pan mode
   if (SettingsMap().EnablePan && !SettingsMap().TargetPan)
     DrawCrossHairs(canvas);
