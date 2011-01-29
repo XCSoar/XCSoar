@@ -9,12 +9,24 @@ Version 6.1 - not yet released
 * map
   - north arrow is automatically hidden in north-up mode
   - added configurable slope shading (off/fixed/wind/sun)
+  - autozoom uses stepless zooming and has configurable upper distance bound
+  - "north up" map orientation now respects "glider position offset"
+    by configuring a "shifting axis", i.e.
+    - shifting based on bearing to target (i.e. North orientated "target up")
+    - shifting based on avg of recently flown headings
+      (i.e. North orientated "track up")
+  - the estimated thermal position is now used as map center during circling
+  - a selection of which waypoint labels are displayed is now possible
+    (All, Task & Landables, Task and None).
+  - different rendering of roads based on importance (major, normal, minor)
+  - a different font is used for rendering important topology labels (i.e. big cities)
 * data files
   - wing area field is read from extended polar files if available
   - zander files: description field is used for additional airport detection
   - added frequency parsing for airspace files
     - TNP: RADIO field
     - OpenAir: AR command
+  - the frequency and runway heading/length given in cup files are now displayed
 * task
   - added BGA start point sector
   - configurable alternate sorting 
