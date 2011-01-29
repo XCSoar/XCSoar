@@ -468,6 +468,17 @@ SaveFormToPolar(SimplePolar &polar)
 }
 
 static void
+UpdatePolarInvalidLabel()
+{
+  SimplePolar polar;
+  SaveFormToPolar(polar);
+  if (polar.IsValid())
+    ((WndFrame *)wf->FindByName(_T("lblPolarInvalid")))->hide();
+  else
+    ((WndFrame *)wf->FindByName(_T("lblPolarInvalid")))->show();
+}
+
+static void
 OnPolarLoadInteral(WndButton &button)
 {
   /* create a fake WndProperty for dlgComboPicker() */
@@ -491,6 +502,7 @@ OnPolarLoadInteral(WndButton &button)
 
     Profile::Set(szProfilePolarName, PolarStore::GetName(dfe->getItem(result)));
     UpdatePolarTitle();
+    UpdatePolarInvalidLabel();
   }
 
   delete dfe;
@@ -520,6 +532,7 @@ OnPolarLoadFromFile(WndButton &button)
 
     Profile::Set(szProfilePolarName, BaseName(path));
     UpdatePolarTitle();
+    UpdatePolarInvalidLabel();
   }
 
   delete dfe;
@@ -533,6 +546,7 @@ OnPolarFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
   case DataField::daChange:
     Profile::Set(szProfilePolarName, _T("Custom"));
     UpdatePolarTitle();
+    UpdatePolarInvalidLabel();
     break;
 
   case DataField::daInc:
@@ -1119,6 +1133,7 @@ setVariables()
   PolarGlue::LoadFromProfile(polar);
   UpdatePolarFields(polar);
   UpdatePolarTitle();
+  UpdatePolarInvalidLabel();
 
   LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
                    settings_computer.SafetySpeed);
