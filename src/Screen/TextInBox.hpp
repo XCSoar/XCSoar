@@ -60,4 +60,10 @@ bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
                TextInBoxMode_t Mode, const RECT &MapRect,
                LabelBlock *label_block=NULL);
 
+bool
+TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
+          TextInBoxMode_t Mode,
+          unsigned screen_width, unsigned screen_height,
+          LabelBlock *label_block=NULL);
+
 #endif

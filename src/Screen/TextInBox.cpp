@@ -160,3 +160,19 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
   return true;
 }
+
+bool
+TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
+          TextInBoxMode_t Mode,
+          unsigned screen_width, unsigned screen_height,
+          LabelBlock *label_block)
+{
+  RECT rc;
+  rc.left = 0;
+  rc.top = 0;
+  rc.right = screen_width;
+  rc.bottom = screen_height;
+
+  return TextInBox(canvas, Value, x, y, Mode,
+                   screen_width, screen_height, label_block);
+}
