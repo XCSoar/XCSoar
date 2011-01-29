@@ -119,9 +119,10 @@ public:
   /**
    * callback to when tab is viewed
    * loads task, refreshes view
+   * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return True
    */
-  static bool OnTabPreShow();
+  static bool OnTabPreShow(unsigned EventType);
 };
 
 class pnlTaskProperties
@@ -146,9 +147,10 @@ public:
 
   /**
    * copies values from ordered_task to form
+   * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return true
    */
-  static bool OnTabPreShow();
+  static bool OnTabPreShow(unsigned EventType);
 };
 
 class pnlTaskList
@@ -175,9 +177,10 @@ public:
   /**
    * callback for Tab being clicked
    * refreshes / reloads list
+   * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return True
    */
-  static bool OnTabPreShow();
+  static bool OnTabPreShow(unsigned EventType);
 
   /**
    *  called when parent dialog closes
@@ -204,9 +207,10 @@ public:
   /**
    * callback
    * sets status and buttons per task edit status
+   * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return True
    */
-  static bool OnTabPreShow();
+  static bool OnTabPreShow(unsigned EventType);
 };
 
 #endif /* DLGTASKMANAGER_HPP */

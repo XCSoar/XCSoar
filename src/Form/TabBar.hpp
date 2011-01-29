@@ -42,8 +42,12 @@ class TabDisplay;
  */
 class TabBarControl : public TabbedControl {
 public:
+/**
+ * @param EventType.  0 = mouse click, 1 = Up/Dn/Lft/Right key
+ * @return
+ */
   typedef bool (*PreHideNotifyCallback_t)(void);
-  typedef bool (*PreShowNotifyCallback_t)(void);
+  typedef bool (*PreShowNotifyCallback_t)(unsigned EventType);
   typedef void (*PostShowNotifyCallback_t)(void);
 
 public:
@@ -125,9 +129,9 @@ public:
         PostShowNotifyCallback_t PostShowFunction = NULL);
 
 public:
-  void SetCurrentPage(unsigned i);
-  void NextPage();
-  void PreviousPage();
+  void SetCurrentPage(unsigned i, unsigned EventType = 0);
+  void NextPage(unsigned EventType = 0);
+  void PreviousPage(unsigned EventType = 0);
   unsigned GetTabCount() { return buttons.size(); }
 
 /**

@@ -214,7 +214,7 @@ pnlTaskProperties::OnTypeClicked(WndButton &Sender)
 }
 
 bool
-pnlTaskProperties::OnTabPreShow()
+pnlTaskProperties::OnTabPreShow(unsigned EventType)
 {
   ordered_task = *ordered_task_pointer;
   RefreshView();

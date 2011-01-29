@@ -105,7 +105,7 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
 }
 
 void
-TabBarControl::SetCurrentPage(unsigned i)
+TabBarControl::SetCurrentPage(unsigned i, unsigned EventType)
 {
   bool Continue = true;
   assert(i < buttons.size());
@@ -117,7 +117,7 @@ TabBarControl::SetCurrentPage(unsigned i)
 
   if (Continue) {
     if (buttons[i]->PreShowFunction) {
-      Continue = buttons[i]->PreShowFunction();
+      Continue = buttons[i]->PreShowFunction(EventType);
     }
   }
 
@@ -131,25 +131,25 @@ TabBarControl::SetCurrentPage(unsigned i)
 }
 
 void
-TabBarControl::NextPage()
+TabBarControl::NextPage(unsigned EventType)
 {
   if (buttons.size() < 2)
     return;
 
   assert(GetCurrentPage() < buttons.size());
 
-  SetCurrentPage((GetCurrentPage() + 1) % buttons.size());
+  SetCurrentPage((GetCurrentPage() + 1) % buttons.size(), EventType);
 }
 
 void
-TabBarControl::PreviousPage()
+TabBarControl::PreviousPage(unsigned EventType)
 {
   if (buttons.size() < 2)
     return;
 
   assert(GetCurrentPage() < buttons.size());
 
-  SetCurrentPage((GetCurrentPage() + buttons.size() - 1) % buttons.size());
+  SetCurrentPage((GetCurrentPage() + buttons.size() - 1) % buttons.size(), EventType);
 }
 
 const RECT
@@ -338,12 +338,12 @@ TabDisplay::on_key_down(unsigned key_code)
 
   case VK_DOWN:
   case VK_RIGHT:
-    theTabBar.NextPage();
+    theTabBar.NextPage(1);
     return true;
 
   case VK_UP:
   case VK_LEFT:
-    theTabBar.PreviousPage();
+    theTabBar.PreviousPage(1);
     return true;
   }
 
@@ -390,7 +390,7 @@ TabDisplay::on_mouse_up(int x, int y)
       const RECT rc = theTabBar.GetButtonSize(i);
       if (PtInRect(&rc, Pos)) {
         if ((int)i == downindex) {
-          theTabBar.SetCurrentPage(i);
+          theTabBar.SetCurrentPage(i, 0);
           break;
         }
       }

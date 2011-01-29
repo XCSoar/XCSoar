@@ -295,7 +295,7 @@ pnlTaskList::OnDeclareClicked(WndButton &Sender)
 }
 
 bool
-pnlTaskList::OnTabPreShow()
+pnlTaskList::OnTabPreShow(unsigned EventType)
 {
   if (!lazy_loaded) {
     lazy_loaded = true;
