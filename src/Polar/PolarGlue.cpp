@@ -33,6 +33,12 @@ namespace PolarGlue
   bool LoadFromOldProfile(SimplePolar &polar);
 }
 
+void
+PolarGlue::LoadDefault(SimplePolar &polar)
+{
+  polar.ReadString(_T("325, 185, 70, -0.51, 115, -0.85, 173, -2.00, 10.5"));
+}
+
 bool
 PolarGlue::LoadFromFile(SimplePolar &polar, TLineReader &reader)
 {
@@ -128,7 +134,7 @@ PolarGlue::LoadFromProfile(SimplePolar &polar)
   if (LoadFromOldProfile(polar))
     return;
 
-  polar.ReadString(_T("325, 185, 70, -0.51, 115, -0.85, 173, -2.00, 10.5"));
+  LoadDefault(polar);
 }
 
 void

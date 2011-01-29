@@ -31,6 +31,7 @@ class TLineReader;
 
 namespace PolarGlue
 {
+  void LoadDefault(SimplePolar &polar);
   bool LoadFromFile(SimplePolar &polar, const TCHAR* path);
   bool LoadFromFile(SimplePolar &polar, TLineReader &reader);
   void LoadFromProfile(SimplePolar &polar);
