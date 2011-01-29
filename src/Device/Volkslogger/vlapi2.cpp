@@ -511,6 +511,7 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
 
   const unsigned timeout_ms = waittime * 1000;
   PeriodClock clock;
+  clock.update();
 
   do { // Solange R's aussenden, bis ein L zurückkommt
     serial_out('R');
