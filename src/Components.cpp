@@ -346,7 +346,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   GlidePolar gp = task_manager->get_glide_polar();
   SimplePolar polar;
   LoadPolarFromProfile(polar);
-  polar.ConvertToGlidePolar(gp);
+  polar.CopyIntoGlidePolar(gp);
   task_manager->set_glide_polar(gp);
 
   task_manager->set_contest(SettingsComputer().contest);

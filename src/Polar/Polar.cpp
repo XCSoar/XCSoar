@@ -29,7 +29,7 @@ Copyright_License {
 #include <cstdio>
 
 void
-SimplePolar::ConvertToGlidePolar(GlidePolar &polar) const
+SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
 {
   fixed d;
   fixed V1, V2, V3;
