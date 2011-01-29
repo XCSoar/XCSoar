@@ -52,7 +52,7 @@ struct SimplePolar
    * Converts a WinPilot based SimplePolar to a XCSoar based GlidePolar
    * @param polar Reference to the GlidePolar to save the data to
    */
-  void CopyIntoGlidePolar(GlidePolar &polar) const;
+  bool CopyIntoGlidePolar(GlidePolar &polar) const;
 };
 
 #endif

@@ -28,7 +28,7 @@ Copyright_License {
 #include <stdlib.h>
 #include <cstdio>
 
-void
+bool
 SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
 {
   fixed d;
@@ -43,20 +43,21 @@ SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
   W3 = fixed(w3);
 
   d = V1 * V1 * (V2 - V3) + V2 * V2 * (V3 - V1) + V3 * V3 * (V1 - V2);
-  if (d == fixed_zero)
-    polar.ideal_polar_a = fixed_zero;
-  else
-    polar.ideal_polar_a = -((V2 - V3) * (W1 - W3) + (V3 - V1) * (W2 - W3)) / d;
+  fixed a = (d == fixed_zero) ? fixed_zero :
+            -((V2 - V3) * (W1 - W3) + (V3 - V1) * (W2 - W3)) / d;
 
   d = V2 - V3;
-  if (d == fixed_zero)
-    polar.ideal_polar_b = fixed_zero;
-  else
-    polar.ideal_polar_b =
-        -(W2 - W3 + polar.ideal_polar_a * (V2 * V2 - V3 * V3)) / d;
+  fixed b = (d == fixed_zero) ? fixed_zero:
+            -(W2 - W3 + a * (V2 * V2 - V3 * V3)) / d;
 
-  polar.ideal_polar_c =
-      -(W3 + polar.ideal_polar_a * V3 * V3 + polar.ideal_polar_b * V3);
+  fixed c = -(W3 + a * V3 * V3 + b * V3);
+
+  if (negative(a) || positive(b) || negative(c))
+    return false;
+
+  polar.ideal_polar_a = a;
+  polar.ideal_polar_b = b;
+  polar.ideal_polar_c = c;
 
   // Glider empty weight
   polar.dry_mass = fixed(dry_mass);
@@ -66,6 +67,7 @@ SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
   polar.wing_area = fixed(wing_area);
 
   polar.update();
+  return true;
 }
 
 void
