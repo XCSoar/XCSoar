@@ -28,6 +28,7 @@ Copyright_License {
 
 class WndFrame : public PaintWindow {
   Color background_color;
+  Color caption_color;
   const Font *font;
   TCHAR text[256];
 
@@ -52,6 +53,10 @@ public:
 
   void SetCaption(const TCHAR *_text) {
     SetText(_text);
+  }
+
+  void SetCaptionColor(const Color &color) {
+    caption_color = color;
   }
 
   unsigned GetTextHeight();

@@ -30,6 +30,7 @@ WndFrame::WndFrame(ContainerWindow &parent,
                    Color _background_color,
                    const WindowStyle style)
   :background_color(_background_color),
+   caption_color(Color::BLACK),
    font(&Fonts::Map),
    mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
 {
@@ -75,7 +76,7 @@ WndFrame::on_paint(Canvas &canvas)
 {
   canvas.clear(background_color);
 
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(caption_color);
   canvas.background_transparent();
 
   canvas.select(*font);
