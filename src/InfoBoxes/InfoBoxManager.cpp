@@ -433,21 +433,69 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
   if (Appearance.InfoBoxBorder == apIbTab)
     return 0;
 
-  if (InfoBoxLayout::InfoBoxGeometry == InfoBoxLayout::ibGNav) {
-    if (i < 6)
-      return BORDERTOP | BORDERRIGHT;
-    else
-      return BORDERTOP;
-  }
+  unsigned border = 0;
 
-  if (!Layout::landscape) {
+  switch (InfoBoxLayout::InfoBoxGeometry) {
+  case InfoBoxLayout::ibTop4Bottom4:
     if (i < 4)
-      return BORDERBOTTOM | BORDERRIGHT;
+      border |= BORDERBOTTOM;
     else
-      return BORDERTOP | BORDERRIGHT;
+      border |= BORDERTOP;
+
+    if (i != 3 && i != 7)
+      border |= BORDERRIGHT;
+    break;
+
+  case InfoBoxLayout::ibBottom8:
+    border |= BORDERTOP;
+
+    if (i != 3 && i != 7)
+      border |= BORDERRIGHT;
+    break;
+
+  case InfoBoxLayout::ibTop8:
+    border |= BORDERBOTTOM;
+
+    if (i != 3 && i != 7)
+      border |= BORDERRIGHT;
+    break;
+
+  case InfoBoxLayout::ibLeft4Right4:
+    if (i != 3 && i != 7)
+      border |= BORDERBOTTOM;
+
+    if (i < 4)
+      border |= BORDERRIGHT;
+    else
+      border |= BORDERLEFT;
+    break;
+
+  case InfoBoxLayout::ibLeft8:
+    if (i != 3 && i != 7)
+      border |= BORDERBOTTOM;
+
+    border |= BORDERRIGHT;
+    break;
+
+  case InfoBoxLayout::ibRight8:
+    if (i != 3 && i != 7)
+      border |= BORDERBOTTOM;
+
+    border |= BORDERLEFT;
+    break;
+
+  case InfoBoxLayout::ibGNav:
+    if (i != 0)
+      border |= BORDERTOP;
+    if (i < 6)
+      border |= BORDERLEFT|BORDERRIGHT;
+    break;
+
+  case InfoBoxLayout::ibSquare:
+    break;
   }
 
-  return BORDERRIGHT | BORDERBOTTOM;
+  return border;
 }
 
 void
