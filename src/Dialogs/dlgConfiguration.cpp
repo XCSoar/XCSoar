@@ -1686,11 +1686,9 @@ void dlgConfigurationShowModal(void)
 
   SimplePolar polar;
   PolarGlue::LoadFromProfile(polar);
-  PolarFileChanged |= SaveFormToPolar(polar);
-
-  if (PolarFileChanged) {
+  if (SaveFormToPolar(polar)) {
     PolarGlue::SaveToProfile(polar);
-    changed |= true;
+    changed  = PolarFileChanged = true;
   }
 
   short tmp = settings_computer.AltitudeMode;
