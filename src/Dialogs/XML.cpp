@@ -797,6 +797,10 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
 
     // Set the caption
     frame->SetCaption(Caption);
+    // Set caption color
+    Color color;
+    if (StringToColor(node.getAttribute(_T("CaptionColor")), color))
+      frame->SetCaptionColor(color);
 
     window = frame;
 
