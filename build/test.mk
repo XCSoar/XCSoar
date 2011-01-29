@@ -56,8 +56,6 @@ TEST_NAMES = \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
 	TestColorRamp TestGeoPoint \
-	test_route \
-	test_troute \
 	TestFileUtil \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint
 
@@ -404,6 +402,8 @@ check: $(TESTS) | $(OUT)/test/dirstamp
 	$(Q)$(PERL) $(TEST_SRC_DIR)/testall.pl $(TESTS)
 
 DEBUG_PROGRAM_NAMES = \
+	test_route \
+	test_troute \
 	TestTrace \
 	TestOLC \
 	BenchmarkProjection \
