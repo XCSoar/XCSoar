@@ -388,7 +388,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	\
-	$(SRC)/Polar/Loader.cpp \
+	$(SRC)/Polar/PolarGlue.cpp \
 	$(SRC)/Polar/Polar.cpp \
 	$(SRC)/Polar/PolarStore.cpp \
 	\

@@ -33,7 +33,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Device/device.hpp"
 #include "Message.hpp"
-#include "Polar/Loader.hpp"
+#include "Polar/PolarGlue.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Language.hpp"

@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Polar/Loader.hpp"
+#include "Polar/PolarGlue.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/PolarStore.hpp"
 #include "Profile/Profile.hpp"

@@ -57,7 +57,7 @@ Copyright_License {
 #include "Audio/VarioSound.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Busy.hpp"
-#include "Polar/Loader.hpp"
+#include "Polar/PolarGlue.hpp"
 #include "Polar/Polar.hpp"
 #include "Persist.hpp"
 #include "MainWindow.hpp"

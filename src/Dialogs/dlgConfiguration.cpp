@@ -47,7 +47,7 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "Math/FastMath.h"
 #include "Polar/PolarStore.hpp"
-#include "Polar/Loader.hpp"
+#include "Polar/PolarGlue.hpp"
 #include "Polar/Polar.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
