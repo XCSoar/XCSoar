@@ -28,8 +28,11 @@ Copyright_License {
 
 struct SimplePolar;
 
-bool LoadPolarFromFile(SimplePolar &polar, const TCHAR* path);
-void LoadPolarFromProfile(SimplePolar &polar);
-void SavePolarToProfile(SimplePolar &polar);
+namespace PolarGlue
+{
+  bool LoadFromFile(SimplePolar &polar, const TCHAR* path);
+  void LoadFromProfile(SimplePolar &polar);
+  void SaveToProfile(SimplePolar &polar);
+}
 
 #endif

@@ -40,7 +40,7 @@ ReadFile(SimplePolar &polar, TLineReader &reader)
 }
 
 bool
-LoadPolarFromFile(SimplePolar &polar, const TCHAR* path)
+PolarGlue::LoadFromFile(SimplePolar &polar, const TCHAR* path)
 {
   FileLineReader *reader = new FileLineReader(path);
   if (reader == NULL)
@@ -70,7 +70,7 @@ ReadPolarFileFromProfile(SimplePolar &polar)
 }
 
 void
-LoadPolarFromProfile(SimplePolar &polar)
+PolarGlue::LoadFromProfile(SimplePolar &polar)
 {
   TCHAR polar_string[255] = _T("\0");
   if (Profile::Get(szProfilePolar, polar_string, 255) &&
@@ -119,7 +119,7 @@ LoadPolarFromProfile(SimplePolar &polar)
 }
 
 void
-SavePolarToProfile(SimplePolar &polar)
+PolarGlue::SaveToProfile(SimplePolar &polar)
 {
   TCHAR polar_string[255];
   polar.GetString(polar_string, 255);

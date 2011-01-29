@@ -475,7 +475,7 @@ OnPolarLoadFromFile(WndButton &button)
   if (result > 0) {
     const TCHAR* path = dfe->getItem(result);
     SimplePolar polar;
-    LoadPolarFromFile(polar, path);
+    PolarGlue::LoadFromFile(polar, path);
     UpdatePolarFields(polar);
   }
 
@@ -1053,7 +1053,7 @@ setVariables()
   }
 
   SimplePolar polar;
-  LoadPolarFromProfile(polar);
+  PolarGlue::LoadFromProfile(polar);
   UpdatePolarFields(polar);
 
   LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
@@ -1621,7 +1621,7 @@ void dlgConfigurationShowModal(void)
                               XCSoarInterface::SetSettingsMap().TrailActive);
 
   SimplePolar polar;
-  LoadPolarFromProfile(polar);
+  PolarGlue::LoadFromProfile(polar);
 
   PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV1"), polar.v0);
   PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV2"), polar.v1);
@@ -1640,7 +1640,7 @@ void dlgConfigurationShowModal(void)
       SaveFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
 
   if (PolarFileChanged) {
-    SavePolarToProfile(polar);
+    PolarGlue::SaveToProfile(polar);
     changed |= true;
   }
 
@@ -2331,7 +2331,7 @@ void dlgConfigurationShowModal(void)
   if (PolarFileChanged && protected_task_manager != NULL) {
     GlidePolar gp = protected_task_manager->get_glide_polar();
     SimplePolar polar;
-    LoadPolarFromProfile(polar);
+    PolarGlue::LoadFromProfile(polar);
     polar.CopyIntoGlidePolar(gp);
     protected_task_manager->set_glide_polar(gp);
   }
