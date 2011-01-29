@@ -416,13 +416,13 @@ OnWaypoints(gcc_unused WndButton &button)
 static void
 UpdatePolarFields(const SimplePolar &polar)
 {
-  LoadFormProperty(*wf, _T("prpPolarV1"), fixed(polar.v0));
-  LoadFormProperty(*wf, _T("prpPolarV2"), fixed(polar.v1));
-  LoadFormProperty(*wf, _T("prpPolarV3"), fixed(polar.v2));
+  LoadFormProperty(*wf, _T("prpPolarV1"), fixed(polar.v1));
+  LoadFormProperty(*wf, _T("prpPolarV2"), fixed(polar.v2));
+  LoadFormProperty(*wf, _T("prpPolarV3"), fixed(polar.v3));
 
-  LoadFormProperty(*wf, _T("prpPolarW1"), fixed(polar.w0));
-  LoadFormProperty(*wf, _T("prpPolarW2"), fixed(polar.w1));
-  LoadFormProperty(*wf, _T("prpPolarW3"), fixed(polar.w2));
+  LoadFormProperty(*wf, _T("prpPolarW1"), fixed(polar.w1));
+  LoadFormProperty(*wf, _T("prpPolarW2"), fixed(polar.w2));
+  LoadFormProperty(*wf, _T("prpPolarW3"), fixed(polar.w3));
 
   LoadFormProperty(*wf, _T("prpPolarMassDry"), fixed(polar.dry_mass));
   LoadFormProperty(*wf, _T("prpPolarMaxBallast"), fixed(polar.max_ballast));
@@ -1626,13 +1626,13 @@ void dlgConfigurationShowModal(void)
   SimplePolar polar;
   PolarGlue::LoadFromProfile(polar);
 
-  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV1"), polar.v0);
-  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV2"), polar.v1);
-  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV3"), polar.v2);
+  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV1"), polar.v1);
+  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV2"), polar.v2);
+  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarV3"), polar.v3);
 
-  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarW1"), polar.w0);
-  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarW2"), polar.w1);
-  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarW3"), polar.w2);
+  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarW1"), polar.w1);
+  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarW2"), polar.w2);
+  PolarFileChanged |= SaveFormProperty(*wf, _T("prpPolarW3"), polar.w3);
 
   PolarFileChanged |=
       SaveFormProperty(*wf, _T("prpPolarMassDry"), polar.dry_mass);

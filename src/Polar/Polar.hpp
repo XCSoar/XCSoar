@@ -37,12 +37,12 @@ struct SimplePolar
   const TCHAR* name;   /**< Name of the glider type */
   double dry_mass;     /**< Mass dry gross (kg) */
   double max_ballast;  /**< Max water ballast (l) */
-  double v0;           /**< Speed (kph) of point 1 */
-  double w0;           /**< Sink rate (negative, m/s) of point 1  */
-  double v1;           /**< Speed (kph) of point 2 */
-  double w1;           /**< Sink rate (negative, m/s) of point 2  */
-  double v2;           /**< Speed (kph) of point 3 */
-  double w2;           /**< Sink rate (negative, m/s) of point 3  */
+  double v1;           /**< Speed (kph) of point 1 */
+  double w1;           /**< Sink rate (negative, m/s) of point 1  */
+  double v2;           /**< Speed (kph) of point 2 */
+  double w2;           /**< Sink rate (negative, m/s) of point 2  */
+  double v3;           /**< Speed (kph) of point 3 */
+  double w3;           /**< Sink rate (negative, m/s) of point 3  */
   double wing_area;    /**< Reference wing area (m^2) */
 
   bool ReadString(const TCHAR* line);

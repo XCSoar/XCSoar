@@ -35,12 +35,12 @@ SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
   fixed V1, V2, V3;
   fixed W1, W2, W3;
 
-  V1 = fixed(v0 / 3.6);
-  V2 = fixed(v1 / 3.6);
-  V3 = fixed(v2 / 3.6);
-  W1 = fixed(w0);
-  W2 = fixed(w1);
-  W3 = fixed(w2);
+  V1 = fixed(v1 / 3.6);
+  V2 = fixed(v2 / 3.6);
+  V3 = fixed(v3 / 3.6);
+  W1 = fixed(w1);
+  W2 = fixed(w2);
+  W3 = fixed(w3);
 
   d = V1 * V1 * (V2 - V3) + V2 * V2 * (V3 - V1) + V3 * V3 * (V1 - V2);
   if (d == fixed_zero)
@@ -72,7 +72,7 @@ void
 SimplePolar::GetString(TCHAR* line, size_t size)
 {
   _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
-             dry_mass, max_ballast, v0, w0, v1, w1, v2, w2, wing_area);
+             dry_mass, max_ballast, v1, w1, v2, w2, v3, w3, wing_area);
 }
 
 bool
@@ -96,14 +96,6 @@ SimplePolar::ReadString(const TCHAR *line)
   if (*p != _T(','))
     return false;
 
-  v0 = _tcstod(p + 1, &p);
-  if (*p != _T(','))
-    return false;
-
-  w0 = _tcstod(p + 1, &p);
-  if (*p != _T(','))
-    return false;
-
   v1 = _tcstod(p + 1, &p);
   if (*p != _T(','))
     return false;
@@ -117,6 +109,14 @@ SimplePolar::ReadString(const TCHAR *line)
     return false;
 
   w2 = _tcstod(p + 1, &p);
+  if (*p != _T(','))
+    return false;
+
+  v3 = _tcstod(p + 1, &p);
+  if (*p != _T(','))
+    return false;
+
+  w3 = _tcstod(p + 1, &p);
 
   if (*p != _T(','))
     wing_area = 0.0;
