@@ -390,7 +390,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Polar/Loader.cpp \
 	$(SRC)/Polar/Polar.cpp \
-	$(SRC)/Polar/BuiltIn.cpp \
+	$(SRC)/Polar/PolarStore.cpp \
 	\
 	$(SRC)/Blackboard.cpp \
 	$(SRC)/Protection.cpp \
