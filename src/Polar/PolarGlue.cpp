@@ -27,6 +27,8 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ConfiguredFile.hpp"
+#include "Dialogs/Message.hpp"
+#include "Language.hpp"
 
 namespace PolarGlue
 {
@@ -130,6 +132,8 @@ PolarGlue::LoadFromProfile(GlidePolar &gp)
 {
   SimplePolar polar;
   if (!LoadFromProfile(polar) || !polar.CopyIntoGlidePolar(gp)) {
+    MessageBoxX(_("Polar has invalid coefficients.\nUsing LS8 polar instead!"),
+                _("Warning"), MB_OK);
     LoadDefault(polar);
     polar.CopyIntoGlidePolar(gp);
   }
