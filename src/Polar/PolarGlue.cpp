@@ -90,31 +90,13 @@ PolarGlue::LoadFromOldProfile(SimplePolar &polar)
       if (ReadPolarFileFromProfile(polar))
         return true;
     } else {
-      switch (Temp) {
-      case 0: // Ka 6
-        Temp = 52;
-        break;
-
-      case 1: // ASW 19
-        Temp = 23;
-        break;
-
-      case 2: // LS 8
-        Temp = 63;
-        break;
-
-      case 3: // ASW 27
-        Temp = 26;
-        break;
-
-      case 4: // LS 6c
-        Temp = 62;
-        break;
-
-      case 5: // ASW 22
-        Temp = 125;
-        break;
-      }
+      if (Temp < 6)
+        Temp = (Temp == 0) ? 52 :
+               (Temp == 1) ? 23 :
+               (Temp == 2) ? 63 :
+               (Temp == 3) ? 26 :
+               (Temp == 4) ? 62 :
+               125;
 
       if (PolarStore::Read(Temp - 7, polar))
         return true;
