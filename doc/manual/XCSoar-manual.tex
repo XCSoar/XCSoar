@@ -1408,8 +1408,8 @@ menu:
 \bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Snail trail}
 \end{quote}
 
-Note that each of these all modes, the snail trail is short in
-circling mode in order to \todonum{verify} reduce screen clutter.
+Note that for all of these modes, the snail trail is short in
+circling mode in order to reduce screen clutter.
 
 In order to assist centering thermals in the presence of wind, the
 snail trail can be artificially drifted with the wind as it is
@@ -3418,8 +3418,8 @@ glider is above final glide.
 \marginpar{\hbox{\vbox{\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/thermalprofile.png}}}}
 
 The thermal band meter shows a graph, where the vertical axis is
-height above the break-off \todonum{update} height, and is scaled according to
-the maximum height achieved.  The horizontal axis is the average climb
+height above the break-off height (Section~\ref{sec:safety-heights}), and is
+scaled according to the maximum height achieved.  The horizontal axis is the average climb
 rate achieved at a particular height band.  The horizontal axis is
 scaled according to the MacCready setting, and an arrow indicating this
 setting, and the glider's current height is overlaid on the shaded
@@ -3435,33 +3435,68 @@ glider is nearing the break-off height and the pilot should consider
 taking even a weak thermal.
 
 \section{Thermal locator}
-  An algorithm estimates the center of the lift when circling.  The
-  thermal marker symbol is a green circle with a spiral.
+An algorithm estimates the center of the lift when circling.  The
+thermal marker symbol is a green circle with a spiral.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/shot-tlocator-circling.png}
 \end{center}
 
-  The thermal locator marks the location of the last 20
-  thermals on the map with the thermal symbol during cruise.
+The thermal locator marks the location of the last 20 
+thermals on the map with the thermal symbol during cruise.
 
-  This location is calculated to compensate for the thermal drift at
-  the glider's height.  This means that internally XCSoar remembers
-  the location of the thermal source on the ground.  In other words,
-  if you leave a thermal at the top and later return at low altitude,
-  the position on the map shows the predicted location of the thermal
-  at that low altitude (which is further upwind than the top).  
+This location is calculated to compensate for the thermal drift at 
+the glider's height.  This means that internally XCSoar remembers 
+the location of the thermal source on the ground.  In other words, 
+if you leave a thermal at the top and later return at low altitude, 
+the position on the map shows the predicted location of the thermal 
+at that low altitude (which is further upwind than the top).  
 
-  If the wind changes and the thermal source is still active, its
-  position on the map reflects the wind change; that is, the thermal
-  at altitude will be projected downwind at the new wind estimate.
+If the wind changes and the thermal source is still active, its 
+position on the map reflects the wind change; that is, the thermal 
+at altitude will be projected downwind at the new wind estimate.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/shot-tlocator-cruise.png}
 \end{center}
 
+
 \section{Thermal assistant}
-\todonum[inline]{explain the thermal assistant}
+
+The thermal assistant is a graphical aid to maximise the exploitation of the
+given thermal updraft. If it is configured ``On" \config{thermalassistant} the
+small polar digram is mapped to the lower left corner of the screen. A
+single tap on the small digram enlarges it to a full-screen view. 
+
+The polar diagram shows the climb rate over the circular course of the glider.
+The screen-shots show a right circle, where the glider position is fixed to the
+left side, and the polar distribution of the climb rate is shown relatively to
+the current glider position.
+
+
+\begin{tabular}{c c}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/dialog-thermal-assistant0.png}&
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/dialog-thermal-assistant1.png}\\
+\end{tabular}
+
+The to screen-shots are taken in a few seconds sequence to demonstrate the
+practical usage of the rotating climb diagram. A simple recipe to optimise
+the climb rate according to the assistant would be to follow these two steps
+repeatedly:
+\begin{description}
+\item[1.]  At the moment the maximum peak on the polar diagram passes the top of
+the display; that is a quarter of the circle before you reach that part again:
+Open the circle a bit to displace the circle center in the direction of the
+strongest climb rate.
+\item[2.]  At the moment the maximum peak on the polar diagram passes the
+gliders position; the vario should show the maximal climb rate: Narrow the
+circle as much a spossible to center the thermal updraft at its maximum. 
+\end{description}
+
+It must be said, that the interpretation of the thermal assistant allways relays
+on the specific lag of the connected sensor and PDA itself. A successful
+updraft optimisation will thus depend on a bit training to take the lag into account.
+
 
 \section{Convection forecast}\label{sec:convection-forecast}
 
@@ -5214,28 +5249,21 @@ which works best for you will depend on how mountainous your region is.
 \begin{maxipage}
 The available terrain colour schemes are illustrated in the table below.
 
-\todonum[inline]{ scheme ``grey'' is missing }
-
-\begin{longtable}{c c c}
+\begin{longtable}{c c c c}
 \includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-flatlands.png}&
-
 \includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-mountanous.png}&
-
-\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-icao.png}\\
+\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-icao.png}&
+\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-grey.png}
+\\
 
 \includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhof4.png}&
 \includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhof7.png}&
-\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhof12.png}\\
+\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhof12.png}&
+\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhofatlas.png}
+\\
 \end{longtable}
 \end{maxipage}
 
-
-\begin{maxipage}
-\begin{longtable}{c c c}
-\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhofatlas.png}& & \\
-
-\end{longtable}
-\end{maxipage}
 
 %%%%%%%%%%%%%%%%%%
 \clearpage
