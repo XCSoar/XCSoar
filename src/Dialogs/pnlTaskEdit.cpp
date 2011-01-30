@@ -46,9 +46,28 @@ static OrderedTask* ordered_task = NULL;
 static OrderedTask** ordered_task_pointer = NULL;
 static bool* task_modified = NULL;
 
+static void
+UpdateButtons()
+{
+  const unsigned index = wTaskPoints->GetCursorIndex();
+  WndButton* wb = (WndButton*)wf->FindByName(_T("cmdDown"));
+  assert(wb);
+  wb->set_visible((int)index < ((int)(ordered_task->task_size()) - 1));
+
+  wb = (WndButton*)wf->FindByName(_T("cmdUp"));
+  assert(wb);
+  wb->set_visible(index > 0 && index < ordered_task->task_size());
+
+  wb = (WndButton*)wf->FindByName(_T("cmdEditTurnpoint"));
+  assert(wb);
+  wb->set_enabled(index < ordered_task->task_size());
+}
+
 void
 pnlTaskEdit::RefreshView()
 {
+  UpdateButtons();
+
   if (!ordered_task->is_max_size())
     wTaskPoints->SetLength(ordered_task->task_size()+1);
   else
@@ -173,6 +192,12 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
 }
 
 void
+pnlTaskEdit::OnTaskCursorCallback(unsigned i)
+{
+  UpdateButtons();
+}
+
+void
 pnlTaskEdit::OnMoveUpClicked(WndButton &Sender)
 {
   if (!wTaskPoints)
@@ -294,6 +319,7 @@ pnlTaskEdit::Load(SingleWindow &parent, TabBarControl* wTabBar, WndForm* _wf,
 
   wTaskPoints->SetActivateCallback(OnTaskListEnter);
   wTaskPoints->SetPaintItemCallback(OnTaskPaintListItem);
+  wTaskPoints->SetCursorCallback(OnTaskCursorCallback);
 
   //Todo: fix onkey down.  release on hiding?
   wf->SetKeyDownNotify(OnKeyDown);

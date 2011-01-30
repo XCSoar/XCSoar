@@ -79,6 +79,7 @@ public:
    */
   static void OnMoveDownClicked(WndButton &Sender);
   static bool OnKeyDown(WndForm &Sender, unsigned key_code);
+  static void OnTaskCursorCallback(unsigned i);
 
   /**
    * Paints a single task list item in the listbox
