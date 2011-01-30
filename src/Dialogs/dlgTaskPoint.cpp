@@ -314,11 +314,11 @@ RefreshView()
   WndButton* wb;
   wb = ((WndButton*)wf->FindByName(_T("butPrevious")));
   if (wb)
-    wb->set_visible(active_index > 0);
+    wb->set_enabled(active_index > 0);
 
   wb = ((WndButton*)wf->FindByName(_T("butNext")));
   if (wb)
-    wb->set_visible(active_index < (ordered_task->task_size() - 1));
+    wb->set_enabled(active_index < (ordered_task->task_size() - 1));
 
   TCHAR buf[100];
   TPLabelTaskPoint tpv(buf);
