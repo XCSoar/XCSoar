@@ -37,7 +37,10 @@ TopWindow::on_pause()
 
   SurfaceDestroyed();
 
+  paused_mutex.Lock();
   paused = true;
+  paused_cond.signal();
+  paused_mutex.Unlock();
 }
 
 void

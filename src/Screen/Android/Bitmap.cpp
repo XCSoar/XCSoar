@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/OpenGL/Texture.hpp"
+#include "Screen/OpenGL/Surface.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/Main.hpp"
 #include "android_drawable.h"
@@ -38,8 +39,10 @@ find_resource_name(unsigned id)
 }
 
 bool
-Bitmap::load(unsigned id)
+Bitmap::load(unsigned _id)
 {
+  id = _id;
+
   reset();
 
   const char *name = find_resource_name(id);
@@ -53,6 +56,9 @@ Bitmap::load(unsigned id)
   texture = new GLTexture(result[0], result[1], result[2]);
   width = texture->get_width();
   height = texture->get_height();
+
+  AddSurfaceListener(*this);
+
   return true;
 }
 
@@ -75,6 +81,8 @@ Bitmap::load_file(const TCHAR *path)
 void
 Bitmap::reset()
 {
+  RemoveSurfaceListener(*this);
+
   delete texture;
   texture = NULL;
 }

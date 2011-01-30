@@ -75,6 +75,8 @@ JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
   event_queue->push(Event::PAUSE);
+
+  CommonInterface::main_window.wait_paused();
 }
 
 JNIEXPORT void JNICALL
