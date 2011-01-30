@@ -52,6 +52,7 @@ private:
                                         const TCHAR seperator=' ');
   static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
   static bool parseAltitude(const TCHAR* src, fixed& dest);
+  static bool parseDistance(const TCHAR* src, fixed& dest);
   static bool parseFlags(const TCHAR* src, WaypointFlags& dest);
   static bool parseStyle(const TCHAR* src, WaypointFlags& dest);
 };

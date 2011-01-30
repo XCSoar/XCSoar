@@ -142,19 +142,23 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   if (iStyle < n_params)
     parseStyle(params[iStyle], new_waypoint.Flags);
 
+  // Runway length (e.g. 546.0m)
+  fixed rwlen;
+  if (iRWLen < n_params && parseDistance(params[iRWLen], rwlen))
+    new_waypoint.RunwayLength = rwlen;
+  else {
+    new_waypoint.RunwayLength = 0;
+    rwlen = fixed_zero;
+  }
+
   // If the Style attribute did not state that this is an airport
   if (!new_waypoint.Flags.Airport) {
-    // -> parse the runway length
-    fixed rwlen;
-    // Runway length (e.g. 546.0m)
-    if (iRWLen < n_params && parseAltitude(params[iRWLen], rwlen)) {
-      // If runway length is between 100m and 300m -> landpoint
-      if (rwlen > fixed(100) && rwlen <= fixed(300))
-        new_waypoint.Flags.LandPoint = true;
-      // If runway length is higher then 300m -> airport
-      if (rwlen > fixed(300))
-        new_waypoint.Flags.Airport = true;
-    }
+    // If runway length is between 100m and 300m -> landpoint
+    if (rwlen > fixed(100) && rwlen <= fixed(300))
+      new_waypoint.Flags.LandPoint = true;
+    // If runway length is higher then 300m -> airport
+    if (rwlen > fixed(300))
+      new_waypoint.Flags.Airport = true;
   }
 
   // Frequency & runway direction/length (for airports and landables)
@@ -166,6 +170,10 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
     if (iRWDir < n_params && *params[iRWDir]) {
       appendStringWithSeperator(new_waypoint.Comment, params[iRWDir]);
       new_waypoint.Comment += _T("°");
+      int direction =_tcstol(params[iRWDir], NULL, 10);
+      if (direction < 0 || direction > 359)
+        direction = -1;
+      new_waypoint.RunwayDirection = Angle::degrees(fixed(direction));
     }
 
     if (iRWLen < n_params)
@@ -247,6 +255,28 @@ WayPointFileSeeYou::parseAltitude(const TCHAR* src, fixed& dest)
     dest = Units::ToSysUnit(dest, unFeet);
 
   // Save altitude
+  return true;
+}
+
+bool
+WayPointFileSeeYou::parseDistance(const TCHAR* src, fixed& dest)
+{
+  // Parse string
+  TCHAR *endptr;
+  double value = _tcstod(src, &endptr);
+  if (endptr == src)
+    return false;
+
+  dest = fixed(value);
+
+  // Convert to system unit if necessary, assume m as default
+  TCHAR* unit = endptr;
+  if (_tcsicmp(unit, _T("ml")) == 0)
+    dest = Units::ToSysUnit(dest, unStatuteMiles);
+  else if (_tcsicmp(unit, _T("nm")) == 0)
+    dest = Units::ToSysUnit(dest, unNauticalMiles);
+
+  // Save distance
   return true;
 }
 
