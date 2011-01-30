@@ -404,16 +404,20 @@ static void
 OnPreviousClicked(WndButton &Sender)
 {
   (void)Sender;
-  next_previous=-1;
-  wf->SetModalResult(mrOK);
+  if (active_index > 0) {
+    next_previous=-1;
+    wf->SetModalResult(mrOK);
+  }
 }
 
 static void
 OnNextClicked(WndButton &Sender)
 {
   (void)Sender;
-  next_previous=1;
-  wf->SetModalResult(mrOK);
+  if (active_index < (ordered_task->task_size() - 1)) {
+    next_previous=1;
+    wf->SetModalResult(mrOK);
+  }
 }
 
 static void
