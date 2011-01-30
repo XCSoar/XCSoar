@@ -276,28 +276,26 @@ int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
 
   if (crc16) {
     show(VLS_TXT_CRC);
-    gcs_counter = 0;
-  }
-  else if (gcs_counter > 2) {              //CRC am Ende abschneiden
-    gcs_counter -= 2;
-    p--;
-    p--;
-    if (gcs_counter < maxlen)
-      p[0] = 0xff;
-    if (gcs_counter+1 < maxlen)
-      p[1] = 0xff;
-    p++;
-    p++;
-  }
-  else {
-    show(VLS_TXT_EMPTY);
-    gcs_counter = 0;
+    return -1;
   }
 
-  if (crc16)
-    return -1; //Fehlermeldung
-  else
-    return gcs_counter;
+  if (gcs_counter < 2) {
+    show(VLS_TXT_EMPTY);
+    return 0;
+  }
+
+  // CRC am Ende abschneiden
+  gcs_counter -= 2;
+  p--;
+  p--;
+  if (gcs_counter < maxlen)
+    p[0] = 0xff;
+  if (gcs_counter+1 < maxlen)
+    p[1] = 0xff;
+  p++;
+  p++;
+
+  return gcs_counter;
 }
 
 
