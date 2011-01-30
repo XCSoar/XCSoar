@@ -31,7 +31,6 @@ Copyright_License {
 #ifdef ANDROID
 #include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
-#include "Android/NativeView.hpp"
 #include "PeriodClock.hpp"
 #elif defined(ENABLE_SDL)
 #include "Screen/SDL/Event.hpp"
@@ -46,6 +45,9 @@ Copyright_License {
 TopWindow::TopWindow()
 #ifdef ENABLE_SDL
   :invalidated(false)
+#ifdef ANDROID
+  , paused(false)
+#endif
 #else
   :hSavedFocus(NULL)
 #endif
@@ -163,16 +165,10 @@ void
 TopWindow::refresh()
 {
 #ifdef ANDROID
-  if (android_paused)
+  if (paused)
     /* the application is paused/suspended, and we don't have an
        OpenGL surface - ignore all drawing requests */
     return;
-  else if (android_resumed) {
-    /* the application was just resumed */
-    android_resumed = false;
-    native_view->initSurface();
-    screen.set();
-  }
 #endif
 
   invalidated_lock.Lock();
@@ -272,6 +268,14 @@ TopWindow::on_event(const Event &event)
 
   case Event::MOUSE_UP:
     return on_mouse_up(event.x, event.y);
+
+  case Event::PAUSE:
+    on_pause();
+    return true;
+
+  case Event::RESUME:
+    on_resume();
+    return true;
   }
 
   return false;

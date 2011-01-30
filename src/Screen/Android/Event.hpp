@@ -45,6 +45,18 @@ struct Event {
     MOUSE_MOTION,
     MOUSE_DOWN,
     MOUSE_UP,
+
+    /**
+     * The Android Activity is being paused, and the OpenGL surface
+     * will be destroyed.
+     */
+    PAUSE,
+
+    /**
+     * The Android Activity is being resumed, and the OpenGL surface
+     * can be created again.
+     */
+    RESUME,
   };
 
   enum type type;

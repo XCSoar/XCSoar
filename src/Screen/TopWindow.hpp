@@ -48,6 +48,16 @@ class TopWindow : public ContainerWindow {
 
   Mutex invalidated_lock;
   bool invalidated;
+
+#ifdef ANDROID
+  /**
+   * Is the application currently paused?  While this flag is set, no
+   * OpenGL operations are allowed, because the OpenGL surface does
+   * not exist.
+   */
+  bool paused;
+#endif
+
 #else /* !ENABLE_SDL */
 
   /**
@@ -150,6 +160,19 @@ protected:
   virtual LRESULT on_message(HWND _hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
 #endif /* !ENABLE_SDL */
+
+#ifdef ANDROID
+private:
+  /**
+   * @see Event::PAUSE
+   */
+  void on_pause();
+
+  /**
+   * @see Event::RESUME
+   */
+  void on_resume();
+#endif
 
 public:
   void post_quit();

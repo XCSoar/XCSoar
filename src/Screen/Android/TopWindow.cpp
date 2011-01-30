@@ -21,16 +21,30 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_MAIN_HPP
-#define XCSOAR_ANDROID_MAIN_HPP
+#include "Screen/TopWindow.hpp"
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 
-#include <jni.h>
+void
+TopWindow::on_pause()
+{
+  if (paused)
+    return;
 
-class NativeView;
-class EventQueue;
+  paused = true;
+}
 
-extern NativeView *native_view;
+void
+TopWindow::on_resume()
+{
+  if (!paused)
+    return;
 
-extern EventQueue *event_queue;
+  paused = false;
 
-#endif
+  native_view->initSurface();
+  screen.set();
+
+  /* schedule a redraw */
+  invalidate();
+}
