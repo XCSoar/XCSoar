@@ -94,7 +94,7 @@ protected:
   BGRColor *buffer;
 
 #ifdef ENABLE_OPENGL
-  mutable GLTexture texture;
+  GLTexture *texture;
 #elif defined(ENABLE_SDL)
   SDL_Surface *surface;
 #else
@@ -183,7 +183,7 @@ public:
   void stretch_to(unsigned width, unsigned height, Canvas &dest_canvas,
                   unsigned dest_width, unsigned dest_height) const {
 #ifdef ENABLE_OPENGL
-    texture.bind();
+    texture->bind();
 #ifdef ANDROID
     /* 16 bit 5/6/5 on Android */
 
@@ -198,7 +198,7 @@ public:
     glColor4f(1.0, 1.0, 1.0, 1.0);
     GLEnable scope(GL_TEXTURE_2D);
     dest_canvas.stretch(0, 0, dest_width, dest_height,
-                        texture, 0, 0, width, height);
+                        *texture, 0, 0, width, height);
 #elif defined(ENABLE_SDL)
     Canvas src_canvas(surface);
     dest_canvas.stretch(0, 0, dest_width, dest_height,

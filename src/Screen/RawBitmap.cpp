@@ -39,7 +39,7 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth))
 #ifdef ENABLE_OPENGL
-  , texture(CorrectedWidth(nWidth), nHeight)
+  , texture(new GLTexture(CorrectedWidth(nWidth), nHeight))
 #endif
 {
   assert(nWidth > 0);
@@ -112,6 +112,7 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
 RawBitmap::~RawBitmap()
 {
 #ifdef ENABLE_OPENGL
+  delete texture;
   delete[] buffer;
 #elif defined(ENABLE_SDL)
   ::SDL_FreeSurface(surface);
