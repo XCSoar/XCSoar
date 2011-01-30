@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Fonts.hpp"
 #include "Components.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 
@@ -299,15 +300,17 @@ RefreshView()
   ObservationZoneConstVisitor &visitor = ozv;
   visitor.Visit(*tp->get_oz());
 
-  WndButton* wb;
-  wb = ((WndButton*)wf->FindByName(_T("butType")));
-  if (wb)
-    wb->SetCaption(OrderedTaskPointName(ordered_task->get_factory().getType(*tp)));
-  
-  wb = ((WndButton*)wf->FindByName(_T("butDetails")));
-  if (wb)
-    wb->SetCaption(tp->get_waypoint().Name.c_str());
+  WndFrame* wfrm = NULL;
 
+  wfrm = ((WndFrame*)wf->FindByName(_T("lblType")));
+  if (wfrm)
+    wfrm->SetCaption(OrderedTaskPointName(ordered_task->get_factory().getType(*tp)));
+
+  wfrm = ((WndFrame*)wf->FindByName(_T("lblLocation")));
+  if (wfrm)
+    wfrm->SetCaption(tp->get_waypoint().Name.c_str());
+
+  WndButton* wb;
   wb = ((WndButton*)wf->FindByName(_T("butPrevious")));
   if (wb)
     wb->set_visible(active_index > 0);
@@ -436,6 +439,14 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
 
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
   assert(wTaskView != NULL);
+
+  WndFrame* wType = (WndFrame*) wf->FindByName(_T("lblType"));
+  assert (wType);
+  wType->SetFont(Fonts::MapBold);
+
+  WndFrame* wLocation = (WndFrame*) wf->FindByName(_T("lblLocation"));
+  assert (wLocation);
+  wLocation->SetFont(Fonts::MapBold);
 
   do {
     RefreshView();
