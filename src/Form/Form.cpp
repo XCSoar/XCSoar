@@ -447,12 +447,10 @@ WndForm::on_paint(Canvas &canvas)
   // JMW todo add here icons?
 
 #ifdef EYE_CANDY
-  SIZE bitmap_title_size = bitmap_title.get_size();
   canvas.stretch(mTitleRect.left, mTitleRect.top,
                  mTitleRect.right - mTitleRect.left,
                  mTitleRect.bottom - mTitleRect.top,
-                 bitmap_title, 0, 0,
-                 bitmap_title_size.cx, bitmap_title_size.cy);
+                 bitmap_title);
 
   // Draw titlebar text
   canvas.text(mTitleRect.left + Layout::FastScale(2), mTitleRect.top, mCaption);
