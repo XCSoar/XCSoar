@@ -30,9 +30,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.os.Build;
+import android.os.PowerManager;
+import android.content.Context;
 
 public class XCSoar extends Activity {
     private static NativeView nativeView;
+
+    PowerManager.WakeLock wakeLock;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +77,13 @@ public class XCSoar extends Activity {
         nativeView.setFocusableInTouchMode(true);
         nativeView.setFocusable(true);
         nativeView.requestFocus();
+
+        PowerManager pm = (PowerManager)
+            getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|
+                                  PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                                  "XCSoar");
+        wakeLock.acquire();
     }
 
     @Override protected void onPause() {
@@ -93,6 +104,12 @@ public class XCSoar extends Activity {
     {
         if (nativeView != null)
             nativeView.exitApp();
+
+        if (wakeLock != null) {
+            wakeLock.release();
+            wakeLock = null;
+        }
+
         super.onDestroy();
         System.exit(0);
     }
