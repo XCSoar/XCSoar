@@ -66,6 +66,11 @@ static int DirectionFilter[] = {
 
 static Angle last_heading = Angle::native(fixed_zero);
 
+/**
+ * used for single-letter name search with Left/Right keys
+ */
+static int NameFilterIdx = -1;
+
 static const TCHAR *const TypeFilter[] = {
   _T("*"), _T("Airport"), _T("Landable"),
   _T("Turnpoint"), _T("File 1"), _T("File 2"),
@@ -362,6 +367,45 @@ WaypointNameAllowedCharacters(const TCHAR *prefix)
 }
 
 static void
+NameButtonUpdateChar()
+{
+  const TCHAR * NameFilter = WaypointNameAllowedCharacters(_T(""));
+  if (NameFilterIdx == -1) {
+    filter_data.name[0] = '\0';
+    wbName->SetCaption(_T("*"));
+  } else {
+    filter_data.name[0] = NameFilter[NameFilterIdx];
+    filter_data.name[1] = '\0';
+    wbName->SetCaption(filter_data.name);
+  }
+
+  UpdateList();
+}
+
+static void
+OnFilterNameButtonRight(gcc_unused WndButton &button)
+{
+  const TCHAR * NameFilter = WaypointNameAllowedCharacters(_T(""));
+  NameFilterIdx++;
+  if (NameFilterIdx > (int)(_tcslen(NameFilter) - 2))
+    NameFilterIdx = -1;
+
+  NameButtonUpdateChar();
+}
+
+static void
+OnFilterNameButtonLeft(gcc_unused WndButton &button)
+{
+  const TCHAR * NameFilter = WaypointNameAllowedCharacters(_T(""));
+  if (NameFilterIdx == -1)
+    NameFilterIdx = (int)(_tcslen(NameFilter)-1);
+  else
+    NameFilterIdx--;
+
+  NameButtonUpdateChar();
+}
+
+static void
 OnFilterNameButton(gcc_unused WndButton &button)
 {
   TCHAR newNameFilter[NAMEFILTERLEN + 1];
@@ -616,6 +660,12 @@ dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location)
 
   ((WndButton *)wf->FindByName(_T("cmdFltName")))->
       SetOnClickNotify(OnFilterNameButton);
+
+  ((WndButton *)wf->FindByName(_T("cmdFltName")))->
+      SetOnLeftNotify(OnFilterNameButtonLeft);
+
+  ((WndButton *)wf->FindByName(_T("cmdFltName")))->
+      SetOnRightNotify(OnFilterNameButtonRight);
 
   wWayPointList = (WndListFrame*)wf->FindByName(_T("frmWayPointList"));
   assert(wWayPointList != NULL);
