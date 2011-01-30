@@ -21,27 +21,27 @@
 
       <Panel Name="frmOZLine" X="107" Y="41" Width="126" Height="95">
         <Edit Name="prpOZLineLength" Caption="Length" Height="25" CaptionWidth="75" Help="Length of the OZ line.">
-         <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1"/>
+         <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1" OnDataAccess="OnOZLineLengthData"/>
         </Edit>
      </Panel>
 
       <Panel Name="frmOZCylinder" X="107" Y="41" Width="126" Height="95">
         <Edit Name="prpOZCylinderRadius" Caption="Radius" Height="25" CaptionWidth="75" Help="Radius of the OZ cylinder.">
-          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1"/>
+          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1" OnDataAccess="OnOZCylinderRadiusData"/>
         </Edit>
       </Panel>
 
       <Panel Name="frmOZSector" X="107" Y="41" Width="126" Height="95">
         <Edit Name="prpOZSectorRadius" Caption="Radius" Height="25" CaptionWidth="75" Help="Radius of the OZ sector.">
-          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1"/>
+          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1" OnDataAccess="OnOZSectorRadiusData"/>
         </Edit>
 
         <Edit Name="prpOZSectorStartRadial" Caption="Start radial" Height="25" CaptionWidth="75" Help="Start radial of the OZ area">
-          <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="360" Step="1"/>
+          <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="360" Step="1" OnDataAccess="OnOZSectorStartRadialData"/>
         </Edit>
 
         <Edit Name="prpOZSectorFinishRadial" Caption="Finish radial" Height="25" CaptionWidth="75" Help="Finish radial of the OZ area">
-          <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="360" Step="1"/>
+          <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="360" Step="1" OnDataAccess="OnOZSectorFinishRadialData"/>
         </Edit>
       </Panel>
       

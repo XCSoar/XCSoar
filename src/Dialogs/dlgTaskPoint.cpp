@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Components.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
+#include "DataField/Float.hpp"
 
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
@@ -411,6 +412,36 @@ OnNextClicked(WndButton &Sender)
   wf->SetModalResult(mrOK);
 }
 
+static void
+OnOZLineLengthData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+ ReadValues();
+}
+
+static void
+OnOZCylinderRadiusData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+ ReadValues();
+}
+
+static void
+OnOZSectorRadiusData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+ ReadValues();
+}
+
+static void
+OnOZSectorStartRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+ ReadValues();
+}
+
+static void
+OnOZSectorFinishRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+ ReadValues();
+}
+
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnRemoveClicked),
@@ -420,6 +451,11 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnPreviousClicked),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnTaskPaint),
+  DeclareCallBackEntry(OnOZLineLengthData),
+  DeclareCallBackEntry(OnOZCylinderRadiusData),
+  DeclareCallBackEntry(OnOZSectorRadiusData),
+  DeclareCallBackEntry(OnOZSectorStartRadialData),
+  DeclareCallBackEntry(OnOZSectorFinishRadialData),
   DeclareCallBackEntry(NULL)
 };
 
