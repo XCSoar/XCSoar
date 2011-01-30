@@ -605,6 +605,7 @@ RasterTileCache::FirstIntersection(unsigned x0, unsigned y0,
                                    short h_origin,
                                    short h_dest,
                                    const long slope_fact, const short h_ceiling,
+                                   const short h_safety,
                                    unsigned& _x, unsigned& _y, short &_h,
                                    const bool can_climb) const
 {
@@ -668,7 +669,7 @@ RasterTileCache::FirstIntersection(unsigned x0, unsigned y0,
   while (!RasterBuffer::is_invalid(h_terrain)) {
 
     if (!step_counter) {
-      h_terrain = GetFieldDirect(x_int, y_int, tile_index);
+      h_terrain = GetFieldDirect(x_int, y_int, tile_index)+h_safety;
       step_counter = tile_index<0? step_coarse: 1;
 
       // calculate height of glide so far

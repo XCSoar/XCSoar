@@ -117,10 +117,12 @@ RoutePolars::calc_footprint(const AGeoPoint& origin,
                             const TaskProjection& proj) const
 {
   const bool valid = map.isMapLoaded();
+  const short altitude = origin.altitude-(short)config.safety_height_terrain;
+  AGeoPoint m_origin((GeoPoint)origin, altitude);
   for (int i=0; i< ROUTEPOLAR_POINTS; ++i) {
-    const GeoPoint dest = msl_intercept(i, origin, proj);
+    const GeoPoint dest = msl_intercept(i, m_origin, proj);
     if (valid)
-      p[i] = map.Intersection(origin, origin.altitude, dest);
+      p[i] = map.Intersection(m_origin, altitude, dest);
     else
       p[i] = dest;
   }
@@ -229,6 +231,7 @@ RoutePolars::check_clearance(const RouteLink &e, const RasterMap& map,
   if (!map.FirstIntersection(start, e.first.altitude,
                              dest, e.second.altitude,
                              calc_vheight(e), climb_ceiling,
+                             (short)config.safety_height_terrain,
                              int_x, int_h))
     return true;
 

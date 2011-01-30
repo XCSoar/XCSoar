@@ -160,7 +160,7 @@ GlideComputerTask::TerrainWarning()
     // remove TerrainFootprint function from GlideComputerAirData
 
     const AGeoPoint start (state.get_location(),
-                           state.NavAltitude-SettingsComputer().safety_height_terrain);
+                           state.NavAltitude);
     m_route.footprint(start, SetCalculated().GlideFootPrint);
   }
 

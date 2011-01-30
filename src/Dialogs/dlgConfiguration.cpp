@@ -932,7 +932,7 @@ setVariables()
   LoadFormProperty(*wf, _T("prpSafetyAltitudeArrival"), ugAltitude,
                    settings_computer.safety_height_arrival);
   LoadFormProperty(*wf, _T("prpSafetyAltitudeTerrain"), ugAltitude,
-                   settings_computer.safety_height_terrain);
+                   settings_computer.route_planner.safety_height_terrain);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAbortTaskMode"));
   if (wp) {
@@ -1865,7 +1865,7 @@ void dlgConfigurationShowModal(void)
                               szProfileSafetyAltitudeArrival);
 
   changed |= SaveFormProperty(*wf, _T("prpSafetyAltitudeTerrain"), ugAltitude,
-                              settings_computer.safety_height_terrain,
+                              settings_computer.route_planner.safety_height_terrain,
                               szProfileSafetyAltitudeTerrain);
 
   changed |= SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,

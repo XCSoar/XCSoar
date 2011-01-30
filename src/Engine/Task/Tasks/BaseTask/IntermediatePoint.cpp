@@ -24,5 +24,5 @@
 fixed
 IntermediatePoint::get_elevation() const
 {
-  return m_elevation+m_task_behaviour.safety_height_terrain;
+  return m_elevation+m_task_behaviour.route_planner.safety_height_terrain;
 }

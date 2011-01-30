@@ -218,6 +218,7 @@ public:
                          short h_origin,
                          short h_dest,
                          const long slope_fact, const short h_ceiling,
+                         const short h_safety,
                          unsigned& int_x, unsigned& int_y, short &h_int,
                          const bool can_climb) const;
 

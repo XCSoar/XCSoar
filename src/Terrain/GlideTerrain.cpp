@@ -46,7 +46,7 @@ TerrainIntersection::TerrainIntersection(const GeoPoint& start):
 GlideTerrain::GlideTerrain(const SETTINGS_COMPUTER &settings,
                            RasterTerrain &terrain):
   m_terrain(terrain),
-  safety_height_terrain(settings.safety_height_terrain),
+  safety_height_terrain(settings.route_planner.safety_height_terrain),
   TerrainBase(fixed_zero),
   max_range(-fixed_one)
 {

@@ -171,7 +171,7 @@ Profile::Use()
   Get(szProfileSafetyAltitudeArrival,
       settings_computer.safety_height_arrival);
   Get(szProfileSafetyAltitudeTerrain,
-      settings_computer.safety_height_terrain);
+      settings_computer.route_planner.safety_height_terrain);
   Get(szProfileSafteySpeed,
       settings_computer.SafetySpeed);
 

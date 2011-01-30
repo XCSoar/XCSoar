@@ -315,7 +315,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
 #define TBSCALEX 20
 
   // calculate height above safety altitude
-  fixed hoffset = SettingsComputer().safety_height_terrain +
+  fixed hoffset = SettingsComputer().route_planner.safety_height_terrain +
                    Calculated().TerrainBase;
   fixed h = Basic().NavAltitude - hoffset;
 

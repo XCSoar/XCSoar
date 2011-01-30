@@ -156,9 +156,6 @@ struct SETTINGS_FEATURES {
 
   /** Use Gestures */
   bool EnableGestures;
-
-  /** Route planning */
-  RoutePlannerConfig route_planner;
 };
 
 

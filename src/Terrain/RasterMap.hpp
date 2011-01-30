@@ -88,6 +88,7 @@ public:
   bool FirstIntersection(const GeoPoint &origin, const short h_origin,
                          const GeoPoint &destination, const short h_destination,
                          const short h_virt, const short h_ceiling,
+                         const short h_safety,
                          GeoPoint& intx, short &h) const;
 
   /**

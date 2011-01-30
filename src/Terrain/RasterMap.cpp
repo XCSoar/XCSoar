@@ -111,6 +111,7 @@ bool
 RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
                              const GeoPoint &destination, const short h_destination,
                              const short h_virt, const short h_ceiling,
+                             const short h_safety,
                              GeoPoint& intx, short &h) const
 {
   std::pair<unsigned, unsigned> c_origin = projection.project(origin);
@@ -136,7 +137,7 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
   if (raster_tile_cache.FirstIntersection(c_origin.first, c_origin.second,
                                           c_destination.first, c_destination.second,
                                           vh_origin, h_destination,
-                                          slope_fact, h_ceiling,
+                                          slope_fact, h_ceiling, h_safety,
                                           c_int.first, c_int.second, h,
                                           can_climb)) {
     bool changed = (c_int != c_destination) || ((h > h_destination)&&(c_int == c_destination));

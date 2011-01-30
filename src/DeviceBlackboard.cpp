@@ -630,7 +630,7 @@ DeviceBlackboard::EnergyHeight()
 void
 DeviceBlackboard::WorkingBand()
 {
-  const fixed h_safety = SettingsComputer().safety_height_terrain +
+  const fixed h_safety = SettingsComputer().route_planner.safety_height_terrain +
     Calculated().TerrainBase;
 
     const fixed working_band_height = Basic().TEAltitude - h_safety;

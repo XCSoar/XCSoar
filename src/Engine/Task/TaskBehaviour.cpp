@@ -37,7 +37,6 @@ TaskBehaviour::TaskBehaviour():
     contest_handicap(100),
     safety_mc(fixed_one),
     safety_mc_use_current(false),
-    safety_height_terrain(150.0),
     safety_height_arrival(300.0),
     start_max_speed_margin(0.0),
     start_max_height_margin(0),
@@ -54,6 +53,7 @@ TaskBehaviour::all_off()
   calc_glide_required = false;
   enable_olc = false;
   ordered_defaults.all_off();
+  route_planner.mode = RoutePlannerConfig::rpNone;
 }
 
 fixed

@@ -38,7 +38,8 @@ struct RoutePlannerConfig {
   RoutePlannerConfig():
     mode(rpBoth),
     allow_climb(true),
-    use_ceiling(true) {}
+    use_ceiling(true),
+    safety_height_terrain(150.0) {}
 
   enum Mode {
     rpNone=0,
@@ -49,6 +50,10 @@ struct RoutePlannerConfig {
   Mode mode;
   bool allow_climb;
   bool use_ceiling;
+
+  /** Minimum height above terrain for arrival height at non-landable waypoint,
+      and for terrain clearance en-route (m) */
+  fixed safety_height_terrain;
 
   bool terrain_enabled() const {
     return (mode== rpTerrain) || (mode== rpBoth);
@@ -118,8 +123,6 @@ public:
   /** Whether to use safety mc value or current task polar MC */
   bool safety_mc_use_current;
 
-  /** Minimum height above terrain for arrival height at non-landable waypoint (m) */
-  fixed safety_height_terrain;
   /** Minimum height above terrain for arrival height at landable waypoint (m) */
   fixed safety_height_arrival;
 
@@ -141,6 +144,9 @@ public:
    * atmHome: sort also by deflection from home
    */
   AbortTaskMode abort_task_mode;
+
+  /** Route planning */
+  RoutePlannerConfig route_planner;
 
   /**
    * Convenience function (used primarily for testing) to disable
