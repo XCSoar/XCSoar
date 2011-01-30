@@ -124,7 +124,8 @@ dlgTaskPointNew(SingleWindow &parent, OrderedTask** task, const unsigned index);
 void dlgVoiceShowModal();
 
 void
-dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& waypoint);
+dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& waypoint,
+                          bool allow_navigation = true);
 
 typedef const TCHAR *(*AllowedCharactersCallback_t)(const TCHAR *value);
 

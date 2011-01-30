@@ -501,7 +501,8 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void 
-dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
+dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
+                            bool allow_navigation)
 {
   selected_waypoint = &way_point;
 
@@ -631,6 +632,19 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
 
   wCommand->hide();
   wImage->SetOnPaintNotify(OnImagePaint);
+
+  if (!allow_navigation) {
+    WndButton* butnav = NULL;
+    butnav = (WndButton *)wf->FindByName(_T("cmdPrev"));
+    assert(butnav);
+    butnav->hide();
+    butnav = (WndButton *)wf->FindByName(_T("cmdNext"));
+    assert(butnav);
+    butnav->hide();
+    butnav = (WndButton *)wf->FindByName(_T("cmdGoto"));
+    assert(butnav);
+    butnav->hide();
+  }
 
   WndButton *wb;
 

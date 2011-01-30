@@ -375,7 +375,7 @@ OnDetailsClicked(WndButton &Sender)
 {
   OrderedTaskPoint* task_point = ordered_task->get_tp(active_index);
   if (task_point)
-    dlgWayPointDetailsShowModal(*parent_window, task_point->get_waypoint());
+    dlgWayPointDetailsShowModal(*parent_window, task_point->get_waypoint(), false);
 }
 
 static void
