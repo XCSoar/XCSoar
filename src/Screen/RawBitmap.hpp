@@ -14,6 +14,7 @@
 #include "Screen/Canvas.hpp"
 
 #ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Surface.hpp"
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 #endif
@@ -86,7 +87,11 @@ struct BGRColor
 /**
  * This class provides fast drawing methods and offscreen buffer.
  */
-class RawBitmap {
+class RawBitmap
+#ifdef ENABLE_OPENGL
+  :private GLSurfaceListener
+#endif
+{
 protected:
   const unsigned int width;
   const unsigned int height;
@@ -219,6 +224,13 @@ public:
                     buffer, &bi, DIB_RGB_COLORS, SRCCOPY);
 #endif
   }
+
+#ifdef ENABLE_OPENGL
+private:
+  /* from GLSurfaceListener */
+  virtual void surface_created();
+  virtual void surface_destroyed();
+#endif
 };
 
 #endif // !defined(AFX_STSCREENBUFFER_H__22D62F5D_32E2_4785_B3D9_2341C11F84A3__INCLUDED_)
