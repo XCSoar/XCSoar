@@ -13,11 +13,15 @@ Version 6.0.3 - not yet released
   - more airspace rendering fixes for Android
 * map
   - Terrain: load more raster tiles on modern devices (second try)
+* Android
+  - keep display backlight on, don't suspend
+  - support extra large displays (tablets)
 
 Version 6.0.2 - 2011/01/20
 * devices
   - more robust NMEA checksum parser
   - CAI302: restart I/O thread after declaration failure
+  - CAI302: parse PCAID baro altitude if "!w" unavailable
   - Condor: read wind from LXWP0
 * user interface
   - Language: translation updates
@@ -36,6 +40,12 @@ Version 6.0.2 - 2011/01/20
 * data files
   - Fixed potential crash while reading airfields files
   - Added more polars (Hang gliders, DG1000, Blanik, Jantar, ...)
+* Android / Linux / OpenGL
+  - enable translations
+  - fix dialog titles
+  - support big displays (tablets)
+  - implement check boxes (for enabling "Expert" mode)
+  - fix airspace rendering
 
 Version 6.0.1 - 2010/12/26
 * map
