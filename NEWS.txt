@@ -7,6 +7,7 @@ Version 6.0.3 - not yet released
   - EW, Volkslogger: restart I/O thread after declaration failure
   - CAI302: check for I/O errors during declaration
   - Volkslogger: enable task declaration
+  - Condor: fixed wind direction processing
 * user interface
   - Language: translation updates
   - Auto zoom: don't disable in circling mode
