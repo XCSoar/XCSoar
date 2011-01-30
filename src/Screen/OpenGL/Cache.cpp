@@ -160,10 +160,14 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
 void
 TextCache::flush()
 {
+  text_cache_map.clear();
+
   for (RenderedText *rt = (RenderedText *)text_cache_head.next;
        rt != &text_cache_head;) {
     RenderedText *next = (RenderedText *)rt->next;
     delete rt;
     rt = next;
   }
+
+  text_cache_head.prev = text_cache_head.next = &text_cache_head;
 }
