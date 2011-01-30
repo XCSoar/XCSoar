@@ -234,6 +234,7 @@ TestWinPilotWayPoint(const Waypoint org_wp, const Waypoint *wp)
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
   ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
   ok1(wp->Flags.Restricted == org_wp.Flags.Restricted);
+  ok1(wp->RunwayDirection == org_wp.RunwayDirection);
 }
 
 static void
@@ -442,7 +443,7 @@ int main(int argc, char **argv)
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(63 + 3 * 4 + (10 + 12 + 10) * org_wp.size());
+  plan_tests(63 + 3 * 4 + (11 + 12 + 10) * org_wp.size());
 
   TestExtractParameters();
 
