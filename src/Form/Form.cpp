@@ -103,6 +103,9 @@ WndForm::WndForm(SingleWindow &_main_window,
   // Create ClientWindow
 
   SetBackColor(Color(0xe2, 0xdc, 0xbe));
+#ifdef EYE_CANDY
+  bitmap_title.load(IDB_DIALOGTITLE);
+#endif
 
   WindowStyle client_style;
   client_style.control_parent();
@@ -444,8 +447,6 @@ WndForm::on_paint(Canvas &canvas)
   // JMW todo add here icons?
 
 #ifdef EYE_CANDY
-  Bitmap bitmap_title;
-  assert(bitmap_title.load(IDB_DIALOGTITLE));
   SIZE bitmap_title_size = bitmap_title.get_size();
   canvas.stretch(mTitleRect.left, mTitleRect.top,
                  mTitleRect.right - mTitleRect.left,

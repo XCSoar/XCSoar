@@ -28,6 +28,10 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Util/tstring.hpp"
 
+#ifdef EYE_CANDY
+#include "Screen/Bitmap.hpp"
+#endif
+
 #include <map>
 #include <list>
 
@@ -105,6 +109,9 @@ protected:
   Color mColorTitle;
   /** Font of the titlebar */
   const Font *mhTitleFont;
+#ifdef EYE_CANDY
+  Bitmap bitmap_title;
+#endif
   /** The ClientWindow */
   ClientAreaWindow client_area;
   /** Coordinates of the ClientWindow */
