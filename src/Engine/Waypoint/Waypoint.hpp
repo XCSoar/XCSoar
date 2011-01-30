@@ -89,6 +89,10 @@ public:
   GeoPoint Location;
   /** Height AMSL (m) of waypoint terrain */
   fixed Altitude;
+  /** Main runway direction in degrees (0-359, -1 unknown) */
+  Angle RunwayDirection;
+  /** Main runway length in m (0 for unknown) */
+  int RunwayLength;
   /** Flag types of this waypoint */
   WaypointFlags Flags;
   /** File number to store waypoint in (0,1), -1 to delete/ignore */
