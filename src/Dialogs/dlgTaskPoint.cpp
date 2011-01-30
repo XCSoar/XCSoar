@@ -359,6 +359,10 @@ OnRemoveClicked(WndButton &Sender)
 {
   (void)Sender;
 
+    if (MessageBoxX(_("Remove task point?"),
+                          _("Task Point"), MB_YESNO | MB_ICONQUESTION) == IDNO)
+      return;
+
   if (!ordered_task->get_factory().remove(active_index))
     return;
 
