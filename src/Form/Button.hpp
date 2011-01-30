@@ -35,6 +35,7 @@ class ContainerWindow;
 class WndButton : public ButtonWindow {
 public:
   typedef void (*ClickNotifyCallback_t)(WndButton &button);
+  typedef void (*LeftRightNotifyCallback_t)(WndButton &button);
 
 public:
   /**
@@ -51,7 +52,9 @@ public:
   WndButton(ContainerWindow &parent, const TCHAR *Caption,
       int X, int Y, int Width, int Height,
             const ButtonWindowStyle style,
-      ClickNotifyCallback_t Function = NULL);
+      ClickNotifyCallback_t Function = NULL,
+      LeftRightNotifyCallback_t LeftFunction = NULL,
+      LeftRightNotifyCallback_t RightFunction = NULL);
 
   /**
    * Sets the function that should be called when the button is pressed
@@ -63,6 +66,25 @@ public:
     mOnClickNotify = Function;
   }
 
+  /**
+   * Sets the function that should be called when the Left key is pressed
+   * @param Function Pointer to the function to be called
+   */
+  void
+  SetOnLeftNotify(LeftRightNotifyCallback_t Function)
+  {
+    mOnLeftNotify = Function;
+  }
+
+  /**
+   * Sets the function that should be called when the Right key is pressed
+   * @param Function Pointer to the function to be called
+   */
+  void
+  SetOnRightNotify(LeftRightNotifyCallback_t Function)
+  {
+    mOnRightNotify = Function;
+  }
   /**
    * Sets the Caption/Text of the Control and resets the cached text height
    * (derived from WindowControl)
@@ -79,6 +101,13 @@ public:
    */
   virtual bool on_clicked();
 
+  /**
+   * Called when the Left (Right) key is pressed
+   * Only called if callback have been explicitly set
+   */
+  virtual bool on_left();
+  virtual bool on_right();
+
 protected:
   virtual bool on_key_check(unsigned key_code) const;
   virtual bool on_key_down(unsigned key_code);
@@ -90,6 +119,14 @@ private:
    * @see SetOnClickNotify()
    */
   ClickNotifyCallback_t mOnClickNotify;
+
+  /**
+   * The callback-functions that should be called when the Left and Right
+   * keys are pressed
+   * @see SetOnLeftNotify() and SetOnRightNotify()
+   */
+  LeftRightNotifyCallback_t mOnLeftNotify;
+  LeftRightNotifyCallback_t mOnRightNotify;
 };
 
 #endif

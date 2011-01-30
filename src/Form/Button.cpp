@@ -28,8 +28,12 @@ Copyright_License {
 WndButton::WndButton(ContainerWindow &parent,
     const TCHAR *Caption, int X, int Y, int Width, int Height,
                      const ButtonWindowStyle style,
-    ClickNotifyCallback_t Function) :
-  mOnClickNotify(Function)
+    ClickNotifyCallback_t Function,
+    LeftRightNotifyCallback_t LeftFunction,
+    LeftRightNotifyCallback_t RightFunction) :
+    mOnClickNotify(Function),
+    mOnLeftNotify(LeftFunction),
+    mOnRightNotify(RightFunction)
 {
   set(parent, Caption, X, Y, Width, Height, style);
   set_font(Fonts::MapBold);
@@ -48,11 +52,41 @@ WndButton::on_clicked()
 }
 
 bool
+WndButton::on_left()
+{
+  // call on Left key function
+  if (mOnLeftNotify != NULL) {
+    mOnLeftNotify(*this);
+    return true;
+  }
+  return false;
+}
+
+bool
+WndButton::on_right()
+{
+  // call on Left key function
+  if (mOnRightNotify != NULL) {
+    mOnRightNotify(*this);
+    return true;
+  }
+  return false;
+}
+
+bool
 WndButton::on_key_check(unsigned key_code) const
 {
   switch (key_code) {
   case VK_RETURN:
     return true;
+
+  case VK_LEFT:
+    if (mOnLeftNotify)
+      return true;
+
+  case VK_RIGHT:
+    if (mOnRightNotify)
+      return true;
 
   default:
     return false;
@@ -69,6 +103,12 @@ WndButton::on_key_down(unsigned key_code)
 #endif
   case VK_RETURN:
     return on_clicked();
+
+  case VK_LEFT:
+    return on_left();
+
+  case VK_RIGHT:
+    return on_right();
   }
 
   return ButtonWindow::on_key_down(key_code);
