@@ -285,17 +285,7 @@ int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
   }
 
   // CRC am Ende abschneiden
-  gcs_counter -= 2;
-  p--;
-  p--;
-  if (gcs_counter < maxlen)
-    p[0] = 0xff;
-  if (gcs_counter+1 < maxlen)
-    p[1] = 0xff;
-  p++;
-  p++;
-
-  return gcs_counter;
+  return gcs_counter - 2;
 }
 
 
