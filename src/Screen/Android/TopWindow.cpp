@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
+#include "Screen/OpenGL/Cache.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 
@@ -30,6 +31,8 @@ TopWindow::on_pause()
 {
   if (paused)
     return;
+
+  TextCache::flush();
 
   paused = true;
 }
