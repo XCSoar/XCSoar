@@ -21,38 +21,40 @@ Copyright_License {
 }
 */
 
-#include "Screen/TopWindow.hpp"
-#include "Screen/OpenGL/Cache.hpp"
 #include "Screen/OpenGL/Surface.hpp"
-#include "Android/Main.hpp"
-#include "Android/NativeView.hpp"
+
+#include <list>
+
+typedef std::list<GLSurfaceListener *> GLSurfaceListenerList;
+
+static GLSurfaceListenerList surface_listeners;
 
 void
-TopWindow::on_pause()
+AddSurfaceListener(GLSurfaceListener &listener)
 {
-  if (paused)
-    return;
-
-  TextCache::flush();
-
-  SurfaceDestroyed();
-
-  paused = true;
+  surface_listeners.push_back(&listener);
 }
 
 void
-TopWindow::on_resume()
+RemoveSurfaceListener(GLSurfaceListener &listener)
 {
-  if (!paused)
-    return;
+  surface_listeners.remove(&listener);
+}
 
-  paused = false;
+void
+SurfaceCreated()
+{
+  const GLSurfaceListenerList copy(surface_listeners);
+  for (GLSurfaceListenerList::const_iterator i = copy.begin();
+       i != copy.end(); ++i)
+    (*i)->surface_created();
+}
 
-  native_view->initSurface();
-  screen.set();
-
-  SurfaceCreated();
-
-  /* schedule a redraw */
-  invalidate();
+void
+SurfaceDestroyed()
+{
+  const GLSurfaceListenerList copy(surface_listeners);
+  for (GLSurfaceListenerList::const_iterator i = copy.begin();
+       i != copy.end(); ++i)
+    (*i)->surface_destroyed();
 }

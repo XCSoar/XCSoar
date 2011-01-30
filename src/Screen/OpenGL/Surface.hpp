@@ -21,38 +21,30 @@ Copyright_License {
 }
 */
 
-#include "Screen/TopWindow.hpp"
-#include "Screen/OpenGL/Cache.hpp"
-#include "Screen/OpenGL/Surface.hpp"
-#include "Android/Main.hpp"
-#include "Android/NativeView.hpp"
+#ifndef XCSOAR_SCREEN_OPENGL_SURFACE_HPP
+#define XCSOAR_SCREEN_OPENGL_SURFACE_HPP
+
+struct GLSurfaceListener {
+  virtual void surface_created() = 0;
+  virtual void surface_destroyed() = 0;
+};
 
 void
-TopWindow::on_pause()
-{
-  if (paused)
-    return;
-
-  TextCache::flush();
-
-  SurfaceDestroyed();
-
-  paused = true;
-}
+AddSurfaceListener(GLSurfaceListener &listener);
 
 void
-TopWindow::on_resume()
-{
-  if (!paused)
-    return;
+RemoveSurfaceListener(GLSurfaceListener &listener);
 
-  paused = false;
+/**
+ * Notify all listeners that the OpenGL surface has been created.
+ */
+void
+SurfaceCreated();
 
-  native_view->initSurface();
-  screen.set();
+/**
+ * Notify all listeners that the OpenGL surface has been destroyed.
+ */
+void
+SurfaceDestroyed();
 
-  SurfaceCreated();
-
-  /* schedule a redraw */
-  invalidate();
-}
+#endif
