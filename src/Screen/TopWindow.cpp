@@ -141,9 +141,7 @@ TopWindow::invalidate()
 
   /* wake up the event loop */
 #ifdef ANDROID
-  Event event;
-  event.type = Event::NOP;
-  event_queue->push(event);
+  event_queue->push(Event::NOP);
 #else
   /* note that SDL_NOEVENT is not documented, but since we just want
      to wake up without actually sending an event, I hope this works
@@ -224,9 +222,7 @@ void
 TopWindow::post_quit()
 {
 #ifdef ANDROID
-  Event event;
-  event.type = Event::QUIT;
-  event_queue->push(event);
+  event_queue->push(Event::QUIT);
 #elif defined(ENABLE_SDL)
   SDL_Event event;
   event.type = SDL_QUIT;

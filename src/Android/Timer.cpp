@@ -99,8 +99,5 @@ Java_org_xcsoar_Timer_run(JNIEnv *env, jobject obj, jlong ptr)
 {
   AndroidTimer *timer = (AndroidTimer *)(void *)ptr;
 
-  Event event;
-  event.type = Event::TIMER;
-  event.ptr = (void *)timer;
-  event_queue->push(event);
+  event_queue->push(Event(Event::TIMER, (void *)timer));
 }
