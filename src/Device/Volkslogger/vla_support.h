@@ -113,8 +113,6 @@ protected:
 
   int32 databaud; // Baudrate as integer (e.g. 115200)
   int databaudidx; // Baudrate as index for VOLKSLOGGER
-	static word Crc16Table[256];
-	word UpdateCRC(byte Octet,word CRC);
   // send command to VL
   int16 sendcommand(byte cmd, byte param1, byte param2);
   // wait for acknowledgement of command (if no data is expected)

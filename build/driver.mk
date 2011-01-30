@@ -1,6 +1,7 @@
 DRIVER_SRC_DIR = $(SRC)/Device/Driver
 
 VOLKSLOGGER_SOURCES = \
+	$(SRC)/Device/Volkslogger/CRC16.cpp \
 	$(SRC)/Device/Volkslogger/Util.cpp \
 	$(SRC)/Device/Volkslogger/dbbconv.cpp \
 	$(SRC)/Device/Volkslogger/grecord.cpp \
