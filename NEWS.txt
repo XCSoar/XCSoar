@@ -6,6 +6,18 @@ Version 6.1 - not yet released
 * user interface
   - "pan to" button in waypoint dialog
   - waypoint selection screen shows last used waypoints if no filter is set
+* route planning
+  - new optional minimum-time route planning around airspace and terrain.  
+    - allows avoidance or terrain, airspace or both
+    - takes final glide and cruise-climb portions of flight into account
+  - Configuration in Route Planner page of settings.  
+    - Feature is by default disabled.
+    - See settings help text for configuration options
+  - Limitations of current version:
+    - does not update the final glide bar, task times etc for any obstacle deviations
+    - does not handle aircraft or destination location inside airspace
+    - does not allow paths with course deviations greater than 90 degrees each leg.
+    - some "jumping" of the solution may be experienced as altitude/location changes.
 * map
   - north arrow is automatically hidden in north-up mode
   - added configurable slope shading (off/fixed/wind/sun)
@@ -22,6 +34,7 @@ Version 6.1 - not yet released
   - a different font is used for rendering important topology labels (i.e. big cities)
   - landables can be displayed with runway heading and proportional length if the
     necessary data is contained in the waypoint files
+  - glide terrain range line more detailed, uses 50 radial points rather than 20
 * data files
   - wing area field is read from extended polar files if available
   - zander files: description field is used for additional airport detection
