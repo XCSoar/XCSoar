@@ -20,6 +20,8 @@ Version 6.1 - not yet released
     (All, Task & Landables, Task and None).
   - different rendering of roads based on importance (major, normal, minor)
   - a different font is used for rendering important topology labels (i.e. big cities)
+  - landables can be displayed with runway heading and proportional length if the
+    necessary data is contained in the waypoint files
 * data files
   - wing area field is read from extended polar files if available
   - zander files: description field is used for additional airport detection
@@ -27,6 +29,8 @@ Version 6.1 - not yet released
     - TNP: RADIO field
     - OpenAir: AR command
   - the frequency and runway heading/length given in cup files are now displayed
+  - use runway heading and length contained in cup waypoint files
+  - for WELT2000 generated winpilot waypoint files (.dat) use runway heading
 * task
   - added BGA start point sector
   - configurable alternate sorting 
