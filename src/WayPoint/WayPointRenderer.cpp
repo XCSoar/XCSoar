@@ -298,6 +298,26 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
                          label_block, v.labels);
 }
 
+static void DrawLandableBase(Canvas &canvas, const RasterPoint& pt,
+                             bool airport, const fixed radius)
+{
+  int iradius = iround(radius);
+  if (airport)
+    canvas.circle(pt.x, pt.y, iradius);
+  else {
+    RasterPoint diamond[4];
+    diamond[0].x = pt.x + 0;
+    diamond[0].y = pt.y - iradius;
+    diamond[1].x = pt.x + iradius;
+    diamond[1].y = pt.y + 0;
+    diamond[2].x = pt.x + 0;
+    diamond[2].y = pt.y + iradius;
+    diamond[3].x = pt.x - iradius;
+    diamond[3].y = pt.y - 0;
+    canvas.polygon(diamond, sizeof(diamond)/sizeof(diamond[0]));
+  }
+}
+
 void
 WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
                                      bool reachable, const Waypoint &way_point)
@@ -330,11 +350,12 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
     if (reachable) {
       fill.set(Color::GREEN);
       canvas.select(fill);
-      canvas.circle(pt.x, pt.y, radius + radius / fixed_two);
+      DrawLandableBase(canvas, pt, way_point.is_airport(),
+                       radius + radius / fixed_two);
     }
     fill.set(Color::MAGENTA);
     canvas.select(fill);
-    canvas.circle(pt.x, pt.y, radius);
+    DrawLandableBase(canvas, pt, way_point.is_airport(), radius);
   } else {
     pen.set(1, Color::BLACK);
     canvas.select(pen);
@@ -347,7 +368,7 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
     else
       fill.set(Color(192, 192, 192));  // Light gray
     canvas.select(fill);
-    canvas.circle(pt.x, pt.y, radius);
+    DrawLandableBase(canvas, pt, way_point.is_airport(), radius);
   }
 
   // Render runway indication
@@ -370,20 +391,12 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
     p1.y=pt.y + iround(y * (len + fixed_one));
     p2.x=pt.x + iround(x * len);
     p2.y=pt.y - iround(y * len);
-    pen.set((way_point.is_airport() ? 7 : 3) * scale, Color::BLACK);
+    pen.set(iround(7 * scale), Color::BLACK);
     canvas.select(pen);
     canvas.line(p1, p2);
-    if (way_point.is_airport()) {
-      pen.set(3 * scale, Color::WHITE);
-      canvas.select(pen);
-      canvas.line(p1, p2);
-    }
-  } else {
-    // Runway direction unknown
-    fill.set(way_point.is_airport() ? Color::WHITE : Color::BLACK);
-    canvas.select(fill);
-    canvas.null_pen();
-    canvas.circle(pt.x, pt.y, radius / 3);
+    pen.set(iround(3 * scale), Color::WHITE);
+    canvas.select(pen);
+    canvas.line(p1, p2);
   }
 }
 
