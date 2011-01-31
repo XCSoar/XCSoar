@@ -126,10 +126,16 @@ static void
 CopyToNarrowBuffer(char *dest, size_t max_size, const TCHAR *src)
 {
 #ifdef _UNICODE
-    if (WideCharToMultiByte(CP_ACP, 0, src, -1,
-                            dest, max_size,
-                            NULL, NULL) <= 0)
-      dest[0] = 0;
+  size_t src_length = _tcslen(src);
+  if (src_length >= max_size)
+    src_length = max_size - 1;
+
+  int dest_length = WideCharToMultiByte(CP_ACP, 0, src, src_length,
+                                        dest, max_size - 1,
+                                        NULL, NULL);
+  if (dest_length < 0)
+    dest_length = 0;
+  dest[dest_length] = 0;
 #else
     strncpy(dest, src, max_size - 1);
     dest[max_size - 1] = 0;
