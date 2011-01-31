@@ -46,6 +46,7 @@ namespace Graphics {
   void InitSnailTrail(const SETTINGS_MAP &settings_map);
   void InitLandableIcons();
   void InitAirspacePens(const SETTINGS_MAP &settings_map);
+  void Deinitialise();
   void DrawAircraft(Canvas &canvas, const Angle angle,
                     const RasterPoint aircraft_pos);
 

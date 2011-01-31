@@ -24,6 +24,7 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Graphics.hpp"
 #include "Screen/Android/Event.hpp"
 #include "Simulator.hpp"
 #include "Asset.hpp"
@@ -67,6 +68,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 {
   CommonInterface::main_window.reset();
   Fonts::Deinitialize();
+  Graphics::Deinitialise();
   delete event_queue;
   delete native_view;
 }
