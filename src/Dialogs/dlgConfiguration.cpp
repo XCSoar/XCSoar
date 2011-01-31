@@ -1343,11 +1343,14 @@ setVariables()
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Purple Circle"));
-    dfe->addEnumText(_("B/W Icon"));
-    dfe->addEnumText(_("Orange Icon"));
+    dfe->addEnumText(_("B/W"));
+    dfe->addEnumText(_("Orange"));
     dfe->Set(Appearance.IndLandable);
     wp->RefreshDisplay();
   }
+
+  LoadFormProperty(*wf, _T("prpAppUseSWLandablesRendering"),
+                   Appearance.UseSWLandablesRendering);
 
   wp = (WndProperty*)wf->FindByName(_T("prpEnableExternalTriggerCruise"));
   if (wp) {
@@ -2232,6 +2235,10 @@ void dlgConfigurationShowModal(void)
       Graphics::InitLandableIcons();
     }
   }
+
+  changed |= SaveFormProperty(*wf, _T("prpAppUseSWLandablesRendering"),
+                              szProfileAppUseSWLandablesRendering,
+                              Appearance.UseSWLandablesRendering);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableExternalTriggerCruise"),
                               szProfileEnableExternalTriggerCruise,

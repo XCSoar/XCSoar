@@ -287,6 +287,9 @@ Profile::Use()
   if (Get(szProfileAppIndLandable, Temp))
     Appearance.IndLandable = (IndLandable_t)Temp;
 
+  Get(szProfileAppUseSWLandablesRendering,
+      Appearance.UseSWLandablesRendering);
+
   Get(szProfileAppInverseInfoBox,
 		  Appearance.InverseInfoBox);
 

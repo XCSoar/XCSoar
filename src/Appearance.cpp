@@ -31,5 +31,6 @@ struct Appearance Appearance = {
   tiDefault,
   true,
   apIbBox,
-  false
+  false,
+  true
 };

@@ -126,8 +126,13 @@
       </Edit>
 
       <Edit Name="prpAppIndLandable" Caption="Landable symbols" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Three styles are available: Purple circles (WinPilot style), a high contrast (monochrome) style with icons, or orange icons. The icons differ for landable field and airport. All styles mark the waypoints within reach green.">
+        Help="Three styles are available: Purple circles (WinPilot style), a high contrast (monochrome) style, or orange. The rendering differs for landable field and airport. All styles mark the waypoints within reach green.">
         <DataField DataType="enum" />
+      </Edit>
+
+      <Edit Name="prpAppUseSWLandablesRendering" Caption="Detailed landables" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="[Off] Display fixed icons for landables.&#10;[On] Show landables with variable information like runway length and heading.">
+        <DataField DataType="boolean" />
       </Edit>
     </Panel>
 
