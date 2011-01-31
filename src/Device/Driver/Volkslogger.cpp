@@ -182,6 +182,9 @@ VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
       vl.read_info() != VLA_ERR_NOERR)
     return false;
 
+  memset(&vl.database, 0, sizeof(vl.database));
+  memset(&vl.declaration, 0, sizeof(vl.declaration));
+
   CopyToNarrowBuffer(vl.declaration.flightinfo.pilot,
 		     sizeof(vl.declaration.flightinfo.pilot),
 		     decl->PilotName);
