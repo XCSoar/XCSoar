@@ -436,7 +436,6 @@ long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secm
 //
 VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   int16 l_count = 0;
-  int16 timeout = 0;
   int16 i;
   VLA_ERROR rc = VLA_ERR_NOERR;
   byte c;
@@ -451,7 +450,6 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
     Sleep(1);
   }
   c = 0;
-  timeout = 0;
 
   const unsigned timeout_ms = waittime * 1000;
   PeriodClock clock;
@@ -461,33 +459,33 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
     serial_out('R');
     Sleep(30);
 
-    if (clock.check(timeout_ms))
-      timeout = 1;
-  } while ( (!timeout) && (serial_in(&c) || c != 'L' ));
+    if (clock.check(timeout_ms)) {
+      if (!quietmode)
+        show(VLS_TXT_CONN_FL);
+      return VLA_ERR_NOANSWER;
+    }
+  } while (serial_in(&c) != VLA_ERR_NOERR || c != 'L');
 
-  if (timeout)
-    rc = VLA_ERR_NOANSWER;
-  else { // Ab dann:
-    l_count = 1;
-    do { // Auf 4 hintereinanderfolgende L's warten
-      if (!serial_in(&c)) {
-        if (c == 'L') {
-          l_count++;
-          if (l_count >= 4)
-            break;
-        }
-        else {
-          rc = VLA_ERR_NOANSWER;
+  l_count = 1;
+  do { // Auf 4 hintereinanderfolgende L's warten
+    if (serial_in(&c) == VLA_ERR_NOERR) {
+      if (c == 'L') {
+        l_count++;
+        if (l_count >= 4)
           break;
-        }
       }
+      else {
+        rc = VLA_ERR_NOANSWER;
+        break;
+      }
+    }
 
-      if (clock.check(timeout_ms))
-        timeout = 1;
-    } while ( !timeout && !serial_in(&c) );
-    if (timeout)
-      rc = VLA_ERR_TIMEOUT;
-  }
+    if (clock.check(timeout_ms)) {
+      if (!quietmode)
+        show(VLS_TXT_CONN_FL);
+      return VLA_ERR_TIMEOUT;
+    }
+  } while (serial_in(&c) == VLA_ERR_NOERR);
 
   if(!quietmode) {
     if (rc == VLA_ERR_NOERR)
