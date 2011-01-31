@@ -81,6 +81,9 @@ Bitmap::load_file(const TCHAR *path)
 void
 Bitmap::reset()
 {
+  if (texture == NULL)
+    return;
+
   RemoveSurfaceListener(*this);
 
   delete texture;
