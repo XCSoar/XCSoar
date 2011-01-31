@@ -19,6 +19,7 @@ Version 6.0.3 - not yet released
   - support extra large displays (tablets)
   - allow task switching
   - disallow multiple instances of XCSoar
+  - show notification icon while running
 
 Version 6.0.2 - 2011/01/20
 * devices
