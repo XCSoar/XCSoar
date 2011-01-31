@@ -352,9 +352,8 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
 
   // Render runway indication
   if (way_point.RunwayDirection.value_degrees() >= fixed_zero) {
-    bool scale_runway_length = true; // TODO: make configurable, probably not
     fixed len;
-    if (scale_runway_length && way_point.RunwayLength > 0)
+    if (Appearance.ScaleRunwayLength && way_point.RunwayLength > 0)
       len = (radius / fixed_two) +
             ((way_point.RunwayLength - 500) / 500) * (radius / fixed_four);
     else

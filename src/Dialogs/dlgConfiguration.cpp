@@ -1355,6 +1355,9 @@ setVariables()
   LoadFormProperty(*wf, _T("prpAppLandableRenderingScale"),
                    Appearance.LandableRenderingScale);
 
+  LoadFormProperty(*wf, _T("prpAppScaleRunwayLength"),
+                   Appearance.ScaleRunwayLength);
+
   wp = (WndProperty*)wf->FindByName(_T("prpEnableExternalTriggerCruise"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -2246,6 +2249,10 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpAppLandableRenderingScale"),
                               szProfileAppLandableRenderingScale,
                               Appearance.LandableRenderingScale);
+
+  changed |= SaveFormProperty(*wf, _T("prpAppScaleRunwayLength"),
+                              szProfileAppScaleRunwayLength,
+                              Appearance.ScaleRunwayLength);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableExternalTriggerCruise"),
                               szProfileEnableExternalTriggerCruise,

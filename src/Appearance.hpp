@@ -68,6 +68,7 @@ struct Appearance {
   bool UseCustomFonts;
   bool UseSWLandablesRendering;
   int LandableRenderingScale;
+  bool ScaleRunwayLength;
 };
 
 extern struct Appearance Appearance;

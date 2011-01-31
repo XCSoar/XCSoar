@@ -293,6 +293,9 @@ Profile::Use()
   Get(szProfileAppLandableRenderingScale,
       Appearance.LandableRenderingScale);
 
+  Get(szProfileAppScaleRunwayLength,
+      Appearance.ScaleRunwayLength);
+  
   Get(szProfileAppInverseInfoBox,
 		  Appearance.InverseInfoBox);
 

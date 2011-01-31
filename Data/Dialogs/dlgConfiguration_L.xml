@@ -139,6 +139,11 @@
         Help="A percentage to select the size landables are displayed on the map.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="50" Max="200" Step="10" />
       </Edit>
+
+      <Edit Name="prpAppScaleRunwayLength" Caption="Scale runway length" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="[Off] Display fixed length for runways.&#10;[On] Scale displayed runway length based on real length">
+        <DataField DataType="boolean" />
+      </Edit>
     </Panel>
 
     <Panel>
