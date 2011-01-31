@@ -52,6 +52,7 @@ private:
   static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
   static bool parseAltitude(const TCHAR* src, fixed& dest);
   static bool parseFlags(const TCHAR* src, WaypointFlags& dest);
+  static bool parseRunwayDirection(const TCHAR* src, Angle& dest);
 
   static void composeLine(TextWriter &writer, const Waypoint& wp);
   static void composeAngle(TextWriter &writer,

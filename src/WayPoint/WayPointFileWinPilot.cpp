@@ -36,14 +36,24 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
   TCHAR ctemp[255];
   const TCHAR *params[20];
   static const unsigned int max_params=sizeof(params)/sizeof(params[0]);
+  static bool welt2000_format = false;
   size_t n_params;
 
-  // If (end-of-file or comment)
-  if (line[0] == '\0' || line[0] == 0x1a ||
-      _tcsstr(line, _T("**")) == line ||
-      _tcsstr(line, _T("*")) == line)
+  if (linenum == 0)
+    welt2000_format = false;
+
+  // If (end-of-file)
+  if (line[0] == '\0' || line[0] == 0x1a)
     // -> return without error condition
     return true;
+
+  // If comment
+  if (line[0] == _T('*')) {
+    if (linenum == 0)
+      welt2000_format = (_tcsstr(line, _T("WRITTEN BY WELT2000")) != NULL);
+    // -> return without error condition
+    return true;
+  }
 
   if (_tcslen(line) >= sizeof(ctemp) / sizeof(ctemp[0]))
     /* line too long for buffer */
@@ -81,6 +91,8 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
   if (n_params > 6) {
     // Description (e.g. 119.750 Airport)
     new_waypoint.Comment=params[6];
+    if (welt2000_format)
+      parseRunwayDirection(params[6], new_waypoint.RunwayDirection);
   }
 
   // Waypoint Flags (e.g. AT)
@@ -138,6 +150,38 @@ WayPointFileWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 
   // Save angle
   dest = Angle::degrees(value);
+  return true;
+}
+
+bool
+WayPointFileWinPilot::parseRunwayDirection(const TCHAR* src, Angle& dest)
+{
+  // WELT2000 written files contain a 4-digit runway direction specification
+  // at the end of the comment, e.g. "123.50 0927"
+  dest = Angle::degrees(fixed_minus_one);
+
+  TCHAR const *start = _tcsrchr(src, _T(' '));
+  if (start)
+    start++;
+  else
+    start = src;
+
+  TCHAR *end;
+  int value = _tcstol(start, &end, 10);
+  if (start == end || *end != _T('\0') || end - start != 4  )
+    return false;
+
+  int a1 = (value / 100) * 10;
+  int a2 = (value % 100) * 10;
+
+  // TODO: WELT2000 generates quite a few entries where
+  //       a) a1 == a2 (accept those) and
+  //       b) the angles are neither equal or reciprocal (discard those)
+  //       Try finding a logic behind this behaviour.
+  if (a1 != a2 && (a1 + 180) % 360 != a2)
+    return false;
+
+  dest = Angle::degrees(fixed(a1));
   return true;
 }
 
