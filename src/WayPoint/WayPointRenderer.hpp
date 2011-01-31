@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 #include "Screen/Point.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 
 #include <stddef.h>
 
@@ -55,7 +56,7 @@ public:
 
   static void
   DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
-                     bool reachable, bool airport);
+                     bool reachable, const Waypoint &way_point);
 
   void render(Canvas &canvas, LabelBlock &label_block,
               const MapWindowProjection &projection,

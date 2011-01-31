@@ -45,6 +45,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Appearance.hpp"
 #include "Units.hpp"
+#include "Screen/Layout.hpp"
 
 #include <stdio.h>
 
@@ -141,8 +142,7 @@ public:
                                                Units::AltitudeUnit);
       }
 
-      WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable,
-                                           way_point.Flags.Airport);
+      WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable, way_point);
     } else {
       // non landable turnpoint
       const MaskedIcon *icon;
@@ -300,17 +300,90 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
 
 void
 WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
-                                     bool reachable, bool airport)
+                                     bool reachable, const Waypoint &way_point)
 {
-  const MaskedIcon *icon;
+  if (!Appearance.UseSWLandablesRendering) {
+    const MaskedIcon *icon;
 
-  if (reachable)
-    icon = airport ? &Graphics::AirportReachableIcon :
-                     &Graphics::FieldReachableIcon;
-  else
-    icon = airport ? &Graphics::AirportUnreachableIcon :
-                     &Graphics::FieldUnreachableIcon;
+    if (reachable)
+      icon = way_point.is_airport() ? &Graphics::AirportReachableIcon :
+                                      &Graphics::FieldReachableIcon;
+    else
+      icon = way_point.is_airport() ? &Graphics::AirportUnreachableIcon :
+                                      &Graphics::FieldUnreachableIcon;
 
-  icon->draw(canvas, pt);
+    icon->draw(canvas, pt);
+    return;
+  }
+
+  // SW rendering of landables
+  static const fixed scale = fixed_one; // TODO: make configurable
+  fixed radius = fixed_int_constant(10) * scale;
+  Brush fill;
+  Pen pen;
+
+  if (Appearance.IndLandable == wpLandableWinPilot) {
+    // Render landable with reachable state
+    pen.set(2 * scale, Color::BLACK);
+    canvas.select(pen);
+    if (reachable) {
+      fill.set(Color::GREEN);
+      canvas.select(fill);
+      canvas.circle(pt.x, pt.y, radius + radius / fixed_two);
+    }
+    fill.set(Color::MAGENTA);
+    canvas.select(fill);
+    canvas.circle(pt.x, pt.y, radius);
+  } else {
+    pen.set(1, Color::BLACK);
+    canvas.select(pen);
+    if (reachable)
+      fill.set(Color::GREEN);
+    else if (Appearance.IndLandable == wpLandableAltB)
+      fill.set(Color(255, 162, 0));    // Orange
+    else if (way_point.is_airport())
+      fill.set(Color::WHITE);
+    else
+      fill.set(Color(192, 192, 192));  // Light gray
+    canvas.select(fill);
+    canvas.circle(pt.x, pt.y, radius);
+  }
+
+  // Render runway indication
+  if (way_point.RunwayDirection.value_degrees() >= fixed_zero) {
+    bool scale_runway_length = true; // TODO: make configurable, probably not
+    fixed len;
+    if (scale_runway_length && way_point.RunwayLength > 0)
+      len = (radius / fixed_two) +
+            ((way_point.RunwayLength - 500) / 500) * (radius / fixed_four);
+    else
+      len = radius-fixed_one;
+#if defined(WIN32) && !defined(_WIN32_WCE)
+    len -= fixed_two * scale;
+#endif
+
+    fixed x, y;
+    way_point.RunwayDirection.sin_cos(x, y);
+
+    RasterPoint p1, p2;
+    p1.x=pt.x - iround(x * (len + fixed_one));
+    p1.y=pt.y + iround(y * (len + fixed_one));
+    p2.x=pt.x + iround(x * len);
+    p2.y=pt.y - iround(y * len);
+    pen.set((way_point.is_airport() ? 7 : 3) * scale, Color::BLACK);
+    canvas.select(pen);
+    canvas.line(p1, p2);
+    if (way_point.is_airport()) {
+      pen.set(3 * scale, Color::WHITE);
+      canvas.select(pen);
+      canvas.line(p1, p2);
+    }
+  } else {
+    // Runway direction unknown
+    fill.set(way_point.is_airport() ? Color::WHITE : Color::BLACK);
+    canvas.select(fill);
+    canvas.null_pen();
+    canvas.circle(pt.x, pt.y, radius / 3);
+  }
 }
 
