@@ -180,6 +180,13 @@ RouteLink::calc_speedups(const TaskProjection& proj)
 }
 
 
+unsigned 
+RoutePolars::round_time(const unsigned val)
+{
+  return val | 0x07;
+}
+
+
 unsigned
 RoutePolars::calc_time(const RouteLink& link) const
 {

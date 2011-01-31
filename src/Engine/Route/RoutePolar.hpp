@@ -454,6 +454,12 @@ public:
                       const RasterMap& map,
                       const TaskProjection& proj) const;
 
+  /**
+   * round up just below nearest 8 second block in a quick way
+   * this is an attempt to stabilise solutions
+   */
+  static unsigned round_time(const unsigned val);
+
 private:
 
   RoutePolar polar_glide;

@@ -282,7 +282,8 @@ RoutePlanner::link_cleared(const RouteLink &e)
   assert (!(e.first==e.second));
 
   count_dij++;
-  AStarPriorityValue v((is_final? g+h: g)+1, (is_final? 0:h));
+  AStarPriorityValue v((is_final? RoutePolars::round_time(g+h) : g), 
+                       (is_final? 0 : RoutePolars::round_time(h)));
   // add one to tie-break towards lower number of links
 
   if (verbose>1) {
