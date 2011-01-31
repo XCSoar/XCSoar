@@ -31,12 +31,15 @@ MixedTaskFactory::MixedTaskFactory(OrderedTask& _task,
   m_start_types.push_back(START_LINE);
   m_start_types.push_back(START_CYLINDER);
   m_start_types.push_back(START_BGA);
+  m_start_types.push_back(START_SECTOR);
+  m_intermediate_types.push_back(FAI_SECTOR);
   m_intermediate_types.push_back(AST_CYLINDER);
   m_intermediate_types.push_back(AAT_CYLINDER);
   m_intermediate_types.push_back(AAT_SEGMENT);
   m_intermediate_types.push_back(KEYHOLE_SECTOR);
   m_intermediate_types.push_back(BGAFIXEDCOURSE_SECTOR);
   m_intermediate_types.push_back(BGAENHANCEDOPTION_SECTOR);
+  m_finish_types.push_back(FINISH_SECTOR);
   m_finish_types.push_back(FINISH_LINE);
   m_finish_types.push_back(FINISH_CYLINDER);
 }
