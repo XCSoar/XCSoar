@@ -46,9 +46,7 @@ Copyright_License {
  */
 MainWindow::~MainWindow()
 {
-  delete vario;
-  delete flarm;
-  delete ta;
+  reset();
 }
 
 bool
@@ -152,6 +150,23 @@ MainWindow::InitialiseConfigured()
 
   LogStartUp(_T("Initialise message system"));
   popup.set(rc);
+}
+
+void
+MainWindow::reset()
+{
+  map.reset();
+
+  delete vario;
+  vario = NULL;
+
+  delete flarm;
+  flarm = NULL;
+
+  delete ta;
+  ta = NULL;
+
+  TopWindow::reset();
 }
 
 // Windows event handlers
