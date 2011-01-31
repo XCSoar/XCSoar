@@ -189,12 +189,12 @@ VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
 		     sizeof(vl.declaration.flightinfo.pilot),
 		     decl->PilotName);
 
-  CopyToNarrowBuffer(vl.declaration.flightinfo.competitionid,
-		     sizeof(vl.declaration.flightinfo.competitionid),
+  CopyToNarrowBuffer(vl.declaration.flightinfo.gliderid,
+                     sizeof(vl.declaration.flightinfo.gliderid),
 		     decl->AircraftRego);
 
-  CopyToNarrowBuffer(vl.declaration.flightinfo.competitionclass,
-		     sizeof(vl.declaration.flightinfo.competitionclass),
+  CopyToNarrowBuffer(vl.declaration.flightinfo.glidertype,
+                     sizeof(vl.declaration.flightinfo.glidertype),
 		     decl->AircraftType);
 
   const Waypoint *home = way_points.find_home();
