@@ -467,7 +467,7 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   } while (serial_in(&c) != VLA_ERR_NOERR || c != 'L');
 
   l_count = 1;
-  do { // Auf 4 hintereinanderfolgende L's warten
+  while (true) { // Auf 4 hintereinanderfolgende L's warten
     if (serial_in(&c) == VLA_ERR_NOERR) {
       if (c == 'L') {
         l_count++;
@@ -485,7 +485,7 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
         show(VLS_TXT_CONN_FL);
       return VLA_ERR_TIMEOUT;
     }
-  } while (serial_in(&c) == VLA_ERR_NOERR);
+  }
 
   if(!quietmode) {
     if (rc == VLA_ERR_NOERR)
