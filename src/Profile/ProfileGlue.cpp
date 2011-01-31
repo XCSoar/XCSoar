@@ -290,6 +290,9 @@ Profile::Use()
   Get(szProfileAppUseSWLandablesRendering,
       Appearance.UseSWLandablesRendering);
 
+  Get(szProfileAppLandableRenderingScale,
+      Appearance.LandableRenderingScale);
+
   Get(szProfileAppInverseInfoBox,
 		  Appearance.InverseInfoBox);
 

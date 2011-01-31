@@ -189,6 +189,7 @@ const TCHAR szProfileDebounceTimeout[] = CONF("DebounceTimeout");
 const TCHAR szProfileAppIndFinalGlide[] = CONF("AppIndFinalGlide");
 const TCHAR szProfileAppIndLandable[] = CONF("AppIndLandable");
 const TCHAR szProfileAppUseSWLandablesRendering[] = CONF("AppUseSWLandablesRendering");
+const TCHAR szProfileAppLandableRenderingScale[] = CONF("AppLandableRenderingScale");
 const TCHAR szProfileAppInverseInfoBox[] = CONF("AppInverseInfoBox");
 const TCHAR szProfileAppGaugeVarioSpeedToFly[] = CONF("AppGaugeVarioSpeedToFly");
 const TCHAR szProfileAppGaugeVarioAvgText[] = CONF("AppGaugeVarioAvgText");

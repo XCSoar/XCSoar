@@ -67,6 +67,7 @@ struct Appearance {
   InfoBoxBorderAppearance_t InfoBoxBorder;
   bool UseCustomFonts;
   bool UseSWLandablesRendering;
+  int LandableRenderingScale;
 };
 
 extern struct Appearance Appearance;

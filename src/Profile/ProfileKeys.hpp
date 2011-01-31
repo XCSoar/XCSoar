@@ -111,6 +111,7 @@ extern const TCHAR szProfileDebounceTimeout[];
 extern const TCHAR szProfileAppIndFinalGlide[];
 extern const TCHAR szProfileAppIndLandable[];
 extern const TCHAR szProfileAppUseSWLandablesRendering[];
+extern const TCHAR szProfileAppLandableRenderingScale[];
 extern const TCHAR szProfileAppInverseInfoBox[];
 extern const TCHAR szProfileAppInfoBoxColors[];
 extern const TCHAR szProfileAppGaugeVarioSpeedToFly[];
