@@ -34,6 +34,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.os.Build;
 import android.os.PowerManager;
+import android.os.Handler;
+import android.os.Message;
 import android.content.Context;
 import android.content.Intent;
 
@@ -70,12 +72,28 @@ public class XCSoar extends Activity {
         setContentView(tv);
     }
 
+  private void quit() {
+    nativeView = null;
+
+    TextView tv = new TextView(XCSoar.this);
+    tv.setText("Shutting down XCSoar...");
+    setContentView(tv);
+
+    finish();
+  }
+
+  Handler quitHandler = new Handler() {
+      public void handleMessage(Message msg) {
+        quit();
+      }
+    };
+
     public void initSDL()
     {
         if (!Loader.loaded)
             return;
 
-        nativeView = new NativeView(this);
+        nativeView = new NativeView(this, quitHandler);
         setContentView(nativeView);
         // Receive keyboard events
         nativeView.setFocusableInTouchMode(true);
@@ -125,8 +143,10 @@ public class XCSoar extends Activity {
         getSystemService(Context.NOTIFICATION_SERVICE);
       notificationManager.cancel(1);
 
-        if (nativeView != null)
+      if (nativeView != null) {
             nativeView.exitApp();
+        nativeView = null;
+      }
 
         if (wakeLock != null) {
             wakeLock.release();

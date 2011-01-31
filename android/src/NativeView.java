@@ -38,6 +38,7 @@ import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.os.Build;
+import android.os.Handler;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -103,6 +104,8 @@ class NativeView extends SurfaceView
   implements SurfaceHolder.Callback, Runnable {
   private static final String TAG = "XCSoar";
 
+  Handler quitHandler;
+
   Resources resources;
 
   EGL10 egl;
@@ -113,8 +116,10 @@ class NativeView extends SurfaceView
 
   Thread thread;
 
-  public NativeView(Activity context) {
+  public NativeView(Activity context, Handler _quitHandler) {
     super(context);
+
+    quitHandler = _quitHandler;
 
     resources = context.getResources();
 
@@ -237,7 +242,7 @@ class NativeView extends SurfaceView
         runNative();
     deinitializeNative();
 
-    ((Activity)getContext()).finish();
+    quitHandler.sendMessage(quitHandler.obtainMessage());
   }
 
   protected native boolean initializeNative(int width, int height);

@@ -20,6 +20,7 @@ Version 6.0.3 - not yet released
   - allow task switching
   - disallow multiple instances of XCSoar
   - show notification icon while running
+  - implement "Quit" properly
 
 Version 6.0.2 - 2011/01/20
 * devices
