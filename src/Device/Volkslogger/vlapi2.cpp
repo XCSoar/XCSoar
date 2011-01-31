@@ -437,7 +437,6 @@ long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secm
 VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   int16 l_count = 0;
   int16 i;
-  VLA_ERROR rc = VLA_ERR_NOERR;
   byte c;
 
   if(!quietmode)
@@ -469,15 +468,15 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   l_count = 1;
   while (true) { // Auf 4 hintereinanderfolgende L's warten
     if (serial_in(&c) == VLA_ERR_NOERR) {
-      if (c == 'L') {
-        l_count++;
-        if (l_count >= 4)
-          break;
+      if (c != 'L') {
+        if (!quietmode)
+          show(VLS_TXT_CONN_FL);
+        return VLA_ERR_NOANSWER;
       }
-      else {
-        rc = VLA_ERR_NOANSWER;
+
+      l_count++;
+      if (l_count >= 4)
         break;
-      }
     }
 
     if (clock.check(timeout_ms)) {
@@ -487,15 +486,12 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
     }
   }
 
-  if(!quietmode) {
-    if (rc == VLA_ERR_NOERR)
-      show(VLS_TXT_CONN_OK);
-    else
-      show(VLS_TXT_CONN_FL);
-  }
+  if (!quietmode)
+    show(VLS_TXT_CONN_OK);
+
   Sleep(300);
   serial_empty_io_buffers();
-  return rc;
+  return VLA_ERR_NOERR;
 }
 
 VLA_XFR::VLA_XFR() {
