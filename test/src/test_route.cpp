@@ -119,6 +119,7 @@ bool test_route(const unsigned n_airspaces, const RasterMap& map)
 
     AirspaceRoute route(map, polar, wind, *airspaces);
     RoutePlannerConfig config;
+    config.mode = RoutePlannerConfig::rpBoth;
 
     bool sol = false;
     for (int i=0; i<NUM_SOL; i++) {

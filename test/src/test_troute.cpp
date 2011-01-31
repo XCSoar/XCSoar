@@ -66,6 +66,7 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
   }
 
   RoutePlannerConfig config;
+  config.mode = RoutePlannerConfig::rpBoth;
 
   unsigned i=0;
   for (fixed ang=fixed_zero; ang< fixed_two_pi; ang+= fixed_quarter_pi*fixed_half) {

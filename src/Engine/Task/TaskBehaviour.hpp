@@ -36,9 +36,9 @@ enum AbortTaskMode {
 
 struct RoutePlannerConfig {
   RoutePlannerConfig():
-    mode(rpBoth),
+    mode(rpNone), // default disable while experimental
     allow_climb(true),
-    use_ceiling(true),
+    use_ceiling(false),
     safety_height_terrain(150.0) {}
 
   enum Mode {
