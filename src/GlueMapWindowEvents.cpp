@@ -367,6 +367,7 @@ void
 GlueMapWindow::on_paint_buffer(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
+  UpdateDisplayMode();
   UpdateMapScale();
 #endif
 

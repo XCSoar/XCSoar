@@ -21,6 +21,7 @@ Version 6.0.3 - not yet released
   - disallow multiple instances of XCSoar
   - show notification icon while running
   - implement "Quit" properly
+  - enable cruise/climb mode switching
 
 Version 6.0.2 - 2011/01/20
 * devices
