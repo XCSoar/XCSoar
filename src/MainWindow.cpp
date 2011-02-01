@@ -203,7 +203,6 @@ MainWindow::on_timer(timer_t id)
     return SingleWindow::on_timer(id);
 
   if (globalRunningEvent.test()) {
-    XCSoarInterface::AfterStartup();
     ProcessTimer::Process();
   }
   return true;

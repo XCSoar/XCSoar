@@ -182,12 +182,6 @@ RestoreDisplayOrientation()
 void
 XCSoarInterface::AfterStartup()
 {
-  static bool first = true;
-  if (!first)
-    return;
-
-  first = false;
-
   LogStartUp(_T("ProgramStarted = 3"));
   StartupLogFreeRamAndStorage();
 
@@ -450,6 +444,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
     instrument_thread->start();
 
   globalRunningEvent.trigger();
+
+  AfterStartup();
 
 #ifndef ENABLE_OPENGL
   draw_thread->resume();
