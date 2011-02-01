@@ -22,6 +22,7 @@ Version 6.0.3 - not yet released
   - show notification icon while running
   - implement "Quit" properly
   - enable cruise/climb mode switching
+  - use the external SD card on Samsung Galaxy
 
 Version 6.0.2 - 2011/01/20
 * devices
