@@ -24,6 +24,7 @@ Version 6.0.3 - not yet released
   - enable cruise/climb mode switching
   - use the external SD card on Samsung Galaxy
   - show on-screen keyboard buttons
+  - fix profile breakage
 
 Version 6.0.2 - 2011/01/20
 * devices

@@ -94,6 +94,13 @@ ProfileMap::Export(ProfileWriter &writer)
     writer.write(it_num->first.c_str(), it_num->second);
 
   for (map_str_t::const_iterator it_str = map_str.begin();
-       it_str != map_str.end(); it_str++)
+       it_str != map_str.end(); it_str++) {
+    if (map_num.find(it_str->first) != map_num.end())
+      /* workaround: if both an integer and a string exists for a
+         given name, don't save the string, as it will break profile
+         loading on PC */
+      continue;
+
     writer.write(it_str->first.c_str(), it_str->second.c_str());
+  }
 }
