@@ -451,7 +451,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
     instrument_thread->start();
 
   globalRunningEvent.trigger();
-  calculation_thread->resume();
 
 #ifndef ENABLE_OPENGL
   draw_thread->resume();
