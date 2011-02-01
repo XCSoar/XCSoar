@@ -47,6 +47,9 @@ StringToPortType(const TCHAR *value)
   if (_tcscmp(value, _T("serial")) == 0)
     return DeviceConfig::SERIAL;
 
+  if (_tcscmp(value, _T("rfcomm")) == 0)
+    return DeviceConfig::RFCOMM;
+
   if (_tcscmp(value, _T("auto")) == 0)
     return DeviceConfig::AUTO;
 
@@ -80,6 +83,9 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   unsigned Temp = 0;
 
   config.port_type = ReadPortType(n);
+
+  MakeDeviceSettingName(buffer, CONF("Port"), n, _T("BluetoothMAC"));
+  Get(buffer, config.bluetooth_mac);
 
   MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
   if (Get(buffer, Temp))
@@ -121,6 +127,9 @@ PortTypeToString(enum DeviceConfig::port_type type)
   case DeviceConfig::SERIAL:
     return _T("serial");
 
+  case DeviceConfig::RFCOMM:
+    return _T("rfcomm");
+
   case DeviceConfig::AUTO:
     return _T("auto");
 
@@ -150,6 +159,9 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
   TCHAR buffer[64];
 
   WritePortType(n, config.port_type);
+
+  MakeDeviceSettingName(buffer, CONF("Port"), n, _T("BluetoothMAC"));
+  Set(buffer, config.bluetooth_mac);
 
   MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
   Set(buffer, config.port_index);

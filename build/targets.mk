@@ -102,7 +102,7 @@ endif
 ifeq ($(TARGET),ANDROID)
   ANDROID_NDK ?= $(HOME)/opt/android-ndk-r4-crystax
 
-  ANDROID_PLATFORM = android-4
+  ANDROID_PLATFORM = android-5
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-eabi
   ANDROID_GCC_VERSION = 4.4.0

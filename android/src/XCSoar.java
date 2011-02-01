@@ -62,6 +62,12 @@ public class XCSoar extends Activity {
         Timer.Initialize();
         InternalGPS.Initialize();
 
+        try {
+          BluetoothHelper.Initialize();
+        } catch (VerifyError e) {
+          // Android < 2.0 doesn't have Bluetooth support
+        }
+
         // fullscreen mode
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,

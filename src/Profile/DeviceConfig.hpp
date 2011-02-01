@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_DEVICE_CONFIG_HPP
 #define XCSOAR_PROFILE_DEVICE_CONFIG_HPP
 
+#include "Util/StaticString.hpp"
+
 #include <tchar.h>
 
 /**
@@ -35,6 +37,11 @@ struct DeviceConfig {
      * Serial port, i.e. COMx / RS-232.
      */
     SERIAL,
+
+    /**
+     * Bluetooth RFCOMM to a paired device.
+     */
+    RFCOMM,
 
     /**
      * Attempt to auto-discover the GPS source.
@@ -53,6 +60,12 @@ struct DeviceConfig {
   port_type port_type;          /**< Type of the port */
   unsigned port_index;          /**< Index of the port */
   unsigned speed_index;         /**< Speed index (baud rate) */
+
+  /**
+   * The Bluetooth MAC address of the peer.
+   */
+  StaticString<32> bluetooth_mac;
+
   TCHAR driver_name[32];        /**< Name of the driver */
 };
 

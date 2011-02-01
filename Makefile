@@ -413,10 +413,12 @@ XCSOAR_SOURCES := \
 ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \
 	$(SRC)/Java/Global.cpp \
+	$(SRC)/Device/AndroidBluetoothPort.cpp \
 	$(SRC)/Android/InternalGPS.cpp \
 	$(SRC)/Android/TextUtil.cpp \
 	$(SRC)/Android/Timer.cpp \
 	$(SRC)/Android/EventBridge.cpp \
+	$(SRC)/Android/BluetoothHelper.cpp \
 	$(SRC)/Android/Main.cpp
 else
 XCSOAR_SOURCES += $(SRC)/XCSoar.cpp

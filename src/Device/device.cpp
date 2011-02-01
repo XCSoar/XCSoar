@@ -51,6 +51,7 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "Java/Object.hpp"
 #include "Java/Global.hpp"
+#include "Device/AndroidBluetoothPort.hpp"
 #endif
 
 #include <assert.h>
@@ -138,6 +139,28 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
     path = COMMPort[config.port_index];
     break;
 
+  case DeviceConfig::RFCOMM:
+#ifdef ANDROID
+    if (config.bluetooth_mac.empty()) {
+      LogStartUp(_T("No Bluetooth MAC configured"));
+      return NULL;
+    }
+
+    {
+      AndroidBluetoothPort *port =
+        new AndroidBluetoothPort(config.bluetooth_mac, handler);
+      if (!port->Open()) {
+        delete port;
+        return NULL;
+      }
+
+      return port;
+    }
+#else
+    LogStartUp(_T("Bluetooth not available on this platform"));
+    return NULL;
+#endif
+
   case DeviceConfig::AUTO:
     if (!detect_gps(buffer, sizeof(buffer))) {
       LogStartUp(_T("no GPS detected"));
@@ -222,6 +245,9 @@ DeviceConfigAvailable(const DeviceConfig &config)
   case DeviceConfig::SERIAL:
     return !is_android();
 
+  case DeviceConfig::RFCOMM:
+    return is_android();
+
   case DeviceConfig::AUTO:
     return is_windows_ce();
 
@@ -246,6 +272,10 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
   case DeviceConfig::SERIAL:
     return b.port_type == DeviceConfig::SERIAL &&
       a.port_index == b.port_index;
+
+  case DeviceConfig::RFCOMM:
+    return b.port_type == DeviceConfig::RFCOMM &&
+      a.bluetooth_mac.equals(b.bluetooth_mac);
 
   case DeviceConfig::AUTO:
   case DeviceConfig::INTERNAL:
