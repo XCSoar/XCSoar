@@ -78,6 +78,12 @@ private:
 
   int gmax;
   bool dirty;
+
+  bool layout_initialised;
+  RasterPoint orgTop;
+  RasterPoint orgMiddle;
+  RasterPoint orgBottom;
+
   Bitmap hDrawBitMap;
   DrawInfo_t diValueTop;
   DrawInfo_t diValueMiddle;

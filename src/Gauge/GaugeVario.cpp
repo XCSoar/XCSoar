@@ -66,7 +66,7 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
    nwidth(Layout::Scale(4)),
    nline(Layout::Scale(8)),
    polys(NULL), lines(NULL),
-   dirty(true)
+   dirty(true), layout_initialised(false)
 {
   Profile::Get(szProfileAppGaugeVarioSpeedToFly, ShowSpeedToFly);
   Profile::Get(szProfileAppGaugeVarioAvgText, ShowAvgText);
@@ -140,18 +140,12 @@ GaugeVario::~GaugeVario()
 void
 GaugeVario::on_paint_buffer(Canvas &canvas)
 {
-  static RasterPoint orgTop = {-1, -1};
-  static RasterPoint orgMiddle = {-1, -1};
-  static RasterPoint orgBottom = {-1, -1};
-  static int ValueHeight;
-  static bool InitDone = false;
-
 #ifdef ENABLE_OPENGL
-  InitDone = false;
+  layout_initialised = false;
 #endif
 
-  if (!InitDone){
-    ValueHeight = 4 + Fonts::CDI.get_capital_height()
+  if (!layout_initialised) {
+    unsigned ValueHeight = 4 + Fonts::CDI.get_capital_height()
                     + Fonts::Title.get_capital_height();
 
     orgMiddle.y = yoffset - ValueHeight / 2;
@@ -165,7 +159,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
     canvas.scale_copy(0, 0, hDrawBitMap,
                       Appearance.InverseInfoBox ? 58 : 0, 0, 58, 120);
 
-    InitDone = true;
+    layout_initialised = true;
   }
 
   if (ShowAvgText) {
