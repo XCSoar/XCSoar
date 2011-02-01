@@ -299,7 +299,8 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
                          label_block, v.labels);
 }
 
-static void DrawLandableBase(Canvas &canvas, const RasterPoint& pt,
+static void
+DrawLandableBase(Canvas &canvas, const RasterPoint& pt,
                              bool airport, const fixed radius)
 {
   int iradius = iround(radius);
@@ -317,6 +318,36 @@ static void DrawLandableBase(Canvas &canvas, const RasterPoint& pt,
     diamond[3].y = pt.y - 0;
     canvas.polygon(diamond, sizeof(diamond)/sizeof(diamond[0]));
   }
+}
+
+static void
+DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
+                   const Angle &a, fixed radius, fixed width)
+{
+  if (radius <= fixed_zero)
+    return;
+
+  fixed fdx, fdy;
+  (a + Angle::degrees(fixed_int_constant(90))).sin_cos(fdx, fdy);
+  int dx = iround(fdx * width / fixed_two);
+  int dy = iround(fdy * width / fixed_two);
+
+  fixed x, y;
+  a.sin_cos(x, y);
+  int rx = iround(x * radius);
+  int ry = iround(y * radius);
+
+  RasterPoint runway[4];
+  runway[0].x = pt.x - rx + dx;
+  runway[0].y = pt.y + ry - dy;
+  runway[1].x = pt.x - rx - dx;
+  runway[1].y = pt.y + ry + dy;
+  runway[2].x = pt.x + rx - dx;
+  runway[2].y = pt.y - ry + dy;
+  runway[3].x = pt.x + rx + dx;
+  runway[3].y = pt.y - ry - dy;
+
+  canvas.polygon(runway, sizeof(runway)/sizeof(runway[0]));
 }
 
 void
@@ -342,12 +373,10 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
                 fixed_int_constant(100);
   fixed radius = fixed_int_constant(10) * scale;
   Brush fill;
-  Pen pen;
 
+  canvas.black_pen();
   if (Appearance.IndLandable == wpLandableWinPilot) {
     // Render landable with reachable state
-    pen.set(2 * scale, Color::BLACK);
-    canvas.select(pen);
     if (reachable) {
       fill.set(Color::GREEN);
       canvas.select(fill);
@@ -358,8 +387,6 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
     canvas.select(fill);
     DrawLandableBase(canvas, pt, way_point.is_airport(), radius);
   } else {
-    pen.set(1, Color::BLACK);
-    canvas.select(pen);
     if (reachable)
       fill.set(Color::GREEN);
     else if (Appearance.IndLandable == wpLandableAltB)
@@ -379,25 +406,11 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
       len = (radius / fixed_two) +
             ((way_point.RunwayLength - 500) / 500) * (radius / fixed_four);
     else
-      len = radius-fixed_one;
-#if defined(WIN32) && !defined(_WIN32_WCE)
-    len -= fixed_two * scale;
-#endif
-
-    fixed x, y;
-    way_point.RunwayDirection.sin_cos(x, y);
-
-    RasterPoint p1, p2;
-    p1.x=pt.x - iround(x * (len + fixed_one));
-    p1.y=pt.y + iround(y * (len + fixed_one));
-    p2.x=pt.x + iround(x * len);
-    p2.y=pt.y - iround(y * len);
-    pen.set(iround(7 * scale), Color::BLACK);
-    canvas.select(pen);
-    canvas.line(p1, p2);
-    pen.set(iround(3 * scale), Color::WHITE);
-    canvas.select(pen);
-    canvas.line(p1, p2);
+      len = radius;
+    len += fixed_two * scale;
+    canvas.white_brush();
+    DrawLandableRunway(canvas, pt, way_point.RunwayDirection, len,
+                       fixed_int_constant(5) * scale);
   }
 }
 
