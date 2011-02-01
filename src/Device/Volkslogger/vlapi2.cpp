@@ -322,6 +322,10 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
     serial_out(c);
     if((i%step)==0)
       progress_set(VLS_TXT_WDB);
+
+    /* throttle sending a bit, or the Volkslogger's receive buffer
+       will overrun */
+    Sleep(td);
   }
 
   serial_out(crc16/256);
