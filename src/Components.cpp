@@ -201,7 +201,6 @@ XCSoarInterface::AfterStartup()
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
-  SetSettingsComputer().enable_olc = true;
   protected_task_manager->task_load_default(&way_points);
 
   task_manager->resume();
