@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_LOGO_VIEW_HPP
 
 #include "Screen/Bitmap.hpp"
+#include "Screen/Font.hpp"
 
 #include <windef.h>
 
@@ -32,6 +33,10 @@ class Canvas;
 
 class LogoView {
   Bitmap logo, big_logo, title, big_title;
+
+#ifdef ENABLE_SDL
+  Font font;
+#endif
 
 public:
   LogoView();
