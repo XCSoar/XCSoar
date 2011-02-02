@@ -52,7 +52,8 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
   GlideComputerAirData(airspace, task),
   GlideComputerTask(task),
   GlideComputerStats(task),
-  way_points(_way_points), protected_task_manager(task)
+  way_points(_way_points), protected_task_manager(task),
+  TeamCodeRefId(-1)
 {
   events.set_computer(*this);
   idle_clock.update();
@@ -154,6 +155,24 @@ GlideComputer::ProcessIdle()
   SetCalculated().time_process_idle = clock.elapsed();
 }
 
+bool
+GlideComputer::DetermineTeamCodeRefLocation()
+{
+  if (SettingsComputer().TeamCodeRefWaypoint < 0)
+    return false;
+
+  if (SettingsComputer().TeamCodeRefWaypoint == TeamCodeRefId)
+    return TeamCodeRefFound;
+
+  TeamCodeRefId = SettingsComputer().TeamCodeRefWaypoint;
+  const Waypoint *wp = way_points.lookup_id(TeamCodeRefId);
+  if (wp == NULL)
+    return TeamCodeRefFound = false;
+
+  TeamCodeRefLocation = wp->Location;
+  return TeamCodeRefFound = true;
+}
+
 /**
  * Calculates the own TeamCode and saves it to Calculated
  */
@@ -161,7 +180,7 @@ void
 GlideComputer::CalculateOwnTeamCode()
 {
   // No reference waypoint for teamcode calculation chosen -> cancel
-  if (SettingsComputer().TeamCodeRefWaypoint < 0)
+  if (!DetermineTeamCodeRefLocation())
     return;
 
   // Only calculate every 10sec otherwise cancel calculation
@@ -169,15 +188,9 @@ GlideComputer::CalculateOwnTeamCode()
     return;
 
   // Get bearing and distance to the reference waypoint
-  const Waypoint *wp =
-      way_points.lookup_id(SettingsComputer().TeamCodeRefWaypoint);
-
-  if (!wp)
-    return;
-
   Angle bearing;
   fixed distance;
-  wp->Location.distance_bearing(Basic().Location, distance, bearing);
+  TeamCodeRefLocation.distance_bearing(Basic().Location, distance, bearing);
 
   // Save teamcode to Calculated
   SetCalculated().OwnTeamCode.Update(bearing, distance);
@@ -189,23 +202,17 @@ GlideComputer::CalculateTeammateBearingRange()
   static bool InTeamSector = false;
 
   // No reference waypoint for teamcode calculation chosen -> cancel
-  if (SettingsComputer().TeamCodeRefWaypoint < 0)
+  if (!DetermineTeamCodeRefLocation())
     return;
 
   // Get bearing and distance to the reference waypoint
-  const Waypoint *wp =
-      way_points.lookup_id(SettingsComputer().TeamCodeRefWaypoint);
-
-  if (!wp)
-    return;
-
-  Angle ownBearing = wp->Location.bearing(Basic().Location);
+  Angle ownBearing = TeamCodeRefLocation.bearing(Basic().Location);
 
   // If (TeamCode exists and is valid)
   if (SettingsComputer().TeammateCodeValid) {
     // Calculate bearing and distance to teammate
     SetCalculated().TeammateLocation =
-        SettingsComputer().TeammateCode.GetLocation(wp->Location);
+        SettingsComputer().TeammateCode.GetLocation(TeamCodeRefLocation);
 
     GeoVector team_vector(Basic().Location, Calculated().TeammateLocation);
 
