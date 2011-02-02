@@ -188,7 +188,7 @@ GlueMapWindow::UpdateMapScale()
     return;
   }
 
-  if (GetDisplayMode() == dmCircling)
+  if (GetDisplayMode() == dmCircling && SettingsMap().CircleZoom)
     return;
 
   if (SettingsMap().EnablePan)
