@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/OpenGL/VertexArray.hpp"
 #include "Screen/OpenGL/Draw.hpp"
 #include "Screen/Util.hpp"
+#include "Util/AllocatedArray.hpp"
 
 #include <assert.h>
 
@@ -78,11 +79,14 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
 
   if (!brush.is_hollow() && cPoints >= 3) {
     brush.set();
-    GLushort *triangles = new GLushort[3*(cPoints-2)];
-    int idx_count = polygon_to_triangle(lppt, cPoints, triangles);
+
+    static AllocatedArray<GLushort> triangle_buffer;
+    triangle_buffer.grow_discard(3 * (cPoints - 2));
+    int idx_count = polygon_to_triangle(lppt, cPoints,
+                                        triangle_buffer.begin());
     if (idx_count > 0)
-      glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT, triangles);
-    delete triangles;
+      glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT,
+                     triangle_buffer.begin());
   }
 
   if (pen_over_brush()) {
