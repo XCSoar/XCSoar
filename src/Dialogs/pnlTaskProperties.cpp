@@ -80,15 +80,6 @@ RefreshView()
   bool racing_types = 
     (ftype == OrderedTask::FACTORY_RT) || aat_types;
 
-  wp = ((WndProperty*)wf->FindByName(_T("prpTaskScored")));
-  if (wp) {
-    wp->set_visible(fai_types || racing_types);
-    DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
-    df.SetAsBoolean(p.task_scored);
-    wp->set_enabled(false);
-    wp->RefreshDisplay();
-  }
-
   wp = ((WndProperty*)wf->FindByName(_T("prpMinTime")));
   if (wp) {
     wp->set_visible(aat_types);
