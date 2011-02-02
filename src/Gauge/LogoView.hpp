@@ -28,14 +28,16 @@ Copyright_License {
 
 class Canvas;
 
-/**
- * Draws the XCSoar logo and the version number into the Canvas, with
- * a white background.
- *
- * @param canvas the Canvas to draw on
- * @param rc the region within the Canvas to draw into
- */
-void
-DrawLogo(Canvas &canvas, const RECT &rc);
+class LogoView {
+public:
+  /**
+   * Draws the XCSoar logo and the version number into the Canvas, with
+   * a white background.
+   *
+   * @param canvas the Canvas to draw on
+   * @param rc the region within the Canvas to draw into
+   */
+  void draw(Canvas &canvas, const RECT &rc);
+};
 
 #endif

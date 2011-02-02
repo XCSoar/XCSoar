@@ -28,7 +28,7 @@ Copyright_License {
 #include "Version.hpp"
 
 void
-DrawLogo(Canvas &canvas, const RECT &rc)
+LogoView::draw(Canvas &canvas, const RECT &rc)
 {
   const unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
 

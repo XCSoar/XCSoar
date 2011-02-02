@@ -34,6 +34,7 @@ Copyright_License {
 #include "Compiler.h"
 
 static WndForm *wf = NULL;
+static LogoView *logo;
 
 extern TCHAR startProfileFile[];
 
@@ -41,7 +42,7 @@ static void
 OnLogoPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   canvas.clear_white();
-  DrawLogo(canvas, Sender->get_client_rect());
+  logo->draw(canvas, Sender->get_client_rect());
 }
 
 static void
@@ -65,6 +66,8 @@ bool
 dlgStartupShowModal()
 {
   LogStartUp(_T("Startup dialog"));
+
+  logo = new LogoView();
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ? _T("IDR_XML_STARTUP_L") :
@@ -107,5 +110,6 @@ dlgStartupShowModal()
   }
 
   delete wf;
+  delete logo;
   return true;
 }

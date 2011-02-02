@@ -34,12 +34,13 @@ Copyright_License {
 #ifdef SIMULATOR_AVAILABLE
 
 static WndForm *wf = NULL;
+static LogoView *logo;
 
 static void
 OnLogoPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   canvas.clear_white();
-  DrawLogo(canvas, Sender->get_client_rect());
+  logo->draw(canvas, Sender->get_client_rect());
 }
 
 static void
@@ -65,6 +66,8 @@ bool
 dlgSimulatorPromptShowModal()
 {
 #ifdef SIMULATOR_AVAILABLE
+  logo = new LogoView();
+
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ? _T("IDR_XML_SIMULATORPROMPT_L") :
                                       _T("IDR_XML_SIMULATORPROMPT"));
@@ -82,6 +85,7 @@ dlgSimulatorPromptShowModal()
   bool retval = (wf->ShowModal() == mrOK);
 
   delete wf;
+  delete logo;
 
   return retval;
 #else
