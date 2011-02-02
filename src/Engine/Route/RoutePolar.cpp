@@ -122,7 +122,7 @@ RoutePolars::calc_footprint(const AGeoPoint& origin,
   for (int i=0; i< ROUTEPOLAR_POINTS; ++i) {
     const GeoPoint dest = msl_intercept(i, m_origin, proj);
     if (valid)
-      p[i] = map.Intersection(m_origin, altitude, dest);
+      p[i] = map.Intersection(m_origin, altitude, altitude, dest);
     else
       p[i] = dest;
   }
@@ -354,4 +354,58 @@ RoutePolars::set_config(const RoutePlannerConfig& _config,
 bool
 RoutePolars::can_climb() const {
   return config.allow_climb && positive(inv_M);
+}
+
+bool
+RoutePolars::intersection(const AGeoPoint& origin,
+                          const AGeoPoint& destination,
+                          const RasterMap& map,
+                          const TaskProjection& proj,
+                          GeoPoint& intx) const
+{
+  if (!map.isMapLoaded())
+    return false;
+
+  RouteLink e(RoutePoint(proj.project(destination), destination.altitude),
+              RoutePoint(proj.project(origin), origin.altitude), proj);
+  if (!positive(e.d)) return false;
+
+  const short h_diff = origin.altitude-destination.altitude;
+
+  if (h_diff <= 0) {
+    // assume gradual climb to destination
+    intx = map.Intersection(origin, origin.altitude-(short)config.safety_height_terrain,
+                            h_diff, destination);
+    return !(intx == destination);
+  }
+
+  const short vh = calc_vheight(e);
+
+  if (h_diff > vh) {
+    // have excess height to glide, scan pure glide, will arrive at destination high
+
+    intx = map.Intersection(origin,
+                            origin.altitude-(short)config.safety_height_terrain,
+                            vh, destination);
+    return !(intx == destination);
+  }
+
+  // mixed cruise-climb then glide segments, do separate searches for each
+
+  // proportion of flight as glide
+  const fixed p = fixed(h_diff)/fixed(vh);
+
+  // location of start of glide
+  const GeoPoint p_glide = destination.interpolate(origin, p);
+
+  // intersects during cruise-climb?
+  intx = map.Intersection(origin, origin.altitude-(short)config.safety_height_terrain,
+                          0, destination);
+  if (!(intx == destination))
+    return true;
+
+  // intersects during glide?
+  intx = map.Intersection(p_glide, origin.altitude-(short)config.safety_height_terrain,
+                          h_diff, destination);
+  return !(intx == destination);
 }

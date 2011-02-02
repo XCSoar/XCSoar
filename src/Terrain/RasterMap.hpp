@@ -97,13 +97,16 @@ public:
    * If the search goes outside the terrain area, will return the destination location
    *
    * @param origin Start (aircraft) location
-   * @param h_origin Height of aircraft
+   * @param h_origin Height of aircraft (m)
+   * @param h_glide Height to be glided (m)
    * @param destination Location of aircraft at MSL
    *
    * @return Location of intersection, or if none, destination
    */
   gcc_pure
-  GeoPoint Intersection(const GeoPoint& origin, const short h_origin,
+  GeoPoint Intersection(const GeoPoint& origin,
+                        const short h_origin,
+                        const short h_glide,
                         const GeoPoint& destination) const;
 
 };

@@ -33,7 +33,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Constants.h"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/GlideTerrain.hpp"
 #include "LocalTime.hpp"
 #include "MapWindowProjection.hpp"
 #include "Components.hpp"

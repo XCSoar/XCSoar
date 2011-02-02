@@ -170,6 +170,20 @@ public:
   void calc_footprint(const AGeoPoint& origin,
                       GeoPoint fp[ROUTEPOLAR_POINTS]) const;
 
+  /**
+   * Determine if intersection with terrain occurs in forwards direction from
+   * origin to destination, with cruise-climb and glide segments.
+   *
+   * @param origin Aircraft location
+   * @param destination Target
+   * @param intx First intercept point
+   *
+   * @return true if terrain intersects
+   */
+  bool intersection(const AGeoPoint& origin,
+                    const AGeoPoint& destination,
+                    GeoPoint& intx) const;
+
   unsigned short verbose; /**< Used for debugging output. To be removed when
                            * code is stable. */
 

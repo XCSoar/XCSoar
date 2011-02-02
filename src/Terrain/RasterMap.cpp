@@ -154,7 +154,9 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
 }
 
 GeoPoint
-RasterMap::Intersection(const GeoPoint& origin, const short h_origin,
+RasterMap::Intersection(const GeoPoint& origin,
+                        const short h_origin,
+                        const short h_glide,
                         const GeoPoint& destination) const
 {
   std::pair<unsigned, unsigned> c_origin = projection.project(origin);
@@ -168,13 +170,17 @@ RasterMap::Intersection(const GeoPoint& origin, const short h_origin,
   if (c_diff==0) {
     return destination; // no distance
   }
-  const long slope_fact = lround((((long)h_origin)<<RASTER_SLOPE_FACT)/c_diff);
+  const long slope_fact = lround((((long)h_glide)<<RASTER_SLOPE_FACT)/c_diff);
 
   std::pair<unsigned, unsigned> c_int;
   raster_tile_cache.Intersection(c_origin.first, c_origin.second,
                                  c_destination.first, c_destination.second,
                                  h_origin, slope_fact,
                                  c_int.first, c_int.second);
+
+  if (c_int == c_destination) // made it to grid location, return exact location
+                              // of destination
+    return destination;
 
   c_int.first = (c_int.first<<8);
   c_int.second = (c_int.second<<8);

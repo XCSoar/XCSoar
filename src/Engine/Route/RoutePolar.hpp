@@ -460,6 +460,24 @@ public:
    */
   static unsigned round_time(const unsigned val);
 
+  /**
+   * Determine if intersection with terrain occurs in forwards direction from
+   * origin to destination, with cruise-climb and glide segments.
+   *
+   * @param origin Aircraft location
+   * @param destination Target
+   * @param map RasterMap of terrain.
+   * @param proj Task projection
+   * @param intx First intercept point (output)
+   *
+   * @return true if terrain intersects
+   */
+  bool intersection(const AGeoPoint& origin,
+                    const AGeoPoint& destination,
+                    const RasterMap& map,
+                    const TaskProjection& proj,
+                    GeoPoint& intx) const;
+
 private:
 
   RoutePolar polar_glide;

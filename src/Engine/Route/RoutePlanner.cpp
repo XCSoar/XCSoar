@@ -569,6 +569,17 @@ RoutePlanner::calc_footprint(const AGeoPoint& origin,
   rpolars.calc_footprint(origin, fp, terrain, proj);
 }
 
+bool
+RoutePlanner::intersection(const AGeoPoint& origin,
+                           const AGeoPoint& destination,
+                           GeoPoint& intx) const
+{
+  TaskProjection proj;
+  proj.reset(origin);
+  proj.update_fast();
+  return rpolars.intersection(origin, destination, terrain, proj, intx);
+}
+
 /*
   @todo:
   - check wind directions are correct

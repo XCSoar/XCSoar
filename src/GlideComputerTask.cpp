@@ -25,7 +25,6 @@ Copyright_License {
 #include "GlideComputerTask.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/GlideTerrain.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
 
@@ -129,22 +128,29 @@ GlideComputerTask::ProcessIdle()
   const AIRCRAFT_STATE as = ToAircraftState(Basic());
   ProtectedTaskManager::ExclusiveLease task(m_task);
   task->update_idle(as);
-  {
-    if (Calculated().task_stats.current_leg.solution_remaining.defined()) {
-      const GeoVector &v = Calculated().task_stats.current_leg.solution_remaining.Vector;
-      const AGeoPoint start (as.get_location(), as.NavAltitude);
-      const AGeoPoint dest (v.end_point(start), Calculated().task_stats.current_leg.solution_remaining.MinHeight);
 
-      m_route.synchronise(m_airspaces, dest, start, task->get_glide_polar(), Basic().wind);
+  const GlideResult& sol = Calculated().task_stats.current_leg.solution_remaining;
 
-      short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
-                                        (int)Basic().working_band_ceiling);
+  if (sol.defined()) {
+    const GeoVector &v = sol.Vector;
+    const AGeoPoint start (as.get_location(), as.NavAltitude);
+    const AGeoPoint dest (v.end_point(start), sol.MinHeight);
 
-      m_route.solve(dest, start, SettingsComputer().route_planner, h_ceiling);
+    m_route.synchronise(m_airspaces, dest, start, task->get_glide_polar(), Basic().wind);
 
-      // allow at least 500m of climb above current altitude as ceiling, in case
-      // there are no actual working band stats.
-    }
+    short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
+                                      (int)Basic().working_band_ceiling);
+
+    m_route.solve(dest, start, SettingsComputer().route_planner, h_ceiling);
+
+    // allow at least 500m of climb above current altitude as ceiling, in case
+    // there are no actual working band stats.
+
+    SetCalculated().TerrainWarning = m_route.intersection(start, dest,
+                                                          SetCalculated().TerrainWarningLocation);
+
+  } else {
+    SetCalculated().TerrainWarning = false;
   }
 }
 
@@ -154,32 +160,11 @@ GlideComputerTask::TerrainWarning()
   const AIRCRAFT_STATE state = ToAircraftState(Basic());
   GlidePolar polar = m_task.get_glide_polar();
 
-
   if (SettingsComputer().FinalGlideTerrain) {
     // @todo: update TerrainBase in new footprint calculations,
     // remove TerrainFootprint function from GlideComputerAirData
 
-    const AGeoPoint start (state.get_location(),
-                           state.NavAltitude);
+    const AGeoPoint start (state.get_location(), state.NavAltitude);
     m_route.footprint(start, SetCalculated().GlideFootPrint);
   }
-
-  GlideTerrain g_terrain(SettingsComputer(), terrain);
-  GeoPoint null_point(Angle::native(fixed_zero), Angle::native(fixed_zero));
-  const TaskStats& stats = Calculated().task_stats;
-  const GlideResult& current = stats.current_leg.solution_remaining;
-
-  TerrainIntersection its(null_point);
-
-  if (!stats.task_valid) {
-    g_terrain.set_max_range(fixed(max(fixed(20000.0), 
-                                      MapProjection().GetScreenDistanceMeters())));
-    its = g_terrain.find_intersection(state, polar);
-  } else {
-    its = g_terrain.find_intersection(state, current, polar);
-  }
-
-  SetCalculated().TerrainWarning = !its.out_of_range;
-  if (!its.out_of_range)
-    SetCalculated().TerrainWarningLocation = its.location;
 }

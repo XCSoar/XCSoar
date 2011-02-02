@@ -55,6 +55,10 @@ public:
   void footprint(const AGeoPoint& origin,
                  GeoPoint p[ROUTEPOLAR_POINTS]) const;
 
+  bool intersection(const AGeoPoint& origin,
+                    const AGeoPoint& destination,
+                    GeoPoint& intx) const;
+
 private:
   RasterTerrain& terrain;
   AirspaceRoute m_planner;
