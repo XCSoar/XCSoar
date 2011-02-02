@@ -206,7 +206,7 @@ OnTeamClicked(WndButton &Sender)
 
   // Ask for confirmation
   if (MessageBoxX(_T("Do you want to set this FLARM contact as your ")
-      _T("new teammate?"), _T("New Teammate"), MB_YESNO) == IDNO)
+      _T("new teammate?"), _T("New Teammate"), MB_YESNO) != IDYES)
     return;
 
   const FLARM_TRAFFIC* target =
