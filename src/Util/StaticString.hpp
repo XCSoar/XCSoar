@@ -32,6 +32,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <tchar.h>
 #include <algorithm>
 
 /**
