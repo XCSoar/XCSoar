@@ -25,6 +25,8 @@ Version 6.0.3 - not yet released
   - use the external SD card on Samsung Galaxy
   - show on-screen keyboard buttons
   - fix profile breakage
+  - show flarm and thermal assistant gauge
+  - show text in splash screen
 
 Version 6.0.2 - 2011/01/20
 * devices

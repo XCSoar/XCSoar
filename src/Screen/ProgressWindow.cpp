@@ -47,7 +47,8 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   // Determine text height
 #ifdef ENABLE_SDL
-  text_height = 20; // XXX font bootstrapping on SDL needed
+  font.set("Droid Sans", 12);
+  text_height = font.get_height();
 #else
   VirtualCanvas canvas(1, 1);
   text_height = canvas.text_height(_T("W"));
@@ -64,6 +65,10 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   message.set(*this, NULL, 0,
               height - progress_border_height - text_height - (height/48),
               width, text_height, message_style);
+
+#ifdef ENABLE_SDL
+  message.set_font(font);
+#endif
 
   // Initialize progress bar
   ProgressBarStyle pb_style;

@@ -38,6 +38,10 @@ class ProgressWindow : public ContainerWindow {
 
   Bitmap bitmap_progress_border;
 
+#ifdef ENABLE_SDL
+  Font font;
+#endif
+
   TextWindow message;
 
   ProgressBar progress_bar;
