@@ -24,21 +24,17 @@ Copyright_License {
 #ifndef SCREEN_LABELBLOCK_HPP
 #define SCREEN_LABELBLOCK_HPP
 
+#include "Util/StaticArray.hpp"
 #include "Compiler.h"
+
 #include <windef.h>
 
 class LabelBlock {
-  enum {
-    MAXLABELBLOCKS = 256
-  };
+  StaticArray<RECT, 256> blocks;
 
 public:
-  LabelBlock():num_blocks(0) {};
   bool check(const RECT rc);
   void reset();
-private:
-  unsigned num_blocks;
-  RECT block_coords[MAXLABELBLOCKS];
 };
 
 #endif

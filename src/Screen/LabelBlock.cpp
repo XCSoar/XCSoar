@@ -26,7 +26,7 @@ Copyright_License {
 
 void LabelBlock::reset()
 {
-  num_blocks = 0;
+  blocks.clear();
 }
 
 static gcc_pure bool
@@ -38,14 +38,12 @@ CheckRectOverlap(const RECT& rc1, const RECT& rc2)
 
 bool LabelBlock::check(const RECT rc)
 {
-  for (unsigned i = 0; i < num_blocks; i++)
-    if (CheckRectOverlap(block_coords[i], rc))
+  for (unsigned i = 0; i < blocks.size(); i++)
+    if (CheckRectOverlap(blocks[i], rc))
       return false;
 
-  if (num_blocks<MAXLABELBLOCKS-1) {
-    block_coords[num_blocks]= rc;
-    num_blocks++;
-  }
+  if (!blocks.full())
+    blocks.append(rc);
 
   return true;
 }
