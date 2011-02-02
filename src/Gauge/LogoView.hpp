@@ -24,12 +24,18 @@ Copyright_License {
 #ifndef XCSOAR_LOGO_VIEW_HPP
 #define XCSOAR_LOGO_VIEW_HPP
 
+#include "Screen/Bitmap.hpp"
+
 #include <windef.h>
 
 class Canvas;
 
 class LogoView {
+  Bitmap logo, big_logo, title, big_title;
+
 public:
+  LogoView();
+
   /**
    * Draws the XCSoar logo and the version number into the Canvas, with
    * a white background.
