@@ -39,13 +39,15 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth))
 #ifdef ENABLE_OPENGL
-  , texture(CorrectedWidth(nWidth), nHeight)
+  , texture(new GLTexture(CorrectedWidth(nWidth), nHeight))
 #endif
 {
   assert(nWidth > 0);
   assert(nHeight > 0);
 
 #ifdef ENABLE_OPENGL
+  AddSurfaceListener(*this);
+
   buffer = new BGRColor[corrected_width * height];
 #elif defined(ENABLE_SDL)
   Uint32 rmask, gmask, bmask, amask;
@@ -112,6 +114,9 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
 RawBitmap::~RawBitmap()
 {
 #ifdef ENABLE_OPENGL
+  RemoveSurfaceListener(*this);
+
+  delete texture;
   delete[] buffer;
 #elif defined(ENABLE_SDL)
   ::SDL_FreeSurface(surface);
@@ -121,3 +126,21 @@ RawBitmap::~RawBitmap()
   delete[] buffer;
 #endif
 }
+
+#ifdef ENABLE_OPENGL
+
+void
+RawBitmap::surface_created()
+{
+  if (texture == NULL)
+    texture = new GLTexture(corrected_width, height);
+}
+
+void
+RawBitmap::surface_destroyed()
+{
+  delete texture;
+  texture = NULL;
+}
+
+#endif

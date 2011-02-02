@@ -45,6 +45,9 @@ Copyright_License {
 TopWindow::TopWindow()
 #ifdef ENABLE_SDL
   :invalidated(false)
+#ifdef ANDROID
+  , paused(false)
+#endif
 #else
   :hSavedFocus(NULL)
 #endif
@@ -140,9 +143,7 @@ TopWindow::invalidate()
 
   /* wake up the event loop */
 #ifdef ANDROID
-  Event event;
-  event.type = Event::NOP;
-  event_queue->push(event);
+  event_queue->push(Event::NOP);
 #else
   /* note that SDL_NOEVENT is not documented, but since we just want
      to wake up without actually sending an event, I hope this works
@@ -163,6 +164,13 @@ TopWindow::expose() {
 void
 TopWindow::refresh()
 {
+#ifdef ANDROID
+  if (paused)
+    /* the application is paused/suspended, and we don't have an
+       OpenGL surface - ignore all drawing requests */
+    return;
+#endif
+
   invalidated_lock.Lock();
   if (!invalidated) {
     invalidated_lock.Unlock();
@@ -210,9 +218,7 @@ void
 TopWindow::post_quit()
 {
 #ifdef ANDROID
-  Event event;
-  event.type = Event::QUIT;
-  event_queue->push(event);
+  event_queue->push(Event::QUIT);
 #elif defined(ENABLE_SDL)
   SDL_Event event;
   event.type = SDL_QUIT;
@@ -262,6 +268,14 @@ TopWindow::on_event(const Event &event)
 
   case Event::MOUSE_UP:
     return on_mouse_up(event.x, event.y);
+
+  case Event::PAUSE:
+    on_pause();
+    return true;
+
+  case Event::RESUME:
+    on_resume();
+    return true;
   }
 
   return false;

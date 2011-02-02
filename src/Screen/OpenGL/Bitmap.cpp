@@ -26,3 +26,17 @@ Copyright_License {
 #else
 #include "Screen/SDL/Bitmap.cpp"
 #endif
+
+void
+Bitmap::surface_created()
+{
+  if (id != 0 && texture == NULL)
+    load(id);
+}
+
+void
+Bitmap::surface_destroyed()
+{
+  delete texture;
+  texture = NULL;
+}

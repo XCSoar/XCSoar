@@ -46,9 +46,7 @@ Copyright_License {
  */
 MainWindow::~MainWindow()
 {
-  delete vario;
-  delete flarm;
-  delete ta;
+  reset();
 }
 
 bool
@@ -154,6 +152,23 @@ MainWindow::InitialiseConfigured()
   popup.set(rc);
 }
 
+void
+MainWindow::reset()
+{
+  map.reset();
+
+  delete vario;
+  vario = NULL;
+
+  delete flarm;
+  flarm = NULL;
+
+  delete ta;
+  ta = NULL;
+
+  TopWindow::reset();
+}
+
 // Windows event handlers
 
 bool
@@ -188,8 +203,17 @@ MainWindow::on_timer(timer_t id)
     return SingleWindow::on_timer(id);
 
   if (globalRunningEvent.test()) {
-    XCSoarInterface::AfterStartup();
     ProcessTimer::Process();
+
+    if (flarm != NULL)
+      flarm->Update(CommonInterface::SettingsMap().EnableFLARMGauge,
+                    CommonInterface::Basic(),
+                    CommonInterface::SettingsComputer());
+
+    if (ta != NULL)
+      ta->Update(CommonInterface::SettingsMap().EnableTAGauge,
+                 CommonInterface::Basic().Heading,
+                 CommonInterface::Calculated());
   }
   return true;
 }

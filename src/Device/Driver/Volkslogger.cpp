@@ -126,10 +126,16 @@ static void
 CopyToNarrowBuffer(char *dest, size_t max_size, const TCHAR *src)
 {
 #ifdef _UNICODE
-    if (WideCharToMultiByte(CP_ACP, 0, src, -1,
-                            dest, max_size,
-                            NULL, NULL) <= 0)
-      dest[0] = 0;
+  size_t src_length = _tcslen(src);
+  if (src_length >= max_size)
+    src_length = max_size - 1;
+
+  int dest_length = WideCharToMultiByte(CP_ACP, 0, src, src_length,
+                                        dest, max_size - 1,
+                                        NULL, NULL);
+  if (dest_length < 0)
+    dest_length = 0;
+  dest[dest_length] = 0;
 #else
     strncpy(dest, src, max_size - 1);
     dest[max_size - 1] = 0;
@@ -182,16 +188,19 @@ VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
       vl.read_info() != VLA_ERR_NOERR)
     return false;
 
+  memset(&vl.database, 0, sizeof(vl.database));
+  memset(&vl.declaration, 0, sizeof(vl.declaration));
+
   CopyToNarrowBuffer(vl.declaration.flightinfo.pilot,
 		     sizeof(vl.declaration.flightinfo.pilot),
 		     decl->PilotName);
 
-  CopyToNarrowBuffer(vl.declaration.flightinfo.competitionid,
-		     sizeof(vl.declaration.flightinfo.competitionid),
+  CopyToNarrowBuffer(vl.declaration.flightinfo.gliderid,
+                     sizeof(vl.declaration.flightinfo.gliderid),
 		     decl->AircraftRego);
 
-  CopyToNarrowBuffer(vl.declaration.flightinfo.competitionclass,
-		     sizeof(vl.declaration.flightinfo.competitionclass),
+  CopyToNarrowBuffer(vl.declaration.flightinfo.glidertype,
+                     sizeof(vl.declaration.flightinfo.glidertype),
 		     decl->AircraftType);
 
   const Waypoint *home = way_points.find_home();

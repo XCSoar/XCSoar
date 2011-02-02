@@ -35,7 +35,7 @@ class Window;
 class AndroidTimer;
 
 struct Event {
-  enum {
+  enum type {
     NOP,
     QUIT,
     TIMER,
@@ -45,13 +45,35 @@ struct Event {
     MOUSE_MOTION,
     MOUSE_DOWN,
     MOUSE_UP,
-  } type;
+
+    /**
+     * The Android Activity is being paused, and the OpenGL surface
+     * will be destroyed.
+     */
+    PAUSE,
+
+    /**
+     * The Android Activity is being resumed, and the OpenGL surface
+     * can be created again.
+     */
+    RESUME,
+  };
+
+  enum type type;
 
   unsigned param;
 
   void *ptr;
 
   int x, y;
+
+  Event() {}
+  Event(enum type _type):type(_type) {}
+  Event(enum type _type, unsigned _param):type(_type), param(_param) {}
+  Event(enum type _type, unsigned _param, void *_ptr)
+    :type(_type), param(_param), ptr(_ptr) {}
+  Event(enum type _type, void *_ptr):type(_type), ptr(_ptr) {}
+  Event(enum type _type, int _x, int _y):type(_type), x(_x), y(_y) {}
 };
 
 class EventQueue : private NonCopyable {

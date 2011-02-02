@@ -433,7 +433,8 @@ DEBUG_PROGRAM_NAMES = \
 	KeyCodeDumper \
 	LoadTopology LoadTerrain \
 	RunInputParser \
-	RunWayPointParser RunAirspaceParser RunDeviceDriver \
+	RunWayPointParser RunAirspaceParser \
+	RunDeviceDriver RunDeclare \
 	RunIGCWriter \
 	RunWindZigZag \
 	RunCanvas RunMapWindow RunDialog \
@@ -769,6 +770,46 @@ RUN_DEVICE_DRIVER_LDADD = \
 	$(MATH_LIBS) \
 	$(UTIL_LIBS)
 $(TARGET_BIN_DIR)/RunDeviceDriver$(TARGET_EXEEXT): $(RUN_DEVICE_DRIVER_OBJS) $(RUN_DEVICE_DRIVER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_DECLARE_SOURCES = \
+	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/UtilsText.cpp \
+	$(SRC)/Units.cpp \
+	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/SerialPort.cpp \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Register.cpp \
+	$(SRC)/Device/Parser.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Descriptor.cpp \
+	$(SRC)/Device/FLARM.cpp \
+	$(SRC)/Device/Declaration.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/Profile/ProfileKeys.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/FLARM/FlarmCalculations.cpp \
+	$(SRC)/ClimbAverageCalculator.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeNMEALogger.cpp \
+	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/RunDeclare.cpp
+RUN_DECLARE_OBJS = $(call SRC_TO_OBJ,$(RUN_DECLARE_SOURCES))
+RUN_DECLARE_LDADD = \
+	$(ZZIP_LIBS) \
+	$(ENGINE_LIBS) \
+	$(DRIVER_LIBS) \
+	$(MATH_LIBS) \
+	$(UTIL_LIBS)
+$(TARGET_BIN_DIR)/RunDeclare$(TARGET_EXEEXT): $(RUN_DECLARE_OBJS) $(RUN_DECLARE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

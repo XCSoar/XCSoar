@@ -48,9 +48,9 @@ GaugeThermalAssistant::Update(const bool enabled, const Angle direction,
 {
   if (enabled && derived.Circling) {
     ThermalAssistantWindow::Update(direction, derived);
-    send_user(MSG_SHOW);
+    show();
   } else {
-    send_user(MSG_HIDE);
+    hide();
   }
 }
 
@@ -66,20 +66,4 @@ GaugeThermalAssistant::on_mouse_down(int x, int y)
 {
   dlgThermalAssistantShowModal();
   return true;
-}
-
-bool
-GaugeThermalAssistant::on_user(unsigned id)
-{
-  switch ((msg)id) {
-  case MSG_SHOW:
-    show();
-    return true;
-
-  case MSG_HIDE:
-    hide();
-    return true;
-  }
-
-  return Window::on_user(id);
 }

@@ -88,14 +88,6 @@ DrawThread::run()
       // Get data from the DeviceBlackboard
       ExchangeBlackboard();
 
-      if (flarm != NULL)
-        flarm->Update(map.SettingsMap().EnableFLARMGauge, map.Basic(),
-                      map.SettingsComputer());
-
-      if (ta != NULL)
-        ta->Update(map.SettingsMap().EnableTAGauge, map.Basic().Heading,
-                   map.Calculated());
-
       // Draw the moving map
       map.repaint();
 

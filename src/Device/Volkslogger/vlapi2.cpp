@@ -19,6 +19,8 @@
 #include "Device/Volkslogger/dbbconv.h"
 #include "Device/Volkslogger/grecord.h"
 #include "Device/Volkslogger/utils.h"
+#include "Util.hpp"
+#include "CRC16.hpp"
 #include "PeriodClock.hpp"
 
 #include <memory.h>
@@ -44,46 +46,6 @@ VLAPI::set_port(Port *_port)
 // ------------------------------------------------------------
 
 int32 VLA_XFR::commandbaud = 9600L;
-
-word VLA_XFR::Crc16Table[256] = {
-  0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
-  0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef,
-  0x1231, 0x0210, 0x3273, 0x2252, 0x52b5, 0x4294, 0x72f7, 0x62d6,
-  0x9339, 0x8318, 0xb37b, 0xa35a, 0xd3bd, 0xc39c, 0xf3ff, 0xe3de,
-  0x2462, 0x3443, 0x0420, 0x1401, 0x64e6, 0x74c7, 0x44a4, 0x5485,
-  0xa56a, 0xb54b, 0x8528, 0x9509, 0xe5ee, 0xf5cf, 0xc5ac, 0xd58d,
-  0x3653, 0x2672, 0x1611, 0x0630, 0x76d7, 0x66f6, 0x5695, 0x46b4,
-  0xb75b, 0xa77a, 0x9719, 0x8738, 0xf7df, 0xe7fe, 0xd79d, 0xc7bc,
-  0x48c4, 0x58e5, 0x6886, 0x78a7, 0x0840, 0x1861, 0x2802, 0x3823,
-  0xc9cc, 0xd9ed, 0xe98e, 0xf9af, 0x8948, 0x9969, 0xa90a, 0xb92b,
-  0x5af5, 0x4ad4, 0x7ab7, 0x6a96, 0x1a71, 0x0a50, 0x3a33, 0x2a12,
-  0xdbfd, 0xcbdc, 0xfbbf, 0xeb9e, 0x9b79, 0x8b58, 0xbb3b, 0xab1a,
-  0x6ca6, 0x7c87, 0x4ce4, 0x5cc5, 0x2c22, 0x3c03, 0x0c60, 0x1c41,
-  0xedae, 0xfd8f, 0xcdec, 0xddcd, 0xad2a, 0xbd0b, 0x8d68, 0x9d49,
-  0x7e97, 0x6eb6, 0x5ed5, 0x4ef4, 0x3e13, 0x2e32, 0x1e51, 0x0e70,
-  0xff9f, 0xefbe, 0xdfdd, 0xcffc, 0xbf1b, 0xaf3a, 0x9f59, 0x8f78,
-  0x9188, 0x81a9, 0xb1ca, 0xa1eb, 0xd10c, 0xc12d, 0xf14e, 0xe16f,
-  0x1080, 0x00a1, 0x30c2, 0x20e3, 0x5004, 0x4025, 0x7046, 0x6067,
-  0x83b9, 0x9398, 0xa3fb, 0xb3da, 0xc33d, 0xd31c, 0xe37f, 0xf35e,
-  0x02b1, 0x1290, 0x22f3, 0x32d2, 0x4235, 0x5214, 0x6277, 0x7256,
-  0xb5ea, 0xa5cb, 0x95a8, 0x8589, 0xf56e, 0xe54f, 0xd52c, 0xc50d,
-  0x34e2, 0x24c3, 0x14a0, 0x0481, 0x7466, 0x6447, 0x5424, 0x4405,
-  0xa7db, 0xb7fa, 0x8799, 0x97b8, 0xe75f, 0xf77e, 0xc71d, 0xd73c,
-  0x26d3, 0x36f2, 0x0691, 0x16b0, 0x6657, 0x7676, 0x4615, 0x5634,
-  0xd94c, 0xc96d, 0xf90e, 0xe92f, 0x99c8, 0x89e9, 0xb98a, 0xa9ab,
-  0x5844, 0x4865, 0x7806, 0x6827, 0x18c0, 0x08e1, 0x3882, 0x28a3,
-  0xcb7d, 0xdb5c, 0xeb3f, 0xfb1e, 0x8bf9, 0x9bd8, 0xabbb, 0xbb9a,
-  0x4a75, 0x5a54, 0x6a37, 0x7a16, 0x0af1, 0x1ad0, 0x2ab3, 0x3a92,
-  0xfd2e, 0xed0f, 0xdd6c, 0xcd4d, 0xbdaa, 0xad8b, 0x9de8, 0x8dc9,
-  0x7c26, 0x6c07, 0x5c64, 0x4c45, 0x3ca2, 0x2c83, 0x1ce0, 0x0cc1,
-  0xef1f, 0xff3e, 0xcf5d, 0xdf7c, 0xaf9b, 0xbfba, 0x8fd9, 0x9ff8,
-  0x6e17, 0x7e36, 0x4e55, 0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0
-};
-
-
-word VLA_XFR::UpdateCRC(byte Octet,word CRC) {
-  return  0xffff & ( (CRC << 8) ^ Crc16Table[ (CRC >> 8) ^ Octet ] );
-}
 
 // set baudrate
 //
@@ -191,16 +153,14 @@ int16 VLA_XFR::wait4ack() {
   PeriodClock clock;
   clock.update();
   // Auf Beendigungscode vom Logger warten
-  while (!test_user_break() && serial_in(&c) != VLA_ERR_NOERR) {
+  while (serial_in(&c) != VLA_ERR_NOERR) {
+    if (test_user_break() && clear_user_break() == 1)
+      return 255;
+
     if (clock.check(timeout_ms))
       return 255;
 
     progress_set(VLS_TXT_WTCMD);
-  }
-
-  if (test_user_break()) {
-    if (clear_user_break() == 1)
-      return 255;
   }
 
   return c;
@@ -237,76 +197,75 @@ int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
     }
 
     // dabei ist Benutzerabbruch jederzeit möglich
-    if (test_user_break()) {
-      if (clear_user_break() == 1) {
-        ende = -1;
-        Sleep(10);
-        serial_out(CAN);
-        serial_out(CAN);
-        serial_out(CAN);
-      }
+    if (test_user_break() && clear_user_break() == 1) {
+      Sleep(10);
+      serial_out(CAN);
+      serial_out(CAN);
+      serial_out(CAN);
+
+      show(VLS_TXT_UIRQ);
+      gcs_counter = 0;
+      return -1;
     }
+
     // oder aber das empfangene Zeichen wird ausgewertet
-    else {
-      switch (c) {
-      case DLE:
-        if (dle_r == 0) {             //!DLE, DLE -> Achtung!
-          dle_r = 1;
-        }
-        else { 	                 // DLE, DLE -> DLE-Zeichen
-          dle_r = 0;
-          if (start) {
-            if(gcs_counter < maxlen)
-              *p++ = c;
-            gcs_counter++;
-            crc16 = UpdateCRC(c,crc16);
-          }
-        }
-        break;
-      case ETX:
-        if (dle_r == 0) {             //!DLE, ETX -> Zeichen
-          if (start) {
-            if(gcs_counter < maxlen) {
-              *p++ = c;
-            }
-            gcs_counter++;
-            crc16 = UpdateCRC(c,crc16);
-          };
-        }
-        else {
-          if (start==1) {
-            ende = 1;                   // DLE, ETX -> Blockende
-            dle_r = 0;
-          }
-        }
-        break;
-      case STX:
-        if (dle_r == 0) {	         //!DLE, STX -> Zeichen
-          if (start) {
-            if(gcs_counter < maxlen)
-              *p++ = c;
-            gcs_counter++;
-            crc16 = UpdateCRC(c,crc16);
-          }
-        }
-        else {
-          start = 1;           // DLE, STX -> Blockstart
-          dle_r = 0;
-          crc16 = 0;
-          progress_set(VLS_TXT_XFERRING);
-        }
-        break;
-      default:
+    switch (c) {
+    case DLE:
+      if (dle_r == 0) {             //!DLE, DLE -> Achtung!
+        dle_r = 1;
+      }
+      else { 	                 // DLE, DLE -> DLE-Zeichen
+        dle_r = 0;
         if (start) {
           if(gcs_counter < maxlen)
             *p++ = c;
           gcs_counter++;
           crc16 = UpdateCRC(c,crc16);
         }
-        break;
       }
+      break;
+    case ETX:
+      if (dle_r == 0) {             //!DLE, ETX -> Zeichen
+        if (start) {
+          if(gcs_counter < maxlen) {
+            *p++ = c;
+          }
+          gcs_counter++;
+          crc16 = UpdateCRC(c,crc16);
+        };
+      }
+      else {
+        if (start==1) {
+          ende = 1;                   // DLE, ETX -> Blockende
+          dle_r = 0;
+        }
+      }
+      break;
+    case STX:
+      if (dle_r == 0) {	         //!DLE, STX -> Zeichen
+        if (start) {
+          if(gcs_counter < maxlen)
+            *p++ = c;
+          gcs_counter++;
+          crc16 = UpdateCRC(c,crc16);
+        }
+      }
+      else {
+        start = 1;           // DLE, STX -> Blockstart
+        dle_r = 0;
+        crc16 = 0;
+        progress_set(VLS_TXT_XFERRING);
+      }
+      break;
+    default:
+      if (start) {
+        if(gcs_counter < maxlen)
+          *p++ = c;
+        gcs_counter++;
+        crc16 = UpdateCRC(c,crc16);
+      }
+      break;
     }
-
 
     if (gcs_counter == maxlen) {
       //    ende = 1; // JMW cheat quick exit... TODO fix me
@@ -315,34 +274,18 @@ int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
   }
   Sleep(100);
 
-  if (ende == -1) {
-    show(VLS_TXT_UIRQ);
-    gcs_counter = 0;
-  }
-  else if (crc16) {
+  if (crc16) {
     show(VLS_TXT_CRC);
-    gcs_counter = 0;
-  }
-  else if (gcs_counter > 2) {              //CRC am Ende abschneiden
-    gcs_counter -= 2;
-    p--;
-    p--;
-    if (gcs_counter < maxlen)
-      p[0] = 0xff;
-    if (gcs_counter+1 < maxlen)
-      p[1] = 0xff;
-    p++;
-    p++;
-  }
-  else {
-    show(VLS_TXT_EMPTY);
-    gcs_counter = 0;
+    return -1;
   }
 
-  if ((ende == -1) || crc16)
-    return -1; //Fehlermeldung
-  else
-    return gcs_counter;
+  if (gcs_counter < 2) {
+    show(VLS_TXT_EMPTY);
+    return 0;
+  }
+
+  // CRC am Ende abschneiden
+  return gcs_counter - 2;
 }
 
 
@@ -358,13 +301,14 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   serial_empty_io_buffers();
   sendcommand(cmd_PDB,0,0); // muß noch mit Timeout versehen werden
   // auf Löschende warten
-  while (serial_in(&c) && !test_user_break()) {}
-  // Fehlerbehandlung
-  if (test_user_break())
-    if (clear_user_break() == 1) {
+  while (serial_in(&c) != VLA_ERR_NOERR) {
+    if (test_user_break() && clear_user_break() == 1) {
       showwait(VLS_TXT_UIRQ2);
       return VLA_ERR_USERCANCELED;
     }
+  }
+
+  // Fehlerbehandlung
   if (c != ACK)
     return VLA_ERR_MISC;
   // Schreiben der Datenbank
@@ -378,6 +322,10 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
     serial_out(c);
     if((i%step)==0)
       progress_set(VLS_TXT_WDB);
+
+    /* throttle sending a bit, or the Volkslogger's receive buffer
+       will overrun */
+    Sleep(td);
   }
 
   serial_out(crc16/256);
@@ -385,14 +333,14 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   serial_out(crc16%256);
   Sleep(td);
   // auf Bestätigung warten
-  while (serial_in(&c) && !test_user_break()) {}
-  // Fehlerbehandlung
-  if (test_user_break()) {
-    if (clear_user_break() == 1) {
+  while (serial_in(&c) != VLA_ERR_NOERR) {
+    if (test_user_break() && clear_user_break() == 1) {
       showwait(VLS_TXT_UIRQ2);
       return VLA_ERR_USERCANCELED;
     }
   }
+
+  // Fehlerbehandlung
   if (c != ACK)
     return VLA_ERR_MISC;
   return VLA_ERR_NOERR;
@@ -492,9 +440,7 @@ long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secm
 //
 VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   int16 l_count = 0;
-  int16 timeout = 0;
   int16 i;
-  VLA_ERROR rc = VLA_ERR_NOERR;
   byte c;
 
   if(!quietmode)
@@ -507,52 +453,49 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
     Sleep(1);
   }
   c = 0;
-  timeout = 0;
 
   const unsigned timeout_ms = waittime * 1000;
   PeriodClock clock;
+  clock.update();
 
   do { // Solange R's aussenden, bis ein L zurückkommt
     serial_out('R');
     Sleep(30);
 
-    if (clock.check(timeout_ms))
-      timeout = 1;
-  } while ( (!timeout) && (serial_in(&c) || c != 'L' ));
+    if (clock.check(timeout_ms)) {
+      if (!quietmode)
+        show(VLS_TXT_CONN_FL);
+      return VLA_ERR_NOANSWER;
+    }
+  } while (serial_in(&c) != VLA_ERR_NOERR || c != 'L');
 
-  if (timeout)
-    rc = VLA_ERR_NOANSWER;
-  else { // Ab dann:
-    l_count = 1;
-    do { // Auf 4 hintereinanderfolgende L's warten
-      if (!serial_in(&c)) {
-        if (c == 'L') {
-          l_count++;
-          if (l_count >= 4)
-            break;
-        }
-        else {
-          rc = VLA_ERR_NOANSWER;
-          break;
-        }
+  l_count = 1;
+  while (true) { // Auf 4 hintereinanderfolgende L's warten
+    if (serial_in(&c) == VLA_ERR_NOERR) {
+      if (c != 'L') {
+        if (!quietmode)
+          show(VLS_TXT_CONN_FL);
+        return VLA_ERR_NOANSWER;
       }
 
-      if (clock.check(timeout_ms))
-        timeout = 1;
-    } while ( !timeout && !serial_in(&c) );
-    if (timeout)
-      rc = VLA_ERR_TIMEOUT;
+      l_count++;
+      if (l_count >= 4)
+        break;
+    }
+
+    if (clock.check(timeout_ms)) {
+      if (!quietmode)
+        show(VLS_TXT_CONN_FL);
+      return VLA_ERR_TIMEOUT;
+    }
   }
 
-  if(!quietmode) {
-    if (rc == VLA_ERR_NOERR)
-      show(VLS_TXT_CONN_OK);
-    else
-      show(VLS_TXT_CONN_FL);
-  }
+  if (!quietmode)
+    show(VLS_TXT_CONN_OK);
+
   Sleep(300);
   serial_empty_io_buffers();
-  return rc;
+  return VLA_ERR_NOERR;
 }
 
 VLA_XFR::VLA_XFR() {
@@ -846,13 +789,9 @@ void VLAPI_DATA::WPT::get(lpb p) {
 //
 void VLAPI_DATA::WPT::put(lpb p) {
   int32 llat,llon;
-  int16 i,l;
   // String, evtl. mit Blanks aufgefüllt, zurückschreiben
   strupr(name);
-  memcpy(p,name,6);
-  l = strlen((char *)p);
-  for(i=l; i<6; i++)
-    p[i] = ' ';
+  copy_padded(p, 6, name);
   // Koordinaten zurückschreiben
   llat = labs((long)(lat * 60000.0));
   llon = labs((long)(lon * 60000.0));
@@ -918,9 +857,7 @@ void VLAPI_DATA::ROUTE::get(lpb p) {
 void VLAPI_DATA::ROUTE::put(lpb p) {
 	int i;
   strupr(name);
-  memcpy(p,name,14);
-  for(i=strlen((char *)p); i<14; i++)
-    p[i] = ' ';
+  copy_padded(p, 14, name);
   // In the following line, we insertes "int"
   // (Florian Ehinger)
   for(i=0; i<10; i++)
@@ -936,10 +873,7 @@ void VLAPI_DATA::PILOT::get(lpb p) {
 void VLAPI_DATA::PILOT::put(lpb p) {
 
   strupr(name);
-  memcpy(p,name,16);
-  for(int i=strlen((char *)p); i<16; i++)
-    p[i] = ' ';
-
+  copy_padded(p, 15, name);
 }
 
 

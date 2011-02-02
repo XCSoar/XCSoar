@@ -21,29 +21,30 @@ Copyright_License {
 }
 */
 
-#ifndef GAUGE_THERMAL_ASSISTENT_HPP
-#define GAUGE_THERMAL_ASSISTENT_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_SURFACE_HPP
+#define XCSOAR_SCREEN_OPENGL_SURFACE_HPP
 
-#include "Gauge/ThermalAssistantWindow.hpp"
+struct GLSurfaceListener {
+  virtual void surface_created() = 0;
+  virtual void surface_destroyed() = 0;
+};
 
-struct DERIVED_INFO;
-class Angle;
-class ContainerWindow;
+void
+AddSurfaceListener(GLSurfaceListener &listener);
+
+void
+RemoveSurfaceListener(GLSurfaceListener &listener);
 
 /**
- * Widget to display a FLARM gauge
+ * Notify all listeners that the OpenGL surface has been created.
  */
-class GaugeThermalAssistant : public ThermalAssistantWindow {
-public:
-  GaugeThermalAssistant(ContainerWindow &parent,
-                        int left, int top, unsigned width, unsigned height,
-                        WindowStyle style=WindowStyle());
+void
+SurfaceCreated();
 
-  void Update(const bool enabled, const Angle direction,
-              const DERIVED_INFO &derived);
-
-protected:
-  bool on_mouse_down(int x, int y);
-};
+/**
+ * Notify all listeners that the OpenGL surface has been destroyed.
+ */
+void
+SurfaceDestroyed();
 
 #endif

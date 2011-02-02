@@ -21,29 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef GAUGE_THERMAL_ASSISTENT_HPP
-#define GAUGE_THERMAL_ASSISTENT_HPP
+#include "Util.hpp"
 
-#include "Gauge/ThermalAssistantWindow.hpp"
+#include <assert.h>
+#include <string.h>
 
-struct DERIVED_INFO;
-class Angle;
-class ContainerWindow;
+void
+copy_padded(unsigned char *dest, size_t size, const char *src)
+{
+  assert(dest != NULL);
+  assert(size > 0);
+  assert(src != NULL);
 
-/**
- * Widget to display a FLARM gauge
- */
-class GaugeThermalAssistant : public ThermalAssistantWindow {
-public:
-  GaugeThermalAssistant(ContainerWindow &parent,
-                        int left, int top, unsigned width, unsigned height,
-                        WindowStyle style=WindowStyle());
+  size_t src_length = strlen(src);
+  if (src_length > size)
+    src_length = size;
 
-  void Update(const bool enabled, const Angle direction,
-              const DERIVED_INFO &derived);
-
-protected:
-  bool on_mouse_down(int x, int y);
-};
-
-#endif
+  memcpy(dest, src, src_length);
+  memset(dest + src_length, ' ', size - src_length);
+}

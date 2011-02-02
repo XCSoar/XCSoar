@@ -57,9 +57,9 @@ GaugeFLARM::Update(bool enable, const NMEA_INFO &gps_info,
   if (visible) {
     FlarmTrafficWindow::Update(gps_info.TrackBearing, gps_info.flarm,
                                settings);
-    send_user(MSG_SHOW);
+    show();
   } else
-    send_user(MSG_HIDE);
+    hide();
 }
 
 /**
@@ -73,20 +73,4 @@ GaugeFLARM::on_mouse_down(int x, int y)
 {
   dlgFlarmTrafficShowModal();
   return true;
-}
-
-bool
-GaugeFLARM::on_user(unsigned id)
-{
-  switch ((msg)id) {
-  case MSG_SHOW:
-    show();
-    return true;
-
-  case MSG_HIDE:
-    hide();
-    return true;
-  }
-
-  return Window::on_user(id);
 }

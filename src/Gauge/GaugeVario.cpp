@@ -66,7 +66,7 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
    nwidth(Layout::Scale(4)),
    nline(Layout::Scale(8)),
    polys(NULL), lines(NULL),
-   dirty(true)
+   dirty(true), layout_initialised(false)
 {
   Profile::Get(szProfileAppGaugeVarioSpeedToFly, ShowSpeedToFly);
   Profile::Get(szProfileAppGaugeVarioAvgText, ShowAvgText);
@@ -140,18 +140,8 @@ GaugeVario::~GaugeVario()
 void
 GaugeVario::on_paint_buffer(Canvas &canvas)
 {
-  static RasterPoint orgTop = {-1, -1};
-  static RasterPoint orgMiddle = {-1, -1};
-  static RasterPoint orgBottom = {-1, -1};
-  static int ValueHeight;
-  static bool InitDone = false;
-
-#ifdef ENABLE_OPENGL
-  InitDone = false;
-#endif
-
-  if (!InitDone){
-    ValueHeight = 4 + Fonts::CDI.get_capital_height()
+  if (!is_persistent() || !layout_initialised) {
+    unsigned ValueHeight = 4 + Fonts::CDI.get_capital_height()
                     + Fonts::Title.get_capital_height();
 
     orgMiddle.y = yoffset - ValueHeight / 2;
@@ -165,7 +155,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
     canvas.scale_copy(0, 0, hDrawBitMap,
                       Appearance.InverseInfoBox ? 58 : 0, 0, 58, 120);
 
-    InitDone = true;
+    layout_initialised = true;
   }
 
   if (ShowAvgText) {
@@ -216,18 +206,18 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
   // clear items first
 
   if (ShowAveNeedle) {
-    if (ival_av != ival_last)
+    if (!is_persistent() || ival_av != ival_last)
       RenderNeedle(canvas, ival_last, true, true);
 
     ival_last = ival_av;
   }
 
-  if ((sval != sval_last) || (ival != vval_last))
+  if (!is_persistent() || (sval != sval_last) || (ival != vval_last))
     RenderVarioLine(canvas, vval_last, sval_last, true);
 
   sval_last = sval;
 
-  if (ival != vval_last)
+  if (!is_persistent() || ival != vval_last)
     RenderNeedle(canvas, vval_last, false, true);
 
   vval_last = ival;
@@ -306,13 +296,12 @@ GaugeVario::RenderClimb(Canvas &canvas)
   if (!dirty)
     return;
 
-  if (!Basic().SwitchState.VarioCircling) {
+  if (Basic().SwitchState.VarioCircling)
+    canvas.scale_copy(x, y, hBitmapClimb, 12, 0, 12, 12);
+  else if (is_persistent())
     canvas.fill_rectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12),
                           Appearance.InverseInfoBox
                           ? Color::BLACK : Color::WHITE);
-  } else {
-    canvas.scale_copy(x, y, hBitmapClimb, 12, 0, 12, 12);
-  }
 }
 
 void
@@ -449,7 +438,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
 
   canvas.background_transparent();
 
-  if (dirty && (_tcscmp(diLabel->lastText, Label) != 0)) {
+  if (!is_persistent() || (dirty && _tcscmp(diLabel->lastText, Label) != 0)) {
     canvas.set_background_color(colTextBackgnd);
     canvas.set_text_color(colTextGray);
     canvas.select(Fonts::Title);
@@ -461,7 +450,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
     _tcscpy(diLabel->lastText, Label);
   }
 
-  if (dirty && (diValue->lastValue != Value)) {
+  if (!is_persistent() || (dirty && diValue->lastValue != Value)) {
     TCHAR Temp[18];
     canvas.set_background_color(colTextBackgnd);
     canvas.set_text_color(colText);
@@ -477,8 +466,8 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
     diValue->lastValue = Value;
   }
 
-  if (dirty && unit_symbol != NULL &&
-      diLabel->last_unit_symbol != unit_symbol) {
+  if (!is_persistent() || (dirty && unit_symbol != NULL &&
+                           diLabel->last_unit_symbol != unit_symbol)) {
     RasterPoint BitmapUnitPos = unit_symbol->get_origin(Appearance.InverseInfoBox
                                                   ? UnitSymbol::INVERSE_GRAY
                                                   : UnitSymbol::GRAY);
@@ -525,25 +514,27 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
   } else
     vdiff = fixed_zero;
 
-  if ((lastVdiff != vdiff) || (dirty)) {
+  if (!is_persistent() || lastVdiff != vdiff || dirty) {
     lastVdiff = vdiff;
 
-    Color background_color = Appearance.InverseInfoBox
-      ? Color::BLACK : Color::WHITE;
+    if (is_persistent()) {
+      Color background_color = Appearance.InverseInfoBox
+        ? Color::BLACK : Color::WHITE;
 
-    // bottom (too slow)
-    canvas.fill_rectangle(x, ybottom + YOFFSET,
-                          x + ARROWXSIZE * 2 + 1,
-                          ybottom + YOFFSET + nary + ARROWYSIZE +
-                          Layout::FastScale(2),
-                          background_color);
+      // bottom (too slow)
+      canvas.fill_rectangle(x, ybottom + YOFFSET,
+                            x + ARROWXSIZE * 2 + 1,
+                            ybottom + YOFFSET + nary + ARROWYSIZE +
+                            Layout::FastScale(2),
+                            background_color);
 
-    // top (too fast)
-    canvas.fill_rectangle(x, ytop - YOFFSET + 1,
-                          x + ARROWXSIZE * 2  +1,
-                          ytop - YOFFSET - nary + 1 - ARROWYSIZE -
-                          Layout::FastScale(2),
-                          background_color);
+      // top (too fast)
+      canvas.fill_rectangle(x, ytop - YOFFSET + 1,
+                            x + ARROWXSIZE * 2  +1,
+                            ytop - YOFFSET - nary + 1 - ARROWYSIZE -
+                            Layout::FastScale(2),
+                            background_color);
+    }
 
     RenderClimb(canvas);
 

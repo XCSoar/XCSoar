@@ -40,6 +40,11 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #endif
 
+#ifdef ANDROID
+#include <sys/stat.h>
+#include <unistd.h>
+#endif
+
 /**
  * The absolute location of the XCSoarData directory.
  */
@@ -202,9 +207,21 @@ FindDataPath()
     /* hard-coded path for Altair */
     return _tcsdup(_T("\\NOR Flash"));
 
-  if (is_android())
+  if (is_android()) {
+    /* XXX use Environment.getExternalStorageDirectory() */
+
+#ifdef ANDROID
+    /* hack for Samsung Galaxy S and Samsung Galaxy Tab (which has a
+       build-in and an external SD card) */
+    struct stat st;
+    if (stat("/sdcard/external_sd", &st) == 0 &&
+        (st.st_mode & S_IFDIR) != 0)
+      return strdup("/sdcard/external_sd/XCSoarData");
+#endif
+
     /* hard-coded path for Android */
     return _tcsdup(_T("/sdcard/XCSoarData"));
+  }
 
 #ifdef _WIN32_WCE
   /* if XCSoar was started from a flash disk, put the XCSoarData onto

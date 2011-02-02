@@ -79,5 +79,7 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.SafetySpeed = fixed(70);
   settings_computer.BallastSecsToEmpty  = 120;
   settings_computer.BallastTimerActive = false;
+
+  settings_computer.enable_olc = true;
 }
 

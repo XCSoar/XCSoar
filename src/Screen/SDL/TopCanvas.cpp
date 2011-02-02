@@ -26,6 +26,7 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Globals.hpp"
+#include "Screen/OpenGL/Surface.hpp"
 #endif
 
 #ifdef ANDROID

@@ -26,6 +26,10 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Surface.hpp"
+#endif
+
 #ifdef ANDROID
 #include <windef.h>
 #elif defined(ENABLE_SDL)
@@ -45,9 +49,14 @@ class GLTexture;
 /**
  * An image loaded from storage.
  */
-class Bitmap : private NonCopyable {
+class Bitmap : private NonCopyable
+#ifdef ENABLE_OPENGL
+             , private GLSurfaceListener
+#endif
+{
 protected:
 #ifdef ENABLE_OPENGL
+  unsigned id;
   GLTexture *texture;
   unsigned width, height;
 #elif defined(ENABLE_SDL)
@@ -58,7 +67,7 @@ protected:
 
 public:
 #ifdef ENABLE_OPENGL
-  Bitmap():texture(NULL) {}
+  Bitmap():id(0), texture(NULL) {}
   explicit Bitmap(unsigned id):texture(NULL) {
     load(id);
   }
@@ -132,6 +141,13 @@ public:
 
     return bitmap;
   }
+#endif
+
+#ifdef ENABLE_OPENGL
+private:
+  /* from GLSurfaceListener */
+  virtual void surface_created();
+  virtual void surface_destroyed();
 #endif
 };
 

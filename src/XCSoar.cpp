@@ -38,6 +38,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Init.hpp"
+#include "Screen/Graphics.hpp"
 
 /**
  * Main entry point for the whole XCSoar application
@@ -85,6 +86,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   CommonInterface::main_window.reset();
 
   Fonts::Deinitialize();
+  Graphics::Deinitialise();
 
   return ret;
 }

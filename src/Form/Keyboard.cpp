@@ -152,6 +152,8 @@ void
 KeyboardControl::on_paint(Canvas &canvas)
 {
   canvas.clear(background_color);
+
+  ContainerWindow::on_paint(canvas);
 }
 
 bool

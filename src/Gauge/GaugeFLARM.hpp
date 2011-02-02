@@ -34,14 +34,6 @@ class ContainerWindow;
  * Widget to display a FLARM gauge
  */
 class GaugeFLARM : public FlarmTrafficWindow {
-  /**
-   * WM_USER offsets.
-   */
-  enum msg {
-    MSG_SHOW,
-    MSG_HIDE,
-  };
-
 public:
   bool ForceVisible, Suppress;
 
@@ -55,7 +47,6 @@ public:
 
 protected:
   bool on_mouse_down(int x, int y);
-  virtual bool on_user(unsigned id);
 };
 
 #endif

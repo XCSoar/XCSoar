@@ -46,7 +46,11 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
   bool norm_valid = line.read_checked(norm);
 
   if (bearing_valid && norm_valid) {
-    value_r.bearing = Angle::degrees(bearing);
+    // Condor 1.1.4 outputs the direction that the wind is going to,
+    // _not_ the direction it is coming from !!
+    //
+    // This seems to differ from the output that the LX devices are giving !!
+    value_r.bearing = Angle::degrees(bearing).Reciprocal();
     value_r.norm = Units::ToSysUnit(norm, unKiloMeterPerHour);
     return true;
   } else

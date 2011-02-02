@@ -21,29 +21,18 @@ Copyright_License {
 }
 */
 
-#ifndef GAUGE_THERMAL_ASSISTENT_HPP
-#define GAUGE_THERMAL_ASSISTENT_HPP
+#ifndef XCSOAR_VOLKSLOGGER_UTIL_HPP
+#define XCSOAR_VOLKSLOGGER_UTIL_HPP
 
-#include "Gauge/ThermalAssistantWindow.hpp"
-
-struct DERIVED_INFO;
-class Angle;
-class ContainerWindow;
+#include <cstddef>
 
 /**
- * Widget to display a FLARM gauge
+ * Copy a string to a fixed-size buffer.  The destination buffer is
+ * not null-terminated, it is padded with spaces at the end if the
+ * source string is shorter than the buffer.  If the source string is
+ * longer than the destination buffer, it is clipped.
  */
-class GaugeThermalAssistant : public ThermalAssistantWindow {
-public:
-  GaugeThermalAssistant(ContainerWindow &parent,
-                        int left, int top, unsigned width, unsigned height,
-                        WindowStyle style=WindowStyle());
-
-  void Update(const bool enabled, const Angle direction,
-              const DERIVED_INFO &derived);
-
-protected:
-  bool on_mouse_down(int x, int y);
-};
+void
+copy_padded(unsigned char *dest, size_t size, const char *src);
 
 #endif

@@ -73,10 +73,7 @@ public:
   void Initialise();
   void InitialiseConfigured();
 
-  void reset() {
-    map.reset();
-    TopWindow::reset();
-  }
+  void reset();
 
   bool GetFullScreen() const {
     return FullScreen;

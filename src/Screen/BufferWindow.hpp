@@ -40,6 +40,21 @@ private:
 #endif
 
 protected:
+  /**
+   * Determines whether this BufferWindow maintains a persistent
+   * buffer which allows incremental drawing in each frame.
+   */
+  static bool is_persistent() {
+#ifdef ENABLE_OPENGL
+    /* on OpenGL, there is no per-window buffer, each frame needs to
+       be redrawn from scratch */
+    return false;
+#else
+    return true;
+#endif
+  }
+
+protected:
 #ifndef ENABLE_OPENGL
   virtual bool on_create();
   virtual bool on_destroy();

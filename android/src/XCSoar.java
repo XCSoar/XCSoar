@@ -23,6 +23,9 @@
 package org.xcsoar;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
@@ -31,7 +34,10 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.os.Build;
 import android.os.PowerManager;
+import android.os.Handler;
+import android.os.Message;
 import android.content.Context;
+import android.content.Intent;
 
 public class XCSoar extends Activity {
     private static NativeView nativeView;
@@ -66,12 +72,28 @@ public class XCSoar extends Activity {
         setContentView(tv);
     }
 
+  private void quit() {
+    nativeView = null;
+
+    TextView tv = new TextView(XCSoar.this);
+    tv.setText("Shutting down XCSoar...");
+    setContentView(tv);
+
+    finish();
+  }
+
+  Handler quitHandler = new Handler() {
+      public void handleMessage(Message msg) {
+        quit();
+      }
+    };
+
     public void initSDL()
     {
         if (!Loader.loaded)
             return;
 
-        nativeView = new NativeView(this);
+        nativeView = new NativeView(this, quitHandler);
         setContentView(nativeView);
         // Receive keyboard events
         nativeView.setFocusableInTouchMode(true);
@@ -84,6 +106,20 @@ public class XCSoar extends Activity {
                                   PowerManager.ACQUIRE_CAUSES_WAKEUP,
                                   "XCSoar");
         wakeLock.acquire();
+
+        /* add an icon to the notification area while XCSoar runs, to
+         * remind the user that we're sucking his battery empty */
+        Notification notification = new Notification(R.drawable.icon, null,
+                                                     System.currentTimeMillis());
+        Intent intent = new Intent(this, XCSoar.class);
+        PendingIntent contentIntent =
+          PendingIntent.getActivity(this, 0, intent, 0);
+        notification.setLatestEventInfo(this, "XCSoar", "XCSoar is running",
+                                        contentIntent);
+
+        NotificationManager notificationManager = (NotificationManager)
+          getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, notification);
     }
 
     @Override protected void onPause() {
@@ -102,8 +138,15 @@ public class XCSoar extends Activity {
 
     @Override protected void onDestroy()
     {
-        if (nativeView != null)
+      /* remove the notification icon */
+      NotificationManager notificationManager = (NotificationManager)
+        getSystemService(Context.NOTIFICATION_SERVICE);
+      notificationManager.cancel(1);
+
+      if (nativeView != null) {
             nativeView.exitApp();
+        nativeView = null;
+      }
 
         if (wakeLock != null) {
             wakeLock.release();

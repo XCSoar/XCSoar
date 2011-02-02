@@ -21,29 +21,41 @@ Copyright_License {
 }
 */
 
-#ifndef GAUGE_THERMAL_ASSISTENT_HPP
-#define GAUGE_THERMAL_ASSISTENT_HPP
+#include "Screen/TopWindow.hpp"
+#include "Screen/OpenGL/Cache.hpp"
+#include "Screen/OpenGL/Surface.hpp"
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 
-#include "Gauge/ThermalAssistantWindow.hpp"
+void
+TopWindow::on_pause()
+{
+  if (paused)
+    return;
 
-struct DERIVED_INFO;
-class Angle;
-class ContainerWindow;
+  TextCache::flush();
 
-/**
- * Widget to display a FLARM gauge
- */
-class GaugeThermalAssistant : public ThermalAssistantWindow {
-public:
-  GaugeThermalAssistant(ContainerWindow &parent,
-                        int left, int top, unsigned width, unsigned height,
-                        WindowStyle style=WindowStyle());
+  SurfaceDestroyed();
 
-  void Update(const bool enabled, const Angle direction,
-              const DERIVED_INFO &derived);
+  paused_mutex.Lock();
+  paused = true;
+  paused_cond.signal();
+  paused_mutex.Unlock();
+}
 
-protected:
-  bool on_mouse_down(int x, int y);
-};
+void
+TopWindow::on_resume()
+{
+  if (!paused)
+    return;
 
-#endif
+  paused = false;
+
+  native_view->initSurface();
+  screen.set();
+
+  SurfaceCreated();
+
+  /* schedule a redraw */
+  invalidate();
+}

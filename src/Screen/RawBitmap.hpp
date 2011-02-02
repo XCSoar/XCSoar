@@ -14,6 +14,7 @@
 #include "Screen/Canvas.hpp"
 
 #ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Surface.hpp"
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 #endif
@@ -86,7 +87,11 @@ struct BGRColor
 /**
  * This class provides fast drawing methods and offscreen buffer.
  */
-class RawBitmap {
+class RawBitmap
+#ifdef ENABLE_OPENGL
+  :private GLSurfaceListener
+#endif
+{
 protected:
   const unsigned int width;
   const unsigned int height;
@@ -94,7 +99,7 @@ protected:
   BGRColor *buffer;
 
 #ifdef ENABLE_OPENGL
-  mutable GLTexture texture;
+  GLTexture *texture;
 #elif defined(ENABLE_SDL)
   SDL_Surface *surface;
 #else
@@ -183,7 +188,7 @@ public:
   void stretch_to(unsigned width, unsigned height, Canvas &dest_canvas,
                   unsigned dest_width, unsigned dest_height) const {
 #ifdef ENABLE_OPENGL
-    texture.bind();
+    texture->bind();
 #ifdef ANDROID
     /* 16 bit 5/6/5 on Android */
 
@@ -198,7 +203,7 @@ public:
     glColor4f(1.0, 1.0, 1.0, 1.0);
     GLEnable scope(GL_TEXTURE_2D);
     dest_canvas.stretch(0, 0, dest_width, dest_height,
-                        texture, 0, 0, width, height);
+                        *texture, 0, 0, width, height);
 #elif defined(ENABLE_SDL)
     Canvas src_canvas(surface);
     dest_canvas.stretch(0, 0, dest_width, dest_height,
@@ -219,6 +224,13 @@ public:
                     buffer, &bi, DIB_RGB_COLORS, SRCCOPY);
 #endif
   }
+
+#ifdef ENABLE_OPENGL
+private:
+  /* from GLSurfaceListener */
+  virtual void surface_created();
+  virtual void surface_destroyed();
+#endif
 };
 
 #endif // !defined(AFX_STSCREENBUFFER_H__22D62F5D_32E2_4785_B3D9_2341C11F84A3__INCLUDED_)

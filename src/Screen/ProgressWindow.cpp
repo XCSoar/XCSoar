@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Screen/ProgressWindow.hpp"
 #include "Screen/VirtualCanvas.hpp"
-#include "Gauge/LogoView.hpp"
 #include "resource.h"
 
 #include <algorithm>
@@ -47,7 +46,8 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   // Determine text height
 #ifdef ENABLE_SDL
-  text_height = 20; // XXX font bootstrapping on SDL needed
+  font.set("Droid Sans", 12);
+  text_height = font.get_height();
 #else
   VirtualCanvas canvas(1, 1);
   text_height = canvas.text_height(_T("W"));
@@ -64,6 +64,10 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   message.set(*this, NULL, 0,
               height - progress_border_height - text_height - (height/48),
               width, text_height, message_style);
+
+#ifdef ENABLE_SDL
+  message.set_font(font);
+#endif
 
   // Initialize progress bar
   ProgressBarStyle pb_style;
@@ -137,7 +141,7 @@ ProgressWindow::on_paint(Canvas &canvas)
   logo_rect.top = 0;
   logo_rect.right = window_width;
   logo_rect.bottom = window_height - progress_border_height;
-  DrawLogo(canvas, logo_rect);
+  logo.draw(canvas, logo_rect);
 
   // Draw progress bar background
   canvas.stretch(0, (window_height - progress_border_height),

@@ -60,6 +60,13 @@ LoadUnitSymbols()
   unit_symbols[unGradFahrenheit].load(IDB_UNIT_DegF, 5, 11);
 }
 
+void
+DeinitialiseUnitSymbols()
+{
+  for (unsigned i = 0; i < unCount; ++i)
+    unit_symbols[i].reset();
+}
+
 const UnitSymbol *
 GetUnitSymbol(Units_t unit)
 {

@@ -22,25 +22,33 @@ Copyright_License {
 */
 
 #include "LogoView.hpp"
-#include "Screen/Bitmap.hpp"
 #include "Screen/Canvas.hpp"
 #include "resource.h"
 #include "Version.hpp"
 
+LogoView::LogoView()
+  :logo(IDB_SWIFT), big_logo(IDB_SWIFT_HD),
+   title(IDB_TITLE), big_title(IDB_TITLE_HD)
+{
+#ifdef ENABLE_SDL
+  font.set("Droid Sans", 12);
+#endif
+}
+
 void
-DrawLogo(Canvas &canvas, const RECT &rc)
+LogoView::draw(Canvas &canvas, const RECT &rc)
 {
   const unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
 
   // Load logo
-  Bitmap bitmap_logo((width >= 290 && height >= 170) ||
-                     (width >= 170 && height >= 210)
-                     ? IDB_SWIFT_HD : IDB_SWIFT);
+  Bitmap &bitmap_logo = (width >= 290 && height >= 170) ||
+    (width >= 170 && height >= 210)
+    ? big_logo : logo;
 
   // Adjust the title to larger screens
-  Bitmap bitmap_title((width >= 530 && height >= 60) ||
-                      (width >= 330 && height >= 250)
-                      ? IDB_TITLE_HD : IDB_TITLE);
+  Bitmap &bitmap_title = (width >= 530 && height >= 60) ||
+    (width >= 330 && height >= 250)
+    ? big_title : title;
 
   // Determine logo size
   SIZE logo_size = bitmap_logo.get_size();
@@ -80,6 +88,11 @@ DrawLogo(Canvas &canvas, const RECT &rc)
   canvas.copy(logox, logoy, logo_size.cx, logo_size.cy, bitmap_logo, 0, 0);
 
   // Draw full XCSoar version number
+
+#ifdef ENABLE_SDL
+  canvas.select(font);
+#endif
+
   canvas.set_text_color(Color::BLACK);
   canvas.background_transparent();
   canvas.text(2, 2, XCSoar_ProductToken);

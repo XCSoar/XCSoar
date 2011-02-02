@@ -21,29 +21,40 @@ Copyright_License {
 }
 */
 
-#ifndef GAUGE_THERMAL_ASSISTENT_HPP
-#define GAUGE_THERMAL_ASSISTENT_HPP
+#include "Screen/OpenGL/Surface.hpp"
 
-#include "Gauge/ThermalAssistantWindow.hpp"
+#include <list>
 
-struct DERIVED_INFO;
-class Angle;
-class ContainerWindow;
+typedef std::list<GLSurfaceListener *> GLSurfaceListenerList;
 
-/**
- * Widget to display a FLARM gauge
- */
-class GaugeThermalAssistant : public ThermalAssistantWindow {
-public:
-  GaugeThermalAssistant(ContainerWindow &parent,
-                        int left, int top, unsigned width, unsigned height,
-                        WindowStyle style=WindowStyle());
+static GLSurfaceListenerList surface_listeners;
 
-  void Update(const bool enabled, const Angle direction,
-              const DERIVED_INFO &derived);
+void
+AddSurfaceListener(GLSurfaceListener &listener)
+{
+  surface_listeners.push_back(&listener);
+}
 
-protected:
-  bool on_mouse_down(int x, int y);
-};
+void
+RemoveSurfaceListener(GLSurfaceListener &listener)
+{
+  surface_listeners.remove(&listener);
+}
 
-#endif
+void
+SurfaceCreated()
+{
+  const GLSurfaceListenerList copy(surface_listeners);
+  for (GLSurfaceListenerList::const_iterator i = copy.begin();
+       i != copy.end(); ++i)
+    (*i)->surface_created();
+}
+
+void
+SurfaceDestroyed()
+{
+  const GLSurfaceListenerList copy(surface_listeners);
+  for (GLSurfaceListenerList::const_iterator i = copy.begin();
+       i != copy.end(); ++i)
+    (*i)->surface_destroyed();
+}

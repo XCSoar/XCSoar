@@ -28,6 +28,7 @@ Copyright_License {
 #include "TextWindow.hpp"
 #include "ProgressBar.hpp"
 #include "Bitmap.hpp"
+#include "Gauge/LogoView.hpp"
 
 /**
  * The XCSoar splash screen with a progress bar.
@@ -37,6 +38,12 @@ class ProgressWindow : public ContainerWindow {
   Brush background_brush;
 
   Bitmap bitmap_progress_border;
+
+#ifdef ENABLE_SDL
+  Font font;
+#endif
+
+  LogoView logo;
 
   TextWindow message;
 

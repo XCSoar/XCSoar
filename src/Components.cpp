@@ -183,12 +183,6 @@ RestoreDisplayOrientation()
 void
 XCSoarInterface::AfterStartup()
 {
-  static bool first = true;
-  if (!first)
-    return;
-
-  first = false;
-
   LogStartUp(_T("ProgramStarted = 3"));
   StartupLogFreeRamAndStorage();
 
@@ -202,7 +196,6 @@ XCSoarInterface::AfterStartup()
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
-  SetSettingsComputer().enable_olc = true;
   protected_task_manager->task_load_default(&way_points);
 
   task_manager->resume();
@@ -451,7 +444,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
     instrument_thread->start();
 
   globalRunningEvent.trigger();
-  calculation_thread->resume();
+
+  AfterStartup();
 
 #ifndef ENABLE_OPENGL
   draw_thread->resume();

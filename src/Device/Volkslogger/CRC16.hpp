@@ -21,29 +21,30 @@ Copyright_License {
 }
 */
 
-#ifndef GAUGE_THERMAL_ASSISTENT_HPP
-#define GAUGE_THERMAL_ASSISTENT_HPP
-
-#include "Gauge/ThermalAssistantWindow.hpp"
-
-struct DERIVED_INFO;
-class Angle;
-class ContainerWindow;
-
-/**
- * Widget to display a FLARM gauge
+/*
+ * Based on code from libkfrgcs, original copyright notice:
+ *
+ * Copyright (c):  2002 by Garrecht Ingenieurgesellschaft
+ *
+ * This file is distributed under the terms of the General Public
+ * Licence. See the file COPYING for more information.
+ *
  */
-class GaugeThermalAssistant : public ThermalAssistantWindow {
-public:
-  GaugeThermalAssistant(ContainerWindow &parent,
-                        int left, int top, unsigned width, unsigned height,
-                        WindowStyle style=WindowStyle());
 
-  void Update(const bool enabled, const Angle direction,
-              const DERIVED_INFO &derived);
+#ifndef XCSOAR_VOLKSLOGGER_CRC16_HPP
+#define XCSOAR_VOLKSLOGGER_CRC16_HPP
 
-protected:
-  bool on_mouse_down(int x, int y);
-};
+#include "Compiler.h"
+
+#include <stdint.h>
+
+extern const uint16_t Crc16Table[256];
+
+gcc_const
+static inline uint16_t
+UpdateCRC(uint8_t Octet, uint16_t CRC)
+{
+  return (CRC << 8) ^ Crc16Table[(CRC >> 8) ^ Octet];
+}
 
 #endif

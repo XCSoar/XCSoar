@@ -78,6 +78,9 @@ public:
 void
 LoadUnitSymbols();
 
+void
+DeinitialiseUnitSymbols();
+
 const UnitSymbol *
 GetUnitSymbol(Units_t unit);
 

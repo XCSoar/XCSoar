@@ -36,6 +36,9 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
+#include "Thread/Mutex.hpp"
+#include "Thread/Cond.hpp"
+
 struct Event;
 #endif
 
@@ -48,6 +51,19 @@ class TopWindow : public ContainerWindow {
 
   Mutex invalidated_lock;
   bool invalidated;
+
+#ifdef ANDROID
+  Mutex paused_mutex;
+  Cond paused_cond;
+
+  /**
+   * Is the application currently paused?  While this flag is set, no
+   * OpenGL operations are allowed, because the OpenGL surface does
+   * not exist.
+   */
+  bool paused;
+#endif
+
 #else /* !ENABLE_SDL */
 
   /**
@@ -150,6 +166,27 @@ protected:
   virtual LRESULT on_message(HWND _hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
 #endif /* !ENABLE_SDL */
+
+#ifdef ANDROID
+private:
+  /**
+   * @see Event::PAUSE
+   */
+  void on_pause();
+
+  /**
+   * @see Event::RESUME
+   */
+  void on_resume();
+
+public:
+  void wait_paused() {
+    paused_mutex.Lock();
+    while (!paused)
+      paused_cond.wait(paused_mutex);
+    paused_mutex.Unlock();
+  }
+#endif
 
 public:
   void post_quit();

@@ -70,8 +70,7 @@ ProcessTimer::MessageProcessTimer()
 void
 ProcessTimer::AirspaceProcessTimer()
 {
-  if (globalRunningEvent.test() &&
-      airspaceWarningEvent.test()) {
+  if (airspaceWarningEvent.test()) {
     airspaceWarningEvent.reset();
     ResetDisplayTimeOut();
 #ifndef GNAV

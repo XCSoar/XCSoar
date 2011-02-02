@@ -337,6 +337,36 @@ Graphics::InitAirspacePens(const SETTINGS_MAP &settings_map)
                          GetAirspaceColourByClass(i, settings_map));
 }
 
+void
+Graphics::Deinitialise()
+{
+  DeinitialiseUnitSymbols();
+
+  hAirspaceInterceptBitmap.reset();
+  hTerrainWarning.reset();
+  hFLARMTraffic.reset();
+  hLogger.reset();
+  hLoggerOff.reset();
+  hCruise.reset();
+  hClimb.reset();
+  hFinalGlide.reset();
+  hAbort.reset();
+  hGPSStatus1.reset();
+  hGPSStatus2.reset();
+
+  SmallIcon.reset();
+  TurnPointIcon.reset();
+  AirportReachableIcon.reset();
+  AirportUnreachableIcon.reset();
+  FieldReachableIcon.reset();
+  FieldUnreachableIcon.reset();
+  hBmpThermalSource.reset();
+  hBmpTarget.reset();
+  hBmpTeammatePosition.reset();
+
+  hBmpMapScaleLeft.reset();
+  hBmpMapScaleRight.reset();
+}
 
 void
 Graphics::DrawAircraft(Canvas &canvas, 
