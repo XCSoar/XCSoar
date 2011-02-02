@@ -204,6 +204,16 @@ MainWindow::on_timer(timer_t id)
 
   if (globalRunningEvent.test()) {
     ProcessTimer::Process();
+
+    if (flarm != NULL)
+      flarm->Update(CommonInterface::SettingsMap().EnableFLARMGauge,
+                    CommonInterface::Basic(),
+                    CommonInterface::SettingsComputer());
+
+    if (ta != NULL)
+      ta->Update(CommonInterface::SettingsMap().EnableTAGauge,
+                 CommonInterface::Basic().Heading,
+                 CommonInterface::Calculated());
   }
   return true;
 }

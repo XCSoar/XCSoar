@@ -34,14 +34,6 @@ class ContainerWindow;
  * Widget to display a FLARM gauge
  */
 class GaugeThermalAssistant : public ThermalAssistantWindow {
-  /**
-   * WM_USER offsets.
-   */
-  enum msg {
-    MSG_SHOW,
-    MSG_HIDE,
-  };
-
 public:
   GaugeThermalAssistant(ContainerWindow &parent,
                         int left, int top, unsigned width, unsigned height,
@@ -52,7 +44,6 @@ public:
 
 protected:
   bool on_mouse_down(int x, int y);
-  virtual bool on_user(unsigned id);
 };
 
 #endif
