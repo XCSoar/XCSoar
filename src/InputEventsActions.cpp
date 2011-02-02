@@ -1699,11 +1699,11 @@ InputEvents::sub_SetZoom(fixed value)
     Message::AddMessage(_("AutoZoom OFF"));
   }
 
-  GlidePolar glide_polar(fixed_zero);
-  if (protected_task_manager != NULL)
-    glide_polar = protected_task_manager->get_glide_polar();
-
-  fixed scale_2min_distance = glide_polar.get_Vmin() * fixed_int_constant(12);
+  const fixed v_22m_per_sec = fixed_int_constant(22);
+  fixed vmin = (protected_task_manager == NULL) ?
+               v_22m_per_sec :
+               protected_task_manager->get_glide_polar().get_Vmin();
+  fixed scale_2min_distance = vmin * fixed_int_constant(12);
   const fixed scale_500m = fixed_int_constant(50);
   const fixed scale_1600km = fixed_int_constant(1600*100);
   fixed minreasonable = (displayMode == dmCircling) ?
