@@ -1691,17 +1691,25 @@ InputEvents::sub_AutoZoom(int vswitch)
 void
 InputEvents::sub_SetZoom(fixed value)
 {
+  DisplayMode_t displayMode = XCSoarInterface::main_window.map.GetDisplayMode();
   if (XCSoarInterface::SettingsMap().AutoZoom &&
-      XCSoarInterface::main_window.map.GetDisplayMode() != dmCircling &&
-      !XCSoarInterface::SettingsMap().EnablePan) {
+      displayMode != dmCircling && !XCSoarInterface::SettingsMap().EnablePan) {
     XCSoarInterface::SetSettingsMap().AutoZoom = false;  // disable autozoom if user manually changes zoom
     Profile::Set(szProfileAutoZoom, false);
     Message::AddMessage(_("AutoZoom OFF"));
   }
 
-  fixed minreasonable = fixed_int_constant(XCSoarInterface::main_window.map.
-      GetDisplayMode() != dmCircling ? 440 : 50);
-  value = max(minreasonable, min(fixed_int_constant(160000), value));
+  GlidePolar glide_polar(fixed_zero);
+  if (protected_task_manager != NULL)
+    glide_polar = protected_task_manager->get_glide_polar();
+
+  fixed scale_2min_distance = glide_polar.get_Vmin() * fixed_int_constant(12);
+  const fixed scale_500m = fixed_int_constant(50);
+  const fixed scale_1600km = fixed_int_constant(1600*100);
+  fixed minreasonable = (displayMode == dmCircling) ?
+                        scale_500m : max(scale_500m, scale_2min_distance);
+
+  value = max(minreasonable, min(scale_1600km, value));
   XCSoarInterface::main_window.map.SetMapScale(value);
 
   XCSoarInterface::main_window.map.QuickRedraw(XCSoarInterface::SettingsMap());
