@@ -25,6 +25,8 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "Java/Global.hpp"
+#include "Java/Class.hpp"
+
 #include <assert.h>
 
 JNIEnv *Font::env(NULL);
@@ -48,7 +50,6 @@ Font::set(const LOGFONT &log)
 bool
 Font::set(const TCHAR *facename, int height, bool bold, bool italic)
 {
-  jclass textUtilClass;
   jobject localObject;
   jstring paramFamilyName;
   jint paramStyle, paramTextSize;
@@ -62,7 +63,7 @@ Font::set(const TCHAR *facename, int height, bool bold, bool italic)
     env = Java::GetEnv();
   }
 
-  textUtilClass = env->FindClass("org/xcsoar/TextUtil");
+  Java::Class textUtilClass(env, "org/xcsoar/TextUtil");
 
   if (midTextUtil == NULL) {
     // initialize static method ID's once
@@ -115,7 +116,6 @@ Font::set(const TCHAR *facename, int height, bool bold, bool italic)
   // free local references
   env->DeleteLocalRef(metricsArray);
   env->DeleteLocalRef(localObject);
-  env->DeleteLocalRef(textUtilClass);
   env->DeleteLocalRef(paramFamilyName);
 
   return true;
