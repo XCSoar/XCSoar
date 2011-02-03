@@ -20,23 +20,17 @@
 }
  */
 
-#ifndef OLC_FAI_HPP
-#define OLC_FAI_HPP
+#include "XContestFree.hpp"
 
-#include "OLCTriangle.hpp"
+XContestFree::XContestFree(const Trace &_trace,
+                       const unsigned &_handicap):
+  ContestDijkstra(_trace, _handicap, 4, 1000) {}
 
-/**
- * Specialisation of OLC Triangle with OLC FAI (triangle) rules
- */
-class OLCFAI: 
-  public OLCTriangle
+void 
+XContestFree::set_weightings()
 {
-public:
-  OLCFAI(const Trace &_trace,
-         const unsigned &_handicap);
-
-  virtual fixed calc_score() const;
-
-};
-
-#endif
+  m_weightings[0] = 5;
+  m_weightings[1] = 5;
+  m_weightings[2] = 5;
+  m_weightings[3] = 5;
+}

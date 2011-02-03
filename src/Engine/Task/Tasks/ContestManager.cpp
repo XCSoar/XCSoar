@@ -16,7 +16,8 @@ ContestManager::ContestManager(const Contests _contest,
   olc_fai(trace_full, _handicap),
   olc_classic(trace_full, _handicap),
   olc_league(trace_sprint, _handicap),
-  olc_plus(trace_full, _handicap)
+  olc_plus(trace_full, _handicap),
+  olc_xcontest(trace_full, _handicap)
 {
   reset();
 }
@@ -74,6 +75,9 @@ ContestManager::update_idle()
       run_contest(olc_plus, result, solution);
 
     break;
+  case OLC_XContest:
+    retval = run_contest(olc_xcontest, result, solution);
+    break;
   };
 
   return retval;
@@ -88,6 +92,7 @@ ContestManager::reset()
   olc_classic.reset();
   olc_league.reset();
   olc_plus.reset();
+  olc_xcontest.reset();
 }
 
 const TracePointVector& 

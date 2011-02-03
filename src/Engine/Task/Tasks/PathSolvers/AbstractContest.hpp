@@ -42,7 +42,6 @@ public:
    *
    * @param _trace Trace object reference to use to retrieve shorter trace for solving
    * @param _handicap Contest handicap factor
-   * @param n_legs Maximum number of legs in Contest task
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
   AbstractContest(const Trace &_trace,

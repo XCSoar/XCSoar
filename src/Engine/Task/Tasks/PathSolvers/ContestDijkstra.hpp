@@ -70,7 +70,7 @@ public:
    *
    * @return True if solver completed in this call
    */
-  bool solve();
+  virtual bool solve();
 
 protected:
   /** Number of points in current trace set */

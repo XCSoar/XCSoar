@@ -20,23 +20,23 @@
 }
  */
 
-#ifndef OLC_FAI_HPP
-#define OLC_FAI_HPP
+#ifndef XCONTEST_FREE_HPP
+#define XCONTEST_FREE_HPP
 
-#include "OLCTriangle.hpp"
+#include "ContestDijkstra.hpp"
 
 /**
- * Specialisation of OLC Triangle with OLC FAI (triangle) rules
+ * Specialisation of ContestDijkstra for XContest free flight rules
  */
-class OLCFAI: 
-  public OLCTriangle
+class XContestFree: 
+  public ContestDijkstra
 {
 public:
-  OLCFAI(const Trace &_trace,
-         const unsigned &_handicap);
+  XContestFree(const Trace &_trace,
+             const unsigned &_handicap);
 
-  virtual fixed calc_score() const;
-
+protected:
+  void set_weightings();
 };
 
 #endif

@@ -20,55 +20,51 @@
 }
  */
 
-#ifndef OLC_LEAGUE_HPP
-#define OLC_LEAGUE_HPP
+#ifndef OLC_TRIANGLE_HPP
+#define OLC_TRIANGLE_HPP
 
-#include "AbstractContest.hpp"
+#include "ContestDijkstra.hpp"
 
 /**
- * Abstract class for contest searches using dijkstra algorithm
- *
+ * Specialisation of OLC Dijkstra for OLC Triangle (triangle) rules
  */
-class OLCLeague:
-  public AbstractContest
+class OLCTriangle: 
+  public ContestDijkstra
 {
 public:
-  OLCLeague(const Trace &_trace,
-    const unsigned& _handicap);
+  OLCTriangle(const Trace &_trace,
+              const unsigned &_handicap,
+              const bool _is_fai=true);
 
-  bool score(ContestResult &result);
-
-  virtual void copy_solution(TracePointVector &vec) const;
-
-  virtual fixed calc_distance() const;
   virtual fixed calc_score() const;
-  virtual fixed calc_time() const;
+  fixed calc_distance() const;
+  fixed calc_time() const;
 
-  /**
-   * Reset the optimiser as if never flown
-   */
-  virtual void reset();
-
-  /**
-   * Update the solver.  The solver is incremental, so this method can
-   * be safely called every time step.
-   *
-   * @return True if solver completed in this call
-   */
-  virtual bool solve();
-
-  TracePointVector& get_solution_classic() {
-    return solution_classic;
-  }
+  void reset();
 
 protected:
-  virtual bool save_solution();
-  TracePointVector solution_classic;
+  fixed leg_distance(unsigned i) const;
+
+  bool path_closed() const;
+
+  unsigned second_leg_distance(const ScanTaskPoint &dest,
+    unsigned &best) const;
+
+  void add_edges(const ScanTaskPoint &curNode);
+
+  bool is_closed;
+  bool is_complete;
+  unsigned first_tp;
+  unsigned best_d;
+
+  void start_search();
+
+  bool update_score();
+
+  bool is_fai;
 
 private:
-  TracePoint best_solution[5];
-  TracePoint solution[5];
-  bool solution_found;
+  void add_start_edges();
 };
 
 #endif

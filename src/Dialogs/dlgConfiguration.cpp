@@ -1005,6 +1005,7 @@ setVariables()
     dfe->addEnumText(_("OLC Classic"), OLC_Classic);
     dfe->addEnumText(_("OLC League"), OLC_League);
     dfe->addEnumText(_("OLC Plus"), OLC_Plus);
+    dfe->addEnumText(_("XContest"), OLC_XContest);
     dfe->Set(settings_computer.contest);
     wp->RefreshDisplay();
   }

@@ -97,8 +97,12 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCLeague.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCSprint.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCClassic.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCTriangle.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCFAI.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCPlus.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/XContest.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/XContestFree.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/XContestTriangle.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/IsolineCrossingFinder.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCready.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCreadyTravelled.cpp \

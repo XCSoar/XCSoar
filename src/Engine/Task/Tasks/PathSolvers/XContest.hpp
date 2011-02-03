@@ -20,55 +20,38 @@
 }
  */
 
-#ifndef OLC_LEAGUE_HPP
-#define OLC_LEAGUE_HPP
+#ifndef XCONTEST_HPP
+#define XCONTEST_HPP
 
 #include "AbstractContest.hpp"
+#include "XContestFree.hpp"
+#include "XContestTriangle.hpp"
 
 /**
- * Abstract class for contest searches using dijkstra algorithm
+ * XContest optimiser, containing searches for free distance and triangles.
  *
+ * Only one solver is run at a time.
  */
-class OLCLeague:
+class XContest:
   public AbstractContest
 {
 public:
-  OLCLeague(const Trace &_trace,
+  XContest(const Trace &_trace,
     const unsigned& _handicap);
-
-  bool score(ContestResult &result);
 
   virtual void copy_solution(TracePointVector &vec) const;
 
   virtual fixed calc_distance() const;
   virtual fixed calc_score() const;
   virtual fixed calc_time() const;
-
-  /**
-   * Reset the optimiser as if never flown
-   */
   virtual void reset();
-
-  /**
-   * Update the solver.  The solver is incremental, so this method can
-   * be safely called every time step.
-   *
-   * @return True if solver completed in this call
-   */
   virtual bool solve();
 
-  TracePointVector& get_solution_classic() {
-    return solution_classic;
-  }
-
-protected:
-  virtual bool save_solution();
-  TracePointVector solution_classic;
-
 private:
-  TracePoint best_solution[5];
-  TracePoint solution[5];
-  bool solution_found;
+  XContestFree solver_free;
+  XContestTriangle solver_triangle;
+  bool mode_free;
+  TracePointVector x_best_solution;
 };
 
 #endif

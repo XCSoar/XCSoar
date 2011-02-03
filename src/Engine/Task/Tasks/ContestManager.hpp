@@ -11,6 +11,7 @@
 #include "PathSolvers/OLCClassic.hpp"
 #include "PathSolvers/OLCLeague.hpp"
 #include "PathSolvers/OLCPlus.hpp"
+#include "PathSolvers/XContest.hpp"
 #include "PathSolvers/Contests.hpp"
 
 class TaskPoint;
@@ -84,6 +85,7 @@ private:
   OLCClassic olc_classic;
   OLCLeague olc_league;
   OLCPlus olc_plus;
+  XContest olc_xcontest;
 };
 
 #endif

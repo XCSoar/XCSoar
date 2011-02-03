@@ -6,7 +6,8 @@ enum Contests {
   OLC_FAI,
   OLC_Classic,
   OLC_League,
-  OLC_Plus
+  OLC_Plus,
+  OLC_XContest
 };
 
 #endif
