@@ -42,7 +42,9 @@ struct SETTINGS_MAP;
 class TopologyFileRenderer : private NonCopyable {
   const TopologyFile &file;
 
+#ifndef ENABLE_OPENGL
   mutable ShapeRenderer shape_renderer;
+#endif
 
   Pen pen;
   Brush brush;

@@ -70,7 +70,12 @@ TopologyFileRenderer::Paint(Canvas &canvas,
   // we already do an outer visibility test, but may need a test
   // in screen coords
 
+#ifdef ENABLE_OPENGL
+  pen.set();
+  brush.set();
+#else
   shape_renderer.configure(&pen, &brush);
+#endif
 
   // get drawing info
 
@@ -258,9 +263,9 @@ TopologyFileRenderer::Paint(Canvas &canvas,
   }
 #ifdef ENABLE_OPENGL
   glPopMatrix();
-#endif
-
+#else
   shape_renderer.commit();
+#endif
 }
 
 void

@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef SHAPE_RENDERER_HPP
 #define SHAPE_RENDERER_HPP
 
+#ifndef ENABLE_OPENGL
+
 #include "Screen/Pen.hpp"
 #include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
@@ -40,22 +42,16 @@ class ShapeRenderer : private NonCopyable {
   AllocatedArray<RasterPoint> points;
   unsigned num_points;
 
-#ifndef ENABLE_OPENGL
   const Pen *pen;
   const Brush *brush;
 
   enum { NONE, OUTLINE, SOLID } mode;
-#endif
 
 public:
   void configure(const Pen *_pen, const Brush *_brush) {
-#ifdef ENABLE_OPENGL
-    _pen->set();
-#else
     pen = _pen;
     brush = _brush;
     mode = NONE;
-#endif
 
     num_points = 0;
   }
@@ -84,32 +80,17 @@ public:
   }
 
   void finish_polyline(Canvas &canvas) {
-#ifdef ENABLE_OPENGL
-    glVertexPointer(2, GL_VALUE, 0, &points[0].x);
-    glDrawArrays(GL_LINE_STRIP, 0, num_points);
-#else
     if (mode != OUTLINE) {
       canvas.select(*pen);
       mode = OUTLINE;
     }
 
     canvas.polyline(points.begin(), num_points);
-#endif
 
     num_points = 0;
   }
 
   void finish_polygon(Canvas &canvas) {
-#ifdef ENABLE_OPENGL
-    if (num_points >= 3) {
-      GLushort *triangles = new GLushort[3*(num_points-2)];
-      int idx_count = polygon_to_triangle(points.begin(), num_points, triangles);
-      glVertexPointer(2, GL_VALUE, 0, &points[0].x);
-      if (idx_count > 0)
-        glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT, triangles);
-      delete triangles;
-    }
-#else
     if (mode != SOLID) {
       canvas.null_pen();
       canvas.select(*brush);
@@ -117,7 +98,6 @@ public:
     }
 
     canvas.polygon(points.begin(), num_points);
-#endif
 
     num_points = 0;
   }
@@ -127,4 +107,5 @@ public:
   }
 };
 
+#endif // !ENABLE_OPENGL
 #endif
