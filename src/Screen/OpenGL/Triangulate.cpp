@@ -134,7 +134,6 @@ _polygon_to_triangle(const PT *points, unsigned num_points,
 
   assert(num_points < 65536);
   GLushort *next = new GLushort[num_points];  // next vertex pointer
-  GLushort *t = triangles;
   GLushort start = 0;  // index of the first vertex
 
   // initialize next pointer counterclockwise
@@ -185,7 +184,7 @@ _polygon_to_triangle(const PT *points, unsigned num_points,
   }
 
   // triangulation
-  const int triangle_idx_count = 3*(num_points-2);
+  GLushort *t = triangles;
   for (unsigned a=start, b=next[a], c=next[b], heat=0;
        num_points > 2;
        a=b, b=c, c=next[c]) {
@@ -218,7 +217,7 @@ _polygon_to_triangle(const PT *points, unsigned num_points,
   }
 
   delete next;
-  return triangle_idx_count;
+  return t - triangles;
 }
 
 #if RASTER_POINT_SIZE != SHAPE_POINT_SIZE
