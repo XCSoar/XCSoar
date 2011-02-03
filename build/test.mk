@@ -203,6 +203,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver/ILEC.cpp \
 	$(SRC)/Device/Driver/PosiGraph.cpp \
 	$(SRC)/Device/Driver/Volkslogger.cpp \
+	$(SRC)/Device/Driver/Zander.cpp \
 	$(VOLKSLOGGER_SOURCES) \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \

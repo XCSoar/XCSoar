@@ -31,6 +31,7 @@
 #include "Device/Driver/PosiGraph.hpp"
 #include "Device/Driver/Vega.hpp"
 #include "Device/Driver/Volkslogger.hpp"
+#include "Device/Driver/Zander.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Geoid.h"
@@ -263,6 +264,36 @@ TestILEC()
   delete device;
 }
 
+static void
+TestZander()
+{
+  NMEAParser parser;
+
+  Device *device = zanderDevice.CreateOnPort(NULL);
+  ok1(device != NULL);
+
+  NMEA_INFO nmea_info;
+  memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.pressure.set_QNH(fixed(999));
+
+  /* baro altitude disabled */
+  device->ParseNMEA("$PZAN1,02476,123456*04", &nmea_info, false);
+  ok1(!nmea_info.BaroAltitudeAvailable);
+
+  /* baro altitude enabled */
+  device->ParseNMEA("$PZAN1,02476,123456*04", &nmea_info, true);
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 2476));
+
+  device->ParseNMEA("$PZAN2,123,9850*03", &nmea_info, true);
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.TrueAirspeed, fixed(34.1667)));
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, fixed(-1.5)));
+
+  delete device;
+}
+
 Declaration::Declaration(OrderedTask const*) {}
 
 static void
@@ -303,13 +334,14 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(92);
+  plan_tests(100);
 
   TestGeneric();
   TestCAI302();
   TestLX(lxDevice);
   TestLX(condorDevice);
   TestILEC();
+  TestZander();
 
   /* XXX the Triadis drivers have too many dependencies, not enabling
      for now */
