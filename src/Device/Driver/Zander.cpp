@@ -82,6 +82,9 @@ bool
 ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                         bool enable_baro)
 {
+  if (!NMEAParser::NMEAChecksum(String))
+    return false;
+
   NMEAInputLine line(String);
   char type[16];
   line.read(type, 16);

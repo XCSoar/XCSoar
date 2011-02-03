@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.0.4 - not yet released
 * devices
    - Zander: PZAN1 contains QNH altitude
+   - Zander: verify checksum
 
 Version 6.0.3 - 2011/02/02
 * devices
