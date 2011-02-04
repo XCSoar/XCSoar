@@ -70,7 +70,7 @@ DataFieldEnum::addEnumText(const TCHAR *Text, unsigned id, const TCHAR *ItemHelp
 }
 
 unsigned
-DataFieldEnum::addEnumText(const TCHAR *Text)
+DataFieldEnum::addEnumText(const TCHAR *Text, const TCHAR *ItemHelpText)
 {
   if (entries.full())
     return 0;
@@ -78,6 +78,7 @@ DataFieldEnum::addEnumText(const TCHAR *Text)
   unsigned i = entries.size();
   Entry &entry = entries.append();
   entry.mText = _tcsdup(Text);
+  entry.mHelp = _tcsdup(ItemHelpText);
   entry.id = i;
   return i;
 }

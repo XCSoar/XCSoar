@@ -63,7 +63,7 @@ public:
 
   void replaceEnumText(unsigned int i, const TCHAR *Text);
   bool addEnumText(const TCHAR *Text, unsigned id, const TCHAR *ItemHelpText = NULL);
-  unsigned addEnumText(const TCHAR *Text);
+  unsigned addEnumText(const TCHAR *Text, const TCHAR *ItemHelpText = NULL);
   void addEnumTexts(const TCHAR *const*list);
 
   virtual int GetAsInteger() const;
