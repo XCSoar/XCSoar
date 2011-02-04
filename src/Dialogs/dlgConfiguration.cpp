@@ -897,9 +897,10 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Track up"));
-    dfe->addEnumText(_("North up"));
-    dfe->addEnumText(_("Target up"));
+    dfe->EnableItemHelp(true);
+    dfe->addEnumText(_("Track up"), _("The moving map display will be rotated so the glider's track is oriented up."));
+    dfe->addEnumText(_("North up"), _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
+    dfe->addEnumText(_("Target up"), _("The moving map display will be rotated so the navigation target is oriented up."));
     dfe->Set(XCSoarInterface::SettingsMap().OrientationCruise);
     wp->RefreshDisplay();
   }
@@ -908,9 +909,10 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Track up"));
-    dfe->addEnumText(_("North up"));
-    dfe->addEnumText(_("Target up"));
+    dfe->EnableItemHelp(true);
+    dfe->addEnumText(_("Track up"), _("The moving map display will be rotated so the glider's track is oriented up."));
+    dfe->addEnumText(_("North up"), _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
+    dfe->addEnumText(_("Target up"), _("The moving map display will be rotated so the navigation target is oriented up."));
     dfe->Set(XCSoarInterface::SettingsMap().OrientationCircling);
     wp->RefreshDisplay();
   }
@@ -919,9 +921,10 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("None"), MAP_SHIFT_BIAS_NONE);
-    dfe->addEnumText(_("Heading"), MAP_SHIFT_BIAS_HEADING);
-    dfe->addEnumText(_("Target"), MAP_SHIFT_BIAS_TARGET);
+    dfe->EnableItemHelp(true);
+    dfe->addEnumText(_("None"), MAP_SHIFT_BIAS_NONE, _("Disable adjustments."));
+    dfe->addEnumText(_("Heading"), MAP_SHIFT_BIAS_HEADING, _("Use a recent average of the flown heading as basis."));
+    dfe->addEnumText(_("Target"), MAP_SHIFT_BIAS_TARGET, _("Use the current target waypoint as basis."));
     dfe->Set(XCSoarInterface::SettingsMap().MapShiftBias);
     wp->RefreshDisplay();
   }
