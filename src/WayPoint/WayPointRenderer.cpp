@@ -328,26 +328,25 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
   if (radius <= fixed_zero)
     return;
 
-  fixed fdx, fdy;
-  (a + Angle::degrees(fixed_int_constant(90))).sin_cos(fdx, fdy);
-  int dx = iround(fdx * width / fixed_two);
-  int dy = iround(fdy * width / fixed_two);
+  fixed fwx, fwy;
+  (a + Angle::degrees(fixed_int_constant(90))).sin_cos(fwx, fwy);
+  int wx = iround(fwx * width);
+  int wy = iround(fwy * width);
 
   fixed x, y;
   a.sin_cos(x, y);
-  int rx = iround(x * radius);
-  int ry = iround(y * radius);
+  int lx = iround(x * radius * fixed_two) & ~0x1;  // make it a even number
+  int ly = iround(y * radius * fixed_two) & ~0x1;
 
   RasterPoint runway[4];
-  runway[0].x = pt.x - rx + dx;
-  runway[0].y = pt.y + ry - dy;
-  runway[1].x = pt.x - rx - dx;
-  runway[1].y = pt.y + ry + dy;
-  runway[2].x = pt.x + rx - dx;
-  runway[2].y = pt.y - ry + dy;
-  runway[3].x = pt.x + rx + dx;
-  runway[3].y = pt.y - ry - dy;
-
+  runway[0].x = pt.x        - (lx / 2) + (wx / 2);
+  runway[0].y = pt.y        + (ly / 2) - (wy / 2);
+  runway[1].x = runway[0].x            - wx;
+  runway[1].y = runway[0].y            + wy;
+  runway[2].x = runway[1].x + lx;
+  runway[2].y = runway[1].y - ly;
+  runway[3].x = runway[2].x            + wx;
+  runway[3].y = runway[2].y            - wy;
   canvas.polygon(runway, sizeof(runway)/sizeof(runway[0]));
 }
 
