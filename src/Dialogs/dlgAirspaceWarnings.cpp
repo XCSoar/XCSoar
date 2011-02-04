@@ -385,6 +385,9 @@ static CallBackTableEntry CallBackTable[] = {
 void
 dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close)
 {
+  if (dlgAirspaceWarningVisible())
+    return;
+
   assert(airspace_warnings != NULL);
 
   wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_AIRSPACEWARNINGS"));
