@@ -64,7 +64,7 @@ DataFieldEnum::addEnumText(const TCHAR *Text, unsigned id, const TCHAR *ItemHelp
 
   Entry &entry = entries.append();
   entry.mText = _tcsdup(Text);
-  entry.mHelp = _tcsdup(ItemHelpText);
+  entry.mHelp = ItemHelpText ? _tcsdup(ItemHelpText) : NULL;
   entry.id = id;
   return true;
 }
@@ -78,7 +78,7 @@ DataFieldEnum::addEnumText(const TCHAR *Text, const TCHAR *ItemHelpText)
   unsigned i = entries.size();
   Entry &entry = entries.append();
   entry.mText = _tcsdup(Text);
-  entry.mHelp = _tcsdup(ItemHelpText);
+  entry.mHelp = ItemHelpText ? _tcsdup(ItemHelpText) : NULL;
   entry.id = i;
   return i;
 }

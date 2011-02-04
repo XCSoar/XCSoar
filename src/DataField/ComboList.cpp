@@ -33,7 +33,7 @@ ComboList::Item::Item(int _DataFieldIndex,
   :DataFieldIndex(_DataFieldIndex),
    StringValue(_tcsdup(_StringValue)),
    StringValueFormatted(_tcsdup(_StringValueFormatted)),
-   StringHelp(_tcsdup(_StringHelp)) {}
+   StringHelp(_StringHelp ? _tcsdup(_StringHelp) : NULL) {}
 
 ComboList::Item::~Item() {
   free(StringValue);

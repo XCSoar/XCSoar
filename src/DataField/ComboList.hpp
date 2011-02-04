@@ -43,7 +43,7 @@ public:
     TCHAR *StringHelp;
 
     Item(int _DataFieldIndex,
-         const TCHAR *_StringValue, const TCHAR *_StringValueFormatted, const TCHAR *_StringHelp = _T(""));
+         const TCHAR *_StringValue, const TCHAR *_StringValueFormatted, const TCHAR *_StringHelp = NULL);
     ~Item();
   };
 
