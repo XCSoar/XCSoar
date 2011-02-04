@@ -171,7 +171,9 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
       appendStringWithSeperator(new_waypoint.Comment, params[iRWDir]);
       new_waypoint.Comment += _T("°");
       int direction =_tcstol(params[iRWDir], NULL, 10);
-      if (direction < 0 || direction > 359)
+      if (direction == 360)
+        direction = 0;
+      else if (direction < 0 || direction > 360)
         direction = -1;
       new_waypoint.RunwayDirection = Angle::degrees(fixed(direction));
     }
