@@ -40,9 +40,10 @@ public:
     int DataFieldIndex;
     TCHAR *StringValue;
     TCHAR *StringValueFormatted;
+    TCHAR *StringHelp;
 
     Item(int _DataFieldIndex,
-         const TCHAR *_StringValue, const TCHAR *_StringValueFormatted);
+         const TCHAR *_StringValue, const TCHAR *_StringValueFormatted, const TCHAR *_StringHelp = _T(""));
     ~Item();
   };
 
@@ -75,9 +76,10 @@ private:
 
   unsigned Append(int DataFieldIndex,
                   const TCHAR *StringValue,
-                  const TCHAR *StringValueFormatted) {
+                  const TCHAR *StringValueFormatted,
+                  const TCHAR *StringHelp = NULL) {
     return Append(new Item(DataFieldIndex,
-                           StringValue, StringValueFormatted));
+                           StringValue, StringValueFormatted, StringHelp));
   }
 
   unsigned Append(int DataFieldIndex, const TCHAR *StringValue) {

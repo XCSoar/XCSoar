@@ -43,11 +43,22 @@ OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
                       rc.top + Layout::FastScale(2), rc,
                       (*ComboListPopup)[i].StringValueFormatted);
 }
+static const TCHAR*
+OnItemHelp(unsigned i)
+{
+  if ((*ComboListPopup)[i].StringHelp) {
+    return (*ComboListPopup)[i].StringHelp;
+  }
+  else {
+    return _T("");
+  }
+}
 
 int
 ComboPicker(SingleWindow &parent, const TCHAR *caption,
             const ComboList &combo_list,
-            ListHelpCallback_t help_callback)
+            ListHelpCallback_t help_callback,
+            bool enable_item_help)
 {
   ComboListPopup = &combo_list;
 
@@ -56,7 +67,8 @@ ComboPicker(SingleWindow &parent, const TCHAR *caption,
                     combo_list.ComboPopupItemSavedIndex,
                     Layout::Scale(18),
                     OnPaintComboPopupListItem, false,
-                    help_callback);
+                    help_callback,
+                    enable_item_help ? OnItemHelp : NULL);
 }
 
 static void
@@ -73,9 +85,9 @@ OnHelpClicked(unsigned i)
 
 static int
 ComboPicker(SingleWindow &parent, const WndProperty &control,
-            const ComboList &combo_list)
+            const ComboList &combo_list, bool EnableItemHelp)
 {
-  return ComboPicker(parent, control.GetCaption(), combo_list, OnHelpClicked);
+  return ComboPicker(parent, control.GetCaption(), combo_list, OnHelpClicked, EnableItemHelp);
 }
 
 int
@@ -112,7 +124,7 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
       ComboPopupDataField->CopyString(sSavedInitialValue, false);
     }
 
-    int idx = ComboPicker(parent, *theProperty, *ComboListPopup);
+    int idx = ComboPicker(parent, *theProperty, *ComboListPopup, ComboPopupDataField->GetItemHelpEnabled());
 
     bOpenCombo = false; //tell  combo to exit loop after close
 

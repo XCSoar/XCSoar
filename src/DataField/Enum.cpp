@@ -57,13 +57,14 @@ DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text)
 }
 
 bool
-DataFieldEnum::addEnumText(const TCHAR *Text, unsigned id)
+DataFieldEnum::addEnumText(const TCHAR *Text, unsigned id, const TCHAR *ItemHelpText)
 {
   if (entries.full())
     return false;
 
   Entry &entry = entries.append();
   entry.mText = _tcsdup(Text);
+  entry.mHelp = _tcsdup(ItemHelpText);
   entry.id = id;
   return true;
 }
@@ -179,7 +180,7 @@ DataFieldEnum::CreateComboList() const
   ComboList *combo_list = new ComboList();
 
   for (unsigned i = 0; i < entries.size(); i++)
-    combo_list->Append(entries[i].id, entries[i].mText);
+    combo_list->Append(entries[i].id, entries[i].mText,  entries[i].mText, entries[i].mHelp);
 
   combo_list->ComboPopupItemSavedIndex = mValue;
   return combo_list;

@@ -77,6 +77,7 @@ public:
     mUsageCounter--;
     return mUsageCounter;
   }
+  virtual void EnableItemHelp(bool value) {};
 
   void SetDisplayFormat(TCHAR *Value);
   // allows combolist to iterate all values
@@ -92,6 +93,7 @@ public:
   {
     SetAsInteger(iDataFieldIndex);
   }
+  bool GetItemHelpEnabled() { return mItemHelp; }
 
   void CopyString(TCHAR * szStringOut, bool bFormatted);
   bool SupportCombo;  // all Types dataField support combolist except DataFieldString.
@@ -101,6 +103,7 @@ protected:
   TCHAR mEditFormat[FORMATSIZE + 1];
   TCHAR mDisplayFormat[FORMATSIZE + 1];
   TCHAR mUnits[UNITSIZE + 1];
+  bool mItemHelp;
 
 private:
   int mUsageCounter;

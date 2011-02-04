@@ -88,7 +88,7 @@ __Dummy(DataField *Sender, DataField::DataAccessKind_t Mode)
 DataField::DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
                      DataAccessCallback_t OnDataAccess)
   :mOnDataAccess(OnDataAccess != NULL ? OnDataAccess : __Dummy),
-   mUsageCounter(0), mDisableSpeedup(false), mDetachGUI(false)
+   mItemHelp(false), mUsageCounter(0), mDisableSpeedup(false), mDetachGUI(false)
 {
   _tcscpy(mEditFormat, EditFormat);
   _tcscpy(mDisplayFormat, DisplayFormat);

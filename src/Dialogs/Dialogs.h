@@ -150,7 +150,8 @@ bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0,
 int
 ComboPicker(SingleWindow &parent, const TCHAR *caption,
             const ComboList &combo_list,
-            ListHelpCallback_t help_callback);
+            ListHelpCallback_t help_callback,
+            bool enable_item_help = false);
 
 int dlgComboPicker(SingleWindow &parent, WndProperty *theProperty);
 

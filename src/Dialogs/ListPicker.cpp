@@ -25,6 +25,7 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Dialogs/dlgTools.h"
 #include "Form/Form.hpp"
+#include "Form/Frame.hpp"
 #include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
 
@@ -33,7 +34,9 @@ Copyright_License {
 static WndForm *wf;
 static ListHelpCallback_t help_callback;
 
+static WndFrame *wItemHelp;
 static WndListFrame *list_control;
+static ItemHelpCallback_t itemhelp_callback;
 
 static void
 OnHelpClicked(WndButton &button)
@@ -76,6 +79,15 @@ OnTimerNotify(WndForm &Sender)
   list_control->invalidate();
 }
 
+static void
+OnPointCursorCallback(unsigned i)
+{
+  assert(wItemHelp);
+  assert(itemhelp_callback);
+  const TCHAR* itemhelp = itemhelp_callback(i);
+  wItemHelp->SetText(itemhelp);
+}
+
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnCancelClicked),
@@ -86,7 +98,8 @@ int
 ListPicker(SingleWindow &parent, const TCHAR *caption,
            unsigned num_items, unsigned initial_value, unsigned item_height,
            WndListFrame::PaintItemCallback_t paint_callback, bool update,
-           ListHelpCallback_t _help_callback)
+           ListHelpCallback_t _help_callback,
+           ItemHelpCallback_t _itemhelp_callback)
 {
   assert(num_items <= 0x7fffffff);
   assert((num_items == 0 && initial_value == 0) || initial_value < num_items);
@@ -110,6 +123,21 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
   list_control->SetPaintItemCallback(paint_callback);
 
   help_callback = _help_callback;
+  itemhelp_callback = _itemhelp_callback;
+
+  if (itemhelp_callback != NULL) {
+    wItemHelp = (WndFrame *)wf->FindByName(_T("lblItemHelp"));
+    assert(wItemHelp);
+    wItemHelp->set_visible(true);
+    const unsigned help_height = wItemHelp->get_height();
+    const RECT rc = list_control->get_position();
+    assert(rc.bottom - rc.top - help_height - 2 > 0);
+    list_control->move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top - help_height - 2);
+    list_control->SetCursorCallback(OnPointCursorCallback);
+    OnPointCursorCallback(initial_value);
+  }
+  else
+    wItemHelp = NULL;
 
   WndButton *help_button = (WndButton *)wf->FindByName(_T("cmdHelp"));
   assert(help_button != NULL);

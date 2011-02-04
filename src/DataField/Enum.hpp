@@ -34,8 +34,9 @@ public:
   struct Entry : private NonCopyable {
     TCHAR *mText;
     unsigned id;
+    TCHAR *mHelp;
 
-    Entry():mText(NULL) {}
+    Entry():mText(NULL), mHelp(NULL) {}
     ~Entry();
   };
 
@@ -61,12 +62,19 @@ public:
   virtual ComboList *CreateComboList() const;
 
   void replaceEnumText(unsigned int i, const TCHAR *Text);
-  bool addEnumText(const TCHAR *Text, unsigned id);
+  bool addEnumText(const TCHAR *Text, unsigned id, const TCHAR *ItemHelpText = NULL);
   unsigned addEnumText(const TCHAR *Text);
   void addEnumTexts(const TCHAR *const*list);
 
   virtual int GetAsInteger() const;
   virtual const TCHAR *GetAsString() const;
+
+  /**
+   * @param value True if display item help in text box below picker
+   * Displays help strings associated with enums Items
+   */
+  void EnableItemHelp(bool value) { mItemHelp = value; }
+
 
   #if defined(__BORLANDC__)
   #pragma warn -hid
