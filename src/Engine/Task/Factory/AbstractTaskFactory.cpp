@@ -73,7 +73,7 @@ AbstractTaskFactory::createStart(const Waypoint &wp) const
   return createStart(*m_start_types.begin(), wp);
 }
 
-IntermediatePoint* 
+IntermediateTaskPoint* 
 AbstractTaskFactory::createIntermediate(const Waypoint &wp) const
 {
   if (get_ordered_task_behaviour().homogeneous_tps && (m_task.task_size()>1)) {
@@ -235,14 +235,14 @@ AbstractTaskFactory::createStart(const LegalPointType_t type,
   return (StartPoint*)createPoint(type, wp);
 }
 
-IntermediatePoint* 
+IntermediateTaskPoint* 
 AbstractTaskFactory::createIntermediate(const LegalPointType_t type,
                                         const Waypoint &wp) const
 {
   if (!validIntermediateType(type))
     return NULL;
 
-  return (IntermediatePoint*)createPoint(type, wp);
+  return (IntermediateTaskPoint*)createPoint(type, wp);
 }
 
 FinishPoint* 
@@ -281,7 +281,7 @@ AbstractTaskFactory::append(const OrderedTaskPoint &new_tp,
 
     if (m_task.has_finish()) {
       // old finish must be mutated into an intermediate point
-      IntermediatePoint* sp = createIntermediate(m_task.getTaskPoint(
+      IntermediateTaskPoint* sp = createIntermediate(m_task.getTaskPoint(
           m_task.task_size() - 1)->get_waypoint());
 
       m_task.replace(*sp, m_task.task_size()-1);
@@ -345,7 +345,7 @@ AbstractTaskFactory::insert(const OrderedTaskPoint &new_tp,
     if (position == 0) {
       if (m_task.has_start()) {
         // old start must be mutated into an intermediate point
-        IntermediatePoint* sp =
+        IntermediateTaskPoint* sp =
             createIntermediate(m_task.getTaskPoint(0)->get_waypoint());
         m_task.replace(*sp, 0);
         delete sp;
@@ -365,7 +365,7 @@ AbstractTaskFactory::insert(const OrderedTaskPoint &new_tp,
         return m_task.insert(new_tp, position);
       } else {
         // candidate must be transformed into a intermediatepoint
-        IntermediatePoint* sp = createIntermediate(new_tp.get_waypoint());
+        IntermediateTaskPoint* sp = createIntermediate(new_tp.get_waypoint());
         bool success = m_task.insert(*sp, position);
         delete sp;
         return success;

@@ -50,7 +50,7 @@ TaskAdvance::state_ready(const TaskPoint &tp,
     const AATPoint *ap = (const AATPoint *)&tp;
     return aat_state_ready(ap->has_entered(), ap->close_to_target(state));
   } else if (tp.is_intermediate()) {
-    const IntermediatePoint *ip = (const IntermediatePoint *)&tp;
+    const IntermediateTaskPoint *ip = (const IntermediateTaskPoint *)&tp;
     return ip->has_entered();
   }
   return false;

@@ -265,6 +265,6 @@ AATPoint::equals(const OrderedTaskPoint* other) const
 void
 AATPoint::reset()
 {
-  IntermediatePoint::reset();
+  IntermediateTaskPoint::reset();
   m_deadzone.clear();
 }

@@ -31,7 +31,7 @@ Copyright_License {
 
 class AATPoint;
 class StartPoint;
-class IntermediatePoint;
+class IntermediateTaskPoint;
 class ASTPoint;
 class FinishPoint;
 class OrderedTask;
@@ -267,10 +267,10 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    * @param type Type of intermediate point
    * @param wp Waypoint reference
    *
-   * @return Initialised IntermediatePoint if valid, otherwise NULL
+   * @return Initialised IntermediateTaskPoint if valid, otherwise NULL
    */
   gcc_pure gcc_malloc
-  IntermediatePoint* createIntermediate(const LegalPointType_t type,
+  IntermediateTaskPoint* createIntermediate(const LegalPointType_t type,
                                         const Waypoint &wp) const;
 
   /**
@@ -300,10 +300,10 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    *
    * @param wp Waypoint reference
    *
-   * @return Initialised IntermediatePoint if valid, otherwise NULL
+   * @return Initialised IntermediateTaskPoint if valid, otherwise NULL
    */
   gcc_pure gcc_malloc
-  IntermediatePoint* createIntermediate(const Waypoint &wp) const;
+  IntermediateTaskPoint* createIntermediate(const Waypoint &wp) const;
 
   /**
    * Create finish point of default type
@@ -471,7 +471,7 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
   bool validStartType(LegalPointType_t type) const;
 
   /**
-   * Determine if a type is valid for an IntermediatePoint
+   * Determine if a type is valid for an IntermediateTaskPoint
    *
    * @param type Type to check
    *
@@ -549,7 +549,7 @@ protected:
   }
 
   /** 
-   * Check whether the supplied position can be an IntermediatePoint
+   * Check whether the supplied position can be an IntermediateTaskPoint
    * 
    * @param position index to test
    * 

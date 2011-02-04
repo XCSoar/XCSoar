@@ -34,7 +34,7 @@
  * to enter the observation zone)
  * but does not yet have an observation zone.
  */
-class ASTPoint : public IntermediatePoint 
+class ASTPoint : public IntermediateTaskPoint 
 {
 public:
 /** 
@@ -52,7 +52,7 @@ public:
            const Waypoint & wp,
            const TaskBehaviour &tb,
            const OrderedTaskBehaviour& to) 
-    : IntermediatePoint(AST, _oz, wp, tb, to)
+    : IntermediateTaskPoint(AST, _oz, wp, tb, to)
     { };
 };
 

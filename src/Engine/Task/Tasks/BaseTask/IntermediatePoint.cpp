@@ -22,7 +22,7 @@
 #include "IntermediatePoint.hpp"
 
 fixed
-IntermediatePoint::get_elevation() const
+IntermediateTaskPoint::get_elevation() const
 {
   return m_elevation+m_task_behaviour.route_planner.safety_height_terrain;
 }

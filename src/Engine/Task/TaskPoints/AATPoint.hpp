@@ -34,7 +34,7 @@
  * \todo
  * - Elevation may vary with target shift
  */
-class AATPoint : public IntermediatePoint {
+class AATPoint : public IntermediateTaskPoint {
 public:
   friend class PrintHelper;
 
@@ -53,7 +53,7 @@ public:
            const Waypoint & wp,
            const TaskBehaviour &tb,
            const OrderedTaskBehaviour& to) : 
-    IntermediatePoint(AAT, _oz, wp, tb, to, true),
+    IntermediateTaskPoint(AAT, _oz, wp, tb, to, true),
     m_target_location(wp.Location),
     m_target_save(wp.Location),
     m_target_locked(false)

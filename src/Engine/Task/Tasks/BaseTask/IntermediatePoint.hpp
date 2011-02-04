@@ -35,7 +35,7 @@
  *
  */
 
-class IntermediatePoint: 
+class IntermediateTaskPoint: 
   public OrderedTaskPoint 
 {
 public:    
@@ -51,7 +51,7 @@ public:
  * @return Partially-initialised object
  */
 
-  IntermediatePoint(enum type _type, ObservationZonePoint* _oz,
+  IntermediateTaskPoint(enum type _type, ObservationZonePoint* _oz,
                     const Waypoint & wp, 
                     const TaskBehaviour& tb,
                     const OrderedTaskBehaviour& to,
