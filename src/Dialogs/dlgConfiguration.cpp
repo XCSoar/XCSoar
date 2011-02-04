@@ -849,23 +849,27 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Full Name"), DISPLAYNAME);
-    dfe->addEnumText(_("First Word of Name"), DISPLAYUNTILSPACE);
-    dfe->addEnumText(_("First 3 Letters"), DISPLAYFIRSTTHREE);
-    dfe->addEnumText(_("First 5 Letters"), DISPLAYFIRSTFIVE);
-    dfe->addEnumText(_("None"), DISPLAYNONE);
+    dfe->EnableItemHelp(true);
+    dfe->addEnumText(_("Full Name"), DISPLAYNAME, _("The full name of each waypoint is displayed."));
+    dfe->addEnumText(_("First Word of Name"), DISPLAYUNTILSPACE, _("The first word of the waypoint name is displayed."));
+    dfe->addEnumText(_("First 3 Letters"), DISPLAYFIRSTTHREE, _("The first 3 letters of the waypoint name are displayed."));
+    dfe->addEnumText(_("First 5 Letters"), DISPLAYFIRSTFIVE, _("The first 5 letters of the waypoint name are displayed."));
+    dfe->addEnumText(_("None"), DISPLAYNONE, _("No waypoint name is displayed."));
     dfe->Set(XCSoarInterface::SettingsMap().DisplayTextType);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpWayPointLabelSelection"));
   if (wp) {
+
+    //Determines what waypoint labels are displayed for each waypoint (space permitting):&#10;
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("All"));
-    dfe->addEnumText(_("Task Waypoints & Landables"));
-    dfe->addEnumText(_("Task Waypoints"));
-    dfe->addEnumText(_("None"));
+    dfe->EnableItemHelp(true);
+    dfe->addEnumText(_("All"), _("All waypoints labels will displayed."));
+    dfe->addEnumText(_("Task Waypoints & Landables"), _("All waypoints labels part of a task and all landables will be displayed."));
+    dfe->addEnumText(_("Task Waypoints"), _("All waypoints labels part of a task will be displayed."));
+    dfe->addEnumText(_("None"), _("No waypoint labels will be displayed."));
     dfe->Set(XCSoarInterface::SettingsMap().WayPointLabelSelection);
     wp->RefreshDisplay();
   }
