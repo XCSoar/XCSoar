@@ -643,7 +643,7 @@ static CallBackTableEntry CallBackTable[] = {
 static DeviceConfig device_config[NUMDEV];
 static int Speed = 1; // default is knots
 static int TaskSpeed = 2; // default is kph
-static int Distance = 2; // default is km
+static int DistanceUnits = 2; // default is km
 static int Lift = 0;
 static int Altitude = 0; //default ft
 static int Temperature = 0; //default is celcius
@@ -1061,7 +1061,7 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  Profile::Get(szProfileDistanceUnitsValue, Distance);
+  Profile::Get(szProfileDistanceUnitsValue, DistanceUnits);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsDistance"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1069,7 +1069,7 @@ setVariables()
     dfe->addEnumText(_("Statute"));
     dfe->addEnumText(_("Nautical"));
     dfe->addEnumText(_("Metric"));
-    dfe->Set(Distance);
+    dfe->Set(DistanceUnits);
     wp->RefreshDisplay();
   }
 
@@ -2361,12 +2361,12 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsDistance"));
   if (wp) {
-    if ((int)Distance != wp->GetDataField()->GetAsInteger()) {
-      Distance = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileDistanceUnitsValue, Distance);
+    if ((int)DistanceUnits != wp->GetDataField()->GetAsInteger()) {
+      DistanceUnits = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileDistanceUnitsValue, DistanceUnits);
       changed = true;
 
-      switch (Distance) {
+      switch (DistanceUnits) {
       case 0:
         Units::SetUserDistanceUnit(unStatuteMiles);
         break;
