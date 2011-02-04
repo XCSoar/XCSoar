@@ -40,8 +40,6 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-#define COMMDEBUG 0
-
 static void
 SerialPort_StatusMessage(unsigned type, const TCHAR *caption,
                       const TCHAR *fmt, ...)
