@@ -641,12 +641,12 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 static DeviceConfig device_config[NUMDEV];
-static int Speed = 1; // default is knots
-static int TaskSpeed = 2; // default is kph
+static int SpeedUnits = 1; // default is knots
+static int TaskSpeedUnits = 2; // default is kph
 static int DistanceUnits = 2; // default is km
-static int Lift = 0;
-static int Altitude = 0; //default ft
-static int Temperature = 0; //default is celcius
+static int LiftUnits = 0;
+static int AltitudeUnits = 0; //default ft
+static int TemperatureUnits = 0; //default is celcius
 
 static void
 InitFileField(WndProperty &wp, const TCHAR *profile_key, const TCHAR *filters)
@@ -1020,7 +1020,7 @@ setVariables()
   LoadFormProperty(*wf, _T("prpHandicap"),
                    settings_computer.contest_handicap);
 
-  Profile::Get(szProfileSpeedUnitsValue, Speed);
+  Profile::Get(szProfileSpeedUnitsValue, SpeedUnits);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsSpeed"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1028,7 +1028,7 @@ setVariables()
     dfe->addEnumText(_("Statute"));
     dfe->addEnumText(_("Nautical"));
     dfe->addEnumText(_("Metric"));
-    dfe->Set(Speed);
+    dfe->Set(SpeedUnits);
     wp->RefreshDisplay();
   }
 
@@ -1049,7 +1049,7 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  Profile::Get(szProfileTaskSpeedUnitsValue, TaskSpeed);
+  Profile::Get(szProfileTaskSpeedUnitsValue, TaskSpeedUnits);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsTaskSpeed"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1057,7 +1057,7 @@ setVariables()
     dfe->addEnumText(_("Statute"));
     dfe->addEnumText(_("Nautical"));
     dfe->addEnumText(_("Metric"));
-    dfe->Set(TaskSpeed);
+    dfe->Set(TaskSpeedUnits);
     wp->RefreshDisplay();
   }
 
@@ -1073,29 +1073,29 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  Profile::Get(szProfileAltitudeUnitsValue, Altitude);
+  Profile::Get(szProfileAltitudeUnitsValue, AltitudeUnits);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsAltitude"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Feet"));
     dfe->addEnumText(_("Meters"));
-    dfe->Set(Altitude);
+    dfe->Set(AltitudeUnits);
     wp->RefreshDisplay();
   }
 
-  Profile::Get(szProfileTemperatureUnitsValue, Temperature);
+  Profile::Get(szProfileTemperatureUnitsValue, TemperatureUnits);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsTemperature"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("C"));
     dfe->addEnumText(_("F"));
-    dfe->Set(Temperature);
+    dfe->Set(TemperatureUnits);
     wp->RefreshDisplay();
   }
 
-  Profile::Get(szProfileLiftUnitsValue, Lift);
+  Profile::Get(szProfileLiftUnitsValue, LiftUnits);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsLift"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1103,7 +1103,7 @@ setVariables()
     dfe->addEnumText(_("Knots"));
     dfe->addEnumText(_("M/s"));
     dfe->addEnumText(_("ft/min"));
-    dfe->Set(Lift);
+    dfe->Set(LiftUnits);
     wp->RefreshDisplay();
   }
 
@@ -2304,12 +2304,12 @@ void dlgConfigurationShowModal(void)
    */
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsSpeed"));
   if (wp) {
-    if ((int)Speed != wp->GetDataField()->GetAsInteger()) {
-      Speed = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileSpeedUnitsValue, Speed);
+    if ((int)SpeedUnits != wp->GetDataField()->GetAsInteger()) {
+      SpeedUnits = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileSpeedUnitsValue, SpeedUnits);
       changed = true;
 
-      switch (Speed) {
+      switch (SpeedUnits) {
       case 0:
         Units::SetUserSpeedUnit(unStatuteMilesPerHour);
         Units::SetUserWindSpeedUnit(unStatuteMilesPerHour);
@@ -2339,12 +2339,12 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsTaskSpeed"));
   if (wp) {
-    if ((int)TaskSpeed != wp->GetDataField()->GetAsInteger()) {
-      TaskSpeed = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileTaskSpeedUnitsValue, TaskSpeed);
+    if ((int)TaskSpeedUnits != wp->GetDataField()->GetAsInteger()) {
+      TaskSpeedUnits = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileTaskSpeedUnitsValue, TaskSpeedUnits);
       changed = true;
 
-      switch (TaskSpeed) {
+      switch (TaskSpeedUnits) {
       case 0:
         Units::SetUserTaskSpeedUnit(unStatuteMilesPerHour);
         break;
@@ -2383,12 +2383,12 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsLift"));
   if (wp) {
-    if ((int)Lift != wp->GetDataField()->GetAsInteger()) {
-      Lift = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileLiftUnitsValue, Lift);
+    if ((int)LiftUnits != wp->GetDataField()->GetAsInteger()) {
+      LiftUnits = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileLiftUnitsValue, LiftUnits);
       changed = true;
 
-      switch (Lift) {
+      switch (LiftUnits) {
       case 0:
         Units::SetUserVerticalSpeedUnit(unKnots);
         break;
@@ -2405,12 +2405,12 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsAltitude"));
   if (wp) {
-    if ((int)Altitude != wp->GetDataField()->GetAsInteger()) {
-      Altitude = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileAltitudeUnitsValue, Altitude);
+    if ((int)AltitudeUnits != wp->GetDataField()->GetAsInteger()) {
+      AltitudeUnits = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileAltitudeUnitsValue, AltitudeUnits);
       changed = true;
 
-      switch (Altitude) {
+      switch (AltitudeUnits) {
       case 0:
         Units::SetUserAltitudeUnit(unFeet);
         break;
@@ -2424,12 +2424,12 @@ void dlgConfigurationShowModal(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsTemperature"));
   if (wp) {
-    if ((int)Temperature != wp->GetDataField()->GetAsInteger()) {
-      Temperature = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileTemperatureUnitsValue, Temperature);
+    if ((int)TemperatureUnits != wp->GetDataField()->GetAsInteger()) {
+      TemperatureUnits = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileTemperatureUnitsValue, TemperatureUnits);
       changed = true;
 
-      switch (Temperature) {
+      switch (TemperatureUnits) {
       case 0:
         Units::SetUserTemperatureUnit(unGradCelcius);
         break;
