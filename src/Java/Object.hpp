@@ -25,14 +25,12 @@ Copyright_License {
 #define XCSOAR_JAVA_OBJECT_HPP
 
 #include "Java/Global.hpp"
-#include "Util/NonCopyable.hpp"
+#include "Java/Ref.hpp"
 
 #include <jni.h>
 
 namespace Java {
-  class Object : private NonCopyable {
-    jobject obj;
-
+  class Object : public GlobalRef<jobject> {
   public:
     /**
      * Constructs an uninitialized object.  The method set() must be
@@ -40,34 +38,12 @@ namespace Java {
      */
     Object() {}
 
-    Object(JNIEnv *env, jobject _obj):obj(_obj) {
-      env->NewGlobalRef(obj);
-    }
-
-    ~Object() {
-      GetEnv()->DeleteGlobalRef(obj);
-    }
-
-    /**
-     * Sets the object, ignoring the previous value.  This is only
-     * allowed once after the default constructor was used.
-     */
-    void set(JNIEnv *env, jobject _obj) {
-      obj = env->NewGlobalRef(_obj);
-    }
-
-    jobject get() const {
-      return obj;
-    }
-
-    operator jobject() const {
-      return obj;
-    }
+    Object(JNIEnv *env, jobject obj):GlobalRef<jobject>(env, obj) {}
 
     void call_void(JNIEnv *env, const char *name) {
-      jclass cls = env->GetObjectClass(obj);
+      jclass cls = env->GetObjectClass(get());
       jmethodID mid = env->GetMethodID(cls, name, "()V");
-      env->CallVoidMethod(obj, mid);
+      env->CallVoidMethod(get(), mid);
       env->DeleteLocalRef(cls);
     }
 
