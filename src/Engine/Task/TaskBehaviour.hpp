@@ -25,6 +25,7 @@
 
 #include "Tasks/PathSolvers/Contests.hpp"
 #include "OrderedTaskBehaviour.hpp"
+#include "Task/Factory/AbstractTaskFactory.hpp"
 
 struct AIRCRAFT_STATE;
 
@@ -61,6 +62,33 @@ struct RoutePlannerConfig {
   bool airspace_enabled() const {
     return (mode== rpAirspace) || (mode== rpBoth);
   }
+};
+
+/**
+* variables set user preference defaults for new task and
+* new turpoints created by the task factories
+*/
+struct SectorDefaults {
+  SectorDefaults():
+  start_type(AbstractTaskFactory::START_CYLINDER),
+  start_radius(1000),
+  turnpoint_type(AbstractTaskFactory::AST_CYLINDER),
+  turnpoint_radius(500),
+  finish_type(AbstractTaskFactory::FINISH_CYLINDER),
+  finish_radius(1000) {}
+
+/** default start type for new tasks */
+AbstractTaskFactory::LegalPointType_t start_type;
+/** default start radius or line length for new tasks */
+fixed start_radius;
+/** default intermediate type for new tasks */
+AbstractTaskFactory::LegalPointType_t turnpoint_type;
+/** default intermediate point radius for new tasks */
+fixed turnpoint_radius;
+/** default finish type for new tasks */
+AbstractTaskFactory::LegalPointType_t finish_type;
+/** default finish radius or line length for new tasks */
+fixed finish_radius;
 };
 
 /**
@@ -130,6 +158,9 @@ public:
   fixed start_max_speed_margin;
   /** Margin in maximum height (m) allowed in start sector */
   unsigned start_max_height_margin;
+
+  /** Default sector info for new ordered task */
+  SectorDefaults sector_defaults;
 
   /** Defaults for ordered task */
   OrderedTaskBehaviour ordered_defaults;
