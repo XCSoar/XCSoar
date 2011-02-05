@@ -104,6 +104,21 @@ public:
   TaskBehaviour();
 
   /**
+   * Enumeration of factory types.  This is the set of
+   * types of ordered task that can be created.
+   */
+  enum Factory_t {
+    FACTORY_FAI_GENERAL = 0,
+    FACTORY_FAI_TRIANGLE,
+    FACTORY_FAI_OR,
+    FACTORY_FAI_GOAL,
+    FACTORY_RT,
+    FACTORY_AAT,
+    FACTORY_MIXED,
+    FACTORY_TOURING
+  };
+
+  /**
    * Option to enable positionining of AAT targets to achieve
    * desired AAT minimum task time
    */

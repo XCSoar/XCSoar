@@ -35,11 +35,11 @@ static WndListFrame* wTaskTypes= NULL;
 static OrderedTask* ordered_task= NULL;
 static bool task_modified = false;
 
-typedef std::vector<OrderedTask::Factory_t> FactoryList;
+typedef std::vector<TaskBehaviour::Factory_t> FactoryList;
 
 static FactoryList factory_types;
 
-static OrderedTask::Factory_t
+static TaskBehaviour::Factory_t
 get_cursor_type() 
 {
   return factory_types[wTaskTypes->GetCursorIndex()];
@@ -116,7 +116,7 @@ static CallBackTableEntry CallBackTable[]={
  * @return true if OK was clicked, false if Cancel was clicked
  */
 bool
-dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task, OrderedTask::Factory_t& task_type_returned)
+dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task, TaskBehaviour::Factory_t& task_type_returned)
 {
   bool bRetVal = false;
   ordered_task = *task;

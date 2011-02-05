@@ -110,7 +110,7 @@ dlgTaskManagerShowModal(SingleWindow &parent);
  * @return true if OK was clicked, false if Cancel was clicked
  */
 bool
-dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task, OrderedTask::Factory_t& task_type_returned);
+dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task, TaskBehaviour::Factory_t& task_type_returned);
 
 bool
 dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task, const unsigned index);

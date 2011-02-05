@@ -33,6 +33,7 @@
 #include "PathSolvers/TaskDijkstraMin.hpp"
 #include "PathSolvers/TaskDijkstraMax.hpp"
 #include "Task/TaskAdvanceSmart.hpp"
+#include "Task/TaskBehaviour.hpp"
 
 class OrderedTaskPoint;
 class TaskPointVisitor;
@@ -83,21 +84,6 @@ public:
   ~OrderedTask();
 
   /**
-   * Enumeration of factory types.  This is the set of
-   * types of ordered task that can be created.
-   */
-  enum Factory_t {
-    FACTORY_FAI_GENERAL = 0,
-    FACTORY_FAI_TRIANGLE,
-    FACTORY_FAI_OR,
-    FACTORY_FAI_GOAL,
-    FACTORY_RT,
-    FACTORY_AAT,
-    FACTORY_MIXED,
-    FACTORY_TOURING
-  };
-
-  /**
    * Accessor for factory system for constructing tasks
    *
    * @return Factory
@@ -114,7 +100,7 @@ public:
    *
    * @return Type of task
    */
-  Factory_t set_factory(const Factory_t _factory);
+  TaskBehaviour::Factory_t set_factory(const TaskBehaviour::Factory_t _factory);
 
   /** 
    * Return list of factory types
@@ -124,7 +110,7 @@ public:
    * @return Vector of factory types
    */
   gcc_pure
-  std::vector<Factory_t> get_factory_types(bool all=true) const;
+  std::vector<TaskBehaviour::Factory_t> get_factory_types(bool all=true) const;
 
   /** 
    * Reset the task (as if never flown)
@@ -697,7 +683,7 @@ private:
 
   GeoPoint m_location_min_last;
 
-  Factory_t factory_mode;
+  TaskBehaviour::Factory_t factory_mode;
   AbstractTaskFactory* active_factory;
   OrderedTaskBehaviour m_ordered_behaviour;
   TaskAdvanceSmart task_advance;
@@ -730,7 +716,7 @@ public:
    * 
    * @return Factory type
    */
-  Factory_t get_factory_type() const {
+  TaskBehaviour::Factory_t get_factory_type() const {
     return factory_mode;
   }
 

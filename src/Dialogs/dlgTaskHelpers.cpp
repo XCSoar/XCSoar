@@ -42,24 +42,24 @@ Copyright_License {
 #include <stdio.h>
 
 const TCHAR*
-OrderedTaskFactoryName(OrderedTask::Factory_t type)
+OrderedTaskFactoryName(TaskBehaviour::Factory_t type)
 {
   switch(type) {
-  case OrderedTask::FACTORY_RT:
+  case TaskBehaviour::FACTORY_RT:
     return _("Racing");
-  case OrderedTask::FACTORY_FAI_GENERAL:
+  case TaskBehaviour::FACTORY_FAI_GENERAL:
     return _("FAI generic");
-  case OrderedTask::FACTORY_FAI_TRIANGLE:
+  case TaskBehaviour::FACTORY_FAI_TRIANGLE:
     return _("FAI triangle");
-  case OrderedTask::FACTORY_FAI_OR:
+  case TaskBehaviour::FACTORY_FAI_OR:
     return _("FAI out and return");
-  case OrderedTask::FACTORY_FAI_GOAL:
+  case TaskBehaviour::FACTORY_FAI_GOAL:
     return _("FAI goal");
-  case OrderedTask::FACTORY_AAT:
+  case TaskBehaviour::FACTORY_AAT:
     return _("AAT");
-  case OrderedTask::FACTORY_MIXED:
+  case TaskBehaviour::FACTORY_MIXED:
     return _("Mixed");
-  case OrderedTask::FACTORY_TOURING:
+  case TaskBehaviour::FACTORY_TOURING:
     return _("Touring");
   default:
     assert(1);
@@ -68,24 +68,24 @@ OrderedTaskFactoryName(OrderedTask::Factory_t type)
 }
 
 const TCHAR*
-OrderedTaskFactoryDescription(OrderedTask::Factory_t type)
+OrderedTaskFactoryDescription(TaskBehaviour::Factory_t type)
 {
   switch(type) {
-  case OrderedTask::FACTORY_RT:
+  case TaskBehaviour::FACTORY_RT:
     return _("Racing task around turnpoints");
-  case OrderedTask::FACTORY_FAI_GENERAL:
+  case TaskBehaviour::FACTORY_FAI_GENERAL:
     return _("FAI rules, path around 3 or more turnpoints and return");
-  case OrderedTask::FACTORY_FAI_TRIANGLE:
+  case TaskBehaviour::FACTORY_FAI_TRIANGLE:
     return _("FAI rules, path from a start to two turnpoints and return");
-  case OrderedTask::FACTORY_FAI_OR:
+  case TaskBehaviour::FACTORY_FAI_OR:
     return _("FAI rules, path from start to a single turnpoint and return");
-  case OrderedTask::FACTORY_FAI_GOAL:
+  case TaskBehaviour::FACTORY_FAI_GOAL:
     return _("FAI rules, path from start to a goal destination");
-  case OrderedTask::FACTORY_AAT:
+  case TaskBehaviour::FACTORY_AAT:
     return _("Racing task through assigned areas, minimum task time applies");
-  case OrderedTask::FACTORY_MIXED:
+  case TaskBehaviour::FACTORY_MIXED:
     return _("Racing task with a mix of assigned areas and turnpoints, minimum task time applies");
-  case OrderedTask::FACTORY_TOURING:
+  case TaskBehaviour::FACTORY_TOURING:
     return _("Casual touring task, uses start and finish cylinders and FAI sector turnpoints");
   default:
     assert(1);

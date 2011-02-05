@@ -269,7 +269,7 @@ public:
    *
    * @return Type of task
    */
-  OrderedTask::Factory_t set_factory(const OrderedTask::Factory_t _factory) {
+  TaskBehaviour::Factory_t set_factory(const TaskBehaviour::Factory_t _factory) {
     return task_ordered.set_factory(_factory);
   }
 

@@ -88,7 +88,7 @@ pnlTaskEdit::OnNewClicked(WndButton &Sender)
 {
   (void)Sender;
 
-  OrderedTask::Factory_t new_type = OrderedTask::FACTORY_FAI_GENERAL;
+  TaskBehaviour::Factory_t new_type = TaskBehaviour::FACTORY_FAI_GENERAL;
   if (dlgTaskTypeShowModal(*parent_window, &ordered_task, new_type)) {
     ordered_task->clear();
     ordered_task->set_factory(new_type);

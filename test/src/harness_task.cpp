@@ -268,7 +268,7 @@ bool test_task_mixed(TaskManager& task_manager,
   OrderedTaskPoint *tp;
   const Waypoint *wp;
 
-  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
+  task_manager.set_factory(TaskBehaviour::FACTORY_MIXED);
   AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
@@ -364,7 +364,7 @@ bool test_task_mixed(TaskManager& task_manager,
 bool test_task_fai(TaskManager& task_manager,
                    const Waypoints &waypoints)
 {
-  task_manager.set_factory(OrderedTask::FACTORY_RT);
+  task_manager.set_factory(TaskBehaviour::FACTORY_RT);
   AbstractTaskFactory &fact = task_manager.get_factory();
   const Waypoint *wp;
 
@@ -429,7 +429,7 @@ bool test_task_aat(TaskManager& task_manager,
   const TaskProjection &projection =
     task_manager.get_ordered_task().get_task_projection();
 
-  task_manager.set_factory(OrderedTask::FACTORY_AAT);
+  task_manager.set_factory(TaskBehaviour::FACTORY_AAT);
   AbstractTaskFactory &fact = task_manager.get_factory();
   const Waypoint *wp;
 
@@ -503,7 +503,7 @@ bool test_task_or(TaskManager& task_manager,
 {
   const Waypoint *wp;
 
-  task_manager.set_factory(OrderedTask::FACTORY_TOURING);
+  task_manager.set_factory(TaskBehaviour::FACTORY_TOURING);
   AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
@@ -557,7 +557,7 @@ bool test_task_dash(TaskManager& task_manager,
 {
   const Waypoint *wp;
 
-  task_manager.set_factory(OrderedTask::FACTORY_TOURING);
+  task_manager.set_factory(TaskBehaviour::FACTORY_TOURING);
   AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
@@ -601,7 +601,7 @@ bool test_task_fg(TaskManager& task_manager,
 {
   const Waypoint *wp;
 
-  task_manager.set_factory(OrderedTask::FACTORY_TOURING);
+  task_manager.set_factory(TaskBehaviour::FACTORY_TOURING);
   AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
@@ -657,7 +657,7 @@ bool test_task_random(TaskManager& task_manager,
 
   OrderedTaskPoint *tp;
 
-  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
+  task_manager.set_factory(TaskBehaviour::FACTORY_MIXED);
   AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");

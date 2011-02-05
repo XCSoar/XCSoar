@@ -157,8 +157,8 @@ private:
 
   const Waypoints *waypoints;
 
-  OrderedTask::Factory_t task_factory_type() const;
-  const TCHAR* task_factory_type(OrderedTask::Factory_t the_type) const;
+  TaskBehaviour::Factory_t task_factory_type() const;
+  const TCHAR* task_factory_type(TaskBehaviour::Factory_t the_type) const;
 };
 
 #endif

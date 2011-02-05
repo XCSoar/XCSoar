@@ -26,8 +26,8 @@ Copyright_License {
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 
-const TCHAR* OrderedTaskFactoryDescription(OrderedTask::Factory_t type);
-const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type);
+const TCHAR* OrderedTaskFactoryDescription(TaskBehaviour::Factory_t type);
+const TCHAR* OrderedTaskFactoryName(TaskBehaviour::Factory_t type);
 
 /**
  *

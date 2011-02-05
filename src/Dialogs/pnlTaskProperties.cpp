@@ -67,18 +67,18 @@ static void
 RefreshView()
 {
   WndProperty* wp;
-  OrderedTask::Factory_t ftype = ordered_task->get_factory_type();
+  TaskBehaviour::Factory_t ftype = ordered_task->get_factory_type();
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
 
-  bool fai_types = (ftype == OrderedTask::FACTORY_FAI_GENERAL) ||
-    (ftype == OrderedTask::FACTORY_FAI_TRIANGLE) ||
-    (ftype == OrderedTask::FACTORY_FAI_OR) ||
-    (ftype == OrderedTask::FACTORY_FAI_GOAL);
+  bool fai_types = (ftype == TaskBehaviour::FACTORY_FAI_GENERAL) ||
+    (ftype == TaskBehaviour::FACTORY_FAI_TRIANGLE) ||
+    (ftype == TaskBehaviour::FACTORY_FAI_OR) ||
+    (ftype == TaskBehaviour::FACTORY_FAI_GOAL);
   bool aat_types = 
-    (ftype == OrderedTask::FACTORY_AAT) ||
-    (ftype == OrderedTask::FACTORY_MIXED);
+    (ftype == TaskBehaviour::FACTORY_AAT) ||
+    (ftype == TaskBehaviour::FACTORY_MIXED);
   bool racing_types = 
-    (ftype == OrderedTask::FACTORY_RT) || aat_types;
+    (ftype == TaskBehaviour::FACTORY_RT) || aat_types;
 
   wp = ((WndProperty*)wf->FindByName(_T("prpMinTime")));
   if (wp) {
@@ -189,12 +189,12 @@ pnlTaskProperties::OnTypeClicked(WndButton &Sender)
 {
   (void)Sender;
 
- OrderedTask::Factory_t new_type = OrderedTask::FACTORY_FAI_GENERAL;
+  TaskBehaviour::Factory_t new_type = TaskBehaviour::FACTORY_FAI_GENERAL;
 
  if (dlgTaskTypeShowModal(*parent_window, &ordered_task, new_type)) {
    if (new_type != ordered_task->get_factory_type()) {
      ordered_task->set_factory(new_type);
-     if (new_type != OrderedTask::FACTORY_MIXED)
+     if (new_type != TaskBehaviour::FACTORY_MIXED)
        ordered_task->get_factory().mutate_tps_to_task_type();
 
      *task_changed = true;

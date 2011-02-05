@@ -390,54 +390,54 @@ Serialiser::deserialise(OrderedTask& data)
 }
 
 
-OrderedTask::Factory_t 
+TaskBehaviour::Factory_t
 Serialiser::task_factory_type() const
 {
   tstring type;
   if (!m_node.get_attribute(_T("type"),type)) {
     assert(1);
-    return OrderedTask::FACTORY_FAI_GENERAL;
+    return TaskBehaviour::FACTORY_FAI_GENERAL;
   }
   if (_tcscmp(type.c_str(), _T("FAIGeneral")) == 0) {
-    return OrderedTask::FACTORY_FAI_GENERAL;
+    return TaskBehaviour::FACTORY_FAI_GENERAL;
   } else if (_tcscmp(type.c_str(), _T("FAITriangle")) == 0) {
-    return OrderedTask::FACTORY_FAI_TRIANGLE;
+    return TaskBehaviour::FACTORY_FAI_TRIANGLE;
   } else if (_tcscmp(type.c_str(), _T("FAIOR")) == 0) {
-    return OrderedTask::FACTORY_FAI_OR;
+    return TaskBehaviour::FACTORY_FAI_OR;
   } else if (_tcscmp(type.c_str(), _T("FAIGoal")) == 0) {
-    return OrderedTask::FACTORY_FAI_GOAL;
+    return TaskBehaviour::FACTORY_FAI_GOAL;
   } else if (_tcscmp(type.c_str(), _T("RT")) == 0) {
-    return OrderedTask::FACTORY_RT;
+    return TaskBehaviour::FACTORY_RT;
   } else if (_tcscmp(type.c_str(), _T("AAT")) == 0) {
-    return OrderedTask::FACTORY_AAT;
+    return TaskBehaviour::FACTORY_AAT;
   } else if (_tcscmp(type.c_str(), _T("Mixed")) == 0) {
-    return OrderedTask::FACTORY_MIXED;
+    return TaskBehaviour::FACTORY_MIXED;
   } else if (_tcscmp(type.c_str(), _T("Touring")) == 0) {
-    return OrderedTask::FACTORY_TOURING;
+    return TaskBehaviour::FACTORY_TOURING;
   }
   assert(1);
-  return OrderedTask::FACTORY_FAI_GENERAL;
+  return TaskBehaviour::FACTORY_FAI_GENERAL;
 }
 
 const TCHAR* 
-Serialiser::task_factory_type(OrderedTask::Factory_t the_type) const
+Serialiser::task_factory_type(TaskBehaviour::Factory_t the_type) const
 {
   switch(the_type) {
-  case OrderedTask::FACTORY_FAI_GENERAL:
+  case TaskBehaviour::FACTORY_FAI_GENERAL:
     return _T("FAIGeneral");
-  case OrderedTask::FACTORY_FAI_TRIANGLE:
+  case TaskBehaviour::FACTORY_FAI_TRIANGLE:
     return _T("FAITriangle");
-  case OrderedTask::FACTORY_FAI_OR:
+  case TaskBehaviour::FACTORY_FAI_OR:
     return _T("FAIOR");
-  case OrderedTask::FACTORY_FAI_GOAL:
+  case TaskBehaviour::FACTORY_FAI_GOAL:
     return _T("FAIGoal");
-  case OrderedTask::FACTORY_RT:
+  case TaskBehaviour::FACTORY_RT:
     return _T("RT");
-  case OrderedTask::FACTORY_AAT:
+  case TaskBehaviour::FACTORY_AAT:
     return _T("AAT");
-  case OrderedTask::FACTORY_MIXED:
+  case TaskBehaviour::FACTORY_MIXED:
     return _T("Mixed");
-  case OrderedTask::FACTORY_TOURING:
+  case TaskBehaviour::FACTORY_TOURING:
     return _T("Touring");
   };
   assert(1);
