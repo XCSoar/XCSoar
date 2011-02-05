@@ -115,13 +115,19 @@ public:
    * Call update_polar to update the aircraft performance model or wind estimate
    * after initialisation as required.
    *
-   * @param terrain RasterMap to be used for terrain intersection tests
    * @param polar Aircraft performance model
    * @param wind Wind setting
    */
-  RoutePlanner(const RasterMap& terrain,
-               const GlidePolar& polar,
+  RoutePlanner(const GlidePolar& polar,
                const SpeedVector& wind);
+
+  /**
+   * Set terrain database
+   * @param terrain RasterMap to be used for terrain intersection tests
+   */
+  void set_terrain(const RasterMap* _terrain) {
+    terrain = _terrain;
+  }
 
   /**
    * Find the optimal path.  Works in reverse time order, from the
@@ -193,7 +199,7 @@ protected:
   bool dirty; /**< Whether an updated solution is required */
   TaskProjection task_projection; /**< Task projection used for flat-earth representation */
   RoutePolars rpolars; /**< Aircraft performance model */
-  const RasterMap &terrain; /**< Terrain raster */
+  const RasterMap *terrain; /**< Terrain raster */
   short h_min; /**< Minimum height scanned during solution (m) */
   short h_max; /**< Maxmimum height scanned during solution (m) */
 

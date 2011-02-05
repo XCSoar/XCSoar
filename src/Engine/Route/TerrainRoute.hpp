@@ -28,8 +28,7 @@ class RasterMap;
 
 class TerrainRoute: public RoutePlanner {
 public:
-  TerrainRoute(const RasterMap& terrain,
-               const GlidePolar& polar,
+  TerrainRoute(const GlidePolar& polar,
                const SpeedVector& wind);
 
   friend class PrintHelper;

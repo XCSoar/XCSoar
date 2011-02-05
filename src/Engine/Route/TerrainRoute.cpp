@@ -21,10 +21,9 @@
  */
 #include "TerrainRoute.hpp"
 
-TerrainRoute::TerrainRoute(const RasterMap& _terrain,
-                           const GlidePolar& polar,
+TerrainRoute::TerrainRoute(const GlidePolar& polar,
                            const SpeedVector& wind):
-  RoutePlanner(_terrain, polar, wind),
+  RoutePlanner(polar, wind),
   m_inx_terrain(0,0,0)
 {
 

@@ -117,7 +117,8 @@ bool test_route(const unsigned n_airspaces, const RasterMap& map)
     SpeedVector wind(Angle::degrees(fixed(0)), fixed(0.0));
     GlidePolar polar(fixed_one);
 
-    AirspaceRoute route(map, polar, wind, *airspaces);
+    AirspaceRoute route(polar, wind, *airspaces);
+    route.set_terrain(&map);
     RoutePlannerConfig config;
     config.mode = RoutePlannerConfig::rpBoth;
 
@@ -161,7 +162,7 @@ int main(int argc, char** argv)
 
   TCHAR jp2_path[4096];
   _tcscpy(jp2_path, PathName(hc_path));
-  _tcscat(jp2_path, _T(DIR_SEPARATOR_S) _T("terrain.hp2"));
+  _tcscat(jp2_path, _T(DIR_SEPARATOR_S) _T("terrain.jp2"));
 
   TCHAR j2w_path[4096];
   _tcscpy(j2w_path, PathName(hc_path));

@@ -48,11 +48,10 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
                              ProtectedTaskManager &task,
                              ProtectedAirspaceWarningManager &airspace,
                              GlideComputerTaskEvents& events,
-                             Airspaces& airspaces,
-                             RasterTerrain& terrain):
+                             Airspaces& airspaces):
   GlideComputerBlackboard(task),
   GlideComputerAirData(airspace, task),
-  GlideComputerTask(task, airspaces, terrain),
+  GlideComputerTask(task, airspaces),
   GlideComputerStats(task),
   way_points(_way_points), protected_task_manager(task)
 {
@@ -330,3 +329,8 @@ GlideComputer::OnTransitionEnter()
 }
 
 
+void
+GlideComputer::set_terrain(RasterTerrain* _terrain)
+{
+  GlideComputerTask::set_terrain(_terrain);
+}

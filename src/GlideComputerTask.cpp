@@ -36,11 +36,10 @@ using std::max;
 // call any event
 
 GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task,
-                                     Airspaces &_airspaces,
-                                     RasterTerrain& _terrain):
+                                     Airspaces &_airspaces):
   GlideComputerBlackboard(task),m_airspaces(_airspaces),
-  m_route(_terrain, task.get_glide_polar(), _airspaces),
-  terrain(_terrain)
+  m_route(task.get_glide_polar(), _airspaces),
+  terrain(NULL)
 {}
 
 void
@@ -131,11 +130,12 @@ GlideComputerTask::ProcessIdle()
 
   const GlideResult& sol = Calculated().task_stats.current_leg.solution_remaining;
 
-  if (sol.defined()) {
+  if (sol.defined() && terrain) {
     const GeoVector &v = sol.Vector;
     const AGeoPoint start (as.get_location(), as.NavAltitude);
     const AGeoPoint dest (v.end_point(start), sol.MinHeight);
 
+    m_route.set_terrain(terrain);
     m_route.synchronise(m_airspaces, dest, start, task->get_glide_polar(), Basic().wind);
 
     short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
@@ -160,11 +160,12 @@ GlideComputerTask::TerrainWarning()
   const AIRCRAFT_STATE state = ToAircraftState(Basic());
   GlidePolar polar = m_task.get_glide_polar();
 
-  if (SettingsComputer().FinalGlideTerrain) {
+  if (SettingsComputer().FinalGlideTerrain && terrain) {
     // @todo: update TerrainBase in new footprint calculations,
     // remove TerrainFootprint function from GlideComputerAirData
 
     const AGeoPoint start (state.get_location(), state.NavAltitude);
+    m_route.set_terrain(terrain);
     m_route.footprint(start, SetCalculated().GlideFootPrint);
   }
 }

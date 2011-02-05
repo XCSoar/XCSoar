@@ -228,11 +228,10 @@ AirspaceRoute::airspace_size() const
   return m_airspaces.size();
 }
 
-AirspaceRoute::AirspaceRoute(const RasterMap& _terrain,
-                             const GlidePolar& polar,
+AirspaceRoute::AirspaceRoute(const GlidePolar& polar,
                              const SpeedVector& wind,
                              const Airspaces& master):
-  RoutePlanner(_terrain, polar, wind),
+  RoutePlanner(polar, wind),
   m_airspaces(master, false)
 {
   reset();

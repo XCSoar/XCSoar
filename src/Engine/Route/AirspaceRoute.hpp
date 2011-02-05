@@ -29,8 +29,7 @@ class AirspaceRoute: public RoutePlanner {
 public:
   friend class PrintHelper;
 
-  AirspaceRoute(const RasterMap& _terrain,
-                const GlidePolar& polar,
+  AirspaceRoute(const GlidePolar& polar,
                 const SpeedVector& wind,
                 const Airspaces& master);
   virtual ~AirspaceRoute();

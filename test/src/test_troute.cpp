@@ -37,7 +37,8 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
 {
   GlidePolar polar(mc);
   SpeedVector wind(Angle::degrees(fixed(0)), mwind);
-  TerrainRoute route(map, polar, wind);
+  TerrainRoute route(polar, wind);
+  route.set_terrain(&map);
 
   GeoPoint origin(map.GetMapCenter());
 
@@ -114,7 +115,7 @@ int main(int argc, char** argv) {
 
   TCHAR jp2_path[4096];
   _tcscpy(jp2_path, PathName(map_path));
-  _tcscat(jp2_path, _T(DIR_SEPARATOR_S) _T("terrain.hp2"));
+  _tcscat(jp2_path, _T(DIR_SEPARATOR_S) _T("terrain.jp2"));
 
   TCHAR j2w_path[4096];
   _tcscpy(j2w_path, PathName(map_path));

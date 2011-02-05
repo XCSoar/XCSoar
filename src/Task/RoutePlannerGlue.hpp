@@ -28,9 +28,10 @@ class RasterTerrain;
 
 class RoutePlannerGlue {
 public:
-  RoutePlannerGlue(RasterTerrain& _terrain,
-                   const GlidePolar& polar,
+  RoutePlannerGlue(const GlidePolar& polar,
                    const Airspaces& master);
+
+  void set_terrain(RasterTerrain* _terrain);
 
   void synchronise(const Airspaces& master,
                    const AGeoPoint& origin,
@@ -60,7 +61,7 @@ public:
                     GeoPoint& intx) const;
 
 private:
-  RasterTerrain& terrain;
+  RasterTerrain* terrain;
   AirspaceRoute m_planner;
 };
 

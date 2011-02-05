@@ -349,7 +349,7 @@ public:
    *
    * @return True if intersect occurs
    */
-  bool check_clearance(const RouteLink &e, const RasterMap& map,
+  bool check_clearance(const RouteLink &e, const RasterMap* map,
                        const TaskProjection &proj,
                        RoutePoint& inp) const;
 
@@ -451,7 +451,7 @@ public:
    */
   void calc_footprint(const AGeoPoint& o,
                       GeoPoint p[ROUTEPOLAR_POINTS],
-                      const RasterMap& map,
+                      const RasterMap* map,
                       const TaskProjection& proj) const;
 
   /**
@@ -474,7 +474,7 @@ public:
    */
   bool intersection(const AGeoPoint& origin,
                     const AGeoPoint& destination,
-                    const RasterMap& map,
+                    const RasterMap* map,
                     const TaskProjection& proj,
                     GeoPoint& intx) const;
 

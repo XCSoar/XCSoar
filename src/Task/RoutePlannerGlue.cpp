@@ -27,13 +27,23 @@
 #include "NMEA/Derived.hpp"
 #include <assert.h>
 
-RoutePlannerGlue::RoutePlannerGlue(RasterTerrain& _terrain,
-                                   const GlidePolar& polar,
+RoutePlannerGlue::RoutePlannerGlue(const GlidePolar& polar,
                                    const Airspaces& master):
-  terrain(_terrain),
-  m_planner(_terrain.map, polar, SpeedVector(Angle::degrees(fixed_zero), fixed_zero), master)
+  terrain(NULL),
+  m_planner(polar, SpeedVector(Angle::degrees(fixed_zero), fixed_zero), master)
 {
-  RasterTerrain::ExclusiveLease lease(terrain);
+}
+
+void
+RoutePlannerGlue::set_terrain(RasterTerrain* _terrain)
+{
+  terrain = _terrain;
+  if (terrain) {
+    RasterTerrain::ExclusiveLease lease(*terrain);
+    m_planner.set_terrain(&terrain->map);
+  } else {
+    m_planner.set_terrain(NULL);
+  }
 }
 
 bool
@@ -42,7 +52,7 @@ RoutePlannerGlue::solve(const AGeoPoint& origin,
                         const RoutePlannerConfig& config,
                         const short h_ceiling)
 {
-  RasterTerrain::ExclusiveLease lease(terrain);
+  RasterTerrain::ExclusiveLease lease(*terrain);
   return m_planner.solve(origin, destination, config, h_ceiling);
 }
 
@@ -51,7 +61,7 @@ RoutePlannerGlue::footprint(const AGeoPoint& origin,
                             GeoPoint p[ROUTEPOLAR_POINTS]) const
 {
   assert(ROUTEPOLAR_POINTS== TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
-  RasterTerrain::ExclusiveLease lease(terrain);
+  RasterTerrain::ExclusiveLease lease(*terrain);
   return m_planner.calc_footprint(origin, p);
 }
 
@@ -60,6 +70,6 @@ RoutePlannerGlue::intersection(const AGeoPoint& origin,
                                const AGeoPoint& destination,
                                GeoPoint& intx) const
 {
-  RasterTerrain::ExclusiveLease lease(terrain);
+  RasterTerrain::ExclusiveLease lease(*terrain);
   return m_planner.intersection(origin, destination, intx);
 }

@@ -53,8 +53,9 @@ public:
                 ProtectedTaskManager& task,
                 ProtectedAirspaceWarningManager &_awm,
                 GlideComputerTaskEvents& events,
-                Airspaces& airspaces,
-                RasterTerrain& terrain);
+                Airspaces& airspaces);
+
+  void set_terrain(RasterTerrain* _terrain);
 
   void ResetFlight(const bool full=true);
   void Initialise();

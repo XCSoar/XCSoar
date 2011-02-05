@@ -157,8 +157,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   glide_computer = new GlideComputer(way_points, *protected_task_manager,
                                      airspace_warnings,
                                      task_events,
-                                     airspace_database,
-                                     *terrain);
+                                     airspace_database);
+  glide_computer->set_terrain(terrain);
 
   ScreenGlobalInit screen_init;
 

@@ -27,12 +27,11 @@
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
 #include <stdio.h>
 
-RoutePlanner::RoutePlanner(const RasterMap& _terrain,
-                           const GlidePolar& polar,
+RoutePlanner::RoutePlanner(const GlidePolar& polar,
                            const SpeedVector& wind):
   verbose(0),
   rpolars(polar, wind),
-  terrain(_terrain),
+  terrain(NULL),
   m_planner()
 #ifndef PLANNER_SET
   , m_unique(50000)
@@ -450,7 +449,7 @@ RoutePlanner::update_polar(const GlidePolar& polar, const SpeedVector& wind)
 bool
 RoutePlanner::check_clearance_terrain(const RouteLink &e, RoutePoint& inp) const
 {
-  if (!terrain.isMapLoaded())
+  if (!terrain || !terrain->isMapLoaded())
     return true;
   count_terrain++;
   if (rpolars.check_clearance(e, terrain, task_projection, inp))

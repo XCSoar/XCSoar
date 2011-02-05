@@ -46,6 +46,7 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "WayPoint/WayPointGlue.hpp"
+#include "GlideComputer.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -108,6 +109,7 @@ SettingsLeave()
     ProgressGlue::Create(_("Loading Terrain File..."));
 
     XCSoarInterface::main_window.map.set_terrain(NULL);
+    glide_computer->set_terrain(NULL);
 
     // re-load terrain
     delete terrain;
@@ -126,6 +128,7 @@ SettingsLeave()
     }
 
     XCSoarInterface::main_window.map.set_terrain(terrain);
+    glide_computer->set_terrain(terrain);
   }
 
   if (TopologyFileChanged) {

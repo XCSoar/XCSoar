@@ -36,8 +36,7 @@ class GlideComputerTask:
 {
 public:
   GlideComputerTask(ProtectedTaskManager& task,
-                    Airspaces &airspaces,
-                    RasterTerrain& terrain);
+                    Airspaces &airspaces);
 
 protected:
   Airspaces &m_airspaces;
@@ -47,13 +46,17 @@ protected:
   void ProcessMoreTask();
   void ResetFlight(const bool full=true);
 
+  void set_terrain(RasterTerrain* _terrain) {
+    terrain = _terrain;
+  }
+
 private:
   void TerrainWarning();
   RoutePlannerGlue m_route;
 
 protected:
   virtual void ProcessIdle();
-  RasterTerrain& terrain;
+  RasterTerrain* terrain;
 };
 
 #endif
