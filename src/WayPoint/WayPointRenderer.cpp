@@ -142,7 +142,8 @@ public:
                                                Units::AltitudeUnit);
       }
 
-      WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable, way_point);
+      WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable, way_point,
+                                           projection.GetScreenAngle());
     } else {
       // non landable turnpoint
       const MaskedIcon *icon;
@@ -352,7 +353,8 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
 
 void
 WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
-                                     bool reachable, const Waypoint &way_point)
+                                     bool reachable, const Waypoint &way_point,
+                                     const Angle &screenRotation)
 {
   if (!Appearance.UseSWLandablesRendering) {
     const MaskedIcon *icon;
@@ -408,8 +410,9 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
     else
       len = radius;
     len += fixed_two * scale;
+    Angle runwayDrawingAngle = way_point.RunwayDirection - screenRotation;
     canvas.white_brush();
-    DrawLandableRunway(canvas, pt, way_point.RunwayDirection, len,
+    DrawLandableRunway(canvas, pt, runwayDrawingAngle, len,
                        fixed_int_constant(5) * scale);
   }
 }
