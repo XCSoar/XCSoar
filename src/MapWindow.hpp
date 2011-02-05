@@ -167,6 +167,8 @@ private:
 public:
   void DrawBestCruiseTrack(Canvas &canvas,
                            const RasterPoint aircraft_pos) const;
+  void DrawTrackBearing(Canvas &canvas,
+                        const RasterPoint aircraft_pos) const;
   void DrawCompass(Canvas &canvas, const RECT &rc) const;
   void DrawWind(Canvas &canvas, const RasterPoint &Orig,
                            const RECT &rc) const;

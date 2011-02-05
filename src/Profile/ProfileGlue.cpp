@@ -188,6 +188,10 @@ Profile::Use()
   Get(szProfileDetourCostMarker,
       settings_map.EnableDetourCostMarker);
 
+  Temp = settings_map.DisplayTrackBearing;
+  Get(szProfileDisplayTrackBearing, Temp);
+  settings_map.DisplayTrackBearing = (DisplayTrackBearing_t) Temp;
+
   Get(szProfileDrawTopology,
       settings_map.EnableTopology);
 

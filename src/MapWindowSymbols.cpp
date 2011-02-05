@@ -156,3 +156,27 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) c
 
   canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
 }
+
+void
+MapWindow::DrawTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos) const
+{
+  if (!Basic().gps.Connected ||
+      SettingsMap().DisplayTrackBearing == dtbOff ||
+      Calculated().Circling)
+    return;
+
+  if (SettingsMap().DisplayTrackBearing == dtbAuto &&
+      (Basic().TrackBearing - Basic().Heading).as_delta().magnitude_degrees() < fixed(5))
+    return;
+
+  RasterPoint end;
+  fixed x,y;
+  (Basic().TrackBearing - render_projection.GetScreenAngle()).sin_cos(x, y);
+  end.x = aircraft_pos.x + iround(x * fixed_int_constant(400));
+  end.y = aircraft_pos.y - iround(y * fixed_int_constant(400));
+
+  Pen pen;
+  pen.set(3, Color(128, 128, 128));
+  canvas.select(pen);
+  canvas.line(aircraft_pos, end);
+}

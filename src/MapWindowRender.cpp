@@ -109,6 +109,9 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   RenderTopology(canvas);
   RenderFinalGlideShading(canvas);
 
+  // Render track bearing (ground track)
+  DrawTrackBearing(canvas, aircraft_pos);
+
   // Render airspace
   RenderAirspace(canvas);
 

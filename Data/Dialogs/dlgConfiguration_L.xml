@@ -181,6 +181,11 @@
         <DataField DataType="boolean"/>
       </Edit>
 
+      <Edit Name="prpDisplayTrackBearing" Caption="Display Track Bearing" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Display the track bearing (ground track projection) on the map.&#10;[Off] Disable display of track bearing.&#10;[On] Always display track bearing.&#10;[Auto] Display track bearing if there is a significant difference to plane heading.">
+        <DataField DataType="enum"/>
+      </Edit>
+
       <Edit Name="prpEnableFLARMMap" Caption="FLARM map" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="This enables the display of FLARM traffic on the map window.&#10;[OFF] FLARM map display disabled&#10;[ON/Fixed] FLARM map display enabled with fixed scale.&#10;[ON/Scaled] FLARM map display enabled and auto scaled.&#10;When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.">
         <DataField DataType="boolean" />

@@ -1125,6 +1125,17 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpRiskGamma"), settings_computer.risk_gamma);
 
+  wp = (WndProperty*)wf->FindByName(_T("prpDisplayTrackBearing"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Off"));
+    dfe->addEnumText(_("On"));
+    dfe->addEnumText(_("Auto"));
+    dfe->Set(XCSoarInterface::SettingsMap().DisplayTrackBearing);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpTrail"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1712,6 +1723,9 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpDetourCostMarker"),
                               szProfileDetourCostMarker,
                               XCSoarInterface::SetSettingsMap().EnableDetourCostMarker);
+  changed |= SaveFormPropertyEnum(*wf, _T("prpDisplayTrackBearing"),
+                              szProfileDisplayTrackBearing,
+                              XCSoarInterface::SetSettingsMap().DisplayTrackBearing);
   changed |= SaveFormProperty(*wf, _T("prpTrail"),
                               szProfileSnailTrail,
                               XCSoarInterface::SetSettingsMap().TrailActive);

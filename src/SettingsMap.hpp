@@ -78,6 +78,13 @@ enum SlopeShadingType_t {
   sstWind,
 };
 
+typedef enum {
+  dtbOff,
+  dtbOn,
+  dtbAuto
+} DisplayTrackBearing_t;
+
+
 // user interface options
 
 // where using these from Calculations or MapWindow thread, should
@@ -104,6 +111,8 @@ struct SETTINGS_MAP {
   bool EnableTrailDrift;
   /** Indicate extra distance reqd. if deviating from target heading */
   bool EnableDetourCostMarker;
+  /** Render track bearing on map */
+  DisplayTrackBearing_t DisplayTrackBearing;
 
   /** Automatic zoom when closing in on waypoint */
   bool AutoZoom;
