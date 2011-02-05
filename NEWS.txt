@@ -35,6 +35,7 @@ Version 6.1 - not yet released
   - landables can be displayed with runway heading and proportional length if the
     necessary data is contained in the waypoint files
   - glide terrain range line more detailed, uses 50 radial points rather than 20
+  - added option to display track bearing line in map
 * data files
   - wing area field is read from extended polar files if available
   - zander files: description field is used for additional airport detection
