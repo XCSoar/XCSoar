@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_REGISTRY_HPP
 #define XCSOAR_REGISTRY_HPP
 
+#include "Util/StaticString.hpp"
 #include "Math/fixed.hpp"
 
 #include <windef.h>
@@ -112,6 +113,13 @@ namespace Registry {
 
   bool Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize);
   bool Set(const TCHAR *szRegValue, const TCHAR *Pos);
+
+  template<unsigned max>
+  static inline bool
+  Get(const TCHAR *name, StaticString<max> &value)
+  {
+    return Get(name, value.buffer(), value.MAX_SIZE);
+  }
 
   void Export(ProfileWriter &writer);
 }

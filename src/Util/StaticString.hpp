@@ -76,6 +76,13 @@ public:
   }
 
   /**
+   * Returns a writable buffer.
+   */
+  TCHAR *buffer() {
+    return data;
+  }
+
+  /**
    * Returns one character.  No bounds checking.
    */
   TCHAR operator[](unsigned i) const {

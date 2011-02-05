@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_GCONF_HPP
 #define XCSOAR_PROFILE_GCONF_HPP
 
+#include "Util/StaticString.hpp"
 #include "Math/fixed.hpp"
 
 #include <tchar.h>
@@ -92,6 +93,13 @@ namespace ProfileGConf {
 
   bool Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize);
   bool Set(const TCHAR *szRegValue, const TCHAR *Pos);
+
+  template<unsigned max>
+  static inline bool
+  Get(const TCHAR *name, StaticString<max> &value)
+  {
+    return Get(name, value.buffer(), value.MAX_SIZE);
+  }
 
   void Export(ProfileWriter &writer);
 }
