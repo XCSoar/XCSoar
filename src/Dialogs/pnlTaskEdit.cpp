@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Components.hpp"
 #include "Gauge/TaskView.hpp"
+#include "Interface.hpp"
 #include "Screen/SingleWindow.hpp"
 
 #include <assert.h>
@@ -88,27 +89,11 @@ pnlTaskEdit::OnNewClicked(WndButton &Sender)
 {
   (void)Sender;
 
-  TaskBehaviour::Factory_t new_type = TaskBehaviour::FACTORY_FAI_GENERAL;
-  if (dlgTaskTypeShowModal(*parent_window, &ordered_task, new_type)) {
-    ordered_task->clear();
-    ordered_task->set_factory(new_type);
-    *task_modified = true;
-  }
-
-  RefreshView();
-}
-
-// ToDo: make this generic factory type and merge with OnNew
-void
-pnlTaskEdit::OnClearClicked(WndButton &Sender)
-{
-  (void)Sender;
-
   if ((ordered_task->task_size() < 2) ||
       (MessageBoxX(_("Clear task?"), _("Task edit"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
     ordered_task->clear();
-    ordered_task->set_factory(ordered_task->get_factory_type());
+    ordered_task->set_factory(XCSoarInterface::SettingsComputer().task_type_default);
     *task_modified = true;
     RefreshView();
   }

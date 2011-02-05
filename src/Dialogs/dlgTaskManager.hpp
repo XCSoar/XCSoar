@@ -62,13 +62,13 @@ public:
   static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
                       WndForm* wf, OrderedTask** task, bool* _task_modified);
 
-  static void OnNewClicked(WndButton &Sender);
   /**
    * clears task points and properties
+   * creates a new task of type=default type from preferences
    * prompts if task has points already
    * @param Sender
    */
-  static void OnClearClicked(WndButton &Sender);
+  static void OnNewClicked(WndButton &Sender);
   static void OnEditTurnpointClicked(WndButton &Sender);
 
   static void OnMoveUpClicked(WndButton &Sender);
