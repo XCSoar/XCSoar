@@ -184,10 +184,37 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
       RefreshView();
     }
   } else if (!ordered_task->is_max_size()) {
-    if (dlgTaskPointNew(*parent_window, &ordered_task, ItemIndex)) {
+
+    OrderedTaskPoint* point = NULL;
+    AbstractTaskFactory &factory = ordered_task->get_factory();
+    // get global default values and update default for current task;
+    OrderedTaskBehaviour ob = ordered_task->get_ordered_task_behaviour() =
+        XCSoarInterface::SetSettingsComputer().ordered_defaults;
+    const Waypoint* way_point =
+        dlgWayPointSelect(*parent_window,
+                          ordered_task->task_size() > 0 ?
+                          ordered_task->get_tp(ordered_task->
+                              task_size() - 1)->get_location() :
+                          XCSoarInterface::Basic().Location);
+    if (!way_point)
+      return;
+
+    if (ItemIndex == 0) {
+      point = factory.createPoint((AbstractTaskFactory::LegalPointType_t)
+          (XCSoarInterface::SettingsComputer().sector_defaults.start_type), *way_point);
+    } else {
+      point = factory.createPoint((AbstractTaskFactory::LegalPointType_t)
+          (XCSoarInterface::SettingsComputer().sector_defaults.turnpoint_type), *way_point);
+     }
+    if (point == NULL)
+      return;
+
+    if (factory.append(*point, true))
       *task_modified = true;
-      RefreshView();
-    }
+
+    delete point;
+
+    RefreshView();
   }
 }
 
