@@ -162,6 +162,14 @@ extern const TCHAR szProfileStartMaxHeightMargin[];
 extern const TCHAR szProfileStartMaxSpeed[];
 extern const TCHAR szProfileStartMaxSpeedMargin[];
 extern const TCHAR szProfileStartHeightRef[];
+extern const TCHAR szProfileStartType[];
+extern const TCHAR szProfileStartRadius[];
+extern const TCHAR szProfileTurnpointType[];
+extern const TCHAR szProfileTurnpointRadius[];
+extern const TCHAR szProfileFinishType[];
+extern const TCHAR szProfileFinishRadius[];
+extern const TCHAR szProfileTaskType[];
+extern const TCHAR szProfileAATMinTime[];
 
 extern const TCHAR szProfileEnableNavBaroAltitude[];
 

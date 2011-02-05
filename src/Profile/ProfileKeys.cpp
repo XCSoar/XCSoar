@@ -242,6 +242,15 @@ const TCHAR szProfileStartMaxSpeed[] = CONF("StartMaxSpeed");
 const TCHAR szProfileStartMaxHeightMargin[] = CONF("StartMaxHeightMargin");
 const TCHAR szProfileStartMaxSpeedMargin[] = CONF("StartMaxSpeedMargin");
 const TCHAR szProfileStartHeightRef[] = CONF("StartHeightRef");
+const TCHAR szProfileStartType[] = CONF("StartType");
+const TCHAR szProfileStartRadius[] = CONF("StartRadius");
+const TCHAR szProfileTurnpointType[] = CONF("TurnpointType");
+const TCHAR szProfileTurnpointRadius[] = CONF("TurnpointRadius");
+const TCHAR szProfileFinishType[] = CONF("FinishType");
+const TCHAR szProfileFinishRadius[] = CONF("FinishRadius");
+const TCHAR szProfileTaskType[] = CONF("TaskType");
+const TCHAR szProfileAATMinTime[] = CONF("AATMinTime");
+
 const TCHAR szProfileEnableNavBaroAltitude[] = CONF("EnableNavBaroAltitude");
 
 const TCHAR szProfileLoggerTimeStepCruise[] = CONF("LoggerTimeStepCruise");

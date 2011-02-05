@@ -32,6 +32,7 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "WayPointFile.hpp"
 #include "Interface.hpp"
+#include "Task/TaskBehaviour.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -62,6 +63,28 @@ Profile::Use()
 		  settings_task.start_max_height_margin);
   Get(szProfileStartMaxSpeedMargin,
 		  settings_task.start_max_speed_margin);
+
+  unsigned sdtemp = 0;
+  Get(szProfileStartType, sdtemp);
+  settings_task.sector_defaults.start_type =
+      (AbstractTaskFactory::LegalPointType_t)sdtemp;
+  Get(szProfileStartRadius,
+      settings_task.sector_defaults.start_radius);
+
+  Get(szProfileTurnpointType, sdtemp);
+      settings_task.sector_defaults.turnpoint_type =
+          (AbstractTaskFactory::LegalPointType_t)sdtemp;
+  Get(szProfileTurnpointRadius,
+      settings_task.sector_defaults.turnpoint_radius);
+
+  Get(szProfileFinishType, sdtemp);
+      settings_task.sector_defaults.finish_type =
+          (AbstractTaskFactory::LegalPointType_t)sdtemp;
+  Get(szProfileFinishRadius,
+      settings_task.sector_defaults.finish_radius);
+
+  Get(szProfileAATMinTime,
+      osettings_task.aat_min_time);
 
   LoadUnits();
   LoadInfoBoxes();
