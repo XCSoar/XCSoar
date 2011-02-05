@@ -1,7 +1,7 @@
 MANUAL_OUTPUT_DIR = $(OUT)/all/manual
 GENERATED_DIR = $(OUT)/all/tex
-TEX_INCLUDES = $(wildcard $(DOC)/manual/*.sty)
-FIGURES = $(DOC)/manual/figures/*.png
+TEX_INCLUDES = $(wildcard $(DOC)/manual/*.sty) $(wildcard $(DOC)/manual/en/*.sty)
+FIGURES = $(DOC)/manual/en/figures/*.png
 SVG_ICON_LIST = \
 	alt2_landable_airport \
 	alt2_landable_field \
@@ -20,13 +20,13 @@ TEX_FLAGS = -halt-on-error -interaction=nonstopmode
 .PHONY: manual
 manual: $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf $(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf
 
-$(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/XCSoar-manual.tex $(TEX_INCLUDES) \
+$(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex $(TEX_INCLUDES) \
 	$(FIGURES) $(SVG_ICONS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	cd $(<D) && pdflatex $(TEX_FLAGS) -output-directory $(abspath $(@D)) $(<F)
 	cd $(<D) && pdflatex $(TEX_FLAGS) -output-directory $(abspath $(@D)) $(<F)
 
-$(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf: $(DOC)/manual/XCSoar-developer-manual.tex $(TEX_INCLUDES) \
+$(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf: $(DOC)/manual/en/XCSoar-developer-manual.tex $(TEX_INCLUDES) \
 	$(FIGURES) $(SVG_ICONS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	cd $(<D) && pdflatex $(TEX_FLAGS) -output-directory $(abspath $(@D)) $(<F)
