@@ -1517,6 +1517,23 @@ setVariables()
     }
     wp->RefreshDisplay();
   }
+  wp = (WndProperty*)wf->FindByName(_T("prpTaskType"));
+  if (wp) {
+    const std::vector<TaskBehaviour::Factory_t> factory_types =
+        temptask->get_factory_types();
+    DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->EnableItemHelp(true);
+
+    for (unsigned i = 0; i < factory_types.size(); i++) {
+      dfe->addEnumText(OrderedTaskFactoryName(factory_types[i]),
+          (unsigned)factory_types[i], OrderedTaskFactoryDescription(
+              factory_types[i]));
+      if (factory_types[i] == settings_computer.task_type_default)
+        dfe->Set((unsigned)factory_types[i]);
+    }
+    wp->RefreshDisplay();
+  }
+
   delete temptask;
 
   LoadFormProperty(*wf, _T("prpStartRadius"),
@@ -2343,6 +2360,14 @@ void dlgConfigurationShowModal(void)
                                   ugDistance,
                                   settings_computer.sector_defaults.finish_radius,
                                   szProfileFinishRadius);
+
+  sdtemp = (unsigned)settings_computer.task_type_default;
+  taskchanged |= SaveFormProperty(*wf, _T("prpTaskType"),
+                                  szProfileTaskType,
+                                  sdtemp);
+  settings_computer.task_type_default =
+      (TaskBehaviour::Factory_t)sdtemp;
+
 
   unsigned aatminutes = unsigned(settings_computer.ordered_defaults.aat_min_time) / 60;
   wp = (WndProperty*)wf->FindByName(_T("prpAATMinTime"));

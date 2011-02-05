@@ -83,6 +83,10 @@ Profile::Use()
   Get(szProfileFinishRadius,
       settings_task.sector_defaults.finish_radius);
 
+  Get(szProfileTaskType, sdtemp);
+      settings_task.task_type_default =
+          (TaskBehaviour::Factory_t)sdtemp;
+
   Get(szProfileAATMinTime,
       osettings_task.aat_min_time);
 

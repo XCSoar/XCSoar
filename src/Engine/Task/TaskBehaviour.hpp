@@ -174,6 +174,9 @@ public:
   /** Margin in maximum height (m) allowed in start sector */
   unsigned start_max_height_margin;
 
+  /** Default task type to use for new tasks */
+  Factory_t task_type_default;
+
   /** Default sector info for new ordered task */
   SectorDefaults sector_defaults;
 

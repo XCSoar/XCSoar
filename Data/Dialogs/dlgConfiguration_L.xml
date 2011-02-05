@@ -658,6 +658,10 @@
       </Panel>
 
       <Panel Name="frmTaskType" X="2" Y="143" Width="-2" Height="48" Border="1">    
+         <Edit Name="prpTaskType" Caption="Task Type" X="0" Y="2" Width="-2" Height="22" CaptionWidth="120"
+          Help="Default task type for new tasks you create.">
+          <DataField DataType="enum" OnDataAccess="OnTaskDefaults_TaskType"/>
+        </Edit>
         <Panel Name="frmAATMinTime" X="0" Y="24" Width="-2" Height="22">
           <Edit Name="prpAATMinTime" Caption="AAT Min Time" Height="22" CaptionWidth="120" 
             Help="Default AAT Min time for new AAT Tasks.">
