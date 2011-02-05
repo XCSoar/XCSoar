@@ -671,6 +671,30 @@ AbstractTaskFactory::getValidIntermediateTypes(unsigned position) const
   return v;
 }
 
+AbstractTaskFactory::LegalPointVector
+AbstractTaskFactory::getValidStartTypes() const
+{
+  LegalPointVector v;
+  v.insert(v.end(), m_start_types.begin(), m_start_types.end());
+  return v;
+}
+
+AbstractTaskFactory::LegalPointVector
+AbstractTaskFactory::getValidIntermediateTypes() const
+{
+  LegalPointVector v;
+  v.insert(v.end(), m_intermediate_types.begin(), m_intermediate_types.end());
+  return v;
+}
+
+AbstractTaskFactory::LegalPointVector
+AbstractTaskFactory::getValidFinishTypes() const
+{
+  LegalPointVector v;
+  v.insert(v.end(), m_finish_types.begin(), m_finish_types.end());
+  return v;
+}
+
 bool 
 AbstractTaskFactory::is_closed() const
 {

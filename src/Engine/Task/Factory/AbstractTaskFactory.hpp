@@ -408,6 +408,30 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
   LegalPointVector getValidIntermediateTypes(unsigned position) const;
 
   /**
+   * List all valid start types for the task type
+   *
+   * @return Vector of valid types in position
+   */
+gcc_pure
+LegalPointVector getValidStartTypes() const;
+
+  /**
+   * List all valid intermediate types for the task type
+   *
+   * @return Vector of valid types in position
+   */
+gcc_pure
+LegalPointVector getValidIntermediateTypes() const;
+
+  /**
+   * List all valid finish types for the task type
+   *
+   * @return Vector of valid types in position
+   */
+gcc_pure
+LegalPointVector getValidFinishTypes() const;
+
+  /**
    * List valid types for a given position
    *
    * @param position Index position in task
