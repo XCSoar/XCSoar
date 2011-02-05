@@ -259,6 +259,9 @@ static CallBackTableEntry CallBackTable[] = {
 void
 dlgFlarmTrafficDetailsShowModal(FlarmId id)
 {
+  if (wf)
+    return;
+
   target_id = id;
 
   // Load dialog from XML
@@ -286,4 +289,5 @@ dlgFlarmTrafficDetailsShowModal(FlarmId id)
 
   // After dialog closed -> delete it
   delete wf;
+  wf = NULL;
 }
