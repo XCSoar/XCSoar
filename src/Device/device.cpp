@@ -47,7 +47,7 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
-#include "Android/NativeView.hpp"
+#include "Android/InternalGPS.hpp"
 #include "Android/Main.hpp"
 #include "Java/Object.hpp"
 #include "Java/Global.hpp"
@@ -92,7 +92,7 @@ static const DWORD dwSpeed[] = {
 };
 
 #ifdef ANDROID
-static Java::Object *internal_gps;
+static InternalGPS *internal_gps;
 #endif
 
 // This function is used to determine whether a generic
@@ -252,22 +252,7 @@ devStartup()
   if (is_simulator())
     return;
 
-  jobject context = native_view->get_context();
-
-  JNIEnv *env = Java::GetEnv();
-  jclass cls = env->FindClass("org/xcsoar/InternalGPS");
-  assert(cls != NULL);
-
-  jmethodID cid = env->GetMethodID(cls, "<init>",
-                                   "(Landroid/content/Context;)V");
-  assert(cid != NULL);
-
-  jobject obj = env->NewObject(cls, cid, context);
-  assert(obj != NULL);
-  env->DeleteLocalRef(context);
-
-  internal_gps = new Java::Object(env, obj);
-  env->DeleteLocalRef(obj);
+  internal_gps = InternalGPS::create(Java::GetEnv(), native_view);
 #else /* !ANDROID */
   LogStartUp(_T("Register serial devices"));
 
