@@ -617,8 +617,7 @@
 
     <Panel Name="frmTaskDefaults">
       <Panel Name="frmTaskDefaultsStart" X="2" Y="2" Width="-2" Height="48" Border="1">  
-        <Label Name="lblTaskDefaultsStart" Caption="Start point" X="2" Y="2" Width="75" Height="22"/>
-        <Edit Name="prpStartType" Caption="Type" X="0" Y="2" Width="-2" Height="22" CaptionWidth="120"
+        <Edit Name="prpStartType" Caption="Start point type" X="0" Y="2" Width="-2" Height="22" CaptionWidth="120"
           Help="Default start type for new tasks you create.">
           <DataField DataType="enum" OnDataAccess="OnTaskDefaultsStartType"/>
         </Edit>
@@ -631,8 +630,7 @@
       </Panel>
       
       <Panel Name="frmTaskFinish" X="2" Y="49" Width="-2" Height="48" Border="1">    
-        <Label Name="lblTaskFinish" Caption="Finish point" X="2" Y="2" Width="75" Height="22"/>
-        <Edit Name="prpFinishType" Caption="Type" X="0" Y="2" Width="-2" Height="22" CaptionWidth="120"
+        <Edit Name="prpFinishType" Caption="Finish point type" X="0" Y="2" Width="-2" Height="22" CaptionWidth="120"
           Help="Default finish type for new tasks you create.">
           <DataField DataType="enum" OnDataAccess="OnTaskDefaultsFinishType"/>
         </Edit>
@@ -645,8 +643,7 @@
       </Panel>
       
       <Panel Name="frmTaskTurnpoint" X="2" Y="96" Width="-2" Height="48" Border="1">    
-        <Label Name="lblTaskTurnpoint" Caption="Turn point" X="2" Y="2" Width="95" Height="22"/>
-        <Edit Name="prpTurnpointType" Caption="Type" X="0" Y="2" Width="-2" Height="22" CaptionWidth="120"
+        <Edit Name="prpTurnpointType" Caption="Turn point type" X="0" Y="2" Width="-2" Height="22" CaptionWidth="120"
           Help="Default turn point type for new tasks you create.">
           <DataField DataType="enum" OnDataAccess="OnTaskDefaults_TurnpointType"/>
         </Edit>
