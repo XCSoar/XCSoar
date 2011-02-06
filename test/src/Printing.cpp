@@ -224,13 +224,13 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AIRCRAFT_STATE &state)
     return;
 
   std::ofstream fi("results/res-isolines.txt");
-  for (unsigned i=0; i<task.tps.size(); i++) {
+  for (unsigned i=0; i<task.task_points.size(); i++) {
     fi << "## point " << i << "\n";
-    if (task.tps[i]->type == TaskPoint::AAT) {
-      aatpoint_print(fi, (AATPoint&)*task.tps[i], state,
+    if (task.task_points[i]->type == TaskPoint::AAT) {
+      aatpoint_print(fi, (AATPoint&)*task.task_points[i], state,
                      task.get_task_projection(), 1);
     } else {
-      orderedtaskpoint_print(fi,*task.tps[i],state,1);
+      orderedtaskpoint_print(fi,*task.task_points[i],state,1);
     }
     fi << "\n";
   }
@@ -238,45 +238,45 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AIRCRAFT_STATE &state)
   std::ofstream f1("results/res-task.txt");
 
   f1 << "#### Task points\n";
-  for (unsigned i=0; i<task.tps.size(); i++) {
+  for (unsigned i=0; i<task.task_points.size(); i++) {
     f1 << "## point " << i << " ###################\n";
-    if (task.tps[i]->type == TaskPoint::AAT) {
-      aatpoint_print(f1, (AATPoint&)*task.tps[i], state,
+    if (task.task_points[i]->type == TaskPoint::AAT) {
+      aatpoint_print(f1, (AATPoint&)*task.task_points[i], state,
                      task.get_task_projection(), 0);
     } else {
-      orderedtaskpoint_print(f1,*task.tps[i],state,0);
+      orderedtaskpoint_print(f1,*task.task_points[i],state,0);
     }
     f1 << "\n";
   }
 
   std::ofstream f5("results/res-ssample.txt");
   f5 << "#### Task sampled points\n";
-  for (unsigned i=0; i<task.tps.size(); i++) {
+  for (unsigned i=0; i<task.task_points.size(); i++) {
     f5 << "## point " << i << "\n";
-    sampledtaskpoint_print_samples(f5,*task.tps[i],state);
+    sampledtaskpoint_print_samples(f5,*task.task_points[i],state);
     f5 << "\n";
   }
 
   std::ofstream f2("results/res-max.txt");
   f2 << "#### Max task\n";
-  for (unsigned i=0; i<task.tps.size(); i++) {
-    OrderedTaskPoint *tp = task.tps[i];
+  for (unsigned i=0; i<task.task_points.size(); i++) {
+    OrderedTaskPoint *tp = task.task_points[i];
     f2 <<  tp->get_location_max().Longitude << " " 
        <<  tp->get_location_max().Latitude << "\n";
   }
 
   std::ofstream f3("results/res-min.txt");
   f3 << "#### Min task\n";
-  for (unsigned i=0; i<task.tps.size(); i++) {
-    OrderedTaskPoint *tp = task.tps[i];
+  for (unsigned i=0; i<task.task_points.size(); i++) {
+    OrderedTaskPoint *tp = task.task_points[i];
     f3 <<  tp->get_location_min().Longitude << " " 
        <<  tp->get_location_min().Latitude << "\n";
   }
 
   std::ofstream f4("results/res-rem.txt");
   f4 << "#### Remaining task\n";
-  for (unsigned i=0; i<task.tps.size(); i++) {
-    OrderedTaskPoint *tp = task.tps[i];
+  for (unsigned i=0; i<task.task_points.size(); i++) {
+    OrderedTaskPoint *tp = task.task_points[i];
     f4 <<  tp->get_location_remaining().Longitude << " " 
        <<  tp->get_location_remaining().Latitude << "\n";
   }
@@ -289,8 +289,8 @@ void PrintHelper::aborttask_print(AbortTask& task, const AIRCRAFT_STATE &state)
 
   std::ofstream f1("results/res-abort-task.txt");
   f1 << "#### Task points\n";
-  for (unsigned i=0; i<task.tps.size(); i++) {
-    GeoPoint l = task.tps[i].first->get_location();
+  for (unsigned i=0; i<task.task_points.size(); i++) {
+    GeoPoint l = task.task_points[i].first->get_location();
     f1 << "## point " << i << " ###################\n";
     if (i==task.activeTaskPoint) {
       f1 << state.Location.Longitude << " " << state.Location.Latitude << "\n";
@@ -489,11 +489,11 @@ TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
   f << "#  i alt  min  elev\n";
   f << start-0.5 << " " << aircraft_start.Altitude << " " <<
     minHs[start] << " " <<
-    tps[start]->get_elevation() << "\n";
+    task_points[start]->get_elevation() << "\n";
   for (int i=start; i<=end; i++) {
     aircraft_predict.Altitude -= gs[i].HeightGlide;
     f << i << " " << aircraft_predict.Altitude << " " << minHs[i]
-      << " " << tps[i]->get_elevation() << "\n";
+      << " " << task_points[i]->get_elevation() << "\n";
   }
   f << "\n";
 }

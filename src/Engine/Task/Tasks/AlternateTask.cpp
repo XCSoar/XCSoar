@@ -94,7 +94,7 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
   std::priority_queue<Divert, DivertVector, AlternateRank> q;
   const fixed dist_straight = state_now.get_location().distance(destination);
 
-  for (AlternateTaskVector::const_iterator i = tps.begin(); i != tps.end(); ++i) {
+  for (AlternateTaskVector::const_iterator i = task_points.begin(); i != task_points.end(); ++i) {
     const TaskWayPoint& tp = *i->first;
     const Waypoint& wp_alt = tp.get_waypoint();
     const fixed dist_divert =

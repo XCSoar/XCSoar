@@ -52,17 +52,17 @@ AbortTask::~AbortTask()
 void 
 AbortTask::setActiveTaskPoint(unsigned index)
 {
-  if (index < tps.size()) {
+  if (index < task_points.size()) {
     activeTaskPoint = index;
-    active_waypoint = tps[index].first->get_waypoint().id;
+    active_waypoint = task_points[index].first->get_waypoint().id;
   }
 }
 
 TaskWayPoint*
 AbortTask::getActiveTaskPoint() const
 {
-  if (activeTaskPoint < tps.size())
-    return tps[activeTaskPoint].first;
+  if (activeTaskPoint < task_points.size())
+    return task_points[activeTaskPoint].first;
 
   return NULL;
 }
@@ -71,21 +71,21 @@ bool
 AbortTask::validTaskPoint(const int index_offset) const
 {
   unsigned index = activeTaskPoint + index_offset;
-  return (index < tps.size());
+  return (index < task_points.size());
 }
 
 unsigned
 AbortTask::task_size() const
 {
-  return tps.size();
+  return task_points.size();
 }
 
 void
 AbortTask::clear()
 {
-  for (AlternateTaskVector::iterator v = tps.begin(); v != tps.end();) {
+  for (AlternateTaskVector::iterator v = task_points.begin(); v != task_points.end();) {
     delete (v->first);
-    tps.erase(v);
+    task_points.erase(v);
   }
   m_landable_reachable = false;
 }
@@ -117,7 +117,7 @@ AbortTask::update_polar()
 bool
 AbortTask::task_full() const
 {
-  return (tps.size() >= max_abort);
+  return (task_points.size() >= max_abort);
 }
 
 /**
@@ -180,11 +180,11 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
 
   while (!q.empty() && !task_full()) {
     const Alternate top = q.top();
-    tps.push_back(std::make_pair(
+    task_points.push_back(std::make_pair(
         new UnorderedTaskPoint(top.first, task_behaviour), top.second));
 
-    const int i = tps.size() - 1;
-    if (tps[i].first->get_waypoint().id == active_waypoint)
+    const int i = task_points.size() - 1;
+    if (task_points[i].first->get_waypoint().id == active_waypoint)
       activeTaskPoint = i;
 
     q.pop();
@@ -268,10 +268,10 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   // inform clients that the landable unreachable scan has been performed 
   client_update(state, false);
 
-  if (tps.size()) {
-    active_waypoint = tps[activeTaskPoint].first->get_waypoint().id;
+  if (task_points.size()) {
+    active_waypoint = task_points[activeTaskPoint].first->get_waypoint().id;
     if (is_active && (active_waypoint_on_entry != active_waypoint))
-      task_events.active_changed(*(tps[activeTaskPoint].first));
+      task_events.active_changed(*(task_points[activeTaskPoint].first));
   }
 
   return false; // nothing to do
@@ -313,12 +313,12 @@ void
 AbortTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
 {
   if (!reverse) {
-    for (AlternateTaskVector::const_iterator i = tps.begin();
-         i != tps.end(); ++i)
+    for (AlternateTaskVector::const_iterator i = task_points.begin();
+         i != task_points.end(); ++i)
       visitor.Visit(*i->first);
   } else {
-    for (AlternateTaskVector::const_reverse_iterator i = tps.rbegin();
-         i != tps.rend(); ++i)
+    for (AlternateTaskVector::const_reverse_iterator i = task_points.rbegin();
+         i != task_points.rend(); ++i)
       visitor.Visit(*i->first);
   }
 }
@@ -343,15 +343,15 @@ AbortTask::get_vector_home(const AIRCRAFT_STATE &state) const
 GeoPoint 
 AbortTask::get_task_center(const GeoPoint& fallback_location) const
 {
-  if (tps.empty())
+  if (task_points.empty())
     return fallback_location;
 
   TaskProjection task_projection;
-  for (unsigned i = 0; i < tps.size(); ++i) {
+  for (unsigned i = 0; i < task_points.size(); ++i) {
     if (i == 0)
-      task_projection.reset(tps[i].first->get_location());
+      task_projection.reset(task_points[i].first->get_location());
 
-    task_projection.scan_location(tps[i].first->get_location());
+    task_projection.scan_location(task_points[i].first->get_location());
   }
   task_projection.update_fast();
   return task_projection.get_center();
@@ -360,15 +360,15 @@ AbortTask::get_task_center(const GeoPoint& fallback_location) const
 fixed 
 AbortTask::get_task_radius(const GeoPoint& fallback_location) const
 { 
-  if (tps.empty())
+  if (task_points.empty())
     return fixed_zero;
 
   TaskProjection task_projection;
-  for (unsigned i = 0; i < tps.size(); ++i) {
+  for (unsigned i = 0; i < task_points.size(); ++i) {
     if (i == 0)
-      task_projection.reset(tps[i].first->get_location());
+      task_projection.reset(task_points[i].first->get_location());
 
-    task_projection.scan_location(tps[i].first->get_location());
+    task_projection.scan_location(task_points[i].first->get_location());
   }
   task_projection.update_fast();
   return task_projection.ApproxRadius();

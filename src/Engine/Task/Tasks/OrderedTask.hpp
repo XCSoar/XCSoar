@@ -671,7 +671,7 @@ private:
 
   void update_start_transition(const AIRCRAFT_STATE &state);
 
-  OrderedTaskPointVector tps;
+  OrderedTaskPointVector task_points;
   StartPoint *ts;
   FinishPoint *tf;
 

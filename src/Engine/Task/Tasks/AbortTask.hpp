@@ -238,7 +238,7 @@ protected:
 
 protected:
   typedef std::vector<std::pair<TaskWayPoint*, GlideResult> > AlternateTaskVector;
-  AlternateTaskVector tps;
+  AlternateTaskVector task_points;
 
   /** whether the AbortTask is the master or running in background */
   bool is_active;
