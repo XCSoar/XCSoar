@@ -73,6 +73,13 @@ public:
 
   static void OnMoveUpClicked(WndButton &Sender);
 
+  /* only visible if on last tp
+   * converts non-finish to finish point
+   * using finish defaults
+   */
+  static void OnMakeFinish(WndButton &Sender);
+
+
   /**
    * moves the task point up (down) in the task point list
    * @param Sender

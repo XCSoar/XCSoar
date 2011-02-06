@@ -51,7 +51,13 @@ static void
 UpdateButtons()
 {
   const unsigned index = wTaskPoints->GetCursorIndex();
-  WndButton* wb = (WndButton*)wf->FindByName(_T("cmdDown"));
+  WndButton* wb = (WndButton*)wf->FindByName(_T("cmdMakeFinish"));
+  assert(wb);
+  wb->set_visible(index > 0 &&
+      (index == ordered_task->task_size() - 1) &&
+      !ordered_task->has_finish()); // Todo check if point is already finish
+
+  wb = (WndButton*)wf->FindByName(_T("cmdDown"));
   assert(wb);
   wb->set_visible((int)index < ((int)(ordered_task->task_size()) - 1));
 
@@ -207,6 +213,12 @@ void
 pnlTaskEdit::OnTaskCursorCallback(unsigned i)
 {
   UpdateButtons();
+}
+void
+pnlTaskEdit::OnMakeFinish(WndButton &Sender)
+{
+  ordered_task->get_factory().CheckAddFinish();
+  RefreshView();
 }
 
 void

@@ -91,6 +91,7 @@ dlgTaskManagerShowModal(SingleWindow &parent)
 }
 
 CallBackTableEntry dlgTaskManager::CallBackTable[] = {
+  DeclareCallBackEntry(pnlTaskEdit::OnMakeFinish),
   DeclareCallBackEntry(pnlTaskEdit::OnMoveUpClicked),
   DeclareCallBackEntry(pnlTaskEdit::OnMoveDownClicked),
   DeclareCallBackEntry(pnlTaskEdit::OnEditTurnpointClicked),
