@@ -50,6 +50,12 @@ StringToPortType(const TCHAR *value)
   if (_tcscmp(value, _T("auto")) == 0)
     return DeviceConfig::AUTO;
 
+  if (_tcscmp(value, _T("internal")) == 0)
+    return DeviceConfig::INTERNAL;
+
+  if (is_android())
+    return DeviceConfig::INTERNAL;
+
   return DeviceConfig::SERIAL;
 }
 
@@ -60,7 +66,9 @@ ReadPortType(unsigned n)
 
   MakeDeviceSettingName(name, CONF("Port"), n, _T("Type"));
   if (!Profile::Get(name, value, sizeof(value) / sizeof(value[0])))
-    return DeviceConfig::SERIAL;
+    return is_android()
+      ? DeviceConfig::INTERNAL
+      : DeviceConfig::SERIAL;
 
   return StringToPortType(value);
 }
@@ -115,6 +123,9 @@ PortTypeToString(enum DeviceConfig::port_type type)
 
   case DeviceConfig::AUTO:
     return _T("auto");
+
+  case DeviceConfig::INTERNAL:
+    return _T("internal");
   }
 
   return NULL;

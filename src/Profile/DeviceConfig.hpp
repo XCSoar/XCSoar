@@ -43,6 +43,11 @@ struct DeviceConfig {
      * @see http://msdn.microsoft.com/en-us/library/bb202042.aspx
      */
     AUTO,
+
+    /**
+     * The built-in GPS receiver.
+     */
+    INTERNAL,
   };
 
   port_type port_type;          /**< Type of the port */

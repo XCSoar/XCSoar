@@ -32,11 +32,18 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Logger/NMEALogger.hpp"
 
+#ifdef ANDROID
+#include "Android/InternalGPS.hpp"
+#endif
+
 #include <assert.h>
 
 DeviceDescriptor::DeviceDescriptor()
   :Com(NULL), pDevPipeTo(NULL),
    Driver(NULL), device(NULL),
+#ifdef ANDROID
+   internal_gps(NULL),
+#endif
    enable_baro(false),
    ticker(false)
 {
@@ -80,6 +87,11 @@ DeviceDescriptor::Open()
 void
 DeviceDescriptor::Close()
 {
+#ifdef ANDROID
+  delete internal_gps;
+  internal_gps = NULL;
+#endif
+
   delete device;
   device = NULL;
 

@@ -116,6 +116,9 @@ static const struct {
 #ifdef _WIN32_WCE
   { DeviceConfig::AUTO, N_("GPS Intermediate Driver") },
 #endif
+#ifdef ANDROID
+  { DeviceConfig::INTERNAL, N_("Built-in GPS") },
+#endif
   { DeviceConfig::SERIAL, NULL } /* sentinel */
 };
 
@@ -618,6 +621,7 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
       break;
 
     case DeviceConfig::AUTO:
+    case DeviceConfig::INTERNAL:
       break;
     }
 
