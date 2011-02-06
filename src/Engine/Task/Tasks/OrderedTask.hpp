@@ -189,7 +189,7 @@ public:
    */
   gcc_pure
   bool has_start() const {
-    return ts != NULL;
+    return taskpoint_start != NULL;
   }
 
   /**
@@ -199,7 +199,7 @@ public:
    */
   gcc_pure
   bool has_finish() const {
-    return tf != NULL;
+    return taskpoint_finish != NULL;
   }
 
   /**
@@ -672,8 +672,8 @@ private:
   void update_start_transition(const AIRCRAFT_STATE &state);
 
   OrderedTaskPointVector task_points;
-  StartPoint *ts;
-  FinishPoint *tf;
+  StartPoint *taskpoint_start;
+  FinishPoint *taskpoint_finish;
 
   TaskProjection task_projection;
 

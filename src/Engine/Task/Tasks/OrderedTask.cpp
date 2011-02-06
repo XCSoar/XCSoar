@@ -77,8 +77,8 @@ OrderedTask::update_geometry()
   if (has_start()) {
     // update stats so data can be used during task construction
     /// @todo this should only be done if not flying! (currently done with has_entered)
-    if (!ts->has_entered()) {
-      GeoPoint loc = ts->get_location();
+    if (!taskpoint_start->has_entered()) {
+      GeoPoint loc = taskpoint_start->get_location();
       update_stats_distances(loc, true);
       if (has_finish()) {
         /// @todo: call AbstractTask::update stats methods with fake state
@@ -93,8 +93,8 @@ OrderedTask::update_geometry()
 fixed 
 OrderedTask::scan_total_start_time(const AIRCRAFT_STATE &)
 {
-  if (ts)
-    return ts->get_state_entered().Time;
+  if (taskpoint_start)
+    return taskpoint_start->get_state_entered().Time;
 
   return fixed_zero;
 }
@@ -118,7 +118,7 @@ OrderedTask::scan_distance_min(const GeoPoint &location, bool full)
     dijkstra_min.distance_min(ac);
     m_location_min_last = location;
   }
-  return ts->scan_distance_min();
+  return taskpoint_start->scan_distance_min();
 }
 
 fixed
@@ -135,15 +135,15 @@ OrderedTask::scan_distance_max()
   const unsigned atp = activeTaskPoint;
   if (atp) {
     activeTaskPoint--;
-    ts->scan_active(task_points[activeTaskPoint]);
+    taskpoint_start->scan_active(task_points[activeTaskPoint]);
   }
   dijkstra_max.distance_max();
 
   if (atp) {
     activeTaskPoint = atp;
-    ts->scan_active(task_points[activeTaskPoint]);
+    taskpoint_start->scan_active(task_points[activeTaskPoint]);
   }
-  return ts->scan_distance_max();
+  return taskpoint_start->scan_distance_max();
 }
 
 void
@@ -151,7 +151,7 @@ OrderedTask::scan_distance_minmax(const GeoPoint &location,
                                   bool force,
                                   fixed *dmin, fixed *dmax)
 {
-  if (!ts)
+  if (!taskpoint_start)
     return;
 
   if (force)
@@ -164,8 +164,8 @@ OrderedTask::scan_distance_minmax(const GeoPoint &location,
 fixed
 OrderedTask::scan_distance_nominal()
 {
-  if (ts)
-    return ts->scan_distance_nominal();
+  if (taskpoint_start)
+    return taskpoint_start->scan_distance_nominal();
 
   return fixed_zero;
 }
@@ -173,8 +173,8 @@ OrderedTask::scan_distance_nominal()
 fixed
 OrderedTask::scan_distance_scored(const GeoPoint &location)
 {
-  if (ts)
-    return ts->scan_distance_scored(location);
+  if (taskpoint_start)
+    return taskpoint_start->scan_distance_scored(location);
 
   return fixed_zero;
 }
@@ -182,8 +182,8 @@ OrderedTask::scan_distance_scored(const GeoPoint &location)
 fixed
 OrderedTask::scan_distance_remaining(const GeoPoint &location)
 {
-  if (ts)
-    return ts->scan_distance_remaining(location);
+  if (taskpoint_start)
+    return taskpoint_start->scan_distance_remaining(location);
 
   return fixed_zero;
 }
@@ -191,8 +191,8 @@ OrderedTask::scan_distance_remaining(const GeoPoint &location)
 fixed
 OrderedTask::scan_distance_travelled(const GeoPoint &location)
 {
-  if (ts)
-    return ts->scan_distance_travelled(location);
+  if (taskpoint_start)
+    return taskpoint_start->scan_distance_travelled(location);
 
   return fixed_zero;
 }
@@ -200,8 +200,8 @@ OrderedTask::scan_distance_travelled(const GeoPoint &location)
 fixed
 OrderedTask::scan_distance_planned()
 {
-  if (ts)
-    return ts->scan_distance_planned();
+  if (taskpoint_start)
+    return taskpoint_start->scan_distance_planned();
 
   return fixed_zero;
 }
@@ -212,10 +212,10 @@ bool
 OrderedTask::check_transitions(const AIRCRAFT_STATE &state, 
                                const AIRCRAFT_STATE &state_last)
 {
-  if (!ts)
+  if (!taskpoint_start)
     return false;
 
-  ts->scan_active(task_points[activeTaskPoint]);
+  taskpoint_start->scan_active(task_points[activeTaskPoint]);
 
   if (!state.Flying)
     return false;
@@ -277,7 +277,7 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
         if (i + 1 < n_task) {
           i++;
           setActiveTaskPoint(i);
-          ts->scan_active(task_points[activeTaskPoint]);
+          taskpoint_start->scan_active(task_points[activeTaskPoint]);
           
           task_events.active_advanced(*task_points[i], i);
 
@@ -291,13 +291,13 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
     }
   }
 
-  ts->scan_active(task_points[activeTaskPoint]);
+  taskpoint_start->scan_active(task_points[activeTaskPoint]);
 
   stats.task_finished = task_finished();
   stats.task_started = task_started();
 
   if (stats.task_started)
-    tf->set_fai_finish_height(get_start_state().NavAltitude - fixed(1000));
+    taskpoint_finish->set_fai_finish_height(get_start_state().NavAltitude - fixed(1000));
 
   if (stats.task_started && !last_started)
     task_events.task_start();
@@ -328,7 +328,7 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
         AATPoint *ap = (AATPoint *)task_points[activeTaskPoint];
         // very nasty hack
         TaskOptTarget tot(task_points, activeTaskPoint, state, glide_polar,
-                          *ap, task_projection, ts);
+                          *ap, task_projection, taskpoint_start);
         tot.search(fixed(0.5));
       }
     }
@@ -405,16 +405,16 @@ OrderedTask::scan_start_finish()
 {
   /// @todo also check there are not more than one start/finish point
   if (!task_points.size()) {
-    ts = NULL;
-    tf = NULL;
+    taskpoint_start = NULL;
+    taskpoint_finish = NULL;
     return false;
   }
 
-  ts = task_points[0]->type == TaskPoint::START
+  taskpoint_start = task_points[0]->type == TaskPoint::START
     ? (StartPoint *)task_points[0]
     : NULL;
 
-  tf = task_points.size() > 1 && task_points[task_points.size() - 1]->type == TaskPoint::FINISH
+  taskpoint_finish = task_points.size() > 1 && task_points[task_points.size() - 1]->type == TaskPoint::FINISH
     ? (FinishPoint *)task_points[task_points.size() - 1]
     : NULL;
 
@@ -571,7 +571,7 @@ OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution(aircraft);
   if (activeTaskPoint == 0)
-    leg.Vector = GeoVector(aircraft.Location, ts->get_location_remaining());
+    leg.Vector = GeoVector(aircraft.Location, taskpoint_start->get_location_remaining());
 }
 
 void
@@ -670,7 +670,7 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
     // only perform scan if modification is possible
     const fixed t_rem = max(fixed_zero, t_target - stats.total.TimeElapsed);
 
-    TaskMinTarget bmt(task_points, activeTaskPoint, aircraft, glide_polar, t_rem, ts);
+    TaskMinTarget bmt(task_points, activeTaskPoint, aircraft, glide_polar, t_rem, taskpoint_start);
     fixed p = bmt.search(fixed_zero);
     return p;
   }
@@ -713,8 +713,8 @@ OrderedTask::OrderedTask(TaskEvents &te,
                          const TaskBehaviour &tb,
                          const GlidePolar &gp):
   AbstractTask(ORDERED, te, tb, gp),
-  ts(NULL),
-  tf(NULL),
+  taskpoint_start(NULL),
+  taskpoint_finish(NULL),
   factory_mode(TaskBehaviour::FACTORY_FAI_GENERAL),
   active_factory(NULL),
   m_ordered_behaviour(tb.ordered_defaults),
@@ -780,8 +780,8 @@ OrderedTask::getTaskPoint(const unsigned index) const
 bool 
 OrderedTask::task_finished() const
 {
-  if (tf)
-    return (tf->has_entered());
+  if (taskpoint_finish)
+    return (taskpoint_finish->has_entered());
 
   return false;
 }
@@ -789,9 +789,9 @@ OrderedTask::task_finished() const
 bool 
 OrderedTask::task_started(bool soft) const
 {
-  if (ts) {
+  if (taskpoint_start) {
     // have we really started?
-    if (ts->has_exited()) 
+    if (taskpoint_start->has_exited()) 
       return true;
 
     // if soft starts allowed, consider started if we progressed to next tp
@@ -859,9 +859,9 @@ OrderedTask::update_start_transition(const AIRCRAFT_STATE &state)
   if (activeTaskPoint == 0) {
     // find boundary point that produces shortest
     // distance from state to that point to next tp point
-    ts->find_best_start(state, *task_points[1], task_projection);
-  } else if (!ts->has_exited() && !(ts->isInSector(state))) {
-    ts->reset();
+    taskpoint_start->find_best_start(state, *task_points[1], task_projection);
+  } else if (!taskpoint_start->has_exited() && !(taskpoint_start->isInSector(state))) {
+    taskpoint_start->reset();
     // reset on invalid transition to outside
     // point to nominal start point
   }
@@ -871,7 +871,7 @@ AIRCRAFT_STATE
 OrderedTask::get_start_state() const
 {
   if (has_start() && task_started()) 
-    return ts->get_state_entered();
+    return taskpoint_start->get_state_entered();
 
   AIRCRAFT_STATE null_state;
   return null_state;
@@ -881,7 +881,7 @@ AIRCRAFT_STATE
 OrderedTask::get_finish_state() const
 {
   if (has_finish() && task_finished()) 
-    return tf->get_state_entered();
+    return taskpoint_finish->get_state_entered();
 
   AIRCRAFT_STATE null_state;
   return null_state;
@@ -900,8 +900,8 @@ OrderedTask::has_targets() const
 fixed
 OrderedTask::get_finish_height() const
 {
-  if (tf)
-    return tf->get_elevation();
+  if (taskpoint_finish)
+    return taskpoint_finish->get_elevation();
 
   return fixed_zero;
 }
