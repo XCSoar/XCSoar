@@ -107,30 +107,35 @@ public:
    * @param filter The filter used for checking
    * @return True if file matches the filter, False otherwise
    */
+  gcc_pure
   static bool checkFilter(const TCHAR *fname, const TCHAR* filter);
 
   /**
    * Returns the number of files in the list
    * @return The number of files in the list
    */
+  gcc_pure
   int GetNumFiles(void) const;
 
   /**
    * Returns the selection index in integer format
    * @return The selection index in integer format
    */
+  gcc_pure
   virtual int GetAsInteger(void) const;
 
   /**
    * Returns the selection title (filename)
    * @return The selection title (filename)
    */
+  gcc_pure
   virtual const TCHAR *GetAsDisplayString() const;
 
   /**
    * Returns the PathFile of the currently selected item
    * @return The PathFile of the currently selected item
    */
+  gcc_pure
   virtual const TCHAR *GetAsString(void) const;
 
   /**
@@ -145,6 +150,7 @@ public:
    * Returns the PathFile of the currently selected item
    * @return The PathFile of the currently selected item
    */
+  gcc_pure
   const TCHAR *GetPathFile(void) const;
 
   #if defined(__BORLANDC__)
@@ -172,7 +178,10 @@ public:
   void ScanDirectoryTop(const TCHAR *filter);
 
   /** For use by other classes */
+  gcc_pure
   unsigned size() const;
+
+  gcc_pure
   const TCHAR *getItem(unsigned index) const;
 
  protected:

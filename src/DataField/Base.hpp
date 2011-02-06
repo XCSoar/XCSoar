@@ -26,6 +26,7 @@ Copyright_License {
 
 // JMW OLD_TASK todo; continue with fixed vars here
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 
@@ -56,8 +57,13 @@ public:
   virtual void Inc(void);
   virtual void Dec(void);
 
+  gcc_pure
   virtual int GetAsInteger() const;
+
+  gcc_pure
   virtual const TCHAR *GetAsString() const;
+
+  gcc_pure
   virtual const TCHAR *GetAsDisplayString() const;
 
   virtual void SetAsInteger(int Value);
@@ -85,6 +91,8 @@ public:
   // allows combolist to iterate all values w/out triggering external events
   void SetDetachGUI(bool bDetachGUI) { mDetachGUI = bDetachGUI; }
   bool GetDetachGUI(void) { return mDetachGUI; }
+
+  gcc_malloc
   virtual ComboList *CreateComboList() const { return NULL; }
 
   virtual void

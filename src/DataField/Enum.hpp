@@ -65,7 +65,10 @@ public:
   unsigned addEnumText(const TCHAR *Text);
   void addEnumTexts(const TCHAR *const*list);
 
+  gcc_pure
   virtual int GetAsInteger() const;
+
+  gcc_pure
   virtual const TCHAR *GetAsString() const;
 
   #if defined(__BORLANDC__)
@@ -82,6 +85,7 @@ public:
   virtual void SetAsString(const TCHAR *Value);
   void Sort(int startindex = 0);
 
+  gcc_pure
   unsigned Count() const {
     return entries.size();
   }
