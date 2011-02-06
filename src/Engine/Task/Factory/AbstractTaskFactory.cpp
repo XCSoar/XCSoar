@@ -607,6 +607,24 @@ AbstractTaskFactory::getValidationErrors()
 }
 
 bool
+AbstractTaskFactory::CheckAddFinish()
+{
+ if (m_task.task_size() < 2)
+   return false;
+
+ if (m_task.has_finish())
+   return false;
+
+ FinishPoint *fp = createFinish(m_task.get_tp(m_task.task_size() - 1)->get_waypoint());
+ assert(fp);
+ remove(m_task.task_size() - 1, false);
+ append(*fp, false);
+ delete fp;
+
+ return true;
+}
+
+bool
 AbstractTaskFactory::validate()
 {
   clearValidationErrors();

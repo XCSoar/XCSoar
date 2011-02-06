@@ -137,6 +137,8 @@ SaveTask()
   if (!cursor_at_active_task())
     return;
 
+ (*active_task)->get_factory().CheckAddFinish();
+
   if (!OrderedTaskSave(**active_task))
     return;
 

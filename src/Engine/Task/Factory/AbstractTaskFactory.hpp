@@ -416,7 +416,15 @@ gcc_pure
 LegalPointVector getValidStartTypes() const;
 
   /**
-   * List all valid intermediate types for the task type
+   * Checks for a finish point.
+   * If task has at least two points, then converts
+   * last point to finish if is not already a finish.
+   * @return True if converted last point to a finish
+   *         False if did not convert (or did not have 2+ pts)
+   */
+ bool CheckAddFinish();
+
+ /** List all valid intermediate types for the task type
    *
    * @return Vector of valid types in position
    */
