@@ -33,6 +33,7 @@ Copyright_License {
 DataFieldEnum::Entry::~Entry()
 {
   free(mText);
+  free(mHelp);
 }
 
 int
