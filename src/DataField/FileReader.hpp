@@ -107,7 +107,7 @@ public:
    * @param filter The filter used for checking
    * @return True if file matches the filter, False otherwise
    */
-  bool checkFilter(const TCHAR *fname, const TCHAR* filter);
+  static bool checkFilter(const TCHAR *fname, const TCHAR* filter);
 
   /**
    * Returns the number of files in the list
