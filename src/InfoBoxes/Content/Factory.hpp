@@ -105,7 +105,7 @@ namespace InfoBoxFactory
     e_CC_Speed, /* Achieved cross country speed while on current task, compensated for altitude */
     e_AA_TimeDiff, /* Difference between estimated task time and AAT minimum time. Colored red if negative (expected arrival too early), or blue if in sector and can turn now with estimated arrival time greater than AAT time plus 5 minutes */
     e_Climb_Avg, /* Time-average climb rate in all thermals */
-    e_DistanceVario, /* Distance Vario */
+    e_RH_Trend, /* Task Req. Total Height Trend */
     e_Battery, /* Displays percentage of device battery remaining (where applicable) and status/voltage of external power supply */
     e_Fin_GR, /* Geometric gradient to the arrival height above the final waypoint. This is not adjusted for total energy */
     e_Alternate_1_Name, /* Displays name and bearing to the best alternate landing location */
