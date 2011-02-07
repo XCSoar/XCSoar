@@ -29,11 +29,13 @@ AATTaskFactory::AATTaskFactory(OrderedTask& _task, const TaskBehaviour &tb):
 {
   m_start_types.push_back(START_LINE);
   m_start_types.push_back(START_CYLINDER);
+  m_start_types.push_back(START_SECTOR);
   m_start_types.push_back(START_BGA);
   m_intermediate_types.push_back(AAT_CYLINDER);
   m_intermediate_types.push_back(AAT_SEGMENT);
   m_finish_types.push_back(FINISH_LINE);
   m_finish_types.push_back(FINISH_CYLINDER);
+  m_finish_types.push_back(FINISH_SECTOR);
 }
 
 void 
