@@ -203,6 +203,25 @@ SetPipeTo(DeviceDescriptor &out)
 }
 
 /**
+ * Checks if the specified DeviceConfig is available on this platform.
+ */
+gcc_pure
+static bool
+DeviceConfigAvailable(const DeviceConfig &config)
+{
+  switch (config.port_type) {
+  case DeviceConfig::SERIAL:
+    return true;
+
+  case DeviceConfig::AUTO:
+    return is_windows_ce();
+  }
+
+  /* unreachable */
+  return false;
+}
+
+/**
  * Checks if the two configurations overlap, i.e. they request access
  * to an exclusive resource, like the same physical COM port.  If this
  * is detected, then the second device will be disabled.
@@ -262,6 +281,9 @@ devStartup()
   DeviceConfig config[NUMDEV];
   for (unsigned i = 0; i < NUMDEV; ++i) {
     Profile::GetDeviceConfig(i, config[i]);
+
+    if (!DeviceConfigAvailable(config[i]))
+      continue;
 
     bool overlap = false;
     for (unsigned j = 0; j < i; ++j)
