@@ -1,0 +1,90 @@
+%\documentclass[twoside,german]{scrartcl} %Artikel (kein Chapter Befehl) besser f�r deutsches Drucken
+\documentclass[german,a4paper,twoside]{scrreprt} %Report  (kein Chapter Befehl) besser f�r deutsches Drucken
+%\documentclass[german,a4paper]{scrbook} %besser f�r deutsches Drucken Volles Programm
+%\usepackage[ansinew]{inputenc}
+\usepackage[utf8]{inputenc} 
+\usepackage[german]{babel}
+\usepackage[off]{flippdf}%Spiegelverkehrte Ausgabe (sogar Bilder ..) Default OFF ..
+\usepackage{supertabular}
+\usepackage{array}
+\usepackage{hhline}
+\usepackage{makeidx}
+\usepackage{framed,color}               % Farbunterst�tzung
+\usepackage{graphicx}                      % Anleitung hierzu    in c:\Program Files\MiKTeX 2.7\doc\latex\graphics\grfguide.pdf
+\usepackage{wrapfig}
+%\usepackage[T1]{fontenc}
+\usepackage{fancyhdr}
+\usepackage{fancybox}
+\usepackage[colorlinks]{hyperref}    % Bietet hyperlinks und Zugriffe auf Dateien in Farbe
+\newcommand{\fspec}[1]{\protect\nolinkurl{#1}}
+\makeindex 
+\parindent=0pt
+\oddsidemargin=0.75\oddsidemargin
+\evensidemargin=0.75\evensidemargin
+%################# Ein paar Schreibvereinachungen ######################
+\def\i{\itemsep=0.15\itemsep}
+\def\c{\centering}
+\def\bc{\begin{center}}
+\def\ec{\end{center}}
+\def\xc{\textsc{XCSoar~}}
+\def\qo#1{\textsf{"#1"}}
+\def\achtung{\marginpar{\includegraphics[height=3.0em]{Bilder/Achtung-Sign.jpg}}}
+\def\merkes{\marginpar{\includegraphics[height=3.0em]{Bilder/merkesdir.jpg}}}
+\def\stop{\marginpar{\begin{center}\includegraphics[height=2.50em]{Bilder/Stop.png}\\ {\footnotesize  \textbf{Stimmt das?}}\end{center}}}
+\def\far{~{\includegraphics[height=1.0em]{Bilder/farrowr.jpg}}~}
+\def\fal{~{\includegraphics[height=1.0em]{Bilder/farrowl.jpg}}~}
+\def\blitz{ \includegraphics[width=1em]{Bilder/blitz1.png}}
+\def\bblitz{\marginpar{\includegraphics[height=2.0em]{Bilder/blitz1.png}}}
+\def\bbblitz{\includegraphics[height=4.0em]{Bilder/blitz1.png}}
+\def\smallblitz{ \includegraphics[width=0.66em]{Bilder/blitz1.png}}
+\rightmargin=0.55\rightmargin
+\leftmargin=0.55\leftmargin
+
+%### Suchpfad fuer Bilder
+\graphicspath{{../shared/figures/}}
+
+\begin{document}
+\input{buttons.sty}                      %L�dt buttons, Men�s etc von XCSoar - leicht variiert von OH.
+\shorthandoff{"}                          %Anf�hrungszeichen erscheinen wie auf Tastatur und nicht als Tastatursteuerzeichen.
+\vspace*{4cm}
+\begin{center}
+\includegraphics[width=10cm]{xcsoar-title.png}\\[2em]
+{\Large\textbf{\textsf{Flash\raisebox{-\baselineskip}[\ht\strutbox]{\bbblitz}Manual made by Hotte (OH)}}}\\
+
+
+\end{center}
+% \reflectbox{Spiegelverkehrt ?}? Ja, geht auch ... 
+%                                                                        \FlipPDF
+%\input{einleitung.tex}                                      % Fertig  bis auf die letzten 4 \sections
+%                                                                       \UnFlipPDF
+%\newpage
+%\input{bedienerOF.tex}                                    % Noch gar nicht fertig ...
+%\newpage
+%\input{navigation.tex}                                     %fast fertig  f�r v6 machen
+%\newpage
+%\input{XC-Tasks.tex}                                       % Im Bau   f�r v6 machen ...
+%\newpage
+%\input{Endanflugrechner.tex}                         %Im Bau 
+%\newpage
+%\input{Athmosphaere-und-Instrumente.tex}   % Im Bau 
+%\newpage
+%\input{Airspace-und-Traffic.tex}                    % Im Bau 
+%\newpage
+%\input{Avionik-und-Airframe.tex}                    % Im Bau 
+%\newpage
+%\input{Schnellstart.tex}                                   %  Fertig.  % f�r v6 ab�nddern-schon weit !
+%\newpage
+%\input{InfoBoxBeschreibung.tex}                    %  Im Bau Sehr Wichtig 
+%\newpage
+%\input{Konfiguration.tex}                               % Im Bau sehr wichtig   
+%\newpage
+\input{Blitzeinstieg}
+%\input{DataFiles.tex}                                     % Im Bau Sehr wichtig 
+%\newpage
+%\input{Entwicklung-und-Entstehung.tex}       % Im Bau  - unwichtig 
+%\begin{small}
+ %\input{GnuGeneralPublicLicense.tex}          % Fertig
+%\end{small}
+\tableofcontents
+\printindex
+\end{document} 

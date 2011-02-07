@@ -15,10 +15,16 @@ SVG_ICON_LIST = \
 	map_turnpoint
 SVG_ICONS = $(patsubst %,$(GENERATED_DIR)/icons/%.png,$(SVG_ICON_LIST))
 
+TEX_INCLUDES_DE =  $(wildcard $(DOC)/manual/*.sty) $(wildcard $(DOC)/manual/de/*.sty)
+FIGURES_DE = $(DOC)/manual/de/Bilder/*.png
+ 
 TEX_FLAGS = -halt-on-error -interaction=nonstopmode
 
 .PHONY: manual
-manual: $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf $(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf
+manual: \
+	$(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf \
+	$(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf \
+	$(MANUAL_OUTPUT_DIR)/XCSoar-Handbuch.pdf
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex $(TEX_INCLUDES) \
 	$(FIGURES) $(SVG_ICONS) | $(MANUAL_OUTPUT_DIR)/dirstamp
@@ -28,6 +34,12 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex $(TEX
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf: $(DOC)/manual/en/XCSoar-developer-manual.tex $(TEX_INCLUDES) \
 	$(FIGURES) $(SVG_ICONS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+	# run TeX twice to make sure that all references are resolved
+	cd $(<D) && pdflatex $(TEX_FLAGS) -output-directory $(abspath $(@D)) $(<F)
+	cd $(<D) && pdflatex $(TEX_FLAGS) -output-directory $(abspath $(@D)) $(<F)
+
+$(MANUAL_OUTPUT_DIR)/XCSoar-Handbuch.pdf: $(DOC)/manual/de/XCSoar-Handbuch.tex $(DOC)/manual/de/Blitzeinstieg.tex $(TEX_INCLUDES_DE) \
+	$(FIGURES_DE) $(SVG_ICONS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	cd $(<D) && pdflatex $(TEX_FLAGS) -output-directory $(abspath $(@D)) $(<F)
 	cd $(<D) && pdflatex $(TEX_FLAGS) -output-directory $(abspath $(@D)) $(<F)
