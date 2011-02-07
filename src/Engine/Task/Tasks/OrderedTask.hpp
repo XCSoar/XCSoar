@@ -236,6 +236,19 @@ public:
   bool replace(const OrderedTaskPoint &tp, const unsigned position);
 
   /**
+   * Replace optional start point.
+   * May fail if the candidate is the wrong type.
+   * Does nothing (but returns true) if replacement is equivalent
+   * Ownership is transferred to this object.
+   *
+   * @param tp Taskpoint to become replacement
+   * @param position Index in task sequence of task point to replace
+   *
+   * @return True on success
+   */
+  bool replace_optional_start(const OrderedTaskPoint &tp, const unsigned position);
+
+  /**
    * Append taskpoint to end of task.  May fail if the candidate
    * is the wrong type (e.g. if it is a StartPoint and the task already
    * has one).
@@ -672,6 +685,8 @@ private:
   void update_start_transition(const AIRCRAFT_STATE &state);
 
   OrderedTaskPointVector task_points;
+  OrderedTaskPointVector optional_start_points;
+
   StartPoint *taskpoint_start;
   FinishPoint *taskpoint_finish;
 
@@ -691,6 +706,20 @@ private:
   TaskDijkstraMax dijkstra_max;
 
   bool allow_incremental_boundary_stats(const AIRCRAFT_STATE &state) const;
+
+  bool check_transition_point(const AIRCRAFT_STATE &state_now, 
+                              const AIRCRAFT_STATE &state_last,
+                              const FlatBoundingBox& bb_now,
+                              const FlatBoundingBox& bb_last,
+                              unsigned index,
+                              OrderedTaskPointVector& points,
+                              bool &transition_enter,
+                              bool &transition_exit,
+                              bool &last_started);
+
+  bool check_duplicate_waypoints(Waypoints& waypoints,
+                                 OrderedTaskPointVector& points,
+                                 const bool is_task);
 
 public:
   /**
@@ -771,6 +800,15 @@ public:
    * @param reverse Visit task points in reverse order
    */
   void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+
+  /**
+   * Accept a (const) task point visitor; makes the visitor visit
+   * all optional start points in the task
+   *
+   * @param visitor Visitor to accept
+   * @param reverse Visit task points in reverse order
+   */
+  void sp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
 
   /**
    * Accept a task point visitor; makes the visitor visit

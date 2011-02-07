@@ -57,15 +57,25 @@ OrderedTask::update_geometry()
   if (!has_start() || !task_points[0])
     return;
 
+  // scan location of task points
   for (unsigned i = 0; i < task_points.size(); ++i) {
     if (i == 0)
       task_projection.reset(task_points[i]->get_location());
 
     task_points[i]->scan_projection(task_projection);
   }
+  // ... and optional start points
+  for (unsigned i = 0; i < optional_start_points.size(); ++i) {
+    optional_start_points[i]->scan_projection(task_projection);
+  }
+
+  // projection can now be determined
   task_projection.update_fast();
 
+  // update OZ's for items that depend on next-point geometry 
   for (OrderedTaskPointVector::iterator it = task_points.begin(); it!= task_points.end(); it++)
+    (*it)->update_oz(task_projection);
+  for (OrderedTaskPointVector::iterator it = optional_start_points.begin(); it!= optional_start_points.end(); it++)
     (*it)->update_oz(task_projection);
 
   // now that the task projection is stable, and oz is stable,
@@ -73,17 +83,18 @@ OrderedTask::update_geometry()
   for (unsigned i = 0; i < task_points.size(); ++i) {
     task_points[i]->update_boundingbox(task_projection);
   }
+  for (unsigned i = 0; i < optional_start_points.size(); ++i) {
+    optional_start_points[i]->update_boundingbox(task_projection);
+  }
 
-  if (has_start()) {
-    // update stats so data can be used during task construction
-    /// @todo this should only be done if not flying! (currently done with has_entered)
-    if (!taskpoint_start->has_entered()) {
-      GeoPoint loc = taskpoint_start->get_location();
-      update_stats_distances(loc, true);
-      if (has_finish()) {
-        /// @todo: call AbstractTask::update stats methods with fake state
-        /// so stats are updated
-      }
+  // update stats so data can be used during task construction
+  /// @todo this should only be done if not flying! (currently done with has_entered)
+  if (!taskpoint_start->has_entered()) {
+    GeoPoint loc = taskpoint_start->get_location();
+    update_stats_distances(loc, true);
+    if (has_finish()) {
+      /// @todo: call AbstractTask::update stats methods with fake state
+      /// so stats are updated
     }
   }
 }
@@ -237,34 +248,13 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
 
   for (int i = t_min; i <= t_max; i++) {
 
-    const bool nearby = task_points[i]->boundingbox_overlaps(bb_now) || task_points[i]->boundingbox_overlaps(bb_last);
-
     bool transition_enter = false;
-    if (nearby && task_points[i]->transition_enter(state, state_last)) {
-      transition_enter = true;
-      task_events.transition_enter(*task_points[i]);
-    }
-
     bool transition_exit = false;
-    if (nearby && task_points[i]->transition_exit(state, state_last, task_projection)) {
-      transition_exit = true;
-      task_events.transition_exit(*task_points[i]);
-      
-      // detect restart
-      if ((i == 0) && last_started)
-        last_started = false;
-    }
 
-    if (i==0) 
-      update_start_transition(state);
-
-    if (nearby) {
-      if (task_points[i]->update_sample_near(state, task_events, task_projection))
-        full_update = true;
-    } else {
-      if (task_points[i]->update_sample_far(state, task_events, task_projection))
-        full_update = true;
-    }
+    full_update |= OrderedTask::check_transition_point(state, state_last, bb_now, bb_last, i,
+                                                       task_points, transition_enter, transition_exit,
+                                                       last_started);
+    // @todo: optional_start_points
 
     if (i == (int)activeTaskPoint) {
       const bool last_request_armed = task_advance.request_armed();
@@ -305,6 +295,48 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   if (stats.task_finished && !last_finished)
     task_events.task_finish();
 
+  return full_update;
+}
+
+
+bool
+OrderedTask::check_transition_point(const AIRCRAFT_STATE &state, 
+                                    const AIRCRAFT_STATE &state_last,
+                                    const FlatBoundingBox& bb_now,
+                                    const FlatBoundingBox& bb_last,
+                                    unsigned i,
+                                    OrderedTaskPointVector& points,
+                                    bool &transition_enter,
+                                    bool &transition_exit,
+                                    bool &last_started)
+{
+  bool full_update = false;
+  const bool nearby = points[i]->boundingbox_overlaps(bb_now) || points[i]->boundingbox_overlaps(bb_last);
+
+  if (nearby && points[i]->transition_enter(state, state_last)) {
+    transition_enter = true;
+    task_events.transition_enter(*points[i]);
+  }
+  
+  if (nearby && points[i]->transition_exit(state, state_last, task_projection)) {
+    transition_exit = true;
+    task_events.transition_exit(*points[i]);
+    
+    // detect restart
+    if ((i == 0) && last_started)
+      last_started = false;
+  }
+  
+  if (i==0) 
+    update_start_transition(state);
+  
+  if (nearby) {
+    if (points[i]->update_sample_near(state, task_events, task_projection))
+      full_update = true;
+  } else {
+    if (points[i]->update_sample_far(state, task_events, task_projection))
+      full_update = true;
+  }
   return full_update;
 }
 
@@ -368,6 +400,7 @@ OrderedTask::set_neighbours(unsigned position)
     next = task_points[position + 1];
 
   task_points[position]->set_neighbours(prev, next);
+  // @todo: optional_start_points
 }
 
 bool
@@ -530,6 +563,27 @@ OrderedTask::replace(const OrderedTaskPoint &new_tp,
   update_geometry();
   return true;
 }
+
+bool 
+OrderedTask::replace_optional_start(const OrderedTaskPoint &new_tp,
+                                    const unsigned position)
+{
+  if (position >= optional_start_points.size())
+    return false;
+
+  if (optional_start_points[position]->equals(&new_tp))
+    // nothing to do
+    return true;
+
+  delete optional_start_points[position];
+  optional_start_points[position] = new_tp.clone(task_behaviour, m_ordered_behaviour);
+
+  set_neighbours(0);
+
+  update_geometry();
+  return true;
+}
+
 
 void 
 OrderedTask::setActiveTaskPoint(unsigned index)
@@ -706,6 +760,10 @@ OrderedTask::~OrderedTask()
     delete *v;
     task_points.erase(v);
   }
+  for (OrderedTaskPointVector::iterator v = optional_start_points.begin(); v != optional_start_points.end();) {
+    delete *v;
+    optional_start_points.erase(v);
+  }
   delete active_factory;
 }
 
@@ -741,6 +799,20 @@ OrderedTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) cons
 }
 
 void 
+OrderedTask::sp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
+{
+  if (!reverse) {
+    for (OrderedTaskPointVector::const_iterator it = optional_start_points.begin();
+         it!= optional_start_points.end(); ++it)
+      visitor.Visit(**it);
+  } else {
+    for (OrderedTaskPointVector::const_reverse_iterator it = optional_start_points.rbegin();
+         it!= optional_start_points.rend(); ++it)
+      visitor.Visit(**it);
+  }
+}
+
+void 
 OrderedTask::tp_Accept(TaskPointVisitor& visitor, const bool reverse)
 {
   if (!reverse) {
@@ -759,6 +831,8 @@ OrderedTask::reset()
 {  
   /// @todo also reset data in this class e.g. stats?
   for (OrderedTaskPointVector::iterator it = task_points.begin(); it!= task_points.end(); it++)
+    (*it)->reset();
+  for (OrderedTaskPointVector::iterator it = optional_start_points.begin(); it!= optional_start_points.end(); it++)
     (*it)->reset();
 
   AbstractTask::reset();
@@ -942,16 +1016,29 @@ OrderedTask::clone(TaskEvents &te,
   return new_task;
 }
 
+bool 
+OrderedTask::check_duplicate_waypoints(Waypoints& waypoints,
+                                       OrderedTaskPointVector& points,
+                                       const bool is_task)
+{
+  bool changed = false;
+  for (unsigned i = 0; i < points.size(); ++i) {
+    Waypoint wp(points[i]->get_waypoint());
+    const bool this_changed = !waypoints.find_duplicate(wp);
+    changed |= this_changed;
+    if (is_task)
+      replace(*points[i], i);
+    else
+      replace_optional_start(*points[i], i);
+  }
+  return changed;
+}
+
 bool
 OrderedTask::check_duplicate_waypoints(Waypoints& waypoints)
 {
-  bool changed = false;
-  for (unsigned i = 0; i < task_size(); ++i) {
-    Waypoint wp(task_points[i]->get_waypoint());
-    bool this_changed = !waypoints.find_duplicate(wp);
-    changed |= this_changed;
-    replace(*task_points[i], i);
-  }
+  bool changed = check_duplicate_waypoints(waypoints, task_points, true);
+  changed |= check_duplicate_waypoints(waypoints, optional_start_points, false);
 
   if (changed)
     waypoints.optimise();
@@ -1093,6 +1180,11 @@ OrderedTask::clear()
 {
   while (task_points.size())
     erase(0);
+
+  for (OrderedTaskPointVector::iterator v = optional_start_points.begin(); v != optional_start_points.end();) {
+    delete *v;
+    optional_start_points.erase(v);
+  }
 
   reset();
   m_ordered_behaviour = task_behaviour.ordered_defaults;

@@ -81,6 +81,10 @@ public:
     bb_screen = bb;
   }
 
+  void set_mode_optional(const bool mode) {
+    mode_optional_start = mode;
+  }
+
 protected:
   void draw_ordered(const OrderedTaskPoint& tp);
 
@@ -138,6 +142,7 @@ protected:
   RenderTaskLayer m_layer;
   const GeoPoint m_location;
   FlatBoundingBox bb_screen;
+  bool mode_optional_start;
 };
 
 

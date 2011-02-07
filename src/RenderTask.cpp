@@ -40,6 +40,11 @@ RenderTask::draw_layers(const AbstractTask& task)
 {
   for (unsigned i=0; i<4; i++) {
     tpv.set_layer((RenderTaskLayer)i);
+    if ((i!= RENDER_TASK_SYMBOLS) && (i!=RENDER_TASK_LEG)) {
+      tpv.set_mode_optional(true);
+      task.sp_CAccept(tpv);
+    }
+    tpv.set_mode_optional(false);
     task.tp_CAccept(tpv);
   }
 }

@@ -48,6 +48,15 @@ public:
   virtual GeoPoint get_task_center(const GeoPoint& fallback_location) const;
   virtual fixed get_task_radius(const GeoPoint& fallback_location) const;
 
+  /**
+   * Accept a (const) task point visitor; makes the visitor visit
+   * all optional start points in the task
+   *
+   * @param visitor Visitor to accept
+   * @param reverse Visit task points in reverse order
+   */
+  virtual void sp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+
 protected:
 
   bool check_task() const;

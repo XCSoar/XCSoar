@@ -199,3 +199,9 @@ UnorderedTask::get_task_radius(const GeoPoint& fallback_location) const
     return half(tp->get_location().distance(fallback_location));
   }
 }
+
+void 
+UnorderedTask::sp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
+{
+  // do nothing!
+}

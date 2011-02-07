@@ -488,6 +488,15 @@ public:
  */
   virtual void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const = 0;
 
+  /**
+   * Accept a (const) task point visitor; makes the visitor visit
+   * all optional start points in the task
+   *
+   * @param visitor Visitor to accept
+   * @param reverse Visit task points in reverse order
+   */
+  virtual void sp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const = 0;
+
 /** 
  * Accept a task point visitor; makes the visitor visit
  * all TaskPoint in the task
