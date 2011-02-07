@@ -332,7 +332,7 @@ namespace
 
   fixed::value_t perform_cordic_rotation_accurate_sin(long theta)
   {
-    long x_cos=1<<28;
+    long x_cos=1<< fixed::resolution_shift;
     long x_sin=0;
     perform_cordic_rotation_unscaled(x_cos, x_sin, theta);
     return scale_cordic_result_accurate(x_sin);
@@ -406,7 +406,7 @@ void fixed::sin_cos(fixed const& theta,fixed* s,fixed*c)
         x=internal_pi-x;
         negate_cos=true;
     }
-    long x_cos=1<<28,x_sin=0;
+    long x_cos=1<<resolution_shift,x_sin=0;
 
     perform_cordic_rotation(x_cos,x_sin,(long)x);
 
