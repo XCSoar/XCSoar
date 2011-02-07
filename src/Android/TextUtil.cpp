@@ -100,23 +100,17 @@ TextUtil::create(const char *facename, int height, bool bold, bool italic)
 std::pair<unsigned, unsigned>
 TextUtil::getTextBounds(const char *text) const
 {
-  jstring paramText;
   jintArray paramExtent;
   jint extent[2];
 
-#ifdef UNICODE
-  paramText = env->NewString(text, wcslen(text));
-#else
-  paramText = env->NewStringUTF(text);
-#endif
   paramExtent = env->NewIntArray(2);
 
   env->CallVoidMethod(get(), midGetTextBounds,
-                      paramText, paramExtent);
+                      Java::String(env, text).get(),
+                      paramExtent);
   env->GetIntArrayRegion(paramExtent, 0, 2, extent);
 
   // free local references
-  env->DeleteLocalRef(paramText);
   env->DeleteLocalRef(paramExtent);
 
   return std::pair<unsigned, unsigned>(extent[0], extent[1]);
@@ -126,21 +120,7 @@ int
 TextUtil::getTextTextureGL(const char *text, int fr, int fg, int fb,
                            int br, int bg, int bb) const
 {
-  jstring paramText;
-  jint textureID;
-
-#ifdef UNICODE
-  paramText = env->NewString(text, wcslen(text));
-#else
-  paramText = env->NewStringUTF(text);
-#endif
-
-  textureID = env->CallIntMethod(get(), midGetTextTextureGL,
-                                 paramText,
-                                 fr, fg, fb, br, bg, bb);
-
-  // free local references
-  env->DeleteLocalRef(paramText);
-
-  return textureID;
+  return env->CallIntMethod(get(), midGetTextTextureGL,
+                            Java::String(env, text).get(),
+                            fr, fg, fb, br, bg, bb);
 }
