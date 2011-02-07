@@ -1468,7 +1468,7 @@ setVariables()
 
 
   OrderedTask* temptask = protected_task_manager->task_blank();
-  temptask->set_factory(TaskBehaviour::FACTORY_MIXED);
+  temptask->set_factory(TaskBehaviour::FACTORY_RT);
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartType"));
   if (wp) {
