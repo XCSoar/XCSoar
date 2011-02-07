@@ -211,7 +211,15 @@ gcc_pure
 static bool
 DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
 {
-  return a.port_index == b.port_index;
+  switch (a.port_type) {
+  case DeviceConfig::SERIAL:
+    return a.port_index == b.port_index;
+
+  case DeviceConfig::AUTO:
+    break;
+  }
+
+  return a.port_type == a.port_type;
 }
 
 #endif /* !ANDROID */
