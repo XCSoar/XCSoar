@@ -65,30 +65,31 @@ struct RoutePlannerConfig {
 };
 
 /**
-* variables set user preference defaults for new task and
-* new turpoints created by the task factories
-*/
-struct SectorDefaults {
-  SectorDefaults():
-  start_type(AbstractTaskFactory::START_CYLINDER),
-  start_radius(1000),
-  turnpoint_type(AbstractTaskFactory::AST_CYLINDER),
-  turnpoint_radius(500),
-  finish_type(AbstractTaskFactory::FINISH_CYLINDER),
-  finish_radius(1000) {}
+ * variables set user preference defaults for new task and
+ * new turpoints created by the task factories
+ */
+struct SectorDefaults
+{
+  SectorDefaults() :
+    start_type(AbstractTaskFactory::START_CYLINDER), start_radius(1000),
+        turnpoint_type(AbstractTaskFactory::AST_CYLINDER),
+        turnpoint_radius(500),
+        finish_type(AbstractTaskFactory::FINISH_CYLINDER), finish_radius(1000)
+  {
+  }
 
-/** default start type for new tasks */
-AbstractTaskFactory::LegalPointType_t start_type;
-/** default start radius or line length for new tasks */
-fixed start_radius;
-/** default intermediate type for new tasks */
-AbstractTaskFactory::LegalPointType_t turnpoint_type;
-/** default intermediate point radius for new tasks */
-fixed turnpoint_radius;
-/** default finish type for new tasks */
-AbstractTaskFactory::LegalPointType_t finish_type;
-/** default finish radius or line length for new tasks */
-fixed finish_radius;
+  /** default start type for new tasks */
+  AbstractTaskFactory::LegalPointType_t start_type;
+  /** default start radius or line length for new tasks */
+  fixed start_radius;
+  /** default intermediate type for new tasks */
+  AbstractTaskFactory::LegalPointType_t turnpoint_type;
+  /** default intermediate point radius for new tasks */
+  fixed turnpoint_radius;
+  /** default finish type for new tasks */
+  AbstractTaskFactory::LegalPointType_t finish_type;
+  /** default finish radius or line length for new tasks */
+  fixed finish_radius;
 };
 
 /**
