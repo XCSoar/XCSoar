@@ -27,7 +27,6 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 
 #ifdef ANDROID
-#include <jni.h>
 #include "Util/tstring.hpp"
 #include "Screen/Color.hpp"
 #else  // !ANDROID
@@ -38,16 +37,15 @@ Copyright_License {
 
 #include <windows.h>
 
+class TextUtil;
+
 /**
  * A font loaded from storage.  It is used by #Canvas to draw text.
  */
 class Font : private NonCopyable {
 protected:
   #ifdef ANDROID
-  static JNIEnv *env;
-  static jmethodID midTextUtil, midGetFontMetrics, midGetTextBounds;
-  static jmethodID midGetTextTextureGL;
-  jobject textUtilObject;
+  TextUtil *textUtilObject;
 
   unsigned line_spacing, style;
   tstring facename;

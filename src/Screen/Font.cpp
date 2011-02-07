@@ -27,15 +27,9 @@ Copyright_License {
 #include "Java/Global.hpp"
 #include "Java/Class.hpp"
 #include "Java/String.hpp"
+#include "Android/TextUtil.hpp"
 
 #include <assert.h>
-
-JNIEnv *Font::env(NULL);
-jmethodID Font::midTextUtil(NULL);
-jmethodID Font::midGetFontMetrics(NULL);
-jmethodID Font::midGetTextBounds(NULL);
-jmethodID Font::midGetTextTextureGL(NULL);
-
 
 bool
 Font::set(const LOGFONT &log)
@@ -51,119 +45,43 @@ Font::set(const LOGFONT &log)
 bool
 Font::set(const TCHAR *facename, int height, bool bold, bool italic)
 {
-  jobject localObject;
-  jint paramStyle, paramTextSize;
-  jintArray metricsArray;
-  jint metrics[5];
-
-  reset();
-
-  if (env == NULL) {
-    // initialize static jvm
-    env = Java::GetEnv();
-  }
-
-  Java::Class textUtilClass(env, "org/xcsoar/TextUtil");
-
-  if (midTextUtil == NULL) {
-    // initialize static method ID's once
-    midTextUtil         = env->GetMethodID(textUtilClass, "<init>",
-                                           "(Ljava/lang/String;II)V");
-    midGetFontMetrics   = env->GetMethodID(textUtilClass, "getFontMetrics",
-                                           "([I)V");
-    midGetTextBounds    = env->GetMethodID(textUtilClass, "getTextBounds",
-                                           "(Ljava/lang/String;[I)V");
-    midGetTextTextureGL = env->GetMethodID(textUtilClass, "getTextTextureGL",
-                                           "(Ljava/lang/String;IIIIII)I");
-  }
-
-  Java::String paramFamilyName(env, facename);
-  paramStyle = 0;
-  if (bold)
-    paramStyle |= 1;
-  if (italic)
-    paramStyle |= 2;
-  paramTextSize = height;
-
-  // construct org.xcsoar.TextUtil object
-  localObject = env->NewObject(textUtilClass, midTextUtil,
-                               paramFamilyName.get(),
-                               paramStyle, paramTextSize);
-  if (!localObject)
-    return false;
-
-  textUtilObject = env->NewGlobalRef(localObject);
+  delete textUtilObject;
+  textUtilObject = TextUtil::create(facename, height, bold, italic);
   if (!textUtilObject)
     return false;
 
-  // get height, ascent_height and capital_height
-  assert(midGetFontMetrics);
-  metricsArray = env->NewIntArray(5);
-  env->CallVoidMethod(textUtilObject, midGetFontMetrics, metricsArray);
-  env->GetIntArrayRegion(metricsArray, 0, 5, metrics);
-  this->height = metrics[0];
-  style = metrics[1];
-  ascent_height = metrics[2];
-  capital_height = metrics[3];
-  line_spacing = metrics[4];
+  this->height = textUtilObject->get_height();
+  style = textUtilObject->get_style();
+  ascent_height = textUtilObject->get_ascent_height();
+  capital_height = textUtilObject->get_capital_height();
+  line_spacing = textUtilObject->get_line_spacing();
 
-  // store face name. android API does not provide ways to query it.
-  Font::facename = facename;
-
-  // free local references
-  env->DeleteLocalRef(metricsArray);
-  env->DeleteLocalRef(localObject);
-
-  return true;
+  return textUtilObject != NULL;
 }
 
 void
 Font::reset()
 {
-  if (textUtilObject) {
-    env->DeleteGlobalRef(textUtilObject);
-    textUtilObject = NULL;
-  }
+  delete textUtilObject;
+  textUtilObject = NULL;
 }
 
 void
 Font::text_width(const TCHAR *text, int &width, int &height) const
 {
-  jstring paramText;
-  jintArray paramExtent;
-  jint extent[2];
 
   if (!textUtilObject)
     return;
 
-#ifdef UNICODE
-  paramText = env->NewString(text, wcslen(text));
-#else
-  paramText = env->NewStringUTF(text);
-#endif
-  paramExtent = env->NewIntArray(2);
-
-  env->CallVoidMethod(textUtilObject, midGetTextBounds,
-                      paramText, paramExtent);
-  env->GetIntArrayRegion(paramExtent, 0, 2, extent);
-
-  width = extent[0];
-  height = extent[1];
-
-  // free local references
-  env->DeleteLocalRef(paramText);
-  env->DeleteLocalRef(paramExtent);
+  std::pair<unsigned, unsigned> size = textUtilObject->getTextBounds(text);
+  width = size.first;
+  height = size.second;
 }
 
 int
 Font::text_texture_gl(const TCHAR *text, SIZE &size,
                       const Color &fg, const Color &bg) const
 {
-  jstring paramText;
-  jint jfg[3] = { fg.red(), fg.green(), fg.blue() };
-  jint jbg[3] = { bg.red(), bg.green(), bg.blue() };
-  jint textureID;
-
   if (!textUtilObject)
     return NULL;
 
@@ -172,21 +90,9 @@ Font::text_texture_gl(const TCHAR *text, SIZE &size,
   if (size.cx == 0 || size.cy == 0)
     return NULL;
 
-#ifdef UNICODE
-  paramText = env->NewString(text, wcslen(text));
-#else
-  paramText = env->NewStringUTF(text);
-#endif
-
-  textureID = env->CallIntMethod(textUtilObject, midGetTextTextureGL,
-                                 paramText,
-                                 jfg[0], jfg[1], jfg[2],
-                                 jbg[0], jbg[1], jbg[2]);
-
-  // free local references
-  env->DeleteLocalRef(paramText);
-
-  return textureID;
+  return textUtilObject->getTextTextureGL(text,
+                                          fg.red(), fg.green(), fg.blue(),
+                                          bg.red(), bg.green(), bg.blue());
 }
 
 
