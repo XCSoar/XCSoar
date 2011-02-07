@@ -26,6 +26,7 @@ Copyright_License {
 #ifdef ANDROID
 #include "Java/Global.hpp"
 #include "Java/Class.hpp"
+#include "Java/String.hpp"
 
 #include <assert.h>
 
@@ -51,7 +52,6 @@ bool
 Font::set(const TCHAR *facename, int height, bool bold, bool italic)
 {
   jobject localObject;
-  jstring paramFamilyName;
   jint paramStyle, paramTextSize;
   jintArray metricsArray;
   jint metrics[5];
@@ -77,11 +77,7 @@ Font::set(const TCHAR *facename, int height, bool bold, bool italic)
                                            "(Ljava/lang/String;IIIIII)I");
   }
 
-#ifdef UNICODE
-  paramFamilyName = env->NewString(facename, wcslen(facename));
-#else
-  paramFamilyName = env->NewStringUTF(facename);
-#endif
+  Java::String paramFamilyName(env, facename);
   paramStyle = 0;
   if (bold)
     paramStyle |= 1;
@@ -90,7 +86,8 @@ Font::set(const TCHAR *facename, int height, bool bold, bool italic)
   paramTextSize = height;
 
   // construct org.xcsoar.TextUtil object
-  localObject = env->NewObject(textUtilClass, midTextUtil, paramFamilyName,
+  localObject = env->NewObject(textUtilClass, midTextUtil,
+                               paramFamilyName.get(),
                                paramStyle, paramTextSize);
   if (!localObject)
     return false;
@@ -116,7 +113,6 @@ Font::set(const TCHAR *facename, int height, bool bold, bool italic)
   // free local references
   env->DeleteLocalRef(metricsArray);
   env->DeleteLocalRef(localObject);
-  env->DeleteLocalRef(paramFamilyName);
 
   return true;
 }

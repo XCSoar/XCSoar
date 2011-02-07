@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Java/Object.hpp"
 #include "Java/Class.hpp"
+#include "Java/String.hpp"
 
 #include <assert.h>
 
@@ -68,16 +69,15 @@ public:
   }
 
   bool loadResourceTexture(const char *name, jint *result) {
-    jstring name2 = env->NewStringUTF(name);
+    Java::String name2(env, name);
     jintArray result2 = env->NewIntArray(3);
 
     bool success = env->CallBooleanMethod(obj, load_resource_texture_method,
-                                          name2, result2);
+                                          name2.get(), result2);
     if (success)
       env->GetIntArrayRegion(result2, 0, 3, result);
 
     env->DeleteLocalRef(result2);
-    env->DeleteLocalRef(name2);
 
     return success;
   }
