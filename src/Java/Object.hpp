@@ -36,6 +36,11 @@
 #include <jni.h>
 
 namespace Java {
+  /**
+   * Wrapper for a local "jobject" reference.
+   */
+  typedef LocalRef<jobject> LocalObject;
+
   class Object : public GlobalRef<jobject> {
   public:
     /**

@@ -42,6 +42,7 @@ Copyright_License {
 #ifdef ANDROID
 #include "Java/Global.hpp"
 #include "Java/Class.hpp"
+#include "Java/Object.hpp"
 #endif
 
 #include <windef.h> /* for MAX_PATH */
@@ -215,9 +216,11 @@ detect_language()
                                          "()Ljava/util/Locale;");
   assert(cid != NULL);
 
-  jobject obj = env->CallStaticObjectMethod(cls, cid);
-  if (obj == NULL)
+  jobject _obj = env->CallStaticObjectMethod(cls, cid);
+  if (_obj == NULL)
     return NULL;
+
+  Java::LocalObject obj(env, _obj);
 
   /* call Locale.getLanguage() */
 
@@ -225,12 +228,8 @@ detect_language()
   assert(cid != NULL);
 
   jstring language = (jstring)env->CallObjectMethod(obj, cid);
-  if (language == NULL) {
-    env->DeleteLocalRef(obj);
+  if (language == NULL)
     return NULL;
-  }
-
-  env->DeleteLocalRef(obj);
 
   const char *language2 = env->GetStringUTFChars(language, NULL);
   if (language2 == NULL) {
