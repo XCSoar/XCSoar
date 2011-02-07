@@ -32,8 +32,7 @@ InternalGPS::create(JNIEnv *env, NativeView *native_view)
 {
   jobject context = native_view->get_context();
 
-  jclass cls = env->FindClass("org/xcsoar/InternalGPS");
-  assert(cls != NULL);
+  Java::Class cls(env, "org/xcsoar/InternalGPS");
 
   jmethodID cid = env->GetMethodID(cls, "<init>",
                                    "(Landroid/content/Context;)V");
