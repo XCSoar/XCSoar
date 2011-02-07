@@ -148,7 +148,7 @@ public:
   void
   Visit(const FAISectorZone& oz)
   {
-    _stprintf(text, _("FAI Sector"));
+    _stprintf(text, _("FAI quadrant"));
   }
 
   void
@@ -379,7 +379,7 @@ OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
 {
   switch (type) {
   case AbstractTaskFactory::START_SECTOR:
-    return _("Start sector");
+    return _("FAI start quadrant");
   case AbstractTaskFactory::START_LINE:
     return _("Start line");
   case AbstractTaskFactory::START_CYLINDER:
@@ -387,7 +387,7 @@ OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
   case AbstractTaskFactory::START_BGA:
     return _("BGA start sector");
   case AbstractTaskFactory::FAI_SECTOR:
-    return _("Turnpoint FAI sector");
+    return _("FAI quadrant");
   case AbstractTaskFactory::KEYHOLE_SECTOR:
     return _("Keyhole sector (DAe)");
   case AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR:
@@ -401,7 +401,7 @@ OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
   case AbstractTaskFactory::AAT_SEGMENT:
     return _("Area sector");
   case AbstractTaskFactory::FINISH_SECTOR:
-    return _("Finish sector");
+    return _("FAI finish quadrant");
   case AbstractTaskFactory::FINISH_LINE:
     return _("Finish line");
   case AbstractTaskFactory::FINISH_CYLINDER:
