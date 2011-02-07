@@ -261,6 +261,17 @@ public:
   bool append(const OrderedTaskPoint &tp);
 
   /**
+   * Append optional start point.  May fail if the candidate
+   * is the wrong type.
+   * Ownership is transferred to this object.
+   *
+   * @param tp Taskpoint to append to task
+   *
+   * @return True on success
+   */
+  bool append_optional_start(const OrderedTaskPoint &tp);
+
+  /**
    * Remove task point at specified position.  Note that
    * currently start/finish points can't be removed.
    *
@@ -269,6 +280,15 @@ public:
    * @return True on success
    */
   bool remove(const unsigned position);
+
+  /**
+   * Remove optional start point at specified position.
+   *
+   * @param position Index in sequence of optional start point to remove
+   *
+   * @return True on success
+   */
+  bool remove_optional_start(const unsigned position);
 
   /**
    * Relocate a task point to a new location
@@ -681,6 +701,13 @@ private:
    * @param i index of task point in sequence
    */
   void erase(unsigned i);
+
+  /**
+   * Erase optional start point (for internal use)
+   *
+   * @param i index of optional start point in sequence
+   */
+  void erase_optional_start(unsigned i);
 
   void update_start_transition(const AIRCRAFT_STATE &state);
 

@@ -400,7 +400,12 @@ OrderedTask::set_neighbours(unsigned position)
     next = task_points[position + 1];
 
   task_points[position]->set_neighbours(prev, next);
-  // @todo: optional_start_points
+
+  if (position==0) {
+    for (unsigned i = 0; i < optional_start_points.size(); ++i) {
+      optional_start_points[i]->set_neighbours(prev, next);
+    }
+  }
 }
 
 bool
@@ -461,6 +466,13 @@ OrderedTask::erase(const unsigned index)
   task_points.erase(task_points.begin() + index);
 }
 
+void
+OrderedTask::erase_optional_start(const unsigned index)
+{
+  delete optional_start_points[index];
+  optional_start_points.erase(optional_start_points.begin() + index);
+}
+
 bool
 OrderedTask::remove(const unsigned position)
 {
@@ -476,6 +488,21 @@ OrderedTask::remove(const unsigned position)
   set_neighbours(position);
   if (position)
     set_neighbours(position - 1);
+
+  update_geometry();
+  return true;
+}
+
+bool
+OrderedTask::remove_optional_start(const unsigned position)
+{
+  if (position >= optional_start_points.size())
+    return false;
+
+  erase_optional_start(position);
+
+  if (task_points.size()>1)
+    set_neighbours(0);
 
   update_geometry();
   return true;
@@ -499,6 +526,16 @@ OrderedTask::append(const OrderedTaskPoint &new_tp)
   }
 
   set_neighbours(task_points.size() - 1);
+  update_geometry();
+  return true;
+}
+
+bool 
+OrderedTask::append_optional_start(const OrderedTaskPoint &new_tp)
+{
+  optional_start_points.push_back(new_tp.clone(task_behaviour, m_ordered_behaviour));
+  if (task_points.size() > 1)
+    set_neighbours(0);
   update_geometry();
   return true;
 }
@@ -564,6 +601,7 @@ OrderedTask::replace(const OrderedTaskPoint &new_tp,
   return true;
 }
 
+
 bool 
 OrderedTask::replace_optional_start(const OrderedTaskPoint &new_tp,
                                     const unsigned position)
@@ -579,7 +617,6 @@ OrderedTask::replace_optional_start(const OrderedTaskPoint &new_tp,
   optional_start_points[position] = new_tp.clone(task_behaviour, m_ordered_behaviour);
 
   set_neighbours(0);
-
   update_geometry();
   return true;
 }
@@ -939,6 +976,7 @@ OrderedTask::update_start_transition(const AIRCRAFT_STATE &state)
     // reset on invalid transition to outside
     // point to nominal start point
   }
+  // @todo: optional start
 }
 
 AIRCRAFT_STATE 
@@ -946,6 +984,8 @@ OrderedTask::get_start_state() const
 {
   if (has_start() && task_started()) 
     return taskpoint_start->get_state_entered();
+
+  // @todo: optional start
 
   AIRCRAFT_STATE null_state;
   return null_state;
@@ -1011,6 +1051,9 @@ OrderedTask::clone(TaskEvents &te,
   for (unsigned i = 0; i < task_points.size(); ++i) {
     new_task->append(*task_points[i]);
   }
+  for (unsigned i = 0; i < optional_start_points.size(); ++i) {
+    new_task->append_optional_start(*optional_start_points[i]);
+  }
   new_task->activeTaskPoint = activeTaskPoint;
   new_task->update_geometry();
   return new_task;
@@ -1063,6 +1106,7 @@ OrderedTask::commit(const OrderedTask& that)
     modified = true;
   }
 
+  // ensure each task point made identical
   for (unsigned i = 0; i < that.task_size(); ++i) {
     if (i >= task_size()) {
       // that task is larger than this
@@ -1071,6 +1115,25 @@ OrderedTask::commit(const OrderedTask& that)
     } else if (!task_points[i]->equals(that.task_points[i])) {
       // that task point is changed
       replace(*that.task_points[i], i);
+      modified = true;
+    }
+  }
+
+  // remove if that optional start list is smaller than this one
+  while (optional_start_points.size() > that.optional_start_points.size()) {
+    remove_optional_start(optional_start_points.size() - 1);
+    modified = true;
+  }
+
+  // ensure each task point made identical
+  for (unsigned i = 0; i < that.optional_start_points.size(); ++i) {
+    if (i >= optional_start_points.size()) {
+      // that task is larger than this
+      append_optional_start(*that.optional_start_points[i]);
+      modified = true;
+    } else if (!optional_start_points[i]->equals(that.optional_start_points[i])) {
+      // that task point is changed
+      replace_optional_start(*that.optional_start_points[i], i);
       modified = true;
     }
   }
@@ -1181,10 +1244,8 @@ OrderedTask::clear()
   while (task_points.size())
     erase(0);
 
-  for (OrderedTaskPointVector::iterator v = optional_start_points.begin(); v != optional_start_points.end();) {
-    delete *v;
-    optional_start_points.erase(v);
-  }
+  while (optional_start_points.size())
+    erase_optional_start(0);
 
   reset();
   m_ordered_behaviour = task_behaviour.ordered_defaults;

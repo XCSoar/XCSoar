@@ -839,3 +839,19 @@ AbstractTaskFactory::mutate_closed_finish_per_task_type()
   }
   return changed;
 }
+
+
+bool 
+AbstractTaskFactory::append_optional_start(const OrderedTaskPoint &new_tp,
+                                           const bool auto_mutate)
+{
+  if (auto_mutate && !validType(new_tp, 0)) {
+    // candidate must be transformed into a startpoint of appropriate type
+    StartPoint* sp = createStart(new_tp.get_waypoint());
+    bool success = m_task.append_optional_start(*sp);
+    delete sp;
+    return success;
+  }
+  // ok to add directly
+  return m_task.append_optional_start(new_tp);
+}

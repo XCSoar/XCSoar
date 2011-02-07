@@ -74,6 +74,13 @@ Serialiser::deserialise_point(OrderedTask& data)
     if ((oz = oser.deserialise_oz(*wp, false)) != NULL) {
       pt = fact.createStart(oz, *wp);
     }
+  } else if (_tcscmp(type.c_str(), _T("OptionalStart")) == 0) {
+    if ((oz = oser.deserialise_oz(*wp, false)) != NULL) {
+      pt = fact.createStart(oz, *wp);
+      fact.append_optional_start(*pt);
+      delete pt; // don't let generic code below add it
+      pt = NULL;
+    }
   } else if (_tcscmp(type.c_str(), _T("Turn")) == 0) {
     if ((oz = oser.deserialise_oz(*wp, true)) != NULL) {
       pt = fact.createAST(oz, *wp);
@@ -102,7 +109,7 @@ Serialiser::deserialise_point(OrderedTask& data)
 void
 Serialiser::Visit(const StartPoint& data)
 {
-  DataNode* child = serialise(data, _T("Start"));
+  DataNode* child = serialise(data, mode_optional_start? _T("OptionalStart"): _T("Start"));
   delete child;
 }
 
@@ -364,9 +371,11 @@ Serialiser::serialise(const OrderedTask& data)
 {
   m_node.set_attribute(_T("type"), task_factory_type(data.get_factory_type()));
   serialise(data.get_ordered_task_behaviour());
+  mode_optional_start = false;
   data.tp_CAccept(*this);
+  mode_optional_start = true;
+  data.sp_CAccept(*this);
 }
-
 
 void 
 Serialiser::deserialise(OrderedTask& data)

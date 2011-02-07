@@ -47,7 +47,7 @@ public:
    * @return Initialised object
    */
   Serialiser(DataNode& the_node, const Waypoints *_waypoints=NULL)
-    :m_node(the_node), waypoints(_waypoints) {};
+    :m_node(the_node), waypoints(_waypoints), mode_optional_start(false) {};
 
   /** 
    * Serialise a task (create a DataNode structure to reflect the task)
@@ -156,6 +156,7 @@ private:
   DataNode &m_node;
 
   const Waypoints *waypoints;
+  bool mode_optional_start;
 
   TaskBehaviour::Factory_t task_factory_type() const;
   const TCHAR* task_factory_type(TaskBehaviour::Factory_t the_type) const;
