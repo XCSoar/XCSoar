@@ -1227,14 +1227,8 @@ OrderedTask::get_factory_types(bool all) const
 {
   /// @todo: check transform types if all=false
   std::vector<TaskBehaviour::Factory_t> f_list;
-  f_list.push_back(TaskBehaviour::FACTORY_FAI_GENERAL);
-  f_list.push_back(TaskBehaviour::FACTORY_FAI_TRIANGLE);
-  f_list.push_back(TaskBehaviour::FACTORY_FAI_OR);
-  f_list.push_back(TaskBehaviour::FACTORY_FAI_GOAL);
   f_list.push_back(TaskBehaviour::FACTORY_RT);
   f_list.push_back(TaskBehaviour::FACTORY_AAT);
-  f_list.push_back(TaskBehaviour::FACTORY_MIXED);
-  f_list.push_back(TaskBehaviour::FACTORY_TOURING);
   return f_list;
 }
 
