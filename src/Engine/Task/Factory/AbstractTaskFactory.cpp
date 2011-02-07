@@ -70,7 +70,11 @@ AbstractTaskFactory::createAST(ObservationZonePoint* oz,
 StartPoint* 
 AbstractTaskFactory::createStart(const Waypoint &wp) const
 {
-  return createStart(*m_start_types.begin(), wp);
+  LegalPointType_t type = m_behaviour.sector_defaults.start_type;
+  if (!validStartType(type))
+    type = *m_start_types.begin();
+
+  return createStart(type, wp);
 }
 
 IntermediateTaskPoint* 
@@ -81,13 +85,22 @@ AbstractTaskFactory::createIntermediate(const Waypoint &wp) const
     if (validIntermediateType(type))
       return createIntermediate(type, wp);
   }
-  return createIntermediate(*m_intermediate_types.begin(), wp);
+
+  LegalPointType_t type = m_behaviour.sector_defaults.turnpoint_type;
+    if (!validIntermediateType(type))
+      type = *m_intermediate_types.begin();
+
+  return createIntermediate(type, wp);
 }
 
 FinishPoint* 
 AbstractTaskFactory::createFinish(const Waypoint &wp) const
 {
-  return createFinish(*m_finish_types.begin(), wp);
+  LegalPointType_t type = m_behaviour.sector_defaults.finish_type;
+    if (!validFinishType(type))
+      type = *m_finish_types.begin();
+
+    return createFinish(type, wp);
 }
 
 AbstractTaskFactory::LegalPointType_t 
@@ -184,7 +197,6 @@ AbstractTaskFactory::getType(const OrderedTaskPoint &point) const
   assert(1);
   return START_LINE;
 }
-
 
 OrderedTaskPoint* 
 AbstractTaskFactory::createPoint(const LegalPointType_t type,
