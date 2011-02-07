@@ -202,6 +202,18 @@ SetPipeTo(DeviceDescriptor &out)
   }
 }
 
+/**
+ * Checks if the two configurations overlap, i.e. they request access
+ * to an exclusive resource, like the same physical COM port.  If this
+ * is detected, then the second device will be disabled.
+ */
+gcc_pure
+static bool
+DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
+{
+  return a.port_index == b.port_index;
+}
+
 #endif /* !ANDROID */
 
 void
@@ -245,7 +257,7 @@ devStartup()
 
     bool overlap = false;
     for (unsigned j = 0; j < i; ++j)
-      if (config[i].port_index == config[j].port_index)
+      if (DeviceConfigOverlaps(config[i], config[j]))
         overlap = true;
 
     if (!overlap)
