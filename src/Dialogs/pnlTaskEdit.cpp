@@ -191,11 +191,9 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
       return;
 
     if (ItemIndex == 0) {
-      point = factory.createPoint((AbstractTaskFactory::LegalPointType_t)
-          (XCSoarInterface::SettingsComputer().sector_defaults.start_type), *way_point);
+      point = (OrderedTaskPoint*)factory.createStart(*way_point);
     } else {
-      point = factory.createPoint((AbstractTaskFactory::LegalPointType_t)
-          (XCSoarInterface::SettingsComputer().sector_defaults.turnpoint_type), *way_point);
+      point = (OrderedTaskPoint*)factory.createIntermediate(*way_point);
      }
     if (point == NULL)
       return;
