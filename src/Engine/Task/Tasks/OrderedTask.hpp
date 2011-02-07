@@ -210,6 +210,12 @@ public:
   void setActiveTaskPoint(unsigned desired);
 
   /**
+   * Cycle through optional start points, replacing actual task start point
+   * with top item in optional starts.
+   */
+  void rotateOptionalStarts();
+
+  /**
    * Insert taskpoint before specified index in task.  May fail if the candidate
    * is the wrong type (e.g. if it is a StartPoint and the task already
    * has one).
@@ -709,7 +715,7 @@ private:
    */
   void erase_optional_start(unsigned i);
 
-  void update_start_transition(const AIRCRAFT_STATE &state);
+  void update_start_transition(const AIRCRAFT_STATE &state, OrderedTaskPoint& start);
 
   OrderedTaskPointVector task_points;
   OrderedTaskPointVector optional_start_points;
@@ -734,19 +740,29 @@ private:
 
   bool allow_incremental_boundary_stats(const AIRCRAFT_STATE &state) const;
 
-  bool check_transition_point(const AIRCRAFT_STATE &state_now, 
+  bool check_transition_point(OrderedTaskPoint& point,
+                              const AIRCRAFT_STATE &state_now, 
                               const AIRCRAFT_STATE &state_last,
                               const FlatBoundingBox& bb_now,
                               const FlatBoundingBox& bb_last,
-                              unsigned index,
-                              OrderedTaskPointVector& points,
                               bool &transition_enter,
                               bool &transition_exit,
-                              bool &last_started);
+                              bool &last_started,
+                              const bool is_start);
+
+  bool check_transition_optional_start(const AIRCRAFT_STATE &state_now, 
+                                       const AIRCRAFT_STATE &state_last,
+                                       const FlatBoundingBox& bb_now,
+                                       const FlatBoundingBox& bb_last,
+                                       bool &transition_enter,
+                                       bool &transition_exit,
+                                       bool &last_started);
 
   bool check_duplicate_waypoints(Waypoints& waypoints,
                                  OrderedTaskPointVector& points,
                                  const bool is_task);
+
+  void select_optional_start(unsigned pos);
 
 public:
   /**

@@ -251,10 +251,16 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
     bool transition_enter = false;
     bool transition_exit = false;
 
-    full_update |= OrderedTask::check_transition_point(state, state_last, bb_now, bb_last, i,
-                                                       task_points, transition_enter, transition_exit,
-                                                       last_started);
-    // @todo: optional_start_points
+    if (i==0) {
+      full_update |= check_transition_optional_start(state, state_last, bb_now, bb_last, 
+                                                     transition_enter, transition_exit,
+                                                     last_started);
+    }
+
+    full_update |= check_transition_point(*task_points[i], 
+                                          state, state_last, bb_now, bb_last, 
+                                          transition_enter, transition_exit,
+                                          last_started, i==0);
 
     if (i == (int)activeTaskPoint) {
       const bool last_request_armed = task_advance.request_armed();
@@ -300,41 +306,71 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
 
 
 bool
-OrderedTask::check_transition_point(const AIRCRAFT_STATE &state, 
+OrderedTask::check_transition_optional_start(const AIRCRAFT_STATE &state, 
+                                             const AIRCRAFT_STATE &state_last,
+                                             const FlatBoundingBox& bb_now,
+                                             const FlatBoundingBox& bb_last,
+                                             bool &transition_enter,
+                                             bool &transition_exit,
+                                             bool &last_started)
+{
+  bool full_update = false;
+  for (unsigned j = 0; j < optional_start_points.size(); ++j) {
+    full_update |= check_transition_point(*optional_start_points[j], 
+                                          state, state_last, bb_now, bb_last, 
+                                          transition_enter, transition_exit,
+                                          last_started, true);
+
+    if (transition_enter || transition_exit) {
+      // we have entered or exited this optional start point, so select it.
+      // user has no choice in this: rules for multiple start points are that
+      // the last start OZ flown through is used for scoring
+      
+      select_optional_start(j);
+
+      return full_update;
+    }
+  }
+  return full_update;
+}
+
+
+bool
+OrderedTask::check_transition_point(OrderedTaskPoint& point,
+                                    const AIRCRAFT_STATE &state, 
                                     const AIRCRAFT_STATE &state_last,
                                     const FlatBoundingBox& bb_now,
                                     const FlatBoundingBox& bb_last,
-                                    unsigned i,
-                                    OrderedTaskPointVector& points,
                                     bool &transition_enter,
                                     bool &transition_exit,
-                                    bool &last_started)
+                                    bool &last_started,
+                                    const bool is_start)
 {
   bool full_update = false;
-  const bool nearby = points[i]->boundingbox_overlaps(bb_now) || points[i]->boundingbox_overlaps(bb_last);
+  const bool nearby = point.boundingbox_overlaps(bb_now) || point.boundingbox_overlaps(bb_last);
 
-  if (nearby && points[i]->transition_enter(state, state_last)) {
+  if (nearby && point.transition_enter(state, state_last)) {
     transition_enter = true;
-    task_events.transition_enter(*points[i]);
+    task_events.transition_enter(point);
   }
   
-  if (nearby && points[i]->transition_exit(state, state_last, task_projection)) {
+  if (nearby && point.transition_exit(state, state_last, task_projection)) {
     transition_exit = true;
-    task_events.transition_exit(*points[i]);
+    task_events.transition_exit(point);
     
     // detect restart
-    if ((i == 0) && last_started)
+    if (is_start && last_started)
       last_started = false;
   }
   
-  if (i==0) 
-    update_start_transition(state);
+  if (is_start) 
+    update_start_transition(state, point);
   
   if (nearby) {
-    if (points[i]->update_sample_near(state, task_events, task_projection))
+    if (point.update_sample_near(state, task_events, task_projection))
       full_update = true;
   } else {
-    if (points[i]->update_sample_far(state, task_events, task_projection))
+    if (point.update_sample_far(state, task_events, task_projection))
       full_update = true;
   }
   return full_update;
@@ -965,18 +1001,18 @@ OrderedTask::getActiveIndex() const
 }
 
 void
-OrderedTask::update_start_transition(const AIRCRAFT_STATE &state)
+OrderedTask::update_start_transition(const AIRCRAFT_STATE &state, OrderedTaskPoint& start)
 {
   if (activeTaskPoint == 0) {
     // find boundary point that produces shortest
     // distance from state to that point to next tp point
     taskpoint_start->find_best_start(state, *task_points[1], task_projection);
-  } else if (!taskpoint_start->has_exited() && !(taskpoint_start->isInSector(state))) {
-    taskpoint_start->reset();
+  } else if (!start.has_exited() && !start.isInSector(state)) {
+    start.reset();
     // reset on invalid transition to outside
     // point to nominal start point
   }
-  // @todo: optional start
+  // @todo: modify this for optional start?
 }
 
 AIRCRAFT_STATE 
@@ -985,7 +1021,7 @@ OrderedTask::get_start_state() const
   if (has_start() && task_started()) 
     return taskpoint_start->get_state_entered();
 
-  // @todo: optional start
+  // @todo: modify this for optional start?
 
   AIRCRAFT_STATE null_state;
   return null_state;
@@ -1290,4 +1326,28 @@ OrderedTask::get_bounding_box(const GeoPoint& point) const
     return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
   }
   return FlatBoundingBox (task_projection.project(point), 1);
+}
+
+void 
+OrderedTask::rotateOptionalStarts()
+{
+  if (!task_size())
+    return;
+  if (!optional_start_points.size()) 
+    return;
+
+  select_optional_start(0);
+}
+
+void
+OrderedTask::select_optional_start(unsigned pos) 
+{
+  assert(pos< optional_start_points.size());
+
+  // put task start onto end
+  optional_start_points.push_back(task_points[0]);
+  // set task start from top optional item
+  task_points[0] = optional_start_points[pos];
+  // remove top optional item from list
+  optional_start_points.erase(optional_start_points.begin()+pos);
 }
