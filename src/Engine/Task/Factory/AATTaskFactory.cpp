@@ -42,7 +42,6 @@ void
 AATTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 {
   to.task_scored = true;
-  to.fai_finish = false;  
   to.homogeneous_tps = false;
   to.is_closed = false;
   to.min_points = 3;

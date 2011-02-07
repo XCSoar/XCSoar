@@ -30,7 +30,7 @@
 
   <Edit Name="prpFAIFinishHeight" Caption="FAI finish height" X="2" Width="-2" Height="22" CaptionWidth="140"
     Help="If enabled, this option requires the minimum height above ground for finish to be greater than 1000m below the start height.">
-    <DataField DataType="boolean"/>
+    <DataField DataType="boolean" OnDataAccess="pnlTaskProperties::OnFAIFinishHeightData"/>
   </Edit>
   <Button Name="butType" Caption="Type" X="82" Width="98" Height="22" OnClick="pnlTaskProperties::OnTypeClicked"/>
 

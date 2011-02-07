@@ -70,15 +70,8 @@ RefreshView()
   TaskBehaviour::Factory_t ftype = ordered_task->get_factory_type();
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
 
-  bool fai_types = (ftype == TaskBehaviour::FACTORY_FAI_GENERAL) ||
-    (ftype == TaskBehaviour::FACTORY_FAI_TRIANGLE) ||
-    (ftype == TaskBehaviour::FACTORY_FAI_OR) ||
-    (ftype == TaskBehaviour::FACTORY_FAI_GOAL);
-  bool aat_types = 
-    (ftype == TaskBehaviour::FACTORY_AAT) ||
-    (ftype == TaskBehaviour::FACTORY_MIXED);
-  bool racing_types = 
-    (ftype == TaskBehaviour::FACTORY_RT) || aat_types;
+  bool aat_types = (ftype == TaskBehaviour::FACTORY_AAT);
+  bool racing_types = (ftype == TaskBehaviour::FACTORY_RT) || aat_types;
 
   wp = ((WndProperty*)wf->FindByName(_T("prpMinTime")));
   if (wp) {
@@ -90,7 +83,6 @@ RefreshView()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpFAIFinishHeight")));
   if (wp) {
-    wp->set_visible(fai_types);
     DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
     df.SetAsBoolean(p.fai_finish);
     wp->RefreshDisplay();
@@ -114,7 +106,7 @@ RefreshView()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpFinishMinHeight")));
   if (wp) {
-    wp->set_visible(racing_types);
+    wp->set_visible(!p.fai_finish);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(Units::ToUserAltitude(fixed(p.finish_min_height)));
     wp->RefreshDisplay();
@@ -147,12 +139,6 @@ ReadValues()
   fixed min_time = GetFormValueFixed(*wf, _T("prpMinTime")) * 60;
   if (min_time != p.aat_min_time) {
     p.aat_min_time = min_time;
-    *task_changed = true;
-  }
-
-  bool finish_height = GetFormValueBoolean(*wf, _T("prpFAIFinishHeight"));
-  if (finish_height != p.fai_finish) {
-    p.fai_finish = finish_height;
     *task_changed = true;
   }
 
@@ -217,6 +203,20 @@ pnlTaskProperties::OnTabPreHide()
 {
   ReadValues();
   return true;
+}
+
+void
+pnlTaskProperties::OnFAIFinishHeightData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
+  if (Mode == DataField::daChange) {
+    bool newvalue = ((DataFieldBoolean*)Sender)->GetAsBoolean();
+    if (newvalue != p.fai_finish) {
+      p.fai_finish = newvalue;
+      *task_changed = true;
+      RefreshView();
+    }
+  }
 }
 
 Window*

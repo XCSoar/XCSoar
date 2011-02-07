@@ -53,7 +53,6 @@ void
 RTTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 {
   to.task_scored = true;
-  to.fai_finish = false;  
   to.homogeneous_tps = true;
   to.is_closed = false;
   to.min_points = 3;

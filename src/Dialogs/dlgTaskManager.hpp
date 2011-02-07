@@ -25,6 +25,7 @@ Copyright_License {
 #define DLGTASKMANAGER_HPP
 
 #include "Dialogs/Internal.hpp"
+#include "DataField/Enum.hpp"
 
 class dlgTaskManager
 {
@@ -152,6 +153,14 @@ public:
    * @return true
    */
   static bool OnTabPreHide();
+
+  /**
+   * Shows/Hides normal finish height depending on whether FAI
+   * Finish Height is on or off
+   * @param Sender
+   * @param Mode
+   */
+  static void OnFAIFinishHeightData(DataField *Sender, DataField::DataAccessKind_t Mode);
 
   /**
    * copies values from ordered_task to form
