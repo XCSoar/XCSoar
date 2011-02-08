@@ -502,12 +502,14 @@ XCSoarInterface::Shutdown(void)
   // Wait for the calculations thread to finish
   calculation_thread->join();
   delete calculation_thread;
+  calculation_thread = NULL;
   LogStartUp(_T("- calculation thread returned"));
 
   //  Wait for the instruments thread to finish
   if (instrument_thread != NULL) {
     instrument_thread->join();
     delete instrument_thread;
+    instrument_thread = NULL;
   }
 
   LogStartUp(_T("- instrument thread returned"));
