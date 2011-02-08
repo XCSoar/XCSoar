@@ -23,6 +23,10 @@ Copyright_License {
 
 #include "Thread/Thread.hpp"
 
+#ifdef ANDROID
+#include "Java/Global.hpp"
+#endif
+
 #include <assert.h>
 
 #ifdef HAVE_POSIX
@@ -115,6 +119,11 @@ Thread::thread_proc(void *p)
   Thread *thread = (Thread *)p;
 
   thread->run();
+
+#ifdef ANDROID
+  Java::DetachCurrentThread();
+#endif
+
   return NULL;
 }
 

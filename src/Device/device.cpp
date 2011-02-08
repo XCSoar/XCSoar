@@ -47,10 +47,11 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
-#include "Android/NativeView.hpp"
+#include "Android/InternalGPS.hpp"
 #include "Android/Main.hpp"
 #include "Java/Object.hpp"
 #include "Java/Global.hpp"
+#include "Device/AndroidBluetoothPort.hpp"
 #endif
 
 #include <assert.h>
@@ -91,10 +92,6 @@ static const DWORD dwSpeed[] = {
   115200
 };
 
-#ifdef ANDROID
-static Java::Object *internal_gps;
-#endif
-
 // This function is used to determine whether a generic
 // baro source needs to be used if available
 bool
@@ -106,8 +103,6 @@ devHasBaroSource(void)
 
   return false;
 }
-
-#ifndef ANDROID
 
 /**
  * Attempt to detect the GPS device.
@@ -144,6 +139,28 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
     path = COMMPort[config.port_index];
     break;
 
+  case DeviceConfig::RFCOMM:
+#ifdef ANDROID
+    if (config.bluetooth_mac.empty()) {
+      LogStartUp(_T("No Bluetooth MAC configured"));
+      return NULL;
+    }
+
+    {
+      AndroidBluetoothPort *port =
+        new AndroidBluetoothPort(config.bluetooth_mac, handler);
+      if (!port->Open()) {
+        delete port;
+        return NULL;
+      }
+
+      return port;
+    }
+#else
+    LogStartUp(_T("Bluetooth not available on this platform"));
+    return NULL;
+#endif
+
   case DeviceConfig::AUTO:
     if (!detect_gps(buffer, sizeof(buffer))) {
       LogStartUp(_T("no GPS detected"));
@@ -153,6 +170,9 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
     LogStartUp(_T("GPS detected: %s"), buffer);
 
     path = buffer;
+    break;
+
+  case DeviceConfig::INTERNAL:
     break;
   }
 
@@ -172,6 +192,18 @@ static bool
 devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
            DeviceDescriptor *&nmeaout)
 {
+  if (config.port_type == DeviceConfig::INTERNAL) {
+#ifdef ANDROID
+    if (is_simulator())
+      return true;
+
+    device.internal_gps = InternalGPS::create(Java::GetEnv(), native_view);
+    return device.internal_gps != NULL;
+#else
+    return false;
+#endif
+  }
+
   const struct DeviceRegister *Driver = devGetDriver(config.driver_name);
   if (Driver == NULL)
     return false;
@@ -202,34 +234,60 @@ SetPipeTo(DeviceDescriptor &out)
   }
 }
 
-#endif /* !ANDROID */
+/**
+ * Checks if the specified DeviceConfig is available on this platform.
+ */
+gcc_pure
+static bool
+DeviceConfigAvailable(const DeviceConfig &config)
+{
+  switch (config.port_type) {
+  case DeviceConfig::SERIAL:
+    return !is_android();
+
+  case DeviceConfig::RFCOMM:
+    return is_android();
+
+  case DeviceConfig::AUTO:
+    return is_windows_ce();
+
+  case DeviceConfig::INTERNAL:
+    return is_android();
+  }
+
+  /* unreachable */
+  return false;
+}
+
+/**
+ * Checks if the two configurations overlap, i.e. they request access
+ * to an exclusive resource, like the same physical COM port.  If this
+ * is detected, then the second device will be disabled.
+ */
+gcc_pure
+static bool
+DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
+{
+  switch (a.port_type) {
+  case DeviceConfig::SERIAL:
+    return b.port_type == DeviceConfig::SERIAL &&
+      a.port_index == b.port_index;
+
+  case DeviceConfig::RFCOMM:
+    return b.port_type == DeviceConfig::RFCOMM &&
+      a.bluetooth_mac.equals(b.bluetooth_mac);
+
+  case DeviceConfig::AUTO:
+  case DeviceConfig::INTERNAL:
+    break;
+  }
+
+  return a.port_type == a.port_type;
+}
 
 void
 devStartup()
 {
-#ifdef ANDROID
-  assert(internal_gps == NULL);
-
-  if (is_simulator())
-    return;
-
-  jobject context = native_view->get_context();
-
-  JNIEnv *env = Java::GetEnv();
-  jclass cls = env->FindClass("org/xcsoar/InternalGPS");
-  assert(cls != NULL);
-
-  jmethodID cid = env->GetMethodID(cls, "<init>",
-                                   "(Landroid/content/Context;)V");
-  assert(cid != NULL);
-
-  jobject obj = env->NewObject(cls, cid, context);
-  assert(obj != NULL);
-  env->DeleteLocalRef(context);
-
-  internal_gps = new Java::Object(env, obj);
-  env->DeleteLocalRef(obj);
-#else /* !ANDROID */
   LogStartUp(_T("Register serial devices"));
 
   DeviceDescriptor *pDevNmeaOut = NULL;
@@ -240,21 +298,37 @@ devStartup()
   Profile::Get(szProfileIgnoreNMEAChecksum, NMEAParser::ignore_checksum);
 
   DeviceConfig config[NUMDEV];
+  bool none_available = true;
   for (unsigned i = 0; i < NUMDEV; ++i) {
     Profile::GetDeviceConfig(i, config[i]);
 
+    if (!DeviceConfigAvailable(config[i]))
+      continue;
+
+    none_available = false;
+
     bool overlap = false;
     for (unsigned j = 0; j < i; ++j)
-      if (config[i].port_index == config[j].port_index)
+      if (DeviceConfigOverlaps(config[i], config[j]))
         overlap = true;
 
     if (!overlap)
       devInitOne(DeviceList[i], config[i], pDevNmeaOut);
   }
 
+  if (none_available) {
+#ifdef ANDROID
+    /* fall back to built-in GPS when no configured device is
+       available on this platform */
+    LogStartUp(_T("Falling back to built-in GPS"));
+
+    config[0].port_type = DeviceConfig::INTERNAL;
+    devInitOne(DeviceList[0], config[0], pDevNmeaOut);
+#endif
+  }
+
   if (pDevNmeaOut != NULL)
     SetPipeTo(*pDevNmeaOut);
-#endif /* !ANDROID */
 }
 
 bool
@@ -335,10 +409,6 @@ devVarioFindVega(void)
 void
 devShutdown()
 {
-#ifdef ANDROID
-  delete internal_gps;
-  internal_gps = NULL;
-#else
   int i;
 
   // Stop COM devices
@@ -347,7 +417,6 @@ devShutdown()
   for (i = 0; i < NUMDEV; i++) {
     DeviceList[i].Close();
   }
-#endif
 }
 
 void

@@ -25,9 +25,12 @@ Copyright_License {
 
 #include "Navigation/SearchPointVector.hpp"
 #include "Screen/Point.hpp"
+#include "Geo/GeoClip.hpp"
+#include "Util/AllocatedArray.hpp"
 
 class Canvas;
 class Projection;
+class WindowProjection;
 struct SETTINGS_MAP;
 
 /**
@@ -35,13 +38,20 @@ struct SETTINGS_MAP;
  */
 class MapDrawHelper 
 {
+  const GeoClip clip;
+
+  /**
+   * A variable-length buffer for clipped GeoPoints.
+   */
+  AllocatedArray<GeoPoint> geo_points;
+
 public:
-  MapDrawHelper(Canvas &_canvas, 
+  MapDrawHelper(Canvas &_canvas,
 #ifndef ENABLE_OPENGL
                 Canvas &_buffer, 
                 Canvas &_stencil, 
 #endif
-                const Projection &_proj,
+                const WindowProjection &_proj,
                 const SETTINGS_MAP& settings_map);
 
   MapDrawHelper(MapDrawHelper &_that);

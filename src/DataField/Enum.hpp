@@ -66,7 +66,10 @@ public:
   unsigned addEnumText(const TCHAR *Text, const TCHAR *ItemHelpText = NULL);
   void addEnumTexts(const TCHAR *const*list);
 
+  gcc_pure
   virtual int GetAsInteger() const;
+
+  gcc_pure
   virtual const TCHAR *GetAsString() const;
 
   /**
@@ -90,6 +93,7 @@ public:
   virtual void SetAsString(const TCHAR *Value);
   void Sort(int startindex = 0);
 
+  gcc_pure
   unsigned Count() const {
     return entries.size();
   }

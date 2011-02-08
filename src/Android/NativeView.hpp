@@ -25,6 +25,8 @@ Copyright_License {
 #define XCSOAR_ANDROID_NATIVE_VIEW_HPP
 
 #include "Java/Object.hpp"
+#include "Java/Class.hpp"
+#include "Java/String.hpp"
 
 #include <assert.h>
 
@@ -40,7 +42,7 @@ class NativeView {
 public:
   NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height)
     :env(_env), obj(env, _obj), width(_width), height(_height) {
-    jclass cls = env->FindClass("org/xcsoar/NativeView");
+    Java::Class cls(env, "org/xcsoar/NativeView");
     init_surface_method = env->GetMethodID(cls, "initSurface", "()V");
     swap_method = env->GetMethodID(cls, "swap", "()V");
     load_resource_texture_method = env->GetMethodID(cls, "loadResourceTexture",
@@ -51,8 +53,7 @@ public:
   unsigned get_height() const { return height; }
 
   jobject get_context() {
-    jclass cls = env->FindClass("android/view/View");
-    assert(cls != NULL);
+    Java::Class cls(env, "org/xcsoar/NativeView");
     jmethodID mid = env->GetMethodID(cls, "getContext",
                                      "()Landroid/content/Context;");
     assert(mid != NULL);
@@ -68,16 +69,15 @@ public:
   }
 
   bool loadResourceTexture(const char *name, jint *result) {
-    jstring name2 = env->NewStringUTF(name);
+    Java::String name2(env, name);
     jintArray result2 = env->NewIntArray(3);
 
     bool success = env->CallBooleanMethod(obj, load_resource_texture_method,
-                                          name2, result2);
+                                          name2.get(), result2);
     if (success)
       env->GetIntArrayRegion(result2, 0, 3, result);
 
     env->DeleteLocalRef(result2);
-    env->DeleteLocalRef(name2);
 
     return success;
   }

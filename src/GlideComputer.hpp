@@ -30,6 +30,7 @@ Copyright_License {
 #include "GlideComputerAirData.hpp"
 #include "GlideComputerStats.hpp"
 #include "GlideComputerTask.hpp"
+#include "Compiler.h"
 
 class Waypoints;
 class ProtectedTaskManager;
@@ -47,6 +48,10 @@ class GlideComputer:
 {
   const Waypoints &way_points;
   ProtectedTaskManager &protected_task_manager;
+
+  int TeamCodeRefId;
+  bool TeamCodeRefFound;
+  GeoPoint TeamCodeRefLocation;
 
 public:
   GlideComputer(const Waypoints &_way_points,
@@ -75,6 +80,16 @@ protected:
   virtual void OnDepartedThermal();
 
 private:
+
+  /**
+   * Fill the cache variable TeamCodeRefLocation.
+   *
+   * @return true if the location was found, false if the
+   * TeamCodeRefLocation variable is undefined
+   */
+  gcc_pure
+  bool DetermineTeamCodeRefLocation();
+
   void CalculateTeammateBearingRange();
   void CalculateOwnTeamCode();
   void FLARM_ScanTraffic();

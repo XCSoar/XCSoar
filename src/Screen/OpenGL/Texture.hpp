@@ -72,20 +72,21 @@ public:
   }
 
 protected:
-  void init() {
+  void init(bool mag_linear=false) {
     glGenTextures(1, &id);
     bind();
-    configure();
+    configure(mag_linear);
   }
 
-  static inline void configure() {
+  static inline void configure(bool mag_linear=false) {
     if (is_embedded()) {
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     } else {
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+                    !is_embedded() || mag_linear ? GL_LINEAR : GL_NEAREST);
   }
 
 #ifndef ANDROID

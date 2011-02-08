@@ -71,6 +71,10 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Gauge/GaugeVario.hpp"
 
+#ifdef ANDROID
+#include "Android/BluetoothHelper.hpp"
+#endif
+
 #include <assert.h>
 
 enum config_page {
@@ -125,6 +129,9 @@ static const struct {
 } port_types[] = {
 #ifdef _WIN32_WCE
   { DeviceConfig::AUTO, N_("GPS Intermediate Driver") },
+#endif
+#ifdef ANDROID
+  { DeviceConfig::INTERNAL, N_("Built-in GPS") },
 #endif
   { DeviceConfig::SERIAL, NULL } /* sentinel */
 };
@@ -686,6 +693,7 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
                   WndProperty *port_field, WndProperty *speed_field,
                   WndProperty *driver_field, WndButton *setup_button)
 {
+#ifndef ANDROID
   static const TCHAR *const COMMPort[] = {
     _T("COM1"), _T("COM2"), _T("COM3"), _T("COM4"),
     _T("COM5"), _T("COM6"), _T("COM7"), _T("COM8"),
@@ -698,6 +706,7 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
     _T("19200"), _T("38400"), _T("57600"), _T("115200"),
     NULL
   };
+#endif
 
   if (port_field != NULL) {
     DataFieldEnum *dfe = (DataFieldEnum *)port_field->GetDataField();
@@ -709,6 +718,27 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
         dfe->Set(i);
     }
 
+#ifdef ANDROID
+    JNIEnv *env = Java::GetEnv();
+    jobjectArray bonded = BluetoothHelper::list(env);
+    if (bonded != NULL) {
+      jsize n = env->GetArrayLength(bonded);
+      for (jsize i = 0; i < n; ++i) {
+        jstring address = (jstring)env->GetObjectArrayElement(bonded, i);
+        if (address == NULL)
+          continue;
+
+        const char *address2 = env->GetStringUTFChars(address, NULL);
+        if (address2 == NULL)
+          continue;
+
+        dfe->addEnumText(address2);
+        env->ReleaseStringUTFChars(address, address2);
+      }
+
+      env->DeleteLocalRef(bonded);
+    }
+#else
     dfe->addEnumTexts(COMMPort);
 
     switch (config.port_type) {
@@ -716,19 +746,26 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
       dfe->Set(config.port_index + num_port_types);
       break;
 
+    case DeviceConfig::RFCOMM:
     case DeviceConfig::AUTO:
+    case DeviceConfig::INTERNAL:
       break;
     }
+#endif
 
     port_field->RefreshDisplay();
   }
 
   if (speed_field != NULL) {
+#ifdef ANDROID
+    speed_field->hide();
+#else
     DataFieldEnum *dfe = (DataFieldEnum *)speed_field->GetDataField();
     dfe->addEnumTexts(tSpeed);
 
     dfe->Set(config.speed_index);
     speed_field->RefreshDisplay();
+#endif
   }
 
   if (driver_field) {
@@ -1631,7 +1668,8 @@ FinishFileField(WndForm &wf, const TCHAR *control_name,
 static bool
 FinishPortField(DeviceConfig &config, WndProperty &port_field)
 {
-  int value = port_field.GetDataField()->GetAsInteger();
+  const DataFieldEnum &df = *(const DataFieldEnum *)port_field.GetDataField();
+  int value = df.GetAsInteger();
 
   if (value < (int)num_port_types) {
     if (port_types[value].type == config.port_type)
@@ -1642,12 +1680,23 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
   } else {
     value -= num_port_types;
 
+#ifdef ANDROID
+    if (config.port_type == DeviceConfig::RFCOMM &&
+        _tcscmp(config.bluetooth_mac, df.GetAsString()) == 0)
+      return false;
+#else
     if (config.port_type == DeviceConfig::SERIAL &&
         value == (int)config.port_index)
       return false;
+#endif
 
+#ifdef ANDROID
+    config.port_type = DeviceConfig::RFCOMM;
+    config.bluetooth_mac = df.GetAsString();
+#else
     config.port_type = DeviceConfig::SERIAL;
     config.port_index = value;
+#endif
     return true;
   }
 }
@@ -1662,11 +1711,13 @@ FinishDeviceFields(DeviceConfig &config,
   if (port_field != NULL && FinishPortField(config, *port_field))
     changed = true;
 
+#ifndef ANDROID
   if (speed_field != NULL &&
       (int)config.speed_index != speed_field->GetDataField()->GetAsInteger()) {
     config.speed_index = speed_field->GetDataField()->GetAsInteger();
     changed = true;
   }
+#endif
 
   if (driver_field != NULL &&
       _tcscmp(config.driver_name,

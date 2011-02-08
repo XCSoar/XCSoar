@@ -21,9 +21,32 @@ Copyright_License {
 }
 */
 
+#include "Android/InternalGPS.hpp"
+#include "Android/NativeView.hpp"
 #include "org_xcsoar_InternalGPS.h"
 #include "DeviceBlackboard.hpp"
 #include "Protection.hpp"
+
+InternalGPS *
+InternalGPS::create(JNIEnv *env, NativeView *native_view)
+{
+  jobject context = native_view->get_context();
+
+  Java::Class cls(env, "org/xcsoar/InternalGPS");
+
+  jmethodID cid = env->GetMethodID(cls, "<init>",
+                                   "(Landroid/content/Context;)V");
+  assert(cid != NULL);
+
+  jobject obj = env->NewObject(cls, cid, context);
+  assert(obj != NULL);
+  env->DeleteLocalRef(context);
+
+  InternalGPS *internal_gps = new InternalGPS(env, obj);
+  env->DeleteLocalRef(obj);
+
+  return internal_gps;
+}
 
 JNIEXPORT void JNICALL
 Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,

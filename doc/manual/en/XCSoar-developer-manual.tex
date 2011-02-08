@@ -1,6 +1,13 @@
 \documentclass[a4paper,12pt]{refrep}
 \title{Developer Manual}
-\input{xcsoar.sty}
+
+% Set the page title
+\newcommand{\mycontent}[0]{
+\begin{tabular}{l}
+\hspace*{-4cm} \em XCSoar Developer Manual \vspace*{2pt}
+\end{tabular}}
+
+\input{../xcsoar.sty}
 \input{title-xcsoar.sty}
 \begin{document}
 \maketitle
@@ -105,6 +112,6 @@ in the layer file will be rendered in standard style below this threshold.
 \appendix
 
 \chapter{GNU General Public License}\label{cha:gnu-general-public}
-\input{gpl.tex}
+\input{../shared/gpl.tex}
 
 \end{document}

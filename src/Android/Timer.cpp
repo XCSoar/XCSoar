@@ -24,6 +24,7 @@ Copyright_License {
 #include "Android/Timer.hpp"
 #include "Android/Main.hpp"
 #include "Java/Global.hpp"
+#include "Java/Class.hpp"
 #include "Screen/Window.hpp"
 #include "Screen/Android/Event.hpp"
 #include "org_xcsoar_Timer.h"
@@ -32,14 +33,11 @@ Copyright_License {
 
 AndroidTimer::Bridge::Bridge(JNIEnv *env, jlong ptr, jint period)
 {
-  jclass cls = env->FindClass("org/xcsoar/Timer");
-  assert(cls != NULL);
-
+  Java::Class cls(env, "org/xcsoar/Timer");
   jmethodID cid = env->GetMethodID(cls, "<init>", "(JI)V");
   assert(cid != NULL);
 
   jobject obj = env->NewObject(cls, cid, ptr, period);
-  env->DeleteLocalRef(cls);
 
   set(env, obj);
   env->DeleteLocalRef(obj);

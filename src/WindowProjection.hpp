@@ -125,7 +125,9 @@ public:
 
   // used by terrain renderer, topology and airspace
   gcc_pure
-  GeoBounds GetScreenBounds() const;
+  const GeoBounds &GetScreenBounds() const {
+    return screenbounds_latlon;
+  }
 
   /** Updates the cached screenbounds_latlon member */
   void UpdateScreenBounds();

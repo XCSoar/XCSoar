@@ -79,6 +79,20 @@ is_embedded()
 }
 
 /**
+ * Returns whether the application is running on Pocket PC / Windows
+ * CE / Windows Mobile.
+ */
+static inline bool
+is_windows_ce()
+{
+#ifdef _WIN32_WCE
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
  * Returns whether the application is running on an old version of
  * Windows CE (pre 5.0).  Starting with version 5.0, several bug
  * workarounds are disabled at compile time.

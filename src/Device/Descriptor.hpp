@@ -35,6 +35,7 @@ class Port;
 class Device;
 class AtmosphericPressure;
 struct DeviceRegister;
+class InternalGPS;
 
 class DeviceDescriptor : public Port::Handler {
 public:
@@ -43,6 +44,10 @@ public:
   const struct DeviceRegister *Driver;
 
   Device *device;
+
+#ifdef ANDROID
+  InternalGPS *internal_gps;
+#endif
 
   bool enable_baro;
   NMEAParser parser;

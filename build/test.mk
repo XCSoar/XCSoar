@@ -328,11 +328,13 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver/Condor.cpp \
 	$(SRC)/Device/Driver/EW.cpp \
 	$(SRC)/Device/Driver/EWMicroRecorder.cpp \
+	$(SRC)/Device/Driver/FlymasterF1.cpp \
 	$(SRC)/Device/Driver/LX.cpp \
 	$(SRC)/Device/Driver/ILEC.cpp \
 	$(SRC)/Device/Driver/Westerboer.cpp \
 	$(SRC)/Device/Driver/PosiGraph.cpp \
 	$(SRC)/Device/Driver/Volkslogger.cpp \
+	$(SRC)/Device/Driver/Zander.cpp \
 	$(VOLKSLOGGER_SOURCES) \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \

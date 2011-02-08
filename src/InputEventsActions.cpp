@@ -1693,7 +1693,8 @@ InputEvents::sub_SetZoom(fixed value)
 {
   DisplayMode_t displayMode = XCSoarInterface::main_window.map.GetDisplayMode();
   if (XCSoarInterface::SettingsMap().AutoZoom &&
-      displayMode != dmCircling && !XCSoarInterface::SettingsMap().EnablePan) {
+      !(displayMode == dmCircling && XCSoarInterface::SettingsMap().CircleZoom) &&
+      !XCSoarInterface::SettingsMap().EnablePan) {
     XCSoarInterface::SetSettingsMap().AutoZoom = false;  // disable autozoom if user manually changes zoom
     Profile::Set(szProfileAutoZoom, false);
     Message::AddMessage(_("AutoZoom OFF"));

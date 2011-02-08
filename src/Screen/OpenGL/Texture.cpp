@@ -140,7 +140,8 @@ load_surface_into_texture(const SDL_Surface *surface)
 GLTexture::GLTexture(unsigned _width, unsigned _height)
   :width(_width), height(_height)
 {
-  init();
+  /* enable linear filtering for the terrain texture */
+  init(true);
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
                validate_texture_size(width), validate_texture_size(height),

@@ -1,38 +1,47 @@
 /*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2011 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+ * Copyright (C) 2010-2011 Max Kellermann <max@duempel.org>
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * - Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ *
+ * - Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the
+ * distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
+ * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 #ifndef XCSOAR_JAVA_OBJECT_HPP
 #define XCSOAR_JAVA_OBJECT_HPP
 
 #include "Java/Global.hpp"
-#include "Util/NonCopyable.hpp"
+#include "Java/Ref.hpp"
 
 #include <jni.h>
 
 namespace Java {
-  class Object : private NonCopyable {
-    jobject obj;
+  /**
+   * Wrapper for a local "jobject" reference.
+   */
+  typedef LocalRef<jobject> LocalObject;
 
+  class Object : public GlobalRef<jobject> {
   public:
     /**
      * Constructs an uninitialized object.  The method set() must be
@@ -40,34 +49,12 @@ namespace Java {
      */
     Object() {}
 
-    Object(JNIEnv *env, jobject _obj):obj(_obj) {
-      env->NewGlobalRef(obj);
-    }
-
-    ~Object() {
-      GetEnv()->DeleteGlobalRef(obj);
-    }
-
-    /**
-     * Sets the object, ignoring the previous value.  This is only
-     * allowed once after the default constructor was used.
-     */
-    void set(JNIEnv *env, jobject _obj) {
-      obj = env->NewGlobalRef(_obj);
-    }
-
-    jobject get() const {
-      return obj;
-    }
-
-    operator jobject() const {
-      return obj;
-    }
+    Object(JNIEnv *env, jobject obj):GlobalRef<jobject>(env, obj) {}
 
     void call_void(JNIEnv *env, const char *name) {
-      jclass cls = env->GetObjectClass(obj);
+      jclass cls = env->GetObjectClass(get());
       jmethodID mid = env->GetMethodID(cls, name, "()V");
-      env->CallVoidMethod(obj, mid);
+      env->CallVoidMethod(get(), mid);
       env->DeleteLocalRef(cls);
     }
 

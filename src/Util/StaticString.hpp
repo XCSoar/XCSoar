@@ -27,11 +27,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_STATIC_ARRAY_HPP
-#define XCSOAR_STATIC_ARRAY_HPP
+#ifndef XCSOAR_STATIC_STRING_HPP
+#define XCSOAR_STATIC_STRING_HPP
 
 #include <assert.h>
 #include <string.h>
+#include <tchar.h>
 #include <algorithm>
 
 /**
@@ -72,6 +73,13 @@ public:
     assert(other != NULL);
 
     return _tcscmp(data, other) == 0;
+  }
+
+  /**
+   * Returns a writable buffer.
+   */
+  TCHAR *buffer() {
+    return data;
   }
 
   /**

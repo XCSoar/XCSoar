@@ -646,6 +646,9 @@ static CallBackTableEntry CallBackTable[] = {
 void
 dlgFlarmTrafficShowModal()
 {
+  if (wf)
+    return;
+
   // Load dialog from XML
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ? _T("IDR_XML_FLARMTRAFFIC_L") :
@@ -688,4 +691,5 @@ dlgFlarmTrafficShowModal()
 
   // After dialog closed -> delete it
   delete wf;
+  wf = NULL;
 }

@@ -52,6 +52,18 @@ Version 6.1 - not yet released
     - along task direction
     - along home direction
 
+Version 6.0.4 - not yet released
+* devices
+   - FlymasterF1: convert pressure to altitude
+   - FlymasterF1: don't override the baro altitude of the primary device
+   - Zander: PZAN1 contains QNH altitude
+   - Zander: verify checksum
+* user interface
+   - prevent potential crash while using flarm radar dialogs
+   - improve behaviour if "circling zoom" is disabled
+* Android
+  - device: support NMEA over Bluetooth RFCOMM
+
 Version 6.0.3 - 2011/02/02
 * devices
   - EW, Volkslogger: restart I/O thread after declaration failure

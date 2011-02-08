@@ -35,7 +35,6 @@ Copyright_License {
 
 #include <assert.h>
 
-Trigger closeTriggerEvent;
 Trigger globalRunningEvent;
 Trigger airspaceWarningEvent;
 Trigger triggerClimbEvent;

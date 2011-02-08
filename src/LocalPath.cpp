@@ -200,6 +200,30 @@ ExistingDataOnFlash(TCHAR *buffer)
 
 #endif /* _WIN32_WCE */
 
+#ifdef ANDROID
+
+/**
+ * Determine whether a text file contains a given string
+ */
+static bool
+fgrep(const char *fname, const char *string)
+{
+  char line[100];
+  FILE *fp;
+
+  if ((fp = fopen(fname, "r")) == NULL)
+    return false;
+  while (fgets(line, sizeof(line), fp) != NULL)
+    if (strstr(line, string) != NULL) {
+      fclose(fp);
+      return true;
+    }
+  fclose(fp);
+  return false;
+}
+
+#endif /* ANDROID */
+
 static TCHAR *
 FindDataPath()
 {
@@ -215,7 +239,8 @@ FindDataPath()
        build-in and an external SD card) */
     struct stat st;
     if (stat("/sdcard/external_sd", &st) == 0 &&
-        (st.st_mode & S_IFDIR) != 0)
+        (st.st_mode & S_IFDIR) != 0 &&
+        fgrep("/proc/mounts", "/sdcard/external_sd "))
       return strdup("/sdcard/external_sd/XCSoarData");
 #endif
 
