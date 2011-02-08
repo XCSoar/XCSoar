@@ -38,12 +38,12 @@ public:
 };
 
 static bool
-VARIO(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+VARIO(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   // $VARIO,fPressure,fVario,Bat1Volts,Bat2Volts,BatBank,TempSensor1,TempSensor2*CS
 
   fixed value;
-  if (line.read_checked(value))
+  if (line.read_checked(value) && enable_baro)
     GPS_INFO->ProvideStaticPressure(NMEA_INFO::BARO_ALTITUDE_FLYMASTER,
                                     value * 100);
 
@@ -67,7 +67,7 @@ FlymasterF1Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
   line.read(type, 16);
 
   if (strcmp(type, "$VARIO") == 0)
-    return VARIO(line, GPS_INFO);
+    return VARIO(line, GPS_INFO, enable_baro);
   else
     return false;
 }
