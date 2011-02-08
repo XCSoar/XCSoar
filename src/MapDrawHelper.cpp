@@ -32,8 +32,9 @@ MapDrawHelper::MapDrawHelper(Canvas &_canvas,
                              Canvas &_buffer, 
                              Canvas &_stencil, 
 #endif
-                             const Projection &_proj,
+                             const WindowProjection &_proj,
                              const SETTINGS_MAP& settings_map):
+  clip(_proj.GetScreenBounds().scale(fixed(1.1))),
   m_canvas(_canvas),
 #ifndef ENABLE_OPENGL
   m_buffer(_buffer),
@@ -51,6 +52,7 @@ MapDrawHelper::MapDrawHelper(Canvas &_canvas,
 }
 
 MapDrawHelper::MapDrawHelper(MapDrawHelper &_that):
+  clip(_that.clip),
   m_canvas(_that.m_canvas),
 #ifndef ENABLE_OPENGL
   m_buffer(_that.m_buffer),
@@ -71,13 +73,28 @@ void
 MapDrawHelper::draw_search_point_vector(Canvas& the_canvas, 
                                         const SearchPointVector& points) 
 {
-  const size_t size = points.size();
+  size_t size = points.size();
   if (size<3) {
     return;
   }
 
+  /* copy all SearchPointVector elements to geo_points */
+  geo_points.grow_discard(size * 3);
+  for (unsigned i = 0; i < size; ++i)
+    geo_points[i] = points[i].get_location();
+
+  /* clip them */
+  size = clip.clip_polygon(geo_points.begin(),
+                           geo_points.begin(), size);
+  if (size < 3)
+    /* it's completely outside the screen */
+    return;
+
+  /* draw it all */
   RasterPoint screen[size];
-  MapCanvas::project(m_proj, points, screen);
+  for (unsigned i = 0; i < size; ++i)
+    screen[i] = m_proj.GeoToScreen(geo_points[i]);
+
   if (!MapCanvas::visible(the_canvas, screen, size))
     return;
 
