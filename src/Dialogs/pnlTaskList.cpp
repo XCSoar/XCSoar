@@ -137,13 +137,19 @@ SaveTask()
   if (!cursor_at_active_task())
     return;
 
- (*active_task)->get_factory().CheckAddFinish();
+  (*active_task)->get_factory().CheckAddFinish();
 
-  if (!OrderedTaskSave(**active_task))
-    return;
+  if (((*active_task)->task_size() > 1) && (*active_task)->check_task()) {
+    if (!OrderedTaskSave(**active_task))
+      return;
 
-  task_store.scan();
-  RefreshView();
+    task_store.scan();
+    RefreshView();
+  } else {
+    MessageBoxX(getTaskValidationErrors(
+        (*active_task)->get_factory().getValidationErrors()), _("Task not saved"),
+        MB_ICONEXCLAMATION);
+  }
 }
 
 static void
