@@ -490,7 +490,6 @@ XCSoarInterface::Shutdown(void)
 
   // Stop threads
   LogStartUp(_T("CloseDrawingThread"));
-  closeTriggerEvent.trigger();
 #ifndef ENABLE_OPENGL
   draw_thread->stop();
 #endif
