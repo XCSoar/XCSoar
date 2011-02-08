@@ -58,7 +58,7 @@ bool test_task_bad(TaskManager& task_manager,
   ok (bfact.validate(),"ok with one tp",0);
 
   bfact.remove(1);
-  ok (!bfact.validate(),"insufficient tps for aat",0);
+  ok (bfact.validate(),"ok with zero tps (just start and finish)",0);
 
   ok (bfact.remove(task_manager.task_size()-1,false),"remove finish manually",0);
   ok (!bfact.validate(),"aat is invalid (no finish)",0);

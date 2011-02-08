@@ -55,7 +55,7 @@ RTTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
   to.task_scored = true;
   to.homogeneous_tps = false;
   to.is_closed = false;
-  to.min_points = 3;
+  to.min_points = 2;
   to.max_points = 10;
   to.start_requires_arm = true;
 }
