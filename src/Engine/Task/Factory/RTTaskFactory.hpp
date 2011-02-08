@@ -50,6 +50,15 @@ public:
  * @return True if task is valid according to factory rules
  */
   virtual bool validate();
+
+  /**
+   * swaps AAT OZs for AST_CYLINDERs
+   * @param tp
+   * @return: point type compatible with current factory, most
+   * similar to type of tp
+   */
+  virtual gcc_pure
+  LegalPointType_t getMutatedPointType(const OrderedTaskPoint &tp) const;
 };
 
 #endif

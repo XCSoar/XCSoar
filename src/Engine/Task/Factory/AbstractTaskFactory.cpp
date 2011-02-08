@@ -35,6 +35,7 @@
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 #include <algorithm>
+#include <stdio.h>
 
 /**
  * Utility class to read the user-definable radius or length of and observation zone
@@ -104,6 +105,48 @@ AbstractTaskFactory::createMutatedPoint(const OrderedTaskPoint &tp,
 
   return (OrderedTaskPoint*)createPoint(newtype,
      tp.get_waypoint(), ozsize, ozsize, ozsize);
+}
+
+AbstractTaskFactory::LegalPointType_t
+AbstractTaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
+{
+  const LegalPointType_t oldtype = getType(tp);
+  LegalPointType_t newtype = oldtype;
+
+  switch (tp.type) {
+  case TaskPoint::START:
+    if (!validStartType(newtype)) {
+      newtype = m_behaviour.sector_defaults.start_type;
+      if (!validStartType(newtype))
+        newtype = *m_start_types.begin();
+    }
+    break;
+
+  case TaskPoint::AST:
+  case TaskPoint::AAT:
+    if (!validIntermediateType(newtype)) {
+      printf("not valid intermediate type - oldtype\n");
+      newtype = m_behaviour.sector_defaults.turnpoint_type;
+      if (!validIntermediateType(newtype)) {
+        printf("not valid intermediate type - default\n");
+        newtype = *m_intermediate_types.begin();
+      }
+    }
+    break;
+
+  case TaskPoint::FINISH:
+    if (!validFinishType(newtype)) {
+      newtype = m_behaviour.sector_defaults.finish_type;
+      if (!validFinishType(newtype))
+        newtype = *m_finish_types.begin();
+    }
+    break;
+
+  case TaskPoint::UNORDERED:
+  case TaskPoint::ROUTE:
+    break;
+  }
+  return newtype;
 }
 
 StartPoint* 
@@ -896,15 +939,30 @@ AbstractTaskFactory::mutate_tps_to_task_type()
   for (unsigned int i = 0; i < m_task.task_size(); i++) {
     OrderedTaskPoint *tp = m_task.get_tp(i);
     if (!validType(*tp, i)) {
+
+      LegalPointType_t newtype = getMutatedPointType(*tp);
       if ((tp->type == TaskPoint::FINISH) &&
           (i == m_task.task_size() - 1) && is_position_finish(i)) {
-        FinishPoint *fp = createFinish(tp->get_waypoint());
+
+        if (!validFinishType(newtype)) {
+          newtype = m_behaviour.sector_defaults.finish_type;
+          if (!validStartType(newtype))
+            newtype = *m_finish_types.begin();
+        }
+
+        FinishPoint *fp = (FinishPoint*)createMutatedPoint(*tp, newtype);
         assert(fp);
-        if (replace(*fp, i, false))
+        if (replace(*fp, i, true))
           changed = true;
         delete fp;
       } else {
-        OrderedTaskPoint *tpnew = createIntermediate(tp->get_waypoint());
+
+        if (!validIntermediateType(newtype)) {
+          newtype = m_behaviour.sector_defaults.turnpoint_type;
+          if (!validIntermediateType(newtype))
+            newtype = *m_finish_types.begin();
+        }
+        OrderedTaskPoint *tpnew = (OrderedTaskPoint*)createMutatedPoint(*tp, newtype);
         if (replace(*tpnew, i, true))
           changed = true;
         delete tpnew;

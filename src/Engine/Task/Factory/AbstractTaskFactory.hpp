@@ -370,6 +370,22 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
                                        const LegalPointType_t newtype) const;
 
   /**
+  * Returns "suggested/best" type for the current factory based on the type
+  * of point that was created by a different factory.  Used when task type
+  * changes, e.g. if task type from Racing to AAT, will return AAT_CYLINDER
+  * for a AST_CYLINDER
+  * Return type is compatible type with original type
+  *   (Start/Intermediate/Finish)
+  * Does not consider position of point in task
+  *
+  * @param tp The tp that exists (from task built using different factory)
+  * @return The suggested mutated type for the current factory
+  */
+  virtual gcc_pure
+  LegalPointType_t getMutatedPointType(const OrderedTaskPoint &tp) const;
+
+
+  /**
    * Create an AST point given an OZ
    *
    * @param pt OZ to be used

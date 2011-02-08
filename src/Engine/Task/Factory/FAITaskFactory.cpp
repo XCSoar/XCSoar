@@ -63,3 +63,46 @@ FAITaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
   to.finish_min_height = 0;
   to.start_requires_arm = false;
 }
+
+AbstractTaskFactory::LegalPointType_t
+FAITaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
+{
+  const LegalPointType_t oldtype = getType(tp);
+  LegalPointType_t newtype = oldtype;
+
+  switch (oldtype) {
+
+  case START_SECTOR:
+  case START_LINE:
+    break;
+
+  case START_CYLINDER:
+  case START_BGA:
+    newtype = START_SECTOR;
+    break;
+
+  case KEYHOLE_SECTOR:
+  case BGAFIXEDCOURSE_SECTOR:
+  case BGAENHANCEDOPTION_SECTOR:
+  case AAT_SEGMENT:
+    newtype = FAI_SECTOR;
+    break;
+
+  case FINISH_SECTOR:
+  case FINISH_LINE:
+    break;
+
+  case FINISH_CYLINDER:
+    newtype = FINISH_SECTOR;
+    break;
+
+  case FAI_SECTOR:
+  case AST_CYLINDER:
+    break;
+
+  case AAT_CYLINDER:
+    newtype = AST_CYLINDER;
+    break;
+  }
+  return newtype;
+}

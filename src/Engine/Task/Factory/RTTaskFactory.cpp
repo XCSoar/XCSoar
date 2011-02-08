@@ -59,3 +59,39 @@ RTTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
   to.max_points = 10;
   to.start_requires_arm = true;
 }
+
+AbstractTaskFactory::LegalPointType_t
+RTTaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
+{
+  const LegalPointType_t oldtype = getType(tp);
+  LegalPointType_t newtype = oldtype;
+
+  switch (oldtype) {
+
+  case START_SECTOR:
+  case START_LINE:
+  case START_CYLINDER:
+  case START_BGA:
+    break;
+
+  case KEYHOLE_SECTOR:
+  case BGAFIXEDCOURSE_SECTOR:
+  case BGAENHANCEDOPTION_SECTOR:
+  case FAI_SECTOR:
+  case AST_CYLINDER:
+    break;
+
+  case FINISH_SECTOR:
+  case FINISH_LINE:
+  case FINISH_CYLINDER:
+    break;
+
+  case AAT_SEGMENT:
+  case AAT_CYLINDER:
+      newtype = AST_CYLINDER;
+    break;
+  }
+
+  return newtype;
+}
+

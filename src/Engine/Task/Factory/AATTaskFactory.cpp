@@ -48,3 +48,45 @@ AATTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
   to.max_points = 13;
   to.start_requires_arm = true;
 }
+
+AbstractTaskFactory::LegalPointType_t
+AATTaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
+{
+  const LegalPointType_t oldtype = getType(tp);
+  LegalPointType_t newtype = oldtype;
+
+  switch (oldtype) {
+
+  case START_SECTOR:
+  case START_LINE:
+  case START_CYLINDER:
+  case START_BGA:
+    break;
+
+  case KEYHOLE_SECTOR:
+  case BGAFIXEDCOURSE_SECTOR:
+  case BGAENHANCEDOPTION_SECTOR:
+    newtype = AbstractTaskFactory::getMutatedPointType(tp);
+    break;
+
+  case FINISH_SECTOR:
+  case FINISH_LINE:
+  case FINISH_CYLINDER:
+    break;
+
+  case FAI_SECTOR:
+    newtype = AAT_CYLINDER;
+    //ToDo: create a 90 degree symmetric AAT sector
+    break;
+
+  case AST_CYLINDER:
+    newtype = AAT_CYLINDER;
+    break;
+
+  case AAT_SEGMENT:
+  case AAT_CYLINDER:
+    break;
+  }
+
+  return newtype;
+}
