@@ -341,33 +341,33 @@ OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
 {
   switch (type) {
   case AbstractTaskFactory::START_SECTOR:
-    return _("Cross corner edge from inside area to start");
+    return _("A 90 degree sector with 1km radius. Cross corner edge from inside area to start");
   case AbstractTaskFactory::START_LINE:
-    return _("Cross line from inside area to start");
+    return _("A straight line.  Cross line from inside area to start");
   case AbstractTaskFactory::START_CYLINDER:
-    return _("Exit area to start");
+    return _("A cylinder.  Exit area to start");
   case AbstractTaskFactory::START_BGA:
-    return _("Exit area in any direction to start");
+    return _("A 180 degree sector with 5km radius.  Exit area in any direction to start");
   case AbstractTaskFactory::FAI_SECTOR:
-    return _("Any point within area scored from corner point");
+    return _("A 90 degree sector with 'infinite' length sides.  Cross any edge, scored from corner point");
   case AbstractTaskFactory::AST_CYLINDER:
-    return _("Any point within area scored from center");
+    return _("A cylinder.  Any point within area scored from center");
   case AbstractTaskFactory::KEYHOLE_SECTOR:
-    return _("(German rules) Any point within 1/2 km of center or 10km of a 90 degree sector");
+    return _("(German rules) Any point within 1/2 km of center or 10km of a 90 degree sector.  Scored from center");
   case AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR:
-    return _("(British rules) Any point within 1/2 km of center or 20km of a 90 degree sector");
+    return _("(British rules) Any point within 1/2 km of center or 20km of a 90 degree sector.  Scored from center");
   case AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR:
-    return _("(British rules) Any point within 1/2 km of center or 10km of a 180 degree sector");
+    return _("(British rules) Any point within 1/2 km of center or 10km of a 180 degree sector.  Scored from center");
   case AbstractTaskFactory::AAT_CYLINDER:
-    return _("Scored inside area");
+    return _("A cylinder.  Scored by farthest point reached in area");
   case AbstractTaskFactory::AAT_SEGMENT:
-    return _("Scored inside area");
+    return _("A sector that can vary in angle and radius.  Scored by farthest point reached inside area");
   case AbstractTaskFactory::FINISH_SECTOR:
-    return _("Cross corner edge to finish");
+    return _("A 90 degree sector with 1km radius.  Cross edge to finish");
   case AbstractTaskFactory::FINISH_LINE:
     return _("Cross line into area to finish");
   case AbstractTaskFactory::FINISH_CYLINDER:
-    return _("Enter area to finish");
+    return _("Enter cylinder to finish");
   default:
     assert(1);
   }
