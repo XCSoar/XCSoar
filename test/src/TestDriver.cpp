@@ -26,6 +26,7 @@
 #include "Device/Driver/Condor.hpp"
 #include "Device/Driver/EW.hpp"
 #include "Device/Driver/EWMicroRecorder.hpp"
+#include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver/PosiGraph.hpp"
@@ -200,6 +201,36 @@ TestCAI302()
 }
 
 static void
+TestFlymasterF1()
+{
+  NMEAParser parser;
+
+  Device *device = flymasterf1Device.CreateOnPort(NULL);
+  ok1(device != NULL);
+
+  NMEA_INFO nmea_info;
+  memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.pressure.set_QNH(fixed(1013.25));
+
+  /* baro altitude disabled */
+  device->ParseNMEA("$VARIO,999.98,-12,12.4,12.7,0,21.3,25.5*CS",
+                    &nmea_info, false);
+  ok1(!nmea_info.BaroAltitudeAvailable);
+  ok1(!nmea_info.AirspeedAvailable);
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, -1.2));
+  ok1(!nmea_info.TemperatureAvailable);
+
+  /* baro altitude enabled */
+  device->ParseNMEA("$VARIO,999.98,-1.2,12.4,12.7,0,21.3,25.5*CS",
+                    &nmea_info, true);
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(between(nmea_info.BaroAltitude, 111.0, 111.1));
+
+  delete device;
+}
+
+static void
 TestLX(const struct DeviceRegister &driver)
 {
   Device *device = driver.CreateOnPort(NULL);
@@ -334,10 +365,11 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(100);
+  plan_tests(108);
 
   TestGeneric();
   TestCAI302();
+  TestFlymasterF1();
   TestLX(lxDevice);
   TestLX(condorDevice);
   TestILEC();
