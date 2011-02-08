@@ -267,11 +267,14 @@ devStartup()
   Profile::Get(szProfileIgnoreNMEAChecksum, NMEAParser::ignore_checksum);
 
   DeviceConfig config[NUMDEV];
+  bool none_available = true;
   for (unsigned i = 0; i < NUMDEV; ++i) {
     Profile::GetDeviceConfig(i, config[i]);
 
     if (!DeviceConfigAvailable(config[i]))
       continue;
+
+    none_available = false;
 
     bool overlap = false;
     for (unsigned j = 0; j < i; ++j)
@@ -280,6 +283,17 @@ devStartup()
 
     if (!overlap)
       devInitOne(DeviceList[i], config[i], pDevNmeaOut);
+  }
+
+  if (none_available) {
+#ifdef ANDROID
+    /* fall back to built-in GPS when no configured device is
+       available on this platform */
+    LogStartUp(_T("Falling back to built-in GPS"));
+
+    config[0].port_type = DeviceConfig::INTERNAL;
+    devInitOne(DeviceList[0], config[0], pDevNmeaOut);
+#endif
   }
 
   if (pDevNmeaOut != NULL)
