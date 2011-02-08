@@ -93,10 +93,50 @@ OrderedTaskFactoryDescription(TaskBehaviour::Factory_t type)
   return NULL;
 }
 
+static void
+TaskSummaryShape(OrderedTask* task, TCHAR* text)
+{
+  switch (task->task_size()) {
+  case 0:
+    text[0] = '\0';
+    break;
+
+  case 1:
+    _tcscpy(text, _("Unknown"));
+    break;
+
+  case 2:
+    _tcscpy(text, _("Goal"));
+    break;
+
+  case 3:
+    if (task->get_factory().is_closed())
+      _tcscpy(text, _("Out and Return"));
+    else
+      _tcscpy(text, _("Two legs"));
+    break;
+
+  case 4:
+    if (!task->get_factory().is_unique() ||!task->get_factory().is_closed())
+      _tcscpy(text, _("Three legs"));
+    else if (task->get_factory().TestFAITriangle())
+      _tcscpy(text, _("FAI triangle"));
+    else
+      _tcscpy(text, _("non-FAI triangle"));
+    break;
+
+  default:
+    _stprintf(text, _("%d legs"), task->task_size() - 1);
+    break;
+  }
+}
 void
 OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
 {
   const TaskStats &stats = task->get_stats();
+  TCHAR summary_shape[25];
+  TaskSummaryShape(task, summary_shape);
+
   TCHAR invalid [15];
   if (task->check_task())
     invalid[0] = '\0';
@@ -118,9 +158,11 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
              OrderedTaskFactoryName(task->get_factory_type()), linebreak);
   } else {
     if (task->has_targets())
-      _stprintf(text, _("%s%s%sNominal dist: %.0f %s%sMax dist: %.0f %s%sMin dist: %.0f %s"),
+      _stprintf(text, _("%s%s%s%s%sNominal dist: %.0f %s%sMax dist: %.0f %s%sMin dist: %.0f %s"),
                 OrderedTaskFactoryName(task->get_factory_type()),
                 invalid,
+                linebreak,
+                summary_shape,
                 linebreak,
                 (double)Units::ToUserDistance(stats.distance_nominal),
                 Units::GetDistanceName(),
@@ -131,9 +173,11 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
                 (double)Units::ToUserDistance(stats.distance_min),
                 Units::GetDistanceName());
     else
-      _stprintf(text, _("%s%s%sDistance: %.0f %s"),
+      _stprintf(text, _("%s%s%s%s%sDistance: %.0f %s"),
                 OrderedTaskFactoryName(task->get_factory_type()),
                 invalid,
+                linebreak,
+                summary_shape,
                 linebreak,
                 (double)Units::ToUserDistance(stats.distance_nominal),
                 Units::GetDistanceName());
