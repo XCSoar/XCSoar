@@ -1351,6 +1351,11 @@ OrderedTask::select_optional_start(unsigned pos)
   // remove top optional item from list
   optional_start_points.erase(optional_start_points.begin()+pos);
 
+  // update neighbour links
+  set_neighbours(0);
+  if (task_points.size()>1)
+    set_neighbours(1);
+
   // we've changed the task, so update geometry
   update_geometry();
 }
