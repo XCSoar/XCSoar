@@ -40,6 +40,13 @@ namespace Java {
 
   void Init(JNIEnv *env);
 
+  static inline void
+  DetachCurrentThread()
+  {
+    if (jvm != NULL)
+      jvm->DetachCurrentThread();
+  }
+
   static inline gcc_pure
   JNIEnv *GetEnv()
   {
