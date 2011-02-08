@@ -72,21 +72,21 @@ OrderedTaskFactoryDescription(TaskBehaviour::Factory_t type)
 {
   switch(type) {
   case TaskBehaviour::FACTORY_RT:
-    return _("Racing task around turnpoints");
+    return _("Racing task around turn points");
   case TaskBehaviour::FACTORY_FAI_GENERAL:
-    return _("FAI rules, path around 3 or more turnpoints and return");
+    return _("FAI rules, path around 3 or more turn points and return");
   case TaskBehaviour::FACTORY_FAI_TRIANGLE:
-    return _("FAI rules, path from a start to two turnpoints and return");
+    return _("FAI rules, path from a start to two turn points and return");
   case TaskBehaviour::FACTORY_FAI_OR:
-    return _("FAI rules, path from start to a single turnpoint and return");
+    return _("FAI rules, path from start to a single turn point and return");
   case TaskBehaviour::FACTORY_FAI_GOAL:
     return _("FAI rules, path from start to a goal destination");
   case TaskBehaviour::FACTORY_AAT:
     return _("Racing task through assigned areas, minimum task time applies");
   case TaskBehaviour::FACTORY_MIXED:
-    return _("Racing task with a mix of assigned areas and turnpoints, minimum task time applies");
+    return _("Racing task with a mix of assigned areas and turn points, minimum task time applies");
   case TaskBehaviour::FACTORY_TOURING:
-    return _("Casual touring task, uses start and finish cylinders and FAI sector turnpoints");
+    return _("Casual touring task, uses start and finish cylinders and FAI sector turn points");
   default:
     assert(1);
   }
@@ -395,7 +395,7 @@ OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
   case AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR:
     return _("BGA Enhanced Option Fixed Course sector");
   case AbstractTaskFactory::AST_CYLINDER:
-    return _("Turnpoint cylinder");
+    return _("Turn point cylinder");
   case AbstractTaskFactory::AAT_CYLINDER:
     return _("Area cylinder");
   case AbstractTaskFactory::AAT_SEGMENT:
