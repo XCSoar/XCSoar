@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 #include "Compiler.h"
+#include "Math/fixed.hpp"
 
 #include <vector>
 
@@ -250,7 +251,7 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
   }
 
   /** 
-   * Create a point of supplied type
+   * Create a point of supplied type using default sector sizes
    * 
    * @param type Type of point to be created
    * @param wp Waypoint reference
@@ -260,6 +261,24 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
   gcc_pure gcc_malloc
   OrderedTaskPoint* createPoint(const LegalPointType_t type,
                                 const Waypoint &wp) const;
+
+  /**
+   * Create a point of supplied type
+   * Optionally overrides the default sector sizes
+   *
+   * @param type Type of point to be created
+   * @param wp Waypoint reference
+   * @param start_radius.  if < 0 then use default, else use for new point
+   * @param turnpoint_radius.  if < 0 then use default, else use for new point
+   * @param finish_radius.  if < 0 then use default, else use for new point
+   * @return Initialised object.  Transfers ownership to client.
+   */
+  gcc_pure gcc_malloc
+  OrderedTaskPoint* createPoint(const LegalPointType_t type,
+                                const Waypoint &wp,
+                                const fixed _start_radius,
+                                const fixed _turnpoint_radius,
+                                const fixed _finish_radius) const;
 
   /**
    * Create start point of specified type
