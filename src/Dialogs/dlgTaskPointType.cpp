@@ -112,7 +112,7 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type)
     AbstractTaskFactory &factory = ordered_task->get_factory();
 
     if (point) {
-      point = factory.createPoint(type, point->get_waypoint());
+      point = factory.createMutatedPoint(*point, type);
       if (point == NULL)
         return false;
 

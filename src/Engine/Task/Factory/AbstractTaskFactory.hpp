@@ -359,6 +359,17 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
                                 const Waypoint &wp) const;
 
   /**
+   * Creates new OrderedTaskPoint of a different type with the
+   * same radius.
+   * Does not validate the new type against the current task type.
+   * @param tp
+   * @return pointer to the point
+   */
+  gcc_pure gcc_malloc
+  OrderedTaskPoint* createMutatedPoint(const OrderedTaskPoint &tp,
+                                       const LegalPointType_t newtype) const;
+
+  /**
    * Create an AST point given an OZ
    *
    * @param pt OZ to be used
