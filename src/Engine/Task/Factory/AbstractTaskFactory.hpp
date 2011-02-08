@@ -582,6 +582,15 @@ LegalPointVector getValidFinishTypes() const;
   TaskValidationErrorVector getValidationErrors();
 
 
+  /**
+   *
+   * @return True if task is a valid FAI triangle
+   * ToDo: add test for FAI triangle with start/finish in
+   * the middle of a leg
+   */
+  gcc_pure
+  bool TestFAITriangle(void);
+
 protected:
 
   /**
