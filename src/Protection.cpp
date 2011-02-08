@@ -34,7 +34,7 @@ Copyright_License {
 
 #include <assert.h>
 
-Trigger globalRunningEvent;
+Flag globalRunningEvent;
 Trigger airspaceWarningEvent;
 
 Mutex mutexBlackboard;

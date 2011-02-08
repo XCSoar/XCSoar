@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_PROTECTION_HPP
 
 #include "Thread/Trigger.hpp"
+#include "Thread/Flag.hpp"
 #include "Thread/Mutex.hpp"
 
 extern Mutex mutexBlackboard;
@@ -48,7 +49,7 @@ extern bool InputFileChanged;
 extern bool MapFileChanged;
 extern bool LanguageChanged;
 
-extern Trigger globalRunningEvent;
+extern Flag globalRunningEvent;
 extern Trigger airspaceWarningEvent;
 
 /**
