@@ -4,6 +4,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.0.4 - not yet released
 * devices
+   - FlymasterF1: convert pressure to altitude
    - Zander: PZAN1 contains QNH altitude
    - Zander: verify checksum
 * user interface

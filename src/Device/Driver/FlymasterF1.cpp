@@ -44,8 +44,8 @@ VARIO(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   fixed value;
   if (line.read_checked(value))
-    GPS_INFO->ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_FLYMASTER,
-                                      value * 100);
+    GPS_INFO->ProvideStaticPressure(NMEA_INFO::BARO_ALTITUDE_FLYMASTER,
+                                    value * 100);
 
   if (line.read_checked(value)) {
     // vario is in dm/s

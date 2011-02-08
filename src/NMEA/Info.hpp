@@ -483,6 +483,13 @@ struct NMEA_INFO {
   }
 
   /**
+   * Sets the barometric altitude from a static pressure sensor.
+   */
+  void SetStaticPressure(enum BaroAltitudeOrigin origin, fixed value) {
+    SetBaroAltitudeTrue(origin, pressure.StaticPressureToQNHAltitude(value));
+  }
+
+  /**
    * Provide a "true" barometric altitude, but only use it if the
    * previous altitude was not present or the same/lower priority.
    */
@@ -498,6 +505,16 @@ struct NMEA_INFO {
   void ProvideBaroAltitude1013(enum BaroAltitudeOrigin origin, fixed value) {
     if (!BaroAltitudeAvailable || BaroAltitudeOrigin <= origin)
       SetBaroAltitude1013(origin, value);
+  }
+
+  /**
+   * Provide barometric altitude from a static pressure sensor, but
+   * only use it if the previous altitude was not present or the
+   * same/lower priority.
+   */
+  void ProvideStaticPressure(enum BaroAltitudeOrigin origin, fixed value) {
+    if (!BaroAltitudeAvailable || BaroAltitudeOrigin <= origin)
+      SetStaticPressure(origin, value);
   }
 
   /**
