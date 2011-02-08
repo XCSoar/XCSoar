@@ -72,9 +72,9 @@ OrderedTaskFactoryDescription(TaskBehaviour::Factory_t type)
 {
   switch(type) {
   case TaskBehaviour::FACTORY_RT:
-    return _("Racing task around turn points");
+    return _("Racing task around turn points.  Can also be used for FAI badge and record tasks.  Allows all shapes of observation zones.");
   case TaskBehaviour::FACTORY_FAI_GENERAL:
-    return _("FAI rules, path around 3 or more turn points and return");
+    return _("FAI rules, allows only FAI start, finish and turn point types, for badges and records.  Enables FAI finish height for final glide calculation");
   case TaskBehaviour::FACTORY_FAI_TRIANGLE:
     return _("FAI rules, path from a start to two turn points and return");
   case TaskBehaviour::FACTORY_FAI_OR:
@@ -82,7 +82,7 @@ OrderedTaskFactoryDescription(TaskBehaviour::Factory_t type)
   case TaskBehaviour::FACTORY_FAI_GOAL:
     return _("FAI rules, path from start to a goal destination");
   case TaskBehaviour::FACTORY_AAT:
-    return _("Racing task through assigned areas, minimum task time applies");
+    return _("Task through assigned areas, minimum task time applies.  Restricted to cylinder and sector observation zones.");
   case TaskBehaviour::FACTORY_MIXED:
     return _("Racing task with a mix of assigned areas and turn points, minimum task time applies");
   case TaskBehaviour::FACTORY_TOURING:
