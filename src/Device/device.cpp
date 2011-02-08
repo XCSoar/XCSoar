@@ -244,7 +244,8 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
 {
   switch (a.port_type) {
   case DeviceConfig::SERIAL:
-    return a.port_index == b.port_index;
+    return b.port_type == DeviceConfig::SERIAL &&
+      a.port_index == b.port_index;
 
   case DeviceConfig::AUTO:
   case DeviceConfig::INTERNAL:
