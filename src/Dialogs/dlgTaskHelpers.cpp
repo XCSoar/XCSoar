@@ -137,12 +137,6 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
   TCHAR summary_shape[25];
   TaskSummaryShape(task, summary_shape);
 
-  TCHAR invalid [15];
-  if (task->check_task())
-    invalid[0] = '\0';
-  else
-    _tcscpy(invalid,_(" (invalid)"));
-
   TCHAR linebreak[3];
   if (linebreaks) {
     linebreak[0] = '\n';
@@ -154,14 +148,11 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
   }
 
   if (!task->task_size()) {
-    _stprintf(text, _("%s%sTask is empty"),
-             OrderedTaskFactoryName(task->get_factory_type()), linebreak);
+    _stprintf(text, _("Task is empty (%s)"),
+             OrderedTaskFactoryName(task->get_factory_type()));
   } else {
     if (task->has_targets())
-      _stprintf(text, _("%s%s%s%s%sNominal dist: %.0f %s%sMax dist: %.0f %s%sMin dist: %.0f %s"),
-                OrderedTaskFactoryName(task->get_factory_type()),
-                invalid,
-                linebreak,
+      _stprintf(text, _("%s%sDistance: %.0f %s%sMax: %.0f %s%sMin: %.0f %s (%s)"),
                 summary_shape,
                 linebreak,
                 (double)Units::ToUserDistance(stats.distance_nominal),
@@ -171,16 +162,15 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
                 Units::GetDistanceName(),
                 linebreak,
                 (double)Units::ToUserDistance(stats.distance_min),
-                Units::GetDistanceName());
+                Units::GetDistanceName(),
+                OrderedTaskFactoryName(task->get_factory_type()));
     else
-      _stprintf(text, _("%s%s%s%s%sDistance: %.0f %s"),
-                OrderedTaskFactoryName(task->get_factory_type()),
-                invalid,
-                linebreak,
+      _stprintf(text, _("%s%sDistance: %.0f %s (%s)"),
                 summary_shape,
                 linebreak,
                 (double)Units::ToUserDistance(stats.distance_nominal),
-                Units::GetDistanceName());
+                Units::GetDistanceName(),
+                OrderedTaskFactoryName(task->get_factory_type()));
   }
 }
 
