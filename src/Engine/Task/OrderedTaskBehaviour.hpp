@@ -23,7 +23,6 @@
 #define ORDEREDTASK_BEHAVIOUR_HPP
 
 #include "Math/fixed.hpp"
-#include "Util/Serialisable.hpp"
 
 struct AIRCRAFT_STATE;
 class TaskBehaviour;
@@ -32,8 +31,7 @@ class TaskBehaviour;
  * Settings for ordered tasks; most of these are set by the #AbstractTaskFactory
  * but can be overriden
  */
-class OrderedTaskBehaviour:
-  public Serialisable
+class OrderedTaskBehaviour
 {
 public:
   friend class Serialiser;

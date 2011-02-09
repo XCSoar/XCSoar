@@ -34,7 +34,6 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskBehaviour.hpp"
 #include "Trace/Trace.hpp"
-#include "Util/Serialisable.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 
@@ -48,7 +47,6 @@ class Waypoints;
  *  of navigation tasks.  Hides details of these AbstractTasks behind a facade.
  */
 class TaskManager: 
-  public Serialisable,
   private NonCopyable
 {
 public:
