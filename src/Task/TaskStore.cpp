@@ -39,7 +39,7 @@ public:
     m_store(store) {}
 
   void Visit(const TCHAR* path, const TCHAR* filename) {
-    m_store.push_back(TaskStore::TaskStoreItem(path));
+    m_store.push_back(TaskStore::Item(path));
   }
 };
 
@@ -69,21 +69,21 @@ TaskStore::size() const
   return m_store.size();
 }
 
-TaskStore::TaskStoreItem::TaskStoreItem(const tstring &the_filename):
+TaskStore::Item::Item(const tstring &the_filename):
   filename(the_filename),
   task(NULL),
   valid(true)
 {        
 }
 
-TaskStore::TaskStoreItem::~TaskStoreItem() 
+TaskStore::Item::~Item()
 {
   if (!filename.empty())
     delete task;
 }
 
 OrderedTask*
-TaskStore::TaskStoreItem::get_task() 
+TaskStore::Item::get_task()
 {
   if (task != NULL)
     return task;
@@ -98,7 +98,7 @@ TaskStore::TaskStoreItem::get_task()
 }
 
 const TCHAR *
-TaskStore::TaskStoreItem::get_name() const
+TaskStore::Item::get_name() const
 {
   const TCHAR *path = filename.c_str();
   const TCHAR *name = BaseName(path);
@@ -108,7 +108,7 @@ TaskStore::TaskStoreItem::get_name() const
 }
 
 bool
-TaskStore::TaskStoreItem::operator<(const TaskStoreItem &i2) const
+TaskStore::Item::operator<(const Item &i2) const
 {
   return _tcscmp(get_name(), i2.get_name()) == -1;
 }

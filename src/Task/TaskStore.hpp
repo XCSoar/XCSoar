@@ -43,10 +43,10 @@ public:
    */
   void clear();
 
-  struct TaskStoreItem 
+  struct Item
   {
-    TaskStoreItem(const tstring &the_filename);
-    ~TaskStoreItem();
+    Item(const tstring &the_filename);
+    ~Item();
 
     tstring filename;
     OrderedTask* task;
@@ -55,10 +55,10 @@ public:
     const TCHAR* get_name() const;
     OrderedTask* get_task();
 
-    bool operator<(const TaskStoreItem &i2) const;
+    bool operator<(const TaskStore::Item &i2) const;
   };
 
-  typedef std::vector<TaskStoreItem> TaskStoreVector;
+  typedef std::vector<TaskStore::Item> TaskStoreVector;
 
   /**
    * Return the number of tasks in the TaskStore
