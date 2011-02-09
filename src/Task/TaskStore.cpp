@@ -42,8 +42,10 @@ public:
   void Visit(const TCHAR* path, const TCHAR* filename) {
     TaskFile* task_file = TaskFile::Create(path);
     if (task_file != NULL) {
-      for (unsigned i = 0; i < task_file->Count(); i++)
-        m_store.push_back(TaskStore::Item(path, i));
+      for (unsigned i = 0; i < task_file->Count(); i++) {
+        const TCHAR *name = BaseName(path);
+        m_store.push_back(TaskStore::Item(path, (name == NULL) ? path : name, i));
+      }
 
       delete task_file;
     }
@@ -77,7 +79,9 @@ TaskStore::size() const
   return m_store.size();
 }
 
-TaskStore::Item::Item(const tstring &the_filename, unsigned _task_index):
+TaskStore::Item::Item(const tstring &the_filename, const tstring _task_name,
+                      unsigned _task_index):
+  task_name(_task_name),
   filename(the_filename),
   task_index(_task_index),
   task(NULL),
@@ -109,10 +113,7 @@ TaskStore::Item::get_task()
 const TCHAR *
 TaskStore::Item::get_name() const
 {
-  const TCHAR *path = filename.c_str();
-  const TCHAR *name = BaseName(path);
-
-  return (name == NULL) ? path : name;
+  return task_name.c_str();
 }
 
 bool

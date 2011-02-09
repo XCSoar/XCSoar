@@ -45,9 +45,11 @@ public:
 
   struct Item
   {
-    Item(const tstring &the_filename, unsigned _task_index = 0);
+    Item(const tstring &the_filename, const tstring _task_name,
+         unsigned _task_index = 0);
     ~Item();
 
+    tstring task_name;
     tstring filename;
     unsigned task_index;
     OrderedTask* task;
