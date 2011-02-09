@@ -29,6 +29,9 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
 #include "LocalPath.hpp"
+#include "Language.hpp"
+
+#include <cstdio>
 
 class TaskFileVisitor: public File::Visitor
 {
@@ -42,8 +45,17 @@ public:
   void Visit(const TCHAR* path, const TCHAR* filename) {
     TaskFile* task_file = TaskFile::Create(path);
     if (task_file != NULL) {
-      for (unsigned i = 0; i < task_file->Count(); i++) {
-        const TCHAR *name = BaseName(path);
+      unsigned count = task_file->Count();
+      for (unsigned i = 0; i < count; i++) {
+        const TCHAR* base_name = BaseName(path);
+        TCHAR name[255];
+        _tcscpy(name, (base_name != NULL) ? base_name : path);
+        if (count > 1) {
+          TCHAR suffix[255];
+          _stprintf(suffix, _T(" - %s #%d"), _("Task"), i + 1);
+          _tcscat(name, suffix);
+        }
+
         m_store.push_back(TaskStore::Item(path, (name == NULL) ? path : name, i));
       }
 
