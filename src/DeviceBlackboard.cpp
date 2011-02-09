@@ -137,9 +137,9 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   SetBasic().GPSAltitude = alt;
   SetBasic().SetBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, baroalt);
   SetBasic().Time = t;
-  SetBasic().TotalEnergyVarioAvailable = false;
-  SetBasic().NettoVarioAvailable = false;
-  SetBasic().ExternalWindAvailable = false;
+  SetBasic().TotalEnergyVarioAvailable.clear();
+  SetBasic().NettoVarioAvailable.clear();
+  SetBasic().ExternalWindAvailable.clear();
   SetBasic().gps.Replay = true;
 };
 

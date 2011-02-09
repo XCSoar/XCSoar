@@ -95,6 +95,7 @@ int main(int argc, char **argv)
                            Angle::degrees(fixed(50.6322)));
 
   static NMEA_INFO i;
+  i.Time = fixed(1);
   i.DateTime.year = 2010;
   i.DateTime.month = 9;
   i.DateTime.day = 4;

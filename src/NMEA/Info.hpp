@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_INFO_H
 #define XCSOAR_NMEA_INFO_H
 
+#include "NMEA/Validity.hpp"
 #include "DateTime.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/Aircraft.hpp"
@@ -224,7 +225,7 @@ struct NMEA_INFO {
    * Is a barometric altitude available?
    * @see BaroAltitude
    */
-  bool BaroAltitudeAvailable;
+  Validity BaroAltitudeAvailable;
 
   /**
    * Specifies the last-known source for the barometric altitude.
@@ -374,13 +375,13 @@ struct NMEA_INFO {
    * Is an external vario signal available?
    * @see TotalEnergyVario
    */
-  bool TotalEnergyVarioAvailable;
+  Validity TotalEnergyVarioAvailable;
 
   /**
    * Is an external netto vario signal available?
    * @see NettoVario
    */
-  bool NettoVarioAvailable;
+  Validity NettoVarioAvailable;
 
   /**
    * Rate of change of total energy of aircraft (m/s, up positive)
@@ -423,7 +424,7 @@ struct NMEA_INFO {
    * @see ExternalWindSpeed
    * @see ExternalWindDirection
    */
-  bool ExternalWindAvailable;
+  Validity ExternalWindAvailable;
 
   /**
    * The wind read from the device.  If ExternalWindAvailable is
@@ -482,7 +483,7 @@ struct NMEA_INFO {
   void SetBaroAltitudeTrue(enum BaroAltitudeOrigin origin, fixed value) {
     BaroAltitude = value;
     BaroAltitudeOrigin = origin;
-    BaroAltitudeAvailable = true;
+    BaroAltitudeAvailable.update(Time);
   }
 
   /**
@@ -542,7 +543,7 @@ struct NMEA_INFO {
    */
   void ProvideTotalEnergyVario(fixed value) {
     TotalEnergyVario = value;
-    TotalEnergyVarioAvailable = true;
+    TotalEnergyVarioAvailable.update(Time);
   }
 
   /**
@@ -550,7 +551,7 @@ struct NMEA_INFO {
    */
   void ProvideNettoVario(fixed value) {
     NettoVario = value;
-    NettoVarioAvailable = true;
+    NettoVarioAvailable.update(Time);
   }
 
   /**
@@ -558,8 +559,14 @@ struct NMEA_INFO {
    */
   void ProvideExternalWind(const SpeedVector &value) {
     ExternalWind = value;
-    ExternalWindAvailable = true;
+    ExternalWindAvailable.update(Time);
   }
+
+  /**
+   * Check expiry times of all attributes which have a time stamp
+   * associated with them.
+   */
+  void expire();
 
   /**
    * Adds data from the specified object, unless already present in

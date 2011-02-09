@@ -119,6 +119,7 @@ TestGeneric()
 
   NMEA_INFO nmea_info;
   memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.Time = fixed(1297230000);
 
   /* no GPS reception */
   parser.ParseNMEAString_Internal("$GPRMC,082310,V,,,,,230610*3f",
@@ -160,6 +161,7 @@ TestCAI302()
 
   NMEA_INFO nmea_info;
   memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.Time = fixed(1297230000);
   nmea_info.pressure.set_QNH(fixed(1013.25));
 
   /* baro altitude disabled */
@@ -210,6 +212,7 @@ TestFlymasterF1()
 
   NMEA_INFO nmea_info;
   memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.Time = fixed(1297230000);
   nmea_info.pressure.set_QNH(fixed(1013.25));
 
   /* baro altitude disabled */
@@ -238,6 +241,7 @@ TestLX(const struct DeviceRegister &driver)
 
   NMEA_INFO nmea_info;
   memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.Time = fixed(1297230000);
 
   /* baro altitude disabled */
   device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", &nmea_info, false);
@@ -273,6 +277,7 @@ TestILEC()
 
   NMEA_INFO nmea_info;
   memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.Time = fixed(1297230000);
 
   /* baro altitude disabled */
   device->ParseNMEA("$PILC,PDA1,1489,-3.21*7D", &nmea_info, false);
@@ -303,6 +308,7 @@ TestWesterboer()
 
   NMEA_INFO nmea_info;
   memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.Time = fixed(1297230000);
 
   device->ParseNMEA("$PWES0,20,-25,25,-22,2,-100,589,589,1260,1296,128,295*01",
                     &nmea_info, true);
@@ -332,6 +338,7 @@ TestZander()
 
   NMEA_INFO nmea_info;
   memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.Time = fixed(1297230000);
   nmea_info.pressure.set_QNH(fixed(999));
 
   /* baro altitude disabled */

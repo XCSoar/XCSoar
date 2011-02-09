@@ -41,6 +41,15 @@ ACCELERATION_STATE::complement(const ACCELERATION_STATE &add)
 }
 
 void
+NMEA_INFO::expire()
+{
+  BaroAltitudeAvailable.expire(Time, fixed(30));
+  TotalEnergyVarioAvailable.expire(Time, fixed(5));
+  NettoVarioAvailable.expire(Time, fixed(5));
+  ExternalWindAvailable.expire(Time, fixed(600));
+}
+
+void
 NMEA_INFO::complement(const NMEA_INFO &add)
 {
   gps.complement(add.gps);
@@ -68,13 +77,13 @@ NMEA_INFO::complement(const NMEA_INFO &add)
   /* calculated: Heading, TurnRateWind, TurnRate */
   /* calculated: TrueAirspeedEstimated */
 
-  if ((!BaroAltitudeAvailable ||
+  if ((BaroAltitudeAvailable.complement(add.BaroAltitudeAvailable) ||
        (BaroAltitudeOrigin <= BARO_ALTITUDE_UNKNOWN &&
         add.BaroAltitudeOrigin > BaroAltitudeOrigin)) &&
       add.BaroAltitudeAvailable) {
     BaroAltitude = add.BaroAltitude;
     BaroAltitudeOrigin = add.BaroAltitudeOrigin;
-    BaroAltitudeAvailable = true;
+    BaroAltitudeAvailable = add.BaroAltitudeAvailable;
   }
 
   /* calculated: EnergyHeight, TEAltitude, working_band_height,
@@ -84,22 +93,16 @@ NMEA_INFO::complement(const NMEA_INFO &add)
 
   /* calculated: GliderSinkRate, GPSVario, GPSVarioTE, BruttoVario */
 
-  if (!TotalEnergyVarioAvailable && add.TotalEnergyVarioAvailable) {
+  if (TotalEnergyVarioAvailable.complement(add.TotalEnergyVarioAvailable))
     TotalEnergyVario = add.TotalEnergyVario;
-    TotalEnergyVarioAvailable = add.TotalEnergyVarioAvailable;
-  }
 
-  if (!NettoVarioAvailable && add.NettoVarioAvailable) {
+  if (NettoVarioAvailable.complement(add.NettoVarioAvailable))
     NettoVario = add.NettoVario;
-    NettoVarioAvailable = add.NettoVarioAvailable;
-  }
 
   // XXX MacCready, Ballast, Bugs
 
-  if (!ExternalWindAvailable && add.ExternalWindAvailable) {
+  if (ExternalWindAvailable.complement(add.ExternalWindAvailable))
     ExternalWind = add.ExternalWind;
-    ExternalWindAvailable = add.ExternalWindAvailable;
-  }
 
   if (!TemperatureAvailable && add.TemperatureAvailable) {
     OutsideAirTemperature = add.OutsideAirTemperature;
