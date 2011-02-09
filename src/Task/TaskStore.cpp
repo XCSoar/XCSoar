@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Task/TaskStore.hpp"
+#include "Task/TaskFile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Components.hpp"
@@ -39,7 +40,13 @@ public:
     m_store(store) {}
 
   void Visit(const TCHAR* path, const TCHAR* filename) {
-    m_store.push_back(TaskStore::Item(path));
+    TaskFile* task_file = TaskFile::Create(path);
+    if (task_file != NULL) {
+      for (unsigned i = 0; i < task_file->Count(); i++)
+        m_store.push_back(TaskStore::Item(path, i));
+
+      delete task_file;
+    }
   }
 };
 
