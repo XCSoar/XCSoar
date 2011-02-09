@@ -136,18 +136,15 @@ WindStore::NewWind(const NMEA_INFO &info, DERIVED_INFO &derived,
     Vector &wind)
 {
   fixed mag = hypot(wind.x, wind.y);
-  fixed bearing;
+  Angle bearing;
 
   if (wind.y == fixed_zero && wind.x == fixed_zero)
-    bearing = fixed_zero;
+    bearing = Angle::native(fixed_zero);
   else
-    bearing = atan2(wind.y, wind.x) * fixed_rad_to_deg;
+    bearing = Angle::radians(atan2(wind.y, wind.x));
 
   if (mag < fixed(30)) { // limit to reasonable values
-    if (negative(bearing))
-      bearing += fixed_360;
-
-    derived.estimated_wind = SpeedVector(Angle::degrees(bearing), mag);
+    derived.estimated_wind = SpeedVector(bearing.as_bearing(), mag);
   } else {
     // TODO code: give warning, wind estimate bogus or very strong!
   }
