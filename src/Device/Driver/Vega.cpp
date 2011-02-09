@@ -270,10 +270,11 @@ PDVDS(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   fixed value;
   GPS_INFO->NettoVarioAvailable = line.read_checked(value);
-  if (GPS_INFO->NettoVarioAvailable)
+  if (GPS_INFO->NettoVarioAvailable) {
     GPS_INFO->NettoVario = value / 10;
+    TriggerVarioUpdate();
+  }
 
-  GPS_INFO->TotalEnergyVarioAvailable = true;
   //hasVega = true;
 
   return true;

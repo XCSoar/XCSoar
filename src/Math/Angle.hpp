@@ -33,7 +33,7 @@ Copyright_License {
 
 class Angle {
 private:
-  Angle(const fixed& init_value): m_value(init_value) {};
+  explicit Angle(const fixed& init_value): m_value(init_value) {};
 
 public:
   /**

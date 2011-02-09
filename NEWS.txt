@@ -54,13 +54,16 @@ Version 6.1 - not yet released
 
 Version 6.0.4 - not yet released
 * devices
-   - FlymasterF1: convert pressure to altitude
-   - FlymasterF1: don't override the baro altitude of the primary device
-   - Zander: PZAN1 contains QNH altitude
-   - Zander: verify checksum
+  - EWMicroRecorder: parse PGRMZ as altitude above 1013.25 hPa
+  - FlymasterF1: convert pressure to altitude
+  - FlymasterF1: don't override the baro altitude of the primary device
+  - Zander: PZAN1 contains QNH altitude
+  - Zander: verify checksum
 * user interface
-   - prevent potential crash while using flarm radar dialogs
-   - improve behaviour if "circling zoom" is disabled
+  - prevent potential crash while using flarm radar dialogs
+  - improve behaviour if "circling zoom" is disabled
+* map
+  - enable terrain and topology by default
 * Android
   - device: support NMEA over Bluetooth RFCOMM
 

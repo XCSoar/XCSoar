@@ -28,8 +28,8 @@ SettingsMapBlackboard::SettingsMapBlackboard()
 {
   settings_map.CircleZoom = false;
   settings_map.MaxAutoZoomDistance = fixed(10000); /* 100 km */
-  settings_map.EnableTopology = false;
-  settings_map.EnableTerrain = false;
+  settings_map.EnableTopology = true;
+  settings_map.EnableTerrain = true;
   settings_map.NorthArrow = true;
   settings_map.SlopeShadingType = sstWind;
   settings_map.EnableTrailDrift = false;
