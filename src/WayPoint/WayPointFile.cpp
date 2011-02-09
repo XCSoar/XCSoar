@@ -105,16 +105,16 @@ WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
     } else if (*s == _T('\0') || ((*s == _T(',') && !in_quote))) {
       // end of src or field separator (',') outside quoted part detected
       // field content is already completely copied but may contain trailing spaces
-      if (trim && (last_non_discardable_char != NULL)) {
+      if (trim && (last_non_discardable_char != NULL))
         // remove trailing unquoted whitespace from dst field
         d = last_non_discardable_char+1;
-      }
+
       // 0-terminate field and update pointer to individual field
       *d++ = _T('\0');
-      if (++i < sz) {
+      if (++i < sz)
         // if size permits remember start of next field.
         arr[i] = d;
-      }
+
       // start processing of next field
       last_non_discardable_char = NULL;
     } else {
@@ -123,10 +123,9 @@ WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
         // we are not inside a quoted string and therefore need to trim
         // leading and trailing spaces. Drop whitespace if dst is still empty
         if (*s == _T(' ')) {
-          if (last_non_discardable_char != NULL) {
+          if (last_non_discardable_char != NULL)
             // dst field is not empty - append ' '
             *d++ = *s;
-          }
         } else {
           // no space, remember position and append to result
           last_non_discardable_char = d;
@@ -145,14 +144,12 @@ WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
   return i;
 }
 
-
 short
 WayPointFile::AltitudeFromTerrain(GeoPoint &location,
                                   const RasterTerrain &terrain)
 {
   return terrain.GetTerrainHeight(location);
 }
-
 
 void
 WayPointFile::add_waypoint(Waypoints &way_points,
@@ -162,7 +159,6 @@ WayPointFile::add_waypoint(Waypoints &way_points,
   // return successful line parse
   Waypoint wp(new_waypoint);
   way_points.append(wp);
-  return;
 }
 
 void
@@ -175,11 +171,11 @@ WayPointFile::check_altitude(Waypoint &new_waypoint,
 
   // Load waypoint altitude from terrain
   const short t_alt = AltitudeFromTerrain(new_waypoint.Location, *terrain);
-  if (RasterBuffer::is_special(t_alt)) {
+  if (RasterBuffer::is_special(t_alt))
     new_waypoint.Altitude = fixed_zero;
-  } else { // TERRAIN_VALID
+  else
+    // TERRAIN_VALID
     new_waypoint.Altitude = (fixed)t_alt;
-  }
 }
 
 bool
@@ -243,9 +239,11 @@ WayPointFile::Save(const Waypoints &way_points)
   // No filename -> return
   if (file[0] == 0)
     return false;
+
   // Not writable -> return
   if (!IsWritable())
     return false;
+
   // Compressed file -> return
   if (compressed)
     return false;
@@ -267,37 +265,32 @@ WayPointFile::create(const TCHAR* filename, int the_filenum)
   bool compressed = false;
 
   // If filename is empty -> clear and return false
-  if (string_is_empty(filename)) {
+  if (string_is_empty(filename))
     return NULL;
-  }
 
   // check existence of file
   if (!File::Exists(filename)) {
     ZipSource zip(filename);
-    if (zip.error()) {
+    if (zip.error())
       // File does not exist, fail
       return NULL;
-    } else {
-      // File does exist inside map file -> save compressed flag
-      compressed = true;
-    }
+
+    // File does exist inside map file -> save compressed flag
+    compressed = true;
   }
 
   // If WinPilot waypoint file -> save type and return true
   if (MatchesExtension(filename, _T(".dat")) ||
-      MatchesExtension(filename, _T(".xcw"))) {
+      MatchesExtension(filename, _T(".xcw")))
     return new WayPointFileWinPilot(filename, the_filenum, compressed);
-  }
 
   // If SeeYou waypoint file -> save type and return true
-  if (MatchesExtension(filename, _T(".cup"))) {
+  if (MatchesExtension(filename, _T(".cup")))
     return new WayPointFileSeeYou(filename, the_filenum, compressed);
-  }
 
   // If Zander waypoint file -> save type and return true
-  if (MatchesExtension(filename, _T(".wpz"))) {
+  if (MatchesExtension(filename, _T(".wpz")))
     return new WayPointFileZander(filename, the_filenum, compressed);
-  }
 
   // unknown
   return NULL;
