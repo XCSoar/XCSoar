@@ -37,7 +37,7 @@ public:
    *
    * @param x_default Default value of input
    */
-  DiffFilter(fixed x_default = fixed_zero)
+  DiffFilter(const fixed x_default = fixed_zero)
   {
     reset(x_default, fixed_zero);
   }
