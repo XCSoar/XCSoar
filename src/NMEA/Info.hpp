@@ -292,6 +292,11 @@ struct NMEA_INFO {
     BARO_ALTITUDE_TRIADIS_PDVDV,
 
     /**
+     * Parsed from the Westerboer sentence "PWES0".
+     */
+    BARO_ALTITUDE_WESTERBOER,
+
+    /**
      * Parsed from the Zander sentence "PZAN1".
      */
     BARO_ALTITUDE_ZANDER,
