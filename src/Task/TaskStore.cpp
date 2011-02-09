@@ -102,6 +102,12 @@ TaskStore::TaskStoreItem::get_name() const
   return name;
 }
 
+bool
+TaskStore::TaskStoreItem::operator<(const TaskStoreItem &i2) const
+{
+  return _tcscmp(get_name(), i2.get_name()) == -1;
+}
+
 const TCHAR *
 TaskStore::get_name(unsigned index) const
 {

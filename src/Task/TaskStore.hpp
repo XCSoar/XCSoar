@@ -56,6 +56,8 @@ public:
 
     const TCHAR* get_name() const;
     OrderedTask* get_task();
+
+    bool operator<(const TaskStoreItem &i2) const;
   };
 
   typedef std::vector<TaskStoreItem> TaskStoreVector;
