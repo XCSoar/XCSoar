@@ -93,13 +93,19 @@ TaskStore::TaskStoreItem::get_task()
 }
 
 const TCHAR *
-TaskStore::get_name(unsigned index) const
+TaskStore::TaskStoreItem::get_name() const
 {
-  const TCHAR *path = m_store[index].filename.c_str();
+  const TCHAR *path = filename.c_str();
   const TCHAR *name = BaseName(path);
   if (name == NULL)
     name = path;
   return name;
+}
+
+const TCHAR *
+TaskStore::get_name(unsigned index) const
+{
+  return m_store[index].get_name();
 }
 
 OrderedTask* 

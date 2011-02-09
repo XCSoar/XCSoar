@@ -53,6 +53,8 @@ public:
     tstring filename;
     OrderedTask* task;
     bool valid;
+
+    const TCHAR* get_name() const;
     OrderedTask* get_task();
   };
 
