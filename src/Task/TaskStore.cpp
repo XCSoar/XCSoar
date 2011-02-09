@@ -32,10 +32,10 @@ Copyright_License {
 class TaskFileVisitor: public File::Visitor
 {
 private:
-  TaskStore::TaskStoreVector &m_store;
+  TaskStore::ItemVector &m_store;
 
 public:
-  TaskFileVisitor(TaskStore::TaskStoreVector &store):
+  TaskFileVisitor(TaskStore::ItemVector &store):
     m_store(store) {}
 
   void Visit(const TCHAR* path, const TCHAR* filename) {

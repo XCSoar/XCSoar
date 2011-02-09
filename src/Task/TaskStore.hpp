@@ -58,7 +58,7 @@ public:
     bool operator<(const TaskStore::Item &i2) const;
   };
 
-  typedef std::vector<TaskStore::Item> TaskStoreVector;
+  typedef std::vector<TaskStore::Item> ItemVector;
 
   /**
    * Return the number of tasks in the TaskStore
@@ -84,7 +84,7 @@ private:
   /**
    * Internal task storage
    */
-  TaskStoreVector m_store;
+  ItemVector m_store;
 };
 
 #endif
