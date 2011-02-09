@@ -102,9 +102,8 @@ TaskStore::Item::get_name() const
 {
   const TCHAR *path = filename.c_str();
   const TCHAR *name = BaseName(path);
-  if (name == NULL)
-    name = path;
-  return name;
+
+  return (name == NULL) ? path : name;
 }
 
 bool
