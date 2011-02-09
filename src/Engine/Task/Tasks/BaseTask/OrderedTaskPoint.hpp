@@ -28,7 +28,6 @@
 #include "ScoredTaskPoint.hpp"
 #include "ObservationZoneClient.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
-#include "Util/Serialisable.hpp"
 #include "Compiler.h"
 
 /**

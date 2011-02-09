@@ -28,7 +28,6 @@
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"
 #include <vector>
-#include "Util/Serialisable.hpp"
 #include "GlideSolvers/MacCready.hpp"
 #include "PathSolvers/TaskDijkstraMin.hpp"
 #include "PathSolvers/TaskDijkstraMax.hpp"
