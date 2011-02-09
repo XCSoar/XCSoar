@@ -79,6 +79,14 @@ struct SpeedVector {
   bool is_non_zero() const {
     return positive(norm);
   }
+
+  /**
+   * Return the vector with the bearing rotated by 180 degrees.
+   */
+  gcc_pure
+  SpeedVector Reciprocal() const {
+    return SpeedVector(bearing.Reciprocal(), norm);
+  }
 };
 
 #endif
