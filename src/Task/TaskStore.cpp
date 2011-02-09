@@ -22,11 +22,26 @@ Copyright_License {
 */
 
 #include "Task/TaskStore.hpp"
-#include "DataField/FileReader.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Components.hpp"
 #include "OS/PathName.hpp"
+#include "OS/FileUtil.hpp"
+#include "LocalPath.hpp"
+
+class TaskFileVisitor: public File::Visitor
+{
+private:
+  TaskStore::TaskStoreVector &m_store;
+
+public:
+  TaskFileVisitor(TaskStore::TaskStoreVector &store):
+    m_store(store) {}
+
+  void Visit(const TCHAR* path, const TCHAR* filename) {
+    m_store.push_back(TaskStore::TaskStoreItem(path));
+  }
+};
 
 void
 TaskStore::clear()
@@ -41,13 +56,9 @@ TaskStore::scan()
   clear();
 
   // scan files
-  DataFieldFileReader fr(NULL);
-  fr.ScanDirectoryTop(_T("*.tsk"));
-
-  // append to list
-  for (unsigned i = 1; i < fr.size(); i++) {
-    m_store.push_back(TaskStoreItem(fr.getItem(i)));
-  }
+  TaskFileVisitor tfv(m_store);
+  const TCHAR* data_path = GetPrimaryDataPath();
+  Directory::VisitSpecificFiles(data_path, _T("*.tsk"), tfv, true);
 
   sort(m_store.begin(), m_store.end());
 }
