@@ -175,7 +175,7 @@ pnlTaskProperties::OnTypeClicked(WndButton &Sender)
 {
   (void)Sender;
 
-  TaskBehaviour::Factory_t new_type = TaskBehaviour::FACTORY_FAI_GENERAL;
+  TaskBehaviour::Factory_t new_type = TaskBehaviour::FACTORY_RT;
 
  if (dlgTaskTypeShowModal(*parent_window, &ordered_task, new_type)) {
    if (new_type != ordered_task->get_factory_type()) {

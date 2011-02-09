@@ -846,14 +846,14 @@ OrderedTask::OrderedTask(TaskEvents &te,
   AbstractTask(ORDERED, te, tb, gp),
   taskpoint_start(NULL),
   taskpoint_finish(NULL),
-  factory_mode(TaskBehaviour::FACTORY_FAI_GENERAL),
+  factory_mode(TaskBehaviour::FACTORY_RT),
   active_factory(NULL),
   m_ordered_behaviour(tb.ordered_defaults),
   task_advance(m_ordered_behaviour),
   dijkstra_min(*this),
   dijkstra_max(*this)
 {
-  active_factory = new FAITaskFactory(*this, task_behaviour);
+  active_factory = new RTTaskFactory(*this, task_behaviour);
   active_factory->update_ordered_task_behaviour(m_ordered_behaviour);
 }
 
