@@ -360,32 +360,32 @@ Serialiser::deserialise(OrderedTaskBehaviour& data)
 }
 
 void 
-Serialiser::serialise(const OrderedTask& data)
+Serialiser::serialise(const OrderedTask &task)
 {
-  m_node.set_attribute(_T("type"), task_factory_type(data.get_factory_type()));
-  serialise(data.get_ordered_task_behaviour());
+  m_node.set_attribute(_T("type"), task_factory_type(task.get_factory_type()));
+  serialise(task.get_ordered_task_behaviour());
   mode_optional_start = false;
-  data.tp_CAccept(*this);
+  task.tp_CAccept(*this);
   mode_optional_start = true;
-  data.sp_CAccept(*this);
+  task.sp_CAccept(*this);
 }
 
 void 
-Serialiser::deserialise(OrderedTask& data)
+Serialiser::deserialise(OrderedTask &task)
 {
-  data.clear();
-  data.set_factory(task_factory_type());
-  data.reset();
+  task.clear();
+  task.set_factory(task_factory_type());
+  task.reset();
 
-  OrderedTaskBehaviour beh = data.get_ordered_task_behaviour();
+  OrderedTaskBehaviour beh = task.get_ordered_task_behaviour();
   deserialise(beh);
-  data.set_ordered_task_behaviour(beh);
+  task.set_ordered_task_behaviour(beh);
 
   DataNode* point_node;
   unsigned i=0;
   while ((point_node = m_node.get_child_by_name(_T("Point"),i)) != NULL) {
     Serialiser pser(*point_node, waypoints);
-    pser.deserialise_point(data);
+    pser.deserialise_point(task);
     delete point_node;
     i++;
   }

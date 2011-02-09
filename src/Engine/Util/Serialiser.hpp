@@ -54,14 +54,14 @@ public:
    * 
    * @param data OrderedTask to serialise
    */
-  void serialise(const OrderedTask& data);
+  void serialise(const OrderedTask &task);
 
   /** 
    * De-serialise a task (create a task to reflect the DataNode structure)
    * 
    * @param data OrderedTask to serialise
    */
-  void deserialise(OrderedTask& data);
+  void deserialise(OrderedTask &task);
 
   void Visit(const StartPoint& data);
   void Visit(const ASTPoint& data);
