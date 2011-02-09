@@ -34,13 +34,13 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
 {
   TCHAR ctemp[255];
   const TCHAR *params[20];
-  static const unsigned int max_params=sizeof(params)/sizeof(params[0]);
+  static const unsigned int max_params = sizeof(params) / sizeof(params[0]);
   size_t n_params;
 
-  static unsigned iName = 0, iCode = 1, iCountry = 2;
-  static unsigned iLatitude = 3, iLongitude = 4, iElevation = 5;
-  static unsigned iStyle = 6, iRWDir = 7, iRWLen = 8;
-  static unsigned iFrequency = 9, iDescription = 10;
+  unsigned iName = 0;
+  unsigned iLatitude = 3, iLongitude = 4, iElevation = 5;
+  unsigned iStyle = 6, iRWDir = 7, iRWLen = 8;
+  unsigned iFrequency = 9, iDescription = 10;
 
   static bool ignore_following = false;
 
@@ -55,44 +55,10 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
     /* line too long for buffer */
     return false;
 
-  // Parse first line holding field order
-  /// @todo linenum == 0 should be the first
-  /// (not ignored) line, not just line 0
-  if (linenum == 0) {
-    // Get fields
-    n_params = extractParameters(line, ctemp, params, max_params, true, _T('"'));
-
-    // Iterate through fields and save the field order
-    for (unsigned i = 0; i < n_params; i++) {
-      const TCHAR* value = params[i];
-
-      if (!_tcscmp(value, _T("name")))
-        iName = i;
-      else if (!_tcscmp(value, _T("code")))
-        iCode = i;
-      else if (!_tcscmp(value, _T("country")))
-        iCountry = i;
-      else if (!_tcscmp(value, _T("lat")))
-        iLatitude = i;
-      else if (!_tcscmp(value, _T("lon")))
-        iLongitude = i;
-      else if (!_tcscmp(value, _T("elev")))
-        iElevation = i;
-      else if (!_tcscmp(value, _T("style")))
-        iStyle = i;
-      else if (!_tcscmp(value, _T("rwdir")))
-        iRWDir = i;
-      else if (!_tcscmp(value, _T("rwlen")))
-        iRWLen = i;
-      else if (!_tcscmp(value, _T("freq")))
-        iFrequency = i;
-      else if (!_tcscmp(value, _T("desc")))
-        iDescription = i;
-    }
-    ignore_following = false;
-
+  // Skip first line if it doesn't begin with a quotation character
+  // (usually the field order line)
+  if (linenum == 0 && line[0] != _T('\"'))
     return true;
-  }
 
   // If task marker is reached ignore all following lines
   if (_tcsstr(line, _T("-----Related Tasks-----")) == line)
