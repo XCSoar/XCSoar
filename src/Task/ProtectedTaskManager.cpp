@@ -24,6 +24,7 @@ Copyright_License {
 #include "ProtectedTaskManager.hpp"
 #include "Task/TaskManager.hpp"
 #include "Util/Serialiser.hpp"
+#include "Util/Deserialiser.hpp"
 #include "Util/DataNodeXML.hpp"
 #include "LocalPath.hpp"
 
@@ -261,7 +262,7 @@ ProtectedTaskManager::task_create(const TCHAR* path,
 
   if (_tcscmp(root->get_name().c_str(),_T("Task"))==0) {
     OrderedTask* task = task_blank();
-    Serialiser des(*root, waypoints);
+    Deserialiser des(*root, waypoints);
     des.deserialise(*task);
     if (task->check_task()) {
       delete root;

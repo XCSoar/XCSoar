@@ -8,7 +8,7 @@
 
 // #include "Wind/WindAnalyser.hpp"
 
-#include "Util/Serialiser.hpp"
+#include "Util/Deserialiser.hpp"
 #include "Util/DataNodeXML.hpp"
 
 /*
@@ -26,7 +26,7 @@ static OrderedTask* task_load(OrderedTask* task) {
   if (!root)
     return NULL;
 
-  Serialiser des(*root);
+  Deserialiser des(*root);
   des.deserialise(*task);
   if (task->check_task()) {
     delete root;

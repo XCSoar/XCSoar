@@ -38,71 +38,6 @@
 #include <assert.h>
 
 void
-Serialiser::deserialise_point(OrderedTask& data)
-{
-  tstring type;
-  if (!m_node.get_attribute(_T("type"), type)) {
-    assert(1);
-    return;
-  }
-
-  DataNode* wp_node = m_node.get_child_by_name(_T("Waypoint"));
-  if (wp_node == NULL)
-    return;
-
-  Serialiser wser(*wp_node, waypoints);
-  Waypoint *wp = wser.deserialise_waypoint();
-  if (wp == NULL) {
-    delete wp_node;
-    return;
-  }
-
-  DataNode* oz_node = m_node.get_child_by_name(_T("ObservationZone"));
-  if (oz_node == NULL) {
-    delete wp_node;
-    delete wp;
-    return;
-  }
-
-  Serialiser oser(*oz_node, waypoints);
-
-  AbstractTaskFactory& fact = data.get_factory();
-
-  ObservationZonePoint* oz = NULL;
-  OrderedTaskPoint *pt = NULL;
-
-  if (_tcscmp(type.c_str(), _T("Start")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, false)) != NULL)
-      pt = fact.createStart(oz, *wp);
-  } else if (_tcscmp(type.c_str(), _T("OptionalStart")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, false)) != NULL) {
-      pt = fact.createStart(oz, *wp);
-      fact.append_optional_start(*pt);
-      delete pt; // don't let generic code below add it
-      pt = NULL;
-    }
-  } else if (_tcscmp(type.c_str(), _T("Turn")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, true)) != NULL)
-      pt = fact.createAST(oz, *wp);
-  } else if (_tcscmp(type.c_str(), _T("Area")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, true)) != NULL)
-      pt = fact.createAAT(oz, *wp);
-  } else if (_tcscmp(type.c_str(), _T("Finish")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, false)) != NULL)
-      pt = fact.createFinish(oz, *wp);
-  } 
-
-  if (pt != NULL) {
-    fact.append(*pt, false);
-    delete pt;
-  }
-
-  delete wp;
-  delete wp_node;
-  delete oz_node;
-}
-
-void
 Serialiser::Visit(const StartPoint& data)
 {
   DataNode* child =
@@ -154,60 +89,6 @@ Serialiser::serialise(const OrderedTaskPoint& data, const TCHAR* name)
   delete ochild;
 
   return child;
-}
-
-ObservationZonePoint*
-Serialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
-{
-
-  tstring type;
-  if (!m_node.get_attribute(_T("type"), type)) {
-    assert(1);
-    return NULL;
-  }
-
-  if (_tcscmp(type.c_str(), _T("Line")) == 0) {
-    LineSectorZone *ls = new LineSectorZone(wp.Location);
-
-    fixed length;
-    if (m_node.get_attribute(_T("length"), length))
-      ls->setLength(length);
-
-    return ls;
-  } else if (_tcscmp(type.c_str(), _T("Cylinder")) == 0) {
-    CylinderZone *ls = new CylinderZone(wp.Location);
-
-    fixed radius;
-    if (m_node.get_attribute(_T("radius"), radius))
-      ls->setRadius(radius);
-
-    return ls;
-  } else if (_tcscmp(type.c_str(), _T("Sector")) == 0) {
-    SectorZone *ls = new SectorZone(wp.Location);
-
-    fixed radius;
-    Angle start, end;
-    if (m_node.get_attribute(_T("radius"), radius))
-      ls->setRadius(radius);
-    if (m_node.get_attribute(_T("start_radial"), start))
-      ls->setStartRadial(start);
-    if (m_node.get_attribute(_T("end_radial"), end))
-      ls->setEndRadial(end);
-
-    return ls;
-  } else if (_tcscmp(type.c_str(), _T("FAISector")) == 0)
-    return new FAISectorZone(wp.Location, is_turnpoint);
-  else if (_tcscmp(type.c_str(), _T("Keyhole")) == 0)
-    return new KeyholeZone(wp.Location);
-  else if (_tcscmp(type.c_str(), _T("BGAStartSector")) == 0)
-    return new BGAStartSectorZone(wp.Location);
-  else if (_tcscmp(type.c_str(), _T("BGAFixedCourse")) == 0)
-    return new BGAFixedCourseZone(wp.Location);
-  else if (_tcscmp(type.c_str(), _T("BGAEnhancedOption")) == 0)
-    return new BGAEnhancedOptionZone(wp.Location);
-
-  assert(1);
-  return NULL;
 }
 
 void 
@@ -277,43 +158,6 @@ Serialiser::serialise(const GeoPoint& data)
 }
 
 void 
-Serialiser::deserialise(GeoPoint& data)
-{
-  m_node.get_attribute(_T("longitude"), data.Longitude);
-  m_node.get_attribute(_T("latitude"), data.Latitude);
-}
-
-Waypoint*
-Serialiser::deserialise_waypoint()
-{
-  DataNode* loc_node = m_node.get_child_by_name(_T("Location"));
-  if (!loc_node)
-    return NULL;
-
-  GeoPoint loc;
-  Serialiser lser(*loc_node, waypoints);
-  lser.deserialise(loc);
-  delete loc_node;
-
-  if (waypoints != NULL) {
-    /* try to merge with existing waypoint from database */
-    const Waypoint *from_database = waypoints->lookup_location(loc, fixed(100));
-    // XXX narrow down search by comparing the name?
-    if (from_database != NULL)
-      /* found it, clone it for the caller to consume */
-      return new Waypoint(*from_database);
-  }
-
-  Waypoint *wp = new Waypoint(loc);
-  m_node.get_attribute(_T("name"), wp->Name);
-  m_node.get_attribute(_T("id"), wp->id);
-  m_node.get_attribute(_T("comment"), wp->Comment);
-  m_node.get_attribute(_T("altitude"), wp->Altitude);
-
-  return wp;
-}
-
-void 
 Serialiser::serialise(const Waypoint& data)
 {
   m_node.set_attribute(_T("name"), data.Name);
@@ -344,22 +188,6 @@ Serialiser::serialise(const OrderedTaskBehaviour& data)
 }
 
 void 
-Serialiser::deserialise(OrderedTaskBehaviour& data)
-{
-  m_node.get_attribute(_T("task_scored"), data.task_scored);
-  m_node.get_attribute(_T("aat_min_time"), data.aat_min_time);
-  m_node.get_attribute(_T("start_max_speed"), data.start_max_speed);
-  m_node.get_attribute(_T("start_max_height"), data.start_max_height);
-  m_node.get_attribute(_T("start_max_height_ref"), data.start_max_height_ref);
-  m_node.get_attribute(_T("finish_min_height"), data.finish_min_height);
-  m_node.get_attribute(_T("fai_finish"), data.fai_finish);
-  m_node.get_attribute(_T("min_points"), data.min_points);
-  m_node.get_attribute(_T("max_points"), data.max_points);
-  m_node.get_attribute(_T("homogeneous_tps"), data.homogeneous_tps);
-  m_node.get_attribute(_T("is_closed"), data.is_closed);
-}
-
-void 
 Serialiser::serialise(const OrderedTask &task)
 {
   m_node.set_attribute(_T("type"), task_factory_type(task.get_factory_type()));
@@ -368,57 +196,6 @@ Serialiser::serialise(const OrderedTask &task)
   task.tp_CAccept(*this);
   mode_optional_start = true;
   task.sp_CAccept(*this);
-}
-
-void 
-Serialiser::deserialise(OrderedTask &task)
-{
-  task.clear();
-  task.set_factory(task_factory_type());
-  task.reset();
-
-  OrderedTaskBehaviour beh = task.get_ordered_task_behaviour();
-  deserialise(beh);
-  task.set_ordered_task_behaviour(beh);
-
-  DataNode* point_node;
-  unsigned i=0;
-  while ((point_node = m_node.get_child_by_name(_T("Point"),i)) != NULL) {
-    Serialiser pser(*point_node, waypoints);
-    pser.deserialise_point(task);
-    delete point_node;
-    i++;
-  }
-}
-
-TaskBehaviour::Factory_t
-Serialiser::task_factory_type() const
-{
-  tstring type;
-  if (!m_node.get_attribute(_T("type"),type)) {
-    assert(1);
-    return TaskBehaviour::FACTORY_FAI_GENERAL;
-  }
-
-  if (_tcscmp(type.c_str(), _T("FAIGeneral")) == 0)
-    return TaskBehaviour::FACTORY_FAI_GENERAL;
-  else if (_tcscmp(type.c_str(), _T("FAITriangle")) == 0)
-    return TaskBehaviour::FACTORY_FAI_TRIANGLE;
-  else if (_tcscmp(type.c_str(), _T("FAIOR")) == 0)
-    return TaskBehaviour::FACTORY_FAI_OR;
-  else if (_tcscmp(type.c_str(), _T("FAIGoal")) == 0)
-    return TaskBehaviour::FACTORY_FAI_GOAL;
-  else if (_tcscmp(type.c_str(), _T("RT")) == 0)
-    return TaskBehaviour::FACTORY_RT;
-  else if (_tcscmp(type.c_str(), _T("AAT")) == 0)
-    return TaskBehaviour::FACTORY_AAT;
-  else if (_tcscmp(type.c_str(), _T("Mixed")) == 0)
-    return TaskBehaviour::FACTORY_MIXED;
-  else if (_tcscmp(type.c_str(), _T("Touring")) == 0)
-    return TaskBehaviour::FACTORY_TOURING;
-
-  assert(1);
-  return TaskBehaviour::FACTORY_FAI_GENERAL;
 }
 
 const TCHAR* 
