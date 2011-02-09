@@ -43,24 +43,37 @@ public:
     m_store(store) {}
 
   void Visit(const TCHAR* path, const TCHAR* filename) {
+    // Create a TaskFile instance to determine how many
+    // tasks are inside of this task file
     TaskFile* task_file = TaskFile::Create(path);
-    if (task_file != NULL) {
-      unsigned count = task_file->Count();
-      for (unsigned i = 0; i < count; i++) {
-        const TCHAR* base_name = BaseName(path);
-        TCHAR name[255];
-        _tcscpy(name, (base_name != NULL) ? base_name : path);
-        if (count > 1) {
-          TCHAR suffix[255];
-          _stprintf(suffix, _T(" - %s #%d"), _("Task"), i + 1);
-          _tcscat(name, suffix);
-        }
+    if (task_file == NULL)
+      return;
 
-        m_store.push_back(TaskStore::Item(path, (name == NULL) ? path : name, i));
+    // Get base name of the task file
+    const TCHAR* base_name = BaseName(path);
+
+    // Count the tasks in the task file
+    unsigned count = task_file->Count();
+    // For each task in the task file
+    for (unsigned i = 0; i < count; i++) {
+      // Copy base name of the file into task name
+      TCHAR name[255];
+      _tcscpy(name, (base_name != NULL) ? base_name : path);
+
+      // If the task file holds more than one task
+      if (count > 1) {
+        // .. append " - Task #[n]" suffix to the task name
+        TCHAR suffix[255];
+        _stprintf(suffix, _T(" - %s #%d"), _("Task"), i + 1);
+        _tcscat(name, suffix);
       }
 
-      delete task_file;
+      // Add the task to the TaskStore
+      m_store.push_back(TaskStore::Item(path, (name == NULL) ? path : name, i));
     }
+
+    // Remove temporary TaskFile instance
+    delete task_file;
   }
 };
 
