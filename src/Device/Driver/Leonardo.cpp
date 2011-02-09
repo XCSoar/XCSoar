@@ -103,7 +103,9 @@ LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 
   // 10 = wind speed [km/h]
   // 11 = wind direction [degrees]
-  info.ExternalWindAvailable = ReadSpeedVector(line, info.ExternalWind);
+  SpeedVector wind;
+  if (ReadSpeedVector(line, wind))
+    info.ProvideExternalWind(wind);
 
   TriggerVarioUpdate();
 

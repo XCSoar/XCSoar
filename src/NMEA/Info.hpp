@@ -554,6 +554,14 @@ struct NMEA_INFO {
   }
 
   /**
+   * Set the external wind value.
+   */
+  void ProvideExternalWind(const SpeedVector &value) {
+    ExternalWind = value;
+    ExternalWindAvailable = true;
+  }
+
+  /**
    * Adds data from the specified object, unless already present in
    * this one.
    *

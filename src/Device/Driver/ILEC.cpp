@@ -83,7 +83,9 @@ ParsePDA1(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
   }
 
   // wind direction [degrees, kph]
-  info.ExternalWindAvailable = ReadSpeedVector(line, info.ExternalWind);
+  SpeedVector wind;
+  if (ReadSpeedVector(line, wind))
+    info.ProvideExternalWind(wind);
 
   // confidence [0..100]
   // not used
