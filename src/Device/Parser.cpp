@@ -736,11 +736,9 @@ bool
 NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   fixed wnet;
-  if (line.read_checked(wnet)) {
-    GPS_INFO->TotalEnergyVario = Units::ToSysUnit((wnet - fixed(200)) / 10,
-                                                  unKnots);
-    GPS_INFO->TotalEnergyVarioAvailable = true;
-  }
+  if (line.read_checked(wnet))
+    GPS_INFO->ProvideTotalEnergyVario(Units::ToSysUnit((wnet - fixed(200)) / 10,
+                                                       unKnots));
 
   line.skip(); // average vario +200
 

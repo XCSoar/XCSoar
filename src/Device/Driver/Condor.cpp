@@ -73,6 +73,8 @@ cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   11 windspeed (kph)
   */
 
+  fixed value;
+
   line.skip();
 
   fixed airspeed;
@@ -90,15 +92,15 @@ cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
     // ToDo check if QNH correction is needed!
     GPS_INFO->ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_LX, alt);
 
-  GPS_INFO->TotalEnergyVarioAvailable =
-    line.read_checked(GPS_INFO->TotalEnergyVario);
+  if (line.read_checked(value)) {
+    GPS_INFO->ProvideTotalEnergyVario(value);
+    TriggerVarioUpdate();
+  }
 
   line.skip(6);
 
   GPS_INFO->ExternalWindAvailable =
     ReadSpeedVector(line, GPS_INFO->ExternalWind);
-
-  TriggerVarioUpdate();
 
   return true;
 }

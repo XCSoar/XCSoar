@@ -229,9 +229,10 @@ PDVDV(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   fixed value;
 
-  GPS_INFO->TotalEnergyVarioAvailable = line.read_checked(value);
-  if (GPS_INFO->TotalEnergyVarioAvailable)
-    GPS_INFO->TotalEnergyVario = value / 10;
+  if (line.read_checked(value)) {
+    GPS_INFO->ProvideTotalEnergyVario(value / 10);
+    TriggerVarioUpdate();
+  }
 
   GPS_INFO->IndicatedAirspeed = line.read(fixed_zero) / 10;
   GPS_INFO->TrueAirspeed = line.read(fixed_zero) *
@@ -243,8 +244,6 @@ PDVDV(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   if (enable_baro)
     GPS_INFO->ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_TRIADIS_PDVDV,
                                       line.read(fixed_zero));
-
-  TriggerVarioUpdate();
 
   return true;
 }
@@ -269,9 +268,8 @@ PDVDS(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   GPS_INFO->StallRatio = line.read(fixed_zero);
 
   fixed value;
-  GPS_INFO->NettoVarioAvailable = line.read_checked(value);
-  if (GPS_INFO->NettoVarioAvailable) {
-    GPS_INFO->NettoVario = value / 10;
+  if (line.read_checked(value)) {
+    GPS_INFO->ProvideNettoVario(value / 10);
     TriggerVarioUpdate();
   }
 

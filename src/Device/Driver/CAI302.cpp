@@ -561,9 +561,9 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   }
 
   if (line.read_checked(value)) {
-    GPS_INFO->TotalEnergyVario = Units::ToSysUnit((value - fixed(200)) / 10,
-                                                  unKnots);
-    GPS_INFO->TotalEnergyVarioAvailable = true;
+    GPS_INFO->ProvideTotalEnergyVario(Units::ToSysUnit((value - fixed(200)) / 10,
+                                                       unKnots));
+    TriggerVarioUpdate();
   }
 
   line.skip(2);
@@ -592,9 +592,6 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
     } else
       BugsUpdateTimeout--;
   }
-
-  // JMW update audio functions etc.
-  TriggerVarioUpdate();
 
   return true;
 }

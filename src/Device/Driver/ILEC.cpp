@@ -68,6 +68,8 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 static bool
 ParsePDA1(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 {
+  fixed value;
+
   // altitude [m]
   int altitude;
   if (line.read_checked(altitude) && enable_baro)
@@ -75,15 +77,16 @@ ParsePDA1(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
                                  fixed(altitude));
 
   // total energy vario [m/s]
-  info.TotalEnergyVarioAvailable = line.read_checked(info.TotalEnergyVario);
+  if (line.read_checked(value)) {
+    info.ProvideTotalEnergyVario(value);
+    TriggerVarioUpdate();
+  }
 
   // wind direction [degrees, kph]
   info.ExternalWindAvailable = ReadSpeedVector(line, info.ExternalWind);
 
   // confidence [0..100]
   // not used
-
-  TriggerVarioUpdate();
 
   return true;
 }

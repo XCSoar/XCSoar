@@ -48,12 +48,9 @@ VARIO(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
                                     value * 100);
 
   if (line.read_checked(value)) {
-    // vario is in dm/s
-    GPS_INFO->TotalEnergyVario = value / 10;
-    GPS_INFO->TotalEnergyVarioAvailable = true;
+    GPS_INFO->ProvideTotalEnergyVario(value / 10);
+    TriggerVarioUpdate();
   }
-
-  TriggerVarioUpdate();
 
   return true;
 }

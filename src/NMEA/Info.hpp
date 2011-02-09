@@ -538,6 +538,22 @@ struct NMEA_INFO {
   }
 
   /**
+   * Set the barometric TE vario value [m/s].
+   */
+  void ProvideTotalEnergyVario(fixed value) {
+    TotalEnergyVario = value;
+    TotalEnergyVarioAvailable = true;
+  }
+
+  /**
+   * Set the barometric netto vario value [m/s].
+   */
+  void ProvideNettoVario(fixed value) {
+    NettoVario = value;
+    NettoVarioAvailable = true;
+  }
+
+  /**
    * Adds data from the specified object, unless already present in
    * this one.
    *

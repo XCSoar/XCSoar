@@ -64,9 +64,8 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   bool vtas_av = line.read_checked(vtas);
 
-  GPS_INFO->TotalEnergyVarioAvailable = line.read_checked(value);
-  if (GPS_INFO->TotalEnergyVarioAvailable) {
-    GPS_INFO->TotalEnergyVario = Units::ToSysUnit(value, unKnots);
+  if (line.read_checked(value)) {
+    GPS_INFO->ProvideTotalEnergyVario(Units::ToSysUnit(value, unKnots));
 
     TriggerVarioUpdate();
   }

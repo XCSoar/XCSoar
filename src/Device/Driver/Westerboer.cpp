@@ -59,17 +59,13 @@ PWES0(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 
   line.skip(); /* device */
 
-  if (line.read_checked(i)) {
-    info.TotalEnergyVario = fixed(i) / 10;
-    info.TotalEnergyVarioAvailable = true;
-  }
+  if (line.read_checked(i))
+    info.ProvideTotalEnergyVario(fixed(i) / 10);
 
   line.skip(); /* average vario */
 
-  if (line.read_checked(i)) {
-    info.NettoVario = fixed(i) / 10;
-    info.NettoVarioAvailable = true;
-  }
+  if (line.read_checked(i))
+    info.ProvideNettoVario(fixed(i) / 10);
 
   line.skip(); /* average netto vario */
   line.skip(); /* speed to fly */

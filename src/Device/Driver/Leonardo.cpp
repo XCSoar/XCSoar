@@ -75,9 +75,8 @@ LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
     info.ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_LEONARDO, value);
 
   // 1 = vario [dm/s]
-  info.TotalEnergyVarioAvailable = line.read_checked(value);
-  if (info.TotalEnergyVarioAvailable)
-    info.TotalEnergyVario = value / 10;
+  if (line.read_checked(value))
+    info.ProvideTotalEnergyVario(value / 10);
 
   // 2 = airspeed [km/h]
   /* XXX is that TAS or IAS? */
@@ -90,10 +89,9 @@ LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
   }
 
   // 3 = netto vario [dm/s]
-  if (line.read_checked(value)) {
-    info.NettoVario = value / 10;
-    info.NettoVarioAvailable = true;
-  } else
+  if (line.read_checked(value))
+    info.ProvideNettoVario(value / 10);
+  else
     /* short "$C" sentence ends after airspeed */
     return true;
 
@@ -123,9 +121,8 @@ LeonardoParseD(NMEAInputLine &line, NMEA_INFO &info)
   fixed value;
 
   // 0 = vario [dm/s]
-  info.TotalEnergyVarioAvailable = line.read_checked(value);
-  if (info.TotalEnergyVarioAvailable)
-    info.TotalEnergyVario = value / 10;
+  if (line.read_checked(value))
+    info.ProvideTotalEnergyVario(value / 10);
 
   // 1 = air pressure [Pa]
   if (line.skip() == 0)
@@ -133,10 +130,8 @@ LeonardoParseD(NMEAInputLine &line, NMEA_INFO &info)
     return true;
 
   // 2 = netto vario [dm/s]
-  if (line.read_checked(value)) {
-    info.NettoVario = value / 10;
-    info.NettoVarioAvailable = true;
-  }
+  if (line.read_checked(value))
+    info.ProvideNettoVario(value / 10);
 
   // 3 = airspeed [km/h]
   /* XXX is that TAS or IAS? */

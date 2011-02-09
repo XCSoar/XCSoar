@@ -69,11 +69,9 @@ PZAN2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   }
 
   if (line.read_checked(wnet)) {
-    GPS_INFO->TotalEnergyVario = (wnet - fixed(10000)) / 100;
-    GPS_INFO->TotalEnergyVarioAvailable = true;
+    GPS_INFO->ProvideTotalEnergyVario((wnet - fixed(10000)) / 100);
+    TriggerVarioUpdate();
   }
-
-  TriggerVarioUpdate();
 
   return true;
 }
