@@ -493,6 +493,8 @@ InfoBoxWindow::on_mouse_down(int x, int y)
 bool
 InfoBoxWindow::on_mouse_up(int x, int y)
 {
+  if (!has_focus()) return PaintWindow::on_mouse_up(x, y);
+
   if (click_clock.check(2000)) {
     InputEvents::eventDoInfoKey(_T("setup"));
     return true;
