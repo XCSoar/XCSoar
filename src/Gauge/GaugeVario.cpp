@@ -320,12 +320,11 @@ GaugeVario::ValueToNeedlePos(fixed Value)
   int i;
 
   if (!InitDone){
-    gmax = (int)(GAUGEVARIOSWEEP) + 2;
     MakeAllPolygons();
     InitDone = true;
   }
   i = iround(Value * degrees_per_unit);
-  i = min(gmax,max(-gmax,i));
+  i = min((int)gmax, max(-gmax, i));
   return i;
 }
 

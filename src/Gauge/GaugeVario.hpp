@@ -54,6 +54,8 @@ class GaugeVario:
 
     /** degrees total sweep */
     GAUGEVARIOSWEEP = 90,
+
+    gmax = GAUGEVARIOSWEEP + 2,
   };
 
 public:
@@ -87,7 +89,6 @@ private:
   RasterPoint *polys;
   RasterPoint *lines;
 
-  int gmax;
   bool dirty;
 
   bool layout_initialised;
