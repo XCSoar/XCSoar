@@ -26,6 +26,7 @@ Copyright_License {
 #include "Util/Serialiser.hpp"
 #include "Util/Deserialiser.hpp"
 #include "Util/DataNodeXML.hpp"
+#include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
 
 #include <windef.h> // for MAX_PATH
@@ -256,23 +257,12 @@ OrderedTask*
 ProtectedTaskManager::task_create(const TCHAR* path,
                                   const Waypoints *waypoints) const
 {
-  DataNode* root = DataNodeXML::load(path);
-  if (!root)
-    return NULL;
-
-  if (_tcscmp(root->get_name().c_str(),_T("Task"))==0) {
-    OrderedTask* task = task_blank();
-    Deserialiser des(*root, waypoints);
-    des.deserialise(*task);
-    if (task->check_task()) {
-      delete root;
-      return task;
-    }
-    delete task;
-    delete root;
-    return NULL;
+  TaskFile* task_file = TaskFile::Create(path);
+  if (task_file != NULL) {
+    OrderedTask* task = task_file->GetTask(waypoints);
+    delete task_file;
+    return task;
   }
-  delete root;
   return NULL;
 }
  

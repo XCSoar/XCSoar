@@ -988,6 +988,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
+	$(SRC)/Task/TaskFile.cpp \
+	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -1142,6 +1144,9 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/UtilsFile.cpp \
+	$(SRC)/Task/TaskFile.cpp \
+	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Math/Screen.cpp \
@@ -1311,6 +1316,8 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Task/TaskFile.cpp \
+	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
