@@ -233,6 +233,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Gauge/GaugeFLARM.cpp \
 	$(SRC)/Gauge/GaugeThermalAssistant.cpp \
 	$(SRC)/Gauge/GaugeVario.cpp \
+	$(SRC)/Gauge/GlueGaugeVario.cpp \
 	$(SRC)/Gauge/TaskView.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
 	\

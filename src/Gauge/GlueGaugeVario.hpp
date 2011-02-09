@@ -21,16 +21,37 @@ Copyright_License {
 }
 */
 
-#include "InstrumentThread.hpp"
-#include "Gauge/GlueGaugeVario.hpp"
+#ifndef GLUE_GAUGE_VARIO_H
+#define GLUE_GAUGE_VARIO_H
 
-InstrumentThread::InstrumentThread(GlueGaugeVario &_vario)
-  :vario(_vario) {}
+#include "GaugeVario.hpp"
 
-void
-InstrumentThread::tick()
-{
-  vario.invalidate_blackboard();
-}
+/**
+ * A variant of GaugeVario which auto-updates its data from the device
+ * blackboard.
+ */
+class GlueGaugeVario : public GaugeVario {
+  /**
+   * Is our InstrumentBlackboard up to date?
+   */
+  bool blackboard_valid;
 
+public:
+  GlueGaugeVario(ContainerWindow &parent,
+                 int left, int top, unsigned width, unsigned height,
+                 const WindowStyle style=WindowStyle())
+    :GaugeVario(parent, left, top, width, height, style),
+     blackboard_valid(false) {}
 
+  /**
+   * Indicate that vario data in the device blackboard has been
+   * updated, and trigger a redraw.  This method may be called from
+   * any thread.
+   */
+  void invalidate_blackboard();
+
+protected:
+  virtual void on_paint_buffer(Canvas &canvas);
+};
+
+#endif

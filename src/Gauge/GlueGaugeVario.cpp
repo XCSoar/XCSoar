@@ -21,16 +21,34 @@ Copyright_License {
 }
 */
 
-#include "InstrumentThread.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
-
-InstrumentThread::InstrumentThread(GlueGaugeVario &_vario)
-  :vario(_vario) {}
+#include "Protection.hpp"
+#include "DeviceBlackboard.hpp"
 
 void
-InstrumentThread::tick()
+GlueGaugeVario::invalidate_blackboard()
 {
-  vario.invalidate_blackboard();
+  /* protecting the flag with a Mutex would be correct, but not
+     worth the overhead */
+
+  if (!blackboard_valid)
+    return;
+
+  blackboard_valid = false;
+  invalidate();
 }
 
+void
+GlueGaugeVario::on_paint_buffer(Canvas &canvas)
+{
+  if (!blackboard_valid) {
+    blackboard_valid = true;
 
+    const ScopeLock protect(mutexBlackboard);
+    ReadBlackboardBasic(device_blackboard.Basic());
+    ReadBlackboardCalculated(device_blackboard.Calculated());
+    ReadSettingsComputer(device_blackboard.SettingsComputer());
+  }
+
+  GaugeVario::on_paint_buffer(canvas);
+}

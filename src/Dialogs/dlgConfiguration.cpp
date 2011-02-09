@@ -69,7 +69,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Hardware/Display.hpp"
 #include "OS/PathName.hpp"
-#include "Gauge/GaugeVario.hpp"
+#include "Gauge/GlueGaugeVario.hpp"
 
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"

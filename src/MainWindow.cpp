@@ -36,7 +36,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Gauge/GaugeThermalAssistant.hpp"
-#include "Gauge/GaugeVario.hpp"
+#include "Gauge/GlueGaugeVario.hpp"
 #include "MenuBar.hpp"
 #include "Appearance.hpp"
 
@@ -120,11 +120,11 @@ MainWindow::InitialiseConfigured()
   WindowStyle hidden;
   hidden.hide();
 
-  vario = new GaugeVario(*this,
-                         rc.right - InfoBoxLayout::ControlWidth, 0,
-                         InfoBoxLayout::ControlWidth,
-                         InfoBoxLayout::ControlHeight * 3,
-                         hidden);
+  vario = new GlueGaugeVario(*this,
+                             rc.right - InfoBoxLayout::ControlWidth, 0,
+                             InfoBoxLayout::ControlWidth,
+                             InfoBoxLayout::ControlHeight * 3,
+                             hidden);
 
   WindowStyle hidden_border;
   hidden_border.hide();

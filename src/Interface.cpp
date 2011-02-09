@@ -33,7 +33,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Components.hpp"
 #include "DrawThread.hpp"
-#include "Gauge/GaugeVario.hpp"
+#include "Gauge/GlueGaugeVario.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "PeriodClock.hpp"
 #include "Screen/Blank.hpp"

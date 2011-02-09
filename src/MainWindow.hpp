@@ -28,7 +28,7 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 #include "PopupMessage.hpp"
 
-class GaugeVario;
+class GlueGaugeVario;
 class GaugeFLARM;
 class GaugeThermalAssistant;
 class StatusMessageList;
@@ -39,7 +39,7 @@ class StatusMessageList;
 class MainWindow : public SingleWindow {
 public:
   GlueMapWindow map;
-  GaugeVario *vario;
+  GlueGaugeVario *vario;
   GaugeFLARM *flarm;
   GaugeThermalAssistant *ta;
   PopupMessage popup;

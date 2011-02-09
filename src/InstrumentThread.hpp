@@ -26,13 +26,13 @@ Copyright_License {
 
 #include "Thread/WorkerThread.hpp"
 
-class GaugeVario;
+class GlueGaugeVario;
 
 class InstrumentThread : public WorkerThread {
-  GaugeVario &vario;
+  GlueGaugeVario &vario;
 
 public:
-  InstrumentThread(GaugeVario &_vario);
+  InstrumentThread(GlueGaugeVario &_vario);
 
 protected:
   virtual void tick();

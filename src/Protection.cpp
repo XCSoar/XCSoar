@@ -79,7 +79,7 @@ void CreateCalculationThread(void) {
 
   device_blackboard.ReadBlackboard(glide_computer->Calculated());
 
-  GaugeVario *gauge_vario = XCSoarInterface::main_window.vario;
+  GlueGaugeVario *gauge_vario = XCSoarInterface::main_window.vario;
   if (gauge_vario != NULL)
     instrument_thread = new InstrumentThread(*gauge_vario);
 
