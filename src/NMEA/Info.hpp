@@ -252,6 +252,11 @@ struct NMEA_INFO {
     BARO_ALTITUDE_GARMIN,
 
     /**
+     * Parsed from proprietary EW sentence "PGRMZ".
+     */
+    BARO_ALTITUDE_EW,
+
+    /**
      * Parsed from proprietary Volkslogger sentence "PGCS1".
      */
     BARO_ALTITUDE_VOLKSLOGGER,

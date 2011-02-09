@@ -97,9 +97,17 @@ EWMicroRecorderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
   line.read(type, 16);
 
   if (strcmp(type, "$PGRMZ") == 0) {
-    if (enable_baro)
-      GPS_INFO->BaroAltitudeAvailable =
-        ReadAltitude(line, GPS_INFO->BaroAltitude);
+    fixed value;
+
+    /* The normal Garmin $PGRMZ line contains the "true" barometric
+       altitude above MSL (corrected with QNH), but EWMicroRecorder
+       differs here slightly: it emits the uncorrected barometric
+       altitude.  That is the only reason why we catch this sentence
+       in the driver instead of letting the generic class NMEAParser
+       do it. */
+    if (ReadAltitude(line, value) && enable_baro)
+      GPS_INFO->ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_EW,
+                                        value);
 
     return true;
   } else
