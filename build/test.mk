@@ -55,7 +55,7 @@ TEST_NAMES = \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
-	TestColorRamp TestGeoPoint \
+	TestColorRamp TestGeoPoint TestDiffFilter \
 	TestFileUtil TestPolars \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint
 
@@ -211,6 +211,16 @@ TEST_GEO_POINT_SOURCES = \
 TEST_GEO_POINT_OBJS = $(call SRC_TO_OBJ,$(TEST_GEO_POINT_SOURCES))
 TEST_GEO_POINT_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestGeoPoint$(TARGET_EXEEXT): $(TEST_GEO_POINT_OBJS) $(TEST_GEO_POINT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_DIFF_FILTER_SOURCES = \
+	$(ENGINE_SRC_DIR)/Util/DiffFilter.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestDiffFilter.cpp
+TEST_DIFF_FILTER_OBJS = $(call SRC_TO_OBJ,$(TEST_DIFF_FILTER_SOURCES))
+TEST_DIFF_FILTER_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestDiffFilter$(TARGET_EXEEXT): $(TEST_DIFF_FILTER_OBJS) $(TEST_DIFF_FILTER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
