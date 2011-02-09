@@ -69,8 +69,9 @@ TaskStore::size() const
   return m_store.size();
 }
 
-TaskStore::Item::Item(const tstring &the_filename):
+TaskStore::Item::Item(const tstring &the_filename, unsigned _task_index):
   filename(the_filename),
+  task_index(_task_index),
   task(NULL),
   valid(true)
 {        
