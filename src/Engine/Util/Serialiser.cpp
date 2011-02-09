@@ -37,32 +37,33 @@
 
 #include <assert.h>
 
-
 void
 Serialiser::deserialise_point(OrderedTask& data)
 {
   tstring type;
-  if (!m_node.get_attribute(_T("type"),type)) {
+  if (!m_node.get_attribute(_T("type"), type)) {
     assert(1);
     return;
   }
 
   DataNode* wp_node = m_node.get_child_by_name(_T("Waypoint"));
-  if (wp_node==NULL)
+  if (wp_node == NULL)
     return;
+
   Serialiser wser(*wp_node, waypoints);
   Waypoint *wp = wser.deserialise_waypoint();
-  if (wp==NULL) {
+  if (wp == NULL) {
     delete wp_node;
     return;
   }
 
   DataNode* oz_node = m_node.get_child_by_name(_T("ObservationZone"));
-  if (oz_node==NULL) {
+  if (oz_node == NULL) {
     delete wp_node;
     delete wp;
     return;
   }
+
   Serialiser oser(*oz_node, waypoints);
 
   AbstractTaskFactory& fact = data.get_factory();
@@ -71,9 +72,8 @@ Serialiser::deserialise_point(OrderedTask& data)
   OrderedTaskPoint *pt = NULL;
 
   if (_tcscmp(type.c_str(), _T("Start")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, false)) != NULL) {
+    if ((oz = oser.deserialise_oz(*wp, false)) != NULL)
       pt = fact.createStart(oz, *wp);
-    }
   } else if (_tcscmp(type.c_str(), _T("OptionalStart")) == 0) {
     if ((oz = oser.deserialise_oz(*wp, false)) != NULL) {
       pt = fact.createStart(oz, *wp);
@@ -82,17 +82,14 @@ Serialiser::deserialise_point(OrderedTask& data)
       pt = NULL;
     }
   } else if (_tcscmp(type.c_str(), _T("Turn")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, true)) != NULL) {
+    if ((oz = oser.deserialise_oz(*wp, true)) != NULL)
       pt = fact.createAST(oz, *wp);
-    }
   } else if (_tcscmp(type.c_str(), _T("Area")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, true)) != NULL) {
+    if ((oz = oser.deserialise_oz(*wp, true)) != NULL)
       pt = fact.createAAT(oz, *wp);
-    }
   } else if (_tcscmp(type.c_str(), _T("Finish")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, false)) != NULL) {
+    if ((oz = oser.deserialise_oz(*wp, false)) != NULL)
       pt = fact.createFinish(oz, *wp);
-    }
   } 
 
   if (pt != NULL) {
@@ -105,11 +102,11 @@ Serialiser::deserialise_point(OrderedTask& data)
   delete oz_node;
 }
 
-
 void
 Serialiser::Visit(const StartPoint& data)
 {
-  DataNode* child = serialise(data, mode_optional_start? _T("OptionalStart"): _T("Start"));
+  DataNode* child =
+    serialise(data, mode_optional_start ? _T("OptionalStart"): _T("Start"));
   delete child;
 }
 
@@ -137,9 +134,7 @@ Serialiser::Visit(const FinishPoint& data)
 void
 Serialiser::Visit(const UnorderedTaskPoint& data)
 {
-  // visit(data, _T("Unordered"));
 }
-
 
 DataNode*
 Serialiser::serialise(const OrderedTaskPoint& data, const TCHAR* name)
@@ -166,63 +161,60 @@ Serialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
 {
 
   tstring type;
-  if (!m_node.get_attribute(_T("type"),type)) {
+  if (!m_node.get_attribute(_T("type"), type)) {
     assert(1);
     return NULL;
   }
+
   if (_tcscmp(type.c_str(), _T("Line")) == 0) {
     LineSectorZone *ls = new LineSectorZone(wp.Location);
 
     fixed length;
-    if (m_node.get_attribute(_T("length"), length)) {
+    if (m_node.get_attribute(_T("length"), length))
       ls->setLength(length);
-    }
+
     return ls;
   } else if (_tcscmp(type.c_str(), _T("Cylinder")) == 0) {
     CylinderZone *ls = new CylinderZone(wp.Location);
 
     fixed radius;
-    if (m_node.get_attribute(_T("radius"), radius)) {
+    if (m_node.get_attribute(_T("radius"), radius))
       ls->setRadius(radius);
-    }
+
     return ls;
   } else if (_tcscmp(type.c_str(), _T("Sector")) == 0) {
     SectorZone *ls = new SectorZone(wp.Location);
 
     fixed radius;
     Angle start, end;
-    if (m_node.get_attribute(_T("radius"), radius)) {
+    if (m_node.get_attribute(_T("radius"), radius))
       ls->setRadius(radius);
-    }
-    if (m_node.get_attribute(_T("start_radial"), start)) {
+    if (m_node.get_attribute(_T("start_radial"), start))
       ls->setStartRadial(start);
-    }
-    if (m_node.get_attribute(_T("end_radial"), end)) {
+    if (m_node.get_attribute(_T("end_radial"), end))
       ls->setEndRadial(end);
-    }
+
     return ls;
-  } else if (_tcscmp(type.c_str(), _T("FAISector")) == 0) {
+  } else if (_tcscmp(type.c_str(), _T("FAISector")) == 0)
     return new FAISectorZone(wp.Location, is_turnpoint);
-  } else if (_tcscmp(type.c_str(), _T("Keyhole")) == 0) {
+  else if (_tcscmp(type.c_str(), _T("Keyhole")) == 0)
     return new KeyholeZone(wp.Location);
-  } else if (_tcscmp(type.c_str(), _T("BGAStartSector")) == 0) {
+  else if (_tcscmp(type.c_str(), _T("BGAStartSector")) == 0)
     return new BGAStartSectorZone(wp.Location);
-  } else if (_tcscmp(type.c_str(), _T("BGAFixedCourse")) == 0) {
+  else if (_tcscmp(type.c_str(), _T("BGAFixedCourse")) == 0)
     return new BGAFixedCourseZone(wp.Location);
-  } else if (_tcscmp(type.c_str(), _T("BGAEnhancedOption")) == 0) {
+  else if (_tcscmp(type.c_str(), _T("BGAEnhancedOption")) == 0)
     return new BGAEnhancedOptionZone(wp.Location);
-  }
+
   assert(1);
   return NULL;
 }
-
 
 void 
 Serialiser::serialise(const ObservationZonePoint& data) 
 {
   ObservationZoneConstVisitor::Visit(data);
 } 
-
 
 void 
 Serialiser::Visit(const FAISectorZone& data)
@@ -297,6 +289,7 @@ Serialiser::deserialise_waypoint()
   DataNode* loc_node = m_node.get_child_by_name(_T("Location"));
   if (!loc_node)
     return NULL;
+
   GeoPoint loc;
   Serialiser lser(*loc_node, waypoints);
   lser.deserialise(loc);
@@ -398,7 +391,6 @@ Serialiser::deserialise(OrderedTask& data)
   }
 }
 
-
 TaskBehaviour::Factory_t
 Serialiser::task_factory_type() const
 {
@@ -407,23 +399,24 @@ Serialiser::task_factory_type() const
     assert(1);
     return TaskBehaviour::FACTORY_FAI_GENERAL;
   }
-  if (_tcscmp(type.c_str(), _T("FAIGeneral")) == 0) {
+
+  if (_tcscmp(type.c_str(), _T("FAIGeneral")) == 0)
     return TaskBehaviour::FACTORY_FAI_GENERAL;
-  } else if (_tcscmp(type.c_str(), _T("FAITriangle")) == 0) {
+  else if (_tcscmp(type.c_str(), _T("FAITriangle")) == 0)
     return TaskBehaviour::FACTORY_FAI_TRIANGLE;
-  } else if (_tcscmp(type.c_str(), _T("FAIOR")) == 0) {
+  else if (_tcscmp(type.c_str(), _T("FAIOR")) == 0)
     return TaskBehaviour::FACTORY_FAI_OR;
-  } else if (_tcscmp(type.c_str(), _T("FAIGoal")) == 0) {
+  else if (_tcscmp(type.c_str(), _T("FAIGoal")) == 0)
     return TaskBehaviour::FACTORY_FAI_GOAL;
-  } else if (_tcscmp(type.c_str(), _T("RT")) == 0) {
+  else if (_tcscmp(type.c_str(), _T("RT")) == 0)
     return TaskBehaviour::FACTORY_RT;
-  } else if (_tcscmp(type.c_str(), _T("AAT")) == 0) {
+  else if (_tcscmp(type.c_str(), _T("AAT")) == 0)
     return TaskBehaviour::FACTORY_AAT;
-  } else if (_tcscmp(type.c_str(), _T("Mixed")) == 0) {
+  else if (_tcscmp(type.c_str(), _T("Mixed")) == 0)
     return TaskBehaviour::FACTORY_MIXED;
-  } else if (_tcscmp(type.c_str(), _T("Touring")) == 0) {
+  else if (_tcscmp(type.c_str(), _T("Touring")) == 0)
     return TaskBehaviour::FACTORY_TOURING;
-  }
+
   assert(1);
   return TaskBehaviour::FACTORY_FAI_GENERAL;
 }
@@ -448,7 +441,8 @@ Serialiser::task_factory_type(TaskBehaviour::Factory_t the_type) const
     return _T("Mixed");
   case TaskBehaviour::FACTORY_TOURING:
     return _T("Touring");
-  };
+  }
+
   assert(1);
   return NULL;
 }
