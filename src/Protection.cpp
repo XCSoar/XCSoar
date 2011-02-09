@@ -25,12 +25,11 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "MapWindow.hpp"
 #include "SettingsMap.hpp"
-#include "Gauge/GaugeVario.hpp"
+#include "Gauge/GlueGaugeVario.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "GlideComputer.hpp"
 #include "CalculationThread.hpp"
-#include "InstrumentThread.hpp"
 #include "DrawThread.hpp"
 
 #include <assert.h>
@@ -56,10 +55,9 @@ void TriggerGPSUpdate()
 
 void TriggerVarioUpdate()
 {
-  if (instrument_thread == NULL)
-    return;
-
-  instrument_thread->trigger();
+  GlueGaugeVario *gauge_vario = CommonInterface::main_window.vario;
+  if (gauge_vario != NULL)
+    gauge_vario->invalidate_blackboard();
 }
 
 #include "DeviceBlackboard.hpp"
@@ -78,10 +76,6 @@ void CreateCalculationThread(void) {
   XCSoarInterface::ExchangeBlackboard();
 
   device_blackboard.ReadBlackboard(glide_computer->Calculated());
-
-  GlueGaugeVario *gauge_vario = XCSoarInterface::main_window.vario;
-  if (gauge_vario != NULL)
-    instrument_thread = new InstrumentThread(*gauge_vario);
 
   // Create a read thread for performing calculations
   calculation_thread = new CalculationThread(*glide_computer);

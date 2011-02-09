@@ -65,7 +65,6 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "StatusMessage.hpp"
 #include "CalculationThread.hpp"
-#include "InstrumentThread.hpp"
 #include "Replay/Replay.hpp"
 #include "ResourceLoader.hpp"
 #include "LocalPath.hpp"
@@ -104,7 +103,6 @@ DrawThread *draw_thread;
 #endif
 
 CalculationThread *calculation_thread;
-InstrumentThread *instrument_thread;
 
 Logger logger;
 Replay *replay;
@@ -439,10 +437,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // Start calculation thread
   calculation_thread->start();
 
-  // Start instrument thread
-  if (instrument_thread != NULL)
-    instrument_thread->start();
-
   globalRunningEvent.trigger();
 
   AfterStartup();
@@ -495,23 +489,11 @@ XCSoarInterface::Shutdown(void)
 #endif
   calculation_thread->stop();
 
-  if (instrument_thread != NULL)
-    instrument_thread->stop();
-
   // Wait for the calculations thread to finish
   calculation_thread->join();
   delete calculation_thread;
   calculation_thread = NULL;
   LogStartUp(_T("- calculation thread returned"));
-
-  //  Wait for the instruments thread to finish
-  if (instrument_thread != NULL) {
-    instrument_thread->join();
-    delete instrument_thread;
-    instrument_thread = NULL;
-  }
-
-  LogStartUp(_T("- instrument thread returned"));
 
   //  Wait for the drawing thread to finish
 #ifndef ENABLE_OPENGL

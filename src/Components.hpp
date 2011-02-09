@@ -32,7 +32,6 @@ class RasterWeather;
 class GlideComputer;
 class DrawThread;
 class CalculationThread;
-class InstrumentThread;
 class Waypoints;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
@@ -58,7 +57,6 @@ extern GlideComputer *glide_computer;
 extern DrawThread *draw_thread;
 #endif
 extern CalculationThread *calculation_thread;
-extern InstrumentThread *instrument_thread;
 
 extern Logger logger;
 
