@@ -86,9 +86,6 @@ private:
 
   Bitmap hBitmapClimb;
 
-  RasterPoint *polys;
-  RasterPoint *lines;
-
   bool dirty;
 
   bool layout_initialised;
@@ -105,11 +102,13 @@ private:
   DrawInfo_t diLabelBottom;
   const UnitSymbol *unit_symbol;
 
+  RasterPoint polys[(gmax * 2 + 1) * 3];
+  RasterPoint lines[gmax * 2 + 1];
+
 public:
   GaugeVario(ContainerWindow &parent,
              int left, int top, unsigned width, unsigned height,
              const WindowStyle style=WindowStyle());
-  ~GaugeVario();
 
 protected:
   virtual void on_paint_buffer(Canvas &canvas);

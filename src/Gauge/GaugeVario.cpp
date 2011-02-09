@@ -34,7 +34,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 
 #include <assert.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 #include <algorithm>
@@ -61,7 +60,6 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
    nlength1(Layout::Scale(6)),
    nwidth(Layout::Scale(4)),
    nline(Layout::Scale(8)),
-   polys(NULL), lines(NULL),
    dirty(true), layout_initialised(false)
 {
   Profile::Get(szProfileAppGaugeVarioSpeedToFly, ShowSpeedToFly);
@@ -125,12 +123,6 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   yoffset = get_height() / 2 + get_top();
 
   hide();
-}
-
-GaugeVario::~GaugeVario()
-{
-  free(polys);
-  free(lines);
 }
 
 void
@@ -272,12 +264,6 @@ GaugeVario::getPolygon(int i)
 void
 GaugeVario::MakeAllPolygons()
 {
-  polys = (RasterPoint*)malloc((gmax * 2 + 1) * 3 * sizeof(RasterPoint));
-  lines = (RasterPoint*)malloc((gmax * 2 + 1) * sizeof(RasterPoint));
-
-  assert(polys);
-  assert(lines);
-
   if (polys && lines)
     for (int i = -gmax; i <= gmax; i++)
       MakePolygon(i);
