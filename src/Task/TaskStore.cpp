@@ -69,13 +69,6 @@ TaskStore::size() const
   return m_store.size();
 }
 
-TaskStore::TaskStoreItem::TaskStoreItem():
-  filename(_T("unk")),
-  task(NULL),
-  valid(false)
-{
-}
-
 TaskStore::TaskStoreItem::TaskStoreItem(const tstring &the_filename):
   filename(the_filename),
   task(NULL),

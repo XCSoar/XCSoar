@@ -45,8 +45,6 @@ public:
 
   struct TaskStoreItem 
   {
-    TaskStoreItem();
-
     TaskStoreItem(const tstring &the_filename);
     ~TaskStoreItem();
 
