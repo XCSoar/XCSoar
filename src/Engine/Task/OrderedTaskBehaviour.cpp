@@ -24,20 +24,19 @@
 #include "TaskBehaviour.hpp"
 
 OrderedTaskBehaviour::OrderedTaskBehaviour():
-    task_scored(true),
-    aat_min_time(3600*5.35),
-    start_max_speed(60.0),
-    start_max_height(0),
-    start_max_height_ref(0),
-    finish_min_height(0),
-    fai_finish(false),
-    min_points(2),
-    max_points(20),
-    homogeneous_tps(false),
-    is_closed(false),
-    start_requires_arm(false)
+  task_scored(true),
+  aat_min_time(3600 * 5.35),
+  start_max_speed(60.0),
+  start_max_height(0),
+  start_max_height_ref(0),
+  finish_min_height(0),
+  fai_finish(false),
+  min_points(2),
+  max_points(20),
+  homogeneous_tps(false),
+  is_closed(false),
+  start_requires_arm(false)
 {
-
 }
 
 bool 
@@ -53,7 +52,6 @@ OrderedTaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state,
   return state.Speed <= start_max_speed + margin;
 }
 
-
 bool 
 OrderedTaskBehaviour::check_start_height(const AIRCRAFT_STATE &state,
                                          const TaskBehaviour& behaviour,
@@ -65,20 +63,18 @@ OrderedTaskBehaviour::check_start_height(const AIRCRAFT_STATE &state,
 
   const unsigned margin = with_margin ? behaviour.start_max_height_margin : 0;
 
-  if (start_max_height_ref > 0) {
+  if (start_max_height_ref > 0)
     return state.NavAltitude <= fixed(start_max_height + margin);
-  } else {
+  else
     return state.NavAltitude <= (fixed(start_max_height + margin) + spAlt);
-  }
 }
 
-
 bool 
-OrderedTaskBehaviour::check_finish_height(const AIRCRAFT_STATE &state, const fixed fpAlt) const
+OrderedTaskBehaviour::check_finish_height(const AIRCRAFT_STATE &state,
+                                          const fixed fpAlt) const
 {
   if (finish_min_height == 0)
     return true;
 
-//  return state.AltitudeAGL >= fixed(finish_min_height);
   return state.NavAltitude >= (fixed(finish_min_height) + fpAlt);
 }
