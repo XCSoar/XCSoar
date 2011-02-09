@@ -449,8 +449,7 @@ DeviceBlackboard::NettoVario(const GlidePolar& glide_polar)
     : fixed_zero;
 
   if (!Basic().NettoVarioAvailable)
-    SetBasic().NettoVario = Basic().TotalEnergyVario
-      - Basic().GliderSinkRate;
+    SetBasic().NettoVario = Basic().BruttoVario - Basic().GliderSinkRate;
 }
 
 
@@ -529,8 +528,9 @@ DeviceBlackboard::Vario()
     SetBasic().GPSVarioTE = GainTE / dT;
   }
 
-  if (!Basic().TotalEnergyVarioAvailable)
-    SetBasic().TotalEnergyVario = Basic().GPSVario;
+  SetBasic().BruttoVario = Basic().TotalEnergyVarioAvailable
+    ? Basic().TotalEnergyVario
+    : Basic().GPSVario;
 }
 
 

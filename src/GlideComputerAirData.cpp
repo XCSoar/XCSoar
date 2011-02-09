@@ -219,7 +219,7 @@ GlideComputerAirData::Average30s()
 
     vario_30s_filter.reset();
     netto_30s_filter.reset();
-    SetCalculated().Average30s = Basic().TotalEnergyVario;
+    SetCalculated().Average30s = Basic().BruttoVario;
     SetCalculated().NettoAverage30s = Basic().NettoVario;
   }
 
@@ -228,7 +228,7 @@ GlideComputerAirData::Average30s()
 
   const unsigned Elapsed = (unsigned)(Basic().Time - LastBasic().Time);
   for (unsigned i = 0; i < Elapsed; ++i) {
-    if (vario_30s_filter.update(Basic().TotalEnergyVario))
+    if (vario_30s_filter.update(Basic().BruttoVario))
       SetCalculated().Average30s =
         LowPassFilter(Calculated().Average30s, vario_30s_filter.average(),
                       fixed(0.8));
@@ -310,7 +310,7 @@ GlideComputerAirData::UpdateLiftDatabase()
        left == negative((Basic().Heading - h).as_delta().value_degrees());
        h += heading_step) {
     unsigned index = heading_to_index(h);
-    SetCalculated().LiftDatabase[index] = Basic().TotalEnergyVario;
+    SetCalculated().LiftDatabase[index] = Basic().BruttoVario;
   }
 }
 
@@ -892,7 +892,7 @@ GlideComputerAirData::ThermalBand()
     tbi = new_tbi;
   }
 
-  tbi.add(dheight, Basic().TotalEnergyVario);
+  tbi.add(dheight, Basic().BruttoVario);
 }
 
 void

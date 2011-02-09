@@ -394,6 +394,13 @@ struct NMEA_INFO {
    */
   fixed NettoVario;
 
+  /**
+   * Current vertical speed (total energy).  This is set to
+   * TotalEnergyVario if available, and falls back to GPSVario.  It is
+   * maintained by DeviceBlackboard::Vario().
+   */
+  fixed BruttoVario;
+
   //##############
   //   Settings
   //##############
@@ -577,7 +584,7 @@ struct NMEA_INFO {
 
     /* managed by DeviceBlackboard: pressure */
 
-    /* calculated: GliderSinkRate, GPSVario, GPSVarioTE */
+    /* calculated: GliderSinkRate, GPSVario, GPSVarioTE, BruttoVario */
 
     if (!TotalEnergyVarioAvailable && add.TotalEnergyVarioAvailable) {
       TotalEnergyVario = add.TotalEnergyVario;
@@ -637,7 +644,7 @@ ToAircraftState(const NMEA_INFO &info)
   }
 
   /* VARIO_INFO */
-  aircraft.Vario = info.TotalEnergyVario;
+  aircraft.Vario = info.BruttoVario;
   aircraft.NettoVario = info.NettoVario;
 
   /* FLYING_STATE */

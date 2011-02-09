@@ -99,7 +99,7 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentVario::Update(InfoBoxWindow &infobox)
 {
-  SetVSpeed(infobox, XCSoarInterface::Basic().TotalEnergyVario);
+  SetVSpeed(infobox, XCSoarInterface::Basic().BruttoVario);
 }
 
 void
