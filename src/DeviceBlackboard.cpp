@@ -599,9 +599,10 @@ DeviceBlackboard::Dynamics()
         / max(fixed_small, fabs(cos(angle)));
 
     // estimate pitch angle (assuming balanced turn)
-    SetBasic().acceleration.PitchAngle = Angle::radians(
-      atan2(Basic().GPSVario - Basic().TotalEnergyVario,
-            Basic().TrueAirspeed));
+    SetBasic().acceleration.PitchAngle = Basic().TotalEnergyVarioAvailable
+      ? Angle::radians(atan2(Basic().GPSVario - Basic().TotalEnergyVario,
+                             Basic().TrueAirspeed))
+      : Angle::native(fixed_zero);
 
   } else {
     SetBasic().acceleration.BankAngle = Angle::native(fixed_zero);
