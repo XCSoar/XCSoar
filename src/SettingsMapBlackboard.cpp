@@ -27,8 +27,8 @@ Copyright_License {
 SettingsMapBlackboard::SettingsMapBlackboard()
 {
   settings_map.CircleZoom = false;
-  settings_map.EnableTopology = false;
-  settings_map.EnableTerrain = false;
+  settings_map.EnableTopology = true;
+  settings_map.EnableTerrain = true;
   settings_map.SlopeShading = true;
   settings_map.DeclutterLabels = 0;
   settings_map.EnableTrailDrift = false;

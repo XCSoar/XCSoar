@@ -12,6 +12,8 @@ Version 6.0.4 - not yet released
 * user interface
    - prevent potential crash while using flarm radar dialogs
    - improve behaviour if "circling zoom" is disabled
+* map
+  - enable terrain and topology by default
 * Android
   - device: support NMEA over Bluetooth RFCOMM
 
