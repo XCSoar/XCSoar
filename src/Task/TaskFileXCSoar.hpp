@@ -32,6 +32,10 @@ public:
     TaskFile(_path) {}
 
   OrderedTask* GetTask(const Waypoints *waypoints) const;
+
+  unsigned Count() const {
+    return 1;
+  }
 };
 
 #endif
