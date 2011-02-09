@@ -43,12 +43,13 @@ TaskStore::scan()
   // scan files
   DataFieldFileReader fr(NULL);
   fr.ScanDirectoryTop(_T("*.tsk"));
-  fr.Sort();
 
   // append to list
   for (unsigned i = 1; i < fr.size(); i++) {
     m_store.push_back(TaskStoreItem(fr.getItem(i)));
   }
+
+  sort(m_store.begin(), m_store.end());
 }
 
 size_t
