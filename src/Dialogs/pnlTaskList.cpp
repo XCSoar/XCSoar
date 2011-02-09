@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Dialogs/dlgTaskManager.hpp"
-#include "TaskStore.hpp"
+#include "Task/TaskStore.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
