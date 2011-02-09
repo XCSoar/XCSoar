@@ -42,10 +42,6 @@ Copyright_License {
 using std::min;
 using std::max;
 
-#define NARROWS 3
-#define GAUGEVARIORANGE fixed(5) // 5 m/s
-#define GAUGEVARIOSWEEP fixed(90) // degrees total sweep
-#define YOFFSET 36
 #define DeltaVstep fixed_four
 #define DeltaVlimit fixed(16)
 #define TextBug _T("Bug")
@@ -320,7 +316,7 @@ int
 GaugeVario::ValueToNeedlePos(fixed Value)
 {
   static bool InitDone = false;
-  static fixed degrees_per_unit = GAUGEVARIOSWEEP / GAUGEVARIORANGE;
+  static fixed degrees_per_unit = fixed(GAUGEVARIOSWEEP) / GAUGEVARIORANGE;
   int i;
 
   if (!InitDone){

@@ -45,6 +45,17 @@ class GaugeVario:
   public BufferWindow,
   public InstrumentBlackboard
 {
+  enum {
+    NARROWS = 3,
+    YOFFSET = 36,
+
+    /** 5 m/s */
+    GAUGEVARIORANGE = 5,
+
+    /** degrees total sweep */
+    GAUGEVARIOSWEEP = 90,
+  };
+
 public:
   bool ShowAvgText;
   bool ShowMc;
