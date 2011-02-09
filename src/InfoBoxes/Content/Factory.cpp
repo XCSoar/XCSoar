@@ -211,7 +211,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Speed Task Average"),
     N_("V Task Av"),
-    N_("Average cross country speed while on current task, compensated for altitude."),
+    N_("Average cross country speed while on current task, not compensated for altitude."),
     59, // V Task Inst
     16, // Fin AltR
   },
@@ -589,7 +589,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Speed Task Instantaneous"),
     N_("V Tsk Ins"),
-    N_("Instantaneous cross country speed while on current task, compensated for altitude."),
+    N_("Instantaneous cross country speed while on current task, compensated for altitude. Equivalent to instantaneous Pirker cross-country speed."),
     61, // V Task Ach
     17, // V Task Av
   },
@@ -607,7 +607,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Speed Task Achieved"),
     N_("V Tsk Ach"),
-    N_("Achieved cross country speed while on current task, compensated for altitude."),
+    N_("Achieved cross country speed while on current task, compensated for altitude.  Equivalent to Pirker cross-country speed remaining."),
     18, // Fin Dis
     59, // V Task Inst
   },

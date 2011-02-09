@@ -461,7 +461,7 @@ InfoBoxContentTaskSpeedAchieved::Update(InfoBoxWindow &infobox)
 
   // Set Value
   SetValueFromFixed(infobox, _T("%2.0f"),
-                    Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()));
+                    Units::ToUserTaskSpeed(task_stats.total.remaining_effective.get_speed()));
 
   // Set Unit
   infobox.SetValueUnit(Units::TaskSpeedUnit);
