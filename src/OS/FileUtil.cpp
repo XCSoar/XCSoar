@@ -199,8 +199,14 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
 
     if (S_ISDIR(st.st_mode) && recursive)
       ScanDirectories(visitor, true, FileName, filter);
-    else if (S_ISREG(st.st_mode) && fnmatch(filter, ent->d_name, 0) == 0)
-      visitor.Visit(FileName, ent->d_name);
+    else {
+      int flags = 0;
+#ifdef FNM_CASEFOLD
+      flags = FNM_CASEFOLD;
+#endif
+      if (S_ISREG(st.st_mode) && fnmatch(filter, ent->d_name, flags) == 0)
+        visitor.Visit(FileName, ent->d_name);
+    }
   }
 
   closedir(dir);
