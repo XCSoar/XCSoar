@@ -933,6 +933,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(SRC)/Poco/RWLock.cpp \
+	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \
@@ -1137,6 +1138,7 @@ $(RUN_PROGRESS_WINDOW_BIN): $(RUN_PROGRESS_WINDOW_OBJS) $(RUN_PROGRESS_WINDOW_LD
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_ANALYSIS_SOURCES = \
+	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \

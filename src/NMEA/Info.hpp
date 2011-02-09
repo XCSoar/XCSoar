@@ -110,10 +110,7 @@ struct GPS_STATE
    * Adds data from the specified object, unless already present in
    * this one.
    */
-  void complement(const GPS_STATE &add) {
-    if (add.Connected > Connected)
-      *this = add;
-  }
+  void complement(const GPS_STATE &add);
 };
 
 /**
@@ -147,14 +144,7 @@ struct ACCELERATION_STATE
    * Adds data from the specified object, unless already present in
    * this one.
    */
-  void complement(const ACCELERATION_STATE &add) {
-    /* calculated: BankAngle, PitchAngle */
-
-    if (!Available && add.Available) {
-      Gload = add.Gload;
-      Available = add.Available;
-    }
-  }
+  void complement(const ACCELERATION_STATE &add);
 };
 
 
@@ -544,120 +534,11 @@ struct NMEA_INFO {
    * Note that this does not copy calculated values which are managed
    * outside of the NMEA parser.
    */
-  void complement(const NMEA_INFO &add) {
-    gps.complement(add.gps);
-
-    acceleration.complement(add.acceleration);
-
-    /* calculated: flight */
-
-    if (add.gps.Connected > gps.Connected) {
-      gps = add.gps;
-      Location = add.Location;
-      TrackBearing = add.TrackBearing;
-      GroundSpeed = add.GroundSpeed;
-      GPSAltitude = add.GPSAltitude;
-      Time = add.Time;
-      DateTime = add.DateTime;
-    }
-
-    if (!AirspeedAvailable && add.AirspeedAvailable) {
-      TrueAirspeed = add.TrueAirspeed;
-      IndicatedAirspeed = add.IndicatedAirspeed;
-      AirspeedAvailable = true;
-    }
-
-    /* calculated: Heading, TurnRateWind, TurnRate */
-    /* calculated: TrueAirspeedEstimated */
-
-    if ((!BaroAltitudeAvailable ||
-         (BaroAltitudeOrigin <= BARO_ALTITUDE_UNKNOWN &&
-          add.BaroAltitudeOrigin > BaroAltitudeOrigin)) &&
-        add.BaroAltitudeAvailable) {
-      BaroAltitude = add.BaroAltitude;
-      BaroAltitudeOrigin = add.BaroAltitudeOrigin;
-      BaroAltitudeAvailable = true;
-    }
-
-    /* calculated: EnergyHeight, TEAltitude, working_band_height,
-       NavAltitude,working_band_fraction, AltitudeAGL */
-
-    /* managed by DeviceBlackboard: pressure */
-
-    /* calculated: GliderSinkRate, GPSVario, GPSVarioTE, BruttoVario */
-
-    if (!TotalEnergyVarioAvailable && add.TotalEnergyVarioAvailable) {
-      TotalEnergyVario = add.TotalEnergyVario;
-      TotalEnergyVarioAvailable = add.TotalEnergyVarioAvailable;
-    }
-
-    if (!NettoVarioAvailable && add.NettoVarioAvailable) {
-      NettoVario = add.NettoVario;
-      NettoVarioAvailable = add.NettoVarioAvailable;
-    }
-
-    // XXX MacCready, Ballast, Bugs
-
-    if (!ExternalWindAvailable && add.ExternalWindAvailable) {
-      ExternalWind = add.ExternalWind;
-      ExternalWindAvailable = add.ExternalWindAvailable;
-    }
-
-    if (!TemperatureAvailable && add.TemperatureAvailable) {
-      OutsideAirTemperature = add.OutsideAirTemperature;
-      TemperatureAvailable = add.TemperatureAvailable;
-    }
-
-    if (!HumidityAvailable && add.HumidityAvailable) {
-      RelativeHumidity = add.RelativeHumidity;
-      HumidityAvailable = add.HumidityAvailable;
-    }
-
-    if (!positive(SupplyBatteryVoltage) && positive(add.SupplyBatteryVoltage))
-      SupplyBatteryVoltage = add.SupplyBatteryVoltage;
-
-    if (!SwitchStateAvailable && add.SwitchStateAvailable)
-      SwitchState = add.SwitchState;
-
-    flarm.complement(add.flarm);
-  }
+  void complement(const NMEA_INFO &add);
 };
 
-static inline const AIRCRAFT_STATE
-ToAircraftState(const NMEA_INFO &info)
-{
-  AIRCRAFT_STATE aircraft;
-
-  /* SPEED_STATE */
-  aircraft.Speed = info.GroundSpeed;
-  aircraft.TrueAirspeed = info.TrueAirspeed;
-  aircraft.IndicatedAirspeed = info.IndicatedAirspeed;
-
-  /* ALTITUDE_STATE */
-  aircraft.NavAltitude = info.NavAltitude;
-  aircraft.working_band_fraction = info.working_band_fraction;
-  aircraft.AltitudeAGL = info.AltitudeAGL;
-  if (info.BaroAltitudeAvailable) {
-    aircraft.AirspaceAltitude = info.BaroAltitude;
-  } else {
-    aircraft.AirspaceAltitude = info.GPSAltitude;
-  }
-
-  /* VARIO_INFO */
-  aircraft.Vario = info.BruttoVario;
-  aircraft.NettoVario = info.NettoVario;
-
-  /* FLYING_STATE */
-  (FLYING_STATE &)aircraft = info.flight;
-
-  /* AIRCRAFT_STATE */
-  aircraft.Time = info.Time;
-  aircraft.Location = info.Location;
-  aircraft.TrackBearing = info.TrackBearing;
-  aircraft.Gload = info.acceleration.Gload;
-  aircraft.wind = info.wind;
-
-  return aircraft;
-}
+gcc_pure
+const AIRCRAFT_STATE
+ToAircraftState(const NMEA_INFO &info);
 
 #endif
