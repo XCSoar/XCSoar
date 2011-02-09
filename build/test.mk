@@ -990,6 +990,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
+	$(SRC)/Task/TaskFileSeeYou.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -1147,6 +1148,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
+	$(SRC)/Task/TaskFileSeeYou.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Math/Screen.cpp \
@@ -1318,6 +1320,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
+	$(SRC)/Task/TaskFileSeeYou.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \

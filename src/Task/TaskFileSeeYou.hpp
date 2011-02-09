@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2011 The XCSoar Project
@@ -19,35 +18,22 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#include "Task/TaskFile.hpp"
+#ifndef XCSOAR_TASK_FILE_SEEYOU_HPP
+#define XCSOAR_TASK_FILE_SEEYOU_HPP
 
-#include "Task/TaskFileXCSoar.hpp"
-#include "Task/TaskFileSeeYou.hpp"
+#include "TaskFile.hpp"
 
-#include "OS/FileUtil.hpp"
-#include "UtilsFile.hpp"
-#include "Util/StringUtil.hpp"
-
-#include <assert.h>
-
-TaskFile*
-TaskFile::Create(const TCHAR* path)
+class TaskFileSeeYou: public TaskFile
 {
-  // If filename is empty or file does not exist
-  if (string_is_empty(path) || !File::Exists(path))
-    return NULL;
+public:
+  TaskFileSeeYou(const TCHAR* _path):
+    TaskFile(_path) {}
 
-  // If XCSoar task file -> return new XCSoarTaskFile
-  if (MatchesExtension(path, _T(".tsk")))
-    return new TaskFileXCSoar(path);
+  OrderedTask* GetTask(const Waypoints *waypoints) const;
 
-  // If XCSoar task file -> return new XCSoarTaskFile
-  if (MatchesExtension(path, _T(".cup")))
-    return new TaskFileSeeYou(path);
+  unsigned Count() const;
+};
 
-  // unknown task file type
-  return NULL;
-}
-
+#endif
