@@ -52,9 +52,9 @@ FAITaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 {
   to.task_scored = true;
   to.fai_finish = true;  
-  to.homogeneous_tps = true;
-  to.is_closed = true;
-  to.min_points = 3;
+  to.homogeneous_tps = false;
+  to.is_closed = false;
+  to.min_points = 2;
   to.max_points = 10;
 
   to.start_max_speed = fixed_zero;
