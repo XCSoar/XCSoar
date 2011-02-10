@@ -48,7 +48,7 @@ OrderedTaskFactoryName(TaskBehaviour::Factory_t type)
   case TaskBehaviour::FACTORY_RT:
     return _("Racing");
   case TaskBehaviour::FACTORY_FAI_GENERAL:
-    return _("FAI generic");
+    return _("FAI badges/ records");
   case TaskBehaviour::FACTORY_FAI_TRIANGLE:
     return _("FAI triangle");
   case TaskBehaviour::FACTORY_FAI_OR:
