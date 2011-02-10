@@ -269,8 +269,7 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   // inform clients that the landable reachable scan has been performed 
   client_update(state, true);
 
-  // now try with non-safety polar, not final glide
-  fill_reachable(state, approx_waypoints, glide_polar, true, false);
+  // now try with non-safety polar, not final glide (not preferring airports)
   fill_reachable(state, approx_waypoints, glide_polar, false, false);
 
   // inform clients that the landable unreachable scan has been performed 
