@@ -44,8 +44,6 @@ SWITCH_INFO::reset()
 void
 GPS_STATE::reset()
 {
-  // Set the NAVWarning positive (assume not gps found yet)
-  NAVWarning = true;
   Simulator = false;
 #ifdef ANDROID
   AndroidInternalGPS = false;
@@ -74,11 +72,13 @@ NMEA_INFO::reset()
   gps.reset();
   acceleration.reset();
 
-  // XXX Location
+  LocationAvailable.clear();
 
   TrackBearing = Heading = Angle::native(fixed_zero);
+  TrackBearingAvailable.clear();
   TurnRateWind = TurnRate = fixed_zero;
 
+  GroundSpeedAvailable.clear();
   AirspeedAvailable.clear();
   GroundSpeed = TrueAirspeed = IndicatedAirspeed = fixed_zero;
 
@@ -156,6 +156,9 @@ NMEA_INFO::expire_wall_clock()
 void
 NMEA_INFO::expire()
 {
+  LocationAvailable.expire(Time, fixed(10));
+  TrackBearingAvailable.expire(Time, fixed(10));
+  GroundSpeedAvailable.expire(Time, fixed(10));
   AirspeedAvailable.expire(Time, fixed(30));
   GPSAltitudeAvailable.expire(Time, fixed(30));
   BaroAltitudeAvailable.expire(Time, fixed(30));
@@ -177,20 +180,24 @@ NMEA_INFO::complement(const NMEA_INFO &add)
        useful information */
     return;
 
-  if (!Connected)
+  if (!Connected) {
     gps = add.gps;
+    Time = add.Time;
+    DateTime = add.DateTime;
+  }
 
   acceleration.complement(add.acceleration);
 
   /* calculated: flight */
 
-  if (gps.NAVWarning && !add.gps.NAVWarning) {
+  if (LocationAvailable.complement(add.LocationAvailable))
     Location = add.Location;
+
+  if (TrackBearingAvailable.complement(add.TrackBearingAvailable))
     TrackBearing = add.TrackBearing;
+
+  if (GroundSpeedAvailable.complement(add.GroundSpeedAvailable))
     GroundSpeed = add.GroundSpeed;
-    Time = add.Time;
-    DateTime = add.DateTime;
-  }
 
   if (AirspeedAvailable.complement(add.AirspeedAvailable)) {
     TrueAirspeed = add.TrueAirspeed;

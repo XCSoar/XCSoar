@@ -39,7 +39,7 @@ void
 InfoBoxContentSpeedGround::Update(InfoBoxWindow &infobox)
 {
 
-  if (XCSoarInterface::Basic().gps.NAVWarning) {
+  if (!XCSoarInterface::Basic().GroundSpeedAvailable) {
     infobox.SetInvalid();
     return;
   }

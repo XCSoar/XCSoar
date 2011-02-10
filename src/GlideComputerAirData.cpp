@@ -510,7 +510,7 @@ GlideComputerAirData::FlightTimes()
   if (positive(Basic().Time) && time_retreated()) {
     // 20060519:sgi added (Basic().Time != 0) due to always return here
     // if no GPS time available
-    if (!Basic().gps.NAVWarning)
+    if (Basic().LocationAvailable)
       // Reset statistics.. (probably due to being in IGC replay mode)
       ResetFlight(false);
 
@@ -543,7 +543,7 @@ GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
     calculated.flight.flying_state_reset();
 
   // GPS not lost
-  if (basic.gps.NAVWarning)
+  if (!basic.LocationAvailable)
     return;
 
   // Speed too high for being on the ground

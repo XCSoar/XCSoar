@@ -85,7 +85,7 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
 
   // set NAVWarning flags because this value was not provided
   // by a real GPS
-  basic.gps.NAVWarning = true;
+  basic.LocationAvailable.clear();
   basic.GPSAltitudeAvailable.clear();
 }
 
@@ -111,13 +111,14 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   NMEA_INFO &basic = SetBasic();
 
   basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
-  basic.gps.NAVWarning = false;
   basic.gps.SatellitesUsed = 6;
   basic.acceleration.Available = false;
   basic.Location = loc;
+  basic.LocationAvailable.update(t);
   basic.GroundSpeed = speed;
   basic.AirspeedAvailable.clear(); // Clear airspeed as it is not given by any value.
   basic.TrackBearing = bearing;
+  basic.TrackBearingAvailable.update(t);
   basic.GPSAltitude = alt;
   basic.GPSAltitudeAvailable.update(t);
   basic.ProvidePressureAltitude(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, baroalt);
@@ -152,7 +153,6 @@ DeviceBlackboard::ProcessSimulation()
   NMEA_INFO &basic = SetBasic();
 
   basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
-  basic.gps.NAVWarning = false;
   basic.gps.SatellitesUsed = 6;
   basic.gps.Simulator = true;
   basic.gps.MovementDetected = false;
@@ -163,7 +163,9 @@ DeviceBlackboard::ProcessSimulation()
 
   basic.Location = FindLatitudeLongitude(basic.Location, basic.TrackBearing,
                                          basic.GroundSpeed);
+  basic.LocationAvailable.update(basic.Time);
   basic.GPSAltitudeAvailable.update(basic.Time);
+  basic.TrackBearingAvailable.update(basic.Time);
 
   basic.Time += fixed_one;
   long tsec = (long)basic.Time;
@@ -629,7 +631,7 @@ DeviceBlackboard::AutoQNH()
       || !countdown_autoqnh    // only do it once
       || basic.gps.Replay // never in replay mode
       || basic.gps.Simulator // never in simulator
-      || basic.gps.NAVWarning // Reject if no valid GPS fix
+      || !basic.LocationAvailable // Reject if no valid GPS fix
       || !basic.PressureAltitudeAvailable // Reject if no pressure altitude
       || basic.QNHAvailable // Reject if QNH already known
     ) {

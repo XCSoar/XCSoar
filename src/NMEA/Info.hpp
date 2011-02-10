@@ -70,9 +70,6 @@ struct GPS_STATE
   //   Status
   //############
 
-  /** GPS fix not valid */
-  int NAVWarning;
-
   /**
    * FixQuality
    * 1 = GPS fix (SPS)
@@ -172,8 +169,12 @@ struct NMEA_INFO {
 
   ACCELERATION_STATE acceleration;
 
+  Validity LocationAvailable;
+
   /** location of aircraft */
   GeoPoint Location;
+
+  Validity TrackBearingAvailable;
 
   /** track angle in degrees true */
   Angle TrackBearing;
@@ -191,6 +192,8 @@ struct NMEA_INFO {
   //   Speeds
   //############
 
+  Validity GroundSpeedAvailable;
+
   /**
    * Is air speed information available?
    * If not, will be estimated from ground speed and wind estimate
@@ -203,7 +206,7 @@ struct NMEA_INFO {
    * @see TrueAirspeed
    * @see IndicatedAirspeed
    */
-  fixed GroundSpeed; 
+  fixed GroundSpeed;
 
   /**
    * True air speed (m/s)

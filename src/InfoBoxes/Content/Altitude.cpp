@@ -125,7 +125,7 @@ InfoBoxContentAltitude::PnlInfoUpdate()
       ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltGPS")))->SetText(sTmp);
   }
 
-  if (basic.gps.NAVWarning || !calculated.TerrainValid){
+  if (!basic.LocationAvailable || !calculated.TerrainValid){
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTerrain")))->SetText(_("N/A"));
   } else {
     // Set Value
@@ -505,7 +505,7 @@ InfoBoxContentTerrainHeight::Update(InfoBoxWindow &infobox)
   const DERIVED_INFO &calculated = CommonInterface::Calculated();
   TCHAR sTmp[32];
 
-  if (basic.gps.NAVWarning || !calculated.TerrainValid){
+  if (!basic.LocationAvailable || !calculated.TerrainValid){
     infobox.SetInvalid();
     return;
   }

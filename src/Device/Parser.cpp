@@ -392,15 +392,16 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     // block actual GPS signal
     return true;
 
-  GPS_INFO->gps.NAVWarning = !gpsValid;
-
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return true;
 
+  if (!gpsValid)
+    GPS_INFO->LocationAvailable.clear();
+  else if (valid_location)
+    GPS_INFO->LocationAvailable.update(GPS_INFO->Time);
+
   if (valid_location)
     GPS_INFO->Location = location;
-  else
-    GPS_INFO->gps.NAVWarning = true;
 
 #ifdef ANDROID
   GPS_INFO->gps.AndroidInternalGPS = false;
@@ -503,16 +504,16 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (!activeGPS)
     return true;
 
-  fixed speed = line.read(fixed_zero);
-  gps.MovementDetected = speed > fixed_two;
+  fixed speed;
+  bool GroundSpeedAvailable = line.read_checked(speed);
+  gps.MovementDetected = GroundSpeedAvailable && speed > fixed_two;
 
   if (gps.Replay)
     // block actual GPS signal if not moving and a log is being replayed
     return true;
 
-  gps.NAVWarning = !gpsValid;
-
-  fixed TrackBearing = line.read(fixed_zero);
+  fixed TrackBearing;
+  bool TrackBearingAvailable = line.read_checked(TrackBearing);
 
   // JMW get date info first so TimeModify is accurate
   char date_buffer[9];
@@ -527,16 +528,23 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return true;
 
+  if (!gpsValid)
+    GPS_INFO->LocationAvailable.clear();
+  else if (valid_location)
+    GPS_INFO->LocationAvailable.update(GPS_INFO->Time);
+
   if (valid_location)
     GPS_INFO->Location = location;
-  else
-    GPS_INFO->gps.NAVWarning = true;
 
-  GPS_INFO->GroundSpeed = Units::ToSysUnit(speed, unKnots);
+  if (GroundSpeedAvailable) {
+    GPS_INFO->GroundSpeed = Units::ToSysUnit(speed, unKnots);
+    GPS_INFO->GroundSpeedAvailable.update(GPS_INFO->Time);
+  }
 
-  if (GPS_INFO->GroundSpeed > fixed_one) {
+  if (TrackBearingAvailable && gps.MovementDetected) {
     // JMW don't update bearing unless we're moving
     GPS_INFO->TrackBearing = Angle::degrees(TrackBearing).as_bearing();
+    GPS_INFO->TrackBearingAvailable.update(GPS_INFO->Time);
   }
 
   if (!GGAAvailable) {
@@ -629,10 +637,13 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return true;
 
+  if (!gpsValid)
+    GPS_INFO->LocationAvailable.clear();
+  else if (valid_location)
+    GPS_INFO->LocationAvailable.update(GPS_INFO->Time);
+
   if (valid_location)
     GPS_INFO->Location = location;
-  else
-    GPS_INFO->gps.NAVWarning = true;
 
 #ifdef ANDROID
   GPS_INFO->gps.AndroidInternalGPS = false;

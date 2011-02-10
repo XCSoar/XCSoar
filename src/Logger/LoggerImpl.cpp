@@ -57,7 +57,7 @@ LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
   DateTime = src.DateTime;
   Time = src.Time;
 
-  NAVWarning = src.gps.NAVWarning;
+  NAVWarning = !src.LocationAvailable;
   FixQuality = src.gps.FixQuality;
   SatellitesUsed = src.gps.SatellitesUsed;
   HDOP = src.gps.HDOP;
@@ -158,7 +158,10 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
     tmp_info.DateTime = src.DateTime;
     tmp_info.Time = src.Time;
 
-    tmp_info.gps.NAVWarning = src.NAVWarning;
+    if (src.NAVWarning)
+      tmp_info.LocationAvailable.clear();
+    else
+      tmp_info.LocationAvailable.update(tmp_info.Time);
     tmp_info.gps.FixQuality = src.FixQuality;
     tmp_info.gps.SatellitesUsed = src.SatellitesUsed;
     tmp_info.gps.HDOP = src.HDOP;

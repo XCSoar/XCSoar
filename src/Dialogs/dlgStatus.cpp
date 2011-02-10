@@ -152,7 +152,7 @@ UpdateValuesSystem()
   assert(wp != NULL);
   if (!basic.Connected)
     wp->SetText(_("Disconnected"));
-  else if (gps.NAVWarning)
+  else if (!basic.LocationAvailable)
     wp->SetText(_("Fix invalid"));
   else if (gps.SatellitesUsed == 0)
     wp->SetText(_("No fix"));

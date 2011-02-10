@@ -58,14 +58,13 @@ void
 GlueMapWindow::DrawGPSStatus(Canvas &canvas, const RECT &rc,
                              const NMEA_INFO &info) const
 {
-  const GPS_STATE &gps = info.gps;
   const TCHAR *txt;
   MaskedIcon *icon = NULL;
 
   if (!info.Connected) {
     icon = &Graphics::hGPSStatus2;
     txt = _("GPS not connected");
-  } else if (gps.NAVWarning || (gps.SatellitesUsed == 0)) {
+  } else if (!info.LocationAvailable) {
     icon = &Graphics::hGPSStatus1;
     txt = _("GPS waiting for fix");
   } else {

@@ -111,10 +111,9 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
   static bool wait_lock = false;
 
   const NMEA_INFO &basic = CommonInterface::Basic();
-  const GPS_STATE &gps = basic.gps;
 
   bool connected_now = basic.Connected;
-  if (connected_now && gps.NAVWarning) {
+  if (connected_now && !basic.LocationAvailable) {
     if (!wait_lock) {
       // waiting for lock first time
       wait_lock = true;

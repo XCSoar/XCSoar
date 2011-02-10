@@ -101,7 +101,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // .. not flying
   // .. feature disabled
   // .. feature inaccessible
-  if (Basic().gps.NAVWarning
+  if (!Basic().LocationAvailable
       || !Calculated().flight.Flying
       || !SettingsComputer().FinalGlideTerrain
       || !task)

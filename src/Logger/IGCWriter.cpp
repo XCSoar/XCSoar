@@ -317,7 +317,7 @@ IGCWriter::LogPoint(const NMEA_INFO& gps_info)
   if (!Simulator) {
     const char *p = frecord.update(gps_info.gps.SatelliteIDs,
                                    gps_info.DateTime, gps_info.Time,
-                                   gps_info.gps.NAVWarning);
+                                   !gps_info.LocationAvailable);
     if (p != NULL)
       writeln(p);
   }
@@ -325,11 +325,11 @@ IGCWriter::LogPoint(const NMEA_INFO& gps_info)
   if (!LastValidPoint.Initialized &&
       ((gps_info.GPSAltitude < fixed(-100))
        || (gps_info.BaroAltitude < fixed(-100))
-          || gps_info.gps.NAVWarning))
+          || !gps_info.LocationAvailable))
     return;
 
 
-  if (gps_info.gps.NAVWarning) {
+  if (!gps_info.LocationAvailable) {
     IsValidFix = 'V'; // invalid
     p = LastValidPoint;
   } else {

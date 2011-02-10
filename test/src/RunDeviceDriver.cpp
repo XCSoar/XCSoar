@@ -132,19 +132,22 @@ Dump(const NMEA_INFO &basic)
 
   if (!basic.Connected)
     printf("GPS not connected\n");
-  else if (basic.gps.NAVWarning)
-    printf("Waiting for GPS fix\n");
   else
     printf("GPS connected, %d satellites\n", basic.gps.SatellitesUsed);
 
-  if (!basic.gps.NAVWarning) {
+  if (basic.LocationAvailable) {
     printf("Position=");
     Dump(basic.Location);
     printf("\n");
   }
 
-  if (basic.AirspeedAvailable) {
+  if (basic.TrackBearingAvailable)
+    printf("TrackBearing=%d\n", (int)basic.TrackBearing.value_degrees());
+
+  if (basic.GroundSpeedAvailable)
     printf("GroundSpeed=%d\n", (int)basic.GroundSpeed);
+
+  if (basic.AirspeedAvailable) {
     printf("TrueAirspeed=%d\n", (int)basic.TrueAirspeed);
     printf("IndicatedAirspeed=%d\n",
            (int)basic.IndicatedAirspeed);

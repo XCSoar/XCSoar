@@ -90,10 +90,13 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.DateTime = date_time;
 
   basic.gps.SatellitesUsed = n_satellites;
-  basic.gps.NAVWarning = n_satellites <= 0;
   basic.gps.AndroidInternalGPS = true;
   basic.Location = GeoPoint(Angle::degrees(fixed(longitude)),
                             Angle::degrees(fixed(latitude)));
+  if (n_satellites > 0)
+    basic.LocationAvailable.update(basic.Time);
+  else
+    basic.LocationAvailable.clear();
 
   if (hasAltitude) {
     fixed GeoidSeparation = LookupGeoidSeparation(basic.Location);
@@ -102,8 +105,11 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   } else
     basic.GPSAltitudeAvailable.clear();
 
-  if (hasBearing)
+  if (hasBearing) {
     basic.TrackBearing = Angle::degrees(fixed(bearing));
+    basic.TrackBearingAvailable.update(basic.Time);
+  } else
+    basic.TrackBearingAvailable.clear();
 
   if (hasSpeed)
     basic.GroundSpeed = fixed(speed);
