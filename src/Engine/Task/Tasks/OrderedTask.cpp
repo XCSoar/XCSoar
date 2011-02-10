@@ -1265,6 +1265,7 @@ OrderedTask::get_factory_types(bool all) const
   std::vector<TaskBehaviour::Factory_t> f_list;
   f_list.push_back(TaskBehaviour::FACTORY_RT);
   f_list.push_back(TaskBehaviour::FACTORY_AAT);
+  f_list.push_back(TaskBehaviour::FACTORY_FAI_GENERAL);
   return f_list;
 }
 
