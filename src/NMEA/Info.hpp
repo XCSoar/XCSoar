@@ -191,7 +191,7 @@ struct NMEA_INFO {
    * If not, will be estimated from ground speed and wind estimate
    * @see TrueAirspeed in Aircraft
    */
-  bool AirspeedAvailable;
+  Validity AirspeedAvailable;
 
   /**
    * Speed over ground in m/s
@@ -552,7 +552,7 @@ struct NMEA_INFO {
    */
   void ProvideBothAirspeeds(fixed as) {
     IndicatedAirspeed = TrueAirspeed = as;
-    AirspeedAvailable = true;
+    AirspeedAvailable.update(Time);
   }
 
   /**
@@ -562,7 +562,7 @@ struct NMEA_INFO {
   void ProvideBothAirspeeds(fixed ias, fixed tas) {
     IndicatedAirspeed = ias;
     TrueAirspeed = tas;
-    AirspeedAvailable = true;
+    AirspeedAvailable.update(Time);
   }
 
   /**
@@ -573,7 +573,7 @@ struct NMEA_INFO {
     TrueAirspeed = tas;
     IndicatedAirspeed = TrueAirspeed /
       AtmosphericPressure::AirDensityRatio(altitude);
-    AirspeedAvailable = true;
+    AirspeedAvailable.update(Time);
   }
 
   /**
