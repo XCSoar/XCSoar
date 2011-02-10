@@ -433,6 +433,11 @@ struct NMEA_INFO {
   SpeedVector ExternalWind;
 
   /**
+   * Is the wind available?
+   */
+  Validity WindAvailable;
+
+  /**
    * The effective wind vector; depending on the settings, this is
    * either ExternalWind, calculated wind or manual wind.
    */

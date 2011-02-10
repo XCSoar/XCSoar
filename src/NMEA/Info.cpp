@@ -47,6 +47,7 @@ NMEA_INFO::expire()
   TotalEnergyVarioAvailable.expire(Time, fixed(5));
   NettoVarioAvailable.expire(Time, fixed(5));
   ExternalWindAvailable.expire(Time, fixed(600));
+  WindAvailable.expire(Time, fixed(600));
 }
 
 void

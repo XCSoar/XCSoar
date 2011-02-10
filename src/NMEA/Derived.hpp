@@ -30,6 +30,7 @@ Copyright_License {
 #include "Task/TaskStats/TaskStats.hpp"
 #include "Task/TaskStats/CommonStats.hpp"
 #include "NMEA/ThermalBand.hpp"
+#include "NMEA/Validity.hpp"
 #include "TeamCodeCalculation.h"
 
 #include <tchar.h>
@@ -255,11 +256,22 @@ struct DERIVED_INFO:
    * @todo Reset to cleared state
    */
   void reset() {
+    estimated_wind_available.clear();
     task_stats.reset();
     common_stats.reset();
   };
 
+  void expire(fixed Time) {
+    /* the estimated wind remains valid for an hour */
+    estimated_wind_available.expire(Time, fixed(3600));
+  }
+
   fixed V_stf; /**< Speed to fly block/dolphin (m/s) */
+
+  /**
+   * Does #estimated_wind have a meaningful value?
+   */
+  Validity estimated_wind_available;
 
   SpeedVector estimated_wind;   /**< Wind speed, direction */
 

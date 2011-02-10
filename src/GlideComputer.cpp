@@ -100,6 +100,8 @@ GlideComputer::ProcessGPS()
   PeriodClock clock;
   clock.update();
 
+  SetCalculated().expire(Basic().Time);
+
   // Process basic information
   ProcessBasic();
 

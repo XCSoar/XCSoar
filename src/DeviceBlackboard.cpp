@@ -140,6 +140,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   SetBasic().TotalEnergyVarioAvailable.clear();
   SetBasic().NettoVarioAvailable.clear();
   SetBasic().ExternalWindAvailable.clear();
+  SetBasic().WindAvailable.clear();
   SetBasic().gps.Replay = true;
 };
 
@@ -402,6 +403,7 @@ void
 DeviceBlackboard::tick(const GlidePolar& glide_polar)
 {
   SetBasic().expire();
+  calculated_info.expire(Basic().Time);
 
   // check for timeout on FLARM objects
   FLARM_RefreshSlots();
@@ -539,12 +541,17 @@ DeviceBlackboard::Vario()
 void
 DeviceBlackboard::Wind()
 {
-  if (Basic().ExternalWindAvailable && SettingsComputer().ExternalWind)
+  if (Basic().ExternalWindAvailable && SettingsComputer().ExternalWind) {
     SetBasic().wind = Basic().ExternalWind;
-  else if (SettingsComputer().AutoWindMode == 0)
+    SetBasic().WindAvailable = Basic().ExternalWindAvailable;
+  } else if (SettingsComputer().AutoWindMode == 0) {
     SetBasic().wind = SettingsComputer().ManualWind;
-  else
+    SetBasic().WindAvailable.update(Basic().Time);
+  } else if (Calculated().estimated_wind_available) {
     SetBasic().wind = Calculated().estimated_wind;
+    SetBasic().WindAvailable = Calculated().estimated_wind_available;
+  } else
+    SetBasic().WindAvailable.clear();
 }
 
 /**

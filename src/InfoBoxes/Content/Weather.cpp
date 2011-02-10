@@ -82,6 +82,12 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
 {
+  const NMEA_INFO &info = CommonInterface::Basic();
+  if (!info.WindAvailable) {
+    infobox.SetInvalid();
+    return;
+  }
+
   // Set Value
   SetValueFromFixed(infobox, _T("%2.0f"),
                     Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
@@ -96,5 +102,11 @@ InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentWindBearing::Update(InfoBoxWindow &infobox)
 {
+  const NMEA_INFO &info = CommonInterface::Basic();
+  if (!info.WindAvailable) {
+    infobox.SetInvalid();
+    return;
+  }
+
   infobox.SetValue(XCSoarInterface::Basic().wind.bearing, _T("T"));
 }
