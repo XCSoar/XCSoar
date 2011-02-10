@@ -221,6 +221,8 @@ struct NMEA_INFO {
   //   Altitude
   //##############
 
+  Validity GPSAltitudeAvailable;
+
   fixed GPSAltitude; /**< GPS altitude AMSL (m) */
 
   /**

@@ -165,7 +165,7 @@ Dump(const NMEA_INFO &basic)
            (int)basic.IndicatedAirspeed);
   }
 
-  if (basic.gps.Connected == 2)
+  if (basic.GPSAltitudeAvailable)
     printf("GPSAltitude=%d\n", (int)basic.GPSAltitude);
 
   if (basic.BaroAltitudeAvailable)

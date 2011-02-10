@@ -41,7 +41,7 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
   const NMEA_INFO &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
-  if (basic.gps.NAVWarning){
+  if (!basic.GPSAltitudeAvailable) {
     infobox.SetInvalid();
     return;
   }
@@ -161,6 +161,11 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
 {
   const NMEA_INFO &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
+
+  if (!basic.GPSAltitudeAvailable) {
+    infobox.SetInvalid();
+    return;
+  }
 
   fixed Value = basic.GPSAltitude;
 

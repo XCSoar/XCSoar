@@ -81,6 +81,7 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
   // set NAVWarning flags because this value was not provided
   // by a real GPS
   basic.gps.NAVWarning = true;
+  basic.GPSAltitudeAvailable.clear();
 }
 
 /**
@@ -110,6 +111,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.ProvideBothAirspeeds(speed);
   basic.TrackBearing = bearing;
   basic.GPSAltitude = alt;
+  basic.GPSAltitudeAvailable.update(t);
   basic.SetBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, baroalt);
   basic.Time = t;
   basic.TotalEnergyVarioAvailable.clear();

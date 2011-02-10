@@ -81,7 +81,8 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
   fixed value;
 
   // 0,1 = GPS altitude, unit
-  line.read_checked_compare(info.GPSAltitude, "M");
+  if (line.read_checked_compare(info.GPSAltitude, "M"))
+    info.GPSAltitudeAvailable.update(info.Time);
 
   // 2,3 = baro altitude, unit
   bool available = line.read_checked_compare(value, "M");

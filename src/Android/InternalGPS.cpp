@@ -78,8 +78,11 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.Location = GeoPoint(Angle::degrees(fixed(longitude)),
                             Angle::degrees(fixed(latitude)));
 
-  if (hasAltitude)
+  if (hasAltitude) {
     basic.GPSAltitude = fixed(altitude);
+    basic.GPSAltitudeAvailable.update(basic.Time);
+  } else
+    basic.GPSAltitudeAvailable.clear();
 
   if (hasBearing)
     basic.TrackBearing = Angle::degrees(fixed(bearing));

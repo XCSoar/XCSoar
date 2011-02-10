@@ -321,10 +321,12 @@ UpdateValuesFlight(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   assert(wp != NULL);
-  _stprintf(Temp, _T("%.0f %s"),
-            (double)Units::ToUserAltitude(basic.GPSAltitude),
-            Units::GetAltitudeName());
-  wp->SetText(Temp);
+  if (basic.GPSAltitudeAvailable) {
+    _stprintf(Temp, _T("%.0f %s"),
+              (double)Units::ToUserAltitude(basic.GPSAltitude),
+              Units::GetAltitudeName());
+    wp->SetText(Temp);
+  }
 
   wp = (WndProperty*)wf->FindByName(_T("prpMaxHeightGain"));
   assert(wp != NULL);

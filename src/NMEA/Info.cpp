@@ -85,6 +85,7 @@ NMEA_INFO::reset()
   GroundSpeed = TrueAirspeed = IndicatedAirspeed = fixed_zero;
   TrueAirspeedEstimated = fixed_zero;
 
+  GPSAltitudeAvailable.clear();
   GPSAltitude = fixed_zero;
 
   BaroAltitudeAvailable.clear();
@@ -137,6 +138,7 @@ void
 NMEA_INFO::expire()
 {
   AirspeedAvailable.expire(Time, fixed(30));
+  GPSAltitudeAvailable.expire(Time, fixed(30));
   BaroAltitudeAvailable.expire(Time, fixed(30));
   TotalEnergyVarioAvailable.expire(Time, fixed(5));
   NettoVarioAvailable.expire(Time, fixed(5));
