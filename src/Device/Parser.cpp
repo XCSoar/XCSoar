@@ -634,19 +634,25 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   // "Altitude" should always be GPS Altitude.
 
   bool altitude_available = ReadAltitude(line, GPS_INFO->GPSAltitude);
-  if (!altitude_available)
+  if (altitude_available)
+    GPS_INFO->GPSAltitudeAvailable.update(ThisTime);
+  else {
     GPS_INFO->GPSAltitude = fixed_zero;
+    GPS_INFO->GPSAltitudeAvailable.clear();
+  }
 
   fixed GeoidSeparation;
   if (ReadAltitude(line, GeoidSeparation)) {
     // No real need to parse this value,
     // but we do assume that no correction is required in this case
 
-    if (!altitude_available)
+    if (!altitude_available) {
       /* Some devices, such as the "LG Incite Cellphone" seem to be
          severely bugged, and report the GPS altitude in the Geoid
          column.  That sucks! */
       GPS_INFO->GPSAltitude = GeoidSeparation;
+      GPS_INFO->GPSAltitudeAvailable.update(ThisTime);
+    }
   } else {
     // need to estimate Geoid Separation internally (optional)
     // FLARM uses MSL altitude
