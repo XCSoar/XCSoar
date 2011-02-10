@@ -364,7 +364,7 @@ bool test_task_mixed(TaskManager& task_manager,
 bool test_task_fai(TaskManager& task_manager,
                    const Waypoints &waypoints)
 {
-  task_manager.set_factory(TaskBehaviour::FACTORY_RT);
+  task_manager.set_factory(TaskBehaviour::FACTORY_FAI_GENERAL);
   AbstractTaskFactory &fact = task_manager.get_factory();
   const Waypoint *wp;
 
