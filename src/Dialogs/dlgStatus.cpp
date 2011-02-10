@@ -298,14 +298,17 @@ static const Waypoint* nearest_waypoint;
 static void
 UpdateValuesFlight(void)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+
   WndProperty *wp;
   TCHAR Temp[1000];
   TCHAR sLongitude[16];
   TCHAR sLatitude[16];
 
-  Units::LongitudeToString(XCSoarInterface::Basic().Location.Longitude,
+  Units::LongitudeToString(basic.Location.Longitude,
                            sLongitude, sizeof(sLongitude)-1);
-  Units::LatitudeToString(XCSoarInterface::Basic().Location.Latitude,
+  Units::LatitudeToString(basic.Location.Latitude,
                           sLatitude, sizeof(sLatitude)-1);
 
   wp = (WndProperty*)wf->FindByName(_T("prpLongitude"));
@@ -319,19 +322,19 @@ UpdateValuesFlight(void)
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   assert(wp != NULL);
   _stprintf(Temp, _T("%.0f %s"),
-            (double)Units::ToUserAltitude(XCSoarInterface::Basic().GPSAltitude),
+            (double)Units::ToUserAltitude(basic.GPSAltitude),
             Units::GetAltitudeName());
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpMaxHeightGain"));
   assert(wp != NULL);
   _stprintf(Temp, _T("%d %s"),
-            (int)Units::ToUserAltitude(XCSoarInterface::Calculated().MaxHeightGain),
+            (int)Units::ToUserAltitude(calculated.MaxHeightGain),
             Units::GetAltitudeName());
   wp->SetText(Temp);
 
   if (nearest_waypoint) {
-    GeoVector vec(XCSoarInterface::Basic().Location,
+    GeoVector vec(basic.Location,
                   nearest_waypoint->Location);
 
     wp = (WndProperty*)wf->FindByName(_T("prpNear"));
@@ -372,9 +375,12 @@ UpdateValuesRules(void)
   WndProperty *wp;
   TCHAR Temp[80];
 
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const CommonStats &common_stats = calculated.common_stats;
+
   wp = (WndProperty*)wf->FindByName(_T("prpValidStart"));
   assert(wp != NULL);
-  if (XCSoarInterface::Calculated().common_stats.task_started)
+  if (calculated.common_stats.task_started)
     /// @todo proper task validity check
     wp->SetText(_("TRUE"));
   else
@@ -382,7 +388,7 @@ UpdateValuesRules(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpValidFinish"));
   assert(wp != NULL);
-  if (XCSoarInterface::Calculated().common_stats.task_finished)
+  if (common_stats.task_finished)
     wp->SetText(_("TRUE"));
   else
     wp->SetText(_("FALSE"));
@@ -391,7 +397,7 @@ UpdateValuesRules(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartTime"));
   assert(wp != NULL);
-  if (XCSoarInterface::Calculated().common_stats.task_started) {
+  if (common_stats.task_started) {
     Units::TimeToText(Temp, (int)TimeLocal(start_state.Time));
     wp->SetText(Temp);
   } else {
@@ -400,7 +406,7 @@ UpdateValuesRules(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartSpeed"));
   assert(wp != NULL);
-  if (XCSoarInterface::Calculated().common_stats.task_started) {
+  if (common_stats.task_started) {
     _stprintf(Temp, _T("%d %s"),
               (int)Units::ToUserTaskSpeed(start_state.Speed),
               Units::GetTaskSpeedName());
@@ -412,7 +418,7 @@ UpdateValuesRules(void)
   // StartMaxHeight, StartMaxSpeed;
   wp = (WndProperty*)wf->FindByName(_T("prpStartHeight"));
   assert(wp != NULL);
-  if (XCSoarInterface::Calculated().common_stats.task_started) {
+  if (common_stats.task_started) {
     _stprintf(Temp, _T("%.0f %s"),
               (double)Units::ToUserAltitude(start_state.NavAltitude),
               Units::GetAltitudeName());
@@ -453,13 +459,16 @@ UpdateValuesTask(void)
   if (protected_task_manager == NULL)
     return;
 
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.task_stats;
+
   WndProperty *wp;
   TCHAR Temp[80];
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskTime"));
   Units::TimeToText(Temp, protected_task_manager->get_ordered_task_behaviour().aat_min_time);
   assert(wp != NULL);
-  if (XCSoarInterface::Calculated().task_stats.has_targets)
+  if (task_stats.has_targets)
     wp->SetText(Temp);
   else
     wp->hide();
@@ -467,41 +476,40 @@ UpdateValuesTask(void)
   wp = (WndProperty*)wf->FindByName(_T("prpETETime"));
   assert(wp != NULL);
   Units::TimeToText(Temp,
-                    XCSoarInterface::Calculated().task_stats.total.TimeElapsed
-                    +XCSoarInterface::Calculated().task_stats.total.TimeRemaining);
+                    task_stats.total.TimeElapsed +
+                    task_stats.total.TimeRemaining);
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpRemainingTime"));
   assert(wp != NULL);
-  Units::TimeToText(Temp,
-                    XCSoarInterface::Calculated().task_stats.total.TimeRemaining);
+  Units::TimeToText(Temp, task_stats.total.TimeRemaining);
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskDistance"));
   assert(wp != NULL);
   _stprintf(Temp, _T("%.0f %s"), (double)Units::ToUserDistance(
-            XCSoarInterface::Calculated().task_stats.total.planned.get_distance()),
+            task_stats.total.planned.get_distance()),
             Units::GetDistanceName());
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpRemainingDistance"));
   assert(wp != NULL);
   _stprintf(Temp, _T("%.0f %s"), (double)Units::ToUserDistance(
-            XCSoarInterface::Calculated().task_stats.total.remaining.get_distance()),
+            task_stats.total.remaining.get_distance()),
             Units::GetDistanceName());
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpEstimatedSpeed"));
   assert(wp != NULL);
   _stprintf(Temp, _T("%.0f %s"), (double)Units::ToUserTaskSpeed(
-            XCSoarInterface::Calculated().task_stats.total.planned.get_speed()),
+            task_stats.total.planned.get_speed()),
             Units::GetTaskSpeedName());
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAverageSpeed"));
   assert(wp != NULL);
   _stprintf(Temp, _T("%.0f %s"), (double)Units::ToUserTaskSpeed(
-            XCSoarInterface::Calculated().task_stats.total.travelled.get_speed()),
+            task_stats.total.travelled.get_speed()),
             Units::GetTaskSpeedName());
   wp->SetText(Temp);
 }

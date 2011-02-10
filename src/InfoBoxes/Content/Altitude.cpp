@@ -38,20 +38,21 @@ Copyright_License {
 void
 InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
-  if (XCSoarInterface::Basic().gps.NAVWarning){
+  if (basic.gps.NAVWarning){
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  Units::FormatUserAltitude(XCSoarInterface::Basic().GPSAltitude, sTmp,
+  Units::FormatUserAltitude(basic.GPSAltitude, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
-  Units::FormatAlternateUserAltitude(XCSoarInterface::Basic().GPSAltitude, sTmp,
+  Units::FormatAlternateUserAltitude(basic.GPSAltitude, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
 
@@ -62,9 +63,11 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
 bool
 InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
+
   if (!is_simulator())
     return false;
-  if (XCSoarInterface::Basic().gps.Replay)
+  if (basic.gps.Replay)
     return false;
 
   fixed fixed_step = (fixed)Units::ToSysUnit(fixed(100), Units::AltitudeUnit);
@@ -73,22 +76,22 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
   switch (keycode) {
   case ibkUp:
     device_blackboard.SetAltitude(
-        XCSoarInterface::Basic().GPSAltitude + fixed_step);
+        basic.GPSAltitude + fixed_step);
     return true;
 
   case ibkDown:
     device_blackboard.SetAltitude(
-        max(fixed_zero, XCSoarInterface::Basic().GPSAltitude - fixed_step));
+        max(fixed_zero, basic.GPSAltitude - fixed_step));
     return true;
 
   case ibkLeft:
     device_blackboard.SetTrackBearing(
-        XCSoarInterface::Basic().TrackBearing - a5);
+        basic.TrackBearing - a5);
     return true;
 
   case ibkRight:
     device_blackboard.SetTrackBearing(
-        XCSoarInterface::Basic().TrackBearing + a5);
+        basic.TrackBearing + a5);
     return true;
 
   case ibkEnter:
@@ -101,21 +104,22 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
   TCHAR sTmp[32];
 
-  if (XCSoarInterface::Basic().gps.NAVWarning
-      || !XCSoarInterface::Calculated().TerrainValid) {
+  if (basic.gps.NAVWarning || !calculated.TerrainValid) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  Units::FormatUserAltitude(XCSoarInterface::Basic().AltitudeAGL, sTmp,
+  Units::FormatUserAltitude(basic.AltitudeAGL, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
-  Units::FormatAlternateUserAltitude(XCSoarInterface::Basic().AltitudeAGL, sTmp,
+  Units::FormatAlternateUserAltitude(basic.AltitudeAGL, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
 
@@ -123,27 +127,28 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
   infobox.SetValueUnit(Units::AltitudeUnit);
 
   // Set Color (red/black)
-  infobox.SetColor(XCSoarInterface::Basic().AltitudeAGL <
+  infobox.SetColor(basic.AltitudeAGL <
       XCSoarInterface::SettingsComputer().route_planner.safety_height_terrain ? 1 : 0);
 }
 
 void
 InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
-  if (!XCSoarInterface::Basic().BaroAltitudeAvailable) {
+  if (!basic.BaroAltitudeAvailable) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  Units::FormatUserAltitude(XCSoarInterface::Basic().BaroAltitude, sTmp,
+  Units::FormatUserAltitude(basic.BaroAltitude, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
-  Units::FormatAlternateUserAltitude(XCSoarInterface::Basic().BaroAltitude, sTmp,
+  Units::FormatAlternateUserAltitude(basic.BaroAltitude, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
 
@@ -154,9 +159,10 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
-  fixed Value = XCSoarInterface::Basic().GPSAltitude;
+  fixed Value = basic.GPSAltitude;
 
   const Waypoint* home_waypoint = way_points.find_home();
   if (home_waypoint)
@@ -179,21 +185,22 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTerrainHeight::Update(InfoBoxWindow &infobox)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
   TCHAR sTmp[32];
 
-  if (XCSoarInterface::Basic().gps.NAVWarning
-      || !XCSoarInterface::Calculated().TerrainValid){
+  if (basic.gps.NAVWarning || !calculated.TerrainValid){
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  Units::FormatUserAltitude(XCSoarInterface::Calculated().TerrainAlt, sTmp,
+  Units::FormatUserAltitude(calculated.TerrainAlt, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
-  Units::FormatAlternateUserAltitude(XCSoarInterface::Calculated().TerrainAlt, sTmp,
+  Units::FormatAlternateUserAltitude(calculated.TerrainAlt, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
 

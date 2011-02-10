@@ -73,12 +73,14 @@ void
 DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().Location = loc;
-  SetBasic().GPSAltitude = alt;
+  NMEA_INFO &basic = SetBasic();
+
+  basic.Location = loc;
+  basic.GPSAltitude = alt;
 
   // set NAVWarning flags because this value was not provided
   // by a real GPS
-  SetBasic().gps.NAVWarning = true;
+  basic.gps.NAVWarning = true;
 }
 
 /**
@@ -100,20 +102,22 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
                               const fixed t)
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().acceleration.Available = false;
-  SetBasic().Location = loc;
-  SetBasic().GroundSpeed = speed;
-  SetBasic().IndicatedAirspeed = speed; // cheat
-  SetBasic().TrackBearing = bearing;
-  SetBasic().AirspeedAvailable = false;
-  SetBasic().GPSAltitude = alt;
-  SetBasic().SetBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, baroalt);
-  SetBasic().Time = t;
-  SetBasic().TotalEnergyVarioAvailable.clear();
-  SetBasic().NettoVarioAvailable.clear();
-  SetBasic().ExternalWindAvailable.clear();
-  SetBasic().WindAvailable.clear();
-  SetBasic().gps.Replay = true;
+  NMEA_INFO &basic = SetBasic();
+
+  basic.acceleration.Available = false;
+  basic.Location = loc;
+  basic.GroundSpeed = speed;
+  basic.IndicatedAirspeed = speed; // cheat
+  basic.TrackBearing = bearing;
+  basic.AirspeedAvailable = false;
+  basic.GPSAltitude = alt;
+  basic.SetBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, baroalt);
+  basic.Time = t;
+  basic.TotalEnergyVarioAvailable.clear();
+  basic.NettoVarioAvailable.clear();
+  basic.ExternalWindAvailable.clear();
+  basic.WindAvailable.clear();
+  basic.gps.Replay = true;
 };
 
 /**
@@ -121,8 +125,10 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
  */
 void DeviceBlackboard::StopReplay() {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().GroundSpeed = fixed_zero;
-  SetBasic().gps.Replay = false;
+  NMEA_INFO &basic = SetBasic();
+
+  basic.GroundSpeed = fixed_zero;
+  basic.gps.Replay = false;
 }
 
 /**
@@ -179,24 +185,24 @@ DeviceBlackboard::ProcessSimulation()
     return;
 
   ScopeLock protect(mutexBlackboard);
+  NMEA_INFO &basic = SetBasic();
 
-  SetBasic().gps.Simulator = true;
-  SetBasic().gps.MovementDetected = false;
+  basic.gps.Simulator = true;
+  basic.gps.MovementDetected = false;
 
   SetNAVWarning(false);
-  SetBasic().Location = FindLatitudeLongitude(Basic().Location,
-                                              Basic().TrackBearing,
-                                              Basic().GroundSpeed);
-  SetBasic().Time += fixed_one;
-  long tsec = (long)Basic().Time;
-  SetBasic().DateTime.hour = tsec / 3600;
-  SetBasic().DateTime.minute = (tsec - Basic().DateTime.hour * 3600) / 60;
-  SetBasic().DateTime.second = tsec-Basic().DateTime.hour * 3600
-    - Basic().DateTime.minute * 60;
+  basic.Location = FindLatitudeLongitude(basic.Location, basic.TrackBearing,
+                                         basic.GroundSpeed);
+  basic.Time += fixed_one;
+  long tsec = (long)basic.Time;
+  basic.DateTime.hour = tsec / 3600;
+  basic.DateTime.minute = (tsec - basic.DateTime.hour * 3600) / 60;
+  basic.DateTime.second = tsec - basic.DateTime.hour * 3600
+    - basic.DateTime.minute * 60;
 
   // use this to test FLARM parsing/display
   if (is_debug() && !is_altair())
-    DeviceList[0].parser.TestRoutine(&SetBasic());
+    DeviceList[0].parser.TestRoutine(&basic);
 }
 
 /**
@@ -209,8 +215,10 @@ void
 DeviceBlackboard::SetSpeed(fixed val)
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().GroundSpeed = val;
-  SetBasic().IndicatedAirspeed = val;
+  NMEA_INFO &basic = SetBasic();
+
+  basic.GroundSpeed = val;
+  basic.IndicatedAirspeed = val;
 }
 
 /**
@@ -236,8 +244,10 @@ void
 DeviceBlackboard::SetAltitude(fixed val)
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().GPSAltitude = val;
-  SetBasic().BaroAltitude = val;
+  NMEA_INFO &basic = SetBasic();
+
+  basic.GPSAltitude = val;
+  basic.BaroAltitude = val;
 }
 
 /**
@@ -284,8 +294,9 @@ DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP
  */
 void
 DeviceBlackboard::FLARM_RefreshSlots() {
-  FLARM_STATE &flarm_state = SetBasic().flarm;
-  flarm_state.Refresh(Basic().Time);
+  NMEA_INFO &basic = SetBasic();
+
+  basic.flarm.Refresh(basic.Time);
 }
 
 /**
@@ -299,24 +310,26 @@ DeviceBlackboard::SetSystemTime() {
     return;
 
 #ifdef HAVE_WIN32
+  NMEA_INFO &basic = SetBasic();
+
   // Altair doesn't have a battery-backed up realtime clock,
   // so as soon as we get a fix for the first time, set the
   // system clock to the GPS time.
   static bool sysTimeInitialised = false;
 
-  const GPS_STATE &gps = Basic().gps;
+  const GPS_STATE &gps = basic.gps;
 
   if (!gps.NAVWarning && SettingsMap().SetSystemTimeFromGPS
       && !sysTimeInitialised) {
     SYSTEMTIME sysTime;
     ::GetSystemTime(&sysTime);
 
-    sysTime.wYear = (unsigned short)Basic().DateTime.year;
-    sysTime.wMonth = (unsigned short)Basic().DateTime.month;
-    sysTime.wDay = (unsigned short)Basic().DateTime.day;
-    sysTime.wHour = (unsigned short)Basic().DateTime.hour;
-    sysTime.wMinute = (unsigned short)Basic().DateTime.minute;
-    sysTime.wSecond = (unsigned short)Basic().DateTime.second;
+    sysTime.wYear = (unsigned short)basic.DateTime.year;
+    sysTime.wMonth = (unsigned short)basic.DateTime.month;
+    sysTime.wDay = (unsigned short)basic.DateTime.day;
+    sysTime.wHour = (unsigned short)basic.DateTime.hour;
+    sysTime.wMinute = (unsigned short)basic.DateTime.minute;
+    sysTime.wSecond = (unsigned short)basic.DateTime.second;
     sysTime.wMilliseconds = 0;
     sysTimeInitialised = (::SetSystemTime(&sysTime)==true);
 
@@ -418,14 +431,16 @@ DeviceBlackboard::tick_fast(const GlidePolar& glide_polar)
 void
 DeviceBlackboard::NettoVario(const GlidePolar& glide_polar)
 {
-  SetBasic().GliderSinkRate = Basic().flight.Flying
-    ? - glide_polar.SinkRate(Basic().IndicatedAirspeed,
-                             Basic().acceleration.Gload)
+  NMEA_INFO &basic = SetBasic();
+
+  basic.GliderSinkRate = basic.flight.Flying
+    ? - glide_polar.SinkRate(basic.IndicatedAirspeed,
+                             basic.acceleration.Gload)
     /* the glider sink rate is useless when not flying */
     : fixed_zero;
 
-  if (!Basic().NettoVarioAvailable)
-    SetBasic().NettoVario = Basic().BruttoVario - Basic().GliderSinkRate;
+  if (!basic.NettoVarioAvailable)
+    basic.NettoVario = basic.BruttoVario - basic.GliderSinkRate;
 }
 
 
@@ -437,14 +452,16 @@ DeviceBlackboard::NettoVario(const GlidePolar& glide_polar)
 void
 DeviceBlackboard::NavAltitude()
 {
+  NMEA_INFO &basic = SetBasic();
+
   if (!SettingsComputer().EnableNavBaroAltitude
-      || !Basic().BaroAltitudeAvailable) {
-    SetBasic().NavAltitude = Basic().GPSAltitude;
+      || !basic.BaroAltitudeAvailable) {
+    basic.NavAltitude = basic.GPSAltitude;
   } else {
-    SetBasic().NavAltitude = Basic().BaroAltitude;
+    basic.NavAltitude = basic.BaroAltitude;
   }
-  SetBasic().AltitudeAGL = Basic().NavAltitude
-    - Calculated().TerrainAlt;
+
+  basic.AltitudeAGL = basic.NavAltitude - Calculated().TerrainAlt;
 }
 
 
@@ -454,34 +471,34 @@ DeviceBlackboard::NavAltitude()
 void
 DeviceBlackboard::Heading()
 {
-  const SpeedVector wind = Basic().wind;
+  NMEA_INFO &basic = SetBasic();
+  const SpeedVector wind = basic.wind;
 
-  if (positive(Basic().GroundSpeed) || wind.is_non_zero()) {
-    fixed x0 = (Basic().TrackBearing.fastsine()) * Basic().GroundSpeed;
-    fixed y0 = (Basic().TrackBearing.fastcosine())
-      * Basic().GroundSpeed;
-    x0 += (wind.bearing.fastsine()) * wind.norm;
-    y0 += (wind.bearing.fastcosine()) * wind.norm;
+  if (positive(basic.GroundSpeed) || wind.is_non_zero()) {
+    fixed x0 = basic.TrackBearing.fastsine() * basic.GroundSpeed;
+    fixed y0 = basic.TrackBearing.fastcosine() * basic.GroundSpeed;
+    x0 += wind.bearing.fastsine() * wind.norm;
+    y0 += wind.bearing.fastcosine() * wind.norm;
 
-    if (!Basic().flight.Flying) {
+    if (!basic.flight.Flying) {
       // don't take wind into account when on ground
-      SetBasic().Heading = Basic().TrackBearing;
+      basic.Heading = basic.TrackBearing;
     } else {
-      SetBasic().Heading = Angle::radians(atan2(x0, y0)).as_bearing();
+      basic.Heading = Angle::radians(atan2(x0, y0)).as_bearing();
     }
 
     // calculate estimated true airspeed
-    SetBasic().TrueAirspeedEstimated = hypot(x0, y0);
+    basic.TrueAirspeedEstimated = hypot(x0, y0);
 
   } else {
-    SetBasic().Heading = Basic().TrackBearing;
-    SetBasic().TrueAirspeedEstimated = fixed_zero;
+    basic.Heading = basic.TrackBearing;
+    basic.TrueAirspeedEstimated = fixed_zero;
   }
 
-  if (!Basic().AirspeedAvailable) {
-    SetBasic().TrueAirspeed = Basic().TrueAirspeedEstimated;
-    SetBasic().IndicatedAirspeed = Basic().TrueAirspeed
-      / AtmosphericPressure::AirDensityRatio(Basic().GetAltitudeBaroPreferred());
+  if (!basic.AirspeedAvailable) {
+    basic.TrueAirspeed = basic.TrueAirspeedEstimated;
+    basic.IndicatedAirspeed = basic.TrueAirspeed
+      / AtmosphericPressure::AirDensityRatio(basic.GetAltitudeBaroPreferred());
   }
 }
 
@@ -492,38 +509,41 @@ DeviceBlackboard::Heading()
 void
 DeviceBlackboard::Vario()
 {
+  NMEA_INFO &basic = SetBasic();
   // Calculate time passed since last calculation
-  const fixed dT = Basic().Time - LastBasic().Time;
+  const fixed dT = basic.Time - LastBasic().Time;
 
   if (positive(dT)) {
-    const fixed Gain = Basic().NavAltitude - LastBasic().NavAltitude;
-    const fixed GainTE = Basic().TEAltitude - LastBasic().TEAltitude;
+    const fixed Gain = basic.NavAltitude - LastBasic().NavAltitude;
+    const fixed GainTE = basic.TEAltitude - LastBasic().TEAltitude;
 
     // estimate value from GPS
-    SetBasic().GPSVario = Gain / dT;
-    SetBasic().GPSVarioTE = GainTE / dT;
+    basic.GPSVario = Gain / dT;
+    basic.GPSVarioTE = GainTE / dT;
   }
 
-  SetBasic().BruttoVario = Basic().TotalEnergyVarioAvailable
-    ? Basic().TotalEnergyVario
-    : Basic().GPSVario;
+  basic.BruttoVario = basic.TotalEnergyVarioAvailable
+    ? basic.TotalEnergyVario
+    : basic.GPSVario;
 }
 
 
 void
 DeviceBlackboard::Wind()
 {
-  if (Basic().ExternalWindAvailable && SettingsComputer().ExternalWind) {
-    SetBasic().wind = Basic().ExternalWind;
-    SetBasic().WindAvailable = Basic().ExternalWindAvailable;
+  NMEA_INFO &basic = SetBasic();
+
+  if (basic.ExternalWindAvailable && SettingsComputer().ExternalWind) {
+    basic.wind = basic.ExternalWind;
+    basic.WindAvailable = basic.ExternalWindAvailable;
   } else if (SettingsComputer().AutoWindMode == 0) {
-    SetBasic().wind = SettingsComputer().ManualWind;
-    SetBasic().WindAvailable.update(Basic().Time);
+    basic.wind = SettingsComputer().ManualWind;
+    basic.WindAvailable.update(basic.Time);
   } else if (Calculated().estimated_wind_available) {
-    SetBasic().wind = Calculated().estimated_wind;
-    SetBasic().WindAvailable = Calculated().estimated_wind_available;
+    basic.wind = Calculated().estimated_wind;
+    basic.WindAvailable = Calculated().estimated_wind_available;
   } else
-    SetBasic().WindAvailable.clear();
+    basic.WindAvailable.clear();
 }
 
 /**
@@ -532,21 +552,22 @@ DeviceBlackboard::Wind()
 void
 DeviceBlackboard::TurnRate()
 {
+  NMEA_INFO &basic = SetBasic();
   // Calculate time passed since last calculation
-  const fixed dT = Basic().Time - LastBasic().Time;
+  const fixed dT = basic.Time - LastBasic().Time;
 
   // Calculate turn rate
 
-  if (!Basic().flight.Flying) {
-    SetBasic().TurnRate = fixed_zero;
+  if (!basic.flight.Flying) {
+    basic.TurnRate = fixed_zero;
     return;
   }
   if (!positive(dT)) {
     return;
   }
 
-  SetBasic().TurnRate =
-    (Basic().TrackBearing - LastBasic().TrackBearing).as_delta().value_degrees() / dT;
+  basic.TurnRate =
+    (basic.TrackBearing - LastBasic().TrackBearing).as_delta().value_degrees() / dT;
 }
 
 /**
@@ -557,41 +578,42 @@ DeviceBlackboard::TurnRate()
 void
 DeviceBlackboard::Dynamics()
 {
-  if (Basic().flight.Flying &&
-      (positive(Basic().GroundSpeed) ||
-       Basic().wind.is_non_zero())) {
+  NMEA_INFO &basic = SetBasic();
+
+  if (basic.flight.Flying &&
+      (positive(basic.GroundSpeed) || basic.wind.is_non_zero())) {
 
     // calculate turn rate in wind coordinates
-    const fixed dT = Basic().Time - LastBasic().Time;
+    const fixed dT = basic.Time - LastBasic().Time;
 
     if (positive(dT)) {
-      SetBasic().TurnRateWind =
-        (Basic().Heading - LastBasic().Heading).as_delta().value_degrees() / dT;
+      basic.TurnRateWind =
+        (basic.Heading - LastBasic().Heading).as_delta().value_degrees() / dT;
     }
 
     // estimate bank angle (assuming balanced turn)
-    const fixed angle = atan(Angle::degrees(Basic().TurnRateWind
-        * Basic().TrueAirspeed * fixed_inv_g).value_radians());
+    const fixed angle = atan(Angle::degrees(basic.TurnRateWind
+        * basic.TrueAirspeed * fixed_inv_g).value_radians());
 
-    SetBasic().acceleration.BankAngle = Angle::radians(angle);
+    basic.acceleration.BankAngle = Angle::radians(angle);
 
-    if (!Basic().acceleration.Available)
-      SetBasic().acceleration.Gload = fixed_one
+    if (!basic.acceleration.Available)
+      basic.acceleration.Gload = fixed_one
         / max(fixed_small, fabs(cos(angle)));
 
     // estimate pitch angle (assuming balanced turn)
-    SetBasic().acceleration.PitchAngle = Basic().TotalEnergyVarioAvailable
-      ? Angle::radians(atan2(Basic().GPSVario - Basic().TotalEnergyVario,
-                             Basic().TrueAirspeed))
+    basic.acceleration.PitchAngle = basic.TotalEnergyVarioAvailable
+      ? Angle::radians(atan2(basic.GPSVario - basic.TotalEnergyVario,
+                             basic.TrueAirspeed))
       : Angle::native(fixed_zero);
 
   } else {
-    SetBasic().acceleration.BankAngle = Angle::native(fixed_zero);
-    SetBasic().acceleration.PitchAngle = Angle::native(fixed_zero);
-    SetBasic().TurnRateWind = fixed_zero;
+    basic.acceleration.BankAngle = Angle::native(fixed_zero);
+    basic.acceleration.PitchAngle = Angle::native(fixed_zero);
+    basic.TurnRateWind = fixed_zero;
 
-    if (!Basic().acceleration.Available)
-      SetBasic().acceleration.Gload = fixed_one;
+    if (!basic.acceleration.Available)
+      basic.acceleration.Gload = fixed_one;
   }
 }
 
@@ -604,70 +626,78 @@ DeviceBlackboard::Dynamics()
 void
 DeviceBlackboard::EnergyHeight()
 {
-  SetBasic().EnergyHeight =
-      Basic().TrueAirspeed * Basic().TrueAirspeed * fixed_inv_2g;
-  SetBasic().TEAltitude = Basic().NavAltitude + Basic().EnergyHeight;
+  NMEA_INFO &basic = SetBasic();
+
+  basic.EnergyHeight = basic.TrueAirspeed * basic.TrueAirspeed * fixed_inv_2g;
+  basic.TEAltitude = basic.NavAltitude + basic.EnergyHeight;
 }
 
 void
 DeviceBlackboard::WorkingBand()
 {
+  NMEA_INFO &basic = SetBasic();
+
   const fixed h_safety = SettingsComputer().route_planner.safety_height_terrain +
     Calculated().TerrainBase;
 
-    const fixed working_band_height = Basic().TEAltitude - h_safety;
+    const fixed working_band_height = basic.TEAltitude - h_safety;
 
-  SetBasic().working_band_height = working_band_height;
-    if (negative(Basic().working_band_height)) {
-    SetBasic().working_band_fraction = fixed_zero;
+  basic.working_band_height = working_band_height;
+  if (negative(basic.working_band_height)) {
+    basic.working_band_fraction = fixed_zero;
     return;
   }
 
   const fixed max_height = Calculated().thermal_band.MaxThermalHeight;
   if (positive(max_height))
-    SetBasic().working_band_fraction = working_band_height / max_height;
+    basic.working_band_fraction = working_band_height / max_height;
   else
-    SetBasic().working_band_fraction = fixed_one;
+    basic.working_band_fraction = fixed_one;
 
-  SetBasic().working_band_ceiling = std::max(max_height + h_safety, Basic().TEAltitude);
-
+  basic.working_band_ceiling = std::max(max_height + h_safety,
+                                        basic.TEAltitude);
 }
 
 void
 DeviceBlackboard::FlightState(const GlidePolar& glide_polar)
 {
-  if (Basic().Time < LastBasic().Time)
-    SetBasic().flight.flying_state_reset();
+  NMEA_INFO &basic = SetBasic();
+
+  if (basic.Time < LastBasic().Time)
+    basic.flight.flying_state_reset();
 
   // GPS not lost
-  if (Basic().gps.NAVWarning)
+  if (basic.gps.NAVWarning)
     return;
 
   // Speed too high for being on the ground
-  const fixed speed = Basic().AirspeedAvailable?
-    std::max(SetBasic().TrueAirspeed, Basic().GroundSpeed): Basic().GroundSpeed;
+  const fixed speed = basic.AirspeedAvailable
+    ? std::max(basic.TrueAirspeed, basic.GroundSpeed)
+    : basic.GroundSpeed;
 
   if (speed > glide_polar.get_Vtakeoff() ||
-      (Calculated().TerrainValid && Basic().AltitudeAGL > fixed(300))) {
-    SetBasic().flight.flying_state_moving(Basic().Time);
+      (Calculated().TerrainValid && basic.AltitudeAGL > fixed(300))) {
+    basic.flight.flying_state_moving(basic.Time);
   } else {
-    SetBasic().flight.flying_state_stationary(Basic().Time);
+    basic.flight.flying_state_stationary(basic.Time);
   }
 }
 
 void
 DeviceBlackboard::AutoQNH()
 {
+  NMEA_INFO &basic = SetBasic();
+
   #define QNH_TIME 10
 
   static unsigned countdown_autoqnh = QNH_TIME;
 
-  if (!Basic().flight.OnGround // must be on ground
+  if (!basic.flight.OnGround // must be on ground
       || !countdown_autoqnh    // only do it once
-      || Basic().gps.Replay // never in replay mode
-      || Basic().gps.Simulator // never in simulator
-      || Basic().gps.NAVWarning // Reject if no valid GPS fix
-      || !Basic().BaroAltitudeAvailable // Reject if no baro altitude
+      || basic.gps.Replay // never in replay mode
+      || basic.gps.Simulator // never in simulator
+      || basic.gps.NAVWarning // Reject if no valid GPS fix
+      || !basic.BaroAltitudeAvailable // Reject if no baro altitude
     ) {
     if (countdown_autoqnh<= QNH_TIME) {
       countdown_autoqnh= QNH_TIME; // restart if havent performed
@@ -679,9 +709,8 @@ DeviceBlackboard::AutoQNH()
     countdown_autoqnh--;
 
   if (!countdown_autoqnh) {
-    SetBasic().pressure.FindQNH(Basic().BaroAltitude, 
-                                Calculated().TerrainAlt);
-    AllDevicesPutQNH(Basic().pressure);
+    basic.pressure.FindQNH(basic.BaroAltitude, Calculated().TerrainAlt);
+    AllDevicesPutQNH(basic.pressure);
     countdown_autoqnh = UINT_MAX; // disable after performing once
   }
 }
@@ -690,14 +719,18 @@ void
 DeviceBlackboard::SetQNH(fixed qnh)
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().pressure.set_QNH(qnh);
-  AllDevicesPutQNH(Basic().pressure);
+  NMEA_INFO &basic = SetBasic();
+
+  basic.pressure.set_QNH(qnh);
+  AllDevicesPutQNH(basic.pressure);
 }
 
 void
 DeviceBlackboard::SetMC(fixed mc)
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().MacCready = mc;
+  NMEA_INFO &basic = SetBasic();
+
+  basic.MacCready = mc;
   AllDevicesPutMacCready(mc);
 }
