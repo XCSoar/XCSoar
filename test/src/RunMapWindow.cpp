@@ -211,7 +211,7 @@ GenerateBlackboard(MapWindow &map)
   DERIVED_INFO derived_info;
   SETTINGS_COMPUTER settings_computer;
 
-  memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.reset();
   nmea_info.gps.Connected = 2;
   nmea_info.gps.SatellitesUsed = 4;
   nmea_info.Location.Latitude = Angle::degrees(fixed(51.2));

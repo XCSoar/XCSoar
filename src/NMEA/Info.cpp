@@ -24,6 +24,35 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 
 void
+SWITCH_INFO::reset()
+{
+  AirbrakeLocked = false;
+  FlapPositive = false;
+  FlapNeutral = false;
+  FlapNegative = false;
+  GearExtended = false;
+  Acknowledge = false;
+  Repeat = false;
+  SpeedCommand = false;
+  UserSwitchUp = false;
+  UserSwitchMiddle = false;
+  UserSwitchDown = false;
+  VarioCircling = false;
+}
+
+void
+GPS_STATE::reset()
+{
+  // Set the NAVWarning positive (assume not gps found yet)
+  Connected = 0;
+  NAVWarning = true;
+  Simulator = false;
+  SatellitesUsed = 0;
+  MovementDetected = false;
+  Replay = false;
+}
+
+void
 GPS_STATE::complement(const GPS_STATE &add) {
   if (add.Connected > Connected)
     *this = add;
@@ -38,6 +67,70 @@ ACCELERATION_STATE::complement(const ACCELERATION_STATE &add)
     Gload = add.Gload;
     Available = add.Available;
   }
+}
+
+void
+NMEA_INFO::reset()
+{
+  gps.reset();
+  acceleration.reset();
+  flight.flying_state_reset();
+
+  // XXX Location
+
+  TrackBearing = Heading = Angle::native(fixed_zero);
+  TurnRateWind = TurnRate = fixed_zero;
+
+  AirspeedAvailable = false;
+  GroundSpeed = TrueAirspeed = IndicatedAirspeed = fixed_zero;
+  TrueAirspeedEstimated = fixed_zero;
+
+  GPSAltitude = fixed_zero;
+
+  BaroAltitudeAvailable.clear();
+  BaroAltitudeOrigin = BARO_ALTITUDE_UNKNOWN;
+  BaroAltitude = fixed_zero;
+  EnergyHeight = TEAltitude = fixed_zero;
+
+  working_band_height = working_band_ceiling = fixed_zero;
+
+  NavAltitude = fixed_zero;
+
+  working_band_fraction = fixed_zero;
+
+  AltitudeAGL = fixed_zero;
+
+  pressure.set_QNH(fixed(1013.25));
+
+  Time = fixed_zero;
+  DateTime.year = DateTime.month = DateTime.day = 0;
+  DateTime.day_of_week = 0;
+  DateTime.hour = DateTime.minute = DateTime.second = 0;
+
+  GliderSinkRate = fixed_zero;
+
+  GPSVario = GPSVarioTE = fixed_zero;
+
+  TotalEnergyVarioAvailable.clear();
+  NettoVarioAvailable.clear();
+  BruttoVario = fixed_zero;
+
+  // XXX MacCready, Ballast, Bugs
+
+  ExternalWindAvailable.clear();
+  WindAvailable.clear();
+
+  TemperatureAvailable = false;
+  HumidityAvailable = false;
+
+  SupplyBatteryVoltage = fixed_minus_one;
+
+  SwitchStateAvailable = false;
+  SwitchState.reset();
+
+  // XXX StallRatio
+
+  flarm.clear();
 }
 
 void

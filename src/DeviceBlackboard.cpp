@@ -54,25 +54,6 @@ DeviceBlackboard::Initialise()
   // Clear the gps_info and calculated_info
   gps_info.reset();
   calculated_info.reset();
-  
-  // Set the NAVWarning positive (assume not gps found yet)
-  gps_info.gps.NAVWarning = true;
-  gps_info.gps.Simulator = false;
-
-  // Clear the SwitchStates
-  gps_info.SwitchStateAvailable = false;
-  gps_info.SwitchState.AirbrakeLocked = false;
-  gps_info.SwitchState.FlapPositive = false;
-  gps_info.SwitchState.FlapNeutral = false;
-  gps_info.SwitchState.FlapNegative = false;
-  gps_info.SwitchState.GearExtended = false;
-  gps_info.SwitchState.Acknowledge = false;
-  gps_info.SwitchState.Repeat = false;
-  gps_info.SwitchState.SpeedCommand = false;
-  gps_info.SwitchState.UserSwitchUp = false;
-  gps_info.SwitchState.UserSwitchMiddle = false;
-  gps_info.SwitchState.UserSwitchDown = false;
-  gps_info.SwitchState.VarioCircling = false;
 
   // Set GPS assumed time to system time
   gps_info.DateTime = BrokenDateTime::NowUTC();

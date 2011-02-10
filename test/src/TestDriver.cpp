@@ -46,11 +46,7 @@
 #include "FaultInjectionPort.hpp"
 #include "TestUtil.hpp"
 
-#include <string.h>
-
 static bool gps_updated, vario_updated;
-
-FLYING_STATE::FLYING_STATE() {}
 
 void TriggerGPSUpdate()
 {
@@ -118,7 +114,7 @@ TestGeneric()
   NMEAParser parser;
 
   NMEA_INFO nmea_info;
-  memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
 
   /* no GPS reception */
@@ -160,7 +156,7 @@ TestCAI302()
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
-  memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
   nmea_info.pressure.set_QNH(fixed(1013.25));
 
@@ -211,7 +207,7 @@ TestFlymasterF1()
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
-  memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
   nmea_info.pressure.set_QNH(fixed(1013.25));
 
@@ -240,7 +236,7 @@ TestLX(const struct DeviceRegister &driver)
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
-  memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
 
   /* baro altitude disabled */
@@ -276,7 +272,7 @@ TestILEC()
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
-  memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
 
   /* baro altitude disabled */
@@ -307,7 +303,7 @@ TestWesterboer()
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
-  memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
 
   device->ParseNMEA("$PWES0,20,-25,25,-22,2,-100,589,589,1260,1296,128,295*01",
@@ -337,7 +333,7 @@ TestZander()
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
-  memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
   nmea_info.pressure.set_QNH(fixed(999));
 

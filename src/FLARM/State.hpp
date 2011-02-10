@@ -68,6 +68,7 @@ protected:
   }
 
 public:
+  void clear();
 
   /**
    * Adds data from the specified object, unless already present in

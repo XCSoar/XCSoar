@@ -51,6 +51,8 @@ struct SWITCH_INFO
   bool VarioCircling;
   bool FlapLanding;
   // bool Stall;
+
+  void reset();
 };
 
 /**
@@ -107,6 +109,8 @@ struct GPS_STATE
    */
   bool Simulator;
 
+  void reset();
+
   /**
    * Adds data from the specified object, unless already present in
    * this one.
@@ -141,6 +145,10 @@ struct ACCELERATION_STATE
    */
   fixed Gload;
 
+  void reset() {
+    Available = false;
+  }
+
   /**
    * Adds data from the specified object, unless already present in
    * this one.
@@ -153,12 +161,6 @@ struct ACCELERATION_STATE
  * A struct that holds all the parsed data read from the connected devices
  */
 struct NMEA_INFO {
-
-  /**
-   * @todo Reset to cleared state
-   */
-  void reset() {};
-
   GPS_STATE gps;
 
   ACCELERATION_STATE acceleration;
@@ -566,6 +568,11 @@ struct NMEA_INFO {
     ExternalWind = value;
     ExternalWindAvailable.update(Time);
   }
+
+  /**
+   * Clears all information, start with tabula rasa.
+   */
+  void reset();
 
   /**
    * Check expiry times of all attributes which have a time stamp

@@ -23,6 +23,17 @@ Copyright_License {
 
 #include "FLARM/State.hpp"
 
+void
+FLARM_STATE::clear()
+{
+  FLARM_Available = false;
+  FLARMTraffic = false;
+  NewTraffic = false;
+
+  for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; ++i)
+    FLARM_Traffic[i].Clear();
+}
+
 const FLARM_TRAFFIC *
 FLARM_STATE::FindMaximumAlert() const
 {

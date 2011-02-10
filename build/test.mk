@@ -358,7 +358,9 @@ TEST_DRIVER_SOURCES = \
 	$(VOLKSLOGGER_SOURCES) \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
+	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/FLARM/State.cpp \
 	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Math/Angle.cpp \
 	$(SRC)/Units.cpp \
@@ -366,6 +368,8 @@ TEST_DRIVER_SOURCES = \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
@@ -944,6 +948,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/FLARM/State.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \
@@ -1153,6 +1158,7 @@ $(RUN_PROGRESS_WINDOW_BIN): $(RUN_PROGRESS_WINDOW_OBJS) $(RUN_PROGRESS_WINDOW_LD
 RUN_ANALYSIS_SOURCES = \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \
+	$(SRC)/FLARM/State.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsFile.cpp \
