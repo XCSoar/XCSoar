@@ -107,9 +107,8 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.acceleration.Available = false;
   basic.Location = loc;
   basic.GroundSpeed = speed;
-  basic.IndicatedAirspeed = speed; // cheat
+  basic.ProvideBothAirspeeds(speed);
   basic.TrackBearing = bearing;
-  basic.AirspeedAvailable = false;
   basic.GPSAltitude = alt;
   basic.SetBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, baroalt);
   basic.Time = t;
@@ -218,7 +217,7 @@ DeviceBlackboard::SetSpeed(fixed val)
   NMEA_INFO &basic = SetBasic();
 
   basic.GroundSpeed = val;
-  basic.IndicatedAirspeed = val;
+  basic.ProvideBothAirspeeds(val);
 }
 
 /**
