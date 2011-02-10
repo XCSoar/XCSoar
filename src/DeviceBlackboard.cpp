@@ -60,15 +60,6 @@ DeviceBlackboard::Initialise()
   gps_info.Time = fixed(gps_info.DateTime.hour * 3600 +
                         gps_info.DateTime.minute * 60 +
                         gps_info.DateTime.second);
-
-  if (is_simulator()) {
-    #ifdef _SIM_STARTUPSPEED
-      gps_info.Speed = _SIM_STARTUPSPEED;
-    #endif
-    #ifdef _SIM_STARTUPALTITUDE
-      gps_info.GPSAltitude = _SIM_STARTUPALTITUDE;
-    #endif
-  }
 }
 
 /**
