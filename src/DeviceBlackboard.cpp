@@ -401,6 +401,8 @@ DeviceBlackboard::FLARM_ScanTraffic()
 void
 DeviceBlackboard::tick(const GlidePolar& glide_polar)
 {
+  SetBasic().expire();
+
   // check for timeout on FLARM objects
   FLARM_RefreshSlots();
   // lookup known traffic
