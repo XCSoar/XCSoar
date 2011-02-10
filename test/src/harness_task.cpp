@@ -503,7 +503,7 @@ bool test_task_or(TaskManager& task_manager,
 {
   const Waypoint *wp;
 
-  task_manager.set_factory(TaskBehaviour::FACTORY_TOURING);
+  task_manager.set_factory(TaskBehaviour::FACTORY_FAI_OR);
   AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
