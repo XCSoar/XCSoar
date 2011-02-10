@@ -704,18 +704,16 @@ InputEvents::ShowMenu()
 void
 InputEvents::ProcessMenuTimer()
 {
-  if (!InfoBoxManager::HasFocus()) {
-    if (MenuTimeOut == XCSoarInterface::MenuTimeoutMax) {
-      if (XCSoarInterface::SettingsMap().EnablePan &&
-          !XCSoarInterface::SettingsMap().TargetPan) {
-        setMode(MODE_PAN);
-      } else {
-        setMode(MODE_DEFAULT);
-      }
+  if (MenuTimeOut == XCSoarInterface::MenuTimeoutMax) {
+    if (XCSoarInterface::SettingsMap().EnablePan &&
+        !XCSoarInterface::SettingsMap().TargetPan) {
+      setMode(MODE_PAN);
+    } else {
+      setMode(MODE_DEFAULT);
     }
-
-    MenuTimeOut++;
   }
+
+  MenuTimeOut++;
 }
 
 void
