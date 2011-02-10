@@ -33,6 +33,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 static SingleWindow *parent_window;
 static WndForm* wf = NULL;
