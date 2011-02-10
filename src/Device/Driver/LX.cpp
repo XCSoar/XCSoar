@@ -74,18 +74,17 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   line.skip();
 
   fixed airspeed;
-  GPS_INFO->AirspeedAvailable = line.read_checked(airspeed);
+  bool tas_available = line.read_checked(airspeed);
 
   fixed alt = fixed_zero;
   if (line.read_checked(alt) && enable_baro)
     // ToDo check if QNH correction is needed!
     GPS_INFO->ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_LX, alt);
 
-  if (GPS_INFO->AirspeedAvailable) {
-    GPS_INFO->TrueAirspeed = Units::ToSysUnit(airspeed, unKiloMeterPerHour);
-    GPS_INFO->IndicatedAirspeed =
-      GPS_INFO->TrueAirspeed / AtmosphericPressure::AirDensityRatio(alt);
-  }
+  if (tas_available)
+    GPS_INFO->ProvideTrueAirspeedWithAltitude(Units::ToSysUnit(airspeed,
+                                                               unKiloMeterPerHour),
+                                              alt);
 
   if (line.read_checked(value)) {
     GPS_INFO->ProvideTotalEnergyVario(value);

@@ -553,10 +553,8 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   line.skip();
   // GPS_INFO->pressure.set_QNH(_tcstod(ctemp, NULL) - 1000); ?
 
-  if (line.read_checked(value)) {
-    GPS_INFO->TrueAirspeed = value / 100;
-    GPS_INFO->AirspeedAvailable = true;
-  }
+  if (line.read_checked(value))
+    GPS_INFO->ProvideTrueAirspeed(value / 100);
 
   if (line.read_checked(value)) {
     GPS_INFO->ProvideTotalEnergyVario(Units::ToSysUnit((value - fixed(200)) / 10,

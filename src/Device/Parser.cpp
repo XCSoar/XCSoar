@@ -752,17 +752,8 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   }
 
   fixed vtas;
-  bool valid_vtas = false;
-  if (line.read_checked(vtas)) {
-    vtas = Units::ToSysUnit(vtas, unKnots);
-
-    GPS_INFO->AirspeedAvailable = true;
-    GPS_INFO->TrueAirspeed = vtas;
-  }
-
-  if (valid_baralt && valid_vtas)
-    GPS_INFO->IndicatedAirspeed =
-      vtas / GPS_INFO->pressure.AirDensityRatio(baralt);
+  if (line.read_checked(vtas))
+    GPS_INFO->ProvideTrueAirspeed(Units::ToSysUnit(vtas, unKnots));
 
   TriggerVarioUpdate();
 

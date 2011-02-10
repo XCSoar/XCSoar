@@ -234,12 +234,13 @@ PDVDV(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
     TriggerVarioUpdate();
   }
 
-  GPS_INFO->IndicatedAirspeed = line.read(fixed_zero) / 10;
-  GPS_INFO->TrueAirspeed = line.read(fixed_zero) *
-    GPS_INFO->IndicatedAirspeed / 1024;
+  bool ias_available = line.read_checked(value);
+  fixed tas_ratio = line.read(fixed(1024)) / 1024;
+  if (ias_available)
+    GPS_INFO->ProvideBothAirspeeds(value / 10,
+                                   value / 10 * tas_ratio);
 
   //hasVega = true;
-  GPS_INFO->AirspeedAvailable = true;
 
   if (enable_baro)
     GPS_INFO->ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_TRIADIS_PDVDV,

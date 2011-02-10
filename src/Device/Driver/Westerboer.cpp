@@ -78,12 +78,11 @@ PWES0(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 
   bool have_ias = line.read_checked(i);
   bool have_tas = line.read_checked(k);
-  if (have_ias && have_tas) {
-    info.IndicatedAirspeed = Units::ToSysUnit(fixed(i) / 10,
-                                              unKiloMeterPerHour);
-    info.TrueAirspeed = Units::ToSysUnit(fixed(k) / 10, unKiloMeterPerHour);
-    info.AirspeedAvailable = true;
-  }
+  if (have_ias && have_tas)
+    info.ProvideBothAirspeeds(Units::ToSysUnit(fixed(i) / 10,
+                                               unKiloMeterPerHour),
+                              Units::ToSysUnit(fixed(k) / 10,
+                                               unKiloMeterPerHour));
 
   if (line.read_checked(i))
     info.SupplyBatteryVoltage = fixed(i) / 10;

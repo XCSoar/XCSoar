@@ -80,13 +80,8 @@ LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 
   // 2 = airspeed [km/h]
   /* XXX is that TAS or IAS? */
-  info.AirspeedAvailable = line.read_checked(value);
-  if (info.AirspeedAvailable) {
-    info.TrueAirspeed = Units::ToSysUnit(value, unKiloMeterPerHour);
-    info.IndicatedAirspeed = info.TrueAirspeed *
-        AtmosphericPressure::AirDensityRatio(info.BaroAltitudeAvailable ?
-            info.BaroAltitude : info.GPSAltitude);
-  }
+  if (line.read_checked(value))
+    info.ProvideTrueAirspeed(Units::ToSysUnit(value, unKiloMeterPerHour));
 
   // 3 = netto vario [dm/s]
   if (line.read_checked(value))
@@ -137,11 +132,8 @@ LeonardoParseD(NMEAInputLine &line, NMEA_INFO &info)
 
   // 3 = airspeed [km/h]
   /* XXX is that TAS or IAS? */
-  info.AirspeedAvailable = line.read_checked(value);
-  if (info.AirspeedAvailable) {
-    info.TrueAirspeed = Units::ToSysUnit(value, unKiloMeterPerHour);
-    info.IndicatedAirspeed = info.TrueAirspeed; // XXX convert properly
-  }
+  if (line.read_checked(value))
+    info.ProvideTrueAirspeed(Units::ToSysUnit(value, unKiloMeterPerHour));
 
   // 4 = temperature [deg C]
   fixed oat;

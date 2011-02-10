@@ -546,6 +546,45 @@ struct NMEA_INFO {
   }
 
   /**
+   * Set both true airspeed and indicated airspeed to this value
+   * [m/s].  This is used by device drivers when it is not documented
+   * whether the airspeed variable is TAS or IAS.
+   */
+  void ProvideBothAirspeeds(fixed as) {
+    IndicatedAirspeed = TrueAirspeed = as;
+    AirspeedAvailable = true;
+  }
+
+  /**
+   * Set both true airspeed and indicated airspeed to two different
+   * values [m/s].
+   */
+  void ProvideBothAirspeeds(fixed ias, fixed tas) {
+    IndicatedAirspeed = ias;
+    TrueAirspeed = tas;
+    AirspeedAvailable = true;
+  }
+
+  /**
+   * Set the true airspeed [m/s] and derive the indicated airspeed
+   * from it, using the specified altitude [m].
+   */
+  void ProvideTrueAirspeedWithAltitude(fixed tas, fixed altitude) {
+    TrueAirspeed = tas;
+    IndicatedAirspeed = TrueAirspeed /
+      AtmosphericPressure::AirDensityRatio(altitude);
+    AirspeedAvailable = true;
+  }
+
+  /**
+   * Set the true airspeed [m/s] and derive the indicated airspeed
+   * from it, using the current altitude.
+   */
+  void ProvideTrueAirspeed(fixed tas) {
+    ProvideTrueAirspeedWithAltitude(tas, GetAltitudeBaroPreferred());
+  }
+
+  /**
    * Set the barometric TE vario value [m/s].
    */
   void ProvideTotalEnergyVario(fixed value) {

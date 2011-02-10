@@ -76,11 +76,9 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
   ///  oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
 
-  GPS_INFO->AirspeedAvailable = line.read_checked(value) && vtas_av;
-  if (GPS_INFO->AirspeedAvailable) {
-    GPS_INFO->IndicatedAirspeed = Units::ToSysUnit(sqrt(value), unKnots);
-    GPS_INFO->TrueAirspeed = Units::ToSysUnit(vtas, unKnots);
-  }
+  if (line.read_checked(value) && vtas_av)
+    GPS_INFO->ProvideBothAirspeeds(Units::ToSysUnit(sqrt(value), unKnots),
+                                   Units::ToSysUnit(vtas, unKnots));
 
   // RMN: Changed bugs-calculation, swapped ballast and bugs to suit
   // the B50-string for Borgelt, it's % degradation, for us, it is %

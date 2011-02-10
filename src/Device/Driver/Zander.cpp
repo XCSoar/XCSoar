@@ -27,6 +27,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "Units.hpp"
 
 #include <stdlib.h>
 
@@ -58,15 +59,9 @@ PZAN2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   fixed vtas, wnet;
 
-  if (line.read_checked(vtas)) {
-    vtas /= fixed(3.6); // km/h -> m/s
-
-    GPS_INFO->TrueAirspeed = vtas;
-    GPS_INFO->IndicatedAirspeed = GPS_INFO->BaroAltitudeAvailable
-      ? vtas / AtmosphericPressure::AirDensityRatio(GPS_INFO->BaroAltitude)
-      : fixed_zero;
-    GPS_INFO->AirspeedAvailable = true;
-  }
+  if (line.read_checked(vtas))
+    GPS_INFO->ProvideTrueAirspeed(Units::ToSysUnit(vtas,
+                                                   unKiloMeterPerHour));
 
   if (line.read_checked(wnet)) {
     GPS_INFO->ProvideTotalEnergyVario((wnet - fixed(10000)) / 100);
