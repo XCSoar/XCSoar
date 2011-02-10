@@ -40,6 +40,11 @@ public:
    */
   Validity() {}
 
+  /**
+   * Initialize the object with the specified timestamp.
+   */
+  Validity(fixed _last):last(_last) {}
+
 public:
   /**
    * Clears the time stamp, marking the referenced value "invalid".
