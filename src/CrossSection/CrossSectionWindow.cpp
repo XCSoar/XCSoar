@@ -249,8 +249,8 @@ CrossSectionWindow::ReadBlackboard(const NMEA_INFO &_gps_info,
 void
 CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
 {
-  fixed hmin = max(fixed_zero, gps_info.GPSAltitude - fixed(3300));
-  fixed hmax = max(fixed(3300), gps_info.GPSAltitude + fixed(1000));
+  fixed hmin = max(fixed_zero, gps_info.NavAltitude - fixed(3300));
+  fixed hmax = max(fixed(3300), gps_info.NavAltitude + fixed(1000));
 
   Chart chart(canvas, rc);
   chart.ResetScale();
@@ -331,8 +331,8 @@ CrossSectionWindow::PaintGlide(Chart &chart)
 {
   if (gps_info.GroundSpeed > fixed(10)) {
     fixed t = vec.Distance / gps_info.GroundSpeed;
-    chart.DrawLine(fixed_zero, gps_info.GPSAltitude, vec.Distance,
-                   gps_info.GPSAltitude + calculated_info.Average30s * t,
+    chart.DrawLine(fixed_zero, gps_info.NavAltitude, vec.Distance,
+                   gps_info.NavAltitude + calculated_info.Average30s * t,
                    Chart::STYLE_BLUETHIN);
   }
 }
@@ -349,7 +349,7 @@ CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
 
   RasterPoint line[4];
   line[0].x = chart.screenX(fixed_zero);
-  line[0].y = chart.screenY(gps_info.GPSAltitude);
+  line[0].y = chart.screenY(gps_info.NavAltitude);
   line[1].x = rc.left;
   line[1].y = line[0].y;
   line[2].x = line[1].x;

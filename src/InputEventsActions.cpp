@@ -1463,7 +1463,7 @@ void
 InputEvents::eventAddWaypoint(const TCHAR *misc)
 {
   Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().Location);
-  edit_waypoint.Altitude = XCSoarInterface::Basic().GPSAltitude;
+  edit_waypoint.Altitude = XCSoarInterface::Basic().NavAltitude;
   if (dlgWaypointEditShowModal(edit_waypoint)) {
     if (edit_waypoint.Name.size()) {
       ScopeSuspendAllThreads suspend;
