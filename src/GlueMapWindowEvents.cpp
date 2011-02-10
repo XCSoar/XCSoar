@@ -360,7 +360,7 @@ GlueMapWindow::Render(Canvas &canvas, const RECT &rc)
   DrawFlightMode(canvas, rc);
   DrawThermalBand(canvas, rc);
   DrawFinalGlide(canvas, rc);
-  DrawGPSStatus(canvas, rc, Basic().gps);
+  DrawGPSStatus(canvas, rc, Basic());
 
 #ifdef DRAWLOAD
   canvas.select(Fonts::Map);

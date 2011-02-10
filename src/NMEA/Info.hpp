@@ -64,15 +64,6 @@ struct GPS_STATE
   //   Status
   //############
 
-  /**
-   * Is a GPS unit connected?
-   *
-   * 0 = not connected
-   * 1 = connected, waiting for fix
-   * 2 = connected, fix found
-   */
-  unsigned Connected;
-
   /** GPS fix not valid */
   int NAVWarning;
 
@@ -110,12 +101,6 @@ struct GPS_STATE
   bool Simulator;
 
   void reset();
-
-  /**
-   * Adds data from the specified object, unless already present in
-   * this one.
-   */
-  void complement(const GPS_STATE &add);
 };
 
 /**
@@ -161,6 +146,13 @@ struct ACCELERATION_STATE
  * A struct that holds all the parsed data read from the connected devices
  */
 struct NMEA_INFO {
+  /**
+   * Is there a device connected?  This attribute gets updated each
+   * time a NMEA line was successfully parsed.  When this expires, it
+   * means that the device got disconnected.
+   */
+  Validity Connected;
+
   GPS_STATE gps;
 
   ACCELERATION_STATE acceleration;
@@ -616,8 +608,17 @@ struct NMEA_INFO {
   void reset();
 
   /**
+   * Check the expiry time of the device connection with the wall
+   * clock time.  This should be called from a periodic timer.  The
+   * GPS time cannot be used here, because a disconnected device would
+   * not update its GPS time.
+   */
+  void expire_wall_clock();
+
+  /**
    * Check expiry times of all attributes which have a time stamp
-   * associated with them.
+   * associated with them.  This should be called after the GPS time
+   * stamp has been updated.
    */
   void expire();
 

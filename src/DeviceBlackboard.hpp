@@ -63,7 +63,6 @@ public:
   void SetLocation(const GeoPoint &loc, const fixed speed, const Angle bearing,
                    const fixed alt, const fixed baroalt, const fixed t);
   void ProcessSimulation();
-  bool LowerConnection();
   void RaiseConnection();
   void StopReplay();
   void SetBaroAlt(fixed x) {
@@ -74,6 +73,16 @@ public:
   void SetAltitude(fixed alt);
   void SetQNH(fixed qnh);
   void SetMC(fixed mc);
+
+  /**
+   * Check the expiry time of the device connection with the wall
+   * clock time.  This method locks the blackboard, i.e. it may be
+   * called from any thread.
+   *
+   * @return true if the connection has just expired, false if the
+   * connection status has not changed
+   */
+  bool expire_wall_clock();
 
   void tick(const GlidePolar& glide_polar);
   void tick_fast(const GlidePolar& glide_polar);

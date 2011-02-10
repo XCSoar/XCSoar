@@ -406,11 +406,11 @@ InfoBoxManager::SetDirty()
 void
 InfoBoxManager::ProcessTimer()
 {
-  static fixed lasttime;
+  static Validity last;
 
-  if (XCSoarInterface::Basic().Time != lasttime) {
+  if (XCSoarInterface::Basic().Connected.modified(last)) {
     SetDirty();
-    lasttime = XCSoarInterface::Basic().Time;
+    last = XCSoarInterface::Basic().Connected;
   }
 
   InfoBoxDrawIfDirty();

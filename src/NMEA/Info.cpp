@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "NMEA/Info.hpp"
+#include "OS/Clock.hpp"
 
 void
 SWITCH_INFO::reset()
@@ -44,18 +45,11 @@ void
 GPS_STATE::reset()
 {
   // Set the NAVWarning positive (assume not gps found yet)
-  Connected = 0;
   NAVWarning = true;
   Simulator = false;
   SatellitesUsed = 0;
   MovementDetected = false;
   Replay = false;
-}
-
-void
-GPS_STATE::complement(const GPS_STATE &add) {
-  if (add.Connected > Connected)
-    *this = add;
 }
 
 void
@@ -72,6 +66,8 @@ ACCELERATION_STATE::complement(const ACCELERATION_STATE &add)
 void
 NMEA_INFO::reset()
 {
+  Connected.clear();
+
   gps.reset();
   acceleration.reset();
   flight.flying_state_reset();
@@ -135,6 +131,17 @@ NMEA_INFO::reset()
 }
 
 void
+NMEA_INFO::expire_wall_clock()
+{
+  const fixed monotonic = fixed(MonotonicClockMS()) / 1000;
+  Connected.expire(monotonic, fixed(10));
+  if (!Connected) {
+    gps.reset();
+    flarm.clear();
+  }
+}
+
+void
 NMEA_INFO::expire()
 {
   AirspeedAvailable.expire(Time, fixed(30));
@@ -149,14 +156,19 @@ NMEA_INFO::expire()
 void
 NMEA_INFO::complement(const NMEA_INFO &add)
 {
-  gps.complement(add.gps);
+  if (!add.Connected)
+    /* if there is no heartbeat on the other object, there cannot be
+       useful information */
+    return;
+
+  if (!Connected)
+    gps = add.gps;
 
   acceleration.complement(add.acceleration);
 
   /* calculated: flight */
 
-  if (add.gps.Connected > gps.Connected) {
-    gps = add.gps;
+  if (gps.NAVWarning && !add.gps.NAVWarning) {
     Location = add.Location;
     TrackBearing = add.TrackBearing;
     GroundSpeed = add.GroundSpeed;

@@ -138,21 +138,14 @@ Dump(const NMEA_INFO &basic)
   printf("Time=%02u:%02u:%02u\n",
          basic.DateTime.hour, basic.DateTime.minute, basic.DateTime.second);
 
-  switch (basic.gps.Connected) {
-  case 0:
+  if (!basic.Connected)
     printf("GPS not connected\n");
-    break;
-
-  case 1:
+  else if (basic.gps.NAVWarning)
     printf("Waiting for GPS fix\n");
-    break;
-
-  case 2:
+  else
     printf("GPS connected, %d satellites\n", basic.gps.SatellitesUsed);
-    break;
-  }
 
-  if (basic.gps.Connected == 2) {
+  if (!basic.gps.NAVWarning) {
     printf("Position=");
     Dump(basic.Location);
     printf("\n");

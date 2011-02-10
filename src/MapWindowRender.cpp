@@ -149,7 +149,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   DrawFLARMTraffic(canvas, aircraft_pos);
 
   // Finally, draw you!
-  if (Basic().gps.Connected)
+  if (Basic().Connected)
     Graphics::DrawAircraft(canvas, 
                            Basic().Heading - render_projection.GetScreenAngle(),
                            aircraft_pos);

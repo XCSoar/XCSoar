@@ -140,7 +140,8 @@ static CallBackTableEntry CallBackTable[] = {
 static void
 UpdateValuesSystem()
 {
-  static const GPS_STATE &gps = XCSoarInterface::Basic().gps;
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const GPS_STATE &gps = basic.gps;
 
   TCHAR Temp[80];
   TCHAR Temp2[80];
@@ -149,7 +150,7 @@ UpdateValuesSystem()
 
   wp = (WndProperty*)wf->FindByName(_T("prpGPS"));
   assert(wp != NULL);
-  if (!gps.Connected)
+  if (!basic.Connected)
     wp->SetText(_("Disconnected"));
   else if (gps.NAVWarning)
     wp->SetText(_("Fix invalid"));
@@ -163,7 +164,7 @@ UpdateValuesSystem()
 
   wp = (WndProperty*)wf->FindByName(_T("prpNumSat"));
   assert(wp != NULL);
-  if (!gps.Connected)
+  if (!basic.Connected)
     wp->SetText(_T(""));
   else if (gps.SatellitesUsed >= 0) {
     // known number of sats

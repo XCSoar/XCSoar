@@ -35,6 +35,8 @@ Copyright_License {
 #include "Math/Constants.h"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Simulator.hpp"
+#include "OS/Clock.hpp"
+
 #include <limits.h>
 
 #define fixed_inv_2g fixed(1.0/(2.0*9.81))
@@ -105,7 +107,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   ScopeLock protect(mutexBlackboard);
   NMEA_INFO &basic = SetBasic();
 
-  basic.gps.Connected = 2;
+  basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
   basic.gps.NAVWarning = false;
   basic.gps.SatellitesUsed = 6;
   basic.acceleration.Available = false;
@@ -137,28 +139,6 @@ void DeviceBlackboard::StopReplay() {
   basic.gps.Replay = false;
 }
 
-/**
- * Lowers the connection status of the device
- *
- * Connected + Fix -> Connected + No Fix
- * Connected + No Fix -> Not connected
- * @return True if still connected afterwards, False otherwise
- */
-bool
-DeviceBlackboard::LowerConnection()
-{
-  ScopeLock protect(mutexBlackboard);
-  GPS_STATE &gps = SetBasic().gps;
-
-  if (!is_android() && gps.Connected)
-    gps.Connected--;
-
-  if (!gps.Connected)
-    gps.reset();
-
-  return gps.Connected > 0;
-}
-
 void
 DeviceBlackboard::ProcessSimulation()
 {
@@ -168,7 +148,7 @@ DeviceBlackboard::ProcessSimulation()
   ScopeLock protect(mutexBlackboard);
   NMEA_INFO &basic = SetBasic();
 
-  basic.gps.Connected = 2;
+  basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
   basic.gps.NAVWarning = false;
   basic.gps.SatellitesUsed = 6;
   basic.gps.Simulator = true;
@@ -369,6 +349,18 @@ DeviceBlackboard::FLARM_ScanTraffic()
         _tcscpy(traffic.Name, fname);
     }
   }
+}
+
+bool
+DeviceBlackboard::expire_wall_clock()
+{
+  ScopeLock protect(mutexBlackboard);
+  NMEA_INFO &basic = SetBasic();
+  if (!basic.Connected)
+    return false;
+
+  basic.expire_wall_clock();
+  return !basic.Connected;
 }
 
 void

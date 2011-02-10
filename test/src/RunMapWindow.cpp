@@ -213,7 +213,8 @@ GenerateBlackboard(MapWindow &map)
 
   nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
-  nmea_info.gps.Connected = 2;
+  nmea_info.Connected.update(nmea_info.Time);
+  nmea_info.gps.NAVWarning = false;
   nmea_info.gps.SatellitesUsed = 4;
   nmea_info.Location.Latitude = Angle::degrees(fixed(51.2));
   nmea_info.Location.Longitude = Angle::degrees(fixed(7.7));

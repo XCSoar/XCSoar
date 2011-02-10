@@ -31,6 +31,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "StringUtil.hpp"
 #include "Logger/NMEALogger.hpp"
+#include "OS/Clock.hpp"
 
 #ifdef ANDROID
 #include "Android/InternalGPS.hpp"
@@ -145,13 +146,13 @@ DeviceDescriptor::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
   assert(GPS_INFO != NULL);
 
   if (device != NULL && device->ParseNMEA(String, GPS_INFO, enable_baro)) {
-    GPS_INFO->gps.Connected = 2;
+    GPS_INFO->Connected.update(fixed(MonotonicClockMS()) / 1000);
     return true;
   }
 
   if (String[0] == '$') { // Additional "if" to find GPS strings
     if (parser.ParseNMEAString_Internal(String, GPS_INFO)) {
-      GPS_INFO->gps.Connected = 2;
+      GPS_INFO->Connected.update(fixed(MonotonicClockMS()) / 1000);
       return true;
     }
   }

@@ -173,7 +173,8 @@ private:
   void DrawMapScale(Canvas &canvas, const RECT &rc,
                     const MapWindowProjection &projection) const;
   void DrawFlightMode(Canvas &canvas, const RECT &rc) const;
-  void DrawGPSStatus(Canvas &canvas, const RECT &rc, const GPS_STATE &gps) const;
+  void DrawGPSStatus(Canvas &canvas, const RECT &rc,
+                     const NMEA_INFO &info) const;
   void DrawCrossHairs(Canvas &canvas) const;
   void DrawFinalGlide(Canvas &canvas, const RECT &rc) const;
   void DrawThermalBand(Canvas &canvas, const RECT &rc) const;

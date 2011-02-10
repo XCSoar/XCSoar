@@ -104,9 +104,10 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
   static bool wait_connect = false;
   static bool wait_lock = false;
 
-  const GPS_STATE &gps = CommonInterface::Basic().gps;
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const GPS_STATE &gps = basic.gps;
 
-  bool connected_now = device_blackboard.LowerConnection();
+  bool connected_now = basic.Connected;
   if (connected_now && gps.NAVWarning) {
     if (!wait_lock) {
       // waiting for lock first time
@@ -159,6 +160,12 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
 void
 ProcessTimer::Process(void)
 {
+  if (device_blackboard.expire_wall_clock())
+    /* trigger a redraw when the connection was just lost, to show the
+       new state; when no GPS is connected, no other entity triggers
+       the redraw, so we have to do it */
+    CommonInterface::main_window.full_redraw();
+
   CommonProcessTimer();
 
   if (!is_simulator()) {

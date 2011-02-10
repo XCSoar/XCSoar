@@ -54,12 +54,13 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
 
 void
 GlueMapWindow::DrawGPSStatus(Canvas &canvas, const RECT &rc,
-                             const GPS_STATE &gps) const
+                             const NMEA_INFO &info) const
 {
+  const GPS_STATE &gps = info.gps;
   const TCHAR *txt;
   MaskedIcon *icon = NULL;
 
-  if (!gps.Connected) {
+  if (!info.Connected) {
     icon = &Graphics::hGPSStatus2;
     txt = _("GPS not connected");
   } else if (gps.NAVWarning || (gps.SatellitesUsed == 0)) {

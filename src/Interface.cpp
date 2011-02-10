@@ -107,11 +107,7 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
   device_blackboard.ReadSettingsMap(SettingsMap());
 
 #ifdef ENABLE_OPENGL
-  if (trigger_draw)
-    main_window.map.invalidate();
-#else
-  if (trigger_draw)
-    draw_thread->trigger_redraw();
+  main_window.full_redraw();
 #endif
 
   // TODO: trigger refresh if the settings are changed

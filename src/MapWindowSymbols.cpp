@@ -135,7 +135,7 @@ MapWindow::DrawCompass(Canvas &canvas, const RECT &rc) const
 void
 MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
-  if (!Basic().gps.Connected ||
+  if (Basic().gps.NAVWarning ||
       !Calculated().task_stats.task_valid ||
       !Calculated().task_stats.current_leg.solution_remaining.defined() ||
       Calculated().task_stats.current_leg.solution_remaining.Vector.Distance
@@ -160,7 +160,7 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) c
 void
 MapWindow::DrawTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
-  if (!Basic().gps.Connected ||
+  if (Basic().gps.NAVWarning ||
       SettingsMap().DisplayTrackBearing == dtbOff ||
       Calculated().Circling)
     return;

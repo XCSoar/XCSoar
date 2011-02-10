@@ -26,6 +26,7 @@ Copyright_License {
 #include "org_xcsoar_InternalGPS.h"
 #include "DeviceBlackboard.hpp"
 #include "Protection.hpp"
+#include "OS/Clock.hpp"
 
 InternalGPS *
 InternalGPS::create(JNIEnv *env, NativeView *native_view)
@@ -71,7 +72,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   mutexBlackboard.Lock();
 
   NMEA_INFO &basic = device_blackboard.SetBasic();
-
+  basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
   basic.Time = fixed((long)time);
   basic.gps.SatellitesUsed = n_satellites;
   basic.gps.NAVWarning = n_satellites <= 0;
