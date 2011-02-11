@@ -36,10 +36,10 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   static const unsigned int max_params = sizeof(params) / sizeof(params[0]);
   size_t n_params;
 
-  unsigned iName = 0;
-  unsigned iLatitude = 3, iLongitude = 4, iElevation = 5;
-  unsigned iStyle = 6, iRWDir = 7, iRWLen = 8;
-  unsigned iFrequency = 9, iDescription = 10;
+  const unsigned iName = 0;
+  const unsigned iLatitude = 3, iLongitude = 4, iElevation = 5;
+  const unsigned iStyle = 6, iRWDir = 7, iRWLen = 8;
+  const unsigned iFrequency = 9, iDescription = 10;
 
   static bool ignore_following;
   if (linenum == 0)
