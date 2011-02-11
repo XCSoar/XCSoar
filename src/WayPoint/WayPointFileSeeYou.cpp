@@ -41,7 +41,9 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   static unsigned iStyle = 6, iRWDir = 7, iRWLen = 8;
   static unsigned iFrequency = 9, iDescription = 10;
 
-  static bool ignore_following = false;
+  static bool ignore_following;
+  if (linenum == 0)
+    ignore_following = false;
 
   // If (end-of-file or comment)
   if (line[0] == '\0' || line[0] == 0x1a ||
