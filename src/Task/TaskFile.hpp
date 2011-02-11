@@ -46,7 +46,7 @@ public:
    */
   static TaskFile* Create(const TCHAR* path);
 
-  virtual OrderedTask* GetTask(const Waypoints *waypoints) const = 0;
+  virtual OrderedTask* GetTask(const Waypoints *waypoints, unsigned index) const = 0;
   virtual unsigned Count() const = 0;
 };
 

@@ -254,12 +254,12 @@ ProtectedTaskManager::task_save(const TCHAR* path)
 }
 
 OrderedTask* 
-ProtectedTaskManager::task_create(const TCHAR* path,
-                                  const Waypoints *waypoints) const
+ProtectedTaskManager::task_create(const TCHAR* path, const Waypoints *waypoints,
+                                  unsigned index) const
 {
   TaskFile* task_file = TaskFile::Create(path);
   if (task_file != NULL) {
-    OrderedTask* task = task_file->GetTask(waypoints);
+    OrderedTask* task = task_file->GetTask(waypoints, index);
     delete task_file;
     return task;
   }
@@ -267,9 +267,10 @@ ProtectedTaskManager::task_create(const TCHAR* path,
 }
  
 bool 
-ProtectedTaskManager::task_load(const TCHAR* path, const Waypoints *waypoints)
+ProtectedTaskManager::task_load(const TCHAR* path, const Waypoints *waypoints,
+                                unsigned index)
 {
-  OrderedTask* task = task_create(path, waypoints);
+  OrderedTask* task = task_create(path, waypoints, index);
   if (task != NULL) {
     ExclusiveLease lease(*this);
     lease->commit(*task);

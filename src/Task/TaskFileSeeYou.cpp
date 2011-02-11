@@ -24,7 +24,7 @@
 #include "Task/TaskFileSeeYou.hpp"
 
 OrderedTask*
-TaskFileSeeYou::GetTask(const Waypoints *waypoints) const
+TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 {
   return NULL;
 }

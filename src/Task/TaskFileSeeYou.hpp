@@ -31,7 +31,7 @@ public:
   TaskFileSeeYou(const TCHAR* _path):
     TaskFile(_path) {}
 
-  OrderedTask* GetTask(const Waypoints *waypoints) const;
+  OrderedTask* GetTask(const Waypoints *waypoints, unsigned index) const;
 
   unsigned Count() const;
 };

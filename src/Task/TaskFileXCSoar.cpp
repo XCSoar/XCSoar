@@ -28,9 +28,13 @@ Copyright_License {
 #include "Engine/Util/Deserialiser.hpp"
 #include "Engine/Util/DataNodeXML.hpp"
 
+#include <assert.h>
+
 OrderedTask* 
-TaskFileXCSoar::GetTask(const Waypoints *waypoints) const
+TaskFileXCSoar::GetTask(const Waypoints *waypoints, unsigned index) const
 {
+  assert(index == 0);
+
   if (protected_task_manager == NULL)
     return NULL;
 
