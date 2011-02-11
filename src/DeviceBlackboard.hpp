@@ -69,7 +69,6 @@ public:
   void SetBaroAlt(fixed x) {
     SetBasic().BaroAltitude = x;
   }
-  void SetNAVWarning(bool val);
   void SetTrackBearing(Angle val);
   void SetSpeed(fixed val);
   void SetAltitude(fixed alt);

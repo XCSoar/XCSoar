@@ -105,6 +105,9 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   ScopeLock protect(mutexBlackboard);
   NMEA_INFO &basic = SetBasic();
 
+  basic.gps.Connected = 2;
+  basic.gps.NAVWarning = false;
+  basic.gps.SatellitesUsed = 6;
   basic.acceleration.Available = false;
   basic.Location = loc;
   basic.GroundSpeed = speed;
@@ -119,6 +122,8 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.ExternalWindAvailable.clear();
   basic.WindAvailable.clear();
   basic.gps.Replay = true;
+
+  TriggerGPSUpdate();
 };
 
 /**
@@ -130,24 +135,6 @@ void DeviceBlackboard::StopReplay() {
 
   basic.GroundSpeed = fixed_zero;
   basic.gps.Replay = false;
-}
-
-/**
- * Sets the NAVWarning to val
- * @param val New value for NAVWarning
- */
-void
-DeviceBlackboard::SetNAVWarning(bool val)
-{
-  ScopeLock protect(mutexBlackboard);
-  GPS_STATE &gps = SetBasic().gps;
-  gps.NAVWarning = val;
-  if (!val) {
-    // if NavWarning is false, since this is externally forced
-    // by the simulator, we also set the number of satelites used
-    // as a simulated value
-    gps.SatellitesUsed = 6;
-  }
 }
 
 /**
@@ -172,16 +159,6 @@ DeviceBlackboard::LowerConnection()
   return gps.Connected > 0;
 }
 
-/**
- * Raises the connection status to connected + fix
- */
-void
-DeviceBlackboard::RaiseConnection()
-{
-  ScopeLock protect(mutexBlackboard);
-  SetBasic().gps.Connected = 2;
-}
-
 void
 DeviceBlackboard::ProcessSimulation()
 {
@@ -191,10 +168,12 @@ DeviceBlackboard::ProcessSimulation()
   ScopeLock protect(mutexBlackboard);
   NMEA_INFO &basic = SetBasic();
 
+  basic.gps.Connected = 2;
+  basic.gps.NAVWarning = false;
+  basic.gps.SatellitesUsed = 6;
   basic.gps.Simulator = true;
   basic.gps.MovementDetected = false;
 
-  SetNAVWarning(false);
   basic.Location = FindLatitudeLongitude(basic.Location, basic.TrackBearing,
                                          basic.GroundSpeed);
   basic.GPSAltitudeAvailable.update(basic.Time);
@@ -209,6 +188,8 @@ DeviceBlackboard::ProcessSimulation()
   // use this to test FLARM parsing/display
   if (is_debug() && !is_altair())
     DeviceList[0].parser.TestRoutine(&basic);
+
+  TriggerGPSUpdate();
 }
 
 /**

@@ -174,8 +174,6 @@ ProcessTimer::Process(void)
           !replay->NmeaReplayEnabled())
         replay->Stop();
 
-      device_blackboard.RaiseConnection();
-      device_blackboard.SetNAVWarning(false);
       return;
     }
 
@@ -192,8 +190,6 @@ ProcessTimer::Process(void)
     } else if (m_clock.elapsed() >= 1000) {
       m_clock.update();
       device_blackboard.ProcessSimulation();
-      TriggerGPSUpdate();
-      device_blackboard.RaiseConnection();
     }
   }
 }
