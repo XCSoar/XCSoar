@@ -85,7 +85,7 @@ private:
   static bool PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO); // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
 
   // FLARM sentences
-  bool PFLAU(NMEAInputLine &line, FLARM_STATE &flarm);
+  bool PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time);
   bool PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 };
 

@@ -80,10 +80,8 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   char t_lau[50];
   sprintf(t_lau, "2,1,2,1,%d", l);
 
-  GPS_INFO->flarm.FLARM_Available = true;
-
   NMEAInputLine line(t_lau);
-  PFLAU(line, GPS_INFO->flarm);
+  PFLAU(line, GPS_INFO->flarm, GPS_INFO->Time);
 
   line = NMEAInputLine(t_laa1);
   PFLAA(line, GPS_INFO);

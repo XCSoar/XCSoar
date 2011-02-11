@@ -105,7 +105,7 @@ NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO *GPS_INFO)
       return PFLAA(line, GPS_INFO);
 
     if (strcmp(type + 1, "PFLAU") == 0)
-      return PFLAU(line, GPS_INFO->flarm);
+      return PFLAU(line, GPS_INFO->flarm, GPS_INFO->Time);
 
     // Garmin altitude sentence
     if (strcmp(type + 1, "PGRMZ") == 0)
@@ -775,11 +775,11 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v4.06E.pdf
  */
 bool
-NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm)
+NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time)
 {
   static int old_flarm_rx = 0;
 
-  flarm.FLARM_Available = true;
+  flarm.FLARM_Available.update(Time);
   isFlarm = true;
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,

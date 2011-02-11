@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_FLARM_STATE_HPP
 
 #include "FLARM/Traffic.hpp"
+#include "NMEA/Validity.hpp"
 
 /**
  * Received FLARM data, cached
@@ -44,7 +45,7 @@ struct FLARM_STATE
   /** Alarm level of FLARM (0-3) */
   unsigned short FLARM_AlarmLevel;
   /** Is FLARM information available? */
-  bool FLARM_Available;
+  Validity FLARM_Available;
   /** Flarm traffic information */
   FLARM_TRAFFIC FLARM_Traffic[FLARM_MAX_TRAFFIC];
   /**
@@ -209,6 +210,8 @@ public:
   }
 
   void Refresh(fixed Time) {
+    FLARM_Available.expire(Time, fixed(10));
+
     bool present = false;
 
     if (FLARM_Available) {
