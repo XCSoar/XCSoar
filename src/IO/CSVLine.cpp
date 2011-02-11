@@ -38,10 +38,10 @@ CSVLine::CSVLine(const char *line):
 size_t
 CSVLine::skip()
 {
-  const char *comma = strchr(data, ',');
-  if (comma != NULL && comma < end) {
-    size_t length = comma - data;
-    data = comma + 1;
+  const char* _seperator = strchr(data, ',');
+  if (_seperator != NULL && _seperator < end) {
+    size_t length = _seperator - data;
+    data = _seperator + 1;
     return length;
   } else {
     size_t length = end - data;
