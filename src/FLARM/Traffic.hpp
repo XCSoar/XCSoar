@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "FlarmId.hpp"
 #include "Navigation/GeoPoint.hpp"
+#include "NMEA/Validity.hpp"
 
 #include <tchar.h>
 
@@ -53,6 +54,11 @@ struct FLARM_TRAFFIC {
     acStaticObject = 15    //!< static object
   };
 
+  /**
+   * Is this object valid, or has it expired already?
+   */
+  Validity Valid;
+
   /** Location of the FLARM target */
   GeoPoint Location;
   /** TrackBearing of the FLARM target */
@@ -77,13 +83,11 @@ struct FLARM_TRAFFIC {
   TCHAR Name[10];
   unsigned short IDType;
   unsigned short AlarmLevel;
-  /** Last time the FLARM target was seen */
-  fixed Time_Fix;
   AircraftType Type;
   fixed Average30s;
 
   bool defined() const {
-    return ID.defined();
+    return Valid;
   }
 
   bool HasAlarm() const {
@@ -110,7 +114,7 @@ struct FLARM_TRAFFIC {
   }
 
   void Clear() {
-    ID.clear();
+    Valid.clear();
     Name[0] = 0;
   }
 
@@ -120,19 +124,8 @@ struct FLARM_TRAFFIC {
    * @return true if the object is still valid
    */
   bool Refresh(fixed Time) {
-    if (!defined())
-      return false;
-
-    // if (FLARM target is too old or time has gone backwards)
-    if (Time > fixed(Time_Fix) + fixed_two || Time < fixed(Time_Fix)) {
-      // clear this slot if it is too old (2 seconds), or if
-      // time has gone backwards (due to replay)
-      Clear();
-      return false;
-    } else {
-      // FLARM data is present
-      return true;
-    }
+    Valid.expire(Time, fixed_two);
+    return Valid;
   }
 
   static const TCHAR* GetTypeString(AircraftType type);

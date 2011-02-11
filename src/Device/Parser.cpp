@@ -872,6 +872,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
       // no more slots available
       return true;
 
+    flarm_slot->Clear();
     flarm_slot->ID = traffic.ID;
 
     flarm.NewTraffic = true;
@@ -879,7 +880,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   }
 
   // set time of fix to current time
-  flarm_slot->Time_Fix = GPS_INFO->Time;
+  flarm_slot->Valid.update(GPS_INFO->Time);
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
