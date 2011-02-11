@@ -91,9 +91,8 @@ TaskStore::scan()
 
   // scan files
   TaskFileVisitor tfv(m_store);
-  const TCHAR* data_path = GetPrimaryDataPath();
-  Directory::VisitSpecificFiles(data_path, _T("*.tsk"), tfv, true);
-  Directory::VisitSpecificFiles(data_path, _T("*.cup"), tfv, true);
+  VisitDataFiles(_T("*.tsk"), tfv);
+  VisitDataFiles(_T("*.cup"), tfv);
 
   sort(m_store.begin(), m_store.end());
 }
