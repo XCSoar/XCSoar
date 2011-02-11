@@ -126,30 +126,7 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   }
 
   FileVisitor fv(*this);
-
-  const TCHAR *data_path = GetPrimaryDataPath();
-  Directory::VisitSpecificFiles(data_path, filter, fv, true);
-
-  {
-    TCHAR buffer[MAX_PATH];
-    const TCHAR *home_path = GetHomeDataPath(buffer);
-    if (home_path != NULL && _tcscmp(data_path, home_path) != 0)
-      Directory::VisitSpecificFiles(home_path, filter, fv, true);
-  }
-
-#if defined(_WIN32_WCE) && !defined(GNAV)
-  TCHAR FlashPath[MAX_PATH];
-  FlashCardEnumerator enumerator;
-  const TCHAR *name;
-  while ((name = enumerator.next()) != NULL) {
-    _stprintf(FlashPath, _T("/%s/%s"), name, XCSDATADIR);
-    if (_tcscmp(data_path, FlashPath) == 0)
-      /* don't scan primary data path twice */
-      continue;
-
-    Directory::VisitSpecificFiles(FlashPath, filter, fv, true);
-  }
-#endif /* _WIN32_WCE && !GNAV*/
+  VisitDataFiles(filter, fv);
 
   Sort();
 }

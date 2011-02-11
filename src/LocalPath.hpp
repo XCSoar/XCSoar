@@ -26,6 +26,10 @@ Copyright_License {
 
 #include <tchar.h>
 
+namespace File {
+  class Visitor;
+}
+
 #define XCSDATADIR _T("XCSoarData")
 
 /**
@@ -69,5 +73,7 @@ void ExpandLocalPath(TCHAR* filein);
  * @param filein Pointer to the string to convert
  */
 void ContractLocalPath(TCHAR* filein);
+
+void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor);
 
 #endif

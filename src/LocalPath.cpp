@@ -26,18 +26,18 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Asset.hpp"
 
+#include "OS/FileUtil.hpp"
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h> // for MAX_PATH
-
 #ifdef WIN32
 #include <shlobj.h>
 #endif
 
 #ifdef _WIN32_WCE
 #include "OS/FlashCardEnumerator.hpp"
-#include "OS/FileUtil.hpp"
 #endif
 
 #ifdef ANDROID
@@ -300,6 +300,34 @@ GetHomeDataPath(TCHAR *buffer)
   _tcscat(buffer, XCSDATADIR);
   return buffer;
 #endif
+}
+
+void
+VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
+{
+  const TCHAR *data_path = GetPrimaryDataPath();
+  Directory::VisitSpecificFiles(data_path, filter, visitor, true);
+
+  {
+    TCHAR buffer[MAX_PATH];
+    const TCHAR *home_path = GetHomeDataPath(buffer);
+    if (home_path != NULL && _tcscmp(data_path, home_path) != 0)
+      Directory::VisitSpecificFiles(home_path, filter, visitor, true);
+  }
+
+#if defined(_WIN32_WCE) && !defined(GNAV)
+  TCHAR FlashPath[MAX_PATH];
+  FlashCardEnumerator enumerator;
+  const TCHAR *name;
+  while ((name = enumerator.next()) != NULL) {
+    _stprintf(FlashPath, _T("/%s/%s"), name, XCSDATADIR);
+    if (_tcscmp(data_path, FlashPath) == 0)
+      /* don't scan primary data path twice */
+      continue;
+
+    Directory::VisitSpecificFiles(FlashPath, filter, visitor, true);
+  }
+#endif /* _WIN32_WCE && !GNAV*/
 }
 
 struct ScopePathGlobalInit {

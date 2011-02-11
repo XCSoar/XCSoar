@@ -31,6 +31,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "OS/PathName.hpp"
+#include "OS/FileUtil.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -39,17 +40,7 @@ Copyright_License {
 #include <shellapi.h>
 #endif
 
-const TCHAR *
-GetPrimaryDataPath()
-{
-  return _T("");
-}
-
-const TCHAR *
-GetHomeDataPath(TCHAR *buffer)
-{
-  return NULL;
-}
+void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
 
 Font Fonts::Map;
 Font Fonts::MapBold;
