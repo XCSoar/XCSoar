@@ -113,10 +113,7 @@ public:
   }
 
   void SetTarget(const FlarmId &id) {
-    const FLARM_TRAFFIC *traffic = data.FindTraffic(id);
-    if (traffic != NULL && !traffic->defined())
-      traffic = NULL;
-    SetTarget(traffic);
+    SetTarget(data.FindTraffic(id));
   }
 
   void NextTarget();

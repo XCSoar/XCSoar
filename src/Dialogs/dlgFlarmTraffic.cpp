@@ -164,10 +164,7 @@ FlarmTrafficControl::CalcAutoZoom()
   bool warning_mode = WarningMode();
   fixed zoom_dist = fixed_zero;
 
-  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
-    if (!data.traffic[i].defined())
-      continue;
-
+  for (unsigned i = 0; i < data.traffic.size(); i++) {
     if (warning_mode && !data.traffic[i].HasAlarm())
       continue;
 

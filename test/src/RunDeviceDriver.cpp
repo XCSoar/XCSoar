@@ -186,7 +186,8 @@ Dump(const NMEA_INFO &basic)
     printf("FLARM rx=%u tx=%u\n", flarm.rx, flarm.tx);
     printf("FLARM gps=%u\n", flarm.gps);
     printf("FLARM alarm=%u\n", flarm.alarm_level);
-    printf("FLARM traffic=%d new=%d\n", flarm.FLARMTraffic, flarm.NewTraffic);
+    printf("FLARM traffic=%u new=%d\n",
+           flarm.traffic.size(), flarm.NewTraffic);
   }
 }
 

@@ -48,26 +48,13 @@ struct FLARM_STATE
   /** Is FLARM information available? */
   Validity available;
   /** Flarm traffic information */
-  FLARM_TRAFFIC traffic[FLARM_MAX_TRAFFIC];
-  /**
-   * Is there FLARM traffic present?
-   * @see traffic
-   */
-  bool FLARMTraffic;
+  StaticArray<FLARM_TRAFFIC, FLARM_MAX_TRAFFIC> traffic;
+
   /**
    * Is there new FLARM traffic present?
    * @see traffic
    */
   bool NewTraffic;
-
-protected:
-  const FLARM_TRAFFIC *FirstTrafficSlot() const {
-    return &traffic[0];
-  }
-
-  const FLARM_TRAFFIC *LastTrafficSlot() const {
-    return &traffic[FLARM_MAX_TRAFFIC - 1];
-  }
 
 public:
   void clear();
@@ -82,13 +69,7 @@ public:
   }
 
   unsigned GetActiveTrafficCount() const {
-    unsigned count = 0;
-
-    for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
-      if (traffic[i].defined())
-        ++count;
-
-    return count;
+    return traffic.size();
   }
 
   /**
@@ -98,7 +79,7 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   FLARM_TRAFFIC *FindTraffic(FlarmId id) {
-    for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
+    for (unsigned i = 0; i < traffic.size(); i++)
       if (traffic[i].ID == id)
         return &traffic[i];
 
@@ -112,7 +93,7 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   const FLARM_TRAFFIC *FindTraffic(FlarmId id) const {
-    for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
+    for (unsigned i = 0; i < traffic.size(); i++)
       if (traffic[i].ID == id)
         return &traffic[i];
 
@@ -126,8 +107,8 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   FLARM_TRAFFIC *FindTraffic(const TCHAR *name) {
-    for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
-      if (traffic[i].defined() && traffic[i].Name.equals(name))
+    for (unsigned i = 0; i < traffic.size(); i++)
+      if (traffic[i].Name.equals(name))
         return &traffic[i];
 
     return NULL;
@@ -140,8 +121,8 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   const FLARM_TRAFFIC *FindTraffic(const TCHAR *name) const {
-    for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
-      if (traffic[i].defined() && traffic[i].Name.equals(name))
+    for (unsigned i = 0; i < traffic.size(); i++)
+      if (traffic[i].Name.equals(name))
         return &traffic[i];
 
     return NULL;
@@ -153,49 +134,41 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if the array is full
    */
   FLARM_TRAFFIC *AllocateTraffic() {
-    for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
-      if (!traffic[i].defined())
-        return &traffic[i];
-
-    return NULL;
+    return traffic.full()
+      ? NULL
+      : &traffic.append();
   }
 
   /**
    * Search for the previous traffic in the ordered list.
    */
   const FLARM_TRAFFIC *PreviousTraffic(const FLARM_TRAFFIC *t) const {
-    while (--t >= FirstTrafficSlot()) {
-      if (t->defined())
-        return t;
-    }
-
-    return NULL;
+    return t > traffic.begin()
+      ? t - 1
+      : NULL;
   }
 
   /**
    * Search for the next traffic in the ordered list.
    */
   const FLARM_TRAFFIC *NextTraffic(const FLARM_TRAFFIC *t) const {
-    while (++t <= LastTrafficSlot()) {
-      if (t->defined())
-        return t;
-    }
-
-    return NULL;
+    return t + 1 < traffic.end()
+      ? t + 1
+      : NULL;
   }
 
   /**
    * Search for the first traffic in the ordered list.
    */
   const FLARM_TRAFFIC *FirstTraffic() const {
-    return NextTraffic(FirstTrafficSlot() - 1);
+    return traffic.empty() ? NULL : traffic.begin();
   }
 
   /**
    * Search for the last traffic in the ordered list.
    */
   const FLARM_TRAFFIC *LastTraffic() const {
-    return PreviousTraffic(LastTrafficSlot() + 1);
+    return traffic.empty() ? NULL : traffic.end() - 1;
   }
 
   /**
@@ -204,23 +177,19 @@ public:
    */
   const FLARM_TRAFFIC *FindMaximumAlert() const;
 
-  unsigned TrafficIndex(const FLARM_TRAFFIC *traffic) const {
-    return traffic - FirstTrafficSlot();
+  unsigned TrafficIndex(const FLARM_TRAFFIC *t) const {
+    return t - traffic.begin();
   }
 
   void Refresh(fixed Time) {
     available.expire(Time, fixed(10));
+    if (!available)
+      traffic.clear();
 
-    bool present = false;
+    for (unsigned i = traffic.size(); i-- > 0;)
+      if (!traffic[i].Refresh(Time))
+        traffic.quick_remove(i);
 
-    if (available) {
-      for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++) {
-        if (traffic[i].Refresh(Time))
-          present = true;
-      }
-    }
-
-    FLARMTraffic = present;
     NewTraffic = false;
   }
 };

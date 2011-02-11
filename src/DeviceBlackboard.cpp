@@ -337,12 +337,12 @@ DeviceBlackboard::FLARM_ScanTraffic()
     return;
 
   // for each item in traffic
-  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
+  for (unsigned i = 0; i < flarm.traffic.size(); i++) {
     FLARM_TRAFFIC &traffic = flarm.traffic[i];
 
     // if (traffic[flarm_slot] has data)
     // and if (Target currently without name)
-    if (traffic.defined() && !traffic.HasName()) {
+    if (!traffic.HasName()) {
       // need to lookup name for this target
       const TCHAR *fname = FlarmDetails::LookupCallsign(traffic.ID);
       if (fname != NULL)

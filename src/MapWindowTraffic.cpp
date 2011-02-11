@@ -62,12 +62,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   RasterPoint Arrow[5];
 
   // Circle through the FLARM targets
-  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
+  for (unsigned i = 0; i < flarm.traffic.size(); i++) {
     const FLARM_TRAFFIC &traffic = flarm.traffic[i];
-
-    // if FLARM target i exists
-    if (!traffic.defined())
-      continue;
 
     // Save the location of the FLARM target
     GeoPoint target_loc = traffic.Location;

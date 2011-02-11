@@ -56,7 +56,7 @@ FlarmTrafficWindow::FlarmTrafficWindow(unsigned _padding, bool _small)
 bool
 FlarmTrafficWindow::WarningMode() const
 {
-  assert(warning < FLARM_STATE::FLARM_MAX_TRAFFIC);
+  assert(warning < (int)data.traffic.size());
   assert(warning < 0 || data.traffic[warning].defined());
   assert(warning < 0 || data.traffic[warning].HasAlarm());
 
@@ -122,7 +122,7 @@ FlarmTrafficWindow::on_resize(unsigned width, unsigned height)
 void
 FlarmTrafficWindow::SetTarget(int i)
 {
-  assert(i < FLARM_STATE::FLARM_MAX_TRAFFIC);
+  assert(i < (int)data.traffic.size());
   assert(i < 0 || data.traffic[i].defined());
 
   if (selection == i)
@@ -142,7 +142,7 @@ FlarmTrafficWindow::NextTarget()
   if (WarningMode())
     return;
 
-  assert(selection < FLARM_STATE::FLARM_MAX_TRAFFIC);
+  assert(selection < (int)data.traffic.size());
 
   const FLARM_TRAFFIC *traffic;
   if (selection >= 0)
@@ -166,7 +166,7 @@ FlarmTrafficWindow::PrevTarget()
   if (WarningMode())
     return;
 
-  assert(selection < FLARM_STATE::FLARM_MAX_TRAFFIC);
+  assert(selection < (int)data.traffic.size());
 
   const FLARM_TRAFFIC *traffic;
   if (selection >= 0)
@@ -504,18 +504,18 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
   }
 
   // Iterate through the traffic (normal traffic)
-  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
+  for (unsigned i = 0; i < data.traffic.size(); ++i) {
     const FLARM_TRAFFIC &traffic = data.traffic[i];
 
-    if (traffic.defined() && !traffic.HasAlarm() &&
+    if (!traffic.HasAlarm() &&
         static_cast<unsigned> (selection) != i)
       PaintRadarTarget(canvas, traffic, i);
   }
 
-  if (selection >= 0 && selection < FLARM_STATE::FLARM_MAX_TRAFFIC) {
+  if (selection >= 0) {
     const FLARM_TRAFFIC &traffic = data.traffic[selection];
 
-    if (traffic.defined() && !traffic.HasAlarm())
+    if (!traffic.HasAlarm())
       PaintRadarTarget(canvas, traffic, selection);
   }
 
@@ -523,10 +523,10 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
     return;
 
   // Iterate through the traffic (alarm traffic)
-  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
+  for (unsigned i = 0; i < data.traffic.size(); ++i) {
     const FLARM_TRAFFIC &traffic = data.traffic[i];
 
-    if (traffic.defined() && traffic.HasAlarm())
+    if (traffic.HasAlarm())
       PaintRadarTarget(canvas, traffic, i);
   }
 }
@@ -671,9 +671,9 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
 void
 FlarmTrafficWindow::Paint(Canvas &canvas)
 {
-  assert(selection < FLARM_STATE::FLARM_MAX_TRAFFIC);
+  assert(selection < (int)data.traffic.size());
   assert(selection < 0 || data.traffic[selection].defined());
-  assert(warning < FLARM_STATE::FLARM_MAX_TRAFFIC);
+  assert(warning < (int)data.traffic.size());
   assert(warning < 0 || data.traffic[warning].defined());
   assert(warning < 0 || data.traffic[warning].HasAlarm());
 
@@ -698,7 +698,7 @@ FlarmTrafficWindow::SelectNearTarget(int x, int y, int max_distance)
   int min_distance = 99999;
   int min_id = -1;
 
-  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
+  for (unsigned i = 0; i < data.traffic.size(); ++i) {
     // If FLARM target does not exist -> next one
     if (!data.traffic[i].defined())
       continue;

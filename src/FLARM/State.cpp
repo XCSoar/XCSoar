@@ -27,11 +27,8 @@ void
 FLARM_STATE::clear()
 {
   available.clear();
-  FLARMTraffic = false;
+  traffic.clear();
   NewTraffic = false;
-
-  for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; ++i)
-    traffic[i].Clear();
 }
 
 const FLARM_TRAFFIC *
@@ -39,10 +36,10 @@ FLARM_STATE::FindMaximumAlert() const
 {
   const FLARM_TRAFFIC *alert = NULL;
 
-  for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; ++i) {
+  for (unsigned i = 0; i < traffic.size(); ++i) {
     const FLARM_TRAFFIC &traffic = this->traffic[i];
 
-    if (traffic.defined() && traffic.HasAlarm() &&
+    if (traffic.HasAlarm() &&
         (alert == NULL ||
          (traffic.AlarmLevel > alert->AlarmLevel ||
           (traffic.AlarmLevel == alert->AlarmLevel &&
