@@ -365,6 +365,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Math/Angle.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
+	$(SRC)/OS/Clock.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
@@ -641,6 +642,7 @@ KEY_CODE_DUMPER_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/OS/Clock.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/KeyCodeDumper.cpp
@@ -781,6 +783,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/Compatibility/string.c \
+	$(SRC)/OS/Clock.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -820,6 +823,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/Compatibility/string.c \
+	$(SRC)/OS/Clock.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -865,6 +869,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Compatibility/string.c \
+	$(SRC)/OS/Clock.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -904,6 +909,7 @@ RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/Wind/WindZigZag.cpp \
 	$(SRC)/Compatibility/string.c \
+	$(SRC)/OS/Clock.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -928,6 +934,7 @@ RUN_CANVAS_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/OS/Clock.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunCanvas.cpp
@@ -946,6 +953,7 @@ $(RUN_CANVAS_BIN): $(RUN_CANVAS_OBJS) $(RUN_CANVAS_LDADD) | $(TARGET_BIN_DIR)/di
 RUN_MAP_WINDOW_SOURCES = \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
+	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/FLARM/State.cpp \
@@ -1071,6 +1079,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/Clock.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
@@ -1111,6 +1120,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Projection.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/OS/Clock.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
@@ -1133,6 +1143,7 @@ $(RUN_RENDER_OZ_BIN): $(RUN_RENDER_OZ_OBJS) $(RUN_RENDER_OZ_LDADD) | $(TARGET_BI
 
 RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Version.cpp \
+	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
@@ -1161,6 +1172,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/Clock.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
@@ -1281,6 +1293,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
+	$(SRC)/OS/Clock.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
