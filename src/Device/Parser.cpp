@@ -496,8 +496,6 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   GPS_STATE &gps = GPS_INFO->gps;
 
-  gps.Connected = 2;
-
   if (!activeGPS)
     return true;
 
