@@ -251,6 +251,9 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     ObservationZonePoint* oz;
     if (turnpoint_infos[i].Line)
       oz = new LineSectorZone(wp->Location, turnpoint_infos[i].Radius1);
+    else if (turnpoint_infos[i].Style == SeeYouTurnpointInformation::Fixed)
+      oz = new SectorZone(wp->Location, turnpoint_infos[i].Radius1,
+                          turnpoint_infos[i].Angle1, turnpoint_infos[i].Angle2);
     else
       oz = new FAISectorZone(wp->Location, (i < n_waypoints - 1));
 
