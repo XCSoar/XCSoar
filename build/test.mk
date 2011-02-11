@@ -1174,9 +1174,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/UtilsFile.cpp \
-	$(SRC)/Task/TaskFile.cpp \
-	$(SRC)/Task/TaskFileXCSoar.cpp \
-	$(SRC)/Task/TaskFileSeeYou.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Math/Screen.cpp \

@@ -50,6 +50,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Thread/Trigger.hpp"
 #include "GlideComputerInterface.hpp"
+#include "Task/TaskFile.hpp"
 
 /* fake symbols: */
 
@@ -64,6 +65,12 @@ unsigned InfoBoxLayout::ControlWidth = 100;
 
 Trigger airspaceWarningEvent(_T("airspaceWarning"));
 Trigger triggerClimbEvent(_T("triggerClimb"));
+
+TaskFile*
+TaskFile::Create(const TCHAR* path)
+{
+  return NULL;
+}
 
 void dlgBasicSettingsShowModal() {}
 void dlgTaskCalculatorShowModal(SingleWindow &parent) {}
