@@ -75,6 +75,11 @@ public:
 
   void reset();
 
+  /**
+   * Trigger a full redraw of the screen.
+   */
+  void full_redraw();
+
   bool GetFullScreen() const {
     return FullScreen;
   }

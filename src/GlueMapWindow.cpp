@@ -41,6 +41,16 @@ GlueMapWindow::set(ContainerWindow &parent, const RECT &rc)
 }
 
 void
+GlueMapWindow::FullRedraw()
+{
+#ifdef ENABLE_OPENGL
+  invalidate();
+#else
+  draw_thread->trigger_redraw();
+#endif
+}
+
+void
 GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
 {
   assert(&_settings_map != &SettingsMap());

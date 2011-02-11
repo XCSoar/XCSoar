@@ -67,6 +67,11 @@ class GlueMapWindow : public MapWindow {
 public:
   GlueMapWindow();
 
+  /**
+   * Trigger a full redraw of the map.
+   */
+  void FullRedraw();
+
   void QuickRedraw(const SETTINGS_MAP &_settings_map);
 
   bool Idle();

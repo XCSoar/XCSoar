@@ -39,7 +39,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "Components.hpp"
-#include "DrawThread.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskManager.hpp"
 #include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
@@ -217,11 +216,7 @@ OnGotoClicked(gcc_unused WndButton &button)
   protected_task_manager->do_goto(*selected_waypoint);
   wf->SetModalResult(mrOK);
 
-#ifdef ENABLE_OPENGL
-  CommonInterface::main_window.map.invalidate();
-#else
-  draw_thread->trigger_redraw();
-#endif
+  CommonInterface::main_window.full_redraw();
 }
 
 static task_edit_result

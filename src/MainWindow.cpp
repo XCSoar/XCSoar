@@ -169,6 +169,12 @@ MainWindow::reset()
   TopWindow::reset();
 }
 
+void
+MainWindow::full_redraw()
+{
+  map.FullRedraw();
+}
+
 // Windows event handlers
 
 bool

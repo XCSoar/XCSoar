@@ -80,7 +80,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceAircraftPerformance.hpp"
-#include "DrawThread.hpp"
 #include "Replay/Replay.hpp"
 #include "DeviceBlackboard.hpp"
 #include "UtilsSettings.hpp"
@@ -101,11 +100,7 @@ using std::max;
 static void
 trigger_redraw()
 {
-#ifdef ENABLE_OPENGL
-  CommonInterface::main_window.map.invalidate();
-#else
-  draw_thread->trigger_redraw();
-#endif
+  CommonInterface::main_window.full_redraw();
 }
 
 // -----------------------------------------------------------------------
