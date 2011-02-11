@@ -24,66 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_INPUT_LINE_HPP
 #define XCSOAR_NMEA_INPUT_LINE_HPP
 
-#include "Math/fixed.hpp"
+#include "IO/CSVLine.hpp"
 
 /**
  * A helper class which can dissect a NMEA input line.
  */
-class NMEAInputLine {
-  const char *data, *end;
-
+class NMEAInputLine: public CSVLine {
 public:
-  NMEAInputLine(const char *line);
-
-  const char *rest() const {
-    return data;
-  }
-
-  /**
-   * Skip the next column.
-   *
-   * @return the length of the column
-   */
-  size_t skip();
-
-  /**
-   * Skip a number of columns.
-   */
-  void skip(unsigned n) {
-    while (n-- > 0)
-      skip();
-  }
-
-  char read_first_char();
-
-  void read(char *dest, size_t size);
-  bool read_compare(const char *value);
-
-  long read(long default_value);
-  long read_hex(long default_value);
-
-  int read(int default_value) {
-    return (int)read((long)default_value);
-  }
-
-  int read(bool default_value) {
-    return read((long)default_value) != 0;
-  }
-
-  double read(double default_value);
-  bool read_checked(double &value_r);
-
-#ifdef FIXED_MATH
-  fixed read(fixed default_value);
-  bool read_checked(fixed &value_r);
-#endif
-
-  bool read_checked(int &value_r);
-
-  /**
-   * Read a #fixed only if the unit string which follows matches.
-   */
-  bool read_checked_compare(fixed &value_r, const char *string);
+  NMEAInputLine(const char* line);
 };
 
 #endif

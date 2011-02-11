@@ -374,6 +374,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Math/Angle.cpp \
@@ -794,6 +795,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Device/FLARM.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -833,6 +835,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/Device/FLARM.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
@@ -875,6 +878,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Device/FLARM.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -919,6 +923,7 @@ RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(SRC)/Device/FLARM.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
