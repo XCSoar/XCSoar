@@ -106,11 +106,6 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
 
   const GPS_STATE &gps = CommonInterface::Basic().gps;
 
-  if (!gps.Connected)
-    // if gps is not connected, set navwarning to true so
-    // calculations flight timers don't get updated
-    device_blackboard.SetNAVWarning(true);
-
   bool connected_now = device_blackboard.LowerConnection();
   if (connected_now && gps.NAVWarning) {
     if (!wait_lock) {

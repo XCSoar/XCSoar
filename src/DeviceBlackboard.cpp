@@ -166,6 +166,9 @@ DeviceBlackboard::LowerConnection()
   if (!is_android() && gps.Connected)
     gps.Connected--;
 
+  if (!gps.Connected)
+    gps.reset();
+
   return gps.Connected > 0;
 }
 
