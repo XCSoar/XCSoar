@@ -194,6 +194,8 @@ DeviceBlackboard::ProcessSimulation()
   SetNAVWarning(false);
   basic.Location = FindLatitudeLongitude(basic.Location, basic.TrackBearing,
                                          basic.GroundSpeed);
+  basic.GPSAltitudeAvailable.update(basic.Time);
+
   basic.Time += fixed_one;
   long tsec = (long)basic.Time;
   basic.DateTime.hour = tsec / 3600;
