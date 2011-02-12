@@ -80,10 +80,8 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 
     if (traffic->HasName()) {
       // copy the 3 first chars from the name to TeamFlarmCNTarget
-      for (int z = 0; z < 3; z++)
-        XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[z] =
-            (traffic->Name[z] != 0 ? traffic->Name[z] : 32);
-
+      _tcsncpy(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget,
+               traffic->Name, 3);
       XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
     } else {
       XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
