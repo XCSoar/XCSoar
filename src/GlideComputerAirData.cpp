@@ -543,8 +543,6 @@ GlideComputerAirData::TerrainFootprint(fixed screen_range)
 
   SetCalculated().TerrainBase = g_terrain.get_terrain_base();
 */
-
-  SetCalculated().Experimental = Calculated().TerrainBase;
 }
 
 void

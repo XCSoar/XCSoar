@@ -111,8 +111,7 @@ void
 InfoBoxContentExperimental1::Update(InfoBoxWindow &infobox)
 {
   // Set Value
-  SetValueFromFixed(infobox, _T("%-2.1f"),
-                    XCSoarInterface::Calculated().Experimental);
+  infobox.SetInvalid();
 }
 
 void
