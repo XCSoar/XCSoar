@@ -152,16 +152,6 @@ WayPointFile::AltitudeFromTerrain(GeoPoint &location,
 }
 
 void
-WayPointFile::add_waypoint(Waypoints &way_points,
-                           const Waypoint &new_waypoint)
-{
-  // Append the new waypoint to the waypoint list and
-  // return successful line parse
-  Waypoint wp(new_waypoint);
-  way_points.append(wp);
-}
-
-void
 WayPointFile::check_altitude(Waypoint &new_waypoint,
                              const RasterTerrain *terrain,
                              bool alt_ok)

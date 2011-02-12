@@ -98,7 +98,7 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
   // Waypoint Flags (e.g. AT)
   parseFlags(params[4], new_waypoint.Flags);
 
-  add_waypoint(way_points, new_waypoint);
+  way_points.append(new_waypoint);
   return true;
 }
 

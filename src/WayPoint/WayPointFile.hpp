@@ -77,8 +77,6 @@ protected:
                       const RasterTerrain *terrain,
                       bool alt_ok);
 
-  void add_waypoint(Waypoints &way_points, const Waypoint &new_waypoint);
-
   /**
    * Parse a file line
    * @param line The line to parse

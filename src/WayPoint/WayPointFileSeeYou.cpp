@@ -153,7 +153,7 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   if (iDescription < n_params)
     appendStringWithSeperator(new_waypoint.Comment, params[iDescription]);
 
-  add_waypoint(way_points, new_waypoint);
+  way_points.append(new_waypoint);
   return true;
 }
 
