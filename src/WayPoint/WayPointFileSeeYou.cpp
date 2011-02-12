@@ -147,21 +147,6 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   if (iStyle < n_params)
     parseStyle(params[iStyle], new_waypoint.Flags);
 
-  // If the Style attribute did not state that this is an airport
-  if (!new_waypoint.Flags.Airport) {
-    // -> parse the runway length
-    fixed rwlen;
-    // Runway length (e.g. 546.0m)
-    if (iRWLen < n_params && parseAltitude(params[iRWLen], rwlen)) {
-      // If runway length is between 100m and 300m -> landpoint
-      if (rwlen > fixed(100) && rwlen <= fixed(300))
-        new_waypoint.Flags.LandPoint = true;
-      // If runway length is higher then 300m -> airport
-      if (rwlen > fixed(300))
-        new_waypoint.Flags.Airport = true;
-    }
-  }
-
   add_waypoint(way_points, new_waypoint);
   return true;
 }
