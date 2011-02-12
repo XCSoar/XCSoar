@@ -607,6 +607,8 @@ struct NMEA_INFO {
    */
   void reset();
 
+  void ResetFlight(bool full);
+
   /**
    * Check the expiry time of the device connection with the wall
    * clock time.  This should be called from a periodic timer.  The

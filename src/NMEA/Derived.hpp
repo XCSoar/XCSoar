@@ -262,6 +262,8 @@ struct DERIVED_INFO:
   unsigned time_process_idle; /**< Time (ms) to process idle computer functions */
 
   fixed Experimental; /**< Used as temporary holder for new features */
+
+  void ResetFlight(bool full);
 };
 
 #endif

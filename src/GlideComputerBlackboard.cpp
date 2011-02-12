@@ -59,51 +59,8 @@ GlideComputerBlackboard::ResetFlight(const bool full)
     }
   */
 
-  if (full) {
-    gps_info.Time = fixed_zero;
-    gps_info.BaroAltitudeAvailable.clear();
-    gps_info.BaroAltitudeOrigin = NMEA_INFO::BARO_ALTITUDE_UNKNOWN;
-
-    calculated_info.timeCruising = fixed_zero;
-    calculated_info.timeCircling = fixed_zero;
-    calculated_info.TotalHeightClimb = fixed_zero;
-
-    calculated_info.CruiseStartTime = fixed_minus_one;
-    calculated_info.ClimbStartTime = fixed_minus_one;
-
-    calculated_info.CruiseLD = fixed(INVALID_GR);
-    calculated_info.AverageLD = fixed(INVALID_GR);
-    calculated_info.LD = fixed(INVALID_GR);
-    calculated_info.LDvario = fixed(INVALID_GR);
-    calculated_info.ThermalAverage = fixed_zero;
-
-    for (unsigned i = 0; i < 200; i++) {
-      calculated_info.AverageClimbRate[i] = fixed_zero;
-      calculated_info.AverageClimbRateN[i] = 0;
-    }
-
-    calculated_info.MinAltitude = fixed_zero;
-    calculated_info.MaxHeightGain = fixed_zero;
-  }
-
-  calculated_info.thermal_band.clear();
-
-  // clear thermal sources for first time.
-  for (unsigned i = 0; i < THERMAL_LOCATOR_INFO::MAX_THERMAL_SOURCES; i++) {
-    calculated_info.ThermalSources[i].LiftRate = fixed_minus_one;
-  }
-
-  calculated_info.Circling = false;
-  for (int i = 0; i <= TERRAIN_ALT_INFO::NUMTERRAINSWEEPS; i++) {
-    calculated_info.GlideFootPrint[i].Longitude = Angle::native(fixed_zero);
-    calculated_info.GlideFootPrint[i].Latitude = Angle::native(fixed_zero);
-  }
-  calculated_info.TerrainWarning = false;
-
-  // If you load persistent values, you need at least these reset:
-  calculated_info.LastThermalAverage = fixed_zero;
-  calculated_info.LastThermalAverageSmooth = fixed_zero;
-  calculated_info.ThermalGain = fixed_zero;
+  gps_info.ResetFlight(full);
+  calculated_info.ResetFlight(full);
 }
 
 /**

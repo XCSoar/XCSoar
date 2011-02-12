@@ -21,39 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_NMEA_THERMAL_LOCATOR_HPP
-#define XCSOAR_NMEA_THERMAL_LOCATOR_HPP
+#include "NMEA/ThermalLocator.hpp"
 
-#include "Engine/Navigation/GeoPoint.hpp"
-
-/**
- * Structure to hold information on identified thermal sources on the ground
- */
-struct THERMAL_SOURCE_INFO
+void
+THERMAL_LOCATOR_INFO::Clear()
 {
-  GeoPoint Location;
-  fixed GroundHeight;
-  fixed LiftRate;
-  fixed Time;
-};
-
-/**
- * Structure for current thermal estimate from ThermalLocator
- * 
- */
-struct THERMAL_LOCATOR_INFO
-{
-  static const unsigned MAX_THERMAL_SOURCES = 20;
-
-  /** Location of thermal at aircraft altitude */
-  GeoPoint ThermalEstimate_Location;
-  /** Is thermal estimation valid? */
-  bool ThermalEstimate_Valid;
-
-  /** Position and data of the last thermal sources */
-  THERMAL_SOURCE_INFO ThermalSources[MAX_THERMAL_SOURCES];
-
-  void Clear();
-};
-
-#endif
+  // clear thermal sources for first time.
+  for (unsigned i = 0; i < MAX_THERMAL_SOURCES; i++)
+    ThermalSources[i].LiftRate = fixed_minus_one;
+}

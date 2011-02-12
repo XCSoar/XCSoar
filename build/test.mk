@@ -1168,7 +1168,9 @@ $(RUN_PROGRESS_WINDOW_BIN): $(RUN_PROGRESS_WINDOW_OBJS) $(RUN_PROGRESS_WINDOW_LD
 
 RUN_ANALYSIS_SOURCES = \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/Derived.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \
+	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \

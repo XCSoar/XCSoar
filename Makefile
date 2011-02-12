@@ -204,7 +204,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Logger/NMEALogger.cpp \
 	$(SRC)/Logger/ExternalLogger.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/Derived.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \
+	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/Replay/Replay.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
