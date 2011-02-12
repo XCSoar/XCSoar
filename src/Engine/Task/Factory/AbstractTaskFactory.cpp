@@ -968,6 +968,20 @@ AbstractTaskFactory::mutate_tps_to_task_type()
         if (replace(*fp, i, true))
           changed = true;
         delete fp;
+
+      } else if (i == 0) {
+        if (!validStartType(newtype)) {
+          newtype = m_behaviour.sector_defaults.start_type;
+          if (!validStartType(newtype))
+            newtype = *m_start_types.begin();
+        }
+
+        StartPoint *sp = (StartPoint*)createMutatedPoint(*tp, newtype);
+        assert(sp);
+        if (replace(*sp, i, true))
+          changed = true;
+        delete sp;
+
       } else {
 
         if (!validIntermediateType(newtype)) {
