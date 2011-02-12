@@ -113,7 +113,7 @@ GlideComputerAirData::ProcessVertical()
   thermallocator.Process(Calculated().Circling,
                          Basic().Time, Basic().Location,
                          Basic().NettoVario,
-                         Basic().wind, SetCalculated());
+                         Basic().wind, SetCalculated().thermal_locator);
 
   CuSonde::updateMeasurements(Basic());
   LastThermalStats();
@@ -767,7 +767,7 @@ GlideComputerAirData::Turning()
 void
 GlideComputerAirData::ThermalSources()
 {
-  THERMAL_LOCATOR_INFO &thermal_locator = SetCalculated();
+  THERMAL_LOCATOR_INFO &thermal_locator = SetCalculated().thermal_locator;
 
   if (!thermal_locator.ThermalEstimate_Valid ||
       !positive(Calculated().LastThermalAverage))

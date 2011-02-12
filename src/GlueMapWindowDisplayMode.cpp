@@ -286,10 +286,10 @@ GlueMapWindow::UpdateProjection()
   if (settings_map.EnablePan)
     SetLocation(settings_map.PanLocation);
   else if (GetDisplayMode() == dmCircling &&
-           Calculated().ThermalEstimate_Valid &&
-           Calculated().ThermalEstimate_Location.distance(Basic().Location)
+           Calculated().thermal_locator.ThermalEstimate_Valid &&
+           Calculated().thermal_locator.ThermalEstimate_Location.distance(Basic().Location)
                                                                 < fixed(750))
-    SetLocation(Calculated().ThermalEstimate_Location);
+    SetLocation(Calculated().thermal_locator.ThermalEstimate_Location);
   else
     // Pan is off
     SetLocation(Basic().Location);

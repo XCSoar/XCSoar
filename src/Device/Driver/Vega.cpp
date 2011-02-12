@@ -408,7 +408,8 @@ VegaDevice::OnSysTicker()
   if (device_blackboard.Basic().TotalEnergyVarioAvailable)
     _VarioWriteSettings(port);
 
-  THERMAL_LOCATOR_INFO t = device_blackboard.Calculated();
+  const THERMAL_LOCATOR_INFO &t =
+    device_blackboard.Calculated().thermal_locator;
   char tbuf[100];
   sprintf(tbuf, "PTLOC,%d,%3.5f,%3.5f,%g,%g",
           (int)(t.ThermalEstimate_Valid),

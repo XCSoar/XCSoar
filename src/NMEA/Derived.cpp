@@ -52,7 +52,7 @@ DERIVED_INFO::ResetFlight(bool full)
 
   thermal_band.clear();
 
-  THERMAL_LOCATOR_INFO::Clear();
+  thermal_locator.Clear();
 
   Circling = false;
   for (int i = 0; i <= TERRAIN_ALT_INFO::NUMTERRAINSWEEPS; i++) {
