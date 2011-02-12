@@ -959,7 +959,7 @@ AbstractTaskFactory::mutate_tps_to_task_type()
 
         if (!validFinishType(newtype)) {
           newtype = m_behaviour.sector_defaults.finish_type;
-          if (!validStartType(newtype))
+          if (!validFinishType(newtype))
             newtype = *m_finish_types.begin();
         }
 
@@ -987,7 +987,7 @@ AbstractTaskFactory::mutate_tps_to_task_type()
         if (!validIntermediateType(newtype)) {
           newtype = m_behaviour.sector_defaults.turnpoint_type;
           if (!validIntermediateType(newtype))
-            newtype = *m_finish_types.begin();
+            newtype = *m_intermediate_types.begin();
         }
         OrderedTaskPoint *tpnew = (OrderedTaskPoint*)createMutatedPoint(*tp, newtype);
         if (replace(*tpnew, i, true))
