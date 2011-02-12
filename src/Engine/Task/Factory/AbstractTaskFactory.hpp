@@ -126,7 +126,8 @@ enum TaskValidationErrorType_t {
   UNDER_MIN_TURNPOINTS,
   TURNPOINTS_NOT_UNIQUE,
   INVALID_FAI_TRIANGLE_GEOMETRY,
-  EMPTY_TASK
+  EMPTY_TASK,
+  NON_FAI_OZS
 };
 
   /**
@@ -446,6 +447,17 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    *
    * @return settings from task
    */
+
+  /**
+   * Checks whether shapes of all OZs, start, finish are valid
+   * for an FAI badge or record
+   * Appends warning message to m_validation_errors
+   * This is used independently of check_task() validation
+   *
+   * @return True if all OZs are valid for a FAI badge or record
+   */
+  bool validateFAIOZs();
+
   gcc_pure
   const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
 

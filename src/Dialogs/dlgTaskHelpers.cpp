@@ -93,9 +93,16 @@ OrderedTaskFactoryDescription(TaskBehaviour::Factory_t type)
   return NULL;
 }
 
-static void
+/**
+ *
+ * @param task
+ * @param text
+ * @return True if FAI shape
+ */
+static bool
 TaskSummaryShape(OrderedTask* task, TCHAR* text)
 {
+  bool FAIShape = false;
   switch (task->task_size()) {
   case 0:
     text[0] = '\0';
@@ -107,11 +114,15 @@ TaskSummaryShape(OrderedTask* task, TCHAR* text)
 
   case 2:
     _tcscpy(text, _("Goal"));
+    FAIShape = true;
+
     break;
 
   case 3:
-    if (task->get_factory().is_closed())
+    if (task->get_factory().is_closed()) {
       _tcscpy(text, _("Out and Return"));
+      FAIShape = true;
+    }
     else
       _tcscpy(text, _("Two legs"));
     break;
@@ -119,8 +130,10 @@ TaskSummaryShape(OrderedTask* task, TCHAR* text)
   case 4:
     if (!task->get_factory().is_unique() ||!task->get_factory().is_closed())
       _tcscpy(text, _("Three legs"));
-    else if (task->get_factory().TestFAITriangle())
+    else if (task->get_factory().TestFAITriangle()) {
       _tcscpy(text, _("FAI triangle"));
+      FAIShape = true;
+    }
     else
       _tcscpy(text, _("non-FAI triangle"));
     break;
@@ -129,13 +142,22 @@ TaskSummaryShape(OrderedTask* task, TCHAR* text)
     _stprintf(text, _("%d legs"), task->task_size() - 1);
     break;
   }
+  return FAIShape;
 }
 void
 OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
 {
   const TaskStats &stats = task->get_stats();
-  TCHAR summary_shape[25];
-  TaskSummaryShape(task, summary_shape);
+  TCHAR summary_shape[100];
+  bool FAIShape = TaskSummaryShape(task, summary_shape);
+  if (FAIShape || task->get_factory_type() == TaskBehaviour::FACTORY_FAI_GENERAL) {
+    if (!task->get_factory().validateFAIOZs()) {
+      _tcscat(summary_shape, _T("/ "));
+      _tcscat(summary_shape, getTaskValidationErrors(
+          task->get_factory().getValidationErrors()));
+    }
+  }
+
 
   TCHAR linebreak[3];
   if (linebreaks) {
@@ -152,7 +174,7 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
              OrderedTaskFactoryName(task->get_factory_type()));
   } else {
     if (task->has_targets())
-      _stprintf(text, _("%s%sDistance: %.0f %s%sMax: %.0f %s%sMin: %.0f %s (%s)"),
+      _stprintf(text, _("%s%s%.0f %s%sMax: %.0f %s%sMin: %.0f %s (%s)"),
                 summary_shape,
                 linebreak,
                 (double)Units::ToUserDistance(stats.distance_nominal),
@@ -516,6 +538,9 @@ TaskValidationError(AbstractTaskFactory::TaskValidationErrorType_t type)
     break;
   case AbstractTaskFactory::EMPTY_TASK:
     return _("Empty task.\n");
+    break;
+  case AbstractTaskFactory::NON_FAI_OZS:
+    return _("non-FAI turn points");
     break;
   }
 

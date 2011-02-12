@@ -784,6 +784,73 @@ AbstractTaskFactory::CheckAddFinish()
 }
 
 bool
+AbstractTaskFactory::validateFAIOZs()
+{
+  clearValidationErrors();
+  bool valid = true;
+
+  for (unsigned i = 0; i < m_task.task_size() && valid; i++) {
+    const OrderedTaskPoint *tp = m_task.get_tp(i);
+    const ObservationZonePoint* oz = tp->get_oz();
+    UserSizeObservationZone soz;
+    ObservationZoneConstVisitor &oz_visitor = soz;
+    oz_visitor.Visit(*oz);
+    const fixed ozsize = soz.get_user_size();
+
+    switch (getType(*tp)) {
+    case  START_BGA:
+    case  START_CYLINDER:
+      valid = false;
+      break;
+
+    case  START_SECTOR:
+      if (ozsize > fixed(1000.01)) {
+        valid = false;
+      }
+      break;
+    case  START_LINE:
+      if (ozsize > fixed(2000.01)) {
+        valid = false;
+      }
+      break;
+
+    case  FAI_SECTOR:
+      break;
+
+    case  AST_CYLINDER:
+      if (ozsize > fixed(500.01)) {
+        valid = false;
+      }
+      break;
+
+    case  KEYHOLE_SECTOR:
+    case  BGAFIXEDCOURSE_SECTOR:
+    case  BGAENHANCEDOPTION_SECTOR:
+    case  AAT_CYLINDER:
+    case  AAT_SEGMENT:
+      valid = false;
+      break;
+
+    case  FINISH_SECTOR:
+      break;
+    case  FINISH_LINE:
+      if (ozsize > fixed(2000.01)) {
+        valid = false;
+      }
+      break;
+
+    case  FINISH_CYLINDER:
+      valid = false;
+      break;
+    }
+  }
+  if (!valid)
+    addValidationError(NON_FAI_OZS);
+
+  return valid;
+}
+
+bool
 AbstractTaskFactory::validate()
 {
   clearValidationErrors();
