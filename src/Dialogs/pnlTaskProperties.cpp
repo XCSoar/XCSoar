@@ -37,6 +37,8 @@ static WndForm *wf = NULL;
 static OrderedTask* ordered_task = NULL;
 static bool* task_changed = NULL;
 static OrderedTask** ordered_task_pointer = NULL;
+static TaskBehaviour::Factory_t orig_taskType =
+    TaskBehaviour::FACTORY_RT;
 
 static void 
 InitView()
@@ -154,7 +156,6 @@ ReadValues()
   TaskBehaviour::Factory_t newtype = (TaskBehaviour::Factory_t)
       GetFormValueInteger(*wf, _T("prpTaskType"));
   if (newtype != ordered_task->get_factory_type()) {
-    ordered_task->get_factory().mutate_tps_to_task_type();
     *task_changed = true;
   }
 
@@ -196,8 +197,9 @@ bool
 pnlTaskProperties::OnTabPreShow(unsigned EventType)
 {
   ordered_task = *ordered_task_pointer;
+  orig_taskType = ordered_task->get_factory_type();
   LoadFormProperty(*wf, _T("prpTaskType"),
-      (unsigned)ordered_task->get_factory_type());
+      (unsigned)orig_taskType);
   RefreshView();
   return true;
 }
@@ -206,6 +208,9 @@ bool
 pnlTaskProperties::OnTabPreHide()
 {
   ReadValues();
+  if (orig_taskType != ordered_task->get_factory_type())
+    ordered_task->get_factory().mutate_tps_to_task_type();
+
   return true;
 }
 
