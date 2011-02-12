@@ -76,7 +76,7 @@ MapWindow::DrawTask(Canvas &canvas)
 
   /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
-  bool draw_bearing = Basic().gps.NAVWarning;
+  bool draw_bearing = !Basic().gps.NAVWarning;
   bool draw_route = draw_bearing;
 
   const Route& route = Calculated().common_stats.planned_route;
@@ -124,7 +124,7 @@ void
 MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
 {
   if (Calculated().Circling 
-      || !Basic().gps.NAVWarning
+      || Basic().gps.NAVWarning
       || !SettingsMap().EnableDetourCostMarker
       || (task == NULL)) 
     return;
