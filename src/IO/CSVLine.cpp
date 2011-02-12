@@ -197,6 +197,29 @@ bool
 CSVLine::read_checked(int &value_r)
 {
   char *endptr;
+  int value = strtol(data, &endptr, 10);
+  assert(endptr >= data && endptr <= end);
+
+  bool success = endptr > data;
+  if (endptr >= end) {
+    data = end;
+  } else if (*endptr == ',') {
+    data = endptr + 1;
+  } else {
+    data = endptr;
+    skip();
+    return false;
+  }
+
+  if (success)
+    value_r = value;
+  return success;
+}
+
+bool
+CSVLine::read_checked(long &value_r)
+{
+  char *endptr;
   long value = strtol(data, &endptr, 10);
   assert(endptr >= data && endptr <= end);
 
