@@ -87,7 +87,7 @@ private:
   void AirspaceWarning();
   void TerrainFootprint(const fixed max_dist);
   void BallastDump();
-  void sources();
+  void ThermalSources();
 
   /**
    * Updates stats during transition from climb mode to cruise mode

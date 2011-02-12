@@ -763,7 +763,7 @@ GlideComputerAirData::Turning()
 }
 
 void
-GlideComputerAirData::sources()
+GlideComputerAirData::ThermalSources()
 {
   THERMAL_LOCATOR_INFO &thermal_locator = SetCalculated().thermal_locator;
 
@@ -827,7 +827,7 @@ GlideComputerAirData::LastThermalStats()
 void
 GlideComputerAirData::OnDepartedThermal()
 {
-  sources();
+  ThermalSources();
 }
 
 void
