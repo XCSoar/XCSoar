@@ -234,10 +234,6 @@ WayPointFile::Save(const Waypoints &way_points)
   if (!IsWritable())
     return false;
 
-  // Compressed file -> return
-  if (compressed)
-    return false;
-
   // Try to open waypoint file for writing
   TextWriter writer(file);
   if (writer.error())
