@@ -61,7 +61,7 @@ TEST_NAMES = \
 	TestWayPointFile TestThermalBase \
 	test_load_task \
 	TestColorRamp TestGeoPoint TestDiffFilter \
-	TestFileUtil TestPolars \
+	TestFileUtil TestPolars TestCSVLine \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
@@ -149,6 +149,16 @@ TEST_ANGLE_SOURCES = \
 TEST_ANGLE_OBJS = $(call SRC_TO_OBJ,$(TEST_ANGLE_SOURCES))
 TEST_ANGLE_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestAngle$(TARGET_EXEEXT): $(TEST_ANGLE_OBJS) $(TEST_ANGLE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_CSV_LINE_SOURCES = \
+	$(SRC)/IO/CSVLine.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestCSVLine.cpp
+TEST_CSV_LINE_OBJS = $(call SRC_TO_OBJ,$(TEST_CSV_LINE_SOURCES))
+TEST_CSV_LINE_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestCSVLine$(TARGET_EXEEXT): $(TEST_CSV_LINE_OBJS) $(TEST_CSV_LINE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
