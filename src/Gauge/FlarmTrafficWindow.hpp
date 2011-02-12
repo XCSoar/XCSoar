@@ -112,6 +112,13 @@ public:
     SetTarget(traffic != NULL ? (int)data.TrafficIndex(traffic) : -1);
   }
 
+  void SetTarget(const FlarmId &id) {
+    const FLARM_TRAFFIC *traffic = data.FindTraffic(id);
+    if (traffic != NULL && !traffic->defined())
+      traffic = NULL;
+    SetTarget(traffic);
+  }
+
   void NextTarget();
   void PrevTarget();
   bool SelectNearTarget(int x, int y, int max_distance);
@@ -126,7 +133,7 @@ public:
 protected:
   fixed RangeScale(fixed d) const;
 
-  void UpdateSelector();
+  void UpdateSelector(const FlarmId id);
   void UpdateWarnings();
   void Update(Angle new_direction, const FLARM_STATE &new_data,
               const SETTINGS_TEAMCODE &new_settings);
