@@ -266,26 +266,33 @@ class TPLabelTaskPoint:
   public TaskPointConstVisitor
 {
 public:
-  TPLabelTaskPoint(TCHAR* buff):
-    text(buff)
+  TPLabelTaskPoint(TCHAR* buffType, TCHAR* buffNamePrefix):
+    textType(buffType),
+    textNamePrefix(buffNamePrefix)
   {
-    text[0] = _T('\0');
+    textType[0] = _T('\0');
+    textNamePrefix[0] = _T('\0');
   }
 
   void Visit(const UnorderedTaskPoint& tp) {}
   void Visit(const StartPoint& tp) {    
-    _tcscpy(text, _T("Start point"));
+    _tcscpy(textType, _T("Start point"));
+    _tcscpy(textNamePrefix, _T("Start: "));
   }
   void Visit(const FinishPoint& tp) {
-    _tcscpy(text, _T("Finish point"));
+    _tcscpy(textType, _T("Finish point"));
+    _tcscpy(textNamePrefix, _T("Finish: "));
   }
   void Visit(const AATPoint& tp) {
-    _tcscpy(text, _T("Assigned area point"));
+    _tcscpy(textType, _T("Assigned area point"));
+    _stprintf(textNamePrefix, _T("%d: "), active_index);
   }
   void Visit(const ASTPoint& tp) {
-    _tcscpy(text, _T("Task point"));
+    _tcscpy(textType, _T("Task point"));
+    _stprintf(textNamePrefix, _T("%d: "), active_index);
   }
-  TCHAR* text;
+  TCHAR* textType;
+  TCHAR* textNamePrefix;
 };
 
 static void
@@ -307,10 +314,6 @@ RefreshView()
   if (wfrm)
     wfrm->SetCaption(OrderedTaskPointName(ordered_task->get_factory().getType(*tp)));
 
-  wfrm = ((WndFrame*)wf->FindByName(_T("lblLocation")));
-  if (wfrm)
-    wfrm->SetCaption(tp->get_waypoint().Name.c_str());
-
   WndButton* wb;
   wb = ((WndButton*)wf->FindByName(_T("butPrevious")));
   if (wb)
@@ -320,11 +323,20 @@ RefreshView()
   if (wb)
     wb->set_enabled(active_index < (ordered_task->task_size() - 1));
 
-  TCHAR buf[100];
-  TPLabelTaskPoint tpv(buf);
+  TCHAR bufType[100];
+  TCHAR bufNamePrefix[100];
+  TPLabelTaskPoint tpv(bufType, bufNamePrefix);
   TaskPointConstVisitor &tp_visitor = tpv;
   tp_visitor.Visit(*tp);
-  wf->SetCaption(tpv.text);
+  wf->SetCaption(tpv.textType);
+
+  wfrm = ((WndFrame*)wf->FindByName(_T("lblLocation")));
+  if (wfrm) {
+    TCHAR buff[100];
+    _stprintf(buff, _T("%s %s"), tpv.textNamePrefix,
+        tp->get_waypoint().Name.c_str());
+    wfrm->SetCaption(buff);
+  }
 }
 
 static void
@@ -360,7 +372,7 @@ OnRemoveClicked(WndButton &Sender)
   (void)Sender;
 
     if (MessageBoxX(_("Remove task point?"),
-                          _("Task Point"), MB_YESNO | MB_ICONQUESTION) == IDNO)
+                          _("Task Point"), MB_YESNO | MB_ICONQUESTION) != IDYES)
       return;
 
   if (!ordered_task->get_factory().remove(active_index))
