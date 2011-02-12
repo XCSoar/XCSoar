@@ -91,6 +91,8 @@ RefreshView()
   bool aat_types = (ftype == TaskBehaviour::FACTORY_AAT);
   bool racing_types = (ftype == TaskBehaviour::FACTORY_RT) || aat_types;
 
+  LoadFormProperty(*wf, _T("prpTaskType"),(int)ftype);
+
   wp = ((WndProperty*)wf->FindByName(_T("prpMinTime")));
   if (wp) {
     wp->set_visible(aat_types);
@@ -230,6 +232,7 @@ pnlTaskProperties::OnTaskTypeData(DataField *Sender, DataField::DataAccessKind_t
     const TaskBehaviour::Factory_t newtype =
        (TaskBehaviour::Factory_t)df.GetAsInteger();
     if (newtype != ordered_task->get_factory_type()) {
+      ReadValues();
       ordered_task->set_factory(newtype);
       *task_changed =true;
       RefreshView();
