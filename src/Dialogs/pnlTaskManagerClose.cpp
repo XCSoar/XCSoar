@@ -85,7 +85,9 @@ pnlTaskManagerClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
 
   Window *wTaskManagerClose =
       LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
-                 _T("IDR_XML_TASKMANAGERCLOSE"));
+                 Layout::landscape ?
+                     _T("IDR_XML_TASKMANAGERCLOSE_L") :
+                     _T("IDR_XML_TASKMANAGERCLOSE"));
   assert(wTaskManagerClose);
 
   wStatus = (WndFrame *)wf->FindByName(_T("frmStatus"));
@@ -96,16 +98,6 @@ pnlTaskManagerClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
 
   cmdClose = (WndButton *)wf->FindByName(_T("cmdClose"));
   assert(cmdClose);
-
-  // center for portrait or for landscape
-  const RECT r = wTabBar->get_client_rect();
-  const unsigned CloseTop = (r.bottom - r.top -
-      (Layout::landscape ? 0 : wTabBar->GetBarHeight())) / 2 - cmdClose->get_height();
-  const unsigned CloseLeft = (r.right - r.left - cmdClose->get_width() +
-      (Layout::landscape ? wTabBar->GetBarWidth() : 0)) / 2;
-  cmdClose->move(CloseLeft, CloseTop);
-  wStatus->move(CloseLeft, CloseTop - wStatus->get_height());
-  cmdRevert->move(CloseLeft, CloseTop + 2* cmdClose->get_height());
 
   wStatus->SetAlignCenter();
   return wTaskManagerClose;
