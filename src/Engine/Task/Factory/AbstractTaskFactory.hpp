@@ -250,6 +250,19 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
     return m_finish_types;
   }
 
+  /**
+   * @param start_radius: either fixed_minus_one or a valid value
+   * @param turnpoint_radius: either fixed_minus_one or a valid value
+   * @param finish_radius: either fixed_minus_one or a valid value
+   *
+   * sets radiuses to the correct default for that task type or general defaults
+   */
+  virtual gcc_pure
+  void getPointDefaultSizes(const LegalPointType_t type,
+                                            fixed &start_radius,
+                                            fixed &turnpoint_radius,
+                                            fixed &finish_radius) const;
+
   /** 
    * Create a point of supplied type using default sector sizes
    * 

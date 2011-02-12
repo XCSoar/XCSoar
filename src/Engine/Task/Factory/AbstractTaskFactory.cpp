@@ -322,6 +322,24 @@ AbstractTaskFactory::createPoint(const LegalPointType_t type,
       fixed_minus_one);
 }
 
+void
+AbstractTaskFactory::getPointDefaultSizes(const LegalPointType_t type,
+                                          fixed &start_radius,
+                                          fixed &turnpoint_radius,
+                                          fixed &finish_radius) const
+{
+  TaskBehaviour ob =this->m_behaviour;
+
+  if (start_radius < fixed_zero)
+    start_radius = ob.sector_defaults.start_radius;
+
+  if (turnpoint_radius < fixed_zero)
+    turnpoint_radius = ob.sector_defaults.turnpoint_radius;
+
+  if (finish_radius < fixed_zero)
+    finish_radius = ob.sector_defaults.finish_radius;
+}
+
 OrderedTaskPoint*
 AbstractTaskFactory::createPoint(const LegalPointType_t type,
                                  const Waypoint &wp,
@@ -329,14 +347,11 @@ AbstractTaskFactory::createPoint(const LegalPointType_t type,
                                  const fixed _turnpoint_radius,
                                  const fixed _finish_radius) const
 {
-  TaskBehaviour ob =this->m_behaviour;
+  fixed start_radius = _start_radius;
+  fixed turnpoint_radius = _turnpoint_radius;
+  fixed finish_radius = _finish_radius;
 
-  const fixed start_radius = (_start_radius < fixed_zero) ?
-      ob.sector_defaults.start_radius : _start_radius;
-  const fixed turnpoint_radius = (_turnpoint_radius < fixed_zero) ?
-      ob.sector_defaults.turnpoint_radius : _turnpoint_radius;
-  const fixed finish_radius = (_finish_radius < fixed_zero) ?
-      ob.sector_defaults.finish_radius : _finish_radius;
+  getPointDefaultSizes(type, start_radius, turnpoint_radius, finish_radius);
 
   switch (type) {
   case START_SECTOR:

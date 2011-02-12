@@ -64,6 +64,24 @@ public:
    */
   virtual gcc_pure
   LegalPointType_t getMutatedPointType(const OrderedTaskPoint &tp) const;
+
+
+  /**
+   * @param start_radius: either fixed_minus_one or a valid value
+   * @param turnpoint_radius: either fixed_minus_one or a valid value
+   * @param finish_radius: either fixed_minus_one or a valid value
+   *
+   * only affects start cylinder/line, finish cylinder/line and
+   * turnpoint sector
+   * Does not affects FAI sectors which have their own class types
+   *
+   * sets radiuses FAI defaults
+   */
+  virtual gcc_pure
+  void getPointDefaultSizes(const LegalPointType_t type,
+                                            fixed &start_radius,
+                                            fixed &turnpoint_radius,
+                                            fixed &finish_radius) const;
 };
 
 #endif
