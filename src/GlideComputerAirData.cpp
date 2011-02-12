@@ -767,13 +767,15 @@ GlideComputerAirData::Turning()
 void
 GlideComputerAirData::ThermalSources()
 {
-  if (!Calculated().ThermalEstimate_Valid ||
+  THERMAL_LOCATOR_INFO &thermal_locator = SetCalculated();
+
+  if (!thermal_locator.ThermalEstimate_Valid ||
       !positive(Calculated().LastThermalAverage))
     return;
 
   GeoPoint ground_location;
   fixed ground_altitude = fixed_minus_one;
-  EstimateThermalBase(Calculated().ThermalEstimate_Location,
+  EstimateThermalBase(thermal_locator.ThermalEstimate_Location,
                       Basic().NavAltitude,
                       Calculated().LastThermalAverage,
                       Basic().wind,
@@ -785,21 +787,21 @@ GlideComputerAirData::ThermalSources()
     int ibest = 0;
 
     for (unsigned i = 0; i < THERMAL_LOCATOR_INFO::MAX_THERMAL_SOURCES; i++) {
-      if (negative(Calculated().ThermalSources[i].LiftRate)) {
+      if (negative(thermal_locator.ThermalSources[i].LiftRate)) {
         ibest = i;
         break;
       }
-      fixed dt = Basic().Time - Calculated().ThermalSources[i].Time;
+      fixed dt = Basic().Time - thermal_locator.ThermalSources[i].Time;
       if (dt > tbest) {
         tbest = dt;
         ibest = i;
       }
     }
 
-    SetCalculated().ThermalSources[ibest].LiftRate = Calculated().LastThermalAverage;
-    SetCalculated().ThermalSources[ibest].Location = ground_location;
-    SetCalculated().ThermalSources[ibest].GroundHeight = ground_altitude;
-    SetCalculated().ThermalSources[ibest].Time = Basic().Time;
+    thermal_locator.ThermalSources[ibest].LiftRate = Calculated().LastThermalAverage;
+    thermal_locator.ThermalSources[ibest].Location = ground_location;
+    thermal_locator.ThermalSources[ibest].GroundHeight = ground_altitude;
+    thermal_locator.ThermalSources[ibest].Time = Basic().Time;
   }
 }
 

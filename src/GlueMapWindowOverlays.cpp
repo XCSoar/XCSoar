@@ -590,9 +590,10 @@ GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
   if (GetDisplayMode() == dmCircling) {
     // in circling mode, draw thermal at actual estimated location
     const MapWindowProjection &projection = render_projection;
-    if (Calculated().ThermalEstimate_Valid) {
+    const THERMAL_LOCATOR_INFO &thermal_locator = Calculated();
+    if (thermal_locator.ThermalEstimate_Valid) {
       RasterPoint sc;
-      if (projection.GeoToScreenIfVisible(Calculated().ThermalEstimate_Location, sc)) {
+      if (projection.GeoToScreenIfVisible(thermal_locator.ThermalEstimate_Location, sc)) {
         Graphics::hBmpThermalSource.draw(canvas, sc);
       }
     }
