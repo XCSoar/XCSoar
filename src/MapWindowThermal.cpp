@@ -39,7 +39,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
   // draw only at close map scales in non-circling mode
   // draw thermal at location it would be at the glider's height
 
-  for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
+  for (unsigned i = 0; i < THERMAL_LOCATOR_INFO::MAX_THERMAL_SOURCES; i++) {
     // trivial/bad thermal, don't draw it
     if (!positive(Calculated().ThermalSources[i].LiftRate))
       continue;

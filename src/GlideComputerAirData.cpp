@@ -784,7 +784,7 @@ GlideComputerAirData::ThermalSources()
     fixed tbest = fixed_zero;
     int ibest = 0;
 
-    for (int i = 0; i < MAX_THERMAL_SOURCES; i++) {
+    for (unsigned i = 0; i < THERMAL_LOCATOR_INFO::MAX_THERMAL_SOURCES; i++) {
       if (negative(Calculated().ThermalSources[i].LiftRate)) {
         ibest = i;
         break;

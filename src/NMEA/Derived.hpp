@@ -35,8 +35,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-#define MAX_THERMAL_SOURCES 20
-
 /**
  * Structure to hold information on identified thermal sources on the ground
  */
@@ -215,6 +213,8 @@ struct CLIMB_HISTORY_INFO
  */
 struct THERMAL_LOCATOR_INFO
 {
+  static const unsigned MAX_THERMAL_SOURCES = 20;
+
   /** Location of thermal at aircraft altitude */
   GeoPoint ThermalEstimate_Location;
   /** Is thermal estimation valid? */

@@ -49,8 +49,6 @@ void GlideComputerBlackboard::Initialise()
 void
 GlideComputerBlackboard::ResetFlight(const bool full)
 {
-  unsigned i;
-
   /*
     \todo also need to call flight_state_reset() on Basic() ?
 
@@ -79,7 +77,7 @@ GlideComputerBlackboard::ResetFlight(const bool full)
     calculated_info.LDvario = fixed(INVALID_GR);
     calculated_info.ThermalAverage = fixed_zero;
 
-    for (i = 0; i < 200; i++) {
+    for (unsigned i = 0; i < 200; i++) {
       calculated_info.AverageClimbRate[i] = fixed_zero;
       calculated_info.AverageClimbRateN[i] = 0;
     }
@@ -91,7 +89,7 @@ GlideComputerBlackboard::ResetFlight(const bool full)
   calculated_info.thermal_band.clear();
 
   // clear thermal sources for first time.
-  for (i = 0; i < MAX_THERMAL_SOURCES; i++) {
+  for (unsigned i = 0; i < THERMAL_LOCATOR_INFO::MAX_THERMAL_SOURCES; i++) {
     calculated_info.ThermalSources[i].LiftRate = fixed_minus_one;
   }
 
