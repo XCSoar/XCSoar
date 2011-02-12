@@ -779,30 +779,30 @@ NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time)
 {
   static int old_flarm_rx = 0;
 
-  flarm.FLARM_Available.update(Time);
+  flarm.available.update(Time);
   isFlarm = true;
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
-  flarm.FLARM_RX = line.read(0);
-  flarm.FLARM_TX = line.read(0);
-  flarm.FLARM_GPS = line.read(0);
+  flarm.rx = line.read(0);
+  flarm.tx = line.read(0);
+  flarm.gps = line.read(0);
   line.skip();
-  flarm.FLARM_AlarmLevel = line.read(0);
+  flarm.alarm_level = line.read(0);
 
   // process flarm updates
 
-  if (flarm.FLARM_RX && old_flarm_rx == 0)
+  if (flarm.rx && old_flarm_rx == 0)
     // traffic has appeared..
     InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
 
-  if (flarm.FLARM_RX == 0 && old_flarm_rx)
+  if (flarm.rx == 0 && old_flarm_rx)
     // traffic has disappeared..
     InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
 
   // TODO feature: add another event for new traffic.
 
-  old_flarm_rx = flarm.FLARM_RX;
+  old_flarm_rx = flarm.rx;
 
   return true;
 }

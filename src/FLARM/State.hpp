@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "FLARM/Traffic.hpp"
 #include "NMEA/Validity.hpp"
+#include "Util/StaticArray.hpp"
 
 /**
  * Received FLARM data, cached
@@ -37,35 +38,35 @@ struct FLARM_STATE
   };
 
   /** Number of received FLARM devices */
-  unsigned short FLARM_RX;
+  unsigned short rx;
   /** Transmit status */
-  unsigned short FLARM_TX;
+  unsigned short tx;
   /** GPS status */
-  unsigned short FLARM_GPS;
+  unsigned short gps;
   /** Alarm level of FLARM (0-3) */
-  unsigned short FLARM_AlarmLevel;
+  unsigned short alarm_level;
   /** Is FLARM information available? */
-  Validity FLARM_Available;
+  Validity available;
   /** Flarm traffic information */
-  FLARM_TRAFFIC FLARM_Traffic[FLARM_MAX_TRAFFIC];
+  FLARM_TRAFFIC traffic[FLARM_MAX_TRAFFIC];
   /**
    * Is there FLARM traffic present?
-   * @see FLARM_Traffic
+   * @see traffic
    */
   bool FLARMTraffic;
   /**
    * Is there new FLARM traffic present?
-   * @see FLARM_Traffic
+   * @see traffic
    */
   bool NewTraffic;
 
 protected:
   const FLARM_TRAFFIC *FirstTrafficSlot() const {
-    return &FLARM_Traffic[0];
+    return &traffic[0];
   }
 
   const FLARM_TRAFFIC *LastTrafficSlot() const {
-    return &FLARM_Traffic[FLARM_MAX_TRAFFIC - 1];
+    return &traffic[FLARM_MAX_TRAFFIC - 1];
   }
 
 public:
@@ -76,7 +77,7 @@ public:
    * this one.
    */
   void complement(const FLARM_STATE &add) {
-    if (!FLARM_Available && add.FLARM_Available)
+    if (!available && add.available)
       *this = add;
   }
 
@@ -84,7 +85,7 @@ public:
     unsigned count = 0;
 
     for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
-      if (FLARM_Traffic[i].defined())
+      if (traffic[i].defined())
         ++count;
 
     return count;
@@ -98,8 +99,8 @@ public:
    */
   FLARM_TRAFFIC *FindTraffic(FlarmId id) {
     for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
-      if (FLARM_Traffic[i].ID == id)
-        return &FLARM_Traffic[i];
+      if (traffic[i].ID == id)
+        return &traffic[i];
 
     return NULL;
   }
@@ -112,8 +113,8 @@ public:
    */
   const FLARM_TRAFFIC *FindTraffic(FlarmId id) const {
     for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
-      if (FLARM_Traffic[i].ID == id)
-        return &FLARM_Traffic[i];
+      if (traffic[i].ID == id)
+        return &traffic[i];
 
     return NULL;
   }
@@ -126,9 +127,9 @@ public:
    */
   FLARM_TRAFFIC *FindTraffic(const TCHAR *name) {
     for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
-      if (FLARM_Traffic[i].defined() &&
-          _tcscmp(FLARM_Traffic[i].Name, name) == 0)
-        return &FLARM_Traffic[i];
+      if (traffic[i].defined() &&
+          _tcscmp(traffic[i].Name, name) == 0)
+        return &traffic[i];
 
     return NULL;
   }
@@ -141,9 +142,9 @@ public:
    */
   const FLARM_TRAFFIC *FindTraffic(const TCHAR *name) const {
     for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
-      if (FLARM_Traffic[i].defined() &&
-          _tcscmp(FLARM_Traffic[i].Name, name) == 0)
-        return &FLARM_Traffic[i];
+      if (traffic[i].defined() &&
+          _tcscmp(traffic[i].Name, name) == 0)
+        return &traffic[i];
 
     return NULL;
   }
@@ -155,8 +156,8 @@ public:
    */
   FLARM_TRAFFIC *AllocateTraffic() {
     for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
-      if (!FLARM_Traffic[i].defined())
-        return &FLARM_Traffic[i];
+      if (!traffic[i].defined())
+        return &traffic[i];
 
     return NULL;
   }
@@ -210,13 +211,13 @@ public:
   }
 
   void Refresh(fixed Time) {
-    FLARM_Available.expire(Time, fixed(10));
+    available.expire(Time, fixed(10));
 
     bool present = false;
 
-    if (FLARM_Available) {
+    if (available) {
       for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++) {
-        if (FLARM_Traffic[i].Refresh(Time))
+        if (traffic[i].Refresh(Time))
           present = true;
       }
     }

@@ -320,7 +320,7 @@ DeviceBlackboard::SetSystemTime() {
 }
 
 /**
- * Tries to find a name for every current FLARM_Traffic id
+ * Tries to find a name for every current traffic id
  */
 void
 DeviceBlackboard::FLARM_ScanTraffic()
@@ -333,14 +333,14 @@ DeviceBlackboard::FLARM_ScanTraffic()
   FLARM_STATE &flarm = SetBasic().flarm;
 
   // if (FLARM data is available)
-  if (!flarm.FLARM_Available)
+  if (!flarm.available)
     return;
 
-  // for each item in FLARM_Traffic
+  // for each item in traffic
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
-    FLARM_TRAFFIC &traffic = flarm.FLARM_Traffic[i];
+    FLARM_TRAFFIC &traffic = flarm.traffic[i];
 
-    // if (FLARM_Traffic[flarm_slot] has data)
+    // if (traffic[flarm_slot] has data)
     // and if (Target currently without name)
     if (traffic.defined() && !traffic.HasName()) {
       // need to lookup name for this target

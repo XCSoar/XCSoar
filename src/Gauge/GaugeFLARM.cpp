@@ -48,7 +48,7 @@ GaugeFLARM::Update(bool enable, const NMEA_INFO &gps_info,
                    const SETTINGS_TEAMCODE &settings)
 {
   // If FLARM alarm level higher then 0
-  if (gps_info.flarm.FLARM_AlarmLevel > 0)
+  if (gps_info.flarm.alarm_level > 0)
     // Show FLARM gauge and do not care about suppression
     Suppress = false;
 

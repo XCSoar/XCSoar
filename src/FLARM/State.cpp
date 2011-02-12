@@ -26,12 +26,12 @@ Copyright_License {
 void
 FLARM_STATE::clear()
 {
-  FLARM_Available.clear();
+  available.clear();
   FLARMTraffic = false;
   NewTraffic = false;
 
   for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; ++i)
-    FLARM_Traffic[i].Clear();
+    traffic[i].Clear();
 }
 
 const FLARM_TRAFFIC *
@@ -40,7 +40,7 @@ FLARM_STATE::FindMaximumAlert() const
   const FLARM_TRAFFIC *alert = NULL;
 
   for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; ++i) {
-    const FLARM_TRAFFIC &traffic = FLARM_Traffic[i];
+    const FLARM_TRAFFIC &traffic = this->traffic[i];
 
     if (traffic.defined() && traffic.HasAlarm() &&
         (alert == NULL ||

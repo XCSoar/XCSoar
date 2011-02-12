@@ -182,10 +182,10 @@ Dump(const NMEA_INFO &basic)
     printf("RelativeHumidity=%d\n", (int)basic.RelativeHumidity);
 
   const FLARM_STATE &flarm = basic.flarm;
-  if (flarm.FLARM_Available) {
-    printf("FLARM rx=%u tx=%u\n", flarm.FLARM_RX, flarm.FLARM_TX);
-    printf("FLARM gps=%u\n", flarm.FLARM_GPS);
-    printf("FLARM alarm=%u\n", flarm.FLARM_AlarmLevel);
+  if (flarm.available) {
+    printf("FLARM rx=%u tx=%u\n", flarm.rx, flarm.tx);
+    printf("FLARM gps=%u\n", flarm.gps);
+    printf("FLARM alarm=%u\n", flarm.alarm_level);
     printf("FLARM traffic=%d new=%d\n", flarm.FLARMTraffic, flarm.NewTraffic);
   }
 }

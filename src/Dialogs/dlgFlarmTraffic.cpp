@@ -165,16 +165,14 @@ FlarmTrafficControl::CalcAutoZoom()
   fixed zoom_dist = fixed_zero;
 
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
-    if (!data.FLARM_Traffic[i].defined())
+    if (!data.traffic[i].defined())
       continue;
 
-    if (warning_mode && !data.FLARM_Traffic[i].HasAlarm())
+    if (warning_mode && !data.traffic[i].HasAlarm())
       continue;
 
-    fixed dist = data.FLARM_Traffic[i].RelativeNorth
-                * data.FLARM_Traffic[i].RelativeNorth
-                + data.FLARM_Traffic[i].RelativeEast
-                * data.FLARM_Traffic[i].RelativeEast;
+    fixed dist = data.traffic[i].RelativeNorth * data.traffic[i].RelativeNorth
+      + data.traffic[i].RelativeEast * data.traffic[i].RelativeEast;
 
     zoom_dist = max(dist, zoom_dist);
   }
@@ -279,7 +277,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   if (selection == -1)
     return;
 
-  assert(data.FLARM_Traffic[selection].defined());
+  assert(data.traffic[selection].defined());
 
   // Temporary string
   TCHAR tmp[20];
@@ -288,9 +286,9 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   // Shortcut to the selected traffic
   FLARM_TRAFFIC traffic;
   if (WarningMode())
-    traffic = data.FLARM_Traffic[warning];
+    traffic = data.traffic[warning];
   else
-    traffic = data.FLARM_Traffic[selection];
+    traffic = data.traffic[selection];
 
   assert(traffic.defined());
 
@@ -525,7 +523,7 @@ static void
 Update()
 {
   if (XCSoarInterface::SettingsMap().AutoCloseFlarmDialog &&
-      (!XCSoarInterface::Basic().flarm.FLARM_Available ||
+      (!XCSoarInterface::Basic().flarm.available ||
        XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0))
     wf->SetModalResult(mrOK);
 

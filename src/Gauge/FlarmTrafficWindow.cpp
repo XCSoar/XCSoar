@@ -57,8 +57,8 @@ bool
 FlarmTrafficWindow::WarningMode() const
 {
   assert(warning < FLARM_STATE::FLARM_MAX_TRAFFIC);
-  assert(warning < 0 || data.FLARM_Traffic[warning].defined());
-  assert(warning < 0 || data.FLARM_Traffic[warning].HasAlarm());
+  assert(warning < 0 || data.traffic[warning].defined());
+  assert(warning < 0 || data.traffic[warning].HasAlarm());
 
   return warning >= 0;
 }
@@ -123,7 +123,7 @@ void
 FlarmTrafficWindow::SetTarget(int i)
 {
   assert(i < FLARM_STATE::FLARM_MAX_TRAFFIC);
-  assert(i < 0 || data.FLARM_Traffic[i].defined());
+  assert(i < 0 || data.traffic[i].defined());
 
   if (selection == i)
     return;
@@ -146,7 +146,7 @@ FlarmTrafficWindow::NextTarget()
 
   const FLARM_TRAFFIC *traffic;
   if (selection >= 0)
-    traffic = data.NextTraffic(&data.FLARM_Traffic[selection]);
+    traffic = data.NextTraffic(&data.traffic[selection]);
   else
     traffic = NULL;
 
@@ -170,7 +170,7 @@ FlarmTrafficWindow::PrevTarget()
 
   const FLARM_TRAFFIC *traffic;
   if (selection >= 0)
-    traffic = data.PreviousTraffic(&data.FLARM_Traffic[selection]);
+    traffic = data.PreviousTraffic(&data.traffic[selection]);
   else
     traffic = NULL;
 
@@ -187,9 +187,9 @@ FlarmTrafficWindow::PrevTarget()
 void
 FlarmTrafficWindow::UpdateSelector()
 {
-  if (small || !data.FLARM_Available)
+  if (small || !data.available)
     SetTarget(-1);
-  else if (selection < 0 || (!data.FLARM_Traffic[selection].defined() &&
+  else if (selection < 0 || (!data.traffic[selection].defined() &&
                              !SelectNearTarget(sc[selection].x, sc[selection].y,
                                                radius * 2)))
     NextTarget();
@@ -492,14 +492,14 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 void
 FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
 {
-  if (!data.FLARM_Available || data.GetActiveTrafficCount() == 0) {
+  if (!data.available || data.GetActiveTrafficCount() == 0) {
     PaintRadarNoTraffic(canvas);
     return;
   }
 
   // Iterate through the traffic (normal traffic)
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
-    const FLARM_TRAFFIC &traffic = data.FLARM_Traffic[i];
+    const FLARM_TRAFFIC &traffic = data.traffic[i];
 
     if (traffic.defined() && !traffic.HasAlarm() &&
         static_cast<unsigned> (selection) != i)
@@ -507,7 +507,7 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
   }
 
   if (selection >= 0 && selection < FLARM_STATE::FLARM_MAX_TRAFFIC) {
-    const FLARM_TRAFFIC &traffic = data.FLARM_Traffic[selection];
+    const FLARM_TRAFFIC &traffic = data.traffic[selection];
 
     if (traffic.defined() && !traffic.HasAlarm())
       PaintRadarTarget(canvas, traffic, selection);
@@ -518,7 +518,7 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
 
   // Iterate through the traffic (alarm traffic)
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
-    const FLARM_TRAFFIC &traffic = data.FLARM_Traffic[i];
+    const FLARM_TRAFFIC &traffic = data.traffic[i];
 
     if (traffic.defined() && traffic.HasAlarm())
       PaintRadarTarget(canvas, traffic, i);
@@ -666,10 +666,10 @@ void
 FlarmTrafficWindow::Paint(Canvas &canvas)
 {
   assert(selection < FLARM_STATE::FLARM_MAX_TRAFFIC);
-  assert(selection < 0 || data.FLARM_Traffic[selection].defined());
+  assert(selection < 0 || data.traffic[selection].defined());
   assert(warning < FLARM_STATE::FLARM_MAX_TRAFFIC);
-  assert(warning < 0 || data.FLARM_Traffic[warning].defined());
-  assert(warning < 0 || data.FLARM_Traffic[warning].HasAlarm());
+  assert(warning < 0 || data.traffic[warning].defined());
+  assert(warning < 0 || data.traffic[warning].HasAlarm());
 
   PaintRadarBackground(canvas);
   PaintRadarTraffic(canvas);
@@ -694,7 +694,7 @@ FlarmTrafficWindow::SelectNearTarget(int x, int y, int max_distance)
 
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
     // If FLARM target does not exist -> next one
-    if (!data.FLARM_Traffic[i].defined())
+    if (!data.traffic[i].defined())
       continue;
 
     int distance_sq = (x - sc[i].x) * (x - sc[i].x) +

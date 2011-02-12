@@ -280,7 +280,7 @@ void
 GlideComputer::FLARM_ScanTraffic()
 {
   // If (not FLARM available) cancel
-  if (!Basic().flarm.FLARM_Available || !SettingsComputer().TeamFlarmTracking)
+  if (!Basic().flarm.available || !SettingsComputer().TeamFlarmTracking)
     return;
 
   if (SettingsComputer().TeamCodeRefWaypoint < 0)
