@@ -158,6 +158,18 @@ public:
     append(value);
     return true;
   }
+
+  /**
+   * Remove an item by copying the last item over it.
+   */
+  void quick_remove(unsigned i) {
+    assert(i < size());
+
+    if (i < size() - 1)
+      data[i] = data[size() - 1];
+
+    --the_size;
+  }
 };
 
 #endif
