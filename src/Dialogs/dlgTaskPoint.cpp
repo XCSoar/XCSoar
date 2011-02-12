@@ -295,6 +295,22 @@ public:
   TCHAR* textNamePrefix;
 };
 
+/**
+ * for FAI tasks, make the zone sizes disabled so the user can't alter them
+ * @param enable
+ */
+static void
+EnableSizeEdit(bool enable)
+{
+  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpOZLineLength"));
+  assert(wp);
+  wp->set_enabled(enable);
+
+  wp = (WndProperty*)wf->FindByName(_T("prpOZCylinderRadius"));
+  assert(wp);
+  wp->set_enabled(enable);
+}
+
 static void
 RefreshView()
 {
@@ -322,6 +338,8 @@ RefreshView()
   wb = ((WndButton*)wf->FindByName(_T("butNext")));
   if (wb)
     wb->set_enabled(active_index < (ordered_task->task_size() - 1));
+
+  EnableSizeEdit(ordered_task->get_factory_type() != TaskBehaviour::FACTORY_FAI_GENERAL);
 
   TCHAR bufType[100];
   TCHAR bufNamePrefix[100];
