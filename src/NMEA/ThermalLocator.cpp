@@ -30,3 +30,23 @@ THERMAL_LOCATOR_INFO::Clear()
   for (unsigned i = 0; i < MAX_SOURCES; i++)
     sources[i].LiftRate = fixed_minus_one;
 }
+
+THERMAL_SOURCE_INFO &
+THERMAL_LOCATOR_INFO::AllocateSource(fixed Time)
+{
+  fixed tbest = fixed_zero;
+  unsigned ibest = 0;
+
+  for (unsigned i = 0; i < MAX_SOURCES; i++) {
+    if (negative(sources[i].LiftRate))
+      return sources[i];
+
+    fixed dt = Time - sources[i].Time;
+    if (dt > tbest) {
+      tbest = dt;
+      ibest = i;
+    }
+  }
+
+  return sources[ibest];
+}

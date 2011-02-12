@@ -54,6 +54,12 @@ struct THERMAL_LOCATOR_INFO
   THERMAL_SOURCE_INFO sources[MAX_SOURCES];
 
   void Clear();
+
+  /**
+   * Allocate a new #THERMAL_SOURCE_INFO slot; discard the oldest one
+   * if the list is full.
+   */
+  THERMAL_SOURCE_INFO &AllocateSource(fixed Time);
 };
 
 #endif

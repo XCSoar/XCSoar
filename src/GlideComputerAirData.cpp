@@ -783,25 +783,12 @@ GlideComputerAirData::sources()
                       ground_altitude);
 
   if (positive(ground_altitude)) {
-    fixed tbest = fixed_zero;
-    int ibest = 0;
+    THERMAL_SOURCE_INFO &source = thermal_locator.AllocateSource(Basic().Time);
 
-    for (unsigned i = 0; i < THERMAL_LOCATOR_INFO::MAX_SOURCES; i++) {
-      if (negative(thermal_locator.sources[i].LiftRate)) {
-        ibest = i;
-        break;
-      }
-      fixed dt = Basic().Time - thermal_locator.sources[i].Time;
-      if (dt > tbest) {
-        tbest = dt;
-        ibest = i;
-      }
-    }
-
-    thermal_locator.sources[ibest].LiftRate = Calculated().LastThermalAverage;
-    thermal_locator.sources[ibest].Location = ground_location;
-    thermal_locator.sources[ibest].GroundHeight = ground_altitude;
-    thermal_locator.sources[ibest].Time = Basic().Time;
+    source.LiftRate = Calculated().LastThermalAverage;
+    source.Location = ground_location;
+    source.GroundHeight = ground_altitude;
+    source.Time = Basic().Time;
   }
 }
 
