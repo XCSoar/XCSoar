@@ -1096,8 +1096,24 @@ AbstractTaskFactory::mutate_closed_finish_per_task_type()
   return changed;
 }
 
-
 bool 
+AbstractTaskFactory::append_optional_start(const Waypoint& wp)
+{
+  OrderedTaskPoint* tp = NULL;
+  if (m_task.task_size()) {
+    tp = m_task.get_tp(0)->clone(m_behaviour, m_task.get_ordered_task_behaviour(), &wp);
+  } else {
+    tp = createStart(wp);
+  }
+  if (!tp)
+    return false; // should never happen
+
+  bool success = m_task.append_optional_start(*tp);
+  delete tp;
+  return success;
+}
+
+bool
 AbstractTaskFactory::append_optional_start(const OrderedTaskPoint &new_tp,
                                            const bool auto_mutate)
 {

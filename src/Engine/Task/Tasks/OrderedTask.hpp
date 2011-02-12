@@ -837,6 +837,23 @@ public:
   const OrderedTaskPoint* get_tp(const unsigned index) const;
 
   /**
+   * @return number of optional start poitns
+   */
+  gcc_pure
+  unsigned optional_start_points_size() { return optional_start_points.size(); }
+
+  /**
+   * returns optional start point
+   *
+   * @param pos optional start point index
+   * @return NULL if index out of range, else optional start point
+   */
+  gcc_pure
+  const OrderedTaskPoint * get_optional_start(unsigned pos) const;
+
+
+
+  /**
    * Accept a (const) task point visitor; makes the visitor visit
    * all TaskPoint in the task
    *

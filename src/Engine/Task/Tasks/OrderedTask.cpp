@@ -1361,3 +1361,12 @@ OrderedTask::select_optional_start(unsigned pos)
   // we've changed the task, so update geometry
   update_geometry();
 }
+
+const OrderedTaskPoint *
+OrderedTask::get_optional_start(unsigned pos) const
+{
+  if (pos >= optional_start_points.size())
+    return NULL;
+
+  return optional_start_points[pos];
+}
