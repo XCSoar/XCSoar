@@ -35,7 +35,6 @@
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 #include <algorithm>
-#include <stdio.h>
 
 /**
  * Utility class to read the user-definable radius or length of and observation zone
@@ -125,10 +124,8 @@ AbstractTaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
   case TaskPoint::AST:
   case TaskPoint::AAT:
     if (!validIntermediateType(newtype)) {
-      printf("not valid intermediate type - oldtype\n");
       newtype = m_behaviour.sector_defaults.turnpoint_type;
       if (!validIntermediateType(newtype)) {
-        printf("not valid intermediate type - default\n");
         newtype = *m_intermediate_types.begin();
       }
     }
