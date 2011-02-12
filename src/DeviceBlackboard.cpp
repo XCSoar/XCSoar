@@ -256,17 +256,6 @@ DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP
 }
 
 /**
- * Checks for timeout of the FLARM targets and
- * saves the status to Basic()
- */
-void
-DeviceBlackboard::FLARM_RefreshSlots() {
-  NMEA_INFO &basic = SetBasic();
-
-  basic.flarm.Refresh(basic.Time);
-}
-
-/**
  * Sets the system time to GPS time if not yet done and
  * defined in settings
  */
@@ -369,8 +358,6 @@ DeviceBlackboard::tick(const GlidePolar& glide_polar)
   SetBasic().expire();
   calculated_info.expire(Basic().Time);
 
-  // check for timeout on FLARM objects
-  FLARM_RefreshSlots();
   // lookup known traffic
   FLARM_ScanTraffic();
   // set system time if necessary

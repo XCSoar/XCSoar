@@ -151,6 +151,7 @@ NMEA_INFO::expire()
   NettoVarioAvailable.expire(Time, fixed(5));
   ExternalWindAvailable.expire(Time, fixed(600));
   WindAvailable.expire(Time, fixed(600));
+  flarm.Refresh(Time);
 }
 
 void

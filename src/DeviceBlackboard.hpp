@@ -89,7 +89,6 @@ public:
 
 private:
 // moved from GlideComputerAirData
-  void FLARM_RefreshSlots();
   void FLARM_ScanTraffic();
   void SetSystemTime();
   void NavAltitude();
