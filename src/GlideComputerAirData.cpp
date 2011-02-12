@@ -870,7 +870,7 @@ GlideComputerAirData::ThermalBand()
     ThermalBandInfo new_tbi;
 
     // calculate new buckets so glider is below max
-    fixed hbuk = tbi.MaxThermalHeight / NUMTHERMALBUCKETS;
+    fixed hbuk = tbi.MaxThermalHeight / ThermalBandInfo::NUMTHERMALBUCKETS;
 
     new_tbi.clear();
     new_tbi.MaxThermalHeight = max(fixed_one, tbi.MaxThermalHeight);
@@ -879,7 +879,7 @@ GlideComputerAirData::ThermalBand()
     }
 
     // shift data into new buckets
-    for (unsigned i = 0; i < NUMTHERMALBUCKETS; i++) {
+    for (unsigned i = 0; i < ThermalBandInfo::NUMTHERMALBUCKETS; i++) {
       fixed h = tbi.bucket_height(i);
       // height of center of bucket
       unsigned j = new_tbi.bucket_for_height(h);

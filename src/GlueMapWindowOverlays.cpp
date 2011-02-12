@@ -310,8 +310,8 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
   // JMW TODO accuracy: gather proper statistics
   // note these should/may also be relative to ground
   fixed mth = thermal_band.MaxThermalHeight;
-  fixed Wt[NUMTHERMALBUCKETS];
-  fixed ht[NUMTHERMALBUCKETS];
+  fixed Wt[ThermalBandInfo::NUMTHERMALBUCKETS];
+  fixed ht[ThermalBandInfo::NUMTHERMALBUCKETS];
   int TBSCALEY = ((rc.bottom - rc.top) / 2) - IBLSCALE(30);
 #define TBSCALEX 20
 
@@ -364,10 +364,10 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
   const fixed mc = get_glide_polar().get_mc();
   fixed Wmax = max(fixed_half, mc);
 
-  for (int i = 0; i < NUMTHERMALBUCKETS; i++) {
+  for (unsigned i = 0; i < ThermalBandInfo::NUMTHERMALBUCKETS; i++) {
     fixed wthis = fixed_zero;
     // height of this thermal point [0,mth]
-    fixed hi = i * mth / NUMTHERMALBUCKETS;
+    fixed hi = i * mth / ThermalBandInfo::NUMTHERMALBUCKETS;
     fixed hp = ((hi - minh) / (maxh - minh));
 
     if (thermal_band.ThermalProfileN[i] > 5) {
@@ -393,7 +393,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
     canvas.select(Graphics::hpThermalBand);
     canvas.select(Graphics::hbThermalBand);
 
-    RasterPoint ThermalProfile[NUMTHERMALBUCKETS + 2];
+    RasterPoint ThermalProfile[ThermalBandInfo::NUMTHERMALBUCKETS + 2];
     for (int i = 0; i < numtherm; i++) {
       ThermalProfile[1 + i].x =
           (iround((Wt[i] / Wmax) * IBLSCALE(TBSCALEX))) + rc.left;

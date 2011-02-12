@@ -49,7 +49,7 @@ ThermalBandInfo::bucket_for_height(fixed height) const
   if (bucket < 0)
     return 0;
 
-  if (bucket >= NUMTHERMALBUCKETS)
+  if ((unsigned)bucket >= NUMTHERMALBUCKETS)
     return NUMTHERMALBUCKETS - 1;
 
   return bucket;

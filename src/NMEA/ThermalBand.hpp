@@ -26,14 +26,14 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-#define NUMTHERMALBUCKETS 10
-
 /**
  * Derived thermal climb rate histogram by altitude (time averaged)
  * 
  */
 struct ThermalBandInfo
 {
+  static const unsigned NUMTHERMALBUCKETS = 10;
+
   /** Maximum height achieved in circling */ 
   fixed MaxThermalHeight;
   /** Number of samples in each bucket */ 
