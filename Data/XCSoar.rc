@@ -214,6 +214,8 @@ IDR_XML_TASKPOINT       XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskPoint.xml"
 IDR_XML_TASKPOINT_L     XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskPoint_L.xml"
 IDR_XML_TASKPOINTTYPE   XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskPointType.xml"
 IDR_XML_TASKPOINTTYPE_L XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskPointType_L.xml"
+IDR_XML_TASKOPTIONALSTARTS XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskOptionalStarts.xml"
+IDR_XML_TASKOPTIONALSTARTS_L XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskOptionalStarts_L.xml"
 
 // translations
 #if defined(WIN32) || defined(ANDROID)

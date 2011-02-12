@@ -110,6 +110,9 @@ bool
 dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index);
 
 bool
+dlgTaskOptionalStarts(SingleWindow &parent, OrderedTask** task);
+
+bool
 dlgTaskPointNew(SingleWindow &parent, OrderedTask** task, const unsigned index);
 
 void dlgVoiceShowModal();

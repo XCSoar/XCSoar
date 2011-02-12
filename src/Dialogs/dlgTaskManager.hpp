@@ -170,6 +170,12 @@ public:
   static void OnTaskTypeData(DataField *Sender, DataField::DataAccessKind_t Mode);
 
   /**
+   * displays dlgTaskOptionalStarts
+   * @param Sender
+   */
+  static void OnOptionalStartsClicked(WndButton &Sender);
+
+  /**
    * copies values from ordered_task to form
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return true
