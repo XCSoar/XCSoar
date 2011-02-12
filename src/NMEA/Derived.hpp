@@ -30,21 +30,11 @@ Copyright_License {
 #include "Task/TaskStats/TaskStats.hpp"
 #include "Task/TaskStats/CommonStats.hpp"
 #include "NMEA/ThermalBand.hpp"
+#include "NMEA/ThermalLocator.hpp"
 #include "NMEA/Validity.hpp"
 #include "TeamCodeCalculation.h"
 
 #include <tchar.h>
-
-/**
- * Structure to hold information on identified thermal sources on the ground
- */
-struct THERMAL_SOURCE_INFO
-{
-  GeoPoint Location;
-  fixed GroundHeight;
-  fixed LiftRate;
-  fixed Time;
-};
 
 /**
  * Enumeration for cruise/circling mode detection
@@ -204,24 +194,6 @@ struct CLIMB_HISTORY_INFO
   fixed AverageClimbRate[200];
   /** Number of samples in each episode */
   long AverageClimbRateN[200];
-};
-
-
-/**
- * Structure for current thermal estimate from ThermalLocator
- * 
- */
-struct THERMAL_LOCATOR_INFO
-{
-  static const unsigned MAX_THERMAL_SOURCES = 20;
-
-  /** Location of thermal at aircraft altitude */
-  GeoPoint ThermalEstimate_Location;
-  /** Is thermal estimation valid? */
-  bool ThermalEstimate_Valid;
-
-  /** Position and data of the last thermal sources */
-  THERMAL_SOURCE_INFO ThermalSources[MAX_THERMAL_SOURCES];
 };
 
 /**
