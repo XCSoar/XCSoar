@@ -8,7 +8,7 @@
   <Button Name="cmdRename" Caption="Rename" X="202" Y="150" Width="58" Height="35" OnClick="pnlTaskList::OnRenameClicked"/>
   <Button Name="cmdDelete" Caption="Delete" X="262" Y="150" Width="57" Height="35" OnClick="pnlTaskList::OnDeleteClicked"/>
 
-  <Label Name="frmSummary1" X="82" Y="186" Width="236" Height="36" Border="1"/>
-  <Canvas Name="frmTaskView1" X="0" Y="149" Width="80" Height="73" Border="1" OnPaint="pnlTaskList::OnTaskPaint" />
+  <Label Name="frmSummary1" X="77" Y="184" Width="243" Height="38" Border="0"/>
+  <Canvas Name="frmTaskView1" X="0" Y="149" Width="77" Height="73" Border="0" OnPaint="pnlTaskList::OnTaskPaint" />
 
 </Panel>

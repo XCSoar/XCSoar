@@ -10,7 +10,7 @@
   <SymbolButton Name="cmdUp" Caption="^" X="121" Y="131" Width="57" Height="35" OnClick="pnlTaskEdit::OnMoveUpClicked"/>
   <Button Name="cmdNew" Caption="Clear Task" X="180" Y="131" Width="57" Height="35" OnClick="pnlTaskEdit::OnNewClicked"/>
 
-  <Label Name="frmSummary" X="121" Y="168" Width="117" Height="97" Border="1"/>
-  <Canvas Name="frmTaskView" X="2" Y="168" Width="115" Height="97" Border="1" OnPaint="pnlTaskEdit::OnTaskPaint" />
+  <Label Name="frmSummary" X="107" Y="168" Width="133" Height="97" Border="0"/>
+  <Canvas Name="frmTaskView" X="0" Y="168" Width="109" Height="97" Border="0" OnPaint="pnlTaskEdit::OnTaskPaint" />
 
 </Panel>
