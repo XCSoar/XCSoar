@@ -78,7 +78,7 @@ ThermalLocator::Update(const fixed t_0,
                        THERMAL_LOCATOR_INFO &therm)
 {
   if (n_points < TLOCATOR_NMIN) {
-    therm.ThermalEstimate_Valid = false;
+    therm.estimate_valid = false;
     return; // nothing to do.
   }
 
@@ -104,13 +104,13 @@ ThermalLocator::Update(const fixed t_0,
   // if sufficient data, estimate location
 
   if (!positive(acc)) {
-    therm.ThermalEstimate_Valid = false;
+    therm.estimate_valid = false;
     return;
   }
   f0 = f0 * (fixed_one/acc) + av;
 
-  therm.ThermalEstimate_Location = projection.funproject(f0);
-  therm.ThermalEstimate_Valid = true;
+  therm.estimate_location = projection.funproject(f0);
+  therm.estimate_valid = true;
 }
 
 FlatPoint

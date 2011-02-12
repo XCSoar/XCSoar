@@ -27,6 +27,6 @@ void
 THERMAL_LOCATOR_INFO::Clear()
 {
   // clear thermal sources for first time.
-  for (unsigned i = 0; i < MAX_THERMAL_SOURCES; i++)
-    ThermalSources[i].LiftRate = fixed_minus_one;
+  for (unsigned i = 0; i < MAX_SOURCES; i++)
+    sources[i].LiftRate = fixed_minus_one;
 }

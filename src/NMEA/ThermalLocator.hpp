@@ -43,15 +43,15 @@ struct THERMAL_SOURCE_INFO
  */
 struct THERMAL_LOCATOR_INFO
 {
-  static const unsigned MAX_THERMAL_SOURCES = 20;
+  static const unsigned MAX_SOURCES = 20;
 
   /** Location of thermal at aircraft altitude */
-  GeoPoint ThermalEstimate_Location;
+  GeoPoint estimate_location;
   /** Is thermal estimation valid? */
-  bool ThermalEstimate_Valid;
+  bool estimate_valid;
 
   /** Position and data of the last thermal sources */
-  THERMAL_SOURCE_INFO ThermalSources[MAX_THERMAL_SOURCES];
+  THERMAL_SOURCE_INFO sources[MAX_SOURCES];
 
   void Clear();
 };

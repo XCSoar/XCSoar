@@ -765,17 +765,17 @@ GlideComputerAirData::Turning()
 }
 
 void
-GlideComputerAirData::ThermalSources()
+GlideComputerAirData::sources()
 {
   THERMAL_LOCATOR_INFO &thermal_locator = SetCalculated().thermal_locator;
 
-  if (!thermal_locator.ThermalEstimate_Valid ||
+  if (!thermal_locator.estimate_valid ||
       !positive(Calculated().LastThermalAverage))
     return;
 
   GeoPoint ground_location;
   fixed ground_altitude = fixed_minus_one;
-  EstimateThermalBase(thermal_locator.ThermalEstimate_Location,
+  EstimateThermalBase(thermal_locator.estimate_location,
                       Basic().NavAltitude,
                       Calculated().LastThermalAverage,
                       Basic().wind,
@@ -786,22 +786,22 @@ GlideComputerAirData::ThermalSources()
     fixed tbest = fixed_zero;
     int ibest = 0;
 
-    for (unsigned i = 0; i < THERMAL_LOCATOR_INFO::MAX_THERMAL_SOURCES; i++) {
-      if (negative(thermal_locator.ThermalSources[i].LiftRate)) {
+    for (unsigned i = 0; i < THERMAL_LOCATOR_INFO::MAX_SOURCES; i++) {
+      if (negative(thermal_locator.sources[i].LiftRate)) {
         ibest = i;
         break;
       }
-      fixed dt = Basic().Time - thermal_locator.ThermalSources[i].Time;
+      fixed dt = Basic().Time - thermal_locator.sources[i].Time;
       if (dt > tbest) {
         tbest = dt;
         ibest = i;
       }
     }
 
-    thermal_locator.ThermalSources[ibest].LiftRate = Calculated().LastThermalAverage;
-    thermal_locator.ThermalSources[ibest].Location = ground_location;
-    thermal_locator.ThermalSources[ibest].GroundHeight = ground_altitude;
-    thermal_locator.ThermalSources[ibest].Time = Basic().Time;
+    thermal_locator.sources[ibest].LiftRate = Calculated().LastThermalAverage;
+    thermal_locator.sources[ibest].Location = ground_location;
+    thermal_locator.sources[ibest].GroundHeight = ground_altitude;
+    thermal_locator.sources[ibest].Time = Basic().Time;
   }
 }
 
@@ -842,7 +842,7 @@ GlideComputerAirData::LastThermalStats()
 void
 GlideComputerAirData::OnDepartedThermal()
 {
-  ThermalSources();
+  sources();
 }
 
 void

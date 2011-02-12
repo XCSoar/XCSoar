@@ -412,9 +412,9 @@ VegaDevice::OnSysTicker()
     device_blackboard.Calculated().thermal_locator;
   char tbuf[100];
   sprintf(tbuf, "PTLOC,%d,%3.5f,%3.5f,%g,%g",
-          (int)(t.ThermalEstimate_Valid),
-          (double)t.ThermalEstimate_Location.Longitude.value_degrees(),
-          (double)t.ThermalEstimate_Location.Latitude.value_degrees(),
+          (int)(t.estimate_valid),
+          (double)t.estimate_location.Longitude.value_degrees(),
+          (double)t.estimate_location.Latitude.value_degrees(),
           (double)fixed_zero,
           (double)fixed_zero);
 
