@@ -950,7 +950,8 @@ AbstractTaskFactory::mutate_tps_to_task_type()
 
   for (unsigned int i = 0; i < m_task.task_size(); i++) {
     OrderedTaskPoint *tp = m_task.get_tp(i);
-    if (!validType(*tp, i)) {
+    if (!validType(*tp, i) ||
+        (m_task.get_factory_type() == TaskBehaviour::FACTORY_FAI_GENERAL)) {
 
       LegalPointType_t newtype = getMutatedPointType(*tp);
       if ((tp->type == TaskPoint::FINISH) &&
