@@ -27,6 +27,7 @@ Copyright_License {
 #include "FlarmId.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "NMEA/Validity.hpp"
+#include "Util/StaticString.hpp"
 
 #include <tchar.h>
 
@@ -80,7 +81,7 @@ struct FLARM_TRAFFIC {
   /** FLARM id of the FLARM target */
   FlarmId ID;
   /** (if exists) Name of the FLARM target */
-  TCHAR Name[10];
+  StaticString<10> Name;
   unsigned short IDType;
   unsigned short AlarmLevel;
   AircraftType Type;
@@ -95,7 +96,7 @@ struct FLARM_TRAFFIC {
   }
 
   bool HasName() const {
-    return Name[0] != _T('\0');
+    return !Name.empty();
   }
 
   /**
@@ -115,7 +116,7 @@ struct FLARM_TRAFFIC {
 
   void Clear() {
     Valid.clear();
-    Name[0] = 0;
+    Name.clear();
   }
 
   /**

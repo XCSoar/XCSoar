@@ -346,7 +346,7 @@ DeviceBlackboard::FLARM_ScanTraffic()
       // need to lookup name for this target
       const TCHAR *fname = FlarmDetails::LookupCallsign(traffic.ID);
       if (fname != NULL)
-        _tcscpy(traffic.Name, fname);
+        traffic.Name = fname;
     }
   }
 }

@@ -127,8 +127,7 @@ public:
    */
   FLARM_TRAFFIC *FindTraffic(const TCHAR *name) {
     for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
-      if (traffic[i].defined() &&
-          _tcscmp(traffic[i].Name, name) == 0)
+      if (traffic[i].defined() && traffic[i].Name.equals(name))
         return &traffic[i];
 
     return NULL;
@@ -142,8 +141,7 @@ public:
    */
   const FLARM_TRAFFIC *FindTraffic(const TCHAR *name) const {
     for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
-      if (traffic[i].defined() &&
-          _tcscmp(traffic[i].Name, name) == 0)
+      if (traffic[i].defined() && traffic[i].Name.equals(name))
         return &traffic[i];
 
     return NULL;
