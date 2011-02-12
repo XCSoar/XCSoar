@@ -99,7 +99,7 @@ CallBackTableEntry dlgTaskManager::CallBackTable[] = {
   DeclareCallBackEntry(pnlTaskEdit::OnTaskPaint),
   DeclareCallBackEntry(pnlTaskEdit::OnTabPreShow),
 
-  DeclareCallBackEntry(pnlTaskProperties::OnTypeClicked),
+  DeclareCallBackEntry(pnlTaskProperties::OnTaskTypeData),
 
   DeclareCallBackEntry(pnlTaskList::OnLoadSaveClicked),
   DeclareCallBackEntry(pnlTaskList::OnDeleteClicked),

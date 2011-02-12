@@ -103,15 +103,6 @@ class OrderedTask;
 void
 dlgTaskManagerShowModal(SingleWindow &parent);
 
-/**
- *
- * @param task - not modified
- * @param task_type_returned type of task selected in UI
- * @return true if OK was clicked, false if Cancel was clicked
- */
-bool
-dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task, TaskBehaviour::Factory_t& task_type_returned);
-
 bool
 dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task, const unsigned index);
 

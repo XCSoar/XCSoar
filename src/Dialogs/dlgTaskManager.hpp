@@ -147,7 +147,6 @@ public:
   static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
                       WndForm* wf, OrderedTask** task, bool* _task_modified);
 
-  static void OnTypeClicked(WndButton &Sender);
   /**
    * copies values from form to ordered_task
    * @return true
@@ -161,6 +160,14 @@ public:
    * @param Mode
    */
   static void OnFAIFinishHeightData(DataField *Sender, DataField::DataAccessKind_t Mode);
+
+  /**
+   *
+   * Changes the task type and mutates the task points as necessary
+   * @param Sender datafield for prpTaskType
+   * @param Mode
+   */
+  static void OnTaskTypeData(DataField *Sender, DataField::DataAccessKind_t Mode);
 
   /**
    * copies values from ordered_task to form

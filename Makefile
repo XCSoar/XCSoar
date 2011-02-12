@@ -140,7 +140,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/pnlTaskEdit.cpp \
 	$(SRC)/Dialogs/pnlTaskProperties.cpp \
 	$(SRC)/Dialogs/pnlTaskList.cpp \
-	$(SRC)/Dialogs/dlgTaskType.cpp \
 	$(SRC)/Dialogs/dlgTaskPoint.cpp \
 	$(SRC)/Dialogs/dlgTaskPointType.cpp \
 	$(SRC)/Dialogs/dlgTaskHelpers.cpp \

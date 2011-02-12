@@ -61,13 +61,31 @@ InitView()
     dfe->addEnumText(_("AGL"));
     dfe->addEnumText(_("MSL"));
   }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpTaskType"));
+  if (wp) {
+    const std::vector<TaskBehaviour::Factory_t> factory_types =
+        ordered_task->get_factory_types();
+    DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->EnableItemHelp(true);
+
+    for (unsigned i = 0; i < factory_types.size(); i++) {
+      dfe->addEnumText(OrderedTaskFactoryName(factory_types[i]),
+          (unsigned)factory_types[i], OrderedTaskFactoryDescription(
+              factory_types[i]));
+      if (factory_types[i] == ordered_task->get_factory_type())
+        dfe->Set((unsigned)factory_types[i]);
+    }
+    wp->RefreshDisplay();
+  }
+
 }
 
 static void 
 RefreshView()
 {
   WndProperty* wp;
-  TaskBehaviour::Factory_t ftype = ordered_task->get_factory_type();
+  const TaskBehaviour::Factory_t ftype = ordered_task->get_factory_type();
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
 
   bool aat_types = (ftype == TaskBehaviour::FACTORY_AAT);
@@ -121,11 +139,6 @@ RefreshView()
     wp->RefreshDisplay();
   }
 
-  WndButton* wb;
-  wb = ((WndButton*)wf->FindByName(_T("butType")));
-  if (wb)
-    wb->SetCaption(OrderedTaskFactoryName(ordered_task->get_factory_type()));
-
   // fixed aat_min_time
   // finish_min_height
 }
@@ -135,6 +148,13 @@ static void
 ReadValues()
 {
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
+
+  TaskBehaviour::Factory_t newtype = (TaskBehaviour::Factory_t)
+      GetFormValueInteger(*wf, _T("prpTaskType"));
+  if (newtype != ordered_task->get_factory_type()) {
+    ordered_task->get_factory().mutate_tps_to_task_type();
+    *task_changed = true;
+  }
 
   fixed min_time = GetFormValueFixed(*wf, _T("prpMinTime")) * 60;
   if (min_time != p.aat_min_time) {
@@ -170,30 +190,12 @@ ReadValues()
   }
 }
 
-void
-pnlTaskProperties::OnTypeClicked(WndButton &Sender)
-{
-  (void)Sender;
-
-  TaskBehaviour::Factory_t new_type = TaskBehaviour::FACTORY_RT;
-
- if (dlgTaskTypeShowModal(*parent_window, &ordered_task, new_type)) {
-   if (new_type != ordered_task->get_factory_type()) {
-     ordered_task->set_factory(new_type);
-     if (new_type != TaskBehaviour::FACTORY_MIXED)
-       ordered_task->get_factory().mutate_tps_to_task_type();
-
-     *task_changed = true;
-   }
- }
-
- RefreshView();
-}
-
 bool
 pnlTaskProperties::OnTabPreShow(unsigned EventType)
 {
   ordered_task = *ordered_task_pointer;
+  LoadFormProperty(*wf, _T("prpTaskType"),
+      (unsigned)ordered_task->get_factory_type());
   RefreshView();
   return true;
 }
@@ -214,6 +216,22 @@ pnlTaskProperties::OnFAIFinishHeightData(DataField *Sender, DataField::DataAcces
     if (newvalue != p.fai_finish) {
       p.fai_finish = newvalue;
       *task_changed = true;
+      RefreshView();
+    }
+  }
+}
+
+
+void
+pnlTaskProperties::OnTaskTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  if (Mode == DataField::daChange) {
+    const DataFieldEnum &df = *(DataFieldEnum *)Sender;
+    const TaskBehaviour::Factory_t newtype =
+       (TaskBehaviour::Factory_t)df.GetAsInteger();
+    if (newtype != ordered_task->get_factory_type()) {
+      ordered_task->set_factory(newtype);
+      *task_changed =true;
       RefreshView();
     }
   }
