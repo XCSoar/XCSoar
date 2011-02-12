@@ -80,24 +80,8 @@ CSVLine::read_compare(const char *value)
 long
 CSVLine::read(long default_value)
 {
-  char *endptr;
-  long value = strtol(data, &endptr, 10);
-  assert(endptr >= data && endptr <= end);
-  if (endptr == data)
-    /* nothing was parsed */
-    value = default_value;
-
-  if (endptr >= end) {
-    data = end;
-    return value;
-  } else if (*endptr == ',') {
-    data = endptr + 1;
-    return value;
-  } else {
-    data = endptr;
-    skip();
-    return default_value;
-  }
+  read_checked(default_value);
+  return default_value;
 }
 
 long
@@ -126,24 +110,8 @@ CSVLine::read_hex(long default_value)
 double
 CSVLine::read(double default_value)
 {
-  char *endptr;
-  double value = strtod(data, &endptr);
-  assert(endptr >= data && endptr <= end);
-  if (endptr == data)
-    /* nothing was parsed */
-    value = default_value;
-
-  if (endptr >= end) {
-    data = end;
-    return value;
-  } else if (*endptr == ',') {
-    data = endptr + 1;
-    return value;
-  } else {
-    data = endptr;
-    skip();
-    return default_value;
-  }
+  read_checked(default_value);
+  return default_value;
 }
 
 bool
