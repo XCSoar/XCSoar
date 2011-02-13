@@ -593,6 +593,9 @@ public:
     return common_stats.planned_route;
   }
 
+  const RoutePolars& get_route_polars() const { return task_abort.get_route_polars(); }
+  const RoutePolars& get_route_polars_safety() const { return task_abort.get_route_polars_safety(); }
+
 private:
   GlidePolar m_glide_polar;
 

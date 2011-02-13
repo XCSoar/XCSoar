@@ -262,6 +262,9 @@ public:
    */
   void set_active(const bool _active) { is_active = _active; }
 
+  const RoutePolars& get_route_polars() const { return route_polars; }
+  const RoutePolars& get_route_polars_safety() const { return route_polars_safety; }
+
 protected:
   const Waypoints &waypoints;
   RoutePolars route_polars;

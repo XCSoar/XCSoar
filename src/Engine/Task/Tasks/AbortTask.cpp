@@ -118,6 +118,10 @@ AbortTask::update_polar(const SpeedVector& wind)
   polar_safety = get_safety_polar();
 
   // fast lookup versions
+
+  route_polars.set_config(task_behaviour.route_planner);
+  route_polars_safety.set_config(task_behaviour.route_planner);
+
   route_polars.initialise(polar_safety, wind);
   route_polars_safety.initialise(glide_polar, wind);
 }
