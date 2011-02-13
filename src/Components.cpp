@@ -72,7 +72,7 @@ Copyright_License {
 #include "Hardware/AltairControl.hpp"
 #include "Hardware/Display.hpp"
 #include "Compiler.h"
-
+#include "NMEA/Aircraft.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "WayPoint/WayPointGlue.hpp"
 

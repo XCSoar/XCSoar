@@ -34,6 +34,7 @@ Copyright_License {
 #include "Airspace/AirspaceVisibility.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "NMEA/Aircraft.hpp"
 
 #include <algorithm>
 

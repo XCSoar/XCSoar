@@ -35,6 +35,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
+#include "NMEA/Aircraft.hpp"
 
 class AirspaceWarningCopy: 
   public AirspaceWarningVisitor

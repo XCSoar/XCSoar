@@ -27,6 +27,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
+#include "NMEA/Aircraft.hpp"
 
 #include <algorithm>
 

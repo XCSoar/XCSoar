@@ -21,20 +21,15 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
-#include "NMEA/Aircraft.hpp"
+#ifndef XCSOAR_NMEA_AIRCRAFT_HPP
+#define XCSOAR_NMEA_AIRCRAFT_HPP
 
-void
-MapWindow::DrawWaypoints(Canvas &canvas)
-{
-  GlidePolar polar = get_glide_polar();
-  polar.set_mc(min(Calculated().common_stats.current_risk_mc,
-                   SettingsComputer().safety_mc));
+#include "Navigation/Aircraft.hpp"
 
-  way_point_renderer.render(canvas, label_block,
-                            render_projection, SettingsMap(),
-                            SettingsComputer(), polar,
-                            ToAircraftState(Basic()),
-                            task);
-}
+struct NMEA_INFO;
+
+gcc_pure
+const AIRCRAFT_STATE
+ToAircraftState(const NMEA_INFO &info);
+
+#endif

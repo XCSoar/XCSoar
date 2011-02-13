@@ -88,6 +88,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Airspace/AirspaceVisibility.hpp"
 #include "Airspace/AirspaceSoonestSort.hpp"
 #include "LocalTime.hpp"
+#include "NMEA/Aircraft.hpp"
 
 #include <assert.h>
 #include <ctype.h>

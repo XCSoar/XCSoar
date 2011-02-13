@@ -241,36 +241,3 @@ NMEA_INFO::complement(const NMEA_INFO &add)
 
   flarm.complement(add.flarm);
 }
-
-const AIRCRAFT_STATE
-ToAircraftState(const NMEA_INFO &info)
-{
-  AIRCRAFT_STATE aircraft;
-
-  /* SPEED_STATE */
-  aircraft.Speed = info.GroundSpeed;
-  aircraft.TrueAirspeed = info.TrueAirspeed;
-  aircraft.IndicatedAirspeed = info.IndicatedAirspeed;
-
-  /* ALTITUDE_STATE */
-  aircraft.NavAltitude = info.NavAltitude;
-  aircraft.working_band_fraction = info.working_band_fraction;
-  aircraft.AltitudeAGL = info.AltitudeAGL;
-  aircraft.AirspaceAltitude = info.GetAltitudeBaroPreferred();
-
-  /* VARIO_INFO */
-  aircraft.Vario = info.BruttoVario;
-  aircraft.NettoVario = info.NettoVario;
-
-  /* FLYING_STATE */
-  (FLYING_STATE &)aircraft = info.flight;
-
-  /* AIRCRAFT_STATE */
-  aircraft.Time = info.Time;
-  aircraft.Location = info.Location;
-  aircraft.TrackBearing = info.TrackBearing;
-  aircraft.Gload = info.acceleration.Gload;
-  aircraft.wind = info.wind;
-
-  return aircraft;
-}

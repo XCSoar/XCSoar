@@ -634,8 +634,4 @@ struct NMEA_INFO {
   void complement(const NMEA_INFO &add);
 };
 
-gcc_pure
-const AIRCRAFT_STATE
-ToAircraftState(const NMEA_INFO &info);
-
 #endif

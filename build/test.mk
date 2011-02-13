@@ -956,6 +956,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
@@ -1171,6 +1172,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/NMEA/Derived.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
+	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \

@@ -46,6 +46,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Defines.h"
+#include "NMEA/Aircraft.hpp"
 
 #include <algorithm>
 

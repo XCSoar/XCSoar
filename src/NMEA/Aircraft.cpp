@@ -21,20 +21,38 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 #include "NMEA/Aircraft.hpp"
+#include "NMEA/Info.hpp"
 
-void
-MapWindow::DrawWaypoints(Canvas &canvas)
+const AIRCRAFT_STATE
+ToAircraftState(const NMEA_INFO &info)
 {
-  GlidePolar polar = get_glide_polar();
-  polar.set_mc(min(Calculated().common_stats.current_risk_mc,
-                   SettingsComputer().safety_mc));
+  AIRCRAFT_STATE aircraft;
 
-  way_point_renderer.render(canvas, label_block,
-                            render_projection, SettingsMap(),
-                            SettingsComputer(), polar,
-                            ToAircraftState(Basic()),
-                            task);
+  /* SPEED_STATE */
+  aircraft.Speed = info.GroundSpeed;
+  aircraft.TrueAirspeed = info.TrueAirspeed;
+  aircraft.IndicatedAirspeed = info.IndicatedAirspeed;
+
+  /* ALTITUDE_STATE */
+  aircraft.NavAltitude = info.NavAltitude;
+  aircraft.working_band_fraction = info.working_band_fraction;
+  aircraft.AltitudeAGL = info.AltitudeAGL;
+  aircraft.AirspaceAltitude = info.GetAltitudeBaroPreferred();
+
+  /* VARIO_INFO */
+  aircraft.Vario = info.BruttoVario;
+  aircraft.NettoVario = info.NettoVario;
+
+  /* FLYING_STATE */
+  (FLYING_STATE &)aircraft = info.flight;
+
+  /* AIRCRAFT_STATE */
+  aircraft.Time = info.Time;
+  aircraft.Location = info.Location;
+  aircraft.TrackBearing = info.TrackBearing;
+  aircraft.Gload = info.acceleration.Gload;
+  aircraft.wind = info.wind;
+
+  return aircraft;
 }
