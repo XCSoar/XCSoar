@@ -633,7 +633,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   bool altitude_available = ReadAltitude(line, GPS_INFO->GPSAltitude);
   if (altitude_available)
-    GPS_INFO->GPSAltitudeAvailable.update(ThisTime);
+    GPS_INFO->GPSAltitudeAvailable.update(GPS_INFO->Time);
   else {
     GPS_INFO->GPSAltitude = fixed_zero;
     GPS_INFO->GPSAltitudeAvailable.clear();
@@ -649,7 +649,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
          severely bugged, and report the GPS altitude in the Geoid
          column.  That sucks! */
       GPS_INFO->GPSAltitude = GeoidSeparation;
-      GPS_INFO->GPSAltitudeAvailable.update(ThisTime);
+      GPS_INFO->GPSAltitudeAvailable.update(GPS_INFO->Time);
     }
   } else {
     // need to estimate Geoid Separation internally (optional)
