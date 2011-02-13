@@ -39,6 +39,7 @@ test_load_task()
     new OrderedTask(default_events, task_behaviour, glide_polar);
 
   OrderedTask* t = task_load(blank);
+  delete blank;
   return (t!= NULL);
 }
 
