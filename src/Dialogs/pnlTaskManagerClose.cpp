@@ -71,7 +71,7 @@ pnlTaskManagerClose::OnRevertClicked(WndButton &Sender)
 }
 
 bool
-pnlTaskManagerClose::OnTabPreShow(unsigned EventType)
+pnlTaskManagerClose::OnTabPreShow(TabBarControl::EventType EventType)
 {
   *goto_calculator_on_exit = false;
   WndButton *wb = (WndButton*)wf->FindByName(_T("cmdCalculatorResume"));
@@ -86,7 +86,7 @@ pnlTaskManagerClose::OnTabPreShow(unsigned EventType)
   // because we arrived here via the task calculator
   wb->set_visible(show_calculator_button);
 
-  if (!(*task_modified) && EventType == 0) {
+  if (!(*task_modified) && EventType == TabBarControl::MouseOrButton) {
 
     if (!show_calculator_button) {
       dlgTaskManager::OnClose();

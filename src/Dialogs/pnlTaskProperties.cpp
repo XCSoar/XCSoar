@@ -206,7 +206,7 @@ ReadValues()
 }
 
 bool
-pnlTaskProperties::OnTabPreShow(unsigned EventType)
+pnlTaskProperties::OnTabPreShow(TabBarControl::EventType EventType)
 {
   ordered_task = *ordered_task_pointer;
   orig_taskType = ordered_task->get_factory_type();

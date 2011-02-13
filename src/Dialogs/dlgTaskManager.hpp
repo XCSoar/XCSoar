@@ -131,7 +131,7 @@ public:
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return True
    */
-  static bool OnTabPreShow(unsigned EventType);
+  static bool OnTabPreShow(TabBarControl::EventType EventType);
 };
 
 class pnlTaskProperties
@@ -180,7 +180,7 @@ public:
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return true
    */
-  static bool OnTabPreShow(unsigned EventType);
+  static bool OnTabPreShow(TabBarControl::EventType EventType);
 };
 
 class pnlTaskList
@@ -210,7 +210,7 @@ public:
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return True
    */
-  static bool OnTabPreShow(unsigned EventType);
+  static bool OnTabPreShow(TabBarControl::EventType EventType);
 
   /**
    *  called when parent dialog closes
@@ -242,7 +242,7 @@ public:
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return True
    */
-  static bool OnTabPreShow(unsigned EventType);
+  static bool OnTabPreShow(TabBarControl::EventType EventType);
 };
 
 #endif /* DLGTASKMANAGER_HPP */

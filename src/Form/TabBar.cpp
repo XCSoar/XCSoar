@@ -105,7 +105,7 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
 }
 
 void
-TabBarControl::SetCurrentPage(unsigned i, unsigned EventType)
+TabBarControl::SetCurrentPage(unsigned i, EventType _EventType) // need Reclick as bool here?
 {
   bool Continue = true;
   assert(i < buttons.size());
@@ -117,7 +117,7 @@ TabBarControl::SetCurrentPage(unsigned i, unsigned EventType)
 
   if (Continue) {
     if (buttons[i]->PreShowFunction) {
-      Continue = buttons[i]->PreShowFunction(EventType);
+      Continue = buttons[i]->PreShowFunction(_EventType);
     }
   }
 
@@ -131,25 +131,25 @@ TabBarControl::SetCurrentPage(unsigned i, unsigned EventType)
 }
 
 void
-TabBarControl::NextPage(unsigned EventType)
+TabBarControl::NextPage(EventType _EventType)
 {
   if (buttons.size() < 2)
     return;
 
   assert(GetCurrentPage() < buttons.size());
 
-  SetCurrentPage((GetCurrentPage() + 1) % buttons.size(), EventType);
+  SetCurrentPage((GetCurrentPage() + 1) % buttons.size(), _EventType);
 }
 
 void
-TabBarControl::PreviousPage(unsigned EventType)
+TabBarControl::PreviousPage(EventType _EventType)
 {
   if (buttons.size() < 2)
     return;
 
   assert(GetCurrentPage() < buttons.size());
 
-  SetCurrentPage((GetCurrentPage() + buttons.size() - 1) % buttons.size(), EventType);
+  SetCurrentPage((GetCurrentPage() + buttons.size() - 1) % buttons.size(), _EventType);
 }
 
 const RECT
@@ -338,12 +338,12 @@ TabDisplay::on_key_down(unsigned key_code)
 
   case VK_DOWN:
   case VK_RIGHT:
-    theTabBar.NextPage(1);
+    theTabBar.NextPage(TabBarControl::NextPreviousKey);
     return true;
 
   case VK_UP:
   case VK_LEFT:
-    theTabBar.PreviousPage(1);
+    theTabBar.PreviousPage(TabBarControl::NextPreviousKey);
     return true;
   }
 
@@ -390,7 +390,7 @@ TabDisplay::on_mouse_up(int x, int y)
       const RECT rc = theTabBar.GetButtonSize(i);
       if (PtInRect(&rc, Pos)) {
         if ((int)i == downindex) {
-          theTabBar.SetCurrentPage(i, 0);
+          theTabBar.SetCurrentPage(i, TabBarControl::MouseOrButton);
           break;
         }
       }
