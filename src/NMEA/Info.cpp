@@ -89,11 +89,7 @@ NMEA_INFO::reset()
   BaroAltitude = fixed_zero;
   EnergyHeight = TEAltitude = fixed_zero;
 
-  working_band_height = working_band_ceiling = fixed_zero;
-
   NavAltitude = fixed_zero;
-
-  working_band_fraction = fixed_zero;
 
   pressure.set_QNH(fixed(1013.25));
 

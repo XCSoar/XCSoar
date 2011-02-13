@@ -34,6 +34,15 @@ struct ThermalBandInfo
 {
   static const unsigned NUMTHERMALBUCKETS = 10;
 
+  /** Height above working band/safety (m) */
+  fixed working_band_height;
+
+  /** Absolute ceiling of climbs (m) */
+  fixed working_band_ceiling;
+
+  /** Fraction of working band height */
+  fixed working_band_fraction;
+
   /** Maximum height achieved in circling */ 
   fixed MaxThermalHeight;
   /** Number of samples in each bucket */ 

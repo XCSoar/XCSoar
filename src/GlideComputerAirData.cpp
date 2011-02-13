@@ -615,6 +615,8 @@ GlideComputerAirData::PercentCircling(const fixed Rate)
 {
   DERIVED_INFO &calculated = SetCalculated();
 
+  WorkingBand();
+
   // TODO accuracy: TB: this would only work right if called every ONE second!
 
   // JMW circling % only when really circling,
@@ -866,6 +868,33 @@ GlideComputerAirData::OnDepartedThermal()
 }
 
 void
+GlideComputerAirData::WorkingBand()
+{
+  const NMEA_INFO &basic = Basic();
+  ThermalBandInfo &tbi = SetCalculated().thermal_band;
+
+  const fixed h_safety = SettingsComputer().route_planner.safety_height_terrain +
+    Calculated().TerrainBase;
+
+  const fixed working_band_height = basic.TEAltitude - h_safety;
+
+  tbi.working_band_height = working_band_height;
+  if (negative(tbi.working_band_height)) {
+    tbi.working_band_fraction = fixed_zero;
+    return;
+  }
+
+  const fixed max_height = Calculated().thermal_band.MaxThermalHeight;
+  if (positive(max_height))
+    tbi.working_band_fraction = working_band_height / max_height;
+  else
+    tbi.working_band_fraction = fixed_one;
+
+  tbi.working_band_ceiling = std::max(max_height + h_safety,
+                                      basic.TEAltitude);
+}
+
+void
 GlideComputerAirData::ThermalBand()
 {
   if (!time_advanced())
@@ -874,12 +903,13 @@ GlideComputerAirData::ThermalBand()
   // JMW TODO accuracy: Should really work out dt here,
   //           but i'm assuming constant time steps
 
-  const fixed dheight = Basic().working_band_height;
+  ThermalBandInfo &tbi = SetCalculated().thermal_band;
 
-  if (!positive(Basic().working_band_height))
+  const fixed dheight = tbi.working_band_height;
+
+  if (!positive(dheight))
     return; // nothing to do.
 
-  ThermalBandInfo &tbi = SetCalculated().thermal_band;
   if (tbi.MaxThermalHeight == fixed_zero)
     tbi.MaxThermalHeight = dheight;
 

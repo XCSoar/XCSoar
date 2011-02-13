@@ -327,17 +327,8 @@ struct NMEA_INFO {
   /** Nav Altitude + Energy height (m) */
   fixed TEAltitude;
 
-  /** Height above working band/safety (m) */
-  fixed working_band_height;
-
-  /** Absolute ceiling of climbs (m) */
-  fixed working_band_ceiling;
-
   /** Altitude used for navigation (GPS or Baro) */
   fixed NavAltitude;
-
-  /** Fraction of working band height */
-  fixed working_band_fraction;
 
   /**
    * Troposhere atmosphere model for QNH correction

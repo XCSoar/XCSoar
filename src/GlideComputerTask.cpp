@@ -141,7 +141,7 @@ GlideComputerTask::ProcessIdle()
     m_route.synchronise(m_airspaces, dest, start, task->get_glide_polar(), Basic().wind);
 
     short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
-                                      (int)Basic().working_band_ceiling);
+                                      (int)Calculated().thermal_band.working_band_ceiling);
 
     m_route.solve(dest, start, SettingsComputer().route_planner, h_ceiling);
 

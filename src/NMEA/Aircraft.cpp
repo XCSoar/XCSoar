@@ -37,7 +37,7 @@ ToAircraftState(const NMEA_INFO &info, const DERIVED_INFO &calculated)
 
   /* ALTITUDE_STATE */
   aircraft.NavAltitude = info.NavAltitude;
-  aircraft.working_band_fraction = info.working_band_fraction;
+  aircraft.working_band_fraction = calculated.thermal_band.working_band_fraction;
   aircraft.AltitudeAGL = calculated.AltitudeAGL;
   aircraft.AirspaceAltitude = info.GetAltitudeBaroPreferred();
 

@@ -28,6 +28,9 @@ Copyright_License {
 void
 ThermalBandInfo::clear()
 {
+  working_band_height = working_band_ceiling = fixed_zero;
+  working_band_fraction = fixed_zero;
+
   MaxThermalHeight = fixed_zero;
 
   for (unsigned i = 0; i < NUMTHERMALBUCKETS; i++) {

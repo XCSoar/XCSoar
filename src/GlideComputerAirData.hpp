@@ -104,6 +104,7 @@ private:
    *  LastThermalAverageSmooth
    */
   void LastThermalStats();
+  void WorkingBand();
   void ThermalBand();
   void PercentCircling(const fixed Rate);
   void Turning();
