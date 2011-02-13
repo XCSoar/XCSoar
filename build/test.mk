@@ -1016,6 +1016,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/TaskFileSeeYou.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
+	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Topology/TopologyFile.cpp \

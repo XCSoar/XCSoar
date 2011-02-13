@@ -305,3 +305,51 @@ ProtectedTaskManager::reset()
   ExclusiveLease lease(*this);
   lease->reset();
 }
+
+void
+ProtectedTaskManager::route_set_terrain(RasterTerrain* terrain)
+{
+  ExclusiveLease lease(*this);
+  m_route.set_terrain(terrain);
+}
+
+void
+ProtectedTaskManager::route_solve(const AGeoPoint& dest, const AGeoPoint& start,
+                                  const short h_ceiling)
+{
+  ExclusiveLease lease(*this);
+  m_route.synchronise(m_airspaces, dest, start);
+  m_route.solve(dest, start, lease->get_task_behaviour().route_planner, h_ceiling);
+  m_route.get_solution(lease->get_planned_route());
+}
+
+void
+ProtectedTaskManager::route_update_polar(const SpeedVector& wind)
+{
+  ExclusiveLease lease(*this);
+  m_route.update_polar(lease->get_glide_polar(), wind);
+}
+
+void
+ProtectedTaskManager::footprint(const AGeoPoint& origin,
+                                GeoPoint p[ROUTEPOLAR_POINTS]) const
+{
+  Lease lease(*this);
+  m_route.footprint(origin, p);
+}
+
+bool
+ProtectedTaskManager::intersection(const AGeoPoint& origin,
+                                   const AGeoPoint& destination,
+                                   GeoPoint& intx) const
+{
+  Lease lease(*this);
+  return m_route.intersection(origin, destination, intx);
+}
+
+RoutePolars
+ProtectedTaskManager::get_route_polars() const
+{
+  Lease lease(*this);
+  return m_route.get_route_polars();
+}

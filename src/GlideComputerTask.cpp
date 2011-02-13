@@ -36,10 +36,8 @@ using std::max;
 // JMW TODO: abstract up to higher layer so a base copy of this won't
 // call any event
 
-GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task,
-                                     Airspaces &_airspaces):
-  GlideComputerBlackboard(task),m_airspaces(_airspaces),
-  m_route(task.get_glide_polar(), _airspaces),
+GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task):
+  GlideComputerBlackboard(task),
   terrain(NULL)
 {}
 
@@ -65,8 +63,6 @@ GlideComputerTask::ProcessBasicTask()
   glide_polar.set_mc(basic.MacCready);
   task->set_glide_polar(glide_polar);
 
-  m_route.update_polar(glide_polar, basic.wind);
-
   bool auto_updated = false;
 
   if (basic.Time != LastBasic().Time && !basic.gps.NAVWarning) {
@@ -81,7 +77,6 @@ GlideComputerTask::ProcessBasicTask()
 
   SetCalculated().task_stats = task->get_stats();
   SetCalculated().common_stats = task->get_common_stats();
-
 
 /* JMW @todo 
 
@@ -105,13 +100,13 @@ GlideComputerTask::ProcessBasicTask()
       SetMC(mc_computer);
     }
   }
-
-  m_route.get_solution(SetCalculated().common_stats.planned_route);
 }
 
 void
 GlideComputerTask::ProcessMoreTask()
 {
+  m_task.route_update_polar(Basic().wind);
+
   TerrainWarning();
 
   if (SettingsComputer().EnableBlockSTF)
@@ -129,29 +124,31 @@ void
 GlideComputerTask::ProcessIdle()
 {
   const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
-  ProtectedTaskManager::ExclusiveLease task(m_task);
-  task->update_idle(as);
+  {
+    ProtectedTaskManager::ExclusiveLease task(m_task);
+    task->update_idle(as);
+  }
 
   const GlideResult& sol = Calculated().task_stats.current_leg.solution_remaining;
 
   if (sol.defined() && terrain) {
+
     const GeoVector &v = sol.Vector;
     const AGeoPoint start (as.get_location(), as.NavAltitude);
     const AGeoPoint dest (v.end_point(start), sol.MinHeight);
 
-    m_route.set_terrain(terrain);
-    m_route.synchronise(m_airspaces, dest, start);
+    m_task.route_set_terrain(terrain);
 
     short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
                                       (int)Calculated().thermal_band.working_band_ceiling);
 
-    m_route.solve(dest, start, SettingsComputer().route_planner, h_ceiling);
+    m_task.route_solve(dest, start, h_ceiling);
 
     // allow at least 500m of climb above current altitude as ceiling, in case
     // there are no actual working band stats.
 
-    SetCalculated().TerrainWarning = m_route.intersection(start, dest,
-                                                          SetCalculated().TerrainWarningLocation);
+    SetCalculated().TerrainWarning = m_task.intersection(start, dest,
+                                                         SetCalculated().TerrainWarningLocation);
 
   } else {
     SetCalculated().TerrainWarning = false;
@@ -169,7 +166,7 @@ GlideComputerTask::TerrainWarning()
     // remove TerrainFootprint function from GlideComputerAirData
 
     const AGeoPoint start (state.get_location(), state.NavAltitude);
-    m_route.set_terrain(terrain);
-    m_route.footprint(start, SetCalculated().GlideFootPrint);
+    m_task.route_set_terrain(terrain);
+    m_task.footprint(start, SetCalculated().GlideFootPrint);
   }
 }

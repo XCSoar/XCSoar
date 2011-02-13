@@ -35,7 +35,6 @@ Copyright_License {
 class Waypoints;
 class ProtectedTaskManager;
 class GlideComputerTaskEvents;
-class Airspaces;
 class RasterTerrain;
 
 // TODO: replace copy constructors so copies of these structures
@@ -57,8 +56,7 @@ public:
   GlideComputer(const Waypoints &_way_points,
                 ProtectedTaskManager& task,
                 ProtectedAirspaceWarningManager &_awm,
-                GlideComputerTaskEvents& events,
-                Airspaces& airspaces);
+                GlideComputerTaskEvents& events);
 
   void set_terrain(RasterTerrain* _terrain);
 

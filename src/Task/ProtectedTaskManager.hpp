@@ -28,11 +28,13 @@
 #include "Task/TaskManager.hpp"
 #include "Task/TaskAdvance.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
+#include "Task/RoutePlannerGlue.hpp"
 #include "Compiler.h"
 
 class TaskStats;
 class CommonStats;
 class RasterTerrain;
+class Airspaces;
 
 /**
  * Facade to task/airspace/waypoints as used by threads,
@@ -43,14 +45,19 @@ class ProtectedTaskManager: public Guard<TaskManager>
 protected:
   const TaskBehaviour &task_behaviour;
   TaskEvents &task_events;
+  Airspaces &m_airspaces;
+  RoutePlannerGlue m_route;
 
   static const TCHAR default_task_path[];
 
 public:
   ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour& tb,
-                       TaskEvents& te)
+                       TaskEvents& te,
+                       Airspaces &airspaces)
     :Guard<TaskManager>(_task_manager),
-     task_behaviour(tb), task_events(te) {}
+     task_behaviour(tb), task_events(te), m_airspaces(airspaces),
+     m_route(_task_manager.get_glide_polar(), m_airspaces)
+    {}
 
   // common accessors for ui and calc clients
   gcc_pure
@@ -238,6 +245,20 @@ public:
    */
   gcc_pure
   fixed get_ordered_taskpoint_radius(const unsigned TPindex) const;
+
+  void route_set_terrain(RasterTerrain* terrain);
+  void route_solve(const AGeoPoint& dest, const AGeoPoint& start,
+                   const short h_ceiling);
+  void route_update_polar(const SpeedVector& wind);
+
+  void footprint(const AGeoPoint& origin,
+                 GeoPoint p[ROUTEPOLAR_POINTS]) const;
+
+  bool intersection(const AGeoPoint& origin,
+                    const AGeoPoint& destination,
+                    GeoPoint& intx) const;
+
+  RoutePolars get_route_polars() const;
 
 };
 

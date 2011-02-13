@@ -157,14 +157,13 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   protected_task_manager = new ProtectedTaskManager(task_manager,
                                                     XCSoarInterface::SettingsComputer(),
-                                                    task_events);
+                                                    task_events, airspace_database);
 
   LoadFiles();
 
   glide_computer = new GlideComputer(way_points, *protected_task_manager,
                                      airspace_warnings,
-                                     task_events,
-                                     airspace_database);
+                                     task_events);
   glide_computer->set_terrain(terrain);
 
   ScreenGlobalInit screen_init;

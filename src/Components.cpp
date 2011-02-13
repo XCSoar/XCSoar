@@ -310,7 +310,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   protected_task_manager =
     new ProtectedTaskManager(*task_manager,
                              XCSoarInterface::SettingsComputer(),
-                             task_events);
+                             task_events, airspace_database);
 
   airspace_warning = new AirspaceWarningManager(airspace_database,
                                                 *task_manager);
@@ -323,8 +323,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   glide_computer = new GlideComputer(way_points, *protected_task_manager,
                                      *airspace_warnings,
-                                     task_events,
-                                     airspace_database);
+                                     task_events);
   glide_computer->set_terrain(terrain);
   glide_computer->SetLogger(&logger);
   glide_computer->Initialise();

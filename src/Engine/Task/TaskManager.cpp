@@ -674,3 +674,4 @@ TaskManager::getAlternates() const
 {
   return task_abort.getAlternates();
 }
+

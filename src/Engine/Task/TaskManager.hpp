@@ -589,6 +589,10 @@ public:
     return task_behaviour;
   }
 
+  Route& get_planned_route() {
+    return common_stats.planned_route;
+  }
+
 private:
   GlidePolar m_glide_polar;
 
