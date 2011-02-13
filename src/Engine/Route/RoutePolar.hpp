@@ -430,7 +430,7 @@ public:
    * @param _ceiling_alt Ceiling altitude (m)
    */
   void set_config(const RoutePlannerConfig& _config,
-                  const short _cruise_alt,
+                  const short _cruise_alt = SHRT_MAX,
                   const short _ceiling_alt = SHRT_MAX);
 
   /**
