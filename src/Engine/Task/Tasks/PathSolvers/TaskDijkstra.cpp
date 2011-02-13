@@ -23,8 +23,8 @@
 #include "TaskDijkstra.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 
-TaskDijkstra::TaskDijkstra(OrderedTask& _task, bool is_min) :
-  NavDijkstra<SearchPoint> (is_min, 0),
+TaskDijkstra::TaskDijkstra(OrderedTask& _task, bool is_min, const bool do_reserve):
+  NavDijkstra<SearchPoint> (is_min, 0, do_reserve? DIJKSTRA_QUEUE_SIZE: 0),
   task(_task)
 {
 }

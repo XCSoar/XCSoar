@@ -23,8 +23,8 @@
 #include "TaskDijkstraMax.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 
-TaskDijkstraMax::TaskDijkstraMax(OrderedTask& _task) :
-  TaskDijkstra(_task, false)
+TaskDijkstraMax::TaskDijkstraMax(OrderedTask& _task, const bool do_reserve) :
+  TaskDijkstra(_task, false, do_reserve)
 {
 }
 

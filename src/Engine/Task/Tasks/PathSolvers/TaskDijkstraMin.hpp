@@ -32,7 +32,7 @@ class TaskDijkstraMin:
   public TaskDijkstra
 {
 public:
-  TaskDijkstraMin(OrderedTask& _task);
+  TaskDijkstraMin(OrderedTask& _task, const bool do_reserve=false);
 
   /**
    * Search task points for targets within OZs to produce the

@@ -40,8 +40,9 @@ public:
    * 
    * @return Initialised object
    */
-  NavDijkstra(const bool is_min, const unsigned _num_stages):
-    dijkstra(is_min),
+  NavDijkstra(const bool is_min, const unsigned _num_stages, 
+              const unsigned reserve_default= DIJKSTRA_QUEUE_SIZE):
+    dijkstra(is_min, reserve_default),
     solution_valid(false)
   {
     set_stages(_num_stages);

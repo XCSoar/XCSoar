@@ -34,12 +34,15 @@ unsigned ContestDijkstra::count_olc_size = 0;
 
 const unsigned ContestDijkstra::max_contest_trace = 300;
 
+// set size of reserved queue elements (may differ from Dijkstra default)
+#define CONTEST_QUEUE_SIZE DIJKSTRA_QUEUE_SIZE
+
 ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned &_handicap,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
   AbstractContest(_trace, _handicap, finish_alt_diff),
-  NavDijkstra<TracePoint>(false, n_legs + 1),
+  NavDijkstra<TracePoint>(false, n_legs + 1, CONTEST_QUEUE_SIZE),
   solution_found(false)
 {
   reset();
