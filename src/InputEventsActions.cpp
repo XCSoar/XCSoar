@@ -1173,8 +1173,7 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
 
   const AIRCRAFT_STATE aircraft_state =
       ToAircraftState(XCSoarInterface::Basic());
-  AirspaceVisible visible(XCSoarInterface::SettingsComputer(),
-                          ToAircraftState(XCSoarInterface::Basic()));
+  AirspaceVisible visible(XCSoarInterface::SettingsComputer(), aircraft_state);
   GlidePolar polar(fixed_zero);
   if (protected_task_manager != NULL)
     polar = protected_task_manager->get_glide_polar();
