@@ -81,12 +81,6 @@ NMEAInputLine::read_compare(const char *value)
   return strcmp(buffer, value) == 0;
 }
 
-static bool
-is_end_of_line(char ch)
-{
-  return ch == '\0' || ch == '*';
-}
-
 long
 NMEAInputLine::read(long default_value)
 {
@@ -97,7 +91,7 @@ NMEAInputLine::read(long default_value)
     /* nothing was parsed */
     value = default_value;
 
-  if (is_end_of_line(*endptr)) {
+  if (endptr >= end) {
     data = end;
     return value;
   } else if (*endptr == ',') {
@@ -120,7 +114,7 @@ NMEAInputLine::read_hex(long default_value)
     /* nothing was parsed */
     value = default_value;
 
-  if (is_end_of_line(*endptr)) {
+  if (endptr >= end) {
     data = end;
     return value;
   } else if (*endptr == ',') {
@@ -143,7 +137,7 @@ NMEAInputLine::read(double default_value)
     /* nothing was parsed */
     value = default_value;
 
-  if (is_end_of_line(*endptr)) {
+  if (endptr >= end) {
     data = end;
     return value;
   } else if (*endptr == ',') {
@@ -164,7 +158,7 @@ NMEAInputLine::read_checked(double &value_r)
   assert(endptr >= data && endptr <= end);
 
   bool success = endptr > data;
-  if (is_end_of_line(*endptr)) {
+  if (endptr >= end) {
     data = end;
   } else if (*endptr == ',') {
     data = endptr + 1;
@@ -211,7 +205,7 @@ NMEAInputLine::read_checked(int &value_r)
   assert(endptr >= data && endptr <= end);
 
   bool success = endptr > data;
-  if (is_end_of_line(*endptr)) {
+  if (endptr >= end) {
     data = end;
   } else if (*endptr == ',') {
     data = endptr + 1;
