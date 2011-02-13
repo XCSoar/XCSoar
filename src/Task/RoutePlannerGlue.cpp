@@ -65,15 +65,6 @@ RoutePlannerGlue::footprint(const AGeoPoint& origin,
   return m_planner.calc_footprint(origin, p);
 }
 
-bool
-RoutePlannerGlue::intersection(const AGeoPoint& origin,
-                               const AGeoPoint& destination,
-                               GeoPoint& intx) const
-{
-  RasterTerrain::ExclusiveLease lease(*terrain);
-  return m_planner.intersection(origin, destination, intx);
-}
-
 RoutePolars
 RoutePlannerGlue::get_route_polars() const
 {

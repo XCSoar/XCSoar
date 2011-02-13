@@ -147,7 +147,7 @@ GlideComputerTask::ProcessIdle()
     // allow at least 500m of climb above current altitude as ceiling, in case
     // there are no actual working band stats.
 
-    SetCalculated().TerrainWarning = m_task.intersection(start, dest,
+    SetCalculated().TerrainWarning = m_task.intersection(terrain, start, dest,
                                                          SetCalculated().TerrainWarningLocation);
 
   } else {

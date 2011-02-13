@@ -28,6 +28,7 @@ Copyright_License {
 #include "Util/DataNodeXML.hpp"
 #include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
+#include "Terrain/RasterTerrain.hpp"
 
 #include <windef.h> // for MAX_PATH
 
@@ -339,12 +340,23 @@ ProtectedTaskManager::footprint(const AGeoPoint& origin,
 }
 
 bool
-ProtectedTaskManager::intersection(const AGeoPoint& origin,
+ProtectedTaskManager::intersection(RasterTerrain* terrain,
+                                   const AGeoPoint& origin,
                                    const AGeoPoint& destination,
-                                   GeoPoint& intx) const
+                                   GeoPoint& intx, const bool safety) const
 {
   Lease lease(*this);
-  return m_route.intersection(origin, destination, intx);
+  RasterTerrain::ExclusiveLease rlease(*terrain);
+
+  const RoutePolars& rpolars = safety? 
+    lease->get_route_polars_safety() :
+    lease->get_route_polars();
+
+  TaskProjection proj;
+  proj.reset(origin);
+  proj.update_fast();
+  
+  return rpolars.intersection(origin, destination, &terrain->map, proj, intx);
 }
 
 RoutePolars

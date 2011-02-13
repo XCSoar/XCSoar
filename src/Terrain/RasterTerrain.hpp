@@ -40,7 +40,9 @@ class FileCache;
  */
 class RasterTerrain : public Guard<RasterMap> {
 public:
-  friend class RoutePlannerGlue;
+  friend class RoutePlannerGlue; // for route planning
+  friend class ProtectedTaskManager; // for intersection
+  friend class WaypointVisitorMap; // for intersection rendering
 
   /** invalid value for terrain */
   static const short TERRAIN_INVALID = RasterBuffer::TERRAIN_INVALID;

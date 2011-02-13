@@ -254,9 +254,10 @@ public:
   void footprint(const AGeoPoint& origin,
                  GeoPoint p[ROUTEPOLAR_POINTS]) const;
 
-  bool intersection(const AGeoPoint& origin,
+  bool intersection(RasterTerrain* terrain,
+                    const AGeoPoint& origin,
                     const AGeoPoint& destination,
-                    GeoPoint& intx) const;
+                    GeoPoint& intx, const bool safety=false) const;
 
   RoutePolars get_route_polars() const;
 

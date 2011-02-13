@@ -58,10 +58,6 @@ public:
   void footprint(const AGeoPoint& origin,
                  GeoPoint p[ROUTEPOLAR_POINTS]) const;
 
-  bool intersection(const AGeoPoint& origin,
-                    const AGeoPoint& destination,
-                    GeoPoint& intx) const;
-
   RoutePolars get_route_polars() const;
 
 private:
