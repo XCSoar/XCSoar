@@ -36,5 +36,6 @@ MapWindow::DrawWaypoints(Canvas &canvas)
                             render_projection, SettingsMap(),
                             SettingsComputer(), polar,
                             ToAircraftState(Basic(), Calculated()),
-                            task);
+                            task,
+                            terrain);
 }

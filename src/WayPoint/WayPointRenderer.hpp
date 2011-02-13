@@ -39,6 +39,7 @@ class Waypoints;
 class GlidePolar;
 class TaskBehaviour;
 class ProtectedTaskManager;
+class RasterTerrain;
 
 /**
  * Renders way point icons and labels into a #Canvas.
@@ -65,7 +66,8 @@ public:
               const TaskBehaviour &task_behaviour,
               const GlidePolar &glide_polar,
               const AIRCRAFT_STATE &aircraft_state,
-              const ProtectedTaskManager *task);
+              const ProtectedTaskManager *task,
+              RasterTerrain* terrain);
 };
 
 #endif
