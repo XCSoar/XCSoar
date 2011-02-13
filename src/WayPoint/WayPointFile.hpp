@@ -68,9 +68,6 @@ public:
 
   virtual bool IsWritable() = 0;
 
-  static short AltitudeFromTerrain(GeoPoint &location,
-                                   const RasterTerrain &terrain);
-
 protected:
   TCHAR file[255];
   const int file_num;

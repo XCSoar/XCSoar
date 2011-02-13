@@ -25,7 +25,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "InputEvents.hpp"
 #include "Screen/Layout.hpp"
-#include "WayPointFile.hpp"
+#include "Terrain/RasterTerrain.hpp"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
@@ -327,7 +327,7 @@ static void GetValues(void) {
 
   ss = GetFormValueInteger(*wf, _T("prpAltitude"));
   global_wpt->Altitude = ss == 0 && terrain != NULL
-    ? fixed(WayPointFile::AltitudeFromTerrain(global_wpt->Location, *terrain))
+    ? fixed(terrain->GetTerrainHeight(global_wpt->Location))
     : Units::ToSysUnit(fixed(ss), Units::AltitudeUnit);
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));

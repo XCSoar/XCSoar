@@ -143,13 +143,6 @@ WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
   return i;
 }
 
-short
-WayPointFile::AltitudeFromTerrain(GeoPoint &location,
-                                  const RasterTerrain &terrain)
-{
-  return terrain.GetTerrainHeight(location);
-}
-
 void
 WayPointFile::check_altitude(Waypoint &new_waypoint, bool alt_ok)
 {
@@ -157,7 +150,7 @@ WayPointFile::check_altitude(Waypoint &new_waypoint, bool alt_ok)
     return;
 
   // Load waypoint altitude from terrain
-  const short t_alt = AltitudeFromTerrain(new_waypoint.Location, *terrain);
+  const short t_alt = terrain->GetTerrainHeight(new_waypoint.Location);
   if (RasterBuffer::is_special(t_alt))
     new_waypoint.Altitude = fixed_zero;
   else
