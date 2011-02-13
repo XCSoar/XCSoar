@@ -120,7 +120,8 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
   // If waypoint file exists
   if (wp_file0.get() != NULL) {
     // parse the file
-    if (wp_file0->Parse(way_points, terrain)) {
+    wp_file0->SetTerrain(terrain);
+    if (wp_file0->Parse(way_points)) {
       found = true;
       // Set waypoints writable flag
       way_points.set_file0_writable(wp_file0->IsWritable());
@@ -140,7 +141,8 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
   // If waypoint file exists
   if (wp_file1.get() != NULL) {
     // parse the file
-    if (wp_file1->Parse(way_points, terrain)) {
+    wp_file1->SetTerrain(terrain);
+    if (wp_file1->Parse(way_points)) {
       found = true;
     } else {
       LogStartUp(_T("Parse error in waypoint file 2"));
@@ -163,7 +165,8 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
     // If waypoint file inside map file exists
     if (wp_file2.get() != NULL) {
       // parse the file
-      if (wp_file2->Parse(way_points, terrain)) {
+      wp_file2->SetTerrain(terrain);
+      if (wp_file2->Parse(way_points)) {
         found = true;
       } else {
         LogStartUp(_T("Parse error in map waypoint file"));

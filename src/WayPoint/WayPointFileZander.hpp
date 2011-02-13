@@ -36,7 +36,7 @@ public:
                                                                  _compressed) {};
 protected:
   bool parseLine(const TCHAR* line, const unsigned linenum,
-                 Waypoints &way_points, const RasterTerrain *terrain);
+                 Waypoints &way_points);
 
   bool IsWritable() { return false; }
 

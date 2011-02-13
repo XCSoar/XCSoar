@@ -190,7 +190,7 @@ TestWayPointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
     return false;
   }
 
-  if(!ok1(f->Parse(way_points, NULL))) {
+  if(!ok1(f->Parse(way_points))) {
     delete f;
     skip(2, 0, "parsing waypoint file failed");
   }

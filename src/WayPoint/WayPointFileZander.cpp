@@ -29,8 +29,7 @@ Copyright_License {
 
 bool
 WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
-                              Waypoints &way_points,
-                              const RasterTerrain *terrain)
+                              Waypoints &way_points)
 {
   // If (end-of-file or comment)
   if (line[0] == '\0' || line[0] == 0x1a ||
@@ -67,7 +66,7 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
   // Altitude (Characters 30-34 // e.g. 1561 (in meters))
   /// @todo configurable behaviour
   bool alt_ok = parseAltitude(line + 30, new_waypoint.Altitude);
-  check_altitude(new_waypoint, terrain, alt_ok);
+  check_altitude(new_waypoint, alt_ok);
 
   // Description (Characters 35-44)
   if (len > 35)

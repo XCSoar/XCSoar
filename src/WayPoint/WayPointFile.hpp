@@ -54,7 +54,7 @@ public:
    * @param terrain RasterTerrain (for automatic waypoint height)
    * @return True if the waypoint file parsing was okay, False otherwise
    */
-  bool Parse(Waypoints &way_points, const RasterTerrain *terrain);
+  bool Parse(Waypoints &way_points);
 
   /**
    * Saves the given waypoint list into the waypoint file provided by SetFile()
@@ -62,6 +62,10 @@ public:
    * @return True if saving was successful, False otherwise
    */
   bool Save(const Waypoints &way_points);
+
+  void SetTerrain(const RasterTerrain* _terrain) {
+    terrain = _terrain;
+  }
 
   virtual bool IsWritable() = 0;
 
@@ -73,9 +77,9 @@ protected:
   const int file_num;
   const bool compressed;
 
-  void check_altitude(Waypoint &new_waypoint, 
-                      const RasterTerrain *terrain,
-                      bool alt_ok);
+  const RasterTerrain* terrain;
+
+  void check_altitude(Waypoint &new_waypoint, bool alt_ok);
 
   /**
    * Parse a file line
@@ -87,7 +91,7 @@ protected:
    * parsing error occured
    */
   virtual bool parseLine(const TCHAR* line, unsigned linenum,
-                         Waypoints &way_points, const RasterTerrain *terrain) = 0;
+                         Waypoints &way_points) = 0;
 
   virtual void saveFile(TextWriter &writer, const Waypoints &way_points) {};
 

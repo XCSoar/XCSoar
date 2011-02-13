@@ -41,7 +41,8 @@ Copyright_License {
 WayPointFile::WayPointFile(const TCHAR* file_name, const int _file_num,
                            const bool _compressed): 
   file_num(_file_num),
-  compressed(_compressed)
+  compressed(_compressed),
+  terrain(NULL)
 {
   _tcscpy(file, file_name);
 }
@@ -152,9 +153,7 @@ WayPointFile::AltitudeFromTerrain(GeoPoint &location,
 }
 
 void
-WayPointFile::check_altitude(Waypoint &new_waypoint,
-                             const RasterTerrain *terrain,
-                             bool alt_ok)
+WayPointFile::check_altitude(Waypoint &new_waypoint, bool alt_ok)
 {
   if (terrain == NULL || alt_ok)
     return;
@@ -169,8 +168,7 @@ WayPointFile::check_altitude(Waypoint &new_waypoint,
 }
 
 bool
-WayPointFile::Parse(Waypoints &way_points, 
-                    const RasterTerrain *terrain)
+WayPointFile::Parse(Waypoints &way_points)
 {
   // If no file loaded yet -> return false
   if (file[0] == 0)
@@ -191,7 +189,7 @@ WayPointFile::Parse(Waypoints &way_points,
     TCHAR *line;
     for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
       // and parse them
-      parseLine(line, i, way_points, terrain);
+      parseLine(line, i, way_points);
 
       if ((i & 0x3f) == 0) {
         unsigned status = reader.tell() * 25 / filesize;
@@ -211,7 +209,7 @@ WayPointFile::Parse(Waypoints &way_points,
     TCHAR *line;
     for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
       // and parse them
-      parseLine(line, i, way_points, terrain);
+      parseLine(line, i, way_points);
 
       if ((i & 0x3f) == 0) {
         unsigned status = reader.tell() * 25 / filesize;

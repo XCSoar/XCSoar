@@ -30,8 +30,7 @@ Copyright_License {
 
 bool
 WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
-                                Waypoints &way_points, 
-                                const RasterTerrain *terrain)
+                                Waypoints &way_points)
 {
   TCHAR ctemp[255];
   const TCHAR *params[20];
@@ -86,7 +85,7 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
   // Altitude (e.g. 458M)
   /// @todo configurable behaviour
   bool alt_ok = parseAltitude(params[3], new_waypoint.Altitude);
-  check_altitude(new_waypoint, terrain, alt_ok);
+  check_altitude(new_waypoint, alt_ok);
 
   if (n_params > 6) {
     // Description (e.g. 119.750 Airport)

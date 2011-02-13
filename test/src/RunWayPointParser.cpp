@@ -57,7 +57,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  if (!parser->Parse(way_points, NULL)) {
+  if (!parser->Parse(way_points)) {
     fprintf(stderr, "WayPointParser::Parse() has failed\n");
     return 1;
   }

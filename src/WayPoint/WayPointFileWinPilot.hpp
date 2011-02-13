@@ -43,7 +43,7 @@ public:
 
 protected:
   bool parseLine(const TCHAR* line, const unsigned linenum,
-                 Waypoints &way_points, const RasterTerrain *terrain);
+                 Waypoints &way_points);
 
   void saveFile(TextWriter &writer, const Waypoints &way_points);
   bool IsWritable() { return true; }
