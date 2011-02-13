@@ -77,6 +77,7 @@ TERRAIN_ALT_INFO::Clear()
 {
   TerrainWarning = false;
 
+  AltitudeAGLValid = false;
   AltitudeAGL = fixed_zero;
 
   for (int i = 0; i <= TERRAIN_ALT_INFO::NUMTERRAINSWEEPS; i++) {

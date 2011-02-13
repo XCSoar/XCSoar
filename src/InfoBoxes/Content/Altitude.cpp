@@ -104,11 +104,10 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
   const DERIVED_INFO &calculated = CommonInterface::Calculated();
   TCHAR sTmp[32];
 
-  if (basic.gps.NAVWarning || !calculated.TerrainValid) {
+  if (!calculated.AltitudeAGLValid) {
     infobox.SetInvalid();
     return;
   }

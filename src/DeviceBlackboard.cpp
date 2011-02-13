@@ -614,7 +614,7 @@ DeviceBlackboard::FlightState(const GlidePolar& glide_polar)
     : basic.GroundSpeed;
 
   if (speed > glide_polar.get_Vtakeoff() ||
-      (calculated.TerrainValid && calculated.AltitudeAGL > fixed(300))) {
+      (calculated.AltitudeAGLValid && calculated.AltitudeAGL > fixed(300))) {
     basic.flight.flying_state_moving(basic.Time);
   } else {
     basic.flight.flying_state_stationary(basic.Time);

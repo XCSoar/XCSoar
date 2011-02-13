@@ -431,6 +431,7 @@ GlideComputerAirData::TerrainHeight()
   if (terrain == NULL) {
     calculated.TerrainValid = false;
     calculated.TerrainAlt = fixed_zero;
+    calculated.AltitudeAGLValid = false;
     calculated.AltitudeAGL = fixed_zero;
     return;
   }
@@ -443,6 +444,7 @@ GlideComputerAirData::TerrainHeight()
     else {
       calculated.TerrainValid = false;
       calculated.TerrainAlt = fixed_zero;
+      calculated.AltitudeAGLValid = false;
       calculated.AltitudeAGL = fixed_zero;
       return;
     }
@@ -451,6 +453,7 @@ GlideComputerAirData::TerrainHeight()
   calculated.TerrainValid = true;
   calculated.TerrainAlt = fixed(Alt);
   calculated.AltitudeAGL = basic.NavAltitude - calculated.TerrainAlt;
+  calculated.AltitudeAGLValid = true;
 }
 
 /**

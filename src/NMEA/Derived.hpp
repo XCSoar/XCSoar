@@ -180,6 +180,11 @@ struct TERRAIN_ALT_INFO
   /** True if terrain is valid, False otherwise */
   bool TerrainValid;
 
+  /**
+   * Does the attribute #AltitudeAGL have a valid value?
+   */
+  bool AltitudeAGLValid;
+
   bool TerrainWarning;
 
   /** Terrain altitude */
