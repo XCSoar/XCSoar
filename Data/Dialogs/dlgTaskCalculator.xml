@@ -41,4 +41,5 @@
   <Edit Name="prpCruiseEfficiency" Caption="Cruise efficiency" X="2" Height="22" ReadOnly="1" CaptionWidth="150" Help="Efficiency of cruise.  100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets.  Less than 100 is appropriate if you fly considerably off-track.  This value estimates your cruise efficiency according to the current flight history with the set MC value.  Calculation begins after task is started.">
     <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f"/>
   </Edit>
+  <Button  Name="cmdTaskManager" Caption="Task Manager" X="63" Y="-47" Width="110" Height="35" OnClick="OnTaskManagerClicked" />
 </Form>

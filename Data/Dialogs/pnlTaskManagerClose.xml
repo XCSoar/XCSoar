@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 
 <Panel Name="frmTaskClose" Border="0">
-  <Label Name="frmStatus" X="40" Y="70" Width="160" Height="20" Border="0"/>
-  <Button Name="cmdClose" Caption="Fly" X="60" Y="90" Width="120" Height="40" OnClick="pnlTaskManagerClose::OnCloseClicked"/>
+  <Button Name="cmdClose" Caption="Fly" X="60" Y="40" Width="120" Height="40" OnClick="pnlTaskManagerClose::OnCloseClicked"/>
+  <Label Name="frmStatus" X="40" Y="97" Width="160" Height="20" Border="0"/>
   
-  <Button Name="cmdRevert" Caption="Revert Changes" X="60" Y="160" Width="120" Height="35" OnClick="pnlTaskManagerClose::OnRevertClicked"/>
+  <Button Name="cmdRevert" Caption="Revert Changes" X="60" Y="117" Width="120" Height="35" OnClick="pnlTaskManagerClose::OnRevertClicked"/>
+  <Button Name="cmdCalculatorResume" Caption="Calculator" X="60" Y="176" Width="120" Height="35" OnClick="pnlTaskManagerClose::OnCalculatorResumeClicked"/>
 </Panel>

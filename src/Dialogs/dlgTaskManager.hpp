@@ -229,14 +229,16 @@ public:
    * @return Window* that points to the control created
    */
   static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
-                      WndForm* wf, OrderedTask** task, bool* _task_modified);
+                      WndForm* wf, OrderedTask** task, bool* _task_modified,
+                      bool* _goto_calculator_on_exit);
 
   static void OnCloseClicked(WndButton &Sender);
   static void OnRevertClicked(WndButton &Sender);
-
+  static void OnCalculatorResumeClicked(WndButton &Sender);
   /**
    * callback
    * sets status and buttons per task edit status
+   * Closes immediately if flying and task not changed and mouse click
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return True
    */
