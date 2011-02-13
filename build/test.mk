@@ -33,12 +33,15 @@ testslow: $(TESTSLOW)
 testfast: $(TESTFAST)
 	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTFAST)
 
-TESTLIBS = $(HARNESS_LIBS) \
+TESTLIBS1 = $(HARNESS_LIBS) \
 	   $(ZZIP_LIBS) \
 	$(ENGINE_CORE_LIBS) \
 	$(IO_LIBS) \
 	$(MATH_LIBS) \
 	$(UTIL_LIBS)
+
+TESTLIBS = $(TESTLIBS1) \
+	$(TARGET_OUTPUT_DIR)/test/src/FakeTerrain.o
 
 $(HARNESS_PROGRAMS): $(TARGET_BIN_DIR)/%$(TARGET_EXEEXT): $(TARGET_OUTPUT_DIR)/test/src/%.o $(TESTLIBS) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
@@ -76,7 +79,7 @@ TEST_TROUTE_SOURCES = \
 	$(TEST_SRC_DIR)/test_troute.cpp
 TEST_TROUTE_OBJS = $(call SRC_TO_OBJ,$(TEST_TROUTE_SOURCES))
 TEST_TROUTE_BIN = $(TARGET_BIN_DIR)/test_troute$(TARGET_EXEEXT)
-TEST_TROUTE_LDADD = $(TESTLIBS) \
+TEST_TROUTE_LDADD = $(TESTLIBS1) \
 	$(MATH_LIBS) \
 	$(IO_LIBS) \
 	$(JASPER_LIBS) \
@@ -100,7 +103,7 @@ TEST_ROUTE_SOURCES = \
 	$(TEST_SRC_DIR)/test_route.cpp
 TEST_ROUTE_OBJS = $(call SRC_TO_OBJ,$(TEST_ROUTE_SOURCES))
 TEST_ROUTE_BIN = $(TARGET_BIN_DIR)/test_route$(TARGET_EXEEXT)
-TEST_ROUTE_LDADD = $(TESTLIBS) \
+TEST_ROUTE_LDADD = $(TESTLIBS1) \
 	$(MATH_LIBS) \
 	$(IO_LIBS) \
 	$(JASPER_LIBS) \
@@ -413,6 +416,7 @@ TEST_OLC_SOURCES = \
 	$(SRC)/Math/FastMath.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/Util/StringUtil.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TestOLC.cpp 
 TEST_OLC_OBJS = $(call SRC_TO_OBJ,$(TEST_OLC_SOURCES))
@@ -429,6 +433,7 @@ TEST_TRACE_SOURCES = \
 	$(SRC)/Math/FastMath.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/Util/StringUtil.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TestTrace.cpp 
 TEST_TRACE_OBJS = $(call SRC_TO_OBJ,$(TEST_TRACE_SOURCES))
@@ -749,6 +754,7 @@ RUN_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Units.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceParser.cpp
 RUN_AIRSPACE_PARSER_OBJS = $(call SRC_TO_OBJ,$(RUN_AIRSPACE_PARSER_SOURCES))

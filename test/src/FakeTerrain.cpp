@@ -28,3 +28,22 @@ RasterMap::GetField(const GeoPoint &location) const
 {
   return RasterBuffer::TERRAIN_INVALID;
 }
+
+GeoPoint
+RasterMap::Intersection(const GeoPoint& origin,
+                        const short h_origin,
+                        const short h_glide,
+                        const GeoPoint& destination) const
+{
+  return GeoPoint(Angle::native(fixed_zero), Angle::native(fixed_zero));
+}
+
+bool
+RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
+                             const GeoPoint &destination, const short h_destination,
+                             const short h_virt, const short h_ceiling,
+                             const short h_safety,
+                             GeoPoint& intx, short &h) const
+{
+  return false;
+}

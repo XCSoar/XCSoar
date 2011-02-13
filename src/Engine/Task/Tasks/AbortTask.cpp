@@ -39,6 +39,8 @@ AbortTask::AbortTask(TaskEvents &te, const TaskBehaviour &tb,
                      const GlidePolar &gp, const Waypoints &wps):
   UnorderedTask(ABORT, te, tb, gp),
   waypoints(wps),
+  route_polars(gp, SpeedVector(fixed_zero, fixed_zero)),
+  route_polars_safety(gp, SpeedVector(fixed_zero, fixed_zero)),
   active_waypoint(0),
   polar_safety(gp)
 {
@@ -108,10 +110,16 @@ AbortTask::get_safety_polar() const
 }
 
 void
-AbortTask::update_polar()
+AbortTask::update_polar(const SpeedVector& wind)
 {
+  // @todo: only update route_polars on change
+
   // glide_polar for task
   polar_safety = get_safety_polar();
+
+  // fast lookup versions
+  route_polars.initialise(polar_safety, wind);
+  route_polars_safety.initialise(glide_polar, wind);
 }
 
 bool
@@ -234,7 +242,7 @@ bool
 AbortTask::update_sample(const AIRCRAFT_STATE &state, 
                          const bool full_update)
 {
-  update_polar();
+  update_polar(state.wind);
   clear();
 
   const unsigned active_waypoint_on_entry = is_active? active_waypoint: (unsigned)-1;
@@ -280,7 +288,7 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
 void 
 AbortTask::update_offline(const AIRCRAFT_STATE &state)
 {
-  update_polar();
+  update_polar(state.wind);
   m_landable_reachable = false;
 
   AlternateVector approx_waypoints;

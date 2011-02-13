@@ -26,7 +26,7 @@
 #include "UnorderedTask.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-
+#include "Route/RoutePolar.hpp"
 #include <vector>
 
 /**
@@ -214,8 +214,10 @@ protected:
 
   /**
    * Propagate changes to safety glide polar from global glide polar.
+   *
+   * @param wind Wind at aircraft
    */
-  void update_polar();
+  void update_polar(const SpeedVector& wind);
 
   /**
    * Fill abort task list with candidate waypoints given a list of
@@ -262,6 +264,8 @@ public:
 
 protected:
   const Waypoints &waypoints;
+  RoutePolars route_polars;
+  RoutePolars route_polars_safety;
 
 private:
   unsigned active_waypoint;
