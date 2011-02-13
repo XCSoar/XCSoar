@@ -102,8 +102,16 @@ OnOptionalStartListEnter(unsigned ItemIndex)
 
   const unsigned index_optional_starts = ItemIndex - (RealStartExists ? 1 : 0);
 
-  if(index_optional_starts < ordered_task->optional_start_points_size()) {
-    //ToDo: Relocate
+  if (index_optional_starts < ordered_task->optional_start_points_size()) {
+    const Waypoint* way_point = dlgWayPointSelect(*parent_window,
+        ordered_task->task_size() > 0 ? ordered_task->get_tp(0)->get_location()
+            : XCSoarInterface::Basic().Location);
+    if (!way_point)
+      return;
+
+    if (ordered_task->relocate_optional_start(index_optional_starts, *way_point))
+      task_modified = true;
+
   } else if (!ordered_task->is_max_size()) {
 
     AbstractTaskFactory &factory = ordered_task->get_factory();
@@ -118,9 +126,8 @@ OnOptionalStartListEnter(unsigned ItemIndex)
     if (factory.append_optional_start(*way_point)) {
       task_modified = true;
     }
-
-    RefreshView();
   }
+  RefreshView();
 }
 
 static void

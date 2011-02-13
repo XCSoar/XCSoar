@@ -298,6 +298,13 @@ public:
   bool remove_optional_start(const unsigned position);
 
   /**
+   * Change the waypoint of an optional start point
+   * @param position valid index to optional start point
+   * @param waypoint
+   * @return true if succeeded
+   */
+  bool relocate_optional_start(const unsigned position, const Waypoint& waypoint);
+  /**
    * Relocate a task point to a new location
    *
    * @param position Index in task sequence of task point to replace

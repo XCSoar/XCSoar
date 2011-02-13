@@ -1183,6 +1183,19 @@ OrderedTask::commit(const OrderedTask& that)
   return modified;
 }
 
+bool
+OrderedTask::relocate_optional_start(const unsigned position, const Waypoint& waypoint)
+{
+  if (position >= optional_start_points.size())
+    return false;
+
+  OrderedTaskPoint *new_tp = optional_start_points[position]->clone(task_behaviour,
+                                                  m_ordered_behaviour,
+                                                  &waypoint);
+  delete optional_start_points[position];
+  optional_start_points[position]= new_tp;
+  return true;
+}
 
 bool
 OrderedTask::relocate(const unsigned position, const Waypoint& waypoint) 
