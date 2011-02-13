@@ -59,6 +59,7 @@ TEST_NAMES = \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
+	test_load_task \
 	TestColorRamp TestGeoPoint TestDiffFilter \
 	TestFileUtil TestPolars \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint
@@ -129,6 +130,16 @@ TEST_MATH_TABLES_SOURCES = \
 TEST_MATH_TABLES_OBJS = $(call SRC_TO_OBJ,$(TEST_MATH_TABLES_SOURCES))
 TEST_MATH_TABLES_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestMathTables$(TARGET_EXEEXT): $(TEST_MATH_TABLES_OBJS) $(TEST_MATH_TABLES_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_LOAD_TASK_SOURCES = \
+	$(SRC)/Engine/Util/DataNodeXML.cpp \
+	$(SRC)/xmlParser.cpp \
+	$(TEST_SRC_DIR)/test_load_task.cpp
+TEST_LOAD_TASK_OBJS = $(call SRC_TO_OBJ,$(TEST_LOAD_TASK_SOURCES))
+TEST_LOAD_TASK_LDADD = $(TESTLIBS)
+$(TARGET_BIN_DIR)/test_load_task$(TARGET_EXEEXT): $(TEST_LOAD_TASK_OBJS) $(TEST_LOAD_TASK_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

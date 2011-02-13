@@ -10,7 +10,7 @@ OPENGL = y
 SDL_CPPFLAGS :=
 SDL_LDLIBS :=
 else
-OPENGL ?= n
+OPENGL ?= y
 SDL_CPPFLAGS := -I/usr/local/i586-mingw32msvc/include/SDL
 SDL_LDLIBS := -L/usr/local/i586-mingw32msvc/lib -lSDL
 endif
