@@ -93,6 +93,10 @@ NMEAInputLine::read(long default_value)
   char *endptr;
   long value = strtol(data, &endptr, 10);
   assert(endptr >= data && endptr <= end);
+  if (endptr == data)
+    /* nothing was parsed */
+    value = default_value;
+
   if (is_end_of_line(*endptr)) {
     data = end;
     return value;
@@ -112,6 +116,10 @@ NMEAInputLine::read_hex(long default_value)
   char *endptr;
   long value = strtol(data, &endptr, 16);
   assert(endptr >= data && endptr <= end);
+  if (endptr == data)
+    /* nothing was parsed */
+    value = default_value;
+
   if (is_end_of_line(*endptr)) {
     data = end;
     return value;
@@ -131,6 +139,10 @@ NMEAInputLine::read(double default_value)
   char *endptr;
   double value = strtod(data, &endptr);
   assert(endptr >= data && endptr <= end);
+  if (endptr == data)
+    /* nothing was parsed */
+    value = default_value;
+
   if (is_end_of_line(*endptr)) {
     data = end;
     return value;
