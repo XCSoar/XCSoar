@@ -49,6 +49,7 @@ public:
   typedef bool (*PreHideNotifyCallback_t)(void);
   typedef bool (*PreShowNotifyCallback_t)(EventType _EventType);
   typedef void (*PostShowNotifyCallback_t)(void);
+  typedef void (*ReClickNotifyCallback_t)(void);
 
 public:
 /**
@@ -78,12 +79,14 @@ public:
                 MaskedIcon *_bmp,
                 PreHideNotifyCallback_t _PreHideFunction,
                 PreShowNotifyCallback_t _PreShowFunction,
-                PostShowNotifyCallback_t _PostShowFunction):
+                PostShowNotifyCallback_t _PostShowFunction,
+                ReClickNotifyCallback_t _ReClickFunction):
                   IsButtonOnly(_IsButtonOnly),
                   bmp(_bmp),
                   PreHideFunction(_PreHideFunction),
                   PreShowFunction(_PreShowFunction),
-                  PostShowFunction(_PostShowFunction)
+                  PostShowFunction(_PostShowFunction),
+                  ReClickFunction(_ReClickFunction)
     {
       _tcscpy(Caption, _Caption);
     };
@@ -108,6 +111,11 @@ public:
      * Called immediately after tab is made active and shown
      */
     PostShowNotifyCallback_t PostShowFunction;
+
+    /**
+     * Called if tab is clicked while it is the currently displayed tab
+     */
+    ReClickNotifyCallback_t ReClickFunction;
   };
 
 public:
@@ -126,11 +134,12 @@ public:
         MaskedIcon *bmp = NULL,
         PreHideNotifyCallback_t PreHideFunction = NULL,
         PreShowNotifyCallback_t PreShowFunction = NULL,
-        PostShowNotifyCallback_t PostShowFunction = NULL);
+        PostShowNotifyCallback_t PostShowFunction = NULL,
+        ReClickNotifyCallback_t ReClickFunction = NULL);
 
 public:
   void SetCurrentPage(unsigned i,
-      EventType EventType = TabBarControl::MouseOrButton);
+      EventType EventType = TabBarControl::MouseOrButton, bool ReClick = false);
   void NextPage(EventType EventType = TabBarControl::MouseOrButton);
   void PreviousPage(EventType EventType = TabBarControl::MouseOrButton);
   unsigned GetTabCount() { return buttons.size(); }
