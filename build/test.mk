@@ -52,6 +52,7 @@ TEST_NAMES = \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
+	test_load_task \
 	TestColorRamp \
 	test_replay_task TestProjection
 
@@ -64,6 +65,16 @@ TEST_REPLAY_TASK_SOURCES = \
 TEST_REPLAY_TASK_OBJS = $(call SRC_TO_OBJ,$(TEST_REPLAY_TASK_SOURCES))
 TEST_REPLAY_TASK_LDADD = $(TESTLIBS)
 $(TARGET_BIN_DIR)/test_replay_task$(TARGET_EXEEXT): $(TEST_REPLAY_TASK_OBJS) $(TEST_REPLAY_TASK_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_LOAD_TASK_SOURCES = \
+	$(SRC)/Engine/Util/DataNodeXML.cpp \
+	$(SRC)/xmlParser.cpp \
+	$(TEST_SRC_DIR)/test_load_task.cpp
+TEST_LOAD_TASK_OBJS = $(call SRC_TO_OBJ,$(TEST_LOAD_TASK_SOURCES))
+TEST_LOAD_TASK_LDADD = $(TESTLIBS)
+$(TARGET_BIN_DIR)/test_load_task$(TARGET_EXEEXT): $(TEST_LOAD_TASK_OBJS) $(TEST_LOAD_TASK_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
