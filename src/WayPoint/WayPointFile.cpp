@@ -38,10 +38,8 @@ Copyright_License {
 
 #include <assert.h>
 
-WayPointFile::WayPointFile(const TCHAR* file_name, const int _file_num,
-                           const bool _compressed): 
+WayPointFile::WayPointFile(const TCHAR* file_name, const int _file_num):
   file_num(_file_num),
-  compressed(_compressed),
   terrain(NULL)
 {
   _tcscpy(file, file_name);
@@ -168,7 +166,7 @@ WayPointFile::check_altitude(Waypoint &new_waypoint, bool alt_ok)
 }
 
 bool
-WayPointFile::Parse(Waypoints &way_points)
+WayPointFile::Parse(Waypoints &way_points, bool compressed)
 {
   // If no file loaded yet -> return false
   if (file[0] == 0)
@@ -246,35 +244,22 @@ WayPointFile::Save(const Waypoints &way_points)
 WayPointFile*
 WayPointFile::create(const TCHAR* filename, int the_filenum)
 {
-  bool compressed = false;
-
   // If filename is empty -> clear and return false
   if (string_is_empty(filename))
     return NULL;
 
-  // check existence of file
-  if (!File::Exists(filename)) {
-    ZipSource zip(filename);
-    if (zip.error())
-      // File does not exist, fail
-      return NULL;
-
-    // File does exist inside map file -> save compressed flag
-    compressed = true;
-  }
-
   // If WinPilot waypoint file -> save type and return true
   if (MatchesExtension(filename, _T(".dat")) ||
       MatchesExtension(filename, _T(".xcw")))
-    return new WayPointFileWinPilot(filename, the_filenum, compressed);
+    return new WayPointFileWinPilot(filename, the_filenum);
 
   // If SeeYou waypoint file -> save type and return true
   if (MatchesExtension(filename, _T(".cup")))
-    return new WayPointFileSeeYou(filename, the_filenum, compressed);
+    return new WayPointFileSeeYou(filename, the_filenum);
 
   // If Zander waypoint file -> save type and return true
   if (MatchesExtension(filename, _T(".wpz")))
-    return new WayPointFileZander(filename, the_filenum, compressed);
+    return new WayPointFileZander(filename, the_filenum);
 
   // unknown
   return NULL;

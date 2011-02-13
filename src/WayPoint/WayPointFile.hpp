@@ -35,8 +35,7 @@ class TextWriter;
 class WayPointFile 
 {
 protected:
-  WayPointFile(const TCHAR* file_name, const int _file_num,
-               const bool _compressed=false);
+  WayPointFile(const TCHAR* file_name, const int _file_num);
 
 public:
   /**
@@ -54,7 +53,7 @@ public:
    * @param terrain RasterTerrain (for automatic waypoint height)
    * @return True if the waypoint file parsing was okay, False otherwise
    */
-  bool Parse(Waypoints &way_points);
+  bool Parse(Waypoints &way_points, bool compressed = false);
 
   /**
    * Saves the given waypoint list into the waypoint file provided by SetFile()
@@ -75,7 +74,6 @@ public:
 protected:
   TCHAR file[255];
   const int file_num;
-  const bool compressed;
 
   const RasterTerrain* terrain;
 

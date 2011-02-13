@@ -36,10 +36,8 @@ class WayPointFileWinPilot:
   public WayPointFile 
 {
 public:
-  WayPointFileWinPilot(const TCHAR* file_name, const int _file_num,
-                       const bool _compressed=false): WayPointFile(file_name,
-                                                                   _file_num,
-                                                                   _compressed) {};
+  WayPointFileWinPilot(const TCHAR* file_name, const int _file_num):
+    WayPointFile(file_name, _file_num) {}
 
 protected:
   bool parseLine(const TCHAR* line, const unsigned linenum,

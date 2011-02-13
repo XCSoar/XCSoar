@@ -31,10 +31,8 @@ class WayPointFileSeeYou:
   public WayPointFile 
 {
 public:
-  WayPointFileSeeYou(const TCHAR* file_name, const int _file_num,
-                     const bool _compressed=false): WayPointFile(file_name,
-                                                                 _file_num,
-                                                                 _compressed) {};
+  WayPointFileSeeYou(const TCHAR* file_name, const int _file_num):
+    WayPointFile(file_name, _file_num) {}
 
 protected:
   /**

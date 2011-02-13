@@ -166,7 +166,7 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
     if (wp_file2.get() != NULL) {
       // parse the file
       wp_file2->SetTerrain(terrain);
-      if (wp_file2->Parse(way_points)) {
+      if (wp_file2->Parse(way_points, true)) {
         found = true;
       } else {
         LogStartUp(_T("Parse error in map waypoint file"));
