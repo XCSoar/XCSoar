@@ -72,6 +72,8 @@ struct VARIO_INFO
    * Index 1 equals 5 to 15 degrees.
    */
   fixed LiftDatabase[36];
+
+  void Clear();
 };
 
 /**
@@ -97,6 +99,9 @@ struct CLIMB_INFO
 
   /** Average vertical speed in the last thermals smoothed by low-pass-filter */
   fixed LastThermalAverageSmooth;
+
+  void ClearPartial();
+  void Clear();
 };
 
 
@@ -155,6 +160,9 @@ struct CIRCLING_INFO
 
   /** Total height climbed during task */
   fixed TotalHeightClimb;
+
+  void ClearPartial();
+  void Clear();
 };
 
 /**
@@ -182,6 +190,8 @@ struct TERRAIN_ALT_INFO
 
   /** Lowest height within glide range */
   fixed TerrainBase;
+
+  void Clear();
 };
 
 /**
@@ -194,6 +204,8 @@ struct CLIMB_HISTORY_INFO
   fixed AverageClimbRate[200];
   /** Number of samples in each episode */
   long AverageClimbRateN[200];
+
+  void Clear();
 };
 
 /**

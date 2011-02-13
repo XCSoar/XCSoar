@@ -25,44 +25,89 @@ Copyright_License {
 #include "Defines.h"
 
 void
+VARIO_INFO::Clear()
+{
+  CruiseLD = fixed(INVALID_GR);
+  AverageLD = fixed(INVALID_GR);
+  LD = fixed(INVALID_GR);
+  LDvario = fixed(INVALID_GR);
+}
+
+void
+CLIMB_INFO::ClearPartial()
+{
+  // If you load persistent values, you need at least these reset:
+  LastThermalAverage = fixed_zero;
+  LastThermalAverageSmooth = fixed_zero;
+  ThermalGain = fixed_zero;
+}
+
+void
+CLIMB_INFO::Clear()
+{
+  ClearPartial();
+
+  ThermalAverage = fixed_zero;
+}
+
+void
+CIRCLING_INFO::ClearPartial()
+{
+  Circling = false;
+}
+
+void
+CIRCLING_INFO::Clear()
+{
+  ClearPartial();
+
+  timeCruising = fixed_zero;
+  timeCircling = fixed_zero;
+  TotalHeightClimb = fixed_zero;
+
+  CruiseStartTime = fixed_minus_one;
+  ClimbStartTime = fixed_minus_one;
+
+  MinAltitude = fixed_zero;
+  MaxHeightGain = fixed_zero;
+}
+
+void
+TERRAIN_ALT_INFO::Clear()
+{
+  for (int i = 0; i <= TERRAIN_ALT_INFO::NUMTERRAINSWEEPS; i++) {
+    GlideFootPrint[i].Longitude = Angle::native(fixed_zero);
+    GlideFootPrint[i].Latitude = Angle::native(fixed_zero);
+  }
+
+  TerrainWarning = false;
+}
+
+void
+CLIMB_HISTORY_INFO::Clear()
+{
+  for (unsigned i = 0; i < 200; i++) {
+    AverageClimbRate[i] = fixed_zero;
+    AverageClimbRateN[i] = 0;
+  }
+}
+
+void
 DERIVED_INFO::ResetFlight(bool full)
 {
   if (full) {
-    timeCruising = fixed_zero;
-    timeCircling = fixed_zero;
-    TotalHeightClimb = fixed_zero;
-
-    CruiseStartTime = fixed_minus_one;
-    ClimbStartTime = fixed_minus_one;
-
-    CruiseLD = fixed(INVALID_GR);
-    AverageLD = fixed(INVALID_GR);
-    LD = fixed(INVALID_GR);
-    LDvario = fixed(INVALID_GR);
-    ThermalAverage = fixed_zero;
-
-    for (unsigned i = 0; i < 200; i++) {
-      AverageClimbRate[i] = fixed_zero;
-      AverageClimbRateN[i] = 0;
-    }
-
-    MinAltitude = fixed_zero;
-    MaxHeightGain = fixed_zero;
+    VARIO_INFO::Clear();
+    CLIMB_INFO::Clear();
+    CIRCLING_INFO::Clear();
+    CLIMB_HISTORY_INFO::Clear();
+  } else {
+    CLIMB_INFO::ClearPartial();
+    CIRCLING_INFO::ClearPartial();
   }
 
   thermal_band.clear();
 
   thermal_locator.Clear();
 
-  Circling = false;
-  for (int i = 0; i <= TERRAIN_ALT_INFO::NUMTERRAINSWEEPS; i++) {
-    GlideFootPrint[i].Longitude = Angle::native(fixed_zero);
-    GlideFootPrint[i].Latitude = Angle::native(fixed_zero);
-  }
-  TerrainWarning = false;
-
-  // If you load persistent values, you need at least these reset:
-  LastThermalAverage = fixed_zero;
-  LastThermalAverageSmooth = fixed_zero;
-  ThermalGain = fixed_zero;
+  TERRAIN_ALT_INFO::Clear();
 }
