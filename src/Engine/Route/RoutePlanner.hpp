@@ -193,6 +193,13 @@ public:
   unsigned short verbose; /**< Used for debugging output. To be removed when
                            * code is stable. */
 
+  /**
+   * Return copy of route polars
+   */
+  RoutePolars get_route_polars() const {
+    return rpolars;
+  }
+
 protected:
   typedef std::pair<AFlatGeoPoint, AFlatGeoPoint> ClearingPair;
 

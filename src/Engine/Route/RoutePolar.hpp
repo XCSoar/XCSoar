@@ -247,6 +247,16 @@ class RoutePolar {
 
 public:
   /**
+   * Copy constructor
+   */
+  RoutePolar(const RoutePolar& from);
+
+  /**
+   * Dummy constructor, does nothing!
+   */
+  RoutePolar() {};
+
+  /**
    * Populate internal structure with performance data.
    * To be called when the glide polar settings or wind changes.
    *

@@ -32,6 +32,11 @@
 
 #define MC_CEILING_PENALTY_FACTOR 5.0
 
+RoutePolar::RoutePolar(const RoutePolar& from)
+{
+  std::copy(from.points, from.points+ ROUTEPOLAR_POINTS, points);
+}
+
 GlideResult
 RoutePolar::solve_task(const GlidePolar& glide_polar,
                        const SpeedVector& wind,
