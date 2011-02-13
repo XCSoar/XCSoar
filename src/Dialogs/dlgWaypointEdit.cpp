@@ -34,10 +34,6 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Compiler.h"
 
-#if defined(__BORLANDC__)  // due to compiler bug
-  #include "RasterTerrain.h"
-#endif
-
 #include <stdio.h>
 
 static WndForm *wf=NULL;
