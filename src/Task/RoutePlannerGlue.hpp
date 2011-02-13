@@ -33,13 +33,15 @@ public:
 
   void set_terrain(RasterTerrain* _terrain);
 
+  void update_polar(const GlidePolar& polar,
+                    const SpeedVector& wind) {
+    m_planner.update_polar(polar, wind);
+  }
+
   void synchronise(const Airspaces& master,
                    const AGeoPoint& origin,
-                   const AGeoPoint& destination,
-                   const GlidePolar& polar,
-                   const SpeedVector& wind) {
+                   const AGeoPoint& destination) {
     m_planner.synchronise(master, origin, destination);
-    m_planner.update_polar(polar, wind);
   }
   void reset() {
     m_planner.reset();
@@ -59,6 +61,8 @@ public:
   bool intersection(const AGeoPoint& origin,
                     const AGeoPoint& destination,
                     GeoPoint& intx) const;
+
+  RoutePolars get_route_polars() const;
 
 private:
   RasterTerrain* terrain;

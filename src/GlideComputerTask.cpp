@@ -65,6 +65,8 @@ GlideComputerTask::ProcessBasicTask()
   glide_polar.set_mc(basic.MacCready);
   task->set_glide_polar(glide_polar);
 
+  m_route.update_polar(glide_polar, basic.wind);
+
   bool auto_updated = false;
 
   if (basic.Time != LastBasic().Time && !basic.gps.NAVWarning) {
@@ -138,7 +140,7 @@ GlideComputerTask::ProcessIdle()
     const AGeoPoint dest (v.end_point(start), sol.MinHeight);
 
     m_route.set_terrain(terrain);
-    m_route.synchronise(m_airspaces, dest, start, task->get_glide_polar(), Basic().wind);
+    m_route.synchronise(m_airspaces, dest, start);
 
     short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
                                       (int)Calculated().thermal_band.working_band_ceiling);

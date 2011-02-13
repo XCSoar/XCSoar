@@ -73,3 +73,9 @@ RoutePlannerGlue::intersection(const AGeoPoint& origin,
   RasterTerrain::ExclusiveLease lease(*terrain);
   return m_planner.intersection(origin, destination, intx);
 }
+
+RoutePolars
+RoutePlannerGlue::get_route_polars() const
+{
+  return m_planner.get_route_polars();
+}
