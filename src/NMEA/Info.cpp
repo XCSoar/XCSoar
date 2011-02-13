@@ -95,8 +95,6 @@ NMEA_INFO::reset()
 
   working_band_fraction = fixed_zero;
 
-  AltitudeAGL = fixed_zero;
-
   pressure.set_QNH(fixed(1013.25));
 
   Time = fixed_zero;
@@ -206,7 +204,7 @@ NMEA_INFO::complement(const NMEA_INFO &add)
   }
 
   /* calculated: EnergyHeight, TEAltitude, working_band_height,
-     NavAltitude,working_band_fraction, AltitudeAGL */
+     NavAltitude,working_band_fraction */
 
   /* managed by DeviceBlackboard: pressure */
 

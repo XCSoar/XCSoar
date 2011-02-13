@@ -78,7 +78,7 @@ GlideComputerAirData::GlideComputerAirData(ProtectedAirspaceWarningManager &awm,
 void
 GlideComputerAirData::ResetFlight(const bool full)
 {
-  const AIRCRAFT_STATE as = ToAircraftState(Basic());
+  const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
   m_airspace.reset_warning(as);
 
   vario_30s_filter.reset();
@@ -119,7 +119,7 @@ GlideComputerAirData::ProcessVertical()
                          basic.NettoVario,
                          basic.wind, calculated.thermal_locator);
 
-  CuSonde::updateMeasurements(basic);
+  CuSonde::updateMeasurements(basic, calculated);
   LastThermalStats();
   LD();
   CruiseLD();
@@ -431,6 +431,7 @@ GlideComputerAirData::TerrainHeight()
   if (terrain == NULL) {
     calculated.TerrainValid = false;
     calculated.TerrainAlt = fixed_zero;
+    calculated.AltitudeAGL = fixed_zero;
     return;
   }
 
@@ -442,12 +443,14 @@ GlideComputerAirData::TerrainHeight()
     else {
       calculated.TerrainValid = false;
       calculated.TerrainAlt = fixed_zero;
+      calculated.AltitudeAGL = fixed_zero;
       return;
     }
   }
 
   calculated.TerrainValid = true;
   calculated.TerrainAlt = fixed(Alt);
+  calculated.AltitudeAGL = basic.NavAltitude - calculated.TerrainAlt;
 }
 
 /**
@@ -525,7 +528,7 @@ GlideComputerAirData::AirspaceWarning()
 {
   airspace_database.set_flight_levels(Basic().pressure);
 
-  const AIRCRAFT_STATE as = ToAircraftState(Basic());
+  const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
   if (m_airspace.update_warning(as, Calculated().Circling))
     airspaceWarningEvent.trigger();
 }
@@ -556,7 +559,7 @@ GlideComputerAirData::TerrainFootprint(fixed screen_range)
   const fixed d_bearing = fixed_360 / TERRAIN_ALT_INFO::NUMTERRAINSWEEPS;
 
   unsigned i = 0;
-  AIRCRAFT_STATE state = ToAircraftState(Basic());
+  AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
   for (fixed ang = fixed_zero; i < TERRAIN_ALT_INFO::NUMTERRAINSWEEPS;
        ang += d_bearing, i++) {
     state.TrackBearing = Angle::degrees(ang);

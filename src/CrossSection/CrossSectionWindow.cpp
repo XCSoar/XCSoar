@@ -276,7 +276,9 @@ CrossSectionWindow::PaintAirspaces(Canvas &canvas, Chart &chart)
 
   // Create IntersectionVisitor to render to the canvas
   AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map,
-                                            start, ToAircraftState(gps_info));
+                                            start,
+                                            ToAircraftState(Basic(),
+                                                            Calculated()));
 
   // Call visitor with intersecting airspaces
   airspace_database->visit_intersecting(start, vec, ivisitor);

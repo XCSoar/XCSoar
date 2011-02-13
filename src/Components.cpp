@@ -366,7 +366,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   ReadAirspace(airspace_database, terrain, Basic().pressure);
 
   const AIRCRAFT_STATE aircraft_state =
-    ToAircraftState(device_blackboard.Basic());
+    ToAircraftState(device_blackboard.Basic(), device_blackboard.Calculated());
   airspace_warning->reset(aircraft_state);
   airspace_warning->set_config(XCSoarInterface::SettingsComputer().airspace_warnings);
 

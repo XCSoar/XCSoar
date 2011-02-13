@@ -68,8 +68,9 @@ GlideComputerTask::ProcessBasicTask()
   bool auto_updated = false;
 
   if (basic.Time != LastBasic().Time && !basic.gps.NAVWarning) {
-    const AIRCRAFT_STATE current_as = ToAircraftState(Basic());
-    const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic());
+    const AIRCRAFT_STATE current_as = ToAircraftState(basic, Calculated());
+    const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic(),
+                                                   LastCalculated());
 
     task->update(current_as, last_as);
     auto_updated = task->update_auto_mc(current_as, std::max(
@@ -125,7 +126,7 @@ GlideComputerTask::ProcessMoreTask()
 void
 GlideComputerTask::ProcessIdle()
 {
-  const AIRCRAFT_STATE as = ToAircraftState(Basic());
+  const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
   ProtectedTaskManager::ExclusiveLease task(m_task);
   task->update_idle(as);
 
@@ -158,7 +159,7 @@ GlideComputerTask::ProcessIdle()
 void
 GlideComputerTask::TerrainWarning()
 {
-  const AIRCRAFT_STATE state = ToAircraftState(Basic());
+  const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
   GlidePolar polar = m_task.get_glide_polar();
 
   if (SettingsComputer().FinalGlideTerrain && terrain) {

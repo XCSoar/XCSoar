@@ -191,6 +191,9 @@ struct TERRAIN_ALT_INFO
   /** Lowest height within glide range */
   fixed TerrainBase;
 
+  /** Altitude over terrain */
+  fixed AltitudeAGL;
+
   void Clear();
 };
 

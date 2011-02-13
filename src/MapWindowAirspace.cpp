@@ -252,7 +252,7 @@ MapWindow::DrawAirspace(Canvas &canvas)
                         SettingsMap());
   AirspaceVisitorMap v(helper, awc);
   const AirspaceMapVisible visible(SettingsComputer(),
-                                   ToAircraftState(Basic()),
+                                   ToAircraftState(Basic(), Calculated()),
                                    false, awc);
 
   // JMW TODO wasteful to draw twice, can't it be drawn once?

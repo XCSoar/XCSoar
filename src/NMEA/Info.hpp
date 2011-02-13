@@ -339,9 +339,6 @@ struct NMEA_INFO {
   /** Fraction of working band height */
   fixed working_band_fraction;
 
-  /** Altitude over terrain */
-  fixed AltitudeAGL;
-
   /**
    * Troposhere atmosphere model for QNH correction
    */

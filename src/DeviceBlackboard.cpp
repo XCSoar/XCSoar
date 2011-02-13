@@ -426,8 +426,6 @@ DeviceBlackboard::NavAltitude()
   } else {
     basic.NavAltitude = basic.BaroAltitude;
   }
-
-  basic.AltitudeAGL = basic.NavAltitude - Calculated().TerrainAlt;
 }
 
 
@@ -628,6 +626,7 @@ void
 DeviceBlackboard::FlightState(const GlidePolar& glide_polar)
 {
   NMEA_INFO &basic = SetBasic();
+  const DERIVED_INFO &calculated = Calculated();
 
   if (basic.Time < LastBasic().Time)
     basic.flight.flying_state_reset();
@@ -642,7 +641,7 @@ DeviceBlackboard::FlightState(const GlidePolar& glide_polar)
     : basic.GroundSpeed;
 
   if (speed > glide_polar.get_Vtakeoff() ||
-      (Calculated().TerrainValid && basic.AltitudeAGL > fixed(300))) {
+      (calculated.TerrainValid && calculated.AltitudeAGL > fixed(300))) {
     basic.flight.flying_state_moving(basic.Time);
   } else {
     basic.flight.flying_state_stationary(basic.Time);

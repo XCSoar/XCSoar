@@ -81,6 +81,8 @@ TERRAIN_ALT_INFO::Clear()
   }
 
   TerrainWarning = false;
+
+  AltitudeAGL = fixed_zero;
 }
 
 void

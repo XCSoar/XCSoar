@@ -23,9 +23,10 @@ Copyright_License {
 
 #include "NMEA/Aircraft.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/Derived.hpp"
 
 const AIRCRAFT_STATE
-ToAircraftState(const NMEA_INFO &info)
+ToAircraftState(const NMEA_INFO &info, const DERIVED_INFO &calculated)
 {
   AIRCRAFT_STATE aircraft;
 
@@ -37,7 +38,7 @@ ToAircraftState(const NMEA_INFO &info)
   /* ALTITUDE_STATE */
   aircraft.NavAltitude = info.NavAltitude;
   aircraft.working_band_fraction = info.working_band_fraction;
-  aircraft.AltitudeAGL = info.AltitudeAGL;
+  aircraft.AltitudeAGL = calculated.AltitudeAGL;
   aircraft.AirspaceAltitude = info.GetAltitudeBaroPreferred();
 
   /* VARIO_INFO */

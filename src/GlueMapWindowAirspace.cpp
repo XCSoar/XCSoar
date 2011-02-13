@@ -215,7 +215,7 @@ GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
   AirspaceDetailsDialogVisitor airspace_copy_popup(*(SingleWindow *)get_root_owner(),
                                                    location);
   const AirspaceMapVisible visible(SettingsComputer(),
-                                   ToAircraftState(Basic()),
+                                   ToAircraftState(Basic(), Calculated()),
                                    false, awc);
 
   airspace_database->visit_within_range(location, fixed(100.0),

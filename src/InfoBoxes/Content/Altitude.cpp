@@ -114,12 +114,12 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  Units::FormatUserAltitude(basic.AltitudeAGL, sTmp,
+  Units::FormatUserAltitude(calculated.AltitudeAGL, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
-  Units::FormatAlternateUserAltitude(basic.AltitudeAGL, sTmp,
+  Units::FormatAlternateUserAltitude(calculated.AltitudeAGL, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
 
@@ -127,7 +127,7 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
   infobox.SetValueUnit(Units::AltitudeUnit);
 
   // Set Color (red/black)
-  infobox.SetColor(basic.AltitudeAGL <
+  infobox.SetColor(calculated.AltitudeAGL <
       XCSoarInterface::SettingsComputer().route_planner.safety_height_terrain ? 1 : 0);
 }
 

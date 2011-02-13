@@ -57,6 +57,7 @@ public:
 protected:
 #endif
   NMEA_INFO& SetBasic() { return gps_info; }
+  DERIVED_INFO& SetCalculated() { return calculated_info; }
 
 public:
   void SetStartupLocation(const GeoPoint &loc, const fixed alt);

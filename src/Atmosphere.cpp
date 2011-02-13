@@ -96,7 +96,8 @@ CuSonde::adjustForecastTemperature(double delta)
  * @param basic NMEA_INFO for temperature and humidity
  */
 void
-CuSonde::updateMeasurements(const NMEA_INFO &basic)
+CuSonde::updateMeasurements(const NMEA_INFO &basic,
+                            const DERIVED_INFO &calculated)
 {
   // if (not flying) nothing to update...
   if (!basic.flight.Flying)
@@ -126,7 +127,7 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic)
     return;
 
   // calculate ground height
-  hGround = basic.AltitudeAGL;
+  hGround = calculated.AltitudeAGL;
 
   // if (going up)
   if (level > last_level) {

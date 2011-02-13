@@ -25,6 +25,7 @@ Copyright_License {
 #define ATMOSPHERE_H
 
 struct NMEA_INFO;
+struct DERIVED_INFO;
 
 class CuSondeLevel {
 public:
@@ -81,7 +82,8 @@ namespace CuSonde
   /** Height of ground above MSL */
   extern double hGround;
   extern unsigned short last_level;
-  void updateMeasurements(const NMEA_INFO &basic);
+  void updateMeasurements(const NMEA_INFO &basic,
+                          const DERIVED_INFO &calculated);
   extern CuSondeLevel cslevels[CUSONDE_NUMLEVELS];
   void findCloudBase(unsigned short level);
   void findThermalHeight(unsigned short level);
