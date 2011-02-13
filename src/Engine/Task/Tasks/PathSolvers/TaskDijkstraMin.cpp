@@ -23,8 +23,8 @@
 #include "TaskDijkstraMin.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 
-TaskDijkstraMin::TaskDijkstraMin(OrderedTask& _task) :
-  TaskDijkstra(_task, true)
+TaskDijkstraMin::TaskDijkstraMin(OrderedTask& _task, const bool do_reserve) :
+  TaskDijkstra(_task, true, do_reserve)
 {
 }
 

@@ -32,7 +32,7 @@ class TaskDijkstraMax:
   public TaskDijkstra
 {
 public:
-  TaskDijkstraMax(OrderedTask& _task);
+  TaskDijkstraMax(OrderedTask& _task, const bool do_reserve=false);
 
   /**
    * Search task points for targets within OZs to produce the

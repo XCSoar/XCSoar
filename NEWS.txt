@@ -16,6 +16,7 @@ Version 6.0.4 - not yet released
   - enable terrain and topology by default
 * task
   - abort: for non-final glide options, don't prefer airports
+  - task manager: reduce memory usage
 * Android
   - device: support NMEA over Bluetooth RFCOMM
 
