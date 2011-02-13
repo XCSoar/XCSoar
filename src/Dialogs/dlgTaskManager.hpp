@@ -243,6 +243,13 @@ public:
    * @return True
    */
   static bool OnTabPreShow(TabBarControl::EventType EventType);
+
+  /**
+   * Called when the Close tab is displayed and clicked a 2nd time
+   * Acts as if the user clicked the Fly button
+   */
+  static void OnTabReClick();
+
 };
 
 #endif /* DLGTASKMANAGER_HPP */

@@ -70,6 +70,12 @@ pnlTaskManagerClose::OnRevertClicked(WndButton &Sender)
   RefreshStatus();
 }
 
+void
+pnlTaskManagerClose::OnTabReClick()
+{
+  dlgTaskManager::OnClose();
+}
+
 bool
 pnlTaskManagerClose::OnTabPreShow(TabBarControl::EventType EventType)
 {

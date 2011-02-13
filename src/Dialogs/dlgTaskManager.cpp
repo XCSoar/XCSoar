@@ -179,7 +179,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                               &goto_calculator_on_exit);
   assert(wClose);
   wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hFinalGlide*/, NULL,
-                     pnlTaskManagerClose::OnTabPreShow);
+                     pnlTaskManagerClose::OnTabPreShow, NULL, pnlTaskManagerClose::OnTabReClick);
 
   wTabBar->SetCurrentPage(0);
 
