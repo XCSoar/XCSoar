@@ -411,7 +411,7 @@ type=key
 data=6
 event=Calculator
 event=Mode default
-label=Task\nCalc$(CheckTaskResumed)$(CheckTask)
+label=Task$(CheckWaypointFile)
 location=5
 
 mode=Nav1
@@ -457,13 +457,13 @@ label=Nav
 location=1
 
 
-mode=Nav2
-type=key
-data=6
-event=Setup Task
-event=Mode default
-label=Task\nEdit$(CheckWaypointFile)
-location=5
+#mode=Nav2
+#type=key
+#data=6
+#event=Setup Task
+#event=Mode default
+#label=Task\nEdit$(CheckWaypointFile)
+#location=5
 
 mode=Nav2
 type=key

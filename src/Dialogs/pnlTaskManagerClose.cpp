@@ -25,6 +25,8 @@ Copyright_License {
 #include "Dialogs/dlgTaskManager.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
+#include "Task/ProtectedTaskManager.hpp"
+#include "Components.hpp"
 
 #include <assert.h>
 #include <stdio.h> //debug
@@ -34,6 +36,7 @@ WndFrame* wStatus = NULL;
 WndButton* cmdRevert = NULL;
 WndButton* cmdClose = NULL;
 static bool* task_modified = NULL;
+static bool* goto_calculator_on_exit = NULL;
 
 static void
 RefreshStatus()
@@ -52,6 +55,14 @@ pnlTaskManagerClose::OnCloseClicked(WndButton &Sender)
 }
 
 void
+pnlTaskManagerClose::OnCalculatorResumeClicked(WndButton &Sender)
+{
+  (void)Sender;
+  *goto_calculator_on_exit = true;
+  dlgTaskManager::OnClose();
+}
+
+void
 pnlTaskManagerClose::OnRevertClicked(WndButton &Sender)
 {
   (void)Sender;
@@ -59,12 +70,34 @@ pnlTaskManagerClose::OnRevertClicked(WndButton &Sender)
   RefreshStatus();
 }
 
-bool
-pnlTaskManagerClose::OnTabPreShow(unsigned EventType)
+void
+pnlTaskManagerClose::OnTabReClick()
 {
-  if (!(*task_modified) && EventType == 0) {
-    dlgTaskManager::OnClose();
-    return true;
+  dlgTaskManager::OnClose();
+}
+
+bool
+pnlTaskManagerClose::OnTabPreShow(TabBarControl::EventType EventType)
+{
+  *goto_calculator_on_exit = false;
+  WndButton *wb = (WndButton*)wf->FindByName(_T("cmdCalculatorResume"));
+  assert(wb);
+  TaskManager::TaskMode_t mode = protected_task_manager->get_mode();
+  const bool show_calculator_button =
+        (XCSoarInterface::Basic().flight.Flying &&
+                        (mode != TaskManager::MODE_ABORT) &&
+                        (mode != TaskManager::MODE_GOTO) &&
+                        XCSoarInterface::Calculated().task_stats.task_valid) ?
+                            false : true;
+  // because we arrived here via the task calculator
+  wb->set_visible(show_calculator_button);
+
+  if (!(*task_modified) && EventType == TabBarControl::MouseOrButton) {
+
+    if (!show_calculator_button) {
+      dlgTaskManager::OnClose();
+      return true;
+    }
   }
 
   RefreshStatus();
@@ -73,7 +106,8 @@ pnlTaskManagerClose::OnTabPreShow(unsigned EventType)
 
 Window*
 pnlTaskManagerClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
-                          WndForm* _wf, OrderedTask** task, bool* _task_modified)
+                          WndForm* _wf, OrderedTask** task,
+                          bool* _task_modified, bool* _goto_calculator_on_exit)
 {
   assert(wTabBar);
 
@@ -83,9 +117,14 @@ pnlTaskManagerClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
   assert(_task_modified);
   task_modified = _task_modified;
 
+  assert(_goto_calculator_on_exit);
+  goto_calculator_on_exit = _goto_calculator_on_exit;
+
   Window *wTaskManagerClose =
       LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
-                 _T("IDR_XML_TASKMANAGERCLOSE"));
+                 Layout::landscape ?
+                     _T("IDR_XML_TASKMANAGERCLOSE_L") :
+                     _T("IDR_XML_TASKMANAGERCLOSE"));
   assert(wTaskManagerClose);
 
   wStatus = (WndFrame *)wf->FindByName(_T("frmStatus"));
@@ -96,16 +135,6 @@ pnlTaskManagerClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
 
   cmdClose = (WndButton *)wf->FindByName(_T("cmdClose"));
   assert(cmdClose);
-
-  // center for portrait or for landscape
-  const RECT r = wTabBar->get_client_rect();
-  const unsigned CloseTop = (r.bottom - r.top -
-      (Layout::landscape ? 0 : wTabBar->GetBarHeight())) / 2 - cmdClose->get_height();
-  const unsigned CloseLeft = (r.right - r.left - cmdClose->get_width() +
-      (Layout::landscape ? wTabBar->GetBarWidth() : 0)) / 2;
-  cmdClose->move(CloseLeft, CloseTop);
-  wStatus->move(CloseLeft, CloseTop - wStatus->get_height());
-  cmdRevert->move(CloseLeft, CloseTop + 2* cmdClose->get_height());
 
   wStatus->SetAlignCenter();
   return wTaskManagerClose;

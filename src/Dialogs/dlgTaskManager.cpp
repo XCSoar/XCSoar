@@ -47,6 +47,7 @@ static WndForm *wf = NULL;
 static TabBarControl* wTabBar = NULL;
 static OrderedTask* active_task = NULL;
 static bool task_modified = false;
+static bool goto_calculator_on_exit = false;
 
 bool
 dlgTaskManager::CommitTaskChanges()
@@ -109,9 +110,11 @@ CallBackTableEntry dlgTaskManager::CallBackTable[] = {
   DeclareCallBackEntry(pnlTaskList::OnTabPreShow),
 
   DeclareCallBackEntry(pnlTaskProperties::OnFAIFinishHeightData),
+  DeclareCallBackEntry(pnlTaskProperties::OnOptionalStartsClicked),
 
   DeclareCallBackEntry(pnlTaskManagerClose::OnCloseClicked),
   DeclareCallBackEntry(pnlTaskManagerClose::OnRevertClicked),
+  DeclareCallBackEntry(pnlTaskManagerClose::OnCalculatorResumeClicked),
 
   DeclareCallBackEntry(NULL)
 };
@@ -133,6 +136,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     return;
 
   parent_window = &parent;
+  goto_calculator_on_exit = false;
 
   wf = LoadDialog(CallBackTable, parent,
                   Layout::landscape ?
@@ -171,10 +175,11 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                      pnlTaskList::OnTabPreShow);
 
   Window* wClose =
-    pnlTaskManagerClose::Load(parent, wTabBar, wf, &active_task, &task_modified);
+    pnlTaskManagerClose::Load(parent, wTabBar, wf, &active_task, &task_modified,
+                              &goto_calculator_on_exit);
   assert(wClose);
   wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hFinalGlide*/, NULL,
-                     pnlTaskManagerClose::OnTabPreShow);
+                     pnlTaskManagerClose::OnTabPreShow, NULL, pnlTaskManagerClose::OnTabReClick);
 
   wTabBar->SetCurrentPage(0);
 
@@ -184,4 +189,6 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
   delete wf;
   delete active_task;
+  if (goto_calculator_on_exit)
+    dlgTaskCalculatorShowModal(parent);
 }

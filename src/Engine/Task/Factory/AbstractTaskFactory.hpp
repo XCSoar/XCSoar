@@ -163,10 +163,20 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
   bool append(const OrderedTaskPoint &new_tp, const bool auto_mutate = true);
 
   /**
+   * Add optional start point to ordered task.
+   * Copies current start point's shape or uses defaults
+   * if no start exists.
+   *
+   * @param wp location of new point
+   *
+   * @return True if operation successful
+   */
+  bool append_optional_start(const Waypoint& wp);
+
+  /**
    * Add optional start point to ordered task.  It is the
    * user's responsibility to ensure the point is
-   * valid.
-   *
+   * valid.  Used by deserialise_point()
    * @param new_tp New taskpoint to add
    * @param auto_mutate Modify task point types automatically to retain validity
    *

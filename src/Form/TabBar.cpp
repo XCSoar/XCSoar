@@ -84,7 +84,8 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
     bool IsButtonOnly, MaskedIcon *bmp,
     PreHideNotifyCallback_t PreHideFunction,
     PreShowNotifyCallback_t PreShowFunction,
-    PostShowNotifyCallback_t PostShowFunction)
+    PostShowNotifyCallback_t PostShowFunction,
+    ReClickNotifyCallback_t ReClickFunction)
 {
   if (GetCurrentPage() != buttons.size())
     w->hide();
@@ -97,7 +98,7 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
     w->move(rc.left, rc.top + TabBarHeight, rc.right - rc.left, rc.bottom - rc.top - TabBarHeight);
 
   OneTabButton *b = new OneTabButton(Caption, IsButtonOnly, bmp,
-      PreHideFunction, PreShowFunction, PostShowFunction);
+      PreHideFunction, PreShowFunction, PostShowFunction, ReClickFunction);
 
   buttons.append(b);
 
@@ -105,51 +106,59 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
 }
 
 void
-TabBarControl::SetCurrentPage(unsigned i, unsigned EventType)
+TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
+                              bool ReClick)
 {
   bool Continue = true;
   assert(i < buttons.size());
 
-  if (buttons[GetCurrentPage()]->PreHideFunction) {
-    if (!buttons[GetCurrentPage()]->PreHideFunction())
-        Continue = false;
-  }
+  if (ReClick) {
+    if (buttons[GetCurrentPage()]->ReClickFunction)
+      buttons[GetCurrentPage()]->ReClickFunction();
 
-  if (Continue) {
-    if (buttons[i]->PreShowFunction) {
-      Continue = buttons[i]->PreShowFunction(EventType);
+  } else {
+    if (buttons[GetCurrentPage()]->PreHideFunction) {
+      if (!buttons[GetCurrentPage()]->PreHideFunction())
+          Continue = false;
     }
-  }
 
-  if (Continue) {
-    TabbedControl::SetCurrentPage(i);
-    if (buttons[i]->PostShowFunction) {
-      buttons[i]->PostShowFunction();
+    if (Continue) {
+      if (buttons[i]->PreShowFunction) {
+        Continue = buttons[i]->PreShowFunction(_EventType);
+      }
+    }
+
+    if (Continue) {
+      TabbedControl::SetCurrentPage(i);
+      if (buttons[i]->PostShowFunction) {
+        buttons[i]->PostShowFunction();
+      }
     }
   }
   theTabDisplay->trigger_invalidate();
 }
 
 void
-TabBarControl::NextPage(unsigned EventType)
+TabBarControl::NextPage(EventType _EventType)
 {
   if (buttons.size() < 2)
     return;
 
   assert(GetCurrentPage() < buttons.size());
 
-  SetCurrentPage((GetCurrentPage() + 1) % buttons.size(), EventType);
+  SetCurrentPage((GetCurrentPage() + 1) % buttons.size(), _EventType, false);
 }
 
 void
-TabBarControl::PreviousPage(unsigned EventType)
+TabBarControl::PreviousPage(EventType _EventType)
 {
   if (buttons.size() < 2)
     return;
 
   assert(GetCurrentPage() < buttons.size());
 
-  SetCurrentPage((GetCurrentPage() + buttons.size() - 1) % buttons.size(), EventType);
+  SetCurrentPage((GetCurrentPage() + buttons.size() - 1) % buttons.size(),
+                  _EventType, false);
 }
 
 const RECT
@@ -212,13 +221,13 @@ TabDisplay::on_paint(Canvas &canvas)
       | DT_WORDBREAK;
 
   for (unsigned i = 0; i < theTabBar.GetTabCount(); i++) {
-    if (i == theTabBar.GetCurrentPage()) {
-      canvas.set_text_color(Color::WHITE);
-      canvas.set_background_color(Color::BLACK);
-
-    } else if (((int)i == downindex) && (dragoffbutton == false)) {
+    if (((int)i == downindex) && (dragoffbutton == false)) {
       canvas.set_text_color(Color::BLACK);
       canvas.set_background_color(Color::YELLOW);
+
+    } else if (i == theTabBar.GetCurrentPage()) {
+        canvas.set_text_color(Color::WHITE);
+        canvas.set_background_color(Color::BLACK);
 
     } else {
       canvas.set_text_color(Color::BLACK);
@@ -338,12 +347,12 @@ TabDisplay::on_key_down(unsigned key_code)
 
   case VK_DOWN:
   case VK_RIGHT:
-    theTabBar.NextPage(1);
+    theTabBar.NextPage(TabBarControl::NextPreviousKey);
     return true;
 
   case VK_UP:
   case VK_LEFT:
-    theTabBar.PreviousPage(1);
+    theTabBar.PreviousPage(TabBarControl::NextPreviousKey);
     return true;
   }
 
@@ -365,8 +374,7 @@ TabDisplay::on_mouse_down(int x, int y)
     set_focus();
   for (unsigned i = 0; i < theTabBar.GetTabCount(); i++) {
     const RECT rc = theTabBar.GetButtonSize(i);
-    if (PtInRect(&rc, Pos)
-        && i != theTabBar.GetCurrentPage()) {
+    if (PtInRect(&rc, Pos)) {
       dragging = true;
       downindex = i;
       set_capture();
@@ -390,7 +398,8 @@ TabDisplay::on_mouse_up(int x, int y)
       const RECT rc = theTabBar.GetButtonSize(i);
       if (PtInRect(&rc, Pos)) {
         if ((int)i == downindex) {
-          theTabBar.SetCurrentPage(i, 0);
+          theTabBar.SetCurrentPage(i, TabBarControl::MouseOrButton,
+              theTabBar.GetCurrentPage() == i);
           break;
         }
       }

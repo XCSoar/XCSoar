@@ -2,9 +2,10 @@
 
 <Form Name="frmTaskCalculator" X="5" Y="0" Width="320" Height="240" Caption="Task Calculator">
 
-  <Button Name="Target" Caption="Target" X="2" Y="2" Width="60" Height="30" OnClick="OnTargetClicked" />
-  <Button Caption="Close" X="2" Y="-64" Width="60" Height="30" OnClick="OnOKClicked" />
-  <Button Caption="Cancel" X="2" Y="-32" Width="60" Height="30" OnClick="OnCancelClicked" />
+  <Button Name="Target" Caption="Target" X="2" Y="2" Width="75" Height="35" OnClick="OnTargetClicked" />
+  <Button Caption="Close" X="2" Y="-110" Width="75" Height="35" OnClick="OnOKClicked" />
+  <Button Caption="Cancel" X="2" Y="-73" Width="75" Height="35" OnClick="OnCancelClicked" />
+  <Button Name="cmdTaskManager" Caption="Task Manager" X="2" Y="-37" Width="75" Height="35" OnClick="OnTaskManagerClicked" />
 
   <Panel Name="frmData" X="70" Y="0" Height="222">
 

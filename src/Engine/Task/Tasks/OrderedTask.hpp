@@ -298,6 +298,13 @@ public:
   bool remove_optional_start(const unsigned position);
 
   /**
+   * Change the waypoint of an optional start point
+   * @param position valid index to optional start point
+   * @param waypoint
+   * @return true if succeeded
+   */
+  bool relocate_optional_start(const unsigned position, const Waypoint& waypoint);
+  /**
    * Relocate a task point to a new location
    *
    * @param position Index in task sequence of task point to replace
@@ -835,6 +842,23 @@ public:
    */
   gcc_pure
   const OrderedTaskPoint* get_tp(const unsigned index) const;
+
+  /**
+   * @return number of optional start poitns
+   */
+  gcc_pure
+  unsigned optional_start_points_size() { return optional_start_points.size(); }
+
+  /**
+   * returns optional start point
+   *
+   * @param pos optional start point index
+   * @return NULL if index out of range, else optional start point
+   */
+  gcc_pure
+  const OrderedTaskPoint * get_optional_start(unsigned pos) const;
+
+
 
   /**
    * Accept a (const) task point visitor; makes the visitor visit

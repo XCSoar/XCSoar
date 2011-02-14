@@ -131,7 +131,7 @@ public:
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return True
    */
-  static bool OnTabPreShow(unsigned EventType);
+  static bool OnTabPreShow(TabBarControl::EventType EventType);
 };
 
 class pnlTaskProperties
@@ -170,11 +170,17 @@ public:
   static void OnTaskTypeData(DataField *Sender, DataField::DataAccessKind_t Mode);
 
   /**
+   * displays dlgTaskOptionalStarts
+   * @param Sender
+   */
+  static void OnOptionalStartsClicked(WndButton &Sender);
+
+  /**
    * copies values from ordered_task to form
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return true
    */
-  static bool OnTabPreShow(unsigned EventType);
+  static bool OnTabPreShow(TabBarControl::EventType EventType);
 };
 
 class pnlTaskList
@@ -204,7 +210,7 @@ public:
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return True
    */
-  static bool OnTabPreShow(unsigned EventType);
+  static bool OnTabPreShow(TabBarControl::EventType EventType);
 
   /**
    *  called when parent dialog closes
@@ -223,18 +229,27 @@ public:
    * @return Window* that points to the control created
    */
   static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
-                      WndForm* wf, OrderedTask** task, bool* _task_modified);
+                      WndForm* wf, OrderedTask** task, bool* _task_modified,
+                      bool* _goto_calculator_on_exit);
 
   static void OnCloseClicked(WndButton &Sender);
   static void OnRevertClicked(WndButton &Sender);
-
+  static void OnCalculatorResumeClicked(WndButton &Sender);
   /**
    * callback
    * sets status and buttons per task edit status
+   * Closes immediately if flying and task not changed and mouse click
    * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
    * @return True
    */
-  static bool OnTabPreShow(unsigned EventType);
+  static bool OnTabPreShow(TabBarControl::EventType EventType);
+
+  /**
+   * Called when the Close tab is displayed and clicked a 2nd time
+   * Acts as if the user clicked the Fly button
+   */
+  static void OnTabReClick();
+
 };
 
 #endif /* DLGTASKMANAGER_HPP */

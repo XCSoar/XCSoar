@@ -41,6 +41,7 @@ static WndForm *wf = NULL;
 
 static fixed emc;
 static fixed cruise_efficiency;
+static bool goto_task_manager = false;
 
 static void
 OnCancelClicked(WndButton &Sender)
@@ -53,6 +54,14 @@ static void
 OnOKClicked(WndButton &Sender)
 {
   (void)Sender;
+  wf->SetModalResult(mrOK);
+}
+static void
+OnTaskManagerClicked
+(WndButton &Sender)
+{
+  (void)Sender;
+  goto_task_manager = true;
   wf->SetModalResult(mrOK);
 }
 
@@ -170,6 +179,17 @@ RefreshCalculator(void)
     df->Set(XCSoarInterface::Calculated().task_stats.cruise_efficiency * fixed(100));
     wp->RefreshDisplay();
   }
+
+  WndButton *wb = (WndButton*)wf->FindByName(_T("cmdTaskManager"));
+  assert(wb);
+  TaskManager::TaskMode_t mode = protected_task_manager->get_mode();
+  if (XCSoarInterface::Basic().flight.Flying &&
+                        (mode != TaskManager::MODE_ABORT) &&
+                        (mode != TaskManager::MODE_GOTO) &&
+                        XCSoarInterface::Calculated().task_stats.task_valid)
+    wb->set_visible(true);
+  else
+    wb->set_visible(false); // because we arrived here via the task manager
 }
 
 static void
@@ -254,6 +274,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCancelClicked),
   DeclareCallBackEntry(OnTargetClicked),
   DeclareCallBackEntry(OnCruiseEfficiencyData),
+  DeclareCallBackEntry(OnTaskManagerClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -284,6 +305,8 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
 
   cruise_efficiency = CRUISE_EFFICIENCY_enter;
 
+  goto_task_manager = false;
+
   RefreshCalculator();
 
   if (!XCSoarInterface::Calculated().common_stats.ordered_has_targets) {
@@ -301,5 +324,7 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
 
   delete wf;
   wf = NULL;
+  if (goto_task_manager)
+    dlgTaskManagerShowModal(parent);
 }
 

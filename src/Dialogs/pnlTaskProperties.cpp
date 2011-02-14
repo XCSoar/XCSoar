@@ -31,6 +31,7 @@ Copyright_License {
 #include "Dialogs/dlgTaskManager.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 static SingleWindow *parent_window;
 static WndForm *wf = NULL;
@@ -143,6 +144,17 @@ RefreshView()
     wp->RefreshDisplay();
   }
 
+  WndButton * wb = (WndButton*)wf->FindByName(_T("cmdOptionalStarts"));
+  assert(wb);
+  if (ordered_task->optional_start_points_size() == 0)
+    wb->SetCaption(_T("Enable Alternate Starts"));
+  else {
+    TCHAR tmp[50];
+    _stprintf(tmp, _T("Edit Alternate Starts(%d)"),
+        ordered_task->optional_start_points_size());
+    wb->SetCaption(tmp);
+  }
+
   // fixed aat_min_time
   // finish_min_height
 }
@@ -194,7 +206,7 @@ ReadValues()
 }
 
 bool
-pnlTaskProperties::OnTabPreShow(unsigned EventType)
+pnlTaskProperties::OnTabPreShow(TabBarControl::EventType EventType)
 {
   ordered_task = *ordered_task_pointer;
   orig_taskType = ordered_task->get_factory_type();
@@ -242,6 +254,15 @@ pnlTaskProperties::OnTaskTypeData(DataField *Sender, DataField::DataAccessKind_t
       *task_changed =true;
       RefreshView();
     }
+  }
+}
+
+void
+pnlTaskProperties::OnOptionalStartsClicked(WndButton &Sender)
+{
+  if (dlgTaskOptionalStarts(*parent_window, ordered_task_pointer)) {
+    *task_changed =true;
+    RefreshView();
   }
 }
 
