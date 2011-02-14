@@ -596,6 +596,13 @@ public:
   const RoutePolars& get_route_polars() const { return task_abort.get_route_polars(); }
   const RoutePolars& get_route_polars_safety() const { return task_abort.get_route_polars_safety(); }
 
+  /**
+   * Set external test function to be used for additional intersection tests
+   */
+  void set_intersection_test(AbortIntersectionTest* _test) {
+    task_abort.set_intersection_test(_test);
+  }
+
 private:
   GlidePolar m_glide_polar;
 

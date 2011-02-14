@@ -29,6 +29,13 @@
 #include "Route/RoutePolar.hpp"
 #include <vector>
 
+class AbortIntersectionTest {
+public:
+  virtual bool intersects(const AGeoPoint& origin,
+                          const AGeoPoint& destination,
+                          const RoutePolars& rpolars) = 0;
+};
+
 /**
  * Abort task provides automatic management of a sorted list of task points
  * that are reachable or close to reachable, and landable (with airfields preferred).
@@ -229,6 +236,7 @@ protected:
    * @param polar Polar used for tests
    * @param only_airfield If true, only add waypoints that are airfields.
    * @param final_glide Whether solution must be glide only or climb allowed
+   * @param safety Whether solution uses safety polar
    *
    * @return True if a landpoint within final glide was found
    */
@@ -236,7 +244,8 @@ protected:
                       AlternateVector &approx_waypoints,
                       const GlidePolar &polar,
                       const bool only_airfield,
-                      const bool final_glide);
+                      const bool final_glide,
+                      const bool safety);
 
 protected:
   typedef std::vector<std::pair<TaskWayPoint*, GlideResult> > AlternateTaskVector;
@@ -265,10 +274,20 @@ public:
   const RoutePolars& get_route_polars() const { return route_polars; }
   const RoutePolars& get_route_polars_safety() const { return route_polars_safety; }
 
+  /**
+   * Set external test function to be used for additional intersection tests
+   */
+  void set_intersection_test(AbortIntersectionTest* _test) {
+    intersection_test = _test;
+  }
+
 protected:
   const Waypoints &waypoints;
   RoutePolars route_polars;
   RoutePolars route_polars_safety;
+
+  /** Hook for external intersection tests */
+  AbortIntersectionTest* intersection_test;
 
 private:
   unsigned active_waypoint;

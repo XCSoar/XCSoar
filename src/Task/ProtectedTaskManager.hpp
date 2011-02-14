@@ -36,6 +36,21 @@ class CommonStats;
 class RasterTerrain;
 class Airspaces;
 
+class TerrainIntersectionTest: public AbortIntersectionTest {
+public:
+  TerrainIntersectionTest(): rterrain(NULL) {};
+
+  void set_terrain(RasterTerrain* _rterrain) {
+    rterrain = _rterrain;
+  }
+
+  virtual bool intersects(const AGeoPoint& origin,
+                          const AGeoPoint& destination,
+                          const RoutePolars& rpolars);
+private:
+  RasterTerrain* rterrain;
+};
+
 /**
  * Facade to task/airspace/waypoints as used by threads,
  * to manage locking
@@ -47,6 +62,7 @@ protected:
   TaskEvents &task_events;
   Airspaces &m_airspaces;
   RoutePlannerGlue m_route;
+  TerrainIntersectionTest intersection_test;
 
   static const TCHAR default_task_path[];
 
@@ -58,6 +74,8 @@ public:
      task_behaviour(tb), task_events(te), m_airspaces(airspaces),
      m_route(_task_manager.get_glide_polar(), m_airspaces)
     {}
+  
+  ~ProtectedTaskManager();
 
   // common accessors for ui and calc clients
   gcc_pure

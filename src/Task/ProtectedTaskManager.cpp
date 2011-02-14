@@ -32,6 +32,11 @@ Copyright_License {
 
 #include <windef.h> // for MAX_PATH
 
+ProtectedTaskManager::~ProtectedTaskManager() {
+  ExclusiveLease lease(*this);
+  lease->set_intersection_test(NULL); // de-register
+}
+
 GlidePolar 
 ProtectedTaskManager::get_glide_polar() const
 {
@@ -312,6 +317,8 @@ ProtectedTaskManager::route_set_terrain(RasterTerrain* terrain)
 {
   ExclusiveLease lease(*this);
   m_route.set_terrain(terrain);
+  intersection_test.set_terrain(terrain);
+  lease->set_intersection_test(&intersection_test);
 }
 
 void
@@ -364,4 +371,17 @@ ProtectedTaskManager::get_route_polars() const
 {
   Lease lease(*this);
   return m_route.get_route_polars();
+}
+
+
+bool TerrainIntersectionTest::intersects(const AGeoPoint& origin,
+                                         const AGeoPoint& destination,
+                                         const RoutePolars& rpolars) 
+{
+  RasterTerrain::ExclusiveLease rlease(*rterrain);
+  TaskProjection proj;
+  proj.reset(origin);
+  proj.update_fast();
+  GeoPoint intx; // return ignored
+  return rpolars.intersection(origin, destination, &rterrain->map, proj, intx);
 }

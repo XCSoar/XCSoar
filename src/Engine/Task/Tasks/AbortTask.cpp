@@ -41,6 +41,7 @@ AbortTask::AbortTask(TaskEvents &te, const TaskBehaviour &tb,
   waypoints(wps),
   route_polars(gp, SpeedVector(fixed_zero, fixed_zero)),
   route_polars_safety(gp, SpeedVector(fixed_zero, fixed_zero)),
+  intersection_test(NULL),
   active_waypoint(0),
   polar_safety(gp)
 {
@@ -161,10 +162,15 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
                           AlternateVector &approx_waypoints,
                           const GlidePolar &polar,
                           const bool only_airfield,
-                          const bool final_glide)
+                          const bool final_glide,
+                          const bool safety)
 {
   if (task_full() || approx_waypoints.empty())
     return false;
+
+  const RoutePolars& rpolars = safety? route_polars_safety: route_polars;
+  const AGeoPoint p_start (state.get_location(), 
+                           (short)state.NavAltitude);
 
   bool found_final_glide = false;
   std::priority_queue<Alternate, AlternateVector, AbortRank> q;
@@ -179,15 +185,27 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
     UnorderedTaskPoint t(v->first, task_behaviour);
     const GlideResult result = TaskSolution::glide_solution_remaining(t, state, polar);
     if (is_reachable(result, final_glide)) {
-      q.push(std::make_pair(v->first, result));
-      // remove it since it's already in the list now      
-      approx_waypoints.erase(v);
+      bool intersects = false;
+      const bool is_reachable_final = is_reachable(result, true);
 
-      if (is_reachable(result, true))
-        found_final_glide = true;
-    } else {
-      ++v;
-    }
+      if (intersection_test && final_glide && is_reachable_final) {
+        intersects = intersection_test->intersects(p_start,
+                                                   AGeoPoint(v->first.Location, 
+                                                             result.MinHeight),
+                                                   rpolars);
+      }
+      if (!intersects) {
+        q.push(std::make_pair(v->first, result));
+        // remove it since it's already in the list now      
+        approx_waypoints.erase(v);
+
+        if (is_reachable_final)
+          found_final_glide = true;
+
+        continue; // skip incrementing v since we just erased it
+      }
+    } 
+    ++v;
   }
 
   while (!q.empty() && !task_full()) {
@@ -267,14 +285,14 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   // sort by alt difference
 
   // first try with safety polar, final glide only
-  m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, true, true);
-  m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, false, true);
+  m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, true, true, true);
+  m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, false, true, true);
 
   // inform clients that the landable reachable scan has been performed 
   client_update(state, true);
 
   // now try with non-safety polar, not final glide (not preferring airports)
-  fill_reachable(state, approx_waypoints, glide_polar, false, false);
+  fill_reachable(state, approx_waypoints, glide_polar, false, false, false);
 
   // inform clients that the landable unreachable scan has been performed 
   client_update(state, false);
