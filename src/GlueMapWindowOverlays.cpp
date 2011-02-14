@@ -235,13 +235,21 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
     if (Offset != Offset0)
       canvas.polygon(GlideBar0, 6);
 
-    // draw x on final glide bar if unreachable at current Mc
-    if (!Calculated().task_stats.total.achievable()) {
+    // draw cross (x) on final glide bar if unreachable at current Mc
+    // or above final glide but impeded by obstacle
+    int cross_sign = 0;
+
+    if (!Calculated().task_stats.total.achievable())
+      cross_sign = 1;
+    if (Calculated().TerrainWarning && (Offset>0))
+      cross_sign = -1;
+
+    if (cross_sign != 0) {
       canvas.select(Graphics::hpAircraftBorder);
-      canvas.line(Layout::Scale(9 - 5), y0 + Layout::Scale(9 - 5),
-                  Layout::Scale(9 + 5), y0 + Layout::Scale(9 + 5));
-      canvas.line(Layout::Scale(9 - 5), y0 + Layout::Scale(9 + 5),
-                  Layout::Scale(9 + 5), y0 + Layout::Scale(9 - 5));
+      canvas.line(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 - 5),
+                  Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 + 5));
+      canvas.line(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 + 5),
+                  Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 - 5));
     }
 
     if (Appearance.IndFinalGlide == fgFinalGlideDefault) {
