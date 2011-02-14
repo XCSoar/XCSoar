@@ -31,10 +31,10 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h> //debug
 
-WndForm* wf = NULL;
-WndFrame* wStatus = NULL;
-WndButton* cmdRevert = NULL;
-WndButton* cmdClose = NULL;
+static WndForm* wf = NULL;
+static WndFrame* wStatus = NULL;
+static WndButton* cmdRevert = NULL;
+static WndButton* cmdClose = NULL;
 static bool* task_modified = NULL;
 static bool* goto_calculator_on_exit = NULL;
 
