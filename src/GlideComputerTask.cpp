@@ -52,6 +52,8 @@ GlideComputerTask::ProcessBasicTask()
 {
   const NMEA_INFO &basic = Basic();
 
+  m_task.route_set_terrain(terrain);
+
   ProtectedTaskManager::ExclusiveLease task(m_task);
 
   task->set_task_behaviour(SettingsComputer());
@@ -137,8 +139,6 @@ GlideComputerTask::ProcessIdle()
     const AGeoPoint start (as.get_location(), as.NavAltitude);
     const AGeoPoint dest (v.end_point(start), sol.MinHeight);
 
-    m_task.route_set_terrain(terrain);
-
     short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
                                       (int)Calculated().thermal_band.working_band_ceiling);
 
@@ -166,7 +166,6 @@ GlideComputerTask::TerrainWarning()
     // remove TerrainFootprint function from GlideComputerAirData
 
     const AGeoPoint start (state.get_location(), state.NavAltitude);
-    m_task.route_set_terrain(terrain);
     m_task.footprint(start, SetCalculated().GlideFootPrint);
   }
 }
