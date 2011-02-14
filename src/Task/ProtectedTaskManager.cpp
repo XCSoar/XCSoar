@@ -378,6 +378,9 @@ bool TerrainIntersectionTest::intersects(const AGeoPoint& origin,
                                          const AGeoPoint& destination,
                                          const RoutePolars& rpolars) 
 {
+  if (!rterrain)
+    return false;
+
   RasterTerrain::ExclusiveLease rlease(*rterrain);
   TaskProjection proj;
   proj.reset(origin);
