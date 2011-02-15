@@ -64,11 +64,11 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
     way_points.set_home(settings.HomeWaypoint);
   } else {
     // search for home in waypoint list, if we don't have a home
-    settings.HomeWaypoint = -1;
+    settings.ClearHome();
 
     wp = way_points.find_home();
     if (wp)
-      settings.HomeWaypoint = wp->id;
+      settings.SetHome(*wp);
   }
 
   // check invalid task ref waypoint or forced reset due to file change

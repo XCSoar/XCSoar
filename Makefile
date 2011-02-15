@@ -296,6 +296,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapProjectionBlackboard.cpp \
 	$(SRC)/MapWindowBlackboard.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
+	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/CalculationThread.cpp \
 	$(SRC)/InstrumentThread.cpp \
