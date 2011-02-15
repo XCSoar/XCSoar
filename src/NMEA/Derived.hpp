@@ -187,6 +187,11 @@ struct TERRAIN_ALT_INFO
 
   bool TerrainWarning;
 
+  /**
+   * Does the GlideFootPrint array have valid values?
+   */
+  bool GlideFootPrintValid;
+
   /** Terrain altitude */
   fixed TerrainAlt;
 

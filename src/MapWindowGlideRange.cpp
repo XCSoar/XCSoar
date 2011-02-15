@@ -34,7 +34,8 @@ Copyright_License {
 
 void MapWindow::CalculateScreenPositionsGroundline(void)
 {
-  if (!SettingsComputer().FinalGlideTerrain)
+  if (!SettingsComputer().FinalGlideTerrain ||
+      !Calculated().GlideFootPrintValid)
     return;
 
   const GeoClip clip(render_projection.GetScreenBounds().scale(fixed(1.1)));

@@ -167,5 +167,7 @@ GlideComputerTask::TerrainWarning()
 
     const AGeoPoint start (state.get_location(), state.NavAltitude);
     m_task.footprint(start, SetCalculated().GlideFootPrint);
-  }
+    SetCalculated().GlideFootPrintValid = true;
+  } else
+    SetCalculated().GlideFootPrintValid = false;
 }

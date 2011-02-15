@@ -80,10 +80,7 @@ TERRAIN_ALT_INFO::Clear()
   AltitudeAGLValid = false;
   AltitudeAGL = fixed_zero;
 
-  for (int i = 0; i <= TERRAIN_ALT_INFO::NUMTERRAINSWEEPS; i++) {
-    GlideFootPrint[i].Longitude = Angle::native(fixed_zero);
-    GlideFootPrint[i].Latitude = Angle::native(fixed_zero);
-  }
+  GlideFootPrintValid = false;
 }
 
 void
