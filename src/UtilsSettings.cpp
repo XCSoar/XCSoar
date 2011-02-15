@@ -98,6 +98,8 @@ SettingsLeave()
   SuspendAllThreads();
 
   if (MapFileChanged) {
+    /* set these flags, because they may be loaded from the map
+       file */
     AirspaceFileChanged = true;
     AirfieldFileChanged = true;
     WaypointFileChanged = true;
@@ -105,7 +107,7 @@ SettingsLeave()
     TopologyFileChanged = true;
   }
 
-  if ((WaypointFileChanged) || (TerrainFileChanged) || (AirfieldFileChanged)) {
+  if (TerrainFileChanged) {
     ProgressGlue::Create(_("Loading Terrain File..."));
 
     XCSoarInterface::main_window.map.set_terrain(NULL);
@@ -114,6 +116,10 @@ SettingsLeave()
     delete terrain;
     terrain = RasterTerrain::OpenTerrain(file_cache);
 
+    XCSoarInterface::main_window.map.set_terrain(terrain);
+  }
+
+  if (WaypointFileChanged || AirfieldFileChanged) {
     // re-load waypoints
     WayPointGlue::ReadWaypoints(way_points, terrain);
     ReadAirfieldFile(way_points);
@@ -124,8 +130,6 @@ SettingsLeave()
                             XCSoarInterface::SetSettingsComputer(),
                             WaypointFileChanged, false);
     }
-
-    XCSoarInterface::main_window.map.set_terrain(terrain);
   }
 
   if (TopologyFileChanged) {
