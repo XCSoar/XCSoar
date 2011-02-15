@@ -59,6 +59,14 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 
   // check invalid home waypoint or forced reset due to file change
   const Waypoint *wp = reset ? NULL : way_points.lookup_id(settings.HomeWaypoint);
+  if (wp == NULL && settings.HomeLocationAvailable) {
+    /* fall back to HomeLocation, try to find it in the waypoint
+       database */
+    wp = way_points.lookup_location(settings.HomeLocation, fixed(100));
+    if (wp != NULL && wp->is_airport())
+      settings.SetHome(*wp);
+  }
+
   if (wp != NULL) {
     // home waypoint found
     way_points.set_home(settings.HomeWaypoint);
@@ -96,6 +104,9 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
   // VENTA3> this is probably useless, since HomeWayPoint &c were currently
   //         just loaded from registry.
   Profile::Set(szProfileHomeWaypoint,settings.HomeWaypoint);
+  if (settings.HomeLocationAvailable)
+    Profile::SetGeoPoint(szProfileHomeLocation, settings.HomeLocation);
+
   Profile::Set(szProfileTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
 }
 

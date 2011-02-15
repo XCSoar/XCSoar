@@ -28,10 +28,13 @@ void
 SETTINGS_PLACES_OF_INTEREST::ClearHome()
 {
   HomeWaypoint = -1;
+  HomeLocationAvailable = false;
 }
 
 void
 SETTINGS_PLACES_OF_INTEREST::SetHome(const Waypoint &wp)
 {
   HomeWaypoint = wp.id;
+  HomeLocation = wp.Location;
+  HomeLocationAvailable = true;
 }

@@ -134,6 +134,7 @@ const TCHAR szProfileFinalGlideTerrain[] = CONF("FinalGlideTerrain");
 const TCHAR szProfileAutoWind[] = CONF("AutoWind");
 const TCHAR szProfileExternalWind[] = CONF("ExternalWind");
 const TCHAR szProfileHomeWaypoint[] = CONF("HomeWaypoint");
+const TCHAR szProfileHomeLocation[] = CONF("HomeLocation");
 const TCHAR szProfileLiftUnitsValue[] = CONF("Lift");
 const TCHAR szProfileLatLonUnits[] = CONF("LatLonUnits");
 const TCHAR szProfilePolarID[] = CONF("Polar"); // pL

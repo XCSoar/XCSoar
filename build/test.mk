@@ -858,6 +858,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
+	$(SRC)/Profile/Earth.cpp \
 	$(SRC)/WayPoint/WayPointGlue.cpp \
 	$(SRC)/WayPoint/WayPointFile.cpp \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \

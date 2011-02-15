@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SETTINGS_COMPUTER_HPP
 
 #include "FLARM/FlarmId.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
 
 #include <tchar.h>
 
@@ -141,6 +142,10 @@ struct SETTINGS_VOICE {
 struct SETTINGS_PLACES_OF_INTEREST {
   /** Array index of the home waypoint */
   int HomeWaypoint;
+
+  bool HomeLocationAvailable;
+
+  GeoPoint HomeLocation;
 
   void ClearHome();
   void SetHome(const Waypoint &wp);

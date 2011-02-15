@@ -17,6 +17,8 @@ Version 6.0.4 - not yet released
 * task
   - abort: for non-final glide options, don't prefer airports
   - task manager: reduce memory usage
+* configuration
+  - don't forget the home airport after a configuration change
 * Android
   - device: support NMEA over Bluetooth RFCOMM
 

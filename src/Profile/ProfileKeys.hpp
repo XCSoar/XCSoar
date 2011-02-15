@@ -83,6 +83,7 @@ extern const TCHAR szProfileWarningTime[];
 extern const TCHAR szProfileAcknowledgementTime[];
 extern const TCHAR szProfileCircleZoom[];
 extern const TCHAR szProfileHomeWaypoint[];
+extern const TCHAR szProfileHomeLocation[];
 extern const TCHAR szProfileTeamcodeRefWaypoint[];
 extern const TCHAR szProfilePilotName[];
 extern const TCHAR szProfileAircraftType[];
