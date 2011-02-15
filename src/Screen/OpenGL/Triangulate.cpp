@@ -203,11 +203,11 @@ polygon_to_triangle(const RasterPoint *points, unsigned num_points,
     if (heat++ > num_points) {
       // if polygon edges overlap we may loop endlessly
       //LogDebug(_T("polygon_to_triangle: bad polygon"));
-      delete next;
+      delete[] next;
       return 0;
     }
   }
 
-  delete next;
+  delete[] next;
   return triangle_idx_count;
 }
