@@ -123,13 +123,13 @@ SettingsLeave()
     // re-load waypoints
     WayPointGlue::ReadWaypoints(way_points, terrain);
     ReadAirfieldFile(way_points);
+  }
 
+  if (WaypointFileChanged || TerrainFileChanged) {
     // re-set home
-    if (WaypointFileChanged || TerrainFileChanged) {
-      WayPointGlue::SetHome(way_points, terrain,
-                            XCSoarInterface::SetSettingsComputer(),
-                            WaypointFileChanged, false);
-    }
+    WayPointGlue::SetHome(way_points, terrain,
+                          XCSoarInterface::SetSettingsComputer(),
+                          WaypointFileChanged, false);
   }
 
   if (TopologyFileChanged) {
