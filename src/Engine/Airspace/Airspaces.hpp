@@ -157,6 +157,16 @@ public:
                           const GeoVector &vec,
                           AirspaceIntersectionVisitor& visitor) const;
 
+  /**
+   * Call visitor class on airspaces this location is inside
+   * Note that the visitor is not instantiated separately for each match
+   *
+   * @param loc location of origin of search
+   * @param visitor visitor class to call on airspaces
+   */
+  void visit_inside(const GeoPoint &loc,
+                    AirspaceVisitor& visitor) const;
+
   /** 
    * Search for airspaces within range of the aircraft.
    * 

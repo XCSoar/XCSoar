@@ -296,3 +296,17 @@ Airspaces::end() const
 {
   return airspace_tree.end();
 }
+
+void
+Airspaces::visit_inside(const GeoPoint &loc,
+                        AirspaceVisitor& visitor) const
+{
+  Airspace bb_target(loc, task_projection);
+  AirspaceVector vectors;
+  airspace_tree.find_within_range(bb_target, 0, std::back_inserter(vectors));
+
+  for (AirspaceVector::iterator v = vectors.begin(); v != vectors.end(); ++v) {
+    if ((*v).inside(loc))
+      visitor.Visit(*v);
+  }
+}
