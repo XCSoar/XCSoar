@@ -83,8 +83,6 @@ extern const TCHAR szProfileWarningTime[];
 extern const TCHAR szProfileAcknowledgementTime[];
 extern const TCHAR szProfileCircleZoom[];
 extern const TCHAR szProfileHomeWaypoint[];
-extern const TCHAR szProfileAlternate1[];         // VENTA3
-extern const TCHAR szProfileAlternate2[];
 extern const TCHAR szProfileTeamcodeRefWaypoint[];
 extern const TCHAR szProfilePilotName[];
 extern const TCHAR szProfileAircraftType[];
