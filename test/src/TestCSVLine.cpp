@@ -25,72 +25,90 @@
 
 #include <cstring>
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
   plan_tests(19);
 
-  CSVLine line1("1,2,x,4,5,6,7,8,9,10");
+  {
+    CSVLine line("1,2,x,4,5,6,7,8,9,10");
 
-  // Test read(long)
-  int number_one = line1.read(-1);
-  ok1(number_one == 1);
+    {
+      // Test read(long)
+      int temp = line.read(-1);
+      ok1(temp == 1);
+    }
 
-  // Test rest()
-  ok1(strcmp(line1.rest(), "2,x,4,5,6,7,8,9,10") == 0);
+    // Test rest()
+    ok1(strcmp(line.rest(), "2,x,4,5,6,7,8,9,10") == 0);
 
-  // Test skip()
-  ok1(line1.skip() == 1);
+    // Test skip()
+    ok1(line.skip() == 1);
 
-  // Test skip(int)
-  line1.skip(3);
-  ok1(line1.read(-1) == 6);
+    // Test skip(int)
+    line.skip(3);
+    ok1(line.read(-1) == 6);
 
-  // Test read_first_char()
-  ok1(line1.read_first_char() == '7');
+    // Test read_first_char()
+    ok1(line.read_first_char() == '7');
 
-  // Test read(char)
-  char number_eight[10];
-  line1.read(number_eight, 10);
-  ok1(strcmp(number_eight, "8") == 0);
+    {
+      // Test read(char)
+      char temp[10];
+      line.read(temp, 10);
+      ok1(strcmp(temp, "8") == 0);
+    }
 
-  // Test read_compare(char)
-  ok1(line1.read_compare("9"));
+    // Test read_compare(char)
+    ok1(line.read_compare("9"));
 
-  // Test read(long)
-  long number_ten = line1.read(-1);
-  ok1(number_ten == 10);
+    {
+      // Test read(long)
+      long temp = line.read(-1);
+      ok1(temp == 10);
+    }
 
-  // Test default-value at line-end
-  ok1(line1.read(11) == 11);
+    // Test default-value at line-end
+    ok1(line.read(11) == 11);
 
-  // Test default-value at line-end
-  ok1(!line1.read_checked(number_one));
+    {
+      // Test default-value at line-end
+      int temp;
+      ok1(!line.read_checked(temp));
+    }
+  }
 
+  {
+    CSVLine line("A0,4.5555,4.5555,42,0,1.337,42.42,42,xxx");
 
+    // Test read_hex()
+    ok1(line.read_hex(-1) == 160);
 
-  CSVLine line2("A0,4.5555,4.5555,33,0,1.337,42.42,42,xxx");
+    // Test read(double)
+    ok1(equals(fixed(line.read(0.0)), 4.5555));
 
-  // Test read_hex()
-  ok1(line2.read_hex(-1) == 160);
+    // Test read(fixed)
+    ok1(equals(line.read(fixed_zero), 4.5555));
 
-  // Test read(double)
-  ok1(equals(fixed(line2.read(0.0)), 4.5555));
+    // Test read(bool)
+    ok1(line.read(false) == true);
+    ok1(line.read(false) == false);
 
-  // Test read(fixed)
-  ok1(equals(line2.read(fixed_zero), 4.5555));
-
-  // Test read(bool)
-  ok1(line2.read(false) == true);
-  ok1(line2.read(false) == false);
-
-  // Test read_checked()
-  double test1;
-  ok1(line2.read_checked(test1) && equals(fixed(test1), 1.337));
-  fixed test2;
-  ok1(line2.read_checked(test2) && equals(test2, 42.42));
-  int test3;
-  ok1(line2.read_checked(test3) && test3 == 42);
-  ok1(!line2.read_checked(test3) && test3 == 42);
+    // Test read_checked()
+    {
+      double temp;
+      ok1(line.read_checked(temp) && equals(fixed(temp), 1.337));
+    }
+    {
+      fixed temp;
+      ok1(line.read_checked(temp) && equals(temp, 42.42));
+    }
+    {
+      int temp;
+      ok1(line.read_checked(temp) && temp == 42);
+      ok1(!line.read_checked(temp) && temp == 42);
+    }
+  }
 
   return exit_status();
 }
