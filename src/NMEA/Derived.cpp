@@ -75,14 +75,14 @@ CIRCLING_INFO::Clear()
 void
 TERRAIN_ALT_INFO::Clear()
 {
+  TerrainWarning = false;
+
+  AltitudeAGL = fixed_zero;
+
   for (int i = 0; i <= TERRAIN_ALT_INFO::NUMTERRAINSWEEPS; i++) {
     GlideFootPrint[i].Longitude = Angle::native(fixed_zero);
     GlideFootPrint[i].Latitude = Angle::native(fixed_zero);
   }
-
-  TerrainWarning = false;
-
-  AltitudeAGL = fixed_zero;
 }
 
 void

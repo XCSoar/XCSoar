@@ -177,22 +177,24 @@ struct TERRAIN_ALT_INFO
     NUMTERRAINSWEEPS = 49,
   };
 
-  /** Terrain altitude */
-  fixed TerrainAlt;
   /** True if terrain is valid, False otherwise */
-  bool   TerrainValid;
+  bool TerrainValid;
 
   bool TerrainWarning;
-  GeoPoint TerrainWarningLocation;
 
-  /** Final glide ground line */
-  GeoPoint GlideFootPrint[NUMTERRAINSWEEPS];
+  /** Terrain altitude */
+  fixed TerrainAlt;
 
   /** Lowest height within glide range */
   fixed TerrainBase;
 
   /** Altitude over terrain */
   fixed AltitudeAGL;
+
+  GeoPoint TerrainWarningLocation;
+
+  /** Final glide ground line */
+  GeoPoint GlideFootPrint[NUMTERRAINSWEEPS];
 
   void Clear();
 };
