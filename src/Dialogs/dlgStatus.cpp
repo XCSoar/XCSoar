@@ -179,7 +179,7 @@ UpdateValuesSystem()
 
   wp = (WndProperty*)wf->FindByName(_T("prpVario"));
   assert(wp != NULL);
-  if (XCSoarInterface::Basic().TotalEnergyVarioAvailable)
+  if (basic.TotalEnergyVarioAvailable)
     wp->SetText(_("Connected"));
   else
     wp->SetText(_("Disconnected"));
@@ -189,7 +189,7 @@ UpdateValuesSystem()
 
   wp = (WndProperty*)wf->FindByName(_T("prpFLARM"));
   assert(wp != NULL);
-  if (XCSoarInterface::Basic().flarm.available)
+  if (basic.flarm.available)
     wp->SetText(_("Connected"));
   else
     wp->SetText(_("Disconnected"));
@@ -226,11 +226,11 @@ UpdateValuesSystem()
     _tcscat(Temp, Temp2);
   }
 #endif
-  if (XCSoarInterface::Basic().SupplyBatteryVoltage == fixed_zero)
+  if (basic.SupplyBatteryVoltage == fixed_zero)
     Temp2[0] = 0;
   else
     _stprintf(Temp2, _T("%.1f V"),
-              (double)XCSoarInterface::Basic().SupplyBatteryVoltage);
+              (double)basic.SupplyBatteryVoltage);
 
   _tcscat(Temp, Temp2);
 
@@ -242,6 +242,9 @@ UpdateValuesSystem()
 static void
 UpdateValuesTimes(void)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const FLYING_STATE &flight = basic.flight;
+
   WndProperty *wp;
   TCHAR Temp[1000];
   double sunsettime;
@@ -259,14 +262,13 @@ UpdateValuesTimes(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
   assert(wp != NULL);
-  Units::TimeToText(Temp, (int)DetectCurrentTime(&XCSoarInterface::Basic()));
+  Units::TimeToText(Temp, (int)DetectCurrentTime(&basic));
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTakeoffTime"));
   assert(wp != NULL);
-  if (positive(XCSoarInterface::Basic().flight.FlightTime)) {
-    Units::TimeToText(Temp,
-                      TimeLocal((long)XCSoarInterface::Basic().flight.TakeOffTime));
+  if (positive(flight.FlightTime)) {
+    Units::TimeToText(Temp, TimeLocal((long)flight.TakeOffTime));
     wp->SetText(Temp);
   } else {
     wp->SetText(_T(""));
@@ -274,11 +276,10 @@ UpdateValuesTimes(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpLandingTime"));
   assert(wp != NULL);
-  if (!XCSoarInterface::Basic().flight.Flying &&
-      positive(XCSoarInterface::Basic().flight.FlightTime)) {
+  if (!flight.Flying && positive(flight.FlightTime)) {
     Units::TimeToText(Temp,
-                      TimeLocal((long)(XCSoarInterface::Basic().flight.TakeOffTime
-                                            + XCSoarInterface::Basic().flight.FlightTime)));
+                      TimeLocal((long)(flight.TakeOffTime
+                                       + flight.FlightTime)));
     wp->SetText(Temp);
   } else {
     wp->SetText(_T(""));
@@ -286,8 +287,8 @@ UpdateValuesTimes(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlightTime"));
   assert(wp != NULL);
-  if (positive(XCSoarInterface::Basic().flight.FlightTime)) {
-    Units::TimeToText(Temp, (int)XCSoarInterface::Basic().flight.FlightTime);
+  if (positive(flight.FlightTime)) {
+    Units::TimeToText(Temp, (int)flight.FlightTime);
     wp->SetText(Temp);
   } else {
     wp->SetText(_T(""));
