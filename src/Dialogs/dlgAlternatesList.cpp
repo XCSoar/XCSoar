@@ -53,7 +53,7 @@ PaintListItem(Canvas &canvas, const RECT rc, unsigned index)
 
   WayPointRenderer::DrawLandableSymbol(canvas, pt,
                                        positive(solution.AltitudeDifference),
-                                       way_point);
+                                       true, way_point);
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;

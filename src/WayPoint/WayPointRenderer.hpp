@@ -57,7 +57,8 @@ public:
 
   static void
   DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
-                     bool reachable, const Waypoint &way_point,
+                     bool reachable_glide, bool reachable_terrain,
+                     const Waypoint &way_point,
                      const Angle &screen_rotation = Angle::degrees(fixed_zero));
 
   void render(Canvas &canvas, LabelBlock &label_block,

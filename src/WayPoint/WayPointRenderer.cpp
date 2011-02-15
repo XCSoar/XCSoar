@@ -136,7 +136,8 @@ public:
     if (!projection.WaypointInScaleFilter(way_point) && !in_task)
       return;
 
-    bool reachable = false;
+    bool reachable_glide = false;
+    bool reachable_terrain = (terrain == NULL);
 
     int AltArrivalAGL = 0;
 
@@ -147,7 +148,7 @@ public:
 
       if (r.glide_reachable()) {
 
-        reachable = true;
+        reachable_glide = true;
         // reachable according to height, now check terrain intersection
 
         if (terrain) {
@@ -155,16 +156,16 @@ public:
           const AGeoPoint p_dest (t.get_location(), r.MinHeight);
           GeoPoint p_intx = p_dest;
 
-          if (rpolars.intersection(p_start, p_dest, &terrain->map, proj, p_intx))
-            reachable = false;
+          if (!rpolars.intersection(p_start, p_dest, &terrain->map, proj, p_intx))
+            reachable_terrain = true;
         }
 
-        if (reachable) 
-          AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
-                                                 Units::AltitudeUnit);
+        AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
+                                               Units::AltitudeUnit);
       }
 
-      WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable, way_point,
+      WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable_glide,
+                                           reachable_terrain, way_point,
                                            projection.GetScreenAngle());
     } else {
       // non landable turnpoint
@@ -189,7 +190,7 @@ public:
     }
 
     TextInBoxMode_t text_mode;
-    if (reachable && way_point.is_landable()) {
+    if (reachable_glide && way_point.is_landable()) {
       text_mode.Mode = RoundedBlack;
       text_mode.Bold = true;
     } else if (in_task) {
@@ -208,8 +209,8 @@ public:
       _stprintf(Buffer + length, _T("%d%s"), AltArrivalAGL, sAltUnit);
     }
 
-    if (reachable && (Appearance.IndLandable == wpLandableWinPilot ||
-                      Appearance.UseSWLandablesRendering))
+    if (reachable_glide && (Appearance.IndLandable == wpLandableWinPilot ||
+                            Appearance.UseSWLandablesRendering))
       // make space for the green circle
       sc.x += 5;
 
@@ -383,13 +384,17 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
 
 void
 WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
-                                     bool reachable, const Waypoint &way_point,
+                                     bool reachable_glide,
+                                     bool reachable_terrain,
+                                     const Waypoint &way_point,
                                      const Angle &screenRotation)
 {
+  static const Color ORANGE(255, 162, 0);
+
   if (!Appearance.UseSWLandablesRendering) {
     const MaskedIcon *icon;
 
-    if (reachable)
+    if (reachable_glide && reachable_terrain)
       icon = way_point.is_airport() ? &Graphics::AirportReachableIcon :
                                       &Graphics::FieldReachableIcon;
     else
@@ -409,8 +414,8 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
   canvas.black_pen();
   if (Appearance.IndLandable == wpLandableWinPilot) {
     // Render landable with reachable state
-    if (reachable) {
-      fill.set(Color::GREEN);
+    if (reachable_glide) {
+      fill.set(reachable_terrain ? Color::GREEN : ORANGE);
       canvas.select(fill);
       DrawLandableBase(canvas, pt, way_point.is_airport(),
                        radius + radius / fixed_two);
@@ -418,18 +423,21 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
     fill.set(Color::MAGENTA);
     canvas.select(fill);
     DrawLandableBase(canvas, pt, way_point.is_airport(), radius);
+  } else if (Appearance.IndLandable == wpLandableAltB) {
+    if (reachable_glide)
+      fill.set(reachable_terrain ? Color::GREEN : Color::YELLOW);
+    else
+      fill.set(ORANGE);
   } else {
-    if (reachable)
-      fill.set(Color::GREEN);
-    else if (Appearance.IndLandable == wpLandableAltB)
-      fill.set(Color(255, 162, 0));    // Orange
+    if (reachable_glide)
+      fill.set(reachable_terrain ? Color::GREEN : ORANGE);
     else if (way_point.is_airport())
       fill.set(Color::WHITE);
     else
-      fill.set(Color(192, 192, 192));  // Light gray
-    canvas.select(fill);
-    DrawLandableBase(canvas, pt, way_point.is_airport(), radius);
+      fill.set(Color::LIGHT_GRAY);
   }
+  canvas.select(fill);
+  DrawLandableBase(canvas, pt, way_point.is_airport(), radius);
 
   // Render runway indication
   if (way_point.RunwayDirection.value_degrees() >= fixed_zero) {
