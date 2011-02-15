@@ -39,7 +39,13 @@ InputEvents::findKey(const TCHAR *data)
 pt2Event
 InputEvents::findEvent(const TCHAR *data)
 {
-  return (pt2Event)_tcsdup(data);
+  union {
+    const TCHAR *in;
+    pt2Event out;
+  } u;
+
+  u.in = data;
+  return u.out;
 }
 
 int
