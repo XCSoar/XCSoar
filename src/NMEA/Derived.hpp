@@ -33,6 +33,7 @@ Copyright_License {
 #include "NMEA/ThermalLocator.hpp"
 #include "NMEA/Validity.hpp"
 #include "TeamCodeCalculation.h"
+#include "Engine/Navigation/Aircraft.hpp"
 
 #include <tchar.h>
 
@@ -281,6 +282,8 @@ struct DERIVED_INFO:
 
   TaskStats task_stats; /**< Copy of task statistics data for active task */
   CommonStats common_stats; /**< Copy of common task statistics data */
+
+  FLYING_STATE flight;
 
   ThermalBandInfo thermal_band;
 

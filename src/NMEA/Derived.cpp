@@ -105,6 +105,8 @@ DERIVED_INFO::ResetFlight(bool full)
     CIRCLING_INFO::ClearPartial();
   }
 
+  flight.flying_state_reset();
+
   thermal_band.clear();
 
   thermal_locator.Clear();

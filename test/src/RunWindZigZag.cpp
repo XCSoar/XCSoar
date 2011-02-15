@@ -122,7 +122,7 @@ DeviceBlackboard::tick(const GlidePolar& glide_polar)
   if (!Basic().acceleration.Available)
     SetBasic().acceleration.Gload = fixed_one;
 
-  SetBasic().flight.flying_state_moving(Basic().Time);
+  SetCalculated().flight.flying_state_moving(Basic().Time);
 }
 
 int main(int argc, char **argv)

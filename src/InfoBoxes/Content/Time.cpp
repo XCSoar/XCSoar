@@ -71,13 +71,13 @@ InfoBoxContentTimeFlight::Update(InfoBoxWindow &infobox)
 {
   TCHAR sTmp[32];
 
-  if (!positive(XCSoarInterface::Basic().flight.FlightTime)) {
+  if (!positive(CommonInterface::Calculated().flight.FlightTime)) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  int dd = abs((int)XCSoarInterface::Basic().flight.FlightTime) % (3600 * 24);
+  int dd = abs((int)CommonInterface::Calculated().flight.FlightTime) % (3600 * 24);
   int hours = (dd / 3600);
   int mins = (dd / 60 - hours * 60);
   int seconds = (dd - mins * 60 - hours * 3600);

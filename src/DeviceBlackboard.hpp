@@ -100,7 +100,6 @@ private:
   void TurnRate();
   void Vario();
   void NettoVario(const GlidePolar& glide_polar);
-  void FlightState(const GlidePolar& glide_polar);
   void AutoQNH();
 
   NMEA_INFO state_last;

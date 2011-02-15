@@ -93,8 +93,6 @@ GlideComputerBlackboard::SaveFinish()
 void
 GlideComputerBlackboard::RestoreFinish()
 {
-  FLYING_STATE flying_state = Basic().flight;
-
   calculated_info = Finish_Derived_Info;
 
   // \todo restore flying state

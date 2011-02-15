@@ -124,7 +124,7 @@ SettingsLeave()
       WayPointGlue::SetHome(way_points, terrain,
                             XCSoarInterface::SetSettingsComputer(),
                             WaypointFileChanged,
-                            !XCSoarInterface::Basic().flight.Flying);
+                            !CommonInterface::Calculated().flight.Flying);
     }
 
     XCSoarInterface::main_window.map.set_terrain(terrain);

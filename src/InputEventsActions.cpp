@@ -620,7 +620,7 @@ InputEvents::eventCalculator(const TCHAR *misc)
   dlgTaskCalculatorShowModal(XCSoarInterface::main_window);
 #else
   TaskManager::TaskMode_t mode = protected_task_manager->get_mode();
-  if (XCSoarInterface::Basic().flight.Flying &&
+  if (CommonInterface::Calculated().flight.Flying &&
                         (mode != TaskManager::MODE_ABORT) &&
                         (mode != TaskManager::MODE_GOTO) &&
                         XCSoarInterface::Calculated().task_stats.task_valid)
@@ -879,14 +879,14 @@ InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
     dlgVegaDemoShowModal();
   } else if (_tcscmp(misc, _T("zero"))==0) {
     // zero, no mixing
-    if (!XCSoarInterface::Basic().flight.Flying) {
+    if (!CommonInterface::Calculated().flight.Flying) {
       VarioWriteNMEA(_T("PDVSC,S,ZeroASI,1"));
     }
   } else if (_tcscmp(misc, _T("save")) == 0) {
     VarioWriteNMEA(_T("PDVSC,S,StoreToEeprom,2"));
 
   // accel calibration
-  } else if (!XCSoarInterface::Basic().flight.Flying) {
+  } else if (!CommonInterface::Calculated().flight.Flying) {
     if (_tcscmp(misc, _T("X1"))==0)
       VarioWriteNMEA(_T("PDVSC,S,CalibrateAccel,1"));
     else if (_tcscmp(misc, _T("X2"))==0)

@@ -60,7 +60,7 @@ void MapWindow::CalculateScreenPositionsGroundline(void)
 void
 MapWindow::DrawTerrainAbove(Canvas &canvas)
 {
-  if (Basic().gps.NAVWarning || !Basic().flight.Flying ||
+  if (Basic().gps.NAVWarning || !Calculated().flight.Flying ||
       SettingsMap().EnablePan || GroundlineLength < 3)
     return;
 
@@ -124,7 +124,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
     canvas.polygon(Groundline, GroundlineLength);
   }
 
-  if (!Basic().flight.Flying)
+  if (!Calculated().flight.Flying)
     return;
 
   if (Calculated().TerrainWarning) {

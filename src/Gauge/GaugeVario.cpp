@@ -486,7 +486,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
   x = get_right() - 2 * ARROWXSIZE;
 
   // only draw speed command if flying and vario is not circling
-  if ((Basic().flight.Flying)
+  if ((Calculated().flight.Flying)
       && (!Basic().gps.Simulator || !Calculated().Circling)
       && !Basic().SwitchState.VarioCircling) {
     vdiff = Calculated().V_stf - Basic().IndicatedAirspeed;

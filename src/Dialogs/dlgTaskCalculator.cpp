@@ -183,7 +183,7 @@ RefreshCalculator(void)
   WndButton *wb = (WndButton*)wf->FindByName(_T("cmdTaskManager"));
   assert(wb);
   TaskManager::TaskMode_t mode = protected_task_manager->get_mode();
-  if (XCSoarInterface::Basic().flight.Flying &&
+  if (CommonInterface::Calculated().flight.Flying &&
                         (mode != TaskManager::MODE_ABORT) &&
                         (mode != TaskManager::MODE_GOTO) &&
                         XCSoarInterface::Calculated().task_stats.task_valid)

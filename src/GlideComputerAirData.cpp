@@ -124,7 +124,7 @@ GlideComputerAirData::ProcessVertical()
   LD();
   CruiseLD();
 
-  if (basic.flight.Flying && !calculated.Circling)
+  if (calculated.flight.Flying && !calculated.Circling)
     calculated.AverageLD = rotaryLD.calculate();
 
   Average30s();
@@ -142,7 +142,7 @@ GlideComputerAirData::Wind()
 {
   DERIVED_INFO &calculated = SetCalculated();
 
-  if (!Basic().flight.Flying || !time_advanced())
+  if (!calculated.flight.Flying || !time_advanced())
     return;
 
   if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING) {
@@ -342,7 +342,7 @@ GlideComputerAirData::MaxHeightGain()
   const NMEA_INFO &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
 
-  if (!basic.flight.Flying)
+  if (!calculated.flight.Flying)
     return;
 
   if (positive(Calculated().MinAltitude)) {
@@ -383,13 +383,13 @@ GlideComputerAirData::LD()
       UpdateLD(Calculated().LD, DistanceFlown,
                LastBasic().NavAltitude - Basic().NavAltitude, fixed(0.1));
 
-    if (Basic().flight.Flying && !Calculated().Circling)
+    if (calculated.flight.Flying && !Calculated().Circling)
       rotaryLD.add((int)DistanceFlown, (int)Basic().NavAltitude);
   }
 
   // LD instantaneous from vario, updated every reading..
   if (Basic().TotalEnergyVarioAvailable && Basic().AirspeedAvailable &&
-      Basic().flight.Flying) {
+      calculated.flight.Flying) {
     calculated.LDvario =
       UpdateLD(Calculated().LDvario, Basic().IndicatedAirspeed,
                -Basic().TotalEnergyVario, fixed(0.3));
@@ -479,6 +479,7 @@ GlideComputerAirData::FlightTimes()
     return false;
   }
 
+  FlightState(m_task.get_glide_polar());
   TakeoffLanding();
 
   return true;
@@ -494,15 +495,41 @@ GlideComputerAirData::ProcessIdle()
     AirspaceWarning();
 }
 
+void
+GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
+{
+  const NMEA_INFO &basic = Basic();
+  DERIVED_INFO &calculated = SetCalculated();
+
+  if (basic.Time < LastBasic().Time)
+    calculated.flight.flying_state_reset();
+
+  // GPS not lost
+  if (basic.gps.NAVWarning)
+    return;
+
+  // Speed too high for being on the ground
+  const fixed speed = basic.AirspeedAvailable
+    ? std::max(basic.TrueAirspeed, basic.GroundSpeed)
+    : basic.GroundSpeed;
+
+  if (speed > glide_polar.get_Vtakeoff() ||
+      (calculated.AltitudeAGLValid && calculated.AltitudeAGL > fixed(300))) {
+    calculated.flight.flying_state_moving(basic.Time);
+  } else {
+    calculated.flight.flying_state_stationary(basic.Time);
+  }
+}
+
 /**
  * Detects takeoff and landing events
  */
 void
 GlideComputerAirData::TakeoffLanding()
 {
-  if (Basic().flight.Flying && !LastBasic().flight.Flying)
+  if (Calculated().flight.Flying && !LastCalculated().flight.Flying)
     OnTakeoff();
-  else if (!Basic().flight.Flying && LastBasic().flight.Flying)
+  else if (!Calculated().flight.Flying && LastCalculated().flight.Flying)
     OnLanding();
 }
 
@@ -661,7 +688,7 @@ GlideComputerAirData::Turning()
   DERIVED_INFO &calculated = SetCalculated();
 
   // You can't be circling unless you're flying
-  if (!Basic().flight.Flying || !time_advanced())
+  if (!calculated.flight.Flying || !time_advanced())
     return;
 
   // JMW limit rate to 50 deg per second otherwise a big spike

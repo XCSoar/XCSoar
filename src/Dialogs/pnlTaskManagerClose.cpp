@@ -84,7 +84,7 @@ pnlTaskManagerClose::OnTabPreShow(TabBarControl::EventType EventType)
   assert(wb);
   TaskManager::TaskMode_t mode = protected_task_manager->get_mode();
   const bool show_calculator_button =
-        (XCSoarInterface::Basic().flight.Flying &&
+    (CommonInterface::Calculated().flight.Flying &&
                         (mode != TaskManager::MODE_ABORT) &&
                         (mode != TaskManager::MODE_GOTO) &&
                         XCSoarInterface::Calculated().task_stats.task_valid) ?

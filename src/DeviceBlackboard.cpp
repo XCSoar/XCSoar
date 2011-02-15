@@ -364,7 +364,6 @@ DeviceBlackboard::tick(const GlidePolar& glide_polar)
   SetSystemTime();
 
   // calculate fast data to complete aircraft state
-  FlightState(glide_polar);
   Wind();
   Heading();
   NavAltitude();
@@ -398,7 +397,7 @@ DeviceBlackboard::NettoVario(const GlidePolar& glide_polar)
 {
   NMEA_INFO &basic = SetBasic();
 
-  basic.GliderSinkRate = basic.flight.Flying
+  basic.GliderSinkRate = Calculated().flight.Flying
     ? - glide_polar.SinkRate(basic.IndicatedAirspeed,
                              basic.acceleration.Gload)
     /* the glider sink rate is useless when not flying */
@@ -443,7 +442,7 @@ DeviceBlackboard::Heading()
     x0 += wind.bearing.fastsine() * wind.norm;
     y0 += wind.bearing.fastcosine() * wind.norm;
 
-    if (!basic.flight.Flying) {
+    if (!Calculated().flight.Flying) {
       // don't take wind into account when on ground
       basic.Heading = basic.TrackBearing;
     } else {
@@ -521,7 +520,7 @@ DeviceBlackboard::TurnRate()
 
   // Calculate turn rate
 
-  if (!basic.flight.Flying) {
+  if (!Calculated().flight.Flying) {
     basic.TurnRate = fixed_zero;
     return;
   }
@@ -543,7 +542,7 @@ DeviceBlackboard::Dynamics()
 {
   NMEA_INFO &basic = SetBasic();
 
-  if (basic.flight.Flying &&
+  if (Calculated().flight.Flying &&
       (positive(basic.GroundSpeed) || basic.wind.is_non_zero())) {
 
     // calculate turn rate in wind coordinates
@@ -596,32 +595,6 @@ DeviceBlackboard::EnergyHeight()
 }
 
 void
-DeviceBlackboard::FlightState(const GlidePolar& glide_polar)
-{
-  NMEA_INFO &basic = SetBasic();
-  const DERIVED_INFO &calculated = Calculated();
-
-  if (basic.Time < LastBasic().Time)
-    basic.flight.flying_state_reset();
-
-  // GPS not lost
-  if (basic.gps.NAVWarning)
-    return;
-
-  // Speed too high for being on the ground
-  const fixed speed = basic.AirspeedAvailable
-    ? std::max(basic.TrueAirspeed, basic.GroundSpeed)
-    : basic.GroundSpeed;
-
-  if (speed > glide_polar.get_Vtakeoff() ||
-      (calculated.AltitudeAGLValid && calculated.AltitudeAGL > fixed(300))) {
-    basic.flight.flying_state_moving(basic.Time);
-  } else {
-    basic.flight.flying_state_stationary(basic.Time);
-  }
-}
-
-void
 DeviceBlackboard::AutoQNH()
 {
   NMEA_INFO &basic = SetBasic();
@@ -630,7 +603,7 @@ DeviceBlackboard::AutoQNH()
 
   static unsigned countdown_autoqnh = QNH_TIME;
 
-  if (!basic.flight.OnGround // must be on ground
+  if (!Calculated().flight.OnGround // must be on ground
       || !countdown_autoqnh    // only do it once
       || basic.gps.Replay // never in replay mode
       || basic.gps.Simulator // never in simulator

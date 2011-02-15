@@ -27,10 +27,10 @@ Copyright_License {
 #include "NMEA/Validity.hpp"
 #include "DateTime.hpp"
 #include "Navigation/GeoPoint.hpp"
-#include "Navigation/Aircraft.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "FLARM/State.hpp"
 #include "Sizes.h"
+#include "Engine/Navigation/SpeedVector.hpp"
 
 /**
  * State of external switch devices (esp Vega)
@@ -156,8 +156,6 @@ struct NMEA_INFO {
   GPS_STATE gps;
 
   ACCELERATION_STATE acceleration;
-
-  FLYING_STATE flight;
 
   /** location of aircraft */
   GeoPoint Location;

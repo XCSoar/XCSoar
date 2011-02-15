@@ -243,7 +243,8 @@ static void
 UpdateValuesTimes(void)
 {
   const NMEA_INFO &basic = CommonInterface::Basic();
-  const FLYING_STATE &flight = basic.flight;
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const FLYING_STATE &flight = calculated.flight;
 
   WndProperty *wp;
   TCHAR Temp[1000];

@@ -413,7 +413,7 @@ public:
     // @todo accuracy: correct TAS for vertical speed if dynamic pullup
 
     // reset if flight hasnt started or airspeed instrument not available
-    if (!basic.flight.Flying ||
+    if (!derived.flight.Flying ||
         !basic.AirspeedAvailable) {
 
       reset();

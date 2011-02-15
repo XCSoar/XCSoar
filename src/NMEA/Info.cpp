@@ -70,7 +70,6 @@ NMEA_INFO::reset()
 
   gps.reset();
   acceleration.reset();
-  flight.flying_state_reset();
 
   // XXX Location
 

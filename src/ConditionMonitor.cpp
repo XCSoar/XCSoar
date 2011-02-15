@@ -53,7 +53,7 @@ public:
   void
   Update(const GlideComputer& cmp)
   {
-    if (!cmp.Basic().flight.Flying)
+    if (!cmp.Calculated().flight.Flying)
       return;
 
     bool restart = false;
@@ -138,7 +138,7 @@ protected:
   {
     wind = cmp.Basic().wind;
 
-    if (!cmp.Basic().flight.Flying) {
+    if (!cmp.Calculated().flight.Flying) {
       last_wind = wind;
       return false;
     }
@@ -187,7 +187,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    if (!cmp.Basic().flight.Flying || !cmp.Calculated().task_stats.task_valid)
+    if (!cmp.Calculated().flight.Flying || !cmp.Calculated().task_stats.task_valid)
       return false;
 
     const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
@@ -255,7 +255,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    if (!cmp.Basic().flight.Flying || HaveCondorDevice() ||
+    if (!cmp.Calculated().flight.Flying || HaveCondorDevice() ||
         !cmp.Calculated().task_stats.task_valid)
       return false;
   
@@ -300,7 +300,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    if (!cmp.Basic().flight.Flying || 
+    if (!cmp.Calculated().flight.Flying ||
         !cmp.Calculated().task_stats.task_valid ||
         !cmp.Calculated().common_stats.mode_ordered ||
         !cmp.Calculated().common_stats.ordered_valid ||
@@ -401,7 +401,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    if (!cmp.Basic().flight.Flying || 
+    if (!cmp.Calculated().flight.Flying ||
         !cmp.Calculated().task_stats.task_valid)
       return false;
 
@@ -442,7 +442,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    if (!cmp.Basic().flight.Flying) 
+    if (!cmp.Calculated().flight.Flying)
       return false;
 
     now_reachable = cmp.Calculated().common_stats.landable_reachable;

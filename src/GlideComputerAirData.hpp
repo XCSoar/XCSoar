@@ -83,6 +83,7 @@ private:
   void CruiseLD();
   void Wind();
   void TerrainHeight();
+  void FlightState(const GlidePolar& glide_polar);
   void TakeoffLanding();
   void AirspaceWarning();
   void TerrainFootprint(const fixed max_dist);

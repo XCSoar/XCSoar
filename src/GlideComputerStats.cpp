@@ -80,12 +80,13 @@ GlideComputerStats::DoLogging()
     gps_info.gps.Simulator = false; // reset for next fix (set by NMEA parsing)
   }
 
-  if (Basic().flight.Flying) {
+  if (Calculated().flight.Flying) {
     if (stats_clock.check_advance(Basic().Time)) {
-      flightstats.AddAltitudeTerrain(Basic().flight.FlightTime,
+      flightstats.AddAltitudeTerrain(Calculated().flight.FlightTime,
                                      Calculated().TerrainAlt);
-      flightstats.AddAltitude(Basic().flight.FlightTime, Basic().NavAltitude);
-      flightstats.AddTaskSpeed(Basic().flight.FlightTime,
+      flightstats.AddAltitude(Calculated().flight.FlightTime,
+                              Basic().NavAltitude);
+      flightstats.AddTaskSpeed(Calculated().flight.FlightTime,
                                Calculated().task_stats.total.remaining_effective.get_speed_incremental());
     }
   }
@@ -97,14 +98,14 @@ void
 GlideComputerStats::OnClimbBase(fixed StartAlt)
 {
   flightstats.AddClimbBase(Calculated().ClimbStartTime -
-                           Basic().flight.TakeOffTime, StartAlt);
+                           Calculated().flight.TakeOffTime, StartAlt);
 }
 
 void
 GlideComputerStats::OnClimbCeiling()
 {
   flightstats.AddClimbCeiling(Calculated().CruiseStartTime -
-                              Basic().flight.TakeOffTime,
+                              Calculated().flight.TakeOffTime,
                               Calculated().CruiseStartAlt);
 }
 
