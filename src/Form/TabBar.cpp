@@ -235,7 +235,6 @@ TabDisplay::on_paint(Canvas &canvas)
     }
     const RECT &rc = theTabBar.GetButtonSize(i);
 
-    RECT rcText = rc;
     RECT rcTextFinal = rc;
     const unsigned buttonheight = rc.bottom - rc.top;
     const int textwidth = canvas.text_width(theTabBar.GetButtonCaption(i));

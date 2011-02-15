@@ -45,18 +45,6 @@ TopologyFileRenderer::TopologyFileRenderer(const TopologyFile &_file)
     icon.load_big(IDB_TOWN, IDB_TOWN_HD);
 }
 
-gcc_const
-static rectObj
-ConvertRect(const GeoBounds br)
-{
-  rectObj dest;
-  dest.minx = br.west.value_degrees();
-  dest.maxx = br.east.value_degrees();
-  dest.miny = br.south.value_degrees();
-  dest.maxy = br.north.value_degrees();
-  return dest;
-}
-
 void
 TopologyFileRenderer::Paint(Canvas &canvas,
                             const WindowProjection &projection) const
@@ -78,9 +66,6 @@ TopologyFileRenderer::Paint(Canvas &canvas,
 #endif
 
   // get drawing info
-
-  const rectObj screenRect =
-    ConvertRect(projection.GetScreenBounds());
 
 #ifdef ENABLE_OPENGL
   const unsigned level = file.thinning_level(map_scale);
@@ -293,9 +278,6 @@ TopologyFileRenderer::PaintLabels(Canvas &canvas,
   // get drawing info
 
   int iskip = file.GetSkipSteps(map_scale);
-
-  rectObj screenRect =
-    ConvertRect(projection.GetScreenBounds());
 
 #ifdef ENABLE_OPENGL
   Matrix2D m1;
