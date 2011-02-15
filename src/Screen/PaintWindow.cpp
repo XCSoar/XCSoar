@@ -54,8 +54,3 @@ PaintWindow::register_class(HINSTANCE hInstance)
   return RegisterClass(&wc) != 0;
 #endif /* !ENABLE_SDL */
 }
-
-bool PaintWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) {
-  // not defined!
-  return false;
-}
