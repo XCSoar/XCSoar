@@ -30,10 +30,10 @@
 #include <utility>
 
 class GlidePolar;
-class GlideResult;
+struct GlideResult;
 class TaskProjection;
 class RasterMap;
-class SpeedVector;
+struct SpeedVector;
 
 /**
  * Extension of GeoPoint for altitude (3d location in spherical space)
