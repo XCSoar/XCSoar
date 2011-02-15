@@ -108,10 +108,9 @@ public:
   }
 
   RasterPoint Apply(const ShapePoint &sp) const {
-    RasterPoint rp = {
-      x: (mul(sp.x, m[0][0]) + mul(sp.y, m[1][0]) + m[2][0]) >> 16,
-      y: (mul(sp.x, m[1][0]) + mul(sp.y, m[1][1]) + m[2][1]) >> 16,
-    };
+    RasterPoint rp;
+    rp.x = (mul(sp.x, m[0][0]) + mul(sp.y, m[1][0]) + m[2][0]) >> 16;
+    rp.y = (mul(sp.x, m[1][0]) + mul(sp.y, m[1][1]) + m[2][1]) >> 16;
     return rp;
   }
 
