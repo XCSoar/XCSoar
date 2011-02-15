@@ -578,7 +578,7 @@ VLA_ERROR VLAPI::read_info() {
   byte buffer[8];
   VLA_ERROR err;
 
-  if(((err = readinfo(buffer,sizeof(buffer))) == VLA_ERR_NOERR)) {
+  if ((err = readinfo(buffer,sizeof(buffer))) == VLA_ERR_NOERR) {
     // Aufbau der Versions- und sonstigen Nummern
     vlinfo.sessionid = 256*buffer[0] + buffer[1];
     vlinfo.vlserno = 256*buffer[2] + buffer[3];
