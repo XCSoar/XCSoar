@@ -196,8 +196,15 @@ class NativeView extends SurfaceView
   /**
    * Initializes the OpenGL surface.  Called by the native code.
    */
-  private void initSurface() {
-    initGL(getHolder());
+  private boolean initSurface() {
+    try {
+      initGL(getHolder());
+      return true;
+    } catch (Exception e) {
+      Log.e(TAG, "initGL error: " + e);
+      deinitSurface();
+      return false;
+    }
   }
 
   /**

@@ -49,9 +49,11 @@ TopWindow::on_resume()
   if (!paused)
     return;
 
+  if (!native_view->initSurface())
+    return;
+
   paused = false;
 
-  native_view->initSurface();
   screen.set();
 
   SurfaceCreated();
