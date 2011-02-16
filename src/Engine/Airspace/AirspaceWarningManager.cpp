@@ -195,7 +195,8 @@ public:
     m_warning_state(warning_state),
     m_max_time(max_time),
     m_found(false),
-    m_max_alt(max_alt)
+    m_max_alt(max_alt),
+    mode_inside(false)
     {      
     };
 
@@ -211,11 +212,23 @@ public:
 
     AirspaceWarning& warning = m_warning_manager.get_warning(airspace);
     if (warning.state_accepted(m_warning_state)) {
-      AirspaceInterceptSolution solution = intercept(airspace, m_state, m_perf);
-      if (solution.valid() && (solution.elapsed_time <= m_max_time)) {
-        warning.update_solution(m_warning_state, solution);
-        m_found = true;
+
+      AirspaceInterceptSolution solution;
+
+      if (mode_inside) {
+        GeoPoint c = airspace.closest_point(m_state.Location);
+        GeoVector vector_exit(m_state.Location, c);
+        airspace.intercept(m_state, vector_exit, m_perf, solution);
+      } else {
+        solution = intercept(airspace, m_state, m_perf);
       }
+      if (!solution.valid())
+        return;
+      if (solution.elapsed_time > m_max_time)
+        return;
+
+      warning.update_solution(m_warning_state, solution);
+      m_found = true;
     }
   }
   void Visit(const AirspaceCircle& as) {
@@ -223,6 +236,9 @@ public:
   }
   void Visit(const AirspacePolygon& as) {
     intersection(as);
+  }
+  void Visit(const Airspace& a) {
+    AirspaceVisitor::Visit(a);
   }
 
 /** 
@@ -233,6 +249,10 @@ public:
   bool found() const {
     return m_found;
   }
+
+  void set_mode(bool m) {
+    mode_inside = m;
+  }
 private:
   const AIRCRAFT_STATE m_state;
   const AirspaceAircraftPerformance &m_perf;
@@ -241,6 +261,7 @@ private:
   const fixed m_max_time;
   bool m_found;
   const fixed m_max_alt;
+  bool mode_inside;
 
   bool exclude_alt(const AbstractAirspace& airspace) {
     if (!positive(m_max_alt)) {
@@ -283,6 +304,9 @@ AirspaceWarningManager::update_predicted(const AIRCRAFT_STATE& state,
 
   GeoVector vector_predicted(state.Location, location_predicted);
   m_airspaces.visit_intersecting(state.Location, vector_predicted, visitor);
+
+  visitor.set_mode(true);
+  m_airspaces.visit_inside(state.Location, visitor);
 
   return visitor.found();
 }

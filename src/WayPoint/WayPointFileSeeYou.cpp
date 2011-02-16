@@ -118,16 +118,6 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
     rwlen = fixed_zero;
   }
 
-  // If the Style attribute did not state that this is an airport
-  if (!new_waypoint.Flags.Airport) {
-    // If runway length is between 100m and 300m -> landpoint
-    if (rwlen > fixed(100) && rwlen <= fixed(300))
-      new_waypoint.Flags.LandPoint = true;
-    // If runway length is higher then 300m -> airport
-    if (rwlen > fixed(300))
-      new_waypoint.Flags.Airport = true;
-  }
-
   // Frequency & runway direction/length (for airports and landables)
   // and description (e.g. "Some Description")
   if (new_waypoint.is_landable()) {

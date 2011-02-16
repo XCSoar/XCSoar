@@ -58,7 +58,7 @@ find_waypoint(Waypoints &way_points, const TCHAR *name)
     buffer[name_length - 5] = _T('\0');
     wp = way_points.lookup_name(buffer);
     if (wp != NULL) {
-      XCSoarInterface::SetSettingsComputer().HomeWaypoint = wp->id;
+      XCSoarInterface::SetSettingsComputer().SetHome(*wp);
       return wp;
     }
   }

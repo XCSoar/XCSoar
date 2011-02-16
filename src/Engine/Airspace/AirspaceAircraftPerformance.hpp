@@ -256,11 +256,11 @@ public:
   }
 
   virtual fixed get_climb_rate() const {
-    return fixed_zero;
+    return m_state_filter.get_climb_rate();
   }
 
   virtual fixed get_descent_rate() const {
-    return fixed_zero;
+    return -m_state_filter.get_climb_rate();
   }
 
   virtual fixed get_max_speed() const {

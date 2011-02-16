@@ -314,6 +314,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapProjectionBlackboard.cpp \
 	$(SRC)/MapWindowBlackboard.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
+	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/CalculationThread.cpp \
 	\
@@ -366,6 +367,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Compatibility/string.c 	\
 	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/Earth.cpp \
 	$(SRC)/Profile/Writer.cpp \
 	$(SRC)/Profile/ProfileGlue.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
@@ -510,6 +512,8 @@ $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): CPPFLAGS += 
 $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(XCSOAR_LDFLAGS) -o $@
+
+$(TARGET_OUTPUT_DIR)/$(SRC)/Version.o: $(topdir)/VERSION.txt
 
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 

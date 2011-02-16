@@ -59,13 +59,24 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 
   // check invalid home waypoint or forced reset due to file change
   const Waypoint *wp = reset ? NULL : way_points.lookup_id(settings.HomeWaypoint);
+  if (wp == NULL && settings.HomeLocationAvailable) {
+    /* fall back to HomeLocation, try to find it in the waypoint
+       database */
+    wp = way_points.lookup_location(settings.HomeLocation, fixed(100));
+    if (wp != NULL && wp->is_airport())
+      settings.SetHome(*wp);
+  }
+
   if (wp != NULL) {
     // home waypoint found
     way_points.set_home(settings.HomeWaypoint);
   } else {
     // search for home in waypoint list, if we don't have a home
     wp = way_points.find_home();
-    settings.HomeWaypoint = wp ? (int)wp->id : -1;
+    if (wp != NULL)
+      settings.SetHome(*wp);
+    else
+      settings.ClearHome();
   }
 
   // check invalid task ref waypoint or forced reset due to file change
@@ -89,6 +100,9 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 
   // Save the home waypoint number in the resgistry
   Profile::Set(szProfileHomeWaypoint,settings.HomeWaypoint);
+  if (settings.HomeLocationAvailable)
+    Profile::SetGeoPoint(szProfileHomeLocation, settings.HomeLocation);
+
   Profile::Set(szProfileTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
 }
 

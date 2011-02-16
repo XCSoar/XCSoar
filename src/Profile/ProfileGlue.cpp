@@ -252,6 +252,9 @@ Profile::Use()
   Get(szProfileHomeWaypoint,
       settings_computer.HomeWaypoint);
 
+  settings_computer.HomeLocationAvailable =
+    GetGeoPoint(szProfileHomeLocation, settings_computer.HomeLocation);
+
   Get(szProfileSnailWidthScale,
       settings_map.SnailScaling);
 

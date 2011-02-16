@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SETTINGS_COMPUTER_HPP
 
 #include "FLARM/FlarmId.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
 
 #include <tchar.h>
 
@@ -33,6 +34,8 @@ Copyright_License {
 
 #include "SettingsAirspace.hpp"
 #include "TeamCodeCalculation.h"
+
+class Waypoint;
 
 // control of calculations, these only changed by user interface
 // but are used read-only by calculations
@@ -138,6 +141,13 @@ struct SETTINGS_VOICE {
 struct SETTINGS_PLACES_OF_INTEREST {
   /** Array index of the home waypoint */
   int HomeWaypoint;
+
+  bool HomeLocationAvailable;
+
+  GeoPoint HomeLocation;
+
+  void ClearHome();
+  void SetHome(const Waypoint &wp);
 };
 
 

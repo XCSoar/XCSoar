@@ -274,7 +274,7 @@ OnNewHomeClicked(gcc_unused WndButton &button)
 {
   assert(selected_waypoint != NULL);
 
-  XCSoarInterface::SetSettingsComputer().HomeWaypoint = selected_waypoint->id;
+  XCSoarInterface::SetSettingsComputer().SetHome(*selected_waypoint);
 
   {
     ScopeSuspendAllThreads suspend;

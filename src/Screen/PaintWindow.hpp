@@ -139,9 +139,6 @@ public:
     // duplicate in MainWindow
 #endif /* !ENABLE_SDL */
   }
-
-protected:
-  virtual bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
 };
 
 #endif

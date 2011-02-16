@@ -21,36 +21,20 @@ Copyright_License {
 }
 */
 
-#include "Screen/PaintWindow.hpp"
+#include "SettingsComputer.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 
-#ifdef ENABLE_SDL
-#include "Screen/ContainerWindow.hpp"
-#endif /* ENABLE_SDL */
-
-PaintWindow::~PaintWindow()
+void
+SETTINGS_PLACES_OF_INTEREST::ClearHome()
 {
-  reset();
+  HomeWaypoint = -1;
+  HomeLocationAvailable = false;
 }
 
-bool
-PaintWindow::register_class(HINSTANCE hInstance)
+void
+SETTINGS_PLACES_OF_INTEREST::SetHome(const Waypoint &wp)
 {
-#ifdef ENABLE_SDL
-  return true; // XXX
-#else /* !ENABLE_SDL */
-  WNDCLASS wc;
-
-  wc.hInstance = hInstance;
-  wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_PARENTDC;
-  wc.lpfnWndProc = Window::WndProc;
-  wc.cbClsExtra = 0;
-  wc.cbWndExtra = 0;
-  wc.hIcon = (HICON)NULL;
-  wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-  wc.hbrBackground = NULL;
-  wc.lpszMenuName = 0;
-  wc.lpszClassName = TEXT("PaintWindow");
-
-  return RegisterClass(&wc) != 0;
-#endif /* !ENABLE_SDL */
+  HomeWaypoint = wp.id;
+  HomeLocation = wp.Location;
+  HomeLocationAvailable = true;
 }

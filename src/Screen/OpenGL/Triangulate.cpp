@@ -211,12 +211,12 @@ _polygon_to_triangle(const PT *points, unsigned num_points,
     if (heat++ > num_points) {
       // if polygon edges overlap we may loop endlessly
       //LogDebug(_T("polygon_to_triangle: bad polygon"));
-      delete next;
+      delete[] next;
       return 0;
     }
   }
 
-  delete next;
+  delete[] next;
   return t - triangles;
 }
 
@@ -369,8 +369,8 @@ triangle_to_strip(GLushort *triangles, unsigned index_count,
   //         index_count, strip - triangle_strip,
   //         (strip - triangle_strip)*100/index_count);
 
-  delete triangle_strip;
-  delete vcount;
+  delete[] triangle_strip;
+  delete[] vcount;
 
   return strip - triangle_strip;
 }

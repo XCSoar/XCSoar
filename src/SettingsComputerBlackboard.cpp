@@ -52,7 +52,7 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.TeammateCodeValid = false;
   settings_computer.TeamFlarmIdTarget.clear();
 
-  settings_computer.HomeWaypoint = -1;
+  settings_computer.ClearHome();
 
   settings_computer.EnableVoiceClimbRate = false;
   settings_computer.EnableVoiceTerrain = false;

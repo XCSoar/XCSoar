@@ -1043,6 +1043,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
+	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
@@ -1061,6 +1062,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
+	$(SRC)/Profile/Earth.cpp \
 	$(SRC)/WayPoint/WayPointGlue.cpp \
 	$(SRC)/WayPoint/WayPointFile.cpp \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
@@ -1267,6 +1269,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/GlideComputerInterface.cpp \
 	$(SRC)/GlideComputerAirData.cpp \
 	$(SRC)/GlideComputerStats.cpp \
+	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \

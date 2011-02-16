@@ -41,6 +41,8 @@ namespace ProfileImpl = ProfileGConf;
 #include <stddef.h>
 #include <tchar.h>
 
+struct GeoPoint;
+
 namespace Profile
 {
   using namespace ProfileImpl;
@@ -87,6 +89,18 @@ namespace Profile
    * characters
    */
   bool GetPath(const TCHAR *key, TCHAR *value);
+
+  /**
+   * Load a GeoPoint from the profile.
+   */
+  bool GetGeoPoint(const TCHAR *key, GeoPoint &value);
+
+  /**
+   * Save a GeoPoint from the profile.  It is stored as a string,
+   * longitude and latitude formatted in degrees separated by a space
+   * character.
+   */
+  bool SetGeoPoint(const TCHAR *key, const GeoPoint &value);
 
   /**
    * Adjusts the application settings according to the profile settings
