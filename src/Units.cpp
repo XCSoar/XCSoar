@@ -65,46 +65,6 @@ UnitSetting Units::Current = {
   unKiloMeterPerHour
 };
 
-const UnitSetting Units::European = {
-  unKiloMeter,
-  unMeter,
-  unGradCelcius,
-  unKiloMeterPerHour,
-  unMeterPerSecond,
-  unKiloMeterPerHour,
-  unKiloMeterPerHour
-};
-
-const UnitSetting Units::British = {
-  unNauticalMiles,
-  unFeet,
-  unGradCelcius,
-  unKnots,
-  unKnots,
-  unKnots,
-  unKnots
-};
-
-const UnitSetting Units::American = {
-  unStatuteMiles,
-  unFeet,
-  unGradFahrenheit,
-  unKnots,
-  unStatuteMilesPerHour,
-  unStatuteMilesPerHour,
-  unStatuteMilesPerHour
-};
-
-const UnitSetting Units::Australian = {
-  unNauticalMiles,
-  unMeter,
-  unGradCelcius,
-  unKnots,
-  unKnots,
-  unKnots,
-  unKnots
-};
-
 void
 Units::LongitudeToDMS(Angle Longitude, int *dd, int *mm, int *ss, bool *east)
 {
