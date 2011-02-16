@@ -40,7 +40,7 @@ SetVSpeed(InfoBoxWindow &infobox, fixed value)
   TCHAR buffer[32];
   Units::FormatUserVSpeed(value, buffer, 32, false);
   infobox.SetValue(buffer[0] == _T('+') ? buffer + 1 : buffer);
-  infobox.SetValueUnit(Units::VerticalSpeedUnit);
+  infobox.SetValueUnit(Units::Current.VerticalSpeedUnit);
 }
 
 void
@@ -134,7 +134,7 @@ InfoBoxContentThermalLastGain::Update(InfoBoxWindow &infobox)
   infobox.SetValue(sTmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::AltitudeUnit);
+  infobox.SetValueUnit(Units::Current.AltitudeUnit);
 }
 
 void
@@ -191,7 +191,7 @@ InfoBoxContentThermalGain::Update(InfoBoxWindow &infobox)
   infobox.SetValue(sTmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::AltitudeUnit);
+  infobox.SetValueUnit(Units::Current.AltitudeUnit);
 }
 
 void

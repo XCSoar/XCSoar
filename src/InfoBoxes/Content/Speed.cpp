@@ -51,7 +51,7 @@ InfoBoxContentSpeedGround::Update(InfoBoxWindow &infobox)
   infobox.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::SpeedUnit);
+  infobox.SetValueUnit(Units::Current.SpeedUnit);
 }
 
 bool
@@ -108,7 +108,7 @@ InfoBoxContentSpeedIndicated::Update(InfoBoxWindow &infobox)
   infobox.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::SpeedUnit);
+  infobox.SetValueUnit(Units::Current.SpeedUnit);
 }
 
 void
@@ -126,7 +126,7 @@ InfoBoxContentSpeed::Update(InfoBoxWindow &infobox)
   infobox.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::SpeedUnit);
+  infobox.SetValueUnit(Units::Current.SpeedUnit);
 }
 
 void
@@ -139,7 +139,7 @@ InfoBoxContentSpeedMacCready::Update(InfoBoxWindow &infobox)
   infobox.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::SpeedUnit);
+  infobox.SetValueUnit(Units::Current.SpeedUnit);
 }
 
 void
@@ -152,7 +152,7 @@ InfoBoxContentSpeedDolphin::Update(InfoBoxWindow &infobox)
   infobox.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::SpeedUnit);
+  infobox.SetValueUnit(Units::Current.SpeedUnit);
 
   // Set Comment
   if (XCSoarInterface::SettingsComputer().EnableBlockSTF)

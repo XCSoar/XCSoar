@@ -172,7 +172,7 @@ InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
   infobox.SetValue(tmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::DistanceUnit);
+  infobox.SetValueUnit(Units::Current.DistanceUnit);
 
   // Set Comment
   if (!XCSoarInterface::SettingsComputer().TeamFlarmIdTarget.defined())

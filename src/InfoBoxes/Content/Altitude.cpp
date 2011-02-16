@@ -57,7 +57,7 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
   infobox.SetComment(sTmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::AltitudeUnit);
+  infobox.SetValueUnit(Units::Current.AltitudeUnit);
 }
 
 bool
@@ -123,7 +123,7 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
   infobox.SetComment(sTmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::AltitudeUnit);
+  infobox.SetValueUnit(Units::Current.AltitudeUnit);
 
   // Set Color (red/black)
   infobox.SetColor(calculated.AltitudeAGL <
@@ -152,7 +152,7 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
   infobox.SetComment(sTmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::AltitudeUnit);
+  infobox.SetValueUnit(Units::Current.AltitudeUnit);
 }
 
 void
@@ -183,7 +183,7 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
   infobox.SetComment(sTmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::AltitudeUnit);
+  infobox.SetValueUnit(Units::Current.AltitudeUnit);
 }
 
 void
@@ -209,5 +209,5 @@ InfoBoxContentTerrainHeight::Update(InfoBoxWindow &infobox)
   infobox.SetComment(sTmp);
 
   // Set Unit
-  infobox.SetValueUnit(Units::AltitudeUnit);
+  infobox.SetValueUnit(Units::Current.AltitudeUnit);
 }

@@ -81,6 +81,17 @@ struct UnitDescriptor_t
   fixed ToUserOffset;
 };
 
+struct UnitSetting
+{
+  Units_t DistanceUnit;  /**< Unit for distances */
+  Units_t AltitudeUnit; /**< Unit for altitudes, heights */
+  Units_t TemperatureUnit; /**< Unit for temperature */
+  Units_t SpeedUnit; /**< Unit for aircraft speeds */
+  Units_t VerticalSpeedUnit; /**< Unit for vertical speeds, varios */
+  Units_t WindSpeedUnit; /**< Unit for wind speeds */
+  Units_t TaskSpeedUnit; /**< Unit for task speeds */
+};
+
 /**
  * Namespace to manage unit conversions.
  * internal system units are (metric SI).
@@ -90,13 +101,7 @@ namespace Units
 {
   extern const UnitDescriptor_t UnitDescriptors[];
 
-  extern Units_t DistanceUnit;  /**< Unit for distances */
-  extern Units_t AltitudeUnit; /**< Unit for altitudes, heights */
-  extern Units_t TemperatureUnit; /**< Unit for temperature */
-  extern Units_t SpeedUnit; /**< Unit for aircraft speeds */
-  extern Units_t VerticalSpeedUnit; /**< Unit for vertical speeds, varios */
-  extern Units_t WindSpeedUnit; /**< Unit for wind speeds */
-  extern Units_t TaskSpeedUnit; /**< Unit for task speeds */
+  extern UnitSetting Current;
   extern CoordinateFormats_t CoordinateFormat; /**< Unit for lat/lon */
 
   /**
@@ -282,85 +287,85 @@ namespace Units
   static inline fixed
   ToUserAltitude(fixed Value)
   {
-    return ToUserUnit(Value, AltitudeUnit);
+    return ToUserUnit(Value, Current.AltitudeUnit);
   }
 
   static inline fixed
   ToSysAltitude(fixed Value)
   {
-    return ToSysUnit(Value, AltitudeUnit);
+    return ToSysUnit(Value, Current.AltitudeUnit);
   }
 
   static inline fixed
   ToUserTemperature(fixed Value)
   {
-    return ToUserUnit(Value, TemperatureUnit);
+    return ToUserUnit(Value, Current.TemperatureUnit);
   }
 
   static inline fixed
   ToSysTemperature(fixed Value)
   {
-    return ToSysUnit(Value, TemperatureUnit);
+    return ToSysUnit(Value, Current.TemperatureUnit);
   }
 
   static inline fixed
   ToUserDistance(fixed Value)
   {
-    return ToUserUnit(Value, DistanceUnit);
+    return ToUserUnit(Value, Current.DistanceUnit);
   }
 
   static inline fixed
   ToSysDistance(fixed Value)
   {
-    return ToSysUnit(Value, DistanceUnit);
+    return ToSysUnit(Value, Current.DistanceUnit);
   }
 
   static inline fixed
   ToUserSpeed(fixed Value)
   {
-    return ToUserUnit(Value, SpeedUnit);
+    return ToUserUnit(Value, Current.SpeedUnit);
   }
 
   static inline fixed
   ToSysSpeed(fixed Value)
   {
-    return ToSysUnit(Value, SpeedUnit);
+    return ToSysUnit(Value, Current.SpeedUnit);
   }
 
   static inline fixed
   ToUserVSpeed(fixed Value)
   {
-    return ToUserUnit(Value, VerticalSpeedUnit);
+    return ToUserUnit(Value, Current.VerticalSpeedUnit);
   }
 
   static inline fixed
   ToSysVSpeed(fixed Value)
   {
-    return ToSysUnit(Value, VerticalSpeedUnit);
+    return ToSysUnit(Value, Current.VerticalSpeedUnit);
   }
 
   static inline fixed
   ToUserTaskSpeed(fixed Value)
   {
-    return ToUserUnit(Value, TaskSpeedUnit);
+    return ToUserUnit(Value, Current.TaskSpeedUnit);
   }
 
   static inline fixed
   ToSysTaskSpeed(fixed Value)
   {
-    return ToSysUnit(Value, TaskSpeedUnit);
+    return ToSysUnit(Value, Current.TaskSpeedUnit);
   }
 
   static inline fixed
   ToUserWindSpeed(fixed Value)
   {
-    return ToUserUnit(Value, WindSpeedUnit);
+    return ToUserUnit(Value, Current.WindSpeedUnit);
   }
 
   static inline fixed
   ToSysWindSpeed(fixed Value)
   {
-    return ToSysUnit(Value, WindSpeedUnit);
+    return ToSysUnit(Value, Current.WindSpeedUnit);
   }
 };
 

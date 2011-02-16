@@ -117,7 +117,7 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
 
   blankThickPen.set(Layout::Scale(5), colTextBackgnd);
 
-  unit_symbol = GetUnitSymbol(Units::VerticalSpeedUnit);
+  unit_symbol = GetUnitSymbol(Units::Current.VerticalSpeedUnit);
 
   xoffset = get_right();
   yoffset = get_height() / 2 + get_top();

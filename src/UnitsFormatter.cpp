@@ -169,7 +169,7 @@ Units::FormatUserAltitude(fixed Altitude, TCHAR *Buffer, size_t size,
                           bool IncludeUnit)
 {
   TCHAR sTmp[32];
-  const UnitDescriptor_t *pU = &UnitDescriptors[AltitudeUnit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[Current.AltitudeUnit];
 
   /// \todo rounding
   Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
@@ -193,17 +193,17 @@ bool
 Units::FormatAlternateUserAltitude(fixed Altitude, TCHAR *Buffer, size_t size,
                                    bool IncludeUnit)
 {
-  Units_t saveUnit = AltitudeUnit;
+  Units_t saveUnit = Current.AltitudeUnit;
   bool res;
 
   if (saveUnit == unMeter)
-    AltitudeUnit = unFeet;
+    Current.AltitudeUnit = unFeet;
   if (saveUnit == unFeet)
-    AltitudeUnit = unMeter;
+    Current.AltitudeUnit = unMeter;
 
   res = FormatUserAltitude(Altitude, Buffer, size, IncludeUnit);
 
-  AltitudeUnit = saveUnit;
+  Current.AltitudeUnit = saveUnit;
 
   return res;
 }
@@ -216,7 +216,7 @@ Units::FormatUserArrival(fixed Altitude, TCHAR *Buffer, size_t size,
                          bool IncludeUnit)
 {
   TCHAR sTmp[32];
-  const UnitDescriptor_t *pU = &UnitDescriptors[AltitudeUnit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[Current.AltitudeUnit];
 
   Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
 
@@ -243,7 +243,7 @@ Units::FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
   fixed value;
   TCHAR sTmp[32];
 
-  const UnitDescriptor_t *pU = &UnitDescriptors[DistanceUnit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[Current.DistanceUnit];
 
   value = Distance * pU->ToUserFact; // + pU->ToUserOffset;
 
@@ -255,20 +255,20 @@ Units::FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
     prec = 2;
   else {
     prec = 2;
-    if (DistanceUnit == unKiloMeter) {
+    if (Current.DistanceUnit == unKiloMeter) {
       prec = 0;
       pU = &UnitDescriptors[unMeter];
       value = Distance * pU->ToUserFact;
     }
-    if (DistanceUnit == unNauticalMiles ||
-        DistanceUnit == unStatuteMiles) {
+    if (Current.DistanceUnit == unNauticalMiles ||
+        Current.DistanceUnit == unStatuteMiles) {
       pU = &UnitDescriptors[unFeet];
       value = Distance * pU->ToUserFact;
       if (value < fixed(1000)) {
         prec = 0;
       } else {
         prec = 1;
-        pU = &UnitDescriptors[DistanceUnit];
+        pU = &UnitDescriptors[Current.DistanceUnit];
         value = Distance * pU->ToUserFact;
       }
     }
@@ -297,31 +297,31 @@ Units::FormatUserMapScale(Units_t *Unit, fixed Distance, TCHAR *Buffer,
   fixed value;
   TCHAR sTmp[32];
 
-  const UnitDescriptor_t *pU = &UnitDescriptors[DistanceUnit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[Current.DistanceUnit];
 
   if (Unit != NULL)
-    *Unit = DistanceUnit;
+    *Unit = Current.DistanceUnit;
 
   value = Distance * pU->ToUserFact; // + pU->ToUserOffset;
 
   if (value >= fixed(9.999))
     prec = 0;
-  else if ((DistanceUnit == unKiloMeter && value >= fixed(0.999)) ||
-           (DistanceUnit != unKiloMeter && value >= fixed(0.160)))
+  else if ((Current.DistanceUnit == unKiloMeter && value >= fixed(0.999)) ||
+           (Current.DistanceUnit != unKiloMeter && value >= fixed(0.160)))
     prec = 1;
   else if (!IncludeUnit)
     prec = 2;
   else {
     prec = 2;
-    if (DistanceUnit == unKiloMeter) {
+    if (Current.DistanceUnit == unKiloMeter) {
       prec = 0;
       if (Unit != NULL)
         *Unit = unMeter;
       pU = &UnitDescriptors[unMeter];
       value = Distance * pU->ToUserFact;
     }
-    if (DistanceUnit == unNauticalMiles ||
-        DistanceUnit == unStatuteMiles) {
+    if (Current.DistanceUnit == unNauticalMiles ||
+        Current.DistanceUnit == unStatuteMiles) {
       prec = 0;
       if (Unit != NULL)
         *Unit = unFeet;
@@ -351,7 +351,7 @@ Units::FormatUserSpeed(fixed Speed, TCHAR *Buffer, size_t size,
 {
   int prec;
   TCHAR sTmp[32];
-  const UnitDescriptor_t *pU = &UnitDescriptors[SpeedUnit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[Current.SpeedUnit];
 
   Speed = Speed * pU->ToUserFact;
 
@@ -379,7 +379,7 @@ Units::FormatUserVSpeed(fixed Speed, TCHAR *Buffer, size_t size,
                         bool IncludeUnit)
 {
   TCHAR sTmp[32];
-  const UnitDescriptor_t *pU = &UnitDescriptors[VerticalSpeedUnit];
+  const UnitDescriptor_t *pU = &UnitDescriptors[Current.VerticalSpeedUnit];
 
   Speed = Speed * pU->ToUserFact;
 

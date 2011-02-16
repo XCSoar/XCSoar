@@ -62,13 +62,15 @@ const UnitDescriptor_t Units::UnitDescriptors[] = {
     fixed_constant(-459.67, -123391726059LL) }
 };
 
-Units_t Units::DistanceUnit = unKiloMeter;
-Units_t Units::AltitudeUnit = unMeter;
-Units_t Units::TemperatureUnit = unGradCelcius;
-Units_t Units::SpeedUnit = unKiloMeterPerHour;
-Units_t Units::VerticalSpeedUnit = unMeterPerSecond;
-Units_t Units::WindSpeedUnit = unKiloMeterPerHour;
-Units_t Units::TaskSpeedUnit = unKiloMeterPerHour;
+UnitSetting Units::Current = {
+  unKiloMeter,
+  unMeter,
+  unGradCelcius,
+  unKiloMeterPerHour,
+  unMeterPerSecond,
+  unKiloMeterPerHour,
+  unKiloMeterPerHour
+};
 
 void
 Units::LongitudeToDMS(Angle Longitude, int *dd, int *mm, int *ss, bool *east)
@@ -130,105 +132,105 @@ Units::SetCoordinateFormat(CoordinateFormats_t NewFormat)
 Units_t
 Units::GetUserDistanceUnit()
 {
-  return DistanceUnit;
+  return Current.DistanceUnit;
 }
 
 Units_t
 Units::SetUserDistanceUnit(Units_t NewUnit)
 {
-  Units_t last = DistanceUnit;
-  if (DistanceUnit != NewUnit)
-    DistanceUnit = NewUnit;
+  Units_t last = Current.DistanceUnit;
+  if (Current.DistanceUnit != NewUnit)
+    Current.DistanceUnit = NewUnit;
   return last;
 }
 
 Units_t
 Units::GetUserAltitudeUnit()
 {
-  return AltitudeUnit;
+  return Current.AltitudeUnit;
 }
 
 Units_t
 Units::SetUserAltitudeUnit(Units_t NewUnit)
 {
-  Units_t last = AltitudeUnit;
-  if (AltitudeUnit != NewUnit)
-    AltitudeUnit = NewUnit;
+  Units_t last = Current.AltitudeUnit;
+  if (Current.AltitudeUnit != NewUnit)
+    Current.AltitudeUnit = NewUnit;
   return last;
 }
 
 Units_t
 Units::GetUserTemperatureUnit()
 {
-  return TemperatureUnit;
+  return Current.TemperatureUnit;
 }
 
 Units_t
 Units::SetUserTemperatureUnit(Units_t NewUnit)
 {
-  Units_t last = TemperatureUnit;
-  if (TemperatureUnit != NewUnit)
-    TemperatureUnit = NewUnit;
+  Units_t last = Current.TemperatureUnit;
+  if (Current.TemperatureUnit != NewUnit)
+    Current.TemperatureUnit = NewUnit;
   return last;
 }
 
 Units_t
 Units::GetUserSpeedUnit()
 {
-  return SpeedUnit;
+  return Current.SpeedUnit;
 }
 
 Units_t
 Units::SetUserSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = SpeedUnit;
-  if (SpeedUnit != NewUnit)
-    SpeedUnit = NewUnit;
+  Units_t last = Current.SpeedUnit;
+  if (Current.SpeedUnit != NewUnit)
+    Current.SpeedUnit = NewUnit;
   return last;
 }
 
 Units_t
 Units::GetUserTaskSpeedUnit()
 {
-  return TaskSpeedUnit;
+  return Current.TaskSpeedUnit;
 }
 
 Units_t
 Units::SetUserTaskSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = TaskSpeedUnit;
-  if (TaskSpeedUnit != NewUnit)
-    TaskSpeedUnit = NewUnit;
+  Units_t last = Current.TaskSpeedUnit;
+  if (Current.TaskSpeedUnit != NewUnit)
+    Current.TaskSpeedUnit = NewUnit;
   return last;
 }
 
 Units_t
 Units::GetUserVerticalSpeedUnit()
 {
-  return VerticalSpeedUnit;
+  return Current.VerticalSpeedUnit;
 }
 
 Units_t
 Units::SetUserVerticalSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = VerticalSpeedUnit;
-  if (VerticalSpeedUnit != NewUnit)
-    VerticalSpeedUnit = NewUnit;
+  Units_t last = Current.VerticalSpeedUnit;
+  if (Current.VerticalSpeedUnit != NewUnit)
+    Current.VerticalSpeedUnit = NewUnit;
   return last;
 }
 
 Units_t
 Units::GetUserWindSpeedUnit()
 {
-  return WindSpeedUnit;
+  return Current.WindSpeedUnit;
 }
 
 Units_t
 Units::SetUserWindSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = WindSpeedUnit;
-  if (WindSpeedUnit != NewUnit)
-    WindSpeedUnit = NewUnit;
+  Units_t last = Current.WindSpeedUnit;
+  if (Current.WindSpeedUnit != NewUnit)
+    Current.WindSpeedUnit = NewUnit;
   return last;
 }
 

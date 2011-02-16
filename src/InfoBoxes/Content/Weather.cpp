@@ -93,7 +93,7 @@ InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
                     Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
 
   // Set Unit
-  infobox.SetValueUnit(Units::WindSpeedUnit);
+  infobox.SetValueUnit(Units::Current.WindSpeedUnit);
 
   // Set Comment
   infobox.SetComment(XCSoarInterface::Basic().wind.bearing, _T("T"));
