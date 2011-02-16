@@ -102,6 +102,10 @@ namespace Units
   extern const UnitDescriptor_t UnitDescriptors[];
 
   extern UnitSetting Current;
+  extern const UnitSetting European;
+  extern const UnitSetting British;
+  extern const UnitSetting American;
+  extern const UnitSetting Australian;
   extern CoordinateFormats_t CoordinateFormat; /**< Unit for lat/lon */
 
   /**

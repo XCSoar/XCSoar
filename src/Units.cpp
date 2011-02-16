@@ -25,13 +25,6 @@ Copyright_License {
 // - check buffer size in LongitudeToString and LatiditudeToString
 // - unit dialog support
 
-//default       EU   UK   US   AUS
-//altitude      m    ft   ft   m
-//verticalspeed m/s  kts  kts  kts
-//wind speed    km/  kts  mp   kts
-//IAS           km/  kts  mp   kts
-//distance      km   nm   ml   nm
-
 #include "Units.hpp"
 #include "Math/Angle.hpp"
 
@@ -70,6 +63,46 @@ UnitSetting Units::Current = {
   unMeterPerSecond,
   unKiloMeterPerHour,
   unKiloMeterPerHour
+};
+
+const UnitSetting Units::European = {
+  unKiloMeter,
+  unMeter,
+  unGradCelcius,
+  unKiloMeterPerHour,
+  unMeterPerSecond,
+  unKiloMeterPerHour,
+  unKiloMeterPerHour
+};
+
+const UnitSetting Units::British = {
+  unNauticalMiles,
+  unFeet,
+  unGradCelcius,
+  unKnots,
+  unKnots,
+  unKnots,
+  unKnots
+};
+
+const UnitSetting Units::American = {
+  unStatuteMiles,
+  unFeet,
+  unGradFahrenheit,
+  unKnots,
+  unStatuteMilesPerHour,
+  unStatuteMilesPerHour,
+  unStatuteMilesPerHour
+};
+
+const UnitSetting Units::Australian = {
+  unNauticalMiles,
+  unMeter,
+  unGradCelcius,
+  unKnots,
+  unKnots,
+  unKnots,
+  unKnots
 };
 
 void
