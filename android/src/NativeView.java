@@ -371,7 +371,7 @@ class NativeView extends SurfaceView
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
-    EventBridge.onKeyDown(keyCode);
+    EventBridge.onKeyUp(keyCode);
     return true;
   }
 
