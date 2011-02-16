@@ -342,16 +342,6 @@ namespace Units
                         bool IncludeUnit = true);
 
   /**
-   * Converts a Value from the given unit "From" to the given unit "To"
-   * @param Value The value in system unit
-   * @param From The source unit
-   * @param To The destination unit
-   * @return The value in user-specified unit
-   */
-  gcc_const
-  fixed ConvertUnits(fixed Value, Units_t From, Units_t To);
-
-  /**
    * Converts a Value from the system unit to the user-specified unit
    * @param Value The value in system unit
    * @param Unit The destination unit

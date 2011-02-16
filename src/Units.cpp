@@ -669,12 +669,6 @@ Units::FormatUserVSpeed(fixed Speed, TCHAR *Buffer, size_t size,
 }
 
 fixed
-Units::ConvertUnits(fixed Value, Units_t From, Units_t To)
-{
-  return ToUserUnit(ToSysUnit(Value, From), To);
-}
-
-fixed
 Units::ToUserUnit(fixed Value, Units_t Unit)
 {
   const UnitDescriptor_t *pU = &UnitDescriptors[Unit];
