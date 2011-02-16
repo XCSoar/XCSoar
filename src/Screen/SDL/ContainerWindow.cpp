@@ -106,6 +106,8 @@ ContainerWindow::on_paint(Canvas &canvas)
 {
   Window *full = NULL;
 
+  const std::list<Window*> &children = this->children;
+
   /* find the last full window, which covers all the other windows
      behind it */
   for (std::list<Window*>::const_reverse_iterator i = children.rbegin();
