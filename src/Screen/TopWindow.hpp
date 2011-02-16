@@ -62,6 +62,12 @@ class TopWindow : public ContainerWindow {
    * not exist.
    */
   bool paused;
+
+  /**
+   * Has the application been resumed?  When this flag is set,
+   * TopWindow::expose() attempts to reinitialize the OpenGL surface.
+   */
+  bool resumed;
 #endif
 
 #else /* !ENABLE_SDL */

@@ -39,6 +39,7 @@ TopWindow::on_pause()
 
   paused_mutex.Lock();
   paused = true;
+  resumed = false;
   paused_cond.signal();
   paused_mutex.Unlock();
 }
@@ -49,14 +50,8 @@ TopWindow::on_resume()
   if (!paused)
     return;
 
-  if (!native_view->initSurface())
-    return;
-
-  paused = false;
-
-  screen.set();
-
-  SurfaceCreated();
+  /* tell TopWindow::expose() to reinitialize OpenGL */
+  resumed = true;
 
   /* schedule a redraw */
   invalidate();

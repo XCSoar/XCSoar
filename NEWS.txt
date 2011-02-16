@@ -21,6 +21,7 @@ Version 6.0.4 - not yet released
   - don't forget the home airport after a configuration change
 * Android
   - device: support NMEA over Bluetooth RFCOMM
+  - more pause/resume crash fixes
 
 Version 6.0.3 - 2011/02/02
 * devices
