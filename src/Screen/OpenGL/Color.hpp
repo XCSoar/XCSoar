@@ -148,34 +148,32 @@ struct Color {
 #endif
   }
 
+  /**
+   * Compares two colors
+   * @param a Color 1
+   * @param b Color 2
+   * @return True if colors match, False otherwise
+   */
+  bool operator ==(const Color &other) const
+  {
+    return r == other.r
+      && g == other.g
+      && b == other.b;
+  }
+
+  /**
+   * Compares two colors (negative)
+   * @param a Color 1
+   * @param b Color 2
+   * @return True if color do not match, False otherwise
+   */
+  bool operator !=(const Color &other) const
+  {
+    return !(*this == other);
+  }
+
   static const Color WHITE, BLACK, GRAY, RED, GREEN, BLUE, YELLOW, CYAN,
     MAGENTA, LIGHT_GRAY;
 };
-
-/**
- * Compares two colors
- * @param a Color 1
- * @param b Color 2
- * @return True if colors match, False otherwise
- */
-static inline bool
-operator ==(const Color a, const Color b)
-{
-  return a.r == b.r
-         && a.g == b.g
-         && a.b == b.b;
-}
-
-/**
- * Compares two colors (negative)
- * @param a Color 1
- * @param b Color 2
- * @return True if color do not match, False otherwise
- */
-static inline bool
-operator !=(const Color a, const Color b)
-{
-  return !(a == b);
-}
 
 #endif
