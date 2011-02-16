@@ -71,6 +71,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
 #include "UnitsFormatter.hpp"
+#include "UnitsStore.hpp"
 
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"
@@ -140,6 +141,7 @@ static const struct {
 static const unsigned num_port_types =
   sizeof(port_types) / sizeof(port_types[0]) - 1;
 
+static bool loading = false;
 static bool changed = false;
 static bool taskchanged = false;
 static bool requirerestart = false;
@@ -569,6 +571,97 @@ OnPolarFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
+static void
+UpdateUnitFields(const UnitSetting &units)
+{
+  unsigned index;
+  index = (units.SpeedUnit == unStatuteMilesPerHour) ? 0 :
+          (units.SpeedUnit == unKnots) ? 1 : 2;
+  LoadFormProperty(*wf, _T("prpUnitsSpeed"), index);
+
+  index = (units.TaskSpeedUnit == unStatuteMilesPerHour) ? 0 :
+          (units.TaskSpeedUnit == unKnots) ? 1 : 2;
+  LoadFormProperty(*wf, _T("prpUnitsTaskSpeed"), index);
+
+  index = (units.DistanceUnit == unStatuteMiles) ? 0 :
+          (units.DistanceUnit == unNauticalMiles) ? 1 : 2;
+  LoadFormProperty(*wf, _T("prpUnitsDistance"), index);
+
+  index = (units.AltitudeUnit == unFeet) ? 0 : 1;
+  LoadFormProperty(*wf, _T("prpUnitsAltitude"), index);
+
+  index = (units.TemperatureUnit == unGradFahrenheit) ? 1 : 0;
+  LoadFormProperty(*wf, _T("prpUnitsTemperature"), index);
+
+  index = (units.VerticalSpeedUnit == unKnots) ? 0 :
+          (units.VerticalSpeedUnit == unFeetPerMinute) ? 2 : 1;
+  LoadFormProperty(*wf, _T("prpUnitsLift"), index);
+}
+
+static void
+SetUnitsTitle(const TCHAR* title)
+{
+  TCHAR caption[255];
+  _tcscpy(caption,  _("Units"));
+  _tcscat(caption, _T(": "));
+  _tcscat(caption, title);
+  ((WndFrame *)wf->FindByName(_T("lblUnitsSetting")))->SetCaption(caption);
+}
+
+static void
+UpdateUnitsTitle()
+{
+  TCHAR title[255];
+  if (Profile::Get(szProfileUnitsPresetName, title, 255))
+    SetUnitsTitle(title);
+}
+
+static void
+OnLoadUnitsPreset(WndButton &button)
+{
+  /* create a fake WndProperty for dlgComboPicker() */
+  /* XXX reimplement properly */
+
+  DataFieldEnum *dfe = new DataFieldEnum(NULL);
+  unsigned len = Units::Store::Count();
+  for (unsigned i = 0; i < len; i++)
+    dfe->addEnumText(Units::Store::GetName(i), i);
+
+  dfe->Sort();
+  ComboList *list = dfe->CreateComboList();
+
+  /* let the user select */
+
+  int result = ComboPicker(XCSoarInterface::main_window, _("Unit presets"), *list, NULL);
+  if (result >= 0) {
+    const UnitSetting& units = Units::Store::Read(dfe->getItem(result));
+    UpdateUnitFields(units);
+
+    Profile::Set(szProfileUnitsPresetName, Units::Store::GetName(dfe->getItem(result)));
+    UpdateUnitsTitle();
+  }
+
+  delete dfe;
+  delete list;
+}
+
+static void
+OnUnitFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  switch (Mode) {
+  case DataField::daChange:
+    if (!loading)
+      Profile::Set(szProfileUnitsPresetName, _T("Custom"));
+    UpdateUnitsTitle();
+    break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
+  }
+}
+
 static bool
 FormKeyDown(WndForm &Sender, unsigned key_code)
 {
@@ -649,6 +742,8 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnPolarLoadInteral),
   DeclareCallBackEntry(OnPolarLoadFromFile),
   DeclareCallBackEntry(OnPolarFieldData),
+  DeclareCallBackEntry(OnLoadUnitsPreset),
+  DeclareCallBackEntry(OnUnitFieldData),
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(NULL)
 };
@@ -1735,6 +1830,8 @@ PrepareConfigurationDialog()
 {
   gcc_unused ScopeBusyIndicator busy;
 
+  loading = true;
+
   WndProperty *wp;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
@@ -1783,6 +1880,7 @@ PrepareConfigurationDialog()
   taskchanged = false;
   requirerestart = false;
   waypointneedsave = false;
+  loading = false;
 }
 
 void dlgConfigurationShowModal(void)

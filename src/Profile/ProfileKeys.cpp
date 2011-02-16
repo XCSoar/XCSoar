@@ -151,6 +151,7 @@ const TCHAR szProfileSnailTrail[] = CONF("SnailTrail");
 const TCHAR szProfileTrailDrift[] = CONF("TrailDrift");
 const TCHAR szProfileDetourCostMarker[] = CONF("DetourCostMarker");
 const TCHAR szProfileDisplayTrackBearing[] = CONF("DisplayTrackBearing");
+const TCHAR szProfileUnitsPresetName[] = CONF("UnitsPresetName");
 const TCHAR szProfileSpeedUnitsValue[] = CONF("Speed");
 const TCHAR szProfileTaskSpeedUnitsValue[] = CONF("TaskSpeed");
 const TCHAR szProfileWarningTime[] = CONF("WarnTime");
