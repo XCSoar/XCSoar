@@ -83,6 +83,11 @@ public:
   operator double () const {
     return d;
   }
+
+  bool operator<=(const BBDist &other) const {
+    return d <= other.d;
+  }
+
 private:
   void set_max(const size_t _dim, const BBDist &rhs) {
     if (rhs.val[_dim]>val[_dim]) {
