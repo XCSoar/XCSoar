@@ -109,15 +109,6 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   if (iStyle < n_params)
     parseStyle(params[iStyle], new_waypoint.Flags);
 
-  // Runway length (e.g. 546.0m)
-  fixed rwlen;
-  if (iRWLen < n_params && parseDistance(params[iRWLen], rwlen))
-    new_waypoint.RunwayLength = rwlen;
-  else {
-    new_waypoint.RunwayLength = 0;
-    rwlen = fixed_zero;
-  }
-
   // Frequency & runway direction/length (for airports and landables)
   // and description (e.g. "Some Description")
   if (new_waypoint.is_landable()) {
@@ -136,9 +127,16 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
       new_waypoint.RunwayDirection = Angle::degrees(fixed(direction));
     }
 
-    if (iRWLen < n_params)
-      appendStringWithSeperator(new_waypoint.Comment, params[iRWLen]);
+    // Runway length (e.g. 546.0m)
+    fixed rwlen;
+    if (iRWLen < n_params && parseDistance(params[iRWLen], rwlen)) {
+      if (rwlen > fixed_zero) {
+        new_waypoint.RunwayLength = rwlen;
+        appendStringWithSeperator(new_waypoint.Comment, params[iRWLen]);
+      }
+    }
   }
+
   if (iDescription < n_params)
     appendStringWithSeperator(new_waypoint.Comment, params[iDescription]);
 
