@@ -510,11 +510,6 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(_T("Save default task"));
   protected_task_manager->task_save_default();
 
-  // Clear airspace database
-  LogStartUp(_T("Close airspace"));
-  airspace_warnings->clear();
-  airspace_database.clear();
-
   // Clear waypoint database
   LogStartUp(_T("Close waypoints"));
   way_points.clear();
@@ -568,6 +563,12 @@ XCSoarInterface::Shutdown(void)
   CloseGeoid();
 
   delete glide_computer;
+
+  // Clear airspace database
+  LogStartUp(_T("Close airspace"));
+  airspace_warnings->clear();
+  airspace_database.clear();
+
   delete airspace_warnings;
   delete airspace_warning;
 
