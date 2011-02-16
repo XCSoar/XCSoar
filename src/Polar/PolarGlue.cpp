@@ -100,8 +100,8 @@ PolarGlue::LoadFromOldProfile(SimplePolar &polar)
                (Temp == 4) ? 62 :
                125;
 
-      if (PolarStore::Read(Temp - 7, polar))
-        return true;
+      PolarStore::Read(Temp - 7, polar);
+      return true;
     }
   }
   return false;

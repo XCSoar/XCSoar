@@ -35,7 +35,7 @@ namespace PolarStore
   gcc_const
   const TCHAR *GetName(unsigned i);
 
-  bool Read(unsigned i, SimplePolar &polar);
+  void Read(unsigned i, SimplePolar &polar);
 
   unsigned Count();
 }

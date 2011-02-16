@@ -215,12 +215,11 @@ PolarStore::GetName(unsigned i)
  * @param i Array id of the polar
  * @param polar Polar to set
  */
-bool
+void
 PolarStore::Read(unsigned i, SimplePolar &polar)
 {
   assert(i < Count());
   polar = WinPilotPolars[i];
-  return true;
 }
 
 unsigned
