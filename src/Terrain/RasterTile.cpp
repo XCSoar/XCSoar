@@ -600,8 +600,8 @@ RasterTileCache::LoadCache(FILE *file)
 #endif
 
 bool
-RasterTileCache::FirstIntersection(unsigned x0, unsigned y0,
-                                   unsigned x1, unsigned y1,
+RasterTileCache::FirstIntersection(int x0, int y0,
+                                   int x1, int y1,
                                    short h_origin,
                                    short h_dest,
                                    const long slope_fact, const short h_ceiling,
@@ -609,7 +609,7 @@ RasterTileCache::FirstIntersection(unsigned x0, unsigned y0,
                                    unsigned& _x, unsigned& _y, short &_h,
                                    const bool can_climb) const
 {
-  if ((x0 >= width) || (y0 >= height))
+  if (((unsigned)x0 >= width) || ((unsigned)y0 >= height))
     // origin is outside overall bounds
     return false;
 
@@ -621,8 +621,8 @@ RasterTileCache::FirstIntersection(unsigned x0, unsigned y0,
   h_dest = std::max(h_dest, h_origin);
 
   // line algorithm parameters
-  const int dx = abs((int)x1-(int)x0);
-  const int dy = abs((int)y1-(int)y0);
+  const int dx = abs(x1-x0);
+  const int dy = abs(y1-y0);
   int err = dx-dy;
   const int sx = (x0 < x1)? 1: -1;
   const int sy = (y0 < y1)? 1: -1;
@@ -648,8 +648,8 @@ RasterTileCache::FirstIntersection(unsigned x0, unsigned y0,
 #ifdef DEBUG_TILE
     printf("# fint start above ceiling %d %d\n", h_origin, h_ceiling);
 #endif
-    _x = x0;
-    _y = y0;
+    _x = (unsigned)x0;
+    _y = (unsigned)y0;
     _h = h_origin;
     return true;
   }
@@ -741,7 +741,7 @@ RasterTileCache::FirstIntersection(unsigned x0, unsigned y0,
       }
     }
 
-    if (!intersect_counter && (x_int==x1) && (y_int==y1)) {
+    if (!intersect_counter && (x_int==(unsigned)x1) && (y_int==(unsigned)y1)) {
 #ifdef DEBUG_TILE
       printf("# fint cleared\n");
 #endif
@@ -814,8 +814,8 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_
 
 
 void
-RasterTileCache::Intersection(unsigned x0, unsigned y0,
-                              unsigned x1, unsigned y1,
+RasterTileCache::Intersection(int x0, int y0,
+                              int x1, int y1,
                               short h_origin,
                               const long slope_fact,
                               unsigned& _x, unsigned& _y) const
@@ -823,7 +823,7 @@ RasterTileCache::Intersection(unsigned x0, unsigned y0,
   _x = x0;
   _y = y0;
 
-  if ((x0 >= width) || (y0 >= height)) {
+  if (((unsigned)x0 >= width) || ((unsigned)y0 >= height)) {
     // origin is outside overall bounds
     return;
   }
@@ -833,8 +833,8 @@ RasterTileCache::Intersection(unsigned x0, unsigned y0,
   int tile_index = -1;
 
   // line algorithm parameters
-  const int dx = abs((int)x1-(int)x0);
-  const int dy = abs((int)y1-(int)y0);
+  const int dx = abs(x1-x0);
+  const int dy = abs(y1-y0);
   int err = dx-dy;
   const int sx = (x0 < x1)? 1: -1;
   const int sy = (y0 < y1)? 1: -1;
@@ -871,7 +871,7 @@ RasterTileCache::Intersection(unsigned x0, unsigned y0,
       }
     }
 
-    if ((_x==x1) && (_y==y1))
+    if ((_x==(unsigned)x1) && (_y==(unsigned)y1))
       return;
 
     const int e2 = 2*err;

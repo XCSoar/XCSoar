@@ -213,8 +213,8 @@ public:
   short GetFieldInterpolated(unsigned int lx,
                              unsigned int ly) const;
 
-  bool FirstIntersection(unsigned origin_x, unsigned origin_y,
-                         unsigned destination_x, unsigned destination_y,
+  bool FirstIntersection(int origin_x, int origin_y,
+                         int destination_x, int destination_y,
                          short h_origin,
                          short h_dest,
                          const long slope_fact, const short h_ceiling,
@@ -222,8 +222,8 @@ public:
                          unsigned& int_x, unsigned& int_y, short &h_int,
                          const bool can_climb) const;
 
-  void Intersection(unsigned origin_x, unsigned origin_y,
-                    unsigned destination_x, unsigned destination_y,
+  void Intersection(int origin_x, int origin_y,
+                    int destination_x, int destination_y,
                     short h_origin, const long slope_fact,
                     unsigned& int_x, unsigned& int_y) const;
 
