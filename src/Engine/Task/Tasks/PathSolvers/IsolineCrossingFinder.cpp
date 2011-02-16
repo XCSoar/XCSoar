@@ -43,13 +43,9 @@ IsolineCrossingFinder::f(const fixed t)
   s.Location = a;
 
   // note: use of isInSector is slow!
-  if (aap.isInSector(s)) {
-    // attract solutions away from t
-    return fixed_one - fabs(t);
-  } else {
-    // attract solutions towards t
-    return -fixed_one - fabs(t);
-  }
+  // if (aap.isInSector(s)) ->  attract solutions away from t
+  // else                   ->  attract solutions towards t
+  return (aap.isInSector(s) ? fixed_one : -fixed_one) - fabs(t);
 }
 
 #define bsgn(x) (x < fixed_one ? false : true)
