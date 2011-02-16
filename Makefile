@@ -496,6 +496,8 @@ $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJ
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(XCSOAR_LDFLAGS) -o $@
 
+$(TARGET_OUTPUT_DIR)/$(SRC)/Version.o: $(topdir)/VERSION.txt
+
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 
 clean: cleancov FORCE
