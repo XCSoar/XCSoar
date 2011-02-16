@@ -177,7 +177,7 @@ public:
  * @return True if this is more severe than that
  */
   gcc_pure
-  bool operator < (const AirspaceWarning& that);
+  bool operator<(const AirspaceWarning &that) const;
 
 private:
   const AbstractAirspace& m_airspace;
