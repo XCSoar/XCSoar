@@ -130,7 +130,7 @@ Waypoints::WaypointTree::const_iterator
 Waypoints::find_nearest(const GeoPoint &loc) const
 {
   WaypointEnvelope bb_target(loc, task_projection);
-  std::pair<WaypointTree::const_iterator, double> found =
+  std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
       waypoint_tree.find_nearest(bb_target);
 
 #ifdef INSTRUMENT_TASK
@@ -167,7 +167,7 @@ Waypoints::lookup_location(const GeoPoint &loc, const fixed range) const
     return NULL;
 
   WaypointEnvelope bb_target(loc, task_projection);
-  std::pair<WaypointTree::const_iterator, double> found =
+  std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
       waypoint_tree.find_nearest(bb_target);
 
 #ifdef INSTRUMENT_TASK
