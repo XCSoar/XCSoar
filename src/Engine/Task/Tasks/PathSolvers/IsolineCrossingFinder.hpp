@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef ISOLINECROSSINGFINDER_HPP
 #define ISOLINECROSSINGFINDER_HPP
 
@@ -34,20 +35,18 @@ class IsolineCrossingFinder:
   public ZeroFinder
 {
 public:
-/** 
- * Constructor.  After construction, call solve() to perform the search.
- * 
- * @param _aap AATPoint for which to test OZ inclusion
- * @param _ell GeoEllipse representing the isoline
- * @param xmin Min parameter of search
- * @param xmax Max parameter of search
- * 
- * @return Partially initialised object
- */
-  IsolineCrossingFinder(const AATPoint& _aap,
-                        const GeoEllipse &_ell,
-                        const fixed xmin, 
-                        const fixed xmax);
+  /**
+   * Constructor.  After construction, call solve() to perform the search.
+   *
+   * @param _aap AATPoint for which to test OZ inclusion
+   * @param _ell GeoEllipse representing the isoline
+   * @param xmin Min parameter of search
+   * @param xmax Max parameter of search
+   *
+   * @return Partially initialised object
+   */
+  IsolineCrossingFinder(const AATPoint& _aap, const GeoEllipse &_ell,
+                        const fixed xmin, const fixed xmax);
 
   fixed f(const fixed t);
 
@@ -58,13 +57,14 @@ public:
    */
   bool valid(const fixed t);
 
-/** 
- * Search for parameter value of isoline intersecting the OZ boundary
- * within min/max parameter range.
- * 
- * @return Parameter value of isoline intersection
- */
+  /**
+   * Search for parameter value of isoline intersecting the OZ boundary
+   * within min/max parameter range.
+   *
+   * @return Parameter value of isoline intersection
+   */
   fixed solve();
+
 private:
   const AATPoint &aap;
   const GeoEllipse &ell;

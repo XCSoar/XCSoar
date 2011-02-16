@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "IsolineCrossingFinder.hpp"
 #include "Navigation/Geometry/GeoEllipse.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
@@ -32,9 +33,7 @@ IsolineCrossingFinder::IsolineCrossingFinder(const AATPoint& _aap,
   aap(_aap),
   ell(_ell)
 {
-
 }
-
 
 fixed 
 IsolineCrossingFinder::f(const fixed t) 
@@ -46,14 +45,14 @@ IsolineCrossingFinder::f(const fixed t)
   // note: use of isInSector is slow!
   if (aap.isInSector(s)) {
     // attract solutions away from t
-    return fixed_one-fabs(t);
+    return fixed_one - fabs(t);
   } else {
     // attract solutions towards t
-    return -fixed_one-fabs(t);
+    return -fixed_one - fabs(t);
   }
 }
 
-#define bsgn(x) (x<fixed_one? false:true)
+#define bsgn(x) (x < fixed_one ? false : true)
 
 bool 
 IsolineCrossingFinder::valid(const fixed x) 
@@ -72,7 +71,7 @@ IsolineCrossingFinder::valid(const fixed x)
 fixed 
 IsolineCrossingFinder::solve() 
 {
-  const fixed sol = find_zero(half(xmax+xmin));
+  const fixed sol = find_zero(half(xmax + xmin));
   if (valid(sol)) {
     return sol;
   } else {
