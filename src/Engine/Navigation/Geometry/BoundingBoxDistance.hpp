@@ -88,6 +88,10 @@ public:
     return d <= other.d;
   }
 
+  bool is_zero() const {
+    return d == 0;
+  }
+
 private:
   void set_max(const size_t _dim, const BBDist &rhs) {
     if (rhs.val[_dim]>val[_dim]) {
