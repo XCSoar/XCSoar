@@ -98,11 +98,11 @@ struct Color {
    * @param b Color 2
    * @return True if colors match, False otherwise
    */
-  bool operator ==(const Color &b) const
+  bool operator ==(const Color &other) const
   {
-    return r == other.value.r
-      && g == other.value.g
-      && b == other.value.b;
+    return value.r == other.value.r
+      && value.g == other.value.g
+      && value.b == other.value.b;
   }
 
   /**
