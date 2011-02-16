@@ -31,7 +31,7 @@ Copyright_License {
 #include "Screen/TextInBox.hpp"
 #include "StringUtil.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Units.hpp"
+#include "UnitsFormatter.hpp"
 
 #include <stdio.h>
 

@@ -38,6 +38,7 @@
 #include "LocalPath.hpp"
 #include "MainWindow.hpp"
 #include "Components.hpp"
+#include "UnitsFormatter.hpp"
 
 #include <math.h>
 #include <stdio.h>

@@ -59,7 +59,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Marks.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "Units.hpp"
+#include "UnitsFormatter.hpp"
 #include "MainWindow.hpp"
 #include "Atmosphere.h"
 #include "Gauge/GaugeFLARM.hpp"

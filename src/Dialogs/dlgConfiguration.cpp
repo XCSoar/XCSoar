@@ -70,6 +70,7 @@ Copyright_License {
 #include "Hardware/Display.hpp"
 #include "OS/PathName.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
+#include "UnitsFormatter.hpp"
 
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"

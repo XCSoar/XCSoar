@@ -25,7 +25,7 @@
 #include "FLARM/Traffic.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
-#include "Units.hpp"
+#include "UnitsFormatter.hpp"
 #include "Math/Screen.hpp"
 #include "Language.hpp"
 

@@ -36,6 +36,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "LogFile.hpp"
 #include "StringUtil.hpp"
+#include "UnitsFormatter.hpp"
 
 #include <algorithm>
 #include <list>

@@ -82,7 +82,7 @@ struct UnitDescriptor_t
 };
 
 /**
- * Class to manage unit conversions and display,
+ * Namespace to manage unit conversions.
  * internal system units are (metric SI).
  * 
  */
@@ -243,22 +243,6 @@ namespace Units
   void LatitudeToDMS(Angle Latitude,
                      int *dd, int *mm, int *ss, bool *north);
 
-  /**
-   * Converts a double-based Longitude into a formatted string
-   * @param Longitude The double-based Longitude
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
-   */
-  bool LongitudeToString(Angle Longitude, TCHAR *Buffer, size_t size);
-
-  /**
-   * Converts a double-based Latitude into a formatted string
-   * @param Latitude The double-based Latitude
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
-   */
-  bool LatitudeToString(Angle Latitude, TCHAR *Buffer, size_t size);
-
   gcc_const
   const TCHAR *GetSpeedName();
 
@@ -276,70 +260,6 @@ namespace Units
 
   gcc_const
   const TCHAR *GetTaskSpeedName();
-
-  /**
-   * Converts a double-based Altitude into a formatted string
-   * @param Altitude The double-based Altitude
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
-   */
-  bool FormatUserAltitude(fixed Altitude, TCHAR *Buffer, size_t size,
-                          bool IncludeUnit = true);
-
-  /**
-   * Converts a double-based Altitude into a formatted string of the alternate
-   * altitude format
-   * @param Altitude The double-based Altitude
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
-   */
-  bool FormatAlternateUserAltitude(fixed Altitude, TCHAR *Buffer,
-                                   size_t size, bool IncludeUnit = true);
-
-  /**
-   * Converts a double-based Arrival Altitude into a formatted string
-   * @param Altitude The double-based Arrival Altitude
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
-   */
-  bool FormatUserArrival(fixed Altitude, TCHAR *Buffer, size_t size,
-                         bool IncludeUnit = true);
-
-  /**
-   * Converts a double-based horizontal Distance into a formatted string
-   * @param Distance The double-based Distance
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
-   */
-  bool FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
-                          bool IncludeUnit = true);
-
-  bool FormatUserMapScale(Units_t *Unit, fixed Distance, TCHAR *Buffer,
-                          size_t size, bool IncludeUnit = true);
-
-  /**
-   * Converts a double-based Speed into a formatted string
-   * @param Speed The double-based Speed
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
-   */
-  bool FormatUserSpeed(fixed Altitude, TCHAR *Buffer, size_t size,
-                       bool IncludeUnit = true);
-
-  /**
-   * Converts a double-based vertical Speed into a formatted string
-   * @param Speed The double-based vertical Speed
-   * @param Buffer Buffer string to write to (pointer)
-   * @param size Size of the Buffer
-   * @return True if Buffer long enough, False otherwise
-   */
-  bool FormatUserVSpeed(fixed Altitude, TCHAR *Buffer, size_t size,
-                        bool IncludeUnit = true);
 
   /**
    * Converts a Value from the system unit to the user-specified unit
@@ -442,8 +362,6 @@ namespace Units
   {
     return ToSysUnit(Value, WindSpeedUnit);
   }
-
-  void TimeToText(TCHAR* text, int d);
 };
 
 #endif

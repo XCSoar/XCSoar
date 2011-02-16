@@ -39,6 +39,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "StringUtil.hpp"
 #include "Compiler.h"
+#include "UnitsFormatter.hpp"
 
 #include <stdio.h>
 

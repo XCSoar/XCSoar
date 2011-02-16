@@ -30,6 +30,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Message.hpp"
 #include "Language.hpp"
+#include "UnitsFormatter.hpp"
 
 #include <tchar.h>
 #include <stdio.h>

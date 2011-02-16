@@ -24,7 +24,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Altitude.hpp"
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
-#include "Units.hpp"
+#include "UnitsFormatter.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
