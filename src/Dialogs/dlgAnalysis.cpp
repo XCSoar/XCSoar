@@ -260,7 +260,7 @@ Update(void)
               _("Time"),
               timetext1,
               _("Speed"),
-              (int)Units::ToUserUnit(stats.olc.speed, Units::TaskSpeedUnit),
+              (int)Units::ToUserTaskSpeed(stats.olc.speed),
               Units::GetTaskSpeedName());
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_T(""));

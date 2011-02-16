@@ -236,7 +236,7 @@ static void SetValues(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {
     wp->GetDataField()->SetAsInteger(iround(
-        Units::ToUserUnit(global_wpt->Altitude, Units::AltitudeUnit)));
+        Units::ToUserAltitude(global_wpt->Altitude)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -324,7 +324,7 @@ static void GetValues(void) {
   ss = GetFormValueInteger(*wf, _T("prpAltitude"));
   global_wpt->Altitude = ss == 0 && terrain != NULL
     ? fixed(terrain->GetTerrainHeight(global_wpt->Location))
-    : Units::ToSysUnit(fixed(ss), Units::AltitudeUnit);
+    : Units::ToSysAltitude(fixed(ss));
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
   if (wp) {

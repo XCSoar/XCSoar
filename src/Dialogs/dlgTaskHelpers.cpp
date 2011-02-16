@@ -295,19 +295,25 @@ public:
   void
   Visit(const SectorZone& oz)
   {
-    _stprintf(radius,_T("%.1f%s"), (double)Units::ToUserDistance(oz.getRadius()),Units::GetUnitName(Units::DistanceUnit));
+    _stprintf(radius,_T("%.1f%s"),
+              (double)Units::ToUserDistance(oz.getRadius()),
+              Units::GetDistanceName());
   }
 
   void
   Visit(const LineSectorZone& oz)
   {
-    _stprintf(radius,_T("%.1f%s"), (double)Units::ToUserDistance(oz.getLength()),Units::GetUnitName(Units::DistanceUnit));
+    _stprintf(radius,_T("%.1f%s"),
+              (double)Units::ToUserDistance(oz.getLength()),
+              Units::GetDistanceName());
   }
 
   void
   Visit(const CylinderZone& oz)
   {
-    _stprintf(radius,_T("%.1f%s"), (double)Units::ToUserDistance(oz.getRadius()),Units::GetUnitName(Units::DistanceUnit));
+    _stprintf(radius,_T("%.1f%s"),
+              (double)Units::ToUserDistance(oz.getRadius()),
+              Units::GetDistanceName());
   }
   TCHAR* radius;
 };

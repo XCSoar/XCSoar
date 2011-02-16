@@ -50,7 +50,7 @@ import_label(const char *src)
 
   if (ispunct(src[0])) {
     fixed value(strtod(src + 1, NULL));
-    value = Units::ToUserUnit(value, Units::AltitudeUnit);
+    value = Units::ToUserAltitude(value);
 
     TCHAR buffer[32];
     if (value > fixed(999))

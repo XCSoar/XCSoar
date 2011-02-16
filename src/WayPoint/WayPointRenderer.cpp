@@ -160,8 +160,7 @@ public:
             reachable_terrain = true;
         }
 
-        AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
-                                               Units::AltitudeUnit);
+        AltArrivalAGL = (int)Units::ToUserAltitude(r.AltitudeDifference);
       }
 
       WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable_glide,

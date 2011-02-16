@@ -153,7 +153,8 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawLis
       fDist = ordered_task->getTaskPoint(DrawListIndex)->leg_distance_nominal();
 
       if (fDist > fixed(0.01)) {
-        _stprintf(sDist,_T("%.1f%s"), (double)Units::ToUserDistance(fDist),Units::GetUnitName(Units::DistanceUnit));
+        _stprintf(sDist, _T("%.1f%s"), (double)Units::ToUserDistance(fDist),
+                  Units::GetDistanceName());
         x = w0 - canvas.text_width(sDist);
         canvas.text(rc.left + x, rc.top + Layout::FastScale(2), sDist);
       }

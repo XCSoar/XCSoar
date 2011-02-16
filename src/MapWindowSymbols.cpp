@@ -96,8 +96,7 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
     canvas.line(Tail[0], Tail[1]);
   }
 
-  _stprintf(sTmp, _T("%i"),
-            iround(Units::ToUserUnit(wind.norm, Units::WindSpeedUnit)));
+  _stprintf(sTmp, _T("%i"), iround(Units::ToUserWindSpeed(wind.norm)));
 
   canvas.set_text_color(Color::BLACK);
 

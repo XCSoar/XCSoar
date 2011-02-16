@@ -331,8 +331,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       // Now: "CIRCLING THREE FOUR"
       // Later: "AVERAGE THREE POINT FOUR"
       _stprintf(text, _T(",%d"), VWI_CIRCLING);
-      TextToDigitsSmall(text, Units::ToUserUnit(Calculated->Average30s,
-                                                Units::VerticalSpeedUnit));
+      TextToDigitsSmall(text, Units::ToUserVSpeed(Calculated->Average30s));
       DoSend(Time, text);
       return true;
     }

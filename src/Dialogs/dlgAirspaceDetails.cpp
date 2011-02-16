@@ -120,7 +120,7 @@ SetValues(void)
     const GeoVector vec(ac_loc, closest_loc);
     TCHAR buf[80];
     _stprintf(buf, _T("%d%s"),
-              (int)Units::ToUserUnit(vec.Distance, Units::DistanceUnit),
+              (int)Units::ToUserDistance(vec.Distance),
               Units::GetDistanceName());
     wp->SetText(buf);
     wp->RefreshDisplay();

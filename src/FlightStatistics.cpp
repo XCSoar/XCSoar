@@ -199,7 +199,7 @@ FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
 
   chart.DrawXGrid(fixed_half, Task_Speed.x_min,
                   Chart::STYLE_THINDASHPAPER, fixed_half, true);
-  chart.DrawYGrid(Units::ToSysUnit(fixed_ten, Units::TaskSpeedUnit),
+  chart.DrawYGrid(Units::ToSysTaskSpeed(fixed_ten),
                   fixed_zero, Chart::STYLE_THINDASHPAPER, fixed(10), true);
   chart.DrawLineGraph(Task_Speed, Chart::STYLE_MEDIUMBLACK);
   chart.DrawTrend(Task_Speed, Chart::STYLE_BLUETHIN);
@@ -726,8 +726,7 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
             _("Distance to go"),
             (double)Units::ToUserDistance(d_remaining),
             Units::GetDistanceName(), _("Target speed"),
-            (double)Units::ToUserUnit(common.aat_speed_remaining,
-                                      Units::TaskSpeedUnit),
+            (double)Units::ToUserTaskSpeed(common.aat_speed_remaining),
             Units::GetTaskSpeedName());
       } else {
         _stprintf(sTmp,
@@ -737,8 +736,7 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
             (double)Units::ToUserDistance(d_remaining),
             Units::GetDistanceName(),
             _("Target speed"),
-            (double)Units::ToUserUnit(common.aat_speed_remaining,
-                                      Units::TaskSpeedUnit),
+            (double)Units::ToUserTaskSpeed(common.aat_speed_remaining),
             Units::GetTaskSpeedName());
       }
     } else {

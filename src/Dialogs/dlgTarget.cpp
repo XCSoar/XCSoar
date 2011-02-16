@@ -272,7 +272,7 @@ RefreshCalculator()
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(Units::ToUserUnit(speedach, Units::TaskSpeedUnit));
+    df.SetAsFloat(Units::ToUserTaskSpeed(speedach));
     df.SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }

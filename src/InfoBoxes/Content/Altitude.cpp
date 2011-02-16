@@ -70,7 +70,7 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
   if (basic.gps.Replay)
     return false;
 
-  fixed fixed_step = (fixed)Units::ToSysUnit(fixed(100), Units::AltitudeUnit);
+  fixed fixed_step = (fixed)Units::ToSysAltitude(fixed(100));
   const Angle a5 = Angle::degrees(fixed(5));
 
   switch (keycode) {

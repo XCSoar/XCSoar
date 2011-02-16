@@ -62,7 +62,7 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
   if (XCSoarInterface::Basic().gps.Replay)
     return false;
 
-  fixed fixed_step = (fixed)Units::ToSysUnit(fixed_ten, Units::SpeedUnit);
+  fixed fixed_step = (fixed)Units::ToSysSpeed(fixed_ten);
   const Angle a5 = Angle::degrees(fixed(5));
 
   switch (keycode) {
