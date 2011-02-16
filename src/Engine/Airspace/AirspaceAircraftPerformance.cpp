@@ -9,7 +9,7 @@ fixed
 AirspaceAircraftPerformance::solution_general(const fixed& distance,
                                               const fixed& dh) const
 {
-  const fixed t_cruise = distance/get_cruise_speed();
+  const fixed t_cruise = positive(distance)? distance/get_cruise_speed(): fixed_zero;
   const fixed h_descent = dh-t_cruise*get_cruise_descent();
 
   if (fabs(h_descent)<fixed_one) {
@@ -114,7 +114,7 @@ AirspaceAircraftPerformance::solution_vertical(const fixed& distance,
   if (!(top>base)) {
     // unique solution
     fixed t_this = solution_general(distance, altitude-top);
-    if (t_this!= fixed_big) {
+    if (t_this< fixed_big) {
       intercept_alt = top;
       return t_this;
     } else {

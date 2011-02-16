@@ -216,9 +216,7 @@ public:
       AirspaceInterceptSolution solution;
 
       if (mode_inside) {
-        GeoPoint c = airspace.closest_point(m_state.Location);
-        GeoVector vector_exit(m_state.Location, c);
-        airspace.intercept(m_state, vector_exit, m_perf, solution);
+        airspace.intercept(m_state, m_perf, solution, m_state.Location, m_state.Location);
       } else {
         solution = intercept(airspace, m_state, m_perf);
       }
