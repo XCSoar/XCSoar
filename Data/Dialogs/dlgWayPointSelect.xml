@@ -16,8 +16,8 @@
     <DataField DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
   </Edit>
 
+  <List Name="frmWayPointList" X="1" Y="123" Width="-1" Height="-1" ItemHeight="18"/>
+
   <Button Name="cmdSelect" Caption="Select" X="-154" Y="2" Width="75"  Height="35" />
   <Button Name="cmdClose" Caption="Cancel" X="-77" Y="2" Width="75"  Height="35"  />
-
-  <List Name="frmWayPointList" X="1" Y="123" Width="-1" Height="-1" ItemHeight="18"/>
 </Form>
