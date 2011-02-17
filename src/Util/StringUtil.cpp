@@ -54,6 +54,24 @@ string_after_prefix_ci(const TCHAR *string, const TCHAR *prefix)
     : NULL;
 }
 
+const TCHAR *
+TrimLeft(const TCHAR *p)
+{
+  while (IsWhitespaceNotNull(*p))
+    ++p;
+  return p;
+}
+
+#ifdef _UNICODE
+const char *
+TrimLeft(const char *p)
+{
+  while (IsWhitespaceNotNull(*p))
+    ++p;
+  return p;
+}
+#endif
+
 void
 TrimRight(TCHAR *p)
 {
