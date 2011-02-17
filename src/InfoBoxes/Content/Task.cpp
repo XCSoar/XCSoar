@@ -87,12 +87,15 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
   }
   SetTitleFromWaypointName(infobox, way_point);
 
+  // Set Comment
+  infobox.SetComment(way_point->Comment.c_str());
+
   const GlideResult &solution_remaining =
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       !solution_remaining.defined() ||
       solution_remaining.Vector.Distance <= fixed(10)) {
-    infobox.SetInvalid();
+    infobox.SetValueInvalid();
     return;
   }
 
@@ -101,9 +104,6 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
     solution_remaining.Vector.Bearing - XCSoarInterface::Basic().TrackBearing;
 
   SetValueBearingDifference(infobox, Value);
-
-  // Set Comment
-  infobox.SetComment(way_point->Comment.c_str());
 
   // Set Color (blue/black)
   infobox.SetColor(solution_remaining.is_final_glide() ? 2 : 0);
