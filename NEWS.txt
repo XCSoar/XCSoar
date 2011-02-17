@@ -10,6 +10,7 @@ Version 6.0.4 - not yet released
   - LX: parse LXWP0 as altitude above 1013.25 hPa
   - Zander: PZAN1 contains QNH altitude
   - Zander: verify checksum
+  - don't force cruise mode when no Vega/B50 is present
 * user interface
   - prevent potential crash while using flarm radar dialogs
   - improve behaviour if "circling zoom" is disabled

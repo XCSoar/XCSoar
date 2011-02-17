@@ -72,7 +72,7 @@ DeviceBlackboard::Initialise()
   gps_info.SwitchState.UserSwitchUp = false;
   gps_info.SwitchState.UserSwitchMiddle = false;
   gps_info.SwitchState.UserSwitchDown = false;
-  gps_info.SwitchState.VarioCircling = false;
+  gps_info.SwitchState.FlightMode = SWITCH_INFO::MODE_UNKNOWN;
 
   // Set GPS assumed time to system time
   gps_info.DateTime = BrokenDateTime::NowUTC();

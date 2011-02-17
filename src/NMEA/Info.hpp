@@ -47,7 +47,13 @@ struct SWITCH_INFO
   bool UserSwitchUp;
   bool UserSwitchMiddle;
   bool UserSwitchDown;
-  bool VarioCircling;
+
+  enum {
+    MODE_UNKNOWN,
+    MODE_CIRCLING,
+    MODE_CRUISE,
+  } FlightMode;
+
   bool FlapLanding;
   // bool Stall;
 };

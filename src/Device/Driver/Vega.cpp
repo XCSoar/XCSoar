@@ -111,8 +111,10 @@ PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   GPS_INFO->SwitchState.Stall =
     (switchinputs & (1<<INPUT_BIT_STALL))>0;
   */
-  GPS_INFO->SwitchState.VarioCircling =
-    (switchoutputs & (1<<OUTPUT_BIT_CIRCLING))>0;
+  GPS_INFO->SwitchState.FlightMode =
+    (switchoutputs & (1 << OUTPUT_BIT_CIRCLING)) > 0
+    ? SWITCH_INFO::MODE_CIRCLING
+    : SWITCH_INFO::MODE_CRUISE;
   GPS_INFO->SwitchState.FlapLanding =
     (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
 
