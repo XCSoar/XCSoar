@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 
 <Form Name="frmWayPointInfo" Width="240" Height="320" Caption="Waypoint Info">
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="2" Y="-30" Width="35" Height="28" OnClick="OnPrevClicked" />
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="39" Y="-30" Width="35" Height="28" OnClick="OnNextClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="2" Y="-37" Width="37" Height="35" OnClick="OnPrevClicked" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="41" Y="-37" Width="37" Height="35" OnClick="OnNextClicked" />
   
-  <Button Name="cmdGoto" Caption="Goto" X="88" Y="-30" Width="60" Height="28" />
+  <Button Name="cmdGoto" Caption="Goto" X="85" Y="-37" Width="75" Height="35" />
 
-  <Button Name="cmdClose" Caption="Close" X="-62" Y="-30" Width="60" Height="28" />
+  <Button Name="cmdClose" Caption="Close" X="-77" Y="-37" Width="75" Height="35" />
 
-  <Panel Name="frmInfos" X="0" Y="0" Height="-32">
+  <Panel Name="frmInfos" X="0" Y="0" Height="-39">
     <Edit Name="prpWpComment" Caption="Comment" X="2" Y="2" Height="40" CaptionWidth="100" ReadOnly="1" />
     <Edit Name="prpLatitude" Caption="Latitude" X="2" Height="22" CaptionWidth="100" ReadOnly="1" />
     <Edit Name="prpLongitude" Caption="Longitude" X="2" Height="22" CaptionWidth="100" ReadOnly="1" />
@@ -21,9 +21,9 @@
     <Edit Name="prpMc2" Caption="Alt diff MC current" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
   </Panel>
 
-  <List Name="frmDetails" X="0" Y="0" Height="-32" ItemHeight="18"/>
+  <List Name="frmDetails" X="0" Y="0" Height="-39" ItemHeight="18"/>
 
-  <Panel Name="frmCommands" X="0" Y="0" Width="-32" Visible="0">
+  <Panel Name="frmCommands" X="0" Y="0" Height="-39" Visible="0">
     <Button Name="cmdReplace" Caption="Replace in task" X="40" Y="10" Width="-40" Height="30" />
     <Button Name="cmdInserInTask" Caption="Insert in task" X="40" Width="-40" Height="30" />
     <Button Name="cmdAppendInTask" Caption="Append to task" X="40" Width="-40" Height="30" />
