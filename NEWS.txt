@@ -13,6 +13,7 @@ Version 6.0.4 - not yet released
 * user interface
   - prevent potential crash while using flarm radar dialogs
   - improve behaviour if "circling zoom" is disabled
+  - vario: fix circling mode display
 * map
   - enable terrain and topology by default
 * task
