@@ -389,6 +389,7 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
                                      const Angle &screenRotation)
 {
   static const Color ORANGE(255, 162, 0);
+  static const Color NOT_REACHABLE_TERRAIN(224, 64, 64);
 
   if (!Appearance.UseSWLandablesRendering) {
     const MaskedIcon *icon;
@@ -414,7 +415,7 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
   if (Appearance.IndLandable == wpLandableWinPilot) {
     // Render landable with reachable state
     if (reachable_glide) {
-      fill.set(reachable_terrain ? Color::GREEN : ORANGE);
+      fill.set(reachable_terrain ? Color::GREEN : NOT_REACHABLE_TERRAIN);
       canvas.select(fill);
       DrawLandableBase(canvas, pt, way_point.is_airport(),
                        radius + radius / fixed_two);
@@ -422,12 +423,12 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
     fill.set(Color::MAGENTA);
   } else if (Appearance.IndLandable == wpLandableAltB) {
     if (reachable_glide)
-      fill.set(reachable_terrain ? Color::GREEN : Color::YELLOW);
+      fill.set(reachable_terrain ? Color::GREEN : NOT_REACHABLE_TERRAIN);
     else
       fill.set(ORANGE);
   } else {
     if (reachable_glide)
-      fill.set(reachable_terrain ? Color::GREEN : ORANGE);
+      fill.set(reachable_terrain ? Color::GREEN : NOT_REACHABLE_TERRAIN);
     else if (way_point.is_airport())
       fill.set(Color::WHITE);
     else
