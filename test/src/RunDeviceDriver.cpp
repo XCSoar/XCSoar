@@ -227,8 +227,10 @@ int main(int argc, char **argv)
   }
 
   char buffer[1024];
-  while (fgets(buffer, sizeof(buffer), stdin) != NULL)
+  while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+    TrimRight(buffer);
     device.LineReceived(buffer);
+  }
 
   Dump(device_blackboard.Basic());
 }
