@@ -238,6 +238,7 @@ TestLX(const struct DeviceRegister &driver)
 
   NMEA_INFO nmea_info;
   memset(&nmea_info, 0, sizeof(nmea_info));
+  nmea_info.pressure.set_QNH(fixed(1013.25));
 
   /* baro altitude disabled */
   device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", &nmea_info, false);
@@ -248,7 +249,7 @@ TestLX(const struct DeviceRegister &driver)
   /* baro altitude enabled */
   device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", &nmea_info, true);
   ok1(nmea_info.BaroAltitudeAvailable);
-  ok1(equals(nmea_info.BaroAltitude, 1266.5));
+  ok1(between(nmea_info.BaroAltitude, 1266, 1267));
   ok1(!nmea_info.AirspeedAvailable);
   ok1(!nmea_info.TotalEnergyVarioAvailable);
 
