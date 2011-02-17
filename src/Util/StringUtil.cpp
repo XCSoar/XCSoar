@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "StringUtil.hpp"
+#include "CharUtil.hpp"
 #include "Compatibility/string.h"
 
 #include <assert.h>
@@ -58,7 +59,7 @@ TrimRight(TCHAR *p)
 {
   size_t length = _tcslen(p);
 
-  while (length > 0 && _istspace(p[length - 1]))
+  while (length > 0 && IsWhitespaceOrNull(p[length - 1]))
     --length;
 
   p[length] = 0;
