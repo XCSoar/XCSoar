@@ -385,7 +385,7 @@ CreateOriginalWaypoints()
   wp3.Name = _T("Golden Gate Bridge");
   wp3.Comment = _T("");
   wp3.RunwayDirection = Angle::degrees(fixed(-1));
-  wp3.RunwayLength = Units::ToSysUnit(fixed(0.005), unNauticalMiles);;
+  wp3.RunwayLength = 0;
 
   wp3.Flags.Airport = false;
   wp3.Flags.TurnPoint = true;
