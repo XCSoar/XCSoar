@@ -172,6 +172,12 @@ WayPointFileWinPilot::parseRunwayDirection(const TCHAR* src, Angle& dest)
 
   int a1 = (value / 100) * 10;
   int a2 = (value % 100) * 10;
+  if (a1 < 0 || a1 > 360 || a2 < 0 || a2 > 360)
+    return false;
+  if (a1 == 360)
+    a1 = 0;
+  if (a2 == 360)
+    a2 = 0;
 
   // TODO: WELT2000 generates quite a few entries where
   //       a) a1 == a2 (accept those) and
