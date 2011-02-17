@@ -55,8 +55,8 @@ static const UnitStoreItem Presets[] =
     unFeet,
     unGradFahrenheit,
     unKnots,
-    unStatuteMilesPerHour,
-    unStatuteMilesPerHour,
+    unKnots,
+    unKnots,
     unStatuteMilesPerHour
   } },
   { _T("Australian"), {
