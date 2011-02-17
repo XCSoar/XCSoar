@@ -62,6 +62,11 @@ string_after_prefix_ci(const TCHAR *string, const TCHAR *prefix);
  */
 void TrimRight(TCHAR *p);
 
+#ifdef _UNICODE
+void
+TrimRight(char *p);
+#endif
+
 /**
  * Normalize a string for searching.  This strips all characters
  * except letters and digits, folds case to a neutral form.  It is

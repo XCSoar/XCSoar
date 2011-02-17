@@ -65,6 +65,19 @@ TrimRight(TCHAR *p)
   p[length] = 0;
 }
 
+#ifdef _UNICODE
+void
+TrimRight(char *p)
+{
+  size_t length = strlen(p);
+
+  while (length > 0 && IsWhitespaceOrNull(p[length - 1]))
+    --length;
+
+  p[length] = 0;
+}
+#endif
+
 TCHAR *
 normalize_search_string(TCHAR *dest, const TCHAR *src)
 {

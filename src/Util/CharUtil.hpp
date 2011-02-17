@@ -32,4 +32,14 @@ IsWhitespaceOrNull(const TCHAR ch)
   return (unsigned)ch <= 0x20;
 }
 
+#ifdef _UNICODE
+
+static inline bool
+IsWhitespaceOrNull(const char ch)
+{
+  return (unsigned char)ch <= 0x20;
+}
+
+#endif /* _UNICODE */
+
 #endif
