@@ -659,7 +659,7 @@ GlideComputerAirData::Turning()
   bool forcecruise = false;
   bool forcecircling = false;
   if (SettingsComputer().EnableExternalTriggerCruise && !Basic().gps.Replay) {
-    forcecircling = triggerClimbEvent.test();
+    forcecircling = Basic().SwitchState.VarioCircling;
     forcecruise = !forcecircling;
   }
 

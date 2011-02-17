@@ -63,7 +63,6 @@ Copyright_License {
 unsigned InfoBoxLayout::ControlWidth = 100;
 
 Trigger airspaceWarningEvent(_T("airspaceWarning"));
-Trigger triggerClimbEvent(_T("triggerClimb"));
 
 void dlgBasicSettingsShowModal() {}
 void dlgTaskCalculatorShowModal(SingleWindow &parent) {}

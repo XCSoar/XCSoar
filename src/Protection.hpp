@@ -49,7 +49,6 @@ extern bool MapFileChanged;
 
 extern Trigger globalRunningEvent;
 extern Trigger airspaceWarningEvent;
-extern Trigger triggerClimbEvent;
 
 /**
  * Suspend all threads which have unprotected access to shared data.

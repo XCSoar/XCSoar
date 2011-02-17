@@ -37,7 +37,6 @@ Copyright_License {
 
 Trigger globalRunningEvent;
 Trigger airspaceWarningEvent;
-Trigger triggerClimbEvent;
 
 Mutex mutexBlackboard;
 // protect GPS_INFO, maccready etc,

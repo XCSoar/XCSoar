@@ -52,8 +52,6 @@ static DeviceDescriptor device;
 
 Mutex mutexBlackboard;
 
-Trigger triggerClimbEvent(_T("triggerClimb"));
-
 void TriggerGPSUpdate() {}
 void TriggerVarioUpdate() {}
 

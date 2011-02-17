@@ -112,11 +112,6 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   // inclimb/incruise 1=cruise,0=climb, OAT
   GPS_INFO->SwitchState.VarioCircling = line.read(false);
-  if (GPS_INFO->SwitchState.VarioCircling) {
-    triggerClimbEvent.trigger();
-  } else {
-    triggerClimbEvent.reset();
-  }
 
   GPS_INFO->TemperatureAvailable = line.read_checked(value);
   if (GPS_INFO->TemperatureAvailable)

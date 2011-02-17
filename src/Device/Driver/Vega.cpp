@@ -125,11 +125,6 @@ PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     is_circling = GPS_INFO->SwitchState.SpeedCommand;
     break;
   }
-  if (is_circling) {
-    triggerClimbEvent.trigger();
-  } else {
-    triggerClimbEvent.reset();
-  }
 
   long up_switchinputs;
   long down_switchinputs;
