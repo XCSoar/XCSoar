@@ -307,9 +307,14 @@ TabDisplay::on_key_check(unsigned key_code) const
 {
   switch (key_code) {
 
+  case VK_APP1:
+  case VK_APP2:
+  case VK_APP3:
+  case VK_APP4:
+    return true;
+
   case VK_RETURN:
-    return false; // ToDo
-    break;
+    return true;
 
   case VK_LEFT:
     if (Layout::landscape)
@@ -345,12 +350,35 @@ bool
 TabDisplay::on_key_down(unsigned key_code)
 {
   switch (key_code) {
-#ifdef GNAV
-  // JMW added this to make data entry easier
-  case VK_F4:
-#endif
-  case VK_RETURN: //ToDo: support Return
-    break;
+
+  case VK_APP1:
+    if (theTabBar.GetTabCount() > 0)
+      theTabBar.SetCurrentPage(0, TabBarControl::MouseOrButton,
+          theTabBar.GetCurrentPage() == 0);
+    return true;
+
+  case VK_APP2:
+    if (theTabBar.GetTabCount() > 1)
+      theTabBar.SetCurrentPage(1, TabBarControl::MouseOrButton,
+          theTabBar.GetCurrentPage() == 1);
+    return true;
+
+  case VK_APP3:
+    if (theTabBar.GetTabCount() > 2)
+      theTabBar.SetCurrentPage(2, TabBarControl::MouseOrButton,
+          theTabBar.GetCurrentPage() == 2);
+    return true;
+
+  case VK_APP4:
+    if (theTabBar.GetTabCount() > 3)
+      theTabBar.SetCurrentPage(3, TabBarControl::MouseOrButton,
+          theTabBar.GetCurrentPage() == 3);
+    return true;
+
+  case VK_RETURN:
+    theTabBar.SetCurrentPage(theTabBar.GetCurrentPage(),
+        TabBarControl::MouseOrButton, true);
+    return true;
 
   case VK_DOWN:
   case VK_RIGHT:
