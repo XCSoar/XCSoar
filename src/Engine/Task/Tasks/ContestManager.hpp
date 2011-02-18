@@ -86,6 +86,7 @@ private:
   OLCLeague olc_league;
   OLCPlus olc_plus;
   XContest olc_xcontest;
+  XContest olc_dhvxc;
 };
 
 #endif
