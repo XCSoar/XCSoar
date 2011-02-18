@@ -180,6 +180,8 @@ const RECT
     partialTab = true;
 
   const unsigned finalmargin = partialTab ? TabLineHeight - 3 * margin : margin;
+  // Todo make the final margin display on either beginning or end of tab bar
+  // depending on position of tab bar
 
   const unsigned but_width = Layout::landscape ?
       (theTabDisplay->GetTabHeight() - finalmargin) / buttons.size() - margin
@@ -190,19 +192,15 @@ const RECT
     rc.left = 0;
     rc.right = theTabDisplay->GetTabWidth() - TabLineHeight;
 
-    rc.top = margin + (margin + but_width) * i;
+    rc.top = finalmargin + (margin + but_width) * i;
     rc.bottom = rc.top + but_width;
-    if (!partialTab && (i == buttons.size() - 1))
-      rc.bottom = theTabDisplay->GetTabHeight() - margin - 1;
 
   } else {
   rc.top = 0;
   rc.bottom = rc.top + theTabDisplay->GetTabHeight() - TabLineHeight;
 
-    rc.left = margin + (margin + but_width) * i;
+    rc.left = finalmargin + (margin + but_width) * i;
     rc.right = rc.left + but_width;
-    if (!partialTab && (i == buttons.size() - 1))
-      rc.right = theTabDisplay->GetTabWidth() - margin - 1;
   }
 
   buttons[i]->butSize = rc;
