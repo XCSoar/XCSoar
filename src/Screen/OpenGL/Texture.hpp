@@ -26,11 +26,17 @@ Copyright_License {
 
 #include "Asset.hpp"
 
+#include <assert.h>
+
 #ifdef ANDROID
 #include <GLES/gl.h>
 #else
 #include <SDL.h>
 #include <SDL_opengl.h>
+#endif
+
+#ifndef NDEBUG
+extern unsigned num_textures;
 #endif
 
 /**
@@ -44,7 +50,11 @@ protected:
 public:
 #ifdef ANDROID
   GLTexture(GLuint _id, unsigned _width, unsigned _height)
-    :id(_id), width(_width), height(_height) {}
+    :id(_id), width(_width), height(_height) {
+#ifndef NDEBUG
+    ++num_textures;
+#endif
+  }
 #endif
 
   /**
@@ -61,6 +71,11 @@ public:
 
   ~GLTexture() {
     glDeleteTextures(1, &id);
+
+#ifndef NDEBUG
+    assert(num_textures > 0);
+    --num_textures;
+#endif
   }
 
   unsigned get_width() const {
@@ -73,6 +88,10 @@ public:
 
 protected:
   void init(bool mag_linear=false) {
+#ifndef NDEBUG
+    ++num_textures;
+#endif
+
     glGenTextures(1, &id);
     bind();
     configure(mag_linear);

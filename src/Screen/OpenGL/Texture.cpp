@@ -32,6 +32,10 @@ Copyright_License {
 
 #include <assert.h>
 
+#ifndef NDEBUG
+unsigned num_textures;
+#endif
+
 static inline bool
 allow_unaligned_textures()
 {

@@ -34,6 +34,10 @@ Copyright_License {
 #include "Java/Global.hpp"
 #include "org_xcsoar_NativeView.h"
 
+#ifndef NDEBUG
+#include "Screen/OpenGL/Texture.hpp"
+#endif
+
 #include <assert.h>
 
 NativeView *native_view;
@@ -77,6 +81,8 @@ JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
   CommonInterface::main_window.pause();
+
+  assert(num_textures == 0);
 }
 
 JNIEXPORT void JNICALL
