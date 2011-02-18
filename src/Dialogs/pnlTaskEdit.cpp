@@ -31,12 +31,14 @@ Copyright_License {
 #include "Gauge/TaskView.hpp"
 #include "Interface.hpp"
 #include "Screen/SingleWindow.hpp"
+#include "Form/TabBar.hpp"
 
 #include <assert.h>
 #include <stdio.h>
 
 static SingleWindow *parent_window;
 static WndForm* wf = NULL;
+static TabBarControl* wTabBar = NULL;
 static WndOwnerDrawFrame* wTaskView = NULL;
 static WndFrame* wSummary = NULL;
 static RECT TaskViewRect;
@@ -261,8 +263,10 @@ bool
 pnlTaskEdit::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
 {
   if (!fullscreen) {
-    wTaskView->move(0, 0, wf->GetClientAreaWindow().get_width(),
-                    wf->GetClientAreaWindow().get_height());
+    const unsigned xoffset = (Layout::landscape ? wTabBar->GetTabWidth() : 0);
+    const unsigned yoffset = (!Layout::landscape ? wTabBar->GetTabHeight() : 0);
+    wTaskView->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
+                    wf->GetClientAreaWindow().get_height() - yoffset);
     fullscreen = true;
     wTaskView->show_on_top();
   } else {
@@ -302,10 +306,12 @@ pnlTaskEdit::OnTabPreShow(TabBarControl::EventType EventType)
 }
 
 Window*
-pnlTaskEdit::Load(SingleWindow &parent, TabBarControl* wTabBar, WndForm* _wf,
+pnlTaskEdit::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
                   OrderedTask** task, bool* _task_modified)
 {
-  assert(wTabBar);
+  assert(_wTabBar);
+  wTabBar = _wTabBar;
+
   assert(_wf);
   wf = _wf;
 
