@@ -40,7 +40,7 @@ TabBarControl::TabBarControl(ContainerWindow &_parent,
                     (Layout::Scale(TabLineHeightInitUnscaled) * 0.75) :
                     Layout::Scale(TabLineHeightInitUnscaled))
 {
-  theTabDisplay = new TabDisplay(*this, _width, _height);
+  theTabDisplay = new TabDisplay(*this, x, y, _width, _height);
 }
 
 bool
@@ -211,7 +211,7 @@ const RECT
 
 // TabDisplay Functions
 TabDisplay::TabDisplay(TabBarControl& _theTabBar,
-    unsigned width, unsigned height) :
+    unsigned left, unsigned top, unsigned width, unsigned height) :
   PaintWindow(),
   theTabBar(_theTabBar),
   dragging(false),
@@ -219,7 +219,7 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar,
 {
   WindowStyle mystyle;
   mystyle.tab_stop();
-  set(theTabBar, 0, 0, width, height, mystyle);
+  set(theTabBar, left, top, width, height, mystyle);
 }
 
 void

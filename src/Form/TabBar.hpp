@@ -180,9 +180,13 @@ public:
  *
  * @param parent
  * @param _theTabBar. An existing TabBar object
- * @param height the height to make the row of tabs the screen
+ * @param left. Left position of the tab bar box in the parent window
+ * @param top Top position of the tab bar box in the parent window
+ * @param width Width of tab bar box in the parent window
+ * @param height Height of tab bar box in the parent window
  */
-  TabDisplay(TabBarControl& _theTabBar, unsigned width, unsigned height);
+ TabDisplay(TabBarControl& _theTabBar, unsigned left, unsigned top,
+     unsigned width, unsigned height);
 
 public:
   void trigger_invalidate() { invalidate(); }
