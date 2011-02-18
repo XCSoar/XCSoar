@@ -148,6 +148,8 @@ public:
   void NextPage(EventType EventType = TabBarControl::MouseOrButton);
   void PreviousPage(EventType EventType = TabBarControl::MouseOrButton);
   unsigned GetTabCount() { return buttons.size(); }
+  unsigned GetTabHeight();
+  unsigned GetTabWidth();
 
 /**
  * calculates the size and position of ith button

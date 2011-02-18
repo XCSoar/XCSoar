@@ -207,6 +207,18 @@ const RECT
   return buttons[i]->butSize;
 }
 
+unsigned
+TabBarControl::GetTabHeight()
+{
+  return theTabDisplay->GetTabHeight();
+}
+
+unsigned
+TabBarControl::GetTabWidth()
+{
+  return theTabDisplay->GetTabWidth();
+}
+
 // TabDisplay Functions
 TabDisplay::TabDisplay(TabBarControl& _theTabBar,
     unsigned left, unsigned top, unsigned width, unsigned height) :
