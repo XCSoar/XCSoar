@@ -200,6 +200,7 @@ public:
   static void OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex);
   static void OnLoadSaveClicked(WndButton &Sender);
   static bool OnDeclareClicked(WndButton &Sender);
+  static bool OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y);
   static void OnDeleteClicked(WndButton &Sender);
   static void OnRenameClicked(WndButton &Sender);
   static void OnTaskListEnter(unsigned ItemIndex);

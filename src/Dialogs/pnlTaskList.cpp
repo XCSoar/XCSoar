@@ -38,8 +38,10 @@ Copyright_License {
 static WndForm *wf = NULL;
 static TabBarControl* wTabBar;
 static WndListFrame* wTasks = NULL;
-static WndFrame* wTaskView = NULL;
+static WndOwnerDrawFrame* wTaskView = NULL;
 static TaskStore task_store;
+static RECT TaskViewRect;
+static bool fullscreen;
 
 static OrderedTask** active_task = NULL;
 static bool* task_modified = NULL;
@@ -303,6 +305,26 @@ pnlTaskList::OnDeclareClicked(WndButton &Sender)
 }
 
 bool
+pnlTaskList::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
+{
+  if (!fullscreen) {
+    const unsigned xoffset = (Layout::landscape ? wTabBar->GetTabWidth() : 0);
+    const unsigned yoffset = (!Layout::landscape ? wTabBar->GetTabHeight() : 0);
+    wTaskView->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
+                    wf->GetClientAreaWindow().get_height() - yoffset);
+    fullscreen = true;
+    wTaskView->show_on_top();
+  } else {
+    wTaskView->move(TaskViewRect.left, TaskViewRect.top,
+                    TaskViewRect.right - TaskViewRect.left,
+                    TaskViewRect.bottom - TaskViewRect.top);
+    fullscreen = false;
+  }
+  wTaskView->invalidate();
+  return true;
+}
+
+bool
 pnlTaskList::OnTabPreShow(TabBarControl::EventType EventType)
 {
   if (!lazy_loaded) {
@@ -347,8 +369,12 @@ pnlTaskList::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
   assert(wList);
 
   // Save important control pointers
-  wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView1"));
+  wTaskView = (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskView1"));
   assert(wTaskView != NULL);
+
+  TaskViewRect = wTaskView->get_position();
+  wTaskView->SetOnMouseDownNotify(OnTaskViewClick);
+  fullscreen = false;
 
   wTasks = (WndListFrame*)wf->FindByName(_T("frmTasks"));
   assert(wTasks != NULL);
