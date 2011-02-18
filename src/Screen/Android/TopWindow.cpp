@@ -58,9 +58,16 @@ TopWindow::on_resume()
   invalidate();
 }
 
+static bool
+match_pause_and_resume(const Event &event, void *ctx)
+{
+  return event.type == Event::PAUSE || event.type == Event::RESUME;
+}
+
 void
 TopWindow::pause()
 {
+  event_queue->purge(match_pause_and_resume, NULL);
   event_queue->push(Event::PAUSE);
 
   paused_mutex.Lock();
@@ -72,5 +79,6 @@ TopWindow::pause()
 void
 TopWindow::resume()
 {
+  event_queue->purge(match_pause_and_resume, NULL);
   event_queue->push(Event::RESUME);
 }
