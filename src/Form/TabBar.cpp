@@ -36,13 +36,11 @@ TabBarControl::TabBarControl(ContainerWindow &_parent,
                 const WindowStyle style):
                 TabbedControl(_parent, 0, 0, _parent.get_width(), _parent.get_height(), style),
                 theTabDisplay(NULL),
-                TabBarHeight(_height),
-                TabBarWidth(_width),
                 TabLineHeight(Layout::landscape ?
                     (Layout::Scale(TabLineHeightInitUnscaled) * 0.75) :
                     Layout::Scale(TabLineHeightInitUnscaled))
 {
-  theTabDisplay = new TabDisplay(*this, TabBarWidth, TabBarHeight);
+  theTabDisplay = new TabDisplay(*this, x, y, _width, _height);
 }
 
 bool
@@ -95,7 +93,9 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
   if (Layout::landscape)
     w->move(rc.left , rc.top, rc.right - rc.left , rc.bottom - rc.top);
   else
-    w->move(rc.left, rc.top + TabBarHeight, rc.right - rc.left, rc.bottom - rc.top - TabBarHeight);
+    w->move(rc.left, rc.top + theTabDisplay->GetTabHeight(),
+            rc.right - rc.left,
+            rc.bottom - rc.top - theTabDisplay->GetTabHeight());
 
   OneTabButton *b = new OneTabButton(Caption, IsButtonOnly, bmp,
       PreHideFunction, PreShowFunction, PostShowFunction, ReClickFunction);
@@ -162,46 +162,54 @@ TabBarControl::PreviousPage(EventType _EventType)
 }
 
 const RECT
-TabBarControl::GetButtonSize(unsigned i)
+&TabBarControl::GetButtonSize(unsigned i)
 {
+  const static RECT rcFallback = {0, 0, 0, 0};
+
+  if (i >= buttons.size())
+    return rcFallback; // should never be used
+
+  if (buttons[i]->butSize.left < buttons[i]->butSize.right)
+    return buttons[i]->butSize;
+
   const unsigned margin = 1;
 
   bool partialTab = false;
-  if ( (Layout::landscape && TabBarHeight < get_height()) ||
-      (!Layout::landscape && TabBarWidth < get_width()) )
+  if ( (Layout::landscape && theTabDisplay->GetTabHeight() < get_height()) ||
+      (!Layout::landscape && theTabDisplay->GetTabWidth() < get_width()) )
     partialTab = true;
 
   const unsigned finalmargin = partialTab ? TabLineHeight - 3 * margin : margin;
+  // Todo make the final margin display on either beginning or end of tab bar
+  // depending on position of tab bar
 
-  const unsigned but_width = Layout::landscape ? (TabBarHeight - finalmargin) / buttons.size() - margin
-       : (TabBarWidth - finalmargin) / buttons.size() - margin;
+  const unsigned but_width = Layout::landscape ?
+      (theTabDisplay->GetTabHeight() - finalmargin) / buttons.size() - margin
+       : (theTabDisplay->GetTabWidth() - finalmargin) / buttons.size() - margin;
   RECT rc;
 
   if (Layout::landscape) {
     rc.left = 0;
-    rc.right = TabBarWidth - TabLineHeight;
+    rc.right = theTabDisplay->GetTabWidth() - TabLineHeight;
 
-    rc.top = margin + (margin + but_width) * i;
+    rc.top = finalmargin + (margin + but_width) * i;
     rc.bottom = rc.top + but_width;
-    if (!partialTab && (i == buttons.size() - 1))
-      rc.bottom = TabBarHeight - margin - 1;
 
   } else {
   rc.top = 0;
-  rc.bottom = rc.top + TabBarHeight - TabLineHeight;
+  rc.bottom = rc.top + theTabDisplay->GetTabHeight() - TabLineHeight;
 
-    rc.left = margin + (margin + but_width) * i;
+    rc.left = finalmargin + (margin + but_width) * i;
     rc.right = rc.left + but_width;
-    if (!partialTab && (i == buttons.size() - 1))
-      rc.right = TabBarWidth - margin - 1;
   }
 
-  return rc;
+  buttons[i]->butSize = rc;
+  return buttons[i]->butSize;
 }
 
 // TabDisplay Functions
 TabDisplay::TabDisplay(TabBarControl& _theTabBar,
-    unsigned width, unsigned height) :
+    unsigned left, unsigned top, unsigned width, unsigned height) :
   PaintWindow(),
   theTabBar(_theTabBar),
   dragging(false),
@@ -209,7 +217,7 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar,
 {
   WindowStyle mystyle;
   mystyle.tab_stop();
-  set(theTabBar, 0, 0, width, height, mystyle);
+  set(theTabBar, left, top, width, height, mystyle);
 }
 
 void

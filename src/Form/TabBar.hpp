@@ -65,7 +65,6 @@ public:
                 const WindowStyle style = WindowStyle());
 
 private:
-#define TabHeightInitUnscaled (unsigned)40
 #define TabLineHeightInitUnscaled (unsigned)5
 
 public:
@@ -89,13 +88,19 @@ public:
                   ReClickFunction(_ReClickFunction)
     {
       _tcscpy(Caption, _Caption);
+      butSize.left = 0;
+      butSize.top = 0;
+      butSize.right = 0;
+      butSize.bottom = 0;
     };
 
   public:
     TCHAR Caption[MAX_PATH];
     bool IsButtonOnly;
     MaskedIcon *bmp;
-  /**
+    RECT butSize;
+
+    /**
    * Called before the tab is hidden.
    * @returns  True if ok and tab may change.  False if click should be ignored
    */
@@ -150,19 +155,14 @@ public:
  * @param i index of button
  * @return Rectangle of button coordinates
  */
-  const RECT GetButtonSize(unsigned i);
+  const RECT &GetButtonSize(unsigned i);
   const TCHAR* GetButtonCaption(unsigned i);
   const MaskedIcon* GetButtonIcon(unsigned i);
   bool GetButtonIsButtonOnly(unsigned i);
-  unsigned GetBarHeight() { return TabBarHeight; }
-  unsigned GetBarWidth() { return TabBarWidth; }
-
 
 protected:
   TabDisplay * theTabDisplay;
   StaticArray<OneTabButton *, 32> buttons;
-  const unsigned int TabBarHeight;
-  const unsigned int TabBarWidth;
   const unsigned int TabLineHeight;
 
 };
@@ -180,12 +180,18 @@ public:
  *
  * @param parent
  * @param _theTabBar. An existing TabBar object
- * @param height the height to make the row of tabs the screen
+ * @param left. Left position of the tab bar box in the parent window
+ * @param top Top position of the tab bar box in the parent window
+ * @param width Width of tab bar box in the parent window
+ * @param height Height of tab bar box in the parent window
  */
-  TabDisplay(TabBarControl& _theTabBar, unsigned width, unsigned height);
+ TabDisplay(TabBarControl& _theTabBar, unsigned left, unsigned top,
+     unsigned width, unsigned height);
 
 public:
   void trigger_invalidate() { invalidate(); }
+  unsigned GetTabHeight() { return this->get_height(); }
+  unsigned GetTabWidth() { return this->get_width(); }
 
 protected:
   TabBarControl& theTabBar;
