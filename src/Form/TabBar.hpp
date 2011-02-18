@@ -65,7 +65,6 @@ public:
                 const WindowStyle style = WindowStyle());
 
 private:
-#define TabHeightInitUnscaled (unsigned)40
 #define TabLineHeightInitUnscaled (unsigned)5
 
 public:
