@@ -286,6 +286,21 @@ class NativeView extends SurfaceView
   }
 
   /**
+   * Initialize the current texture and load the specified Bitmap into
+   * it.
+   */
+  private void loadTexture(Bitmap bmp) {
+    /* size must be a power of two; create an empty texture, and load
+       the Bitmap into it */
+
+    gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA,
+                    nextPowerOfTwo(bmp.getWidth()),
+                    nextPowerOfTwo(bmp.getHeight()),
+                    0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, null);
+    GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, bmp);
+  }
+
+  /**
    * Loads the specified bitmap resource as OpenGL texture.
    *
    * @param result an array of 3 integers: texture id, width, height
@@ -329,16 +344,8 @@ class NativeView extends SurfaceView
     gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
                        GL10.GL_NEAREST);
 
-    /* size must be a power of two; create an empty texture, and load
-       the Bitmap into it */
-
-    gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGB,
-                    nextPowerOfTwo(bmp.getWidth()),
-                    nextPowerOfTwo(bmp.getHeight()),
-                    0, GL10.GL_RGB, GL10.GL_UNSIGNED_BYTE, null);
-
     try {
-      GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, bmp);
+      loadTexture(bmp);
     } catch (Exception e) {
       Log.e(TAG, "GLUtils error: " + e);
       return false;
