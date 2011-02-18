@@ -290,6 +290,14 @@ class NativeView extends SurfaceView
    * it.
    */
   private void loadTexture(Bitmap bmp) {
+    /* try the easy way - however this fails on Android 2.2; Android
+       1.6 and 2.3 are doing fine */
+
+    GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bmp, 0);
+    if (gl.glGetError() != gl.GL_INVALID_VALUE)
+      /* success */
+      return;
+
     /* size must be a power of two; create an empty texture, and load
        the Bitmap into it */
 
