@@ -88,13 +88,19 @@ public:
                   ReClickFunction(_ReClickFunction)
     {
       _tcscpy(Caption, _Caption);
+      butSize.left = 0;
+      butSize.top = 0;
+      butSize.right = 0;
+      butSize.bottom = 0;
     };
 
   public:
     TCHAR Caption[MAX_PATH];
     bool IsButtonOnly;
     MaskedIcon *bmp;
-  /**
+    RECT butSize;
+
+    /**
    * Called before the tab is hidden.
    * @returns  True if ok and tab may change.  False if click should be ignored
    */
@@ -149,7 +155,7 @@ public:
  * @param i index of button
  * @return Rectangle of button coordinates
  */
-  const RECT GetButtonSize(unsigned i);
+  const RECT &GetButtonSize(unsigned i);
   const TCHAR* GetButtonCaption(unsigned i);
   const MaskedIcon* GetButtonIcon(unsigned i);
   bool GetButtonIsButtonOnly(unsigned i);

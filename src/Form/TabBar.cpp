@@ -162,8 +162,16 @@ TabBarControl::PreviousPage(EventType _EventType)
 }
 
 const RECT
-TabBarControl::GetButtonSize(unsigned i)
+&TabBarControl::GetButtonSize(unsigned i)
 {
+  const static RECT rcFallback = {0, 0, 0, 0};
+
+  if (i >= buttons.size())
+    return rcFallback; // should never be used
+
+  if (buttons[i]->butSize.left < buttons[i]->butSize.right)
+    return buttons[i]->butSize;
+
   const unsigned margin = 1;
 
   bool partialTab = false;
@@ -196,7 +204,8 @@ TabBarControl::GetButtonSize(unsigned i)
       rc.right = TabBarWidth - margin - 1;
   }
 
-  return rc;
+  buttons[i]->butSize = rc;
+  return buttons[i]->butSize;
 }
 
 // TabDisplay Functions
