@@ -76,13 +76,11 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
-  event_queue->push(Event::PAUSE);
-
-  CommonInterface::main_window.wait_paused();
+  CommonInterface::main_window.pause();
 }
 
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 {
-  event_queue->push(Event::RESUME);
+  CommonInterface::main_window.resume();
 }

@@ -186,12 +186,8 @@ private:
   void on_resume();
 
 public:
-  void wait_paused() {
-    paused_mutex.Lock();
-    while (!paused)
-      paused_cond.wait(paused_mutex);
-    paused_mutex.Unlock();
-  }
+  void pause();
+  void resume();
 #endif
 
 public:

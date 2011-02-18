@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/TopWindow.hpp"
 #include "Screen/OpenGL/Cache.hpp"
 #include "Screen/OpenGL/Surface.hpp"
+#include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 
@@ -55,4 +56,21 @@ TopWindow::on_resume()
 
   /* schedule a redraw */
   invalidate();
+}
+
+void
+TopWindow::pause()
+{
+  event_queue->push(Event::PAUSE);
+
+  paused_mutex.Lock();
+  while (!paused)
+    paused_cond.wait(paused_mutex);
+  paused_mutex.Unlock();
+}
+
+void
+TopWindow::resume()
+{
+  event_queue->push(Event::RESUME);
 }
