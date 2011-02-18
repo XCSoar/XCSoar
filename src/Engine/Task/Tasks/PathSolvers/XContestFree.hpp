@@ -26,17 +26,22 @@
 #include "ContestDijkstra.hpp"
 
 /**
- * Specialisation of ContestDijkstra for XContest free flight rules
+ * Specialisation of ContestDijkstra for XContest and DHV-XC free flight rules
  */
 class XContestFree: 
   public ContestDijkstra
 {
 public:
   XContestFree(const Trace &_trace,
-             const unsigned &_handicap);
+               const unsigned &_handicap,
+               const bool _is_dhv=false);
+
+  virtual fixed calc_score() const;
 
 protected:
   void set_weightings();
+private:
+  const bool is_dhv;
 };
 
 #endif

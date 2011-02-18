@@ -37,7 +37,8 @@ class XContest:
 {
 public:
   XContest(const Trace &_trace,
-    const unsigned& _handicap);
+           const unsigned& _handicap,
+           const bool is_dhv=false);
 
   virtual void copy_solution(TracePointVector &vec) const;
 

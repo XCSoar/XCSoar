@@ -24,14 +24,21 @@
 #include "Navigation/TracePoint.hpp"
 
 XContestTriangle::XContestTriangle(const Trace &_trace,
-                                   const unsigned &_handicap):
-  OLCTriangle(_trace, _handicap) {}
+                                   const unsigned &_handicap,
+                                   const bool _is_dhv):
+  OLCTriangle(_trace, _handicap),
+  is_dhv(_is_dhv) {}
 
 fixed
 XContestTriangle::calc_score() const
 {
-  // 1.4 or 1.2 points per km for FAI vs non-FAI triangle
-  const fixed score_factor = is_fai? fixed(0.0014): fixed(0.0012);
+  // DHV-XC: 2.0 or 1.75 points per km for FAI vs non-FAI triangle
+  // XContest: 1.4 or 1.2 points per km for FAI vs non-FAI triangle
+
+  const fixed score_factor = is_dhv?
+    (is_fai? fixed(0.002): fixed(0.00175))
+    :(is_fai? fixed(0.0014): fixed(0.0012));
+
   return apply_handicap(calc_distance()*score_factor);
 }
 

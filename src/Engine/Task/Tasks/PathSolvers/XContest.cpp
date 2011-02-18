@@ -23,10 +23,11 @@
 #include <assert.h>
 
 XContest::XContest(const Trace &_trace,
-                     const unsigned &_handicap):
+                   const unsigned &_handicap,
+                   const bool is_dhv):
   AbstractContest(_trace, _handicap, 1000),
-  solver_free(_trace, _handicap),
-  solver_triangle(_trace, _handicap)
+  solver_free(_trace, _handicap, is_dhv),
+  solver_triangle(_trace, _handicap, is_dhv)
 {
   reset();
 }

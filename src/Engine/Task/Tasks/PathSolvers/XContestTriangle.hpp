@@ -26,7 +26,7 @@
 #include "OLCTriangle.hpp"
 
 /**
- * Specialisation of ContestDijkstra for XContest triangle rules.
+ * Specialisation of ContestDijkstra for XContest and DHV-XC triangle rules.
  *
  * This solver alternates between searching for FAI and non-FAI triangles
  */
@@ -35,7 +35,8 @@ class XContestTriangle:
 {
 public:
   XContestTriangle(const Trace &_trace,
-             const unsigned &_handicap);
+                   const unsigned &_handicap,
+                   const bool _is_dhv=false);
 
   virtual fixed calc_score() const;
   virtual fixed calc_distance() const;
@@ -43,6 +44,8 @@ public:
   virtual bool solve();
 
   void swap_mode();
+private:
+  const bool is_dhv;
 };
 
 #endif
