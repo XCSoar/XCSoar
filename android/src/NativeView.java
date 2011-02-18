@@ -180,6 +180,14 @@ class NativeView extends SurfaceView
       }
     }
 
+    Log.d(TAG, "EGLConfig: red="+
+          findConfigAttrib(closestConfig, EGL10.EGL_RED_SIZE, 0) +
+          " green=" + findConfigAttrib(closestConfig, EGL10.EGL_GREEN_SIZE, 0) +
+          " blue=" + findConfigAttrib(closestConfig, EGL10.EGL_BLUE_SIZE, 0) +
+          " alpha=" + findConfigAttrib(closestConfig, EGL10.EGL_ALPHA_SIZE, 0) +
+          " depth=" + findConfigAttrib(closestConfig, EGL10.EGL_DEPTH_SIZE, 0) +
+          " stencil=" + findConfigAttrib(closestConfig, EGL10.EGL_STENCIL_SIZE, 0));
+
     /* initialize context and surface */
 
     context = egl.eglCreateContext(display, closestConfig,
