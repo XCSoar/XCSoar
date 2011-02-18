@@ -159,15 +159,10 @@ public:
   const TCHAR* GetButtonCaption(unsigned i);
   const MaskedIcon* GetButtonIcon(unsigned i);
   bool GetButtonIsButtonOnly(unsigned i);
-  unsigned GetBarHeight() { return TabBarHeight; }
-  unsigned GetBarWidth() { return TabBarWidth; }
-
 
 protected:
   TabDisplay * theTabDisplay;
   StaticArray<OneTabButton *, 32> buttons;
-  const unsigned int TabBarHeight;
-  const unsigned int TabBarWidth;
   const unsigned int TabLineHeight;
 
 };
@@ -191,6 +186,8 @@ public:
 
 public:
   void trigger_invalidate() { invalidate(); }
+  unsigned GetTabHeight() { return this->get_height(); }
+  unsigned GetTabWidth() { return this->get_width(); }
 
 protected:
   TabBarControl& theTabBar;
