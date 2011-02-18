@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 
 <Panel Name="frmBrowse" Border="0">
-  <List Name="frmTasks" X="2" Y="0" Width="236" Height="129" ItemHeight="18"/>
+  <List Name="frmTasks" X="2" Y="40" Width="236" Height="129" ItemHeight="18"/>
 
-  <Button Name="cmdLoadSave" Caption="Load" X="3" Y="131" Width="57" Height="35" OnClick="pnlTaskList::OnLoadSaveClicked"/>
-  <Button Name="cmdDeclare" Caption="Declare" X="62" Y="131" Width="57" Height="35" OnClick="pnlTaskList::OnDeclareClicked"/>
-  <Button Name="cmdRename" Caption="Rename" X="121" Y="131" Width="57" Height="35" OnClick="pnlTaskList::OnRenameClicked"/>
-  <Button Name="cmdDelete" Caption="Delete" X="180" Y="131" Width="57" Height="35" OnClick="pnlTaskList::OnDeleteClicked"/>
+  <Button Name="cmdLoadSave" Caption="Load" X="3" Y="171" Width="57" Height="35" OnClick="pnlTaskList::OnLoadSaveClicked"/>
+  <Button Name="cmdDeclare" Caption="Declare" X="62" Y="171" Width="57" Height="35" OnClick="pnlTaskList::OnDeclareClicked"/>
+  <Button Name="cmdRename" Caption="Rename" X="121" Y="171" Width="57" Height="35" OnClick="pnlTaskList::OnRenameClicked"/>
+  <Button Name="cmdDelete" Caption="Delete" X="180" Y="171" Width="57" Height="35" OnClick="pnlTaskList::OnDeleteClicked"/>
 
-  <Label Name="frmSummary1" X="107" Y="168" Width="133" Height="97" Border="0"/>
-  <Canvas Name="frmTaskView1" X="0" Y="168" Width="109" Height="97" Border="0" OnPaint="pnlTaskList::OnTaskPaint" />
+  <Label Name="frmSummary1" X="107" Y="208" Width="133" Height="97" Border="0"/>
+  <Canvas Name="frmTaskView1" X="0" Y="208" Width="109" Height="97" Border="0" OnPaint="pnlTaskList::OnTaskPaint" />
 
 </Panel>

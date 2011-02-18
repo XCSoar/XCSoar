@@ -90,12 +90,7 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
 
   TabbedControl::AddClient(w);
   const RECT rc = get_client_rect();
-  if (Layout::landscape)
     w->move(rc.left , rc.top, rc.right - rc.left , rc.bottom - rc.top);
-  else
-    w->move(rc.left, rc.top + theTabDisplay->GetTabHeight(),
-            rc.right - rc.left,
-            rc.bottom - rc.top - theTabDisplay->GetTabHeight());
 
   OneTabButton *b = new OneTabButton(Caption, IsButtonOnly, bmp,
       PreHideFunction, PreShowFunction, PostShowFunction, ReClickFunction);
