@@ -43,6 +43,12 @@ MaskedIcon::load_big(unsigned id, unsigned big_id, bool center)
 
   assert(defined());
 
+  CalculateLayout(center);
+}
+
+void
+MaskedIcon::CalculateLayout(bool center)
+{
   size = bitmap.get_size();
   /* left half is mask, right half is icon */
   size.cx /= 2;
