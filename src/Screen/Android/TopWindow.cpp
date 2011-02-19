@@ -67,6 +67,8 @@ match_pause_and_resume(const Event &event, void *ctx)
 void
 TopWindow::pause()
 {
+  surface_valid = false;
+
   event_queue->purge(match_pause_and_resume, NULL);
   event_queue->push(Event::PAUSE);
 
