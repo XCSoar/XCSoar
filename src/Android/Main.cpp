@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Android/Event.hpp"
+#include "Screen/OpenGL/Debug.hpp"
 #include "Simulator.hpp"
 #include "Asset.hpp"
 #include "Profile/Profile.hpp"
@@ -50,6 +51,10 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 {
   Java::Init(env);
 
+#ifndef NDEBUG
+  OpenGL::thread = pthread_self();
+#endif
+
   assert(native_view == NULL);
   native_view = new NativeView(env, obj, width, height);
   InitAsset();
@@ -64,6 +69,10 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
 {
+#ifndef NDEBUG
+  OpenGL::thread = pthread_self();
+#endif
+
   CommonInterface::main_window.event_loop();
 }
 

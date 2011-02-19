@@ -21,47 +21,15 @@ Copyright_License {
 }
 */
 
-#include "Screen/Init.hpp"
-
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Cache.hpp"
-#include "Screen/OpenGL/Debug.hpp"
-#endif
-
-#include <SDL.h>
-#include <SDL_ttf.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-
-ScreenGlobalInit::ScreenGlobalInit()
-{
-  if (::SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) != 0) {
-    fprintf(stderr, "SDL_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
-
-#if defined(ENABLE_OPENGL)
+#ifndef XCSOAR_SCREEN_OPENGL_DEBUG_HPP
+#define XCSOAR_SCREEN_OPENGL_DEBUG_HPP
 #ifndef NDEBUG
-  OpenGL::thread = pthread_self();
+
+#include <pthread.h>
+
+namespace OpenGL {
+  extern pthread_t thread;
+};
+
 #endif
-
-  ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
 #endif
-
-  if (::TTF_Init() != 0) {
-    fprintf(stderr, "TTF_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
-}
-
-ScreenGlobalInit::~ScreenGlobalInit()
-{
-#ifdef ENABLE_OPENGL
-  TextCache::flush();
-#endif
-
-  ::TTF_Quit();
-  ::SDL_Quit();
-}

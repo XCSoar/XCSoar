@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/OpenGL/Cache.hpp"
 #include "Screen/OpenGL/Texture.hpp"
+#include "Screen/OpenGL/Debug.hpp"
 #include "Screen/Color.hpp"
 
 #include <map>
@@ -60,6 +61,7 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
                const char *text)
 #endif
 {
+  assert(pthread_equal(pthread_self(), OpenGL::thread));
   assert(font != NULL);
   assert(text != NULL);
 
@@ -160,6 +162,8 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
 void
 TextCache::flush()
 {
+  assert(pthread_equal(pthread_self(), OpenGL::thread));
+
   text_cache_map.clear();
 
   for (RenderedText *rt = (RenderedText *)text_cache_head.next;

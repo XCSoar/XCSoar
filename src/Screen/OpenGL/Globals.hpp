@@ -31,6 +31,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_GLOBALS_HPP
 #define XCSOAR_SCREEN_OPENGL_GLOBALS_HPP
 
+#ifndef NDEBUG
+#include <pthread.h>
+#endif
+
 namespace OpenGL {
   /**
    * The dimensions of the screen in pixels.

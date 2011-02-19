@@ -97,6 +97,7 @@ load_texture_auto_align(GLint internal_format,
 static bool
 load_surface_into_texture(const SDL_Surface *surface)
 {
+
   assert(surface != NULL);
   assert(surface->format != NULL);
 
