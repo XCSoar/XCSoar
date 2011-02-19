@@ -339,6 +339,18 @@ RefreshView()
   if (wb)
     wb->set_enabled(active_index < (ordered_task->task_size() - 1));
 
+  wb = (WndButton*)wf->FindByName(_T("cmdOptionalStarts"));
+  assert(wb);
+  wb->set_visible(active_index == 0);
+  if (ordered_task->optional_start_points_size() == 0)
+    wb->SetCaption(_T("Enable Alternate Starts"));
+  else {
+    TCHAR tmp[50];
+    _stprintf(tmp, _T("Edit Alternate Starts(%d)"),
+        ordered_task->optional_start_points_size());
+    wb->SetCaption(tmp);
+  }
+
   EnableSizeEdit(ordered_task->get_factory_type() != TaskBehaviour::FACTORY_FAI_GENERAL);
 
   TCHAR bufType[100];
@@ -450,6 +462,19 @@ OnNextClicked(WndButton &Sender)
   }
 }
 
+/**
+ * displays dlgTaskOptionalStarts
+ * @param Sender
+ */
+static void
+OnOptionalStartsClicked(WndButton &Sender)
+{
+  if (dlgTaskOptionalStarts(*parent_window, &ordered_task)) {
+    task_modified =true;
+    RefreshView();
+  }
+}
+
 static void
 OnOZLineLengthData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
@@ -488,6 +513,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnTypeClicked),
   DeclareCallBackEntry(OnPreviousClicked),
   DeclareCallBackEntry(OnNextClicked),
+  DeclareCallBackEntry(OnOptionalStartsClicked),
   DeclareCallBackEntry(OnTaskPaint),
   DeclareCallBackEntry(OnOZLineLengthData),
   DeclareCallBackEntry(OnOZCylinderRadiusData),
