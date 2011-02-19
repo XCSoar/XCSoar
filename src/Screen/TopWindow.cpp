@@ -187,7 +187,7 @@ TopWindow::refresh()
     SurfaceCreated();
   }
 
-  if (paused)
+  if (paused || !surface_valid)
     /* the application is paused/suspended, and we don't have an
        OpenGL surface - ignore all drawing requests */
     return;
