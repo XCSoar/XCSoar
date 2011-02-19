@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 
 <Form Name="frmTaskCalculator" X="5" Y="0" Width="240" Height="240" Caption="Task Calculator">
-  <Button Caption="Close" X="2" Y="2" Width="75" Height="35" OnClick="OnOKClicked" />
+  <Button Name="Target" Caption="Target" X="2" Y="2" Width="75" Height="35" OnClick="OnTargetClicked" />
   <Button Caption="Cancel" X="79" Y="2" Width="-82" Height="35" OnClick="OnCancelClicked" />
-
-  <Button Name="Target" Caption="Target" X="-80" Y="2" Width="-2" Height="35" OnClick="OnTargetClicked" />
+  <Button Caption="Close" X="-80" Y="2" Width="-2" Height="35" OnClick="OnOKClicked" />
 
   <Edit Name="prpAATTime" Caption="Assigned task time" X="2" Height="22" CaptionWidth="150" ReadOnly="1">
     <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f"/>
