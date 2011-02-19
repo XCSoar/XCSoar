@@ -29,7 +29,9 @@ Copyright_License {
 #include "Thread/Trigger.hpp"
 #include "Device/Port.hpp"
 
-#include <windows.h>
+#ifndef HAVE_POSIX
+#include <windef.h>
+#endif
 
 #define NMEA_BUF_SIZE 100
 
