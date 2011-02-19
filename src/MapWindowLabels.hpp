@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_MAP_WINDOW_LABELS_HPP
 
 #include "Screen/TextInBox.hpp"
+#include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Sizes.h" /* for NAME_SIZE */
 
@@ -34,7 +35,7 @@ class WayPointLabelList : private NonCopyable {
 public:
   struct Label{
     TCHAR Name[NAME_SIZE+1];
-    POINT Pos;
+    RasterPoint Pos;
     TextInBoxMode_t Mode;
     int AltArivalAGL;
     bool inTask;

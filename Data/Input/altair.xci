@@ -313,8 +313,8 @@ location=8
 mode=Nav1
 type=key
 data=0
-event=Mode default
 event=WaypointDetails select
+event=Mode default
 label=Waypoint\nList$(CheckWaypointFile)
 location=9
 
@@ -405,10 +405,10 @@ location=7
 mode=Display1
 type=key
 data=9
-event=Mode default
 event=StatusMessage Dropped marker
 event=Logger note Mark
 event=MarkLocation
+event=Mode default
 label=Mark\nDrop
 location=8
 
@@ -697,16 +697,16 @@ location=5
 mode=Info1
 type=key
 data=7
-event=Mode default
 event=NearestWaypointDetails aircraft
+event=Mode default
 label=$(CheckWaypointFile)Nearest\nWaypoint
 location=6
 
 mode=Info1
 type=key
 data=8
-event=Mode default
 event=NearestAirspaceDetails
+event=Mode default
 label=Nearest\nAirspace$(CheckAirspace)
 location=7
 

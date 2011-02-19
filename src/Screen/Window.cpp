@@ -31,6 +31,10 @@ Copyright_License {
 #include "Screen/SDL/Event.hpp"
 #endif /* ENABLE_SDL */
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Debug.hpp"
+#endif
+
 #include <assert.h>
 
 Window::~Window()
@@ -43,7 +47,9 @@ Window::~Window()
 void
 Window::assert_thread() const
 {
-#ifndef ENABLE_SDL
+#ifdef ENABLE_OPENGL
+  assert(pthread_equal(pthread_self(), OpenGL::thread));
+#elif !defined(ENABLE_SDL)
   assert(hWnd != NULL);
   assert(!::IsWindow(hWnd) ||
          ::GetWindowThreadProcessId(hWnd, NULL) == ::GetCurrentThreadId());

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Android/Event.hpp"
+#include "Screen/OpenGL/Debug.hpp"
 #include "Simulator.hpp"
 #include "Asset.hpp"
 #include "Profile/Profile.hpp"
@@ -33,6 +34,10 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Java/Global.hpp"
 #include "org_xcsoar_NativeView.h"
+
+#ifndef NDEBUG
+#include "Screen/OpenGL/Texture.hpp"
+#endif
 
 #include <assert.h>
 
@@ -45,6 +50,10 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jint width, jint height)
 {
   Java::Init(env);
+
+#ifndef NDEBUG
+  OpenGL::thread = pthread_self();
+#endif
 
   assert(native_view == NULL);
   native_view = new NativeView(env, obj, width, height);
@@ -60,6 +69,10 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
 {
+#ifndef NDEBUG
+  OpenGL::thread = pthread_self();
+#endif
+
   CommonInterface::main_window.event_loop();
 }
 
@@ -76,13 +89,22 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
-  event_queue->push(Event::PAUSE);
+  if (event_queue == NULL)
+    /* pause before we have initialized the event subsystem does not
+       work - let's bail out, nothing is lost anyway */
+    exit(0);
 
-  CommonInterface::main_window.wait_paused();
+  CommonInterface::main_window.pause();
+
+  assert(num_textures == 0);
 }
 
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 {
-  event_queue->push(Event::RESUME);
+  if (event_queue == NULL)
+    /* there is nothing here yet which can be resumed */
+    exit(0);
+
+  CommonInterface::main_window.resume();
 }

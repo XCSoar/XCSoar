@@ -52,18 +52,22 @@ Version 6.1 - not yet released
     - along task direction
     - along home direction
 
-Version 6.0.4 - not yet released
+Version 6.0.4 - 2011/02/19
 * devices
   - EWMicroRecorder: parse PGRMZ as altitude above 1013.25 hPa
   - FlymasterF1: convert pressure to altitude
   - FlymasterF1: don't override the baro altitude of the primary device
+  - LX: parse LXWP0 as altitude above 1013.25 hPa
   - Zander: PZAN1 contains QNH altitude
   - Zander: verify checksum
+  - don't force cruise mode when no Vega/B50 is present
 * user interface
   - prevent potential crash while using flarm radar dialogs
   - improve behaviour if "circling zoom" is disabled
+  - vario: fix circling mode display
 * map
   - enable terrain and topology by default
+  - Terrain: load fewer raster tiles on Altair
 * task
   - abort: for non-final glide options, don't prefer airports
   - task manager: reduce memory usage
@@ -72,6 +76,9 @@ Version 6.0.4 - not yet released
   - don't forget the home airport after a configuration change
 * Android
   - device: support NMEA over Bluetooth RFCOMM
+  - more pause/resume crash fixes
+  - don't process hardware keys twice
+  - fix bitmap loading on Android 2.3
 
 Version 6.0.3 - 2011/02/02
 * devices

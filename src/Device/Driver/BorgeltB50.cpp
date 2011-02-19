@@ -108,11 +108,14 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   */
 
   // inclimb/incruise 1=cruise,0=climb, OAT
-  GPS_INFO->SwitchState.VarioCircling = line.read(false);
-  if (GPS_INFO->SwitchState.VarioCircling) {
-    triggerClimbEvent.trigger();
-  } else {
-    triggerClimbEvent.reset();
+  switch (line.read(-1)) {
+  case 0:
+    GPS_INFO->SwitchState.FlightMode = SWITCH_INFO::MODE_CRUISE;
+    break;
+
+  case 1:
+    GPS_INFO->SwitchState.FlightMode = SWITCH_INFO::MODE_CIRCLING;
+    break;
   }
 
   GPS_INFO->TemperatureAvailable = line.read_checked(value);

@@ -123,7 +123,7 @@ BackgroundDrawHelper::set_sun_angle(const WindowProjection& projection,
 
 void
 BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas, LabelBlock &block,
-                                     const TCHAR *Buffer, POINT pt)
+                                     const TCHAR *Buffer, RasterPoint pt)
 {
   if (string_is_empty(Buffer))
     return;

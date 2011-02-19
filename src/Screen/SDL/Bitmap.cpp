@@ -29,6 +29,7 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Texture.hpp"
+#include "Screen/OpenGL/Debug.hpp"
 #endif
 
 #include <SDL_endian.h>
@@ -46,6 +47,7 @@ Bitmap::load(SDL_Surface *_surface)
 
 #ifdef ENABLE_OPENGL
   assert(texture == NULL);
+  assert(pthread_equal(pthread_self(), OpenGL::thread));
 
   texture = new GLTexture(_surface);
   width = _surface->w;
@@ -136,6 +138,8 @@ void
 Bitmap::reset()
 {
 #ifdef ENABLE_OPENGL
+  assert(pthread_equal(pthread_self(), OpenGL::thread));
+
   delete texture;
   texture = NULL;
 #else

@@ -21,30 +21,41 @@ Copyright_License {
 }
 */
 
-#ifndef INTERFACE_BLACKBOARD_H
-#define INTERFACE_BLACKBOARD_H
+#ifndef XCSOAR_KDTREE_MATH_HPP
+#define XCSOAR_KDTREE_MATH_HPP
 
-#include "Blackboard.hpp"
-#include "SettingsComputerBlackboard.hpp"
-#include "SettingsMapBlackboard.hpp"
-#include "Compiler.h"
+#include "Math/FastMath.h"
 
-class InterfaceBlackboard:
-  public BaseBlackboard,
-  public SettingsComputerBlackboard,
-  public SettingsMapBlackboard
+#include <math.h>
+
+namespace KDTree
 {
-public:
-  void ReadBlackboardBasic(const NMEA_INFO &nmea_info);
-  void ReadBlackboardCalculated(const DERIVED_INFO &derived_info);
-
+  /**
+   * This overloads the math.h function, and maps it to isqrt4().
+   */
   gcc_const
-  SETTINGS_COMPUTER& SetSettingsComputer() { return settings_computer; }
+  static inline unsigned int sqrt(unsigned long val)
+  {
+    return ::isqrt4(val);
+  }
 
+  /**
+   * This overloads the math.h function, and maps it to isqrt4().
+   */
   gcc_const
-  SETTINGS_MAP& SetSettingsMap() { return settings_map; }
+  static inline int sqrt(int val)
+  {
+    return ::isqrt4(val);
+  }
 
-  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
-};
+  /**
+   * Import the math.h function into this namespace.
+   */
+  gcc_const
+  static inline double sqrt(double val)
+  {
+    return ::sqrt(val);
+  }
+} // namespace KDTree
 
-#endif
+#endif // include guard

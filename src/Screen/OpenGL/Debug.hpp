@@ -21,30 +21,15 @@ Copyright_License {
 }
 */
 
-#ifndef INTERFACE_BLACKBOARD_H
-#define INTERFACE_BLACKBOARD_H
+#ifndef XCSOAR_SCREEN_OPENGL_DEBUG_HPP
+#define XCSOAR_SCREEN_OPENGL_DEBUG_HPP
+#ifndef NDEBUG
 
-#include "Blackboard.hpp"
-#include "SettingsComputerBlackboard.hpp"
-#include "SettingsMapBlackboard.hpp"
-#include "Compiler.h"
+#include <pthread.h>
 
-class InterfaceBlackboard:
-  public BaseBlackboard,
-  public SettingsComputerBlackboard,
-  public SettingsMapBlackboard
-{
-public:
-  void ReadBlackboardBasic(const NMEA_INFO &nmea_info);
-  void ReadBlackboardCalculated(const DERIVED_INFO &derived_info);
-
-  gcc_const
-  SETTINGS_COMPUTER& SetSettingsComputer() { return settings_computer; }
-
-  gcc_const
-  SETTINGS_MAP& SetSettingsMap() { return settings_map; }
-
-  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
+namespace OpenGL {
+  extern pthread_t thread;
 };
 
+#endif
 #endif

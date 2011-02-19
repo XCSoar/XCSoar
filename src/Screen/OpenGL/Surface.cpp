@@ -24,10 +24,13 @@ Copyright_License {
 #include "Screen/OpenGL/Surface.hpp"
 
 #include <list>
+#include <cassert>
 
 typedef std::list<GLSurfaceListener *> GLSurfaceListenerList;
 
 static GLSurfaceListenerList surface_listeners;
+
+bool surface_valid = true;
 
 void
 AddSurfaceListener(GLSurfaceListener &listener)
@@ -44,6 +47,11 @@ RemoveSurfaceListener(GLSurfaceListener &listener)
 void
 SurfaceCreated()
 {
+  if (surface_valid)
+    return;
+
+  surface_valid = true;
+
   const GLSurfaceListenerList copy(surface_listeners);
   for (GLSurfaceListenerList::const_iterator i = copy.begin();
        i != copy.end(); ++i)
@@ -53,6 +61,8 @@ SurfaceCreated()
 void
 SurfaceDestroyed()
 {
+  assert(!surface_valid);
+
   const GLSurfaceListenerList copy(surface_listeners);
   for (GLSurfaceListenerList::const_iterator i = copy.begin();
        i != copy.end(); ++i)

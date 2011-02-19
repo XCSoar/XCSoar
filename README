@@ -53,7 +53,7 @@ For Linux/Unix, you need:
 For Android, you need:
 
 - Android SDK (http://developer.android.com/sdk/)
-- Crystax Android NDK (http://smartctl.net/android/ndk.php)
+- Android NDK r5b (http://developer.android.com/sdk/ndk/)
 
 To compile, run:
 

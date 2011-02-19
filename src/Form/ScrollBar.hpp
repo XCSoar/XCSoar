@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_FORM_SCROLL_BAR_HPP
 #define XCSOAR_FORM_SCROLL_BAR_HPP
 
+#include "Screen/Point.hpp"
+
 #include <windows.h>
 
 class Window;
@@ -95,20 +97,22 @@ public:
   }
 
   /**
-   * Returns whether the given POINT is in the ScrollBar area
-   * @param pt POINT to check
-   * @return True if the given POINT is in the ScrollBar area, False otherwise
+   * Returns whether the given RasterPoint is in the ScrollBar area
+   * @param pt RasterPoint to check
+   * @return True if the given RasterPoint is in the ScrollBar area,
+   * False otherwise
    */
-  bool in(const POINT pt) const {
+  bool in(const RasterPoint &pt) const {
     return ::PtInRect(&rc, pt);
   }
 
   /**
-   * Returns whether the given POINT is in the slider area
-   * @param pt POINT to check
-   * @return True if the given POINT is in the slider area, False otherwise
+   * Returns whether the given RasterPoint is in the slider area
+   * @param pt RasterPoint to check
+   * @return True if the given RasterPoint is in the slider area,
+   * False otherwise
    */
-  bool in_slider(const POINT pt) const {
+  bool in_slider(const RasterPoint &pt) const {
     return ::PtInRect(&rc_slider, pt);
   }
 

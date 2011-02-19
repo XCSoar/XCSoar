@@ -51,8 +51,6 @@ static DeviceDescriptor device;
 
 Mutex mutexBlackboard;
 
-Trigger triggerClimbEvent(_T("triggerClimb"));
-
 void TriggerGPSUpdate() {}
 void TriggerVarioUpdate() {}
 
@@ -97,12 +95,6 @@ InputEvents::processNmea(unsigned key)
 {
   return true;
 }
-
-/*
- * Fake MapWindowProjection.cpp
- */
-
-Projection::Projection() {}
 
 /*
  * Fake Settings*Blackboard.cpp

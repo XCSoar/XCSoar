@@ -50,11 +50,6 @@ endif
 ifeq ($(TARGET),WM5)
   CONFIG_WM5 := y
   HAVE_CE := y
-endif
-
-ifeq ($(TARGET),WM5X)
-  CONFIG_WM5 := y
-  HAVE_CE := y
   XSCALE := y
 endif
 
@@ -100,16 +95,17 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r4-crystax
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r5b
 
   ANDROID_PLATFORM = android-5
   ANDROID_ARCH = arm
-  ANDROID_ABI2 = arm-eabi
-  ANDROID_GCC_VERSION = 4.4.0
+  ANDROID_ABI2 = arm-linux-androideabi
+  ANDROID_ABI3 = armeabi
+  ANDROID_GCC_VERSION = 4.4.3
 
-  ANDROID_NDK_PLATFORM = $(ANDROID_NDK)/build/platforms/$(ANDROID_PLATFORM)
+  ANDROID_NDK_PLATFORM = $(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM)
   ANDROID_TARGET_ROOT = $(ANDROID_NDK_PLATFORM)/arch-$(ANDROID_ARCH)
-  ANDROID_TOOLCHAIN = $(ANDROID_NDK)/build/prebuilt/linux-x86/$(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)
+  ANDROID_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)/prebuilt/linux-x86
   TCPATH = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI2)-
 
   MCPU := -march=armv5te -mtune=xscale -msoft-float -fpic -mthumb-interwork -ffunction-sections -funwind-tables -fstack-protector -fno-short-enums
@@ -167,7 +163,7 @@ endif
 ifeq ($(CONFIG_WM5),y)
   CE_MAJOR := 5
   CE_MINOR := 00
-  PCPU := ARMV4
+  PCPU := ARMV5
 endif
 
 # armv4i
@@ -257,9 +253,8 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_CPPFLAGS += -I$(ANDROID_TARGET_ROOT)/usr/include
+  TARGET_CPPFLAGS += -isystem $(ANDROID_NDK)/sources/cxx-stl/stlport/stlport
   TARGET_CPPFLAGS += -DANDROID
-  TARGET_CPPFLAGS += -D__ARM_ARCH_5__ -D__ARM_ARCH_5T__ -D__ARM_ARCH_5E__ -D__ARM_ARCH_5TE__
-  TARGET_CPPFLAGS += -D__ISO_C_VISIBLE=1999 -D__POSIX_VISIBLE=0 -D__XPG_VISIBLE=0
   CXXFLAGS += -D__STDC_VERSION__=199901L
 endif
 
@@ -345,7 +340,8 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_LDLIBS := -lstdc++
+  TARGET_LDLIBS := $(ANDROID_TARGET_ROOT)/usr/lib/libstdc++.so
+  TARGET_LDLIBS += $(ANDROID_NDK)/sources/cxx-stl/stlport/libs/$(ANDROID_ABI3)/libstlport_static.a
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libGLESv1_CM.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libc.so $(ANDROID_TARGET_ROOT)/usr/lib/libm.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/liblog.so

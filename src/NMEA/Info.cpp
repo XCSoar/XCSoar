@@ -38,7 +38,7 @@ SWITCH_INFO::reset()
   UserSwitchUp = false;
   UserSwitchMiddle = false;
   UserSwitchDown = false;
-  VarioCircling = false;
+  FlightMode = SWITCH_INFO::MODE_UNKNOWN;
 }
 
 void

@@ -55,13 +55,11 @@ Profile::GetPath(const TCHAR *key, TCHAR *value)
 }
 
 #ifndef USE_PROFILE_MAP
-bool
 #if defined(WIN32)
+bool
 ProfileImpl::_Get(const TCHAR *szRegValue, DWORD &pPos)
-#else
-ProfileImpl::_Get(const TCHAR *szRegValue, int &pPos)
-#endif
 {
   return false;
 }
+#endif
 #endif

@@ -180,6 +180,14 @@ class NativeView extends SurfaceView
       }
     }
 
+    Log.d(TAG, "EGLConfig: red="+
+          findConfigAttrib(closestConfig, EGL10.EGL_RED_SIZE, 0) +
+          " green=" + findConfigAttrib(closestConfig, EGL10.EGL_GREEN_SIZE, 0) +
+          " blue=" + findConfigAttrib(closestConfig, EGL10.EGL_BLUE_SIZE, 0) +
+          " alpha=" + findConfigAttrib(closestConfig, EGL10.EGL_ALPHA_SIZE, 0) +
+          " depth=" + findConfigAttrib(closestConfig, EGL10.EGL_DEPTH_SIZE, 0) +
+          " stencil=" + findConfigAttrib(closestConfig, EGL10.EGL_STENCIL_SIZE, 0));
+
     /* initialize context and surface */
 
     context = egl.eglCreateContext(display, closestConfig,
@@ -196,8 +204,15 @@ class NativeView extends SurfaceView
   /**
    * Initializes the OpenGL surface.  Called by the native code.
    */
-  private void initSurface() {
-    initGL(getHolder());
+  private boolean initSurface() {
+    try {
+      initGL(getHolder());
+      return true;
+    } catch (Exception e) {
+      Log.e(TAG, "initGL error: " + e);
+      deinitSurface();
+      return false;
+    }
   }
 
   /**
@@ -271,6 +286,29 @@ class NativeView extends SurfaceView
   }
 
   /**
+   * Initialize the current texture and load the specified Bitmap into
+   * it.
+   */
+  private void loadTexture(Bitmap bmp) {
+    /* try the easy way - however this fails on Android 2.2; Android
+       1.6 and 2.3 are doing fine */
+
+    GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bmp, 0);
+    if (gl.glGetError() != gl.GL_INVALID_VALUE)
+      /* success */
+      return;
+
+    /* size must be a power of two; create an empty texture, and load
+       the Bitmap into it */
+
+    gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA,
+                    nextPowerOfTwo(bmp.getWidth()),
+                    nextPowerOfTwo(bmp.getHeight()),
+                    0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, null);
+    GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, bmp);
+  }
+
+  /**
    * Loads the specified bitmap resource as OpenGL texture.
    *
    * @param result an array of 3 integers: texture id, width, height
@@ -314,16 +352,8 @@ class NativeView extends SurfaceView
     gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
                        GL10.GL_NEAREST);
 
-    /* size must be a power of two; create an empty texture, and load
-       the Bitmap into it */
-
-    gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGB,
-                    nextPowerOfTwo(bmp.getWidth()),
-                    nextPowerOfTwo(bmp.getHeight()),
-                    0, GL10.GL_RGB, GL10.GL_UNSIGNED_BYTE, null);
-
     try {
-      GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, bmp);
+      loadTexture(bmp);
     } catch (Exception e) {
       Log.e(TAG, "GLUtils error: " + e);
       return false;
@@ -364,7 +394,7 @@ class NativeView extends SurfaceView
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
-    EventBridge.onKeyDown(keyCode);
+    EventBridge.onKeyUp(keyCode);
     return true;
   }
 

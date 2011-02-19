@@ -92,35 +92,33 @@ struct Color {
                  (value.b + 0xff * 3) / 4);
   }
 
+  /**
+   * Compares two colors
+   * @param a Color 1
+   * @param b Color 2
+   * @return True if colors match, False otherwise
+   */
+  bool operator ==(const Color &other) const
+  {
+    return value.r == other.value.r
+      && value.g == other.value.g
+      && value.b == other.value.b;
+  }
+
+  /**
+   * Compares two colors (negative)
+   * @param a Color 1
+   * @param b Color 2
+   * @return True if color do not match, False otherwise
+   */
+  bool operator !=(const Color &other) const
+  {
+    return !(*this == other);
+  }
+
   static const Color WHITE, BLACK, GRAY, RED, GREEN, BLUE, YELLOW, CYAN,
     MAGENTA, LIGHT_GRAY;
 };
-
-/**
- * Compares two colors
- * @param a Color 1
- * @param b Color 2
- * @return True if colors match, False otherwise
- */
-static inline bool
-operator ==(const Color a, const Color b)
-{
-  return a.value.r == b.value.r
-         && a.value.g == b.value.g
-         && a.value.b == b.value.b;
-}
-
-/**
- * Compares two colors (negative)
- * @param a Color 1
- * @param b Color 2
- * @return True if color do not match, False otherwise
- */
-static inline bool
-operator !=(const Color a, const Color b)
-{
-  return !(a == b);
-}
 
 #ifndef ENABLE_OPENGL
 

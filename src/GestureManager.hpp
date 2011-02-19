@@ -30,7 +30,9 @@
 #ifndef GESTURE_MANAGER_HPP
 #define GESTURE_MANAGER_HPP
 
-#include <windef.h>
+#include "Screen/Point.hpp"
+
+#include <tchar.h>
 
 /**
  * A manager class that can detect mouse gesture
@@ -62,7 +64,7 @@ public:
 
 protected:
   /** Position of the last mouse_move event */
-  POINT drag_last;
+  RasterPoint drag_last;
   /** The gesture string */
   TCHAR gesture[11];
 

@@ -21,49 +21,37 @@ Copyright_License {
 }
 */
 
-#include "Profile/GConf.hpp"
-#include "Config/GConf.hpp"
+#ifndef XCSOAR_CHAR_UTIL_HPP
+#define XCSOAR_CHAR_UTIL_HPP
 
-bool
-ProfileGConf::_Get(const TCHAR *szRegValue, int &pPos)
+#include <tchar.h>
+
+static inline bool
+IsWhitespaceOrNull(const TCHAR ch)
 {
-  int value;
-  if (!GConf().get(szRegValue, value))
-    return false;
-
-  pPos = value;
-  return true;
+  return (unsigned)ch <= 0x20;
 }
 
-/**
- * Reads a value from the registry file
- * @param szRegValue Name of the value that should be read
- * @param pPos Pointer to the output buffer
- * @param dwSize Maximum size of the output buffer
- */
-bool
-ProfileGConf::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
+static inline bool
+IsWhitespaceNotNull(const TCHAR ch)
 {
-  if (GConf().get(szRegValue, pPos, dwSize))
-    return true;
-
-  pPos[0] = _T('\0');
-  return false;
+  return ch > 0 && ch <= 0x20;
 }
 
-/**
- * Writes a value to the registry
- * @param szRegValue Name of the value that should be written
- * @param Pos Value that should be written
- */
-bool
-ProfileGConf::Set(const TCHAR *szRegValue, const TCHAR *Pos)
+#ifdef _UNICODE
+
+static inline bool
+IsWhitespaceOrNull(const char ch)
 {
-  return GConf().set(szRegValue, Pos);
+  return (unsigned char)ch <= 0x20;
 }
 
-void
-ProfileGConf::Export(ProfileWriter &writer)
+static inline bool
+IsWhitespaceNotNull(const char ch)
 {
-  // XXX implement
+  return ch > 0 && ch <= 0x20;
 }
+
+#endif /* _UNICODE */
+
+#endif

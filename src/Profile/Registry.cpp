@@ -24,6 +24,7 @@ Copyright_License {
 #include "Profile/Registry.hpp"
 #include "Profile/Writer.hpp"
 #include "Config/Registry.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -42,8 +43,25 @@ bool
 Registry::_Get(const TCHAR *szRegValue, DWORD &pPos)
 {
   RegistryKey registry(HKEY_CURRENT_USER, szProfileKey, true);
-  return !registry.error() &&
-    registry.get_value(szRegValue, pPos);
+  if (registry.error())
+    return false;
+
+  if (registry.get_value(szRegValue, pPos))
+    return true;
+
+  /* try to parse from a string; XCSoar 6.1 stores all profile values
+     in strings */
+  TCHAR string[32];
+  if (Get(szRegValue, string, 32)) {
+    TCHAR *endptr;
+    unsigned long value = _tcstoul(string, &endptr, 10);
+    if (endptr != string && string_is_empty(endptr)) {
+      pPos = (DWORD)value;
+      return true;
+    }
+  }
+
+  return false;
 }
 
 /**

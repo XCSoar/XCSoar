@@ -22,11 +22,16 @@ Copyright_License {
 */
 
 #include "Screen/OpenGL/Globals.hpp"
+#include "Screen/OpenGL/Debug.hpp"
 
 namespace OpenGL {
   unsigned screen_width, screen_height;
 
 #ifdef ANDROID
   int translate_x, translate_y;
+#endif
+
+#ifndef NDEBUG
+  pthread_t thread;
 #endif
 };

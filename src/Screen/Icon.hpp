@@ -38,15 +38,13 @@ protected:
 
   SIZE size;
 
-  POINT origin;
+  RasterPoint origin;
 
 public:
   const SIZE& get_size() const {
     return size;
   }
-  const POINT& get_origin() const {
-    return origin;
-  }
+
   bool defined() const {
     return bitmap.defined();
   }
@@ -65,6 +63,9 @@ public:
   void draw(Canvas &canvas, RasterPoint pt) const {
     draw(canvas, pt.x, pt.y);
   }
+
+protected:
+  void CalculateLayout(bool center);
 };
 
 #endif

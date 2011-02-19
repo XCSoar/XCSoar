@@ -278,7 +278,7 @@ GaugeVario::RenderClimb(Canvas &canvas)
   if (!dirty)
     return;
 
-  if (Basic().SwitchState.VarioCircling)
+  if (Calculated().Circling)
     canvas.scale_copy(x, y, hBitmapClimb, 12, 0, 12, 12);
   else if (is_persistent())
     canvas.fill_rectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12),
@@ -487,8 +487,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 
   // only draw speed command if flying and vario is not circling
   if ((Calculated().flight.Flying)
-      && (!Basic().gps.Simulator || !Calculated().Circling)
-      && !Basic().SwitchState.VarioCircling) {
+      && (!Basic().gps.Simulator || !Calculated().Circling)) {
     vdiff = Calculated().V_stf - Basic().IndicatedAirspeed;
     vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
     vdiff = iround(vdiff/DeltaVstep) * DeltaVstep;

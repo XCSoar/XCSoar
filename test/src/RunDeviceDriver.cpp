@@ -50,8 +50,6 @@ static DeviceDescriptor device;
 
 Mutex mutexBlackboard;
 
-Trigger triggerClimbEvent(_T("triggerClimb"));
-
 void TriggerGPSUpdate() {}
 void TriggerVarioUpdate() {}
 
@@ -96,12 +94,6 @@ InputEvents::processNmea(unsigned key)
 {
   return true;
 }
-
-/*
- * Fake MapWindowProjection.cpp
- */
-
-Projection::Projection() {}
 
 /*
  * Fake Settings*Blackboard.cpp
@@ -221,8 +213,10 @@ int main(int argc, char **argv)
   }
 
   char buffer[1024];
-  while (fgets(buffer, sizeof(buffer), stdin) != NULL)
+  while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+    TrimRight(buffer);
     device.LineReceived(buffer);
+  }
 
   Dump(device_blackboard.Basic());
 }

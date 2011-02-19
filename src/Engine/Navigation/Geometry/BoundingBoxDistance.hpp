@@ -22,6 +22,9 @@
 #ifndef BOUNDINGBOXDISTANCE_HPP
 #define BOUNDINGBOXDISTANCE_HPP
 
+#include "Math/FastMath.h"
+#include "Compiler.h"
+
 /**
  * Class used for 2-d integer bounding box distance calculations by kd-tree
  * \todo better documentation for BBDist hack
@@ -80,9 +83,19 @@ public:
  * 
  * @return Absolute value (accumulated) distance
  */
-  operator double () const {
-    return d;
+  gcc_pure
+  BBDist sqrt() const {
+    return BBDist((int)isqrt4(d));
   }
+
+  bool operator<=(const BBDist &other) const {
+    return d <= other.d;
+  }
+
+  bool is_zero() const {
+    return d == 0;
+  }
+
 private:
   void set_max(const size_t _dim, const BBDist &rhs) {
     if (rhs.val[_dim]>val[_dim]) {
@@ -104,5 +117,15 @@ private:
   int val[2];
   int d;  
 };
+
+/**
+ * Wrapper for BBDist::sqrt() which overloads ::sqrt().
+ */
+gcc_pure
+static inline BBDist
+sqrt(const BBDist &d)
+{
+  return d.sqrt();
+}
 
 #endif

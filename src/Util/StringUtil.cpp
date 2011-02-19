@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "StringUtil.hpp"
+#include "CharUtil.hpp"
 #include "Compatibility/string.h"
 
 #include <assert.h>
@@ -53,16 +54,47 @@ string_after_prefix_ci(const TCHAR *string, const TCHAR *prefix)
     : NULL;
 }
 
+const TCHAR *
+TrimLeft(const TCHAR *p)
+{
+  while (IsWhitespaceNotNull(*p))
+    ++p;
+  return p;
+}
+
+#ifdef _UNICODE
+const char *
+TrimLeft(const char *p)
+{
+  while (IsWhitespaceNotNull(*p))
+    ++p;
+  return p;
+}
+#endif
+
 void
 TrimRight(TCHAR *p)
 {
   size_t length = _tcslen(p);
 
-  while (length > 0 && _istspace(p[length - 1]))
+  while (length > 0 && IsWhitespaceOrNull(p[length - 1]))
     --length;
 
   p[length] = 0;
 }
+
+#ifdef _UNICODE
+void
+TrimRight(char *p)
+{
+  size_t length = strlen(p);
+
+  while (length > 0 && IsWhitespaceOrNull(p[length - 1]))
+    --length;
+
+  p[length] = 0;
+}
+#endif
 
 TCHAR *
 normalize_search_string(TCHAR *dest, const TCHAR *src)

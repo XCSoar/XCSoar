@@ -27,6 +27,8 @@ Copyright_License {
 #include "InterfaceBlackboard.hpp"
 #include "Compiler.h"
 
+#include <windef.h> /* for HINSTANCE */
+
 class MainWindow;
 class StatusMessageList;
 
@@ -53,14 +55,6 @@ public:
    */
   gcc_const
   static const DERIVED_INFO& Calculated() { return blackboard.Calculated(); }
-
-  /**
-   * Returns InterfaceBlackboard.MapProjection (MapWindowProjection) (read-only)
-   * @return InterfaceBlackboard.MapProjection
-   */
-  gcc_const
-  static const MapWindowProjection& MapProjection()
-  { return blackboard.MapProjection(); }
 
   /**
    * Returns the InterfaceBlackboard.SettingsComputer (read-only)
@@ -94,9 +88,6 @@ public:
   static SETTINGS_MAP& SetSettingsMap()
   { return blackboard.SetSettingsMap(); }
 
-  static void ReadMapProjection(const MapWindowProjection &map) {
-    blackboard.ReadMapProjection(map);
-  }
   static void ReadBlackboardBasic(const NMEA_INFO& nmea_info) {
     blackboard.ReadBlackboardBasic(nmea_info);
   }
@@ -153,7 +144,6 @@ public:
   static bool Startup(HINSTANCE);
 
   static void ExchangeBlackboard();
-  static void ReceiveMapProjection();
   static void ReceiveBlackboard();
 
 private:

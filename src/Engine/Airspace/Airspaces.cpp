@@ -110,7 +110,7 @@ Airspaces::scan_nearest(const GeoPoint &location,
 {
   Airspace bb_target(location, task_projection);
 
-  std::pair<AirspaceTree::const_iterator, double> 
+  std::pair<AirspaceTree::const_iterator, AirspaceTree::distance_type>
     found = airspace_tree.find_nearest(bb_target);
 
 #ifdef INSTRUMENT_TASK
@@ -121,7 +121,7 @@ Airspaces::scan_nearest(const GeoPoint &location,
   if (found.first != airspace_tree.end()) {
     // also should do scan_range with range = 0 since there
     // could be more than one with zero dist
-    if (found.second == 0) {
+    if (found.second.is_zero()) {
       return scan_range(location, fixed_zero, condition);
     } else {
       if (condition(*found.first->get_airspace()))

@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_STRING_UTIL_HPP
 #define XCSOAR_STRING_UTIL_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 static inline bool
@@ -58,9 +60,30 @@ const TCHAR *
 string_after_prefix_ci(const TCHAR *string, const TCHAR *prefix);
 
 /**
+ * Skips whitespace at the beginning of the string, and returns the
+ * first non-whitespace character.  If the string has no
+ * non-whitespace characters, then a pointer to the NULL terminator is
+ * returned.
+ */
+gcc_pure
+const TCHAR *
+TrimLeft(const TCHAR *p);
+
+#ifdef _UNICODE
+gcc_pure
+const char *
+TrimLeft(const char *p);
+#endif
+
+/**
  * Strips trailing whitespace.
  */
 void TrimRight(TCHAR *p);
+
+#ifdef _UNICODE
+void
+TrimRight(char *p);
+#endif
 
 /**
  * Normalize a string for searching.  This strips all characters

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Key.h"
+#include "Screen/Point.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "Screen/WindowCanvas.hpp"
@@ -386,7 +387,7 @@ WndListFrame::on_mouse_down(int x, int y)
   scroll_bar.drag_end(this);
   drag_end();
 
-  POINT Pos;
+  RasterPoint Pos;
   Pos.x = x;
   Pos.y = y;
 

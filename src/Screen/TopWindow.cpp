@@ -30,7 +30,9 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "Screen/Android/Event.hpp"
+#include "Screen/OpenGL/Surface.hpp"
 #include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 #include "PeriodClock.hpp"
 #elif defined(ENABLE_SDL)
 #include "Screen/SDL/Event.hpp"
@@ -46,7 +48,7 @@ TopWindow::TopWindow()
 #ifdef ENABLE_SDL
   :invalidated(false)
 #ifdef ANDROID
-  , paused(false)
+  , paused(false), resumed(false)
 #endif
 #else
   :hSavedFocus(NULL)
@@ -165,7 +167,27 @@ void
 TopWindow::refresh()
 {
 #ifdef ANDROID
-  if (paused)
+  if (resumed) {
+    /* Try to reinitialize OpenGL.  This often fails on the first
+       attempt (IllegalArgumentException "Make sure the SurfaceView or
+       associated SurfaceHolder has a valid Surface"), therefore we're
+       trying again until we're successful. */
+
+    assert(paused);
+
+    if (!native_view->initSurface())
+      /* failed - retry later */
+      return;
+
+    paused = false;
+    resumed = false;
+
+    screen.set();
+
+    SurfaceCreated();
+  }
+
+  if (paused || !surface_valid)
     /* the application is paused/suspended, and we don't have an
        OpenGL surface - ignore all drawing requests */
     return;

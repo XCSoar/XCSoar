@@ -27,7 +27,7 @@ ifeq ($(PROFILE_NO_FILE),y)
 TARGET_CPPFLAGS += -DPROFILE_NO_FILE
 endif
 
-# load the profile into memory instead of Registry/GConf?
+# load the profile into memory instead of Registry?
 PROFILE_MAP ?= $(call bool_or,$(call bool_not,$(HAVE_WIN32)),$(CONFIG_ALTAIR))
 ifeq ($(PROFILE_MAP),y)
 TARGET_CPPFLAGS += -DUSE_PROFILE_MAP

@@ -56,7 +56,6 @@ XCSoarInterface::ExchangeBlackboard()
 {
   ScopeLock protect(mutexBlackboard);
   ReceiveBlackboard();
-  ReceiveMapProjection();
   SendSettingsComputer();
   SendSettingsMap();
 }
@@ -78,13 +77,6 @@ ActionInterface::SendSettingsComputer()
   // then others can retrieve from it at their convenience.
   device_blackboard.ReadSettingsComputer(SettingsComputer());
   // TODO: trigger refresh if the settings are changed
-}
-
-void
-XCSoarInterface::ReceiveMapProjection()
-{
-  ScopeLock protect(mutexBlackboard);
-  ReadMapProjection(device_blackboard.MapProjection());
 }
 
 /**

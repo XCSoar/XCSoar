@@ -7,6 +7,12 @@
 }
 {
    <insert_a_suppression_name_here>
+   Memcheck:Overlap
+   fun:memcpy
+   fun:_ZNSt4pairI8Waypoint11GlideResultEaSERKS2_
+}
+{
+   <insert_a_suppression_name_here>
    Memcheck:Leak
    fun:malloc
    fun:_XlcCreateLC

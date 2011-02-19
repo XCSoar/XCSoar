@@ -371,7 +371,7 @@ TabDisplay::on_mouse_down(int x, int y)
 {
   drag_end();
 
-  POINT Pos;
+  RasterPoint Pos;
   Pos.x = x;
   Pos.y = y;
 
@@ -395,7 +395,7 @@ TabDisplay::on_mouse_down(int x, int y)
 bool
 TabDisplay::on_mouse_up(int x, int y)
 {
-  POINT Pos;
+  RasterPoint Pos;
   Pos.x = x;
   Pos.y = y;
 
@@ -427,7 +427,7 @@ TabDisplay::on_mouse_move(int x, int y, unsigned keys)
     return false;
 
   const RECT rc = theTabBar.GetButtonSize(downindex);
-  POINT Pos;
+  RasterPoint Pos;
   Pos.x = x;
   Pos.y = y;
 

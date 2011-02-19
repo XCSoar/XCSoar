@@ -29,10 +29,10 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Sizes.h" /* for WPCIRCLESIZE */
 
-static POINT
+static RasterPoint
 TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
 {
-  POINT offset;
+  RasterPoint offset;
   offset.x = 0;
   offset.y = 0;
 
@@ -121,7 +121,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
   if (Mode.Mode == RoundedBlack ||
       Mode.Mode == RoundedWhite ||
       Mode.Mode == Filled) {
-    POINT offset = TextInBoxMoveInView(brect, MapRect);
+    RasterPoint offset = TextInBoxMoveInView(brect, MapRect);
     x += offset.x;
     y += offset.y;
   }

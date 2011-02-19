@@ -101,7 +101,7 @@ MapWindow::on_paint(Canvas &canvas)
   /* copy MapWindow to device_blackboard */
 
   mutexBlackboard.Lock();
-  device_blackboard.ReadMapProjection(VisibleProjection());
+  device_blackboard.SetScreenDistanceMeters(VisibleProjection().GetScreenDistanceMeters());
   mutexBlackboard.Unlock();
 
 #else /* !ENABLE_OPENGL */

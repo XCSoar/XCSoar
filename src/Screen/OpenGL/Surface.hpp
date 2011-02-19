@@ -29,6 +29,11 @@ struct GLSurfaceListener {
   virtual void surface_destroyed() = 0;
 };
 
+/**
+ * This flag is true when there is a valid OpenGL surface.
+ */
+extern bool surface_valid;
+
 void
 AddSurfaceListener(GLSurfaceListener &listener);
 

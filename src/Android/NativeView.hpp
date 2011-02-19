@@ -43,7 +43,7 @@ public:
   NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height)
     :env(_env), obj(env, _obj), width(_width), height(_height) {
     Java::Class cls(env, "org/xcsoar/NativeView");
-    init_surface_method = env->GetMethodID(cls, "initSurface", "()V");
+    init_surface_method = env->GetMethodID(cls, "initSurface", "()Z");
     swap_method = env->GetMethodID(cls, "swap", "()V");
     load_resource_texture_method = env->GetMethodID(cls, "loadResourceTexture",
                                                     "(Ljava/lang/String;[I)Z");
@@ -60,8 +60,8 @@ public:
     return env->CallObjectMethod(obj, mid);
   }
 
-  void initSurface() {
-    env->CallVoidMethod(obj, init_surface_method);
+  bool initSurface() {
+    return env->CallBooleanMethod(obj, init_surface_method);
   }
 
   void swap() {

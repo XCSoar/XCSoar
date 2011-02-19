@@ -64,7 +64,6 @@ Copyright_License {
 unsigned InfoBoxLayout::ControlWidth = 100;
 
 Trigger airspaceWarningEvent(_T("airspaceWarning"));
-Trigger triggerClimbEvent(_T("triggerClimb"));
 
 TaskFile*
 TaskFile::Create(const TCHAR* path)

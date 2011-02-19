@@ -111,8 +111,10 @@ PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   GPS_INFO->SwitchState.Stall =
     (switchinputs & (1<<INPUT_BIT_STALL))>0;
   */
-  GPS_INFO->SwitchState.VarioCircling =
-    (switchoutputs & (1<<OUTPUT_BIT_CIRCLING))>0;
+  GPS_INFO->SwitchState.FlightMode =
+    (switchoutputs & (1 << OUTPUT_BIT_CIRCLING)) > 0
+    ? SWITCH_INFO::MODE_CIRCLING
+    : SWITCH_INFO::MODE_CRUISE;
   GPS_INFO->SwitchState.FlapLanding =
     (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
 
@@ -124,11 +126,6 @@ PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   case 2:
     is_circling = GPS_INFO->SwitchState.SpeedCommand;
     break;
-  }
-  if (is_circling) {
-    triggerClimbEvent.trigger();
-  } else {
-    triggerClimbEvent.reset();
   }
 
   long up_switchinputs;

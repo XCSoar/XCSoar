@@ -283,8 +283,6 @@ WndProperty::on_resize(unsigned width, unsigned height)
 bool
 WndProperty::on_mouse_down(int x, int y)
 {
-  POINT Pos;
-
   if (mDialogStyle) {
     if (!edit.is_read_only()) {
       // when they click on the label
@@ -306,6 +304,7 @@ WndProperty::on_mouse_down(int x, int y)
       return true;
     }
 
+    RasterPoint Pos;
     Pos.x = x;
     Pos.y = y;
     //POINTSTOPOINT(Pos, MAKEPOINTS(lParam));
@@ -387,7 +386,7 @@ WndProperty::on_paint(Canvas &canvas)
     canvas.clear(GetBackColor());
 
   SIZE tsize;
-  POINT org;
+  RasterPoint org;
 
   WindowControl::on_paint(canvas);
 

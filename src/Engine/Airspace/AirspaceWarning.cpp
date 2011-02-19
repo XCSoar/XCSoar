@@ -174,7 +174,7 @@ AirspaceWarning::trivial() const
 }
 
 bool 
-AirspaceWarning::operator < (const AirspaceWarning& other)
+AirspaceWarning::operator<(const AirspaceWarning &other) const
 {
   // compare bother.ack
   if (get_ack_expired() != other.get_ack_expired())

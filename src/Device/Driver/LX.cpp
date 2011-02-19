@@ -78,8 +78,9 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   fixed alt = fixed_zero;
   if (line.read_checked(alt) && enable_baro)
-    // ToDo check if QNH correction is needed!
-    GPS_INFO->ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_LX, alt);
+    /* a dump on a LX7007 has confirmed that the LX sends uncorrected
+       altitude above 1013.25hPa here */
+    GPS_INFO->ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_LX, alt);
 
   if (tas_available)
     GPS_INFO->ProvideTrueAirspeedWithAltitude(Units::ToSysUnit(airspeed,

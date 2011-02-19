@@ -489,7 +489,7 @@ void
 GlideComputerAirData::ProcessIdle()
 {
   BallastDump();
-  TerrainFootprint(MapProjection().GetScreenDistanceMeters());
+  TerrainFootprint(GetScreenDistanceMeters());
   if (airspace_clock.check_advance(Basic().Time)
       && SettingsComputer().EnableAirspaceWarnings)
     AirspaceWarning();
@@ -724,8 +724,22 @@ GlideComputerAirData::Turning()
   bool forcecruise = false;
   bool forcecircling = false;
   if (SettingsComputer().EnableExternalTriggerCruise && !Basic().gps.Replay) {
-    forcecircling = triggerClimbEvent.test();
-    forcecruise = !forcecircling;
+    switch (Basic().SwitchState.FlightMode) {
+    case SWITCH_INFO::MODE_UNKNOWN:
+      forcecircling = false;
+      forcecruise = false;
+      break;
+
+    case SWITCH_INFO::MODE_CIRCLING:
+      forcecircling = true;
+      forcecruise = false;
+      break;
+
+    case SWITCH_INFO::MODE_CRUISE:
+      forcecircling = false;
+      forcecruise = true;
+      break;
+    }
   }
 
   switch (Calculated().TurnMode) {

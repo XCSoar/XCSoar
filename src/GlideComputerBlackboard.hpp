@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Blackboard.hpp"
 #include "SettingsComputerBlackboard.hpp"
-#include "MapProjectionBlackboard.hpp"
 
 class ProtectedTaskManager;
 
@@ -36,9 +35,10 @@ class ProtectedTaskManager;
  */
 class GlideComputerBlackboard:
   public BaseBlackboard,
-  public SettingsComputerBlackboard,
-  public MapProjectionBlackboard
+  public SettingsComputerBlackboard
 {
+  fixed ScreenDistanceMeters;
+
 public:
   GlideComputerBlackboard(ProtectedTaskManager &task);
 
@@ -46,6 +46,15 @@ public:
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
   const NMEA_INFO& LastBasic() const { return last_gps_info; }
   const DERIVED_INFO& LastCalculated() const { return last_calculated_info; }
+
+  fixed GetScreenDistanceMeters() const {
+    return ScreenDistanceMeters;
+  }
+
+  void SetScreenDistanceMeters(fixed _ScreenDistanceMeters) {
+    ScreenDistanceMeters = _ScreenDistanceMeters;
+  }
+
 protected:
   ProtectedTaskManager &m_task;
 

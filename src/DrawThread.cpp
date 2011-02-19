@@ -46,7 +46,7 @@ DrawThread::ExchangeBlackboard()
 
   /* return MapWindow projection to the device_blackboard */
   mutexBlackboard.Lock();
-  device_blackboard.ReadMapProjection(map.VisibleProjection());
+  device_blackboard.SetScreenDistanceMeters(map.VisibleProjection().GetScreenDistanceMeters());
   mutexBlackboard.Unlock();
 }
 

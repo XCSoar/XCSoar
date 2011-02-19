@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/TopWindow.hpp"
 #include "Screen/OpenGL/Cache.hpp"
 #include "Screen/OpenGL/Surface.hpp"
+#include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 
@@ -39,6 +40,7 @@ TopWindow::on_pause()
 
   paused_mutex.Lock();
   paused = true;
+  resumed = false;
   paused_cond.signal();
   paused_mutex.Unlock();
 }
@@ -49,13 +51,36 @@ TopWindow::on_resume()
   if (!paused)
     return;
 
-  paused = false;
-
-  native_view->initSurface();
-  screen.set();
-
-  SurfaceCreated();
+  /* tell TopWindow::expose() to reinitialize OpenGL */
+  resumed = true;
 
   /* schedule a redraw */
   invalidate();
+}
+
+static bool
+match_pause_and_resume(const Event &event, void *ctx)
+{
+  return event.type == Event::PAUSE || event.type == Event::RESUME;
+}
+
+void
+TopWindow::pause()
+{
+  surface_valid = false;
+
+  event_queue->purge(match_pause_and_resume, NULL);
+  event_queue->push(Event::PAUSE);
+
+  paused_mutex.Lock();
+  while (!paused)
+    paused_cond.wait(paused_mutex);
+  paused_mutex.Unlock();
+}
+
+void
+TopWindow::resume()
+{
+  event_queue->purge(match_pause_and_resume, NULL);
+  event_queue->push(Event::RESUME);
 }

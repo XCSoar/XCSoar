@@ -7,6 +7,8 @@
 #ifndef INCLUDE_KDTREE_NODE_HPP
 #define INCLUDE_KDTREE_NODE_HPP
 
+#include "math.hpp"
+
 #ifdef KDTREE_DEFINE_OSTREAM_OPERATORS
 #  include <ostream>
 #endif

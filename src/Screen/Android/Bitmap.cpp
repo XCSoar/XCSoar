@@ -45,6 +45,11 @@ Bitmap::load(unsigned _id)
 
   reset();
 
+  if (!surface_valid) {
+    AddSurfaceListener(*this);
+    return true;
+  }
+
   const char *name = find_resource_name(id);
   if (name == NULL)
     return false;
