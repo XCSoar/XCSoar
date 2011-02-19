@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.0.4 - not yet released
+Version 6.0.4 - 2011/02/19
 * devices
   - EWMicroRecorder: parse PGRMZ as altitude above 1013.25 hPa
   - FlymasterF1: convert pressure to altitude
