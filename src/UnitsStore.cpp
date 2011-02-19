@@ -42,13 +42,13 @@ static const UnitStoreItem Presets[] =
     unKiloMeterPerHour
   } },
   { _T("British"), {
-    unNauticalMiles,
+    unKiloMeter,
     unFeet,
     unGradCelcius,
     unKnots,
     unKnots,
     unKnots,
-    unKnots
+    unKiloMeterPerHour
   } },
   { _T("American"), {
     unStatuteMiles,
