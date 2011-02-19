@@ -605,29 +605,12 @@ InputEvents::eventFlarmTraffic(const TCHAR *misc)
   dlgFlarmTrafficShowModal();
 }
 
-/**
- * If Not Flying or No Task or Goto/Abort Task
- * then Task Manager Dialog
- * else
- * Task Calculator Dialog
- */
 void
 InputEvents::eventCalculator(const TCHAR *misc)
 {
   (void)misc;
 
-#ifdef GNAV
   dlgTaskCalculatorShowModal(XCSoarInterface::main_window);
-#else
-  TaskManager::TaskMode_t mode = protected_task_manager->get_mode();
-  if (CommonInterface::Calculated().flight.Flying &&
-                        (mode != TaskManager::MODE_ABORT) &&
-                        (mode != TaskManager::MODE_GOTO) &&
-                        XCSoarInterface::Calculated().task_stats.task_valid)
-    dlgTaskCalculatorShowModal(XCSoarInterface::main_window);
-  else
-    dlgTaskManagerShowModal(XCSoarInterface::main_window);
-#endif
 }
 
 // Status

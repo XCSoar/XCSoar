@@ -179,17 +179,6 @@ RefreshCalculator(void)
     df->Set(XCSoarInterface::Calculated().task_stats.cruise_efficiency * fixed(100));
     wp->RefreshDisplay();
   }
-
-  WndButton *wb = (WndButton*)wf->FindByName(_T("cmdTaskManager"));
-  assert(wb);
-  TaskManager::TaskMode_t mode = protected_task_manager->get_mode();
-  if (CommonInterface::Calculated().flight.Flying &&
-                        (mode != TaskManager::MODE_ABORT) &&
-                        (mode != TaskManager::MODE_GOTO) &&
-                        XCSoarInterface::Calculated().task_stats.task_valid)
-    wb->set_visible(true);
-  else
-    wb->set_visible(false); // because we arrived here via the task manager
 }
 
 static void
