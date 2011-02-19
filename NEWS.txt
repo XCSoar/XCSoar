@@ -17,6 +17,7 @@ Version 6.0.4 - not yet released
   - vario: fix circling mode display
 * map
   - enable terrain and topology by default
+  - Terrain: load fewer raster tiles on Altair
 * task
   - abort: for non-final glide options, don't prefer airports
   - task manager: reduce memory usage
