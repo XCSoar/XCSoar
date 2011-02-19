@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Form/Control.hpp"
 #include "Screen/EditWindow.hpp"
+#include "Screen/Point.hpp"
 
 class DataField;
 class ContainerWindow;
@@ -174,9 +175,9 @@ private:
   /** Editor Control */
   Editor edit;
   /** Size of the Editor Control */
-  POINT mEditSize;
+  RasterPoint mEditSize;
   /** Position of the Editor Control */
-  POINT mEditPos;
+  RasterPoint mEditPos;
   /** Size of the "up" and "down" buttons */
   int  mBitmapSize;
   /** Width reserved for the caption of the Control */

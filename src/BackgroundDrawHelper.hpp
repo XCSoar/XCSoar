@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef BACKGROUND_DRAW_HELPER_HPP
 #define BACKGROUND_DRAW_HELPER_HPP
 
+#include "Screen/Point.hpp"
+
 class Canvas;
 class WindowProjection;
 struct SETTINGS_MAP;
@@ -34,7 +36,8 @@ class RasterWeather;
 class LabelBlock;
 
 #include "Math/Angle.hpp"
-#include <windef.h>
+
+#include <tchar.h>
 
 /**
  * Utility class to draw terrain, topology (not implemented yet)
@@ -59,7 +62,7 @@ public:
 
 private:
   static void DrawSpotHeight(Canvas &canvas,  LabelBlock &block,
-                             const TCHAR *Buffer, POINT pt);
+                             const TCHAR *Buffer, RasterPoint pt);
 
 private:
   TerrainRenderer* m_rend;

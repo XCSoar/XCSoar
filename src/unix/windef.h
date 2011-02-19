@@ -53,11 +53,6 @@ typedef int32_t LONG;
 typedef struct w32_handle *HANDLE;
 typedef HANDLE HINSTANCE;
 
-typedef struct tagPOINT {
-	LONG x;
-	LONG y;
-} POINT;
-
 typedef struct tagSIZE {
   LONG cx;
   LONG cy;

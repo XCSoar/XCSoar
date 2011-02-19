@@ -67,7 +67,7 @@ protected:
 
   int selection;
   int warning;
-  POINT radar_mid;
+  RasterPoint radar_mid;
 
   /**
    * The minimum distance between the window boundary and the biggest
@@ -82,7 +82,7 @@ protected:
 
   bool small;
 
-  POINT sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
+  RasterPoint sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
 
   bool enable_north_up;
   Angle heading;

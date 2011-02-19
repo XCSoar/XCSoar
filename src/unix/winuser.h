@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef WINUSER_H
 #define WINUSER_H
 
+#include "Screen/Point.hpp"
+
 #include <windef.h>
 
 enum {
@@ -104,7 +106,7 @@ OffsetRect(RECT *rc, int dx, int dy)
 }
 
 static inline bool
-PtInRect(const RECT *rc, POINT pt)
+PtInRect(const RECT *rc, const RasterPoint &pt)
 {
   return pt.x >= rc->left && pt.x < rc->right &&
     pt.y >= rc->top && pt.y < rc->bottom;

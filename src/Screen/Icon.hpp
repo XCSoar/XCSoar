@@ -38,7 +38,7 @@ protected:
 
   SIZE size;
 
-  POINT origin;
+  RasterPoint origin;
 
 public:
   const SIZE& get_size() const {

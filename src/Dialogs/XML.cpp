@@ -62,7 +62,7 @@ struct ControlSize: public SIZE
   bool no_scaling;
 };
 
-struct ControlPosition: public POINT
+struct ControlPosition: public RasterPoint
 {
   bool no_scaling;
 };
@@ -226,7 +226,7 @@ SetPositionCentered(const ControlPosition original, const RECT rc,
 }
 
 static ControlSize
-GetSize(const XMLNode &Node, const RECT rc, const POINT pos)
+GetSize(const XMLNode &Node, const RECT rc, const RasterPoint &pos)
 {
   ControlSize sz;
 

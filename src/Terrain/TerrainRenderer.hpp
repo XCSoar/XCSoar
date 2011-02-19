@@ -42,8 +42,8 @@ public:
   TerrainRenderer(const RasterTerrain *_terrain);
 
 public:
-  POINT spot_max_pt;
-  POINT spot_min_pt;
+  RasterPoint spot_max_pt;
+  RasterPoint spot_min_pt;
   short spot_max_val;
   short spot_min_val;
 
