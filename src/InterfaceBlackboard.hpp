@@ -27,14 +27,12 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsComputerBlackboard.hpp"
 #include "SettingsMapBlackboard.hpp"
-#include "MapProjectionBlackboard.hpp"
 #include "Compiler.h"
 
 class InterfaceBlackboard:
   public BaseBlackboard,
   public SettingsComputerBlackboard,
-  public SettingsMapBlackboard,
-  public MapProjectionBlackboard
+  public SettingsMapBlackboard
 {
 public:
   void ReadBlackboardBasic(const NMEA_INFO &nmea_info);
