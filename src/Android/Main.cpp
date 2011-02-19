@@ -89,6 +89,11 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
+  if (event_queue == NULL)
+    /* pause before we have initialized the event subsystem does not
+       work - let's bail out, nothing is lost anyway */
+    exit(0);
+
   CommonInterface::main_window.pause();
 
   assert(num_textures == 0);
@@ -97,5 +102,9 @@ Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 {
+  if (event_queue == NULL)
+    /* there is nothing here yet which can be resumed */
+    exit(0);
+
   CommonInterface::main_window.resume();
 }
