@@ -67,6 +67,7 @@ Version 6.0.4 - not yet released
 * task
   - abort: for non-final glide options, don't prefer airports
   - task manager: reduce memory usage
+  - olc: DHV-XC contest optimisation
 * configuration
   - don't forget the home airport after a configuration change
 * Android
