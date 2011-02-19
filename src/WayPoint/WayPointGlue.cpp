@@ -33,6 +33,7 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 
 #include <tchar.h>
+#include <windef.h> /* for MAX_PATH */
 
 #include <memory>
 
