@@ -31,6 +31,7 @@ Copyright_License {
 #include "Defines.h"
 
 GlideComputerBlackboard::GlideComputerBlackboard(ProtectedTaskManager &task):
+  ScreenDistanceMeters(fixed(50000)),
   m_task(task)
 {
 }

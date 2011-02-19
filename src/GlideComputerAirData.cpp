@@ -458,7 +458,7 @@ void
 GlideComputerAirData::ProcessIdle()
 {
   BallastDump();
-  TerrainFootprint(MapProjection().GetScreenDistanceMeters());
+  TerrainFootprint(GetScreenDistanceMeters());
   if (airspace_clock.check_advance(Basic().Time)
       && SettingsComputer().EnableAirspaceWarnings)
     AirspaceWarning();

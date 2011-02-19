@@ -142,7 +142,7 @@ GlideComputerTask::TerrainWarning()
 
   if (!stats.task_valid) {
     g_terrain.set_max_range(fixed(max(fixed(20000.0), 
-                                      MapProjection().GetScreenDistanceMeters())));
+                                      GetScreenDistanceMeters())));
     its = g_terrain.find_intersection(state, polar);
   } else {
     its = g_terrain.find_intersection(state, current, polar);

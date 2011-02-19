@@ -67,7 +67,7 @@ CalculationThread::tick()
     // Copy settings form SettingsComputerBlackboard to GlideComputerBlackboard
     glide_computer.ReadSettingsComputer(device_blackboard.SettingsComputer());
     // Copy mapprojection from MapProjectionBlackboard to GlideComputerBlackboard
-    glide_computer.ReadMapProjection(device_blackboard.MapProjection());
+    glide_computer.SetScreenDistanceMeters(device_blackboard.MapProjection().GetScreenDistanceMeters());
   }
 
   // if (time advanced and slow calculations need to be updated)
