@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<Form Name="frmWindSettingRegular" X="5" Y="5" Width="153" Height="135" Caption="Wind Settings" Popup="1">
+<Form Name="frmWindSettingRegular" X="5" Y="5" Width="153" Height="148" Caption="Wind Settings" Popup="1">
   <Edit Name="prpSpeed" Caption="Speed" X="2" Y="2" Width="145" Height="22" CaptionWidth="68" Help="Manual adjustment of wind speed.">
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Step="1"/>
   </Edit>
@@ -17,6 +17,6 @@
     <DataField DataType="boolean"/>
   </Edit>
   
-  <Button Caption="Close" X="2" Y="90" Width="66" Height="22" OnClick="OnOkay"/>
-  <Button Caption="Cancel" X="74" Y="90" Width="66" Height="22" OnClick="OnCancel"/>
+  <Button Caption="Cancel" X="2" Y="90" Width="74" Height="35" OnClick="OnCancel"/>
+  <Button Caption="Close" X="-77" Y="90" Width="75" Height="35" OnClick="OnOkay"/>
 </Form>

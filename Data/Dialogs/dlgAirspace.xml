@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <Form Name="frmAirspace" Width="320" Height="240" Caption="Airspace">
-  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" OnClick="OnCloseClicked"/>
-  <Button Name="cmdLookup" Caption="Lookup" X="2" Width="98" Height="22" OnClick="OnLookupClicked"/>
+  <Button Name="cmdClose" Caption="Close" X="2" Y="-37" Width="75" Height="35" OnClick="OnCloseClicked"/>
+  <Button Name="cmdLookup" Caption="Lookup" X="2" Y="-74" Width="75" Height="35" OnClick="OnLookupClicked"/>
 
   <List Name="frmAirspaceList" X="102" Y="1" Width="-1" Height="-1" ItemHeight="18"/>
 </Form>
