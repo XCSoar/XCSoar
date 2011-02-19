@@ -41,9 +41,16 @@ MaskedIcon::load_big(unsigned id, unsigned big_id, bool center)
   } else
     bitmap.load(id);
 
+#ifdef ENABLE_OPENGL
+  /* postpone CalculateLayout() call, because the OpenGL surface may
+     be absent now */
+  size.cx = 0;
+  size.cy = center;
+#else
   assert(defined());
 
   CalculateLayout(center);
+#endif
 }
 
 void
@@ -68,6 +75,10 @@ MaskedIcon::draw(Canvas &canvas, int x, int y) const
   assert(defined());
 
 #ifdef ENABLE_OPENGL
+  if (size.cx == 0)
+    /* hack: do the postponed layout calcuation now */
+    const_cast<MaskedIcon *>(this)->CalculateLayout((bool)size.cy);
+
   GLTexture &texture = *bitmap.native();
 
   GLEnable scope(GL_TEXTURE_2D);
