@@ -8,7 +8,8 @@ enum Contests {
   OLC_League,
   OLC_Plus,
   OLC_XContest,
-  OLC_DHVXC
+  OLC_DHVXC,
+  OLC_SISAT
 };
 
 #endif

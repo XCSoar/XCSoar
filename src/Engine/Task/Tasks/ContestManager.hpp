@@ -12,6 +12,7 @@
 #include "PathSolvers/OLCLeague.hpp"
 #include "PathSolvers/OLCPlus.hpp"
 #include "PathSolvers/XContest.hpp"
+#include "PathSolvers/OLCSISAT.hpp"
 #include "PathSolvers/Contests.hpp"
 
 class TaskPoint;
@@ -87,6 +88,7 @@ private:
   OLCPlus olc_plus;
   XContest olc_xcontest;
   XContest olc_dhvxc;
+  OLCSISAT olc_sisat;
 };
 
 #endif

@@ -81,6 +81,7 @@ Version 6.0.4 - 2011/02/19
   - abort: for non-final glide options, don't prefer airports
   - task manager: reduce memory usage
   - olc: DHV-XC contest optimisation
+  - olc: SIS-AT 2011 contest optimisation
 * configuration
   - don't forget the home airport after a configuration change
 * Android
