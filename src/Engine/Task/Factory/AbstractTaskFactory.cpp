@@ -1002,9 +1002,9 @@ bool
 AbstractTaskFactory::remove_excess_tps_per_task_type()
 {
   bool changed = false;
-  int maxtp = get_ordered_task_behaviour().max_points;
-  for (unsigned int i = maxtp; i < m_task.task_size(); i++) {
-    remove(i);
+  unsigned maxtp = get_ordered_task_behaviour().max_points;
+  while (maxtp < m_task.task_size()) {
+    remove(maxtp, false);
     changed = true;
   }
   return changed;
@@ -1021,8 +1021,7 @@ AbstractTaskFactory::mutate_tps_to_task_type()
         (m_task.get_factory_type() == TaskBehaviour::FACTORY_FAI_GENERAL)) {
 
       LegalPointType_t newtype = getMutatedPointType(*tp);
-      if ((tp->type == TaskPoint::FINISH) &&
-          (i == m_task.task_size() - 1) && is_position_finish(i)) {
+      if (is_position_finish(i)) {
 
         if (!validFinishType(newtype)) {
           newtype = m_behaviour.sector_defaults.finish_type;
