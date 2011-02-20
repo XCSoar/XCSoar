@@ -1,0 +1,1005 @@
+\chapter{Cross Country Tasks}\label{cha:tasks}
+
+XCSoar provides a full task management system, in which tasks can be
+edited prior to flight and, when undertaking casual cross-country
+flying, modified during flight.  Waypoints are advanced automatically
+or may be cycled through manually.  This chapter also describes the
+use of IGC loggers with XCSoar.
+
+\section{Editing tasks}
+
+You can edit tasks in several ways.  Some methods are more useful for
+editing prior to flight, and others allow tasks to be modified whilst
+in flight for casual cross-country touring.  Tasks can be saved to
+files and loaded later, and can be transferred between any XCSoar
+platform (Pocket PC, Altair, PC).
+
+\tip It is also possible to save a `default' task and have this task loaded
+automatically upon start-up of XCSoar.  One application of this is to
+set up a default task with one waypoint being the home --- this means
+that XCSoar is then programmed for final glide back to home, which is
+useful for casual cross-country touring.
+
+The main ways of setting tasks are the following:
+\begin{itemize}
+\item Using the task editor dialog
+\item Selecting waypoints from the map and adding them to the task from the
+ waypoint details dialog
+\item Loading the task from a file
+\end{itemize}
+
+%Selecting the Task menu item will produce the Task dialog box.  The
+%list box on the left displays all of the turn points loaded into the
+%system. Highlight the desired entries and using the "-$>$" and "$<$-"
+%buttons assemble the desired task in the Task list box. As each turn
+%point is added to the task a continuous display of the calculated task
+%length is shown.  Tasks can be saved for recalling later using the
+%"Save" button and recalled using the "Load" button.  Once the desired
+%task is complete select "OK".
+%
+%{\it DIAGRAM SHOWING TASK DIALOG EDITING, WITH LABELED ARROWS POINTING
+%TO THE USER INTERFACE ELEMENTS?}
+
+\tip Loading a task from file may be useful in competition or casual
+cross-country flying in groups, as one person can distribute the task
+file to others, thereby saving the group the job of editing the task
+themselves.
+
+%\tip If no task is present at startup, a task is created automatically,
+%  containing one waypoint to home.
+% There will be a 6.1 feature like this.
+
+XCSoar saves the current task when shutting down and loads it at
+startup, thereby allowing the task to be entered early in the day,
+then turning off the glide computer until ready for flight.
+
+Task waypoints are preserved even if the waypoint
+file is changed.  This means, if you save a task, then change the
+waypoint file, then load the task again, new waypoints are generated
+for any waypoints that are missing in the new waypoint file.
+
+\section{Waypoint details dialog}
+%Several ways of selecting a waypoint are available:
+%\begin{itemize}
+%\item Touch its name or the waypoint symbol on the map screen if it is visible.
+%\item If the waypoint is in the active task, highlight the waypoint {\InfoBox}, then use the up/down arrow keys to select the desired waypoint, and press the
+%enter key.
+%\item From the Task dialog, find and highlight the waypoint in
+% the waypoint list, then press the 'Details' button.
+%\end{itemize}
+%The display will now show the waypoint details dialog.
+
+The waypoint details dialog describes a waypoint in detail and has
+navigation functions such as GoTo, Insert.
+
+This may be accessed several ways:
+\begin{itemize}
+\item
+From the task editor, menu \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Edit}
+and select a waypoint, then press the button with waypoints name on it.
+
+\item 
+From the menu \bmenu{Info}\blink\bmenu{Waypoint details} to show the
+details for the active waypoint.
+
+\item
+From the menu \bmenu{Info}\blink\bmenu{Nearest waypoint} to show the
+details of the waypoint nearest the aircraft, or if in pan mode,
+nearest the pan cursor.
+
+\item
+From the waypoint selector, menu \bmenu{Nav}\blink\bmenu{Waypoint
+List} and select a waypoint to show the details of that waypoint.
+\end{itemize}
+
+The waypoint details dialog contains two major pages (accessed via the
+\button{$>$} and \button{$<$} buttons). Depending on the availability of further
+details to the waypoint they will by shown on extra pages.
+
+\subsection*{Waypoint details}
+This page contains text describing the waypoint's location, elevation
+and local sunset. Last not least a button \button{GoTo} to directly initiate
+navigating to this waypoint. The button cancels the current task. 
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails0.png}
+\end{center}
+
+This page also shows three forms of altitude difference (additional
+altitude required to reach the waypoint at the safety altitude) for
+the corresponding waypoint:
+\begin{description}
+\item[Alt diff MC 0] Altitude difference at MC setting of 0
+\item[Alt diff MC safety] Altitude difference at the abort/safety MacCready setting
+\item[Alt diff MC current] Altitude difference at the current MacCready setting
+\end{description}
+
+\subsection*{Task menu}  
+This page contains a column of buttons allowing various actions to be performed:
+\begin{description}
+\item[\button{Replace in task}] replaces the active waypoint in the task.
+\item[\button{Insert in task}] inserts the waypoint before the active waypoint in
+  the task.
+\item[\button{Append to task}] adds the waypoint to the end of the task.
+\item[\button{Remove from task}] removes the waypoint from the task.
+\item[\button{Set as new home}] sets the waypoint as the home airfield.
+\item[\button{Set teamcode}] sets the waypoint as reference waypoint for
+  team code coordinates.
+
+\end{description}
+
+It is a good idea to set your home waypoint from the waypoint details
+dialog. This causes XCSoar to start up at the home location regardless
+of whether a GPS fix is received.  If no home is set, then XCSoar
+starts in the center of the terrain map.
+
+\subsection*{Airfield information}
+This page may contain relevant text from the enroute supplement about
+the airfield, including runways, radio frequencies, traffic patterns,
+contacts.
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails1.png}
+\end{center}
+
+\subsection*{Satellite image}
+This page shows a satellite image of the
+waypoint.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails2.pdf}
+\end{center}
+
+
+\section{Waypoint selector dialog}\label{sec:waypoint-selector-dialog}
+The waypoint selector is a dialog that allows waypoints to be easily selected
+from a potentially large database.
+
+This may be accessed several ways:
+\begin{itemize}
+\item  From the menu \bmenu{Nav}\blink\bmenu{Waypoint List}
+\item  From the task editor, menu \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task
+Edit} and selecting a waypoint and open the details.
+\item  Or just by gesture\gesture{Down - Right}.
+\end{itemize}
+
+The waypoint selector comprises a set of optional filters on the left
+side of the page, and a list of matching waypoints on the right.
+There are several filters available, which may be used together,
+individually or not at all.
+\begin{description}
+\item[Name] Filtering based on the matching the first letter in the waypoint name. 
+\item[Distance] Filters out waypoints further that a specified distance to the aircraft.
+\item[Direction] Filters out waypoints that are not in a specified direction from the aircraft. 
+   An additional special direction ``HDG(0°)'' filters waypoints within 30
+   degrees to either side of the heading of the glider.  This allows the pilot to point the glider at a group of
+  waypoints and quickly find them.
+\item[Type] Filters out waypoints that are not of the specified type
+(Landable point, Airport or Turnpoint) or that appear in the specified File~1 or
+File~2 (primary or secondary waypoint file respectively).
+\end{description}
+When filtering by name and type, the list of matching waypoints is
+sorted by name. When (in addition) filtering by distance or direction,
+ the list of matching waypoints is sorted by distance.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointselect.png}
+\end{center}
+
+The list can be scrolled if there is more than one screen full of
+matching waypoints.  To scroll through the list, simply drag with the finger, or
+move to the bottom (or top) of the list with the cursor.   
+
+Selecting an item will result in different behaviour
+depending on what function opened the waypoint selector.  In typical
+use it brings up the waypoint details dialog for the selected
+waypoint.
+
+\section{Task manager}\label{sec:task-manager-dialog}
+\begin{it}The task manager is target of major rework and thus the description
+possibly comes short compared to its functionality. Version 6.1 of XCSoar will hopefully
+leverage the rate of change at the task editor and the manual will be more
+complete at this point.\end{it}
+
+The task manager is used to edit, view, load, save to file, and declare cross
+country tasks. It is accessed via the menu
+\begin{quote}
+\bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Edit}
+\end{quote} 
+
+The task manager's primary page is an overview. It gives a graphical
+view of the active task, lets you enter into the task editor, or task browser.
+Further you can backup the current task with the \button{Save as} button, and 
+send the task to a connected intelligent logger device with the \button{Declare}
+button.
+
+\subsection*{Task browser}
+The \button{Browse} button enters the task browser. On the left side it displays a thumbnail of
+the selected task, its type and task distance.  The right side lists all
+tasks XCSoar found on your system, including an item for the current active
+task. This could be handy to save the active task to a different file and thus
+make a backup before modifying it.  Not to mention, the active task can not be
+renamed or deleted. To remove any active task from XCSoar you have to enter the
+editor and ``clear'' it there.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskbrowser.png}
+\end{center}
+
+The task browser dialogs has the following buttons on the
+top of the form:
+\begin{description}
+\item[\button{Load}] Loads the selected task file and closes the dialog and
+returns to the task overview page.
+\item[\button{Rename}] Opens the text editor, allowing the
+file name to be changed.  If the Chancel button or ESC button in the
+text editor is pressed, the task will be unchanged.
+\item[\button{Delete}] Removes the task entirely from the system.
+\end{description}
+
+
+\subsection*{Task editor}
+The \button{Edit} button enters the task editor. It comprises a list of 
+waypoints on the right side of the form. All means to add, change, or
+delete waypoints to the list composing the task are accessible through this
+side of the form. By pressing the ``(add waypoint)'' a propor selection of
+waypoint types according to the task type is presented. Selecting a waypoint
+type leads directly to the already described waypoint selector dialog (see
+Section~\ref{sec:waypoint-selector-dialog}).
+
+The type of task and the total distance of the task is shown below the waypoint
+list.
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit0.png}
+\end{center}
+
+The left side of the form gives all means to manipulate the task entirely. You
+can create a new one, review the task properties, and clear the task entirely. A
+graphical fullscreen overview is shown by taping on the task thumbnail view.
+
+The up and down button below allow to reorder the waypoint list. This is handy
+to e.g. flip the round trip direction of a triangle course by changing the
+turning point sequence.
+
+\subsection*{Task types}
+By pressing the \button{New} button a selction of task types is presented to
+choose  from.
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit1.png}
+\end{center}
+On the list of task types the type of the active task is marked with a ``*'' in
+fornt of it. The set of task types largly covers the typically used
+international FAI task set and also a ``Mixed'' type to describe virtually any
+intended flight. The ``Touring`` type is a simple way to enter as less
+as possible into the system and have a maximal casual cross country support by
+XCSoar.  On the left side of the form a short description is given to the
+selected task type.
+
+Since the manual does not intend to rephrase FAI rules or tasks you better refer
+to the online source  \url{http://www.fai.org}. 
+
+
+\subsection*{Task properties}
+By pressing the \button{Properties} button a summary with the important
+parameters of the task is reached.  If applicable values are taken from the
+default rules configuration page \config{taskrules}.  For FAI tasks only the
+finish height option applies. For the AAT the most important setting is the
+minimum task time, which can be set here.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit2.png}
+\end{center}
+
+The task properies dialogs contain several fields:
+\begin{description}
+\item[AAT min time]  (Only for AAT) Minimum AAT task time in minutes.
+\item[Task scoring]  Internal flag, which determines whether accurate scoring
+measurements of the task is required or not. It can not be modified.
+\item[Start max speed]  Maximum speed allowed in start observation zone.  Set to
+0 for no limit.
+\item[Start max height]  Maximum height while starting the task.  Set to 0 for
+no limit.
+\item[Start height ref]  Reference used for start max height rule. ``MSL''
+reference is altitude above mean sea level, ``AGL'' reference is the height
+above ground at the start point.
+\item[Finish min height]  Minimum height above ground while finishing the task. 
+Set to 0 for no limit.
+\item[FAI finish height]  (Only for FAI tasks) If enabled, this option requires
+the minimum height above ground for finish to be greater than 1000m below the start height.
+\end{description}
+
+\section{Advancing and restarting tasks}\label{sec:advanc-rest-tasks}
+At all times one waypoint in the task is designated as the active
+waypoint.  The active waypoint is used for calculation and display of
+navigation information, that is, the pilot is directed to fly towards
+the active waypoint (also referred to as the ``next waypoint'' in the
+description of InfoBoxes as in Chapter~\ref{cha:infobox}).
+
+During flight a continuous display of the bearing of the next turn
+point is shown.
+
+The altitude required to complete the task is calculated from the
+glider's position to the active waypoint through to the final
+waypoint.
+
+Changing the active waypoint is performed automatically by default in the following ways.
+\begin{description}
+\item[Auto advance mode]
+Once the aircraft enters the turn point observation zone (OZ) and satisfies
+the turn point rules, the software will automatically select the next
+task turn point.
+
+The active waypoint is advanced through the list of waypoints in the
+task automatically: the start waypoint is advanced when the starting
+conditions are met (such as flying through a start line or leaving a
+start cylinder); intermediate waypoints are advanced when the glider
+passes through the observation zone for AAT tasks, the waypoint is
+advanced when the glider enters the AAT area).
+\item[Arm auto advance]
+This is similar to the Auto method, but it requires the pilot to arm a
+trigger.  Therefore, if the advancement conditions are met but the
+trigger is not armed, the waypoint is not advanced.  The `Arm' button can be 
+used to arm the trigger.  It is accessed via the menu
+\begin{quote}
+\bmenu{Nav}\blink\bmenu{Arm Start/Turn}
+\end{quote}
+This is used for all waypoints with an variable target like the AAT observation
+zone with an obtimised target point, so that the minimum task time
+conditaion will be meet.
+%\item[Arm auto advance start]
+%This is similar to the Auto method but the start must be armed.
+%Therefore, the pilot must press the arm button before starting, and on
+%subsequent waypoints the advancement is automatic.
+\end{description}  
+
+Status messages are given in arm modes when inside the observation sector, 
+as reminders to press arm when the pilot is ready to advance to the next
+waypoint. For starting, a warning is given that the glider is in the start
+cylinder or behind the start line, as a reminder to ``arm'' if necessary.
+
+In any times, the pilot can override the current waypoint
+with the buttons:
+
+\begin{quote}
+\bmenu{Nav}\blink\bmenu{Previous turnpoint} and
+\bmenu{Nav}\blink\bmenu{Next turnpoint }
+\end{quote}
+
+For PC and Pocket PC with touchscreen versions only, the user may
+manually cycle through the waypoints by highlighting the waypoint
+{\InfoBox} and by pressing the up or down cursor key.
+
+See Section~\ref{sec:task-rules} for details on observation rules.
+
+If a user has cycled through the waypoint manually, this does not mean
+that the glider has successfully passed the waypoint!  However, this
+facility is useful to force a task restart or to skip a waypoint when
+flying a casual cross-country task.
+
+\tip Tasks can be restarted simply by manually cycling back through the
+waypoints to the start.
+
+In all modes, if the glider re-enters the start zone or crosses the
+start line within 10 minutes of the previous start, the task may be
+automatically restarted.  In ``arm'' mode, the pilot still
+needs to activate ``arm'' to re-start.
+
+When selecting \button{Previous turnpoint}, the trigger that detects
+auto-advance for that waypoint is cleared; meaning that the task
+computer expects the aircraft wants to fly to that observation zone (OZ)
+again before continuing the task.  The pilot may still select \button{Next
+turnpoint} to advance to the next task waypoint.
+
+A system beep and message is given on task/waypoint advance.  The
+messages are given when the system advances the task waypoint
+automatically or, in arm modes, when the system is armed and the
+aircraft is in sector:
+\begin{itemize}
+\item[Task start]  appears when the aircraft has crossed the start line or
+ exited the start sector. 
+\item[Next turnpoint]  appears when the aircraft has entered the observation
+ sector for turnpoints. Turns with variable target advance as soon as
+ \button{Arm turn} is pressed (arm auto advacne).  For arm modes, if the aircraft has 
+ already entered the observation sector and left, pressing arm will
+ cause the message to appear to confirm a valid advance to the next
+ turnpoint.
+\item[Task finish]  appears when the aircraft has crossed the finish line
+ or entered the finish cylinder.  This occurs in all advance modes. 
+\end{itemize}
+
+\section{Task rules}\label{sec:task-rules}
+
+A variety of task rules may be used when specifying tasks, including
+the common FAI triangles and Assigned Area Tasks (AAT).  Many aspects
+of the rules can also be customised.
+
+Starting and finishing lines are centered on their associated waypoint
+and aligned perpendicular to the next and previous waypoints
+respectively.
+
+Sector turn-points are 90 degree segments aligned to the bisection of
+the previous and next waypoints, as commonly used in FAI tasks.
+There is also support for British BGA, and German DAeC sectors.
+
+The conditions to meet for a valid start depending on the type of start:
+\begin{description}
+\item[Start Cylinder] When the glider leaves the cylinder area.
+\item[Start Line] When the glider crosses the start line.
+\end{description}
+
+The conditions to meet for a valid intermediate waypoints depending on their
+ type:
+\begin{description}
+\item[FAI Sector] When the glider has entered the observation zone (OZ), defined 
+by a segment and radial distance from the waypoint.  The segment is
+defined by a 90 degree arc centered about the bisector of inbound and
+outbound legs, with a distance of 20 km.
+\item[Keyhole Sector (DAeC 0.5/10 sector)] When the glider has entered the
+observation zone, defined by a segment and radial distance from the waypoint.  The segment is
+defined by a 90 degree arc centered about the bisector of inbound and
+outbound legs, with a distance of 10 km.  The observation zone also includes
+a cylinder of 500 m.
+\item[Turnpoint Cylinder]  When the glider has entered the observation zone
+defined by a radial distance from the waypoint.
+\item[BGA Fixed Course Sector]  When the glider has entered the
+observation zone defined by a segment and radial distance from the
+waypoint. The segment is defined by a 90 degree arc centered about the
+bisector of inbound and outbound legs, with a distance of 20 km.
+The observation zone also includes a cylinder of 500 m (British rules).
+\item[BGA Enhanced Option Fixed Course Sector]  When the glider has entered the
+observation zone defined by a segment and radial distance from the
+waypoint. The segment is defined by a 180 degree arc centered about the
+bisector of inbound and outbound legs, with a distance of 10 km.
+The observation zone also includes a cylinder of 500 m (British rules).
+\item[Area Zylinder (AAT)]  and
+\item[Area Sector (AAT)]  When the glider has entered the observation zone
+defined by the radial distance from the waypoint, and segment for sector areas.
+\end{description}
+
+Task completion depends on the finish type:
+\begin{description}
+\item[Finish Cylinder] When the glider enters the cylinder area.
+\item[Finish Line] When the glider crosses the finish line.
+\end{description}
+
+Automatic advancement is triggered whenever a condition is met. To start an AAT,
+mixed task, or Racing task the start has to be armed before. 
+
+
+\tip Competition rules may be defined in a profile file for
+distribution to a group of pilots or task-setters, so all competitors
+are playing by the same rules!
+
+Additional task rules for valid starts and finishes may also be
+specified.  Starts may have a defined maximum altitude above ground,
+and a maximum speed.  Finishes may have a minimum altitude above
+ground.  These parameters are defined in the page ``Default Task Rules'' in
+the configuration \config{taskrules} settings.
+
+For non-AAT tasks, an option is available to set the minimum finish
+altitude according to the FAI rule, whereby the minimum finish
+altitude is above 1000 meters below the start altitude.
+
+\section{Alternate starts}\label{sec:alternate-starts}
+
+Alternate start points are skipped for XCsoar 6.0, but
+will potentially brought back in a next release. 
+
+%\todonum[inline]{Alternate start points are skipped for XCsoar 6.0, but
+%will potentially brought back in a next release. This section can thus be
+%treated as obsolete. }
+
+%The task system allows alternate start sectors to be defined.
+  
+%To use it, on the task edit page, select the start point, then turn on
+%the `Alternate start points' property.  Then press the button 'Edit
+%alternate start points'.
+
+%\begin{center}
+%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-startpoint2.png}
+%\end{center}
+  
+%  To edit the start points, move the cursor to an item in the list on
+%  the right side of the dialog, and press enter.  This opens the
+%  waypoint selector dialog, to allow selection of the waypoint.  This
+%  process can be repeated several times for several alternate start
+%  waypoints.  Press the `clear' button to clear all alternate start
+%  points.
+
+%  Each start sector is fixed to the same type (line/cylinder) and size
+%  (start radius) defined in the task waypoint page.
+
+%  Note that the task start point should be included in the alternate
+%  start location list. 
+
+%\begin{center}
+%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-startpoint3.png}
+%\end{center}
+
+%\begin{center}
+%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-startpoint4.png}
+%\end{center}
+
+%  In flight, any time you cross a start line (or exit a start
+%  cylinder), this will start the task at that particular alternate
+%  start.  Task statistics are recalculated for the start sector you
+%  last flew through.  All alternate start sectors are shown on the
+%  map.  You can re-start simply by flying through the start sector
+%  again or another start sector.  This automatic re-start will only
+%  happen if the active waypoint is the first turnpoint after the
+%  start, or the start itself.
+
+%  When the waypoint advance mode is `Arm' or `Arm Start', then a start
+%  is only recognised by XCSoar if the advance trigger is armed.
+
+%  If desired, alternate start points may be selected as the active
+%  waypoint by selecting the previous waypoint.  Continuing to select
+%  the previous waypoint will cycle through all alternate start points.
+
+\section{Task calculator dialog}\label{sec:task-calc-dial}
+The task calculator dialog allows the pilot to see the effect of
+various changes to the task on final performance.
+
+This may be accessed several ways:
+\begin{itemize}
+\item From the menu 
+\begin{quote}
+\bmenu{Nav}\blink\bmenu{Task calc}
+\end{quote}
+\item From the analysis dialog, menu \bmenu{Info}\blink\bmenu{Analysis} and select
+ the button \button{Task Calc}
+\end{itemize}
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskcalc3.png}
+\end{center}
+
+\begin{description}
+\item[Assigned task time]  This field displays the assigned task time.
+\item[Estimated task time]  This field displays the estimated total time 
+ on task to complete the task at the provided MacCready setting.
+\item[Task distance]  This field displays the task distance remaining.
+\item[Set MacCready]  Allows the user to adjust the MacCready value and 
+ see the effect it has on the estimated task time.
+\item[Set range]  Allows the user to adjust the targets within the remaining 
+ AAT areas, to see the effect it has on estimated task time and task distance.
+\item[Set speed remaining]  This field displays the estimated speed for the
+ remainder of the task at the provided MacCready setting.
+\item[Achieved MacCready]  This field displays the achieved MacCready value.
+\item[Cruise efficiency]  100 indicates perfect MacCready performance, greater 
+than 100 indicates better than MacCready performance is achieved through flying
+in streets. Less than 100 is appropriate if you fly considerably off-track. This 
+value estimates your cruise efficiency according to the current flight history 
+with the set MC value. Calculation begins after task is started.
+\end{description}
+See Section~\ref{sec:task-speed-estim} for more details on task speed
+and achieved MacCready calculations.
+
+On closing the dialog the entered MacCready value is used as the MacCready 
+setting. If the \button{Cancel} button is pressed, the MacCready setting is 
+unaffected.
+
+The \button{Target} button, for AAT tasks, adjusts the range
+(increases or decreases) so that the estimated task time exceeds the
+assigned task time by less than five minutes.  The range is adjusted
+target-wise. In typical use, all targets are set to ``auto" that means the pilot 
+does not have to manually adjust the range to find the course for arrival at 
+the assigned task time, thereby reducing pilot workload.
+
+
+\section{Task status dialog}
+
+The status dialog (see Section~\ref{sec:dialog-windows}) gives a
+summary of important task information.  It can be useful to give a
+good overview of the task status while freeing up InfoBoxes for other
+purposes.  The status dialog can be referred to in order to confirm
+that a valid start was detected, as well as the progress against the
+task.
+
+This is accessed via the menu:
+\begin{quote}
+\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Status}
+\end{quote}
+the pages `Task' and the following are of interest.
+
+\section{Assigned Area Tasks}\label{sec:aat-tasks}
+
+\subsection*{AAT targets}
+
+A {\em target} is a point within an AAT area that the pilot intends to
+fly to.  These targets can be moved within the AAT areas so the pilot
+can adjust the effective distance of the task.  Targets may be set on
+the ground, during task planning, and modified during flight.
+
+When flying an AAT task, the navigation system directs the glider to
+the target, and statistics like distance to waypoint are also relative
+to the target rather than the waypoint of the AAT area itself.
+
+Automatic task waypoint advancement does not trigger when entering an
+AAT area solely. The pilot has to arm the turn manually to advance to the next
+turn. When arming the AAT turn while flying through the OZ also the task
+optimiser is triggered to capture the realised AAT target and bring the target
+optimisation for the rest of the task up to date. See Section~\ref{sec:advanc-rest-tasks} for details.
+
+\subsection*{Manually moving targets}
+
+In order to make the specification of targets more straightforward,
+their location is defined by a range parameter that determines how
+far from the minimum to maximum possible distance the target is.  This
+is expressed as a percentage.  For example, with range set to 100\%,
+the target is located to give the maximum overall task distance.  With
+range set to~$-100$\%, the target is located to give the minimum overall
+task distance.  
+
+Zero range yields a nominal task distance: for sectors the target is
+half way along the bisector radial; for cylinders the target is in the
+center of the cylinder.
+
+The task calculator dialog (see Section~\ref{sec:task-calc-dial}), shows the
+average percentage over all turns in the AAT Range field.
+The targets can be individually modified from the target dialog of the task
+calculator.
+
+
+\subsection*{AAT targets and the Task Calculator}
+
+The typical use of targets in flying AAT is as follows:
+\begin{itemize}
+\item Set the expected MacCready, bugs/ballast and wind settings
+  for the flight using the flight settings and wind settings dialogs.
+\item Define the task as normal from the task editor.
+\item Based on the pilot's judgement of how good the weather is,
+  and whether some areas are likely to me more or less difficult than
+  others, targets may be set individually for each turn-point in the
+  task editor.  The ETE field in the task editor can be compared to
+  the assigned minimum time to check the planned task is efficient and
+  long enough.
+\item During flight, if situations change, such as changed MacCready setting
+  or wind, the task calculator can be brought up to show the estimated
+  task time, again allowing comparison to the assigned minimum time.
+\item If the pilot decides to extend or shorten the flight, all the remaining
+  targets can be modified from the task calculator. 
+\end{itemize}
+
+The task calculator therefore allows the pilot to make (and help to
+answer) `what if?' questions, for example:
+\begin{itemize}
+\item What will happen if the conditions improve?  The MacCready setting can be 
+increased and the pilot can see if there is sufficient adjustment to targets in 
+order to be able to extend the planned task.
+\item What will happen if the conditions deteriorate?  The MacCready setting can 
+be decreased and the pilot can see how much the task can be shortened and still 
+finish the task later than the assigned minimum time.
+\item What will happen if I leave the AAT area now?  By pressing \button{Arm
+turn} the take over of the current position into the optimisation can
+be forced. The repositioning of subsequent turns can be reviewed in the task calculation
+dialog.
+\end{itemize}
+
+\subsection*{Target projection}
+
+XCSoar continually analyses the path of the glider through AAT sectors
+to find the points in previous AAT sectors through which the achieved
+scoreable distance will be greatest.  Internally, the program moves
+the targets for previous AAT sectors, which are then the optimal
+targets.
+
+In certain conditions, targets for the current AAT sector may be moved
+automatically:
+\begin{itemize}
+\item When inside an AAT sector, the target in that sector is moved to
+to a line projecting from the previous sector's target through the
+aircraft, at the same distance from the previous sector's target to
+the target prior to entering the sector.  The effect of this is to
+allow pilots to choose to enter an AAT sector in a different direction
+or offset from the direct line from the previous target to the current
+target.
+
+\item While the aircraft is in the AAT sector and the distance from the
+previous target to the aircraft is greater than the distance from the
+previous target to the current target, the target is moved further
+along the projected line from the previous target to the aircraft,
+just beyond the aircraft.  Hence, the black track line will not be
+visible but the blue optimal track arrow will point along this
+projected direction.
+\end{itemize}
+
+A worked example is provided in the following figures to illustrate
+how targets move during a flight and to show how XCSoar determines the
+maximum scored path.
+
+\begin{maxipage}
+\begin{center}
+\begin{longtable}{|c|c|}
+\toprule
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat01.png} & 
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat02.png} \\
+{\em Outside sector} & {\em Inside sector} \\
+Target (-20\%) is on bisector & Target moved along track line \\
+
+\midrule
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat03.png} & 
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat04.png} \\
+{\em User decreased range} & {\em User increased range} \\
+Target (-80\%) moved along track line & Target (80\%) moved along track \\
+
+\midrule
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat05.png} & 
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat06.png} \\
+{\em Analysis (task page)} & {\em Next waypoint} \\
+Path around active target  & Arm advance pressed \\
+\bottomrule
+\end{longtable}
+\end{center}
+\end{maxipage}
+
+\begin{maxipage}
+\begin{center}
+\begin{longtable}{|c|c|}
+\toprule
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat07.png} & 
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat08.png} \\
+{\em Analysis (task page)} & {\em Approaching next area} \\
+Best scored target found & Target (60\%) is on bisector \\
+
+\midrule
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat09.png} & 
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat11.png} \\
+{\em Inside sector} & {\em Next waypoint} \\
+Target (60\%) moved along track line & Arm advance pressed \\
+
+\midrule
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat12.png} &  \\
+{\em Analysis (task page)} &  \\
+Best scored targets found &  \\
+
+\bottomrule
+\end{longtable}
+\end{center}
+\end{maxipage}
+
+\section{OnLine Contest}
+
+The analysis dialog contains a page `OnLine Contest' which can be
+used to show the optimal path and estimated score.  The configuration settings \config{taskrules} 
+(task rules page) allows the selection of which set of rules to be used for the
+OLC optimisation.
+
+The optimisation is done continuously in the background and can be retrieved at
+any time. The analysis page shows a graphical overview of the optimisation
+result besides distance and score. A InfoBox is available which gives the
+instant OLC distance and score as well.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/shot-olc.png}
+\end{center}
+
+When flying OLC, either AAT or non-AAT tasks may still be used to
+manage the flight navigation.  During flight, the computer will optimise the
+current flight with respect to the selected OLC rules.  
+
+In the OLC analysis page, the aircraft track is shown as a thin green line, the optimal 
+path is shown as a thick red dashed line.
+
+If continued flight in final glide will result in higher score, the displayed
+results are shown as ``In progress'' and a blue line shows the projected path 
+to improve the score. For Sprint and Classic OLC types, this path is extended in the direction 
+to the current waypoint. For Triangle OLC type, this path is extended in the direction to 
+produce the largest triangle. \todonum{still true?}
+
+The score and computed optimal distance is approximate.
+
+
+When the aircraft has landed, the displayed result gest not updated anymore.
+
+
+\section{Abort/resume task}
+
+If atmospheric conditions change for the worse, you may make the
+judgement that it will be impossible to complete the task.  In this
+situation, XCSoar can be instructed to 'abort' the task, and it will
+then help you reach a safe landing site.
+
+To abort/resume the task, press
+\begin{quote}
+\bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Abort}
+\end{quote}
+
+Once aborted, whatever cross-country task was being flown is
+discarded.  The task waypoint list is then filled with nearby landing
+points, ordered by the estimated arrival altitude at best glide angle
+with the safety MacCready ring setting, adjusted for wind.  The
+first waypoint in the list is therefore the most reachable waypoint.
+
+The configuration option `Abort use current MC' determines whether
+waypoint arrival heights in abort mode uses the MacCready value prior
+to aborting the task, or if the safety MacCready value is used.  If
+this is false, the MC value used to calculate arrival heights in abort
+mode is the safety MacCready value.  Default is to use the safety
+MacCready value.  When switching to abort mode, the MacCready setting
+is set to the safety value if it is lower than the current setting.
+
+When no land-point is reachable, then the nearest 10 landable points
+are shown. 
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/abort-low.png}
+\end{center}
+
+When at least one land-point is reachable, then only the reachable land-points are shown.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/abort-high.png}
+\end{center}
+
+If the task waypoint that was active, prior to aborting the task, is
+landable and estimated to be reachable, then it remains the active
+waypoint in abort mode.  Otherwise, the most reachable landable
+waypoint is selected as the active waypoint, even if there are no
+reachable waypoints.
+
+The active waypoint, and in fact the list of nearby landable points in
+the task, is changed dynamically when in abort mode, so that at any
+time the pilot is presented with several landing options and any of
+these may be selected as the active waypoint.
+
+If conditions improve, the task can be resumed (by selecting the same
+menu button that aborted the task).  The active waypoint, prior to
+aborting the task, is then restored along with all the other task
+details.
+
+When the task is aborted, the flight mode changes to final glide mode.
+
+\section{Logger}
+
+A flight logger conforming to the IGC file specification can be used
+to record flights.  
+
+Several flight loggers are accessible via XCSoar:
+\begin{itemize}
+\item A software-based logger.  All versions of XCSoar have this
+  functionality.  The logger conforms to the IGC standard but is not
+  certified.
+\item The PRO version of Altair has an internal IGC certified logger device.
+  XCSoar communicates with the logger as if it were an external serial device.
+
+\item XCSoar can also send declarations to some external logger devices. 
+For this to work, the device must be specified in the ``Devices'' 
+section of the configuration \config{comdevices} settings.
+\end{itemize}
+
+The logger can be turned on and off automatically or manually.  
+To turn the logger on (or off) manually, select from the menu
+\begin{quote}
+\bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Logger Start}
+\end{quote}
+
+When the internal software logger is active, a small diamond in the
+lower right corner of the map area flashes once per second.
+
+By default, XCSoar is set up to automatically start and stop the
+internal software flight logger when it detects the aircraft is flying
+and when it has landed, respectively.  Only when the logger is
+manually started does it ask if the flight is to be declared; when
+automatically starting it automatically declares the current task.
+
+If a task has been declared, then subsequent attempts at modifying the
+task result in a warning message asking to confirm whether the action
+is to be taken and invalidate the declaration.  This is intended to
+make it harder to accidentally modify the task resulting in a failed
+declared task.
+
+The XCSoar software logger, when started, checks for 500kB of free
+space on the file storage.  If there is insufficient space, it will
+automatically delete IGC files, oldest first, in order to free up
+500kB.  It does not ask the user for confirmation before performing
+this operation.
+
+The internal software logger buffers data so that when it starts
+(automatically or manually) up to 60 seconds of data prior to starting
+is recorded.  This means that the software logger now adequately
+captures the full takeoff.
+
+\section{Logger replay dialog}
+
+Flight logs in the IGC format generated by XCSoar or other loggers can
+be replayed.  The logger replay dialog can be accessed via the
+menu:
+\begin{quote}
+\bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Replay}
+\end{quote}
+
+\begin{center}
+\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/loggerreplay.png}
+\end{center}
+
+During replay, the word ``REPLAY'' appears at the lower left corner of
+the screen.  During replay, the program behaves as if real GPS updates
+are being received by a GPS.  The logger replay dialog does not need
+to be open during replay.
+
+To start a log, first select the file to load, and then select the
+\button{Start} button.  The replay can be performed in accelerated time
+by changing the time scale from 1x to a higher number, and paused by
+setting the time scale to zero.  High time scales can result in degraded
+performance of the wind estimation and other statistics/analysis routines.
+
+Stop the log using the \button{Stop}.
+Once a log is started, further presses of the \button{Start} has the
+effect of restarting the replay.
+
+Note: it is recommended to reset the device before flight, after a log
+file has been replayed, in order to ensure that XCSoar's internal
+statistics are properly reset.
+
+When operating XCSoar in FLY mode, the replay is disabled (stopped) if
+the real GPS receiver detects that the aircraft is moving.
+
+The logger replay works best with high sampling rate log files;
+6 second interval or less works fine.
+
+\section{Analysis dialog}\label{sec:analysis-dialog-climb}
+
+The analysis dialog is very useful in planning and conducting
+cross-country flights.  This is accessed via the menu under
+\begin{quote}
+\bmenu{Info}\blink\bmenu{Analysis}
+\end{quote}
+
+Several pages are of interest:
+\begin{description}
+\item[Barograph]  Shows a graph of the history of the altitude of the glider.
+  Statistics are used to estimate the thermal working band (average
+  base and ceiling of climbs) and to estimate how the ceiling is
+  changing over time.  The base and ceiling lines are drawn on the
+  barograph.
+
+  The `Settings' button opens the flight settings dialog
+  (e.g.\ to adjust the QNH)
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-barograph.png}
+\end{center}
+
+\item[Climb history]
+  Shows a bar chart of the average climb rate achieved during each
+  climb.  Statistics are used to estimate the overall average climb
+  rate, and to estimate how this average is changing over time.  The
+  current MacCready setting is drawn on the bar chart as a thick red
+  dashed line, and the climb rate trend is drawn on the chart as a
+  blue line.
+
+  The ``Task Calc'' button opens the task calculator,
+  (e.g.\ to adjust the MC value)
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-climb.png}
+\end{center}
+
+\item[Task]
+  This page shows an overview of the entire task.  The main task line
+  is drawn in thick dashed green, AAT areas are shaded.  For AAT
+  tasks, the path from the aircraft around the remaining targets within AAT
+  areas is shown in red.  The aircraft track is shown as a thin green line.
+
+  The `Task Calc' button opens the task calculator,
+  (e.g.\ to adjust the AAT task range or MC value)
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-task.png}
+\end{center}
+
+\end{description}
+
+\section{Sunlight and time}
+
+A sun ephemeris computes the time of sunset, which is displayed in the
+Aircraft Status dialog (see Section~\ref{sec:status}).  Note that
+local terrain and atmospheric conditions may result in poor visibility
+before the displayed sunset time.
+
+For PDA systems, the clock is adjusted for daylight saving time according
+to the settings in the operating system.  For Altair, the clock UTC offset
+must be adjusted manually for daylight saving time in the configuration
+settings dialog.
+
+If the expected arrival time at the final waypoint in the task is past
+sunset, a status message warning is issued.

@@ -1,0 +1,252 @@
+\chapter{Avionics and Airframe}\label{cha:avionics-airframe}
+
+This chapter discusses XCSoar as a subsystem of the aircraft.  It
+covers the integration of XCSoar with external devices, including GPS,
+switches and sensors, and aircraft radio transceivers and other
+devices.  Integration with FLARM is covered in
+Chapter~\ref{cha:airspace}, and integration with variometers is
+covered in Chapter~\ref{cha:atmosph}.
+
+\section{Battery life}
+
+Most modern PDAs are designed for short sporadic use and so do not
+have a very good battery capacity when considering the duration of
+cross-country soaring flights.  It is recommended to power the PDA
+externally, via a transformer connected to the glider battery.  This
+installation should be performed by appropriately qualified personnel,
+and should contain a fuse and a manual isolation switch.
+
+The greatest cause of power drain by the PDA is the LCD back-light,
+however domestic PDAs are not particularly bright so they may need to
+have the back-light up full. However, for EFIS systems such as Altair,
+it is recommended to use the lowest back-light settings that are
+comfortable.
+
+When operating PDAs under internal battery, XCSoar detects a low
+battery condition and allows the operating system to shut down and
+preserve the memory.  In addition, it can be set up to blank the
+screen after a period of inactivity, so that it can reduce the power
+consumption.  When the screen is blanked, pressing one of the hardware
+buttons on the PDA activates the screen again.  When a status message
+is issued by the system, the screen becomes activated.
+
+Another way to help conserve battery power is to reduce the
+computational load by turning off certain features.  Drawing terrain
+and long snail trails contribute significantly to the CPU load.
+
+For Altair/Vega systems, the external supply voltage is displayed on
+the system status dialog (see Section~\ref{sec:system-status-dialog}).
+
+\section{GPS connection}
+
+XCSoar requires a 3D GPS fix for its navigation functions.
+
+\subsection*{GPS status}
+
+GPS status icons and text may appear on the bottom edge of the
+map display to indicate:
+\begin{description}
+\item[Waiting for GPS fix]  The GPS may have a 2D fix, better reception
+  or additional time to search for satellites is required.
+  The aircraft symbol disappears while there is no 3D fix.
+\item[GPS not connected]  No communication with the GPS is received.
+  This indicates an error in the Comm port settings or the GPS device may
+  be disconnected or switched off.
+\end{description}
+
+When the GPS is not connected for more than one minute, XCSoar
+automatically attempts to restart communication with the device and
+will then resume waiting.  This method has shown to provide the most
+reliable way of recovering from communication errors.
+
+XCSoar can handle up to two GPS sources and it uses them to provide
+redundancy.  This means that if the primary GPS source drops out,
+XCSoar will use the GPS data from the second source.  If both sources
+have valid fixes, the second source is ignored.  For this reason, it
+is recommended to have the GPS source with the best antenna or
+reliability as the primary device.
+
+\subsection*{GPS altitude}
+
+Some older GPS units (and some new ones) do not output altitude
+relative to mean sea level, rather they output elevation with respect
+to the WGS84 ellipsoid.  XCSoar detects when this occurs and applies
+the ellipsoid to geoid offset according to an internal tabulated data
+at two degree spacing.  This is not required for FLARM units or Altair
+Pro, which correctly output MSL altitude.
+
+\section{Switch inputs}
+
+XCSoar supports monitoring of switches and sensors connected to the
+host computer, for the purpose of providing situational awareness
+feedback, alerts, or as general-purpose user-interface input devices.
+Several mechanisms are available for interfacing to switches and
+sensors:
+\begin{description}
+\item[Serial device]  Certain intelligent variometers such as
+ triadis engineering's Vega have multiple airframe switches
+ and pass this information on to the PDA or EFIS as special
+ NMEA sentences.
+\item[1-Wire device]  triadis engineering's Altair glide computer
+ and Vega variometer provide a 1-Wire peripheral bus to which
+ various digital and analog sensors can be attached.
+\item[Bluetooth device]  Many Pocket PC devices support wireless
+ connection to a Bluetooth Game-Pad device that has several buttons.
+ This is more suited to user-interface input devices than airframe
+ monitoring.
+\end{description}
+
+A custom `input events' file determines how switch and sensor
+inputs are processed.
+
+A standard set of airframe inputs are defined as:
+\begin{itemize}
+\item Airbrake
+\item Flap position (positive/landing flap, neutral, negative/reflex)
+\item Landing gear
+\end{itemize}
+
+This set is expected to expand to include engine and fuel monitoring.
+
+Other logical inputs from Vega include computed quantities relating to
+specific airframe alerts and aircraft operating envelope warnings, for
+example ``airbrake extended and gear retracted''.  
+
+Refer to the Vega documentation and {\em XCSoar Advanced Configuration
+Manual} for more details on switch inputs and how they may be used.
+
+\section{Switch dialog}
+
+A dialog displaying switch states for the Vega variometer
+is available from the menu:
+\begin{quote}
+\bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Vario}\blink\bmenu{Airframe
+Switches}
+\end{quote}
+
+This dialog is updated in real-time, allowing the pilot
+to check the correct functioning of switches during daily
+inspection tests or before takeoff. 
+
+\begin{center}
+\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/dialog-switches.png}
+\end{center}
+
+\section{Aircraft radio transceiver}
+
+Monitoring and setting the active and standby frequencies of aircraft
+transceivers with serial connections are currently in development.
+The goal is to provide the functionality whereby the radio frequency
+can be set with one button press (requiring confirmation by the pilot)
+when the aircraft flies into controlled airspace or enters an
+airfield's advisory/mandatory broadcast traffic zone.
+
+\section{Mobile telephones}
+
+The capability for XCSoar to send and receive position updates and
+other data (such as weather/task updates) in flight via SMS messages
+on the GSM mobile phone network has been demonstrated in July 2005.
+This used a standard consumer mobile telephone over a Bluetooth
+connection; the same code can be used for similar communications via a
+serial connection to a GSM or CDMA modem.  This code requires further
+development before being integrated into public releases of the
+software.
+
+Applications of this technology include:
+\begin{itemize}
+\item Tracking of gliders from the home base for spectator displays
+\item Automatic broadcast of last known position when outlanding
+  to home base and retrieve crews
+\item Team flying, and to assist lead and follow training
+\end{itemize}
+
+\section{Supported variometers}\label{sec:supported-varios}
+
+Currently XCSoar supports inputs from triadis Engineering Vega intelligent
+variometer, TR-DVS digital voice system, the Cambridge Aero Instruments 302 (and
+302A) DDV and GPSNAV, Borgelt B50/B500, LX Navigation LX1600 variometers,
+Zander variometers, ILEC SN10 variometer, Tasman Instruments variometer,
+Flymaster F1, Flytec, amd Leonardo. 
+
+Note that the level of support for each device varies, and not all manufacturers
+release their protocols to allow the XCSoar developers to provide full support. 
+Barometric altitude is also read from certain GPS units and loggers, including
+the Volkslogger and Posigraph.
+
+\section{Other avionics devices}
+
+Support for other instruments, such as a magnetic compass or Attitude
+Heading Reference System (artificial horizon), may be implemented in
+the future.  Make a request to the XCSoar developers if you are
+interested in support for other instruments.
+
+Support for the Honeywell Digital Compass HMR3000 is under
+development.
+
+\section{Slave mode}
+
+A device type in the configuration settings, ``NMEA Out'' is defined
+for use in joining two Altair or PDA systems in a master-slave mode.
+In the master, the second com device can be set to NMEA Out, and all
+data received in the first com device (as well as outgoing data) will
+be sent to the slave.  
+
+As an example where two Altairs are being connected together, in the
+slave, the first com device can then be set to ``Vega'' or ``Altair
+Pro'' and this system receives all data as if it came from the
+Master's GPS and connected instruments (Vega, FLARM etc).
+
+\section{Interface to external loggers}
+
+XCSoar has support for declaration and handling special sentences used
+by commercial flight loggers.  Devices that are supported but do not
+include declaration support include Posigraph and Colibri.  These will
+be improved in the future.
+
+\subsection*{Volkslogger}
+
+Uploading of the current task to the Volkslogger is supported.  The
+device type in the system settings must be set to `Volkslogger'.
+
+When the \button{Declare} button is pressed in the task editor, the
+current task, and pilot name, aircraft type and competition ID will be
+uploaded to the Volkslogger.
+
+Note that uploading the task erases the Volkslogger's database of
+waypoints!
+
+The support for synchronising the waypoint database between XCSoar and
+the Volkslogger will be improved in the future. 
+
+\subsection*{EW logger}
+
+Uploading of the current task to EW loggers is supported.  The
+device type in the system settings must be set to `EW'.
+
+When the \button{Declare} button is pressed in the task editor, the
+current task, will be uploaded to the Volkslogger.
+
+\subsection*{CAI 302}
+
+Uploading of the current task to the CAI 302 is supported.  The device
+type in the system settings must be set to `CAI 302.
+
+When the \button{Declare} button is pressed in the task editor, the
+current task, and pilot name, aircraft type and competition ID will be
+uploaded to the CAI 302.
+
+
+\section{System status dialog}\label{sec:system-status-dialog}
+
+The system status dialog (see Section~\ref{sec:dialog-windows}) is
+used primarily as a systems check, to see how the host computer and
+connected devices are performing.
+
+This is accessed via the menu under 
+\begin{quote}
+\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Status}
+\end{quote}
+and then selecting the page `System'.
+
+All dynamic values (e.g.\ battery voltage, number of satellites in
+view) are updated continuously.
