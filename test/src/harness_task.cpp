@@ -23,6 +23,7 @@
 #include "harness_task.hpp"
 #include "test_debug.hpp"
 
+#include "Dialogs/dlgTaskHelpers.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
@@ -32,6 +33,7 @@
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 #include "harness_waypoints.hpp"
+#include <string.h>
 
 class ObservationZoneVisitorPrint: public ObservationZoneConstVisitor
 {
@@ -95,6 +97,13 @@ public:
 private:
   ObservationZoneVisitorPrint ozv;
 };
+
+void test_note(const char* text)
+{
+  if (verbose) {
+    printf("%s",text);
+  }
+}
 
 void task_report(TaskManager& task_manager, const char* text)
 {
@@ -258,6 +267,76 @@ bool test_task_manip(TaskManager& task_manager,
   return true;
 }
 
+bool test_task_type_manip(TaskManager& task_manager,
+                     const Waypoints &waypoints, unsigned n_points)
+{
+  if (!test_task_random_RT_AAT_FAI(task_manager, waypoints, n_points))
+    return false;
+
+  AbstractTaskFactory &fact = task_manager.get_factory();
+
+  switch (rand() %3) {
+  case 0:
+    task_manager.set_factory(TaskBehaviour::FACTORY_AAT);
+    test_note("# switched FACTORY TYPE to AAT\n");
+    break;
+  case 1:
+    task_manager.set_factory(TaskBehaviour::FACTORY_RT);
+    test_note("# switched FACTORY TYPE to RT\n");
+    break;
+  case 2:
+    task_manager.set_factory(TaskBehaviour::FACTORY_FAI_GENERAL);
+    test_note("# switched FACTORY TYPE to FAI GENERAL\n");
+    break;
+  default:
+    test_note("# unknown task type\n");
+  }
+
+  fact.mutate_tps_to_task_type();
+
+  test_note("# checking mutated start..\n");
+  if (!fact.validStartType(
+      fact.getType(*task_manager.get_ordered_task().get_tp(0))))
+    return false;
+
+
+  char tmp[255];
+  sprintf(tmp, "# checking mutated intermediates.  task_size():%d..\n",
+      task_manager.task_size());
+  test_note(tmp);
+
+  for (unsigned i = 1; i < (task_manager.task_size() - 1); i++) {
+    sprintf(tmp, "# checking mutated intermediate point %d..\n", i);
+    test_note(tmp);
+    if (!fact.validIntermediateType(
+        fact.getType(*task_manager.get_ordered_task().get_tp(i))))
+      return false;
+  }
+
+  test_note("# checking mutated finish..\n");
+  if (!fact.validFinishType(
+      fact.getType(*task_manager.get_ordered_task().get_tp(
+          task_manager.task_size() - 1))))
+    return false;
+
+  test_note("# validating task..\n");
+  if (!fact.validate()) {
+    return false;
+  }
+  test_note("# checking task..\n");
+  if (!task_manager.check_ordered_task()) {
+    return false;
+  }
+
+  if (task_manager.get_ordered_task().get_factory_type() ==
+                                      TaskBehaviour::FACTORY_FAI_GENERAL) {
+    test_note("# checking OZs for FAI task..\n");
+    if (!fact.validateFAIOZs())
+      return false;
+  }
+
+  return true;
+}
 
 bool test_task_mixed(TaskManager& task_manager,
                      const Waypoints &waypoints)
@@ -715,6 +794,103 @@ bool test_task_random(TaskManager& task_manager,
   return true;
 }
 
+bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
+                      const Waypoints &waypoints,
+                      const unsigned _num_points)
+{
+  const Waypoint *wp;
+
+  OrderedTaskPoint *tp;
+  AbstractTaskFactory &fact = task_manager.get_factory();
+  char tmp[255];
+  char tskType[20];
+  tskType[0] = '\0';
+
+
+  switch (rand() %3) {
+  case 0:
+    task_manager.set_factory(TaskBehaviour::FACTORY_AAT);
+    strcpy(tskType,"AAT");
+    test_note("# creating random AAT task\n");
+    break;
+  case 1:
+    task_manager.set_factory(TaskBehaviour::FACTORY_RT);
+    strcpy(tskType,"RT");
+    test_note("# creating random RT task\n");
+    break;
+  case 2:
+    task_manager.set_factory(TaskBehaviour::FACTORY_FAI_GENERAL);
+    strcpy(tskType,"FAI");
+    test_note("# creating random FAI GENERAL\n");
+    break;
+  }
+
+  //max points includes start & finish
+  const unsigned num_points_total = (
+    max(task_manager.get_ordered_task_behaviour().min_points,
+        (_num_points % task_manager.get_ordered_task_behaviour().max_points) + 1));
+  const unsigned num_int_points = num_points_total - 2;
+
+  test_note("# adding start\n");
+  wp = random_waypoint(waypoints);
+  if (wp) {
+    AbstractTaskFactory::LegalPointType_t s =
+      fact.getStartTypes()[(rand() % fact.getStartTypes().size())];
+
+    tp = fact.createStart(s,*wp);
+    if (!fact.append(*tp,false)) {
+      return false;
+    }
+    delete tp;
+  }
+
+  for (unsigned i=0; i<num_int_points; i++) {
+    test_note("# adding intermediate\n");
+    wp = random_waypoint(waypoints);
+    if (wp) {
+      AbstractTaskFactory::LegalPointType_t s =
+        fact.getIntermediateTypes()[(rand() % fact.getIntermediateTypes().size())];
+
+      tp = fact.createIntermediate(s,*wp);
+      if (!fact.append(*tp,false)) {
+        return false;
+      }
+      delete tp;
+    }
+  }
+
+  test_note("# adding finish\n");
+  wp = random_waypoint(waypoints);
+  if (wp) {
+    AbstractTaskFactory::LegalPointType_t s =
+      fact.getFinishTypes()[(rand() % fact.getFinishTypes().size())];
+
+    tp = fact.createFinish(s,*wp);
+    if (!fact.append(*tp,false)) {
+      return false;
+    }
+    delete tp;
+  }
+
+  test_note("# validating task..\n");
+  if (!fact.validate()) {
+    return false;
+  }
+  if (task_manager.get_ordered_task().get_factory_type()
+      == TaskBehaviour::FACTORY_FAI_GENERAL)
+  {
+    test_note("# checking OZs for FAI General..\n");
+    if (!fact.validateFAIOZs())
+      return false;
+  }
+
+  task_manager.resume();
+  sprintf(tmp, "# SUCCESS CREATING %s task! task_size():%d..\n",
+      tskType,
+      task_manager.task_size());
+  test_note(tmp);
+  return true;
+}
 
 bool test_task(TaskManager& task_manager,
                const Waypoints &waypoints,

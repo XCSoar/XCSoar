@@ -32,8 +32,8 @@ int main(int argc, char** argv)
   }
 
   #define NUM_RANDOM 50
-
-  plan_tests(NUM_TASKS+2+NUM_RANDOM+8);
+  #define NUM_TYPE_MANIPS 50
+  plan_tests(NUM_TASKS+2+NUM_RANDOM+8+NUM_TYPE_MANIPS);
 
   TaskEventsPrint default_events(verbose);
   GlidePolar glide_polar(fixed_two);
@@ -46,6 +46,14 @@ int main(int argc, char** argv)
                              waypoints);
     task_manager.set_glide_polar(glide_polar);
     test_task_bad(task_manager,waypoints);
+  }
+
+  {
+    for (unsigned i = 0; i < NUM_TYPE_MANIPS; i++) {
+      TaskManager task_manager(default_events,
+                               waypoints);
+      ok(test_task_type_manip(task_manager,waypoints, i+2), "construction: task type manip", 0);
+    }
   }
 
   for (int i=0; i<NUM_TASKS+2; i++) {
