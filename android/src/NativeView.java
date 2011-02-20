@@ -306,6 +306,23 @@ class NativeView extends SurfaceView
                     nextPowerOfTwo(bmp.getHeight()),
                     0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, null);
     GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, bmp);
+    if (gl.glGetError() != gl.GL_INVALID_OPERATION)
+      /* success */
+      return;
+
+    /* the two attempts above fail on the Samsung Galaxy Tab; the
+       following has been verified to work */
+
+    Bitmap tmp = bmp.copy(Bitmap.Config.RGB_565, false);
+    if (tmp == null)
+      return;
+
+    gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGB,
+                    nextPowerOfTwo(bmp.getWidth()),
+                    nextPowerOfTwo(bmp.getHeight()),
+                    0, GL10.GL_RGB, GL10.GL_UNSIGNED_BYTE, null);
+    GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, tmp);
+    tmp.recycle();
   }
 
   /**
