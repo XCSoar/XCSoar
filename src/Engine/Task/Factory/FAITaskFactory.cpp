@@ -42,7 +42,7 @@ FAITaskFactory::validate()
 
   if (!is_unique()) {
     addValidationError(TURNPOINTS_NOT_UNIQUE);
-    valid = false;
+    // warning only
   }
   return valid;
 }
