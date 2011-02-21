@@ -205,9 +205,6 @@ GlideComputer::CalculateTeammateBearingRange()
   if (!DetermineTeamCodeRefLocation())
     return;
 
-  // Get bearing and distance to the reference waypoint
-  Angle ownBearing = TeamCodeRefLocation.bearing(Basic().Location);
-
   // If (TeamCode exists and is valid)
   if (SettingsComputer().TeammateCodeValid) {
     // Calculate bearing and distance to teammate
