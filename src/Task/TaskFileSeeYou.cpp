@@ -256,6 +256,9 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     else if (turnpoint_infos[i].Line)
       oz = new LineSectorZone(wp->Location, turnpoint_infos[i].Radius1);
 
+    else if (fabs(turnpoint_infos[i].Angle1.value_degrees() - fixed(180)) < fixed(1) )
+      oz = new CylinderZone(wp->Location, turnpoint_infos[i].Radius1);
+
     else if (turnpoint_infos[i].Style == SeeYouTurnpointInformation::Fixed)
       oz = new SectorZone(wp->Location, turnpoint_infos[i].Radius1,
                           turnpoint_infos[i].Angle1, turnpoint_infos[i].Angle2);
