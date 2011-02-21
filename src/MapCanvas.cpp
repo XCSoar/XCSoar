@@ -86,12 +86,12 @@ MapCanvas::visible(const Canvas &canvas,
     bounds.top < (int)canvas.get_height() && bounds.bottom >= 0;
 }
 
-void
-MapCanvas::draw(const SearchPointVector &points)
+bool
+MapCanvas::prepare_polygon(const SearchPointVector &points)
 {
   unsigned num_points = points.size();
   if (num_points < 3)
-    return;
+    return false;
 
   /* copy all SearchPointVector elements to geo_points */
   geo_points.grow_discard(num_points * 3);
@@ -99,18 +99,37 @@ MapCanvas::draw(const SearchPointVector &points)
     geo_points[i] = points[i].get_location();
 
   /* clip them */
-  num_points = clip.clip_polygon(geo_points.begin(),
+  num_raster_points = clip.clip_polygon(geo_points.begin(),
                                  geo_points.begin(), num_points);
-  if (num_points < 3)
+  if (num_raster_points < 3)
     /* it's completely outside the screen */
-    return;
+    return false;
 
   /* project all GeoPoints to screen coordinates */
-  RasterPoint pts[num_points];
-  for (unsigned i = 0; i < num_points; ++i)
-    pts[i] = projection.GeoToScreen(geo_points[i]);
+  raster_points.grow_discard(num_raster_points);
+  for (unsigned i = 0; i < num_raster_points; ++i)
+    raster_points[i] = projection.GeoToScreen(geo_points[i]);
 
+  return true;
+}
+
+void
+MapCanvas::prepare_circle(const GeoPoint &center, fixed radius)
+{
+  raster_points.grow_discard(1);
+  num_raster_points = 1;
+  raster_points[0] = projection.GeoToScreen(center);
+  screen_radius = projection.GeoToScreenDistance(radius);
+}
+
+void
+MapCanvas::draw_prepared()
+{
   /* draw it all */
-  if (visible(pts, num_points))
-    canvas.polygon(pts, num_points);
+  if (num_raster_points == 1) {
+    // OpenGL TODO: cache and mabye clip the circle coordinates
+    canvas.circle(raster_points[0].x, raster_points[0].y, screen_radius);
+  } else if (visible(raster_points.begin(), num_raster_points)) {
+    canvas.polygon(raster_points.begin(), num_raster_points);
+  }
 }

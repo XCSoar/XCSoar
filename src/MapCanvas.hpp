@@ -48,6 +48,14 @@ public:
    */
   AllocatedArray<GeoPoint> geo_points;
 
+  /**
+   * Cache a shape and draw it multiple times with prepare_*() and
+   * draw_prepared().
+   */
+  AllocatedArray<RasterPoint> raster_points;
+  unsigned num_raster_points;
+  unsigned screen_radius;
+
 public:
   MapCanvas(Canvas &_canvas, const Projection &_projection,
             const GeoClip &_clip)
@@ -88,7 +96,14 @@ public:
     return visible(canvas, screen, num);
   }
 
-  void draw(const SearchPointVector &points);
+  void draw(const SearchPointVector &points) {
+    if (prepare_polygon(points))
+      draw_prepared();
+  }
+
+  bool prepare_polygon(const SearchPointVector &points);
+  void prepare_circle(const GeoPoint &center, fixed radius);
+  void draw_prepared();
 };
 
 #endif
