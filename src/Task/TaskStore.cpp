@@ -65,7 +65,7 @@ public:
       if (count > 1) {
         // .. append " - Task #[n]" suffix to the task name
         TCHAR suffix[255];
-        _stprintf(suffix, _T(" - %s #%d"), _("Task"), i + 1);
+        _stprintf(suffix, _T(" - %s #%2d"), _("Task"), i + 1);
         _tcscat(name, suffix);
       }
 
