@@ -50,6 +50,11 @@ endif
 ifeq ($(TARGET),WM5)
   CONFIG_WM5 := y
   HAVE_CE := y
+endif
+
+ifeq ($(TARGET),WM5X)
+  CONFIG_WM5 := y
+  HAVE_CE := y
   XSCALE := y
 endif
 
@@ -163,7 +168,7 @@ endif
 ifeq ($(CONFIG_WM5),y)
   CE_MAJOR := 5
   CE_MINOR := 00
-  PCPU := ARMV5
+  PCPU := ARMV4
 endif
 
 # armv4i
