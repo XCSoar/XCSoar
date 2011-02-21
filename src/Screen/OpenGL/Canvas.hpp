@@ -33,6 +33,7 @@ Copyright_License {
 #include "Screen/OpenGL/Color.hpp"
 #include "Screen/OpenGL/Point.hpp"
 #include "Screen/OpenGL/Triangulate.hpp"
+#include "Util/AllocatedArray.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -69,6 +70,11 @@ protected:
   enum {
     OPAQUE, TRANSPARENT
   } background_mode;
+
+  /**
+   * static buffer to store vertices of wide lines.
+   */
+  static AllocatedArray<RasterPoint> vertex_buffer;
 
 public:
   Canvas()

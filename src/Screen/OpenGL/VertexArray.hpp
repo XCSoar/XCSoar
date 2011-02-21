@@ -57,4 +57,17 @@ struct GLCircleVertices : public GLVertexArray<32> {
   GLCircleVertices(GLvalue center_x, GLvalue center_y, GLvalue radius);
 };
 
+struct GLDonutVertices : public GLVertexArray<66> {
+  enum {
+    CIRCLE_SIZE = (SIZE - 2) / 2,
+  };
+
+  GLDonutVertices(GLvalue center_x, GLvalue center_y,
+                  GLvalue radius_inner, GLvalue radius_outer);
+
+  void bind_circle() const {
+    glVertexPointer(2, GL_VALUE, 4, v);
+  }
+};
+
 #endif

@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Point.hpp"
 
 #include <algorithm>
+#include <math.h>
 #include <assert.h>
 
 /**
@@ -92,6 +93,18 @@ left_bend(const RasterPoint &a, const RasterPoint &b, const RasterPoint &c)
 {
   return ((b.x-a.x) * (int)(c.y-b.y) -
           (b.y-a.y) * (int)(c.x-b.x)) > 0;
+}
+
+/**
+ * Scale vector v to a given length.
+ */
+static inline void
+normalize(RasterPoint *v, float length)
+{
+  // TODO: optimize!
+  float scale = length / sqrt(v->x*(float)v->x + v->y*(float)v->y);
+  v->x = floor(v->x*scale + 0.5f);
+  v->y = floor(v->y*scale + 0.5f);
 }
 
 /**
@@ -210,4 +223,149 @@ polygon_to_triangle(const RasterPoint *points, unsigned num_points,
 
   delete[] next;
   return triangle_idx_count;
+}
+
+/**
+ * Create a triangle strip representing a thick line.
+ *
+ * @param points line coordinates
+ * @param num_points numer of line points
+ * @param strip triangle vertices, size: 2*(num_points + (int)(loop || tcap))
+ * @param line_width width of line in pixels
+ * @param loop true if line is a closed loop
+ * @param tcap add a triangle at the beginning and end of the line
+ *
+ * @return Returns the number of triangle coordinates or 0 for failure
+ */
+unsigned
+line_to_triangle(const RasterPoint *points, unsigned num_points,
+                 RasterPoint *strip, unsigned line_width,
+                 bool loop, bool tcap)
+{
+  if (num_points < 2)
+    return 0;
+  if (loop && num_points < 3)
+    loop = false;
+
+  RasterPoint *s = strip;
+  const RasterPoint *a, *b, *c;
+  const RasterPoint * const points_end = points + num_points;
+
+  // initialize a, b and vertices
+  if (loop) {
+    b = points + num_points - 1;
+    a = b-1;
+    while (a >= points && a->x == b->x && a->y == b->y)
+      a--;  // skip identical points
+    if (a < points)
+      return 0;  // no two different points found
+    c = points;
+  } else  {
+    a = points;
+    b = a+1;
+    while (b != points_end && a->x == b->x && a->y == b->y)
+      b++;  // skip identical points
+    if (b == points_end)
+      return 0;  // no two different points found
+    c = b+1;
+  }
+  while (c != points_end && b->x == c->x && b->y == c->y)
+    c++;  // skip identical points
+
+  if (!loop) {
+    // add flat or triangle cap at beginning of line
+    RasterPoint p;
+    if (tcap) {
+      p.x = a->x - b->x;
+      p.y = a->y - b->y;
+      normalize(&p, line_width * 0.5f);
+
+      s->x = a->x + p.x;
+      s->y = a->y + p.y;
+      s++;
+    }
+    p.x = a->y - b->y;
+    p.y = b->x - a->x;
+    normalize(&p, line_width * 0.5f);
+
+    s->x = a->x - p.x;
+    s->y = a->y - p.y;
+    s++;
+    s->x = a->x + p.x;
+    s->y = a->y + p.y;
+    s++;
+  }
+
+  // add points by calculating the angle bisector of ab and bc
+  if (num_points >= 3) {
+    while (c != points_end) {
+      if (!triangle_empty(*a, *b, *c)) {  // skip zero or 180 degree bends
+        // TODO: support 180 degree bends!
+
+        RasterPoint g, h;
+        g.x = b->x - a->x;
+        g.y = b->y - a->y;
+        h.x = c->x - b->x;
+        h.y = c->y - b->y;
+        normalize(&g, 1000.);
+        normalize(&h, 1000.);
+        int bisector_x = -g.y - h.y;
+        int bisector_y = g.x + h.x;
+
+        float projected_length = (-g.y*bisector_x + g.x*bisector_y) * (1.f/1000.f);
+
+        // HACK: reduce artefacts for acute angles
+        if (projected_length < 400.f)
+          projected_length = 400.f;
+
+        bisector_x = floor(bisector_x/projected_length*line_width*0.5f + 0.5f);
+        bisector_y = floor(bisector_y/projected_length*line_width*0.5f + 0.5f);
+
+        s->x = b->x - bisector_x;
+        s->y = b->y - bisector_y;
+        s++;
+        s->x = b->x + bisector_x;
+        s->y = b->y + bisector_y;
+        s++;
+      }
+
+      a=b;  b=c;  c++;
+      while (c != points_end && b->x == c->x && b->y == c->y)
+        c++;  // skip identical points
+    }
+  }
+
+  if (loop) {
+    // repeat first two points at the end
+    s->x = strip[0].x;
+    s->y = strip[0].y;
+    s++;
+    s->x = strip[1].x;
+    s->y = strip[1].y;
+    s++;
+  } else {
+    // add flat or triangle cap at end of line
+    RasterPoint p;
+    p.x = a->y - b->y;
+    p.y = b->x - a->x;
+    normalize(&p, line_width * 0.5f);
+
+    s->x = b->x - p.x;
+    s->y = b->y - p.y;
+    s++;
+    s->x = b->x + p.x;
+    s->y = b->y + p.y;
+    s++;
+    if (tcap) {
+      p.x = b->x - a->x;
+      p.y = b->y - a->y;
+      normalize(&p, line_width * 0.5f);
+
+      s->x = b->x + p.x;
+      s->y = b->y + p.y;
+      s++;
+    }
+  }
+
+  return s - strip;
 }
