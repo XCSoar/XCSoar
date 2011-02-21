@@ -227,10 +227,8 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   if (task == NULL)
     return NULL;
 
-  task->clear();
   task->set_factory(task_info.WpDis ?
                     TaskBehaviour::FACTORY_RT : TaskBehaviour::FACTORY_AAT);
-  task->reset();
 
   if (!task_info.WpDis) {
     OrderedTaskBehaviour beh = task->get_ordered_task_behaviour();
