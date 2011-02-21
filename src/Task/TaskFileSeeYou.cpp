@@ -43,6 +43,7 @@ struct SeeYouTaskInformation {
 };
 
 struct SeeYouTurnpointInformation {
+  bool Valid; // CUP file contained info for this OZ
   enum style_t {
     Fixed,
     Symmetrical,
@@ -58,8 +59,8 @@ struct SeeYouTurnpointInformation {
   Angle Angle1, Angle2, Angle12;
 
   SeeYouTurnpointInformation():
-    Style(Symmetrical), Line(false), Reduce(false), Radius1(fixed(500)),
-    Angle1(Angle::degrees(fixed_90)) {}
+    Valid(false), Style(Symmetrical), Line(false), Reduce(false),
+    Radius1(fixed(500)), Angle1(Angle::degrees(fixed_90)) {}
 };
 
 static fixed
@@ -192,6 +193,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
       if (params[0] + 8 == end || oz_index >= 30)
         continue;
 
+      turnpoint_infos[oz_index].Valid = true;
       // Iterate through available OZ options
       for (unsigned i = 1; i < n_params; i++) {
         if (_tcsncmp(params[i], _T("Style"), 5) == 0) {
@@ -248,8 +250,12 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
       wp = file_wp;
 
     ObservationZonePoint* oz;
-    if (turnpoint_infos[i].Line)
+    if (!turnpoint_infos[i].Valid)
+      oz = NULL;
+
+    else if (turnpoint_infos[i].Line)
       oz = new LineSectorZone(wp->Location, turnpoint_infos[i].Radius1);
+
     else if (turnpoint_infos[i].Style == SeeYouTurnpointInformation::Fixed)
       oz = new SectorZone(wp->Location, turnpoint_infos[i].Radius1,
                           turnpoint_infos[i].Angle1, turnpoint_infos[i].Angle2);
@@ -258,13 +264,16 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 
     OrderedTaskPoint *pt = NULL;
     if (i == 1)
-      pt = fact.createStart(oz, *wp);
+      pt = (oz ? fact.createStart(oz, *wp) : fact.createStart(*wp));
+
     else if (i == n_waypoints - 2)
-      pt = fact.createFinish(oz, *wp);
+      pt = (oz ? fact.createFinish(oz, *wp) : fact.createFinish(*wp));
+
     else if (task->get_factory_type() == TaskBehaviour::FACTORY_RT)
-      pt = fact.createAST(oz, *wp);
+      pt = (oz ? fact.createAST(oz, *wp) : fact.createIntermediate(*wp));
+
     else
-      pt = fact.createAAT(oz, *wp);
+      pt = (oz ? fact.createAAT(oz, *wp) : fact.createIntermediate(*wp));
 
     if (pt != NULL)
       fact.append(*pt, false);
