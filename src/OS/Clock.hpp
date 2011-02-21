@@ -29,7 +29,6 @@ Copyright_License {
 /**
  * Returns the value of a monotonic clock in milliseconds.
  */
-gcc_const
 unsigned
 MonotonicClockMS();
 
