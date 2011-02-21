@@ -262,8 +262,12 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     else if (turnpoint_infos[i].Style == SeeYouTurnpointInformation::Fixed)
       oz = new SectorZone(wp->Location, turnpoint_infos[i].Radius1,
                           turnpoint_infos[i].Angle1, turnpoint_infos[i].Angle2);
-    else
+    // symmetric sector
+    else if (task->get_factory_type() == TaskBehaviour::FACTORY_RT)
       oz = new FAISectorZone(wp->Location, (i < n_waypoints - 1));
+
+    else // XCSoar does not support symmetric sector for AAT
+      oz = new CylinderZone(wp->Location, turnpoint_infos[i].Radius1);
 
     OrderedTaskPoint *pt = NULL;
     if (i == 1)
