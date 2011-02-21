@@ -61,6 +61,25 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
 }
 
 void
+Canvas::raised_edge(RECT &rc)
+{
+  Pen bright(1, Color(240, 240, 240));
+  select(bright);
+  two_lines(rc.left, rc.bottom - 2, rc.left, rc.top,
+            rc.right - 2, rc.top);
+
+  Pen dark(1, Color(128, 128, 128));
+  select(dark);
+  two_lines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
+            rc.right - 1, rc.top + 1);
+
+  ++rc.left;
+  ++rc.top;
+  --rc.right;
+  --rc.bottom;
+}
+
+void
 Canvas::polyline(const RasterPoint *points, unsigned num_points)
 {
   glVertexPointer(2, GL_VALUE, 0, points);
@@ -93,6 +112,37 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
     pen.set();
     glDrawArrays(GL_LINE_LOOP, 0, num_points);
   }
+}
+
+void
+Canvas::line(int ax, int ay, int bx, int by)
+{
+  pen.set();
+
+  const GLvalue v[] = { ax, ay, bx, by };
+  glVertexPointer(2, GL_VALUE, 0, v);
+  glDrawArrays(GL_LINE_STRIP, 0, 2);
+}
+
+/**
+ * Draw a line from a to b. A point will be drawn at position b, if the
+ * pen-size > 1 to hide gaps between consecutive lines.
+ */
+void
+Canvas::line_piece(const RasterPoint a, const RasterPoint b)
+{
+  pen.set();
+
+  const GLvalue v[] = { a.x, a.y, b.x, b.y };
+  glVertexPointer(2, GL_VALUE, 0, v);
+  glDrawArrays(GL_LINE_STRIP, 0, 2);
+
+#ifndef ANDROID
+  if (pen.get_width() > 1) {
+    glPointSize(pen.get_width());
+    glDrawArrays(GL_POINTS, 1, 1);
+  }
+#endif
 }
 
 void
