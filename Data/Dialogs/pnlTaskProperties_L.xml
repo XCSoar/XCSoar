@@ -37,9 +37,6 @@
     <DataField DataType="enum" OnDataAccess="pnlTaskProperties::OnTaskTypeData"/>
   </Edit>  
   
-  <Button Name="cmdOptionalStarts" Caption="Details" X="34" Width="180" Height="25" 
-  	OnClick="pnlTaskProperties::OnOptionalStartsClicked"/>
-
   </Panel>
 
 </Panel>
