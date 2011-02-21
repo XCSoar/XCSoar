@@ -229,14 +229,14 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 
   task->set_factory(task_info.WpDis ?
                     TaskBehaviour::FACTORY_RT : TaskBehaviour::FACTORY_AAT);
+  AbstractTaskFactory& fact = task->get_factory();
 
-  if (!task_info.WpDis) {
+  if (task->get_factory_type() == TaskBehaviour::FACTORY_AAT) {
     OrderedTaskBehaviour beh = task->get_ordered_task_behaviour();
     beh.aat_min_time = task_info.TaskTime;
     task->set_ordered_task_behaviour(beh);
   }
 
-  AbstractTaskFactory& fact = task->get_factory();
   // load task waypoints.  Skip takeoff and landing point
   for (unsigned i = 1; i < n_waypoints - 1; i++) {
     const Waypoint* file_wp = file_waypoints.lookup_name(wps[i + 1]);
@@ -261,7 +261,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
       pt = fact.createStart(oz, *wp);
     else if (i == n_waypoints - 2)
       pt = fact.createFinish(oz, *wp);
-    else if (task_info.WpDis == true)
+    else if (task->get_factory_type() == TaskBehaviour::FACTORY_RT)
       pt = fact.createAST(oz, *wp);
     else
       pt = fact.createAAT(oz, *wp);
