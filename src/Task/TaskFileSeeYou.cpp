@@ -188,7 +188,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 
       // Read OZ index
       TCHAR* end;
-      int oz_index = _tcstol(params[0] + 8, &end, 10);
+      const int oz_index = _tcstol(params[0] + 8, &end, 10) + 1; //skip takeoff
       if (params[0] + 8 == end || oz_index >= 30)
         continue;
 
@@ -239,7 +239,8 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   }
 
   AbstractTaskFactory& fact = task->get_factory();
-  for (unsigned i = 0; i < n_waypoints; i++) {
+  // load task waypoints.  Skip takeoff and landing point
+  for (unsigned i = 1; i < n_waypoints - 1; i++) {
     const Waypoint* file_wp = file_waypoints.lookup_name(wps[i + 1]);
     if (file_wp == NULL)
       return NULL;
@@ -258,9 +259,9 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
       oz = new FAISectorZone(wp->Location, (i < n_waypoints - 1));
 
     OrderedTaskPoint *pt = NULL;
-    if (i == 0)
+    if (i == 1)
       pt = fact.createStart(oz, *wp);
-    else if (i == n_waypoints - 1)
+    else if (i == n_waypoints - 2)
       pt = fact.createFinish(oz, *wp);
     else if (task_info.WpDis == true)
       pt = fact.createAST(oz, *wp);
