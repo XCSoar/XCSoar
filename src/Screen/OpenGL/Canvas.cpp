@@ -61,28 +61,28 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
 }
 
 void
-Canvas::polyline(const RasterPoint *lppt, unsigned cPoints)
+Canvas::polyline(const RasterPoint *points, unsigned num_points)
 {
-  glVertexPointer(2, GL_VALUE, 0, lppt);
+  glVertexPointer(2, GL_VALUE, 0, points);
 
   pen.set();
-  glDrawArrays(GL_LINE_STRIP, 0, cPoints);
+  glDrawArrays(GL_LINE_STRIP, 0, num_points);
 }
 
 void
-Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
+Canvas::polygon(const RasterPoint *points, unsigned num_points)
 {
   if (brush.is_hollow() && !pen.defined())
     return;
 
-  glVertexPointer(2, GL_VALUE, 0, lppt);
+  glVertexPointer(2, GL_VALUE, 0, points);
 
-  if (!brush.is_hollow() && cPoints >= 3) {
+  if (!brush.is_hollow() && num_points >= 3) {
     brush.set();
 
     static AllocatedArray<GLushort> triangle_buffer;
-    triangle_buffer.grow_discard(3 * (cPoints - 2));
-    int idx_count = polygon_to_triangle(lppt, cPoints,
+    triangle_buffer.grow_discard(3 * (num_points - 2));
+    int idx_count = polygon_to_triangle(points, num_points,
                                         triangle_buffer.begin());
     if (idx_count > 0)
       glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT,
@@ -91,7 +91,7 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
 
   if (pen_over_brush()) {
     pen.set();
-    glDrawArrays(GL_LINE_LOOP, 0, cPoints);
+    glDrawArrays(GL_LINE_LOOP, 0, num_points);
   }
 }
 
