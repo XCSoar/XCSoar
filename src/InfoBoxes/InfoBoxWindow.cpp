@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 #include "InputEvents.hpp"
 #include "Compatibility/string.h"
 #include "Screen/UnitSymbol.hpp"
@@ -67,6 +68,7 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent, int X, int Y, int Width, 
   _tcscpy(mTitle, _T(""));
   _tcscpy(mValue, _T(""));
   _tcscpy(mComment, _T(""));
+  mID = -1;
 }
 
 void
@@ -77,6 +79,12 @@ InfoBoxWindow::SetValueUnit(Units_t Value)
 
   mValueUnit = Value;
   invalidate(recValue);
+}
+
+void
+InfoBoxWindow::SetID(const int id)
+{
+  mID = id;
 }
 
 void
@@ -421,6 +429,25 @@ InfoBoxWindow::HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode)
 }
 
 bool
+InfoBoxWindow::HandleQuickAccess(const TCHAR *Value)
+{
+  if (content != NULL && content->HandleQuickAccess(Value)) {
+    UpdateContent();
+    return true;
+  }
+  return false;
+}
+
+InfoBoxContent::InfoBoxDlgContent*
+InfoBoxWindow::GetInfoBoxDlgContent()
+{
+  if (content != NULL)
+    return content->GetInfoBoxDlgContent();
+
+  return false;
+}
+
+bool
 InfoBoxWindow::on_resize(unsigned width, unsigned height)
 {
   PaintWindow::on_resize(width, height);
@@ -495,8 +522,8 @@ InfoBoxWindow::on_mouse_up(int x, int y)
 {
   if (!has_focus()) return PaintWindow::on_mouse_up(x, y);
 
-  if (click_clock.check(2000)) {
-    InputEvents::eventDoInfoKey(_T("setup"));
+  if (click_clock.check(1000)) {
+    InfoBoxManager::ShowDlgInfoBox(mID);
     return true;
   } else
     return PaintWindow::on_mouse_up(x, y);

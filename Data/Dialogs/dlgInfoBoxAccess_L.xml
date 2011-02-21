@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+<Form Name="frmInfoBoxAccess" Width="100" Height="240" X="104" Y="0" Caption="InfoBox Access" Popup="1">
+  <TabBar Name="TabBar" X="0" Y="0" Width="40" Height="230"> 
+  </TabBar>
+</Form>

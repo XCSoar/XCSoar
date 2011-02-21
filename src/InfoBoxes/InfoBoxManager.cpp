@@ -27,6 +27,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Protection.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
+#include "InfoBoxes/Content/Base.hpp"
 #include "InputEvents.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Layout.hpp"
@@ -346,6 +347,7 @@ InfoBoxManager::DisplayInfoBox()
     if (needupdate) {
       InfoBoxes[i]->SetTitle(gettext(InfoBoxFactory::GetCaption(DisplayType[i])));
       InfoBoxes[i]->SetContentProvider(InfoBoxFactory::Create(DisplayType[i]));
+      InfoBoxes[i]->SetID(i);
     }
 
     InfoBoxes[i]->UpdateContent();
@@ -375,6 +377,34 @@ InfoBoxManager::ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode)
   // emulate update to trigger calculations
   TriggerGPSUpdate();
 
+  ResetDisplayTimeOut();
+}
+
+InfoBoxContent::InfoBoxDlgContent*
+InfoBoxManager::GetInfoBoxDlgContent(const int id)
+{
+  if (id < 0)
+    return false;
+
+  if (InfoBoxes[id] != NULL)
+    return InfoBoxes[id]->GetInfoBoxDlgContent();
+
+  return false;
+}
+
+void
+InfoBoxManager::ProcessQuickAccess(const int id, const TCHAR *Value)
+{
+  if (id < 0)
+    return;
+
+  // do approciate action
+  if (InfoBoxes[id] != NULL)
+    InfoBoxes[id]->HandleQuickAccess(Value);
+
+  SetDirty();
+  // emulate update to trigger calculations
+  TriggerGPSUpdate();
   ResetDisplayTimeOut();
 }
 
@@ -575,9 +605,21 @@ OnInfoBoxHelp(unsigned item)
 }
 
 void
-InfoBoxManager::SetupFocused()
+InfoBoxManager::ShowDlgInfoBox(const int id)
 {
-  int i = GetFocused();
+  if (GetInfoBoxDlgContent(id))
+    dlgInfoBoxAccessShowModal(XCSoarInterface::main_window, id);
+  else SetupFocused(id);
+}
+
+void
+InfoBoxManager::SetupFocused(const int id)
+{
+  int i;
+
+  if (id < 0) i = GetFocused();
+  else i = id;
+
   if (i < 0)
     return;
 

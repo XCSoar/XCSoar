@@ -26,11 +26,37 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 
+#include "Form/TabBar.hpp"
+#include "Form/Button.hpp"
+
 class InfoBoxContentMacCready : public InfoBoxContent
 {
 public:
+  virtual InfoBoxDlgContent* GetInfoBoxDlgContent();
+
+  static Window* PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
+  static void PnlEditOnCloseClicked(WndButton &Sender);
+  static bool PnlEditOnTabPreShow(TabBarControl::EventType EventType);
+
+  static void PnlEditOnPlusBig(WndButton &Sender);
+  static void PnlEditOnPlusSmall(WndButton &Sender);
+  static void PnlEditOnMinusSmall(WndButton &Sender);
+  static void PnlEditOnMinusBig(WndButton &Sender);
+
+  static CallBackTableEntry CallBackTable[];
+  static InfoBoxPanelContent pnlEdit;
+  static InfoBoxPanelContent pnlInfo;
+  static InfoBoxPanelContent pnlSetup;
+  static InfoBoxDlgContent dlgContent;
+
+  static Window* PnlInfoLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
+
+  static Window* PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
+  static void PnlSetupOnSetup(WndButton &Sender);
+
   virtual void Update(InfoBoxWindow &infobox);
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
+  virtual bool HandleQuickAccess(const TCHAR *misc);
 };
 
 class InfoBoxContentVario : public InfoBoxContent

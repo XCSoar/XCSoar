@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_CONTENT_HPP
 #define XCSOAR_INFOBOX_CONTENT_HPP
 
+#include "Dialogs/XML.hpp"
+#include "Dialogs/dlgTools.h"
+#include "Form/TabBar.hpp"
+
 #include <tchar.h>
 #include "Language.hpp"
 #include "fixed.hpp"
@@ -45,6 +49,35 @@ public:
 
   virtual void Update(InfoBoxWindow &infobox) = 0;
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) {
+    return false;
+  }
+
+  /**
+   * This is a generic handler for the InfoBox. It takes the argument and
+   * processes it like the HandleKey handler, but is just more generic.
+   * @param misc
+   * @return True on success, Fales otherwise
+   */
+  virtual bool HandleQuickAccess(const TCHAR *misc) {
+    return false;
+  }
+
+  struct InfoBoxPanelContent {
+    Window* (*load)(SingleWindow&, TabBarControl*, WndForm*, int); // ptr to Load function
+    bool (*preHide)(void); // ptr to PreHideFunction
+    bool (*preShow)(TabBarControl::EventType); // ptr to PreShowFunction
+    void (*postShow)(void); // ptr to PostShowFunction
+    void (*reClick)(void); // ptr to ReClickFunction
+  };
+
+  struct InfoBoxDlgContent {
+    InfoBoxPanelContent pnlEdit;
+    InfoBoxPanelContent pnlInfo;
+    InfoBoxPanelContent pnlSetup;
+    CallBackTableEntry* CallBackTable;
+  };
+
+  virtual InfoBoxDlgContent* GetInfoBoxDlgContent() {
     return false;
   }
 

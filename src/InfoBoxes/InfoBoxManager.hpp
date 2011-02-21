@@ -50,7 +50,21 @@ namespace InfoBoxManager
   void Event_Select(int i);
   void Event_Change(int i);
 
+  /**
+   * The following two handle direct access to InfoBox values.
+   * ProcessKey takes an keycode and expects the target InfoBox
+   * to be focussed.
+   * @param keycode
+   */
   void ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode);
+  /**
+   * ProcessQuickAccess takes the id of the InfoBox where to pass the
+   * value Value. It doesn't expect the target InfoBox to be focussed.
+   * @param id
+   * @param Value
+   */
+  void ProcessQuickAccess(const int id, const TCHAR *Value);
+
   bool Click(InfoBoxWindow &ib);
 
   void ProcessTimer();
@@ -61,6 +75,8 @@ namespace InfoBoxManager
   void Paint();
   void Show();
   void Hide();
+
+  InfoBoxContent::InfoBoxDlgContent* GetInfoBoxDlgContent(const int id);
 
   enum mode GetCurrentMode();
 
@@ -75,10 +91,12 @@ namespace InfoBoxManager
 
   bool HasFocus();
 
+  void ShowDlgInfoBox(const int id);
+
   /**
    * Opens a configuration dialog for the focused InfoBox.
    */
-  void SetupFocused();
+  void SetupFocused(const int id = -1);
 };
 
 #endif

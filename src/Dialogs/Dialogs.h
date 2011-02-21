@@ -98,6 +98,9 @@ void dlgStatusShowModal(int page);
 
 void dlgSwitchesShowModal();
 
+void
+dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id);
+
 class OrderedTask;
 
 void

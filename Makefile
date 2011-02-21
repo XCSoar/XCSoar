@@ -128,6 +128,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgFlarmTraffic.cpp \
 	$(SRC)/Dialogs/dlgFlarmTrafficDetails.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
+	$(SRC)/Dialogs/dlgInfoBoxAccess.cpp \
 	$(SRC)/Dialogs/dlgLoggerReplay.cpp \
 	$(SRC)/Dialogs/dlgSimulatorPrompt.cpp \
 	$(SRC)/Dialogs/dlgStartup.cpp \
