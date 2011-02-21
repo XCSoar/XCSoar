@@ -28,6 +28,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Altitude.hpp"
 #include "InfoBoxes/Content/Direction.hpp"
 #include "InfoBoxes/Content/Glide.hpp"
+#include "InfoBoxes/Content/MacCready.hpp"
 #include "InfoBoxes/Content/Other.hpp"
 #include "InfoBoxes/Content/Speed.hpp"
 #include "InfoBoxes/Content/Task.hpp"
