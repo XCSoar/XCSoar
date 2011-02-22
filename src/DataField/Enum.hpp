@@ -47,6 +47,10 @@ public:
       return string;
     }
 
+    const TCHAR *GetDisplayString() const {
+      return string;
+    }
+
     void SetString(const TCHAR *_string);
     void Set(unsigned _id, const TCHAR *_string);
   };
@@ -82,6 +86,7 @@ public:
 
   gcc_pure
   virtual const TCHAR *GetAsString() const;
+  virtual const TCHAR *GetAsDisplayString() const;
 
   #if defined(__BORLANDC__)
   #pragma warn -hid

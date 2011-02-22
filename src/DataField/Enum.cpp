@@ -110,6 +110,18 @@ DataFieldEnum::GetAsString() const
   }
 }
 
+const TCHAR *
+DataFieldEnum::GetAsDisplayString() const
+{
+  if (entries.empty()) {
+    assert(value == 0);
+    return NULL;
+  } else {
+    assert(value < entries.size());
+    return entries[value].GetDisplayString();
+  }
+}
+
 void
 DataFieldEnum::Set(int Value)
 {
@@ -172,7 +184,7 @@ DataFieldEnumCompare(const void *elem1, const void *elem2)
   const DataFieldEnum::Entry *entry1 = (const DataFieldEnum::Entry *)elem1;
   const DataFieldEnum::Entry *entry2 = (const DataFieldEnum::Entry *)elem2;
 
-  return _tcscmp(entry1->GetString(), entry2->GetString());
+  return _tcscmp(entry1->GetDisplayString(), entry2->GetDisplayString());
 }
 
 void
@@ -189,7 +201,8 @@ DataFieldEnum::CreateComboList() const
   ComboList *combo_list = new ComboList();
 
   for (unsigned i = 0; i < entries.size(); i++)
-    combo_list->Append(entries[i].GetId(), entries[i].GetString());
+    combo_list->Append(entries[i].GetId(), entries[i].GetString(),
+                       entries[i].GetDisplayString());
 
   combo_list->ComboPopupItemSavedIndex = value;
   return combo_list;
