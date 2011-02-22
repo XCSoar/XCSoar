@@ -592,7 +592,25 @@ private:
      *
      * @return Iterator to last (latest) item
      */
-    TraceDelta::iterator last() const {
+    gcc_pure
+    TraceDelta::iterator last() {
+      assert(list.size());
+      if (!list.empty()) {
+        TraceDelta::iterator i = list.end();
+        --i;
+        return i;
+      }
+
+      return list.end();
+    }
+
+    /**
+     * Find latest item in list.  Returns end() on failure.
+     *
+     * @return Iterator to last (latest) item
+     */
+    gcc_pure
+    TraceDelta::const_iterator last() const {
       assert(list.size());
       if (!list.empty()) {
         TraceDelta::const_iterator i = list.end();
@@ -608,7 +626,25 @@ private:
      *
      * @return Iterator to first (earliest) item
      */
-    TraceDelta::iterator first() const {
+    gcc_pure
+    TraceDelta::iterator first() {
+      if (size() > 1) {
+        TraceDelta::iterator i = last();
+        --i;
+        return i;
+      } else {
+        assert(1);
+        return list.end();
+      }
+    }
+
+    /**
+     * Find first item in list (by time).  Returns end() on failure
+     *
+     * @return Iterator to first (earliest) item
+     */
+    gcc_pure
+    TraceDelta::const_iterator first() const {
       if (size() > 1) {
         TraceDelta::const_iterator i = last();
         --i;
