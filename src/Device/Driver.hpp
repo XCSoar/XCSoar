@@ -31,6 +31,7 @@ Copyright_License {
 struct NMEA_INFO;
 class Port;
 class AtmosphericPressure;
+class OperationEnvironment;
 
 /**
  * This is the interface for a device driver.
@@ -39,7 +40,7 @@ class Device {
 public:
   virtual ~Device();
 
-  virtual bool Open() = 0;
+  virtual bool Open(OperationEnvironment &env) = 0;
 
   virtual void LinkTimeout() = 0;
 
@@ -59,7 +60,8 @@ public:
   virtual bool PutActiveFrequency(double frequency) = 0;
   virtual bool PutStandbyFrequency(double frequency) = 0;
 
-  virtual bool Declare(const struct Declaration *declaration) = 0;
+  virtual bool Declare(const struct Declaration *declaration,
+                       OperationEnvironment &env) = 0;
 
   virtual void OnSysTicker() = 0;
 };
@@ -70,7 +72,7 @@ public:
  */
 class AbstractDevice : public Device {
 public:
-  virtual bool Open();
+  virtual bool Open(OperationEnvironment &env);
 
   virtual void LinkTimeout();
 
@@ -90,7 +92,8 @@ public:
   virtual bool PutActiveFrequency(double frequency);
   virtual bool PutStandbyFrequency(double frequency);
 
-  virtual bool Declare(const struct Declaration *declaration);
+  virtual bool Declare(const struct Declaration *declaration,
+                       OperationEnvironment &env);
 
   virtual void OnSysTicker();
 };

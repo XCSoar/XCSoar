@@ -35,7 +35,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Math/FastMath.h"
-#include "OS/Sleep.h"
+#include "Operation.hpp"
 
 #include <tchar.h>
 #include <stdlib.h>
@@ -136,13 +136,14 @@ public:
      BallastUpdateTimeout(0) {}
 
 public:
-  virtual bool Open();
+  virtual bool Open(OperationEnvironment &env);
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
   virtual bool PutMacCready(double MacCready);
   virtual bool PutBugs(double bugs);
   virtual bool PutBallast(double ballast);
-  virtual bool Declare(const Declaration *declaration);
+  virtual bool Declare(const Declaration *declaration,
+                       OperationEnvironment &env);
 
 private:
   bool cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro);
@@ -242,7 +243,7 @@ CAI302Device::PutBallast(double Ballast)
 }
 
 bool
-CAI302Device::Open()
+CAI302Device::Open(OperationEnvironment &env)
 {
   port->Write('\x03');
   port->Write("LOG 0\r");
@@ -331,7 +332,8 @@ ReadBlock(Port &port, void *dest, size_t max_length, size_t length)
 }
 
 static bool
-DeclareInner(Port *port, const Declaration *decl)
+DeclareInner(Port *port, const Declaration *decl,
+             OperationEnvironment &env)
 {
   const int ASYNCPAUSE302 = 700;
 
@@ -353,7 +355,7 @@ DeclareInner(Port *port, const Declaration *decl)
   port->ExpectString("$$$");
 
   port->Write("O\r");
-  Sleep(ASYNCPAUSE302);
+  env.Sleep(ASYNCPAUSE302);
 
   cai302_OdataNoArgs_t cai302_OdataNoArgs;
   if (!ReadBlock(*port, &cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs),
@@ -362,7 +364,7 @@ DeclareInner(Port *port, const Declaration *decl)
     return false;
 
   port->Write("O 0\r"); // 0=active pilot
-  Sleep(ASYNCPAUSE302);
+  env.Sleep(ASYNCPAUSE302);
 
   cai302_OdataPilot_t cai302_OdataPilot;
   if (!ReadBlock(*port, &cai302_OdataPilot, sizeof(cai302_OdataPilot),
@@ -380,7 +382,7 @@ DeclareInner(Port *port, const Declaration *decl)
   swap(cai302_OdataPilot.MarginHeight);
 
   port->Write("G\r");
-  Sleep(ASYNCPAUSE302);
+  env.Sleep(ASYNCPAUSE302);
 
   cai302_GdataNoArgs_t cai302_GdataNoArgs;
   if (!ReadBlock(*port, &cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs),
@@ -389,7 +391,7 @@ DeclareInner(Port *port, const Declaration *decl)
     return false;
 
   port->Write("G 0\r");
-  Sleep(ASYNCPAUSE302);
+  env.Sleep(ASYNCPAUSE302);
 
   cai302_Gdata_t cai302_Gdata;
   if (!ReadBlock(*port, &cai302_Gdata, sizeof(cai302_Gdata),
@@ -470,11 +472,11 @@ DeclareInner(Port *port, const Declaration *decl)
 }
 
 bool
-CAI302Device::Declare(const Declaration *decl)
+CAI302Device::Declare(const Declaration *decl, OperationEnvironment &env)
 {
   port->StopRxThread();
 
-  bool success = DeclareInner(port, decl);
+  bool success = DeclareInner(port, decl, env);
 
   port->SetRxTimeout(500);
 

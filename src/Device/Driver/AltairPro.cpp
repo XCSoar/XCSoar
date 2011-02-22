@@ -62,7 +62,8 @@ public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
   virtual bool PutQNH(const AtmosphericPressure& pres);
-  virtual bool Declare(const struct Declaration *declaration);
+  virtual bool Declare(const struct Declaration *declaration,
+                       OperationEnvironment &env);
   virtual void OnSysTicker();
 };
 
@@ -109,7 +110,8 @@ AltairProDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
 
 
 bool
-AltairProDevice::Declare(const struct Declaration *decl)
+AltairProDevice::Declare(const struct Declaration *decl,
+                         OperationEnvironment &env)
 {
   port->StopRxThread();
   port->SetRxTimeout(500); // set RX timeout to 500[ms]

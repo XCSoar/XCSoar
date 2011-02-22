@@ -156,7 +156,7 @@ class VLAPI : protected VLA_XFR, public VLAPI_DATA {
   VLA_ERROR stillconnect();
  public:
 
-  VLAPI();
+  VLAPI(OperationEnvironment &env);
   ~VLAPI();
 
   VLINFO vlinfo;

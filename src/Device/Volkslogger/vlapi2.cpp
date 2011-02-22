@@ -22,14 +22,13 @@
 #include "Util.hpp"
 #include "CRC16.hpp"
 #include "PeriodClock.hpp"
+#include "Operation.hpp"
 
 #include <memory.h>
 #include <string.h>
 #include <stdlib.h>
 
 extern int noninteractive;
-
-#include "OS/Sleep.h"
 
 // sizes of VL memory regions
 const int VLAPI_DBB_MEMSIZE = 16384;
@@ -82,13 +81,13 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
   byte 		cmdarray[8];
   word          crc16 = 0;
   // alte Zeichen verwerfen
-  Sleep(100);
+  env.Sleep(100);
   serial_empty_io_buffers();
 
   // Kommandointerpreter im VL zurücksetzen
   for (unsigned i =0 ; i < 6; i++) {
     serial_out(CAN);
-    Sleep(d);
+    env.Sleep(d);
   }
   // Kommandopaket aufbauen
 
@@ -102,16 +101,16 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
   cmdarray[7] = 0;
   // Kommando verschicken ( ENQ,Daten,CRC )
   serial_out(ENQ);
-  Sleep(d);
+  env.Sleep(d);
   for (unsigned i = 0; i < sizeof(cmdarray); i++) {
     crc16 = UpdateCRC(cmdarray[i],crc16);
     serial_out(cmdarray[i]);
-    Sleep(d);
+    env.Sleep(d);
   }
   serial_out(crc16/256);
-  Sleep(d);
+  env.Sleep(d);
   serial_out(crc16%256);
-  Sleep(d);
+  env.Sleep(d);
   // Kommandobestätigung abwarten, aber höchstens timeout Sekunden
   const unsigned timeout_ms = 4000;
   PeriodClock clock;
@@ -185,7 +184,7 @@ int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
   memset(puffer, 0xff, maxlen);
 
   p = puffer;
-  Sleep(300);
+  env.Sleep(300);
   while(!ende) {
     // Zeichen anfordern und darauf warten
     serial_out(ACK);
@@ -198,7 +197,7 @@ int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
 
     // dabei ist Benutzerabbruch jederzeit möglich
     if (test_user_break() && clear_user_break() == 1) {
-      Sleep(10);
+      env.Sleep(10);
       serial_out(CAN);
       serial_out(CAN);
       serial_out(CAN);
@@ -272,7 +271,7 @@ int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
     }
 
   }
-  Sleep(100);
+  env.Sleep(100);
 
   if (crc16) {
     show(VLS_TXT_CRC);
@@ -312,7 +311,7 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   if (c != ACK)
     return VLA_ERR_MISC;
   // Schreiben der Datenbank
-  Sleep(100);
+  env.Sleep(100);
   crc16 = 0;
   step = dbbsize / 400;
 
@@ -325,13 +324,13 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
 
     /* throttle sending a bit, or the Volkslogger's receive buffer
        will overrun */
-    Sleep(td);
+    env.Sleep(td);
   }
 
   serial_out(crc16/256);
-  Sleep(td);
+  env.Sleep(td);
   serial_out(crc16%256);
-  Sleep(td);
+  env.Sleep(td);
   // auf Bestätigung warten
   while (serial_in(&c) != VLA_ERR_NOERR) {
     if (test_user_break() && clear_user_break() == 1) {
@@ -356,7 +355,7 @@ VLA_ERROR VLA_XFR::dbbget(lpb dbbbuffer, int32 dbbsize) {
   serial_set_baudrate(databaud);
   groesse = readlog(dbbbuffer,dbbsize);
   serial_set_baudrate(commandbaud);
-  Sleep(300);
+  env.Sleep(300);
   if (groesse <= 0)
     return VLA_ERR_NODATA;
   // und Tschüß
@@ -385,7 +384,7 @@ VLA_ERROR VLA_XFR::all_logsget(lpb dbbbuffer, int32 dbbsize) {
   serial_set_baudrate(databaud);
   groesse = readlog(dbbbuffer,dbbsize);
   serial_set_baudrate(commandbaud);
-  Sleep(300);
+  env.Sleep(300);
   if (groesse <= 0)
     return VLA_ERR_NODATA;
   // und Tschüß
@@ -421,7 +420,7 @@ long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secm
 
   // read signature
   serial_set_baudrate(commandbaud); // CMD-Baudrate einstellen
-  Sleep(300);
+  env.Sleep(300);
   cret = sendcommand(cmd_SIG, 0,0);
 
   if (cret)
@@ -450,7 +449,7 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   // eventuell noch laufende Aktion im Logger abbrechen
   for (i=0; i<10; i++) {
     serial_out(CAN);
-    Sleep(1);
+    env.Sleep(1);
   }
   c = 0;
 
@@ -460,7 +459,7 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
 
   do { // Solange R's aussenden, bis ein L zurückkommt
     serial_out('R');
-    Sleep(30);
+    env.Sleep(30);
 
     if (clock.check(timeout_ms)) {
       if (!quietmode)
@@ -493,12 +492,12 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   if (!quietmode)
     show(VLS_TXT_CONN_OK);
 
-  Sleep(300);
+  env.Sleep(300);
   serial_empty_io_buffers();
   return VLA_ERR_NOERR;
 }
 
-VLA_XFR::VLA_XFR() {
+VLA_XFR::VLA_XFR(OperationEnvironment &_env):env(_env) {
   set_databaud(9600L);
 }
 
@@ -520,7 +519,7 @@ VLA_ERROR VLA_XFR::readinfo(lpb buffer, int32 buffersize) {
 // ------------------------------------------------------------
 
 // constructor
-VLAPI::VLAPI() {
+VLAPI::VLAPI(OperationEnvironment &_env):VLA_XFR(_env) {
 
 
   vlpresent = 0;

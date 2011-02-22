@@ -31,6 +31,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "StringUtil.hpp"
 #include "Logger/NMEALogger.hpp"
+#include "Operation.hpp"
 
 #ifdef ANDROID
 #include "Android/InternalGPS.hpp"
@@ -75,7 +76,8 @@ DeviceDescriptor::Open()
   parser.Reset();
 
   device = Driver->CreateOnPort(Com);
-  if (!device->Open()) {
+  OperationEnvironment env;
+  if (!device->Open(env)) {
     delete device;
     device = NULL;
     return false;
@@ -225,7 +227,8 @@ DeviceDescriptor::LinkTimeout()
 bool
 DeviceDescriptor::Declare(const struct Declaration *declaration)
 {
-  bool result = (device != NULL) && (device->Declare(declaration));
+  OperationEnvironment env;
+  bool result = device != NULL && device->Declare(declaration, env);
 
   if (parser.isFlarm)
     result = FlarmDeclare(Com, declaration) || result;

@@ -42,6 +42,7 @@
 #include "InputEvents.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "Operation.hpp"
 #include "FaultInjectionPort.hpp"
 #include "TestUtil.hpp"
 
@@ -351,7 +352,8 @@ TestDeclare(const struct DeviceRegister &driver)
 
   for (unsigned i = 0; i < 1024; ++i) {
     inject_port_fault = i;
-    bool success = device->Declare(&declaration);
+    OperationEnvironment env;
+    bool success = device->Declare(&declaration, env);
     if (success || !port.running || port.timeout != 0 ||
         port.baud_rate != FaultInjectionPort::DEFAULT_BAUD_RATE)
       break;
