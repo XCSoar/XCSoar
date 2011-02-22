@@ -32,6 +32,7 @@ Copyright_License {
 #include "Language.hpp"
 
 #include <cstdio>
+#include <algorithm>
 
 class TaskFileVisitor: public File::Visitor
 {
@@ -94,7 +95,7 @@ TaskStore::scan()
   VisitDataFiles(_T("*.tsk"), tfv);
   VisitDataFiles(_T("*.cup"), tfv);
 
-  sort(m_store.begin(), m_store.end());
+  std::sort(m_store.begin(), m_store.end());
 }
 
 size_t
