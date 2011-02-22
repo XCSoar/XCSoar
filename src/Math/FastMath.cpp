@@ -145,7 +145,8 @@ gcc_pure
 static inline
 uint64_t normalise_hint2(const uint32_t x)
 {
-  static const uint64_t hint2_limit = sqrt((uint64_t)3<<(NORMALISE_BITS*4-1));
+  static const uint64_t hint2_limit =
+    sqrt((double)((uint64_t)3 << (NORMALISE_BITS * 4 - 1)));
 
   // taking x as maximum individual value of a size 2 vector,
   // this provides an initial estimate of 1/sqrt(vector)
@@ -168,7 +169,8 @@ uint64_t normalise_hint3(const uint32_t x)
 {
   // as normalise_hint2 but for size 3 vector
 
-  static const uint64_t hint3_limit = (sqrt((uint64_t)3<<(NORMALISE_BITS*4))/sqrt(3));
+  static const uint64_t hint3_limit =
+    sqrt((double)((uint64_t)3 << (NORMALISE_BITS * 4))) / sqrt(3.0);
 
   uint64_t y = 1<< (NORMALISE_BITS*2-log2_fast(x));
   while (x*y > hint3_limit)
