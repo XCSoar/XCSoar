@@ -108,10 +108,12 @@ final class BluetoothHelper {
     if (devices == null)
       return null;
 
-    String[] addresses = new String[devices.size()];
+    String[] addresses = new String[devices.size() * 2];
     int n = 0;
-    for (BluetoothDevice device: devices)
+    for (BluetoothDevice device: devices) {
       addresses[n++] = device.getAddress();
+      addresses[n++] = device.getName();
+    }
 
     return addresses;
   }
