@@ -2749,11 +2749,7 @@ void dlgConfigurationShowModal(void)
 
   if (changed) {
     Profile::Save();
-
-    if (!requirerestart)
-      MessageBoxX(_("Changes to configuration saved."),
-                  _T(""), MB_OK);
-    else
+    if (requirerestart)
       MessageBoxX(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
                   _T(""), MB_OK);
   }

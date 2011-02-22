@@ -196,12 +196,8 @@ void dlgConfigInfoboxesShowModal(InfoBoxManager::mode _mode)
   for (unsigned j = 0; j < InfoBoxLayout::numInfoWindows; ++j)
     GetInfoBoxSelector(j);
 
-  if (changed) {
+  if (changed)
     Profile::Save();
-
-    MessageBoxX(_("Changes to configuration saved."),
-                _T(""), MB_OK);
-  }
 
   delete wf;
 }
