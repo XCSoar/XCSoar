@@ -71,7 +71,7 @@ public:
   void SetFilename(const char *name);
 
 protected:
-  virtual bool update_time(const fixed mintime);
+  virtual bool update_time();
   virtual void reset_time();
   virtual void on_reset() {}
   virtual void on_stop() {}
@@ -82,10 +82,10 @@ protected:
 };
 
 bool
-IgcReplayGlue::update_time(const fixed mintime)
+IgcReplayGlue::update_time()
 {
   t_simulation += fixed_one;
-  t_simulation = std::max(mintime, t_simulation);
+  t_simulation = std::max(GetMinTime(), t_simulation);
   return true;
 }
 
