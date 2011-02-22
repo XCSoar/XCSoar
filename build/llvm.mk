@@ -3,7 +3,7 @@ CLANG ?= n
 ifeq ($(CLANG),y)
 CXX = clang++
 CC = clang
-DEPFLAGS =
+DEPFLAGS = -MD -MF $(DEPFILE) -MT $@
 
 HOSTCC = $(CC)
 HOSTCXX = $(CXX)
