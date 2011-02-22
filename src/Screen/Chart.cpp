@@ -378,7 +378,7 @@ void
 Chart::DrawXGrid(const fixed tic_step, const fixed zero, Pen &pen,
                  const fixed unit_step, bool draw_units)
 {
-  if (!tic_step)
+  if (!positive(tic_step))
     return;
 
   RasterPoint line[2];
@@ -454,7 +454,7 @@ void
 Chart::DrawYGrid(const fixed tic_step, const fixed zero, Pen &pen,
                  const fixed unit_step, bool draw_units)
 {
-  if (!tic_step)
+  if (!positive(tic_step))
     return;
 
   RasterPoint line[2];
