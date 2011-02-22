@@ -580,7 +580,7 @@ private:
       if (empty())
         return 0;
 
-      TraceDelta::iterator d_last = last();
+      TraceDelta::const_iterator d_last = last();
       if (d_last->p_time> t)
         return d_last->p_time-t;
 
