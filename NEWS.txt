@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.0.5 - not yet released
+* devices:
+  - EWMicroRecorder: fix hang during task declaration
 * Android
   - fix bitmap loading on Samsung Galaxy Tab
 

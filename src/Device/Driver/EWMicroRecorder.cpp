@@ -127,7 +127,7 @@ EWMicroRecorderDevice::TryConnect()
     bool started = false;
 
     int i;
-    while ((i = port->GetChar()) != _TEOF) {
+    while ((i = port->GetChar()) != EOF) {
       char ch = (char)i;
 
       if (!started) {
