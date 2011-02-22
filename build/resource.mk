@@ -127,7 +127,9 @@ $(BMP_LAUNCH_SIM_224): %_2.bmp: %.png
 
 RESOURCE_FILES = $(wildcard Data/Dialogs/*.xml)
 
-ifneq ($(TARGET),ANDROID)
+ifeq ($(TARGET),ANDROID)
+RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
+else
 RESOURCE_FILES += $(wildcard Data/bitmaps/*.bmp)
 RESOURCE_FILES += $(BMP_ICONS) $(BMP_ICONS_160) 
 RESOURCE_FILES += $(BMP_SPLASH_160) $(BMP_SPLASH_80)
