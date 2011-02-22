@@ -35,6 +35,20 @@ DataFieldEnum::Entry::~Entry()
   free(mText);
 }
 
+void
+DataFieldEnum::Entry::SetString(const TCHAR *_string)
+{
+  free(mText);
+  mText = _tcsdup(_string);
+}
+
+void
+DataFieldEnum::Entry::Set(unsigned _id, const TCHAR *_string)
+{
+  id = _id;
+  SetString(_string);
+}
+
 int
 DataFieldEnum::GetAsInteger() const
 {
@@ -43,17 +57,15 @@ DataFieldEnum::GetAsInteger() const
     return 0;
   } else {
     assert(mValue < entries.size());
-    return entries[mValue].id;
+    return entries[mValue].GetId();
   }
 }
 
 void
 DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text)
 {
-  if (i <= entries.size()) {
-    free(entries[i].mText);
-    entries[i].mText = _tcsdup(Text);
- }
+  if (i <= entries.size())
+    entries[i].SetString(Text);
 }
 
 bool
@@ -63,8 +75,7 @@ DataFieldEnum::addEnumText(const TCHAR *Text, unsigned id)
     return false;
 
   Entry &entry = entries.append();
-  entry.mText = _tcsdup(Text);
-  entry.id = id;
+  entry.Set(id, Text);
   return true;
 }
 
@@ -76,8 +87,7 @@ DataFieldEnum::addEnumText(const TCHAR *Text)
 
   unsigned i = entries.size();
   Entry &entry = entries.append();
-  entry.mText = _tcsdup(Text);
-  entry.id = i;
+  entry.Set(i, Text);
   return i;
 }
 
@@ -96,7 +106,7 @@ DataFieldEnum::GetAsString() const
     return NULL;
   } else {
     assert(mValue < entries.size());
-    return entries[mValue].mText;
+    return entries[mValue].GetString();
   }
 }
 
@@ -162,7 +172,7 @@ DataFieldEnumCompare(const void *elem1, const void *elem2)
   const DataFieldEnum::Entry *entry1 = (const DataFieldEnum::Entry *)elem1;
   const DataFieldEnum::Entry *entry2 = (const DataFieldEnum::Entry *)elem2;
 
-  return _tcscmp(entry1->mText, entry2->mText);
+  return _tcscmp(entry1->GetString(), entry2->GetString());
 }
 
 void
@@ -179,7 +189,7 @@ DataFieldEnum::CreateComboList() const
   ComboList *combo_list = new ComboList();
 
   for (unsigned i = 0; i < entries.size(); i++)
-    combo_list->Append(entries[i].id, entries[i].mText);
+    combo_list->Append(entries[i].GetId(), entries[i].GetString());
 
   combo_list->ComboPopupItemSavedIndex = mValue;
   return combo_list;
@@ -191,7 +201,7 @@ DataFieldEnum::Find(const TCHAR *text) const
   assert(text != NULL);
 
   for (unsigned int i = 0; i < entries.size(); i++)
-    if (_tcscmp(text, entries[i].mText) == 0)
+    if (_tcscmp(text, entries[i].GetString()) == 0)
       return i;
 
   return -1;
@@ -201,7 +211,7 @@ int
 DataFieldEnum::Find(unsigned id) const
 {
   for (unsigned i = 0; i < entries.size(); i++)
-    if (entries[i].id == id)
+    if (entries[i].GetId() == id)
       return i;
 
   return -1;

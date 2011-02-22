@@ -31,12 +31,24 @@ Copyright_License {
 class DataFieldEnum: public DataField
 {
 public:
-  struct Entry : private NonCopyable {
+  class Entry : private NonCopyable {
     TCHAR *mText;
     unsigned id;
 
+  public:
     Entry():mText(NULL) {}
     ~Entry();
+
+    unsigned GetId() const {
+      return id;
+    }
+
+    const TCHAR *GetString() const {
+      return mText;
+    }
+
+    void SetString(const TCHAR *_string);
+    void Set(unsigned _id, const TCHAR *_string);
   };
 
 private:
