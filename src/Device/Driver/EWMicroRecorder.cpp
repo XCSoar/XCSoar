@@ -130,11 +130,9 @@ EWMicroRecorderDevice::TryConnect()
     while ((i = port->GetChar()) != _TEOF) {
       char ch = (char)i;
 
-      if (!started) {
-        if (ch == _T('-')) {
-          started = true;
-        }
-      }
+      if (!started && ch == _T('-'))
+        started = true;
+
       if (started) {
         if (ch == 0x13) {
           port->Write('\x16');
