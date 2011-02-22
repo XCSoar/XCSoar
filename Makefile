@@ -170,6 +170,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \
 	\
+	$(SRC)/Operation.cpp \
 	$(SRC)/Atmosphere.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/ConditionMonitor.cpp \
