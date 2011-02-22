@@ -638,6 +638,13 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
       }
 
       env->DeleteLocalRef(bonded);
+
+      if (config.port_type == DeviceConfig::RFCOMM &&
+          !config.bluetooth_mac.empty()) {
+        if (!dfe->Exists(config.bluetooth_mac))
+          dfe->addEnumText(config.bluetooth_mac);
+        dfe->SetAsString(config.bluetooth_mac);
+      }
     }
 #else
     dfe->addEnumTexts(COMMPort);
