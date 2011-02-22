@@ -33,20 +33,30 @@ Copyright_License {
 DataFieldEnum::Entry::~Entry()
 {
   free(string);
+
+  if (display_string != string)
+    free(display_string);
 }
 
 void
 DataFieldEnum::Entry::SetString(const TCHAR *_string)
 {
   free(string);
-  string = _tcsdup(_string);
+  if (display_string != string)
+    free(display_string);
+
+  display_string = string = _tcsdup(_string);
 }
 
 void
-DataFieldEnum::Entry::Set(unsigned _id, const TCHAR *_string)
+DataFieldEnum::Entry::Set(unsigned _id, const TCHAR *_string,
+                          const TCHAR *_display_string)
 {
   id = _id;
   SetString(_string);
+
+  if (_display_string != NULL)
+    display_string = _tcsdup(_display_string);
 }
 
 int
@@ -80,14 +90,14 @@ DataFieldEnum::addEnumText(const TCHAR *Text, unsigned id)
 }
 
 unsigned
-DataFieldEnum::addEnumText(const TCHAR *Text)
+DataFieldEnum::addEnumText(const TCHAR *Text, const TCHAR *display_string)
 {
   if (entries.full())
     return 0;
 
   unsigned i = entries.size();
   Entry &entry = entries.append();
-  entry.Set(i, Text);
+  entry.Set(i, Text, display_string);
   return i;
 }
 

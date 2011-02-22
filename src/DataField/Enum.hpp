@@ -34,9 +34,10 @@ public:
   class Entry : private NonCopyable {
     unsigned id;
     TCHAR *string;
+    TCHAR *display_string;
 
   public:
-    Entry():string(NULL) {}
+    Entry():string(NULL), display_string(NULL) {}
     ~Entry();
 
     unsigned GetId() const {
@@ -48,11 +49,12 @@ public:
     }
 
     const TCHAR *GetDisplayString() const {
-      return string;
+      return display_string;
     }
 
     void SetString(const TCHAR *_string);
-    void Set(unsigned _id, const TCHAR *_string);
+    void Set(unsigned _id, const TCHAR *_string,
+             const TCHAR *_display_string=NULL);
   };
 
 private:
@@ -78,7 +80,7 @@ public:
 
   void replaceEnumText(unsigned int i, const TCHAR *Text);
   bool addEnumText(const TCHAR *Text, unsigned id);
-  unsigned addEnumText(const TCHAR *Text);
+  unsigned addEnumText(const TCHAR *Text, const TCHAR *display_string=NULL);
   void addEnumTexts(const TCHAR *const*list);
 
   gcc_pure
