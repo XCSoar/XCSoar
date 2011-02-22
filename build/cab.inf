@@ -22,11 +22,6 @@ ProcessorType=2577
 VersionMin = 3.0
 VersionMax = 32767.0
 
-[CEDevice.ARMV5]
-ProcessorType=2577
-VersionMin = 4.0
-VersionMax = 32767.0
-
 ; prevent warnings on screen resolution
 BuildMax = 0xE0000000
 
@@ -51,11 +46,6 @@ VersionMax = 32767.0
 4 = ,"ARM Files",,..\bin
 
 [SourceDisksNames.armv4]
-1 = ,"ARM Files",,..\bin
-3 = ,"ARM Files",,..\bin
-4 = ,"ARM Files",,..\bin
-
-[SourceDisksNames.armv5]
 1 = ,"ARM Files",,..\bin
 3 = ,"ARM Files",,..\bin
 4 = ,"ARM Files",,..\bin
