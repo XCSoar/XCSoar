@@ -285,12 +285,10 @@ WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
   fixed rthismin = fixed_zero;
   int jmax = -1;
   int jmin = -1;
-  fixed rpoint;
   int idiff;
 
   for (j = 0; j < numwindsamples; j++) {
     rthisp = fixed_zero;
-    rpoint = windsamples[j].mag;
 
     for (i = 0; i < numwindsamples; i++) {
       if (i == j)

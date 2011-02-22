@@ -153,7 +153,7 @@ class NativeView extends SurfaceView
       EGL10.EGL_BLUE_SIZE, 4,
       EGL10.EGL_ALPHA_SIZE, 0,
       EGL10.EGL_DEPTH_SIZE, 0,
-      EGL10.EGL_STENCIL_SIZE, 0,
+      EGL10.EGL_STENCIL_SIZE, 1,
       EGL10.EGL_NONE
     };
 
@@ -173,7 +173,7 @@ class NativeView extends SurfaceView
       int d = findConfigAttrib(config, EGL10.EGL_DEPTH_SIZE, 0);
       int s = findConfigAttrib(config, EGL10.EGL_STENCIL_SIZE, 0);
       int distance = Math.abs(r - 5) + Math.abs(g - 6) + Math.abs(b - 5) +
-        Math.abs(a - 0) + Math.abs(d - 0) + Math.abs(s - 0);
+        Math.abs(a - 0) + Math.abs(d - 0) + Math.abs(s - 8);
       if (distance < closestDistance) {
         closestDistance = distance;
         closestConfig = config;

@@ -30,4 +30,9 @@ unsigned
 polygon_to_triangle(const RasterPoint *points, unsigned num_points,
                     GLushort *triangles, unsigned min_distance=1);
 
+unsigned
+line_to_triangle(const RasterPoint *points, unsigned num_points,
+                 RasterPoint *strip, unsigned line_width,
+                 bool loop=false, bool tcap=false);
+
 #endif

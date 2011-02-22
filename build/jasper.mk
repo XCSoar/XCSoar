@@ -16,6 +16,10 @@ JASPER = \
 	$(JASSRC)/jpc/jpc_tagtree.c	$(JASSRC)/jpc/jpc_tsfb.c \
 	$(JASSRC)/jpc/jpc_util.c
 
+ifneq ($(CLANG),y)
+$(call SRC_TO_OBJ,$(JASPER)): CFLAGS += -Wno-unused-but-set-parameter -Wno-unused-but-set-variable
+endif
+
 JASPER_LIBS = $(TARGET_OUTPUT_DIR)/jasper.a
 
 $(JASPER_LIBS): $(call SRC_TO_OBJ,$(JASPER))

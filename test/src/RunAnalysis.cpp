@@ -172,7 +172,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.set(_T("STATIC"), _T("RunDialog"),
                   0, 0, 640, 480);
 
-  SETTINGS_MAP settings_map;
   Graphics::Initialise();
   Graphics::InitialiseConfigured(CommonInterface::SetSettingsMap());
 

@@ -21,32 +21,26 @@ Copyright_License {
 }
 */
 
+#ifndef ENABLE_OPENGL
+
 #include "MapDrawHelper.hpp"
 #include "Screen/Canvas.hpp"
 #include "WindowProjection.hpp"
 #include "SettingsMap.hpp"
 #include "MapCanvas.hpp"
 
-MapDrawHelper::MapDrawHelper(Canvas &_canvas, 
-#ifndef ENABLE_OPENGL
-                             Canvas &_buffer, 
-                             Canvas &_stencil, 
-#endif
+MapDrawHelper::MapDrawHelper(Canvas &_canvas,
+                             Canvas &_buffer,
+                             Canvas &_stencil,
                              const WindowProjection &_proj,
                              const SETTINGS_MAP& settings_map):
   clip(_proj.GetScreenBounds().scale(fixed(1.1))),
   m_canvas(_canvas),
-#ifndef ENABLE_OPENGL
   m_buffer(_buffer),
   m_stencil(_stencil),
-#else
-  m_buffer(_canvas),
-#endif
   m_proj(_proj),
-#ifndef ENABLE_OPENGL
   m_buffer_drawn(false),
   m_use_stencil(false),
-#endif
   m_settings_map(settings_map)
 {
 }
@@ -54,17 +48,11 @@ MapDrawHelper::MapDrawHelper(Canvas &_canvas,
 MapDrawHelper::MapDrawHelper(MapDrawHelper &_that):
   clip(_that.clip),
   m_canvas(_that.m_canvas),
-#ifndef ENABLE_OPENGL
   m_buffer(_that.m_buffer),
   m_stencil(_that.m_stencil),
-#else
-  m_buffer(_that.m_canvas),
-#endif
   m_proj(_that.m_proj),
-#ifndef ENABLE_OPENGL
   m_buffer_drawn(_that.m_buffer_drawn),
   m_use_stencil(_that.m_use_stencil),
-#endif
   m_settings_map(_that.m_settings_map)
 {
 }
@@ -99,11 +87,9 @@ MapDrawHelper::draw_search_point_vector(Canvas& the_canvas,
     return;
 
   the_canvas.polygon(&screen[0], size);
-#ifndef ENABLE_OPENGL
   if (m_use_stencil) {
     m_stencil.polygon(&screen[0], size);
   }
-#endif
 }
 
 void 
@@ -111,17 +97,14 @@ MapDrawHelper::draw_circle(Canvas &the_canvas,
                            const RasterPoint &center, unsigned radius)
 {
   the_canvas.circle(center.x, center.y, radius);
-#ifndef ENABLE_OPENGL
   if (m_use_stencil) {
     m_stencil.circle(center.x, center.y, radius);
   }
-#endif
 }
 
 void 
 MapDrawHelper::buffer_render_finish() 
 {
-#ifndef ENABLE_OPENGL
   if (m_buffer_drawn) {
     // need to do this to prevent drawing of colored outline
     m_buffer.white_pen();
@@ -132,24 +115,21 @@ MapDrawHelper::buffer_render_finish()
     m_canvas.copy_and(m_buffer);
     m_buffer_drawn = false;
   }
-#endif
 }
 
 void 
 MapDrawHelper::buffer_render_start() 
 {
-#ifndef ENABLE_OPENGL
   if (!m_buffer_drawn) {
     clear_buffer();
     m_buffer_drawn = true;
   }
-#endif
 }
 
 void 
 MapDrawHelper::clear_buffer() {
-#ifndef ENABLE_OPENGL
   m_buffer.clear_white();
   m_stencil.clear_white();
-#endif
 }
+
+#endif // !ENABLE_OPENGL
