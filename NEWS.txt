@@ -9,6 +9,7 @@ Version 6.0.5 - not yet released
   - fix bitmap loading on Samsung Galaxy Tab
   - show Bluetooth device names in configuration dialog
   - larger default fonts
+  - improved airspace rendering
 
 Version 6.0.4 - 2011/02/19
 * devices
