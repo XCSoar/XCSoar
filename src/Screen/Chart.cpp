@@ -62,7 +62,7 @@ Chart::Chart(Canvas &the_canvas, const RECT the_rc) :
   pens[STYLE_REDTHICK].set(Pen::DASH, 3, Color(200, 50, 50));
   pens[STYLE_DASHGREEN].set(Pen::DASH, 2, Color::GREEN);
   pens[STYLE_MEDIUMBLACK].set(is_altair() ? 1 : 2, Color(50, 243, 45));
-  pens[STYLE_THINDASHPAPER].set(Pen::DASH, 1, Color(0x60, 0x60, 0x60));
+  pens[STYLE_THINDASHPAPER].set(Pen::DASH, 1, Color(0xB0, 0xB0, 0xB0));
 }
 
 void

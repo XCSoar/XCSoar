@@ -88,8 +88,8 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   assert(glide_computer != NULL);
 
-  canvas.clear(Color(0x40, 0x40, 0x00));
-  canvas.set_text_color(Color::WHITE);
+  canvas.clear(Color::WHITE);
+  canvas.set_text_color(Color::BLACK);
   canvas.select(Fonts::Map);
 
   RECT rcgfx = Sender->get_client_rect();
@@ -399,8 +399,8 @@ OnCreateCrossSectionWindow(ContainerWindow &parent, int left, int top,
   csw->set(parent, left, top, width, height, style);
   csw->set_airspaces(&airspace_database);
   csw->set_terrain(terrain);
-  csw->set_background_color(Color(0x40, 0x40, 0x00));
-  csw->set_text_color(Color::WHITE);
+  csw->set_background_color(Color::WHITE);
+  csw->set_text_color(Color::BLACK);
   UpdateCrossSection();
   return csw;
 }
