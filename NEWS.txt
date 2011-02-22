@@ -8,6 +8,7 @@ Version 6.0.5 - not yet released
 * Android
   - fix bitmap loading on Samsung Galaxy Tab
   - show Bluetooth device names in configuration dialog
+  - larger default fonts
 
 Version 6.0.4 - 2011/02/19
 * devices
