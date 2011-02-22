@@ -292,7 +292,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 }
 
 unsigned
-TaskFileSeeYou::Count() const
+TaskFileSeeYou::Count()
 {
   FileLineReader reader(path);
   if (reader.error())
@@ -303,8 +303,23 @@ TaskFileSeeYou::Count() const
   TCHAR *line;
   for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
     if (in_task_section) {
-      if (line[0] == _T('\"'))
+      if (line[0] == _T('\"')) {
+
+        if (count < namesuffixes.MAX_SIZE) {
+          unsigned cc = 0;
+          TCHAR buff[40];
+          for (cc = 1; line[cc] && line[cc] != '"' && cc < 40; cc++) {
+            buff[cc - 1] = line[cc];
+          }
+          buff[--cc] = '\0';
+          if (_tcslen(buff) > 0) {
+            namesuffixes.append(_tcsdup(buff));
+          } else {
+            namesuffixes.append(NULL);
+          }
+        }
         count++;
+      }
     } else if (_tcsicmp(line, _T("-----Related Tasks-----")) == 0) {
       in_task_section = true;
     }

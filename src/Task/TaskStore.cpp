@@ -63,10 +63,18 @@ public:
 
       // If the task file holds more than one task
       if (count > 1) {
-        // .. append " - Task #[n]" suffix to the task name
-        TCHAR suffix[255];
-        _stprintf(suffix, _T(" - %s #%2d"), _("Task"), i + 1);
-        _tcscat(name, suffix);
+        if (i < task_file->namesuffixes.size() &&
+            task_file->namesuffixes[i]) {
+
+          _tcscat(name, _T(": "));
+          _tcscat(name, task_file->namesuffixes[i]);
+
+        } else {
+          // .. append " - Task #[n]" suffix to the task name
+          TCHAR suffix[255];
+          _stprintf(suffix, _T(": %s #%2d"), _("Task"), i + 1);
+          _tcscat(name, suffix);
+        }
       }
 
       // Add the task to the TaskStore

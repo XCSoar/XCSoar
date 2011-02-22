@@ -87,7 +87,7 @@ void Logger::LogFinishEvent(const NMEA_INFO &gps_info) {}
 void Logger::LogPoint(const NMEA_INFO &gps_info) {}
 LoggerImpl::LoggerImpl() {}
 LoggerImpl::~LoggerImpl() {}
-
+TaskFile::~TaskFile() {}
 ThermalLocator::ThermalLocator() {}
 void ThermalLocator::Reset() {}
 

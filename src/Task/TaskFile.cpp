@@ -31,7 +31,13 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 
 #include <assert.h>
+#include <stdlib.h>
 
+TaskFile::~TaskFile()
+{
+  for (unsigned i = 0; i < namesuffixes.size(); i++)
+    free ((TCHAR*)namesuffixes[i]);
+}
 TaskFile*
 TaskFile::Create(const TCHAR* path)
 {
