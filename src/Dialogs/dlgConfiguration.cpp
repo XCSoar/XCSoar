@@ -72,6 +72,7 @@ Copyright_License {
 #include "Gauge/GlueGaugeVario.hpp"
 #include "UnitsFormatter.hpp"
 #include "UnitsStore.hpp"
+#include "LogFile.hpp"
 
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"
@@ -2763,6 +2764,7 @@ void dlgConfigurationShowModal(void)
 
   if (changed) {
     Profile::Save();
+    LogDebug(_T("Configuration: Changes saved"));
     if (requirerestart)
       MessageBoxX(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
                   _T(""), MB_OK);

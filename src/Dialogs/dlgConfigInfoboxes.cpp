@@ -32,6 +32,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
+#include "LogFile.hpp"
 
 #include <assert.h>
 #include <cstdio>
@@ -196,8 +197,10 @@ void dlgConfigInfoboxesShowModal(InfoBoxManager::mode _mode)
   for (unsigned j = 0; j < InfoBoxLayout::numInfoWindows; ++j)
     GetInfoBoxSelector(j);
 
-  if (changed)
+  if (changed) {
     Profile::Save();
+    LogDebug(_T("InfoBox configuration: Changes saved"));
+  }
 
   delete wf;
 }

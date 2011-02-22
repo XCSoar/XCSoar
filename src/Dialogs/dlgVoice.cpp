@@ -28,6 +28,7 @@ Copyright_License {
 #include "Audio/VegaVoice.h"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
+#include "LogFile.hpp"
 
 static WndForm *wf=NULL;
 
@@ -103,8 +104,10 @@ void dlgVoiceShowModal(void){
 
   changed = SaveFromForm(*wf, XCSoarInterface::SetSettingsComputer());
 
-  if (changed)
+  if (changed) {
     Profile::Save();
+    LogDebug(_T("Voice configuration: Changes saved"));
+  }
 
   delete wf;
   wf = NULL;
