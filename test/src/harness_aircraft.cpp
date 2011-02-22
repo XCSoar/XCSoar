@@ -216,9 +216,6 @@ AircraftSim::target_height()
 
 void AircraftSim::update_mode()  
 {
-  
-  const ElementStat stat = task_manager.get_stats().current_leg;
-  
   switch (acstate) {
   case Cruise:
     if ((awp>0) && 
