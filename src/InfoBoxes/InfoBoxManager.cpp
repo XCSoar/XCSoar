@@ -384,12 +384,12 @@ InfoBoxContent::InfoBoxDlgContent*
 InfoBoxManager::GetInfoBoxDlgContent(const int id)
 {
   if (id < 0)
-    return false;
+    return NULL;
 
   if (InfoBoxes[id] != NULL)
     return InfoBoxes[id]->GetInfoBoxDlgContent();
 
-  return false;
+  return NULL;
 }
 
 void

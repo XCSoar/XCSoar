@@ -78,7 +78,7 @@ public:
   };
 
   virtual InfoBoxDlgContent* GetInfoBoxDlgContent() {
-    return false;
+    return NULL;
   }
 
   static void SetTitleFromWaypointName(InfoBoxWindow &infobox,

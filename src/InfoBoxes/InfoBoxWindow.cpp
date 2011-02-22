@@ -444,7 +444,7 @@ InfoBoxWindow::GetInfoBoxDlgContent()
   if (content != NULL)
     return content->GetInfoBoxDlgContent();
 
-  return false;
+  return NULL;
 }
 
 bool
