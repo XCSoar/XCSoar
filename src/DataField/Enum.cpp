@@ -32,14 +32,14 @@ Copyright_License {
 
 DataFieldEnum::Entry::~Entry()
 {
-  free(mText);
+  free(string);
 }
 
 void
 DataFieldEnum::Entry::SetString(const TCHAR *_string)
 {
-  free(mText);
-  mText = _tcsdup(_string);
+  free(string);
+  string = _tcsdup(_string);
 }
 
 void
@@ -53,11 +53,11 @@ int
 DataFieldEnum::GetAsInteger() const
 {
   if (entries.empty()) {
-    assert(mValue == 0);
+    assert(value == 0);
     return 0;
   } else {
-    assert(mValue < entries.size());
-    return entries[mValue].GetId();
+    assert(value < entries.size());
+    return entries[value].GetId();
   }
 }
 
@@ -102,11 +102,11 @@ const TCHAR *
 DataFieldEnum::GetAsString() const
 {
   if (entries.empty()) {
-    assert(mValue == 0);
+    assert(value == 0);
     return NULL;
   } else {
-    assert(mValue < entries.size());
-    return entries[mValue].GetString();
+    assert(value < entries.size());
+    return entries[value].GetString();
   }
 }
 
@@ -136,14 +136,14 @@ void
 DataFieldEnum::Inc(void)
 {
   if (entries.empty()) {
-    assert(mValue == 0);
+    assert(value == 0);
     return;
   }
 
-  assert(mValue < entries.size());
+  assert(value < entries.size());
 
-  if (mValue < entries.size() - 1) {
-    mValue++;
+  if (value < entries.size() - 1) {
+    value++;
     if (!GetDetachGUI())
       (mOnDataAccess)(this, daChange);
   }
@@ -153,14 +153,14 @@ void
 DataFieldEnum::Dec(void)
 {
   if (entries.empty()) {
-    assert(mValue == 0);
+    assert(value == 0);
     return;
   }
 
-  assert(mValue < entries.size());
+  assert(value < entries.size());
 
-  if (mValue > 0) {
-    mValue--;
+  if (value > 0) {
+    value--;
     if (!GetDetachGUI())
       (mOnDataAccess)(this, daChange);
   }
@@ -191,7 +191,7 @@ DataFieldEnum::CreateComboList() const
   for (unsigned i = 0; i < entries.size(); i++)
     combo_list->Append(entries[i].GetId(), entries[i].GetString());
 
-  combo_list->ComboPopupItemSavedIndex = mValue;
+  combo_list->ComboPopupItemSavedIndex = value;
   return combo_list;
 }
 
@@ -222,10 +222,10 @@ DataFieldEnum::SetIndex(unsigned new_value)
 {
   assert(new_value < entries.size());
 
-  if (new_value == mValue)
+  if (new_value == value)
     return;
 
-  mValue = new_value;
+  value = new_value;
   if (!GetDetachGUI())
     mOnDataAccess(this, daChange);
 }

@@ -32,11 +32,11 @@ class DataFieldEnum: public DataField
 {
 public:
   class Entry : private NonCopyable {
-    TCHAR *mText;
     unsigned id;
+    TCHAR *string;
 
   public:
-    Entry():mText(NULL) {}
+    Entry():string(NULL) {}
     ~Entry();
 
     unsigned GetId() const {
@@ -44,7 +44,7 @@ public:
     }
 
     const TCHAR *GetString() const {
-      return mText;
+      return string;
     }
 
     void SetString(const TCHAR *_string);
@@ -53,12 +53,12 @@ public:
 
 private:
   StaticArray<Entry, 128> entries;
-  unsigned int mValue;
+  unsigned int value;
 
 public:
   DataFieldEnum(DataAccessCallback_t OnDataAccess) :
     DataField(_T(""), _T(""), OnDataAccess),
-    mValue(0)
+    value(0)
   {
     SupportCombo = true;
   }
