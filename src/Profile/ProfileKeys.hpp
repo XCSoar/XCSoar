@@ -26,16 +26,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-#if !defined(WIN32) && !defined(USE_PROFILE_MAP)
-/* for GConf */
-#define PROFILE_KEY_PREFIX "/apps/XCSoar/"
-#endif
-
-#ifdef PROFILE_KEY_PREFIX
-#define CONF(key) _T(PROFILE_KEY_PREFIX key)
-#else
 #define CONF(key) _T(key)
-#endif
 
 extern const TCHAR *szProfileDisplayType[];
 extern const TCHAR *szProfileColour[];
