@@ -179,4 +179,55 @@ struct FlatGeoPoint {
   }
 };
 
+
+/**
+ * Extension of FlatGeoPoint for altitude (3d location in flat-earth space)
+ */
+class AFlatGeoPoint: public FlatGeoPoint {
+public:
+  AFlatGeoPoint(const int &x, const int& y, const short &alt):
+    FlatGeoPoint(x,y),altitude(alt) {};
+  AFlatGeoPoint(const FlatGeoPoint& p, const short &alt):FlatGeoPoint(p),altitude(alt) {};
+  AFlatGeoPoint():FlatGeoPoint(0,0),altitude(0) {};
+  short altitude;                                           /**< Nav reference altitude (m) */
+
+  /**
+   * Rounds location to reduce state space
+   */
+  void round_location() {
+    // round point to correspond roughly with terrain step size
+    Longitude = (Longitude>>2)<<2;
+    Latitude = (Latitude>>2)<<2;
+  }
+
+  /**
+   * Equality comparison operator
+   *
+   * @param other object to compare to
+   *
+   * @return true if location and altitude are equal
+   */
+  gcc_pure
+  bool operator== (const AFlatGeoPoint &other) const {
+    return FlatGeoPoint::equals(other) && (altitude == other.altitude);
+  };
+
+  /**
+   * Ordering operator, used for set ordering.  Uses lexicographic comparison.
+   *
+   * @param sp object to compare to
+   *
+   * @return true if lexicographically smaller
+   */
+  gcc_pure
+  bool operator< (const AFlatGeoPoint &sp) const {
+    if (!sort(sp))
+      return false;
+    else if (FlatGeoPoint::equals(sp))
+      return altitude > sp.altitude;
+    else
+      return true;
+  }
+};
+
 #endif

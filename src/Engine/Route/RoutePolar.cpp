@@ -306,14 +306,6 @@ RoutePolars::neighbour_link(const RoutePoint &start,
 }
 
 
-void
-AFlatGeoPoint::round_location()
-{
-  // round point to correspond roughly with terrain step size
-  Longitude = (Longitude>>2)<<2;
-  Latitude = (Latitude>>2)<<2;
-}
-
 bool
 RoutePolars::achievable(const RouteLink& link, const bool check_ceiling) const
 {
