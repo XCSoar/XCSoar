@@ -189,7 +189,7 @@ Canvas::circle(int x, int y, unsigned radius)
                              radius - pen.get_width()/2,
                              radius + pen.get_width()/2);
     if (!brush.is_hollow()) {
-      vertices.bind_circle();
+      vertices.bind_inner_circle();
       brush.set();
       glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.CIRCLE_SIZE);
     }
