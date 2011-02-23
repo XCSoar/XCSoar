@@ -134,12 +134,38 @@ InfoBoxContentMacCready::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabB
   return wInfoBoxAccessEdit;
 }
 
+bool
+InfoBoxContentMacCready::PnlSetupPreShow(TabBarControl::EventType EventType)
+{
+
+  if (XCSoarInterface::SettingsComputer().auto_mc)
+    ((WndButton *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("cmdMode")))->SetCaption(_("MANUAL"));
+  else
+    ((WndButton *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("cmdMode")))->SetCaption(_("AUTO"));
+
+  return true;
+}
+
 void
 InfoBoxContentMacCready::PnlSetupOnSetup(WndButton &Sender) {
   (void)Sender;
   InfoBoxManager::SetupFocused(InfoBoxID);
   dlgInfoBoxAccess::OnClose();
 }
+
+void
+InfoBoxContentMacCready::PnlSetupOnMode(WndButton &Sender)
+{
+  (void)Sender;
+
+  if (XCSoarInterface::SettingsComputer().auto_mc)
+    Sender.SetCaption(_("AUTO"));
+  else
+    Sender.SetCaption(_("MANUAL"));
+
+  InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("mode"));
+}
+
 
 /*
  * Subpart callback function pointers
@@ -159,6 +185,8 @@ InfoBoxContentMacCready::InfoBoxPanelContent InfoBoxContentMacCready::pnlInfo =
 InfoBoxContentMacCready::InfoBoxPanelContent InfoBoxContentMacCready::pnlSetup =
 {
   (*InfoBoxContentMacCready::PnlSetupLoad),
+  NULL,
+  (*InfoBoxContentMacCready::PnlSetupPreShow),
   NULL
 };
 
@@ -169,6 +197,7 @@ CallBackTableEntry InfoBoxContentMacCready::CallBackTable[] = {
   DeclareCallBackEntry(InfoBoxContentMacCready::PnlEditOnMinusBig),
 
   DeclareCallBackEntry(InfoBoxContentMacCready::PnlSetupOnSetup),
+  DeclareCallBackEntry(InfoBoxContentMacCready::PnlSetupOnMode),
 
   DeclareCallBackEntry(NULL)
 };
@@ -273,6 +302,9 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
     protected_task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
     return true;
+
+  } else if (_tcscmp(misc, _T("mode")) == 0) {
+    return HandleKey(ibkEnter);
   }
   return false;
 }
