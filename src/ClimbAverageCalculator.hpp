@@ -34,13 +34,13 @@ public:
 
 private:
 	static int const MAX_HISTORY = 40;
-	struct flarmAltHistoryItem
+	struct HistoryItem
 	{
 		fixed time;
 		fixed altitude;
 	};
 
-	flarmAltHistoryItem history[MAX_HISTORY];
+	HistoryItem history[MAX_HISTORY];
   int newestValIndex;
 };
 
