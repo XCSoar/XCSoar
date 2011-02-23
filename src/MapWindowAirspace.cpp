@@ -119,7 +119,7 @@ public:
      black(_black),
      m_warnings(warnings),
      m_settings_map(settings_map),
-     pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)) {
+     pen_thick(IBLSCALE(10), Color(0x00, 0x00, 0x00)) {
     glStencilMask(0xff);
     glClear(GL_STENCIL_BUFFER_BIT);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -131,26 +131,38 @@ public:
 
 public:
   void Visit(const AirspaceCircle& airspace) {
-    prepare_circle(airspace.get_center(), airspace.get_radius());
-    Render(airspace);
+    RasterPoint screen_center = projection.GeoToScreen(airspace.get_center());
+    unsigned screen_radius = projection.GeoToScreenDistance(airspace.get_radius());
+    GLEnable stencil(GL_STENCIL_TEST);
+
+    {
+      GLEnable blend(GL_BLEND);
+      setup_interior(airspace);
+      if (m_warnings.is_warning(airspace) ||
+          m_warnings.is_inside(airspace) ||
+          pen_thick.get_width() >= 2*screen_radius) {
+        // fill whole circle
+        canvas.circle(screen_center.x, screen_center.y, screen_radius);
+      } else {
+        // draw a ring inside the circle
+        Color color = Graphics::Colours[m_settings_map.iAirspaceColour[airspace.get_type()]];
+        Pen pen_donut(pen_thick.get_width()/2, color.with_alpha(90));
+        canvas.hollow_brush();
+        canvas.select(pen_donut);
+        canvas.circle(screen_center.x, screen_center.y,
+                      screen_radius - pen_thick.get_width()/4);
+      }
+    }
+
+    // draw outline
+    setup_outline(airspace);
+    canvas.circle(screen_center.x, screen_center.y, screen_radius);
   }
 
   void Visit(const AirspacePolygon& airspace) {
     if (!prepare_polygon(airspace.get_points()))
       return;
-    Render(airspace);
-  }
 
-private:
-  void setup_canvas(const AbstractAirspace &airspace) {
-    if (black)
-      canvas.black_pen();
-    else
-      canvas.select(Graphics::hAirspacePens[airspace.get_type()]);
-    canvas.hollow_brush();
-  }
-
-  void Render(const AbstractAirspace& airspace) {
     bool fill_airspace = m_warnings.is_warning(airspace) ||
                          m_warnings.is_inside(airspace);
     GLEnable stencil(GL_STENCIL_TEST);
@@ -158,51 +170,79 @@ private:
     if (!m_warnings.is_acked(airspace)) {
       if (!fill_airspace) {
         // set stencil for filling (bit 0)
-        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-        glStencilFunc(GL_ALWAYS, 3, 3);
-        glStencilMask(1);
-        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-        canvas.hollow_brush();
-        canvas.select(pen_thick);
+        set_fillstencil();
         draw_prepared();
       }
 
       // fill interior without overpainting any previous outlines
-      if (fill_airspace)
-        glStencilFunc(GL_EQUAL, 0, 2);
-      else
-        glStencilFunc(GL_EQUAL, 1, 3);
-      glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-      glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
       {
+        setup_interior(airspace, !fill_airspace);
         GLEnable blend(GL_BLEND);
-        Color color = Graphics::Colours[m_settings_map.iAirspaceColour[airspace.get_type()]];
-        canvas.select(Brush(color.with_alpha(90)));
-        canvas.null_pen();
         draw_prepared();
       }
 
       if (!fill_airspace) {
         // clear fill stencil (bit 0)
-        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-        glStencilMask(1);
-        glStencilOp(GL_KEEP, GL_KEEP, GL_ZERO);
-        canvas.hollow_brush();
-        canvas.select(pen_thick);
+        clear_fillstencil();
         draw_prepared();
       }
     }
 
+    // draw outline
+    setup_outline(airspace);
+    draw_prepared();
+  }
+
+private:
+  void setup_outline(const AbstractAirspace &airspace) {
     // set bit 1 in stencil buffer, where an outline is drawn
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     glStencilFunc(GL_ALWAYS, 3, 3);
     glStencilMask(2);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    // draw outline
-    setup_canvas(airspace);
-    draw_prepared();
+    if (black)
+      canvas.black_pen();
+    else
+      canvas.select(Graphics::hAirspacePens[airspace.get_type()]);
+    canvas.hollow_brush();
   }
+
+  void setup_interior(const AbstractAirspace &airspace,
+                      bool check_fillstencil = false) {
+    // restrict drawing area and don't paint over previously drawn outlines
+    if (check_fillstencil)
+      glStencilFunc(GL_EQUAL, 1, 3);
+    else
+      glStencilFunc(GL_EQUAL, 0, 2);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+
+    Color color = Graphics::Colours[m_settings_map.iAirspaceColour[airspace.get_type()]];
+    canvas.select(Brush(color.with_alpha(90)));
+    canvas.null_pen();
+  }
+
+  void set_fillstencil() {
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glStencilFunc(GL_ALWAYS, 3, 3);
+    glStencilMask(1);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+    canvas.hollow_brush();
+    canvas.select(pen_thick);
+  }
+
+  void clear_fillstencil() {
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glStencilFunc(GL_ALWAYS, 3, 3);
+    glStencilMask(1);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_ZERO);
+
+    canvas.hollow_brush();
+    canvas.select(pen_thick);
+  }
+
   bool black;
   const AirspaceWarningCopy& m_warnings;
   const SETTINGS_MAP& m_settings_map;
