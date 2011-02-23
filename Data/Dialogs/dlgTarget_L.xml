@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<Form Name="frmTarget" X="-120" Y="0" Width="120" Height="240" Caption="Target" Popup="1">
+<Form Name="frmTarget" X="0" Y="0" Width="120" Height="240" Caption="Target" Popup="1">
   <Button Name="btnOK" Caption="Close" X="2" Y="-37" Width="-2" Height="35" OnClick="OnOKClicked" />
 
   <Edit Name="prpTaskPoint" X="0" Y="2" Height="29" CaptionWidth="1"

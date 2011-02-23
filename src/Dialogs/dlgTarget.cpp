@@ -489,6 +489,7 @@ dlgTargetShowModal()
 
   bool oldEnablePan = XCSoarInterface::SetSettingsMap().EnablePan;
   GeoPoint oldPanLocation = XCSoarInterface::SetSettingsMap().PanLocation;
+  const bool oldFullScreen = XCSoarInterface::main_window.GetFullScreen();
 
   InitTargetPoints();
 
@@ -500,10 +501,12 @@ dlgTargetShowModal()
 
   wf->SetTimerNotify(OnTimerNotify);
 
+  XCSoarInterface::main_window.SetFullScreen(true);
+
   RECT dialog_rect = wf->get_position();
   RECT map_rect = XCSoarInterface::main_window.get_client_rect();
   if (Layout::landscape)
-    map_rect.right = dialog_rect.left;
+    map_rect.left = dialog_rect.right;
   else
     map_rect.top = dialog_rect.bottom;
   XCSoarInterface::main_window.SetCustomView(map_rect);
@@ -513,6 +516,7 @@ dlgTargetShowModal()
   XCSoarInterface::SetSettingsMap().EnablePan = oldEnablePan;
   XCSoarInterface::SetSettingsMap().PanLocation = oldPanLocation;
   XCSoarInterface::SetSettingsMap().TargetPan = false;
+  XCSoarInterface::main_window.SetFullScreen(oldFullScreen);
 
   XCSoarInterface::main_window.LeaveCustomView();
 
