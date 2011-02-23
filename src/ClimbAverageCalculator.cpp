@@ -23,10 +23,8 @@ Copyright_License {
 
 #include "ClimbAverageCalculator.hpp"
 
-ClimbAverageCalculator::ClimbAverageCalculator()
-{
-	newestValIndex = -1;
-}
+ClimbAverageCalculator::ClimbAverageCalculator():
+  newestValIndex(-1) {}
 
 fixed
 ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_time)
