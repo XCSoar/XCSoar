@@ -37,7 +37,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.SnailWidthScale = 16;
   settings_map.SnailType = stStandardVario;
   settings_map.WindArrowStyle = 0;
-  settings_map.DisplayTextType = DISPLAYNONE;
+  settings_map.DisplayTextType = DISPLAYFIRSTFIVE;
   settings_map.TrailActive = 1;
   settings_map.bAirspaceBlackOutline = false;
   settings_map.GliderScreenPosition = 20; // 20% from bottom
