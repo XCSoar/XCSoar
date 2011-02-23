@@ -122,7 +122,7 @@ RoutePolars::calc_footprint(const AGeoPoint& origin,
                             const TaskProjection& proj) const
 {
   const bool valid = map && map->isMapLoaded();
-  const short altitude = origin.altitude-(short)config.safety_height_terrain;
+  const short altitude = origin.altitude-safety_height();
   AGeoPoint m_origin((GeoPoint)origin, altitude);
   for (int i=0; i< ROUTEPOLAR_POINTS; ++i) {
     const GeoPoint dest = msl_intercept(i, m_origin, proj);
@@ -243,10 +243,10 @@ RoutePolars::check_clearance(const RouteLink &e, const RasterMap* map,
   assert(map);
 
   if (!map->FirstIntersection(start, e.first.altitude,
-                             dest, e.second.altitude,
-                             calc_vheight(e), climb_ceiling,
-                             (short)config.safety_height_terrain,
-                             int_x, int_h))
+                              dest, e.second.altitude,
+                              calc_vheight(e), climb_ceiling,
+                              safety_height(),
+                              int_x, int_h))
     return true;
 
   inp = RoutePoint(proj.project(int_x), int_h);
@@ -373,7 +373,7 @@ RoutePolars::intersection(const AGeoPoint& origin,
 
   if (h_diff <= 0) {
     // assume gradual climb to destination
-    intx = map->Intersection(origin, origin.altitude-(short)config.safety_height_terrain,
+    intx = map->Intersection(origin, origin.altitude-safety_height(),
                             h_diff, destination);
     return !(intx == destination);
   }
@@ -384,7 +384,7 @@ RoutePolars::intersection(const AGeoPoint& origin,
     // have excess height to glide, scan pure glide, will arrive at destination high
 
     intx = map->Intersection(origin,
-                             origin.altitude-(short)config.safety_height_terrain,
+                             origin.altitude-safety_height(),
                              vh, destination);
     return !(intx == destination);
   }
@@ -398,13 +398,23 @@ RoutePolars::intersection(const AGeoPoint& origin,
   const GeoPoint p_glide = destination.interpolate(origin, p);
 
   // intersects during cruise-climb?
-  intx = map->Intersection(origin, origin.altitude-(short)config.safety_height_terrain,
+  intx = map->Intersection(origin, origin.altitude-safety_height(),
                            0, destination);
   if (!(intx == destination))
     return true;
 
   // intersects during glide?
-  intx = map->Intersection(p_glide, origin.altitude-(short)config.safety_height_terrain,
+  intx = map->Intersection(p_glide, origin.altitude-safety_height(),
                            h_diff, destination);
   return !(intx == destination);
+}
+
+short
+RoutePolars::calc_glide_arrival(const AFlatGeoPoint& origin,
+                                const FlatGeoPoint& dest,
+                                const TaskProjection& proj) const
+{
+  const RouteLink e(RoutePoint(dest, 0),
+                    origin, proj);
+  return origin.altitude-calc_vheight(e);
 }

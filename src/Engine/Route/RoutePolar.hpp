@@ -433,6 +433,16 @@ public:
                     const TaskProjection& proj,
                     GeoPoint& intx) const;
 
+  /**
+   * Calculate height of arrival at destination starting from origin
+   */
+  short calc_glide_arrival(const AFlatGeoPoint& origin,
+                           const FlatGeoPoint& dest,
+                           const TaskProjection& proj) const;
+
+  short safety_height() const {
+    return (short)config.safety_height_terrain;
+  }
 private:
 
   RoutePolar polar_glide;
