@@ -34,17 +34,15 @@ ClimbAverageCalculator::ClimbAverageCalculator()
 }
 
 fixed
-ClimbAverageCalculator::GetAverage(fixed curTime,
-                                   fixed curAltitude,
-                                   fixed averageTime)
+ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_time)
 {
   int bestHistory;
 
   newestValIndex = newestValIndex < MAX_HISTORY - 1 ? newestValIndex + 1 : 0;
 
   // add the new sample
-  history[newestValIndex].time = curTime;
-  history[newestValIndex].altitude = curAltitude;
+  history[newestValIndex].time = time;
+  history[newestValIndex].altitude = altitude;
 
   // initially bestHistory is the current...
   bestHistory = newestValIndex;
@@ -55,7 +53,7 @@ ClimbAverageCalculator::GetAverage(fixed curTime,
       continue;
 
     // inside the period ?
-    if (history[i].time + averageTime < curTime)
+    if (history[i].time + average_time < time)
       continue;
 
     // is the sample older (and therefore better) than the current found ?
@@ -65,8 +63,8 @@ ClimbAverageCalculator::GetAverage(fixed curTime,
 
   // calculate the average !
   if (bestHistory != newestValIndex)
-    return (curAltitude - history[bestHistory].altitude) /
-           (curTime - history[bestHistory].time);
+    return (altitude - history[bestHistory].altitude) /
+           (time - history[bestHistory].time);
 
   return fixed_zero;
 }

@@ -30,7 +30,7 @@ class ClimbAverageCalculator
 {
 public:
 	ClimbAverageCalculator();
-	fixed GetAverage(fixed curTime, fixed curAltitude, fixed averageTime);
+	fixed GetAverage(fixed time, fixed altitude, fixed average_time);
 
 private:
 	static int const MAX_HISTORY = 40;
