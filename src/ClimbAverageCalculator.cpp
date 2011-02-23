@@ -51,7 +51,7 @@ ClimbAverageCalculator::GetAverage(fixed curTime,
 
   // now run through the history and find the best sample for average period within the average time period
   for (int i = 0; i < MAX_HISTORY; i++) {
-    if (history[i].time == fixed(-99999))
+    if (negative(history[i].time))
       continue;
 
     // inside the period ?
