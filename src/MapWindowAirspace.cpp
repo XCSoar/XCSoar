@@ -156,10 +156,10 @@ private:
     GLEnable stencil(GL_STENCIL_TEST);
 
     if (!m_warnings.is_acked(airspace)) {
-      glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-      glStencilFunc(GL_ALWAYS, 3, 3);
       if (!fill_airspace) {
         // set stencil for filling (bit 0)
+        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+        glStencilFunc(GL_ALWAYS, 3, 3);
         glStencilMask(1);
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         canvas.hollow_brush();
@@ -195,8 +195,8 @@ private:
 
     // set bit 1 in stencil buffer, where an outline is drawn
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-    glStencilMask(2);
     glStencilFunc(GL_ALWAYS, 3, 3);
+    glStencilMask(2);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     // draw outline
