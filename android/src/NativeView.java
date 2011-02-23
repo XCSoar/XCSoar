@@ -153,7 +153,7 @@ class NativeView extends SurfaceView
       EGL10.EGL_BLUE_SIZE, 4,
       EGL10.EGL_ALPHA_SIZE, 0,
       EGL10.EGL_DEPTH_SIZE, 0,
-      EGL10.EGL_STENCIL_SIZE, 0,
+      EGL10.EGL_STENCIL_SIZE, 1,
       EGL10.EGL_NONE
     };
 
@@ -173,7 +173,7 @@ class NativeView extends SurfaceView
       int d = findConfigAttrib(config, EGL10.EGL_DEPTH_SIZE, 0);
       int s = findConfigAttrib(config, EGL10.EGL_STENCIL_SIZE, 0);
       int distance = Math.abs(r - 5) + Math.abs(g - 6) + Math.abs(b - 5) +
-        Math.abs(a - 0) + Math.abs(d - 0) + Math.abs(s - 0);
+        Math.abs(a - 0) + Math.abs(d - 0) + Math.abs(s - 8);
       if (distance < closestDistance) {
         closestDistance = distance;
         closestConfig = config;
@@ -306,6 +306,23 @@ class NativeView extends SurfaceView
                     nextPowerOfTwo(bmp.getHeight()),
                     0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, null);
     GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, bmp);
+    if (gl.glGetError() != gl.GL_INVALID_OPERATION)
+      /* success */
+      return;
+
+    /* the two attempts above fail on the Samsung Galaxy Tab; the
+       following has been verified to work */
+
+    Bitmap tmp = bmp.copy(Bitmap.Config.RGB_565, false);
+    if (tmp == null)
+      return;
+
+    gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGB,
+                    nextPowerOfTwo(bmp.getWidth()),
+                    nextPowerOfTwo(bmp.getHeight()),
+                    0, GL10.GL_RGB, GL10.GL_UNSIGNED_BYTE, null);
+    GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, tmp);
+    tmp.recycle();
   }
 
   /**

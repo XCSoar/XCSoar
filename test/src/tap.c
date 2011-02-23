@@ -176,6 +176,12 @@ _gen_result(int ok, const char *func, const char *file, unsigned int line,
 	}
 	free(local_test_name);
 
+#ifdef WIN32
+	// Flush the pipe content after each test
+	// to prevent a flooded pipe that freezes the application
+	fflush(stdout);
+#endif
+
 	UNLOCK;
 
 	/* We only care (when testing) that ok is positive, but here we

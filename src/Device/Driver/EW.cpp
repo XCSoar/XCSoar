@@ -30,11 +30,15 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Port.hpp"
 #include "NMEA/Checksum.h"
-#include "OS/Sleep.h"
+#include "Operation.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
 #include "Waypoint/Waypoint.hpp"
+
+#ifdef _UNICODE
+#include <windows.h>
+#endif
 
 #define  USESHORTTPNAME   1       // hack, soulf be configurable
 
@@ -55,11 +59,13 @@ public:
 protected:
   bool TryConnect();
   bool AddWayPoint(const Waypoint &way_point);
-  bool DeclareInner(const struct Declaration *declaration);
+  bool DeclareInner(const struct Declaration *declaration,
+                    OperationEnvironment &env);
 
 public:
   virtual void LinkTimeout();
-  virtual bool Declare(const struct Declaration *declaration);
+  virtual bool Declare(const struct Declaration *declaration,
+                       OperationEnvironment &env);
 };
 
 static void
@@ -108,7 +114,8 @@ convert_string(char *dest, size_t size, const TCHAR *src)
 }
 
 bool
-EWDevice::DeclareInner(const struct Declaration *decl)
+EWDevice::DeclareInner(const struct Declaration *decl,
+                       OperationEnvironment &env)
 {
   char sTmp[72];
 
@@ -118,7 +125,7 @@ EWDevice::DeclareInner(const struct Declaration *decl)
     return false;
 
   WriteWithChecksum(port, "#SPI"); // send SetPilotInfo
-  Sleep(50);
+  env.Sleep(50);
 
   char sPilot[13], sGliderType[9], sGliderID[9];
   convert_string(sPilot, sizeof(sPilot), decl->PilotName);
@@ -145,7 +152,7 @@ EWDevice::DeclareInner(const struct Declaration *decl)
   /*
   sprintf(sTmp, "#SUI%02d", 0);           // send pilot name
   WriteWithChecksum(port, sTmp);
-  Sleep(50);
+  env.Sleep(50);
   port->Write(PilotsName);
   port->Write('\r');
 
@@ -154,7 +161,7 @@ EWDevice::DeclareInner(const struct Declaration *decl)
 
   sprintf(sTmp, "#SUI%02d", 1);           // send type of aircraft
   WriteWithChecksum(port, sTmp);
-  Sleep(50);
+  env.Sleep(50);
   port->Write(Class);
   port->Write('\r');
 
@@ -163,7 +170,7 @@ EWDevice::DeclareInner(const struct Declaration *decl)
 
   sprintf(sTmp, "#SUI%02d", 2);           // send aircraft ID
   WriteWithChecksum(port, sTmp);
-  Sleep(50);
+  env.Sleep(50);
   port->Write(ID);
   port->Write('\r');
 
@@ -185,7 +192,7 @@ EWDevice::DeclareInner(const struct Declaration *decl)
 }
 
 bool
-EWDevice::Declare(const struct Declaration *decl)
+EWDevice::Declare(const struct Declaration *decl, OperationEnvironment &env)
 {
   fDeclarationPending = true;
 
@@ -195,7 +202,7 @@ EWDevice::Declare(const struct Declaration *decl)
 
   port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
-  bool success = DeclareInner(decl);
+  bool success = DeclareInner(decl, env);
 
   port->Write("NMEA\r\n"); // switch to NMEA mode
 

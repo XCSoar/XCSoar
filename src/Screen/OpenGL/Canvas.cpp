@@ -30,9 +30,10 @@ Copyright_License {
 #include "Screen/OpenGL/VertexArray.hpp"
 #include "Screen/OpenGL/Draw.hpp"
 #include "Screen/Util.hpp"
-#include "Util/AllocatedArray.hpp"
 
 #include <assert.h>
+
+AllocatedArray<RasterPoint> Canvas::vertex_buffer;
 
 void
 Canvas::rectangle(int left, int top, int right, int bottom)
@@ -61,28 +62,47 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
 }
 
 void
-Canvas::polyline(const RasterPoint *lppt, unsigned cPoints)
+Canvas::raised_edge(RECT &rc)
 {
-  glVertexPointer(2, GL_VALUE, 0, lppt);
+  Pen bright(1, Color(240, 240, 240));
+  select(bright);
+  two_lines(rc.left, rc.bottom - 2, rc.left, rc.top,
+            rc.right - 2, rc.top);
 
-  pen.set();
-  glDrawArrays(GL_LINE_STRIP, 0, cPoints);
+  Pen dark(1, Color(128, 128, 128));
+  select(dark);
+  two_lines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
+            rc.right - 1, rc.top + 1);
+
+  ++rc.left;
+  ++rc.top;
+  --rc.right;
+  --rc.bottom;
 }
 
 void
-Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
+Canvas::polyline(const RasterPoint *points, unsigned num_points)
+{
+  glVertexPointer(2, GL_VALUE, 0, points);
+
+  pen.set();
+  glDrawArrays(GL_LINE_STRIP, 0, num_points);
+}
+
+void
+Canvas::polygon(const RasterPoint *points, unsigned num_points)
 {
   if (brush.is_hollow() && !pen.defined())
     return;
 
-  glVertexPointer(2, GL_VALUE, 0, lppt);
+  glVertexPointer(2, GL_VALUE, 0, points);
 
-  if (!brush.is_hollow() && cPoints >= 3) {
+  if (!brush.is_hollow() && num_points >= 3) {
     brush.set();
 
     static AllocatedArray<GLushort> triangle_buffer;
-    triangle_buffer.grow_discard(3 * (cPoints - 2));
-    int idx_count = polygon_to_triangle(lppt, cPoints,
+    triangle_buffer.grow_discard(3 * (num_points - 2));
+    int idx_count = polygon_to_triangle(points, num_points,
                                         triangle_buffer.begin());
     if (idx_count > 0)
       glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT,
@@ -91,7 +111,52 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
 
   if (pen_over_brush()) {
     pen.set();
-    glDrawArrays(GL_LINE_LOOP, 0, cPoints);
+    if (pen.get_width() <= 2) {
+      glDrawArrays(GL_LINE_LOOP, 0, num_points);
+    } else {
+      vertex_buffer.grow_discard(2 * (num_points + 1));
+      unsigned vertices = line_to_triangle(points, num_points,
+                                           vertex_buffer.begin(),
+                                           pen.get_width(), true);
+      if (vertices > 0) {
+        glVertexPointer(2, GL_VALUE, 0, vertex_buffer.begin());
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
+      }
+    }
+  }
+}
+
+void
+Canvas::line(int ax, int ay, int bx, int by)
+{
+  pen.set();
+
+  const GLvalue v[] = { ax, ay, bx, by };
+  glVertexPointer(2, GL_VALUE, 0, v);
+  glDrawArrays(GL_LINE_STRIP, 0, 2);
+}
+
+/**
+ * Draw a line from a to b, using triangle caps if pen-size > 2 to hide
+ * gaps between consecutive lines.
+ */
+void
+Canvas::line_piece(const RasterPoint a, const RasterPoint b)
+{
+  pen.set();
+
+  const RasterPoint v[] = { {a.x, a.y}, {b.x, b.y} };
+  if (pen.get_width() > 2) {
+    RasterPoint strip[6];
+    unsigned strip_len = line_to_triangle(v, 2, strip, pen.get_width(),
+                                          false, true);
+    if (strip_len > 0) {
+      glVertexPointer(2, GL_VALUE, 0, &strip[0].x);
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, strip_len);
+    }
+  } else {
+    glVertexPointer(2, GL_VALUE, 0, &v[0].x);
+    glDrawArrays(GL_LINE_STRIP, 0, 2);
   }
 }
 
@@ -119,23 +184,31 @@ Canvas::two_lines(const RasterPoint a, const RasterPoint b,
 void
 Canvas::circle(int x, int y, unsigned radius)
 {
-  GLCircleVertices vertices(x, y, radius);
-  vertices.bind();
-
-  if (!brush.is_hollow()) {
-    brush.set();
-    glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.SIZE);
-  }
-
-  if (pen_over_brush()) {
-    pen.set();
-    glDrawArrays(GL_LINE_LOOP, 0, vertices.SIZE);
-#ifndef ANDROID
-    if (pen.get_width() > 1) {
-      glPointSize(pen.get_width());
-      glDrawArrays(GL_POINTS, 0, vertices.SIZE);
+  if (pen_over_brush() && pen.get_width() > 2) {
+    GLDonutVertices vertices(x, y,
+                             radius - pen.get_width()/2,
+                             radius + pen.get_width()/2);
+    if (!brush.is_hollow()) {
+      vertices.bind_circle();
+      brush.set();
+      glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.CIRCLE_SIZE);
     }
-#endif
+    vertices.bind();
+    pen.set();
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.SIZE);
+  } else {
+    GLCircleVertices vertices(x, y, radius);
+    vertices.bind();
+
+    if (!brush.is_hollow()) {
+      brush.set();
+      glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.SIZE);
+    }
+
+    if (pen_over_brush()) {
+      pen.set();
+      glDrawArrays(GL_LINE_LOOP, 0, vertices.SIZE);
+    }
   }
 }
 

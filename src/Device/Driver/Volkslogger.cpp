@@ -59,7 +59,8 @@ protected:
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
-  virtual bool Declare(const Declaration *declaration);
+  virtual bool Declare(const Declaration *declaration,
+                       OperationEnvironment &env);
 };
 
 // RMN: Volkslogger
@@ -224,7 +225,7 @@ VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
 }
 
 bool
-VolksloggerDevice::Declare(const Declaration *decl)
+VolksloggerDevice::Declare(const Declaration *decl, OperationEnvironment &env)
 {
   if (decl->size() < 2)
     return false;
@@ -239,7 +240,7 @@ VolksloggerDevice::Declare(const Declaration *decl)
 
   ProgressGlue::SetStep(1);
 
-  VLAPI vl;
+  VLAPI vl(env);
   vl.set_port(port);
 
   bool success = DeclareInner(vl, decl);

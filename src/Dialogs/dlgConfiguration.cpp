@@ -818,9 +818,9 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
     JNIEnv *env = Java::GetEnv();
     jobjectArray bonded = BluetoothHelper::list(env);
     if (bonded != NULL) {
-      jsize n = env->GetArrayLength(bonded);
+      jsize n = env->GetArrayLength(bonded) / 2;
       for (jsize i = 0; i < n; ++i) {
-        jstring address = (jstring)env->GetObjectArrayElement(bonded, i);
+        jstring address = (jstring)env->GetObjectArrayElement(bonded, i * 2);
         if (address == NULL)
           continue;
 
@@ -828,11 +828,25 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
         if (address2 == NULL)
           continue;
 
-        dfe->addEnumText(address2);
+        jstring name = (jstring)env->GetObjectArrayElement(bonded, i * 2 + 1);
+        const char *name2 = name != NULL
+          ? env->GetStringUTFChars(name, NULL)
+          : NULL;
+
+        dfe->addEnumText(address2, name2);
         env->ReleaseStringUTFChars(address, address2);
+        if (name2 != NULL)
+          env->ReleaseStringUTFChars(name, name2);
       }
 
       env->DeleteLocalRef(bonded);
+
+      if (config.port_type == DeviceConfig::RFCOMM &&
+          !config.bluetooth_mac.empty()) {
+        if (!dfe->Exists(config.bluetooth_mac))
+          dfe->addEnumText(config.bluetooth_mac);
+        dfe->SetAsString(config.bluetooth_mac);
+      }
     }
 #else
     dfe->addEnumTexts(COMMPort);

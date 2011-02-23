@@ -118,16 +118,6 @@ PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   GPS_INFO->SwitchState.FlapLanding =
     (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
 
-  bool is_circling = false;
-  switch (device_blackboard.SettingsComputer().EnableExternalTriggerCruise) {
-  case 1:
-    is_circling = GPS_INFO->SwitchState.FlapLanding;
-    break;
-  case 2:
-    is_circling = GPS_INFO->SwitchState.SpeedCommand;
-    break;
-  }
-
   long up_switchinputs;
   long down_switchinputs;
   long up_switchoutputs;

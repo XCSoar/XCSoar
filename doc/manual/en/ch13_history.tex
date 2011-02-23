@@ -1,0 +1,211 @@
+\chapter{History and Development}\label{cha:history-development}
+
+\section{Product history}
+\todonum[inline]{Describe background of XCSoar and its developers,
+ development process, get on board!  If you want something, ask (nicely)}
+
+XCSoar started as a commercial product developed by Mike Roberts (UK),
+where it enjoyed a successful share of the market for several years
+and going though several releases, the last being {\bf Version~2}.
+Personal reasons prevented him from being able to continue supporting
+the product and so in late 2004 he announced the licensing of the
+source code to the GNU public license, as XCSoar {\bf Version~3}.  A support
+website on Yahoo Groups was set up and the open source project started
+to gain interest and input by developers.
+
+In March 2005 the program was substantially enhanced and this resulted 
+in {\bf Version~4.0} being released.  By this time, coordination of
+the various development efforts on the source code became difficult
+and time-consuming, so it was decided to move the project to
+SourceForge, whereby all the software work could be managed by a
+concurrent version management system.
+
+In July 2005, {\bf Version~4.2} was released which addressed some
+compatibility issues that were experienced with certain PDA and GPS
+hardware configurations.
+
+In September 2005, {\bf Version~4.5} was released.  This contained
+major enhancements to the user interface including the introduction
+of the `input event' system and language translation files.
+
+In April 2006, {\bf Version~4.7} was released to Altair customers.
+This contained stability and performance enhancements as well as many
+bug fixes; and a new method for handling dialogs based on XML files.
+
+In September 2006, {\bf Version~5.0} was released on all platforms,
+Altair, PC, PDA.  This version contains many improvements and new
+features and is based on extensive testing in flight and in
+simulation.
+
+In September 2007, {\bf Version~5.1.2} was released on all platforms,
+Altair, PC, PDA.  This version contains many improvements and new
+features and is based on extensive testing in flight and in
+simulation.  Major improvements include a new map file format
+incorporating JPG2000 compression, online contest support, additional
+supported devices, FLARM radar screen, and overall improved stability,
+reliability and accuracy of task calculations.  Many feature requests
+from users have been incorporated into this release.
+
+\todo[inline]{What happened in the three years up to Version 6.0}
+
+\section{Get involved}
+
+The success of the project is the result of many kinds of
+contributions.  You do not have to be a software developer to help.
+
+In general, there are perhaps five major ways of contributing, other
+than working on the software itself:
+\begin{description}
+\item[Give feedback]
+Ideas, suggestions, bug reports, encouragement and
+constructive criticism are all very welcome and helpful.
+\item[Setup suggestions]
+Because XCSoar is so configurable, we rely to some extent on users to
+think about how they would like the program to be set up.  Selection
+of infobox layouts, button menus and button assignments require some
+design thought, and making these available to the developers and other
+users will help us provide good default settings.
+\item[Data integrity]
+Airspace and waypoint files need to be kept up to date, and it often
+takes people with local knowledge to do this.
+\item[Promotion]  The more users the software has, the better
+ the product will be.  As more people use the software and give
+ feedback, bugs are found more easily and improvements can occur at a
+ greater pace.  You can help here, for example, by showing the
+ software to others and by conducting demonstration and training
+ sessions in your club.
+\item[Documentation]  You are encouraged to add and edit text on the
+XCSoar homepage, which is set up as a `Wiki'.  All you need to do is
+to register for edit access.
+\end{description}
+
+\section{Open source philosophy}
+
+There are several benefits to having software like XCSoar open source.
+
+\begin{itemize}
+\item Firstly, it is free so pilots can try out the software at no
+ cost and decide if it is suitable for their needs; and pilots are free
+ to copy the program onto whatever Pocket PC device, PC or EFIS they like
+ without charge.
+\item You have access to the source code so you are free to change
+ the software or use pieces of it in new free programs.
+\item Having the source code available on the Internet means that it is
+ subject to wide scrutiny and therefore bugs are easily and quickly fixed.
+\item A large group of developers are available to help in troubleshooting
+ and quickly implement new features upon request.
+\item Open source software under the GNU public license cannot at a later
+ date be made closed-source; so by using this software you will not be
+ locked in to unspecified software costs in the future.
+\end{itemize}
+
+The full terms of the licensing agreement for XCSoar is given in
+Appendix~\ref{cha:gnu-general-public}.
+
+The development of XCSoar since its open source release has been
+entirely a volunteer effort.  This does not preclude individual
+developers or organisations from offering commercial support services.
+The spirit of the project however suggests that in such cases the
+commercial services are encouraged to produce some flow-on benefit
+back to the wider community of users.
+
+\section{Development process}
+
+We try to incorporate new features as quickly as possible.  This has
+to be balanced by the needs to not change substantially the interface
+without appropriate warnings so users that upgrade do not get a shock.
+This means that when we introduced the new button menu system in
+version 4.5, it was necessary to also distribute a file that allowed
+users to have the buttons assigned to their `legacy' function.
+
+XCSoar, being used in flight, is a special kind of software because it
+can be regarded as `mission-critical', and is a real-time system.
+This has placed a very high emphasis on developers to perform a great
+deal of testing before releasing changes to the public.  
+
+Flight testing is certainly the best sort of test, but we have also
+been able to conduct the bulk of testing by using XCSoar in a car,
+and more recently, by replaying IGC flight logs.
+
+In general, we don't want the program to crash or hang, ever, and if
+it does so during testing, then whatever bug caused the problem has to
+be fixed as top priority.
+
+The software developers all keep in contact with each other through
+the SourceForge developer's mailing list
+\begin{quote}
+\url{xcsoar-devel@lists.sourceforge.net}
+\end{quote}
+We try to coordinate our activities to avoid conflict and duplicated
+effort, and to work together as a team.  If you would like to get
+involved in the software development, send the developers an email.
+
+\section{User base}
+
+Who is using XCSoar?  Good question, and hard to answer.  Since no-one
+pays for the product --- most people download the program anonymously
+--- it is hard for anyone to keep track of how many users are out
+there.
+
+Statistics from the main website indicate there has been an average of
+approximately twenty downloads per day between June 2005 and June
+2006, and eighty downloads per day between June 2006 and September
+2007.  Looking at how many people download the terrain and topology
+data packs from the website indicates that it is used in many
+countries and in nearly every continent.
+
+XCSoar is used by a wide cross section of pilots, including early
+post-solo through to experienced competition pilots.  There are many
+`armchair' pilots who use XCSoar with gliding simulators, such as
+Condor.
+
+\section{Credits}
+
+Software developers:
+\begin{itemize}
+\item Mike Roberts 
+\item John Wharington \url{jwharington@gmail.com}
+\item Samuel Gisiger \url{samuel.gisiger@triadis.ch}
+\item Scott Penrose \url{scottp@dd.com.au}
+\item Jeff Goodenough \url{jeff@enborne.f2s.com}
+\item Robin Birch \url{robinb@ruffnready.co.uk}
+\item Alastair Harrison \url{aharrison@magic.force9.co.uk}
+\item Lars H \url{lars_hn@hotmail.com}
+\item Rob Dunning \url{rob@raspberryridgesheepfarm.com}
+\item Russell King \url{rmk@arm.linux.org.uk}
+\item Paolo Ventafridda \url{coolwind@email.it}
+\item Tobias Lohner \url{tobias@lohner-net.de}
+\item Mirek Jezek \url{mjezek@ipplc.cz}
+\item Max Kellermann \url{max@duempel.org}
+\item Tobias Bieniek \url{tobias.bieniek@gmx.de}
+\item Simon Taylor \url{simon.taylor.uk@gmail.com}
+\item Matthew Scutter \url{yellowplantain@gmail.com}
+\item Gabor Liptak \url{liptakgabor@freemail.hu}
+\item Matthew Turnbull \url{matthewt@talk21.com}
+\end{itemize}
+
+Translators:
+\begin{itemize}
+\item Brtko Peter \url{p.brtko@facc.co.at}
+\item Andres Miramontes \url{amiramon@gmail.com}
+\item Helmut J. Rohs \url{helmut.j.rohs@web.de}
+\item Michal Jezierski \url{m.jezierski@finke.pl}
+\item Peter Hanhart \url{peter.hanhart@schoensleben.ch}
+\item Philipp Wollschlegel \url{folken@kabelsalat.ch}
+\item Roman Stoklasa \url{rstoki@gmail.com}
+\item Sylvain Burger \url{sylvain.burger@wanadoo.fr}
+\item Luis Fernando Rigato Vasconcellos \url{fernando.rigato@gmail.com}
+\item Joop Gooden \url{joop.gooden@nlr.nl}
+\item Luke Szczepaniak \url{luke@silentflight.ca}
+\end{itemize}
+
+Other code and algorithms contributions come from:
+\begin{description}
+\item[Ephemeris] Jarmo Lammi
+\item[Shapelib] Frank Warmerdam
+\item[Least squares] Curtis Olson \url{http://www.flightgear.org/~curt}
+\item[Aviation Formulary] Ed Williams
+\item[JasPer] Michael D. Adams \url{http://www.ece.uvic.ca/~mdadams/jasper/}
+\item[KFlog] Volkslogger code by Heiner Lamprecht
+\item[Volkslogger support] Garrecht Ingenieurgesellschaft
+\end{description}

@@ -22,8 +22,11 @@
 
 #include "Device/Port.hpp"
 
+#include <algorithm>
 #include <assert.h>
 #include <stdio.h>
+
+static unsigned inject_port_fault;
 
 class FaultInjectionPort : public Port {
 public:
@@ -68,11 +71,15 @@ public:
   }
 
   int Read(void *Buffer, size_t Size) {
-    return -1;
+    if (inject_port_fault == 0)
+      return -1;
+
+    --inject_port_fault;
+    char *p = (char *)Buffer;
+    std::fill(p, p + Size, ' ');
+    return Size;
   }
 };
-
-static unsigned inject_port_fault;
 
 Port::Port(Handler &_handler)
   :handler(_handler) {}

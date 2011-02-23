@@ -31,23 +31,46 @@ Copyright_License {
 class DataFieldEnum: public DataField
 {
 public:
-  struct Entry : private NonCopyable {
-    TCHAR *mText;
+  class Entry : private NonCopyable {
     unsigned id;
+    TCHAR *string;
+    TCHAR *display_string;
     TCHAR *mHelp;
 
-    Entry():mText(NULL), mHelp(NULL) {}
+  public:
+    Entry():string(NULL), display_string(NULL), mHelp(NULL) {}
     ~Entry();
+
+    unsigned GetId() const {
+      return id;
+    }
+
+    const TCHAR *GetString() const {
+      return string;
+    }
+
+    const TCHAR *GetDisplayString() const {
+      return display_string;
+    }
+
+    const TCHAR *GetHelp() const {
+      return mHelp;
+    }
+
+    void SetString(const TCHAR *_string);
+    void Set(unsigned _id, const TCHAR *_string,
+             const TCHAR *_display_string=NULL,
+             const TCHAR *_help=NULL);
   };
 
 private:
   StaticArray<Entry, 128> entries;
-  unsigned int mValue;
+  unsigned int value;
 
 public:
   DataFieldEnum(DataAccessCallback_t OnDataAccess) :
     DataField(_T(""), _T(""), OnDataAccess),
-    mValue(0)
+    value(0)
   {
     SupportCombo = true;
   }
@@ -63,7 +86,8 @@ public:
 
   void replaceEnumText(unsigned int i, const TCHAR *Text);
   bool addEnumText(const TCHAR *Text, unsigned id, const TCHAR *ItemHelpText = NULL);
-  unsigned addEnumText(const TCHAR *Text, const TCHAR *ItemHelpText = NULL);
+  unsigned addEnumText(const TCHAR *Text, const TCHAR *display_string=NULL,
+                       const TCHAR *ItemHelpText=NULL);
   void addEnumTexts(const TCHAR *const*list);
 
   gcc_pure
@@ -71,6 +95,7 @@ public:
 
   gcc_pure
   virtual const TCHAR *GetAsString() const;
+  virtual const TCHAR *GetAsDisplayString() const;
 
   /**
    * @param value True if display item help in text box below picker

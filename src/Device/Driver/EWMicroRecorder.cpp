@@ -66,7 +66,8 @@ protected:
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
-  virtual bool Declare(const Declaration *declaration);
+  virtual bool Declare(const Declaration *declaration,
+                       OperationEnvironment &env);
 };
 
 static bool
@@ -127,7 +128,7 @@ EWMicroRecorderDevice::TryConnect()
     bool started = false;
 
     int i;
-    while ((i = port->GetChar()) != _TEOF) {
+    while ((i = port->GetChar()) != EOF) {
       char ch = (char)i;
 
       if (!started && ch == _T('-'))
@@ -261,7 +262,8 @@ EWMicroRecorderDevice::DeclareInner(const Declaration *decl)
 }
 
 bool
-EWMicroRecorderDevice::Declare(const Declaration *decl)
+EWMicroRecorderDevice::Declare(const Declaration *decl,
+                               OperationEnvironment &env)
 {
   // Must have at least two, max 12 waypoints
   if (decl->size() < 2 || decl->size() > 12)

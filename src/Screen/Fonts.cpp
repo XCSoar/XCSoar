@@ -138,7 +138,7 @@ InitialiseLogFonts()
   }
 
 #ifdef ENABLE_SDL
-  int FontHeight = Layout::SmallScale(20);
+  int FontHeight = Layout::SmallScale(24);
 #else
   int FontHeight = Layout::SmallScale(35);
 #endif

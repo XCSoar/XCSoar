@@ -23,6 +23,8 @@ Copyright_License {
 #ifndef MAP_DRAW_HELPER_HPP
 #define MAP_DRAW_HELPER_HPP
 
+#ifndef ENABLE_OPENGL
+
 #include "Navigation/SearchPointVector.hpp"
 #include "Screen/Point.hpp"
 #include "Geo/GeoClip.hpp"
@@ -36,7 +38,7 @@ struct SETTINGS_MAP;
 /**
  * Utility class to draw multilayer items on a canvas with stencil masking
  */
-class MapDrawHelper 
+class MapDrawHelper
 {
   const GeoClip clip;
 
@@ -47,10 +49,8 @@ class MapDrawHelper
 
 public:
   MapDrawHelper(Canvas &_canvas,
-#ifndef ENABLE_OPENGL
-                Canvas &_buffer, 
-                Canvas &_stencil, 
-#endif
+                Canvas &_buffer,
+                Canvas &_stencil,
                 const WindowProjection &_proj,
                 const SETTINGS_MAP& settings_map);
 
@@ -58,14 +58,10 @@ public:
 
   Canvas &m_canvas;
   Canvas &m_buffer;
-#ifndef ENABLE_OPENGL
   Canvas &m_stencil;
-#endif
   const Projection& m_proj;
-#ifndef ENABLE_OPENGL
   bool m_buffer_drawn;
   bool m_use_stencil;
-#endif
 
   const SETTINGS_MAP& m_settings_map;
 
@@ -83,5 +79,6 @@ protected:
   void clear_buffer();
 };
 
+#endif // !ENABLE_OPENGL
 
 #endif

@@ -26,7 +26,7 @@ Copyright_License {
 Device::~Device() {}
 
 bool
-AbstractDevice::Open()
+AbstractDevice::Open(OperationEnvironment &env)
 {
   return true;
 }
@@ -104,7 +104,8 @@ AbstractDevice::PutStandbyFrequency(double frequency)
 }
 
 bool
-AbstractDevice::Declare(const struct Declaration *declaration)
+AbstractDevice::Declare(const struct Declaration *declaration,
+                        OperationEnvironment &env)
 {
   return false;
 }

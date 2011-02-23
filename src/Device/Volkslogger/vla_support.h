@@ -23,6 +23,7 @@
 #include "vlapierr.h"
 
 class Port;
+class OperationEnvironment;
 
 /*
 	VLA_SYS contains target system dependent primitives upon which
@@ -111,6 +112,8 @@ protected:
 
 	static int32 commandbaud;    // baudrate for commands
 
+  OperationEnvironment &env;
+
   int32 databaud; // Baudrate as integer (e.g. 115200)
   int databaudidx; // Baudrate as index for VOLKSLOGGER
   // send command to VL
@@ -120,7 +123,7 @@ protected:
   // read block of data from VL, with flow-control
   int32 readlog(lpb puffer, int32);
 
-  VLA_XFR();
+  VLA_XFR(OperationEnvironment &env);
   void set_databaud(int32 db);
 
 	// establish connection with VL within specified time

@@ -31,7 +31,7 @@ Copyright_License {
 #include "Device/Driver/CaiGpsNav.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port.hpp"
-#include "OS/Sleep.h"
+#include "Operation.hpp"
 
 #include <tchar.h>
 
@@ -45,14 +45,14 @@ public:
   CaiGpsNavDevice(Port *_port):port(_port) {}
 
 public:
-  virtual bool Open();
+  virtual bool Open(OperationEnvironment &env);
 };
 
 bool
-CaiGpsNavDevice::Open()
+CaiGpsNavDevice::Open(OperationEnvironment &env)
 {
   port->Write(CtrlC);
-  Sleep(50);
+  env.Sleep(50);
   port->Write("NMEA\r");
 
   // This is for a slightly different mode, that

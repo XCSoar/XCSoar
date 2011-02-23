@@ -41,4 +41,9 @@ unsigned
 triangle_to_strip(GLushort *triangles, unsigned index_count,
                   unsigned vertex_count, unsigned polygon_count=1);
 
+unsigned
+line_to_triangle(const RasterPoint *points, unsigned num_points,
+                 RasterPoint *strip, unsigned line_width,
+                 bool loop=false, bool tcap=false);
+
 #endif
