@@ -26,11 +26,6 @@ Copyright_License {
 ClimbAverageCalculator::ClimbAverageCalculator()
 {
 	newestValIndex = -1;
-
-	for (int i = 0; i < MAX_HISTORY; i++) {
-    history[i].altitude = fixed(-99999);
-    history[i].time = fixed(-99999);
-	}
 }
 
 fixed
@@ -41,6 +36,7 @@ ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_tim
   newestValIndex = newestValIndex < MAX_HISTORY - 1 ? newestValIndex + 1 : 0;
 
   // add the new sample
+  history[newestValIndex].valid = true;
   history[newestValIndex].time = time;
   history[newestValIndex].altitude = altitude;
 
@@ -50,7 +46,7 @@ ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_tim
   // now run through the history and find the best sample
   // for average period within the average time period
   for (int i = 0; i < MAX_HISTORY; i++) {
-    if (negative(history[i].time))
+    if (!history[i].valid)
       continue;
 
     // outside the period -> skip value

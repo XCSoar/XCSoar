@@ -29,18 +29,21 @@ Copyright_License {
 class ClimbAverageCalculator
 {
 public:
-	ClimbAverageCalculator();
-	fixed GetAverage(fixed time, fixed altitude, fixed average_time);
+  ClimbAverageCalculator();
+  fixed GetAverage(fixed time, fixed altitude, fixed average_time);
 
 private:
-	static int const MAX_HISTORY = 40;
-	struct HistoryItem
-	{
-		fixed time;
-		fixed altitude;
-	};
+  static int const MAX_HISTORY = 40;
+  struct HistoryItem
+  {
+    bool valid;
+    fixed time;
+    fixed altitude;
 
-	HistoryItem history[MAX_HISTORY];
+    HistoryItem(): valid(false) {}
+  };
+
+  HistoryItem history[MAX_HISTORY];
   int newestValIndex;
 };
 
