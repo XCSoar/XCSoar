@@ -50,6 +50,11 @@ dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(parent, id);
 }
 
+WndForm* dlgInfoBoxAccess::GetWindowForm()
+{
+  return wf;
+}
+
 void
 dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
 {

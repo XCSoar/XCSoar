@@ -39,6 +39,7 @@ public:
 
   static void dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id);
 
+  static WndForm* GetWindowForm();
 };
 
 
