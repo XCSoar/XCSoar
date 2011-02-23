@@ -229,7 +229,7 @@ polygon_to_triangle(const RasterPoint *points, unsigned num_points,
  * Create a triangle strip representing a thick line.
  *
  * @param points line coordinates
- * @param num_points numer of line points
+ * @param num_points number of line points
  * @param strip triangle vertices, size: 2*(num_points + (int)(loop || tcap))
  * @param line_width width of line in pixels
  * @param loop true if line is a closed loop
@@ -247,11 +247,12 @@ line_to_triangle(const RasterPoint *points, unsigned num_points,
   if (loop && num_points < 3)
     loop = false;
 
+  float half_line_width = line_width*0.5f;
   RasterPoint *s = strip;
   const RasterPoint *a, *b, *c;
   const RasterPoint * const points_end = points + num_points;
 
-  // initialize a, b and vertices
+  // initialize a, b and c vertices
   if (loop) {
     b = points + num_points - 1;
     a = b-1;
@@ -278,7 +279,7 @@ line_to_triangle(const RasterPoint *points, unsigned num_points,
     if (tcap) {
       p.x = a->x - b->x;
       p.y = a->y - b->y;
-      normalize(&p, line_width * 0.5f);
+      normalize(&p, half_line_width);
 
       s->x = a->x + p.x;
       s->y = a->y + p.y;
@@ -286,7 +287,7 @@ line_to_triangle(const RasterPoint *points, unsigned num_points,
     }
     p.x = a->y - b->y;
     p.y = b->x - a->x;
-    normalize(&p, line_width * 0.5f);
+    normalize(&p, half_line_width);
 
     s->x = a->x - p.x;
     s->y = a->y - p.y;
@@ -318,8 +319,9 @@ line_to_triangle(const RasterPoint *points, unsigned num_points,
         if (projected_length < 400.f)
           projected_length = 400.f;
 
-        bisector_x = floor(bisector_x/projected_length*line_width*0.5f + 0.5f);
-        bisector_y = floor(bisector_y/projected_length*line_width*0.5f + 0.5f);
+        float scale = half_line_width / projected_length;
+        bisector_x = floor(bisector_x*scale + 0.5f);
+        bisector_y = floor(bisector_y*scale + 0.5f);
 
         s->x = b->x - bisector_x;
         s->y = b->y - bisector_y;
@@ -348,7 +350,7 @@ line_to_triangle(const RasterPoint *points, unsigned num_points,
     RasterPoint p;
     p.x = a->y - b->y;
     p.y = b->x - a->x;
-    normalize(&p, line_width * 0.5f);
+    normalize(&p, half_line_width);
 
     s->x = b->x - p.x;
     s->y = b->y - p.y;
@@ -359,7 +361,7 @@ line_to_triangle(const RasterPoint *points, unsigned num_points,
     if (tcap) {
       p.x = b->x - a->x;
       p.y = b->y - a->y;
-      normalize(&p, line_width * 0.5f);
+      normalize(&p, half_line_width);
 
       s->x = b->x + p.x;
       s->y = b->y + p.y;
