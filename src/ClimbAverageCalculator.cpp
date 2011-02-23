@@ -47,12 +47,13 @@ ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_tim
   // initially bestHistory is the current...
   bestHistory = newestValIndex;
 
-  // now run through the history and find the best sample for average period within the average time period
+  // now run through the history and find the best sample
+  // for average period within the average time period
   for (int i = 0; i < MAX_HISTORY; i++) {
     if (negative(history[i].time))
       continue;
 
-    // inside the period ?
+    // outside the period -> skip value
     if (history[i].time + average_time < time)
       continue;
 
