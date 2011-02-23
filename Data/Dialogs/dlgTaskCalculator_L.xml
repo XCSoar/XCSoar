@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmTaskCalculator" X="5" Y="0" Width="320" Height="240" Caption="Task Calculator">
+<Form Name="frmTaskCalculator" X="0" Y="0" Width="320" Height="240" Caption="Task Calculator">
 
   <Button Name="Target" Caption="Target" X="2" Y="2" Width="75" Height="35" OnClick="OnTargetClicked" />
   <Button Name="cmdTaskManager" Caption="Task Manager" X="2" Y="-111" Width="75" Height="35" OnClick="OnTaskManagerClicked" />
