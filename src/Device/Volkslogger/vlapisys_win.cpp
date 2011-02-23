@@ -123,8 +123,6 @@ void VLA_SYS::progress_reset()
 
 void VLA_SYS::progress_set(VLS_TXT_ID txtid)
 {
-  ProgressGlue::Step();
-
   if(noninteractive)  return;
 }
 

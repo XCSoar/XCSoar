@@ -27,6 +27,7 @@
 #include "Units/Units.hpp"
 #include "TestUtil.hpp"
 #include "tstring.hpp"
+#include "Operation.hpp"
 
 #include <vector>
 
@@ -185,7 +186,8 @@ TestWayPointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
     return false;
   }
 
-  if(!ok1(f.Parse(way_points))) {
+  OperationEnvironment operation;
+  if(!ok1(f.Parse(way_points, operation))) {
     skip(2, 0, "parsing waypoint file failed");
     return false;
   }

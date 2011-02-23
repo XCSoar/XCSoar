@@ -25,8 +25,10 @@ Copyright_License {
 #define TOPOGRAPHY_GLUE_H
 
 class TopographyStore;
+class OperationEnvironment;
 
 bool
-LoadConfiguredTopography(TopographyStore &store);
+LoadConfiguredTopography(TopographyStore &store,
+                         OperationEnvironment &operation);
 
 #endif

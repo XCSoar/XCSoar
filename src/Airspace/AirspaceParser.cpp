@@ -24,7 +24,7 @@ Copyright_License {
 
 #include "AirspaceParser.hpp"
 #include "Airspace/Airspaces.hpp"
-#include "ProgressGlue.hpp"
+#include "Operation.hpp"
 #include "Units/Units.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
@@ -830,13 +830,14 @@ DetectFileType(const TCHAR *line)
 }
 
 bool
-ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
+ReadAirspace(Airspaces &airspace_database, TLineReader &reader,
+             OperationEnvironment &operation)
 {
   int LineCount = 0;
   bool ignore = false;
 
   // Create and init ProgressDialog
-  ProgressGlue::SetRange(1024);
+  operation.SetProgressRange(1024);
 
   long file_size = reader.size();
 
@@ -878,7 +879,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 
     // Update the ProgressDialog
     if ((LineCount & 0xff) == 0)
-      ProgressGlue::SetValue(reader.tell() * 1024 / file_size);
+      operation.SetProgressPosition(reader.tell() * 1024 / file_size);
   }
 
   if (LineCount == 0)

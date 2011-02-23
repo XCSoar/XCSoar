@@ -30,6 +30,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "WindowProjection.hpp"
+#include "Operation.hpp"
 
 #include <zzip/zzip.h>
 
@@ -98,7 +99,8 @@ int main(int argc, char **argv)
   }
 
   TopographyStore topography;
-  topography.Load(reader, NULL, NULL, dir);
+  OperationEnvironment operation;
+  topography.Load(operation, reader, NULL, dir);
   zzip_dir_close(dir);
 
   TestProjection projection;

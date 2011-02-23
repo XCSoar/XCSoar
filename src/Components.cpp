@@ -87,6 +87,7 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideComputerInterface.hpp"
 #include "ProgressGlue.hpp"
+#include "Operation.hpp"
 #include "Pages.hpp"
 
 #ifndef ENABLE_OPENGL
@@ -215,6 +216,8 @@ XCSoarInterface::AfterStartup()
 bool
 XCSoarInterface::Startup(HINSTANCE hInstance)
 {
+  OperationEnvironment operation(true);
+
   // Set the application title to "XCSoar"
   TCHAR szTitle[] = _T("XCSoar");
 
@@ -264,7 +267,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   if (!LoadProfile())
     return false;
 
-  ProgressGlue::Create(_("Initialising"));
+  operation.SetText(_("Initialising"));
 
   LoadDisplayOrientation();
 
@@ -324,9 +327,9 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   airspace_warnings = new ProtectedAirspaceWarningManager(*airspace_warning);
 
   // Read the terrain file
-  ProgressGlue::Create(_("Loading Terrain File..."));
+  operation.SetText(_("Loading Terrain File..."));
   LogStartUp(_T("OpenTerrain"));
-  terrain = RasterTerrain::OpenTerrain(file_cache);
+  terrain = RasterTerrain::OpenTerrain(file_cache, operation);
 
   glide_computer = new GlideComputer(way_points, airspace_database,
                                      *protected_task_manager,
@@ -350,13 +353,13 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   // Read the topography file(s)
   topography = new TopographyStore();
-  LoadConfiguredTopography(*topography);
+  LoadConfiguredTopography(*topography, operation);
 
   // Read the waypoint files
-  WayPointGlue::LoadWaypoints(way_points, terrain);
+  WayPointGlue::LoadWaypoints(way_points, terrain, operation);
 
   // Read and parse the airfield info file
-  ReadAirfieldFile(way_points);
+  ReadAirfieldFile(way_points, operation);
 
   // Set the home waypoint
   WayPointGlue::SetHome(way_points, terrain, SetSettingsComputer(),
@@ -366,12 +369,12 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   ReadBlackboardBasic(device_blackboard.Basic());
 
   // Scan for weather forecast
-  ProgressGlue::Create(_("Scanning weather forecast"));
   LogStartUp(_T("RASP load"));
-  RASP.ScanAll(Basic().Location);
+  RASP.ScanAll(Basic().Location, operation);
 
   // Reads the airspace files
-  ReadAirspace(airspace_database, terrain, SettingsComputer().pressure);
+  ReadAirspace(airspace_database, terrain, SettingsComputer().pressure,
+               operation);
 
   const AIRCRAFT_STATE aircraft_state =
     ToAircraftState(device_blackboard.Basic(), device_blackboard.Calculated());
@@ -392,7 +395,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 #endif
 
   // Start the device thread(s)
-  ProgressGlue::Create(_("Starting devices"));
+  operation.SetText(_("Starting devices"));
   devStartup();
 
 /*
@@ -403,7 +406,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   This should be done inside devStartup if it is really required
 */
 
-  ProgressGlue::Create(_("Initialising display"));
+  operation.SetText(_("Initialising display"));
 
   main_window.map.set_way_points(&way_points);
   main_window.map.set_task(protected_task_manager);
@@ -460,10 +463,11 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 void
 XCSoarInterface::Shutdown(void)
 {
+  OperationEnvironment operation(true);
   gcc_unused ScopeBusyIndicator busy;
 
   // Show progress dialog
-  ProgressGlue::Create(_("Shutdown, please wait..."));
+  operation.SetText(_("Shutdown, please wait..."));
 
   // Log shutdown information
   LogStartUp(_T("Entering shutdown..."));
@@ -473,11 +477,11 @@ XCSoarInterface::Shutdown(void)
   globalRunningEvent.Reset();
 
   // Stop logger and save igc file
-  ProgressGlue::Create(_("Shutdown, saving logs..."));
+  operation.SetText(_("Shutdown, saving logs..."));
   logger.guiStopLogger(Basic(), true);
 
   // Save settings to profile
-  ProgressGlue::Create(_("Shutdown, saving profile..."));
+  operation.SetText(_("Shutdown, saving profile..."));
   Profile::Save();
 
   // Stop sound
@@ -489,7 +493,7 @@ XCSoarInterface::Shutdown(void)
   //  VarioSound_Close();
 #endif
 
-  ProgressGlue::Create(_("Shutdown, please wait..."));
+  operation.SetText(_("Shutdown, please wait..."));
 
   // Stop threads
   LogStartUp(_T("Stop threads"));
@@ -516,7 +520,7 @@ XCSoarInterface::Shutdown(void)
   main_window.map.reset();
 
   // Save the task for the next time
-  ProgressGlue::Create(_("Shutdown, saving task..."));
+  operation.SetText(_("Shutdown, saving task..."));
 
   LogStartUp(_T("Save default task"));
   protected_task_manager->task_save_default();
@@ -525,7 +529,7 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(_T("Close waypoints"));
   way_points.clear();
 
-  ProgressGlue::Create(_("Shutdown, please wait..."));
+  operation.SetText(_("Shutdown, please wait..."));
 
   // Clear weather database
   LogStartUp(_T("CloseRASP"));

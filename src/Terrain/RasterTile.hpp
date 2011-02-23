@@ -37,6 +37,7 @@ Copyright_License {
 
 struct RasterLocation;
 struct GridLocation;
+class OperationEnvironment;
 
 class RasterTile : private NonCopyable {
   struct MetaData {
@@ -256,8 +257,13 @@ protected:
    */
   StaticArray<unsigned short, MAX_RTC_TILES> RequestTiles;
 
+  /**
+   * Progress callbacks for loading the file during startup.
+   */
+  OperationEnvironment *operation;
+
 public:
-  RasterTileCache() {
+  RasterTileCache():operation(NULL) {
     Reset();
   }
 
@@ -328,7 +334,8 @@ protected:
   short GetFieldDirect(const unsigned px, const unsigned py, int &tile_index) const;
 
 public:
-  bool LoadOverview(const char *path, const TCHAR *world_file);
+  bool LoadOverview(const char *path, const TCHAR *world_file,
+                    OperationEnvironment &operation);
 
   bool SaveCache(FILE *file) const;
   bool LoadCache(FILE *file);

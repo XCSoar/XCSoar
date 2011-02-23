@@ -31,6 +31,7 @@ Copyright_License {
 #include <tchar.h>
 
 class RasterMap;
+class OperationEnvironment;
 struct zzip_dir;
 
 /**
@@ -85,9 +86,9 @@ public:
   /**
    * @param day_time the UTC time, in seconds since midnight
    */
-  void Reload(int day_time);
+  void Reload(int day_time, OperationEnvironment &operation);
 
-  void ScanAll(const GeoPoint &location);
+  void ScanAll(const GeoPoint &location, OperationEnvironment &operation);
   bool isWeatherAvailable(unsigned t) const;
 
   gcc_pure
@@ -105,7 +106,8 @@ private:
   static void GetFilename(TCHAR *rasp_filename, const TCHAR *name,
                           unsigned time_index);
 
-  bool LoadItem(const TCHAR* name, unsigned time_index);
+  bool LoadItem(const TCHAR* name, unsigned time_index,
+                OperationEnvironment &operation);
 
   gcc_pure
   bool ExistsItem(struct zzip_dir *dir, const TCHAR* name,

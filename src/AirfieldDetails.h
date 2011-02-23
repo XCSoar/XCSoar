@@ -25,7 +25,9 @@ Copyright_License {
 #define AIRFIELDDETAILS_H
 
 class Waypoints;
+class OperationEnvironment;
 
-void ReadAirfieldFile(Waypoints &way_points);
+void
+ReadAirfieldFile(Waypoints &way_points, OperationEnvironment &operation);
 
 #endif

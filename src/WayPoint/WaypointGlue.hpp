@@ -28,6 +28,7 @@ Copyright_License {
 
 class Waypoints;
 class RasterTerrain;
+class OperationEnvironment;
 struct SETTINGS_COMPUTER;
 
 class WaypointReaderBase;
@@ -46,11 +47,14 @@ namespace WayPointGlue {
    * @param terrain RasterTerrain (for automatic waypoint height)
    */
   bool LoadWaypoints(Waypoints &way_points,
-                     const RasterTerrain *terrain);
+                     const RasterTerrain *terrain,
+                     OperationEnvironment &operation);
   bool LoadWaypointFile(int num, Waypoints &way_points,
-                        const RasterTerrain *terrain);
+                        const RasterTerrain *terrain,
+                        OperationEnvironment &operation);
   bool LoadMapFileWaypoints(int num, const TCHAR* key,
-                            Waypoints &way_points, const RasterTerrain *terrain);
+                            Waypoints &way_points, const RasterTerrain *terrain,
+                            OperationEnvironment &operation);
   bool SaveWaypoints(const Waypoints &way_points);
   bool SaveWaypointFile(const Waypoints &way_points, int num);
 };

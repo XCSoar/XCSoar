@@ -26,18 +26,44 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 
+#include <tchar.h>
+
 /**
  * An environment a complex operation runs in.  The operation may run
  * in a separate thread, and this class provides a bridge to the
  * calling thread.
  */
 class OperationEnvironment : private NonCopyable {
+  bool show_progress;
+
 public:
+  OperationEnvironment(bool _show_progress=false)
+    :show_progress(_show_progress) {}
+
   /**
    * Sleep for a fixed amount of time.  May return earlier if an event
    * occurs.
    */
   void Sleep(unsigned ms);
+
+  /**
+   * Show a human-readable (localized) short text describing the
+   * current state of the operation.
+   */
+  void SetText(const TCHAR *text);
+
+  /**
+   * Initialize the progress bar, and set the maximum value which will
+   * mean "100% done".  The default value is 0, which means "no
+   * progress bar".
+   */
+  void SetProgressRange(unsigned range);
+
+  /**
+   * Set the current position of the progress bar.  Must not be bigger
+   * than the configured range.
+   */
+  void SetProgressPosition(unsigned position);
 };
 
 #endif

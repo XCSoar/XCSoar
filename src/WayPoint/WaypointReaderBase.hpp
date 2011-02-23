@@ -31,6 +31,7 @@ class Waypoint;
 class Waypoints;
 class RasterTerrain;
 class TLineReader;
+class OperationEnvironment;
 
 class WaypointReaderBase 
 {
@@ -53,9 +54,9 @@ public:
    * @param terrain RasterTerrain (for automatic waypoint height)
    * @return True if the waypoint file parsing was okay, False otherwise
    */
-  bool Parse(Waypoints &way_points, StatusCallback callback = NULL);
+  bool Parse(Waypoints &way_points, OperationEnvironment &operation);
   void Parse(Waypoints &way_points, TLineReader &reader,
-             StatusCallback callback = NULL);
+             OperationEnvironment &operation);
 
   bool VerifyFormat() const;
   virtual bool VerifyFormat(TLineReader &reader) const {

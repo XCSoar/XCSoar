@@ -32,13 +32,12 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "WaypointReader.hpp"
 #include "Language/Language.hpp"
-#include "ProgressGlue.hpp"
 #include "Components.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "IO/TextWriter.hpp"
 #include "WayPoint/WaypointWriter.hpp"
-#include "ProgressGlue.hpp"
+#include "Operation.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -148,7 +147,8 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 
 bool
 WayPointGlue::LoadWaypointFile(int num, Waypoints &way_points,
-                               const RasterTerrain *terrain)
+                               const RasterTerrain *terrain,
+                               OperationEnvironment &operation)
 {
   // Get waypoint filename
   TCHAR szFile[MAX_PATH];
@@ -162,8 +162,7 @@ WayPointGlue::LoadWaypointFile(int num, Waypoints &way_points,
     // parse the file
     reader.SetTerrain(terrain);
 
-    ProgressGlue::SetRange(100);
-    if (reader.Parse(way_points, ProgressGlue::SetValue))
+    if (reader.Parse(way_points, operation))
       return true;
 
     LogStartUp(_T("Parse error in waypoint file %d"), num);
@@ -176,7 +175,9 @@ WayPointGlue::LoadWaypointFile(int num, Waypoints &way_points,
 
 bool
 WayPointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
-                                   Waypoints &way_points, const RasterTerrain *terrain)
+                                   Waypoints &way_points,
+                                   const RasterTerrain *terrain,
+                                   OperationEnvironment &operation)
 {
   TCHAR szFile[MAX_PATH];
 
@@ -201,7 +202,7 @@ WayPointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
   if (!reader.Error()) {
     // parse the file
     reader.SetTerrain(terrain);
-    if (reader.Parse(way_points))
+    if (reader.Parse(way_points, operation))
       return true;
 
     LogStartUp(_T("Parse error in map waypoint file"));
@@ -214,10 +215,11 @@ WayPointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
 
 bool
 WayPointGlue::LoadWaypoints(Waypoints &way_points,
-                            const RasterTerrain *terrain)
+                            const RasterTerrain *terrain,
+                            OperationEnvironment &operation)
 {
   LogStartUp(_T("ReadWaypoints"));
-  ProgressGlue::Create(_("Loading Waypoints..."));
+  operation.SetText(_("Loading Waypoints..."));
 
   bool found = false;
 
@@ -225,19 +227,20 @@ WayPointGlue::LoadWaypoints(Waypoints &way_points,
   way_points.clear();
 
   // ### FIRST FILE ###
-  found |= LoadWaypointFile(1, way_points, terrain);
+  found |= LoadWaypointFile(1, way_points, terrain, operation);
 
   // ### SECOND FILE ###
-  found |= LoadWaypointFile(2, way_points, terrain);
+  found |= LoadWaypointFile(2, way_points, terrain, operation);
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
-  found |= LoadWaypointFile(3, way_points, terrain);
+  found |= LoadWaypointFile(3, way_points, terrain, operation);
 
   // ### MAP/FOURTH FILE ###
 
   // If no waypoint file found yet
   if (!found)
-    found = LoadMapFileWaypoints(0, szProfileMapFile, way_points, terrain);
+    found = LoadMapFileWaypoints(0, szProfileMapFile, way_points, terrain,
+                                 operation);
 
   // Optimise the waypoint list after attaching new waypoints
   way_points.optimise();

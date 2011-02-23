@@ -56,6 +56,7 @@ Copyright_License {
 #include "InterfaceBlackboard.hpp"
 #include "Replay/IGCParser.hpp"
 #include "IO/FileLineReader.hpp"
+#include "Operation.hpp"
 
 #ifdef WIN32
 #include <shellapi.h>
@@ -116,10 +117,12 @@ static RasterTerrain *terrain;
 static void
 LoadFiles(Airspaces &airspace_database)
 {
-  terrain = RasterTerrain::OpenTerrain(NULL);
+  OperationEnvironment operation;
+
+  terrain = RasterTerrain::OpenTerrain(NULL, operation);
 
   AtmosphericPressure pressure;
-  ReadAirspace(airspace_database, terrain, pressure);
+  ReadAirspace(airspace_database, terrain, pressure, operation);
 }
 
 static void

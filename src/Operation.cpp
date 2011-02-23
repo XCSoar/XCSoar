@@ -23,9 +23,31 @@ Copyright_License {
 
 #include "Operation.hpp"
 #include "OS/Sleep.h"
+#include "ProgressGlue.hpp"
 
 void
 OperationEnvironment::Sleep(unsigned ms)
 {
   ::Sleep(ms);
+}
+
+void
+OperationEnvironment::SetText(const TCHAR *text)
+{
+  if (show_progress)
+    ProgressGlue::Create(text);
+}
+
+void
+OperationEnvironment::SetProgressRange(unsigned range)
+{
+  if (show_progress)
+    ProgressGlue::SetRange(range);
+}
+
+void
+OperationEnvironment::SetProgressPosition(unsigned position)
+{
+  if (show_progress)
+    ProgressGlue::SetValue(position);
 }

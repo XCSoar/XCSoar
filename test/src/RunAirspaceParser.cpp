@@ -24,6 +24,7 @@ Copyright_License {
 #include "Airspace/AirspaceParser.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "IO/FileLineReader.hpp"
+#include "Operation.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -43,7 +44,8 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  if (!ReadAirspace(airspaces, reader)) {
+  OperationEnvironment operation;
+  if (!ReadAirspace(airspaces, reader, operation)) {
     fprintf(stderr, "Failed to parse input file\n");
     return 1;
   }

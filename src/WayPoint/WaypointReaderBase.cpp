@@ -28,6 +28,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
+#include "Operation.hpp"
 
 #include <assert.h>
 
@@ -155,9 +156,10 @@ WaypointReaderBase::CheckAltitude(Waypoint &new_waypoint) const
 
 void
 WaypointReaderBase::Parse(Waypoints &way_points, TLineReader &reader,
-                    StatusCallback callback)
+                          OperationEnvironment &operation)
 {
   long filesize = std::max(reader.size(), 1l);
+  operation.SetProgressRange(100);
 
   // Read through the lines of the file
   TCHAR *line;
@@ -165,15 +167,14 @@ WaypointReaderBase::Parse(Waypoints &way_points, TLineReader &reader,
     // and parse them
     ParseLine(line, i, way_points);
 
-    if ((i & 0x3f) == 0) {
-      if (callback != NULL)
-        callback(reader.tell() * 100 / filesize);
-    }
+    if ((i & 0x3f) == 0)
+      operation.SetProgressPosition(reader.tell() * 100 / filesize);
   }
 }
 
 bool
-WaypointReaderBase::Parse(Waypoints &way_points, StatusCallback callback)
+WaypointReaderBase::Parse(Waypoints &way_points,
+                          OperationEnvironment &operation)
 {
   // If no file loaded yet -> return false
   if (file[0] == 0)
@@ -185,14 +186,14 @@ WaypointReaderBase::Parse(Waypoints &way_points, StatusCallback callback)
     if (reader.error())
       return false;
 
-    Parse(way_points, reader, callback);
+    Parse(way_points, reader, operation);
   } else {
     // convert path to ascii
     ZipLineReader reader(file);
     if (reader.error())
       return false;
 
-    Parse(way_points, reader, callback);
+    Parse(way_points, reader, operation);
   }
 
   return true;

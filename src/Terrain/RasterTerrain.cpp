@@ -31,7 +31,7 @@ Copyright_License {
 // General, open/close
 
 RasterTerrain *
-RasterTerrain::OpenTerrain(FileCache *cache)
+RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 {
   TCHAR szFile[MAX_PATH], world_file_buffer[MAX_PATH];
   const TCHAR *world_file;
@@ -47,7 +47,7 @@ RasterTerrain::OpenTerrain(FileCache *cache)
   } else
     return NULL;
 
-  RasterTerrain *rt = new RasterTerrain(szFile, world_file, cache);
+  RasterTerrain *rt = new RasterTerrain(szFile, world_file, cache, operation);
   if (!rt->map.isMapLoaded()) {
     delete rt;
     return NULL;

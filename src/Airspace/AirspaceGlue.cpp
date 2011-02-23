@@ -26,7 +26,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "ProgressGlue.hpp"
+#include "Operation.hpp"
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
 #include "IO/ConfiguredFile.hpp"
@@ -34,10 +34,11 @@ Copyright_License {
 void
 ReadAirspace(Airspaces &airspaces,
              RasterTerrain *terrain,
-             const AtmosphericPressure &press)
+             const AtmosphericPressure &press,
+             OperationEnvironment &operation)
 {
   LogStartUp(_T("ReadAirspace"));
-  ProgressGlue::Create(_("Loading Airspace File..."));
+  operation.SetText(_("Loading Airspace File..."));
 
   bool airspace_ok = false;
 
@@ -45,7 +46,7 @@ ReadAirspace(Airspaces &airspaces,
   TLineReader *reader =
     OpenConfiguredTextFile(szProfileAirspaceFile, _T("airspace.txt"));
   if (reader != NULL) {
-    if (!ReadAirspace(airspaces, *reader))
+    if (!ReadAirspace(airspaces, *reader, operation))
       LogStartUp(_T("No airspace file 1"));
     else
       airspace_ok =  true;
@@ -55,7 +56,7 @@ ReadAirspace(Airspaces &airspaces,
 
   reader = OpenConfiguredTextFile(szProfileAdditionalAirspaceFile);
   if (reader != NULL) {
-    if (!ReadAirspace(airspaces, *reader))
+    if (!ReadAirspace(airspaces, *reader, operation))
       LogStartUp(_T("No airspace file 2"));
     else
       airspace_ok = true;

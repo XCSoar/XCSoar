@@ -30,6 +30,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Math/Earth.hpp"
 #include "Units/Units.hpp"
+#include "Operation.hpp"
 
 #include <tchar.h>
 
@@ -145,7 +146,8 @@ MapWindow::UpdateWeather()
   if (weather == NULL)
     return false;
 
-  weather->Reload((int)Basic().Time);
+  OperationEnvironment operation;
+  weather->Reload((int)Basic().Time, operation);
   weather->SetViewCenter(visible_projection.GetGeoScreenCenter(),
                          visible_projection.GetScreenWidthMeters() / 2);
   return weather->IsDirty();

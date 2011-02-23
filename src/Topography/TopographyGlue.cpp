@@ -26,7 +26,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
-#include "ProgressGlue.hpp"
+#include "Operation.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "IO/FileLineReader.hpp"
@@ -42,7 +42,8 @@ Copyright_License {
  * directory.
  */
 static bool
-LoadConfiguredTopographyFile(TopographyStore &store)
+LoadConfiguredTopographyFile(TopographyStore &store,
+                             OperationEnvironment &operation)
 {
   TCHAR file[MAX_PATH];
   if (!Profile::GetPath(szProfileTopographyFile, file))
@@ -59,7 +60,7 @@ LoadConfiguredTopographyFile(TopographyStore &store)
   if (directory == NULL)
     return false;
 
-  store.Load(reader, ProgressGlue::SetValue, directory);
+  store.Load(operation, reader, directory);
   return true;
 }
 
@@ -68,7 +69,8 @@ LoadConfiguredTopographyFile(TopographyStore &store)
  * the same ZIP file.
  */
 static bool
-LoadConfiguredTopographyZip(TopographyStore &store)
+LoadConfiguredTopographyZip(TopographyStore &store,
+                            OperationEnvironment &operation)
 {
   TCHAR path[MAX_PATH];
   if (!Profile::GetPath(szProfileMapFile, path))
@@ -84,18 +86,18 @@ LoadConfiguredTopographyZip(TopographyStore &store)
     return false;
   }
 
-  store.Load(reader, ProgressGlue::SetValue, NULL, dir);
+  store.Load(operation, reader, NULL, dir);
   zzip_dir_close(dir);
   return true;
 }
 
 bool
-LoadConfiguredTopography(TopographyStore &store)
+LoadConfiguredTopography(TopographyStore &store,
+                         OperationEnvironment &operation)
 {
   LogStartUp(_T("Loading Topography File..."));
-  ProgressGlue::Create(_("Loading Topography File..."));
-  ProgressGlue::SetRange(100);
+  operation.SetText(_("Loading Topography File..."));
 
-  return LoadConfiguredTopographyFile(store) ||
-    LoadConfiguredTopographyZip(store);
+  return LoadConfiguredTopographyFile(store, operation) ||
+    LoadConfiguredTopographyZip(store, operation);
 }

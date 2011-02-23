@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
+#include "Operation.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -50,7 +51,8 @@ int main(int argc, char **argv)
   _tcscpy(j2w_path, PathName(map_path));
   _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
 
-  RasterMap map(jp2_path, j2w_path, NULL);
+  OperationEnvironment operation;
+  RasterMap map(jp2_path, j2w_path, NULL, operation);
   if (!map.isMapLoaded()) {
     fprintf(stderr, "failed to load map\n");
     return EXIT_FAILURE;

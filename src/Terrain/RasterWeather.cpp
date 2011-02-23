@@ -29,7 +29,7 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
-#include "ProgressGlue.hpp"
+#include "Operation.hpp"
 #include "zzip/zzip.h"
 #include "Engine/Math/Earth.hpp"
 
@@ -187,11 +187,12 @@ RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR* name,
 }
 
 bool
-RasterWeather::LoadItem(const TCHAR* name, unsigned time_index)
+RasterWeather::LoadItem(const TCHAR* name, unsigned time_index,
+                        OperationEnvironment &operation)
 {
   TCHAR rasp_filename[MAX_PATH];
   GetFilename(rasp_filename, name, time_index);
-  RasterMap *map = new RasterMap(rasp_filename, NULL, NULL);
+  RasterMap *map = new RasterMap(rasp_filename, NULL, NULL, operation);
   if (!map->isMapLoaded()) {
     delete map;
     return false;
@@ -214,10 +215,13 @@ RasterWeather::ExistsItem(struct zzip_dir *dir, const TCHAR* name,
 }
 
 void
-RasterWeather::ScanAll(const GeoPoint &location)
+RasterWeather::ScanAll(const GeoPoint &location,
+                       OperationEnvironment &operation)
 {
   /* not holding the lock here, because this method is only called
      during startup, when the other threads aren't running yet */
+
+  operation.SetText(_("Scanning weather forecast"));
 
   TCHAR fname[MAX_PATH];
   LocalPath(fname, _T("xcsoar-rasp.dat"));
@@ -226,9 +230,9 @@ RasterWeather::ScanAll(const GeoPoint &location)
   if (dir == NULL)
     return;
 
-  ProgressGlue::SetRange(MAX_WEATHER_TIMES);
+  operation.SetProgressRange(MAX_WEATHER_TIMES);
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
-    ProgressGlue::SetValue(i);
+    operation.SetProgressPosition(i);
     weather_available[i] = ExistsItem(dir, _T("wstar"), i) ||
       ExistsItem(dir, _T("wstar_bsratio"), i);
   }
@@ -237,7 +241,7 @@ RasterWeather::ScanAll(const GeoPoint &location)
 }
 
 void
-RasterWeather::Reload(int day_time)
+RasterWeather::Reload(int day_time, OperationEnvironment &operation)
 {
   static unsigned last_weather_time;
   bool found = false;
@@ -282,9 +286,10 @@ RasterWeather::Reload(int day_time)
 
       _Close();
 
-      if (!LoadItem(WeatherDescriptors[_parameter].name, _weather_time) &&
+      if (!LoadItem(WeatherDescriptors[_parameter].name, _weather_time,
+                    operation) &&
           _parameter == 1)
-        LoadItem(_T("wstar_bsratio"), _weather_time);
+        LoadItem(_T("wstar_bsratio"), _weather_time, operation);
     }
   }
 

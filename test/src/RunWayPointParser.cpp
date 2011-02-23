@@ -25,6 +25,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "OS/PathName.hpp"
+#include "Operation.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -56,7 +57,8 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  if (!parser.Parse(way_points)) {
+  OperationEnvironment operation;
+  if (!parser.Parse(way_points, operation)) {
     fprintf(stderr, "WayPointParser::Parse() has failed\n");
     return 1;
   }

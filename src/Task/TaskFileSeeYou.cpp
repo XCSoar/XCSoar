@@ -35,6 +35,7 @@
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
+#include "Operation.hpp"
 
 struct SeeYouTaskInformation {
   /** True = RT, False = AAT */
@@ -427,7 +428,8 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   Waypoints file_waypoints;
   {
     WaypointReaderSeeYou waypoint_file(path, 0);
-    if (!waypoint_file.Parse(file_waypoints))
+    OperationEnvironment operation;
+    if (!waypoint_file.Parse(file_waypoints, operation))
       return NULL;
   }
   file_waypoints.optimise();

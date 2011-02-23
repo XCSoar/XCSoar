@@ -26,8 +26,10 @@ Copyright_License {
 
 class Airspaces;
 class TLineReader;
+class OperationEnvironment;
 
 bool
-ReadAirspace(Airspaces &airspace_database, TLineReader &reader);
+ReadAirspace(Airspaces &airspace_database, TLineReader &reader,
+             OperationEnvironment &operation);
 
 #endif

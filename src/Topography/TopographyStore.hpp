@@ -32,6 +32,7 @@ Copyright_License {
 class WindowProjection;
 class TopographyFile;
 class NLineReader;
+class OperationEnvironment;
 struct zzip_dir;
 
 /**
@@ -66,9 +67,7 @@ public:
   unsigned ScanVisibility(const WindowProjection &m_projection,
                           unsigned max_update=1024);
 
-  typedef void (*StatusCallback)(unsigned percent);
-
-  void Load(NLineReader &reader, StatusCallback callback,
+  void Load(OperationEnvironment &operation, NLineReader &reader,
             const TCHAR *Directory, struct zzip_dir *zdir = NULL);
   void Reset();
 };

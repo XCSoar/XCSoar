@@ -26,6 +26,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "IO/LineReader.hpp"
 #include "OS/PathName.hpp"
+#include "Operation.hpp"
 #include "Compatibility/path.h"
 
 #include <windef.h> // for MAX_PATH
@@ -57,7 +58,7 @@ TopographyStore::~TopographyStore()
 }
 
 void
-TopographyStore::Load(NLineReader &reader, StatusCallback callback,
+TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
                       const TCHAR *Directory, struct zzip_dir *zdir)
 {
   Reset();
@@ -76,6 +77,8 @@ TopographyStore::Load(NLineReader &reader, StatusCallback callback,
   char *ShapeFilenameEnd = ShapeFilename + strlen(ShapeFilename);
 
   long filesize = std::max(reader.size(), 1l);
+
+  operation.SetProgressRange(100);
 
   char *line;
   while (!files.full() && (line = reader.read()) != NULL) {
@@ -152,8 +155,7 @@ TopographyStore::Load(NLineReader &reader, StatusCallback callback,
                                   ShapeField, ShapeIcon,
                                   pen_width));
 
-    if (callback != NULL)
-      callback((reader.tell() * 100) / filesize);
+    operation.SetProgressPosition((reader.tell() * 100) / filesize);
   }
 }
 

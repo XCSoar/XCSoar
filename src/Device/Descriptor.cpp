@@ -32,6 +32,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "Operation.hpp"
+#include "ProgressGlue.hpp"
 #include "OS/Clock.hpp"
 
 #ifdef ANDROID
@@ -224,8 +225,9 @@ DeviceDescriptor::Declare(const struct Declaration *declaration)
   assert(!declaring);
   declaring = true;
 
-  OperationEnvironment env;
+  OperationEnvironment env(true);
   bool result = device != NULL && device->Declare(declaration, env);
+  ProgressGlue::Close();
 
   if (parser.isFlarm)
     result = FlarmDeclare(Com, declaration) || result;

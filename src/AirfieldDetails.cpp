@@ -32,7 +32,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "IO/ConfiguredFile.hpp"
-#include "ProgressGlue.hpp"
+#include "Operation.hpp"
 
 static const Waypoint *
 find_waypoint(Waypoints &way_points, const TCHAR *name)
@@ -79,7 +79,8 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
  * Parses the data provided by the airfield details file handle
  */
 static void
-ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader)
+ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
+                     OperationEnvironment &operation)
 {
   tstring Details;
   TCHAR Name[201];
@@ -90,7 +91,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader)
   int i;
 
   long filesize = std::max(reader.size(), 1l);
-  ProgressGlue::SetRange(100);
+  operation.SetProgressRange(100);
 
   TCHAR *TempString;
   while ((TempString = reader.read()) != NULL) {
@@ -111,7 +112,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader)
 
       inDetails = true;
 
-      ProgressGlue::SetValue(reader.tell() * 100 / filesize);
+      operation.SetProgressPosition(reader.tell() * 100 / filesize);
     } else {
       // append text to details string
       if (!string_is_empty(TempString)) {
@@ -131,7 +132,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader)
  * Opens the airfield details file and parses it
  */
 void
-ReadAirfieldFile(Waypoints &way_points)
+ReadAirfieldFile(Waypoints &way_points, OperationEnvironment &operation)
 {
   LogStartUp(_T("ReadAirfieldFile"));
 
@@ -140,8 +141,8 @@ ReadAirfieldFile(Waypoints &way_points)
   if (reader == NULL)
     return;
 
-  ProgressGlue::Create(_("Loading Airfield Details File..."));
+  operation.SetText(_("Loading Airfield Details File..."));
 
-  ParseAirfieldDetails(way_points, *reader);
+  ParseAirfieldDetails(way_points, *reader, operation);
   delete reader;
 }

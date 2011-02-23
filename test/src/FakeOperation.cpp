@@ -22,8 +22,25 @@ Copyright_License {
 */
 
 #include "Operation.hpp"
+#include "OS/Sleep.h"
 
 void
 OperationEnvironment::Sleep(unsigned ms)
+{
+  ::Sleep(ms);
+}
+
+void
+OperationEnvironment::SetText(const TCHAR *text)
+{
+}
+
+void
+OperationEnvironment::SetProgressRange(unsigned range)
+{
+}
+
+void
+OperationEnvironment::SetProgressPosition(unsigned position)
 {
 }

@@ -26,7 +26,7 @@ Copyright_License {
 #include "jasper/jas_image.h"
 #include "Math/Angle.hpp"
 #include "IO/ZipLineReader.hpp"
-#include "ProgressGlue.hpp"
+#include "Operation.hpp"
 #include "Math/FastMath.h"
 
 #include <stdlib.h>
@@ -382,7 +382,8 @@ RasterTileCache::MarkerSegment(long file_offset, unsigned id)
   if (!scan_overview || segments.full())
     return;
 
-  ProgressGlue::SetValue(file_offset / 65536);
+  if (operation != NULL)
+    operation->SetProgressPosition(file_offset / 65536);
 
   int tile = -1;
   if (is_tile_segment(id) && !segments.empty())
@@ -408,8 +409,8 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
     return;
   }
 
-  if (scan_overview)
-    ProgressGlue::SetRange(jas_stream_length(in) / 65536);
+  if (operation != NULL)
+    operation->SetProgressRange(jas_stream_length(in) / 65536);
 
   jp2_decode(in, scan_overview ? "xcsoar=2" : "xcsoar=1");
   jas_stream_close(in);
@@ -476,8 +477,12 @@ RasterTileCache::LoadWorldFile(const TCHAR *path)
 }
 
 bool
-RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file)
+RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file,
+                              OperationEnvironment &_operation)
 {
+  assert(operation == NULL);
+  operation = &_operation;
+
   Reset();
 
   LoadJPG2000(path);
@@ -492,6 +497,7 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file)
   if (!initialised)
     Reset();
 
+  operation = NULL;
   return initialised;
 }
 

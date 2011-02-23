@@ -33,6 +33,7 @@ Copyright_License {
 #include <tchar.h>
 
 class FileCache;
+class OperationEnvironment;
 
 class RasterMap : private NonCopyable {
   char *path;
@@ -40,7 +41,8 @@ class RasterMap : private NonCopyable {
   RasterProjection projection;
 
 public:
-  RasterMap(const TCHAR *path, const TCHAR *world_file, FileCache *cache);
+  RasterMap(const TCHAR *path, const TCHAR *world_file, FileCache *cache,
+            OperationEnvironment &operation);
   ~RasterMap();
 
   bool isMapLoaded() const {

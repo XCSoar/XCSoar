@@ -43,6 +43,7 @@ Copyright_License {
 #include "IO/ConfiguredFile.hpp"
 #include "LocalPath.hpp"
 #include "Components.hpp"
+#include "Operation.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -54,9 +55,11 @@ void dlgAirspaceDetails(const AbstractAirspace& the_airspace) {}
 static void
 LoadFiles(Airspaces &airspace_database)
 {
+  OperationEnvironment operation;
+
   TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile);
   if (reader != NULL) {
-    ReadAirspace(airspace_database, *reader);
+    ReadAirspace(airspace_database, *reader, operation);
     delete reader;
 
     airspace_database.optimise();

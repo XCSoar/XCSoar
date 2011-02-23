@@ -31,6 +31,7 @@ Copyright_License {
 
 class Waypoints;
 class RasterTerrain;
+class OperationEnvironment;
 
 class WaypointReader
 {
@@ -59,10 +60,9 @@ public:
   /**
    * Parses the waypoint file into the given Waypoints instance
    * @param way_points A Waypoints instance that will hold the parsed waypoints
-   * @param callback An optional callback function
    * @return True if the file was parsed successfully
    */
-  bool Parse(Waypoints &way_points, WaypointReaderBase::StatusCallback callback = NULL);
+  bool Parse(Waypoints &way_points, OperationEnvironment &operation);
 
   /**
    * Returns whether there is a valid internal reader

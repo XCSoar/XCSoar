@@ -31,6 +31,7 @@
 #include "Terrain/RasterMap.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
+#include "Operation.hpp"
 
 extern Airspaces *airspaces;
 
@@ -168,7 +169,8 @@ int main(int argc, char** argv)
   _tcscpy(j2w_path, PathName(hc_path));
   _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
 
-  RasterMap map(jp2_path, j2w_path, NULL);
+  OperationEnvironment operation;
+  RasterMap map(jp2_path, j2w_path, NULL, operation);
   do {
     map.SetViewCenter(map.GetMapCenter(), fixed(100000));
   } while (map.IsDirty());

@@ -44,6 +44,7 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "ProgressGlue.hpp"
+#include "Operation.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "WayPoint/WaypointGlue.hpp"
 #include "GlideComputer.hpp"
@@ -100,6 +101,8 @@ SettingsLeave()
 
   SuspendAllThreads();
 
+  OperationEnvironment operation(true);
+
   if (LanguageChanged)
     ReadLanguageFile();
 
@@ -121,7 +124,7 @@ SettingsLeave()
 
     // re-load terrain
     delete terrain;
-    terrain = RasterTerrain::OpenTerrain(file_cache);
+    terrain = RasterTerrain::OpenTerrain(file_cache, operation);
 
     XCSoarInterface::main_window.map.set_terrain(terrain);
     glide_computer->set_terrain(terrain);
@@ -129,8 +132,8 @@ SettingsLeave()
 
   if (WaypointFileChanged || AirfieldFileChanged) {
     // re-load waypoints
-    WayPointGlue::LoadWaypoints(way_points, terrain);
-    ReadAirfieldFile(way_points);
+    WayPointGlue::LoadWaypoints(way_points, terrain, operation);
+    ReadAirfieldFile(way_points, operation);
   }
 
   if (WaypointFileChanged || TerrainFileChanged) {
@@ -143,7 +146,7 @@ SettingsLeave()
   if (TopographyFileChanged) {
     XCSoarInterface::main_window.map.set_topography(NULL);
     topography->Reset();
-    LoadConfiguredTopography(*topography);
+    LoadConfiguredTopography(*topography, operation);
     XCSoarInterface::main_window.map.set_topography(topography);
   }
 
@@ -152,7 +155,8 @@ SettingsLeave()
       airspace_warnings->clear();
     airspace_database.clear();
     ReadAirspace(airspace_database, terrain,
-                 CommonInterface::SettingsComputer().pressure);
+                 CommonInterface::SettingsComputer().pressure,
+                 operation);
   }
 
   if (protected_task_manager != NULL) {

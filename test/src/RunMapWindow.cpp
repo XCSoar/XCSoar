@@ -54,6 +54,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ConfiguredFile.hpp"
+#include "Operation.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -179,16 +180,18 @@ static Blackboard blackboard;
 static void
 LoadFiles()
 {
+  OperationEnvironment operation;
+
   topography = new TopographyStore();
-  LoadConfiguredTopography(*topography);
+  LoadConfiguredTopography(*topography, operation);
 
-  terrain = RasterTerrain::OpenTerrain(NULL);
+  terrain = RasterTerrain::OpenTerrain(NULL, operation);
 
-  WayPointGlue::LoadWaypoints(way_points, terrain);
+  WayPointGlue::LoadWaypoints(way_points, terrain, operation);
 
   TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile);
   if (reader != NULL) {
-    ReadAirspace(airspace_database, *reader);
+    ReadAirspace(airspace_database, *reader, operation);
     delete reader;
 
     airspace_database.optimise();
