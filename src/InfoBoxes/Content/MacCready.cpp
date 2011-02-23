@@ -124,14 +124,14 @@ InfoBoxContentMacCready::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabB
 
   InfoBoxID = id;
 
-  Window *wInfoBoxAccessEdit =
+  Window *wInfoBoxAccessSetup =
       LoadWindow(CallBackTable, wf, *wTabBar,
                  Layout::landscape ?
                      _T("IDR_XML_INFOBOXMACCREADYSETUP_L") :
                      _T("IDR_XML_INFOBOXMACCREADYSETUP"));
-  assert(wInfoBoxAccessEdit);
+  assert(wInfoBoxAccessSetup);
 
-  return wInfoBoxAccessEdit;
+  return wInfoBoxAccessSetup;
 }
 
 bool
@@ -282,8 +282,7 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
   fixed mc = polar.get_mc();
 
   if (_tcscmp(misc, _T("+0.1")) == 0) {
-    HandleKey(ibkUp);
-    return true;
+    return HandleKey(ibkUp);
 
   } else if (_tcscmp(misc, _T("+0.5")) == 0) {
     mc = std::min(mc + fixed_one / 2, fixed(5));
@@ -293,8 +292,7 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
     return true;
 
   } else if (_tcscmp(misc, _T("-0.1")) == 0) {
-    HandleKey(ibkDown);
-    return true;
+    return HandleKey(ibkDown);
 
   } else if (_tcscmp(misc, _T("-0.5")) == 0) {
     mc = std::max(mc - fixed_one / 2, fixed_zero);
@@ -306,5 +304,6 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
   } else if (_tcscmp(misc, _T("mode")) == 0) {
     return HandleKey(ibkEnter);
   }
+
   return false;
 }
