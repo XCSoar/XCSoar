@@ -26,278 +26,278 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 
 const TCHAR *szProfileDisplayType[MAXINFOWINDOWS] = {
-  CONF("Info0"),
-  CONF("Info1"),
-  CONF("Info2"),
-  CONF("Info3"),
-  CONF("Info4"),
-  CONF("Info5"),
-  CONF("Info6"),
-  CONF("Info7"),
-  CONF("Info8"),
-  CONF("Info9"),
-  CONF("Info10"),
-  CONF("Info11"),
-  CONF("Info12"),
-  CONF("Info13"),
+  _T("Info0"),
+  _T("Info1"),
+  _T("Info2"),
+  _T("Info3"),
+  _T("Info4"),
+  _T("Info5"),
+  _T("Info6"),
+  _T("Info7"),
+  _T("Info8"),
+  _T("Info9"),
+  _T("Info10"),
+  _T("Info11"),
+  _T("Info12"),
+  _T("Info13"),
 }; // pL
 
 const TCHAR *szProfileColour[] = {
-  CONF("Colour0"),
-  CONF("Colour1"),
-  CONF("Colour2"),
-  CONF("Colour3"),
-  CONF("Colour4"),
-  CONF("Colour5"),
-  CONF("Colour6"),
-  CONF("Colour7"),
-  CONF("Colour8"),
-  CONF("Colour9"),
-  CONF("Colour10"),
-  CONF("Colour11"),
-  CONF("Colour12"),
-  CONF("Colour13"),
-  CONF("Colour14"),
+  _T("Colour0"),
+  _T("Colour1"),
+  _T("Colour2"),
+  _T("Colour3"),
+  _T("Colour4"),
+  _T("Colour5"),
+  _T("Colour6"),
+  _T("Colour7"),
+  _T("Colour8"),
+  _T("Colour9"),
+  _T("Colour10"),
+  _T("Colour11"),
+  _T("Colour12"),
+  _T("Colour13"),
+  _T("Colour14"),
 }; // pL
 
 const TCHAR *szProfileBrush[] = {
-  CONF("Brush0"),
-  CONF("Brush1"),
-  CONF("Brush2"),
-  CONF("Brush3"),
-  CONF("Brush4"),
-  CONF("Brush5"),
-  CONF("Brush6"),
-  CONF("Brush7"),
-  CONF("Brush8"),
-  CONF("Brush9"),
-  CONF("Brush10"),
-  CONF("Brush11"),
-  CONF("Brush12"),
-  CONF("Brush13"),
-  CONF("Brush14"),
+  _T("Brush0"),
+  _T("Brush1"),
+  _T("Brush2"),
+  _T("Brush3"),
+  _T("Brush4"),
+  _T("Brush5"),
+  _T("Brush6"),
+  _T("Brush7"),
+  _T("Brush8"),
+  _T("Brush9"),
+  _T("Brush10"),
+  _T("Brush11"),
+  _T("Brush12"),
+  _T("Brush13"),
+  _T("Brush14"),
 }; // pL
 
 const TCHAR *szProfileAirspaceMode[] = {
-  CONF("AirspaceMode0"),
-  CONF("AirspaceMode1"),
-  CONF("AirspaceMode2"),
-  CONF("AirspaceMode3"),
-  CONF("AirspaceMode4"),
-  CONF("AirspaceMode5"),
-  CONF("AirspaceMode6"),
-  CONF("AirspaceMode7"),
-  CONF("AirspaceMode8"),
-  CONF("AirspaceMode9"),
-  CONF("AirspaceMode10"),
-  CONF("AirspaceMode11"),
-  CONF("AirspaceMode12"),
-  CONF("AirspaceMode13"),
-  CONF("AirspaceMode14"),
+  _T("AirspaceMode0"),
+  _T("AirspaceMode1"),
+  _T("AirspaceMode2"),
+  _T("AirspaceMode3"),
+  _T("AirspaceMode4"),
+  _T("AirspaceMode5"),
+  _T("AirspaceMode6"),
+  _T("AirspaceMode7"),
+  _T("AirspaceMode8"),
+  _T("AirspaceMode9"),
+  _T("AirspaceMode10"),
+  _T("AirspaceMode11"),
+  _T("AirspaceMode12"),
+  _T("AirspaceMode13"),
+  _T("AirspaceMode14"),
 }; // pL
 
 const TCHAR *szProfileAirspacePriority[] = {
-  CONF("AirspacePriority0"),
-  CONF("AirspacePriority1"),
-  CONF("AirspacePriority2"),
-  CONF("AirspacePriority3"),
-  CONF("AirspacePriority4"),
-  CONF("AirspacePriority5"),
-  CONF("AirspacePriority6"),
-  CONF("AirspacePriority7"),
-  CONF("AirspacePriority8"),
-  CONF("AirspacePriority9"),
-  CONF("AirspacePriority10"),
-  CONF("AirspacePriority11"),
-  CONF("AirspacePriority12"),
-  CONF("AirspacePriority13"),
-  CONF("AirspacePriority14"),
+  _T("AirspacePriority0"),
+  _T("AirspacePriority1"),
+  _T("AirspacePriority2"),
+  _T("AirspacePriority3"),
+  _T("AirspacePriority4"),
+  _T("AirspacePriority5"),
+  _T("AirspacePriority6"),
+  _T("AirspacePriority7"),
+  _T("AirspacePriority8"),
+  _T("AirspacePriority9"),
+  _T("AirspacePriority10"),
+  _T("AirspacePriority11"),
+  _T("AirspacePriority12"),
+  _T("AirspacePriority13"),
+  _T("AirspacePriority14"),
 }; // pL
 
-const TCHAR szProfileAirspaceWarning[] = CONF("AirspaceWarn");
-const TCHAR szProfileAirspaceBlackOutline[] = CONF("AirspaceBlackOutline");
-const TCHAR szProfileAltMargin[] = CONF("AltMargin");
-const TCHAR szProfileAltMode[] = CONF("AltitudeMode");
-const TCHAR szProfileAltitudeUnitsValue[] = CONF("Altitude");
-const TCHAR szProfileTemperatureUnitsValue[] = CONF("Temperature");
-const TCHAR szProfileCircleZoom[] = CONF("CircleZoom");
-const TCHAR szProfileMaxAutoZoomDistance[] = CONF("MaxAutoZoomDistance");
-const TCHAR szProfileClipAlt[] = CONF("ClipAlt");
-const TCHAR szProfileDisplayText[] = CONF("DisplayText");
-const TCHAR szProfileWayPointLabelSelection[] = CONF("WayPointLabelSelection");
-const TCHAR szProfileDisplayUpValue[] = CONF("DisplayUp");
-const TCHAR szProfileOrientationCruise[] = CONF("OrientationCruise");
-const TCHAR szProfileOrientationCircling[] = CONF("OrientationCircling");
-const TCHAR szProfileMapShiftBias[] = CONF("MapShiftBias");
-const TCHAR szProfileDistanceUnitsValue[] = CONF("Distance");
-const TCHAR szProfileDrawTerrain[] = CONF("DrawTerrain");
-const TCHAR szProfileSlopeShading[] = CONF("SlopeShading");
-const TCHAR szProfileSlopeShadingType[] = CONF("SlopeShadingType");
-const TCHAR szProfileDrawTopology[] = CONF("DrawTopology");
-const TCHAR szProfileFinalGlideTerrain[] = CONF("FinalGlideTerrain");
-const TCHAR szProfileAutoWind[] = CONF("AutoWind");
-const TCHAR szProfileExternalWind[] = CONF("ExternalWind");
-const TCHAR szProfileHomeWaypoint[] = CONF("HomeWaypoint");
-const TCHAR szProfileHomeLocation[] = CONF("HomeLocation");
-const TCHAR szProfileLiftUnitsValue[] = CONF("Lift");
-const TCHAR szProfileLatLonUnits[] = CONF("LatLonUnits");
-const TCHAR szProfilePolarID[] = CONF("Polar");
-const TCHAR szProfilePolar[] = CONF("PolarInformation");
-const TCHAR szProfilePolarName[] = CONF("PolarName");
-const TCHAR szProfileSafetyAltitudeArrival[] = CONF("SafetyAltitudeArrival");
-const TCHAR szProfileSafetyAltitudeTerrain[] = CONF("SafetyAltitudeTerrain");
-const TCHAR szProfileSafteySpeed[] = CONF("SafteySpeed");
-const TCHAR szProfileSnailTrail[] = CONF("SnailTrail");
-const TCHAR szProfileTrailDrift[] = CONF("TrailDrift");
-const TCHAR szProfileDetourCostMarker[] = CONF("DetourCostMarker");
-const TCHAR szProfileDisplayTrackBearing[] = CONF("DisplayTrackBearing");
-const TCHAR szProfileUnitsPresetName[] = CONF("UnitsPresetName");
-const TCHAR szProfileSpeedUnitsValue[] = CONF("Speed");
-const TCHAR szProfileTaskSpeedUnitsValue[] = CONF("TaskSpeed");
-const TCHAR szProfileWarningTime[] = CONF("WarnTime");
-const TCHAR szProfileAcknowledgementTime[] = CONF("AcknowledgementTime");
-const TCHAR szProfileAirfieldFile[] = CONF("AirfieldFile"); // pL
-const TCHAR szProfileAirspaceFile[] = CONF("AirspaceFile"); // pL
-const TCHAR szProfileAdditionalAirspaceFile[] = CONF("AdditionalAirspaceFile"); // pL
-const TCHAR szProfilePolarFile[] = CONF("PolarFile"); // pL
-const TCHAR szProfileTerrainFile[] = CONF("TerrainFile"); // pL
-const TCHAR szProfileTopologyFile[] = CONF("TopologyFile"); // pL
-const TCHAR szProfileWayPointFile[] = CONF("WPFile"); // pL
-const TCHAR szProfileAdditionalWayPointFile[] = CONF("AdditionalWPFile"); // pL
-const TCHAR szProfileLanguageFile[] = CONF("LanguageFile"); // pL
-const TCHAR szProfileStatusFile[] = CONF("StatusFile"); // pL
-const TCHAR szProfileInputFile[] = CONF("InputFile"); // pL
-const TCHAR szProfilePilotName[] = CONF("PilotName");
-const TCHAR szProfileAircraftType[] = CONF("AircraftType");
-const TCHAR szProfileAircraftRego[] = CONF("AircraftRego");
-const TCHAR szProfileLoggerID[] = CONF("LoggerID");
-const TCHAR szProfileLoggerShort[] = CONF("LoggerShortName");
-const TCHAR szProfileSoundVolume[] = CONF("SoundVolume");
-const TCHAR szProfileSoundDeadband[] = CONF("SoundDeadband");
-const TCHAR szProfileSoundAudioVario[] = CONF("AudioVario");
-const TCHAR szProfileSoundTask[] = CONF("SoundTask");
-const TCHAR szProfileSoundModes[] = CONF("SoundModes");
-const TCHAR szProfileNettoSpeed[] = CONF("NettoSpeed");
-const TCHAR szProfileAccelerometerZero[] = CONF("AccelerometerZero");
+const TCHAR szProfileAirspaceWarning[] = _T("AirspaceWarn");
+const TCHAR szProfileAirspaceBlackOutline[] = _T("AirspaceBlackOutline");
+const TCHAR szProfileAltMargin[] = _T("AltMargin");
+const TCHAR szProfileAltMode[] = _T("AltitudeMode");
+const TCHAR szProfileAltitudeUnitsValue[] = _T("Altitude");
+const TCHAR szProfileTemperatureUnitsValue[] = _T("Temperature");
+const TCHAR szProfileCircleZoom[] = _T("CircleZoom");
+const TCHAR szProfileMaxAutoZoomDistance[] = _T("MaxAutoZoomDistance");
+const TCHAR szProfileClipAlt[] = _T("ClipAlt");
+const TCHAR szProfileDisplayText[] = _T("DisplayText");
+const TCHAR szProfileWayPointLabelSelection[] = _T("WayPointLabelSelection");
+const TCHAR szProfileDisplayUpValue[] = _T("DisplayUp");
+const TCHAR szProfileOrientationCruise[] = _T("OrientationCruise");
+const TCHAR szProfileOrientationCircling[] = _T("OrientationCircling");
+const TCHAR szProfileMapShiftBias[] = _T("MapShiftBias");
+const TCHAR szProfileDistanceUnitsValue[] = _T("Distance");
+const TCHAR szProfileDrawTerrain[] = _T("DrawTerrain");
+const TCHAR szProfileSlopeShading[] = _T("SlopeShading");
+const TCHAR szProfileSlopeShadingType[] = _T("SlopeShadingType");
+const TCHAR szProfileDrawTopology[] = _T("DrawTopology");
+const TCHAR szProfileFinalGlideTerrain[] = _T("FinalGlideTerrain");
+const TCHAR szProfileAutoWind[] = _T("AutoWind");
+const TCHAR szProfileExternalWind[] = _T("ExternalWind");
+const TCHAR szProfileHomeWaypoint[] = _T("HomeWaypoint");
+const TCHAR szProfileHomeLocation[] = _T("HomeLocation");
+const TCHAR szProfileLiftUnitsValue[] = _T("Lift");
+const TCHAR szProfileLatLonUnits[] = _T("LatLonUnits");
+const TCHAR szProfilePolarID[] = _T("Polar");
+const TCHAR szProfilePolar[] = _T("PolarInformation");
+const TCHAR szProfilePolarName[] = _T("PolarName");
+const TCHAR szProfileSafetyAltitudeArrival[] = _T("SafetyAltitudeArrival");
+const TCHAR szProfileSafetyAltitudeTerrain[] = _T("SafetyAltitudeTerrain");
+const TCHAR szProfileSafteySpeed[] = _T("SafteySpeed");
+const TCHAR szProfileSnailTrail[] = _T("SnailTrail");
+const TCHAR szProfileTrailDrift[] = _T("TrailDrift");
+const TCHAR szProfileDetourCostMarker[] = _T("DetourCostMarker");
+const TCHAR szProfileDisplayTrackBearing[] = _T("DisplayTrackBearing");
+const TCHAR szProfileUnitsPresetName[] = _T("UnitsPresetName");
+const TCHAR szProfileSpeedUnitsValue[] = _T("Speed");
+const TCHAR szProfileTaskSpeedUnitsValue[] = _T("TaskSpeed");
+const TCHAR szProfileWarningTime[] = _T("WarnTime");
+const TCHAR szProfileAcknowledgementTime[] = _T("AcknowledgementTime");
+const TCHAR szProfileAirfieldFile[] = _T("AirfieldFile"); // pL
+const TCHAR szProfileAirspaceFile[] = _T("AirspaceFile"); // pL
+const TCHAR szProfileAdditionalAirspaceFile[] = _T("AdditionalAirspaceFile"); // pL
+const TCHAR szProfilePolarFile[] = _T("PolarFile"); // pL
+const TCHAR szProfileTerrainFile[] = _T("TerrainFile"); // pL
+const TCHAR szProfileTopologyFile[] = _T("TopologyFile"); // pL
+const TCHAR szProfileWayPointFile[] = _T("WPFile"); // pL
+const TCHAR szProfileAdditionalWayPointFile[] = _T("AdditionalWPFile"); // pL
+const TCHAR szProfileLanguageFile[] = _T("LanguageFile"); // pL
+const TCHAR szProfileStatusFile[] = _T("StatusFile"); // pL
+const TCHAR szProfileInputFile[] = _T("InputFile"); // pL
+const TCHAR szProfilePilotName[] = _T("PilotName");
+const TCHAR szProfileAircraftType[] = _T("AircraftType");
+const TCHAR szProfileAircraftRego[] = _T("AircraftRego");
+const TCHAR szProfileLoggerID[] = _T("LoggerID");
+const TCHAR szProfileLoggerShort[] = _T("LoggerShortName");
+const TCHAR szProfileSoundVolume[] = _T("SoundVolume");
+const TCHAR szProfileSoundDeadband[] = _T("SoundDeadband");
+const TCHAR szProfileSoundAudioVario[] = _T("AudioVario");
+const TCHAR szProfileSoundTask[] = _T("SoundTask");
+const TCHAR szProfileSoundModes[] = _T("SoundModes");
+const TCHAR szProfileNettoSpeed[] = _T("NettoSpeed");
+const TCHAR szProfileAccelerometerZero[] = _T("AccelerometerZero");
 
-const TCHAR szProfileAutoBlank[] = CONF("AutoBlank");
-const TCHAR szProfileGestures[] = CONF("Gestures");
-const TCHAR szProfileAverEffTime[] = CONF("AverEffTime");
-const TCHAR szProfileVarioGauge[] = CONF("VarioGauge");
+const TCHAR szProfileAutoBlank[] = _T("AutoBlank");
+const TCHAR szProfileGestures[] = _T("Gestures");
+const TCHAR szProfileAverEffTime[] = _T("AverEffTime");
+const TCHAR szProfileVarioGauge[] = _T("VarioGauge");
 
-const TCHAR szProfileDebounceTimeout[] = CONF("DebounceTimeout");
+const TCHAR szProfileDebounceTimeout[] = _T("DebounceTimeout");
 
-const TCHAR szProfileAppIndFinalGlide[] = CONF("AppIndFinalGlide");
-const TCHAR szProfileAppIndLandable[] = CONF("AppIndLandable");
-const TCHAR szProfileAppUseSWLandablesRendering[] = CONF("AppUseSWLandablesRendering");
-const TCHAR szProfileAppLandableRenderingScale[] = CONF("AppLandableRenderingScale");
-const TCHAR szProfileAppScaleRunwayLength[] = CONF("AppScaleRunwayLength");
-const TCHAR szProfileAppInverseInfoBox[] = CONF("AppInverseInfoBox");
-const TCHAR szProfileAppGaugeVarioSpeedToFly[] = CONF("AppGaugeVarioSpeedToFly");
-const TCHAR szProfileAppGaugeVarioAvgText[] = CONF("AppGaugeVarioAvgText");
-const TCHAR szProfileAppGaugeVarioMc[] = CONF("AppGaugeVarioMc");
-const TCHAR szProfileAppGaugeVarioBugs[] = CONF("AppGaugeVarioBugs");
-const TCHAR szProfileAppGaugeVarioBallast[] = CONF("AppGaugeVarioBallast");
-const TCHAR szProfileAppGaugeVarioGross[] = CONF("AppGaugeVarioGross");
-const TCHAR szProfileNorthArrow[] = CONF("NorthArrow");
-const TCHAR szProfileAppStatusMessageAlignment[] = CONF("AppStatusMessageAlignment");
-const TCHAR szProfileAppTextInputStyle[] = CONF("AppTextInputStyle");
-const TCHAR szProfileAppDialogStyle[] = CONF("AppDialogStyle");
-const TCHAR szProfileAppInfoBoxColors[] = CONF("AppInfoBoxColors");
-const TCHAR szProfileTeamcodeRefWaypoint[] = CONF("TeamcodeRefWaypoint");
-const TCHAR szProfileAppInfoBoxBorder[] = CONF("AppInfoBoxBorder");
+const TCHAR szProfileAppIndFinalGlide[] = _T("AppIndFinalGlide");
+const TCHAR szProfileAppIndLandable[] = _T("AppIndLandable");
+const TCHAR szProfileAppUseSWLandablesRendering[] = _T("AppUseSWLandablesRendering");
+const TCHAR szProfileAppLandableRenderingScale[] = _T("AppLandableRenderingScale");
+const TCHAR szProfileAppScaleRunwayLength[] = _T("AppScaleRunwayLength");
+const TCHAR szProfileAppInverseInfoBox[] = _T("AppInverseInfoBox");
+const TCHAR szProfileAppGaugeVarioSpeedToFly[] = _T("AppGaugeVarioSpeedToFly");
+const TCHAR szProfileAppGaugeVarioAvgText[] = _T("AppGaugeVarioAvgText");
+const TCHAR szProfileAppGaugeVarioMc[] = _T("AppGaugeVarioMc");
+const TCHAR szProfileAppGaugeVarioBugs[] = _T("AppGaugeVarioBugs");
+const TCHAR szProfileAppGaugeVarioBallast[] = _T("AppGaugeVarioBallast");
+const TCHAR szProfileAppGaugeVarioGross[] = _T("AppGaugeVarioGross");
+const TCHAR szProfileNorthArrow[] = _T("NorthArrow");
+const TCHAR szProfileAppStatusMessageAlignment[] = _T("AppStatusMessageAlignment");
+const TCHAR szProfileAppTextInputStyle[] = _T("AppTextInputStyle");
+const TCHAR szProfileAppDialogStyle[] = _T("AppDialogStyle");
+const TCHAR szProfileAppInfoBoxColors[] = _T("AppInfoBoxColors");
+const TCHAR szProfileTeamcodeRefWaypoint[] = _T("TeamcodeRefWaypoint");
+const TCHAR szProfileAppInfoBoxBorder[] = _T("AppInfoBoxBorder");
 
-const TCHAR szProfileAppInfoBoxModel[] = CONF("AppInfoBoxModel"); // VENTA-ADDON MODEL CONFIG
+const TCHAR szProfileAppInfoBoxModel[] = _T("AppInfoBoxModel"); // VENTA-ADDON MODEL CONFIG
 
-const TCHAR szProfileAppAveNeedle[] = CONF("AppAveNeedle");
+const TCHAR szProfileAppAveNeedle[] = _T("AppAveNeedle");
 
-const TCHAR szProfileAutoAdvance[] = CONF("AutoAdvance");
-const TCHAR szProfileUTCOffset[] = CONF("UTCOffset");
-const TCHAR szProfileBlockSTF[] = CONF("BlockSpeedToFly");
-const TCHAR szProfileAutoZoom[] = CONF("AutoZoom");
-const TCHAR szProfileMenuTimeout[] = CONF("MenuTimeout");
-const TCHAR szProfileTerrainContrast[] = CONF("TerrainContrast");
-const TCHAR szProfileTerrainBrightness[] = CONF("TerrainBrightness");
-const TCHAR szProfileTerrainRamp[] = CONF("TerrainRamp");
-const TCHAR szProfileEnableFLARMMap[] = CONF("EnableFLARMDisplay");
-const TCHAR szProfileEnableFLARMGauge[] = CONF("EnableFLARMGauge");
-const TCHAR szProfileAutoCloseFlarmDialog[] = CONF("AutoCloseFlarmDialog");
-const TCHAR szProfileEnableTAGauge[] = CONF("EnableTAGauge");
-const TCHAR szProfileFLARMGaugeBearing[] = CONF("FLARMGaugeBearing");
-const TCHAR szProfileGliderScreenPosition[] = CONF("GliderScreenPosition");
-const TCHAR szProfileSetSystemTimeFromGPS[] = CONF("SetSystemTimeFromGPS");
+const TCHAR szProfileAutoAdvance[] = _T("AutoAdvance");
+const TCHAR szProfileUTCOffset[] = _T("UTCOffset");
+const TCHAR szProfileBlockSTF[] = _T("BlockSpeedToFly");
+const TCHAR szProfileAutoZoom[] = _T("AutoZoom");
+const TCHAR szProfileMenuTimeout[] = _T("MenuTimeout");
+const TCHAR szProfileTerrainContrast[] = _T("TerrainContrast");
+const TCHAR szProfileTerrainBrightness[] = _T("TerrainBrightness");
+const TCHAR szProfileTerrainRamp[] = _T("TerrainRamp");
+const TCHAR szProfileEnableFLARMMap[] = _T("EnableFLARMDisplay");
+const TCHAR szProfileEnableFLARMGauge[] = _T("EnableFLARMGauge");
+const TCHAR szProfileAutoCloseFlarmDialog[] = _T("AutoCloseFlarmDialog");
+const TCHAR szProfileEnableTAGauge[] = _T("EnableTAGauge");
+const TCHAR szProfileFLARMGaugeBearing[] = _T("FLARMGaugeBearing");
+const TCHAR szProfileGliderScreenPosition[] = _T("GliderScreenPosition");
+const TCHAR szProfileSetSystemTimeFromGPS[] = _T("SetSystemTimeFromGPS");
 
-const TCHAR szProfileVoiceClimbRate[] = CONF("VoiceClimbRate");
-const TCHAR szProfileVoiceTerrain[] = CONF("VoiceTerrain");
-const TCHAR szProfileVoiceWaypointDistance[] = CONF("VoiceWaypointDistance");
-const TCHAR szProfileVoiceTaskAltitudeDifference[] = CONF("VoiceTaskAltitudeDifference");
-const TCHAR szProfileVoiceMacCready[] = CONF("VoiceMacCready");
-const TCHAR szProfileVoiceNewWaypoint[] = CONF("VoiceNewWaypoint");
-const TCHAR szProfileVoiceInSector[] = CONF("VoiceInSector");
-const TCHAR szProfileVoiceAirspace[] = CONF("VoiceAirspace");
+const TCHAR szProfileVoiceClimbRate[] = _T("VoiceClimbRate");
+const TCHAR szProfileVoiceTerrain[] = _T("VoiceTerrain");
+const TCHAR szProfileVoiceWaypointDistance[] = _T("VoiceWaypointDistance");
+const TCHAR szProfileVoiceTaskAltitudeDifference[] = _T("VoiceTaskAltitudeDifference");
+const TCHAR szProfileVoiceMacCready[] = _T("VoiceMacCready");
+const TCHAR szProfileVoiceNewWaypoint[] = _T("VoiceNewWaypoint");
+const TCHAR szProfileVoiceInSector[] = _T("VoiceInSector");
+const TCHAR szProfileVoiceAirspace[] = _T("VoiceAirspace");
 
-const TCHAR szProfileFinishMinHeight[] = CONF("FinishMinHeight");
-const TCHAR szProfileStartMaxHeight[] = CONF("StartMaxHeight");
-const TCHAR szProfileStartMaxSpeed[] = CONF("StartMaxSpeed");
-const TCHAR szProfileStartMaxHeightMargin[] = CONF("StartMaxHeightMargin");
-const TCHAR szProfileStartMaxSpeedMargin[] = CONF("StartMaxSpeedMargin");
-const TCHAR szProfileStartHeightRef[] = CONF("StartHeightRef");
-const TCHAR szProfileStartType[] = CONF("StartType");
-const TCHAR szProfileStartRadius[] = CONF("StartRadius");
-const TCHAR szProfileTurnpointType[] = CONF("TurnpointType");
-const TCHAR szProfileTurnpointRadius[] = CONF("TurnpointRadius");
-const TCHAR szProfileFinishType[] = CONF("FinishType");
-const TCHAR szProfileFinishRadius[] = CONF("FinishRadius");
-const TCHAR szProfileTaskType[] = CONF("TaskType");
-const TCHAR szProfileAATMinTime[] = CONF("AATMinTime");
+const TCHAR szProfileFinishMinHeight[] = _T("FinishMinHeight");
+const TCHAR szProfileStartMaxHeight[] = _T("StartMaxHeight");
+const TCHAR szProfileStartMaxSpeed[] = _T("StartMaxSpeed");
+const TCHAR szProfileStartMaxHeightMargin[] = _T("StartMaxHeightMargin");
+const TCHAR szProfileStartMaxSpeedMargin[] = _T("StartMaxSpeedMargin");
+const TCHAR szProfileStartHeightRef[] = _T("StartHeightRef");
+const TCHAR szProfileStartType[] = _T("StartType");
+const TCHAR szProfileStartRadius[] = _T("StartRadius");
+const TCHAR szProfileTurnpointType[] = _T("TurnpointType");
+const TCHAR szProfileTurnpointRadius[] = _T("TurnpointRadius");
+const TCHAR szProfileFinishType[] = _T("FinishType");
+const TCHAR szProfileFinishRadius[] = _T("FinishRadius");
+const TCHAR szProfileTaskType[] = _T("TaskType");
+const TCHAR szProfileAATMinTime[] = _T("AATMinTime");
 
-const TCHAR szProfileEnableNavBaroAltitude[] = CONF("EnableNavBaroAltitude");
+const TCHAR szProfileEnableNavBaroAltitude[] = _T("EnableNavBaroAltitude");
 
-const TCHAR szProfileLoggerTimeStepCruise[] = CONF("LoggerTimeStepCruise");
-const TCHAR szProfileLoggerTimeStepCircling[] = CONF("LoggerTimeStepCircling");
+const TCHAR szProfileLoggerTimeStepCruise[] = _T("LoggerTimeStepCruise");
+const TCHAR szProfileLoggerTimeStepCircling[] = _T("LoggerTimeStepCircling");
 
-const TCHAR szProfileSafetyMacCready[] = CONF("SafetyMacCready");
-const TCHAR szProfileAbortTaskMode[] = CONF("AbortTaskMode");
-const TCHAR szProfileAbortSafetyUseCurrent[] = CONF("AbortSafetyUseCurrent");
-const TCHAR szProfileAutoMcMode[] = CONF("AutoMcMode");
-const TCHAR szProfileEnableExternalTriggerCruise[] = CONF("EnableExternalTriggerCruise");
-const TCHAR szProfileOLCRules[] = CONF("OLCRules");
-const TCHAR szProfileHandicap[] = CONF("Handicap");
-const TCHAR szProfileSnailWidthScale[] = CONF("SnailWidthScale");
-const TCHAR szProfileSnailType[] = CONF("SnailType");
-const TCHAR szProfileUserLevel[] = CONF("UserLevel");
-const TCHAR szProfileRiskGamma[] = CONF("RiskGamma");
-const TCHAR szProfileWindArrowStyle[] = CONF("WindArrowStyle");
-const TCHAR szProfileDisableAutoLogger[] = CONF("DisableAutoLogger");
-const TCHAR szProfileMapFile[] = CONF("MapFile"); // pL
-const TCHAR szProfileBallastSecsToEmpty[] = CONF("BallastSecsToEmpty");
-const TCHAR szProfileUseCustomFonts[] = CONF("UseCustomFonts");
-const TCHAR szProfileFontInfoWindowFont[] = CONF("InfoWindowFont");
-const TCHAR szProfileFontTitleWindowFont[] = CONF("TitleWindowFont");
-const TCHAR szProfileFontMapWindowFont[] = CONF("MapWindowFont");
-const TCHAR szProfileFontTitleSmallWindowFont[] = CONF("TeamCodeFont");
-const TCHAR szProfileFontMapWindowBoldFont[] = CONF("MapWindowBoldFont");
-const TCHAR szProfileFontCDIWindowFont[] = CONF("CDIWindowFont");
-const TCHAR szProfileFontMapLabelFont[] = CONF("MapLabelFont");
-const TCHAR szProfileFontMapLabelImportantFont[] = CONF("MapLabelImportantFont");
-const TCHAR szProfileFontStatisticsFont[] = CONF("StatisticsFont");
-const TCHAR szProfileFontBugsBallastFont[] = CONF("BugsBallastFont");
-const TCHAR szProfileFontAirspacePressFont[] = CONF("AirspacePressFont");
-const TCHAR szProfileFontAirspaceColourDlgFont[] = CONF("AirspaceColourDlgFont");
-const TCHAR szProfileFontTeamCodeFont[] = CONF("TeamCodeFont");
+const TCHAR szProfileSafetyMacCready[] = _T("SafetyMacCready");
+const TCHAR szProfileAbortTaskMode[] = _T("AbortTaskMode");
+const TCHAR szProfileAbortSafetyUseCurrent[] = _T("AbortSafetyUseCurrent");
+const TCHAR szProfileAutoMcMode[] = _T("AutoMcMode");
+const TCHAR szProfileEnableExternalTriggerCruise[] = _T("EnableExternalTriggerCruise");
+const TCHAR szProfileOLCRules[] = _T("OLCRules");
+const TCHAR szProfileHandicap[] = _T("Handicap");
+const TCHAR szProfileSnailWidthScale[] = _T("SnailWidthScale");
+const TCHAR szProfileSnailType[] = _T("SnailType");
+const TCHAR szProfileUserLevel[] = _T("UserLevel");
+const TCHAR szProfileRiskGamma[] = _T("RiskGamma");
+const TCHAR szProfileWindArrowStyle[] = _T("WindArrowStyle");
+const TCHAR szProfileDisableAutoLogger[] = _T("DisableAutoLogger");
+const TCHAR szProfileMapFile[] = _T("MapFile"); // pL
+const TCHAR szProfileBallastSecsToEmpty[] = _T("BallastSecsToEmpty");
+const TCHAR szProfileUseCustomFonts[] = _T("UseCustomFonts");
+const TCHAR szProfileFontInfoWindowFont[] = _T("InfoWindowFont");
+const TCHAR szProfileFontTitleWindowFont[] = _T("TitleWindowFont");
+const TCHAR szProfileFontMapWindowFont[] = _T("MapWindowFont");
+const TCHAR szProfileFontTitleSmallWindowFont[] = _T("TeamCodeFont");
+const TCHAR szProfileFontMapWindowBoldFont[] = _T("MapWindowBoldFont");
+const TCHAR szProfileFontCDIWindowFont[] = _T("CDIWindowFont");
+const TCHAR szProfileFontMapLabelFont[] = _T("MapLabelFont");
+const TCHAR szProfileFontMapLabelImportantFont[] = _T("MapLabelImportantFont");
+const TCHAR szProfileFontStatisticsFont[] = _T("StatisticsFont");
+const TCHAR szProfileFontBugsBallastFont[] = _T("BugsBallastFont");
+const TCHAR szProfileFontAirspacePressFont[] = _T("AirspacePressFont");
+const TCHAR szProfileFontAirspaceColourDlgFont[] = _T("AirspaceColourDlgFont");
+const TCHAR szProfileFontTeamCodeFont[] = _T("TeamCodeFont");
 
-const TCHAR szProfileInfoBoxGeometry[] = CONF("InfoBoxGeometry");
+const TCHAR szProfileInfoBoxGeometry[] = _T("InfoBoxGeometry");
 
-const TCHAR szProfileFlarmSideData[] = CONF("FlarmRadarSideData");
-const TCHAR szProfileFlarmAutoZoom[] = CONF("FlarmRadarAutoZoom");
-const TCHAR szProfileFlarmNorthUp[] = CONF("FlarmRadarNorthUp");
+const TCHAR szProfileFlarmSideData[] = _T("FlarmRadarSideData");
+const TCHAR szProfileFlarmAutoZoom[] = _T("FlarmRadarAutoZoom");
+const TCHAR szProfileFlarmNorthUp[] = _T("FlarmRadarNorthUp");
 
-const TCHAR szProfileIgnoreNMEAChecksum[] = CONF("IgnoreNMEAChecksum");
-const TCHAR szProfileDisplayOrientation[] = CONF("DisplayOrientation");
+const TCHAR szProfileIgnoreNMEAChecksum[] = _T("IgnoreNMEAChecksum");
+const TCHAR szProfileDisplayOrientation[] = _T("DisplayOrientation");
 
-const TCHAR szProfileClimbMapScale[] = CONF("ClimbMapScale");
-const TCHAR szProfileCruiseMapScale[] = CONF("CruiseMapScale");
+const TCHAR szProfileClimbMapScale[] = _T("ClimbMapScale");
+const TCHAR szProfileCruiseMapScale[] = _T("CruiseMapScale");
 
-const TCHAR szProfileRoutePlannerMode[] = CONF("RoutePlannerMode");
-const TCHAR szProfileRoutePlannerAllowClimb[] = CONF("RoutePlannerAllowClimb");
-const TCHAR szProfileRoutePlannerUseCeiling[] = CONF("RoutePlannerUseCeiling");
+const TCHAR szProfileRoutePlannerMode[] = _T("RoutePlannerMode");
+const TCHAR szProfileRoutePlannerAllowClimb[] = _T("RoutePlannerAllowClimb");
+const TCHAR szProfileRoutePlannerUseCeiling[] = _T("RoutePlannerUseCeiling");

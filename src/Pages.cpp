@@ -143,7 +143,7 @@ Pages::MakeProfileKey(TCHAR* buffer, int page)
   if (page < 0 || page > 7)
     return false;
 
-  _tcscpy(buffer, CONF("Page"));
+  _tcscpy(buffer, _T("Page"));
   _stprintf(buffer + _tcslen(buffer), _T("%d"), page + 1);
   return true;
 }

@@ -199,10 +199,10 @@ PDVSC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   TCHAR regname[100];
 
-  _stprintf(regname, CONF("Vega%sUpdated"), name);
+  _stprintf(regname, _T("Vega%sUpdated"), name);
   Profile::Set(regname, 1);
 
-  _stprintf(regname, CONF("Vega%s"), name);
+  _stprintf(regname, _T("Vega%s"), name);
   Profile::Set(regname, value);
 
   return true;

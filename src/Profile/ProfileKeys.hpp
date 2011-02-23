@@ -26,8 +26,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-#define CONF(key) _T(key)
-
 extern const TCHAR *szProfileDisplayType[];
 extern const TCHAR *szProfileColour[];
 extern const TCHAR *szProfileBrush[];

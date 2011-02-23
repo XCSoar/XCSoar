@@ -67,7 +67,7 @@ ReadPortType(unsigned n)
 {
   TCHAR name[64], value[64];
 
-  MakeDeviceSettingName(name, CONF("Port"), n, _T("Type"));
+  MakeDeviceSettingName(name, _T("Port"), n, _T("Type"));
   if (!Profile::Get(name, value, sizeof(value) / sizeof(value[0])))
     return is_android()
       ? DeviceConfig::INTERNAL
@@ -84,10 +84,10 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
 
   config.port_type = ReadPortType(n);
 
-  MakeDeviceSettingName(buffer, CONF("Port"), n, _T("BluetoothMAC"));
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("BluetoothMAC"));
   Get(buffer, config.bluetooth_mac);
 
-  MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("Index"));
   if (Get(buffer, Temp))
     config.port_index = Temp;
   else if (is_altair() && n == 0)
@@ -97,7 +97,7 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   else
     config.port_index = 0;
 
-  MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
+  MakeDeviceSettingName(buffer, _T("Speed"), n, _T("Index"));
   if (Get(buffer, Temp))
     config.speed_index = Temp;
   else if (is_altair())
@@ -105,7 +105,7 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   else
     config.speed_index = 2;
 
-  _tcscpy(buffer, CONF("DeviceA"));
+  _tcscpy(buffer, _T("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
   if (!Get(buffer, config.driver_name,
            sizeof(config.driver_name) / sizeof(config.driver_name[0]))) {
@@ -149,7 +149,7 @@ WritePortType(unsigned n, enum DeviceConfig::port_type type)
 
   TCHAR name[64];
 
-  MakeDeviceSettingName(name, CONF("Port"), n, _T("Type"));
+  MakeDeviceSettingName(name, _T("Port"), n, _T("Type"));
   return Profile::Set(name, value);
 }
 
@@ -160,16 +160,16 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
 
   WritePortType(n, config.port_type);
 
-  MakeDeviceSettingName(buffer, CONF("Port"), n, _T("BluetoothMAC"));
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("BluetoothMAC"));
   Set(buffer, config.bluetooth_mac);
 
-  MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("Index"));
   Set(buffer, config.port_index);
 
-  MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
+  MakeDeviceSettingName(buffer, _T("Speed"), n, _T("Index"));
   Set(buffer, config.speed_index);
 
-  _tcscpy(buffer, CONF("DeviceA"));
+  _tcscpy(buffer, _T("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
   Set(buffer, config.driver_name);
 }
