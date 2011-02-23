@@ -86,39 +86,50 @@ gettext(const TCHAR* text)
 {
   assert(text != NULL);
 
+  // If empty string or no language file is loaded -> skip the translation
   if (string_is_empty(text) || mo_file == NULL)
     return text;
 
 #ifdef _UNICODE
+  // Try to lookup the english string in the map of cached TCHAR translations
   const tstring text2(text);
   translation_map::const_iterator it = translations.find(text2);
   if (it != translations.end())
+    // Return the looked up translation
     return it->second.c_str();
 
+  // Convert the english TCHAR string to char
   size_t wide_length = _tcslen(text);
   char original[wide_length * 4 + 1];
 
+  // If the conversion failed -> use the english original string
   if (::WideCharToMultiByte(CP_UTF8, 0, text, -1,
                             original, sizeof(original), NULL, NULL) <= 0)
     return text;
 
+  // Lookup the converted english char string in the MO file
   const char *translation = mo_file->lookup(original);
+  // If the lookup failed -> use the english original string
   if (translation == NULL || *translation == 0 ||
       strcmp(original, translation) == 0)
     return text;
 
+  // Convert the translated char string to TCHAR
   TCHAR translation2[strlen(translation) + 1];
   if (::MultiByteToWideChar(CP_UTF8, 0, translation, -1, translation2,
                             sizeof(translation2) / sizeof(translation2[0])) <= 0)
     return text;
 
+  // Add the translated TCHAR string to the cache map for the next time
   translations[text2] = translation2;
+
+  // Return the translated TCHAR string
   return translations[text2].c_str();
 #else
+  // Search for the english original string in the MO file
   const char *translation = mo_file->lookup(text);
-  return translation != NULL && *translation != 0
-    ? translation
-    : text;
+  // Return either the translated string if found or the original
+  return translation != NULL && *translation != 0 ? translation : text;
 #endif
 }
 
@@ -179,8 +190,10 @@ gcc_pure
 static const TCHAR *
 find_language(WORD language)
 {
+  // Search for supported languages matching the language code
   for (unsigned i = 0; language_table[i].resource != NULL; ++i)
     if (language_table[i].language == language)
+      // .. and return the MO file name if found
       return language_table[i].resource;
 
   return NULL;
@@ -194,8 +207,10 @@ find_language(const TCHAR *resource)
 {
   assert(resource != NULL);
 
+  // Search for supported languages matching the MO file name
   for (unsigned i = 0; language_table[i].resource != NULL; ++i)
     if (_tcscmp(language_table[i].resource, resource) == 0)
+      // .. and return the language code
       return language_table[i].language;
 
   return 0;
@@ -210,7 +225,8 @@ detect_language()
 
   Java::Class cls(env, "java/util/Locale");
 
-  /* call Locale.getDefault() */
+  // Call static function Locale.getDefault() that
+  // returns the user's default Locale object
 
   jmethodID cid = env->GetStaticMethodID(cls, "getDefault",
                                          "()Ljava/util/Locale;");
@@ -222,7 +238,8 @@ detect_language()
 
   Java::LocalObject obj(env, _obj);
 
-  /* call Locale.getLanguage() */
+  // Call function Locale.getLanguage() that
+  // returns a two-letter language string
 
   cid = env->GetMethodID(cls, "getLanguage", "()Ljava/lang/String;");
   assert(cid != NULL);
@@ -231,6 +248,7 @@ detect_language()
   if (language == NULL)
     return NULL;
 
+  // Convert the jstring to a char string
   const char *language2 = env->GetStringUTFChars(language, NULL);
   if (language2 == NULL) {
     env->DeleteLocalRef(language);
@@ -244,12 +262,15 @@ detect_language()
     /* hack */
     language3 = "pt_BR";
 
+  // Attach .mo to the language identifier
   static char language_buffer[16];
   snprintf(language_buffer, sizeof(language_buffer), "%s.mo", language3);
 
+  // Clean up the memory
   env->ReleaseStringUTFChars(language, language2);
   env->DeleteLocalRef(language);
 
+  // Return e.g. "de.mo"
   return language_buffer;
 
 #else /* !ANDROID */
@@ -273,11 +294,14 @@ detect_language()
   }
 #endif
 
+  // Retrieve the default user language identifier from the OS
   LANGID lang_id = GetUserDefaultUILanguage();
   LogStartUp(_T("Language: GetUserDefaultUILanguage()=0x%x"), (int)lang_id);
   if (lang_id == 0)
     return NULL;
 
+  // Try to convert the primary language part of the language identifier
+  // to a MO file name in the language table
   return find_language(PRIMARYLANGID(lang_id));
 
 #endif /* !ANDROID */
@@ -292,12 +316,14 @@ ReadResourceLanguageFile(const TCHAR *resource)
 
   LogStartUp(_T("Language: loading resource '%s'"), resource);
 
+  // Load resource
   ResourceLoader::Data data = ResourceLoader::Load(resource, _T("MO"));
   if (data.first == NULL) {
     LogStartUp(_T("Language: resource '%s' not found"), resource);
     return false;
   }
 
+  // Load MO file from resource
   mo_loader.reset(new MOLoader(data.first, data.second));
   if (mo_loader->error()) {
     LogStartUp(_T("Language: could not load resource '%s'"), resource);
@@ -332,16 +358,19 @@ AutoDetectLanguage()
 {
 #if defined(HAVE_POSIX) && !defined(ANDROID)
 
+  // Set the current locale to the environment's default
   setlocale(LC_ALL, "");
-  // allways use a dot as decimal point in printf/scanf.
+  // always use a dot as decimal point in printf/scanf()
   setlocale(LC_NUMERIC, "C");
   bindtextdomain("xcsoar", "/usr/share/locale");
   textdomain("xcsoar");
 
 #else /* !HAVE_POSIX */
 
+  // Try to detect the language by calling the OS's corresponding functions
   const TCHAR *resource = detect_language();
   if (resource != NULL)
+    // If a language was detected -> try to load the MO file
     ReadResourceLanguageFile(resource);
 
 #endif /* !HAVE_POSIX */
