@@ -60,7 +60,10 @@ struct SeeYouTurnpointInformation {
 
   SeeYouTurnpointInformation():
     Valid(false), Style(Symmetrical), Line(false), Reduce(false),
-    Radius1(fixed(500)), Angle1(Angle::degrees(fixed_90)) {}
+    Radius1(fixed(500)), Radius2(fixed(500)),
+    Angle1(Angle::degrees(fixed_zero)),
+    Angle2(Angle::degrees(fixed_zero)),
+    Angle12(Angle::degrees(fixed_zero)) {}
 };
 
 static fixed
@@ -148,7 +151,8 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   }
 
   // Read waypoint list
-  // e.g. "Club day 4 Racing task","085PRI","083BOJ","170D_K","065SKY"
+  // e.g. "Club day 4 Racing task","085PRI","083BOJ","170D_K","065SKY","0844YY", "0844YY"
+  //       TASK NAME              , TAKEOFF, START  , TP1    , TP2    , FINISH ,  LANDING
   TCHAR waypoints_buffer[1024];
   const TCHAR *wps[30];
   size_t n_waypoints = WayPointFile::
