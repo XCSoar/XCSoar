@@ -75,7 +75,7 @@ Copyright_License {
 #define REG_PATH TEXT("Software\\OpenSource\\XCSoar")
 #define FILE_EXPLORER TEXT("fexplore.exe")
 
-#define BUF_SIZE				256
+#define BUF_SIZE 256
 
 #if (WIN32_PLATFORM_PSPC <= 300)
 #define USE_OPAQUE_FILL
@@ -107,12 +107,12 @@ static int WinBottomMargin = 2;
 static BOOL Refresh;
 
 typedef struct _FILELIST {
-	TCHAR FileName[BUF_SIZE];
-	TCHAR CommandLine[BUF_SIZE];
+  TCHAR FileName[BUF_SIZE];
+  TCHAR CommandLine[BUF_SIZE];
   TCHAR Description[BUF_SIZE];
   HBITMAP bitmap;
 #ifdef USE_MASKS
-	HBITMAP mask;
+  HBITMAP mask;
 #endif
 } FILELIST;
 
@@ -217,10 +217,10 @@ CreateFileList(void)
   if (FileList[1].bitmap == NULL)
     FileList[1].bitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_XCSOARLSWIFTSIM));
 
-// Create Mask bitmaps if required
+  // Create Mask bitmaps if required
 #ifdef USE_MASKS
 
-	for (i = 0; i < FileListCnt; ++i) {
+  for (i = 0; i < FileListCnt; ++i) {
     if (FileList[i].mask == NULL) {
       FileList[i].mask = CreateMaskBMP(FileList[i].bitmap, RGB(0, 0, 255));
     }
@@ -230,14 +230,14 @@ CreateFileList(void)
 }
 
 /* ****************************************************************************
-	DllMain
+   DllMain
 ******************************************************************************/
 BOOL WINAPI
 DllMain(HINSTANCE hModule, gcc_unused DWORD fdwReason,
         gcc_unused PVOID pvReserved)
 {
-	hInst = hModule;
-	return TRUE;
+  hInst = hModule;
+  return TRUE;
 }
 
 /* *****************************************************************************
@@ -297,25 +297,25 @@ ToolTipProc(HWND hDlg, UINT uMsg, gcc_unused WPARAM wParam, LPARAM lParam)
 #endif /* ENABLE_TOOLTIPS */
 
 /* ****************************************************************************
-	OnPaint
+   OnPaint
 ******************************************************************************/
 static void
 OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 {
-	TODAYDRAWWATERMARKINFO dwi;
+  TODAYDRAWWATERMARKINFO dwi;
 
-	HDC drawdc, tempdc;
-	HBITMAP hDrawBitMap;
-	HBITMAP hRetDrawBmp;
-	// HBITMAP hRetBmp;
-	RECT rect;
-	RECT selrect;
+  HDC drawdc, tempdc;
+  HBITMAP hDrawBitMap;
+  HBITMAP hRetDrawBmp;
+  // HBITMAP hRetBmp;
+  RECT rect;
+  RECT selrect;
   // BITMAP bmp;
-	int x, y;
-	int i;
-	HBRUSH hBrush;
+  int x, y;
+  int i;
+  HBRUSH hBrush;
 
-	GetClientRect(hWnd, (LPRECT)&rect);
+  GetClientRect(hWnd, (LPRECT)&rect);
 
   drawdc = CreateCompatibleDC(hdc);
   tempdc = CreateCompatibleDC(hdc);
@@ -330,11 +330,10 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
   dwi.hwnd = hWnd;
   SendMessage(GetParent(hWnd), TODAYM_DRAWWATERMARK, 0, (LPARAM)&dwi);
 
-	x = WinLeftMargin;
+  x = WinLeftMargin;
   y = WinTopMargin;
 
   for (i = 0; i < FileListCnt; i++) {
-
     if (SelItem == i) {
       SetRect(&selrect, x, y, x + IconSizeX + (HMargin * 2),
               y + IconSizeY + (VMargin * 2));
@@ -346,7 +345,7 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
     SelectObject(tempdc, FileList[i].bitmap);
 
 #ifdef USE_MASKS
-		MaskBlt(drawdc, x + HMargin, y + VMargin, IconSizeX, IconSizeY, tempdc, 0,
+    MaskBlt(drawdc, x + HMargin, y + VMargin, IconSizeX, IconSizeY, tempdc, 0,
             0, FileList[i].mask, 0, 0, MAKEROP4(0x00AA0029, SRCCOPY));
 #else
     TransparentBlt(drawdc, x + HMargin, y + VMargin, IconSizeX, IconSizeY,
@@ -366,7 +365,7 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 }
 
 /* ****************************************************************************
-	Point2Item
+   Point2Item
 ******************************************************************************/
 static int
 Point2Item(int px, int py)
@@ -403,7 +402,7 @@ Point2Item(int px, int py)
 static BOOL
 ShellOpen(const TCHAR *FileName, const TCHAR *CommandLine)
 {
-	SHELLEXECUTEINFO sei;
+  SHELLEXECUTEINFO sei;
   WIN32_FIND_DATA FindData;
   HANDLE hFindFile;
 
@@ -450,7 +449,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
   int x, y;
   int i;
 
-	switch (msg) {
+  switch (msg) {
 #ifdef ENABLE_TOOLTIPS
   case WM_CREATE:
     if (hToolTip == NULL)
@@ -458,7 +457,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                               ToolTipProc);
     break;
 
-	case WM_DESTROY:
+  case WM_DESTROY:
     DestroyWindow(hToolTip);
     hToolTip = NULL;
 
@@ -488,7 +487,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
     return FALSE;
 
-	case WM_LBUTTONDOWN:
+  case WM_LBUTTONDOWN:
     SelItem = Point2Item(LOWORD(lParam), HIWORD(lParam));
     InvalidateRect(hWnd, NULL, FALSE);
     UpdateWindow(hWnd);
@@ -505,23 +504,23 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
       SendMessage(hToolTip, WM_SETTEXT, 0,
                   (LPARAM)(FileList + SelItem)->Description);
       GetWindowRect(hWnd, &rect);
-			GetWindowRect(hToolTip, &tip_rect);
+      GetWindowRect(hToolTip, &tip_rect);
 
-			tip_rect.left = rect.left + LOWORD(lParam) -
-                      (tip_rect.right - tip_rect.left) - 10;
-			if (tip_rect.left < 0)
+      tip_rect.left = rect.left + LOWORD(lParam) -
+        (tip_rect.right - tip_rect.left) - 10;
+      if (tip_rect.left < 0)
         tip_rect.left = 0;
 
-			tip_rect.top = rect.top + HIWORD(lParam) -
-                     (tip_rect.bottom - tip_rect.top) - 10;
-			if (tip_rect.top < 0)
+      tip_rect.top = rect.top + HIWORD(lParam) -
+        (tip_rect.bottom - tip_rect.top) - 10;
+      if (tip_rect.top < 0)
         tip_rect.top = 0;
 
-			SetWindowPos(hToolTip, HWND_TOPMOST, tip_rect.left, tip_rect.top,
+      SetWindowPos(hToolTip, HWND_TOPMOST, tip_rect.left, tip_rect.top,
                    0, 0, SWP_NOACTIVATE | SWP_NOSIZE | SWP_SHOWWINDOW);
-		}
+    }
 #endif
-		SetCapture(hWnd);
+    SetCapture(hWnd);
     break;
 
   case WM_LBUTTONUP:
@@ -531,20 +530,19 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     ReleaseCapture();
     i = Point2Item(LOWORD(lParam), HIWORD(lParam));
-    if (i != -1 && i == SelItem) {
-      if (!is_running) {
-        is_running = 1;
-        ShellOpen((FileList + i)->FileName, (FileList + i)->CommandLine);
-        Sleep(1000);
-        is_running = 0;
-      }
+    if (i != -1 && i == SelItem && !is_running) {
+      is_running = 1;
+      ShellOpen((FileList + i)->FileName, (FileList + i)->CommandLine);
+      Sleep(1000);
+      is_running = 0;
     }
+
     SelItem = -1;
     InvalidateRect(hWnd, NULL, FALSE);
     UpdateWindow(hWnd);
     break;
 
-	case WM_PAINT:
+  case WM_PAINT:
     hdc = BeginPaint(hWnd, &ps);
     OnPaint(hWnd, hdc, &ps);
     EndPaint(hWnd, &ps);
@@ -553,82 +551,82 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
   case WM_ERASEBKGND:
     return 1;
 
-	default:
-		return DefWindowProc(hWnd, msg, wParam, lParam);
-	}
+  default:
+    return DefWindowProc(hWnd, msg, wParam, lParam);
+  }
 
-	return 0;
+  return 0;
 }
 
 /* ****************************************************************************
-	InitInstance
+   InitInstance
 ******************************************************************************/
 static HWND InitInstance(HWND pWnd, TODAYLISTITEM *ptli)
 {
-	WNDCLASS wc;
+  WNDCLASS wc;
 
-	hInst = ptli->hinstDLL;
+  hInst = ptli->hinstDLL;
 
-	CreateFileList();
+  CreateFileList();
 
-	wc.style = CS_HREDRAW | CS_VREDRAW;
-	wc.hCursor = 0;
-	wc.lpszMenuName = 0;
-	wc.lpfnWndProc = (WNDPROC)WndProc;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hInstance = ptli->hinstDLL;
-	wc.hIcon = NULL;
-	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-	wc.lpszClassName = MAIN_WND_CLASS;
-	UnregisterClass(MAIN_WND_CLASS, ptli->hinstDLL);
-	RegisterClass(&wc);
+  wc.style = CS_HREDRAW | CS_VREDRAW;
+  wc.hCursor = 0;
+  wc.lpszMenuName = 0;
+  wc.lpfnWndProc = (WNDPROC)WndProc;
+  wc.cbClsExtra = 0;
+  wc.cbWndExtra = 0;
+  wc.hInstance = ptli->hinstDLL;
+  wc.hIcon = NULL;
+  wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+  wc.lpszClassName = MAIN_WND_CLASS;
+  UnregisterClass(MAIN_WND_CLASS, ptli->hinstDLL);
+  RegisterClass(&wc);
 
-	Refresh = TRUE;
+  Refresh = TRUE;
 
-	return CreateWindow(MAIN_WND_CLASS, WINDOW_TITLE, WS_CHILD | WS_VISIBLE,
+  return CreateWindow(MAIN_WND_CLASS, WINDOW_TITLE, WS_CHILD | WS_VISIBLE,
                       CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, pWnd, NULL,
                       ptli->hinstDLL, NULL);
 }
 
 /* ****************************************************************************
-	InitializeCustomItem
+   InitializeCustomItem
 ******************************************************************************/
 gcc_unused
 HWND APIENTRY InitializeCustomItem(TODAYLISTITEM *ptli, HWND pWnd)
 {
-	if(ptli->fEnabled == 0){
-		return NULL;
-	}
-	return InitInstance(pWnd, ptli);
+  if (ptli->fEnabled == 0)
+    return NULL;
+
+  return InitInstance(pWnd, ptli);
 }
 
 /* ****************************************************************************
-	CustomItemOptionsDlgProc
+   CustomItemOptionsDlgProc
 ******************************************************************************/
 gcc_unused
 BOOL APIENTRY
 CustomItemOptionsDlgProc(HWND hDlg, UINT uMsg, UINT wParam,
                          gcc_unused LONG lParam)
 {
-	SHINITDLGINFO shidi;
+  SHINITDLGINFO shidi;
   // LVCOLUMN lvc;
   // LV_ITEM lvi;
   // int ItemIndex;
   // int i;
 
   switch (uMsg) {
-	case WM_INITDIALOG:
+  case WM_INITDIALOG:
     shidi.dwMask = SHIDIM_FLAGS;
     shidi.dwFlags = SHIDIF_DONEBUTTON | SHIDIF_SIPDOWN |
-                    SHIDIF_SIZEDLGFULLSCREEN;
+      SHIDIF_SIZEDLGFULLSCREEN;
     shidi.hDlg = hDlg;
     SHInitDialog(&shidi);
 
     SetWindowText(hDlg, TEXT("XCSoarLaunch"));
     break;
 
-	case WM_COMMAND:
+  case WM_COMMAND:
     switch (LOWORD(wParam)) {
     case IDC_BUTTON_UNINSTALL:
       if (MessageBox(hDlg, TEXT("Delete today information?"),
@@ -638,6 +636,7 @@ CustomItemOptionsDlgProc(HWND hDlg, UINT uMsg, UINT wParam,
         MessageBox(hDlg, TEXT("Information was deleted. Please uninstall."),
                    TEXT("Info"), MB_OK | MB_ICONINFORMATION);
       }
+
       EndDialog(hDlg, IDOK);
       break;
 
@@ -647,8 +646,9 @@ CustomItemOptionsDlgProc(HWND hDlg, UINT uMsg, UINT wParam,
     }
     break;
 
-	default:
-		return FALSE;
-	}
-	return TRUE;
+  default:
+    return FALSE;
+  }
+
+  return TRUE;
 }
