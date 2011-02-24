@@ -116,6 +116,7 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
     break;
 
   case ibRight8:
+  case ibRight12:
     if (i < numInfoWindows / 2) {
       *x = rc.right - ControlWidth * 2;
       *y = rc.top + ControlHeight * i;
@@ -169,6 +170,8 @@ InfoBoxLayout::LoadGeometry()
 
   if (InfoBoxGeometry == ibGNav)
     numInfoWindows = 9;
+  else if (InfoBoxGeometry == ibRight12)
+    numInfoWindows = 12;
   else if (InfoBoxGeometry == ibSquare)
     numInfoWindows = 5;
   else
@@ -198,6 +201,7 @@ InfoBoxLayout::CalcInfoBoxSizes(RECT rc)
     break;
 
   case ibGNav:
+  case ibRight12:
     // calculate control dimensions
     ControlHeight = (rc.bottom - rc.top) / 6;
     ControlWidth = ControlHeight * 1.44; // preserve relative shape
@@ -252,6 +256,7 @@ InfoBoxLayout::GetRemainingRect(RECT rc)
     break;
 
   case ibGNav:
+  case ibRight12:
     // calculate small map screen size
     MapRect.right = rc.right - ControlWidth * 2;
     break;

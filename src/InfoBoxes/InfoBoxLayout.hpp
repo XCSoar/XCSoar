@@ -44,7 +44,9 @@ namespace InfoBoxLayout
     // 6: infoboxes GNAV
     ibGNav = 6,
     // 7: infoboxes (5) along right side (square screen)
-    ibSquare = 7
+    ibSquare = 7,
+    // 8: 12 infoboxes along right side (i.e. like GNav without vario)
+    ibRight12 = 8
   };
 
   extern bool fullscreen;

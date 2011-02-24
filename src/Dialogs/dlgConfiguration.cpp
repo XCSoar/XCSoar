@@ -1449,6 +1449,7 @@ setVariables()
     dfe->addEnumText(_("8 Right (Landscape)")); // 5
     dfe->addEnumText(_("9 Right + Vario (Landscape)"));  // 6
     dfe->addEnumText(_("5 Right (Square)")); // 7
+    dfe->addEnumText(_("12 Right (Landscape)")); // 8
     dfe->Set(InfoBoxLayout::InfoBoxGeometry);
     wp->RefreshDisplay();
   }

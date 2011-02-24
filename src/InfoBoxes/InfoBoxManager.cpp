@@ -439,6 +439,7 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
     break;
 
   case InfoBoxLayout::ibGNav:
+  case InfoBoxLayout::ibRight12:
     if (i != 0)
       border |= BORDERTOP;
     if (i < 6)
