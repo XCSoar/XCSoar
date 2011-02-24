@@ -402,35 +402,12 @@ Point2Item(int px, int py)
 static BOOL
 ShellOpen(const TCHAR *FileName, const TCHAR *CommandLine)
 {
-  SHELLEXECUTEINFO sei;
-  WIN32_FIND_DATA FindData;
-  HANDLE hFindFile;
+  TCHAR buffer[256];
+  _sntprintf(buffer, 256, _T("\"%s\" %s"), FileName, CommandLine);
 
-  if ((hFindFile = FindFirstFile(FileName, &FindData)) != INVALID_HANDLE_VALUE) {
-    FindClose(hFindFile);
-    if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-      //Folder open
-      CommandLine = FileName;
-      FileName = FILE_EXPLORER;
-    }
-  }
-  if (lstrcmp(FileName, TEXT("\\")) == 0) {
-    CommandLine = FileName;
-    FileName = FILE_EXPLORER;
-  }
-
-  memset(&sei, 0, sizeof(SHELLEXECUTEINFO));
-  sei.cbSize = sizeof(sei);
-  sei.fMask = 0;
-  sei.hwnd = NULL;
-  sei.lpVerb = NULL;
-  sei.lpFile = FileName;
-  if (*CommandLine != TEXT('\0'))
-    sei.lpParameters = CommandLine;
-  sei.lpDirectory = NULL;
-  sei.nShow = SW_SHOWNORMAL;
-  sei.hInstApp = hInst;
-  return ShellExecuteEx(&sei);
+  PROCESS_INFORMATION pi;
+  return CreateProcess(FileName, buffer, NULL, NULL, false,
+                       0, NULL, NULL, NULL, &pi);
 }
 
 /* ****************************************************************************
