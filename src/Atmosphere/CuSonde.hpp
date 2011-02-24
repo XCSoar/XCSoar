@@ -54,7 +54,7 @@ namespace CuSonde
     void updateThermalIndex(unsigned short level, bool newdata=true);
 
     /** Number of measurements */
-    int nmeasurements;
+    unsigned nmeasurements;
 
     /** Estimated ThermalHeight with data of this level */
     double thermalHeight;
