@@ -62,7 +62,8 @@ public:
  */
   TabBarControl(ContainerWindow &parent,
                 int x, int y, unsigned width, unsigned height,
-                const WindowStyle style = WindowStyle());
+                const WindowStyle style = WindowStyle(),
+                bool _flipOrientation = false);
 
 private:
 #define TabLineHeightInitUnscaled (unsigned)5
@@ -166,6 +167,7 @@ protected:
   TabDisplay * theTabDisplay;
   StaticArray<OneTabButton *, 32> buttons;
   const unsigned int TabLineHeight;
+  bool flipOrientation;
 
 };
 
@@ -188,7 +190,7 @@ public:
  * @param height Height of tab bar box in the parent window
  */
  TabDisplay(TabBarControl& _theTabBar, unsigned left, unsigned top,
-     unsigned width, unsigned height);
+     unsigned width, unsigned height, bool _flipOrientation = false);
 
 public:
   void trigger_invalidate() { invalidate(); }
@@ -200,6 +202,7 @@ protected:
   bool dragging; // tracks that mouse is down and captured
   int downindex; // index of tab where mouse down occurred
   bool dragoffbutton; // set by mouse_move
+  bool flipOrientation;
 
 protected:
 /**

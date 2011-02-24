@@ -857,10 +857,15 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
   } else if (_tcscmp(node.getName(), _T("TabBar")) == 0) {
     // Create the TabBarControl
 
+    bool flipOrientation = false;
+    if ( (Layout::landscape && StringToIntDflt(node.getAttribute(_T("Horizontal")), 0)) ||
+         (!Layout::landscape && StringToIntDflt(node.getAttribute(_T("Vertical")), 0) ) )
+      flipOrientation = true;
+
     style.control_parent();
     TabBarControl *tabbar = new TabBarControl(parent,
                                               pos.x, pos.y, size.cx, size.cy,
-                                              style);
+                                              style, flipOrientation);
     window = tabbar;
 
   } else if (_tcscmp(node.getName(), _T("Custom")) == 0) {
