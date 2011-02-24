@@ -307,9 +307,6 @@ devStartup()
 
   DeviceDescriptor *pDevNmeaOut = NULL;
 
-  for (unsigned i = 0; i < NUMDEV; i++)
-    DeviceList[i].Clear();
-
   Profile::Get(szProfileIgnoreNMEAChecksum, NMEAParser::ignore_checksum);
 
   DeviceConfig config[NUMDEV];

@@ -51,22 +51,12 @@ DeviceDescriptor::DeviceDescriptor()
 {
 }
 
-void
-DeviceDescriptor::Clear()
-{
-  /* must be closed already */
-  assert(device == NULL);
-  assert(Com == NULL);
-
-  Driver = NULL;
-  pDevPipeTo = NULL;
-  enable_baro = false;
-  ticker = false;
-}
-
 bool
 DeviceDescriptor::Open()
 {
+  assert(!enable_baro);
+  assert(!ticker);
+
   if (Driver == NULL)
     return false;
 
@@ -102,6 +92,11 @@ DeviceDescriptor::Close()
   Com = NULL;
 
   delete OldCom;
+
+  Driver = NULL;
+  pDevPipeTo = NULL;
+  enable_baro = false;
+  ticker = false;
 }
 
 const TCHAR *

@@ -58,8 +58,6 @@ public:
   DeviceDescriptor();
 
 public:
-  void Clear();
-
   bool Open();
   void Close();
 
