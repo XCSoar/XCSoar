@@ -37,7 +37,7 @@ Copyright_License {
 #include "MapWindowProjection.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
-#include "Atmosphere.h"
+#include "Atmosphere/CuSonde.hpp"
 #include "LogFile.hpp"
 #include "GPSClock.hpp"
 #include "ThermalBase.hpp"

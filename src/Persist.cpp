@@ -25,7 +25,7 @@ Copyright_License {
 #include "Persist.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
-#include "Atmosphere.h"
+#include "Atmosphere/CuSonde.hpp"
 #include "UtilsSystem.hpp"
 #include "Logger/Logger.hpp"
 #include "GlideComputer.hpp"

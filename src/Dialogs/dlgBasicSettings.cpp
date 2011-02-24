@@ -27,7 +27,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
-#include "Atmosphere.h"
+#include "Atmosphere/CuSonde.hpp"
 #include "DataField/Base.hpp"
 #include "DataField/Float.hpp"
 #include "MainWindow.hpp"

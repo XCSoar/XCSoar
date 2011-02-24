@@ -61,7 +61,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "UnitsFormatter.hpp"
 #include "MainWindow.hpp"
-#include "Atmosphere.h"
+#include "Atmosphere/CuSonde.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Profile/Profile.hpp"
 #include "LocalPath.hpp"

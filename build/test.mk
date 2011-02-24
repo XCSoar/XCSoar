@@ -1236,7 +1236,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Math/Screen.cpp \
-	$(SRC)/Atmosphere.cpp \
+	$(SRC)/Atmosphere/CuSonde.cpp \
 	$(SRC)/Wind/WindAnalyser.cpp \
 	$(SRC)/Wind/WindStore.cpp \
 	$(SRC)/Wind/WindMeasurementList.cpp \

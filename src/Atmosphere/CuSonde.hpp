@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef ATMOSPHERE_H
-#define ATMOSPHERE_H
+#ifndef XCSOAR_ATMOSPHERE_CUSONDE_HPP
+#define XCSOAR_ATMOSPHERE_CUSONDE_HPP
 
 struct NMEA_INFO;
 struct DERIVED_INFO;

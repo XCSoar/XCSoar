@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Atmosphere.h"
+#include "Atmosphere/CuSonde.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 

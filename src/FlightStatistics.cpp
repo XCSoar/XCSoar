@@ -36,7 +36,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Wind/WindStore.hpp"
 #include "Language.hpp"
-#include "Atmosphere.h"
+#include "Atmosphere/CuSonde.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsMap.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"

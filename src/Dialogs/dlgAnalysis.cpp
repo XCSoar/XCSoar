@@ -33,7 +33,6 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "MainWindow.hpp"
 #include "GlideComputer.hpp"
-#include "Atmosphere.h"
 #include "Blackboard.hpp"
 #include "Components.hpp"
 #include "Protection.hpp"

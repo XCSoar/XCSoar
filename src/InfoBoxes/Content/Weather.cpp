@@ -25,7 +25,7 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
-#include "Atmosphere.h"
+#include "Atmosphere/CuSonde.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
