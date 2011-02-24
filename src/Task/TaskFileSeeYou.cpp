@@ -156,7 +156,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   TCHAR waypoints_buffer[1024];
   const TCHAR *wps[30];
   size_t n_waypoints = WayPointFile::
-      extractParameters(line, waypoints_buffer, wps, 30, true, _T('"')) - 1;
+      extractParameters(line, waypoints_buffer, wps, 30, true, _T('"')) - 3;
 
   SeeYouTaskInformation task_info;
   SeeYouTurnpointInformation turnpoint_infos[30];
@@ -193,7 +193,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 
       // Read OZ index
       TCHAR* end;
-      const int oz_index = _tcstol(params[0] + 8, &end, 10) + 1; //skip takeoff
+      const int oz_index = _tcstol(params[0] + 8, &end, 10);
       if (params[0] + 8 == end || oz_index >= 30)
         continue;
 
@@ -244,8 +244,8 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   }
 
   // load task waypoints.  Skip takeoff and landing point
-  for (unsigned i = 1; i < n_waypoints - 1; i++) {
-    const Waypoint* file_wp = file_waypoints.lookup_name(wps[i + 1]);
+  for (unsigned i = 0; i < n_waypoints; i++) {
+    const Waypoint* file_wp = file_waypoints.lookup_name(wps[i + 2]);
     if (file_wp == NULL)
       return NULL;
 
@@ -268,16 +268,16 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
                           turnpoint_infos[i].Angle1, turnpoint_infos[i].Angle2);
     // symmetric sector
     else if (task->get_factory_type() == TaskBehaviour::FACTORY_RT)
-      oz = new FAISectorZone(wp->Location, (i < n_waypoints - 1));
+      oz = new FAISectorZone(wp->Location, (i > 0 && (i < n_waypoints - 1)));
 
     else // XCSoar does not support symmetric sector for AAT
       oz = new CylinderZone(wp->Location, turnpoint_infos[i].Radius1);
 
     OrderedTaskPoint *pt = NULL;
-    if (i == 1)
+    if (i == 0  )
       pt = (oz ? fact.createStart(oz, *wp) : fact.createStart(*wp));
 
-    else if (i == n_waypoints - 2)
+    else if (i == n_waypoints - 1)
       pt = (oz ? fact.createFinish(oz, *wp) : fact.createFinish(*wp));
 
     else if (task->get_factory_type() == TaskBehaviour::FACTORY_RT)
