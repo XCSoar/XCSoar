@@ -26,6 +26,7 @@
  */
 
 #include "Logger/LoggerGRecord.hpp"
+#include "Version.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -95,7 +96,13 @@ RunValidate(const TCHAR *path)
 
 int main(int argc, char* argv[])
 {
-  puts(szInfo);
+  printf("Vali XCS for the XCSoar Flight Computer Version "
+#ifdef _UNICODE
+         "%S\n",
+#else
+         "%s\n",
+#endif
+         XCSoar_Version);
   if (argc > 1 && strcmp(argv[1], "-?") != 0) {
 #ifdef _UNICODE
     TCHAR path[MAX_PATH];
