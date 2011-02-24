@@ -32,6 +32,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "InfoBoxes/InfoBoxLayout.hpp"
 
 #include "Form/TabBar.hpp"
 #include "Form/Panel.hpp"
@@ -60,9 +61,11 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   if (!dlgContent)
     return;
 
+  const RECT targetRect = InfoBoxLayout::GetRemainingRect(parent.get_client_rect());
+
   wf = LoadDialog(dlgContent->CallBackTable, parent,
                    Layout::landscape ?
-                  _T("IDR_XML_INFOBOXACCESS_L") : _T("IDR_XML_INFOBOXACCESS"));
+                  _T("IDR_XML_INFOBOXACCESS_L") : _T("IDR_XML_INFOBOXACCESS"), &targetRect);
 
   assert(wf != NULL);
 
