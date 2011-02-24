@@ -397,17 +397,16 @@ FlightStatistics::RenderTemperature(Canvas &canvas, const RECT rc) const
 {
   Chart chart(canvas, rc);
 
-  int i;
   int hmin = 10000;
   int hmax = -10000;
   fixed tmin = fixed(CuSonde::maxGroundTemperature);
   fixed tmax = fixed(CuSonde::maxGroundTemperature);
 
   // find range for scaling of graph
-  for (i = 0; i < CUSONDE_NUMLEVELS - 1; i++) {
+  for (unsigned i = 0; i < CuSonde::NUM_LEVELS - 1u; i++) {
     if (CuSonde::cslevels[i].nmeasurements) {
-      hmin = min(hmin, i);
-      hmax = max(hmax, i);
+      hmin = min(hmin, (int)i);
+      hmax = max(hmax, (int)i);
 
       tmin = min(tmin, fixed(min(CuSonde::cslevels[i].tempDry,
                                  min(CuSonde::cslevels[i].airTemp,
@@ -434,7 +433,7 @@ FlightStatistics::RenderTemperature(Canvas &canvas, const RECT rc) const
 
   int ipos = 0;
 
-  for (i = 0; i < CUSONDE_NUMLEVELS - 1; i++) {
+  for (unsigned i = 0; i < CuSonde::NUM_LEVELS - 1u; i++) {
     if (CuSonde::cslevels[i].nmeasurements
         && CuSonde::cslevels[i + 1].nmeasurements) {
 

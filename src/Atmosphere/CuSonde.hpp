@@ -27,10 +27,6 @@ Copyright_License {
 struct NMEA_INFO;
 struct DERIVED_INFO;
 
-/** Meters between levels */
-#define CUSONDE_HEIGHTSTEP 100
-/** Number of levels */
-#define CUSONDE_NUMLEVELS 100
 /**
  * Dry adiabatic lapse rate (degrees C per meter)
  *
@@ -48,6 +44,11 @@ struct DERIVED_INFO;
  */
 namespace CuSonde
 {
+  /** Meters between levels */
+  static const unsigned HEIGHT_STEP = 100;
+  /** Number of levels */
+  static const unsigned NUM_LEVELS = 100;
+
   struct Level {
     Level() {
       nmeasurements = 0;
@@ -83,7 +84,7 @@ namespace CuSonde
   extern unsigned short last_level;
   void updateMeasurements(const NMEA_INFO &basic,
                           const DERIVED_INFO &calculated);
-  extern Level cslevels[CUSONDE_NUMLEVELS];
+  extern Level cslevels[NUM_LEVELS];
   void findCloudBase(unsigned short level);
   void findThermalHeight(unsigned short level);
   void adjustForecastTemperature(double delta);

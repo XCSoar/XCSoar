@@ -38,7 +38,7 @@ double CuSonde::thermalHeight = 0;
 double CuSonde::cloudBase = 0;
 double CuSonde::hGround = 0;
 double CuSonde::maxGroundTemperature = 25.0;
-CuSonde::Level CuSonde::cslevels[CUSONDE_NUMLEVELS];
+CuSonde::Level CuSonde::cslevels[NUM_LEVELS];
 
 // TODO accuracy: recalculate thermal index etc if maxGroundTemp changes
 
@@ -51,15 +51,14 @@ CuSonde::setForecastTemperature(double val)
 {
   maxGroundTemperature = val;
 
-  int level;
-  int zlevel = 0;
+  unsigned zlevel = 0;
 
   // set these to invalid, so old values must be overwritten
   cloudBase = -1;
   thermalHeight = -1;
 
   // iterate through all levels
-  for (level = 0; level < CUSONDE_NUMLEVELS; level++) {
+  for (unsigned level = 0; level < NUM_LEVELS; level++) {
     // update the ThermalIndex for each level with
     // the new maxGroundTemperature
     cslevels[level].updateThermalIndex((unsigned short)level, false);
@@ -73,7 +72,7 @@ CuSonde::setForecastTemperature(double val)
   }
 
   // iterate through all levels with measurements
-  for (level = 0; level <= zlevel; level++) {
+  for (unsigned level = 0; level <= zlevel; level++) {
     // calculate ThermalHeight
     findThermalHeight((unsigned short)level);
     // calculate CloudBase
@@ -110,10 +109,10 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic,
   // find appropriate level
   unsigned short level = (unsigned short)((int)max(basic.GetAltitudeBaroPreferred(),
                                                    fixed(0.0))
-                                          / CUSONDE_HEIGHTSTEP);
+                                          / HEIGHT_STEP);
 
   // if (level out of range) cancel update
-  if (level >= CUSONDE_NUMLEVELS)
+  if (level >= NUM_LEVELS)
     return;
 
   // if (level skipped) cancel update
@@ -148,7 +147,7 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic,
         Units::ToUserUnit(basic.OutsideAirTemperature, unGradCelcius));
     cslevels[level + 1].updateThermalIndex((unsigned short)(level + 1));
 
-    if (level < CUSONDE_NUMLEVELS - 1) {
+    if (level < NUM_LEVELS - 1) {
       findThermalHeight(level);
       findCloudBase(level);
     }
@@ -183,10 +182,10 @@ CuSonde::findThermalHeight(unsigned short level)
   // (-1.6 - ti0)/dti = dlevel;
 
   double dlevel = (TITHRESHOLD - cslevels[level].thermalIndex) / dti;
-  double dthermalheight = (level + dlevel) * CUSONDE_HEIGHTSTEP;
+  double dthermalheight = (level + dlevel) * HEIGHT_STEP;
 
   if ((dlevel > 1.0)
-      && (level + 2 < CUSONDE_NUMLEVELS)
+      && (level + 2u < NUM_LEVELS)
       && (cslevels[level + 2].nmeasurements > 0))
       // estimated point should be in next level.
       return;
@@ -230,10 +229,10 @@ CuSonde::findCloudBase(unsigned short level)
   // (-3 - ti0)/dti = dlevel;
 
   double dlevel = -(cslevels[level].tempDry - cslevels[level].dewpoint) / dti;
-  double dcloudbase = (level + dlevel) * CUSONDE_HEIGHTSTEP;
+  double dcloudbase = (level + dlevel) * HEIGHT_STEP;
 
   if ((dlevel > 1.0)
-      && (level + 2 < CUSONDE_NUMLEVELS)
+      && (level + 2u < NUM_LEVELS)
       && (cslevels[level + 2].nmeasurements > 0))
     // estimated point should be in next level.
     return;
@@ -287,13 +286,13 @@ CuSonde::Level::updateTemps(double rh, double t)
  *
  * ThermalIndex is the difference in dry temp and environmental temp
  * at the specified altitude.
- * @param level level = altitude / CUSONDE_HEIGHTSTEP
+ * @param level level = altitude / HEIGHT_STEP
  * @param newdata Function logs data to debug file if true
  */
 void
 CuSonde::Level::updateThermalIndex(unsigned short level, bool newdata)
 {
-  double hlevel = level * CUSONDE_HEIGHTSTEP;
+  double hlevel = level * HEIGHT_STEP;
 
   // Calculate the dry temperature at altitude = hlevel
   tempDry = DALR * (hlevel - CuSonde::hGround) + CuSonde::maxGroundTemperature;
