@@ -453,10 +453,12 @@ public:
    *
    * @param TPindex index of tp in task
    * @param ref state of aircraft to be checked
+   * @parm AATOnly if true then returns false for non-AAT points
    *
    * @return True if reference point is inside sector
    */
- bool isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref) const;
+ bool isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref,
+     const bool AATOnly = true) const;
 
   /**
    * Accessor to get target location of specified tp
