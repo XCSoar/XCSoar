@@ -24,6 +24,7 @@ Copyright_License {
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
+#include "Device/Port.hpp"
 #include "Protection.hpp"
 #include "Units.hpp"
 #include "NMEA/Info.hpp"
@@ -33,9 +34,57 @@ Copyright_License {
 
 class LXDevice: public AbstractDevice
 {
+  Port *port;
+  BrokenDate DeclDate;
+
+public:
+  LXDevice(Port *_port)
+    :port(_port) {
+    DeclDate.day = 1;
+    DeclDate.month = 1;
+    DeclDate.year = 2010;
+  }
+
+protected:
+  bool StartCommandMode();
+  void StartNMEAMode();
+  void WritePilotInfo(const Declaration *decl);
+  bool WriteTask(const Declaration *decl);
+  void WriteToNanoint32(int32_t i);
+
+  struct lxNanoDevice_Pilot_t { //strings have extra byte for NULL
+    char PilotName[19];
+    char GliderType[12];
+    char GliderID[8];
+    char CompetitionID[4];
+  };
+
+  struct lxNanoDevice_Declaration_t { //strings have extra byte for NULL
+    unsigned char dayinput;
+    unsigned char monthinput;
+    unsigned char yearinput;
+    unsigned char dayuser;
+    unsigned char monthuser;
+    unsigned char yearuser;
+    int16_t taskid;
+    unsigned char numtps;
+    unsigned char tptypes[12];
+    int32_t Longitudes[12];
+    int32_t Latitudes[12];
+    char WaypointNames[12][9];
+  };
+
+  lxNanoDevice_Declaration_t lxNanoDevice_Declaration;
+  lxNanoDevice_Pilot_t lxNanoDevice_Pilot;
+
+  bool DeclareInner(const Declaration *declaration,
+                    OperationEnvironment &env);
+
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
       bool enable_baro);
+  virtual bool Declare(const Declaration *declaration,
+                       OperationEnvironment &env);
 };
 
 static bool
@@ -168,14 +217,219 @@ LXDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   return false;
 }
 
+void
+LXDevice::WriteToNanoint32(int32_t i)
+{
+  port->Write((char) ((i>>24) & 0xFF));
+  port->Write((char) ((i>>16) & 0xFF));
+  port->Write((char) ((i>>8) & 0xFF));
+  port->Write((char) (i & 0xFF));
+}
+
+void
+LXDevice::StartNMEAMode()
+{
+  port->Write('\x16');
+  port->ExpectString("$$$");
+}
+
+bool
+LXDevice::StartCommandMode()
+{
+  port->Write('\x16');
+  port->ExpectString("\x06");
+
+  port->Write('\x16');
+  port->ExpectString("\x06");
+
+  port->Write('\x16');
+  if (!port->ExpectString("\x06"))
+    return false;
+
+  return true;
+}
+
+/**
+ * fills dest with src and appends spaces to end
+ * adds '\0' to end of string resulting in
+ * numchar characters plus '\0'
+ */
+static void
+copy_space_padded(char dest[], const TCHAR src[], unsigned int numchars)
+{
+  for(unsigned i = 0; i < numchars; i++) {
+    if (i < _tcslen(src))
+      dest[i] = (char)src[i];
+    else
+      dest[i] = '\x20';
+  }
+  dest[numchars] = '\0';
+}
+
+void
+LXDevice::WritePilotInfo(const Declaration *decl)
+{
+  copy_space_padded(lxNanoDevice_Pilot.PilotName, decl->PilotName, sizeof(lxNanoDevice_Pilot.PilotName) - 1);
+  copy_space_padded(lxNanoDevice_Pilot.GliderType, decl->AircraftType, sizeof(lxNanoDevice_Pilot.GliderType) - 1);
+  copy_space_padded(lxNanoDevice_Pilot.GliderID, decl->AircraftRego, sizeof(lxNanoDevice_Pilot.GliderID) - 1);
+  copy_space_padded(lxNanoDevice_Pilot.CompetitionID, _T(""), sizeof(lxNanoDevice_Pilot.CompetitionID) - 1);
+
+  port->Write('\x02');
+  port->Write('\xCA');      // start declaration
+  port->Write('\x00');
+  port->Write('\x00');
+  port->Write('\x00');
+
+  port->Write(lxNanoDevice_Pilot.PilotName);
+  port->Write('\x00');
+  port->Write(lxNanoDevice_Pilot.GliderType);
+  port->Write('\x00');
+  port->Write(lxNanoDevice_Pilot.GliderID);
+  port->Write('\x00');
+  port->Write(lxNanoDevice_Pilot.CompetitionID);
+  port->Write('\x00');
+
+}
+
+/**
+ * Nano task has max 12 points which include Takeoff,
+ * start, tps, finish and landing.
+ * Leave takeoff and landing as all 0's.
+ * @param decl  The declaration
+ */
+bool
+LXDevice::WriteTask(const Declaration *decl)
+{
+  const unsigned int NUMTPS = 12;
+  if (decl->size() > 10)
+    return false;
+
+  if (decl->size() < 2)
+      return false;
+
+  if (DeclDate.day > 0 && DeclDate.day < 32
+      && DeclDate.month > 0 && DeclDate.month < 13) {
+    lxNanoDevice_Declaration.dayinput = (unsigned char)DeclDate.day;
+    lxNanoDevice_Declaration.monthinput = (unsigned char)DeclDate.month;
+    int iCentury = DeclDate.year / 100; // Todo: if no gps fix, use system time
+    iCentury *= 100;
+    lxNanoDevice_Declaration.yearinput = (unsigned char)(DeclDate.year - iCentury);
+  }
+  else {
+    lxNanoDevice_Declaration.dayinput = (unsigned char)1;
+    lxNanoDevice_Declaration.monthinput = (unsigned char)1;
+    lxNanoDevice_Declaration.yearinput = (unsigned char)10;
+  }
+  lxNanoDevice_Declaration.dayuser = lxNanoDevice_Declaration.dayinput;
+  lxNanoDevice_Declaration.monthuser = lxNanoDevice_Declaration.monthinput;
+  lxNanoDevice_Declaration.yearuser = lxNanoDevice_Declaration.yearinput;
+  lxNanoDevice_Declaration.taskid = 0;
+  lxNanoDevice_Declaration.numtps = decl->size();
+
+  for (unsigned i = 0; i < NUMTPS; i++) {
+    if (i == 0) { // takeoff
+      lxNanoDevice_Declaration.tptypes[i] = 3;
+      lxNanoDevice_Declaration.Latitudes[i] = 0;
+      lxNanoDevice_Declaration.Longitudes[i] = 0;
+      copy_space_padded(lxNanoDevice_Declaration.WaypointNames[i], _T("TAKEOFF"), 8);
+
+
+    } else if (i <= decl->size()) {
+      lxNanoDevice_Declaration.tptypes[i] = 1;
+      lxNanoDevice_Declaration.Longitudes[i] =
+          (int32_t)(decl->get_location(i - 1).Longitude.value_degrees() * 60000);
+      lxNanoDevice_Declaration.Latitudes[i] =
+          (int32_t)(decl->get_location(i - 1).Latitude.value_degrees() * 60000);
+      copy_space_padded(lxNanoDevice_Declaration.WaypointNames[i], decl->get_name(i - 1), 8);
+
+    } else if (i == decl->size() + 1) { // landing
+      lxNanoDevice_Declaration.tptypes[i] = 2;
+      lxNanoDevice_Declaration.Longitudes[i] = 0;
+      lxNanoDevice_Declaration.Latitudes[i] = 0;
+      copy_space_padded(lxNanoDevice_Declaration.WaypointNames[i], _T("LANDING"), 8);
+
+    } else { // unused
+      lxNanoDevice_Declaration.tptypes[i] = 0;
+      lxNanoDevice_Declaration.Longitudes[i] = 0;
+      lxNanoDevice_Declaration.Latitudes[i] = 0;
+      memset((void*)lxNanoDevice_Declaration.WaypointNames[i], 0, 9);
+    }
+  }
+
+  port->Write('\x07');
+  for (int i = 0; i < 75; i++) // User Data
+    port->Write('\x00');
+
+  port->Write('\02');
+  port->Write('\xD0');
+
+  port->Write((char)lxNanoDevice_Declaration.dayinput);
+  port->Write((char)lxNanoDevice_Declaration.monthinput);
+  port->Write((char)lxNanoDevice_Declaration.yearinput);
+  port->Write((char)lxNanoDevice_Declaration.dayuser);
+  port->Write((char)lxNanoDevice_Declaration.monthuser);
+  port->Write((char)lxNanoDevice_Declaration.yearuser);
+  port->Write('\x00');
+  port->Write('\x01'); // task ID
+  port->Write((char)lxNanoDevice_Declaration.numtps);
+
+  for (unsigned int i = 0; i < NUMTPS; i++) {
+    port->Write((char)lxNanoDevice_Declaration.tptypes[i]);
+  }
+  for (unsigned int i = 0; i < NUMTPS; i++) {
+    WriteToNanoint32(lxNanoDevice_Declaration.Longitudes[i]);
+  }
+  for (unsigned int i = 0; i < NUMTPS; i++) {
+    WriteToNanoint32(lxNanoDevice_Declaration.Latitudes[i]);
+  }
+  for (unsigned int i = 0; i < NUMTPS; i++) {
+    port->Write(lxNanoDevice_Declaration.WaypointNames[i]);
+    port->Write('\0');
+  }
+
+  return true;
+}
+
+bool
+LXDevice::DeclareInner(const Declaration *decl, OperationEnvironment &env)
+{
+  if (!port->SetRxTimeout(500))
+    return false;
+
+  if (!StartCommandMode())
+      return false;
+
+  WritePilotInfo(decl);
+  WriteTask(decl);
+
+  return true;
+}
+
+bool
+LXDevice::Declare(const Declaration *decl, OperationEnvironment &env)
+{
+  if (decl->size() < 2 || decl->size() > 12)
+    return false;
+
+  if (!port->StopRxThread())
+    return false;
+
+  bool success = DeclareInner(decl, env);
+
+  StartNMEAMode();
+  port->SetRxTimeout(0);
+  port->StartRxThread();
+  return success;
+}
+
 static Device *
 LXCreateOnPort(Port *com_port)
 {
-  return new LXDevice();
+  return new LXDevice(com_port);
 }
 
 const struct DeviceRegister lxDevice = {
   _T("LX"),
-  drfBaroAlt,
+  drfLogger | drfBaroAlt,
   LXCreateOnPort,
 };
