@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.0.5 - not yet released
 * devices:
   - EWMicroRecorder: fix hang during task declaration
+  - FLARM: parse PGRMZ as altitude above 1013.25 hPa
 * Android
   - fix bitmap loading on Samsung Galaxy Tab
   - show Bluetooth device names in configuration dialog
