@@ -26,10 +26,12 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 #include "InfoBoxes/Content/Base.hpp"
+#include "Profile/InfoBoxConfig.hpp"
 
 #include <windef.h>
 
 extern unsigned numInfoWindows;
+extern InfoBoxManagerConfig infoBoxManagerConfig;
 
 class InfoBoxWindow;
 
@@ -40,11 +42,11 @@ protected:
 
 namespace InfoBoxManager
 {
-  enum mode {
-    MODE_CIRCLING,
-    MODE_CRUISE,
-    MODE_FINAL_GLIDE,
-    MODE_AUXILIARY,
+  enum PanelSelection {
+    PANEL_CIRCLING,
+    PANEL_CRUISE,
+    PANEL_FINAL_GLIDE,
+    PANEL_AUXILIARY,
   };
 
   void Event_Select(int i);
@@ -78,16 +80,13 @@ namespace InfoBoxManager
 
   InfoBoxContent::InfoBoxDlgContent* GetInfoBoxDlgContent(const int id);
 
-  enum mode GetCurrentMode();
+  unsigned GetCurrentPanel();
 
-  unsigned GetType(unsigned box, enum mode mode);
-  void SetType(unsigned box, char type, enum mode mode);
+  unsigned GetType(unsigned box, unsigned panel);
+  void SetType(unsigned box, unsigned type, unsigned panel);
+  void SetCurrentType(unsigned box, unsigned type);
 
-  unsigned GetTypes(unsigned box);
-  void SetTypes(unsigned box, unsigned types);
-
-  bool IsEmpty(enum mode mode);
-  bool IsEmpty();
+  bool IsEmpty(unsigned panel);
 
   bool HasFocus();
 

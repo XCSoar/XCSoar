@@ -173,6 +173,8 @@ InfoBoxLayout::LoadGeometry()
     numInfoWindows = 5;
   else
     numInfoWindows = 8;
+
+  assert(numInfoWindows <= InfoBoxPanelConfig::MAX_INFOBOXES);
 }
 
 void

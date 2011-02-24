@@ -42,20 +42,13 @@ static WndForm *wf = NULL;
 static WndButton *buttonCopy = NULL;
 static WndButton *buttonPaste = NULL;
 static int cpyInfoBox[10];
-static InfoBoxManager::mode mode;
+static unsigned panel;
 
 static void
 OnCloseClicked(gcc_unused WndButton &button)
 {
   wf->SetModalResult(mrOK);
 }
-
-static const TCHAR *const info_box_mode_names[] = {
-  N_("Circling"),
-  N_("Cruise"),
-  N_("FinalGlide"),
-  N_("Auxiliary"),
-};
 
 static WndProperty *
 FindInfoBoxField(int item)
@@ -131,7 +124,7 @@ SetInfoBoxSelector(unsigned item)
 
   dfe->Sort(0);
 
-  dfe->Set(InfoBoxManager::GetType(item, mode));
+  dfe->Set(InfoBoxManager::GetType(item, panel));
   wp->RefreshDisplay();
 }
 
@@ -143,19 +136,19 @@ GetInfoBoxSelector(unsigned item)
     return;
 
   int itnew = wp->GetDataField()->GetAsInteger();
-  int it = InfoBoxManager::GetType(item, mode);
+  int it = InfoBoxManager::GetType(item, panel);
 
   if (it == itnew)
     return;
 
   changed = true;
-  InfoBoxManager::SetType(item, itnew, mode);
-  Profile::SetInfoBoxes(item, InfoBoxManager::GetTypes(item));
+  InfoBoxManager::SetType(item, itnew, panel);
+  Profile::SetInfoBoxManagerConfig(infoBoxManagerConfig);
 }
 
-void dlgConfigInfoboxesShowModal(InfoBoxManager::mode _mode)
+void dlgConfigInfoboxesShowModal(unsigned _panel)
 {
-  mode = _mode;
+  panel = _panel;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ? _T("IDR_XML_CONFIG_INFOBOXES_L") :
@@ -166,7 +159,7 @@ void dlgConfigInfoboxesShowModal(InfoBoxManager::mode _mode)
   TCHAR caption[100];
   _tcscpy(caption, wf->GetCaption());
   _tcscat(caption, _T(": "));
-  _tcscat(caption, gettext(info_box_mode_names[(int)mode]));
+  _tcscat(caption, infoBoxManagerConfig.panel[panel].name);
   wf->SetCaption(caption);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);

@@ -33,6 +33,7 @@ Copyright_License {
 #include "WayPointFile.hpp"
 #include "Interface.hpp"
 #include "Task/TaskBehaviour.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -91,7 +92,7 @@ Profile::Use()
       osettings_task.aat_min_time);
 
   LoadUnits();
-  LoadInfoBoxes();
+  Profile::GetInfoBoxManagerConfig(infoBoxManagerConfig);
 
   SETTINGS_MAP &settings_map = XCSoarInterface::SetSettingsMap();
 

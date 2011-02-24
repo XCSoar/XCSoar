@@ -396,25 +396,25 @@ OnCloseClicked(gcc_unused WndButton &button)
 static void
 OnInfoBoxesCircling(gcc_unused WndButton &button)
 {
-  dlgConfigInfoboxesShowModal(InfoBoxManager::MODE_CIRCLING);
+  dlgConfigInfoboxesShowModal(InfoBoxManager::PANEL_CIRCLING);
 }
 
 static void
 OnInfoBoxesCruise(gcc_unused WndButton &button)
 {
-  dlgConfigInfoboxesShowModal(InfoBoxManager::MODE_CRUISE);
+  dlgConfigInfoboxesShowModal(InfoBoxManager::PANEL_CRUISE);
 }
 
 static void
 OnInfoBoxesFinalGlide(gcc_unused WndButton &button)
 {
-  dlgConfigInfoboxesShowModal(InfoBoxManager::MODE_FINAL_GLIDE);
+  dlgConfigInfoboxesShowModal(InfoBoxManager::PANEL_FINAL_GLIDE);
 }
 
 static void
 OnInfoBoxesAuxiliary(gcc_unused WndButton &button)
 {
-  dlgConfigInfoboxesShowModal(InfoBoxManager::MODE_AUXILIARY);
+  dlgConfigInfoboxesShowModal(InfoBoxManager::PANEL_AUXILIARY);
 }
 
 static void

@@ -12,8 +12,6 @@
 // max length of waypoint comment names
 #define COMMENT_SIZE 50
 
-#define MAXINFOWINDOWS 14
-
 #define REGKEYSIZE 64
 
 #define MAXSATELLITES 12

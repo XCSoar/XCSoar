@@ -26,7 +26,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-extern const TCHAR *szProfileDisplayType[];
 extern const TCHAR *szProfileColour[];
 extern const TCHAR *szProfileBrush[];
 extern const TCHAR *szProfileAirspaceMode[];

@@ -28,6 +28,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "InfoBoxes/Content/Base.hpp"
+#include "Profile/InfoBoxConfig.hpp"
 #include "InputEvents.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Layout.hpp"
@@ -66,34 +67,11 @@ namespace InfoBoxManager
 static bool InfoBoxesDirty = false;
 static bool InfoBoxesHidden = false;
 
-InfoBoxWindow *InfoBoxes[MAXINFOWINDOWS];
+InfoBoxWindow *InfoBoxes[InfoBoxPanelConfig::MAX_INFOBOXES];
+
+InfoBoxManagerConfig infoBoxManagerConfig;
 
 static InfoBoxLook info_box_look;
-
-#ifdef GNAV
-static unsigned InfoType[MAXINFOWINDOWS] = {
-  0x340E0E0E,
-  0x33120B0B,
-  0x31030316,
-  0x002B2B31,
-  0x06263030,
-  0x19212121,
-  0x27291107,
-  0x250F0F0F,
-  0x1A2D2D2D
-};
-#else
-static unsigned InfoType[MAXINFOWINDOWS] = {
-  0x0E0E0E,
-  0x0B1215,
-  0x040000,
-  0x012316,
-  0x0A0A0A,
-  0x222223,
-  0x060606,
-  0x191919
-};
-#endif
 
 void
 InfoBoxFullWindow::on_paint(Canvas &canvas)
@@ -193,111 +171,57 @@ InfoBoxManager::Event_Select(int i)
     InfoBoxes[i]->set_focus();
 }
 
-enum InfoBoxManager::mode
-InfoBoxManager::GetCurrentMode()
+unsigned
+InfoBoxManager::GetCurrentPanel()
 {
   if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo)
-    return MODE_AUXILIARY;
+    return PANEL_AUXILIARY;
   else if (XCSoarInterface::main_window.map.GetDisplayMode() == dmCircling)
-    return MODE_CIRCLING;
+    return PANEL_CIRCLING;
   else if (XCSoarInterface::main_window.map.GetDisplayMode() == dmFinalGlide)
-    return MODE_FINAL_GLIDE;
+    return PANEL_FINAL_GLIDE;
   else
-    return MODE_CRUISE;
+    return PANEL_CRUISE;
 }
 
 unsigned
-InfoBoxManager::GetType(unsigned box, enum mode mode)
+InfoBoxManager::GetType(unsigned box, unsigned panelIdx)
 {
-  assert(box < MAXINFOWINDOWS);
+  assert(box < InfoBoxPanelConfig::MAX_INFOBOXES);
+  assert(panelIdx < InfoBoxManagerConfig::MAX_INFOBOX_PANELS);
 
-  switch (mode) {
-  case MODE_CIRCLING:
-    return InfoType[box] & 0xff;
-  case MODE_CRUISE:
-    return (InfoType[box] >> 8) & 0xff;
-  case MODE_FINAL_GLIDE:
-    return (InfoType[box] >> 16) & 0xff;
-  case MODE_AUXILIARY:
-    return (InfoType[box] >> 24) & 0xff;
-  }
-
-  return 0xdeadbeef; /* not reachable */
-}
-
-unsigned
-InfoBoxManager::GetTypes(unsigned box)
-{
-  assert(box < MAXINFOWINDOWS);
-
-  return InfoType[box];
-}
-
-void
-InfoBoxManager::SetTypes(unsigned box, unsigned types)
-{
-  assert(box < MAXINFOWINDOWS);
-
-  InfoType[box] = types;
-  // TODO: check it's within range
+  return infoBoxManagerConfig.panel[panelIdx].infoBoxID[box];
 }
 
 unsigned
 InfoBoxManager::GetCurrentType(unsigned box)
 {
-  unsigned retval = GetType(box, GetCurrentMode());
+  unsigned retval = GetType(box, GetCurrentPanel());
   return std::min(InfoBoxFactory::NUM_TYPES - 1, retval);
 }
 
 bool
-InfoBoxManager::IsEmpty(enum mode mode)
+InfoBoxManager::IsEmpty(unsigned panelIdx)
 {
-  for (unsigned i = 0; i < MAXINFOWINDOWS; ++i)
-    if (InfoBoxManager::GetType(i, mode) != 0)
-      return false;
-
-  return true;
-}
-
-bool
-InfoBoxManager::IsEmpty()
-{
-  for (unsigned i = 0; i < MAXINFOWINDOWS; ++i)
-    if (InfoBoxManager::GetTypes(i) != 0)
-      return false;
-
-  return true;
+  return infoBoxManagerConfig.panel[panelIdx].IsEmpty();
 }
 
 void
-InfoBoxManager::SetType(unsigned i, char type, enum mode mode)
+InfoBoxManager::SetType(unsigned i, unsigned type, unsigned panelIdx)
 {
-  assert(i < MAXINFOWINDOWS);
+  assert(i < InfoBoxPanelConfig::MAX_INFOBOXES);
+  assert(panelIdx < InfoBoxManagerConfig::MAX_INFOBOX_PANELS);
 
-  switch (mode) {
-  case MODE_CIRCLING:
-    InfoType[i] &= 0xffffff00;
-    InfoType[i] += type;
-    break;
-  case MODE_CRUISE:
-    InfoType[i] &= 0xffff00ff;
-    InfoType[i] += (type << 8);
-    break;
-  case MODE_FINAL_GLIDE:
-    InfoType[i] &= 0xff00ffff;
-    InfoType[i] += (type << 16);
-    break;
-  case MODE_AUXILIARY:
-    InfoType[i] &= 0x00ffffff;
-    InfoType[i] += (type << 24);
-    break;
+  if ((unsigned int) type != infoBoxManagerConfig.panel[panelIdx].infoBoxID[i]) {
+    infoBoxManagerConfig.panel[panelIdx].infoBoxID[i] = type;
+    infoBoxManagerConfig.panel[panelIdx].modified = true;
   }
 }
 
 void
-InfoBoxManager::SetCurrentType(unsigned box, char type)
+InfoBoxManager::SetCurrentType(unsigned box, unsigned type)
 {
-  SetType(box, type, GetCurrentMode());
+  SetType(box, type, GetCurrentPanel());
 }
 
 void
@@ -317,7 +241,7 @@ InfoBoxManager::Event_Change(int i)
 
   // TODO code: if i==0, go to default or reset
 
-  SetCurrentType(InfoFocus, j);
+  SetCurrentType(InfoFocus, (unsigned) j);
 
   InfoBoxes[InfoFocus]->UpdateContent();
   Paint();
@@ -329,9 +253,9 @@ InfoBoxManager::DisplayInfoBox()
   if (InfoBoxesHidden)
     return;
 
-  int DisplayType[MAXINFOWINDOWS];
+  int DisplayType[InfoBoxPanelConfig::MAX_INFOBOXES];
   static bool first = true;
-  static int DisplayTypeLast[MAXINFOWINDOWS];
+  static int DisplayTypeLast[InfoBoxPanelConfig::MAX_INFOBOXES];
 
   // JMW note: this is updated every GPS time step
 
@@ -623,8 +547,8 @@ InfoBoxManager::SetupFocused(const int id)
   if (i < 0)
     return;
 
-  const enum mode mode = GetCurrentMode();
-  int old_type = GetType(i, mode);
+  const unsigned panel = GetCurrentPanel();
+  int old_type = GetType(i, panel);
 
   /* create a fake WndProperty for dlgComboPicker() */
   /* XXX reimplement properly */
@@ -659,7 +583,7 @@ InfoBoxManager::SetupFocused(const int id)
 
   /* yes: apply and save it */
 
-  SetType(i, new_type, mode);
+  SetType(i, new_type, panel);
   DisplayInfoBox();
-  Profile::SetInfoBoxes(i, GetTypes(i));
+  Profile::SetInfoBoxManagerConfig(infoBoxManagerConfig);
 }

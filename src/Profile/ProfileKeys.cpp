@@ -25,23 +25,6 @@ Copyright_License {
 #include "Defines.h"
 #include "Profile/ProfileKeys.hpp"
 
-const TCHAR *szProfileDisplayType[MAXINFOWINDOWS] = {
-  _T("Info0"),
-  _T("Info1"),
-  _T("Info2"),
-  _T("Info3"),
-  _T("Info4"),
-  _T("Info5"),
-  _T("Info6"),
-  _T("Info7"),
-  _T("Info8"),
-  _T("Info9"),
-  _T("Info10"),
-  _T("Info11"),
-  _T("Info12"),
-  _T("Info13"),
-}; // pL
-
 const TCHAR *szProfileColour[] = {
   _T("Colour0"),
   _T("Colour1"),

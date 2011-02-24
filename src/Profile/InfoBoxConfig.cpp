@@ -22,51 +22,107 @@ Copyright_License {
 */
 
 #include "Profile/InfoBoxConfig.hpp"
-
 #include "Profile/Profile.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
-#include "Sizes.h"
+#include "Language.hpp"
 
-// This function checks to see if Final Glide mode infoboxes have been
-// initialised.  If all are zero, then the current configuration was
-// using XCSoarV3 infoboxes, so copy settings from cruise mode.
+
+InfoBoxPanelConfig::InfoBoxPanelConfig() : modified(false)
+{
+  name[0] = 0;
+  for (unsigned int i = 0; i < MAX_INFOBOXES; i++)
+    infoBoxID[i] = 0;
+}
+
+
+bool InfoBoxPanelConfig::IsEmpty() const
+{
+  for (unsigned int i = 0; i < MAX_INFOBOXES; i++)
+    if (infoBoxID[i] != 0)
+      return false;
+  return true;
+}
+
+
+InfoBoxManagerConfig::InfoBoxManagerConfig()
+{
+  static const unsigned int DFLT_CONFIG_BOXES = 9;
+  static const unsigned int DFLT_CONFIG_PANELS = 4;
+  static const int dflt_IDs[DFLT_CONFIG_PANELS][DFLT_CONFIG_BOXES] = {
+    { 0x0E, 0x0B, 0x16, 0x31, 0x30, 0x21, 0x07, 0x0F, 0x2D },
+    { 0x0E, 0x0B, 0x03, 0x2B, 0x30, 0x21, 0x11, 0x0F, 0x2D },
+    { 0x0E, 0x12, 0x03, 0x2B, 0x26, 0x21, 0x29, 0x0F, 0x2D },
+    { 0x34, 0x33, 0x31, 0x00, 0x06, 0x19, 0x27, 0x25, 0x1A }
+  };
+
+  assert(MAX_INFOBOX_PANELS >= DFLT_CONFIG_PANELS);
+  assert(InfoBoxPanelConfig::MAX_INFOBOXES >= DFLT_CONFIG_BOXES);
+
+  _tcscpy(panel[0].name, N_("Circling"));
+  _tcscpy(panel[1].name, N_("Cruise"));
+  _tcscpy(panel[2].name, N_("FinalGlide"));
+  for (unsigned int i = PREASSIGNED_PANELS; i < MAX_INFOBOX_PANELS; i++)
+    _stprintf(panel[i].name, N_("Aux-%u"), i-2);
+
+  for (unsigned int i = 0; i < DFLT_CONFIG_PANELS; i++)
+    for (unsigned int j = 0; j < DFLT_CONFIG_BOXES; j++)
+      panel[i].infoBoxID[j] = dflt_IDs[i][j];
+}
+
+
 static void
-CheckInfoTypes()
-{
-  if (InfoBoxManager::IsEmpty(InfoBoxManager::MODE_CRUISE))
-    return;
+GetV60InfoBoxManagerConfig(InfoBoxManagerConfig &config) {
+  TCHAR profileKey[16];
 
-  bool iszero_fg = InfoBoxManager::IsEmpty(InfoBoxManager::MODE_FINAL_GLIDE);
-  bool iszero_aux = InfoBoxManager::IsEmpty(InfoBoxManager::MODE_AUXILIARY);
-  if (!iszero_fg && !iszero_aux)
-    return;
+  assert(InfoBoxManagerConfig::MAX_INFOBOX_PANELS >= 4);
+  _tcscpy(profileKey, _T("Info"));
 
-  for (unsigned i = 0; i < MAXINFOWINDOWS; ++i) {
-    if (iszero_fg)
-      InfoBoxManager::SetType(i, InfoBoxManager::GetType(i, InfoBoxManager::MODE_CRUISE),
-                              InfoBoxManager::MODE_FINAL_GLIDE);
-    if (iszero_aux)
-      InfoBoxManager::SetType(i, InfoBoxManager::GetType(i, InfoBoxManager::MODE_CRUISE),
-                              InfoBoxManager::MODE_AUXILIARY);
+  for (unsigned int i = 0; i < InfoBoxPanelConfig::MAX_INFOBOXES; i++) {
+    _stprintf(profileKey+4, _T("%u"), i);
+    unsigned int temp = 0;
+    if (Profile::Get(profileKey, temp)) {
+      config.panel[0].infoBoxID[i] = temp & 0xFF;
+      config.panel[1].infoBoxID[i] = (temp >> 8) & 0xFF;
+      config.panel[2].infoBoxID[i] = (temp >> 16) & 0xFF;
+      config.panel[3].infoBoxID[i] = (temp >> 24) & 0xFF;
+    }
   }
 }
 
+
 void
-Profile::SetInfoBoxes(int Index, int the_type)
+Profile::GetInfoBoxManagerConfig(InfoBoxManagerConfig &config)
 {
-  Set(szProfileDisplayType[Index], the_type);
+  GetV60InfoBoxManagerConfig(config);
+  TCHAR profileKey[32];
+  for (unsigned int i = 0; i < InfoBoxManagerConfig::MAX_INFOBOX_PANELS; i++) {
+    if (i >= InfoBoxManagerConfig::PREASSIGNED_PANELS) {
+      _stprintf(profileKey, _T("InfoBoxPanel%uName"), i);
+      Get(profileKey, config.panel[i].name, InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH);
+      if (config.panel[i].name[0] == 0)
+        _stprintf(config.panel[i].name, N_("Aux-%u"), i-2);
+    }
+    for (unsigned int j = 0; j < InfoBoxPanelConfig::MAX_INFOBOXES; j++) {
+      _stprintf(profileKey, _T("InfoBoxPanel%uBox%u"), i, j);
+      Get(profileKey, config.panel[i].infoBoxID[j]);
+    }
+  }
 }
 
+
 void
-Profile::LoadInfoBoxes()
+Profile::SetInfoBoxManagerConfig(const InfoBoxManagerConfig &config)
 {
-  unsigned Temp = 0;
-
-  for (unsigned i = 0; i < MAXINFOWINDOWS; i++) {
-    if (Get(szProfileDisplayType[i], Temp))
-      InfoBoxManager::SetTypes(i, Temp);
+  TCHAR profileKey[32];
+  for (unsigned int i = 0; i < InfoBoxManagerConfig::MAX_INFOBOX_PANELS; i++) {
+    if (config.panel[i].modified) {
+      if (i >= InfoBoxManagerConfig::PREASSIGNED_PANELS) {
+        _stprintf(profileKey, _T("InfoBoxPanel%uName"), i);
+        Set(profileKey, config.panel[i].name);
+      }
+      for (unsigned int j = 0; j < InfoBoxPanelConfig::MAX_INFOBOXES; j++) {
+        _stprintf(profileKey, _T("InfoBoxPanel%uBox%u"), i, j);
+        Set(profileKey, config.panel[i].infoBoxID[j]);
+      }
+    }
   }
-
-  // check against V3 infotypes
-  CheckInfoTypes();
 }
