@@ -77,7 +77,6 @@ Copyright_License {
 #define REG_PATH TEXT("Software\\OpenSource\\XCSoar")
 #define FILE_EXPLORER TEXT("fexplore.exe")
 
-#define ID_ICON_TIMER			1
 #define BUF_SIZE				256
 
 #if (WIN32_PLATFORM_PSPC <= 300)
@@ -106,7 +105,6 @@ static int WinLeftMargin = 8;
 static int WinTopMargin = 2;
 static int WinRightMargin = 2;
 static int WinBottomMargin = 2;
-static int ShowIconSec = 1;
 
 static BOOL Refresh;
 
@@ -498,8 +496,6 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
       }
       y += IconSizeY + (VMargin * 2) + WinBottomMargin;
       ((TODAYLISTITEM *)(wParam))->cyp = y;
-
-      SetTimer(hWnd, ID_ICON_TIMER, ShowIconSec * 1000, NULL);
       return TRUE;
     }
     return FALSE;
@@ -568,17 +564,6 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
   case WM_ERASEBKGND:
     return 1;
-
-	case WM_TIMER:
-    switch (wParam) {
-    case ID_ICON_TIMER:
-      // JMW maybe break here?
-      KillTimer(hWnd, ID_ICON_TIMER);
-      InvalidateRect(hWnd, NULL, FALSE);
-      UpdateWindow(hWnd);
-      break;
-    }
-    break;
 
 	default:
 		return DefWindowProc(hWnd, msg, wParam, lParam);
