@@ -27,35 +27,6 @@ Copyright_License {
 struct NMEA_INFO;
 struct DERIVED_INFO;
 
-class CuSondeLevel {
-public:
-  CuSondeLevel() {
-    nmeasurements = 0;
-    thermalHeight = -1;
-    cloudBase = -1;
-  }
-
-  /** Environmental temperature in degrees C */
-  double airTemp;
-  /** DewPoint in degrees C */
-  double dewpoint;
-  /** Dry temperature in degrees C */
-  double tempDry;
-  /** ThermalIndex in degrees C */
-  double thermalIndex;
-
-  void updateTemps(double rh, double t);
-  void updateThermalIndex(unsigned short level, bool newdata=true);
-
-  /** Number of measurements */
-  int nmeasurements;
-
-  /** Estimated ThermalHeight with data of this level */
-  double thermalHeight;
-  /** Estimated CloudBase with data of this level */
-  double cloudBase;
-};
-
 /** Meters between levels */
 #define CUSONDE_HEIGHTSTEP 100
 /** Number of levels */
@@ -77,6 +48,34 @@ public:
  */
 namespace CuSonde
 {
+  struct Level {
+    Level() {
+      nmeasurements = 0;
+      thermalHeight = -1;
+      cloudBase = -1;
+    }
+
+    /** Environmental temperature in degrees C */
+    double airTemp;
+    /** DewPoint in degrees C */
+    double dewpoint;
+    /** Dry temperature in degrees C */
+    double tempDry;
+    /** ThermalIndex in degrees C */
+    double thermalIndex;
+
+    void updateTemps(double rh, double t);
+    void updateThermalIndex(unsigned short level, bool newdata=true);
+
+    /** Number of measurements */
+    int nmeasurements;
+
+    /** Estimated ThermalHeight with data of this level */
+    double thermalHeight;
+    /** Estimated CloudBase with data of this level */
+    double cloudBase;
+  };
+
   /** Expected temperature maximum on the ground */
   extern double maxGroundTemperature;
   /** Height of ground above MSL */
@@ -84,7 +83,7 @@ namespace CuSonde
   extern unsigned short last_level;
   void updateMeasurements(const NMEA_INFO &basic,
                           const DERIVED_INFO &calculated);
-  extern CuSondeLevel cslevels[CUSONDE_NUMLEVELS];
+  extern Level cslevels[CUSONDE_NUMLEVELS];
   void findCloudBase(unsigned short level);
   void findThermalHeight(unsigned short level);
   void adjustForecastTemperature(double delta);

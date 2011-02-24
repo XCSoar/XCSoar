@@ -38,7 +38,7 @@ double CuSonde::thermalHeight = 0;
 double CuSonde::cloudBase = 0;
 double CuSonde::hGround = 0;
 double CuSonde::maxGroundTemperature = 25.0;
-CuSondeLevel CuSonde::cslevels[CUSONDE_NUMLEVELS];
+CuSonde::Level CuSonde::cslevels[CUSONDE_NUMLEVELS];
 
 // TODO accuracy: recalculate thermal index etc if maxGroundTemp changes
 
@@ -257,7 +257,7 @@ CuSonde::findCloudBase(unsigned short level)
  * @param t Temperature in degrees C
  */
 void
-CuSondeLevel::updateTemps(double rh, double t)
+CuSonde::Level::updateTemps(double rh, double t)
 {
   double logEx, adewpoint;
 
@@ -291,7 +291,7 @@ CuSondeLevel::updateTemps(double rh, double t)
  * @param newdata Function logs data to debug file if true
  */
 void
-CuSondeLevel::updateThermalIndex(unsigned short level, bool newdata)
+CuSonde::Level::updateThermalIndex(unsigned short level, bool newdata)
 {
   double hlevel = level * CUSONDE_HEIGHTSTEP;
 
