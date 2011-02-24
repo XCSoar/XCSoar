@@ -222,6 +222,10 @@ GetPosition(const XMLNode &Node, const RECT rc, int bottom_most=-1)
   if (pt.y < -1)
     pt.y += rc.bottom;
 
+  // Move inside target rc (e.g. if parent != targetRect -> usually, rc.left == rc.top == 0, so no moving takes place).
+  pt.x += rc.left;
+  pt.y += rc.top;
+
   return pt;
 }
 
@@ -440,11 +444,12 @@ LoadWindow(CallBackTableEntry *LookUpTable,
  * @param FileName The XML filename to search for in XCSoarData
  * @param Parent The parent window (e.g. XCSoarInterface::main_window)
  * @param resource The resource to look for
+ * @param targetRect The area where to move the dialog if not parent
  * @return The WndForm object
  */
 WndForm *
 LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
-               const TCHAR* resource)
+               const TCHAR* resource, const RECT *targetRect)
 {
   WndForm *form = NULL;
 
@@ -476,7 +481,7 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
 
   // Determine the dialog size
   const TCHAR* Caption = GetCaption(node);
-  const RECT rc = Parent.get_client_rect();
+  const RECT rc = targetRect ? *targetRect : Parent.get_client_rect();
   ControlPosition pos = GetPosition(node, rc, 0);
   ControlSize size = GetSize(node, rc, pos);
 
