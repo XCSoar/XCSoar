@@ -373,12 +373,6 @@ Point2Item(int px, int py)
   pt.x = px;
   pt.y = py;
   for (x = WinLeftMargin, y = WinTopMargin, i = 0; i < FileListCnt; i++) {
-    if ((x + IconSizeX + (HMargin * 2)) >
-        GetSystemMetrics(SM_CXSCREEN) - WinRightMargin) {
-      x = WinLeftMargin;
-      y += IconSizeY + (VMargin * 2);
-    }
-
     SetRect(&rect, x, y, x + IconSizeX + (HMargin * 2),
             y + IconSizeY + (VMargin * 2));
 
@@ -418,7 +412,6 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 #ifdef ENABLE_TOOLTIPS
   SHRGINFO rg;
 #endif
-  int x, y;
   int i;
 
   switch (msg) {
@@ -443,18 +436,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
   case WM_TODAYCUSTOM_QUERYREFRESHCACHE:
     if (Refresh) {
       Refresh = FALSE;
-
-      // compute screen extents
-      for (x = WinLeftMargin, y = WinTopMargin, i = 0; i < FileListCnt; i++) {
-        if ((x + IconSizeX + (HMargin * 2)) >
-            GetSystemMetrics(SM_CXSCREEN) - WinRightMargin) {
-          x = WinLeftMargin;
-          y += IconSizeY + (VMargin * 2);
-        }
-        x += IconSizeX + (HMargin * 2);
-      }
-      y += IconSizeY + (VMargin * 2) + WinBottomMargin;
-      ((TODAYLISTITEM *)(wParam))->cyp = y;
+      ((TODAYLISTITEM *)(wParam))->cyp = WinTopMargin + IconSizeY + (VMargin * 2) + WinBottomMargin;
       return TRUE;
     }
     return FALSE;
