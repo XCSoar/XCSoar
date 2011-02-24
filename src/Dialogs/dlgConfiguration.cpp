@@ -1019,10 +1019,15 @@ setVariables()
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("All"), _("All waypoints labels will displayed."));
-    dfe->addEnumText(_("Task Waypoints & Landables"), _("All waypoints labels part of a task and all landables will be displayed."));
-    dfe->addEnumText(_("Task Waypoints"), _("All waypoints labels part of a task will be displayed."));
-    dfe->addEnumText(_("None"), _("No waypoint labels will be displayed."));
+    dfe->addEnumText(_("All"), wlsAllWayPoints,
+                     _("All waypoints labels will displayed."));
+    dfe->addEnumText(_("Task Waypoints & Landables"),
+                     wlsTaskAndLandableWayPoints,
+                     _("All waypoints labels part of a task and all landables will be displayed."));
+    dfe->addEnumText(_("Task Waypoints"), wlsTaskWayPoints,
+                     _("All waypoints labels part of a task will be displayed."));
+    dfe->addEnumText(_("None"), wlsNoWayPoints,
+                     _("No waypoint labels will be displayed."));
     dfe->Set(XCSoarInterface::SettingsMap().WayPointLabelSelection);
     wp->RefreshDisplay();
   }
@@ -1055,9 +1060,12 @@ setVariables()
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("Track up"), _("The moving map display will be rotated so the glider's track is oriented up."));
-    dfe->addEnumText(_("North up"), _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
-    dfe->addEnumText(_("Target up"), _("The moving map display will be rotated so the navigation target is oriented up."));
+    dfe->addEnumText(_("Track up"), TRACKUP,
+                     _("The moving map display will be rotated so the glider's track is oriented up."));
+    dfe->addEnumText(_("North up"), NORTHUP,
+                     _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
+    dfe->addEnumText(_("Target up"), TARGETUP,
+                     _("The moving map display will be rotated so the navigation target is oriented up."));
     dfe->Set(XCSoarInterface::SettingsMap().OrientationCruise);
     wp->RefreshDisplay();
   }
@@ -1067,9 +1075,12 @@ setVariables()
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("Track up"), _("The moving map display will be rotated so the glider's track is oriented up."));
-    dfe->addEnumText(_("North up"), _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
-    dfe->addEnumText(_("Target up"), _("The moving map display will be rotated so the navigation target is oriented up."));
+    dfe->addEnumText(_("Track up"), TRACKUP,
+                     _("The moving map display will be rotated so the glider's track is oriented up."));
+    dfe->addEnumText(_("North up"), NORTHUP,
+                     _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
+    dfe->addEnumText(_("Target up"), TARGETUP,
+                     _("The moving map display will be rotated so the navigation target is oriented up."));
     dfe->Set(XCSoarInterface::SettingsMap().OrientationCircling);
     wp->RefreshDisplay();
   }
