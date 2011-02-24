@@ -41,8 +41,6 @@ Copyright_License {
 #include <windows.h>
 
 #include <todaycmn.h>
-#include <commctrl.h>
-#include <commdlg.h>
 #include <aygshell.h>
 
 #include "resource-launch.h"
