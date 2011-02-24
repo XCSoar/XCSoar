@@ -263,9 +263,25 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     else if (fabs(turnpoint_infos[i].Angle1.value_degrees() - fixed(180)) < fixed(1) )
       oz = new CylinderZone(wp->Location, turnpoint_infos[i].Radius1);
 
-    else if (turnpoint_infos[i].Style == SeeYouTurnpointInformation::Fixed)
-      oz = new SectorZone(wp->Location, turnpoint_infos[i].Radius1,
-                          turnpoint_infos[i].Angle1, turnpoint_infos[i].Angle2);
+    else if (turnpoint_infos[i].Style == SeeYouTurnpointInformation::Fixed) {
+
+      if (task->get_factory_type() == TaskBehaviour::FACTORY_RT) {
+        // ToDo: XCSoar does not support fixed sectors for RT
+        oz = new CylinderZone(wp->Location, turnpoint_infos[i].Radius1);
+
+      } else {
+        Angle A12adj = Angle::degrees(
+            turnpoint_infos[i].Angle12.value_degrees() - 180);
+
+        const Angle RadialStart = Angle::degrees(A12adj.value_degrees()
+            - turnpoint_infos[i].Angle1.value_degrees()).as_bearing();
+        const Angle RadialEnd = Angle::degrees(A12adj.value_degrees()
+            + turnpoint_infos[i].Angle1.value_degrees()).as_bearing();
+
+        oz = new SectorZone(wp->Location, turnpoint_infos[i].Radius1,
+            RadialStart, RadialEnd);
+      }
+    }
     // symmetric sector
     else if (task->get_factory_type() == TaskBehaviour::FACTORY_RT)
       oz = new FAISectorZone(wp->Location, (i > 0 && (i < n_waypoints - 1)));
