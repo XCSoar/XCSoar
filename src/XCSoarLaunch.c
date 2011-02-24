@@ -107,11 +107,9 @@ static int WinBottomMargin = 2;
 static BOOL Refresh;
 
 typedef struct _FILELIST {
-	TCHAR Name[BUF_SIZE];
 	TCHAR FileName[BUF_SIZE];
 	TCHAR CommandLine[BUF_SIZE];
   TCHAR Description[BUF_SIZE];
-	int Index;
   HBITMAP bitmap;
 #ifdef USE_MASKS
 	HBITMAP mask;
@@ -204,8 +202,6 @@ CreateFileList(void)
 
   //  wsprintf(installDir, TEXT("\\Program Files\\XCSoar"));
 
-  lstrcpy(FileList[0].Name, TEXT("XCSoar"));
-
   wsprintf(FileList[0].FileName, TEXT("%s\\XCSoar.exe"), installDir);
   _tcscpy(FileList[0].CommandLine, TEXT("-fly"));
   lstrcpy(FileList[0].Description, TEXT("Start XCSoar in flight mode"));
@@ -213,16 +209,10 @@ CreateFileList(void)
   if (FileList[0].bitmap == NULL)
     FileList[0].bitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_XCSOARLSWIFT));
 
-  FileList[0].Index = 0;
-
-  lstrcpy(FileList[1].Name, TEXT("XCSoar Sim"));
-
   wsprintf(FileList[1].FileName, TEXT("%s\\XCSoar.exe"), installDir);
   _tcscpy(FileList[1].CommandLine, TEXT("-simulator"));
 
   lstrcpy(FileList[1].Description, TEXT("Start XCSoar in simulator mode"));
-
-  FileList[1].Index = 1;
 
   if (FileList[1].bitmap == NULL)
     FileList[1].bitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_XCSOARLSWIFTSIM));
