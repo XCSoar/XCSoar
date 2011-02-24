@@ -28,17 +28,6 @@ struct NMEA_INFO;
 struct DERIVED_INFO;
 
 /**
- * Dry adiabatic lapse rate (degrees C per meter)
- *
- * DALR = dT/dz = g/c_p =
- * @see http://en.wikipedia.org/wiki/Lapse_rate#Dry_adiabatic_lapse_rate
- * @see http://pds-atmospheres.nmsu.edu/education_and_outreach/encyclopedia/adiabatic_lapse_rate.htm
- */
-#define DALR -0.00974
-/** ThermalIndex threshold in degrees C */
-#define TITHRESHOLD -1.6
-
-/**
  * Namespaces that provides simple estimates of thermal heights from lapse rates
  * derived from temperature trace obtained during flight.
  */

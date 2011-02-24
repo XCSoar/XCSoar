@@ -31,6 +31,18 @@ Copyright_License {
 #include <stdlib.h> /* for abs() */
 #include <algorithm>
 
+/**
+ * Dry adiabatic lapse rate (degrees C per meter)
+ *
+ * DALR = dT/dz = g/c_p =
+ * @see http://en.wikipedia.org/wiki/Lapse_rate#Dry_adiabatic_lapse_rate
+ * @see http://pds-atmospheres.nmsu.edu/education_and_outreach/encyclopedia/adiabatic_lapse_rate.htm
+ */
+#define DALR -0.00974
+
+/** ThermalIndex threshold in degrees C */
+#define TITHRESHOLD -1.6
+
 using std::max;
 
 unsigned short CuSonde::last_level=0;
