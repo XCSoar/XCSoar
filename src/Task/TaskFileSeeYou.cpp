@@ -203,19 +203,19 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
         if (_tcsncmp(params[i], _T("Style"), 5) == 0) {
           if (_tcslen(params[i]) > 6)
             turnpoint_infos[oz_index].Style = ParseStyle(params[i] + 6);
-        } else if (_tcsncmp(params[i], _T("R1"), 2) == 0) {
+        } else if (_tcsncmp(params[i], _T("R1="), 3) == 0) {
           if (_tcslen(params[i]) > 3)
             turnpoint_infos[oz_index].Radius1 = ParseRadius(params[i] + 3);
-        } else if (_tcsncmp(params[i], _T("A1"), 2) == 0) {
+        } else if (_tcsncmp(params[i], _T("A1="), 3) == 0) {
           if (_tcslen(params[i]) > 3)
             turnpoint_infos[oz_index].Angle1 = ParseAngle(params[i] + 3);
-        } else if (_tcsncmp(params[i], _T("R2"), 2) == 0) {
+        } else if (_tcsncmp(params[i], _T("R2="), 3) == 0) {
           if (_tcslen(params[i]) > 3)
             turnpoint_infos[oz_index].Radius2 = ParseRadius(params[i] + 3);
-        } else if (_tcsncmp(params[i], _T("A2"), 2) == 0) {
+        } else if (_tcsncmp(params[i], _T("A2="), 3) == 0) {
           if (_tcslen(params[i]) > 3)
             turnpoint_infos[oz_index].Angle2 = ParseAngle(params[i] + 3);
-        } else if (_tcsncmp(params[i], _T("A12"), 3) == 0) {
+        } else if (_tcsncmp(params[i], _T("A12="), 4) == 0) {
           if (_tcslen(params[i]) > 3)
             turnpoint_infos[oz_index].Angle12 = ParseAngle(params[i] + 4);
         } else if (_tcsncmp(params[i], _T("Line"), 4) == 0) {
