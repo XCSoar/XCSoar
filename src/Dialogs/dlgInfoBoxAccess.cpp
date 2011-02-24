@@ -109,10 +109,10 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   }
 
   Window* wClose =
-    pnlInfoBoxAccessClose::Load(parent, wTabBar, wf, dlgContent->CallBackTable);
+    dlgInfoBoxAccess::pnlCloseLoad(parent, wTabBar, wf, dlgContent->CallBackTable);
   assert(wClose);
-  wTabBar->AddClient(wClose, _T("Close"), false, NULL, NULL,  pnlInfoBoxAccessClose::OnTabPreShow,
-                                                 NULL, pnlInfoBoxAccessClose::OnTabReClick);
+  wTabBar->AddClient(wClose, _T("Close"), false, NULL, NULL,  dlgInfoBoxAccess::pnlCloseOnTabPreShow,
+                                                 NULL, dlgInfoBoxAccess::pnlCloseOnTabReClick);
 
 
   wTabBar->SetCurrentPage(0);
@@ -133,20 +133,20 @@ dlgInfoBoxAccess::OnClose()
 // panel close
 
 void
-pnlInfoBoxAccessClose::OnCloseClicked(WndButton &Sender)
+dlgInfoBoxAccess::pnlCloseOnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
   dlgInfoBoxAccess::OnClose();
 }
 
 void
-pnlInfoBoxAccessClose::OnTabReClick()
+dlgInfoBoxAccess::pnlCloseOnTabReClick()
 {
   dlgInfoBoxAccess::OnClose();
 }
 
 bool
-pnlInfoBoxAccessClose::OnTabPreShow(TabBarControl::EventType EventType)
+dlgInfoBoxAccess::pnlCloseOnTabPreShow(TabBarControl::EventType EventType)
 {
   if (EventType == TabBarControl::MouseOrButton) {
     dlgInfoBoxAccess::OnClose();
@@ -156,7 +156,7 @@ pnlInfoBoxAccessClose::OnTabPreShow(TabBarControl::EventType EventType)
 }
 
 Window*
-pnlInfoBoxAccessClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
+dlgInfoBoxAccess::pnlCloseLoad(SingleWindow &parent, TabBarControl* wTabBar,
                             WndForm* _wf, CallBackTableEntry* CallBackTable)
 {
   assert(wTabBar);
