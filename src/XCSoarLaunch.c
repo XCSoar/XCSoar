@@ -52,6 +52,10 @@ Copyright_License {
 #define HAVE_GESTURE
 #endif
 
+#ifdef HAVE_GESTURE
+#define ENABLE_TOOLTIPS
+#endif
+
 /* ************************************************************************
 	Define
 **************************************************************************/
@@ -89,7 +93,11 @@ Copyright_License {
 **************************************************************************/
 
 static HINSTANCE hInst;
+
+#ifdef ENABLE_TOOLTIPS
 static HWND hToolTip;
+#endif
+
 static int IconSizeX = 112;
 static int IconSizeY = 30;
 static int HMargin = 0;
@@ -249,6 +257,9 @@ DllMain(HINSTANCE hModule, gcc_unused DWORD fdwReason,
 /* *****************************************************************************
 	ToolTipProc
 ******************************************************************************/
+
+#ifdef ENABLE_TOOLTIPS
+
 static BOOL CALLBACK
 ToolTipProc(HWND hDlg, UINT uMsg, gcc_unused WPARAM wParam, LPARAM lParam)
 {
@@ -296,6 +307,8 @@ ToolTipProc(HWND hDlg, UINT uMsg, gcc_unused WPARAM wParam, LPARAM lParam)
 
   return TRUE;
 }
+
+#endif /* ENABLE_TOOLTIPS */
 
 /* ****************************************************************************
 	OnPaint
@@ -445,13 +458,14 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
   HDC hdc;
   PAINTSTRUCT ps;
-#ifdef HAVE_GESTURE
+#ifdef ENABLE_TOOLTIPS
   SHRGINFO rg;
 #endif
   int x, y;
   int i;
 
 	switch (msg) {
+#ifdef ENABLE_TOOLTIPS
   case WM_CREATE:
     if (hToolTip == NULL)
       hToolTip = CreateDialog(hInst, MAKEINTRESOURCE(IDD_DIALOG_TOOLTIP), NULL,
@@ -464,6 +478,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     // FileListCnt = 0;
     return 0;
+#endif
 
   case WM_TODAYCUSTOM_CLEARCACHE:
     break;
@@ -493,7 +508,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     SelItem = Point2Item(LOWORD(lParam), HIWORD(lParam));
     InvalidateRect(hWnd, NULL, FALSE);
     UpdateWindow(hWnd);
-#ifdef HAVE_GESTURE
+#ifdef ENABLE_TOOLTIPS
     rg.cbSize = sizeof(SHRGINFO);
     rg.hwndClient = hWnd;
     rg.ptDown.x = LOWORD(lParam);
@@ -526,7 +541,10 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     break;
 
   case WM_LBUTTONUP:
+#ifdef ENABLE_TOOLTIPS
     ShowWindow(hToolTip, SW_HIDE);
+#endif
+
     ReleaseCapture();
     i = Point2Item(LOWORD(lParam), HIWORD(lParam));
     if (i != -1 && i == SelItem) {
