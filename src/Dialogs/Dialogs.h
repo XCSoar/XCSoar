@@ -137,7 +137,15 @@ void dlgStartPointShowModal();
 bool dlgWaypointEditShowModal(Waypoint &way_point);
 
 void dlgWeatherShowModal();
-void dlgTargetShowModal();
+
+/**
+ * Shows map display zoomed to target point
+ * with half dialog popup to manipulate point
+ *
+ * @param TargetPoint if -1 then goes to active target
+ * else goes to TargetPoint by default
+ */
+void dlgTargetShowModal(int TargetPoint = -1);
 void dlgThermalAssistantShowModal();
 void dlgFlarmTrafficShowModal();
 void dlgFlarmTrafficDetailsShowModal(FlarmId id);

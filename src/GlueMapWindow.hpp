@@ -112,6 +112,19 @@ public:
   bool isInSector(const int x, const int y);
 
   /**
+   * If point is in any active OZ of the current task,
+   * it returns the index of that turnpoint.
+   *
+   * Used to popup the dlgTarget
+   *
+   * @param gp location where click started
+   *
+   * @return -1 if not in any sector, else tp index
+   *        if tp index >= task's ActiveIndex
+   */
+  int isInAnyActiveSector(const GeoPoint &gp);
+
+  /**
    * If PanTarget, updates task with new target
    * Used by dlgTarget
    *

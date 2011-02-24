@@ -475,7 +475,7 @@ InitTargetPoints()
 }
 
 void
-dlgTargetShowModal()
+dlgTargetShowModal(int TargetPoint)
 {
   if (protected_task_manager == NULL ||
       protected_task_manager->get_mode() != TaskManager::MODE_ORDERED)
@@ -491,6 +491,8 @@ dlgTargetShowModal()
   GeoPoint oldPanLocation = XCSoarInterface::SetSettingsMap().PanLocation;
   const bool oldFullScreen = XCSoarInterface::main_window.GetFullScreen();
 
+  if (TargetPoint >=0)
+    target_point = TargetPoint;
   InitTargetPoints();
 
   btnIsLocked = (WndButton*)wf->FindByName(_T("btnIsLocked"));

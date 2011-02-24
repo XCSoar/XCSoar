@@ -91,3 +91,27 @@ GlueMapWindow::isInSector(const int x, const int y)
   }
   return false;
 }
+
+int
+GlueMapWindow::isInAnyActiveSector(const GeoPoint &gp)
+{
+  assert(protected_task_manager != NULL);
+
+  ProtectedTaskManager::Lease task_manager(*protected_task_manager);
+  const AbstractTask *at = task_manager->get_active_task();
+  const unsigned TaskSize = at->task_size();
+  const unsigned ActiveIndex = task_manager->getActiveTaskPointIndex();
+
+  if (task_manager->get_mode() != TaskManager::MODE_ORDERED)
+    return -1;
+
+  AIRCRAFT_STATE a;
+  a.Location = gp;
+
+  for (unsigned i = ActiveIndex; i < TaskSize; i++) {
+    if (task_manager->isInSector(i, a, false))
+      return i;
+  }
+
+  return -1;
+}

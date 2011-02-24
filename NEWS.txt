@@ -52,6 +52,7 @@ Version 6.1 - not yet released
     - by arrival altitude
     - along task direction
     - along home direction
+  - "long-click" in task turnpoint zone displays Target dialog
 
 Version 6.0.5 - not yet released
 * devices:
