@@ -214,7 +214,11 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
 
   device.Driver = Driver;
   device.Com = Com;
-  device.Open();
+
+  if (!device.Open()) {
+    device.Close();
+    return false;
+  }
 
   device.enable_baro = devIsBaroSource(device) && !devHasBaroSource();
 
