@@ -86,6 +86,8 @@ public:
                          bool enable_baro);
   virtual bool Declare(const Declaration *declaration,
                        OperationEnvironment &env);
+  bool DeclareInner(const Declaration *declaration,
+                       OperationEnvironment &env);
 
 };
 
@@ -316,6 +318,18 @@ LXNanoDevice::Declare(const Declaration *decl,
   if (!port->StopRxThread())
     return false;
 
+  bool success = DeclareInner(decl, env);
+
+  StartNMEAMode();
+  port->SetRxTimeout(0);
+  port->StartRxThread();
+  return success;
+}
+
+bool
+LXNanoDevice::DeclareInner(const Declaration *decl,
+                      OperationEnvironment &env)
+{
   if (!port->SetRxTimeout(500))
     return false;
 
@@ -325,9 +339,6 @@ LXNanoDevice::Declare(const Declaration *decl,
   WritePilotInfo(decl);
   WriteTask(decl);
 
-  StartNMEAMode();
-  port->SetRxTimeout(0);
-  port->StartRxThread();
   return true;
 }
 
