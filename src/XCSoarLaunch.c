@@ -38,11 +38,7 @@ Copyright_License {
 #include <stdbool.h>
 #include <tchar.h>
 
-#define _INC_OLE
-
 #include <windows.h>
-
-#undef  _INC_OLE
 
 #include <todaycmn.h>
 #include <commctrl.h>
