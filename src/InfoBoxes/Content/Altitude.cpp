@@ -33,7 +33,163 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Simulator.hpp"
 
+#include "Dialogs/dlgInfoBoxAccess.hpp"
+#include "Screen/Layout.hpp"
+
 #include <tchar.h>
+#include <stdio.h>
+
+/*
+ * InfoBoxContentAltitude
+ *
+ * Subpart Panel Info
+ */
+
+static int InfoBoxID;
+
+Window*
+InfoBoxContentAltitude::PnlInfoLoad(SingleWindow &parent, TabBarControl* wTabBar,
+                                    WndForm* wf, const int id)
+{
+  assert(wTabBar);
+  assert(wf);
+//  wf = _wf;
+
+  InfoBoxID = id;
+
+  Window *wInfoBoxAccessInfo =
+      LoadWindow(CallBackTable, wf, *wTabBar,
+                 Layout::landscape ?
+                     _T("IDR_XML_INFOBOXALTITUDEINFO_L") :
+                     _T("IDR_XML_INFOBOXALTITUDEINFO"));
+  assert(wInfoBoxAccessInfo);
+
+  return wInfoBoxAccessInfo;
+}
+
+bool
+InfoBoxContentAltitude::PnlInfoOnTabPreShow(TabBarControl::EventType EventType)
+{
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  TCHAR sTmp[32];
+
+  if (!calculated.AltitudeAGLValid) {
+    ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltAGL")))->SetText(_("N/A"));
+  } else {
+    // Set Value
+    _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(calculated.AltitudeAGL),
+                                   Units::GetAltitudeName());
+
+    ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltAGL")))->SetText(sTmp);
+  }
+
+  if (!basic.BaroAltitudeAvailable) {
+    ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltBaro")))->SetText(_("N/A"));
+  } else {
+    // Set Value
+    _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(basic.BaroAltitude),
+                                       Units::GetAltitudeName());
+
+    ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltBaro")))->SetText(sTmp);
+  }
+
+  if (!basic.GPSAltitudeAvailable) {
+    ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltGPS")))->SetText(_("N/A"));
+  } else {
+    // Set Value
+     _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(basic.GPSAltitude),
+                                         Units::GetAltitudeName());
+
+      ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltGPS")))->SetText(sTmp);
+  }
+
+  if (basic.gps.NAVWarning || !calculated.TerrainValid){
+    ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTerrain")))->SetText(_("N/A"));
+  } else {
+    // Set Value
+     _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(calculated.TerrainAlt),
+                                         Units::GetAltitudeName());
+
+      ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTerrain")))->SetText(sTmp);
+  }
+
+  return true;
+}
+
+/*
+ * Subpart Panel Setup
+ */
+
+Window*
+InfoBoxContentAltitude::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar,
+                                     WndForm* wf, const int id)
+{
+  assert(wTabBar);
+  assert(wf);
+//  wf = _wf;
+
+  InfoBoxID = id;
+
+  Window *wInfoBoxAccessSetup =
+      LoadWindow(CallBackTable, wf, *wTabBar,
+                 Layout::landscape ?
+                     _T("IDR_XML_INFOBOXALTITUDESETUP_L") :
+                     _T("IDR_XML_INFOBOXALTITUDESETUP"));
+  assert(wInfoBoxAccessSetup);
+
+  return wInfoBoxAccessSetup;
+}
+
+void
+InfoBoxContentAltitude::PnlSetupOnSetup(WndButton &Sender) {
+  (void)Sender;
+  InfoBoxManager::SetupFocused(InfoBoxID);
+  dlgInfoBoxAccess::OnClose();
+}
+
+/*
+ * Subpart callback function pointers
+ */
+
+InfoBoxContentAltitude::InfoBoxPanelContent InfoBoxContentAltitude::pnlEdit =
+{
+  NULL
+};
+
+InfoBoxContentAltitude::InfoBoxPanelContent InfoBoxContentAltitude::pnlInfo =
+{
+  (*InfoBoxContentAltitude::PnlInfoLoad),
+  NULL,
+  (*InfoBoxContentAltitude::PnlInfoOnTabPreShow),
+
+  NULL
+};
+
+InfoBoxContentAltitude::InfoBoxPanelContent InfoBoxContentAltitude::pnlSetup =
+{
+  (*InfoBoxContentAltitude::PnlSetupLoad),
+  NULL
+};
+
+CallBackTableEntry InfoBoxContentAltitude::CallBackTable[] = {
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSetupOnSetup),
+
+  DeclareCallBackEntry(NULL)
+};
+
+InfoBoxContentAltitude::InfoBoxDlgContent InfoBoxContentAltitude::dlgContent =
+{
+    InfoBoxContentAltitude::pnlEdit,
+    InfoBoxContentAltitude::pnlInfo,
+    InfoBoxContentAltitude::pnlSetup,
+    InfoBoxContentAltitude::CallBackTable
+};
+
+InfoBoxContentAltitude::InfoBoxDlgContent*
+InfoBoxContentAltitude::GetInfoBoxDlgContent() {
+  return &dlgContent;
+}
 
 void
 InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
