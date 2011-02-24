@@ -48,9 +48,15 @@ Copyright_License {
 #include "resource-launch.h"
 #include "Compiler.h"
 
+#if _WIN32_WCE >= 0x0420
+#define HAVE_GESTURE
+#endif
+
 /* ************************************************************************
 	Define
 **************************************************************************/
+
+#ifdef HAVE_GESTURE
 
 #ifndef SHRG_RETURNCMD
 #define SHRG_RETURNCMD 1
@@ -59,6 +65,8 @@ Copyright_License {
 #ifndef GN_CONTEXTMENU
 #define GN_CONTEXTMENU 1000
 #endif
+
+#endif /* HAVE_GESTURE */
 
 #define WINDOW_TITLE TEXT("XCSoarLaunch")
 #define MAIN_WND_CLASS TEXT("XCSoarLaunchWndClass")
@@ -437,7 +445,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
   HDC hdc;
   PAINTSTRUCT ps;
-#if _WIN32_WCE >= 0x0420
+#ifdef HAVE_GESTURE
   SHRGINFO rg;
 #endif
   int x, y;
@@ -485,7 +493,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     SelItem = Point2Item(LOWORD(lParam), HIWORD(lParam));
     InvalidateRect(hWnd, NULL, FALSE);
     UpdateWindow(hWnd);
-#if _WIN32_WCE >= 0x0420
+#ifdef HAVE_GESTURE
     rg.cbSize = sizeof(SHRGINFO);
     rg.hwndClient = hWnd;
     rg.ptDown.x = LOWORD(lParam);
