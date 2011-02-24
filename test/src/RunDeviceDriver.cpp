@@ -197,20 +197,20 @@ int main(int argc, char **argv)
   }
 
   PathName driver_name(argv[1]);
-  device.Driver = devGetDriver(driver_name);
-  if (device.Driver == NULL) {
+  const struct DeviceRegister *driver = devGetDriver(driver_name);
+  if (driver == NULL) {
     fprintf(stderr, "No such driver: %s\n", argv[1]);
     return 1;
   }
 
   NullPort port(*(Port::Handler *)NULL);
-  device.Com = &port;
-  device.enable_baro = true;
 
-  if (!device.Open()) {
+  if (!device.Open(&port, driver)) {
     fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
     return 1;
   }
+
+  device.enable_baro = true;
 
   char buffer[1024];
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {

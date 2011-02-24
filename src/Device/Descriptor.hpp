@@ -58,7 +58,11 @@ public:
   DeviceDescriptor();
 
 public:
-  bool Open();
+  /**
+   * When this method fails, the caller is responsible for freeing the
+   * Port object.
+   */
+  bool Open(Port *port, const struct DeviceRegister *driver);
   void Close();
 
   const TCHAR *GetName() const;

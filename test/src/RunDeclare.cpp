@@ -141,8 +141,8 @@ int main(int argc, char **argv)
   PathName port_name(argv[2]);
   int baud = atoi(argv[3]);
 
-  device.Driver = devGetDriver(driver_name);
-  if (device.Driver == NULL) {
+  const struct DeviceRegister *driver = devGetDriver(driver_name);
+  if (driver == NULL) {
     fprintf(stderr, "No such driver: %s\n", argv[1]);
     return EXIT_FAILURE;
   }
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  if (!device.Open()) {
+  if (!device.Open(device.Com, driver)) {
     delete device.Com;
     fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
     return EXIT_FAILURE;

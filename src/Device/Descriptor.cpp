@@ -52,13 +52,17 @@ DeviceDescriptor::DeviceDescriptor()
 }
 
 bool
-DeviceDescriptor::Open()
+DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
 {
+  assert(_port != NULL);
+  assert(_driver != NULL);
+  assert(Com == NULL);
+  assert(device == NULL);
   assert(!enable_baro);
   assert(!ticker);
 
-  if (Driver == NULL)
-    return false;
+  Com = _port;
+  Driver = _driver;
 
   assert(Driver->CreateOnPort != NULL || (Driver->Flags & drfNmeaOut));
   if (Driver->CreateOnPort == NULL)
@@ -71,6 +75,7 @@ DeviceDescriptor::Open()
   if (!device->Open(env)) {
     delete device;
     device = NULL;
+    Com = NULL;
     return false;
   }
 

@@ -223,11 +223,8 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
   if (Com == NULL)
     return false;
 
-  device.Driver = Driver;
-  device.Com = Com;
-
-  if (!device.Open()) {
-    device.Close();
+  if (!device.Open(Com, Driver)) {
+    delete Com;
     return false;
   }
 
