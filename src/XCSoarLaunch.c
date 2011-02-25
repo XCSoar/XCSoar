@@ -35,6 +35,8 @@ Copyright_License {
 	Include Files
 **************************************************************************/
 
+#include "Compatibility/gdi.h"
+
 #include <stdbool.h>
 #include <tchar.h>
 
@@ -81,10 +83,6 @@ Copyright_License {
 #define USE_OPAQUE_FILL
 #endif
 
-/*#if (WIN32_PLATFORM_PSPC < 500)*/
-#define USE_MASKS
-/*#endif*/
-
 /* ************************************************************************
 	Global Variables
 **************************************************************************/
@@ -108,9 +106,6 @@ typedef struct _FILELIST {
   const TCHAR *CommandLine;
   const TCHAR *Description;
   HBITMAP bitmap;
-#ifdef USE_MASKS
-  HBITMAP mask;
-#endif
 } FILELIST;
 
 static FILELIST FileList[2] = {
@@ -144,45 +139,6 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
   return hRes == ERROR_SUCCESS && dwType == REG_SZ;
 }
 
-#ifdef USE_MASKS
-/**
- * Given a bitmap and a background colour,
- * creates and returns a handle to a 1bpp
- * mask bitmap.
- */
-static HBITMAP
-CreateMaskBMP(HBITMAP hBMPOrig, COLORREF bgCol)
-{
-  if (!hBMPOrig)
-    return NULL;
-
-  HDC hDCMask = CreateCompatibleDC(NULL);
-  HDC hDCOrig = CreateCompatibleDC(NULL);
-
-  BITMAP BMPinfo;
-  GetObject(hBMPOrig, sizeof(BITMAP), (LPVOID)&BMPinfo);
-
-  // Create a monochrome mask bitmap
-  HBITMAP hBMPMask = CreateBitmap(BMPinfo.bmWidth, BMPinfo.bmHeight, 1, 1, NULL);
-
-  // Select BMPs into DCs
-  SelectObject(hDCOrig, hBMPOrig);
-  SelectObject(hDCMask, hBMPMask);
-
-  // Set background color of original bmp dc to the transparent colour
-  SetBkColor(hDCOrig, bgCol);
-
-  // Create mask of original icon
-  BitBlt(hDCMask, 0, 0, BMPinfo.bmWidth, BMPinfo.bmHeight, hDCOrig, 0, 0,
-         SRCCOPY);
-
-  DeleteObject(hDCMask);
-  DeleteObject(hDCOrig);
-
-  return hBMPMask;
-}
-#endif
-
 static void
 CreateFileList(void)
 {
@@ -191,17 +147,6 @@ CreateFileList(void)
 
   if (FileList[1].bitmap == NULL)
     FileList[1].bitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_XCSOARLSWIFTSIM));
-
-  // Create Mask bitmaps if required
-#ifdef USE_MASKS
-
-  for (int i = 0; i < FileListCnt; ++i) {
-    if (FileList[i].mask == NULL) {
-      FileList[i].mask = CreateMaskBMP(FileList[i].bitmap, RGB(0, 0, 255));
-    }
-  }
-
-#endif
 }
 
 /* ****************************************************************************
@@ -309,13 +254,8 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 
     SelectObject(tempdc, FileList[i].bitmap);
 
-#ifdef USE_MASKS
-    MaskBlt(drawdc, x, y, IconSizeX, IconSizeY, tempdc, 0,
-            0, FileList[i].mask, 0, 0, MAKEROP4(0x00AA0029, SRCCOPY));
-#else
-    TransparentBlt(drawdc, x, y, IconSizeX, IconSizeY,
-                   tempdc, 0, 0, IconSizeX, IconSizeY, RGB(0, 0, 255));
-#endif
+    TransparentImage(drawdc, x, y, IconSizeX, IconSizeY,
+                     tempdc, 0, 0, IconSizeX, IconSizeY, RGB(0, 0, 255));
 
     x += IconSizeX;
   }
