@@ -36,6 +36,7 @@ Copyright_License {
 #include "Screen/UnitSymbol.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "UnitsFormatter.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 
 #include <stdio.h>
 
@@ -495,8 +496,10 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const RECT &rc,
   else if (SettingsMap().EnablePan)
     _tcscat(ScaleInfo, _T("PAN "));
 
-  if (SettingsMap().EnableAuxiliaryInfo)
-    _tcscat(ScaleInfo, _T("AUX "));
+  if (SettingsMap().EnableAuxiliaryInfo) {
+    _tcscat(ScaleInfo, InfoBoxManager::GetCurrentPanelName());
+    _tcscat(ScaleInfo, _T(" "));
+  }
 
   if (Basic().gps.Replay)
     _tcscat(ScaleInfo, _T("REPLAY "));
