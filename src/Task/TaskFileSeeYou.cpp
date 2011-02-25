@@ -262,6 +262,28 @@ CreatePoint(unsigned pos, unsigned n_waypoints, const Waypoint *wp,
   return pt;
 }
 
+static TCHAR *
+AdvanceReaderToTask(FileLineReader &reader, const unsigned index)
+{
+  // Skip lines until n-th task
+  unsigned count = 0;
+  bool in_task_section = false;
+  static TCHAR *line;
+  for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
+    if (in_task_section) {
+      if (line[0] == _T('\"') || line[0] == _T(',')) {
+        if (count == index)
+          break;
+
+        count++;
+      }
+    } else if (_tcsicmp(line, _T("-----Related Tasks-----")) == 0) {
+      in_task_section = true;
+    }
+  }
+  return line;
+}
+
 OrderedTask*
 TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 {
@@ -279,22 +301,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   if (reader.error())
     return NULL;
 
-  // Skip lines until n-th task
-  unsigned count = 0;
-  bool in_task_section = false;
-  TCHAR *line;
-  for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
-    if (in_task_section) {
-      if (line[0] == _T('\"') || line[0] == _T(',')) {
-        if (count == index)
-          break;
-
-        count++;
-      }
-    } else if (_tcsicmp(line, _T("-----Related Tasks-----")) == 0) {
-      in_task_section = true;
-    }
-  }
+  TCHAR *line = AdvanceReaderToTask(reader, index);
 
   // Read waypoint list
   // e.g. "Club day 4 Racing task","085PRI","083BOJ","170D_K","065SKY","0844YY", "0844YY"
