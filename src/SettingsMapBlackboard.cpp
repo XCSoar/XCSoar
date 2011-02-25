@@ -49,7 +49,8 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.TerrainBrightness = 36;
   settings_map.TerrainRamp = 0;
   settings_map.EnableAirspace = true;
-  settings_map.EnableAuxiliaryInfo = 0;
+  settings_map.EnableAuxiliaryInfo = true;
+  settings_map.AuxiliaryInfoBoxPanel = 0;
   settings_map.UserForceDisplayMode = dmNone;
   settings_map.EnablePan = false;
   settings_map.PanLocation.Longitude = Angle::native(fixed_zero);

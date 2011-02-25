@@ -174,8 +174,12 @@ InfoBoxManager::Event_Select(int i)
 unsigned
 InfoBoxManager::GetCurrentPanel()
 {
-  if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo)
-    return PANEL_AUXILIARY;
+  if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo) {
+    unsigned panel = PANEL_AUXILIARY + XCSoarInterface::SettingsMap().AuxiliaryInfoBoxPanel;
+    if (panel >= InfoBoxManagerConfig::MAX_INFOBOX_PANELS)
+      panel = PANEL_AUXILIARY;
+    return panel;
+  }
   else if (XCSoarInterface::main_window.map.GetDisplayMode() == dmCircling)
     return PANEL_CIRCLING;
   else if (XCSoarInterface::main_window.map.GetDisplayMode() == dmFinalGlide)

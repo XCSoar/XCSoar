@@ -144,6 +144,7 @@ struct SETTINGS_MAP {
   short TerrainRamp;
   bool EnableAirspace;
   bool EnableAuxiliaryInfo;
+  unsigned AuxiliaryInfoBoxPanel;
   DisplayMode_t UserForceDisplayMode;
   bool EnablePan;
   GeoPoint PanLocation;
