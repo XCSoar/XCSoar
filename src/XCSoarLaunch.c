@@ -107,15 +107,24 @@ static const unsigned WinBottomMargin = 2;
 static BOOL Refresh;
 
 typedef struct _FILELIST {
-  TCHAR CommandLine[BUF_SIZE];
-  TCHAR Description[BUF_SIZE];
+  const TCHAR *CommandLine;
+  const TCHAR *Description;
   HBITMAP bitmap;
 #ifdef USE_MASKS
   HBITMAP mask;
 #endif
 } FILELIST;
 
-static FILELIST FileList[2];
+static FILELIST FileList[2] = {
+  {
+    .CommandLine = _T("-fly"),
+    .Description = _T("Start XCSoar in flight mode"),
+  },
+  {
+    .CommandLine = _T("-simulator"),
+    .Description = _T("Start XCSoar in simulator mode"),
+  },
+};
 
 static const int FileListCnt = 2;
 static int SelItem = -1;
@@ -179,15 +188,8 @@ CreateMaskBMP(HBITMAP hBMPOrig, COLORREF bgCol)
 static void
 CreateFileList(void)
 {
-  _tcscpy(FileList[0].CommandLine, TEXT("-fly"));
-  lstrcpy(FileList[0].Description, TEXT("Start XCSoar in flight mode"));
-
   if (FileList[0].bitmap == NULL)
     FileList[0].bitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_XCSOARLSWIFT));
-
-  _tcscpy(FileList[1].CommandLine, TEXT("-simulator"));
-
-  lstrcpy(FileList[1].Description, TEXT("Start XCSoar in simulator mode"));
 
   if (FileList[1].bitmap == NULL)
     FileList[1].bitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_XCSOARLSWIFTSIM));
