@@ -344,11 +344,19 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     if (Refresh) {
       Refresh = FALSE;
 
+      const unsigned screen_width = GetSystemMetrics(SM_CXSCREEN) -
+        (WinLeftMargin + WinRightMargin);
+
+      /* scale the buttons on large screens */
+      unsigned scale = screen_width / (IconSizeX * 2);
+      if (scale < 1)
+        scale = 1;
+
       const unsigned top = WinTopMargin;
-      const unsigned bottom = top + IconSizeY;
+      const unsigned bottom = top + IconSizeY * scale;
       for (int x = WinLeftMargin, i = 0; i < FileListCnt; i++) {
-        SetRect(&FileList[i].rc, x, top, x + IconSizeX, bottom);
-        x += IconSizeX;
+        SetRect(&FileList[i].rc, x, top, x + IconSizeX * scale, bottom);
+        x += IconSizeX * scale;
       }
 
       ((TODAYLISTITEM *)(wParam))->cyp = bottom + WinBottomMargin;
