@@ -58,6 +58,8 @@ const TCHAR* gettext(const TCHAR* text);
 #pragma warning( disable : 4786 )
 #endif
 
+void reset_gettext_cache();
+
 #endif // !HAVE_POSIX
 
 #endif

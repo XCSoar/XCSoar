@@ -112,4 +112,12 @@ gettext(const TCHAR* text)
 #endif
 }
 
+void
+reset_gettext_cache()
+{
+#ifdef _UNICODE
+  translations.clear();
+#endif
+}
+
 #endif /* !HAVE_POSIX */

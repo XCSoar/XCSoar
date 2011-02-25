@@ -47,6 +47,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "WayPoint/WayPointGlue.hpp"
 #include "GlideComputer.hpp"
+#include "LanguageGlue.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -63,6 +64,7 @@ bool PolarFileChanged = false;
 bool LanguageFileChanged = false;
 bool StatusFileChanged = false;
 bool InputFileChanged = false;
+bool LanguageChanged = false;
 
 static void
 SettingsEnter()
@@ -85,6 +87,7 @@ SettingsEnter()
   StatusFileChanged = false;
   InputFileChanged = false;
   DevicePortChanged = false;
+  LanguageChanged = false;
 }
 
 static void
@@ -96,6 +99,9 @@ SettingsLeave()
   XCSoarInterface::main_window.map.set_focus();
 
   SuspendAllThreads();
+
+  if (LanguageChanged)
+    ReadLanguageFile();
 
   if (MapFileChanged) {
     /* set these flags, because they may be loaded from the map

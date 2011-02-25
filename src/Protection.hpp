@@ -46,6 +46,7 @@ extern bool LanguageFileChanged;
 extern bool StatusFileChanged;
 extern bool InputFileChanged;
 extern bool MapFileChanged;
+extern bool LanguageChanged;
 
 extern Trigger globalRunningEvent;
 extern Trigger airspaceWarningEvent;

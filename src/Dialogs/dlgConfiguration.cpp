@@ -2257,7 +2257,7 @@ void dlgConfigurationShowModal(void)
     if (_tcscmp(old_value, new_value) != 0 &&
         _tcscmp(old_base, new_base) != 0) {
       Profile::Set(szProfileLanguageFile, new_value);
-      requirerestart = changed = true;
+      LanguageChanged = changed = true;
     }
   }
 

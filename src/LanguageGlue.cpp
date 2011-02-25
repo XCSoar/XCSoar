@@ -334,6 +334,11 @@ LoadLanguageFile(const TCHAR *path)
 void
 ReadLanguageFile()
 {
+#if !defined(HAVE_POSIX) || defined(ANDROID)
+  mo_file = NULL;
+  reset_gettext_cache();
+#endif
+
   LogStartUp(_T("Loading language file"));
 
   TCHAR buffer[MAX_PATH], second_buffer[MAX_PATH];
