@@ -54,7 +54,9 @@ enum DialogStyle
   /** like eDialogScaled but center dialog in screen */
   dsScaledCentered,
   /** don't adjust at all (same as !Layout::ScaleSupported()) */
-  dsFixed
+  dsFixed,
+  /** stretch horizontal and place to bottom */
+  dsScaledBottom
 };
 
 extern DialogStyle DialogStyleSetting;

@@ -170,7 +170,7 @@ GetDialogStyle(const XMLNode &xNode)
 static int 
 ScaleWidth(const int x, const DialogStyle eDialogStyle) 
 {
-  if (eDialogStyle == dsFullWidth)
+  if (eDialogStyle == dsFullWidth || eDialogStyle == dsScaledBottom)
     // stretch width to fill screen horizontally
     return x * dialog_width_scale / 1024;
   else
@@ -380,7 +380,7 @@ InitScaleWidth(const SIZE size, const RECT rc, const DialogStyle eDialogStyle)
   if (!Layout::ScaleSupported())
     return;
 
-  if (eDialogStyle == dsFullWidth)
+  if (eDialogStyle == dsFullWidth || eDialogStyle == dsScaledBottom)
     dialog_width_scale = (rc.right - rc.left) * 1024 / size.cx;
   else
     dialog_width_scale = 1024;
@@ -501,6 +501,11 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
 
   case dsScaled:
   case dsFixed:
+    break;
+
+  case dsScaledBottom:
+    size.cx = rc.right - rc.left; // stretch form to full width of screen
+    pos.y = rc.bottom - size.cy; // position at bottom of screen
     break;
   }
 
