@@ -178,7 +178,7 @@ OnTaskListEnter(unsigned ItemIndex)
 }
 
 static void
-OnMoveUpClicked(WndButton &Sender)
+MoveUp()
 {
   if (!wTaskPoints)
     return;
@@ -196,7 +196,13 @@ OnMoveUpClicked(WndButton &Sender)
 }
 
 static void
-OnMoveDownClicked(WndButton &Sender)
+OnMoveUpClicked(WndButton &Sender)
+{
+  MoveUp();
+}
+
+static void
+MoveDown()
 {
   if (!wTaskPoints)
     return;
@@ -211,6 +217,12 @@ OnMoveDownClicked(WndButton &Sender)
   wTaskPoints->SetCursorIndex(index + 1);
   task_modified = true;
   RefreshView();
+}
+
+static void
+OnMoveDownClicked(WndButton &Sender)
+{
+  MoveDown();
 }
 
 static bool
@@ -239,6 +251,21 @@ OnKeyDown(WndForm &Sender, unsigned key_code)
       return true;
     }
     return false;
+
+  case '6': /* F5 */
+    if (is_altair()) {
+      MoveUp();
+      return true;
+    } else
+      return false;
+
+  case '7': /* F6 */
+    if (is_altair()) {
+      MoveDown();
+      return true;
+    } else
+      return false;
+
   default:
     return false;
   }
