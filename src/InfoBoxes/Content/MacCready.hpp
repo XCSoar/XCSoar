@@ -51,7 +51,10 @@ public:
   static Window* PnlInfoLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
 
   static Window* PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
+  static bool PnlSetupPreShow(TabBarControl::EventType EventType);
   static void PnlSetupOnSetup(WndButton &Sender);
+  static void PnlSetupOnMode(WndButton &Sender);
+
 
   virtual void Update(InfoBoxWindow &infobox);
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);

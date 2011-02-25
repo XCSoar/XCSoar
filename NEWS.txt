@@ -37,6 +37,7 @@ Version 6.1 - not yet released
   - glide terrain range line more detailed, uses 50 radial points rather than 20
   - added option to display track bearing line in map
 * data files
+  - support for SeeYou .CUP task files in the task manager
   - wing area field is read from extended polar files if available
   - zander files: description field is used for additional airport detection
   - added frequency parsing for airspace files
@@ -51,6 +52,7 @@ Version 6.1 - not yet released
     - by arrival altitude
     - along task direction
     - along home direction
+  - "long-click" in task turnpoint zone displays Target dialog
 
 Version 6.0.5 - not yet released
 * devices:

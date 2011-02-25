@@ -50,6 +50,9 @@ static bool task_modified = false;
 static unsigned active_index = 0;
 static int next_previous = 0;
 
+// setting to True during refresh so control values don't trigger form save
+static bool Refreshing = false;
+
 static void
 OnCloseClicked(WndButton &Sender)
 {
@@ -320,6 +323,8 @@ RefreshView()
   if (!tp)
     return;
 
+  Refreshing = true; // tell onChange routines not to save form!
+
   TPLabelObservationZone ozv;
   ObservationZoneConstVisitor &visitor = ozv;
   visitor.Visit(*tp->get_oz());
@@ -367,6 +372,7 @@ RefreshView()
         tp->get_waypoint().Name.c_str());
     wfrm->SetCaption(buff);
   }
+  Refreshing = false; // reactivate onChange routines
 }
 
 static void
@@ -478,31 +484,41 @@ OnOptionalStartsClicked(WndButton &Sender)
 static void
 OnOZLineLengthData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
- ReadValues();
+  if (!Refreshing)
+    ReadValues();
+  wTaskView->invalidate();
 }
 
 static void
 OnOZCylinderRadiusData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
- ReadValues();
+  if (!Refreshing)
+    ReadValues();
+  wTaskView->invalidate();
 }
 
 static void
 OnOZSectorRadiusData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
- ReadValues();
+  if (!Refreshing)
+    ReadValues();
+  wTaskView->invalidate();
 }
 
 static void
 OnOZSectorStartRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
- ReadValues();
+  if (!Refreshing)
+    ReadValues();
+  wTaskView->invalidate();
 }
 
 static void
 OnOZSectorFinishRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
- ReadValues();
+  if (!Refreshing)
+    ReadValues();
+  wTaskView->invalidate();
 }
 
 static CallBackTableEntry CallBackTable[] = {

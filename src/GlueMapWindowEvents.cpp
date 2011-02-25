@@ -239,6 +239,9 @@ GlueMapWindow::on_mouse_up(int x, int y)
       if (airspace_database != NULL &&
           AirspaceDetailsAtPoint(drag_start_geopoint))
         return true;
+      const int TargetPoint = isInAnyActiveSector(drag_start_geopoint);
+      if (TargetPoint >= 0)
+        dlgTargetShowModal(TargetPoint);
     }
   }
 

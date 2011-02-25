@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_XML_HPP
 #define XCSOAR_DIALOGS_XML_HPP
 
+#include "Screen/SingleWindow.hpp"
+
 #include <tchar.h>
 
 class Window;
@@ -65,6 +67,6 @@ LoadWindow(CallBackTableEntry *LookUpTable,
 
 WndForm *
 LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
-               const TCHAR *resource);
+               const TCHAR *resource, const RECT *targetRect = NULL);
 
 #endif

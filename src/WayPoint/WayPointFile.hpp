@@ -90,6 +90,7 @@ protected:
 
   virtual void saveFile(TextWriter &writer, const Waypoints &way_points) {};
 
+public:
   // Helper functions
 
   /**

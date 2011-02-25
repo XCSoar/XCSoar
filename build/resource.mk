@@ -126,6 +126,7 @@ $(BMP_LAUNCH_SIM_224): %_2.bmp: %.png
 	$(Q)$(IM_PREFIX)convert $< -background blue -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
 
 RESOURCE_FILES = $(wildcard Data/Dialogs/*.xml)
+RESOURCE_FILES += $(wildcard Data/Dialogs/Infobox/*.xml)
 
 ifeq ($(TARGET),ANDROID)
 RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))

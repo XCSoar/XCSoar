@@ -33,14 +33,15 @@ Copyright_License {
 
 TabBarControl::TabBarControl(ContainerWindow &_parent,
                 int x, int y, unsigned _width, unsigned _height,
-                const WindowStyle style):
+                const WindowStyle style, bool _flipOrientation):
                 TabbedControl(_parent, 0, 0, _parent.get_width(), _parent.get_height(), style),
                 theTabDisplay(NULL),
-                TabLineHeight(Layout::landscape ?
+                TabLineHeight((Layout::landscape ^ _flipOrientation) ?
                     (Layout::Scale(TabLineHeightInitUnscaled) * 0.75) :
-                    Layout::Scale(TabLineHeightInitUnscaled))
+                    Layout::Scale(TabLineHeightInitUnscaled)),
+                flipOrientation(_flipOrientation)
 {
-  theTabDisplay = new TabDisplay(*this, x, y, _width, _height);
+  theTabDisplay = new TabDisplay(*this, x, y, _width, _height, flipOrientation);
 }
 
 bool
@@ -170,20 +171,20 @@ const RECT
   const unsigned margin = 1;
 
   bool partialTab = false;
-  if ( (Layout::landscape && theTabDisplay->GetTabHeight() < get_height()) ||
-      (!Layout::landscape && theTabDisplay->GetTabWidth() < get_width()) )
+  if ( ((Layout::landscape ^ flipOrientation) && theTabDisplay->GetTabHeight() < get_height()) ||
+      ((!Layout::landscape ^ flipOrientation) && theTabDisplay->GetTabWidth() < get_width()) )
     partialTab = true;
 
   const unsigned finalmargin = partialTab ? TabLineHeight - 3 * margin : margin;
   // Todo make the final margin display on either beginning or end of tab bar
   // depending on position of tab bar
 
-  const unsigned but_width = Layout::landscape ?
+  const unsigned but_width = (Layout::landscape ^ flipOrientation) ?
       (theTabDisplay->GetTabHeight() - finalmargin) / buttons.size() - margin
        : (theTabDisplay->GetTabWidth() - finalmargin) / buttons.size() - margin;
   RECT rc;
 
-  if (Layout::landscape) {
+  if (Layout::landscape ^ flipOrientation) {
     rc.left = 0;
     rc.right = theTabDisplay->GetTabWidth() - TabLineHeight;
 
@@ -216,11 +217,12 @@ TabBarControl::GetTabWidth()
 
 // TabDisplay Functions
 TabDisplay::TabDisplay(TabBarControl& _theTabBar,
-    unsigned left, unsigned top, unsigned width, unsigned height) :
+    unsigned left, unsigned top, unsigned width, unsigned height, bool _flipOrientation) :
   PaintWindow(),
   theTabBar(_theTabBar),
   dragging(false),
-  downindex(-1)
+  downindex(-1),
+  flipOrientation(_flipOrientation)
 {
   WindowStyle mystyle;
   mystyle.tab_stop();
@@ -324,25 +326,25 @@ TabDisplay::on_key_check(unsigned key_code) const
     return true;
 
   case VK_LEFT:
-    if (Layout::landscape)
+    if (Layout::landscape ^ flipOrientation)
       return false;
     else
       return (theTabBar.GetCurrentPage() > 0);
 
   case VK_RIGHT:
-    if (Layout::landscape)
+    if (Layout::landscape ^ flipOrientation)
       return false;
     else
       return theTabBar.GetCurrentPage() < theTabBar.GetTabCount() - 1;
 
   case VK_DOWN:
-    if (Layout::landscape)
+    if (Layout::landscape ^ flipOrientation)
       return theTabBar.GetCurrentPage() < theTabBar.GetTabCount() - 1;
     else
       return false;
 
   case VK_UP:
-    if (Layout::landscape)
+    if (Layout::landscape ^ flipOrientation)
       return (theTabBar.GetCurrentPage() > 0);
     else
       return false;

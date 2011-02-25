@@ -23,6 +23,7 @@
 #ifndef XCSOAR_TASK_FILE_HPP
 #define XCSOAR_TASK_FILE_HPP
 
+#include "Util/StaticArray.hpp"
 #include <tchar.h>
 
 class Waypoints;
@@ -39,6 +40,7 @@ protected:
   }
 
 public:
+  ~TaskFile();
   /**
    * Creates a TaskFile instance according to the extension
    * @param filename The filepath
@@ -47,7 +49,9 @@ public:
   static TaskFile* Create(const TCHAR* path);
 
   virtual OrderedTask* GetTask(const Waypoints *waypoints, unsigned index) const = 0;
-  virtual unsigned Count() const = 0;
+  virtual unsigned Count() = 0;
+
+  StaticArray<TCHAR *, 64> namesuffixes;
 };
 
 #endif

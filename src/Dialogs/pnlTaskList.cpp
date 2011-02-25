@@ -200,6 +200,17 @@ DeleteTask()
     return;
 
   const TCHAR *fname = get_cursor_name();
+  tstring upperstring = fname;
+  std::transform(upperstring.begin(), upperstring.end(), upperstring.begin(),
+      ::toupper);
+
+  if (upperstring.find(_T(".CUP")) != tstring::npos) {
+    MessageBoxX(_T("Can't delete .CUP files"), _("Delete Error"),
+        MB_ICONEXCLAMATION);
+    return;
+  }
+
+
   tstring text = _("Delete the selected task?");
   text += _T("\n(");
   text += fname;
@@ -225,10 +236,20 @@ RenameTask()
 
   const TCHAR *oldname = get_cursor_name();
   tstring newname = oldname;
-  if (newname.find(_T(".tsk")) != tstring::npos)
-    newname = newname.substr(0, newname.find(_T(".tsk")));
+  tstring upperstring = newname;
+  std::transform(upperstring.begin(), upperstring.end(), upperstring.begin(),
+      ::toupper);
 
-  if (!dlgTextEntryShowModal(newname, 10))
+  if (upperstring.find(_T(".CUP")) != tstring::npos) {
+    MessageBoxX(_T("Can't rename .CUP files"), _("Rename Error"),
+        MB_ICONEXCLAMATION);
+    return;
+  }
+
+  if (upperstring.find(_T(".TSK")) != tstring::npos)
+    newname = newname.substr(0, upperstring.find(_T(".TSK")));
+
+  if (!dlgTextEntryShowModal(newname, 40))
     return;
 
   newname += _T(".tsk");

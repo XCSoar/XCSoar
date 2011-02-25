@@ -485,14 +485,22 @@ TaskManager::get_ordered_taskpoint_name(unsigned TPindex) const
 }
 
 bool
-TaskManager::isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref) const
+TaskManager::isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref,
+                          const bool AATOnly) const
 {
   if (!check_ordered_task())
     return false;
 
-  const AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
-  if (ap)
-    return ap->isInSector(ref);
+  if (AATOnly) {
+    const AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
+    if (ap)
+      return ap->isInSector(ref);
+  }
+  else {
+    const OrderedTaskPoint *p = task_ordered.getTaskPoint(TPindex);
+    if (p)
+      return p->isInSector(ref);
+  }
 
   return false;
 }

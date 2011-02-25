@@ -33,7 +33,7 @@ public:
 
   OrderedTask* GetTask(const Waypoints *waypoints, unsigned index) const;
 
-  unsigned Count() const {
+  unsigned Count() {
     return 1;
   }
 };

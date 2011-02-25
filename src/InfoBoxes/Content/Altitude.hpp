@@ -25,33 +25,53 @@ Copyright_License {
 #define XCSOAR_INFOBOX_CONTENT_ALTITUDE_HPP
 
 #include "InfoBoxes/Content/Base.hpp"
+#include "Form/TabBar.hpp"
+#include "Form/Button.hpp"
 
-class InfoBoxContentAltitudeGPS : public InfoBoxContent
+class InfoBoxContentAltitude : public InfoBoxContent
+{
+public:
+  virtual InfoBoxDlgContent* GetInfoBoxDlgContent();
+
+  static Window* PnlInfoLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
+  static bool PnlInfoOnTabPreShow(TabBarControl::EventType EventType);
+
+  static CallBackTableEntry CallBackTable[];
+  static InfoBoxPanelContent pnlEdit;
+  static InfoBoxPanelContent pnlInfo;
+  static InfoBoxPanelContent pnlSetup;
+  static InfoBoxDlgContent dlgContent;
+
+  static Window* PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
+  static void PnlSetupOnSetup(WndButton &Sender);
+};
+
+class InfoBoxContentAltitudeGPS : public InfoBoxContentAltitude
 {
 public:
   virtual void Update(InfoBoxWindow &infobox);
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 };
 
-class InfoBoxContentAltitudeAGL : public InfoBoxContent
+class InfoBoxContentAltitudeAGL : public InfoBoxContentAltitude
 {
 public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
-class InfoBoxContentAltitudeBaro : public InfoBoxContent
+class InfoBoxContentAltitudeBaro : public InfoBoxContentAltitude
 {
 public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
-class InfoBoxContentAltitudeQFE : public InfoBoxContent
+class InfoBoxContentAltitudeQFE : public InfoBoxContentAltitude
 {
 public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
-class InfoBoxContentTerrainHeight : public InfoBoxContent
+class InfoBoxContentTerrainHeight : public InfoBoxContentAltitude
 {
 public:
   virtual void Update(InfoBoxWindow &infobox);

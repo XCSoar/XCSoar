@@ -39,27 +39,24 @@ public:
 
   static void dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id);
 
-};
+  static WndForm* GetWindowForm();
 
 
-class pnlInfoBoxAccessClose
-{
-public:
   /**
    * creates the control from its XML file and does any init work
    * @param parent
    * @param wf
    * @return Window* that points to the control created
    */
-  static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
+  static Window* pnlCloseLoad(SingleWindow &parent, TabBarControl* wTabBar,
                       WndForm* wf, CallBackTableEntry* CallBackTable);
 
-  static void OnCloseClicked(WndButton &Sender);
+  static void pnlCloseOnCloseClicked(WndButton &Sender);
   /**
    * callback
    */
-  static void OnTabReClick();
-  static bool OnTabPreShow(TabBarControl::EventType EventType);
+  static void pnlCloseOnTabReClick();
+  static bool pnlCloseOnTabPreShow(TabBarControl::EventType EventType);
 };
 
 #endif /* DLGINFOBOXACCESS_H_ */

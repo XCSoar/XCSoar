@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<Form Name="frmTarget" X="-120" Y="0" Width="120" Height="240" Caption="Target" Popup="1">
-  <Button Name="btnOK" Caption="Close" X="2" Y="-37" Width="-2" Height="35" OnClick="OnOKClicked" />
-
+<Form Name="frmTarget" X="0" Y="0" Width="120" Height="240" Caption="Target" Popup="1">
   <Edit Name="prpTaskPoint" X="0" Y="2" Height="29" CaptionWidth="1"
     Help="This sets the task point for review.">
     <DataField DataType="enum" OnDataAccess="OnTaskPointData"/>
   </Edit>
 
-  <Button Name="btnIsLocked" Caption="Locked" X="-77" Width="75" Height="29" OnClick="OnIsLockedClicked" />
+  <Button Name="btnIsLocked" Caption="Locked" X="2" Y="35" Width="-2" Height="32" OnClick="OnIsLockedClicked" />
 
-  <Edit Name="prpRange" Caption="Range" X="0" Height="27" CaptionWidth="60" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
+  <Edit Name="prpRange" Caption="Range" X="0" Y="71" Height="27" CaptionWidth="60" Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
     <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min="-100" Max="100" Step="5" OnDataAccess="OnRangeData"/>
   </Edit>
 
@@ -33,4 +31,7 @@
   <aEdit Name="prpSpeedAchieved" Caption="V ach" X="0" Height="22" CaptionWidth="60" ReadOnly="1" min="0" max="2000" step="10" Help="AA Speed - Assigned Area Task average speed achievable around target points remaining in minimum AAT time.">
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
   </aEdit>
+
+  <Button Name="btnOK" Caption="Close" X="2" Y="-34" Width="-2" Height="32" OnClick="OnOKClicked" />
+
 </Form>

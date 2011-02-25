@@ -124,14 +124,26 @@ InfoBoxContentMacCready::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabB
 
   InfoBoxID = id;
 
-  Window *wInfoBoxAccessEdit =
+  Window *wInfoBoxAccessSetup =
       LoadWindow(CallBackTable, wf, *wTabBar,
                  Layout::landscape ?
                      _T("IDR_XML_INFOBOXMACCREADYSETUP_L") :
                      _T("IDR_XML_INFOBOXMACCREADYSETUP"));
-  assert(wInfoBoxAccessEdit);
+  assert(wInfoBoxAccessSetup);
 
-  return wInfoBoxAccessEdit;
+  return wInfoBoxAccessSetup;
+}
+
+bool
+InfoBoxContentMacCready::PnlSetupPreShow(TabBarControl::EventType EventType)
+{
+
+  if (XCSoarInterface::SettingsComputer().auto_mc)
+    ((WndButton *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("cmdMode")))->SetCaption(_("MANUAL"));
+  else
+    ((WndButton *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("cmdMode")))->SetCaption(_("AUTO"));
+
+  return true;
 }
 
 void
@@ -140,6 +152,20 @@ InfoBoxContentMacCready::PnlSetupOnSetup(WndButton &Sender) {
   InfoBoxManager::SetupFocused(InfoBoxID);
   dlgInfoBoxAccess::OnClose();
 }
+
+void
+InfoBoxContentMacCready::PnlSetupOnMode(WndButton &Sender)
+{
+  (void)Sender;
+
+  if (XCSoarInterface::SettingsComputer().auto_mc)
+    Sender.SetCaption(_("AUTO"));
+  else
+    Sender.SetCaption(_("MANUAL"));
+
+  InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("mode"));
+}
+
 
 /*
  * Subpart callback function pointers
@@ -159,6 +185,8 @@ InfoBoxContentMacCready::InfoBoxPanelContent InfoBoxContentMacCready::pnlInfo =
 InfoBoxContentMacCready::InfoBoxPanelContent InfoBoxContentMacCready::pnlSetup =
 {
   (*InfoBoxContentMacCready::PnlSetupLoad),
+  NULL,
+  (*InfoBoxContentMacCready::PnlSetupPreShow),
   NULL
 };
 
@@ -169,6 +197,7 @@ CallBackTableEntry InfoBoxContentMacCready::CallBackTable[] = {
   DeclareCallBackEntry(InfoBoxContentMacCready::PnlEditOnMinusBig),
 
   DeclareCallBackEntry(InfoBoxContentMacCready::PnlSetupOnSetup),
+  DeclareCallBackEntry(InfoBoxContentMacCready::PnlSetupOnMode),
 
   DeclareCallBackEntry(NULL)
 };
@@ -253,8 +282,7 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
   fixed mc = polar.get_mc();
 
   if (_tcscmp(misc, _T("+0.1")) == 0) {
-    HandleKey(ibkUp);
-    return true;
+    return HandleKey(ibkUp);
 
   } else if (_tcscmp(misc, _T("+0.5")) == 0) {
     mc = std::min(mc + fixed_one / 2, fixed(5));
@@ -264,8 +292,7 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
     return true;
 
   } else if (_tcscmp(misc, _T("-0.1")) == 0) {
-    HandleKey(ibkDown);
-    return true;
+    return HandleKey(ibkDown);
 
   } else if (_tcscmp(misc, _T("-0.5")) == 0) {
     mc = std::max(mc - fixed_one / 2, fixed_zero);
@@ -273,6 +300,10 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
     protected_task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
     return true;
+
+  } else if (_tcscmp(misc, _T("mode")) == 0) {
+    return HandleKey(ibkEnter);
   }
+
   return false;
 }
