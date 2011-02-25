@@ -389,6 +389,7 @@ public:
   void copy_transparent_black(const Canvas &src);
 
   void stretch_transparent(const Bitmap &src, Color key);
+  void invert_stretch_transparent(const Bitmap &src, Color key);
 
   void stretch(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
@@ -427,6 +428,10 @@ public:
   void stretch(const Bitmap &src) {
     stretch(0, 0, width, height, src);
   }
+
+  void copy_not(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                SDL_Surface *src, int src_x, int src_y);
 
   void copy_or(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,

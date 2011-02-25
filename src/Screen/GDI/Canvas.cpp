@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Canvas.hpp"
+#include "Screen/BufferCanvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
 #include "Compatibility/gdi.h"
@@ -248,6 +249,34 @@ Canvas::stretch_transparent(const Bitmap &src, Color key)
 #endif
 
   ::SelectObject(compatible_dc, old);
+}
+
+void
+Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
+{
+  assert(defined());
+  assert(src.defined());
+
+  if (compatible_dc == NULL)
+    compatible_dc = ::CreateCompatibleDC(dc);
+
+  HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src.native());
+  const SIZE size = src.get_size();
+
+  BufferCanvas inverted(*this, size.cx, size.cy);
+  ::BitBlt(inverted, 0, 0, size.cx, size.cy,
+           compatible_dc, 0, 0, NOTSRCCOPY);
+  ::SelectObject(compatible_dc, old);
+
+#ifdef _WIN32_WCE
+  ::TransparentImage(dc, 0, 0, get_width(), get_height(),
+                     inverted, 0, 0, size.cx, size.cy,
+                     key);
+#else
+  ::TransparentBlt(dc, 0, 0, get_width(), get_height(),
+                   inverted, 0, 0, size.cx, size.cy,
+                   key);
+#endif
 }
 
 void

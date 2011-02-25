@@ -307,6 +307,16 @@ Canvas::stretch_transparent(const Bitmap &src, Color key)
 }
 
 void
+Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
+{
+  assert(src.defined());
+
+  // XXX
+  GLLogicOp invert(GL_COPY_INVERTED);
+  stretch(src);
+}
+
+void
 Canvas::stretch(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 const Bitmap &src, int src_x, int src_y,
