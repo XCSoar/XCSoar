@@ -73,6 +73,7 @@ Copyright_License {
 #include "UnitsFormatter.hpp"
 #include "UnitsStore.hpp"
 #include "LogFile.hpp"
+#include "LanguageGlue.hpp"
 
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"

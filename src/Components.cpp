@@ -36,6 +36,7 @@ Copyright_License {
 #include "Device/Geoid.h"
 #include "Dialogs/Dialogs.h"
 #include "ButtonLabel.hpp"
+#include "LanguageGlue.hpp"
 #include "Language.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"

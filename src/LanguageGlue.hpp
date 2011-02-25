@@ -21,43 +21,23 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_LANGUAGE_HPP
-#define XCSOAR_LANGUAGE_HPP
+#ifndef XCSOAR_LANGUAGE_GLUE_HPP
+#define XCSOAR_LANGUAGE_GLUE_HPP
 
-#if defined(HAVE_POSIX) && !defined(ANDROID)
+void ReadLanguageFile(void);
 
-#include <libintl.h>
-
-#define _(x) gettext(x)
-
-#ifdef gettext_noop
-#define N_(x) gettext_noop(x)
-#else
-#define N_(x) (x)
-#endif
-
-#else // !HAVE_POSIX
-
-#include "Compiler.h"
+#if (defined(WIN32) && !defined(HAVE_POSIX)) || defined(ANDROID)
+#define HAVE_BUILTIN_LANGUAGES
 
 #include <tchar.h>
 
-class MOFile;
-extern const MOFile *mo_file;
+struct builtin_language {
+  unsigned language;
+  const TCHAR *resource;
+};
 
-gcc_const
-const TCHAR* gettext(const TCHAR* text);
+extern const struct builtin_language language_table[];
 
-/**
- * For source compatibility with GNU gettext.
- */
-#define _(x) gettext(_T(x))
-#define N_(x) _T(x)
-
-#if !defined(_WIN32_WCE) && !defined(NDEBUG) && defined(_MSC_VER)
-#pragma warning( disable : 4786 )
 #endif
-
-#endif // !HAVE_POSIX
 
 #endif
