@@ -247,12 +247,6 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
   dwi.hwnd = hWnd;
   SendMessage(GetParent(hWnd), TODAYM_DRAWWATERMARK, 0, (LPARAM)&dwi);
 
-  if (SelItem >= 0 && ButtonDown) {
-    HBRUSH hBrush = CreateSolidBrush(GetSysColor(COLOR_HIGHLIGHT));
-    FillRect(drawdc, &FileList[SelItem].rc, hBrush);
-    DeleteObject(hBrush);
-  }
-
   for (int i = 0; i < FileListCnt; i++) {
     SelectObject(tempdc, FileList[i].bitmap);
 
@@ -261,6 +255,29 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
                      FileList[i].rc.right - FileList[i].rc.left,
                      FileList[i].rc.bottom - FileList[i].rc.top,
                      tempdc, 0, 0, IconSizeX, IconSizeY, RGB(0, 0, 255));
+  }
+
+  if (SelItem >= 0 && ButtonDown) {
+    const int i = SelItem;
+
+    HBITMAP neg_bmp = CreateCompatibleBitmap(hdc, IconSizeX, IconSizeY);
+    HDC neg_dc = CreateCompatibleDC(hdc);
+    SelectObject(neg_dc, neg_bmp);
+
+    /* create an inverted bitmap */
+    SelectObject(tempdc, FileList[i].bitmap);
+    BitBlt(neg_dc, 0, 0, IconSizeX, IconSizeY,
+           tempdc, 0, 0, NOTSRCCOPY);
+
+    /* draw it (with inverted transparent color) */
+    TransparentImage(drawdc,
+                     FileList[i].rc.left, FileList[i].rc.top,
+                     FileList[i].rc.right - FileList[i].rc.left,
+                     FileList[i].rc.bottom - FileList[i].rc.top,
+                     neg_dc, 0, 0, IconSizeX, IconSizeY, RGB(255, 255, 0));
+
+    DeleteDC(neg_dc);
+    DeleteObject(neg_bmp);
   }
 
   BitBlt(hdc, ps->rcPaint.left, ps->rcPaint.top, ps->rcPaint.right,
