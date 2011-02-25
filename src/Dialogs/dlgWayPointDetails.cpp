@@ -489,9 +489,9 @@ OnImagePaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   (void)Sender;
 
-  if (page == 4) {
+  if (page == 3) {
     canvas.copy(jpgimage1);
-  } else if (page == 5) {
+  } else if (page == 4) {
     canvas.copy(jpgimage2);
   }
 }
