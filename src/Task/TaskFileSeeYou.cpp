@@ -240,6 +240,28 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
   return oz;
 }
 
+static OrderedTaskPoint*
+CreatePoint(unsigned pos, unsigned n_waypoints, const Waypoint *wp,
+    AbstractTaskFactory& fact, ObservationZonePoint* oz,
+    const TaskBehaviour::Factory_t factType)
+{
+  OrderedTaskPoint *pt = NULL;
+
+  if (pos == 0)
+    pt = (oz ? fact.createStart(oz, *wp) : fact.createStart(*wp));
+
+  else if (pos == n_waypoints - 1)
+    pt = (oz ? fact.createFinish(oz, *wp) : fact.createFinish(*wp));
+
+  else if (factType == TaskBehaviour::FACTORY_RT)
+    pt = (oz ? fact.createAST(oz, *wp) : fact.createIntermediate(*wp));
+
+  else
+    pt = (oz ? fact.createAAT(oz, *wp) : fact.createIntermediate(*wp));
+
+  return pt;
+}
+
 OrderedTask*
 TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 {
@@ -315,18 +337,8 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     ObservationZonePoint* oz = CreateOZ(turnpoint_infos[i], wp,
         isIntermediate, task->get_factory_type());
 
-    OrderedTaskPoint *pt = NULL;
-    if (i == 0  )
-      pt = (oz ? fact.createStart(oz, *wp) : fact.createStart(*wp));
-
-    else if (i == n_waypoints - 1)
-      pt = (oz ? fact.createFinish(oz, *wp) : fact.createFinish(*wp));
-
-    else if (task->get_factory_type() == TaskBehaviour::FACTORY_RT)
-      pt = (oz ? fact.createAST(oz, *wp) : fact.createIntermediate(*wp));
-
-    else
-      pt = (oz ? fact.createAAT(oz, *wp) : fact.createIntermediate(*wp));
+    OrderedTaskPoint *pt = CreatePoint(i, n_waypoints, wp, fact, oz,
+        task->get_factory_type());
 
     if (pt != NULL)
       fact.append(*pt, false);
