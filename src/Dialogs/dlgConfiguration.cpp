@@ -1315,7 +1315,10 @@ setVariables()
   }
 
   SimplePolar polar;
-  PolarGlue::LoadFromProfile(polar);
+  if (!PolarGlue::LoadFromProfile(polar)) {
+    PolarGlue::LoadDefault(polar);
+    SetPolarTitle(polar.name);
+  }
   UpdatePolarFields(polar);
   UpdatePolarTitle();
   UpdatePolarInvalidLabel();
