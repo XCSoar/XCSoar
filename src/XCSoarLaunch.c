@@ -319,7 +319,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 #ifdef ENABLE_TOOLTIPS
   SHRGINFO rg;
 #endif
-  int i;
+  POINT pt;
 
   switch (msg) {
 #ifdef ENABLE_TOOLTIPS
@@ -406,10 +406,11 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 #endif
 
     ReleaseCapture();
-    i = Point2Item(LOWORD(lParam), HIWORD(lParam));
-    if (i != -1 && i == SelItem && !is_running) {
+    pt.x = LOWORD(lParam);
+    pt.y = HIWORD(lParam);
+    if (SelItem >= 0 && PtInRect(&FileList[SelItem].rc, pt) && !is_running) {
       is_running = 1;
-      LaunchXCSoar(hWnd, FileList[i].CommandLine);
+      LaunchXCSoar(hWnd, FileList[SelItem].CommandLine);
       Sleep(1000);
       is_running = 0;
     }
