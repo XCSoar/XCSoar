@@ -95,14 +95,14 @@ static HINSTANCE hInst;
 static HWND hToolTip;
 #endif
 
-static int IconSizeX = 112;
-static int IconSizeY = 30;
-static int HMargin = 0;
-static int VMargin = 2;
-static int WinLeftMargin = 8;
-static int WinTopMargin = 2;
-static int WinRightMargin = 2;
-static int WinBottomMargin = 2;
+static const unsigned IconSizeX = 112;
+static const unsigned IconSizeY = 30;
+static const unsigned HMargin = 0;
+static const unsigned VMargin = 2;
+static const unsigned WinLeftMargin = 8;
+static const unsigned WinTopMargin = 2;
+static const unsigned WinRightMargin = 2;
+static const unsigned WinBottomMargin = 2;
 
 static BOOL Refresh;
 
@@ -118,7 +118,7 @@ typedef struct _FILELIST {
 
 static FILELIST FileList[2];
 
-static int FileListCnt = 2;
+static const int FileListCnt = 2;
 static int SelItem = -1;
 
 TCHAR installDir[BUF_SIZE];
