@@ -106,6 +106,7 @@ typedef struct _FILELIST {
   const TCHAR *CommandLine;
   const TCHAR *Description;
   HBITMAP bitmap;
+  RECT rc;
 } FILELIST;
 
 static FILELIST FileList[2] = {
@@ -240,24 +241,20 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
   dwi.hwnd = hWnd;
   SendMessage(GetParent(hWnd), TODAYM_DRAWWATERMARK, 0, (LPARAM)&dwi);
 
-  unsigned x = WinLeftMargin;
-  const unsigned y = WinTopMargin;
+  if (SelItem >= 0) {
+    HBRUSH hBrush = CreateSolidBrush(GetSysColor(COLOR_HIGHLIGHT));
+    FillRect(drawdc, &FileList[SelItem].rc, hBrush);
+    DeleteObject(hBrush);
+  }
 
   for (int i = 0; i < FileListCnt; i++) {
-    if (SelItem == i) {
-      RECT selrect;
-      SetRect(&selrect, x, y, x + IconSizeX, y + IconSizeY);
-      HBRUSH hBrush = CreateSolidBrush(GetSysColor(COLOR_HIGHLIGHT));
-      FillRect(drawdc, &selrect, hBrush);
-      DeleteObject(hBrush);
-    }
-
     SelectObject(tempdc, FileList[i].bitmap);
 
-    TransparentImage(drawdc, x, y, IconSizeX, IconSizeY,
+    TransparentImage(drawdc,
+                     FileList[i].rc.left, FileList[i].rc.top,
+                     FileList[i].rc.right - FileList[i].rc.left,
+                     FileList[i].rc.bottom - FileList[i].rc.top,
                      tempdc, 0, 0, IconSizeX, IconSizeY, RGB(0, 0, 255));
-
-    x += IconSizeX;
   }
 
   BitBlt(hdc, ps->rcPaint.left, ps->rcPaint.top, ps->rcPaint.right,
@@ -279,17 +276,9 @@ Point2Item(int px, int py)
   pt.x = px;
   pt.y = py;
 
-  const unsigned y = WinTopMargin;
-
-  for (int x = WinLeftMargin, i = 0; i < FileListCnt; i++) {
-    RECT rect;
-    SetRect(&rect, x, y, x + IconSizeX, y + IconSizeY);
-
-    if (PtInRect(&rect, pt) == TRUE)
+  for (int i = 0; i < FileListCnt; i++)
+    if (PtInRect(&FileList[i].rc, pt))
       return i;
-
-    x += IconSizeX;
-  }
 
   return -1;
 }
@@ -354,7 +343,15 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
   case WM_TODAYCUSTOM_QUERYREFRESHCACHE:
     if (Refresh) {
       Refresh = FALSE;
-      ((TODAYLISTITEM *)(wParam))->cyp = WinTopMargin + IconSizeY + WinBottomMargin;
+
+      const unsigned top = WinTopMargin;
+      const unsigned bottom = top + IconSizeY;
+      for (int x = WinLeftMargin, i = 0; i < FileListCnt; i++) {
+        SetRect(&FileList[i].rc, x, top, x + IconSizeX, bottom);
+        x += IconSizeX;
+      }
+
+      ((TODAYLISTITEM *)(wParam))->cyp = bottom + WinBottomMargin;
       return TRUE;
     }
     return FALSE;
