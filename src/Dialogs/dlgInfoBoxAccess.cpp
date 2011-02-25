@@ -78,34 +78,17 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   wTabBar = (TabBarControl*)wf->FindByName(_T("TabBar"));
   assert(wTabBar != NULL);
 
-// we have four tabs:
-// edit, info, setup, close
+  Window* wPanel[dlgContent->PANELSIZE];
 
-  if (dlgContent->pnlEdit.load) {
-    Window* wEdit =
-      dlgContent->pnlEdit.load(parent, wTabBar, wf, id);
+  for (int i = 0; i < dlgContent->PANELSIZE; i++) {
+    assert(dlgContent->Panels[i].load);
 
-    assert(wEdit);
-    wTabBar->AddClient(wEdit, _T("Edit"), false, NULL, (*dlgContent->pnlEdit.preHide), (*dlgContent->pnlEdit.preShow),
-                                                       (*dlgContent->pnlEdit.postShow), (*dlgContent->pnlEdit.reClick));
-  }
+    wPanel[i] =
+      dlgContent->Panels[i].load(parent, wTabBar, wf, id);
 
-  if (dlgContent->pnlInfo.load) {
-    Window* wInfo =
-      dlgContent->pnlInfo.load(parent, wTabBar, wf, id);
-
-    assert(wInfo);
-    wTabBar->AddClient(wInfo, _T("Info"), false, NULL, (*dlgContent->pnlInfo.preHide), (*dlgContent->pnlInfo.preShow),
-                                                       (*dlgContent->pnlInfo.postShow), (*dlgContent->pnlInfo.reClick));
-  }
-
-  if (dlgContent->pnlSetup.load) {
-    Window* wSetup =
-      dlgContent->pnlSetup.load(parent, wTabBar, wf, id);
-
-    assert(wSetup);
-    wTabBar->AddClient(wSetup, _T("Setup"), false, NULL, (*dlgContent->pnlSetup.preHide), (*dlgContent->pnlSetup.preShow),
-                                                         (*dlgContent->pnlSetup.postShow), (*dlgContent->pnlSetup.reClick));
+    assert(wPanel[i]);
+    wTabBar->AddClient(wPanel[i], dlgContent->Panels[i].name, false, NULL, (*dlgContent->Panels[i].preHide), (*dlgContent->Panels[i].preShow),
+                                                                           (*dlgContent->Panels[i].postShow), (*dlgContent->Panels[i].reClick));
   }
 
   Window* wClose =
@@ -113,7 +96,6 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   assert(wClose);
   wTabBar->AddClient(wClose, _T("Close"), false, NULL, NULL,  dlgInfoBoxAccess::pnlCloseOnTabPreShow,
                                                  NULL, dlgInfoBoxAccess::pnlCloseOnTabReClick);
-
 
   wTabBar->SetCurrentPage(0);
 

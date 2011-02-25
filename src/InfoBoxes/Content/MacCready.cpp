@@ -66,7 +66,7 @@ InfoBoxContentMacCready::PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBa
   InfoBoxID = id;
 
   Window *wInfoBoxAccessEdit =
-      LoadWindow(CallBackTable, wf, *wTabBar,
+      LoadWindow(dlgContent.CallBackTable, wf, *wTabBar,
                  Layout::landscape ?
                      _T("IDR_XML_INFOBOXMACCREADYEDIT_L") :
                      _T("IDR_XML_INFOBOXMACCREADYEDIT"));
@@ -125,7 +125,7 @@ InfoBoxContentMacCready::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabB
   InfoBoxID = id;
 
   Window *wInfoBoxAccessSetup =
-      LoadWindow(CallBackTable, wf, *wTabBar,
+      LoadWindow(dlgContent.CallBackTable, wf, *wTabBar,
                  Layout::landscape ?
                      _T("IDR_XML_INFOBOXMACCREADYSETUP_L") :
                      _T("IDR_XML_INFOBOXMACCREADYSETUP"));
@@ -171,23 +171,17 @@ InfoBoxContentMacCready::PnlSetupOnMode(WndButton &Sender)
  * Subpart callback function pointers
  */
 
-InfoBoxContentMacCready::InfoBoxPanelContent InfoBoxContentMacCready::pnlEdit =
-{
-  (*InfoBoxContentMacCready::PnlEditLoad),
-  NULL
-};
 
-InfoBoxContentMacCready::InfoBoxPanelContent InfoBoxContentMacCready::pnlInfo =
-{
-  NULL
-};
+InfoBoxContentMacCready::InfoBoxPanelContent InfoBoxContentMacCready::Panels[] = {
+  InfoBoxContentMacCready::InfoBoxPanelContent (
+    _T("Edit"),
+    (*InfoBoxContentMacCready::PnlEditLoad)),
 
-InfoBoxContentMacCready::InfoBoxPanelContent InfoBoxContentMacCready::pnlSetup =
-{
-  (*InfoBoxContentMacCready::PnlSetupLoad),
-  NULL,
-  (*InfoBoxContentMacCready::PnlSetupPreShow),
-  NULL
+  InfoBoxContentMacCready::InfoBoxPanelContent (
+    _T("Setup"),
+    (*InfoBoxContentMacCready::PnlSetupLoad),
+    NULL,
+    (*InfoBoxContentMacCready::PnlSetupPreShow))
 };
 
 CallBackTableEntry InfoBoxContentMacCready::CallBackTable[] = {
@@ -202,11 +196,9 @@ CallBackTableEntry InfoBoxContentMacCready::CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-InfoBoxContentMacCready::InfoBoxDlgContent InfoBoxContentMacCready::dlgContent =
-{
-    InfoBoxContentMacCready::pnlEdit,
-    InfoBoxContentMacCready::pnlInfo,
-    InfoBoxContentMacCready::pnlSetup,
+InfoBoxContentMacCready::InfoBoxDlgContent InfoBoxContentMacCready::dlgContent = {
+    InfoBoxContentMacCready::PANELSIZE,
+    InfoBoxContentMacCready::Panels,
     InfoBoxContentMacCready::CallBackTable
 };
 

@@ -30,6 +30,9 @@ Copyright_License {
 
 class InfoBoxContentAltitude : public InfoBoxContent
 {
+private:
+  static const int PANELSIZE = 2;
+
 public:
   virtual InfoBoxDlgContent* GetInfoBoxDlgContent();
 
@@ -37,9 +40,8 @@ public:
   static bool PnlInfoOnTabPreShow(TabBarControl::EventType EventType);
 
   static CallBackTableEntry CallBackTable[];
-  static InfoBoxPanelContent pnlEdit;
-  static InfoBoxPanelContent pnlInfo;
-  static InfoBoxPanelContent pnlSetup;
+  static InfoBoxPanelContent Panels[];
+
   static InfoBoxDlgContent dlgContent;
 
   static Window* PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);

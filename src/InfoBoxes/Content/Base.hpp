@@ -63,6 +63,19 @@ public:
   }
 
   struct InfoBoxPanelContent {
+    InfoBoxPanelContent(const TCHAR* _name,
+                        Window* (*_load)(SingleWindow&, TabBarControl*, WndForm*, int),
+                        bool (*_preHide)(void) = NULL,
+                        bool (*_preShow)(TabBarControl::EventType) = NULL,
+                        void (*_postShow)(void) = NULL,
+                        void (*_reClick)(void) = NULL ) :
+                        name(_name),
+                        load(_load),
+                        preHide(_preHide),
+                        preShow(_preShow),
+                        postShow(_postShow),
+                        reClick(_reClick) {};
+    const TCHAR* name;
     Window* (*load)(SingleWindow&, TabBarControl*, WndForm*, int); // ptr to Load function
     bool (*preHide)(void); // ptr to PreHideFunction
     bool (*preShow)(TabBarControl::EventType); // ptr to PreShowFunction
@@ -71,9 +84,8 @@ public:
   };
 
   struct InfoBoxDlgContent {
-    InfoBoxPanelContent pnlEdit;
-    InfoBoxPanelContent pnlInfo;
-    InfoBoxPanelContent pnlSetup;
+    const int PANELSIZE;
+    InfoBoxPanelContent* Panels;
     CallBackTableEntry* CallBackTable;
   };
 

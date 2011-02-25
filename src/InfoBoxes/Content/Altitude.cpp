@@ -152,24 +152,16 @@ InfoBoxContentAltitude::PnlSetupOnSetup(WndButton &Sender) {
  * Subpart callback function pointers
  */
 
-InfoBoxContentAltitude::InfoBoxPanelContent InfoBoxContentAltitude::pnlEdit =
-{
-  NULL
-};
-
-InfoBoxContentAltitude::InfoBoxPanelContent InfoBoxContentAltitude::pnlInfo =
-{
+InfoBoxContentAltitude::InfoBoxPanelContent InfoBoxContentAltitude::Panels[] = {
+InfoBoxContentAltitude::InfoBoxPanelContent (
+  _T("Info"),
   (*InfoBoxContentAltitude::PnlInfoLoad),
   NULL,
-  (*InfoBoxContentAltitude::PnlInfoOnTabPreShow),
+  (*InfoBoxContentAltitude::PnlInfoOnTabPreShow)),
 
-  NULL
-};
-
-InfoBoxContentAltitude::InfoBoxPanelContent InfoBoxContentAltitude::pnlSetup =
-{
-  (*InfoBoxContentAltitude::PnlSetupLoad),
-  NULL
+InfoBoxContentAltitude::InfoBoxPanelContent (
+  _T("Setup"),
+  (*InfoBoxContentAltitude::PnlSetupLoad))
 };
 
 CallBackTableEntry InfoBoxContentAltitude::CallBackTable[] = {
@@ -178,11 +170,9 @@ CallBackTableEntry InfoBoxContentAltitude::CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-InfoBoxContentAltitude::InfoBoxDlgContent InfoBoxContentAltitude::dlgContent =
-{
-    InfoBoxContentAltitude::pnlEdit,
-    InfoBoxContentAltitude::pnlInfo,
-    InfoBoxContentAltitude::pnlSetup,
+InfoBoxContentAltitude::InfoBoxDlgContent InfoBoxContentAltitude::dlgContent = {
+    InfoBoxContentAltitude::PANELSIZE,
+    InfoBoxContentAltitude::Panels,
     InfoBoxContentAltitude::CallBackTable
 };
 
