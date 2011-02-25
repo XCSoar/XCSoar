@@ -116,6 +116,12 @@ ParseRadius(const TCHAR* str)
   return fixed(radius);
 }
 
+/**
+ * Parses the Options parameters line from See You task file for one task
+ * @param task_info Updated with Options
+ * @param params Input array of parameters preparsed from See You task file
+ * @param n_params number parameters in the line
+ */
 static void
 ParseOptions(SeeYouTaskInformation *task_info, const TCHAR *params[],
     const size_t n_params)
@@ -135,6 +141,12 @@ ParseOptions(SeeYouTaskInformation *task_info, const TCHAR *params[],
   }
 }
 
+/**
+ * Parses one ObsZone line from the See You task file
+ * @param turnpoint_infos Updated with the OZ info
+ * @param params Input array of parameters preparsed from See You task file
+ * @param n_params Number parameters in the line
+ */
 static void
 ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
     unsigned n_params)
@@ -177,10 +189,10 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
 }
 
 /**
- * Parses task
+ * Parses Options and OZs from See You task file
  * @param reader.  Points to first line of task after task "Waypoint list" line
- * @param task_info loads this with CU task options info
- * @param turnpoint_infos loads this with CU task tp info
+ * @param task_info Loads this with CU task options info
+ * @param turnpoint_infos Loads this with CU task tp info
  */
 static void
 ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
@@ -210,6 +222,14 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
   } // end while
 }
 
+/**
+ * Creates the correct XCSoar OZ type from the See You OZ options for the point
+ * @param turnpoint_infos Contains the See You turnpoint and OZ info
+ * @param wp The waypoint
+ * @param isIntermediate.  True if not start or end point
+ * @param factType The XCSoar factory type
+ * @return the XCSoar OZ
+ */
 static ObservationZonePoint*
 CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     const Waypoint *wp, bool isIntermediate,
@@ -254,6 +274,16 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
   return oz;
 }
 
+/**
+ * Creates the XCSoar turnpoint from the See You parameters for the point
+ * @param pos The position of the point in the XCSoar task
+ * @param n_waypoints Number of points in the XCSoar task
+ * @param wp The waypoint
+ * @param fact The XCSoar factory
+ * @param oz The XCSoar OZ for the point
+ * @param factType The XCSoar factory type
+ * @return The point
+ */
 static OrderedTaskPoint*
 CreatePoint(unsigned pos, unsigned n_waypoints, const Waypoint *wp,
     AbstractTaskFactory& fact, ObservationZonePoint* oz,
