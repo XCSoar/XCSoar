@@ -116,6 +116,87 @@ ParseRadius(const TCHAR* str)
   return fixed(radius);
 }
 
+/**
+ * Parses task
+ * @param reader.  Points to first line of task after task "Waypoint list" line
+ * @param task_info loads this with CU task options info
+ * @param turnpoint_infos loads this with CU task tp info
+ */
+static void
+ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
+  SeeYouTurnpointInformation turnpoint_infos[])
+{
+  // Read options/observation zones
+  TCHAR params_buffer[1024];
+  const TCHAR *params[20];
+  TCHAR *line;
+  const unsigned int max_params = sizeof(params) / sizeof(params[0]);
+  while ((line = reader.read()) != NULL &&
+         line[0] != _T('\"') && line[0] != _T(',')) {
+    size_t n_params = WayPointFile::
+        extractParameters(line, params_buffer, params, max_params, true);
+
+    if (_tcscmp(params[0], _T("Options")) == 0) {
+      // Options line found
+      // Iterate through available task options
+      for (unsigned i = 1; i < n_params; i++) {
+        if (_tcsncmp(params[i], _T("WpDis"), 5) == 0) {
+          // Parse WpDis option
+          if (_tcslen(params[i]) > 6 &&
+              _tcsncmp(params[i] + 6, _T("False"), 5) == 0)
+            task_info->WpDis = false;
+        } else if (_tcsncmp(params[i], _T("TaskTime"), 8) == 0) {
+          // Parse TaskTime option
+          if (_tcslen(params[i]) > 9)
+            task_info->TaskTime = ParseTaskTime(params[i] + 9);
+        }
+      }
+    } else if (_tcsncmp(params[0], _T("ObsZone"), 7) == 0) {
+      // Observation zone line found
+
+      if (_tcslen(params[0]) <= 8)
+        continue;
+
+      // Read OZ index
+      TCHAR* end;
+      const int oz_index = _tcstol(params[0] + 8, &end, 10);
+      if (params[0] + 8 == end || oz_index >= 30)
+        continue;
+
+      turnpoint_infos[oz_index].Valid = true;
+      // Iterate through available OZ options
+      for (unsigned i = 1; i < n_params; i++) {
+        if (_tcsncmp(params[i], _T("Style"), 5) == 0) {
+          if (_tcslen(params[i]) > 6)
+            turnpoint_infos[oz_index].Style = ParseStyle(params[i] + 6);
+        } else if (_tcsncmp(params[i], _T("R1="), 3) == 0) {
+          if (_tcslen(params[i]) > 3)
+            turnpoint_infos[oz_index].Radius1 = ParseRadius(params[i] + 3);
+        } else if (_tcsncmp(params[i], _T("A1="), 3) == 0) {
+          if (_tcslen(params[i]) > 3)
+            turnpoint_infos[oz_index].Angle1 = ParseAngle(params[i] + 3);
+        } else if (_tcsncmp(params[i], _T("R2="), 3) == 0) {
+          if (_tcslen(params[i]) > 3)
+            turnpoint_infos[oz_index].Radius2 = ParseRadius(params[i] + 3);
+        } else if (_tcsncmp(params[i], _T("A2="), 3) == 0) {
+          if (_tcslen(params[i]) > 3)
+            turnpoint_infos[oz_index].Angle2 = ParseAngle(params[i] + 3);
+        } else if (_tcsncmp(params[i], _T("A12="), 4) == 0) {
+          if (_tcslen(params[i]) > 3)
+            turnpoint_infos[oz_index].Angle12 = ParseAngle(params[i] + 4);
+        } else if (_tcsncmp(params[i], _T("Line"), 4) == 0) {
+          if (_tcslen(params[i]) > 5 && params[i][5] == _T('1'))
+            turnpoint_infos[oz_index].Line = true;
+        } else if (_tcsncmp(params[i], _T("Reduce"), 6) == 0) {
+          if (_tcslen(params[i]) > 7 && params[i][7] == _T('1'))
+            turnpoint_infos[oz_index].Reduce = true;
+        }
+      }
+    }
+  } // end while
+}
+
+
 OrderedTask*
 TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 {
@@ -161,73 +242,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   SeeYouTaskInformation task_info;
   SeeYouTurnpointInformation turnpoint_infos[30];
 
-  // Read options/observation zones
-  TCHAR params_buffer[1024];
-  const TCHAR *params[20];
-  const unsigned int max_params = sizeof(params) / sizeof(params[0]);
-  while ((line = reader.read()) != NULL &&
-         line[0] != _T('\"') && line[0] != _T(',')) {
-    size_t n_params = WayPointFile::
-        extractParameters(line, params_buffer, params, max_params, true);
-
-    if (_tcscmp(params[0], _T("Options")) == 0) {
-      // Options line found
-      // Iterate through available task options
-      for (unsigned i = 1; i < n_params; i++) {
-        if (_tcsncmp(params[i], _T("WpDis"), 5) == 0) {
-          // Parse WpDis option
-          if (_tcslen(params[i]) > 6 &&
-              _tcsncmp(params[i] + 6, _T("False"), 5) == 0)
-            task_info.WpDis = false;
-        } else if (_tcsncmp(params[i], _T("TaskTime"), 8) == 0) {
-          // Parse TaskTime option
-          if (_tcslen(params[i]) > 9)
-            task_info.TaskTime = ParseTaskTime(params[i] + 9);
-        }
-      }
-    } else if (_tcsncmp(params[0], _T("ObsZone"), 7) == 0) {
-      // Observation zone line found
-
-      if (_tcslen(params[0]) <= 8)
-        continue;
-
-      // Read OZ index
-      TCHAR* end;
-      const int oz_index = _tcstol(params[0] + 8, &end, 10);
-      if (params[0] + 8 == end || oz_index >= 30)
-        continue;
-
-      turnpoint_infos[oz_index].Valid = true;
-      // Iterate through available OZ options
-      for (unsigned i = 1; i < n_params; i++) {
-        if (_tcsncmp(params[i], _T("Style"), 5) == 0) {
-          if (_tcslen(params[i]) > 6)
-            turnpoint_infos[oz_index].Style = ParseStyle(params[i] + 6);
-        } else if (_tcsncmp(params[i], _T("R1="), 3) == 0) {
-          if (_tcslen(params[i]) > 3)
-            turnpoint_infos[oz_index].Radius1 = ParseRadius(params[i] + 3);
-        } else if (_tcsncmp(params[i], _T("A1="), 3) == 0) {
-          if (_tcslen(params[i]) > 3)
-            turnpoint_infos[oz_index].Angle1 = ParseAngle(params[i] + 3);
-        } else if (_tcsncmp(params[i], _T("R2="), 3) == 0) {
-          if (_tcslen(params[i]) > 3)
-            turnpoint_infos[oz_index].Radius2 = ParseRadius(params[i] + 3);
-        } else if (_tcsncmp(params[i], _T("A2="), 3) == 0) {
-          if (_tcslen(params[i]) > 3)
-            turnpoint_infos[oz_index].Angle2 = ParseAngle(params[i] + 3);
-        } else if (_tcsncmp(params[i], _T("A12="), 4) == 0) {
-          if (_tcslen(params[i]) > 3)
-            turnpoint_infos[oz_index].Angle12 = ParseAngle(params[i] + 4);
-        } else if (_tcsncmp(params[i], _T("Line"), 4) == 0) {
-          if (_tcslen(params[i]) > 5 && params[i][5] == _T('1'))
-            turnpoint_infos[oz_index].Line = true;
-        } else if (_tcsncmp(params[i], _T("Reduce"), 6) == 0) {
-          if (_tcslen(params[i]) > 7 && params[i][7] == _T('1'))
-            turnpoint_infos[oz_index].Reduce = true;
-        }
-      }
-    }
-  }
+  ParseCUTaskDetails(reader, &task_info, turnpoint_infos);
 
   OrderedTask* task = protected_task_manager->task_blank();
   if (task == NULL)
