@@ -38,7 +38,8 @@ namespace Pages
     enum eMapInfoBoxes {
       mib_None,
       mib_Normal,
-      mib_Aux
+      mib_Aux,
+      mib_Aux_2
     } MapInfoBoxes;
 
     PageLayout() :

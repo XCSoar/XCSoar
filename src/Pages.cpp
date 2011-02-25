@@ -97,6 +97,13 @@ Pages::OpenLayout(PageLayout &layout)
     case PageLayout::mib_Aux:
       XCSoarInterface::main_window.SetFullScreen(false);
       XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = true;
+      XCSoarInterface::SetSettingsMap().AuxiliaryInfoBoxPanel = 0;
+      break;
+
+    case PageLayout::mib_Aux_2:
+      XCSoarInterface::main_window.SetFullScreen(false);
+      XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = true;
+      XCSoarInterface::SetSettingsMap().AuxiliaryInfoBoxPanel = 1;
       break;
 
     case PageLayout::mib_None:
@@ -257,9 +264,11 @@ Pages::LoadDefault()
   pages[1].MapInfoBoxes = PageLayout::mib_Aux;
 
   pages[2].Type = PageLayout::t_Map;
-  pages[2].MapInfoBoxes = PageLayout::mib_None;
+  pages[2].MapInfoBoxes = PageLayout::mib_Aux_2;
 
-  pages[3].Type = PageLayout::t_Empty;
+  pages[3].Type = PageLayout::t_Map;
+  pages[3].MapInfoBoxes = PageLayout::mib_None;
+
   pages[4].Type = PageLayout::t_Empty;
   pages[5].Type = PageLayout::t_Empty;
   pages[6].Type = PageLayout::t_Empty;
