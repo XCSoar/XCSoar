@@ -12,6 +12,7 @@ Version 6.0.5 - not yet released
   - terrain: permanently disable failed tiles
   - terrain: fix "unexpected marker segment type" error
   - AAT: don't draw "dead zone" on ancient hardware (PPC2000)
+  - Airspace: disable stencil buffer on ancient hardware (PPC2000)
 * Android
   - fix bitmap loading on Samsung Galaxy Tab
   - show Bluetooth device names in configuration dialog

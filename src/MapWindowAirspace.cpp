@@ -269,7 +269,7 @@ public:
     m_warnings(warnings),
     pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
     pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00)) {
-    m_use_stencil = true;
+    m_use_stencil = !is_ancient_hardware();
   }
 
   void Visit(const AirspaceCircle& airspace) {
