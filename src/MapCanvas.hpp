@@ -102,7 +102,6 @@ public:
   }
 
   bool prepare_polygon(const SearchPointVector &points);
-  void prepare_circle(const GeoPoint &center, fixed radius);
   void draw_prepared();
 };
 
