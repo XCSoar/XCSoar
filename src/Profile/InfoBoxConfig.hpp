@@ -42,7 +42,7 @@ class InfoBoxManagerConfig {
 public:
   InfoBoxManagerConfig();
 
-  static const unsigned int MAX_INFOBOX_PANELS = 4;
+  static const unsigned int MAX_INFOBOX_PANELS = 8;
   static const unsigned int PREASSIGNED_PANELS = 3;
   InfoBoxPanelConfig panel[MAX_INFOBOX_PANELS];
 };
