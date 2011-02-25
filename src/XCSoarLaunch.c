@@ -135,10 +135,10 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
     return false;
   }
 
-  DWORD dwType = REG_SZ;
+  DWORD dwType;
   hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)pPos, &dwSize);
   RegCloseKey(hKey);
-  return hRes == ERROR_SUCCESS;
+  return hRes == ERROR_SUCCESS && dwType == REG_SZ;
 }
 
 #ifdef USE_MASKS
