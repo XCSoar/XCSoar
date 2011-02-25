@@ -130,10 +130,10 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
   DWORD dwType = REG_SZ;
   long hRes;
 
-  pPos[0] = '\0';
   hRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_PATH, 0, KEY_ALL_ACCESS, &hKey);
   if (hRes != ERROR_SUCCESS) {
     RegCloseKey(hKey);
+    pPos[0] = '\0';
     return false;
   }
 
