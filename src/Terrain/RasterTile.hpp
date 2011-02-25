@@ -49,6 +49,14 @@ public:
     height = yend - ystart;
   }
 
+  /**
+   * Permanently disable this tile after a failure.
+   */
+  void Clear() {
+    width = height = 0;
+    request = false;
+  }
+
   bool defined() const {
     return width > 0 && height > 0;
   }

@@ -491,8 +491,19 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file)
 void
 RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
 {
-  if (PollTiles(x, y, radius))
-    LoadJPG2000(path);
+  if (!PollTiles(x, y, radius))
+    return;
+
+  LoadJPG2000(path);
+
+  /* permanently disable the requested tiles which are still not
+     loaded, to prevent trying to reload them over and over in a busy
+     loop */
+  for (unsigned i = 0; i < RequestTiles.size(); ++i) {
+    RasterTile &tile = tiles[RequestTiles[i]];
+    if (tile.is_requested() && !tile.IsEnabled())
+      tile.Clear();
+  }
 }
 
 bool
