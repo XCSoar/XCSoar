@@ -133,7 +133,47 @@ ParseOptions(SeeYouTaskInformation *task_info, const TCHAR *params[],
         task_info->TaskTime = ParseTaskTime(params[i] + 9);
     }
   }
+}
 
+static void
+ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
+    unsigned n_params)
+{
+  // Read OZ index
+  TCHAR* end;
+  const int oz_index = _tcstol(params[0] + 8, &end, 10);
+  if (params[0] + 8 == end || oz_index >= 30)
+    return;
+
+  turnpoint_infos[oz_index].Valid = true;
+  // Iterate through available OZ options
+  for (unsigned i = 1; i < n_params; i++) {
+    if (_tcsncmp(params[i], _T("Style"), 5) == 0) {
+      if (_tcslen(params[i]) > 6)
+        turnpoint_infos[oz_index].Style = ParseStyle(params[i] + 6);
+    } else if (_tcsncmp(params[i], _T("R1="), 3) == 0) {
+      if (_tcslen(params[i]) > 3)
+        turnpoint_infos[oz_index].Radius1 = ParseRadius(params[i] + 3);
+    } else if (_tcsncmp(params[i], _T("A1="), 3) == 0) {
+      if (_tcslen(params[i]) > 3)
+        turnpoint_infos[oz_index].Angle1 = ParseAngle(params[i] + 3);
+    } else if (_tcsncmp(params[i], _T("R2="), 3) == 0) {
+      if (_tcslen(params[i]) > 3)
+        turnpoint_infos[oz_index].Radius2 = ParseRadius(params[i] + 3);
+    } else if (_tcsncmp(params[i], _T("A2="), 3) == 0) {
+      if (_tcslen(params[i]) > 3)
+        turnpoint_infos[oz_index].Angle2 = ParseAngle(params[i] + 3);
+    } else if (_tcsncmp(params[i], _T("A12="), 4) == 0) {
+      if (_tcslen(params[i]) > 3)
+        turnpoint_infos[oz_index].Angle12 = ParseAngle(params[i] + 4);
+    } else if (_tcsncmp(params[i], _T("Line"), 4) == 0) {
+      if (_tcslen(params[i]) > 5 && params[i][5] == _T('1'))
+        turnpoint_infos[oz_index].Line = true;
+    } else if (_tcsncmp(params[i], _T("Reduce"), 6) == 0) {
+      if (_tcslen(params[i]) > 7 && params[i][7] == _T('1'))
+        turnpoint_infos[oz_index].Reduce = true;
+    }
+  }
 }
 
 /**
@@ -162,45 +202,10 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
 
     } else if (_tcsncmp(params[0], _T("ObsZone"), 7) == 0) {
       // Observation zone line found
-
       if (_tcslen(params[0]) <= 8)
         continue;
 
-      // Read OZ index
-      TCHAR* end;
-      const int oz_index = _tcstol(params[0] + 8, &end, 10);
-      if (params[0] + 8 == end || oz_index >= 30)
-        continue;
-
-      turnpoint_infos[oz_index].Valid = true;
-      // Iterate through available OZ options
-      for (unsigned i = 1; i < n_params; i++) {
-        if (_tcsncmp(params[i], _T("Style"), 5) == 0) {
-          if (_tcslen(params[i]) > 6)
-            turnpoint_infos[oz_index].Style = ParseStyle(params[i] + 6);
-        } else if (_tcsncmp(params[i], _T("R1="), 3) == 0) {
-          if (_tcslen(params[i]) > 3)
-            turnpoint_infos[oz_index].Radius1 = ParseRadius(params[i] + 3);
-        } else if (_tcsncmp(params[i], _T("A1="), 3) == 0) {
-          if (_tcslen(params[i]) > 3)
-            turnpoint_infos[oz_index].Angle1 = ParseAngle(params[i] + 3);
-        } else if (_tcsncmp(params[i], _T("R2="), 3) == 0) {
-          if (_tcslen(params[i]) > 3)
-            turnpoint_infos[oz_index].Radius2 = ParseRadius(params[i] + 3);
-        } else if (_tcsncmp(params[i], _T("A2="), 3) == 0) {
-          if (_tcslen(params[i]) > 3)
-            turnpoint_infos[oz_index].Angle2 = ParseAngle(params[i] + 3);
-        } else if (_tcsncmp(params[i], _T("A12="), 4) == 0) {
-          if (_tcslen(params[i]) > 3)
-            turnpoint_infos[oz_index].Angle12 = ParseAngle(params[i] + 4);
-        } else if (_tcsncmp(params[i], _T("Line"), 4) == 0) {
-          if (_tcslen(params[i]) > 5 && params[i][5] == _T('1'))
-            turnpoint_infos[oz_index].Line = true;
-        } else if (_tcsncmp(params[i], _T("Reduce"), 6) == 0) {
-          if (_tcslen(params[i]) > 7 && params[i][7] == _T('1'))
-            turnpoint_infos[oz_index].Reduce = true;
-        }
-      }
+      ParseOZs(turnpoint_infos, params, n_params);
     }
   } // end while
 }
