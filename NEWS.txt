@@ -9,6 +9,7 @@ Version 6.0.5 - not yet released
 * user interface
   - scale the "Today Screen" buttons on large screens
   - fix page numbers in satellite image renderer
+  - generate satellite file name from original waypoint id
 * map
   - terrain: permanently disable failed tiles
   - terrain: fix "unexpected marker segment type" error

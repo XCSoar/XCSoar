@@ -422,6 +422,8 @@ Waypoints::create(const GeoPoint &location)
   } else {
     edit_waypoint.FileNum = 1;
   }
+
+  edit_waypoint.original_id = 0;
   return edit_waypoint;
 }
 

@@ -126,6 +126,7 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
 
   Waypoint new_waypoint(location);
   new_waypoint.FileNum = file_num;
+  new_waypoint.original_id = 0;
 
   // Name (e.g. "Some Turnpoint", with quotes)
   if (!parseString(params[iName], new_waypoint.Name))

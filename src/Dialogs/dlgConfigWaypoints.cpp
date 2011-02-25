@@ -108,8 +108,10 @@ OnWaypointDeleteClicked(WndButton &Sender)
     if(MessageBoxX(way_points.get(res).Name,
                    _("Delete Waypoint?"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
+      Waypoint &waypoint = way_points.set(res);
 
-      way_points.set(res).FileNum = -1;
+      waypoint.FileNum = -1;
+      waypoint.original_id = 0;
       WaypointsNeedSave = true;
     }
   }

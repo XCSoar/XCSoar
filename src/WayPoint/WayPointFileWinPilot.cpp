@@ -66,6 +66,7 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
 
   Waypoint new_waypoint(location);
   new_waypoint.FileNum = file_num;
+  new_waypoint.original_id = _tcstoul(params[0], NULL, 0);
 
   // Name (e.g. KAMPLI)
   if (!parseString(params[5], new_waypoint.Name))
@@ -239,7 +240,7 @@ void
 WayPointFileWinPilot::composeLine(TextWriter &writer, const Waypoint& wp)
 {
   // Attach the waypoint id to the output
-  writer.printf("%u,", wp.id);
+  writer.printf("%u,", wp.original_id > 0 ? wp.original_id : wp.id);
   // Attach the latitude to the output
   composeAngle(writer, wp.Location.Latitude, true);
   writer.write(',');

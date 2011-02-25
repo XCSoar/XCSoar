@@ -523,10 +523,10 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
 
   _stprintf(path_modis, _T("%s" DIR_SEPARATOR_S "modis-%03d.jpg"),
            Directory,
-           selected_waypoint->id+1);
+            selected_waypoint->original_id);
   _stprintf(path_google,_T("%s" DIR_SEPARATOR_S "google-%03d.jpg"),
            Directory,
-           selected_waypoint->id+1);
+            selected_waypoint->original_id);
 
   TCHAR sTmp[128];
   _stprintf(sTmp, _T("%s: '%s'"), wf->GetCaption(), selected_waypoint->Name.c_str());

@@ -75,6 +75,12 @@ public:
   Waypoint(const GeoPoint &_location, const bool is_turnpoint= false);
 
   unsigned id; /**< Unique id */
+
+  /**
+   * The id number as specified in the input file.
+   */
+  unsigned original_id;
+
   GeoPoint Location; /**< Geodetic location */
   fixed Altitude; /**< Height AMSL (m) of waypoint terrain */
   WaypointFlags Flags; /**< Flag types of this waypoint */
