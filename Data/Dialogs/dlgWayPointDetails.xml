@@ -32,5 +32,5 @@
     <Button Name="cmdTeamCode" Caption="Set teamcode" X="40" Width="-40" Height="30" />
   </Panel>
 
-  <Canvas Name="frmImage" X="0" Y="0" Height="-32" Visible="0"/>
+  <Canvas Name="frmImage" X="0" Y="0" Height="-32" Visible="0" Border="1"/>
 </Form>
