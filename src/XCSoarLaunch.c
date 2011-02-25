@@ -123,6 +123,12 @@ static FILELIST FileList[2] = {
 static const int FileListCnt = 2;
 static int SelItem = -1;
 
+/**
+ * True when the mouse cursor is over the selected button while
+ * dragging.
+ */
+static bool ButtonDown;
+
 static bool
 GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
@@ -241,7 +247,7 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
   dwi.hwnd = hWnd;
   SendMessage(GetParent(hWnd), TODAYM_DRAWWATERMARK, 0, (LPARAM)&dwi);
 
-  if (SelItem >= 0) {
+  if (SelItem >= 0 && ButtonDown) {
     HBRUSH hBrush = CreateSolidBrush(GetSysColor(COLOR_HIGHLIGHT));
     FillRect(drawdc, &FileList[SelItem].rc, hBrush);
     DeleteObject(hBrush);
@@ -366,6 +372,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
   case WM_LBUTTONDOWN:
     SelItem = Point2Item(LOWORD(lParam), HIWORD(lParam));
+    ButtonDown = true;
     InvalidateRect(hWnd, NULL, FALSE);
     UpdateWindow(hWnd);
 #ifdef ENABLE_TOOLTIPS
@@ -406,9 +413,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 #endif
 
     ReleaseCapture();
-    pt.x = LOWORD(lParam);
-    pt.y = HIWORD(lParam);
-    if (SelItem >= 0 && PtInRect(&FileList[SelItem].rc, pt) && !is_running) {
+    if (SelItem >= 0 && ButtonDown && !is_running) {
       is_running = 1;
       LaunchXCSoar(hWnd, FileList[SelItem].CommandLine);
       Sleep(1000);
@@ -418,6 +423,19 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     SelItem = -1;
     InvalidateRect(hWnd, NULL, FALSE);
     UpdateWindow(hWnd);
+    break;
+
+  case WM_MOUSEMOVE:
+    if (SelItem >= 0) {
+      pt.x = LOWORD(lParam);
+      pt.y = HIWORD(lParam);
+      bool down = PtInRect(&FileList[SelItem].rc, pt);
+      if (down != ButtonDown) {
+        ButtonDown = down;
+        InvalidateRect(hWnd, &FileList[SelItem].rc, false);
+      }
+    }
+
     break;
 
   case WM_PAINT:
