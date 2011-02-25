@@ -150,9 +150,9 @@ class RasterTileCache : private NonCopyable {
   struct CacheHeader {
     enum {
 #ifdef FIXED_MATH
-      VERSION = 0x2,
+      VERSION = 0x4,
 #else
-      VERSION = 0x3,
+      VERSION = 0x5,
 #endif
     };
 
