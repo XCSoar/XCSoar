@@ -97,8 +97,6 @@ static HWND hToolTip;
 
 static const unsigned IconSizeX = 112;
 static const unsigned IconSizeY = 30;
-static const unsigned HMargin = 0;
-static const unsigned VMargin = 2;
 static const unsigned WinLeftMargin = 8;
 static const unsigned WinTopMargin = 2;
 static const unsigned WinRightMargin = 2;
@@ -303,8 +301,7 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
   for (int i = 0; i < FileListCnt; i++) {
     if (SelItem == i) {
       RECT selrect;
-      SetRect(&selrect, x, y, x + IconSizeX + (HMargin * 2),
-              y + IconSizeY + (VMargin * 2));
+      SetRect(&selrect, x, y, x + IconSizeX, y + IconSizeY);
       HBRUSH hBrush = CreateSolidBrush(GetSysColor(COLOR_HIGHLIGHT));
       FillRect(drawdc, &selrect, hBrush);
       DeleteObject(hBrush);
@@ -313,14 +310,14 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
     SelectObject(tempdc, FileList[i].bitmap);
 
 #ifdef USE_MASKS
-    MaskBlt(drawdc, x + HMargin, y + VMargin, IconSizeX, IconSizeY, tempdc, 0,
+    MaskBlt(drawdc, x, y, IconSizeX, IconSizeY, tempdc, 0,
             0, FileList[i].mask, 0, 0, MAKEROP4(0x00AA0029, SRCCOPY));
 #else
-    TransparentBlt(drawdc, x + HMargin, y + VMargin, IconSizeX, IconSizeY,
+    TransparentBlt(drawdc, x, y, IconSizeX, IconSizeY,
                    tempdc, 0, 0, IconSizeX, IconSizeY, RGB(0, 0, 255));
 #endif
 
-    x += IconSizeX + HMargin * 2;
+    x += IconSizeX;
   }
 
   BitBlt(hdc, ps->rcPaint.left, ps->rcPaint.top, ps->rcPaint.right,
@@ -346,13 +343,12 @@ Point2Item(int px, int py)
 
   for (int x = WinLeftMargin, i = 0; i < FileListCnt; i++) {
     RECT rect;
-    SetRect(&rect, x, y, x + IconSizeX + (HMargin * 2),
-            y + IconSizeY + (VMargin * 2));
+    SetRect(&rect, x, y, x + IconSizeX, y + IconSizeY);
 
     if (PtInRect(&rect, pt) == TRUE)
       return i;
 
-    x += IconSizeX + (HMargin * 2);
+    x += IconSizeX;
   }
 
   return -1;
@@ -418,7 +414,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
   case WM_TODAYCUSTOM_QUERYREFRESHCACHE:
     if (Refresh) {
       Refresh = FALSE;
-      ((TODAYLISTITEM *)(wParam))->cyp = WinTopMargin + IconSizeY + (VMargin * 2) + WinBottomMargin;
+      ((TODAYLISTITEM *)(wParam))->cyp = WinTopMargin + IconSizeY + WinBottomMargin;
       return TRUE;
     }
     return FALSE;
