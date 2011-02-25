@@ -107,7 +107,6 @@ static const unsigned WinBottomMargin = 2;
 static BOOL Refresh;
 
 typedef struct _FILELIST {
-  TCHAR FileName[BUF_SIZE];
   TCHAR CommandLine[BUF_SIZE];
   TCHAR Description[BUF_SIZE];
   HBITMAP bitmap;
@@ -121,8 +120,6 @@ static FILELIST FileList[2];
 static const int FileListCnt = 2;
 static int SelItem = -1;
 
-static TCHAR installDir[BUF_SIZE];
-
 static bool
 GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
@@ -131,7 +128,6 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
                            &hKey);
   if (hRes != ERROR_SUCCESS) {
     RegCloseKey(hKey);
-    pPos[0] = '\0';
     return false;
   }
 
@@ -183,18 +179,12 @@ CreateMaskBMP(HBITMAP hBMPOrig, COLORREF bgCol)
 static void
 CreateFileList(void)
 {
-  GetRegistryString(TEXT("InstallDir"), installDir, BUF_SIZE - 1);
-
-  //  wsprintf(installDir, TEXT("\\Program Files\\XCSoar"));
-
-  wsprintf(FileList[0].FileName, TEXT("%s\\XCSoar.exe"), installDir);
   _tcscpy(FileList[0].CommandLine, TEXT("-fly"));
   lstrcpy(FileList[0].Description, TEXT("Start XCSoar in flight mode"));
 
   if (FileList[0].bitmap == NULL)
     FileList[0].bitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_XCSOARLSWIFT));
 
-  wsprintf(FileList[1].FileName, TEXT("%s\\XCSoar.exe"), installDir);
   _tcscpy(FileList[1].CommandLine, TEXT("-simulator"));
 
   lstrcpy(FileList[1].Description, TEXT("Start XCSoar in simulator mode"));
@@ -370,8 +360,17 @@ Point2Item(int px, int py)
 	ShellOpen
 ******************************************************************************/
 static BOOL
-ShellOpen(const TCHAR *FileName, const TCHAR *CommandLine)
+LaunchXCSoar(HWND hWnd, const TCHAR *CommandLine)
 {
+  TCHAR FileName[BUF_SIZE];
+  if (!GetRegistryString(TEXT("InstallDir"), FileName, BUF_SIZE - 16)) {
+    MessageBox(hWnd, _T("XCSoar installation was not found"),
+               _T("Error"), MB_OK);
+    return false;
+  }
+
+  _tcscat(FileName, _T("\\XCSoar.exe"));
+
   TCHAR buffer[256];
   _sntprintf(buffer, 256, _T("\"%s\" %s"), FileName, CommandLine);
 
@@ -467,7 +466,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     i = Point2Item(LOWORD(lParam), HIWORD(lParam));
     if (i != -1 && i == SelItem && !is_running) {
       is_running = 1;
-      ShellOpen((FileList + i)->FileName, (FileList + i)->CommandLine);
+      LaunchXCSoar(hWnd, FileList[i].CommandLine);
       Sleep(1000);
       is_running = 0;
     }
