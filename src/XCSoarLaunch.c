@@ -121,22 +121,21 @@ static FILELIST FileList[2];
 static const int FileListCnt = 2;
 static int SelItem = -1;
 
-TCHAR installDir[BUF_SIZE];
+static TCHAR installDir[BUF_SIZE];
 
 static bool
 GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
   HKEY hKey;
-  DWORD dwType = REG_SZ;
-  long hRes;
-
-  hRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_PATH, 0, KEY_ALL_ACCESS, &hKey);
+  LONG hRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_PATH, 0, KEY_ALL_ACCESS,
+                           &hKey);
   if (hRes != ERROR_SUCCESS) {
     RegCloseKey(hKey);
     pPos[0] = '\0';
     return false;
   }
 
+  DWORD dwType = REG_SZ;
   hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)pPos, &dwSize);
   RegCloseKey(hKey);
   return hRes == ERROR_SUCCESS;
@@ -151,22 +150,17 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 static HBITMAP
 CreateMaskBMP(HBITMAP hBMPOrig, COLORREF bgCol)
 {
-  HDC hDCMask;
-  HDC hDCOrig;
-
-  BITMAP BMPinfo;
-  HBITMAP hBMPMask;
-
   if (!hBMPOrig)
     return NULL;
 
-  hDCMask = CreateCompatibleDC(NULL);
-  hDCOrig = CreateCompatibleDC(NULL);
+  HDC hDCMask = CreateCompatibleDC(NULL);
+  HDC hDCOrig = CreateCompatibleDC(NULL);
 
+  BITMAP BMPinfo;
   GetObject(hBMPOrig, sizeof(BITMAP), (LPVOID)&BMPinfo);
 
   // Create a monochrome mask bitmap
-  hBMPMask = CreateBitmap(BMPinfo.bmWidth, BMPinfo.bmHeight, 1, 1, NULL);
+  HBITMAP hBMPMask = CreateBitmap(BMPinfo.bmWidth, BMPinfo.bmHeight, 1, 1, NULL);
 
   // Select BMPs into DCs
   SelectObject(hDCOrig, hBMPOrig);
@@ -189,10 +183,6 @@ CreateMaskBMP(HBITMAP hBMPOrig, COLORREF bgCol)
 static void
 CreateFileList(void)
 {
-#ifdef USE_MASKS
-  int i;
-#endif
-
   GetRegistryString(TEXT("InstallDir"), installDir, BUF_SIZE - 1);
 
   //  wsprintf(installDir, TEXT("\\Program Files\\XCSoar"));
@@ -215,7 +205,7 @@ CreateFileList(void)
   // Create Mask bitmaps if required
 #ifdef USE_MASKS
 
-  for (i = 0; i < FileListCnt; ++i) {
+  for (int i = 0; i < FileListCnt; ++i) {
     if (FileList[i].mask == NULL) {
       FileList[i].mask = CreateMaskBMP(FileList[i].bitmap, RGB(0, 0, 255));
     }
@@ -297,42 +287,33 @@ ToolTipProc(HWND hDlg, UINT uMsg, gcc_unused WPARAM wParam, LPARAM lParam)
 static void
 OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 {
-  TODAYDRAWWATERMARKINFO dwi;
-
-  HDC drawdc, tempdc;
-  HBITMAP hDrawBitMap;
-  HBITMAP hRetDrawBmp;
-  // HBITMAP hRetBmp;
   RECT rect;
-  RECT selrect;
-  // BITMAP bmp;
-  int x, y;
-  int i;
-  HBRUSH hBrush;
-
   GetClientRect(hWnd, (LPRECT)&rect);
 
-  drawdc = CreateCompatibleDC(hdc);
-  tempdc = CreateCompatibleDC(hdc);
-  hDrawBitMap = CreateCompatibleBitmap(hdc, rect.right, rect.bottom);
-  hRetDrawBmp = SelectObject(drawdc, hDrawBitMap);
+  HDC drawdc = CreateCompatibleDC(hdc);
+  HDC tempdc = CreateCompatibleDC(hdc);
+  HBITMAP hDrawBitMap = CreateCompatibleBitmap(hdc, rect.right, rect.bottom);
+  HBITMAP hRetDrawBmp = SelectObject(drawdc, hDrawBitMap);
 
 #ifdef USE_OPAQUE_FILL
   FillRect(drawdc, &rect, (HBRUSH)GetStockObject(WHITE_BRUSH));
 #endif
+
+  TODAYDRAWWATERMARKINFO dwi;
   dwi.hdc = drawdc;
   GetClientRect(hWnd, &dwi.rc);
   dwi.hwnd = hWnd;
   SendMessage(GetParent(hWnd), TODAYM_DRAWWATERMARK, 0, (LPARAM)&dwi);
 
-  x = WinLeftMargin;
-  y = WinTopMargin;
+  unsigned x = WinLeftMargin;
+  const unsigned y = WinTopMargin;
 
-  for (i = 0; i < FileListCnt; i++) {
+  for (int i = 0; i < FileListCnt; i++) {
     if (SelItem == i) {
+      RECT selrect;
       SetRect(&selrect, x, y, x + IconSizeX + (HMargin * 2),
               y + IconSizeY + (VMargin * 2));
-      hBrush = CreateSolidBrush(GetSysColor(COLOR_HIGHLIGHT));
+      HBRUSH hBrush = CreateSolidBrush(GetSysColor(COLOR_HIGHLIGHT));
       FillRect(drawdc, &selrect, hBrush);
       DeleteObject(hBrush);
     }
@@ -365,14 +346,14 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 static int
 Point2Item(int px, int py)
 {
-  RECT rect;
   POINT pt;
-  int x, y;
-  int i;
-
   pt.x = px;
   pt.y = py;
-  for (x = WinLeftMargin, y = WinTopMargin, i = 0; i < FileListCnt; i++) {
+
+  const unsigned y = WinTopMargin;
+
+  for (int x = WinLeftMargin, i = 0; i < FileListCnt; i++) {
+    RECT rect;
     SetRect(&rect, x, y, x + IconSizeX + (HMargin * 2),
             y + IconSizeY + (VMargin * 2));
 
@@ -517,12 +498,11 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 ******************************************************************************/
 static HWND InitInstance(HWND pWnd, TODAYLISTITEM *ptli)
 {
-  WNDCLASS wc;
-
   hInst = ptli->hinstDLL;
 
   CreateFileList();
 
+  WNDCLASS wc;
   wc.style = CS_HREDRAW | CS_VREDRAW;
   wc.hCursor = 0;
   wc.lpszMenuName = 0;
