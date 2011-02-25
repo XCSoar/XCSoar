@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-
-<Panel Name="frmInfoBoxMacCreadyEdit" Border="0">
-  <Button Name="cmdPlusBig" Caption="+0.5" X="5" Y="32" Width="45" Height="50" onClick="InfoBoxContentMacCready::PnlEditOnPlusBig"/>
-  <Button Name="cmdPlusSmall" Caption="+0.1" X="55" Y="32" Width="45" Height="50" onClick="InfoBoxContentMacCready::PnlEditOnPlusSmall"/>
-  <Button Name="cmdMinusSmall" Caption="-0.1" X="106" Y="32" Width="45" Height="50" onClick="InfoBoxContentMacCready::PnlEditOnMinusSmall"/>
-  <Button Name="cmdMinusBig" Caption="-0.5" X="156" Y="32" Width="45" Height="50" onClick="InfoBoxContentMacCready::PnlEditOnMinusBig"/>
-</Panel>

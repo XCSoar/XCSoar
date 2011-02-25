@@ -66,10 +66,7 @@ InfoBoxContentMacCready::PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBa
   InfoBoxID = id;
 
   Window *wInfoBoxAccessEdit =
-      LoadWindow(dlgContent.CallBackTable, wf, *wTabBar,
-                 Layout::landscape ?
-                     _T("IDR_XML_INFOBOXMACCREADYEDIT_L") :
-                     _T("IDR_XML_INFOBOXMACCREADYEDIT"));
+      LoadWindow(dlgContent.CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXMACCREADYEDIT"));
   assert(wInfoBoxAccessEdit);
 
   return wInfoBoxAccessEdit;
@@ -125,10 +122,7 @@ InfoBoxContentMacCready::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabB
   InfoBoxID = id;
 
   Window *wInfoBoxAccessSetup =
-      LoadWindow(dlgContent.CallBackTable, wf, *wTabBar,
-                 Layout::landscape ?
-                     _T("IDR_XML_INFOBOXMACCREADYSETUP_L") :
-                     _T("IDR_XML_INFOBOXMACCREADYSETUP"));
+      LoadWindow(dlgContent.CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXMACCREADYSETUP"));
   assert(wInfoBoxAccessSetup);
 
   return wInfoBoxAccessSetup;

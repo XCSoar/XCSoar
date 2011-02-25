@@ -58,10 +58,7 @@ InfoBoxContentAltitude::PnlInfoLoad(SingleWindow &parent, TabBarControl* wTabBar
   InfoBoxID = id;
 
   Window *wInfoBoxAccessInfo =
-      LoadWindow(CallBackTable, wf, *wTabBar,
-                 Layout::landscape ?
-                     _T("IDR_XML_INFOBOXALTITUDEINFO_L") :
-                     _T("IDR_XML_INFOBOXALTITUDEINFO"));
+      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXALTITUDEINFO"));
   assert(wInfoBoxAccessInfo);
 
   return wInfoBoxAccessInfo;
@@ -132,10 +129,7 @@ InfoBoxContentAltitude::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBa
   InfoBoxID = id;
 
   Window *wInfoBoxAccessSetup =
-      LoadWindow(CallBackTable, wf, *wTabBar,
-                 Layout::landscape ?
-                     _T("IDR_XML_INFOBOXALTITUDESETUP_L") :
-                     _T("IDR_XML_INFOBOXALTITUDESETUP"));
+      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXALTITUDESETUP"));
   assert(wInfoBoxAccessSetup);
 
   return wInfoBoxAccessSetup;

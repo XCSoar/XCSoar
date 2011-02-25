@@ -69,8 +69,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   const RECT targetRect = InfoBoxLayout::GetRemainingRect(parent.get_client_rect());
 
   wf = LoadDialog(dlgContent->CallBackTable, parent,
-                   Layout::landscape ?
-                  _T("IDR_XML_INFOBOXACCESS_L") : _T("IDR_XML_INFOBOXACCESS"), &targetRect);
+                  _T("IDR_XML_INFOBOXACCESS"), &targetRect);
 
   assert(wf != NULL);
 
@@ -147,10 +146,7 @@ dlgInfoBoxAccess::pnlCloseLoad(SingleWindow &parent, TabBarControl* wTabBar,
   wf = _wf;
 
   Window *wInfoBoxAccessClose =
-      LoadWindow(CallBackTable, wf, *wTabBar,
-                 Layout::landscape ?
-                     _T("IDR_XML_INFOBOXACCESSCLOSE_L") :
-                     _T("IDR_XML_INFOBOXACCESSCLOSE"));
+      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXACCESSCLOSE"));
   assert(wInfoBoxAccessClose);
 
   return wInfoBoxAccessClose;
