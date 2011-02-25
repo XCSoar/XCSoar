@@ -116,6 +116,26 @@ ParseRadius(const TCHAR* str)
   return fixed(radius);
 }
 
+static void
+ParseOptions(SeeYouTaskInformation *task_info, const TCHAR *params[],
+    const size_t n_params)
+{
+  // Iterate through available task options
+  for (unsigned i = 1; i < n_params; i++) {
+    if (_tcsncmp(params[i], _T("WpDis"), 5) == 0) {
+      // Parse WpDis option
+      if (_tcslen(params[i]) > 6 &&
+          _tcsncmp(params[i] + 6, _T("False"), 5) == 0)
+        task_info->WpDis = false;
+    } else if (_tcsncmp(params[i], _T("TaskTime"), 8) == 0) {
+      // Parse TaskTime option
+      if (_tcslen(params[i]) > 9)
+        task_info->TaskTime = ParseTaskTime(params[i] + 9);
+    }
+  }
+
+}
+
 /**
  * Parses task
  * @param reader.  Points to first line of task after task "Waypoint list" line
@@ -133,24 +153,13 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
   const unsigned int max_params = sizeof(params) / sizeof(params[0]);
   while ((line = reader.read()) != NULL &&
          line[0] != _T('\"') && line[0] != _T(',')) {
-    size_t n_params = WayPointFile::
+    const size_t n_params = WayPointFile::
         extractParameters(line, params_buffer, params, max_params, true);
 
     if (_tcscmp(params[0], _T("Options")) == 0) {
       // Options line found
-      // Iterate through available task options
-      for (unsigned i = 1; i < n_params; i++) {
-        if (_tcsncmp(params[i], _T("WpDis"), 5) == 0) {
-          // Parse WpDis option
-          if (_tcslen(params[i]) > 6 &&
-              _tcsncmp(params[i] + 6, _T("False"), 5) == 0)
-            task_info->WpDis = false;
-        } else if (_tcsncmp(params[i], _T("TaskTime"), 8) == 0) {
-          // Parse TaskTime option
-          if (_tcslen(params[i]) > 9)
-            task_info->TaskTime = ParseTaskTime(params[i] + 9);
-        }
-      }
+      ParseOptions(task_info, params, n_params);
+
     } else if (_tcsncmp(params[0], _T("ObsZone"), 7) == 0) {
       // Observation zone line found
 
@@ -323,8 +332,9 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   task->set_factory(task_info.WpDis ?
                     TaskBehaviour::FACTORY_RT : TaskBehaviour::FACTORY_AAT);
   AbstractTaskFactory& fact = task->get_factory();
+  const TaskBehaviour::Factory_t factType = task->get_factory_type();
 
-  if (task->get_factory_type() == TaskBehaviour::FACTORY_AAT) {
+  if (factType == TaskBehaviour::FACTORY_AAT) {
     OrderedTaskBehaviour beh = task->get_ordered_task_behaviour();
     beh.aat_min_time = task_info.TaskTime;
     task->set_ordered_task_behaviour(beh);
@@ -342,10 +352,10 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 
     const bool isIntermediate = (i > 0) && (i < (n_waypoints - 1));
     ObservationZonePoint* oz = CreateOZ(turnpoint_infos[i], wp,
-        isIntermediate, task->get_factory_type());
+        isIntermediate, factType);
 
     OrderedTaskPoint *pt = CreatePoint(i, n_waypoints, wp, fact, oz,
-        task->get_factory_type());
+        factType);
 
     if (pt != NULL)
       fact.append(*pt, false);
