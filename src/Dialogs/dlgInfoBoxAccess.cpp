@@ -58,6 +58,9 @@ WndForm* dlgInfoBoxAccess::GetWindowForm()
 void
 dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
 {
+  // check for another instance of this window
+  if (dlgInfoBoxAccess::GetWindowForm() != NULL) return;
+
   parent_window = &parent;
 
   InfoBoxContent::InfoBoxDlgContent *dlgContent;
@@ -101,6 +104,8 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   wf->ShowModal();
 
   delete wf;
+  // unset wf because wf is still static and public
+  wf = NULL;
 }
 
 bool
