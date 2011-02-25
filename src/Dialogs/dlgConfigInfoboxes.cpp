@@ -159,7 +159,7 @@ void dlgConfigInfoboxesShowModal(unsigned _panel)
   TCHAR caption[100];
   _tcscpy(caption, wf->GetCaption());
   _tcscat(caption, _T(": "));
-  _tcscat(caption, infoBoxManagerConfig.panel[panel].name);
+  _tcscat(caption, InfoBoxManager::GetPanelName(panel));
   wf->SetCaption(caption);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);

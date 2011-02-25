@@ -184,6 +184,18 @@ InfoBoxManager::GetCurrentPanel()
     return PANEL_CRUISE;
 }
 
+const TCHAR*
+InfoBoxManager::GetPanelName(unsigned panelIdx)
+{
+  return infoBoxManagerConfig.panel[panelIdx].name;
+}
+
+const TCHAR*
+InfoBoxManager::GetCurrentPanelName()
+{
+  return GetPanelName(GetCurrentPanel());
+}
+
 unsigned
 InfoBoxManager::GetType(unsigned box, unsigned panelIdx)
 {

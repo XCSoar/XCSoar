@@ -81,6 +81,8 @@ namespace InfoBoxManager
   InfoBoxContent::InfoBoxDlgContent* GetInfoBoxDlgContent(const int id);
 
   unsigned GetCurrentPanel();
+  const TCHAR* GetCurrentPanelName();
+  const TCHAR* GetPanelName(unsigned panel);
 
   unsigned GetType(unsigned box, unsigned panel);
   void SetType(unsigned box, unsigned type, unsigned panel);
