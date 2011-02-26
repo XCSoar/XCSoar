@@ -355,6 +355,7 @@ pnlTaskList::OnTabPreShow(TabBarControl::EventType EventType)
   }
   wTasks->SetCursorIndex(0); // so Save & Declare are always available
   UpdateButtons();
+  dlgTaskManager::TaskViewRestore(wTaskView);
   RefreshView();
   return true;
 }

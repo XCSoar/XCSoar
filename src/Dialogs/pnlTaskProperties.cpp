@@ -36,6 +36,7 @@ Copyright_License {
 static SingleWindow *parent_window;
 static WndForm *wf = NULL;
 static OrderedTask* ordered_task = NULL;
+static WndOwnerDrawFrame* wTaskView = NULL;
 static bool* task_changed = NULL;
 static OrderedTask** ordered_task_pointer = NULL;
 static TaskBehaviour::Factory_t orig_taskType =
@@ -144,6 +145,7 @@ RefreshView()
     wp->RefreshDisplay();
   }
 
+  wTaskView->invalidate();
 
   // fixed aat_min_time
   // finish_min_height
@@ -202,6 +204,7 @@ pnlTaskProperties::OnTabPreShow(TabBarControl::EventType EventType)
   orig_taskType = ordered_task->get_factory_type();
   LoadFormProperty(*wf, _T("prpTaskType"),
       (unsigned)orig_taskType);
+  dlgTaskManager::TaskViewRestore(wTaskView);
   RefreshView();
   return true;
 }
@@ -265,6 +268,10 @@ pnlTaskProperties::Load(SingleWindow &parent, TabBarControl* wTabBar,
       LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
                  Layout::landscape ?
                  _T("IDR_XML_TASKPROPERTIES_L") : _T("IDR_XML_TASKPROPERTIES"));
+
+  wTaskView = (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskViewProperties"));
+  assert(wTaskView != NULL);
+  wTaskView->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
 
   assert(wProp);
 

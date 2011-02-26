@@ -36,6 +36,7 @@ static WndFrame* wStatus = NULL;
 static WndButton* cmdRevert = NULL;
 static WndButton* cmdClose = NULL;
 static bool* task_modified = NULL;
+static WndOwnerDrawFrame* wTaskView = NULL;
 
 static void
 RefreshStatus()
@@ -74,6 +75,7 @@ pnlTaskManagerClose::OnTabPreShow(TabBarControl::EventType EventType)
     dlgTaskManager::OnClose();
     return true;
   }
+  dlgTaskManager::TaskViewRestore(wTaskView);
 
   RefreshStatus();
   return true;
@@ -98,6 +100,10 @@ pnlTaskManagerClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
                      _T("IDR_XML_TASKMANAGERCLOSE_L") :
                      _T("IDR_XML_TASKMANAGERCLOSE"));
   assert(wTaskManagerClose);
+
+  wTaskView = (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskViewClose"));
+  assert(wTaskView != NULL);
+  wTaskView->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
 
   wStatus = (WndFrame *)wf->FindByName(_T("frmStatus"));
   assert(wStatus);

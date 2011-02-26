@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 
 <Panel Name="frmTaskCalculator" Border="0">
+  <Button Name="Target" Caption="Target" X="2" Y="34" Width="60" Height="42" OnClick="pnlTaskCalculator::OnTargetClicked" />
+
   <Panel Name="TaskListTabOffset" Border="0" X="0" Y="76">
   
-  <Button Name="Target" Caption="Target" X="2" Y="2" Width="75" Height="35" OnClick="pnlTaskCalculator::OnTargetClicked" />
 
   <Edit Name="prpAATTime" Caption="AAT time" Y="2" X="12" Height="22" CaptionWidth="150" ReadOnly="1">
     <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f"/>
