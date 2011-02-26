@@ -1,11 +1,8 @@
 <?xml version="1.0"?>
 
-<Form Name="frmTaskCalculator" X="0" Y="0" Width="320" Height="240" Caption="Task Calculator">
+<Panel Name="frmTaskCalculator" Border="0">
 
-  <Button Name="Target" Caption="Target" X="2" Y="2" Width="75" Height="35" OnClick="OnTargetClicked" />
-  <Button Name="cmdTaskManager" Caption="Task Manager" X="2" Y="-111" Width="75" Height="35" OnClick="OnTaskManagerClicked" />
-  <Button Caption="Cancel" X="2" Y="-74" Width="75" Height="35" OnClick="OnCancelClicked" />
-  <Button Caption="Close" X="2" Y="-37" Width="75" Height="35" OnClick="OnOKClicked" />
+  <Button Name="Target" Caption="Target" X="2" Y="2" Width="75" Height="35" OnClick="pnlTaskCalculator::OnTargetClicked" />
 
   <Panel Name="frmData" X="70" Y="0" Height="222">
 
@@ -21,11 +18,14 @@
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f"/>
   </Edit>
 
-  <Edit Name="prpMacCready" Caption="Set MacCready" X="2" Height="22" CaptionWidth="150" Help="Adjusts MC value used in the calculator.  Use this to determine the effect on estimated task time due to changes in conditions.  This value will not affect the main computer's setting if the dialog is exited with the Cancel button.">
-    <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="10" Step="0.1" OnDataAccess="OnMacCreadyData"/>
+  <Edit Name="prpMacCready" Caption="Set MacCready" X="2" Height="22" CaptionWidth="150" 
+    Help="Adjusts MC value used in the calculator.  Use this to determine the effect on estimated task time due to changes in conditions.  This value will not affect the main computer's setting if the dialog is exited with the Cancel button.">
+    <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" 
+    Max="10" Step="0.1" OnDataAccess="pnlTaskCalculator::OnMacCreadyData"/>
   </Edit>
 
-  <Edit Name="prpRange" Caption="AAT Range" X="2" Height="22" CaptionWidth="150" ReadOnly="1" Help="For AAT tasks, this value tells you how far based on the targets of your task you will fly relative to the minimum and maximum possible tasks. -100% indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% is maximum AAT distance.">
+  <Edit Name="prpRange" Caption="AAT Range" X="2" Height="22" CaptionWidth="150" ReadOnly="1" 
+    Help="For AAT tasks, this value tells you how far based on the targets of your task you will fly relative to the minimum and maximum possible tasks. -100% indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% is maximum AAT distance.">
     <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f"/>
   </Edit>
 
@@ -46,4 +46,5 @@
   </Edit>
 
   </Panel>
-</Form>
+
+</Panel>

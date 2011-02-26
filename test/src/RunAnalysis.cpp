@@ -72,10 +72,10 @@ TaskFile::Create(const TCHAR* path)
 }
 
 void dlgBasicSettingsShowModal() {}
-void dlgTaskCalculatorShowModal(SingleWindow &parent) {}
 void dlgWindSettingsShowModal() {}
 void dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close) {}
 
+void dlgTaskManagerShowModal(SingleWindow &parent) {}
 void ConditionMonitorsUpdate(const GlideComputer &cmp) {}
 
 bool InputEvents::processGlideComputer(unsigned) { return false; }

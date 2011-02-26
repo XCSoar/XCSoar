@@ -364,7 +364,7 @@ OnCalcClicked(WndButton &Sender)
 
   if (page == ANALYSIS_PAGE_CLIMB) {
     wf->hide();
-    dlgTaskCalculatorShowModal(*(SingleWindow *)wf->get_root_owner());
+    dlgTaskManagerShowModal(*(SingleWindow *)wf->get_root_owner());
     wf->show();
   }
 
@@ -379,7 +379,7 @@ OnCalcClicked(WndButton &Sender)
 
   if ((page == ANALYSIS_PAGE_TASK) || (page == ANALYSIS_PAGE_TASK_SPEED)) {
     wf->hide();
-    dlgTaskCalculatorShowModal(*(SingleWindow *)wf->get_root_owner());
+    dlgTaskManagerShowModal(*(SingleWindow *)wf->get_root_owner());
     wf->show();
   }
 

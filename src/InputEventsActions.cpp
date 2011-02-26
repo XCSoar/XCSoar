@@ -610,7 +610,7 @@ InputEvents::eventCalculator(const TCHAR *misc)
 {
   (void)misc;
 
-  dlgTaskCalculatorShowModal(XCSoarInterface::main_window);
+  dlgTaskManagerShowModal(XCSoarInterface::main_window);
 }
 
 // Status

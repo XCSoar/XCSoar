@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/dlgTaskManager.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Units.hpp"
@@ -30,6 +31,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Screen/Layout.hpp"
+#include "Form/TabBar.hpp"
 
 #include <math.h>
 #include <algorithm>
@@ -38,32 +40,10 @@ using std::min;
 using std::max;
 
 static WndForm *wf = NULL;
-
+static TabBarControl* wTabBar = NULL;
 static fixed emc;
 static fixed cruise_efficiency;
-static bool goto_task_manager = false;
-
-static void
-OnCancelClicked(WndButton &Sender)
-{
-  (void)Sender;
-  wf->SetModalResult(mrCancel);
-}
-
-static void
-OnOKClicked(WndButton &Sender)
-{
-  (void)Sender;
-  wf->SetModalResult(mrOK);
-}
-static void
-OnTaskManagerClicked
-(WndButton &Sender)
-{
-  (void)Sender;
-  goto_task_manager = true;
-  wf->SetModalResult(mrOK);
-}
+static bool lazy_loaded = false;
 
 static void
 GetCruiseEfficiency(void)
@@ -181,8 +161,8 @@ RefreshCalculator(void)
   }
 }
 
-static void
-OnTargetClicked(WndButton &Sender)
+void
+pnlTaskCalculator::OnTargetClicked(WndButton &Sender)
 {
   (void)Sender;
   wf->hide();
@@ -190,13 +170,14 @@ OnTargetClicked(WndButton &Sender)
   wf->show();
 }
 
-static void OnTimerNotify(WndForm &Sender) {
+void
+pnlTaskCalculator::OnTimerNotify(WndForm &Sender) {
   (void)Sender;
   RefreshCalculator();
 }
 
-static void
-OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
+void
+pnlTaskCalculator::OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat *df = (DataFieldFloat *)Sender;
 
@@ -223,8 +204,8 @@ OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-static void
-OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
+void
+pnlTaskCalculator::OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
   fixed clast = protected_task_manager->get_glide_polar().get_cruise_efficiency();
@@ -256,64 +237,54 @@ OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-
-static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnMacCreadyData),
-  DeclareCallBackEntry(OnOKClicked),
-  DeclareCallBackEntry(OnCancelClicked),
-  DeclareCallBackEntry(OnTargetClicked),
-  DeclareCallBackEntry(OnCruiseEfficiencyData),
-  DeclareCallBackEntry(OnTaskManagerClicked),
-  DeclareCallBackEntry(NULL)
-};
-
-void
-dlgTaskCalculatorShowModal(SingleWindow &parent)
+bool
+pnlTaskCalculator::OnTabPreShow(TabBarControl::EventType EventType)
 {
-  if (protected_task_manager == NULL)
-    return;
+  if (!lazy_loaded) {
+    lazy_loaded = true;
+    GlidePolar polar = protected_task_manager->get_glide_polar();
 
-  if (!Layout::landscape) {
-    wf = LoadDialog(CallBackTable,
-                        parent,
-                        _T("IDR_XML_TASKCALCULATOR"));
-  } else {
-    wf = LoadDialog(CallBackTable,
-                        parent,
-                        _T("IDR_XML_TASKCALCULATOR_L"));
+    fixed CRUISE_EFFICIENCY_enter = polar.get_cruise_efficiency();
+//    fixed MACCREADY_enter = protected_task_manager->get_glide_polar().get_mc();
+
+    emc = XCSoarInterface::Calculated().task_stats.effective_mc;
+
+    cruise_efficiency = CRUISE_EFFICIENCY_enter;
+
+    if (!XCSoarInterface::Calculated().common_stats.ordered_has_targets) {
+      ((WndButton *)wf->FindByName(_T("prpRange")))->hide();
+    }
+    wf->SetTimerNotify(pnlTaskCalculator::OnTimerNotify);
   }
-  if (!wf)
-    return;
-
-  GlidePolar polar = protected_task_manager->get_glide_polar();
-
-  fixed CRUISE_EFFICIENCY_enter = polar.get_cruise_efficiency();
-  fixed MACCREADY_enter = protected_task_manager->get_glide_polar().get_mc();
-
-  emc = XCSoarInterface::Calculated().task_stats.effective_mc;
-
-  cruise_efficiency = CRUISE_EFFICIENCY_enter;
-
-  goto_task_manager = false;
-
   RefreshCalculator();
 
-  if (!XCSoarInterface::Calculated().common_stats.ordered_has_targets) {
-    ((WndButton *)wf->FindByName(_T("prpRange")))->hide();
-  }
-  wf->SetTimerNotify(OnTimerNotify);
+  return true;
+}
 
-  if (wf->ShowModal() == mrCancel) {
-    // todo: restore task settings.
-    SetMC(MACCREADY_enter);
+Window*
+pnlTaskCalculator::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf)
+{
+  if (protected_task_manager == NULL)
+    return NULL;
+
+  assert(_wTabBar);
+  wTabBar = _wTabBar;
+
+  assert(_wf);
+  wf = _wf;
+
+  Window *wCalc =
+      LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
+                 Layout::landscape ?
+                 _T("IDR_XML_TASKCALCULATOR_L") : _T("IDR_XML_TASKCALCULATOR"));
+  assert(wCalc);
+
+  lazy_loaded = false;
+
 #ifdef OLD_TASK
     GlidePolar::SetCruiseEfficiency(CRUISE_EFFICIENCY_enter);
 #endif
-  }
 
-  delete wf;
-  wf = NULL;
-  if (goto_task_manager)
-    dlgTaskManagerShowModal(parent);
+    return wCalc;
 }
 

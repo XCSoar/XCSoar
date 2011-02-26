@@ -36,7 +36,6 @@ static WndFrame* wStatus = NULL;
 static WndButton* cmdRevert = NULL;
 static WndButton* cmdClose = NULL;
 static bool* task_modified = NULL;
-static bool* goto_calculator_on_exit = NULL;
 
 static void
 RefreshStatus()
@@ -51,14 +50,6 @@ void
 pnlTaskManagerClose::OnCloseClicked(WndButton &Sender)
 {
   (void)Sender;
-  dlgTaskManager::OnClose();
-}
-
-void
-pnlTaskManagerClose::OnCalculatorResumeClicked(WndButton &Sender)
-{
-  (void)Sender;
-  *goto_calculator_on_exit = true;
   dlgTaskManager::OnClose();
 }
 
@@ -79,25 +70,9 @@ pnlTaskManagerClose::OnTabReClick()
 bool
 pnlTaskManagerClose::OnTabPreShow(TabBarControl::EventType EventType)
 {
-  *goto_calculator_on_exit = false;
-  WndButton *wb = (WndButton*)wf->FindByName(_T("cmdCalculatorResume"));
-  assert(wb);
-  TaskManager::TaskMode_t mode = protected_task_manager->get_mode();
-  const bool show_calculator_button =
-    (CommonInterface::Calculated().flight.Flying &&
-                        (mode != TaskManager::MODE_ABORT) &&
-                        (mode != TaskManager::MODE_GOTO) &&
-                        XCSoarInterface::Calculated().task_stats.task_valid) ?
-                            false : true;
-  // because we arrived here via the task calculator
-  wb->set_visible(show_calculator_button);
-
   if (!(*task_modified) && EventType == TabBarControl::MouseOrButton) {
-
-    if (!show_calculator_button) {
-      dlgTaskManager::OnClose();
-      return true;
-    }
+    dlgTaskManager::OnClose();
+    return true;
   }
 
   RefreshStatus();
@@ -107,7 +82,7 @@ pnlTaskManagerClose::OnTabPreShow(TabBarControl::EventType EventType)
 Window*
 pnlTaskManagerClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
                           WndForm* _wf, OrderedTask** task,
-                          bool* _task_modified, bool* _goto_calculator_on_exit)
+                          bool* _task_modified)
 {
   assert(wTabBar);
 
@@ -116,9 +91,6 @@ pnlTaskManagerClose::Load(SingleWindow &parent, TabBarControl* wTabBar,
 
   assert(_task_modified);
   task_modified = _task_modified;
-
-  assert(_goto_calculator_on_exit);
-  goto_calculator_on_exit = _goto_calculator_on_exit;
 
   Window *wTaskManagerClose =
       LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,

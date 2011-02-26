@@ -6,6 +6,5 @@
     <Button Name="cmdClose" Caption="Fly" X="30" Y="25" Width="120" Height="40" OnClick="pnlTaskManagerClose::OnCloseClicked"/>
     <Label Name="frmStatus" X="10" Y="86" Width="160" Height="20" Border="0"/>
     <Button Name="cmdRevert" Caption="Revert Changes" X="30" Y="106" Width="120" Height="35" OnClick="pnlTaskManagerClose::OnRevertClicked"/>
-    <Button Name="cmdCalculatorResume" Caption="Calculator" X="30" Y="163" Width="120" Height="35" OnClick="pnlTaskManagerClose::OnCalculatorResumeClicked"/>
   </Panel>
 </Panel>

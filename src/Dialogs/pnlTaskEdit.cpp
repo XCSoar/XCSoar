@@ -83,7 +83,7 @@ pnlTaskEdit::RefreshView()
 
   if (wSummary) {
     TCHAR text[300];
-    OrderedTaskSummary(ordered_task, text, !Layout::landscape);
+    OrderedTaskSummary(ordered_task, text, false);
     wSummary->SetCaption(text);
   }
 }

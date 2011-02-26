@@ -233,12 +233,11 @@ public:
    * @return Window* that points to the control created
    */
   static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
-                      WndForm* wf, OrderedTask** task, bool* _task_modified,
-                      bool* _goto_calculator_on_exit);
+                      WndForm* wf, OrderedTask** task, bool* _task_modified);
 
   static void OnCloseClicked(WndButton &Sender);
   static void OnRevertClicked(WndButton &Sender);
-  static void OnCalculatorResumeClicked(WndButton &Sender);
+
   /**
    * callback
    * sets status and buttons per task edit status
@@ -254,6 +253,42 @@ public:
    */
   static void OnTabReClick();
 
+};
+
+class pnlTaskCalculator
+{
+public:
+  /**
+   * creates the control from its XML file and does any init work
+   * @param parent
+   * @param wf
+   * @return Window* that points to the control created
+   */
+  static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
+                      WndForm* wf);
+
+  /**
+   * copies values from form to ordered_task
+   * @return true
+   */
+  static bool OnTabPreHide();
+
+  /**
+   * copies values from ordered_task to form
+   * @param EventType 0 = Mouse Click, 1 = up/dn/left/right key
+   * @return true
+   */
+  static bool OnTabPreShow(TabBarControl::EventType EventType);
+
+  static void OnTargetClicked(WndButton &Sender);
+
+  static void OnTimerNotify(WndForm &Sender);
+
+  static void OnMacCreadyData(DataField *Sender,
+      DataField::DataAccessKind_t Mode);
+
+  static void OnCruiseEfficiencyData(DataField *Sender,
+      DataField::DataAccessKind_t Mode);
 };
 
 #endif /* DLGTASKMANAGER_HPP */

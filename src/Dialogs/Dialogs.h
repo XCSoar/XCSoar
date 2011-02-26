@@ -84,9 +84,6 @@ dlgStartupShowModal();
 bool dlgSimulatorPromptShowModal();
 
 
-void
-dlgTaskCalculatorShowModal(SingleWindow &parent);
-
 void dlgWindSettingsShowModal();
 void dlgStartTaskShowModal(bool *validStart, double Time, double Speed,
     double Altitude);

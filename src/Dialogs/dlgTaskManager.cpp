@@ -47,7 +47,6 @@ static WndForm *wf = NULL;
 static TabBarControl* wTabBar = NULL;
 static OrderedTask* active_task = NULL;
 static bool task_modified = false;
-static bool goto_calculator_on_exit = false;
 static bool fullscreen;
 static RECT TaskViewRect;
 
@@ -153,7 +152,10 @@ CallBackTableEntry dlgTaskManager::CallBackTable[] = {
 
   DeclareCallBackEntry(pnlTaskManagerClose::OnCloseClicked),
   DeclareCallBackEntry(pnlTaskManagerClose::OnRevertClicked),
-  DeclareCallBackEntry(pnlTaskManagerClose::OnCalculatorResumeClicked),
+
+  DeclareCallBackEntry(pnlTaskCalculator::OnMacCreadyData),
+  DeclareCallBackEntry(pnlTaskCalculator::OnTargetClicked),
+  DeclareCallBackEntry(pnlTaskCalculator::OnCruiseEfficiencyData),
 
   DeclareCallBackEntry(NULL)
 };
@@ -175,8 +177,6 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     return;
 
   parent_window = &parent;
-  goto_calculator_on_exit = false;
-
   wf = LoadDialog(CallBackTable, parent,
                   Layout::landscape ?
                   _T("IDR_XML_TASKMANAGER_L") : _T("IDR_XML_TASKMANAGER"));
@@ -191,41 +191,69 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   assert(wTabBar != NULL);
 
 
+  Window* wProps =
+    pnlTaskProperties::Load(parent, wTabBar, wf, &active_task, &task_modified);
+  assert(wProps);
+
+  Window* wClose =
+    pnlTaskManagerClose::Load(parent, wTabBar, wf, &active_task, &task_modified);
+  assert(wClose);
+
+  Window* wCalculator =
+    pnlTaskCalculator::Load(parent, wTabBar, wf);
+  assert(wCalculator);
+
   Window* wEdit =
     pnlTaskEdit::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wEdit);
-  wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL, NULL,
-                     pnlTaskEdit::OnTabPreShow);
 
   WndOwnerDrawFrame* wTaskView =
       (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskView"));
   assert(wTaskView);
   TaskViewRect = wTaskView->get_position();
 
-
-  Window* wProps =
-    pnlTaskProperties::Load(parent, wTabBar, wf, &active_task, &task_modified);
-  assert(wProps);
-  wTabBar->AddClient(wProps, _T("Proper ties"), false, NULL,
-                     pnlTaskProperties::OnTabPreHide,
-                     pnlTaskProperties::OnTabPreShow);
-
-  // ToDo: fix the label word wrap on PDAs to "Properties" wraps to two lines nicely
-
   Window* wLst =
     pnlTaskList::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wLst);
-  wTabBar->AddClient(wLst, _T("Browse declare"), false, NULL, NULL,
-                     pnlTaskList::OnTabPreShow);
 
-  Window* wClose =
-    pnlTaskManagerClose::Load(parent, wTabBar, wf, &active_task, &task_modified,
-                              &goto_calculator_on_exit);
-  assert(wClose);
-  wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hFinalGlide*/, NULL,
-                     pnlTaskManagerClose::OnTabPreShow, NULL, pnlTaskManagerClose::OnTabReClick);
+  if (Layout::landscape) {
+    wTabBar->AddClient(wCalculator, _T("Calc"), false, NULL, NULL,
+                         pnlTaskCalculator::OnTabPreShow);
 
-  wTabBar->SetCurrentPage(0);
+    wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL, NULL,
+                         pnlTaskEdit::OnTabPreShow);
+
+    wTabBar->AddClient(wLst, _T("Browse declare"), false, NULL, NULL,
+                       pnlTaskList::OnTabPreShow);
+
+    wTabBar->AddClient(wProps, _T("Properties"), false, NULL,
+                           pnlTaskProperties::OnTabPreHide,
+                           pnlTaskProperties::OnTabPreShow);
+
+    wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hFinalGlide*/, NULL,
+                           pnlTaskManagerClose::OnTabPreShow, NULL, pnlTaskManagerClose::OnTabReClick);
+
+    wTabBar->SetCurrentPage(0);
+  } else {
+    wTabBar->AddClient(wProps, _T("Properties"), false, NULL,
+                           pnlTaskProperties::OnTabPreHide,
+                           pnlTaskProperties::OnTabPreShow);
+
+    wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hFinalGlide*/, NULL,
+                           pnlTaskManagerClose::OnTabPreShow, NULL, pnlTaskManagerClose::OnTabReClick);
+
+    wTabBar->AddClient(wCalculator, _T("Calc"), false, NULL, NULL,
+                         pnlTaskCalculator::OnTabPreShow);
+
+    wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL, NULL,
+                         pnlTaskEdit::OnTabPreShow);
+
+    wTabBar->AddClient(wLst, _T("Browse declare"), false, NULL, NULL,
+                       pnlTaskList::OnTabPreShow);
+    wTabBar->SetCurrentPage(2);
+  }
+
+
   fullscreen = false;
 
   wf->ShowModal();
@@ -234,6 +262,4 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
   delete wf;
   delete active_task;
-  if (goto_calculator_on_exit)
-    dlgTaskCalculatorShowModal(parent);
 }
