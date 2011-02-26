@@ -56,7 +56,8 @@ process is presented in Chapter~\ref{cha:history-development}.
 
 \subsection*{Terminology}
 A variety of terms may be used to describe embedded devices like the Pocket PC
-platform, including `organiser' and Portable Digital Assistant (PDA).  XCSoar is
+platform, including `organiser', Portable Digital Assistant (PDA)
+and Personal Navigation Assistant (PNA).  XCSoar is
 also available on triadis Engineering's Altair glide computer, which is
 formally an Electronic Flight Instrumentation System, and several other
 platforms. Throughout this document, these terms are used interchangeably to
@@ -77,13 +78,16 @@ It is possible to run XCSoar on an ordinary computer with the Windows
 operating system. This setup can be used for training yourself in using XCSoar.
 A simulation mode is included in XCSoar as well as a IGC replay function, that
 can be used when not connected to a valid GPS source.
-\item[Windows Mobile PDA]
+\item[Windows Mobile PDA/PNA]
 Devices powered by Microsoft Pocket PC 2000 up to Windows Mobile 6 are
 supported by XCSoar. Windows Mobile 7 will not be supported as Microsoft decided
 to skip support for native applications from this version on.
-\item[Unix PC]
-XCSoar can be run on Unix using the Wine emulator. A native Unix port is almost
-ready, but won't be released yet with the 6.0 version of XCSoar.
+\item[Unix/Linux PC]
+XCSoar can be run on Unix using the Wine emulator. A native Unix port
+has been released with the 6.0 version of XCSoar, but is still
+considered experimental.
+\item[Unix/Linux Mobile PDA/PNA]
+\todonum[inline]{Are these supported?  For example, the Tom Tom}
 \item[Android Devices]
 XCSoar runs on Android 1.6 or newer.
 \item[Altair]
@@ -117,7 +121,7 @@ location of this directory is determined with the following method:
 \item[Windows PC]
 \texttt{XCSoarData} is always located in your personal folder (``\texttt{My
 Documents}'')
-\item[Windows Mobile PDA (PNA)]
+\item[Windows Mobile PDA/PNA]
 \begin{itemize}
 \item If you start XCSoar from a SD card, it is always in the root of
   that SD card (e.g. ``\texttt{/SD Card/XCSoarData}'')
@@ -128,9 +132,7 @@ Documents}'')
 \end{itemize}
 \item[Unix PC]
 \begin{itemize}
-\item If \texttt{.xcsoar} exists in you user folder (e.g.
-``\texttt{\~{}/.xcsoar}'') this one is used.
-\item Otherwise ``\texttt{/etc/xcsoar}'' will be used.
+\item \verb|~/.xcsoar/XCSoarData|.
 \end{itemize}
 \item[Android Devices]
 \texttt{XCSoarData} is located on the SD card (e.g.
@@ -214,6 +216,23 @@ Development of a proper windows installer for the PC version is in
 progress.  For now, any additional data files used by the PC version
 must be placed in the \verb|My Documents\XCSoarData| directory.
 
+
+\subsection*{Installation on Unix/Linux}
+
+The file downloaded is \verb|xcsoar_XXX.deb|, where \verb|XXX| includes
+the version number and platform, e.g. \verb|xcsoar_6.0.4_i386.deb|.
+The is a Debian package and can be installed using 
+\begin{center}
+\verb|sudo dpkg -i xcsoar_XXX.deb|.
+\end{center}
+Use \verb|dpkg-query -L xcsoar| to see where the executable and 
+other files are installed,
+Additional data files must be placed in the directory
+\verb|~/.xcsoar/XCSoarData/|.
+If \verb|~/.xcsoar| does not exist, it will be created the first time
+that \verb|xcsoar| is run.
+
+
 \subsection*{Installation on Android}
 
 Obtain XCSoar from Google's Android market, or install the \verb|apk|
@@ -280,6 +299,29 @@ loaded automatically.
 To change the screen orientation, it is convenient to create a shortcut to the
 program, then right click on the shortcut icon and click on ``Shortcut''. 
 In the field ``Target'' add one of the desired options listed above.
+
+\subsection*{XCSoar Unix/Linux PC version}
+Run \verb|xcsoar| from a command line, or create a shortcut on the
+desktop.  The location of the executable file may be found using
+\verb|which xcsoar|.  Only landscape mode is  supported for now.
+
+\subsection*{Loading data files}
+The first time that XCSoar is run, it does not automatically load the 
+data files that you placed in the \verb|XCSoarData| directory.  
+To tell XCSoar which files to load, double click/tap the map (the large,
+blank white part with the glider symbol in the center),
+choose the menu \bmenu{Config} (clik/tap it twice), then select
+\bmenu{System Setup}.  The System Setup screen should be displayed:
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-basic.png}
+\end{center}
+The first page allows you to choose the map, 
+waypoint and airspace files, by clicking/tapping on the text boxes.
+Many other features of XCSoar may be configured with
+\bmenu{System Setup}. These are described in detail in Chapter
+\ref{cha:configuration}.
+Once completed, XCSoar must be restarted; from now on, the data files
+will be loaded automatically at run time.
 
 \subsection*{Start-up and user profiles}
 When XCSoar starts up, it will check for existing profiles. If multiple
