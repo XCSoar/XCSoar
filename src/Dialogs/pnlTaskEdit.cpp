@@ -223,8 +223,8 @@ pnlTaskEdit::OnMakeFinish(WndButton &Sender)
   RefreshView();
 }
 
-void
-pnlTaskEdit::OnMoveUpClicked(WndButton &Sender)
+static void
+MoveUp()
 {
   if (!wTaskPoints)
     return;
@@ -238,11 +238,17 @@ pnlTaskEdit::OnMoveUpClicked(WndButton &Sender)
 
   wTaskPoints->SetCursorIndex(index - 1);
   *task_modified = true;
-  RefreshView();
+  pnlTaskEdit::RefreshView();
 }
 
 void
-pnlTaskEdit::OnMoveDownClicked(WndButton &Sender)
+pnlTaskEdit::OnMoveUpClicked(WndButton &Sender)
+{
+  MoveUp();
+}
+
+static void
+MoveDown()
 {
   if (!wTaskPoints)
     return;
@@ -256,7 +262,13 @@ pnlTaskEdit::OnMoveDownClicked(WndButton &Sender)
 
   wTaskPoints->SetCursorIndex(index + 1);
   *task_modified = true;
-  RefreshView();
+  pnlTaskEdit::RefreshView();
+}
+
+void
+pnlTaskEdit::OnMoveDownClicked(WndButton &Sender)
+{
+  MoveDown();
 }
 
 bool
@@ -289,6 +301,21 @@ pnlTaskEdit::OnKeyDown(WndForm &Sender, unsigned key_code)
       return true;
     }
     return false;
+
+  case '6': /* F5 */
+    if (is_altair()) {
+      MoveUp();
+      return true;
+    } else
+      return false;
+
+  case '7': /* F6 */
+    if (is_altair()) {
+      MoveDown();
+      return true;
+    } else
+      return false;
+
   default:
     return false;
   }

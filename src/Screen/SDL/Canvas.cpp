@@ -390,6 +390,37 @@ Canvas::stretch_transparent(const Bitmap &src, Color key)
 }
 
 void
+Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
+{
+  assert(src.defined());
+
+  SDL_Surface *src_surface = src.native();
+  const unsigned src_x = 0, src_y = 0;
+  const unsigned src_width = src_surface->w;
+  const unsigned src_height = src_surface->h;
+  const unsigned dest_x = 0, dest_y = 0;
+  const unsigned dest_width = get_width();
+  const unsigned dest_height = get_height();
+
+  SDL_Surface *zoomed =
+    ::zoomSurface(src_surface, (double)dest_width / (double)src_width,
+                  (double)dest_height / (double)src_height,
+                  SMOOTHING_OFF);
+
+  if (zoomed == NULL)
+    return;
+
+  ::SDL_SetColorKey(zoomed, SDL_SRCCOLORKEY,
+                    ::SDL_MapRGB(zoomed->format, key.value.r,
+                                 key.value.g, key.value.b));
+
+  copy_not(dest_x, dest_y, dest_width, dest_height,
+           zoomed, (src_x * dest_width) / src_width,
+           (src_y * dest_height) / src_height);
+  ::SDL_FreeSurface(zoomed);
+}
+
+void
 Canvas::stretch(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 SDL_Surface *src,
@@ -480,6 +511,64 @@ clip_range(int &a, unsigned a_size, int &b, unsigned b_size, unsigned &size)
     size = b_size - b;
 
   return (int)size > 0;
+}
+
+static void
+blit_not(SDL_Surface *dest, int dest_x, int dest_y,
+         unsigned dest_width, unsigned dest_height,
+         SDL_Surface *_src, int src_x, int src_y)
+{
+  int ret;
+
+  /* obey the dest and src surface borders */
+
+  if (!clip_range(dest_x, dest->w, src_x, _src->w, dest_width) ||
+      !clip_range(dest_y, dest->h, src_y, _src->h, dest_height))
+    return;
+
+  ret = ::SDL_LockSurface(dest);
+  if (ret != 0)
+    return;
+
+  /* convert src's pixel format */
+
+  SDL_Surface *src = ::SDL_ConvertSurface(_src, dest->format, SDL_SWSURFACE);
+  if (src == NULL) {
+    ::SDL_UnlockSurface(dest);
+    return;
+  }
+
+  ret = ::SDL_LockSurface(src);
+  if (ret != 0) {
+    ::SDL_FreeSurface(src);
+    ::SDL_UnlockSurface(dest);
+    return;
+  }
+
+  /* get pointers to the upper left dest/src pixel */
+
+  unsigned char *dest_buffer = (unsigned char *)dest->pixels;
+  dest_buffer += dest_y * dest->pitch +
+    dest_x * dest->format->BytesPerPixel;
+
+  unsigned char *src_buffer = (unsigned char *)src->pixels;
+  src_buffer += src_y * src->pitch +
+    src_x * src->format->BytesPerPixel;
+
+  /* copy line by line */
+
+  for (unsigned y = 0; y < dest_height; ++y) {
+    ::SDL_imageFilterBitNegation(src_buffer, dest_buffer,
+                                 dest_width * dest->format->BytesPerPixel);
+    src_buffer += src->pitch;
+    dest_buffer += dest->pitch;
+  }
+
+  /* cleanup */
+
+  ::SDL_UnlockSurface(src);
+  ::SDL_FreeSurface(src);
+  ::SDL_UnlockSurface(dest);
 }
 
 static void
@@ -596,6 +685,20 @@ blit_and(SDL_Surface *dest, int dest_x, int dest_y,
   ::SDL_UnlockSurface(src);
   ::SDL_FreeSurface(src);
   ::SDL_UnlockSurface(dest);
+}
+
+void
+Canvas::copy_not(int dest_x, int dest_y,
+                 unsigned dest_width, unsigned dest_height,
+                 SDL_Surface *src, int src_x, int src_y)
+{
+  assert(src != NULL);
+
+  dest_x += x_offset;
+  dest_y += y_offset;
+
+  ::blit_not(surface, dest_x, dest_y, dest_width, dest_height,
+             src, src_x, src_y);
 }
 
 void

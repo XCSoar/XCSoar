@@ -54,14 +54,27 @@ Version 6.1 - not yet released
     - along home direction
   - "long-click" in task turnpoint zone displays Target dialog
 
-Version 6.0.5 - not yet released
+Version 6.0.5 - 2011/02/26
 * devices:
   - EWMicroRecorder: fix hang during task declaration
+  - FLARM: parse PGRMZ as altitude above 1013.25 hPa
+* user interface
+  - scale the "Today Screen" buttons on large screens
+  - fix page numbers in satellite image renderer
+  - generate satellite file name from original waypoint id
+* map
+  - terrain: permanently disable failed tiles
+  - terrain: fix "unexpected marker segment type" error
+  - AAT: don't draw "dead zone" on ancient hardware (PPC2000)
+  - Airspace: disable stencil buffer on ancient hardware (PPC2000)
 * Android
   - fix bitmap loading on Samsung Galaxy Tab
   - show Bluetooth device names in configuration dialog
   - larger default fonts
   - improved airspace rendering
+* Altair
+  - fix dialog hot keys
+  - task editor: bind F5/F6 to move up/down
 
 Version 6.0.4 - 2011/02/19
 * devices

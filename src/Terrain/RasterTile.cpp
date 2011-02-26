@@ -371,6 +371,25 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
   return skip_to - file_offset;
 }
 
+/**
+ * Does this segment belong to the preceding tile?  If yes, then it
+ * inherits the tile number.
+ */
+static bool
+is_tile_segment(unsigned id)
+{
+  return id == 0xff93 /* SOD */ ||
+    id == 0xff52 /* COD */ ||
+    id == 0xff53 /* COC */ ||
+    id == 0xff5c /* QCD */ ||
+    id == 0xff5d /* QCC */ ||
+    id == 0xff5e /* RGN */ ||
+    id == 0xff5f /* POC */ ||
+    id == 0xff61 /* PPT */ ||
+    id == 0xff58 /* PLT */ ||
+    id == 0xff64 /* COM */;
+}
+
 void
 RasterTileCache::MarkerSegment(long file_offset, unsigned id)
 {
@@ -380,8 +399,8 @@ RasterTileCache::MarkerSegment(long file_offset, unsigned id)
   ProgressGlue::SetValue(file_offset / 65536);
 
   int tile = -1;
-  if (id == 0xff93 && !segments.empty())
-    /* this SOD segment belongs to the same tile as the preceding SOT
+  if (is_tile_segment(id) && !segments.empty())
+    /* this segment belongs to the same tile as the preceding SOT
        segment */
     tile = segments.last().tile;
 
@@ -493,8 +512,19 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file)
 void
 RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
 {
-  if (PollTiles(x, y, radius))
-    LoadJPG2000(path);
+  if (!PollTiles(x, y, radius))
+    return;
+
+  LoadJPG2000(path);
+
+  /* permanently disable the requested tiles which are still not
+     loaded, to prevent trying to reload them over and over in a busy
+     loop */
+  for (unsigned i = 0; i < RequestTiles.size(); ++i) {
+    RasterTile &tile = tiles[RequestTiles[i]];
+    if (tile.is_requested() && !tile.IsEnabled())
+      tile.Clear();
+  }
 }
 
 bool

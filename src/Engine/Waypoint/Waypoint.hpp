@@ -85,6 +85,12 @@ public:
 
   /** Unique id */
   unsigned id;
+
+  /**
+   * The id number as specified in the input file.
+   */
+  unsigned original_id;
+
   /** Geodetic location */
   GeoPoint Location;
   /** Height AMSL (m) of waypoint terrain */

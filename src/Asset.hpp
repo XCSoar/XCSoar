@@ -108,6 +108,22 @@ is_old_ce()
 }
 
 /**
+ * Is XCSoar running on ancient and slow hardware?  If yes, then some
+ * expensive UI features are disabled.
+ */
+static inline bool
+is_ancient_hardware()
+{
+#if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
+  /* Windows CE 3.0 (PPC2000 & PPC2002) */
+  return true;
+#else
+  /* we assume that all other platforms are fast enough */
+  return false;
+#endif
+}
+
+/**
  * Returns whether the application is running on a HP31x
  * @return True if host hardware is a HP31x, False otherwise
  */

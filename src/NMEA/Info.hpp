@@ -243,6 +243,12 @@ struct NMEA_INFO {
     BARO_ALTITUDE_GARMIN,
 
     /**
+     * Parsed from proprietary Garmin sentence "PGRMZ", emitted by
+     * a FLARM.
+     */
+    BARO_ALTITUDE_FLARM,
+
+    /**
      * Parsed from proprietary EW sentence "PGRMZ".
      */
     BARO_ALTITUDE_EW,

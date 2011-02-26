@@ -148,16 +148,21 @@ class NativeView extends SurfaceView
 
     int[] num_config = new int[1];
     int[] configSpec = new int[]{
+      EGL10.EGL_STENCIL_SIZE, 1,  /* Don't change this position in array! */
       EGL10.EGL_RED_SIZE, 4,
       EGL10.EGL_GREEN_SIZE, 4,
       EGL10.EGL_BLUE_SIZE, 4,
       EGL10.EGL_ALPHA_SIZE, 0,
       EGL10.EGL_DEPTH_SIZE, 0,
-      EGL10.EGL_STENCIL_SIZE, 1,
       EGL10.EGL_NONE
     };
 
     egl.eglChooseConfig(display, configSpec, null, 0, num_config);
+    if (num_config[0] == 0) {
+      /* fallback in case stencil buffer is not available */
+      configSpec[1] = 0;
+      egl.eglChooseConfig(display, configSpec, null, 0, num_config);
+    }
 
     int numConfigs = num_config[0];
     EGLConfig[] configs = new EGLConfig[numConfigs];

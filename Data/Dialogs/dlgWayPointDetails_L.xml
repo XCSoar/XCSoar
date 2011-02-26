@@ -32,5 +32,5 @@
     <Button Name="cmdActivatePan" Caption="Pan to waypoint" X="40" Width="-50" Height="30" />
   </Panel>
 
-  <Canvas Name="frmImage" X="76" Y="0" Visible="0"/>
+  <Canvas Name="frmImage" X="76" Y="0" Visible="0" Border="1"/>
 </Form>

@@ -114,22 +114,10 @@ MapCanvas::prepare_polygon(const SearchPointVector &points)
 }
 
 void
-MapCanvas::prepare_circle(const GeoPoint &center, fixed radius)
-{
-  raster_points.grow_discard(1);
-  num_raster_points = 1;
-  raster_points[0] = projection.GeoToScreen(center);
-  screen_radius = projection.GeoToScreenDistance(radius);
-}
-
-void
 MapCanvas::draw_prepared()
 {
   /* draw it all */
-  if (num_raster_points == 1) {
-    // OpenGL TODO: cache and mabye clip the circle coordinates
-    canvas.circle(raster_points[0].x, raster_points[0].y, screen_radius);
-  } else if (visible(raster_points.begin(), num_raster_points)) {
+  if (visible(raster_points.begin(), num_raster_points)) {
     canvas.polygon(raster_points.begin(), num_raster_points);
   }
 }

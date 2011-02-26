@@ -325,18 +325,19 @@ Changing the active waypoint is performed automatically by default in the follow
 \item[Auto advance mode]
 Once the aircraft enters the turn point observation zone (OZ) and satisfies
 the turn point rules, the software will automatically select the next
-task turn point.
+task turn point. This is the default behavior for almost every task waypoint.
+An exceptions is the AAT task.
 
 The active waypoint is advanced through the list of waypoints in the
 task automatically: the start waypoint is advanced when the starting
 conditions are met (such as flying through a start line or leaving a
 start cylinder); intermediate waypoints are advanced when the glider
-passes through the observation zone for AAT tasks, the waypoint is
-advanced when the glider enters the AAT area).
-\item[Arm auto advance]
-This is similar to the Auto method, but it requires the pilot to arm a
-trigger.  Therefore, if the advancement conditions are met but the
-trigger is not armed, the waypoint is not advanced.  The `Arm' button can be 
+enters the observation zone.
+
+\item[Manually arm mode]
+This is quite similar to the Auto method, but it requires the pilot to manually
+interact and arm a trigger.  Therefore, if the advancement conditions are met
+but the trigger is not armed, the waypoint is not advanced.  The `Arm' button can be 
 used to arm the trigger.  It is accessed via the menu
 \begin{quote}
 \bmenu{Nav}\blink\bmenu{Arm Start/Turn}
@@ -344,14 +345,10 @@ used to arm the trigger.  It is accessed via the menu
 This is used for all waypoints with an variable target like the AAT observation
 zone with an obtimised target point, so that the minimum task time
 conditaion will be meet.
-%\item[Arm auto advance start]
-%This is similar to the Auto method but the start must be armed.
-%Therefore, the pilot must press the arm button before starting, and on
-%subsequent waypoints the advancement is automatic.
 \end{description}  
 
-Status messages are given in arm modes when inside the observation sector, 
-as reminders to press arm when the pilot is ready to advance to the next
+Status messages are given in manually arm mode when inside the observation
+sector, as reminders to press arm when the pilot is ready to advance to the next
 waypoint. For starting, a warning is given that the glider is in the start
 cylinder or behind the start line, as a reminder to ``arm'' if necessary.
 
@@ -378,31 +375,29 @@ flying a casual cross-country task.
 waypoints to the start.
 
 In all modes, if the glider re-enters the start zone or crosses the
-start line within 10 minutes of the previous start, the task may be
-automatically restarted.  In ``arm'' mode, the pilot still
-needs to activate ``arm'' to re-start.
+start of the previous start, the task will be automatically restarted. 
 
 When selecting \button{Previous turnpoint}, the trigger that detects
 auto-advance for that waypoint is cleared; meaning that the task
-computer expects the aircraft wants to fly to that observation zone (OZ)
+manager expects the aircraft wants to fly to that observation zone (OZ)
 again before continuing the task.  The pilot may still select \button{Next
 turnpoint} to advance to the next task waypoint.
 
 A system beep and message is given on task/waypoint advance.  The
 messages are given when the system advances the task waypoint
-automatically or, in arm modes, when the system is armed and the
+automatically or, in manually arm mode, when the system is armed and the
 aircraft is in sector:
 \begin{itemize}
 \item[Task start]  appears when the aircraft has crossed the start line or
- exited the start sector. 
+ exited the start sector. This can be repeated any time.
 \item[Next turnpoint]  appears when the aircraft has entered the observation
  sector for turnpoints. Turns with variable target advance as soon as
- \button{Arm turn} is pressed (arm auto advacne).  For arm modes, if the aircraft has 
- already entered the observation sector and left, pressing arm will
- cause the message to appear to confirm a valid advance to the next
- turnpoint.
+ \button{Arm Turn} is pressed.  For the manually arm mode, if the
+ aircraft has already entered the observation sector and left, pressing arm will
+ cause the task manager to expect, that the turn is intended to approach
+ another time.
 \item[Task finish]  appears when the aircraft has crossed the finish line
- or entered the finish cylinder.  This occurs in all advance modes. 
+ or entered the finish cylinder.  This occurs in both advance modes. 
 \end{itemize}
 
 \section{Task rules}\label{sec:task-rules}
@@ -725,7 +720,7 @@ Target (-80\%) moved along track line & Target (80\%) moved along track \\
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat05.png} & 
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat06.png} \\
 {\em Analysis (task page)} & {\em Next waypoint} \\
-Path around active target  & Arm advance pressed \\
+Path around active target  & ``Arm Turn'' pressed \\
 \bottomrule
 \end{longtable}
 \end{center}
@@ -744,7 +739,7 @@ Best scored target found & Target (60\%) is on bisector \\
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat09.png} & 
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat11.png} \\
 {\em Inside sector} & {\em Next waypoint} \\
-Target (60\%) moved along track line & Arm advance pressed \\
+Target (60\%) moved along track line & ``Arm Turn" pressed \\
 
 \midrule
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat12.png} &  \\

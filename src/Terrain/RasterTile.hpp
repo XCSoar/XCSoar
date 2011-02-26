@@ -73,6 +73,14 @@ public:
     height = yend - ystart;
   }
 
+  /**
+   * Permanently disable this tile after a failure.
+   */
+  void Clear() {
+    width = height = 0;
+    request = false;
+  }
+
   bool defined() const {
     return width > 0 && height > 0;
   }
@@ -166,9 +174,9 @@ class RasterTileCache : private NonCopyable {
   struct CacheHeader {
     enum {
 #ifdef FIXED_MATH
-      VERSION = 0x2,
+      VERSION = 0x4,
 #else
-      VERSION = 0x3,
+      VERSION = 0x5,
 #endif
     };
 

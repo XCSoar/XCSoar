@@ -31,6 +31,10 @@ Copyright_License {
 
 #ifdef GNAV
   #define TARGET "Altair"
+#elif defined(ANDROID)
+  #define TARGET "Android"
+#elif defined(__linux__)
+  #define TARGET "Linux"
 #elif !defined(WIN32)
   #define TARGET "UNIX"
 #elif !defined(_WIN32_WCE)

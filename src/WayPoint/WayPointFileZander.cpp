@@ -58,6 +58,7 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
 
   Waypoint new_waypoint(location);
   new_waypoint.FileNum = file_num;
+  new_waypoint.original_id = 0;
 
   // Name (Characters 0-12)
   if (!parseString(line, new_waypoint.Name, 12))

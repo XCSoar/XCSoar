@@ -288,7 +288,7 @@ gcc_pure
 static bool
 check_special_key(const MSG &msg)
 {
-  return !is_special_key(msg.wParam) || check_key(msg);
+  return is_special_key(msg.wParam) && check_key(msg);
 }
 
 #endif /* !ENABLE_SDL */

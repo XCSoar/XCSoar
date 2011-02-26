@@ -36,6 +36,7 @@ Copyright_License {
 #include "RenderObservationZone.hpp"
 #include "NMEA/Info.hpp"
 #include "SettingsMap.hpp"
+#include "Asset.hpp"
 
 RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
                                  const WindowProjection &_projection,
@@ -127,7 +128,7 @@ RenderTaskPoint::Visit(const AATPoint& tp)
   
 #ifndef ENABLE_OPENGL
   if (m_layer == RENDER_TASK_OZ_SHADE && buffer != NULL &&
-      do_draw_deadzone(tp)) {
+      do_draw_deadzone(tp) && !is_ancient_hardware()) {
     // Draw clear area on top indicating part of OZ already travelled in
     // This provides a simple and intuitive visual representation of
     // where in the OZ to go to increase scoring distance.
@@ -270,7 +271,7 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
 void 
 RenderTaskPoint::draw_deadzone(const AATPoint& tp) 
 {
-  if (!do_draw_deadzone(tp)) {
+  if (!do_draw_deadzone(tp) || is_ancient_hardware()) {
     return;
   }
   /*
