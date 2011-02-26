@@ -71,6 +71,16 @@ public:
   gcc_pure
   unsigned distance(const FlatBoundingBox &f) const;
 
+  /**
+   * Test whether a point is inside the bounding box
+   *
+   * @param loc Point to test
+   *
+   * @return true if loc is inside the bounding box
+   */
+  gcc_pure
+  bool is_inside(const FlatGeoPoint& loc) const;
+
   /** 
    * Function object used by kd-tree to index coordinates 
    */

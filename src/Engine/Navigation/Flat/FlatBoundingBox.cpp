@@ -122,3 +122,17 @@ FlatBoundingBox::overlaps(const FlatBoundingBox& other) const
 
   return true;
 }
+
+bool
+FlatBoundingBox::is_inside(const FlatGeoPoint& loc) const
+{
+  if (loc.Longitude < bb_ll.Longitude)
+    return false;
+  if (loc.Longitude > bb_ur.Longitude)
+    return false;
+  if (loc.Latitude < bb_ll.Latitude)
+    return false;
+  if (loc.Latitude > bb_ur.Latitude)
+    return false;
+  return true;
+}
