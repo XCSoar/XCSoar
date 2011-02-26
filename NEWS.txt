@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.0.5 - not yet released
+Version 6.0.5 - 2011/02/26
 * devices:
   - EWMicroRecorder: fix hang during task declaration
   - FLARM: parse PGRMZ as altitude above 1013.25 hPa
