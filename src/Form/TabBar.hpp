@@ -162,6 +162,7 @@ public:
   const TCHAR* GetButtonCaption(unsigned i);
   const MaskedIcon* GetButtonIcon(unsigned i);
   bool GetButtonIsButtonOnly(unsigned i);
+  unsigned GetTabLineHeight() {return TabLineHeight; }
 
 protected:
   TabDisplay * theTabDisplay;
