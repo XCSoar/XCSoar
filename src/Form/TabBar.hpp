@@ -169,6 +169,10 @@ protected:
   const unsigned int TabLineHeight;
   bool flipOrientation;
 
+private:
+  // used to indicate initial state before tabs have changed
+  bool setting_up;
+
 };
 
 /**

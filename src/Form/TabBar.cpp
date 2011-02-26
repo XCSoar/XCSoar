@@ -39,7 +39,8 @@ TabBarControl::TabBarControl(ContainerWindow &_parent,
                 TabLineHeight((Layout::landscape ^ _flipOrientation) ?
                     (Layout::Scale(TabLineHeightInitUnscaled) * 0.75) :
                     Layout::Scale(TabLineHeightInitUnscaled)),
-                flipOrientation(_flipOrientation)
+                flipOrientation(_flipOrientation),
+                setting_up(true)
 {
   theTabDisplay = new TabDisplay(*this, x, y, _width, _height, flipOrientation);
 }
@@ -113,7 +114,7 @@ TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
       buttons[GetCurrentPage()]->ReClickFunction();
 
   } else {
-    if (buttons[GetCurrentPage()]->PreHideFunction) {
+    if (!setting_up && buttons[GetCurrentPage()]->PreHideFunction) {
       if (!buttons[GetCurrentPage()]->PreHideFunction())
           Continue = false;
     }
@@ -132,6 +133,8 @@ TabBarControl::SetCurrentPage(unsigned i, EventType _EventType,
     }
   }
   theTabDisplay->trigger_invalidate();
+
+  setting_up = false;
 }
 
 void
