@@ -27,8 +27,6 @@ Copyright_License {
 
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "Components.hpp"
-#include "Gauge/TaskView.hpp"
 #include "Interface.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Form/TabBar.hpp"
@@ -41,10 +39,7 @@ static WndForm* wf = NULL;
 static TabBarControl* wTabBar = NULL;
 static WndOwnerDrawFrame* wTaskView = NULL;
 static WndFrame* wSummary = NULL;
-static RECT TaskViewRect;
-static RECT TaskPointsRect;
 static RECT TaskSummaryRect;
-static bool fullscreen;
 static WndListFrame* wTaskPoints = NULL;
 static OrderedTask* ordered_task = NULL;
 static OrderedTask** ordered_task_pointer = NULL;
@@ -106,14 +101,6 @@ pnlTaskEdit::OnNewClicked(WndButton &Sender)
     *task_modified = true;
     RefreshView();
   }
-}
-
-void
-pnlTaskEdit::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
-{
-  PaintTask(canvas, Sender->get_client_rect(), *ordered_task,
-            XCSoarInterface::Basic().Location,
-            XCSoarInterface::SettingsMap(), terrain);
 }
 
 void
@@ -272,26 +259,6 @@ pnlTaskEdit::OnMoveDownClicked(WndButton &Sender)
 }
 
 bool
-pnlTaskEdit::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
-{
-  if (!fullscreen) {
-    const unsigned xoffset = (Layout::landscape ? wTabBar->GetTabWidth() : 0);
-    const unsigned yoffset = (!Layout::landscape ? wTabBar->GetTabHeight() : 0);
-    Sender->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
-                    wf->GetClientAreaWindow().get_height() - yoffset);
-    fullscreen = true;
-    Sender->show_on_top();
-  } else {
-    Sender->move(TaskViewRect.left, TaskViewRect.top,
-                    TaskViewRect.right - TaskViewRect.left,
-                    TaskViewRect.bottom - TaskViewRect.top);
-    fullscreen = false;
-  }
-  Sender->invalidate();
-  return true;
-}
-
-bool
 pnlTaskEdit::OnKeyDown(WndForm &Sender, unsigned key_code)
 {
   switch (key_code){
@@ -361,14 +328,10 @@ pnlTaskEdit::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
 
   wTaskPoints = (WndListFrame*)wf->FindByName(_T("frmTaskPoints"));
   assert(wTaskPoints != NULL);
-  TaskPointsRect = wTaskPoints->get_position();
 
   wTaskView = (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskView"));
   assert(wTaskView != NULL);
-
-  TaskViewRect = wTaskView->get_position();
-  wTaskView->SetOnMouseDownNotify(OnTaskViewClick);
-  fullscreen = false;
+  wTaskView->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
 
   wSummary = (WndFrame *)wf->FindByName(_T("frmSummary"));
   assert(wSummary);

@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "DataField/Enum.hpp"
+#include "Components.hpp"
+#include "Gauge/TaskView.hpp"
 
 class dlgTaskManager
 {
@@ -47,6 +49,23 @@ public:
   static void dlgTaskManagerShowModal(SingleWindow &parent);
   static void RevertTask();
   static CallBackTableEntry CallBackTable[];
+
+public:
+  /**
+   * paints the task int the frame
+   * @param Sender the frame in which to paint the task
+   * @param canvas the canvas in which to paint the task
+   */
+  static void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
+
+  /**
+   * toggles maximize or restore state of the TaskView frame
+   * @param Sender
+   * @param x
+   * @param y
+   * @return
+   */
+  static bool OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y);
 };
 
 
@@ -110,21 +129,6 @@ public:
    */
   static void RefreshView();
 
-  /**
-   * paints the task int the frame
-   * @param Sender the frame in which to paint the task
-   * @param canvas the canvas in which to paint the task
-   */
-  static void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
-
-  /**
-   * toggles maximize or restore state of the TaskView frame
-   * @param Sender
-   * @param x
-   * @param y
-   * @return
-   */
-  static bool OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y);
   /**
    * callback to when tab is viewed
    * loads task, refreshes view

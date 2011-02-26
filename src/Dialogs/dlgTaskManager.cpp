@@ -48,6 +48,36 @@ static TabBarControl* wTabBar = NULL;
 static OrderedTask* active_task = NULL;
 static bool task_modified = false;
 static bool goto_calculator_on_exit = false;
+static bool fullscreen;
+static RECT TaskViewRect;
+
+bool
+dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
+{
+  if (!fullscreen) {
+    const unsigned xoffset = (Layout::landscape ? wTabBar->GetTabWidth() : 0);
+    const unsigned yoffset = (!Layout::landscape ? wTabBar->GetTabHeight() : 0);
+    Sender->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
+                    wf->GetClientAreaWindow().get_height() - yoffset);
+    fullscreen = true;
+    Sender->show_on_top();
+  } else {
+    Sender->move(TaskViewRect.left, TaskViewRect.top,
+                    TaskViewRect.right - TaskViewRect.left,
+                    TaskViewRect.bottom - TaskViewRect.top);
+    fullscreen = false;
+  }
+  Sender->invalidate();
+  return true;
+}
+
+void
+dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+{
+  PaintTask(canvas, Sender->get_client_rect(), *active_task,
+            XCSoarInterface::Basic().Location,
+            XCSoarInterface::SettingsMap(), terrain);
+}
 
 bool
 dlgTaskManager::CommitTaskChanges()
@@ -92,12 +122,13 @@ dlgTaskManagerShowModal(SingleWindow &parent)
 }
 
 CallBackTableEntry dlgTaskManager::CallBackTable[] = {
+  DeclareCallBackEntry(dlgTaskManager::OnTaskPaint),
+
   DeclareCallBackEntry(pnlTaskEdit::OnMakeFinish),
   DeclareCallBackEntry(pnlTaskEdit::OnMoveUpClicked),
   DeclareCallBackEntry(pnlTaskEdit::OnMoveDownClicked),
   DeclareCallBackEntry(pnlTaskEdit::OnEditTurnpointClicked),
   DeclareCallBackEntry(pnlTaskEdit::OnNewClicked),
-  DeclareCallBackEntry(pnlTaskEdit::OnTaskPaint),
   DeclareCallBackEntry(pnlTaskEdit::OnTabPreShow),
 
   DeclareCallBackEntry(pnlTaskProperties::OnTaskTypeData),
@@ -157,6 +188,11 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL, NULL,
                      pnlTaskEdit::OnTabPreShow);
 
+  WndOwnerDrawFrame* wTaskView =
+      (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskView"));
+  assert(wTaskView);
+  TaskViewRect = wTaskView->get_position();
+
 
   Window* wProps =
     pnlTaskProperties::Load(parent, wTabBar, wf, &active_task, &task_modified);
@@ -181,6 +217,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                      pnlTaskManagerClose::OnTabPreShow, NULL, pnlTaskManagerClose::OnTabReClick);
 
   wTabBar->SetCurrentPage(0);
+  fullscreen = false;
 
   wf->ShowModal();
 

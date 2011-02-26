@@ -11,6 +11,6 @@
   <Button Name="cmdNew" Caption="Clear Task" X="180" Y="171" Width="57" Height="35" OnClick="pnlTaskEdit::OnNewClicked"/>
 
   <Label Name="frmSummary" X="107" Y="208" Width="133" Height="97" Border="0"/>
-  <Canvas Name="frmTaskView" X="0" Y="208" Width="109" Height="97" Border="0" OnPaint="pnlTaskEdit::OnTaskPaint" />
+  <Canvas Name="frmTaskView" X="0" Y="208" Width="109" Height="97" Border="0" OnPaint="dlgTaskManager::OnTaskPaint" />
 
 </Panel>
