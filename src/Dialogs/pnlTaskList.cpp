@@ -361,6 +361,12 @@ pnlTaskList::OnTabPreShow(TabBarControl::EventType EventType)
 }
 
 void
+pnlTaskList::OnTabReClick()
+{
+  dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
+}
+
+void
 pnlTaskList::DestroyTab()
 {
   task_store.clear();

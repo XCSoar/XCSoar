@@ -141,6 +141,11 @@ public:
    * @return True
    */
   static bool OnTabPreShow(TabBarControl::EventType EventType);
+
+  /**
+   * unzooms the task view if it is maximized
+   */
+  static void OnTabReClick();
 };
 
 class pnlTaskProperties
@@ -184,6 +189,11 @@ public:
    * @return true
    */
   static bool OnTabPreShow(TabBarControl::EventType EventType);
+
+  /**
+   * unzooms the task view if it is maximized
+   */
+  static void OnTabReClick();
 };
 
 class pnlTaskList
@@ -215,6 +225,11 @@ public:
    * @return True
    */
   static bool OnTabPreShow(TabBarControl::EventType EventType);
+
+  /**
+   * unzooms the task view if it is maximized
+   */
+  static void OnTabReClick();
 
   /**
    *  called when parent dialog closes

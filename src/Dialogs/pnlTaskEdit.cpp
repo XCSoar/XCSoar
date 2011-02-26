@@ -300,6 +300,12 @@ pnlTaskEdit::OnTabPreShow(TabBarControl::EventType EventType)
   return true;
 }
 
+void
+pnlTaskEdit::OnTabReClick()
+{
+  dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
+}
+
 Window*
 pnlTaskEdit::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
                   OrderedTask** task, bool* _task_modified)

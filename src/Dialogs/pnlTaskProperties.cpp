@@ -220,6 +220,12 @@ pnlTaskProperties::OnTabPreHide()
 }
 
 void
+pnlTaskProperties::OnTabReClick()
+{
+  dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
+}
+
+void
 pnlTaskProperties::OnFAIFinishHeightData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();

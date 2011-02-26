@@ -221,14 +221,17 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                          pnlTaskCalculator::OnTabPreShow);
 
     wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL, NULL,
-                         pnlTaskEdit::OnTabPreShow);
+                         pnlTaskEdit::OnTabPreShow, NULL,
+                         pnlTaskEdit::OnTabReClick);
 
-    wTabBar->AddClient(wLst, _T("Browse declare"), false, NULL, NULL,
-                       pnlTaskList::OnTabPreShow);
+    wTabBar->AddClient(wLst, _T("Browse/ Declare"), false, NULL, NULL,
+                       pnlTaskList::OnTabPreShow, NULL,
+                       pnlTaskList::OnTabReClick);
 
     wTabBar->AddClient(wProps, _T("Properties"), false, NULL,
                            pnlTaskProperties::OnTabPreHide,
-                           pnlTaskProperties::OnTabPreShow);
+                           pnlTaskProperties::OnTabPreShow, NULL,
+                           pnlTaskProperties::OnTabReClick);
 
     wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hFinalGlide*/, NULL,
                            pnlTaskManagerClose::OnTabPreShow, NULL, pnlTaskManagerClose::OnTabReClick);
@@ -237,7 +240,8 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   } else {
     wTabBar->AddClient(wProps, _T("Properties"), false, NULL,
                            pnlTaskProperties::OnTabPreHide,
-                           pnlTaskProperties::OnTabPreShow);
+                           pnlTaskProperties::OnTabPreShow, NULL,
+                           pnlTaskProperties::OnTabReClick);
 
     wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hFinalGlide*/, NULL,
                            pnlTaskManagerClose::OnTabPreShow, NULL, pnlTaskManagerClose::OnTabReClick);
@@ -246,10 +250,12 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                          pnlTaskCalculator::OnTabPreShow);
 
     wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL, NULL,
-                         pnlTaskEdit::OnTabPreShow);
+                         pnlTaskEdit::OnTabPreShow, NULL,
+                         pnlTaskEdit::OnTabReClick);
 
-    wTabBar->AddClient(wLst, _T("Browse declare"), false, NULL, NULL,
-                       pnlTaskList::OnTabPreShow);
+    wTabBar->AddClient(wLst, _T("Browse/ Declare"), false, NULL, NULL,
+                       pnlTaskList::OnTabPreShow, NULL,
+                       pnlTaskList::OnTabReClick);
     wTabBar->SetCurrentPage(2);
   }
 
