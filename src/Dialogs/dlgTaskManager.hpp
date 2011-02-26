@@ -50,6 +50,11 @@ public:
   static void RevertTask();
   static CallBackTableEntry CallBackTable[];
 
+  /**
+   * restores task view rect
+   */
+  static void TaskViewRestore(WndOwnerDrawFrame *wTaskView);
+
 public:
   /**
    * paints the task int the frame

@@ -295,6 +295,7 @@ pnlTaskEdit::OnTabPreShow(TabBarControl::EventType EventType)
     ordered_task = *ordered_task_pointer;
     wTaskPoints->SetCursorIndex(0);
   }
+  dlgTaskManager::TaskViewRestore(wTaskView);
   RefreshView();
   return true;
 }

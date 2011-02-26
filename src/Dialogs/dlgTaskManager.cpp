@@ -72,6 +72,15 @@ dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
 }
 
 void
+dlgTaskManager::TaskViewRestore(WndOwnerDrawFrame *wTaskView)
+{
+  fullscreen = false;
+  wTaskView->move(TaskViewRect.left, TaskViewRect.top,
+      TaskViewRect.right - TaskViewRect.left,
+      TaskViewRect.bottom - TaskViewRect.top);
+}
+
+void
 dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   PaintTask(canvas, Sender->get_client_rect(), *active_task,
