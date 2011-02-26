@@ -20,6 +20,8 @@ Version 6.0.5 - not yet released
   - show Bluetooth device names in configuration dialog
   - larger default fonts
   - improved airspace rendering
+* Altair
+  - fix dialog hot keys
 
 Version 6.0.4 - 2011/02/19
 * devices
