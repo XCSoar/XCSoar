@@ -222,20 +222,18 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   using namespace Pages;
 
   if (_tcscmp(misc, _T("normal")) == 0) {
-    PageLayout pl(PageLayout::t_Map);
-    pl.MapInfoBoxes = PageLayout::mib_Normal;
+    PageLayout pl(PageLayout::tlMapAndInfoBoxes);
     OpenLayout(pl);
   } else if (_tcscmp(misc, _T("auxilary")) == 0) {
-    PageLayout pl(PageLayout::t_Map);
-    pl.MapInfoBoxes = PageLayout::mib_Aux;
+    PageLayout pl(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(false, 3));
     OpenLayout(pl);
   } else if (_tcscmp(misc, _T("toggleauxiliary")) == 0) {
-    PageLayout pl(PageLayout::t_Map);
-    pl.MapInfoBoxes = XCSoarInterface::SettingsMap().EnableAuxiliaryInfo ?
-                      PageLayout::mib_Normal : PageLayout::mib_Aux;
+    PageLayout pl(!XCSoarInterface::SettingsMap().EnableAuxiliaryInfo ?
+      PageLayout(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(false, 3)) :
+      PageLayout(PageLayout::tlMapAndInfoBoxes));
     OpenLayout(pl);
   } else if (_tcscmp(misc, _T("full")) == 0) {
-    PageLayout pl(PageLayout::t_Map);
+    PageLayout pl(PageLayout::tlMap);
     OpenLayout(pl);
   } else if (_tcscmp(misc, _T("togglefull")) == 0) {
     XCSoarInterface::main_window.SetFullScreen(

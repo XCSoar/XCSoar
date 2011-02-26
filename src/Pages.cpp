@@ -27,250 +27,242 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Profile/Profile.hpp"
+#include "Profile/InfoBoxConfig.hpp"
 #include "Language.hpp"
 
 #include <stdio.h>
 
 namespace Pages
 {
-  int Current = 0;
-  PageLayout pages[8];
+  unsigned Current = 0;
+  PageLayout pages[MAX_PAGES];
+  const unsigned MAX_VALID_LAYOUTS =
+    1 + // Nothing
+    1 + // Map & Auto InfoBoxes
+    1 + // Map (Full Screen)
+    InfoBoxManagerConfig::MAX_INFOBOX_PANELS;
+  unsigned validLayoutsCnt = 0;
+  PageLayout validLayouts[MAX_VALID_LAYOUTS];
 
-  bool MakeProfileKey(TCHAR* buffer, int page);
-  bool MakeProfileValue(TCHAR* buffer, int page);
-  bool ParseProfileValue(TCHAR* buffer, int page);
+  void addValidLayout(const PageLayout& pl);
 }
+
 
 void
 Pages::Update()
 {
+  while (pages[Current].topLayout == PageLayout::tlEmpty)
+    Current = (Current + 1) % MAX_PAGES;
+
   OpenLayout(pages[Current]);
 }
+
 
 void
 Pages::Next()
 {
-  Current++;
-  if (Current > 7 || pages[Current].Type == PageLayout::t_Empty)
-    Current = 0;
+  do {
+    Current = (Current + 1) % MAX_PAGES;
+  } while (pages[Current].topLayout == PageLayout::tlEmpty);
 
   Update();
 }
+
 
 void
 Pages::Prev()
 {
-  Current--;
-  if (Current < 0)
-    Current = 7;
-
-  while (pages[Current].Type == PageLayout::t_Empty && Current > 0)
-    Current--;
+  do {
+    Current = (Current == 0) ? MAX_PAGES - 1 : Current - 1;
+  } while (pages[Current].topLayout == PageLayout::tlEmpty);
 
   Update();
 }
 
+
 void
-Pages::Open(int page)
+Pages::Open(unsigned page)
 {
-  if (page < 0 || page > 7)
+  if (page >= MAX_PAGES)
     return;
 
-  if (pages[page].Type == PageLayout::t_Empty)
+  if (pages[page].topLayout == PageLayout::tlEmpty)
     return;
 
   Current = page;
   Update();
 }
 
+
 void
 Pages::OpenLayout(PageLayout &layout)
 {
-  switch (layout.Type) {
-  case PageLayout::t_Map:
-    switch (layout.MapInfoBoxes) {
-    case PageLayout::mib_Normal:
-      XCSoarInterface::main_window.SetFullScreen(false);
-      XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = false;
-      break;
-
-    case PageLayout::mib_Aux:
-      XCSoarInterface::main_window.SetFullScreen(false);
-      XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = true;
-      XCSoarInterface::SetSettingsMap().AuxiliaryInfoBoxPanel = 0;
-      break;
-
-    case PageLayout::mib_Aux_2:
-      XCSoarInterface::main_window.SetFullScreen(false);
-      XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = true;
-      XCSoarInterface::SetSettingsMap().AuxiliaryInfoBoxPanel = 1;
-      break;
-
-    case PageLayout::mib_None:
-    default:
+  switch (layout.topLayout) {
+    case PageLayout::tlMap:
       XCSoarInterface::main_window.SetFullScreen(true);
       XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = false;
       break;
-    }
-    break;
-
-  default:
-    return;
+    case PageLayout::tlMapAndInfoBoxes:
+      if (!layout.infoBoxConfig.autoSwitch &&
+          layout.infoBoxConfig.panel < InfoBoxManagerConfig::MAX_INFOBOX_PANELS) {
+        XCSoarInterface::main_window.SetFullScreen(false);
+        XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = true;
+        XCSoarInterface::SetSettingsMap().AuxiliaryInfoBoxPanel = layout.infoBoxConfig.panel;
+      }
+      else {
+        XCSoarInterface::main_window.SetFullScreen(false);
+        XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = false;
+        XCSoarInterface::SetSettingsMap().AuxiliaryInfoBoxPanel = 0;
+      }
+      break;
+    case PageLayout::tlEmpty:
+      return;
   }
 
   InfoBoxManager::SetDirty();
   XCSoarInterface::SendSettingsMap(true);
 }
 
+
 void
-Pages::SetLayout(int page, PageLayout &layout)
+Pages::SetLayout(unsigned page, const PageLayout &layout)
 {
-  if (page < 0 || page > 7)
+  if (page >= MAX_PAGES)
     return;
 
-  pages[page] = layout;
+  if (pages[page] != layout) {
+    pages[page] = layout;
+    SavePageToProfile(page);
+  }
 
   if (page == Current)
     Update();
 }
 
+
 Pages::PageLayout*
-Pages::GetLayout(int page)
+Pages::GetLayout(unsigned page)
 {
-  if (page < 0 || page > 7)
+  if (page >= MAX_PAGES)
     return NULL;
 
   return &pages[page];
 }
 
-#ifdef EXPERIMENTAL_PAGES_CODE
-bool
-Pages::MakeProfileKey(TCHAR* buffer, int page)
-{
-  if (page < 0 || page > 7)
-    return false;
-
-  _tcscpy(buffer, _T("Page"));
-  _stprintf(buffer + _tcslen(buffer), _T("%d"), page + 1);
-  return true;
-}
 
 void
-Pages::PageLayout::MakeConfigString(TCHAR* buffer)
+Pages::PageLayout::MakeTitle(TCHAR* buffer) const
 {
-  switch (Type) {
-  case t_Map:
-    _tcscpy(buffer, _T("map"));
-
-    switch (MapInfoBoxes) {
-    case mib_Normal:
-      _tcscat(buffer, _T(" ib_normal"));
+  switch (topLayout) {
+    case PageLayout::tlMap:
+      _tcscpy(buffer, _("Map (Full Screen)"));
       break;
-
-    case mib_Aux:
-      _tcscat(buffer, _T(" ib_aux"));
+    case PageLayout::tlMapAndInfoBoxes:
+      if (!infoBoxConfig.autoSwitch &&
+          infoBoxConfig.panel < InfoBoxManagerConfig::MAX_INFOBOX_PANELS) {
+        _tcscpy(buffer, _("Map & InfoBoxes "));
+        _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
+      }
+      else
+        _tcscpy(buffer, _("Map & InfoBoxes (Auto)"));
       break;
-    }
-    break;
-
-  case t_Empty:
-  default:
-    _tcscpy(buffer, _T(""));
-    break;
+    default:
+      _tcscpy(buffer, _("---"));
+      break;
   }
 }
 
-bool
-Pages::MakeProfileValue(TCHAR* buffer, int page)
-{
-  PageLayout* pl = GetLayout(page);
-  if (!pl)
-    return false;
-
-  pl->MakeConfigString(buffer);
-
-  return true;
-}
 
 void
-Pages::PageLayout::ParseConfigString(TCHAR* buffer)
+Pages::SavePageToProfile(unsigned page)
 {
-  if (_tcsncmp(buffer, _T("map"), 3) == 0) {
-    Type = t_Map;
-
-    if (_tcsncmp(buffer + 3, _T(" ib_normal"), 10) == 0)
-      MapInfoBoxes = mib_Normal;
-    else if (_tcsncmp(buffer + 3, _T(" ib_aux"), 7) == 0)
-      MapInfoBoxes = mib_Aux;
-    else
-      MapInfoBoxes = mib_None;
-  } else {
-    Type = t_Empty;
-  }
+  TCHAR profileKey[32];
+  unsigned prefixLen = _stprintf(profileKey, _T("Page%u"), page);
+  if (prefixLen <= 0)
+    return;
+  _tcscpy(profileKey + prefixLen, _T("InfoBoxMode"));
+  Profile::Set(profileKey, pages[page].infoBoxConfig.autoSwitch);
+  _tcscpy(profileKey + prefixLen, _T("InfoBoxPanel"));
+  Profile::Set(profileKey, pages[page].infoBoxConfig.panel);
+  _tcscpy(profileKey + prefixLen, _T("Layout"));
+  Profile::Set(profileKey, pages[page].topLayout);
 }
 
-bool
-Pages::ParseProfileValue(TCHAR* buffer, int page)
-{
-  if (page < 0 || page > 7)
-    return false;
-
-  pages[page].ParseConfigString(buffer);
-  return true;
-}
 
 void
 Pages::SaveToProfile()
 {
-  for (int i = 0; i < 8; i++) {
-    TCHAR key[64] = _T("");
-    TCHAR value[255] = _T("");
-
-    if (!MakeProfileKey(key, i) || !MakeProfileValue(value, i))
-      continue;
-
-    Profile::Set(key, value);
-  }
+  for (unsigned i = 0; i < MAX_PAGES; i++)
+    SavePageToProfile(i);
 }
-#endif /* EXPERIMENTAL_PAGES_CODE */
+
+
+void
+Pages::LoadPageFromProfile(unsigned page)
+{
+  TCHAR profileKey[32];
+  unsigned prefixLen = _stprintf(profileKey, _T("Page%u"), page);
+  if (prefixLen <= 0)
+    return;
+
+  PageLayout pl;
+  _tcscpy(profileKey + prefixLen, _T("InfoBoxMode"));
+  if (!Profile::Get(profileKey, pl.infoBoxConfig.autoSwitch))
+    return;
+  _tcscpy(profileKey + prefixLen, _T("InfoBoxPanel"));
+  if (!Profile::Get(profileKey, pl.infoBoxConfig.panel))
+    return;
+  _tcscpy(profileKey + prefixLen, _T("Layout"));
+  unsigned temp = 0;
+  if (!Profile::Get(profileKey, temp))
+    return;
+  pl.topLayout = (PageLayout::eTopLayout) temp;
+  if (pl.topLayout > PageLayout::tlLAST)
+    return;
+  if (pl.infoBoxConfig.panel >= InfoBoxManagerConfig::MAX_INFOBOX_PANELS)
+    return;
+  if (page == 0 && pl.topLayout == PageLayout::tlEmpty)
+    return;
+
+  pages[page] = pl;
+}
+
 
 void
 Pages::LoadFromProfile()
 {
   LoadDefault();
-
-#ifdef EXPERIMENTAL_PAGES_CODE
-  for (int i = 0; i < 8; i++) {
-    TCHAR key[64] = _T("");
-    TCHAR value[255] = _T("");
-
-    if (!MakeProfileKey(key, i) || !Profile::Get(key, value, 255))
-      continue;
-
-    ParseProfileValue(value, i);
-  }
-#endif
-
+  for (unsigned i = 0; i < MAX_PAGES; i++)
+    LoadPageFromProfile(i);
   Update();
 }
+
+
+void
+Pages::addValidLayout(const PageLayout& pl)
+{
+  assert(validLayoutsCnt < MAX_VALID_LAYOUTS);
+  validLayouts[validLayoutsCnt++] = pl;
+}
+
 
 void
 Pages::LoadDefault()
 {
-  pages[0].Type = PageLayout::t_Map;
-  pages[0].MapInfoBoxes = PageLayout::mib_Normal;
+  pages[0]=PageLayout(PageLayout::tlMapAndInfoBoxes);
+  pages[1]=PageLayout(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(false, 3));
+  pages[2]=PageLayout(PageLayout::tlMap);
 
-  pages[1].Type = PageLayout::t_Map;
-  pages[1].MapInfoBoxes = PageLayout::mib_Aux;
-
-  pages[2].Type = PageLayout::t_Map;
-  pages[2].MapInfoBoxes = PageLayout::mib_Aux_2;
-
-  pages[3].Type = PageLayout::t_Map;
-  pages[3].MapInfoBoxes = PageLayout::mib_None;
-
-  pages[4].Type = PageLayout::t_Empty;
-  pages[5].Type = PageLayout::t_Empty;
-  pages[6].Type = PageLayout::t_Empty;
-  pages[7].Type = PageLayout::t_Empty;
+  addValidLayout(PageLayout());
+  addValidLayout(PageLayout(PageLayout::tlMapAndInfoBoxes));
+  addValidLayout(PageLayout(PageLayout::tlMap));
+  for (unsigned i = 0; i < InfoBoxManagerConfig::MAX_INFOBOX_PANELS; i++)
+    addValidLayout(PageLayout(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(false, i)));
 }
+
+
+const Pages::PageLayout*
+Pages::PossiblePageLayout(unsigned i) {
+  return (i < validLayoutsCnt) ? &validLayouts[i] : NULL;
+}
+

@@ -175,7 +175,7 @@ unsigned
 InfoBoxManager::GetCurrentPanel()
 {
   if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo) {
-    unsigned panel = PANEL_AUXILIARY + XCSoarInterface::SettingsMap().AuxiliaryInfoBoxPanel;
+    unsigned panel = XCSoarInterface::SettingsMap().AuxiliaryInfoBoxPanel;
     if (panel >= InfoBoxManagerConfig::MAX_INFOBOX_PANELS)
       panel = PANEL_AUXILIARY;
     return panel;

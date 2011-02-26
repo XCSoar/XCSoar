@@ -28,35 +28,62 @@ Copyright_License {
 
 namespace Pages
 {
+  const unsigned MAX_PAGES = 8;
+
+  struct InfoBoxConfig {
+    bool autoSwitch;
+    unsigned panel;
+
+    InfoBoxConfig(bool autoSwitch = true, unsigned panel = 0)
+      : autoSwitch(autoSwitch), panel(panel) {}
+
+    bool operator==(const InfoBoxConfig& ibc) const {
+      if (autoSwitch != ibc.autoSwitch)
+        return false;
+      if (panel != ibc.panel)
+        return false;
+      return true;
+    }
+
+    bool operator!=(const InfoBoxConfig& ibc) const {
+      return !(*this == ibc);
+    }
+  };
+
   struct PageLayout
   {
-    enum eType {
-      t_Empty,
-      t_Map
-    } Type;
+    enum eTopLayout {
+      tlEmpty,
+      tlMap,
+      tlMapAndInfoBoxes,
+      tlLAST = tlMapAndInfoBoxes
+    } topLayout;
 
-    enum eMapInfoBoxes {
-      mib_None,
-      mib_Normal,
-      mib_Aux,
-      mib_Aux_2
-    } MapInfoBoxes;
+    InfoBoxConfig infoBoxConfig;
 
-    PageLayout() :
-      Type(t_Empty), MapInfoBoxes(mib_None) {}
+    PageLayout(eTopLayout topLayout=tlEmpty, InfoBoxConfig infoBoxConfig=InfoBoxConfig()) :
+      topLayout(topLayout), infoBoxConfig(infoBoxConfig) {}
 
-    PageLayout(eType _type) :
-      Type(_type), MapInfoBoxes(mib_None) {}
+    void MakeTitle(TCHAR* str) const;
 
-    void ParseConfigString(TCHAR* str);
-    void MakeConfigString(TCHAR* str);
+    bool operator==(const PageLayout& pl) const {
+      if (topLayout != pl.topLayout)
+        return false;
+      if (infoBoxConfig != pl.infoBoxConfig)
+        return false;
+      return true;
+    }
+
+    bool operator!=(const PageLayout& pl) const {
+      return !(*this == pl);
+    }
   };
 
   /**
    * Opens the given page.
    * @param page The page to open
    */
-  void Open(int page);
+  void Open(unsigned page);
   /**
    * Opens the next page.
    */
@@ -77,19 +104,22 @@ namespace Pages
    * @param page The page to change
    * @param layout The layout that should be assigned
    */
-  void SetLayout(int page, PageLayout &layout);
+  void SetLayout(unsigned page, const PageLayout &layout);
   /**
    * Returns the layout of the given page
    * @param page The page to look for
    * @return The layout of the given page
    */
-  PageLayout* GetLayout(int page);
+  PageLayout* GetLayout(unsigned page);
 
+  void SavePageToProfile(unsigned page);
   void SaveToProfile();
+  void LoadPageFromProfile(unsigned page);
   void LoadFromProfile();
   void LoadDefault();
+  const PageLayout* PossiblePageLayout(unsigned i);
 
   void Update();
-}
+};
 
 #endif
