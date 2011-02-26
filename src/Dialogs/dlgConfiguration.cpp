@@ -1187,7 +1187,6 @@ setVariables()
   LoadFormProperty(*wf, _T("prpHandicap"),
                    settings_computer.contest_handicap);
 
-  Profile::Get(szProfileSpeedUnitsValue, SpeedUnits);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsSpeed"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1195,7 +1194,6 @@ setVariables()
     dfe->addEnumText(_("Statute"));
     dfe->addEnumText(_("Nautical"));
     dfe->addEnumText(_("Metric"));
-    dfe->Set(SpeedUnits);
     wp->RefreshDisplay();
   }
 
@@ -1216,7 +1214,6 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  Profile::Get(szProfileTaskSpeedUnitsValue, TaskSpeedUnits);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsTaskSpeed"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1224,11 +1221,9 @@ setVariables()
     dfe->addEnumText(_("Statute"));
     dfe->addEnumText(_("Nautical"));
     dfe->addEnumText(_("Metric"));
-    dfe->Set(TaskSpeedUnits);
     wp->RefreshDisplay();
   }
 
-  Profile::Get(szProfileDistanceUnitsValue, DistanceUnits);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsDistance"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1236,33 +1231,27 @@ setVariables()
     dfe->addEnumText(_("Statute"));
     dfe->addEnumText(_("Nautical"));
     dfe->addEnumText(_("Metric"));
-    dfe->Set(DistanceUnits);
     wp->RefreshDisplay();
   }
 
-  Profile::Get(szProfileAltitudeUnitsValue, AltitudeUnits);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsAltitude"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Feet"));
     dfe->addEnumText(_("Meters"));
-    dfe->Set(AltitudeUnits);
     wp->RefreshDisplay();
   }
 
-  Profile::Get(szProfileTemperatureUnitsValue, TemperatureUnits);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsTemperature"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("C"));
     dfe->addEnumText(_("F"));
-    dfe->Set(TemperatureUnits);
     wp->RefreshDisplay();
   }
 
-  Profile::Get(szProfileLiftUnitsValue, LiftUnits);
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsLift"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1270,9 +1259,10 @@ setVariables()
     dfe->addEnumText(_("Knots"));
     dfe->addEnumText(_("M/s"));
     dfe->addEnumText(_("ft/min"));
-    dfe->Set(LiftUnits);
     wp->RefreshDisplay();
   }
+
+  UpdateUnitFields(Units::Current);
 
   LoadFormProperty(*wf, _T("prpTrailDrift"),
                    XCSoarInterface::SettingsMap().EnableTrailDrift);
