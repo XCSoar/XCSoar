@@ -277,17 +277,17 @@ pnlTaskEdit::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
   if (!fullscreen) {
     const unsigned xoffset = (Layout::landscape ? wTabBar->GetTabWidth() : 0);
     const unsigned yoffset = (!Layout::landscape ? wTabBar->GetTabHeight() : 0);
-    wTaskView->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
+    Sender->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
                     wf->GetClientAreaWindow().get_height() - yoffset);
     fullscreen = true;
-    wTaskView->show_on_top();
+    Sender->show_on_top();
   } else {
-    wTaskView->move(TaskViewRect.left, TaskViewRect.top,
+    Sender->move(TaskViewRect.left, TaskViewRect.top,
                     TaskViewRect.right - TaskViewRect.left,
                     TaskViewRect.bottom - TaskViewRect.top);
     fullscreen = false;
   }
-  wTaskView->invalidate();
+  Sender->invalidate();
   return true;
 }
 
