@@ -175,16 +175,16 @@ const RECT
       ((!Layout::landscape ^ flipOrientation) && theTabDisplay->GetTabWidth() < get_width()) )
     partialTab = true;
 
-  const unsigned finalmargin = partialTab ? TabLineHeight - 3 * margin : margin;
+  const unsigned finalmargin = 1; //partialTab ? TabLineHeight - 1 * margin : margin;
   // Todo make the final margin display on either beginning or end of tab bar
   // depending on position of tab bar
 
-  const unsigned but_width = (Layout::landscape ^ flipOrientation) ?
-      (theTabDisplay->GetTabHeight() - finalmargin) / buttons.size() - margin
-       : (theTabDisplay->GetTabWidth() - finalmargin) / buttons.size() - margin;
   RECT rc;
 
   if (Layout::landscape ^ flipOrientation) {
+    const unsigned but_width =
+       (theTabDisplay->GetTabHeight() - finalmargin) / buttons.size() - margin;
+
     rc.left = 0;
     rc.right = theTabDisplay->GetTabWidth() - TabLineHeight;
 
@@ -192,10 +192,26 @@ const RECT
     rc.bottom = rc.top + but_width;
 
   } else {
-  rc.top = 0;
-  rc.bottom = rc.top + theTabDisplay->GetTabHeight() - TabLineHeight;
+    const unsigned portraitRows = (buttons.size() > 4) ? 2 : 1;
 
-    rc.left = finalmargin + (margin + but_width) * i;
+    const unsigned portraitColumnsRow0 = ((portraitRows == 1)
+       ? buttons.size() : buttons.size() / 2);
+    const unsigned portraitColumnsRow1 = ((portraitRows == 1)
+       ? 0 : buttons.size() - buttons.size() / 2);
+
+    const unsigned row = (i > (portraitColumnsRow0 - 1)) ? 1 : 0;
+
+    const unsigned rowheight = (theTabDisplay->GetTabHeight() - TabLineHeight)
+        / portraitRows - margin;
+
+    const unsigned but_width =
+          (theTabDisplay->GetTabWidth() - finalmargin) /
+          ((row == 0) ? portraitColumnsRow0 : portraitColumnsRow1) - margin;
+
+    rc.top = row * (rowheight + margin);
+    rc.bottom = rc.top + rowheight;
+
+    rc.left = finalmargin + (margin + but_width) * (row ? (i - portraitColumnsRow0) : i);
     rc.right = rc.left + but_width;
   }
 
