@@ -3,4 +3,5 @@
 <Form Name="frmTaskEdit" Width="240" Height="320" Caption="Task Manager">
   <TabBar Name="TabBar" X="64" Y="0" Width="177" Height="76">
   </TabBar>
+  <Canvas Name="frmBlackRect" X="0" Y="40" Width="65" Height="4" Border="0" OnPaint="dlgTaskManager::OnBlackBarPaint"/>
 </Form>

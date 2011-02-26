@@ -7,6 +7,6 @@
   
     <Button Name="cmdRevert" Caption="Revert Changes" X="60" Y="117" Width="120" Height="35" OnClick="pnlTaskManagerClose::OnRevertClicked"/>
   </Panel>
-  <Canvas Name="frmTaskViewClose" X="0" Y="0" Width="65" Height="76" Border="1" OnPaint="dlgTaskManager::OnTaskPaint" />
+  <Canvas Name="frmTaskViewClose" X="0" Y="0" Width="65" Height="71" Border="0" OnPaint="dlgTaskManager::OnTaskPaint" />
   
 </Panel>

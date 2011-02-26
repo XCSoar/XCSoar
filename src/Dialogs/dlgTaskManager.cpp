@@ -87,6 +87,19 @@ dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
             XCSoarInterface::SettingsMap(), terrain);
 }
 
+void
+dlgTaskManager::OnBlackBarPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+{
+  canvas.clear(Color::BLACK);
+  if (wTabBar->has_focus()) {
+    RECT rcFocus;
+    rcFocus.top = rcFocus.left = 0;
+    rcFocus.right = canvas.get_width();
+    rcFocus.bottom = canvas.get_height();
+    canvas.draw_focus(rcFocus);
+  }
+}
+
 bool
 dlgTaskManager::CommitTaskChanges()
 {
@@ -131,6 +144,7 @@ dlgTaskManagerShowModal(SingleWindow &parent)
 
 CallBackTableEntry dlgTaskManager::CallBackTable[] = {
   DeclareCallBackEntry(dlgTaskManager::OnTaskPaint),
+  DeclareCallBackEntry(dlgTaskManager::OnBlackBarPaint),
 
   DeclareCallBackEntry(pnlTaskEdit::OnMakeFinish),
   DeclareCallBackEntry(pnlTaskEdit::OnMoveUpClicked),
@@ -190,6 +204,17 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   wTabBar = (TabBarControl*)wf->FindByName(_T("TabBar"));
   assert(wTabBar != NULL);
 
+  if (!Layout::landscape) {
+    WndOwnerDrawFrame* wBlackRect =
+        (WndOwnerDrawFrame*)wf->FindByName(_T("frmBlackRect"));
+    assert(wBlackRect);
+    const unsigned TabLineHeight = wTabBar->GetTabLineHeight();
+    wBlackRect->move(0,
+        wTabBar->GetTabHeight() - TabLineHeight,
+        wf->get_width() - wTabBar->GetTabWidth() + TabLineHeight,
+        TabLineHeight);
+    wBlackRect->show_on_top();
+  }
 
   Window* wProps =
     pnlTaskProperties::Load(parent, wTabBar, wf, &active_task, &task_modified);
@@ -224,7 +249,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                          pnlTaskEdit::OnTabPreShow, NULL,
                          pnlTaskEdit::OnTabReClick);
 
-    wTabBar->AddClient(wLst, _T("Browse/ Declare"), false, NULL, NULL,
+    wTabBar->AddClient(wLst, _T("Browse, Declare"), false, NULL, NULL,
                        pnlTaskList::OnTabPreShow, NULL,
                        pnlTaskList::OnTabReClick);
 
@@ -253,7 +278,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                          pnlTaskEdit::OnTabPreShow, NULL,
                          pnlTaskEdit::OnTabReClick);
 
-    wTabBar->AddClient(wLst, _T("Browse/ Declare"), false, NULL, NULL,
+    wTabBar->AddClient(wLst, _T("Browse, Declare"), false, NULL, NULL,
                        pnlTaskList::OnTabPreShow, NULL,
                        pnlTaskList::OnTabReClick);
     wTabBar->SetCurrentPage(2);

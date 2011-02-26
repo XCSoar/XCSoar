@@ -64,6 +64,13 @@ public:
   static void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
 
   /**
+   * Continues the black bar of the TabBar across the width of portrait screen
+   * @param Sender
+   * @param canvas
+   */
+  static void OnBlackBarPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
+
+  /**
    * toggles maximize or restore state of the TaskView frame
    * @param Sender
    * @param x

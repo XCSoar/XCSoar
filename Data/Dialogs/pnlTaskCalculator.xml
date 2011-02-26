@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Panel Name="frmTaskCalculator" Border="0">
-  <Button Name="Target" Caption="Target" X="2" Y="34" Width="60" Height="42" OnClick="pnlTaskCalculator::OnTargetClicked" />
+  <Button Name="Target" Caption="Target" X="4" Y="3" Width="57" Height="65" OnClick="pnlTaskCalculator::OnTargetClicked" />
 
   <Panel Name="TaskListTabOffset" Border="0" X="0" Y="76">
   

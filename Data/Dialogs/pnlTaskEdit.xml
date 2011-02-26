@@ -13,6 +13,6 @@
 
     <Label Name="frmSummary" X="0" Y="168" Width="240" Height="65" Border="0"/>
   </Panel>
-  <Canvas Name="frmTaskView" X="0" Y="0" Width="65" Height="76" Border="1" OnPaint="dlgTaskManager::OnTaskPaint" />
+  <Canvas Name="frmTaskView" X="0" Y="0" Width="65" Height="71" Border="0" OnPaint="dlgTaskManager::OnTaskPaint" />
 
 </Panel>
