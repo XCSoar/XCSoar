@@ -14,7 +14,8 @@ MO_FILES = $(patsubst po/%.po,$(OUT)/po/%.mo,$(PO_FILES))
 LINGUAS = $(patsubst po/%.po,%,$(PO_FILES))
 
 $(OUT)/po/cpp.pot: $(GETTEXT_SOURCES) | $(OUT)/po/dirstamp
-	$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) \
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) \
 	  --add-comments --keyword=_ --keyword=N_ \
 	  --from-code=utf-8 \
 	  --keyword=C_:1c,2 \
@@ -27,10 +28,12 @@ $(OUT)/po/cpp.pot: $(GETTEXT_SOURCES) | $(OUT)/po/dirstamp
 	  $^
 
 $(OUT)/po/xml.pot: $(GETTEXT_DIALOGS) | $(OUT)/po/dirstamp
+	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) $(topdir)/tools/xml2po.pl $^ >$@.tmp
 	$(Q)mv $@.tmp $@
 
 $(OUT)/po/event.pot: $(GETTEXT_EVENTS) | $(OUT)/po/dirstamp
+	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) $(topdir)/tools/xci2po.pl $^ >$@.tmp
 	$(Q)mv $@.tmp $@
 
