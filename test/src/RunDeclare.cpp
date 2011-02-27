@@ -142,14 +142,16 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  SerialPort port(port_name, baud, *(Port::Handler *)NULL);
-  device.Com = &port;
-  if (!port.Open()) {
+  SerialPort *port = new SerialPort(port_name, baud, *(Port::Handler *)NULL);
+  device.Com = port;
+  if (!port->Open()) {
+    delete port;
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
   }
 
   if (!device.Open()) {
+    delete device.Com;
     fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
     return EXIT_FAILURE;
   }
