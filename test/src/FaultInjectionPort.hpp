@@ -91,6 +91,15 @@ Port::Write(const char *s)
 {
 }
 
+int
+Port::GetChar()
+{
+  unsigned char ch;
+  return Read(&ch, sizeof(ch)) == sizeof(ch)
+    ? ch
+    : EOF;
+}
+
 bool
 Port::ExpectString(const char *token)
 {

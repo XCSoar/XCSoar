@@ -72,7 +72,6 @@ public:
   virtual bool StartRxThread();
   void ProcessChar(char c);
 
-  virtual int GetChar();
   virtual int Read(void *Buffer, size_t Size);
 
 protected:

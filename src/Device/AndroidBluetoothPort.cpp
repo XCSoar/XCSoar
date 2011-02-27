@@ -138,16 +138,6 @@ AndroidBluetoothPort::StartRxThread(void)
   return true;
 }
 
-int
-AndroidBluetoothPort::GetChar(void)
-{
-  if (helper == NULL)
-    return EOF;
-
-  JNIEnv *env = Java::GetEnv();
-  return helper->read(env);
-}
-
 bool
 AndroidBluetoothPort::SetRxTimeout(int Timeout)
 {
@@ -168,7 +158,8 @@ AndroidBluetoothPort::SetBaudrate(unsigned long BaudRate)
 int
 AndroidBluetoothPort::Read(void *Buffer, size_t Size)
 {
-  int ch = GetChar();
+  JNIEnv *env = Java::GetEnv();
+  int ch = helper->read(env);
   if (ch < 0)
     return -1;
 

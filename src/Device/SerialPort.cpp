@@ -357,34 +357,6 @@ SerialPort::StartRxThread(void)
   return true;
 }
 
-int
-SerialPort::GetChar(void)
-{
-#ifdef HAVE_POSIX
-  if (fd < 0)
-    return EOF;
-
-  char buffer;
-  if (read(fd, &buffer, sizeof(buffer)) != 1)
-    return EOF;
-
-  return buffer;
-#else /* !HAVE_POSIX */
-  BYTE  inbuf[2];
-  DWORD dwBytesTransferred;
-
-  if (hPort == INVALID_HANDLE_VALUE || Thread::defined())
-    return EOF;
-
-  if (ReadFile(hPort, inbuf, 1, &dwBytesTransferred, (OVERLAPPED *)NULL)) {
-    if (dwBytesTransferred == 1)
-      return inbuf[0];
-  }
-#endif /* !HAVE_POSIX */
-
-  return EOF;
-}
-
 bool
 SerialPort::SetRxTimeout(int Timeout)
 {
