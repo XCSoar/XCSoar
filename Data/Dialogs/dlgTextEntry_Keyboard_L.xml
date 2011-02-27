@@ -4,9 +4,9 @@
   <Edit Name="prpText"    X="0" Y="2" Width="270" Height="22" CaptionWidth="1" ReadOnly="1" />
   <Button Name="btnBackspace" Caption="&lt;-"    X="272" Y="3" Width="36"  Height="20" OnClick="OnBackspace"/>
 
-  <Button Name="btnOK" Caption="Ok" X="1" Y="183" Width="80" Height="41" OnClick="OnOk"/>
-  <Button Caption="Cancel" X="175" Y="183" Width="60" Height="41" OnClick="OnCancel"/>
-  <Button Caption="Clear" X="235" Y="183" Width="50" Height="41" OnClick="OnClear"/>
+  <Button Name="btnOK" Caption="Ok" X="2" Y="185" Width="80" Height="40" OnClick="OnOk"/>
+  <Button Name="btnCancel" Caption="Cancel" X="175" Y="185" Width="60" Height="40" OnClick="OnCancel"/>
+  <Button Caption="Clear" X="235" Y="185" Width="50" Height="40" OnClick="OnClear"/>
 
-  <Keyboard Name="Keyboard" X="2" Y="25" Width="-2" Height="199" OnCharacter="OnCharacter"/>
+  <Keyboard Name="Keyboard" X="2" Y="25" Width="-2" Height="200" OnCharacter="OnCharacter"/>
 </Form>
