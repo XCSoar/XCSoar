@@ -165,6 +165,26 @@ public:
   gcc_pure
   bool overlaps(const FlatBoundingBox& other) const;
 
+  /**
+   * Expand the bounding box to include this point
+   */
+  void expand(const FlatGeoPoint& p) {
+    bb_ll.Longitude = std::min(bb_ll.Longitude, p.Longitude);
+    bb_ur.Longitude = std::max(bb_ur.Longitude, p.Longitude);
+    bb_ll.Latitude = std::min(bb_ll.Latitude, p.Latitude);
+    bb_ur.Latitude = std::max(bb_ur.Latitude, p.Latitude);
+  }
+
+  /**
+   * Expand the border by x amount
+   */
+  void expand() {
+    bb_ll.Longitude--;
+    bb_ur.Longitude++;
+    bb_ll.Latitude--;
+    bb_ur.Latitude++;
+  }
+
 private:
   FlatGeoPoint bb_ll;
   FlatGeoPoint bb_ur;
