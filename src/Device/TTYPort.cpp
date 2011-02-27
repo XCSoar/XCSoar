@@ -32,6 +32,7 @@ Copyright_License {
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/poll.h>
+#include <termios.h>
 
 #include <assert.h>
 #include <tchar.h>
@@ -78,6 +79,8 @@ TTYPort::Open()
                           _("Unable to open port %s"), sPortName);
     return false;
   }
+
+  SetBaudrate(baud_rate);
 
   if (!StartRxThread()){
     close(fd);
@@ -175,10 +178,77 @@ TTYPort::SetRxTimeout(int Timeout)
   return true;
 }
 
+/**
+ * Convert a numeric baud rate to a termios.h constant (B*).  Returns
+ * B0 on error.
+ */
+static speed_t
+baud_rate_to_speed_t(unsigned baud_rate)
+{
+  switch (baud_rate) {
+  case 1200:
+    return B1200;
+
+  case 2400:
+    return B2400;
+
+  case 4800:
+    return B4800;
+
+  case 9600:
+    return B9600;
+
+  case 19200:
+    return B19200;
+
+  case 38400:
+    return B38400;
+
+  case 57600:
+    return B57600;
+
+  case 115200:
+    return B115200;
+
+  default:
+    return B0;
+  }
+}
+
 unsigned long
 TTYPort::SetBaudrate(unsigned long BaudRate)
 {
-  return BaudRate; // XXX
+  if (fd < 0)
+    return 0;
+
+  speed_t speed = baud_rate_to_speed_t(BaudRate);
+  if (speed == B0)
+    /* not supported */
+    return 0;
+
+  unsigned old = baud_rate;
+
+  struct termios attr;
+  if (tcgetattr(fd, &attr) < 0)
+    return 0;
+
+  attr.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+  attr.c_oflag &= ~OPOST;
+  attr.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+  attr.c_cflag &= ~(CSIZE | PARENB | CRTSCTS | IXON | IXOFF);
+  attr.c_cflag |= (CS8 | CLOCAL);
+  attr.c_cc[VMIN] = 0;
+  attr.c_cc[VTIME] = 1;
+  cfsetospeed(&attr, speed);
+  cfsetispeed(&attr, speed);
+  if (tcsetattr(fd, TCSANOW, &attr) < 0) {
+    close(fd);
+    return 0;
+  }
+
+  baud_rate = BaudRate;
+
+  return old;
 }
 
 int
