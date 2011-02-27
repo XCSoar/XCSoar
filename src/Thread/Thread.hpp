@@ -64,7 +64,7 @@ public:
    */
   bool inside() const {
 #ifdef HAVE_POSIX
-    return pthread_equal(pthread_self(), handle);
+    return defined() && pthread_equal(pthread_self(), handle);
 #else
     return GetCurrentThread() == handle;
 #endif
