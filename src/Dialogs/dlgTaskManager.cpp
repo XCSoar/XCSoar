@@ -170,6 +170,8 @@ CallBackTableEntry dlgTaskManager::CallBackTable[] = {
   DeclareCallBackEntry(pnlTaskCalculator::OnMacCreadyData),
   DeclareCallBackEntry(pnlTaskCalculator::OnTargetClicked),
   DeclareCallBackEntry(pnlTaskCalculator::OnCruiseEfficiencyData),
+  DeclareCallBackEntry(pnlTaskCalculator::OnWarningPaint),
+
 
   DeclareCallBackEntry(NULL)
 };
@@ -225,7 +227,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   assert(wClose);
 
   Window* wCalculator =
-    pnlTaskCalculator::Load(parent, wTabBar, wf);
+    pnlTaskCalculator::Load(parent, wTabBar, wf, &task_modified);
   assert(wCalculator);
 
   Window* wEdit =

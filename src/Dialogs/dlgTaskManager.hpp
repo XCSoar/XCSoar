@@ -284,10 +284,11 @@ public:
    * creates the control from its XML file and does any init work
    * @param parent
    * @param wf
+   * @param _task_modified tells calc whether to display warning
    * @return Window* that points to the control created
    */
   static Window* Load(SingleWindow &parent, TabBarControl* wTabBar,
-                      WndForm* wf);
+                      WndForm* wf, bool* _task_modified);
 
   /**
    * copies values from form to ordered_task
@@ -302,6 +303,10 @@ public:
    */
   static bool OnTabPreShow(TabBarControl::EventType EventType);
 
+  /**
+   * draws colored warning message if task has been modified
+   */
+  static void OnWarningPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
   static void OnTargetClicked(WndButton &Sender);
 
   static void OnTimerNotify(WndForm &Sender);

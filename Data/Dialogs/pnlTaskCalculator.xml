@@ -4,9 +4,10 @@
   <Button Name="Target" Caption="Target" X="4" Y="3" Width="57" Height="65" OnClick="pnlTaskCalculator::OnTargetClicked" />
 
   <Panel Name="TaskListTabOffset" Border="0" X="0" Y="76">
-  
 
-  <Edit Name="prpAATTime" Caption="AAT time" Y="2" X="12" Height="22" CaptionWidth="150" ReadOnly="1">
+  <Canvas Name="lblTaskChangedWarning" X="0" Y="0" Height="17" Border="0" OnPaint="pnlTaskCalculator::OnWarningPaint"/>
+
+  <Edit Name="prpAATTime" Caption="AAT time" X="92" Y ="20" Height="22" CaptionWidth="70" ReadOnly="1">
     <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f"/>
   </Edit>
 
@@ -44,6 +45,5 @@
   <Edit Name="prpCruiseEfficiency" Caption="Cruise efficiency" X="12" Height="22" ReadOnly="1" CaptionWidth="150" Help="Efficiency of cruise.  100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets.  Less than 100 is appropriate if you fly considerably off-track.  This value estimates your cruise efficiency according to the current flight history with the set MC value.  Calculation begins after task is started.">
     <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f"/>
   </Edit>
-
   </Panel>
 </Panel>

@@ -32,6 +32,9 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/TabBar.hpp"
+#include "Screen/Fonts.hpp"
+#include "Screen/Icon.hpp"
+#include "Screen/Graphics.hpp"
 
 #include <math.h>
 #include <algorithm>
@@ -44,6 +47,7 @@ static TabBarControl* wTabBar = NULL;
 static fixed emc;
 static fixed cruise_efficiency;
 static bool lazy_loaded = false;
+static bool* task_modified = NULL;
 
 static void
 GetCruiseEfficiency(void)
@@ -256,13 +260,39 @@ pnlTaskCalculator::OnTabPreShow(TabBarControl::EventType EventType)
     }
     wf->SetTimerNotify(pnlTaskCalculator::OnTimerNotify);
   }
+
   RefreshCalculator();
 
   return true;
 }
 
+void
+pnlTaskCalculator::OnWarningPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+{
+  if (*task_modified) {
+    const TCHAR* message = _T("Calculator excludes unsaved task changes!");
+    canvas.select(Fonts::Title);
+    const int textheight = canvas.text_height(message);
+
+    const MaskedIcon *bmp = &Graphics::hAirspaceInterceptBitmap;
+    const int offsetx = bmp->get_size().cx;
+    const int offsety = canvas.get_height() - bmp->get_size().cy;
+    canvas.clear(Color::YELLOW);
+    bmp->draw(canvas, offsetx, offsety);
+    canvas.set_background_color(Color::YELLOW);
+
+    canvas.text(offsetx * 2 + Layout::Scale(2),
+                (int)(canvas.get_height() - textheight) / 2,
+                message);
+  }
+  else {
+    canvas.clear(wf->GetBackColor());
+  }
+}
+
 Window*
-pnlTaskCalculator::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf)
+pnlTaskCalculator::Load(SingleWindow &parent, TabBarControl* _wTabBar,
+    WndForm* _wf, bool* _task_modified)
 {
   if (protected_task_manager == NULL)
     return NULL;
@@ -272,6 +302,9 @@ pnlTaskCalculator::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* 
 
   assert(_wf);
   wf = _wf;
+
+  assert(_task_modified);
+  task_modified = _task_modified;
 
   Window *wCalc =
       LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,
