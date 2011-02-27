@@ -38,6 +38,8 @@ class TTYPort : public Port, protected StoppableThread
   /** Name of the serial port */
   TCHAR sPortName[64];
 
+  unsigned rx_timeout;
+
   unsigned baud_rate;
 
   int fd;

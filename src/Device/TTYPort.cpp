@@ -31,6 +31,7 @@ Copyright_License {
 #include <time.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/poll.h>
 
 #include <assert.h>
 #include <tchar.h>
@@ -54,7 +55,7 @@ TTYPort_StatusMessage(unsigned type, const TCHAR *caption,
 }
 
 TTYPort::TTYPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
-  :Port(_handler), baud_rate(_baud_rate),
+  :Port(_handler), rx_timeout(0), baud_rate(_baud_rate),
    fd(-1),
    buffer(NMEA_BUF_SIZE)
 {
@@ -170,7 +171,8 @@ TTYPort::StartRxThread(void)
 bool
 TTYPort::SetRxTimeout(int Timeout)
 {
-  return true; // XXX
+  rx_timeout = Timeout;
+  return true;
 }
 
 unsigned long
@@ -183,6 +185,14 @@ int
 TTYPort::Read(void *Buffer, size_t Size)
 {
   if (fd < 0)
+    return -1;
+
+  struct pollfd pfd;
+  pfd.fd = fd;
+  pfd.events = POLLIN;
+
+  int ret = poll(&pfd, 1, rx_timeout);
+  if (ret != 1)
     return -1;
 
   return read(fd, Buffer, Size);
