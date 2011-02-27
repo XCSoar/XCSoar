@@ -219,31 +219,15 @@ bool intersects(const SearchPointVector& spv,
 FlatBoundingBox
 compute_boundingbox(const SearchPointVector& spv)
 {
-  FlatGeoPoint fmin;
-  FlatGeoPoint fmax;
-  bool empty=true;
-  for (SearchPointVector::const_iterator v = spv.begin();
-       v != spv.end(); ++v) {
-    FlatGeoPoint f = v->get_flatLocation();
-    if (empty) {
-      empty = false;
-      fmin = f;
-      fmax = f;
-    } else {
-      fmin.Longitude = min(fmin.Longitude, f.Longitude);
-      fmin.Latitude = min(fmin.Latitude, f.Latitude);
-      fmax.Longitude = max(fmax.Longitude, f.Longitude);
-      fmax.Latitude = max(fmax.Latitude, f.Latitude);
-    }
-  }
-  if (!empty) {
-    // note +/- 1 to ensure rounding keeps bb valid
-    fmin.Longitude-= 1; fmin.Latitude-= 1;
-    fmax.Longitude+= 1; fmax.Latitude+= 1;
-    return FlatBoundingBox(fmin,fmax);
-  } else {
+  if (spv.empty())
     return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
-  }
+
+  FlatBoundingBox bb(spv[0].get_flatLocation());
+  for (SearchPointVector::const_iterator v = spv.begin();
+       v != spv.end(); ++v)
+    bb.expand(v->get_flatLocation());
+  bb.expand(); // add 1 to fix rounding
+  return bb;
 }
 
 

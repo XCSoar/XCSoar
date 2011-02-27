@@ -191,27 +191,12 @@ OrderedTaskPoint::scan_projection(TaskProjection& task_projection) const
 void
 OrderedTaskPoint::update_boundingbox(const TaskProjection& task_projection)
 {
-  FlatGeoPoint fmin;
-  FlatGeoPoint fmax;
-  bool empty = true;
+  flat_bb = FlatBoundingBox(task_projection.project(get_location()));
 
-  for (fixed t=fixed_zero; t<= fixed_one; t+= fixed_steps) {
-    FlatGeoPoint f = task_projection.project(get_boundary_parametric(t));
-    if (empty) {
-      empty = false;
-      fmin = f;
-      fmax = f;
-    } else {
-      fmin.Longitude = min(fmin.Longitude, f.Longitude);
-      fmin.Latitude = min(fmin.Latitude, f.Latitude);
-      fmax.Longitude = max(fmax.Longitude, f.Longitude);
-      fmax.Latitude = max(fmax.Latitude, f.Latitude);
-    }
-  }
-  // note +/- 1 to ensure rounding keeps bb valid 
-  fmin.Longitude-= 1; fmin.Latitude-= 1;
-  fmax.Longitude+= 1; fmax.Latitude+= 1;
-  flat_bb = FlatBoundingBox(fmin,fmax);
+  for (fixed t=fixed_zero; t<= fixed_one; t+= fixed_steps)
+    flat_bb.expand(task_projection.project(get_boundary_parametric(t)));
+
+  flat_bb.expand(); // add 1 to fix rounding
 }
 
 bool

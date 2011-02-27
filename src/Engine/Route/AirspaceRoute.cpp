@@ -21,7 +21,6 @@
  */
 #include "AirspaceRoute.hpp"
 #include "Navigation/SearchPointVector.hpp"
-#include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
