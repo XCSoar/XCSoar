@@ -27,5 +27,5 @@ Copyright_License {
 void
 OperationEnvironment::Sleep(unsigned ms)
 {
-  Sleep(ms);
+  ::Sleep(ms);
 }
