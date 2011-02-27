@@ -95,7 +95,7 @@ TTYPort::Open()
 void
 TTYPort::Flush(void)
 {
-  // XXX
+  tcflush(fd, TCIOFLUSH);
 }
 
 void
