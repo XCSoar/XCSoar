@@ -29,7 +29,7 @@ sub handle_start {
         if ($name eq 'Caption' or $name eq 'Help') {
             next unless $value =~ /[a-zA-Z]/;
 
-            die "Malformed attribute at $path:" . $expat->current_line
+            die "Malformed attribute at $path:" . $expat->current_line . "\n  -> \"" . $value . "\"\n"
               if $value =~ /^\s|\s$|\t| \n| \r|\n /s;
 
             $strings{$value} ||= [];
@@ -43,7 +43,7 @@ my %handlers = (
 );
 
 foreach $path (@ARGV) {
-    my $parser = new XML::Parser(Handlers => \%handlers);
+    my $parser = new XML::Parser(Handlers => \%handlers, ErrorContext => 2);
     $parser->parsefile($path);
 }
 
