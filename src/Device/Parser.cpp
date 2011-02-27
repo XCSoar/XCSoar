@@ -756,11 +756,8 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   line.skip(); // average vario +200
 
   fixed baralt;
-  bool valid_baralt = false;
   if (line.read_checked(baralt)) {
     baralt = max(fixed_zero, Units::ToSysUnit(baralt - fixed(2000), unFeet));
-    valid_baralt = true;
-
     GPS_INFO->ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_TASMAN, baralt);
   }
 
