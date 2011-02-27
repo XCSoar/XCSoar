@@ -657,7 +657,6 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/Device/Port.cpp \
-	$(SRC)/Device/SerialPort.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
@@ -682,6 +681,13 @@ RUN_DECLARE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/RunDeclare.cpp
+ifeq ($(HAVE_POSIX),y)
+RUN_DECLARE_SOURCES += \
+	$(SRC)/Device/TTYPort.cpp
+else
+RUN_DECLARE_SOURCES += \
+	$(SRC)/Device/SerialPort.cpp
+endif
 RUN_DECLARE_OBJS = $(call SRC_TO_OBJ,$(RUN_DECLARE_SOURCES))
 RUN_DECLARE_LDADD = \
 	$(ZZIP_LIBS) \

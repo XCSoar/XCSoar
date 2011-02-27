@@ -21,7 +21,6 @@ Copyright_License {
 }
 */
 
-#include "Device/SerialPort.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
@@ -35,6 +34,12 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "OS/PathName.hpp"
 #include "Protection.hpp"
+
+#ifdef HAVE_POSIX
+#include "Device/TTYPort.hpp"
+#else
+#include "Device/SerialPort.hpp"
+#endif
 
 #include <stdio.h>
 
@@ -142,7 +147,11 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
+#ifdef HAVE_POSIX
+  TTYPort *port = new TTYPort(port_name, baud, *(Port::Handler *)NULL);
+#else
   SerialPort *port = new SerialPort(port_name, baud, *(Port::Handler *)NULL);
+#endif
   device.Com = port;
   if (!port->Open()) {
     delete port;

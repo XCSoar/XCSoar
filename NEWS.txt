@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.0.6 - not yet released
 * devices:
   - fix declaration crash in Volkslogger, EW, CAI302, CAI GPS NAV
+* Linux
+  - implement the serial port
 
 Version 6.0.5 - 2011/02/26
 * devices:

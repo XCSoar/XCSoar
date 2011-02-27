@@ -403,7 +403,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Simulator.cpp \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/NullPort.cpp \
-	$(SRC)/Device/SerialPort.cpp \
 	$(SRC)/Device/FLARM.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(DIALOG_SOURCES)
@@ -411,6 +410,14 @@ XCSOAR_SOURCES := \
 #	$(SRC)/VarioSound.cpp \
 #	$(SRC)/WaveThread.cpp \
 
+
+ifeq ($(HAVE_POSIX),y)
+XCSOAR_SOURCES += \
+	$(SRC)/Device/TTYPort.cpp
+else
+XCSOAR_SOURCES += \
+	$(SRC)/Device/SerialPort.cpp
+endif
 
 ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \

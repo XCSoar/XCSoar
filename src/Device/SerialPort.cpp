@@ -28,13 +28,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "OS/Sleep.h"
 
-#ifdef HAVE_POSIX
-#include <time.h>
-#include <fcntl.h>
-#include <unistd.h>
-#else /* !HAVE_POSIX */
 #include <windows.h>
-#endif /* !HAVE_POSIX */
 
 #include <assert.h>
 #include <tchar.h>
@@ -59,11 +53,7 @@ SerialPort_StatusMessage(unsigned type, const TCHAR *caption,
 
 SerialPort::SerialPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
   :Port(_handler), baud_rate(_baud_rate),
-#ifdef HAVE_POSIX
-   fd(-1),
-#else
    hPort(INVALID_HANDLE_VALUE),
-#endif
    buffer(NMEA_BUF_SIZE)
 {
   assert(path != NULL);
@@ -79,14 +69,6 @@ SerialPort::~SerialPort()
 bool
 SerialPort::Open()
 {
-#ifdef HAVE_POSIX
-  fd = open(sPortName, O_RDWR | O_NOCTTY);
-  if (fd < 0) {
-    SerialPort_StatusMessage(MB_OK | MB_ICONINFORMATION, NULL,
-                          _("Unable to open port %s"), sPortName);
-    return false;
-  }
-#else /* !HAVE_POSIX */
   DCB PortDCB;
 
   buffer.clear();
@@ -157,16 +139,10 @@ SerialPort::Open()
   EscapeCommFunction(hPort, SETDTR);
   // SETRTS: Sends the RTS (request-to-send) signal.
   EscapeCommFunction(hPort, SETRTS);
-#endif /* !HAVE_POSIX */
 
   if (!StartRxThread()){
-#ifdef HAVE_POSIX
-    close(fd);
-    fd = -1;
-#else /* !HAVE_POSIX */
     CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
-#endif /* !HAVE_POSIX */
 
     return false;
   }
@@ -177,26 +153,12 @@ SerialPort::Open()
 void
 SerialPort::Flush(void)
 {
-#ifdef HAVE_POSIX
-  // XXX
-#else /* !HAVE_POSIX */
   PurgeComm(hPort, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
-#endif /* !HAVE_POSIX */
 }
 
 void
 SerialPort::run()
 {
-#ifdef HAVE_POSIX
-  char buffer[1024];
-
-  // XXX use poll()
-  while (!wait_stopped(50)) {
-    ssize_t nbytes = read(fd, buffer, sizeof(buffer));
-    for (ssize_t i = 0; i < nbytes; ++i)
-      ProcessChar(buffer[i]);
-  }
-#else /* !HAVE_POSIX */
   DWORD dwCommModemStatus, dwBytesTransferred;
   BYTE inbuf[1024];
 
@@ -228,7 +190,6 @@ SerialPort::run()
     for (unsigned int j = 0; j < dwBytesTransferred; j++)
       ProcessChar(inbuf[j]);
   }
-#endif /* !HAVE_POSIX */
 
   Flush();
 }
@@ -236,16 +197,6 @@ SerialPort::run()
 bool
 SerialPort::Close()
 {
-#ifdef HAVE_POSIX
-  if (fd < 0)
-    return true;
-
-  StopRxThread();
-
-  close(fd);
-  fd = -1;
-  return true;
-#else /* !HAVE_POSIX */
   if (hPort != INVALID_HANDLE_VALUE) {
     StopRxThread();
     Sleep(100); // todo ...
@@ -263,18 +214,11 @@ SerialPort::Close()
   }
 
   return false;
-#endif /* !HAVE_POSIX */
 }
 
 void
 SerialPort::Write(const void *data, unsigned length)
 {
-#ifdef HAVE_POSIX
-  if (fd < 0)
-    return;
-
-  write(fd, data, length);
-#else /* !HAVE_POSIX */
   if (hPort == INVALID_HANDLE_VALUE)
     return;
 
@@ -288,7 +232,6 @@ SerialPort::Write(const void *data, unsigned length)
   DWORD NumberOfBytesWritten;
   // lpNumberOfBytesWritten : This parameter can be NULL only when the lpOverlapped parameter is not NULL.
   ::WriteFile(hPort, data, length, &NumberOfBytesWritten, NULL);
-#endif /* !HAVE_POSIX */
 }
 
 bool
@@ -298,13 +241,8 @@ SerialPort::StopRxThread()
   assert(!Thread::inside());
 
   // Make sure the port is still open
-#ifdef HAVE_POSIX
-  if (fd < 0)
-    return false;
-#else /* !HAVE_POSIX */
   if (hPort == INVALID_HANDLE_VALUE)
     return false;
-#endif /* !HAVE_POSIX */
 
   // If the thread is not running, cancel the rest of the function
   if (!Thread::defined())
@@ -312,9 +250,6 @@ SerialPort::StopRxThread()
 
   stop();
 
-#ifdef HAVE_POSIX
-  Thread::join();
-#else
   Flush();
 
   /* this will cancel WaitCommEvent() */
@@ -332,7 +267,6 @@ SerialPort::StopRxThread()
 
     Thread::join();
   }
-#endif /* !HAVE_POSIX */
 
   return true;
 }
@@ -344,13 +278,8 @@ SerialPort::StartRxThread(void)
   assert(!Thread::inside());
 
   // Make sure the port was opened correctly
-#ifdef HAVE_POSIX
-  if (fd < 0)
-    return false;
-#else /* !HAVE_POSIX */
   if (hPort == INVALID_HANDLE_VALUE)
     return false;
-#endif /* !HAVE_POSIX */
 
   // Start the receive thread
   StoppableThread::start();
@@ -360,9 +289,6 @@ SerialPort::StartRxThread(void)
 bool
 SerialPort::SetRxTimeout(int Timeout)
 {
-#ifdef HAVE_POSIX
-  return true; // XXX
-#else /* !HAVE_POSIX */
   COMMTIMEOUTS CommTimeouts;
 
   if (hPort == INVALID_HANDLE_VALUE)
@@ -400,15 +326,11 @@ SerialPort::SetRxTimeout(int Timeout)
   }
 
   return true;
-#endif /* !HAVE_POSIX */
 }
 
 unsigned long
 SerialPort::SetBaudrate(unsigned long BaudRate)
 {
-#ifdef HAVE_POSIX
-  return BaudRate; // XXX
-#else /* !HAVE_POSIX */
   COMSTAT ComStat;
   DCB PortDCB;
   DWORD dwErrors;
@@ -432,18 +354,11 @@ SerialPort::SetBaudrate(unsigned long BaudRate)
     return 0;
 
   return result;
-#endif /* !HAVE_POSIX */
 }
 
 int
 SerialPort::Read(void *Buffer, size_t Size)
 {
-#ifdef HAVE_POSIX
-  if (fd < 0)
-    return -1;
-
-  return read(fd, Buffer, Size);
-#else /* !HAVE_POSIX */
   DWORD dwBytesTransferred;
 
   if (hPort == INVALID_HANDLE_VALUE)
@@ -453,7 +368,6 @@ SerialPort::Read(void *Buffer, size_t Size)
     return dwBytesTransferred;
 
   return -1;
-#endif /* !HAVE_POSIX */
 }
 
 void
