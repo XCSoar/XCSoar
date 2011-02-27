@@ -33,13 +33,13 @@ Copyright_License {
 #include <windef.h>
 #endif
 
-#define NMEA_BUF_SIZE 100
-
 /**
  * Generic SerialPort thread handler class
  */
 class SerialPort : public Port, protected StoppableThread
 {
+  static const unsigned NMEA_BUF_SIZE = 100;
+
   /** Name of the serial port */
   TCHAR sPortName[64];
 
