@@ -158,12 +158,11 @@ GlideComputerTask::ProcessIdle()
 void
 GlideComputerTask::TerrainWarning()
 {
-  const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
-
   if (SettingsComputer().FinalGlideTerrain && terrain) {
     // @todo: update TerrainBase in new footprint calculations,
     // remove TerrainFootprint function from GlideComputerAirData
 
+    const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
     const AGeoPoint start (state.get_location(), state.NavAltitude);
     m_task.footprint(start, SetCalculated().GlideFootPrint);
     SetCalculated().GlideFootPrintValid = true;
