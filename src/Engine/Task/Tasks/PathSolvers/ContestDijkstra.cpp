@@ -43,7 +43,7 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned finish_alt_diff):
   AbstractContest(_trace, _handicap, finish_alt_diff),
   NavDijkstra<TracePoint>(n_legs + 1),
-  m_dijkstra(false, CONTEST_QUEUE_SIZE),
+  m_dijkstra(false, 0),
   solution_found(false)
 {
   reset();
@@ -139,6 +139,7 @@ ContestDijkstra::solve()
 {
   if (m_dijkstra.empty()) {
     set_weightings();
+    m_dijkstra.reserve(CONTEST_QUEUE_SIZE);
   }
 
   assert(num_stages <= MAX_STAGES);
