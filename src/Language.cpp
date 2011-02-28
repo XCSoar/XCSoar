@@ -26,6 +26,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
+#include "Util/UTF8.hpp"
 #include "OS/PathName.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
@@ -116,7 +117,7 @@ gettext(const TCHAR* text)
   return translations[text2].c_str();
 #else
   const char *translation = mo_file->lookup(text);
-  return translation != NULL && *translation != 0
+  return translation != NULL && *translation != 0 && ValidateUTF8(translation)
     ? translation
     : text;
 #endif

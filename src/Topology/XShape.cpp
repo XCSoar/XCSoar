@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Topology/XShape.hpp"
+#include "Util/UTF8.hpp"
 #include "Units.hpp"
 #include "shapelib/map.h"
 
@@ -65,6 +66,9 @@ import_label(const char *src)
 
   return dest;
 #else
+  if (!ValidateUTF8(src))
+    return NULL;
+
   return strdup(src);
 #endif
 }

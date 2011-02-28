@@ -7,6 +7,8 @@ Version 6.0.6 - not yet released
   - fix declaration crash in Volkslogger, EW, CAI302, CAI GPS NAV
 * Windows
   - compile vali-xcs.exe as console application
+* Android
+  - fix crash due to invalid UTF-8 labels
 * Linux
   - implement the serial port
 
