@@ -1049,6 +1049,16 @@ setVariables()
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabelStyle"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Rounded Rectangle"), RoundedBlack);
+    dfe->addEnumText(_("Outlined"), OutlinedInverted);
+    dfe->Set(XCSoarInterface::SettingsMap().LandableRenderMode);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpWayPointLabelSelection"));
   if (wp) {
 
@@ -2106,6 +2116,10 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabels"),
                                   szProfileDisplayText,
                                   XCSoarInterface::SetSettingsMap().DisplayTextType);
+
+  changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabelStyle"),
+                                  szProfileWaypointLabelStyle,
+                                  XCSoarInterface::SetSettingsMap().LandableRenderMode);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpWayPointLabelSelection"),
                                   szProfileWayPointLabelSelection,
