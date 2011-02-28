@@ -10,8 +10,9 @@
   <Button Name="cmdFonts" Caption="Fonts" X="75" Y="240" Width="60" Height="28" />
   <Button Name="cmdWaypoints" Caption="Waypts." X="75" Y="240" Width="60" Height="28" />
 
+  <Button Name="cmdLoadPolarFile" Caption="Import" X="113" Y="240" Width="60" Height="28" OnClick="OnPolarLoadFromFile" />        
+  <Button Name="cmdSavePolarFile" Caption="Export" X="175" Y="240" Width="60" Height="28" OnClick="OnPolarExport" />        
   <Button Name="cmdLoadInternalPolar" Caption="List" X="175" Y="270" Width="60" Height="28" OnClick="OnPolarLoadInteral" />
-  <Button Name="cmdLoadPolarFile" Caption="Import" X="175" Y="240" Width="60" Height="28" OnClick="OnPolarLoadFromFile" />        
 
   <Tabbed Name="tabbed" X="0" Y="0" Width="0" Height="222">
     <Panel Name="frmSite">

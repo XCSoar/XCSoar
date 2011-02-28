@@ -8,6 +8,7 @@
 
   <Button Name="cmdLoadInternalPolar" Caption="List" X="5" Y="40" Width="60" Height="28" OnClick="OnPolarLoadInteral" />
   <Button Name="cmdLoadPolarFile" Caption="Import" X="5" Y="70" Width="60" Height="28" OnClick="OnPolarLoadFromFile" />        
+  <Button Name="cmdSavePolarFile" Caption="Export" X="5" Y="100" Width="60" Height="28" OnClick="OnPolarExport" />        
 
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="29" Height="28" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="36" Y="160" Width="29" Height="28" OnClick="OnNextClicked" />

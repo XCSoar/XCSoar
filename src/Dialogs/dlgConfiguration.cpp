@@ -159,6 +159,7 @@ static WndButton *buttonFonts = NULL;
 static WndButton *buttonWaypoints = NULL;
 static WndButton *buttonPolarList = NULL;
 static WndButton *buttonPolarImport = NULL;
+static WndButton *buttonPolarExport = NULL;
 
 static void
 UpdateButtons(void)
@@ -221,6 +222,9 @@ PageSwitched()
 
   if (buttonPolarImport != NULL)
     buttonPolarImport->set_visible(current_page == PAGE_POLAR);
+
+  if (buttonPolarExport != NULL)
+    buttonPolarExport->set_visible(current_page == PAGE_POLAR);
 }
 
 static void
@@ -565,6 +569,22 @@ OnPolarLoadFromFile(WndButton &button)
 }
 
 static void
+OnPolarExport(WndButton &button)
+{
+  TCHAR filename[69] = _T("");
+  if (!dlgTextEntryShowModal(filename, 64))
+    return;
+
+  TCHAR path[MAX_PATH];
+  _tcscat(filename, _T(".plr"));
+  LocalPath(path, filename);
+
+  SimplePolar polar;
+  SaveFormToPolar(polar);
+  PolarGlue::SaveToFile(polar, path);
+}
+
+static void
 OnPolarFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
@@ -751,6 +771,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnDeviceBData),
   DeclareCallBackEntry(OnPolarLoadInteral),
   DeclareCallBackEntry(OnPolarLoadFromFile),
+  DeclareCallBackEntry(OnPolarExport),
   DeclareCallBackEntry(OnPolarFieldData),
   DeclareCallBackEntry(OnLoadUnitsPreset),
   DeclareCallBackEntry(OnUnitFieldData),
@@ -936,6 +957,7 @@ setVariables()
 
   buttonPolarList = ((WndButton *)wf->FindByName(_T("cmdLoadInternalPolar")));
   buttonPolarImport = ((WndButton *)wf->FindByName(_T("cmdLoadPolarFile")));
+  buttonPolarExport = ((WndButton *)wf->FindByName(_T("cmdSavePolarFile")));
 
   UpdateButtons();
 
