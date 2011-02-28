@@ -147,6 +147,11 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
+  if ((device.Driver->Flags & drfLogger) == 0) {
+    fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
+    return EXIT_FAILURE;
+  }
+
 #ifdef HAVE_POSIX
   TTYPort *port = new TTYPort(port_name, baud, *(Port::Handler *)NULL);
 #else
