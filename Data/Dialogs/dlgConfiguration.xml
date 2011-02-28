@@ -10,6 +10,9 @@
   <Button Name="cmdFonts" Caption="Fonts" X="75" Y="240" Width="60" Height="28" />
   <Button Name="cmdWaypoints" Caption="Waypts." X="75" Y="240" Width="60" Height="28" />
 
+  <Button Name="cmdLoadInternalPolar" Caption="List" X="175" Y="270" Width="60" Height="28" OnClick="OnPolarLoadInteral" />
+  <Button Name="cmdLoadPolarFile" Caption="Import" X="175" Y="240" Width="60" Height="28" OnClick="OnPolarLoadFromFile" />        
+
   <Tabbed Name="tabbed" X="0" Y="0" Width="0" Height="222">
     <Panel Name="frmSite">
       <Edit Name="prpMapFile" Caption="Map Database" X="2" Width="-2" Height="22" CaptionWidth="100"
@@ -315,7 +318,7 @@
     </Panel>
   
     <Panel Name="frmPolar">
-      <Panel Name="pnlPolarDetails" X="2" Y="2" Border="30" Height="135" Width="-2">
+      <Panel Name="pnlPolarDetails" X="2" Y="2" Border="30" Height="109" Width="-2">
         <Label Name="lblPolar" Caption="Polar:" X="2" Y="2" Height="16" Width="-60" />
         <Label Name="lblPolarInvalid" Caption="INVALID" X="-50" Y="2" Height="16" CaptionColor="0xFF0000" />
 
@@ -349,9 +352,6 @@
         <Edit Name="prpPolarWingArea" Caption="Wing area" Y="84" Width="232" Height="22" CaptionWidth="133">
           <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="20" Step="0.1" OnDataAccess="OnPolarFieldData" />
         </Edit>
-
-        <Button Name="cmdLoadInternalPolar" Caption="Load polar" X="2" Y="108" Width="115" Height="24" OnClick="OnPolarLoadInteral" />
-        <Button Name="cmdLoadPolarFile" Caption="Load polar file" X="117" Y="108" Width="115" Height="24" OnClick="OnPolarLoadFromFile" />        
       </Panel>
 
       <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" X="2" Width="-2" Height="22" CaptionWidth="120"

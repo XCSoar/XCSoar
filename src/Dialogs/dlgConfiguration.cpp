@@ -157,6 +157,8 @@ static WndButton *buttonAircraftRego = NULL;
 static WndButton *buttonLoggerID = NULL;
 static WndButton *buttonFonts = NULL;
 static WndButton *buttonWaypoints = NULL;
+static WndButton *buttonPolarList = NULL;
+static WndButton *buttonPolarImport = NULL;
 
 static void
 UpdateButtons(void)
@@ -213,6 +215,12 @@ PageSwitched()
 
   if (buttonWaypoints != NULL)
     buttonWaypoints->set_visible(current_page == PAGE_SITE);
+
+  if (buttonPolarList != NULL)
+    buttonPolarList->set_visible(current_page == PAGE_POLAR);
+
+  if (buttonPolarImport != NULL)
+    buttonPolarImport->set_visible(current_page == PAGE_POLAR);
 }
 
 static void
@@ -925,6 +933,9 @@ setVariables()
   buttonWaypoints = ((WndButton *)wf->FindByName(_T("cmdWaypoints")));
   if (buttonWaypoints)
     buttonWaypoints->SetOnClickNotify(OnWaypoints);
+
+  buttonPolarList = ((WndButton *)wf->FindByName(_T("cmdLoadInternalPolar")));
+  buttonPolarImport = ((WndButton *)wf->FindByName(_T("cmdLoadPolarFile")));
 
   UpdateButtons();
 
