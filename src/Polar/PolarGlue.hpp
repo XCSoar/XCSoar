@@ -36,7 +36,7 @@ namespace PolarGlue
   bool LoadFromFile(SimplePolar &polar, const TCHAR* path);
   bool LoadFromFile(SimplePolar &polar, TLineReader &reader);
   bool LoadFromProfile(SimplePolar &polar);
-  void SaveToProfile(SimplePolar &polar);
+  void SaveToProfile(const SimplePolar &polar);
 
   void LoadFromProfile(GlidePolar &gp);
 }

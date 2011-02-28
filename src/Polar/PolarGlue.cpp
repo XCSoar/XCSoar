@@ -120,7 +120,7 @@ PolarGlue::LoadFromProfile(SimplePolar &polar)
 }
 
 void
-PolarGlue::SaveToProfile(SimplePolar &polar)
+PolarGlue::SaveToProfile(const SimplePolar &polar)
 {
   TCHAR polar_string[255];
   polar.GetString(polar_string, 255);
