@@ -29,12 +29,17 @@ Copyright_License {
 class GlidePolar;
 struct SimplePolar;
 class TLineReader;
+class TextWriter;
 
 namespace PolarGlue
 {
   void LoadDefault(SimplePolar &polar);
+
   bool LoadFromFile(SimplePolar &polar, const TCHAR* path);
+  bool SaveToFile(const SimplePolar &polar, const TCHAR* path);
   bool LoadFromFile(SimplePolar &polar, TLineReader &reader);
+  bool SaveToFile(const SimplePolar &polar, TextWriter &writer);
+
   bool LoadFromProfile(SimplePolar &polar);
   void SaveToProfile(const SimplePolar &polar);
 
