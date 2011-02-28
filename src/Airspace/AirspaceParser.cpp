@@ -49,7 +49,7 @@ enum asFileType {
   ftTNP
 };
 
-static const int k_nAreaCount = 12;
+static const int k_nAreaCount = 13;
 static const TCHAR* k_strAreaStart[k_nAreaCount] = {
   _T("R"),
   _T("Q"),
@@ -62,7 +62,8 @@ static const TCHAR* k_strAreaStart[k_nAreaCount] = {
   _T("GP"),
   _T("W"),
   _T("E"),
-  _T("F")
+  _T("F"),
+  _T("TMZ")
 };
 
 static const int k_nAreaType[k_nAreaCount] = {
@@ -77,7 +78,8 @@ static const int k_nAreaType[k_nAreaCount] = {
   NOGLIDER,
   WAVE,
   CLASSE,
-  CLASSF
+  CLASSF,
+  TMZ
 };
 
 // this can now be called multiple times to load several airspaces.
