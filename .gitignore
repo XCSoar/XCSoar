@@ -1,4 +1,5 @@
 results/res-*
+results/terrain.txt
 .stgit*
 .together/*
 .deps
