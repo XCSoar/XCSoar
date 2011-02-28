@@ -25,7 +25,6 @@ Copyright_License {
 #include "Engine/Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
-#include "Profile/Profile.hpp"
 
 gcc_pure
 static enum Declaration::TurnPoint::shape
@@ -66,10 +65,6 @@ Declaration::TurnPoint::TurnPoint(const OrderedTaskPoint &tp)
 
 Declaration::Declaration(const OrderedTask* task)
 {
-  Profile::Get(szProfilePilotName, PilotName);
-  Profile::Get(szProfileAircraftType, AircraftType);
-  Profile::Get(szProfileAircraftRego, AircraftRego);
-
   if (task)
     for (unsigned i = 0; i < task->task_size(); i++)
       TurnPoints.push_back(*task->get_tp(i));

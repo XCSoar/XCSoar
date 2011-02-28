@@ -385,6 +385,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/DeviceConfig.cpp \
 	$(SRC)/Profile/InfoBoxConfig.cpp \
 	$(SRC)/Profile/AirspaceConfig.cpp \
+	$(SRC)/Profile/DeclarationConfig.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \

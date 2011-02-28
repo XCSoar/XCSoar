@@ -29,6 +29,7 @@
 #include "Device/Declaration.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/List.hpp"
+#include "Profile/DeclarationConfig.hpp"
 
 static bool DeclaredToDevice = false;
 
@@ -69,7 +70,8 @@ ExternalLogger::Declare(const OrderedTask& task)
   if (!task.check_task())
     return;
 
-  const Declaration decl(&task);
+  Declaration decl(&task);
+  Profile::GetDeclarationConfig(decl);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     if (DeviceDeclare(&DeviceList[i], decl))
