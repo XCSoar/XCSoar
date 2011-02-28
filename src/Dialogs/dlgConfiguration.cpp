@@ -581,7 +581,10 @@ OnPolarExport(WndButton &button)
 
   SimplePolar polar;
   SaveFormToPolar(polar);
-  PolarGlue::SaveToFile(polar, path);
+  if (PolarGlue::SaveToFile(polar, path)) {
+    Profile::Set(szProfilePolarName, filename);
+    UpdatePolarTitle();
+  }
 }
 
 static void
