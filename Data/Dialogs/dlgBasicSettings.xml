@@ -21,7 +21,7 @@
   </Edit>
 
   <Edit Name="prpQNH" Caption="QNH" X="2" Width="-2" Height="22" CaptionWidth="78" Help="Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected.">
-    <DataField DataType="double" DisplayFormat="%.1fhPa" EditFormat="%.1f" Min="850" Max="1300" Step="0.1" OnDataAccess="OnQnhData"/>
+    <DataField DataType="double" DisplayFormat="%.0fhPa" EditFormat="%.0f" Min="850" Max="1300" Step="1" OnDataAccess="OnQnhData"/>
   </Edit>
 
   <Edit Name="prpAltitude" Caption="Altitude" X="2" Width="-2" Height="22" CaptionWidth="78" ReadOnly="1">

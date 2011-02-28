@@ -21,29 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_POLAR_LOADER_HPP
-#define XCSOAR_POLAR_LOADER_HPP
+#ifndef XCSOAR_UNITS_GLUE_HPP
+#define XCSOAR_UNITS_GLUE_HPP
 
-#include <tchar.h>
-
-class GlidePolar;
-struct SimplePolar;
-class TLineReader;
-class TextWriter;
-
-namespace PolarGlue
+namespace Units
 {
-  void LoadDefault(SimplePolar &polar);
-
-  bool LoadFromFile(SimplePolar &polar, const TCHAR* path);
-  bool SaveToFile(const SimplePolar &polar, const TCHAR* path);
-  bool LoadFromFile(SimplePolar &polar, TLineReader &reader);
-  bool SaveToFile(const SimplePolar &polar, TextWriter &writer);
-
-  bool LoadFromProfile(SimplePolar &polar);
-  void SaveToProfile(const SimplePolar &polar);
-
-  void LoadFromProfile(GlidePolar &gp);
+  void LoadFromOSLanguage();
 }
 
 #endif

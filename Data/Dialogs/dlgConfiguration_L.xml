@@ -6,6 +6,10 @@
   <Button Name="cmdFonts" Caption="Fonts" X="5" Y="130" Width="60" Height="28"/>
   <Button Name="cmdWaypoints" Caption="Waypts." X="5" Y="130" Width="60" Height="28"/>
 
+  <Button Name="cmdLoadInternalPolar" Caption="List" X="5" Y="40" Width="60" Height="28" OnClick="OnPolarLoadInteral" />
+  <Button Name="cmdLoadPolarFile" Caption="Import" X="5" Y="70" Width="60" Height="28" OnClick="OnPolarLoadFromFile" />        
+  <Button Name="cmdSavePolarFile" Caption="Export" X="5" Y="100" Width="60" Height="28" OnClick="OnPolarExport" />        
+
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="29" Height="28" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="36" Y="160" Width="29" Height="28" OnClick="OnNextClicked" />
   <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28"/>
@@ -118,6 +122,10 @@
 
     <Panel Name="frmWayPoints">
       <Edit Name="prpWaypointLabels" Caption="Label format" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Determines how labels are displayed with each waypoint:&#10;[Full Name] The full name of each waypoint is displayed.&#10;[First Word of Name] The first word of the waypoint name is displayed.&#10;[First 3 Letters] The first 3 letters of the waypoint name are displayed.&#10;[First 5 Letters] The first 5 letters of the waypoint name are displayed.&#10;[None] No waypoint name is displayed.">
+        <DataField DataType="enum" />
+      </Edit>
+
+      <Edit Name="prpWaypointLabelStyle" Caption="Label style" X="2" Width="-2" Height="22" CaptionWidth="100">
         <DataField DataType="enum" />
       </Edit>
 
@@ -315,7 +323,7 @@
     </Panel>
   
     <Panel Name="frmPolar">
-      <Panel Name="pnlPolarDetails" X="12" Y="2" Border="30" Height="135" Width="-2">
+      <Panel Name="pnlPolarDetails" X="12" Y="2" Border="30" Height="109" Width="-2">
         <Label Name="lblPolar" Caption="Polar:" X="2" Y="2" Height="16" Width="-60" />
         <Label Name="lblPolarInvalid" Caption="INVALID" X="-50" Y="2" Height="16" CaptionColor="0xFF0000" />
 
@@ -349,9 +357,6 @@
         <Edit Name="prpPolarWingArea" Caption="Wing area" Y="84" Width="232" Height="22" CaptionWidth="133">
           <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="20" Step="0.1" OnDataAccess="OnPolarFieldData" />
         </Edit>
-
-        <Button Name="cmdLoadInternalPolar" Caption="Load polar" X="2" Y="108" Width="115" Height="24" OnClick="OnPolarLoadInteral" />
-        <Button Name="cmdLoadPolarFile" Caption="Load polar file" X="117" Y="108" Width="115" Height="24" OnClick="OnPolarLoadFromFile" />        
       </Panel>
 
       <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" X="2" Width="-2" Height="22" CaptionWidth="110"

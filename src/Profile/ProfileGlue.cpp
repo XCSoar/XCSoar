@@ -184,6 +184,10 @@ Profile::Use()
   Get(szProfileWayPointLabelSelection, Temp);
   settings_map.WayPointLabelSelection = (WayPointLabelSelection_t) Temp;
 
+  Temp = settings_map.LandableRenderMode;
+  Get(szProfileWaypointLabelStyle, Temp);
+  settings_map.LandableRenderMode = (RenderMode)Temp;
+
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
 

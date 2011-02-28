@@ -26,6 +26,7 @@ Copyright_License {
 #include "Polar/PolarStore.hpp"
 #include "Profile/Profile.hpp"
 #include "IO/FileLineReader.hpp"
+#include "IO/TextWriter.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
@@ -68,6 +69,24 @@ PolarGlue::LoadFromFile(SimplePolar &polar, const TCHAR* path)
   LoadFromFile(polar, *reader);
   delete reader;
   return true;
+}
+
+bool
+PolarGlue::SaveToFile(const SimplePolar &polar, TextWriter &writer)
+{
+  TCHAR buffer[256];
+  polar.GetString(buffer, 256);
+  return writer.writeln(buffer);
+}
+
+bool
+PolarGlue::SaveToFile(const SimplePolar &polar, const TCHAR* path)
+{
+  TextWriter writer(path);
+  if (writer.error())
+    return false;
+
+  return SaveToFile(polar, writer);
 }
 
 static bool
@@ -120,7 +139,7 @@ PolarGlue::LoadFromProfile(SimplePolar &polar)
 }
 
 void
-PolarGlue::SaveToProfile(SimplePolar &polar)
+PolarGlue::SaveToProfile(const SimplePolar &polar)
 {
   TCHAR polar_string[255];
   polar.GetString(polar_string, 255);

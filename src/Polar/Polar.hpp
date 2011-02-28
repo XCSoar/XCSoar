@@ -52,7 +52,7 @@ struct SimplePolar
   double wing_area;    /**< Reference wing area (m^2) */
 
   bool ReadString(const TCHAR* line);
-  void GetString(TCHAR* line, size_t size);
+  void GetString(TCHAR* line, size_t size) const;
 
   /**
    * Converts a WinPilot based SimplePolar to a XCSoar based GlidePolar

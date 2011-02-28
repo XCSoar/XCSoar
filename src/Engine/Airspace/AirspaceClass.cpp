@@ -78,6 +78,12 @@ airspace_class_as_text(const AirspaceClass_t item,
     } else {
       return _T("W"); // was Wav
     }
+  case TMZ:
+    if (!concise) {
+      return _T("Transponder Mandatory Zone");
+    } else {
+      return _T("TMZ");
+    }
   case AATASK:
     if (!concise) {
       return _T("AAT");

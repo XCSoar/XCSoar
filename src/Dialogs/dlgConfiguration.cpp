@@ -157,6 +157,9 @@ static WndButton *buttonAircraftRego = NULL;
 static WndButton *buttonLoggerID = NULL;
 static WndButton *buttonFonts = NULL;
 static WndButton *buttonWaypoints = NULL;
+static WndButton *buttonPolarList = NULL;
+static WndButton *buttonPolarImport = NULL;
+static WndButton *buttonPolarExport = NULL;
 
 static void
 UpdateButtons(void)
@@ -213,6 +216,15 @@ PageSwitched()
 
   if (buttonWaypoints != NULL)
     buttonWaypoints->set_visible(current_page == PAGE_SITE);
+
+  if (buttonPolarList != NULL)
+    buttonPolarList->set_visible(current_page == PAGE_POLAR);
+
+  if (buttonPolarImport != NULL)
+    buttonPolarImport->set_visible(current_page == PAGE_POLAR);
+
+  if (buttonPolarExport != NULL)
+    buttonPolarExport->set_visible(current_page == PAGE_POLAR);
 }
 
 static void
@@ -511,7 +523,7 @@ OnPolarLoadInteral(WndButton &button)
 
   /* let the user select */
 
-  int result = ComboPicker(XCSoarInterface::main_window, _("Polar"), *list, NULL);
+  int result = ComboPicker(XCSoarInterface::main_window, _("Load Polar"), *list, NULL);
   if (result >= 0) {
     SimplePolar polar;
     PolarStore::Read(dfe->getItem(result), polar);
@@ -540,7 +552,7 @@ OnPolarLoadFromFile(WndButton &button)
   /* let the user select */
 
   int result = ComboPicker(XCSoarInterface::main_window,
-                           _("Polar file"), *list, NULL);
+                           _("Load Polar from file"), *list, NULL);
   if (result > 0) {
     const TCHAR* path = dfe->getItem(result);
     SimplePolar polar;
@@ -554,6 +566,25 @@ OnPolarLoadFromFile(WndButton &button)
 
   delete dfe;
   delete list;
+}
+
+static void
+OnPolarExport(WndButton &button)
+{
+  TCHAR filename[69] = _T("");
+  if (!dlgTextEntryShowModal(filename, 64))
+    return;
+
+  TCHAR path[MAX_PATH];
+  _tcscat(filename, _T(".plr"));
+  LocalPath(path, filename);
+
+  SimplePolar polar;
+  SaveFormToPolar(polar);
+  if (PolarGlue::SaveToFile(polar, path)) {
+    Profile::Set(szProfilePolarName, filename);
+    UpdatePolarTitle();
+  }
 }
 
 static void
@@ -743,6 +774,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnDeviceBData),
   DeclareCallBackEntry(OnPolarLoadInteral),
   DeclareCallBackEntry(OnPolarLoadFromFile),
+  DeclareCallBackEntry(OnPolarExport),
   DeclareCallBackEntry(OnPolarFieldData),
   DeclareCallBackEntry(OnLoadUnitsPreset),
   DeclareCallBackEntry(OnUnitFieldData),
@@ -926,6 +958,10 @@ setVariables()
   if (buttonWaypoints)
     buttonWaypoints->SetOnClickNotify(OnWaypoints);
 
+  buttonPolarList = ((WndButton *)wf->FindByName(_T("cmdLoadInternalPolar")));
+  buttonPolarImport = ((WndButton *)wf->FindByName(_T("cmdLoadPolarFile")));
+  buttonPolarExport = ((WndButton *)wf->FindByName(_T("cmdSavePolarFile")));
+
   UpdateButtons();
 
   for (unsigned i = 0; i < NUMDEV; ++i)
@@ -1010,6 +1046,16 @@ setVariables()
     dfe->addEnumText(_("First 5 Letters"), DISPLAYFIRSTFIVE, _("The first 5 letters of the waypoint name are displayed."));
     dfe->addEnumText(_("None"), DISPLAYNONE, _("No waypoint name is displayed."));
     dfe->Set(XCSoarInterface::SettingsMap().DisplayTextType);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabelStyle"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Rounded Rectangle"), RoundedBlack);
+    dfe->addEnumText(_("Outlined"), OutlinedInverted);
+    dfe->Set(XCSoarInterface::SettingsMap().LandableRenderMode);
     wp->RefreshDisplay();
   }
 
@@ -2070,6 +2116,10 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabels"),
                                   szProfileDisplayText,
                                   XCSoarInterface::SetSettingsMap().DisplayTextType);
+
+  changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabelStyle"),
+                                  szProfileWaypointLabelStyle,
+                                  XCSoarInterface::SetSettingsMap().LandableRenderMode);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpWayPointLabelSelection"),
                                   szProfileWayPointLabelSelection,

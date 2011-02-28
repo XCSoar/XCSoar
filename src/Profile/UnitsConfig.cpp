@@ -25,10 +25,12 @@ Copyright_License {
 
 #include "Profile/Profile.hpp"
 #include "Units.hpp"
+#include "UnitsGlue.hpp"
 
 void
 Profile::LoadUnits()
 {
+  bool found = false;
   unsigned Lift = 0;
   unsigned Altitude = 0;
   unsigned Temperature = 0;
@@ -38,7 +40,7 @@ Profile::LoadUnits()
     Units::SetCoordinateFormat((CoordinateFormats_t)Temp);
 
   unsigned Speed = 1;
-  Get(szProfileSpeedUnitsValue, Speed);
+  found |= Get(szProfileSpeedUnitsValue, Speed);
   switch (Speed) {
   case 0:
     Units::SetUserSpeedUnit(unStatuteMilesPerHour);
@@ -56,7 +58,7 @@ Profile::LoadUnits()
   }
 
   unsigned TaskSpeed = 2;
-  Get(szProfileTaskSpeedUnitsValue, TaskSpeed);
+  found |= Get(szProfileTaskSpeedUnitsValue, TaskSpeed);
   switch (TaskSpeed) {
   case 0:
     Units::SetUserTaskSpeedUnit(unStatuteMilesPerHour);
@@ -71,7 +73,7 @@ Profile::LoadUnits()
   }
 
   unsigned Distance = 2;
-  Get(szProfileDistanceUnitsValue,Distance);
+  found |= Get(szProfileDistanceUnitsValue,Distance);
   switch (Distance) {
   case 0:
     Units::SetUserDistanceUnit(unStatuteMiles);
@@ -85,7 +87,7 @@ Profile::LoadUnits()
     break;
   }
 
-  Get(szProfileAltitudeUnitsValue, Altitude);
+  found |= Get(szProfileAltitudeUnitsValue, Altitude);
   switch (Altitude) {
   case 0:
     Units::SetUserAltitudeUnit(unFeet);
@@ -96,7 +98,7 @@ Profile::LoadUnits()
     break;
   }
 
-  Get(szProfileTemperatureUnitsValue, Temperature);
+  found |= Get(szProfileTemperatureUnitsValue, Temperature);
   switch (Temperature) {
   default:
   case 0:
@@ -107,7 +109,7 @@ Profile::LoadUnits()
     break;
   }
 
-  Get(szProfileLiftUnitsValue, Lift);
+  found |= Get(szProfileLiftUnitsValue, Lift);
   switch (Lift) {
   case 0:
     Units::SetUserVerticalSpeedUnit(unKnots);
@@ -117,4 +119,7 @@ Profile::LoadUnits()
     Units::SetUserVerticalSpeedUnit(unMeterPerSecond);
     break;
   }
+
+  if (!found)
+    Units::LoadFromOSLanguage();
 }

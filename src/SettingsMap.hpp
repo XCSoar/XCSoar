@@ -28,6 +28,7 @@ Copyright_License {
 
 #include "Navigation/GeoPoint.hpp"
 #include "SettingsAirspace.hpp"
+#include "Screen/TextInBox.hpp"
 
 enum DisplayOrientation_t {
   TRACKUP = 0,
@@ -124,6 +125,8 @@ struct SETTINGS_MAP {
   DisplayTextType_t DisplayTextType;
   /** What type of waypoint labels to render */
   WayPointLabelSelection_t WayPointLabelSelection;
+  /** What type of waypoint labels to render */
+  RenderMode LandableRenderMode;
 
   int TrailActive;
   /** Airspaces are drawn with black border (otherwise in airspace color) */

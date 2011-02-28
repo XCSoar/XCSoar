@@ -190,7 +190,7 @@ public:
 
     TextInBoxMode_t text_mode;
     if (reachable_glide && way_point.is_landable()) {
-      text_mode.Mode = RoundedBlack;
+      text_mode.Mode = settings_map.LandableRenderMode;
       text_mode.Bold = true;
     } else if (in_task) {
       text_mode.Mode = OutlinedInverted;
