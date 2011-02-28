@@ -66,9 +66,9 @@ Declaration::TurnPoint::TurnPoint(const OrderedTaskPoint &tp)
 
 Declaration::Declaration(const OrderedTask* task)
 {
-  Profile::Get(szProfilePilotName, PilotName, 64);
-  Profile::Get(szProfileAircraftType, AircraftType, 32);
-  Profile::Get(szProfileAircraftRego, AircraftRego, 32);
+  Profile::Get(szProfilePilotName, PilotName);
+  Profile::Get(szProfileAircraftType, AircraftType);
+  Profile::Get(szProfileAircraftRego, AircraftRego);
 
   if (task)
     for (unsigned i = 0; i < task->task_size(); i++)

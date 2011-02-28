@@ -337,9 +337,9 @@ TestDeclare(const struct DeviceRegister &driver)
   ok1(device != NULL);
 
   Declaration declaration(NULL);
-  _tcscpy(declaration.PilotName, _T("Foo Bar"));
-  _tcscpy(declaration.AircraftType, _T("Cirrus"));
-  _tcscpy(declaration.AircraftRego, _T("D-3003"));
+  declaration.PilotName = _T("Foo Bar");
+  declaration.AircraftType = _T("Cirrus");
+  declaration.AircraftRego = _T("D-3003");
   const GeoPoint gp(Angle::degrees(fixed(7.7061111111111114)),
                     Angle::degrees(fixed(51.051944444444445)));
   Waypoint wp(gp);

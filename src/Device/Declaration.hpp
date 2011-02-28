@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
+#include "Util/StaticString.hpp"
 #include "Compiler.h"
 
 #include <vector>
@@ -53,9 +54,9 @@ struct Declaration {
     TurnPoint(const OrderedTaskPoint &tp);
   };
 
-  TCHAR PilotName[64];
-  TCHAR AircraftType[32];
-  TCHAR AircraftRego[32];
+  StaticString<64> PilotName;
+  StaticString<32> AircraftType;
+  StaticString<32> AircraftRego;
   std::vector<TurnPoint> TurnPoints;
 
   Declaration(const OrderedTask* task);

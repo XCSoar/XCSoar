@@ -232,11 +232,11 @@ EWMicroRecorderDevice::DeclareInner(const Declaration *decl)
   port->Write('\x18');         // start to upload file
   port->Write(user_data);
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-               _T("Pilot Name:"), decl->PilotName);
+                        _T("Pilot Name:"), decl->PilotName.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-               _T("Competition ID:"), decl->AircraftRego);
+                        _T("Competition ID:"), decl->AircraftRego.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-               _T("Aircraft Type:"), decl->AircraftType);
+                        _T("Aircraft Type:"), decl->AircraftType.c_str());
   port->Write("Description:      Declaration\r\n");
 
   for (unsigned i = 0; i < 11; i++) {
