@@ -511,7 +511,7 @@ OnPolarLoadInteral(WndButton &button)
 
   /* let the user select */
 
-  int result = ComboPicker(XCSoarInterface::main_window, _("Polar"), *list, NULL);
+  int result = ComboPicker(XCSoarInterface::main_window, _("Load Polar"), *list, NULL);
   if (result >= 0) {
     SimplePolar polar;
     PolarStore::Read(dfe->getItem(result), polar);
@@ -540,7 +540,7 @@ OnPolarLoadFromFile(WndButton &button)
   /* let the user select */
 
   int result = ComboPicker(XCSoarInterface::main_window,
-                           _("Polar file"), *list, NULL);
+                           _("Load Polar from file"), *list, NULL);
   if (result > 0) {
     const TCHAR* path = dfe->getItem(result);
     SimplePolar polar;
