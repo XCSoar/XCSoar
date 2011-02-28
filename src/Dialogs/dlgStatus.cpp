@@ -202,7 +202,7 @@ UpdateValuesSystem()
   if (logger.isLoggerActive())
     wp->SetText(_("ON"));
   else
-    wp->SetText(_("OFF"));
+    wp->SetText(_("Off"));
 
   wp->RefreshDisplay();
 

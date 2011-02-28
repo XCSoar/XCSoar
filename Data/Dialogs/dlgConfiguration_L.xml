@@ -187,7 +187,7 @@
       </Edit>
 
       <Edit Name="prpEnableFLARMMap" Caption="FLARM map" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="This enables the display of FLARM traffic on the map window.&#10;[OFF] FLARM map display disabled&#10;[ON/Fixed] FLARM map display enabled with fixed scale.&#10;[ON/Scaled] FLARM map display enabled and auto scaled.&#10;When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.">
+        Help="This enables the display of FLARM traffic on the map window.&#10;[Off] FLARM map display disabled&#10;[ON/Fixed] FLARM map display enabled with fixed scale.&#10;[ON/Scaled] FLARM map display enabled and auto scaled.&#10;When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.">
         <DataField DataType="boolean" />
       </Edit>
     </Panel>
@@ -224,7 +224,7 @@
   
     <Panel Name="frmFinalGlide">
       <Edit Name="prpFinalGlideTerrain" Caption="Glide terrain line" X="2" Width="-2" Height="22" CaptionWidth="150"
-       Help="This determines whether the the glide terrain range is calculated and drawn as a line on the map area:&#10;[OFF] Disables display&#10;[Line] Draws a dashed line at the glide range&#10;[Shade] Shades terrain outside glide range">
+       Help="This determines whether the the glide terrain range is calculated and drawn as a line on the map area:&#10;[Off] Disables display&#10;[Line] Draws a dashed line at the glide range&#10;[Shade] Shades terrain outside glide range">
        <DataField DataType="enum" />
      </Edit>
 
@@ -572,7 +572,7 @@
       </Edit>
       
       <Edit Name="prpAutoCloseFlarmDialog" Caption="Auto close FLARM" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Setting this to &quot;ON&quot; will automatically close the FLARM dialog if there is no traffic. &quot;OFF&quot; will keep the dialog open even without current traffic.">
+        Help="Setting this to &quot;ON&quot; will automatically close the FLARM dialog if there is no traffic. &quot;Off&quot; will keep the dialog open even without current traffic.">
         <DataField DataType="boolean"/>
       </Edit>
       

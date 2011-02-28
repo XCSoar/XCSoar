@@ -140,7 +140,7 @@ InputEvents::eventSounds(const TCHAR *misc)
     if (XCSoarInterface::SettingsComputer().EnableSoundVario)
       Message::AddMessage(_("Vario Sounds ON"));
     else
-      Message::AddMessage(_("Vario Sounds OFF"));
+      Message::AddMessage(_("Vario Sounds Off"));
   }
   /*
   if (EnableSoundVario != OldEnableSoundVario) {
@@ -167,7 +167,7 @@ InputEvents::eventSnailTrail(const TCHAR *misc)
     XCSoarInterface::SetSettingsMap().TrailActive = 3;
   else if (_tcscmp(misc, _T("show")) == 0) {
     if (XCSoarInterface::SettingsMap().TrailActive == 0)
-      Message::AddMessage(_("SnailTrail OFF"));
+      Message::AddMessage(_("SnailTrail Off"));
     if (XCSoarInterface::SettingsMap().TrailActive == 1)
       Message::AddMessage(_("SnailTrail ON Long"));
     if (XCSoarInterface::SettingsMap().TrailActive == 2)
@@ -202,7 +202,7 @@ InputEvents::eventAirSpace(const TCHAR *misc)
     XCSoarInterface::SetSettingsMap().EnableAirspace = true;
   else if (_tcscmp(misc, _T("show")) == 0) {
     if (!XCSoarInterface::SetSettingsMap().EnableAirspace)
-      Message::AddMessage(_("Show Airspace OFF"));
+      Message::AddMessage(_("Show Airspace Off"));
     if (XCSoarInterface::SetSettingsMap().EnableAirspace)
       Message::AddMessage(_("Show Airspace ON"));
   }
@@ -288,7 +288,7 @@ InputEvents::eventZoom(const TCHAR* misc)
     if (XCSoarInterface::SettingsMap().AutoZoom)
       Message::AddMessage(_("AutoZoom ON"));
     else
-      Message::AddMessage(_("AutoZoom OFF"));
+      Message::AddMessage(_("AutoZoom Off"));
   } else if (_tcscmp(misc, _T("slowout")) == 0)
     sub_ScaleZoom(-1);
   else if (_tcscmp(misc, _T("slowin")) == 0)
@@ -316,7 +316,7 @@ InputEvents::eventZoom(const TCHAR* misc)
     if (XCSoarInterface::SettingsMap().CircleZoom)
       Message::AddMessage(_("Circling Zoom ON"));
     else
-      Message::AddMessage(_("Circling Zoom OFF"));
+      Message::AddMessage(_("Circling Zoom Off"));
   } else {
     TCHAR *endptr;
     double zoom = _tcstod(misc, &endptr);
@@ -383,7 +383,7 @@ InputEvents::eventPan(const TCHAR *misc)
     if (XCSoarInterface::SettingsMap().EnablePan)
       Message::AddMessage(_("Pan mode ON"));
     else
-      Message::AddMessage(_("Pan mode OFF"));
+      Message::AddMessage(_("Pan mode Off"));
   }
 
   XCSoarInterface::SendSettingsMap(true);
@@ -739,7 +739,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
     if (XCSoarInterface::SettingsComputer().auto_mc) {
       Message::AddMessage(_("Auto MacCready ON"));
     } else {
-      Message::AddMessage(_("Auto MacCready OFF"));
+      Message::AddMessage(_("Auto MacCready Off"));
     }
   } else if (_tcscmp(misc, _T("show")) == 0) {
     TCHAR Temp[100];
@@ -1125,13 +1125,13 @@ InputEvents::eventLogger(const TCHAR *misc)
     if (EnableLogNMEA) {
       Message::AddMessage(_("NMEA Log ON"));
     } else {
-      Message::AddMessage(_("NMEA Log OFF"));
+      Message::AddMessage(_("NMEA Log Off"));
     }
   } else if (_tcscmp(misc, _T("show")) == 0)
     if (logger.isLoggerActive()) {
       Message::AddMessage(_("Logger ON"));
     } else {
-      Message::AddMessage(_("Logger OFF"));
+      Message::AddMessage(_("Logger Off"));
     }
   else if (_tcsncmp(misc, _T("note"), 4) == 0)
     // add note to logger file if available..
@@ -1588,10 +1588,10 @@ InputEvents::sub_TerrainTopology(int vswitch)
     if (XCSoarInterface::SettingsMap().EnableTopology)
       _stprintf(buf, _T("\r\n%s / "), _("ON"));
     else
-      _stprintf(buf, _T("\r\n%s / "), _("OFF"));
+      _stprintf(buf, _T("\r\n%s / "), _("Off"));
 
     _tcscat(buf, XCSoarInterface::SettingsMap().EnableTerrain
-            ? _("ON") : _("OFF"));
+            ? _("ON") : _("Off"));
 
     Message::AddMessage(_("Topology / Terrain"), buf);
     return;
@@ -1690,7 +1690,7 @@ InputEvents::sub_SetZoom(fixed value)
       !XCSoarInterface::SettingsMap().EnablePan) {
     XCSoarInterface::SetSettingsMap().AutoZoom = false;  // disable autozoom if user manually changes zoom
     Profile::Set(szProfileAutoZoom, false);
-    Message::AddMessage(_("AutoZoom OFF"));
+    Message::AddMessage(_("AutoZoom Off"));
   }
 
   const fixed v_22m_per_sec = fixed_int_constant(22);

@@ -54,7 +54,7 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
   bool DisplaySupplyVoltageAsValue=false;
   switch (Power::External::Status) {
     case Power::External::OFF:
-      infobox.SetComment(_("AC OFF"));
+      infobox.SetComment(_("AC Off"));
       break;
     case Power::External::ON:
       if (XCSoarInterface::Basic().SupplyBatteryVoltage <= (fixed)0)

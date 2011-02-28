@@ -1042,7 +1042,7 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("OFF"));
+    dfe->addEnumText(_("Off"));
     dfe->addEnumText(_("Fixed"));
     dfe->addEnumText(_("Sun"));
     dfe->addEnumText(_("Wind"));
@@ -1121,7 +1121,7 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("OFF"));
+    dfe->addEnumText(_("Off"));
     dfe->addEnumText(_("Line"));
     dfe->addEnumText(_("Shade"));
     dfe->Set(settings_computer.FinalGlideTerrain);
@@ -1542,7 +1542,7 @@ setVariables()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("OFF"));
+    dfe->addEnumText(_("Off"));
     dfe->addEnumText(_("Flap"));
     dfe->addEnumText(_("SC"));
     dfe->Set(settings_computer.EnableExternalTriggerCruise);

@@ -349,7 +349,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
   if (_tcsstr(OutBuffer, _T("$(AirSpaceToggleName)"))) {
     ReplaceInString(OutBuffer, _T("$(AirSpaceToggleName)"),
-                    SettingsMap().EnableAirspace ? _("OFF") : _("ON"), Size);
+                    SettingsMap().EnableAirspace ? _("Off") : _("ON"), Size);
   }
 
   if (_tcsstr(OutBuffer, _T("$(TerrainTopologyToggleName)"))) {
@@ -373,7 +373,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
       break;
     case 3:
       ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      _("Terrain off"), Size);
+                      _("Terrain Off"), Size);
       break;
     }
   }

@@ -811,7 +811,7 @@ FillEnums(void)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("OFF"));
+    dfe->addEnumText(_T("Off"));
     dfe->addEnumText(_T("ON"));
     dfe->addEnumText(_T("AUTO"));
     dfe->Set(0);

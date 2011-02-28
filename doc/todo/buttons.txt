@@ -47,10 +47,10 @@ A quick definition of inputs
 	This is a special type - it is used to create extra buttons on screen
 	for those who do not have enough hardware buttons/keyboard etc
 
-	This effectively puts extraâ transparent, navbox type buttons on the
+	This effectively puts extraï¿½ transparent, navbox type buttons on the
 	screen, allowing you to add up to 8 buttons (order added as per 
 	order found in the file) extra on the screen. I think the layout of
-	said would be the same physical sizeâ lined up with (next to/below) the
+	said would be the same physical sizeï¿½ lined up with (next to/below) the
 	others.
 
 	DATA: Name of button (in other words - anything)
@@ -67,17 +67,17 @@ A quick definition of inputs
 
 Functions / Misc
 
-* "fullscreen" / "ON", "OFF", "TOGGLE"
+* "fullscreen" / "ON", "Off", "TOGGLE"
 
-* "snail_trail" / "Short", "Long", "OFF", "TOGGLE"
+* "snail_trail" / "Short", "Long", "Off", "TOGGLE"
 
-* "vario" / "ON", "OFF", "TOGGLE"
+* "vario" / "ON", "Off", "TOGGLE"
 
 * "marker" / "Optional text in marker" (Consider also graphic)
 
-* "menu" / "ON", "OFF", "TOGGLE", "SHOW", "HIDE", "SWAP
+* "menu" / "ON", "Off", "TOGGLE", "SHOW", "HIDE", "SWAP
 
-	ON/OFF/TOGGLE refers to the menu button
+	ON/Off/TOGGLE refers to the menu button
 	SHOW/HIDE/SWAP refers to the menu itself
 
 * "menu_entry" / "Task" , "Bugs + Ballast", "AbortResume", "Abort", "Resume", "Pressure",
@@ -95,7 +95,7 @@ Functions / Misc
 
 * "ballast" / "Add", "Subtract", "0"-"100"
 
-* "zoom" / "Auto", "AutoON", "AutoOFF", "In", "Out", "0"-"nn"
+* "zoom" / "Auto", "AutoON", "AutoOff", "In", "Out", "0"-"nn"
 
 	Set zoom. Auto toggle, on/off, in, out normal or some number to zoom to
 
