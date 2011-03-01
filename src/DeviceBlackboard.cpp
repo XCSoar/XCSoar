@@ -113,7 +113,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.acceleration.Available = false;
   basic.Location = loc;
   basic.GroundSpeed = speed;
-  basic.ProvideBothAirspeeds(speed);
+  basic.AirspeedAvailable.clear(); // Clear airspeed as it is not given by any value.
   basic.TrackBearing = bearing;
   basic.GPSAltitude = alt;
   basic.GPSAltitudeAvailable.update(t);
@@ -168,6 +168,9 @@ DeviceBlackboard::ProcessSimulation()
   // use this to test FLARM parsing/display
   if (is_debug() && !is_altair())
     DeviceList[0].parser.TestRoutine(&basic);
+
+  // clear Airspeed as it is not available in simulation mode
+  basic.AirspeedAvailable.clear();
 
   TriggerGPSUpdate();
 }
