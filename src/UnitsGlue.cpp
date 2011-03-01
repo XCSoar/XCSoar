@@ -114,7 +114,7 @@ AutoDetect()
   DynamicLibrary coreloc_dll(_T("coredll"));
   if (!coreloc_dll.defined()) {
     LogStartUp(_T("UnitsGlue: coredll.dll not found"));
-    return NULL;
+    return 0;
   }
 
   typedef LANGID WINAPI (*GetUserDefaultUILanguage_t)();
@@ -123,7 +123,7 @@ AutoDetect()
     coreloc_dll.lookup(_T("GetUserDefaultUILanguage"));
   if (GetUserDefaultUILanguage == NULL) {
     LogStartUp(_T("UnitsGlue: GetUserDefaultUILanguage() not available"));
-    return NULL;
+    return 0;
   }
 #endif
 
@@ -131,7 +131,7 @@ AutoDetect()
   LANGID lang_id = GetUserDefaultUILanguage();
   LogStartUp(_T("UnitsGlue: GetUserDefaultUILanguage()=0x%x"), (int)lang_id);
   if (lang_id == 0)
-    return NULL;
+    return 0;
 
   return find_language(lang_id);
 
