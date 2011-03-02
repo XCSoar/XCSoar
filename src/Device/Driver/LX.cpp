@@ -256,27 +256,27 @@ LXDevice::StartCommandMode()
 /**
  * fills dest with src and appends spaces to end
  * adds '\0' to end of string resulting in
- * numchar characters plus '\0'
+ * len characters with last char = '\0'
  */
 static void
-copy_space_padded(char dest[], const TCHAR src[], unsigned int numchars)
+copy_space_padded(char dest[], const TCHAR src[], unsigned int len)
 {
-  for(unsigned i = 0; i < numchars; i++) {
+  for(unsigned i = 0; i < (len - 1); i++) {
     if (i < _tcslen(src))
       dest[i] = (char)src[i];
     else
       dest[i] = '\x20';
   }
-  dest[numchars] = '\0';
+  dest[len-1] = '\0';
 }
 
 void
 LXDevice::LoadPilotInfo(const Declaration *decl)
 {
-  copy_space_padded(lxNanoDevice_Pilot.PilotName, decl->PilotName, sizeof(lxNanoDevice_Pilot.PilotName) - 1);
-  copy_space_padded(lxNanoDevice_Pilot.GliderType, decl->AircraftType, sizeof(lxNanoDevice_Pilot.GliderType) - 1);
-  copy_space_padded(lxNanoDevice_Pilot.GliderID, decl->AircraftRego, sizeof(lxNanoDevice_Pilot.GliderID) - 1);
-  copy_space_padded(lxNanoDevice_Pilot.CompetitionID, _T(""), sizeof(lxNanoDevice_Pilot.CompetitionID) - 1);
+  copy_space_padded(lxNanoDevice_Pilot.PilotName, decl->PilotName, sizeof(lxNanoDevice_Pilot.PilotName));
+  copy_space_padded(lxNanoDevice_Pilot.GliderType, decl->AircraftType, sizeof(lxNanoDevice_Pilot.GliderType));
+  copy_space_padded(lxNanoDevice_Pilot.GliderID, decl->AircraftRego, sizeof(lxNanoDevice_Pilot.GliderID));
+  copy_space_padded(lxNanoDevice_Pilot.CompetitionID, _T(""), sizeof(lxNanoDevice_Pilot.CompetitionID));
 }
 
 void
@@ -336,7 +336,8 @@ LXDevice::LoadTask(const Declaration *decl)
       lxNanoDevice_Declaration.tptypes[i] = 3;
       lxNanoDevice_Declaration.Latitudes[i] = 0;
       lxNanoDevice_Declaration.Longitudes[i] = 0;
-      copy_space_padded(lxNanoDevice_Declaration.WaypointNames[i], _T("TAKEOFF"), 8);
+      copy_space_padded(lxNanoDevice_Declaration.WaypointNames[i], _T("TAKEOFF"),
+        sizeof(lxNanoDevice_Declaration.WaypointNames[i]));
 
 
     } else if (i <= decl->size()) {
@@ -345,13 +346,15 @@ LXDevice::LoadTask(const Declaration *decl)
           (int32_t)(decl->get_location(i - 1).Longitude.value_degrees() * 60000);
       lxNanoDevice_Declaration.Latitudes[i] =
           (int32_t)(decl->get_location(i - 1).Latitude.value_degrees() * 60000);
-      copy_space_padded(lxNanoDevice_Declaration.WaypointNames[i], decl->get_name(i - 1), 8);
+      copy_space_padded(lxNanoDevice_Declaration.WaypointNames[i], decl->get_name(i - 1),
+          sizeof(lxNanoDevice_Declaration.WaypointNames[i]));
 
     } else if (i == decl->size() + 1) { // landing
       lxNanoDevice_Declaration.tptypes[i] = 2;
       lxNanoDevice_Declaration.Longitudes[i] = 0;
       lxNanoDevice_Declaration.Latitudes[i] = 0;
-      copy_space_padded(lxNanoDevice_Declaration.WaypointNames[i], _T("LANDING"), 8);
+      copy_space_padded(lxNanoDevice_Declaration.WaypointNames[i], _T("LANDING"),
+          sizeof(lxNanoDevice_Declaration.WaypointNames[i]));
 
     } else { // unused
       lxNanoDevice_Declaration.tptypes[i] = 0;
