@@ -200,7 +200,7 @@ UpdateValuesSystem()
   wp = (WndProperty*)wf->FindByName(_T("prpLogger"));
   assert(wp != NULL);
   if (logger.isLoggerActive())
-    wp->SetText(_("ON"));
+    wp->SetText(_("On"));
   else
     wp->SetText(_("Off"));
 

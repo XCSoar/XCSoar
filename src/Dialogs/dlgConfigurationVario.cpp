@@ -812,7 +812,7 @@ FillEnums(void)
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_T("Off"));
-    dfe->addEnumText(_T("ON"));
+    dfe->addEnumText(_T("On"));
     dfe->addEnumText(_T("AUTO"));
     dfe->Set(0);
     wp->RefreshDisplay();
