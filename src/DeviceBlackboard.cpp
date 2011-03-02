@@ -452,18 +452,8 @@ DeviceBlackboard::Heading()
       basic.Heading = Angle::radians(atan2(x0, y0)).as_bearing();
     }
 
-    // calculate estimated true airspeed
-    basic.TrueAirspeedEstimated = hypot(x0, y0);
-
   } else {
     basic.Heading = basic.TrackBearing;
-    basic.TrueAirspeedEstimated = fixed_zero;
-  }
-
-  if (!basic.AirspeedAvailable) {
-    basic.TrueAirspeed = basic.TrueAirspeedEstimated;
-    basic.IndicatedAirspeed = basic.TrueAirspeed
-      / AtmosphericPressure::AirDensityRatio(basic.GetAltitudeBaroPreferred());
   }
 }
 

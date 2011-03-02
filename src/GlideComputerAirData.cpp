@@ -113,6 +113,7 @@ GlideComputerAirData::ProcessVertical()
 
   Turning();
   Wind();
+  Airspeed();
 
   thermallocator.Process(calculated.Circling,
                          basic.Time, basic.Location,
@@ -176,6 +177,32 @@ GlideComputerAirData::SetWindEstimate(fixed wind_speed, Angle wind_bearing,
   Vector v_wind = Vector(SpeedVector(wind_bearing, wind_speed));
 
   windanalyser.slot_newEstimate(Basic(), SetCalculated(), v_wind, quality);
+}
+
+void
+GlideComputerAirData::Airspeed()
+{
+  NMEA_INFO &basic = SetBasic();
+  const SpeedVector wind = basic.wind;
+
+  if (positive(basic.GroundSpeed) || wind.is_non_zero()) {
+    fixed x0 = basic.TrackBearing.fastsine() * basic.GroundSpeed;
+    fixed y0 = basic.TrackBearing.fastcosine() * basic.GroundSpeed;
+    x0 += wind.bearing.fastsine() * wind.norm;
+    y0 += wind.bearing.fastcosine() * wind.norm;
+
+    // calculate estimated true airspeed
+    basic.TrueAirspeedEstimated = hypot(x0, y0);
+
+  } else {
+    basic.TrueAirspeedEstimated = fixed_zero;
+  }
+
+  if (!basic.AirspeedAvailable) {
+    basic.TrueAirspeed = basic.TrueAirspeedEstimated;
+    basic.IndicatedAirspeed = basic.TrueAirspeed
+      / AtmosphericPressure::AirDensityRatio(basic.GetAltitudeBaroPreferred());
+  }
 }
 
 void

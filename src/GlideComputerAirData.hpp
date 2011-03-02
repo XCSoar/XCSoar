@@ -72,6 +72,7 @@ protected:
 
   bool FlightTimes();
 private:
+  void Airspeed();
   void AverageClimbRate();
   void Average30s();
   void AverageThermal();
