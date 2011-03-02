@@ -315,9 +315,10 @@ LXDevice::StartCommandMode()
 static void
 copy_space_padded(char dest[], const TCHAR src[], unsigned int len)
 {
+  const unsigned slen = _tcslen(src);
   for(unsigned i = 0; i < (len - 1); i++) {
-    if (i < _tcslen(src))
-      dest[i] = (char)src[i];
+    if (i < slen)
+      dest[i] = (char)max((src[i] & 0x7f), 0x20);
     else
       dest[i] = '\x20';
   }
