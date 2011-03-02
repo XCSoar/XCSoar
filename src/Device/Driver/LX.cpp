@@ -29,6 +29,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "Operation.hpp"
 
 #include <stdlib.h>
 
@@ -37,7 +38,8 @@ enum LX_command {
   LX_PREFIX = 0x02,
   LX_ACK = 0x06,
   LX_SYN = 0x16,
-  LX_WRITE_FLIGHT_INFO = 0xCA
+  LX_WRITE_FLIGHT_INFO = 0xCA,
+  LX_WRITE_CONTEST_CLASS = 0xD0,
 };
 #define LX_ACK_STRING "\x06"
 
@@ -57,11 +59,13 @@ public:
 
 protected:
   bool StartCommandMode();
-  void StartNMEAMode();
+  void StartNMEAMode(OperationEnvironment &env);
   void LoadPilotInfo(const Declaration *decl);
   void WritePilotInfo();
   bool LoadTask(const Declaration *decl);
   void WriteTask();
+  void LoadContestClass(const Declaration *decl);
+  void WriteContestClass();
   void CRCWriteint32(int32_t i);
   void CRCWrite(const char *buff, unsigned size);
   void CRCWrite(char c);
@@ -91,8 +95,14 @@ protected:
     char WaypointNames[12][9];
   } gcc_packed;
 
+
+  struct lxDevice_ContestClass_t { //strings have extra byte for NULL
+    char contest_class[9];
+  } gcc_packed;
+
   lxDevice_Declaration_t lxDevice_Declaration;
   lxDevice_Pilot_t lxDevice_Pilot;
+  lxDevice_ContestClass_t lxDevice_ContestClass;
   char crc;
 
   bool DeclareInner(const Declaration *declaration,
@@ -285,10 +295,14 @@ LXDevice::CRCWriteint32(int32_t i)
 }
 
 void
-LXDevice::StartNMEAMode()
+LXDevice::StartNMEAMode(OperationEnvironment &env)
 {
   port->Write(LX_SYN);
-  port->ExpectString("$$$");
+  env.Sleep(500);
+  port->Write(LX_SYN);
+  env.Sleep(500);
+  port->Write(LX_SYN);
+  env.Sleep(500);
 }
 
 bool
@@ -342,7 +356,6 @@ LXDevice::WritePilotInfo()
   CRCWrite((const char*)&lxDevice_Pilot, sizeof(lxDevice_Pilot));
   return;
 }
-
 
 /**
  * Loads LX task structure from XCSoar task structure
@@ -451,10 +464,24 @@ LXDevice::WriteTask()
   return;
 }
 
+void
+LXDevice::LoadContestClass(const Declaration *decl)
+{
+  copy_space_padded(lxDevice_ContestClass.contest_class, _T(""), sizeof(lxDevice_ContestClass.contest_class));
+}
+
+void
+LXDevice::WriteContestClass()
+{
+  CRCWrite((const char*)&lxDevice_ContestClass.contest_class,
+      sizeof(lxDevice_ContestClass.contest_class));
+  return;
+}
+
 bool
 LXDevice::DeclareInner(const Declaration *decl, OperationEnvironment &env)
 {
-  if (!port->SetRxTimeout(500))
+  if (!port->SetRxTimeout(2000))
     return false;
 
   if (!StartCommandMode())
@@ -463,6 +490,7 @@ LXDevice::DeclareInner(const Declaration *decl, OperationEnvironment &env)
   LoadPilotInfo(decl);
   if (!LoadTask(decl))
     return false;
+  LoadContestClass(decl);
 
   port->Write(LX_PREFIX);
   port->Write(LX_WRITE_FLIGHT_INFO);      // start declaration
@@ -470,6 +498,14 @@ LXDevice::DeclareInner(const Declaration *decl, OperationEnvironment &env)
   crc = 0xff;
   WritePilotInfo();
   WriteTask();
+  port->Write(crc);
+  if (!port->ExpectString(LX_ACK_STRING))
+    return false;
+
+  crc = 0xff;
+  port->Write(LX_PREFIX);
+  port->Write(LX_WRITE_CONTEST_CLASS);
+  WriteContestClass();
   port->Write(crc);
   return port->ExpectString(LX_ACK_STRING);
 }
@@ -485,7 +521,7 @@ LXDevice::Declare(const Declaration *decl, OperationEnvironment &env)
 
   bool success = DeclareInner(decl, env);
 
-  StartNMEAMode();
+  StartNMEAMode(env);
   port->SetRxTimeout(0);
   port->StartRxThread();
   return success;
