@@ -21,46 +21,46 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_SERIAL_PORT_HPP
-#define XCSOAR_DEVICE_SERIAL_PORT_HPP
+#ifndef XCSOAR_DEVICE_TTY_PORT_HPP
+#define XCSOAR_DEVICE_TTY_PORT_HPP
 
 #include "FifoBuffer.hpp"
 #include "Thread/StoppableThread.hpp"
 #include "Device/Port.hpp"
 
-#include <windef.h>
-
 /**
- * Generic SerialPort thread handler class
+ * A serial port class for POSIX (/dev/ttyS*, /dev/ttyUSB*).
  */
-class SerialPort : public Port, protected StoppableThread
+class TTYPort : public Port, protected StoppableThread
 {
   static const unsigned NMEA_BUF_SIZE = 100;
 
   /** Name of the serial port */
   TCHAR sPortName[64];
 
+  unsigned rx_timeout;
+
   unsigned baud_rate;
 
-  HANDLE hPort;
+  int fd;
 
   FifoBuffer<char> buffer;
 
 public:
   /**
-   * Creates a new serial port (RS-232) object, but does not open it yet.
+   * Creates a new TTYPort object, but does not open it yet.
    *
-   * @param path the path of the virtual file to open, e.g. "COM1:"
+   * @param path the path of the virtual file to open, e.g. "/dev/ttyS0"
    * @param _baud_rate the speed of the port
    * @param _handler the callback object for input received on the
    * port
    */
-  SerialPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler);
+  TTYPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler);
 
   /**
    * Closes the serial port (Destructor)
    */
-  virtual ~SerialPort();
+  virtual ~TTYPort();
 
   virtual void Write(const void *data, unsigned length);
   virtual void Flush();

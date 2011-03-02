@@ -130,15 +130,15 @@ AltairProDevice::DeclareInternal(const struct Declaration *decl)
 {
   TCHAR Buffer[256];
 
-  _stprintf(Buffer, _T("PDVSC,S,Pilot,%s"), decl-> PilotName);
+  _stprintf(Buffer, _T("PDVSC,S,Pilot,%s"), decl->PilotName.c_str());
   if (!PropertySetGet(port, Buffer, dim(Buffer)))
     return false;
 
-  _stprintf(Buffer, _T("PDVSC,S,GliderID,%s"), decl->AircraftRego);
+  _stprintf(Buffer, _T("PDVSC,S,GliderID,%s"), decl->AircraftRego.c_str());
   if (!PropertySetGet(port, Buffer, dim(Buffer)))
     return false;
 
-  _stprintf(Buffer, _T("PDVSC,S,GliderType,%s"), decl->AircraftType);
+  _stprintf(Buffer, _T("PDVSC,S,GliderType,%s"), decl->AircraftType.c_str());
   if (!PropertySetGet(port, Buffer, dim(Buffer)))
     return false;
 

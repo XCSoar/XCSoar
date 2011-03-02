@@ -66,15 +66,15 @@ FlarmDeclareInternal(Port *port, const Declaration *decl)
 {
   TCHAR Buffer[256];
 
-  _stprintf(Buffer, _T("PFLAC,S,PILOT,%s"), decl->PilotName);
+  _stprintf(Buffer, _T("PFLAC,S,PILOT,%s"), decl->PilotName.c_str());
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 
-  _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"), decl->AircraftRego);
+  _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"), decl->AircraftRego.c_str());
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 
-  _stprintf(Buffer, _T("PFLAC,S,GLIDERTYPE,%s"), decl->AircraftType);
+  _stprintf(Buffer, _T("PFLAC,S,GLIDERTYPE,%s"), decl->AircraftType.c_str());
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 

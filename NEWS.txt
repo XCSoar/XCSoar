@@ -54,6 +54,12 @@ Version 6.1 - not yet released
     - along home direction
   - "long-click" in task turnpoint zone displays Target dialog
 
+Version 6.0.6 - not yet released
+* devices:
+  - fix declaration crash in Volkslogger, EW, CAI302, CAI GPS NAV
+* Linux
+  - implement the serial port
+
 Version 6.0.5 - 2011/02/26
 * devices:
   - EWMicroRecorder: fix hang during task declaration

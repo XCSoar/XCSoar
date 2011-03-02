@@ -31,7 +31,6 @@ Copyright_License {
 #include "Device/Descriptor.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port.hpp"
-#include "Device/SerialPort.hpp"
 #include "Device/NullPort.hpp"
 #include "LogFile.hpp"
 #include "DeviceBlackboard.hpp"
@@ -52,6 +51,10 @@ Copyright_License {
 #include "Java/Object.hpp"
 #include "Java/Global.hpp"
 #include "Device/AndroidBluetoothPort.hpp"
+#elif defined(HAVE_POSIX)
+#include "Device/TTYPort.hpp"
+#else
+#include "Device/SerialPort.hpp"
 #endif
 
 #include <assert.h>
@@ -176,16 +179,24 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
     break;
   }
 
+#ifdef ANDROID
+  return NULL;
+#else
   if (path == NULL)
     return NULL;
 
+#ifdef HAVE_POSIX
+  TTYPort *Com = new TTYPort(path, dwSpeed[config.speed_index], handler);
+#else
   SerialPort *Com = new SerialPort(path, dwSpeed[config.speed_index], handler);
+#endif
   if (!Com->Open()) {
     delete Com;
     return NULL;
   }
 
   return Com;
+#endif
 }
 
 static bool

@@ -21,7 +21,6 @@ Copyright_License {
 }
 */
 
-#include "Device/SerialPort.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
@@ -35,6 +34,12 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "OS/PathName.hpp"
 #include "Protection.hpp"
+
+#ifdef HAVE_POSIX
+#include "Device/TTYPort.hpp"
+#else
+#include "Device/SerialPort.hpp"
+#endif
 
 #include <stdio.h>
 
@@ -142,22 +147,33 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  SerialPort port(port_name, baud, *(Port::Handler *)NULL);
-  device.Com = &port;
-  if (!port.Open()) {
+  if ((device.Driver->Flags & drfLogger) == 0) {
+    fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
+    return EXIT_FAILURE;
+  }
+
+#ifdef HAVE_POSIX
+  TTYPort *port = new TTYPort(port_name, baud, *(Port::Handler *)NULL);
+#else
+  SerialPort *port = new SerialPort(port_name, baud, *(Port::Handler *)NULL);
+#endif
+  device.Com = port;
+  if (!port->Open()) {
+    delete port;
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
   }
 
   if (!device.Open()) {
+    delete device.Com;
     fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
     return EXIT_FAILURE;
   }
 
   Declaration declaration(NULL);
-  _tcscpy(declaration.PilotName, _T("Foo Bar"));
-  _tcscpy(declaration.AircraftType, _T("Cirrus"));
-  _tcscpy(declaration.AircraftRego, _T("D-3003"));
+  declaration.PilotName = _T("Foo Bar");
+  declaration.AircraftType = _T("Cirrus");
+  declaration.AircraftRego = _T("D-3003");
 
   declaration.append(MakeWaypoint(_T("Bergneustadt"), 488,
                                   7.7061111111111114, 51.051944444444445));

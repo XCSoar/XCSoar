@@ -102,7 +102,7 @@ public:
    * Read a single byte from the serial port
    * @return The byte that was read or EOF in failure
    */
-  virtual int GetChar() = 0;
+  int GetChar();
 
   /**
    * Read data from the serial port
