@@ -544,7 +544,6 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
     default:
       return true;
     }
-
     break;
 
   case _T('V'):
@@ -558,6 +557,7 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
     } else if (string_after_prefix_ci(&line[2], _T("D=+"))) {
       temp_area.Rotation = +1;
     }
+    break;
   }
 
   return true;
