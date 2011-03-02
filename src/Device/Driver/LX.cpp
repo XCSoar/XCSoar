@@ -32,6 +32,8 @@ Copyright_License {
 
 #include <stdlib.h>
 
+static const unsigned int NUMTPS = 12;
+
 class LXDevice: public AbstractDevice
 {
   Port *port;
@@ -48,8 +50,10 @@ public:
 protected:
   bool StartCommandMode();
   void StartNMEAMode();
-  void WritePilotInfo(const Declaration *decl);
-  bool WriteTask(const Declaration *decl);
+  void LoadPilotInfo(const Declaration *decl);
+  void WritePilotInfo();
+  bool LoadTask(const Declaration *decl);
+  void WriteTask();
   void WriteToNanoint32(int32_t i);
 
   struct lxNanoDevice_Pilot_t { //strings have extra byte for NULL
@@ -267,13 +271,17 @@ copy_space_padded(char dest[], const TCHAR src[], unsigned int numchars)
 }
 
 void
-LXDevice::WritePilotInfo(const Declaration *decl)
+LXDevice::LoadPilotInfo(const Declaration *decl)
 {
   copy_space_padded(lxNanoDevice_Pilot.PilotName, decl->PilotName, sizeof(lxNanoDevice_Pilot.PilotName) - 1);
   copy_space_padded(lxNanoDevice_Pilot.GliderType, decl->AircraftType, sizeof(lxNanoDevice_Pilot.GliderType) - 1);
   copy_space_padded(lxNanoDevice_Pilot.GliderID, decl->AircraftRego, sizeof(lxNanoDevice_Pilot.GliderID) - 1);
   copy_space_padded(lxNanoDevice_Pilot.CompetitionID, _T(""), sizeof(lxNanoDevice_Pilot.CompetitionID) - 1);
+}
 
+void
+LXDevice::WritePilotInfo()
+{
   port->Write('\x02');
   port->Write('\xCA');      // start declaration
   port->Write('\x00');
@@ -288,19 +296,16 @@ LXDevice::WritePilotInfo(const Declaration *decl)
   port->Write('\x00');
   port->Write(lxNanoDevice_Pilot.CompetitionID);
   port->Write('\x00');
-
 }
 
+
 /**
- * Nano task has max 12 points which include Takeoff,
- * start, tps, finish and landing.
- * Leave takeoff and landing as all 0's.
+ * Loads LX task structure from XCSoar task structure
  * @param decl  The declaration
  */
 bool
-LXDevice::WriteTask(const Declaration *decl)
+LXDevice::LoadTask(const Declaration *decl)
 {
-  const unsigned int NUMTPS = 12;
   if (decl->size() > 10)
     return false;
 
@@ -356,6 +361,19 @@ LXDevice::WriteTask(const Declaration *decl)
     }
   }
 
+  return true;
+}
+
+/**
+ * Writes task structure to LX
+ * LX task has max 12 points which include Takeoff,
+ * start, tps, finish and landing.
+ * Leave takeoff and landing as all 0's.
+ * @param decl  The declaration
+ */
+void
+LXDevice::WriteTask()
+{
   port->Write('\x07');
   for (int i = 0; i < 75; i++) // User Data
     port->Write('\x00');
@@ -387,7 +405,7 @@ LXDevice::WriteTask(const Declaration *decl)
     port->Write('\0');
   }
 
-  return true;
+  return;
 }
 
 bool
@@ -399,8 +417,14 @@ LXDevice::DeclareInner(const Declaration *decl, OperationEnvironment &env)
   if (!StartCommandMode())
       return false;
 
-  WritePilotInfo(decl);
-  WriteTask(decl);
+  LoadPilotInfo(decl);
+
+  WritePilotInfo();
+
+  if (!LoadTask(decl))
+    return false;
+
+  WriteTask();
 
   return true;
 }
