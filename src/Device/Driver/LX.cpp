@@ -33,6 +33,13 @@ Copyright_License {
 #include <stdlib.h>
 
 static const unsigned int NUMTPS = 12;
+enum LX_command {
+  LX_PREFIX = 0x02,
+  LX_ACK = 0x06,
+  LX_SYN = 0x16,
+  LX_WRITE_FLIGHT_INFO = 0xCA
+};
+#define LX_ACK_STRING "\x06"
 
 class LXDevice: public AbstractDevice
 {
@@ -236,21 +243,21 @@ LXDevice::WriteToNanoint32(int32_t i)
 void
 LXDevice::StartNMEAMode()
 {
-  port->Write('\x16');
+  port->Write(LX_SYN);
   port->ExpectString("$$$");
 }
 
 bool
 LXDevice::StartCommandMode()
 {
-  port->Write('\x16');
-  port->ExpectString("\x06");
+  port->Write(LX_SYN);
+  port->ExpectString(LX_ACK_STRING);
 
-  port->Write('\x16');
-  port->ExpectString("\x06");
+  port->Write(LX_SYN);
+  port->ExpectString(LX_ACK_STRING);
 
-  port->Write('\x16');
-  if (!port->ExpectString("\x06"))
+  port->Write(LX_SYN);
+  if (!port->ExpectString(LX_ACK_STRING))
     return false;
 
   return true;
@@ -421,8 +428,8 @@ LXDevice::DeclareInner(const Declaration *decl, OperationEnvironment &env)
   if (!LoadTask(decl))
     return false;
 
-  port->Write('\x02');
-  port->Write('\xCA');      // start declaration
+  port->Write(LX_PREFIX);
+  port->Write(LX_WRITE_FLIGHT_INFO);      // start declaration
 
   WritePilotInfo();
   WriteTask();
