@@ -439,18 +439,13 @@ DeviceBlackboard::Heading()
   NMEA_INFO &basic = SetBasic();
   const SpeedVector wind = basic.wind;
 
-  if (positive(basic.GroundSpeed) || wind.is_non_zero()) {
+  if ((positive(basic.GroundSpeed) || wind.is_non_zero()) && Calculated().flight.Flying) {
     fixed x0 = basic.TrackBearing.fastsine() * basic.GroundSpeed;
     fixed y0 = basic.TrackBearing.fastcosine() * basic.GroundSpeed;
     x0 += wind.bearing.fastsine() * wind.norm;
     y0 += wind.bearing.fastcosine() * wind.norm;
 
-    if (!Calculated().flight.Flying) {
-      // don't take wind into account when on ground
-      basic.Heading = basic.TrackBearing;
-    } else {
-      basic.Heading = Angle::radians(atan2(x0, y0)).as_bearing();
-    }
+    basic.Heading = Angle::radians(atan2(x0, y0)).as_bearing();
 
   } else {
     basic.Heading = basic.TrackBearing;
