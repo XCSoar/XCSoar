@@ -70,7 +70,7 @@ protected:
     char GliderID[8];
     char CompetitionID[4];
     char unknown2[73];
-  };
+  } gcc_packed;
 
   struct lxNanoDevice_Declaration_t { //strings have extra byte for NULL
     unsigned char unknown1[5];
@@ -86,7 +86,7 @@ protected:
     int32_t Longitudes[12];
     int32_t Latitudes[12];
     char WaypointNames[12][9];
-  };
+  } gcc_packed;
 
   lxNanoDevice_Declaration_t lxNanoDevice_Declaration;
   lxNanoDevice_Pilot_t lxNanoDevice_Pilot;
@@ -294,16 +294,8 @@ LXDevice::LoadPilotInfo(const Declaration *decl)
 void
 LXDevice::WritePilotInfo()
 {
-  port->Write(lxNanoDevice_Pilot.unknown1, sizeof(lxNanoDevice_Pilot.unknown1));
-  port->Write(lxNanoDevice_Pilot.PilotName);
-  port->Write('\x00');
-  port->Write(lxNanoDevice_Pilot.GliderType);
-  port->Write('\x00');
-  port->Write(lxNanoDevice_Pilot.GliderID);
-  port->Write('\x00');
-  port->Write(lxNanoDevice_Pilot.CompetitionID);
-  port->Write('\x00');
-  port->Write(lxNanoDevice_Pilot.unknown2, sizeof(lxNanoDevice_Pilot.unknown2));
+  port->Write((const unsigned char*)&lxNanoDevice_Pilot, sizeof(lxNanoDevice_Pilot));
+  return;
 }
 
 
@@ -387,15 +379,16 @@ LXDevice::LoadTask(const Declaration *decl)
 void
 LXDevice::WriteTask()
 {
-  port->Write(lxNanoDevice_Declaration.unknown1, sizeof(lxNanoDevice_Declaration.unknown1));
-  port->Write((char)lxNanoDevice_Declaration.dayinput);
-  port->Write((char)lxNanoDevice_Declaration.monthinput);
-  port->Write((char)lxNanoDevice_Declaration.yearinput);
-  port->Write((char)lxNanoDevice_Declaration.dayuser);
-  port->Write((char)lxNanoDevice_Declaration.monthuser);
-  port->Write((char)lxNanoDevice_Declaration.yearuser);
-  port->Write('\x00');
-  port->Write('\x01'); // task ID
+  port->Write((const unsigned char*)&lxNanoDevice_Declaration,
+                                    sizeof(lxNanoDevice_Declaration.unknown1) +
+                                    sizeof(lxNanoDevice_Declaration.dayinput) +
+                                    sizeof(lxNanoDevice_Declaration.monthinput) +
+                                    sizeof(lxNanoDevice_Declaration.yearinput) +
+                                    sizeof(lxNanoDevice_Declaration.dayuser) +
+                                    sizeof(lxNanoDevice_Declaration.monthuser) +
+                                    sizeof(lxNanoDevice_Declaration.yearuser));
+
+  port->Write((const unsigned char*)&lxNanoDevice_Declaration.taskid, sizeof(lxNanoDevice_Declaration.taskid));
   port->Write((char)lxNanoDevice_Declaration.numtps);
 
   for (unsigned int i = 0; i < NUMTPS; i++) {
@@ -411,7 +404,6 @@ LXDevice::WriteTask()
     port->Write(lxNanoDevice_Declaration.WaypointNames[i]);
     port->Write('\0');
   }
-
   return;
 }
 
