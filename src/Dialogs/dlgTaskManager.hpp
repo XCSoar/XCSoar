@@ -78,6 +78,13 @@ public:
    * @return
    */
   static bool OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y);
+
+  /**
+   * different for landscape and for portrait mode
+   * Used by TaskList after loading
+   * @return Tab index that shows turnpoints
+   */
+  static unsigned GetTurnpointTab();
 };
 
 

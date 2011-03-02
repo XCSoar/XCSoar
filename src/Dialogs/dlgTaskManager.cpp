@@ -49,6 +49,13 @@ static OrderedTask* active_task = NULL;
 static bool task_modified = false;
 static bool fullscreen;
 static RECT TaskViewRect;
+static unsigned TurnpointTab = 0;
+
+unsigned
+dlgTaskManager::GetTurnpointTab()
+{
+  return TurnpointTab;
+}
 
 bool
 dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
@@ -250,6 +257,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL, NULL,
                          pnlTaskEdit::OnTabPreShow, NULL,
                          pnlTaskEdit::OnTabReClick);
+    TurnpointTab = 1;
 
     wTabBar->AddClient(wLst, _T("Browse, Declare"), false, NULL, NULL,
                        pnlTaskList::OnTabPreShow, NULL,
@@ -279,8 +287,9 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL, NULL,
                          pnlTaskEdit::OnTabPreShow, NULL,
                          pnlTaskEdit::OnTabReClick);
+    TurnpointTab = 3;
 
-    wTabBar->AddClient(wLst, _T("Browse, Declare"), false, NULL, NULL,
+    wTabBar->AddClient(wLst, _T("Browse Declare"), false, NULL, NULL,
                        pnlTaskList::OnTabPreShow, NULL,
                        pnlTaskList::OnTabReClick);
     wTabBar->SetCurrentPage(2);
