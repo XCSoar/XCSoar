@@ -211,8 +211,6 @@ struct NMEA_INFO {
    */
   fixed IndicatedAirspeed;
 
-  fixed TrueAirspeedEstimated;
-
   //##############
   //   Altitude
   //##############

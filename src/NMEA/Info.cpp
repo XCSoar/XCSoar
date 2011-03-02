@@ -78,7 +78,6 @@ NMEA_INFO::reset()
 
   AirspeedAvailable.clear();
   GroundSpeed = TrueAirspeed = IndicatedAirspeed = fixed_zero;
-  TrueAirspeedEstimated = fixed_zero;
 
   GPSAltitudeAvailable.clear();
   GPSAltitude = fixed_zero;
@@ -187,7 +186,6 @@ NMEA_INFO::complement(const NMEA_INFO &add)
   }
 
   /* calculated: Heading, TurnRateWind, TurnRate */
-  /* calculated: TrueAirspeedEstimated */
 
   if ((BaroAltitudeAvailable.complement(add.BaroAltitudeAvailable) ||
        (BaroAltitudeOrigin <= BARO_ALTITUDE_UNKNOWN &&

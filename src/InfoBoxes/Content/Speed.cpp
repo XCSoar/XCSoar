@@ -96,14 +96,14 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentSpeedIndicated::Update(InfoBoxWindow &infobox)
 {
-  if (!XCSoarInterface::Basic().AirspeedAvailable) {
+  if (!XCSoarInterface::Calculated().AirspeedAvailable) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserSpeed(XCSoarInterface::Basic().IndicatedAirspeed,
+  Units::FormatUserSpeed(XCSoarInterface::Calculated().IndicatedAirspeed,
                          tmp, 32, false);
   infobox.SetValue(tmp);
 
@@ -114,14 +114,14 @@ InfoBoxContentSpeedIndicated::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentSpeed::Update(InfoBoxWindow &infobox)
 {
-  if (!XCSoarInterface::Basic().AirspeedAvailable) {
+  if (!XCSoarInterface::Calculated().AirspeedAvailable) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserSpeed(XCSoarInterface::Basic().TrueAirspeed,
+  Units::FormatUserSpeed(XCSoarInterface::Calculated().TrueAirspeed,
                          tmp, 32, false);
   infobox.SetValue(tmp);
 

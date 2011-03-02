@@ -401,7 +401,7 @@ DeviceBlackboard::NettoVario(const GlidePolar& glide_polar)
   NMEA_INFO &basic = SetBasic();
 
   basic.GliderSinkRate = Calculated().flight.Flying
-    ? - glide_polar.SinkRate(basic.IndicatedAirspeed,
+    ? - glide_polar.SinkRate(Calculated().IndicatedAirspeed,
                              basic.acceleration.Gload)
     /* the glider sink rate is useless when not flying */
     : fixed_zero;
@@ -431,7 +431,7 @@ DeviceBlackboard::NavAltitude()
 
 
 /**
- * Calculates the heading, and the estimated true airspeed
+ * Calculates the heading
  */
 void
 DeviceBlackboard::Heading()
@@ -548,7 +548,7 @@ DeviceBlackboard::Dynamics()
 
     // estimate bank angle (assuming balanced turn)
     const fixed angle = atan(Angle::degrees(basic.TurnRateWind
-        * basic.TrueAirspeed * fixed_inv_g).value_radians());
+        * Calculated().TrueAirspeed * fixed_inv_g).value_radians());
 
     basic.acceleration.BankAngle = Angle::radians(angle);
 
@@ -559,7 +559,7 @@ DeviceBlackboard::Dynamics()
     // estimate pitch angle (assuming balanced turn)
     basic.acceleration.PitchAngle = basic.TotalEnergyVarioAvailable
       ? Angle::radians(atan2(basic.GPSVario - basic.TotalEnergyVario,
-                             basic.TrueAirspeed))
+                             Calculated().TrueAirspeed))
       : Angle::native(fixed_zero);
 
   } else {
@@ -583,7 +583,7 @@ DeviceBlackboard::EnergyHeight()
 {
   NMEA_INFO &basic = SetBasic();
 
-  basic.EnergyHeight = basic.TrueAirspeed * basic.TrueAirspeed * fixed_inv_2g;
+  basic.EnergyHeight = Calculated().TrueAirspeed * Calculated().TrueAirspeed * fixed_inv_2g;
   basic.TEAltitude = basic.NavAltitude + basic.EnergyHeight;
 }
 

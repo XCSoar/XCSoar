@@ -255,6 +255,7 @@ struct DERIVED_INFO:
    * @todo Reset to cleared state
    */
   void reset() {
+    AirspeedAvailable.clear();
     estimated_wind_available.clear();
     task_stats.reset();
     common_stats.reset();
@@ -263,9 +264,20 @@ struct DERIVED_INFO:
   void expire(fixed Time) {
     /* the estimated wind remains valid for an hour */
     estimated_wind_available.expire(Time, fixed(3600));
+    /* the calculated airspeed expires after 5 seconds */
+    AirspeedAvailable.expire(Time, fixed(5));
   }
 
   fixed V_stf; /**< Speed to fly block/dolphin (m/s) */
+
+  /**
+   * Airspeed
+   * Is set to measured airspeed if provided, otherwise calculated
+   * from groundspeed and wind, if available.
+   */
+  fixed TrueAirspeed;
+  fixed IndicatedAirspeed;
+  Validity AirspeedAvailable;
 
   /**
    * Does #estimated_wind have a meaningful value?
