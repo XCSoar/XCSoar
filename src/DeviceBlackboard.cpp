@@ -558,20 +558,25 @@ DeviceBlackboard::Dynamics()
     }
 
     // estimate bank angle (assuming balanced turn)
-    const fixed angle = atan(Angle::degrees(basic.TurnRateWind
-        * Calculated().TrueAirspeed * fixed_inv_g).value_radians());
+    if (Calculated().AirspeedAvailable) {
+      const fixed angle = atan(Angle::degrees(basic.TurnRateWind
+          * Calculated().TrueAirspeed * fixed_inv_g).value_radians());
 
-    basic.acceleration.BankAngle = Angle::radians(angle);
-
-    if (!basic.acceleration.Available)
-      basic.acceleration.Gload = fixed_one
-        / max(fixed_small, fabs(cos(angle)));
+      basic.acceleration.BankAngle = Angle::radians(angle);
+      if (!basic.acceleration.Available)
+        basic.acceleration.Gload = fixed_one / max(fixed_small, fabs(cos(angle)));
+    } else {
+      basic.acceleration.BankAngle = Angle::native(fixed_zero);
+      if (!basic.acceleration.Available)
+        basic.acceleration.Gload = fixed_one;
+    }
 
     // estimate pitch angle (assuming balanced turn)
-    basic.acceleration.PitchAngle = basic.TotalEnergyVarioAvailable
-      ? Angle::radians(atan2(basic.GPSVario - basic.TotalEnergyVario,
-                             Calculated().TrueAirspeed))
-      : Angle::native(fixed_zero);
+    if (Calculated().AirspeedAvailable && basic.TotalEnergyVarioAvailable)
+      basic.acceleration.PitchAngle = Angle::radians(atan2(basic.GPSVario - basic.TotalEnergyVario,
+          Calculated().TrueAirspeed));
+    else
+      basic.acceleration.PitchAngle = Angle::native(fixed_zero);
 
   } else {
     basic.acceleration.BankAngle = Angle::native(fixed_zero);
@@ -594,7 +599,13 @@ DeviceBlackboard::EnergyHeight()
 {
   NMEA_INFO &basic = SetBasic();
 
-  basic.EnergyHeight = Calculated().TrueAirspeed * Calculated().TrueAirspeed * fixed_inv_2g;
+  if (Calculated().AirspeedAvailable)
+    basic.EnergyHeight = Calculated().TrueAirspeed * Calculated().TrueAirspeed * fixed_inv_2g;
+  else
+    /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
+     of the glider for sure. */
+    basic.EnergyHeight = fixed_zero;
+
   basic.TEAltitude = basic.NavAltitude + basic.EnergyHeight;
 }
 
