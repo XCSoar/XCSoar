@@ -70,7 +70,7 @@ DeviceDescriptor::Open()
   if (Driver == NULL)
     return false;
 
-  assert(Driver->CreateOnPort != NULL || Driver->Flags & drfNmeaOut);
+  assert(Driver->CreateOnPort != NULL || (Driver->Flags & drfNmeaOut));
   if (Driver->CreateOnPort == NULL)
     return true;
 
