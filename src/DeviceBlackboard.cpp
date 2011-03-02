@@ -36,6 +36,7 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Simulator.hpp"
 #include "OS/Clock.hpp"
+#include "Interface.hpp"
 
 #include <limits.h>
 
@@ -484,16 +485,31 @@ DeviceBlackboard::Wind()
   NMEA_INFO &basic = SetBasic();
 
   if (basic.ExternalWindAvailable && SettingsComputer().ExternalWind) {
+    // external wind available
     basic.wind = basic.ExternalWind;
     basic.WindAvailable = basic.ExternalWindAvailable;
-  } else if (SettingsComputer().AutoWindMode == 0) {
+
+  } else if (SettingsComputer().ManualWindAvailable && SettingsComputer().AutoWindMode == 0) {
+    // manual wind only if available and desired
     basic.wind = SettingsComputer().ManualWind;
     basic.WindAvailable.update(basic.Time);
-  } else if (Calculated().estimated_wind_available) {
+
+  } else if (Calculated().estimated_wind_available.modified(SettingsComputer().ManualWindAvailable)
+             && SettingsComputer().AutoWindMode) {
+    // auto wind when available and newer than manual wind
     basic.wind = Calculated().estimated_wind;
     basic.WindAvailable = Calculated().estimated_wind_available;
+    XCSoarInterface::SetSettingsComputer().ManualWindAvailable.clear(); // unset manual wind
+
+  } else if (SettingsComputer().ManualWindAvailable
+             && SettingsComputer().AutoWindMode) {
+    // manual wind overrides auto wind if available
+    basic.wind = SettingsComputer().ManualWind;
+    basic.WindAvailable = SettingsComputer().ManualWindAvailable;
+
   } else
-    basic.WindAvailable.clear();
+   // no wind available
+   basic.WindAvailable.clear();
 }
 
 /**

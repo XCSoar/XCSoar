@@ -31,6 +31,7 @@ Copyright_License {
 
 #include "Task/TaskBehaviour.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
+#include "NMEA/Validity.hpp"
 
 #include "SettingsAirspace.hpp"
 #include "TeamCodeCalculation.h"
@@ -75,7 +76,12 @@ struct SETTINGS_WIND {
    */
   bool ExternalWind;
 
+  /**
+   * This is the manual wind set by the pilot. Validity is set when
+   * changeing manual wind but does not expire.
+   */
   SpeedVector ManualWind;
+  Validity ManualWindAvailable;
 };
 
 /**
