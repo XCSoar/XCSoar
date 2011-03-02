@@ -25,6 +25,9 @@ Copyright_License {
 #define XCSOAR_INFOBOX_CONTENT_WEATHER_HPP
 
 #include "InfoBoxes/Content/Base.hpp"
+#include "Form/TabBar.hpp"
+#include "Form/Button.hpp"
+#include "DataField/Float.hpp"
 
 class InfoBoxContentHumidity : public InfoBoxContent
 {
@@ -45,13 +48,37 @@ public:
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 };
 
-class InfoBoxContentWindSpeed : public InfoBoxContent
+class InfoBoxContentWind : public InfoBoxContent
+{
+private:
+  static const int PANELSIZE = 2;
+
+public:
+  virtual InfoBoxDlgContent* GetInfoBoxDlgContent();
+
+  static Window* PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
+  static bool PnlEditOnTabPreShow(TabBarControl::EventType EventType);
+  static void PnlEditOnWindSpeed(DataFieldFloat &Sender);
+  static void PnlEditOnWindDirection(DataFieldFloat &Sender);
+
+  static CallBackTableEntry CallBackTable[];
+  static InfoBoxPanelContent Panels[];
+
+  static InfoBoxDlgContent dlgContent;
+
+  static Window* PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
+  static bool PnlSetupOnTabPreShow(TabBarControl::EventType EventType);
+  static bool PnlSetupOnTabPreHide();
+  static void PnlSetupOnSetup(WndButton &Sender);
+};
+
+class InfoBoxContentWindSpeed : public InfoBoxContentWind
 {
 public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
-class InfoBoxContentWindBearing : public InfoBoxContent
+class InfoBoxContentWindBearing : public InfoBoxContentWind
 {
 public:
   virtual void Update(InfoBoxWindow &infobox);

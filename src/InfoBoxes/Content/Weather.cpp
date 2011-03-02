@@ -26,6 +26,13 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
 #include "Atmosphere/CuSonde.hpp"
+#include "Protection.hpp"
+
+#include "Dialogs/dlgInfoBoxAccess.hpp"
+#include "Profile/Profile.hpp"
+#include "DataField/Enum.hpp"
+#include "DataField/Float.hpp"
+#include "DataField/Boolean.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -78,6 +85,205 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 
   return false;
 }
+
+/*
+ * InfoBoxContentWind
+ *
+ * Subpart Panel Edit
+ */
+
+static int InfoBoxID;
+
+Window*
+InfoBoxContentWind::PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBar,
+                                WndForm* wf, const int id)
+{
+  assert(wTabBar);
+  assert(wf);
+
+  InfoBoxID = id;
+
+  Window *wInfoBoxAccessEdit =
+      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXWINDEDIT"));
+  assert(wInfoBoxAccessEdit);
+
+  return wInfoBoxAccessEdit;
+}
+
+bool
+InfoBoxContentWind::PnlEditOnTabPreShow(TabBarControl::EventType EventType)
+{
+  const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
+    XCSoarInterface::SettingsComputer().ExternalWind;
+
+  WndProperty* wp;
+
+  wp = (WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpSpeed"));
+  if (wp) {
+    wp->set_enabled(!external_wind);
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
+    df.SetUnits(Units::GetSpeedName());
+    df.Set(Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpDirection"));
+  if (wp) {
+    wp->set_enabled(!external_wind);
+    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
+    df.Set(XCSoarInterface::Basic().wind.bearing.value_degrees());
+    wp->RefreshDisplay();
+  }
+
+  return true;
+}
+
+void
+InfoBoxContentWind::PnlEditOnWindSpeed(DataFieldFloat &Sender) {
+  (void)Sender;
+
+  const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
+    XCSoarInterface::SettingsComputer().ExternalWind;
+
+  if (!external_wind) {
+    XCSoarInterface::SetSettingsComputer().ManualWind.norm =
+      Units::ToSysWindSpeed(Sender.GetAsFixed());
+    XCSoarInterface::SetSettingsComputer().ManualWindAvailable.update(XCSoarInterface::Basic().Time);
+    TriggerGPSUpdate();
+  }
+}
+
+void
+InfoBoxContentWind::PnlEditOnWindDirection(DataFieldFloat &Sender) {
+  (void)Sender;
+
+  const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
+    XCSoarInterface::SettingsComputer().ExternalWind;
+
+  if (!external_wind) {
+    XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
+      Angle::degrees(Sender.GetAsFixed());
+    XCSoarInterface::SetSettingsComputer().ManualWindAvailable.update(XCSoarInterface::Basic().Time);
+    TriggerGPSUpdate();
+  }
+}
+
+/*
+ * Subpart Panel Setup
+ */
+
+Window*
+InfoBoxContentWind::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar,
+                                 WndForm* wf, const int id)
+{
+  assert(wTabBar);
+  assert(wf);
+
+  InfoBoxID = id;
+
+  Window *wInfoBoxAccessSetup =
+      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXWINDSETUP"));
+  assert(wInfoBoxAccessSetup);
+
+  const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
+    XCSoarInterface::SettingsComputer().ExternalWind;
+
+  WndProperty* wp;
+
+  wp = (WndProperty*)wf->FindByName(_T("prpAutoWind"));
+  if (external_wind) {
+    wp->set_enabled(false);
+    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
+    df.addEnumText(_("External"));
+    df.Set(0);
+    wp->RefreshDisplay();
+  } else {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Manual"));
+    dfe->addEnumText(_("Circling"));
+    dfe->addEnumText(_("ZigZag"));
+    dfe->addEnumText(_("Both"));
+    dfe->Set(XCSoarInterface::SettingsComputer().AutoWindMode);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTrailDrift"));
+  if (wp) {
+    DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
+    df.Set(XCSoarInterface::SettingsMap().EnableTrailDrift);
+    wp->RefreshDisplay();
+  }
+
+  return wInfoBoxAccessSetup;
+}
+
+bool
+InfoBoxContentWind::PnlSetupOnTabPreHide()
+{
+  const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
+    XCSoarInterface::SettingsComputer().ExternalWind;
+
+  if (!external_wind)
+    SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpAutoWind"), szProfileAutoWind,
+                     XCSoarInterface::SetSettingsComputer().AutoWindMode);
+
+  DataFieldEnum* dfe = (DataFieldEnum*)((WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAutoWind")))->GetDataField();
+
+  if (_tcscmp(dfe->GetAsString(), _("Manual")) == 0)
+    XCSoarInterface::SetSettingsComputer().ManualWindAvailable.update(XCSoarInterface::Basic().Time);
+
+  SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpTrailDrift"),
+                   XCSoarInterface::SetSettingsMap().EnableTrailDrift);
+
+  return true;
+}
+
+void
+InfoBoxContentWind::PnlSetupOnSetup(WndButton &Sender) {
+  (void)Sender;
+  InfoBoxManager::SetupFocused(InfoBoxID);
+  dlgInfoBoxAccess::OnClose();
+}
+
+/*
+ * Subpart callback function pointers
+ */
+
+InfoBoxContentWind::InfoBoxPanelContent InfoBoxContentWind::Panels[] = {
+InfoBoxContentWind::InfoBoxPanelContent (
+  _T("Edit"),
+  (*InfoBoxContentWind::PnlEditLoad),
+  NULL,
+  (*InfoBoxContentWind::PnlEditOnTabPreShow)),
+
+InfoBoxContentWind::InfoBoxPanelContent (
+  _T("Setup"),
+  (*InfoBoxContentWind::PnlSetupLoad),
+  (*InfoBoxContentWind::PnlSetupOnTabPreHide))
+};
+
+CallBackTableEntry InfoBoxContentWind::CallBackTable[] = {
+  DeclareCallBackEntry(InfoBoxContentWind::PnlEditOnWindSpeed),
+  DeclareCallBackEntry(InfoBoxContentWind::PnlEditOnWindDirection),
+
+  DeclareCallBackEntry(InfoBoxContentWind::PnlSetupOnSetup),
+
+  DeclareCallBackEntry(NULL)
+};
+
+InfoBoxContentWind::InfoBoxDlgContent InfoBoxContentWind::dlgContent = {
+    InfoBoxContentWind::PANELSIZE,
+    InfoBoxContentWind::Panels,
+    InfoBoxContentWind::CallBackTable
+};
+
+InfoBoxContentWind::InfoBoxDlgContent*
+InfoBoxContentWind::GetInfoBoxDlgContent() {
+  return &dlgContent;
+}
+
 
 void
 InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
