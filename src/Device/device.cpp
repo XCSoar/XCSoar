@@ -233,7 +233,7 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
 
   device.enable_baro = devIsBaroSource(device) && !devHasBaroSource();
 
-  if (nmeaout == NULL && Driver->Flags & (1l << dfNmeaOut))
+  if (nmeaout == NULL && (Driver->Flags & (1l << dfNmeaOut)))
     nmeaout = &device;
 
   return true;
