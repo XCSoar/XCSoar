@@ -277,7 +277,7 @@ TabDisplay::on_paint(Canvas &canvas)
     const int textheight = canvas.text_height(theTabBar.GetButtonCaption(i));
     unsigned textheightoffset = 0;
 
-    if (textwidth >= rc.right - rc.left) // assume 2 lines
+    if (textwidth > (rc.right - rc.left)) // assume 2 lines
       textheightoffset = max(0, (int)(buttonheight - textheight * 2) / 2);
     else
       textheightoffset = max(0, (int)(buttonheight - textheight) / 2);
