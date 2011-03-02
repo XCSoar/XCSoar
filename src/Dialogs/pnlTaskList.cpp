@@ -180,7 +180,7 @@ LoadTask()
   RefreshView();
   *task_modified = true;
 
-  wTabBar->SetCurrentPage(0);
+  wTabBar->SetCurrentPage(dlgTaskManager::GetTurnpointTab());
   wTabBar->set_focus();
 }
 
