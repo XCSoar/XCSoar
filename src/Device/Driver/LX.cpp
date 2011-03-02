@@ -282,8 +282,6 @@ LXDevice::LoadPilotInfo(const Declaration *decl)
 void
 LXDevice::WritePilotInfo()
 {
-  port->Write('\x02');
-  port->Write('\xCA');      // start declaration
   port->Write('\x00');
   port->Write('\x00');
   port->Write('\x00');
@@ -421,12 +419,13 @@ LXDevice::DeclareInner(const Declaration *decl, OperationEnvironment &env)
       return false;
 
   LoadPilotInfo(decl);
-
-  WritePilotInfo();
-
   if (!LoadTask(decl))
     return false;
 
+  port->Write('\x02');
+  port->Write('\xCA');      // start declaration
+
+  WritePilotInfo();
   WriteTask();
 
   return true;
