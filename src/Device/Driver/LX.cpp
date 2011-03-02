@@ -48,7 +48,8 @@ class LXDevice: public AbstractDevice
 
 public:
   LXDevice(Port *_port)
-    :port(_port) {
+    :port(_port),
+     crc(0xff) {
     DeclDate.day = 1;
     DeclDate.month = 1;
     DeclDate.year = 2010;
@@ -62,6 +63,8 @@ protected:
   bool LoadTask(const Declaration *decl);
   void WriteTask();
   void WriteToNanoint32(int32_t i);
+  void CRCWrite(const char *buff, unsigned size);
+  void CRCWrite(char c);
 
   struct lxNanoDevice_Pilot_t { //strings have extra byte for NULL
     char unknown1[3];
@@ -90,6 +93,7 @@ protected:
 
   lxNanoDevice_Declaration_t lxNanoDevice_Declaration;
   lxNanoDevice_Pilot_t lxNanoDevice_Pilot;
+  char crc;
 
   bool DeclareInner(const Declaration *declaration,
                     OperationEnvironment &env);
@@ -100,6 +104,32 @@ public:
   virtual bool Declare(const Declaration *declaration,
                        OperationEnvironment &env);
 };
+
+static char
+calc_crc_char(char d, char crc) {
+    char tmp;
+    const char crcpoly = 0x69;
+    int count;
+
+    for (count = 8; --count >= 0; d <<= 1) {
+        tmp = crc ^ d;
+        crc <<= 1;
+        if (tmp & 0x80)
+            crc ^= crcpoly;
+    }
+    return crc;
+}
+
+static char
+filser_calc_crc(const char *p0, size_t len, char crc) {
+    const char *p = p0;
+    size_t i;
+
+    for (i = 0; i < len; i++)
+        crc = calc_crc_char(p[i], crc);
+
+    return crc;
+}
 
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
@@ -212,6 +242,20 @@ LXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   return true;
 }
 
+void
+LXDevice::CRCWrite(const char *buff, unsigned size)
+{
+  port->Write(buff, size);
+  crc = filser_calc_crc(buff, size, crc);
+}
+
+void
+LXDevice::CRCWrite(char c)
+{
+  port->Write(c);
+  crc = calc_crc_char(c, crc);
+}
+
 bool
 LXDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
@@ -234,10 +278,10 @@ LXDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 void
 LXDevice::WriteToNanoint32(int32_t i)
 {
-  port->Write((char) ((i>>24) & 0xFF));
-  port->Write((char) ((i>>16) & 0xFF));
-  port->Write((char) ((i>>8) & 0xFF));
-  port->Write((char) (i & 0xFF));
+  CRCWrite((char) ((i>>24) & 0xFF));
+  CRCWrite((char) ((i>>16) & 0xFF));
+  CRCWrite((char) ((i>>8) & 0xFF));
+  CRCWrite((char) (i & 0xFF));
 }
 
 void
@@ -294,7 +338,7 @@ LXDevice::LoadPilotInfo(const Declaration *decl)
 void
 LXDevice::WritePilotInfo()
 {
-  port->Write((const unsigned char*)&lxNanoDevice_Pilot, sizeof(lxNanoDevice_Pilot));
+  CRCWrite((const char*)&lxNanoDevice_Pilot, sizeof(lxNanoDevice_Pilot));
   return;
 }
 
@@ -379,7 +423,7 @@ LXDevice::LoadTask(const Declaration *decl)
 void
 LXDevice::WriteTask()
 {
-  port->Write((const unsigned char*)&lxNanoDevice_Declaration,
+  CRCWrite((const char*)&lxNanoDevice_Declaration,
                                     sizeof(lxNanoDevice_Declaration.unknown1) +
                                     sizeof(lxNanoDevice_Declaration.dayinput) +
                                     sizeof(lxNanoDevice_Declaration.monthinput) +
@@ -388,11 +432,11 @@ LXDevice::WriteTask()
                                     sizeof(lxNanoDevice_Declaration.monthuser) +
                                     sizeof(lxNanoDevice_Declaration.yearuser));
 
-  port->Write((const unsigned char*)&lxNanoDevice_Declaration.taskid, sizeof(lxNanoDevice_Declaration.taskid));
-  port->Write((char)lxNanoDevice_Declaration.numtps);
+  CRCWrite((const char*)&lxNanoDevice_Declaration.taskid, sizeof(lxNanoDevice_Declaration.taskid));
+  CRCWrite((char)lxNanoDevice_Declaration.numtps);
 
   for (unsigned int i = 0; i < NUMTPS; i++) {
-    port->Write((char)lxNanoDevice_Declaration.tptypes[i]);
+    CRCWrite((char)lxNanoDevice_Declaration.tptypes[i]);
   }
   for (unsigned int i = 0; i < NUMTPS; i++) {
     WriteToNanoint32(lxNanoDevice_Declaration.Longitudes[i]);
@@ -401,8 +445,7 @@ LXDevice::WriteTask()
     WriteToNanoint32(lxNanoDevice_Declaration.Latitudes[i]);
   }
   for (unsigned int i = 0; i < NUMTPS; i++) {
-    port->Write(lxNanoDevice_Declaration.WaypointNames[i]);
-    port->Write('\0');
+    CRCWrite(lxNanoDevice_Declaration.WaypointNames[i], sizeof(lxNanoDevice_Declaration.WaypointNames[i]));
   }
   return;
 }
@@ -423,10 +466,11 @@ LXDevice::DeclareInner(const Declaration *decl, OperationEnvironment &env)
   port->Write(LX_PREFIX);
   port->Write(LX_WRITE_FLIGHT_INFO);      // start declaration
 
+  crc = 0xff;
   WritePilotInfo();
   WriteTask();
-
-  return true;
+  port->Write(crc);
+  return port->ExpectString(LX_ACK_STRING);
 }
 
 bool
