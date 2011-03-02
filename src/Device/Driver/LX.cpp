@@ -57,13 +57,16 @@ protected:
   void WriteToNanoint32(int32_t i);
 
   struct lxNanoDevice_Pilot_t { //strings have extra byte for NULL
+    char unknown1[3];
     char PilotName[19];
     char GliderType[12];
     char GliderID[8];
     char CompetitionID[4];
+    char unknown2[73];
   };
 
   struct lxNanoDevice_Declaration_t { //strings have extra byte for NULL
+    unsigned char unknown1[5];
     unsigned char dayinput;
     unsigned char monthinput;
     unsigned char yearinput;
@@ -273,19 +276,18 @@ copy_space_padded(char dest[], const TCHAR src[], unsigned int len)
 void
 LXDevice::LoadPilotInfo(const Declaration *decl)
 {
+  memset((void*)lxNanoDevice_Pilot.unknown1, 0, sizeof(lxNanoDevice_Pilot.unknown1));
   copy_space_padded(lxNanoDevice_Pilot.PilotName, decl->PilotName, sizeof(lxNanoDevice_Pilot.PilotName));
   copy_space_padded(lxNanoDevice_Pilot.GliderType, decl->AircraftType, sizeof(lxNanoDevice_Pilot.GliderType));
   copy_space_padded(lxNanoDevice_Pilot.GliderID, decl->AircraftRego, sizeof(lxNanoDevice_Pilot.GliderID));
   copy_space_padded(lxNanoDevice_Pilot.CompetitionID, _T(""), sizeof(lxNanoDevice_Pilot.CompetitionID));
+  memset((void*)lxNanoDevice_Pilot.unknown2, 0, sizeof(lxNanoDevice_Pilot.unknown2));
 }
 
 void
 LXDevice::WritePilotInfo()
 {
-  port->Write('\x00');
-  port->Write('\x00');
-  port->Write('\x00');
-
+  port->Write(lxNanoDevice_Pilot.unknown1, sizeof(lxNanoDevice_Pilot.unknown1));
   port->Write(lxNanoDevice_Pilot.PilotName);
   port->Write('\x00');
   port->Write(lxNanoDevice_Pilot.GliderType);
@@ -294,6 +296,7 @@ LXDevice::WritePilotInfo()
   port->Write('\x00');
   port->Write(lxNanoDevice_Pilot.CompetitionID);
   port->Write('\x00');
+  port->Write(lxNanoDevice_Pilot.unknown2, sizeof(lxNanoDevice_Pilot.unknown2));
 }
 
 
@@ -309,6 +312,8 @@ LXDevice::LoadTask(const Declaration *decl)
 
   if (decl->size() < 2)
       return false;
+
+  memset((void*)lxNanoDevice_Declaration.unknown1, 0, sizeof(lxNanoDevice_Declaration.unknown1));
 
   if (DeclDate.day > 0 && DeclDate.day < 32
       && DeclDate.month > 0 && DeclDate.month < 13) {
@@ -375,13 +380,7 @@ LXDevice::LoadTask(const Declaration *decl)
 void
 LXDevice::WriteTask()
 {
-  port->Write('\x07');
-  for (int i = 0; i < 75; i++) // User Data
-    port->Write('\x00');
-
-  port->Write('\02');
-  port->Write('\xD0');
-
+  port->Write(lxNanoDevice_Declaration.unknown1, sizeof(lxNanoDevice_Declaration.unknown1));
   port->Write((char)lxNanoDevice_Declaration.dayinput);
   port->Write((char)lxNanoDevice_Declaration.monthinput);
   port->Write((char)lxNanoDevice_Declaration.yearinput);
