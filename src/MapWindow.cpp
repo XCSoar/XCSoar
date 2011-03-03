@@ -97,7 +97,7 @@ MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
 unsigned
 MapWindow::UpdateTopology(unsigned max_update)
 {
-  if (topology != NULL && SettingsMap().EnableTopology)
+  if (topology != NULL && SettingsMap().EnableTopography)
     return topology->ScanVisibility(visible_projection, max_update);
   else
     return 0;

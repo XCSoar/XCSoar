@@ -97,7 +97,7 @@ struct SETTINGS_MAP {
   /** Maximum distance limit for AutoZoom */
   fixed MaxAutoZoomDistance;
   /** Map will show topology */
-  bool EnableTopology;
+  bool EnableTopography;
   /** Map will show terrain */
   bool EnableTerrain;
 

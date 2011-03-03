@@ -354,7 +354,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
   if (_tcsstr(OutBuffer, _T("$(TerrainTopologyToggleName)"))) {
     char val = 0;
-    if (SettingsMap().EnableTopology)
+    if (SettingsMap().EnableTopography)
       val++;
     if (SettingsMap().EnableTerrain)
       val += (char)2;
@@ -384,7 +384,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   CondReplaceInString(SettingsMap().AutoZoom, OutBuffer,
 		                  _T("$(ZoomAutoToggleActionName)"),
 		                  _("Manual"), _("Auto"), Size);
-  CondReplaceInString(SettingsMap().EnableTopology, OutBuffer,
+  CondReplaceInString(SettingsMap().EnableTopography, OutBuffer,
                       _T("$(TopologyToggleActionName)"),
                       _("Off"), _("On"), Size);
   CondReplaceInString(SettingsMap().EnableTerrain, OutBuffer,

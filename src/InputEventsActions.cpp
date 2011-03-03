@@ -1547,7 +1547,7 @@ InputEvents::sub_TerrainTopology(int vswitch)
     // toggle through 4 possible options
     char val = 0;
 
-    if (XCSoarInterface::SettingsMap().EnableTopology)
+    if (XCSoarInterface::SettingsMap().EnableTopography)
       val++;
     if (XCSoarInterface::SettingsMap().EnableTerrain)
       val += (char)2;
@@ -1556,7 +1556,7 @@ InputEvents::sub_TerrainTopology(int vswitch)
     if (val > 3)
       val = 0;
 
-    XCSoarInterface::SetSettingsMap().EnableTopology = ((val & 0x01) == 0x01);
+    XCSoarInterface::SetSettingsMap().EnableTopography = ((val & 0x01) == 0x01);
     XCSoarInterface::SetSettingsMap().EnableTerrain = ((val & 0x02) == 0x02);
   } else if (vswitch == -2)
     // toggle terrain
@@ -1564,14 +1564,14 @@ InputEvents::sub_TerrainTopology(int vswitch)
         !XCSoarInterface::SettingsMap().EnableTerrain;
   else if (vswitch == -3)
     // toggle topology
-    XCSoarInterface::SetSettingsMap().EnableTopology =
-        !XCSoarInterface::SettingsMap().EnableTopology;
+    XCSoarInterface::SetSettingsMap().EnableTopography =
+        !XCSoarInterface::SettingsMap().EnableTopography;
   else if (vswitch == 1)
     // Turn on topology
-    XCSoarInterface::SetSettingsMap().EnableTopology = true;
+    XCSoarInterface::SetSettingsMap().EnableTopography = true;
   else if (vswitch == 2)
     // Turn off topology
-    XCSoarInterface::SetSettingsMap().EnableTopology = false;
+    XCSoarInterface::SetSettingsMap().EnableTopography = false;
   else if (vswitch == 3)
     // Turn on terrain
     XCSoarInterface::SetSettingsMap().EnableTerrain = true;
@@ -1583,7 +1583,7 @@ InputEvents::sub_TerrainTopology(int vswitch)
     // ARH Let user know what's happening
     TCHAR buf[128];
 
-    if (XCSoarInterface::SettingsMap().EnableTopology)
+    if (XCSoarInterface::SettingsMap().EnableTopography)
       _stprintf(buf, _T("\r\n%s / "), _("On"));
     else
       _stprintf(buf, _T("\r\n%s / "), _("Off"));
@@ -1597,7 +1597,7 @@ InputEvents::sub_TerrainTopology(int vswitch)
 
   /* save new values to profile */
   Profile::Set(szProfileDrawTopology,
-               XCSoarInterface::SettingsMap().EnableTopology);
+               XCSoarInterface::SettingsMap().EnableTopography);
   Profile::Set(szProfileDrawTerrain,
                XCSoarInterface::SettingsMap().EnableTerrain);
 
