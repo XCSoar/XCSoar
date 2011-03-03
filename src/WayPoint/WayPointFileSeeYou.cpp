@@ -255,11 +255,24 @@ WayPointFileSeeYou::parseStyle(const TCHAR* src, Waypoint &dest)
     return false;
 
   // Update flags
-  dest.Type = (style == 3) ? wtOutlanding :
-              (style == 2 || style == 4 || style == 5) ? wtAirfield :
-              (style == 6 || style == 7) ? wtMountainTop :
-              (style == 14) ? wtBridge :
-              wtNormal;
+  switch (style) {
+  case 3:
+    dest.Type = wtOutlanding;
+    break;
+  case 2:
+  case 4:
+  case 5:
+    dest.Type = wtAirfield;
+    break;
+  case 6:
+  case 7:
+    dest.Type = wtMountainTop;
+    break;
+  case 14:
+    dest.Type = wtBridge;
+    break;
+  }
+
   dest.Flags.TurnPoint = true;
 
   return true;
