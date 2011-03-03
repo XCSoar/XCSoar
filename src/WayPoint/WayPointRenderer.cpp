@@ -168,11 +168,9 @@ public:
                                            projection.GetScreenAngle());
     } else {
       // non landable turnpoint
-      const MaskedIcon *icon;
-      if (projection.GetMapScale() <= fixed(4000))
-        icon = &Graphics::TurnPointIcon;
-      else
-        icon = &Graphics::SmallIcon;
+      const MaskedIcon *icon =
+          projection.GetMapScale() > fixed(4000) ? &Graphics::SmallIcon :
+          &Graphics::TurnPointIcon;
 
       icon->draw(canvas, sc);
     }
