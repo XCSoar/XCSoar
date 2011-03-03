@@ -90,7 +90,7 @@ GlueMapWindow::Idle()
     idle_robin = (idle_robin + 1) % 3;
     switch (idle_robin) {
     case 0:
-      topography_dirty = UpdateTopology(1) > 0;
+      topography_dirty = UpdateTopography(1) > 0;
       break;
 
     case 1:

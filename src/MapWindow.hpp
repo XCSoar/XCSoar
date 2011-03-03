@@ -197,7 +197,7 @@ public:
   virtual void Render(Canvas &canvas, const RECT &rc);
 
 protected:
-  unsigned UpdateTopology(unsigned max_update=1024);
+  unsigned UpdateTopography(unsigned max_update=1024);
 
   /**
    * @return true if UpdateTerrain() should be called again
@@ -210,7 +210,7 @@ protected:
   bool UpdateWeather();
 
   void UpdateAll() {
-    UpdateTopology();
+    UpdateTopography();
     UpdateTerrain();
     UpdateWeather();
   }
