@@ -1384,7 +1384,7 @@ setVariables()
                 szProfileMapFile, _T("*.xcm\0*.lkm\0"));
   InitFileField(*wf, _T("prpTerrainFile"),
                 szProfileTerrainFile, _T("*.jp2\0"));
-  InitFileField(*wf, _T("prpTopologyFile"),
+  InitFileField(*wf, _T("prpTopographyFile"),
                 szProfileTopologyFile, _T("*.tpl\0"));
   InitFileField(*wf, _T("prpAirfieldFile"),
                 szProfileAirfieldFile, _T("*.txt\0"));
@@ -2259,7 +2259,7 @@ void dlgConfigurationShowModal(void)
   TerrainFileChanged = FinishFileField(*wf, _T("prpTerrainFile"),
                                        szProfileTerrainFile);
 
-  TopologyFileChanged = FinishFileField(*wf, _T("prpTopologyFile"),
+  TopologyFileChanged = FinishFileField(*wf, _T("prpTopographyFile"),
                                         szProfileTopologyFile);
 
   AirfieldFileChanged = FinishFileField(*wf, _T("prpAirfieldFile"),
