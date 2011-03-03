@@ -31,7 +31,6 @@ Copyright_License {
 #endif
 
 typedef uint8_t BYTE;
-typedef uint32_t DWORD;
 typedef int32_t LONG;
 
 typedef struct w32_handle *HANDLE;
