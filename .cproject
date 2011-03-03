@@ -27,6 +27,7 @@
 								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.507017671" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
+									<listOptionValue builtIn="false" value="WINAPI"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.804428986" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -34,6 +35,7 @@
 								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.1896440557" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
+									<listOptionValue builtIn="false" value="WINAPI"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.490395041" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -41,6 +43,7 @@
 								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.1619324442" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
+									<listOptionValue builtIn="false" value="WINAPI"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1687759916" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -1240,6 +1243,7 @@
 								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.1061025219" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
+									<listOptionValue builtIn="false" value="WINAPI"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1751312565" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -1247,6 +1251,7 @@
 								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.612046531" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
+									<listOptionValue builtIn="false" value="WINAPI"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1228970797" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -1254,6 +1259,7 @@
 								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.1969219373" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
+									<listOptionValue builtIn="false" value="WINAPI"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.190944738" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -1851,6 +1857,7 @@
 								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.705007348" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
+									<listOptionValue builtIn="false" value="WINAPI"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.657059216" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -1858,6 +1865,7 @@
 								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.317100640" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
+									<listOptionValue builtIn="false" value="WINAPI"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.447909109" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -1865,6 +1873,7 @@
 								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.995970215" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
+									<listOptionValue builtIn="false" value="WINAPI"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1757545394" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
