@@ -227,7 +227,7 @@ TestWinPilotWayPoint(const Waypoint org_wp, const Waypoint *wp)
     return;
   }
 
-  ok1(wp->Type == org_wp.Type);
+  ok1(wp->Type == ((!org_wp.is_landable()) ? wtNormal : org_wp.Type));
   ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
   ok1(wp->Flags.Home == org_wp.Flags.Home);
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
@@ -296,7 +296,7 @@ TestZanderWayPoint(const Waypoint org_wp, const Waypoint *wp)
     return;
   }
 
-  ok1(wp->Type == org_wp.Type);
+  ok1(wp->Type == ((!org_wp.is_landable()) ? wtNormal : org_wp.Type));
   ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
   ok1(wp->Flags.Home == org_wp.Flags.Home);
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
@@ -359,7 +359,7 @@ CreateOriginalWaypoints()
   wp2.RunwayDirection = Angle::degrees(fixed(-1));
   wp2.RunwayLength = 0;
 
-  wp2.Type = wtNormal;
+  wp2.Type = wtMountainTop;
   wp2.Flags.TurnPoint = true;
   wp2.Flags.Home = false;
   wp2.Flags.StartPoint = false;

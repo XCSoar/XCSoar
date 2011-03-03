@@ -59,6 +59,7 @@ enum WaypointType {
   wtNormal,
   wtAirfield,
   wtOutlanding,
+  wtMountainTop,
 };
 
 /**

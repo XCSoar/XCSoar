@@ -257,6 +257,7 @@ WayPointFileSeeYou::parseStyle(const TCHAR* src, Waypoint &dest)
   // Update flags
   dest.Type = (style == 3) ? wtOutlanding :
               (style == 2 || style == 4 || style == 5) ? wtAirfield :
+              (style == 6 || style == 7) ? wtMountainTop :
               wtNormal;
   dest.Flags.TurnPoint = true;
 
