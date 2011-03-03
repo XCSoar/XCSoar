@@ -322,11 +322,11 @@ XCSOAR_SOURCES := \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/CalculationThread.cpp \
 	\
-	$(SRC)/Topology/TopographyFile.cpp \
-	$(SRC)/Topology/TopographyStore.cpp \
-	$(SRC)/Topology/TopographyRenderer.cpp \
-	$(SRC)/Topology/TopographyGlue.cpp \
-	$(SRC)/Topology/XShape.cpp \
+	$(SRC)/Topography/TopographyFile.cpp \
+	$(SRC)/Topography/TopographyStore.cpp \
+	$(SRC)/Topography/TopographyRenderer.cpp \
+	$(SRC)/Topography/TopographyGlue.cpp \
+	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \

@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Topology/TopographyStore.hpp"
-#include "Topology/TopographyFile.hpp"
+#include "Topography/TopographyStore.hpp"
+#include "Topography/TopographyFile.hpp"
 #include "StringUtil.hpp"
 #include "IO/LineReader.hpp"
 #include "OS/PathName.hpp"

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
 
 #include "Screen/Point.hpp"
-#include "Topology/XShapePoint.hpp"
+#include "Topography/XShapePoint.hpp"
 
 unsigned
 polygon_to_triangle(const RasterPoint *points, unsigned num_points,

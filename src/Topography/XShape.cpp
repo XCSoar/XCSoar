@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Topology/XShape.hpp"
+#include "Topography/XShape.hpp"
 #include "Units.hpp"
 #include "shapelib/map.h"
 #ifdef ENABLE_OPENGL

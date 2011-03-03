@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Topology/TopographyStore.hpp"
-#include "Topology/TopographyRenderer.hpp"
+#include "Topography/TopographyStore.hpp"
+#include "Topography/TopographyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Task/ProtectedTaskManager.hpp"

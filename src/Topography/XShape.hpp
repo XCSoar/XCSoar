@@ -31,7 +31,7 @@ Copyright_License {
 #include "shapelib/mapshape.h"
 #ifdef ENABLE_OPENGL
 #include "Screen/Point.hpp"
-#include "Topology/XShapePoint.hpp"
+#include "Topography/XShapePoint.hpp"
 #endif
 
 #include <tchar.h>

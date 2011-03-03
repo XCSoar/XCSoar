@@ -696,9 +696,9 @@ $(KEY_CODE_DUMPER_BIN): $(KEY_CODE_DUMPER_OBJS) $(KEY_CODE_DUMPER_LDADD) | $(TAR
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 LOAD_TOPOLOGY_SOURCES = \
-	$(SRC)/Topology/TopographyStore.cpp \
-	$(SRC)/Topology/TopographyFile.cpp \
-	$(SRC)/Topology/XShape.cpp \
+	$(SRC)/Topography/TopographyStore.cpp \
+	$(SRC)/Topography/TopographyFile.cpp \
+	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/WindowProjection.cpp \
 	$(SRC)/Units.cpp \
@@ -1081,11 +1081,11 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/Topology/TopographyFile.cpp \
-	$(SRC)/Topology/TopographyStore.cpp \
-	$(SRC)/Topology/TopographyRenderer.cpp \
-	$(SRC)/Topology/TopographyGlue.cpp \
-	$(SRC)/Topology/XShape.cpp \
+	$(SRC)/Topography/TopographyFile.cpp \
+	$(SRC)/Topography/TopographyStore.cpp \
+	$(SRC)/Topography/TopographyRenderer.cpp \
+	$(SRC)/Topography/TopographyGlue.cpp \
+	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/UnitsFormatter.cpp \
 	$(SRC)/UtilsText.cpp \

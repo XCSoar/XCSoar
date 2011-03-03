@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Topology/TopographyRenderer.hpp"
-#include "Topology/TopographyFile.hpp"
-#include "Topology/XShape.hpp"
+#include "Topography/TopographyRenderer.hpp"
+#include "Topography/TopographyFile.hpp"
+#include "Topography/XShape.hpp"
 #include "WindowProjection.hpp"
 #include "SettingsMap.hpp"
 #include "resource.h"

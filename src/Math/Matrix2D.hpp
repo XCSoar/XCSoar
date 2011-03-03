@@ -25,7 +25,7 @@ Copyright_License {
 
 #include "Math/Angle.hpp"
 #include "Screen/Point.hpp"
-#include "Topology/XShapePoint.hpp"
+#include "Topography/XShapePoint.hpp"
 
 #ifdef HAVE_BOOST
 #include <boost/cstdint.hpp>

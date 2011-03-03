@@ -1,4 +1,4 @@
-SHPSRC = $(SRC)/Topology/shapelib
+SHPSRC = $(SRC)/Topography/shapelib
 
 SHAPELIB = \
 	$(SHPSRC)/mapbits.c 	\

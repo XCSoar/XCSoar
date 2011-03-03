@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef TOPOGRAPHY_RENDERER_HPP
 #define TOPOGRAPHY_RENDERER_HPP
 
-#include "Topology/TopographyStore.hpp"
-#include "Topology/ShapeRenderer.hpp"
+#include "Topography/TopographyStore.hpp"
+#include "Topography/ShapeRenderer.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"

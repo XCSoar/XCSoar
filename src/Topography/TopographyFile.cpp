@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Topology/TopographyFile.hpp"
-#include "Topology/XShape.hpp"
+#include "Topography/TopographyFile.hpp"
+#include "Topography/XShape.hpp"
 #include "WindowProjection.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/LabelBlock.hpp"
