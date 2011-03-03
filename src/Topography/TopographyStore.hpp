@@ -41,11 +41,11 @@ class TopographyStore : private NonCopyable {
 public:
   enum {
     /** maximum number of topologies */
-    MAXTOPOLOGY = 20,
+    MAXTOPOGRAPHY = 20,
   };
 
 private:
-  StaticArray<TopographyFile *, MAXTOPOLOGY> files;
+  StaticArray<TopographyFile *, MAXTOPOGRAPHY> files;
 
 public:
   ~TopographyStore();

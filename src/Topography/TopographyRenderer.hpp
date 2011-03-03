@@ -79,7 +79,7 @@ public:
  */
 class TopographyRenderer : private NonCopyable {
   const TopographyStore &store;
-  TopographyFileRenderer *files[TopographyStore::MAXTOPOLOGY];
+  TopographyFileRenderer *files[TopographyStore::MAXTOPOGRAPHY];
 
 public:
   TopographyRenderer(const TopographyStore &store);
