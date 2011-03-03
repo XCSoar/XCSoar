@@ -377,7 +377,7 @@ CreateOriginalWaypoints()
   wp3.RunwayDirection = Angle::degrees(fixed(-1));
   wp3.RunwayLength = 0;
 
-  wp3.Type = wtNormal;
+  wp3.Type = wtBridge;
   wp3.Flags.TurnPoint = true;
   wp3.Flags.Home = false;
   wp3.Flags.StartPoint = false;
