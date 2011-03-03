@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 /*
- * This program loads the topology from a map file and exits.  Useful
+ * This program loads the topography from a map file and exits.  Useful
  * for valgrind and profiling.
  */
 
@@ -97,13 +97,13 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  TopographyStore topology;
-  topology.Load(reader, NULL, dir);
+  TopographyStore topography;
+  topography.Load(reader, NULL, dir);
   zzip_dir_close(dir);
 
   TestProjection projection;
 
-  topology.ScanVisibility(projection);
+  topography.ScanVisibility(projection);
 
   return EXIT_SUCCESS;
 }
