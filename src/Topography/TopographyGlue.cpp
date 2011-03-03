@@ -38,7 +38,7 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 /**
- * Load topology from a plain file, load the other files from the same
+ * Load topography from a plain file, load the other files from the same
  * directory.
  */
 static bool
@@ -50,7 +50,7 @@ LoadConfiguredTopographyFile(TopographyStore &store)
 
   FileLineReaderA reader(file);
   if (reader.error()) {
-    LogStartUp(_T("No topology file: %s"), file);
+    LogStartUp(_T("No topography file: %s"), file);
     return false;
   }
 
@@ -64,7 +64,7 @@ LoadConfiguredTopographyFile(TopographyStore &store)
 }
 
 /**
- * Load topology from the map file (ZIP), load the other files from
+ * Load topography from the map file (ZIP), load the other files from
  * the same ZIP file.
  */
 static bool
@@ -80,7 +80,7 @@ LoadConfiguredTopographyZip(TopographyStore &store)
 
   ZipLineReaderA reader(dir, "topology.tpl");
   if (reader.error()) {
-    LogStartUp(_T("No topology in map file: %s"), path);
+    LogStartUp(_T("No topography in map file: %s"), path);
     return false;
   }
 
@@ -92,8 +92,8 @@ LoadConfiguredTopographyZip(TopographyStore &store)
 bool
 LoadConfiguredTopography(TopographyStore &store)
 {
-  LogStartUp(_T("Loading Topology File..."));
-  ProgressGlue::Create(_("Loading Topology File..."));
+  LogStartUp(_T("Loading Topography File..."));
+  ProgressGlue::Create(_("Loading Topography File..."));
 
   return LoadConfiguredTopographyFile(store) ||
     LoadConfiguredTopographyZip(store);
