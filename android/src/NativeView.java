@@ -404,7 +404,6 @@ class NativeView extends SurfaceView
 
   public void onPause() {
     pauseNative();
-    deinitSurface();
   }
 
   public void exitApp() {

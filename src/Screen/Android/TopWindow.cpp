@@ -38,6 +38,8 @@ TopWindow::on_pause()
 
   SurfaceDestroyed();
 
+  native_view->deinitSurface();
+
   paused_mutex.Lock();
   paused = true;
   resumed = false;
