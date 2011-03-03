@@ -406,8 +406,8 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
   }
 
   // SW rendering of landables
-  fixed scale = fixed(Appearance.LandableRenderingScale) /
-                fixed_int_constant(100);
+  fixed scale = fixed(Layout::SmallScale(Appearance.LandableRenderingScale)) /
+                fixed_int_constant(150);
   fixed radius = fixed_int_constant(10) * scale;
   Brush fill;
 
