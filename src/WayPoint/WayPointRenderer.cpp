@@ -171,6 +171,7 @@ public:
       const MaskedIcon *icon =
           projection.GetMapScale() > fixed(4000) ? &Graphics::SmallIcon :
           way_point.Type == wtMountainTop ? &Graphics::MountainTopIcon :
+          way_point.Type == wtBridge ? &Graphics::BridgeIcon :
           &Graphics::TurnPointIcon;
 
       icon->draw(canvas, sc);

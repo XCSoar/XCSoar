@@ -100,12 +100,14 @@
 #define IDB_DIALOGTITLE                 342
 #define IDB_MOUNTAIN_TOP                343
 #define IDB_MOUNTAIN_TOP_HD            5343
+#define IDB_BRIDGE                      344
+#define IDB_BRIDGE_HD                  5344
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        344
+#define _APS_NEXT_RESOURCE_VALUE        345
 #define _APS_NEXT_COMMAND_VALUE         40025
 #define _APS_NEXT_CONTROL_VALUE         1264
 #define _APS_NEXT_SYMED_VALUE           102

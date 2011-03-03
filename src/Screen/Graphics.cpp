@@ -86,7 +86,7 @@ Brush Graphics::hbFinalGlideAbove;
 Brush Graphics::hbWind;
 
 MaskedIcon Graphics::SmallIcon, Graphics::TurnPointIcon;
-MaskedIcon Graphics::MountainTopIcon;
+MaskedIcon Graphics::MountainTopIcon, Graphics::BridgeIcon;
 MaskedIcon Graphics::AirportReachableIcon, Graphics::AirportUnreachableIcon;
 MaskedIcon Graphics::FieldReachableIcon, Graphics::FieldUnreachableIcon;
 MaskedIcon Graphics::hBmpThermalSource;
@@ -242,6 +242,7 @@ Graphics::Initialise()
   SmallIcon.load_big(IDB_SMALL, IDB_SMALL_HD);
   TurnPointIcon.load_big(IDB_TURNPOINT, IDB_TURNPOINT_HD);
   MountainTopIcon.load_big(IDB_MOUNTAIN_TOP, IDB_MOUNTAIN_TOP_HD);
+  BridgeIcon.load_big(IDB_BRIDGE, IDB_BRIDGE_HD);
 
   hpAircraft.set(Layout::Scale(3), Color::WHITE);
   hpAircraftBorder.set(Layout::Scale(1), Color::BLACK);
@@ -359,6 +360,7 @@ Graphics::Deinitialise()
   SmallIcon.reset();
   TurnPointIcon.reset();
   MountainTopIcon.reset();
+  BridgeIcon.reset();
   AirportReachableIcon.reset();
   AirportUnreachableIcon.reset();
   FieldReachableIcon.reset();
