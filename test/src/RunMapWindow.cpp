@@ -81,7 +81,7 @@ static TaskManager task_manager(task_events,
 
 static Airspaces airspace_database;
 
-static TopographyStore *topology;
+static TopographyStore *topography;
 static RasterTerrain *terrain;
 Logger logger;
 
@@ -149,7 +149,7 @@ public:
     map.set(*this, rc);
     map.set_way_points(&way_points);
     map.set_airspaces(&airspace_database, NULL);
-    map.set_topography(topology);
+    map.set_topography(topography);
     map.set_terrain(terrain);
     if (terrain != NULL)
       map.SetLocation(terrain->GetTerrainCenter());
@@ -188,8 +188,8 @@ static Blackboard blackboard;
 static void
 LoadFiles()
 {
-  topology = new TopographyStore();
-  LoadConfiguredTopography(*topology);
+  topography = new TopographyStore();
+  LoadConfiguredTopography(*topography);
 
   terrain = RasterTerrain::OpenTerrain(NULL);
 
@@ -303,7 +303,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Fonts::Deinitialize();
 
   delete terrain;
-  delete topology;
+  delete topography;
 
   return 0;
 }
