@@ -157,4 +157,5 @@ TextCache::flush()
   }
 
   text_cache_head.Clear();
+  text_cache_size = 0;
 }
