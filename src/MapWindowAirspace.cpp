@@ -264,12 +264,26 @@ class AirspaceVisitorMap:
 {
 public:
   AirspaceVisitorMap(MapDrawHelper &_helper,
-                     const AirspaceWarningCopy& warnings):
+                     const AirspaceWarningCopy& warnings,
+                     const SETTINGS_MAP &settings_map):
     MapDrawHelper(_helper),
     m_warnings(warnings),
     pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
     pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00)) {
-    m_use_stencil = !is_ancient_hardware();
+
+    switch (settings_map.AirspaceFillMode) {
+    case SETTINGS_MAP::AS_FILL_DEFAULT:
+      m_use_stencil = !is_ancient_hardware();
+      break;
+
+    case SETTINGS_MAP::AS_FILL_ALL:
+      m_use_stencil = false;
+      break;
+
+    case SETTINGS_MAP::AS_FILL_PADDING:
+      m_use_stencil = true;
+      break;
+    }
   }
 
   void Visit(const AirspaceCircle& airspace) {
@@ -416,7 +430,7 @@ MapWindow::DrawAirspace(Canvas &canvas)
                        buffer_canvas, stencil_canvas,
                        render_projection,
                        SettingsMap());
-  AirspaceVisitorMap v(helper, awc);
+  AirspaceVisitorMap v(helper, awc, SettingsMap());
 
   // JMW TODO wasteful to draw twice, can't it be drawn once?
   // we are using two draws so borders go on top of everything

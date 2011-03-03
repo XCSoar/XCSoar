@@ -82,6 +82,10 @@
       <Edit Name="prpAirspaceOutline" Caption="Use black outline*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw a black outline around each airspace rather than the airspace color">
         <DataField DataType="boolean"/>
       </Edit> 
+
+      <Edit Name="prpAirspaceFillMode" Caption="Airspace fill mode*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Specifies the mode for filling the airspace area.">
+        <DataField DataType="enum"/>
+      </Edit>
     </Panel>
   
     <Panel Name="frmDisplay">

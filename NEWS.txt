@@ -6,6 +6,8 @@ Version 6.0.6 - not yet released
 * devices:
   - fix declaration crash in Volkslogger, EW, CAI302, CAI GPS NAV
   - EW: remove duplicate newline in declaration output
+* map
+  - Airspace: add option to re-enable stencil buffer on PPC2000
 * Windows
   - compile vali-xcs.exe as console application
 * Android
