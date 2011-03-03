@@ -490,7 +490,7 @@ DEBUG_PROGRAM_NAMES = \
 	ReadGRecord VerifyGRecord AppendGRecord \
 	AddChecksum \
 	KeyCodeDumper \
-	LoadTopology LoadTerrain \
+	LoadTopography LoadTerrain \
 	RunInputParser \
 	RunWayPointParser RunAirspaceParser \
 	RunDeviceDriver RunDeclare \
@@ -695,7 +695,7 @@ $(KEY_CODE_DUMPER_BIN): $(KEY_CODE_DUMPER_OBJS) $(KEY_CODE_DUMPER_LDADD) | $(TAR
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
-LOAD_TOPOLOGY_SOURCES = \
+LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Topography/TopographyStore.cpp \
 	$(SRC)/Topography/TopographyFile.cpp \
 	$(SRC)/Topography/XShape.cpp \
@@ -705,17 +705,17 @@ LOAD_TOPOLOGY_SOURCES = \
 	$(SRC)/UnitsFormatter.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
-	$(TEST_SRC_DIR)/LoadTopology.cpp
-LOAD_TOPOLOGY_OBJS = $(call SRC_TO_OBJ,$(LOAD_TOPOLOGY_SOURCES))
-LOAD_TOPOLOGY_BIN = $(TARGET_BIN_DIR)/LoadTopology$(TARGET_EXEEXT)
-LOAD_TOPOLOGY_LDADD = \
+	$(TEST_SRC_DIR)/LoadTopography.cpp
+LOAD_TOPOGRAPHY_OBJS = $(call SRC_TO_OBJ,$(LOAD_TOPOGRAPHY_SOURCES))
+LOAD_TOPOGRAPHY_BIN = $(TARGET_BIN_DIR)/LoadTopography$(TARGET_EXEEXT)
+LOAD_TOPOGRAPHY_LDADD = \
 	$(MATH_LIBS) \
 	$(IO_LIBS) \
 	$(SHAPELIB_LIBS) \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
-$(LOAD_TOPOLOGY_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
-$(LOAD_TOPOLOGY_BIN): $(LOAD_TOPOLOGY_OBJS) $(LOAD_TOPOLOGY_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+$(LOAD_TOPOGRAPHY_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(LOAD_TOPOGRAPHY_BIN): $(LOAD_TOPOGRAPHY_OBJS) $(LOAD_TOPOGRAPHY_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(ZZIP_LDFLAGS) -o $@
 
