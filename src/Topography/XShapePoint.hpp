@@ -22,8 +22,8 @@ Copyright_License {
 }
 */
 
-#ifndef TOPOLOGY_XSHAPE_POINT_HPP
-#define TOPOLOGY_XSHAPE_POINT_HPP
+#ifndef TOPOGRAPHY_XSHAPE_POINT_HPP
+#define TOPOGRAPHY_XSHAPE_POINT_HPP
 
 #include "Screen/Point.hpp"
 

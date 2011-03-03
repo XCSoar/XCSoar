@@ -22,8 +22,8 @@ Copyright_License {
 }
 */
 
-#ifndef TOPOLOGY_H
-#define TOPOLOGY_H
+#ifndef TOPOGRAPHY_HPP
+#define TOPOGRAPHY_HPP
 
 #include "shapelib/mapshape.h"
 #include "Geo/GeoBounds.hpp"

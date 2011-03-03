@@ -22,8 +22,8 @@ Copyright_License {
 }
 */
 
-#ifndef TOPOLOGY_XSHAPE_HPP
-#define TOPOLOGY_XSHAPE_HPP
+#ifndef TOPOGRAPHY_XSHAPE_HPP
+#define TOPOGRAPHY_XSHAPE_HPP
 
 #include "Util/NonCopyable.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
