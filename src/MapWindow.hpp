@@ -81,7 +81,7 @@ protected:
   MapWindowProjection render_projection;
 
   const Waypoints *way_points;
-  TopographyStore *topology;
+  TopographyStore *topography;
   TopographyRenderer *topography_renderer;
 
   RasterTerrain *terrain;
@@ -136,7 +136,7 @@ public:
     airspace_warnings = _airspace_warnings;
   }
 
-  void set_topology(TopographyStore *_topology);
+  void set_topography(TopographyStore *_topography);
   void set_terrain(RasterTerrain *_terrain);
   void set_weather(RasterWeather *_weather);
 
@@ -243,15 +243,15 @@ private:
    */
   void RenderTerrain(Canvas &canvas);
   /**
-   * Renders the topology
+   * Renders the topography
    * @param canvas The drawing canvas
    */
-  void RenderTopology(Canvas &canvas);
+  void RenderTopography(Canvas &canvas);
   /**
-   * Renders the topology labels
+   * Renders the topography labels
    * @param canvas The drawing canvas
    */
-  void RenderTopologyLabels(Canvas &canvas);
+  void RenderTopographyLabels(Canvas &canvas);
   /**
    * Renders the final glide shading
    * @param canvas The drawing canvas

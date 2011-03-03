@@ -142,10 +142,10 @@ SettingsLeave()
   }
 
   if (TopographyFileChanged) {
-    XCSoarInterface::main_window.map.set_topology(NULL);
+    XCSoarInterface::main_window.map.set_topography(NULL);
     topology->Reset();
     LoadConfiguredTopography(*topology);
-    XCSoarInterface::main_window.map.set_topology(topology);
+    XCSoarInterface::main_window.map.set_topography(topology);
   }
 
   if (AirspaceFileChanged) {

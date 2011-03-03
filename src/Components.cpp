@@ -400,7 +400,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   main_window.map.set_task(protected_task_manager);
   main_window.map.set_airspaces(&airspace_database, airspace_warnings);
 
-  main_window.map.set_topology(topology);
+  main_window.map.set_topography(topology);
   main_window.map.set_terrain(terrain);
   main_window.map.set_weather(&RASP);
   main_window.map.set_marks(marks);

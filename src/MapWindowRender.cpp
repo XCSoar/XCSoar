@@ -43,14 +43,14 @@ MapWindow::RenderTerrain(Canvas &canvas)
 }
 
 void
-MapWindow::RenderTopology(Canvas &canvas)
+MapWindow::RenderTopography(Canvas &canvas)
 {
   if (topography_renderer != NULL && SettingsMap().EnableTopography)
     topography_renderer->Draw(canvas, render_projection);
 }
 
 void
-MapWindow::RenderTopologyLabels(Canvas &canvas)
+MapWindow::RenderTopographyLabels(Canvas &canvas)
 {
   if (topography_renderer != NULL && SettingsMap().EnableTopography)
     topography_renderer->DrawLabels(canvas, render_projection, label_block,
@@ -106,7 +106,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
 
   // Render terrain, groundline and topology
   RenderTerrain(canvas);
-  RenderTopology(canvas);
+  RenderTopography(canvas);
   RenderFinalGlideShading(canvas);
 
   // Render track bearing (ground track)
@@ -132,7 +132,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   DrawThermalEstimate(canvas);
 
   // Render topology on top of airspace, to keep the text readable
-  RenderTopologyLabels(canvas);
+  RenderTopographyLabels(canvas);
 
   // Render glide through terrain range
   RenderGlide(canvas);

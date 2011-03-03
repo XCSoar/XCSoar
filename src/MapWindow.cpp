@@ -38,7 +38,7 @@ Copyright_License {
  */
 MapWindow::MapWindow()
   :way_points(NULL),
-   topology(NULL), topography_renderer(NULL),
+   topography(NULL), topography_renderer(NULL),
    terrain(NULL),
    terrain_radius(fixed_zero),
    weather(NULL),
@@ -97,8 +97,8 @@ MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
 unsigned
 MapWindow::UpdateTopography(unsigned max_update)
 {
-  if (topology != NULL && SettingsMap().EnableTopography)
-    return topology->ScanVisibility(visible_projection, max_update);
+  if (topography != NULL && SettingsMap().EnableTopography)
+    return topography->ScanVisibility(visible_projection, max_update);
   else
     return 0;
 }
@@ -172,13 +172,13 @@ MapWindow::on_paint_buffer(Canvas &canvas)
 }
 
 void
-MapWindow::set_topology(TopographyStore *_topology)
+MapWindow::set_topography(TopographyStore *_topography)
 {
-  topology = _topology;
+  topography = _topography;
 
   delete topography_renderer;
-  topography_renderer = topology != NULL
-    ? new TopographyRenderer(*topology)
+  topography_renderer = topography != NULL
+    ? new TopographyRenderer(*topography)
     : NULL;
 }
 
