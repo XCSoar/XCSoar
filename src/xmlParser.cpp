@@ -170,7 +170,7 @@ fromXMLString(LPCTSTR ss, int lo)
   /* allocate a buffer with the size of the input string; we know for
      sure that this is enough, because resolving entities can only
      shrink the string, but never grows */
-  TCHAR *d = (TCHAR *)malloc((_tcslen(ss) + 1) * sizeof(*d));
+  TCHAR *d = (TCHAR *)malloc((lo + 1) * sizeof(*d));
   assert(d);
   TCHAR *result = d;
   while (ss < end && *ss) {
