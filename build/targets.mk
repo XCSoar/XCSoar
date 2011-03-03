@@ -29,10 +29,7 @@ ifeq ($(TARGET),PC)
 endif
 
 ifeq ($(TARGET),CYGWIN)
-  CONFIG_CYGWIN := y
   WINHOST := y
-else
-  CONFIG_CYGWIN := n
 endif
 
 ifeq ($(TARGET),ALTAIR)
@@ -64,7 +61,7 @@ ifeq ($(CONFIG_PC),y)
   MCPU := -march=$(CPU)
 endif
 
-ifeq ($(CONFIG_CYGWIN),y)
+ifeq ($(TARGET),CYGWIN)
   TCPATH := i686-pc-cygwin-
   CPU := i586
   MCPU := -march=$(CPU)
@@ -175,7 +172,7 @@ ifeq ($(CONFIG_PC),y)
   TARGET := PC
 endif
 
-ifeq ($(CONFIG_CYGWIN),y)
+ifeq ($(TARGET),CYGWIN)
   WINVER = 0x0500
 endif
 
@@ -205,7 +202,7 @@ endif
 ifeq ($(HAVE_WIN32),y)
   TARGET_CPPFLAGS += -DWIN32_LEAN_AND_MEAN
   TARGET_CPPFLAGS += -DNOMINMAX
-  ifeq ($(CONFIG_CYGWIN),y)
+  ifeq ($(TARGET),CYGWIN)
   TARGET_CPPFLAGS += -DWIN32
   endif
 endif
@@ -293,7 +290,7 @@ ifeq ($(TARGET),PC)
 endif
 
 ifeq ($(HAVE_WIN32),y)
-  ifeq ($(CONFIG_PC)$(CONFIG_CYGWIN),nn)
+  ifeq ($(HAVE_CE),y)
     TARGET_LDFLAGS := -Wl,--major-subsystem-version=$(CE_MAJOR)
     TARGET_LDFLAGS += -Wl,--minor-subsystem-version=$(CE_MINOR)
   endif
@@ -323,7 +320,7 @@ ifeq ($(CONFIG_PC),y)
   TARGET_LDLIBS := -lwinmm -lstdc++
 endif
 
-ifeq ($(CONFIG_CYGWIN),y)
+ifeq ($(TARGET),CYGWIN)
   TARGET_LDLIBS := -lwinmm -lstdc++
   TARGET_LDLIBS += -lintl
 endif
