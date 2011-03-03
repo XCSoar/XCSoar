@@ -1084,7 +1084,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Topology/TopographyFile.cpp \
 	$(SRC)/Topology/TopographyStore.cpp \
 	$(SRC)/Topology/TopographyRenderer.cpp \
-	$(SRC)/Topology/TopologyGlue.cpp \
+	$(SRC)/Topology/TopographyGlue.cpp \
 	$(SRC)/Topology/XShape.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/UnitsFormatter.cpp \

@@ -29,7 +29,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "AirfieldDetails.h"
 #include "Topology/TopographyStore.hpp"
-#include "Topology/TopologyGlue.hpp"
+#include "Topology/TopographyGlue.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Device/device.hpp"
 #include "Message.hpp"

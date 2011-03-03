@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef TOPOLOGY_GLUE_H
-#define TOPOLOGY_GLUE_H
+#ifndef TOPOGRAPHY_GLUE_H
+#define TOPOGRAPHY_GLUE_H
 
 class TopographyStore;
 
