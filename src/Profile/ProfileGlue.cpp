@@ -224,7 +224,7 @@ Profile::Use()
   Get(szProfileDisplayTrackBearing, Temp);
   settings_map.DisplayTrackBearing = (DisplayTrackBearing_t) Temp;
 
-  Get(szProfileDrawTopology,
+  Get(szProfileDrawTopography,
       settings_map.EnableTopography);
 
   Get(szProfileDrawTerrain,

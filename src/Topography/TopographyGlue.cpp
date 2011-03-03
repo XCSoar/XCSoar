@@ -45,7 +45,7 @@ static bool
 LoadConfiguredTopographyFile(TopographyStore &store)
 {
   TCHAR file[MAX_PATH];
-  if (!Profile::GetPath(szProfileTopologyFile, file))
+  if (!Profile::GetPath(szProfileTopographyFile, file))
     return false;
 
   FileLineReaderA reader(file);

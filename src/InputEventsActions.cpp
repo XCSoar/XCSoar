@@ -1596,7 +1596,7 @@ InputEvents::sub_TerrainTopology(int vswitch)
   }
 
   /* save new values to profile */
-  Profile::Set(szProfileDrawTopology,
+  Profile::Set(szProfileDrawTopography,
                XCSoarInterface::SettingsMap().EnableTopography);
   Profile::Set(szProfileDrawTerrain,
                XCSoarInterface::SettingsMap().EnableTerrain);

@@ -1385,7 +1385,7 @@ setVariables()
   InitFileField(*wf, _T("prpTerrainFile"),
                 szProfileTerrainFile, _T("*.jp2\0"));
   InitFileField(*wf, _T("prpTopographyFile"),
-                szProfileTopologyFile, _T("*.tpl\0"));
+                szProfileTopographyFile, _T("*.tpl\0"));
   InitFileField(*wf, _T("prpAirfieldFile"),
                 szProfileAirfieldFile, _T("*.txt\0"));
 
@@ -2135,7 +2135,7 @@ void dlgConfigurationShowModal(void)
                               XCSoarInterface::SetSettingsMap().EnableTerrain);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableTopography"),
-                              szProfileDrawTopology,
+                              szProfileDrawTopography,
                               XCSoarInterface::SetSettingsMap().EnableTopography);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSlopeShadingType"));
@@ -2260,7 +2260,7 @@ void dlgConfigurationShowModal(void)
                                        szProfileTerrainFile);
 
   TopographyFileChanged = FinishFileField(*wf, _T("prpTopographyFile"),
-                                        szProfileTopologyFile);
+                                        szProfileTopographyFile);
 
   AirfieldFileChanged = FinishFileField(*wf, _T("prpAirfieldFile"),
                                         szProfileAirfieldFile);
