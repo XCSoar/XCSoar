@@ -387,26 +387,38 @@ InputEvents::eventPan(const TCHAR *misc)
   XCSoarInterface::SendSettingsMap(true);
 }
 
-// Do JUST Terrain/Toplogy (toggle any, on/off any, show)
 void
 InputEvents::eventTerrainTopology(const TCHAR *misc)
 {
+  eventTerrainTopography(misc);
+}
+
+// Do JUST Terrain/Topography (toggle any, on/off any, show)
+void
+InputEvents::eventTerrainTopography(const TCHAR *misc)
+{
   if (_tcscmp(misc, _T("terrain toggle")) == 0)
-    sub_TerrainTopology(-2);
+    sub_TerrainTopography(-2);
+  else if (_tcscmp(misc, _T("topography toggle")) == 0)
+    sub_TerrainTopography(-3);
   else if (_tcscmp(misc, _T("topology toggle")) == 0)
-    sub_TerrainTopology(-3);
+    sub_TerrainTopography(-3);
   else if (_tcscmp(misc, _T("terrain on")) == 0)
-    sub_TerrainTopology(3);
+    sub_TerrainTopography(3);
   else if (_tcscmp(misc, _T("terrain off")) == 0)
-    sub_TerrainTopology(4);
+    sub_TerrainTopography(4);
+  else if (_tcscmp(misc, _T("topography on")) == 0)
+    sub_TerrainTopography(1);
+  else if (_tcscmp(misc, _T("topography off")) == 0)
+    sub_TerrainTopography(2);
   else if (_tcscmp(misc, _T("topology on")) == 0)
-    sub_TerrainTopology(1);
+    sub_TerrainTopography(1);
   else if (_tcscmp(misc, _T("topology off")) == 0)
-    sub_TerrainTopology(2);
+    sub_TerrainTopography(2);
   else if (_tcscmp(misc, _T("show")) == 0)
-    sub_TerrainTopology(0);
+    sub_TerrainTopography(0);
   else if (_tcscmp(misc, _T("toggle")) == 0)
-    sub_TerrainTopology(-1);
+    sub_TerrainTopography(-1);
 
   XCSoarInterface::SendSettingsMap(true);
 }
@@ -421,9 +433,9 @@ InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc)
     airspace_warnings->clear_warnings();
     return;
   }
-  // Else toggle TerrainTopology - and show the results
-  sub_TerrainTopology(-1);
-  sub_TerrainTopology(0);
+  // Else toggle TerrainTopography - and show the results
+  sub_TerrainTopography(-1);
+  sub_TerrainTopography(0);
   XCSoarInterface::SendSettingsMap(true);
 }
 
@@ -1531,17 +1543,17 @@ eventSounds			- Include Task and Modes sounds along with Vario
 
 /* Event_TerrainToplogy Changes
    0       Show
-   1       Toplogy = ON
-   2       Toplogy = OFF
+   1       Topography = ON
+   2       Topography = OFF
    3       Terrain = ON
    4       Terrain = OFF
    -1      Toggle through 4 stages (off/off, off/on, on/off, on/on)
    -2      Toggle terrain
-   -3      Toggle toplogy
+   -3      Toggle topography
  */
 
 void
-InputEvents::sub_TerrainTopology(int vswitch)
+InputEvents::sub_TerrainTopography(int vswitch)
 {
   if (vswitch == -1) {
     // toggle through 4 possible options
@@ -1563,14 +1575,14 @@ InputEvents::sub_TerrainTopology(int vswitch)
     XCSoarInterface::SetSettingsMap().EnableTerrain =
         !XCSoarInterface::SettingsMap().EnableTerrain;
   else if (vswitch == -3)
-    // toggle topology
+    // toggle topography
     XCSoarInterface::SetSettingsMap().EnableTopography =
         !XCSoarInterface::SettingsMap().EnableTopography;
   else if (vswitch == 1)
-    // Turn on topology
+    // Turn on topography
     XCSoarInterface::SetSettingsMap().EnableTopography = true;
   else if (vswitch == 2)
-    // Turn off topology
+    // Turn off topography
     XCSoarInterface::SetSettingsMap().EnableTopography = false;
   else if (vswitch == 3)
     // Turn on terrain
@@ -1579,7 +1591,7 @@ InputEvents::sub_TerrainTopology(int vswitch)
     // Turn off terrain
     XCSoarInterface::SetSettingsMap().EnableTerrain = false;
   else if (vswitch == 0) {
-    // Show terrain/Topology
+    // Show terrain/topography
     // ARH Let user know what's happening
     TCHAR buf[128];
 
@@ -1591,7 +1603,7 @@ InputEvents::sub_TerrainTopology(int vswitch)
     _tcscat(buf, XCSoarInterface::SettingsMap().EnableTerrain
             ? _("On") : _("Off"));
 
-    Message::AddMessage(_("Topology / Terrain"), buf);
+    Message::AddMessage(_("Topography / Terrain"), buf);
     return;
   }
 

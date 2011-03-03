@@ -578,14 +578,14 @@ location=6
 mode=Display2
 type=key
 data=8
-event=TerrainTopology terrain toggle
+event=TerrainTopography terrain toggle
 label=Terrain $(TerrainToggleActionName)
 location=7
 
 mode=Display2
 type=key
 data=9
-event=TerrainTopology topology toggle
+event=TerrainTopography topology toggle
 label=Topology $(TopologyToggleActionName)
 location=8
 

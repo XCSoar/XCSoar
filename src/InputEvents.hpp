@@ -75,7 +75,7 @@ namespace InputEvents
 
   // helpers (temporary)
 
-  void sub_TerrainTopology(int vswitch);
+  void sub_TerrainTopography(int vswitch);
   void sub_Pan(int vswitch);
   void sub_PanCursor(int dx, int dy);
   void sub_AutoZoom(int vswitch);
@@ -128,6 +128,7 @@ namespace InputEvents
   void eventTaskLoad(const TCHAR *misc);
   void eventTaskSave(const TCHAR *misc);
   void eventTaskTransition(const TCHAR *misc);
+  void eventTerrainTopography(const TCHAR *misc);
   void eventTerrainTopology(const TCHAR *misc);
   void eventWaypointDetails(const TCHAR *misc);
   void eventWind(const TCHAR *misc);
