@@ -3,88 +3,108 @@ TARGETS = PC PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID CYGWIN
 # These targets are built when you don't specify the TARGET variable.
 DEFAULT_TARGETS = PC PPC2000 PPC2003 WM5 ALTAIR WINE
 
-CONFIG_PPC2003 := n
 HAVE_CE := n
 HAVE_FPU := y
 XSCALE := n
 
+HAVE_POSIX := n
+HAVE_WIN32 := y
+HAVE_MSVCRT := y
+
 ifeq ($(TARGET),PPC2000)
+  CE_MAJOR := 3
+  CE_MINOR := 00
+  PCPU := ARM
+
   HAVE_CE := y
 endif
 
 ifeq ($(TARGET),PPC2003)
-  CONFIG_PPC2003 := y
+  CE_MAJOR := 4
+  CE_MINOR := 00
+  PCPU := ARMV4
+
   HAVE_CE := y
 endif
 
 ifeq ($(TARGET),PPC2003X)
-  CONFIG_PPC2003 := y
+  CE_MAJOR := 4
+  CE_MINOR := 00
+  PCPU := ARMV4
+
   HAVE_CE := y
   XSCALE := y
 endif
-
-ifeq ($(TARGET),PC)
-endif
-
-ifeq ($(TARGET),CYGWIN)
-  WINHOST := y
-endif
-
-ifeq ($(TARGET),ALTAIR)
-  HAVE_CE := y
-  XSCALE := y
-endif
-
-ifeq ($(TARGET),WM5)
-  CONFIG_WM5 := y
-  HAVE_CE := y
-endif
-
-ifeq ($(TARGET),WM5X)
-  CONFIG_WM5 := y
-  HAVE_CE := y
-  XSCALE := y
-endif
-
-############# build and CPU info
 
 ifeq ($(TARGET),PC)
   TCPATH := i586-mingw32msvc-
-
   ifeq ($(WINHOST),y)
     TCPATH :=
   endif
 
   CPU := i586
   MCPU := -march=$(CPU)
+
+  WINVER = 0x0500
 endif
 
 ifeq ($(TARGET),CYGWIN)
-  TCPATH := i686-pc-cygwin-
+  TCPATH :=
+
   CPU := i586
   MCPU := -march=$(CPU)
+
+  WINVER = 0x0500
+  WINHOST := y
+
+  HAVE_POSIX := y
+  HAVE_WIN32 := y
+  HAVE_MSVCRT := n
+  HAVE_VASPRINTF := y
+endif
+
+ifeq ($(TARGET),ALTAIR)
+  CE_MAJOR := 5
+  CE_MINOR := 00
+
+  HAVE_CE := y
+  XSCALE := y
+endif
+
+ifeq ($(TARGET),WM5)
+  PCPU := ARMV4
+  CE_MAJOR := 5
+  CE_MINOR := 00
+
+  HAVE_CE := y
+endif
+
+ifeq ($(TARGET),WM5X)
+  PCPU := ARMV4
+  CE_MAJOR := 5
+  CE_MINOR := 00
+
+  HAVE_CE := y
+  XSCALE := y
 endif
 
 ifeq ($(TARGET),WINE)
   TCPATH := wine
   CPU := i586
   MCPU := -march=$(CPU)
-endif
+  WINVER = 0x0500
 
-ifeq ($(HAVE_CE),y)
-  TCPATH := arm-mingw32ce-
-  CPU := strongarm1110
-  HAVE_FPU := n
-
-  ifeq ($(XSCALE),y)
-    CPU := xscale
-  endif
-
-  MCPU := -mcpu=$(CPU)
+  HAVE_POSIX := y
+  HAVE_MSVCRT := n
 endif
 
 ifeq ($(TARGET),UNIX)
   TCPATH :=
+
+  HAVE_POSIX := y
+  HAVE_WIN32 := n
+  HAVE_MSVCRT := n
+  HAVE_VASPRINTF := y
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -103,78 +123,22 @@ ifeq ($(TARGET),ANDROID)
 
   MCPU := -march=armv5te -mtune=xscale -msoft-float -fpic -mthumb-interwork -ffunction-sections -funwind-tables -fstack-protector -fno-short-enums
   HAVE_FPU := n
-endif
-
-ifeq ($(TARGET),CYGWIN)
-  TCPATH :=
-endif
-
-############# platform info
-
-HAVE_POSIX := n
-HAVE_WIN32 := y
-HAVE_MSVCRT := y
-
-ifeq ($(TARGET),WINE)
-  HAVE_POSIX := y
-  HAVE_MSVCRT := n
-endif
-
-ifeq ($(TARGET),UNIX)
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
   HAVE_VASPRINTF := y
 endif
 
-ifeq ($(TARGET),ANDROID)
-  HAVE_POSIX := y
-  HAVE_WIN32 := n
-  HAVE_MSVCRT := n
-  HAVE_VASPRINTF := y
-endif
+ifeq ($(HAVE_CE),y)
+  TCPATH := arm-mingw32ce-
+  CPU := strongarm1110
+  HAVE_FPU := n
 
-ifeq ($(TARGET),CYGWIN)
-  HAVE_POSIX := y
-  HAVE_WIN32 := y
-  HAVE_MSVCRT := n
-  HAVE_VASPRINTF := y
-endif
+  ifeq ($(XSCALE),y)
+    CPU := xscale
+  endif
 
-ifeq ($(TARGET),PPC2000)
-  CE_MAJOR := 3
-  CE_MINOR := 00
-  PCPU := ARM
-endif
-
-ifeq ($(CONFIG_PPC2003),y)
-  CE_MAJOR := 4
-  CE_MINOR := 00
-  PCPU := ARMV4
-endif
-
-ifeq ($(CONFIG_WM5),y)
-  CE_MAJOR := 5
-  CE_MINOR := 00
-  PCPU := ARMV4
-endif
-
-# armv4i
-ifeq ($(TARGET),ALTAIR)
-  CE_MAJOR := 5
-  CE_MINOR := 00
-endif
-
-ifneq ($(filter PC WINE,$(TARGET)),)
-  WINVER = 0x0500
-endif
-
-ifeq ($(TARGET),CYGWIN)
-  WINVER = 0x0500
-endif
-
-ifeq ($(TARGET),WINE)
-  WINVER = 0x0500
+  MCPU := -mcpu=$(CPU)
 endif
 
 ######## target definitions
