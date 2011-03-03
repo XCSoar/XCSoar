@@ -730,7 +730,42 @@
         <DataField DataType="boolean"/>
       </Edit>
     </Panel>
-  
+
+    <Panel Name="frmPages">
+      <Edit Name="prpPageLayout0" Caption="Page 1" X="2" Width="-2" Height="22" CaptionWidth="100"
+         Help="Determines the information displayed on different screen pages.">
+        <DataField DataType="enum" />
+      </Edit>
+      <Edit Name="prpPageLayout1" Caption="Page 2" X="2" Width="-2" Height="22" CaptionWidth="100"
+         Help="Determines the information displayed on different screen pages.">
+        <DataField DataType="enum" />
+      </Edit>
+      <Edit Name="prpPageLayout2" Caption="Page 3" X="2" Width="-2" Height="22" CaptionWidth="100"
+         Help="Determines the information displayed on different screen pages.">
+        <DataField DataType="enum" />
+      </Edit>
+      <Edit Name="prpPageLayout3" Caption="Page 4" X="2" Width="-2" Height="22" CaptionWidth="100"
+         Help="Determines the information displayed on different screen pages.">
+        <DataField DataType="enum" />
+      </Edit>
+      <Edit Name="prpPageLayout4" Caption="Page 5" X="2" Width="-2" Height="22" CaptionWidth="100"
+         Help="Determines the information displayed on different screen pages.">
+        <DataField DataType="enum" />
+      </Edit>
+      <Edit Name="prpPageLayout5" Caption="Page 6" X="2" Width="-2" Height="22" CaptionWidth="100"
+         Help="Determines the information displayed on different screen pages.">
+        <DataField DataType="enum" />
+      </Edit>
+      <Edit Name="prpPageLayout6" Caption="Page 7" X="2" Width="-2" Height="22" CaptionWidth="100"
+         Help="Determines the information displayed on different screen pages.">
+        <DataField DataType="enum" />
+      </Edit>
+      <Edit Name="prpPageLayout7" Caption="Page 8" X="2" Width="-2" Height="22" CaptionWidth="100"
+         Help="Determines the information displayed on different screen pages.">
+        <DataField DataType="enum" />
+      </Edit>
+    </Panel>
+
     <Panel Name="frmSpecials">
       <Edit Name="prpAppInfoBoxModel" Caption="Device model" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Select your PNA model to make full use of its hardware capabilities. If it is not included, use Generic type.">

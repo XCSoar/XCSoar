@@ -74,6 +74,7 @@ Copyright_License {
 #include "UnitsStore.hpp"
 #include "LogFile.hpp"
 #include "LanguageGlue.hpp"
+#include "PagesConfigPanel.hpp"
 
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"
@@ -101,6 +102,7 @@ enum config_page {
   PAGE_TASK_DEFAULTS,
   PAGE_INFOBOXES,
   PAGE_LOGGER,
+  PAGE_PAGES,
   PAGE_EXPERIMENTAL,
 };
 
@@ -124,6 +126,7 @@ static const TCHAR *const captions[] = {
   N_("Default task turnpoints"),
   N_("InfoBoxes"),
   N_("Logger"),
+  N_("Pages"),
   N_("Experimental features"),
 };
 
@@ -1350,6 +1353,8 @@ setVariables()
     dfe->Set(XCSoarInterface::SettingsMap().TrailActive);
     wp->RefreshDisplay();
   }
+
+  PagesConfigPanel::Init(wf);
 
   SimplePolar polar;
   if (!PolarGlue::LoadFromProfile(polar)) {
@@ -2811,6 +2816,8 @@ void dlgConfigurationShowModal(void)
     PolarGlue::LoadFromProfile(gp);
     protected_task_manager->set_glide_polar(gp);
   }
+
+  changed |= PagesConfigPanel::Save(wf);
 
   if (DevicePortChanged)
     for (unsigned i = 0; i < NUMDEV; ++i)
