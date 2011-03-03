@@ -35,6 +35,8 @@ Copyright_License {
 
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Screen/Layout.hpp"
+#include "DataField/Float.hpp"
+#include "DataField/Base.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -61,11 +63,27 @@ InfoBoxContentAltitude::PnlInfoLoad(SingleWindow &parent, TabBarControl* wTabBar
       LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXALTITUDEINFO"));
   assert(wInfoBoxAccessInfo);
 
+  wf->SetTimerNotify(OnTimerNotify);
+
   return wInfoBoxAccessInfo;
+}
+
+void
+InfoBoxContentAltitude::OnTimerNotify(WndForm &Sender)
+{
+  (void)Sender;
+
+  PnlInfoUpdate();
 }
 
 bool
 InfoBoxContentAltitude::PnlInfoOnTabPreShow(TabBarControl::EventType EventType)
+{
+  return PnlInfoUpdate();
+}
+
+bool
+InfoBoxContentAltitude::PnlInfoUpdate()
 {
   const DERIVED_INFO &calculated = CommonInterface::Calculated();
   const NMEA_INFO &basic = CommonInterface::Basic();
@@ -132,7 +150,27 @@ InfoBoxContentAltitude::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBa
       LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXALTITUDESETUP"));
   assert(wInfoBoxAccessSetup);
 
+  LoadFormProperty(*wf, _T("prpQNH"),
+                   XCSoarInterface::Basic().pressure.get_QNH());
+
   return wInfoBoxAccessSetup;
+}
+
+void
+InfoBoxContentAltitude::PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode)
+{
+  DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
+
+  switch (Mode) {
+  case DataField::daChange:
+    device_blackboard.SetQNH(Sender->GetAsFixed());
+    break;
+
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daSpecial:
+    return;
+  }
 }
 
 void
@@ -159,6 +197,7 @@ InfoBoxContentAltitude::InfoBoxPanelContent (
 };
 
 CallBackTableEntry InfoBoxContentAltitude::CallBackTable[] = {
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSetupOnQNH),
   DeclareCallBackEntry(InfoBoxContentAltitude::PnlSetupOnSetup),
 
   DeclareCallBackEntry(NULL)

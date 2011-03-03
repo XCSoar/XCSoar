@@ -27,6 +27,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/Button.hpp"
+#include "DataField/Base.hpp"
 
 class InfoBoxContentAltitude : public InfoBoxContent
 {
@@ -37,7 +38,9 @@ public:
   virtual InfoBoxDlgContent* GetInfoBoxDlgContent();
 
   static Window* PnlInfoLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
+  static void OnTimerNotify(WndForm &Sender);
   static bool PnlInfoOnTabPreShow(TabBarControl::EventType EventType);
+  static bool PnlInfoUpdate();
 
   static CallBackTableEntry CallBackTable[];
   static InfoBoxPanelContent Panels[];
@@ -45,6 +48,7 @@ public:
   static InfoBoxDlgContent dlgContent;
 
   static Window* PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
+  static void PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode);
   static void PnlSetupOnSetup(WndButton &Sender);
 };
 
