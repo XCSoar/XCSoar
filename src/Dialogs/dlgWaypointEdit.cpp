@@ -250,9 +250,9 @@ static void SetValues(void) {
     dfe->addEnumText(_T("Airport"));
     dfe->addEnumText(_T("Landpoint"));
 
-    if (global_wpt->Flags.Airport) {
+    if (global_wpt->is_airport()) {
       dfe->Set(1);
-    } else if (global_wpt->Flags.LandPoint) {
+    } else if (global_wpt->is_landable()) {
       dfe->Set(2);
     } else {
       dfe->Set(0);
