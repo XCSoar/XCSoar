@@ -177,7 +177,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   for (AlternateVector::iterator v = approx_waypoints.begin();
        v != approx_waypoints.end();) {
 
-    if (only_airfield && !v->first.Flags.Airport) {
+    if (only_airfield && !v->first.is_airport()) {
       ++v;
       continue;
     }
