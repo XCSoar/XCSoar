@@ -17,7 +17,7 @@
   <Tabbed Name="tabbed" X="70" Y="0" Width="0" Height="222">
     <Panel Name="frmSite">
       <Edit Name="prpMapFile" Caption="Map Database" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="The name of the file (.xcm) containing terrain, topology, and optionally waypoints, their details and airspaces.">
+        Help="The name of the file (.xcm) containing terrain, topography, and optionally waypoints, their details and airspaces.">
         <DataField DataType="filereader" />
       </Edit>
     
@@ -44,7 +44,7 @@
         <DataField DataType="filereader" />
       </Edit>
     
-      <Edit Name="prpTopographyFile" Caption="Topology file*" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Specifies the file defining the topological features.">
+      <Edit Name="prpTopographyFile" Caption="Topography file*" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Specifies the file defining the topological features.">
         <DataField DataType="filereader" />
       </Edit>
     
@@ -205,7 +205,7 @@
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpEnableTopography" Caption="Topology display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topological features (roads, rivers, lakes etc) on the map.  Requires the topology file to be specified.">
+      <Edit Name="prpEnableTopography" Caption="Topography display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topological features (roads, rivers, lakes etc) on the map.  Requires the topography file to be specified.">
         <DataField DataType="boolean" />
       </Edit>
     
