@@ -22,56 +22,29 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
-#include "Asset.hpp"
-
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Globals.hpp"
-#endif
+#include "PeriodClock.hpp"
 
 #ifdef ANDROID
 #include "Screen/Android/Event.hpp"
 #include "Screen/OpenGL/Surface.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
-#include "PeriodClock.hpp"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Event.hpp"
-#include "PeriodClock.hpp"
 #else
-#include "Screen/GDI/Event.hpp"
-#if defined(GNAV) && !defined(PCGNAV)
-#include "resource.h" /* for IDI_XCSOAR */
+#include "Screen/SDL/Event.hpp"
 #endif
-#endif /* !ENABLE_SDL */
 
 TopWindow::TopWindow()
-#ifdef ENABLE_SDL
   :invalidated(false)
 #ifdef ANDROID
   , paused(false), resumed(false)
 #endif
-#else
-  :hSavedFocus(NULL)
-#endif
 {
-#ifdef HAVE_AYGSHELL_DLL
-  memset(&s_sai, 0, sizeof(s_sai));
-  s_sai.cbSize = sizeof(s_sai);
-#endif
 }
 
 bool
 TopWindow::find(const TCHAR *cls, const TCHAR *text)
 {
-#ifdef ENABLE_SDL
   return false; // XXX
-#else /* !ENABLE_SDL */
-  HWND h = FindWindow(cls, text);
-  if (h != NULL)
-      SetForegroundWindow((HWND)((ULONG) h | 0x00000001));
-
-  return h != NULL;
-#endif /* !ENABLE_SDL */
 }
 
 void
@@ -81,7 +54,6 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
   WindowStyle style;
   style.popup();
 
-#ifdef ENABLE_SDL
   screen.set();
 
   /* apply the mode which was chosen by TopCanvas */
@@ -101,34 +73,13 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
 
   ::SDL_WM_SetCaption(text2, NULL);
 #endif
-#else /* !ENABLE_SDL */
-  Window::set(NULL, cls, text, left, top, width, height, style);
-#endif /* !ENABLE_SDL */
 }
 
 void
 TopWindow::full_screen()
 {
-#ifdef ENABLE_SDL
   screen.full_screen();
-#else /* !ENABLE_SDL */
-  ::SetForegroundWindow(hWnd);
-#ifndef _WIN32_WCE
-  show_on_top();
-#else
-#ifdef HAVE_AYGSHELL_DLL
-  ayg_shell_dll.SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|
-                             SHFS_HIDESTARTICON);
-#endif
-  ::SetWindowPos(hWnd, HWND_TOP, 0, 0,
-                 GetSystemMetrics(SM_CXSCREEN),
-                 GetSystemMetrics(SM_CYSCREEN),
-                 SWP_SHOWWINDOW);
-#endif
-#endif /* !ENABLE_SDL */
 }
-
-#ifdef ENABLE_SDL
 
 void
 TopWindow::invalidate()
@@ -205,105 +156,19 @@ TopWindow::refresh()
   expose();
 }
 
-#endif /* ENABLE_SDL */
-
 bool
 TopWindow::on_activate()
 {
-#ifndef ENABLE_SDL
-  if (hSavedFocus != NULL && ::IsWindow(hSavedFocus) &&
-      ::IsWindowVisible(hSavedFocus) && ::IsWindowEnabled(hSavedFocus)) {
-    /* restore the keyboard focus to the control which was previously
-       focused */
-    ::SetFocus(hSavedFocus);
-    return true;
-  }
-#endif
-
   return false;
 }
 
 bool
 TopWindow::on_deactivate()
 {
-#ifndef ENABLE_SDL
-  /* remember the currently focused control */
-  hSavedFocus = ::GetFocus();
-  if (hSavedFocus != NULL && !identify_descendant(hSavedFocus))
-    hSavedFocus = NULL;
-#endif
-
   return false;
 }
 
-void
-TopWindow::post_quit()
-{
-#ifdef ANDROID
-  event_queue->push(Event::QUIT);
-#elif defined(ENABLE_SDL)
-  SDL_Event event;
-  event.type = SDL_QUIT;
-  ::SDL_PushEvent(&event);
-#else
-  ::PostQuitMessage(0);
-#endif
-}
-
-#ifdef ANDROID
-
-bool
-TopWindow::on_event(const Event &event)
-{
-  switch (event.type) {
-    Window *w;
-
-  case Event::NOP:
-  case Event::QUIT:
-  case Event::TIMER:
-  case Event::USER:
-    break;
-
-  case Event::KEY_DOWN:
-    w = get_focused_window();
-    if (w == NULL)
-      w = this;
-
-    return w->on_key_down(event.param);
-
-  case Event::KEY_UP:
-    w = get_focused_window();
-    if (w == NULL)
-      w = this;
-
-    return w->on_key_up(event.param);
-
-  case Event::MOUSE_MOTION:
-    // XXX keys
-    return on_mouse_move(event.x, event.y, 0);
-
-  case Event::MOUSE_DOWN:
-    static PeriodClock double_click;
-    return double_click.check_always_update(300)
-      ? on_mouse_down(event.x, event.y)
-      : on_mouse_double(event.x, event.y);
-
-  case Event::MOUSE_UP:
-    return on_mouse_up(event.x, event.y);
-
-  case Event::PAUSE:
-    on_pause();
-    return true;
-
-  case Event::RESUME:
-    on_resume();
-    return true;
-  }
-
-  return false;
-}
-
-#elif defined(ENABLE_SDL)
+#ifndef ANDROID
 
 bool
 TopWindow::on_event(const SDL_Event &event)
@@ -350,44 +215,9 @@ TopWindow::on_event(const SDL_Event &event)
   return false;
 }
 
-#else /* !ENABLE_SDL */
-
-LRESULT TopWindow::on_message(HWND _hWnd, UINT message,
-			       WPARAM wParam, LPARAM lParam) {
-  switch (message) {
-  case WM_ACTIVATE:
-#ifdef HAVE_AYGSHELL_DLL
-    ayg_shell_dll.SHHandleWMActivate(_hWnd, wParam, lParam, &s_sai, FALSE);
-#endif
-
-    if (wParam == WA_INACTIVE ? on_deactivate() : on_activate())
-      return true;
-    break;
-
-  case WM_SETTINGCHANGE:
-#ifdef HAVE_AYGSHELL_DLL
-    ayg_shell_dll.SHHandleWMSettingChange(_hWnd, wParam, lParam, &s_sai);
-#endif
-    break;
-  };
-  return ContainerWindow::on_message(_hWnd, message, wParam, lParam);
-}
-#endif /* !ENABLE_SDL */
-
 int
 TopWindow::event_loop()
 {
-#ifdef ANDROID
-  update();
-
-  EventLoop loop(*event_queue, *this);
-  Event event;
-  while (loop.get(event))
-    loop.dispatch(event);
-
-  return 0;
-
-#elif defined(ENABLE_SDL)
   update();
 
   EventLoop loop(*this);
@@ -396,14 +226,14 @@ TopWindow::event_loop()
     loop.dispatch(event);
 
   return 0;
-
-#else /* !ENABLE_SDL */
-
-  EventLoop loop;
-  MSG msg;
-  while (loop.get(msg))
-    loop.dispatch(msg);
-
-  return msg.wParam;
-#endif /* !ENABLE_SDL */
 }
+
+void
+TopWindow::post_quit()
+{
+  SDL_Event event;
+  event.type = SDL_QUIT;
+  ::SDL_PushEvent(&event);
+}
+
+#endif /* !ANDROID */

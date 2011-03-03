@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
+#include "PeriodClock.hpp"
 
 void
 TopWindow::on_pause()
@@ -85,4 +86,74 @@ TopWindow::resume()
 {
   event_queue->purge(match_pause_and_resume, NULL);
   event_queue->push(Event::RESUME);
+}
+
+bool
+TopWindow::on_event(const Event &event)
+{
+  switch (event.type) {
+    Window *w;
+
+  case Event::NOP:
+  case Event::QUIT:
+  case Event::TIMER:
+  case Event::USER:
+    break;
+
+  case Event::KEY_DOWN:
+    w = get_focused_window();
+    if (w == NULL)
+      w = this;
+
+    return w->on_key_down(event.param);
+
+  case Event::KEY_UP:
+    w = get_focused_window();
+    if (w == NULL)
+      w = this;
+
+    return w->on_key_up(event.param);
+
+  case Event::MOUSE_MOTION:
+    // XXX keys
+    return on_mouse_move(event.x, event.y, 0);
+
+  case Event::MOUSE_DOWN:
+    static PeriodClock double_click;
+    return double_click.check_always_update(300)
+      ? on_mouse_down(event.x, event.y)
+      : on_mouse_double(event.x, event.y);
+
+  case Event::MOUSE_UP:
+    return on_mouse_up(event.x, event.y);
+
+  case Event::PAUSE:
+    on_pause();
+    return true;
+
+  case Event::RESUME:
+    on_resume();
+    return true;
+  }
+
+  return false;
+}
+
+int
+TopWindow::event_loop()
+{
+  update();
+
+  EventLoop loop(*event_queue, *this);
+  Event event;
+  while (loop.get(event))
+    loop.dispatch(event);
+
+  return 0;
+}
+
+void
+TopWindow::post_quit()
+{
+  event_queue->push(Event::QUIT);
 }
