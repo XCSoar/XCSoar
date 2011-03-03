@@ -11,6 +11,8 @@ HAVE_POSIX := n
 HAVE_WIN32 := y
 HAVE_MSVCRT := y
 
+TARGET_ARCH :=
+
 ifeq ($(TARGET),PPC2000)
   CE_MAJOR := 3
   CE_MINOR := 00
@@ -42,8 +44,7 @@ ifeq ($(TARGET),PC)
     TCPATH :=
   endif
 
-  CPU := i586
-  MCPU := -march=$(CPU)
+  TARGET_ARCH += -march=i586
 
   WINVER = 0x0500
 endif
@@ -51,8 +52,7 @@ endif
 ifeq ($(TARGET),CYGWIN)
   TCPATH :=
 
-  CPU := i586
-  MCPU := -march=$(CPU)
+  TARGET_ARCH += -march=i586
 
   WINVER = 0x0500
   WINHOST := y
@@ -90,8 +90,7 @@ endif
 
 ifeq ($(TARGET),WINE)
   TCPATH := wine
-  CPU := i586
-  MCPU := -march=$(CPU)
+  TARGET_ARCH += -march=i586
   WINVER = 0x0500
 
   HAVE_POSIX := y
@@ -121,7 +120,8 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)/prebuilt/linux-x86
   TCPATH = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI2)-
 
-  MCPU := -march=armv5te -mtune=xscale -msoft-float -fpic -mthumb-interwork -ffunction-sections -funwind-tables -fstack-protector -fno-short-enums
+  TARGET_ARCH += -march=armv5te -mtune=xscale -msoft-float -mthumb-interwork
+  TARGET_ARCH += -fpic -ffunction-sections -funwind-tables -fstack-protector -fno-short-enums
   HAVE_FPU := n
   HAVE_POSIX := y
   HAVE_WIN32 := n
@@ -131,14 +131,13 @@ endif
 
 ifeq ($(HAVE_CE),y)
   TCPATH := arm-mingw32ce-
-  CPU := strongarm1110
   HAVE_FPU := n
 
   ifeq ($(XSCALE),y)
-    CPU := xscale
+    TARGET_ARCH += -mcpu=xscale
+  else
+    TARGET_ARCH += -mcpu=strongarm1110
   endif
-
-  MCPU := -mcpu=$(CPU)
 endif
 
 ######## target definitions
@@ -213,8 +212,6 @@ endif
 
 ####### compiler target
 
-TARGET_ARCH := $(MCPU)
-
 ifeq ($(HAVE_WIN32),y)
   TARGET_ARCH += -mwin32
 
@@ -232,7 +229,6 @@ endif
 
 ifeq ($(TARGET),CYGWIN)
   WINDRESFLAGS += -I./Data
-  TARGET_ARCH :=
 endif
 
 ####### linker configuration
