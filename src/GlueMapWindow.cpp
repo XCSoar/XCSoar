@@ -80,7 +80,7 @@ bool
 GlueMapWindow::Idle()
 {
   bool still_dirty;
-  bool topology_dirty = true; /* scan topology in every Idle() call */
+  bool topography_dirty = true; /* scan topography in every Idle() call */
   bool terrain_dirty = true;
   bool weather_dirty = true;
 
@@ -90,7 +90,7 @@ GlueMapWindow::Idle()
     idle_robin = (idle_robin + 1) % 3;
     switch (idle_robin) {
     case 0:
-      topology_dirty = UpdateTopology(1) > 0;
+      topography_dirty = UpdateTopology(1) > 0;
       break;
 
     case 1:
@@ -102,7 +102,7 @@ GlueMapWindow::Idle()
       break;
     }
 
-    still_dirty = terrain_dirty || topology_dirty || weather_dirty;
+    still_dirty = terrain_dirty || topography_dirty || weather_dirty;
   } while (RenderTimeAvailable() &&
 #ifndef ENABLE_OPENGL
            !draw_thread->is_triggered() &&
