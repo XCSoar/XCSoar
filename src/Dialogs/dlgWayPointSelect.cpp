@@ -508,9 +508,9 @@ PaintWaypoint(Canvas &canvas, const RECT rc,
 
   if (way_point.Flags.Home)
     buffer[0] = 'H';
-  else if (way_point.Flags.Airport)
+  else if (way_point.is_airport())
     buffer[0] = 'A';
-  else if (way_point.Flags.LandPoint)
+  else if (way_point.is_landable())
     buffer[0] = 'L';
 
   if (way_point.Flags.TurnPoint) {
