@@ -57,6 +57,16 @@ dlgTaskManager::GetTurnpointTab()
   return TurnpointTab;
 }
 
+void
+dlgTaskManager::SetTitle()
+{
+  TCHAR title[99];
+//  dlgTaskManager::SetTitleSuffix(wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
+
+  _stprintf(title, _T("Task Manager - %s"), wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
+  wf->SetCaption(title);
+}
+
 bool
 dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
 {
@@ -219,9 +229,9 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     assert(wBlackRect);
     const unsigned TabLineHeight = wTabBar->GetTabLineHeight();
     wBlackRect->move(0,
-        wTabBar->GetTabHeight() - TabLineHeight,
-        wf->get_width() - wTabBar->GetTabWidth() + TabLineHeight,
-        TabLineHeight);
+                     wTabBar->GetTabHeight() - TabLineHeight - Layout::Scale(2),
+                     wf->get_width() - wTabBar->GetTabWidth() + TabLineHeight,
+                     TabLineHeight + Layout::Scale(2));
     wBlackRect->show_on_top();
   }
 
@@ -251,46 +261,48 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   assert(wLst);
 
   if (Layout::landscape) {
-    wTabBar->AddClient(wCalculator, _T("Calc"), false, NULL, NULL,
-                         pnlTaskCalculator::OnTabPreShow);
+    wTabBar->AddClient(wCalculator, _T("Calculator"), false, &Graphics::hBmpTabCalculator, NULL,
+                       pnlTaskCalculator::OnTabPreShow, dlgTaskManager::SetTitle);
 
-    wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL, NULL,
-                         pnlTaskEdit::OnTabPreShow, NULL,
-                         pnlTaskEdit::OnTabReClick);
+    wTabBar->AddClient(wEdit, _T("Turn points"), false, &Graphics::hBmpTabTask, NULL,
+                       pnlTaskEdit::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskEdit::OnTabReClick);
     TurnpointTab = 1;
 
-    wTabBar->AddClient(wLst, _T("Browse, Declare"), false, NULL, NULL,
-                       pnlTaskList::OnTabPreShow, NULL,
+    wTabBar->AddClient(wLst, _T("Browse"), false, &Graphics::hBmpTabFolder, NULL,
+                       pnlTaskList::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskList::OnTabReClick);
 
-    wTabBar->AddClient(wProps, _T("Properties"), false, NULL,
-                           pnlTaskProperties::OnTabPreHide,
-                           pnlTaskProperties::OnTabPreShow, NULL,
-                           pnlTaskProperties::OnTabReClick);
+    wTabBar->AddClient(wProps, _T("Properties"), false, &Graphics::hBmpTabSettings,
+                       pnlTaskProperties::OnTabPreHide,
+                       pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskProperties::OnTabReClick);
 
-    wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hFinalGlide*/, NULL,
-                           pnlTaskManagerClose::OnTabPreShow, NULL, pnlTaskManagerClose::OnTabReClick);
+    wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hBmpTabClose*/, NULL,
+                       pnlTaskManagerClose::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskManagerClose::OnTabReClick);
 
     wTabBar->SetCurrentPage(0);
   } else {
-    wTabBar->AddClient(wProps, _T("Properties"), false, NULL,
-                           pnlTaskProperties::OnTabPreHide,
-                           pnlTaskProperties::OnTabPreShow, NULL,
-                           pnlTaskProperties::OnTabReClick);
+    wTabBar->AddClient(wProps, _T("Properties"), false, &Graphics::hBmpTabSettings,
+                       pnlTaskProperties::OnTabPreHide,
+                       pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskProperties::OnTabReClick);
 
-    wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hFinalGlide*/, NULL,
-                           pnlTaskManagerClose::OnTabPreShow, NULL, pnlTaskManagerClose::OnTabReClick);
+    wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hBmpTabClose*/, NULL,
+                       pnlTaskManagerClose::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskManagerClose::OnTabReClick);
 
-    wTabBar->AddClient(wCalculator, _T("Calc"), false, NULL, NULL,
-                         pnlTaskCalculator::OnTabPreShow);
+    wTabBar->AddClient(wCalculator, _T("Calculator"), false, &Graphics::hBmpTabCalculator, NULL,
+                       pnlTaskCalculator::OnTabPreShow, dlgTaskManager::SetTitle);
 
-    wTabBar->AddClient(wEdit, _T("Turn points"), false, NULL, NULL,
-                         pnlTaskEdit::OnTabPreShow, NULL,
-                         pnlTaskEdit::OnTabReClick);
+    wTabBar->AddClient(wEdit, _T("Turn points"), false, &Graphics::hBmpTabTask, NULL,
+                       pnlTaskEdit::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskEdit::OnTabReClick);
     TurnpointTab = 3;
 
-    wTabBar->AddClient(wLst, _T("Browse Declare"), false, NULL, NULL,
-                       pnlTaskList::OnTabPreShow, NULL,
+    wTabBar->AddClient(wLst, _T("Browse"), false, &Graphics::hBmpTabFolder, NULL,
+                       pnlTaskList::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskList::OnTabReClick);
     wTabBar->SetCurrentPage(2);
   }

@@ -85,6 +85,8 @@ public:
    * @return Tab index that shows turnpoints
    */
   static unsigned GetTurnpointTab();
+
+  static void SetTitle();
 };
 
 
