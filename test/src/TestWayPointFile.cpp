@@ -233,7 +233,6 @@ TestWinPilotWayPoint(const Waypoint org_wp, const Waypoint *wp)
   ok1(wp->Flags.Home == org_wp.Flags.Home);
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
   ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
-  ok1(wp->Flags.Restricted == org_wp.Flags.Restricted);
   ok1(wp->RunwayDirection == org_wp.RunwayDirection);
 }
 
@@ -269,7 +268,6 @@ TestSeeYouWayPoint(const Waypoint org_wp, const Waypoint *wp)
   //ok1(wp->Flags.Home == org_wp.Flags.Home);
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
   ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
-  ok1(wp->Flags.Restricted == org_wp.Flags.Restricted);
   ok1(wp->Comment == org_wp.Comment);
   ok1(wp->RunwayLength == org_wp.RunwayLength);
   ok1(wp->RunwayDirection == org_wp.RunwayDirection);
@@ -306,7 +304,6 @@ TestZanderWayPoint(const Waypoint org_wp, const Waypoint *wp)
   ok1(wp->Flags.Home == org_wp.Flags.Home);
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
   ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
-  ok1(wp->Flags.Restricted == org_wp.Flags.Restricted);
 }
 
 static void
@@ -353,7 +350,6 @@ CreateOriginalWaypoints()
   wp.Flags.Home = true;
   wp.Flags.StartPoint = false;
   wp.Flags.FinishPoint = false;
-  wp.Flags.Restricted = false;
   org_wp.push_back(wp);
 
   // Aconcagua
@@ -373,7 +369,6 @@ CreateOriginalWaypoints()
   wp2.Flags.Home = false;
   wp2.Flags.StartPoint = false;
   wp2.Flags.FinishPoint = false;
-  wp2.Flags.Restricted = false;
   org_wp.push_back(wp2);
 
   // Golden Gate Bridge
@@ -393,7 +388,6 @@ CreateOriginalWaypoints()
   wp3.Flags.Home = false;
   wp3.Flags.StartPoint = false;
   wp3.Flags.FinishPoint = false;
-  wp3.Flags.Restricted = false;
   org_wp.push_back(wp3);
 
   // Red Square
@@ -413,7 +407,6 @@ CreateOriginalWaypoints()
   wp4.Flags.Home = false;
   wp4.Flags.StartPoint = false;
   wp4.Flags.FinishPoint = false;
-  wp4.Flags.Restricted = false;
   org_wp.push_back(wp4);
 
   // Sydney Opera
@@ -433,7 +426,6 @@ CreateOriginalWaypoints()
   wp5.Flags.Home = false;
   wp5.Flags.StartPoint = false;
   wp5.Flags.FinishPoint = false;
-  wp5.Flags.Restricted = false;
   org_wp.push_back(wp5);
 
   return org_wp;
@@ -443,7 +435,7 @@ int main(int argc, char **argv)
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(63 + 3 * 4 + (11 + 12 + 10) * org_wp.size());
+  plan_tests(63 + 3 * 4 + (10 + 11 + 9) * org_wp.size());
 
   TestExtractParameters();
 

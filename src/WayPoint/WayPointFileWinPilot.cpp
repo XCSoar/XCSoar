@@ -249,10 +249,6 @@ WayPointFileWinPilot::parseFlags(const TCHAR* src, WaypointFlags& dest)
     case 'f':
       dest.FinishPoint = true;
       break;
-    case 'R':
-    case 'r':
-      dest.Restricted = true;
-      break;
     }
   }
 
@@ -342,12 +338,10 @@ WayPointFileWinPilot::composeFlags(TextWriter &writer,
     writer.write('S');
   if (src.FinishPoint)
     writer.write('F');
-  if (src.Restricted)
-    writer.write('R');
 
   // set as turnpoint by default if nothing else
   if (!src.Airport && !src.TurnPoint && !src.LandPoint && !src.Home &&
-      !src.StartPoint && !src.FinishPoint && !src.Restricted)
+      !src.StartPoint && !src.FinishPoint)
     writer.write('T');
 }
 

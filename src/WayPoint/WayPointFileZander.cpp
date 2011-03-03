@@ -181,9 +181,6 @@ WayPointFileZander::parseFlags(const TCHAR* src, WaypointFlags& dest)
              (src[1] == 'L' || src[1] == 'l')) {
     dest.TurnPoint = true;
     dest.LandPoint = true;
-  } else if ((src[0] == 'R' || src[0] == 'r') &&
-             (src[1] == 'A' || src[1] == 'a')) {
-    dest.Restricted = true;
   } else {
     return false;
   }
