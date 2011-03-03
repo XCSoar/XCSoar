@@ -22,7 +22,7 @@ TARGET_CPPFLAGS += -DPROFILE_NO_FILE
 endif
 
 # load the profile into memory instead of Registry?
-PROFILE_MAP ?= $(call bool_or,$(call bool_not,$(HAVE_WIN32)),$(CONFIG_ALTAIR))
+PROFILE_MAP ?= $(call bool_or,$(call bool_not,$(HAVE_WIN32)),$(if $(filter ALTAIR,$(TARGET)),y))
 ifeq ($(PROFILE_MAP),y)
 TARGET_CPPFLAGS += -DUSE_PROFILE_MAP
 endif

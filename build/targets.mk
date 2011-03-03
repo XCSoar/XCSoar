@@ -4,7 +4,6 @@ TARGETS = PC PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID CYGWIN
 DEFAULT_TARGETS = PC PPC2000 PPC2003 WM5 ALTAIR WINE
 
 CONFIG_PPC2003 := n
-CONFIG_ALTAIR := n
 CONFIG_PC := n
 HAVE_CE := n
 HAVE_FPU := y
@@ -37,7 +36,6 @@ else
 endif
 
 ifeq ($(TARGET),ALTAIR)
-  CONFIG_ALTAIR := y
   HAVE_CE := y
   XSCALE := y
 endif
@@ -167,10 +165,9 @@ ifeq ($(CONFIG_WM5),y)
 endif
 
 # armv4i
-ifeq ($(CONFIG_ALTAIR),y)
+ifeq ($(TARGET),ALTAIR)
   CE_MAJOR := 5
   CE_MINOR := 00
-  TARGET := ALTAIR
 endif
 
 ifeq ($(CONFIG_PC),y)
@@ -222,7 +219,7 @@ ifeq ($(TARGET),WINE)
   # -mno-cygwin
 endif
 
-ifeq ($(CONFIG_ALTAIR),y)
+ifeq ($(TARGET),ALTAIR)
   TARGET_CPPFLAGS += -DGNAV
   TARGET_CPPFLAGS += -DDISABLEAUDIO
 endif
