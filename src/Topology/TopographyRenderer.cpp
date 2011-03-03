@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Topology/TopologyRenderer.hpp"
+#include "Topology/TopographyRenderer.hpp"
 #include "Topology/TopographyFile.hpp"
 #include "Topology/XShape.hpp"
 #include "WindowProjection.hpp"
@@ -37,7 +37,7 @@ Copyright_License {
 
 #include <algorithm>
 
-TopologyFileRenderer::TopologyFileRenderer(const TopographyFile &_file)
+TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
   :file(_file), pen(file.get_pen_width(), file.get_color()),
    brush(file.get_color())
 {
@@ -46,7 +46,7 @@ TopologyFileRenderer::TopologyFileRenderer(const TopographyFile &_file)
 }
 
 void
-TopologyFileRenderer::Paint(Canvas &canvas,
+TopographyFileRenderer::Paint(Canvas &canvas,
                             const WindowProjection &projection) const
 {
   fixed map_scale = projection.GetMapScale();
@@ -254,7 +254,7 @@ TopologyFileRenderer::Paint(Canvas &canvas,
 }
 
 void
-TopologyFileRenderer::PaintLabels(Canvas &canvas,
+TopographyFileRenderer::PaintLabels(Canvas &canvas,
                                   const WindowProjection &projection,
                                   LabelBlock &label_block,
                                   const SETTINGS_MAP &settings_map) const
@@ -351,21 +351,21 @@ TopologyFileRenderer::PaintLabels(Canvas &canvas,
   }
 }
 
-TopologyRenderer::TopologyRenderer(const TopographyStore &_store)
+TopographyRenderer::TopographyRenderer(const TopographyStore &_store)
   :store(_store)
 {
   for (unsigned i = 0; i < store.size(); ++i)
-    files[i] = new TopologyFileRenderer(store[i]);
+    files[i] = new TopographyFileRenderer(store[i]);
 }
 
-TopologyRenderer::~TopologyRenderer()
+TopographyRenderer::~TopographyRenderer()
 {
   for (unsigned i = 0; i < store.size(); ++i)
     delete files[i];
 }
 
 void
-TopologyRenderer::Draw(Canvas &canvas,
+TopographyRenderer::Draw(Canvas &canvas,
                        const WindowProjection &projection) const
 {
   for (unsigned i = 0; i < store.size(); ++i)
@@ -373,7 +373,7 @@ TopologyRenderer::Draw(Canvas &canvas,
 }
 
 void
-TopologyRenderer::DrawLabels(Canvas &canvas,
+TopographyRenderer::DrawLabels(Canvas &canvas,
                              const WindowProjection &projection,
                              LabelBlock &label_block,
                              const SETTINGS_MAP &settings_map) const

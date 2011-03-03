@@ -24,7 +24,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Topology/TopographyStore.hpp"
-#include "Topology/TopologyRenderer.hpp"
+#include "Topology/TopographyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -178,7 +178,7 @@ MapWindow::set_topology(TopographyStore *_topology)
 
   delete topology_renderer;
   topology_renderer = topology != NULL
-    ? new TopologyRenderer(*topology)
+    ? new TopographyRenderer(*topology)
     : NULL;
 }
 

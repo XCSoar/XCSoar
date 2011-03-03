@@ -324,7 +324,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Topology/TopographyFile.cpp \
 	$(SRC)/Topology/TopographyStore.cpp \
-	$(SRC)/Topology/TopologyRenderer.cpp \
+	$(SRC)/Topology/TopographyRenderer.cpp \
 	$(SRC)/Topology/TopologyGlue.cpp \
 	$(SRC)/Topology/XShape.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \

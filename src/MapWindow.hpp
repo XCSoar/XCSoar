@@ -39,7 +39,7 @@ Copyright_License {
 #include "Compiler.h"
 
 class TopographyStore;
-class TopologyRenderer;
+class TopographyRenderer;
 class RasterTerrain;
 class RasterWeather;
 class Marks;
@@ -82,7 +82,7 @@ protected:
 
   const Waypoints *way_points;
   TopographyStore *topology;
-  TopologyRenderer *topology_renderer;
+  TopographyRenderer *topology_renderer;
 
   RasterTerrain *terrain;
   GeoPoint terrain_center;

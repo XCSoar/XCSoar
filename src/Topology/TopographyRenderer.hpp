@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef TOPOLOGY_RENDERER_HPP
-#define TOPOLOGY_RENDERER_HPP
+#ifndef TOPOGRAPHY_RENDERER_HPP
+#define TOPOGRAPHY_RENDERER_HPP
 
 #include "Topology/TopographyStore.hpp"
 #include "Topology/ShapeRenderer.hpp"
@@ -39,7 +39,7 @@ struct SETTINGS_MAP;
 /**
  * Class used to manage and render vector topology layers
  */
-class TopologyFileRenderer : private NonCopyable {
+class TopographyFileRenderer : private NonCopyable {
   const TopographyFile &file;
 
 #ifndef ENABLE_OPENGL
@@ -52,7 +52,7 @@ class TopologyFileRenderer : private NonCopyable {
   MaskedIcon icon;
 
 public:
-  TopologyFileRenderer(const TopographyFile &file);
+  TopographyFileRenderer(const TopographyFile &file);
 
   /**
    * Paints the polygons, lines and points/icons in the TopographyFile
@@ -77,13 +77,13 @@ public:
 /**
  * Class used to manage and render vector topology layers
  */
-class TopologyRenderer : private NonCopyable {
+class TopographyRenderer : private NonCopyable {
   const TopographyStore &store;
-  TopologyFileRenderer *files[TopographyStore::MAXTOPOLOGY];
+  TopographyFileRenderer *files[TopographyStore::MAXTOPOLOGY];
 
 public:
-  TopologyRenderer(const TopographyStore &store);
-  ~TopologyRenderer();
+  TopographyRenderer(const TopographyStore &store);
+  ~TopographyRenderer();
 
   /**
    * Draws the topology to the given canvas
