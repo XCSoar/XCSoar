@@ -28,7 +28,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Form/Tabbed.hpp"
 
-class MaskedIcon;
+class Bitmap;
 class WndOwnerDrawFrame;
 class ContainerWindow;
 class TabDisplay;
@@ -76,7 +76,7 @@ public:
   public:
     OneTabButton(const TCHAR* _Caption,
                 bool _IsButtonOnly,
-                MaskedIcon *_bmp,
+                Bitmap *_bmp,
                 PreHideNotifyCallback_t _PreHideFunction,
                 PreShowNotifyCallback_t _PreShowFunction,
                 PostShowNotifyCallback_t _PostShowFunction,
@@ -98,7 +98,7 @@ public:
   public:
     TCHAR Caption[MAX_PATH];
     bool IsButtonOnly;
-    MaskedIcon *bmp;
+    Bitmap *bmp;
     RECT butSize;
 
     /**
@@ -129,7 +129,7 @@ public:
  * @param w. The window (e.g. created by LoadWindow()
  * @param Caption. Caption for the tab display
  * @param IsButtonOnly.  The tab button will resemble look/feel of a button
- * @param bmp.  Pointer to a MaskedIcon to display instead of caption on tab
+ * @param bmp.  Pointer to a Bitmap to display instead of caption on tab
  * @param PreHideFunction client callback
  * @param PreShowFunction client callback
  * @param PostShowFunction client callback
@@ -137,7 +137,7 @@ public:
  */
   unsigned AddClient(Window *w, const TCHAR* Caption,
         bool IsButtonOnly = false,
-        MaskedIcon *bmp = NULL,
+        Bitmap *bmp = NULL,
         PreHideNotifyCallback_t PreHideFunction = NULL,
         PreShowNotifyCallback_t PreShowFunction = NULL,
         PostShowNotifyCallback_t PostShowFunction = NULL,
@@ -160,7 +160,7 @@ public:
  */
   const RECT &GetButtonSize(unsigned i);
   const TCHAR* GetButtonCaption(unsigned i);
-  const MaskedIcon* GetButtonIcon(unsigned i);
+  const Bitmap* GetButtonIcon(unsigned i);
   bool GetButtonIsButtonOnly(unsigned i);
   unsigned GetTabLineHeight() {return TabLineHeight; }
 

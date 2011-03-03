@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Screen/Icon.hpp"
+#include "Screen/Canvas.hpp"
 
 #include <assert.h>
 
@@ -68,7 +69,7 @@ TabBarControl::GetButtonCaption(unsigned i)
   return buttons[i]->Caption;
 }
 
-const MaskedIcon *
+const Bitmap *
 TabBarControl::GetButtonIcon(unsigned i)
 {
   assert(i < buttons.size());
@@ -81,7 +82,7 @@ TabBarControl::GetButtonIcon(unsigned i)
 
 unsigned
 TabBarControl::AddClient(Window *w, const TCHAR* Caption,
-    bool IsButtonOnly, MaskedIcon *bmp,
+    bool IsButtonOnly, Bitmap *bmp,
     PreHideNotifyCallback_t PreHideFunction,
     PreShowNotifyCallback_t PreShowFunction,
     PostShowNotifyCallback_t PostShowFunction,
@@ -257,6 +258,7 @@ TabDisplay::on_paint(Canvas &canvas)
       | DT_WORDBREAK;
 
   for (unsigned i = 0; i < theTabBar.GetTabCount(); i++) {
+    bool inverse = false;
     if (((int)i == downindex) && (dragoffbutton == false)) {
       canvas.set_text_color(Color::BLACK);
       canvas.set_background_color(Color::YELLOW);
@@ -264,6 +266,7 @@ TabDisplay::on_paint(Canvas &canvas)
     } else if (i == theTabBar.GetCurrentPage()) {
         canvas.set_text_color(Color::WHITE);
         canvas.set_background_color(Color::BLACK);
+        inverse = true;
 
     } else {
       canvas.set_text_color(Color::BLACK);
@@ -293,11 +296,27 @@ TabDisplay::on_paint(Canvas &canvas)
       canvas.fill_rectangle(rc, canvas.get_background_color());
     }
     if (theTabBar.GetButtonIcon(i) != NULL) {
-      const MaskedIcon *bmp = theTabBar.GetButtonIcon(i);
-      const int offsetx = (rc.right - rc.left - bmp->get_size().cx) / 2;
+
+      const Bitmap *bmp = theTabBar.GetButtonIcon(i);
+      const int offsetx = (rc.right - rc.left - bmp->get_size().cx / 2) / 2;
       const int offsety = (rc.bottom - rc.top - bmp->get_size().cy) / 2;
 
-      bmp->draw(canvas, rc.left + offsetx, rc.top + offsety);
+      if (inverse) // black background
+        canvas.copy_not(rc.left + offsetx,
+                    rc.top + offsety,
+                    bmp->get_size().cx / 2,
+                    bmp->get_size().cy,
+                    *bmp,
+                    bmp->get_size().cx / 2, 0);
+
+      else
+        canvas.copy(rc.left + offsetx,
+                    rc.top + offsety,
+                    bmp->get_size().cx / 2,
+                    bmp->get_size().cy,
+                    *bmp,
+                    bmp->get_size().cx / 2, 0);
+
     } else {
       canvas.formatted_text(&rcTextFinal, theTabBar.GetButtonCaption(i),
           CaptionStyle);
