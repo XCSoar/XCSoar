@@ -170,6 +170,7 @@ public:
       // non landable turnpoint
       const MaskedIcon *icon =
           projection.GetMapScale() > fixed(4000) ? &Graphics::SmallIcon :
+          way_point.Type == wtMountainTop ? &Graphics::MountainTopIcon :
           &Graphics::TurnPointIcon;
 
       icon->draw(canvas, sc);
