@@ -94,7 +94,7 @@ Copyright_License {
 
 FileCache *file_cache;
 Marks *marks;
-TopographyStore *topology;
+TopographyStore *topography;
 RasterTerrain *terrain;
 RasterWeather RASP;
 
@@ -340,8 +340,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   task_manager->set_contest(SettingsComputer().contest);
 
   // Read the topology file(s)
-  topology = new TopographyStore();
-  LoadConfiguredTopography(*topology);
+  topography = new TopographyStore();
+  LoadConfiguredTopography(*topography);
 
   // Read the waypoint files
   WayPointGlue::ReadWaypoints(way_points, terrain);
@@ -400,7 +400,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   main_window.map.set_task(protected_task_manager);
   main_window.map.set_airspaces(&airspace_database, airspace_warnings);
 
-  main_window.map.set_topography(topology);
+  main_window.map.set_topography(topography);
   main_window.map.set_terrain(terrain);
   main_window.map.set_weather(&RASP);
   main_window.map.set_marks(marks);
@@ -526,7 +526,7 @@ XCSoarInterface::Shutdown(void)
   delete terrain;
 
   LogStartUp(_T("CloseTopology"));
-  delete topology;
+  delete topography;
 
   delete marks;
 

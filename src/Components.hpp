@@ -49,7 +49,7 @@ extern Waypoints way_points;
 extern ProtectedTaskManager *protected_task_manager;
 extern Replay *replay;
 extern Marks *marks;
-extern TopographyStore *topology;
+extern TopographyStore *topography;
 extern RasterTerrain *terrain;
 extern RasterWeather RASP;
 extern GlideComputer *glide_computer;

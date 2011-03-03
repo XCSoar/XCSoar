@@ -143,9 +143,9 @@ SettingsLeave()
 
   if (TopographyFileChanged) {
     XCSoarInterface::main_window.map.set_topography(NULL);
-    topology->Reset();
-    LoadConfiguredTopography(*topology);
-    XCSoarInterface::main_window.map.set_topography(topology);
+    topography->Reset();
+    LoadConfiguredTopography(*topography);
+    XCSoarInterface::main_window.map.set_topography(topography);
   }
 
   if (AirspaceFileChanged) {
