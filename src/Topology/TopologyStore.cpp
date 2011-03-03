@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Topology/TopologyStore.hpp"
-#include "Topology/TopologyFile.hpp"
+#include "Topology/TopographyFile.hpp"
 #include "StringUtil.hpp"
 #include "IO/LineReader.hpp"
 #include "OS/PathName.hpp"
@@ -141,7 +141,7 @@ TopologyStore::Load(NLineReader &reader, const TCHAR *Directory,
     if (*p == _T(','))
       labelImportantRange = strtod(p + 1, &p);
 
-    files.append(new TopologyFile(zdir, ShapeFilename,
+    files.append(new TopographyFile(zdir, ShapeFilename,
                                   fixed(ShapeRange) * 1000,
                                   fixed(labelRange) * 1000,
                                   fixed(labelImportantRange) * 1000,

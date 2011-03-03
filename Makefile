@@ -322,7 +322,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/CalculationThread.cpp \
 	\
-	$(SRC)/Topology/TopologyFile.cpp \
+	$(SRC)/Topology/TopographyFile.cpp \
 	$(SRC)/Topology/TopologyStore.cpp \
 	$(SRC)/Topology/TopologyRenderer.cpp \
 	$(SRC)/Topology/TopologyGlue.cpp \

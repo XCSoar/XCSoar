@@ -40,7 +40,7 @@ struct SETTINGS_MAP;
  * Class used to manage and render vector topology layers
  */
 class TopologyFileRenderer : private NonCopyable {
-  const TopologyFile &file;
+  const TopographyFile &file;
 
 #ifndef ENABLE_OPENGL
   mutable ShapeRenderer shape_renderer;
@@ -52,10 +52,10 @@ class TopologyFileRenderer : private NonCopyable {
   MaskedIcon icon;
 
 public:
-  TopologyFileRenderer(const TopologyFile &file);
+  TopologyFileRenderer(const TopographyFile &file);
 
   /**
-   * Paints the polygons, lines and points/icons in the TopologyFile
+   * Paints the polygons, lines and points/icons in the TopographyFile
    * @param canvas The canvas to paint on
    * @param bitmap_canvas Temporary canvas for the icon
    * @param projection

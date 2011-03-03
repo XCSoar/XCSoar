@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Topology/TopologyFile.hpp"
+#include "Topology/TopographyFile.hpp"
 #include "Topology/XShape.hpp"
 #include "WindowProjection.hpp"
 #include "Screen/Graphics.hpp"
@@ -38,7 +38,7 @@ Copyright_License {
 #include <tchar.h>
 #include <ctype.h> // needed for Wine
 
-TopologyFile::TopologyFile(struct zzip_dir *_dir, const char *filename,
+TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
                            fixed _threshold,
                            fixed _labelThreshold,
                            fixed _labelImportantThreshold,
@@ -68,7 +68,7 @@ TopologyFile::TopologyFile(struct zzip_dir *_dir, const char *filename,
   std::fill(shpCache.begin(), shpCache.end(), (XShape *)NULL);
 }
 
-TopologyFile::~TopologyFile()
+TopographyFile::~TopographyFile()
 {
   if (!shapefileopen)
     return;
@@ -83,7 +83,7 @@ TopologyFile::~TopologyFile()
 }
 
 void
-TopologyFile::ClearCache()
+TopographyFile::ClearCache()
 {
   for (unsigned i = 0; i < shpCache.size(); i++) {
     delete shpCache[i];
@@ -92,7 +92,7 @@ TopologyFile::ClearCache()
 }
 
 rectObj
-TopologyFile::ConvertRect(const GeoBounds &br)
+TopographyFile::ConvertRect(const GeoBounds &br)
 {
   rectObj dest;
   dest.minx = br.west.value_degrees();
@@ -103,7 +103,7 @@ TopologyFile::ConvertRect(const GeoBounds &br)
 }
 
 bool
-TopologyFile::updateCache(const WindowProjection &map_projection)
+TopographyFile::updateCache(const WindowProjection &map_projection)
 {
   if (!shapefileopen)
     return false;
@@ -151,7 +151,7 @@ TopologyFile::updateCache(const WindowProjection &map_projection)
 }
 
 unsigned
-TopologyFile::GetSkipSteps(fixed map_scale) const
+TopographyFile::GetSkipSteps(fixed map_scale) const
 {
   if (map_scale * 4 > scaleThreshold * 3)
     return 4;
@@ -165,7 +165,7 @@ TopologyFile::GetSkipSteps(fixed map_scale) const
 #ifdef ENABLE_OPENGL
 
 unsigned
-TopologyFile::thinning_level(fixed map_scale) const
+TopographyFile::thinning_level(fixed map_scale) const
 {
   if (map_scale * 2 > scaleThreshold)
     return 3;
@@ -178,7 +178,7 @@ TopologyFile::thinning_level(fixed map_scale) const
 }
 
 unsigned
-TopologyFile::min_point_distance(unsigned level) const
+TopographyFile::min_point_distance(unsigned level) const
 {
   switch (level) {
     case 1:

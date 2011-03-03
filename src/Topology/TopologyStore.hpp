@@ -30,7 +30,7 @@ Copyright_License {
 #include <tchar.h>
 
 class WindowProjection;
-class TopologyFile;
+class TopographyFile;
 class NLineReader;
 struct zzip_dir;
 
@@ -45,7 +45,7 @@ public:
   };
 
 private:
-  StaticArray<TopologyFile *, MAXTOPOLOGY> files;
+  StaticArray<TopographyFile *, MAXTOPOLOGY> files;
 
 public:
   ~TopologyStore();
@@ -54,7 +54,7 @@ public:
     return files.size();
   }
 
-  const TopologyFile &operator [](unsigned i) const {
+  const TopographyFile &operator [](unsigned i) const {
     return *files[i];
   }
 

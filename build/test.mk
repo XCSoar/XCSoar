@@ -697,7 +697,7 @@ $(KEY_CODE_DUMPER_BIN): $(KEY_CODE_DUMPER_OBJS) $(KEY_CODE_DUMPER_LDADD) | $(TAR
 
 LOAD_TOPOLOGY_SOURCES = \
 	$(SRC)/Topology/TopologyStore.cpp \
-	$(SRC)/Topology/TopologyFile.cpp \
+	$(SRC)/Topology/TopographyFile.cpp \
 	$(SRC)/Topology/XShape.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/WindowProjection.cpp \
@@ -1081,7 +1081,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/Topology/TopologyFile.cpp \
+	$(SRC)/Topology/TopographyFile.cpp \
 	$(SRC)/Topology/TopologyStore.cpp \
 	$(SRC)/Topology/TopologyRenderer.cpp \
 	$(SRC)/Topology/TopologyGlue.cpp \

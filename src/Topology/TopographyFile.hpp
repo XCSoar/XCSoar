@@ -42,7 +42,7 @@ struct SETTINGS_MAP;
 class XShape;
 struct zzip_dir;
 
-class TopologyFile : private NonCopyable {
+class TopographyFile : private NonCopyable {
   struct zzip_dir *dir;
 
   AllocatedArray<XShape *> shpCache;
@@ -65,7 +65,7 @@ public:
    * be renderd in default style
    * @return
    */
-  TopologyFile(struct zzip_dir *dir, const char *shpname,
+  TopographyFile(struct zzip_dir *dir, const char *shpname,
                fixed threshold, fixed labelThreshold,
                fixed labelImportantThreshold,
                const Color color,
@@ -75,7 +75,7 @@ public:
   /**
    * The destructor clears the cache and closes the shapefile
    */
-  ~TopologyFile();
+  ~TopographyFile();
 
   bool is_visible(fixed map_scale) const {
     return map_scale <= scaleThreshold;
@@ -139,19 +139,19 @@ public:
 
   /**
    * The threshold value for the visibility check. If the current scale
-   * is below this value the contents of this TopologyFile will be drawn.
+   * is below this value the contents of this TopographyFile will be drawn.
    */
   fixed scaleThreshold;
 
   /**
    * The threshold value for label rendering. If the current scale
-   * is below this value no labels of this TopologyFile will be drawn.
+   * is below this value no labels of this TopographyFile will be drawn.
    */
   fixed labelThreshold;
 
   /**
    * The threshold value for label rendering in important style . If the current
-   * scale is below this value labels of this TopologyFile will be drawn
+   * scale is below this value labels of this TopographyFile will be drawn
    * in standard style
    */
   fixed labelImportantThreshold;

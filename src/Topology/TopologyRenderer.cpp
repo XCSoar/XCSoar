@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Topology/TopologyRenderer.hpp"
-#include "Topology/TopologyFile.hpp"
+#include "Topology/TopographyFile.hpp"
 #include "Topology/XShape.hpp"
 #include "WindowProjection.hpp"
 #include "SettingsMap.hpp"
@@ -37,7 +37,7 @@ Copyright_License {
 
 #include <algorithm>
 
-TopologyFileRenderer::TopologyFileRenderer(const TopologyFile &_file)
+TopologyFileRenderer::TopologyFileRenderer(const TopographyFile &_file)
   :file(_file), pen(file.get_pen_width(), file.get_color()),
    brush(file.get_color())
 {
