@@ -82,7 +82,7 @@ protected:
 
   const Waypoints *way_points;
   TopographyStore *topology;
-  TopographyRenderer *topology_renderer;
+  TopographyRenderer *topography_renderer;
 
   RasterTerrain *terrain;
   GeoPoint terrain_center;

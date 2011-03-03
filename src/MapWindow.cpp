@@ -38,7 +38,7 @@ Copyright_License {
  */
 MapWindow::MapWindow()
   :way_points(NULL),
-   topology(NULL), topology_renderer(NULL),
+   topology(NULL), topography_renderer(NULL),
    terrain(NULL),
    terrain_radius(fixed_zero),
    weather(NULL),
@@ -52,7 +52,7 @@ MapWindow::MapWindow()
 
 MapWindow::~MapWindow()
 {
-  delete topology_renderer;
+  delete topography_renderer;
 }
 
 void
@@ -176,8 +176,8 @@ MapWindow::set_topology(TopographyStore *_topology)
 {
   topology = _topology;
 
-  delete topology_renderer;
-  topology_renderer = topology != NULL
+  delete topography_renderer;
+  topography_renderer = topology != NULL
     ? new TopographyRenderer(*topology)
     : NULL;
 }
