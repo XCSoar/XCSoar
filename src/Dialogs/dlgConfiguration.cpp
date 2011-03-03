@@ -1084,7 +1084,7 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpEnableTerrain"),
                    XCSoarInterface::SettingsMap().EnableTerrain);
-  LoadFormProperty(*wf, _T("prpEnableTopology"),
+  LoadFormProperty(*wf, _T("prpEnableTopography"),
                    XCSoarInterface::SettingsMap().EnableTopography);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSlopeShadingType"));
@@ -2134,7 +2134,7 @@ void dlgConfigurationShowModal(void)
                               szProfileDrawTerrain,
                               XCSoarInterface::SetSettingsMap().EnableTerrain);
 
-  changed |= SaveFormProperty(*wf, _T("prpEnableTopology"),
+  changed |= SaveFormProperty(*wf, _T("prpEnableTopography"),
                               szProfileDrawTopology,
                               XCSoarInterface::SetSettingsMap().EnableTopography);
 

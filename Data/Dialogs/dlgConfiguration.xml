@@ -205,7 +205,7 @@
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpEnableTopology" Caption="Topology display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topological features (roads, rivers, lakes etc) on the map.  Requires the topology file to be specified.">
+      <Edit Name="prpEnableTopography" Caption="Topology display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topological features (roads, rivers, lakes etc) on the map.  Requires the topology file to be specified.">
         <DataField DataType="boolean"/>
       </Edit>
     
