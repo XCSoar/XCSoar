@@ -321,7 +321,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 
   update();
 
-  EventLoop loop(*event_queue, *(TopWindow *)get_root_owner());
+  EventLoop loop(*event_queue, main_window);
   Event event;
   while (mModalResult == 0 && loop.get(event))
     loop.dispatch(event);
@@ -330,7 +330,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 
   update();
 
-  EventLoop loop(*(TopWindow *)get_root_owner());
+  EventLoop loop(main_window);
   SDL_Event event;
   while (mModalResult == 0 && loop.get(event))
     loop.dispatch(event);
