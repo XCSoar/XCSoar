@@ -377,9 +377,8 @@ InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  const UnitDescriptor_t *pU = &Units::UnitDescriptors[unFeet];
-
-  fixed Altitude = basic.pressure.QNHAltitudeToPressureAltitude(basic.BaroAltitude) * pU->ToUserFact;
+  fixed Altitude = Units::ToUserUnit(
+      basic.pressure.QNHAltitudeToPressureAltitude(basic.BaroAltitude), unFeet);
 
   _stprintf(sTmp, _T("%03d"), iround(Altitude/100));
 
