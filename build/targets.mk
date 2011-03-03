@@ -295,7 +295,9 @@ TARGET_LDLIBS =
 ifeq ($(TARGET),PC)
   TARGET_LDFLAGS += -Wl,--major-subsystem-version=5
   TARGET_LDFLAGS += -Wl,--minor-subsystem-version=00
-  TARGET_LDFLAGS += -Wl,-subsystem,windows
+
+  # default to "console"; see SCREEN_LDLIBS
+  TARGET_LDFLAGS += -Wl,-subsystem,console
 endif
 
 ifeq ($(HAVE_WIN32),y)

@@ -87,6 +87,10 @@ SCREEN_LDLIBS += -lcomctl32 -luser32 -lgdi32 -lmsimg32
 endif
 endif
 
+ifeq ($(TARGET),PC)
+SCREEN_LDLIBS += -Wl,-subsystem,windows
+endif
+
 $(SCREEN_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(SCREEN_LIBS): $(SCREEN_OBJS)
 	@$(NQ)echo "  AR      $@"
