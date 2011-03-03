@@ -213,18 +213,17 @@ endif
 ####### compiler target
 
 ifeq ($(HAVE_WIN32),y)
-  TARGET_ARCH += -mwin32
+  ifeq ($(TARGET),WINE)
+    TARGET_ARCH += -m32
+  else
+    TARGET_ARCH += -mwin32
+  endif
 
   WINDRESFLAGS := -I$(SRC) $(TARGET_CPPFLAGS)
 endif # UNIX
 
 ifeq ($(TARGET),PC)
   TARGET_ARCH += -mwindows -mms-bitfields
-endif
-
-ifeq ($(TARGET),WINE)
-  TARGET_ARCH := $(filter-out -mwin32,$(TARGET_ARCH))
-  TARGET_ARCH += -m32
 endif
 
 ifeq ($(TARGET),CYGWIN)
