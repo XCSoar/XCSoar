@@ -585,8 +585,8 @@ location=7
 mode=Display2
 type=key
 data=9
-event=TerrainTopography topology toggle
-label=Topology $(TopologyToggleActionName)
+event=TerrainTopography topography toggle
+label=Topography $(TopographyToggleActionName)
 location=8
 
 mode=Display2

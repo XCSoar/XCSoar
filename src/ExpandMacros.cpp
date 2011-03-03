@@ -361,7 +361,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     switch (val) {
     case 0:
       ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      _("Topology on"), Size);
+                      _("Topography on"), Size);
       break;
     case 1:
       ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
@@ -369,10 +369,36 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
       break;
     case 2:
       ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      _("Terrain + Topology"), Size);
+                      _("Terrain + Topography"), Size);
       break;
     case 3:
       ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
+                      _("Terrain Off"), Size);
+      break;
+    }
+  }
+
+  if (_tcsstr(OutBuffer, _T("$(TerrainTopographyToggleName)"))) {
+    char val = 0;
+    if (SettingsMap().EnableTopography)
+      val++;
+    if (SettingsMap().EnableTerrain)
+      val += (char)2;
+    switch (val) {
+    case 0:
+      ReplaceInString(OutBuffer, _T("$(TerrainTopographyToggleName)"),
+                      _("Topography on"), Size);
+      break;
+    case 1:
+      ReplaceInString(OutBuffer, _T("$(TerrainTopographyToggleName)"),
+                      _("Terrain on"), Size);
+      break;
+    case 2:
+      ReplaceInString(OutBuffer, _T("$(TerrainTopographyToggleName)"),
+                      _("Terrain + Topography"), Size);
+      break;
+    case 3:
+      ReplaceInString(OutBuffer, _T("$(TerrainTopographyToggleName)"),
                       _("Terrain Off"), Size);
       break;
     }
@@ -386,6 +412,9 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 		                  _("Manual"), _("Auto"), Size);
   CondReplaceInString(SettingsMap().EnableTopography, OutBuffer,
                       _T("$(TopologyToggleActionName)"),
+                      _("Off"), _("On"), Size);
+  CondReplaceInString(SettingsMap().EnableTopography, OutBuffer,
+                      _T("$(TopographyToggleActionName)"),
                       _("Off"), _("On"), Size);
   CondReplaceInString(SettingsMap().EnableTerrain, OutBuffer,
                       _T("$(TerrainToggleActionName)"),

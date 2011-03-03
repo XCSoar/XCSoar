@@ -452,7 +452,7 @@ type=key
 data=8
 event=TerrainTopography show
 event=TerrainTopography toggle
-label=$(TerrainTopologyToggleName)
+label=$(TerrainTopographyToggleName)
 location=7
 
 mode=Display2
