@@ -28,6 +28,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/MemInfo.hpp"
 
 #include <tchar.h>
 
@@ -41,25 +42,6 @@ Copyright_License {
 #ifdef WIN32
 #include <windows.h>
 #endif
-
-static long
-CheckFreeRam()
-{
-#ifdef WIN32
-  MEMORYSTATUS memInfo;
-  // Program memory
-  memInfo.dwLength = sizeof(memInfo);
-  GlobalMemoryStatus(&memInfo);
-
-  //	   memInfo.dwTotalPhys,
-  //	   memInfo.dwAvailPhys,
-  //	   memInfo.dwTotalPhys- memInfo.dwAvailPhys);
-
-  return memInfo.dwAvailPhys;
-#else /* !WIN32 */
-  return 64 * 1024 * 1024; // XXX
-#endif /* !WIN32 */
-}
 
 // This is necessary to be called periodically to get rid of
 // memory defragmentation, since on pocket pc platforms there is no
@@ -126,7 +108,7 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
 void
 StartupLogFreeRamAndStorage()
 {
-  int freeram = CheckFreeRam() / 1024;
+  int freeram = SystemFreeRAM() / 1024;
   int freestorage = FindFreeSpace(GetPrimaryDataPath());
   LogStartUp(_T("Free ram %d; free storage %d"), freeram, freestorage);
 }

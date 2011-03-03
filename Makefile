@@ -366,6 +366,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/CommandLine.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/SystemLoad.cpp \
+	$(SRC)/OS/MemInfo.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/FileMapping.cpp \
 	$(SRC)/OS/PathName.cpp \
