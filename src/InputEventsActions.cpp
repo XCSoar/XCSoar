@@ -1263,7 +1263,7 @@ InputEvents::eventProfileLoad(const TCHAR *misc)
 
     WaypointFileChanged = true;
     TerrainFileChanged = true;
-    TopologyFileChanged = true;
+    TopographyFileChanged = true;
     AirspaceFileChanged = true;
     AirfieldFileChanged = true;
     PolarFileChanged = true;

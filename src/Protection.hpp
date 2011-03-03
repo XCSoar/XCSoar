@@ -40,7 +40,7 @@ extern bool AirspaceFileChanged;
 extern bool WaypointFileChanged;
 extern bool TerrainFileChanged;
 extern bool AirfieldFileChanged;
-extern bool TopologyFileChanged;
+extern bool TopographyFileChanged;
 extern bool PolarFileChanged;
 extern bool LanguageFileChanged;
 extern bool StatusFileChanged;

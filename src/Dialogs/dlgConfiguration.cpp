@@ -2259,7 +2259,7 @@ void dlgConfigurationShowModal(void)
   TerrainFileChanged = FinishFileField(*wf, _T("prpTerrainFile"),
                                        szProfileTerrainFile);
 
-  TopologyFileChanged = FinishFileField(*wf, _T("prpTopographyFile"),
+  TopographyFileChanged = FinishFileField(*wf, _T("prpTopographyFile"),
                                         szProfileTopologyFile);
 
   AirfieldFileChanged = FinishFileField(*wf, _T("prpAirfieldFile"),

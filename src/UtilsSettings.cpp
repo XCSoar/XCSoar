@@ -59,7 +59,7 @@ bool AirspaceFileChanged = false;
 bool AirfieldFileChanged = false;
 bool WaypointFileChanged = false;
 bool TerrainFileChanged = false;
-bool TopologyFileChanged = false;
+bool TopographyFileChanged = false;
 bool PolarFileChanged = false;
 bool LanguageFileChanged = false;
 bool StatusFileChanged = false;
@@ -81,7 +81,7 @@ SettingsEnter()
   AirfieldFileChanged = false;
   WaypointFileChanged = false;
   TerrainFileChanged = false;
-  TopologyFileChanged = false;
+  TopographyFileChanged = false;
   PolarFileChanged = false;
   LanguageFileChanged = false;
   StatusFileChanged = false;
@@ -110,7 +110,7 @@ SettingsLeave()
     AirfieldFileChanged = true;
     WaypointFileChanged = true;
     TerrainFileChanged = true;
-    TopologyFileChanged = true;
+    TopographyFileChanged = true;
   }
 
   if (TerrainFileChanged) {
@@ -141,7 +141,7 @@ SettingsLeave()
                           !CommonInterface::Calculated().flight.Flying);
   }
 
-  if (TopologyFileChanged) {
+  if (TopographyFileChanged) {
     XCSoarInterface::main_window.map.set_topology(NULL);
     topology->Reset();
     LoadConfiguredTopography(*topology);
@@ -165,7 +165,7 @@ SettingsLeave()
       || AirspaceFileChanged
       || WaypointFileChanged
       || TerrainFileChanged
-      || TopologyFileChanged) {
+      || TopographyFileChanged) {
     ProgressGlue::Close();
     XCSoarInterface::main_window.map.set_focus();
 #ifndef ENABLE_OPENGL
