@@ -77,6 +77,12 @@ public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
+class InfoBoxContentFlightLevel : public InfoBoxContentAltitude
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+};
+
 class InfoBoxContentTerrainHeight : public InfoBoxContentAltitude
 {
 public:

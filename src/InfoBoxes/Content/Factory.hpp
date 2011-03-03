@@ -120,7 +120,8 @@ namespace InfoBoxFactory
     e_CPU_Load, /* CPU load consumed by XCSoar averaged over 5 seconds */
     e_WP_H, /* Absolute arrival altitude at the next waypoint in final glide */
     e_Free_RAM, /* Free RAM as reported by OS */
-    /* 78 */
+    e_FlightLevel, /* Flight Level, also known as pressure altitude */
+    /* 79 */
     e_NUM_TYPES /* Last item */
   }t_InfoBox;
 

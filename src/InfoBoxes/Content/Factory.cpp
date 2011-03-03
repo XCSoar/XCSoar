@@ -42,7 +42,7 @@ Copyright_License {
 #include <stddef.h>
 
 // Groups:
-//   Altitude 0,1,20,33,70
+//   Altitude 0,1,20,33,70,78
 //   Aircraft info 3,6,23,32,37,47,54
 //   LD 4,5,19,66,38,53,71
 //   Vario 2,7,8,9,21,22,63,24,44
@@ -61,7 +61,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("H GPS"),
     N_("This is the height above mean sea level reported by the GPS. Touchscreen/PC only: in simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn."),
     1, // H AGL
-    70, // QFE MSL
+    78, // Flight Level
   },
 
   // 1
@@ -694,7 +694,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("QFE GPS"),
     N_("QFE GPS"),
     N_("Automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude."),
-    0, // H MSL
+    78, // Flight Level
     33, // H Baro
   },
 
@@ -759,6 +759,15 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Free RAM as reported by OS."),
     75, // CPU Load
     75, // CPU Load
+  },
+
+  // 78
+  {
+    N_("Flight Level"),
+    N_("Flight Level"),
+    N_("Pressure Altitude given as Flight Level. Only available if barometric altitude available and correct QNH set."),
+    0, // H GPS
+    70, // QFE GPS
   },
 };
 
@@ -922,6 +931,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentNextAltitudeArrival();
   case 77:
     return new InfoBoxContentFreeRAM();
+  case 78:
+    return new InfoBoxContentFlightLevel();
   }
 
   return NULL;

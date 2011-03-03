@@ -25,6 +25,7 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "UnitsFormatter.hpp"
+#include "Units.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -363,6 +364,27 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
 
   // Set Unit
   infobox.SetValueUnit(Units::Current.AltitudeUnit);
+}
+
+void
+InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
+{
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  TCHAR sTmp[32];
+
+  if (!basic.BaroAltitudeAvailable) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  const UnitDescriptor_t *pU = &Units::UnitDescriptors[unFeet];
+
+  fixed Altitude = basic.pressure.QNHAltitudeToPressureAltitude(basic.BaroAltitude) * pU->ToUserFact;
+
+  _stprintf(sTmp, _T("%03d"), iround(Altitude/100));
+
+  // Set Value
+  infobox.SetValue(sTmp);
 }
 
 void

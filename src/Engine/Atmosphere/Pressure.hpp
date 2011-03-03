@@ -80,6 +80,14 @@ public:
   fixed AltitudeToQNHAltitude(const fixed alt) const;
 
   /**
+   * Converts QNH adjusted altitude to pressure altitude (with QNH=1013.25 as reference)
+   * @param alt QNH-based altitude(m)
+   * @return pressure altitude (m)
+   */
+  gcc_pure
+  fixed QNHAltitudeToPressureAltitude(const fixed alt) const;
+
+  /**
    * Calculates the air density from a given QNH-based altitude
    * @param altitude QNH-based altitude (m)
    * @return Air density (kg/m^3)

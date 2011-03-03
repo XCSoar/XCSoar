@@ -57,6 +57,12 @@ AtmosphericPressure::AltitudeToQNHAltitude(const fixed alt) const
   return StaticPressureToQNHAltitude(fixed(pow((k4 - alt) * k5, inv_k1)));
 }
 
+fixed
+AtmosphericPressure::QNHAltitudeToPressureAltitude(const fixed alt) const
+{
+  return (pow(fixed_101325, k1) - pow(QNHAltitudeToStaticPressure(alt) * pa_to_hpa, k1)) * inv_k2;
+}
+
 void
 AtmosphericPressure::FindQNH(const fixed alt_raw, const fixed alt_known)
 {
