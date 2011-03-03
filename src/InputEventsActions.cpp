@@ -1586,12 +1586,12 @@ InputEvents::sub_TerrainTopology(int vswitch)
     TCHAR buf[128];
 
     if (XCSoarInterface::SettingsMap().EnableTopology)
-      _stprintf(buf, _T("\r\n%s / "), _("ON"));
+      _stprintf(buf, _T("\r\n%s / "), _("On"));
     else
       _stprintf(buf, _T("\r\n%s / "), _("Off"));
 
     _tcscat(buf, XCSoarInterface::SettingsMap().EnableTerrain
-            ? _("ON") : _("Off"));
+            ? _("On") : _("Off"));
 
     Message::AddMessage(_("Topology / Terrain"), buf);
     return;
