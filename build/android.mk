@@ -14,6 +14,7 @@ ANDROID_BIN = $(TARGET_OUTPUT_DIR)/bin
 
 ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux_x86
 ANDROID_ABI = $(ANDROID_ABI3)
+ANDROID_ALL_ABIS = armeabi armeabi-v7a
 ANDROID_LIB_DIR = /opt/android/libs/$(ANDROID_ABI)
 
 ANDROID_LIB_NAMES =
@@ -72,6 +73,38 @@ $(ANDROID_BUILD)/build.xml: android/AndroidManifest.xml $(PNG_FILES) | $(TARGET_
 	$(Q)$(ANDROID_SDK)/tools/android update project --path $(@D) --target $(ANDROID_PLATFORM)
 	@touch $@
 
+ifeq ($(FAT_BINARY),y)
+
+# generate a "fat" APK file with binaries for all ABIs
+
+ALL_SO = $(patsubst %,$(ANDROID_BUILD)/libs/%/libapplication.so,$(ANDROID_ALL_ABIS))
+
+$(ANDROID_BUILD)/libs/armeabi/libapplication.so: $(OUT)/ANDROID/build/libs/armeabi/libapplication.so | $(ANDROID_BUILD)/libs/armeabi/dirstamp
+	$(Q)cp $< $@
+
+$(OUT)/ANDROID/build/libs/armeabi/libapplication.so:
+	$(Q)$(MAKE) TARGET=ANDROID $@
+
+$(ANDROID_BUILD)/libs/armeabi-v7a/libapplication.so: $(OUT)/ANDROID7/build/libs/armeabi-v7a/libapplication.so | $(ANDROID_BUILD)/libs/armeabi-v7a/dirstamp
+	$(Q)cp $< $@
+
+$(OUT)/ANDROID7/build/libs/armeabi-v7a/libapplication.so:
+	$(Q)$(MAKE) TARGET=ANDROID7 $@
+
+$(ANDROID_BIN)/XCSoar-debug.apk: $(ALL_SO) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png android/src/*.java
+	@$(NQ)echo "  ANT     $@"
+	$(Q)cd $(ANDROID_BUILD) && $(ANT) debug
+
+$(ANDROID_BIN)/XCSoar-unsigned.apk: $(ALL_SO) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png android/src/*.java
+	@$(NQ)echo "  ANT     $@"
+	$(Q)cd $(ANDROID_BUILD) && $(ANT) release
+
+$(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BIN)/XCSoar-unsigned.apk
+	@$(NQ)echo "  SIGN    $@"
+	$(Q)$(JARSIGNER) -keystore $(ANDROID_KEYSTORE) -signedjar $(ANDROID_BIN)/XCSoar.apk $(ANDROID_BIN)/XCSoar-unsigned.apk $(ANDROID_KEY_ALIAS)
+
+else # !FAT_BINARY
+
 # add dependency to this source file
 $(TARGET_OUTPUT_DIR)/$(SRC)/Android/Main.o: $(NATIVE_HEADERS)
 $(TARGET_OUTPUT_DIR)/$(SRC)/Android/EventBridge.o: $(NATIVE_HEADERS)
@@ -103,5 +136,7 @@ $(ANDROID_BIN)/XCSoar-unsigned.apk: $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libappl
 $(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BIN)/XCSoar-unsigned.apk
 	@$(NQ)echo "  SIGN    $@"
 	$(Q)$(JARSIGNER) -keystore $(ANDROID_KEYSTORE) -signedjar $(ANDROID_BIN)/XCSoar.apk $(ANDROID_BIN)/XCSoar-unsigned.apk $(ANDROID_KEY_ALIAS)
+
+endif # !FAT_BINARY
 
 endif

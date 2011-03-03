@@ -10,6 +10,7 @@ Version 6.0.6 - not yet released
 * Android
   - fix crash due to invalid UTF-8 labels
   - more pause/resume crash fixes
+  - take advantage of ARMv7 CPUs
 * Linux
   - implement the serial port
 
