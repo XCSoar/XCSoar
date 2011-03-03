@@ -321,6 +321,10 @@ ifneq ($(TARGET),ANDROID)
 endif
 endif
 
+ifeq ($(TARGET),ANDROID)
+  TARGET_LDFLAGS += -nostdlib -Wl,-shared,-Bsymbolic -Wl,--no-undefined
+endif
+
 ifeq ($(CONFIG_PC),y)
   TARGET_LDLIBS := -lwinmm -lstdc++
 endif
@@ -370,5 +374,4 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_EXEEXT := .so
-  TARGET_LDFLAGS += -nostdlib -Wl,-shared,-Bsymbolic -Wl,--no-undefined
 endif
