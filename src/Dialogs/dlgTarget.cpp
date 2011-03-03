@@ -508,7 +508,7 @@ dlgTargetShowModal()
     map_rect.top = dialog_rect.bottom;
   XCSoarInterface::main_window.SetCustomView(map_rect);
 
-  wf->ShowModal(true); // enable map
+  wf->ShowModal(&CommonInterface::main_window.map); // enable map
   XCSoarInterface::SetSettingsMap().EnablePan = oldEnablePan;
   XCSoarInterface::SetSettingsMap().PanLocation = oldPanLocation;
   XCSoarInterface::SetSettingsMap().TargetPan = false;

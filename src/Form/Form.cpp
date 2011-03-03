@@ -245,9 +245,9 @@ is_allowed_map_message(UINT message)
 }
 
 static bool
-is_allowed_map(HWND hWnd, UINT message, bool enable_map)
+is_allowed_map(HWND hWnd, UINT message, const Window *window)
 {
-  return !is_altair() && enable_map && MapWindow::identify(hWnd) &&
+  return !is_altair() && window != NULL && window->identify(hWnd) &&
     is_allowed_map_message(message);
 }
 
@@ -285,7 +285,9 @@ check_special_key(const MSG &msg)
 
 #endif /* !ENABLE_SDL */
 
-int WndForm::ShowModal(bool bEnableMap) {
+int
+WndForm::ShowModal(Window *modal_allowed)
+{
   assert_none_locked();
 
 #define OPENCLOSESUPPRESSTIME 500
@@ -352,7 +354,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 
     if (is_user_input(msg.message)
         && !identify_descendant(msg.hwnd) // not current window or child
-        && !is_allowed_map(msg.hwnd, msg.message, bEnableMap))
+        && !is_allowed_map(msg.hwnd, msg.message, modal_allowed))
       continue;   // make it modal
 
     // hack to stop exiting immediately

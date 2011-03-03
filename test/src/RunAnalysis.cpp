@@ -101,11 +101,6 @@ EstimateThermalBase(const GeoPoint Thermal_Location,
                     const SpeedVector wind,
                     GeoPoint &ground_location, fixed &ground_alt) {}
 
-#ifndef ENABLE_SDL
-#include "MapWindow.hpp"
-bool MapWindow::identify(HWND hWnd) { return false; }
-#endif /* !ENABLE_SDL */
-
 /* done with fake symbols. */
 
 InterfaceBlackboard CommonInterface::blackboard;

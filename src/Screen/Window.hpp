@@ -220,6 +220,14 @@ public:
   };
 
   /**
+   * Is it this window?
+   */
+  gcc_pure
+  bool identify(HWND h) const {
+    return h == hWnd;
+  }
+
+  /**
    * Is it this window or one of its descendants?
    */
   gcc_pure

@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"
-#include "MapWindow.hpp"
 #include "StatusMessage.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
@@ -51,14 +50,6 @@ GetHomeDataPath(TCHAR *buffer)
 {
   return NULL;
 }
-
-#ifndef ENABLE_SDL
-bool
-MapWindow::identify(HWND hWnd)
-{
-  return false;
-}
-#endif /* !ENABLE_SDL */
 
 Font Fonts::Map;
 Font Fonts::MapBold;

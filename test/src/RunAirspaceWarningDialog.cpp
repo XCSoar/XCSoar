@@ -26,7 +26,6 @@ Copyright_License {
 #include "Screen/Init.hpp"
 #include "Interface.hpp"
 #include "Dialogs/Dialogs.h"
-#include "MapWindow.hpp"
 #include "UtilsSystem.hpp"
 #include "Profile/Profile.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
@@ -47,14 +46,6 @@ Copyright_License {
 #include <stdio.h>
 
 unsigned InfoBoxLayout::ControlWidth = 100;
-
-#ifndef ENABLE_SDL
-bool
-MapWindow::identify(HWND hWnd)
-{
-  return false;
-}
-#endif /* !ENABLE_SDL */
 
 static Waypoints way_points;
 static TaskBehaviour task_behaviour;

@@ -25,7 +25,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Init.hpp"
 #include "Dialogs/Dialogs.h"
-#include "MapWindow.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "WayPointParser.h"
@@ -71,14 +70,6 @@ bool Logger::CheckDeclaration() { return true; }
 
 void RasterTerrain::Lock(void) {}
 void RasterTerrain::Unlock(void) {}
-
-#ifndef ENABLE_SDL
-bool
-MapWindow::identify(HWND hWnd)
-{
-  return false;
-}
-#endif /* !ENABLE_SDL */
 
 void dlgAnalysisShowModal(void) {}
 void dlgTaskCalculatorShowModal(SingleWindow &parent) {}

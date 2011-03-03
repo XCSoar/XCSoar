@@ -210,7 +210,10 @@ public:
   /** Set the font of the titlebar */
   void SetTitleFont(const Font &font);
 
-  int ShowModal(bool bEnableMap = false);
+  /**
+   * @param modal_allowed a Window that may receive user input
+   */
+  int ShowModal(Window *modal_allowed=NULL);
 
   const TCHAR *GetCaption() const {
     return mCaption;
