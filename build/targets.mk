@@ -1,4 +1,4 @@
-TARGETS = PC PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID CYGWIN
+TARGETS = PC PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID ANDROID7 CYGWIN
 
 # These targets are built when you don't specify the TARGET variable.
 DEFAULT_TARGETS = PC PPC2000 PPC2003 WM5 ALTAIR WINE
@@ -8,6 +8,7 @@ TARGET_FLAVOR := $(TARGET)
 HAVE_CE := n
 HAVE_FPU := y
 XSCALE := n
+ARMV7 := n
 
 HAVE_POSIX := n
 HAVE_WIN32 := y
@@ -27,6 +28,12 @@ ifeq ($(TARGET),WM5X)
   XSCALE := y
   TARGET_FLAVOR := $(TARGET)
   override TARGET = WM5
+endif
+
+ifeq ($(TARGET),ANDROID7)
+  ARMV7 := y
+  TARGET_FLAVOR := $(TARGET)
+  override TARGET = ANDROID
 endif
 
 # real targets
@@ -112,17 +119,29 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_PLATFORM = android-5
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-linux-androideabi
-  ANDROID_ABI3 = armeabi
   ANDROID_GCC_VERSION = 4.4.3
+
+  ifeq ($(ARMV7),y)
+    ANDROID_ABI3 = armeabi-v7a
+  else
+    ANDROID_ABI3 = armeabi
+  endif
 
   ANDROID_NDK_PLATFORM = $(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM)
   ANDROID_TARGET_ROOT = $(ANDROID_NDK_PLATFORM)/arch-$(ANDROID_ARCH)
   ANDROID_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)/prebuilt/linux-x86
   TCPATH = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI2)-
 
-  TARGET_ARCH += -march=armv5te -mtune=xscale -msoft-float -mthumb-interwork
+  ifeq ($(ARMV7),y)
+    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=vfp -mthumb-interwork
+    HAVE_FPU := y
+  else
+    TARGET_ARCH += -march=armv5te -mtune=xscale -msoft-float -mthumb-interwork
+    HAVE_FPU := n
+  endif
+
   TARGET_ARCH += -fpic -ffunction-sections -funwind-tables -fstack-protector -fno-short-enums
-  HAVE_FPU := n
+
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
@@ -268,6 +287,10 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_LDFLAGS += -nostdlib -Wl,-shared,-Bsymbolic -Wl,--no-undefined
+
+  ifeq ($(ARMV7),y)
+    TARGET_LDFLAGS += -Wl,--fix-cortex-a8
+  endif
 endif
 
 ifneq ($(filter PC WINE,$(TARGET)),)
