@@ -177,6 +177,16 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
 
     wp_file2.reset(WayPointFile::create(szFile, 2));
 
+    // Test if waypoints.xcw can be loaded, otherwise try waypoints.cup
+    if (wp_file2.get() == NULL) {
+      // Get the map filename
+      Profile::GetPath(szProfileMapFile, szFile);
+      _tcscat(szFile, _T("/"));
+      _tcscat(szFile, _T("waypoints.cup"));
+
+      wp_file2.reset(WayPointFile::create(szFile, 2));
+    }
+
     // If waypoint file inside map file exists
     if (wp_file2.get() != NULL) {
       // parse the file
