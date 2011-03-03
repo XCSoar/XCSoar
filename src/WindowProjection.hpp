@@ -123,7 +123,7 @@ public:
   gcc_pure
   GeoPoint GetGeoScreenCenter() const;
 
-  // used by terrain renderer, topology and airspace
+  // used by terrain renderer, topography and airspace
   gcc_pure
   const GeoBounds &GetScreenBounds() const {
     return screenbounds_latlon;

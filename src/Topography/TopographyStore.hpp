@@ -35,7 +35,7 @@ class NLineReader;
 struct zzip_dir;
 
 /**
- * Class used to manage and render vector topology layers
+ * Class used to manage and render vector topography layers
  */
 class TopographyStore : private NonCopyable {
 public:

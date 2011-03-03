@@ -423,7 +423,7 @@ InputEvents::eventTerrainTopography(const TCHAR *misc)
   XCSoarInterface::SendSettingsMap(true);
 }
 
-// Do clear warnings IF NONE Toggle Terrain/Topology
+// Do clear warnings IF NONE Toggle Terrain/Topography
 void
 InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc)
 {

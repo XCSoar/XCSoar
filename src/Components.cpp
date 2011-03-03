@@ -339,7 +339,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   task_manager->set_contest(SettingsComputer().contest);
 
-  // Read the topology file(s)
+  // Read the topography file(s)
   topography = new TopographyStore();
   LoadConfiguredTopography(*topography);
 
@@ -525,7 +525,7 @@ XCSoarInterface::Shutdown(void)
 
   delete terrain;
 
-  LogStartUp(_T("CloseTopology"));
+  LogStartUp(_T("CloseTopography"));
   delete topography;
 
   delete marks;

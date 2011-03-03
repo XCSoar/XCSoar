@@ -104,7 +104,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   // reset label over-write preventer
   label_block.reset();
 
-  // Render terrain, groundline and topology
+  // Render terrain, groundline and topography
   RenderTerrain(canvas);
   RenderTopography(canvas);
   RenderFinalGlideShading(canvas);
@@ -131,7 +131,7 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   // Render estimate of thermal location
   DrawThermalEstimate(canvas);
 
-  // Render topology on top of airspace, to keep the text readable
+  // Render topography on top of airspace, to keep the text readable
   RenderTopographyLabels(canvas);
 
   // Render glide through terrain range

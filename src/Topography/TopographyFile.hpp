@@ -133,7 +133,7 @@ public:
 #endif
 
   /**
-   * @return true if new data from the topology file has been loaded
+   * @return true if new data from the topography file has been loaded
    */
   bool updateCache(const WindowProjection &map_projection);
 

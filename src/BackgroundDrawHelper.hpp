@@ -40,7 +40,7 @@ class LabelBlock;
 #include <tchar.h>
 
 /**
- * Utility class to draw terrain, topology (not implemented yet)
+ * Utility class to draw terrain, topography (not implemented yet)
  */
 class BackgroundDrawHelper 
 {

@@ -37,7 +37,7 @@ class LabelBlock;
 struct SETTINGS_MAP;
 
 /**
- * Class used to manage and render vector topology layers
+ * Class used to manage and render vector topography layers
  */
 class TopographyFileRenderer : private NonCopyable {
   const TopographyFile &file;
@@ -63,7 +63,7 @@ public:
   void Paint(Canvas &canvas, const WindowProjection &projection) const;
 
   /**
-   * Paints a topology label if the space is available in the LabelBlock
+   * Paints a topography label if the space is available in the LabelBlock
    * @param canvas The canvas to paint on
    * @param projection
    * @param label_block The LabelBlock class to use for decluttering
@@ -75,7 +75,7 @@ public:
 };
 
 /**
- * Class used to manage and render vector topology layers
+ * Class used to manage and render vector topography layers
  */
 class TopographyRenderer : private NonCopyable {
   const TopographyStore &store;
@@ -86,7 +86,7 @@ public:
   ~TopographyRenderer();
 
   /**
-   * Draws the topology to the given canvas
+   * Draws the topography to the given canvas
    * @param canvas The drawing canvas
    * @param rc The area to draw in
    */
