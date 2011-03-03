@@ -3,6 +3,8 @@ TARGETS = PC PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID CYGWIN
 # These targets are built when you don't specify the TARGET variable.
 DEFAULT_TARGETS = PC PPC2000 PPC2003 WM5 ALTAIR WINE
 
+TARGET_FLAVOR := $(TARGET)
+
 HAVE_CE := n
 HAVE_FPU := y
 XSCALE := n
@@ -12,6 +14,22 @@ HAVE_WIN32 := y
 HAVE_MSVCRT := y
 
 TARGET_ARCH :=
+
+# virtual targets ("flavors")
+
+ifeq ($(TARGET),PPC2003X)
+  XSCALE := y
+  TARGET_FLAVOR := $(TARGET)
+  override TARGET = PPC2003
+endif
+
+ifeq ($(TARGET),WM5X)
+  XSCALE := y
+  TARGET_FLAVOR := $(TARGET)
+  override TARGET = WM5
+endif
+
+# real targets
 
 ifeq ($(TARGET),PPC2000)
   CE_MAJOR := 3
@@ -27,15 +45,6 @@ ifeq ($(TARGET),PPC2003)
   PCPU := ARMV4
 
   HAVE_CE := y
-endif
-
-ifeq ($(TARGET),PPC2003X)
-  CE_MAJOR := 4
-  CE_MINOR := 00
-  PCPU := ARMV4
-
-  HAVE_CE := y
-  XSCALE := y
 endif
 
 ifeq ($(TARGET),PC)
@@ -77,15 +86,6 @@ ifeq ($(TARGET),WM5)
   CE_MINOR := 00
 
   HAVE_CE := y
-endif
-
-ifeq ($(TARGET),WM5X)
-  PCPU := ARMV4
-  CE_MAJOR := 5
-  CE_MINOR := 00
-
-  HAVE_CE := y
-  XSCALE := y
 endif
 
 ifeq ($(TARGET),WINE)
