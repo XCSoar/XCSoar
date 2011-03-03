@@ -237,9 +237,18 @@ WayPointFile::Save(const Waypoints &way_points)
 WayPointFile*
 WayPointFile::create(const TCHAR* filename, int the_filenum)
 {
-  // If filename is empty -> clear and return false
+  // If filename is empty -> clear and return NULL pointer
   if (string_is_empty(filename))
     return NULL;
+
+  // Test if file exists
+  if (!File::Exists(filename)) {
+    // Test if file exists in zip archive
+    ZipSource zip(filename);
+    if (zip.error())
+      // If the file doesn't exist return NULL pointer
+      return NULL;
+  }
 
   // If WinPilot waypoint file -> save type and return true
   if (MatchesExtension(filename, _T(".dat")) ||
