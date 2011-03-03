@@ -180,7 +180,7 @@ LoadChecklist(void)
 
   TCHAR Details[MAXDETAILS];
   TCHAR Name[100];
-  BOOL inDetails = FALSE;
+  bool inDetails = false;
   int i;
 
   Details[0] = 0;

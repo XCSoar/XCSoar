@@ -40,12 +40,6 @@ Copyright_License {
 #define MAX_PATH 4096
 #endif
 
-typedef bool BOOL;
-enum {
-	FALSE = false,
-	TRUE = true,
-};
-
 typedef uint8_t BYTE;
 typedef uint32_t DWORD;
 typedef int32_t LONG;
