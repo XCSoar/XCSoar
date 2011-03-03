@@ -134,7 +134,7 @@ GetDirectionData(int DirectionFilterIdx)
     _stprintf(sTmp, _T("%c"), '*');
   } else if (DirectionFilterIdx == 1) {
     _stprintf(sTmp, _T("HDG(%u")_T(DEG)_T(")"),
-              uround(XCSoarInterface::Basic().Heading.as_bearing().value_degrees()));
+              uround(last_heading.as_bearing().value_degrees()));
   } else
   _stprintf(sTmp, _T("%d")_T(DEG), DirectionFilter[DirectionFilterIdx]);
 
@@ -246,9 +246,7 @@ private:
       return true;
 
     int a = DirectionFilter[filter_data.direction_index];
-    Angle angle = a == DirHDG
-      ? last_heading = heading
-      : Angle::degrees(fixed(a));
+    Angle angle = (a == DirHDG) ? heading : Angle::degrees(fixed(a));
 
     const GeoVector vec(location, wp.Location);
     fixed DirectionErr = (vec.Bearing - angle).as_delta().magnitude_degrees();
@@ -309,7 +307,7 @@ static void
 UpdateList()
 {
   FillList(WayPointSelectInfo, way_points, g_location,
-           XCSoarInterface::Basic().Heading, filter_data);
+          last_heading, filter_data);
 
   wWayPointList->SetLength(std::max(1, (int)WayPointSelectInfo.size()));
   wWayPointList->SetOrigin(0);
@@ -497,9 +495,10 @@ static void
 OnTimerNotify(WndForm &Sender)
 {
   (void)Sender;
-  if (filter_data.direction_index == 1) {
+  if (filter_data.direction_index == 1 && !XCSoarInterface::Calculated().Circling) {
     Angle a = last_heading - XCSoarInterface::Basic().Heading;
-    if (a.as_delta().magnitude_degrees() >= fixed_one) {
+    if (a.as_delta().magnitude_degrees() >= fixed(60)) {
+      last_heading = XCSoarInterface::Basic().Heading;
       UpdateList();
       InitializeDirection(true);
       wpDirection->RefreshDisplay();
@@ -585,6 +584,7 @@ dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location)
   wpType = (WndProperty *)wf->FindByName(_T("prpFltType"));
 
   g_location = location;
+  last_heading = XCSoarInterface::Basic().Heading;
   PrepareData();
   UpdateList();
 
