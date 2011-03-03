@@ -27,6 +27,6 @@ Copyright_License {
 class TopographyStore;
 
 bool
-LoadConfiguredTopology(TopographyStore &store);
+LoadConfiguredTopography(TopographyStore &store);
 
 #endif

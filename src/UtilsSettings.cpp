@@ -144,7 +144,7 @@ SettingsLeave()
   if (TopologyFileChanged) {
     XCSoarInterface::main_window.map.set_topology(NULL);
     topology->Reset();
-    LoadConfiguredTopology(*topology);
+    LoadConfiguredTopography(*topology);
     XCSoarInterface::main_window.map.set_topology(topology);
   }
 

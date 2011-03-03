@@ -341,7 +341,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   // Read the topology file(s)
   topology = new TopographyStore();
-  LoadConfiguredTopology(*topology);
+  LoadConfiguredTopography(*topology);
 
   // Read the waypoint files
   WayPointGlue::ReadWaypoints(way_points, terrain);

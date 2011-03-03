@@ -189,7 +189,7 @@ static void
 LoadFiles()
 {
   topology = new TopographyStore();
-  LoadConfiguredTopology(*topology);
+  LoadConfiguredTopography(*topology);
 
   terrain = RasterTerrain::OpenTerrain(NULL);
 

@@ -42,7 +42,7 @@ Copyright_License {
  * directory.
  */
 static bool
-LoadConfiguredTopologyFile(TopographyStore &store)
+LoadConfiguredTopographyFile(TopographyStore &store)
 {
   TCHAR file[MAX_PATH];
   if (!Profile::GetPath(szProfileTopologyFile, file))
@@ -68,7 +68,7 @@ LoadConfiguredTopologyFile(TopographyStore &store)
  * the same ZIP file.
  */
 static bool
-LoadConfiguredTopologyZip(TopographyStore &store)
+LoadConfiguredTopographyZip(TopographyStore &store)
 {
   TCHAR path[MAX_PATH];
   if (!Profile::GetPath(szProfileMapFile, path))
@@ -90,11 +90,11 @@ LoadConfiguredTopologyZip(TopographyStore &store)
 }
 
 bool
-LoadConfiguredTopology(TopographyStore &store)
+LoadConfiguredTopography(TopographyStore &store)
 {
   LogStartUp(_T("Loading Topology File..."));
   ProgressGlue::Create(_("Loading Topology File..."));
 
-  return LoadConfiguredTopologyFile(store) ||
-    LoadConfiguredTopologyZip(store);
+  return LoadConfiguredTopographyFile(store) ||
+    LoadConfiguredTopographyZip(store);
 }
