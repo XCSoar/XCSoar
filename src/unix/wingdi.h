@@ -45,7 +45,7 @@ typedef struct tagLOGFONT {
 	BYTE lfClipPrecision;
 	BYTE lfQuality;
 	BYTE lfPitchAndFamily;
-	TCHAR lfFaceName[LF_FACESIZE];
+	char lfFaceName[LF_FACESIZE];
 } LOGFONT;
 
 #endif

@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_DIALOGS_MESSAGE_HPP
 
 #include <windows.h>
+#include <tchar.h>
 
 int
 MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType);

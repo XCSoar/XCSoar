@@ -24,17 +24,7 @@ Copyright_License {
 #ifndef WINDEF_H
 #define WINDEF_H
 
-#include <stdbool.h>
-#include <stddef.h>
 #include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <wchar.h>
-#include <stdarg.h>
-#include <time.h>
-#include <unistd.h>
-
-#include "tchar.h"
 
 #ifndef MAX_PATH
 #define MAX_PATH 4096

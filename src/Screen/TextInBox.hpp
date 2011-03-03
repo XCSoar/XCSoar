@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_TEXT_IN_BOX_HPP
 
 #include <windef.h>
+#include <tchar.h>
 
 class Canvas;
 class LabelBlock;
