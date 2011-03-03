@@ -8,6 +8,9 @@ Version 6.0.6 - not yet released
   - EW: remove duplicate newline in declaration output
 * map
   - Airspace: add option to re-enable stencil buffer on PPC2000
+* other
+  - select waypoint: update heading filter only on large changes
+  - reduce dialog memory usage
 * Windows
   - compile vali-xcs.exe as console application
 * Android
