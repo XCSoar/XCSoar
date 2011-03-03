@@ -25,14 +25,11 @@ Copyright_License {
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Debug.hpp"
 #include "Screen/Color.hpp"
+#include "Util/ListHead.hpp"
 
 #include <map>
 #include <string>
 #include <assert.h>
-
-struct ListHead {
-  ListHead *prev, *next;
-};
 
 struct RenderedText : public ListHead {
   std::string key;
