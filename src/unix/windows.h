@@ -25,7 +25,6 @@ Copyright_License {
 #define WINDOWS_H
 
 #include <windef.h>
-#include <winbase.h>
 #include <winuser.h>
 #include <wingdi.h>
 
