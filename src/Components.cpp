@@ -52,7 +52,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Marks.hpp"
 #include "Device/device.hpp"
-#include "Topology/TopologyStore.hpp"
+#include "Topology/TopographyStore.hpp"
 #include "Topology/TopologyGlue.hpp"
 #include "Audio/VarioSound.h"
 #include "Screen/Graphics.hpp"
@@ -94,7 +94,7 @@ Copyright_License {
 
 FileCache *file_cache;
 Marks *marks;
-TopologyStore *topology;
+TopographyStore *topology;
 RasterTerrain *terrain;
 RasterWeather RASP;
 
@@ -340,7 +340,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   task_manager->set_contest(SettingsComputer().contest);
 
   // Read the topology file(s)
-  topology = new TopologyStore();
+  topology = new TopographyStore();
   LoadConfiguredTopology(*topology);
 
   // Read the waypoint files

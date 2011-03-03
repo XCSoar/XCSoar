@@ -26,7 +26,7 @@ Copyright_License {
  * for valgrind and profiling.
  */
 
-#include "Topology/TopologyStore.hpp"
+#include "Topology/TopographyStore.hpp"
 #include "OS/PathName.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "WindowProjection.hpp"
@@ -97,7 +97,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  TopologyStore topology;
+  TopographyStore topology;
   topology.Load(reader, NULL, dir);
   zzip_dir_close(dir);
 

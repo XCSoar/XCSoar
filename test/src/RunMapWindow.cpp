@@ -37,7 +37,7 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "WayPointGlue.hpp"
 #include "Device/device.hpp"
-#include "Topology/TopologyStore.hpp"
+#include "Topology/TopographyStore.hpp"
 #include "Topology/TopologyGlue.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Logger/LoggerImpl.hpp"
@@ -81,7 +81,7 @@ static TaskManager task_manager(task_events,
 
 static Airspaces airspace_database;
 
-static TopologyStore *topology;
+static TopographyStore *topology;
 static RasterTerrain *terrain;
 Logger logger;
 
@@ -188,7 +188,7 @@ static Blackboard blackboard;
 static void
 LoadFiles()
 {
-  topology = new TopologyStore();
+  topology = new TopographyStore();
   LoadConfiguredTopology(*topology);
 
   terrain = RasterTerrain::OpenTerrain(NULL);

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Topology/TopologyGlue.hpp"
-#include "Topology/TopologyStore.hpp"
+#include "Topology/TopographyStore.hpp"
 #include "Language.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
@@ -42,7 +42,7 @@ Copyright_License {
  * directory.
  */
 static bool
-LoadConfiguredTopologyFile(TopologyStore &store)
+LoadConfiguredTopologyFile(TopographyStore &store)
 {
   TCHAR file[MAX_PATH];
   if (!Profile::GetPath(szProfileTopologyFile, file))
@@ -68,7 +68,7 @@ LoadConfiguredTopologyFile(TopologyStore &store)
  * the same ZIP file.
  */
 static bool
-LoadConfiguredTopologyZip(TopologyStore &store)
+LoadConfiguredTopologyZip(TopographyStore &store)
 {
   TCHAR path[MAX_PATH];
   if (!Profile::GetPath(szProfileMapFile, path))
@@ -90,7 +90,7 @@ LoadConfiguredTopologyZip(TopologyStore &store)
 }
 
 bool
-LoadConfiguredTopology(TopologyStore &store)
+LoadConfiguredTopology(TopographyStore &store)
 {
   LogStartUp(_T("Loading Topology File..."));
   ProgressGlue::Create(_("Loading Topology File..."));

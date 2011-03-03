@@ -351,7 +351,7 @@ TopologyFileRenderer::PaintLabels(Canvas &canvas,
   }
 }
 
-TopologyRenderer::TopologyRenderer(const TopologyStore &_store)
+TopologyRenderer::TopologyRenderer(const TopographyStore &_store)
   :store(_store)
 {
   for (unsigned i = 0; i < store.size(); ++i)

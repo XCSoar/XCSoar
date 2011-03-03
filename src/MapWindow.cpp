@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Topology/TopologyStore.hpp"
+#include "Topology/TopographyStore.hpp"
 #include "Topology/TopologyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
@@ -172,7 +172,7 @@ MapWindow::on_paint_buffer(Canvas &canvas)
 }
 
 void
-MapWindow::set_topology(TopologyStore *_topology)
+MapWindow::set_topology(TopographyStore *_topology)
 {
   topology = _topology;
 

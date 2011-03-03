@@ -26,7 +26,7 @@ Copyright_License {
 
 class FileCache;
 class Marks;
-class TopologyStore;
+class TopographyStore;
 class RasterTerrain;
 class RasterWeather;
 class GlideComputer;
@@ -49,7 +49,7 @@ extern Waypoints way_points;
 extern ProtectedTaskManager *protected_task_manager;
 extern Replay *replay;
 extern Marks *marks;
-extern TopologyStore *topology;
+extern TopographyStore *topology;
 extern RasterTerrain *terrain;
 extern RasterWeather RASP;
 extern GlideComputer *glide_computer;

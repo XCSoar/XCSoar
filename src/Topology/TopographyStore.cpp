@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Topology/TopologyStore.hpp"
+#include "Topology/TopographyStore.hpp"
 #include "Topology/TopographyFile.hpp"
 #include "StringUtil.hpp"
 #include "IO/LineReader.hpp"
@@ -31,7 +31,7 @@ Copyright_License {
 #include <windef.h> // for MAX_PATH
 
 unsigned
-TopologyStore::ScanVisibility(const WindowProjection &m_projection,
+TopographyStore::ScanVisibility(const WindowProjection &m_projection,
                               unsigned max_update)
 {
   // check if any needs to have cache updates because wasnt
@@ -51,13 +51,13 @@ TopologyStore::ScanVisibility(const WindowProjection &m_projection,
   return num_updated;
 }
 
-TopologyStore::~TopologyStore()
+TopographyStore::~TopographyStore()
 {
   Reset();
 }
 
 void
-TopologyStore::Load(NLineReader &reader, const TCHAR *Directory,
+TopographyStore::Load(NLineReader &reader, const TCHAR *Directory,
                     struct zzip_dir *zdir)
 {
   Reset();
@@ -152,7 +152,7 @@ TopologyStore::Load(NLineReader &reader, const TCHAR *Directory,
 }
 
 void
-TopologyStore::Reset()
+TopographyStore::Reset()
 {
   for (unsigned i = 0; i < files.size(); ++i)
     delete files[i];

@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef TOPOLOGY_STORE_H
-#define TOPOLOGY_STORE_H
+#ifndef TOPOGRAPHY_STORE_HPP
+#define TOPOGRAPHY_STORE_HPP
 
 #include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
@@ -37,7 +37,7 @@ struct zzip_dir;
 /**
  * Class used to manage and render vector topology layers
  */
-class TopologyStore : private NonCopyable {
+class TopographyStore : private NonCopyable {
 public:
   enum {
     /** maximum number of topologies */
@@ -48,7 +48,7 @@ private:
   StaticArray<TopographyFile *, MAXTOPOLOGY> files;
 
 public:
-  ~TopologyStore();
+  ~TopographyStore();
 
   unsigned size() const {
     return files.size();

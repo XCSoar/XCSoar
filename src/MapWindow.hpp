@@ -38,7 +38,7 @@ Copyright_License {
 #include "WayPoint/WayPointRenderer.hpp"
 #include "Compiler.h"
 
-class TopologyStore;
+class TopographyStore;
 class TopologyRenderer;
 class RasterTerrain;
 class RasterWeather;
@@ -81,7 +81,7 @@ protected:
   MapWindowProjection render_projection;
 
   const Waypoints *way_points;
-  TopologyStore *topology;
+  TopographyStore *topology;
   TopologyRenderer *topology_renderer;
 
   RasterTerrain *terrain;
@@ -136,7 +136,7 @@ public:
     airspace_warnings = _airspace_warnings;
   }
 
-  void set_topology(TopologyStore *_topology);
+  void set_topology(TopographyStore *_topology);
   void set_terrain(RasterTerrain *_terrain);
   void set_weather(RasterWeather *_weather);
 

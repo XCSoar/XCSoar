@@ -696,7 +696,7 @@ $(KEY_CODE_DUMPER_BIN): $(KEY_CODE_DUMPER_OBJS) $(KEY_CODE_DUMPER_LDADD) | $(TAR
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 LOAD_TOPOLOGY_SOURCES = \
-	$(SRC)/Topology/TopologyStore.cpp \
+	$(SRC)/Topology/TopographyStore.cpp \
 	$(SRC)/Topology/TopographyFile.cpp \
 	$(SRC)/Topology/XShape.cpp \
 	$(SRC)/Projection.cpp \
@@ -1082,7 +1082,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Topology/TopographyFile.cpp \
-	$(SRC)/Topology/TopologyStore.cpp \
+	$(SRC)/Topology/TopographyStore.cpp \
 	$(SRC)/Topology/TopologyRenderer.cpp \
 	$(SRC)/Topology/TopologyGlue.cpp \
 	$(SRC)/Topology/XShape.cpp \

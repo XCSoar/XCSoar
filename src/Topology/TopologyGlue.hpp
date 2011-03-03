@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef TOPOLOGY_GLUE_H
 #define TOPOLOGY_GLUE_H
 
-class TopologyStore;
+class TopographyStore;
 
 bool
-LoadConfiguredTopology(TopologyStore &store);
+LoadConfiguredTopology(TopographyStore &store);
 
 #endif

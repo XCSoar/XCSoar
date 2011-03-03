@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef TOPOLOGY_RENDERER_HPP
 #define TOPOLOGY_RENDERER_HPP
 
-#include "Topology/TopologyStore.hpp"
+#include "Topology/TopographyStore.hpp"
 #include "Topology/ShapeRenderer.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
@@ -78,11 +78,11 @@ public:
  * Class used to manage and render vector topology layers
  */
 class TopologyRenderer : private NonCopyable {
-  const TopologyStore &store;
-  TopologyFileRenderer *files[TopologyStore::MAXTOPOLOGY];
+  const TopographyStore &store;
+  TopologyFileRenderer *files[TopographyStore::MAXTOPOLOGY];
 
 public:
-  TopologyRenderer(const TopologyStore &store);
+  TopologyRenderer(const TopographyStore &store);
   ~TopologyRenderer();
 
   /**
