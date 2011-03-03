@@ -49,14 +49,14 @@ protected:
 private:
   static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
   static bool parseAltitude(const TCHAR* src, fixed& dest);
-  static bool parseFlags(const TCHAR* src, WaypointFlags& dest);
+  static bool parseFlags(const TCHAR* src, Waypoint &dest);
   static bool parseRunwayDirection(const TCHAR* src, Angle& dest);
 
   static void composeLine(TextWriter &writer, const Waypoint& wp);
   static void composeAngle(TextWriter &writer,
                            const Angle& src, const bool lat);
   static void composeAltitude(TextWriter &writer, const fixed src);
-  static void composeFlags(TextWriter &writer, const WaypointFlags &src);
+  static void composeFlags(TextWriter &writer, const Waypoint &src);
 };
 
 #endif

@@ -25,9 +25,7 @@
 void
 WaypointFlags::setDefaultFlags(bool turnpoint)
 {
-  Airport = false;
   TurnPoint = turnpoint;
-  LandPoint = false;
   Home = false;
   StartPoint = false;
   FinishPoint = false;
@@ -35,7 +33,7 @@ WaypointFlags::setDefaultFlags(bool turnpoint)
 
 Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
   Location(_location), RunwayDirection(Angle::degrees(fixed_minus_one)),
-  RunwayLength(0)
+  RunwayLength(0), Type(wtNormal)
 {
   Flags.setDefaultFlags(is_turnpoint);
 }

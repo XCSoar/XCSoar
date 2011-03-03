@@ -108,7 +108,7 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   // Style (e.g. 5)
   /// @todo include peaks with peak symbols etc.
   if (iStyle < n_params)
-    parseStyle(params[iStyle], new_waypoint.Flags);
+    parseStyle(params[iStyle], new_waypoint);
 
   // Frequency & runway direction/length (for airports and landables)
   // and description (e.g. "Some Description")
@@ -240,7 +240,7 @@ WayPointFileSeeYou::parseDistance(const TCHAR* src, fixed& dest)
 }
 
 bool
-WayPointFileSeeYou::parseStyle(const TCHAR* src, WaypointFlags& dest)
+WayPointFileSeeYou::parseStyle(const TCHAR* src, Waypoint &dest)
 {
   // 1 - Normal
   // 2 - AirfieldGrass
@@ -255,9 +255,10 @@ WayPointFileSeeYou::parseStyle(const TCHAR* src, WaypointFlags& dest)
     return false;
 
   // Update flags
-  dest.LandPoint = (style == 3);
-  dest.Airport = (style == 2 || style == 4 || style == 5);
-  dest.TurnPoint = true;
+  dest.Type = (style == 3) ? wtOutlanding :
+              (style == 2 || style == 4 || style == 5) ? wtAirfield :
+              wtNormal;
+  dest.Flags.TurnPoint = true;
 
   return true;
 }

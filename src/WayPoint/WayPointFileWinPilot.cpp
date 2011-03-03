@@ -96,7 +96,7 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
   }
 
   // Waypoint Flags (e.g. AT)
-  parseFlags(params[4], new_waypoint.Flags);
+  parseFlags(params[4], new_waypoint);
 
   way_points.append(new_waypoint);
   return true;
@@ -212,7 +212,7 @@ WayPointFileWinPilot::parseAltitude(const TCHAR* src, fixed& dest)
 }
 
 bool
-WayPointFileWinPilot::parseFlags(const TCHAR* src, WaypointFlags& dest)
+WayPointFileWinPilot::parseFlags(const TCHAR* src, Waypoint &dest)
 {
   // A = Airport
   // T = Turnpoint
@@ -227,27 +227,29 @@ WayPointFileWinPilot::parseFlags(const TCHAR* src, WaypointFlags& dest)
     switch (src[i]) {
     case 'A':
     case 'a':
-      dest.Airport = true;
+      dest.Type = wtAirfield;
       break;
     case 'T':
     case 't':
-      dest.TurnPoint = true;
+      dest.Flags.TurnPoint = true;
       break;
     case 'L':
     case 'l':
-      dest.LandPoint = true;
+      // Don't downgrade!
+      if (dest.Type != wtAirfield)
+        dest.Type = wtOutlanding;
       break;
     case 'H':
     case 'h':
-      dest.Home = true;
+      dest.Flags.Home = true;
       break;
     case 'S':
     case 's':
-      dest.StartPoint = true;
+      dest.Flags.StartPoint = true;
       break;
     case 'F':
     case 'f':
-      dest.FinishPoint = true;
+      dest.Flags.FinishPoint = true;
       break;
     }
   }
@@ -284,7 +286,7 @@ WayPointFileWinPilot::composeLine(TextWriter &writer, const Waypoint& wp)
   composeAltitude(writer, wp.Altitude);
   writer.write(',');
   // Attach the waypoint flags to the output
-  composeFlags(writer, wp.Flags);
+  composeFlags(writer, wp);
   writer.write(',');
   // Attach the waypoint name to the output
   writer.write(wp.Name.c_str());
@@ -324,24 +326,24 @@ WayPointFileWinPilot::composeAltitude(TextWriter &writer, const fixed src)
 
 void
 WayPointFileWinPilot::composeFlags(TextWriter &writer,
-                                   const WaypointFlags &src)
+                                   const Waypoint &src)
 {
-  if (src.Airport)
+  if (src.is_airport())
     writer.write('A');
-  if (src.TurnPoint)
+  if (src.Flags.TurnPoint)
     writer.write('T');
-  if (src.LandPoint)
+  if (src.is_landable())
     writer.write('L');
-  if (src.Home)
+  if (src.Flags.Home)
     writer.write('H');
-  if (src.StartPoint)
+  if (src.Flags.StartPoint)
     writer.write('S');
-  if (src.FinishPoint)
+  if (src.Flags.FinishPoint)
     writer.write('F');
 
   // set as turnpoint by default if nothing else
-  if (!src.Airport && !src.TurnPoint && !src.LandPoint && !src.Home &&
-      !src.StartPoint && !src.FinishPoint)
+  if (!src.Flags.TurnPoint && !src.is_landable() &&
+      !src.Flags.Home && !src.Flags.StartPoint && !src.Flags.FinishPoint)
     writer.write('T');
 }
 

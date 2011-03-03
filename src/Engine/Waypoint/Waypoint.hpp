@@ -38,12 +38,8 @@ class TaskProjection;
  * present for compatibility
  */
 struct WaypointFlags {
-  /** If waypoint is an airport/airfield */
-  bool Airport:1;
   /** If waypoint can be used as a turnpoint */
   bool TurnPoint:1;
-  /** If waypoint can be landed at although not an airport */
-  bool LandPoint:1;
   /** If waypoint is to be used as home */
   bool Home:1;
   /** If waypoint is marked as a potential start point */
@@ -57,6 +53,12 @@ struct WaypointFlags {
    * @param turnpoint Whether the waypoint is a turnpoint
    */
   void setDefaultFlags(bool turnpoint);
+};
+
+enum WaypointType {
+  wtNormal,
+  wtAirfield,
+  wtOutlanding,
 };
 
 /**
@@ -96,6 +98,8 @@ public:
   Angle RunwayDirection;
   /** Main runway length in m (0 for unknown) */
   int RunwayLength;
+  /** Type of the waypoint */
+  WaypointType Type;
   /** Flag types of this waypoint */
   WaypointFlags Flags;
   /** File number to store waypoint in (0,1), -1 to delete/ignore */
@@ -115,7 +119,7 @@ public:
   bool
   is_landable() const
   {
-    return Flags.LandPoint || Flags.Airport;
+    return (Type == wtAirfield || Type == wtOutlanding);
   }
 
   /**
@@ -126,7 +130,7 @@ public:
   bool
   is_airport() const
   {
-    return Flags.Airport;
+    return Type == wtAirfield;
   }
 
   /**

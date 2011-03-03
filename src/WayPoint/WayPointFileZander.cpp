@@ -74,8 +74,8 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
     parseString(line + 35, new_waypoint.Comment, 9);
 
   // Flags (Characters 45-49)
-  if (len < 46 || !parseFlags(line + 45, new_waypoint.Flags))
-    if (len < 36 || !parseFlagsFromDescription(line + 35, new_waypoint.Flags))
+  if (len < 46 || !parseFlags(line + 45, new_waypoint))
+    if (len < 36 || !parseFlagsFromDescription(line + 35, new_waypoint))
       new_waypoint.Flags.TurnPoint = true;
 
   way_points.append(new_waypoint);
@@ -149,7 +149,7 @@ WayPointFileZander::parseAltitude(const TCHAR* src, fixed& dest)
 }
 
 bool
-WayPointFileZander::parseFlags(const TCHAR* src, WaypointFlags& dest)
+WayPointFileZander::parseFlags(const TCHAR* src, Waypoint &dest)
 {
   // WP = Waypoint
   // HA = Home Field
@@ -160,27 +160,27 @@ WayPointFileZander::parseFlags(const TCHAR* src, WaypointFlags& dest)
 
   // If flags field exists (this function isn't called otherwise)
   // -> turnpoint needs to be declared as one
-  dest.TurnPoint = false;
+  dest.Flags.TurnPoint = false;
 
   if ((src[0] == 'W' || src[0] == 'w') &&
       (src[1] == 'P' || src[1] == 'p')) {
-    dest.TurnPoint = true;
+    dest.Flags.TurnPoint = true;
   } else if ((src[0] == 'H' || src[0] == 'h') &&
              (src[1] == 'A' || src[1] == 'a')) {
-    dest.TurnPoint = true;
-    dest.Airport = true;
-    dest.Home = true;
+    dest.Type = wtAirfield;
+    dest.Flags.TurnPoint = true;
+    dest.Flags.Home = true;
   } else if ((src[0] == 'W' || src[0] == 'w') &&
              (src[1] == 'A' || src[1] == 'a')) {
-    dest.TurnPoint = true;
-    dest.Airport = true;
+    dest.Type = wtAirfield;
+    dest.Flags.TurnPoint = true;
   } else if ((src[0] == 'L' || src[0] == 'l') &&
              (src[1] == 'F' || src[1] == 'f')) {
-    dest.LandPoint = true;
+    dest.Type = wtOutlanding;
   } else if ((src[0] == 'W' || src[0] == 'w') &&
              (src[1] == 'L' || src[1] == 'l')) {
-    dest.TurnPoint = true;
-    dest.LandPoint = true;
+    dest.Type = wtOutlanding;
+    dest.Flags.TurnPoint = true;
   } else {
     return false;
   }
@@ -190,14 +190,14 @@ WayPointFileZander::parseFlags(const TCHAR* src, WaypointFlags& dest)
 
 bool
 WayPointFileZander::parseFlagsFromDescription(const TCHAR* src,
-                                              WaypointFlags& dest)
+                                              Waypoint &dest)
 {
   // If the description starts with 1 the waypoint is an airport
   // (usually the description of an airport is the frequency)
 
   if (src[0] == '1') {
-    dest.TurnPoint = true;
-    dest.Airport = true;
+    dest.Type = wtAirfield;
+    dest.Flags.TurnPoint = true;
     return true;
   }
 

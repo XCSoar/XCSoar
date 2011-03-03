@@ -332,15 +332,14 @@ static void GetValues(void) {
     switch(myflag) {
     case 1:
       global_wpt->Flags.TurnPoint = true;
-      global_wpt->Flags.Airport = true;
+      global_wpt->Type = wtAirfield;
       break;
     case 2:
-      global_wpt->Flags.LandPoint = true;
+      global_wpt->Type = wtOutlanding;
       break;
     default:
+      global_wpt->Type = wtNormal;
       global_wpt->Flags.TurnPoint = true;
-      global_wpt->Flags.Airport = false;
-      global_wpt->Flags.LandPoint = false;
     };
   }
 }

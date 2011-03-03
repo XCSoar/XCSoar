@@ -227,9 +227,8 @@ TestWinPilotWayPoint(const Waypoint org_wp, const Waypoint *wp)
     return;
   }
 
-  ok1(wp->Flags.Airport == org_wp.Flags.Airport);
+  ok1(wp->Type == org_wp.Type);
   ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
-  ok1(wp->Flags.LandPoint == org_wp.Flags.LandPoint);
   ok1(wp->Flags.Home == org_wp.Flags.Home);
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
   ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
@@ -261,9 +260,8 @@ TestSeeYouWayPoint(const Waypoint org_wp, const Waypoint *wp)
     return;
   }
 
-  ok1(wp->Flags.Airport == org_wp.Flags.Airport);
+  ok1(wp->Type == org_wp.Type);
   ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
-  ok1(wp->Flags.LandPoint == org_wp.Flags.LandPoint);
   // No home waypoints in a SeeYou file
   //ok1(wp->Flags.Home == org_wp.Flags.Home);
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
@@ -298,9 +296,8 @@ TestZanderWayPoint(const Waypoint org_wp, const Waypoint *wp)
     return;
   }
 
-  ok1(wp->Flags.Airport == org_wp.Flags.Airport);
+  ok1(wp->Type == org_wp.Type);
   ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
-  ok1(wp->Flags.LandPoint == org_wp.Flags.LandPoint);
   ok1(wp->Flags.Home == org_wp.Flags.Home);
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
   ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
@@ -344,9 +341,8 @@ CreateOriginalWaypoints()
   wp.RunwayDirection = Angle::degrees(fixed(40));
   wp.RunwayLength = 590;
 
-  wp.Flags.Airport = true;
+  wp.Type = wtAirfield;
   wp.Flags.TurnPoint = true;
-  wp.Flags.LandPoint = false;
   wp.Flags.Home = true;
   wp.Flags.StartPoint = false;
   wp.Flags.FinishPoint = false;
@@ -363,9 +359,8 @@ CreateOriginalWaypoints()
   wp2.RunwayDirection = Angle::degrees(fixed(-1));
   wp2.RunwayLength = 0;
 
-  wp2.Flags.Airport = false;
+  wp2.Type = wtNormal;
   wp2.Flags.TurnPoint = true;
-  wp2.Flags.LandPoint = false;
   wp2.Flags.Home = false;
   wp2.Flags.StartPoint = false;
   wp2.Flags.FinishPoint = false;
@@ -382,9 +377,8 @@ CreateOriginalWaypoints()
   wp3.RunwayDirection = Angle::degrees(fixed(-1));
   wp3.RunwayLength = 0;
 
-  wp3.Flags.Airport = false;
+  wp3.Type = wtNormal;
   wp3.Flags.TurnPoint = true;
-  wp3.Flags.LandPoint = false;
   wp3.Flags.Home = false;
   wp3.Flags.StartPoint = false;
   wp3.Flags.FinishPoint = false;
@@ -401,9 +395,8 @@ CreateOriginalWaypoints()
   wp4.RunwayDirection = Angle::degrees(fixed(90));
   wp4.RunwayLength = Units::ToSysUnit(fixed(0.01), unStatuteMiles);
 
-  wp4.Flags.Airport = false;
+  wp4.Type = wtOutlanding;
   wp4.Flags.TurnPoint = true;
-  wp4.Flags.LandPoint = true;
   wp4.Flags.Home = false;
   wp4.Flags.StartPoint = false;
   wp4.Flags.FinishPoint = false;
@@ -420,9 +413,8 @@ CreateOriginalWaypoints()
   wp5.RunwayDirection = Angle::degrees(fixed(-1));
   wp5.RunwayLength = 0;
 
-  wp5.Flags.Airport = false;
+  wp5.Type = wtNormal;
   wp5.Flags.TurnPoint = true;
-  wp5.Flags.LandPoint = false;
   wp5.Flags.Home = false;
   wp5.Flags.StartPoint = false;
   wp5.Flags.FinishPoint = false;
@@ -435,7 +427,7 @@ int main(int argc, char **argv)
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(63 + 3 * 4 + (10 + 11 + 9) * org_wp.size());
+  plan_tests(63 + 3 * 4 + (9 + 10 + 8) * org_wp.size());
 
   TestExtractParameters();
 

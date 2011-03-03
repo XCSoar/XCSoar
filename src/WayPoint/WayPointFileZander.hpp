@@ -43,8 +43,8 @@ private:
   static bool parseString(const TCHAR* src, tstring& dest, unsigned len);
   static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
   static bool parseAltitude(const TCHAR* src, fixed& dest);
-  static bool parseFlags(const TCHAR* src, WaypointFlags& dest);
-  static bool parseFlagsFromDescription(const TCHAR* src, WaypointFlags& dest);
+  static bool parseFlags(const TCHAR* src, Waypoint &dest);
+  static bool parseFlagsFromDescription(const TCHAR* src, Waypoint &dest);
 };
 
 #endif
