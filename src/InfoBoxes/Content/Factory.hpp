@@ -119,7 +119,8 @@ namespace InfoBoxFactory
     e_Experimental2, /* Experimental2 */
     e_CPU_Load, /* CPU load consumed by XCSoar averaged over 5 seconds */
     e_WP_H, /* Absolute arrival altitude at the next waypoint in final glide */
-    /* 77 */
+    e_Free_RAM, /* Free RAM as reported by OS */
+    /* 78 */
     e_NUM_TYPES /* Last item */
   }t_InfoBox;
 

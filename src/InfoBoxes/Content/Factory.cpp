@@ -751,6 +751,15 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     13, // WP AltR
     12, // WP AltD
   },
+
+  // 77
+  {
+    N_("Free RAM"),
+    N_("Free RAM"),
+    N_("Free RAM as reported by OS."),
+    75, // CPU Load
+    75, // CPU Load
+  },
 };
 
 InfoBoxContent*
@@ -911,6 +920,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentCPULoad();
   case 76:
     return new InfoBoxContentNextAltitudeArrival();
+  case 77:
+    return new InfoBoxContentFreeRAM();
   }
 
   return NULL;

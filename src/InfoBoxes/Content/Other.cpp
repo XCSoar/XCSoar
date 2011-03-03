@@ -27,6 +27,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Hardware/Battery.hpp"
 #include "OS/SystemLoad.hpp"
+#include "OS/MemInfo.hpp"
 #include "Asset.hpp"
 
 #include <tchar.h>
@@ -132,4 +133,25 @@ InfoBoxContentCPULoad::Update(InfoBoxWindow &infobox)
   } else {
     infobox.SetInvalid();
   }
+}
+
+void
+InfoBoxContentFreeRAM::Update(InfoBoxWindow &infobox)
+{
+  TCHAR tmp[32];
+  TCHAR unit;
+  unsigned long freeRAM = SystemFreeRAM();
+  if (freeRAM >= 1024 * 1024 *1024) {
+    freeRAM /= (1024 * 1024 * 1024);
+    unit = _T('G');
+  } else if (freeRAM >= 1024 * 1024) {
+    freeRAM /= (1024 * 1024);
+    unit = _T('M');
+  } else if (freeRAM >= 1024) {
+    freeRAM /= 1024;
+    unit = _T('K');
+  } else
+    unit = _T('B');
+  _stprintf(tmp, _T("%lu%c"), freeRAM, unit);
+  infobox.SetValue(tmp);
 }
