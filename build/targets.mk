@@ -6,7 +6,6 @@ DEFAULT_TARGETS = PC PPC2000 PPC2003 WM5 ALTAIR WINE
 CONFIG_PPC2003 := n
 CONFIG_ALTAIR := n
 CONFIG_PC := n
-CONFIG_WINE := n
 HAVE_CE := n
 HAVE_FPU := y
 XSCALE := n
@@ -35,10 +34,6 @@ ifeq ($(TARGET),CYGWIN)
   WINHOST := y
 else
   CONFIG_CYGWIN := n
-endif
-
-ifeq ($(TARGET),WINE)
-  CONFIG_WINE := y
 endif
 
 ifeq ($(TARGET),ALTAIR)
@@ -77,7 +72,7 @@ ifeq ($(CONFIG_CYGWIN),y)
   MCPU := -march=$(CPU)
 endif
 
-ifeq ($(CONFIG_WINE),y)
+ifeq ($(TARGET),WINE)
   TCPATH := wine
   CPU := i586
   MCPU := -march=$(CPU)
@@ -187,7 +182,7 @@ ifeq ($(CONFIG_CYGWIN),y)
   WINVER = 0x0500
 endif
 
-ifeq ($(CONFIG_WINE),y)
+ifeq ($(TARGET),WINE)
   WINVER = 0x0500
   TARGET := WINE
   CONFIG_PC := y
@@ -222,7 +217,7 @@ ifeq ($(TARGET),PPC2000)
   TARGET_CPPFLAGS += -DNOLINETO -DNOCLEARTYPE
 endif
 
-ifeq ($(CONFIG_WINE),y)
+ifeq ($(TARGET),WINE)
   TARGET_CPPFLAGS += -D__WINE__
   # -mno-cygwin
 endif
@@ -364,7 +359,7 @@ endif
 TARGET_EXEEXT = .exe
 NOSTRIP_SUFFIX = -ns
 
-ifeq ($(CONFIG_WINE),y)
+ifeq ($(TARGET),WINE)
   TARGET_EXEEXT :=
   NOSTRIP_SUFFIX :=
 endif

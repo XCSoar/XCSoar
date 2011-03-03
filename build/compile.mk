@@ -15,7 +15,7 @@ STRIP = $(TCPATH)strip$(EXE)
 WINDRES = $(TCPATH)windres$(EXE)
 ARFLAGS = rc
 
-ifeq ($(CONFIG_WINE),y)
+ifeq ($(TARGET),WINE)
 AR = ar$(EXE)
 STRIP = strip$(EXE)
 WINDRES = wrc$(EXE)
