@@ -32,7 +32,6 @@ WaypointFlags::setDefaultFlags(bool turnpoint)
   StartPoint = false;
   FinishPoint = false;
   Restricted = false;
-  WaypointFlag = false;
 }
 
 Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):

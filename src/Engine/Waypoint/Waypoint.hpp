@@ -52,7 +52,6 @@ struct WaypointFlags {
   bool FinishPoint:1;
   /** If waypoint is marked for restricted access (unused?) */
   bool Restricted:1;
-  bool WaypointFlag:1;
 
   /**
    * Set default flags (all off except turnpoint)
