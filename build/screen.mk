@@ -30,10 +30,12 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/EditWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Android/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/Android/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/Event.cpp
 else
 SCREEN_SOURCES += \

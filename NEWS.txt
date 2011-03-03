@@ -17,6 +17,7 @@ Version 6.0.6 - not yet released
   - fix crash due to invalid UTF-8 labels
   - more pause/resume crash fixes
   - take advantage of ARMv7 CPUs
+  - dialogs are modal now
 * Linux
   - implement the serial port
 

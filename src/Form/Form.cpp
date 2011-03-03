@@ -326,7 +326,8 @@ WndForm::ShowModal(Window *modal_allowed)
   EventLoop loop(*event_queue, main_window);
   Event event;
   while (mModalResult == 0 && loop.get(event))
-    loop.dispatch(event);
+    if (main_window.FilterEvent(event, this, modal_allowed))
+      loop.dispatch(event);
 
 #elif defined(ENABLE_SDL)
 
@@ -335,7 +336,8 @@ WndForm::ShowModal(Window *modal_allowed)
   EventLoop loop(main_window);
   SDL_Event event;
   while (mModalResult == 0 && loop.get(event))
-    loop.dispatch(event);
+    if (main_window.FilterEvent(event, this, modal_allowed))
+      loop.dispatch(event);
 
 #else /* !ENABLE_SDL */
 

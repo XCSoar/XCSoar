@@ -214,7 +214,11 @@ public:
 #endif
   }
 
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+  const ContainerWindow *GetParent() const {
+    return parent;
+  }
+#else
   operator HWND() const {
     return hWnd;
   };
