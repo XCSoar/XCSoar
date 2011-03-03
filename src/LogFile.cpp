@@ -34,47 +34,6 @@ Copyright_License {
 #include <android/log.h>
 #endif
 
-#if !defined(NDEBUG) && !defined(GNAV)
-/**
- * Saves the given string (Str) to the debug logfile
- * @param Str String to be logged
- */
-void
-LogDebug(const TCHAR *Str, ...)
-{
-  static bool initialised = false;
-  static TCHAR szFileName[MAX_PATH];
-
-  if (!initialised) {
-    if (is_altair())
-      LocalPath(szFileName, _T("persist/xcsoar-debug.log"));
-    else
-      LocalPath(szFileName, _T("xcsoar-debug.log"));
-  }
-
-  TCHAR buf[MAX_PATH];
-  va_list ap;
-
-  va_start(ap, Str);
-  _vstprintf(buf, Str, ap);
-  va_end(ap);
-
-#ifdef ANDROID
-  __android_log_print(ANDROID_LOG_DEBUG, "XCSoar", "%s", buf);
-#endif
-
-#if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(NDEBUG)
-  fprintf(stderr, "%s\n", buf);
-#endif
-
-  TextWriter writer(szFileName, initialised);
-  if (!writer.error())
-    writer.writeln(buf);
-
-  if (!initialised)
-    initialised = true;
-}
-#endif /* !NDEBUG */
 
 /**
  * Saves the given string (Str) to the logfile

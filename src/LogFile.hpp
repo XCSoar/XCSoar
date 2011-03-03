@@ -30,10 +30,7 @@ Copyright_License {
 
 #if !defined(NDEBUG) && !defined(GNAV)
 
-#ifndef _UNICODE
-gcc_printf(1, 2)
-#endif
-void LogDebug(const TCHAR *Str, ...);
+#define LogDebug(...) LogStartUp(__VA_ARGS__)
 
 #else /* NDEBUG */
 

@@ -38,18 +38,3 @@ LogStartUp(const TCHAR *fmt, ...)
   fputc('\n', stderr);
 }
 
-#if !defined(NDEBUG) && !defined(GNAV)
-
-void
-LogDebug(const TCHAR *fmt, ...)
-{
-  va_list ap;
-
-  va_start(ap, fmt);
-  _vftprintf(stderr, fmt, ap);
-  va_end(ap);
-
-  fputc('\n', stderr);
-}
-
-#endif
