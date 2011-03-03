@@ -30,14 +30,113 @@
 #ifndef XCSOAR_UTIL_LIST_HEAD_HPP
 #define XCSOAR_UTIL_LIST_HEAD_HPP
 
+#include "Compiler.h"
+
+#include <cassert>
+
 /**
  * A doubly linked list implementation, similar to linux/list.h.  It
  * is very cheap at runtime, because the prev/next pointers are
  * included in each item, instead of doing a separate allocation.  To
  * use it, derive your class/struct from this one.
  */
-struct ListHead {
+class ListHead {
   ListHead *prev, *next;
+
+public:
+  /**
+   * Cheap non-initializing constructor.
+   */
+  ListHead() {}
+
+  struct empty {};
+
+  /**
+   * Initialize an empty list.
+   */
+  ListHead(empty):prev(this), next(this) {}
+
+  const ListHead *GetPrevious() const {
+    return prev;
+  }
+
+  ListHead *GetPrevious() {
+    return prev;
+  }
+
+  const ListHead *GetNext() const {
+    return next;
+  }
+
+  ListHead *GetNext() {
+    return next;
+  }
+
+  bool IsEmpty() const {
+    assert((prev == this) == (next == this));
+    return prev == this;
+  }
+
+  /**
+   * Count the number of items in this list, not including the current
+   * one.
+   */
+  gcc_pure
+  unsigned Count() const {
+    unsigned n = 0;
+    for (const ListHead *p = next; p != this; p = p->next)
+      ++n;
+    return n;
+  }
+
+  /**
+   * Turns this object into an empty list.
+   */
+  void Clear() {
+    prev = next = this;
+  }
+
+  /**
+   * Remove this item from the linked list.
+   */
+  void Remove() {
+    assert(!IsEmpty());
+    assert(prev->next == this);
+    assert(next->prev == this);
+
+    next->prev = prev;
+    prev->next = next;
+  }
+
+  /**
+   * Insert this item after the specified one.  It must not be in the
+   * list already (or in another list).
+   */
+  void InsertAfter(ListHead &other) {
+    assert(&other != this);
+    assert(&other != this);
+    assert(other.prev->next == &other);
+    assert(other.next->prev == &other);
+
+    next = other.next;
+    next->prev = this;
+    prev = &other;
+    other.next = this;
+  }
+
+  /**
+   * Move this item from its current position in the list after the
+   * specified one.
+   */
+  void MoveAfter(ListHead &other) {
+    if (prev == &other) {
+      assert(other.next == this);
+      return;
+    }
+
+    Remove();
+    InsertAfter(other);
+  }
 };
 
 #endif
