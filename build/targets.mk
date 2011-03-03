@@ -4,7 +4,6 @@ TARGETS = PC PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID CYGWIN
 DEFAULT_TARGETS = PC PPC2000 PPC2003 WM5 ALTAIR WINE
 
 CONFIG_PPC2003 := n
-CONFIG_PC := n
 HAVE_CE := n
 HAVE_FPU := y
 XSCALE := n
@@ -25,7 +24,6 @@ ifeq ($(TARGET),PPC2003X)
 endif
 
 ifeq ($(TARGET),PC)
-  CONFIG_PC := y
 endif
 
 ifeq ($(TARGET),CYGWIN)
@@ -50,7 +48,7 @@ endif
 
 ############# build and CPU info
 
-ifeq ($(CONFIG_PC),y)
+ifeq ($(TARGET),PC)
   TCPATH := i586-mingw32msvc-
 
   ifeq ($(WINHOST),y)
@@ -167,9 +165,8 @@ ifeq ($(TARGET),ALTAIR)
   CE_MINOR := 00
 endif
 
-ifeq ($(CONFIG_PC),y)
+ifneq ($(filter PC WINE,$(TARGET)),)
   WINVER = 0x0500
-  TARGET := PC
 endif
 
 ifeq ($(TARGET),CYGWIN)
@@ -178,8 +175,6 @@ endif
 
 ifeq ($(TARGET),WINE)
   WINVER = 0x0500
-  TARGET := WINE
-  CONFIG_PC := y
 endif
 
 ######## target definitions
@@ -316,7 +311,7 @@ ifeq ($(TARGET),ANDROID)
   TARGET_LDFLAGS += -nostdlib -Wl,-shared,-Bsymbolic -Wl,--no-undefined
 endif
 
-ifeq ($(CONFIG_PC),y)
+ifneq ($(filter PC WINE,$(TARGET)),)
   TARGET_LDLIBS := -lwinmm -lstdc++
 endif
 
