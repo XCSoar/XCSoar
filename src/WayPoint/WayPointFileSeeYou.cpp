@@ -116,18 +116,6 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
     if (iFrequency < n_params)
       appendStringWithSeperator(new_waypoint.Comment, params[iFrequency]);
 
-    if (iRWDir < n_params && *params[iRWDir]) {
-      appendStringWithSeperator(new_waypoint.Comment, params[iRWDir]);
-      new_waypoint.Comment += _T("°");
-      TCHAR *end;
-      int direction =_tcstol(params[iRWDir], &end, 10);
-      if (end == params[iRWDir] || direction < 0 || direction > 360)
-        direction = -1;
-      else if (direction == 360)
-        direction = 0;
-      new_waypoint.RunwayDirection = Angle::degrees(fixed(direction));
-    }
-
     // Runway length (e.g. 546.0m)
     fixed rwlen;
     if (iRWLen < n_params && parseDistance(params[iRWLen], rwlen)) {
@@ -135,6 +123,19 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
         new_waypoint.RunwayLength = rwlen;
         appendStringWithSeperator(new_waypoint.Comment, params[iRWLen]);
       }
+    }
+
+    if (iRWDir < n_params && *params[iRWDir]) {
+      appendStringWithSeperator(new_waypoint.Comment, params[iRWDir]);
+      new_waypoint.Comment += _T("°");
+      TCHAR *end;
+      int direction =_tcstol(params[iRWDir], &end, 10);
+      if (end == params[iRWDir] || direction < 0 || direction > 360 ||
+          (direction == 0 && !positive(rwlen)))
+        direction = -1;
+      else if (direction == 360)
+        direction = 0;
+      new_waypoint.RunwayDirection = Angle::degrees(fixed(direction));
     }
   }
 
