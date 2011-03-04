@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.0.6 - not yet released
+Version 6.0.6 - 2011/03/04
 * devices:
   - fix declaration crash in Volkslogger, EW, CAI302, CAI GPS NAV
   - EW: remove duplicate newline in declaration output
