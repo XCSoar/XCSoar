@@ -90,6 +90,7 @@ NMEA_INFO::reset()
   NavAltitude = fixed_zero;
 
   pressure.set_QNH(fixed(1013.25));
+  QNHAvailable.clear();
 
   Time = fixed_zero;
   DateTime.year = DateTime.month = DateTime.day = 0;
