@@ -279,6 +279,9 @@ WayPointFileSeeYou::parseStyle(const TCHAR* src, Waypoint &dest)
   case 14:
     dest.Type = wtBridge;
     break;
+  case 15:
+    dest.Type = wtPowerPlant;
+    break;
   }
 
   dest.Flags.TurnPoint = true;

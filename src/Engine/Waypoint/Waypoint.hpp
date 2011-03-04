@@ -63,6 +63,7 @@ enum WaypointType {
   wtBridge,
   wtTunnel,
   wtTower,
+  wtPowerPlant,
 };
 
 /**
