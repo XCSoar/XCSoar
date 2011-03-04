@@ -30,13 +30,12 @@
 
 #include "Compiler.h"
 
-#include <stdlib.h>
 #include <tchar.h>
 
 class TextWriter;
 
 /** Enumeration for XML parse errors. */
-typedef enum XMLError
+enum XMLError
 {
   eXMLErrorNone = 0,
   eXMLErrorEmpty,
@@ -49,38 +48,38 @@ typedef enum XMLError
   eXMLErrorInvalidTag,
   eXMLErrorNoElements,
   eXMLErrorFileNotFound
-} XMLError;
+};
 
 /** Enumeration used to manage type of data. Use in conjonction with structure XMLNodeContents */
-typedef enum XMLElementType
+enum XMLElementType
 {
   eNodeChild = 0,
   eNodeAttribute = 1,
   eNodeText = 2,
   eNodeNULL = 4
-} XMLElementType;
+};
 
 /** Structure used to obtain error details if the parse fails. */
-typedef struct XMLResults
+struct XMLResults
 {
   enum XMLError error;
   int nLine, nColumn;
-} XMLResults;
+};
 
 /** Structure for XML attribute. */
-typedef struct
+struct XMLAttribute
 {
   const TCHAR *lpszName;
   const TCHAR *lpszValue;
-} XMLAttribute;
+} ;
 
 struct XMLNodeContents;
 
-typedef struct XMLNode
+struct XMLNode
 {
 //  friend class XMLNode;
 protected:
-  typedef struct // to allow shallow copy and "intelligent/smart" pointers (automatic delete):
+  struct XMLNodeData // to allow shallow copy and "intelligent/smart" pointers (automatic delete):
   {
     /** Element name (=NULL if root) */
     const TCHAR *lpszName;
@@ -98,7 +97,7 @@ protected:
       XMLAttribute  *pAttribute;     // Array of attributes
       int           *pOrder;         // order in which the child_nodes,text_fields and
       int  ref_count;
-  } XMLNodeData;
+  };
   XMLNodeData *d;
 
   // protected constructor: use "parse" functions to get your first instance of XMLNode
@@ -260,10 +259,10 @@ private:
    * Update "order" information when deleting a content of a XMLNode.
    */
   static void removeOrderElement(XMLNodeData *d, XMLElementType t, int index);
-} XMLNode;
+};
 
 // This structure is given by the function "enumContents".
-typedef struct XMLNodeContents
+struct XMLNodeContents
 {
   // This dictates what's the content of the XMLNodeContent
   enum XMLElementType type;
@@ -272,7 +271,7 @@ typedef struct XMLNodeContents
   XMLNode child;
   XMLAttribute attrib;
   const TCHAR *text;
-} XMLNodeContents;
+};
 
 /**
  * Duplicate (copy in a new allocated buffer) the source string.
