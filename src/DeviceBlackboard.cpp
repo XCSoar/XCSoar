@@ -623,7 +623,8 @@ DeviceBlackboard::AutoQNH()
       || basic.gps.Replay // never in replay mode
       || basic.gps.Simulator // never in simulator
       || basic.gps.NAVWarning // Reject if no valid GPS fix
-      || !basic.BaroAltitudeAvailable // Reject if no baro altitude
+      || !basic.BaroAltitude1013Available // Reject if no baro altitude 1013
+      || basic.QNHAvailable // Reject if QNH already known
     ) {
     if (countdown_autoqnh<= QNH_TIME) {
       countdown_autoqnh= QNH_TIME; // restart if havent performed
@@ -635,7 +636,7 @@ DeviceBlackboard::AutoQNH()
     countdown_autoqnh--;
 
   if (!countdown_autoqnh) {
-    basic.ProvideQNHSetting(basic.pressure.FindQNHFromBaroAltitude1013(basic.BaroAltitude, Calculated().TerrainAlt));
+    basic.ProvideQNHSetting(basic.pressure.FindQNHFromBaroAltitude1013(basic.BaroAltitude1013, Calculated().TerrainAlt));
     AllDevicesPutQNH(basic.pressure);
     countdown_autoqnh = UINT_MAX; // disable after performing once
   }
