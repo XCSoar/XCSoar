@@ -27,7 +27,8 @@
 
 #include <stdio.h>
 
-static LPTSTR stringDup(const tstring text) 
+static TCHAR *
+stringDup(const tstring text)
 {
   return stringDup(text.c_str());
 }
