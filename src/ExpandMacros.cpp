@@ -146,12 +146,16 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
     }
 
   } else {
+
+    const bool next_is_final = task->validTaskPoint(1) && !task->validTaskPoint(2);
+    const bool previous_is_start = task->validTaskPoint(-1) && !task->validTaskPoint(-2);
+
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       // Waypoint\nNext
       if (!task->validTaskPoint(1))
         invalid = true;
 
-      CondReplaceInString(task->validTaskPoint(1) && !task->validTaskPoint(2),
+      CondReplaceInString(next_is_final,
                           OutBuffer,
                           _T("$(WaypointNext)"),
                           _("Finish turnpoint"),
@@ -161,11 +165,62 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       if (!task->validTaskPoint(-1))
         invalid = true;
 
-      CondReplaceInString(task->validTaskPoint(-1) && !task->validTaskPoint(-2),
+      CondReplaceInString(previous_is_start,
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
                           _("Start turnpoint"),
                           _("Previous turnpoint"), Size);
+
+    } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
+      // Waypoint\nNext
+      if (!task->validTaskPoint(1))
+        invalid = true;
+
+      switch (task_manager->get_task_advance().get_advance_state()) {
+      case TaskAdvance::MANUAL:
+      case TaskAdvance::AUTO:
+      case TaskAdvance::START_ARMED:
+      case TaskAdvance::TURN_ARMED:
+        CondReplaceInString(next_is_final,
+                            OutBuffer,
+                            _T("$(WaypointNextArm)"),
+                            _("Finish turnpoint"),
+                            _("Next turnpoint"), Size);
+        break;
+      case TaskAdvance::START_DISARMED:
+        ReplaceInString(OutBuffer, _T("$(WaypointNextArm)"), _("Arm start"), Size);
+        break;
+      case TaskAdvance::TURN_DISARMED:
+        ReplaceInString(OutBuffer, _T("$(WaypointNextArm)"), _("Arm turn"), Size);
+        break;
+      default:
+        assert(1);
+      }
+
+    } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
+      if (!task->validTaskPoint(-1))
+        invalid = true;
+
+      switch (task_manager->get_task_advance().get_advance_state()) {
+      case TaskAdvance::MANUAL:
+      case TaskAdvance::AUTO:
+      case TaskAdvance::START_DISARMED:
+      case TaskAdvance::TURN_DISARMED:
+        CondReplaceInString(previous_is_start,
+                            OutBuffer,
+                            _T("$(WaypointPreviousArm)"),
+                            _("Start turnpoint"),
+                            _("Previous turnpoint"), Size);
+        break;
+      case TaskAdvance::START_ARMED:
+        ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"), _("Disarm start"), Size);
+        break;
+      case TaskAdvance::TURN_ARMED:
+        ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"), _("Disarm turn"), Size);
+        break;
+      default:
+        assert(1);
+      }
     } 
 #ifdef OLD_TASK // multiple start points
     else if (task.getSettings().EnableMultipleStartPoints) {

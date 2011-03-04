@@ -929,15 +929,18 @@ InputEvents::eventAdjustWaypoint(const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   if (_tcscmp(misc, _T("next")) == 0)
-    task_manager->incrementActiveTaskPoint(1); // next
+    protected_task_manager->incrementActiveTaskPoint(1); // next
   else if (_tcscmp(misc, _T("nextwrap")) == 0)
-    task_manager->incrementActiveTaskPoint(1); // next - with wrap
+    protected_task_manager->incrementActiveTaskPoint(1); // next - with wrap
   else if (_tcscmp(misc, _T("previous")) == 0)
-    task_manager->incrementActiveTaskPoint(-1); // previous
+    protected_task_manager->incrementActiveTaskPoint(-1); // previous
   else if (_tcscmp(misc, _T("previouswrap")) == 0)
-    task_manager->incrementActiveTaskPoint(-1); // previous with wrap
+    protected_task_manager->incrementActiveTaskPoint(-1); // previous with wrap
+  else if (_tcscmp(misc, _T("nextarm")) == 0)
+    protected_task_manager->incrementActiveTaskPointArm(1); // arm sensitive next
+  else if (_tcscmp(misc, _T("previousarm")) == 0)
+    protected_task_manager->incrementActiveTaskPointArm(-1); // arm sensitive previous
 
   trigger_redraw();
 }

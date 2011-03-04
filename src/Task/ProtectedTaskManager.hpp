@@ -105,6 +105,7 @@ public:
   const AbortTask::AlternateVector getAlternates() const;
 
   void incrementActiveTaskPoint(int offset);
+  void incrementActiveTaskPointArm(int offset);
 
   bool do_goto(const Waypoint & wp);
 

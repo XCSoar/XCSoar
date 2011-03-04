@@ -188,6 +188,37 @@ ProtectedTaskManager::incrementActiveTaskPoint(int offset)
   lease->incrementActiveTaskPoint(offset);
 }
 
+void 
+ProtectedTaskManager::incrementActiveTaskPointArm(int offset)
+{
+  ExclusiveLease lease(*this);
+
+  switch (lease->get_task_advance().get_advance_state()) {
+  case TaskAdvance::MANUAL:
+  case TaskAdvance::AUTO:
+    lease->incrementActiveTaskPoint(offset);
+    break;
+  case TaskAdvance::START_DISARMED:
+  case TaskAdvance::TURN_DISARMED:
+    if (offset) {
+      lease->get_task_advance().set_armed(true);
+    } else {
+      lease->incrementActiveTaskPoint(offset);
+    }
+    break;
+  case TaskAdvance::START_ARMED:
+  case TaskAdvance::TURN_ARMED:
+    if (offset) {
+      lease->incrementActiveTaskPoint(offset);
+    } else {
+      lease->get_task_advance().set_armed(false);
+    }
+    break;
+  default:
+    assert(1);
+  }
+}
+
 bool 
 ProtectedTaskManager::do_goto(const Waypoint & wp)
 {
