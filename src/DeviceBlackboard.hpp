@@ -75,7 +75,7 @@ public:
   void RaiseConnection();
   void StopReplay();
   void SetBaroAlt(fixed x) {
-    SetBasic().BaroAltitude = x;
+    SetBasic().ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, x);
   }
   void SetTrackBearing(Angle val);
   void SetSpeed(fixed val);
