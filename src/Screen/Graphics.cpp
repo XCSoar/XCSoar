@@ -97,6 +97,11 @@ MaskedIcon Graphics::hBmpTeammatePosition;
 MaskedIcon Graphics::hBmpMapScaleLeft;
 MaskedIcon Graphics::hBmpMapScaleRight;
 
+Bitmap Graphics::hBmpTabTask;
+Bitmap Graphics::hBmpTabFolder;
+Bitmap Graphics::hBmpTabSettings;
+Bitmap Graphics::hBmpTabCalculator;
+
 // used for flarm
 Brush Graphics::AlarmBrush;
 Brush Graphics::WarningBrush;
@@ -211,6 +216,11 @@ Graphics::Initialise()
 
   hBmpMapScaleLeft.load_big(IDB_MAPSCALE_LEFT, 0, false);
   hBmpMapScaleRight.load_big(IDB_MAPSCALE_RIGHT, 0, false);
+
+  hBmpTabTask.load((Layout::scale > 1) ? IDB_TASK_HD : IDB_TASK);
+  hBmpTabFolder.load((Layout::scale > 1) ? IDB_FOLDER_HD : IDB_FOLDER);
+  hBmpTabSettings.load((Layout::scale > 1) ? IDB_SETTINGS_HD : IDB_SETTINGS);
+  hBmpTabCalculator.load((Layout::scale > 1) ? IDB_CALCULATOR_HD : IDB_CALCULATOR);
 
   hBmpThermalSource.load_big(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
   hBmpTarget.load_big(IDB_TARGET, IDB_TARGET_HD);
@@ -378,6 +388,11 @@ Graphics::Deinitialise()
 
   hBmpMapScaleLeft.reset();
   hBmpMapScaleRight.reset();
+
+  hBmpTabTask.reset();
+  hBmpTabFolder.reset();
+  hBmpTabSettings.reset();
+  hBmpTabCalculator.reset();
 }
 
 void

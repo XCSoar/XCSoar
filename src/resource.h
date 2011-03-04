@@ -108,6 +108,14 @@
 #define IDB_TOWER_HD                   5346
 #define IDB_POWER_PLANT                 347
 #define IDB_POWER_PLANT_HD             5347
+#define IDB_FOLDER                      348
+#define IDB_FOLDER_HD                  5348
+#define IDB_SETTINGS                    349
+#define IDB_SETTINGS_HD                5349
+#define IDB_TASK                        350
+#define IDB_TASK_HD                    5350
+#define IDB_CALCULATOR                  351
+#define IDB_CALCULATOR_HD              5351
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED

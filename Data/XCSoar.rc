@@ -46,6 +46,15 @@ IDB_CLIMB               BITMAP  DISCARDABLE     "../output/data/icons/mode_climb
 IDB_CLIMB_HD            BITMAP  DISCARDABLE     "../output/data/icons/mode_climb_160.bmp"
 IDB_CLIMBSMALL          BITMAP  DISCARDABLE     "bitmaps/climb_12.bmp"
 IDB_CLIMBSMALLINV       BITMAP  DISCARDABLE     "bitmaps/climb_12inv.bmp"
+IDB_FOLDER              BITMAP  DISCARDABLE     "../output/data/icons/folder.bmp"
+IDB_FOLDER_HD           BITMAP  DISCARDABLE     "../output/data/icons/folder_160.bmp"
+IDB_SETTINGS            BITMAP  DISCARDABLE     "../output/data/icons/settings.bmp"
+IDB_SETTINGS_HD         BITMAP  DISCARDABLE     "../output/data/icons/settings_160.bmp"
+IDB_TASK                BITMAP  DISCARDABLE     "../output/data/icons/task.bmp"
+IDB_TASK_HD             BITMAP  DISCARDABLE     "../output/data/icons/task_160.bmp"
+IDB_CALCULATOR          BITMAP  DISCARDABLE     "../output/data/icons/calculator.bmp"
+IDB_CALCULATOR_HD       BITMAP  DISCARDABLE     "../output/data/icons/calculator_160.bmp"
+
 #ifdef EYE_CANDY
 IDB_DIALOGTITLE         BITMAP  DISCARDABLE     "bitmaps/dialog_title.bmp"
 #endif
