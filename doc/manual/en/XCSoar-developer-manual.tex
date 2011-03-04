@@ -66,6 +66,96 @@ furnishing, performance, or use of this material.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Introduction}\label{cha:introduction}
+
+\chapter{Policy}\label{cha:policy}
+
+\section{Writing Patches}
+
+Submit patches or \texttt{git pull} requests to the developer mailing
+list (\texttt{xcsoar-devel@lists.sourceforge.net}).  We provide
+accounts on \texttt{git.xcsoar.org} to regular contributors.
+
+A patch should be self-explanatory, it needs a good description.  The
+subject line specifies the subsystem/library name and a brief
+description of what is changed, followed by an empty line.  Then write
+a longer description if needed, and explain why this change is needed.
+
+Each patch must compile and must not introduce a regression (as far as
+we know at the time).
+
+Each patch must be self-contained and should only change one thing.
+Split larger patches into smaller pieces.  Don't refactor and
+add/modify/remove features in the same patch.
+
+Don't rewrite code unless you need to.  Migrate incrementally to a new
+concept.  Keep patches small and easy to understand.
+
+\section{Code Style}
+
+79 columns, reasonable exceptions allowed.  Indent 2 spaces, no tabs.
+
+\emph{Comments:} write enough code comments (in English).  All
+workarounds must be documented.  Everybody must be able to understand
+your code, even when you're gone.
+
+\emph{API documentation:} non-trivial functions should be documented
+in a doxygen comment.
+
+\emph{Names:} class/function names in \texttt{CamelCase} (not
+\texttt{camelCase}); attributes/variables lower case, separated with
+underscore (e.g. \texttt{foo\_bar}); constants (including
+\texttt{enum} values) all upper case (e.g. \texttt{FOO\_BAR}).
+
+\emph{Files:} \texttt{*.cpp} and \texttt{*.hpp} for C++.  Files should
+be named after the main class which is provided.  Each class should
+have a separate source file and a separate header.  UNIX text format.
+
+Be \texttt{const}-correct.
+
+Compile with \texttt{WERROR=y} and fix all warnings.
+
+Don't write large functions.  Split them up when they become too
+large.
+
+Avoid dynamic allocation.
+
+Some sample code to demonstrate our code style:
+
+\begin{verbatim}
+struct TheStruct {
+  unsigned an_attribute;
+
+  void TheMethod();
+};
+
+static bool
+FooBar(int a_parameter, unsigned another_parameter,
+       const TheStruct *next_row)
+{
+  switch (a_parameter) {
+  case 0:
+    break;
+  }
+
+  if (a_parameter == 2 && another_parameter == 3 &&
+      next_row != NULL)
+    return true;
+
+  return a_parameter == 42;
+}
+\end{verbatim}
+
+\section{C++}
+
+Don't use RTTI and exceptions.
+
+Avoid expensive and bloated STL containers if there are cheaper
+solutions (e.g. \texttt{StaticArray}, \texttt{StaticString} if the
+maximum size is predictable).
+
+Avoid template hell.  Keep templates readable.  Keep in mind that
+excessive template use may bloat the binary.
+
 \chapter{Topology and Terrain}\label{cha:topology}
 \section{Topology layer description file}
 Each line of the topology layer description file (topology.tpl) contains
