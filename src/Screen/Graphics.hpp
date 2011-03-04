@@ -112,6 +112,7 @@ namespace Graphics {
   extern Brush hbWind;
 
   extern MaskedIcon SmallIcon, TurnPointIcon, MountainTopIcon, BridgeIcon;
+  extern MaskedIcon TowerIcon;
   extern MaskedIcon TunnelIcon, AirportReachableIcon, AirportUnreachableIcon;
   extern MaskedIcon FieldReachableIcon, FieldUnreachableIcon;
   extern MaskedIcon hBmpThermalSource;

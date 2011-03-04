@@ -182,6 +182,9 @@ public:
         case wtTunnel:
           icon = &Graphics::TunnelIcon;
           break;
+        case wtTower:
+          icon = &Graphics::TowerIcon;
+          break;
         default:
           icon = &Graphics::TurnPointIcon;
           break;

@@ -104,6 +104,8 @@
 #define IDB_BRIDGE_HD                  5344
 #define IDB_TUNNEL                      345
 #define IDB_TUNNEL_HD                  5345
+#define IDB_TOWER                       346
+#define IDB_TOWER_HD                   5346
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED

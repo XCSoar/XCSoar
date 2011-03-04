@@ -102,6 +102,8 @@ IDB_BRIDGE              BITMAP  DISCARDABLE     "../output/data/icons/map_bridge
 IDB_BRIDGE_HD           BITMAP  DISCARDABLE     "../output/data/icons/map_bridge_160.bmp"
 IDB_TUNNEL              BITMAP  DISCARDABLE     "../output/data/icons/map_tunnel.bmp"
 IDB_TUNNEL_HD           BITMAP  DISCARDABLE     "../output/data/icons/map_tunnel_160.bmp"
+IDB_TOWER               BITMAP  DISCARDABLE     "../output/data/icons/map_tower.bmp"
+IDB_TOWER_HD            BITMAP  DISCARDABLE     "../output/data/icons/map_tower_160.bmp"
 IDB_UNIT_KM             BITMAP  DISCARDABLE     "bitmaps/unit_km.bmp"
 IDB_UNIT_SM             BITMAP  DISCARDABLE     "bitmaps/unit_sm.bmp"
 IDB_UNIT_NM             BITMAP  DISCARDABLE     "bitmaps/unit_nm.bmp"
