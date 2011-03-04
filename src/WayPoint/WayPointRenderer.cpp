@@ -185,6 +185,9 @@ public:
         case wtTower:
           icon = &Graphics::TowerIcon;
           break;
+        case wtPowerPlant:
+          icon = &Graphics::PowerPlantIcon;
+          break;
         default:
           icon = &Graphics::TurnPointIcon;
           break;
