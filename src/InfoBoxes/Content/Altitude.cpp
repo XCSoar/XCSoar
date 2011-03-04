@@ -372,18 +372,41 @@ InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
   const NMEA_INFO &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
-  if (!basic.BaroAltitudeAvailable) {
+  if (basic.BaroAltitude1013Available) {
+    fixed Altitude = Units::ToUserUnit(basic.BaroAltitude1013, unFeet);
+
+    // Title color black
+    infobox.SetColorTop(0);
+
+    // Set Value
+    _stprintf(sTmp, _T("%03d"), iround(Altitude/100));
+    infobox.SetValue(sTmp);
+
+    // Set Comment
+    _stprintf(sTmp, _T("%dft"), iround(Altitude));
+    infobox.SetComment(sTmp);
+
+  } else if (basic.GPSAltitudeAvailable && basic.QNHAvailable) {
+    // Take gps altitude as baro altitude. This is inaccurate but still fits our needs.
+    fixed Altitude = Units::ToUserUnit(basic.pressure.QNHAltitudeToPressureAltitude(basic.GPSAltitude), unFeet);
+
+    // Title color red
+    infobox.SetColorTop(1);
+
+    // Set Value
+    _stprintf(sTmp, _T("%03d"), iround(Altitude/100));
+    infobox.SetValue(sTmp);
+
+    // Set Comment
+    _stprintf(sTmp, _T("%dft"), iround(Altitude));
+    infobox.SetComment(sTmp);
+
+  } else if ((basic.BaroAltitudeAvailable || basic.GPSAltitudeAvailable) && !basic.QNHAvailable) {
     infobox.SetInvalid();
-    return;
+    infobox.SetComment(_T("set QNH"));
+  } else {
+    infobox.SetInvalid();
   }
-
-  fixed Altitude = Units::ToUserUnit(
-      basic.pressure.QNHAltitudeToPressureAltitude(basic.BaroAltitude), unFeet);
-
-  _stprintf(sTmp, _T("%03d"), iround(Altitude/100));
-
-  // Set Value
-  infobox.SetValue(sTmp);
 }
 
 void
