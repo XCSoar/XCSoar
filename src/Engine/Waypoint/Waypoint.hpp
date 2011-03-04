@@ -61,6 +61,7 @@ enum WaypointType {
   wtOutlanding,
   wtMountainTop,
   wtBridge,
+  wtTunnel,
 };
 
 /**
