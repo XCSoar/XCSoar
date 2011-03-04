@@ -407,7 +407,6 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
                                      const Waypoint &way_point,
                                      const Angle &screenRotation)
 {
-  static const Color ORANGE(255, 162, 0);
   static const Color NOT_REACHABLE_TERRAIN(224, 64, 64);
 
   if (!Appearance.UseSWLandablesRendering) {
@@ -444,7 +443,7 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
     if (reachable_glide)
       fill.set(reachable_terrain ? Color::GREEN : NOT_REACHABLE_TERRAIN);
     else
-      fill.set(ORANGE);
+      fill.set(Color::ORANGE);
   } else {
     if (reachable_glide)
       fill.set(reachable_terrain ? Color::GREEN : NOT_REACHABLE_TERRAIN);

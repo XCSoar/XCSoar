@@ -33,7 +33,8 @@ const Color
   Color::BLUE(0, 0, 0xff),
   Color::YELLOW(0xff, 0xff, 0),
   Color::CYAN(0, 0xff, 0xff),
-  Color::MAGENTA(0xff, 0, 0xff);
+  Color::MAGENTA(0xff, 0, 0xff),
+  Color::ORANGE(0xff, 0xa2, 0);
 
 static unsigned char light_color(unsigned char c) {
   return ((c ^ 0xff) >> 1) ^ 0xff;
