@@ -53,6 +53,11 @@ Version 6.1 - not yet released
     - along task direction
     - along home direction
   - "long-click" in task turnpoint zone displays Target dialog
+  - "arm advance" menu buttons removed.  Next/previous buttons function as normal
+    for turnpoints (including startpoints) not requiring arming, for those that do
+    require arm, "next" reads and functions as "arm" on first press and once armed,
+    reads and functions as "next".  "previous" reads and functions as "previous" if
+    not armed, "disarm" if armed.
 
 Version 6.0.6 - 2011/03/04
 * devices:

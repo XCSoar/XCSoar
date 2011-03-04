@@ -194,13 +194,13 @@ type=key
 data=9
 event=Setup Target
 
-mode=default
-type=key
-data=0
-event=ArmAdvance show
-event=ArmAdvance toggle
-label=$(CheckTaskResumed)$(CheckTask)
-location=9
+#mode=default
+#type=key
+#data=0
+#event=ArmAdvance show
+#event=ArmAdvance toggle
+#label=$(CheckTaskResumed)$(CheckTask)
+#location=9
 
 mode=default
 type=key
@@ -287,27 +287,27 @@ event=Mode default
 label=Task$(CheckTaskResumed)
 location=5
 
-mode=Nav1
-type=key
-data=7
-event=ArmAdvance show
-event=ArmAdvance on
-event=Mode default
-label=$(CheckTaskResumed)$(CheckTask)$(AdvanceArmed)
-location=6
+#mode=Nav1
+#type=key
+#data=7
+#event=ArmAdvance show
+#event=ArmAdvance on
+#event=Mode default
+#label=$(CheckTaskResumed)$(CheckTask)$(AdvanceArmed)
+#location=6
 
 mode=Nav1
 type=key
 data=8
-event=AdjustWaypoint previous
-label=$(WaypointPrevious)
+event=AdjustWaypoint previousarm
+label=$(WaypointPreviousArm)
 location=7
 
 mode=Nav1
 type=key
 data=9
-event=AdjustWaypoint next
-label=$(WaypointNext)
+event=AdjustWaypoint nextarm
+label=$(WaypointNextArm)
 location=8
 
 mode=Nav1
