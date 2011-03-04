@@ -131,6 +131,25 @@ public:
   gcc_pure
   fixed QNHAltitudeToStaticPressure(const fixed alt) const;
 
+  /**
+   * Converts a pressure value to pressure altitude (with QNH=1013.25 as reference)
+   * @param ps Air pressure (Pa)
+   * @return pressure altitude (m)
+   */
+  gcc_pure
+  fixed StaticPressureToAltitude(const fixed ps) const;
+
+  /**
+   * Converts a 1013.25 hPa based altitude to the corresponding pressure
+   *
+   * @see StaticPressureToAltitude
+   * @param alt Altitude over 1013.25 hPa based zero(m)
+   * @return Air pressure at given altitude (Pa)
+   */
+  gcc_pure
+  fixed AltitudeToStaticPressure(const fixed alt) const;
+
+
 private:
   /** Pressure at sea level, hPa */
   fixed m_QNH;

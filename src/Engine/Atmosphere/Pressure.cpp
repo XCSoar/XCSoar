@@ -46,6 +46,13 @@ AtmosphericPressure::QNHAltitudeToStaticPressure(const fixed alt) const
 }
 
 fixed
+AtmosphericPressure::AltitudeToStaticPressure(const fixed alt) const
+{
+  return hpa_to_pa * pow((pow(fixed_101325, k1) - k2 * alt), inv_k1);
+}
+
+
+fixed
 AtmosphericPressure::StaticPressureToQNHAltitude(const fixed ps) const
 {
   return (pow(m_QNH, k1) - pow(ps * pa_to_hpa, k1)) * inv_k2;
@@ -61,6 +68,12 @@ fixed
 AtmosphericPressure::QNHAltitudeToPressureAltitude(const fixed alt) const
 {
   return (pow(fixed_101325, k1) - pow(QNHAltitudeToStaticPressure(alt) * pa_to_hpa, k1)) * inv_k2;
+}
+
+fixed
+AtmosphericPressure::StaticPressureToAltitude(const fixed ps) const
+{
+  return (pow(fixed_101325, k1) - pow(ps * pa_to_hpa, k1)) * inv_k2;
 }
 
 void
