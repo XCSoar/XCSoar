@@ -268,6 +268,11 @@ WayPointFileSeeYou::parseStyle(const TCHAR* src, Waypoint &dest)
   case 7:
     dest.Type = wtMountainTop;
     break;
+  case 8:
+  case 11:
+  case 16:
+    dest.Type = wtTower;
+    break;
   case 13:
     dest.Type = wtTunnel;
     break;
