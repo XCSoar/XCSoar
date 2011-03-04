@@ -32,6 +32,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <windef.h>
+#include <tchar.h>
 
 class LeastSquares;
 class Canvas;

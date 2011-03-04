@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_BASE_HPP
 #define XCSOAR_DATA_FIELD_BASE_HPP
 
-// JMW OLD_TASK todo; continue with fixed vars here
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>

@@ -43,6 +43,9 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.LandableRenderMode = RoundedBlack;
   settings_map.TrailActive = 1;
   settings_map.bAirspaceBlackOutline = false;
+#ifndef ENABLE_OPENGL
+  settings_map.AirspaceFillMode = SETTINGS_MAP::AS_FILL_DEFAULT;
+#endif
   settings_map.GliderScreenPosition = 20; // 20% from bottom
   settings_map.OrientationCircling = TRACKUP;
   settings_map.OrientationCruise = TRACKUP;

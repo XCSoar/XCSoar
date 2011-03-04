@@ -21,21 +21,23 @@ Copyright_License {
 }
 */
 
-#ifndef WINBASE_H
-#define WINBASE_H
+#include "Screen/SingleWindow.hpp"
+#include "Screen/Android/Event.hpp"
 
-#include <windef.h>
-
-#include <stdio.h>
-
-/* File I/O */
-
-static inline int
-MoveFile(const TCHAR *oldpath, const TCHAR *newpath)
+bool
+SingleWindow::FilterEvent(const Event &event, Window *allowed,
+                          Window *second_allowed) const
 {
-  /* XXX handle EXDEV; cross-filesystem moves are not supported by
-     rename() */
-  return rename(oldpath, newpath);
-}
+  assert(allowed != NULL);
 
-#endif
+  switch (event.type) {
+  case Event::MOUSE_MOTION:
+  case Event::MOUSE_DOWN:
+  case Event::MOUSE_UP:
+    return FilterMouseEvent(event.x, event.y,
+                            allowed, second_allowed);
+
+  default:
+    return true;
+  }
+}

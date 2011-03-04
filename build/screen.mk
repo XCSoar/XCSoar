@@ -19,7 +19,6 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/PaintWindow.cpp \
 	$(SCREEN_SRC_DIR)/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/TextWindow.cpp \
-	$(SCREEN_SRC_DIR)/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/SingleWindow.cpp
 
 ifeq ($(ENABLE_SDL),y)
@@ -30,10 +29,13 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/CheckBox.cpp \
 	$(SCREEN_SRC_DIR)/SDL/EditWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
+	$(SCREEN_SRC_DIR)/SDL/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Android/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/Android/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/Event.cpp
 else
 SCREEN_SOURCES += \
@@ -68,6 +70,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/ButtonWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/EditWindow.cpp \
+	$(SCREEN_SRC_DIR)/GDI/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Event.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \
@@ -86,6 +89,10 @@ SCREEN_LDLIBS += -lcommctrl
 else
 SCREEN_LDLIBS += -lcomctl32 -luser32 -lgdi32 -lmsimg32
 endif
+endif
+
+ifeq ($(TARGET),PC)
+SCREEN_LDLIBS += -Wl,-subsystem,windows
 endif
 
 $(SCREEN_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)

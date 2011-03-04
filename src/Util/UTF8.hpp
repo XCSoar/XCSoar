@@ -21,11 +21,16 @@ Copyright_License {
 }
 */
 
-#ifndef WINDOWS_H
-#define WINDOWS_H
+#ifndef XCSOAR_UTIL_UTF8_HPP
+#define XCSOAR_UTIL_UTF8_HPP
 
-#include <windef.h>
-#include <winuser.h>
-#include <wingdi.h>
+#include "Compiler.h"
+
+/**
+ * Is this a valid UTF-8 string?
+ */
+gcc_pure
+bool
+ValidateUTF8(const char *p);
 
 #endif

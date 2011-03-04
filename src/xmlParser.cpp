@@ -163,7 +163,7 @@ fromXMLString(const TCHAR *ss, size_t lo)
   /* allocate a buffer with the size of the input string; we know for
      sure that this is enough, because resolving entities can only
      shrink the string, but never grows */
-  TCHAR *d = (TCHAR *)malloc((_tcslen(ss) + 1) * sizeof(*d));
+  TCHAR *d = (TCHAR *)malloc((lo + 1) * sizeof(*d));
   assert(d);
   TCHAR *result = d;
   while (ss < end && *ss) {
@@ -322,7 +322,6 @@ GetNextToken(XML *pXML, size_t *pcbToken, enum TokenTypeTag *pType)
   TCHAR chTemp;
   size_t nSize;
   bool nFoundMatch;
-  bool nExit;
   unsigned n;
   bool nIsText = false;
 
@@ -451,7 +450,7 @@ GetNextToken(XML *pXML, size_t *pcbToken, enum TokenTypeTag *pType)
     // Indicate we are dealing with text
     *pType = eTokenText;
     nSize = 1;
-    nExit = false;
+    bool nExit = false;
 
     while (!nExit && ((ch = getNextChar(pXML)) != 0)) {
       switch (ch) {
@@ -534,7 +533,8 @@ XMLNode::getError(XMLError error)
 }
 
 
-XMLNode XMLNode::createRoot(const TCHAR *lpszName)
+XMLNode
+XMLNode::createRoot(const TCHAR *lpszName)
 {
   return XMLNode(NULL, lpszName, false);
 }

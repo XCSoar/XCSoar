@@ -482,22 +482,23 @@ XCSoarInterface::Shutdown(void)
   ProgressGlue::Create(_("Shutdown, please wait..."));
 
   // Stop threads
-  LogStartUp(_T("CloseDrawingThread"));
+  LogStartUp(_T("Stop threads"));
 #ifndef ENABLE_OPENGL
   draw_thread->stop();
 #endif
   calculation_thread->stop();
 
   // Wait for the calculations thread to finish
+  LogStartUp(_T("Waiting for calculation thread"));
   calculation_thread->join();
   delete calculation_thread;
   calculation_thread = NULL;
-  LogStartUp(_T("- calculation thread returned"));
 
   //  Wait for the drawing thread to finish
 #ifndef ENABLE_OPENGL
+  LogStartUp(_T("Waiting for draw thread"));
+
   draw_thread->join();
-  LogStartUp(_T("- draw thread returned"));
   delete draw_thread;
 #endif
 

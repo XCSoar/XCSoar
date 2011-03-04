@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Topography/XShape.hpp"
+#include "Util/UTF8.hpp"
 #include "Units.hpp"
 #include "shapelib/map.h"
 #ifdef ENABLE_OPENGL
@@ -71,6 +72,9 @@ import_label(const char *src)
 
   return dest;
 #else
+  if (!ValidateUTF8(src))
+    return NULL;
+
   return strdup(src);
 #endif
 }

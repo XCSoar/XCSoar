@@ -25,14 +25,11 @@ Copyright_License {
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Debug.hpp"
 #include "Screen/Color.hpp"
+#include "Util/ListHead.hpp"
 
 #include <map>
 #include <string>
 #include <assert.h>
-
-struct ListHead {
-  ListHead *prev, *next;
-};
 
 struct RenderedText : public ListHead {
   std::string key;
@@ -48,7 +45,7 @@ struct RenderedText : public ListHead {
 };
 
 static std::map<std::string,RenderedText*> text_cache_map;
-static ListHead text_cache_head = { &text_cache_head, &text_cache_head };
+static ListHead text_cache_head = ListHead(ListHead::empty());
 static unsigned text_cache_size = 0;
 
 #ifdef ANDROID
@@ -95,17 +92,7 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
     RenderedText *rt = i->second;
 
     /* move to the front, so it gets flushed last */
-    if (rt->prev != &text_cache_head) {
-      /* remove */
-      rt->next->prev = rt->prev;
-      rt->prev->next = rt->next;
-
-      /* insert */
-      rt->next = text_cache_head.next;
-      rt->next->prev = rt;
-      rt->prev = &text_cache_head;
-      text_cache_head.next = rt;
-    }
+    rt->MoveAfter(text_cache_head);
 
     return &rt->texture;
   }
@@ -113,10 +100,9 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
   /* remove old entries from cache */
 
   if (text_cache_size >= 256) {
-    RenderedText *rt = (RenderedText *)text_cache_head.prev;
+    RenderedText *rt = (RenderedText *)text_cache_head.GetPrevious();
     text_cache_map.erase(rt->key);
-    rt->next->prev = rt->prev;
-    rt->prev->next = rt->next;
+    rt->Remove();
     delete rt;
     --text_cache_size;
   }
@@ -145,10 +131,7 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
   SDL_FreeSurface(surface);
 #endif
 
-  rt->next = text_cache_head.next;
-  rt->next->prev = rt;
-  rt->prev = &text_cache_head;
-  text_cache_head.next = rt;
+  rt->InsertAfter(text_cache_head);
 
   text_cache_map.insert(std::make_pair(key, rt));
 
@@ -166,12 +149,13 @@ TextCache::flush()
 
   text_cache_map.clear();
 
-  for (RenderedText *rt = (RenderedText *)text_cache_head.next;
+  for (RenderedText *rt = (RenderedText *)text_cache_head.GetNext();
        rt != &text_cache_head;) {
-    RenderedText *next = (RenderedText *)rt->next;
+    RenderedText *next = (RenderedText *)rt->GetNext();
     delete rt;
     rt = next;
   }
 
-  text_cache_head.prev = text_cache_head.next = &text_cache_head;
+  text_cache_head.Clear();
+  text_cache_size = 0;
 }

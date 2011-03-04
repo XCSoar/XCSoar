@@ -211,6 +211,13 @@ Profile::Use()
 
   Get(szProfileAirspaceBlackOutline,
       settings_map.bAirspaceBlackOutline);
+
+#ifndef ENABLE_OPENGL
+  Temp = (unsigned)settings_map.AirspaceFillMode;
+  Get(szProfileAirspaceFillMode, Temp);
+  settings_map.AirspaceFillMode = (enum SETTINGS_MAP::AirspaceFillMode)Temp;
+#endif
+
   Get(szProfileSnailTrail,
       settings_map.TrailActive);
 

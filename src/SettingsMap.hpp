@@ -132,6 +132,23 @@ struct SETTINGS_MAP {
   /** Airspaces are drawn with black border (otherwise in airspace color) */
   bool bAirspaceBlackOutline;
 
+#ifndef ENABLE_OPENGL
+  /**
+   * What portion of the airspace area should be filled with the
+   * airspace brush?
+   */
+  enum AirspaceFillMode {
+    /** the platform specific default is used */
+    AS_FILL_DEFAULT,
+
+    /** fill all of the area */
+    AS_FILL_ALL,
+
+    /** fill only a thick padding (like on ICAO maps) */
+    AS_FILL_PADDING,
+  } AirspaceFillMode;
+#endif
+
   int GliderScreenPosition;
   /** Orientation of the map (North up, Track up, etc.) */
   DisplayOrientation_t OrientationCruise;

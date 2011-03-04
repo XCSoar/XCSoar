@@ -1017,6 +1017,21 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpAirspaceOutline"),
                    settings_map.bAirspaceBlackOutline);
+
+  wp = (WndProperty *)wf->FindByName(_T("prpAirspaceFillMode"));
+  {
+#ifdef ENABLE_OPENGL
+    wp->hide();
+#else
+    DataFieldEnum &dfe = *(DataFieldEnum *)wp->GetDataField();
+    dfe.addEnumText(_("Default"), SETTINGS_MAP::AS_FILL_DEFAULT);
+    dfe.addEnumText(_("Fill all"), SETTINGS_MAP::AS_FILL_ALL);
+    dfe.addEnumText(_("Fill padding"), SETTINGS_MAP::AS_FILL_PADDING);
+    dfe.Set(settings_map.AirspaceFillMode);
+    wp->RefreshDisplay();
+#endif
+  }
+
   LoadFormProperty(*wf, _T("prpLoggerShortName"),
                    settings_computer.LoggerShortName);
   LoadFormProperty(*wf, _T("prpDebounceTimeout"),
@@ -2081,6 +2096,15 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpAirspaceOutline"),
                               szProfileAirspaceBlackOutline,
                               XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
+
+#ifndef ENABLE_OPENGL
+  SETTINGS_MAP &settings_map = XCSoarInterface::SetSettingsMap();
+
+  tmp = settings_map.AirspaceFillMode;
+  changed |= SaveFormProperty(*wf, _T("prpAirspaceFillMode"),
+                              szProfileAirspaceFillMode, tmp);
+  settings_map.AirspaceFillMode = (enum SETTINGS_MAP::AirspaceFillMode)tmp;
+#endif
 
   wp = (WndProperty*)wf->FindByName(_T("prpUTCOffset"));
   if (wp) {

@@ -259,7 +259,7 @@ RenameTask()
   LocalPath(oldpath, oldname);
   LocalPath(newpath, newname.c_str());
 
-  MoveFile(oldpath, newpath);
+  File::Rename(oldpath, newpath);
 
   task_store.scan();
   RefreshView();

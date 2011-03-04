@@ -28,6 +28,7 @@ Copyright_License {
 
 #ifdef HAVE_POSIX
 #include <unistd.h>
+#include <stdio.h>
 #else
 #include <windows.h>
 #endif
@@ -104,6 +105,18 @@ namespace File
     return unlink(path) == 0;
 #else
     return DeleteFile(path);
+#endif
+  }
+
+  static inline bool
+  Rename(const TCHAR *oldpath, const TCHAR *newpath)
+  {
+#ifdef HAVE_POSIX
+    /* XXX handle EXDEV; cross-filesystem moves are not supported by
+       rename() */
+    return rename(oldpath, newpath) == 0;
+#else
+    return MoveFile(oldpath, newpath) != 0;
 #endif
   }
 }

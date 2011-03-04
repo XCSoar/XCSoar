@@ -240,7 +240,7 @@ EWMicroRecorderDevice::DeclareInner(const Declaration *decl)
   for (unsigned i = 0; i < 11; i++) {
     if (i+1>= decl->size()) {
       EWMicroRecorderPrintf(port, _T("%-17s %s\r\n"),
-               _T("TP LatLon:"), _T("0000000N00000000E TURN POINT\r\n"));
+               _T("TP LatLon:"), _T("0000000N00000000E TURN POINT"));
     } else {
       const Waypoint &wp = decl->get_waypoint(i);
       if (i == 0) {

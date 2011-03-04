@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "DataField/Base.hpp"
 #include "PeriodClock.hpp"
+#include "Math/fixed.hpp"
 
 class DataFieldFloat: 
 public DataField

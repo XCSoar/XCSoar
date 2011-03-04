@@ -252,10 +252,9 @@ is_allowed_mouse_message(UINT message)
 }
 
 static bool
-is_allowed_mouse(HWND hWnd, UINT message, Window *allowed_mouse)
+is_allowed_mouse(HWND hWnd, UINT message, const Window *window)
 {
-  return !is_altair() && allowed_mouse != NULL &&
-    (HWND)*allowed_mouse == hWnd &&
+  return !is_altair() && window != NULL && window->identify(hWnd) &&
     is_allowed_mouse_message(message);
 }
 
@@ -331,19 +330,21 @@ WndForm::ShowModal(Window *mouse_allowed)
 
   update();
 
-  EventLoop loop(*event_queue, *(TopWindow *)get_root_owner());
+  EventLoop loop(*event_queue, main_window);
   Event event;
   while (mModalResult == 0 && loop.get(event))
-    loop.dispatch(event);
+    if (main_window.FilterEvent(event, this, mouse_allowed))
+      loop.dispatch(event);
 
 #elif defined(ENABLE_SDL)
 
   update();
 
-  EventLoop loop(*(TopWindow *)get_root_owner());
+  EventLoop loop(main_window);
   SDL_Event event;
   while (mModalResult == 0 && loop.get(event))
-    loop.dispatch(event);
+    if (main_window.FilterEvent(event, this, mouse_allowed))
+      loop.dispatch(event);
 
 #else /* !ENABLE_SDL */
 

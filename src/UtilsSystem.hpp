@@ -24,6 +24,7 @@ Copyright_License {
 #define XCSOAR_UTILS_SYSTEM_H
 
 #include <windef.h>
+#include <tchar.h>
 
 void MyCompactHeaps();
 unsigned long FindFreeSpace(const TCHAR *path);

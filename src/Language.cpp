@@ -24,6 +24,7 @@ Copyright_License {
 
 #include "Language.hpp"
 #include "StringUtil.hpp"
+#include "Util/UTF8.hpp"
 
 #if defined(HAVE_POSIX) && !defined(ANDROID)
 
@@ -108,7 +109,9 @@ gettext(const TCHAR* text)
   // Search for the english original string in the MO file
   const char *translation = mo_file->lookup(text);
   // Return either the translated string if found or the original
-  return translation != NULL && *translation != 0 ? translation : text;
+  return translation != NULL && *translation != 0 && ValidateUTF8(translation)
+    ? translation
+    : text;
 #endif
 }
 

@@ -36,6 +36,7 @@ Copyright_License {
 #endif // !ANDROID
 
 #include <windows.h>
+#include <tchar.h>
 
 class TextUtil;
 

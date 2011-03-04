@@ -28,7 +28,9 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Sizes.h"
 #include "Navigation/TracePoint.hpp"
+
 #include <windef.h>
+#include <tchar.h>
 
 struct NMEA_INFO;
 struct DERIVED_INFO;

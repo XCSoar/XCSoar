@@ -68,8 +68,8 @@ static WndListFrame *wDetails = NULL;
 static WndFrame *wInfo = NULL;
 static WndFrame *wCommand = NULL;
 static WndOwnerDrawFrame *wImage = NULL;
-static BOOL hasimage1 = false;
-static BOOL hasimage2 = false;
+static bool hasimage1 = false;
+static bool hasimage2 = false;
 static const Waypoint *selected_waypoint = NULL;
 
 static Bitmap jpgimage1, jpgimage2;

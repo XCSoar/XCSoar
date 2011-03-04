@@ -84,7 +84,7 @@ static const TCHAR *const COMMPort[] = {
   _T("COM0:"),
 };
 
-static const DWORD dwSpeed[] = {
+static const unsigned dwSpeed[] = {
   1200,
   2400,
   4800,

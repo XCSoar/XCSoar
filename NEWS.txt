@@ -54,9 +54,22 @@ Version 6.1 - not yet released
     - along home direction
   - "long-click" in task turnpoint zone displays Target dialog
 
-Version 6.0.6 - not yet released
+Version 6.0.6 - 2011/03/04
 * devices:
   - fix declaration crash in Volkslogger, EW, CAI302, CAI GPS NAV
+  - EW: remove duplicate newline in declaration output
+* map
+  - Airspace: add option to re-enable stencil buffer on PPC2000
+* other
+  - select waypoint: update heading filter only on large changes
+  - reduce dialog memory usage
+* Windows
+  - compile vali-xcs.exe as console application
+* Android
+  - fix crash due to invalid UTF-8 labels
+  - more pause/resume crash fixes
+  - take advantage of ARMv7 CPUs
+  - dialogs are modal now
 * Linux
   - implement the serial port
 

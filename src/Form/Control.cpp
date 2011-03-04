@@ -39,7 +39,7 @@ bool
 KeyTimer(bool isdown, unsigned thekey)
 {
   static PeriodClock fps_time_down;
-  static DWORD savedKey = 0;
+  static unsigned savedKey = 0;
 
   if (thekey == savedKey && fps_time_down.check_update(2000)) {
     savedKey = 0;

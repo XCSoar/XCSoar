@@ -1,102 +1,123 @@
-TARGETS = PC PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID CYGWIN
+TARGETS = PC PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID ANDROID7 ANDROIDFAT CYGWIN
 
 # These targets are built when you don't specify the TARGET variable.
 DEFAULT_TARGETS = PC PPC2000 PPC2003 WM5 ALTAIR WINE
 
-CONFIG_PPC2003 := n
-CONFIG_ALTAIR := n
-CONFIG_PC := n
-CONFIG_WINE := n
+TARGET_FLAVOR := $(TARGET)
+
 HAVE_CE := n
 HAVE_FPU := y
 XSCALE := n
+ARMV7 := n
+FAT_BINARY := n
+
+HAVE_POSIX := n
+HAVE_WIN32 := y
+HAVE_MSVCRT := y
+
+TARGET_ARCH :=
+
+# virtual targets ("flavors")
+
+ifeq ($(TARGET),PPC2003X)
+  XSCALE := y
+  TARGET_FLAVOR := $(TARGET)
+  override TARGET = PPC2003
+endif
+
+ifeq ($(TARGET),WM5X)
+  XSCALE := y
+  TARGET_FLAVOR := $(TARGET)
+  override TARGET = WM5
+endif
+
+ifeq ($(TARGET),ANDROID7)
+  ARMV7 := y
+  TARGET_FLAVOR := $(TARGET)
+  override TARGET = ANDROID
+endif
+
+ifeq ($(TARGET),ANDROIDFAT)
+  FAT_BINARY := y
+  TARGET_FLAVOR := $(TARGET)
+  override TARGET = ANDROID
+endif
+
+# real targets
 
 ifeq ($(TARGET),PPC2000)
+  CE_MAJOR := 3
+  CE_MINOR := 00
+  PCPU := ARM
+
   HAVE_CE := y
 endif
 
 ifeq ($(TARGET),PPC2003)
-  CONFIG_PPC2003 := y
-  HAVE_CE := y
-endif
+  CE_MAJOR := 4
+  CE_MINOR := 00
+  PCPU := ARMV4
 
-ifeq ($(TARGET),PPC2003X)
-  CONFIG_PPC2003 := y
   HAVE_CE := y
-  XSCALE := y
 endif
 
 ifeq ($(TARGET),PC)
-  CONFIG_PC := y
+  TCPATH := i586-mingw32msvc-
+  ifeq ($(WINHOST),y)
+    TCPATH :=
+  endif
+
+  TARGET_ARCH += -march=i586
+
+  WINVER = 0x0500
 endif
 
 ifeq ($(TARGET),CYGWIN)
-  CONFIG_CYGWIN := y
-  WINHOST := y
-else
-  CONFIG_CYGWIN := n
-endif
+  TCPATH :=
 
-ifeq ($(TARGET),WINE)
-  CONFIG_WINE := y
+  TARGET_ARCH += -march=i586
+
+  WINVER = 0x0500
+  WINHOST := y
+
+  HAVE_POSIX := y
+  HAVE_WIN32 := y
+  HAVE_MSVCRT := n
+  HAVE_VASPRINTF := y
 endif
 
 ifeq ($(TARGET),ALTAIR)
-  CONFIG_ALTAIR := y
+  CE_MAJOR := 5
+  CE_MINOR := 00
+
   HAVE_CE := y
   XSCALE := y
 endif
 
 ifeq ($(TARGET),WM5)
-  CONFIG_WM5 := y
+  PCPU := ARMV4
+  CE_MAJOR := 5
+  CE_MINOR := 00
+
   HAVE_CE := y
 endif
 
-ifeq ($(TARGET),WM5X)
-  CONFIG_WM5 := y
-  HAVE_CE := y
-  XSCALE := y
-endif
-
-############# build and CPU info
-
-ifeq ($(CONFIG_PC),y)
-  TCPATH := i586-mingw32msvc-
-
-  ifeq ($(WINHOST),y)
-    TCPATH :=
-  endif
-
-  CPU := i586
-  MCPU := -march=$(CPU)
-endif
-
-ifeq ($(CONFIG_CYGWIN),y)
-  TCPATH := i686-pc-cygwin-
-  CPU := i586
-  MCPU := -march=$(CPU)
-endif
-
-ifeq ($(CONFIG_WINE),y)
+ifeq ($(TARGET),WINE)
   TCPATH := wine
-  CPU := i586
-  MCPU := -march=$(CPU)
-endif
+  TARGET_ARCH += -march=i586
+  WINVER = 0x0500
 
-ifeq ($(HAVE_CE),y)
-  TCPATH := arm-mingw32ce-
-  CPU := strongarm1110
-  HAVE_FPU := n
-
-  ifeq ($(XSCALE),y)
-    CPU := xscale
-  endif
-
-  MCPU := -mcpu=$(CPU)
+  HAVE_POSIX := y
+  HAVE_MSVCRT := n
 endif
 
 ifeq ($(TARGET),UNIX)
   TCPATH :=
+
+  HAVE_POSIX := y
+  HAVE_WIN32 := n
+  HAVE_MSVCRT := n
+  HAVE_VASPRINTF := y
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -105,92 +126,44 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_PLATFORM = android-5
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-linux-androideabi
-  ANDROID_ABI3 = armeabi
   ANDROID_GCC_VERSION = 4.4.3
+
+  ifeq ($(ARMV7),y)
+    ANDROID_ABI3 = armeabi-v7a
+  else
+    ANDROID_ABI3 = armeabi
+  endif
 
   ANDROID_NDK_PLATFORM = $(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM)
   ANDROID_TARGET_ROOT = $(ANDROID_NDK_PLATFORM)/arch-$(ANDROID_ARCH)
   ANDROID_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)/prebuilt/linux-x86
   TCPATH = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI2)-
 
-  MCPU := -march=armv5te -mtune=xscale -msoft-float -fpic -mthumb-interwork -ffunction-sections -funwind-tables -fstack-protector -fno-short-enums
+  ifeq ($(ARMV7),y)
+    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=vfp -mthumb-interwork
+    HAVE_FPU := y
+  else
+    TARGET_ARCH += -march=armv5te -mtune=xscale -msoft-float -mthumb-interwork
+    HAVE_FPU := n
+  endif
+
+  TARGET_ARCH += -fpic -ffunction-sections -funwind-tables -fstack-protector -fno-short-enums
+
+  HAVE_POSIX := y
+  HAVE_WIN32 := n
+  HAVE_MSVCRT := n
+  HAVE_VASPRINTF := y
+endif
+
+ifeq ($(HAVE_CE),y)
+  TCPATH := arm-mingw32ce-
   HAVE_FPU := n
-endif
 
-ifeq ($(TARGET),CYGWIN)
-  TCPATH :=
-endif
-
-############# platform info
-
-HAVE_POSIX := n
-HAVE_WIN32 := y
-HAVE_MSVCRT := y
-
-ifeq ($(TARGET),WINE)
-  HAVE_POSIX := y
-  HAVE_MSVCRT := n
-endif
-
-ifeq ($(TARGET),UNIX)
-  HAVE_POSIX := y
-  HAVE_WIN32 := n
-  HAVE_MSVCRT := n
-  HAVE_VASPRINTF := y
-endif
-
-ifeq ($(TARGET),ANDROID)
-  HAVE_POSIX := y
-  HAVE_WIN32 := n
-  HAVE_MSVCRT := n
-  HAVE_VASPRINTF := y
-endif
-
-ifeq ($(TARGET),CYGWIN)
-  HAVE_POSIX := y
-  HAVE_WIN32 := y
-  HAVE_MSVCRT := n
-  HAVE_VASPRINTF := y
-endif
-
-ifeq ($(TARGET),PPC2000)
-  CE_MAJOR := 3
-  CE_MINOR := 00
-  PCPU := ARM
-endif
-
-ifeq ($(CONFIG_PPC2003),y)
-  CE_MAJOR := 4
-  CE_MINOR := 00
-  PCPU := ARMV4
-endif
-
-ifeq ($(CONFIG_WM5),y)
-  CE_MAJOR := 5
-  CE_MINOR := 00
-  PCPU := ARMV4
-endif
-
-# armv4i
-ifeq ($(CONFIG_ALTAIR),y)
-  CE_MAJOR := 5
-  CE_MINOR := 00
-  TARGET := ALTAIR
-endif
-
-ifeq ($(CONFIG_PC),y)
-  WINVER = 0x0500
-  TARGET := PC
-endif
-
-ifeq ($(CONFIG_CYGWIN),y)
-  WINVER = 0x0500
-endif
-
-ifeq ($(CONFIG_WINE),y)
-  WINVER = 0x0500
-  TARGET := WINE
-  CONFIG_PC := y
+  ifeq ($(XSCALE),y)
+    TARGET_ARCH += -mcpu=xscale
+  else
+    TARGET_ARCH += -mcpu=strongarm1110
+  endif
 endif
 
 ######## target definitions
@@ -213,7 +186,7 @@ endif
 ifeq ($(HAVE_WIN32),y)
   TARGET_CPPFLAGS += -DWIN32_LEAN_AND_MEAN
   TARGET_CPPFLAGS += -DNOMINMAX
-  ifeq ($(CONFIG_CYGWIN),y)
+  ifeq ($(TARGET),CYGWIN)
   TARGET_CPPFLAGS += -DWIN32
   endif
 endif
@@ -222,12 +195,12 @@ ifeq ($(TARGET),PPC2000)
   TARGET_CPPFLAGS += -DNOLINETO -DNOCLEARTYPE
 endif
 
-ifeq ($(CONFIG_WINE),y)
+ifeq ($(TARGET),WINE)
   TARGET_CPPFLAGS += -D__WINE__
   # -mno-cygwin
 endif
 
-ifeq ($(CONFIG_ALTAIR),y)
+ifeq ($(TARGET),ALTAIR)
   TARGET_CPPFLAGS += -DGNAV
   TARGET_CPPFLAGS += -DDISABLEAUDIO
 endif
@@ -265,10 +238,12 @@ endif
 
 ####### compiler target
 
-TARGET_ARCH := $(MCPU)
-
 ifeq ($(HAVE_WIN32),y)
-  TARGET_ARCH += -mwin32
+  ifeq ($(TARGET),WINE)
+    TARGET_ARCH += -m32
+  else
+    TARGET_ARCH += -mwin32
+  endif
 
   WINDRESFLAGS := -I$(SRC) $(TARGET_CPPFLAGS)
 endif # UNIX
@@ -277,14 +252,8 @@ ifeq ($(TARGET),PC)
   TARGET_ARCH += -mwindows -mms-bitfields
 endif
 
-ifeq ($(TARGET),WINE)
-  TARGET_ARCH := $(filter-out -mwin32,$(TARGET_ARCH))
-  TARGET_ARCH += -m32
-endif
-
 ifeq ($(TARGET),CYGWIN)
   WINDRESFLAGS += -I./Data
-  TARGET_ARCH :=
 endif
 
 ####### linker configuration
@@ -295,11 +264,13 @@ TARGET_LDLIBS =
 ifeq ($(TARGET),PC)
   TARGET_LDFLAGS += -Wl,--major-subsystem-version=5
   TARGET_LDFLAGS += -Wl,--minor-subsystem-version=00
-  TARGET_LDFLAGS += -Wl,-subsystem,windows
+
+  # default to "console"; see SCREEN_LDLIBS
+  TARGET_LDFLAGS += -Wl,-subsystem,console
 endif
 
 ifeq ($(HAVE_WIN32),y)
-  ifeq ($(CONFIG_PC)$(CONFIG_CYGWIN),nn)
+  ifeq ($(HAVE_CE),y)
     TARGET_LDFLAGS := -Wl,--major-subsystem-version=$(CE_MAJOR)
     TARGET_LDFLAGS += -Wl,--minor-subsystem-version=$(CE_MINOR)
   endif
@@ -321,11 +292,19 @@ ifneq ($(TARGET),ANDROID)
 endif
 endif
 
-ifeq ($(CONFIG_PC),y)
+ifeq ($(TARGET),ANDROID)
+  TARGET_LDFLAGS += -nostdlib -Wl,-shared,-Bsymbolic -Wl,--no-undefined
+
+  ifeq ($(ARMV7),y)
+    TARGET_LDFLAGS += -Wl,--fix-cortex-a8
+  endif
+endif
+
+ifneq ($(filter PC WINE,$(TARGET)),)
   TARGET_LDLIBS := -lwinmm -lstdc++
 endif
 
-ifeq ($(CONFIG_CYGWIN),y)
+ifeq ($(TARGET),CYGWIN)
   TARGET_LDLIBS := -lwinmm -lstdc++
   TARGET_LDLIBS += -lintl
 endif
@@ -358,7 +337,7 @@ endif
 TARGET_EXEEXT = .exe
 NOSTRIP_SUFFIX = -ns
 
-ifeq ($(CONFIG_WINE),y)
+ifeq ($(TARGET),WINE)
   TARGET_EXEEXT :=
   NOSTRIP_SUFFIX :=
 endif
@@ -370,5 +349,4 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_EXEEXT := .so
-  TARGET_LDFLAGS += -nostdlib -Wl,-shared,-Bsymbolic -Wl,--no-undefined
 endif

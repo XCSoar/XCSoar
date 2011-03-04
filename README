@@ -77,6 +77,8 @@ Supported targets:
 
  ANDROID: Android OS (work in progress)
 
+ ANDROID7: Android with ARMv7 CPU
+
 
 Submitting patches
 ------------------

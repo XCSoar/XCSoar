@@ -45,6 +45,29 @@ public:
     return !dialogs.empty();
   }
 
+#ifdef ENABLE_SDL
+protected:
+  gcc_pure
+  bool FilterMouseEvent(int x, int y, Window *allowed,
+                        Window *second_allowed=NULL) const;
+#endif
+
+public:
+  /**
+   * Check if the specified event should be allowed.  An event may be
+   * rejected when a modal dialog is active, and the event should go
+   * to a window outside of the dialog.
+   */
+#ifdef ANDROID
+  gcc_pure
+  bool FilterEvent(const Event &event, Window *allowed,
+                   Window *second_allowed=NULL) const;
+#elif defined(ENABLE_SDL)
+  gcc_pure
+  bool FilterEvent(const SDL_Event &event, Window *allowed,
+                   Window *second_allowed=NULL) const;
+#endif
+
 protected:
   virtual bool on_close();
   virtual bool on_destroy();
