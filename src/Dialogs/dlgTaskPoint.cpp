@@ -429,8 +429,10 @@ OnDetailsClicked(WndButton &Sender)
 static void
 OnRelocateClicked(WndButton &Sender)
 {
-  const Waypoint *wp = dlgWayPointSelect(*parent_window,
-                                         XCSoarInterface::Basic().Location);
+  const GeoPoint &gpBearing = (active_index ?
+                               ordered_task->get_tp(active_index - 1)->get_location() :
+                               XCSoarInterface::Basic().Location);
+  const Waypoint *wp = dlgWayPointSelect(*parent_window, gpBearing);
   if (wp == NULL)
     return;
 
