@@ -168,13 +168,25 @@ public:
                                            projection.GetScreenAngle());
     } else {
       // non landable turnpoint
-      const MaskedIcon *icon =
-          projection.GetMapScale() > fixed(4000) ? &Graphics::SmallIcon :
-          way_point.Type == wtMountainTop ? &Graphics::MountainTopIcon :
-          way_point.Type == wtBridge ? &Graphics::BridgeIcon :
-          way_point.Type == wtTunnel ? &Graphics::TunnelIcon :
-          &Graphics::TurnPointIcon;
-
+      const MaskedIcon *icon;
+      if (projection.GetMapScale() > fixed(4000))
+        icon = &Graphics::SmallIcon;
+      else {
+        switch (way_point.Type) {
+        case wtMountainTop:
+          icon = &Graphics::MountainTopIcon;
+          break;
+        case wtBridge:
+          icon = &Graphics::BridgeIcon;
+          break;
+        case wtTunnel:
+          icon = &Graphics::TunnelIcon;
+          break;
+        default:
+          icon = &Graphics::TurnPointIcon;
+          break;
+        }
+      }
       icon->draw(canvas, sc);
     }
 
