@@ -25,10 +25,17 @@ Copyright_License {
 #define XCSOAR_IGC_PARSER_HPP
 
 #include "Math/fixed.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
 
 #include <tchar.h>
 
-struct GeoPoint;
+struct IGCFix {
+  fixed time;
+
+  GeoPoint location;
+
+  fixed gps_altitude, pressure_altitude;
+};
 
 /**
  * Parse an IGC "B" record.
@@ -36,8 +43,6 @@ struct GeoPoint;
  * @return true on success, false if the line was not recognized
  */
 bool
-IGCParseFix(const TCHAR *buffer, fixed &Time,
-            GeoPoint &location,
-            fixed &Altitude, fixed &PressureAltitude);
+IGCParseFix(const TCHAR *buffer, IGCFix &fix);
 
 #endif

@@ -42,12 +42,9 @@
 #include <algorithm>
 
 bool
-IgcReplayGlue::ScanBuffer(const TCHAR* buffer, fixed &Time,
-                          GeoPoint &location,
-                             fixed &Altitude, fixed &PressureAltitude)
+IgcReplayGlue::ScanBuffer(const TCHAR *buffer, IGCFix &fix)
 {
-  if (IgcReplay::ScanBuffer(buffer, Time, location, Altitude,
-                            PressureAltitude))
+  if (IgcReplay::ScanBuffer(buffer, fix))
     return true;
 
   int found = 0;

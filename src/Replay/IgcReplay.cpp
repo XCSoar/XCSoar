@@ -38,22 +38,18 @@ IgcReplay::IgcReplay() :
 }
 
 bool
-IgcReplay::ScanBuffer(const TCHAR* buffer, fixed &Time,
-                      GeoPoint &location,
-                      fixed &Altitude, fixed &PressureAltitude)
+IgcReplay::ScanBuffer(const TCHAR* buffer, IGCFix &fix)
 {
-  return IGCParseFix(buffer, Time, location,
-                     Altitude, PressureAltitude);
+  return IGCParseFix(buffer, fix);
 }
 
 bool
-IgcReplay::ReadPoint(fixed &Time, GeoPoint &location,
-                     fixed &Altitude, fixed &PressureAltitude)
+IgcReplay::ReadPoint(IGCFix &fix)
 {
   TCHAR *buffer;
 
   while ((buffer = reader->read()) != NULL) {
-    if (ScanBuffer(buffer, Time, location, Altitude, PressureAltitude))
+    if (ScanBuffer(buffer, fix))
       return true;
   }
 
@@ -138,13 +134,12 @@ IgcReplay::Update()
 
   // if need a new point
   while (cli.NeedData(t_simulation) && Enabled) {
-    fixed t1 = fixed_zero;
-    GeoPoint location;
-    fixed Alt1, PAlt1;
-    Enabled = ReadPoint(t1, location, Alt1, PAlt1);
+    IGCFix fix;
+    Enabled = ReadPoint(fix);
 
-    if (Enabled && positive(t1))
-      cli.Update(t1, location, Alt1, PAlt1);
+    if (Enabled && positive(fix.time))
+      cli.Update(fix.time, fix.location,
+                 fix.gps_altitude, fix.pressure_altitude);
   }
 
   if (t_simulation == fixed_zero)

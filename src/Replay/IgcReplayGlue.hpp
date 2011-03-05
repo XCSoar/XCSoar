@@ -40,9 +40,7 @@ protected:
                           const fixed speed, const Angle bearing,
                           const fixed alt, const fixed baroalt, const fixed t);
 
-  virtual bool ScanBuffer(const TCHAR* buffer, fixed &Time,
-                          GeoPoint &location,
-                          fixed &Altitude, fixed &PressureAltitude);
+  virtual bool ScanBuffer(const TCHAR *buffer, IGCFix &fix);
 private:
   PeriodClock clock;
 };

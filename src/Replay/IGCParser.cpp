@@ -22,14 +22,11 @@ Copyright_License {
 */
 
 #include "IGCParser.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
 
 #include <stdio.h>
 
 bool
-IGCParseFix(const TCHAR *buffer, fixed &Time,
-            GeoPoint &location,
-            fixed &Altitude, fixed &PressureAltitude)
+IGCParseFix(const TCHAR *buffer, IGCFix &fix)
 {
   int DegLat, DegLon;
   int MinLat, MinLon;
@@ -57,18 +54,18 @@ IGCParseFix(const TCHAR *buffer, fixed &Time,
   if (EoW == _T('W'))
     Longitude *= -1;
 
-  location.Latitude = Angle::degrees(Latitude);
-  location.Longitude = Angle::degrees(Longitude);
+  fix.location.Latitude = Angle::degrees(Latitude);
+  fix.location.Longitude = Angle::degrees(Longitude);
 
-  Altitude = fixed(iAltitude);
-  PressureAltitude = fixed(iPressureAltitude);
+  fix.gps_altitude = fixed(iAltitude);
+  fix.pressure_altitude = fixed(iPressureAltitude);
 
   // some loggers drop out GPS altitude, so when this happens, revert
   // to pressure altitude
   if ((iPressureAltitude != 0) && (iAltitude==0)) {
-    Altitude = PressureAltitude;
+    fix.gps_altitude = fix.pressure_altitude;
   }
 
-  Time = fixed(Hour * 3600 + Minute * 60 + Second);
+  fix.time = fixed(Hour * 3600 + Minute * 60 + Second);
   return true;
 }

@@ -35,6 +35,7 @@ Copyright_License {
 
 struct GeoPoint;
 class Angle;
+struct IGCFix;
 
 class IgcReplay: public AbstractReplay
 {
@@ -57,14 +58,11 @@ protected:
   virtual void on_advance(const GeoPoint &loc,
                           const fixed speed, const Angle bearing,
                           const fixed alt, const fixed baroalt, const fixed t) = 0;
-  virtual bool ScanBuffer(const TCHAR* buffer, fixed &Time,
-                          GeoPoint &location,
-                          fixed &Altitude, fixed &PressureAltitude);
+  virtual bool ScanBuffer(const TCHAR* buffer, IGCFix &fix);
 
   fixed t_simulation;
 
-  bool ReadPoint(fixed &Time, GeoPoint &location,
-                 fixed &Altitude, fixed &PressureAltitude);
+  bool ReadPoint(IGCFix &fix);
 
   fixed GetMinTime() const;
 private:
