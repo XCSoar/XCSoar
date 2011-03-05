@@ -172,10 +172,10 @@ TestCAI302()
   device->ParseNMEA("$PCAID,N,500,0,*14", &nmea_info, false);
   ok1(!nmea_info.BaroAltitudeAvailable);
 
-  /* baro altitude enabled (PCAID) */
+  /* pressure altitude enabled (PCAID) */
   device->ParseNMEA("$PCAID,N,500,0,*14", &nmea_info, true);
-  ok1(nmea_info.BaroAltitudeAvailable);
-  ok1(between(nmea_info.BaroAltitude, 499, 501));
+  ok1(nmea_info.PressureAltitudeAvailable);
+  ok1(between(nmea_info.PressureAltitude, 499, 501));
 
   /* baro altitude enabled */
   device->ParseNMEA("!w,000,000,0000,500,01287,01020,-0668,191,199,191,000,000,100*44",
@@ -242,24 +242,24 @@ TestLX(const struct DeviceRegister &driver)
   nmea_info.Time = fixed(1297230000);
   nmea_info.ProvideQNHSetting(fixed(1013.25));
 
-  /* baro altitude disabled */
+  /* pressure altitude disabled */
   device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", &nmea_info, false);
-  ok1(!nmea_info.BaroAltitudeAvailable);
+  ok1(!nmea_info.PressureAltitudeAvailable);
   ok1(!nmea_info.AirspeedAvailable);
   ok1(!nmea_info.TotalEnergyVarioAvailable);
 
-  /* baro altitude enabled */
+  /* pressure altitude enabled */
   device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", &nmea_info, true);
-  ok1(nmea_info.BaroAltitudeAvailable);
-  ok1(between(nmea_info.BaroAltitude, 1266, 1267));
+  ok1(nmea_info.PressureAltitudeAvailable);
+  ok1(between(nmea_info.PressureAltitude, 1266, 1267));
   ok1(!nmea_info.AirspeedAvailable);
   ok1(!nmea_info.TotalEnergyVarioAvailable);
 
   /* airspeed and vario available */
   device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1",
                     &nmea_info, true);
-  ok1(nmea_info.BaroAltitudeAvailable);
-  ok1(equals(nmea_info.BaroAltitude, 1665.5));
+  ok1(nmea_info.PressureAltitudeAvailable);
+  ok1(equals(nmea_info.PressureAltitude, 1665.5));
   ok1(nmea_info.AirspeedAvailable);
   ok1(equals(nmea_info.TrueAirspeed, 222.3/3.6));
   ok1(nmea_info.TotalEnergyVarioAvailable);
