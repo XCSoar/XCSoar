@@ -67,8 +67,6 @@ public:
   void SetFilename(const char *name);
 
 protected:
-  virtual bool update_time();
-  virtual void reset_time();
   virtual void on_reset() {}
   virtual void on_stop() {}
   virtual void on_bad_file() { error = true; }
@@ -76,19 +74,6 @@ protected:
                           const Angle bearing, const fixed alt,
                           const fixed baroalt, const fixed t);
 };
-
-bool
-IgcReplayGlue::update_time()
-{
-  t_simulation += fixed_one;
-  return true;
-}
-
-void
-IgcReplayGlue::reset_time()
-{
-  t_simulation = fixed_zero;
-}
 
 void
 IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
