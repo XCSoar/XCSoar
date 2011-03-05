@@ -30,7 +30,8 @@ Copyright_License {
 #include "Sizes.h"
 
 #if defined(WIN32) && (!defined(__GNUC__) || defined(_WIN32_WCE))
-#include "uniqueid.h"
+#include <windows.h>
+#include <winioctl.h>
 #endif
 
 // Registration Data
