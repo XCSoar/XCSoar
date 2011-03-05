@@ -392,6 +392,68 @@ append_to_task(const Waypoint &wp)
   return SUCCESS;
 }
 
+static task_edit_result
+goto_and_clear_task(const Waypoint &wp)
+{
+  std::auto_ptr<OrderedTask> task(protected_task_manager->task_blank());
+
+  const AbstractTaskFactory &factory = task->get_factory();
+  StartPoint *sp = (StartPoint *)factory.createStart(wp);
+  FinishPoint *fp = (FinishPoint *)factory.createFinish(wp);
+  bool success = task->append(*sp);
+  success &= task->append(*fp);
+  delete sp;
+  delete fp;
+
+  if (!success)
+    return UNMODIFIED;
+
+  if (!task->check_task())
+    return INVALID;
+
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  task_manager->commit(*task);
+  task_manager->reset();
+
+  return SUCCESS;
+}
+
+static unsigned
+ordered_task_size()
+{
+  assert(protected_task_manager != NULL);
+  ProtectedTaskManager::Lease task_manager(*protected_task_manager);
+  const OrderedTask &ot = task_manager->get_ordered_task();
+  if (ot.check_task())
+    return ot.task_size();
+
+  return 0;
+}
+
+static void
+OnGotoAndClearTaskClicked(gcc_unused WndButton &button)
+{
+  if (protected_task_manager == NULL)
+    return;
+
+  if ((ordered_task_size() > 2) && MessageBoxX(_("Clear current task?"),
+                        _("Goto and clear task"), MB_YESNO | MB_ICONQUESTION) != IDYES)
+    return;
+
+  switch (goto_and_clear_task(*selected_waypoint)) {
+  case SUCCESS:
+    protected_task_manager->task_save_default();
+    wf->SetModalResult(mrOK);
+    break;
+
+  case UNMODIFIED:
+  case INVALID:
+    MessageBoxX(_("Unknown error creating task."), _("Error"),
+                MB_OK | MB_ICONEXCLAMATION);
+    break;
+  }
+}
+
 static void
 OnAppendInTaskClicked(gcc_unused WndButton &button)
 {
@@ -669,6 +731,10 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   wb = ((WndButton *)wf->FindByName(_T("cmdRemoveFromTask")));
   if (wb)
     wb->SetOnClickNotify(OnRemoveFromTaskClicked);
+
+  wb = ((WndButton *)wf->FindByName(_T("cmdGotoAndClearTask")));
+  if (wb)
+    wb->SetOnClickNotify(OnGotoAndClearTaskClicked);
 
   wb = ((WndButton *)wf->FindByName(_T("cmdActivatePan")));
   if (wb)
