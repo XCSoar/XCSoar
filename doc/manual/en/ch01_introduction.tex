@@ -12,12 +12,12 @@ are available from
 \xcsoarwebsite
 \end{quote}
 
-\section{Organisation of this manual}
+\section{Organization of this manual}
 
 \todonum[inline]{Write about the manual crossref hinting icons and the yellow
 colour. The Quickstart will be readable also without those links available} 
 This manual is broadly
-organised into the major functions of the software from a pilot's perspective.  The remainder of this chapter
+organized into the major functions of the software from a pilot's perspective.  The remainder of this chapter
 deals with how to download, install and run the software on various
 platforms.  Chapter~\ref{cha:interface} introduces the user interface
 concepts and gives an overview of the display.
@@ -58,7 +58,7 @@ process is presented in Chapter~\ref{cha:history-development}.
 A variety of terms may be used to describe embedded devices like the Pocket PC
 platform, including `organiser', Portable Digital Assistant (PDA)
 and Personal Navigation Assistant (PNA).  XCSoar is
-also available on triadis Engineering's Altair glide computer, which is
+also available on Triadis Engineering's Altair glide computer, which is
 formally an Electronic Flight Instrumentation System, and several other
 platforms. Throughout this document, these terms are used interchangeably to
 refer to whatever hardware XCSoar is running on.
@@ -86,12 +86,10 @@ to skip support for native applications from this version on.
 XCSoar can be run on Unix using the Wine emulator. A native Unix port
 has been released with the 6.0 version of XCSoar, but is still
 considered experimental.
-\item[Unix/Linux Mobile PDA/PNA]
-\todonum[inline]{Are these supported?  For example, the Tom Tom}
 \item[Android Devices]
 XCSoar runs on Android 1.6 or newer.
 \item[Altair]
-The Altair glide computer by triadis Engineering is a glide computer
+The Altair glide computer by Triadis Engineering is a glide computer
 factory installed with XCSoar.  The Altair PRO version also contains
 an internal GPS.
 \end{description}
@@ -109,40 +107,55 @@ version and save it to disk:
 \item[Windows Mobile 5] For Windows Mobile 5 and 6
 \end{description}
 
-\subsection*{Additional files}
-To be able to use XCSoar's advanced features additional data files, such as
-terrain, topology, special use airspace, waypoints etc.\ are needed. The files
+\subsection*{Data files location}
+To be able to use XCSoar's advanced features, additional data files, such as
+terrain, topography, special use airspace, waypoints etc.\ are needed. The files
 that can be used with XCSoar are described in Chapter~\ref{cha:data-files}.
 
-All data files should be copied into the directory \texttt{XCSoarData}. The
-location of this directory is determined with the following method:
+All data files should be copied into the directory
+\texttt{XCSoarData}.  This directory must be in a specific place
+so that XCSoar knows where to look for data files:
 
 \begin{description}
 \item[Windows PC]
-\texttt{XCSoarData} is always located in your personal folder (``\texttt{My
+\texttt{XCSoarData} must be located in your personal folder (``\texttt{My
 Documents}'')
 \item[Windows Mobile PDA/PNA]
 \begin{itemize}
 \item If you start XCSoar from a SD card, it is always in the root of
-  that SD card (e.g. ``\texttt{/SD Card/XCSoarData}'')
+  that SD card (e.g. ``\texttt{SD Card/XCSoarData}'')
 \item If \texttt{XCSoarData} already exists on any SD card inserted
-  at XCSoar start\-up, this one is used
+  at XCSoar start\-up, this one is used.
 \item If none of the above applies, then it is in your personal folder
-  (``\texttt{/My Documents}'')
+  (``\texttt{My Documents/}'')
 \end{itemize}
 \item[Unix PC]
-\begin{itemize}
-\item \verb|~/.xcsoar/XCSoarData|.
-\end{itemize}
+\verb|~/.xcsoar/XCSoarData|.
 \item[Android Devices]
 \texttt{XCSoarData} is located on the SD card (e.g.
 ``\texttt{/sdcard/XCSoarData}'').
 \item[Altair]
-\texttt{XCSoarData} is located in the interal storage.
+\texttt{XCSoarData} is located in the internal storage.
 \end{description}
 
 For embedded devices it is recommended to create \texttt{XCSoarData} on a SD
-card, because you can easily update the data files on your PC.
+card, because you can easily update the data files using your PC.
+
+
+XCSoar will generate a number of additional files at run time.  These
+will be placed in the  \texttt{XCSoarData} directory (Windows PC and 
+Windows Mobile devices), or the \texttt{.xcsoar} directory (Unix/Linux
+PC).  At first run, XCSoar will create the files 
+\texttt{Default.tsk} (Default Task),  \texttt{xcsoar-registry.prf} 
+(configuration settings), \newline
+\texttt{xcsoar-startup.log} (log of the startup progress), 
+plus three directories: \texttt{cache},
+\texttt{config} and \texttt{logs}.  Additional files may be
+created/modified while XCSoar is running, such as task files
+(\texttt{*.tsk}) and flight logs.
+
+
+
 
 \section{Installation}
 \subsection*{Installation of Pocket PC version from Windows PC}
@@ -197,10 +210,10 @@ You can download the CAB file appropriate for your organiser and
 install it onto a nonvolatile storage card like a Compact Flash or
 Secure Digital card. Place it in your organiser. Use the File Manager
 on your organiser to find the CAB and click on it to execute
-it. Follow the onscreen instructions, the CAB file will be deleted
+it. Follow the on-screen instructions, the CAB file will be deleted
 after installation.
 
-Alternatively you can download the CAB file from sourceforge through
+Alternatively you can download the CAB file from Sourceforge through
 your Internet Explorer on your organiser and install it that way.
 
 \tip It is generally a good idea to keep the CAB file on the storage card
@@ -239,6 +252,9 @@ Obtain XCSoar from Google's Android market, or install the \verb|apk|
 file manually.  Copy the data files on the SD card in the directory
 \verb|XCSoarData|.
 
+
+
+
 \section{Running XCSoar}
 %\subsection*{Fly and simulator modes}
 
@@ -249,13 +265,6 @@ Two modes are available inside the XCSoar application:
 \item[SIM] This starts XCSoar in simulator mode, no serial communications
   are attempted.
 \end{description}
-
-The simulator contains a simple interface allowing the user to fly
-the glider about.  Dragging the glider symbol (with touchscreen or
-mouse) causes the glider to move in the direction of the drag, the
-speed being proportional to the length of the drag.  In SIM mode, the
-aircraft altitude can be adjusted by selecting the GPS altitude
-{\InfoBox} (marked \infobox{H GPS}), and pressing the up or down key.
 
 \subsection*{XCSoar Pocket PC version}
 The program can be run in either of two modes by pressing the `FLY' or
@@ -310,7 +319,7 @@ The first time that XCSoar is run, it does not automatically load the
 data files that you placed in the \verb|XCSoarData| directory.  
 To tell XCSoar which files to load, double click/tap the map (the large,
 blank white part with the glider symbol in the center),
-choose the menu \bmenu{Config} (clik/tap it twice), then select
+choose the menu \bmenu{Config} (click/tap it twice), then select
 \bmenu{System Setup}.  The System Setup screen should be displayed:
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-basic.png}
@@ -336,6 +345,28 @@ can be useful for example in the following cases:
 \end{itemize}
 
 
+\subsection*{SIM mode}
+The simulator contains a simple interface allowing the user to fly
+the glider about.  On the map screen, clicking/touching the glider symbol
+(with touchscreen or mouse) and dragging 
+causes the glider to move in the direction of the drag, the
+speed being proportional to the length of the drag.  
+
+In the PC version and for embedded devices with buttons, the aircraft
+speed, height and direction may be changed using the \InfoBox es.
+These features are not available for touchscreen devices.
+The aircraft altitude can be adjusted by selecting the GPS altitude
+{\InfoBox} (marked \infobox{H GPS}), and pressing the up or down key.
+The airspeed  can be adjusted by selecting the ground speed
+{\InfoBox} (marked \infobox{V Gnd}), and pressing the up or down key.
+The glider's track  can be adjusted by selecting the track
+{\InfoBox} (marked \infobox{Track}), and pressing the up or down key.
+With either of the \InfoBox es \infobox{H GPS} or \infobox{V Gnd})
+selected, the glider's direction may be changed using the left/right keys.
+
+Other controls, buttons and menus work the same as in FLY mode.
+
+
 \subsection*{Splash screen}
 When XCSoar starts up, shuts down, or loads large files, such as airspace,
 waypoints, terrain, etc., a progress screen is presented while the data is being
@@ -346,7 +377,7 @@ This screen also displays the software version information.
 
 \subsection*{Exiting the program}
 For PDA and PC versions, XCSoar is shut down from the menu. The menu can be
-opened by double-clicking on the map or the infoboxes.
+opened by double-clicking on the map or the \InfoBox es.
 \begin{quote}
 \bmenu{QUIT}
 \end{quote}
@@ -357,7 +388,11 @@ on the XCSoar window.
 For Altair, XCSoar is shut down by holding the PWR button for two seconds or
 more.
 
-\section{Through-life support}
+
+
+
+
+\section{Technical support}
 
 \subsection*{Troubleshooting}
 A small team of dedicated developers produces XCSoar. Although we are
