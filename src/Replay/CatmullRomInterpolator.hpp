@@ -42,16 +42,17 @@ typedef struct _LOGGER_INTERP_POINT
  */
 class CatmullRomInterpolator
 {
-public:
   const fixed t;
 
+  int num;
+  LOGGER_INTERP_POINT p[4];
+
+public:
   CatmullRomInterpolator(fixed _t):
     t(_t)
   {
     Reset();
   }
-
-  LOGGER_INTERP_POINT p[4];
 
   void
   Reset()
@@ -179,6 +180,4 @@ private:
       return u;
     }
   }
-
-  int num;
 };
