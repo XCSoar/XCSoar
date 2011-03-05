@@ -21,16 +21,12 @@
 */
 
 #include "Replay/IgcReplay.hpp"
-
 #include "Engine/Trace/Trace.hpp"
-#include "Engine/Task/TaskStats/CommonStats.hpp"
 #include "Engine/Task/Tasks/ContestManager.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "Printing.hpp"
 
-#include <windef.h>
 #include <assert.h>
-#include <cstdio>
 
 Trace full_trace;
 Trace sprint_trace(9000, 300);
