@@ -168,20 +168,6 @@ public:
     return max(fixed_zero, max(p[0].t, max(p[1].t, max(p[2].t, p[3].t))));
   }
 
-  fixed
-  GetAverageTime() const
-  {
-    if (num <= 0)
-      return fixed_zero;
-
-    fixed tav = fixed_zero;
-    for (int i = 0; i < num; i++) {
-      tav += p[i].t / num;
-    }
-
-    return tav;
-  }
-
   bool
   NeedData(fixed t_simulation) const
   {
