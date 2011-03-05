@@ -441,6 +441,7 @@ TEST_OLC_SOURCES = \
 	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Math/Angle.cpp \
 	$(SRC)/Math/FastMath.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
@@ -458,6 +459,7 @@ TEST_TRACE_SOURCES = \
 	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Math/Angle.cpp \
 	$(SRC)/Math/FastMath.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \

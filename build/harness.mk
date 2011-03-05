@@ -1,4 +1,5 @@
 TEST_SRC = \
+	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/Replay/TaskAutoPilot.cpp \
 	$(SRC)/Replay/AircraftSim.cpp \

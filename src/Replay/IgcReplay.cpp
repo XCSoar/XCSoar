@@ -22,6 +22,8 @@
 */
 
 #include "Replay/IgcReplay.hpp"
+#include "Replay/IGCParser.hpp"
+
 #include <algorithm>
 
 #include "Navigation/GeoPoint.hpp"
@@ -40,43 +42,8 @@ IgcReplay::ScanBuffer(const TCHAR* buffer, fixed &Time,
                       fixed &Latitude, fixed &Longitude, fixed &Altitude,
                       fixed &PressureAltitude)
 {
-  int DegLat, DegLon;
-  int MinLat, MinLon;
-  TCHAR NoS, EoW;
-  int iAltitude, iPressureAltitude;
-  int Hour = 0;
-  int Minute = 0;
-  int Second = 0;
-  int lfound =
-      _stscanf(buffer, _T("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05d"),
-      &Hour, &Minute, &Second, &DegLat, &MinLat, &NoS, &DegLon,
-      &MinLon, &EoW, &iPressureAltitude, &iAltitude);
-
-  if (lfound == EOF)
-    return false;
-
-  if (lfound != 11)
-    return false;
-
-  Latitude = fixed(DegLat) + fixed(MinLat) / 60000;
-  if (NoS == _T('S'))
-    Latitude *= -1;
-
-  Longitude = fixed(DegLon) + fixed(MinLon) / 60000;
-  if (EoW == _T('W'))
-    Longitude *= -1;
-
-  Altitude = fixed(iAltitude);
-  PressureAltitude = fixed(iPressureAltitude);
-
-  // some loggers drop out GPS altitude, so when this happens, revert
-  // to pressure altitude
-  if ((iPressureAltitude != 0) && (iAltitude==0)) {
-    Altitude = PressureAltitude;
-  }
-
-  Time = fixed(Hour * 3600 + Minute * 60 + Second);
-  return true;
+  return IGCParseFix(buffer, Time, Latitude, Longitude,
+                     Altitude, PressureAltitude);
 }
 
 bool
