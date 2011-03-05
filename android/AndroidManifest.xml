@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.xcsoar"
-          android:versionCode="28"
-          android:versionName="6.0.6">
+          android:versionCode="29"
+          android:versionName="6.0.7">
   <application android:icon="@drawable/icon" android:label="@string/app_name"
                android:debuggable="true">
     <activity android:name=".XCSoar"
