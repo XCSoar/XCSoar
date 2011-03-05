@@ -142,7 +142,7 @@ IgcReplay::Update()
                  fix.gps_altitude, fix.pressure_altitude);
   }
 
-  if (t_simulation == fixed_zero)
+  if (!positive(t_simulation))
     t_simulation = cli.GetMaxTime();
 
   if (!Enabled) {
