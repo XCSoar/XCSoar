@@ -24,6 +24,8 @@
 #include "Math/fixed.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Navigation/Geometry/GeoVector.hpp"
+
+#include <algorithm>
 #include <assert.h>
 
 typedef struct _LOGGER_INTERP_POINT
@@ -68,12 +70,7 @@ public:
     if (num < 4)
       num++;
 
-    for (int i = 0; i < 3; i++) {
-      p[i].loc = p[i + 1].loc;
-      p[i].alt = p[i + 1].alt;
-      p[i].palt = p[i + 1].palt;
-      p[i].t = p[i + 1].t;
-    }
+    std::copy(p + 1, p + 4, p);
 
     p[3].loc = location;
     p[3].alt = alt;
