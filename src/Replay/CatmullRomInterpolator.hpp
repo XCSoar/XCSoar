@@ -201,5 +201,4 @@ private:
   }
 
   int num;
-  fixed tzero;
 };
