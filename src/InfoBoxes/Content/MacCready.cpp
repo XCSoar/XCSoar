@@ -208,8 +208,13 @@ InfoBoxContentMacCready::GetInfoBoxDlgContent() {
 void
 InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
 {
-  SetVSpeed(infobox,
-            XCSoarInterface::Calculated().common_stats.current_risk_mc);
+  if (protected_task_manager == NULL) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  GlidePolar polar = protected_task_manager->get_glide_polar();
+  SetVSpeed(infobox, polar.get_mc());
 
   // Set Comment
   if (XCSoarInterface::SettingsComputer().auto_mc)
