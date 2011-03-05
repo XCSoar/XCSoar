@@ -34,6 +34,7 @@
  */
 class CatmullRomInterpolator
 {
+public:
   struct Record {
     GeoPoint loc;
     fixed alt;
@@ -41,6 +42,7 @@ class CatmullRomInterpolator
     fixed t;
   };
 
+private:
   const fixed t;
 
   unsigned num;
@@ -90,34 +92,26 @@ public:
     if (!positive(p[2].t-p[1].t)) {
       return GeoVector(fixed_zero, Angle::native(fixed_zero));
     }
-    fixed alt, palt;
-    GeoPoint p0, p1;
-    Interpolate(time-fixed(0.05), p0, alt, palt);
-    Interpolate(time+fixed(0.05), p1, alt, palt);
+
+    const Record r0 = Interpolate(time - fixed(0.05));
+    const Record r1 = Interpolate(time + fixed(0.05));
     return GeoVector(p[1].loc.distance(p[2].loc)/
-                     (p[2].t-p[1].t), p0.bearing(p1));
+                     (p[2].t-p[1].t), r0.loc.bearing(r1.loc));
   }
 
-  void
-  Interpolate(fixed time, GeoPoint &loc, fixed &alt, fixed &palt) const
+  gcc_pure
+  Record
+  Interpolate(fixed time) const
   {
     assert(Ready());
 
     const fixed u = time_fraction(time, false);
 
-    if (!positive(u)) {
-      loc = p[1].loc;
-      alt = p[1].alt;
-      palt = p[1].palt;
-      return;
-    }
+    if (!positive(u))
+      return p[1];
 
-    if (u > fixed_one) {
-      loc = p[2].loc;
-      alt = p[2].alt;
-      palt = p[2].palt;
-      return;
-    }
+    if (u > fixed_one)
+      return p[2];
 
     /*
       ps = ( c0   c1    c2  c3)
@@ -134,15 +128,21 @@ public:
                        (t - fixed_two) * u3 + (fixed(3) - 2 * t) * u2 + t * u,
                         t * u3 - t * u2};
 
-    loc.Latitude = (p[0].loc.Latitude * c[0] + p[1].loc.Latitude * c[1]
-                    + p[2].loc.Latitude * c[2] + p[3].loc.Latitude * c[3]);
+    Record r;
+    r.loc.Latitude = p[0].loc.Latitude * c[0] + p[1].loc.Latitude * c[1]
+      + p[2].loc.Latitude * c[2] + p[3].loc.Latitude * c[3];
 
-    loc.Longitude = (p[0].loc.Longitude * c[0] + p[1].loc.Longitude * c[1]
-                     + p[2].loc.Longitude * c[2] + p[3].loc.Longitude * c[3]);
+    r.loc.Longitude = p[0].loc.Longitude * c[0] + p[1].loc.Longitude * c[1]
+      + p[2].loc.Longitude * c[2] + p[3].loc.Longitude * c[3];
 
-    alt = (p[0].alt * c[0] + p[1].alt * c[1] + p[2].alt * c[2] + p[3].alt * c[3]);
-    palt = (p[0].palt * c[0] + p[1].palt * c[1] +
-            p[2].palt * c[2] + p[3].palt * c[3]);
+    r.alt = p[0].alt * c[0] + p[1].alt * c[1] +
+      p[2].alt * c[2] + p[3].alt * c[3];
+    r.palt = p[0].palt * c[0] + p[1].palt * c[1] +
+      p[2].palt * c[2] + p[3].palt * c[3];
+
+    r.t = time;
+
+    return r;
   }
 
   fixed

@@ -141,13 +141,9 @@ IgcReplay::Update()
   if (!Enabled) {
     Stop();
   } else {
-    fixed Alt, PAlt;
-    GeoPoint Pos;
-
-    cli.Interpolate(t_simulation, Pos, Alt, PAlt);
-
+    const CatmullRomInterpolator::Record r = cli.Interpolate(t_simulation);
     const GeoVector v = cli.GetVector(t_simulation);
-    on_advance(Pos, v.Distance, v.Bearing, Alt, PAlt, t_simulation);
+    on_advance(r.loc, v.Distance, v.Bearing, r.alt, r.palt, t_simulation);
   }
 
   return Enabled;
