@@ -28,6 +28,8 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct GeoPoint;
+
 /**
  * Parse an IGC "B" record.
  *
@@ -35,7 +37,7 @@ Copyright_License {
  */
 bool
 IGCParseFix(const TCHAR *buffer, fixed &Time,
-            fixed &Latitude, fixed &Longitude,
+            GeoPoint &location,
             fixed &Altitude, fixed &PressureAltitude);
 
 #endif

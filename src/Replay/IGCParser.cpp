@@ -22,12 +22,13 @@ Copyright_License {
 */
 
 #include "IGCParser.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
 
 #include <stdio.h>
 
 bool
 IGCParseFix(const TCHAR *buffer, fixed &Time,
-            fixed &Latitude, fixed &Longitude,
+            GeoPoint &location,
             fixed &Altitude, fixed &PressureAltitude)
 {
   int DegLat, DegLon;
@@ -48,13 +49,16 @@ IGCParseFix(const TCHAR *buffer, fixed &Time,
   if (lfound != 11)
     return false;
 
-  Latitude = fixed(DegLat) + fixed(MinLat) / 60000;
+  fixed Latitude = fixed(DegLat) + fixed(MinLat) / 60000;
   if (NoS == _T('S'))
     Latitude *= -1;
 
-  Longitude = fixed(DegLon) + fixed(MinLon) / 60000;
+  fixed Longitude = fixed(DegLon) + fixed(MinLon) / 60000;
   if (EoW == _T('W'))
     Longitude *= -1;
+
+  location.Latitude = Angle::degrees(Latitude);
+  location.Longitude = Angle::degrees(Longitude);
 
   Altitude = fixed(iAltitude);
   PressureAltitude = fixed(iPressureAltitude);

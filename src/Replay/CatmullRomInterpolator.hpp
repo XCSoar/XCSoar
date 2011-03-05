@@ -60,7 +60,7 @@ public:
   }
 
   void
-  Update(fixed t, fixed lon, fixed lat, fixed alt, fixed palt)
+  Update(fixed t, GeoPoint location, fixed alt, fixed palt)
   {
     if (num && (t <= p[num - 1].t))
       return;
@@ -75,8 +75,7 @@ public:
       p[i].t = p[i + 1].t;
     }
 
-    p[3].loc.Latitude = Angle::degrees(fixed(lat));
-    p[3].loc.Longitude = Angle::degrees(fixed(lon));
+    p[3].loc = location;
     p[3].alt = alt;
     p[3].palt = palt;
     p[3].t = t;

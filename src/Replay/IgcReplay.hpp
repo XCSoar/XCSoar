@@ -57,13 +57,13 @@ protected:
   virtual void on_advance(const GeoPoint &loc,
                           const fixed speed, const Angle bearing,
                           const fixed alt, const fixed baroalt, const fixed t) = 0;
-  virtual bool ScanBuffer(const TCHAR* buffer, fixed &Time, fixed &Latitude,
-                          fixed &Longitude, fixed &Altitude,
-                          fixed &PressureAltitude);
+  virtual bool ScanBuffer(const TCHAR* buffer, fixed &Time,
+                          GeoPoint &location,
+                          fixed &Altitude, fixed &PressureAltitude);
 
   fixed t_simulation;
 
-  bool ReadPoint(fixed &Time, fixed &Latitude, fixed &Longitude,
+  bool ReadPoint(fixed &Time, GeoPoint &location,
                  fixed &Altitude, fixed &PressureAltitude);
 
   fixed GetMinTime() const;

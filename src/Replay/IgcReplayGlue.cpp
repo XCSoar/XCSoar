@@ -43,11 +43,10 @@
 
 bool
 IgcReplayGlue::ScanBuffer(const TCHAR* buffer, fixed &Time,
-                             fixed &Latitude, fixed &Longitude,
+                          GeoPoint &location,
                              fixed &Altitude, fixed &PressureAltitude)
 {
-
-  if (IgcReplay::ScanBuffer(buffer, Time, Latitude, Longitude, Altitude,
+  if (IgcReplay::ScanBuffer(buffer, Time, location, Altitude,
                             PressureAltitude))
     return true;
 
