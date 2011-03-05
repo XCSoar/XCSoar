@@ -56,12 +56,6 @@ IgcReplay::ReadPoint(IGCFix &fix)
   return false;
 }
 
-fixed 
-IgcReplay::GetMinTime() const
-{
-  return cli.GetMinTime();
-}
-
 bool
 IgcReplay::update_time()
 {

@@ -64,7 +64,6 @@ protected:
 
   bool ReadPoint(IGCFix &fix);
 
-  fixed GetMinTime() const;
 private:
   CatmullRomInterpolator cli;
 
