@@ -129,7 +129,7 @@ IgcReplay::Update()
   if (!Enabled)
     return false;
 
-  if (!update_time())
+  if (positive(t_simulation) && !update_time())
     return true;
 
   // if need a new point
