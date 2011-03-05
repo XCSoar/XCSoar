@@ -3,31 +3,31 @@
 <Panel Name="frmTaskProperties" Border="0">
   <Panel Name="TaskPropertiesTabOffset" Border="0" X="0" Y="76">
 
-    <Edit Name="prpMinTime" Caption="AAT min time" X="2" Y="2" Width="-2" Height="22" CaptionWidth="140" ReadOnly="0" min="0" max="600" step="10" Help="Minimum AAT task time in minutes.">
+    <Edit Name="prpMinTime" Caption="AAT Min. Time" X="2" Y="2" Width="-2" Height="22" CaptionWidth="140" ReadOnly="0" min="0" max="600" step="10" Help="Minimum AAT task time in minutes.">
       <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f"/>
     </Edit>
 
-    <Edit Name="prpStartMaxSpeed" Caption="Start max speed" X="2" Width="-2" Height="22" CaptionWidth="140"
+    <Edit Name="prpStartMaxSpeed" Caption="Start Max. Speed" X="2" Width="-2" Height="22" CaptionWidth="140"
       Help="Maximum speed allowed in start observation zone.  Set to 0 for no limit.">
       <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5"/>
     </Edit>
 
-    <Edit Name="prpStartMaxHeight" Caption="Start max height" X="2" Width="-2" Height="22" CaptionWidth="140"
+    <Edit Name="prpStartMaxHeight" Caption="Start Max. Height" X="2" Width="-2" Height="22" CaptionWidth="140"
       Help="Maximum height while starting the task.  Set to 0 for no limit.">
       <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="25"/>
     </Edit>
 
-    <Edit Name="prpStartHeightRef" Caption="Start height ref" X="2" Width="-2" Height="22" CaptionWidth="140"
+    <Edit Name="prpStartHeightRef" Caption="Start Height Ref." X="2" Width="-2" Height="22" CaptionWidth="140"
       Help="Reference used for start max height rule&#10;[MSL] Reference is altitude above mean sea level&#10;[AGL] Reference is the height above the start point">
       <DataField DataType="enum"/>
     </Edit>
 
-    <Edit Name="prpFinishMinHeight" Caption="Finish min height" X="2" Width="-2" Height="22" CaptionWidth="140"
+    <Edit Name="prpFinishMinHeight" Caption="Finish Min. Height" X="2" Width="-2" Height="22" CaptionWidth="140"
       Help="Minimum height above ground while finishing the task.  Set to 0 for no limit.">
       <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="25"/>
     </Edit>
 
-    <Edit Name="prpFAIFinishHeight" Caption="FAI finish height" X="2" Width="-2" Height="22" CaptionWidth="140"
+    <Edit Name="prpFAIFinishHeight" Caption="FAI Finish Height" X="2" Width="-2" Height="22" CaptionWidth="140"
       Help="If enabled, this option requires the minimum height above ground for finish to be greater than 1000m below the start height.">
       <DataField DataType="boolean" OnDataAccess="pnlTaskProperties::OnFAIFinishHeightData"/>
     </Edit>
@@ -35,6 +35,7 @@
       Help="Sets the behaviour for the current task.">
       <DataField DataType="enum" OnDataAccess="pnlTaskProperties::OnTaskTypeData"/>
     </Edit>
+
 
   </Panel>
   <Canvas Name="frmTaskViewProperties" X="0" Y="0" Width="61" Height="71" Border="0" OnPaint="dlgTaskManager::OnTaskPaint" />

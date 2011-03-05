@@ -16,7 +16,7 @@
 
     <Panel Name="frmType" X="0" Y="67" Width="242" Height="200" Border="1">
       <Label Name="lblType" Caption="Type" X="2" Y="3" Width="144" Height="18"/>
-      <Button Name="butType" Caption="Change point type" X="152" Y="3" Width="81" Height="35" OnClick="OnTypeClicked"/>
+      <Button Name="butType" Caption="Change Point Type" X="152" Y="3" Width="81" Height="35" OnClick="OnTypeClicked"/>
       <Canvas Name="frmTaskView" X="2" Y="25" Width="100" Height="92" Border="1" OnPaint="OnTaskPaint" />
 
       <Panel Name="frmOZLine" X="107" Y="41" Width="126" Height="80">

@@ -12,7 +12,7 @@
     <DataField DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" ReadOnly="1" />
   </Edit>
 
-  <Edit Name="prpWingLoading" Caption="Wing loading" X="2" Width="-2" Height="22" CaptionWidth="78" ReadOnly="1">
+  <Edit Name="prpWingLoading" Caption="Wing Loading" X="2" Width="-2" Height="22" CaptionWidth="78" ReadOnly="1">
     <DataField DataType="double" DisplayFormat="%.1f kg/m2" EditFormat="%.1f" ReadOnly="1" />
   </Edit>
 
@@ -28,7 +28,7 @@
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" ReadOnly="1"/>
   </Edit>
 
-  <Edit Name="prpTemperature" Caption="Max Temp" X="2" Width="-2" Height="22" CaptionWidth="78" Help="Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)">
+  <Edit Name="prpTemperature" Caption="Max. Temp" X="2" Width="-2" Height="22" CaptionWidth="78" Help="Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)">
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" OnDataAccess="OnTempData"/>
   </Edit>
 </Form>

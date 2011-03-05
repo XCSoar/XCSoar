@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<Form Name="frmTeamCode" Width="320" Height="240" Caption="Team code">
+<Form Name="frmTeamCode" Width="320" Height="240" Caption="Team Code">
   <Button Caption="Close" X="5" Y="190" Width="60"  Height="28" OnClick="OnCloseClicked" />
 
   <Button Name="cmdSetWaypoint" Caption="Set WP" X="5" Y="15" Width="60" Height="28" />
   <Button Caption="Flarm Lock" X="5" Y="108" Width="60"  Height="40" OnClick="OnFlarmLockClicked" />
   <Button Name="cmdSetCode" Caption="Set Code" X="5" Y="150" Width="60"  Height="28" />
   
-  <Edit Name="prpOwnCode" Caption="Own code:" X="70" Y="15" Width="200" Height="22" CaptionWidth="100" ReadOnly="1" />
-  <Edit Name="prpMateCode" Caption="Mate code:" X="70"  Width="200" Height="22" CaptionWidth="100" ReadOnly="1" />
+  <Edit Name="prpOwnCode" Caption="Own Code:" X="70" Y="15" Width="200" Height="22" CaptionWidth="100" ReadOnly="1" />
+  <Edit Name="prpMateCode" Caption="Mate Code:" X="70"  Width="200" Height="22" CaptionWidth="100" ReadOnly="1" />
   <Edit Name="prpRange" Caption="Range:" X="70"  Width="200" Height="22" CaptionWidth="100" ReadOnly="1">
     <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" ReadOnly="1" />
   </Edit>
@@ -16,5 +16,5 @@
     <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" ReadOnly="1" />
   </Edit>
   <Edit Name="prpRelBearing" Caption="Rel. Bearing:" X="70"  Width="200" Height="22" CaptionWidth="100" ReadOnly="1" />
-  <Edit Name="prpFlarmLock" Caption="Flarm lock:" X="70"  Width="200" Height="22" CaptionWidth="100" ReadOnly="1" />
+  <Edit Name="prpFlarmLock" Caption="Flarm Lock:" X="70"  Width="200" Height="22" CaptionWidth="100" ReadOnly="1" />
 </Form>
