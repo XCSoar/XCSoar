@@ -635,7 +635,7 @@ DeviceBlackboard::AutoQNH()
     countdown_autoqnh--;
 
   if (!countdown_autoqnh) {
-    basic.pressure.FindQNH(basic.BaroAltitude, Calculated().TerrainAlt);
+    basic.ProvideQNHSetting(basic.pressure.FindQNH(basic.BaroAltitude, Calculated().TerrainAlt));
     AllDevicesPutQNH(basic.pressure);
     countdown_autoqnh = UINT_MAX; // disable after performing once
   }
@@ -647,7 +647,7 @@ DeviceBlackboard::SetQNH(fixed qnh)
   ScopeLock protect(mutexBlackboard);
   NMEA_INFO &basic = SetBasic();
 
-  basic.pressure.set_QNH(qnh);
+  basic.ProvideQNHSetting(qnh);
   AllDevicesPutQNH(basic.pressure);
 }
 

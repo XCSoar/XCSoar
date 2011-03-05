@@ -160,7 +160,7 @@ TestCAI302()
   NMEA_INFO nmea_info;
   nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
-  nmea_info.pressure.set_QNH(fixed(1013.25));
+  nmea_info.ProvideQNHSetting(fixed(1013.25));
 
   /* baro altitude disabled */
   device->ParseNMEA("!w,000,000,0000,500,01287,01020,-0668,191,199,191,000,000,100*44",
@@ -211,7 +211,7 @@ TestFlymasterF1()
   NMEA_INFO nmea_info;
   nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
-  nmea_info.pressure.set_QNH(fixed(1013.25));
+  nmea_info.ProvideQNHSetting(fixed(1013.25));
 
   /* baro altitude disabled */
   device->ParseNMEA("$VARIO,999.98,-12,12.4,12.7,0,21.3,25.5*CS",
@@ -240,7 +240,7 @@ TestLX(const struct DeviceRegister &driver)
   NMEA_INFO nmea_info;
   nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
-  nmea_info.pressure.set_QNH(fixed(1013.25));
+  nmea_info.ProvideQNHSetting(fixed(1013.25));
 
   /* baro altitude disabled */
   device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", &nmea_info, false);
@@ -338,7 +338,6 @@ TestZander()
   NMEA_INFO nmea_info;
   nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
-  nmea_info.pressure.set_QNH(fixed(999));
 
   /* baro altitude disabled */
   device->ParseNMEA("$PZAN1,02476,123456*04", &nmea_info, false);
