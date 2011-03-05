@@ -28,24 +28,23 @@
 #include <algorithm>
 #include <assert.h>
 
-typedef struct _LOGGER_INTERP_POINT
-{
-  GeoPoint loc;
-  fixed alt;
-  fixed palt;
-  fixed t;
-} LOGGER_INTERP_POINT;
-
 /**
  * A Catmull-Rom splines interpolator
  * @see http://www.cs.cmu.edu/~462/projects/assn2/assn2/catmullRom.pdf
  */
 class CatmullRomInterpolator
 {
+  struct Record {
+    GeoPoint loc;
+    fixed alt;
+    fixed palt;
+    fixed t;
+  };
+
   const fixed t;
 
   unsigned num;
-  LOGGER_INTERP_POINT p[4];
+  Record p[4];
 
 public:
   CatmullRomInterpolator(fixed _t):
