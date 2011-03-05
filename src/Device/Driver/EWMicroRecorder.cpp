@@ -107,7 +107,7 @@ EWMicroRecorderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
        in the driver instead of letting the generic class NMEAParser
        do it. */
     if (ReadAltitude(line, value) && enable_baro)
-      GPS_INFO->ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_EW,
+      GPS_INFO->ProvidePressureAltitude(NMEA_INFO::BARO_ALTITUDE_EW,
                                         value);
 
     return true;

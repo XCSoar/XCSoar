@@ -30,7 +30,7 @@ AIRSPACE_ALT::set_flight_level(const AtmosphericPressure &press)
 {
   static const fixed fl_feet_to_m(30.48);
   if (Base == abFL)
-    Altitude = press.AltitudeToQNHAltitude(FL * fl_feet_to_m);
+    Altitude = press.PressureAltitudeToQNHAltitude(FL * fl_feet_to_m);
 }
 
 void 

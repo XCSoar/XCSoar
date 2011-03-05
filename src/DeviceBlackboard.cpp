@@ -118,7 +118,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.TrackBearing = bearing;
   basic.GPSAltitude = alt;
   basic.GPSAltitudeAvailable.update(t);
-  basic.ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, baroalt);
+  basic.ProvidePressureAltitude(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, baroalt);
   basic.Time = t;
   basic.TotalEnergyVarioAvailable.clear();
   basic.NettoVarioAvailable.clear();
@@ -623,7 +623,7 @@ DeviceBlackboard::AutoQNH()
       || basic.gps.Replay // never in replay mode
       || basic.gps.Simulator // never in simulator
       || basic.gps.NAVWarning // Reject if no valid GPS fix
-      || !basic.BaroAltitude1013Available // Reject if no baro altitude 1013
+      || !basic.PressureAltitudeAvailable // Reject if no pressure altitude
       || basic.QNHAvailable // Reject if QNH already known
     ) {
     if (countdown_autoqnh<= QNH_TIME) {
@@ -636,7 +636,7 @@ DeviceBlackboard::AutoQNH()
     countdown_autoqnh--;
 
   if (!countdown_autoqnh) {
-    basic.ProvideQNHSetting(basic.pressure.FindQNHFromBaroAltitude1013(basic.BaroAltitude1013, Calculated().TerrainAlt));
+    basic.ProvideQNHSetting(basic.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, Calculated().TerrainAlt));
     AllDevicesPutQNH(basic.pressure);
     countdown_autoqnh = UINT_MAX; // disable after performing once
   }

@@ -70,7 +70,7 @@ public:
    * @param alt_known Altitude of a known location (m)
    */
   gcc_pure
-  fixed FindQNHFromBaroAltitude1013(const fixed alt_raw, const fixed alt_known);
+  fixed FindQNHFromPressureAltitude(const fixed alt_raw, const fixed alt_known);
 
   /**
    * Converts altitude with QNH=1013.25 reference to QNH adjusted altitude
@@ -78,7 +78,7 @@ public:
    * @return QNH-based altitude (m)
    */
   gcc_pure
-  fixed AltitudeToQNHAltitude(const fixed alt) const;
+  fixed PressureAltitudeToQNHAltitude(const fixed alt) const;
 
   /**
    * Converts QNH adjusted altitude to pressure altitude (with QNH=1013.25 as reference)
@@ -138,7 +138,7 @@ public:
    * @return pressure altitude (m)
    */
   gcc_pure
-  fixed StaticPressureToAltitude(const fixed ps) const;
+  fixed StaticPressureToPressureAltitude(const fixed ps) const;
 
   /**
    * Converts a 1013.25 hPa based altitude to the corresponding pressure
@@ -148,7 +148,7 @@ public:
    * @return Air pressure at given altitude (Pa)
    */
   gcc_pure
-  fixed AltitudeToStaticPressure(const fixed alt) const;
+  fixed PressureAltitudeToStaticPressure(const fixed alt) const;
 
 
 private:

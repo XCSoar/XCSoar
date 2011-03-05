@@ -177,7 +177,7 @@ cai_PCAID(NMEAInputLine &line, NMEA_INFO &data, bool enable_baro)
 
   fixed value;
   if (line.read_checked(value) && enable_baro)
-    data.ProvideBaroAltitude1013(NMEA_INFO::BARO_ALTITUDE_CAI302_PCAID, value);
+    data.ProvidePressureAltitude(NMEA_INFO::BARO_ALTITUDE_CAI302_PCAID, value);
 
   return true;
 }

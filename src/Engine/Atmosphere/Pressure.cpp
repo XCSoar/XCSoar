@@ -46,7 +46,7 @@ AtmosphericPressure::QNHAltitudeToStaticPressure(const fixed alt) const
 }
 
 fixed
-AtmosphericPressure::AltitudeToStaticPressure(const fixed alt) const
+AtmosphericPressure::PressureAltitudeToStaticPressure(const fixed alt) const
 {
   return hpa_to_pa * pow((pow(fixed_101325, k1) - k2 * alt), inv_k1);
 }
@@ -59,7 +59,7 @@ AtmosphericPressure::StaticPressureToQNHAltitude(const fixed ps) const
 }
 
 fixed
-AtmosphericPressure::AltitudeToQNHAltitude(const fixed alt) const
+AtmosphericPressure::PressureAltitudeToQNHAltitude(const fixed alt) const
 {
   return StaticPressureToQNHAltitude(fixed(pow((k4 - alt) * k5, inv_k1)));
 }
@@ -71,13 +71,13 @@ AtmosphericPressure::QNHAltitudeToPressureAltitude(const fixed alt) const
 }
 
 fixed
-AtmosphericPressure::StaticPressureToAltitude(const fixed ps) const
+AtmosphericPressure::StaticPressureToPressureAltitude(const fixed ps) const
 {
   return (pow(fixed_101325, k1) - pow(ps * pa_to_hpa, k1)) * inv_k2;
 }
 
 fixed
-AtmosphericPressure::FindQNHFromBaroAltitude1013(const fixed alt_raw, const fixed alt_known)
+AtmosphericPressure::FindQNHFromPressureAltitude(const fixed alt_raw, const fixed alt_known)
 {
   // step 1, find static pressure from device assuming it's QNH adjusted
   const fixed psraw = QNHAltitudeToStaticPressure(alt_raw);

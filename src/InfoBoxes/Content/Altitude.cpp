@@ -372,8 +372,8 @@ InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
   const NMEA_INFO &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
-  if (basic.BaroAltitude1013Available) {
-    fixed Altitude = Units::ToUserUnit(basic.BaroAltitude1013, unFeet);
+  if (basic.PressureAltitudeAvailable) {
+    fixed Altitude = Units::ToUserUnit(basic.PressureAltitude, unFeet);
 
     // Title color black
     infobox.SetColorTop(0);
