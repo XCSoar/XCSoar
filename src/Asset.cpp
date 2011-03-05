@@ -42,10 +42,104 @@ ModelType GlobalModelType = MODELTYPE_PNA_PNA;
 #endif
 
 static void
-ReadCompaqID(void);
+ReadCompaqID(void)
+{
+#if defined(_WIN32_WCE)
+  PROCESS_INFORMATION pi;
+
+  if(strAssetNumber[0] != '\0')
+    return;
+
+  CreateProcess(_T("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL,
+                     FALSE, 0, NULL, NULL, NULL, &pi);
+
+  FILE *file = _tfopen(_T("\\windows\\cpqAssetData.dat"), _T("rb"));
+  if (file == NULL) {
+    // MessageBoxX(hWnd, _T("Unable to open asset data file."), _T("Error!"), MB_OK);
+    return;
+  }
+  fseek(file, 976, SEEK_SET);
+  memset(strAssetNumber, 0, 64 * sizeof(TCHAR));
+  fread(&strAssetNumber, 64, 1, file);
+  fclose(file);
+#endif
+}
 
 static void
-ReadUUID(void);
+ReadUUID(void)
+{
+#if defined(_WIN32_WCE) && defined(IOCTL_HAL_GET_DEVICEID) && defined(FILE_DEVICE_HAL)
+  BOOL fRes;
+
+#define GUIDBuffsize 100
+  unsigned char GUIDbuffer[GUIDBuffsize];
+
+  int eLast = 0;
+  int i;
+  unsigned long uNumReturned=0;
+  int iBuffSizeIn=0;
+  unsigned long temp, Asset;
+
+  GUID Guid;
+
+  // approach followed: http://blogs.msdn.com/jehance/archive/2004/07/12/181116.aspx
+  // 1) send 16 byte buffer - some older devices need this
+  // 2) if buffer is wrong size, resize buffer accordingly and retry
+  // 3) take first 16 bytes of buffer and process.  Buffer returned may be any size
+  // First try exactly 16 bytes, some older PDAs require exactly 16 byte buffer
+
+    strAssetNumber[0]= '\0';
+
+    iBuffSizeIn = sizeof(Guid);
+    memset(GUIDbuffer, 0, iBuffSizeIn);
+    fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer,
+                           iBuffSizeIn, &uNumReturned);
+    if(fRes == false) {
+      // try larger buffer
+      eLast = GetLastError();
+      if (ERROR_INSUFFICIENT_BUFFER != eLast)
+        return;
+      else {
+        // wrong buffer
+        iBuffSizeIn = uNumReturned;
+        memset(GUIDbuffer, 0, iBuffSizeIn);
+        fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer,
+                               iBuffSizeIn, &uNumReturned);
+        eLast = GetLastError();
+
+        if(fRes == false)
+          return;
+      }
+    }
+
+    // here assume we have data in GUIDbuffer of length uNumReturned
+    memcpy(&Guid, GUIDbuffer, sizeof(Guid));
+
+    temp = Guid.Data2;
+    temp = temp << 16;
+    temp += Guid.Data3;
+
+    Asset = temp ^ Guid.Data1;
+
+    temp = 0;
+    for(i = 0; i < 4; i++) {
+      temp = temp << 8;
+      temp += Guid.Data4[i];
+    }
+
+    Asset = Asset ^ temp;
+
+    temp = 0;
+    for(i = 0; i < 4; i++) {
+      temp = temp << 8;
+      temp += Guid.Data4[i + 4];
+    }
+
+    Asset = Asset ^ temp;
+
+    _stprintf(strAssetNumber, _T("%08X%08X"), Asset, Guid.Data1);
+#endif
+}
 
 /**
  * Finds the unique ID of this PDA
@@ -102,106 +196,6 @@ void ReadAssetNumber(void)
   LogStartUp(_T("Asset ID: %s (fallback)"), strAssetNumber);
 
   return;
-}
-
-static void
-ReadCompaqID(void)
-{
-#if defined(_WIN32_WCE)
-  PROCESS_INFORMATION pi;
-
-  if(strAssetNumber[0] != '\0')
-    return;
-
-  CreateProcess(_T("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL,
-                     FALSE, 0, NULL, NULL, NULL, &pi);
-
-  FILE *file = _tfopen(_T("\\windows\\cpqAssetData.dat"), _T("rb"));
-  if (file == NULL) {
-    // MessageBoxX(hWnd, _T("Unable to open asset data file."), _T("Error!"), MB_OK);
-    return;
-  }
-  fseek(file, 976, SEEK_SET);
-  memset(strAssetNumber, 0, 64 * sizeof(TCHAR));
-  fread(&strAssetNumber, 64, 1, file);
-  fclose(file);
-#endif
-}
-
-static void
-ReadUUID(void)
-{
-#if defined(_WIN32_WCE) && defined(IOCTL_HAL_GET_DEVICEID) && defined(FILE_DEVICE_HAL)
-  BOOL fRes;
-
-#define GUIDBuffsize 100
-  unsigned char GUIDbuffer[GUIDBuffsize];
-
-  int eLast = 0;
-  int i;
-  unsigned long uNumReturned=0;
-  int iBuffSizeIn=0;
-  unsigned long temp, Asset;
-
-  GUID Guid;
-
-  // approach followed: http://blogs.msdn.com/jehance/archive/2004/07/12/181116.aspx
-  // 1) send 16 byte buffer - some older devices need this
-  // 2) if buffer is wrong size, resize buffer accordingly and retry
-  // 3) take first 16 bytes of buffer and process.  Buffer returned may be any size
-  // First try exactly 16 bytes, some older PDAs require exactly 16 byte buffer
-
-	  strAssetNumber[0]= '\0';
-
-	  iBuffSizeIn = sizeof(Guid);
-	  memset(GUIDbuffer, 0, iBuffSizeIn);
-	  fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer,
-	                         iBuffSizeIn, &uNumReturned);
-	  if(fRes == false) {
-	    // try larger buffer
-		  eLast = GetLastError();
-		  if (ERROR_INSUFFICIENT_BUFFER != eLast)
-			  return;
-		  else {
-		    // wrong buffer
-        iBuffSizeIn = uNumReturned;
-        memset(GUIDbuffer, 0, iBuffSizeIn);
-        fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer,
-                               iBuffSizeIn, &uNumReturned);
-        eLast = GetLastError();
-
-        if(fRes == false)
-          return;
-		  }
-	  }
-
-	  // here assume we have data in GUIDbuffer of length uNumReturned
-	  memcpy(&Guid, GUIDbuffer, sizeof(Guid));
-
-	  temp = Guid.Data2;
-	  temp = temp << 16;
-	  temp += Guid.Data3;
-
-	  Asset = temp ^ Guid.Data1;
-
-	  temp = 0;
-	  for(i = 0; i < 4; i++) {
-		  temp = temp << 8;
-		  temp += Guid.Data4[i];
-		}
-
-	  Asset = Asset ^ temp;
-
-	  temp = 0;
-	  for(i = 0; i < 4; i++) {
-		  temp = temp << 8;
-		  temp += Guid.Data4[i + 4];
-		}
-
-	  Asset = Asset ^ temp;
-
-	  _stprintf(strAssetNumber, _T("%08X%08X"), Asset, Guid.Data1);
-#endif
 }
 
 void
