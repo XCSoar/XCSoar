@@ -80,8 +80,6 @@ IgcReplayGlue::update_time()
   t_simulation += TimeScale * max(clock.elapsed(), 0) / 1000;
   clock.update();
 
-  t_simulation = std::max(GetMinTime(), t_simulation);
-
   return true;
 }
 

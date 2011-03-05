@@ -81,7 +81,6 @@ bool
 IgcReplayGlue::update_time()
 {
   t_simulation += fixed_one;
-  t_simulation = std::max(GetMinTime(), t_simulation);
   return true;
 }
 
