@@ -44,7 +44,7 @@ class CatmullRomInterpolator
 {
   const fixed t;
 
-  int num;
+  unsigned num;
   LOGGER_INTERP_POINT p[4];
 
 public:
