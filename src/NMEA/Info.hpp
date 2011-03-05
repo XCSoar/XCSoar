@@ -320,7 +320,7 @@ struct NMEA_INFO {
      * Parsed from the Cambridge CAI302 sentence "!w".
      */
     BARO_ALTITUDE_CAI302_W,
-  } BaroAltitudeOrigin;
+  } BaroAltitudeOrigin, BaroAltitude1013Origin;
 
   /**
    * Barometric altitude (if available)
@@ -328,6 +328,14 @@ struct NMEA_INFO {
    * @see Altitude
    */
   fixed BaroAltitude;
+
+  /**
+   * Pressure altitude, which is the BaroAltitude with QNH=1013.25 as reference (if available)
+   * @see BaroAltitudeAvailable
+   * @see Altitude
+   */
+  fixed BaroAltitude1013;
+  Validity BaroAltitude1013Available;
 
   /** Energy height excess to slow to best glide speed @author JMW */
   fixed EnergyHeight;
@@ -480,7 +488,12 @@ struct NMEA_INFO {
    * Sets the "true" barometric altitude (i.e. above NN, not above
    * 1013 hPa).
    */
-  void SetBaroAltitudeTrue(enum BaroAltitudeOrigin origin, fixed value) {
+  void SetBaroAltitudeTrue(enum BaroAltitudeOrigin origin, fixed value, bool needs_qnh) {
+    if (!QNHAvailable && needs_qnh) {
+      BaroAltitudeAvailable.clear();
+      return;
+    }
+
     BaroAltitude = value;
     BaroAltitudeOrigin = origin;
     BaroAltitudeAvailable.update(Time);
@@ -489,15 +502,23 @@ struct NMEA_INFO {
   /**
    * Sets the barometric altitude above 1013 hPa.
    */
-  void SetBaroAltitude1013(enum BaroAltitudeOrigin origin, fixed value) {
-    SetBaroAltitudeTrue(origin, pressure.AltitudeToQNHAltitude(value));
+  void SetBaroAltitude1013(enum BaroAltitudeOrigin origin, fixed value, bool needs_qnh) {
+    if (!QNHAvailable && needs_qnh) {
+      BaroAltitude1013Available.clear();
+      return;
+    }
+
+    BaroAltitude1013 = value;
+    BaroAltitude1013Origin = origin;
+    BaroAltitude1013Available.update(Time);
   }
 
   /**
    * Sets the barometric altitude from a static pressure sensor.
    */
   void SetStaticPressure(enum BaroAltitudeOrigin origin, fixed value) {
-    SetBaroAltitudeTrue(origin, pressure.StaticPressureToQNHAltitude(value));
+    SetBaroAltitudeTrue(origin, pressure.StaticPressureToQNHAltitude(value), true);
+    SetBaroAltitude1013(origin, pressure.StaticPressureToAltitude(value), false);
   }
 
   /**
@@ -505,8 +526,11 @@ struct NMEA_INFO {
    * previous altitude was not present or the same/lower priority.
    */
   void ProvideBaroAltitudeTrue(enum BaroAltitudeOrigin origin, fixed value) {
-    if (!BaroAltitudeAvailable || BaroAltitudeOrigin <= origin)
-      SetBaroAltitudeTrue(origin, value);
+    if (BaroAltitudeOrigin <= origin)
+      SetBaroAltitudeTrue(origin, value, false);
+
+    if (BaroAltitude1013Origin <= origin)
+      SetBaroAltitude1013(origin, pressure.QNHAltitudeToPressureAltitude(value), true);
   }
 
   /**
@@ -514,8 +538,11 @@ struct NMEA_INFO {
    * the previous altitude was not present or the same/lower priority.
    */
   void ProvideBaroAltitude1013(enum BaroAltitudeOrigin origin, fixed value) {
-    if (!BaroAltitudeAvailable || BaroAltitudeOrigin <= origin)
-      SetBaroAltitude1013(origin, value);
+    if (BaroAltitude1013Origin <= origin)
+      SetBaroAltitude1013(origin, value, false);
+
+    if (BaroAltitudeOrigin <= origin)
+      SetBaroAltitudeTrue(origin, pressure.AltitudeToQNHAltitude(value), true);
   }
 
   /**
@@ -524,7 +551,7 @@ struct NMEA_INFO {
    * same/lower priority.
    */
   void ProvideStaticPressure(enum BaroAltitudeOrigin origin, fixed value) {
-    if (!BaroAltitudeAvailable || BaroAltitudeOrigin <= origin)
+    if (BaroAltitudeOrigin <= origin)
       SetStaticPressure(origin, value);
   }
 

@@ -87,6 +87,10 @@ NMEA_INFO::reset()
   BaroAltitude = fixed_zero;
   EnergyHeight = TEAltitude = fixed_zero;
 
+  BaroAltitude1013Available.clear();
+  BaroAltitude1013Origin = BARO_ALTITUDE_UNKNOWN;
+  BaroAltitude1013 = fixed_zero;
+
   NavAltitude = fixed_zero;
 
   pressure.set_QNH(fixed(1013.25));
@@ -150,6 +154,7 @@ NMEA_INFO::expire()
   AirspeedAvailable.expire(Time, fixed(30));
   GPSAltitudeAvailable.expire(Time, fixed(30));
   BaroAltitudeAvailable.expire(Time, fixed(30));
+  BaroAltitude1013Available.expire(Time, fixed(30));
   TotalEnergyVarioAvailable.expire(Time, fixed(5));
   NettoVarioAvailable.expire(Time, fixed(5));
   ExternalWindAvailable.expire(Time, fixed(600));
@@ -195,6 +200,15 @@ NMEA_INFO::complement(const NMEA_INFO &add)
     BaroAltitude = add.BaroAltitude;
     BaroAltitudeOrigin = add.BaroAltitudeOrigin;
     BaroAltitudeAvailable = add.BaroAltitudeAvailable;
+  }
+
+  if ((BaroAltitude1013Available.complement(add.BaroAltitude1013Available) ||
+       (BaroAltitude1013Origin <= BARO_ALTITUDE_UNKNOWN &&
+        add.BaroAltitude1013Origin > BaroAltitude1013Origin)) &&
+      add.BaroAltitude1013Available) {
+    BaroAltitude1013 = add.BaroAltitude1013;
+    BaroAltitude1013Origin = add.BaroAltitude1013Origin;
+    BaroAltitude1013Available = add.BaroAltitude1013Available;
   }
 
   /* calculated: EnergyHeight, TEAltitude, working_band_height,

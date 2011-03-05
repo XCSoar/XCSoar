@@ -105,7 +105,7 @@ int main(int argc, char **argv)
   i.Location = home;
   i.GPSAltitude = fixed(487);
   i.GPSAltitudeAvailable.update(i.Time);
-  i.SetBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, fixed(490));
+  i.SetBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, fixed(490), false);
 
   IGCWriter writer(path, i);
 
