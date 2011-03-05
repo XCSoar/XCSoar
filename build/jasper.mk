@@ -17,7 +17,9 @@ JASPER = \
 	$(JASSRC)/jpc/jpc_util.c
 
 ifneq ($(CLANG),y)
+ifneq ($(TARGET),CYGWIN)
 $(call SRC_TO_OBJ,$(JASPER)): CFLAGS += -Wno-unused-but-set-parameter -Wno-unused-but-set-variable
+endif
 endif
 
 JASPER_LIBS = $(TARGET_OUTPUT_DIR)/jasper.a
