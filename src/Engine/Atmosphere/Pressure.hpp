@@ -59,18 +59,18 @@ public:
   }
 
   /**
-   * Sets the current QNH by comparing a raw altitude
+   * Calculates the current QNH by comparing a raw altitude
    * to a known altitude of a certain location
    *
-   * This function assumes the barometric altitude (alt_raw) is
-   * already adjusted for QNH ---> the function returns the
-   * QNH value to make the barometric altitude equal to the
-   * alt_known value.
+   * This function assumes the altitude (alt_raw) is
+   * a pressure altitude based on QNH=1013.25 hPa
+   * ---> the function returns the QNH value to make
+   * the barometric altitude equal to the alt_known value.
    * @param alt_raw Current pressure altitude (m)
    * @param alt_known Altitude of a known location (m)
    */
   gcc_pure
-  fixed FindQNH(const fixed alt_raw, const fixed alt_known);
+  fixed FindQNHFromBaroAltitude1013(const fixed alt_raw, const fixed alt_known);
 
   /**
    * Converts altitude with QNH=1013.25 reference to QNH adjusted altitude

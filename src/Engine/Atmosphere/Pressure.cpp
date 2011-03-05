@@ -77,7 +77,7 @@ AtmosphericPressure::StaticPressureToAltitude(const fixed ps) const
 }
 
 fixed
-AtmosphericPressure::FindQNH(const fixed alt_raw, const fixed alt_known)
+AtmosphericPressure::FindQNHFromBaroAltitude1013(const fixed alt_raw, const fixed alt_known)
 {
   // step 1, find static pressure from device assuming it's QNH adjusted
   const fixed psraw = QNHAltitudeToStaticPressure(alt_raw);
