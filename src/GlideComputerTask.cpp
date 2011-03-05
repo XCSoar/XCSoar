@@ -159,7 +159,6 @@ void
 GlideComputerTask::TerrainWarning()
 {
   const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
-  GlidePolar polar = m_task.get_glide_polar();
 
   if (SettingsComputer().FinalGlideTerrain && terrain) {
     // @todo: update TerrainBase in new footprint calculations,
