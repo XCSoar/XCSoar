@@ -90,8 +90,7 @@ public:
   GeoVector 
   GetVector(fixed time) const
   {
-    if (!Ready())
-      return fixed_zero;
+    assert(Ready());
 
     if (!positive(p[2].t-p[1].t)) {
       return GeoVector(fixed_zero, Angle::native(fixed_zero));
@@ -107,12 +106,7 @@ public:
   void
   Interpolate(fixed time, GeoPoint &loc, fixed &alt, fixed &palt) const
   {
-    if (!Ready()) {
-      loc = p[num].loc;
-      alt = p[num].alt;
-      palt = p[num].palt;
-      return;
-    }
+    assert(Ready());
 
     const fixed u = time_fraction(time, false);
 
@@ -159,12 +153,16 @@ public:
   fixed
   GetMinTime() const
   {
+    assert(Ready());
+
     return p[0].t;
   }
 
   fixed
   GetMaxTime() const
   {
+    assert(Ready());
+
     return max(fixed_zero, max(p[0].t, max(p[1].t, max(p[2].t, p[3].t))));
   }
 
@@ -177,6 +175,7 @@ public:
 private:
 
   fixed time_fraction(const fixed time, bool limit_range=true) const {
+    assert(Ready());
     assert(p[2].t>p[1].t);
     const fixed u = (time - p[1].t) / (p[2].t - p[1].t);
     if (limit_range) {
