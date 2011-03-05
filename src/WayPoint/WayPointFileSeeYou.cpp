@@ -117,13 +117,10 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
       appendStringWithSeperator(new_waypoint.Comment, params[iFrequency]);
 
     // Runway length (e.g. 546.0m)
-    fixed rwlen;
-    if (iRWLen < n_params && parseDistance(params[iRWLen], rwlen)) {
-      if (rwlen > fixed_zero) {
-        new_waypoint.RunwayLength = rwlen;
-        appendStringWithSeperator(new_waypoint.Comment, params[iRWLen]);
-      }
-    }
+    fixed rwlen = fixed_minus_one;
+    if (iRWLen < n_params && parseDistance(params[iRWLen], rwlen) &&
+        positive(rwlen))
+      new_waypoint.RunwayLength = rwlen;
 
     if (iRWDir < n_params && *params[iRWDir]) {
       appendStringWithSeperator(new_waypoint.Comment, params[iRWDir]);
@@ -137,6 +134,9 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
         direction = 0;
       new_waypoint.RunwayDirection = Angle::degrees(fixed(direction));
     }
+
+    if (positive(rwlen))
+      appendStringWithSeperator(new_waypoint.Comment, params[iRWLen]);
   }
 
   if (iDescription < n_params)
