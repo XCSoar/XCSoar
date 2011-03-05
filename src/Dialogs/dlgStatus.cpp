@@ -225,13 +225,10 @@ UpdateValuesSystem()
     _tcscat(Temp, Temp2);
   }
 #endif
-  if (XCSoarInterface::Basic().SupplyBatteryVoltage == fixed_zero)
-    Temp2[0] = 0;
-  else
-    _stprintf(Temp2, _T("%.1f V"),
-              (double)XCSoarInterface::Basic().SupplyBatteryVoltage);
-
-  _tcscat(Temp, Temp2);
+  if (positive(XCSoarInterface::Basic().SupplyBatteryVoltage)) {
+    _stprintf(Temp2, _T("%.1f V"), (double)XCSoarInterface::Basic().SupplyBatteryVoltage);
+    _tcscat(Temp, Temp2);
+  }
 
   wp->SetText(Temp);
   wp->RefreshDisplay();
