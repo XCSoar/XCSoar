@@ -99,6 +99,9 @@ GlueMapWindow::isInAnyActiveSector(const GeoPoint &gp)
 
   ProtectedTaskManager::Lease task_manager(*protected_task_manager);
   const AbstractTask *at = task_manager->get_active_task();
+  if (at == NULL)
+    return -1;
+
   const unsigned TaskSize = at->task_size();
   const unsigned ActiveIndex = task_manager->getActiveTaskPointIndex();
 
