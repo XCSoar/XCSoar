@@ -20,8 +20,8 @@
 }
 */
 
-#include "Replay/IgcReplay.hpp"
-
+#include "Replay/IGCParser.hpp"
+#include "IO/FileLineReader.hpp"
 #include "Engine/Trace/Trace.hpp"
 #include "Engine/Task/TaskStats/CommonStats.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
@@ -32,33 +32,11 @@
 #include <assert.h>
 #include <cstdio>
 
-class IgcReplayGlue:
-  public IgcReplay
-{
-public:
-  Trace trace;
-  bool error;
-
-  IgcReplayGlue(unsigned ntrace): 
-    trace(1000, ntrace), 
-    error(false) {}
-
-  void SetFilename(const char *name);
-
-protected:
-  virtual void on_reset() {}
-  virtual void on_stop() {}
-  virtual void on_bad_file() { error = true; }
-  virtual void on_advance(const GeoPoint &loc, const fixed speed,
-                          const Angle bearing, const fixed alt,
-                          const fixed baroalt, const fixed t);
-
-};
-
-void
-IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
-                          const Angle bearing, const fixed alt,
-                          const fixed baroalt, const fixed t)
+static void
+on_advance(Trace &trace,
+           const GeoPoint &loc, const fixed speed,
+           const Angle bearing, const fixed alt,
+           const fixed baroalt, const fixed t)
 {
   AIRCRAFT_STATE new_state;
   new_state.Location = loc;
@@ -82,36 +60,34 @@ IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
   }
 }
 
-void
-IgcReplayGlue::SetFilename(const char *name)
-{
-#ifdef _UNICODE
-  TCHAR tname[MAX_PATH];
-  int length = ::MultiByteToWideChar(CP_ACP, 0, name, -1, tname, MAX_PATH);
-  if (length == 0)
-    return;
-
-  IgcReplay::SetFilename(tname);
-#else
-  IgcReplay::SetFilename(name);
-#endif
-}
-
 static bool
 TestTrace(const char *filename, unsigned ntrace, bool output=false)
 {
-  IgcReplayGlue replay(ntrace);
-  replay.SetFilename(filename);
-  replay.Start();
-  assert(!replay.error);
+  FileLineReader reader(filename);
+  if (reader.error()) {
+    fprintf(stderr, "Failed to open %s\n", filename);
+    return false;
+  }
 
   printf("# %d", ntrace);  
-  int i=0;
-  for (i = 1; replay.Update(); i++) {
+  Trace trace(1000, ntrace);
+
+  TCHAR *line;
+  int i = 0;
+  for (; (line = reader.read()) != NULL; i++) {
     if (output && (i % 500 == 0)) {
       putchar('.');
       fflush(stdout);
     }
+
+    IGCFix fix;
+    if (!IGCParseFix(line, fix))
+      continue;
+
+    on_advance(trace,
+               fix.location, fixed(30), Angle::native(fixed_zero),
+               fix.gps_altitude, fix.pressure_altitude,
+               fix.time);
   }
   putchar('\n');
   printf("# samples %d\n", i);

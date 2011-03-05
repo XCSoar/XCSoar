@@ -20,13 +20,16 @@
 }
 */
 
-#include "Replay/IgcReplay.hpp"
+#include "Replay/IGCParser.hpp"
+#include "IO/FileLineReader.hpp"
+#include "Engine/Math/Earth.hpp"
 #include "Engine/Trace/Trace.hpp"
 #include "Engine/Task/Tasks/ContestManager.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "Printing.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 Trace full_trace;
 Trace sprint_trace(9000, 300);
@@ -56,29 +59,10 @@ ContestManager olc_plus(OLC_Plus, handicap,
                         stats_plus,
                         full_trace, sprint_trace);
 
-class IgcReplayGlue:
-  public IgcReplay
-{
-public:
-  bool error;
-
-  IgcReplayGlue() : error(false) {}
-
-  void SetFilename(const char *name);
-
-protected:
-  virtual void on_reset() {}
-  virtual void on_stop() {}
-  virtual void on_bad_file() { error = true; }
-  virtual void on_advance(const GeoPoint &loc, const fixed speed,
-                          const Angle bearing, const fixed alt,
-                          const fixed baroalt, const fixed t);
-};
-
-void
-IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
-                          const Angle bearing, const fixed alt,
-                          const fixed baroalt, const fixed t)
+static void
+on_advance(const GeoPoint &loc, const fixed speed,
+           const Angle bearing, const fixed alt,
+           const fixed baroalt, const fixed t)
 {
   AIRCRAFT_STATE new_state;
   new_state.Location = loc;
@@ -95,34 +79,29 @@ IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
   sprint_trace.optimise_if_old();
 }
 
-void
-IgcReplayGlue::SetFilename(const char *name)
-{
-#ifdef _UNICODE
-  TCHAR tname[MAX_PATH];
-  int length = ::MultiByteToWideChar(CP_ACP, 0, name, -1, tname, MAX_PATH);
-  if (length == 0)
-    return;
-
-  IgcReplay::SetFilename(tname);
-#else
-  IgcReplay::SetFilename(name);
-#endif
-}
-
-static void
+static int
 TestOLC(const char *filename)
 {
-  IgcReplayGlue replay;
-  replay.SetFilename(filename);
-  replay.Start();
-  assert(!replay.error);
+  FileLineReader reader(filename);
+  if (reader.error()) {
+    fprintf(stderr, "Failed to open %s\n", filename);
+    return EXIT_FAILURE;
+  }
 
-  for (int i = 1; replay.Update(); i++) {
+  TCHAR *line;
+  for (int i = 1; (line = reader.read()) != NULL; i++) {
     if (i % 500 == 0) {
       putchar('.');
       fflush(stdout);
     }
+
+    IGCFix fix;
+    if (!IGCParseFix(line, fix))
+      continue;
+
+    on_advance(fix.location, fixed(30), Angle::native(fixed_zero),
+               fix.gps_altitude, fix.pressure_altitude,
+               fix.time);
 
     olc_classic.update_idle();
     olc_fai.update_idle();
@@ -145,6 +124,8 @@ TestOLC(const char *filename)
   PrintHelper::print(stats_sprint);
   std::cout << "plus\n";
   PrintHelper::print(stats_plus);
+
+  return 0;
 }
 
 
@@ -152,7 +133,5 @@ int main(int argc, char **argv)
 {
   assert(argc >= 2);
 
-  TestOLC(argv[1]);
-
-  return 0;
+  return TestOLC(argv[1]);
 }
