@@ -103,7 +103,7 @@ MainWindow::InitialiseConfigured()
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, InfoBoxLayout::InfoBoxGeometry);
 
-  Fonts::SizeInfoboxFont(InfoBoxLayout::ControlWidth);
+  Fonts::SizeInfoboxFont(ib_layout.control_width);
 
   if (Appearance.UseCustomFonts) {
     LogStartUp(_T("Load fonts"));
@@ -123,9 +123,9 @@ MainWindow::InitialiseConfigured()
   hidden.hide();
 
   vario = new GlueGaugeVario(*this,
-                             rc.right - InfoBoxLayout::ControlWidth, 0,
-                             InfoBoxLayout::ControlWidth,
-                             InfoBoxLayout::ControlHeight * 3,
+                             rc.right - ib_layout.control_width, 0,
+                             ib_layout.control_width,
+                             ib_layout.control_height * 3,
                              hidden);
 
   WindowStyle hidden_border;
@@ -133,15 +133,15 @@ MainWindow::InitialiseConfigured()
   hidden_border.border();
 
   flarm = new GaugeFLARM(*this,
-                         rc.right - InfoBoxLayout::ControlWidth * 2 + 1,
-                         rc.bottom - InfoBoxLayout::ControlHeight * 2 + 1,
-                         InfoBoxLayout::ControlWidth * 2 - 1,
-                         InfoBoxLayout::ControlHeight * 2 - 1,
+                         rc.right - ib_layout.control_width * 2 + 1,
+                         rc.bottom - ib_layout.control_height * 2 + 1,
+                         ib_layout.control_width * 2 - 1,
+                         ib_layout.control_height * 2 - 1,
                          hidden_border);
   flarm->bring_to_top();
 
-  unsigned sz = std::min(InfoBoxLayout::ControlHeight,
-                         InfoBoxLayout::ControlWidth) * 2;
+  unsigned sz = std::min(ib_layout.control_height,
+                         ib_layout.control_width) * 2;
 
   ta = new GaugeThermalAssistant(*this, 0, rc.bottom - sz, sz, sz,
                                  hidden_border);

@@ -38,8 +38,6 @@ static const unsigned char geometry_counts[] = {
 namespace InfoBoxLayout
 {
   Geometry InfoBoxGeometry = ibTop4Bottom4;
-  unsigned ControlWidth;
-  unsigned ControlHeight;
   bool fullscreen = false;
 
   unsigned numInfoWindows = 8;
@@ -53,7 +51,8 @@ namespace InfoBoxLayout
   LoadGeometryFromProfile(unsigned width, unsigned height);
 
   static void
-  CalcInfoBoxSizes(RECT rc);
+  CalcInfoBoxSizes(Layout &layout,
+                   RECT rc, InfoBoxLayout::Geometry geometry);
 }
 
 void
@@ -64,18 +63,17 @@ InfoBoxLayout::Init(RECT rc)
 
   numInfoWindows = geometry_counts[InfoBoxGeometry];
   assert(numInfoWindows <= InfoBoxPanelConfig::MAX_INFOBOXES);
-
-  CalcInfoBoxSizes(rc);
 }
 
 static int
-MakeTopRow(RECT *p, unsigned n, int left, int top)
+MakeTopRow(const InfoBoxLayout::Layout &layout,
+           RECT *p, unsigned n, int left, int top)
 {
   RECT *const end = p + n;
-  const int bottom = top + InfoBoxLayout::ControlHeight;
+  const int bottom = top + layout.control_height;
   while (p < end) {
     p->left = left;
-    left += InfoBoxLayout::ControlWidth;
+    left += layout.control_width;
     p->right = left;
     p->top = top;
     p->bottom = bottom;
@@ -87,23 +85,25 @@ MakeTopRow(RECT *p, unsigned n, int left, int top)
 }
 
 static int
-MakeBottomRow(RECT *p, unsigned n, int left, int bottom)
+MakeBottomRow(const InfoBoxLayout::Layout &layout,
+              RECT *p, unsigned n, int left, int bottom)
 {
-  int top = bottom - InfoBoxLayout::ControlHeight;
-  MakeTopRow(p, n, left, top);
+  int top = bottom - layout.control_height;
+  MakeTopRow(layout, p, n, left, top);
   return top;
 }
 
 static int
-MakeLeftColumn(RECT *p, unsigned n, int left, int top)
+MakeLeftColumn(const InfoBoxLayout::Layout &layout,
+               RECT *p, unsigned n, int left, int top)
 {
   RECT *const end = p + n;
-  const int right = left + InfoBoxLayout::ControlWidth;
+  const int right = left + layout.control_width;
   while (p < end) {
     p->left = left;
     p->right = right;
     p->top = top;
-    top += InfoBoxLayout::ControlHeight;
+    top += layout.control_height;
     p->bottom = top;
 
     ++p;
@@ -113,10 +113,11 @@ MakeLeftColumn(RECT *p, unsigned n, int left, int top)
 }
 
 static int
-MakeRightColumn(RECT *p, unsigned n, int right, int top)
+MakeRightColumn(const InfoBoxLayout::Layout &layout,
+                RECT *p, unsigned n, int right, int top)
 {
-  int left = right - InfoBoxLayout::ControlWidth;
-  MakeLeftColumn(p, n, left, top);
+  int left = right - layout.control_width;
+  MakeLeftColumn(layout, p, n, left, top);
   return left;
 }
 
@@ -126,67 +127,75 @@ InfoBoxLayout::Calculate(RECT rc, Geometry geometry)
   Layout layout;
   layout.count = numInfoWindows;
 
+  CalcInfoBoxSizes(layout, rc, geometry);
+
   switch (geometry) {
   case ibTop4Bottom4:
     layout.count = 8;
-    rc.top = MakeTopRow(layout.positions, 4, rc.left, rc.top);
-    rc.bottom = MakeBottomRow(layout.positions + 4, 4, rc.left, rc.bottom);
+    rc.top = MakeTopRow(layout, layout.positions, 4, rc.left, rc.top);
+    rc.bottom = MakeBottomRow(layout, layout.positions + 4, 4,
+                              rc.left, rc.bottom);
     break;
 
   case ibBottom8:
     assert(numInfoWindows == 8);
 
-    rc.bottom = MakeBottomRow(layout.positions + 4, 4, rc.left, rc.bottom);
-    rc.bottom = MakeBottomRow(layout.positions, 4, rc.left, rc.bottom);
+    rc.bottom = MakeBottomRow(layout, layout.positions + 4, 4,
+                              rc.left, rc.bottom);
+    rc.bottom = MakeBottomRow(layout, layout.positions, 4,
+                              rc.left, rc.bottom);
     break;
 
   case ibTop8:
     assert(numInfoWindows == 8);
 
-    rc.top = MakeTopRow(layout.positions, 4, rc.left, rc.top);
-    rc.top = MakeTopRow(layout.positions + 4, 4, rc.left, rc.top);
+    rc.top = MakeTopRow(layout, layout.positions, 4, rc.left, rc.top);
+    rc.top = MakeTopRow(layout, layout.positions + 4, 4, rc.left, rc.top);
     break;
 
   case ibLeft4Right4:
     assert(numInfoWindows == 8);
 
-    rc.left = MakeLeftColumn(layout.positions, 4, rc.left, rc.top);
-    rc.right = MakeRightColumn(layout.positions + 4, 4, rc.right, rc.top);
+    rc.left = MakeLeftColumn(layout, layout.positions, 4, rc.left, rc.top);
+    rc.right = MakeRightColumn(layout, layout.positions + 4, 4,
+                               rc.right, rc.top);
     break;
 
   case ibLeft8:
     assert(numInfoWindows == 8);
 
-    rc.left = MakeLeftColumn(layout.positions, 4, rc.left, rc.top);
-    rc.left = MakeLeftColumn(layout.positions + 4, 4, rc.left, rc.top);
+    rc.left = MakeLeftColumn(layout, layout.positions, 4, rc.left, rc.top);
+    rc.left = MakeLeftColumn(layout, layout.positions + 4, 4, rc.left, rc.top);
     break;
 
   case ibRight8:
     assert(numInfoWindows == 8);
 
-    rc.right = MakeRightColumn(layout.positions + 4, 4, rc.right, rc.top);
-    rc.right = MakeRightColumn(layout.positions, 4, rc.right, rc.top);
+    rc.right = MakeRightColumn(layout, layout.positions + 4, 4,
+                               rc.right, rc.top);
+    rc.right = MakeRightColumn(layout, layout.positions, 4, rc.right, rc.top);
     break;
 
   case ibRight12:
     assert(numInfoWindows == 12);
 
-    rc.right = MakeRightColumn(layout.positions + 6, 6, rc.right, rc.top);
-    rc.right = MakeRightColumn(layout.positions, 6, rc.right, rc.top);
+    rc.right = MakeRightColumn(layout, layout.positions + 6, 6,
+                               rc.right, rc.top);
+    rc.right = MakeRightColumn(layout, layout.positions, 6, rc.right, rc.top);
     break;
 
   case ibGNav:
     assert(numInfoWindows == 9);
 
-    rc.right = MakeRightColumn(layout.positions + 6, 3,
-                               rc.right, rc.top + 3 * ControlHeight);
-    rc.right = MakeRightColumn(layout.positions, 6, rc.right, rc.top);
+    rc.right = MakeRightColumn(layout, layout.positions + 6, 3,
+                               rc.right, rc.top + 3 * layout.control_height);
+    rc.right = MakeRightColumn(layout, layout.positions, 6, rc.right, rc.top);
     break;
 
   case ibSquare:
     assert(numInfoWindows == 5);
 
-    rc.right = MakeRightColumn(layout.positions, 5, rc.right, rc.top);
+    rc.right = MakeRightColumn(layout, layout.positions, 5, rc.right, rc.top);
     break;
   };
 
@@ -231,36 +240,38 @@ InfoBoxLayout::LoadGeometryFromProfile(unsigned width, unsigned height)
 }
 
 void
-InfoBoxLayout::CalcInfoBoxSizes(RECT rc)
+InfoBoxLayout::CalcInfoBoxSizes(Layout &layout,
+                                RECT rc, InfoBoxLayout::Geometry geometry)
 {
   switch (InfoBoxGeometry) {
   case ibTop4Bottom4:
   case ibBottom8:
   case ibTop8:
     // calculate control dimensions
-    ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
-    ControlHeight = (rc.bottom - rc.top) / CONTROLHEIGHTRATIO;
+    layout.control_width = 2 * (rc.right - rc.left) / numInfoWindows;
+    layout.control_height = (rc.bottom - rc.top) / CONTROLHEIGHTRATIO;
     break;
 
   case ibLeft4Right4:
   case ibLeft8:
   case ibRight8:
     // calculate control dimensions
-    ControlWidth = (rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3;
-    ControlHeight = 2 * (rc.bottom - rc.top) / numInfoWindows;
+    layout.control_width = (rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3;
+    layout.control_height = 2 * (rc.bottom - rc.top) / numInfoWindows;
     break;
 
   case ibGNav:
   case ibRight12:
     // calculate control dimensions
-    ControlHeight = (rc.bottom - rc.top) / 6;
-    ControlWidth = ControlHeight * 1.44; // preserve relative shape
+    layout.control_height = (rc.bottom - rc.top) / 6;
+    // preserve relative shape
+    layout.control_width = layout.control_height * 1.44;
     break;
 
   case ibSquare:
     // calculate control dimensions
-    ControlWidth = (rc.right - rc.left) * 0.2;
-    ControlHeight = (rc.bottom - rc.top) / 5;
+    layout.control_width = (rc.right - rc.left) * 0.2;
+    layout.control_height = (rc.bottom - rc.top) / 5;
     break;
   }
 }

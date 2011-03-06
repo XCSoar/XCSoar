@@ -53,6 +53,8 @@ namespace InfoBoxLayout
   };
 
   struct Layout {
+    unsigned control_width, control_height;
+
     unsigned count;
     RECT positions[InfoBoxPanelConfig::MAX_INFOBOXES];
 
@@ -61,7 +63,6 @@ namespace InfoBoxLayout
 
   extern bool fullscreen;
   extern Geometry InfoBoxGeometry;
-  extern unsigned ControlWidth, ControlHeight;
 
   gcc_pure
   Layout

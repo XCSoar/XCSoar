@@ -96,12 +96,12 @@ InfoBoxFullWindow::on_paint(Canvas &canvas)
       rh = 80;
     }
 
-    fw = rw / (double)InfoBoxLayout::ControlWidth;
-    fh = rh / (double)InfoBoxLayout::ControlHeight;
+    fw = rw / (double)InfoBoxManager::layout.control_width;
+    fh = rh / (double)InfoBoxManager::layout.control_height;
 
     double f = std::min(fw, fh);
-    rw = (int)(f * InfoBoxLayout::ControlWidth);
-    rh = (int)(f * InfoBoxLayout::ControlHeight);
+    rw = (int)(f * InfoBoxManager::layout.control_width);
+    rh = (int)(f * InfoBoxManager::layout.control_height);
 
     if (Layout::landscape) {
       rx = i % 3;
