@@ -70,7 +70,7 @@ RoutePolar::dxdy_to_index(const int dx, const int dy)
   const int ady = abs(dy);
   const int v = i_normalise_sine(adx, ady);
   int index;
-  if (adx<= ady) {
+  if (ady<= adx) {
     index = v;
   } else {
     index = ROUTEPOLAR_Q1 - v;
