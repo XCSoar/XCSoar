@@ -61,6 +61,10 @@ void
 InfoBoxLayout::Init(RECT rc)
 {
   LoadGeometry(rc.right - rc.left, rc.bottom - rc.top);
+
+  numInfoWindows = geometry_counts[InfoBoxGeometry];
+  assert(numInfoWindows <= InfoBoxPanelConfig::MAX_INFOBOXES);
+
   CalcInfoBoxSizes(rc);
 }
 
@@ -223,10 +227,6 @@ InfoBoxLayout::LoadGeometry(unsigned width, unsigned height)
     InfoBoxGeometry = (Geometry)tmp;
 
   InfoBoxGeometry = ValidateGeometry(InfoBoxGeometry, width, height);
-
-  numInfoWindows = geometry_counts[InfoBoxGeometry];
-
-  assert(numInfoWindows <= InfoBoxPanelConfig::MAX_INFOBOXES);
 }
 
 void
