@@ -89,7 +89,6 @@ OLCTriangle::path_closed() const
   assert(n_points > 0);
   const ScanTaskPoint end(0, n_points-1);
   fixed d_min(-1);
-  unsigned i_min;
 
   ScanTaskPoint start(0, 0);
 
@@ -103,14 +102,11 @@ OLCTriangle::path_closed() const
 
     if (!positive(d_min) || (d_this < d_min)) {
       d_min = d_this;
-      i_min = start.second;
     } 
     if (d_this<= fixed_int_constant(1000)) {
       return true;
     }
   }
-
-//  std::cout << d_min << " " << i_min << "\n";
 
   return false;
 }
