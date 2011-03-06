@@ -27,6 +27,14 @@ Copyright_License {
 
 #include <stdio.h>
 
+/**
+ * The number of info boxes in each geometry.
+ */
+static const unsigned char geometry_counts[] = {
+  8, 8, 8, 8, 8, 8,
+  9, 5, 12,
+};
+
 namespace InfoBoxLayout
 {
   Geometry InfoBoxGeometry = ibTop4Bottom4;
@@ -186,7 +194,8 @@ static InfoBoxLayout::Geometry
 InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
                                 unsigned width, unsigned height)
 {
-  if ((unsigned)geometry >= 9)
+  if ((unsigned)geometry >=
+      sizeof(geometry_counts) / sizeof(geometry_counts[0]))
     /* out of range */
     geometry = ibTop4Bottom4;
 
@@ -215,14 +224,7 @@ InfoBoxLayout::LoadGeometry(unsigned width, unsigned height)
 
   InfoBoxGeometry = ValidateGeometry(InfoBoxGeometry, width, height);
 
-  if (InfoBoxGeometry == ibGNav)
-    numInfoWindows = 9;
-  else if (InfoBoxGeometry == ibRight12)
-    numInfoWindows = 12;
-  else if (InfoBoxGeometry == ibSquare)
-    numInfoWindows = 5;
-  else
-    numInfoWindows = 8;
+  numInfoWindows = geometry_counts[InfoBoxGeometry];
 
   assert(numInfoWindows <= InfoBoxPanelConfig::MAX_INFOBOXES);
 }
