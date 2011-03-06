@@ -27,17 +27,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-
-/*
-Screen
-640x480 landscape
-
-480/6 = 80 control height
-
-2/3 of width is map = 420
-leaving 220 = 110 control width
-*/
-
 namespace InfoBoxLayout
 {
   Layouts InfoBoxGeometry = ibTop4Bottom4;
