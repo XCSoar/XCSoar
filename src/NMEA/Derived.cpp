@@ -108,6 +108,9 @@ DERIVED_INFO::ResetFlight(bool full)
     CIRCLING_INFO::ClearPartial();
   }
 
+  AirspeedAvailable.clear();
+  estimated_wind_available.clear();
+
   flight.flying_state_reset();
 
   thermal_band.clear();
