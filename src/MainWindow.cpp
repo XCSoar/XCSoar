@@ -100,6 +100,8 @@ MainWindow::InitialiseConfigured()
 
   LogStartUp(_T("InfoBox geometry"));
   InfoBoxLayout::Init(rc);
+  const InfoBoxLayout::Layout ib_layout =
+    InfoBoxLayout::Calculate(rc, InfoBoxLayout::InfoBoxGeometry);
 
   Fonts::SizeInfoboxFont(InfoBoxLayout::ControlWidth);
 
@@ -109,8 +111,8 @@ MainWindow::InitialiseConfigured()
   }
 
   LogStartUp(_T("Create info boxes"));
-  InfoBoxManager::Create(rc);
-  map_rect = InfoBoxManager::layout.remaining;
+  InfoBoxManager::Create(rc, ib_layout);
+  map_rect = ib_layout.remaining;
 
   LogStartUp(_T("Create button labels"));
   ButtonLabel::CreateButtonLabels(*this);

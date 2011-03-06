@@ -473,9 +473,9 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
 }
 
 void
-InfoBoxManager::Create(RECT rc)
+InfoBoxManager::Create(RECT rc, const InfoBoxLayout::Layout &_layout)
 {
-  layout = InfoBoxLayout::Calculate(rc, InfoBoxLayout::InfoBoxGeometry);
+  layout = _layout;
 
   info_box_look.value.fg_color
     = info_box_look.title.fg_color

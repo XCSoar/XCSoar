@@ -78,7 +78,7 @@ namespace InfoBoxManager
   void ProcessTimer();
   void SetDirty();
 
-  void Create(RECT rc);
+  void Create(RECT rc, const InfoBoxLayout::Layout &layout);
   void Destroy();
   void Paint();
   void Show();
