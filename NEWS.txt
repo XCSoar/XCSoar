@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.0.7 - not yet released
 * map
   - Airspace: support alternative OpenAir coordinate format
+* replay: don't execute recorded input events
 
 Version 6.0.6 - 2011/03/04
 * devices:

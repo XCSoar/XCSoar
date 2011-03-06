@@ -42,38 +42,6 @@
 #include <algorithm>
 
 bool
-IgcReplayGlue::ScanBuffer(const TCHAR* buffer, fixed &Time,
-                             fixed &Latitude, fixed &Longitude,
-                             fixed &Altitude, fixed &PressureAltitude)
-{
-
-  if (IgcReplay::ScanBuffer(buffer, Time, Latitude, Longitude, Altitude,
-                            PressureAltitude))
-    return true;
-
-  int found = 0;
-  TCHAR event[200];
-  TCHAR misc[200];
-
-  found = _stscanf(buffer, _T("LPLT event=%[^ ] %[A-Za-z0-9 \\/().,]"),
-                   event, misc);
-
-  if (found > 0) {
-    pt2Event fevent = InputEvents::findEvent(event);
-    if (fevent) {
-      if (found == 2) {
-        TCHAR *mmisc = StringMallocParse(misc);
-        fevent(mmisc);
-        free(mmisc);
-      } else {
-        fevent(_T("\0"));
-      }
-    }
-  }
-  return false;
-}
-
-bool
 IgcReplayGlue::update_time()
 {
   if (!clock.check(1000))
