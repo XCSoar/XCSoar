@@ -43,8 +43,6 @@ namespace InfoBoxLayout
   bool fullscreen = false;
 
   unsigned numInfoWindows = 8;
-  RECT positions[InfoBoxPanelConfig::MAX_INFOBOXES];
-  RECT remaining;
 
   gcc_const
   static Geometry
