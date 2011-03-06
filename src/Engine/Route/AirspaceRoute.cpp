@@ -148,9 +148,6 @@ AirspaceRoute::find_clearing_pair(const SearchPointVector& spv,
 
   bool check_others = false;
 
-  bool found_left = false;
-  bool found_right = false;
-
   SearchPointVector::const_iterator i= start;
 
   int j=0;
@@ -169,10 +166,8 @@ AirspaceRoute::find_clearing_pair(const SearchPointVector& spv,
       AGeoPoint gborder(task_projection.unproject(pborder), dest.altitude); // @todo alt!
       if (!check_others || !inside_others(gborder)) {
         if (j==0) {
-          found_left = true;
           p.first = pborder;
         } else if (j==1) {
-          found_right = true;
           p.second = pborder;
         }
       }
