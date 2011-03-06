@@ -82,7 +82,7 @@ TabBarControl::GetButtonIcon(unsigned i)
 
 unsigned
 TabBarControl::AddClient(Window *w, const TCHAR* Caption,
-    bool IsButtonOnly, Bitmap *bmp,
+    bool IsButtonOnly, const Bitmap *bmp,
     PreHideNotifyCallback_t PreHideFunction,
     PreShowNotifyCallback_t PreShowFunction,
     PostShowNotifyCallback_t PostShowFunction,

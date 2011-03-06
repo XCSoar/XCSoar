@@ -76,7 +76,7 @@ public:
   public:
     OneTabButton(const TCHAR* _Caption,
                 bool _IsButtonOnly,
-                Bitmap *_bmp,
+                const Bitmap *_bmp,
                 PreHideNotifyCallback_t _PreHideFunction,
                 PreShowNotifyCallback_t _PreShowFunction,
                 PostShowNotifyCallback_t _PostShowFunction,
@@ -98,7 +98,7 @@ public:
   public:
     TCHAR Caption[MAX_PATH];
     bool IsButtonOnly;
-    Bitmap *bmp;
+    const Bitmap *bmp;
     RECT butSize;
 
     /**
@@ -137,7 +137,7 @@ public:
  */
   unsigned AddClient(Window *w, const TCHAR* Caption,
         bool IsButtonOnly = false,
-        Bitmap *bmp = NULL,
+        const Bitmap *bmp = NULL,
         PreHideNotifyCallback_t PreHideFunction = NULL,
         PreShowNotifyCallback_t PreShowFunction = NULL,
         PostShowNotifyCallback_t PostShowFunction = NULL,
