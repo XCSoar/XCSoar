@@ -35,6 +35,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 #include "Logger/Logger.hpp"
+#include "Appearance.hpp"
 
 #include "Form/TabBar.hpp"
 #include "Form/Panel.hpp"
@@ -260,48 +261,58 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     pnlTaskList::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wLst);
 
+  const DialogTabStyle_t IconsStyle = Appearance.DialogTabStyle;
+  const Bitmap *CalcIcon = ((IconsStyle == dtIcon) ?
+                             &Graphics::hBmpTabCalculator : NULL);
+  const Bitmap *TurnPointIcon = ((IconsStyle == dtIcon) ?
+                                  &Graphics::hBmpTabTask : NULL);
+  const Bitmap *BrowseIcon = ((IconsStyle == dtIcon) ?
+                               &Graphics::hBmpTabFolder : NULL);
+  const Bitmap *PropertiesIcon = ((IconsStyle == dtIcon) ?
+                                   &Graphics::hBmpTabSettings : NULL);
+
   if (Layout::landscape) {
-    wTabBar->AddClient(wCalculator, _T("Calculator"), false, &Graphics::hBmpTabCalculator, NULL,
+    wTabBar->AddClient(wCalculator, _T("Calculator"), false, CalcIcon, NULL,
                        pnlTaskCalculator::OnTabPreShow, dlgTaskManager::SetTitle);
 
-    wTabBar->AddClient(wEdit, _T("Turn points"), false, &Graphics::hBmpTabTask, NULL,
+    wTabBar->AddClient(wEdit, _T("Turn points"), false, TurnPointIcon, NULL,
                        pnlTaskEdit::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskEdit::OnTabReClick);
     TurnpointTab = 1;
 
-    wTabBar->AddClient(wLst, _T("Browse"), false, &Graphics::hBmpTabFolder, NULL,
+    wTabBar->AddClient(wLst, _T("Browse"), false, BrowseIcon, NULL,
                        pnlTaskList::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskList::OnTabReClick);
 
-    wTabBar->AddClient(wProps, _T("Properties"), false, &Graphics::hBmpTabSettings,
+    wTabBar->AddClient(wProps, _T("Rules"), false, PropertiesIcon,
                        pnlTaskProperties::OnTabPreHide,
                        pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskProperties::OnTabReClick);
 
-    wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hBmpTabClose*/, NULL,
+    wTabBar->AddClient(wClose, _T("Close"), false, NULL, NULL,
                        pnlTaskManagerClose::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskManagerClose::OnTabReClick);
 
     wTabBar->SetCurrentPage(0);
   } else {
-    wTabBar->AddClient(wProps, _T("Properties"), false, &Graphics::hBmpTabSettings,
+    wTabBar->AddClient(wProps, _T("Rules"), false, PropertiesIcon,
                        pnlTaskProperties::OnTabPreHide,
                        pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskProperties::OnTabReClick);
 
-    wTabBar->AddClient(wClose, _T("Close"), false, NULL /*&Graphics::hBmpTabClose*/, NULL,
+    wTabBar->AddClient(wClose, _T("Close"), false, NULL, NULL,
                        pnlTaskManagerClose::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskManagerClose::OnTabReClick);
 
-    wTabBar->AddClient(wCalculator, _T("Calculator"), false, &Graphics::hBmpTabCalculator, NULL,
+    wTabBar->AddClient(wCalculator, _T("Calculator"), false, CalcIcon, NULL,
                        pnlTaskCalculator::OnTabPreShow, dlgTaskManager::SetTitle);
 
-    wTabBar->AddClient(wEdit, _T("Turn points"), false, &Graphics::hBmpTabTask, NULL,
+    wTabBar->AddClient(wEdit, _T("Turn points"), false, TurnPointIcon, NULL,
                        pnlTaskEdit::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskEdit::OnTabReClick);
     TurnpointTab = 3;
 
-    wTabBar->AddClient(wLst, _T("Browse"), false, &Graphics::hBmpTabFolder, NULL,
+    wTabBar->AddClient(wLst, _T("Browse"), false, BrowseIcon, NULL,
                        pnlTaskList::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskList::OnTabReClick);
     wTabBar->SetCurrentPage(2);

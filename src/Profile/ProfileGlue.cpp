@@ -354,6 +354,9 @@ Profile::Use()
   if (Get(szProfileAppTextInputStyle, Temp))
     Appearance.TextInputStyle = (TextInputStyle_t)Temp;
 
+  if (Get(szProfileAppDialogTabStyle, Temp))
+    Appearance.DialogTabStyle = (DialogTabStyle_t)Temp;
+
   if (Get(szProfileAppDialogStyle, Temp))
     DialogStyleSetting = (DialogStyle)Temp;
 

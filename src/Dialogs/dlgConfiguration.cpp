@@ -1475,6 +1475,16 @@ setVariables()
        (mouse or touch screen), hide the option on Altair */
     wp->hide();
 
+  wp = (WndProperty*)wf->FindByName(_T("prpTabDialogStyle"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Text"));
+    dfe->addEnumText(_("Icons"));
+    dfe->Set(Appearance.DialogTabStyle);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpDialogStyle"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -2444,6 +2454,14 @@ void dlgConfigurationShowModal(void)
       changed = true;
     }
   }
+
+    wp = (WndProperty*)wf->FindByName(_T("prpTabDialogStyle"));
+    assert(wp != NULL);
+    if (Appearance.DialogTabStyle != (DialogTabStyle_t)(wp->GetDataField()->GetAsInteger())) {
+      Appearance.DialogTabStyle = (DialogTabStyle_t)(wp->GetDataField()->GetAsInteger());
+      Profile::Set(szProfileAppDialogTabStyle, Appearance.DialogTabStyle);
+      changed = true;
+    }
 
   wp = (WndProperty*)wf->FindByName(_T("prpDialogStyle"));
   if (wp)

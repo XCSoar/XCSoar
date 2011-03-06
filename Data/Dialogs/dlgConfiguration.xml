@@ -516,6 +516,11 @@
       Help="Determines how the user is prompted for text input (filename, teamcode etc.)">
         <DataField DataType="enum"/>
       </Edit>
+
+      <Edit Name="prpTabDialogStyle" Caption="Tab Dialog Style"  X="2" Width="-2" Height="22" CaptionWidth="110"
+      Help="Determines whether tabbed dialogs use text or dialogs">
+        <DataField DataType="enum"/>
+      </Edit>
     </Panel>
   
     <Panel>

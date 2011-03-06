@@ -53,6 +53,11 @@ typedef enum {
 } TextInputStyle_t;
 
 typedef enum {
+  dtText,
+  dtIcon,
+} DialogTabStyle_t;
+
+typedef enum {
   apIbBox = 0,
   apIbTab
 } InfoBoxBorderAppearance_t;
@@ -63,6 +68,7 @@ struct Appearance {
   bool InverseInfoBox;
   StateMessageAlign_t StateMessageAlign;
   TextInputStyle_t TextInputStyle;
+  DialogTabStyle_t DialogTabStyle;
   bool InfoBoxColors;
   InfoBoxBorderAppearance_t InfoBoxBorder;
   bool UseCustomFonts;

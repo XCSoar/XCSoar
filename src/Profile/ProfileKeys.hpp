@@ -113,6 +113,7 @@ extern const TCHAR szProfileAppGaugeVarioGross[];
 extern const TCHAR szProfileNorthArrow[];
 extern const TCHAR szProfileAppStatusMessageAlignment[];
 extern const TCHAR szProfileAppTextInputStyle[];
+extern const TCHAR szProfileAppDialogTabStyle[];
 extern const TCHAR szProfileAppDialogStyle[];
 extern const TCHAR szProfileAppInfoBoxBorder[];
 extern const TCHAR szProfileAppInfoBoxModel[]; // VENTA-ADDON MODEL CHANGE
