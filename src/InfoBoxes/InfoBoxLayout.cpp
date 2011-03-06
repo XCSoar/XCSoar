@@ -50,8 +50,9 @@ namespace InfoBoxLayout
   static Geometry
   ValidateGeometry(Geometry geometry, unsigned width, unsigned height);
 
-  static void
-  LoadGeometry(unsigned width, unsigned height);
+  gcc_pure
+  static Geometry
+  LoadGeometryFromProfile(unsigned width, unsigned height);
 
   static void
   CalcInfoBoxSizes(RECT rc);
@@ -60,7 +61,8 @@ namespace InfoBoxLayout
 void
 InfoBoxLayout::Init(RECT rc)
 {
-  LoadGeometry(rc.right - rc.left, rc.bottom - rc.top);
+  InfoBoxGeometry = LoadGeometryFromProfile(rc.right - rc.left,
+                                            rc.bottom - rc.top);
 
   numInfoWindows = geometry_counts[InfoBoxGeometry];
   assert(numInfoWindows <= InfoBoxPanelConfig::MAX_INFOBOXES);
@@ -219,14 +221,15 @@ InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
   return geometry;
 }
 
-void
-InfoBoxLayout::LoadGeometry(unsigned width, unsigned height)
+InfoBoxLayout::Geometry
+InfoBoxLayout::LoadGeometryFromProfile(unsigned width, unsigned height)
 {
   unsigned tmp;
-  if (Profile::Get(szProfileInfoBoxGeometry, tmp))
-    InfoBoxGeometry = (Geometry)tmp;
+  Geometry geometry = Profile::Get(szProfileInfoBoxGeometry, tmp)
+    ? (Geometry)tmp
+    : ibTop4Bottom4;
 
-  InfoBoxGeometry = ValidateGeometry(InfoBoxGeometry, width, height);
+  return ValidateGeometry(geometry, width, height);
 }
 
 void
