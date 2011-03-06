@@ -24,6 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_INFO_BOX_LAYOUT_HPP
 #define XCSOAR_INFO_BOX_LAYOUT_HPP
 
+#include "Profile/InfoBoxConfig.hpp"
+#include "Compiler.h"
+
 #include <windef.h>
 
 namespace InfoBoxLayout
@@ -49,19 +52,23 @@ namespace InfoBoxLayout
     ibRight12 = 8
   };
 
+  struct Layout {
+    unsigned count;
+    RECT positions[InfoBoxPanelConfig::MAX_INFOBOXES];
+
+    RECT remaining;
+  };
+
   extern bool fullscreen;
   extern Layouts InfoBoxGeometry;
   extern unsigned ControlWidth, ControlHeight, TitleHeight;
-  extern unsigned numInfoWindows;
 
-  extern RECT positions[];
-  extern RECT remaining;
+  gcc_pure
+  Layout
+  Calculate(RECT rc, Layouts shape);
 
   void Init(RECT rc);
   void LoadGeometry(unsigned width, unsigned height);
-
-  // used by manager
-  void CalcInfoBoxPositions(RECT rc);
 
   void CalcInfoBoxSizes(RECT rc);
 };

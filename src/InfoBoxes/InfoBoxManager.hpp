@@ -35,6 +35,10 @@ extern InfoBoxManagerConfig infoBoxManagerConfig;
 
 class InfoBoxWindow;
 
+namespace InfoBoxLayout {
+  struct Layout;
+};
+
 class InfoBoxFullWindow : public PaintWindow {
 protected:
   virtual void on_paint(Canvas &canvas);
@@ -48,6 +52,8 @@ namespace InfoBoxManager
     PANEL_FINAL_GLIDE,
     PANEL_AUXILIARY,
   };
+
+  extern InfoBoxLayout::Layout layout;
 
   void Event_Select(int i);
   void Event_Change(int i);

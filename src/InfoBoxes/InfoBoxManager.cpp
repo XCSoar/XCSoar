@@ -51,6 +51,8 @@ Copyright_License {
 
 namespace InfoBoxManager
 {
+  InfoBoxLayout::Layout layout;
+
   /** the window for displaying infoboxes full-screen */
   InfoBoxFullWindow full_window;
 
@@ -78,7 +80,7 @@ InfoBoxFullWindow::on_paint(Canvas &canvas)
 {
   canvas.clear_white();
 
-  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++) {
+  for (unsigned i = 0; i < InfoBoxManager::layout.count; i++) {
     // JMW TODO: make these calculated once only.
     int x, y;
     int rx, ry;
@@ -127,7 +129,7 @@ InfoBoxManager::Hide()
 {
   InfoBoxesHidden = true;
 
-  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++)
+  for (unsigned i = 0; i < layout.count; i++)
     InfoBoxes[i]->fast_hide();
 
   full_window.hide();
@@ -138,14 +140,14 @@ InfoBoxManager::Show()
 {
   InfoBoxesHidden = false;
 
-  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++)
+  for (unsigned i = 0; i < layout.count; i++)
     InfoBoxes[i]->show();
 }
 
 int
 InfoBoxManager::GetFocused()
 {
-  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++)
+  for (unsigned i = 0; i < layout.count; i++)
     if (InfoBoxes[i]->has_focus())
       return i;
 
@@ -158,11 +160,11 @@ InfoBoxManager::Event_Select(int i)
   int InfoFocus = GetFocused();
 
   if (InfoFocus < 0) {
-    InfoFocus = (i >= 0 ? 0 : InfoBoxLayout::numInfoWindows - 1);
+    InfoFocus = (i >= 0 ? 0 : layout.count - 1);
   } else {
     InfoFocus += i;
 
-    if (InfoFocus < 0 || (unsigned)InfoFocus >= InfoBoxLayout::numInfoWindows)
+    if (InfoFocus < 0 || (unsigned)InfoFocus >= layout.count)
       InfoFocus = -1;
   }
 
@@ -276,7 +278,7 @@ InfoBoxManager::DisplayInfoBox()
 
   // JMW note: this is updated every GPS time step
 
-  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++) {
+  for (unsigned i = 0; i < layout.count; i++) {
     // All calculations are made in a separate thread. Slow calculations
     // should apply to the function DoCalculationsSlow()
     // Do not put calculations here!
@@ -473,6 +475,8 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
 void
 InfoBoxManager::Create(RECT rc)
 {
+  layout = InfoBoxLayout::Calculate(rc, InfoBoxLayout::InfoBoxGeometry);
+
   info_box_look.value.fg_color
     = info_box_look.title.fg_color
     = info_box_look.comment.fg_color
@@ -508,8 +512,8 @@ InfoBoxManager::Create(RECT rc)
                   rc.right - rc.left, rc.bottom - rc.top);
 
   // create infobox windows
-  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++) {
-    const RECT &rc = InfoBoxLayout::positions[i];
+  for (unsigned i = 0; i < layout.count; i++) {
+    const RECT &rc = layout.positions[i];
     int Border = GetInfoBoxBorder(i);
 
     InfoBoxes[i] = new InfoBoxWindow(XCSoarInterface::main_window,
@@ -522,7 +526,7 @@ InfoBoxManager::Create(RECT rc)
 void
 InfoBoxManager::Destroy()
 {
-  for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++)
+  for (unsigned i = 0; i < layout.count; i++)
     delete (InfoBoxes[i]);
 
   full_window.reset();

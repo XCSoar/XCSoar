@@ -61,7 +61,7 @@ FindInfoBoxField(int item)
 static void
 OnCopy(gcc_unused WndButton &button)
 {
-  for (unsigned item = 0; item < InfoBoxLayout::numInfoWindows; item++) {
+  for (unsigned item = 0; item < InfoBoxManager::layout.count; item++) {
     WndProperty *wp = FindInfoBoxField(item);
     if (wp)
       cpyInfoBox[item] = wp->GetDataField()->GetAsInteger();
@@ -75,7 +75,7 @@ OnPaste(gcc_unused WndButton &button)
                  MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
-  for (unsigned item = 0; item < InfoBoxLayout::numInfoWindows; item++) {
+  for (unsigned item = 0; item < InfoBoxManager::layout.count; item++) {
     WndProperty *wp = FindInfoBoxField(item);
     if (wp &&
         cpyInfoBox[item] >= 0 &&
@@ -180,14 +180,14 @@ void dlgConfigInfoboxesShowModal(unsigned _panel)
   if (buttonPaste)
     buttonPaste->SetOnClickNotify(OnPaste);
 
-  for (unsigned j = 0; j < InfoBoxLayout::numInfoWindows; j++)
+  for (unsigned j = 0; j < InfoBoxManager::layout.count; j++)
     SetInfoBoxSelector(j);
 
   changed = false;
 
   wf->ShowModal();
 
-  for (unsigned j = 0; j < InfoBoxLayout::numInfoWindows; ++j)
+  for (unsigned j = 0; j < InfoBoxManager::layout.count; ++j)
     GetInfoBoxSelector(j);
 
   if (changed) {
