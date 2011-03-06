@@ -61,7 +61,7 @@ namespace InfoBoxLayout
 
   extern bool fullscreen;
   extern Geometry InfoBoxGeometry;
-  extern unsigned ControlWidth, ControlHeight, TitleHeight;
+  extern unsigned ControlWidth, ControlHeight;
 
   gcc_pure
   Layout

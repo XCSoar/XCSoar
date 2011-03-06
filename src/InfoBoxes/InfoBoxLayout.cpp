@@ -32,7 +32,6 @@ namespace InfoBoxLayout
   Geometry InfoBoxGeometry = ibTop4Bottom4;
   unsigned ControlWidth;
   unsigned ControlHeight;
-  unsigned TitleHeight;
   bool fullscreen = false;
 
   unsigned numInfoWindows = 8;
@@ -238,6 +237,4 @@ InfoBoxLayout::CalcInfoBoxSizes(RECT rc)
     ControlHeight = (rc.bottom - rc.top) / 5;
     break;
   }
-
-  TitleHeight = ControlHeight / 3.1;
 }
