@@ -155,6 +155,27 @@ MainWindow::InitialiseConfigured()
 }
 
 void
+MainWindow::ReinitialiseLayout()
+{
+  InfoBoxManager::Destroy();
+
+  RECT rc = get_client_rect();
+  InfoBoxLayout::Init(rc);
+  const InfoBoxLayout::Layout ib_layout =
+    InfoBoxLayout::Calculate(rc, InfoBoxLayout::InfoBoxGeometry);
+
+  InfoBoxManager::Create(rc, ib_layout);
+  map_rect = ib_layout.remaining;
+
+  if (!FullScreen) {
+    map.move(map_rect.left, map_rect.top,
+             map_rect.right - map_rect.left,
+             map_rect.bottom - map_rect.top);
+    map.FullRedraw();
+  }
+}
+
+void
 MainWindow::reset()
 {
   map.reset();

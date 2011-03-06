@@ -6,6 +6,7 @@ Version 6.1 - not yet released
 * user interface
   - "pan to" button in waypoint dialog
   - waypoint selection screen shows last used waypoints if no filter is set
+  - change the info box geometry without restarting XCSoar
 * route planning
   - new optional minimum-time route planning around airspace and terrain.  
     - allows avoidance or terrain, airspace or both

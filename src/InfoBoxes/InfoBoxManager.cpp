@@ -56,6 +56,12 @@ namespace InfoBoxManager
   /** the window for displaying infoboxes full-screen */
   InfoBoxFullWindow full_window;
 
+  /**
+   * Is this the initial DisplayInfoBox() call?  If yes, then all
+   * content objects need to be created.
+   */
+  static bool first;
+
   unsigned GetCurrentType(unsigned box);
   void SetCurrentType(unsigned box, char type);
 
@@ -273,7 +279,6 @@ InfoBoxManager::DisplayInfoBox()
     return;
 
   int DisplayType[InfoBoxPanelConfig::MAX_INFOBOXES];
-  static bool first = true;
   static int DisplayTypeLast[InfoBoxPanelConfig::MAX_INFOBOXES];
 
   // JMW note: this is updated every GPS time step
@@ -475,6 +480,7 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
 void
 InfoBoxManager::Create(RECT rc, const InfoBoxLayout::Layout &_layout)
 {
+  first = true;
   layout = _layout;
 
   info_box_look.value.fg_color

@@ -73,6 +73,12 @@ public:
   void Initialise();
   void InitialiseConfigured();
 
+  /**
+   * Destroy and re-create all info boxes, and adjust the map
+   * position/size.
+   */
+  void ReinitialiseLayout();
+
   void reset();
 
   /**

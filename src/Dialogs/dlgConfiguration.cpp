@@ -2380,6 +2380,7 @@ void dlgConfigurationShowModal(void)
     }
   }
 
+  bool info_box_geometry_changed = false;
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxGeom"));
   if (wp) {
     if (InfoBoxLayout::InfoBoxGeometry !=
@@ -2389,7 +2390,7 @@ void dlgConfigurationShowModal(void)
       Profile::Set(szProfileInfoBoxGeometry,
                    (unsigned)InfoBoxLayout::InfoBoxGeometry);
       changed = true;
-      requirerestart = true;
+      info_box_geometry_changed = true;
     }
   }
 
@@ -2849,6 +2850,9 @@ void dlgConfigurationShowModal(void)
 
   if (!is_embedded() && DevicePortChanged)
     requirerestart = true;
+
+  if (info_box_geometry_changed)
+    XCSoarInterface::main_window.ReinitialiseLayout();
 
   if (changed) {
     Profile::Save();
