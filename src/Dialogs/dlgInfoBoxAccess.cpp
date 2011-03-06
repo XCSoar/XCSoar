@@ -69,7 +69,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   if (!dlgContent)
     return;
 
-  const RECT targetRect = InfoBoxLayout::GetRemainingRect(parent.get_client_rect());
+  const RECT targetRect = InfoBoxLayout::remaining;
 
   wf = LoadDialog(dlgContent->CallBackTable, parent,
                   _T("IDR_XML_INFOBOXACCESS"), &targetRect);

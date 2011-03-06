@@ -24,8 +24,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
-#include "LogFile.hpp"
-#include "SettingsMap.hpp"
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
 #include "Sizes.h"
@@ -50,7 +48,10 @@ namespace InfoBoxLayout
   unsigned ControlHeight;
   unsigned TitleHeight;
   bool fullscreen = false;
+
   unsigned numInfoWindows = 8;
+  RECT positions[InfoBoxPanelConfig::MAX_INFOBOXES];
+  RECT remaining;
 }
 
 void
@@ -58,95 +59,130 @@ InfoBoxLayout::Init(RECT rc)
 {
   LoadGeometry();
   CalcInfoBoxSizes(rc);
+  CalcInfoBoxPositions(rc);
+}
+
+static int
+MakeTopRow(RECT *p, unsigned n, int left, int top)
+{
+  RECT *const end = p + n;
+  const int bottom = top + InfoBoxLayout::ControlHeight;
+  while (p < end) {
+    p->left = left;
+    left += InfoBoxLayout::ControlWidth;
+    p->right = left;
+    p->top = top;
+    p->bottom = bottom;
+
+    ++p;
+  }
+
+  return bottom;
+}
+
+static int
+MakeBottomRow(RECT *p, unsigned n, int left, int bottom)
+{
+  int top = bottom - InfoBoxLayout::ControlHeight;
+  MakeTopRow(p, n, left, top);
+  return top;
+}
+
+static int
+MakeLeftColumn(RECT *p, unsigned n, int left, int top)
+{
+  RECT *const end = p + n;
+  const int right = left + InfoBoxLayout::ControlWidth;
+  while (p < end) {
+    p->left = left;
+    p->right = right;
+    p->top = top;
+    top += InfoBoxLayout::ControlHeight;
+    p->bottom = top;
+
+    ++p;
+  }
+
+  return right;
+}
+
+static int
+MakeRightColumn(RECT *p, unsigned n, int right, int top)
+{
+  int left = right - InfoBoxLayout::ControlWidth;
+  MakeLeftColumn(p, n, left, top);
+  return left;
 }
 
 void
-InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
-    int *sizex, int *sizey)
+InfoBoxLayout::CalcInfoBoxPositions(RECT rc)
 {
   switch (InfoBoxGeometry) {
   case ibTop4Bottom4:
-    if (i < numInfoWindows / 2) {
-      *x = i * ControlWidth;
-      *y = rc.top;
-    } else {
-      *x = (i - numInfoWindows / 2) * ControlWidth;
-      *y = rc.bottom - ControlHeight;
-    }
+    assert(numInfoWindows == 8);
+
+    rc.top = MakeTopRow(positions, 4, rc.left, rc.top);
+    rc.bottom = MakeBottomRow(positions + 4, 4, rc.left, rc.bottom);
     break;
 
   case ibBottom8:
-    if (i < numInfoWindows / 2) {
-      *x = i * ControlWidth;
-      *y = rc.bottom - ControlHeight * 2;
-    } else {
-      *x = (i - numInfoWindows / 2) * ControlWidth;
-      *y = rc.bottom - ControlHeight;
-    }
+    assert(numInfoWindows == 8);
+
+    rc.bottom = MakeBottomRow(positions + 4, 4, rc.left, rc.bottom);
+    rc.bottom = MakeBottomRow(positions, 4, rc.left, rc.bottom);
     break;
 
   case ibTop8:
-    if (i < numInfoWindows / 2) {
-      *x = i * ControlWidth;
-      *y = rc.top;
-    } else {
-      *x = (i - numInfoWindows / 2) * ControlWidth;
-      *y = rc.top + ControlHeight;
-    }
+    assert(numInfoWindows == 8);
+
+    rc.top = MakeTopRow(positions, 4, rc.left, rc.top);
+    rc.top = MakeTopRow(positions + 4, 4, rc.left, rc.top);
     break;
 
   case ibLeft4Right4:
-    if (i < numInfoWindows / 2) {
-      *x = rc.left;
-      *y = rc.top + ControlHeight * i;
-    } else {
-      *x = rc.right - ControlWidth;
-      *y = rc.top + ControlHeight * (i - numInfoWindows / 2);
-    }
+    assert(numInfoWindows == 8);
+
+    rc.left = MakeLeftColumn(positions, 4, rc.left, rc.top);
+    rc.right = MakeRightColumn(positions + 4, 4, rc.right, rc.top);
     break;
 
   case ibLeft8:
-    if (i < numInfoWindows / 2) {
-      *x = rc.left;
-      *y = rc.top + ControlHeight * i;
-    } else {
-      *x = rc.left + ControlWidth;
-      *y = rc.top + ControlHeight * (i - numInfoWindows / 2);
-    }
+    assert(numInfoWindows == 8);
+
+    rc.left = MakeLeftColumn(positions, 4, rc.left, rc.top);
+    rc.left = MakeLeftColumn(positions + 4, 4, rc.left, rc.top);
     break;
 
   case ibRight8:
+    assert(numInfoWindows == 8);
+
+    rc.right = MakeRightColumn(positions + 4, 4, rc.right, rc.top);
+    rc.right = MakeRightColumn(positions, 4, rc.right, rc.top);
+    break;
+
   case ibRight12:
-    if (i < numInfoWindows / 2) {
-      *x = rc.right - ControlWidth * 2;
-      *y = rc.top + ControlHeight * i;
-    } else {
-      *x = rc.right - ControlWidth;
-      *y = rc.top + ControlHeight * (i - numInfoWindows / 2);
-    }
+    assert(numInfoWindows == 12);
+
+    rc.right = MakeRightColumn(positions + 6, 6, rc.right, rc.top);
+    rc.right = MakeRightColumn(positions, 6, rc.right, rc.top);
     break;
 
   case ibGNav:
-    if (i < 3) {
-      *x = rc.right - ControlWidth * 2;
-      *y = rc.top + ControlHeight * i;
-    } else if (i < 6) {
-      *x = rc.right - ControlWidth * 2;
-      *y = rc.top + ControlHeight * (i - 3) + ControlHeight * 3;
-    } else {
-      *x = rc.right - ControlWidth;
-      *y = rc.top + ControlHeight * (i - 6) + ControlHeight * 3;
-    }
+    assert(numInfoWindows == 9);
+
+    rc.right = MakeRightColumn(positions + 6, 3,
+                               rc.right, rc.top + 3 * ControlHeight);
+    rc.right = MakeRightColumn(positions, 6, rc.right, rc.top);
     break;
 
   case ibSquare:
-    *x = rc.right - ControlWidth;
-    *y = rc.top + ControlHeight * i;
+    assert(numInfoWindows == 5);
+
+    rc.right = MakeRightColumn(positions, 5, rc.right, rc.top);
     break;
   };
 
-  *sizex = ControlWidth;
-  *sizey = ControlHeight;
+  remaining = rc;
 }
 
 void
@@ -215,57 +251,4 @@ InfoBoxLayout::CalcInfoBoxSizes(RECT rc)
   }
 
   TitleHeight = ControlHeight / 3.1;
-}
-
-RECT
-InfoBoxLayout::GetRemainingRect(RECT rc)
-{
-  RECT MapRect = rc;
-
-  switch (InfoBoxGeometry) {
-  case ibTop4Bottom4:
-    // calculate small map screen size
-    MapRect.top = rc.top + ControlHeight;
-    MapRect.bottom = rc.bottom - ControlHeight;
-    break;
-
-  case ibBottom8:
-    // calculate small map screen size
-    MapRect.bottom = rc.bottom - ControlHeight * 2;
-    break;
-
-  case ibTop8:
-    // calculate small map screen size
-    MapRect.top = rc.top + ControlHeight * 2;
-    break;
-
-  case ibLeft4Right4:
-    // calculate small map screen size
-    MapRect.left = rc.left + ControlWidth;
-    MapRect.right = rc.right - ControlWidth;
-    break;
-
-  case ibLeft8:
-    // calculate small map screen size
-    MapRect.left = rc.left + ControlWidth * 2;
-    break;
-
-  case ibRight8:
-    // calculate small map screen size
-    MapRect.right = rc.right - ControlWidth * 2;
-    break;
-
-  case ibGNav:
-  case ibRight12:
-    // calculate small map screen size
-    MapRect.right = rc.right - ControlWidth * 2;
-    break;
-
-  case ibSquare:
-    // calculate small map screen size
-    MapRect.right = rc.right - ControlWidth;
-    break;
-  }
-
-  return MapRect;
 }

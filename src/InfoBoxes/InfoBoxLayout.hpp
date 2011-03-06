@@ -54,15 +54,16 @@ namespace InfoBoxLayout
   extern unsigned ControlWidth, ControlHeight, TitleHeight;
   extern unsigned numInfoWindows;
 
+  extern RECT positions[];
+  extern RECT remaining;
+
   void Init(RECT rc);
   void LoadGeometry();
 
   // used by manager
-  void GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
-                                 int *sizex, int *sizey);
+  void CalcInfoBoxPositions(RECT rc);
 
   void CalcInfoBoxSizes(RECT rc);
-  RECT GetRemainingRect(RECT rc);
 };
 
 #endif

@@ -100,7 +100,7 @@ MainWindow::InitialiseConfigured()
 
   LogStartUp(_T("InfoBox geometry"));
   InfoBoxLayout::Init(rc);
-  map_rect = InfoBoxLayout::GetRemainingRect(rc);
+  map_rect = InfoBoxLayout::remaining;
 
   Fonts::SizeInfoboxFont();
 

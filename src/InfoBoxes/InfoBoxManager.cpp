@@ -509,12 +509,12 @@ InfoBoxManager::Create(RECT rc)
 
   // create infobox windows
   for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++) {
-    int xoff, yoff, sizex, sizey;
-    InfoBoxLayout::GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
+    const RECT &rc = InfoBoxLayout::positions[i];
     int Border = GetInfoBoxBorder(i);
 
     InfoBoxes[i] = new InfoBoxWindow(XCSoarInterface::main_window,
-                                     xoff, yoff, sizex, sizey,
+                                     rc.left, rc.top,
+                                     rc.right - rc.left, rc.bottom - rc.top,
                                      Border, info_box_look);
   }
 }
