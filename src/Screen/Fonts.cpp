@@ -23,14 +23,12 @@ Copyright_License {
 
 #include "Screen/Fonts.hpp"
 #include "LogFile.hpp"
-#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "ButtonLabel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/FontConfig.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/AnyCanvas.hpp"
 #include "Appearance.hpp"
-#include "InfoBoxes/InfoBoxLayout.hpp"
 
 #include <stdio.h>
 
@@ -193,10 +191,10 @@ Fonts::Initialize()
 }
 
 void
-Fonts::SizeInfoboxFont()
+Fonts::SizeInfoboxFont(unsigned control_width)
 {
   if (!is_altair())
-    SizeLogFont(LogInfoBox, InfoBoxLayout::ControlWidth, _T("1234m"));
+    SizeLogFont(LogInfoBox, control_width, _T("1234m"));
   InfoBox.set(LogInfoBox);
 }
 

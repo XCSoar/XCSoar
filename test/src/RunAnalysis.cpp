@@ -61,8 +61,6 @@ Copyright_License {
 #include "ThermalLocator.hpp"
 #include "LocalTime.hpp"
 
-unsigned InfoBoxLayout::ControlWidth = 100;
-
 Trigger airspaceWarningEvent(_T("airspaceWarning"));
 
 TaskFile*

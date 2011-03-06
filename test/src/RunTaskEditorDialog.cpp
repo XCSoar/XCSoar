@@ -42,8 +42,6 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-unsigned InfoBoxLayout::ControlWidth = 100;
-
 void
 DeviceBlackboard::SetStartupLocation(const GeoPoint &loc,
                                      const double alt)

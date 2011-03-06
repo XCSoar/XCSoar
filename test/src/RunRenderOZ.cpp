@@ -47,8 +47,6 @@ Copyright_License {
 #include "SettingsMap.hpp"
 #include "ResourceLoader.hpp"
 
-unsigned InfoBoxLayout::ControlWidth = 64;
-
 enum {
   NUM_OZ_TYPES = 7,
 };

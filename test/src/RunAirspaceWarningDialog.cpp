@@ -45,8 +45,6 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-unsigned InfoBoxLayout::ControlWidth = 100;
-
 static Waypoints way_points;
 static TaskBehaviour task_behaviour;
 static TaskEvents task_events;

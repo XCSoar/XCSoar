@@ -85,8 +85,6 @@ static TopographyStore *topography;
 static RasterTerrain *terrain;
 Logger logger;
 
-unsigned InfoBoxLayout::ControlWidth = 100;
-
 LoggerImpl::LoggerImpl() {}
 LoggerImpl::~LoggerImpl() {}
 

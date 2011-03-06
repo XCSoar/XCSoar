@@ -40,7 +40,7 @@ namespace Fonts
   extern Font MapLabelImportant;
 
   void Initialize();
-  void SizeInfoboxFont();
+  void SizeInfoboxFont(unsigned control_width);
   void LoadCustom();
   void Deinitialize();
 

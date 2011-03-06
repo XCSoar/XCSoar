@@ -101,7 +101,7 @@ MainWindow::InitialiseConfigured()
   LogStartUp(_T("InfoBox geometry"));
   InfoBoxLayout::Init(rc);
 
-  Fonts::SizeInfoboxFont();
+  Fonts::SizeInfoboxFont(InfoBoxLayout::ControlWidth);
 
   if (Appearance.UseCustomFonts) {
     LogStartUp(_T("Load fonts"));
