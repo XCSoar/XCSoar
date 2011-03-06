@@ -193,8 +193,6 @@ InfoBoxLayout::LoadGeometry(unsigned width, unsigned height)
       InfoBoxGeometry = ibTop4Bottom4;
   }
 
-  Profile::Set(szProfileInfoBoxGeometry, (unsigned)InfoBoxGeometry);
-
   if (InfoBoxGeometry == ibGNav)
     numInfoWindows = 9;
   else if (InfoBoxGeometry == ibRight12)
