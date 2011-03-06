@@ -230,8 +230,8 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     assert(wBlackRect);
     const unsigned TabLineHeight = wTabBar->GetTabLineHeight();
     wBlackRect->move(0,
-                     wTabBar->GetTabHeight() - TabLineHeight - Layout::Scale(2),
-                     wf->get_width() - wTabBar->GetTabWidth() + TabLineHeight,
+                     wTabBar->GetTabHeight() - TabLineHeight - Layout::Scale(1),
+                     wf->get_width() - wTabBar->GetTabWidth() + Layout::Scale(3),
                      TabLineHeight + Layout::Scale(2));
     wBlackRect->show_on_top();
   }
@@ -295,26 +295,27 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
     wTabBar->SetCurrentPage(0);
   } else {
-    wTabBar->AddClient(wProps, _T("Rules"), false, PropertiesIcon,
-                       pnlTaskProperties::OnTabPreHide,
-                       pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
-                       pnlTaskProperties::OnTabReClick);
+    wTabBar->AddClient(wCalculator, _T("Calculator"), false, CalcIcon, NULL,
+                       pnlTaskCalculator::OnTabPreShow, dlgTaskManager::SetTitle);
 
     wTabBar->AddClient(wClose, _T("Close"), false, NULL, NULL,
                        pnlTaskManagerClose::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskManagerClose::OnTabReClick);
 
-    wTabBar->AddClient(wCalculator, _T("Calculator"), false, CalcIcon, NULL,
-                       pnlTaskCalculator::OnTabPreShow, dlgTaskManager::SetTitle);
-
     wTabBar->AddClient(wEdit, _T("Turn points"), false, TurnPointIcon, NULL,
                        pnlTaskEdit::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskEdit::OnTabReClick);
-    TurnpointTab = 3;
+    TurnpointTab = 2;
 
     wTabBar->AddClient(wLst, _T("Browse"), false, BrowseIcon, NULL,
                        pnlTaskList::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskList::OnTabReClick);
+
+    wTabBar->AddClient(wProps, _T("Rules"), false, PropertiesIcon,
+                       pnlTaskProperties::OnTabPreHide,
+                       pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
+                       pnlTaskProperties::OnTabReClick);
+
     wTabBar->SetCurrentPage(2);
   }
 
