@@ -29,7 +29,7 @@ Copyright_License {
 
 namespace InfoBoxLayout
 {
-  Layouts InfoBoxGeometry = ibTop4Bottom4;
+  Geometry InfoBoxGeometry = ibTop4Bottom4;
   unsigned ControlWidth;
   unsigned ControlHeight;
   unsigned TitleHeight;
@@ -100,12 +100,12 @@ MakeRightColumn(RECT *p, unsigned n, int right, int top)
 }
 
 InfoBoxLayout::Layout
-InfoBoxLayout::Calculate(RECT rc, Layouts shape)
+InfoBoxLayout::Calculate(RECT rc, Geometry geometry)
 {
   Layout layout;
   layout.count = numInfoWindows;
 
-  switch (shape) {
+  switch (geometry) {
   case ibTop4Bottom4:
     layout.count = 8;
     rc.top = MakeTopRow(layout.positions, 4, rc.left, rc.top);
@@ -178,7 +178,7 @@ InfoBoxLayout::LoadGeometry(unsigned width, unsigned height)
 {
   unsigned tmp;
   if (Profile::Get(szProfileInfoBoxGeometry, tmp))
-    InfoBoxGeometry = (Layouts)tmp;
+    InfoBoxGeometry = (Geometry)tmp;
 
   if (width > height) {
     /* landscape */

@@ -31,7 +31,7 @@ Copyright_License {
 
 namespace InfoBoxLayout
 {
-  enum Layouts {
+  enum Geometry {
     // 0: default, infoboxes along top and bottom, map in middle
     ibTop4Bottom4 = 0,
     // 1: both infoboxes along bottom
@@ -60,12 +60,12 @@ namespace InfoBoxLayout
   };
 
   extern bool fullscreen;
-  extern Layouts InfoBoxGeometry;
+  extern Geometry InfoBoxGeometry;
   extern unsigned ControlWidth, ControlHeight, TitleHeight;
 
   gcc_pure
   Layout
-  Calculate(RECT rc, Layouts shape);
+  Calculate(RECT rc, Geometry geometry);
 
   void Init(RECT rc);
   void LoadGeometry(unsigned width, unsigned height);
