@@ -401,7 +401,8 @@ DeviceBlackboard::NettoVario(const GlidePolar& glide_polar)
 {
   NMEA_INFO &basic = SetBasic();
 
-  basic.GliderSinkRate = Calculated().flight.Flying
+  basic.GliderSinkRate =
+    (Calculated().flight.Flying && Calculated().AirspeedAvailable)
     ? - glide_polar.SinkRate(Calculated().IndicatedAirspeed,
                              basic.acceleration.Gload)
     /* the glider sink rate is useless when not flying */
