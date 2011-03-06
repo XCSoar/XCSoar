@@ -68,9 +68,6 @@ namespace InfoBoxLayout
   Calculate(RECT rc, Geometry geometry);
 
   void Init(RECT rc);
-  void LoadGeometry(unsigned width, unsigned height);
-
-  void CalcInfoBoxSizes(RECT rc);
 };
 
 #endif

@@ -37,6 +37,12 @@ namespace InfoBoxLayout
   unsigned numInfoWindows = 8;
   RECT positions[InfoBoxPanelConfig::MAX_INFOBOXES];
   RECT remaining;
+
+  static void
+  LoadGeometry(unsigned width, unsigned height);
+
+  static void
+  CalcInfoBoxSizes(RECT rc);
 }
 
 void
