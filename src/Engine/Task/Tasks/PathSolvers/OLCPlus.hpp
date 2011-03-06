@@ -43,7 +43,7 @@ public:
 
   virtual void reset();
 
-  bool solve();
+  bool solve(bool exhaustive);
 
   TracePointVector& get_solution_classic() {
     return solution_classic;

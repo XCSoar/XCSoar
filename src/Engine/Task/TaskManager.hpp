@@ -191,6 +191,8 @@ public:
   bool update_auto_mc(const AIRCRAFT_STATE& state_now,
                       const fixed fallback_mc);
 
+  bool score_exhaustive();
+
   /**
    * Accessor for statistics of active task
    *

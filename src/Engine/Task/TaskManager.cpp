@@ -324,6 +324,13 @@ TaskManager::update_idle(const AIRCRAFT_STATE& state)
   return retval;
 }
 
+bool
+TaskManager::score_exhaustive()
+{
+  return task_behaviour.enable_olc &&
+    contest_manager.solve_exhaustive();
+}
+
 const TaskStats& 
 TaskManager::get_stats() const
 {

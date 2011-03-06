@@ -46,7 +46,7 @@ public:
   virtual fixed calc_score() const;
   virtual fixed calc_time() const;
   virtual void reset();
-  virtual bool solve();
+  virtual bool solve(bool exhaustive);
 
 private:
   XContestFree solver_free;

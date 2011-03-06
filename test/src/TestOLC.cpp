@@ -131,6 +131,8 @@ TestOLC(const char *filename)
     olc_plus.update_idle();
   }
 
+  olc_classic.solve_exhaustive();
+
   putchar('\n');
 
   std::cout << "classic\n";

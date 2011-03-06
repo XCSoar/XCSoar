@@ -43,11 +43,11 @@ XContest::reset()
 }
 
 bool
-XContest::solve()
+XContest::solve(bool exhaustive)
 {
   if (mode_free) {
 
-    if (solver_free.solve()) {
+    if (solver_free.solve(exhaustive)) {
       if (save_solution())
         solver_free.copy_solution(x_best_solution);
       mode_free = false;
@@ -57,7 +57,7 @@ XContest::solve()
 
   } else {
 
-    if (solver_triangle.solve()) {
+    if (solver_triangle.solve(exhaustive)) {
       if (save_solution())
         solver_free.copy_solution(x_best_solution);
       mode_free = true;

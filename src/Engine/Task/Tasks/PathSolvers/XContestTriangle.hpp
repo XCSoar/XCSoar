@@ -41,7 +41,7 @@ public:
   virtual fixed calc_score() const;
   virtual fixed calc_distance() const;
 
-  virtual bool solve();
+  virtual bool solve(bool exhaustive);
 
   void swap_mode();
 private:

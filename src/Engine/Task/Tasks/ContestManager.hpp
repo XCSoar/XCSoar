@@ -51,9 +51,15 @@ public:
    * Update internal states (non-essential) for housework,
    * or where functions are slow and would cause loss to real-time performance.
    *
+   * @param exhaustive true to find the final solution, false stops
+   * after a number of iterations (incremental search)
    * @return True if internal state changed
    */
-  bool update_idle();
+  bool update_idle(bool exhaustive=false);
+
+  bool solve_exhaustive() {
+    return update_idle(true);
+  }
 
   /** 
    * Reset the task (as if never flown)
@@ -79,7 +85,8 @@ private:
 
   bool run_contest(AbstractContest& the_contest, 
                    ContestResult &contest_result,
-                   TracePointVector &contest_solution);
+                   TracePointVector &contest_solution,
+                   bool exhaustive);
 
   OLCSprint olc_sprint;
   OLCFAI olc_fai;

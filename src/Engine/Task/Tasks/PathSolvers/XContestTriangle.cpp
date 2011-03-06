@@ -64,9 +64,9 @@ XContestTriangle::calc_distance() const
 }
 
 bool 
-XContestTriangle::solve()
+XContestTriangle::solve(bool exhaustive)
 {
-  if (!ContestDijkstra::solve()) 
+  if (!ContestDijkstra::solve(exhaustive))
     return false;
 
   best_d = 0; // reset heuristic

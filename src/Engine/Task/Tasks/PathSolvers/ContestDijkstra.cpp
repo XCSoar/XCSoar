@@ -111,7 +111,7 @@ ContestDijkstra::clear_trace()
 void
 ContestDijkstra::update_trace()
 {
-  if (!master_is_updated()) 
+  if (!master_is_updated())
     return;
 
   trace_master.get_trace_points(trace);
@@ -125,7 +125,7 @@ ContestDijkstra::update_trace()
 
 
 bool
-ContestDijkstra::solve()
+ContestDijkstra::solve(bool exhaustive)
 {
   if (dijkstra.empty()) {
     set_weightings();
@@ -161,7 +161,7 @@ ContestDijkstra::solve()
   count_olc_solve++;
   count_olc_size = max(count_olc_size, dijkstra.queue_size());
 
-  if (distance_general(25)) {
+  if (distance_general(exhaustive ? 0 - 1 : 25)) {
     save_solution();
     update_trace();
     return true;

@@ -211,6 +211,8 @@ test_replay(const Contests olc_type,
   };
   sim.Stop();
 
+  task_manager.score_exhaustive();
+
   if (verbose) {
     distance_counts();
   }

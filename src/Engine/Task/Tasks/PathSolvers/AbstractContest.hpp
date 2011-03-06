@@ -97,9 +97,11 @@ public:
    * Update the solver.  The solver is incremental, so this method can
    * be safely called every time step.
    *
+   * @param exhaustive true to find the final solution, false stops
+   * after a number of iterations (incremental search)
    * @return True if solver completed in this call
    */
-  virtual bool solve() = 0;
+  virtual bool solve(bool exhaustive) = 0;
 
 protected:
 

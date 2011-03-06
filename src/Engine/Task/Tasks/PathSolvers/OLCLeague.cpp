@@ -50,7 +50,7 @@ OLCLeague::reset()
 }
 
 bool
-OLCLeague::solve()
+OLCLeague::solve(bool exhaustive)
 {
   TracePointVector trace;
   trace_master.get_trace_edges(trace);

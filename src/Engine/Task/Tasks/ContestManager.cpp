@@ -28,11 +28,12 @@ ContestManager::ContestManager(const Contests _contest,
 bool
 ContestManager::run_contest(AbstractContest &the_contest, 
                             ContestResult &contest_result,
-                            TracePointVector &contest_solution)
+                            TracePointVector &contest_solution,
+                            bool exhaustive)
 {
   // run solver, return immediately if further processing is required
   // by subsequent calls
-  if (!the_contest.solve())
+  if (!the_contest.solve(exhaustive))
     return false;
 
   // if no improved solution was found, must have finished processing
@@ -51,40 +52,43 @@ ContestManager::run_contest(AbstractContest &the_contest,
 
 
 bool 
-ContestManager::update_idle()
+ContestManager::update_idle(bool exhaustive)
 {
   bool retval = false;
   ContestResult dummy_result;
 
   switch (contest) {
   case OLC_Sprint:
-    retval = run_contest(olc_sprint, result, solution);
+    retval = run_contest(olc_sprint, result, solution, exhaustive);
     break;
   case OLC_FAI:
-    retval = run_contest(olc_fai, result, solution);
+    retval = run_contest(olc_fai, result, solution, exhaustive);
     break;
   case OLC_Classic:
-    retval = run_contest(olc_classic, result, solution);
+    retval = run_contest(olc_classic, result, solution, exhaustive);
     break;
   case OLC_League:
-    retval = run_contest(olc_classic, dummy_result, olc_league.get_solution_classic());
-    retval |= run_contest(olc_league, result, solution);
+    retval = run_contest(olc_classic, dummy_result,
+                         olc_league.get_solution_classic(), exhaustive);
+    retval |= run_contest(olc_league, result, solution, exhaustive);
     break;
   case OLC_Plus:
-    retval = run_contest(olc_classic, olc_plus.get_result_classic(), olc_plus.get_solution_classic());
-    retval |= run_contest(olc_fai, olc_plus.get_result_fai(), olc_plus.get_solution_fai());
+    retval = run_contest(olc_classic, olc_plus.get_result_classic(),
+                         olc_plus.get_solution_classic(), exhaustive);
+    retval |= run_contest(olc_fai, olc_plus.get_result_fai(),
+                          olc_plus.get_solution_fai(), exhaustive);
     if (retval) 
-      run_contest(olc_plus, result, solution);
+      run_contest(olc_plus, result, solution, exhaustive);
 
     break;
   case OLC_XContest:
-    retval = run_contest(olc_xcontest, result, solution);
+    retval = run_contest(olc_xcontest, result, solution, exhaustive);
     break;
   case OLC_DHVXC:
-    retval = run_contest(olc_dhvxc, result, solution);
+    retval = run_contest(olc_dhvxc, result, solution, exhaustive);
     break;
   case OLC_SISAT:
-    retval = run_contest(olc_sisat, result, solution);
+    retval = run_contest(olc_sisat, result, solution, exhaustive);
     break;
   };
 

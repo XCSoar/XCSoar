@@ -55,7 +55,7 @@ public:
    *
    * @return True if solver completed in this call
    */
-  virtual bool solve();
+  virtual bool solve(bool exhaustive);
 
   TracePointVector& get_solution_classic() {
     return solution_classic;

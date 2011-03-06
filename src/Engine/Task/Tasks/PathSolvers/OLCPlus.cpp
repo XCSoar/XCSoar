@@ -42,7 +42,7 @@ OLCPlus::reset()
 }
 
 bool
-OLCPlus::solve()
+OLCPlus::solve(bool exhaustive)
 {
   return save_solution();
 }
