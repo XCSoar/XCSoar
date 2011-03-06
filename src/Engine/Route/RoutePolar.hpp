@@ -443,6 +443,12 @@ public:
   short safety_height() const {
     return (short)config.safety_height_terrain;
   }
+
+  FlatGeoPoint reach_intercept(const int index,
+                               const AGeoPoint& p,
+                               const RasterMap* map,
+                               const TaskProjection& proj) const;
+
 private:
 
   RoutePolar polar_glide;

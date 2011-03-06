@@ -418,3 +418,17 @@ RoutePolars::calc_glide_arrival(const AFlatGeoPoint& origin,
                     origin, proj);
   return origin.altitude-calc_vheight(e);
 }
+
+FlatGeoPoint
+RoutePolars::reach_intercept(const int index,
+                             const AGeoPoint& origin,
+                             const RasterMap* map,
+                             const TaskProjection& proj) const
+{
+  const bool valid = map && map->isMapLoaded();
+  const short altitude = origin.altitude-safety_height();
+  const AGeoPoint m_origin((GeoPoint)origin, altitude);
+  const GeoPoint dest = msl_intercept(index, m_origin, proj);
+  const GeoPoint p = valid? map->Intersection(m_origin, altitude, altitude, dest): dest;
+  return proj.project(p);
+}
