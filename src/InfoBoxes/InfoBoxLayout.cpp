@@ -38,6 +38,10 @@ namespace InfoBoxLayout
   RECT positions[InfoBoxPanelConfig::MAX_INFOBOXES];
   RECT remaining;
 
+  gcc_const
+  static Geometry
+  ValidateGeometry(Geometry geometry, unsigned width, unsigned height);
+
   static void
   LoadGeometry(unsigned width, unsigned height);
 
@@ -178,6 +182,30 @@ InfoBoxLayout::Calculate(RECT rc, Geometry geometry)
   return layout;
 }
 
+static InfoBoxLayout::Geometry
+InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
+                                unsigned width, unsigned height)
+{
+  if ((unsigned)geometry >= 9)
+    /* out of range */
+    geometry = ibTop4Bottom4;
+
+  if (width > height) {
+    /* landscape */
+    if (geometry < ibLeft4Right4)
+      geometry = ibGNav;
+  } else if (width == height) {
+    /* square */
+    geometry = ibSquare;
+  } else {
+    /* portrait */
+    if (geometry >= ibLeft4Right4)
+      geometry = ibTop4Bottom4;
+  }
+
+  return geometry;
+}
+
 void
 InfoBoxLayout::LoadGeometry(unsigned width, unsigned height)
 {
@@ -185,18 +213,7 @@ InfoBoxLayout::LoadGeometry(unsigned width, unsigned height)
   if (Profile::Get(szProfileInfoBoxGeometry, tmp))
     InfoBoxGeometry = (Geometry)tmp;
 
-  if (width > height) {
-    /* landscape */
-    if (InfoBoxGeometry < ibLeft4Right4)
-      InfoBoxGeometry = ibGNav;
-  } else if (width == height) {
-    /* square */
-    InfoBoxGeometry = ibSquare;
-  } else {
-    /* portrait */
-    if (InfoBoxGeometry >= ibLeft4Right4)
-      InfoBoxGeometry = ibTop4Bottom4;
-  }
+  InfoBoxGeometry = ValidateGeometry(InfoBoxGeometry, width, height);
 
   if (InfoBoxGeometry == ibGNav)
     numInfoWindows = 9;
