@@ -72,6 +72,7 @@ CIRCLING_INFO::Clear()
   MaxHeightGain = fixed_zero;
 
   SmoothedTurnRate = fixed_zero;
+  TurnMode = CRUISE;
 }
 
 void
