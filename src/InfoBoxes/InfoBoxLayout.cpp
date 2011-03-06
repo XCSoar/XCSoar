@@ -24,7 +24,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
-#include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
 #include "Sizes.h"
 
@@ -57,7 +56,7 @@ namespace InfoBoxLayout
 void
 InfoBoxLayout::Init(RECT rc)
 {
-  LoadGeometry();
+  LoadGeometry(rc.right - rc.left, rc.bottom - rc.top);
   CalcInfoBoxSizes(rc);
   CalcInfoBoxPositions(rc);
 }
@@ -186,18 +185,21 @@ InfoBoxLayout::CalcInfoBoxPositions(RECT rc)
 }
 
 void
-InfoBoxLayout::LoadGeometry()
+InfoBoxLayout::LoadGeometry(unsigned width, unsigned height)
 {
   unsigned tmp;
   if (Profile::Get(szProfileInfoBoxGeometry, tmp))
     InfoBoxGeometry = (Layouts)tmp;
 
-  if (Layout::landscape) {
+  if (width > height) {
+    /* landscape */
     if (InfoBoxGeometry < ibLeft4Right4)
       InfoBoxGeometry = ibGNav;
-  } else if (Layout::square) {
+  } else if (width == height) {
+    /* square */
     InfoBoxGeometry = ibSquare;
   } else {
+    /* portrait */
     if (InfoBoxGeometry >= ibLeft4Right4)
       InfoBoxGeometry = ibTop4Bottom4;
   }

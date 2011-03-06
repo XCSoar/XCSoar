@@ -58,7 +58,7 @@ namespace InfoBoxLayout
   extern RECT remaining;
 
   void Init(RECT rc);
-  void LoadGeometry();
+  void LoadGeometry(unsigned width, unsigned height);
 
   // used by manager
   void CalcInfoBoxPositions(RECT rc);
