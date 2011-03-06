@@ -70,6 +70,8 @@ CIRCLING_INFO::Clear()
 
   MinAltitude = fixed_zero;
   MaxHeightGain = fixed_zero;
+
+  SmoothedTurnRate = fixed_zero;
 }
 
 void
