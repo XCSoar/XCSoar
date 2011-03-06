@@ -485,7 +485,7 @@ InfoBoxManager::Create(RECT rc)
   WindowStyle style;
   style.hide();
   full_window.set(XCSoarInterface::main_window, rc.left, rc.top,
-                  rc.right - rc.left, rc.bottom - rc.top);
+                  rc.right - rc.left, rc.bottom - rc.top, style);
 
   // create infobox windows
   for (unsigned i = 0; i < InfoBoxLayout::numInfoWindows; i++) {
