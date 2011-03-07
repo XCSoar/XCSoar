@@ -237,20 +237,6 @@ WndForm::SetTitleFont(const Font &font)
 
 #ifndef ENABLE_SDL
 
-static bool
-is_allowed_map_message(UINT message)
-{
-  return message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ||
-    message == WM_MOUSEMOVE;
-}
-
-static bool
-is_allowed_map(HWND hWnd, UINT message, const Window *window)
-{
-  return !is_altair() && window != NULL && window->identify(hWnd) &&
-    is_allowed_map_message(message);
-}
-
 /**
  * Is this key handled by the focused control? (bypassing the dialog
  * manager)
@@ -338,10 +324,8 @@ WndForm::ShowModal(Window *modal_allowed)
 
   DialogEventLoop loop(*this);
   while (mModalResult == 0 && loop.get(msg)) {
-    if (is_user_input(msg.message)
-        && !identify_descendant(msg.hwnd) // not current window or child
-        && !is_allowed_map(msg.hwnd, msg.message, modal_allowed))
-      continue;   // make it modal
+    if (!main_window.FilterEvent(msg, this, modal_allowed))
+      continue;
 
     // hack to stop exiting immediately
     if (is_embedded() && !is_altair() && !hastimed &&

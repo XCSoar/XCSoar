@@ -66,6 +66,10 @@ public:
   gcc_pure
   bool FilterEvent(const SDL_Event &event, Window *allowed,
                    Window *second_allowed=NULL) const;
+#else
+  gcc_pure
+  bool FilterEvent(const MSG &message, Window *allowed,
+                   Window *second_allowed=NULL) const;
 #endif
 
 protected:
