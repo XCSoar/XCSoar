@@ -84,6 +84,19 @@ EventQueue::purge(bool (*match)(const Event &event, void *ctx), void *ctx)
 }
 
 static bool
+match_type(const Event &event, void *ctx)
+{
+  const enum Event::type *type_p = (const enum Event::type *)ctx;
+  return event.type == *type_p;
+}
+
+void
+EventQueue::purge(enum Event::type type)
+{
+  purge(match_type, &type);
+}
+
+static bool
 match_window(const Event &event, void *ctx)
 {
   return event.type == Event::USER && event.ptr == ctx;
