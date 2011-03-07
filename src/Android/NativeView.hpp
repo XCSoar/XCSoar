@@ -37,14 +37,30 @@ class NativeView {
   unsigned width, height;
 
   jmethodID init_surface_method, deinit_surface_method;
+  jmethodID setRequestedOrientationID;
   jmethodID swap_method, load_resource_texture_method;
 
 public:
+  /**
+   * @see http://developer.android.com/reference/android/R.attr.html#screenOrientation
+   */
+  enum screen_orientation {
+    SCREEN_ORIENTATION_UNSPECIFIED = -1,
+    SCREEN_ORIENTATION_LANDSCAPE = 0,
+    SCREEN_ORIENTATION_PORTRAIT = 1,
+    SCREEN_ORIENTATION_USER = 2,
+    SCREEN_ORIENTATION_BEHIND = 3,
+    SCREEN_ORIENTATION_SENSOR = 4,
+    SCREEN_ORIENTATION_NOSENSOR = 5,
+  };
+
   NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height)
     :env(_env), obj(env, _obj), width(_width), height(_height) {
     Java::Class cls(env, "org/xcsoar/NativeView");
     init_surface_method = env->GetMethodID(cls, "initSurface", "()Z");
     deinit_surface_method = env->GetMethodID(cls, "deinitSurface", "()V");
+    setRequestedOrientationID =
+      env->GetMethodID(cls, "setRequestedOrientation", "(I)Z");
     swap_method = env->GetMethodID(cls, "swap", "()V");
     load_resource_texture_method = env->GetMethodID(cls, "loadResourceTexture",
                                                     "(Ljava/lang/String;[I)Z");
@@ -72,6 +88,10 @@ public:
 
   void deinitSurface() {
     env->CallVoidMethod(obj, deinit_surface_method);
+  }
+
+  bool setRequestedOrientation(screen_orientation so) {
+    return env->CallBooleanMethod(obj, setRequestedOrientationID, (jint)so);
   }
 
   void swap() {

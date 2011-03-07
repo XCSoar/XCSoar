@@ -25,6 +25,11 @@ Copyright_License {
 
 #include "Asset.hpp"
 
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
+#endif
+
 #ifdef WIN32
 #include "Screen/RootDC.hpp"
 #include "Config/Registry.hpp"
@@ -121,6 +126,8 @@ Display::RotateSupported()
 
   return ChangeDisplaySettingsEx(NULL, &dm, NULL,
                                  CDS_TEST, NULL) == DISP_CHANGE_SUCCESSFUL;
+#elif defined(ANDROID)
+  return true;
 #else
   return false;
 #endif
@@ -182,6 +189,27 @@ Display::Rotate(enum orientation orientation)
 
   return ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL,
                                  CDS_RESET, NULL) == DISP_CHANGE_SUCCESSFUL;
+#elif defined(ANDROID)
+  if (native_view == NULL)
+    return false;
+
+  NativeView::screen_orientation android_orientation =
+    NativeView::SCREEN_ORIENTATION_SENSOR;
+  switch (orientation) {
+  case ORIENTATION_DEFAULT:
+    android_orientation = NativeView::SCREEN_ORIENTATION_NOSENSOR;
+    break;
+
+  case ORIENTATION_PORTRAIT:
+    android_orientation = NativeView::SCREEN_ORIENTATION_PORTRAIT;
+    break;
+
+  case ORIENTATION_LANDSCAPE:
+    android_orientation = NativeView::SCREEN_ORIENTATION_LANDSCAPE;
+    break;
+  };
+
+  return native_view->setRequestedOrientation(android_orientation);
 #else
   return false;
 #endif
@@ -199,6 +227,8 @@ Display::RotateRestore()
 
   return ChangeDisplaySettingsEx(NULL, &dm, NULL,
                                  CDS_RESET, NULL) == DISP_CHANGE_SUCCESSFUL;
+#elif defined(ANDROID)
+  return native_view->setRequestedOrientation(NativeView::SCREEN_ORIENTATION_NOSENSOR);
 #else
   return false;
 #endif

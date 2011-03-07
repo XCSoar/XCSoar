@@ -61,6 +61,8 @@ Version 6.1 - not yet released
     require arm, "next" reads and functions as "arm" on first press and once armed,
     reads and functions as "next".  "previous" reads and functions as "previous" if
     not armed, "disarm" if armed.
+* Android
+  - support landscape/portrait switching
 
 Version 6.0.7 - not yet released
 * map
