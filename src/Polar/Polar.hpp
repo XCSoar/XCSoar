@@ -64,6 +64,8 @@ struct SimplePolar
 
   bool IsValid() const;
   static bool IsValid(const PolarCoefficients &coeff);
+
+  void Init();
 };
 
 #endif

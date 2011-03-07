@@ -69,6 +69,13 @@ SimplePolar::IsValid() const
   return IsValid(pc);
 }
 
+void
+SimplePolar::Init()
+{
+  v1 = v2 = v3 = w1 = w2 = w3 = dry_mass = max_ballast = wing_area = 0.0;
+  name = NULL;
+}
+
 bool
 SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
 {

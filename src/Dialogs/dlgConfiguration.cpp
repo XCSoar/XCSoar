@@ -503,6 +503,7 @@ static void
 UpdatePolarInvalidLabel()
 {
   SimplePolar polar;
+  polar.Init();
   SaveFormToPolar(polar);
   if (polar.IsValid())
     ((WndFrame *)wf->FindByName(_T("lblPolarInvalid")))->hide();
