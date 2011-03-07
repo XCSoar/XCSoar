@@ -237,6 +237,26 @@ WndForm::SetTitleFont(const Font &font)
 
 #ifndef ENABLE_SDL
 
+static bool
+is_key_down(const MSG &msg)
+{
+  return msg.message == WM_KEYDOWN;
+}
+
+static unsigned
+get_key_code(const MSG &msg)
+{
+  assert(msg.message == WM_KEYDOWN || msg.message == WM_KEYUP);
+
+  return msg.wParam;
+}
+
+static bool
+is_mouse_up(const MSG &msg)
+{
+  return msg.message == WM_LBUTTONUP;
+}
+
 /**
  * Is this key handled by the focused control? (bypassing the dialog
  * manager)
@@ -278,7 +298,6 @@ WndForm::ShowModal(Window *modal_allowed)
 
 #define OPENCLOSESUPPRESSTIME 500
 #ifndef ENABLE_SDL
-  MSG msg;
   HWND oldFocusHwnd;
 #endif /* !ENABLE_SDL */
 
@@ -323,13 +342,14 @@ WndForm::ShowModal(Window *modal_allowed)
 #else /* !ENABLE_SDL */
 
   DialogEventLoop loop(*this);
-  while (mModalResult == 0 && loop.get(msg)) {
-    if (!main_window.FilterEvent(msg, this, modal_allowed))
+  MSG event;
+  while (mModalResult == 0 && loop.get(event)) {
+    if (!main_window.FilterEvent(event, this, modal_allowed))
       continue;
 
     // hack to stop exiting immediately
     if (is_embedded() && !is_altair() && !hastimed &&
-        is_user_input(msg.message)) {
+        is_user_input(event)) {
       if (!enter_clock.check(200))
         /* ignore user input in the first 200ms */
         continue;
@@ -337,26 +357,28 @@ WndForm::ShowModal(Window *modal_allowed)
         hastimed = true;
     }
 
-    if (is_embedded() && msg.message == WM_LBUTTONUP &&
+    if (is_embedded() && is_mouse_up(event) &&
         !timeAnyOpenClose.check(OPENCLOSESUPPRESSTIME))
       /* prevents child click from being repeat-handled by parent if
          buttons overlap */
       continue;
 
-    if (msg.message == WM_KEYDOWN && mOnKeyDownNotify != NULL &&
-        identify_descendant(msg.hwnd) && !check_special_key(msg) &&
-        mOnKeyDownNotify(*this, msg.wParam))
+    if (mOnKeyDownNotify != NULL && is_key_down(event) &&
+        identify_descendant(event.hwnd) &&
+        !check_special_key(event) &&
+        mOnKeyDownNotify(*this, get_key_code(event)))
       continue;
 
-    if (msg.message == WM_KEYDOWN && identify_descendant(msg.hwnd) &&
-        (msg.wParam == VK_UP || msg.wParam == VK_DOWN)) {
+    if (is_key_down(event) &&
+        identify_descendant(event.hwnd) &&
+        (get_key_code(event) == VK_UP || get_key_code(event) == VK_DOWN)) {
       /* VK_UP and VK_DOWN move the focus only within the current
          control group - but we want it to behave like Shift-Tab and
          Tab */
 
-      if (!check_key(msg)) {
+      if (!check_key(event)) {
         /* this window doesn't handle VK_UP/VK_DOWN */
-        if (msg.wParam == VK_DOWN)
+        if (get_key_code(event) == VK_DOWN)
           focus_next_control();
         else
           focus_previous_control();
@@ -364,7 +386,7 @@ WndForm::ShowModal(Window *modal_allowed)
       }
     }
 
-    loop.dispatch(msg);
+    loop.dispatch(event);
   } // End Modal Loop
 #endif /* !ENABLE_SDL */
 
