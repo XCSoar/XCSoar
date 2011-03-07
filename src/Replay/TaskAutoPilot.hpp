@@ -78,20 +78,49 @@ class ElementStat;
 
 class TaskAccessor {
 public:
+  gcc_pure
   virtual bool is_ordered() const = 0;
+
+  gcc_pure
   virtual bool is_empty() const = 0;
+
+  gcc_pure
   virtual bool is_finished() const = 0;
+
+  gcc_pure
   virtual bool is_started() const = 0;
+
+  gcc_pure
   virtual GeoPoint random_oz_point(unsigned index, const fixed noise) const = 0;
+
+  gcc_pure
   virtual unsigned size() const = 0;
+
+  gcc_pure
   virtual GeoPoint getActiveTaskPointLocation() const = 0;
+
+  gcc_pure
   virtual bool has_entered(unsigned index) const = 0;
+
+  gcc_pure
   virtual const ElementStat leg_stats() const = 0;
+
+  gcc_pure
   virtual fixed target_height() const = 0;
+
+  gcc_pure
   virtual fixed distance_to_final() const = 0;
+
+  gcc_pure
   virtual fixed remaining_alt_difference() const = 0;
+
+  gcc_pure
   virtual GlidePolar get_glide_polar() const =0;
+
+  gcc_pure
   virtual void setActiveTaskPoint(unsigned index) = 0;
+
+  gcc_pure
   virtual unsigned getActiveTaskPointIndex() const = 0;
 };
 
@@ -118,6 +147,7 @@ public:
                         const AIRCRAFT_STATE& state,
                         const AIRCRAFT_STATE& state_last);
 
+  gcc_pure
   GeoPoint target(const TaskAccessor& task) const;
   void set_speed_factor(fixed f) {
     speed_factor = f;
