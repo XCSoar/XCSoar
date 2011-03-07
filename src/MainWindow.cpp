@@ -210,6 +210,16 @@ MainWindow::ReinitialisePosition()
   Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
 
   ReinitialiseLayout();
+
+  if (map.defined()) {
+    /* the map being created already is an indicator that XCSoar is
+       running already, and so we assume the menu buttons have been
+       created, too */
+
+    ButtonLabel::Destroy();
+    ButtonLabel::CreateButtonLabels(*this);
+    ButtonLabel::SetFont(Fonts::Map);
+  }
 }
 
 void
