@@ -76,6 +76,20 @@ struct Event {
   Event(enum type _type, int _x, int _y):type(_type), x(_x), y(_y) {}
 };
 
+static inline bool
+is_user_input(enum Event::type type)
+{
+  return type == Event::KEY_DOWN || type == Event::KEY_UP ||
+    type == Event::MOUSE_MOTION ||
+    type == Event::MOUSE_DOWN || type == Event::MOUSE_UP;
+}
+
+static inline bool
+is_user_input(const Event &event)
+{
+  return is_user_input(event.type);
+}
+
 class EventQueue : private NonCopyable {
   std::queue<Event> events;
 
