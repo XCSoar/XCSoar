@@ -79,7 +79,9 @@ EventQueue::purge(Uint32 mask,
 static bool
 match_window(const SDL_Event &event, void *ctx)
 {
-  return event.type == Window::EVENT_USER && event.user.data1 == ctx;
+  return (event.type == Window::EVENT_USER ||
+          event.type == Window::EVENT_TIMER) &&
+    event.user.data1 == ctx;
 }
 
 void
