@@ -30,7 +30,6 @@ Copyright_License {
 
 #include <windef.h>
 
-extern unsigned numInfoWindows;
 extern InfoBoxManagerConfig infoBoxManagerConfig;
 
 class InfoBoxWindow;
