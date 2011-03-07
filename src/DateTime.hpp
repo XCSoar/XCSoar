@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_DATE_TIME_HPP
 #define XCSOAR_DATE_TIME_HPP
 
+#include "Compiler.h"
+
 #include <stdint.h>
 
 /**
@@ -70,6 +72,15 @@ struct BrokenTime {
  * A broken-down representation of date and time.
  */
 struct BrokenDateTime : public BrokenDate, public BrokenTime {
+#ifdef HAVE_POSIX
+  /**
+   * Convert a UNIX UTC time stamp (seconds since epoch) to a
+   * BrokenDateTime object.
+   */
+  gcc_const
+  static BrokenDateTime FromUnixTimeUTC(int64_t t);
+#endif
+
   /**
    * Returns the current system date and time, in UTC.
    */
