@@ -164,6 +164,12 @@ MainWindow::ReinitialiseLayout()
        yet either, so there is nothing to do here */
     return;
 
+#ifndef ENABLE_SDL
+  if (draw_thread == NULL)
+    /* no layout changes during startup */
+    return;
+#endif
+
   InfoBoxManager::Destroy();
 
   RECT rc = get_client_rect();
