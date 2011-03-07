@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.0.7 - not yet released
 * map
   - Airspace: support alternative OpenAir coordinate format
+  - allow zooming in to 1 km
 * replay: don't execute recorded input events
 * Windows
   - hide the task bar on Windows CE Core
