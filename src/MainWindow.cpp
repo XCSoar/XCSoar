@@ -164,6 +164,8 @@ MainWindow::ReinitialiseLayout()
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, InfoBoxLayout::InfoBoxGeometry);
 
+  Fonts::SizeInfoboxFont(ib_layout.control_width);
+
   InfoBoxManager::Create(rc, ib_layout);
   map_rect = ib_layout.remaining;
 
