@@ -113,6 +113,7 @@ public:
 
   void purge(bool (*match)(const Event &event, void *ctx), void *ctx);
 
+  void purge(enum Event::type type);
   void purge(Window &window);
   void purge(AndroidTimer &timer);
 };
