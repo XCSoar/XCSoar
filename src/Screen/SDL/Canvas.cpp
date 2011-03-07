@@ -730,6 +730,17 @@ Canvas::copy_and(int dest_x, int dest_y,
 }
 
 void
+Canvas::copy_not(int dest_x, int dest_y,
+                 unsigned dest_width, unsigned dest_height,
+                 const Bitmap &src, int src_x, int src_y)
+{
+  assert(src.defined());
+
+  copy_not(dest_x, dest_y, dest_width, dest_height,
+           src.native(), src_x, src_y);
+}
+
+void
 Canvas::copy_or(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 const Bitmap &src, int src_x, int src_y)

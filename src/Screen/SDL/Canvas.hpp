@@ -433,6 +433,10 @@ public:
                 unsigned dest_width, unsigned dest_height,
                 SDL_Surface *src, int src_x, int src_y);
 
+  void copy_not(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src, int src_x, int src_y);
+
   void copy_or(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
                SDL_Surface *src, int src_x, int src_y);
