@@ -72,6 +72,14 @@ class TopWindow : public ContainerWindow {
 
 #else /* !ENABLE_SDL */
 
+#ifdef _WIN32_WCE
+  /**
+   * A handle to the task bar that was manually hidden.  This is a
+   * hack when aygshell.dll is not available (Windows CE Core).
+   */
+  HWND task_bar;
+#endif
+
   /**
    * On WM_ACTIVATE, the focus is returned to this window.
    */
@@ -94,6 +102,10 @@ public:
 
   void set(const TCHAR *cls, const TCHAR *text,
            int left, int top, unsigned width, unsigned height);
+
+#ifdef _WIN32_WCE
+  void reset();
+#endif
 
 #if !defined(ENABLE_SDL) && !defined(_WIN32_WCE)
   gcc_pure

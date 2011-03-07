@@ -110,14 +110,12 @@ MapCanvas::prepare_polygon(const SearchPointVector &points)
   for (unsigned i = 0; i < num_raster_points; ++i)
     raster_points[i] = projection.GeoToScreen(geo_points[i]);
 
-  return true;
+  return visible(raster_points.begin(), num_raster_points);
 }
 
 void
 MapCanvas::draw_prepared()
 {
   /* draw it all */
-  if (visible(raster_points.begin(), num_raster_points)) {
-    canvas.polygon(raster_points.begin(), num_raster_points);
-  }
+  canvas.polygon(raster_points.begin(), num_raster_points);
 }

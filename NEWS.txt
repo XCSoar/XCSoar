@@ -62,6 +62,18 @@ Version 6.1 - not yet released
     reads and functions as "next".  "previous" reads and functions as "previous" if
     not armed, "disarm" if armed.
 
+Version 6.0.7 - not yet released
+* map
+  - Airspace: support alternative OpenAir coordinate format
+  - allow zooming in to 1 km
+* replay: don't execute recorded input events
+* Windows
+  - hide the task bar on Windows CE Core
+* Android
+  - disable auto-restart on various Android configuration events
+  - import time from internal GPS correctly
+  - read internal GPS accuracy
+
 Version 6.0.6 - 2011/03/04
 * devices:
   - fix declaration crash in Volkslogger, EW, CAI302, CAI GPS NAV

@@ -113,6 +113,7 @@ WindAnalyser::reset()
   curModeOK = false;
   windstore.reset();
   numwindsamples = 0;
+  first = true;
 }
 
 static fixed
@@ -162,10 +163,10 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
     // or use circular buffer
   }
 
-  if ((info.GroundSpeed < Magnitude(minVector)) || first)
+  if (first || (info.GroundSpeed < Magnitude(minVector)))
     minVector = curVector;
 
-  if ((info.GroundSpeed > Magnitude(maxVector)) || first)
+  if (first || (info.GroundSpeed > Magnitude(maxVector)))
     maxVector = curVector;
 
   if (fullCircle) { //we have completed a full circle!

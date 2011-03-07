@@ -92,7 +92,8 @@ public class InternalGPS
                                   double longitude, double latitude,
                                   boolean hasAltitude, double altitude,
                                   boolean hasBearing, double bearing,
-                                  boolean hasSpeed, double speed);
+                                  boolean hasSpeed, double speed,
+                                  boolean hasAccuracy, double accuracy);
 
   private void sendLocation(Location location) {
     Bundle extras = location.getExtras();
@@ -102,7 +103,8 @@ public class InternalGPS
                 location.getLongitude(), location.getLatitude(),
                 location.hasAltitude(), location.getAltitude(),
                 location.hasBearing(), location.getBearing(),
-                location.hasSpeed(), location.getSpeed());
+                location.hasSpeed(), location.getSpeed(),
+                location.hasAccuracy(), location.getAccuracy());
   }
 
   /** from LocationListener */

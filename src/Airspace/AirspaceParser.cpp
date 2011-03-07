@@ -276,6 +276,7 @@ static bool
 ReadCoords(const TCHAR *Text, GeoPoint &point)
 {
   // Format: 53:20:41 N 010:24:41 E
+  // Alternative Format: 53:20.68 N 010:24.68 E
 
   TCHAR *Stop;
 
@@ -297,9 +298,12 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
       return false;
 
     sec = _tcstol(Stop, &Stop, 10);
-    if (sec < 0 || sec >= 60) {
-      // ToDo
-    }
+  } else if (*Stop == '.') {
+    Stop++;
+    if (*Stop == '\0')
+      return false;
+
+    sec = (_tcstol(Stop, &Stop, 10) * 60) / 100;
   }
 
   point.Latitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
@@ -326,6 +330,12 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
       return false;
 
     sec = _tcstol(Stop, &Stop, 10);
+  } else if (*Stop == '.') {
+    Stop++;
+    if (*Stop == '\0')
+      return false;
+
+    sec = (_tcstol(Stop, &Stop, 10) * 60) / 100;
   }
 
   point.Longitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));

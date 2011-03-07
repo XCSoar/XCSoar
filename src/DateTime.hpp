@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_DATE_TIME_HPP
 #define XCSOAR_DATE_TIME_HPP
 
+#include "Compiler.h"
+
 #include <stdint.h>
 
 /**
@@ -49,6 +51,12 @@ struct BrokenDate {
    * Day of the week (0-6, 0: sunday)
    */
   unsigned char day_of_week;
+
+  bool operator>(const BrokenDate &other) const {
+    return year > other.year ||
+      (year == other.year && (month > other.month ||
+                              (month == other.month && day > other.day)));
+  }
 };
 
 /**
@@ -69,12 +77,28 @@ struct BrokenTime {
    * Second, 0-59.
    */
   uint8_t second;
+
+  /**
+   * Returns the number of seconds which have passed on this day.
+   */
+  unsigned GetSecondOfDay() const {
+    return hour * 3600u + minute * 60u + second;
+  }
 };
 
 /**
  * A broken-down representation of date and time.
  */
 struct BrokenDateTime : public BrokenDate, public BrokenTime {
+#ifdef HAVE_POSIX
+  /**
+   * Convert a UNIX UTC time stamp (seconds since epoch) to a
+   * BrokenDateTime object.
+   */
+  gcc_const
+  static BrokenDateTime FromUnixTimeUTC(int64_t t);
+#endif
+
   /**
    * Returns the current system date and time, in UTC.
    */

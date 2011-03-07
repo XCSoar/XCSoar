@@ -64,7 +64,7 @@ public:
   void
   Update(fixed t, GeoPoint location, fixed alt, fixed palt)
   {
-    if (num && (t <= p[num - 1].t))
+    if (num && (t <= p[3].t))
       return;
 
     if (num < 4)

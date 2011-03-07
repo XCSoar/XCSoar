@@ -67,13 +67,26 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
                                         jdouble longitude, jdouble latitude,
                                         jboolean hasAltitude, jdouble altitude,
                                         jboolean hasBearing, jdouble bearing,
-                                        jboolean hasSpeed, jdouble speed)
+                                        jboolean hasSpeed, jdouble speed,
+                                        jboolean hasAccuracy, jdouble accuracy)
 {
   mutexBlackboard.Lock();
 
   NMEA_INFO &basic = device_blackboard.SetBasic();
   basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
-  basic.Time = fixed((long)time);
+
+  BrokenDateTime date_time = BrokenDateTime::FromUnixTimeUTC(time / 1000);
+  fixed second_of_day = fixed(date_time.GetSecondOfDay()) +
+    /* add the millisecond fraction of the original timestamp for
+       better accuracy */
+    fixed((unsigned)time % 1000u) / 1000u;
+  if (second_of_day < basic.Time && date_time > basic.DateTime)
+    /* don't wrap around when going past midnight in UTC */
+    second_of_day += fixed(24u * 3600u);
+
+  basic.Time = second_of_day;
+  basic.DateTime = date_time;
+
   basic.gps.SatellitesUsed = n_satellites;
   basic.gps.NAVWarning = n_satellites <= 0;
   basic.Location = GeoPoint(Angle::degrees(fixed(longitude)),
@@ -90,6 +103,9 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
 
   if (hasSpeed)
     basic.GroundSpeed = fixed(speed);
+
+  if (hasAccuracy)
+    basic.gps.HDOP = fixed(accuracy);
 
   mutexBlackboard.Unlock();
 

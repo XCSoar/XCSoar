@@ -236,7 +236,7 @@ RefreshCalculator()
   }
 
   if (btnIsLocked) {
-    btnIsLocked->SetCaption(IsLocked ? _T("Locked") : _T("Auto"));
+    btnIsLocked->SetCaption(IsLocked ? _T("Unlock") : _T("Lock"));
     btnIsLocked->set_visible(!nodisplay);
   }
 

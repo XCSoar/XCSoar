@@ -42,34 +42,6 @@
 #include <algorithm>
 
 bool
-IgcReplayGlue::ScanBuffer(const TCHAR *buffer, IGCFix &fix)
-{
-  if (IgcReplay::ScanBuffer(buffer, fix))
-    return true;
-
-  int found = 0;
-  TCHAR event[200];
-  TCHAR misc[200];
-
-  found = _stscanf(buffer, _T("LPLT event=%[^ ] %[A-Za-z0-9 \\/().,]"),
-                   event, misc);
-
-  if (found > 0) {
-    pt2Event fevent = InputEvents::findEvent(event);
-    if (fevent) {
-      if (found == 2) {
-        TCHAR *mmisc = StringMallocParse(misc);
-        fevent(mmisc);
-        free(mmisc);
-      } else {
-        fevent(_T("\0"));
-      }
-    }
-  }
-  return false;
-}
-
-bool
 IgcReplayGlue::update_time()
 {
   // Allow for poor time slicing, we never get called more
