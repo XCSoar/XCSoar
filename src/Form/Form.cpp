@@ -319,22 +319,17 @@ WndForm::ShowModal(Window *modal_allowed)
 
   main_window.add_dialog(this);
 
-#ifdef ANDROID
+#ifdef ENABLE_SDL
 
   update();
 
+#ifdef ANDROID
   EventLoop loop(*event_queue, main_window);
   Event event;
-  while (mModalResult == 0 && loop.get(event))
-    if (main_window.FilterEvent(event, this, modal_allowed))
-      loop.dispatch(event);
-
-#elif defined(ENABLE_SDL)
-
-  update();
-
+#else
   EventLoop loop(main_window);
   SDL_Event event;
+#endif
   while (mModalResult == 0 && loop.get(event))
     if (main_window.FilterEvent(event, this, modal_allowed))
       loop.dispatch(event);
