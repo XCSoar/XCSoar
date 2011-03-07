@@ -11,6 +11,8 @@ Version 6.0.7 - not yet released
   - hide the task bar on Windows CE Core
 * Android
   - disable auto-restart on various Android configuration events
+  - import time from internal GPS correctly
+  - read internal GPS accuracy
 
 Version 6.0.6 - 2011/03/04
 * devices:

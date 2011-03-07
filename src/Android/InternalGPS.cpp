@@ -66,7 +66,8 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
                                         jdouble longitude, jdouble latitude,
                                         jboolean hasAltitude, jdouble altitude,
                                         jboolean hasBearing, jdouble bearing,
-                                        jboolean hasSpeed, jdouble speed)
+                                        jboolean hasSpeed, jdouble speed,
+                                        jboolean hasAccuracy, jdouble accuracy)
 {
   mutexBlackboard.Lock();
 
@@ -96,6 +97,9 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
 
   if (hasSpeed)
     basic.GroundSpeed = fixed(speed);
+
+  if (hasAccuracy)
+    basic.gps.HDOP = fixed(accuracy);
 
   mutexBlackboard.Unlock();
 
