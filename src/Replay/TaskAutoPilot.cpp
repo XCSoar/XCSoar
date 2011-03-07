@@ -152,8 +152,6 @@ void
 TaskAutoPilot::update_mode(const TaskAccessor& task,
                            const AIRCRAFT_STATE& state)
 {
-  const ElementStat stat = task.leg_stats();
-
   switch (acstate) {
   case Cruise:
     if ((awp>0) &&
