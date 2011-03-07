@@ -29,6 +29,18 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 #include "PeriodClock.hpp"
 
+bool
+TopWindow::on_resize(unsigned width, unsigned height)
+{
+  if (native_view != NULL) {
+    native_view->SetSize(width, height);
+    screen.set();
+  }
+
+  ContainerWindow::on_resize(width, height);
+  return true;
+}
+
 void
 TopWindow::on_pause()
 {
@@ -126,6 +138,10 @@ TopWindow::on_event(const Event &event)
 
   case Event::MOUSE_UP:
     return on_mouse_up(event.x, event.y);
+
+  case Event::RESIZE:
+    resize(event.x, event.y);
+    return true;
 
   case Event::PAUSE:
     on_pause();

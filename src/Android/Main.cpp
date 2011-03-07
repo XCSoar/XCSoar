@@ -87,6 +87,19 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 }
 
 JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
+                                         jint width, jint height)
+{
+  if (event_queue == NULL)
+    return;
+
+  event_queue->purge(Event::RESIZE);
+
+  Event event(Event::RESIZE, width, height);
+  event_queue->push(event);
+}
+
+JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
   if (event_queue == NULL)

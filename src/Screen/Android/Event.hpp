@@ -47,6 +47,12 @@ struct Event {
     MOUSE_UP,
 
     /**
+     * The NativeView was resized (e.g. by changing the screen
+     * orientation).
+     */
+    RESIZE,
+
+    /**
      * The Android Activity is being paused, and the OpenGL surface
      * will be destroyed.
      */

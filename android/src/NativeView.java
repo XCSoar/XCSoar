@@ -249,6 +249,8 @@ class NativeView extends SurfaceView
                                        int width, int height) {
     if (thread == null || !thread.isAlive())
       start();
+    else
+      resizedNative(width, height);
   }
 
   @Override public void surfaceDestroyed(SurfaceHolder holder) {
@@ -268,6 +270,7 @@ class NativeView extends SurfaceView
   protected native boolean initializeNative(int width, int height);
   protected native void runNative();
   protected native void deinitializeNative();
+  protected native void resizedNative(int width, int height);
 
   protected native void pauseNative();
   protected native void resumeNative();

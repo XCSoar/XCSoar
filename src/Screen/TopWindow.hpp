@@ -186,6 +186,8 @@ protected:
 #endif /* !ENABLE_SDL */
 
 #ifdef ANDROID
+  virtual bool on_resize(unsigned width, unsigned height);
+
 private:
   /**
    * @see Event::PAUSE

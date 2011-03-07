@@ -53,6 +53,11 @@ public:
   unsigned get_width() const { return width; }
   unsigned get_height() const { return height; }
 
+  void SetSize(unsigned _width, unsigned _height) {
+    width = _width;
+    height = _height;
+  }
+
   jobject get_context() {
     Java::Class cls(env, "org/xcsoar/NativeView");
     jmethodID mid = env->GetMethodID(cls, "getContext",
