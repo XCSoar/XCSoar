@@ -19,6 +19,7 @@ Version 6.0.7 - not yet released
   - read internal GPS accuracy
 * Linux
   - improved button rendering
+  - dialog keyboard navigation implemented
 
 Version 6.0.6 - 2011/03/04
 * devices:

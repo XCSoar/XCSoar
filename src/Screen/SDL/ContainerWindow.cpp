@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/SubCanvas.hpp"
 
+#include <algorithm>
 #include <assert.h>
 
 ContainerWindow::ContainerWindow()
@@ -36,22 +37,171 @@ ContainerWindow::~ContainerWindow()
   reset();
 }
 
+gcc_pure
+Window *
+ContainerWindow::find_control(std::list<Window*>::const_iterator i,
+                              std::list<Window*>::const_iterator end)
+{
+  for (; i != end; ++i) {
+    Window &child = **i;
+    if (!child.is_visible() || !child.is_enabled())
+      continue;
+
+    if (child.is_tab_stop())
+      return &child;
+
+    if (child.is_control_parent()) {
+      ContainerWindow &container = (ContainerWindow &)child;
+      Window *control = container.find_first_control();
+      if (control != NULL)
+        return control;
+    }
+  }
+
+  return NULL;
+}
+
+gcc_pure
+Window *
+ContainerWindow::find_control(std::list<Window*>::const_reverse_iterator i,
+                              std::list<Window*>::const_reverse_iterator end)
+{
+  for (; i != end; ++i) {
+    Window &child = **i;
+    if (!child.is_visible() || !child.is_enabled())
+      continue;
+
+    if (child.is_tab_stop())
+      return &child;
+
+    if (child.is_control_parent()) {
+      ContainerWindow &container = (ContainerWindow &)child;
+      Window *control = container.find_first_control();
+      if (control != NULL)
+        return control;
+    }
+  }
+
+  return NULL;
+}
+
+Window *
+ContainerWindow::find_first_control()
+{
+  return find_control(children.begin(), children.end());
+}
+
+Window *
+ContainerWindow::find_last_control()
+{
+  return find_control(children.rbegin(), children.rend());
+}
+
+Window *
+ContainerWindow::find_next_child_control(Window *reference)
+{
+  assert(reference != NULL);
+  assert(reference->GetParent() == this);
+
+  std::list<Window*>::const_iterator i =
+    std::find(children.begin(), children.end(), reference);
+  assert(i != children.end());
+
+  return find_control(++i, children.end());
+}
+
+Window *
+ContainerWindow::find_previous_child_control(Window *reference)
+{
+  assert(reference != NULL);
+  assert(reference->GetParent() == this);
+
+  std::list<Window*>::const_reverse_iterator i =
+    std::find(children.rbegin(), children.rend(), reference);
+#ifndef ANDROID
+  /* Android's NDK r5b ships a cxx-stl which does not allow comparing
+     two const_reverse_iterator objects for inequality */
+  assert(i != children.rend());
+#endif
+
+  return find_control(++i, children.rend());
+}
+
+Window *
+ContainerWindow::find_next_control(Window *reference)
+{
+  assert(reference != NULL);
+
+  if (reference == this)
+    return NULL;
+
+  while (true) {
+    ContainerWindow *container = reference->parent;
+    assert(container != NULL);
+
+    Window *control = container->find_next_child_control(reference);
+    if (control != NULL)
+      return control;
+
+    if (container == this)
+      return NULL;
+
+    reference = container;
+  }
+}
+
+Window *
+ContainerWindow::find_previous_control(Window *reference)
+{
+  assert(reference != NULL);
+
+  if (reference == this)
+    return NULL;
+
+  while (true) {
+    ContainerWindow *container = reference->parent;
+    assert(container != NULL);
+
+    Window *control = container->find_previous_child_control(reference);
+    if (control != NULL)
+      return control;
+
+    if (container == this)
+      return NULL;
+
+    reference = container;
+  }
+}
+
 void
 ContainerWindow::focus_first_control()
 {
-  // XXX
+  Window *control = find_first_control();
+  if (control != NULL)
+    control->set_focus();
 }
 
 void
 ContainerWindow::focus_next_control()
 {
-  // XXX
+  Window *focused = get_focused_window();
+  if (focused != NULL) {
+    Window *control = find_next_control(focused);
+    if (control != NULL)
+      control->set_focus();
+  } else
+    focus_first_control();
 }
 
 void
 ContainerWindow::focus_previous_control()
 {
-  // XXX
+  Window *focused = get_focused_window();
+  Window *control = focused != NULL
+    ? find_previous_control(focused)
+    : find_last_control();
+  if (control != NULL)
+    control->set_focus();
 }
 
 bool

@@ -117,6 +117,35 @@ public:
   void set_child_capture(Window *window);
   void release_child_capture(Window *window);
   virtual void clear_capture();
+
+protected:
+  gcc_pure
+  static Window *find_control(std::list<Window*>::const_iterator i,
+                              std::list<Window*>::const_iterator end);
+
+  gcc_pure
+  static Window *find_control(std::list<Window*>::const_reverse_iterator i,
+                              std::list<Window*>::const_reverse_iterator end);
+
+  gcc_pure
+  Window *find_first_control();
+
+  gcc_pure
+  Window *find_last_control();
+
+  gcc_pure
+  Window *find_next_child_control(Window *reference);
+
+  gcc_pure
+  Window *find_previous_child_control(Window *reference);
+
+  gcc_pure
+  Window *find_next_control(Window *reference);
+
+  gcc_pure
+  Window *find_previous_control(Window *reference);
+
+public:
 #endif /* ENABLE_SDL */
 
   /**
