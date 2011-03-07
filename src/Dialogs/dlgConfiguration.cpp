@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "Blackboard.hpp"
 #include "SettingsAirspace.hpp"
 #include "SettingsComputer.hpp"
@@ -44,7 +43,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Profile/Profile.hpp"
-#include "LocalTime.hpp"
 #include "Math/FastMath.h"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
@@ -52,7 +50,6 @@ Copyright_License {
 #include "DataField/FileReader.hpp"
 #include "DataField/ComboList.hpp"
 #include "Asset.hpp"
-#include "GlideRatio.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
@@ -67,12 +64,11 @@ Copyright_License {
 #include "Hardware/Display.hpp"
 #include "OS/PathName.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
-#include "UnitsFormatter.hpp"
-#include "UnitsStore.hpp"
 #include "LogFile.hpp"
 #include "LanguageGlue.hpp"
 #include "PagesConfigPanel.hpp"
 #include "PolarConfigPanel.hpp"
+#include "UnitsConfigPanel.hpp"
 
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"
@@ -433,98 +429,6 @@ OnWaypoints(gcc_unused WndButton &button)
   dlgConfigWaypointsShowModal();
 }
 
-
-static void
-UpdateUnitFields(const UnitSetting &units)
-{
-  unsigned index;
-  index = (units.SpeedUnit == unStatuteMilesPerHour) ? 0 :
-          (units.SpeedUnit == unKnots) ? 1 : 2;
-  LoadFormProperty(*wf, _T("prpUnitsSpeed"), index);
-
-  index = (units.TaskSpeedUnit == unStatuteMilesPerHour) ? 0 :
-          (units.TaskSpeedUnit == unKnots) ? 1 : 2;
-  LoadFormProperty(*wf, _T("prpUnitsTaskSpeed"), index);
-
-  index = (units.DistanceUnit == unStatuteMiles) ? 0 :
-          (units.DistanceUnit == unNauticalMiles) ? 1 : 2;
-  LoadFormProperty(*wf, _T("prpUnitsDistance"), index);
-
-  index = (units.AltitudeUnit == unFeet) ? 0 : 1;
-  LoadFormProperty(*wf, _T("prpUnitsAltitude"), index);
-
-  index = (units.TemperatureUnit == unGradFahrenheit) ? 1 : 0;
-  LoadFormProperty(*wf, _T("prpUnitsTemperature"), index);
-
-  index = (units.VerticalSpeedUnit == unKnots) ? 0 :
-          (units.VerticalSpeedUnit == unFeetPerMinute) ? 2 : 1;
-  LoadFormProperty(*wf, _T("prpUnitsLift"), index);
-}
-
-static void
-SetUnitsTitle(const TCHAR* title)
-{
-  TCHAR caption[255];
-  _tcscpy(caption,  _("Units"));
-  _tcscat(caption, _T(": "));
-  _tcscat(caption, title);
-  ((WndFrame *)wf->FindByName(_T("lblUnitsSetting")))->SetCaption(caption);
-}
-
-static void
-UpdateUnitsTitle()
-{
-  TCHAR title[255];
-  if (Profile::Get(szProfileUnitsPresetName, title, 255))
-    SetUnitsTitle(title);
-}
-
-static void
-OnLoadUnitsPreset(WndButton &button)
-{
-  /* create a fake WndProperty for dlgComboPicker() */
-  /* XXX reimplement properly */
-
-  DataFieldEnum *dfe = new DataFieldEnum(NULL);
-  unsigned len = Units::Store::Count();
-  for (unsigned i = 0; i < len; i++)
-    dfe->addEnumText(Units::Store::GetName(i), i);
-
-  dfe->Sort();
-  ComboList *list = dfe->CreateComboList();
-
-  /* let the user select */
-
-  int result = ComboPicker(XCSoarInterface::main_window, _("Unit presets"), *list, NULL);
-  if (result >= 0) {
-    const UnitSetting& units = Units::Store::Read(dfe->getItem(result));
-    UpdateUnitFields(units);
-
-    Profile::Set(szProfileUnitsPresetName, Units::Store::GetName(dfe->getItem(result)));
-    UpdateUnitsTitle();
-  }
-
-  delete dfe;
-  delete list;
-}
-
-static void
-OnUnitFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  switch (Mode) {
-  case DataField::daChange:
-    if (!loading)
-      Profile::Set(szProfileUnitsPresetName, _T("Custom"));
-    UpdateUnitsTitle();
-    break;
-
-  case DataField::daInc:
-  case DataField::daDec:
-  case DataField::daSpecial:
-    return;
-  }
-}
-
 static bool
 FormKeyDown(WndForm &Sender, unsigned key_code)
 {
@@ -554,47 +458,11 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
   }
 }
 
-static void
-SetLocalTime(void)
-{
-  WndProperty* wp;
-  TCHAR temp[20];
-  Units::TimeToText(temp, TimeLocal(XCSoarInterface::Basic().Time));
-
-  wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
-  assert(wp != NULL);
-
-  wp->SetText(temp);
-  wp->RefreshDisplay();
-}
-
-static void
-OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  switch(Mode) {
-  case DataField::daChange:
-  {
-    DataFieldFloat &df = *(DataFieldFloat *)Sender;
-    int ival = iround(df.GetAsFixed() * 3600);
-    if (XCSoarInterface::SettingsComputer().UTCOffset != ival)
-      XCSoarInterface::SetSettingsComputer().UTCOffset = ival;
-
-    SetLocalTime();
-    break;
-  }
-  case DataField::daInc:
-  case DataField::daDec:
-  case DataField::daSpecial:
-    return;
-  }
-}
-
 extern void OnInfoBoxHelp(WindowControl * Sender);
 
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnAirspaceColoursClicked),
   DeclareCallBackEntry(OnAirspaceModeClicked),
-  DeclareCallBackEntry(OnUTCData),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(OnSetupDeviceAClicked),
@@ -606,19 +474,14 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(PolarConfigPanel::OnLoadFromFile),
   DeclareCallBackEntry(PolarConfigPanel::OnExport),
   DeclareCallBackEntry(PolarConfigPanel::OnFieldData),
-  DeclareCallBackEntry(OnLoadUnitsPreset),
-  DeclareCallBackEntry(OnUnitFieldData),
+  DeclareCallBackEntry(UnitsConfigPanel::OnLoadPreset),
+  DeclareCallBackEntry(UnitsConfigPanel::OnFieldData),
+  DeclareCallBackEntry(UnitsConfigPanel::OnUTCData),
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(NULL)
 };
 
 static DeviceConfig device_config[NUMDEV];
-static int SpeedUnits = 1; // default is knots
-static int TaskSpeedUnits = 2; // default is kph
-static int DistanceUnits = 2; // default is km
-static int LiftUnits = 0;
-static int AltitudeUnits = 0; //default ft
-static int TemperatureUnits = 0; //default is celcius
 
 static void
 InitFileField(WndProperty &wp, const TCHAR *profile_key, const TCHAR *filters)
@@ -789,6 +652,7 @@ setVariables()
     buttonWaypoints->SetOnClickNotify(OnWaypoints);
 
   PolarConfigPanel::Init(wf);
+  UnitsConfigPanel::Init(wf);
 
   UpdateButtons();
 
@@ -824,16 +688,6 @@ setVariables()
     dfe->Set(settings_computer.AltitudeMode);
     wp->RefreshDisplay();
   }
-
-  LoadFormProperty(*wf, _T("prpUTCOffset"),
-                   fixed(iround(fixed(settings_computer.UTCOffset) / 1800)) / 2);
-
-#ifdef WIN32
-  if (is_embedded() && !is_altair())
-    ((WndProperty*)wf->FindByName(_T("prpUTCOffset")))->set_enabled(false);
-#endif
-
-  SetLocalTime();
 
   LoadFormProperty(*wf, _T("prpClipAltitude"), ugAltitude,
                    settings_computer.ClipAltitude);
@@ -1075,83 +929,6 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpHandicap"),
                    settings_computer.contest_handicap);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsSpeed"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Statute"));
-    dfe->addEnumText(_("Nautical"));
-    dfe->addEnumText(_("Metric"));
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsLatLon"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    const TCHAR *const units_lat_lon[] = {
-      _T("DDMMSS"),
-      _T("DDMMSS.ss"),
-      _T("DDMM.mmm"),
-      _T("DD.dddd"),
-      NULL
-    };
-
-    dfe->addEnumTexts(units_lat_lon);
-    dfe->Set(Units::GetCoordinateFormat());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsTaskSpeed"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Statute"));
-    dfe->addEnumText(_("Nautical"));
-    dfe->addEnumText(_("Metric"));
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsDistance"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Statute"));
-    dfe->addEnumText(_("Nautical"));
-    dfe->addEnumText(_("Metric"));
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsAltitude"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Feet"));
-    dfe->addEnumText(_("Meters"));
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsTemperature"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("C"));
-    dfe->addEnumText(_("F"));
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsLift"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Knots"));
-    dfe->addEnumText(_("M/s"));
-    dfe->addEnumText(_("ft/min"));
-    wp->RefreshDisplay();
-  }
-
-  UpdateUnitFields(Units::Current);
 
   LoadFormProperty(*wf, _T("prpTrailDrift"),
                    XCSoarInterface::SettingsMap().EnableTrailDrift);
@@ -1926,22 +1703,6 @@ void dlgConfigurationShowModal(void)
   settings_map.AirspaceFillMode = (enum SETTINGS_MAP::AirspaceFillMode)tmp;
 #endif
 
-  wp = (WndProperty*)wf->FindByName(_T("prpUTCOffset"));
-  if (wp) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    int ival = iround(df.GetAsFixed() * 3600);
-    if (settings_computer.UTCOffset != ival) {
-      settings_computer.UTCOffset = ival;
-
-      // have to do this because registry variables can't be negative!
-      if (ival < 0)
-        ival += 24 * 3600;
-
-      Profile::Set(szProfileUTCOffset, ival);
-      changed = true;
-    }
-  }
-
   changed |= SaveFormProperty(*wf, _T("prpClipAltitude"), ugAltitude,
                               settings_computer.ClipAltitude,
                               szProfileClipAlt);
@@ -2523,147 +2284,7 @@ void dlgConfigurationShowModal(void)
                               szProfileRoutePlannerUseCeiling,
                               settings_computer.route_planner.use_ceiling);
 
-  /* the Units settings affect how other form values are read and translated
-   * so changes to Units settings should be processed after all other form settings
-   */
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsSpeed"));
-  if (wp) {
-    if ((int)SpeedUnits != wp->GetDataField()->GetAsInteger()) {
-      SpeedUnits = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileSpeedUnitsValue, SpeedUnits);
-      changed = true;
-
-      switch (SpeedUnits) {
-      case 0:
-        Units::SetUserSpeedUnit(unStatuteMilesPerHour);
-        Units::SetUserWindSpeedUnit(unStatuteMilesPerHour);
-        break;
-      case 1:
-        Units::SetUserSpeedUnit(unKnots);
-        Units::SetUserWindSpeedUnit(unKnots);
-        break;
-      case 2:
-      default:
-        Units::SetUserSpeedUnit(unKiloMeterPerHour);
-        Units::SetUserWindSpeedUnit(unKiloMeterPerHour);
-        break;
-      }
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsLatLon"));
-  if (wp) {
-    if ((int)Units::GetCoordinateFormat() != wp->GetDataField()->GetAsInteger()) {
-      Units::SetCoordinateFormat(
-          (CoordinateFormats_t)wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileLatLonUnits, Units::GetCoordinateFormat());
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsTaskSpeed"));
-  if (wp) {
-    if ((int)TaskSpeedUnits != wp->GetDataField()->GetAsInteger()) {
-      TaskSpeedUnits = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileTaskSpeedUnitsValue, TaskSpeedUnits);
-      changed = true;
-
-      switch (TaskSpeedUnits) {
-      case 0:
-        Units::SetUserTaskSpeedUnit(unStatuteMilesPerHour);
-        break;
-      case 1:
-        Units::SetUserTaskSpeedUnit(unKnots);
-        break;
-      case 2:
-      default:
-        Units::SetUserTaskSpeedUnit(unKiloMeterPerHour);
-        break;
-      }
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsDistance"));
-  if (wp) {
-    if ((int)DistanceUnits != wp->GetDataField()->GetAsInteger()) {
-      DistanceUnits = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileDistanceUnitsValue, DistanceUnits);
-      changed = true;
-
-      switch (DistanceUnits) {
-      case 0:
-        Units::SetUserDistanceUnit(unStatuteMiles);
-        break;
-      case 1:
-        Units::SetUserDistanceUnit(unNauticalMiles);
-        break;
-      case 2:
-      default:
-        Units::SetUserDistanceUnit(unKiloMeter);
-        break;
-      }
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsLift"));
-  if (wp) {
-    if ((int)LiftUnits != wp->GetDataField()->GetAsInteger()) {
-      LiftUnits = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileLiftUnitsValue, LiftUnits);
-      changed = true;
-
-      switch (LiftUnits) {
-      case 0:
-        Units::SetUserVerticalSpeedUnit(unKnots);
-        break;
-      case 1:
-      default:
-        Units::SetUserVerticalSpeedUnit(unMeterPerSecond);
-        break;
-      case 2:
-        Units::SetUserVerticalSpeedUnit(unFeetPerMinute);
-        break;
-      }
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsAltitude"));
-  if (wp) {
-    if ((int)AltitudeUnits != wp->GetDataField()->GetAsInteger()) {
-      AltitudeUnits = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileAltitudeUnitsValue, AltitudeUnits);
-      changed = true;
-
-      switch (AltitudeUnits) {
-      case 0:
-        Units::SetUserAltitudeUnit(unFeet);
-        break;
-      case 1:
-      default:
-        Units::SetUserAltitudeUnit(unMeter);
-        break;
-      }
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsTemperature"));
-  if (wp) {
-    if ((int)TemperatureUnits != wp->GetDataField()->GetAsInteger()) {
-      TemperatureUnits = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileTemperatureUnitsValue, TemperatureUnits);
-      changed = true;
-
-      switch (TemperatureUnits) {
-      case 0:
-        Units::SetUserTemperatureUnit(unGradCelcius);
-        break;
-      case 1:
-      default:
-        Units::SetUserTemperatureUnit(unGradFahrenheit);
-        break;
-      }
-    }
-  }
+  changed |= UnitsConfigPanel::Save();
 
   changed |= PagesConfigPanel::Save(wf);
 

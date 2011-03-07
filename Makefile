@@ -137,6 +137,7 @@ DIALOG_SOURCES = \
 	\
 	$(SRC)/Dialogs/PagesConfigPanel.cpp \
 	$(SRC)/Dialogs/PolarConfigPanel.cpp \
+	$(SRC)/Dialogs/UnitsConfigPanel.cpp \
 	\
 	$(SRC)/Dialogs/dlgTaskManager.cpp \
 	$(SRC)/Dialogs/pnlTaskManagerClose.cpp \
