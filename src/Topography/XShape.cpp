@@ -79,6 +79,30 @@ import_label(const char *src)
 #endif
 }
 
+/**
+ * Returns the minimum number of points for each line of this shape
+ * type.  Returns -1 if the shape type is not supported.
+ */
+gcc_const
+static unsigned
+min_points_for_type(int shapelib_type)
+{
+  switch (shapelib_type) {
+  case MS_SHAPE_POINT:
+    return 1;
+
+  case MS_SHAPE_LINE:
+    return 2;
+
+  case MS_SHAPE_POLYGON:
+    return 3;
+
+  default:
+    /* not supported */
+    return -1;
+  }
+}
+
 XShape::XShape(shapefileObj *shpfile, int i, int label_field)
   :label(NULL)
 {
@@ -101,12 +125,27 @@ XShape::XShape(shapefileObj *shpfile, int i, int label_field)
 
   type = shape.type;
 
-  num_lines = std::min((unsigned)shape.numlines, (unsigned)MAX_LINES);
+  num_lines = 0;
 
+  const int min_points = min_points_for_type(shape.type);
+  if (min_points < 0) {
+    /* not supported, leave an empty XShape object */
+    points = NULL;
+    msFreeShape(&shape);
+    return;
+  }
+
+  const unsigned input_lines = std::min((unsigned)shape.numlines,
+                                        (unsigned)MAX_LINES);
   unsigned num_points = 0;
-  for (unsigned l = 0; l < num_lines; ++l) {
-    lines[l] = std::min(shape.line[l].numpoints, 16384);
-    num_points += lines[l];
+  for (unsigned l = 0; l < input_lines; ++l) {
+    if (shape.line[l].numpoints < min_points)
+      /* malformed shape */
+      continue;
+
+    lines[num_lines] = std::min(shape.line[l].numpoints, 16384);
+    num_points += lines[num_lines];
+    ++num_lines;
   }
 
 #ifdef ENABLE_OPENGL
