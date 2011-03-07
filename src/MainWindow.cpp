@@ -157,6 +157,12 @@ MainWindow::InitialiseConfigured()
 void
 MainWindow::ReinitialiseLayout()
 {
+  if (!map.defined())
+    /* without the MapWindow, it is safe to assume that the MainWindow
+       is just being initialized, and the InfoBoxes aren't initialized
+       yet either, so there is nothing to do here */
+    return;
+
   InfoBoxManager::Destroy();
 
   RECT rc = get_client_rect();
