@@ -169,6 +169,23 @@ MainWindow::ReinitialiseLayout()
   InfoBoxManager::Create(rc, ib_layout);
   map_rect = ib_layout.remaining;
 
+  if (vario != NULL)
+    vario->move(rc.right - ib_layout.control_width, 0,
+                ib_layout.control_width,
+                ib_layout.control_height * 3);
+
+  if (flarm != NULL)
+    flarm->move(rc.right - ib_layout.control_width * 2 + 1,
+                rc.bottom - ib_layout.control_height * 2 + 1,
+                ib_layout.control_width * 2 - 1,
+                ib_layout.control_height * 2 - 1);
+
+  if (ta != NULL) {
+    unsigned sz = std::min(ib_layout.control_height,
+                           ib_layout.control_width) * 2;
+    ta->move(0, rc.bottom - sz, sz, sz);
+  }
+
   if (!FullScreen) {
     map.move(map_rect.left, map_rect.top,
              map_rect.right - map_rect.left,
