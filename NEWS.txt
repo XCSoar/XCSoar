@@ -6,6 +6,8 @@ Version 6.0.7 - not yet released
 * map
   - Airspace: support alternative OpenAir coordinate format
 * replay: don't execute recorded input events
+* Android
+  - disable auto-restart on various Android configuration events
 
 Version 6.0.6 - 2011/03/04
 * devices:
