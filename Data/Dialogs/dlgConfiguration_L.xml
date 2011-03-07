@@ -6,9 +6,9 @@
   <Button Name="cmdFonts" Caption="Fonts" X="5" Y="130" Width="60" Height="28"/>
   <Button Name="cmdWaypoints" Caption="Waypts." X="5" Y="130" Width="60" Height="28"/>
 
-  <Button Name="cmdLoadInternalPolar" Caption="List" X="5" Y="40" Width="60" Height="28" OnClick="OnPolarLoadInteral" />
-  <Button Name="cmdLoadPolarFile" Caption="Import" X="5" Y="70" Width="60" Height="28" OnClick="OnPolarLoadFromFile" />        
-  <Button Name="cmdSavePolarFile" Caption="Export" X="5" Y="100" Width="60" Height="28" OnClick="OnPolarExport" />        
+  <Button Name="cmdLoadInternalPolar" Caption="List" X="5" Y="40" Width="60" Height="28" OnClick="PolarConfigPanel::OnLoadInteral" />
+  <Button Name="cmdLoadPolarFile" Caption="Import" X="5" Y="70" Width="60" Height="28" OnClick="PolarConfigPanel::OnLoadFromFile" />
+  <Button Name="cmdSavePolarFile" Caption="Export" X="5" Y="100" Width="60" Height="28" OnClick="PolarConfigPanel::OnExport" />
 
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="29" Height="28" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="36" Y="160" Width="29" Height="28" OnClick="OnNextClicked" />
@@ -332,34 +332,34 @@
         <Label Name="lblPolarInvalid" Caption="Invalid" X="-50" Y="2" Height="16" CaptionColor="0xFF0000" />
 
         <Edit Name="prpPolarV1" Caption="Polar V" X="2" Y="18" Width="130" Height="22" CaptionWidth="80">
-          <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="OnPolarFieldData" />
+          <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
         <Edit Name="prpPolarV2" Caption="Polar V" X="132" Y="18" Width="50" Height="22" CaptionWidth="1">
-          <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="OnPolarFieldData" />
+          <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
         <Edit Name="prpPolarV3" Caption="Polar V" X="182" Y="18" Width="50" Height="22" CaptionWidth="1">
-          <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="OnPolarFieldData" />
+          <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
-  
+
         <Edit Name="prpPolarW1" Caption="Polar W" X="2" Y="40" Width="130" Height="22" CaptionWidth="80">
-          <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-5" Max="0" Step="0.05" OnDataAccess="OnPolarFieldData" />
+          <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-5" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
         <Edit Name="prpPolarW2" Caption="Polar W" X="132" Y="40" Width="50" Height="22" CaptionWidth="1">
-          <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-5" Max="0" Step="0.05" OnDataAccess="OnPolarFieldData" />
+          <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-5" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
         <Edit Name="prpPolarW3" Caption="Polar W" X="182" Y="40" Width="50" Height="22" CaptionWidth="1">
-          <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-5" Max="0" Step="0.05" OnDataAccess="OnPolarFieldData" />
+          <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-5" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
-        
+
         <Edit Name="prpPolarMassDry" Caption="Dry Mass/Max. Ballast" Y="62" Width="182" Height="22" CaptionWidth="133">
-          <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="OnPolarFieldData" />
+          <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
         <Edit Name="prpPolarMaxBallast" Caption="Max. Ballast" X="182" Y="62" Width="50" Height="22" CaptionWidth="1">
-          <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="500" Step="5" OnDataAccess="OnPolarFieldData" />
+          <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="500" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
 
         <Edit Name="prpPolarWingArea" Caption="Wing Area" Y="84" Width="232" Height="22" CaptionWidth="133">
-          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="20" Step="0.1" OnDataAccess="OnPolarFieldData" />
+          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="20" Step="0.1" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
       </Panel>
 
@@ -367,12 +367,12 @@
         Help="The maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5" />
       </Edit>
-    
+
       <Edit Name="prpHandicap" Caption="Handicap" X="2" Width="-2" Height="22" CaptionWidth="110"
         Help="The handicap factor used for OnLine Contest scoring.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="50" Max="150" Step="1" />
       </Edit>
-    
+
       <Edit Name="prpBallastSecsToEmpty" Caption="Dump Time" X="2" Width="-2" Height="22" CaptionWidth="110"
         Help="The time in seconds to dump full ballast.">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="300" Step="5" />

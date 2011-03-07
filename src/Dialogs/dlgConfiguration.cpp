@@ -46,9 +46,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "LocalTime.hpp"
 #include "Math/FastMath.h"
-#include "Polar/PolarStore.hpp"
-#include "Polar/PolarGlue.hpp"
-#include "Polar/Polar.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Float.hpp"
@@ -75,6 +72,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LanguageGlue.hpp"
 #include "PagesConfigPanel.hpp"
+#include "PolarConfigPanel.hpp"
 
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"
@@ -160,9 +158,6 @@ static WndButton *buttonAircraftRego = NULL;
 static WndButton *buttonLoggerID = NULL;
 static WndButton *buttonFonts = NULL;
 static WndButton *buttonWaypoints = NULL;
-static WndButton *buttonPolarList = NULL;
-static WndButton *buttonPolarImport = NULL;
-static WndButton *buttonPolarExport = NULL;
 
 static void
 UpdateButtons(void)
@@ -220,14 +215,7 @@ PageSwitched()
   if (buttonWaypoints != NULL)
     buttonWaypoints->set_visible(current_page == PAGE_SITE);
 
-  if (buttonPolarList != NULL)
-    buttonPolarList->set_visible(current_page == PAGE_POLAR);
-
-  if (buttonPolarImport != NULL)
-    buttonPolarImport->set_visible(current_page == PAGE_POLAR);
-
-  if (buttonPolarExport != NULL)
-    buttonPolarExport->set_visible(current_page == PAGE_POLAR);
+  PolarConfigPanel::Activate(current_page == PAGE_POLAR);
 }
 
 static void
@@ -445,168 +433,6 @@ OnWaypoints(gcc_unused WndButton &button)
   dlgConfigWaypointsShowModal();
 }
 
-static void
-UpdatePolarFields(const SimplePolar &polar)
-{
-  LoadFormProperty(*wf, _T("prpPolarV1"), fixed(polar.v1));
-  LoadFormProperty(*wf, _T("prpPolarV2"), fixed(polar.v2));
-  LoadFormProperty(*wf, _T("prpPolarV3"), fixed(polar.v3));
-
-  LoadFormProperty(*wf, _T("prpPolarW1"), fixed(polar.w1));
-  LoadFormProperty(*wf, _T("prpPolarW2"), fixed(polar.w2));
-  LoadFormProperty(*wf, _T("prpPolarW3"), fixed(polar.w3));
-
-  LoadFormProperty(*wf, _T("prpPolarMassDry"), fixed(polar.dry_mass));
-  LoadFormProperty(*wf, _T("prpPolarMaxBallast"), fixed(polar.max_ballast));
-
-  LoadFormProperty(*wf, _T("prpPolarWingArea"), fixed(polar.wing_area));
-}
-
-static void
-SetPolarTitle(const TCHAR* title)
-{
-  TCHAR caption[255];
-  _tcscpy(caption,  _("Polar"));
-  _tcscat(caption, _T(": "));
-  _tcscat(caption, title);
-  ((WndFrame *)wf->FindByName(_T("lblPolar")))->SetCaption(caption);
-}
-
-static void
-UpdatePolarTitle()
-{
-  TCHAR title[255];
-  if (Profile::Get(szProfilePolarName, title, 255))
-    SetPolarTitle(title);
-}
-
-static bool
-SaveFormToPolar(SimplePolar &polar)
-{
-  bool changed = SaveFormProperty(*wf, _T("prpPolarV1"), polar.v1);
-  changed |= SaveFormProperty(*wf, _T("prpPolarV2"), polar.v2);
-  changed |= SaveFormProperty(*wf, _T("prpPolarV3"), polar.v3);
-
-  changed |= SaveFormProperty(*wf, _T("prpPolarW1"), polar.w1);
-  changed |= SaveFormProperty(*wf, _T("prpPolarW2"), polar.w2);
-  changed |= SaveFormProperty(*wf, _T("prpPolarW3"), polar.w3);
-
-  changed |= SaveFormProperty(*wf, _T("prpPolarMassDry"), polar.dry_mass);
-  changed |= SaveFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
-
-  changed |= SaveFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
-
-  return changed;
-}
-
-static void
-UpdatePolarInvalidLabel()
-{
-  SimplePolar polar;
-  polar.Init();
-  SaveFormToPolar(polar);
-  if (polar.IsValid())
-    ((WndFrame *)wf->FindByName(_T("lblPolarInvalid")))->hide();
-  else
-    ((WndFrame *)wf->FindByName(_T("lblPolarInvalid")))->show();
-}
-
-static void
-OnPolarLoadInteral(WndButton &button)
-{
-  /* create a fake WndProperty for dlgComboPicker() */
-  /* XXX reimplement properly */
-
-  DataFieldEnum *dfe = new DataFieldEnum(NULL);
-  unsigned len = PolarStore::Count();
-  for (unsigned i = 0; i < len; i++)
-    dfe->addEnumText(PolarStore::GetName(i), i);
-
-  dfe->Sort();
-  ComboList *list = dfe->CreateComboList();
-
-  /* let the user select */
-
-  int result = ComboPicker(XCSoarInterface::main_window, _("Load Polar"), *list, NULL);
-  if (result >= 0) {
-    SimplePolar polar;
-    PolarStore::Read(dfe->getItem(result), polar);
-    UpdatePolarFields(polar);
-
-    Profile::Set(szProfilePolarName, PolarStore::GetName(dfe->getItem(result)));
-    UpdatePolarTitle();
-    UpdatePolarInvalidLabel();
-  }
-
-  delete dfe;
-  delete list;
-}
-
-static void
-OnPolarLoadFromFile(WndButton &button)
-{
-  /* create a fake WndProperty for dlgComboPicker() */
-  /* XXX reimplement properly */
-
-  DataFieldFileReader *dfe = new DataFieldFileReader(NULL);
-  dfe->ScanDirectoryTop(_T("*.plr"));
-
-  ComboList *list = dfe->CreateComboList();
-
-  /* let the user select */
-
-  int result = ComboPicker(XCSoarInterface::main_window,
-                           _("Load Polar from file"), *list, NULL);
-  if (result > 0) {
-    const TCHAR* path = dfe->getItem(result);
-    SimplePolar polar;
-    PolarGlue::LoadFromFile(polar, path);
-    UpdatePolarFields(polar);
-
-    Profile::Set(szProfilePolarName, BaseName(path));
-    UpdatePolarTitle();
-    UpdatePolarInvalidLabel();
-  }
-
-  delete dfe;
-  delete list;
-}
-
-static void
-OnPolarExport(WndButton &button)
-{
-  TCHAR filename[69] = _T("");
-  if (!dlgTextEntryShowModal(filename, 64))
-    return;
-
-  TCHAR path[MAX_PATH];
-  _tcscat(filename, _T(".plr"));
-  LocalPath(path, filename);
-
-  SimplePolar polar;
-  SaveFormToPolar(polar);
-  if (PolarGlue::SaveToFile(polar, path)) {
-    Profile::Set(szProfilePolarName, filename);
-    UpdatePolarTitle();
-  }
-}
-
-static void
-OnPolarFieldData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  switch (Mode) {
-  case DataField::daChange:
-    Profile::Set(szProfilePolarName, _T("Custom"));
-    UpdatePolarTitle();
-    UpdatePolarInvalidLabel();
-    break;
-
-  case DataField::daInc:
-  case DataField::daDec:
-  case DataField::daSpecial:
-    return;
-  }
-}
 
 static void
 UpdateUnitFields(const UnitSetting &units)
@@ -776,10 +602,10 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnInfoBoxHelp),
   DeclareCallBackEntry(OnDeviceAData),
   DeclareCallBackEntry(OnDeviceBData),
-  DeclareCallBackEntry(OnPolarLoadInteral),
-  DeclareCallBackEntry(OnPolarLoadFromFile),
-  DeclareCallBackEntry(OnPolarExport),
-  DeclareCallBackEntry(OnPolarFieldData),
+  DeclareCallBackEntry(PolarConfigPanel::OnLoadInteral),
+  DeclareCallBackEntry(PolarConfigPanel::OnLoadFromFile),
+  DeclareCallBackEntry(PolarConfigPanel::OnExport),
+  DeclareCallBackEntry(PolarConfigPanel::OnFieldData),
   DeclareCallBackEntry(OnLoadUnitsPreset),
   DeclareCallBackEntry(OnUnitFieldData),
   DeclareCallBackEntry(OnUserLevel),
@@ -962,9 +788,7 @@ setVariables()
   if (buttonWaypoints)
     buttonWaypoints->SetOnClickNotify(OnWaypoints);
 
-  buttonPolarList = ((WndButton *)wf->FindByName(_T("cmdLoadInternalPolar")));
-  buttonPolarImport = ((WndButton *)wf->FindByName(_T("cmdLoadPolarFile")));
-  buttonPolarExport = ((WndButton *)wf->FindByName(_T("cmdSavePolarFile")));
+  PolarConfigPanel::Init(wf);
 
   UpdateButtons();
 
@@ -1371,15 +1195,6 @@ setVariables()
   }
 
   PagesConfigPanel::Init(wf);
-
-  SimplePolar polar;
-  if (!PolarGlue::LoadFromProfile(polar)) {
-    PolarGlue::LoadDefault(polar);
-    SetPolarTitle(polar.name);
-  }
-  UpdatePolarFields(polar);
-  UpdatePolarTitle();
-  UpdatePolarInvalidLabel();
 
   LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
                    settings_computer.SafetySpeed);
@@ -2068,12 +1883,6 @@ void dlgConfigurationShowModal(void)
                               szProfileSnailTrail,
                               XCSoarInterface::SetSettingsMap().TrailActive);
 
-  SimplePolar polar;
-  PolarGlue::LoadFromProfile(polar);
-  if (SaveFormToPolar(polar)) {
-    PolarGlue::SaveToProfile(polar);
-    changed  = PolarFileChanged = true;
-  }
 
   short tmp = settings_computer.AltitudeMode;
   changed |= SaveFormProperty(*wf, _T("prpAirspaceDisplay"),
@@ -2855,13 +2664,9 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  if (PolarFileChanged && protected_task_manager != NULL) {
-    GlidePolar gp = protected_task_manager->get_glide_polar();
-    PolarGlue::LoadFromProfile(gp);
-    protected_task_manager->set_glide_polar(gp);
-  }
-
   changed |= PagesConfigPanel::Save(wf);
+
+  changed |= PolarConfigPanel::Save();
 
   if (DevicePortChanged)
     for (unsigned i = 0; i < NUMDEV; ++i)
