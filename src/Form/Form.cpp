@@ -338,17 +338,6 @@ WndForm::ShowModal(Window *modal_allowed)
 
   DialogEventLoop loop(*this);
   while (mModalResult == 0 && loop.get(msg)) {
-//hack!
-
-    // JMW update display timeout so we don't get blanking
-    /*
-    if (msg.message == WM_KEYDOWN) {
-      if (!Debounce()) {
-        continue;
-      }
-    }
-    */
-
     if (is_user_input(msg.message)
         && !identify_descendant(msg.hwnd) // not current window or child
         && !is_allowed_map(msg.hwnd, msg.message, modal_allowed))
