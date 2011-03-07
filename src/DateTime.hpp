@@ -46,6 +46,12 @@ struct BrokenDate {
    * Day of month, 1-31.
    */
   uint8_t day;
+
+  bool operator>(const BrokenDate &other) const {
+    return year > other.year ||
+      (year == other.year && (month > other.month ||
+                              (month == other.month && day > other.day)));
+  }
 };
 
 /**
@@ -66,6 +72,13 @@ struct BrokenTime {
    * Second, 0-59.
    */
   uint8_t second;
+
+  /**
+   * Returns the number of seconds which have passed on this day.
+   */
+  unsigned GetSecondOfDay() const {
+    return hour * 3600u + minute * 60u + second;
+  }
 };
 
 /**
