@@ -27,6 +27,10 @@ Copyright_License {
 TopWindow::TopWindow()
   :hSavedFocus(NULL)
 {
+#ifdef _WIN32_WCE
+  task_bar = NULL;
+#endif
+
 #ifdef HAVE_AYGSHELL_DLL
   memset(&s_sai, 0, sizeof(s_sai));
   s_sai.cbSize = sizeof(s_sai);
@@ -53,6 +57,22 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
   Window::set(NULL, cls, text, left, top, width, height, style);
 }
 
+#ifdef _WIN32_WCE
+
+void
+TopWindow::reset()
+{
+  ContainerWindow::reset();
+
+  if (task_bar != NULL) {
+    /* restore the task bar */
+    ::ShowWindow(task_bar, SW_SHOW);
+    task_bar = NULL;
+  }
+}
+
+#endif
+
 void
 TopWindow::full_screen()
 {
@@ -60,10 +80,24 @@ TopWindow::full_screen()
 #ifndef _WIN32_WCE
   show_on_top();
 #else
+
+  bool success = false;
 #ifdef HAVE_AYGSHELL_DLL
-  ayg_shell_dll.SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|
-                             SHFS_HIDESTARTICON);
+  success = ayg_shell_dll.SHFullScreen(hWnd, SHFS_HIDETASKBAR|
+                                       SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
 #endif
+  if (!success) {
+    /* hack: on Windows CE Core, there is no aygshell.dll; try to
+       manually hide the task bar window */
+    task_bar = ::FindWindow(_T("HHTaskBar"), _T(""));
+    if (task_bar != NULL) {
+      if (::IsWindowVisible(task_bar))
+        ::ShowWindow(task_bar, SW_HIDE);
+      else
+        task_bar = NULL;
+    }
+  }
+
   ::SetWindowPos(hWnd, HWND_TOP, 0, 0,
                  GetSystemMetrics(SM_CXSCREEN),
                  GetSystemMetrics(SM_CYSCREEN),

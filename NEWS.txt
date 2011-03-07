@@ -6,6 +6,8 @@ Version 6.0.7 - not yet released
 * map
   - Airspace: support alternative OpenAir coordinate format
 * replay: don't execute recorded input events
+* Windows
+  - hide the task bar on Windows CE Core
 * Android
   - disable auto-restart on various Android configuration events
 
