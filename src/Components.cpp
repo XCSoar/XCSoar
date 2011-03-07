@@ -154,10 +154,7 @@ LoadDisplayOrientation()
 
   LogStartUp(_T("Display rotated"));
 
-  RECT rc = SystemWindowSize();
-  XCSoarInterface::main_window.fast_move(rc.left, rc.top,
-                                         rc.right - rc.left, rc.bottom - rc.top);
-
+  XCSoarInterface::main_window.ReinitialisePosition();
   XCSoarInterface::main_window.Initialise();
 
   /* force the progress dialog to update its layout */

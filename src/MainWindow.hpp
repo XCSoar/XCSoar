@@ -79,6 +79,12 @@ public:
    */
   void ReinitialiseLayout();
 
+  /**
+   * Adjust the window position and size, to make it full-screen again
+   * after display rotation.
+   */
+  void ReinitialisePosition();
+
   void reset();
 
   /**

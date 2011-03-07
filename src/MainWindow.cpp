@@ -39,6 +39,7 @@ Copyright_License {
 #include "Gauge/GlueGaugeVario.hpp"
 #include "MenuBar.hpp"
 #include "Appearance.hpp"
+#include "UtilsSystem.hpp"
 
 /**
  * Destructor of the MainWindow-Class
@@ -198,6 +199,17 @@ MainWindow::ReinitialiseLayout()
              map_rect.bottom - map_rect.top);
     map.FullRedraw();
   }
+}
+
+void
+MainWindow::ReinitialisePosition()
+{
+  RECT rc = SystemWindowSize();
+  fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+
+  Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
+
+  ReinitialiseLayout();
 }
 
 void
