@@ -210,15 +210,53 @@ InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
 
   if (width > height) {
     /* landscape */
-    if (geometry < ibLeft4Right4)
-      geometry = ibGNav;
+
+    switch (geometry) {
+    case ibTop4Bottom4:
+      return ibLeft4Right4;
+
+    case ibBottom8:
+      return ibRight8;
+
+    case ibTop8:
+      return ibLeft8;
+
+    case ibLeft4Right4:
+    case ibLeft8:
+    case ibRight8:
+    case ibGNav:
+      break;
+
+    case ibSquare:
+      return ibRight8;
+
+    case ibRight12:
+      break;
+    }
   } else if (width == height) {
     /* square */
     geometry = ibSquare;
   } else {
     /* portrait */
-    if (geometry >= ibLeft4Right4)
-      geometry = ibTop4Bottom4;
+
+    switch (geometry) {
+    case ibTop4Bottom4:
+    case ibBottom8:
+    case ibTop8:
+      break;
+
+    case ibLeft4Right4:
+      return ibTop4Bottom4;
+
+    case ibLeft8:
+      return ibTop8;
+
+    case ibRight8:
+    case ibGNav:
+    case ibSquare:
+    case ibRight12:
+      return ibBottom8;
+    }
   }
 
   return geometry;
