@@ -152,7 +152,7 @@ void
 InfoBoxLayout::LoadGeometry()
 {
   unsigned tmp;
-  if (Profile::Get(szProfileInfoBoxGeometry, tmp))
+  if (Profile::Get(szProfileInfoBoxGeometry, tmp) && tmp < 8)
     InfoBoxGeometry = (Layouts)tmp;
 
   if (Layout::landscape) {
