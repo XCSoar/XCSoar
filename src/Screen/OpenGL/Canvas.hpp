@@ -329,6 +329,10 @@ public:
     copy_or(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
+  void copy_not(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src, int src_x, int src_y);
+
   void copy_and(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 const Bitmap &src, int src_x, int src_y);

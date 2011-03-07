@@ -380,3 +380,15 @@ Canvas::copy_and(int dest_x, int dest_y,
   copy(dest_x, dest_y, dest_width, dest_height,
        src, src_x, src_y);
 }
+
+void
+Canvas::copy_not(int dest_x, int dest_y,
+                 unsigned dest_width, unsigned dest_height,
+                 const Bitmap &src, int src_x, int src_y)
+{
+  assert(src.defined());
+
+  GLLogicOp logic_op(GL_COPY_INVERTED);
+  copy(dest_x, dest_y, dest_width, dest_height,
+       src, src_x, src_y);
+}
