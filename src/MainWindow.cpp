@@ -199,6 +199,8 @@ MainWindow::ReinitialiseLayout()
              map_rect.bottom - map_rect.top);
     map.FullRedraw();
   }
+
+  map.BringToBottom();
 }
 
 void
@@ -219,6 +221,8 @@ MainWindow::ReinitialisePosition()
     ButtonLabel::Destroy();
     ButtonLabel::CreateButtonLabels(*this);
     ButtonLabel::SetFont(Fonts::Map);
+
+    map.BringToBottom();
   }
 }
 
