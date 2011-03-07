@@ -380,10 +380,6 @@ WndForm::ShowModal(Window *modal_allowed)
       }
     }
 
-    /* let the WIN32 dialog manager handle hot keys like Tab */
-    if (::IsDialogMessage(hWnd, &msg))
-      continue;
-
     loop.dispatch(msg);
   } // End Modal Loop
 #endif /* !ENABLE_SDL */
