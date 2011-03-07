@@ -72,7 +72,17 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
 
   NMEA_INFO &basic = device_blackboard.SetBasic();
 
-  basic.Time = fixed((long)time);
+  BrokenDateTime date_time = BrokenDateTime::FromUnixTimeUTC(time / 1000);
+  fixed second_of_day = fixed(date_time.GetSecondOfDay()) +
+    /* add the millisecond fraction of the original timestamp for
+       better accuracy */
+    fixed((unsigned)time % 1000u) / 1000u;
+  if (second_of_day < basic.Time && date_time > basic.DateTime)
+    /* don't wrap around when going past midnight in UTC */
+    second_of_day += fixed(24u * 3600u);
+
+  basic.Time = second_of_day;
+  basic.DateTime = date_time;
   basic.gps.SatellitesUsed = n_satellites;
   basic.gps.NAVWarning = n_satellites <= 0;
   basic.Location = GeoPoint(Angle::degrees(fixed(longitude)),
