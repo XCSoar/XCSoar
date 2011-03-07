@@ -28,39 +28,3 @@ ContainerWindow::on_color(Window &window, Canvas &canvas)
 {
   return NULL;
 }
-
-void
-ContainerWindow::focus_first_control()
-{
-#ifdef ENABLE_SDL
-  // XXX
-#else
-  HWND hControl = ::GetNextDlgTabItem(hWnd, hWnd, false);
-  if (hControl != NULL)
-    ::SetFocus(hControl);
-#endif
-}
-
-void
-ContainerWindow::focus_next_control()
-{
-#ifdef ENABLE_SDL
-  // XXX
-#else
-  HWND hControl = ::GetNextDlgTabItem(hWnd, ::GetFocus(), false);
-  if (hControl != NULL)
-    ::SetFocus(hControl);
-#endif
-}
-
-void
-ContainerWindow::focus_previous_control()
-{
-#ifdef ENABLE_SDL
-  // XXX
-#else
-  HWND hControl = ::GetNextDlgTabItem(hWnd, ::GetFocus(), true);
-  if (hControl != NULL)
-    ::SetFocus(hControl);
-#endif
-}

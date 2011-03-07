@@ -36,6 +36,24 @@ ContainerWindow::~ContainerWindow()
   reset();
 }
 
+void
+ContainerWindow::focus_first_control()
+{
+  // XXX
+}
+
+void
+ContainerWindow::focus_next_control()
+{
+  // XXX
+}
+
+void
+ContainerWindow::focus_previous_control()
+{
+  // XXX
+}
+
 bool
 ContainerWindow::on_destroy()
 {
