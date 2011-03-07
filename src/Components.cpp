@@ -154,7 +154,6 @@ LoadDisplayOrientation()
 
   LogStartUp(_T("Display rotated"));
 
-  XCSoarInterface::main_window.ReinitialisePosition();
   XCSoarInterface::main_window.Initialise();
 
   /* force the progress dialog to update its layout */

@@ -214,22 +214,6 @@ MainWindow::ReinitialisePosition()
 {
   RECT rc = SystemWindowSize();
   fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
-
-  Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
-
-  ReinitialiseLayout();
-
-  if (map.defined()) {
-    /* the map being created already is an indicator that XCSoar is
-       running already, and so we assume the menu buttons have been
-       created, too */
-
-    ButtonLabel::Destroy();
-    ButtonLabel::CreateButtonLabels(*this);
-    ButtonLabel::SetFont(Fonts::Map);
-
-    map.BringToBottom();
-  }
 }
 
 void
@@ -256,6 +240,30 @@ MainWindow::full_redraw()
 }
 
 // Windows event handlers
+
+bool
+MainWindow::on_resize(unsigned width, unsigned height)
+{
+  SingleWindow::on_resize(width, height);
+
+  Layout::Initialize(width, height);
+
+  ReinitialiseLayout();
+
+  if (map.defined()) {
+    /* the map being created already is an indicator that XCSoar is
+       running already, and so we assume the menu buttons have been
+       created, too */
+
+    ButtonLabel::Destroy();
+    ButtonLabel::CreateButtonLabels(*this);
+    ButtonLabel::SetFont(Fonts::Map);
+
+    map.BringToBottom();
+  }
+
+  return true;
+}
 
 bool
 MainWindow::on_activate()

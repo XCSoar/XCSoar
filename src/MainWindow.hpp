@@ -102,6 +102,7 @@ public:
   void LeaveCustomView();
 
 protected:
+  virtual bool on_resize(unsigned width, unsigned height);
   bool on_activate();
   bool on_setfocus();
   bool on_timer(timer_t id);

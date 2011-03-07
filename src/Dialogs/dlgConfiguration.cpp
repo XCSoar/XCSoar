@@ -2686,8 +2686,6 @@ void dlgConfigurationShowModal(void)
       if (!Display::Rotate(orientation))
         LogStartUp(_T("Display rotation failed"));
     }
-
-    XCSoarInterface::main_window.ReinitialisePosition();
   } else if (info_box_geometry_changed)
     XCSoarInterface::main_window.ReinitialiseLayout();
 
