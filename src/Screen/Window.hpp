@@ -405,12 +405,22 @@ public:
 
 #ifdef ENABLE_SDL
   void bring_to_top();
+  void BringToBottom();
 #else
   void bring_to_top() {
     assert_none_locked();
     assert_thread();
 
     ::BringWindowToTop(hWnd);
+  }
+
+  void BringToBottom() {
+    assert_none_locked();
+    assert_thread();
+
+    ::SetWindowPos(hWnd, HWND_BOTTOM, 0, 0, 0, 0,
+                   SWP_NOMOVE|SWP_NOSIZE|
+                   SWP_NOACTIVATE|SWP_NOOWNERZORDER);
   }
 #endif
 

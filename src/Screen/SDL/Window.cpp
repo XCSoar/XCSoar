@@ -176,6 +176,15 @@ Window::bring_to_top()
 }
 
 void
+Window::BringToBottom()
+{
+  assert_none_locked();
+  assert_thread();
+
+  parent->BringChildToBottom(*this);
+}
+
+void
 Window::send_user(unsigned id)
 {
 #ifdef ANDROID

@@ -91,6 +91,12 @@ public:
     invalidate();
   }
 
+  void BringChildToBottom(Window &child) {
+    children.remove(&child);
+    children.push_back(&child);
+    invalidate();
+  }
+
   /**
    * Locate a child window by its relative coordinates.
    */
