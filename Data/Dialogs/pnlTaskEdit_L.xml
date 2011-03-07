@@ -5,7 +5,7 @@
 
   <Button Name="cmdEditTurnpoint" Caption="Edit Point" X="82" Y="188" Width="58" Height="35" OnClick="pnlTaskEdit::OnEditTurnpointClicked"/>
   <Button Name="cmdMakeFinish" Caption="Make Finish" X="142" Y="188" Width="58" Height="35" OnClick="pnlTaskEdit::OnMakeFinish"/>
-  <SymbolButton Name="cmdDown" Caption="V" X="142" Y="188" Width="58" Height="35" OnClick="pnlTaskEdit::OnMoveDownClicked"/>
+  <SymbolButton Name="cmdDown" Caption="v" X="142" Y="188" Width="58" Height="35" OnClick="pnlTaskEdit::OnMoveDownClicked"/>
   <SymbolButton Name="cmdUp" Caption="^" X="202" Y="188" Width="58" Height="35" OnClick="pnlTaskEdit::OnMoveUpClicked"/>
   <Button Name="cmdNew" Caption="Clear Task" X="262" Y="188" Width="57" Height="35" OnClick="pnlTaskEdit::OnNewClicked"/>
 
