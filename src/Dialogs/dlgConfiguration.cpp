@@ -2214,6 +2214,7 @@ void dlgConfigurationShowModal(void)
     }
   }
 
+  bool orientation_changed = false;
   if (Display::RotateSupported()) {
     wp = (WndProperty*)wf->FindByName(_T("prpDisplayOrientation"));
     assert(wp != NULL);
@@ -2224,7 +2225,7 @@ void dlgConfigurationShowModal(void)
     if (orientation != Profile::GetDisplayOrientation()) {
       Profile::SetDisplayOrientation(orientation);
       changed = true;
-      requirerestart = true;
+      orientation_changed = true;
     }
   }
 
@@ -2675,7 +2676,19 @@ void dlgConfigurationShowModal(void)
   if (!is_embedded() && DevicePortChanged)
     requirerestart = true;
 
-  if (info_box_geometry_changed)
+  if (orientation_changed) {
+    assert(Display::RotateSupported());
+
+    Display::orientation orientation = Profile::GetDisplayOrientation();
+    if (orientation == Display::ORIENTATION_DEFAULT)
+      Display::RotateRestore();
+    else {
+      if (!Display::Rotate(orientation))
+        LogStartUp(_T("Display rotation failed"));
+    }
+
+    XCSoarInterface::main_window.ReinitialisePosition();
+  } else if (info_box_geometry_changed)
     XCSoarInterface::main_window.ReinitialiseLayout();
 
   if (changed) {

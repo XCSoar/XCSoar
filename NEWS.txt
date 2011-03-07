@@ -7,6 +7,7 @@ Version 6.1 - not yet released
   - "pan to" button in waypoint dialog
   - waypoint selection screen shows last used waypoints if no filter is set
   - change the info box geometry without restarting XCSoar
+  - change the display orientation without restarting XCSoar
   - tabbed Task dialog with icons or text on tabs per settings
 * route planning
   - new optional minimum-time route planning around airspace and terrain.  
