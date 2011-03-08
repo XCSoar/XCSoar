@@ -151,6 +151,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/SiteConfigPanel.cpp \
 	$(SRC)/Dialogs/SymbolsConfigPanel.cpp \
 	$(SRC)/Dialogs/TaskRulesConfigPanel.cpp \
+	$(SRC)/Dialogs/TaskDefaultsConfigPanel.cpp \
 	$(SRC)/Dialogs/TerrainDisplayConfigPanel.cpp \
 	$(SRC)/Dialogs/UnitsConfigPanel.cpp \
 	$(SRC)/Dialogs/WayPointDisplayConfigPanel.cpp \

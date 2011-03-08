@@ -42,10 +42,6 @@ Copyright_License {
 #include "DataField/ComboList.hpp"
 #include "Asset.hpp"
 #include "Components.hpp"
-#include "Task/ProtectedTaskManager.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
-#include "Dialogs/dlgTaskHelpers.hpp"
-#include "Task/Factory/AbstractTaskFactory.hpp"
 #include "WayPointFile.hpp"
 #include "Simulator.hpp"
 #include "Compiler.h"
@@ -68,6 +64,7 @@ Copyright_License {
 #include "LayoutConfigPanel.hpp"
 #include "GaugesConfigPanel.hpp"
 #include "TaskRulesConfigPanel.hpp"
+#include "TaskDefaultsConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -299,6 +296,7 @@ setVariables()
   LayoutConfigPanel::Init(wf);
   GaugesConfigPanel::Init(wf);
   TaskRulesConfigPanel::Init(wf);
+  TaskDefaultsConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
@@ -348,86 +346,6 @@ setVariables()
   LoadFormProperty(*wf, _T("prpAppInfoBoxColors"), Appearance.InfoBoxColors);
 
 
-  OrderedTask* temptask = protected_task_manager->task_blank();
-  temptask->set_factory(TaskBehaviour::FACTORY_RT);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpStartType"));
-  if (wp) {
-    const AbstractTaskFactory::LegalPointVector point_types =
-        temptask->get_factory().getValidStartTypes();
-    DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-
-    for (unsigned i = 0; i < point_types.size(); i++) {
-      dfe->addEnumText(OrderedTaskPointName(point_types[i]), (unsigned)point_types[i],
-          OrderedTaskPointDescription(point_types[i]));
-      if (point_types[i] == settings_computer.sector_defaults.start_type)
-        dfe->Set((unsigned)point_types[i]);
-    }
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpTurnpointType"));
-  if (wp) {
-    const AbstractTaskFactory::LegalPointVector point_types =
-        temptask->get_factory().getValidIntermediateTypes();
-    DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-
-    for (unsigned i = 0; i < point_types.size(); i++) {
-      dfe->addEnumText(OrderedTaskPointName(point_types[i]),
-          (unsigned)point_types[i],
-          OrderedTaskPointDescription(point_types[i]));
-      if (point_types[i] == settings_computer.sector_defaults.turnpoint_type) {
-        dfe->Set((unsigned)point_types[i]);
-      }
-    }
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpFinishType"));
-  if (wp) {
-    const AbstractTaskFactory::LegalPointVector point_types =
-        temptask->get_factory().getValidFinishTypes();
-    DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-
-    for (unsigned i = 0; i < point_types.size(); i++) {
-      dfe->addEnumText(OrderedTaskPointName(point_types[i]), (unsigned)point_types[i],
-          OrderedTaskPointDescription(point_types[i]));
-      if (point_types[i] == settings_computer.sector_defaults.finish_type)
-        dfe->Set((unsigned)point_types[i]);
-    }
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskType"));
-  if (wp) {
-    const std::vector<TaskBehaviour::Factory_t> factory_types =
-        temptask->get_factory_types();
-    DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-
-    for (unsigned i = 0; i < factory_types.size(); i++) {
-      dfe->addEnumText(OrderedTaskFactoryName(factory_types[i]),
-          (unsigned)factory_types[i], OrderedTaskFactoryDescription(
-              factory_types[i]));
-      if (factory_types[i] == settings_computer.task_type_default)
-        dfe->Set((unsigned)factory_types[i]);
-    }
-    wp->RefreshDisplay();
-  }
-
-  delete temptask;
-
-  LoadFormProperty(*wf, _T("prpStartRadius"),
-                                  ugDistance,
-                                  settings_computer.sector_defaults.start_radius);
-  LoadFormProperty(*wf, _T("prpTurnpointRadius"),
-                                  ugDistance,
-                                  settings_computer.sector_defaults.turnpoint_radius);
-  LoadFormProperty(*wf, _T("prpFinishRadius"),
-                                  ugDistance,
-                                  settings_computer.sector_defaults.finish_radius);
-  LoadFormProperty(*wf, _T("prpAATMinTime"),
-                   (unsigned)(settings_computer.ordered_defaults.aat_min_time / 60));
 }
 
 static void
@@ -558,62 +476,6 @@ void dlgConfigurationShowModal(void)
                      szProfileAppInfoBoxColors, Appearance.InfoBoxColors);
 
 
-  unsigned sdtemp = 0;
-  sdtemp = (unsigned)settings_computer.sector_defaults.start_type;
-  taskchanged |= SaveFormProperty(*wf, _T("prpStartType"),
-                                  szProfileStartType,
-                                  sdtemp);
-  settings_computer.sector_defaults.start_type =
-      (AbstractTaskFactory::LegalPointType_t)sdtemp;
-
-  taskchanged |= SaveFormProperty(*wf, _T("prpStartRadius"),
-                                  ugDistance,
-                                  settings_computer.sector_defaults.start_radius,
-                                  szProfileStartRadius);
-
-  sdtemp = (unsigned)settings_computer.sector_defaults.turnpoint_type;
-  taskchanged |= SaveFormProperty(*wf, _T("prpTurnpointType"),
-                                  szProfileTurnpointType,
-                                  sdtemp);
-  settings_computer.sector_defaults.turnpoint_type =
-      (AbstractTaskFactory::LegalPointType_t)sdtemp;
-
-  taskchanged |= SaveFormProperty(*wf, _T("prpTurnpointRadius"),
-                                  ugDistance,
-                                  settings_computer.sector_defaults.turnpoint_radius,
-                                  szProfileTurnpointRadius);
-
-  sdtemp = (unsigned)settings_computer.sector_defaults.finish_type;
-  taskchanged |= SaveFormProperty(*wf, _T("prpFinishType"),
-                                  szProfileFinishType,
-                                  sdtemp);
-  settings_computer.sector_defaults.finish_type =
-      (AbstractTaskFactory::LegalPointType_t)sdtemp;
-
-  taskchanged |= SaveFormProperty(*wf, _T("prpFinishRadius"),
-                                  ugDistance,
-                                  settings_computer.sector_defaults.finish_radius,
-                                  szProfileFinishRadius);
-
-  sdtemp = (unsigned)settings_computer.task_type_default;
-  taskchanged |= SaveFormProperty(*wf, _T("prpTaskType"),
-                                  szProfileTaskType,
-                                  sdtemp);
-  settings_computer.task_type_default =
-      (TaskBehaviour::Factory_t)sdtemp;
-
-
-  unsigned aatminutes = unsigned(settings_computer.ordered_defaults.aat_min_time) / 60;
-  wp = (WndProperty*)wf->FindByName(_T("prpAATMinTime"));
-  if (aatminutes != (unsigned)wp->GetDataField()->GetAsInteger()) {
-    aatminutes = wp->GetDataField()->GetAsInteger();
-    settings_computer.ordered_defaults.aat_min_time = fixed(aatminutes * 60);
-    Profile::Set(szProfileAATMinTime, aatminutes * 60);
-    taskchanged = true;
-  }
-
-  changed |= taskchanged;
-
   changed |= UnitsConfigPanel::Save();
   changed |= PagesConfigPanel::Save(wf);
   changed |= PolarConfigPanel::Save();
@@ -632,6 +494,7 @@ void dlgConfigurationShowModal(void)
   changed |= LayoutConfigPanel::Save();
   changed |= GaugesConfigPanel::Save();
   changed |= TaskRulesConfigPanel::Save();
+  changed |= TaskDefaultsConfigPanel::Save();
 
   if (changed) {
     Profile::Save();
