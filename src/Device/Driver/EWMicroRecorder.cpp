@@ -34,6 +34,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Units.hpp"
+#include "PeriodClock.hpp"
 
 #include <tchar.h>
 #include <assert.h>
@@ -127,8 +128,11 @@ EWMicroRecorderDevice::TryConnect()
     unsigned user_size = 0;
     bool started = false;
 
+    PeriodClock clock;
+    clock.update();
+
     int i;
-    while ((i = port->GetChar()) != EOF) {
+    while ((i = port->GetChar()) != EOF && !clock.check(8000)) {
       char ch = (char)i;
 
       if (!started) {
