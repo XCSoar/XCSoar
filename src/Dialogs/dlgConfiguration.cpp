@@ -71,6 +71,7 @@ Copyright_License {
 #include "SiteConfigPanel.hpp"
 #include "MapDisplayConfigPanel.hpp"
 #include "WayPointDisplayConfigPanel.hpp"
+#include "SymbolsConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -293,15 +294,13 @@ setVariables()
   SiteConfigPanel::Init(wf);
   MapDisplayConfigPanel::Init(wf);
   WayPointDisplayConfigPanel::Init(wf);
+  SymbolsConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
 
   LoadFormProperty(*wf, _T("prpDebounceTimeout"),
                    XCSoarInterface::debounceTimeout);
-
-  LoadFormProperty(*wf, _T("prpEnableFLARMMap"),
-                   XCSoarInterface::SettingsMap().EnableFLARMMap);
 
   LoadFormProperty(*wf, _T("prpEnableFLARMGauge"),
                    XCSoarInterface::SettingsMap().EnableFLARMGauge);
@@ -360,16 +359,6 @@ setVariables()
   LoadFormProperty(*wf, _T("prpEnableNavBaroAltitude"),
                    settings_computer.EnableNavBaroAltitude);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpWindArrowStyle"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Arrow head"));
-    dfe->addEnumText(_("Full arrow"));
-    dfe->Set(XCSoarInterface::SettingsMap().WindArrowStyle);
-    wp->RefreshDisplay();
-  }
-
   wp = (WndProperty*)wf->FindByName(_T("prpAutoWind"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -416,10 +405,6 @@ setVariables()
   LoadFormProperty(*wf, _T("prpHandicap"),
                    settings_computer.contest_handicap);
 
-  LoadFormProperty(*wf, _T("prpTrailDrift"),
-                   XCSoarInterface::SettingsMap().EnableTrailDrift);
-  LoadFormProperty(*wf, _T("prpDetourCostMarker"),
-                   XCSoarInterface::SettingsMap().EnableDetourCostMarker);
   LoadFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
                    settings_computer.safety_mc_use_current);
 
@@ -428,28 +413,6 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpRiskGamma"), settings_computer.risk_gamma);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpDisplayTrackBearing"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"));
-    dfe->addEnumText(_("On"));
-    dfe->addEnumText(_("Auto"));
-    dfe->Set(XCSoarInterface::SettingsMap().DisplayTrackBearing);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTrail"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"));
-    dfe->addEnumText(_("Long"));
-    dfe->addEnumText(_("Short"));
-    dfe->addEnumText(_("Full"));
-    dfe->Set(XCSoarInterface::SettingsMap().TrailActive);
-    wp->RefreshDisplay();
-  }
 
   PagesConfigPanel::Init(wf);
 
@@ -639,16 +602,6 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppIndFinalGlide"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Default"));
-    dfe->addEnumText(_("Alternate"));
-    dfe->Set(Appearance.IndFinalGlide);
-    wp->RefreshDisplay();
-  }
-
   wp = (WndProperty*)wf->FindByName(_T("prpEnableExternalTriggerCruise"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -814,25 +767,6 @@ setVariables()
                    (unsigned)(settings_computer.ordered_defaults.aat_min_time / 60));
 
 
-  LoadFormProperty(*wf, _T("prpSnailWidthScale"),
-                   XCSoarInterface::SettingsMap().SnailScaling);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    TCHAR tmp_text[30];
-    _tcscpy(tmp_text, _("Vario"));
-    _tcscat(tmp_text, _T(" #1"));
-    dfe->addEnumText(tmp_text);
-    _tcscpy(tmp_text, _("Vario"));
-    _tcscat(tmp_text, _T(" #2"));
-    dfe->addEnumText(tmp_text);
-    dfe->addEnumText(_("Altitude"));
-    dfe->Set((int)XCSoarInterface::SettingsMap().SnailType);
-    wp->RefreshDisplay();
-  }
-
   wp = (WndProperty*)wf->FindByName(_T("prpRoutePlannerMode"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -970,23 +904,6 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SaveFormProperty(*wf, _T("prpTrailDrift"),
-                              szProfileTrailDrift,
-                              XCSoarInterface::SetSettingsMap().EnableTrailDrift);
-  changed |= SaveFormProperty(*wf, _T("prpDetourCostMarker"),
-                              szProfileDetourCostMarker,
-                              XCSoarInterface::SetSettingsMap().EnableDetourCostMarker);
-  changed |= SaveFormPropertyEnum(*wf, _T("prpDisplayTrackBearing"),
-                              szProfileDisplayTrackBearing,
-                              XCSoarInterface::SetSettingsMap().DisplayTrackBearing);
-  changed |= SaveFormProperty(*wf, _T("prpTrail"),
-                              szProfileSnailTrail,
-                              XCSoarInterface::SetSettingsMap().TrailActive);
-
-
-  changed |= SaveFormProperty(*wf, _T("prpEnableFLARMMap"),
-                              szProfileEnableFLARMMap,
-                              XCSoarInterface::SetSettingsMap().EnableFLARMMap);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableFLARMGauge"),
                               szProfileEnableFLARMGauge,
@@ -1048,10 +965,6 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpExternalWind"),
                               szProfileExternalWind,
                               settings_computer.ExternalWind);
-
-  changed |= SaveFormProperty(*wf, _T("prpWindArrowStyle"),
-                              szProfileWindArrowStyle,
-                              XCSoarInterface::SetSettingsMap().WindArrowStyle);
 
   int auto_mc_mode = (int)settings_computer.auto_mc_mode;
   changed |= SaveFormProperty(*wf, _T("prpAutoMcMode"), szProfileAutoMcMode,
@@ -1138,15 +1051,6 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpMaxManoeuveringSpeed"),
                               ugHorizontalSpeed, settings_computer.SafetySpeed,
                               szProfileSafteySpeed);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppIndFinalGlide"));
-  if (wp) {
-    if (Appearance.IndFinalGlide != (IndFinalGlide_t)(wp->GetDataField()->GetAsInteger())) {
-      Appearance.IndFinalGlide = (IndFinalGlide_t)(wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppIndFinalGlide, Appearance.IndFinalGlide);
-      changed = true;
-    }
-  }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
   if (wp) {
@@ -1411,24 +1315,6 @@ void dlgConfigurationShowModal(void)
 
   changed |= taskchanged;
 
-  bool snailscaling_changed =
-      SaveFormProperty(*wf, _T("prpSnailWidthScale"),
-                       szProfileSnailWidthScale,
-                       XCSoarInterface::SetSettingsMap().SnailScaling);
-  changed |= snailscaling_changed;
-  if (snailscaling_changed)
-    Graphics::InitSnailTrail(XCSoarInterface::SettingsMap());
-
-  wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
-  if (wp) {
-    if (XCSoarInterface::SettingsMap().SnailType != (SnailType_t)wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().SnailType = (SnailType_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileSnailType, (int)XCSoarInterface::SettingsMap().SnailType);
-      changed = true;
-      Graphics::InitSnailTrail(XCSoarInterface::SettingsMap());
-    }
-  }
-
   wp = (WndProperty*)wf->FindByName(_T("prpRoutePlannerMode"));
   if (wp) {
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
@@ -1457,6 +1343,7 @@ void dlgConfigurationShowModal(void)
   changed |= SiteConfigPanel::Save();
   changed |= MapDisplayConfigPanel::Save();
   changed |= WayPointDisplayConfigPanel::Save();
+  changed |= SymbolsConfigPanel::Save();
 
   if (orientation_changed) {
     assert(Display::RotateSupported());
