@@ -24,7 +24,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
-#include "SettingsAirspace.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsMap.hpp"
 #include "Appearance.hpp"
@@ -67,6 +66,7 @@ Copyright_License {
 #include "UnitsConfigPanel.hpp"
 #include "LoggerConfigPanel.hpp"
 #include "DevicesConfigPanel.hpp"
+#include "AirspaceConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -161,18 +161,6 @@ OnUserLevel(CheckBoxControl &control)
 }
 
 static void
-OnAirspaceColoursClicked(gcc_unused WndButton &button)
-{
-  dlgAirspaceShowModal(true);
-}
-
-static void
-OnAirspaceModeClicked(gcc_unused WndButton &button)
-{
-  dlgAirspaceShowModal(false);
-}
-
-static void
 OnNextClicked(gcc_unused WndButton &button)
 {
   configuration_tabbed->NextPage();
@@ -260,8 +248,8 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 extern void OnInfoBoxHelp(WindowControl * Sender);
 
 static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnAirspaceColoursClicked),
-  DeclareCallBackEntry(OnAirspaceModeClicked),
+  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceColoursClicked),
+  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceModeClicked),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(DevicesConfigPanel::OnSetupDeviceAClicked),
@@ -327,46 +315,10 @@ setVariables()
   UnitsConfigPanel::Init(wf);
   LoggerConfigPanel::Init(wf);
   DevicesConfigPanel::Init(wf);
+  AirspaceConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
-
-  const SETTINGS_MAP &settings_map =
-    XCSoarInterface::SettingsMap();
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAirspaceDisplay"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("All on"));
-    dfe->addEnumText(_("Clip"));
-    dfe->addEnumText(_("Auto"));
-    dfe->addEnumText(_("All below"));
-    dfe->Set(settings_computer.AltitudeMode);
-    wp->RefreshDisplay();
-  }
-
-  LoadFormProperty(*wf, _T("prpClipAltitude"), ugAltitude,
-                   settings_computer.ClipAltitude);
-  LoadFormProperty(*wf, _T("prpAltWarningMargin"), ugAltitude,
-                   settings_computer.airspace_warnings.AltWarningMargin);
-
-  LoadFormProperty(*wf, _T("prpAirspaceOutline"),
-                   settings_map.bAirspaceBlackOutline);
-
-  wp = (WndProperty *)wf->FindByName(_T("prpAirspaceFillMode"));
-  {
-#ifdef ENABLE_OPENGL
-    wp->hide();
-#else
-    DataFieldEnum &dfe = *(DataFieldEnum *)wp->GetDataField();
-    dfe.addEnumText(_("Default"), SETTINGS_MAP::AS_FILL_DEFAULT);
-    dfe.addEnumText(_("Fill all"), SETTINGS_MAP::AS_FILL_ALL);
-    dfe.addEnumText(_("Fill padding"), SETTINGS_MAP::AS_FILL_PADDING);
-    dfe.Set(settings_map.AirspaceFillMode);
-    wp->RefreshDisplay();
-#endif
-  }
 
   LoadFormProperty(*wf, _T("prpDebounceTimeout"),
                    XCSoarInterface::debounceTimeout);
@@ -380,12 +332,6 @@ setVariables()
                    XCSoarInterface::SettingsMap().AutoCloseFlarmDialog);
   LoadFormProperty(*wf, _T("prpEnableTAGauge"),
                    XCSoarInterface::SettingsMap().EnableTAGauge);
-  LoadFormProperty(*wf, _T("prpAirspaceWarnings"),
-                   settings_computer.EnableAirspaceWarnings);
-  LoadFormProperty(*wf, _T("prpWarningTime"),
-                   settings_computer.airspace_warnings.WarningTime);
-  LoadFormProperty(*wf, _T("prpAcknowledgementTime"),
-                   settings_computer.airspace_warnings.AcknowledgementTime);
 
   wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabels"));
   if (wp) {
@@ -1226,11 +1172,6 @@ void dlgConfigurationShowModal(void)
                               XCSoarInterface::SetSettingsMap().TrailActive);
 
 
-  short tmp = settings_computer.AltitudeMode;
-  changed |= SaveFormProperty(*wf, _T("prpAirspaceDisplay"),
-                              szProfileAltMode, tmp);
-  settings_computer.AltitudeMode = (AirspaceDisplayMode_t)tmp;
-
   changed |= SaveFormProperty(*wf, _T("prpEnableFLARMMap"),
                               szProfileEnableFLARMMap,
                               XCSoarInterface::SetSettingsMap().EnableFLARMMap);
@@ -1250,39 +1191,6 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpDebounceTimeout"),
                               szProfileDebounceTimeout,
                               XCSoarInterface::debounceTimeout);
-
-  changed |= SaveFormProperty(*wf, _T("prpAirspaceOutline"),
-                              szProfileAirspaceBlackOutline,
-                              XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
-
-#ifndef ENABLE_OPENGL
-  SETTINGS_MAP &settings_map = XCSoarInterface::SetSettingsMap();
-
-  tmp = settings_map.AirspaceFillMode;
-  changed |= SaveFormProperty(*wf, _T("prpAirspaceFillMode"),
-                              szProfileAirspaceFillMode, tmp);
-  settings_map.AirspaceFillMode = (enum SETTINGS_MAP::AirspaceFillMode)tmp;
-#endif
-
-  changed |= SaveFormProperty(*wf, _T("prpClipAltitude"), ugAltitude,
-                              settings_computer.ClipAltitude,
-                              szProfileClipAlt);
-
-  changed |= SaveFormProperty(*wf, _T("prpAltWarningMargin"),
-                              ugAltitude, settings_computer.airspace_warnings.AltWarningMargin,
-                              szProfileAltMargin);
-
-  changed |= SaveFormProperty(*wf, _T("prpAirspaceWarnings"),
-                              szProfileAirspaceWarning,
-                              settings_computer.EnableAirspaceWarnings);
-
-  changed |= SaveFormProperty(*wf, _T("prpWarningTime"),
-                              szProfileWarningTime,
-                              settings_computer.airspace_warnings.WarningTime);
-
-  changed |= SaveFormProperty(*wf, _T("prpAcknowledgementTime"),
-                              szProfileAcknowledgementTime,
-                              settings_computer.airspace_warnings.AcknowledgementTime);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabels"),
                                   szProfileDisplayText,
@@ -1822,14 +1730,11 @@ void dlgConfigurationShowModal(void)
                               settings_computer.route_planner.use_ceiling);
 
   changed |= UnitsConfigPanel::Save();
-
   changed |= PagesConfigPanel::Save(wf);
-
   changed |= PolarConfigPanel::Save();
-
   changed |= LoggerConfigPanel::Save();
-
   changed |= DevicesConfigPanel::Save(requirerestart);
+  changed |= AirspaceConfigPanel::Save();
 
   if (orientation_changed) {
     assert(Display::RotateSupported());
