@@ -68,6 +68,7 @@ Copyright_License {
 #include "LoggerConfigPanel.hpp"
 #include "DevicesConfigPanel.hpp"
 #include "AirspaceConfigPanel.hpp"
+#include "SiteConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -287,6 +288,7 @@ setVariables()
   LoggerConfigPanel::Init(wf);
   DevicesConfigPanel::Init(wf);
   AirspaceConfigPanel::Init(wf);
+  SiteConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
@@ -544,24 +546,6 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                    settings_computer.BallastSecsToEmpty);
-
-  ConfigPanel::InitFileField(*wf, _T("prpAirspaceFile"),
-                szProfileAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
-  ConfigPanel::InitFileField(*wf, _T("prpAdditionalAirspaceFile"),
-                szProfileAdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
-  ConfigPanel::InitFileField(*wf, _T("prpWaypointFile"),
-                szProfileWayPointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0"));
-  ConfigPanel::InitFileField(*wf, _T("prpAdditionalWaypointFile"),
-                szProfileAdditionalWayPointFile,
-                _T("*.dat\0*.xcw\0*.cup\0*.wpz\0"));
-  ConfigPanel::InitFileField(*wf, _T("prpMapFile"),
-                szProfileMapFile, _T("*.xcm\0*.lkm\0"));
-  ConfigPanel::InitFileField(*wf, _T("prpTerrainFile"),
-                szProfileTerrainFile, _T("*.jp2\0"));
-  ConfigPanel::InitFileField(*wf, _T("prpTopographyFile"),
-                szProfileTopographyFile, _T("*.tpl\0"));
-  ConfigPanel::InitFileField(*wf, _T("prpAirfieldFile"),
-                szProfileAirfieldFile, _T("*.txt\0"));
 
   wp = (WndProperty *)wf->FindByName(_T("prpLanguageFile"));
   if (wp != NULL) {
@@ -1256,30 +1240,6 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpHandicap"), szProfileHandicap,
                               settings_computer.contest_handicap);
 
-  WaypointFileChanged = WaypointFileChanged |
-    ConfigPanel::FinishFileField(*wf, _T("prpWaypointFile"), szProfileWayPointFile) |
-    ConfigPanel::FinishFileField(*wf, _T("prpAdditionalWaypointFile"),
-                    szProfileAdditionalWayPointFile);
-
-  AirspaceFileChanged =
-    ConfigPanel::FinishFileField(*wf, _T("prpAirspaceFile"), szProfileAirspaceFile) |
-    ConfigPanel::FinishFileField(*wf, _T("prpAdditionalAirspaceFile"),
-                    szProfileAdditionalAirspaceFile);
-
-  MapFileChanged = ConfigPanel::FinishFileField(*wf, _T("prpMapFile"), szProfileMapFile);
-
-  TerrainFileChanged = ConfigPanel::FinishFileField(*wf, _T("prpTerrainFile"),
-                                       szProfileTerrainFile);
-
-  TopographyFileChanged = ConfigPanel::FinishFileField(*wf, _T("prpTopographyFile"),
-                                        szProfileTopographyFile);
-
-  AirfieldFileChanged = ConfigPanel::FinishFileField(*wf, _T("prpAirfieldFile"),
-                                        szProfileAirfieldFile);
-
-  changed |= (WaypointFileChanged || AirfieldFileChanged || MapFileChanged ||
-              TerrainFileChanged || TopographyFileChanged || AirfieldFileChanged);
-
   wp = (WndProperty *)wf->FindByName(_T("prpLanguageFile"));
   if (wp != NULL) {
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
@@ -1680,6 +1640,7 @@ void dlgConfigurationShowModal(void)
   changed |= LoggerConfigPanel::Save();
   changed |= DevicesConfigPanel::Save(requirerestart);
   changed |= AirspaceConfigPanel::Save();
+  changed |= SiteConfigPanel::Save();
 
   if (orientation_changed) {
     assert(Display::RotateSupported());

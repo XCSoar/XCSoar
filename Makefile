@@ -141,6 +141,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/LoggerConfigPanel.cpp \
 	$(SRC)/Dialogs/PagesConfigPanel.cpp \
 	$(SRC)/Dialogs/PolarConfigPanel.cpp \
+	$(SRC)/Dialogs/SiteConfigPanel.cpp \
 	$(SRC)/Dialogs/UnitsConfigPanel.cpp \
 	\
 	$(SRC)/Dialogs/dlgTaskManager.cpp \
