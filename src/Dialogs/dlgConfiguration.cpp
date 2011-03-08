@@ -73,6 +73,7 @@ Copyright_License {
 #include "WayPointDisplayConfigPanel.hpp"
 #include "SymbolsConfigPanel.hpp"
 #include "TerrainDisplayConfigPanel.hpp"
+#include "GlideComputerConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -297,6 +298,7 @@ setVariables()
   WayPointDisplayConfigPanel::Init(wf);
   SymbolsConfigPanel::Init(wf);
   TerrainDisplayConfigPanel::Init(wf);
+  GlideComputerConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
@@ -331,47 +333,6 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpFinalGlideTerrain"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"));
-    dfe->addEnumText(_("Line"));
-    dfe->addEnumText(_("Shade"));
-    dfe->Set(settings_computer.FinalGlideTerrain);
-    wp->RefreshDisplay();
-  }
-
-  LoadFormProperty(*wf, _T("prpEnableNavBaroAltitude"),
-                   settings_computer.EnableNavBaroAltitude);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoWind"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Manual"));
-    dfe->addEnumText(_("Circling"));
-    dfe->addEnumText(_("ZigZag"));
-    dfe->addEnumText(_("Both"));
-    dfe->Set(settings_computer.AutoWindMode);
-    wp->RefreshDisplay();
-  }
-
-  LoadFormProperty(*wf, _T("prpExternalWind"), settings_computer.ExternalWind);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoMcMode"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Final glide"));
-    dfe->addEnumText(_("Trending Average climb"));
-    dfe->addEnumText(_("Both"));
-    dfe->Set((int)settings_computer.auto_mc_mode);
-    wp->RefreshDisplay();
-  }
-
-  LoadFormProperty(*wf, _T("prpBlockSTF"),
-                   settings_computer.EnableBlockSTF);
 
   wp = (WndProperty*)wf->FindByName(_T("prpContests"));
   if (wp) {
@@ -571,32 +532,6 @@ setVariables()
     } else {
       wp->hide();
     }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAverEffTime"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("15 seconds"));
-    dfe->addEnumText(_("30 seconds"));
-    dfe->addEnumText(_("60 seconds"));
-    dfe->addEnumText(_("90 seconds"));
-    dfe->addEnumText(_("2 minutes"));
-    dfe->addEnumText(_("3 minutes"));
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(settings_computer.AverEffTime);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpEnableExternalTriggerCruise"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"));
-    dfe->addEnumText(_("Flap"));
-    dfe->addEnumText(_("SC"));
-    dfe->Set(settings_computer.EnableExternalTriggerCruise);
-    wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpAppInverseInfoBox"),
@@ -904,29 +839,6 @@ void dlgConfigurationShowModal(void)
                               settings_computer.route_planner.safety_height_terrain,
                               szProfileSafetyAltitudeTerrain);
 
-  changed |= SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,
-                              settings_computer.AutoWindMode);
-
-  changed |= SaveFormProperty(*wf, _T("prpExternalWind"),
-                              szProfileExternalWind,
-                              settings_computer.ExternalWind);
-
-  int auto_mc_mode = (int)settings_computer.auto_mc_mode;
-  changed |= SaveFormProperty(*wf, _T("prpAutoMcMode"), szProfileAutoMcMode,
-                              auto_mc_mode);
-  settings_computer.auto_mc_mode = (TaskBehaviour::AutoMCMode_t)auto_mc_mode;
-
-  changed |= SaveFormProperty(*wf, _T("prpEnableNavBaroAltitude"),
-                              szProfileEnableNavBaroAltitude,
-                              settings_computer.EnableNavBaroAltitude);
-
-  changed |= SaveFormProperty(*wf, _T("prpFinalGlideTerrain"),
-                              szProfileFinalGlideTerrain,
-                              settings_computer.FinalGlideTerrain);
-
-  changed |= SaveFormProperty(*wf, _T("prpBlockSTF"),
-                              szProfileBlockSTF,
-                              settings_computer.EnableBlockSTF);
 
   {
     unsigned t= settings_computer.contest;
@@ -1013,16 +925,6 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpGestures"), szProfileGestures,
                               settings_computer.EnableGestures);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAverEffTime")); // VENTA6
-  if (wp) {
-    if (settings_computer.AverEffTime != wp->GetDataField()->GetAsInteger()) {
-      settings_computer.AverEffTime = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileAverEffTime,
-                   settings_computer.AverEffTime);
-      changed = true;
-      requirerestart = true;
-    }
-  }
 
   bool info_box_geometry_changed = false;
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxGeom"));
@@ -1108,10 +1010,6 @@ void dlgConfigurationShowModal(void)
           changed = true;
         }
     }
-
-  changed |= SaveFormProperty(*wf, _T("prpEnableExternalTriggerCruise"),
-                              szProfileEnableExternalTriggerCruise,
-                              settings_computer.EnableExternalTriggerCruise);
 
   changed |= requirerestart |=
     SaveFormProperty(*wf, _T("prpAppInverseInfoBox"),
@@ -1266,6 +1164,7 @@ void dlgConfigurationShowModal(void)
   changed |= WayPointDisplayConfigPanel::Save();
   changed |= SymbolsConfigPanel::Save();
   changed |= TerrainDisplayConfigPanel::Save();
+  changed |= GlideComputerConfigPanel::Save(requirerestart);
 
   if (orientation_changed) {
     assert(Display::RotateSupported());
