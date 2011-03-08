@@ -61,6 +61,7 @@ Copyright_License {
 #include "Gauge/GlueGaugeVario.hpp"
 #include "LogFile.hpp"
 #include "LanguageGlue.hpp"
+#include "ConfigPanel.hpp"
 #include "PagesConfigPanel.hpp"
 #include "PolarConfigPanel.hpp"
 #include "UnitsConfigPanel.hpp"
@@ -267,36 +268,6 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(NULL)
 };
-
-
-static void
-InitFileField(WndProperty &wp, const TCHAR *profile_key, const TCHAR *filters)
-{
-  DataFieldFileReader &df = *(DataFieldFileReader *)wp.GetDataField();
-
-  size_t length;
-  while ((length = _tcslen(filters)) > 0) {
-    df.ScanDirectoryTop(filters);
-    filters += length + 1;
-  }
-
-  TCHAR path[MAX_PATH];
-  if (Profile::GetPath(profile_key, path))
-    df.Lookup(path);
-
-  wp.RefreshDisplay();
-}
-
-static void
-InitFileField(WndForm &wf, const TCHAR *control_name,
-              const TCHAR *profile_key, const TCHAR *filters)
-{
-  WndProperty *wp = (WndProperty *)wf.FindByName(control_name);
-  assert(wp != NULL);
-
-  InitFileField(*wp, profile_key, filters);
-}
-
 
 static void
 setVariables()
@@ -574,22 +545,22 @@ setVariables()
   LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                    settings_computer.BallastSecsToEmpty);
 
-  InitFileField(*wf, _T("prpAirspaceFile"),
+  ConfigPanel::InitFileField(*wf, _T("prpAirspaceFile"),
                 szProfileAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
-  InitFileField(*wf, _T("prpAdditionalAirspaceFile"),
+  ConfigPanel::InitFileField(*wf, _T("prpAdditionalAirspaceFile"),
                 szProfileAdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
-  InitFileField(*wf, _T("prpWaypointFile"),
+  ConfigPanel::InitFileField(*wf, _T("prpWaypointFile"),
                 szProfileWayPointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0"));
-  InitFileField(*wf, _T("prpAdditionalWaypointFile"),
+  ConfigPanel::InitFileField(*wf, _T("prpAdditionalWaypointFile"),
                 szProfileAdditionalWayPointFile,
                 _T("*.dat\0*.xcw\0*.cup\0*.wpz\0"));
-  InitFileField(*wf, _T("prpMapFile"),
+  ConfigPanel::InitFileField(*wf, _T("prpMapFile"),
                 szProfileMapFile, _T("*.xcm\0*.lkm\0"));
-  InitFileField(*wf, _T("prpTerrainFile"),
+  ConfigPanel::InitFileField(*wf, _T("prpTerrainFile"),
                 szProfileTerrainFile, _T("*.jp2\0"));
-  InitFileField(*wf, _T("prpTopographyFile"),
+  ConfigPanel::InitFileField(*wf, _T("prpTopographyFile"),
                 szProfileTopographyFile, _T("*.tpl\0"));
-  InitFileField(*wf, _T("prpAirfieldFile"),
+  ConfigPanel::InitFileField(*wf, _T("prpAirfieldFile"),
                 szProfileAirfieldFile, _T("*.txt\0"));
 
   wp = (WndProperty *)wf->FindByName(_T("prpLanguageFile"));
@@ -633,9 +604,9 @@ setVariables()
     wp->RefreshDisplay();
   }
 
-  InitFileField(*wf, _T("prpStatusFile"),
+  ConfigPanel::InitFileField(*wf, _T("prpStatusFile"),
                 szProfileStatusFile, _T("*.xcs\0"));
-  InitFileField(*wf, _T("prpInputFile"),
+  ConfigPanel::InitFileField(*wf, _T("prpInputFile"),
                 szProfileInputFile, _T("*.xci\0"));
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppStatusMessageAlignment"));
@@ -1008,39 +979,6 @@ setVariables()
 
 }
 
-static bool
-ProfileStringModified(const TCHAR *key, const TCHAR *new_value)
-{
-  TCHAR old_value[MAX_PATH];
-  Profile::Get(key, old_value, MAX_PATH);
-  return _tcscmp(old_value, new_value) != 0;
-}
-
-static bool
-FinishFileField(const WndProperty &wp, const TCHAR *profile_key)
-{
-  const DataFieldFileReader *dfe =
-    (const DataFieldFileReader *)wp.GetDataField();
-  TCHAR new_value[MAX_PATH];
-  _tcscpy(new_value, dfe->GetPathFile());
-  ContractLocalPath(new_value);
-
-  if (!ProfileStringModified(profile_key, new_value))
-    return false;
-
-  Profile::Set(profile_key, new_value);
-  changed = true;
-  return true;
-}
-
-static bool
-FinishFileField(WndForm &wf, const TCHAR *control_name,
-                const TCHAR *profile_key)
-{
-  const WndProperty *wp = (const WndProperty *)wf.FindByName(control_name);
-  return wp != NULL && FinishFileField(*wp, profile_key);
-}
-
 static void
 PrepareConfigurationDialog()
 {
@@ -1319,25 +1257,28 @@ void dlgConfigurationShowModal(void)
                               settings_computer.contest_handicap);
 
   WaypointFileChanged = WaypointFileChanged |
-    FinishFileField(*wf, _T("prpWaypointFile"), szProfileWayPointFile) |
-    FinishFileField(*wf, _T("prpAdditionalWaypointFile"),
+    ConfigPanel::FinishFileField(*wf, _T("prpWaypointFile"), szProfileWayPointFile) |
+    ConfigPanel::FinishFileField(*wf, _T("prpAdditionalWaypointFile"),
                     szProfileAdditionalWayPointFile);
 
   AirspaceFileChanged =
-    FinishFileField(*wf, _T("prpAirspaceFile"), szProfileAirspaceFile) |
-    FinishFileField(*wf, _T("prpAdditionalAirspaceFile"),
+    ConfigPanel::FinishFileField(*wf, _T("prpAirspaceFile"), szProfileAirspaceFile) |
+    ConfigPanel::FinishFileField(*wf, _T("prpAdditionalAirspaceFile"),
                     szProfileAdditionalAirspaceFile);
 
-  MapFileChanged = FinishFileField(*wf, _T("prpMapFile"), szProfileMapFile);
+  MapFileChanged = ConfigPanel::FinishFileField(*wf, _T("prpMapFile"), szProfileMapFile);
 
-  TerrainFileChanged = FinishFileField(*wf, _T("prpTerrainFile"),
+  TerrainFileChanged = ConfigPanel::FinishFileField(*wf, _T("prpTerrainFile"),
                                        szProfileTerrainFile);
 
-  TopographyFileChanged = FinishFileField(*wf, _T("prpTopographyFile"),
+  TopographyFileChanged = ConfigPanel::FinishFileField(*wf, _T("prpTopographyFile"),
                                         szProfileTopographyFile);
 
-  AirfieldFileChanged = FinishFileField(*wf, _T("prpAirfieldFile"),
+  AirfieldFileChanged = ConfigPanel::FinishFileField(*wf, _T("prpAirfieldFile"),
                                         szProfileAirfieldFile);
+
+  changed |= (WaypointFileChanged || AirfieldFileChanged || MapFileChanged ||
+              TerrainFileChanged || TopographyFileChanged || AirfieldFileChanged);
 
   wp = (WndProperty *)wf->FindByName(_T("prpLanguageFile"));
   if (wp != NULL) {
@@ -1380,11 +1321,15 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  if (FinishFileField(*wf, _T("prpStatusFile"), szProfileStatusFile))
+  if (ConfigPanel::FinishFileField(*wf, _T("prpStatusFile"), szProfileStatusFile)) {
+    changed = true;
     requirerestart = true;
+  }
 
-  if (FinishFileField(*wf, _T("prpInputFile"), szProfileInputFile))
+  if (ConfigPanel::FinishFileField(*wf, _T("prpInputFile"), szProfileInputFile)) {
+    changed = true;
     requirerestart = true;
+  }
 
   changed |= SaveFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                               szProfileBallastSecsToEmpty,
