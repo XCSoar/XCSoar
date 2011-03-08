@@ -316,7 +316,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                        pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskProperties::OnTabReClick);
 
-    wTabBar->SetCurrentPage(2);
+    wTabBar->SetCurrentPage(0);
   }
 
 
