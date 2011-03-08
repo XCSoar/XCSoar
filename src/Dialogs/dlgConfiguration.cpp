@@ -31,11 +31,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/DisplayConfig.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "Logger/Logger.hpp"
-#include "Device/Register.hpp"
-#include "Device/List.hpp"
-#include "Device/Descriptor.hpp"
 #include "Screen/Busy.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Key.h"
@@ -70,10 +66,8 @@ Copyright_License {
 #include "PolarConfigPanel.hpp"
 #include "UnitsConfigPanel.hpp"
 #include "LoggerConfigPanel.hpp"
+#include "DevicesConfigPanel.hpp"
 
-#ifdef ANDROID
-#include "Android/BluetoothHelper.hpp"
-#endif
 
 #include <assert.h>
 
@@ -125,21 +119,6 @@ static const TCHAR *const captions[] = {
   N_("Experimental features"),
 };
 
-static const struct {
-  enum DeviceConfig::port_type type;
-  const TCHAR *label;
-} port_types[] = {
-#ifdef _WIN32_WCE
-  { DeviceConfig::AUTO, N_("GPS Intermediate Driver") },
-#endif
-#ifdef ANDROID
-  { DeviceConfig::INTERNAL, N_("Built-in GPS") },
-#endif
-  { DeviceConfig::SERIAL, NULL } /* sentinel */
-};
-
-static const unsigned num_port_types =
-  sizeof(port_types) / sizeof(port_types[0]) - 1;
 
 static bool loading = false;
 static bool changed = false;
@@ -172,57 +151,6 @@ PageSwitched()
   PolarConfigPanel::Activate(current_page == PAGE_POLAR);
 }
 
-static void
-SetupDevice(DeviceDescriptor &device)
-{
-#ifdef ToDo
-  device.DoSetup();
-  wf->FocusNext(NULL);
-#endif
-
-  // this is a hack, devices dont jet support device dependant setup dialogs
-
-  if (!device.IsVega())
-    return;
-
-  changed = dlgConfigurationVarioShowModal();
-}
-
-static void
-OnSetupDeviceAClicked(WndButton &button)
-{
-  SetupDevice(DeviceList[0]);
-
-  // this is a hack to get the dialog to retain focus because
-  // the progress dialog in the vario configuration somehow causes
-  // focus problems
-  button.set_focus();
-}
-
-
-static void
-OnSetupDeviceBClicked(WndButton &button)
-{
-  SetupDevice(DeviceList[1]);
-
-  // this is a hack to get the dialog to retain focus because
-  // the progress dialog in the vario configuration somehow causes
-  // focus problems
-  button.set_focus();
-}
-
-static void
-UpdateDeviceSetupButton(unsigned DeviceIdx, const TCHAR *Name)
-{
-  assert(DeviceIdx < 26);
-
-  TCHAR button_name[] = _T("cmdSetupDeviceA");
-  button_name[(sizeof(button_name) / sizeof(button_name[0])) - 2] += DeviceIdx;
-
-  WndButton *wb = (WndButton *)wf->FindByName(button_name);
-  if (wb != NULL)
-    wb->set_visible(Name != NULL && _tcscmp(Name, _T("Vega")) == 0);
-}
 
 static void
 OnUserLevel(CheckBoxControl &control)
@@ -230,36 +158,6 @@ OnUserLevel(CheckBoxControl &control)
   changed = true;
   Profile::Set(szProfileUserLevel, control.get_checked());
   wf->FilterAdvanced(control.get_checked());
-}
-
-static void
-OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  switch (Mode) {
-  case DataField::daChange:
-    UpdateDeviceSetupButton(0, Sender->GetAsString());
-    break;
-
-  case DataField::daInc:
-  case DataField::daDec:
-  case DataField::daSpecial:
-    return;
-  }
-}
-
-static void
-OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  switch (Mode) {
-  case DataField::daChange:
-    UpdateDeviceSetupButton(1, Sender->GetAsString());
-    break;
-
-  case DataField::daInc:
-  case DataField::daDec:
-  case DataField::daSpecial:
-    return;
-  }
 }
 
 static void
@@ -366,11 +264,11 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnAirspaceModeClicked),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(OnSetupDeviceAClicked),
-  DeclareCallBackEntry(OnSetupDeviceBClicked),
+  DeclareCallBackEntry(DevicesConfigPanel::OnSetupDeviceAClicked),
+  DeclareCallBackEntry(DevicesConfigPanel::OnSetupDeviceBClicked),
   DeclareCallBackEntry(OnInfoBoxHelp),
-  DeclareCallBackEntry(OnDeviceAData),
-  DeclareCallBackEntry(OnDeviceBData),
+  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAData),
+  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceBData),
   DeclareCallBackEntry(PolarConfigPanel::OnLoadInteral),
   DeclareCallBackEntry(PolarConfigPanel::OnLoadFromFile),
   DeclareCallBackEntry(PolarConfigPanel::OnExport),
@@ -382,7 +280,6 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-static DeviceConfig device_config[NUMDEV];
 
 static void
 InitFileField(WndProperty &wp, const TCHAR *profile_key, const TCHAR *filters)
@@ -412,116 +309,6 @@ InitFileField(WndForm &wf, const TCHAR *control_name,
   InitFileField(*wp, profile_key, filters);
 }
 
-static void
-SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
-                  WndProperty *port_field, WndProperty *speed_field,
-                  WndProperty *driver_field, WndButton *setup_button)
-{
-#ifndef ANDROID
-  static const TCHAR *const COMMPort[] = {
-    _T("COM1"), _T("COM2"), _T("COM3"), _T("COM4"),
-    _T("COM5"), _T("COM6"), _T("COM7"), _T("COM8"),
-    _T("COM9"), _T("COM10"), _T("COM0"),
-    NULL
-  };
-
-  static const TCHAR *const tSpeed[] = {
-    _T("1200"), _T("2400"), _T("4800"), _T("9600"),
-    _T("19200"), _T("38400"), _T("57600"), _T("115200"),
-    NULL
-  };
-#endif
-
-  if (port_field != NULL) {
-    DataFieldEnum *dfe = (DataFieldEnum *)port_field->GetDataField();
-
-    for (unsigned i = 0; port_types[i].label != NULL; i++) {
-      dfe->addEnumText(gettext(port_types[i].label));
-
-      if (port_types[i].type == config.port_type)
-        dfe->Set(i);
-    }
-
-#ifdef ANDROID
-    JNIEnv *env = Java::GetEnv();
-    jobjectArray bonded = BluetoothHelper::list(env);
-    if (bonded != NULL) {
-      jsize n = env->GetArrayLength(bonded) / 2;
-      for (jsize i = 0; i < n; ++i) {
-        jstring address = (jstring)env->GetObjectArrayElement(bonded, i * 2);
-        if (address == NULL)
-          continue;
-
-        const char *address2 = env->GetStringUTFChars(address, NULL);
-        if (address2 == NULL)
-          continue;
-
-        jstring name = (jstring)env->GetObjectArrayElement(bonded, i * 2 + 1);
-        const char *name2 = name != NULL
-          ? env->GetStringUTFChars(name, NULL)
-          : NULL;
-
-        dfe->addEnumText(address2, name2);
-        env->ReleaseStringUTFChars(address, address2);
-        if (name2 != NULL)
-          env->ReleaseStringUTFChars(name, name2);
-      }
-
-      env->DeleteLocalRef(bonded);
-
-      if (config.port_type == DeviceConfig::RFCOMM &&
-          !config.bluetooth_mac.empty()) {
-        if (!dfe->Exists(config.bluetooth_mac))
-          dfe->addEnumText(config.bluetooth_mac);
-        dfe->SetAsString(config.bluetooth_mac);
-      }
-    }
-#else
-    dfe->addEnumTexts(COMMPort);
-
-    switch (config.port_type) {
-    case DeviceConfig::SERIAL:
-      dfe->Set(config.port_index + num_port_types);
-      break;
-
-    case DeviceConfig::RFCOMM:
-    case DeviceConfig::AUTO:
-    case DeviceConfig::INTERNAL:
-      break;
-    }
-#endif
-
-    port_field->RefreshDisplay();
-  }
-
-  if (speed_field != NULL) {
-#ifdef ANDROID
-    speed_field->hide();
-#else
-    DataFieldEnum *dfe = (DataFieldEnum *)speed_field->GetDataField();
-    dfe->addEnumTexts(tSpeed);
-
-    dfe->Set(config.speed_index);
-    speed_field->RefreshDisplay();
-#endif
-  }
-
-  if (driver_field) {
-    DataFieldEnum *dfe = (DataFieldEnum *)driver_field->GetDataField();
-
-    const TCHAR *DeviceName;
-    for (unsigned i = 0; (DeviceName = devRegisterGetName(i)) != NULL; i++)
-      dfe->addEnumText(DeviceName);
-
-    dfe->Sort(1);
-    dfe->SetAsString(config.driver_name);
-
-    driver_field->RefreshDisplay();
-  }
-
-  if (setup_button != NULL)
-    setup_button->set_visible(device.IsVega());
-}
 
 static void
 setVariables()
@@ -539,21 +326,7 @@ setVariables()
   PolarConfigPanel::Init(wf);
   UnitsConfigPanel::Init(wf);
   LoggerConfigPanel::Init(wf);
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    Profile::GetDeviceConfig(i, device_config[i]);
-
-  SetupDeviceFields(DeviceList[0], device_config[0],
-                    (WndProperty*)wf->FindByName(_T("prpComPort1")),
-                    (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
-                    (WndProperty*)wf->FindByName(_T("prpComDevice1")),
-                    (WndButton *)wf->FindByName(_T("cmdSetupDeviceA")));
-
-  SetupDeviceFields(DeviceList[1], device_config[1],
-                    (WndProperty*)wf->FindByName(_T("prpComPort2")),
-                    (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
-                    (WndProperty*)wf->FindByName(_T("prpComDevice2")),
-                    (WndButton *)wf->FindByName(_T("cmdSetupDeviceB")));
+  DevicesConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
@@ -816,10 +589,6 @@ setVariables()
                    XCSoarInterface::SettingsMap().EnableTrailDrift);
   LoadFormProperty(*wf, _T("prpDetourCostMarker"),
                    XCSoarInterface::SettingsMap().EnableDetourCostMarker);
-  LoadFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
-                   XCSoarInterface::SettingsMap().SetSystemTimeFromGPS);
-  LoadFormProperty(*wf, _T("prpIgnoreNMEAChecksum"),
-                   NMEAParser::ignore_checksum);
   LoadFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
                    settings_computer.safety_mc_use_current);
 
@@ -1326,73 +1095,6 @@ FinishFileField(WndForm &wf, const TCHAR *control_name,
   return wp != NULL && FinishFileField(*wp, profile_key);
 }
 
-/**
- * @return true if the value has changed
- */
-static bool
-FinishPortField(DeviceConfig &config, WndProperty &port_field)
-{
-  const DataFieldEnum &df = *(const DataFieldEnum *)port_field.GetDataField();
-  int value = df.GetAsInteger();
-
-  if (value < (int)num_port_types) {
-    if (port_types[value].type == config.port_type)
-      return false;
-
-    config.port_type = port_types[value].type;
-    return true;
-  } else {
-    value -= num_port_types;
-
-#ifdef ANDROID
-    if (config.port_type == DeviceConfig::RFCOMM &&
-        _tcscmp(config.bluetooth_mac, df.GetAsString()) == 0)
-      return false;
-#else
-    if (config.port_type == DeviceConfig::SERIAL &&
-        value == (int)config.port_index)
-      return false;
-#endif
-
-#ifdef ANDROID
-    config.port_type = DeviceConfig::RFCOMM;
-    config.bluetooth_mac = df.GetAsString();
-#else
-    config.port_type = DeviceConfig::SERIAL;
-    config.port_index = value;
-#endif
-    return true;
-  }
-}
-
-static bool
-FinishDeviceFields(DeviceConfig &config,
-                   WndProperty *port_field, WndProperty *speed_field,
-                   WndProperty *driver_field)
-{
-  bool changed = false;
-
-  if (port_field != NULL && FinishPortField(config, *port_field))
-    changed = true;
-
-#ifndef ANDROID
-  if (speed_field != NULL &&
-      (int)config.speed_index != speed_field->GetDataField()->GetAsInteger()) {
-    config.speed_index = speed_field->GetDataField()->GetAsInteger();
-    changed = true;
-  }
-#endif
-
-  if (driver_field != NULL &&
-      _tcscmp(config.driver_name,
-              driver_field->GetDataField()->GetAsString()) != 0) {
-    _tcscpy(config.driver_name, driver_field->GetDataField()->GetAsString());
-    changed = true;
-  }
-
-  return changed;
-}
-
 static void
 PrepareConfigurationDialog()
 {
@@ -1509,14 +1211,6 @@ void dlgConfigurationShowModal(void)
       changed = true;
     }
   }
-
-  changed |= SaveFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
-                              szProfileSetSystemTimeFromGPS,
-                              XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS);
-
-  changed |= SaveFormProperty(*wf, _T("prpIgnoreNMEAChecksum"),
-                              szProfileIgnoreNMEAChecksum,
-                              NMEAParser::ignore_checksum);
 
   changed |= SaveFormProperty(*wf, _T("prpTrailDrift"),
                               szProfileTrailDrift,
@@ -2090,22 +1784,6 @@ void dlgConfigurationShowModal(void)
 
   changed |= taskchanged;
 
-  DevicePortChanged =
-    FinishDeviceFields(device_config[0],
-                       (WndProperty*)wf->FindByName(_T("prpComPort1")),
-                       (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
-                       (WndProperty*)wf->FindByName(_T("prpComDevice1")));
-
-  DevicePortChanged =
-    FinishDeviceFields(device_config[1],
-                       (WndProperty*)wf->FindByName(_T("prpComPort2")),
-                       (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
-                       (WndProperty*)wf->FindByName(_T("prpComDevice2"))) ||
-    DevicePortChanged;
-
-  if (DevicePortChanged)
-    changed = true;
-
   bool snailscaling_changed =
       SaveFormProperty(*wf, _T("prpSnailWidthScale"),
                        szProfileSnailWidthScale,
@@ -2151,12 +1829,7 @@ void dlgConfigurationShowModal(void)
 
   changed |= LoggerConfigPanel::Save();
 
-  if (DevicePortChanged)
-    for (unsigned i = 0; i < NUMDEV; ++i)
-      Profile::SetDeviceConfig(i, device_config[i]);
-
-  if (!is_embedded() && DevicePortChanged)
-    requirerestart = true;
+  changed |= DevicesConfigPanel::Save(requirerestart);
 
   if (orientation_changed) {
     assert(Display::RotateSupported());
