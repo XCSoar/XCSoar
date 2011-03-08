@@ -74,6 +74,7 @@ Copyright_License {
 #include "SymbolsConfigPanel.hpp"
 #include "TerrainDisplayConfigPanel.hpp"
 #include "GlideComputerConfigPanel.hpp"
+#include "SafetyFactorsConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -299,6 +300,7 @@ setVariables()
   SymbolsConfigPanel::Init(wf);
   TerrainDisplayConfigPanel::Init(wf);
   GlideComputerConfigPanel::Init(wf);
+  SafetyFactorsConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
@@ -316,22 +318,6 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpMenuTimeout"),
                    XCSoarInterface::MenuTimeoutMax / 2);
-
-  LoadFormProperty(*wf, _T("prpSafetyAltitudeArrival"), ugAltitude,
-                   settings_computer.safety_height_arrival);
-  LoadFormProperty(*wf, _T("prpSafetyAltitudeTerrain"), ugAltitude,
-                   settings_computer.route_planner.safety_height_terrain);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAbortTaskMode"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Simple"));
-    dfe->addEnumText(_("Task"));
-    dfe->addEnumText(_("Home"));
-    dfe->Set(settings_computer.abort_task_mode);
-    wp->RefreshDisplay();
-  }
 
 
   wp = (WndProperty*)wf->FindByName(_T("prpContests"));
@@ -351,15 +337,6 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpHandicap"),
                    settings_computer.contest_handicap);
-
-  LoadFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
-                   settings_computer.safety_mc_use_current);
-
-  LoadFormProperty(*wf, _T("prpSafetyMacCready"), ugVerticalSpeed,
-                   settings_computer.safety_mc);
-
-  LoadFormProperty(*wf, _T("prpRiskGamma"), settings_computer.risk_gamma);
-
 
   PagesConfigPanel::Init(wf);
 
@@ -764,47 +741,7 @@ void dlgConfigurationShowModal(void)
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
 
-  changed |= SaveFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
-                              szProfileAbortSafetyUseCurrent,
-                              settings_computer.safety_mc_use_current);
-
   WndProperty *wp;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAbortTaskMode"));
-  if (wp) {
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-    if ((int)settings_computer.abort_task_mode != df.GetAsInteger()) {
-      settings_computer.abort_task_mode = (AbortTaskMode)df.GetAsInteger();
-      Profile::Set(szProfileAbortTaskMode,
-                   (unsigned)settings_computer.abort_task_mode);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
-  if (wp) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    fixed val = Units::ToSysVSpeed(df.GetAsFixed());
-    if (settings_computer.safety_mc != val) {
-      settings_computer.safety_mc = val;
-      Profile::Set(szProfileSafetyMacCready,
-                    iround(settings_computer.safety_mc*10));
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpRiskGamma"));
-  if (wp) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    fixed val = df.GetAsFixed();
-    if (settings_computer.risk_gamma != val) {
-      settings_computer.risk_gamma = val;
-      Profile::Set(szProfileRiskGamma,
-                    iround(settings_computer.risk_gamma*10));
-      changed = true;
-    }
-  }
-
 
   changed |= SaveFormProperty(*wf, _T("prpEnableFLARMGauge"),
                               szProfileEnableFLARMGauge,
@@ -830,14 +767,6 @@ void dlgConfigurationShowModal(void)
       changed = true;
     }
   }
-
-  changed |= SaveFormProperty(*wf, _T("prpSafetyAltitudeArrival"), ugAltitude,
-                              settings_computer.safety_height_arrival,
-                              szProfileSafetyAltitudeArrival);
-
-  changed |= SaveFormProperty(*wf, _T("prpSafetyAltitudeTerrain"), ugAltitude,
-                              settings_computer.route_planner.safety_height_terrain,
-                              szProfileSafetyAltitudeTerrain);
 
 
   {
@@ -1165,6 +1094,7 @@ void dlgConfigurationShowModal(void)
   changed |= SymbolsConfigPanel::Save();
   changed |= TerrainDisplayConfigPanel::Save();
   changed |= GlideComputerConfigPanel::Save(requirerestart);
+  changed |= SafetyFactorsConfigPanel::Save();
 
   if (orientation_changed) {
     assert(Display::RotateSupported());
