@@ -147,7 +147,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  if ((device.Driver->Flags & drfLogger) == 0) {
+  if ((driver->Flags & drfLogger) == 0) {
     fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
     return EXIT_FAILURE;
   }
@@ -157,14 +157,13 @@ int main(int argc, char **argv)
 #else
   SerialPort *port = new SerialPort(port_name, baud, *(Port::Handler *)NULL);
 #endif
-  device.Com = port;
   if (!port->Open()) {
     delete port;
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
   }
 
-  if (!device.Open(device.Com, driver)) {
+  if (!device.Open(port, driver)) {
     delete device.Com;
     fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
     return EXIT_FAILURE;
