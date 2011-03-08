@@ -38,10 +38,6 @@ namespace PolarConfigPanel
   void OnLoadFromFile(WndButton &button);
   void OnExport(WndButton &button);
   void OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mode);
-
-  extern WndButton* buttonList;
-  extern WndButton* buttonImport;
-  extern WndButton* buttonExport;
 };
 
 #endif /* POLARCONFIGPANEL_HPP */

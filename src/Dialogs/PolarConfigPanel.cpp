@@ -44,9 +44,9 @@ Copyright_License {
 #include "MainWindow.hpp"
 
 static WndForm* wf = NULL;
-WndButton* PolarConfigPanel::buttonList = NULL;
-WndButton* PolarConfigPanel::buttonImport = NULL;
-WndButton* PolarConfigPanel::buttonExport = NULL;
+static WndButton* buttonList = NULL;
+static WndButton* buttonImport = NULL;
+static WndButton* buttonExport = NULL;
 
 static void
 UpdatePolarFields(const SimplePolar &polar)
