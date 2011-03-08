@@ -274,20 +274,7 @@ setVariables()
   TaskDefaultsConfigPanel::Init(wf);
   InfoBoxesConfigPanel::Init(wf);
   ExperimentalConfigPanel::Init(wf);
-
-  const SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::SettingsComputer();
-
-  LoadFormProperty(*wf, _T("prpHandicap"),
-                   settings_computer.contest_handicap);
-
   PagesConfigPanel::Init(wf);
-
-  LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
-                   settings_computer.SafetySpeed);
-
-  LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
-                   settings_computer.BallastSecsToEmpty);
 }
 
 static void
@@ -344,24 +331,6 @@ void dlgConfigurationShowModal(void)
 
   // TODO enhancement: implement a cancel button that skips all this
   // below after exit.
-
-  SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::SetSettingsComputer();
-
-
-  changed |= SaveFormProperty(*wf, _T("prpHandicap"), szProfileHandicap,
-                              settings_computer.contest_handicap);
-
-  changed |= SaveFormProperty(*wf, _T("prpBallastSecsToEmpty"),
-                              szProfileBallastSecsToEmpty,
-                              settings_computer.BallastSecsToEmpty);
-
-  changed |= SaveFormProperty(*wf, _T("prpMaxManoeuveringSpeed"),
-                              ugHorizontalSpeed, settings_computer.SafetySpeed,
-                              szProfileSafteySpeed);
-
-
-
   changed |= UnitsConfigPanel::Save();
   changed |= PagesConfigPanel::Save(wf);
   changed |= PolarConfigPanel::Save();

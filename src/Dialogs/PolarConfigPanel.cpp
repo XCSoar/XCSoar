@@ -241,12 +241,36 @@ PolarConfigPanel::Init(WndForm *_wf)
   UpdatePolarFields(polar);
   UpdatePolarTitle();
   UpdatePolarInvalidLabel();
+
+
+  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
+
+  LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
+                   settings_computer.SafetySpeed);
+
+  LoadFormProperty(*wf, _T("prpHandicap"),
+                   settings_computer.contest_handicap);
+
+  LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
+                   settings_computer.BallastSecsToEmpty);
 }
 
 bool
 PolarConfigPanel::Save()
 {
   bool changed = false;
+  SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
+
+  changed |= SaveFormProperty(*wf, _T("prpMaxManoeuveringSpeed"),
+                              ugHorizontalSpeed, settings_computer.SafetySpeed,
+                              szProfileSafteySpeed);
+
+  changed |= SaveFormProperty(*wf, _T("prpHandicap"), szProfileHandicap,
+                              settings_computer.contest_handicap);
+
+  changed |= SaveFormProperty(*wf, _T("prpBallastSecsToEmpty"),
+                              szProfileBallastSecsToEmpty,
+                              settings_computer.BallastSecsToEmpty);
 
   SimplePolar polar;
   PolarGlue::LoadFromProfile(polar);
@@ -260,5 +284,6 @@ PolarConfigPanel::Save()
       protected_task_manager->set_glide_polar(gp);
     }
   }
+
   return changed;
 }
