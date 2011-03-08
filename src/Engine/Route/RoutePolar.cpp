@@ -102,13 +102,14 @@ RoutePolar::index_to_dxdy(const int index, int& dx, int& dy)
 GeoPoint
 RoutePolars::msl_intercept(const int index, const AGeoPoint& p, const TaskProjection& proj) const
 {
+  const unsigned safe_index = ((unsigned)index)% ROUTEPOLAR_POINTS;
   const FlatGeoPoint fp = proj.project(p);
-  const fixed d = p.altitude*polar_glide.get_point(index).inv_gradient;
+  const fixed d = p.altitude*polar_glide.get_point(safe_index).inv_gradient;
   const fixed scale = proj.get_approx_scale();
   const int steps = int(d / scale) + 1;
   int dx;
   int dy;
-  RoutePolar::index_to_dxdy(index, dx, dy);
+  RoutePolar::index_to_dxdy(safe_index, dx, dy);
   dx= (dx*steps)>>7;
   dy= (dy*steps)>>7;
   const FlatGeoPoint dp(fp.Longitude+dx, fp.Latitude+dy);
