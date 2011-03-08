@@ -850,8 +850,8 @@ RasterTileCache::Intersection(int x0, int y0,
                               const long slope_fact,
                               unsigned& _x, unsigned& _y) const
 {
-  _x = x0;
-  _y = y0;
+  _x = (unsigned)x0;
+  _y = (unsigned)y0;
 
   if (((unsigned)x0 >= width) || ((unsigned)y0 >= height)) {
     // origin is outside overall bounds
