@@ -69,6 +69,7 @@ Copyright_License {
 #include "PagesConfigPanel.hpp"
 #include "PolarConfigPanel.hpp"
 #include "UnitsConfigPanel.hpp"
+#include "LoggerConfigPanel.hpp"
 
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"
@@ -148,51 +149,8 @@ static bool waypointneedsave = false;
 static config_page current_page;
 static WndForm *wf = NULL;
 TabbedControl *configuration_tabbed;
-static WndButton *buttonPilotName = NULL;
-static WndButton *buttonAircraftType = NULL;
-static WndButton *buttonAircraftRego = NULL;
-static WndButton *buttonLoggerID = NULL;
 static WndButton *buttonFonts = NULL;
 static WndButton *buttonWaypoints = NULL;
-
-static void
-UpdateButtons(void)
-{
-  TCHAR text[120];
-  TCHAR val[100];
-  if (buttonPilotName) {
-    Profile::Get(szProfilePilotName, val, 100);
-    if (string_is_empty(val))
-      _tcscpy(val, _("(blank)"));
-
-    _stprintf(text, _T("%s: %s"), _("Pilot name"), val);
-    buttonPilotName->SetCaption(text);
-  }
-  if (buttonAircraftType) {
-    Profile::Get(szProfileAircraftType, val, 100);
-    if (string_is_empty(val))
-      _tcscpy(val, _("(blank)"));
-
-    _stprintf(text, _T("%s: %s"), _("Aircraft type"), val);
-    buttonAircraftType->SetCaption(text);
-  }
-  if (buttonAircraftRego) {
-    Profile::Get(szProfileAircraftRego, val, 100);
-    if (string_is_empty(val))
-      _tcscpy(val, _("(blank)"));
-
-    _stprintf(text, _T("%s: %s"), _("Competition ID"), val);
-    buttonAircraftRego->SetCaption(text);
-  }
-  if (buttonLoggerID) {
-    Profile::Get(szProfileLoggerID, val, 100);
-    if (string_is_empty(val))
-      _tcscpy(val, _("(blank)"));
-
-    _stprintf(text, _T("%s: %s"), _("Logger ID"), val);
-    buttonLoggerID->SetCaption(text);
-  }
-}
 
 static void
 PageSwitched()
@@ -302,63 +260,6 @@ OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode)
   case DataField::daSpecial:
     return;
   }
-}
-
-static void
-OnAircraftRegoClicked(gcc_unused WndButton &button)
-{
-  TCHAR Temp[100];
-  if (buttonAircraftRego) {
-    Profile::Get(szProfileAircraftRego, Temp, 100);
-    if (dlgTextEntryShowModal(Temp, 100)) {
-      Profile::Set(szProfileAircraftRego, Temp);
-      changed = true;
-    }
-  }
-  UpdateButtons();
-}
-
-static void
-OnAircraftTypeClicked(gcc_unused WndButton &button)
-{
-  TCHAR Temp[100];
-  if (buttonAircraftType) {
-    Profile::Get(szProfileAircraftType, Temp, 100);
-    if (dlgTextEntryShowModal(Temp, 100)) {
-      Profile::Set(szProfileAircraftType, Temp);
-      changed = true;
-    }
-  }
-  UpdateButtons();
-}
-
-static void
-OnPilotNameClicked(gcc_unused WndButton &button)
-{
-  TCHAR Temp[100];
-  if (buttonPilotName) {
-    Profile::Get(szProfilePilotName, Temp, 100);
-    if (dlgTextEntryShowModal(Temp, 100)) {
-      Profile::Set(szProfilePilotName, Temp);
-      changed = true;
-    }
-  }
-  UpdateButtons();
-}
-
-static void
-OnLoggerIDClicked(gcc_unused WndButton &button)
-{
-  TCHAR Temp[100];
-  if (buttonLoggerID) {
-    Profile::Get(szProfileLoggerID, Temp, 100);
-    if (dlgTextEntryShowModal(Temp, 100)) {
-      Profile::Set(szProfileLoggerID, Temp);
-      changed = true;
-    }
-    ReadAssetNumber();
-  }
-  UpdateButtons();
 }
 
 static void
@@ -627,22 +528,6 @@ setVariables()
 {
   WndProperty *wp;
 
-  buttonPilotName = ((WndButton *)wf->FindByName(_T("cmdPilotName")));
-  if (buttonPilotName)
-    buttonPilotName->SetOnClickNotify(OnPilotNameClicked);
-
-  buttonAircraftType = ((WndButton *)wf->FindByName(_T("cmdAircraftType")));
-  if (buttonAircraftType)
-    buttonAircraftType->SetOnClickNotify(OnAircraftTypeClicked);
-
-  buttonAircraftRego = ((WndButton *)wf->FindByName(_T("cmdAircraftRego")));
-  if (buttonAircraftRego)
-    buttonAircraftRego->SetOnClickNotify(OnAircraftRegoClicked);
-
-  buttonLoggerID = ((WndButton *)wf->FindByName(_T("cmdLoggerID")));
-  if (buttonLoggerID)
-    buttonLoggerID->SetOnClickNotify(OnLoggerIDClicked);
-
   buttonFonts = ((WndButton *)wf->FindByName(_T("cmdFonts")));
   if (buttonFonts)
     buttonFonts->SetOnClickNotify(OnFonts);
@@ -653,8 +538,7 @@ setVariables()
 
   PolarConfigPanel::Init(wf);
   UnitsConfigPanel::Init(wf);
-
-  UpdateButtons();
+  LoggerConfigPanel::Init(wf);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     Profile::GetDeviceConfig(i, device_config[i]);
@@ -711,8 +595,6 @@ setVariables()
 #endif
   }
 
-  LoadFormProperty(*wf, _T("prpLoggerShortName"),
-                   settings_computer.LoggerShortName);
   LoadFormProperty(*wf, _T("prpDebounceTimeout"),
                    XCSoarInterface::debounceTimeout);
 
@@ -940,8 +822,6 @@ setVariables()
                    NMEAParser::ignore_checksum);
   LoadFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
                    settings_computer.safety_mc_use_current);
-  LoadFormProperty(*wf, _T("prpDisableAutoLogger"),
-                   !settings_computer.DisableAutoLogger);
 
   LoadFormProperty(*wf, _T("prpSafetyMacCready"), ugVerticalSpeed,
                    settings_computer.safety_mc);
@@ -1374,10 +1254,6 @@ setVariables()
                    (unsigned)(settings_computer.ordered_defaults.aat_min_time / 60));
 
 
-  LoadFormProperty(*wf, _T("prpLoggerTimeStepCruise"),
-                   settings_computer.LoggerTimeStepCruise);
-  LoadFormProperty(*wf, _T("prpLoggerTimeStepCircling"),
-                   settings_computer.LoggerTimeStepCircling);
   LoadFormProperty(*wf, _T("prpSnailWidthScale"),
                    XCSoarInterface::SettingsMap().SnailScaling);
 
@@ -1597,11 +1473,6 @@ void dlgConfigurationShowModal(void)
                               szProfileAbortSafetyUseCurrent,
                               settings_computer.safety_mc_use_current);
 
-  /* GUI label is "Enable Auto Logger" */
-  changed |= SaveFormPropertyNegated(*wf, _T("prpDisableAutoLogger"),
-                                     szProfileDisableAutoLogger,
-                                     settings_computer.DisableAutoLogger);
-
   WndProperty *wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpAbortTaskMode"));
@@ -1665,10 +1536,6 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpAirspaceDisplay"),
                               szProfileAltMode, tmp);
   settings_computer.AltitudeMode = (AirspaceDisplayMode_t)tmp;
-
-  changed |= SaveFormProperty(*wf, _T("prpLoggerShortName"),
-                              szProfileLoggerShort,
-                              settings_computer.LoggerShortName);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableFLARMMap"),
                               szProfileEnableFLARMMap,
@@ -2223,14 +2090,6 @@ void dlgConfigurationShowModal(void)
 
   changed |= taskchanged;
 
-  changed |= SaveFormProperty(*wf, _T("prpLoggerTimeStepCruise"),
-                              szProfileLoggerTimeStepCruise,
-                              settings_computer.LoggerTimeStepCruise);
-
-  changed |= SaveFormProperty(*wf, _T("prpLoggerTimeStepCircling"),
-                              szProfileLoggerTimeStepCircling,
-                              settings_computer.LoggerTimeStepCircling);
-
   DevicePortChanged =
     FinishDeviceFields(device_config[0],
                        (WndProperty*)wf->FindByName(_T("prpComPort1")),
@@ -2289,6 +2148,8 @@ void dlgConfigurationShowModal(void)
   changed |= PagesConfigPanel::Save(wf);
 
   changed |= PolarConfigPanel::Save();
+
+  changed |= LoggerConfigPanel::Save();
 
   if (DevicePortChanged)
     for (unsigned i = 0; i < NUMDEV; ++i)
