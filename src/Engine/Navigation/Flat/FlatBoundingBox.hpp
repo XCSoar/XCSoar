@@ -176,6 +176,24 @@ public:
   }
 
   /**
+   * Expand the bounding box to include this bounding box
+   */
+  void expand(const FlatBoundingBox& p) {
+    bb_ll.Longitude = std::min(bb_ll.Longitude, p.bb_ll.Longitude);
+    bb_ur.Longitude = std::max(bb_ur.Longitude, p.bb_ur.Longitude);
+    bb_ll.Latitude = std::min(bb_ll.Latitude, p.bb_ll.Latitude);
+    bb_ur.Latitude = std::max(bb_ur.Latitude, p.bb_ur.Latitude);
+  }
+
+  /**
+   * Shift the bounding box by an offset p
+   */
+  void shift(const FlatGeoPoint& p) {
+    bb_ll = bb_ll+p;
+    bb_ur = bb_ur+p;
+  }
+
+  /**
    * Expand the border by x amount
    */
   void expand() {
