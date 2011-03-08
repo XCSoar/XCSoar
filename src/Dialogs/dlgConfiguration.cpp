@@ -69,6 +69,7 @@ Copyright_License {
 #include "DevicesConfigPanel.hpp"
 #include "AirspaceConfigPanel.hpp"
 #include "SiteConfigPanel.hpp"
+#include "MapDisplayConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -289,6 +290,7 @@ setVariables()
   DevicesConfigPanel::Init(wf);
   AirspaceConfigPanel::Init(wf);
   SiteConfigPanel::Init(wf);
+  MapDisplayConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
@@ -364,54 +366,6 @@ setVariables()
     dfe->addEnumText(_("Sun"));
     dfe->addEnumText(_("Wind"));
     dfe->Set(XCSoarInterface::SettingsMap().SlopeShadingType);
-    wp->RefreshDisplay();
-  }
-
-  LoadFormProperty(*wf, _T("prpCirclingZoom"),
-                   XCSoarInterface::SettingsMap().CircleZoom);
-
-  LoadFormProperty(*wf, _T("prpMaxAutoZoomDistance"), ugDistance,
-                   XCSoarInterface::SettingsMap().MaxAutoZoomDistance);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpOrientationCruise"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("Track up"), TRACKUP,
-                     _("The moving map display will be rotated so the glider's track is oriented up."));
-    dfe->addEnumText(_("North up"), NORTHUP,
-                     _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
-    dfe->addEnumText(_("Target up"), TARGETUP,
-                     _("The moving map display will be rotated so the navigation target is oriented up."));
-    dfe->Set(XCSoarInterface::SettingsMap().OrientationCruise);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpOrientationCircling"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("Track up"), TRACKUP,
-                     _("The moving map display will be rotated so the glider's track is oriented up."));
-    dfe->addEnumText(_("North up"), NORTHUP,
-                     _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
-    dfe->addEnumText(_("Target up"), TARGETUP,
-                     _("The moving map display will be rotated so the navigation target is oriented up."));
-    dfe->Set(XCSoarInterface::SettingsMap().OrientationCircling);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpMapShiftBias"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("None"), MAP_SHIFT_BIAS_NONE, _("Disable adjustments."));
-    dfe->addEnumText(_("Heading"), MAP_SHIFT_BIAS_HEADING, _("Use a recent average of the flown heading as basis."));
-    dfe->addEnumText(_("Target"), MAP_SHIFT_BIAS_TARGET, _("Use the current target waypoint as basis."));
-    dfe->Set(XCSoarInterface::SettingsMap().MapShiftBias);
     wp->RefreshDisplay();
   }
 
@@ -770,8 +724,6 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpAppInverseInfoBox"),
                    Appearance.InverseInfoBox);
-  LoadFormProperty(*wf, _T("prpGliderScreenPosition"),
-                   XCSoarInterface::SettingsMap().GliderScreenPosition);
   LoadFormProperty(*wf, _T("prpTerrainContrast"),
                    XCSoarInterface::SettingsMap().TerrainContrast * 100 / 255);
   LoadFormProperty(*wf, _T("prpTerrainBrightness"),
@@ -1146,44 +1098,6 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  changed |= SaveFormProperty(*wf, _T("prpCirclingZoom"),
-                              szProfileCircleZoom,
-                              XCSoarInterface::SetSettingsMap().CircleZoom);
-
-  changed |= SaveFormProperty(*wf, _T("prpMaxAutoZoomDistance"),
-                              ugDistance,
-                              XCSoarInterface::SetSettingsMap().MaxAutoZoomDistance,
-                              szProfileMaxAutoZoomDistance);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpOrientationCruise"));
-  if (wp) {
-    if (XCSoarInterface::SettingsMap().OrientationCruise != wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().OrientationCruise = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileOrientationCruise,
-                    XCSoarInterface::SettingsMap().OrientationCruise);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpOrientationCircling"));
-  if (wp) {
-    if (XCSoarInterface::SettingsMap().OrientationCircling != wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().OrientationCircling = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileOrientationCircling,
-                    XCSoarInterface::SettingsMap().OrientationCircling);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpMapShiftBias"));
-  if (wp) {
-    if (XCSoarInterface::SettingsMap().MapShiftBias != wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().MapShiftBias = (MapShiftBias_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileMapShiftBias,
-                   XCSoarInterface::SettingsMap().MapShiftBias);
-      changed = true;
-    }
-  }
 
   wp = (WndProperty*)wf->FindByName(_T("prpMenuTimeout"));
   if (wp) {
@@ -1450,10 +1364,6 @@ void dlgConfigurationShowModal(void)
     SaveFormProperty(*wf, _T("prpAppInverseInfoBox"),
                      szProfileAppInverseInfoBox, Appearance.InverseInfoBox);
 
-  changed |= SaveFormProperty(*wf, _T("prpGliderScreenPosition"),
-                              szProfileGliderScreenPosition,
-                              XCSoarInterface::SetSettingsMap().GliderScreenPosition);
-
   changed |= SaveFormProperty(*wf, _T("prpAppAveNeedle"), szProfileAppAveNeedle,
                               XCSoarInterface::main_window.vario->ShowAveNeedle);
 
@@ -1641,6 +1551,7 @@ void dlgConfigurationShowModal(void)
   changed |= DevicesConfigPanel::Save(requirerestart);
   changed |= AirspaceConfigPanel::Save();
   changed |= SiteConfigPanel::Save();
+  changed |= MapDisplayConfigPanel::Save();
 
   if (orientation_changed) {
     assert(Display::RotateSupported());
