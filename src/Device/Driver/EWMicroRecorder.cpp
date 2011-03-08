@@ -277,7 +277,9 @@ EWMicroRecorderDevice::Declare(const Declaration *decl,
 
   port->StopRxThread();
 
-  port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+  /* during tests, the EW has taken up to one second to respond to
+     the command \x18 */
+  port->SetRxTimeout(2500);
 
   bool success = DeclareInner(decl);
 

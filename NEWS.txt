@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.0.7 - not yet released
 * devices
   - EW microRecorder: timeout during connect
+  - EW microRecorder: increase RX timeout
 * map
   - Airspace: support alternative OpenAir coordinate format
   - allow zooming in to 1 km
