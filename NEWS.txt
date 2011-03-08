@@ -6,6 +6,7 @@ Version 6.0.7 - not yet released
 * devices
   - EW microRecorder: timeout during connect
   - EW microRecorder: increase RX timeout
+  - EW microRecorder: insert new declaration into old EW-USER.TXT
 * map
   - Airspace: support alternative OpenAir coordinate format
   - allow zooming in to 1 km

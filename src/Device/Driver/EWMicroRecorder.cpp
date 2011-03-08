@@ -233,8 +233,18 @@ EWMicroRecorderDevice::DeclareInner(const Declaration *decl)
   if (!TryConnect())
     return false;
 
+  char *p = strstr(user_data, "FLIGHT DECLARATION");
+  if (p != NULL) {
+    p = strstr(p, "Description:");
+    if (p != NULL)
+      *p = 0;
+  }
+
   port->Write('\x18');         // start to upload file
   port->Write(user_data);
+
+  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
+                        _T("Description:"), _T("XCSoar task declaration"));
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Pilot Name:"), decl->PilotName.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
