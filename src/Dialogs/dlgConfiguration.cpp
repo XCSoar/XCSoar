@@ -65,6 +65,7 @@ Copyright_License {
 #include "GaugesConfigPanel.hpp"
 #include "TaskRulesConfigPanel.hpp"
 #include "TaskDefaultsConfigPanel.hpp"
+#include "InfoBoxesConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -179,30 +180,6 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnInfoBoxesCircling(gcc_unused WndButton &button)
-{
-  dlgConfigInfoboxesShowModal(InfoBoxManager::PANEL_CIRCLING);
-}
-
-static void
-OnInfoBoxesCruise(gcc_unused WndButton &button)
-{
-  dlgConfigInfoboxesShowModal(InfoBoxManager::PANEL_CRUISE);
-}
-
-static void
-OnInfoBoxesFinalGlide(gcc_unused WndButton &button)
-{
-  dlgConfigInfoboxesShowModal(InfoBoxManager::PANEL_FINAL_GLIDE);
-}
-
-static void
-OnInfoBoxesAuxiliary(gcc_unused WndButton &button)
-{
-  dlgConfigInfoboxesShowModal(InfoBoxManager::PANEL_AUXILIARY);
-}
-
-static void
 OnFonts(gcc_unused WndButton &button)
 {
   dlgConfigFontsShowModal();
@@ -269,8 +246,6 @@ static CallBackTableEntry CallBackTable[] = {
 static void
 setVariables()
 {
-  WndProperty *wp;
-
   buttonFonts = ((WndButton *)wf->FindByName(_T("cmdFonts")));
   if (buttonFonts)
     buttonFonts->SetOnClickNotify(OnFonts);
@@ -297,6 +272,7 @@ setVariables()
   GaugesConfigPanel::Init(wf);
   TaskRulesConfigPanel::Init(wf);
   TaskDefaultsConfigPanel::Init(wf);
+  InfoBoxesConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
@@ -311,16 +287,6 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                    settings_computer.BallastSecsToEmpty);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Box"));
-    dfe->addEnumText(_("Tab"));
-    dfe->Set(Appearance.InfoBoxBorder);
-    wp->RefreshDisplay();
-  }
 
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
@@ -339,11 +305,6 @@ setVariables()
     wp->RefreshDisplay();
   }
 #endif
-
-  LoadFormProperty(*wf, _T("prpAppInverseInfoBox"),
-                   Appearance.InverseInfoBox);
-
-  LoadFormProperty(*wf, _T("prpAppInfoBoxColors"), Appearance.InfoBoxColors);
 
 
 }
@@ -373,15 +334,6 @@ PrepareConfigurationDialog()
   wf->FilterAdvanced(expert_mode);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
-
-  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesCircling")))->
-      SetOnClickNotify(OnInfoBoxesCircling);
-  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesCruise")))->
-      SetOnClickNotify(OnInfoBoxesCruise);
-  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesFinalGlide")))->
-      SetOnClickNotify(OnInfoBoxesFinalGlide);
-  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAuxiliary")))->
-      SetOnClickNotify(OnInfoBoxesAuxiliary);
 
   configuration_tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(configuration_tabbed != NULL);
@@ -424,8 +376,6 @@ void dlgConfigurationShowModal(void)
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
 
-  WndProperty *wp;
-
 
   changed |= SaveFormProperty(*wf, _T("prpHandicap"), szProfileHandicap,
                               settings_computer.contest_handicap);
@@ -437,19 +387,6 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpMaxManoeuveringSpeed"),
                               ugHorizontalSpeed, settings_computer.SafetySpeed,
                               szProfileSafteySpeed);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
-  if (wp) {
-    if (Appearance.InfoBoxBorder != (InfoBoxBorderAppearance_t)
-        (wp->GetDataField()->GetAsInteger())) {
-      Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)
-        (wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppInfoBoxBorder,
-                    Appearance.InfoBoxBorder);
-      changed = true;
-      requirerestart = true;
-    }
-  }
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
   // VENTA-ADDON MODEL CHANGE
@@ -466,14 +403,6 @@ void dlgConfigurationShowModal(void)
 //
 #endif
 
-
-  changed |= requirerestart |=
-    SaveFormProperty(*wf, _T("prpAppInverseInfoBox"),
-                     szProfileAppInverseInfoBox, Appearance.InverseInfoBox);
-
-  changed |= requirerestart |=
-    SaveFormProperty(*wf, _T("prpAppInfoBoxColors"),
-                     szProfileAppInfoBoxColors, Appearance.InfoBoxColors);
 
 
   changed |= UnitsConfigPanel::Save();
@@ -495,6 +424,7 @@ void dlgConfigurationShowModal(void)
   changed |= GaugesConfigPanel::Save();
   changed |= TaskRulesConfigPanel::Save();
   changed |= TaskDefaultsConfigPanel::Save();
+  changed |= InfoBoxesConfigPanel::Save(requirerestart);
 
   if (changed) {
     Profile::Save();
