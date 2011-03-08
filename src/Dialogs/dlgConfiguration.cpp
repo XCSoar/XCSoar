@@ -75,6 +75,7 @@ Copyright_License {
 #include "TerrainDisplayConfigPanel.hpp"
 #include "GlideComputerConfigPanel.hpp"
 #include "SafetyFactorsConfigPanel.hpp"
+#include "RouteConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -301,6 +302,7 @@ setVariables()
   TerrainDisplayConfigPanel::Init(wf);
   GlideComputerConfigPanel::Init(wf);
   SafetyFactorsConfigPanel::Init(wf);
+  RouteConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
@@ -643,26 +645,6 @@ setVariables()
                                   settings_computer.sector_defaults.finish_radius);
   LoadFormProperty(*wf, _T("prpAATMinTime"),
                    (unsigned)(settings_computer.ordered_defaults.aat_min_time / 60));
-
-
-  wp = (WndProperty*)wf->FindByName(_T("prpRoutePlannerMode"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("None"));
-    dfe->addEnumText(_("Terrain"));
-    dfe->addEnumText(_("Airspace"));
-    dfe->addEnumText(_("Both"));
-    dfe->Set(settings_computer.route_planner.mode);
-    wp->RefreshDisplay();
-  }
-
-  LoadFormProperty(*wf, _T("prpRoutePlannerAllowClimb"),
-                   settings_computer.route_planner.allow_climb);
-
-  LoadFormProperty(*wf, _T("prpRoutePlannerUseCeiling"),
-                   settings_computer.route_planner.use_ceiling);
-
 }
 
 static void
@@ -1063,25 +1045,6 @@ void dlgConfigurationShowModal(void)
 
   changed |= taskchanged;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpRoutePlannerMode"));
-  if (wp) {
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-    if ((int)settings_computer.route_planner.mode != df.GetAsInteger()) {
-      settings_computer.route_planner.mode = (RoutePlannerConfig::Mode)df.GetAsInteger();
-      Profile::Set(szProfileRoutePlannerMode,
-                   (unsigned)settings_computer.route_planner.mode);
-      changed = true;
-    }
-  }
-
-  changed |= SaveFormProperty(*wf, _T("prpRoutePlannerAllowClimb"),
-                              szProfileRoutePlannerAllowClimb,
-                              settings_computer.route_planner.allow_climb);
-
-  changed |= SaveFormProperty(*wf, _T("prpRoutePlannerUseCeiling"),
-                              szProfileRoutePlannerUseCeiling,
-                              settings_computer.route_planner.use_ceiling);
-
   changed |= UnitsConfigPanel::Save();
   changed |= PagesConfigPanel::Save(wf);
   changed |= PolarConfigPanel::Save();
@@ -1095,6 +1058,7 @@ void dlgConfigurationShowModal(void)
   changed |= TerrainDisplayConfigPanel::Save();
   changed |= GlideComputerConfigPanel::Save(requirerestart);
   changed |= SafetyFactorsConfigPanel::Save();
+  changed |= RouteConfigPanel::Save();
 
   if (orientation_changed) {
     assert(Display::RotateSupported());

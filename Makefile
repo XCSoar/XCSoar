@@ -143,6 +143,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/MapDisplayConfigPanel.cpp \
 	$(SRC)/Dialogs/PagesConfigPanel.cpp \
 	$(SRC)/Dialogs/PolarConfigPanel.cpp \
+	$(SRC)/Dialogs/RouteConfigPanel.cpp \
 	$(SRC)/Dialogs/SafetyFactorsConfigPanel.cpp \
 	$(SRC)/Dialogs/SiteConfigPanel.cpp \
 	$(SRC)/Dialogs/SymbolsConfigPanel.cpp \
