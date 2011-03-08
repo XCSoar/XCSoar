@@ -22,17 +22,14 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "Protection.hpp"
 #include "Blackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsMap.hpp"
 #include "Appearance.hpp"
-#include "LocalPath.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/DisplayConfig.hpp"
 #include "Logger/Logger.hpp"
 #include "Screen/Busy.hpp"
-#include "Screen/Blank.hpp"
 #include "Screen/Key.h"
 #include "Form/CheckBox.hpp"
 #include "Screen/Layout.hpp"
@@ -51,17 +48,12 @@ Copyright_License {
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "WayPointFile.hpp"
-#include "StringUtil.hpp"
 #include "Simulator.hpp"
 #include "Compiler.h"
-#include "Screen/Graphics.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Hardware/Display.hpp"
-#include "OS/PathName.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
 #include "LogFile.hpp"
-#include "LanguageGlue.hpp"
-#include "ConfigPanel.hpp"
 #include "PagesConfigPanel.hpp"
 #include "PolarConfigPanel.hpp"
 #include "UnitsConfigPanel.hpp"
@@ -76,6 +68,7 @@ Copyright_License {
 #include "GlideComputerConfigPanel.hpp"
 #include "SafetyFactorsConfigPanel.hpp"
 #include "RouteConfigPanel.hpp"
+#include "InterfaceConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -303,12 +296,10 @@ setVariables()
   GlideComputerConfigPanel::Init(wf);
   SafetyFactorsConfigPanel::Init(wf);
   RouteConfigPanel::Init(wf);
+  InterfaceConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
-
-  LoadFormProperty(*wf, _T("prpDebounceTimeout"),
-                   XCSoarInterface::debounceTimeout);
 
   LoadFormProperty(*wf, _T("prpEnableFLARMGauge"),
                    XCSoarInterface::SettingsMap().EnableFLARMGauge);
@@ -316,11 +307,6 @@ setVariables()
                    XCSoarInterface::SettingsMap().AutoCloseFlarmDialog);
   LoadFormProperty(*wf, _T("prpEnableTAGauge"),
                    XCSoarInterface::SettingsMap().EnableTAGauge);
-
-
-  LoadFormProperty(*wf, _T("prpMenuTimeout"),
-                   XCSoarInterface::MenuTimeoutMax / 2);
-
 
   wp = (WndProperty*)wf->FindByName(_T("prpContests"));
   if (wp) {
@@ -348,51 +334,6 @@ setVariables()
   LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                    settings_computer.BallastSecsToEmpty);
 
-  wp = (WndProperty *)wf->FindByName(_T("prpLanguageFile"));
-  if (wp != NULL) {
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-    df.addEnumText(_("Automatic"));
-    df.addEnumText(_("None"));
-
-#ifdef HAVE_BUILTIN_LANGUAGES
-    for (const struct builtin_language *l = language_table;
-         l->resource != NULL; ++l)
-      df.addEnumText(l->resource);
-#endif
-
-    DataFieldFileReader files(NULL);
-    files.ScanDirectoryTop(_T("*.mo"));
-    for (unsigned i = 0; i < files.size(); ++i) {
-      const TCHAR *path = files.getItem(i);
-      if (path == NULL)
-        continue;
-
-      path = BaseName(path);
-      if (path != NULL && !df.Exists(path))
-        df.addEnumText(path);
-    }
-
-    df.Sort(2);
-
-    TCHAR value[MAX_PATH];
-    if (!Profile::GetPath(szProfileLanguageFile, value))
-      value[0] = _T('\0');
-
-    if (_tcscmp(value, _T("none")) == 0)
-      df.Set(1);
-    else if (!string_is_empty(value) && _tcscmp(value, _T("auto")) != 0) {
-      const TCHAR *base = BaseName(value);
-      if (base != NULL)
-        df.SetAsString(base);
-    }
-
-    wp->RefreshDisplay();
-  }
-
-  ConfigPanel::InitFileField(*wf, _T("prpStatusFile"),
-                szProfileStatusFile, _T("*.xcs\0"));
-  ConfigPanel::InitFileField(*wf, _T("prpInputFile"),
-                szProfileInputFile, _T("*.xci\0"));
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppStatusMessageAlignment"));
   if (wp) {
@@ -401,31 +342,6 @@ setVariables()
     dfe->addEnumText(_("Center"));
     dfe->addEnumText(_("Topleft"));
     dfe->Set(Appearance.StateMessageAlign);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTextInput"));
-  assert(wp != NULL);
-  if (has_pointer()) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Default"));
-    dfe->addEnumText(_("Keyboard"));
-    dfe->addEnumText(_("HighScore Style"));
-    dfe->Set(Appearance.TextInputStyle);
-    wp->RefreshDisplay();
-  } else
-    /* on-screen keyboard doesn't work without a pointing device
-       (mouse or touch screen), hide the option on Altair */
-    wp->hide();
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTabDialogStyle"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Text"));
-    dfe->addEnumText(_("Icons"));
-    dfe->Set(Appearance.DialogTabStyle);
     wp->RefreshDisplay();
   }
 
@@ -502,17 +418,6 @@ setVariables()
   }
 #endif
 
-  wp = (WndProperty*)wf->FindByName(_T("prpGestures"));
-  if (wp) {
-    if (has_pointer()) {
-      DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
-      df.Set(settings_computer.EnableGestures);
-      wp->RefreshDisplay();
-    } else {
-      wp->hide();
-    }
-  }
-
   LoadFormProperty(*wf, _T("prpAppInverseInfoBox"),
                    Appearance.InverseInfoBox);
 
@@ -532,15 +437,6 @@ setVariables()
                    XCSoarInterface::main_window.vario->ShowBugs);
   LoadFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
                    XCSoarInterface::main_window.vario->ShowBallast);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoBlank"));
-  if (wp) {
-    if (is_altair() || !is_embedded())
-      wp->hide();
-    DataFieldBoolean *df = (DataFieldBoolean *)wp->GetDataField();
-    df->Set(XCSoarInterface::SettingsMap().EnableAutoBlank);
-    wp->RefreshDisplay();
-  }
 
   LoadFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                    settings_computer.ordered_defaults.finish_min_height);
@@ -737,20 +633,6 @@ void dlgConfigurationShowModal(void)
                               szProfileEnableTAGauge,
                               XCSoarInterface::SetSettingsMap().EnableTAGauge);
 
-  changed |= SaveFormProperty(*wf, _T("prpDebounceTimeout"),
-                              szProfileDebounceTimeout,
-                              XCSoarInterface::debounceTimeout);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpMenuTimeout"));
-  if (wp) {
-    if ((int)XCSoarInterface::MenuTimeoutMax != wp->GetDataField()->GetAsInteger()*2) {
-      XCSoarInterface::MenuTimeoutMax = wp->GetDataField()->GetAsInteger()*2;
-      Profile::Set(szProfileMenuTimeout,XCSoarInterface::MenuTimeoutMax);
-      changed = true;
-    }
-  }
-
-
   {
     unsigned t= settings_computer.contest;
     changed |= SaveFormProperty(*wf, _T("prpContests"), szProfileOLCRules,
@@ -760,57 +642,6 @@ void dlgConfigurationShowModal(void)
 
   changed |= SaveFormProperty(*wf, _T("prpHandicap"), szProfileHandicap,
                               settings_computer.contest_handicap);
-
-  wp = (WndProperty *)wf->FindByName(_T("prpLanguageFile"));
-  if (wp != NULL) {
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-
-    TCHAR old_value[MAX_PATH];
-    if (!Profile::GetPath(szProfileLanguageFile, old_value))
-      old_value[0] = _T('\0');
-
-    const TCHAR *old_base = BaseName(old_value);
-    if (old_base == NULL)
-      old_base = old_value;
-
-    TCHAR buffer[MAX_PATH];
-    const TCHAR *new_value, *new_base;
-
-    switch (df.GetAsInteger()) {
-    case 0:
-      new_value = new_base = _T("auto");
-      break;
-
-    case 1:
-      new_value = new_base = _T("none");
-      break;
-
-    default:
-      _tcscpy(buffer, df.GetAsString());
-      ContractLocalPath(buffer);
-      new_value = buffer;
-      new_base = BaseName(new_value);
-      if (new_base == NULL)
-        new_base = new_value;
-      break;
-    }
-
-    if (_tcscmp(old_value, new_value) != 0 &&
-        _tcscmp(old_base, new_base) != 0) {
-      Profile::Set(szProfileLanguageFile, new_value);
-      LanguageChanged = changed = true;
-    }
-  }
-
-  if (ConfigPanel::FinishFileField(*wf, _T("prpStatusFile"), szProfileStatusFile)) {
-    changed = true;
-    requirerestart = true;
-  }
-
-  if (ConfigPanel::FinishFileField(*wf, _T("prpInputFile"), szProfileInputFile)) {
-    changed = true;
-    requirerestart = true;
-  }
 
   changed |= SaveFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                               szProfileBallastSecsToEmpty,
@@ -832,10 +663,6 @@ void dlgConfigurationShowModal(void)
       requirerestart = true;
     }
   }
-
-  changed |= SaveFormProperty(*wf, _T("prpGestures"), szProfileGestures,
-                              settings_computer.EnableGestures);
-
 
   bool info_box_geometry_changed = false;
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxGeom"));
@@ -893,24 +720,6 @@ void dlgConfigurationShowModal(void)
     }
   }
 
-  if (has_pointer()) {
-    wp = (WndProperty*)wf->FindByName(_T("prpTextInput"));
-    assert(wp != NULL);
-    if (Appearance.TextInputStyle != (TextInputStyle_t)(wp->GetDataField()->GetAsInteger())) {
-      Appearance.TextInputStyle = (TextInputStyle_t)(wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppTextInputStyle, Appearance.TextInputStyle);
-      changed = true;
-    }
-  }
-
-    wp = (WndProperty*)wf->FindByName(_T("prpTabDialogStyle"));
-    assert(wp != NULL);
-    if (Appearance.DialogTabStyle != (DialogTabStyle_t)(wp->GetDataField()->GetAsInteger())) {
-      Appearance.DialogTabStyle = (DialogTabStyle_t)(wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppDialogTabStyle, Appearance.DialogTabStyle);
-      changed = true;
-    }
-
   wp = (WndProperty*)wf->FindByName(_T("prpDialogStyle"));
   if (wp)
     {
@@ -956,12 +765,6 @@ void dlgConfigurationShowModal(void)
   changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
                               szProfileAppGaugeVarioBallast,
                               XCSoarInterface::main_window.vario->ShowBallast);
-
-#ifdef HAVE_BLANK
-  changed |= SaveFormProperty(*wf, _T("prpAutoBlank"),
-                              szProfileAutoBlank,
-                              XCSoarInterface::SetSettingsMap().EnableAutoBlank);
-#endif
 
   taskchanged |= SaveFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                                   settings_computer.ordered_defaults.finish_min_height,
@@ -1059,6 +862,7 @@ void dlgConfigurationShowModal(void)
   changed |= GlideComputerConfigPanel::Save(requirerestart);
   changed |= SafetyFactorsConfigPanel::Save();
   changed |= RouteConfigPanel::Save();
+  changed |= InterfaceConfigPanel::Save(requirerestart);
 
   if (orientation_changed) {
     assert(Display::RotateSupported());

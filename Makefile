@@ -139,6 +139,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/AirspaceConfigPanel.cpp \
 	$(SRC)/Dialogs/DevicesConfigPanel.cpp \
 	$(SRC)/Dialogs/GlideComputerConfigPanel.cpp \
+	$(SRC)/Dialogs/InterfaceConfigPanel.cpp \
 	$(SRC)/Dialogs/LoggerConfigPanel.cpp \
 	$(SRC)/Dialogs/MapDisplayConfigPanel.cpp \
 	$(SRC)/Dialogs/PagesConfigPanel.cpp \
