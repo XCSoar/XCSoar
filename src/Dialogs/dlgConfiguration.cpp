@@ -49,7 +49,6 @@ Copyright_License {
 #include "WayPointFile.hpp"
 #include "Simulator.hpp"
 #include "Compiler.h"
-#include "Gauge/GlueGaugeVario.hpp"
 #include "LogFile.hpp"
 #include "PagesConfigPanel.hpp"
 #include "PolarConfigPanel.hpp"
@@ -67,6 +66,7 @@ Copyright_License {
 #include "RouteConfigPanel.hpp"
 #include "InterfaceConfigPanel.hpp"
 #include "LayoutConfigPanel.hpp"
+#include "GaugesConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -296,16 +296,10 @@ setVariables()
   RouteConfigPanel::Init(wf);
   InterfaceConfigPanel::Init(wf);
   LayoutConfigPanel::Init(wf);
+  GaugesConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
-
-  LoadFormProperty(*wf, _T("prpEnableFLARMGauge"),
-                   XCSoarInterface::SettingsMap().EnableFLARMGauge);
-  LoadFormProperty(*wf, _T("prpAutoCloseFlarmDialog"),
-                   XCSoarInterface::SettingsMap().AutoCloseFlarmDialog);
-  LoadFormProperty(*wf, _T("prpEnableTAGauge"),
-                   XCSoarInterface::SettingsMap().EnableTAGauge);
 
   wp = (WndProperty*)wf->FindByName(_T("prpContests"));
   if (wp) {
@@ -366,20 +360,6 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpAppInfoBoxColors"), Appearance.InfoBoxColors);
 
-  LoadFormProperty(*wf, _T("prpAppAveNeedle"),
-                   XCSoarInterface::main_window.vario->ShowAveNeedle);
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
-                   XCSoarInterface::main_window.vario->ShowSpeedToFly);
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
-                   XCSoarInterface::main_window.vario->ShowAvgText);
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioGross"),
-                   XCSoarInterface::main_window.vario->ShowGross);
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioMc"),
-                   XCSoarInterface::main_window.vario->ShowMc);
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioBugs"),
-                   XCSoarInterface::main_window.vario->ShowBugs);
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
-                   XCSoarInterface::main_window.vario->ShowBallast);
 
   LoadFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                    settings_computer.ordered_defaults.finish_min_height);
@@ -564,18 +544,6 @@ void dlgConfigurationShowModal(void)
 
   WndProperty *wp;
 
-  changed |= SaveFormProperty(*wf, _T("prpEnableFLARMGauge"),
-                              szProfileEnableFLARMGauge,
-                              XCSoarInterface::SetSettingsMap().EnableFLARMGauge);
-
-  changed |= SaveFormProperty(*wf, _T("prpAutoCloseFlarmDialog"),
-                              szProfileAutoCloseFlarmDialog,
-                              XCSoarInterface::SetSettingsMap().AutoCloseFlarmDialog);
-
-  changed |= SaveFormProperty(*wf, _T("prpEnableTAGauge"),
-                              szProfileEnableTAGauge,
-                              XCSoarInterface::SetSettingsMap().EnableTAGauge);
-
   {
     unsigned t= settings_computer.contest;
     changed |= SaveFormProperty(*wf, _T("prpContests"), szProfileOLCRules,
@@ -627,36 +595,9 @@ void dlgConfigurationShowModal(void)
     SaveFormProperty(*wf, _T("prpAppInverseInfoBox"),
                      szProfileAppInverseInfoBox, Appearance.InverseInfoBox);
 
-  changed |= SaveFormProperty(*wf, _T("prpAppAveNeedle"), szProfileAppAveNeedle,
-                              XCSoarInterface::main_window.vario->ShowAveNeedle);
-
   changed |= requirerestart |=
     SaveFormProperty(*wf, _T("prpAppInfoBoxColors"),
                      szProfileAppInfoBoxColors, Appearance.InfoBoxColors);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
-                              szProfileAppGaugeVarioSpeedToFly,
-                              XCSoarInterface::main_window.vario->ShowSpeedToFly);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
-                              szProfileAppGaugeVarioAvgText,
-                              XCSoarInterface::main_window.vario->ShowAvgText);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioGross"),
-                              szProfileAppGaugeVarioGross,
-                              XCSoarInterface::main_window.vario->ShowGross);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioMc"),
-                              szProfileAppGaugeVarioMc,
-                              XCSoarInterface::main_window.vario->ShowMc);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioBugs"),
-                              szProfileAppGaugeVarioBugs,
-                              XCSoarInterface::main_window.vario->ShowBugs);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
-                              szProfileAppGaugeVarioBallast,
-                              XCSoarInterface::main_window.vario->ShowBallast);
 
   taskchanged |= SaveFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                                   settings_computer.ordered_defaults.finish_min_height,
@@ -756,6 +697,7 @@ void dlgConfigurationShowModal(void)
   changed |= RouteConfigPanel::Save();
   changed |= InterfaceConfigPanel::Save(requirerestart);
   changed |= LayoutConfigPanel::Save();
+  changed |= GaugesConfigPanel::Save();
 
   if (changed) {
     Profile::Save();
