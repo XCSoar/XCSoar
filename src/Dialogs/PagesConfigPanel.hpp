@@ -29,7 +29,7 @@ Copyright_License {
 namespace PagesConfigPanel
 {
   void Init(WndForm *wf);
-  bool Save(WndForm *wf);
+  bool Save();
 };
 
 #endif /* PAGESCONFIGPANEL_HPP */

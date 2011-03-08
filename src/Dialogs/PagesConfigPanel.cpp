@@ -29,6 +29,9 @@ Copyright_License {
 
 using namespace Pages;
 
+static WndForm* wf = NULL;
+
+
 static void
 UpdateComboBox(DataFieldEnum* dfe, unsigned page)
 {
@@ -48,9 +51,13 @@ UpdateComboBox(DataFieldEnum* dfe, unsigned page)
   }
 }
 
+
 void
-PagesConfigPanel::Init(WndForm *wf)
+PagesConfigPanel::Init(WndForm *_wf)
 {
+  assert(_wf != NULL);
+  wf = _wf;
+
   TCHAR prpName[64];
   for (unsigned i = 0; i < MAX_PAGES; i++) {
     _stprintf(prpName, _T("prpPageLayout%u"), i);
@@ -63,8 +70,9 @@ PagesConfigPanel::Init(WndForm *wf)
   }
 }
 
+
 bool
-PagesConfigPanel::Save(WndForm *wf)
+PagesConfigPanel::Save()
 {
   TCHAR prpName[64];
   bool changed = false;
@@ -80,5 +88,6 @@ PagesConfigPanel::Save(WndForm *wf)
       }
     }
   }
+
   return changed;
 }

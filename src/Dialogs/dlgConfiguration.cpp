@@ -304,7 +304,7 @@ void dlgConfigurationShowModal(void)
   bool changed = false;
   bool requirerestart = false;
   changed |= UnitsConfigPanel::Save();
-  changed |= PagesConfigPanel::Save(wf);
+  changed |= PagesConfigPanel::Save();
   changed |= PolarConfigPanel::Save();
   changed |= LoggerConfigPanel::Save();
   changed |= DevicesConfigPanel::Save(requirerestart);
