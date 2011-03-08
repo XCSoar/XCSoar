@@ -67,6 +67,7 @@ Copyright_License {
 #include "InterfaceConfigPanel.hpp"
 #include "LayoutConfigPanel.hpp"
 #include "GaugesConfigPanel.hpp"
+#include "TaskRulesConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -297,24 +298,10 @@ setVariables()
   InterfaceConfigPanel::Init(wf);
   LayoutConfigPanel::Init(wf);
   GaugesConfigPanel::Init(wf);
+  TaskRulesConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
-
-  wp = (WndProperty*)wf->FindByName(_T("prpContests"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("OLC FAI"), OLC_FAI);
-    dfe->addEnumText(_("OLC Classic"), OLC_Classic);
-    dfe->addEnumText(_("OLC League"), OLC_League);
-    dfe->addEnumText(_("OLC Plus"), OLC_Plus);
-    dfe->addEnumText(_("XContest"), OLC_XContest);
-    dfe->addEnumText(_("DHV-XC"), OLC_DHVXC);
-    dfe->addEnumText(_("SIS-AT"), OLC_SISAT);
-    dfe->Set(settings_computer.contest);
-    wp->RefreshDisplay();
-  }
 
   LoadFormProperty(*wf, _T("prpHandicap"),
                    settings_computer.contest_handicap);
@@ -359,29 +346,6 @@ setVariables()
                    Appearance.InverseInfoBox);
 
   LoadFormProperty(*wf, _T("prpAppInfoBoxColors"), Appearance.InfoBoxColors);
-
-
-  LoadFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
-                   settings_computer.ordered_defaults.finish_min_height);
-  LoadFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
-                   settings_computer.ordered_defaults.start_max_height);
-  LoadFormProperty(*wf, _T("prpStartMaxHeightMargin"), ugAltitude,
-                   settings_computer.start_max_height_margin);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("AGL"));
-    dfe->addEnumText(_("MSL"));
-    dfe->Set(settings_computer.ordered_defaults.start_max_height_ref);
-    wp->RefreshDisplay();
-  }
-
-  LoadFormProperty(*wf, _T("prpStartMaxSpeed"), ugHorizontalSpeed,
-                   settings_computer.ordered_defaults.start_max_speed);
-  LoadFormProperty(*wf, _T("prpStartMaxSpeedMargin"), ugHorizontalSpeed,
-                   settings_computer.start_max_speed_margin);
 
 
   OrderedTask* temptask = protected_task_manager->task_blank();
@@ -544,12 +508,6 @@ void dlgConfigurationShowModal(void)
 
   WndProperty *wp;
 
-  {
-    unsigned t= settings_computer.contest;
-    changed |= SaveFormProperty(*wf, _T("prpContests"), szProfileOLCRules,
-                                t);
-    settings_computer.contest = (Contests)t;
-  }
 
   changed |= SaveFormProperty(*wf, _T("prpHandicap"), szProfileHandicap,
                               settings_computer.contest_handicap);
@@ -599,31 +557,6 @@ void dlgConfigurationShowModal(void)
     SaveFormProperty(*wf, _T("prpAppInfoBoxColors"),
                      szProfileAppInfoBoxColors, Appearance.InfoBoxColors);
 
-  taskchanged |= SaveFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
-                                  settings_computer.ordered_defaults.finish_min_height,
-                                  szProfileFinishMinHeight);
-
-  taskchanged |= SaveFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
-                                  settings_computer.ordered_defaults.start_max_height,
-                                  szProfileStartMaxHeight);
-
-  taskchanged |= SaveFormProperty(*wf, _T("prpStartMaxHeightMargin"), ugAltitude,
-                                  settings_computer.start_max_height_margin,
-                                  szProfileStartMaxHeightMargin);
-
-  taskchanged |= SaveFormProperty(*wf, _T("prpStartHeightRef"), ugAltitude,
-                                  settings_computer.ordered_defaults.start_max_height_ref,
-                                  szProfileStartHeightRef);
-
-  taskchanged |= SaveFormProperty(*wf, _T("prpStartMaxSpeed"),
-                                  ugHorizontalSpeed,
-                                  settings_computer.ordered_defaults.start_max_speed,
-                                  szProfileStartMaxSpeed);
-
-  taskchanged |= SaveFormProperty(*wf, _T("prpStartMaxSpeedMargin"),
-                                  ugHorizontalSpeed,
-                                  settings_computer.start_max_speed_margin,
-                                  szProfileStartMaxSpeedMargin);
 
   unsigned sdtemp = 0;
   sdtemp = (unsigned)settings_computer.sector_defaults.start_type;
@@ -698,6 +631,7 @@ void dlgConfigurationShowModal(void)
   changed |= InterfaceConfigPanel::Save(requirerestart);
   changed |= LayoutConfigPanel::Save();
   changed |= GaugesConfigPanel::Save();
+  changed |= TaskRulesConfigPanel::Save();
 
   if (changed) {
     Profile::Save();
