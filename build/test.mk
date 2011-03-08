@@ -470,6 +470,21 @@ $(TARGET_BIN_DIR)/TestTrace$(TARGET_EXEEXT): $(TEST_TRACE_OBJS) $(TEST_TRACE_LDA
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
+FLIGHT_TABLE_SOURCES = \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/Math/fixed.cpp \
+	$(SRC)/Math/Angle.cpp \
+	$(SRC)/Math/FastMath.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
+	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
+	$(TEST_SRC_DIR)/FlightTable.cpp
+FLIGHT_TABLE_OBJS = $(call SRC_TO_OBJ,$(FLIGHT_TABLE_SOURCES))
+FLIGHT_TABLE_LDADD = $(UTIL_LIBS) $(MATH_LIBS) $(IO_LIBS)
+$(TARGET_BIN_DIR)/FlightTable$(TARGET_EXEEXT): $(FLIGHT_TABLE_OBJS) $(FLIGHT_TABLE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
 build-check: $(TESTS)
 
 check: $(TESTS) | $(OUT)/test/dirstamp
@@ -480,6 +495,7 @@ DEBUG_PROGRAM_NAMES = \
 	test_route \
 	test_troute \
 	TestTrace \
+	FlightTable \
 	TestOLC \
 	BenchmarkProjection \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
