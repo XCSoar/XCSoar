@@ -70,6 +70,7 @@ Copyright_License {
 #include "AirspaceConfigPanel.hpp"
 #include "SiteConfigPanel.hpp"
 #include "MapDisplayConfigPanel.hpp"
+#include "WayPointDisplayConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -291,6 +292,7 @@ setVariables()
   AirspaceConfigPanel::Init(wf);
   SiteConfigPanel::Init(wf);
   MapDisplayConfigPanel::Init(wf);
+  WayPointDisplayConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
@@ -307,50 +309,6 @@ setVariables()
                    XCSoarInterface::SettingsMap().AutoCloseFlarmDialog);
   LoadFormProperty(*wf, _T("prpEnableTAGauge"),
                    XCSoarInterface::SettingsMap().EnableTAGauge);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabels"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("Full Name"), DISPLAYNAME, _("The full name of each waypoint is displayed."));
-    dfe->addEnumText(_("First Word of Name"), DISPLAYUNTILSPACE, _("The first word of the waypoint name is displayed."));
-    dfe->addEnumText(_("First 3 Letters"), DISPLAYFIRSTTHREE, _("The first 3 letters of the waypoint name are displayed."));
-    dfe->addEnumText(_("First 5 Letters"), DISPLAYFIRSTFIVE, _("The first 5 letters of the waypoint name are displayed."));
-    dfe->addEnumText(_("None"), DISPLAYNONE, _("No waypoint name is displayed."));
-    dfe->Set(XCSoarInterface::SettingsMap().DisplayTextType);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabelStyle"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Rounded Rectangle"), RoundedBlack);
-    dfe->addEnumText(_("Outlined"), OutlinedInverted);
-    dfe->Set(XCSoarInterface::SettingsMap().LandableRenderMode);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpWayPointLabelSelection"));
-  if (wp) {
-
-    //Determines what waypoint labels are displayed for each waypoint (space permitting):&#10;
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("All"), wlsAllWayPoints,
-                     _("All waypoints labels will displayed."));
-    dfe->addEnumText(_("Task Waypoints & Landables"),
-                     wlsTaskAndLandableWayPoints,
-                     _("All waypoints labels part of a task and all landables will be displayed."));
-    dfe->addEnumText(_("Task Waypoints"), wlsTaskWayPoints,
-                     _("All waypoints labels part of a task will be displayed."));
-    dfe->addEnumText(_("None"), wlsNoWayPoints,
-                     _("No waypoint labels will be displayed."));
-    dfe->Set(XCSoarInterface::SettingsMap().WayPointLabelSelection);
-    wp->RefreshDisplay();
-  }
 
   LoadFormProperty(*wf, _T("prpEnableTerrain"),
                    XCSoarInterface::SettingsMap().EnableTerrain);
@@ -690,26 +648,6 @@ setVariables()
     dfe->Set(Appearance.IndFinalGlide);
     wp->RefreshDisplay();
   }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppIndLandable"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Purple Circle"));
-    dfe->addEnumText(_("B/W"));
-    dfe->addEnumText(_("Orange"));
-    dfe->Set(Appearance.IndLandable);
-    wp->RefreshDisplay();
-  }
-
-  LoadFormProperty(*wf, _T("prpAppUseSWLandablesRendering"),
-                   Appearance.UseSWLandablesRendering);
-
-  LoadFormProperty(*wf, _T("prpAppLandableRenderingScale"),
-                   Appearance.LandableRenderingScale);
-
-  LoadFormProperty(*wf, _T("prpAppScaleRunwayLength"),
-                   Appearance.ScaleRunwayLength);
 
   wp = (WndProperty*)wf->FindByName(_T("prpEnableExternalTriggerCruise"));
   if (wp) {
@@ -1066,18 +1004,6 @@ void dlgConfigurationShowModal(void)
                               szProfileDebounceTimeout,
                               XCSoarInterface::debounceTimeout);
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabels"),
-                                  szProfileDisplayText,
-                                  XCSoarInterface::SetSettingsMap().DisplayTextType);
-
-  changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabelStyle"),
-                                  szProfileWaypointLabelStyle,
-                                  XCSoarInterface::SetSettingsMap().LandableRenderMode);
-
-  changed |= SaveFormPropertyEnum(*wf, _T("prpWayPointLabelSelection"),
-                                  szProfileWayPointLabelSelection,
-                                  XCSoarInterface::SetSettingsMap().WayPointLabelSelection);
-
   changed |= SaveFormProperty(*wf, _T("prpEnableTerrain"),
                               szProfileDrawTerrain,
                               XCSoarInterface::SetSettingsMap().EnableTerrain);
@@ -1334,28 +1260,6 @@ void dlgConfigurationShowModal(void)
         }
     }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppIndLandable"));
-  if (wp) {
-    if (Appearance.IndLandable != (IndLandable_t)(wp->GetDataField()->GetAsInteger())) {
-      Appearance.IndLandable = (IndLandable_t)(wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppIndLandable, Appearance.IndLandable);
-      changed = true;
-      Graphics::InitLandableIcons();
-    }
-  }
-
-  changed |= SaveFormProperty(*wf, _T("prpAppUseSWLandablesRendering"),
-                              szProfileAppUseSWLandablesRendering,
-                              Appearance.UseSWLandablesRendering);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppLandableRenderingScale"),
-                              szProfileAppLandableRenderingScale,
-                              Appearance.LandableRenderingScale);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppScaleRunwayLength"),
-                              szProfileAppScaleRunwayLength,
-                              Appearance.ScaleRunwayLength);
-
   changed |= SaveFormProperty(*wf, _T("prpEnableExternalTriggerCruise"),
                               szProfileEnableExternalTriggerCruise,
                               settings_computer.EnableExternalTriggerCruise);
@@ -1552,6 +1456,7 @@ void dlgConfigurationShowModal(void)
   changed |= AirspaceConfigPanel::Save();
   changed |= SiteConfigPanel::Save();
   changed |= MapDisplayConfigPanel::Save();
+  changed |= WayPointDisplayConfigPanel::Save();
 
   if (orientation_changed) {
     assert(Display::RotateSupported());
