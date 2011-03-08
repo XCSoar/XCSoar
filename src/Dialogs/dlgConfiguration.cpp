@@ -22,29 +22,13 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "Blackboard.hpp"
-#include "SettingsComputer.hpp"
-#include "SettingsMap.hpp"
-#include "Appearance.hpp"
-#include "Profile/ProfileKeys.hpp"
-#include "Logger/Logger.hpp"
 #include "Screen/Busy.hpp"
 #include "Screen/Key.h"
 #include "Form/CheckBox.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Profile/Profile.hpp"
-#include "Math/FastMath.h"
-#include "DataField/Boolean.hpp"
-#include "DataField/Enum.hpp"
-#include "DataField/Float.hpp"
 #include "DataField/FileReader.hpp"
-#include "DataField/ComboList.hpp"
-#include "Asset.hpp"
-#include "Components.hpp"
-#include "WayPointFile.hpp"
-#include "Simulator.hpp"
-#include "Compiler.h"
 #include "LogFile.hpp"
 #include "PagesConfigPanel.hpp"
 #include "PolarConfigPanel.hpp"
@@ -119,11 +103,6 @@ static const TCHAR *const captions[] = {
 };
 
 
-static bool loading = false;
-static bool changed = false;
-static bool taskchanged = false;
-static bool requirerestart = false;
-static bool waypointneedsave = false;
 static config_page current_page;
 static WndForm *wf = NULL;
 TabbedControl *configuration_tabbed;
@@ -154,7 +133,6 @@ PageSwitched()
 static void
 OnUserLevel(CheckBoxControl &control)
 {
-  changed = true;
   Profile::Set(szProfileUserLevel, control.get_checked());
   wf->FilterAdvanced(control.get_checked());
 }
@@ -282,8 +260,6 @@ PrepareConfigurationDialog()
 {
   gcc_unused ScopeBusyIndicator busy;
 
-  loading = true;
-
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ? _T("IDR_XML_CONFIGURATION_L") :
                                       _T("IDR_XML_CONFIGURATION"));
@@ -309,12 +285,6 @@ PrepareConfigurationDialog()
   /* restore previous page */
   configuration_tabbed->SetCurrentPage((unsigned)current_page);
   PageSwitched();
-
-  changed = false;
-  taskchanged = false;
-  requirerestart = false;
-  waypointneedsave = false;
-  loading = false;
 }
 
 void dlgConfigurationShowModal(void)
@@ -331,6 +301,8 @@ void dlgConfigurationShowModal(void)
 
   // TODO enhancement: implement a cancel button that skips all this
   // below after exit.
+  bool changed = false;
+  bool requirerestart = false;
   changed |= UnitsConfigPanel::Save();
   changed |= PagesConfigPanel::Save(wf);
   changed |= PolarConfigPanel::Save();
