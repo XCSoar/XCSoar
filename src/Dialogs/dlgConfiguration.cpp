@@ -66,7 +66,7 @@ Copyright_License {
 #include "TaskRulesConfigPanel.hpp"
 #include "TaskDefaultsConfigPanel.hpp"
 #include "InfoBoxesConfigPanel.hpp"
-
+#include "ExperimentalConfigPanel.hpp"
 
 #include <assert.h>
 
@@ -273,6 +273,7 @@ setVariables()
   TaskRulesConfigPanel::Init(wf);
   TaskDefaultsConfigPanel::Init(wf);
   InfoBoxesConfigPanel::Init(wf);
+  ExperimentalConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
@@ -287,26 +288,6 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                    settings_computer.BallastSecsToEmpty);
-
-
-#if defined(_WIN32_WCE) && !defined(GNAV)
-// VENTA-ADDON Model change config menu 11
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Generic"));
-    dfe->addEnumText(_T("HP31x"));
-    dfe->addEnumText(_T("MedionP5"));
-    dfe->addEnumText(_T("MIO"));
-    dfe->addEnumText(_T("Nokia500")); // VENTA3
-    dfe->addEnumText(_T("PN6000"));
-    dfe->Set((int)GlobalModelType);
-    wp->RefreshDisplay();
-  }
-#endif
-
-
 }
 
 static void
@@ -315,8 +296,6 @@ PrepareConfigurationDialog()
   gcc_unused ScopeBusyIndicator busy;
 
   loading = true;
-
-  WndProperty *wp;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ? _T("IDR_XML_CONFIGURATION_L") :
@@ -337,13 +316,6 @@ PrepareConfigurationDialog()
 
   configuration_tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(configuration_tabbed != NULL);
-
-  if (!is_windows_ce() || is_altair()) {
-    wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
-    if (wp) {
-      wp->hide();
-    }
-  }
 
   setVariables();
 
@@ -388,21 +360,6 @@ void dlgConfigurationShowModal(void)
                               ugHorizontalSpeed, settings_computer.SafetySpeed,
                               szProfileSafteySpeed);
 
-#if defined(_WIN32_WCE) && !defined(GNAV)
-  // VENTA-ADDON MODEL CHANGE
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
-  if (wp) {
-    if (GlobalModelType != (ModelType)wp->GetDataField()->GetAsInteger()) {
-      GlobalModelType = (ModelType)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileAppInfoBoxModel,
-                    GlobalModelType);
-      changed = true;
-      requirerestart = true;
-    }
-  }
-//
-#endif
-
 
 
   changed |= UnitsConfigPanel::Save();
@@ -425,6 +382,7 @@ void dlgConfigurationShowModal(void)
   changed |= TaskRulesConfigPanel::Save();
   changed |= TaskDefaultsConfigPanel::Save();
   changed |= InfoBoxesConfigPanel::Save(requirerestart);
+  changed |= ExperimentalConfigPanel::Save(requirerestart);
 
   if (changed) {
     Profile::Save();
