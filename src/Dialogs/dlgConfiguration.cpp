@@ -72,6 +72,7 @@ Copyright_License {
 #include "MapDisplayConfigPanel.hpp"
 #include "WayPointDisplayConfigPanel.hpp"
 #include "SymbolsConfigPanel.hpp"
+#include "TerrainDisplayConfigPanel.hpp"
 
 
 #include <assert.h>
@@ -295,6 +296,7 @@ setVariables()
   MapDisplayConfigPanel::Init(wf);
   WayPointDisplayConfigPanel::Init(wf);
   SymbolsConfigPanel::Init(wf);
+  TerrainDisplayConfigPanel::Init(wf);
 
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
@@ -309,22 +311,6 @@ setVariables()
   LoadFormProperty(*wf, _T("prpEnableTAGauge"),
                    XCSoarInterface::SettingsMap().EnableTAGauge);
 
-  LoadFormProperty(*wf, _T("prpEnableTerrain"),
-                   XCSoarInterface::SettingsMap().EnableTerrain);
-  LoadFormProperty(*wf, _T("prpEnableTopography"),
-                   XCSoarInterface::SettingsMap().EnableTopography);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpSlopeShadingType"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"));
-    dfe->addEnumText(_("Fixed"));
-    dfe->addEnumText(_("Sun"));
-    dfe->addEnumText(_("Wind"));
-    dfe->Set(XCSoarInterface::SettingsMap().SlopeShadingType);
-    wp->RefreshDisplay();
-  }
 
   LoadFormProperty(*wf, _T("prpMenuTimeout"),
                    XCSoarInterface::MenuTimeoutMax / 2);
@@ -615,26 +601,6 @@ setVariables()
 
   LoadFormProperty(*wf, _T("prpAppInverseInfoBox"),
                    Appearance.InverseInfoBox);
-  LoadFormProperty(*wf, _T("prpTerrainContrast"),
-                   XCSoarInterface::SettingsMap().TerrainContrast * 100 / 255);
-  LoadFormProperty(*wf, _T("prpTerrainBrightness"),
-                   XCSoarInterface::SettingsMap().TerrainBrightness * 100 / 255);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTerrainRamp"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Low lands"));
-    dfe->addEnumText(_("Mountainous"));
-    dfe->addEnumText(_("Imhof 7"));
-    dfe->addEnumText(_("Imhof 4"));
-    dfe->addEnumText(_("Imhof 12"));
-    dfe->addEnumText(_("Imhof Atlas"));
-    dfe->addEnumText(_("ICAO"));
-    dfe->addEnumText(_("Grey"));
-    dfe->Set(XCSoarInterface::SettingsMap().TerrainRamp);
-    wp->RefreshDisplay();
-  }
 
   LoadFormProperty(*wf, _T("prpAppInfoBoxColors"), Appearance.InfoBoxColors);
 
@@ -921,27 +887,6 @@ void dlgConfigurationShowModal(void)
                               szProfileDebounceTimeout,
                               XCSoarInterface::debounceTimeout);
 
-  changed |= SaveFormProperty(*wf, _T("prpEnableTerrain"),
-                              szProfileDrawTerrain,
-                              XCSoarInterface::SetSettingsMap().EnableTerrain);
-
-  changed |= SaveFormProperty(*wf, _T("prpEnableTopography"),
-                              szProfileDrawTopography,
-                              XCSoarInterface::SetSettingsMap().EnableTopography);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpSlopeShadingType"));
-  if (wp) {
-    if (XCSoarInterface::SettingsMap().SlopeShadingType !=
-        wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().SlopeShadingType =
-          (SlopeShadingType_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileSlopeShadingType,
-                   XCSoarInterface::SettingsMap().SlopeShadingType);
-      changed = true;
-    }
-  }
-
-
   wp = (WndProperty*)wf->FindByName(_T("prpMenuTimeout"));
   if (wp) {
     if ((int)XCSoarInterface::MenuTimeoutMax != wp->GetDataField()->GetAsInteger()*2) {
@@ -1209,30 +1154,6 @@ void dlgConfigurationShowModal(void)
                               XCSoarInterface::SetSettingsMap().EnableAutoBlank);
 #endif
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTerrainContrast"));
-  if (wp) {
-    if (XCSoarInterface::SettingsMap().TerrainContrast * 100 / 255 !=
-        wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().TerrainContrast = (short)(wp->GetDataField()->GetAsInteger() * 255 / 100);
-      Profile::Set(szProfileTerrainContrast,XCSoarInterface::SettingsMap().TerrainContrast);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTerrainBrightness"));
-  if (wp) {
-    if (XCSoarInterface::SettingsMap().TerrainBrightness * 100 / 255 !=
-        wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().TerrainBrightness = (short)(wp->GetDataField()->GetAsInteger() * 255 / 100);
-      Profile::Set(szProfileTerrainBrightness,
-                    XCSoarInterface::SettingsMap().TerrainBrightness);
-      changed = true;
-    }
-  }
-
-  changed |= SaveFormProperty(*wf, _T("prpTerrainRamp"), szProfileTerrainRamp,
-                              XCSoarInterface::SetSettingsMap().TerrainRamp);
-
   taskchanged |= SaveFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                                   settings_computer.ordered_defaults.finish_min_height,
                                   szProfileFinishMinHeight);
@@ -1344,6 +1265,7 @@ void dlgConfigurationShowModal(void)
   changed |= MapDisplayConfigPanel::Save();
   changed |= WayPointDisplayConfigPanel::Save();
   changed |= SymbolsConfigPanel::Save();
+  changed |= TerrainDisplayConfigPanel::Save();
 
   if (orientation_changed) {
     assert(Display::RotateSupported());
