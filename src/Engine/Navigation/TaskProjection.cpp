@@ -24,6 +24,8 @@
 
 #include "Flat/FlatGeoPoint.hpp"
 #include "Flat/FlatPoint.hpp"
+#include "Flat/FlatBoundingBox.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "Math/Earth.hpp"
 
 #include <algorithm>
@@ -126,3 +128,20 @@ TaskProjection::ApproxRadius() const
   return max(location_mid.distance(location_max),
              location_mid.distance(location_min));
 }
+
+GeoBounds
+TaskProjection::unproject(const FlatBoundingBox& bb) const
+{
+  return GeoBounds (unproject(FlatGeoPoint(bb.bb_ll.Longitude, bb.bb_ur.Latitude)),
+                    unproject(FlatGeoPoint(bb.bb_ur.Longitude, bb.bb_ll.Latitude)));
+}
+
+FlatBoundingBox
+TaskProjection::project(const GeoBounds& bb) const
+{
+  FlatBoundingBox fb(project(GeoPoint(bb.west, bb.south)),
+                     project(GeoPoint(bb.east, bb.north)));
+  fb.expand(); // prevent rounding
+  return fb;
+}
+

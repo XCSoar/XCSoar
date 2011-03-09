@@ -35,6 +35,8 @@
  */
 class FlatBoundingBox {
 public:
+  friend class TaskProjection;
+
   /**
    * Constructor given bounds
    *

@@ -28,6 +28,8 @@
 
 struct FlatPoint;
 struct FlatGeoPoint;
+class FlatBoundingBox;
+struct GeoBounds;
 
 /**
  * Class for performing Lambert Conformal Conic projections from
@@ -71,6 +73,16 @@ public:
   FlatGeoPoint project(const GeoPoint& tp) const;
 
   /**
+   * Projects a GeoBounds to integer 2-d representation bounding box
+   *
+   * @param bb BB to project
+   *
+   * @return Projected bounds
+   */
+  gcc_pure
+  FlatBoundingBox project(const GeoBounds& bb) const;
+
+  /**
    * Projects an integer 2-d representation to a Geodetic point
    *
    * @param tp Point to project
@@ -79,6 +91,16 @@ public:
    */
   gcc_pure
   GeoPoint unproject(const FlatGeoPoint& tp) const;
+
+  /**
+   * Projects a integer 2-d representation bounding box to a GeoBounds
+   *
+   * @param bb BB to project
+   *
+   * @return Projected bounds
+   */
+  gcc_pure
+  GeoBounds unproject(const FlatBoundingBox& bb) const;
 
   /**
    * Project a Geodetic point to an floating point 2-d representation
