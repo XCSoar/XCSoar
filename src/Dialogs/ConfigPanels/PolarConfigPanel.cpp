@@ -44,6 +44,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "MainWindow.hpp"
+#include "OS/FileUtil.hpp"
 
 static WndForm* wf = NULL;
 static WndButton* buttonList = NULL;
@@ -140,34 +141,44 @@ PolarConfigPanel::OnLoadInteral(WndButton &button)
   }
 }
 
+class PolarFileVisitor: public File::Visitor
+{
+private:
+  ComboList &list;
+
+public:
+  PolarFileVisitor(ComboList &_list): list(_list) {}
+
+  void Visit(const TCHAR* path, const TCHAR* filename) {
+    list.Append(0, path, filename);
+  }
+};
+
 void
 PolarConfigPanel::OnLoadFromFile(WndButton &button)
 {
-  /* create a fake WndProperty for dlgComboPicker() */
-  /* XXX reimplement properly */
+  ComboList list;
+  PolarFileVisitor fv(list);
 
-  DataFieldFileReader *dfe = new DataFieldFileReader(NULL);
-  dfe->ScanDirectoryTop(_T("*.plr"));
+  // Fill list
+  VisitDataFiles(_T("*.plr"), fv);
 
-  ComboList *list = dfe->CreateComboList();
+  // Sort list
+  list.Sort();
 
-  /* let the user select */
-
+  // Show selection dialog
   int result = ComboPicker(XCSoarInterface::main_window,
-                           _("Load Polar from file"), *list, NULL);
-  if (result > 0) {
-    const TCHAR* path = dfe->getItem(result);
+                           _("Load Polar from file"), list, NULL);
+  if (result >= 0) {
+    const TCHAR* path = list[result].StringValue;
     SimplePolar polar;
     PolarGlue::LoadFromFile(polar, path);
     UpdatePolarFields(polar);
 
-    Profile::Set(szProfilePolarName, BaseName(path));
+    Profile::Set(szProfilePolarName, list[result].StringValueFormatted);
     UpdatePolarTitle();
     UpdatePolarInvalidLabel();
   }
-
-  delete dfe;
-  delete list;
 }
 
 void
