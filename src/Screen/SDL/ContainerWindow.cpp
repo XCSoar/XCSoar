@@ -76,7 +76,7 @@ ContainerWindow::find_control(std::list<Window*>::const_reverse_iterator i,
 
     if (child.is_control_parent()) {
       ContainerWindow &container = (ContainerWindow &)child;
-      Window *control = container.find_first_control();
+      Window *control = container.find_last_control();
       if (control != NULL)
         return control;
     }
@@ -189,6 +189,8 @@ ContainerWindow::focus_next_control()
     Window *control = find_next_control(focused);
     if (control != NULL)
       control->set_focus();
+    else
+      focus_first_control();
   } else
     focus_first_control();
 }
@@ -199,7 +201,9 @@ ContainerWindow::focus_previous_control()
   Window *focused = get_focused_window();
   Window *control = focused != NULL
     ? find_previous_control(focused)
-    : find_last_control();
+    : NULL;
+  if (control == NULL)
+    control = find_last_control();
   if (control != NULL)
     control->set_focus();
 }
