@@ -472,6 +472,13 @@ WndForm::ShowModal(Window *modal_allowed)
       }
     }
 
+#ifdef ENABLE_SDL
+    if (is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
+      mModalResult = mrCancel;
+      break;
+    }
+#endif
+
     loop.dispatch(event);
   } // End Modal Loop
 

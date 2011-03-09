@@ -17,6 +17,7 @@ Version 6.0.7 - not yet released
   - disable auto-restart on various Android configuration events
   - import time from internal GPS correctly
   - read internal GPS accuracy
+  - the "back" hardware key cancels dialogs
 * Linux
   - improved button and checkbox rendering
   - dialog keyboard navigation implemented
