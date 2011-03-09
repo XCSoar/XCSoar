@@ -42,8 +42,8 @@ public:
     TCHAR *StringValueFormatted;
     TCHAR *StringHelp;
 
-    Item(int _DataFieldIndex,
-         const TCHAR *_StringValue, const TCHAR *_StringValueFormatted, const TCHAR *_StringHelp = NULL);
+    Item(int _DataFieldIndex, const TCHAR *_StringValue,
+         const TCHAR *_StringValueFormatted, const TCHAR *_StringHelp = NULL);
     ~Item();
   };
 
@@ -54,9 +54,9 @@ public:
 private:
   StaticArray<Item*, MAX_SIZE> items;
 
-  public:
-
-  ComboList():ComboPopupItemSavedIndex(-1) {}
+public:
+  ComboList():
+    ComboPopupItemSavedIndex(-1) {}
 
   ~ComboList() {
     Clear();
@@ -66,7 +66,7 @@ private:
     return items.size();
   }
 
-  const Item &operator[](unsigned i) const {
+  const Item& operator[](unsigned i) const {
     return *items[i];
   }
 
@@ -86,7 +86,7 @@ private:
     return Append(DataFieldIndex, StringValue, StringValue);
   }
 
-    int ComboPopupItemSavedIndex;
+  int ComboPopupItemSavedIndex;
 };
 
 #endif
