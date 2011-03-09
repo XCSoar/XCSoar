@@ -766,6 +766,13 @@ private:
                                        bool &transition_exit,
                                        bool &last_started);
 
+  /**
+   * @param waypoints Active waypoint database
+   * @param points Vector of points to confirm in active waypoint database
+   * @param is_task True if task point.  False if optional start point
+   * @return True if waypoint was appended to database
+   *         False if waypoint already existed in database
+   */
   bool check_duplicate_waypoints(Waypoints& waypoints,
                                  OrderedTaskPointVector& points,
                                  const bool is_task);

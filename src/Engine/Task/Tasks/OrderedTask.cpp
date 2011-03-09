@@ -1100,29 +1100,29 @@ OrderedTask::check_duplicate_waypoints(Waypoints& waypoints,
                                        OrderedTaskPointVector& points,
                                        const bool is_task)
 {
-  bool changed = false;
+  bool appended = false;
   for (unsigned i = 0; i < points.size(); ++i) {
     Waypoint wp(points[i]->get_waypoint());
-    const bool this_changed = !waypoints.check_exists_or_append(wp);
-    changed |= this_changed;
+    const bool this_appended = !waypoints.check_exists_or_append(wp);
+    appended |= this_appended;
     if (is_task)
       replace(*points[i], i);
     else
       replace_optional_start(*points[i], i);
   }
-  return changed;
+  return appended;
 }
 
 bool
 OrderedTask::check_duplicate_waypoints(Waypoints& waypoints)
 {
-  bool changed = check_duplicate_waypoints(waypoints, task_points, true);
-  changed |= check_duplicate_waypoints(waypoints, optional_start_points, false);
+  bool appended = check_duplicate_waypoints(waypoints, task_points, true);
+  appended |= check_duplicate_waypoints(waypoints, optional_start_points, false);
 
-  if (changed)
+  if (appended)
     waypoints.optimise();
 
-  return changed;
+  return appended;
 }
 
 bool
