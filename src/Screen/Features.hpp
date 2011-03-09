@@ -21,29 +21,19 @@ Copyright_License {
 }
 */
 
-#include "Form/Panel.hpp"
+#ifndef XCSOAR_SCREEN_FEATURES_HPP
+#define XCSOAR_SCREEN_FEATURES_HPP
 
-PanelControl::PanelControl(ContainerWindow &parent,
-                           int x, int y, unsigned width, unsigned height,
-                           Color _background_color,
-                           const WindowStyle style)
-#ifdef HAVE_CLIPPING
-  :background_color(_background_color)
+#ifdef ENABLE_SDL
+
+#else
+
+/**
+ * This macro is defined when the Canvas implements clipping against
+ * its siblings and children.
+ */
+#define HAVE_CLIPPING
+
 #endif
-{
-  set(parent, x, y, width, height, style);
-}
-
-/* don't need to erase the background when it has been done by the
-   parent window already */
-#ifdef HAVE_CLIPPING
-
-void
-PanelControl::on_paint(Canvas &canvas)
-{
-  canvas.clear(background_color);
-
-  ContainerWindow::on_paint(canvas);
-}
 
 #endif

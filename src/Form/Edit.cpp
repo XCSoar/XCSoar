@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
+#include "Screen/Features.hpp"
 #include "Dialogs/Dialogs.h"
 #include "resource.h"
 
@@ -382,8 +383,13 @@ WndProperty::on_paint(Canvas &canvas)
   if (edit.has_focus()) {
     canvas.clear(GetBackColor().highlight());
     PaintSelector(canvas, get_client_rect());
-  } else
+  } else {
+    /* don't need to erase the background when it has been done by the
+       parent window already */
+#ifdef HAVE_CLIPPING
     canvas.clear(GetBackColor());
+#endif
+  }
 
   SIZE tsize;
   RasterPoint org;
