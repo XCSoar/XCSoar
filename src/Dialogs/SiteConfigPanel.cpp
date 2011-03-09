@@ -28,14 +28,35 @@ Copyright_License {
 #include "SiteConfigPanel.hpp"
 
 static WndForm* wf = NULL;
+static WndButton *buttonWaypoints = NULL;
 
 using namespace ConfigPanel;
+
+
+void
+SiteConfigPanel::Activate(bool active)
+{
+  if (buttonWaypoints != NULL)
+    buttonWaypoints->set_visible(active);
+}
+
+
+static void
+OnWaypoints(gcc_unused WndButton &button)
+{
+  dlgConfigWaypointsShowModal();
+}
+
 
 void
 SiteConfigPanel::Init(WndForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;
+
+  buttonWaypoints = ((WndButton *)wf->FindByName(_T("cmdWaypoints")));
+  if (buttonWaypoints)
+    buttonWaypoints->SetOnClickNotify(OnWaypoints);
 
   InitFileField(*wf, _T("prpAirspaceFile"),
                 szProfileAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));

@@ -31,6 +31,8 @@ namespace SiteConfigPanel
 {
   void Init(WndForm *wf);
   bool Save();
+
+  void Activate(bool active);
 };
 
 #endif /* SITECONFIGPANEL_HPP */

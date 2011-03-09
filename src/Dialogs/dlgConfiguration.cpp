@@ -107,7 +107,6 @@ static config_page current_page;
 static WndForm *wf = NULL;
 TabbedControl *configuration_tabbed;
 static WndButton *buttonFonts = NULL;
-static WndButton *buttonWaypoints = NULL;
 
 static void
 PageSwitched()
@@ -123,9 +122,7 @@ PageSwitched()
   if (buttonFonts != NULL)
     buttonFonts->set_visible(current_page == PAGE_INTERFACE);
 
-  if (buttonWaypoints != NULL)
-    buttonWaypoints->set_visible(current_page == PAGE_SITE);
-
+  SiteConfigPanel::Activate(current_page == PAGE_SITE);
   PolarConfigPanel::Activate(current_page == PAGE_POLAR);
 }
 
@@ -161,12 +158,6 @@ static void
 OnFonts(gcc_unused WndButton &button)
 {
   dlgConfigFontsShowModal();
-}
-
-static void
-OnWaypoints(gcc_unused WndButton &button)
-{
-  dlgConfigWaypointsShowModal();
 }
 
 static bool
@@ -227,10 +218,6 @@ setVariables()
   buttonFonts = ((WndButton *)wf->FindByName(_T("cmdFonts")));
   if (buttonFonts)
     buttonFonts->SetOnClickNotify(OnFonts);
-
-  buttonWaypoints = ((WndButton *)wf->FindByName(_T("cmdWaypoints")));
-  if (buttonWaypoints)
-    buttonWaypoints->SetOnClickNotify(OnWaypoints);
 
   PolarConfigPanel::Init(wf);
   UnitsConfigPanel::Init(wf);
