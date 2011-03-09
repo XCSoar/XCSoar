@@ -29,6 +29,7 @@
 #include <algorithm>
 #include "Navigation/TaskProjection.hpp"
 #include "Navigation/SearchPointVector.hpp"
+#include "ReachFan.hpp"
 
 // define PLANNER_SET if STL tr1 extensions are not to be used
 // (with performance penalty)
@@ -147,6 +148,23 @@ public:
              const short h_ceiling=SHRT_MAX);
 
   /**
+   * Solve reach footprint
+   *
+   * @param origin The start of the search (current aircraft location)
+   *
+   * @return True if reach was scanned
+   */
+  bool solve_reach(const AGeoPoint& origin);
+
+  /**
+   * Visit reach
+   */
+  void accept_in_range(const GeoBounds& bounds,
+                       TriangleFanVisitor& visitor) const {
+    reach.accept_in_range(bounds, visitor);
+  }
+
+  /**
    * Retrieve current solution.  If solver failed previously,
    * direct flight from origin to destination is produced.
    *
@@ -198,6 +216,21 @@ public:
    */
   RoutePolars get_route_polars() const {
     return rpolars;
+  }
+
+  /**
+   * Find arrival height at destination.
+   *
+   * Requires solve_reach() to have been called for positive results.
+   *
+   * @param dest Destination location
+   * @param arrival_height height at arrival or -1 if out of reach
+   *
+   * @return true if check was successful
+   */
+  bool find_positive_arrival(const AGeoPoint& dest,
+                             short& arrival_height) const {
+    return reach.find_positive_arrival(dest, rpolars, arrival_height);
   }
 
 protected:
@@ -307,6 +340,8 @@ private:
 
   AFlatGeoPoint origin_last; /**< Origin at last call to solve() */
   AFlatGeoPoint destination_last; /**< Destination at last call to solve() */
+
+  ReachFan reach;
 
   /**
    * Check a second category of obstacle clearance.  This allows compound

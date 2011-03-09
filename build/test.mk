@@ -90,6 +90,30 @@ $(TEST_TROUTE_BIN): $(TEST_TROUTE_OBJS) $(TEST_TROUTE_LDADD) | $(TARGET_BIN_DIR)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(ZZIP_LDFLAGS) $(ZZIP_LIBS) -o $@
 
+TEST_REACH_SOURCES = \
+	$(SRC)/Engine/Util/DataNodeXML.cpp \
+	$(SRC)/xmlParser.cpp \
+	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterMap.cpp \
+	$(SRC)/Terrain/RasterBuffer.cpp \
+	$(SRC)/Terrain/RasterProjection.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/PathName.cpp \
+	$(SRC)/Engine/Math/Earth.cpp \
+	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
+	$(TEST_SRC_DIR)/test_reach.cpp
+TEST_REACH_OBJS = $(call SRC_TO_OBJ,$(TEST_REACH_SOURCES))
+TEST_REACH_BIN = $(TARGET_BIN_DIR)/test_reach$(TARGET_EXEEXT)
+TEST_REACH_LDADD = $(TESTLIBS1) \
+	$(MATH_LIBS) \
+	$(IO_LIBS) \
+	$(JASPER_LIBS) \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
+$(TEST_REACH_BIN): $(TEST_REACH_OBJS) $(TEST_REACH_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(ZZIP_LDFLAGS) $(ZZIP_LIBS) -o $@
+
 TEST_ROUTE_SOURCES = \
 	$(SRC)/Engine/Util/DataNodeXML.cpp \
 	$(SRC)/xmlParser.cpp \
@@ -492,6 +516,7 @@ check: $(TESTS) | $(OUT)/test/dirstamp
 	$(Q)$(PERL) $(TEST_SRC_DIR)/testall.pl $(TESTS)
 
 DEBUG_PROGRAM_NAMES = \
+	test_reach \
 	test_route \
 	test_troute \
 	TestTrace \

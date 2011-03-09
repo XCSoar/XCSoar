@@ -52,6 +52,7 @@ RoutePlanner::reset()
   h_min = (short)-1;
   h_max = 0;
   m_search_hull.clear();
+  reach.reset();
 }
 
 void
@@ -60,6 +61,11 @@ RoutePlanner::get_solution(Route& route) const
   route = solution_route;
 }
 
+bool
+RoutePlanner::solve_reach(const AGeoPoint& origin)
+{
+  return reach.solve(origin, rpolars, terrain);
+}
 
 bool
 RoutePlanner::solve(const AGeoPoint& origin,

@@ -758,3 +758,45 @@ void PrintHelper::print_route(RoutePlanner& r)
   printf("#   terrain queries %d\n", (int)r.count_terrain);
   printf("#   supressed %d\n", (int)r.count_supressed);
 }
+
+#include "Route/AbstractReach.hpp"
+#include "Route/ReachFan.hpp"
+
+void
+PrintHelper::print_reach_tree(const RoutePlanner& r)
+{
+  print(r.reach);
+}
+
+void
+PrintHelper::print(const ReachFan& r)
+{
+  print(r.root);
+}
+
+void
+PrintHelper::print(const FlatTriangleFanTree& r) {
+  print((const FlatTriangleFan&)r);
+
+  for (std::vector<FlatTriangleFanTree>::const_iterator it = r.children.begin();
+       it != r.children.end(); ++it) {
+    print(*it);
+  }
+};
+
+void
+PrintHelper::print(const FlatTriangleFan& r) {
+  if (r.vs.size()<3)
+    return;
+
+  printf("%d %d # fcorner\n", r.vs[0].Longitude, r.vs[0].Latitude);
+
+  for (std::vector<FlatGeoPoint>::const_iterator it = r.vs.begin();
+       it != r.vs.end(); ++it) {
+    const FlatGeoPoint p = (*it);
+    printf("%d %d # ftri\n", p.Longitude, p.Latitude);
+  }
+  printf("%d %d # ftri\n", r.vs[0].Longitude, r.vs[0].Latitude);
+  printf("# ftri\n");
+}
+
