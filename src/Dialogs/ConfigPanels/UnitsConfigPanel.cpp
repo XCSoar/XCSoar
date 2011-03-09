@@ -98,30 +98,23 @@ UpdateUnitsTitle()
 void
 UnitsConfigPanel::OnLoadPreset(WndButton &button)
 {
-  /* create a fake WndProperty for dlgComboPicker() */
-  /* XXX reimplement properly */
-
-  DataFieldEnum *dfe = new DataFieldEnum(NULL);
+  ComboList list;
   unsigned len = Units::Store::Count();
   for (unsigned i = 0; i < len; i++)
-    dfe->addEnumText(Units::Store::GetName(i), i);
+    list.Append(i, Units::Store::GetName(i));
 
-  dfe->Sort();
-  ComboList *list = dfe->CreateComboList();
+  list.Sort();
 
   /* let the user select */
 
-  int result = ComboPicker(XCSoarInterface::main_window, _("Unit presets"), *list, NULL);
+  int result = ComboPicker(XCSoarInterface::main_window, _("Unit presets"), list, NULL);
   if (result >= 0) {
-    const UnitSetting& units = Units::Store::Read(dfe->getItem(result));
+    const UnitSetting& units = Units::Store::Read(list[result].DataFieldIndex);
     UpdateUnitFields(units);
 
-    Profile::Set(szProfileUnitsPresetName, Units::Store::GetName(dfe->getItem(result)));
+    Profile::Set(szProfileUnitsPresetName, list[result].StringValue);
     UpdateUnitsTitle();
   }
-
-  delete dfe;
-  delete list;
 }
 
 
