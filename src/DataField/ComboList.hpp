@@ -86,6 +86,8 @@ public:
     return Append(DataFieldIndex, StringValue, StringValue);
   }
 
+  void Sort();
+
   int ComboPopupItemSavedIndex;
 };
 
