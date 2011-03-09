@@ -135,28 +135,28 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgStatus.cpp \
 	$(SRC)/Dialogs/dlgSwitches.cpp \
 	\
-	$(SRC)/Dialogs/ConfigPanel.cpp \
-	$(SRC)/Dialogs/AirspaceConfigPanel.cpp \
-	$(SRC)/Dialogs/DevicesConfigPanel.cpp \
-	$(SRC)/Dialogs/ExperimentalConfigPanel.cpp \
-	$(SRC)/Dialogs/GaugesConfigPanel.cpp \
-	$(SRC)/Dialogs/GlideComputerConfigPanel.cpp \
-	$(SRC)/Dialogs/InfoBoxesConfigPanel.cpp \
-	$(SRC)/Dialogs/InterfaceConfigPanel.cpp \
-	$(SRC)/Dialogs/LayoutConfigPanel.cpp \
-	$(SRC)/Dialogs/LoggerConfigPanel.cpp \
-	$(SRC)/Dialogs/MapDisplayConfigPanel.cpp \
-	$(SRC)/Dialogs/PagesConfigPanel.cpp \
-	$(SRC)/Dialogs/PolarConfigPanel.cpp \
-	$(SRC)/Dialogs/RouteConfigPanel.cpp \
-	$(SRC)/Dialogs/SafetyFactorsConfigPanel.cpp \
-	$(SRC)/Dialogs/SiteConfigPanel.cpp \
-	$(SRC)/Dialogs/SymbolsConfigPanel.cpp \
-	$(SRC)/Dialogs/TaskRulesConfigPanel.cpp \
-	$(SRC)/Dialogs/TaskDefaultsConfigPanel.cpp \
-	$(SRC)/Dialogs/TerrainDisplayConfigPanel.cpp \
-	$(SRC)/Dialogs/UnitsConfigPanel.cpp \
-	$(SRC)/Dialogs/WayPointDisplayConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/ConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/DevicesConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/ExperimentalConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/GaugesConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/InfoBoxesConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/LayoutConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/LoggerConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/PagesConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/PolarConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/RouteConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/SiteConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/UnitsConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp \
 	\
 	$(SRC)/Dialogs/dlgTaskManager.cpp \
 	$(SRC)/Dialogs/pnlTaskManagerClose.cpp \
