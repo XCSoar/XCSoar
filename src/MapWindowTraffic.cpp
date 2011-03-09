@@ -54,9 +54,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
   const MapWindowProjection &projection = render_projection;
 
-  // Create pen for icon outlines
-  Pen thinBlackPen(IBLSCALE(1), Color(0, 0, 0));
-  canvas.select(thinBlackPen);
+  // Pen for icon outlines
+  canvas.black_pen();
 
   // Create point array that will form that arrow polygon
   RasterPoint Arrow[5];
@@ -148,8 +147,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     }
 
     // Select black pen
-    static Pen BlackPen(IBLSCALE(1), Color::BLACK);
-    canvas.select(BlackPen);
+    canvas.black_pen();
 
     // Rotate and shift the arrow to the right position and angle
     PolygonRotateShift(Arrow, 5, sc.x, sc.y,
