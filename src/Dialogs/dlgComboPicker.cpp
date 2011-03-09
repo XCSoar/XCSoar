@@ -46,12 +46,10 @@ OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
 static const TCHAR*
 OnItemHelp(unsigned i)
 {
-  if ((*ComboListPopup)[i].StringHelp) {
+  if ((*ComboListPopup)[i].StringHelp)
     return (*ComboListPopup)[i].StringHelp;
-  }
-  else {
-    return _T("");
-  }
+
+  return _T("");
 }
 
 int
