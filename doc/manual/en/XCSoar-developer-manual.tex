@@ -119,6 +119,10 @@ large.
 
 Avoid dynamic allocation.
 
+Asterisks belong to the variable name, not to the type name.  Consider
+``\texttt{Foo* a, b}''.  ``\texttt{Foo *a, b}'' or ``\texttt{Foo *a,
+  *b}'' is easier to understand.
+
 Some sample code to demonstrate our code style:
 
 \begin{verbatim}
