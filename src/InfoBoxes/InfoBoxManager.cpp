@@ -578,34 +578,26 @@ InfoBoxManager::SetupFocused(const int id)
   const unsigned panel = GetCurrentPanel();
   int old_type = GetType(i, panel);
 
-  /* create a fake WndProperty for dlgComboPicker() */
-  /* XXX reimplement properly */
-
-  DataFieldEnum *dfe = new DataFieldEnum(NULL);
+  ComboList list;
   for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; i++)
-    dfe->addEnumText(gettext(InfoBoxFactory::GetName(i)));
-  dfe->Sort(0);
-  dfe->Set(old_type);
+    list.Append(i, gettext(InfoBoxFactory::GetName(i)));
 
-  ComboList *list = dfe->CreateComboList();
-  delete dfe;
+  list.Sort();
+  list.ComboPopupItemSavedIndex = list.LookUp(old_type);
 
   /* let the user select */
 
   TCHAR caption[20];
   _stprintf(caption, _T("%s: %d"), _("InfoBox"), i + 1);
-  info_box_combo_list = list;
-  int result = ComboPicker(XCSoarInterface::main_window, caption, *list,
+  info_box_combo_list = &list;
+  int result = ComboPicker(XCSoarInterface::main_window, caption, list,
                            OnInfoBoxHelp);
-  if (result < 0) {
-    delete list;
+  if (result < 0)
     return;
-  }
 
   /* was there a modification? */
 
-  int new_type = (*list)[result].DataFieldIndex;
-  delete list;
+  int new_type = list[result].DataFieldIndex;
   if (new_type == old_type)
     return;
 
