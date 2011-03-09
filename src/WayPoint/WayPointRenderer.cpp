@@ -64,8 +64,8 @@ public:
                      const TaskBehaviour &_task_behaviour,
                      const AIRCRAFT_STATE &_aircraft_state, Canvas &_canvas,
                      const GlidePolar &polar,
-                     const RoutePolars& _rpolars,
-                     RasterTerrain* _terrain):
+                     RasterTerrain* _terrain,
+                     const ProtectedTaskManager& _task):
     projection(_projection),
     settings_map(_settings_map), task_behaviour(_task_behaviour),
     aircraft_state(_aircraft_state),
@@ -73,8 +73,8 @@ public:
     canvas(_canvas),
     glide_polar(polar),
     task_valid(false),
-    rpolars(_rpolars),
     terrain(_terrain),
+    task(_task),
     labels(projection.GetScreenWidth(), projection.GetScreenHeight())
   {
     // if pan mode, show full names
@@ -137,7 +137,7 @@ public:
       return;
 
     bool reachable_glide = false;
-    bool reachable_terrain = (terrain == NULL);
+    bool reachable_terrain = false;
 
     int AltArrivalAGL = 0;
 
@@ -151,16 +151,24 @@ public:
         reachable_glide = true;
         // reachable according to height, now check terrain intersection
 
-        if (terrain) {
-          RasterTerrain::ExclusiveLease rlease(*terrain);
-          const AGeoPoint p_dest (t.get_location(), r.MinHeight);
-          GeoPoint p_intx = p_dest;
+        const AGeoPoint p_dest (t.get_location(), r.MinHeight);
+        short h;
 
-          if (!rpolars.intersection(p_start, p_dest, &terrain->map, proj, p_intx))
+        if (!task.find_positive_arrival(p_dest, h)) {
+          // fail to query
+          reachable_terrain = true;
+          AltArrivalAGL = (int)Units::ToUserAltitude(r.AltitudeDifference);
+        } else {
+          if (terrain) {
+            h-= terrain->GetTerrainHeight(p_dest);
+          }
+          reachable_glide = (h>=0);
+          reachable_terrain = reachable_glide;
+          if (reachable_glide) {
             reachable_terrain = true;
+            AltArrivalAGL = (int)Units::ToUserAltitude(fixed(h));
+          }
         }
-
-        AltArrivalAGL = (int)Units::ToUserAltitude(r.AltitudeDifference);
       }
 
       WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable_glide,
@@ -281,8 +289,8 @@ private:
   const GlidePolar glide_polar;
   bool task_valid;
   TaskProjection proj;
-  const RoutePolars& rpolars;
   RasterTerrain* terrain;
+  const ProtectedTaskManager& task;
 
 public:
   void set_task_valid() {
@@ -322,23 +330,25 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
 
     canvas.set_text_color(Color::BLACK);
 
-    ProtectedTaskManager::Lease task_manager(*task);
-    
     WaypointVisitorMap v(projection, settings_map, task_behaviour,
                          aircraft_state,
                          canvas, glide_polar,
-                         task_manager->get_route_polars_safety(), 
-                         terrain);
-    
-    // task items come first, this is the only way we know that an item is in task,
-    // and we won't add it if it is already there
-    if (task_manager->stats_valid()) {
-      v.set_task_valid();
-    }
+                         terrain,
+                         *task);
 
-    const AbstractTask *atask = task_manager->get_active_task();
-    if (atask != NULL)
-      atask->tp_CAccept(v);
+    {
+      ProtectedTaskManager::Lease task_manager(*task);
+
+      // task items come first, this is the only way we know that an item is in task,
+      // and we won't add it if it is already there
+      if (task_manager->stats_valid()) {
+        v.set_task_valid();
+      }
+
+      const AbstractTask *atask = task_manager->get_active_task();
+      if (atask != NULL)
+        atask->tp_CAccept(v);
+    }
 
     way_points->visit_within_range(projection.GetGeoScreenCenter(),
                                    projection.GetScreenDistanceMeters(), v);

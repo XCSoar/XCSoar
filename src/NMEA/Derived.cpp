@@ -82,8 +82,6 @@ TERRAIN_ALT_INFO::Clear()
 
   AltitudeAGLValid = false;
   AltitudeAGL = fixed_zero;
-
-  GlideFootPrintValid = false;
 }
 
 void

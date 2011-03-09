@@ -55,10 +55,15 @@ public:
     m_planner.get_solution(route);
   }
 
-  void footprint(const AGeoPoint& origin,
-                 GeoPoint p[ROUTEPOLAR_POINTS]) const;
-
   RoutePolars get_route_polars() const;
+
+  void solve_reach(const AGeoPoint& origin);
+
+  bool find_positive_arrival(const AGeoPoint& dest,
+                             short& arrival_height) const;
+
+  void accept_in_range(const GeoBounds& bounds,
+                       TriangleFanVisitor& visitor) const;
 
 private:
   RasterTerrain* terrain;

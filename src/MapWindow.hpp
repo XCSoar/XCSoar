@@ -37,6 +37,7 @@ Copyright_License {
 #include "BackgroundDrawHelper.hpp"
 #include "WayPoint/WayPointRenderer.hpp"
 #include "Compiler.h"
+#include <vector>
 
 class TopographyStore;
 class TopographyRenderer;
@@ -156,13 +157,6 @@ public:
   void SetLocation(const GeoPoint location) {
     visible_projection.SetGeoLocation(location);
   }
-
-private:
-  RasterPoint Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS * 3];
-  unsigned GroundlineLength;
-
-  // display element functions
-  void CalculateScreenPositionsGroundline();
 
 public:
   void DrawBestCruiseTrack(Canvas &canvas,

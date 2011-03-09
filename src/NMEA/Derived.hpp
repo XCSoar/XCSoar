@@ -188,11 +188,6 @@ struct TERRAIN_ALT_INFO
 
   bool TerrainWarning;
 
-  /**
-   * Does the GlideFootPrint array have valid values?
-   */
-  bool GlideFootPrintValid;
-
   /** Terrain altitude */
   fixed TerrainAlt;
 
@@ -203,9 +198,6 @@ struct TERRAIN_ALT_INFO
   fixed AltitudeAGL;
 
   GeoPoint TerrainWarningLocation;
-
-  /** Final glide ground line */
-  GeoPoint GlideFootPrint[NUMTERRAINSWEEPS];
 
   void Clear();
 };

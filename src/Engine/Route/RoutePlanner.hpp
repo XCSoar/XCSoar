@@ -186,15 +186,6 @@ public:
   virtual void reset();
 
   /**
-   * Calculate terrain interception footprint.
-   *
-   * @param origin Aircraft location
-   * @param fp Array of intercept points
-   */
-  void calc_footprint(const AGeoPoint& origin,
-                      GeoPoint fp[ROUTEPOLAR_POINTS]) const;
-
-  /**
    * Determine if intersection with terrain occurs in forwards direction from
    * origin to destination, with cruise-climb and glide segments.
    *

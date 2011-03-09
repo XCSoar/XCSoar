@@ -270,9 +270,6 @@ public:
                    const short h_ceiling);
   void route_update_polar(const SpeedVector& wind);
 
-  void footprint(const AGeoPoint& origin,
-                 GeoPoint p[ROUTEPOLAR_POINTS]) const;
-
   bool intersection(RasterTerrain* terrain,
                     const AGeoPoint& origin,
                     const AGeoPoint& destination,
@@ -280,6 +277,13 @@ public:
 
   RoutePolars get_route_polars() const;
 
+  void solve_reach(const AGeoPoint& origin);
+
+  void accept_in_range(const GeoBounds& bounds,
+                       TriangleFanVisitor& visitor) const;
+
+  bool find_positive_arrival(const AGeoPoint& dest,
+                             short& arrival_height) const;
 };
 
 #endif

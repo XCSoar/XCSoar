@@ -61,7 +61,6 @@ void
 MapWindow::RenderFinalGlideShading(Canvas &canvas)
 {
   if (terrain != NULL &&
-      SettingsComputer().FinalGlideTerrain == 2 &&
       Calculated().TerrainValid)
       DrawTerrainAbove(canvas);
 }
@@ -97,9 +96,6 @@ MapWindow::Render(Canvas &canvas, const RECT &rc)
   // Calculate screen position of the aircraft
   const RasterPoint aircraft_pos =
       render_projection.GeoToScreen(Basic().Location);
-
-  // Calculate screen positions of the final glide groundline
-  CalculateScreenPositionsGroundline();
 
   // reset label over-write preventer
   label_block.reset();

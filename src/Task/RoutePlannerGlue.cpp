@@ -57,16 +57,30 @@ RoutePlannerGlue::solve(const AGeoPoint& origin,
 }
 
 void
-RoutePlannerGlue::footprint(const AGeoPoint& origin,
-                            GeoPoint p[ROUTEPOLAR_POINTS]) const
+RoutePlannerGlue::solve_reach(const AGeoPoint& origin)
 {
-  assert(ROUTEPOLAR_POINTS== TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
+  if (!terrain)
+    return;
   RasterTerrain::ExclusiveLease lease(*terrain);
-  return m_planner.calc_footprint(origin, p);
+  m_planner.solve_reach(origin);
 }
 
 RoutePolars
 RoutePlannerGlue::get_route_polars() const
 {
   return m_planner.get_route_polars();
+}
+
+bool
+RoutePlannerGlue::find_positive_arrival(const AGeoPoint& dest,
+                                        short& arrival_height) const
+{
+  return m_planner.find_positive_arrival(dest, arrival_height);
+}
+
+void
+RoutePlannerGlue::accept_in_range(const GeoBounds& bounds,
+                                  TriangleFanVisitor& visitor) const
+{
+  m_planner.accept_in_range(bounds, visitor);
 }

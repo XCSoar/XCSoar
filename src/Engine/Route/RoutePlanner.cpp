@@ -564,16 +564,6 @@ RoutePlanner::hull_extended(const RoutePoint& p)
   return true;
 }
 
-void
-RoutePlanner::calc_footprint(const AGeoPoint& origin,
-                             GeoPoint fp[ROUTEPOLAR_POINTS]) const
-{
-  TaskProjection proj;
-  proj.reset(origin);
-  proj.update_fast();
-  rpolars.calc_footprint(origin, fp, terrain, proj);
-}
-
 bool
 RoutePlanner::intersection(const AGeoPoint& origin,
                            const AGeoPoint& destination,

@@ -256,8 +256,8 @@ Graphics::Initialise()
   hpFinalGlideAbove.set(Layout::Scale(1), Color(0xA0, 0xFF, 0xA0));
 
   hpMapScale.set(Layout::Scale(1), Color::BLACK);
-  hpTerrainLine.set(Pen::DASH, Layout::Scale(1), Color(0x30, 0x30, 0x30));
-  hpTerrainLineBg.set(Layout::Scale(1), Color::WHITE);
+  hpTerrainLine.set(Pen::DASH, Layout::Scale(2), Color(0x30, 0x30, 0x30));
+  hpTerrainLineBg.set(Layout::Scale(2), Color::WHITE);
 
   SmallIcon.load_big(IDB_SMALL, IDB_SMALL_HD);
   TurnPointIcon.load_big(IDB_TURNPOINT, IDB_TURNPOINT_HD);

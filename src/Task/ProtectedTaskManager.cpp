@@ -369,14 +369,6 @@ ProtectedTaskManager::route_update_polar(const SpeedVector& wind)
   m_route.update_polar(lease->get_glide_polar(), wind);
 }
 
-void
-ProtectedTaskManager::footprint(const AGeoPoint& origin,
-                                GeoPoint p[ROUTEPOLAR_POINTS]) const
-{
-  Lease lease(*this);
-  m_route.footprint(origin, p);
-}
-
 bool
 ProtectedTaskManager::intersection(RasterTerrain* terrain,
                                    const AGeoPoint& origin,
@@ -418,4 +410,27 @@ bool TerrainIntersectionTest::intersects(const AGeoPoint& origin,
   proj.update_fast();
   GeoPoint intx; // return ignored
   return rpolars.intersection(origin, destination, &rterrain->map, proj, intx);
+}
+
+void
+ProtectedTaskManager::solve_reach(const AGeoPoint& origin)
+{
+  ExclusiveLease lease(*this);
+  m_route.solve_reach(origin);
+}
+
+bool
+ProtectedTaskManager::find_positive_arrival(const AGeoPoint& dest,
+                                            short& arrival_height) const
+{
+  Lease lease(*this);
+  return m_route.find_positive_arrival(dest, arrival_height);
+}
+
+void
+ProtectedTaskManager::accept_in_range(const GeoBounds& bounds,
+                                      TriangleFanVisitor& visitor) const
+{
+  Lease lease(*this);
+  return m_route.accept_in_range(bounds, visitor);
 }

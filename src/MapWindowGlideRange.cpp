@@ -25,6 +25,7 @@ Copyright_License {
 #include "Geo/GeoClip.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Draw.hpp"
@@ -32,23 +33,42 @@ Copyright_License {
 
 #include <stdio.h>
 
-void MapWindow::CalculateScreenPositionsGroundline(void)
-{
-  if (!SettingsComputer().FinalGlideTerrain ||
-      !Calculated().GlideFootPrintValid)
-    return;
+typedef std::vector<RasterPoint> RasterPointVector;
 
-  const GeoClip clip(render_projection.GetScreenBounds().scale(fixed(1.1)));
-  GeoPoint clipped[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS * 3];
-  GroundlineLength =
-    clip.clip_polygon(clipped, Calculated().GlideFootPrint,
-                      TERRAIN_ALT_INFO::NUMTERRAINSWEEPS);
-  if (GroundlineLength < 3)
-    return;
+class TriangleCompound: public TriangleFanVisitor {
+public:
 
-  for (unsigned i = 0; i < GroundlineLength; ++i)
-    Groundline[i] = render_projection.GeoToScreen(clipped[i]);
-}
+  TriangleCompound(const MapWindowProjection& _proj):
+    proj(_proj),
+    clip(_proj.GetScreenBounds().scale(fixed(1.1)))
+    {
+      g.reserve(50);
+    }
+
+  virtual void start_fan() {
+    g.clear();
+  }
+  virtual void add_point(const GeoPoint& p) {
+    g.push_back(p);
+  }
+  virtual void end_fan() {
+    unsigned size =
+      clip.clip_polygon(clipped, &g[0], g.size());
+    if (size < 3)
+      return;
+    RasterPointVector r;
+    for (unsigned i = 0; i < size; ++i) {
+      r.push_back(proj.GeoToScreen(clipped[i]));
+    }
+    fans.push_back(r);
+  };
+
+  std::vector<RasterPointVector> fans;
+  std::vector<GeoPoint> g;
+  GeoPoint clipped[50*4];
+  const MapWindowProjection& proj;
+  const GeoClip clip;
+};
 
 /**
  * Draw the final glide groundline (and shading) to the buffer
@@ -60,9 +80,18 @@ void MapWindow::CalculateScreenPositionsGroundline(void)
 void
 MapWindow::DrawTerrainAbove(Canvas &canvas)
 {
-  if (Basic().gps.NAVWarning || !Calculated().flight.Flying ||
-      SettingsMap().EnablePan || GroundlineLength < 3)
+  if (Basic().gps.NAVWarning
+      || !SettingsComputer().FinalGlideTerrain
+      || !task)
     return;
+
+  TriangleCompound visitor(render_projection);
+  task->accept_in_range(render_projection.GetScreenBounds(), visitor);
+
+  if (visitor.fans.empty())
+    return;
+
+  {
 
 #ifdef ENABLE_OPENGL
   glEnable(GL_STENCIL_TEST);
@@ -75,7 +104,71 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   canvas.null_pen();
   canvas.white_brush();
-  canvas.polygon(Groundline, GroundlineLength);
+  for (std::vector<RasterPointVector>::const_iterator i= visitor.fans.begin();
+       i!= visitor.fans.end(); ++i) {
+    canvas.polygon(&(*i)[0], i->size());
+  }
+
+  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+  glStencilFunc(GL_NOTEQUAL, 1, 1);
+  glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+  canvas.select(Graphics::hpTerrainLine);
+  for (std::vector<RasterPointVector>::const_iterator i= visitor.fans.begin();
+       i!= visitor.fans.end(); ++i) {
+    canvas.polygon(&(*i)[0], i->size());
+  }
+
+  glDisable(GL_STENCIL_TEST);
+
+#elif !defined(ENABLE_SDL)
+
+  Canvas &buffer = buffer_canvas;
+
+  buffer.set_background_color(Color::WHITE);
+  buffer.set_text_color(Color(0xf0,0xf0,0xf0));
+  buffer.clear_white();
+
+  buffer.hollow_brush();
+  for (std::vector<RasterPointVector>::const_iterator i= visitor.fans.begin();
+       i!= visitor.fans.end(); ++i) {
+    buffer.select(Graphics::hpTerrainLine);
+    buffer.polygon(&(*i)[0], i->size());
+  }
+
+  buffer.null_pen();
+  buffer.white_brush();
+  for (std::vector<RasterPointVector>::const_iterator i= visitor.fans.begin();
+       i!= visitor.fans.end(); ++i) {
+    buffer.polygon(&(*i)[0], i->size());
+  }
+  canvas.copy_transparent_white(buffer);
+
+#endif
+  }
+
+  if ((SettingsComputer().FinalGlideTerrain != 2)
+      || !Calculated().flight.Flying
+      || SettingsMap().EnablePan)
+    return;
+
+  // @todo: update this rendering
+
+#ifdef ENABLE_OPENGL
+  glEnable(GL_STENCIL_TEST);
+  glClear(GL_STENCIL_BUFFER_BIT);
+
+  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+  glStencilFunc(GL_ALWAYS, 1, 1);
+  glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+  canvas.null_pen();
+  canvas.white_brush();
+  for (std::vector<RasterPointVector>::const_iterator i= visitor.fans.begin();
+       i!= visitor.fans.end(); ++i) {
+    canvas.polygon(&(*i)[0], i->size());
+  }
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glStencilFunc(GL_NOTEQUAL, 1, 1);
@@ -98,7 +191,10 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   buffer.null_pen();
   buffer.white_brush();
-  buffer.polygon(Groundline, GroundlineLength);
+  for (std::vector<RasterPointVector>::const_iterator i= visitor.fans.begin();
+       i!= visitor.fans.end(); ++i) {
+    buffer.polygon(&(*i)[0], i->size());
+  }
 
   canvas.copy_transparent_white(buffer);
 #endif
@@ -108,22 +204,6 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 void
 MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 {
-  if (Basic().gps.NAVWarning)
-    /* don't draw this if we don't know our own position */
-    return;
-
-  if (SettingsComputer().FinalGlideTerrain && GroundlineLength >= 3) {
-    canvas.hollow_brush();
-
-#ifndef ENABLE_OPENGL
-    canvas.select(Graphics::hpTerrainLineBg);
-    canvas.polygon(Groundline, GroundlineLength);
-#endif
-
-    canvas.select(Graphics::hpTerrainLine);
-    canvas.polygon(Groundline, GroundlineLength);
-  }
-
   if (!Calculated().flight.Flying)
     return;
 

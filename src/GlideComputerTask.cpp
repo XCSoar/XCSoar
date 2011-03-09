@@ -135,8 +135,8 @@ GlideComputerTask::ProcessIdle()
 
   if (sol.defined() && terrain) {
 
-    const GeoVector &v = sol.Vector;
     const AGeoPoint start (as.get_location(), as.NavAltitude);
+    const GeoVector &v = sol.Vector;
     const AGeoPoint dest (v.end_point(start), sol.MinHeight);
 
     short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
@@ -164,8 +164,6 @@ GlideComputerTask::TerrainWarning()
 
     const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
     const AGeoPoint start (state.get_location(), state.NavAltitude);
-    m_task.footprint(start, SetCalculated().GlideFootPrint);
-    SetCalculated().GlideFootPrintValid = true;
-  } else
-    SetCalculated().GlideFootPrintValid = false;
+    m_task.solve_reach(start);
+  }
 }
