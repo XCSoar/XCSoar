@@ -107,6 +107,14 @@ Brush Graphics::AlarmBrush;
 Brush Graphics::WarningBrush;
 Brush Graphics::TrafficBrush;
 
+// used for landable rendering
+Brush Graphics::hbGreen;
+Brush Graphics::hbWhite;
+Brush Graphics::hbMagenta;
+Brush Graphics::hbOrange;
+Brush Graphics::hbLightGray;
+Brush Graphics::hbNotReachableTerrain;
+
 // airspace brushes/colours
 const Color
 Graphics::GetAirspaceColour(const int i)
@@ -260,6 +268,14 @@ Graphics::Initialise()
 
   hpAircraft.set(Layout::Scale(3), Color::WHITE);
   hpAircraftBorder.set(Layout::Scale(1), Color::BLACK);
+
+    // used for landable rendering
+  hbGreen.set(Color::GREEN);
+  hbWhite.set(Color::WHITE);
+  hbMagenta.set(Color::MAGENTA);
+  hbOrange.set(Color::ORANGE);
+  hbLightGray.set(Color::LIGHT_GRAY);
+  hbNotReachableTerrain.set(Color(224, 64, 64));
 }
 
 void
@@ -393,6 +409,13 @@ Graphics::Deinitialise()
   hBmpTabFolder.reset();
   hBmpTabSettings.reset();
   hBmpTabCalculator.reset();
+
+  hbGreen.reset();
+  hbWhite.reset();
+  hbMagenta.reset();
+  hbOrange.reset();
+  hbLightGray.reset();
+  hbNotReachableTerrain.reset();
 }
 
 void

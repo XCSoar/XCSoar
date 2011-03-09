@@ -132,6 +132,14 @@ namespace Graphics {
   extern Brush WarningBrush;
   extern Brush TrafficBrush;
 
+  // used for landable rendering
+  extern Brush hbGreen;
+  extern Brush hbWhite;
+  extern Brush hbMagenta;
+  extern Brush hbOrange;
+  extern Brush hbLightGray;
+  extern Brush hbNotReachableTerrain;
+
   // misc
   extern const Color TaskColor;
   extern const Color Colours[NUMAIRSPACECOLORS];

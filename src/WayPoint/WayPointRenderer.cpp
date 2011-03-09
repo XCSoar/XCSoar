@@ -400,6 +400,7 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
   canvas.polygon(runway, sizeof(runway)/sizeof(runway[0]));
 }
 
+
 void
 WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
                                      bool reachable_glide,
@@ -407,7 +408,6 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
                                      const Waypoint &way_point,
                                      const Angle &screenRotation)
 {
-  static const Color NOT_REACHABLE_TERRAIN(224, 64, 64);
 
   if (!Appearance.UseSWLandablesRendering) {
     const MaskedIcon *icon;
@@ -427,32 +427,29 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
   fixed scale = fixed(Layout::SmallScale(Appearance.LandableRenderingScale)) /
                 fixed_int_constant(150);
   fixed radius = fixed_int_constant(10) * scale;
-  Brush fill;
 
   canvas.black_pen();
   if (Appearance.IndLandable == wpLandableWinPilot) {
     // Render landable with reachable state
     if (reachable_glide) {
-      fill.set(reachable_terrain ? Color::GREEN : NOT_REACHABLE_TERRAIN);
-      canvas.select(fill);
+      canvas.select(reachable_terrain ? Graphics::hbGreen : Graphics::hbNotReachableTerrain);
       DrawLandableBase(canvas, pt, way_point.is_airport(),
                        radius + radius / fixed_two);
     }
-    fill.set(Color::MAGENTA);
+    canvas.select(Graphics::hbMagenta);
   } else if (Appearance.IndLandable == wpLandableAltB) {
     if (reachable_glide)
-      fill.set(reachable_terrain ? Color::GREEN : NOT_REACHABLE_TERRAIN);
+      canvas.select(reachable_terrain ? Graphics::hbGreen : Graphics::hbNotReachableTerrain);
     else
-      fill.set(Color::ORANGE);
+      canvas.select(Graphics::hbOrange);
   } else {
     if (reachable_glide)
-      fill.set(reachable_terrain ? Color::GREEN : NOT_REACHABLE_TERRAIN);
+      canvas.select(reachable_terrain ? Graphics::hbGreen : Graphics::hbNotReachableTerrain);
     else if (way_point.is_airport())
-      fill.set(Color::WHITE);
+      canvas.select(Graphics::hbWhite);
     else
-      fill.set(Color::LIGHT_GRAY);
+      canvas.select(Graphics::hbLightGray);
   }
-  canvas.select(fill);
   DrawLandableBase(canvas, pt, way_point.is_airport(), radius);
 
   // Render runway indication
@@ -465,7 +462,7 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
       len = radius;
     len += fixed_two * scale;
     Angle runwayDrawingAngle = way_point.RunwayDirection - screenRotation;
-    canvas.white_brush();
+    canvas.select(Graphics::hbWhite);
     DrawLandableRunway(canvas, pt, runwayDrawingAngle, len,
                        fixed_int_constant(5) * scale);
   }
