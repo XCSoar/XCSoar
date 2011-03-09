@@ -27,13 +27,8 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Math/fixed.hpp"
 
-#if defined(WIN32) && !defined(USE_PROFILE_MAP)
-#include "Profile/Registry.hpp"
-namespace ProfileImpl = Registry;
-#else
 #include "Profile/ProfileMap.hpp"
 namespace ProfileImpl = ProfileMap;
-#endif
 
 #include <stddef.h>
 #include <tchar.h>
