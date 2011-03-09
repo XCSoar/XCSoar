@@ -37,13 +37,12 @@ class ComboList;
 class DataField
 {
 public:
-  typedef enum
-  {
+  enum DataAccessKind_t {
     daChange,
     daInc,
     daDec,
     daSpecial,
-  } DataAccessKind_t;
+  };
 
   typedef void (*DataAccessCallback_t)(DataField * Sender, DataAccessKind_t Mode);
 
