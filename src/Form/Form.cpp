@@ -516,16 +516,13 @@ WndForm::on_paint(Canvas &canvas)
   // Set the colors
   canvas.set_text_color(Color::WHITE);
 
-#ifndef EYE_CANDY
-  canvas.set_background_color(mColorTitle);
-#endif
-
   // Set the titlebar font and font-size
   canvas.select(*mhTitleFont);
 
   // JMW todo add here icons?
 
 #ifdef EYE_CANDY
+  canvas.background_transparent();
   canvas.stretch(mTitleRect.left, mTitleRect.top,
                  mTitleRect.right - mTitleRect.left,
                  mTitleRect.bottom - mTitleRect.top,
@@ -534,6 +531,7 @@ WndForm::on_paint(Canvas &canvas)
   // Draw titlebar text
   canvas.text(mTitleRect.left + Layout::FastScale(2), mTitleRect.top, mCaption);
 #else
+  canvas.set_background_color(mColorTitle);
   canvas.text_opaque(mTitleRect.left + Layout::FastScale(2),
                      mTitleRect.top, mTitleRect, mCaption);
 #endif
