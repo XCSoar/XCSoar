@@ -117,7 +117,7 @@ struct Color {
   }
 
   static const Color WHITE, BLACK, GRAY, RED, GREEN, BLUE, YELLOW, CYAN,
-    MAGENTA, LIGHT_GRAY;
+    MAGENTA, LIGHT_GRAY, DARK_GRAY;
 };
 
 #ifndef ENABLE_OPENGL
