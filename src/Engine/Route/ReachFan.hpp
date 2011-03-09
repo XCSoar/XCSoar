@@ -29,7 +29,7 @@
 class RoutePolars;
 class RasterMap;
 class TaskProjection;
-class GeoBounds;
+struct GeoBounds;
 
 class FlatTriangleFan {
 protected:
