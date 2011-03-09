@@ -99,14 +99,12 @@ WndForm::WndForm(SingleWindow &_main_window,
 
   // Create ClientWindow
 
-  SetBackColor(Color(0xDA, 0xDB, 0xAB));
-
   WindowStyle client_style;
   client_style.control_parent();
   client_area.set(*this, mClientRect.left, mClientRect.top,
                   mClientRect.right - mClientRect.left,
                   mClientRect.bottom - mClientRect.top, client_style);
-  client_area.SetBackColor(GetBackColor());
+  client_area.SetBackColor(Color(0xDA, 0xDB, 0xAB));
 
 #if !defined(ENABLE_SDL) && !defined(NDEBUG)
   ::SetWindowText(hWnd, mCaption);
