@@ -21,6 +21,7 @@ Version 6.0.7 - not yet released
 * Linux
   - improved button and checkbox rendering
   - dialog keyboard navigation implemented
+  - enable keyboard repeat
 
 Version 6.0.6 - 2011/03/04
 * devices:
