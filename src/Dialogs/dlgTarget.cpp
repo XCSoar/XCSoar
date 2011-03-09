@@ -252,12 +252,14 @@ RefreshCalculator()
     DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
     df->Set(aattimeEst / fixed(60));
     wp->RefreshDisplay();
+    wp->set_visible(!nodisplay);
   }
   wp = (WndProperty*)wf->FindByName(_T("prpAATDelta")); // same as infobox
   if (wp) {
     DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
     df->Set((aattimeEst - aatTime) / fixed(60));
     wp->RefreshDisplay();
+    wp->set_visible(!nodisplay);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
