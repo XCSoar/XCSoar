@@ -73,3 +73,13 @@ ComboList::Sort()
 {
   qsort(items.begin(), items.size(), sizeof(items[0]), CompareByValue);
 }
+
+unsigned
+ComboList::LookUp(int DataFieldIndex)
+{
+  for (unsigned i = 0; i < items.size(); i++)
+    if (items[i]->DataFieldIndex == DataFieldIndex)
+      return i;
+
+  return 0;
+}

@@ -87,6 +87,7 @@ public:
   }
 
   void Sort();
+  unsigned LookUp(int DataFieldIndex);
 
   int ComboPopupItemSavedIndex;
 };
