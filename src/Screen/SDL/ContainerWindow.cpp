@@ -320,7 +320,7 @@ ContainerWindow::child_at(int x, int y)
     if (child.is_visible() &&
         x >= child.get_left() && x < child.get_right() &&
         y >= child.get_top() && y < child.get_bottom())
-      return &child;
+      return child.is_enabled() ? &child : NULL;
   }
 
   return NULL;
