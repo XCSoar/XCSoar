@@ -62,6 +62,23 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
 }
 
 void
+Canvas::outline_rectangle(int left, int top, int right, int bottom)
+{
+  pen.set();
+
+  const RasterPoint v[] = {
+    { left, top },
+    { right, top },
+    { right, bottom },
+    { left, bottom },
+    { left, top },
+  };
+
+  glVertexPointer(2, GL_VALUE, 0, v);
+  glDrawArrays(GL_LINE_STRIP, 0, 5);
+}
+
+void
 Canvas::raised_edge(RECT &rc)
 {
   Pen bright(1, Color(240, 240, 240));
@@ -217,6 +234,14 @@ Canvas::segment(int x, int y, unsigned radius,
                 Angle start, Angle end, bool horizon)
 {
   ::Segment(*this, x, y, radius, start, end, horizon);
+}
+
+void
+Canvas::draw_focus(RECT rc)
+{
+  Pen pen(1, Color::DARK_GRAY);
+  select(pen);
+  outline_rectangle(rc.left, rc.top, rc.right, rc.bottom);
 }
 
 void
