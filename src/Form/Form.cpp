@@ -444,6 +444,15 @@ WndForm::ShowModal(Window *modal_allowed)
         mOnKeyDownNotify(*this, get_key_code(event)))
       continue;
 
+#if defined(ENABLE_SDL) && !defined(ANDROID)
+    if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_TAB) {
+      /* the Tab key moves the keyboard focus */
+      const Uint8 *keystate = ::SDL_GetKeyState(NULL);
+      event.key.keysym.sym = keystate[SDLK_LSHIFT] || keystate[SDLK_RSHIFT]
+        ? SDLK_UP : SDLK_DOWN;
+    }
+#endif
+
     if (is_key_down(event) &&
 #ifndef ENABLE_SDL
         identify_descendant(event.hwnd) &&
