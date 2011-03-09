@@ -199,9 +199,9 @@ public:
   * 
   * @param waypoint Waypoint to check against (replaced)
   * 
-  * @return True if found
+  * @return True if found.  False if appended
   */
-  bool find_duplicate(Waypoint& waypoint);
+  bool check_exists_or_append(Waypoint& waypoint);
 
   /**
    * Call visitor function on waypoints within approximate range

@@ -445,7 +445,7 @@ Waypoints::get_writable(const Waypoint& wp) const
 
 
 bool
-Waypoints::find_duplicate(Waypoint& waypoint)
+Waypoints::check_exists_or_append(Waypoint& waypoint)
 {
   const Waypoint* found = lookup_name(waypoint.Name);
   if (found && found->is_close_to(waypoint.Location, fixed(100))) {

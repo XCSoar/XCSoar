@@ -1103,7 +1103,7 @@ OrderedTask::check_duplicate_waypoints(Waypoints& waypoints,
   bool changed = false;
   for (unsigned i = 0; i < points.size(); ++i) {
     Waypoint wp(points[i]->get_waypoint());
-    const bool this_changed = !waypoints.find_duplicate(wp);
+    const bool this_changed = !waypoints.check_exists_or_append(wp);
     changed |= this_changed;
     if (is_task)
       replace(*points[i], i);
