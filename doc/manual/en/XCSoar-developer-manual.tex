@@ -117,7 +117,9 @@ Compile with \texttt{WERROR=y} and fix all warnings.
 Don't write large functions.  Split them up when they become too
 large.
 
-Avoid dynamic allocation.
+Avoid dynamic allocation.  Dynamic allocation means overhead, more
+locking and heap fragmentation.  Use \texttt{StaticArray} and
+\texttt{StaticString} if possible.
 
 Asterisks belong to the variable name, not to the type name.  Consider
 ``\texttt{Foo* a, b}''.  ``\texttt{Foo *a, b}'' or ``\texttt{Foo *a,
