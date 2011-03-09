@@ -62,6 +62,9 @@ ButtonWindow::on_mouse_move(int x, int y, unsigned keys)
 bool
 ButtonWindow::on_mouse_down(int x, int y)
 {
+  if (is_tab_stop())
+    set_focus();
+
   set_down(true);
   set_capture();
   dragging = true;
@@ -89,6 +92,22 @@ ButtonWindow::on_mouse_up(int x, int y)
 }
 
 bool
+ButtonWindow::on_setfocus()
+{
+  PaintWindow::on_setfocus();
+  invalidate();
+  return true;
+}
+
+bool
+ButtonWindow::on_killfocus()
+{
+  PaintWindow::on_killfocus();
+  invalidate();
+  return true;
+}
+
+bool
 ButtonWindow::on_cancel_mode()
 {
   release_capture();
@@ -103,6 +122,13 @@ ButtonWindow::on_cancel_mode()
 void
 ButtonWindow::on_paint(Canvas &canvas)
 {
+  if (has_focus()) {
+    Pen pen(Layout::Scale(1), Color::BLACK);
+    canvas.select(pen);
+    canvas.hollow_brush();
+    canvas.rectangle(-1, -1, canvas.get_width(), canvas.get_height());
+  }
+
   RECT rc = { 2, 2, canvas.get_width()-4, canvas.get_height()-4 };
   if (down) {
     rc.left += Layout::FastScale(1);

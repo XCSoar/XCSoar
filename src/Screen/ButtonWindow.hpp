@@ -115,6 +115,8 @@ protected:
   virtual bool on_mouse_move(int x, int y, unsigned keys);
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
+  virtual bool on_setfocus();
+  virtual bool on_killfocus();
   virtual bool on_cancel_mode();
   virtual void on_paint(Canvas &canvas);
 };
