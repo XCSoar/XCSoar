@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/CheckBox.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Layout.hpp"
 
 #include <algorithm>
 
@@ -73,6 +74,9 @@ CheckBox::on_mouse_move(int x, int y, unsigned keys)
 bool
 CheckBox::on_mouse_down(int x, int y)
 {
+  if (is_tab_stop())
+    set_focus();
+
   set_pressed(true);
   set_capture();
   dragging = true;
@@ -102,6 +106,22 @@ CheckBox::on_mouse_up(int x, int y)
 }
 
 bool
+CheckBox::on_setfocus()
+{
+  PaintWindow::on_setfocus();
+  invalidate();
+  return true;
+}
+
+bool
+CheckBox::on_killfocus()
+{
+  PaintWindow::on_killfocus();
+  invalidate();
+  return true;
+}
+
+bool
 CheckBox::on_cancel_mode()
 {
   release_capture();
@@ -118,7 +138,11 @@ CheckBox::on_paint(Canvas &canvas)
 {
   Brush brush(pressed ? Color::GRAY : Color::WHITE);
   canvas.select(brush);
-  canvas.black_pen();
+
+  if (has_focus())
+    canvas.select(Pen(Layout::Scale(1) + 1, Color::BLACK));
+  else
+    canvas.black_pen();
   canvas.rectangle(2, 2, canvas.get_height() - 4, canvas.get_height() - 4);
 
   if (checked) {

@@ -18,7 +18,7 @@ Version 6.0.7 - not yet released
   - import time from internal GPS correctly
   - read internal GPS accuracy
 * Linux
-  - improved button rendering
+  - improved button and checkbox rendering
   - dialog keyboard navigation implemented
 
 Version 6.0.6 - 2011/03/04
