@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/CheckBox.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 
 #include <algorithm>
 
@@ -58,6 +59,24 @@ CheckBox::set_pressed(bool value)
 
   pressed = value;
   invalidate();
+}
+
+bool
+CheckBox::on_key_down(unsigned key_code)
+{
+  switch (key_code) {
+  case VK_RETURN:
+  case VK_SPACE:
+    checked = !checked;
+    invalidate();
+
+    if (!on_clicked() && id != 0 && parent != NULL)
+      parent->on_command(id, 0);
+    return true;
+
+  default:
+    return PaintWindow::on_key_down(key_code);
+  }
 }
 
 bool
