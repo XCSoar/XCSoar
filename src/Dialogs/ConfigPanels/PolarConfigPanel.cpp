@@ -119,32 +119,25 @@ UpdatePolarInvalidLabel()
 void
 PolarConfigPanel::OnLoadInteral(WndButton &button)
 {
-  /* create a fake WndProperty for dlgComboPicker() */
-  /* XXX reimplement properly */
-
-  DataFieldEnum *dfe = new DataFieldEnum(NULL);
+  ComboList list;
   unsigned len = PolarStore::Count();
   for (unsigned i = 0; i < len; i++)
-    dfe->addEnumText(PolarStore::GetName(i), i);
+    list.Append(i, PolarStore::GetName(i));
 
-  dfe->Sort();
-  ComboList *list = dfe->CreateComboList();
+  list.Sort();
 
   /* let the user select */
 
-  int result = ComboPicker(XCSoarInterface::main_window, _("Load Polar"), *list, NULL);
+  int result = ComboPicker(XCSoarInterface::main_window, _("Load Polar"), list, NULL);
   if (result >= 0) {
     SimplePolar polar;
-    PolarStore::Read(dfe->getItem(result), polar);
+    PolarStore::Read(list[result].DataFieldIndex, polar);
     UpdatePolarFields(polar);
 
-    Profile::Set(szProfilePolarName, PolarStore::GetName(dfe->getItem(result)));
+    Profile::Set(szProfilePolarName, list[result].StringValue);
     UpdatePolarTitle();
     UpdatePolarInvalidLabel();
   }
-
-  delete dfe;
-  delete list;
 }
 
 void
