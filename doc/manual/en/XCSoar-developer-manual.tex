@@ -130,9 +130,18 @@ Some sample code to demonstrate our code style:
 \begin{verbatim}
 struct TheStruct {
   unsigned an_attribute;
+  bool second_attribute;
+
+  TheStruct();
 
   void TheMethod();
 };
+
+TheStruct::TheStruct()
+  :an_attribute(0),
+   second_attribute(true)
+{
+}
 
 static bool
 FooBar(int a_parameter, unsigned another_parameter,
