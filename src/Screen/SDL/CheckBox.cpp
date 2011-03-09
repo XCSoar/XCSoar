@@ -116,8 +116,6 @@ CheckBox::on_cancel_mode()
 void
 CheckBox::on_paint(Canvas &canvas)
 {
-  canvas.clear(Color(0xDA, 0xDB, 0xAB));
-
   Brush brush(pressed ? Color::GRAY : Color::WHITE);
   canvas.select(brush);
   canvas.black_pen();
