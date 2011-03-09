@@ -25,6 +25,8 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/ComboList.hpp"
 #include "DataField/FileReader.hpp"
+#include "Form/Form.hpp"
+#include "Form/Button.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"

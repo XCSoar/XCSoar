@@ -24,8 +24,10 @@ Copyright_License {
 #ifndef POLARCONFIGPANEL_HPP
 #define POLARCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
+#include "DataField/Base.hpp"
+
+class WndForm;
+class WndButton;
 
 namespace PolarConfigPanel
 {
