@@ -510,6 +510,13 @@ public:
   virtual Window *get_focused_window();
   void set_focus();
 
+  /**
+   * Called by the parent window when this window loses focus, or when
+   * one of its (indirect) child windows loses focus.  This method is
+   * responsible for invoking on_killfocus().
+   */
+  virtual void ClearFocus();
+
 #else /* !ENABLE_SDL */
 
   void set_focus() {

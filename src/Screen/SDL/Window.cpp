@@ -61,6 +61,16 @@ Window::set_focus()
 }
 
 void
+Window::ClearFocus()
+{
+  if (focused) {
+    on_killfocus();
+
+    assert(!focused);
+  }
+}
+
+void
 Window::set_capture()
 {
   assert_none_locked();

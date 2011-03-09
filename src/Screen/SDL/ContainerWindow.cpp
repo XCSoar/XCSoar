@@ -193,14 +193,23 @@ ContainerWindow::set_active_child(Window &child)
   if (active_child == &child)
     return;
 
-  Window *focus = get_focused_window();
-  if (focus != NULL)
-    focus->on_killfocus();
+  ClearFocus();
 
   active_child = &child;
 
   if (parent != NULL)
     parent->set_active_child(*this);
+}
+
+void
+ContainerWindow::ClearFocus()
+{
+  if (active_child != NULL) {
+    active_child->ClearFocus();
+    active_child = NULL;
+  }
+
+  Window::ClearFocus();
 }
 
 Window *
