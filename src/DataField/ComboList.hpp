@@ -56,7 +56,7 @@ private:
 
 public:
   ComboList():
-    ComboPopupItemSavedIndex(-1) {}
+    ComboPopupItemSavedIndex(0) {}
 
   ~ComboList() {
     Clear();
