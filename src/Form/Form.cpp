@@ -494,7 +494,6 @@ WndForm::on_paint(Canvas &canvas)
   // Set the colors
   canvas.set_text_color(Color::BLACK);
   canvas.set_background_color(mColorTitle);
-  canvas.background_transparent();
 
   // Set the titlebar font and font-size
   canvas.select(*mhTitleFont);
