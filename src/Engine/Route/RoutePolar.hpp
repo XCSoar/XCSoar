@@ -397,19 +397,6 @@ public:
   }
 
   /**
-   * Calculate terrain interception footprint
-   *
-   * @param o Aircraft location
-   * @param p Array of intercept points
-   * @param map RasterMap of terrain.
-   * @param proj Task projection
-   */
-  void calc_footprint(const AGeoPoint& o,
-                      GeoPoint p[ROUTEPOLAR_POINTS],
-                      const RasterMap* map,
-                      const TaskProjection& proj) const;
-
-  /**
    * round up just below nearest 8 second block in a quick way
    * this is an attempt to stabilise solutions
    */

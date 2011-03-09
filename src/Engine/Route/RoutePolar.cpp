@@ -116,24 +116,6 @@ RoutePolars::msl_intercept(const int index, const AGeoPoint& p, const TaskProjec
   return (proj.unproject(dp)-(GeoPoint)p)+(GeoPoint)p;
 }
 
-void
-RoutePolars::calc_footprint(const AGeoPoint& origin,
-                            GeoPoint p[ROUTEPOLAR_POINTS],
-                            const RasterMap* map,
-                            const TaskProjection& proj) const
-{
-  const bool valid = map && map->isMapLoaded();
-  const short altitude = origin.altitude-safety_height();
-  AGeoPoint m_origin((GeoPoint)origin, altitude);
-  for (int i=0; i< ROUTEPOLAR_POINTS; ++i) {
-    const GeoPoint dest = msl_intercept(i, m_origin, proj);
-    if (valid)
-      p[i] = map->Intersection(m_origin, altitude, altitude, dest);
-    else
-      p[i] = dest;
-  }
-}
-
 
 RoutePolars::RoutePolars(const GlidePolar& polar,
                          const SpeedVector& wind)
