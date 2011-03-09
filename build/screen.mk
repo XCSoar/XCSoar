@@ -70,6 +70,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/ButtonWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/EditWindow.cpp \
+	$(SCREEN_SRC_DIR)/GDI/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Event.cpp \

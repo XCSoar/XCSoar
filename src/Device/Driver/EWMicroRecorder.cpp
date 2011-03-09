@@ -34,6 +34,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Units.hpp"
+#include "PeriodClock.hpp"
 
 #include <tchar.h>
 #include <assert.h>
@@ -127,8 +128,11 @@ EWMicroRecorderDevice::TryConnect()
     unsigned user_size = 0;
     bool started = false;
 
+    PeriodClock clock;
+    clock.update();
+
     int i;
-    while ((i = port->GetChar()) != EOF) {
+    while ((i = port->GetChar()) != EOF && !clock.check(8000)) {
       char ch = (char)i;
 
       if (!started && ch == _T('-'))
@@ -227,8 +231,18 @@ EWMicroRecorderDevice::DeclareInner(const Declaration *decl)
   if (!TryConnect())
     return false;
 
+  char *p = strstr(user_data, "FLIGHT DECLARATION");
+  if (p != NULL) {
+    p = strstr(p, "Description:");
+    if (p != NULL)
+      *p = 0;
+  }
+
   port->Write('\x18');         // start to upload file
   port->Write(user_data);
+
+  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
+                        _T("Description:"), _T("XCSoar task declaration"));
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Pilot Name:"), decl->PilotName.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
@@ -271,7 +285,9 @@ EWMicroRecorderDevice::Declare(const Declaration *decl,
 
   port->StopRxThread();
 
-  port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+  /* during tests, the EW has taken up to one second to respond to
+     the command \x18 */
+  port->SetRxTimeout(2500);
 
   bool success = DeclareInner(decl);
 

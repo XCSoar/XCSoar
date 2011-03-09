@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 
 void
 ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
@@ -48,6 +50,23 @@ ButtonWindow::set_down(bool _down)
 }
 
 bool
+ButtonWindow::on_key_down(unsigned key_code)
+{
+  switch (key_code) {
+  case VK_RETURN:
+  case VK_SPACE:
+    set_down(false);
+
+    if (id != 0 && parent != NULL)
+      parent->on_command(id, 0);
+    return true;
+
+  default:
+    return PaintWindow::on_key_down(key_code);
+  }
+}
+
+bool
 ButtonWindow::on_mouse_move(int x, int y, unsigned keys)
 {
   if (dragging) {
@@ -61,6 +80,9 @@ ButtonWindow::on_mouse_move(int x, int y, unsigned keys)
 bool
 ButtonWindow::on_mouse_down(int x, int y)
 {
+  if (is_tab_stop())
+    set_focus();
+
   set_down(true);
   set_capture();
   dragging = true;
@@ -88,6 +110,22 @@ ButtonWindow::on_mouse_up(int x, int y)
 }
 
 bool
+ButtonWindow::on_setfocus()
+{
+  PaintWindow::on_setfocus();
+  invalidate();
+  return true;
+}
+
+bool
+ButtonWindow::on_killfocus()
+{
+  PaintWindow::on_killfocus();
+  invalidate();
+  return true;
+}
+
+bool
 ButtonWindow::on_cancel_mode()
 {
   release_capture();
@@ -102,11 +140,22 @@ ButtonWindow::on_cancel_mode()
 void
 ButtonWindow::on_paint(Canvas &canvas)
 {
+  if (has_focus()) {
+    Pen pen(Layout::Scale(1), Color::BLACK);
+    canvas.select(pen);
+    canvas.hollow_brush();
+    canvas.rectangle(-1, -1, canvas.get_width(), canvas.get_height());
+  }
+
   RECT rc = { 2, 2, canvas.get_width()-4, canvas.get_height()-4 };
+  if (down) {
+    rc.left += Layout::FastScale(1);
+    rc.top += Layout::FastScale(1);
+  }
 
   canvas.draw_button(get_client_rect(), down);
 
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(is_enabled() ? Color::BLACK : Color::GRAY);
   canvas.background_transparent();
   canvas.formatted_text(&rc, text.c_str(), get_text_style());
 }

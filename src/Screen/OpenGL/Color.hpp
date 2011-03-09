@@ -173,7 +173,7 @@ struct Color {
   }
 
   static const Color WHITE, BLACK, GRAY, RED, GREEN, BLUE, YELLOW, CYAN,
-    MAGENTA, LIGHT_GRAY, ORANGE;
+    MAGENTA, LIGHT_GRAY, DARK_GRAY, ORANGE;
 };
 
 #endif

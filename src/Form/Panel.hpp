@@ -25,12 +25,15 @@ Copyright_License {
 #define XCSOAR_FORM_PANEL_HPP
 
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Features.hpp"
 
 /**
  * The PanelControl class implements the simplest form of a ContainerControl
  */
 class PanelControl : public ContainerWindow {
+#ifdef HAVE_CLIPPING
   Color background_color;
+#endif
 
 public:
   /**
@@ -46,8 +49,10 @@ public:
                Color _background_color,
                const WindowStyle style=WindowStyle());
 
+#ifdef HAVE_CLIPPING
 protected:
   void on_paint(Canvas &canvas);
+#endif
 };
 
 #endif

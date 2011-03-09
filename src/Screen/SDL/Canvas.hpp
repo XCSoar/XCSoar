@@ -324,7 +324,8 @@ public:
                Angle start, Angle end, bool horizon=false);
 
   void draw_focus(RECT rc) {
-    // XXX
+    outline_rectangle(rc.left, rc.top, rc.right, rc.bottom,
+                      Color::DARK_GRAY);
   }
 
   void draw_button(RECT rc, bool down);

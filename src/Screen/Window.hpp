@@ -52,11 +52,16 @@ class WindowStyle {
 #ifdef ENABLE_SDL
 protected:
   bool visible;
+  bool m_tab_stop, m_control_parent;
   bool double_clicks;
   int text_style;
 
 public:
-  WindowStyle():visible(true), double_clicks(false), text_style(0) {}
+  WindowStyle()
+    :visible(true),
+     m_tab_stop(false), m_control_parent(false),
+     double_clicks(false),
+     text_style(0) {}
 
 #else /* !ENABLE_SDL */
 protected:
@@ -92,13 +97,17 @@ public:
   }
 
   void tab_stop() {
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+    m_tab_stop = true;
+#else
     style |= WS_TABSTOP;
 #endif
   }
 
   void control_parent() {
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+    m_control_parent = true;
+#else
     ex_style |= WS_EX_CONTROLPARENT;
 #endif
   }
@@ -176,6 +185,8 @@ private:
 private:
   const Font *font;
   int text_style;
+
+  bool tab_stop, control_parent;
 
   bool visible;
   bool focused;
@@ -502,6 +513,16 @@ public:
       hide();
   }
 
+#ifdef ENABLE_SDL
+  bool is_tab_stop() const {
+    return tab_stop;
+  }
+
+  bool is_control_parent() const {
+    return control_parent;
+  }
+#endif
+
   /**
    * Can this window get user input?
    */
@@ -531,6 +552,13 @@ public:
 
   virtual Window *get_focused_window();
   void set_focus();
+
+  /**
+   * Called by the parent window when this window loses focus, or when
+   * one of its (indirect) child windows loses focus.  This method is
+   * responsible for invoking on_killfocus().
+   */
+  virtual void ClearFocus();
 
 #else /* !ENABLE_SDL */
 

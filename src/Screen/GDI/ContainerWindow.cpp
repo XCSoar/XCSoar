@@ -24,6 +24,30 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 
+void
+ContainerWindow::focus_first_control()
+{
+  HWND hControl = ::GetNextDlgTabItem(hWnd, hWnd, false);
+  if (hControl != NULL)
+    ::SetFocus(hControl);
+}
+
+void
+ContainerWindow::focus_next_control()
+{
+  HWND hControl = ::GetNextDlgTabItem(hWnd, ::GetFocus(), false);
+  if (hControl != NULL)
+    ::SetFocus(hControl);
+}
+
+void
+ContainerWindow::focus_previous_control()
+{
+  HWND hControl = ::GetNextDlgTabItem(hWnd, ::GetFocus(), true);
+  if (hControl != NULL)
+    ::SetFocus(hControl);
+}
+
 LRESULT
 ContainerWindow::on_message(HWND hWnd, UINT message,
                             WPARAM wParam, LPARAM lParam)

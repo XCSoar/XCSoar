@@ -37,6 +37,12 @@ is_user_input(UINT message)
     message == WM_LBUTTONDBLCLK;
 }
 
+static inline bool
+is_user_input(const MSG &msg)
+{
+  return is_user_input(msg.message);
+}
+
 class EventLoop : private NonCopyable {
 public:
   bool get(MSG &msg);

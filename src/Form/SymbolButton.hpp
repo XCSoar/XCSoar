@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Form/Button.hpp"
 #include "Screen/Brush.hpp"
+#include "Screen/Features.hpp"
 
 /**
  * This class is used for creating buttons with symbols instead of text.
@@ -37,7 +38,9 @@ class WndSymbolButton : public WndButton {
     return style;
   }
 
+#ifdef HAVE_CLIPPING
   Brush background_brush;
+#endif
 
 public:
   /**
@@ -57,8 +60,11 @@ public:
                   Color background_color,
                   ClickNotifyCallback_t Function = NULL)
     :WndButton(Parent, Caption, X, Y, Width, Height,
-               custom_painting(style), Function),
-     background_brush(background_color) {}
+               custom_painting(style), Function)
+#ifdef HAVE_CLIPPING
+    , background_brush(background_color)
+#endif
+  {}
 
 protected:
   /**

@@ -49,6 +49,8 @@ Window::set(ContainerWindow *parent,
   this->width = width;
   this->height = height;
 
+  tab_stop = window_style.m_tab_stop;
+  control_parent = window_style.m_control_parent;
   visible = window_style.visible;
   text_style = window_style.text_style;
 
@@ -86,6 +88,16 @@ Window::set_focus()
     return;
 
   on_setfocus();
+}
+
+void
+Window::ClearFocus()
+{
+  if (focused) {
+    on_killfocus();
+
+    assert(!focused);
+  }
 }
 
 void

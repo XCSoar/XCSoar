@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Key.h"
 #include "Util/StringUtil.hpp"
 
 #ifdef ANDROID
@@ -102,7 +103,6 @@ WndForm::WndForm(SingleWindow &_main_window,
 
   // Create ClientWindow
 
-  SetBackColor(Color(0xe2, 0xdc, 0xbe));
 #ifdef EYE_CANDY
   bitmap_title.load(IDB_DIALOGTITLE);
 #endif
@@ -112,7 +112,7 @@ WndForm::WndForm(SingleWindow &_main_window,
   client_area.set(*this, mClientRect.left, mClientRect.top,
                   mClientRect.right - mClientRect.left,
                   mClientRect.bottom - mClientRect.top, client_style);
-  client_area.SetBackColor(GetBackColor());
+  client_area.SetBackColor(Color(0xe2, 0xdc, 0xbe));
 
 #if !defined(ENABLE_SDL) && !defined(NDEBUG)
   ::SetWindowText(hWnd, mCaption);
@@ -242,35 +242,6 @@ WndForm::SetTitleFont(const Font &font)
   }
 }
 
-#ifndef ENABLE_SDL
-
-static bool
-is_allowed_mouse_message(UINT message)
-{
-  return message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ||
-    message == WM_MOUSEMOVE;
-}
-
-static bool
-is_allowed_mouse(HWND hWnd, UINT message, const Window *window)
-{
-  return !is_altair() && window != NULL && window->identify(hWnd) &&
-    is_allowed_mouse_message(message);
-}
-
-/**
- * Is this key handled by the focused control? (bypassing the dialog
- * manager)
- */
-gcc_pure
-static bool
-check_key(const MSG &msg)
-{
-  LRESULT r = ::SendMessage(msg.hwnd, WM_GETDLGCODE, msg.wParam,
-                            (LPARAM)&msg);
-  return (r & DLGC_WANTMESSAGE) != 0;
-}
-
 static bool
 is_special_key(unsigned key_code)
 {
@@ -279,15 +250,130 @@ is_special_key(unsigned key_code)
     key_code == VK_TAB || key_code == VK_RETURN || key_code == VK_ESCAPE;
 }
 
+#ifdef ANDROID
+
+static bool
+is_key_down(const Event &event)
+{
+  return event.type == Event::KEY_DOWN;
+}
+
+static unsigned
+get_key_code(const Event &event)
+{
+  assert(event.type == Event::KEY_DOWN || event.type == Event::KEY_UP);
+
+  return event.param;
+}
+
+static bool
+is_mouse_up(const Event &event)
+{
+  return event.type == Event::MOUSE_UP;
+}
+
+gcc_pure
+static bool
+check_key(ContainerWindow *container, const Event &event)
+{
+  Window *focused = container->get_focused_window();
+  if (focused == NULL)
+    return false;
+
+  return focused->on_key_check(get_key_code(event));
+}
+
+gcc_pure
+static bool
+check_special_key(ContainerWindow *container, const Event &event)
+{
+  return is_special_key(get_key_code(event)) && check_key(container, event);
+}
+
+#elif defined(ENABLE_SDL)
+
+static bool
+is_key_down(const SDL_Event &event)
+{
+  return event.type == SDL_KEYDOWN;
+}
+
+static unsigned
+get_key_code(const SDL_Event &event)
+{
+  assert(event.type == SDL_KEYDOWN || event.type == SDL_KEYUP);
+
+  return event.key.keysym.sym;
+}
+
+static bool
+is_mouse_up(const SDL_Event &event)
+{
+  return event.type == SDL_MOUSEBUTTONUP;
+}
+
+gcc_pure
+static bool
+check_key(ContainerWindow *container, const SDL_Event &event)
+{
+  Window *focused = container->get_focused_window();
+  if (focused == NULL)
+    return false;
+
+  return focused->on_key_check(get_key_code(event));
+}
+
+gcc_pure
+static bool
+check_special_key(ContainerWindow *container, const SDL_Event &event)
+{
+  return is_special_key(get_key_code(event)) && check_key(container, event);
+}
+
+#else /* GDI follows: */
+
+static bool
+is_key_down(const MSG &msg)
+{
+  return msg.message == WM_KEYDOWN;
+}
+
+static unsigned
+get_key_code(const MSG &msg)
+{
+  assert(msg.message == WM_KEYDOWN || msg.message == WM_KEYUP);
+
+  return msg.wParam;
+}
+
+static bool
+is_mouse_up(const MSG &msg)
+{
+  return msg.message == WM_LBUTTONUP;
+}
+
+/**
+ * Is this key handled by the focused control? (bypassing the dialog
+ * manager)
+ */
+gcc_pure
+static bool
+check_key(ContainerWindow *container, const MSG &msg)
+{
+  LRESULT r = ::SendMessage(msg.hwnd, WM_GETDLGCODE, msg.wParam,
+                            (LPARAM)&msg);
+  return (r & DLGC_WANTMESSAGE) != 0;
+}
+
 /**
  * Is this "special" key handled by the focused control? (bypassing
  * the dialog manager)
  */
 gcc_pure
 static bool
-check_special_key(const MSG &msg)
+check_special_key(ContainerWindow *container, const MSG &msg)
 {
-  return is_special_key(msg.wParam) && check_key(msg);
+  return is_special_key(msg.wParam) && check_key(container, msg);
 }
 
 #endif /* !ENABLE_SDL */
@@ -299,7 +385,6 @@ WndForm::ShowModal(Window *mouse_allowed)
 
 #define OPENCLOSESUPPRESSTIME 500
 #ifndef ENABLE_SDL
-  MSG msg;
   HWND oldFocusHwnd;
 #endif /* !ENABLE_SDL */
 
@@ -319,56 +404,33 @@ WndForm::ShowModal(Window *mouse_allowed)
   set_focus();
   focus_first_control();
 
-#ifndef ENABLE_SDL
   bool hastimed = false;
-#endif /* !ENABLE_SDL */
   WndForm::timeAnyOpenClose.update(); // when current dlg opens or child closes
 
   main_window.add_dialog(this);
 
-#ifdef ANDROID
-
+#ifdef ENABLE_SDL
   update();
+#endif
 
+#ifdef ANDROID
   EventLoop loop(*event_queue, main_window);
   Event event;
-  while (mModalResult == 0 && loop.get(event))
-    if (main_window.FilterEvent(event, this, mouse_allowed))
-      loop.dispatch(event);
-
 #elif defined(ENABLE_SDL)
-
-  update();
-
   EventLoop loop(main_window);
   SDL_Event event;
-  while (mModalResult == 0 && loop.get(event))
-    if (main_window.FilterEvent(event, this, mouse_allowed))
-      loop.dispatch(event);
-
-#else /* !ENABLE_SDL */
-
+#else
   DialogEventLoop loop(*this);
-  while (mModalResult == 0 && loop.get(msg)) {
-//hack!
+  MSG event;
+#endif
 
-    // JMW update display timeout so we don't get blanking
-    /*
-    if (msg.message == WM_KEYDOWN) {
-      if (!Debounce()) {
-        continue;
-      }
-    }
-    */
-
-    if (is_user_input(msg.message)
-        && !identify_descendant(msg.hwnd) // not current window or child
-        && !is_allowed_mouse(msg.hwnd, msg.message, mouse_allowed))
-      continue;   // make it modal
+  while (mModalResult == 0 && loop.get(event)) {
+    if (!main_window.FilterEvent(event, this, mouse_allowed))
+      continue;
 
     // hack to stop exiting immediately
     if (is_embedded() && !is_altair() && !hastimed &&
-        is_user_input(msg.message)) {
+        is_user_input(event)) {
       if (!enter_clock.check(200))
         /* ignore user input in the first 200ms */
         continue;
@@ -376,26 +438,41 @@ WndForm::ShowModal(Window *mouse_allowed)
         hastimed = true;
     }
 
-    if (is_embedded() && msg.message == WM_LBUTTONUP &&
+    if (is_embedded() && is_mouse_up(event) &&
         !timeAnyOpenClose.check(OPENCLOSESUPPRESSTIME))
       /* prevents child click from being repeat-handled by parent if
          buttons overlap */
       continue;
 
-    if (msg.message == WM_KEYDOWN && mOnKeyDownNotify != NULL &&
-        identify_descendant(msg.hwnd) && !check_special_key(msg) &&
-        mOnKeyDownNotify(*this, msg.wParam))
+    if (mOnKeyDownNotify != NULL && is_key_down(event) &&
+#ifndef ENABLE_SDL
+        identify_descendant(event.hwnd) &&
+#endif
+        !check_special_key(this, event) &&
+        mOnKeyDownNotify(*this, get_key_code(event)))
       continue;
 
-    if (msg.message == WM_KEYDOWN && identify_descendant(msg.hwnd) &&
-        (msg.wParam == VK_UP || msg.wParam == VK_DOWN)) {
+#if defined(ENABLE_SDL) && !defined(ANDROID)
+    if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_TAB) {
+      /* the Tab key moves the keyboard focus */
+      const Uint8 *keystate = ::SDL_GetKeyState(NULL);
+      event.key.keysym.sym = keystate[SDLK_LSHIFT] || keystate[SDLK_RSHIFT]
+        ? SDLK_UP : SDLK_DOWN;
+    }
+#endif
+
+    if (is_key_down(event) &&
+#ifndef ENABLE_SDL
+        identify_descendant(event.hwnd) &&
+#endif
+        (get_key_code(event) == VK_UP || get_key_code(event) == VK_DOWN)) {
       /* VK_UP and VK_DOWN move the focus only within the current
          control group - but we want it to behave like Shift-Tab and
          Tab */
 
-      if (!check_key(msg)) {
+      if (!check_key(this, event)) {
         /* this window doesn't handle VK_UP/VK_DOWN */
-        if (msg.wParam == VK_DOWN)
+        if (get_key_code(event) == VK_DOWN)
           focus_next_control();
         else
           focus_previous_control();
@@ -403,13 +480,15 @@ WndForm::ShowModal(Window *mouse_allowed)
       }
     }
 
-    /* let the WIN32 dialog manager handle hot keys like Tab */
-    if (::IsDialogMessage(hWnd, &msg))
-      continue;
+#ifdef ENABLE_SDL
+    if (is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
+      mModalResult = mrCancel;
+      break;
+    }
+#endif
 
-    loop.dispatch(msg);
+    loop.dispatch(event);
   } // End Modal Loop
-#endif /* !ENABLE_SDL */
 
   main_window.remove_dialog(this);
 
@@ -440,7 +519,6 @@ WndForm::on_paint(Canvas &canvas)
 #ifndef EYE_CANDY
   canvas.set_background_color(mColorTitle);
 #endif
-  canvas.background_transparent();
 
   // Set the titlebar font and font-size
   canvas.select(*mhTitleFont);

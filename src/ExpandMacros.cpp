@@ -120,6 +120,16 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       invalid = true;
       ReplaceInString(OutBuffer, _T("$(WaypointPrevious)"),
           _("Previous turnpoint"), Size);
+
+    } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
+      invalid = true;
+      ReplaceInString(OutBuffer, _T("$(WaypointNextArm)"),
+          _("Next turnpoint"), Size);
+
+    } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
+      invalid = true;
+      ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"),
+          _("Previous turnpoint"), Size);
     }
 
   } else if (task_manager->is_mode(TaskManager::MODE_ABORT)) {
@@ -141,6 +151,26 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString(task->validTaskPoint(-1) && !task->validTaskPoint(-2),
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
+                          _("Closest landpoint"),
+                          _("Previous landpoint"), Size);
+
+    } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
+      if (!task->validTaskPoint(1))
+        invalid = true;
+
+      CondReplaceInString(task->validTaskPoint(1) && !task->validTaskPoint(2),
+                          OutBuffer,
+                          _T("$(WaypointNextArm)"),
+                          _("Furthest landpoint"),
+                          _("Next landpoint"), Size);
+
+    } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
+      if (!task->validTaskPoint(-1))
+        invalid = true;
+
+      CondReplaceInString(task->validTaskPoint(-1) && !task->validTaskPoint(-2),
+                          OutBuffer,
+                          _T("$(WaypointPreviousArm)"),
                           _("Closest landpoint"),
                           _("Previous landpoint"), Size);
     }

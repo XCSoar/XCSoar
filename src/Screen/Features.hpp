@@ -21,35 +21,19 @@ Copyright_License {
 }
 */
 
-#include "Screen/EditWindow.hpp"
-#include "Screen/Canvas.hpp"
+#ifndef XCSOAR_SCREEN_FEATURES_HPP
+#define XCSOAR_SCREEN_FEATURES_HPP
 
-void
-EditWindow::set(ContainerWindow &parent, int left, int top,
-                unsigned width, unsigned height,
-                const EditWindowStyle style)
-{
-  read_only = style.is_read_only;
+#ifdef ENABLE_SDL
 
-  Window::set(&parent, left, top, width, height, style);
-}
+#else
 
-void
-EditWindow::on_paint(Canvas &canvas)
-{
-  RECT rc = { 2, 2, canvas.get_width()-4, canvas.get_height()-4 };
+/**
+ * This macro is defined when the Canvas implements clipping against
+ * its siblings and children.
+ */
+#define HAVE_CLIPPING
 
-  if (is_enabled()) {
-    if (is_read_only())
-      canvas.clear(Color(0xe0, 0xe0, 0xe0));
-    else
-      canvas.clear_white();
-    canvas.set_text_color(Color::BLACK);
-  } else {
-    canvas.clear(Color::LIGHT_GRAY);
-    canvas.set_text_color(Color::DARK_GRAY);
-  }
+#endif
 
-  canvas.background_transparent();
-  canvas.formatted_text(&rc, value.c_str(), get_text_style());
-}
+#endif

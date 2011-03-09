@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Screen/CheckBox.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 
 #include <algorithm>
 
@@ -60,6 +62,24 @@ CheckBox::set_pressed(bool value)
 }
 
 bool
+CheckBox::on_key_down(unsigned key_code)
+{
+  switch (key_code) {
+  case VK_RETURN:
+  case VK_SPACE:
+    checked = !checked;
+    invalidate();
+
+    if (!on_clicked() && id != 0 && parent != NULL)
+      parent->on_command(id, 0);
+    return true;
+
+  default:
+    return PaintWindow::on_key_down(key_code);
+  }
+}
+
+bool
 CheckBox::on_mouse_move(int x, int y, unsigned keys)
 {
   if (dragging) {
@@ -73,6 +93,9 @@ CheckBox::on_mouse_move(int x, int y, unsigned keys)
 bool
 CheckBox::on_mouse_down(int x, int y)
 {
+  if (is_tab_stop())
+    set_focus();
+
   set_pressed(true);
   set_capture();
   dragging = true;
@@ -102,6 +125,22 @@ CheckBox::on_mouse_up(int x, int y)
 }
 
 bool
+CheckBox::on_setfocus()
+{
+  PaintWindow::on_setfocus();
+  invalidate();
+  return true;
+}
+
+bool
+CheckBox::on_killfocus()
+{
+  PaintWindow::on_killfocus();
+  invalidate();
+  return true;
+}
+
+bool
 CheckBox::on_cancel_mode()
 {
   release_capture();
@@ -116,11 +155,15 @@ CheckBox::on_cancel_mode()
 void
 CheckBox::on_paint(Canvas &canvas)
 {
-  canvas.clear(Color(0xDA, 0xDB, 0xAB));
-
   Brush brush(pressed ? Color::GRAY : Color::WHITE);
   canvas.select(brush);
-  canvas.black_pen();
+
+  if (has_focus())
+    canvas.select(Pen(Layout::Scale(1) + 1, Color::BLACK));
+  else if (is_enabled())
+    canvas.black_pen();
+  else
+    canvas.select(Pen(1, Color::GRAY));
   canvas.rectangle(2, 2, canvas.get_height() - 4, canvas.get_height() - 4);
 
   if (checked) {
@@ -128,7 +171,7 @@ CheckBox::on_paint(Canvas &canvas)
     canvas.line(canvas.get_height() - 8, 4, 4, canvas.get_height() - 8);
   }
 
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(is_enabled() ? Color::BLACK : Color::GRAY);
   canvas.background_transparent();
   canvas.text(canvas.get_height() + 2, 2, text.c_str());
 

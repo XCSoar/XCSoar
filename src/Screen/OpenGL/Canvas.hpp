@@ -198,6 +198,8 @@ public:
     fill_rectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
   }
 
+  void outline_rectangle(int left, int top, int right, int bottom);
+
   void clear() {
     rectangle(0, 0, get_width(), get_height());
   }
@@ -242,9 +244,7 @@ public:
   void segment(int x, int y, unsigned radius,
                Angle start, Angle end, bool horizon=false);
 
-  void draw_focus(RECT rc) {
-    // XXX
-  }
+  void draw_focus(RECT rc);
 
   void draw_button(RECT rc, bool down);
 

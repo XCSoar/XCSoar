@@ -33,6 +33,14 @@ class TopWindow;
 class SDLTimer;
 class Window;
 
+static inline bool
+is_user_input(const SDL_Event &event)
+{
+  return event.type == SDL_KEYDOWN || event.type == SDL_KEYUP ||
+    event.type == SDL_MOUSEMOTION ||
+    event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP;
+}
+
 class EventLoop : private NonCopyable {
   TopWindow &top_window;
 

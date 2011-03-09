@@ -27,10 +27,16 @@ PanelControl::PanelControl(ContainerWindow &parent,
                            int x, int y, unsigned width, unsigned height,
                            Color _background_color,
                            const WindowStyle style)
+#ifdef HAVE_CLIPPING
   :background_color(_background_color)
+#endif
 {
   set(parent, x, y, width, height, style);
 }
+
+/* don't need to erase the background when it has been done by the
+   parent window already */
+#ifdef HAVE_CLIPPING
 
 void
 PanelControl::on_paint(Canvas &canvas)
@@ -39,3 +45,5 @@ PanelControl::on_paint(Canvas &canvas)
 
   ContainerWindow::on_paint(canvas);
 }
+
+#endif

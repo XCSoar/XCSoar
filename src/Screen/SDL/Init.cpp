@@ -41,6 +41,8 @@ ScreenGlobalInit::ScreenGlobalInit()
     exit(EXIT_FAILURE);
   }
 
+  ::SDL_EnableKeyRepeat(250, 50);
+
 #if defined(ENABLE_OPENGL)
 #ifndef NDEBUG
   OpenGL::thread = pthread_self();

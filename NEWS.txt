@@ -65,6 +65,10 @@ Version 6.1 - not yet released
   - support landscape/portrait switching
 
 Version 6.0.7 - not yet released
+* devices
+  - EW microRecorder: timeout during connect
+  - EW microRecorder: increase RX timeout
+  - EW microRecorder: insert new declaration into old EW-USER.TXT
 * map
   - Airspace: support alternative OpenAir coordinate format
   - allow zooming in to 1 km
@@ -75,6 +79,11 @@ Version 6.0.7 - not yet released
   - disable auto-restart on various Android configuration events
   - import time from internal GPS correctly
   - read internal GPS accuracy
+  - the "back" hardware key cancels dialogs
+* Linux
+  - improved button and checkbox rendering
+  - dialog keyboard navigation implemented
+  - enable keyboard repeat
 
 Version 6.0.6 - 2011/03/04
 * devices:
