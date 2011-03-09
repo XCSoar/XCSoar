@@ -106,7 +106,6 @@ static const TCHAR *const captions[] = {
 static config_page current_page;
 static WndForm *wf = NULL;
 TabbedControl *configuration_tabbed;
-static WndButton *buttonFonts = NULL;
 
 static void
 PageSwitched()
@@ -119,9 +118,7 @@ PageSwitched()
              gettext(captions[(unsigned)current_page]));
   wf->SetCaption(caption);
 
-  if (buttonFonts != NULL)
-    buttonFonts->set_visible(current_page == PAGE_INTERFACE);
-
+  InterfaceConfigPanel::Activate(current_page == PAGE_INTERFACE);
   SiteConfigPanel::Activate(current_page == PAGE_SITE);
   PolarConfigPanel::Activate(current_page == PAGE_POLAR);
 }
@@ -152,12 +149,6 @@ static void
 OnCloseClicked(gcc_unused WndButton &button)
 {
   wf->SetModalResult(mrOK);
-}
-
-static void
-OnFonts(gcc_unused WndButton &button)
-{
-  dlgConfigFontsShowModal();
 }
 
 static bool
@@ -215,10 +206,6 @@ static CallBackTableEntry CallBackTable[] = {
 static void
 setVariables()
 {
-  buttonFonts = ((WndButton *)wf->FindByName(_T("cmdFonts")));
-  if (buttonFonts)
-    buttonFonts->SetOnClickNotify(OnFonts);
-
   PolarConfigPanel::Init(wf);
   UnitsConfigPanel::Init(wf);
   LoggerConfigPanel::Init(wf);

@@ -25,6 +25,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
+#include "Form/Button.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/FileReader.hpp"
@@ -40,8 +41,25 @@ Copyright_License {
 #include "InterfaceConfigPanel.hpp"
 
 static WndForm* wf = NULL;
+static WndButton *buttonFonts = NULL;
 
 using namespace ConfigPanel;
+
+
+void
+InterfaceConfigPanel::Activate(bool active)
+{
+  if (buttonFonts != NULL)
+    buttonFonts->set_visible(active);
+}
+
+
+static void
+OnFonts(gcc_unused WndButton &button)
+{
+  dlgConfigFontsShowModal();
+}
+
 
 void
 InterfaceConfigPanel::Init(WndForm *_wf)
@@ -50,6 +68,10 @@ InterfaceConfigPanel::Init(WndForm *_wf)
   wf = _wf;
   WndProperty *wp;
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
+
+  buttonFonts = ((WndButton *)wf->FindByName(_T("cmdFonts")));
+  if (buttonFonts)
+    buttonFonts->SetOnClickNotify(OnFonts);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAutoBlank"));
   if (wp) {
