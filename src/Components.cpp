@@ -128,7 +128,7 @@ AltairControl altair_control;
 bool
 XCSoarInterface::LoadProfile()
 {
-  if (Profile::use_files() && !dlgStartupShowModal())
+  if (!dlgStartupShowModal())
     return false;
 
   Profile::Load();

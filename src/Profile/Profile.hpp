@@ -39,12 +39,6 @@ namespace Profile
 {
   using namespace ProfileImpl;
 
-  static inline bool
-  use_files()
-  {
-    return true;
-  }
-
   /**
    * Loads the profile files
    */
