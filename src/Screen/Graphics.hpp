@@ -102,6 +102,7 @@ namespace Graphics {
   extern Pen hpMapScale;
   extern Pen hpTerrainLine;
   extern Pen hpTerrainLineBg;
+  extern Pen hpTrackBearingLine;
 
   extern Brush hbCompass;
   extern Brush hbThermalBand;

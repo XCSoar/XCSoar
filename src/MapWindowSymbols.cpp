@@ -174,8 +174,6 @@ MapWindow::DrawTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos) cons
   end.x = aircraft_pos.x + iround(x * fixed_int_constant(400));
   end.y = aircraft_pos.y - iround(y * fixed_int_constant(400));
 
-  Pen pen;
-  pen.set(3, Color(128, 128, 128));
-  canvas.select(pen);
+  canvas.select(Graphics::hpTrackBearingLine);
   canvas.line(aircraft_pos, end);
 }

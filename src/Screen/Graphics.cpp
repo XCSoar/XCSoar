@@ -76,6 +76,7 @@ Pen Graphics::hpFinalGlideBelowLandable;
 Pen Graphics::hpMapScale;
 Pen Graphics::hpTerrainLine;
 Pen Graphics::hpTerrainLineBg;
+Pen Graphics::hpTrackBearingLine;
 
 Brush Graphics::hbCompass;
 Brush Graphics::hbThermalBand;
@@ -276,6 +277,8 @@ Graphics::Initialise()
   hbOrange.set(Color::ORANGE);
   hbLightGray.set(Color::LIGHT_GRAY);
   hbNotReachableTerrain.set(Color(224, 64, 64));
+
+  hpTrackBearingLine.set(3, Color::GRAY);
 }
 
 void
@@ -416,6 +419,8 @@ Graphics::Deinitialise()
   hbOrange.reset();
   hbLightGray.reset();
   hbNotReachableTerrain.reset();
+
+  hpTrackBearingLine.reset();
 }
 
 void
