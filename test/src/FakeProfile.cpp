@@ -35,14 +35,14 @@ Profile::SetFiles(const TCHAR* override)
 }
 
 bool
-ProfileImpl::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
+ProfileMap::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
 {
   pPos[0] = _T('\0');
   return false;
 }
 
 bool
-ProfileImpl::Set(const TCHAR *szRegValue, const TCHAR *Pos)
+ProfileMap::Set(const TCHAR *szRegValue, const TCHAR *Pos)
 {
   return false;
 }

@@ -25,10 +25,8 @@ Copyright_License {
 #define XCSOAR_PROFILE_HPP
 
 #include "Profile/ProfileKeys.hpp"
-#include "Math/fixed.hpp"
-
 #include "Profile/ProfileMap.hpp"
-namespace ProfileImpl = ProfileMap;
+#include "Math/fixed.hpp"
 
 #include <stddef.h>
 #include <tchar.h>
@@ -37,7 +35,7 @@ struct GeoPoint;
 
 namespace Profile
 {
-  using namespace ProfileImpl;
+  using namespace ProfileMap;
 
   /**
    * Loads the profile files
