@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Layout.hpp"
 
 void
 ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
@@ -103,6 +104,10 @@ void
 ButtonWindow::on_paint(Canvas &canvas)
 {
   RECT rc = { 2, 2, canvas.get_width()-4, canvas.get_height()-4 };
+  if (down) {
+    rc.left += Layout::FastScale(1);
+    rc.top += Layout::FastScale(1);
+  }
 
   canvas.draw_button(get_client_rect(), down);
 
