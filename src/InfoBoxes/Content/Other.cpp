@@ -141,17 +141,18 @@ InfoBoxContentFreeRAM::Update(InfoBoxWindow &infobox)
   TCHAR tmp[32];
   TCHAR unit;
   unsigned long freeRAM = SystemFreeRAM();
+  double f = freeRAM;
   if (freeRAM >= 1024 * 1024 *1024) {
-    freeRAM /= (1024 * 1024 * 1024);
+    f /= (1024 * 1024 * 1024);
     unit = _T('G');
   } else if (freeRAM >= 1024 * 1024) {
-    freeRAM /= (1024 * 1024);
+    f /= (1024 * 1024);
     unit = _T('M');
   } else if (freeRAM >= 1024) {
-    freeRAM /= 1024;
+    f /= 1024;
     unit = _T('K');
   } else
     unit = _T('B');
-  _stprintf(tmp, _T("%lu%c"), freeRAM, unit);
+  _stprintf(tmp, _T("%.1f%c"), f, unit);
   infobox.SetValue(tmp);
 }
