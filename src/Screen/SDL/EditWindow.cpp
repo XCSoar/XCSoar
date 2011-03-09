@@ -38,9 +38,17 @@ EditWindow::on_paint(Canvas &canvas)
 {
   RECT rc = { 2, 2, canvas.get_width()-4, canvas.get_height()-4 };
 
-  canvas.clear_white();
+  if (is_enabled()) {
+    if (is_read_only())
+      canvas.clear(Color(0xe0, 0xe0, 0xe0));
+    else
+      canvas.clear_white();
+    canvas.set_text_color(Color::BLACK);
+  } else {
+    canvas.clear(Color::LIGHT_GRAY);
+    canvas.set_text_color(Color::DARK_GRAY);
+  }
 
-  canvas.set_text_color(Color::BLACK);
   canvas.background_transparent();
   canvas.formatted_text(&rc, value.c_str(), get_text_style());
 }

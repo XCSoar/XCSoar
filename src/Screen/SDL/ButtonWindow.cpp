@@ -155,7 +155,7 @@ ButtonWindow::on_paint(Canvas &canvas)
 
   canvas.draw_button(get_client_rect(), down);
 
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(is_enabled() ? Color::BLACK : Color::GRAY);
   canvas.background_transparent();
   canvas.formatted_text(&rc, text.c_str(), get_text_style());
 }
