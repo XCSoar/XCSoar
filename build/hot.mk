@@ -19,6 +19,7 @@ HOT_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatRay.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/ContestDijkstra.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp
 
 $(call SRC_TO_OBJ,$(HOT_SOURCES)): OPTIMIZE += -O3
