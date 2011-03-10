@@ -98,9 +98,8 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
   ScopeLock protect(mutexBlackboard);
   device_blackboard.ReadSettingsMap(SettingsMap());
 
-#ifdef ENABLE_OPENGL
-  main_window.full_redraw();
-#endif
+  if (trigger_draw)
+    main_window.full_redraw();
 
   // TODO: trigger refresh if the settings are changed
 }
