@@ -321,9 +321,14 @@
       </Edit>
 
       <Edit Name="prpFinalGlideTerrain" Caption="Glide Terrain Line" X="2" Width="-2" Height="22" CaptionWidth="150"
-       Help="This determines whether the the glide terrain range is calculated and drawn as a line on the map area:&#10;[Off] Disables display&#10;[Line] Draws a dashed line at the glide range&#10;[Shade] Shades terrain outside glide range">
+       Help="This determines whether the glide terrain range is calculated and drawn as a line on the map area:&#10;[Off] Disables display&#10;[Line] Draws a dashed line at the glide range&#10;[Shade] Shades terrain outside glide range">
        <DataField DataType="enum" />
      </Edit>
+
+      <Edit Name="prpTurningReach" Caption="Turning reach" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="When enabled, the glide terrain range is calculated with turning around terrain obstacles.  If disabled, the range is from straight line paths from the glider.">
+        <DataField DataType="boolean"/>
+      </Edit>
 
     </Panel>
   

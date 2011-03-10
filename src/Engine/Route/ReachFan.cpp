@@ -156,7 +156,7 @@ FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
   }
 
   // worth checking for gaps?
-  if ((depth< REACH_MAX_DEPTH) && (vs.size()>2)) {
+  if ((depth< REACH_MAX_DEPTH) && (vs.size()>2) && (parms.rpolars.turning_reach())) {
     // now check gaps
     const RoutePoint o(origin, 0);
     RouteLink e_last(RoutePoint(*vs.begin(), 0), o, parms.task_proj);

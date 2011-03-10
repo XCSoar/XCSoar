@@ -40,7 +40,8 @@ struct RoutePlannerConfig {
     mode(rpNone), // default disable while experimental
     allow_climb(true),
     use_ceiling(false),
-    safety_height_terrain(150.0) {}
+    safety_height_terrain(150.0),
+    turning_reach(true) {}
 
   enum Mode {
     rpNone=0,
@@ -55,6 +56,10 @@ struct RoutePlannerConfig {
   /** Minimum height above terrain for arrival height at non-landable waypoint,
       and for terrain clearance en-route (m) */
   fixed safety_height_terrain;
+
+  /** Whether to allow turns around obstacles in reach calculations, or just
+      straight line */
+  bool turning_reach;
 
   bool terrain_enabled() const {
     return (mode== rpTerrain) || (mode== rpBoth);

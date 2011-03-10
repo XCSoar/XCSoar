@@ -397,6 +397,15 @@ public:
   }
 
   /**
+   * Check whether turns around obstacles are allowed in reach calculations
+   *
+   * @return True if allow turns, otherwise straight
+   */
+  bool turning_reach() const {
+    return config.turning_reach;
+  }
+
+  /**
    * round up just below nearest 8 second block in a quick way
    * this is an attempt to stabilise solutions
    */

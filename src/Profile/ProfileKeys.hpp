@@ -214,5 +214,6 @@ extern const TCHAR szProfileCruiseMapScale[];
 extern const TCHAR szProfileRoutePlannerMode[];
 extern const TCHAR szProfileRoutePlannerAllowClimb[];
 extern const TCHAR szProfileRoutePlannerUseCeiling[];
+extern const TCHAR szProfileTurningReach[];
 
 #endif

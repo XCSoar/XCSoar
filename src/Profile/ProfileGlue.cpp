@@ -455,6 +455,9 @@ Profile::Use()
   Get(szProfileRoutePlannerUseCeiling,
       settings_computer.route_planner.use_ceiling);
 
+  Get(szProfileTurningReach,
+      settings_computer.route_planner.turning_reach);
+
   if (Get(szProfileRiskGamma, Temp))
     settings_computer.risk_gamma = fixed(Temp) / 10;
 

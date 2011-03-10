@@ -68,6 +68,9 @@ RouteConfigPanel::Init(WndForm *_wf)
 
   LoadFormProperty(*wf, _T("prpRoutePlannerUseCeiling"),
                    settings_computer.route_planner.use_ceiling);
+
+  LoadFormProperty(*wf, _T("prpTurningReach"),
+                   settings_computer.route_planner.turning_reach);
 }
 
 
@@ -101,5 +104,8 @@ RouteConfigPanel::Save()
                               szProfileRoutePlannerUseCeiling,
                               settings_computer.route_planner.use_ceiling);
 
+  changed |= SaveFormProperty(*wf, _T("prpTurningReach"),
+                              szProfileTurningReach,
+                              settings_computer.route_planner.turning_reach);
   return changed;
 }

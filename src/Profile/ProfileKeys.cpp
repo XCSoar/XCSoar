@@ -287,3 +287,4 @@ const TCHAR szProfileCruiseMapScale[] = _T("CruiseMapScale");
 const TCHAR szProfileRoutePlannerMode[] = _T("RoutePlannerMode");
 const TCHAR szProfileRoutePlannerAllowClimb[] = _T("RoutePlannerAllowClimb");
 const TCHAR szProfileRoutePlannerUseCeiling[] = _T("RoutePlannerUseCeiling");
+const TCHAR szProfileTurningReach[] = _T("TurningReach");
