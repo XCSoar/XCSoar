@@ -38,12 +38,12 @@ Copyright_License {
 #include "UnitsConfigPanel.hpp"
 
 static WndForm* wf = NULL;
-static int SpeedUnits = 1; // default is knots
-static int TaskSpeedUnits = 2; // default is kph
-static int DistanceUnits = 2; // default is km
-static int LiftUnits = 0;
-static int AltitudeUnits = 0; //default ft
-static int TemperatureUnits = 0; //default is celcius
+static unsigned SpeedUnits = 1; // default is knots
+static unsigned TaskSpeedUnits = 2; // default is kph
+static unsigned DistanceUnits = 2; // default is km
+static unsigned LiftUnits = 0;
+static unsigned AltitudeUnits = 0; //default ft
+static unsigned TemperatureUnits = 0; //default is celcius
 static bool loading = false;
 
 
