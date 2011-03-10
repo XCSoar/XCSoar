@@ -188,9 +188,10 @@ void
 FlarmTrafficWindow::UpdateSelector(const FlarmId id)
 {
   if (!id.defined())
-    return;
+    SetTarget(-1);
+  else
+    SetTarget(id);
 
-  SetTarget(id);
   if (selection < 0)
     NextTarget();
 }
@@ -227,8 +228,8 @@ FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data,
   data = new_data;
   settings = new_settings;
 
-  UpdateSelector(selection_id);
   UpdateWarnings();
+  UpdateSelector(selection_id);
 
   invalidate();
 }
