@@ -21,6 +21,15 @@ Version 6.1 - not yet released
     - does not handle aircraft or destination location inside airspace
     - does not allow paths with course deviations greater than 90 degrees each leg.
     - some "jumping" of the solution may be experienced as altitude/location changes.
+* reach (glide terrain footprint)
+    - new engine for calculating the where the glider can fly in final glide,
+      formerly known as the glide terrain footprint, now referred to as 'reach'.
+    - this can calculate the reach around terrain obstacles
+    - landable waypoints visible on the map are marked according to whether they are
+      reachable
+    - the reach calculation is configurable, turning search can be disabled if
+      running on low-powered devices.
+    - note that abort/alternates do not currently take reach into account
 * map
   - north arrow is automatically hidden in north-up mode
   - added configurable slope shading (off/fixed/wind/sun)
