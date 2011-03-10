@@ -31,8 +31,16 @@
 #include <assert.h>
 #include <stdio.h>
 
+// Uncomment the following line to use the same trace size as LK8000.
+//#define MATEUSZ_IS_A_CHEATER
+
+#ifdef MATEUSZ_IS_A_CHEATER
+static Trace full_trace(60, Trace::null_time, 100);
+static Trace sprint_trace(0, 9000, 50);
+#else
 static Trace full_trace(60);
 static Trace sprint_trace(0, 9000, 300);
+#endif
 unsigned handicap = 100;
 
 ContestManager olc_classic(OLC_Classic, handicap, 
