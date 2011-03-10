@@ -37,36 +37,39 @@ typedef std::vector<RasterPoint> RasterPointVector;
 
 class TriangleCompound: public TriangleFanVisitor {
 public:
-
-  TriangleCompound(const MapWindowProjection& _proj):
-    proj(_proj),
-    clip(_proj.GetScreenBounds().scale(fixed(1.1)))
-    {
-      g.reserve(50);
-    }
+  TriangleCompound(const MapWindowProjection& _proj)
+    :proj(_proj),
+     clip(_proj.GetScreenBounds().scale(fixed(1.1)))
+  {
+    g.reserve(50);
+  }
 
   virtual void start_fan() {
     g.clear();
   }
+
   virtual void add_point(const GeoPoint& p) {
     g.push_back(p);
   }
-  virtual void end_fan() {
-    unsigned size =
-      clip.clip_polygon(clipped, &g[0], g.size());
+
+  virtual void
+  end_fan()
+  {
+    unsigned size = clip.clip_polygon(clipped, &g[0], g.size());
     if (size < 3)
       return;
+
     RasterPointVector r;
-    for (unsigned i = 0; i < size; ++i) {
+    for (unsigned i = 0; i < size; ++i)
       r.push_back(proj.GeoToScreen(clipped[i]));
-    }
+
     fans.push_back(r);
   };
 
   std::vector<RasterPointVector> fans;
   std::vector<GeoPoint> g;
-  GeoPoint clipped[50*4];
-  const MapWindowProjection& proj;
+  GeoPoint clipped[50 * 4];
+  const MapWindowProjection &proj;
   const GeoClip clip;
 };
 
@@ -108,20 +111,18 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   canvas.null_pen();
   canvas.white_brush();
-  for (std::vector<RasterPointVector>::const_iterator i= visitor.fans.begin();
-       i!= visitor.fans.end(); ++i) {
+  for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+       i != visitor.fans.end(); ++i)
     canvas.polygon(&(*i)[0], i->size());
-  }
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glStencilFunc(GL_NOTEQUAL, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
   canvas.select(Graphics::hpTerrainLine);
-  for (std::vector<RasterPointVector>::const_iterator i= visitor.fans.begin();
-       i!= visitor.fans.end(); ++i) {
+  for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+       i != visitor.fans.end(); ++i)
     canvas.polygon(&(*i)[0], i->size());
-  }
 
   glDisable(GL_STENCIL_TEST);
 
@@ -130,22 +131,22 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   Canvas &buffer = buffer_canvas;
 
   buffer.set_background_color(Color::WHITE);
-  buffer.set_text_color(Color(0xf0,0xf0,0xf0));
+  buffer.set_text_color(Color(0xf0, 0xf0, 0xf0));
   buffer.clear_white();
 
   buffer.hollow_brush();
   buffer.select(Graphics::hpTerrainLine);
-  for (std::vector<RasterPointVector>::const_iterator i= visitor.fans.begin();
-       i!= visitor.fans.end(); ++i) {
+  for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+       i != visitor.fans.end(); ++i)
     buffer.polygon(&(*i)[0], i->size());
-  }
+
 
   buffer.null_pen();
   buffer.white_brush();
-  for (std::vector<RasterPointVector>::const_iterator i= visitor.fans.begin();
-       i!= visitor.fans.end(); ++i) {
+  for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+       i != visitor.fans.end(); ++i)
     buffer.polygon(&(*i)[0], i->size());
-  }
+
   canvas.copy_transparent_white(buffer);
 
 #endif
@@ -159,6 +160,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // @todo: update this rendering
 
 #ifdef ENABLE_OPENGL
+
   glEnable(GL_STENCIL_TEST);
   glClear(GL_STENCIL_BUFFER_BIT);
 
@@ -169,10 +171,9 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   canvas.null_pen();
   canvas.white_brush();
-  for (std::vector<RasterPointVector>::const_iterator i= visitor.fans.begin();
-       i!= visitor.fans.end(); ++i) {
+  for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+       i != visitor.fans.end(); ++i)
     canvas.polygon(&(*i)[0], i->size());
-  }
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glStencilFunc(GL_NOTEQUAL, 1, 1);
@@ -186,21 +187,23 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   glDisable(GL_BLEND);
   glDisable(GL_STENCIL_TEST);
+
 #elif !defined(ENABLE_SDL)
+
   Canvas &buffer = buffer_canvas;
 
   buffer.set_background_color(Color::WHITE);
-  buffer.set_text_color(Color(0xf0,0xf0,0xf0));
+  buffer.set_text_color(Color(0xf0, 0xf0, 0xf0));
   buffer.clear(Graphics::hAboveTerrainBrush);
 
   buffer.null_pen();
   buffer.white_brush();
-  for (std::vector<RasterPointVector>::const_iterator i= visitor.fans.begin();
-       i!= visitor.fans.end(); ++i) {
+  for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+       i != visitor.fans.end(); ++i)
     buffer.polygon(&(*i)[0], i->size());
-  }
 
   canvas.copy_transparent_white(buffer);
+
 #endif
 }
 
