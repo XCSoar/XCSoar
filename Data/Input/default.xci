@@ -328,6 +328,11 @@ type=gesture
 data=DU
 event=Mode Menu
 
+mode=default
+type=gesture
+data=RD
+event=Calculator
+
 ###
 
 mode=default
