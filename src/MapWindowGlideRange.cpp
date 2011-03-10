@@ -85,9 +85,13 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
       || !task)
     return;
 
+  // Create a visitor for the Reach code
   TriangleCompound visitor(render_projection);
+
+  // Fill the TriangleCompound with all TriangleFans in range
   task->accept_in_range(render_projection.GetScreenBounds(), visitor);
 
+  // Exit early if not fans found
   if (visitor.fans.empty())
     return;
 
