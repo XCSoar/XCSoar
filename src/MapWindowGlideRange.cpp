@@ -130,9 +130,9 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   buffer.clear_white();
 
   buffer.hollow_brush();
+  buffer.select(Graphics::hpTerrainLine);
   for (std::vector<RasterPointVector>::const_iterator i= visitor.fans.begin();
        i!= visitor.fans.end(); ++i) {
-    buffer.select(Graphics::hpTerrainLine);
     buffer.polygon(&(*i)[0], i->size());
   }
 
