@@ -120,7 +120,7 @@ InfoBoxLayout::Layout
 InfoBoxLayout::Calculate(RECT rc, Geometry geometry)
 {
   Layout layout;
-  layout.count = geometry_counts[InfoBoxGeometry];
+  layout.count = geometry_counts[geometry];
   assert(layout.count <= InfoBoxPanelConfig::MAX_INFOBOXES);
 
   CalcInfoBoxSizes(layout, rc, geometry);
@@ -277,7 +277,7 @@ void
 InfoBoxLayout::CalcInfoBoxSizes(Layout &layout,
                                 RECT rc, InfoBoxLayout::Geometry geometry)
 {
-  switch (InfoBoxGeometry) {
+  switch (geometry) {
   case ibTop4Bottom4:
   case ibBottom8:
   case ibTop8:
