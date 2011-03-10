@@ -130,7 +130,7 @@ public:
 protected:
   fixed RangeScale(fixed d) const;
 
-  void UpdateSelector(const FlarmId id);
+  void UpdateSelector(const FlarmId id, const RasterPoint pt);
   void UpdateWarnings();
   void Update(Angle new_direction, const FLARM_STATE &new_data,
               const SETTINGS_TEAMCODE &new_settings);

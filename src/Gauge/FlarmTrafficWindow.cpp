@@ -185,14 +185,20 @@ FlarmTrafficWindow::PrevTarget()
  * to select the next one
  */
 void
-FlarmTrafficWindow::UpdateSelector(const FlarmId id)
+FlarmTrafficWindow::UpdateSelector(const FlarmId id, const RasterPoint pt)
 {
+  // Update #selection
   if (!id.defined())
     SetTarget(-1);
   else
     SetTarget(id);
 
-  if (selection < 0)
+  // If we don't have a valid selection and we can't find
+  // a target close to to the RasterPoint we select the next one
+  // on the internal list
+  if (selection < 0 && (
+      pt.x < 0 || pt.y < 0 ||
+      !SelectNearTarget(pt.x, pt.y, radius * 2)) )
     NextTarget();
 }
 
@@ -217,10 +223,15 @@ FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data,
                            const SETTINGS_TEAMCODE &new_settings)
 {
   FlarmId selection_id;
-  if (!small && data.available && selection >= 0)
+  RasterPoint pt;
+  if (!small && data.available && selection >= 0) {
     selection_id = data.traffic[selection].ID;
-  else
+    pt = sc[selection];
+  } else {
     selection_id.clear();
+    pt.x = -100;
+    pt.y = -100;
+  }
 
   heading = new_direction;
   fr.SetAngle(-heading);
@@ -229,7 +240,7 @@ FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data,
   settings = new_settings;
 
   UpdateWarnings();
-  UpdateSelector(selection_id);
+  UpdateSelector(selection_id, pt);
 
   invalidate();
 }
