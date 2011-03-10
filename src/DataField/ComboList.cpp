@@ -29,11 +29,13 @@ Copyright_License {
 ComboList::Item::Item(int _DataFieldIndex,
                       const TCHAR *_StringValue,
                       const TCHAR *_StringValueFormatted,
-                      const TCHAR *_StringHelp) :
-  DataFieldIndex(_DataFieldIndex),
-  StringValue(_tcsdup(_StringValue)),
-  StringValueFormatted(_tcsdup(_StringValueFormatted)),
-  StringHelp(_StringHelp ? _tcsdup(_StringHelp) : NULL) {}
+                      const TCHAR *_StringHelp)
+  :DataFieldIndex(_DataFieldIndex),
+   StringValue(_tcsdup(_StringValue)),
+   StringValueFormatted(_tcsdup(_StringValueFormatted)),
+   StringHelp(_StringHelp ? _tcsdup(_StringHelp) : NULL)
+{
+}
 
 ComboList::Item::~Item()
 {

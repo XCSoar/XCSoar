@@ -51,12 +51,14 @@ public:
     MAX_SIZE = 300,
   };
 
+  int ComboPopupItemSavedIndex;
+
 private:
   StaticArray<Item*, MAX_SIZE> items;
 
 public:
-  ComboList():
-    ComboPopupItemSavedIndex(0) {}
+  ComboList()
+    :ComboPopupItemSavedIndex(0) {}
 
   ~ComboList() {
     Clear();
@@ -88,8 +90,6 @@ public:
 
   void Sort();
   unsigned LookUp(int DataFieldIndex);
-
-  int ComboPopupItemSavedIndex;
 };
 
 #endif
