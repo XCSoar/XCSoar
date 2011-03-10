@@ -45,31 +45,42 @@ public:
   }
 
   virtual void start_fan() {
+    // Clear the GeoPointVector for the next TriangleFan
     g.clear();
   }
 
   virtual void add_point(const GeoPoint& p) {
+    // Add a new GeoPoint to the current TriangleFan
     g.push_back(p);
   }
 
   virtual void
   end_fan()
   {
+    // Perform clipping on the GeoPointVector (Result: clipped)
     unsigned size = clip.clip_polygon(clipped, &g[0], g.size());
+    // With less than three points we can't draw a polygon
     if (size < 3)
       return;
 
+    // Convert GeoPoints to RasterPoints
     RasterPointVector r;
     for (unsigned i = 0; i < size; ++i)
       r.push_back(proj.GeoToScreen(clipped[i]));
 
+    // Save the RasterPoints in the fans vector
     fans.push_back(r);
   };
 
+  /** STL-Container of rasterized polygons */
   std::vector<RasterPointVector> fans;
+  /** Temporary container for TriangleFan processing */
   std::vector<GeoPoint> g;
+  /** Temporary container for TriangleFan clipping */
   GeoPoint clipped[50 * 4];
+  /** Projection to use for GeoPoint -> RasterPoint conversion */
   const MapWindowProjection &proj;
+  /** GeoClip instance used for TriangleFan clipping */
   const GeoClip clip;
 };
 
