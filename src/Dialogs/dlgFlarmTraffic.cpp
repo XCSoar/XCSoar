@@ -272,10 +272,8 @@ void
 FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 {
   // Don't paint numbers if no plane selected
-  if (selection == -1)
+  if (selection == -1 && !WarningMode())
     return;
-
-  assert(data.traffic[selection].defined());
 
   // Temporary string
   TCHAR tmp[20];
