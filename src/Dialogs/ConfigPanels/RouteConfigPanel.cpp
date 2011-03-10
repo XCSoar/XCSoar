@@ -40,6 +40,17 @@ RouteConfigPanel::Init(WndForm *_wf)
   WndProperty *wp;
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
 
+  wp = (WndProperty*)wf->FindByName(_T("prpFinalGlideTerrain"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Off"));
+    dfe->addEnumText(_("Line"));
+    dfe->addEnumText(_("Shade"));
+    dfe->Set(settings_computer.FinalGlideTerrain);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpRoutePlannerMode"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -77,6 +88,10 @@ RouteConfigPanel::Save()
       changed = true;
     }
   }
+
+  changed |= SaveFormProperty(*wf, _T("prpFinalGlideTerrain"),
+                              szProfileFinalGlideTerrain,
+                              settings_computer.FinalGlideTerrain);
 
   changed |= SaveFormProperty(*wf, _T("prpRoutePlannerAllowClimb"),
                               szProfileRoutePlannerAllowClimb,

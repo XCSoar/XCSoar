@@ -235,10 +235,6 @@
     </Panel>
   
     <Panel Name="frmFinalGlide">
-      <Edit Name="prpFinalGlideTerrain" Caption="Glide Terrain Line" X="2" Width="-2" Height="22" CaptionWidth="150"
-       Help="This determines whether the the glide terrain range is calculated and drawn as a line on the map area:&#10;[Off] Disables display&#10;[Line] Draws a dashed line at the glide range&#10;[Shade] Shades terrain outside glide range">
-       <DataField DataType="enum" />
-     </Edit>
      
       <Edit Name="prpAutoWind" Caption="Auto Wind" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="This allows switching on or off the automatic wind algorithm.  When the algorithm is switched off, the pilot is responsible for setting the wind estimate.&#10;[Circling] Requires only a GPS source&#10;[ZigZag] requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag and circling.">
@@ -323,6 +319,11 @@
         Help="When enabled, route planning climbs are limited to ceiling defined by greater of current aircraft altitude plus 500 m and the thermal ceiling.  If disabled, climbs are unlimited.">
         <DataField DataType="boolean"/>
       </Edit>
+
+      <Edit Name="prpFinalGlideTerrain" Caption="Glide Terrain Line" X="2" Width="-2" Height="22" CaptionWidth="150"
+       Help="This determines whether the the glide terrain range is calculated and drawn as a line on the map area:&#10;[Off] Disables display&#10;[Line] Draws a dashed line at the glide range&#10;[Shade] Shades terrain outside glide range">
+       <DataField DataType="enum" />
+     </Edit>
 
     </Panel>
 

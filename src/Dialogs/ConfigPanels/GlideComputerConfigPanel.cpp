@@ -40,17 +40,6 @@ GlideComputerConfigPanel::Init(WndForm *_wf)
   WndProperty *wp;
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpFinalGlideTerrain"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"));
-    dfe->addEnumText(_("Line"));
-    dfe->addEnumText(_("Shade"));
-    dfe->Set(settings_computer.FinalGlideTerrain);
-    wp->RefreshDisplay();
-  }
-
   wp = (WndProperty*)wf->FindByName(_T("prpAutoWind"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -116,10 +105,6 @@ GlideComputerConfigPanel::Save(bool &requirerestart)
   bool changed = false;
   WndProperty *wp;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
-
-  changed |= SaveFormProperty(*wf, _T("prpFinalGlideTerrain"),
-                              szProfileFinalGlideTerrain,
-                              settings_computer.FinalGlideTerrain);
 
   changed |= SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,
                               settings_computer.AutoWindMode);
