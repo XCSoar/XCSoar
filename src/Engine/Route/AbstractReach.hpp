@@ -30,8 +30,6 @@
 class RoutePolars;
 class RasterMap;
 
-#define REACH_MIN_STEP 10
-
 class AbstractReach {
   friend class PrintHelper;
 protected:

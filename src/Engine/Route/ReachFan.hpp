@@ -30,6 +30,9 @@ class RoutePolars;
 class RasterMap;
 class TaskProjection;
 struct GeoBounds;
+struct RouteLink;
+
+struct ReachFanParms;
 
 class FlatTriangleFan {
 protected:
@@ -85,28 +88,19 @@ public:
 
   bool is_inside_tree(const FlatGeoPoint &p, const bool include_children=true) const;
 
-  void fill_reach(const AFlatGeoPoint &origin,
-                  const RoutePolars &rpolars,
-                  const RasterMap* terrain,
-                  const TaskProjection& task_proj);
+  void fill_reach(const AFlatGeoPoint &origin, const ReachFanParms& parms);
 
   void fill_reach(const AFlatGeoPoint &origin,
                   const int index_low, const int index_high,
-                  const RoutePolars &rpolars,
-                  const RasterMap* terrain,
-                  const TaskProjection& task_proj);
+                  const ReachFanParms& parms);
 
   bool check_gap(const AFlatGeoPoint& n,
-                 const FlatGeoPoint& p_long,
-                 const FlatGeoPoint& p_short,
-                 const RoutePolars &rpolars,
-                 const RasterMap* terrain,
-                 const TaskProjection& task_proj,
-                 const int side);
+                 const RouteLink& e_1,
+                 const RouteLink& e_2,
+                 const ReachFanParms& parms);
 
   bool find_positive_arrival(const FlatGeoPoint& n,
-                             const RoutePolars &rpolars,
-                             const TaskProjection& task_proj,
+                             const ReachFanParms& parms,
                              short& arrival_height) const;
 
   void accept_in_range(const FlatBoundingBox& bb,
