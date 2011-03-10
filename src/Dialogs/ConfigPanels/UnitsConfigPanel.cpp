@@ -48,41 +48,41 @@ static bool loading = false;
 
 
 static void
-UpdateUnitFields(const UnitSetting &units, bool init = false)
+UpdateUnitFields(const UnitSetting &units)
 {
   unsigned index;
   index = (units.SpeedUnit == unStatuteMilesPerHour) ? 0 :
           (units.SpeedUnit == unKnots) ? 1 : 2;
   LoadFormProperty(*wf, _T("prpUnitsSpeed"), index);
-  if (init)
+  if (loading)
     SpeedUnits = index;
 
   index = (units.TaskSpeedUnit == unStatuteMilesPerHour) ? 0 :
           (units.TaskSpeedUnit == unKnots) ? 1 : 2;
   LoadFormProperty(*wf, _T("prpUnitsTaskSpeed"), index);
-  if (init)
+  if (loading)
     TaskSpeedUnits = index;
 
   index = (units.DistanceUnit == unStatuteMiles) ? 0 :
           (units.DistanceUnit == unNauticalMiles) ? 1 : 2;
   LoadFormProperty(*wf, _T("prpUnitsDistance"), index);
-  if (init)
+  if (loading)
     DistanceUnits = index;
 
   index = (units.AltitudeUnit == unFeet) ? 0 : 1;
   LoadFormProperty(*wf, _T("prpUnitsAltitude"), index);
-  if (init)
+  if (loading)
     AltitudeUnits = index;
 
   index = (units.TemperatureUnit == unGradFahrenheit) ? 1 : 0;
   LoadFormProperty(*wf, _T("prpUnitsTemperature"), index);
-  if (init)
+  if (loading)
     TemperatureUnits = index;
 
   index = (units.VerticalSpeedUnit == unKnots) ? 0 :
           (units.VerticalSpeedUnit == unFeetPerMinute) ? 2 : 1;
   LoadFormProperty(*wf, _T("prpUnitsLift"), index);
-  if (init)
+  if (loading)
     LiftUnits = index;
 }
 
@@ -269,7 +269,7 @@ UnitsConfigPanel::Init(WndForm *_wf)
     wp->RefreshDisplay();
   }
 
-  UpdateUnitFields(Units::Current, true);
+  UpdateUnitFields(Units::Current);
 
   LoadFormProperty(*wf, _T("prpUTCOffset"), fixed(iround(
          fixed(XCSoarInterface::SettingsComputer().UTCOffset) / 1800)) / 2);
