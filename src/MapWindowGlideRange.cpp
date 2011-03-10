@@ -74,6 +74,8 @@ public:
 
   /** STL-Container of rasterized polygons */
   std::vector<RasterPointVector> fans;
+
+private:
   /** Temporary container for TriangleFan processing */
   std::vector<GeoPoint> g;
   /** Temporary container for TriangleFan clipping */
