@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef INFOBOXES_CONFIG_DIALOG_HPP
 #define INFOBOXES_CONFIG_DIALOG_HPP
 
+#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "tchar.h"
 
 class InfoBoxPanelConfig;
@@ -34,6 +35,7 @@ class SingleWindow;
  */
 bool
 dlgConfigInfoboxesShowModal(SingleWindow &parent, const TCHAR *panel_name,
+                            InfoBoxLayout::Geometry geometry,
                             InfoBoxPanelConfig &data);
 
 #endif

@@ -45,6 +45,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &main_window, unsigned panel)
 
   bool changed = dlgConfigInfoboxesShowModal(main_window,
                                              InfoBoxManager::GetPanelName(panel),
+                                             InfoBoxLayout::InfoBoxGeometry,
                                              data);
   if (changed) {
     Profile::SetInfoBoxManagerConfig(infoBoxManagerConfig);

@@ -29,6 +29,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Fonts.hpp"
 #include "DataField/Enum.hpp"
 #include "Compiler.h"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -40,10 +41,23 @@ Copyright_License {
 #include <cstdio>
 #include <algorithm>
 
+class InfoBoxPreview : public PaintWindow {
+protected:
+  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_double(int x, int y);
+  virtual void on_paint(Canvas &canvas);
+};
+
 static InfoBoxPanelConfig data;
 static WndForm *wf = NULL;
 static InfoBoxPanelConfig clipboard;
 static unsigned clipboard_size;
+static InfoBoxLayout::Layout info_box_layout;
+static InfoBoxPreview previews[InfoBoxPanelConfig::MAX_INFOBOXES];
+static unsigned current_preview;
+
+static WndProperty *edit_select;
+static WndProperty *edit_content;
 static WndButton *buttonPaste;
 
 static void
@@ -53,48 +67,25 @@ RefreshPasteButton()
 }
 
 static void
-OnCloseClicked(gcc_unused WndButton &button)
+RefreshEditContent()
+{
+  DataFieldEnum &df = *(DataFieldEnum *)edit_content->GetDataField();
+  df.Set(data.infoBoxID[current_preview]);
+  edit_content->RefreshDisplay();
+}
+
+static void
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
   wf->SetModalResult(mrOK);
-}
-
-static WndProperty *
-FindInfoBoxField(int item)
-{
-  TCHAR name[80];
-  _stprintf(name, _T("prpInfoBox%1d"), item);
-  return (WndProperty*)wf->FindByName(name);
-}
-
-/**
- * @return true if the #InfoBoxPanelConfig has been modified
- */
-static bool
-FormToPanelConfig(InfoBoxPanelConfig &config)
-{
-  bool changed = false;
-
-  for (unsigned item = 0; item < InfoBoxManager::layout.count; item++) {
-    WndProperty *wp = FindInfoBoxField(item);
-    if (wp == NULL)
-      continue;
-
-    unsigned new_value = wp->GetDataField()->GetAsInteger();
-    if (new_value == config.infoBoxID[item])
-      continue;
-
-    config.infoBoxID[item] = new_value;
-    changed = true;
-  }
-
-  return changed;
 }
 
 static void
 OnCopy(gcc_unused WndButton &button)
 {
-  FormToPanelConfig(clipboard);
+  clipboard = data;
   clipboard_size = InfoBoxManager::layout.count;
+
   RefreshPasteButton();
 }
 
@@ -114,17 +105,93 @@ OnPaste(gcc_unused WndButton &button)
     if (content >= InfoBoxFactory::NUM_TYPES)
       continue;
 
-    WndProperty *wp = FindInfoBoxField(item);
-    if (wp != NULL) {
-      DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
-      dfe->Set(content);
-      wp->RefreshDisplay();
-    }
+    data.infoBoxID[item] = content;
+    previews[item].invalidate();
   }
+
+  RefreshEditContent();
 }
 
 static void
-OnInfoBoxHelp(WindowControl * Sender)
+SetCurrentInfoBox(unsigned _current_preview)
+{
+  assert(_current_preview < info_box_layout.count);
+
+  if (_current_preview == current_preview)
+    return;
+
+  previews[current_preview].invalidate();
+  current_preview = _current_preview;
+  previews[current_preview].invalidate();
+
+  DataFieldEnum &df = *(DataFieldEnum *)edit_select->GetDataField();
+  df.Set(current_preview);
+  edit_select->RefreshDisplay();
+
+  RefreshEditContent();
+}
+
+static void
+OnSelectAccess(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  const DataFieldEnum &dfe = (const DataFieldEnum &)*Sender;
+
+  SetCurrentInfoBox(dfe.GetAsInteger());
+}
+
+static void
+OnContentAccess(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  const DataFieldEnum &dfe = (const DataFieldEnum &)*Sender;
+
+  data.infoBoxID[current_preview] = dfe.GetAsInteger();
+  previews[current_preview].invalidate();
+}
+
+bool
+InfoBoxPreview::on_mouse_down(int x, int y)
+{
+  SetCurrentInfoBox(this - previews);
+  return true;
+}
+
+bool
+InfoBoxPreview::on_mouse_double(int x, int y)
+{
+  edit_content->BeginEditing();
+  return true;
+}
+
+void
+InfoBoxPreview::on_paint(Canvas &canvas)
+{
+  const unsigned i = this - previews;
+  const bool is_current = i == current_preview;
+
+  if (is_current)
+    canvas.clear(Color::BLACK);
+  else
+    canvas.clear_white();
+
+  canvas.hollow_brush();
+  canvas.black_pen();
+  canvas.rectangle(0, 0, canvas.get_width() - 1, canvas.get_height() - 1);
+
+  unsigned type = data.infoBoxID[i];
+  const TCHAR *caption = type < InfoBoxFactory::NUM_TYPES
+    ? InfoBoxFactory::GetCaption(type)
+    : NULL;
+  if (caption == NULL)
+    caption = _("Invalid");
+
+  canvas.select(Fonts::Title);
+  canvas.background_transparent();
+  canvas.set_text_color(is_current ? Color::WHITE : Color::BLACK);
+  canvas.text(2, 2, caption);
+}
+
+static void
+OnContentHelp(WindowControl *Sender)
 {
   WndProperty *wp = (WndProperty*)Sender;
   unsigned type = wp->GetDataField()->GetAsInteger();
@@ -147,71 +214,129 @@ OnInfoBoxHelp(WindowControl * Sender)
   dlgHelpShowModal(wf->GetMainWindow(), caption, text);
 }
 
-static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnInfoBoxHelp),
-  DeclareCallBackEntry(NULL)
-};
-
-static void
-SetInfoBoxSelector(unsigned item)
-{
-  WndProperty *wp = FindInfoBoxField(item);
-  if (wp == NULL)
-    return;
-
-  DataFieldEnum* dfe;
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; i++)
-    dfe->addEnumText(gettext(InfoBoxFactory::GetName(i)));
-
-  dfe->Sort(0);
-
-  dfe->Set(data.infoBoxID[item]);
-  wp->RefreshDisplay();
-}
-
 bool
 dlgConfigInfoboxesShowModal(SingleWindow &parent, const TCHAR *panel_name,
+                            InfoBoxLayout::Geometry geometry,
                             InfoBoxPanelConfig &data_r)
 {
+  current_preview = 0;
   data = data_r;
 
-  wf = LoadDialog(CallBackTable, parent,
-                  Layout::landscape ? _T("IDR_XML_CONFIG_INFOBOXES_L") :
-                                      _T("IDR_XML_CONFIG_INFOBOXES"));
-  if (wf == NULL)
-    return false;
+  RECT rc = parent.get_client_rect();
+  wf = new WndForm(parent, rc.left, rc.top,
+                   rc.right - rc.left, rc.bottom - rc.top,
+                   _("Layout"));
 
-  TCHAR caption[100];
-  _tcscpy(caption, wf->GetCaption());
-  _tcscat(caption, _T(": "));
-  _tcscat(caption, panel_name);
-  wf->SetCaption(caption);
+  ContainerWindow &client_area = wf->GetClientAreaWindow();
+  rc = client_area.get_client_rect();
 
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
+  InflateRect(&rc, Layout::FastScale(-2), Layout::FastScale(-2));
+  info_box_layout = InfoBoxLayout::Calculate(rc, geometry);
 
-  WndButton *buttonCopy = ((WndButton *)wf->FindByName(_T("cmdCopy")));
-  if (buttonCopy)
-    buttonCopy->SetOnClickNotify(OnCopy);
+  WindowStyle preview_style;
+  preview_style.enable_double_clicks();
+  for (unsigned i = 0; i < info_box_layout.count; ++i) {
+    rc = info_box_layout.positions[i];
+    previews[i].set(client_area, rc.left, rc.top,
+                    rc.right - rc.left, rc.bottom - rc.top,
+                    preview_style);
+  }
 
-  buttonPaste = ((WndButton *)wf->FindByName(_T("cmdPaste")));
-  if (buttonPaste)
-    buttonPaste->SetOnClickNotify(OnPaste);
+  rc = info_box_layout.remaining;
+
+  WindowStyle style;
+  style.control_parent();
+
+  EditWindowStyle edit_style;
+  edit_style.tab_stop();
+
+  if (is_embedded() || Layout::scale_1024 < 2048)
+    /* sunken edge doesn't fit well on the tiny screen of an
+       embedded device */
+    edit_style.border();
+  else
+    edit_style.sunken_edge();
+
+  const Color background_color = wf->GetBackColor();
+  const int x = rc.left;
+  const unsigned width = rc.right - rc.left - Layout::FastScale(2);
+  const unsigned height = Layout::Scale(22);
+  const unsigned caption_width = Layout::Scale(60);
+
+  int y = rc.top;
+
+  edit_select = new WndProperty(client_area, _("InfoBox"),
+                                x, y, width, height, caption_width,
+                                background_color, style, edit_style,
+                                NULL);
+
+  DataFieldEnum *dfe = new DataFieldEnum(OnSelectAccess);
+  for (unsigned i = 0; i < info_box_layout.count; ++i) {
+    TCHAR label[32];
+    _stprintf(label, _T("%u"), i + 1);
+    dfe->addEnumText(label, i);
+  }
+
+  edit_select->SetDataField(dfe);
+
+  y += height;
+
+  edit_content = new WndProperty(client_area, _("Content"),
+                                 x, y, width, height, caption_width,
+                                 background_color, style, edit_style,
+                                 NULL);
+
+  dfe = new DataFieldEnum(OnContentAccess);
+  for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; ++i) {
+    const TCHAR *name = InfoBoxFactory::GetName(i);
+    if (name != NULL)
+      dfe->addEnumText(name, i, InfoBoxFactory::GetDescription(i));
+  }
+
+  edit_content->SetDataField(dfe);
+  edit_content->SetOnHelpCallback(OnContentHelp);
+
+  ButtonWindowStyle button_style;
+  button_style.tab_stop();
+  const unsigned button_width = Layout::Scale(60);
+  const unsigned button_height = Layout::Scale(28);
+  const int button_y = rc.bottom - button_height;
+  int button_x = rc.left;
+  WndButton *close_button =
+    new WndButton(client_area, _("Close"),
+                  button_x, button_y, button_width, button_height,
+                  button_style, OnCloseClicked);
+  button_x += button_width + Layout::Scale(2);
+  WndButton *copy_button =
+    new WndButton(client_area, _("Copy"),
+                  button_x, button_y, button_width, button_height,
+                  button_style, OnCopy);
+  button_x += button_width + Layout::Scale(2);
+  buttonPaste =
+    new WndButton(client_area, _("Paste"),
+                  button_x, button_y, button_width, button_height,
+                  button_style, OnPaste);
 
   RefreshPasteButton();
 
-  for (unsigned j = 0; j < InfoBoxManager::layout.count; j++)
-    SetInfoBoxSelector(j);
-
   int result = wf->ShowModal();
-  if (result != mrOK || !FormToPanelConfig(data)) {
-    delete wf;
-    return false;
-  }
 
   delete wf;
+  delete edit_select;
+  delete edit_content;
+  delete close_button;
+  delete copy_button;
+  delete buttonPaste;
 
-  data.modified = true;
-  data_r = data;
-  return true;
+  bool changed = false;
+  if (result == mrOK) {
+    for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; ++i)
+      if (data.infoBoxID[i] != data_r.infoBoxID[i])
+        changed = true;
+
+    if (changed)
+      data_r = data;
+  }
+
+  return changed;
 }
