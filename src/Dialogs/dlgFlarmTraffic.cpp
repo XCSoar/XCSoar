@@ -275,18 +275,14 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   if (selection == -1 && !WarningMode())
     return;
 
+  // Shortcut to the selected traffic
+  FLARM_TRAFFIC traffic = data.traffic[WarningMode() ? warning : selection];
+  assert(traffic.defined());
+
   // Temporary string
   TCHAR tmp[20];
   // Temporary string size
   SIZE sz;
-  // Shortcut to the selected traffic
-  FLARM_TRAFFIC traffic;
-  if (WarningMode())
-    traffic = data.traffic[warning];
-  else
-    traffic = data.traffic[selection];
-
-  assert(traffic.defined());
 
   RECT rc;
   rc.left = padding;
