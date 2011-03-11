@@ -731,7 +731,9 @@
     
       <Button Name="cmdAircraftType" Caption="Aircraft Type" X="2" Width="-2" Height="22" />
     
-      <Button Name="cmdAircraftRego" Caption="Competition Id" X="2" Width="-2" Height="22" />
+      <Button Name="cmdAircraftReg" Caption="Aircraft Registration" X="2" Width="-2" Height="22"/>
+    
+      <Button Name="cmdCompetitionId" Caption="Competition Id" X="2" Width="-2" Height="22"/>
     
       <Button Name="cmdLoggerID" Caption="Logger ID" X="2" Width="-2" Height="22" />
     

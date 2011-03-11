@@ -37,7 +37,8 @@ Copyright_License {
 static WndForm* wf = NULL;
 static WndButton *buttonPilotName = NULL;
 static WndButton *buttonAircraftType = NULL;
-static WndButton *buttonAircraftRego = NULL;
+static WndButton *buttonAircraftReg = NULL;
+static WndButton *buttonCompetitionId = NULL;
 static WndButton *buttonLoggerID = NULL;
 static bool changed = false;
 
@@ -62,13 +63,21 @@ UpdateButtons(void)
     _stprintf(text, _T("%s: %s"), _("Aircraft type"), val);
     buttonAircraftType->SetCaption(text);
   }
-  if (buttonAircraftRego) {
-    Profile::Get(szProfileAircraftRego, val, 100);
+  if (buttonAircraftReg) {
+    Profile::Get(szProfileAircraftReg, val, 100);
+    if (string_is_empty(val))
+      _tcscpy(val, _("(blank)"));
+
+    _stprintf(text, _T("%s: %s"), _("Aircraft reg."), val);
+    buttonAircraftReg->SetCaption(text);
+  }
+  if (buttonCompetitionId) {
+    Profile::Get(szProfileCompetitionId, val, 100);
     if (string_is_empty(val))
       _tcscpy(val, _("(blank)"));
 
     _stprintf(text, _T("%s: %s"), _("Competition ID"), val);
-    buttonAircraftRego->SetCaption(text);
+    buttonCompetitionId->SetCaption(text);
   }
   if (buttonLoggerID) {
     Profile::Get(szProfileLoggerID, val, 100);
@@ -82,13 +91,13 @@ UpdateButtons(void)
 
 
 static void
-OnAircraftRegoClicked(gcc_unused WndButton &button)
+OnCompetitionIdClicked(gcc_unused WndButton &button)
 {
   TCHAR Temp[100];
-  if (buttonAircraftRego) {
-    Profile::Get(szProfileAircraftRego, Temp, 100);
+  if (buttonCompetitionId) {
+    Profile::Get(szProfileCompetitionId, Temp, 100);
     if (dlgTextEntryShowModal(Temp, 100)) {
-      Profile::Set(szProfileAircraftRego, Temp);
+      Profile::Set(szProfileCompetitionId, Temp);
       changed = true;
     }
   }
@@ -103,6 +112,20 @@ OnAircraftTypeClicked(gcc_unused WndButton &button)
     Profile::Get(szProfileAircraftType, Temp, 100);
     if (dlgTextEntryShowModal(Temp, 100)) {
       Profile::Set(szProfileAircraftType, Temp);
+      changed = true;
+    }
+  }
+  UpdateButtons();
+}
+
+static void
+OnAircraftRegClicked(gcc_unused WndButton &button)
+{
+  TCHAR Temp[100];
+  if (buttonAircraftReg) {
+    Profile::Get(szProfileAircraftReg, Temp, 100);
+    if (dlgTextEntryShowModal(Temp, 100)) {
+      Profile::Set(szProfileAircraftReg, Temp);
       changed = true;
     }
   }
@@ -154,9 +177,13 @@ LoggerConfigPanel::Init(WndForm *_wf)
   if (buttonAircraftType)
     buttonAircraftType->SetOnClickNotify(OnAircraftTypeClicked);
 
-  buttonAircraftRego = ((WndButton *)wf->FindByName(_T("cmdAircraftRego")));
-  if (buttonAircraftRego)
-    buttonAircraftRego->SetOnClickNotify(OnAircraftRegoClicked);
+  buttonAircraftReg = ((WndButton *)wf->FindByName(_T("cmdAircraftReg")));
+  if (buttonAircraftReg)
+    buttonAircraftReg->SetOnClickNotify(OnAircraftRegClicked);
+
+  buttonCompetitionId = ((WndButton *)wf->FindByName(_T("cmdCompetitionId")));
+  if (buttonCompetitionId)
+    buttonCompetitionId->SetOnClickNotify(OnCompetitionIdClicked);
 
   buttonLoggerID = ((WndButton *)wf->FindByName(_T("cmdLoggerID")));
   if (buttonLoggerID)

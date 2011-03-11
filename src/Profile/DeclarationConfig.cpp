@@ -30,5 +30,5 @@ Profile::GetDeclarationConfig(Declaration &declaration)
 {
   Profile::Get(szProfilePilotName, declaration.PilotName);
   Profile::Get(szProfileAircraftType, declaration.AircraftType);
-  Profile::Get(szProfileAircraftRego, declaration.AircraftRego);
+  Profile::Get(szProfileAircraftReg, declaration.AircraftRego);
 }
