@@ -70,8 +70,12 @@ void dlgConfigurationShowModal();
 void dlgConfigFontsShowModal();
 void dlgConfigWaypointsShowModal();
 
-void
-dlgConfigInfoboxesShowModal(SingleWindow &parent, unsigned panelIdx);
+/**
+ * @return true when the #InfoBoxPanelConfig object has been modified
+ */
+bool
+dlgConfigInfoboxesShowModal(SingleWindow &parent, const TCHAR *panel_name,
+                            InfoBoxPanelConfig &data);
 
 void dlgVegaDemoShowModal();
 bool dlgConfigurationVarioShowModal();

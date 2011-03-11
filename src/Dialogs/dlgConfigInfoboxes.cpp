@@ -22,26 +22,21 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
-#include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Screen/Layout.hpp"
 #include "DataField/Enum.hpp"
 #include "Compiler.h"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
-#include "LogFile.hpp"
 
 #include <assert.h>
 #include <cstdio>
 #include <algorithm>
 
-static bool changed = false;
+static InfoBoxPanelConfig data;
 static WndForm *wf = NULL;
 static InfoBoxPanelConfig clipboard;
 static unsigned clipboard_size;
-static unsigned panel;
 
 static void
 OnCloseClicked(gcc_unused WndButton &button)
@@ -156,43 +151,26 @@ SetInfoBoxSelector(unsigned item)
 
   dfe->Sort(0);
 
-  dfe->Set(InfoBoxManager::GetType(item, panel));
+  dfe->Set(data.infoBoxID[item]);
   wp->RefreshDisplay();
 }
 
-static void
-GetInfoBoxSelector(unsigned item)
+bool
+dlgConfigInfoboxesShowModal(SingleWindow &parent, const TCHAR *panel_name,
+                            InfoBoxPanelConfig &data_r)
 {
-  WndProperty *wp = FindInfoBoxField(item);
-  if (wp == NULL)
-    return;
-
-  int itnew = wp->GetDataField()->GetAsInteger();
-  int it = InfoBoxManager::GetType(item, panel);
-
-  if (it == itnew)
-    return;
-
-  changed = true;
-  InfoBoxManager::SetType(item, itnew, panel);
-  Profile::SetInfoBoxManagerConfig(infoBoxManagerConfig);
-}
-
-void
-dlgConfigInfoboxesShowModal(SingleWindow &parent, unsigned _panel)
-{
-  panel = _panel;
+  data = data_r;
 
   wf = LoadDialog(CallBackTable, parent,
                   Layout::landscape ? _T("IDR_XML_CONFIG_INFOBOXES_L") :
                                       _T("IDR_XML_CONFIG_INFOBOXES"));
   if (wf == NULL)
-    return;
+    return false;
 
   TCHAR caption[100];
   _tcscpy(caption, wf->GetCaption());
   _tcscat(caption, _T(": "));
-  _tcscat(caption, InfoBoxManager::GetPanelName(panel));
+  _tcscat(caption, panel_name);
   wf->SetCaption(caption);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
@@ -208,17 +186,15 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent, unsigned _panel)
   for (unsigned j = 0; j < InfoBoxManager::layout.count; j++)
     SetInfoBoxSelector(j);
 
-  changed = false;
-
-  wf->ShowModal();
-
-  for (unsigned j = 0; j < InfoBoxManager::layout.count; ++j)
-    GetInfoBoxSelector(j);
-
-  if (changed) {
-    Profile::Save();
-    LogDebug(_T("InfoBox configuration: Changes saved"));
+  int result = wf->ShowModal();
+  if (result != mrOK || !FormToPanelConfig(data)) {
+    delete wf;
+    return false;
   }
 
   delete wf;
+
+  data.modified = true;
+  data_r = data;
+  return true;
 }

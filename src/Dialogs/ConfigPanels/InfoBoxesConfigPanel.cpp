@@ -31,8 +31,24 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Appearance.hpp"
 #include "InfoBoxesConfigPanel.hpp"
+#include "LogFile.hpp"
 
 static WndForm* wf = NULL;
+
+static void
+dlgConfigInfoboxesShowModal(SingleWindow &main_window, unsigned panel)
+{
+  InfoBoxPanelConfig &data = infoBoxManagerConfig.panel[panel];
+
+  bool changed = dlgConfigInfoboxesShowModal(main_window,
+                                             InfoBoxManager::GetPanelName(panel),
+                                             data);
+  if (changed) {
+    Profile::SetInfoBoxManagerConfig(infoBoxManagerConfig);
+    Profile::Save();
+    LogDebug(_T("InfoBox configuration: Changes saved"));
+  }
+}
 
 static void
 OnInfoBoxesCircling(gcc_unused WndButton &button)
