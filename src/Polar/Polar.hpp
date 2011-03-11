@@ -41,6 +41,9 @@ struct PolarCoefficients
 struct SimplePolar
 {
   const TCHAR* name;   /**< Name of the glider type */
+
+  // Using doubles here to simplify the code in PolarStore.cpp
+  //
   double dry_mass;     /**< Mass dry gross (kg) */
   double max_ballast;  /**< Max water ballast (l) */
   double v1;           /**< Speed (kph) of point 1 */
@@ -50,7 +53,7 @@ struct SimplePolar
   double v3;           /**< Speed (kph) of point 3 */
   double w3;           /**< Sink rate (negative, m/s) of point 3  */
   double wing_area;    /**< Reference wing area (m^2) */
-  double v_no;         /**< Maximum speed for normal operations */
+  double v_no;         /**< Maximum speed for normal operations (m/s) */
 
   bool ReadString(const TCHAR* line);
   void GetString(TCHAR* line, size_t size, bool include_v_no = false) const;
