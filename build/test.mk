@@ -230,6 +230,7 @@ $(TARGET_BIN_DIR)/TestUnits$(TARGET_EXEEXT): $(TEST_UNITS_OBJS) $(TEST_UNITS_LDA
 
 TEST_POLARS_SOURCES = \
 	$(SRC)/Profile/ProfileKeys.cpp \
+	$(SRC)/Units.cpp \
 	$(SRC)/Polar/Polar.cpp \
 	$(SRC)/Polar/PolarGlue.cpp \
 	$(SRC)/Polar/PolarStore.cpp \

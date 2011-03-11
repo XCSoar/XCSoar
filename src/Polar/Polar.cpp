@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Polar/Polar.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "Units.hpp"
 
 #include <stdlib.h>
 #include <cstdio>
@@ -36,9 +37,9 @@ SimplePolar::CalculateCoefficients() const
   fixed V1, V2, V3;
   fixed W1, W2, W3;
 
-  V1 = fixed(v1 / 3.6);
-  V2 = fixed(v2 / 3.6);
-  V3 = fixed(v3 / 3.6);
+  V1 = Units::ToSysUnit(fixed(v1), unKiloMeterPerHour);
+  V2 = Units::ToSysUnit(fixed(v2), unKiloMeterPerHour);
+  V3 = Units::ToSysUnit(fixed(v3), unKiloMeterPerHour);
   W1 = fixed(w1);
   W2 = fixed(w2);
   W3 = fixed(w3);
