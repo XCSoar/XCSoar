@@ -413,7 +413,7 @@ TaskFileSeeYou::Count()
   TCHAR *line;
   for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
     if (in_task_section) {
-      if (line[0] == _T('\"')) {
+      if (line[0] == _T('\"') || line[0] == _T(',')) {
 
         if (count < namesuffixes.MAX_SIZE) {
           unsigned cc = 0;
