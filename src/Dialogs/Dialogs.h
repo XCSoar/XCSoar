@@ -69,7 +69,10 @@ void dlgChecklistShowModal();
 void dlgConfigurationShowModal();
 void dlgConfigFontsShowModal();
 void dlgConfigWaypointsShowModal();
-void dlgConfigInfoboxesShowModal(unsigned panelIdx);
+
+void
+dlgConfigInfoboxesShowModal(SingleWindow &parent, unsigned panelIdx);
+
 void dlgVegaDemoShowModal();
 bool dlgConfigurationVarioShowModal();
 void dlgLoggerReplayShowModal();

@@ -27,7 +27,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Screen/Layout.hpp"
-#include "MainWindow.hpp"
 #include "DataField/Enum.hpp"
 #include "Compiler.h"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -116,7 +115,7 @@ OnInfoBoxHelp(WindowControl * Sender)
   else
     text = gettext(text);
 
-  dlgHelpShowModal(XCSoarInterface::main_window, caption, text);
+  dlgHelpShowModal(wf->GetMainWindow(), caption, text);
 }
 
 static CallBackTableEntry CallBackTable[] = {
@@ -160,11 +159,12 @@ GetInfoBoxSelector(unsigned item)
   Profile::SetInfoBoxManagerConfig(infoBoxManagerConfig);
 }
 
-void dlgConfigInfoboxesShowModal(unsigned _panel)
+void
+dlgConfigInfoboxesShowModal(SingleWindow &parent, unsigned _panel)
 {
   panel = _panel;
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, parent,
                   Layout::landscape ? _T("IDR_XML_CONFIG_INFOBOXES_L") :
                                       _T("IDR_XML_CONFIG_INFOBOXES"));
   if (wf == NULL)

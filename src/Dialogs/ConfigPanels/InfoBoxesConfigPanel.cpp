@@ -28,6 +28,7 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
+#include "MainWindow.hpp"
 #include "Appearance.hpp"
 #include "InfoBoxesConfigPanel.hpp"
 
@@ -36,25 +37,29 @@ static WndForm* wf = NULL;
 static void
 OnInfoBoxesCircling(gcc_unused WndButton &button)
 {
-  dlgConfigInfoboxesShowModal(InfoBoxManager::PANEL_CIRCLING);
+  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
+                              InfoBoxManager::PANEL_CIRCLING);
 }
 
 static void
 OnInfoBoxesCruise(gcc_unused WndButton &button)
 {
-  dlgConfigInfoboxesShowModal(InfoBoxManager::PANEL_CRUISE);
+  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
+                              InfoBoxManager::PANEL_CRUISE);
 }
 
 static void
 OnInfoBoxesFinalGlide(gcc_unused WndButton &button)
 {
-  dlgConfigInfoboxesShowModal(InfoBoxManager::PANEL_FINAL_GLIDE);
+  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
+                              InfoBoxManager::PANEL_FINAL_GLIDE);
 }
 
 static void
 OnInfoBoxesAuxiliary(gcc_unused WndButton &button)
 {
-  dlgConfigInfoboxesShowModal(InfoBoxManager::PANEL_AUXILIARY);
+  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
+                              InfoBoxManager::PANEL_AUXILIARY);
 }
 
 void
