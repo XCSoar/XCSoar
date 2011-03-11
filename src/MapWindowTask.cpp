@@ -69,9 +69,7 @@ MapWindow::DrawTask(Canvas &canvas)
   if (task == NULL)
     return;
 
-  ProtectedTaskManager::Lease task_manager(*task);
-  const AbstractTask *task = task_manager->get_active_task();
-  if (task == NULL || !task->check_task())
+  if (!Calculated().task_stats.current_leg.solution_remaining.defined())
     return;
 
   /* RLD bearing is invalid if GPS not connected and in non-sim mode,
@@ -89,25 +87,30 @@ MapWindow::DrawTask(Canvas &canvas)
     }
   }
 
-  RenderObservationZone ozv;
-  RenderTaskPointMap tpv(canvas,
+  ProtectedTaskManager::Lease task_manager(*task);
+  const AbstractTask *task = task_manager->get_active_task();
+  if (task->check_task()) {
+
+    RenderObservationZone ozv;
+    RenderTaskPointMap tpv(canvas,
 #ifdef ENABLE_OPENGL
-                         /* OpenGL doesn't have the BufferCanvas
-                            class */
-                         NULL,
+                           /* OpenGL doesn't have the BufferCanvas
+                              class */
+                           NULL,
 #else
-                         &buffer_canvas,
+                           &buffer_canvas,
 #endif
-                         render_projection,
-                         SettingsMap(),
-                         /* we're accessing the OrderedTask here,
-                            which may be invalid at this point, but it
-                            will be used only if active, so it's ok */
-                         task_manager->get_ordered_task().get_task_projection(),
-                         ozv, draw_bearing,
-                         Basic().Location);
-  RenderTask dv(tpv, render_projection.GetScreenBounds());
-  ((TaskVisitor &)dv).Visit(*task);
+                           render_projection,
+                           SettingsMap(),
+                           /* we're accessing the OrderedTask here,
+                              which may be invalid at this point, but it
+                              will be used only if active, so it's ok */
+                           task_manager->get_ordered_task().get_task_projection(),
+                           ozv, draw_bearing,
+                           Basic().Location);
+    RenderTask dv(tpv, render_projection.GetScreenBounds());
+    ((TaskVisitor &)dv).Visit(*task);
+  }
 
   if (draw_route) {
     canvas.select(Graphics::hpBearing);
