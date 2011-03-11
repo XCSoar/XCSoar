@@ -67,7 +67,7 @@ public:
    *
    * @return true if point is inside reach polygon
    */
-  virtual bool is_inside(const GeoPoint origin, const bool turning) const = 0;
+  virtual bool is_inside(const GeoPoint origin, const bool turning=true) const = 0;
 
   /**
    * Find arrival height at destination.

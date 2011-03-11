@@ -136,7 +136,7 @@ public:
                                      const RoutePolars &rpolars,
                                      short& arrival_height) const;
 
-  virtual bool is_inside(const GeoPoint origin, const bool turning) const;
+  virtual bool is_inside(const GeoPoint origin, const bool turning=true) const;
 
   void accept_in_range(const GeoBounds& bounds,
                        TriangleFanVisitor& visitor) const;
