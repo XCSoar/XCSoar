@@ -35,20 +35,17 @@ class TaskStats;
 class CommonStats;
 class RasterTerrain;
 class Airspaces;
+class AbstractReach;
 
-class TerrainIntersectionTest: public AbortIntersectionTest {
+class ReachIntersectionTest: public AbortIntersectionTest {
 public:
-  TerrainIntersectionTest(): rterrain(NULL) {};
-
-  void set_terrain(RasterTerrain* _rterrain) {
-    rterrain = _rterrain;
+  ReachIntersectionTest(): route(NULL) {};
+  void set_route(RoutePlannerGlue* _route) {
+    route = _route;
   }
-
-  virtual bool intersects(const AGeoPoint& origin,
-                          const AGeoPoint& destination,
-                          const RoutePolars& rpolars);
+  virtual bool intersects(const AGeoPoint& destination);
 private:
-  RasterTerrain* rterrain;
+  const RoutePlannerGlue *route;
 };
 
 /**
@@ -62,7 +59,7 @@ protected:
   TaskEvents &task_events;
   Airspaces &m_airspaces;
   RoutePlannerGlue m_route;
-  TerrainIntersectionTest intersection_test;
+  ReachIntersectionTest intersection_test;
 
   static const TCHAR default_task_path[];
 

@@ -348,7 +348,7 @@ ProtectedTaskManager::route_set_terrain(RasterTerrain* terrain)
 {
   ExclusiveLease lease(*this);
   m_route.set_terrain(terrain);
-  intersection_test.set_terrain(terrain);
+  intersection_test.set_route(&m_route);
   lease->set_intersection_test(&intersection_test);
 }
 
@@ -397,19 +397,16 @@ ProtectedTaskManager::get_route_polars() const
 }
 
 
-bool TerrainIntersectionTest::intersects(const AGeoPoint& origin,
-                                         const AGeoPoint& destination,
-                                         const RoutePolars& rpolars) 
+bool
+ReachIntersectionTest::intersects(const AGeoPoint& destination)
 {
-  if (!rterrain)
+  if (!route)
     return false;
-
-  RasterTerrain::ExclusiveLease rlease(*rterrain);
-  TaskProjection proj;
-  proj.reset(origin);
-  proj.update_fast();
-  GeoPoint intx; // return ignored
-  return rpolars.intersection(origin, destination, &rterrain->map, proj, intx);
+  short h;
+  route->find_positive_arrival(destination, h);
+  // we use find_positive_arrival here instead of is_inside, because may use
+  // arrival height for sorting later
+  return (h< destination.altitude);
 }
 
 void

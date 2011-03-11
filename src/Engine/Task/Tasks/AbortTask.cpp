@@ -168,7 +168,6 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   if (task_full() || approx_waypoints.empty())
     return false;
 
-  const RoutePolars& rpolars = safety? route_polars_safety: route_polars;
   const AGeoPoint p_start (state.get_location(), 
                            (short)state.NavAltitude);
 
@@ -189,10 +188,8 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
       const bool is_reachable_final = is_reachable(result, true);
 
       if (intersection_test && final_glide && is_reachable_final) {
-        intersects = intersection_test->intersects(p_start,
-                                                   AGeoPoint(v->first.Location, 
-                                                             result.MinHeight),
-                                                   rpolars);
+        intersects = intersection_test->intersects(AGeoPoint(v->first.Location,
+                                                             result.MinHeight));
       }
       if (!intersects) {
         q.push(std::make_pair(v->first, result));
