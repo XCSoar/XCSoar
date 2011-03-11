@@ -50,6 +50,7 @@ struct SimplePolar
   double v3;           /**< Speed (kph) of point 3 */
   double w3;           /**< Sink rate (negative, m/s) of point 3  */
   double wing_area;    /**< Reference wing area (m^2) */
+  double v_no;         /**< Maximum speed for normal operations */
 
   bool ReadString(const TCHAR* line);
   void GetString(TCHAR* line, size_t size) const;

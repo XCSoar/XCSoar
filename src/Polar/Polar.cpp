@@ -72,7 +72,7 @@ SimplePolar::IsValid() const
 void
 SimplePolar::Init()
 {
-  v1 = v2 = v3 = w1 = w2 = w3 = dry_mass = max_ballast = wing_area = 0.0;
+  v1 = v2 = v3 = w1 = w2 = w3 = dry_mass = max_ballast = wing_area = v_no = 0.0;
   name = NULL;
 }
 
@@ -149,6 +149,7 @@ SimplePolar::ReadString(const TCHAR *line)
 
   polar.w3 = _tcstod(p + 1, &p);
   polar.wing_area = (*p != _T(',')) ? 0.0 : _tcstod(p + 1, &p);
+  polar.v_no = (*p != _T(',')) ? 0.0 : _tcstod(p + 1, &p);
 
   *this = polar;
 
