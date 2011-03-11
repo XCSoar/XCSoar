@@ -275,6 +275,8 @@ EWMicroRecorderDevice::DeclareInner(const Declaration *decl)
                         _T("Competition ID:"), decl->AircraftRego.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Aircraft Type:"), decl->AircraftType.c_str());
+  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
+                        _T("Aircraft ID:"), decl->AircraftRego.c_str());
 
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Description:"), _T("XCSoar task declaration"));
