@@ -1,8 +1,6 @@
-# Language cz translations for PACKAGE package.
-# Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# Automatically generated, 2011.
-#
+# Czech translation for XCSoar
+# Copyright (C) 2000-2011 The XCSoar Project
+# This file is distributed under the same license as the XCSoar package.
 msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
@@ -10,8 +8,7 @@ msgstr ""
 "POT-Creation-Date: 2011-03-11 07:43+0100\n"
 "PO-Revision-Date: 2011-02-26 01:33+0100\n"
 "Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
-"Language: cz\n"
+"Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"

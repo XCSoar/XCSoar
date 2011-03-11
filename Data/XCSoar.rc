@@ -215,7 +215,7 @@ IDR_XML_TASKPOINTTYPE_L XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskPointType_L.xml"
 
 // translations
 #if defined(WIN32) || defined(ANDROID)
-cz.mo MO DISCARDABLE "../output/po/cz.mo"
+cs.mo MO DISCARDABLE "../output/po/cs.mo"
 de.mo MO DISCARDABLE "../output/po/de.mo"
 el.mo MO DISCARDABLE "../output/po/el.mo"
 es.mo MO DISCARDABLE "../output/po/es.mo"
