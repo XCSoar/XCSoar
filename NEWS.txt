@@ -18,6 +18,7 @@ Version 6.0.7 - not yet released
   - import time from internal GPS correctly
   - read internal GPS accuracy
   - the "back" hardware key cancels dialogs
+  - map the volume keys to cursor up/down
 * Linux
   - improved button and checkbox rendering
   - dialog keyboard navigation implemented
