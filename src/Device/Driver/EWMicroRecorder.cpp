@@ -160,6 +160,22 @@ EWMicroRecorderDevice::TryConnect()
   return false;
 }
 
+/**
+ * "It is important that only alpha numeric characters are included in
+ * the declaration, as other characters such as a comma will prevent
+ * the resultant .IGC file from being validated."
+ *
+ * @see http://www.ewavionics.com/products/microRecorder/microRecorder-instructionsfull.pdf
+ */
+static bool
+IsValidEWChar(char ch)
+{
+  return ch == '\r' || ch == '\n' ||
+    ch == ' ' || ch == '-' ||
+    (ch >= 'a' && ch <= 'z') ||
+    (ch >= 'A' && ch <= 'Z') ||
+    (ch >= '0' && ch <= '9');
+}
 
 static void
 EWMicroRecorderPrintf(Port *port, const TCHAR *fmt, ...)
@@ -177,8 +193,18 @@ EWMicroRecorderPrintf(Port *port, const TCHAR *fmt, ...)
                             NULL, NULL) <= 0)
     return;
 #else
-  const char *buffer = EWStr;
+  char *buffer = EWStr;
 #endif
+
+  char *p = strchr(buffer, ':');
+  if (p != NULL)
+    ++p;
+  else
+    p = buffer;
+
+  for (; *p != 0; ++p)
+    if (!IsValidEWChar(*p))
+      *p = ' ';
 
   port->Write(buffer);
 }
