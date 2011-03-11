@@ -40,8 +40,6 @@ Copyright_License {
 
 static bool changed = false;
 static WndForm *wf = NULL;
-static WndButton *buttonCopy = NULL;
-static WndButton *buttonPaste = NULL;
 static InfoBoxPanelConfig clipboard;
 static unsigned clipboard_size;
 static unsigned panel;
@@ -180,11 +178,11 @@ void dlgConfigInfoboxesShowModal(unsigned _panel)
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
-  buttonCopy = ((WndButton *)wf->FindByName(_T("cmdCopy")));
+  WndButton *buttonCopy = ((WndButton *)wf->FindByName(_T("cmdCopy")));
   if (buttonCopy)
     buttonCopy->SetOnClickNotify(OnCopy);
 
-  buttonPaste = ((WndButton *)wf->FindByName(_T("cmdPaste")));
+  WndButton *buttonPaste = ((WndButton *)wf->FindByName(_T("cmdPaste")));
   if (buttonPaste)
     buttonPaste->SetOnClickNotify(OnPaste);
 
