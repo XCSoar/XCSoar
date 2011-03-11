@@ -91,9 +91,16 @@ static void
 OnInfoBoxHelp(WindowControl * Sender)
 {
   WndProperty *wp = (WndProperty*)Sender;
-  int type = wp->GetDataField()->GetAsInteger();
+  unsigned type = wp->GetDataField()->GetAsInteger();
+  if (type >= InfoBoxFactory::NUM_TYPES)
+    return;
+
+  const TCHAR *name = InfoBoxFactory::GetName(type);
+  if (name == NULL)
+    return;
+
   TCHAR caption[100];
-  _stprintf(caption, _T("%s: %s"), _("InfoBox"), gettext(InfoBoxFactory::GetName(type)));
+  _stprintf(caption, _T("%s: %s"), _("InfoBox"), gettext(name));
 
   const TCHAR* text = InfoBoxFactory::GetDescription(type);
   if (text)
