@@ -279,8 +279,8 @@ LXDevice::LoadPilotInfo(const Declaration *decl)
   memset((void*)lxNanoDevice_Pilot.unknown1, 0, sizeof(lxNanoDevice_Pilot.unknown1));
   copy_space_padded(lxNanoDevice_Pilot.PilotName, decl->PilotName, sizeof(lxNanoDevice_Pilot.PilotName));
   copy_space_padded(lxNanoDevice_Pilot.GliderType, decl->AircraftType, sizeof(lxNanoDevice_Pilot.GliderType));
-  copy_space_padded(lxNanoDevice_Pilot.GliderID, decl->AircraftRego, sizeof(lxNanoDevice_Pilot.GliderID));
-  copy_space_padded(lxNanoDevice_Pilot.CompetitionID, _T(""), sizeof(lxNanoDevice_Pilot.CompetitionID));
+  copy_space_padded(lxNanoDevice_Pilot.GliderID, decl->AircraftReg, sizeof(lxNanoDevice_Pilot.GliderID));
+  copy_space_padded(lxNanoDevice_Pilot.CompetitionID, decl->CompetitionId, sizeof(lxNanoDevice_Pilot.CompetitionID));
   memset((void*)lxNanoDevice_Pilot.unknown2, 0, sizeof(lxNanoDevice_Pilot.unknown2));
 }
 

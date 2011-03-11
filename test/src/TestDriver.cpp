@@ -369,7 +369,8 @@ TestDeclare(const struct DeviceRegister &driver)
   Declaration declaration(NULL);
   declaration.PilotName = _T("Foo Bar");
   declaration.AircraftType = _T("Cirrus");
-  declaration.AircraftRego = _T("D-3003");
+  declaration.AircraftReg = _T("D-3003");
+  declaration.CompetitionId = _T("33");
   const GeoPoint gp(Angle::degrees(fixed(7.7061111111111114)),
                     Angle::degrees(fixed(51.051944444444445)));
   Waypoint wp(gp);

@@ -70,7 +70,7 @@ FlarmDeclareInternal(Port *port, const Declaration *decl)
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 
-  _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"), decl->AircraftRego.c_str());
+  _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"), decl->AircraftReg.c_str());
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 

@@ -172,7 +172,8 @@ int main(int argc, char **argv)
   Declaration declaration(NULL);
   declaration.PilotName = _T("Foo Bar");
   declaration.AircraftType = _T("Cirrus");
-  declaration.AircraftRego = _T("D-3003");
+  declaration.AircraftReg = _T("D-3003");
+  declaration.CompetitionId = _T("33");
 
   declaration.append(MakeWaypoint(_T("Bergneustadt"), 488,
                                   7.7061111111111114, 51.051944444444445));

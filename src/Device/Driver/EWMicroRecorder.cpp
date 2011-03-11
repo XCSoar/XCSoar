@@ -246,7 +246,7 @@ EWMicroRecorderDevice::DeclareInner(const Declaration *decl)
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Pilot Name:"), decl->PilotName.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-                        _T("Competition ID:"), decl->AircraftRego.c_str());
+                        _T("Competition ID:"), decl->CompetitionId.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Aircraft Type:"), decl->AircraftType.c_str());
   port->Write("Description:      Declaration\r\n");

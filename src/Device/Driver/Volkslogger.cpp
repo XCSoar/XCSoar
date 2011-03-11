@@ -198,7 +198,7 @@ VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
 
   CopyToNarrowBuffer(vl.declaration.flightinfo.gliderid,
                      sizeof(vl.declaration.flightinfo.gliderid),
-		     decl->AircraftRego);
+		     decl->AircraftReg);
 
   CopyToNarrowBuffer(vl.declaration.flightinfo.glidertype,
                      sizeof(vl.declaration.flightinfo.glidertype),

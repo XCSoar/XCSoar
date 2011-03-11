@@ -56,7 +56,8 @@ struct Declaration {
 
   StaticString<64> PilotName;
   StaticString<32> AircraftType;
-  StaticString<32> AircraftRego;
+  StaticString<32> AircraftReg;
+  StaticString<8> CompetitionId;
   std::vector<TurnPoint> TurnPoints;
 
   Declaration(const OrderedTask* task);

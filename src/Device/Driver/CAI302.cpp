@@ -417,7 +417,7 @@ DeclareInner(Port *port, const Declaration *decl,
   char PilotName[25], GliderType[13], GliderID[13];
   convert_string(PilotName, sizeof(PilotName), decl->PilotName);
   convert_string(GliderType, sizeof(GliderType), decl->AircraftType);
-  convert_string(GliderID, sizeof(GliderID), decl->AircraftRego);
+  convert_string(GliderID, sizeof(GliderID), decl->AircraftReg);
 
   char szTmp[255];
   sprintf(szTmp, "O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r",

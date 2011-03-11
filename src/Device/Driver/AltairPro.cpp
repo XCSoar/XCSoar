@@ -134,7 +134,7 @@ AltairProDevice::DeclareInternal(const struct Declaration *decl)
   if (!PropertySetGet(port, Buffer, dim(Buffer)))
     return false;
 
-  _stprintf(Buffer, _T("PDVSC,S,GliderID,%s"), decl->AircraftRego.c_str());
+  _stprintf(Buffer, _T("PDVSC,S,GliderID,%s"), decl->AircraftReg.c_str());
   if (!PropertySetGet(port, Buffer, dim(Buffer)))
     return false;
 

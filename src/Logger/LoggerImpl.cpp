@@ -416,7 +416,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     Profile::GetDeviceConfig(0, device_config);
 
   writer->header(gps_info.DateTime,
-                 decl.PilotName, decl.AircraftType, decl.AircraftRego,
+                 decl.PilotName, decl.AircraftType, decl.AircraftReg,
                  strAssetNumber, device_config.driver_name);
 
   if (decl.size()) {

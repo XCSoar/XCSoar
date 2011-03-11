@@ -130,7 +130,7 @@ EWDevice::DeclareInner(const struct Declaration *decl,
   char sPilot[13], sGliderType[9], sGliderID[9];
   convert_string(sPilot, sizeof(sPilot), decl->PilotName);
   convert_string(sGliderType, sizeof(sGliderType), decl->AircraftType);
-  convert_string(sGliderID, sizeof(sGliderID), decl->AircraftRego);
+  convert_string(sGliderID, sizeof(sGliderID), decl->AircraftReg);
 
   // build string (field 4-5 are GPS info, no idea what to write)
   sprintf(sTmp, "%-12s%-8s%-8s%-12s%-12s%-6s\r",
