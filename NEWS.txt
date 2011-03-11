@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.0.7 - not yet released
+Version 6.0.7 - 2011/03/12
 * devices
   - EW microRecorder: timeout during connect
   - EW microRecorder: increase RX timeout
