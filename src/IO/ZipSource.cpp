@@ -47,7 +47,7 @@ ZipSource::ZipSource(const TCHAR *path)
 {
   char narrow_path[4096];
 
-  int length = WideCharToMultiByte(CP_UTF8, 0, path, -1,
+  int length = WideCharToMultiByte(CP_ACP, 0, path, -1,
                                    narrow_path, sizeof(narrow_path), NULL, NULL);
   if (length == 0)
     return;
