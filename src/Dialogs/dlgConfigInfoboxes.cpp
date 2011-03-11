@@ -36,12 +36,14 @@ Copyright_License {
 
 #include <assert.h>
 #include <cstdio>
+#include <algorithm>
 
 static bool changed = false;
 static WndForm *wf = NULL;
 static WndButton *buttonCopy = NULL;
 static WndButton *buttonPaste = NULL;
-static int cpyInfoBox[10];
+static InfoBoxPanelConfig clipboard;
+static unsigned clipboard_size;
 static unsigned panel;
 
 static void
@@ -64,24 +66,32 @@ OnCopy(gcc_unused WndButton &button)
   for (unsigned item = 0; item < InfoBoxManager::layout.count; item++) {
     WndProperty *wp = FindInfoBoxField(item);
     if (wp)
-      cpyInfoBox[item] = wp->GetDataField()->GetAsInteger();
+      clipboard.infoBoxID[item] = wp->GetDataField()->GetAsInteger();
   }
+
+  clipboard_size = InfoBoxManager::layout.count;
 }
 
 static void
 OnPaste(gcc_unused WndButton &button)
 {
+  if (clipboard_size == 0)
+    return;
+
   if(MessageBoxX(_("Overwrite?"), _("InfoBox paste"),
                  MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
-  for (unsigned item = 0; item < InfoBoxManager::layout.count; item++) {
+  unsigned count = std::min(InfoBoxManager::layout.count, clipboard_size);
+  for (unsigned item = 0; item < count; item++) {
+    unsigned content = clipboard.infoBoxID[item];
+    if (content >= InfoBoxFactory::NUM_TYPES)
+      continue;
+
     WndProperty *wp = FindInfoBoxField(item);
-    if (wp &&
-        cpyInfoBox[item] >= 0 &&
-        (unsigned)cpyInfoBox[item] < InfoBoxFactory::NUM_TYPES) {
+    if (wp != NULL) {
       DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
-      dfe->Set(cpyInfoBox[item]);
+      dfe->Set(content);
       wp->RefreshDisplay();
     }
   }
@@ -169,14 +179,6 @@ void dlgConfigInfoboxesShowModal(unsigned _panel)
   wf->SetCaption(caption);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
-
-  static bool first = true;
-  if (first) {
-    first = false;
-
-    for (int item = 0; item < 10; item++)
-      cpyInfoBox[item] = -1;
-  }
 
   buttonCopy = ((WndButton *)wf->FindByName(_T("cmdCopy")));
   if (buttonCopy)
