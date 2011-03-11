@@ -284,7 +284,7 @@ type=key
 data=6
 event=Calculator
 event=Mode default
-label=Task$(CheckTaskResumed)
+label=Task
 location=5
 
 #mode=Nav1
