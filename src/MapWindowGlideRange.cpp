@@ -97,6 +97,7 @@ void
 MapWindow::DrawTerrainAbove(Canvas &canvas)
 {
   if (Basic().gps.NAVWarning
+      || !Calculated().flight.Flying
       || !SettingsComputer().FinalGlideTerrain
       || !task)
     return;
@@ -164,7 +165,6 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   }
 
   if ((SettingsComputer().FinalGlideTerrain != 2)
-      || !Calculated().flight.Flying
       || SettingsMap().EnablePan)
     return;
 
