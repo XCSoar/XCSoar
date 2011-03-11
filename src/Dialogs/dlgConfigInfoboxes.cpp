@@ -102,12 +102,13 @@ OnInfoBoxHelp(WindowControl * Sender)
   TCHAR caption[100];
   _stprintf(caption, _T("%s: %s"), _("InfoBox"), gettext(name));
 
-  const TCHAR* text = InfoBoxFactory::GetDescription(type);
-  if (text)
-    dlgHelpShowModal(XCSoarInterface::main_window, caption, gettext(text));
+  const TCHAR *text = InfoBoxFactory::GetDescription(type);
+  if (text == NULL)
+    text = _("No help available on this item");
   else
-    dlgHelpShowModal(XCSoarInterface::main_window, caption,
-                     _("No help available on this item"));
+    text = gettext(text);
+
+  dlgHelpShowModal(XCSoarInterface::main_window, caption, text);
 }
 
 static CallBackTableEntry CallBackTable[] = {
