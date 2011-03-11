@@ -87,9 +87,7 @@ OnPaste(gcc_unused WndButton &button)
   }
 }
 
-extern void OnInfoBoxHelp(WindowControl * Sender);
-
-void
+static void
 OnInfoBoxHelp(WindowControl * Sender)
 {
   WndProperty *wp = (WndProperty*)Sender;

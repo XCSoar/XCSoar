@@ -180,8 +180,6 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
   }
 }
 
-extern void OnInfoBoxHelp(WindowControl * Sender);
-
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceColoursClicked),
   DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceModeClicked),
@@ -189,7 +187,6 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(DevicesConfigPanel::OnSetupDeviceAClicked),
   DeclareCallBackEntry(DevicesConfigPanel::OnSetupDeviceBClicked),
-  DeclareCallBackEntry(OnInfoBoxHelp),
   DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAData),
   DeclareCallBackEntry(DevicesConfigPanel::OnDeviceBData),
   DeclareCallBackEntry(PolarConfigPanel::OnLoadInteral),
