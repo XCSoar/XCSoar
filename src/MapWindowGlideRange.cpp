@@ -117,6 +117,71 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   if (visitor.fans.empty())
     return;
 
+  // @todo: update this rendering
+
+  // Don't draw shade if
+  // .. shade feature disabled
+  // .. pan mode activated
+  if (SettingsComputer().FinalGlideTerrain == 2 || !SettingsMap().EnablePan) {
+
+#ifdef ENABLE_OPENGL
+
+    glEnable(GL_STENCIL_TEST);
+    glClear(GL_STENCIL_BUFFER_BIT);
+
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+    glStencilFunc(GL_ALWAYS, 1, 1);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+    canvas.null_pen();
+    canvas.white_brush();
+    for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+         i != visitor.fans.end(); ++i)
+      canvas.polygon(&(*i)[0], i->size());
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glStencilFunc(GL_NOTEQUAL, 1, 1);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glColor4f(1.0, 1.0, 1.0, 0.3);
+    GLFillRectangle(0, 0, canvas.get_width(), canvas.get_height());
+
+    glDisable(GL_BLEND);
+    glDisable(GL_STENCIL_TEST);
+
+#elif !defined(ENABLE_SDL)
+
+    // Get a buffer for drawing a mask
+    Canvas &buffer = buffer_canvas;
+
+    // Set the pattern colors
+    buffer.set_background_color(Color::WHITE);
+    buffer.set_text_color(Color(0xf0, 0xf0, 0xf0));
+
+    // Paint the whole buffer canvas with a pattern brush (small dots)
+    buffer.clear(Graphics::hAboveTerrainBrush);
+
+    // Select a white brush (will later be transparent)
+    buffer.null_pen();
+    buffer.white_brush();
+
+    // Draw the TerrainLine polygons to remove the
+    // brush pattern from the polygon areas
+    for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+         i != visitor.fans.end(); ++i)
+      buffer.polygon(&(*i)[0], i->size());
+
+    // Copy everything non-white to the buffer
+    canvas.copy_transparent_white(buffer);
+
+#endif
+
+  }
+
   {
 
 #ifdef ENABLE_OPENGL
@@ -179,71 +244,6 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
 #endif
   }
-
-  // Don't draw shade if
-  // .. shade feature disabled
-  // .. pan mode activated
-  if ((SettingsComputer().FinalGlideTerrain != 2)
-      || SettingsMap().EnablePan)
-    return;
-
-  // @todo: update this rendering
-
-#ifdef ENABLE_OPENGL
-
-  glEnable(GL_STENCIL_TEST);
-  glClear(GL_STENCIL_BUFFER_BIT);
-
-  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-
-  glStencilFunc(GL_ALWAYS, 1, 1);
-  glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
-  canvas.null_pen();
-  canvas.white_brush();
-  for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
-       i != visitor.fans.end(); ++i)
-    canvas.polygon(&(*i)[0], i->size());
-
-  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-  glStencilFunc(GL_NOTEQUAL, 1, 1);
-  glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-  glColor4f(1.0, 1.0, 1.0, 0.3);
-  GLFillRectangle(0, 0, canvas.get_width(), canvas.get_height());
-
-  glDisable(GL_BLEND);
-  glDisable(GL_STENCIL_TEST);
-
-#elif !defined(ENABLE_SDL)
-
-  // Get a buffer for drawing a mask
-  Canvas &buffer = buffer_canvas;
-
-  // Set the pattern colors
-  buffer.set_background_color(Color::WHITE);
-  buffer.set_text_color(Color(0xf0, 0xf0, 0xf0));
-
-  // Paint the whole buffer canvas with a pattern brush (small dots)
-  buffer.clear(Graphics::hAboveTerrainBrush);
-
-  // Select a white brush (will later be transparent)
-  buffer.null_pen();
-  buffer.white_brush();
-
-  // Draw the TerrainLine polygons to remove the
-  // brush pattern from the polygon areas
-  for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
-       i != visitor.fans.end(); ++i)
-    buffer.polygon(&(*i)[0], i->size());
-
-  // Copy everything non-white to the buffer
-  canvas.copy_transparent_white(buffer);
-
-#endif
 }
 
 
