@@ -96,6 +96,11 @@ private:
 void
 MapWindow::DrawTerrainAbove(Canvas &canvas)
 {
+  // Don't draw at all if
+  // .. no GPS fix
+  // .. not flying
+  // .. feature disabled
+  // .. feature inaccessible
   if (Basic().gps.NAVWarning
       || !Calculated().flight.Flying
       || !SettingsComputer().FinalGlideTerrain
@@ -142,28 +147,42 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
 #elif !defined(ENABLE_SDL)
 
+  // Get a buffer for drawing a mask
   Canvas &buffer = buffer_canvas;
 
+  // Paint the whole buffer canvas white ( = transparent)
   buffer.clear_white();
 
+  // Select the TerrainLine pen
   buffer.hollow_brush();
   buffer.select(Graphics::hpTerrainLine);
+
+  // Draw the TerrainLine polygons
   for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
        i != visitor.fans.end(); ++i)
     buffer.polygon(&(*i)[0], i->size());
 
-
+  // Select a white brush (will later be transparent)
   buffer.null_pen();
   buffer.white_brush();
+
+  // Draw the TerrainLine polygons again to remove
+  // the lines connecting all the polygons
+  //
+  // This removes half of the TerrainLine line width !!
   for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
        i != visitor.fans.end(); ++i)
     buffer.polygon(&(*i)[0], i->size());
 
+  // Copy everything non-white to the buffer
   canvas.copy_transparent_white(buffer);
 
 #endif
   }
 
+  // Don't draw shade if
+  // .. shade feature disabled
+  // .. pan mode activated
   if ((SettingsComputer().FinalGlideTerrain != 2)
       || SettingsMap().EnablePan)
     return;
@@ -201,18 +220,27 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
 #elif !defined(ENABLE_SDL)
 
+  // Get a buffer for drawing a mask
   Canvas &buffer = buffer_canvas;
 
+  // Set the pattern colors
   buffer.set_background_color(Color::WHITE);
   buffer.set_text_color(Color(0xf0, 0xf0, 0xf0));
+
+  // Paint the whole buffer canvas with a pattern brush (small dots)
   buffer.clear(Graphics::hAboveTerrainBrush);
 
+  // Select a white brush (will later be transparent)
   buffer.null_pen();
   buffer.white_brush();
+
+  // Draw the TerrainLine polygons to remove the
+  // brush pattern from the polygon areas
   for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
        i != visitor.fans.end(); ++i)
     buffer.polygon(&(*i)[0], i->size());
 
+  // Copy everything non-white to the buffer
   canvas.copy_transparent_white(buffer);
 
 #endif
