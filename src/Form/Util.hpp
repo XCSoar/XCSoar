@@ -95,6 +95,10 @@ bool
 SaveFormProperty(WndForm &form, const TCHAR *control_name, double &value);
 #endif
 
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, fixed &value);
+
 /**
  * Saves a form value into a variable and into the registry.
  *

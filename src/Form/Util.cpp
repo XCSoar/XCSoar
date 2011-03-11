@@ -334,11 +334,9 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, fixed &value,
-                 const TCHAR *registry_name)
+                 UnitGroup_t unit_group, fixed &value)
 {
   assert(control_name != NULL);
-  assert(registry_name != NULL);
 
   fixed new_value = GetFormValueFixed(form, control_name);
   Units_t unit = Units::GetUserUnitByGroup(unit_group);
@@ -347,6 +345,19 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
     return false;
 
   value = new_value;
-  Profile::Set(registry_name, new_value);
+  return true;
+}
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 UnitGroup_t unit_group, fixed &value,
+                 const TCHAR *registry_name)
+{
+  assert(registry_name != NULL);
+
+  if (!SaveFormProperty(form, control_name, unit_group, value))
+    return false;
+
+  Profile::Set(registry_name, value);
   return true;
 }
