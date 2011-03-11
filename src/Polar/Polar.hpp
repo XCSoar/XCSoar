@@ -53,7 +53,7 @@ struct SimplePolar
   double v_no;         /**< Maximum speed for normal operations */
 
   bool ReadString(const TCHAR* line);
-  void GetString(TCHAR* line, size_t size) const;
+  void GetString(TCHAR* line, size_t size, bool include_v_no = false) const;
 
   /**
    * Converts a WinPilot based SimplePolar to a XCSoar based GlidePolar

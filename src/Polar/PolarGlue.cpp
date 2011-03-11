@@ -142,7 +142,7 @@ void
 PolarGlue::SaveToProfile(const SimplePolar &polar)
 {
   TCHAR polar_string[255];
-  polar.GetString(polar_string, 255);
+  polar.GetString(polar_string, 255, true);
   Profile::Set(szProfilePolar, polar_string);
 }
 

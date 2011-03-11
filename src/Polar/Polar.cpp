@@ -99,10 +99,14 @@ SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
 }
 
 void
-SimplePolar::GetString(TCHAR* line, size_t size) const
+SimplePolar::GetString(TCHAR* line, size_t size, bool include_v_no) const
 {
-  _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
-             dry_mass, max_ballast, v1, w1, v2, w2, v3, w3, wing_area);
+  if (include_v_no)
+    _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
+               dry_mass, max_ballast, v1, w1, v2, w2, v3, w3, wing_area, v_no);
+  else
+    _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
+               dry_mass, max_ballast, v1, w1, v2, w2, v3, w3, wing_area);
 }
 
 bool
