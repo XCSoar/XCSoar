@@ -36,7 +36,7 @@ namespace PolarConfigPanel
 
   void Activate(bool active);
 
-  void OnLoadInteral(WndButton &button);
+  void OnLoadInternal(WndButton &button);
   void OnLoadFromFile(WndButton &button);
   void OnExport(WndButton &button);
   void OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mode);

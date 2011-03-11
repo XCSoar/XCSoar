@@ -6,7 +6,7 @@
   <Button Name="cmdFonts" Caption="Fonts" X="5" Y="130" Width="60" Height="28"/>
   <Button Name="cmdWaypoints" Caption="Waypts." X="5" Y="130" Width="60" Height="28"/>
 
-  <Button Name="cmdLoadInternalPolar" Caption="List" X="5" Y="40" Width="60" Height="28" OnClick="PolarConfigPanel::OnLoadInteral" />
+  <Button Name="cmdLoadInternalPolar" Caption="List" X="5" Y="40" Width="60" Height="28" OnClick="PolarConfigPanel::OnLoadInternal" />
   <Button Name="cmdLoadPolarFile" Caption="Import" X="5" Y="70" Width="60" Height="28" OnClick="PolarConfigPanel::OnLoadFromFile" />
   <Button Name="cmdSavePolarFile" Caption="Export" X="5" Y="100" Width="60" Height="28" OnClick="PolarConfigPanel::OnExport" />
 

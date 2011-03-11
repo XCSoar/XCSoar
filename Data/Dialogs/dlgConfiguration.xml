@@ -12,7 +12,7 @@
 
   <Button Name="cmdLoadPolarFile" Caption="Import" X="113" Y="240" Width="60" Height="28" OnClick="PolarConfigPanel::OnLoadFromFile" />
   <Button Name="cmdSavePolarFile" Caption="Export" X="175" Y="240" Width="60" Height="28" OnClick="PolarConfigPanel::OnExport" />
-  <Button Name="cmdLoadInternalPolar" Caption="List" X="175" Y="270" Width="60" Height="28" OnClick="PolarConfigPanel::OnLoadInteral" />
+  <Button Name="cmdLoadInternalPolar" Caption="List" X="175" Y="270" Width="60" Height="28" OnClick="PolarConfigPanel::OnLoadInternal" />
 
   <Tabbed Name="tabbed" X="0" Y="0" Width="0" Height="222">
     <Panel Name="frmSite">

@@ -118,7 +118,7 @@ UpdatePolarInvalidLabel()
 }
 
 void
-PolarConfigPanel::OnLoadInteral(WndButton &button)
+PolarConfigPanel::OnLoadInternal(WndButton &button)
 {
   ComboList list;
   unsigned len = PolarStore::Count();

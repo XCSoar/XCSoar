@@ -189,7 +189,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(DevicesConfigPanel::OnSetupDeviceBClicked),
   DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAData),
   DeclareCallBackEntry(DevicesConfigPanel::OnDeviceBData),
-  DeclareCallBackEntry(PolarConfigPanel::OnLoadInteral),
+  DeclareCallBackEntry(PolarConfigPanel::OnLoadInternal),
   DeclareCallBackEntry(PolarConfigPanel::OnLoadFromFile),
   DeclareCallBackEntry(PolarConfigPanel::OnExport),
   DeclareCallBackEntry(PolarConfigPanel::OnFieldData),
