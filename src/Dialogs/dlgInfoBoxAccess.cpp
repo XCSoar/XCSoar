@@ -39,7 +39,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-static SingleWindow *parent_window;
 static WndForm *wf = NULL;
 
 static TabBarControl* wTabBar = NULL;
@@ -60,8 +59,6 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
 {
   // check for another instance of this window
   if (dlgInfoBoxAccess::GetWindowForm() != NULL) return;
-
-  parent_window = &parent;
 
   InfoBoxContent::InfoBoxDlgContent *dlgContent;
   dlgContent = InfoBoxManager::GetInfoBoxDlgContent(id);

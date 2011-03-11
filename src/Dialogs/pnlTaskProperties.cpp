@@ -33,7 +33,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-static SingleWindow *parent_window;
 static WndForm *wf = NULL;
 static OrderedTask* ordered_task = NULL;
 static WndOwnerDrawFrame* wTaskView = NULL;
@@ -260,7 +259,6 @@ Window*
 pnlTaskProperties::Load(SingleWindow &parent, TabBarControl* wTabBar,
                         WndForm* _wf, OrderedTask** task, bool* _task_modified)
 {
-  parent_window = &parent;
   ordered_task_pointer = task;
   ordered_task = *ordered_task_pointer;;
 

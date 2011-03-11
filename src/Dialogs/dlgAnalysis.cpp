@@ -61,7 +61,6 @@ static WndOwnerDrawFrame *wGrid = NULL;
 static WndFrame *wInfo;
 static WndButton *wCalc = NULL;
 static CrossSectionWindow *csw = NULL;
-static SingleWindow *parent = NULL;
 
 static void
 SetCalcVisibility(const bool visible)
@@ -384,7 +383,7 @@ OnCalcClicked(WndButton &Sender)
   }
 
   if (page == ANALYSIS_PAGE_AIRSPACE)
-    dlgAirspaceWarningsShowModal(*parent);
+    dlgAirspaceWarningsShowModal(wf->GetMainWindow());
 
   Update();
 }
@@ -420,20 +419,18 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgAnalysisShowModal(SingleWindow &_parent, int _page)
+dlgAnalysisShowModal(SingleWindow &parent, int _page)
 {
   wf = NULL;
   wGrid = NULL;
   wInfo = NULL;
   wCalc = NULL;
 
-  wf = LoadDialog(CallBackTable, _parent,
+  wf = LoadDialog(CallBackTable, parent,
                   Layout::landscape ? _T("IDR_XML_ANALYSIS_L") :
                                       _T("IDR_XML_ANALYSIS"));
   if (!wf)
     return;
-
-  parent = &_parent;
 
   wf->SetKeyDownNotify(FormKeyDown);
 

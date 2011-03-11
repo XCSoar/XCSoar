@@ -31,7 +31,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-static SingleWindow *parent_window;
 static WndForm *wf = NULL;
 static WndListFrame* wPointTypes = NULL;
 static bool task_modified = false;
@@ -125,7 +124,7 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type)
         way_point = &(ordered_task->get_tp(0)->get_waypoint());
       else
         way_point =
-            dlgWayPointSelect(*parent_window,
+          dlgWayPointSelect(wf->GetMainWindow(),
                               ordered_task->task_size() > 0 ?
                               ordered_task->get_tp(ordered_task->
                                   task_size() - 1)->get_location() :
@@ -193,7 +192,6 @@ bool
 dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
 {
   ordered_task = *task;
-  parent_window = &parent;
   task_modified = false;
   active_index = index;
 

@@ -42,7 +42,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-static SingleWindow *parent_window;
 static WndForm *wf = NULL;
 static WndFrame* wTaskView = NULL;
 static OrderedTask* ordered_task = NULL;
@@ -423,7 +422,7 @@ OnDetailsClicked(WndButton &Sender)
 {
   OrderedTaskPoint* task_point = ordered_task->get_tp(active_index);
   if (task_point)
-    dlgWayPointDetailsShowModal(*parent_window, task_point->get_waypoint(), false);
+    dlgWayPointDetailsShowModal(wf->GetMainWindow(), task_point->get_waypoint(), false);
 }
 
 static void
@@ -432,7 +431,7 @@ OnRelocateClicked(WndButton &Sender)
   const GeoPoint &gpBearing = (active_index ?
                                ordered_task->get_tp(active_index - 1)->get_location() :
                                XCSoarInterface::Basic().Location);
-  const Waypoint *wp = dlgWayPointSelect(*parent_window, gpBearing);
+  const Waypoint *wp = dlgWayPointSelect(wf->GetMainWindow(), gpBearing);
   if (wp == NULL)
     return;
 
@@ -444,7 +443,7 @@ OnRelocateClicked(WndButton &Sender)
 static void
 OnTypeClicked(WndButton &Sender)
 {
-  if (dlgTaskPointType(*parent_window, &ordered_task, active_index)) {
+  if (dlgTaskPointType(wf->GetMainWindow(), &ordered_task, active_index)) {
     task_modified = true;
     RefreshView();
   }
@@ -477,7 +476,7 @@ OnNextClicked(WndButton &Sender)
 static void
 OnOptionalStartsClicked(WndButton &Sender)
 {
-  if (dlgTaskOptionalStarts(*parent_window, &ordered_task)) {
+  if (dlgTaskOptionalStarts(wf->GetMainWindow(), &ordered_task)) {
     task_modified =true;
     RefreshView();
   }
@@ -546,7 +545,6 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
                       const unsigned index)
 {
   ordered_task = *task;
-  parent_window = &parent;
   task_modified = false;
   active_index = index;
 

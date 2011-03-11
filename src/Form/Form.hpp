@@ -153,6 +153,14 @@ protected:
   void UpdateLayout();
 
 public:
+  /**
+   * Returns a reference to the main window.  This is used by dialogs
+   * when they want to open another dialog.
+   */
+  SingleWindow &GetMainWindow() {
+    return main_window;
+  }
+
   ContainerWindow &GetClientAreaWindow(void);
 
   unsigned GetTitleHeight() const {

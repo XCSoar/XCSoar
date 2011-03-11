@@ -34,7 +34,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-static SingleWindow *parent_window;
 static WndForm* wf = NULL;
 static TabBarControl* wTabBar = NULL;
 static WndOwnerDrawFrame* wTaskView = NULL;
@@ -161,7 +160,7 @@ void
 pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
 {
   if (ItemIndex < ordered_task->task_size()) {
-    if (dlgTaskPointShowModal(*parent_window, &ordered_task, ItemIndex)) {
+    if (dlgTaskPointShowModal(wf->GetMainWindow(), &ordered_task, ItemIndex)) {
       *task_modified = true;
       RefreshView();
     }
@@ -173,7 +172,7 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
     ordered_task->get_ordered_task_behaviour() =
         XCSoarInterface::SetSettingsComputer().ordered_defaults;
     const Waypoint* way_point =
-        dlgWayPointSelect(*parent_window,
+      dlgWayPointSelect(wf->GetMainWindow(),
                           ordered_task->task_size() > 0 ?
                           ordered_task->get_tp(ordered_task->
                               task_size() - 1)->get_location() :
@@ -324,8 +323,6 @@ pnlTaskEdit::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
 
   assert(_task_modified);
   task_modified = _task_modified;
-
-  parent_window = &parent;
 
   Window *wTps =
       LoadWindow(dlgTaskManager::CallBackTable, wf, *wTabBar,

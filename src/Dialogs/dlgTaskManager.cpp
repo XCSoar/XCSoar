@@ -42,7 +42,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-static SingleWindow *parent_window;
 static WndForm *wf = NULL;
 
 static TabBarControl* wTabBar = NULL;
@@ -210,7 +209,6 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   if (protected_task_manager == NULL)
     return;
 
-  parent_window = &parent;
   wf = LoadDialog(CallBackTable, parent,
                   Layout::landscape ?
                   _T("IDR_XML_TASKMANAGER_L") : _T("IDR_XML_TASKMANAGER"));
