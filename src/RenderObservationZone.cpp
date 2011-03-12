@@ -183,8 +183,17 @@ RenderObservationZone::Draw(Canvas &canvas, const Projection &projection,
   }
 
   case ObservationZonePoint::ANNULAR_SECTOR: {
-    //const AnnularSectorZone &oz = (const AnnularSectorZone &)_oz;
+#ifdef ENABLE_OPENGL
+    const AnnularSectorZone &oz = (const AnnularSectorZone &)_oz;
+    RasterPoint p_center = projection.GeoToScreen(oz.get_location());
+    canvas.annulus(p_center.x, p_center.y,
+                   projection.GeoToScreenDistance(oz.getInnerRadius()),
+                   projection.GeoToScreenDistance(oz.getRadius()),
+                   oz.getStartRadial() - projection.GetScreenAngle(),
+                   oz.getEndRadial() - projection.GetScreenAngle());
+#else
     assert(0); // not implemented
+#endif
   }
 
   }
