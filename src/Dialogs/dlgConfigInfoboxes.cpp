@@ -58,14 +58,19 @@ FindInfoBoxField(int item)
 }
 
 static void
-OnCopy(gcc_unused WndButton &button)
+FormToPanelConfig(InfoBoxPanelConfig &config)
 {
   for (unsigned item = 0; item < InfoBoxManager::layout.count; item++) {
     WndProperty *wp = FindInfoBoxField(item);
     if (wp)
-      clipboard.infoBoxID[item] = wp->GetDataField()->GetAsInteger();
+      config.infoBoxID[item] = wp->GetDataField()->GetAsInteger();
   }
+}
 
+static void
+OnCopy(gcc_unused WndButton &button)
+{
+  FormToPanelConfig(clipboard);
   clipboard_size = InfoBoxManager::layout.count;
 }
 
