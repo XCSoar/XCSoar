@@ -21,7 +21,12 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Internal.hpp"
+#include "Dialogs/dlgConfigInfoboxes.hpp"
+#include "Dialogs/Message.hpp"
+#include "Dialogs/Dialogs.h"
+#include "Form/Form.hpp"
+#include "Form/Button.hpp"
+#include "Form/Edit.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Screen/Layout.hpp"
 #include "DataField/Enum.hpp"
@@ -29,6 +34,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
+#include "Compiler.h"
 
 #include <assert.h>
 #include <cstdio>

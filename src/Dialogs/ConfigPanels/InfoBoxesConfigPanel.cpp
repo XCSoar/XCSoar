@@ -34,6 +34,7 @@ Copyright_License {
 #include "InfoBoxesConfigPanel.hpp"
 #include "LogFile.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Dialogs/dlgConfigInfoboxes.hpp"
 
 static WndForm* wf = NULL;
 
