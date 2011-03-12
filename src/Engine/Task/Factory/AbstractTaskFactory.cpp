@@ -32,6 +32,7 @@
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
+#include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 #include <algorithm>
@@ -69,6 +70,11 @@ public:
   }
   void
   Visit(const SectorZone& oz)
+  {
+    ozUserSize = oz.getRadius();
+  }
+  void
+  Visit(const AnnularSectorZone& oz)
   {
     ozUserSize = oz.getRadius();
   }
@@ -233,6 +239,7 @@ AbstractTaskFactory::getType(const OrderedTaskPoint &point) const
     case ObservationZonePoint::KEYHOLE:
     case ObservationZonePoint::BGAFIXEDCOURSE:
     case ObservationZonePoint::BGAENHANCEDOPTION:
+    case ObservationZonePoint::ANNULAR_SECTOR:
       return START_CYLINDER;
 
     case ObservationZonePoint::BGA_START:
@@ -250,7 +257,8 @@ AbstractTaskFactory::getType(const OrderedTaskPoint &point) const
     case ObservationZonePoint::BGA_START:
     case ObservationZonePoint::LINE:
       return AAT_SEGMENT;
-
+    case ObservationZonePoint::ANNULAR_SECTOR:
+      return AAT_ANNULAR_SECTOR;
     case ObservationZonePoint::CYLINDER:
       return AAT_CYLINDER;
     } 
@@ -274,6 +282,7 @@ AbstractTaskFactory::getType(const OrderedTaskPoint &point) const
     case ObservationZonePoint::CYLINDER:
     case ObservationZonePoint::SECTOR:
     case ObservationZonePoint::LINE:
+    case ObservationZonePoint::ANNULAR_SECTOR:
       return AST_CYLINDER;
     } 
     break;
@@ -292,6 +301,7 @@ AbstractTaskFactory::getType(const OrderedTaskPoint &point) const
     case ObservationZonePoint::KEYHOLE:
     case ObservationZonePoint::BGAFIXEDCOURSE:
     case ObservationZonePoint::BGAENHANCEDOPTION:
+    case ObservationZonePoint::ANNULAR_SECTOR:
       return FINISH_CYLINDER;
     } 
     break;
@@ -373,6 +383,8 @@ AbstractTaskFactory::createPoint(const LegalPointType_t type,
     return createAAT(new CylinderZone(wp.Location, turnpoint_radius), wp);
   case AAT_SEGMENT:
     return createAAT(new SectorZone(wp.Location, turnpoint_radius), wp);
+  case AAT_ANNULAR_SECTOR:
+    return createAAT(new AnnularSectorZone(wp.Location, turnpoint_radius), wp);
   case FINISH_SECTOR:
     return createFinish(new FAISectorZone(wp.Location, false), wp);
   case FINISH_LINE:
@@ -672,7 +684,9 @@ AbstractTaskFactory::validAbstractType(LegalAbstractPointType_t type,
        || validIntermediateType(BGAENHANCEDOPTION_SECTOR));
   case POINT_AAT:
     return is_intermediate &&
-      (validIntermediateType(AAT_CYLINDER) || validIntermediateType(AAT_SEGMENT));
+      (validIntermediateType(AAT_CYLINDER)
+       || validIntermediateType(AAT_SEGMENT)
+       || validIntermediateType(AAT_ANNULAR_SECTOR));
   };
   return false;
 }
@@ -828,6 +842,7 @@ AbstractTaskFactory::validateFAIOZs()
     case  BGAENHANCEDOPTION_SECTOR:
     case  AAT_CYLINDER:
     case  AAT_SEGMENT:
+    case  AAT_ANNULAR_SECTOR:
       valid = false;
       break;
 

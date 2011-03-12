@@ -84,6 +84,7 @@ FAITaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
   case KEYHOLE_SECTOR:
   case BGAFIXEDCOURSE_SECTOR:
   case BGAENHANCEDOPTION_SECTOR:
+  case AAT_ANNULAR_SECTOR:
   case AAT_SEGMENT:
     newtype = FAI_SECTOR;
     break;
@@ -131,6 +132,7 @@ FAITaskFactory::getPointDefaultSizes(const LegalPointType_t type,
   case AST_CYLINDER:
   case AAT_CYLINDER:
   case AAT_SEGMENT:
+  case AAT_ANNULAR_SECTOR:
   case FINISH_SECTOR:
   case FINISH_CYLINDER:
   case START_BGA:

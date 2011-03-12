@@ -187,7 +187,6 @@ protected:
   /** Location of far end point of end radial */
   GeoPoint SectorEnd;
 
-private:
   Angle StartRadial;
   Angle EndRadial;
 };

@@ -31,6 +31,7 @@
 #include "Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/BGAStartSectorZone.hpp"
+#include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "DataNode.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -128,10 +129,18 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
 
     return ls;
   } else if (_tcscmp(type.c_str(), _T("Sector")) == 0) {
-    SectorZone *ls = new SectorZone(wp.Location);
 
-    fixed radius;
+    fixed radius, inner_radius;
     Angle start, end;
+    SectorZone *ls;
+
+    if (m_node.get_attribute(_T("inner_radius"), inner_radius)) {
+      AnnularSectorZone *als = new AnnularSectorZone(wp.Location);
+      als->setInnerRadius(inner_radius);
+      ls = als;
+    } else
+      ls = new SectorZone(wp.Location);
+
     if (m_node.get_attribute(_T("radius"), radius))
       ls->setRadius(radius);
     if (m_node.get_attribute(_T("start_radial"), start))

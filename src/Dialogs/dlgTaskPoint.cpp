@@ -34,6 +34,7 @@ Copyright_License {
 #include "Task/TaskPoints/FinishPoint.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
+#include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Gauge/TaskView.hpp"
@@ -122,6 +123,23 @@ public:
                      oz.getStartRadial().value_degrees());
     LoadFormProperty(*wf, _T("prpOZSectorFinishRadial"),
                      oz.getEndRadial().value_degrees());
+    WndProperty* wap = (WndProperty*)wf->FindByName(_T("prpOZSectorInnerRadius"));
+    if (wap) {
+      wap->hide();
+    }
+  }
+
+  void
+  Visit(const AnnularSectorZone& oz)
+  {
+    Visit((const SectorZone&)oz);
+    LoadFormProperty(*wf, _T("prpOZSectorInnerRadius"),
+                     ugDistance, oz.getInnerRadius());
+
+    WndProperty* wap = (WndProperty*)wf->FindByName(_T("prpOZSectorInnerRadius"));
+    if (wap) {
+      wap->show();
+    }
   }
 
   void
@@ -234,6 +252,19 @@ public:
     fixed finish_radial = GetFormValueFixed(*wf, _T("prpOZSectorFinishRadial"));
     if (finish_radial != oz.getEndRadial().value_degrees()) {
       oz.setEndRadial(Angle::degrees(finish_radial));
+      task_modified = true;
+    }
+  }
+
+  void
+  Visit(AnnularSectorZone& oz)
+  {
+    Visit((SectorZone&)oz);
+
+    fixed radius =
+      Units::ToSysDistance(GetFormValueFixed(*wf, _T("prpOZSectorInnerRadius")));
+    if (fabs(radius - oz.getInnerRadius()) > fixed(49)) {
+      oz.setInnerRadius(radius);
       task_modified = true;
     }
   }
@@ -507,6 +538,14 @@ OnOZSectorRadiusData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
+OnOZSectorInnerRadiusData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  if (!Refreshing)
+    ReadValues();
+  wTaskView->invalidate();
+}
+
+static void
 OnOZSectorStartRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   if (!Refreshing)
@@ -535,6 +574,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnOZLineLengthData),
   DeclareCallBackEntry(OnOZCylinderRadiusData),
   DeclareCallBackEntry(OnOZSectorRadiusData),
+  DeclareCallBackEntry(OnOZSectorInnerRadiusData),
   DeclareCallBackEntry(OnOZSectorStartRadialData),
   DeclareCallBackEntry(OnOZSectorFinishRadialData),
   DeclareCallBackEntry(NULL)

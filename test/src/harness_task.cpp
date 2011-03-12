@@ -47,6 +47,9 @@ public:
   virtual void Visit(const SectorZone& oz) {
     printf("# sector zone\n");
   }
+  virtual void Visit(const AnnularSectorZone& oz) {
+    printf("# annular sector zone\n");
+  }
   virtual void Visit(const LineSectorZone& oz) {
     printf("# line zone\n");
   }

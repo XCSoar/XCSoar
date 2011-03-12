@@ -49,6 +49,7 @@ public:
     BGAFIXEDCOURSE,
     BGAENHANCEDOPTION,
     BGA_START,
+    ANNULAR_SECTOR,
   };
 
   const enum shape shape;

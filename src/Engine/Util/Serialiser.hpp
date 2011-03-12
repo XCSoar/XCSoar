@@ -69,6 +69,7 @@ public:
   void Visit(const SectorZone& data);
   void Visit(const LineSectorZone& data);
   void Visit(const CylinderZone& data);
+  void Visit(const AnnularSectorZone& data);
 
 protected:
   /** 

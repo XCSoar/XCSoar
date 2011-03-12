@@ -106,6 +106,7 @@ public:
     FINISH_LINE,
     FINISH_CYLINDER,
     START_BGA,
+    AAT_ANNULAR_SECTOR,
   };
 
   /**
