@@ -26,26 +26,23 @@
 GeoPoint 
 SectorZone::get_boundary_parametric(fixed t) const
 {
-  const Angle half = StartRadial.HalfAngle(EndRadial);
-  const Angle angle = (half + Angle::radians(t * fixed_two_pi)).as_bearing();
-  if (angleInSector(angle))
-    return GeoVector(Radius, angle).end_point(get_location());
-
-  const fixed sweep = (Angle::radians(fixed_two_pi) -
-                       (EndRadial - StartRadial).as_bearing()).half().value_native();
-
-  const fixed d_start =
-      (StartRadial - angle).as_bearing().value_native() / sweep;
-  const fixed d_end =
-      (angle - EndRadial).as_bearing().value_native() / sweep;
-
-  if (d_start < d_end) {
-    return GeoVector(Radius * (fixed_one - d_start),
-                     StartRadial).end_point(get_location());
+  const Angle sweep = (EndRadial-StartRadial).as_bearing();
+  const fixed l = Radius;
+  const fixed c1 = sweep.value_radians()*Radius;
+  const fixed tt = t*(c1+2*l);
+  Angle a;
+  fixed d;
+  if (tt<l) {
+    d = (tt/l)*Radius;
+    a = StartRadial;
+  } else if (tt<l+c1) {
+    d = Radius;
+    a = StartRadial+Angle::radians(((tt-l)/c1)*sweep.value_radians());
   } else {
-    return GeoVector(Radius * (fixed_one - d_end),
-                     EndRadial).end_point(get_location());
+    d = Radius-(tt-l-c1)/l*Radius;
+    a = EndRadial;
   }
+  return GeoVector(d, a).end_point(get_location());
 }
 
 fixed 
