@@ -33,12 +33,6 @@ MapWaypointLabelListCompare(const void *elem1, const void *elem2)
   const WayPointLabelList::Label &e1 = *(const WayPointLabelList::Label *)elem1;
   const WayPointLabelList::Label &e2 = *(const WayPointLabelList::Label *)elem2;
 
-  if (e1.inTask && !e2.inTask)
-    return -1;
-
-  if (!e1.inTask && e2.inTask)
-    return 1;
-
   if (e1.isAirport && !e2.isAirport)
     return -1;
 
@@ -49,6 +43,18 @@ MapWaypointLabelListCompare(const void *elem1, const void *elem2)
     return -1;
 
   if (!e1.isLandable && e2.isLandable)
+    return 1;
+
+  if (e1.isWatchedWaypoint && !e2.isWatchedWaypoint)
+    return -1;
+
+  if (!e1.isWatchedWaypoint && e2.isWatchedWaypoint)
+    return 1;
+
+  if (e1.inTask && !e2.inTask)
+    return -1;
+
+  if (!e1.inTask && e2.inTask)
     return 1;
 
   if (e1.AltArivalAGL > e2.AltArivalAGL)
@@ -63,7 +69,7 @@ MapWaypointLabelListCompare(const void *elem1, const void *elem2)
 void
 WayPointLabelList::Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
                        int AltArivalAGL, bool inTask,
-                       bool isLandable, bool isAirport)
+                       bool isLandable, bool isAirport, bool isWatchedWaypoint)
 {
   if ((X < - WPCIRCLESIZE)
       || (X > (int)width + (WPCIRCLESIZE * 3))
@@ -84,6 +90,7 @@ WayPointLabelList::Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
   E->inTask = inTask;
   E->isLandable = isLandable;
   E->isAirport  = isAirport;
+  E->isWatchedWaypoint = isWatchedWaypoint;
 }
 
 void

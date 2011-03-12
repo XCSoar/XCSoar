@@ -129,11 +129,12 @@ public:
 
   void
   FormatLabel(TCHAR *buffer, const Waypoint &way_point,
-              int &arrival_height_glide, int &arrival_height_terrain)
+              int &arrival_height_glide, int &arrival_height_terrain,
+              bool show_negative_arrival_height_glide)
   {
     FormatTitle(buffer, way_point);
 
-    if (arrival_height_glide < 0)
+    if (arrival_height_glide < 0 && !show_negative_arrival_height_glide)
       return;
 
     if (settings_map.WaypointArrivalHeightDisplay == WP_ARRIVAL_HEIGHT_NONE)
@@ -209,6 +210,7 @@ public:
     bool reachable_terrain = false;
     int arrival_height_glide = 0;
     int arrival_height_terrain = 0;
+    bool watchedWaypoint = way_point.Flags.Watched;
 
     if (way_point.is_landable()) {
       CalculateReachability(way_point, reachable_glide, arrival_height_glide,
@@ -219,6 +221,10 @@ public:
                                            projection.GetScreenAngle());
     } else {
       // non landable turnpoint
+      if (watchedWaypoint)
+        CalculateReachability(way_point, reachable_glide, arrival_height_glide,
+                              reachable_terrain, arrival_height_terrain);
+
       const MaskedIcon *icon;
       if (projection.GetMapScale() > fixed(4000))
         icon = &Graphics::SmallIcon;
@@ -250,7 +256,7 @@ public:
     int pWayPointLabelSelection = settings_map.WayPointLabelSelection;
     if (pWayPointLabelSelection == wlsNoWayPoints)
       return;
-    if (!in_task && task_valid) {
+    if (!in_task && task_valid && !watchedWaypoint) {
       if (pWayPointLabelSelection == wlsTaskWayPoints)
         return;
       if (pWayPointLabelSelection == wlsTaskAndLandableWayPoints &&
@@ -265,10 +271,14 @@ public:
     } else if (in_task) {
       text_mode.Mode = OutlinedInverted;
       text_mode.Bold = true;
+    } else if (watchedWaypoint) {
+      text_mode.Mode = Outlined;
+      text_mode.Bold = false;
     }
 
     TCHAR Buffer[32];
-    FormatLabel(Buffer, way_point, arrival_height_glide, arrival_height_terrain);
+    FormatLabel(Buffer, way_point, arrival_height_glide, arrival_height_terrain,
+                watchedWaypoint);
 
     if (reachable_glide && (Appearance.IndLandable == wpLandableWinPilot ||
                             Appearance.UseSWLandablesRendering))
@@ -276,7 +286,8 @@ public:
       sc.x += 5;
 
     labels.Add(Buffer, sc.x + 5, sc.y, text_mode, arrival_height_glide,
-               in_task, way_point.is_landable(), way_point.is_airport());
+               in_task, way_point.is_landable(), way_point.is_airport(),
+               watchedWaypoint);
   }
 
   void

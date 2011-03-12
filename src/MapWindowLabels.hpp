@@ -41,6 +41,7 @@ public:
     bool inTask;
     bool isLandable;
     bool isAirport;
+    bool isWatchedWaypoint;
   };
 
 protected:
@@ -54,7 +55,8 @@ public:
     :width(_width), height(_height), num_labels(0) {}
 
   void Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
-           int AltArivalAGL, bool inTask, bool isLandable, bool isAirport);
+           int AltArivalAGL, bool inTask, bool isLandable, bool isAirport,
+           bool isWatchedWaypoint);
   void Sort();
 
   unsigned size() const {
