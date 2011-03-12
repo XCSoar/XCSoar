@@ -29,7 +29,7 @@ Copyright_License {
 #include <cstdio>
 
 PolarCoefficients
-SimplePolar::CalculateCoefficients() const
+PolarInfo::CalculateCoefficients() const
 {
   PolarCoefficients pc;
 
@@ -58,20 +58,20 @@ SimplePolar::CalculateCoefficients() const
 }
 
 bool
-SimplePolar::IsValid(const PolarCoefficients &coeff)
+PolarInfo::IsValid(const PolarCoefficients &coeff)
 {
   return positive(coeff.a) && negative(coeff.b) && positive(coeff.c);
 }
 
 bool
-SimplePolar::IsValid() const
+PolarInfo::IsValid() const
 {
   PolarCoefficients pc = CalculateCoefficients();
   return IsValid(pc);
 }
 
 void
-SimplePolar::Init()
+PolarInfo::Init()
 {
   v1 = v2 = v3 = w1 = w2 = w3 = fixed_zero;
   dry_mass = max_ballast = wing_area = v_no = fixed_zero;
@@ -79,7 +79,7 @@ SimplePolar::Init()
 }
 
 bool
-SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
+PolarInfo::CopyIntoGlidePolar(GlidePolar &polar) const
 {
   PolarCoefficients pc = CalculateCoefficients();
   if (!IsValid(pc))
@@ -101,7 +101,7 @@ SimplePolar::CopyIntoGlidePolar(GlidePolar &polar) const
 }
 
 void
-SimplePolar::GetString(TCHAR* line, size_t size, bool include_v_no) const
+PolarInfo::GetString(TCHAR* line, size_t size, bool include_v_no) const
 {
   if (include_v_no)
     _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
@@ -116,9 +116,9 @@ SimplePolar::GetString(TCHAR* line, size_t size, bool include_v_no) const
 }
 
 bool
-SimplePolar::ReadString(const TCHAR *line)
+PolarInfo::ReadString(const TCHAR *line)
 {
-  SimplePolar polar;
+  PolarInfo polar;
   // Example:
   // *LS-3  WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
   // 403, 101, 115.03, -0.86, 174.04, -1.76, 212.72,  -3.4

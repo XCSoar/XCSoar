@@ -33,18 +33,18 @@ Copyright_License {
 
 namespace PolarGlue
 {
-  bool LoadFromOldProfile(SimplePolar &polar);
+  bool LoadFromOldProfile(PolarInfo &polar);
 }
 
 void
-PolarGlue::LoadDefault(SimplePolar &polar)
+PolarGlue::LoadDefault(PolarInfo &polar)
 {
   // Load LS8 polar
   PolarStore::Read(56, polar);
 }
 
 bool
-PolarGlue::LoadFromFile(SimplePolar &polar, TLineReader &reader)
+PolarGlue::LoadFromFile(PolarInfo &polar, TLineReader &reader)
 {
   const TCHAR *line;
   while ((line = reader.read()) != NULL)
@@ -55,7 +55,7 @@ PolarGlue::LoadFromFile(SimplePolar &polar, TLineReader &reader)
 }
 
 bool
-PolarGlue::LoadFromFile(SimplePolar &polar, const TCHAR* path)
+PolarGlue::LoadFromFile(PolarInfo &polar, const TCHAR* path)
 {
   FileLineReader *reader = new FileLineReader(path);
   if (reader == NULL)
@@ -72,7 +72,7 @@ PolarGlue::LoadFromFile(SimplePolar &polar, const TCHAR* path)
 }
 
 bool
-PolarGlue::SaveToFile(const SimplePolar &polar, TextWriter &writer)
+PolarGlue::SaveToFile(const PolarInfo &polar, TextWriter &writer)
 {
   TCHAR buffer[256];
   polar.GetString(buffer, 256);
@@ -80,7 +80,7 @@ PolarGlue::SaveToFile(const SimplePolar &polar, TextWriter &writer)
 }
 
 bool
-PolarGlue::SaveToFile(const SimplePolar &polar, const TCHAR* path)
+PolarGlue::SaveToFile(const PolarInfo &polar, const TCHAR* path)
 {
   TextWriter writer(path);
   if (writer.error())
@@ -90,7 +90,7 @@ PolarGlue::SaveToFile(const SimplePolar &polar, const TCHAR* path)
 }
 
 static bool
-ReadPolarFileFromProfile(SimplePolar &polar)
+ReadPolarFileFromProfile(PolarInfo &polar)
 {
   TLineReader *reader = OpenConfiguredTextFile(szProfilePolarFile);
   if (reader == NULL)
@@ -103,7 +103,7 @@ ReadPolarFileFromProfile(SimplePolar &polar)
 }
 
 bool
-PolarGlue::LoadFromOldProfile(SimplePolar &polar)
+PolarGlue::LoadFromOldProfile(PolarInfo &polar)
 {
   unsigned Temp;
   if (Profile::Get(szProfilePolarID, Temp)) {
@@ -127,7 +127,7 @@ PolarGlue::LoadFromOldProfile(SimplePolar &polar)
 }
 
 bool
-PolarGlue::LoadFromProfile(SimplePolar &polar)
+PolarGlue::LoadFromProfile(PolarInfo &polar)
 {
   TCHAR polar_string[255] = _T("\0");
   if (Profile::Get(szProfilePolar, polar_string, 255) &&
@@ -139,7 +139,7 @@ PolarGlue::LoadFromProfile(SimplePolar &polar)
 }
 
 void
-PolarGlue::SaveToProfile(const SimplePolar &polar)
+PolarGlue::SaveToProfile(const PolarInfo &polar)
 {
   TCHAR polar_string[255];
   polar.GetString(polar_string, 255, true);
@@ -149,7 +149,7 @@ PolarGlue::SaveToProfile(const SimplePolar &polar)
 void
 PolarGlue::LoadFromProfile(GlidePolar &gp)
 {
-  SimplePolar polar;
+  PolarInfo polar;
   if (!LoadFromProfile(polar) || !polar.CopyIntoGlidePolar(gp)) {
     MessageBoxX(_("Polar has invalid coefficients.\nUsing LS8 polar instead!"),
                 _("Warning"), MB_OK);

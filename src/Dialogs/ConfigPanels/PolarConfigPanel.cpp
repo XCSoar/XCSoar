@@ -56,7 +56,7 @@ static WndButton* buttonImport = NULL;
 static WndButton* buttonExport = NULL;
 
 static void
-UpdatePolarFields(const SimplePolar &polar)
+UpdatePolarFields(const PolarInfo &polar)
 {
   LoadFormProperty(*wf, _T("prpPolarV1"), fixed(polar.v1));
   LoadFormProperty(*wf, _T("prpPolarV2"), fixed(polar.v2));
@@ -91,7 +91,7 @@ UpdatePolarTitle()
 }
 
 static bool
-SaveFormToPolar(SimplePolar &polar)
+SaveFormToPolar(PolarInfo &polar)
 {
   bool changed = SaveFormProperty(*wf, _T("prpPolarV1"), polar.v1);
   changed |= SaveFormProperty(*wf, _T("prpPolarV2"), polar.v2);
@@ -112,7 +112,7 @@ SaveFormToPolar(SimplePolar &polar)
 static void
 UpdatePolarInvalidLabel()
 {
-  SimplePolar polar;
+  PolarInfo polar;
   polar.Init();
   SaveFormToPolar(polar);
   if (polar.IsValid())
@@ -135,7 +135,7 @@ PolarConfigPanel::OnLoadInternal(WndButton &button)
 
   int result = ComboPicker(XCSoarInterface::main_window, _("Load Polar"), list, NULL);
   if (result >= 0) {
-    SimplePolar polar;
+    PolarInfo polar;
     PolarStore::Read(list[result].DataFieldIndex, polar);
     UpdatePolarFields(polar);
 
@@ -175,7 +175,7 @@ PolarConfigPanel::OnLoadFromFile(WndButton &button)
                            _("Load Polar from file"), list, NULL);
   if (result >= 0) {
     const TCHAR* path = list[result].StringValue;
-    SimplePolar polar;
+    PolarInfo polar;
     PolarGlue::LoadFromFile(polar, path);
     UpdatePolarFields(polar);
 
@@ -196,7 +196,7 @@ PolarConfigPanel::OnExport(WndButton &button)
   _tcscat(filename, _T(".plr"));
   LocalPath(path, filename);
 
-  SimplePolar polar;
+  PolarInfo polar;
   SaveFormToPolar(polar);
   if (PolarGlue::SaveToFile(polar, path)) {
     Profile::Set(szProfilePolarName, filename);
@@ -243,7 +243,7 @@ PolarConfigPanel::Init(WndForm *_wf)
   buttonImport = ((WndButton *)wf->FindByName(_T("cmdLoadPolarFile")));
   buttonExport = ((WndButton *)wf->FindByName(_T("cmdSavePolarFile")));
 
-  SimplePolar polar;
+  PolarInfo polar;
   if (!PolarGlue::LoadFromProfile(polar)) {
     PolarGlue::LoadDefault(polar);
     SetPolarTitle(polar.name);
@@ -282,7 +282,7 @@ PolarConfigPanel::Save()
                               szProfileBallastSecsToEmpty,
                               settings_computer.BallastSecsToEmpty);
 
-  SimplePolar polar;
+  PolarInfo polar;
   PolarGlue::LoadFromProfile(polar);
   if (SaveFormToPolar(polar)) {
     PolarGlue::SaveToProfile(polar);

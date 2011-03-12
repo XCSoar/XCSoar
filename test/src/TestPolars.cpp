@@ -45,7 +45,7 @@ static void
 TestBasic()
 {
   // Test ReadString()
-  SimplePolar polar;
+  PolarInfo polar;
   polar.ReadString(_T("318, 100, 80, -0.606, 120, -0.99, 160, -1.918"));
   ok1(equals(fixed(polar.dry_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
@@ -79,7 +79,7 @@ static void
 TestFileImport()
 {
   // Test LoadFromFile()
-  SimplePolar polar;
+  PolarInfo polar;
   PolarGlue::LoadFromFile(polar, _T("test/data/test.plr"));
   ok1(equals(fixed(polar.dry_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
@@ -97,7 +97,7 @@ TestBuiltInPolars()
 {
   unsigned count = PolarStore::Count();
   for(unsigned i = 0; i < count; i++) {
-    SimplePolar polar;
+    PolarInfo polar;
     PolarStore::Read(i, polar);
 #ifdef _UNICODE
   size_t wide_length = _tcslen(PolarStore::GetName(i));

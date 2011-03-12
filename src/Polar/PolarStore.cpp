@@ -43,7 +43,7 @@ struct InternalPolarInfo
   double wing_area;    /**< Reference wing area (m^2) */
   double v_no;         /**< Maximum speed for normal operations (m/s) */
 
-  void Transfer(SimplePolar &polar) const {
+  void Transfer(PolarInfo &polar) const {
     polar.name = name;
     polar.dry_mass = fixed(dry_mass);
     polar.max_ballast = fixed(max_ballast);
@@ -248,7 +248,7 @@ PolarStore::GetName(unsigned i)
  * @param polar Polar to set
  */
 void
-PolarStore::Read(unsigned i, SimplePolar &polar)
+PolarStore::Read(unsigned i, PolarInfo &polar)
 {
   assert(i < Count());
   WinPilotPolars[i].Transfer(polar);

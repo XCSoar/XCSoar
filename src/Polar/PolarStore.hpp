@@ -28,14 +28,14 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct SimplePolar;
+struct PolarInfo;
 
 namespace PolarStore
 {
   gcc_const
   const TCHAR *GetName(unsigned i);
 
-  void Read(unsigned i, SimplePolar &polar);
+  void Read(unsigned i, PolarInfo &polar);
 
   unsigned Count();
 }

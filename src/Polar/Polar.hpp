@@ -38,7 +38,7 @@ struct PolarCoefficients
 /**
  * Struct for internally stored WinPilot-like polars
  */
-struct SimplePolar
+struct PolarInfo
 {
   const TCHAR* name;   /**< Name of the glider type */
 
@@ -59,7 +59,7 @@ struct SimplePolar
   void GetString(TCHAR* line, size_t size, bool include_v_no = false) const;
 
   /**
-   * Converts a WinPilot based SimplePolar to a XCSoar based GlidePolar
+   * Converts a WinPilot based PolarInfo to a XCSoar based GlidePolar
    * @param polar Reference to the GlidePolar to save the data to
    */
   bool CopyIntoGlidePolar(GlidePolar &polar) const;
