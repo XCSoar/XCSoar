@@ -21,13 +21,14 @@ Copyright_License {
 }
 */
 
+#include "RouteConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
-#include "RouteConfigPanel.hpp"
+#include "Language.hpp"
 
 static WndForm* wf = NULL;
 

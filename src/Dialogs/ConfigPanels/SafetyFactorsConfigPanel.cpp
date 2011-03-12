@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "SafetyFactorsConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/Edit.hpp"
@@ -28,7 +29,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/Float.hpp"
 #include "Interface.hpp"
-#include "SafetyFactorsConfigPanel.hpp"
+#include "Language.hpp"
 
 static WndForm* wf = NULL;
 

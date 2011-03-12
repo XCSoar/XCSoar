@@ -25,6 +25,7 @@ Copyright_License {
 #include "InfoBoxes/Content/MacCready.hpp"
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 #include "UnitsFormatter.hpp"
 #include "Interface.hpp"
 

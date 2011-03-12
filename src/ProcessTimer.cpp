@@ -38,6 +38,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Replay/Replay.hpp"
 #include "Audio/Sound.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 
 void
 ProcessTimer::HeapCompact()

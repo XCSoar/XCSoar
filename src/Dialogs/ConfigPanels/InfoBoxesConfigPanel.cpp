@@ -32,6 +32,7 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "InfoBoxesConfigPanel.hpp"
 #include "LogFile.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 
 static WndForm* wf = NULL;
 

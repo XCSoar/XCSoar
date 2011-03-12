@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "LayoutConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/DisplayConfig.hpp"
@@ -34,7 +35,8 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "LogFile.hpp"
 #include "Screen/Graphics.hpp"
-#include "LayoutConfigPanel.hpp"
+#include "Language.hpp"
+#include "Dialogs/XML.hpp"
 
 static WndForm* wf = NULL;
 

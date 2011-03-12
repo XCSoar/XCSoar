@@ -39,6 +39,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "ConfigPanel.hpp"
 #include "InterfaceConfigPanel.hpp"
+#include "Language.hpp"
 
 static WndForm* wf = NULL;
 static WndButton *buttonFonts = NULL;

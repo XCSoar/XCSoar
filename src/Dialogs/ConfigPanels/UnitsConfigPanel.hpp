@@ -24,8 +24,11 @@ Copyright_License {
 #ifndef UNITSCONFIGPANEL_HPP
 #define UNITSCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
+#include "DataField/Base.hpp"
+
+class WndForm;
+class WndButton;
+class DataField;
 
 namespace UnitsConfigPanel
 {

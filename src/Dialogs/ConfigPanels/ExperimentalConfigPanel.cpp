@@ -28,6 +28,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "Asset.hpp"
 #include "ExperimentalConfigPanel.hpp"
+#include "Language.hpp"
 
 static WndForm* wf = NULL;
 

@@ -24,9 +24,7 @@ Copyright_License {
 #if !defined(XCSOAR_DIALOGS_H)
 #define XCSOAR_DIALOGS_H
 
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "Dialogs/ListPicker.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
 
 #include <tchar.h>
 #include "Util/tstring.hpp"
@@ -42,6 +40,7 @@ class Airspaces;
 class AbstractAirspace;
 class AbstractTaskFactory;
 class OrderedTaskPoint;
+class InfoBoxPanelConfig;
 
 void StartupScreen();
 

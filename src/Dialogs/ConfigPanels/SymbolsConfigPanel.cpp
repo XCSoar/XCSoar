@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "SymbolsConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/Edit.hpp"
@@ -29,7 +30,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Appearance.hpp"
 #include "Screen/Graphics.hpp"
-#include "SymbolsConfigPanel.hpp"
+#include "Language.hpp"
 
 static WndForm* wf = NULL;
 

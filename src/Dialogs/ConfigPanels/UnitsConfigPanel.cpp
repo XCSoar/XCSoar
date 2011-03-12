@@ -21,9 +21,11 @@ Copyright_License {
 }
 */
 
+#include "UnitsConfigPanel.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/ComboList.hpp"
 #include "DataField/Float.hpp"
+#include "Form/Form.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
@@ -35,7 +37,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Asset.hpp"
-#include "UnitsConfigPanel.hpp"
+#include "Language.hpp"
 
 static WndForm* wf = NULL;
 static unsigned SpeedUnits = 1; // default is knots

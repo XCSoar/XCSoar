@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include <cstdio>
+#include "PolarConfigPanel.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/ComboList.hpp"
 #include "DataField/FileReader.hpp"
@@ -40,11 +40,13 @@ Copyright_License {
 #include "Interface.hpp"
 #include "LocalPath.hpp"
 #include "OS/PathName.hpp"
-#include "PolarConfigPanel.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "MainWindow.hpp"
 #include "OS/FileUtil.hpp"
+#include "Language.hpp"
+
+#include <cstdio>
 
 static WndForm* wf = NULL;
 static WndButton* buttonList = NULL;

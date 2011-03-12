@@ -24,6 +24,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Weather.hpp"
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 #include "Interface.hpp"
 #include "Atmosphere/CuSonde.hpp"
 #include "Protection.hpp"

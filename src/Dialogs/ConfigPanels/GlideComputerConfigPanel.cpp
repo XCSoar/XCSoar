@@ -28,6 +28,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "GlideComputerConfigPanel.hpp"
+#include "Language.hpp"
 
 static WndForm* wf = NULL;
 
