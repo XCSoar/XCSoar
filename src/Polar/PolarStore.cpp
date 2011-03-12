@@ -26,10 +26,42 @@ Copyright_License {
 
 #include <assert.h>
 
+struct InternalPolarInfo
+{
+  const TCHAR* name;   /**< Name of the glider type */
+
+  // Using doubles here to simplify the code in PolarStore.cpp
+  //
+  double dry_mass;     /**< Mass dry gross (kg) */
+  double max_ballast;  /**< Max water ballast (l) */
+  double v1;           /**< Speed (kph) of point 1 */
+  double w1;           /**< Sink rate (negative, m/s) of point 1  */
+  double v2;           /**< Speed (kph) of point 2 */
+  double w2;           /**< Sink rate (negative, m/s) of point 2  */
+  double v3;           /**< Speed (kph) of point 3 */
+  double w3;           /**< Sink rate (negative, m/s) of point 3  */
+  double wing_area;    /**< Reference wing area (m^2) */
+  double v_no;         /**< Maximum speed for normal operations (m/s) */
+
+  void Transfer(SimplePolar &polar) const {
+    polar.name = name;
+    polar.dry_mass = dry_mass;
+    polar.max_ballast = max_ballast;
+    polar.v1 = v1;
+    polar.w1 = w1;
+    polar.v2 = v2;
+    polar.w2 = w2;
+    polar.v3 = v3;
+    polar.w3 = w3;
+    polar.wing_area = wing_area;
+    polar.v_no = v_no;
+  }
+};
+
 /**
  *  Note: new items should be added to bottom, otherwise saved index is lost
  */
-static const SimplePolar WinPilotPolars[] =
+static const InternalPolarInfo WinPilotPolars[] =
 {
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8, 0.0 },
   { _T("604 Kestrel"), 570, 100, 112.97, -0.72, 150.64, -1.42, 207.13, -4.1, 16.26, 0.0 },
@@ -219,7 +251,7 @@ void
 PolarStore::Read(unsigned i, SimplePolar &polar)
 {
   assert(i < Count());
-  polar = WinPilotPolars[i];
+  WinPilotPolars[i].Transfer(polar);
 }
 
 unsigned
