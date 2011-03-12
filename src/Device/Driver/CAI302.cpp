@@ -334,8 +334,6 @@ static bool
 DeclareInner(Port *port, const Declaration *decl,
              OperationEnvironment &env)
 {
-  const int ASYNCPAUSE302 = 700;
-
   port->SetRxTimeout(500);
 
   port->Flush();
@@ -359,7 +357,8 @@ DeclareInner(Port *port, const Declaration *decl,
   port->Flush();
 
   port->Write("O\r");
-  env.Sleep(ASYNCPAUSE302);
+
+  port->SetRxTimeout(1500);
 
   cai302_OdataNoArgs_t cai302_OdataNoArgs;
   if (!ReadBlock(*port, &cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs),
@@ -368,7 +367,6 @@ DeclareInner(Port *port, const Declaration *decl,
     return false;
 
   port->Write("O 0\r"); // 0=active pilot
-  env.Sleep(ASYNCPAUSE302);
 
   cai302_OdataPilot_t cai302_OdataPilot;
   if (!ReadBlock(*port, &cai302_OdataPilot, sizeof(cai302_OdataPilot),
@@ -386,7 +384,6 @@ DeclareInner(Port *port, const Declaration *decl,
   swap(cai302_OdataPilot.MarginHeight);
 
   port->Write("G\r");
-  env.Sleep(ASYNCPAUSE302);
 
   cai302_GdataNoArgs_t cai302_GdataNoArgs;
   if (!ReadBlock(*port, &cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs),
@@ -395,7 +392,6 @@ DeclareInner(Port *port, const Declaration *decl,
     return false;
 
   port->Write("G 0\r");
-  env.Sleep(ASYNCPAUSE302);
 
   cai302_Gdata_t cai302_Gdata;
   if (!ReadBlock(*port, &cai302_Gdata, sizeof(cai302_Gdata),
@@ -407,8 +403,6 @@ DeclareInner(Port *port, const Declaration *decl,
   swap(cai302_Gdata.BallastCapacity);
   swap(cai302_Gdata.ConfigWord);
   swap(cai302_Gdata.WingArea);
-
-  port->SetRxTimeout(1500);
 
   port->Write('\x03');
   if (!port->ExpectString("cmd>"))
