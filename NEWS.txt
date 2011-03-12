@@ -29,7 +29,6 @@ Version 6.1 - not yet released
       reachable
     - the reach calculation is configurable, turning search can be disabled if
       running on low-powered devices.
-    - note that abort/alternates do not currently take reach into account
 * map
   - north arrow is automatically hidden in north-up mode
   - added configurable slope shading (off/fixed/wind/sun)
