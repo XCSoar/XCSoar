@@ -44,6 +44,13 @@ static InfoBoxPanelConfig data;
 static WndForm *wf = NULL;
 static InfoBoxPanelConfig clipboard;
 static unsigned clipboard_size;
+static WndButton *buttonPaste;
+
+static void
+RefreshPasteButton()
+{
+  buttonPaste->set_enabled(clipboard_size > 0);
+}
 
 static void
 OnCloseClicked(gcc_unused WndButton &button)
@@ -88,6 +95,7 @@ OnCopy(gcc_unused WndButton &button)
 {
   FormToPanelConfig(clipboard);
   clipboard_size = InfoBoxManager::layout.count;
+  RefreshPasteButton();
 }
 
 static void
@@ -186,9 +194,11 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent, const TCHAR *panel_name,
   if (buttonCopy)
     buttonCopy->SetOnClickNotify(OnCopy);
 
-  WndButton *buttonPaste = ((WndButton *)wf->FindByName(_T("cmdPaste")));
+  buttonPaste = ((WndButton *)wf->FindByName(_T("cmdPaste")));
   if (buttonPaste)
     buttonPaste->SetOnClickNotify(OnPaste);
+
+  RefreshPasteButton();
 
   for (unsigned j = 0; j < InfoBoxManager::layout.count; j++)
     SetInfoBoxSelector(j);
