@@ -168,6 +168,13 @@ TopWindow::on_deactivate()
   return false;
 }
 
+bool
+TopWindow::on_close()
+{
+  reset();
+  return true;
+}
+
 #ifndef ANDROID
 
 bool
