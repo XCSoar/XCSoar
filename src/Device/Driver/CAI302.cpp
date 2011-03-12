@@ -338,11 +338,16 @@ DeclareInner(Port *port, const Declaration *decl,
 
   port->SetRxTimeout(500);
 
+  port->Flush();
   port->Write('\x03');
 
-  /* empty rx buffer (searching for pattern that never occur) */
-  port->ExpectString("$$$");
+  port->GetChar();
 
+  /* empty rx buffer */
+  port->SetRxTimeout(0);
+  while (port->GetChar() != EOF) {}
+
+  port->SetRxTimeout(500);
   port->Write('\x03');
   if (!port->ExpectString("cmd>"))
     return false;
@@ -351,7 +356,7 @@ DeclareInner(Port *port, const Declaration *decl,
   if (!port->ExpectString("up>"))
     return false;
 
-  port->ExpectString("$$$");
+  port->Flush();
 
   port->Write("O\r");
   env.Sleep(ASYNCPAUSE302);
