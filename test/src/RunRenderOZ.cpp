@@ -43,6 +43,7 @@ Copyright_License {
 #include "Engine/Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Engine/Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Engine/Task/ObservationZones/BGAStartSectorZone.hpp"
+#include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Projection.hpp"
 #include "SettingsMap.hpp"
 #include "ResourceLoader.hpp"
@@ -109,6 +110,13 @@ public:
       oz = new SectorZone(location, radius,
                           Angle::degrees(fixed(0)),
                           Angle::degrees(fixed(70)));
+      break;
+
+    case ObservationZonePoint::ANNULAR_SECTOR:
+      oz = new AnnularSectorZone(location, radius,
+                                 Angle::degrees(fixed(0)),
+                                 Angle::degrees(fixed(70)),
+                                 radius*fixed_half);
       break;
 
     case ObservationZonePoint::FAI_SECTOR:

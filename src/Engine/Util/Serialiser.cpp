@@ -31,6 +31,7 @@
 #include "Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/BGAStartSectorZone.hpp"
+#include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "DataNode.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -134,6 +135,13 @@ Serialiser::Visit(const SectorZone& data)
   m_node.set_attribute(_T("radius"), data.getRadius());
   m_node.set_attribute(_T("start_radial"), data.getStartRadial());
   m_node.set_attribute(_T("end_radial"), data.getEndRadial());
+}
+
+void
+Serialiser::Visit(const AnnularSectorZone& data)
+{
+  Visit((const SectorZone&)data);
+  m_node.set_attribute(_T("inner_radius"), data.getInnerRadius());
 }
 
 void 

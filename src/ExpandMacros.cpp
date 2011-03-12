@@ -223,8 +223,6 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       case TaskAdvance::TURN_DISARMED:
         ReplaceInString(OutBuffer, _T("$(WaypointNextArm)"), _("Arm turn"), Size);
         break;
-      default:
-        assert(1);
       }
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
@@ -248,8 +246,6 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       case TaskAdvance::TURN_ARMED:
         ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"), _("Disarm turn"), Size);
         break;
-      default:
-        assert(1);
       }
     } 
 #ifdef OLD_TASK // multiple start points
@@ -301,8 +297,6 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                       _("Arm\nTurn"), Size);
       invalid = false;
       break;
-    default:
-      assert(1);
     }
   }
 

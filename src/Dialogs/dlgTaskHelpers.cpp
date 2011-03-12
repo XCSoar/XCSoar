@@ -301,6 +301,12 @@ public:
   }
 
   void
+  Visit(const AnnularSectorZone& oz)
+  {
+    Visit((const SectorZone&) oz);
+  }
+
+  void
   Visit(const LineSectorZone& oz)
   {
     _stprintf(radius,_T("%.1f%s"),
@@ -424,6 +430,8 @@ OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
     return _("A cylinder.  Scored by farthest point reached in area");
   case AbstractTaskFactory::AAT_SEGMENT:
     return _("A sector that can vary in angle and radius.  Scored by farthest point reached inside area");
+  case AbstractTaskFactory::AAT_ANNULAR_SECTOR:
+    return _("A sector that can vary in angle, inner and outer radius.  Scored by farthest point reached inside area");
   case AbstractTaskFactory::FINISH_SECTOR:
     return _("A 90 degree sector with 1km radius.  Cross edge to finish");
   case AbstractTaskFactory::FINISH_LINE:
@@ -462,6 +470,8 @@ OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
     return _("Area cylinder");
   case AbstractTaskFactory::AAT_SEGMENT:
     return _("Area sector");
+  case AbstractTaskFactory::AAT_ANNULAR_SECTOR:
+    return _("Area annular sector");
   case AbstractTaskFactory::FINISH_SECTOR:
     return _("FAI finish quadrant");
   case AbstractTaskFactory::FINISH_LINE:

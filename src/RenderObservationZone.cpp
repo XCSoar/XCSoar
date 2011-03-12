@@ -28,6 +28,7 @@ Copyright_License {
 #include "Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
+#include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Screen/Graphics.hpp"
 #include "WindowProjection.hpp"
 #include "SettingsMap.hpp"
@@ -180,5 +181,11 @@ RenderObservationZone::Draw(Canvas &canvas, const Projection &projection,
 
     break;
   }
+
+  case ObservationZonePoint::ANNULAR_SECTOR: {
+    //const AnnularSectorZone &oz = (const AnnularSectorZone &)_oz;
+    assert(0); // not implemented
+  }
+
   }
 }

@@ -44,6 +44,11 @@
         <Edit Name="prpOZSectorFinishRadial" Caption="Finish radial" Height="25" CaptionWidth="60" Help="Finish radial of the OZ area">
           <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="360" Step="1" OnDataAccess="OnOZSectorFinishRadialData"/>
         </Edit>
+
+        <Edit Name="prpOZSectorInnerRadius" Caption="Inner Radius" Height="25" CaptionWidth="60" Help="Inner radius of the OZ sector.">
+          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1" OnDataAccess="OnOZSectorInnerRadiusData"/>
+        </Edit>
+
       </Panel>
         <Button Name="cmdOptionalStarts" Caption="Details" X="2" Y="121" Width="180" Height="25" 
   	OnClick="OnOptionalStartsClicked"/>
