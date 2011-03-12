@@ -237,6 +237,7 @@ const TCHAR szProfileFinishType[] = _T("FinishType");
 const TCHAR szProfileFinishRadius[] = _T("FinishRadius");
 const TCHAR szProfileTaskType[] = _T("TaskType");
 const TCHAR szProfileAATMinTime[] = _T("AATMinTime");
+const TCHAR szProfileAATTimeMargin[] = _T("AATTimeMargin");
 
 const TCHAR szProfileEnableNavBaroAltitude[] = _T("EnableNavBaroAltitude");
 

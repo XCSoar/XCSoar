@@ -127,6 +127,9 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpAATMinTime"),
                    (unsigned)(settings_computer.ordered_defaults.aat_min_time / 60));
 
+  LoadFormProperty(*wf, _T("prpAATTimeMargin"),
+                   (unsigned)(settings_computer.optimise_targets_margin / 60));
+
   delete temptask;
 }
 
@@ -188,6 +191,15 @@ TaskDefaultsConfigPanel::Save()
     aatminutes = wp->GetDataField()->GetAsInteger();
     settings_computer.ordered_defaults.aat_min_time = fixed(aatminutes * 60);
     Profile::Set(szProfileAATMinTime, aatminutes * 60);
+    changed = true;
+  }
+
+  unsigned aatmargin = settings_computer.optimise_targets_margin/60;
+  wp = (WndProperty*)wf->FindByName(_T("prpAATTimeMargin"));
+  if (aatmargin != (unsigned)wp->GetDataField()->GetAsInteger()) {
+    aatmargin = wp->GetDataField()->GetAsInteger();
+    settings_computer.optimise_targets_margin = aatmargin * 60;
+    Profile::Set(szProfileAATTimeMargin, aatmargin * 60);
     changed = true;
   }
 

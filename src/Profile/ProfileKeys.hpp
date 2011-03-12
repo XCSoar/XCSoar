@@ -162,6 +162,7 @@ extern const TCHAR szProfileFinishType[];
 extern const TCHAR szProfileFinishRadius[];
 extern const TCHAR szProfileTaskType[];
 extern const TCHAR szProfileAATMinTime[];
+extern const TCHAR szProfileAATTimeMargin[];
 
 extern const TCHAR szProfileEnableNavBaroAltitude[];
 

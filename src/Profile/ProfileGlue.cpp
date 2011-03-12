@@ -91,6 +91,9 @@ Profile::Use()
   Get(szProfileAATMinTime,
       osettings_task.aat_min_time);
 
+  Get(szProfileAATTimeMargin,
+      settings_task.optimise_targets_margin);
+
   LoadUnits();
   Profile::GetInfoBoxManagerConfig(infoBoxManagerConfig);
 

@@ -25,6 +25,7 @@
 TaskBehaviour::TaskBehaviour():
     optimise_targets_range(true),
     optimise_targets_bearing(true),
+    optimise_targets_margin(300),
     auto_mc(false),
     auto_mc_mode(AUTOMC_BOTH),
     calc_cruise_efficiency(true),
