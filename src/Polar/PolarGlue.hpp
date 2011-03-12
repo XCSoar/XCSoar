@@ -30,6 +30,7 @@ class GlidePolar;
 struct PolarInfo;
 class TLineReader;
 class TextWriter;
+struct SETTINGS_POLAR;
 
 namespace PolarGlue
 {
@@ -43,7 +44,7 @@ namespace PolarGlue
   bool LoadFromProfile(PolarInfo &polar);
   void SaveToProfile(const PolarInfo &polar);
 
-  void LoadFromProfile(GlidePolar &gp);
+  void LoadFromProfile(GlidePolar &gp, SETTINGS_POLAR &settings);
 }
 
 #endif

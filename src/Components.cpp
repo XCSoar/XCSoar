@@ -330,7 +330,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   OpenGeoid();
 
   GlidePolar gp = task_manager->get_glide_polar();
-  PolarGlue::LoadFromProfile(gp);
+  PolarGlue::LoadFromProfile(gp, SetSettingsComputer());
   task_manager->set_glide_polar(gp);
 
   task_manager->set_contest(SettingsComputer().contest);

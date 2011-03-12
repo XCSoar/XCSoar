@@ -30,10 +30,12 @@ Copyright_License {
 #include "IO/ConfiguredFile.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
+#include "SettingsComputer.hpp"
 
 namespace PolarGlue
 {
   bool LoadFromOldProfile(PolarInfo &polar);
+  bool LoadSafetySpeed(PolarInfo &polar);
 }
 
 void
@@ -127,15 +129,25 @@ PolarGlue::LoadFromOldProfile(PolarInfo &polar)
 }
 
 bool
+PolarGlue::LoadSafetySpeed(PolarInfo &polar)
+{
+  return (positive(polar.v_no)) || Profile::Get(szProfileSafteySpeed, polar.v_no);
+}
+
+bool
 PolarGlue::LoadFromProfile(PolarInfo &polar)
 {
   TCHAR polar_string[255] = _T("\0");
   if (Profile::Get(szProfilePolar, polar_string, 255) &&
       polar_string[0] != 0 &&
-      polar.ReadString(polar_string))
+      polar.ReadString(polar_string)) {
+    LoadSafetySpeed(polar);
     return true;
+  }
 
-  return LoadFromOldProfile(polar);
+  bool result = LoadFromOldProfile(polar);
+  LoadSafetySpeed(polar);
+  return result;
 }
 
 void
@@ -147,7 +159,7 @@ PolarGlue::SaveToProfile(const PolarInfo &polar)
 }
 
 void
-PolarGlue::LoadFromProfile(GlidePolar &gp)
+PolarGlue::LoadFromProfile(GlidePolar &gp, SETTINGS_POLAR &settings)
 {
   PolarInfo polar;
   if (!LoadFromProfile(polar) || !polar.CopyIntoGlidePolar(gp)) {
@@ -156,4 +168,5 @@ PolarGlue::LoadFromProfile(GlidePolar &gp)
     LoadDefault(polar);
     polar.CopyIntoGlidePolar(gp);
   }
+  settings.SafetySpeed = fixed(polar.v_no);
 }

@@ -70,6 +70,10 @@ UpdatePolarFields(const PolarInfo &polar)
   LoadFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
 
   LoadFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
+
+  if (positive(polar.v_no))
+    LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"),
+                     ugHorizontalSpeed, polar.v_no);
 }
 
 static void
@@ -105,6 +109,8 @@ SaveFormToPolar(PolarInfo &polar)
   changed |= SaveFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
 
   changed |= SaveFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
+  changed |= SaveFormProperty(*wf, _T("prpMaxManoeuveringSpeed"),
+                              ugHorizontalSpeed, polar.v_no);
 
   return changed;
 }
@@ -255,9 +261,6 @@ PolarConfigPanel::Init(WndForm *_wf)
 
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
 
-  LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
-                   settings_computer.SafetySpeed);
-
   LoadFormProperty(*wf, _T("prpHandicap"),
                    settings_computer.contest_handicap);
 
@@ -270,10 +273,6 @@ PolarConfigPanel::Save()
 {
   bool changed = false;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
-
-  changed |= SaveFormProperty(*wf, _T("prpMaxManoeuveringSpeed"),
-                              ugHorizontalSpeed, settings_computer.SafetySpeed,
-                              szProfileSafteySpeed);
 
   changed |= SaveFormProperty(*wf, _T("prpHandicap"), szProfileHandicap,
                               settings_computer.contest_handicap);
@@ -290,7 +289,7 @@ PolarConfigPanel::Save()
 
     if (protected_task_manager != NULL) {
       GlidePolar gp = protected_task_manager->get_glide_polar();
-      PolarGlue::LoadFromProfile(gp);
+      PolarGlue::LoadFromProfile(gp, settings_computer);
       protected_task_manager->set_glide_polar(gp);
     }
   }
