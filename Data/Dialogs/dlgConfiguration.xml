@@ -129,6 +129,10 @@
         <DataField DataType="enum"/>
       </Edit>
 
+      <Edit Name="prpWaypointArrivalHeightDisplay" Caption="Arrival Height" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Determines how arrival height is displayed in waypoint labels:&#10;[None] No arrival height is displayed.&#10;[Straight glide] Only glide performance is considered for arrival height.&#10;[Terrain avoidance glide] Glide performance and possible detours around terrain are considered for arrival height.&#10;[Straight &amp; Terrain avoidance glide] Arrival height for straight in glide and (if available) arrival height considering detours around terrain is displayed.">
+        <DataField DataType="enum" />
+      </Edit>
+
       <Edit Name="prpWaypointLabelStyle" Caption="Label Style" X="2" Width="-2" Height="22" CaptionWidth="100">
         <DataField DataType="enum" />
       </Edit>

@@ -52,6 +52,13 @@ typedef enum {
   DISPLAYUNTILSPACE
 } DisplayTextType_t;
 
+enum WaypointArrivalHeightDisplay_t {
+  WP_ARRIVAL_HEIGHT_NONE = 0,
+  WP_ARRIVAL_HEIGHT_GLIDE,
+  WP_ARRIVAL_HEIGHT_TERRAIN,
+  WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN
+};
+
 typedef enum {
   wlsAllWayPoints,
   wlsTaskAndLandableWayPoints,
@@ -123,6 +130,8 @@ struct SETTINGS_MAP {
   int WindArrowStyle;
   /** What type of text to draw next to the waypoint icon */
   DisplayTextType_t DisplayTextType;
+  /** Which arrival height to display next to waypoint labels */
+  WaypointArrivalHeightDisplay_t WaypointArrivalHeightDisplay;
   /** What type of waypoint labels to render */
   WayPointLabelSelection_t WayPointLabelSelection;
   /** What type of waypoint labels to render */

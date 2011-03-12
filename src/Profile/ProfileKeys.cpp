@@ -108,6 +108,7 @@ const TCHAR szProfileCircleZoom[] = _T("CircleZoom");
 const TCHAR szProfileMaxAutoZoomDistance[] = _T("MaxAutoZoomDistance");
 const TCHAR szProfileClipAlt[] = _T("ClipAlt");
 const TCHAR szProfileDisplayText[] = _T("DisplayText");
+const TCHAR szWaypointArrivalHeightDisplay[] = _T("szWaypointArrivalHeightDisplay");
 const TCHAR szProfileWayPointLabelSelection[] = _T("WayPointLabelSelection");
 const TCHAR szProfileWaypointLabelStyle[] = _T("WayPointLabelStyle");
 const TCHAR szProfileDisplayUpValue[] = _T("DisplayUp");

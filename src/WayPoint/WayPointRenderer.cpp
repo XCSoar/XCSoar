@@ -126,6 +126,75 @@ public:
     }
   }
 
+
+  void
+  FormatLabel(TCHAR *buffer, const Waypoint &way_point,
+              int &arrival_height_glide, int &arrival_height_terrain)
+  {
+    FormatTitle(buffer, way_point);
+
+    if (arrival_height_glide < 0)
+      return;
+
+    if (settings_map.WaypointArrivalHeightDisplay == WP_ARRIVAL_HEIGHT_NONE)
+      return;
+
+    size_t length = _tcslen(buffer);
+
+    if (settings_map.WaypointArrivalHeightDisplay == WP_ARRIVAL_HEIGHT_TERRAIN) {
+      if (arrival_height_terrain > 0) {
+        if (length > 0)
+          buffer[length++] = _T(':');
+        _stprintf(buffer + length, _T("%d%s"), arrival_height_terrain, sAltUnit);
+      }
+      return;
+    }
+
+    if (length > 0)
+      buffer[length++] = _T(':');
+
+    if (settings_map.WaypointArrivalHeightDisplay == WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN &&
+        arrival_height_terrain > 0) {
+      _stprintf(buffer + length, _T("%d/%d%s"), arrival_height_glide,
+                  arrival_height_terrain, sAltUnit);
+      return;
+    }
+
+    _stprintf(buffer + length, _T("%d%s"), arrival_height_glide, sAltUnit);
+  }
+
+
+  void
+  CalculateReachability(const Waypoint &way_point,
+                        bool &reachable_glide, int &arrival_height_glide,
+                        bool &reachable_terrain, int &arrival_height_terrain)
+  {
+    const UnorderedTaskPoint t(way_point, task_behaviour);
+    const GlideResult r =
+      TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
+
+    arrival_height_glide = (int)Units::ToUserAltitude(r.AltitudeDifference);
+
+    if (r.glide_reachable()) {
+      reachable_glide = true;
+
+      // reachable according to height, now check terrain intersection
+      if (terrain) {
+        const AGeoPoint p_dest (t.get_location(), r.MinHeight);
+        short h = 0;
+        if (task.find_positive_arrival(p_dest, h)) {
+          h -= terrain->GetTerrainHeight(p_dest);
+          h -= iround(task_behaviour.safety_height_arrival);
+          if (h >= 0) {
+            reachable_terrain = true;
+            arrival_height_terrain = (int)Units::ToUserAltitude(fixed(h));
+          }
+        }
+      }
+    }
+  }
+
+
   void
   DrawWaypoint(const Waypoint& way_point, bool in_task = false)
   {
@@ -138,38 +207,12 @@ public:
 
     bool reachable_glide = false;
     bool reachable_terrain = false;
-
-    int AltArrivalAGL = 0;
+    int arrival_height_glide = 0;
+    int arrival_height_terrain = 0;
 
     if (way_point.is_landable()) {
-      const UnorderedTaskPoint t(way_point, task_behaviour);
-      const GlideResult r =
-        TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
-
-      if (r.glide_reachable()) {
-
-        reachable_glide = true;
-        // reachable according to height, now check terrain intersection
-
-        const AGeoPoint p_dest (t.get_location(), r.MinHeight);
-        short h;
-
-        if (!task.find_positive_arrival(p_dest, h)) {
-          // fail to query
-          reachable_terrain = true;
-          AltArrivalAGL = (int)Units::ToUserAltitude(r.AltitudeDifference);
-        } else {
-          if (terrain) {
-            h-= terrain->GetTerrainHeight(p_dest);
-          }
-          reachable_glide = (h>=0);
-          reachable_terrain = reachable_glide;
-          if (reachable_glide) {
-            reachable_terrain = true;
-            AltArrivalAGL = (int)Units::ToUserAltitude(fixed(h));
-          }
-        }
-      }
+      CalculateReachability(way_point, reachable_glide, arrival_height_glide,
+                            reachable_terrain, arrival_height_terrain);
 
       WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable_glide,
                                            reachable_terrain, way_point,
@@ -225,22 +268,14 @@ public:
     }
 
     TCHAR Buffer[32];
-    FormatTitle(Buffer, way_point);
-
-    if (AltArrivalAGL != 0) {
-      size_t length = _tcslen(Buffer);
-      if (length > 0)
-        Buffer[length++] = _T(':');
-
-      _stprintf(Buffer + length, _T("%d%s"), AltArrivalAGL, sAltUnit);
-    }
+    FormatLabel(Buffer, way_point, arrival_height_glide, arrival_height_terrain);
 
     if (reachable_glide && (Appearance.IndLandable == wpLandableWinPilot ||
                             Appearance.UseSWLandablesRendering))
       // make space for the green circle
       sc.x += 5;
 
-    labels.Add(Buffer, sc.x + 5, sc.y, text_mode, AltArrivalAGL,
+    labels.Add(Buffer, sc.x + 5, sc.y, text_mode, arrival_height_glide,
                in_task, way_point.is_landable(), way_point.is_airport());
   }
 

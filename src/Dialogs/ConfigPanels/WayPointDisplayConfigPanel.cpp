@@ -56,6 +56,19 @@ WayPointDisplayConfigPanel::Init(WndForm *_wf)
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(_T("prpWaypointArrivalHeightDisplay"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->EnableItemHelp(true);
+    dfe->addEnumText(_("None"), WP_ARRIVAL_HEIGHT_NONE, _("No arrival height is displayed."));
+    dfe->addEnumText(_("Straight glide"), WP_ARRIVAL_HEIGHT_GLIDE, _("Straight glide arrival height (no terrain is considered)."));
+    dfe->addEnumText(_("Terrain avoidance glide"), WP_ARRIVAL_HEIGHT_TERRAIN, _("Arrival height considering terrain avoidance"));
+    dfe->addEnumText(_("Straight & Terrain glide"), WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN, _("Both arrival heights are displayed."));
+    dfe->Set(XCSoarInterface::SettingsMap().WaypointArrivalHeightDisplay);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabelStyle"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -116,6 +129,10 @@ WayPointDisplayConfigPanel::Save()
   changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabels"),
                                   szProfileDisplayText,
                                   XCSoarInterface::SetSettingsMap().DisplayTextType);
+
+  changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointArrivalHeightDisplay"),
+                                  szWaypointArrivalHeightDisplay,
+                                  XCSoarInterface::SetSettingsMap().WaypointArrivalHeightDisplay);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabelStyle"),
                                   szProfileWaypointLabelStyle,

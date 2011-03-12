@@ -40,6 +40,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.SnailType = stStandardVario;
   settings_map.WindArrowStyle = 0;
   settings_map.DisplayTextType = DISPLAYFIRSTFIVE;
+  settings_map.WaypointArrivalHeightDisplay = WP_ARRIVAL_HEIGHT_GLIDE;
   settings_map.LandableRenderMode = RoundedBlack;
   settings_map.TrailActive = 1;
   settings_map.bAirspaceBlackOutline = false;
