@@ -280,7 +280,7 @@ Canvas::annulus(int x, int y, unsigned small_radius, unsigned big_radius,
 
     vertices.bind_inner_circle();
     if (pstart < pend) {
-      glDrawArrays(GL_LINE_STRIP, pstart, pend + 1);
+      glDrawArrays(GL_LINE_STRIP, pstart, pend - pstart + 1);
     } else {
       glDrawArrays(GL_LINE_STRIP, pstart, 32 - pstart + 1);
       glDrawArrays(GL_LINE_STRIP, 0, pend + 1);
@@ -288,7 +288,7 @@ Canvas::annulus(int x, int y, unsigned small_radius, unsigned big_radius,
 
     vertices.bind_outer_circle();
     if (pstart < pend) {
-      glDrawArrays(GL_LINE_STRIP, pstart, pend + 1);
+      glDrawArrays(GL_LINE_STRIP, pstart, pend - pstart + 1);
     } else {
       glDrawArrays(GL_LINE_STRIP, pstart, 32 - pstart + 1);
       glDrawArrays(GL_LINE_STRIP, 0, pend + 1);
