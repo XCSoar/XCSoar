@@ -30,6 +30,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
+#include "Dialogs/ComboPicker.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Polar/PolarStore.hpp"
 #include "Polar/PolarGlue.hpp"

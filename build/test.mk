@@ -1177,7 +1177,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
-	$(SRC)/Dialogs/dlgComboPicker.cpp \
+	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Thread/Debug.cpp \
@@ -1332,7 +1332,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
-	$(SRC)/Dialogs/dlgComboPicker.cpp \
+	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
 	$(SRC)/FlightStatistics.cpp \
@@ -1392,7 +1392,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/UnitsFormatter.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
-	$(SRC)/Dialogs/dlgComboPicker.cpp \
+	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/dlgAirspaceWarnings.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
@@ -1447,7 +1447,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Dialogs/XML.cpp \
-	$(SRC)/Dialogs/dlgComboPicker.cpp \
+	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/dlgTaskOverview.cpp \
 	$(SRC)/Dialogs/dlgWayPointSelect.cpp \

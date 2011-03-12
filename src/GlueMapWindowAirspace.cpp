@@ -25,6 +25,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
+#include "Dialogs/ListPicker.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"

@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Screen/Features.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/ComboPicker.hpp"
 #include "resource.h"
 
 #include <assert.h>

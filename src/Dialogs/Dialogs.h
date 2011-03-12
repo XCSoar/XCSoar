@@ -24,8 +24,6 @@ Copyright_License {
 #if !defined(XCSOAR_DIALOGS_H)
 #define XCSOAR_DIALOGS_H
 
-#include "Dialogs/ListPicker.hpp"
-
 #include <tchar.h>
 #include "Util/tstring.hpp"
 
@@ -154,14 +152,6 @@ void dlgFlarmTrafficShowModal();
 void dlgFlarmTrafficDetailsShowModal(FlarmId id);
 bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0,
                                    AllowedCharactersCallback_t accb=NULL);
-
-int
-ComboPicker(SingleWindow &parent, const TCHAR *caption,
-            const ComboList &combo_list,
-            ListHelpCallback_t help_callback,
-            bool enable_item_help = false);
-
-int dlgComboPicker(SingleWindow &parent, WndProperty *theProperty);
 
 bool PopupNearestWaypointDetails(const Waypoints &way_points,
     const GeoPoint &location, double range, bool scalefilter = false);

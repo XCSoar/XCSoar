@@ -29,6 +29,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
+#include "Dialogs/ComboPicker.hpp"
 #include "UnitsStore.hpp"
 #include "UnitsFormatter.hpp"
 #include "LocalTime.hpp"
