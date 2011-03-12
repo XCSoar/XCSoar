@@ -68,6 +68,10 @@ struct GLDonutVertices : public GLVertexArray<66> {
   void bind_inner_circle() const {
     glVertexPointer(2, GL_VALUE, sizeof(v[0]) * 2, v);
   }
+
+  void bind_outer_circle() const {
+    glVertexPointer(2, GL_VALUE, sizeof(v[0]) * 2, v + 1);
+  }
 };
 
 #endif

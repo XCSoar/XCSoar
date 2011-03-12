@@ -236,6 +236,66 @@ Canvas::segment(int x, int y, unsigned radius,
   ::Segment(*this, x, y, radius, start, end, horizon);
 }
 
+gcc_const
+static unsigned
+AngleToDonutVertex(Angle angle)
+{
+  return (NATIVE_TO_INT(angle.value_native()) * 64 / 4096 + 48) & 0x3e;
+}
+
+void
+Canvas::annulus(int x, int y, unsigned small_radius, unsigned big_radius,
+                Angle start, Angle end)
+{
+  GLDonutVertices vertices(x, y, small_radius, big_radius);
+
+  const unsigned istart = AngleToDonutVertex(start);
+  const unsigned iend = AngleToDonutVertex(end);
+
+  if (!brush.is_hollow()) {
+    brush.set();
+    vertices.bind();
+
+    if (istart > iend) {
+      glDrawArrays(GL_TRIANGLE_STRIP, istart, 64 - istart + 2);
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, iend + 2);
+    } else {
+      glDrawArrays(GL_TRIANGLE_STRIP, istart, iend - istart + 2);
+    }
+  }
+
+  if (pen_over_brush()) {
+    pen.set();
+
+    if (istart != iend) {
+      if (brush.is_hollow())
+        vertices.bind();
+
+      glDrawArrays(GL_LINE_STRIP, istart, 2);
+      glDrawArrays(GL_LINE_STRIP, iend, 2);
+    }
+
+    const unsigned pstart = istart / 2;
+    const unsigned pend = iend / 2;
+
+    vertices.bind_inner_circle();
+    if (pstart < pend) {
+      glDrawArrays(GL_LINE_STRIP, pstart, pend + 1);
+    } else {
+      glDrawArrays(GL_LINE_STRIP, pstart, 32 - pstart + 1);
+      glDrawArrays(GL_LINE_STRIP, 0, pend + 1);
+    }
+
+    vertices.bind_outer_circle();
+    if (pstart < pend) {
+      glDrawArrays(GL_LINE_STRIP, pstart, pend + 1);
+    } else {
+      glDrawArrays(GL_LINE_STRIP, pstart, 32 - pstart + 1);
+      glDrawArrays(GL_LINE_STRIP, 0, pend + 1);
+    }
+  }
+}
+
 void
 Canvas::draw_focus(RECT rc)
 {
