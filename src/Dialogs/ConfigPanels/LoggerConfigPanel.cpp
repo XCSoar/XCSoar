@@ -27,6 +27,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"

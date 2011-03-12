@@ -29,6 +29,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/FileReader.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Util/StringUtil.hpp"
 #include "Interface.hpp"
 #include "LanguageGlue.hpp"

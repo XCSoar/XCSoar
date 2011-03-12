@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Protection.hpp"
 #include "ConfigPanel.hpp"
 #include "SiteConfigPanel.hpp"

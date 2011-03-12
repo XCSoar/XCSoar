@@ -28,6 +28,7 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Interface.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Device/Register.hpp"

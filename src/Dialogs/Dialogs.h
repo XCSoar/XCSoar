@@ -24,6 +24,8 @@ Copyright_License {
 #if !defined(XCSOAR_DIALOGS_H)
 #define XCSOAR_DIALOGS_H
 
+#include "Form/Form.hpp"
+
 #include <tchar.h>
 #include "Util/tstring.hpp"
 
@@ -155,8 +157,5 @@ bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0,
 
 bool PopupNearestWaypointDetails(const Waypoints &way_points,
     const GeoPoint &location, double range, bool scalefilter = false);
-
-#define mrOK             2
-#define mrCancel         3
 
 #endif

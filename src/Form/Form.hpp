@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_FORM_FORM_HPP
 
 #include "Screen/ContainerWindow.hpp"
-#include "Dialogs/Dialogs.h"
 #include "Util/tstring.hpp"
 
 #ifdef EYE_CANDY
@@ -37,6 +36,11 @@ Copyright_License {
 
 class SingleWindow;
 class PeriodClock;
+
+enum ModalResult {
+  mrOK = 2,
+  mrCancel = 3,
+};
 
 /**
  * A WndForm represents a Window with a titlebar.

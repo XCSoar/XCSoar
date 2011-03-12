@@ -27,6 +27,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Appearance.hpp"

@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Form/Form.hpp"
 
+class WndProperty;
+
 namespace ConfigPanel {
 
   void InitFileField(WndProperty &wp, const TCHAR *profile_key,
