@@ -166,6 +166,13 @@ public:
     edit.set_enabled(enabled);
   }
 
+  /**
+   * Starts  interactively  editing  the  value.   If  a  ComboBox  is
+   * available, then the ComboPicker  will be launched, otherwise, the
+   * focus and cursor is set to the control.
+   */
+  void BeginEditing();
+
 protected:
   virtual bool on_resize(unsigned width, unsigned height);
 

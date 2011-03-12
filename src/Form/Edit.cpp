@@ -215,6 +215,26 @@ WndProperty::SetFont(const Font &Value)
 }
 
 void
+WndProperty::BeginEditing()
+{
+  if (edit.is_read_only()) {
+    /* this would display xml file help on a read-only wndproperty if
+       it exists */
+    OnHelp();
+  } else if (mDialogStyle) {
+    SingleWindow *root = (SingleWindow *)get_root_owner();
+
+    /* if this asserton fails, then there no valid root window could
+       be found - maybe it didn't register its wndproc? */
+    assert(root != NULL);
+
+    dlgComboPicker(*root, this);
+  } else {
+    edit.set_focus();
+  }
+}
+
+void
 WndProperty::UpdateLayout()
 {
   mBitmapSize = mDialogStyle || edit.is_read_only() ? 0 : Layout::Scale(16);
@@ -285,18 +305,7 @@ bool
 WndProperty::on_mouse_down(int x, int y)
 {
   if (mDialogStyle) {
-    if (!edit.is_read_only()) {
-      // when they click on the label
-      SingleWindow *root = (SingleWindow *)get_root_owner();
-
-      /* if this asserton fails, then there no valid root window could
-         be found - maybe it didn't register its wndproc? */
-      assert(root != NULL);
-
-      dlgComboPicker(*root, this);
-    } else {
-      OnHelp(); // this would display xml file help on a read-only wndproperty if it exists
-    }
+    BeginEditing();
   } else {
     if (!edit.has_focus()) {
       if (!edit.is_read_only())
