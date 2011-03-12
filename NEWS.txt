@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.0.8 - not yet released
+* Linux
+  - more dialog improvements
 
 Version 6.0.7 - 2011/03/12
 * devices

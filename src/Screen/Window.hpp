@@ -52,13 +52,14 @@ class WindowStyle {
 #ifdef ENABLE_SDL
 protected:
   bool visible;
+  bool enabled;
   bool m_tab_stop, m_control_parent;
   bool double_clicks;
   int text_style;
 
 public:
   WindowStyle()
-    :visible(true),
+    :visible(true), enabled(true),
      m_tab_stop(false), m_control_parent(false),
      double_clicks(false),
      text_style(0) {}
@@ -90,7 +91,7 @@ public:
 
   void disable() {
 #ifdef ENABLE_SDL
-    // XXX
+    enabled = false;
 #else
     style |= WS_DISABLED;
 #endif
@@ -189,6 +190,7 @@ private:
   bool tab_stop, control_parent;
 
   bool visible;
+  bool enabled;
   bool focused;
   bool capture;
 #else
@@ -507,7 +509,7 @@ public:
   gcc_pure
   bool is_enabled() const {
 #ifdef ENABLE_SDL
-    return true;
+    return enabled;
 #else
     return ::IsWindowEnabled(hWnd);
 #endif
@@ -520,7 +522,11 @@ public:
     assert_thread();
 
 #ifdef ENABLE_SDL
-    // XXX
+    if (enabled == this->enabled)
+      return;
+
+    this->enabled = enabled;
+    invalidate();
 #else
     ::EnableWindow(hWnd, enabled);
 #endif

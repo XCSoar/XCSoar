@@ -80,6 +80,7 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
   tab_stop = window_style.m_tab_stop;
   control_parent = window_style.m_control_parent;
   visible = window_style.visible;
+  enabled = window_style.enabled;
   text_style = window_style.text_style;
 
   if (parent != NULL)
