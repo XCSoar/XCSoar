@@ -57,14 +57,28 @@ FindInfoBoxField(int item)
   return (WndProperty*)wf->FindByName(name);
 }
 
-static void
+/**
+ * @return true if the #InfoBoxPanelConfig has been modified
+ */
+static bool
 FormToPanelConfig(InfoBoxPanelConfig &config)
 {
+  bool changed = false;
+
   for (unsigned item = 0; item < InfoBoxManager::layout.count; item++) {
     WndProperty *wp = FindInfoBoxField(item);
-    if (wp)
-      config.infoBoxID[item] = wp->GetDataField()->GetAsInteger();
+    if (wp == NULL)
+      continue;
+
+    unsigned new_value = wp->GetDataField()->GetAsInteger();
+    if (new_value == config.infoBoxID[item])
+      continue;
+
+    config.infoBoxID[item] = new_value;
+    changed = true;
   }
+
+  return changed;
 }
 
 static void
