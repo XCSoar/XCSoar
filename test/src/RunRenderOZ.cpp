@@ -49,7 +49,7 @@ Copyright_License {
 #include "ResourceLoader.hpp"
 
 enum {
-  NUM_OZ_TYPES = 7,
+  NUM_OZ_TYPES = 9,
 };
 
 static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
@@ -60,6 +60,8 @@ static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
   _T("Keyhole"),
   _T("BGA Fixed Course"),
   _T("BGA Enhanced Option"),
+  _T("BGA Start"),
+  _T("Annular sector"),
 };
 
 static GeoPoint location(Angle::degrees(fixed(7.7061111111111114)),
