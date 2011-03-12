@@ -112,6 +112,17 @@ public:
    */
   virtual int Read(void *Buffer, size_t Size) = 0;
 
+  /**
+   * Read data from the serial port, take care for partial reads.
+   *
+   * Note that this port's receive timeout is still in effect for each
+   * individual read operation.
+   *
+   * @param timeout_ms give up after this number of milliseconds
+   * @return true on success
+   */
+  bool FullRead(void *buffer, size_t length, unsigned timeout_ms);
+
   bool ExpectString(const char *token);
 };
 

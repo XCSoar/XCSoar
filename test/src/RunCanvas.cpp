@@ -180,7 +180,7 @@ private:
     }
 #endif
 
-    PaintWindow::invalidate();
+    invalidate();
   }
 
 protected:

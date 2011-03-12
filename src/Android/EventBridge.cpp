@@ -55,5 +55,6 @@ void
 Java_org_xcsoar_EventBridge_onMouseMove(JNIEnv *env, jclass cls,
                                         jint x, jint y)
 {
+  event_queue->purge(Event::MOUSE_MOTION);
   event_queue->push(Event(Event::MOUSE_MOTION, x, y));
 }

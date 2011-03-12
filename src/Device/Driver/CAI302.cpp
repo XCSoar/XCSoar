@@ -327,23 +327,25 @@ ReadBlock(Port &port, void *dest, size_t max_length, size_t length)
   if (length == 0)
     return true;
 
-  int nbytes = port.Read(dest, length);
-  return nbytes > 0 && (size_t)nbytes == length;
+  return port.FullRead(dest, length, 3000);
 }
 
 static bool
 DeclareInner(Port *port, const Declaration *decl,
              OperationEnvironment &env)
 {
-  const int ASYNCPAUSE302 = 700;
-
   port->SetRxTimeout(500);
 
+  port->Flush();
   port->Write('\x03');
 
-  /* empty rx buffer (searching for pattern that never occur) */
-  port->ExpectString("$$$");
+  port->GetChar();
 
+  /* empty rx buffer */
+  port->SetRxTimeout(0);
+  while (port->GetChar() != EOF) {}
+
+  port->SetRxTimeout(500);
   port->Write('\x03');
   if (!port->ExpectString("cmd>"))
     return false;
@@ -352,10 +354,11 @@ DeclareInner(Port *port, const Declaration *decl,
   if (!port->ExpectString("up>"))
     return false;
 
-  port->ExpectString("$$$");
+  port->Flush();
 
   port->Write("O\r");
-  env.Sleep(ASYNCPAUSE302);
+
+  port->SetRxTimeout(1500);
 
   cai302_OdataNoArgs_t cai302_OdataNoArgs;
   if (!ReadBlock(*port, &cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs),
@@ -364,7 +367,6 @@ DeclareInner(Port *port, const Declaration *decl,
     return false;
 
   port->Write("O 0\r"); // 0=active pilot
-  env.Sleep(ASYNCPAUSE302);
 
   cai302_OdataPilot_t cai302_OdataPilot;
   if (!ReadBlock(*port, &cai302_OdataPilot, sizeof(cai302_OdataPilot),
@@ -382,7 +384,6 @@ DeclareInner(Port *port, const Declaration *decl,
   swap(cai302_OdataPilot.MarginHeight);
 
   port->Write("G\r");
-  env.Sleep(ASYNCPAUSE302);
 
   cai302_GdataNoArgs_t cai302_GdataNoArgs;
   if (!ReadBlock(*port, &cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs),
@@ -391,7 +392,6 @@ DeclareInner(Port *port, const Declaration *decl,
     return false;
 
   port->Write("G 0\r");
-  env.Sleep(ASYNCPAUSE302);
 
   cai302_Gdata_t cai302_Gdata;
   if (!ReadBlock(*port, &cai302_Gdata, sizeof(cai302_Gdata),
@@ -403,8 +403,6 @@ DeclareInner(Port *port, const Declaration *decl,
   swap(cai302_Gdata.BallastCapacity);
   swap(cai302_Gdata.ConfigWord);
   swap(cai302_Gdata.WingArea);
-
-  port->SetRxTimeout(1500);
 
   port->Write('\x03');
   if (!port->ExpectString("cmd>"))
