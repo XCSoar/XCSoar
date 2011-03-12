@@ -82,6 +82,8 @@ class WndProperty : public WindowControl {
     virtual bool on_killfocus();
   };
 
+  friend class Editor;
+
 public:
   typedef int (*DataChangeCallback_t)(WindowControl *Sender, int Mode, int Value);
   typedef void (*ClickUpCallback_t)(WindowControl *Sender);
@@ -110,12 +112,14 @@ public:
   /** Destructor */
   ~WndProperty(void);
 
+protected:
   int CallSpecial(void);
   bool mDialogStyle;
 
   void on_editor_setfocus();
   void on_editor_killfocus();
 
+public:
   void RefreshDisplay(void);
 
   void SetFont(const Font &font);
