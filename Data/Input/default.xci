@@ -321,7 +321,7 @@ event=ScreenModes toggle
 mode=default
 type=gesture
 data=DR
-event=GotoLookup
+event=WaypointDetails select
 
 mode=default
 type=gesture
