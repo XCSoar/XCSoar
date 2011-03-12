@@ -158,10 +158,13 @@ public:
       buffer[length++] = _T(':');
 
     if (settings_map.WaypointArrivalHeightDisplay == WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN &&
-        arrival_height_terrain > 0) {
-      _stprintf(buffer + length, _T("%d/%d%s"), arrival_height_glide,
+        arrival_height_glide > 0 && arrival_height_terrain > 0) {
+      int altd = abs(arrival_height_glide - arrival_height_terrain);
+      if (altd >= 10 && (altd * 100) / arrival_height_glide > 5) {
+        _stprintf(buffer + length, _T("%d/%d%s"), arrival_height_glide,
                   arrival_height_terrain, sAltUnit);
-      return;
+        return;
+      }
     }
 
     _stprintf(buffer + length, _T("%d%s"), arrival_height_glide, sAltUnit);
