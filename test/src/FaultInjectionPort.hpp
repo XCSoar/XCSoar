@@ -101,6 +101,12 @@ Port::GetChar()
 }
 
 bool
+Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
+{
+  return Read(buffer, length) == (int)length;
+}
+
+bool
 Port::ExpectString(const char *token)
 {
   if (inject_port_fault == 0)
