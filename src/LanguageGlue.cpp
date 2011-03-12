@@ -90,7 +90,7 @@ enum {
 #endif
 
 const struct builtin_language language_table[] = {
-  { LANG_CZECH, _T("cz.mo") },
+  { LANG_CZECH, _T("cs.mo") },
   { LANG_GERMAN, _T("de.mo") },
   { LANG_GREEK, _T("el.mo") },
   { LANG_SPANISH, _T("es.mo") },

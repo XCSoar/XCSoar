@@ -40,6 +40,7 @@ import android.view.SurfaceHolder;
 import android.os.Build;
 import android.os.Handler;
 import android.content.res.Resources;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
@@ -108,6 +109,8 @@ class NativeView extends SurfaceView
 
   Resources resources;
 
+  final boolean hasKeyboard;
+
   EGL10 egl;
   EGLDisplay display;
   EGLSurface surface;
@@ -122,6 +125,10 @@ class NativeView extends SurfaceView
     quitHandler = _quitHandler;
 
     resources = context.getResources();
+
+    hasKeyboard = resources.getConfiguration().keyboard !=
+      Configuration.KEYBOARD_NOKEYS;
+    Log.d(TAG, "KEYBOARD="+resources.getConfiguration().keyboard);
 
     touchInput = DifferentTouchInput.getInstance();
 
@@ -417,13 +424,30 @@ class NativeView extends SurfaceView
   public void exitApp() {
   }
 
+  private final int translateKeyCode(int keyCode) {
+    if (!hasKeyboard) {
+      /* map the volume keys to cursor up/down if the device has no
+         hardware keys */
+
+      switch (keyCode) {
+      case KeyEvent.KEYCODE_VOLUME_UP:
+        return KeyEvent.KEYCODE_DPAD_UP;
+
+      case KeyEvent.KEYCODE_VOLUME_DOWN:
+        return KeyEvent.KEYCODE_DPAD_DOWN;
+      }
+    }
+
+    return keyCode;
+  }
+
   @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
-    EventBridge.onKeyDown(keyCode);
+    EventBridge.onKeyDown(translateKeyCode(keyCode));
     return true;
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
-    EventBridge.onKeyUp(keyCode);
+    EventBridge.onKeyUp(translateKeyCode(keyCode));
     return true;
   }
 

@@ -158,6 +158,22 @@ EWMicroRecorderDevice::TryConnect()
   return false;
 }
 
+/**
+ * "It is important that only alpha numeric characters are included in
+ * the declaration, as other characters such as a comma will prevent
+ * the resultant .IGC file from being validated."
+ *
+ * @see http://www.ewavionics.com/products/microRecorder/microRecorder-instructionsfull.pdf
+ */
+static bool
+IsValidEWChar(char ch)
+{
+  return ch == '\r' || ch == '\n' ||
+    ch == ' ' || ch == '-' ||
+    (ch >= 'a' && ch <= 'z') ||
+    (ch >= 'A' && ch <= 'Z') ||
+    (ch >= '0' && ch <= '9');
+}
 
 static void
 EWMicroRecorderPrintf(Port *port, const TCHAR *fmt, ...)
@@ -175,8 +191,18 @@ EWMicroRecorderPrintf(Port *port, const TCHAR *fmt, ...)
                             NULL, NULL) <= 0)
     return;
 #else
-  const char *buffer = EWStr;
+  char *buffer = EWStr;
 #endif
+
+  char *p = strchr(buffer, ':');
+  if (p != NULL)
+    ++p;
+  else
+    p = buffer;
+
+  for (; *p != 0; ++p)
+    if (!IsValidEWChar(*p))
+      *p = ' ';
 
   port->Write(buffer);
 }
@@ -242,14 +268,16 @@ EWMicroRecorderDevice::DeclareInner(const Declaration *decl)
   port->Write(user_data);
 
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-                        _T("Description:"), _T("XCSoar task declaration"));
-  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Pilot Name:"), decl->PilotName.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Competition ID:"), decl->CompetitionId.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Aircraft Type:"), decl->AircraftType.c_str());
-  port->Write("Description:      Declaration\r\n");
+  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
+                        _T("Aircraft ID:"), decl->AircraftReg.c_str());
+
+  EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
+                        _T("Description:"), _T("XCSoar task declaration"));
 
   for (unsigned i = 0; i < 11; i++) {
     if (i+1>= decl->size()) {

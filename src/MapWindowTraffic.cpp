@@ -54,9 +54,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
   const MapWindowProjection &projection = render_projection;
 
-  // Pen for icon outlines
-  canvas.black_pen();
-
   // Create point array that will form that arrow polygon
   RasterPoint Arrow[5];
 

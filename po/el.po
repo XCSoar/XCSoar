@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-07 12:55+0100\n"
+"POT-Creation-Date: 2011-03-11 07:43+0100\n"
 "PO-Revision-Date: 2011-01-23 16:56+0000\n"
 "Last-Translator: Max Kellermann <max@duempel.org>\n"
 "Language-Team: none\n"
@@ -138,120 +138,120 @@ msgstr ""
 msgid "Loading Airfield Details File..."
 msgstr ""
 
-#: src/ExpandMacros.cpp:117 src/ExpandMacros.cpp:158
+#: src/ExpandMacros.cpp:117 src/ExpandMacros.cpp:127 src/ExpandMacros.cpp:188
 #: src/InputEventsActions.cpp:1766
 msgid "Next turnpoint"
 msgstr "Επόμενο Σημείο"
 
-#: src/ExpandMacros.cpp:122 src/ExpandMacros.cpp:168
+#: src/ExpandMacros.cpp:122 src/ExpandMacros.cpp:132 src/ExpandMacros.cpp:198
 msgid "Previous turnpoint"
 msgstr ""
 
-#: src/ExpandMacros.cpp:134
+#: src/ExpandMacros.cpp:144 src/ExpandMacros.cpp:164
 msgid "Furthest landpoint"
 msgstr ""
 
-#: src/ExpandMacros.cpp:135
+#: src/ExpandMacros.cpp:145 src/ExpandMacros.cpp:165
 msgid "Next landpoint"
 msgstr ""
 
-#: src/ExpandMacros.cpp:144
+#: src/ExpandMacros.cpp:154 src/ExpandMacros.cpp:174
 msgid "Closest landpoint"
 msgstr ""
 
-#: src/ExpandMacros.cpp:145
+#: src/ExpandMacros.cpp:155 src/ExpandMacros.cpp:175
 msgid "Previous landpoint"
 msgstr ""
 
-#: src/ExpandMacros.cpp:157
+#: src/ExpandMacros.cpp:187
 msgid "Finish turnpoint"
 msgstr ""
 
-#: src/ExpandMacros.cpp:167
+#: src/ExpandMacros.cpp:197
 msgid "Start turnpoint"
 msgstr ""
 
-#: src/ExpandMacros.cpp:176
+#: src/ExpandMacros.cpp:206
 msgid "Start point cycle"
 msgstr ""
 
-#: src/ExpandMacros.cpp:176 src/ExpandMacros.cpp:182
+#: src/ExpandMacros.cpp:206 src/ExpandMacros.cpp:212
 msgid "Previous waypoint"
 msgstr ""
 
-#: src/ExpandMacros.cpp:191
+#: src/ExpandMacros.cpp:221
 msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
 
-#: src/ExpandMacros.cpp:196
+#: src/ExpandMacros.cpp:226
 msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
 
-#: src/ExpandMacros.cpp:201
+#: src/ExpandMacros.cpp:231
 msgid ""
 "Abort\n"
 "Start"
 msgstr ""
 
-#: src/ExpandMacros.cpp:206
+#: src/ExpandMacros.cpp:236
 msgid ""
 "Arm\n"
 "Start"
 msgstr ""
 
-#: src/ExpandMacros.cpp:211
+#: src/ExpandMacros.cpp:241
 msgid ""
 "Abort\n"
 "Turn"
 msgstr ""
 
-#: src/ExpandMacros.cpp:216
+#: src/ExpandMacros.cpp:246
 msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
 
-#: src/ExpandMacros.cpp:237 src/ExpandMacros.cpp:241
+#: src/ExpandMacros.cpp:267 src/ExpandMacros.cpp:271
 msgid "Resume"
 msgstr ""
 
-#: src/ExpandMacros.cpp:237 src/ExpandMacros.cpp:241
+#: src/ExpandMacros.cpp:267 src/ExpandMacros.cpp:271
 #: src/Dialogs/Message.cpp:168
 msgid "Abort"
 msgstr "Άκυρο"
 
-#: src/ExpandMacros.cpp:333 src/Dialogs/dlgBasicSettings.cpp:54
+#: src/ExpandMacros.cpp:363 src/Dialogs/dlgBasicSettings.cpp:54
 #: Data/Dialogs/dlgLoggerReplay.xml:12
 msgid "Stop"
 msgstr ""
 
-#: src/ExpandMacros.cpp:334 Data/Dialogs/dlgLoggerReplay.xml:10
+#: src/ExpandMacros.cpp:364 Data/Dialogs/dlgLoggerReplay.xml:10
 msgid "Start"
 msgstr "Έναρξη"
 
-#: src/ExpandMacros.cpp:340 src/Dialogs/dlgConfiguration.cpp:1062
+#: src/ExpandMacros.cpp:370 src/Dialogs/dlgConfiguration.cpp:1062
 msgid "Long"
 msgstr ""
 
-#: src/ExpandMacros.cpp:344 src/Dialogs/dlgConfiguration.cpp:1063
+#: src/ExpandMacros.cpp:374 src/Dialogs/dlgConfiguration.cpp:1063
 msgid "Short"
 msgstr ""
 
-#: src/ExpandMacros.cpp:348 src/Dialogs/dlgConfiguration.cpp:1064
+#: src/ExpandMacros.cpp:378 src/Dialogs/dlgConfiguration.cpp:1064
 msgid "Full"
 msgstr ""
 
-#: src/ExpandMacros.cpp:352 src/ExpandMacros.cpp:390 src/ExpandMacros.cpp:396
-#: src/ExpandMacros.cpp:399 src/ExpandMacros.cpp:423 src/ExpandMacros.cpp:476
+#: src/ExpandMacros.cpp:382 src/ExpandMacros.cpp:420 src/ExpandMacros.cpp:426
+#: src/ExpandMacros.cpp:429 src/ExpandMacros.cpp:453 src/ExpandMacros.cpp:506
 #: src/Dialogs/dlgConfiguration.cpp:1061
 msgid "Off"
 msgstr ""
 
-#: src/ExpandMacros.cpp:359 src/ExpandMacros.cpp:409
+#: src/ExpandMacros.cpp:389 src/ExpandMacros.cpp:439
 #: src/InputEventsActions.cpp:1593 src/InputEventsActions.cpp:1596
 #: src/Dialogs/XML.cpp:504 src/Dialogs/dlgConfiguration.cpp:810
 #: src/Dialogs/dlgConfiguration.cpp:888 src/Dialogs/dlgConfiguration.cpp:1316
@@ -259,44 +259,44 @@ msgstr ""
 msgid "OFF"
 msgstr ""
 
-#: src/ExpandMacros.cpp:359 src/ExpandMacros.cpp:413
+#: src/ExpandMacros.cpp:389 src/ExpandMacros.cpp:443
 #: src/InputEventsActions.cpp:1591 src/InputEventsActions.cpp:1596
 #: src/Dialogs/XML.cpp:504 src/Dialogs/dlgStatus.cpp:202
 msgid "ON"
 msgstr ""
 
-#: src/ExpandMacros.cpp:371
+#: src/ExpandMacros.cpp:401
 msgid "Topology on"
 msgstr ""
 
-#: src/ExpandMacros.cpp:375
+#: src/ExpandMacros.cpp:405
 msgid "Terrain on"
 msgstr ""
 
-#: src/ExpandMacros.cpp:379
+#: src/ExpandMacros.cpp:409
 msgid "Terrain + Topology"
 msgstr ""
 
-#: src/ExpandMacros.cpp:383
+#: src/ExpandMacros.cpp:413
 msgid "Terrain off"
 msgstr ""
 
-#: src/ExpandMacros.cpp:390 src/ExpandMacros.cpp:396 src/ExpandMacros.cpp:399
-#: src/ExpandMacros.cpp:423 src/ExpandMacros.cpp:476
+#: src/ExpandMacros.cpp:420 src/ExpandMacros.cpp:426 src/ExpandMacros.cpp:429
+#: src/ExpandMacros.cpp:453 src/ExpandMacros.cpp:506
 msgid "On"
 msgstr ""
 
-#: src/ExpandMacros.cpp:393 src/ExpandMacros.cpp:420
+#: src/ExpandMacros.cpp:423 src/ExpandMacros.cpp:450
 #: src/Dialogs/dlgConfiguration.cpp:912 src/Dialogs/dlgWindSettings.cpp:100
 msgid "Manual"
 msgstr ""
 
-#: src/ExpandMacros.cpp:393 src/ExpandMacros.cpp:420
+#: src/ExpandMacros.cpp:423 src/ExpandMacros.cpp:450
 #: src/Dialogs/dlgConfiguration.cpp:761 Data/Dialogs/dlgBrightness.xml:6
 msgid "Auto"
 msgstr ""
 
-#: src/ExpandMacros.cpp:405
+#: src/ExpandMacros.cpp:435
 msgid "MID"
 msgstr ""
 
