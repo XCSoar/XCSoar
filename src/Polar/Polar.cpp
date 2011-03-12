@@ -73,7 +73,8 @@ SimplePolar::IsValid() const
 void
 SimplePolar::Init()
 {
-  v1 = v2 = v3 = w1 = w2 = w3 = dry_mass = max_ballast = wing_area = v_no = 0.0;
+  v1 = v2 = v3 = w1 = w2 = w3 = fixed_zero;
+  dry_mass = max_ballast = wing_area = v_no = fixed_zero;
   name = NULL;
 }
 
@@ -104,10 +105,14 @@ SimplePolar::GetString(TCHAR* line, size_t size, bool include_v_no) const
 {
   if (include_v_no)
     _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
-               dry_mass, max_ballast, v1, w1, v2, w2, v3, w3, wing_area, v_no);
+               (double)dry_mass, (double)max_ballast, (double)v1, (double)w1,
+               (double)v2, (double)w2, (double)v3, (double)w3,
+               (double)wing_area, (double)v_no);
   else
     _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
-               dry_mass, max_ballast, v1, w1, v2, w2, v3, w3, wing_area);
+               (double)dry_mass, (double)max_ballast, (double)v1, (double)w1,
+               (double)v2, (double)w2, (double)v3, (double)w3,
+               (double)wing_area);
 }
 
 bool
@@ -124,37 +129,37 @@ SimplePolar::ReadString(const TCHAR *line)
 
   TCHAR *p;
 
-  polar.dry_mass = _tcstod(line, &p);
+  polar.dry_mass = fixed(_tcstod(line, &p));
   if (*p != _T(','))
     return false;
 
-  polar.max_ballast = _tcstod(p + 1, &p);
+  polar.max_ballast = fixed(_tcstod(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  polar.v1 = _tcstod(p + 1, &p);
+  polar.v1 = fixed(_tcstod(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  polar.w1 = _tcstod(p + 1, &p);
+  polar.w1 = fixed(_tcstod(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  polar.v2 = _tcstod(p + 1, &p);
+  polar.v2 = fixed(_tcstod(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  polar.w2 = _tcstod(p + 1, &p);
+  polar.w2 = fixed(_tcstod(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  polar.v3 = _tcstod(p + 1, &p);
+  polar.v3 = fixed(_tcstod(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  polar.w3 = _tcstod(p + 1, &p);
-  polar.wing_area = (*p != _T(',')) ? 0.0 : _tcstod(p + 1, &p);
-  polar.v_no = (*p != _T(',')) ? 0.0 : _tcstod(p + 1, &p);
+  polar.w3 = fixed(_tcstod(p + 1, &p));
+  polar.wing_area = (*p != _T(',')) ? fixed_zero : fixed(_tcstod(p + 1, &p));
+  polar.v_no = (*p != _T(',')) ? fixed_zero : fixed(_tcstod(p + 1, &p));
 
   *this = polar;
 

@@ -45,16 +45,16 @@ struct InternalPolarInfo
 
   void Transfer(SimplePolar &polar) const {
     polar.name = name;
-    polar.dry_mass = dry_mass;
-    polar.max_ballast = max_ballast;
-    polar.v1 = v1;
-    polar.w1 = w1;
-    polar.v2 = v2;
-    polar.w2 = w2;
-    polar.v3 = v3;
-    polar.w3 = w3;
-    polar.wing_area = wing_area;
-    polar.v_no = v_no;
+    polar.dry_mass = fixed(dry_mass);
+    polar.max_ballast = fixed(max_ballast);
+    polar.v1 = fixed(v1);
+    polar.w1 = fixed(w1);
+    polar.v2 = fixed(v2);
+    polar.w2 = fixed(w2);
+    polar.v3 = fixed(v3);
+    polar.w3 = fixed(w3);
+    polar.wing_area = fixed(wing_area);
+    polar.v_no = fixed(v_no);
   }
 };
 

@@ -44,16 +44,16 @@ struct SimplePolar
 
   // Using doubles here to simplify the code in PolarStore.cpp
   //
-  double dry_mass;     /**< Mass dry gross (kg) */
-  double max_ballast;  /**< Max water ballast (l) */
-  double v1;           /**< Speed (kph) of point 1 */
-  double w1;           /**< Sink rate (negative, m/s) of point 1  */
-  double v2;           /**< Speed (kph) of point 2 */
-  double w2;           /**< Sink rate (negative, m/s) of point 2  */
-  double v3;           /**< Speed (kph) of point 3 */
-  double w3;           /**< Sink rate (negative, m/s) of point 3  */
-  double wing_area;    /**< Reference wing area (m^2) */
-  double v_no;         /**< Maximum speed for normal operations (m/s) */
+  fixed dry_mass;     /**< Mass dry gross (kg) */
+  fixed max_ballast;  /**< Max water ballast (l) */
+  fixed v1;           /**< Speed (kph) of point 1 */
+  fixed w1;           /**< Sink rate (negative, m/s) of point 1  */
+  fixed v2;           /**< Speed (kph) of point 2 */
+  fixed w2;           /**< Sink rate (negative, m/s) of point 2  */
+  fixed v3;           /**< Speed (kph) of point 3 */
+  fixed w3;           /**< Sink rate (negative, m/s) of point 3  */
+  fixed wing_area;    /**< Reference wing area (m^2) */
+  fixed v_no;         /**< Maximum speed for normal operations (m/s) */
 
   bool ReadString(const TCHAR* line);
   void GetString(TCHAR* line, size_t size, bool include_v_no = false) const;
