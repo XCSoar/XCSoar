@@ -296,6 +296,8 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent, const TCHAR *panel_name,
   edit_content->SetDataField(dfe);
   edit_content->SetOnHelpCallback(OnContentHelp);
 
+  RefreshEditContent();
+
   ButtonWindowStyle button_style;
   button_style.tab_stop();
   const unsigned button_width = Layout::Scale(60);
