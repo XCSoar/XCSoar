@@ -327,8 +327,7 @@ ReadBlock(Port &port, void *dest, size_t max_length, size_t length)
   if (length == 0)
     return true;
 
-  int nbytes = port.Read(dest, length);
-  return nbytes > 0 && (size_t)nbytes == length;
+  return port.FullRead(dest, length, 3000);
 }
 
 static bool

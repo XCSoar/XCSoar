@@ -49,6 +49,27 @@ Port::GetChar()
 }
 
 bool
+Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
+{
+  PeriodClock timeout;
+  timeout.update();
+
+  char *p = (char *)buffer, *end = p + length;
+  while (p < end) {
+    if (timeout.check(timeout_ms))
+      return false;
+
+    int nbytes = Read(p, end - p);
+    if (nbytes <= 0)
+      return false;
+
+    p += nbytes;
+  }
+
+  return true;
+}
+
+bool
 Port::ExpectString(const char *token)
 {
   assert(token != NULL);
