@@ -88,6 +88,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.DateTime = date_time;
   basic.gps.SatellitesUsed = n_satellites;
   basic.gps.NAVWarning = n_satellites <= 0;
+  basic.gps.AndroidInternalGPS = true;
   basic.Location = GeoPoint(Angle::degrees(fixed(longitude)),
                             Angle::degrees(fixed(latitude)));
 

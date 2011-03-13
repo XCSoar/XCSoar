@@ -112,6 +112,15 @@ struct GPS_STATE
    */
   bool Simulator;
 
+#ifdef ANDROID
+  /**
+   * Was this fix obtained from an Android InternalGPS device?  If
+   * yes, then link timeout detection is disabled, because we get
+   * notifications from Android when the GPS gets disconnected.
+   */
+  bool AndroidInternalGPS;
+#endif
+
   /**
    * Adds data from the specified object, unless already present in
    * this one.

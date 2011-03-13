@@ -9,6 +9,7 @@ Version 6.0.8 - not yet released
 * Android
   - calculate WGS84 to real altitude (internal GPS)
   - fix incorrect airspace warning repetitions
+  - auto-reconnect to Bluetooth GPS after timeout
 * Linux
   - more dialog improvements
   - fix bold font rendering

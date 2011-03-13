@@ -59,6 +59,10 @@ DeviceBlackboard::Initialise()
   gps_info.gps.NAVWarning = true;
   gps_info.gps.Simulator = false;
 
+#ifdef ANDROID
+  gps_info.gps.AndroidInternalGPS = false;
+#endif
+
   // Clear the SwitchStates
   gps_info.SwitchStateAvailable = false;
   gps_info.SwitchState.AirbrakeLocked = false;
@@ -183,7 +187,13 @@ DeviceBlackboard::LowerConnection()
   ScopeLock protect(mutexBlackboard);
   GPS_STATE &gps = SetBasic().gps;
 
-  if (!is_android() && gps.Connected)
+  bool enable_link_timeouts = true;
+#ifdef ANDROID
+  if (gps.AndroidInternalGPS)
+    enable_link_timeouts = false;
+#endif
+
+  if (enable_link_timeouts && gps.Connected)
     gps.Connected--;
 
   return gps.Connected > 0;
@@ -209,6 +219,10 @@ DeviceBlackboard::ProcessSimulation()
 
   SetBasic().gps.Simulator = true;
   SetBasic().gps.MovementDetected = false;
+
+#ifdef ANDROID
+  SetBasic().gps.AndroidInternalGPS = false;
+#endif
 
   SetNAVWarning(false);
   SetBasic().Location = FindLatitudeLongitude(Basic().Location,

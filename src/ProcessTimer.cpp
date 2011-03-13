@@ -153,12 +153,10 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
       // no activity for 30 seconds, so assume PDA has been
       // switched off and on again
       //
-#ifdef _WIN32_WCE
       if (!is_altair()) {
         InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
         devRestart();
       }
-#endif
     }
   }
 
