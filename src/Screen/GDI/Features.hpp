@@ -30,4 +30,23 @@ Copyright_License {
  */
 #define HAVE_CLIPPING
 
+#ifdef _WIN32_WCE /* embedded Windows? */
+
+/* AlphaBlend() is implemented since WM5, but we need to load it
+   dynamically from coredll.dll */
+#if _WIN32_WCE >= 0x500
+#define HAVE_ALPHA_BLEND
+#define HAVE_DYNAMIC_ALPHA_BLEND
+#endif
+
+#else /* !_WIN32_WCE */
+
+/* AlphaBlend() is implemented since Windows 2000 */
+#if _WIN32_WINDOWS >= 0x500
+#define HAVE_ALPHA_BLEND
+#define HAVE_BUILTIN_ALPHA_BLEND
+#endif
+
+#endif /* !_WIN32_WCE */
+
 #endif

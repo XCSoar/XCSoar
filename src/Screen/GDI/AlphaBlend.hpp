@@ -24,13 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_GDI_ALPHA_BLEND_HPP
 #define XCSOAR_SCREEN_GDI_ALPHA_BLEND_HPP
 
+#include "Screen/GDI/Features.hpp"
+
+#ifdef HAVE_ALPHA_BLEND
+
 #include <windows.h>
 
-#ifdef _WIN32_WCE /* embedded Windows? */
-
-#if _WIN32_WCE >= 0x500
-#define HAVE_ALPHA_BLEND
-#define HAVE_DYNAMIC_ALPHA_BLEND
+#ifdef HAVE_DYNAMIC_ALPHA_BLEND
 
 typedef BOOL (*AlphaBlend_t)(HDC hdcDest,
                              int xoriginDest, int yoriginDest,
@@ -54,14 +54,7 @@ AlphaBlendAvailable()
   return AlphaBlend != NULL;
 }
 
-#endif /* WM5 */
-
-#elif defined(_WIN32_WINDOWS) /* desktop Windows? */
-
-#if _WIN32_WINDOWS >= 0x500
-/* need Windows 2000 for alpha blending */
-#define HAVE_ALPHA_BLEND
-#define HAVE_BUILTIN_ALPHA_BLEND
+#elif defined(HAVE_BUILTIN_ALPHA_BLEND)
 
 static inline bool
 AlphaBlendAvailable()
@@ -69,8 +62,10 @@ AlphaBlendAvailable()
   return true;
 }
 
+#else
+#error No alpha blending
 #endif
 
-#endif
+#endif /* HAVE_ALPHA_BLEND */
 
 #endif
