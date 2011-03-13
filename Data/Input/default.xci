@@ -328,6 +328,26 @@ type=gesture
 data=DU
 event=Mode Menu
 
+mode=default
+type=gesture
+data=RD
+event=Calculator
+
+mode=default
+type=gesture
+data=URD
+event=Analysis
+
+mode=default
+type=gesture
+data=URDL
+event=Pan supertoggle
+
+mode=default
+type=gesture
+data=LDRDL
+event=Status all
+
 ###
 
 mode=default
