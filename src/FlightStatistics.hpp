@@ -26,24 +26,6 @@ Copyright_License {
 
 #include "Math/leastsqs.h"
 #include "Thread/Mutex.hpp"
-#include "Sizes.h"
-#include "Navigation/TracePoint.hpp"
-
-#include <windef.h>
-#include <tchar.h>
-
-struct NMEA_INFO;
-struct DERIVED_INFO;
-struct SETTINGS_COMPUTER;
-struct SETTINGS_MAP;
-class Canvas;
-class WindStore;
-class Airspaces;
-class RasterTerrain;
-class GlidePolar;
-class Chart;
-class TaskManager;
-class ProtectedTaskManager;
 
 class FlightStatistics {
 public:
@@ -56,6 +38,7 @@ public:
   Mutex mutexStats;
 
   void StartTask();
+
   fixed AverageThermalAdjusted(const fixed wthis, const bool circling);
 
   void AddAltitude(const fixed tflight, const fixed alt);
@@ -66,50 +49,6 @@ public:
   void AddThermalAverage(const fixed v);
 
   void Reset();
-  void RenderBarograph(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
-                       const DERIVED_INFO &derived_info,
-                       const ProtectedTaskManager *task) const;
-
-  void RenderClimb(Canvas &canvas, const RECT rc,
-                   const GlidePolar& glide_polar) const;
-
-  void RenderGlidePolar(Canvas &canvas, const RECT rc,
-                        const DERIVED_INFO &derived,
-                        const SETTINGS_COMPUTER &settings_computer,
-                        const GlidePolar& glide_polar) const;
-
-  void RenderWind(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
-                  const WindStore &wind_store) const;
-
-  void RenderTemperature(Canvas &canvas, const RECT rc) const;
-
-
-  void RenderTrace(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
-                   const SETTINGS_COMPUTER &settings_computer,
-                   const SETTINGS_MAP &settings_map,
-                   const TracePointVector& trace) const;
-
-  void RenderOLC(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
-                 const SETTINGS_COMPUTER &settings_computer,
-                 const SETTINGS_MAP &settings_map,
-                 const TracePointVector& olc,
-                 const TracePointVector& trace) const;
-
-  void RenderTask(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
-                  const SETTINGS_COMPUTER &settings_computer,
-                  const SETTINGS_MAP &settings_map,
-                  const TaskManager &task) const;
-
-  void RenderSpeed(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
-                   const DERIVED_INFO &derived_info,
-                   const TaskManager &task) const;
-
-  void CaptionBarograph(TCHAR *sTmp);
-  void CaptionClimb(TCHAR* sTmp);
-  void CaptionPolar(TCHAR * sTmp, const GlidePolar& glide_polar) const;
-
-  void CaptionTempTrace(TCHAR *sTmp) const;
-  void CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const;
 };
 
 #endif

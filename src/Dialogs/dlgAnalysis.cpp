@@ -39,6 +39,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Compiler.h"
 #include "UnitsFormatter.hpp"
+#include "FlightStatisticsRenderer.hpp"
 
 #include <stdio.h>
 
@@ -94,7 +95,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 
   // background is painted in the base-class
 
-  const FlightStatistics &fs = glide_computer->GetFlightStats();
+  const FlightStatisticsRenderer fs(glide_computer->GetFlightStats());
   GlidePolar glide_polar(fixed_zero);
   if (protected_task_manager != NULL)
     glide_polar = protected_task_manager->get_glide_polar();
@@ -168,7 +169,7 @@ Update(void)
 
   assert(glide_computer != NULL);
 
-  FlightStatistics &fs = glide_computer->GetFlightStats();
+  FlightStatisticsRenderer fs(glide_computer->GetFlightStats());
   GlidePolar polar(fixed_zero);
   if (protected_task_manager != NULL)
     polar = protected_task_manager->get_glide_polar();

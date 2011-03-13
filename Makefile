@@ -363,6 +363,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Persist.cpp \
 	$(SRC)/FlightStatistics.cpp \
+	$(SRC)/FlightStatisticsRenderer.cpp \
 	\
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \
