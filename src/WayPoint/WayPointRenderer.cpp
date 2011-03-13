@@ -93,6 +93,9 @@ public:
   {
     Buffer[0] = _T('\0');
 
+    if (way_point.Name.length() >= NAME_SIZE - sizeof(Buffer[0]) * 20)
+      return;
+
     switch (pDisplayTextType) {
     case DISPLAYNAME:
       _tcscpy(Buffer, way_point.Name.c_str());
@@ -276,7 +279,7 @@ public:
       text_mode.Bold = false;
     }
 
-    TCHAR Buffer[32];
+    TCHAR Buffer[NAME_SIZE+1];
     FormatLabel(Buffer, way_point, arrival_height_glide, arrival_height_terrain,
                 watchedWaypoint);
 
