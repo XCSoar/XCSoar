@@ -29,7 +29,11 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
+#include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
+#include "Task/ObservationZones/KeyHoleZone.hpp"
+#include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
+#include "Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
 
 struct SeeYouTaskInformation {
@@ -224,52 +228,91 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
 
 /**
  * Creates the correct XCSoar OZ type from the See You OZ options for the point
+ * Note: there are several rules enforced here related to the combinations
+ * and types of Zones supported by XCSoar.  When XCSoar adds more zone types,
+ * the logic below will need to be updated.
  * @param turnpoint_infos Contains the See You turnpoint and OZ info
- * @param wp The waypoint
- * @param isIntermediate.  True if not start or end point
+ * @param current point position
+ * @param number wps in task
+ * @param array of wps for each point in task
  * @param factType The XCSoar factory type
  * @return the XCSoar OZ
  */
 static ObservationZonePoint*
 CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
-    const Waypoint *wp, bool isIntermediate,
-    TaskBehaviour::Factory_t factType)
+         unsigned pos, unsigned size, const Waypoint *wps[],
+         TaskBehaviour::Factory_t factType)
 {
   ObservationZonePoint* oz = NULL;
+  const bool isIntermediate = (pos > 0) && (pos < (size - 1));
+  const Waypoint *wp = wps[pos];
 
   if (!turnpoint_infos.Valid)
     oz = NULL;
 
-  else if (turnpoint_infos.Line)
+  if (!isIntermediate && turnpoint_infos.Line) // special case "Line"
     oz = new LineSectorZone(wp->Location, turnpoint_infos.Radius1);
 
+  // special case "Cylinder"
   else if (fabs(turnpoint_infos.Angle1.value_degrees() - fixed(180)) < fixed(1) )
     oz = new CylinderZone(wp->Location, turnpoint_infos.Radius1);
 
-  else if (turnpoint_infos.Style == SeeYouTurnpointInformation::Fixed) {
+  else if (factType == TaskBehaviour::FACTORY_RT) {
 
-    if (factType == TaskBehaviour::FACTORY_RT) {
-      // ToDo: XCSoar does not support fixed sectors for RT
+    // XCSoar does not support fixed sectors for RT
+    if (turnpoint_infos.Style == SeeYouTurnpointInformation::Fixed)
       oz = new CylinderZone(wp->Location, turnpoint_infos.Radius1);
+    else
+      oz = new FAISectorZone(wp->Location, isIntermediate);
 
+  } else if (isIntermediate) { //AAT intermediate point
+    Angle A12adj = turnpoint_infos.Angle12.Reciprocal();
+    assert(wps[pos + 1]);
+    assert(wps[pos - 1]);
+
+    switch (turnpoint_infos.Style) {
+    case SeeYouTurnpointInformation::Fixed: {
+      A12adj = turnpoint_infos.Angle12.Reciprocal();
+      break;
+    }
+    case SeeYouTurnpointInformation::Symmetrical: {
+      const Angle ap = wps[pos - 1]->Location.bearing(wp->Location);
+      const Angle an = wps[pos + 1]->Location.bearing(wp->Location);
+      A12adj = ap.HalfAngle(an).Reciprocal();
+      break;
+    }
+
+    case SeeYouTurnpointInformation::ToNextPoint: {
+      A12adj = wps[pos + 1]->Location.bearing(wp->Location);
+      break;
+    }
+    case SeeYouTurnpointInformation::ToPreviousPoint: {
+      A12adj = wps[pos - 1]->Location.bearing(wp->Location);
+      break;
+    }
+    case SeeYouTurnpointInformation::ToStartPoint: {
+      A12adj = wps[0]->Location.bearing(wp->Location);
+      break;
+    }
+    }
+
+    const Angle RadialStart = (A12adj
+        - turnpoint_infos.Angle1).as_bearing();
+    const Angle RadialEnd = (A12adj
+        + turnpoint_infos.Angle1).as_bearing();
+
+    if (turnpoint_infos.Radius2 > fixed_zero &&
+        (turnpoint_infos.Angle2.as_bearing().value_degrees()) < fixed_one) {
+      oz = new AnnularSectorZone(wp->Location, turnpoint_infos.Radius1,
+          RadialStart, RadialEnd, turnpoint_infos.Radius2);
     } else {
-      const Angle A12adj = turnpoint_infos.Angle12.Reciprocal();
-
-      const Angle RadialStart = (A12adj
-          - turnpoint_infos.Angle1).as_bearing();
-      const Angle RadialEnd = (A12adj
-          + turnpoint_infos.Angle1).as_bearing();
-
       oz = new SectorZone(wp->Location, turnpoint_infos.Radius1,
           RadialStart, RadialEnd);
     }
-  }
-  // symmetric sector
-  else if (factType == TaskBehaviour::FACTORY_RT)
-    oz = new FAISectorZone(wp->Location, isIntermediate);
 
-  else // XCSoar does not support symmetric sector for AAT
+  } else { // XCSoar only implement lines & cylinders for AAT start or finish
     oz = new CylinderZone(wp->Location, turnpoint_infos.Radius1);
+  }
 
   return oz;
 }
@@ -357,6 +400,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 
   SeeYouTaskInformation task_info;
   SeeYouTurnpointInformation turnpoint_infos[30];
+  const Waypoint *wpsInTask[30];
 
   ParseCUTaskDetails(reader, &task_info, turnpoint_infos);
 
@@ -375,7 +419,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     task->set_ordered_task_behaviour(beh);
   }
 
-  // load task waypoints.  Skip takeoff and landing point
+  // mark task waypoints.  Skip takeoff and landing point
   for (unsigned i = 0; i < n_waypoints; i++) {
     const Waypoint* file_wp = file_waypoints.lookup_name(wps[i + 2]);
     if (file_wp == NULL)
@@ -385,19 +429,23 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     if (wp == NULL)
       wp = file_wp;
 
-    const bool isIntermediate = (i > 0) && (i < (n_waypoints - 1));
-    ObservationZonePoint* oz = CreateOZ(turnpoint_infos[i], wp,
-        isIntermediate, factType);
+    wpsInTask[i] = wp;
+  }
 
-    OrderedTaskPoint *pt = CreatePoint(i, n_waypoints, wp, fact, oz,
-        factType);
+  //now create TPs and OZs
+  for (unsigned i = 0; i < n_waypoints; i++) {
+
+    ObservationZonePoint* oz = CreateOZ(turnpoint_infos[i], i, n_waypoints,
+                                        wpsInTask, factType);
+    assert(wpsInTask[i]);
+    OrderedTaskPoint *pt = CreatePoint(i, n_waypoints, wpsInTask[i],
+                                       fact, oz, factType);
 
     if (pt != NULL)
       fact.append(*pt, false);
 
     delete pt;
   }
-
   return task;
 }
 
