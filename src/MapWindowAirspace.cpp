@@ -315,14 +315,16 @@ public:
 
 private:
   void set_buffer_pens(const AbstractAirspace &airspace) {
+    const unsigned color_index =
+      m_settings_map.iAirspaceColour[airspace.get_type()];
+
 #ifdef ENABLE_SDL
-    Color color = Graphics::Colours[m_settings_map.iAirspaceColour[airspace.get_type()]];
+    Color color = Graphics::Colours[color_index];
     m_buffer.select(Brush(color));
 #else /* !SDL */
 
     // this color is used as the black bit
-    m_buffer.set_text_color(light_color(Graphics::Colours[m_settings_map.
-                                        iAirspaceColour[airspace.get_type()]]));
+    m_buffer.set_text_color(light_color(Graphics::Colours[color_index]));
 
     // get brush, can be solid or a 1bpp bitmap
     m_buffer.select(Graphics::hAirspaceBrushes[m_settings_map.
