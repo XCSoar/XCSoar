@@ -378,6 +378,10 @@ Graphics::Deinitialise()
 {
   DeinitialiseUnitSymbols();
 
+  AlarmBrush.reset();
+  WarningBrush.reset();
+  TrafficBrush.reset();
+
   hAirspaceInterceptBitmap.reset();
   hTerrainWarning.reset();
   hFLARMTraffic.reset();
@@ -389,6 +393,19 @@ Graphics::Deinitialise()
   hAbort.reset();
   hGPSStatus1.reset();
   hGPSStatus2.reset();
+
+#ifndef ENABLE_SDL
+  for (unsigned i = 0; i < NUMAIRSPACEBRUSHES; i++) {
+    hAirspaceBrushes[i].reset();
+    hAirspaceBitmap[i].reset();
+  }
+
+  hAboveTerrainBrush.reset();
+  hAboveTerrainBitmap.reset();
+#endif
+
+  for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
+    hAirspacePens[i].reset();
 
   SmallIcon.reset();
   TurnPointIcon.reset();
@@ -421,6 +438,11 @@ Graphics::Deinitialise()
   hbNotReachableTerrain.reset();
 
   hpTrackBearingLine.reset();
+
+  for (unsigned i = 0; i < NUMSNAILCOLORS; i++) {
+    hpSnail[i].reset();
+    hpSnailVario[i].reset();
+  }
 }
 
 void
