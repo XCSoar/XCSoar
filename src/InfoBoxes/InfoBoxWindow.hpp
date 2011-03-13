@@ -107,9 +107,9 @@ private:
   /** a timer which returns keyboard focus back to the map window after a while */
   timer_t focus_timer;
 
-  RECT   recTitle;
-  RECT   recValue;
-  RECT   recComment;
+  RECT recTitle;
+  RECT recValue;
+  RECT recComment;
 
   int colorValue;
   int colorComment;
@@ -240,6 +240,10 @@ public:
   bool HandleQuickAccess(const TCHAR *Value);
 
   InfoBoxContent::DialogContent* GetDialogContent();
+
+  const RECT get_value_rect() const {
+    return recValue;
+  }
 
 protected:
   /**
