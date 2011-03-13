@@ -21,15 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_FEATURES_HPP
-#define XCSOAR_SCREEN_FEATURES_HPP
+#ifndef XCSOAR_SCREEN_GDI_FEATURES_HPP
+#define XCSOAR_SCREEN_GDI_FEATURES_HPP
 
-#ifdef ENABLE_SDL
-
-#else
-
-#include "Screen/GDI/Features.hpp"
-
-#endif
+/**
+ * This macro is defined when the Canvas implements clipping against
+ * its siblings and children.
+ */
+#define HAVE_CLIPPING
 
 #endif
