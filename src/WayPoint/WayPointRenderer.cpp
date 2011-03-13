@@ -93,7 +93,7 @@ public:
   {
     Buffer[0] = _T('\0');
 
-    if (way_point.Name.length() >= NAME_SIZE - sizeof(Buffer[0]) * 20)
+    if (way_point.Name.length() >= NAME_SIZE - 20)
       return;
 
     switch (pDisplayTextType) {
