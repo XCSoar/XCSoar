@@ -31,7 +31,7 @@
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
-#include "Task/ObservationZones/KeyHoleZone.hpp"
+#include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
@@ -226,6 +226,43 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
   } // end while
 }
 
+static bool isKeyhole(const SeeYouTurnpointInformation &turnpoint_infos)
+{
+  if (fabs(turnpoint_infos.Angle1.value_degrees() - fixed(45)) < fixed(2) &&
+      fabs(turnpoint_infos.Radius1 - fixed(10000)) < fixed(2) &&
+      fabs(turnpoint_infos.Angle2.value_degrees() - fixed(180)) < fixed(2) &&
+      fabs(turnpoint_infos.Radius2 - fixed(500)) < fixed(2))
+
+    return true;
+      else
+    return false;
+}
+
+static bool isBGAFixedCourseZone(const SeeYouTurnpointInformation &turnpoint_infos)
+{
+  if (fabs(turnpoint_infos.Angle1.value_degrees() - fixed(45)) < fixed(2) &&
+      fabs(turnpoint_infos.Radius1 - fixed(20000)) < fixed(2) &&
+      fabs(turnpoint_infos.Angle2.value_degrees() - fixed(180)) < fixed(2) &&
+      fabs(turnpoint_infos.Radius2 - fixed(500)) < fixed(2))
+
+    return true;
+      else
+    return false;
+}
+
+static bool isBGAEnhancedOptionZone(const SeeYouTurnpointInformation
+                                    &turnpoint_infos)
+{
+  if (fabs(turnpoint_infos.Angle1.value_degrees() - fixed(90)) < fixed(2) &&
+      fabs(turnpoint_infos.Radius1 - fixed(10000)) < fixed(2) &&
+      fabs(turnpoint_infos.Angle2.value_degrees() - fixed(180)) < fixed(2) &&
+      fabs(turnpoint_infos.Radius2 - fixed(500)) < fixed(2))
+
+    return true;
+      else
+    return false;
+}
+
 /**
  * Creates the correct XCSoar OZ type from the See You OZ options for the point
  * Note: there are several rules enforced here related to the combinations
@@ -250,7 +287,19 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
   if (!turnpoint_infos.Valid)
     oz = NULL;
 
-  if (!isIntermediate && turnpoint_infos.Line) // special case "Line"
+  if (factType == TaskBehaviour::FACTORY_RT &&
+      isIntermediate && isKeyhole(turnpoint_infos))
+    oz = new KeyholeZone(wp->Location);
+
+  else if (factType == TaskBehaviour::FACTORY_RT &&
+      isIntermediate && isBGAEnhancedOptionZone(turnpoint_infos))
+    oz = new BGAEnhancedOptionZone(wp->Location);
+
+  else if (factType == TaskBehaviour::FACTORY_RT &&
+      isIntermediate && isBGAFixedCourseZone(turnpoint_infos))
+    oz = new BGAFixedCourseZone(wp->Location);
+
+  else if (!isIntermediate && turnpoint_infos.Line) // special case "Line"
     oz = new LineSectorZone(wp->Location, turnpoint_infos.Radius1);
 
   // special case "Cylinder"
@@ -310,7 +359,7 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
           RadialStart, RadialEnd);
     }
 
-  } else { // XCSoar only implement lines & cylinders for AAT start or finish
+  } else { // catch-all
     oz = new CylinderZone(wp->Location, turnpoint_infos.Radius1);
   }
 
