@@ -137,7 +137,8 @@ public:
   {
     FormatTitle(buffer, way_point);
 
-    if (arrival_height_glide < 0 && !show_negative_arrival_height_glide)
+    if ((arrival_height_glide < 0 && !show_negative_arrival_height_glide) ||
+        arrival_height_glide == 0)
       return;
 
     if (settings_map.WaypointArrivalHeightDisplay == WP_ARRIVAL_HEIGHT_NONE)
