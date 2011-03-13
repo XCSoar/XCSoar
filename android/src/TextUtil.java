@@ -56,7 +56,7 @@ public class TextUtil {
         m[0] = 'M';
         paint.getTextBounds(m, 0, 1, bounds);
 
-        metrics[0] = Math.round(paint.getTextSize());
+        metrics[0] = Math.round(paint.descent() - paint.ascent());
         metrics[1] = paint.getTypeface().getStyle();
         metrics[2] = Math.round(-paint.ascent());
         metrics[3] = bounds.height();
