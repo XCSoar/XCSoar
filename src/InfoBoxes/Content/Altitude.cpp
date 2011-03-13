@@ -323,7 +323,7 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
     infobox.SetInvalid();
 
     if (basic.PressureAltitudeAvailable && !basic.QNHAvailable)
-      infobox.SetComment(_T("set QNH"));
+      infobox.SetComment(_("no QNH"));
 
     return;
   }
@@ -410,7 +410,7 @@ InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
 
   } else if ((basic.BaroAltitudeAvailable || basic.GPSAltitudeAvailable) && !basic.QNHAvailable) {
     infobox.SetInvalid();
-    infobox.SetComment(_T("set QNH"));
+    infobox.SetComment(_("no QNH"));
   } else {
     infobox.SetInvalid();
   }
