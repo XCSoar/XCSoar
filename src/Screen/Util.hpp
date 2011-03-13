@@ -39,4 +39,9 @@ Segment(Canvas &canvas, long x, long y, int radius,
         Angle start, Angle end,
         bool horizon=false);
 
+bool
+Annulus(Canvas &canvas, long x, long y, int radius,
+        Angle start, Angle end,
+        int inner_radius);
+
 #endif
