@@ -46,6 +46,7 @@ class TaskManager;
 class ProtectedTaskManager;
 
 class FlightStatistics {
+public:
   LeastSquares ThermalAverage;
   LeastSquares Altitude;
   LeastSquares Altitude_Base;
@@ -54,7 +55,6 @@ class FlightStatistics {
   LeastSquares Altitude_Terrain;
   Mutex mutexStats;
 
-public:
   void StartTask();
   fixed AverageThermalAdjusted(const fixed wthis, const bool circling);
 
