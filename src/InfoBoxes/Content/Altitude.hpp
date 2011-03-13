@@ -43,7 +43,7 @@ public:
   static bool PnlInfoUpdate();
 
   static CallBackTableEntry CallBackTable[];
-  static InfoBoxPanelContent Panels[];
+  static PanelContent Panels[];
 
   static InfoBoxDlgContent dlgContent;
 

@@ -167,12 +167,12 @@ InfoBoxContentMacCready::PnlSetupOnMode(WndButton &Sender)
  */
 
 
-InfoBoxContentMacCready::InfoBoxPanelContent InfoBoxContentMacCready::Panels[] = {
-  InfoBoxContentMacCready::InfoBoxPanelContent (
+InfoBoxContentMacCready::PanelContent InfoBoxContentMacCready::Panels[] = {
+  InfoBoxContentMacCready::PanelContent (
     _T("Edit"),
     (*InfoBoxContentMacCready::PnlEditLoad)),
 
-  InfoBoxContentMacCready::InfoBoxPanelContent (
+  InfoBoxContentMacCready::PanelContent (
     _T("Setup"),
     (*InfoBoxContentMacCready::PnlSetupLoad),
     NULL,

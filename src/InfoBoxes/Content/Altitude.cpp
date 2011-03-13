@@ -186,14 +186,14 @@ InfoBoxContentAltitude::PnlSetupOnSetup(WndButton &Sender) {
  * Subpart callback function pointers
  */
 
-InfoBoxContentAltitude::InfoBoxPanelContent InfoBoxContentAltitude::Panels[] = {
-InfoBoxContentAltitude::InfoBoxPanelContent (
+InfoBoxContentAltitude::PanelContent InfoBoxContentAltitude::Panels[] = {
+InfoBoxContentAltitude::PanelContent (
   _T("Info"),
   (*InfoBoxContentAltitude::PnlInfoLoad),
   NULL,
   (*InfoBoxContentAltitude::PnlInfoOnTabPreShow)),
 
-InfoBoxContentAltitude::InfoBoxPanelContent (
+InfoBoxContentAltitude::PanelContent (
   _T("Setup"),
   (*InfoBoxContentAltitude::PnlSetupLoad))
 };

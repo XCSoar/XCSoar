@@ -46,7 +46,7 @@ public:
   static void PnlEditOnMinusBig(WndButton &Sender);
 
   static CallBackTableEntry CallBackTable[];
-  static InfoBoxPanelContent Panels[];
+  static PanelContent Panels[];
 
   static InfoBoxDlgContent dlgContent;
 

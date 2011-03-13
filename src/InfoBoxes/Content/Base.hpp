@@ -62,8 +62,8 @@ public:
     return false;
   }
 
-  struct InfoBoxPanelContent {
-    InfoBoxPanelContent(const TCHAR* _name,
+  struct PanelContent {
+    PanelContent(const TCHAR* _name,
                         Window* (*_load)(SingleWindow&, TabBarControl*, WndForm*, int),
                         bool (*_preHide)(void) = NULL,
                         bool (*_preShow)(TabBarControl::EventType) = NULL,
@@ -85,7 +85,7 @@ public:
 
   struct InfoBoxDlgContent {
     const int PANELSIZE;
-    InfoBoxPanelContent* Panels;
+    PanelContent* Panels;
     CallBackTableEntry* CallBackTable;
   };
 

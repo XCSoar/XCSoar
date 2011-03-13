@@ -252,14 +252,14 @@ InfoBoxContentWind::PnlSetupOnSetup(WndButton &Sender) {
  * Subpart callback function pointers
  */
 
-InfoBoxContentWind::InfoBoxPanelContent InfoBoxContentWind::Panels[] = {
-InfoBoxContentWind::InfoBoxPanelContent (
+InfoBoxContentWind::PanelContent InfoBoxContentWind::Panels[] = {
+InfoBoxContentWind::PanelContent (
   _T("Edit"),
   (*InfoBoxContentWind::PnlEditLoad),
   NULL,
   (*InfoBoxContentWind::PnlEditOnTabPreShow)),
 
-InfoBoxContentWind::InfoBoxPanelContent (
+InfoBoxContentWind::PanelContent (
   _T("Setup"),
   (*InfoBoxContentWind::PnlSetupLoad),
   (*InfoBoxContentWind::PnlSetupOnTabPreHide))
