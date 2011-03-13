@@ -75,6 +75,16 @@ Canvas::segment(int x, int y, unsigned radius,
   ::Segment(*this, x, y, radius, start, end, horizon);
 }
 
+void 
+Canvas::annulus(int x, int y, unsigned small_radius, unsigned big_radius,
+                Angle start, Angle end)
+{
+  assert(defined());
+
+  ::Annulus(*this, x, y, big_radius, start, end, small_radius);
+}
+
+
 const SIZE
 Canvas::text_size(const TCHAR *text, size_t length) const
 {
