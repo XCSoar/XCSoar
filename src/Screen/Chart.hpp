@@ -46,8 +46,8 @@ private:
   Pen pens[5];
 
 public:
-  int BORDER_X;
-  int BORDER_Y;
+  int PaddingLeft;
+  int PaddingBottom;
 
 public:
   Chart(Canvas &the_canvas, const RECT the_rc);

@@ -51,7 +51,7 @@ Chart::ResetScale()
 }
 
 Chart::Chart(Canvas &the_canvas, const RECT the_rc) :
-  canvas(the_canvas), rc(the_rc), BORDER_X(24), BORDER_Y(19)
+  canvas(the_canvas), rc(the_rc), PaddingLeft(24), PaddingBottom(19)
 {
   ResetScale();
 
@@ -88,7 +88,7 @@ Chart::ScaleYFromData(const LeastSquares &lsdata)
   if (fabs(y_max - y_min) > fixed(50)) {
     yscale = (y_max - y_min);
     if (positive(yscale))
-      yscale = fixed(rc.bottom - rc.top - BORDER_Y) / yscale;
+      yscale = fixed(rc.bottom - rc.top - PaddingBottom) / yscale;
   } else {
     yscale = fixed(2000);
   }
@@ -111,7 +111,7 @@ Chart::ScaleXFromData(const LeastSquares &lsdata)
 
   xscale = (x_max - x_min);
   if (positive(xscale))
-    xscale = fixed(rc.right - rc.left - BORDER_X) / xscale;
+    xscale = fixed(rc.right - rc.left - PaddingLeft) / xscale;
 }
 
 void
@@ -128,7 +128,7 @@ Chart::ScaleYFromValue(const fixed value)
 
   yscale = (y_max - y_min);
   if (positive(yscale))
-    yscale = fixed(rc.bottom - rc.top - BORDER_Y) / yscale;
+    yscale = fixed(rc.bottom - rc.top - PaddingBottom) / yscale;
 }
 
 void
@@ -145,7 +145,7 @@ Chart::ScaleXFromValue(const fixed value)
 
   xscale = (x_max - x_min);
   if (positive(xscale))
-    xscale = fixed(rc.right - rc.left - BORDER_X) / xscale;
+    xscale = fixed(rc.right - rc.left - PaddingLeft) / xscale;
 }
 
 void
@@ -168,7 +168,7 @@ Chart::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
 {
   SIZE tsize = canvas.text_size(text);
 
-  int x = (int)((xv - x_min) * xscale) + rc.left - tsize.cx / 2 + BORDER_X;
+  int x = (int)((xv - x_min) * xscale) + rc.left - tsize.cx / 2 + PaddingLeft;
   int y = (int)((y_max - yv) * yscale) + rc.top - tsize.cy / 2;
 
   canvas.background_transparent();
@@ -230,8 +230,8 @@ Chart::DrawTrend(const LeastSquares &lsdata, enum Style Style)
   ymin = lsdata.x_min * lsdata.m + lsdata.b;
   ymax = lsdata.x_max * lsdata.m + lsdata.b;
 
-  xmin = (xmin - x_min) * xscale + fixed(rc.left + BORDER_X);
-  xmax = (xmax - x_min) * xscale + fixed(rc.left + BORDER_X);
+  xmin = (xmin - x_min) * xscale + fixed(rc.left + PaddingLeft);
+  xmax = (xmax - x_min) * xscale + fixed(rc.left + PaddingLeft);
   ymin = (y_max - ymin) * yscale + fixed(rc.top);
   ymax = (y_max - ymax) * yscale + fixed(rc.top);
 
@@ -259,8 +259,8 @@ Chart::DrawTrendN(const LeastSquares &lsdata, enum Style Style)
   ymin = lsdata.x_min * lsdata.m + lsdata.b;
   ymax = lsdata.x_max * lsdata.m + lsdata.b;
 
-  xmin = (xmin) * xscale + fixed(rc.left + BORDER_X);
-  xmax = (xmax) * xscale + fixed(rc.left + BORDER_X);
+  xmin = (xmin) * xscale + fixed(rc.left + PaddingLeft);
+  xmax = (xmax) * xscale + fixed(rc.left + PaddingLeft);
   ymin = (y_max - ymin * yscale) + fixed(rc.top);
   ymax = (y_max - ymax * yscale) + fixed(rc.top);
 
@@ -281,9 +281,9 @@ Chart::DrawLine(const fixed xmin, const fixed ymin,
     return;
 
   RasterPoint line[2];
-  line[0].x = (int)((xmin - x_min) * xscale) + rc.left + BORDER_X;
+  line[0].x = (int)((xmin - x_min) * xscale) + rc.left + PaddingLeft;
   line[0].y = (int)((y_max - ymin) * yscale) + rc.top;
-  line[1].x = (int)((xmax - x_min) * xscale) + rc.left + BORDER_X;
+  line[1].x = (int)((xmax - x_min) * xscale) + rc.left + PaddingLeft;
   line[1].y = (int)((y_max - ymax) * yscale) + rc.top;
 
   StyleLine(line[0], line[1], pen);
@@ -310,9 +310,9 @@ Chart::DrawBarChart(const LeastSquares &lsdata)
   int xmin, ymin, xmax, ymax;
 
   for (int i = 0; i < lsdata.sum_n; i++) {
-    xmin = (fixed(i) + fixed(1.2)) * xscale + fixed(rc.left + BORDER_X);
+    xmin = (fixed(i) + fixed(1.2)) * xscale + fixed(rc.left + PaddingLeft);
     ymin = (y_max - y_min) * yscale + fixed(rc.top);
-    xmax = (fixed(i) + fixed(1.8)) * xscale + fixed(rc.left + BORDER_X);
+    xmax = (fixed(i) + fixed(1.8)) * xscale + fixed(rc.left + PaddingLeft);
     ymax = (y_max - lsdata.ystore[i]) * yscale + fixed(rc.top);
     canvas.rectangle(xmin, ymin, xmax, ymax);
   }
@@ -324,14 +324,14 @@ Chart::DrawFilledLineGraph(const LeastSquares &lsdata)
   RasterPoint line[4];
 
   for (int i = 0; i < lsdata.sum_n - 1; i++) {
-    line[0].x = (int)((lsdata.xstore[i] - x_min) * xscale) + rc.left + BORDER_X;
+    line[0].x = (int)((lsdata.xstore[i] - x_min) * xscale) + rc.left + PaddingLeft;
     line[0].y = (int)((y_max - lsdata.ystore[i]) * yscale) + rc.top;
-    line[1].x = (int)((lsdata.xstore[i + 1] - x_min) * xscale) + rc.left + BORDER_X;
+    line[1].x = (int)((lsdata.xstore[i + 1] - x_min) * xscale) + rc.left + PaddingLeft;
     line[1].y = (int)((y_max - lsdata.ystore[i + 1]) * yscale) + rc.top;
     line[2].x = line[1].x;
-    line[2].y = rc.bottom - BORDER_Y;
+    line[2].y = rc.bottom - PaddingBottom;
     line[3].x = line[0].x;
-    line[3].y = rc.bottom - BORDER_Y;
+    line[3].y = rc.bottom - PaddingBottom;
     canvas.polygon(line, 4);
   }
 }
@@ -342,9 +342,9 @@ Chart::DrawLineGraph(const LeastSquares &lsdata, enum Style Style)
   RasterPoint line[2];
 
   for (int i = 0; i < lsdata.sum_n - 1; i++) {
-    line[0].x = (int)((lsdata.xstore[i] - x_min) * xscale) + rc.left + BORDER_X;
+    line[0].x = (int)((lsdata.xstore[i] - x_min) * xscale) + rc.left + PaddingLeft;
     line[0].y = (int)((y_max - lsdata.ystore[i]) * yscale) + rc.top;
-    line[1].x = (int)((lsdata.xstore[i + 1] - x_min) * xscale) + rc.left + BORDER_X;
+    line[1].x = (int)((lsdata.xstore[i + 1] - x_min) * xscale) + rc.left + PaddingLeft;
     line[1].y = (int)((y_max - lsdata.ystore[i + 1]) * yscale) + rc.top;
 
     // STYLE_DASHGREEN
@@ -388,17 +388,17 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, Pen &pen,
   //  bool do_units = ((x_max-zero)/tic_step)<10;
 
   for (fixed xval = zero; xval <= x_max; xval += tic_step) {
-    xmin = (int)((xval - x_min) * xscale) + rc.left + BORDER_X;
+    xmin = (int)((xval - x_min) * xscale) + rc.left + PaddingLeft;
     ymin = rc.top;
     xmax = xmin;
     ymax = rc.bottom;
     line[0].x = xmin;
     line[0].y = ymin;
     line[1].x = xmax;
-    line[1].y = ymax - BORDER_Y;
+    line[1].y = ymax - PaddingBottom;
 
     // STYLE_THINDASHPAPER
-    if ((xval < x_max) && (xmin >= rc.left + BORDER_X) && (xmin <= rc.right)) {
+    if ((xval < x_max) && (xmin >= rc.left + PaddingLeft) && (xmin <= rc.right)) {
       StyleLine(line[0], line[1], pen);
 
       if (draw_units && xmin >= next_text) {
@@ -414,18 +414,18 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, Pen &pen,
   }
 
   for (fixed xval = zero - tic_step; xval >= x_min; xval -= tic_step) {
-    xmin = (int)((xval - x_min) * xscale) + rc.left + BORDER_X;
+    xmin = (int)((xval - x_min) * xscale) + rc.left + PaddingLeft;
     ymin = rc.top;
     xmax = xmin;
     ymax = rc.bottom;
     line[0].x = xmin;
     line[0].y = ymin;
     line[1].x = xmax;
-    line[1].y = ymax - BORDER_Y;
+    line[1].y = ymax - PaddingBottom;
 
     // STYLE_THINDASHPAPER
 
-    if ((xval > x_min) && (xmin >= rc.left + BORDER_X) && (xmin <= rc.right)) {
+    if ((xval > x_min) && (xmin >= rc.left + PaddingLeft) && (xmin <= rc.right)) {
       StyleLine(line[0], line[1], pen);
 
       if (draw_units) {
@@ -463,13 +463,13 @@ Chart::DrawYGrid(const fixed tic_step, const fixed zero, Pen &pen,
     ymin = (int)((y_max - yval) * yscale) + rc.top;
     xmax = rc.right;
     ymax = ymin;
-    line[0].x = xmin + BORDER_X;
+    line[0].x = xmin + PaddingLeft;
     line[0].y = ymin;
     line[1].x = xmax;
     line[1].y = ymax;
 
     // STYLE_THINDASHPAPER
-    if ((yval < y_max) && (ymin >= rc.top) && (ymin <= rc.bottom - BORDER_Y)) {
+    if ((yval < y_max) && (ymin >= rc.top) && (ymin <= rc.bottom - PaddingBottom)) {
       StyleLine(line[0], line[1], pen);
 
       if (draw_units) {
@@ -487,13 +487,13 @@ Chart::DrawYGrid(const fixed tic_step, const fixed zero, Pen &pen,
     ymin = (int)((y_max - yval) * yscale) + rc.top;
     xmax = rc.right;
     ymax = ymin;
-    line[0].x = xmin + BORDER_X;
+    line[0].x = xmin + PaddingLeft;
     line[0].y = ymin;
     line[1].x = xmax;
     line[1].y = ymax;
 
     // STYLE_THINDASHPAPER
-    if ((yval > y_min) && (ymin >= rc.top) && (ymin <= rc.bottom - BORDER_Y)) {
+    if ((yval > y_min) && (ymin >= rc.top) && (ymin <= rc.bottom - PaddingBottom)) {
       StyleLine(line[0], line[1], pen);
 
       if (draw_units) {
@@ -513,11 +513,11 @@ Chart::ScaleMakeSquare()
   if (y_max <= y_min)
     return;
 
-  if (rc.bottom - rc.top - BORDER_Y <= 0)
+  if (rc.bottom - rc.top - PaddingBottom <= 0)
     return;
 
-  fixed ar = fixed(rc.right - rc.left - BORDER_X)
-              / (rc.bottom - rc.top - BORDER_Y);
+  fixed ar = fixed(rc.right - rc.left - PaddingLeft)
+              / (rc.bottom - rc.top - PaddingBottom);
   fixed ard = (x_max - x_min) / (y_max - y_min);
   fixed armod = ard / ar;
 
@@ -543,14 +543,14 @@ Chart::ScaleMakeSquare()
   y_max += delta / 2;
   y_min -= delta / 2;
 
-  yscale = fixed(rc.bottom - rc.top - BORDER_Y) / (y_max - y_min);
-  xscale = fixed(rc.right - rc.left - BORDER_X) / (x_max - x_min);
+  yscale = fixed(rc.bottom - rc.top - PaddingBottom) / (y_max - y_min);
+  xscale = fixed(rc.right - rc.left - PaddingLeft) / (x_max - x_min);
 }
 
 long
 Chart::screenX(fixed x) const
 {
-  return (long)((x - x_min) * xscale) + rc.left + BORDER_X;
+  return (long)((x - x_min) * xscale) + rc.left + PaddingLeft;
 }
 
 long
