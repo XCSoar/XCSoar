@@ -792,10 +792,10 @@ private:
   gcc_pure
   unsigned get_min_time() const;
 
-  static const unsigned null_delta;
+  static const unsigned null_delta = 0 - 1;
 
 public:
-  static const unsigned null_time;
+  static const unsigned null_time = 0 - 1;
 
   unsigned is_recent(const TracePoint& p) const {
     return m_last_point.time - p.time > delta_list.get_recent_time(no_thin_time);

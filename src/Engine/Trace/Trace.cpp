@@ -2,9 +2,6 @@
 #include "Navigation/Aircraft.hpp"
 #include <algorithm>
 
-const unsigned Trace::null_delta = 0 - 1;
-const unsigned Trace::null_time = 0 - 1;
-
 Trace::Trace(const unsigned _no_thin_time, const unsigned max_time,
              const unsigned max_points) :
   m_max_time(max_time),
