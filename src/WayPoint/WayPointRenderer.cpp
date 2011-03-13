@@ -287,8 +287,8 @@ public:
     FormatLabel(Buffer, way_point, arrival_height_glide, arrival_height_terrain,
                 watchedWaypoint);
 
-    if (reachable_glide && (Appearance.IndLandable == wpLandableWinPilot ||
-                            Appearance.UseSWLandablesRendering))
+    if ((reachable_glide && Appearance.IndLandable == wpLandableWinPilot) ||
+        Appearance.UseSWLandablesRendering)
       // make space for the green circle
       sc.x += 5;
 
