@@ -37,6 +37,8 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "OS/Clock.hpp"
 #include "Interface.hpp"
+#include "Components.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 
 #include <limits.h>
 
@@ -637,7 +639,16 @@ DeviceBlackboard::AutoQNH()
     countdown_autoqnh--;
 
   if (!countdown_autoqnh) {
-    basic.ProvideQNHSetting(basic.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, Calculated().TerrainAlt));
+    const Waypoint *next_wp;
+    next_wp = way_points.lookup_location(basic.Location, fixed(1000));
+
+    if (next_wp && next_wp->is_airport()) {
+      basic.ProvideQNHSetting(basic.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, next_wp->Altitude));
+    } else if (Calculated().TerrainValid) {
+      basic.ProvideQNHSetting(basic.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, Calculated().TerrainAlt));
+    } else
+      return;
+
     AllDevicesPutQNH(basic.pressure);
     countdown_autoqnh = UINT_MAX; // disable after performing once
   }
