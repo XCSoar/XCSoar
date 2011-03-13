@@ -9,14 +9,14 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-11 07:43+0100\n"
 "PO-Revision-Date: 2011-01-23 16:53+0000\n"
-"Last-Translator: Max Kellermann <max@duempel.org>\n"
+"Last-Translator: Filip <Unknown>\n"
 "Language-Team: none\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-13 22:56+0000\n"
-"X-Generator: Launchpad (build 12351)\n"
+"X-Launchpad-Export-Date: 2011-03-13 14:24+0000\n"
+"X-Generator: Launchpad (build 12568)\n"
 
 #: src/Airspace/AirspaceGlue.cpp:40
 msgid "Loading Airspace File..."
@@ -2479,7 +2479,7 @@ msgstr ""
 #: src/Dialogs/dlgConfiguration.cpp:915 src/Dialogs/dlgConfiguration.cpp:928
 #: src/Dialogs/dlgWindSettings.cpp:103
 msgid "Both"
-msgstr "Kruž+ZigZag"
+msgstr "Oboje"
 
 #: src/Dialogs/dlgConfiguration.cpp:926
 msgid "Final glide"
@@ -3995,9 +3995,8 @@ msgid "Height"
 msgstr "Height"
 
 #: Data/Dialogs/dlgConfiguration.xml:86 Data/Dialogs/dlgConfiguration_L.xml:86
-#, fuzzy
 msgid "Airspace fill mode*"
-msgstr "Prikaz"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:457
 #: Data/Dialogs/dlgConfiguration_L.xml:456
