@@ -29,7 +29,7 @@ Translators (by language code):
 
 cs (Czech):
  Milan Havlik
- Zdenek Sebesta
+*Zdenek Sebesta
 
 de (German):
  Tobias Bieniek <tobias.bieniek@gmx.de>
@@ -40,45 +40,45 @@ de (German):
  Philipp Wollschlegel <folken@kabelsalat.ch>
 
 el (Greek):
- Thomas Manousis
+*Thomas Manousis
 
 es (Spanish):
  Miguel Valdiri Badillo <catastro1@tutopia.com>
  Alexander Caldwell <alcald3000@yahoo.com>
  Diego Guerrero <iccarod@hotmail.com>
- Hector Martin
+*Hector Martin
  Andres Miramontes <amiramon@gmail.com>
 
 fr (French):
- Romaric Boucher
+*Romaric Boucher
  Sylvain Burger <sylvain.burger@wanadoo.fr>
- Dany Demarck
+*Dany Demarck
 
 hr (Croatian):
- Zoran Milicic
- Sasa Mihajlovic
+*Zoran Milicic
+*Sasa Mihajlovic
 
 hu (Hungarian):
  Gabor Liptak <liptakgabor@freemail.hu>
- Kalman Rozsahegyi
+*Kalman Rozsahegyi
 
 it (Italian):
- Enrico Girardi
- Lucas Marchesini
+*Enrico Girardi
+*Lucas Marchesini
 
 nl (Dutch):
- Rick Boerma
+*Rick Boerma
  Joop Gooden <joop.gooden@nlr.nl>
  Hans van 't Spijker
 
 pl (Polish):
  Michal Jezierski <m.jezierski@finke.pl>
- Mateusz Pusz
+*Mateusz Pusz
  Luke Szczepaniak <luke@silentflight.ca>
  Mateusz Zakrzewski
 
 pt-BR (Portuguese (Brazil)):
- Tales Maschio
+*Tales Maschio
  Luis Fernando Rigato Vasconcellos <fernando.rigato@gmail.com>
 
 ru (Russian):
@@ -90,10 +90,12 @@ sk (Slovak):
  Roman Stoklasa <rstoki@gmail.com>
 
 sr (Serbian):
- Aleksandar Cirkovic
+*Aleksandar Cirkovic
 
 sv (Swedish):
- Patrick Pagden
+*Patrick Pagden
 
 tr (Turkish):
  'zeugma'
+
+*Contributions attributed to the LK8000 project (http://www.lk8000.it/)
