@@ -319,6 +319,10 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
 
   if (!basic.BaroAltitudeAvailable) {
     infobox.SetInvalid();
+
+    if (basic.PressureAltitudeAvailable && !basic.QNHAvailable)
+      infobox.SetComment(_T("set QNH"));
+
     return;
   }
 
