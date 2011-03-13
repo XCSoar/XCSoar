@@ -109,6 +109,8 @@ Waypoints::append(Waypoint& wp)
   if (empty())
     task_projection.reset(wp.Location);
 
+  wp.Flags.Watched = (wp.FileNum == 2);
+
   task_projection.scan_location(wp.Location);
   wp.id = next_id++;
   tmp_wps.push_back(WaypointEnvelope(wp));
