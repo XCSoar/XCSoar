@@ -204,6 +204,29 @@ Canvas::text(int x, int y, const TCHAR *text)
   ::SDL_FreeSurface(s);
 }
 
+void
+Canvas::text_transparent(int x, int y, const TCHAR *text)
+{
+  SDL_Surface *s;
+
+  if (font == NULL)
+    return;
+
+#ifdef UNICODE
+  s = ::TTF_RenderUNICODE_Solid(font, (const Uint16 *)text, text_color);
+#else
+  s = ::TTF_RenderUTF8_Solid(font, text, Color::BLACK);
+#endif
+  if (s == NULL)
+    return;
+
+  if (s->format->palette != NULL && s->format->palette->ncolors >= 2)
+    s->format->palette->colors[1] = text_color;
+
+  copy(x, y, s);
+  ::SDL_FreeSurface(s);
+}
+
 #endif /* !OPENGL */
 
 void
@@ -285,7 +308,7 @@ void
 Canvas::text_opaque(int x, int y, const RECT &rc, const TCHAR *_text)
 {
   fill_rectangle(rc, background_color);
-  text(x, y, _text);
+  text_transparent(x, y, _text);
 }
 
 #ifndef ENABLE_OPENGL
