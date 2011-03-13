@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/TextEntry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
 #include "Compatibility/string.h"

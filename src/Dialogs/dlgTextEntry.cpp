@@ -21,9 +21,15 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Internal.hpp"
+#include "Dialogs/TextEntry.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/dlgTools.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Key.h"
+#include "Form/Form.hpp"
+#include "Form/Draw.hpp"
+#include "Form/Button.hpp"
+#include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "SettingsMap.hpp"

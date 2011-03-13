@@ -27,7 +27,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 
 #include <tchar.h>
-#include "Util/tstring.hpp"
 
 struct GeoPoint;
 class FlarmId;
@@ -120,13 +119,6 @@ void
 dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& waypoint,
                           bool allow_navigation = true);
 
-typedef const TCHAR *(*AllowedCharactersCallback_t)(const TCHAR *value);
-
-bool dlgTextEntryShowModal(TCHAR *text, int width,
-                           AllowedCharactersCallback_t accb=NULL);
-bool dlgTextEntryShowModal(tstring &text, int width,
-                           AllowedCharactersCallback_t accb=NULL);
-
 void dlgTeamCodeShowModal();
 void dlgStartPointShowModal();
 
@@ -145,8 +137,6 @@ void dlgTargetShowModal(int TargetPoint = -1);
 void dlgThermalAssistantShowModal();
 void dlgFlarmTrafficShowModal();
 void dlgFlarmTrafficDetailsShowModal(FlarmId id);
-bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0,
-                                   AllowedCharactersCallback_t accb=NULL);
 
 bool PopupNearestWaypointDetails(const Waypoints &way_points,
     const GeoPoint &location, double range, bool scalefilter = false);

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "dlgTaskHelpers.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/TextEntry.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Task/Tasks/OrderedTask.hpp"

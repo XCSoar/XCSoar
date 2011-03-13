@@ -22,6 +22,7 @@
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/TextEntry.hpp"
 #include "DataField/Float.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "SettingsComputer.hpp"
