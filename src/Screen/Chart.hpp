@@ -66,7 +66,8 @@ public:
 
   void DrawBarChart(const LeastSquares &lsdata);
   void DrawFilledLineGraph(const LeastSquares &lsdata);
-  void DrawLineGraph(const LeastSquares &lsdata,  enum Style Style);
+  void DrawLineGraph(const LeastSquares &lsdata, Pen &pen);
+  void DrawLineGraph(const LeastSquares &lsdata, enum Style Style);
   void DrawTrend(const LeastSquares &lsdata, enum Style Style);
   void DrawTrendN(const LeastSquares &lsdata, enum Style Style);
   void DrawLine(const fixed xmin, const fixed ymin,

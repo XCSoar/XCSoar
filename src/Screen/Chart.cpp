@@ -337,7 +337,7 @@ Chart::DrawFilledLineGraph(const LeastSquares &lsdata)
 }
 
 void
-Chart::DrawLineGraph(const LeastSquares &lsdata, enum Style Style)
+Chart::DrawLineGraph(const LeastSquares &lsdata, Pen &pen)
 {
   RasterPoint line[2];
 
@@ -349,8 +349,15 @@ Chart::DrawLineGraph(const LeastSquares &lsdata, enum Style Style)
 
     // STYLE_DASHGREEN
     // STYLE_MEDIUMBLACK
-    StyleLine(line[0], line[1], Style);
+    StyleLine(line[0], line[1], pen);
   }
+}
+
+void
+Chart::DrawLineGraph(const LeastSquares &lsdata, enum Style Style)
+{
+  assert((unsigned)Style < sizeof(pens) / sizeof(pens[0]));
+  DrawLineGraph(lsdata, pens[(unsigned)Style]);
 }
 
 void
