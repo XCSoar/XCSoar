@@ -150,6 +150,7 @@ const TCHAR szProfileTerrainFile[] = _T("TerrainFile"); // pL
 const TCHAR szProfileTopographyFile[] = _T("TopologyFile");
 const TCHAR szProfileWayPointFile[] = _T("WPFile"); // pL
 const TCHAR szProfileAdditionalWayPointFile[] = _T("AdditionalWPFile"); // pL
+const TCHAR szProfileWatchedWayPointFile[] = _T("WatchedWPFile"); // pL
 const TCHAR szProfileLanguageFile[] = _T("LanguageFile"); // pL
 const TCHAR szProfileStatusFile[] = _T("StatusFile"); // pL
 const TCHAR szProfileInputFile[] = _T("InputFile"); // pL

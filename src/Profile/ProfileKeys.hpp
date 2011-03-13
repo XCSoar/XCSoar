@@ -51,6 +51,7 @@ extern const TCHAR szProfilePolar[];
 extern const TCHAR szProfilePolarName[];
 extern const TCHAR szProfileWayPointFile[];
 extern const TCHAR szProfileAdditionalWayPointFile[];
+extern const TCHAR szProfileWatchedWayPointFile[];
 extern const TCHAR szProfileAirspaceFile[];
 extern const TCHAR szProfileAdditionalAirspaceFile[];
 extern const TCHAR szProfileAirfieldFile[];

@@ -30,7 +30,12 @@
         Help="Secondary waypoints file.  This may be used to add waypoints for a competition.">
         <DataField DataType="filereader"/>
       </Edit>
-    
+
+      <Edit Name="prpWatchedWaypointFile" Caption="Watched Waypoints" X="2" Width="-2" Height="22" CaptionWidth="100"
+      Help="Waypoint file containing special waypoints for which additional computations like calculation of arrival height in map display always takes place. Useful for waypoints like known reliable thermal sources (e.g. powerplants) or mountain passes.">
+        <DataField DataType="filereader" />
+      </Edit>
+
       <Edit Name="prpAirspaceFile" Caption="Airspaces" X="2" Width="-2" Height="22" CaptionWidth="100" Help="The file name of the primary airspace file.">
         <DataField DataType="filereader"/>
       </Edit>

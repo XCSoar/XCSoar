@@ -68,6 +68,9 @@ SiteConfigPanel::Init(WndForm *_wf)
   InitFileField(*wf, _T("prpAdditionalWaypointFile"),
                 szProfileAdditionalWayPointFile,
                 _T("*.dat\0*.xcw\0*.cup\0*.wpz\0"));
+  InitFileField(*wf, _T("prpWatchedWaypointFile"),
+                szProfileWatchedWayPointFile,
+                _T("*.dat\0*.xcw\0*.cup\0*.wpz\0"));
   InitFileField(*wf, _T("prpMapFile"),
                 szProfileMapFile, _T("*.xcm\0*.lkm\0"));
   InitFileField(*wf, _T("prpTerrainFile"),
@@ -85,7 +88,9 @@ SiteConfigPanel::Save()
   WaypointFileChanged = WaypointFileChanged |
     FinishFileField(*wf, _T("prpWaypointFile"), szProfileWayPointFile) |
     FinishFileField(*wf, _T("prpAdditionalWaypointFile"),
-                    szProfileAdditionalWayPointFile);
+                    szProfileAdditionalWayPointFile) |
+    FinishFileField(*wf, _T("prpWatchedWaypointFile"),
+                    szProfileWatchedWayPointFile);
 
   AirspaceFileChanged =
     FinishFileField(*wf, _T("prpAirspaceFile"), szProfileAirspaceFile) |
