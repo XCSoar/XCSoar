@@ -351,6 +351,9 @@ InfoBoxWindow::Paint(Canvas &canvas)
 {
   canvas.clear(look.background_brush);
 
+  if (content != NULL)
+    content->on_custom_paint(*this, canvas);
+
   canvas.background_transparent();
 
   PaintTitle(canvas);

@@ -52,6 +52,8 @@ public:
     return false;
   }
 
+  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas) {}
+
   /**
    * This is a generic handler for the InfoBox. It takes the argument and
    * processes it like the HandleKey handler, but is just more generic.
