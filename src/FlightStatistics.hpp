@@ -46,6 +46,14 @@ class TaskManager;
 class ProtectedTaskManager;
 
 class FlightStatistics {
+  LeastSquares ThermalAverage;
+  LeastSquares Altitude;
+  LeastSquares Altitude_Base;
+  LeastSquares Altitude_Ceiling;
+  LeastSquares Task_Speed;
+  LeastSquares Altitude_Terrain;
+  Mutex mutexStats;
+
 public:
   void StartTask();
   fixed AverageThermalAdjusted(const fixed wthis, const bool circling);
@@ -57,7 +65,6 @@ public:
   void AddClimbCeiling(const fixed tflight, const fixed alt);
   void AddThermalAverage(const fixed v);
 
-public:
   void Reset();
   void RenderBarograph(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
                        const DERIVED_INFO &derived_info,
@@ -103,15 +110,6 @@ public:
 
   void CaptionTempTrace(TCHAR *sTmp) const;
   void CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const;
-
-private:
-  LeastSquares ThermalAverage;
-  LeastSquares Altitude;
-  LeastSquares Altitude_Base;
-  LeastSquares Altitude_Ceiling;
-  LeastSquares Task_Speed;
-  LeastSquares Altitude_Terrain;
-  Mutex mutexStats;
 };
 
 #endif
