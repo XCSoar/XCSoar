@@ -64,15 +64,14 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
 
   char key[4096];
   snprintf(key, sizeof(key),
-#ifdef ANDROID
            "%s_%u_%u_%02x%02x%02x_%02x%02x%02x_%s",
+#ifdef ANDROID
            font->get_facename(),
            font->get_style(),
            font->get_height(),
 #else  // !ANDROID
-           "%s_%s_%u_%02x%02x%02x_%02x%02x%02x_%s",
            TTF_FontFaceFamilyName(font),
-           TTF_FontFaceStyleName(font),
+           TTF_GetFontStyle(font),
            TTF_FontHeight(font),
 #endif
            background_color.red(),

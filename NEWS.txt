@@ -7,6 +7,7 @@ Version 6.0.8 - not yet released
   - CAI302: fix task declaration on Android
 * Linux
   - more dialog improvements
+  - fix bold font rendering
 
 Version 6.0.7 - 2011/03/12
 * devices
