@@ -137,6 +137,9 @@ public:
   {
     FormatTitle(buffer, way_point);
 
+    if (!way_point.is_landable() && !way_point.Flags.Watched)
+      return;
+
     if ((arrival_height_glide < 0 && !show_negative_arrival_height_glide) ||
         arrival_height_glide == 0)
       return;
