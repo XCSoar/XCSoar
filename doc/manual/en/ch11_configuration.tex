@@ -368,8 +368,6 @@ This page allows glide computer algorithms to be configured.
 \end{center}
 
 \begin{description}
-\item[Glide terrain line]  \label{conf:gliderange} This determines whether the
-glide terrain range is calculated and drawn as a line resp. a shade on the map area.
 \item[Auto wind]  \label{conf:autowind} This allows switching on or off the
 automatic wind algorithm.
  \begin{description}
@@ -426,7 +424,7 @@ This page allows the safety heights and behaviour in abort mode to be defined.
 \begin{description}
 \item[Arrival height]  The height above terrain that the glider
   should arrive at for a safe landing.
-\item[Terrain height] The height above terrain that the glider must
+\item[Terrain height] \label{conf:safetyterrain} The height above terrain that the glider must
   clear during final glide.
 \item[Abort use current MC*]  When enabled, the current MacCready setting
   is used for determining arrival altitude after a task abort.
@@ -441,6 +439,22 @@ This page allows the safety heights and behaviour in abort mode to be defined.
 See Section~\ref{sec:safety-heights} for more details on the meanings
 of the safety heights.
 
+\section{Route}
+
+This page allows control over glide reach calculations and route
+optimisations.
+
+\begin{description}
+\item[Route mode] \label{conf:routemode} This controls which types
+of obstacles are used in route planning.
+\item[Route climb] \label{conf:routeclimb} When enabled and Mc is positive, route planning allows climbs between the
+  aircraft location and destination.
+\item[Route ceiling] \label{conf:routeceiling} When enabled, route planning climbs are limited to ceiling defined by greater of current aircraft altitude plus 500 m and the thermal ceiling.  If disabled, climbs are unlimited.
+\item[Glide terrain line]  \label{conf:gliderange} This determines whether the
+glide terrain range is calculated and drawn as a line resp.\ a shade on the map area.
+\item[Turning reach] \label{conf:turningreach} This controls whether glide range (reach) calculations
+are straight line or allow turns.
+\end{description}
 
 %%%%%%%%%%%%%%%%%%
 \clearpage

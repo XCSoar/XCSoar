@@ -14,12 +14,13 @@ The moving map shows:
 \item Glider symbol
 \item Waypoints
 \item The active task
-\item The bearing to the next waypoint
+\item The bearing (or route\footnote{The line to the next waypoint may be a {\em route}, as described in Section~\ref{sec:route}.})
+  to the next waypoint
 \item Special Use Airspace
 \item Terrain and topology
 \item Markers
 \item Trail
-\item Glide range
+\item Glide range\footnote{The glide range is also referred to as the {\em reach}, as described in Section~\ref{sec:reach}.}
 \end{enumerate}
 The map is drawn in a projected coordinate system (not latitude and
 longitude), and the scale can be changed (zooming in and out), as well
@@ -187,7 +188,9 @@ only drawn if the start/finish points are of line type.  Task
 observation sectors are drawn as segments.
 
 At all times a thick black line is drawn from the glider to the next
-waypoint in the task.
+waypoint in the task.  This line may be the direct path to the waypoint,
+or may be a {\em route} path clearing terrain and airspace obstacles, described in
+further detail in Section~\ref{sec:route}.
 
 \begin{center}
 
@@ -198,7 +201,6 @@ waypoint in the task.
 \includegraphics[angle=0,width=0.3\linewidth,keepaspectratio='true']{figures/cut-barrel.png} \\
 \end{tabular}
 \end{center}
-
 
 \section{Terrain and Topology}
 
@@ -322,28 +324,58 @@ Markers are dropped by the menu, or by gesture \gesture{Left}:
 \bmenu{Display}\blink\bmenu{Mark Drop}
 \end{quote}
 
-\section{Glide range line}
+\section{Glide range line}\label{sec:reach}
 
-A reachable glide `footprint' is displayed on the map display as a black and
-white dashed line, indicating where the glider would descend through the
-terrain clearance height.  This glide range line is calculated for
-tracks extending in all directions.  This feature is useful in
-assessing range with respect to topology when searching low for lift,
-and when flying in mountainous areas.
+A reachable glide `footprint' is displayed on the map display as a
+black and white dashed line, indicating where the glider would descend
+through the terrain clearance height.  The reach shows clearance
+tracks extending in all directions, optionally including paths around
+terrain obstructions.  This feature is useful in assessing range with
+respect to topology when searching low for lift, and when flying in
+mountainous areas.
+
+Reach calculations may be configured \config{turningreach} to two levels of detail:
+\begin{description}
+\item[Straight line] If turning reach is disabled, then the reach shows the
+ furthest distance the glider can fly in final glide in all directions without
+ turning.  This reach appears as a closed ring around the glider.
 
 \begin{center}
-\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/cut-footprint.png}
+\includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{figures/reach1.png}
 %{\it DIAGRAM CUTOUT SHOWING GLIDE RANGE FOOTPRINT.  NO TOPOLOGY,
-%FULLSCREEN, NO TASK.}
+%FULLSCREEN, NO TASK. TURNING=FALSE}
 \end{center}
 
-The display can be configured to additionally blur the not reachable area
+\item[Turning] If turning reach is enabled, then the reach shows the
+  greatest area the glider can reach in all directions, even allowing
+  turns around obstructions.\footnote{The maximum number of turns is
+    set to three, and no turns may be greater than 90 degrees.}  The
+  reach area appears as a closed ring around the glider but may also
+  include holes indicating mountain peaks that the glider cannot reach
+  without further climb.
+
+\begin{center}
+\includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{figures/reach2.png}
+%{\it DIAGRAM CUTOUT SHOWING GLIDE RANGE FOOTPRINT.  NO TOPOLOGY,
+%FULLSCREEN, NO TASK. TURNING=TRUE}
+\end{center}
+
+\end{description}
+
+The display can be configured to additionally blur the unreachable area
 outside the glide range. \config{gliderange}
-The final glide path is checked for whether the glider clears terrain ahead
-by the terrain clearance height.  If clearance is not attained, a red
+The final glide path is checked for whether the glider clears terrain along
+the path by the terrain clearance height.  If clearance is not attained, a red
 cross appears on the map at the point where the violation occurs. If a target is
 defined the calculation is done along the path to the target. 
 
+If reach is enabled, then the reachability of landable waypoints is used
+by the abort task mode, alternate landable option lists and display of
+landable waypoints on the map.
+
+Note that task calculations are otherwise unaffected by reach
+calculations --- for example, heights required as shown in the final
+glide bar or task data as displayed in infoboxes do not take reach into account.
 
 \section{Status dialog}\label{sec:aircr-stat-dial}
 
@@ -368,3 +400,54 @@ This is accessed via the menu under:
 \bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Status}.
 \end{quote}
 and then selecting the page `Aircraft'.
+
+\section{Route}\label{sec:route}
+
+XCSoar can plan paths around terrain and airspace obstacles in three
+dimensions from the aircraft to the destination.  Such a path is known
+as a route.  The height of the destination is the arrival height for
+final waypoints, or may be higher for intermediate waypoints, as
+dictated by the task system as required to complete the task.  Route
+planning functions in normal ordered task mode, abort mode and goto
+mode.
+
+\begin{center}
+%\includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{figures/route.png}
+{\it DIAGRAM CUTOUT SHOWING ROUTE AROUND TERRAIN AND AIRSPACE}
+\end{center}
+
+Routes take into account the glider polar performance and are
+calculated to be optimal in the sense of minimum time.  By default,
+route calculation is disabled, and can be enabled for terrain only or
+terrain and airspace avoidance \config{routemode}.
+
+Terrain is avoided vertically by the terrain safety height
+\config{safetyterrain}, with no additional lateral clearance imposed.
+Valid routes may result in the aircraft arriving at the destination
+higher than the minimum height --- such as can occur when the
+destination is just beyond a steep mountain.
+
+Airspace is avoided horizontally by a buffer of approximately 250 m,
+with no additional vertical clearance imposed.  Valid routes may fly
+below or above airspace.
+
+If MacCready is positive, then climbs are optionally allowed
+\config{routeceiling} in the computed routes.  The top of the climb
+may be limited to 500 m above the heigher of the start and destination
+ceiling, or increased to the ceiling defined by the thermal ceiling
+\config{routeceiling}.  Climbs above the higher of the start and
+destination altitude are penalised by a slower climb rate than the
+actual MacCready value.
+
+Some approximations and limitations of the route planning system are as follows:
+\begin{itemize}
+\item Where climbs are necessary (and permitted) to reach the destination,
+the climbs are assumed to occur at the start of the route.
+\item Climb-cruise segments are assumed to occur at constant altitude,
+equivalent to many small climbs distributed along the path.
+\item Individual turns between path segments greater than 90 degrees
+  are not permitted.
+\item Failures of the solver result in the route reverting to direct flight
+from the aircraft location to the destination.
+\end{itemize}
+
