@@ -438,11 +438,11 @@ InfoBoxWindow::HandleQuickAccess(const TCHAR *Value)
   return false;
 }
 
-InfoBoxContent::InfoBoxDlgContent*
-InfoBoxWindow::GetInfoBoxDlgContent()
+InfoBoxContent::DialogContent*
+InfoBoxWindow::GetDialogContent()
 {
   if (content != NULL)
-    return content->GetInfoBoxDlgContent();
+    return content->GetDialogContent();
 
   return NULL;
 }

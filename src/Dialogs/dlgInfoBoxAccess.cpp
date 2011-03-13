@@ -60,8 +60,8 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   // check for another instance of this window
   if (dlgInfoBoxAccess::GetWindowForm() != NULL) return;
 
-  InfoBoxContent::InfoBoxDlgContent *dlgContent;
-  dlgContent = InfoBoxManager::GetInfoBoxDlgContent(id);
+  InfoBoxContent::DialogContent *dlgContent;
+  dlgContent = InfoBoxManager::GetDialogContent(id);
 
   if (!dlgContent)
     return;

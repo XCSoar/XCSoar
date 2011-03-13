@@ -191,14 +191,14 @@ CallBackTableEntry InfoBoxContentMacCready::CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-InfoBoxContentMacCready::InfoBoxDlgContent InfoBoxContentMacCready::dlgContent = {
+InfoBoxContentMacCready::DialogContent InfoBoxContentMacCready::dlgContent = {
     InfoBoxContentMacCready::PANELSIZE,
     InfoBoxContentMacCready::Panels,
     InfoBoxContentMacCready::CallBackTable
 };
 
-InfoBoxContentMacCready::InfoBoxDlgContent*
-InfoBoxContentMacCready::GetInfoBoxDlgContent() {
+InfoBoxContentMacCready::DialogContent*
+InfoBoxContentMacCready::GetDialogContent() {
   return &dlgContent;
 }
 

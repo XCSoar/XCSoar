@@ -83,13 +83,13 @@ public:
     void (*reClick)(void); // ptr to ReClickFunction
   };
 
-  struct InfoBoxDlgContent {
+  struct DialogContent {
     const int PANELSIZE;
     PanelContent* Panels;
     CallBackTableEntry* CallBackTable;
   };
 
-  virtual InfoBoxDlgContent* GetInfoBoxDlgContent() {
+  virtual DialogContent* GetDialogContent() {
     return NULL;
   }
 

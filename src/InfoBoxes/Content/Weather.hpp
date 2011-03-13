@@ -54,7 +54,7 @@ private:
   static const int PANELSIZE = 2;
 
 public:
-  virtual InfoBoxDlgContent* GetInfoBoxDlgContent();
+  virtual DialogContent* GetDialogContent();
 
   static Window* PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
   static bool PnlEditOnTabPreShow(TabBarControl::EventType EventType);
@@ -64,7 +64,7 @@ public:
   static CallBackTableEntry CallBackTable[];
   static PanelContent Panels[];
 
-  static InfoBoxDlgContent dlgContent;
+  static DialogContent dlgContent;
 
   static Window* PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
   static bool PnlSetupOnTabPreShow(TabBarControl::EventType EventType);

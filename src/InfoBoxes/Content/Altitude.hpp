@@ -35,7 +35,7 @@ private:
   static const int PANELSIZE = 2;
 
 public:
-  virtual InfoBoxDlgContent* GetInfoBoxDlgContent();
+  virtual DialogContent* GetDialogContent();
 
   static Window* PnlInfoLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
   static void OnTimerNotify(WndForm &Sender);
@@ -45,7 +45,7 @@ public:
   static CallBackTableEntry CallBackTable[];
   static PanelContent Panels[];
 
-  static InfoBoxDlgContent dlgContent;
+  static DialogContent dlgContent;
 
   static Window* PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
   static void PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode);

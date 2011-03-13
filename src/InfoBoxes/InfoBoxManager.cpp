@@ -329,14 +329,14 @@ InfoBoxManager::ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode)
   ResetDisplayTimeOut();
 }
 
-InfoBoxContent::InfoBoxDlgContent*
-InfoBoxManager::GetInfoBoxDlgContent(const int id)
+InfoBoxContent::DialogContent*
+InfoBoxManager::GetDialogContent(const int id)
 {
   if (id < 0)
     return NULL;
 
   if (InfoBoxes[id] != NULL)
-    return InfoBoxes[id]->GetInfoBoxDlgContent();
+    return InfoBoxes[id]->GetDialogContent();
 
   return NULL;
 }
@@ -560,7 +560,7 @@ OnInfoBoxHelp(unsigned item)
 void
 InfoBoxManager::ShowDlgInfoBox(const int id)
 {
-  if (GetInfoBoxDlgContent(id))
+  if (GetDialogContent(id))
     dlgInfoBoxAccessShowModal(XCSoarInterface::main_window, id);
   else SetupFocused(id);
 }

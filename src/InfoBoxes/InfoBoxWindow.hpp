@@ -239,7 +239,7 @@ public:
    */
   bool HandleQuickAccess(const TCHAR *Value);
 
-  InfoBoxContent::InfoBoxDlgContent* GetInfoBoxDlgContent();
+  InfoBoxContent::DialogContent* GetDialogContent();
 
 protected:
   /**

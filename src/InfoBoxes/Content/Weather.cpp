@@ -274,14 +274,14 @@ CallBackTableEntry InfoBoxContentWind::CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-InfoBoxContentWind::InfoBoxDlgContent InfoBoxContentWind::dlgContent = {
+InfoBoxContentWind::DialogContent InfoBoxContentWind::dlgContent = {
     InfoBoxContentWind::PANELSIZE,
     InfoBoxContentWind::Panels,
     InfoBoxContentWind::CallBackTable
 };
 
-InfoBoxContentWind::InfoBoxDlgContent*
-InfoBoxContentWind::GetInfoBoxDlgContent() {
+InfoBoxContentWind::DialogContent*
+InfoBoxContentWind::GetDialogContent() {
   return &dlgContent;
 }
 

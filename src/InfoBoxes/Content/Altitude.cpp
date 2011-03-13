@@ -205,14 +205,14 @@ CallBackTableEntry InfoBoxContentAltitude::CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-InfoBoxContentAltitude::InfoBoxDlgContent InfoBoxContentAltitude::dlgContent = {
+InfoBoxContentAltitude::DialogContent InfoBoxContentAltitude::dlgContent = {
     InfoBoxContentAltitude::PANELSIZE,
     InfoBoxContentAltitude::Panels,
     InfoBoxContentAltitude::CallBackTable
 };
 
-InfoBoxContentAltitude::InfoBoxDlgContent*
-InfoBoxContentAltitude::GetInfoBoxDlgContent() {
+InfoBoxContentAltitude::DialogContent*
+InfoBoxContentAltitude::GetDialogContent() {
   return &dlgContent;
 }
 
