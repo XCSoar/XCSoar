@@ -188,7 +188,7 @@ Profile::Use()
   settings_map.WayPointLabelSelection = (WayPointLabelSelection_t) Temp;
 
   Temp = settings_map.WaypointArrivalHeightDisplay;
-  Get(szWaypointArrivalHeightDisplay, Temp);
+  Get(szProfileWaypointArrivalHeightDisplay, Temp);
   settings_map.WaypointArrivalHeightDisplay = (WaypointArrivalHeightDisplay_t) Temp;
 
   Temp = settings_map.LandableRenderMode;

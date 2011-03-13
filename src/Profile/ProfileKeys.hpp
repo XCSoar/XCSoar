@@ -40,7 +40,7 @@ extern const TCHAR szProfileOrientationCruise[];
 extern const TCHAR szProfileOrientationCircling[];
 extern const TCHAR szProfileMapShiftBias[];
 extern const TCHAR szProfileDisplayText[];
-extern const TCHAR szWaypointArrivalHeightDisplay[];
+extern const TCHAR szProfileWaypointArrivalHeightDisplay[];
 extern const TCHAR szProfileWayPointLabelSelection[];
 extern const TCHAR szProfileWaypointLabelStyle[];
 extern const TCHAR szProfileSafetyAltitudeArrival[];

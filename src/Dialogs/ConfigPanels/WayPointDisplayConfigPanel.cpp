@@ -131,7 +131,7 @@ WayPointDisplayConfigPanel::Save()
                                   XCSoarInterface::SetSettingsMap().DisplayTextType);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointArrivalHeightDisplay"),
-                                  szWaypointArrivalHeightDisplay,
+                                  szProfileWaypointArrivalHeightDisplay,
                                   XCSoarInterface::SetSettingsMap().WaypointArrivalHeightDisplay);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabelStyle"),
