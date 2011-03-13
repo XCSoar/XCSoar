@@ -57,6 +57,11 @@ public:
                        const DERIVED_INFO &derived_info,
                        const ProtectedTaskManager *task) const;
 
+  void RenderBarographSpark(Canvas &canvas, const RECT rc,
+                            const NMEA_INFO &nmea_info,
+                            const DERIVED_INFO &derived_info,
+                            const ProtectedTaskManager *task) const;
+
   void RenderClimb(Canvas &canvas, const RECT rc,
                    const GlidePolar& glide_polar) const;
 

@@ -120,6 +120,39 @@ static void DrawLegs(Chart& chart,
 }
 
 void
+FlightStatisticsRenderer::RenderBarographSpark(
+    Canvas &canvas, const RECT rc,const NMEA_INFO &nmea_info,
+    const DERIVED_INFO &derived_info, const ProtectedTaskManager *_task) const
+{
+  ScopeLock lock(fs.mutexStats);
+  Chart chart(canvas, rc);
+  chart.PaddingBottom = 0;
+  chart.PaddingLeft = 0;
+
+  if (fs.Altitude.sum_n < 2)
+    return;
+
+  chart.ScaleXFromData(fs.Altitude);
+  chart.ScaleYFromData(fs.Altitude);
+  chart.ScaleYFromValue(fixed_zero);
+
+  if (_task != NULL) {
+    ProtectedTaskManager::Lease task(*_task);
+    DrawLegs(chart, task, nmea_info, derived_info, false);
+  }
+
+  Brush hbHorizonGround(Color::LIGHT_GRAY);
+
+  canvas.null_pen();
+  canvas.select(hbHorizonGround);
+
+  chart.DrawFilledLineGraph(fs.Altitude_Terrain);
+
+  Pen pen(2, Color::BLACK);
+  chart.DrawLineGraph(fs.Altitude, pen);
+}
+
+void
 FlightStatisticsRenderer::RenderBarograph(Canvas &canvas, const RECT rc,
                                   const NMEA_INFO &nmea_info,
                                   const DERIVED_INFO &derived_info,
