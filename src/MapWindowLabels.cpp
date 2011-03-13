@@ -33,6 +33,12 @@ MapWaypointLabelListCompare(const void *elem1, const void *elem2)
   const WayPointLabelList::Label &e1 = *(const WayPointLabelList::Label *)elem1;
   const WayPointLabelList::Label &e2 = *(const WayPointLabelList::Label *)elem2;
 
+  if (e1.inTask && !e2.inTask)
+    return -1;
+
+  if (!e1.inTask && e2.inTask)
+    return 1;
+
   if (e1.isAirport && !e2.isAirport)
     return -1;
 
@@ -49,12 +55,6 @@ MapWaypointLabelListCompare(const void *elem1, const void *elem2)
     return -1;
 
   if (!e1.isWatchedWaypoint && e2.isWatchedWaypoint)
-    return 1;
-
-  if (e1.inTask && !e2.inTask)
-    return -1;
-
-  if (!e1.inTask && e2.inTask)
     return 1;
 
   if (e1.AltArivalAGL > e2.AltArivalAGL)
