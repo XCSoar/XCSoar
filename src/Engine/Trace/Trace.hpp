@@ -105,100 +105,13 @@ typedef std::list<TracePoint> TracePointList;
  */
 class Trace: private NonCopyable 
 {
-public:
   friend class PrintHelper;
-
-  /**
-   * Constructor.  Task projection is updated after first call to append().
-   *
-   * @param no_thin_time Time window in seconds in which points most recent
-   * wont be trimmed
-   * @param max_time Time window size (seconds), null_time for unlimited
-   * @param max_points Maximum number of points that can be stored
-   */
-  Trace(const unsigned no_thin_time = 0,
-        const unsigned max_time = null_time,
-        const unsigned max_points = 1000);
-
-  /**
-   * Add trace to internal store.  Call optimise() periodically
-   * to balance tree for faster queries
-   *
-   * @param state Aircraft state to log point for
-   */
-  void append(const AIRCRAFT_STATE& state);
-
-  /**
-   * Clear the trace store
-   */
-  void clear();
-
-  /**
-   * Size of traces (in tree, not in temporary store) ---
-   * must call optimise() before this for it to be accurate.
-   *
-   * @return Number of traces in tree
-   */
-  unsigned size() const;
-
-  /**
-   * Whether traces store is empty
-   *
-   * @return True if no traces stored
-   */
-  bool empty() const;
 
   /**
    * Type of KD-tree data structure for trace container
    */
   typedef KDTree::KDTree<2, TracePoint, TracePoint::kd_get_location> TraceTree;
 
-  /**
-   * Re-balance kd-tree periodically 
-   *
-   * @return True if trace store was optimised
-   */
-  bool optimise_if_old();
-
-  /**
-   * Find traces within approximate range (square range box)
-   * to search location.  Possible use by screen display functions.
-   *
-   * @param loc Location from which to search
-   * @param range Distance in meters of search radius
-   * @param mintime Minimum time to match (recency)
-   * @param resolution Thin data to achieve minimum step size in (m) (if positive)
-   *
-   * @return Vector of trace points within square range
-   */
-  gcc_pure
-  TracePointVector
-  find_within_range(const GeoPoint &loc, const fixed range,
-                    const unsigned mintime = 0,
-                    const fixed resolution = fixed_zero) const;
-
-  /** 
-   * Retrieve a vector of trace points sorted by time
-   * 
-   * @param edges_only Search only for trace edges (first, last time)
-   * @param iov Vector of trace points (output)
-   *
-   */
-  void get_trace_points(TracePointVector& iov) const {
-    if (delta_list.size() < 3)
-      get_trace_edges(iov);
-    else
-      delta_list.get_trace(iov, get_min_time());
-  }
-
-  /**
-   * Retrieve a vector of the earliest and latest trace points
-   * 
-   * @param iov Vector of trace points
-   */
-  void get_trace_edges(TracePointVector& iov) const;
-
-private:
   struct TraceDelta {
     /**
      * Function used to points for sorting by deltas.
@@ -242,6 +155,18 @@ private:
     typedef List::const_iterator const_iterator;
     typedef std::pair<iterator, iterator> neighbours;
 
+    unsigned p_time;
+    unsigned elim_time;
+    unsigned elim_distance;
+    unsigned delta_distance;
+
+    // these items are mutable only so we can get around the const
+    // nature of set iterators.  They don't affect set ordering though,
+    // so doing this is safe.
+    mutable TraceTree::const_iterator leaf;
+    mutable iterator prev;
+    mutable iterator next;
+
     TraceDelta(const TracePoint &p, const TraceTree::const_iterator &_leaf)
     {
       p_time = p.time;
@@ -261,18 +186,6 @@ private:
       leaf = _leaf;
       assert (elim_distance != null_delta);
     }
-
-    unsigned p_time;
-    unsigned elim_time;
-    unsigned elim_distance;
-    unsigned delta_distance;
-
-    // these items are mutable only so we can get around the const
-    // nature of set iterators.  They don't affect set ordering though,
-    // so doing this is safe.
-    mutable TraceTree::const_iterator leaf;
-    mutable iterator prev;
-    mutable iterator next;
 
     void set_times(const TracePoint &p) {
       p_time = p.time;
@@ -320,6 +233,8 @@ private:
   };
 
   class DeltaList {
+    TraceDelta::List list;
+
   public:
     /**
      * Append new point to tree and list in sorted order.
@@ -695,8 +610,6 @@ private:
     }
 
   private:
-    TraceDelta::List list;
-
     void insert(const TraceDelta &td) {
       list.insert(td);
     }
@@ -771,11 +684,6 @@ private:
     }
   };
 
-  static void thin_trace_resolution(TracePointList& vec, const unsigned range_sq);
-
-  gcc_pure
-  bool inside_time_window(unsigned time) const;
-
   TraceTree trace_tree;
   DeltaList delta_list;
   TaskProjection task_projection;
@@ -788,6 +696,98 @@ private:
 
   unsigned m_average_delta_time;
   unsigned m_average_delta_distance;
+
+public:
+  /**
+   * Constructor.  Task projection is updated after first call to append().
+   *
+   * @param no_thin_time Time window in seconds in which points most recent
+   * wont be trimmed
+   * @param max_time Time window size (seconds), null_time for unlimited
+   * @param max_points Maximum number of points that can be stored
+   */
+  Trace(const unsigned no_thin_time = 0,
+        const unsigned max_time = null_time,
+        const unsigned max_points = 1000);
+
+  /**
+   * Add trace to internal store.  Call optimise() periodically
+   * to balance tree for faster queries
+   *
+   * @param state Aircraft state to log point for
+   */
+  void append(const AIRCRAFT_STATE& state);
+
+  /**
+   * Clear the trace store
+   */
+  void clear();
+
+  /**
+   * Size of traces (in tree, not in temporary store) ---
+   * must call optimise() before this for it to be accurate.
+   *
+   * @return Number of traces in tree
+   */
+  unsigned size() const;
+
+  /**
+   * Whether traces store is empty
+   *
+   * @return True if no traces stored
+   */
+  bool empty() const;
+
+  /**
+   * Re-balance kd-tree periodically 
+   *
+   * @return True if trace store was optimised
+   */
+  bool optimise_if_old();
+
+  /**
+   * Find traces within approximate range (square range box)
+   * to search location.  Possible use by screen display functions.
+   *
+   * @param loc Location from which to search
+   * @param range Distance in meters of search radius
+   * @param mintime Minimum time to match (recency)
+   * @param resolution Thin data to achieve minimum step size in (m) (if positive)
+   *
+   * @return Vector of trace points within square range
+   */
+  gcc_pure
+  TracePointVector
+  find_within_range(const GeoPoint &loc, const fixed range,
+                    const unsigned mintime = 0,
+                    const fixed resolution = fixed_zero) const;
+
+  /** 
+   * Retrieve a vector of trace points sorted by time
+   * 
+   * @param edges_only Search only for trace edges (first, last time)
+   * @param iov Vector of trace points (output)
+   *
+   */
+  void get_trace_points(TracePointVector& iov) const {
+    if (delta_list.size() < 3)
+      get_trace_edges(iov);
+    else
+      delta_list.get_trace(iov, get_min_time());
+  }
+
+  /**
+   * Retrieve a vector of the earliest and latest trace points
+   * 
+   * @param iov Vector of trace points
+   */
+  void get_trace_edges(TracePointVector& iov) const;
+
+private:
+  static void thin_trace_resolution(TracePointList& vec, const unsigned range_sq);
+
+  gcc_pure
+  bool inside_time_window(unsigned time) const;
 
   gcc_pure
   unsigned get_min_time() const;
