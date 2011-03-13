@@ -29,6 +29,7 @@ WaypointFlags::setDefaultFlags(bool turnpoint)
   Home = false;
   StartPoint = false;
   FinishPoint = false;
+  Watched = false;
 }
 
 Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
