@@ -28,6 +28,8 @@ Copyright_License {
 #include <string.h>
 
 #ifndef ENABLE_OPENGL
+#include "Screen/Util.hpp"
+
 #include <SDL_rotozoom.h>
 #include <SDL_imageFilter.h>
 #endif
@@ -105,6 +107,15 @@ Canvas::segment(int x, int y, unsigned radius,
                (int)start.value_degrees() - 90,
                (int)end.value_degrees() - 90,
                pen.get_color().gfx_color());
+}
+
+void
+Canvas::annulus(int x, int y, unsigned small_radius, unsigned big_radius,
+                Angle start, Angle end)
+{
+  assert(defined());
+
+  ::Annulus(*this, x, y, big_radius, start, end, small_radius);
 }
 
 #endif /* !OPENGL */
