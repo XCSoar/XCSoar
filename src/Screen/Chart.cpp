@@ -35,9 +35,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-#define BORDER_X 24
-#define BORDER_Y 19
-
 const Color Chart::GROUND_COLOUR(157, 101, 60);
 
 void
@@ -54,7 +51,7 @@ Chart::ResetScale()
 }
 
 Chart::Chart(Canvas &the_canvas, const RECT the_rc) :
-  canvas(the_canvas), rc(the_rc)
+  canvas(the_canvas), rc(the_rc), BORDER_X(24), BORDER_Y(19)
 {
   ResetScale();
 
