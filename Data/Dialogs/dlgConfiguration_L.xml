@@ -26,12 +26,12 @@
         <DataField DataType="filereader" />
       </Edit>
     
-      <Edit Name="prpAdditionalWaypointFile" Caption="More Waypoints" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAdditionalWaypointFile" Caption="More Waypoints*" X="2" Width="-2" Height="22" CaptionWidth="100"
       Help="Secondary waypoints file.  This may be used to add waypoints for a competition.">
         <DataField DataType="filereader" />
       </Edit>
 
-      <Edit Name="prpWatchedWaypointFile" Caption="Watched Waypoints" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpWatchedWaypointFile" Caption="Watched Waypoints*" X="2" Width="-2" Height="22" CaptionWidth="100"
       Help="Waypoint file containing special waypoints for which additional computations like calculation of arrival height in map display always takes place. Useful for waypoints like known reliable thermal sources (e.g. powerplants) or mountain passes.">
         <DataField DataType="filereader" />
       </Edit>
@@ -40,7 +40,7 @@
         <DataField DataType="filereader" />
       </Edit>
     
-      <Edit Name="prpAdditionalAirspaceFile" Caption="More Airspaces" X="2" Width="-2" Height="22" CaptionWidth="100" Help="The file name of the secondary airspace file.">
+      <Edit Name="prpAdditionalAirspaceFile" Caption="More Airspaces*" X="2" Width="-2" Height="22" CaptionWidth="100" Help="The file name of the secondary airspace file.">
         <DataField DataType="filereader" />
       </Edit>
     
