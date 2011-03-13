@@ -34,6 +34,8 @@ Copyright_License {
 
 #include "DeviceBlackboard.hpp"
 #include "Simulator.hpp"
+#include "FlightStatisticsRenderer.hpp"
+#include "GlideComputer.hpp"
 
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Screen/Layout.hpp"
@@ -438,4 +440,29 @@ InfoBoxContentTerrainHeight::Update(InfoBoxWindow &infobox)
 
   // Set Unit
   infobox.SetValueUnit(Units::Current.AltitudeUnit);
+}
+
+void
+InfoBoxContentBarogram::Update(InfoBoxWindow &infobox)
+{
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  TCHAR sTmp[32];
+
+  Units::FormatUserAltitude(basic.NavAltitude, sTmp,
+                            sizeof(sTmp) / sizeof(sTmp[0]));
+  infobox.SetComment(sTmp);
+
+  infobox.SetValue(_T(""));
+  infobox.invalidate();
+}
+
+void
+InfoBoxContentBarogram::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
+{
+  RECT rc = infobox.get_value_rect();
+  rc.top += Layout::FastScale(2);
+
+  FlightStatisticsRenderer fs(glide_computer->GetFlightStats());
+  fs.RenderBarographSpark(canvas, rc, XCSoarInterface::Basic(),
+                          XCSoarInterface::Calculated(), protected_task_manager);
 }

@@ -122,6 +122,7 @@ namespace InfoBoxFactory
     e_Free_RAM, /* Free RAM as reported by OS */
     e_FlightLevel, /* Flight Level, also known as pressure altitude */
     /* 79 */
+    e_Barogram,
     e_NUM_TYPES /* Last item */
   }t_InfoBox;
 

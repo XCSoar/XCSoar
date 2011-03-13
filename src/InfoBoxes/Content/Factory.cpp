@@ -769,6 +769,15 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     0, // H GPS
     70, // QFE GPS
   },
+
+  // 79
+  {
+    N_("Barogram"),
+    N_("Barogram"),
+    N_(""),
+    79, // H GPS
+    79, // QFE GPS
+  },
 };
 
 InfoBoxContent*
@@ -927,6 +936,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentExperimental2();
   case e_CPU_Load:
     return new InfoBoxContentCPULoad();
+  case e_Barogram:
+    return new InfoBoxContentBarogram();
   case e_WP_H:
     return new InfoBoxContentNextAltitudeArrival();
   case 77:

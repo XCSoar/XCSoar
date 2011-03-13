@@ -89,4 +89,12 @@ public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
+class InfoBoxContentBarogram : public InfoBoxContentAltitude
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
+};
+
+
 #endif
