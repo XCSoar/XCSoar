@@ -6,6 +6,8 @@ Version 6.0.8 - not yet released
 * don't estimate thermal source for skewed thermals
 * devices
   - CAI302: fix task declaration on Android
+* Android
+  - calculate WGS84 to real altitude (internal GPS)
 * Linux
   - more dialog improvements
   - fix bold font rendering

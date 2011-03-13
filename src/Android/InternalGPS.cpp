@@ -26,6 +26,7 @@ Copyright_License {
 #include "org_xcsoar_InternalGPS.h"
 #include "DeviceBlackboard.hpp"
 #include "Protection.hpp"
+#include "Device/Geoid.h"
 
 InternalGPS *
 InternalGPS::create(JNIEnv *env, NativeView *native_view)
@@ -89,8 +90,10 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.Location = GeoPoint(Angle::degrees(fixed(longitude)),
                             Angle::degrees(fixed(latitude)));
 
-  if (hasAltitude)
-    basic.GPSAltitude = fixed(altitude);
+  if (hasAltitude) {
+    fixed GeoidSeparation = LookupGeoidSeparation(basic.Location);
+    basic.GPSAltitude = fixed(altitude) - GeoidSeparation;
+  }
 
   if (hasBearing)
     basic.TrackBearing = Angle::degrees(fixed(bearing));
