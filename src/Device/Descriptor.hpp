@@ -54,8 +54,14 @@ public:
 
   bool ticker;
 
+  /**
+   * True during task declaration.  Link timeouts are disabled meanwhile.
+   */
+  bool declaring;
+
 public:
   DeviceDescriptor();
+  ~DeviceDescriptor();
 
 public:
   void Clear();
@@ -81,6 +87,14 @@ public:
 
   bool IsVega() const {
     return IsDriver(_T("Vega"));
+  }
+
+  /**
+   * Is this device currently declaring a task?  During that, the
+   * device usually does not send GPS updates.
+   */
+  bool IsDeclaring() const {
+    return declaring;
   }
 
 private:

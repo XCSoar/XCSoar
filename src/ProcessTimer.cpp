@@ -98,6 +98,11 @@ ProcessTimer::CommonProcessTimer()
 int
 ProcessTimer::ConnectionProcessTimer(int itimeout)
 {
+  if (AllDevicesIsDeclaring())
+    /* don't check for device timeouts during task declaration, as the
+       device is busy with that and will not send NMEA updates */
+    return itimeout;
+
   devConnectionMonitor();
 
   static bool connected_last = false;

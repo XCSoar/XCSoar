@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_ALL_HPP
 #define XCSOAR_DEVICE_ALL_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 class AtmosphericPressure;
@@ -40,5 +42,12 @@ void AllDevicesPutQNH(const AtmosphericPressure& pres);
 void AllDevicesPutVoice(const TCHAR *sentence);
 
 void AllDevicesLinkTimeout();
+
+/**
+ * Is any device currently declaring a task?
+ */
+gcc_pure
+bool
+AllDevicesIsDeclaring();
 
 #endif

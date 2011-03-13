@@ -47,13 +47,12 @@ Copyright_License {
 class EWDevice : public AbstractDevice {
 protected:
   Port *port;
-  bool fDeclarationPending;
   unsigned long lLastBaudrate;
   int ewDecelTpIndex;
 
 public:
   EWDevice(Port *_port)
-    :port(_port), fDeclarationPending(false),
+    :port(_port),
      lLastBaudrate(0), ewDecelTpIndex(0) {}
 
 protected:
@@ -194,8 +193,6 @@ EWDevice::DeclareInner(const struct Declaration *decl,
 bool
 EWDevice::Declare(const struct Declaration *decl, OperationEnvironment &env)
 {
-  fDeclarationPending = true;
-
   port->StopRxThread();
 
   lLastBaudrate = port->SetBaudrate(9600L);    // change to IO Mode baudrate
@@ -210,8 +207,6 @@ EWDevice::Declare(const struct Declaration *decl, OperationEnvironment &env)
 
   port->SetRxTimeout(0);                       // clear timeout
   port->StartRxThread();                       // restart RX thread
-
-  fDeclarationPending = false;                    // clear decl pending flag
 
   return success;
 }
@@ -315,8 +310,7 @@ EWDevice::AddWayPoint(const Waypoint &way_point)
 void
 EWDevice::LinkTimeout()
 {
-  if (!fDeclarationPending)
-    port->Write("NMEA\r\n");
+  port->Write("NMEA\r\n");
 }
 
 static Device *
