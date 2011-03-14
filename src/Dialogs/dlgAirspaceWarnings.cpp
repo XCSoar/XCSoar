@@ -204,6 +204,7 @@ static void
 OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 {
   TCHAR sTmp[128];
+  const int paint_rc_margin = 2;   ///< This constant defines the margin that should be respected for renderring within the paint_rc area.
 
   ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
   if (lease->empty()) {
@@ -211,8 +212,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
     // and this refresh, so only need to display "No Warnings" for
     // top item, otherwise exit immediately
     if (i==0) {
-      canvas.text(paint_rc.left + IBLSCALE(2),
-                  paint_rc.top + IBLSCALE(2), _("No Warnings"));
+      canvas.text(paint_rc.left + IBLSCALE(paint_rc_margin),
+                  paint_rc.top + IBLSCALE(paint_rc_margin), _("No Warnings"));
     }
     return;
   }
@@ -232,12 +233,15 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   tstring sType = as.get_type_text(true);
 
   const int TextHeight = 12, TextTop = 1;
-  const int Col0Left = 3, Col1Left = 120, Col2Left = 200;
+  /// Dynamic columns scaling - "name" column is flexible, altitude and state columns are fixed-width.
+  const int Col0LeftScreenCoords = IBLSCALE(paint_rc_margin),
+    Col2LeftScreenCoords = paint_rc.right - IBLSCALE(40),
+    Col1LeftScreenCoords = Col2LeftScreenCoords - IBLSCALE(50);
 
   RECT rcTextClip;
 
   rcTextClip = paint_rc;
-  rcTextClip.right = IBLSCALE(Col1Left - 2);
+  rcTextClip.right = Col1LeftScreenCoords - IBLSCALE(paint_rc_margin);
 
   Color old_text_color = canvas.get_text_color();
   if (!warning.get_ack_expired())
@@ -246,16 +250,16 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   { // name, altitude info
     _stprintf(sTmp, _T("%-20s"), sName.c_str());
 
-    canvas.text_clipped(paint_rc.left + IBLSCALE(Col0Left),
+    canvas.text_clipped(paint_rc.left + Col0LeftScreenCoords,
                         paint_rc.top + IBLSCALE(TextTop),
                         rcTextClip, sTmp);
     
     _stprintf(sTmp, _T("%-20s"), sTop.c_str());
-    canvas.text(paint_rc.left + IBLSCALE(Col1Left),
+    canvas.text(paint_rc.left + Col1LeftScreenCoords,
                 paint_rc.top + IBLSCALE(TextTop), sTmp);
     
     _stprintf(sTmp, _T("%-20s"), sBase.c_str());
-    canvas.text(paint_rc.left + IBLSCALE(Col1Left),
+    canvas.text(paint_rc.left + Col1LeftScreenCoords,
                 paint_rc.top + IBLSCALE(TextTop + TextHeight),
                 sTmp);
   }
@@ -267,7 +271,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
               (int)solution.elapsed_time,
               (int)solution.distance);
 
-    canvas.text_clipped(paint_rc.left + IBLSCALE(Col0Left),
+    canvas.text_clipped(paint_rc.left + Col0LeftScreenCoords,
                         paint_rc.top + IBLSCALE(TextTop + TextHeight),
                         rcTextClip, sTmp);
   }
@@ -301,16 +305,16 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
     /* colored background */
     RECT rc;
 
-    rc.left = paint_rc.left + Layout::FastScale(Col2Left);
-    rc.top = paint_rc.top + Layout::FastScale(2);
-    rc.right = rc.left + state_text_size.cx + Layout::FastScale(4);
-    rc.bottom = paint_rc.bottom - Layout::FastScale(2);
+    rc.left = paint_rc.left + Col2LeftScreenCoords;
+    rc.top = paint_rc.top + Layout::FastScale(paint_rc_margin);
+    rc.right = paint_rc.right - Layout::FastScale(paint_rc_margin);
+    rc.bottom = paint_rc.bottom - Layout::FastScale(paint_rc_margin);
 
     canvas.fill_rectangle(rc, *state_brush);
   }
 
   if (state_text != NULL)
-    canvas.text(paint_rc.left + Layout::FastScale(Col2Left + 2),
+    canvas.text(paint_rc.left + Col2LeftScreenCoords + Layout::FastScale(paint_rc_margin),
                 (paint_rc.bottom + paint_rc.top - state_text_size.cy) / 2,
                 state_text);
 
