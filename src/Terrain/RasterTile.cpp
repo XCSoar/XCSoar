@@ -687,7 +687,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
 #ifdef DEBUG_TILE
   printf("# fint width %d height %d\n", width, height);
 #endif
-  short h_terrain = 0;
+  short h_terrain = 1;
 
   unsigned x_int= x0, y_int= y0;
   short h_int= h_origin;
@@ -696,7 +696,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
   unsigned last_clear_y = y0;
   short last_clear_h = h_origin;
 
-  while (!RasterBuffer::is_invalid(h_terrain)) {
+  while (h_terrain>=0) {
 
     if (!step_counter) {
       h_terrain = GetFieldDirect(x_int, y_int, tile_index)+h_safety;
@@ -878,9 +878,9 @@ RasterTileCache::Intersection(int x0, int y0,
                              // field.
   int total_steps = 0; // total counter of steps
   short h_int= h_origin;
-  short h_terrain = 0;
+  short h_terrain = 1;
 
-  while (!RasterBuffer::is_invalid(h_terrain)) {
+  while (h_terrain>=0) {
 
     if (!step_counter) {
       h_terrain = GetFieldDirect(_x, _y, tile_index);
