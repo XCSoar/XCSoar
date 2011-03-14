@@ -176,6 +176,48 @@ maximum size is predictable).
 Avoid template hell.  Keep templates readable.  Keep in mind that
 excessive template use may bloat the binary.
 
+\section{Graphical User Interface}
+\subsection{Letter Cases}
+
+Following the guidline should prevent the GUI from mixtures of "ON" and "On" text elements, and lead to a systematic GUI text presentation. The goal is to recognize GUI text fast and reliable.
+
+\begin{description}
+  \item[Captions] Captions (button captions, windows titles) to use
+        capitalization. E.g. ,"Pan On", "The Display Of ...". 
+
+  \item[Abbreviations] Generally known abbreviation use upper case like "MC", "ETA",
+        "V"; or they can use CamelCase, especially when using synthetic
+        words  like "GoTo", "InfoBox". 
+        Abbreviated words by simply cutting the end of the word needs a
+        dot, e.g. "Max. temp."
+
+  \item[Plain text] Longer help texts are to write like prose: "This is the help
+        page for ...".
+
+  \item[Labels] Label text has the least systematic constraints:
+\begin{itemize}
+    \item Captions for text (input) fields, e.g. "Wing loading"
+    \item Info text on widgets. E.g. "No data" on an empty
+          analysis page. 
+    \item Label text for radio or check boxes. 
+    \item Selections on Combo-boxes, selectors, Pull-down menus. 
+\end{itemize}
+  All those should go like prose, whereas exceptions might be
+  meaningful.
+  
+  \item[Gauge caption] Also the appearance of the gauge caption should be covered with
+        that. They are currently mapped to upper case all over. I think
+        the most readable also here is a CamelCase approach. E.g. to
+        distinct "WP Dist", "WP AltD", and "WP AltR". Another good
+        example would be MACCREADY, which should be MacCready, or just
+        MC.
+
+  \item[Units] Units have their own specific appearance. A profound paper is
+        http://physics.nist.gov/cuu/pdf/checklist.pdf we could just
+        refer to.
+\end{description}
+
+
 \chapter{Topology and Terrain}\label{cha:topology}
 \section{Topology layer description file}
 Each line of the topology layer description file (topology.tpl) contains
