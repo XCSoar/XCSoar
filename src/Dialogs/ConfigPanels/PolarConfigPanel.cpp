@@ -148,6 +148,11 @@ PolarConfigPanel::OnLoadInternal(WndButton &button)
     Profile::Set(szProfilePolarName, list[result].StringValue);
     UpdatePolarTitle();
     UpdatePolarInvalidLabel();
+
+    unsigned contest_handicap =
+      PolarStore::GetContestHandicap(list[result].DataFieldIndex);
+    if (contest_handicap > 0)
+      LoadFormProperty(*wf, _T("prpHandicap"), contest_handicap);
   }
 }
 
