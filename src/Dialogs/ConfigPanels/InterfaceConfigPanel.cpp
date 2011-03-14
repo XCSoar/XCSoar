@@ -49,7 +49,7 @@ using namespace ConfigPanel;
 
 
 void
-InterfaceConfigPanel::Activate(bool active)
+InterfaceConfigPanel::SetVisible(bool active)
 {
   if (buttonFonts != NULL)
     buttonFonts->set_visible(active);

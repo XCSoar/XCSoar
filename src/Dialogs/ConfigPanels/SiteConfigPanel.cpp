@@ -35,7 +35,7 @@ using namespace ConfigPanel;
 
 
 void
-SiteConfigPanel::Activate(bool active)
+SiteConfigPanel::SetVisible(bool active)
 {
   if (buttonWaypoints != NULL)
     buttonWaypoints->set_visible(active);

@@ -228,7 +228,7 @@ PolarConfigPanel::OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mod
 }
 
 void
-PolarConfigPanel::Activate(bool active)
+PolarConfigPanel::SetVisible(bool active)
 {
   if (buttonList != NULL)
     buttonList->set_visible(active);

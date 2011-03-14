@@ -34,7 +34,7 @@ namespace PolarConfigPanel
   void Init(WndForm *wf);
   bool Save();
 
-  void Activate(bool active);
+  void SetVisible(bool active);
 
   void OnLoadInternal(WndButton &button);
   void OnLoadFromFile(WndButton &button);

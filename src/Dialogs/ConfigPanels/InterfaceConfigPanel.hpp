@@ -31,7 +31,7 @@ namespace InterfaceConfigPanel
   void Init(WndForm *wf);
   bool Save(bool &requirerestart);
 
-  void Activate(bool active);
+  void SetVisible(bool active);
 };
 
 #endif /* INTERFACECONFIGPANEL_HPP */

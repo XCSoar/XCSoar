@@ -118,9 +118,9 @@ PageSwitched()
              gettext(captions[(unsigned)current_page]));
   wf->SetCaption(caption);
 
-  InterfaceConfigPanel::Activate(current_page == PAGE_INTERFACE);
-  SiteConfigPanel::Activate(current_page == PAGE_SITE);
-  PolarConfigPanel::Activate(current_page == PAGE_POLAR);
+  InterfaceConfigPanel::SetVisible(current_page == PAGE_INTERFACE);
+  SiteConfigPanel::SetVisible(current_page == PAGE_SITE);
+  PolarConfigPanel::SetVisible(current_page == PAGE_POLAR);
 }
 
 
