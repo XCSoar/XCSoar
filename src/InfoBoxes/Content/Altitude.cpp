@@ -36,6 +36,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "FlightStatisticsRenderer.hpp"
 #include "GlideComputer.hpp"
+#include "Protection.hpp"
 
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Screen/Layout.hpp"
@@ -137,6 +138,60 @@ InfoBoxContentAltitude::PnlInfoUpdate()
 }
 
 /*
+ * Subpart Panel Simulator
+ */
+
+Window*
+InfoBoxContentAltitude::PnlSimulatorLoad(SingleWindow &parent,
+                                         TabBarControl* wTabBar,
+                                         WndForm* wf, const int id)
+{
+  assert(wTabBar);
+  assert(wf);
+
+  if (!is_simulator())
+    return NULL;
+
+  InfoBoxID = id;
+
+  Window *wInfoBoxAccessSimulator =
+      LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXALTITUDESIMULATOR"));
+  assert(wInfoBoxAccessSimulator);
+
+  return wInfoBoxAccessSimulator;
+}
+
+void
+InfoBoxContentAltitude::PnlSimulatorOnPlus(WndButton &Sender) {
+  (void)Sender;
+
+  if (!is_simulator())
+    return;
+
+  const NMEA_INFO &basic = CommonInterface::Basic();
+
+  fixed fixed_step = (fixed)Units::ToSysAltitude(fixed(100));
+  device_blackboard.SetAltitude(basic.GPSAltitude + fixed_step);
+
+  TriggerGPSUpdate();
+}
+
+void
+InfoBoxContentAltitude::PnlSimulatorOnMinus(WndButton &Sender) {
+  (void)Sender;
+
+  if (!is_simulator())
+    return;
+
+  const NMEA_INFO &basic = CommonInterface::Basic();
+
+  fixed fixed_step = (fixed)Units::ToSysAltitude(fixed(100));
+  device_blackboard.SetAltitude(basic.GPSAltitude - fixed_step);
+
+  TriggerGPSUpdate();
+}
+
+/*
  * Subpart Panel Setup
  */
 
@@ -189,18 +244,24 @@ InfoBoxContentAltitude::PnlSetupOnSetup(WndButton &Sender) {
  */
 
 InfoBoxContentAltitude::PanelContent InfoBoxContentAltitude::Panels[] = {
-InfoBoxContentAltitude::PanelContent (
-  _T("Info"),
-  (*InfoBoxContentAltitude::PnlInfoLoad),
-  NULL,
-  (*InfoBoxContentAltitude::PnlInfoOnTabPreShow)),
+  InfoBoxContentAltitude::PanelContent (
+    _("Simulator"),
+    (*InfoBoxContentAltitude::PnlSimulatorLoad)),
 
-InfoBoxContentAltitude::PanelContent (
-  _T("Setup"),
-  (*InfoBoxContentAltitude::PnlSetupLoad))
+  InfoBoxContentAltitude::PanelContent (
+    _("Info"),
+    (*InfoBoxContentAltitude::PnlInfoLoad),
+    NULL,
+    (*InfoBoxContentAltitude::PnlInfoOnTabPreShow)),
+
+  InfoBoxContentAltitude::PanelContent (
+    _("Setup"),
+    (*InfoBoxContentAltitude::PnlSetupLoad))
 };
 
 CallBackTableEntry InfoBoxContentAltitude::CallBackTable[] = {
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnPlus),
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnMinus),
   DeclareCallBackEntry(InfoBoxContentAltitude::PnlSetupOnQNH),
   DeclareCallBackEntry(InfoBoxContentAltitude::PnlSetupOnSetup),
 

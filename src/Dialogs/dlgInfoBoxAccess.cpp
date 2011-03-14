@@ -85,7 +85,9 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
     wPanel[i] =
       dlgContent->Panels[i].load(parent, wTabBar, wf, id);
 
-    assert(wPanel[i]);
+    if (wPanel[i] == NULL)
+      continue;
+
     wTabBar->AddClient(wPanel[i], dlgContent->Panels[i].name, false, NULL, (*dlgContent->Panels[i].preHide), (*dlgContent->Panels[i].preShow),
                                                                            (*dlgContent->Panels[i].postShow), (*dlgContent->Panels[i].reClick));
   }
@@ -93,7 +95,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   Window* wClose =
     dlgInfoBoxAccess::pnlCloseLoad(parent, wTabBar, wf, dlgContent->CallBackTable);
   assert(wClose);
-  wTabBar->AddClient(wClose, _T("Close"), false, NULL, NULL,  dlgInfoBoxAccess::pnlCloseOnTabPreShow,
+  wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,  dlgInfoBoxAccess::pnlCloseOnTabPreShow,
                                                  NULL, dlgInfoBoxAccess::pnlCloseOnTabReClick);
 
   wTabBar->SetCurrentPage(0);
