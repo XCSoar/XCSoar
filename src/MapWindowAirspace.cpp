@@ -50,9 +50,9 @@ private:
 
 public:
   void Visit(const AirspaceWarning& as) {
-    if (as.get_warning_state()== AirspaceWarning::WARNING_INSIDE) {
+    if (as.get_warning_state() == AirspaceWarning::WARNING_INSIDE) {
       ids_inside.checked_append(&as.get_airspace());
-    } else if (as.get_warning_state()> AirspaceWarning::WARNING_CLEAR) {
+    } else if (as.get_warning_state() > AirspaceWarning::WARNING_CLEAR) {
       ids_warning.checked_append(&as.get_airspace());
       locs.checked_append(as.get_solution().location);
     }
@@ -72,6 +72,18 @@ public:
   }
   bool is_inside(const AbstractAirspace& as) const {
     return find(as, ids_inside);
+  }
+
+  void visit_warned(AirspaceVisitor &visitor) {
+    for (unsigned i = 0; i < ids_warning.size(); i++)
+      if (!is_acked(*ids_warning[i]))
+        visitor.Visit(*ids_warning[i]);
+  }
+
+  void visit_inside(AirspaceVisitor &visitor) {
+    for (unsigned i = 0; i < ids_inside.size(); i++)
+      if (!is_acked(*ids_inside[i]))
+        visitor.Visit(*ids_inside[i]);
   }
 
 private:
@@ -442,6 +454,9 @@ MapWindow::DrawAirspace(Canvas &canvas)
                                         render_projection.GetScreenDistanceMeters(),
                                         v, visible);
 
+  awc.visit_warned(v);
+  awc.visit_inside(v);
+
   v.draw_intercepts();
 
   AirspaceOutlineRenderer outline_renderer(canvas, render_projection,
@@ -449,6 +464,8 @@ MapWindow::DrawAirspace(Canvas &canvas)
   airspace_database->visit_within_range(render_projection.GetGeoScreenCenter(),
                                         render_projection.GetScreenDistanceMeters(),
                                         outline_renderer, visible);
+  awc.visit_warned(outline_renderer);
+  awc.visit_inside(outline_renderer);
 #endif
 
   m_airspace_intersections = awc.get_locations();
