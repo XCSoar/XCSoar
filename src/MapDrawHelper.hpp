@@ -20,6 +20,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #ifndef MAP_DRAW_HELPER_HPP
 #define MAP_DRAW_HELPER_HPP
 
@@ -66,8 +67,8 @@ public:
   const SETTINGS_MAP& m_settings_map;
 
 protected:
-
-  void draw_search_point_vector(Canvas& the_canvas, const SearchPointVector& points);
+  void draw_search_point_vector(Canvas& the_canvas,
+                                const SearchPointVector& points);
 
   void draw_circle(Canvas &the_canvas,
                    const RasterPoint &center, unsigned radius);

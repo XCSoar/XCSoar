@@ -29,31 +29,29 @@ Copyright_License {
 #include "SettingsMap.hpp"
 #include "MapCanvas.hpp"
 
-MapDrawHelper::MapDrawHelper(Canvas &_canvas,
-                             Canvas &_buffer,
-                             Canvas &_stencil,
+MapDrawHelper::MapDrawHelper(Canvas &_canvas, Canvas &_buffer, Canvas &_stencil,
                              const WindowProjection &_proj,
-                             const SETTINGS_MAP& settings_map):
-  clip(_proj.GetScreenBounds().scale(fixed(1.1))),
-  m_canvas(_canvas),
-  m_buffer(_buffer),
-  m_stencil(_stencil),
-  m_proj(_proj),
-  m_buffer_drawn(false),
-  m_use_stencil(false),
-  m_settings_map(settings_map)
+                             const SETTINGS_MAP& settings_map)
+  :clip(_proj.GetScreenBounds().scale(fixed(1.1))),
+   m_canvas(_canvas),
+   m_buffer(_buffer),
+   m_stencil(_stencil),
+   m_proj(_proj),
+   m_buffer_drawn(false),
+   m_use_stencil(false),
+   m_settings_map(settings_map)
 {
 }
 
-MapDrawHelper::MapDrawHelper(MapDrawHelper &_that):
-  clip(_that.clip),
-  m_canvas(_that.m_canvas),
-  m_buffer(_that.m_buffer),
-  m_stencil(_that.m_stencil),
-  m_proj(_that.m_proj),
-  m_buffer_drawn(_that.m_buffer_drawn),
-  m_use_stencil(_that.m_use_stencil),
-  m_settings_map(_that.m_settings_map)
+MapDrawHelper::MapDrawHelper(MapDrawHelper &_that)
+  :clip(_that.clip),
+   m_canvas(_that.m_canvas),
+   m_buffer(_that.m_buffer),
+   m_stencil(_that.m_stencil),
+   m_proj(_that.m_proj),
+   m_buffer_drawn(_that.m_buffer_drawn),
+   m_use_stencil(_that.m_use_stencil),
+   m_settings_map(_that.m_settings_map)
 {
 }
 
@@ -62,9 +60,8 @@ MapDrawHelper::draw_search_point_vector(Canvas& the_canvas,
                                         const SearchPointVector& points) 
 {
   size_t size = points.size();
-  if (size<3) {
+  if (size < 3)
     return;
-  }
 
   /* copy all SearchPointVector elements to geo_points */
   geo_points.grow_discard(size * 3);
@@ -72,8 +69,7 @@ MapDrawHelper::draw_search_point_vector(Canvas& the_canvas,
     geo_points[i] = points[i].get_location();
 
   /* clip them */
-  size = clip.clip_polygon(geo_points.begin(),
-                           geo_points.begin(), size);
+  size = clip.clip_polygon(geo_points.begin(), geo_points.begin(), size);
   if (size < 3)
     /* it's completely outside the screen */
     return;
@@ -87,9 +83,8 @@ MapDrawHelper::draw_search_point_vector(Canvas& the_canvas,
     return;
 
   the_canvas.polygon(&screen[0], size);
-  if (m_use_stencil) {
+  if (m_use_stencil)
     m_stencil.polygon(&screen[0], size);
-  }
 }
 
 void 
@@ -97,9 +92,8 @@ MapDrawHelper::draw_circle(Canvas &the_canvas,
                            const RasterPoint &center, unsigned radius)
 {
   the_canvas.circle(center.x, center.y, radius);
-  if (m_use_stencil) {
+  if (m_use_stencil)
     m_stencil.circle(center.x, center.y, radius);
-  }
 }
 
 void 
@@ -109,9 +103,8 @@ MapDrawHelper::buffer_render_finish()
     // need to do this to prevent drawing of colored outline
     m_buffer.white_pen();
     
-    if (m_use_stencil) {
+    if (m_use_stencil)
       m_buffer.copy_transparent_black(m_stencil);
-    }
 
 #ifdef HAVE_ALPHA_BLEND
     if (m_settings_map.airspace_transparency && AlphaBlendAvailable())
@@ -137,7 +130,8 @@ MapDrawHelper::buffer_render_start()
 }
 
 void 
-MapDrawHelper::clear_buffer() {
+MapDrawHelper::clear_buffer()
+{
   m_buffer.clear_white();
   m_stencil.clear_white();
 }
