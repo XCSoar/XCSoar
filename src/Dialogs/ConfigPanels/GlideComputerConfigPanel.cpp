@@ -87,12 +87,12 @@ GlideComputerConfigPanel::Init(WndForm *_wf)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("15 seconds"));
-    dfe->addEnumText(_("30 seconds"));
-    dfe->addEnumText(_("60 seconds"));
-    dfe->addEnumText(_("90 seconds"));
-    dfe->addEnumText(_("2 minutes"));
-    dfe->addEnumText(_("3 minutes"));
+    dfe->addEnumText(_T("15 s"));
+    dfe->addEnumText(_T("30 s"));
+    dfe->addEnumText(_T("60 s"));
+    dfe->addEnumText(_T("90 s"));
+    dfe->addEnumText(_T("2 min"));
+    dfe->addEnumText(_T("3 min"));
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->Set(settings_computer.AverEffTime);
     wp->RefreshDisplay();

@@ -178,7 +178,7 @@ PolarConfigPanel::OnLoadFromFile(WndButton &button)
 
   // Show selection dialog
   int result = ComboPicker(XCSoarInterface::main_window,
-                           _("Load Polar from file"), list, NULL);
+                           _("Load Polar From File"), list, NULL);
   if (result >= 0) {
     const TCHAR* path = list[result].StringValue;
     PolarInfo polar;

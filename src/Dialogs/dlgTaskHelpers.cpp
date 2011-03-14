@@ -48,7 +48,7 @@ OrderedTaskFactoryName(TaskBehaviour::Factory_t type)
   case TaskBehaviour::FACTORY_RT:
     return _("Racing");
   case TaskBehaviour::FACTORY_FAI_GENERAL:
-    return _("FAI badges/ records");
+    return _("FAI badges/records");
   case TaskBehaviour::FACTORY_FAI_TRIANGLE:
     return _("FAI triangle");
   case TaskBehaviour::FACTORY_FAI_OR:
@@ -459,7 +459,7 @@ OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
   case AbstractTaskFactory::FAI_SECTOR:
     return _("FAI quadrant");
   case AbstractTaskFactory::KEYHOLE_SECTOR:
-    return _("Keyhole sector (DAe)");
+    return _("Keyhole sector (DAeC)");
   case AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR:
     return _("BGA Fixed Course sector");
   case AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR:

@@ -122,7 +122,7 @@ UnitsConfigPanel::OnLoadPreset(WndButton &button)
 
   /* let the user select */
 
-  int result = ComboPicker(XCSoarInterface::main_window, _("Unit presets"), list, NULL);
+  int result = ComboPicker(XCSoarInterface::main_window, _("Unit Presets"), list, NULL);
   if (result >= 0) {
     const UnitSetting& units = Units::Store::Read(list[result].DataFieldIndex);
     UpdateUnitFields(units);
@@ -248,8 +248,8 @@ UnitsConfigPanel::Init(WndForm *_wf)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Feet"));
-    dfe->addEnumText(_("Meters"));
+    dfe->addEnumText(_("foot"));
+    dfe->addEnumText(_("meter"));
     wp->RefreshDisplay();
   }
 
@@ -266,8 +266,8 @@ UnitsConfigPanel::Init(WndForm *_wf)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Knots"));
-    dfe->addEnumText(_("M/s"));
+    dfe->addEnumText(_("knots"));
+    dfe->addEnumText(_("m/s"));
     dfe->addEnumText(_("ft/min"));
     wp->RefreshDisplay();
   }
