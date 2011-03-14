@@ -74,6 +74,9 @@ Version 6.1 - not yet released
     not armed, "disarm" if armed.
   - time margin of AAT optimisation is configurable under "Default task turnpoints" page, expert mode
     as "Optimisation Margin" option.
+  - auto goto task: when no task is defined then on takeoff, if there is a waypoint
+    within 1km of the takeoff location, a goto task pointing back to this location
+    is automatically created.
 * Android
   - support landscape/portrait switching
 
