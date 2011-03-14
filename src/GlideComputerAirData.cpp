@@ -778,9 +778,17 @@ GlideComputerAirData::Turning()
 void
 GlideComputerAirData::ThermalSources()
 {
+  const DERIVED_INFO &calculated = Calculated();
+
   if (!Calculated().ThermalEstimate_Valid ||
       !positive(Calculated().LastThermalAverage))
     return;
+
+  if (Basic().wind.norm/calculated.LastThermalAverage> fixed(10.0)) {
+    // thermal strength is so weak compared to wind that source estimate
+    // is unlikely to be reliable, so don't calculate or remember it
+    return;
+  }
 
   GeoPoint ground_location;
   fixed ground_altitude = fixed_minus_one;
