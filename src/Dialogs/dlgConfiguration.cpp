@@ -274,7 +274,6 @@ void dlgConfigurationShowModal(void)
   // below after exit.
   bool changed = false;
   bool requirerestart = false;
-  changed |= UnitsConfigPanel::Save();
   changed |= PagesConfigPanel::Save();
   changed |= PolarConfigPanel::Save();
   changed |= LoggerConfigPanel::Save();
@@ -295,6 +294,9 @@ void dlgConfigurationShowModal(void)
   changed |= TaskDefaultsConfigPanel::Save();
   changed |= InfoBoxesConfigPanel::Save(requirerestart);
   changed |= ExperimentalConfigPanel::Save(requirerestart);
+  // Units need to be saved last to prevent
+  // conversion problems with other values
+  changed |= UnitsConfigPanel::Save();
 
   if (changed) {
     Profile::Save();
