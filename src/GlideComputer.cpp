@@ -239,6 +239,7 @@ void
 GlideComputer::OnTakeoff()
 {
   GlideComputerAirData::OnTakeoff();
+  GlideComputerTask::OnTakeoff();
   InputEvents::processGlideComputer(GCE_TAKEOFF);
 }
 

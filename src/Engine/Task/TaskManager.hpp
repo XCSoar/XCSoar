@@ -607,6 +607,14 @@ public:
     task_abort.set_intersection_test(_test);
   }
 
+  /**
+   * When called on takeoff, will create a goto task to the nearest waypoint if
+   * no other task is active.
+   * Caller is responsible for ensuring the waypoint database already has an
+   * appropriate waypoint within 1000m of the takeoff location.
+   */
+  void takeoff_autotask(const GeoPoint &ref);
+
 private:
   GlidePolar m_glide_polar;
 

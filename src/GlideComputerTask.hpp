@@ -46,6 +46,8 @@ protected:
     terrain = _terrain;
   }
 
+  virtual void OnTakeoff();
+
 private:
   void TerrainWarning();
 

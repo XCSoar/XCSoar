@@ -108,15 +108,13 @@ public:
                      const bool full_update);
 
   /**
-   * Check if on takeoff, we can create a default goto task
+   * When called on takeoff, creates a default goto task
    *
-   * @param state_now Aircraft state at this time step
-   * @param state_last Aircraft state at previous time step
+   * @param loc Location
    *
    * @return True if default task was created
    */
-  bool check_takeoff(const AIRCRAFT_STATE& state_now, 
-                     const AIRCRAFT_STATE& state_last);
+  bool takeoff_autotask(const GeoPoint& loc);
 
 protected:
 /** 

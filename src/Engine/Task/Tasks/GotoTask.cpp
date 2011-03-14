@@ -114,15 +114,13 @@ GotoTask::reset()
 
 
 bool 
-GotoTask::check_takeoff(const AIRCRAFT_STATE& state_now, 
-                        const AIRCRAFT_STATE& state_last)
+GotoTask::takeoff_autotask(const GeoPoint& location)
 {
-  if (state_now.Flying && !state_last.Flying && !tp) {
-    const Waypoint* wp = waypoints.lookup_location(state_now.Location,
-                                                   fixed(1000));
-    if (wp) {
-      return do_goto(*wp);
-    }
-  }
+  if (tp)
+    return false;
+
+  const Waypoint* wp = waypoints.lookup_location(location, fixed(1000));
+  if (wp)
+    return do_goto(*wp);
   return false;
 }

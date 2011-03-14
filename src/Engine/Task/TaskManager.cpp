@@ -271,10 +271,6 @@ TaskManager::update(const AIRCRAFT_STATE &state,
     // always update ordered task
     retval |= task_ordered.update(state, state_last);
 
-  // check if we can create a goto task on takeoff
-  if (!active_task && task_goto.check_takeoff(state, state_last))
-    retval |= set_mode(MODE_GOTO);
-
   // inform the abort task whether it is running as the task or not  
   task_abort.set_active(active_task == &task_abort);
   // and tell it where the task destination is (if any)
@@ -691,3 +687,10 @@ TaskManager::getAlternates() const
   return task_abort.getAlternates();
 }
 
+void
+TaskManager::takeoff_autotask(const GeoPoint& loc)
+{
+  // create a goto task on takeoff
+  if (!active_task && task_goto.takeoff_autotask(loc))
+    set_mode(MODE_GOTO);
+}

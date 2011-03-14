@@ -71,7 +71,6 @@ GlideComputerTask::ProcessBasicTask()
     const AIRCRAFT_STATE current_as = ToAircraftState(basic, Calculated());
     const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic(),
                                                    LastCalculated());
-
     task->update(current_as, last_as);
     auto_updated = task->update_auto_mc(current_as, std::max(
                                           Calculated().LastThermalAverageSmooth, fixed_zero));
@@ -166,4 +165,11 @@ GlideComputerTask::TerrainWarning()
     const AGeoPoint start (state.get_location(), state.NavAltitude);
     m_task.solve_reach(start);
   }
+}
+
+void 
+GlideComputerTask::OnTakeoff()
+{
+  ProtectedTaskManager::ExclusiveLease task(m_task);
+  task->takeoff_autotask(Basic().Location);
 }
