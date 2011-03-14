@@ -32,7 +32,7 @@ Copyright_License {
 class InfoBoxContentAltitude : public InfoBoxContent
 {
 private:
-  static const int PANELSIZE = 2;
+  static const int PANELSIZE = 3;
 
 public:
   virtual DialogContent* GetDialogContent();
@@ -46,6 +46,11 @@ public:
   static PanelContent Panels[];
 
   static DialogContent dlgContent;
+
+  static Window* PnlSimulatorLoad(SingleWindow &parent, TabBarControl* wTabBar,
+                                  WndForm* wf, const int id);
+  static void PnlSimulatorOnPlus(WndButton &Sender);
+  static void PnlSimulatorOnMinus(WndButton &Sender);
 
   static Window* PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
   static void PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode);
