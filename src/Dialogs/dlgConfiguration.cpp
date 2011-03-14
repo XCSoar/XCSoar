@@ -1820,145 +1820,6 @@ void dlgConfigurationShowModal(void)
                               szProfileBlockSTF,
                               settings_computer.EnableBlockSTF);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsSpeed"));
-  if (wp) {
-    if ((int)Speed != wp->GetDataField()->GetAsInteger()) {
-      Speed = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileSpeedUnitsValue, Speed);
-      changed = true;
-
-      switch (Speed) {
-      case 0:
-        Units::SetUserSpeedUnit(unStatuteMilesPerHour);
-        Units::SetUserWindSpeedUnit(unStatuteMilesPerHour);
-        break;
-      case 1:
-        Units::SetUserSpeedUnit(unKnots);
-        Units::SetUserWindSpeedUnit(unKnots);
-        break;
-      case 2:
-      default:
-        Units::SetUserSpeedUnit(unKiloMeterPerHour);
-        Units::SetUserWindSpeedUnit(unKiloMeterPerHour);
-        break;
-      }
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsLatLon"));
-  if (wp) {
-    if ((int)Units::GetCoordinateFormat() != wp->GetDataField()->GetAsInteger()) {
-      Units::SetCoordinateFormat(
-          (CoordinateFormats_t)wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileLatLonUnits, Units::GetCoordinateFormat());
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsTaskSpeed"));
-  if (wp) {
-    if ((int)TaskSpeed != wp->GetDataField()->GetAsInteger()) {
-      TaskSpeed = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileTaskSpeedUnitsValue, TaskSpeed);
-      changed = true;
-
-      switch (TaskSpeed) {
-      case 0:
-        Units::SetUserTaskSpeedUnit(unStatuteMilesPerHour);
-        break;
-      case 1:
-        Units::SetUserTaskSpeedUnit(unKnots);
-        break;
-      case 2:
-      default:
-        Units::SetUserTaskSpeedUnit(unKiloMeterPerHour);
-        break;
-      }
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsDistance"));
-  if (wp) {
-    if ((int)Distance != wp->GetDataField()->GetAsInteger()) {
-      Distance = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileDistanceUnitsValue, Distance);
-      changed = true;
-
-      switch (Distance) {
-      case 0:
-        Units::SetUserDistanceUnit(unStatuteMiles);
-        break;
-      case 1:
-        Units::SetUserDistanceUnit(unNauticalMiles);
-        break;
-      case 2:
-      default:
-        Units::SetUserDistanceUnit(unKiloMeter);
-        break;
-      }
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsLift"));
-  if (wp) {
-    if ((int)Lift != wp->GetDataField()->GetAsInteger()) {
-      Lift = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileLiftUnitsValue, Lift);
-      changed = true;
-
-      switch (Lift) {
-      case 0:
-        Units::SetUserVerticalSpeedUnit(unKnots);
-        break;
-      case 1:
-      default:
-        Units::SetUserVerticalSpeedUnit(unMeterPerSecond);
-        break;
-      case 2:
-        Units::SetUserVerticalSpeedUnit(unFeetPerMinute);
-        break;
-      }
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsAltitude"));
-  if (wp) {
-    if ((int)Altitude != wp->GetDataField()->GetAsInteger()) {
-      Altitude = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileAltitudeUnitsValue, Altitude);
-      changed = true;
-
-      switch (Altitude) {
-      case 0:
-        Units::SetUserAltitudeUnit(unFeet);
-        break;
-      case 1:
-      default:
-        Units::SetUserAltitudeUnit(unMeter);
-        break;
-      }
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpUnitsTemperature"));
-  if (wp) {
-    if ((int)Temperature != wp->GetDataField()->GetAsInteger()) {
-      Temperature = wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileTemperatureUnitsValue, Temperature);
-      changed = true;
-
-      switch (Temperature) {
-      case 0:
-        Units::SetUserTemperatureUnit(unGradCelcius);
-        break;
-      case 1:
-      default:
-        Units::SetUserTemperatureUnit(unGradFahrenheit);
-        break;
-      }
-    }
-  }
-
   {
     unsigned t= settings_computer.contest;
     changed |= SaveFormProperty(*wf, _T("prpContests"), szProfileOLCRules,
@@ -2339,6 +2200,147 @@ void dlgConfigurationShowModal(void)
 
   if (!is_embedded() && DevicePortChanged)
     requirerestart = true;
+
+  // Units need to be saved last to prevent
+  // conversion problems with other values !!
+  wp = (WndProperty*)wf->FindByName(_T("prpUnitsSpeed"));
+  if (wp) {
+    if ((int)Speed != wp->GetDataField()->GetAsInteger()) {
+      Speed = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileSpeedUnitsValue, Speed);
+      changed = true;
+
+      switch (Speed) {
+      case 0:
+        Units::SetUserSpeedUnit(unStatuteMilesPerHour);
+        Units::SetUserWindSpeedUnit(unStatuteMilesPerHour);
+        break;
+      case 1:
+        Units::SetUserSpeedUnit(unKnots);
+        Units::SetUserWindSpeedUnit(unKnots);
+        break;
+      case 2:
+      default:
+        Units::SetUserSpeedUnit(unKiloMeterPerHour);
+        Units::SetUserWindSpeedUnit(unKiloMeterPerHour);
+        break;
+      }
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpUnitsLatLon"));
+  if (wp) {
+    if ((int)Units::GetCoordinateFormat() != wp->GetDataField()->GetAsInteger()) {
+      Units::SetCoordinateFormat(
+          (CoordinateFormats_t)wp->GetDataField()->GetAsInteger());
+      Profile::Set(szProfileLatLonUnits, Units::GetCoordinateFormat());
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpUnitsTaskSpeed"));
+  if (wp) {
+    if ((int)TaskSpeed != wp->GetDataField()->GetAsInteger()) {
+      TaskSpeed = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileTaskSpeedUnitsValue, TaskSpeed);
+      changed = true;
+
+      switch (TaskSpeed) {
+      case 0:
+        Units::SetUserTaskSpeedUnit(unStatuteMilesPerHour);
+        break;
+      case 1:
+        Units::SetUserTaskSpeedUnit(unKnots);
+        break;
+      case 2:
+      default:
+        Units::SetUserTaskSpeedUnit(unKiloMeterPerHour);
+        break;
+      }
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpUnitsDistance"));
+  if (wp) {
+    if ((int)Distance != wp->GetDataField()->GetAsInteger()) {
+      Distance = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileDistanceUnitsValue, Distance);
+      changed = true;
+
+      switch (Distance) {
+      case 0:
+        Units::SetUserDistanceUnit(unStatuteMiles);
+        break;
+      case 1:
+        Units::SetUserDistanceUnit(unNauticalMiles);
+        break;
+      case 2:
+      default:
+        Units::SetUserDistanceUnit(unKiloMeter);
+        break;
+      }
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpUnitsLift"));
+  if (wp) {
+    if ((int)Lift != wp->GetDataField()->GetAsInteger()) {
+      Lift = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileLiftUnitsValue, Lift);
+      changed = true;
+
+      switch (Lift) {
+      case 0:
+        Units::SetUserVerticalSpeedUnit(unKnots);
+        break;
+      case 1:
+      default:
+        Units::SetUserVerticalSpeedUnit(unMeterPerSecond);
+        break;
+      case 2:
+        Units::SetUserVerticalSpeedUnit(unFeetPerMinute);
+        break;
+      }
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpUnitsAltitude"));
+  if (wp) {
+    if ((int)Altitude != wp->GetDataField()->GetAsInteger()) {
+      Altitude = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileAltitudeUnitsValue, Altitude);
+      changed = true;
+
+      switch (Altitude) {
+      case 0:
+        Units::SetUserAltitudeUnit(unFeet);
+        break;
+      case 1:
+      default:
+        Units::SetUserAltitudeUnit(unMeter);
+        break;
+      }
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpUnitsTemperature"));
+  if (wp) {
+    if ((int)Temperature != wp->GetDataField()->GetAsInteger()) {
+      Temperature = wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileTemperatureUnitsValue, Temperature);
+      changed = true;
+
+      switch (Temperature) {
+      case 0:
+        Units::SetUserTemperatureUnit(unGradCelcius);
+        break;
+      case 1:
+      default:
+        Units::SetUserTemperatureUnit(unGradFahrenheit);
+        break;
+      }
+    }
+  }
 
   if (changed) {
     Profile::Save();
