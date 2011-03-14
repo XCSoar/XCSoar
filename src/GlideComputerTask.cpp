@@ -131,27 +131,25 @@ GlideComputerTask::ProcessIdle()
   }
 
   const GlideResult& sol = Calculated().task_stats.current_leg.solution_remaining;
+  const AGeoPoint start (as.get_location(), as.NavAltitude);
+  const short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
+                                          (int)Calculated().thermal_band.working_band_ceiling);
+  // allow at least 500m of climb above current altitude as ceiling, in case
+  // there are no actual working band stats.
+  const GeoVector &v = sol.Vector;
 
-  if (sol.defined() && terrain) {
-
-    const AGeoPoint start (as.get_location(), as.NavAltitude);
-    const GeoVector &v = sol.Vector;
-    const AGeoPoint dest (v.end_point(start), sol.MinHeight);
-
-    short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
-                                      (int)Calculated().thermal_band.working_band_ceiling);
-
-    m_task.route_solve(dest, start, h_ceiling);
-
-    // allow at least 500m of climb above current altitude as ceiling, in case
-    // there are no actual working band stats.
-
-    SetCalculated().TerrainWarning = m_task.intersection(terrain, start, dest,
-                                                         SetCalculated().TerrainWarningLocation);
-
-  } else {
-    SetCalculated().TerrainWarning = false;
+  if (terrain) {
+    if (sol.defined()) {
+      const AGeoPoint dest(v.end_point(start), sol.MinHeight);
+      m_task.route_solve(dest, start, h_ceiling);
+      SetCalculated().TerrainWarning = m_task.intersection(terrain, start, dest,
+                                                           SetCalculated().TerrainWarningLocation);
+      return;
+    } else {
+      m_task.route_solve(start, start, h_ceiling);
+    }
   }
+  SetCalculated().TerrainWarning = false;
 }
 
 void
