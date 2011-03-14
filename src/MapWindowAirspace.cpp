@@ -44,6 +44,10 @@ Copyright_License {
 class AirspaceWarningCopy: 
   public AirspaceWarningVisitor
 {
+private:
+  StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
+  StaticArray<GeoPoint,32> locs;
+
 public:
   void Visit(const AirspaceWarning& as) {
     if (as.get_warning_state()== AirspaceWarning::WARNING_INSIDE) {
@@ -75,14 +79,15 @@ private:
             const StaticArray<const AbstractAirspace *,64> &list) const {
     return list.contains(&as);
   }
-
-  StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
-  StaticArray<GeoPoint,32> locs;
 };
 
 
 class AirspaceMapVisible: public AirspaceVisible
 {
+private:
+  const bool &m_border;
+  const AirspaceWarningCopy& m_warnings;
+
 public:
   AirspaceMapVisible(const SETTINGS_COMPUTER& _settings, 
                      const AIRCRAFT_STATE& _state, const bool& _border,
@@ -102,15 +107,18 @@ public:
       || m_warnings.is_inside(airspace)
       || m_warnings.is_warning(airspace);
   }
-private:
-  const bool &m_border;
-  const AirspaceWarningCopy& m_warnings;
 };
 
 #ifdef ENABLE_OPENGL
 
 class AirspaceRenderer : public AirspaceVisitor, protected MapCanvas
 {
+private:
+  bool black;
+  const AirspaceWarningCopy& m_warnings;
+  const SETTINGS_MAP& m_settings_map;
+  Pen pen_thick;
+
 public:
   AirspaceRenderer(Canvas &_canvas, const WindowProjection &_projection,
                    const AirspaceWarningCopy& warnings,
@@ -245,10 +253,6 @@ private:
     canvas.select(pen_thick);
   }
 
-  bool black;
-  const AirspaceWarningCopy& m_warnings;
-  const SETTINGS_MAP& m_settings_map;
-  Pen pen_thick;
 };
 
 #else // !ENABLE_OPENGL
