@@ -8,6 +8,7 @@ Version 6.0.8 - not yet released
   - CAI302: fix task declaration on Android
 * Android
   - calculate WGS84 to real altitude (internal GPS)
+  - fix incorrect airspace warning repetitions
 * Linux
   - more dialog improvements
   - fix bold font rendering

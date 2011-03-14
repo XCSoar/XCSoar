@@ -78,7 +78,8 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   fixed second_of_day = fixed(date_time.GetSecondOfDay()) +
     /* add the millisecond fraction of the original timestamp for
        better accuracy */
-    fixed((unsigned)time % 1000u) / 1000u;
+    fixed((unsigned)(time % 1000)) / 1000u;
+
   if (second_of_day < basic.Time && date_time > basic.DateTime)
     /* don't wrap around when going past midnight in UTC */
     second_of_day += fixed(24u * 3600u);
