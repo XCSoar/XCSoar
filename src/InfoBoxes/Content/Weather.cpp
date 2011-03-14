@@ -254,13 +254,13 @@ InfoBoxContentWind::PnlSetupOnSetup(WndButton &Sender) {
 
 InfoBoxContentWind::PanelContent InfoBoxContentWind::Panels[] = {
 InfoBoxContentWind::PanelContent (
-  _T("Edit"),
+  _("Edit"),
   (*InfoBoxContentWind::PnlEditLoad),
   NULL,
   (*InfoBoxContentWind::PnlEditOnTabPreShow)),
 
 InfoBoxContentWind::PanelContent (
-  _T("Setup"),
+  _("Setup"),
   (*InfoBoxContentWind::PnlSetupLoad),
   (*InfoBoxContentWind::PnlSetupOnTabPreHide))
 };

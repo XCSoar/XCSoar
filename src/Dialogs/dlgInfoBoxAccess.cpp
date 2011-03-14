@@ -95,7 +95,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id)
   Window* wClose =
     dlgInfoBoxAccess::pnlCloseLoad(parent, wTabBar, wf, dlgContent->CallBackTable);
   assert(wClose);
-  wTabBar->AddClient(wClose, _T("Close"), false, NULL, NULL,  dlgInfoBoxAccess::pnlCloseOnTabPreShow,
+  wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,  dlgInfoBoxAccess::pnlCloseOnTabPreShow,
                                                  NULL, dlgInfoBoxAccess::pnlCloseOnTabReClick);
 
   wTabBar->SetCurrentPage(0);

@@ -245,17 +245,17 @@ InfoBoxContentAltitude::PnlSetupOnSetup(WndButton &Sender) {
 
 InfoBoxContentAltitude::PanelContent InfoBoxContentAltitude::Panels[] = {
   InfoBoxContentAltitude::PanelContent (
-    _T("Simulator"),
+    _("Simulator"),
     (*InfoBoxContentAltitude::PnlSimulatorLoad)),
 
   InfoBoxContentAltitude::PanelContent (
-    _T("Info"),
+    _("Info"),
     (*InfoBoxContentAltitude::PnlInfoLoad),
     NULL,
     (*InfoBoxContentAltitude::PnlInfoOnTabPreShow)),
 
   InfoBoxContentAltitude::PanelContent (
-    _T("Setup"),
+    _("Setup"),
     (*InfoBoxContentAltitude::PnlSetupLoad))
 };
 
