@@ -89,7 +89,7 @@ MapWindow::DrawTask(Canvas &canvas)
 
   ProtectedTaskManager::Lease task_manager(*task);
   const AbstractTask *task = task_manager->get_active_task();
-  if (task->check_task()) {
+  if (task && task->check_task()) {
 
     RenderObservationZone ozv;
     RenderTaskPointMap tpv(canvas,
