@@ -54,8 +54,7 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
   short horigin = map.GetField(origin)+1000;
   AGeoPoint aorigin(origin, horigin);
 
-  for (unsigned i=0; i<1; ++i)
-    retval = route.solve_reach(aorigin);
+  retval = route.solve_reach(aorigin);
 
   ok(retval, "reach solve", 0);
 
@@ -66,8 +65,8 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
 
   {
     std::ofstream fout ("results/terrain.txt");
-    unsigned nx = 500;
-    unsigned ny = 500;
+    unsigned nx = 100;
+    unsigned ny = 100;
     for (unsigned i=0; i< nx; ++i) {
       for (unsigned j=0; j< ny; ++j) {
         fixed fx = (fixed)i/(nx-1)*fixed_two-fixed_one;
@@ -78,6 +77,10 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
         AGeoPoint adest(x, h);
         short ha;
         route.find_positive_arrival(adest, ha);
+        if ((i % 10 == 0) && (j % 10 == 0)) {
+          AGeoPoint ao2(x, h+1000);
+          route.solve_reach(ao2);
+        }
         fout << x.Longitude.value_degrees() << " " << x.Latitude.value_degrees() << " " << h << " " << ha << "\n";
       }
       fout << "\n";
@@ -107,7 +110,7 @@ int main(int argc, char** argv) {
   RasterMap map(jp2_path, j2w_path, NULL);
   map.SetViewCenter(map.GetMapCenter(), fixed(100000));
 
-  plan_tests(2);
+  plan_tests(1);
   test_reach(map, fixed_zero, fixed(0.1));
 
   return exit_status();
