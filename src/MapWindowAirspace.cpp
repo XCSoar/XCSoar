@@ -56,9 +56,9 @@ public:
       ids_warning.checked_append(&as.get_airspace());
       locs.checked_append(as.get_solution().location);
     }
-    if (!as.get_ack_expired()) {
+
+    if (!as.get_ack_expired())
       ids_acked.checked_append(&as.get_airspace());
-    }
   }
 
   const StaticArray<GeoPoint,32> &get_locations() const {
@@ -91,18 +91,16 @@ private:
 public:
   AirspaceMapVisible(const SETTINGS_COMPUTER& _settings, 
                      const AIRCRAFT_STATE& _state, const bool& _border,
-                     const AirspaceWarningCopy& warnings):
-    AirspaceVisible(_settings, _state),
-    m_border(_border),
-    m_warnings(warnings)
-    {
-    };
+                     const AirspaceWarningCopy& warnings)
+    :AirspaceVisible(_settings, _state),
+     m_border(_border),
+     m_warnings(warnings) {}
 
-  virtual bool operator()( const AbstractAirspace& airspace ) const { 
+  virtual bool operator()(const AbstractAirspace& airspace) const {
     return condition(airspace);
   }
 
-  bool condition( const AbstractAirspace& airspace ) const { 
+  bool condition(const AbstractAirspace& airspace) const {
     return parent_condition(airspace) 
       || m_warnings.is_inside(airspace)
       || m_warnings.is_warning(airspace);
@@ -129,7 +127,8 @@ public:
      black(_black),
      m_warnings(warnings),
      m_settings_map(settings_map),
-     pen_thick(IBLSCALE(10), Color(0x00, 0x00, 0x00)) {
+     pen_thick(IBLSCALE(10), Color(0x00, 0x00, 0x00))
+  {
     glStencilMask(0xff);
     glClear(GL_STENCIL_BUFFER_BIT);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -252,7 +251,6 @@ private:
     canvas.hollow_brush();
     canvas.select(pen_thick);
   }
-
 };
 
 #else // !ENABLE_OPENGL
@@ -271,12 +269,12 @@ class AirspaceVisitorMap:
 public:
   AirspaceVisitorMap(MapDrawHelper &_helper,
                      const AirspaceWarningCopy& warnings,
-                     const SETTINGS_MAP &settings_map):
-    MapDrawHelper(_helper),
-    m_warnings(warnings),
-    pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
-    pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00)) {
-
+                     const SETTINGS_MAP &settings_map)
+    :MapDrawHelper(_helper),
+     m_warnings(warnings),
+     pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
+     pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00))
+  {
     switch (settings_map.AirspaceFillMode) {
     case SETTINGS_MAP::AS_FILL_DEFAULT:
       m_use_stencil = !is_ancient_hardware();
@@ -360,7 +358,10 @@ private:
   Pen pen_medium;
 };
 
-class AirspaceOutlineRenderer : public AirspaceVisitor, protected MapCanvas {
+class AirspaceOutlineRenderer
+  :public AirspaceVisitor,
+   protected MapCanvas
+{
   bool black;
 
 public:
@@ -430,9 +431,7 @@ MapWindow::DrawAirspace(Canvas &canvas)
                                         render_projection.GetScreenDistanceMeters(),
                                         renderer, visible);
 #else
-  MapDrawHelper helper(canvas,
-                       buffer_canvas, stencil_canvas,
-                       render_projection,
+  MapDrawHelper helper(canvas, buffer_canvas, stencil_canvas, render_projection,
                        SettingsMap());
   AirspaceVisitorMap v(helper, awc, SettingsMap());
 
