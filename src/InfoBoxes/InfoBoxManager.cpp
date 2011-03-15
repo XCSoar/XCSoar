@@ -464,7 +464,6 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
     break;
 
   case InfoBoxLayout::ibGNav:
-  case InfoBoxLayout::ibRight12:
     if (i != 0)
       border |= BORDERTOP;
     if (i < 6)
@@ -472,6 +471,12 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
     break;
 
   case InfoBoxLayout::ibSquare:
+    break;
+
+  case InfoBoxLayout::ibRight12:
+    if (i % 6 != 0)
+      border |= BORDERTOP;
+    border |= BORDERLEFT;
     break;
   }
 
