@@ -97,6 +97,14 @@ KeyboardControl::move_button(TCHAR ch, int left, int top)
     kb->move(left, top);
 }
 
+/**
+ * Resizes the button to specified width and height values according to display pixels!
+ *
+ *
+ * @param ch
+ * @param width   Width measured in display pixels!
+ * @param height  Height measured in display pixels!
+ */
 void
 KeyboardControl::resize_button(TCHAR ch,
                                unsigned int width, unsigned int height)
