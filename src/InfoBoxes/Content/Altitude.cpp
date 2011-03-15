@@ -338,18 +338,15 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
   if (basic.gps.Replay)
     return false;
 
-  fixed fixed_step = (fixed)Units::ToSysAltitude(fixed(100));
   const Angle a5 = Angle::degrees(fixed(5));
 
   switch (keycode) {
   case ibkUp:
-    device_blackboard.SetAltitude(
-        basic.GPSAltitude + fixed_step);
+    ChangeAltitude(fixed(+100));
     return true;
 
   case ibkDown:
-    device_blackboard.SetAltitude(
-        max(fixed_zero, basic.GPSAltitude - fixed_step));
+    ChangeAltitude(fixed(-100));
     return true;
 
   case ibkLeft:
