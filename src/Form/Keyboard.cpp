@@ -121,6 +121,13 @@ KeyboardControl::resize_buttons()
     buttons[i].resize(button_width, button_height);
 }
 
+/**
+ * Inicialize the button_width and button_height values.
+ *
+ * button_width is computed as width of the whole keyboard / 10
+ * button_height is computed as height of the whole keyboard / 5
+ *
+ */
 void
 KeyboardControl::set_buttons_size()
 {
