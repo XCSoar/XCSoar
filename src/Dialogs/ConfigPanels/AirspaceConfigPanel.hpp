@@ -30,7 +30,7 @@ Copyright_License {
 namespace AirspaceConfigPanel
 {
   void Init(WndForm *wf);
-  bool Save();
+  bool Save(bool &requirerestart);
 
   void OnAirspaceColoursClicked(gcc_unused WndButton &button);
   void OnAirspaceModeClicked(gcc_unused WndButton &button);

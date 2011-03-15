@@ -278,7 +278,7 @@ void dlgConfigurationShowModal(void)
   changed |= PolarConfigPanel::Save();
   changed |= LoggerConfigPanel::Save();
   changed |= DevicesConfigPanel::Save(requirerestart);
-  changed |= AirspaceConfigPanel::Save();
+  changed |= AirspaceConfigPanel::Save(requirerestart);
   changed |= SiteConfigPanel::Save();
   changed |= MapDisplayConfigPanel::Save();
   changed |= WayPointDisplayConfigPanel::Save();

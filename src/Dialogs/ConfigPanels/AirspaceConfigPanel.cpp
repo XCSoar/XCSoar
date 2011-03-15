@@ -118,7 +118,7 @@ AirspaceConfigPanel::Init(WndForm *_wf)
 
 
 bool
-AirspaceConfigPanel::Save()
+AirspaceConfigPanel::Save(bool &requirerestart)
 {
   bool changed = false;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
@@ -140,13 +140,19 @@ AirspaceConfigPanel::Save()
                               szProfileAirspaceWarning,
                               settings_computer.EnableAirspaceWarnings);
 
-  changed |= SaveFormProperty(*wf, _T("prpWarningTime"),
-                              szProfileWarningTime,
-                              settings_computer.airspace_warnings.WarningTime);
+  if (SaveFormProperty(*wf, _T("prpWarningTime"),
+                       szProfileWarningTime,
+                       settings_computer.airspace_warnings.WarningTime)) {
+    changed = true;
+    requirerestart = true;
+  }
 
-  changed |= SaveFormProperty(*wf, _T("prpAcknowledgementTime"),
-                              szProfileAcknowledgementTime,
-                              settings_computer.airspace_warnings.AcknowledgementTime);
+  if (SaveFormProperty(*wf, _T("prpAcknowledgementTime"),
+                       szProfileAcknowledgementTime,
+                       settings_computer.airspace_warnings.AcknowledgementTime)) {
+    changed = true;
+    requirerestart = true;
+  }
 
   changed |= SaveFormProperty(*wf, _T("prpAirspaceOutline"),
                               szProfileAirspaceBlackOutline,
