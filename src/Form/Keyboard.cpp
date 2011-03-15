@@ -80,6 +80,15 @@ KeyboardControl::get_button(TCHAR ch)
 
 }
 
+/**
+ * Move button to the specified left and top coordinates.
+ *
+ * The coordinates SHOULD BE in pixels of the screen (i.e. after scaling!)
+ *
+ * @param ch
+ * @param left    Number of pixels from the left (in screen pixels)
+ * @param top     Number of pixels from the top (in screen pixels)
+ */
 void
 KeyboardControl::move_button(TCHAR ch, int left, int top)
 {
