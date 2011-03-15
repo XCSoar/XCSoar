@@ -122,7 +122,7 @@ NMEA_INFO::reset()
 
   engine_noise_level_available.clear();
 
-  SupplyBatteryVoltage = fixed_minus_one;
+  SupplyBatteryVoltageAvailable.clear();
 
   SwitchStateAvailable = false;
   SwitchState.reset();
@@ -165,6 +165,7 @@ NMEA_INFO::expire()
   ExternalWindAvailable.expire(Time, fixed(600));
   WindAvailable.expire(Time, fixed(600));
   engine_noise_level_available.expire(Time, fixed(30));
+    SupplyBatteryVoltageAvailable.expire(Time, fixed(300));
   flarm.Refresh(Time);
 }
 
@@ -247,7 +248,7 @@ NMEA_INFO::complement(const NMEA_INFO &add)
     HumidityAvailable = add.HumidityAvailable;
   }
 
-  if (!positive(SupplyBatteryVoltage) && positive(add.SupplyBatteryVoltage))
+  if (SupplyBatteryVoltageAvailable.complement(add.SupplyBatteryVoltageAvailable))
     SupplyBatteryVoltage = add.SupplyBatteryVoltage;
 
   if (!SwitchStateAvailable && add.SwitchStateAvailable)

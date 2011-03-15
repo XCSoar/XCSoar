@@ -81,7 +81,12 @@ PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   long switchinputs = line.read_hex(0L);
   long switchoutputs = line.read_hex(0L);
-  GPS_INFO->SupplyBatteryVoltage = line.read(fixed_zero) / 10;
+
+  fixed value;
+  if (line.read_checked(value)) {
+    GPS_INFO->SupplyBatteryVoltage = value / 10;
+    GPS_INFO->SupplyBatteryVoltageAvailable.update(GPS_INFO->Time);
+  }
 
   GPS_INFO->SwitchStateAvailable = true;
 

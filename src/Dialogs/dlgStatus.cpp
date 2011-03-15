@@ -226,7 +226,7 @@ UpdateValuesSystem()
     _tcscat(Temp, Temp2);
   }
 #endif
-  if (positive(basic.SupplyBatteryVoltage)) {
+  if (basic.SupplyBatteryVoltageAvailable) {
     _stprintf(Temp2, _T("%.1f V"), (double)basic.SupplyBatteryVoltage);
     _tcscat(Temp, Temp2);
   }

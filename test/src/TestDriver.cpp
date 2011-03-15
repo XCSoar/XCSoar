@@ -328,6 +328,7 @@ TestWesterboer()
   ok1(nmea_info.AirspeedAvailable);
   ok1(equals(nmea_info.IndicatedAirspeed, 35));
   ok1(equals(nmea_info.TrueAirspeed, 36));
+  ok1(nmea_info.SupplyBatteryVoltageAvailable);
   ok1(equals(nmea_info.SupplyBatteryVoltage, 12.8));
   ok1(nmea_info.TemperatureAvailable);
   ok1(equals(nmea_info.OutsideAirTemperature, 29.5));
@@ -407,7 +408,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(126);
+  plan_tests(127);
 
   TestGeneric();
   TestCAI302();
