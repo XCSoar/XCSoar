@@ -71,6 +71,7 @@ public DataField
   void Set(fixed Value);
   fixed SetMin(fixed Value);
   fixed SetMax(fixed Value);
+  fixed SetStep(fixed Value);
   #if defined(__BORLANDC__)
   #pragma warn +hid
   #endif

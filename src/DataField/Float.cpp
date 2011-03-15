@@ -79,6 +79,14 @@ DataFieldFloat::SetMax(fixed Value)
   return res;
 }
 
+fixed
+DataFieldFloat::SetStep(fixed Value)
+{
+  fixed res = mStep;
+  mStep = Value;
+  return res;
+}
+
 void
 DataFieldFloat::SetAsInteger(int Value)
 {
