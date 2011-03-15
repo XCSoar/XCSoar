@@ -481,6 +481,9 @@ struct NMEA_INFO {
   //   Other
   //###########
 
+  Validity engine_noise_level_available;
+  unsigned engine_noise_level;
+
   /** Battery supply voltage information (if available) */
   fixed SupplyBatteryVoltage;
 

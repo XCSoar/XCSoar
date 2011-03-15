@@ -120,6 +120,8 @@ NMEA_INFO::reset()
   TemperatureAvailable = false;
   HumidityAvailable = false;
 
+  engine_noise_level_available.clear();
+
   SupplyBatteryVoltage = fixed_minus_one;
 
   SwitchStateAvailable = false;
@@ -162,6 +164,7 @@ NMEA_INFO::expire()
   NettoVarioAvailable.expire(Time, fixed(5));
   ExternalWindAvailable.expire(Time, fixed(600));
   WindAvailable.expire(Time, fixed(600));
+  engine_noise_level_available.expire(Time, fixed(30));
   flarm.Refresh(Time);
 }
 

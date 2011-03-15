@@ -181,6 +181,9 @@ Dump(const NMEA_INFO &basic)
     printf("FLARM traffic=%u new=%d\n",
            flarm.traffic.size(), flarm.NewTraffic);
   }
+
+  if (basic.engine_noise_level_available)
+    printf("ENL=%u\n", basic.engine_noise_level);
 }
 
 int main(int argc, char **argv)
