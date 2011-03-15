@@ -98,7 +98,7 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
 
 #endif
 
-  if (!negative(XCSoarInterface::Basic().SupplyBatteryVoltage)) {
+  if (positive(XCSoarInterface::Basic().SupplyBatteryVoltage)) {
     SetValueFromFixed(infobox, _T("%2.1fV"),
                       XCSoarInterface::Basic().SupplyBatteryVoltage);
     return;
