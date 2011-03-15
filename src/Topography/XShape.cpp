@@ -214,6 +214,8 @@ XShape::get_indices(int thinning_level, unsigned min_distance,
       num_points += lines[i];
 
     if (type == MS_SHAPE_LINE) {
+      if (num_points <= 2)
+        return NULL;  // line cannot be simplified, so don't create indices
       index_count[thinning_level] = idx_count =
         new GLushort[num_lines + num_points];
       indices[thinning_level] = idx = idx_count + num_lines;

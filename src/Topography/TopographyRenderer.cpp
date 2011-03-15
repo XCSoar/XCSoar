@@ -159,26 +159,26 @@ TopographyFileRenderer::Paint(Canvas &canvas,
       break;
 
     case MS_SHAPE_LINE:
+      {
 #ifdef ENABLE_OPENGL
 #ifdef ANDROID
-      glVertexPointer(2, GL_FIXED, 0, &points[0].x);
+        glVertexPointer(2, GL_FIXED, 0, &points[0].x);
 #else
-      glVertexPointer(2, GL_INT, 0, &points[0].x);
+        glVertexPointer(2, GL_INT, 0, &points[0].x);
 #endif
 
-      if (level == 0) {
-        const GLushort *count = cshape->get_lines();
-        const GLushort *end_count = count + cshape->get_number_of_lines();
-        for (int offset = 0; count < end_count; offset += *count++)
-          glDrawArrays(GL_LINE_STRIP, offset, *count);
-      } else {
-        const GLushort *index_count;
-        const GLushort *indices;
-        indices = cshape->get_indices(level, min_distance, index_count);
-        const GLushort *end_count = index_count + cshape->get_number_of_lines();
-        for (; index_count < end_count; indices += *index_count++)
-          glDrawElements(GL_LINE_STRIP, *index_count, GL_UNSIGNED_SHORT,
-                         indices);
+        const GLushort *indices, *count;
+        if (level == 0 ||
+            (indices = cshape->get_indices(level, min_distance, count)) == NULL) {
+          count = cshape->get_lines();
+          const GLushort *end_count = count + cshape->get_number_of_lines();
+          for (int offset = 0; count < end_count; offset += *count++)
+            glDrawArrays(GL_LINE_STRIP, offset, *count);
+        } else {
+          const GLushort *end_count = count + cshape->get_number_of_lines();
+          for (; count < end_count; indices += *count++)
+            glDrawElements(GL_LINE_STRIP, *count, GL_UNSIGNED_SHORT, indices);
+        }
       }
 #else // !ENABLE_OPENGL
       for (; lines < end_lines; ++lines) {
