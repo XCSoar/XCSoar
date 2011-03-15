@@ -40,6 +40,9 @@ class InternalGPS;
 
 class DeviceDescriptor : public Port::Handler {
 public:
+  /** the index of this device in the global list */
+  unsigned index;
+
   Port *Com;
   DeviceDescriptor *pDevPipeTo;
   const struct DeviceRegister *Driver;
@@ -63,6 +66,14 @@ public:
 public:
   DeviceDescriptor();
   ~DeviceDescriptor();
+
+  unsigned GetIndex() const {
+    return index;
+  }
+
+  void SetIndex(unsigned _index) {
+    index = _index;
+  }
 
 public:
   bool IsOpen() const {

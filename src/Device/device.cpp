@@ -208,7 +208,8 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
     if (is_simulator())
       return true;
 
-    device.internal_gps = InternalGPS::create(Java::GetEnv(), native_view);
+    device.internal_gps = InternalGPS::create(Java::GetEnv(), native_view,
+                                              device.GetIndex());
     return device.internal_gps != NULL;
 #else
     return false;
@@ -309,6 +310,8 @@ devStartup()
   DeviceConfig config[NUMDEV];
   bool none_available = true;
   for (unsigned i = 0; i < NUMDEV; ++i) {
+    DeviceList[i].SetIndex(i);
+
     Profile::GetDeviceConfig(i, config[i]);
 
     if (!DeviceConfigAvailable(config[i]))

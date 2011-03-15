@@ -40,7 +40,8 @@ public:
   ~InternalGPS();
 
   gcc_malloc
-  static InternalGPS *create(JNIEnv *env, NativeView *native_view);
+  static InternalGPS *create(JNIEnv *env, NativeView *native_view,
+                             unsigned index);
 };
 
 #endif

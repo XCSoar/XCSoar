@@ -55,6 +55,9 @@ public class InternalGPS
     handler = new Handler();
   }
 
+  /** the index of this device in the global list */
+  private final int index;
+
   /** the name of the currently selected location provider */
   String locationProvider = LocationManager.GPS_PROVIDER;
   //String locationProvider = LocationManager.NETWORK_PROVIDER;
@@ -65,7 +68,9 @@ public class InternalGPS
   private Sensor accelerometer;
   private double acceleration;
 
-  InternalGPS(Context context) {
+  InternalGPS(Context context, int _index) {
+    index = _index;
+
     locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
 
     windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

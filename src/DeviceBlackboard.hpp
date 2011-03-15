@@ -28,6 +28,9 @@ Copyright_License {
 #include "SettingsComputerBlackboard.hpp"
 #include "BasicComputer.hpp"
 #include "Device/Simulator.hpp"
+#include "Device/List.hpp"
+
+#include <cassert>
 
 class GlidePolar;
 
@@ -52,7 +55,12 @@ class DeviceBlackboard:
   BasicComputer computer;
 
   /**
-   * Data from the physical devices.
+   * Data from each physical device.
+   */
+  NMEA_INFO per_device_data[NUMDEV];
+
+  /**
+   * Merged data from the physical devices.
    */
   NMEA_INFO real_data;
 
@@ -75,7 +83,11 @@ protected:
   NMEA_INFO& SetBasic() { return gps_info; }
 
 public:
-  NMEA_INFO &SetRealState() { return real_data; }
+  NMEA_INFO &SetRealState(unsigned i) {
+    assert(i < NUMDEV);
+    return per_device_data[i];
+  }
+
   NMEA_INFO &SetSimulatorState() { return simulator_data; }
   NMEA_INFO &SetReplayState() { return replay_data; }
 

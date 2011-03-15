@@ -44,17 +44,17 @@ InternalGPS::~InternalGPS()
 }
 
 InternalGPS *
-InternalGPS::create(JNIEnv *env, NativeView *native_view)
+InternalGPS::create(JNIEnv *env, NativeView *native_view, unsigned index)
 {
   jobject context = native_view->get_context();
 
   Java::Class cls(env, "org/xcsoar/InternalGPS");
 
   jmethodID cid = env->GetMethodID(cls, "<init>",
-                                   "(Landroid/content/Context;)V");
+                                   "(Landroid/content/Context;I)V");
   assert(cid != NULL);
 
-  jobject obj = env->NewObject(cls, cid, context);
+  jobject obj = env->NewObject(cls, cid, context, index);
   assert(obj != NULL);
   env->DeleteLocalRef(context);
 
@@ -68,8 +68,12 @@ JNIEXPORT void JNICALL
 Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
                                          jint connected)
 {
+  jfieldID fid_index = env->GetFieldID(env->GetObjectClass(obj),
+                                       "index", "I");
+  unsigned index = env->GetIntField(obj, fid_index);
+
   mutexBlackboard.Lock();
-  NMEA_INFO &basic = device_blackboard.SetRealState();
+  NMEA_INFO &basic = device_blackboard.SetRealState(index);
 
   switch (connected) {
   case 0: /* not connected */
@@ -79,11 +83,13 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
 
   case 1: /* waiting for fix */
     basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
+    basic.gps.AndroidInternalGPS = true;
     basic.LocationAvailable.clear();
     break;
 
   case 2: /* connected */
     basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
+    basic.gps.AndroidInternalGPS = true;
     break;
   }
 
@@ -101,9 +107,13 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
                                         jboolean hasAccuracy, jdouble accuracy,
                                         jboolean hasAcceleration, jdouble acceleration)
 {
+  jfieldID fid_index = env->GetFieldID(env->GetObjectClass(obj),
+                                       "index", "I");
+  unsigned index = env->GetIntField(obj, fid_index);
+
   mutexBlackboard.Lock();
 
-  NMEA_INFO &basic = device_blackboard.SetRealState();
+  NMEA_INFO &basic = device_blackboard.SetRealState(index);
   basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
 
   BrokenDateTime date_time = BrokenDateTime::FromUnixTimeUTC(time / 1000);

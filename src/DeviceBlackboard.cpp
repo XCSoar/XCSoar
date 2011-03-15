@@ -64,6 +64,9 @@ DeviceBlackboard::Initialise()
                         gps_info.DateTime.minute * 60 +
                         gps_info.DateTime.second);
 
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    per_device_data[i] = gps_info;
+
   real_data = simulator_data = replay_data = gps_info;
 }
 
@@ -81,6 +84,10 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
 
   if (Calculated().flight.Flying)
     return;
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    if (!per_device_data[i].LocationAvailable)
+      per_device_data[i].SetFakeLocation(loc, alt);
 
   if (!real_data.LocationAvailable)
     real_data.SetFakeLocation(loc, alt);
@@ -273,7 +280,8 @@ DeviceBlackboard::expire_wall_clock()
   if (!Basic().Connected)
     return false;
 
-  real_data.expire_wall_clock();
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    per_device_data[i].expire_wall_clock();
 
   Merge();
   return !Basic().Connected;
@@ -282,6 +290,12 @@ DeviceBlackboard::expire_wall_clock()
 void
 DeviceBlackboard::Merge()
 {
+  real_data.reset();
+  for (unsigned i = 0; i < NUMDEV; ++i) {
+    per_device_data[i].expire();
+    real_data.complement(per_device_data[i]);
+  }
+
   if (replay_data.Connected) {
     replay_data.expire();
     SetBasic() = replay_data;
@@ -289,7 +303,6 @@ DeviceBlackboard::Merge()
     simulator_data.expire();
     SetBasic() = simulator_data;
   } else {
-    real_data.expire();
     SetBasic() = real_data;
   }
 

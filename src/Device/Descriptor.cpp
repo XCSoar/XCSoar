@@ -66,6 +66,11 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
   assert(!enable_baro);
   assert(!ticker);
 
+  mutexBlackboard.Lock();
+  device_blackboard.SetRealState(index).reset();
+  device_blackboard.Merge();
+  mutexBlackboard.Unlock();
+
   Com = _port;
   Driver = _driver;
 
@@ -108,6 +113,11 @@ DeviceDescriptor::Close()
   pDevPipeTo = NULL;
   enable_baro = false;
   ticker = false;
+
+  mutexBlackboard.Lock();
+  device_blackboard.SetRealState(index).reset();
+  device_blackboard.Merge();
+  mutexBlackboard.Unlock();
 }
 
 const TCHAR *
@@ -270,6 +280,6 @@ DeviceDescriptor::LineReceived(const char *line)
   }
 
   ScopeLock protect(mutexBlackboard);
-  if (ParseNMEA(line, &device_blackboard.SetRealState()))
+  if (ParseNMEA(line, &device_blackboard.SetRealState(index)))
     device_blackboard.Merge();
 }
