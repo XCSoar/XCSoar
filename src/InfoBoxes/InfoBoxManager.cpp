@@ -226,6 +226,15 @@ InfoBoxManager::GetCurrentType(unsigned box)
   return std::min(InfoBoxFactory::NUM_TYPES - 1, retval);
 }
 
+const TCHAR*
+InfoBoxManager::GetTitle(unsigned box)
+{
+  if (InfoBoxes[box] != NULL)
+    return InfoBoxes[box]->GetTitle();
+  else
+    return NULL;
+}
+
 bool
 InfoBoxManager::IsEmpty(unsigned panelIdx)
 {
