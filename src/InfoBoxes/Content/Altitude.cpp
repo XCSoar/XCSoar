@@ -163,31 +163,52 @@ InfoBoxContentAltitude::PnlSimulatorLoad(SingleWindow &parent,
 }
 
 void
-InfoBoxContentAltitude::PnlSimulatorOnPlus(WndButton &Sender) {
+InfoBoxContentAltitude::PnlSimulatorOnPlusBig(WndButton &Sender) {
   (void)Sender;
 
   if (!is_simulator())
     return;
 
-  const NMEA_INFO &basic = CommonInterface::Basic();
-
-  fixed fixed_step = (fixed)Units::ToSysAltitude(fixed(100));
-  device_blackboard.SetAltitude(basic.GPSAltitude + fixed_step);
-
-  TriggerGPSUpdate();
+  ChangeAltitude(fixed(+100));
 }
 
 void
-InfoBoxContentAltitude::PnlSimulatorOnMinus(WndButton &Sender) {
+InfoBoxContentAltitude::PnlSimulatorOnPlusSmall(WndButton &Sender) {
   (void)Sender;
 
   if (!is_simulator())
     return;
 
+  ChangeAltitude(fixed(+10));
+}
+
+void
+InfoBoxContentAltitude::PnlSimulatorOnMinusSmall(WndButton &Sender) {
+  (void)Sender;
+
+  if (!is_simulator())
+    return;
+
+  ChangeAltitude(fixed(-10));
+}
+
+void
+InfoBoxContentAltitude::PnlSimulatorOnMinusBig(WndButton &Sender) {
+  (void)Sender;
+
+  if (!is_simulator())
+    return;
+
+  ChangeAltitude(fixed(-100));
+}
+
+void
+InfoBoxContentAltitude::ChangeAltitude(const fixed step)
+{
   const NMEA_INFO &basic = CommonInterface::Basic();
 
-  fixed fixed_step = (fixed)Units::ToSysAltitude(fixed(100));
-  device_blackboard.SetAltitude(basic.GPSAltitude - fixed_step);
+  device_blackboard.SetAltitude(basic.GPSAltitude +
+                                (fixed)Units::ToSysAltitude(step));
 
   TriggerGPSUpdate();
 }
@@ -261,8 +282,10 @@ InfoBoxContentAltitude::PanelContent InfoBoxContentAltitude::Panels[] = {
 };
 
 CallBackTableEntry InfoBoxContentAltitude::CallBackTable[] = {
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnPlus),
-  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnMinus),
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnPlusBig),
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnPlusSmall),
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnMinusSmall),
+  DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnMinusBig),
   DeclareCallBackEntry(InfoBoxContentAltitude::PnlSetupOnQNH),
   DeclareCallBackEntry(InfoBoxContentAltitude::PnlSetupOnSetup),
 
@@ -315,18 +338,15 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
   if (basic.gps.Replay)
     return false;
 
-  fixed fixed_step = (fixed)Units::ToSysAltitude(fixed(100));
   const Angle a5 = Angle::degrees(fixed(5));
 
   switch (keycode) {
   case ibkUp:
-    device_blackboard.SetAltitude(
-        basic.GPSAltitude + fixed_step);
+    ChangeAltitude(fixed(+100));
     return true;
 
   case ibkDown:
-    device_blackboard.SetAltitude(
-        max(fixed_zero, basic.GPSAltitude - fixed_step));
+    ChangeAltitude(fixed(-100));
     return true;
 
   case ibkLeft:
