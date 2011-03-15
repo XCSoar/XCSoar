@@ -63,7 +63,8 @@ public:
   TabBarControl(ContainerWindow &parent,
                 int x, int y, unsigned width, unsigned height,
                 const WindowStyle style = WindowStyle(),
-                bool _flipOrientation = false);
+                bool _flipOrientation = false,
+                bool _clientOverlapTabs = false);
 
 private:
 #define TabLineHeightInitUnscaled (unsigned)5
@@ -163,12 +164,17 @@ public:
   const Bitmap* GetButtonIcon(unsigned i);
   bool GetButtonIsButtonOnly(unsigned i);
   unsigned GetTabLineHeight() {return TabLineHeight; }
+  void SetClientOverlapTabs(bool value) {clientOverlapTabs = value; }
 
 protected:
   TabDisplay * theTabDisplay;
   StaticArray<OneTabButton *, 32> buttons;
   const unsigned int TabLineHeight;
   bool flipOrientation;
+  /** if false (default) Client rectangle is adjacent to tabs
+   *  if true, Client rectangle overlaps tabs (for advanced drawing)
+   */
+  bool clientOverlapTabs;
 
 private:
   // used to indicate initial state before tabs have changed

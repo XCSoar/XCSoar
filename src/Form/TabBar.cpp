@@ -34,13 +34,15 @@ Copyright_License {
 
 TabBarControl::TabBarControl(ContainerWindow &_parent,
                 int x, int y, unsigned _width, unsigned _height,
-                const WindowStyle style, bool _flipOrientation):
+                const WindowStyle style, bool _flipOrientation,
+                bool _clientOverlapTabs):
                 TabbedControl(_parent, 0, 0, _parent.get_width(), _parent.get_height(), style),
                 theTabDisplay(NULL),
                 TabLineHeight((Layout::landscape ^ _flipOrientation) ?
                     (Layout::Scale(TabLineHeightInitUnscaled) * 0.75) :
                     Layout::Scale(TabLineHeightInitUnscaled)),
                 flipOrientation(_flipOrientation),
+                clientOverlapTabs(_clientOverlapTabs),
                 setting_up(true)
 {
   theTabDisplay = new TabDisplay(*this, x, y, _width, _height, flipOrientation);
@@ -93,7 +95,18 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
 
   TabbedControl::AddClient(w);
   const RECT rc = get_client_rect();
+  if (clientOverlapTabs) {
     w->move(rc.left , rc.top, rc.right - rc.left , rc.bottom - rc.top);
+  } else {
+    if (Layout::landscape ^ flipOrientation)
+      w->move(rc.left + theTabDisplay->GetTabHeight(), rc.top,
+              rc.right - rc.left - theTabDisplay->GetTabHeight(),
+              rc.bottom - rc.top);
+    else
+      w->move(rc.left, rc.top + theTabDisplay->GetTabHeight(),
+              rc.right - rc.left,
+              rc.bottom - rc.top - theTabDisplay->GetTabHeight());
+  }
 
   OneTabButton *b = new OneTabButton(Caption, IsButtonOnly, bmp,
       PreHideFunction, PreShowFunction, PostShowFunction, ReClickFunction);

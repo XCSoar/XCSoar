@@ -222,6 +222,8 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   wTabBar = (TabBarControl*)wf->FindByName(_T("TabBar"));
   assert(wTabBar != NULL);
 
+  wTabBar->SetClientOverlapTabs(true);
+
   if (!Layout::landscape) {
     WndOwnerDrawFrame* wBlackRect =
         (WndOwnerDrawFrame*)wf->FindByName(_T("frmBlackRect"));
