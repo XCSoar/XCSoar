@@ -179,6 +179,12 @@ cai_PCAID(NMEAInputLine &line, NMEA_INFO &data, bool enable_baro)
   if (line.read_checked(value) && enable_baro)
     data.ProvidePressureAltitude(NMEA_INFO::BARO_ALTITUDE_CAI302_PCAID, value);
 
+  unsigned enl;
+  if (line.read_checked(enl)) {
+    data.engine_noise_level = enl;
+    data.engine_noise_level_available.update(data.Time);
+  }
+
   return true;
 }
 

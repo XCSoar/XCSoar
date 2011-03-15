@@ -168,14 +168,22 @@ TestCAI302()
   ok1(!nmea_info.BaroAltitudeAvailable);
   ok1(nmea_info.AirspeedAvailable);
   ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(!nmea_info.engine_noise_level_available);
 
   device->ParseNMEA("$PCAID,N,500,0,*14", &nmea_info, false);
   ok1(!nmea_info.BaroAltitudeAvailable);
+  ok1(nmea_info.engine_noise_level_available);
+  ok1(nmea_info.engine_noise_level == 0);
 
   /* pressure altitude enabled (PCAID) */
   device->ParseNMEA("$PCAID,N,500,0,*14", &nmea_info, true);
   ok1(nmea_info.PressureAltitudeAvailable);
   ok1(between(nmea_info.PressureAltitude, 499, 501));
+
+  /* ENL */
+  device->ParseNMEA("$PCAID,N,500,100,*15", &nmea_info, true);
+  ok1(nmea_info.engine_noise_level_available);
+  ok1(nmea_info.engine_noise_level == 100);
 
   /* baro altitude enabled */
   device->ParseNMEA("!w,000,000,0000,500,01287,01020,-0668,191,199,191,000,000,100*44",
@@ -399,7 +407,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(121);
+  plan_tests(126);
 
   TestGeneric();
   TestCAI302();
