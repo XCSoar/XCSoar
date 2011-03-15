@@ -293,6 +293,8 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent, const TCHAR *panel_name,
       dfe->addEnumText(name, i, InfoBoxFactory::GetDescription(i));
   }
 
+  dfe->Sort(0);
+
   edit_content->SetDataField(dfe);
   edit_content->SetOnHelpCallback(OnContentHelp);
 
