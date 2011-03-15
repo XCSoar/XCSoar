@@ -196,6 +196,40 @@ CSVLine::read_checked(long &value_r)
 }
 
 bool
+CSVLine::read_checked(unsigned long &value_r)
+{
+  char *endptr;
+  unsigned long value = strtoul(data, &endptr, 10);
+  assert(endptr >= data && endptr <= end);
+
+  bool success = endptr > data;
+  if (endptr >= end) {
+    data = end;
+  } else if (*endptr == ',') {
+    data = endptr + 1;
+  } else {
+    data = endptr;
+    skip();
+    return false;
+  }
+
+  if (success)
+    value_r = value;
+  return success;
+}
+
+bool
+CSVLine::read_checked(unsigned &value_r)
+{
+  unsigned long lvalue;
+  if (!read_checked(lvalue))
+    return false;
+
+  value_r = lvalue;
+  return true;
+}
+
+bool
 CSVLine::read_checked_compare(fixed &value_r, const char *string)
 {
   fixed value;

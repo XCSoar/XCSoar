@@ -81,6 +81,8 @@ public:
 
   bool read_checked(int &value_r);
   bool read_checked(long &value_r);
+  bool read_checked(unsigned long &value_r);
+  bool read_checked(unsigned &value_r);
 
   /**
    * Read a #fixed only if the unit string which follows matches.
