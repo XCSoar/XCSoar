@@ -23,28 +23,3 @@
 #include "BGAFixedCourseZone.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-GeoPoint 
-BGAFixedCourseZone::get_boundary_parametric(fixed t) const
-{ 
-  const Angle half = getStartRadial().HalfAngle(getEndRadial());
-  const Angle angle = (Angle::radians(t*fixed_two_pi)+half).as_bearing();
-  if (angleInSector(angle)) {
-    return GeoVector(Radius, angle).end_point(get_location());
-  } else {
-    return GeoVector(fixed(500), angle).end_point(get_location());
-  }
-}
-
-fixed 
-BGAFixedCourseZone::score_adjustment() const
-{
-  return fixed(500);
-}
-
-bool 
-BGAFixedCourseZone::isInSector(const AIRCRAFT_STATE &ref) const
-{
-  GeoVector f(get_location(), ref.Location);
-
-  return (f.Distance<= fixed(500)) || ((f.Distance<=Radius) && angleInSector(f.Bearing));
-}

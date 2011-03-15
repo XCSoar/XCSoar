@@ -24,14 +24,14 @@
 #ifndef BGAFIXEDCOURSEZONE_HPP
 #define BGAFIXEDCOURSEZONE_HPP
 
-#include "SymmetricSectorZone.hpp"
+#include "KeyholeZone.hpp"
 
 /**
  *  A 90 degree 20km sector centered at the bisector of incoming/outgoing legs,
  *  with 500m cylinder
  */
 class BGAFixedCourseZone: 
-  public SymmetricSectorZone 
+  public KeyholeZone
 {
 public:  
   /** 
@@ -42,8 +42,7 @@ public:
    * @return Initialised object
    */
   BGAFixedCourseZone(const GeoPoint loc):
-    SymmetricSectorZone(BGAFIXEDCOURSE, loc, fixed(20000.0),
-                        Angle::radians(fixed_half_pi))
+    KeyholeZone(BGAFIXEDCOURSE, loc, fixed(20000.0))
   {
     updateSector();
   }
@@ -55,29 +54,6 @@ public:
       return new BGAFixedCourseZone(get_location());
     }
   }
-
-  /** 
-   * Check whether observer is within OZ
-   *
-   * @return True if reference point is inside sector
-   */
-  virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
-
-/** 
- * Get point on boundary from parametric representation
- * 
- * @param t T value [0,1]
- * 
- * @return Point on boundary
- */
-  GeoPoint get_boundary_parametric(fixed t) const;  
-
-/** 
- * Distance reduction for scoring when outside this OZ
- * 
- * @return Distance (m) to subtract from score
- */
-  virtual fixed score_adjustment() const;
 };
 
 #endif
