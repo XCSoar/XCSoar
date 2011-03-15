@@ -60,7 +60,8 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
    nlength1(Layout::Scale(6)),
    nwidth(Layout::Scale(4)),
    nline(Layout::Scale(8)),
-   dirty(true), layout_initialised(false)
+   dirty(true), layout_initialised(false), needle_initialised(false),
+   ballast_initialised(false), bugs_initialised(false)
 {
   Profile::Get(szProfileAppGaugeVarioSpeedToFly, ShowSpeedToFly);
   Profile::Get(szProfileAppGaugeVarioAvgText, ShowAvgText);
@@ -301,13 +302,12 @@ GaugeVario::RenderZero(Canvas &canvas)
 int
 GaugeVario::ValueToNeedlePos(fixed Value)
 {
-  static bool InitDone = false;
   static fixed degrees_per_unit = fixed(GAUGEVARIOSWEEP) / GAUGEVARIORANGE;
   int i;
 
-  if (!InitDone){
+  if (!needle_initialised){
     MakeAllPolygons();
-    InitDone = true;
+    needle_initialised = true;
   }
   i = iround(Value * degrees_per_unit);
   i = min((int)gmax, max(-gmax, i));
@@ -593,7 +593,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
   static RasterPoint orgLabel = {-1,-1};
   static RasterPoint orgValue = {-1,-1};
 
-  if (recLabelBk.left == -1) { // ontime init, origin and background rect
+  if (!ballast_initialised) { // ontime init, origin and background rect
 
     SIZE tSize;
 
@@ -637,6 +637,8 @@ GaugeVario::RenderBallast(Canvas &canvas)
     // update back rect with max label size
     recValueBk.bottom = recValueBk.top +
                         Fonts::Title.get_capital_height();
+
+    ballast_initialised = true;
   }
 
   fixed BALLAST = Calculated().common_stats.current_ballast;
@@ -682,7 +684,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
   static RasterPoint orgLabel = {-1,-1};
   static RasterPoint orgValue = {-1,-1};
 
-  if (recLabelBk.left == -1) {
+  if (!bugs_initialised) {
     SIZE tSize;
 
     orgLabel.x = 1;
@@ -717,6 +719,8 @@ GaugeVario::RenderBugs(Canvas &canvas)
     recValueBk.right = recValueBk.left + tSize.cx;
     recValueBk.bottom = recValueBk.top +
                         Fonts::Title.get_capital_height();
+
+    bugs_initialised = true;
   }
 
   fixed BUGS = Calculated().common_stats.current_bugs;
@@ -745,4 +749,18 @@ GaugeVario::RenderBugs(Canvas &canvas)
 
     lastBugs = BUGS;
   }
+}
+
+void
+GaugeVario::move(int left, int top, unsigned width, unsigned height)
+{
+  Window::move(left, top, width, height);
+
+  /* trigger reinitialisation */
+  xoffset = get_right();
+  yoffset = get_height() / 2 + get_top();
+  layout_initialised = false;
+  needle_initialised = false;
+  ballast_initialised = false;
+  bugs_initialised = false;
 }

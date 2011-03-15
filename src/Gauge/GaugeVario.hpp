@@ -89,6 +89,9 @@ private:
   bool dirty;
 
   bool layout_initialised;
+  bool needle_initialised;
+  bool ballast_initialised;
+  bool bugs_initialised;
   RasterPoint orgTop;
   RasterPoint orgMiddle;
   RasterPoint orgBottom;
@@ -129,6 +132,10 @@ private:
   void MakePolygon(const int i);
   void MakeAllPolygons();
   RasterPoint *getPolygon(const int i);
+
+public:
+  // overloaded from Window
+  void move(int left, int top, unsigned width, unsigned height);
 };
 
 #endif
