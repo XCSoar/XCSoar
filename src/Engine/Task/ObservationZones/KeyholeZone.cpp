@@ -26,13 +26,29 @@
 GeoPoint 
 KeyholeZone::get_boundary_parametric(fixed t) const
 { 
-  const Angle half = getStartRadial().HalfAngle(getEndRadial());
-  const Angle angle = (Angle::radians(t*fixed_two_pi)+half).as_bearing();
-  if (angleInSector(angle)) {
-    return GeoVector(Radius, angle).end_point(get_location());
+  const fixed sweep = (getEndRadial() - getStartRadial()).as_bearing().value_radians();
+  const fixed small_sweep = fixed_two_pi-sweep;
+  const fixed SmallRadius = fixed(500);
+  const fixed c1 = sweep*Radius;
+  const fixed c2 = small_sweep*SmallRadius;
+  const fixed l = Radius-SmallRadius;
+  const fixed tt = t*(c1+l+l+c2);
+  Angle a;
+  fixed d;
+  if (tt<l) {
+    d = (tt/l)*(Radius-SmallRadius)+SmallRadius;
+    a = getStartRadial();
+  } else if (tt<l+c1) {
+    d = Radius;
+    a = getStartRadial() + Angle::radians((tt-l)/c1*sweep);
+  } else if (tt<l+l+c1) {
+    d = (fixed_one-(tt-l-c1)/l)*(Radius-SmallRadius)+SmallRadius;
+    a = getEndRadial();
   } else {
-    return GeoVector(fixed(500), angle).end_point(get_location());
+    d = SmallRadius;
+    a = getEndRadial() - Angle::radians((tt-l-l-c1)/c2*small_sweep);
   }
+  return GeoVector(d, a).end_point(get_location());
 }
 
 fixed 
