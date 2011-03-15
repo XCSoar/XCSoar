@@ -69,15 +69,17 @@ LayoutConfigPanel::Init(WndForm *_wf)
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
 
-    dfe->addEnumText(_("8 Top + Bottom (Portrait)")); // 0
-    dfe->addEnumText(_("8 Bottom (Portrait)"));  // 1
-    dfe->addEnumText(_("8 Top (Portrait)"));  // 2
-    dfe->addEnumText(_("8 Left + Right (Landscape)"));  // 3
-    dfe->addEnumText(_("8 Left (Landscape)"));  // 4
-    dfe->addEnumText(_("8 Right (Landscape)")); // 5
-    dfe->addEnumText(_("9 Right + Vario (Landscape)"));  // 6
-    dfe->addEnumText(_("5 Right (Square)")); // 7
-    dfe->addEnumText(_("12 Right (Landscape)")); // 8
+    dfe->addEnumText(_("8 Top + Bottom (Portrait)"),
+                     InfoBoxLayout::ibTop4Bottom4);
+    dfe->addEnumText(_("8 Bottom (Portrait)"), InfoBoxLayout::ibBottom8);
+    dfe->addEnumText(_("8 Top (Portrait)"), InfoBoxLayout::ibTop8);
+    dfe->addEnumText(_("8 Left + Right (Landscape)"),
+                     InfoBoxLayout::ibLeft4Right4);
+    dfe->addEnumText(_("8 Left (Landscape)"), InfoBoxLayout::ibLeft8);
+    dfe->addEnumText(_("8 Right (Landscape)"), InfoBoxLayout::ibRight8);
+    dfe->addEnumText(_("9 Right + Vario (Landscape)"), InfoBoxLayout::ibGNav);
+    dfe->addEnumText(_("5 Right (Square)"), InfoBoxLayout::ibSquare);
+    dfe->addEnumText(_("12 Right (Landscape)"), InfoBoxLayout::ibRight12);
     dfe->addEnumText(_("24 Right (Landscape)"), InfoBoxLayout::ibRight24);
     dfe->Set(InfoBoxLayout::InfoBoxGeometry);
     wp->RefreshDisplay();
