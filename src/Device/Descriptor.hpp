@@ -64,6 +64,14 @@ public:
   ~DeviceDescriptor();
 
 public:
+  bool IsOpen() const {
+    return Com != NULL
+#ifdef ANDROID
+      || internal_gps != NULL;
+#endif
+    ;
+  }
+
   /**
    * When this method fails, the caller is responsible for freeing the
    * Port object.
