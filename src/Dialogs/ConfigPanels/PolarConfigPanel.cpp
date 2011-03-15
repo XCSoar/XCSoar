@@ -54,6 +54,7 @@ static WndForm* wf = NULL;
 static WndButton* buttonList = NULL;
 static WndButton* buttonImport = NULL;
 static WndButton* buttonExport = NULL;
+static bool loading = false;
 
 static void
 UpdatePolarFields(const PolarInfo &polar)
@@ -220,7 +221,9 @@ PolarConfigPanel::OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mod
 {
   switch (Mode) {
   case DataField::daChange:
-    Profile::Set(szProfilePolarName, _T("Custom"));
+    if (!loading)
+      Profile::Set(szProfilePolarName, _T("Custom"));
+
     UpdatePolarTitle();
     UpdatePolarInvalidLabel();
     break;
@@ -248,6 +251,8 @@ PolarConfigPanel::SetVisible(bool active)
 void
 PolarConfigPanel::Init(WndForm *_wf)
 {
+  loading = true;
+
   assert(_wf != NULL);
   wf = _wf;
   buttonList = ((WndButton *)wf->FindByName(_T("cmdLoadInternalPolar")));
@@ -271,6 +276,8 @@ PolarConfigPanel::Init(WndForm *_wf)
 
   LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                    settings_computer.BallastSecsToEmpty);
+
+  loading = false;
 }
 
 bool
