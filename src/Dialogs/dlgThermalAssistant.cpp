@@ -28,6 +28,9 @@
 #include "Math/fixed.hpp"
 #include "MainWindow.hpp"
 #include "Compiler.h"
+#include "InfoBoxes/InfoBoxManager.hpp"
+#include "InfoBoxes/InfoBoxLayout.hpp"
+
 
 static WndForm *wf = NULL;
 static ThermalAssistantWindow *wta;
@@ -72,10 +75,12 @@ static CallBackTableEntry CallBackTable[] = {
 void
 dlgThermalAssistantShowModal()
 {
+  const RECT targetRect = InfoBoxManager::layout.remaining;
+
   // Load dialog from XML
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
-                      Layout::landscape ? _T("IDR_XML_THERMALASSISTANT_L") :
-                                          _T("IDR_XML_THERMALASSISTANT"));
+                  _T("IDR_XML_THERMALASSISTANT"), &targetRect);
+
   if (!wf)
     return;
 
