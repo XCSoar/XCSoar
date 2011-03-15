@@ -187,7 +187,6 @@ NMEA_INFO::complement(const NMEA_INFO &add)
     Location = add.Location;
     TrackBearing = add.TrackBearing;
     GroundSpeed = add.GroundSpeed;
-    GPSAltitude = add.GPSAltitude;
     Time = add.Time;
     DateTime = add.DateTime;
   }
@@ -196,6 +195,9 @@ NMEA_INFO::complement(const NMEA_INFO &add)
     TrueAirspeed = add.TrueAirspeed;
     IndicatedAirspeed = add.IndicatedAirspeed;
   }
+
+  if (GPSAltitudeAvailable.complement(add.GPSAltitudeAvailable))
+    GPSAltitude = add.GPSAltitude;
 
   /* calculated: Heading, TurnRateWind, TurnRate */
 
