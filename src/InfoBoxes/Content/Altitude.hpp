@@ -49,12 +49,16 @@ public:
 
   static Window* PnlSimulatorLoad(SingleWindow &parent, TabBarControl* wTabBar,
                                   WndForm* wf, const int id);
-  static void PnlSimulatorOnPlus(WndButton &Sender);
-  static void PnlSimulatorOnMinus(WndButton &Sender);
+  static void PnlSimulatorOnPlusBig(WndButton &Sender);
+  static void PnlSimulatorOnPlusSmall(WndButton &Sender);
+  static void PnlSimulatorOnMinusSmall(WndButton &Sender);
+  static void PnlSimulatorOnMinusBig(WndButton &Sender);
 
   static Window* PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar, WndForm* wf, const int id);
   static void PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode);
   static void PnlSetupOnSetup(WndButton &Sender);
+
+  static void ChangeAltitude(const fixed step);
 };
 
 class InfoBoxContentAltitudeGPS : public InfoBoxContentAltitude
