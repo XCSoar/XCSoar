@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
 <Panel Name="frmInfoBoxAltitudeSimulator" Border="0">
-  <Button Name="cmdPlus" Caption="+100" X="5" Y="32" Width="45" Height="45" onClick="InfoBoxContentAltitude::PnlSimulatorOnPlus"/>
-  <Button Name="cmdMinus" Caption="-100" X="-50" Y="32" Width="45" Height="45" onClick="InfoBoxContentAltitude::PnlSimulatorOnMinus"/>
+  <Button Name="cmdPlus" Caption="+100" X="5" Y="2" Width="45" Height="45" onClick="InfoBoxContentAltitude::PnlSimulatorOnPlus"/>
+  <Button Name="cmdMinus" Caption="-100" X="-50" Y="2" Width="45" Height="45" onClick="InfoBoxContentAltitude::PnlSimulatorOnMinus"/>
 </Panel>
