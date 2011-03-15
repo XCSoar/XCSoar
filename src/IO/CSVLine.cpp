@@ -164,24 +164,12 @@ CSVLine::read_checked(fixed &value_r)
 bool
 CSVLine::read_checked(int &value_r)
 {
-  char *endptr;
-  int value = strtol(data, &endptr, 10);
-  assert(endptr >= data && endptr <= end);
-
-  bool success = endptr > data;
-  if (endptr >= end) {
-    data = end;
-  } else if (*endptr == ',') {
-    data = endptr + 1;
-  } else {
-    data = endptr;
-    skip();
+  long lvalue;
+  if (!read_checked(lvalue))
     return false;
-  }
 
-  if (success)
-    value_r = value;
-  return success;
+  value_r = lvalue;
+  return true;
 }
 
 bool
