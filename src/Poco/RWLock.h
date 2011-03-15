@@ -40,15 +40,11 @@
 
 #include "Poco/Foundation.h"
 
-#if defined(_WIN32_WCE) || defined(ANDROID)
-#include "Poco/RWLock_Mutex.hpp"
-#else /* !_WIN32_WCE */
-#if defined(POCO_OS_FAMILY_WINDOWS)
-#include "Poco/RWLock_WIN32.h"
-#else
+#if defined(HAVE_POSIX) && !defined(ANDROID)
 #include "Poco/RWLock_POSIX.h"
+#else
+#include "Poco/RWLock_Mutex.hpp"
 #endif
-#endif /* !_WIN32_WCE */
 
 namespace Poco {
 

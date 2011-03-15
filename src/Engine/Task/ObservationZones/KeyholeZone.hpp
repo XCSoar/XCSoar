@@ -27,22 +27,36 @@
 #include "SymmetricSectorZone.hpp"
 
 /**
- * A 90 degree 10km sector centered at the bisector of incoming/outgoing legs,
+ * A (default) 90 degree 10km sector centered at the bisector of incoming/outgoing legs,
  * with 500m cylinder
  */
 class KeyholeZone: 
   public SymmetricSectorZone 
 {
+protected:
+/**
+ * Constructor.
+ *
+ * @param loc Tip of sector location
+ * @param radius Radius (m) of sector
+ *
+ * @return Initialised object
+ */
+  KeyholeZone(enum shape _shape, const GeoPoint &loc,
+              const fixed radius=fixed(10000.0),
+              const Angle angle=Angle::radians(fixed_half_pi)):
+    SymmetricSectorZone(_shape, loc, radius, angle) {}
 public:  
   /** 
    * Constructor
    * 
    * @param loc Tip point of sector
+   * @param radius Outer radius (m)
    * 
    * @return Initialised object
    */
-  KeyholeZone(const GeoPoint loc):
-    SymmetricSectorZone(KEYHOLE, loc, fixed(10000.0),
+  KeyholeZone(const GeoPoint loc, const fixed radius=fixed(10000.0)):
+    SymmetricSectorZone(KEYHOLE, loc, radius,
                         Angle::radians(fixed_half_pi))
   {
     updateSector();

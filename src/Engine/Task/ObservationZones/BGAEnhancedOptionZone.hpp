@@ -24,14 +24,14 @@
 #ifndef BGAENHANCEDOPTIONZONE_HPP
 #define BGAENHANCEDOPTIONZONE_HPP
 
-#include "SymmetricSectorZone.hpp"
+#include "KeyholeZone.hpp"
 
 /**
  *  A 180 degree 10km sector centered at the bisector of incoming/outgoing legs,
  *  with 500m cylinder
  */
 class BGAEnhancedOptionZone: 
-  public SymmetricSectorZone 
+  public KeyholeZone
 {
 public:  
   /** 
@@ -42,8 +42,8 @@ public:
    * @return Initialised object
    */
   BGAEnhancedOptionZone(const GeoPoint loc):
-    SymmetricSectorZone(BGAENHANCEDOPTION, loc, fixed(10000.0),
-                        Angle::radians(fixed_pi))
+    KeyholeZone(BGAENHANCEDOPTION, loc, fixed(10000.0),
+                Angle::radians(fixed_pi))
   {
     updateSector();
   }
@@ -55,29 +55,6 @@ public:
       return new BGAEnhancedOptionZone(get_location());
     }
   }
-
-  /** 
-   * Check whether observer is within OZ
-   *
-   * @return True if reference point is inside sector
-   */
-  virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
-
-/** 
- * Get point on boundary from parametric representation
- * 
- * @param t T value [0,1]
- * 
- * @return Point on boundary
- */
-  GeoPoint get_boundary_parametric(fixed t) const;  
-
-/** 
- * Distance reduction for scoring when outside this OZ
- * 
- * @return Distance (m) to subtract from score
- */
-  virtual fixed score_adjustment() const;
 };
 
 #endif
