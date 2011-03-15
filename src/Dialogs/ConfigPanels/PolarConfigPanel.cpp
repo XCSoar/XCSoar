@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "PolarConfigPanel.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/Float.hpp"
 #include "DataField/ComboList.hpp"
 #include "DataField/FileReader.hpp"
 #include "Form/Form.hpp"
@@ -56,6 +57,29 @@ static WndButton* buttonList = NULL;
 static WndButton* buttonImport = NULL;
 static WndButton* buttonExport = NULL;
 static bool loading = false;
+
+static void
+SetLiftFieldStepAndMax(const TCHAR *control)
+{
+  WndProperty *ctl = (WndProperty *)wf->FindByName(control);
+  DataFieldFloat* df = (DataFieldFloat*)ctl->GetDataField();
+  switch (Units::Current.VerticalSpeedUnit) {
+    case unFeetPerMinute:
+      df->SetStep(fixed_ten);
+      df->SetMin(fixed(-2000));
+      break;
+    case unKnots:
+      df->SetStep(fixed(0.1));
+      df->SetMin(fixed(-20));
+      break;
+    case unMeterPerSecond:
+      df->SetStep(fixed(0.05));
+      df->SetMin(fixed(-10));
+      break;
+    default:
+      break;
+  }
+}
 
 static void
 UpdatePolarFields(const PolarInfo &polar)
@@ -259,6 +283,10 @@ PolarConfigPanel::Init(WndForm *_wf)
   buttonList = ((WndButton *)wf->FindByName(_T("cmdLoadInternalPolar")));
   buttonImport = ((WndButton *)wf->FindByName(_T("cmdLoadPolarFile")));
   buttonExport = ((WndButton *)wf->FindByName(_T("cmdSavePolarFile")));
+
+  SetLiftFieldStepAndMax(_T("prpPolarW1"));
+  SetLiftFieldStepAndMax(_T("prpPolarW2"));
+  SetLiftFieldStepAndMax(_T("prpPolarW3"));
 
   PolarInfo polar;
   if (!PolarGlue::LoadFromProfile(polar)) {

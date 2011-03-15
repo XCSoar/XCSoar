@@ -362,13 +362,13 @@
         </Edit>
   
         <Edit Name="prpPolarW1" Caption="Polar W" X="2" Y="40" Width="130" Height="22" CaptionWidth="80">
-          <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-5" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
+          <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
         <Edit Name="prpPolarW2" Caption="Polar W" X="132" Y="40" Width="50" Height="22" CaptionWidth="1">
-          <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-5" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
+          <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
         <Edit Name="prpPolarW3" Caption="Polar W" X="182" Y="40" Width="50" Height="22" CaptionWidth="1">
-          <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-5" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
+          <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
         
         <Edit Name="prpPolarMassDry" Caption="Dry mass; max. ballast" Y="62" Width="182" Height="22" CaptionWidth="133">
