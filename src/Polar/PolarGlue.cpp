@@ -22,11 +22,10 @@ Copyright_License {
 */
 
 #include "Polar/PolarGlue.hpp"
+#include "Polar/PolarFileGlue.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/PolarStore.hpp"
 #include "Profile/Profile.hpp"
-#include "IO/FileLineReader.hpp"
-#include "IO/TextWriter.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
@@ -43,52 +42,6 @@ PolarGlue::LoadDefault(PolarInfo &polar)
 {
   // Load LS8 polar
   PolarStore::Read(56, polar);
-}
-
-bool
-PolarGlue::LoadFromFile(PolarInfo &polar, TLineReader &reader)
-{
-  const TCHAR *line;
-  while ((line = reader.read()) != NULL)
-    if (polar.ReadString(line))
-      return true;
-
-  return false;
-}
-
-bool
-PolarGlue::LoadFromFile(PolarInfo &polar, const TCHAR* path)
-{
-  FileLineReader *reader = new FileLineReader(path);
-  if (reader == NULL)
-    return false;
-
-  if (reader->error()) {
-    delete reader;
-    return false;
-  }
-
-  LoadFromFile(polar, *reader);
-  delete reader;
-  return true;
-}
-
-bool
-PolarGlue::SaveToFile(const PolarInfo &polar, TextWriter &writer)
-{
-  TCHAR buffer[256];
-  polar.GetString(buffer, 256);
-  return writer.writeln(buffer);
-}
-
-bool
-PolarGlue::SaveToFile(const PolarInfo &polar, const TCHAR* path)
-{
-  TextWriter writer(path);
-  if (writer.error())
-    return false;
-
-  return SaveToFile(polar, writer);
 }
 
 static bool

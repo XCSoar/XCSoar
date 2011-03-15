@@ -232,12 +232,9 @@ TEST_POLARS_SOURCES = \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/Polar/Polar.cpp \
-	$(SRC)/Polar/PolarGlue.cpp \
+	$(SRC)/Polar/PolarFileGlue.cpp \
 	$(SRC)/Polar/PolarStore.cpp \
 	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
-	$(TEST_SRC_DIR)/FakeDialogs.cpp \
-	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/TestPolars.cpp
 TEST_POLARS_OBJS = $(call SRC_TO_OBJ,$(TEST_POLARS_SOURCES))
 TEST_POLARS_LDADD = $(MATH_LIBS) $(IO_LIBS)

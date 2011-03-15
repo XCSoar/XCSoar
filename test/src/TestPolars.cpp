@@ -26,7 +26,7 @@
 #include "IO/ConfiguredFile.hpp"
 #include "Profile/Profile.hpp"
 #include "Polar/Polar.hpp"
-#include "Polar/PolarGlue.hpp"
+#include "Polar/PolarFileGlue.hpp"
 #include "Polar/PolarStore.hpp"
 
 #ifdef _UNICODE

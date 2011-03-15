@@ -34,6 +34,7 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Polar/PolarStore.hpp"
+#include "Polar/PolarFileGlue.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "Polar/Polar.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
