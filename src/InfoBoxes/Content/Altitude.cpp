@@ -37,6 +37,7 @@ Copyright_License {
 #include "FlightStatisticsRenderer.hpp"
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
+#include "MainWindow.hpp"
 
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Screen/Layout.hpp"
@@ -526,4 +527,21 @@ InfoBoxContentBarogram::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats());
   fs.RenderBarographSpark(canvas, rc, XCSoarInterface::Basic(),
                           XCSoarInterface::Calculated(), protected_task_manager);
+}
+
+bool
+InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
+{
+  switch (keycode) {
+  case ibkEnter:
+    dlgAnalysisShowModal(XCSoarInterface::main_window, 0);
+    return true;
+
+  case ibkUp:
+  case ibkDown:
+  case ibkLeft:
+  case ibkRight:
+    break;
+  }
+  return false;
 }
