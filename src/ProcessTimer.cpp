@@ -99,6 +99,11 @@ ProcessTimer::CommonProcessTimer()
 int
 ProcessTimer::ConnectionProcessTimer(int itimeout)
 {
+  if (AllDevicesIsDeclaring())
+    /* don't check for device timeouts during task declaration, as the
+       device is busy with that and will not send NMEA updates */
+    return itimeout;
+
   devConnectionMonitor();
 
   static bool connected_last = false;
@@ -145,12 +150,10 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
       // no activity for 30 seconds, so assume PDA has been
       // switched off and on again
       //
-#ifdef _WIN32_WCE
       if (!is_altair()) {
         InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
         devRestart();
       }
-#endif
     }
   }
 

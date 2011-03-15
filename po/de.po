@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-11 07:43+0100\n"
-"PO-Revision-Date: 2011-02-27 21:35+0000\n"
+"PO-Revision-Date: 2011-03-13 18:23+0100\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -7183,7 +7183,7 @@ msgstr "Marken gelöscht"
 
 #: Data/Input/default.xci:125
 msgid "Waiting for GPS Fix"
-msgstr "Waten auf GPS Fix"
+msgstr "Warten auf GPS Fix"
 
 #: Data/Input/default.xci:777
 msgid ""

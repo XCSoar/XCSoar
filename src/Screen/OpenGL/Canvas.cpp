@@ -343,6 +343,37 @@ Canvas::text(int x, int y, const TCHAR *text)
 }
 
 void
+Canvas::text_transparent(int x, int y, const TCHAR *text)
+{
+#ifdef ANDROID
+  assert(x_offset == OpenGL::translate_x);
+  assert(y_offset == OpenGL::translate_y);
+#endif
+
+  if (font == NULL)
+    return;
+
+  GLTexture *texture = TextCache::get(font, Color::BLACK, Color::WHITE, text);
+  if (texture == NULL)
+    return;
+
+  GLEnable scope(GL_TEXTURE_2D);
+  texture->bind();
+  GLLogicOp logic_op(GL_AND_INVERTED);
+
+  /* cut out the shape in black */
+  glColor4f(1.0, 1.0, 1.0, 1.0);
+  texture->draw(x, y);
+
+  if (text_color != Color::BLACK) {
+    /* draw the text color on top */
+    logic_op.set(GL_OR);
+    text_color.set();
+    texture->draw(x, y);
+  }
+}
+
+void
 Canvas::stretch(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 const GLTexture &texture,

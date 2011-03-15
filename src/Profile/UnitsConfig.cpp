@@ -114,6 +114,9 @@ Profile::LoadUnits()
   case 0:
     Units::SetUserVerticalSpeedUnit(unKnots);
     break;
+  case 2:
+    Units::SetUserVerticalSpeedUnit(unFeetPerMinute);
+    break;
   case 1:
   default:
     Units::SetUserVerticalSpeedUnit(unMeterPerSecond);

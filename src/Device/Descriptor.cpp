@@ -47,8 +47,13 @@ DeviceDescriptor::DeviceDescriptor()
    internal_gps(NULL),
 #endif
    enable_baro(false),
-   ticker(false)
+   ticker(false), declaring(false)
 {
+}
+
+DeviceDescriptor::~DeviceDescriptor()
+{
+  assert(!declaring);
 }
 
 bool
@@ -213,6 +218,8 @@ DeviceDescriptor::PutVoice(const TCHAR *sentence)
 void
 DeviceDescriptor::LinkTimeout()
 {
+  assert(!declaring);
+
   if (device != NULL)
     device->LinkTimeout();
 }
@@ -220,19 +227,23 @@ DeviceDescriptor::LinkTimeout()
 bool
 DeviceDescriptor::Declare(const struct Declaration *declaration)
 {
+  assert(!declaring);
+  declaring = true;
+
   OperationEnvironment env;
   bool result = device != NULL && device->Declare(declaration, env);
 
   if (parser.isFlarm)
     result = FlarmDeclare(Com, declaration) || result;
 
+  declaring = false;
   return result;
 }
 
 void
 DeviceDescriptor::OnSysTicker()
 {
-  if (device == NULL)
+  if (device == NULL || declaring)
     return;
 
   ScopeLock protect(mutexBlackboard);

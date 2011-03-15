@@ -81,10 +81,17 @@ Version 6.1 - not yet released
   - support landscape/portrait switching
 
 Version 6.0.8 - not yet released
+* don't estimate thermal source for skewed thermals
+* Units: fix "feet per minute" support
 * devices
   - CAI302: fix task declaration on Android
+* Android
+  - calculate WGS84 to real altitude (internal GPS)
+  - fix incorrect airspace warning repetitions
+  - auto-reconnect to Bluetooth GPS after timeout
 * Linux
   - more dialog improvements
+  - fix bold font rendering
 
 Version 6.0.7 - 2011/03/12
 * devices

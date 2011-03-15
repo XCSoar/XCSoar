@@ -157,6 +157,10 @@ DeviceBlackboard::ProcessSimulation()
   basic.gps.Simulator = true;
   basic.gps.MovementDetected = false;
 
+#ifdef ANDROID
+  basic.gps.AndroidInternalGPS = false;
+#endif
+
   basic.Location = FindLatitudeLongitude(basic.Location, basic.TrackBearing,
                                          basic.GroundSpeed);
   basic.GPSAltitudeAvailable.update(basic.Time);

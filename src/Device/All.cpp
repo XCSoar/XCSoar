@@ -28,6 +28,8 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Simulator.hpp"
 
+#include <assert.h>
+
 void
 devTick()
 {
@@ -127,4 +129,16 @@ AllDevicesLinkTimeout()
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     DeviceList[i].LinkTimeout();
+}
+
+bool
+AllDevicesIsDeclaring()
+{
+  assert(!is_simulator());
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    if (DeviceList[i].IsDeclaring())
+      return true;
+
+  return false;
 }

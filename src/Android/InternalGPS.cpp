@@ -27,6 +27,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Protection.hpp"
 #include "OS/Clock.hpp"
+#include "Device/Geoid.h"
 
 InternalGPS *
 InternalGPS::create(JNIEnv *env, NativeView *native_view)
@@ -79,7 +80,8 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   fixed second_of_day = fixed(date_time.GetSecondOfDay()) +
     /* add the millisecond fraction of the original timestamp for
        better accuracy */
-    fixed((unsigned)time % 1000u) / 1000u;
+    fixed((unsigned)(time % 1000)) / 1000u;
+
   if (second_of_day < basic.Time && date_time > basic.DateTime)
     /* don't wrap around when going past midnight in UTC */
     second_of_day += fixed(24u * 3600u);
@@ -89,11 +91,13 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
 
   basic.gps.SatellitesUsed = n_satellites;
   basic.gps.NAVWarning = n_satellites <= 0;
+  basic.gps.AndroidInternalGPS = true;
   basic.Location = GeoPoint(Angle::degrees(fixed(longitude)),
                             Angle::degrees(fixed(latitude)));
 
   if (hasAltitude) {
-    basic.GPSAltitude = fixed(altitude);
+    fixed GeoidSeparation = LookupGeoidSeparation(basic.Location);
+    basic.GPSAltitude = fixed(altitude) - GeoidSeparation;
     basic.GPSAltitudeAvailable.update(basic.Time);
   } else
     basic.GPSAltitudeAvailable.clear();

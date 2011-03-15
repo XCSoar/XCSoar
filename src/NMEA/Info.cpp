@@ -47,6 +47,9 @@ GPS_STATE::reset()
   // Set the NAVWarning positive (assume not gps found yet)
   NAVWarning = true;
   Simulator = false;
+#ifdef ANDROID
+  AndroidInternalGPS = false;
+#endif
   SatellitesUsed = 0;
   MovementDetected = false;
   Replay = false;

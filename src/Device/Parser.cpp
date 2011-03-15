@@ -402,6 +402,10 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   else
     GPS_INFO->gps.NAVWarning = true;
 
+#ifdef ANDROID
+  GPS_INFO->gps.AndroidInternalGPS = false;
+#endif
+
   return true;
 }
 
@@ -543,6 +547,10 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
       gps.SatellitesUsed = -1;
   }
 
+#ifdef ANDROID
+  GPS_INFO->gps.AndroidInternalGPS = false;
+#endif
+
   // say we are updated every time we get this,
   // so infoboxes get refreshed if GPS connected
   TriggerGPSUpdate();
@@ -625,6 +633,10 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     GPS_INFO->Location = location;
   else
     GPS_INFO->gps.NAVWarning = true;
+
+#ifdef ANDROID
+  GPS_INFO->gps.AndroidInternalGPS = false;
+#endif
 
   gps.HDOP = line.read(fixed_zero);
 
