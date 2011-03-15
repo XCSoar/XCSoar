@@ -122,7 +122,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // Don't draw shade if
   // .. shade feature disabled
   // .. pan mode activated
-  if (SettingsComputer().FinalGlideTerrain == 2 || !SettingsMap().EnablePan) {
+  if (SettingsComputer().FinalGlideTerrain == 2 && !SettingsMap().EnablePan) {
 
 #ifdef ENABLE_OPENGL
 
