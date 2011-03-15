@@ -33,22 +33,15 @@ PolarInfo::CalculateCoefficients() const
 {
   PolarCoefficients pc;
 
-  fixed d;
-  fixed V1, V2, V3;
-
-  V1 = Units::ToSysUnit(fixed(v1), unKiloMeterPerHour);
-  V2 = Units::ToSysUnit(fixed(v2), unKiloMeterPerHour);
-  V3 = Units::ToSysUnit(fixed(v3), unKiloMeterPerHour);
-
-  d = V1 * V1 * (V2 - V3) + V2 * V2 * (V3 - V1) + V3 * V3 * (V1 - V2);
+  fixed d = v1 * v1 * (v2 - v3) + v2 * v2 * (v3 - v1) + v3 * v3 * (v1 - v2);
   pc.a = (d == fixed_zero) ? fixed_zero :
-         -((V2 - V3) * (w1 - w3) + (V3 - V1) * (w2 - w3)) / d;
+         -((v2 - v3) * (w1 - w3) + (v3 - v1) * (w2 - w3)) / d;
 
-  d = V2 - V3;
+  d = v2 - v3;
   pc.b = (d == fixed_zero) ? fixed_zero:
-         -(w2 - w3 + pc.a * (V2 * V2 - V3 * V3)) / d;
+         -(w2 - w3 + pc.a * (v2 * v2 - v3 * v3)) / d;
 
-  pc.c = -(w3 + pc.a * V3 * V3 + pc.b * V3);
+  pc.c = -(w3 + pc.a * v3 * v3 + pc.b * v3);
 
   return pc;
 }
