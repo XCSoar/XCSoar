@@ -59,13 +59,13 @@ static bool loading = false;
 static void
 UpdatePolarFields(const PolarInfo &polar)
 {
-  LoadFormProperty(*wf, _T("prpPolarV1"), polar.v1);
-  LoadFormProperty(*wf, _T("prpPolarV2"), polar.v2);
-  LoadFormProperty(*wf, _T("prpPolarV3"), polar.v3);
+  LoadFormProperty(*wf, _T("prpPolarV1"), ugHorizontalSpeed, polar.v1);
+  LoadFormProperty(*wf, _T("prpPolarV2"), ugHorizontalSpeed, polar.v2);
+  LoadFormProperty(*wf, _T("prpPolarV3"), ugHorizontalSpeed, polar.v3);
 
-  LoadFormProperty(*wf, _T("prpPolarW1"), polar.w1);
-  LoadFormProperty(*wf, _T("prpPolarW2"), polar.w2);
-  LoadFormProperty(*wf, _T("prpPolarW3"), polar.w3);
+  LoadFormProperty(*wf, _T("prpPolarW1"), ugVerticalSpeed, polar.w1);
+  LoadFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, polar.w2);
+  LoadFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, polar.w3);
 
   LoadFormProperty(*wf, _T("prpPolarMassDry"), polar.dry_mass);
   LoadFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
@@ -98,13 +98,13 @@ UpdatePolarTitle()
 static bool
 SaveFormToPolar(PolarInfo &polar)
 {
-  bool changed = SaveFormProperty(*wf, _T("prpPolarV1"), polar.v1);
-  changed |= SaveFormProperty(*wf, _T("prpPolarV2"), polar.v2);
-  changed |= SaveFormProperty(*wf, _T("prpPolarV3"), polar.v3);
+  bool changed = SaveFormProperty(*wf, _T("prpPolarV1"), ugHorizontalSpeed, polar.v1);
+  changed |= SaveFormProperty(*wf, _T("prpPolarV2"), ugHorizontalSpeed, polar.v2);
+  changed |= SaveFormProperty(*wf, _T("prpPolarV3"), ugHorizontalSpeed, polar.v3);
 
-  changed |= SaveFormProperty(*wf, _T("prpPolarW1"), polar.w1);
-  changed |= SaveFormProperty(*wf, _T("prpPolarW2"), polar.w2);
-  changed |= SaveFormProperty(*wf, _T("prpPolarW3"), polar.w3);
+  changed |= SaveFormProperty(*wf, _T("prpPolarW1"), ugVerticalSpeed, polar.w1);
+  changed |= SaveFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, polar.w2);
+  changed |= SaveFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, polar.w3);
 
   changed |= SaveFormProperty(*wf, _T("prpPolarMassDry"), polar.dry_mass);
   changed |= SaveFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Polar/PolarStore.hpp"
 #include "Polar/Polar.hpp"
+#include "Units.hpp"
 
 #include <assert.h>
 
@@ -48,11 +49,11 @@ struct InternalPolarInfo
     polar.name = name;
     polar.dry_mass = fixed(dry_mass);
     polar.max_ballast = fixed(max_ballast);
-    polar.v1 = fixed(v1);
+    polar.v1 = Units::ToSysUnit(fixed(v1), unKiloMeterPerHour);
     polar.w1 = fixed(w1);
-    polar.v2 = fixed(v2);
+    polar.v2 = Units::ToSysUnit(fixed(v2), unKiloMeterPerHour);
     polar.w2 = fixed(w2);
-    polar.v3 = fixed(v3);
+    polar.v3 = Units::ToSysUnit(fixed(v3), unKiloMeterPerHour);
     polar.w3 = fixed(w3);
     polar.wing_area = fixed(wing_area);
     polar.v_no = fixed(v_no);

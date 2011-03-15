@@ -46,11 +46,11 @@ struct PolarInfo
   //
   fixed dry_mass;     /**< Mass dry gross (kg) */
   fixed max_ballast;  /**< Max water ballast (l) */
-  fixed v1;           /**< Speed (kph) of point 1 */
+  fixed v1;           /**< Speed (m/s) of point 1 */
   fixed w1;           /**< Sink rate (negative, m/s) of point 1  */
-  fixed v2;           /**< Speed (kph) of point 2 */
+  fixed v2;           /**< Speed (m/s) of point 2 */
   fixed w2;           /**< Sink rate (negative, m/s) of point 2  */
-  fixed v3;           /**< Speed (kph) of point 3 */
+  fixed v3;           /**< Speed (m/s) of point 3 */
   fixed w3;           /**< Sink rate (negative, m/s) of point 3  */
   fixed wing_area;    /**< Reference wing area (m^2) */
   fixed v_no;         /**< Maximum speed for normal operations (m/s) */

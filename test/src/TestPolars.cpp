@@ -49,22 +49,22 @@ TestBasic()
   polar.ReadString(_T("318, 100, 80, -0.606, 120, -0.99, 160, -1.918"));
   ok1(equals(fixed(polar.dry_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
-  ok1(equals(fixed(polar.v1), 80));
+  ok1(equals(fixed(polar.v1), 22.2222222));
   ok1(equals(fixed(polar.w1), -0.606));
-  ok1(equals(fixed(polar.v2), 120));
+  ok1(equals(fixed(polar.v2), 33.3333333));
   ok1(equals(fixed(polar.w2), -0.99));
-  ok1(equals(fixed(polar.v3), 160));
+  ok1(equals(fixed(polar.v3), 44.4444444));
   ok1(equals(fixed(polar.w3), -1.918));
   ok1(equals(fixed(polar.wing_area), 0.0));
 
   polar.ReadString(_T("318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8"));
   ok1(equals(fixed(polar.dry_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
-  ok1(equals(fixed(polar.v1), 80));
+  ok1(equals(fixed(polar.v1), 22.2222222));
   ok1(equals(fixed(polar.w1), -0.606));
-  ok1(equals(fixed(polar.v2), 120));
+  ok1(equals(fixed(polar.v2), 33.3333333));
   ok1(equals(fixed(polar.w2), -0.99));
-  ok1(equals(fixed(polar.v3), 160));
+  ok1(equals(fixed(polar.v3), 44.4444444));
   ok1(equals(fixed(polar.w3), -1.918));
   ok1(equals(fixed(polar.wing_area), 9.8));
 
@@ -83,11 +83,11 @@ TestFileImport()
   PolarGlue::LoadFromFile(polar, _T("test/data/test.plr"));
   ok1(equals(fixed(polar.dry_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
-  ok1(equals(fixed(polar.v1), 80));
+  ok1(equals(fixed(polar.v1), 22.2222222));
   ok1(equals(fixed(polar.w1), -0.606));
-  ok1(equals(fixed(polar.v2), 120));
+  ok1(equals(fixed(polar.v2), 33.3333333));
   ok1(equals(fixed(polar.w2), -0.99));
-  ok1(equals(fixed(polar.v3), 160));
+  ok1(equals(fixed(polar.v3), 44.4444444));
   ok1(equals(fixed(polar.w3), -1.918));
   ok1(equals(fixed(polar.wing_area), 9.8));
 }

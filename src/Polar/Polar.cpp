@@ -99,15 +99,20 @@ PolarInfo::CopyIntoGlidePolar(GlidePolar &polar) const
 void
 PolarInfo::GetString(TCHAR* line, size_t size, bool include_v_no) const
 {
+  fixed V1, V2, V3;
+  V1 = Units::ToUserUnit(fixed(v1), unKiloMeterPerHour);
+  V2 = Units::ToUserUnit(fixed(v2), unKiloMeterPerHour);
+  V3 = Units::ToUserUnit(fixed(v3), unKiloMeterPerHour);
+
   if (include_v_no)
     _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
-               (double)dry_mass, (double)max_ballast, (double)v1, (double)w1,
-               (double)v2, (double)w2, (double)v3, (double)w3,
+               (double)dry_mass, (double)max_ballast, (double)V1, (double)w1,
+               (double)V2, (double)w2, (double)V3, (double)w3,
                (double)wing_area, (double)v_no);
   else
     _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
-               (double)dry_mass, (double)max_ballast, (double)v1, (double)w1,
-               (double)v2, (double)w2, (double)v3, (double)w3,
+               (double)dry_mass, (double)max_ballast, (double)V1, (double)w1,
+               (double)V2, (double)w2, (double)V3, (double)w3,
                (double)wing_area);
 }
 
@@ -133,7 +138,7 @@ PolarInfo::ReadString(const TCHAR *line)
   if (*p != _T(','))
     return false;
 
-  polar.v1 = fixed(_tcstod(p + 1, &p));
+  polar.v1 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), unKiloMeterPerHour);
   if (*p != _T(','))
     return false;
 
@@ -141,7 +146,7 @@ PolarInfo::ReadString(const TCHAR *line)
   if (*p != _T(','))
     return false;
 
-  polar.v2 = fixed(_tcstod(p + 1, &p));
+  polar.v2 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), unKiloMeterPerHour);
   if (*p != _T(','))
     return false;
 
@@ -149,7 +154,7 @@ PolarInfo::ReadString(const TCHAR *line)
   if (*p != _T(','))
     return false;
 
-  polar.v3 = fixed(_tcstod(p + 1, &p));
+  polar.v3 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), unKiloMeterPerHour);
   if (*p != _T(','))
     return false;
 
