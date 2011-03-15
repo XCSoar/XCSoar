@@ -4,7 +4,7 @@
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="2" Y="-37" Width="37" Height="35" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="41" Y="-37" Width="37" Height="35" OnClick="OnNextClicked" />
   
-  <Button Name="cmdGoto" Caption="Goto" X="85" Y="-37" Width="75" Height="35" />
+  <Button Name="cmdGoto" Caption="GoTo" X="85" Y="-37" Width="75" Height="35" />
 
   <Button Name="cmdClose" Caption="Close" X="-77" Y="-37" Width="75" Height="35" />
 
@@ -28,7 +28,7 @@
     <Button Name="cmdInserInTask" Caption="Insert in task" X="40" Width="-40" Height="30" />
     <Button Name="cmdAppendInTask" Caption="Append to task" X="40" Width="-40" Height="30" />
     <Button Name="cmdRemoveFromTask" Caption="Remove from task" X="40" Width="-40" Height="30" />
-    <Button Name="cmdGotoAndClearTask" Caption="Goto and clear task" X="40" Width="-40" Height="30" />
+    <Button Name="cmdGotoAndClearTask" Caption="GoTo and clear task" X="40" Width="-40" Height="30" />
     <Button Name="cmdNewHome" Caption="Set as new home" X="40" Width="-40" Height="30" />
     <Button Name="cmdActivatePan" Caption="Pan to waypoint" X="40" Width="-40" Height="30" />
   </Panel>

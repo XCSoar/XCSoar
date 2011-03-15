@@ -215,14 +215,14 @@ mode=pan
 type=key
 data=7
 event=Zoom in
-label=Zoom\nin
+label=Zoom\nIn
 location=6
 
 mode=pan
 type=key
 data=8
 event=Zoom out
-label=Zoom\nout
+label=Zoom\nOut
 location=7
 
 mode=pan
@@ -237,7 +237,7 @@ type=key
 data=0
 event=StatusMessage Marks cleared
 event=MarkLocation reset
-label=Marks\nclear
+label=Marks\nClear
 location=9
 
 ###### main entry buttons

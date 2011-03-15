@@ -275,7 +275,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     wTabBar->AddClient(wCalculator, _T("Calculator"), false, CalcIcon, NULL,
                        pnlTaskCalculator::OnTabPreShow, dlgTaskManager::SetTitle);
 
-    wTabBar->AddClient(wEdit, _T("Turn points"), false, TurnPointIcon, NULL,
+    wTabBar->AddClient(wEdit, _T("Turn Points"), false, TurnPointIcon, NULL,
                        pnlTaskEdit::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskEdit::OnTabReClick);
     TurnpointTab = 1;
@@ -302,7 +302,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                        pnlTaskManagerClose::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskManagerClose::OnTabReClick);
 
-    wTabBar->AddClient(wEdit, _T("Turn points"), false, TurnPointIcon, NULL,
+    wTabBar->AddClient(wEdit, _T("Turn Points"), false, TurnPointIcon, NULL,
                        pnlTaskEdit::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskEdit::OnTabReClick);
     TurnpointTab = 2;

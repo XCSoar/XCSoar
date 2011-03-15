@@ -106,7 +106,7 @@ pnlTaskList::OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawLis
 
   const TCHAR *name;
   if (DrawListIndex == 0)
-    name = _T("(Active task)");
+    name = _T("(Active Task)");
   else
     name = task_store.get_name(DrawListIndex-1);
 

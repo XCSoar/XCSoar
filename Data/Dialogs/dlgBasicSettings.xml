@@ -5,30 +5,30 @@
   <Button Name="cmdClose" Caption="Close" X="96" Y="2" Width="75" Height="35" OnClick="OnCloseClicked" />
 
   <Edit Name="prpBallastPercent" Caption="Ballast" X="2" Width="-2" Height="22" CaptionWidth="78" Help="Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).  Press ENTER on this field to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings.">
-    <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min="0" Max="100" Step="5" OnDataAccess="OnBallastData" />
+    <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="0" Max="100" Step="5" OnDataAccess="OnBallastData" />
   </Edit>
 
   <Edit Name="prpBallastLitres" Caption="Volume" X="2" Width="-2" Height="22" CaptionWidth="78" ReadOnly="1">
     <DataField DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" ReadOnly="1" />
   </Edit>
 
-  <Edit Name="prpWingLoading" Caption="Wing Loading" X="2" Width="-2" Height="22" CaptionWidth="78" ReadOnly="1">
+  <Edit Name="prpWingLoading" Caption="Wing loading" X="2" Width="-2" Height="22" CaptionWidth="78" ReadOnly="1">
     <DataField DataType="double" DisplayFormat="%.1f kg/m2" EditFormat="%.1f" ReadOnly="1" />
   </Edit>
 
   <Edit Name="prpBugs" Caption="Clean" X="2" Width="-2" Height="22" CaptionWidth="78" Help="How clean the glider is. Set to 100% for clean, lower numbers as the wings pick up bugs or get wet.  50% indicates the glider's sink rate is doubled.">
-    <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min="50" Max="100" Step="1" OnDataAccess="OnBugsData"/>
+    <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="50" Max="100" Step="1" OnDataAccess="OnBugsData"/>
   </Edit>
 
   <Edit Name="prpQNH" Caption="QNH" X="2" Width="-2" Height="22" CaptionWidth="78" Help="Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected.">
-    <DataField DataType="double" DisplayFormat="%.0fhPa" EditFormat="%.0f" Min="850" Max="1300" Step="1" OnDataAccess="OnQnhData"/>
+    <DataField DataType="double" DisplayFormat="%.0f hPa" EditFormat="%.0f" Min="850" Max="1300" Step="1" OnDataAccess="OnQnhData"/>
   </Edit>
 
   <Edit Name="prpAltitude" Caption="Altitude" X="2" Width="-2" Height="22" CaptionWidth="78" ReadOnly="1">
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" ReadOnly="1"/>
   </Edit>
 
-  <Edit Name="prpTemperature" Caption="Max. Temp" X="2" Width="-2" Height="22" CaptionWidth="78" Help="Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)">
+  <Edit Name="prpTemperature" Caption="Max. temp." X="2" Width="-2" Height="22" CaptionWidth="78" Help="Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)">
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" OnDataAccess="OnTempData"/>
   </Edit>
 </Form>

@@ -568,7 +568,7 @@
     
     <Panel Name="frmVarioAppearance">
       <Edit Name="prpAppGaugeVarioSpeedToFly" Caption="Speed arrows" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Whether to show speed command arrows on the Vario gauge.  When shown, in cruise mode, arrows point up to command slow down; arrows point down to command speed up.">
+        Help="Whether to show speed command arrows on the vario gauge.  When shown, in cruise mode, arrows point up to command slow down; arrows point down to command speed up.">
         <DataField DataType="boolean" />
       </Edit>
     

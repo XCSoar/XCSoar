@@ -3,7 +3,7 @@
 <Form Name="frmVegaDemo" X="5" Y="5" Width="163" Height="160" Caption="Vario Demo">
   <Button Caption="Close" X="78" Y="2" Width="70" Height="22" OnClick="OnCloseClicked" />
 
-  <Edit Name="prpVegaDemoW" Caption="TE Vario" X="2" Width="155" Height="22" CaptionWidth="78" Help="This produces a fake TE vario gross vertical velocity.  It can be used when in circling mode to demonstrate the lift tones.  When not in circling mode, set this to a realistic negative value so speed command tones are produced.">
+  <Edit Name="prpVegaDemoW" Caption="TE vario" X="2" Width="155" Height="22" CaptionWidth="78" Help="This produces a fake TE vario gross vertical velocity.  It can be used when in circling mode to demonstrate the lift tones.  When not in circling mode, set this to a realistic negative value so speed command tones are produced.">
     <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="-20" Max="20" Step="0.1" OnDataAccess="OnVegaDemoW"/>
   </Edit>
 

@@ -25,7 +25,7 @@
     Max="10" Step="0.1" OnDataAccess="pnlTaskCalculator::OnMacCreadyData"/>
   </Edit>
 
-  <Edit Name="prpRange" Caption="AAT Range" X="12" Height="22" CaptionWidth="150" ReadOnly="1" 
+  <Edit Name="prpRange" Caption="AAT range" X="12" Height="22" CaptionWidth="150" ReadOnly="1" 
     Help="For AAT tasks, this value tells you how far based on the targets of your task you will fly relative to the minimum and maximum possible tasks. -100% indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% is maximum AAT distance.">
     <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" ReadOnly="1"/>
   </Edit>
@@ -38,7 +38,7 @@
     <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f"/>
   </Edit>
 
-  <Edit Name="prpSpeedAchieved" Caption="Achieved Speed" X="12" Height="22" CaptionWidth="150" ReadOnly="1">
+  <Edit Name="prpSpeedAchieved" Caption="Achieved speed" X="12" Height="22" CaptionWidth="150" ReadOnly="1">
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f"/>
   </Edit>
 

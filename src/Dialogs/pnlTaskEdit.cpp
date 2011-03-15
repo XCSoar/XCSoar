@@ -111,7 +111,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawLis
 
   if (DrawListIndex == ordered_task->task_size()) {
     if (!ordered_task->is_max_size()) {
-      _stprintf(sTmp, _T("  (%s)"), _("add waypoint"));
+      _stprintf(sTmp, _T("  (%s)"), _("Add Waypoint"));
       canvas.text(rc.left + Layout::FastScale(2),
                   rc.top + Layout::FastScale(2), sTmp);
     }

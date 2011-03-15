@@ -201,9 +201,9 @@ UnitsConfigPanel::Init(WndForm *_wf)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Statute"));
-    dfe->addEnumText(_("Nautical"));
-    dfe->addEnumText(_("Metric"));
+    dfe->addEnumText(_("mph"));
+    dfe->addEnumText(_("knots"));
+    dfe->addEnumText(_("km/h"));
     wp->RefreshDisplay();
   }
 
@@ -228,9 +228,9 @@ UnitsConfigPanel::Init(WndForm *_wf)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Statute"));
-    dfe->addEnumText(_("Nautical"));
-    dfe->addEnumText(_("Metric"));
+    dfe->addEnumText(_("mph"));
+    dfe->addEnumText(_("knots"));
+    dfe->addEnumText(_("km/h"));
     wp->RefreshDisplay();
   }
 
@@ -238,9 +238,9 @@ UnitsConfigPanel::Init(WndForm *_wf)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Statute"));
-    dfe->addEnumText(_("Nautical"));
-    dfe->addEnumText(_("Metric"));
+    dfe->addEnumText(_("sm"));
+    dfe->addEnumText(_("nm"));
+    dfe->addEnumText(_("km"));
     wp->RefreshDisplay();
   }
 

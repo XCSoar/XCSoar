@@ -120,7 +120,7 @@ TaskSummaryShape(OrderedTask* task, TCHAR* text)
 
   case 3:
     if (task->get_factory().is_closed()) {
-      _tcscpy(text, _("Out and Return"));
+      _tcscpy(text, _("Out and return"));
       FAIShape = true;
     }
     else
@@ -174,7 +174,7 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
              OrderedTaskFactoryName(task->get_factory_type()));
   } else {
     if (task->has_targets())
-      _stprintf(text, _("%s%s%.0f %s%sMax: %.0f %s%sMin: %.0f %s (%s)"),
+      _stprintf(text, _("%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"),
                 summary_shape,
                 linebreak,
                 (double)Units::ToUserDistance(stats.distance_nominal),
@@ -187,7 +187,7 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
                 Units::GetDistanceName(),
                 OrderedTaskFactoryName(task->get_factory_type()));
     else
-      _stprintf(text, _("%s%sDistance: %.0f %s (%s)"),
+      _stprintf(text, _("%s%sdist. %.0f %s (%s)"),
                 summary_shape,
                 linebreak,
                 (double)Units::ToUserDistance(stats.distance_nominal),
@@ -271,7 +271,7 @@ public:
   void
   Visit(const KeyholeZone& oz)
   {
-    _stprintf(radius,_("DAe"));
+    _stprintf(radius,_("DAeC"));
   }
 
   void

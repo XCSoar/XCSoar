@@ -139,7 +139,7 @@ public:
 
   /**
    * shows dlgTaskPoint to edit point's properties
-   * or adds new waypoint if (add waypoint) is clicked
+   * or adds new waypoint if (Add Waypoint) is clicked
    * @param ItemIndex index of item
    */
   static void OnTaskListEnter(unsigned ItemIndex);

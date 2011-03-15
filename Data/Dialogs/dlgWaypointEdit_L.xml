@@ -7,7 +7,7 @@
 
   <Button Name="cmdComment" Caption="Comment" X="2" Height="28" />
 
-  <Edit Name="prpLongitudeSign" Caption="Lon" Y="70" Width="65" Height="28" CaptionWidth="28">
+  <Edit Name="prpLongitudeSign" Caption="Lon." Y="70" Width="65" Height="28" CaptionWidth="28">
     <DataField DataType="enum"/>
   </Edit>
 
@@ -31,7 +31,7 @@
     <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="999" Step="1"/>
   </Edit>
 
-  <Edit Name="prpLatitudeSign" Caption="Lat" Y="100" Width="65" Height="28" CaptionWidth="28">
+  <Edit Name="prpLatitudeSign" Caption="Lat." Y="100" Width="65" Height="28" CaptionWidth="28">
     <DataField DataType="enum"/>
   </Edit>
 

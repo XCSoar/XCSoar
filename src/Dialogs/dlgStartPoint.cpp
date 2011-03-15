@@ -55,7 +55,7 @@ OnStartPointPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
       }
     }
     if (i==i0) {
-      _tcscpy(label, _("(add waypoint)"));
+      _tcscpy(label, _("(Add Waypoint)"));
     } else {
       _tcscpy(label, _T(" "));
     }

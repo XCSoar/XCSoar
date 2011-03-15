@@ -384,16 +384,16 @@ UpdateValuesRules(void)
   assert(wp != NULL);
   if (calculated.common_stats.task_started)
     /// @todo proper task validity check
-    wp->SetText(_("TRUE"));
+    wp->SetText(_("True"));
   else
-    wp->SetText(_("FALSE"));
+    wp->SetText(_("False"));
 
   wp = (WndProperty*)wf->FindByName(_T("prpValidFinish"));
   assert(wp != NULL);
   if (common_stats.task_finished)
-    wp->SetText(_("TRUE"));
+    wp->SetText(_("True"));
   else
-    wp->SetText(_("FALSE"));
+    wp->SetText(_("False"));
 
   AIRCRAFT_STATE start_state = protected_task_manager->get_start_state();
 

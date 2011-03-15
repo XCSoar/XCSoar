@@ -114,22 +114,22 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       invalid = true;
       ReplaceInString(OutBuffer, _T("$(WaypointNext)"),
-          _("Next turnpoint"), Size);
+          _("Next Turnpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
       invalid = true;
       ReplaceInString(OutBuffer, _T("$(WaypointPrevious)"),
-          _("Previous turnpoint"), Size);
+          _("Previous Turnpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
       invalid = true;
       ReplaceInString(OutBuffer, _T("$(WaypointNextArm)"),
-          _("Next turnpoint"), Size);
+          _("Next Turnpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
       invalid = true;
       ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"),
-          _("Previous turnpoint"), Size);
+          _("Previous Turnpoint"), Size);
     }
 
   } else if (task_manager->is_mode(TaskManager::MODE_ABORT)) {
@@ -141,8 +141,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString(task->validTaskPoint(1) && !task->validTaskPoint(2),
                           OutBuffer,
                           _T("$(WaypointNext)"),
-                          _("Furthest landpoint"),
-                          _("Next landpoint"), Size);
+                          _("Furthest Landpoint"),
+                          _("Next Landpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
       if (!task->validTaskPoint(-1))
@@ -151,8 +151,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString(task->validTaskPoint(-1) && !task->validTaskPoint(-2),
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
-                          _("Closest landpoint"),
-                          _("Previous landpoint"), Size);
+                          _("Closest Landpoint"),
+                          _("Previous Landpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
       if (!task->validTaskPoint(1))
@@ -161,8 +161,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString(task->validTaskPoint(1) && !task->validTaskPoint(2),
                           OutBuffer,
                           _T("$(WaypointNextArm)"),
-                          _("Furthest landpoint"),
-                          _("Next landpoint"), Size);
+                          _("Furthest Landpoint"),
+                          _("Next Landpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
       if (!task->validTaskPoint(-1))
@@ -171,8 +171,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString(task->validTaskPoint(-1) && !task->validTaskPoint(-2),
                           OutBuffer,
                           _T("$(WaypointPreviousArm)"),
-                          _("Closest landpoint"),
-                          _("Previous landpoint"), Size);
+                          _("Closest Landpoint"),
+                          _("Previous Landpoint"), Size);
     }
 
   } else {
@@ -188,8 +188,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString(next_is_final,
                           OutBuffer,
                           _T("$(WaypointNext)"),
-                          _("Finish turnpoint"),
-                          _("Next turnpoint"), Size);
+                          _("Finish Turnpoint"),
+                          _("Next Turnpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
       if (!task->validTaskPoint(-1))
@@ -198,8 +198,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString(previous_is_start,
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
-                          _("Start turnpoint"),
-                          _("Previous turnpoint"), Size);
+                          _("Start Turnpoint"),
+                          _("Previous Turnpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
       // Waypoint\nNext
@@ -214,8 +214,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
         CondReplaceInString(next_is_final,
                             OutBuffer,
                             _T("$(WaypointNextArm)"),
-                            _("Finish turnpoint"),
-                            _("Next turnpoint"), Size);
+                            _("Finish Turnpoint"),
+                            _("Next Turnpoint"), Size);
         break;
       case TaskAdvance::START_DISARMED:
         ReplaceInString(OutBuffer, _T("$(WaypointNextArm)"), _("Arm start"), Size);
@@ -237,8 +237,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
         CondReplaceInString(previous_is_start,
                             OutBuffer,
                             _T("$(WaypointPreviousArm)"),
-                            _("Start turnpoint"),
-                            _("Previous turnpoint"), Size);
+                            _("Start Turnpoint"),
+                            _("Previous Turnpoint"), Size);
         break;
       case TaskAdvance::START_ARMED:
         ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"), _("Disarm start"), Size);
@@ -254,13 +254,13 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString((task.getActiveIndex()==0),
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
-                          _("Start point cycle"), _("Previous waypoint"),
+                          _("Start point cycle"), _("Previous Waypoint"),
                           Size);
     } 
     else {
       invalid |= !calculated.common_stats.active_has_previous;
       ReplaceInString(OutBuffer, _T("$(WaypointPrevious)"),
-                      _("Previous waypoint"), Size);
+                      _("Previous Waypoint"), Size);
     }
 #endif
   }
@@ -440,11 +440,11 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     switch (val) {
     case 0:
       ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      _("Topography on"), Size);
+                      _("Topography On"), Size);
       break;
     case 1:
       ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      _("Terrain on"), Size);
+                      _("Terrain On"), Size);
       break;
     case 2:
       ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
@@ -466,11 +466,11 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     switch (val) {
     case 0:
       ReplaceInString(OutBuffer, _T("$(TerrainTopographyToggleName)"),
-                      _("Topography on"), Size);
+                      _("Topography On"), Size);
       break;
     case 1:
       ReplaceInString(OutBuffer, _T("$(TerrainTopographyToggleName)"),
-                      _("Terrain on"), Size);
+                      _("Terrain On"), Size);
       break;
     case 2:
       ReplaceInString(OutBuffer, _T("$(TerrainTopographyToggleName)"),

@@ -191,15 +191,15 @@ Update(void)
     wf->SetCaption(sTmp);
     fs.CaptionClimb(sTmp);
     wInfo->SetCaption(sTmp);
-    SetCalcCaption(_("Task calc"));
+    SetCalcCaption(_("Task Calc"));
     break;
 
   case ANALYSIS_PAGE_WIND:
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("Wind at Altitude"));
+              _("Wind At Altitude"));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(_T(""));
-    SetCalcCaption(_("Set wind"));
+    SetCalcCaption(_("Set Wind"));
     break;
 
   case ANALYSIS_PAGE_POLAR:
@@ -214,7 +214,7 @@ Update(void)
 
   case ANALYSIS_PAGE_TEMPTRACE:
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("Temp trace"));
+              _("Temp Trace"));
     wf->SetCaption(sTmp);
     fs.CaptionTempTrace(sTmp);
     wInfo->SetCaption(sTmp);
@@ -223,10 +223,10 @@ Update(void)
 
   case ANALYSIS_PAGE_TASK_SPEED:
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("Task speed"));
+              _("Task Speed"));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(_T(""));
-    SetCalcCaption(_("Task calc"));
+    SetCalcCaption(_("Task Calc"));
     break;
 
   case ANALYSIS_PAGE_TASK:
@@ -240,7 +240,7 @@ Update(void)
 
   case ANALYSIS_PAGE_OLC:
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("OnLine Contest"));
+              _("On-Line Contest"));
     wf->SetCaption(sTmp);
 
     TCHAR timetext1[100];

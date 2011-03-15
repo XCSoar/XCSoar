@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Name="frmWayPointInfo" Width="320" Height="240" Caption="Waypoint Info">
-  <Button Name="cmdGoto" Caption="Goto" X="2" Y="2" Width="75" Height="35" />
+  <Button Name="cmdGoto" Caption="GoTo" X="2" Y="2" Width="75" Height="35" />
 
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="2" Y="-74" Width="37" Height="35" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="41" Y="-74" Width="36" Height="35" OnClick="OnNextClicked" />
@@ -16,9 +16,9 @@
     <Edit Name="prpSunset" Caption="Sunset" X="2" Height="20" CaptionWidth="138" ReadOnly="1" />
     <Edit Name="prpDistance" Caption="Distance" X="2" Height="20" CaptionWidth="138" ReadOnly="1" />
     <Edit Name="prpBearing" Caption="Bearing" X="2" Height="20" CaptionWidth="138" ReadOnly="1" />
-    <Edit Name="prpMc0" Caption="Alt. Diff. MC 0" X="2" Height="20" CaptionWidth="138" ReadOnly="1" />
-    <Edit Name="prpMc1" Caption="Alt. Diff. MC Safety" X="2" Height="20" CaptionWidth="138" ReadOnly="1" />
-    <Edit Name="prpMc2" Caption="Alt. Diff. MC Current" X="2" Height="20" CaptionWidth="138" ReadOnly="1" />
+    <Edit Name="prpMc0" Caption="Alt. diff. MC 0" X="2" Height="20" CaptionWidth="138" ReadOnly="1" />
+    <Edit Name="prpMc1" Caption="Alt. diff. MC safety" X="2" Height="20" CaptionWidth="138" ReadOnly="1" />
+    <Edit Name="prpMc2" Caption="Alt. diff. MC current" X="2" Height="20" CaptionWidth="138" ReadOnly="1" />
   </Panel>
 
   <List Name="frmDetails" X="76" Y="0" ItemHeight="18"/>
@@ -28,7 +28,7 @@
     <Button Name="cmdInserInTask" Caption="Insert In Task" X="40" Width="-50" Height="30" />
     <Button Name="cmdAppendInTask" Caption="Append To Task" X="40" Width="-50" Height="30" />
     <Button Name="cmdRemoveFromTask" Caption="Remove From Task" X="40" Width="-50" Height="30" />
-    <Button Name="cmdGotoAndClearTask" Caption="Goto And Clear Task" X="40" Width="-50" Height="30" />
+    <Button Name="cmdGotoAndClearTask" Caption="GoTo And Clear Task" X="40" Width="-50" Height="30" />
     <Button Name="cmdNewHome" Caption="Set As New Home" X="40" Width="-50" Height="30" />
     <Button Name="cmdActivatePan" Caption="Pan To Waypoint" X="40" Width="-50" Height="30" />
   </Panel>

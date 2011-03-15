@@ -3,7 +3,7 @@
 <Form Name="frmFileSelect" Width="320" Height="240" Caption="File Browser">
   <Button Name="cmdClose" Caption="Close" X="2" Y="0" Width="56" Height="28" OnClick="OnFileCloseClicked"/>
   
-  <Edit Name="prpFltType" Caption="File Type" X="60" Y="0" Width="190" Height="28" CaptionWidth="70">
+  <Edit Name="prpFltType" Caption="File type" X="60" Y="0" Width="190" Height="28" CaptionWidth="70">
     <DataField DataType="enum"/>
   </Edit>
   

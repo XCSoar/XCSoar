@@ -45,7 +45,7 @@
           <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="360" Step="1" OnDataAccess="OnOZSectorFinishRadialData"/>
         </Edit>
 
-        <Edit Name="prpOZSectorInnerRadius" Caption="Inner Radius" Height="25" CaptionWidth="80" Help="Inner radius of the OZ sector.">
+        <Edit Name="prpOZSectorInnerRadius" Caption="Inner radius" Height="25" CaptionWidth="80" Help="Inner radius of the OZ sector.">
           <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.0" Max="100" Step="0.5" Fine="1" 
            OnDataAccess="OnOZSectorInnerRadiusData"/>
         </Edit>
