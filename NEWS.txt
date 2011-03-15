@@ -11,6 +11,7 @@ Version 6.0.8 - not yet released
   - calculate WGS84 to real altitude (internal GPS)
   - fix incorrect airspace warning repetitions
   - auto-reconnect to Bluetooth GPS after timeout
+  - support the acceleration sensor
 * Linux
   - more dialog improvements
   - fix bold font rendering
