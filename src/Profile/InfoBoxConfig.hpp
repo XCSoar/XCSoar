@@ -31,7 +31,7 @@ public:
   InfoBoxPanelConfig();
   bool IsEmpty() const;
 
-  static const unsigned int MAX_INFOBOXES = 12;
+  static const unsigned int MAX_INFOBOXES = 24;
   static const unsigned int MAX_PANEL_NAME_LENGTH = 32;
   TCHAR name[MAX_PANEL_NAME_LENGTH];
   unsigned int infoBoxID[MAX_INFOBOXES];

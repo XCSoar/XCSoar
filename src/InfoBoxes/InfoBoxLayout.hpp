@@ -49,7 +49,9 @@ namespace InfoBoxLayout
     // 7: infoboxes (5) along right side (square screen)
     ibSquare = 7,
     // 8: 12 infoboxes along right side (i.e. like GNav without vario)
-    ibRight12 = 8
+    ibRight12 = 8,
+    // 9: 24 infoboxes along right side (3x8)
+    ibRight24 = 9,
   };
 
   struct Layout {

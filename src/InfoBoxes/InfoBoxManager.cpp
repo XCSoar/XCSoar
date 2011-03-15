@@ -478,6 +478,12 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
       border |= BORDERTOP;
     border |= BORDERLEFT;
     break;
+
+  case InfoBoxLayout::ibRight24:
+    if (i % 8 != 0)
+      border |= BORDERTOP;
+    border |= BORDERLEFT;
+    break;
   }
 
   return border;

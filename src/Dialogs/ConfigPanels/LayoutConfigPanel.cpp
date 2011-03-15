@@ -78,6 +78,7 @@ LayoutConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("9 Right + Vario (Landscape)"));  // 6
     dfe->addEnumText(_("5 Right (Square)")); // 7
     dfe->addEnumText(_("12 Right (Landscape)")); // 8
+    dfe->addEnumText(_("24 Right (Landscape)"), InfoBoxLayout::ibRight24);
     dfe->Set(InfoBoxLayout::InfoBoxGeometry);
     wp->RefreshDisplay();
   }
