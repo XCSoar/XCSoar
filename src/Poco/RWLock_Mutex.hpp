@@ -33,9 +33,6 @@
 #ifndef Foundation_RWLock_Mutex_INCLUDED
 #define Foundation_RWLock_Mutex_INCLUDED
 
-
-#include "Poco/Foundation.h"
-#include "Poco/UnWindows.h"
 #include "Thread/Mutex.hpp"
 
 
