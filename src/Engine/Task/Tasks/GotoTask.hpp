@@ -25,6 +25,7 @@
 
 #include "UnorderedTask.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "Compiler.h"
 
 /**
  * Class providing ability to go to a single task point
@@ -141,8 +142,10 @@ public:
  * @param reverse Visit task points in reverse order 
  *
  */
-  void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
-  void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) {};
+  void tp_CAccept(TaskPointConstVisitor& visitor,
+                  const bool reverse = false) const;
+  void tp_Accept(gcc_unused TaskPointVisitor &visitor,
+                 gcc_unused const bool reverse = false) {}
 
 };
 

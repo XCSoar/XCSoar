@@ -62,15 +62,16 @@ GotoTask::setActiveTaskPoint(unsigned index)
 
 
 bool 
-GotoTask::update_sample(const AIRCRAFT_STATE &state,
-                        const bool full_update)
+GotoTask::update_sample(gcc_unused const AIRCRAFT_STATE &state,
+                        gcc_unused const bool full_update)
 {
   return false; // nothing to do
 }
 
 
 bool 
-GotoTask::check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&)
+GotoTask::check_transitions(gcc_unused const AIRCRAFT_STATE &,
+                            gcc_unused const AIRCRAFT_STATE &)
 {
   return false; // nothing to do
 }
@@ -88,7 +89,8 @@ GotoTask::do_goto(const Waypoint & wp)
 }
 
 void 
-GotoTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
+GotoTask::tp_CAccept(TaskPointConstVisitor& visitor,
+                     gcc_unused const bool reverse) const
 {
   if (tp) {
     visitor.Visit(*tp);
