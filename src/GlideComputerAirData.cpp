@@ -596,6 +596,10 @@ GlideComputerAirData::AirspaceWarning()
 {
   airspace_database.set_flight_levels(Basic().pressure);
 
+  // @todo
+  // AirspaceActivity day (Derived().day_of_week_local);
+  // airspace_database.set_activity(day);
+
   const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
   if (m_airspace.update_warning(as, Calculated().Circling))
     airspaceWarningEvent.trigger();
