@@ -61,15 +61,6 @@ Copyright_License {
  *     y = m * x + b
  * \f]
  *
- * \f[
- *     m = \frac{n * \sum_0^{i-1} (x_i*y_i) - \sum_0^{i-1} x_i* \sum_0^{i-1} y_i}
- *              {n*\sum_0^{i-1} x_i^2 - (\sum_0^{i-1} x_i)^2}
- * \f]
- *
- * \f[
- *     b = \frac{\sum_0^{i-1} y_i}{n} - b_1 * \frac{\sum_0^{i-1} x_i}{n}
- * \f]
- *
  * the least squares error:
  *
  * \f[
@@ -87,7 +78,18 @@ class LeastSquares
 public:
   fixed sum_xi, sum_yi, sum_xi_2, sum_xi_yi;
   int sum_n;
+  /**
+  * \f[
+  *     m = \frac{n * \sum_0^{i-1} (x_i*y_i) - \sum_0^{i-1} x_i* \sum_0^{i-1} y_i}
+  *              {n*\sum_0^{i-1} x_i^2 - (\sum_0^{i-1} x_i)^2}
+  * \f]
+  */
   fixed m;
+  /**
+  * \f[
+  *     b = \frac{\sum_0^{i-1} y_i}{n} - b_1 * \frac{\sum_0^{i-1} x_i}{n}
+  * \f]
+  */
   fixed b;
   fixed sum_error;
 
