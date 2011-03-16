@@ -98,11 +98,7 @@ GotoTask::tp_CAccept(TaskPointConstVisitor& visitor,
 unsigned 
 GotoTask::task_size() const
 {
-  if (tp) {
-    return 1;
-  } else {
-    return 0;
-  }
+  return tp ? 1 : 0;
 }
 
 void
