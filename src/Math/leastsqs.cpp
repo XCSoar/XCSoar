@@ -131,7 +131,7 @@ LeastSquares::LeastSquaresUpdate()
 void
 LeastSquares::LeastSquaresUpdate(fixed y)
 {
-  LeastSquaresUpdate((fixed)(sum_n+1), y);
+  LeastSquaresUpdate(fixed(sum_n + 1), y);
 }
 
 /**
