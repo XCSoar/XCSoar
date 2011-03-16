@@ -237,27 +237,27 @@ WayPointGlue::SaveWaypoints(const Waypoints &way_points)
   // ### FIRST FILE ###
   if (wp_file0.get() != NULL) {
     if (!wp_file0->Save(way_points)) {
-      LogStartUp(_T("Save error in waypoint file 1"));
-    } else {
       LogStartUp(_T("Waypoint file 1 can not be written"));
+    } else {
+      LogStartUp(_T("Waypoint file 1 saved"));
     }
   }
 
   // ### SECOND FILE ###
   if (wp_file1.get() != NULL) {
     if (!wp_file1->Save(way_points)) {
-      LogStartUp(_T("Save error in waypoint file 2"));
-    } else {
       LogStartUp(_T("Waypoint file 2 can not be written"));
+    } else {
+      LogStartUp(_T("Waypoint file 2 saved"));
     }
   }
 
   // ### THIRD FILE ###
   if (wp_file2.get() != NULL) {
     if (!wp_file1->Save(way_points)) {
-      LogStartUp(_T("Save error in waypoint file 3"));
-    } else {
       LogStartUp(_T("Waypoint file 3 can not be written"));
+    } else {
+      LogStartUp(_T("Waypoint file 3 saved"));
     }
   }
 }
