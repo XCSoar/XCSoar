@@ -372,7 +372,7 @@ struct NMEA_INFO {
 
   fixed Time; /**< global time (seconds UTC) */
 
-  /** GPS date and time */
+  /** GPS date and time (UTC) */
   BrokenDateTime DateTime;
 
   //###########
