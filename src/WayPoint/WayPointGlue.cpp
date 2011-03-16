@@ -31,6 +31,9 @@ Copyright_License {
 #include "WayPointFile.hpp"
 #include "Language.hpp"
 #include "ProgressGlue.hpp"
+#include "Components.hpp"
+#include "NMEA/Aircraft.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
@@ -97,6 +100,9 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
       LogStartUp(_T("Start at terrain center"));
       device_blackboard.SetStartupLocation(loc, fixed_zero);
     }
+    const AIRCRAFT_STATE aircraft_state =
+      ToAircraftState(device_blackboard.Basic(), device_blackboard.Calculated());
+    airspace_warnings->reset(aircraft_state);
   }
 
   // Save the home waypoint number in the resgistry

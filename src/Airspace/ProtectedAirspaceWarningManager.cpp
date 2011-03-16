@@ -38,6 +38,13 @@ ProtectedAirspaceWarningManager::clear()
 }
 
 void
+ProtectedAirspaceWarningManager::reset(const AIRCRAFT_STATE &as)
+{
+  ExclusiveLease lease(*this);
+  lease->reset(as);
+}
+
+void
 ProtectedAirspaceWarningManager::clear_warnings()
 {
   ExclusiveLease lease(*this);

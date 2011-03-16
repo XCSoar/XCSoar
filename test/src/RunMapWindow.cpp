@@ -68,6 +68,7 @@ void MapProjectionBlackboard::ReadMapProjection(const MapWindowProjection &) {}
 DeviceBlackboard device_blackboard;
 
 ProtectedTaskManager *protected_task_manager;
+ProtectedAirspaceWarningManager *airspace_warnings;
 
 void
 DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt) {}

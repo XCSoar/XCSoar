@@ -38,6 +38,7 @@ public:
     Guard<AirspaceWarningManager>(awm) {}
 
   void clear();
+  void reset(const AIRCRAFT_STATE& as);
   void clear_warnings();
 
   // warning manager
