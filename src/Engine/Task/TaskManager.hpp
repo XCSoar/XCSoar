@@ -384,11 +384,24 @@ public:
   /**
    * Retrieve olc solution vector
    *
+   * @param solution_index -1 for best, otherwise index of solution
+   *
    * @return Vector of trace points selected for OLC
    */
   gcc_pure
-  const TracePointVector& get_contest_solution() const {
-    return contest_manager.get_contest_solution();
+  const TracePointVector& get_contest_solution(const int solution_index=-1) const {
+    return contest_manager.get_contest_solution(solution_index);
+  }
+
+  /**
+   * Retrieve olc result
+   *
+   * @param solution_index -1 for best, otherwise index of solution
+   *
+   * @return Result for OLC
+   */
+  const ContestResult& get_contest_result(const int solution_index=-1) const {
+    return contest_manager.get_contest_result(solution_index);
   }
 
   /**

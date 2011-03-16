@@ -25,6 +25,7 @@
 #include "Util/tstring.hpp"
 #include "AirspaceAltitude.hpp"
 #include "AirspaceClass.hpp"
+#include "AirspaceActivity.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/SearchPointVector.hpp"
 #include "Compiler.h"
@@ -59,15 +60,7 @@ public:
 
   const enum shape shape;
 
-  enum active {
-    EVERYDAY,
-    WEEKDAY,
-    WEEKEND,
-  };
-
-  enum active active;
-
-  AbstractAirspace(enum shape _shape):shape(_shape), active(EVERYDAY) {}
+  AbstractAirspace(enum shape _shape):shape(_shape), active(true) {}
   virtual ~AbstractAirspace();
 
   /** 
@@ -160,6 +153,13 @@ public:
   void set_flight_level(const AtmosphericPressure &press);
 
   /**
+   * Set activity based on day mask
+   *
+   * @param days Mask of activity
+   */
+  void set_activity(const AirspaceActivity mask) const;
+
+  /**
    * Set fundamental properties of airspace
    *
    * @param _Name Name of airspace
@@ -192,8 +192,8 @@ public:
    *
    * @param _active New activation setting of airspace
    */
-  void set_active(const enum active _active) {
-    active = _active;
+  void set_days(const AirspaceActivity mask) {
+    days_of_operation = mask;
   }
 
   /** 
@@ -359,6 +359,11 @@ public:
   const SearchPointVector& get_clearance() const;
   void clear_clearance() const;
 
+  gcc_pure
+  bool is_active() const {
+    return active;
+  };
+
 protected:
   AIRSPACE_ALT m_base; /**< Base of airspace */
   AIRSPACE_ALT m_top; /**< Top of airspace */
@@ -369,6 +374,8 @@ protected:
   SearchPointVector m_border; /**< Actual border */
   mutable SearchPointVector m_clearance; /**< Convex clearance border */
   bool m_is_convex;
+  mutable bool active;
+  AirspaceActivity days_of_operation;
 
 /**
  * Project border.

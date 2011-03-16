@@ -36,13 +36,14 @@ public:
               const unsigned &_handicap,
               const bool _is_fai=true);
 
-  virtual fixed calc_score() const;
-  fixed calc_distance() const;
-  fixed calc_time() const;
-
   void reset();
 
 protected:
+
+  virtual fixed calc_score() const;
+  virtual fixed calc_distance() const;
+  virtual fixed calc_time() const;
+
   fixed leg_distance(unsigned i) const;
 
   bool path_closed() const;

@@ -23,6 +23,7 @@
 #define AIRSPACES_HPP
 
 #include "AirspacesInterface.hpp"
+#include "AirspaceActivity.hpp"
 #include "AirspacePredicate.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Navigation/TaskProjection.hpp"
@@ -140,6 +141,13 @@ public:
   void set_flight_levels(const AtmosphericPressure &press);
 
   /** 
+   * Set activity based on day mask
+   *
+   * @param days Mask of activity (a particular or range of days matching this day)
+   */
+  void set_activity(const AirspaceActivity mask);
+
+  /**
    * Call visitor class on airspaces within range of location.
    * Note that the visitor is not instantiated separately for each match
    * 
@@ -275,6 +283,8 @@ public:
 private:
 
   fixed m_QNH;
+  AirspaceActivity m_day;
+
   bool m_owner;
 
   AirspaceTree airspace_tree;

@@ -11,7 +11,8 @@
 #include "PathSolvers/OLCClassic.hpp"
 #include "PathSolvers/OLCLeague.hpp"
 #include "PathSolvers/OLCPlus.hpp"
-#include "PathSolvers/XContest.hpp"
+#include "PathSolvers/XContestFree.hpp"
+#include "PathSolvers/XContestTriangle.hpp"
 #include "PathSolvers/OLCSISAT.hpp"
 #include "PathSolvers/Contests.hpp"
 
@@ -31,7 +32,6 @@ public:
    * 
    * @param _contest Contests that shall be used
    * @param _handicap Contest handicap factor
-   * @param _result ContestRules to write result to
    * @param trace_full Trace object reference
    * containing full flight history for scanning
    * @param trace_sprint Trace object reference
@@ -39,7 +39,6 @@ public:
    */
   ContestManager(const Contests _contest,
                  const unsigned &_handicap,
-                 ContestResult &_result,
                  const Trace &trace_full,
                  const Trace &trace_sprint);
 
@@ -69,19 +68,43 @@ public:
   /**
    * Retrieve contest solution vector
    *
+   * @param solution_index -1 for best, otherwise index of solution
+   *
    * @return Vector of trace points selected for Contest
    */
   gcc_pure
-  const TracePointVector& get_contest_solution() const;
+  const TracePointVector& get_contest_solution(const int solution_index=-1) const {
+    return solution[get_index(solution_index)];
+  }
+
+  gcc_pure
+  const ContestResult& get_contest_result(const int solution_index=-1) const {
+    return result[get_index(solution_index)];
+  }
 
 private:
   Contests contest;
-  ContestResult &result;
+
+  int get_index(const int solution_index) const {
+    if (solution_index>=0) {
+      return solution_index;
+    }
+    fixed best = fixed_zero;
+    int i_best = 0;
+    for (int i=0; i<3; ++i) {
+      if (result[i].defined() && (result[i].score > best)) {
+        i_best = i;
+        best = result[i].score;
+      }
+    }
+    return i_best;
+  }
+
+  ContestResult result[3];
+  TracePointVector solution[3];
 
   const Trace &trace_full;
   const Trace &trace_sprint;
-
-  TracePointVector solution;
 
   bool run_contest(AbstractContest& the_contest, 
                    ContestResult &contest_result,
@@ -93,8 +116,10 @@ private:
   OLCClassic olc_classic;
   OLCLeague olc_league;
   OLCPlus olc_plus;
-  XContest olc_xcontest;
-  XContest olc_dhvxc;
+  XContestFree olc_xcontest_free;
+  XContestTriangle olc_xcontest_triangle;
+  XContestFree olc_dhvxc_free;
+  XContestTriangle olc_dhvxc_triangle;
   OLCSISAT olc_sisat;
 };
 

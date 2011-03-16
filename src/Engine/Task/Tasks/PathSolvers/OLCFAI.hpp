@@ -34,7 +34,7 @@ class OLCFAI:
 public:
   OLCFAI(const Trace &_trace,
          const unsigned &_handicap);
-
+protected:
   virtual fixed calc_score() const;
 
 };

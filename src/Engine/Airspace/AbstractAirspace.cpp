@@ -33,9 +33,9 @@ AbstractAirspace::~AbstractAirspace() {}
 bool 
 AbstractAirspace::inside(const AIRCRAFT_STATE& state) const
 {
-  return (m_base.is_below(state) &&
-          m_top.is_above(state) &&
-          inside(state.Location));
+  return m_base.is_below(state) &&
+    m_top.is_above(state) &&
+    inside(state.Location);
 }
 
 
@@ -279,4 +279,10 @@ void
 AbstractAirspace::clear_clearance() const
 {
   m_clearance.clear();
+}
+
+void
+AbstractAirspace::set_activity(const AirspaceActivity mask) const
+{
+  active = days_of_operation.matches(mask);
 }

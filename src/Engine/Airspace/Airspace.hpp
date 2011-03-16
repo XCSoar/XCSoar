@@ -32,6 +32,7 @@
 struct AIRCRAFT_STATE;
 class AtmosphericPressure;
 class AbstractAirspace;
+class AirspaceActivity;
 
 #include <vector>
 typedef std::vector< std::pair<GeoPoint,GeoPoint> > AirspaceIntersectionVector;
@@ -173,6 +174,13 @@ public:
    * @param press Atmospheric pressure model and QNH
    */
   void set_flight_level(const AtmosphericPressure &press) const;
+
+  /**
+   * Set activity based on day mask
+   *
+   * @param days Mask of activity
+   */
+  void set_activity(const AirspaceActivity mask) const;
 
   /**
    * Clear the convex clearance polygon

@@ -228,6 +228,10 @@ Airspaces::insert(AbstractAirspace* asp)
   // this allows for airspaces to be add at any time
   m_QNH = fixed_zero;
 
+  // reset day to all so set_activity will be triggered next update
+  // this allows for airspaces to be add at any time
+  m_day.set_all();
+
   if (m_owner) {
     if (empty())
       task_projection.reset(asp->get_center());
@@ -293,6 +297,19 @@ Airspaces::set_flight_levels(const AtmosphericPressure &press)
   }
 }
 
+void
+Airspaces::set_activity(const AirspaceActivity mask)
+{
+  if (!mask.equals(m_day)) {
+    m_day = mask;
+
+    for (AirspaceTree::iterator v = airspace_tree.begin();
+         v != airspace_tree.end(); ++v) {
+      v->set_activity(mask);
+    }
+  }
+}
+
 Airspaces::AirspaceTree::const_iterator
 Airspaces::begin() const
 {
@@ -308,6 +325,7 @@ Airspaces::end() const
 Airspaces::Airspaces(const Airspaces& master,
   bool owner):
   m_QNH(master.m_QNH),
+  m_day(master.m_day),
   m_owner(owner),
   task_projection(master.task_projection)
 {
@@ -398,3 +416,4 @@ Airspaces::visit_inside(const GeoPoint &loc,
       visitor.Visit(*v);
   }
 }
+

@@ -173,7 +173,6 @@ Update(void)
   GlidePolar polar(fixed_zero);
   if (protected_task_manager != NULL)
     polar = protected_task_manager->get_glide_polar();
-  const CommonStats& stats = XCSoarInterface::Calculated().common_stats;
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -243,10 +242,16 @@ Update(void)
               _("On-Line Contest"));
     wf->SetCaption(sTmp);
 
+    if (!protected_task_manager)
+      break;
+    {
+      ProtectedTaskManager::Lease task(*protected_task_manager);
+
+    const ContestResult& result_olc = task->get_contest_result();
     TCHAR timetext1[100];
-    Units::TimeToText(timetext1, (int)stats.olc.time);
+    Units::TimeToText(timetext1, (int)result_olc.time);
     TCHAR distance[100];
-    Units::FormatUserDistance(stats.olc.distance, distance, 100);
+    Units::FormatUserDistance(result_olc.distance, distance, 100);
     _stprintf(sTmp,
               (Layout::landscape
               ? _T("%s:\r\n  %s\r\n%s:\r\n  %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
@@ -254,15 +259,16 @@ Update(void)
               _("Distance"),
               distance,
               _("Score"),
-              (double)stats.olc.score,
+              (double)result_olc.score,
               _("pts"),
               _("Time"),
               timetext1,
               _("Speed"),
-              (int)Units::ToUserTaskSpeed(stats.olc.speed),
+              (int)Units::ToUserTaskSpeed(result_olc.speed),
               Units::GetTaskSpeedName());
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_T(""));
+    }
     break;
 
   case ANALYSIS_PAGE_AIRSPACE:

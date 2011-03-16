@@ -96,6 +96,14 @@ Airspace::set_flight_level(const AtmosphericPressure &press) const
     assert(1);
 }
 
+void
+Airspace::set_activity(const AirspaceActivity mask) const
+{
+  if (pimpl_airspace)
+    pimpl_airspace->set_activity(mask);
+  else
+    assert(1);
+}
 
 void
 Airspace::clear_clearance() const

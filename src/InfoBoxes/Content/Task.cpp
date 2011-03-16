@@ -548,19 +548,24 @@ InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
 {
-  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
-
   if (!XCSoarInterface::SettingsComputer().enable_olc ||
-      common_stats.olc.score < fixed_one) {
+      !protected_task_manager) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  ProtectedTaskManager::Lease task(*protected_task_manager);
+  const ContestResult& result_olc = task->get_contest_result();
+  if (result_olc.score < fixed_one) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromDistance(infobox, common_stats.olc.distance);
+  SetValueFromDistance(infobox, result_olc.distance);
 
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%.1f pts"), (double)common_stats.olc.score);
+  _stprintf(tmp, _T("%.1f pts"), (double)result_olc.score);
   infobox.SetComment(tmp);
 }
 

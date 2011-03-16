@@ -65,6 +65,7 @@ public:
    */
   virtual void copy_solution(TracePointVector &vec) const = 0;
 
+protected:
   /**
    * Calculate distance of best path
    *
@@ -88,6 +89,7 @@ public:
    */
   virtual fixed calc_time() const = 0;
 
+public:
   /**
    * Reset the optimiser as if never flown
    */

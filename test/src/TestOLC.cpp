@@ -35,28 +35,19 @@ Trace full_trace;
 Trace sprint_trace(9000, 300);
 unsigned handicap = 100;
 
-ContestResult stats_classic;
 ContestManager olc_classic(OLC_Classic, handicap, 
-                           stats_classic,
                            full_trace, sprint_trace);
 
-ContestResult stats_fai;
-ContestManager olc_fai(OLC_FAI, handicap, stats_fai,
+ContestManager olc_fai(OLC_FAI, handicap,
                        full_trace, sprint_trace);
 
-ContestResult stats_sprint;
 ContestManager olc_sprint(OLC_Sprint, handicap, 
-                          stats_sprint,
                           full_trace, sprint_trace);
 
-ContestResult stats_league;
 ContestManager olc_league(OLC_League, handicap, 
-                          stats_league,
                           full_trace, sprint_trace);
 
-ContestResult stats_plus;
 ContestManager olc_plus(OLC_Plus, handicap, 
-                        stats_plus,
                         full_trace, sprint_trace);
 
 static void
@@ -115,15 +106,15 @@ TestOLC(const char *filename)
   putchar('\n');
 
   std::cout << "classic\n";
-  PrintHelper::print(stats_classic);
+  PrintHelper::print(olc_classic.get_contest_result());
   std::cout << "league\n";
-  PrintHelper::print(stats_league);
+  PrintHelper::print(olc_league.get_contest_result());
   std::cout << "fai\n";
-  PrintHelper::print(stats_fai);
+  PrintHelper::print(olc_fai.get_contest_result());
   std::cout << "sprint\n";
-  PrintHelper::print(stats_sprint);
+  PrintHelper::print(olc_sprint.get_contest_result());
   std::cout << "plus\n";
-  PrintHelper::print(stats_plus);
+  PrintHelper::print(olc_plus.get_contest_result());
 
   return 0;
 }
