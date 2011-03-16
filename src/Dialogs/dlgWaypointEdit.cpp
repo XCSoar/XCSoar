@@ -323,8 +323,7 @@ GetValues()
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
   assert(wp != NULL);
-  int myflag = wp->GetDataField()->GetAsInteger();
-  switch(myflag) {
+  switch(wp->GetDataField()->GetAsInteger()) {
   case 1:
     global_wpt->Flags.TurnPoint = true;
     global_wpt->Type = wtAirfield;
