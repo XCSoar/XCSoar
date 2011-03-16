@@ -36,6 +36,7 @@
 #include "DataNode.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
+#include "Compiler.h"
 #include <assert.h>
 
 void
@@ -68,7 +69,7 @@ Serialiser::Visit(const FinishPoint& data)
 }
 
 void
-Serialiser::Visit(const UnorderedTaskPoint& data)
+Serialiser::Visit(gcc_unused const UnorderedTaskPoint& data)
 {
 }
 
@@ -99,31 +100,31 @@ Serialiser::serialise(const ObservationZonePoint& data)
 } 
 
 void 
-Serialiser::Visit(const FAISectorZone& data)
+Serialiser::Visit(gcc_unused const FAISectorZone& data)
 {
   m_node.set_attribute(_T("type"), _T("FAISector"));
 }
 
 void 
-Serialiser::Visit(const KeyholeZone& data)
+Serialiser::Visit(gcc_unused const KeyholeZone& data)
 {
   m_node.set_attribute(_T("type"), _T("Keyhole"));
 }
 
 void 
-Serialiser::Visit(const BGAFixedCourseZone& data)
+Serialiser::Visit(gcc_unused const BGAFixedCourseZone& data)
 {
   m_node.set_attribute(_T("type"), _T("BGAFixedCourse"));
 }
 
 void 
-Serialiser::Visit(const BGAEnhancedOptionZone& data)
+Serialiser::Visit(gcc_unused const BGAEnhancedOptionZone& data)
 {
   m_node.set_attribute(_T("type"), _T("BGAEnhancedOption"));
 }
 
 void 
-Serialiser::Visit(const BGAStartSectorZone& data)
+Serialiser::Visit(gcc_unused const BGAStartSectorZone& data)
 {
   m_node.set_attribute(_T("type"), _T("BGAStartSector"));
 }
