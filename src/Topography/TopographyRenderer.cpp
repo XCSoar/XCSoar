@@ -179,7 +179,6 @@ TopographyFileRenderer::Paint(Canvas &canvas,
           for (; count < end_count; indices += *count++)
             glDrawElements(GL_LINE_STRIP, *count, GL_UNSIGNED_SHORT, indices);
         }
-      }
 #else // !ENABLE_OPENGL
       for (; lines < end_lines; ++lines) {
         unsigned msize = *lines;
@@ -195,6 +194,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
         shape_renderer.finish_polyline(canvas);
       }
 #endif
+      }
       break;
 
     case MS_SHAPE_POLYGON:
