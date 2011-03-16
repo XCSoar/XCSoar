@@ -45,40 +45,42 @@ static WndButton *buttonComment = NULL;
 
 static void UpdateButtons(void) {
   TCHAR text[MAX_PATH];
-  if (buttonName) {
-    _stprintf(text, _T("%s: %s"), _("Name"),
-              global_wpt->Name.size() ? global_wpt->Name.c_str() : _("(blank)"));
-    buttonName->SetCaption(text);
-  }
-  if (buttonComment) {
-    _stprintf(text, _T("%s: %s"), _("Comment"),
-              global_wpt->Comment.size() ?
-              global_wpt->Comment.c_str() : _("(blank)"));
-    buttonComment->SetCaption(text);
-  }
+
+  assert(buttonName != NULL);
+  _stprintf(text, _T("%s: %s"), _("Name"),
+            global_wpt->Name.size() ? global_wpt->Name.c_str() : _("(blank)"));
+  buttonName->SetCaption(text);
+
+  assert(buttonComment != NULL);
+  _stprintf(text, _T("%s: %s"), _("Comment"),
+            global_wpt->Comment.size() ?
+            global_wpt->Comment.c_str() : _("(blank)"));
+  buttonComment->SetCaption(text);
 }
 
 static void
 OnNameClicked(gcc_unused WndButton &button)
 {
-  if (buttonName) {
-    TCHAR buff[NAME_SIZE+1];
-    _tcscpy(buff, global_wpt->Name.c_str());
-    dlgTextEntryShowModal(buff, NAME_SIZE);
-    global_wpt->Name = buff;
-  }
+  assert(buttonName != NULL);
+
+  TCHAR buff[NAME_SIZE+1];
+  _tcscpy(buff, global_wpt->Name.c_str());
+  dlgTextEntryShowModal(buff, NAME_SIZE);
+  global_wpt->Name = buff;
+
   UpdateButtons();
 }
 
 static void
 OnCommentClicked(gcc_unused WndButton &button)
 {
-  if (buttonComment) {
-    TCHAR buff[COMMENT_SIZE+1];
-    _tcscpy(buff, global_wpt->Comment.c_str());
-    dlgTextEntryShowModal(buff, COMMENT_SIZE);
-    global_wpt->Comment = buff;
-  }
+  assert(buttonComment != NULL);
+
+  TCHAR buff[COMMENT_SIZE+1];
+  _tcscpy(buff, global_wpt->Comment.c_str());
+  dlgTextEntryShowModal(buff, COMMENT_SIZE);
+  global_wpt->Comment = buff;
+
   UpdateButtons();
 }
 
@@ -88,66 +90,68 @@ static void SetUnits(void) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     break;
+
   case 2: // ("DDMM.mmm");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     break;
+
   case 3: // ("DD.dddd");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
     // hide this field for DD.dddd format
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
-    if (wp) {
-      wp->hide();
-    }
+    assert(wp != NULL);
+    wp->hide();
+
     break;
   }
 }
@@ -161,14 +165,14 @@ static void SetValues(void) {
 			&dd, &mm, &ss, &sign);
 
   wp = (WndProperty*)wf->FindByName(_T("prpLongitudeSign"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText((_T("W")));
-    dfe->addEnumText((_T("E")));
-    dfe->Set(sign);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+
+  DataFieldEnum* dfe;
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  dfe->addEnumText((_T("W")));
+  dfe->addEnumText((_T("E")));
+  dfe->Set(sign);
+  wp->RefreshDisplay();
 
   LoadFormProperty(*wf, _T("prpLongitudeD"), dd);
 
@@ -194,19 +198,17 @@ static void SetValues(void) {
   LoadFormProperty(*wf, _T("prpLatitudeD"), dd);
 
   wp = (WndProperty*)wf->FindByName(_T("prpLatitudeSign"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText((_T("S")));
-    dfe->addEnumText((_T("N")));
-    dfe->Set(sign);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  dfe->addEnumText((_T("S")));
+  dfe->addEnumText((_T("N")));
+  dfe->Set(sign);
+  wp->RefreshDisplay();
+
   wp = (WndProperty*)wf->FindByName(_T("prpLatitudeD"));
-  if (wp) {
-    wp->GetDataField()->SetAsInteger(dd);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  wp->GetDataField()->SetAsInteger(dd);
+  wp->RefreshDisplay();
 
   switch (Units::GetCoordinateFormat()) {
   case 0: // ("DDMMSS");
@@ -225,34 +227,30 @@ static void SetValues(void) {
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
-  if (wp) {
-    wp->GetDataField()->SetAsInteger(iround(
-        Units::ToUserAltitude(global_wpt->Altitude)));
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  wp->GetDataField()->SetAsInteger(iround(
+      Units::ToUserAltitude(global_wpt->Altitude)));
+  wp->GetDataField()->SetUnits(Units::GetAltitudeName());
+  wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
+  assert(wp != NULL);
+  dfe = (DataFieldEnum*)wp->GetDataField();
 
-    dfe->addEnumText(_T("Turnpoint"));
-    dfe->addEnumText(_T("Airport"));
-    dfe->addEnumText(_T("Landpoint"));
+  dfe->addEnumText(_T("Turnpoint"));
+  dfe->addEnumText(_T("Airport"));
+  dfe->addEnumText(_T("Landpoint"));
 
-    if (global_wpt->is_airport()) {
-      dfe->Set(1);
-    } else if (global_wpt->is_landable()) {
-      dfe->Set(2);
-    } else {
-      dfe->Set(0);
-    }
-
-    wp->RefreshDisplay();
+  if (global_wpt->is_airport()) {
+    dfe->Set(1);
+  } else if (global_wpt->is_landable()) {
+    dfe->Set(2);
+  } else {
+    dfe->Set(0);
   }
-}
 
+  wp->RefreshDisplay();
+}
 
 static void GetValues(void) {
   WndProperty* wp;
@@ -318,29 +316,26 @@ static void GetValues(void) {
     : Units::ToSysAltitude(fixed(ss));
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
-  if (wp) {
-    int myflag = wp->GetDataField()->GetAsInteger();
-    switch(myflag) {
-    case 1:
-      global_wpt->Flags.TurnPoint = true;
-      global_wpt->Type = wtAirfield;
-      break;
-    case 2:
-      global_wpt->Type = wtOutlanding;
-      break;
-    default:
-      global_wpt->Type = wtNormal;
-      global_wpt->Flags.TurnPoint = true;
-    };
-  }
+  assert(wp != NULL);
+  int myflag = wp->GetDataField()->GetAsInteger();
+  switch(myflag) {
+  case 1:
+    global_wpt->Flags.TurnPoint = true;
+    global_wpt->Type = wtAirfield;
+    break;
+  case 2:
+    global_wpt->Type = wtOutlanding;
+    break;
+  default:
+    global_wpt->Type = wtNormal;
+    global_wpt->Flags.TurnPoint = true;
+  };
 }
-
 
 static void OnCloseClicked(WndButton &Sender){
 	(void)Sender;
   wf->SetModalResult(mrOK);
 }
-
 
 static CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnCloseClicked),
@@ -362,18 +357,15 @@ dlgWaypointEditShowModal(Waypoint &way_point)
                         _T("IDR_XML_WAYPOINTEDIT"));
   }
 
-  if (wf == NULL)
-    return false;
+  assert(wf != NULL);
 
   buttonName = ((WndButton *)wf->FindByName(_T("cmdName")));
-  if (buttonName) {
-    buttonName->SetOnClickNotify(OnNameClicked);
-  }
+  assert(buttonName != NULL);
+  buttonName->SetOnClickNotify(OnNameClicked);
 
   buttonComment = ((WndButton *)wf->FindByName(_T("cmdComment")));
-  if (buttonComment) {
-    buttonComment->SetOnClickNotify(OnCommentClicked);
-  }
+  assert(buttonComment != NULL);
+  buttonComment->SetOnClickNotify(OnCommentClicked);
 
   UpdateButtons();
 
