@@ -65,13 +65,13 @@ public:
     return locs;
   }
   bool is_warning(const AbstractAirspace& as) const {
-    return find(as, ids_warning);
+    return as.is_active() && find(as, ids_warning);
   }
   bool is_acked(const AbstractAirspace& as) const {
-    return find(as, ids_acked);
+    return (!as.is_active()) || find(as, ids_acked);
   }
   bool is_inside(const AbstractAirspace& as) const {
-    return find(as, ids_inside);
+    return as.is_active() && find(as, ids_inside);
   }
 
   void visit_warned(AirspaceVisitor &visitor) {
