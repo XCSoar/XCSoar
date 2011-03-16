@@ -136,9 +136,11 @@ Display::RotateSupported()
 bool
 Display::Rotate(enum orientation orientation)
 {
+#ifndef ANDROID
   if (orientation == ORIENTATION_DEFAULT)
     /* leave it as it is */
     return true;
+#endif
 
 #ifdef ROTATE_SUPPORTED
   unsigned width = GetSystemMetrics(SM_CXSCREEN);
@@ -193,13 +195,8 @@ Display::Rotate(enum orientation orientation)
   if (native_view == NULL)
     return false;
 
-  NativeView::screen_orientation android_orientation =
-    NativeView::SCREEN_ORIENTATION_SENSOR;
+  NativeView::screen_orientation android_orientation;
   switch (orientation) {
-  case ORIENTATION_DEFAULT:
-    android_orientation = NativeView::SCREEN_ORIENTATION_NOSENSOR;
-    break;
-
   case ORIENTATION_PORTRAIT:
     android_orientation = NativeView::SCREEN_ORIENTATION_PORTRAIT;
     break;
@@ -207,6 +204,9 @@ Display::Rotate(enum orientation orientation)
   case ORIENTATION_LANDSCAPE:
     android_orientation = NativeView::SCREEN_ORIENTATION_LANDSCAPE;
     break;
+
+  default:
+    android_orientation = NativeView::SCREEN_ORIENTATION_SENSOR;
   };
 
   return native_view->setRequestedOrientation(android_orientation);
@@ -228,7 +228,7 @@ Display::RotateRestore()
   return ChangeDisplaySettingsEx(NULL, &dm, NULL,
                                  CDS_RESET, NULL) == DISP_CHANGE_SUCCESSFUL;
 #elif defined(ANDROID)
-  return native_view->setRequestedOrientation(NativeView::SCREEN_ORIENTATION_NOSENSOR);
+  return native_view->setRequestedOrientation(NativeView::SCREEN_ORIENTATION_SENSOR);
 #else
   return false;
 #endif

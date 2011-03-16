@@ -8,8 +8,7 @@
     <activity android:name=".XCSoar"
               android:label="@string/app_name"
               android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation"
-              android:launchMode="singleInstance"
-              android:screenOrientation="nosensor">
+              android:launchMode="singleInstance">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
