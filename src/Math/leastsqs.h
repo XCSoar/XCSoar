@@ -50,10 +50,6 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-#ifndef __cplusplus
-# error This library requires C++
-#endif
-
 #define MAX_STATISTICS 1000
 
 /**
