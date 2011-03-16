@@ -101,7 +101,6 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCTriangle.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCFAI.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCPlus.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/XContest.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/XContestFree.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/XContestTriangle.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCSISAT.cpp \

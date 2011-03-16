@@ -619,15 +619,15 @@ PrintHelper::contestmanager_print(const ContestManager& man)
 
   std::ofstream fs("results/res-olc-solution.txt");
 
-  if (man.solution.empty()) {
+  if (man.solution[0].empty()) {
     fs << "# no solution\n";
     return;
   }
 
-  if (positive(man.result.time)) {
+  if (positive(man.result[0].time)) {
 
-    for (TracePointVector::const_iterator it = man.solution.begin();
-         it != man.solution.end(); ++it) {
+    for (TracePointVector::const_iterator it = man.solution[0].begin();
+         it != man.solution[0].end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 
          << "\n";
