@@ -229,6 +229,5 @@ Serialiser::task_factory_type(TaskBehaviour::Factory_t the_type) const
     return _T("Touring");
   }
 
-  assert(1);
   return NULL;
 }
