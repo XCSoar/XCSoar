@@ -37,13 +37,15 @@ Copyright_License {
 
 #include <stdio.h>
 
-static WndForm *wf=NULL;
-static Waypoint *global_wpt=NULL;
+static WndForm *wf = NULL;
+static Waypoint *global_wpt = NULL;
 
 static WndButton *buttonName = NULL;
 static WndButton *buttonComment = NULL;
 
-static void UpdateButtons(void) {
+static void
+UpdateButtons()
+{
   TCHAR text[MAX_PATH];
 
   assert(buttonName != NULL);
@@ -63,7 +65,7 @@ OnNameClicked(gcc_unused WndButton &button)
 {
   assert(buttonName != NULL);
 
-  TCHAR buff[NAME_SIZE+1];
+  TCHAR buff[NAME_SIZE + 1];
   _tcscpy(buff, global_wpt->Name.c_str());
   dlgTextEntryShowModal(buff, NAME_SIZE);
   global_wpt->Name = buff;
@@ -84,7 +86,9 @@ OnCommentClicked(gcc_unused WndButton &button)
   UpdateButtons();
 }
 
-static void SetUnits(void) {
+static void
+SetUnits()
+{
   WndProperty* wp;
   switch (Units::GetCoordinateFormat()) {
   case 0: // ("DDMMSS");
@@ -156,13 +160,14 @@ static void SetUnits(void) {
   }
 }
 
-static void SetValues(void) {
+static void
+SetValues()
+{
   WndProperty* wp;
   bool sign;
   int dd,mm,ss;
 
-  Units::LongitudeToDMS(global_wpt->Location.Longitude,
-			&dd, &mm, &ss, &sign);
+  Units::LongitudeToDMS(global_wpt->Location.Longitude, &dd, &mm, &ss, &sign);
 
   wp = (WndProperty*)wf->FindByName(_T("prpLongitudeSign"));
   assert(wp != NULL);
@@ -192,8 +197,7 @@ static void SetValues(void) {
     break;
   }
 
-  Units::LatitudeToDMS(global_wpt->Location.Latitude,
-		       &dd, &mm, &ss, &sign);
+  Units::LatitudeToDMS(global_wpt->Location.Latitude, &dd, &mm, &ss, &sign);
 
   LoadFormProperty(*wf, _T("prpLatitudeD"), dd);
 
@@ -241,22 +245,24 @@ static void SetValues(void) {
   dfe->addEnumText(_T("Airport"));
   dfe->addEnumText(_T("Landpoint"));
 
-  if (global_wpt->is_airport()) {
+  if (global_wpt->is_airport())
     dfe->Set(1);
-  } else if (global_wpt->is_landable()) {
+  else if (global_wpt->is_landable())
     dfe->Set(2);
-  } else {
+  else
     dfe->Set(0);
-  }
 
   wp->RefreshDisplay();
 }
 
-static void GetValues(void) {
+static void
+GetValues()
+{
   WndProperty* wp;
   bool sign = false;
   int dd = 0;
-  double num=0, mm = 0, ss = 0; // mm,ss are numerators (division) so don't want to lose decimals
+  // mm,ss are numerators (division) so don't want to lose decimals
+  double num = 0, mm = 0, ss = 0;
 
   sign = GetFormValueInteger(*wf, _T("prpLongitudeSign")) == 1;
   dd = GetFormValueInteger(*wf, _T("prpLongitudeD"));
@@ -266,21 +272,21 @@ static void GetValues(void) {
   case 1: // ("DDMMSS.ss");
     mm = GetFormValueInteger(*wf, _T("prpLongitudeM"));
     ss = GetFormValueInteger(*wf, _T("prpLongitudeS"));
-    num = dd+mm/60.0+ss/3600.0;
+    num = dd + mm / 60.0 + ss / 3600.0;
     break;
   case 2: // ("DDMM.mmm");
     mm = GetFormValueInteger(*wf, _T("prpLongitudeM"));
     ss = GetFormValueInteger(*wf, _T("prpLongitudemmm"));
-    num = dd+(mm+ss/1000.0)/60.0;
+    num = dd + (mm + ss / 1000.0) / 60.0;
     break;
   case 3: // ("DD.dddd");
     mm = GetFormValueInteger(*wf, _T("prpLongitudeDDDD"));
-    num = dd+mm/10000;
+    num = dd + mm / 10000;
     break;
   }
-  if (!sign) {
+
+  if (!sign)
     num = -num;
-  }
 
   global_wpt->Location.Longitude = Angle::degrees(fixed(num));
 
@@ -292,26 +298,26 @@ static void GetValues(void) {
   case 1: // ("DDMMSS.ss");
     mm = GetFormValueInteger(*wf, _T("prpLatitudeM"));
     ss = GetFormValueInteger(*wf, _T("prpLatitudeS"));
-    num = dd+mm/60.0+ss/3600.0;
+    num = dd + mm / 60.0 + ss / 3600.0;
     break;
   case 2: // ("DDMM.mmm");
     mm = GetFormValueInteger(*wf, _T("prpLatitudeM"));
     ss = GetFormValueInteger(*wf, _T("prpLatitudemmm"));
-    num = dd+(mm+ss/1000.0)/60.0;
+    num = dd + (mm + ss / 1000.0) / 60.0;
     break;
   case 3: // ("DD.dddd");
     mm = GetFormValueInteger(*wf, _T("prpLatitudeDDDD"));
-    num = dd+mm/10000;
+    num = dd + mm / 10000;
     break;
   }
-  if (!sign) {
+
+  if (!sign)
     num = -num;
-  }
 
   global_wpt->Location.Latitude = Angle::degrees(fixed(num));
 
   ss = GetFormValueInteger(*wf, _T("prpAltitude"));
-  global_wpt->Altitude = ss == 0 && terrain != NULL
+  global_wpt->Altitude = (ss == 0 && terrain != NULL)
     ? fixed(terrain->GetTerrainHeight(global_wpt->Location))
     : Units::ToSysAltitude(fixed(ss));
 
@@ -332,12 +338,14 @@ static void GetValues(void) {
   };
 }
 
-static void OnCloseClicked(WndButton &Sender){
+static void
+OnCloseClicked(WndButton &Sender)
+{
 	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 
-static CallBackTableEntry CallBackTable[]={
+static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
@@ -376,7 +384,7 @@ dlgWaypointEditShowModal(Waypoint &way_point)
   wf->SetModalResult(mrCancel);
 
   bool retval = false;
-  if (wf->ShowModal()==mrOK) {
+  if (wf->ShowModal() == mrOK) {
     GetValues();
     retval = true;
   }
