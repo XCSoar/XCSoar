@@ -166,6 +166,7 @@ DeviceBlackboard::ProcessSimulation()
   basic.LocationAvailable.update(basic.Time);
   basic.GPSAltitudeAvailable.update(basic.Time);
   basic.TrackBearingAvailable.update(basic.Time);
+  basic.GroundSpeedAvailable.update(basic.Time);
 
   basic.Time += fixed_one;
   long tsec = (long)basic.Time;
