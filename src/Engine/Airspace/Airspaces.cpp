@@ -372,7 +372,7 @@ Airspaces::synchronise_in_range(const Airspaces& master,
         break;
       }
     }
-    if (!found) {
+    if (!found && other->is_active()) {
       insert(v->get_airspace());
       changed = true;
     }
