@@ -27,10 +27,10 @@
 GotoTask::GotoTask(TaskEvents &te, 
                    const TaskBehaviour &tb,
                    const GlidePolar &gp,
-                   const Waypoints &wps):
-  UnorderedTask(GOTO, te,tb,gp),
-  tp(NULL),
-  waypoints(wps)
+                   const Waypoints &wps)
+  :UnorderedTask(GOTO, te,tb,gp),
+   tp(NULL),
+   waypoints(wps)
 {
 }
 
@@ -90,9 +90,8 @@ void
 GotoTask::tp_CAccept(TaskPointConstVisitor& visitor,
                      gcc_unused const bool reverse) const
 {
-  if (tp) {
+  if (tp)
     visitor.Visit(*tp);
-  }
 }
 
 unsigned 
@@ -118,5 +117,6 @@ GotoTask::takeoff_autotask(const GeoPoint& location)
   const Waypoint* wp = waypoints.lookup_location(location, fixed(1000));
   if (wp)
     return do_goto(*wp);
+
   return false;
 }
