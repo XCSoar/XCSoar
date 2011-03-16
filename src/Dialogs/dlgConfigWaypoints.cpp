@@ -85,8 +85,11 @@ static void
 SaveWaypoints()
 {
   way_points.optimise();
-  WayPointGlue::SaveWaypoints(way_points);
-  WaypointFileChanged = true;
+  if (!WayPointGlue::SaveWaypoints(way_points))
+    MessageBoxX(_("Waypoints not editable"), _("Error"), MB_OK);
+  else
+    WaypointFileChanged = true;
+
   WaypointsNeedSave = false;
 }
 
