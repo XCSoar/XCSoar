@@ -91,8 +91,8 @@ SetUnits()
 {
   WndProperty* wp;
   switch (Units::GetCoordinateFormat()) {
-  case 0: // ("DDMMSS");
-  case 1: // ("DDMMSS.ss");
+  case cfDDMMSS: // ("DDMMSS");
+  case cfDDMMSSss: // ("DDMMSS.ss");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
     assert(wp != NULL);
     wp->hide();
@@ -111,7 +111,7 @@ SetUnits()
 
     break;
 
-  case 2: // ("DDMM.mmm");
+  case cfDDMMmmm: // ("DDMM.mmm");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
     assert(wp != NULL);
     wp->hide();
@@ -130,7 +130,7 @@ SetUnits()
 
     break;
 
-  case 3: // ("DD.dddd");
+  case cfDDdddd: // ("DD.dddd");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
     assert(wp != NULL);
     wp->hide();
@@ -182,16 +182,16 @@ SetValues()
   LoadFormProperty(*wf, _T("prpLongitudeD"), dd);
 
   switch (Units::GetCoordinateFormat()) {
-  case 0: // ("DDMMSS");
-  case 1: // ("DDMMSS.ss");
+  case cfDDMMSS: // ("DDMMSS");
+  case cfDDMMSSss: // ("DDMMSS.ss");
     LoadFormProperty(*wf, _T("prpLongitudeM"), mm);
     LoadFormProperty(*wf, _T("prpLongitudeS"), ss);
     break;
-  case 2: // ("DDMM.mmm");
+  case cfDDMMmmm: // ("DDMM.mmm");
     LoadFormProperty(*wf, _T("prpLongitudeM"), mm);
     LoadFormProperty(*wf, _T("prpLongitudemmm"), 1000 * fixed(ss) / 60);
     break;
-  case 3: // ("DD.dddd");
+  case cfDDdddd: // ("DD.dddd");
     LoadFormProperty(*wf, _T("prpLongitudeDDDD"),
                      10000 * (fixed)(mm + ss) / 3600);
     break;
@@ -215,16 +215,16 @@ SetValues()
   wp->RefreshDisplay();
 
   switch (Units::GetCoordinateFormat()) {
-  case 0: // ("DDMMSS");
-  case 1: // ("DDMMSS.ss");
+  case cfDDMMSS: // ("DDMMSS");
+  case cfDDMMSSss: // ("DDMMSS.ss");
     LoadFormProperty(*wf, _T("prpLatitudeM"), mm);
     LoadFormProperty(*wf, _T("prpLatitudeS"), ss);
     break;
-  case 2: // ("DDMM.mmm");
+  case cfDDMMmmm: // ("DDMM.mmm");
     LoadFormProperty(*wf, _T("prpLatitudeM"), mm);
     LoadFormProperty(*wf, _T("prpLatitudemmm"), 1000 * fixed(ss) / 60);
     break;
-  case 3: // ("DD.dddd");
+  case cfDDdddd: // ("DD.dddd");
     LoadFormProperty(*wf, _T("prpLatitudeDDDD"),
                      10000 * (fixed)(mm + ss) / 3600);
     break;
@@ -268,18 +268,18 @@ GetValues()
   dd = GetFormValueInteger(*wf, _T("prpLongitudeD"));
 
   switch (Units::GetCoordinateFormat()) {
-  case 0: // ("DDMMSS");
-  case 1: // ("DDMMSS.ss");
+  case cfDDMMSS: // ("DDMMSS");
+  case cfDDMMSSss: // ("DDMMSS.ss");
     mm = GetFormValueInteger(*wf, _T("prpLongitudeM"));
     ss = GetFormValueInteger(*wf, _T("prpLongitudeS"));
     num = dd + mm / 60.0 + ss / 3600.0;
     break;
-  case 2: // ("DDMM.mmm");
+  case cfDDMMmmm: // ("DDMM.mmm");
     mm = GetFormValueInteger(*wf, _T("prpLongitudeM"));
     ss = GetFormValueInteger(*wf, _T("prpLongitudemmm"));
     num = dd + (mm + ss / 1000.0) / 60.0;
     break;
-  case 3: // ("DD.dddd");
+  case cfDDdddd: // ("DD.dddd");
     mm = GetFormValueInteger(*wf, _T("prpLongitudeDDDD"));
     num = dd + mm / 10000;
     break;
@@ -294,18 +294,18 @@ GetValues()
   dd = GetFormValueInteger(*wf, _T("prpLatitudeD"));
 
   switch (Units::GetCoordinateFormat()) {
-  case 0: // ("DDMMSS");
-  case 1: // ("DDMMSS.ss");
+  case cfDDMMSS: // ("DDMMSS");
+  case cfDDMMSSss: // ("DDMMSS.ss");
     mm = GetFormValueInteger(*wf, _T("prpLatitudeM"));
     ss = GetFormValueInteger(*wf, _T("prpLatitudeS"));
     num = dd + mm / 60.0 + ss / 3600.0;
     break;
-  case 2: // ("DDMM.mmm");
+  case cfDDMMmmm: // ("DDMM.mmm");
     mm = GetFormValueInteger(*wf, _T("prpLatitudeM"));
     ss = GetFormValueInteger(*wf, _T("prpLatitudemmm"));
     num = dd + (mm + ss / 1000.0) / 60.0;
     break;
-  case 3: // ("DD.dddd");
+  case cfDDdddd: // ("DD.dddd");
     mm = GetFormValueInteger(*wf, _T("prpLatitudeDDDD"));
     num = dd + mm / 10000;
     break;
