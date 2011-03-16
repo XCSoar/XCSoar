@@ -80,6 +80,15 @@ KeyboardControl::get_button(TCHAR ch)
 
 }
 
+/**
+ * Move button to the specified left and top coordinates.
+ *
+ * The coordinates SHOULD BE in pixels of the screen (i.e. after scaling!)
+ *
+ * @param ch
+ * @param left    Number of pixels from the left (in screen pixels)
+ * @param top     Number of pixels from the top (in screen pixels)
+ */
 void
 KeyboardControl::move_button(TCHAR ch, int left, int top)
 {
@@ -88,6 +97,14 @@ KeyboardControl::move_button(TCHAR ch, int left, int top)
     kb->move(left, top);
 }
 
+/**
+ * Resizes the button to specified width and height values according to display pixels!
+ *
+ *
+ * @param ch
+ * @param width   Width measured in display pixels!
+ * @param height  Height measured in display pixels!
+ */
 void
 KeyboardControl::resize_button(TCHAR ch,
                                unsigned int width, unsigned int height)
@@ -104,6 +121,13 @@ KeyboardControl::resize_buttons()
     buttons[i].resize(button_width, button_height);
 }
 
+/**
+ * Inicialize the button_width and button_height values.
+ *
+ * button_width is computed as width of the whole keyboard / 10
+ * button_height is computed as height of the whole keyboard / 5
+ *
+ */
 void
 KeyboardControl::set_buttons_size()
 {
