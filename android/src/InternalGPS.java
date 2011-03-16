@@ -93,7 +93,6 @@ public class InternalGPS
                                              1000, 0, this);
       sensorManager.registerListener(this, accelerometer,
                                      sensorManager.SENSOR_DELAY_NORMAL);
-      setConnected(1); // waiting for fix
     } else
       setConnected(0); // not connected
   }
@@ -155,8 +154,11 @@ public class InternalGPS
                                         Bundle extras) {
     switch (status) {
     case LocationProvider.OUT_OF_SERVICE:
-    case LocationProvider.TEMPORARILY_UNAVAILABLE:
       setConnected(0); // not connected
+      break;
+
+    case LocationProvider.TEMPORARILY_UNAVAILABLE:
+      setConnected(1); // waiting for fix
       break;
 
     case LocationProvider.AVAILABLE:
