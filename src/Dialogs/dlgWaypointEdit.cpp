@@ -356,7 +356,7 @@ dlgWaypointEditShowModal(Waypoint &way_point)
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ?
-                  _T("IDR_XML_WAYPOINTEDIT") : _T("IDR_XML_WAYPOINTEDIT_L"));
+                  _T("IDR_XML_WAYPOINTEDIT_L") : _T("IDR_XML_WAYPOINTEDIT"));
   assert(wf != NULL);
 
   buttonName = ((WndButton *)wf->FindByName(_T("cmdName")));
