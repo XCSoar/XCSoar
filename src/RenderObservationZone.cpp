@@ -164,20 +164,12 @@ RenderObservationZone::Draw(Canvas &canvas, const Projection &projection,
   case ObservationZonePoint::BGAFIXEDCOURSE:
   case ObservationZonePoint::BGAENHANCEDOPTION: {
     const SectorZone &oz = (const SectorZone &)_oz;
-
     RasterPoint p_center = projection.GeoToScreen(oz.get_location());
-    if (layer != LAYER_ACTIVE) {
-      canvas.segment(p_center.x, p_center.y,
-                     projection.GeoToScreenDistance(oz.getRadius()),
-                     oz.getStartRadial() - projection.GetScreenAngle(),
-                     oz.getEndRadial() - projection.GetScreenAngle());
-      canvas.circle(p_center.x, p_center.y,
-                    projection.GeoToScreenDistance(fixed(500)));
-    } else {
-      RasterPoint p_start = projection.GeoToScreen(oz.get_SectorStart());
-      RasterPoint p_end = projection.GeoToScreen(oz.get_SectorEnd());
-      canvas.two_lines(p_start, p_center, p_end);
-    }
+    canvas.keyhole(p_center.x, p_center.y,
+                   projection.GeoToScreenDistance(fixed(500)),
+                   projection.GeoToScreenDistance(oz.getRadius()),
+                   oz.getStartRadial() - projection.GetScreenAngle(),
+                   oz.getEndRadial() - projection.GetScreenAngle());
 
     break;
   }
