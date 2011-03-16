@@ -50,13 +50,13 @@ UpdateButtons()
 
   assert(buttonName != NULL);
   _stprintf(text, _T("%s: %s"), _("Name"),
-            global_wpt->Name.size() ? global_wpt->Name.c_str() : _("(blank)"));
+            global_wpt->Name.empty() ? _("(blank)") : global_wpt->Name.c_str());
   buttonName->SetCaption(text);
 
   assert(buttonComment != NULL);
   _stprintf(text, _T("%s: %s"), _("Comment"),
-            global_wpt->Comment.size() ?
-            global_wpt->Comment.c_str() : _("(blank)"));
+            global_wpt->Comment.empty() ?
+            _("(blank)") : global_wpt->Comment.c_str());
   buttonComment->SetCaption(text);
 }
 
