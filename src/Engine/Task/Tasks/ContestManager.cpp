@@ -5,11 +5,9 @@
 
 ContestManager::ContestManager(const Contests _contest,
                                const unsigned &_handicap,
-                               ContestResult &_result,
                                const Trace& trace_full,
                                const Trace& trace_sprint):
   contest(_contest),
-  result(_result),
   trace_full(trace_full),
   trace_sprint(trace_sprint),
   olc_sprint(trace_sprint, _handicap),
@@ -99,6 +97,7 @@ void
 ContestManager::reset()
 {
   solution.clear();
+  result.reset();
   olc_sprint.reset();
   olc_fai.reset();
   olc_classic.reset();

@@ -43,7 +43,6 @@ CommonStats::reset()
   current_bugs = fixed_one;
   current_ballast = fixed_zero;
 
-  olc.reset();
   planned_route.clear();
 
   reset_task();

@@ -38,7 +38,7 @@ TaskManager::TaskManager(TaskEvents &te,
   task_abort(te, task_behaviour, m_glide_polar, wps),
   contest_manager(task_behaviour.contest, 
                   task_behaviour.contest_handicap,
-                  common_stats.olc, trace_full, trace_sprint),
+                  trace_full, trace_sprint),
   mode(MODE_NULL),
   active_task(NULL) {}
 

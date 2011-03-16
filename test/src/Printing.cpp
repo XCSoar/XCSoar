@@ -320,7 +320,11 @@ void PrintHelper::taskmanager_print(TaskManager& task, const AIRCRAFT_STATE &sta
   contestmanager_print(task.contest_manager);
 
   std::ofstream fs("results/res-stats-common.txt");
-  fs << task.common_stats;
+  const ContestResult& score = task.get_contest_result();
+  fs << "#   score " << score.score << "\n";
+  fs << "#   distance " << score.distance/fixed(1000) << " (km)\n";
+  fs << "#   speed " << score.speed*fixed(3.6) << " (kph)\n";
+  fs << "#   time " << score.time << " (sec)\n";
 }
 
 #include "Math/Earth.hpp"
@@ -408,17 +412,6 @@ std::ostream& operator<< (std::ostream& f,
 
 
 #include "Task/TaskStats/CommonStats.hpp"
-
-std::ostream& operator<< (std::ostream& f, 
-                          const CommonStats& ts)
-{
-  f << "#### Common Stats\n";
-  f << "# olc dist " << ts.olc.distance << " (m)\n";
-  f << "# olc time " << ts.olc.time << " (s)\n";
-  f << "# olc speed " << ts.olc.speed << " (m/s)\n";
-  return f;
-}
-
 
 std::ostream& operator<< (std::ostream& f, 
                           const ElementStat& es)

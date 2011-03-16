@@ -31,7 +31,6 @@ public:
    * 
    * @param _contest Contests that shall be used
    * @param _handicap Contest handicap factor
-   * @param _result ContestRules to write result to
    * @param trace_full Trace object reference
    * containing full flight history for scanning
    * @param trace_sprint Trace object reference
@@ -39,7 +38,6 @@ public:
    */
   ContestManager(const Contests _contest,
                  const unsigned &_handicap,
-                 ContestResult &_result,
                  const Trace &trace_full,
                  const Trace &trace_sprint);
 
@@ -74,9 +72,14 @@ public:
   gcc_pure
   const TracePointVector& get_contest_solution() const;
 
+  gcc_pure
+  const ContestResult& get_contest_result() const {
+    return result;
+  }
+
 private:
   Contests contest;
-  ContestResult &result;
+  ContestResult result;
 
   const Trace &trace_full;
   const Trace &trace_sprint;

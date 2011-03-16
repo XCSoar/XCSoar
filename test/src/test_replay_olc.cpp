@@ -217,7 +217,7 @@ test_replay(const Contests olc_type,
     distance_counts();
   }
   return compare_scores(official_score, 
-                        task_manager.get_common_stats().olc);
+                        task_manager.get_contest_result());
 }
 
 

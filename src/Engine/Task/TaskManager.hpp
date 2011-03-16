@@ -392,6 +392,15 @@ public:
   }
 
   /**
+   * Retrieve olc result
+   *
+   * @return Result for OLC
+   */
+  const ContestResult& get_contest_result() const {
+    return contest_manager.get_contest_result();
+  }
+
+  /**
    * Retrieve olc trace vector
    *
    * @param iov Vector of trace points reduced for OLC
