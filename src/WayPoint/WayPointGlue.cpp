@@ -229,9 +229,10 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
 }
 
 
-void
+bool
 WayPointGlue::SaveWaypoints(const Waypoints &way_points)
 {
+  bool result = false;
   LogStartUp(_T("SaveWaypoints"));
 
   // ### FIRST FILE ###
@@ -239,6 +240,7 @@ WayPointGlue::SaveWaypoints(const Waypoints &way_points)
     if (!wp_file0->Save(way_points)) {
       LogStartUp(_T("Waypoint file 1 can not be written"));
     } else {
+      result = true;
       LogStartUp(_T("Waypoint file 1 saved"));
     }
   }
@@ -248,6 +250,7 @@ WayPointGlue::SaveWaypoints(const Waypoints &way_points)
     if (!wp_file1->Save(way_points)) {
       LogStartUp(_T("Waypoint file 2 can not be written"));
     } else {
+      result = true;
       LogStartUp(_T("Waypoint file 2 saved"));
     }
   }
@@ -257,8 +260,11 @@ WayPointGlue::SaveWaypoints(const Waypoints &way_points)
     if (!wp_file1->Save(way_points)) {
       LogStartUp(_T("Waypoint file 3 can not be written"));
     } else {
+      result = true;
       LogStartUp(_T("Waypoint file 3 saved"));
     }
   }
+
+  return result;
 }
 
