@@ -41,12 +41,13 @@ public:
            const bool is_dhv=false);
 
   virtual void copy_solution(TracePointVector &vec) const;
+  virtual void reset();
+  virtual bool solve(bool exhaustive);
 
+protected:
   virtual fixed calc_distance() const;
   virtual fixed calc_score() const;
   virtual fixed calc_time() const;
-  virtual void reset();
-  virtual bool solve(bool exhaustive);
 
 private:
   XContestFree solver_free;

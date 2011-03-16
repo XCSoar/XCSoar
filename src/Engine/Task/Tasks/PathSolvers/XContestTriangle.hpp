@@ -34,16 +34,19 @@ class XContestTriangle:
   public OLCTriangle
 {
 public:
+  friend class XContest;
   XContestTriangle(const Trace &_trace,
                    const unsigned &_handicap,
                    const bool _is_dhv=false);
 
-  virtual fixed calc_score() const;
-  virtual fixed calc_distance() const;
-
   virtual bool solve(bool exhaustive);
 
   void swap_mode();
+
+protected:
+  virtual fixed calc_score() const;
+  virtual fixed calc_distance() const;
+
 private:
   const bool is_dhv;
 };

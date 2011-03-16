@@ -32,13 +32,14 @@ class XContestFree:
   public ContestDijkstra
 {
 public:
+  friend class XContest;
   XContestFree(const Trace &_trace,
                const unsigned &_handicap,
                const bool _is_dhv=false);
 
+protected:
   virtual fixed calc_score() const;
 
-protected:
   void set_weightings();
 private:
   const bool is_dhv;

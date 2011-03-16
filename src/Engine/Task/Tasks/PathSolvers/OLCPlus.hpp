@@ -37,10 +37,12 @@ public:
 
   virtual void copy_solution(TracePointVector &vec) const;
 
+protected:
   virtual fixed calc_distance() const;
   virtual fixed calc_score() const;
   virtual fixed calc_time() const;
 
+public:
   virtual void reset();
 
   bool solve(bool exhaustive);

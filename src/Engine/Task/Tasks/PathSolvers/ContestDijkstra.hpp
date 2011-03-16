@@ -55,10 +55,12 @@ public:
 
   virtual void copy_solution(TracePointVector &vec) const;
 
+protected:
   virtual fixed calc_distance() const;
   virtual fixed calc_score() const;
   virtual fixed calc_time() const;
 
+public:
   /**
    * Reset the optimiser as if never flown
    */
