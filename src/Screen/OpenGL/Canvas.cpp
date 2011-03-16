@@ -297,6 +297,13 @@ Canvas::annulus(int x, int y, unsigned small_radius, unsigned big_radius,
 }
 
 void
+Canvas::keyhole(int x, int y, unsigned small_radius, unsigned big_radius,
+                  Angle start, Angle end)
+{
+  ::KeyHole(*this, x, y, big_radius, start, end, small_radius);
+}
+
+void
 Canvas::draw_focus(RECT rc)
 {
   Pen pen(1, Color::DARK_GRAY);
