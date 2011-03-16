@@ -46,27 +46,17 @@ static WndButton *buttonComment = NULL;
 static void UpdateButtons(void) {
   TCHAR text[MAX_PATH];
   if (buttonName) {
-    if (!global_wpt->Name.size()) {
-      _stprintf(text,_T("%s: %s"), _("Name"),
-                _("(blank)"));
-    } else {
-      _stprintf(text,_T("%s: %s"), _("Name"),
-                global_wpt->Name.c_str());
-    }
+    _stprintf(text, _T("%s: %s"), _("Name"),
+              global_wpt->Name.size() ? global_wpt->Name.c_str() : _("(blank)"));
     buttonName->SetCaption(text);
   }
   if (buttonComment) {
-    if (!global_wpt->Comment.size()) {
-      _stprintf(text,_T("%s: %s"), _("Comment"),
-                _("(blank)"));
-    } else {
-      _stprintf(text,_T("%s: %s"), _("Comment"),
-                global_wpt->Comment.c_str());
-    }
+    _stprintf(text, _T("%s: %s"), _("Comment"),
+              global_wpt->Comment.size() ?
+              global_wpt->Comment.c_str() : _("(blank)"));
     buttonComment->SetCaption(text);
   }
 }
-
 
 static void
 OnNameClicked(gcc_unused WndButton &button)
