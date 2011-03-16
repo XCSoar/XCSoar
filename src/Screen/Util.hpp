@@ -44,4 +44,9 @@ Annulus(Canvas &canvas, long x, long y, int radius,
         Angle start, Angle end,
         int inner_radius);
 
+bool
+KeyHole(Canvas &canvas, long x, long y, int radius,
+        Angle start, Angle end,
+        int inner_radius);
+
 #endif

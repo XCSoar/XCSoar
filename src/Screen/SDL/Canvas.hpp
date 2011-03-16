@@ -326,6 +326,9 @@ public:
   void annulus(int x, int y, unsigned small_radius, unsigned big_radius,
                Angle start, Angle end);
 
+  void keyhole(int x, int y, unsigned small_radius, unsigned big_radius,
+               Angle start, Angle end);
+
   void draw_focus(RECT rc) {
     outline_rectangle(rc.left, rc.top, rc.right, rc.bottom,
                       Color::DARK_GRAY);

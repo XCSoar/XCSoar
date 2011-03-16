@@ -133,3 +133,31 @@ Annulus(Canvas &canvas, long x, long y, int radius,
 
   return true;
 }
+
+bool
+KeyHole(Canvas &canvas, long x, long y, int radius,
+        Angle start, Angle end, int inner_radius)
+{
+  // dont draw if out of view
+  RECT rc, bounds;
+  SetRect(&rc, 0, 0, canvas.get_width(), canvas.get_height());
+  SetRect(&bounds, x - radius, y - radius, x + radius, y + radius);
+  if (!IntersectRect(&bounds, &bounds, &rc))
+    return false;
+
+  const int istart = NATIVE_TO_INT(start.value_native());
+  const int iend = NATIVE_TO_INT(end.value_native());
+
+  int npoly = 0;
+  RasterPoint pt[66*2];
+
+  segment_poly(pt, x, y, radius, istart, iend, npoly);
+  segment_poly(pt, x, y, inner_radius, iend, istart, npoly);
+
+  assert(npoly <= 66*2);
+  if (npoly) {
+    canvas.polygon(pt, npoly);
+  }
+
+  return true;
+}
