@@ -48,9 +48,7 @@ GotoTask::getActiveTaskPoint() const
 bool 
 GotoTask::validTaskPoint(const int index_offset) const
 {
-  if (index_offset !=0) 
-    return false;
-  return (tp != NULL);
+  return (index_offset == 0 && tp != NULL);
 }
 
 
