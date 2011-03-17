@@ -31,6 +31,7 @@
 #define XCSOAR_OVERWRITING_RING_BUFFER_HPP
 
 #include <algorithm>
+#include <cassert>
 
 /**
  * A fixed-size ring buffer which deletes the oldest item when it
@@ -53,6 +54,9 @@ public:
     head = other.head;
     tail = other.tail;
 
+    assert(head < size);
+    assert(tail < size);
+
     if (head < tail)
       std::copy(other.data + head, other.data + tail, data + head);
     else if (head > tail) {
@@ -63,11 +67,16 @@ public:
 
 protected:
   static unsigned next(unsigned i) {
+    assert(i < size);
+
     return (i + 1) % size;
   }
 
 public:
   bool empty() const {
+    assert(head < size);
+    assert(tail < size);
+
     return head == tail;
   }
 
@@ -76,6 +85,8 @@ public:
   }
 
   const T &peek() const {
+    assert(!empty());
+
     return data[head];
   }
 
@@ -88,6 +99,8 @@ public:
   }
 
   void push(const T &value) {
+    assert(tail < size);
+
     data[tail] = value;
     tail = next(tail);
     if (tail == head)
