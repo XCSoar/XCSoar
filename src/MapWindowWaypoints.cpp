@@ -29,8 +29,10 @@ void
 MapWindow::DrawWaypoints(Canvas &canvas)
 {
   GlidePolar polar = get_glide_polar();
-  polar.set_mc(min(Calculated().common_stats.current_risk_mc,
-                   SettingsComputer().safety_mc));
+  if (SettingsComputer().route_planner.reach_polar_mode !=
+      RoutePlannerConfig::rpmTask)
+    polar.set_mc(min(Calculated().common_stats.current_risk_mc,
+                     SettingsComputer().safety_mc));
 
   way_point_renderer.render(canvas, label_block,
                             render_projection, SettingsMap(),
