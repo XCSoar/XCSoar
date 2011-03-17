@@ -42,7 +42,7 @@ static const UnitStoreItem Presets[] =
     unKiloMeterPerHour
   } },
   { _T("British"), {
-    unKiloMeter,
+    unNauticalMiles,
     unFeet,
     unGradCelcius,
     unKnots,
@@ -60,13 +60,13 @@ static const UnitStoreItem Presets[] =
     unStatuteMilesPerHour
   } },
   { _T("Australian"), {
-    unNauticalMiles,
-    unMeter,
+    unKiloMeter,
+    unFeet,
     unGradCelcius,
     unKnots,
     unKnots,
     unKnots,
-    unKnots
+    unKiloMeterPerHour
   } }
 };
 
