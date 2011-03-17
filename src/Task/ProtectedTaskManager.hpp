@@ -267,10 +267,9 @@ public:
                    const short h_ceiling);
   void route_update_polar(const SpeedVector& wind);
 
-  bool intersection(RasterTerrain* terrain,
-                    const AGeoPoint& origin,
+  bool intersection(const AGeoPoint& origin,
                     const AGeoPoint& destination,
-                    GeoPoint& intx, const bool safety=false) const;
+                    GeoPoint& intx) const;
 
   void solve_reach(const AGeoPoint& origin);
 

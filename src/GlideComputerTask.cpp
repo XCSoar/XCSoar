@@ -143,7 +143,7 @@ GlideComputerTask::ProcessIdle()
     if (sol.defined()) {
       const AGeoPoint dest(v.end_point(start), sol.MinHeight);
       m_task.route_solve(dest, start, h_ceiling);
-      SetCalculated().TerrainWarning = m_task.intersection(terrain, start, dest,
+      SetCalculated().TerrainWarning = m_task.intersection(start, dest,
                                                            SetCalculated().TerrainWarningLocation);
       return;
     } else {

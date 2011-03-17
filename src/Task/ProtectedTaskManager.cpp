@@ -372,23 +372,11 @@ ProtectedTaskManager::route_update_polar(const SpeedVector& wind)
 }
 
 bool
-ProtectedTaskManager::intersection(RasterTerrain* terrain,
-                                   const AGeoPoint& origin,
+ProtectedTaskManager::intersection(const AGeoPoint& origin,
                                    const AGeoPoint& destination,
-                                   GeoPoint& intx, const bool safety) const
+                                   GeoPoint& intx) const
 {
-  Lease lease(*this);
-  RasterTerrain::ExclusiveLease rlease(*terrain);
-
-  const RoutePolars& rpolars = safety? 
-    lease->get_route_polars_safety() :
-    lease->get_route_polars();
-
-  TaskProjection proj;
-  proj.reset(origin);
-  proj.update_fast();
-  
-  return rpolars.intersection(origin, destination, &terrain->map, proj, intx);
+  return m_route.intersection(origin, destination, intx);
 }
 
 bool

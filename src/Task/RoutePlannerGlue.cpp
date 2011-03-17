@@ -78,3 +78,12 @@ RoutePlannerGlue::accept_in_range(const GeoBounds& bounds,
 {
   m_planner.accept_in_range(bounds, visitor);
 }
+
+bool
+RoutePlannerGlue::intersection(const AGeoPoint& origin,
+                               const AGeoPoint& destination,
+                               GeoPoint& intx) const
+{
+  RasterTerrain::ExclusiveLease lease(*terrain);
+  return m_planner.intersection(origin, destination, intx);
+}
