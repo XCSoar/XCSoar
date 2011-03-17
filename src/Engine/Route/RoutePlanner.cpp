@@ -33,7 +33,8 @@ RoutePlanner::RoutePlanner(const GlidePolar& polar,
   rpolars_route(polar, wind),
   rpolars_reach(polar, wind),
   terrain(NULL),
-  m_planner()
+  m_planner(),
+  m_reach_polar_mode(RoutePlannerConfig::rpmTask)
 #ifndef PLANNER_SET
   , m_unique(50000)
 #endif
@@ -79,6 +80,8 @@ RoutePlanner::solve(const AGeoPoint& origin,
                            h_ceiling);
   rpolars_reach.set_config(config, std::max(destination.altitude, origin.altitude),
                            h_ceiling);
+
+  m_reach_polar_mode = config.reach_polar_mode;
 
   {
     const AFlatGeoPoint s_origin(task_projection.project(origin), origin.altitude);
@@ -448,7 +451,15 @@ RoutePlanner::update_polar(const GlidePolar& polar,
                            const SpeedVector& wind)
 {
   rpolars_route.initialise(polar, wind);
-  rpolars_reach.initialise(safety_polar, wind);
+  switch (m_reach_polar_mode) {
+  case RoutePlannerConfig::rpmTask:
+    rpolars_reach = rpolars_route;
+    // make copy to avoid waste
+    break;
+  case RoutePlannerConfig::rpmSafety:
+    rpolars_reach.initialise(safety_polar, wind);
+    break;
+  }
 }
 
 /*

@@ -41,7 +41,8 @@ struct RoutePlannerConfig {
     allow_climb(true),
     use_ceiling(false),
     safety_height_terrain(150.0),
-    turning_reach(true) {}
+    turning_reach(true),
+    reach_polar_mode(rpmSafety) {}
 
   enum Mode {
     rpNone=0,
@@ -49,6 +50,12 @@ struct RoutePlannerConfig {
     rpAirspace,
     rpBoth
   };
+
+  enum PolarMode {
+    rpmTask=0,
+    rpmSafety
+  };
+
   Mode mode;
   bool allow_climb;
   bool use_ceiling;
@@ -60,6 +67,9 @@ struct RoutePlannerConfig {
   /** Whether to allow turns around obstacles in reach calculations, or just
       straight line */
   bool turning_reach;
+
+  /** Whether reach/abort calculations will use the task or safety polar */
+  PolarMode reach_polar_mode;
 
   bool terrain_enabled() const {
     return (mode== rpTerrain) || (mode== rpBoth);

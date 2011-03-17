@@ -331,6 +331,8 @@ private:
 
   ReachFan reach;
 
+  RoutePlannerConfig::PolarMode m_reach_polar_mode;
+
   /**
    * Check a second category of obstacle clearance.  This allows compound
    * obstacle categories by subclasses.
