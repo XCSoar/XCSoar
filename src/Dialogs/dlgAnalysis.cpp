@@ -241,6 +241,7 @@ Update(void)
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
               _("On-Line Contest"));
     wf->SetCaption(sTmp);
+    SetCalcCaption(_T(""));
 
     if (!protected_task_manager)
       break;
@@ -267,7 +268,6 @@ Update(void)
               (int)Units::ToUserTaskSpeed(result_olc.speed),
               Units::GetTaskSpeedName());
     wInfo->SetCaption(sTmp);
-    SetCalcCaption(_T(""));
     }
     break;
 
