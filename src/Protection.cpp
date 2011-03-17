@@ -48,7 +48,6 @@ void TriggerGPSUpdate()
   if (calculation_thread == NULL)
     return;
 
-  calculation_thread->trigger_gps();
   calculation_thread->trigger_data();
 }
 

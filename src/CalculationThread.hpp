@@ -35,9 +35,6 @@ class GlideComputer;
  * Data transfer is handled by a blackboard system.
  */
 class CalculationThread : public WorkerThread {
-  /** The gps_trigger is used only when new GPS data is available */
-  Trigger gps_trigger;
-
   /** Pointer to the GlideComputer that should be used */
   GlideComputer &glide_computer;
 
@@ -47,11 +44,6 @@ public:
   /** Triggers the data_trigger */
   void trigger_data() {
     trigger();
-  }
-
-  /** Triggers the gps_trigger */
-  void trigger_gps() {
-    gps_trigger.trigger();
   }
 
 protected:
