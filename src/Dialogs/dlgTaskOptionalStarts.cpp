@@ -66,7 +66,7 @@ OnOptionalStartPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListInd
 
   if (DrawListIndex == wOptionalStartPoints->GetLength() - 1) {
     canvas.text(rc.left + Layout::FastScale(2),
-                rc.top + Layout::FastScale(2), _("(add alternate start)"));
+                rc.top + Layout::FastScale(2), _("(Add Alternate Start)"));
   } else {
 
     TCHAR tmp[MAX_PATH];

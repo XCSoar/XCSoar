@@ -56,7 +56,7 @@
         <DataField DataType="double" DisplayFormat="%.0f/8" EditFormat="%.0f" Min="0" Max="8" Step="1"/>
       </Edit>
     
-      <Edit Name="prpCalibrationAirSpeed" Caption="IAS cal." X="2" Width="235" Height="22" CaptionWidth="150" Help="Calibration factor applied to measured airspeed to obtain indicated airspeed.">
+      <Edit Name="prpCalibrationAirSpeed" Caption="ASI cal." X="2" Width="235" Height="22" CaptionWidth="150" Help="Calibration factor applied to measured airspeed to obtain indicated airspeed.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="0" Max="200" Step="1"/>
       </Edit>
     

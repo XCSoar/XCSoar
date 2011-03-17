@@ -28,22 +28,22 @@ event=TaskTransition ready
 mode=default
 type=gce
 data=GPS_CONNECTION_WAIT
-event=StatusMessage Waiting for GPS Connection
+event=StatusMessage Waiting for GPS connection
 
 mode=default
 type=gce
 data=COMMPORT_RESTART
-event=StatusMessage Restarting Comm Ports
+event=StatusMessage Restarting comm. ports
 
 mode=default
 type=gce
 data=GPS_FIX_WAIT
-event=StatusMessage Waiting for GPS Fix
+event=StatusMessage Waiting for GPS fix
 
 mode=default
 type=gce
 data=STARTUP_SIMULATOR
-event=StatusMessage Simulation\r\nNothing is real!
+event=StatusMessage Simulation\r\nnothing is real!
 event=TaskLoad persist/Default.tsk
 
 mode=default

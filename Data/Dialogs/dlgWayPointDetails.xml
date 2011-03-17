@@ -16,21 +16,21 @@
     <Edit Name="prpSunset" Caption="Sunset" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
     <Edit Name="prpDistance" Caption="Distance" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
     <Edit Name="prpBearing" Caption="Bearing" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
-    <Edit Name="prpMc0" Caption="Alt diff MC 0" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
-    <Edit Name="prpMc1" Caption="Alt diff MC safety" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
-    <Edit Name="prpMc2" Caption="Alt diff MC current" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+    <Edit Name="prpMc0" Caption="Alt. diff. MC 0" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+    <Edit Name="prpMc1" Caption="Alt. diff. MC safety" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+    <Edit Name="prpMc2" Caption="Alt. diff. MC current" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
   </Panel>
 
   <List Name="frmDetails" X="0" Y="0" Height="-39" ItemHeight="18"/>
 
   <Panel Name="frmCommands" X="0" Y="0" Height="-39" Visible="0">
-    <Button Name="cmdReplace" Caption="Replace in task" X="40" Y="10" Width="-40" Height="30" />
-    <Button Name="cmdInserInTask" Caption="Insert in task" X="40" Width="-40" Height="30" />
-    <Button Name="cmdAppendInTask" Caption="Append to task" X="40" Width="-40" Height="30" />
-    <Button Name="cmdRemoveFromTask" Caption="Remove from task" X="40" Width="-40" Height="30" />
-    <Button Name="cmdGotoAndClearTask" Caption="GoTo and clear task" X="40" Width="-40" Height="30" />
-    <Button Name="cmdNewHome" Caption="Set as new home" X="40" Width="-40" Height="30" />
-    <Button Name="cmdActivatePan" Caption="Pan to waypoint" X="40" Width="-40" Height="30" />
+    <Button Name="cmdReplace" Caption="Replace In Task" X="40" Y="10" Width="-40" Height="30" />
+    <Button Name="cmdInserInTask" Caption="Insert In Task" X="40" Width="-40" Height="30" />
+    <Button Name="cmdAppendInTask" Caption="Append To Task" X="40" Width="-40" Height="30" />
+    <Button Name="cmdRemoveFromTask" Caption="Remove From Task" X="40" Width="-40" Height="30" />
+    <Button Name="cmdGotoAndClearTask" Caption="GoTo And Clear Task" X="40" Width="-40" Height="30" />
+    <Button Name="cmdNewHome" Caption="Set As New Home" X="40" Width="-40" Height="30" />
+    <Button Name="cmdActivatePan" Caption="Pan To Waypoint" X="40" Width="-40" Height="30" />
   </Panel>
 
   <Canvas Name="frmImage" X="0" Y="0" Height="-32" Visible="0" Border="1"/>

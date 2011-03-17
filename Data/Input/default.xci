@@ -61,7 +61,7 @@ event=TaskTransition ready
 #mode=default
 #type=ne
 #data=DOWN_IN_SC
-#event=StatusMessage SC SWITCH
+#event=StatusMessage SC switch
 #
 #mode=default
 #type=ne
@@ -71,17 +71,17 @@ event=TaskTransition ready
 #mode=default
 #type=ne
 #data=DOWN_IN_AUX
-#event=StatusMessage AUX SWITCH
+#event=StatusMessage Aux. switch
 #
 #mode=default
 #type=ne
 #data=DOWN_IN_ACK
-#event=StatusMessage ACKNOWLEDGE
+#event=StatusMessage Acknowledge
 #
 #mode=default
 #type=ne
 #data=DOWN_IN_REP
-#event=StatusMessage REPEAT
+#event=StatusMessage Repeat
 #
 #mode=default
 #type=ne
@@ -91,19 +91,19 @@ event=TaskTransition ready
 #mode=default
 #type=ne
 #data=DOWN_IN_USERSWUP
-#event=StatusMessage USER SWITCH UP
+#event=StatusMessage User switch up
 #
 #
 #mode=default
 #type=ne
 #data=DOWN_IN_USERSWMIDDLE
-#event=StatusMessage USER SWITCH MIDDLE
+#event=StatusMessage User switch middle
 #
 #
 #mode=default
 #type=ne
 #data=DOWN_IN_USERSWDOWN
-#event=StatusMessage USER SWITCH DOWN
+#event=StatusMessage User switch down
 #
 
 # -------------------
@@ -112,22 +112,22 @@ event=TaskTransition ready
 mode=default
 type=gce
 data=GPS_CONNECTION_WAIT
-event=StatusMessage Waiting for GPS Connection
+event=StatusMessage Waiting for GPS connection
 
 mode=default
 type=gce
 data=COMMPORT_RESTART
-event=StatusMessage Restarting Comm Ports
+event=StatusMessage Restarting comm. ports
 
 mode=default
 type=gce
 data=GPS_FIX_WAIT
-event=StatusMessage Waiting for GPS Fix
+event=StatusMessage Waiting for GPS fix
 
 mode=default
 type=gce
 data=STARTUP_SIMULATOR
-event=StatusMessage Simulation\r\nNothing is real!
+event=StatusMessage Simulation\r\nnothing is real!
 event=TaskLoad Default.tsk
 
 mode=default
@@ -151,17 +151,17 @@ event=AutoLogger stop
 mode=default
 type=gce
 data=FLIGHTMODE_FINALGLIDE_ABOVE
-event=StatusMessage Above Final Glide
+event=StatusMessage Above final glide
 
 mode=default
 type=gce
 data=FLIGHTMODE_FINALGLIDE_BELOW
-event=StatusMessage Below Final Glide
+event=StatusMessage Below final glide
 
 mode=default
 type=gce
 data=FLIGHTMODE_FINALGLIDE_TERRAIN
-event=StatusMessage Final Glide Through Terrain
+event=StatusMessage Final glide through terrain
 
 mode=default
 type=gce
