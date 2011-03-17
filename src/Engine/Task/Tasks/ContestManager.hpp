@@ -91,14 +91,18 @@ private:
     if (solution_index >= 0)
       return solution_index;
 
+    // Search for best solution by score
     fixed best = fixed_zero;
     int i_best = 0;
     for (int i = 0; i < 3; ++i) {
       if (result[i].defined() && (result[i].score > best)) {
+        // Better scored solution found
         i_best = i;
         best = result[i].score;
       }
     }
+
+    // Return index to the best solution
     return i_best;
   }
 
