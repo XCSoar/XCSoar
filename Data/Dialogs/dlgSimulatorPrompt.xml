@@ -5,5 +5,7 @@
   <SymbolButton Name="cmdFly" Caption="Fly" X="8" Y="-45" Width="112" Height="30" OnClick="OnFlyClicked"/>
   <SymbolButton Name="cmdSimulator" Caption="Simulator" X="120" Y="-45" Width="112" Height="30" OnClick="OnSimulatorClicked"/>
 
+  <Button Name="cmdQuit" Caption="Quit" X="-75" Y="1" Width="-1" Height="30"/>
+
   <Canvas Name="frmLogo" X="0" Y="0" Height="-70" OnPaint="OnLogoPaint"/>
 </Form>

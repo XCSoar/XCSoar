@@ -61,6 +61,12 @@ OnFlyClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrFly);
 }
 
+static void
+OnQuitClicked(gcc_unused WndButton &button)
+{
+  wf->SetModalResult(mrCancel);
+}
+
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnLogoPaint),
   DeclareCallBackEntry(NULL)
@@ -87,6 +93,10 @@ dlgSimulatorPromptShowModal()
   wb = ((WndButton *)wf->FindByName(_T("cmdFly")));
   assert(wb != NULL);
   wb->SetOnClickNotify(OnFlyClicked);
+
+  wb = ((WndButton *)wf->FindByName(_T("cmdQuit")));
+  assert(wb != NULL);
+  wb->SetOnClickNotify(OnQuitClicked);
 
   int result = wf->ShowModal();
 
