@@ -395,25 +395,16 @@ append_to_task(const Waypoint &wp)
 static task_edit_result
 goto_and_clear_task(const Waypoint &wp)
 {
-  std::auto_ptr<OrderedTask> task(protected_task_manager->task_blank());
-
-  const AbstractTaskFactory &factory = task->get_factory();
-  StartPoint *sp = (StartPoint *)factory.createStart(wp);
-  FinishPoint *fp = (FinishPoint *)factory.createFinish(wp);
-  bool success = task->append(*sp);
-  success &= task->append(*fp);
-  delete sp;
-  delete fp;
-
-  if (!success)
-    return UNMODIFIED;
-
-  if (!task->check_task())
+  if (protected_task_manager == NULL)
     return INVALID;
 
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  task_manager->commit(*task);
-  task_manager->reset();
+  protected_task_manager->do_goto(wp);
+  TaskEvents task_events;
+  GlidePolar glide_polar(protected_task_manager->get_glide_polar());
+  const OrderedTask blank(task_events,
+                          XCSoarInterface::SettingsComputer(),
+                          glide_polar);
+  protected_task_manager->task_commit(blank);
 
   return SUCCESS;
 }
