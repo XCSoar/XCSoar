@@ -58,6 +58,43 @@ BrokenDateTime::FromUnixTimeUTC(int64_t _t)
   return ToBrokenDateTime(tm);
 }
 
+#ifdef ANDROID
+#include <stdlib.h>
+static time_t
+timegm(struct tm *tm)
+{
+  /* Android's Bionic C library doesn't have the GNU extension
+     timegm(); this is the fallback implementation suggested by the
+     timegm() manpage */
+  time_t ret;
+  char *tz;
+
+  tz = getenv("TZ");
+  setenv("TZ", "", 1);
+  tzset();
+  ret = mktime(tm);
+  if (tz)
+    setenv("TZ", tz, 1);
+  else
+    unsetenv("TZ");
+  tzset();
+  return ret;
+}
+#endif
+
+int64_t
+BrokenDateTime::ToUnixTimeUTC() const
+{
+  struct tm tm;
+  tm.tm_year = year - 1900;
+  tm.tm_mon = month - 1;
+  tm.tm_mday = day;
+  tm.tm_hour = hour;
+  tm.tm_min = minute;
+  tm.tm_sec = second;
+  return ::timegm(&tm);
+}
+
 #else /* !HAVE_POSIX */
 
 static const BrokenDateTime
@@ -75,6 +112,41 @@ ToBrokenDateTime(const SYSTEMTIME st)
   dt.second = st.wSecond;
 
   return dt;
+}
+
+static const BrokenDateTime
+ToBrokenDateTime(const FILETIME &ft)
+{
+  SYSTEMTIME st;
+  FileTimeToSystemTime(&ft, &st);
+  return ToBrokenDateTime(st);
+}
+
+static const SYSTEMTIME
+ToSystemTime(const BrokenDateTime &dt)
+{
+  SYSTEMTIME st;
+
+  st.wYear = dt.year;
+  st.wMonth = dt.month;
+  st.wDay = dt.day;
+  st.wDayOfWeek = dt.day_of_week;
+
+  st.wHour = dt.hour;
+  st.wMinute = dt.minute;
+  st.wSecond = dt.second;
+  st.wMilliseconds = 0;
+
+  return st;
+}
+
+static const FILETIME
+ToFileTime(const BrokenDateTime &dt)
+{
+  SYSTEMTIME st = ToSystemTime(dt);
+  FILETIME ft;
+  SystemTimeToFileTime(&st, &ft);
+  return ft;
 }
 
 #endif /* !HAVE_POSIX */
@@ -108,4 +180,21 @@ BrokenDateTime::NowLocal()
 
   return ToBrokenDateTime(st);
 #endif /* !HAVE_POSIX */
+}
+
+BrokenDateTime
+BrokenDateTime::operator+(int seconds) const
+{
+#ifdef HAVE_POSIX
+  return FromUnixTimeUTC(ToUnixTimeUTC() + seconds);
+#else
+  FILETIME ft = ToFileTime(*this);
+  ULARGE_INTEGER uli;
+  uli.u.HighPart = ft.dwHighDateTime;
+  uli.u.LowPart = ft.dwLowDateTime;
+  uli.QuadPart += (LONGLONG)seconds * 10000000;
+  ft.dwHighDateTime = uli.u.HighPart;
+  ft.dwLowDateTime = uli.u.LowPart;
+  return ToBrokenDateTime(ft);
+#endif
 }

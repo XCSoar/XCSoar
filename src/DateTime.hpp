@@ -139,6 +139,9 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    */
   gcc_const
   static BrokenDateTime FromUnixTimeUTC(int64_t t);
+
+  gcc_pure
+  int64_t ToUnixTimeUTC() const;
 #endif
 
   /**
@@ -150,6 +153,19 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * Returns the current system date and time, in the current time zone.
    */
   static const BrokenDateTime NowLocal();
+
+  /**
+   * Returns a BrokenDateTime that has the specified number of seconds
+   * added to it.
+   *
+   * @param seconds the number of seconds to add; may be negative
+   */
+  gcc_pure
+  BrokenDateTime operator+(int seconds) const;
+
+  BrokenDateTime operator-(int seconds) const {
+    return *this + (-seconds);
+  }
 };
 
 #endif
