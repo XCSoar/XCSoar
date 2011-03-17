@@ -53,6 +53,7 @@ TEST_NAMES = \
 	test_waypoints \
 	test_pressure \
 	test_task \
+	TestOverwritingRingBuffer \
 	TestMathTables \
 	TestAngle TestUnits TestEarth TestSunEphemeris \
 	TestValidity \
@@ -65,6 +66,15 @@ TEST_NAMES = \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
+
+TEST_TEST_OVERWRITING_RING_BUFFER_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestOverwritingRingBuffer.cpp
+TEST_TEST_OVERWRITING_RING_BUFFER_OBJS = $(call SRC_TO_OBJ,$(TEST_TEST_OVERWRITING_RING_BUFFER_SOURCES))
+TEST_TEST_OVERWRITING_RING_BUFFER_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestOverwritingRingBuffer$(TARGET_EXEEXT): $(TEST_TEST_OVERWRITING_RING_BUFFER_OBJS) $(TEST_TEST_OVERWRITING_RING_BUFFER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_TROUTE_SOURCES = \
 	$(SRC)/Engine/Util/DataNodeXML.cpp \
