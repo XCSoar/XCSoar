@@ -24,7 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_SIMULATOR_PROMPT_HPP
 #define XCSOAR_SIMULATOR_PROMPT_HPP
 
-bool
+enum SimulatorPromptResult {
+  SPR_QUIT,
+  SPR_FLY,
+  SPR_SIMULATOR,
+};
+
+SimulatorPromptResult
 dlgSimulatorPromptShowModal();
 
 #endif
