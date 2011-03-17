@@ -764,3 +764,44 @@ InfoBoxContentTaskAASpeedMin::Update(InfoBoxWindow &infobox)
   // Set Unit
   infobox.SetValueUnit(Units::Current.TaskSpeedUnit);
 }
+
+void
+InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxWindow &infobox)
+{
+  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const fixed maxheight = fixed(protected_task_manager->
+                                get_ordered_task_behaviour().start_max_height);
+
+  if (!task_stats.task_valid || !positive(maxheight)
+      || !protected_task_manager
+      || !positive(common_stats.TimeUnderStartMaxHeight)) {
+    infobox.SetInvalid();
+    return;
+  }
+  TCHAR tmp[32];
+  const fixed deltatime = XCSoarInterface::Basic().Time -
+      common_stats.TimeUnderStartMaxHeight;
+  int dd = (int)deltatime % (3600 * 24);
+  int hours = (dd / 3600);
+  int mins = (dd / 60 - hours * 60);
+  int seconds = (dd - mins * 60 - hours * 3600);
+  hours = hours % 24;
+
+  if (hours > 0) { // hh:mm, ss
+    // Set Value
+    _stprintf(tmp, _T("%02d:%02d"), hours, mins);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    _stprintf(tmp, _T("%02d"), seconds);
+    infobox.SetComment(tmp);
+  } else { // mm:ss
+    // Set Value
+    _stprintf(tmp, _T("%02d:%02d"), mins, seconds);
+    infobox.SetValue(tmp);
+
+    // Set Comment
+    infobox.SetComment(_T("Time Below"));
+  }
+}

@@ -147,6 +147,21 @@ TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
         task_ordered.get_stats().total.TimeRemaining;
     common_stats.task_time_elapsed =
         task_ordered.get_stats().total.TimeElapsed;
+
+    const fixed start_max_height =
+        fixed(task_ordered.get_ordered_task_behaviour().start_max_height);
+    if (positive(start_max_height) && state.Flying) {
+      if (!positive(common_stats.TimeUnderStartMaxHeight) &&
+          state.NavAltitude < start_max_height) {
+        common_stats.TimeUnderStartMaxHeight = state.Time;
+      }
+      if (state.NavAltitude > start_max_height) {
+          common_stats.TimeUnderStartMaxHeight = -fixed_one;
+      }
+    } else {
+      common_stats.TimeUnderStartMaxHeight = -fixed_one;
+    }
+
   } else {
     common_stats.reset_task();
   }

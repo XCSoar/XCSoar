@@ -50,6 +50,8 @@ public:
   bool landable_reachable;
   /** Whether the task is started (aliases ordered task) */
   bool task_started;
+  /** time UTC ship descended through max task start height */
+  fixed TimeUnderStartMaxHeight;
   /** Whether the task is finished (aliases ordered task) */
   bool task_finished;
   /** Time (s) until assigned minimum time is achieved */
