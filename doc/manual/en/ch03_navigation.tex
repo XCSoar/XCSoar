@@ -172,11 +172,9 @@ abbreviation schemes. \config{labels}
 XCSoar continually calculates which landing points are within gliding
 range using the current wind estimate.  The estimated arrival altitude
 {\em above the arrival safety height} of reachable landable points is
-displayed next to the waypoint.  This arrival altitude is calculated on a
-minimum MacCready setting \todonum{explain somewhere else in detail: the MC
-value scaled according to your altitude compared with the cloud base altitude
-}.
-
+displayed next to the waypoint.  This arrival altitude is calculated
+with the glider performance and MacCready setting configurable as
+either that of the task\config{reachpolar}, or at a safety MacCready value.
 
 \section{Active task}
 
@@ -376,6 +374,16 @@ landable waypoints on the map.
 Note that task calculations are otherwise unaffected by reach
 calculations --- for example, heights required as shown in the final
 glide bar or task data as displayed in infoboxes do not take reach into account.
+
+Furthermore, the reach calculations are used for footprint, landable
+waypoint arrival heights, abort mode and the alternates dialog.  The glider
+performance and MacCready setting used in these calculations are configurable\config{reachpolar}:
+\begin{description}
+\item[Task] The MC value is that used in the task.
+\item[Safety MC] A configurable, typically low MC value is set by the user to set
+ performance near, but slightly degraded to, best glide performance.
+
+\end{description}
 
 \section{Status dialog}\label{sec:aircr-stat-dial}
 
