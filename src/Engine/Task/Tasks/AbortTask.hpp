@@ -134,19 +134,6 @@ public:
   bool update_sample(const AIRCRAFT_STATE &state_now, 
                      const bool full_update);
 
-
-  /**
-   * Update internal states when aircraft state advances.
-   * (for when system is inactive, to determine landable reachability)
-   *
-   * \todo
-   * - should use find_nearest_iterative for speed
-   *
-   * @param state_now Aircraft state at this time step
-   *
-   */
-  void update_offline(const AIRCRAFT_STATE &state_now);
-
   /**
    * Determine if any landable reachable waypoints were found in the
    * last update.

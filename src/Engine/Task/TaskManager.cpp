@@ -157,14 +157,6 @@ TaskManager::update_common_stats_waypoints(const AIRCRAFT_STATE &state)
 {
   common_stats.vector_home = task_abort.get_vector_home(state);
 
-  // if during this update, no landables found, try abort task
-
-  /* not required now using AlternateTask
-  if (active_task && (active_task != &task_abort))
-    // update abort task offline
-    task_abort.update_offline(state);
-  */
-
   common_stats.landable_reachable = task_abort.has_landable_reachable();
 
   common_stats.next_solution.reset();

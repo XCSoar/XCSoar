@@ -304,30 +304,6 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   return false; // nothing to do
 }
 
-void 
-AbortTask::update_offline(const AIRCRAFT_STATE &state)
-{
-  update_polar(state.wind);
-  m_landable_reachable = false;
-
-  AlternateVector approx_waypoints;
-
-  WaypointVisitorVector wvv(approx_waypoints);
-  waypoints.visit_within_radius(state.Location, abort_range(state), wvv);
-
-  for (AlternateVector::iterator v = approx_waypoints.begin();
-       v != approx_waypoints.end(); ++v) {
-
-    UnorderedTaskPoint t(v->first, task_behaviour);
-    const GlideResult result =
-        TaskSolution::glide_solution_remaining(t, state, polar_safety);
-
-    if (is_reachable(result, true)) {
-      m_landable_reachable = true;
-      return;
-    }
-  }
-}
 
 bool 
 AbortTask::check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&)
