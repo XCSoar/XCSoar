@@ -463,6 +463,9 @@ Profile::Use()
   Get(szProfileTurningReach,
       settings_computer.route_planner.turning_reach);
 
+  if (Get(szProfileReachPolarMode, Temp))
+    settings_computer.route_planner.reach_polar_mode = (RoutePlannerConfig::PolarMode)Temp;
+
   if (Get(szProfileRiskGamma, Temp))
     settings_computer.risk_gamma = fixed(Temp) / 10;
 

@@ -334,6 +334,11 @@
        <DataField DataType="enum" />
      </Edit>
 
+      <Edit Name="prpReachPolarMode" Caption="Reach polar" X="2" Width="-2" Height="22" CaptionWidth="150"
+       Help="This determines the glide performance used in reach, landable arrival, abort and alternate calculations:&#10;[Task] Uses task glide polar&#10;[Safety MC] Uses safety MacCready value">
+       <DataField DataType="enum" />
+     </Edit>
+
       <Edit Name="prpTurningReach" Caption="Turning reach" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="When enabled, the glide terrain range is calculated with turning around terrain obstacles.  If disabled, the range is from straight line paths from the glider.">
         <DataField DataType="boolean"/>

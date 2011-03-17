@@ -72,6 +72,16 @@ RouteConfigPanel::Init(WndForm *_wf)
 
   LoadFormProperty(*wf, _T("prpTurningReach"),
                    settings_computer.route_planner.turning_reach);
+
+  wp = (WndProperty*)wf->FindByName(_T("prpReachPolarMode"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Task"));
+    dfe->addEnumText(_("Safety MC"));
+    dfe->Set(settings_computer.route_planner.reach_polar_mode);
+    wp->RefreshDisplay();
+  }
 }
 
 
@@ -89,6 +99,18 @@ RouteConfigPanel::Save()
       settings_computer.route_planner.mode = (RoutePlannerConfig::Mode)df.GetAsInteger();
       Profile::Set(szProfileRoutePlannerMode,
                    (unsigned)settings_computer.route_planner.mode);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpReachPolarMode"));
+  if (wp) {
+    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
+    if ((int)settings_computer.route_planner.reach_polar_mode != df.GetAsInteger()) {
+      settings_computer.route_planner.reach_polar_mode =
+        (RoutePlannerConfig::PolarMode)df.GetAsInteger();
+      Profile::Set(szProfileReachPolarMode,
+                   (unsigned)settings_computer.route_planner.reach_polar_mode);
       changed = true;
     }
   }
