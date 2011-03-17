@@ -132,7 +132,7 @@ public:
 
   void
   FormatLabel(TCHAR *buffer, const Waypoint &way_point,
-              int &arrival_height_glide, int &arrival_height_terrain,
+              const int arrival_height_glide, const int arrival_height_terrain,
               bool show_negative_arrival_height_glide)
   {
     FormatTitle(buffer, way_point);
@@ -148,12 +148,14 @@ public:
       return;
 
     size_t length = _tcslen(buffer);
+    int uah_glide = (int)Units::ToUserAltitude(fixed(arrival_height_glide));
+    int uah_terrain = (int)Units::ToUserAltitude(fixed(arrival_height_terrain));
 
     if (settings_map.WaypointArrivalHeightDisplay == WP_ARRIVAL_HEIGHT_TERRAIN) {
       if (arrival_height_terrain > 0) {
         if (length > 0)
           buffer[length++] = _T(':');
-        _stprintf(buffer + length, _T("%d%s"), arrival_height_terrain, sAltUnit);
+        _stprintf(buffer + length, _T("%d%s"), uah_terrain, sAltUnit);
       }
       return;
     }
@@ -165,13 +167,13 @@ public:
         arrival_height_glide > 0 && arrival_height_terrain > 0) {
       int altd = abs(arrival_height_glide - arrival_height_terrain);
       if (altd >= 10 && (altd * 100) / arrival_height_glide > 5) {
-        _stprintf(buffer + length, _T("%d/%d%s"), arrival_height_glide,
-                  arrival_height_terrain, sAltUnit);
+        _stprintf(buffer + length, _T("%d/%d%s"), uah_glide,
+                  uah_terrain, sAltUnit);
         return;
       }
     }
 
-    _stprintf(buffer + length, _T("%d%s"), arrival_height_glide, sAltUnit);
+    _stprintf(buffer + length, _T("%d%s"), uah_glide, sAltUnit);
   }
 
 
@@ -184,7 +186,7 @@ public:
     const GlideResult r =
       TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
 
-    arrival_height_glide = (int)Units::ToUserAltitude(r.AltitudeDifference);
+    arrival_height_glide = r.AltitudeDifference;
 
     if (r.glide_reachable()) {
       reachable_glide = true;
@@ -198,7 +200,7 @@ public:
           h -= iround(task_behaviour.safety_height_arrival);
           if (h >= 0) {
             reachable_terrain = true;
-            arrival_height_terrain = (int)Units::ToUserAltitude(fixed(h));
+            arrival_height_terrain = h;
             if (arrival_height_terrain > arrival_height_glide)
               arrival_height_terrain = arrival_height_glide;
           }
