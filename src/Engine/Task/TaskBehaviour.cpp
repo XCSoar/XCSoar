@@ -37,7 +37,6 @@ TaskBehaviour::TaskBehaviour():
     contest(OLC_Plus),
     contest_handicap(100),
     safety_mc(fixed_one),
-    safety_mc_use_current(false),
     safety_height_arrival(300.0),
     start_max_speed_margin(0.0),
     start_max_height_margin(0),
@@ -56,10 +55,4 @@ TaskBehaviour::all_off()
   enable_olc = false;
   ordered_defaults.all_off();
   route_planner.mode = RoutePlannerConfig::rpNone;
-}
-
-fixed
-TaskBehaviour::get_safety_mc(const fixed fallback_mc) const
-{
-  return (safety_mc_use_current ? fallback_mc : safety_mc);
 }

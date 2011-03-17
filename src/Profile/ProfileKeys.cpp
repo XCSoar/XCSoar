@@ -249,7 +249,6 @@ const TCHAR szProfileLoggerTimeStepCircling[] = _T("LoggerTimeStepCircling");
 
 const TCHAR szProfileSafetyMacCready[] = _T("SafetyMacCready");
 const TCHAR szProfileAbortTaskMode[] = _T("AbortTaskMode");
-const TCHAR szProfileAbortSafetyUseCurrent[] = _T("AbortSafetyUseCurrent");
 const TCHAR szProfileAutoMcMode[] = _T("AutoMcMode");
 const TCHAR szProfileEnableExternalTriggerCruise[] = _T("EnableExternalTriggerCruise");
 const TCHAR szProfileOLCRules[] = _T("OLCRules");

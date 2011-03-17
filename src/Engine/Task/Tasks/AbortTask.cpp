@@ -102,7 +102,7 @@ AbortTask::abort_range(const AIRCRAFT_STATE &state) const
 GlidePolar
 AbortTask::get_safety_polar() const
 {
-  const fixed mc_safety = task_behaviour.get_safety_mc(glide_polar.get_mc());
+  const fixed mc_safety = task_behaviour.safety_mc;
   GlidePolar polar = glide_polar;
   polar.set_mc(mc_safety);
   return polar;

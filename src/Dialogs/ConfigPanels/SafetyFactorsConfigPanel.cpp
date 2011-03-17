@@ -59,9 +59,6 @@ SafetyFactorsConfigPanel::Init(WndForm *_wf)
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
-                   settings_computer.safety_mc_use_current);
-
   LoadFormProperty(*wf, _T("prpSafetyMacCready"), ugVerticalSpeed,
                    settings_computer.safety_mc);
 
@@ -94,10 +91,6 @@ SafetyFactorsConfigPanel::Save()
       changed = true;
     }
   }
-
-  changed |= SaveFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
-                              szProfileAbortSafetyUseCurrent,
-                              settings_computer.safety_mc_use_current);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {

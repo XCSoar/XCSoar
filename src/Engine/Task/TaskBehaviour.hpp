@@ -181,8 +181,6 @@ public:
 
   /** Safety MacCready value (m/s) used by abort task */
   fixed safety_mc;
-  /** Whether to use safety mc value or current task polar MC */
-  bool safety_mc_use_current;
 
   /** Minimum height above terrain for arrival height at landable waypoint (m) */
   fixed safety_height_arrival;
@@ -221,14 +219,6 @@ public:
    */
   void all_off();
 
-  /**
-   * Return safety MC value (based on options)
-   *
-   * @param fallback_mc Current glide polar mc value (m/s)
-   *
-   * @return Safety MC value (m/s)
-   */
-  fixed get_safety_mc(const fixed fallback_mc) const;
 };
 
 #endif

@@ -444,8 +444,6 @@ Profile::Use()
       settings_computer.LoggerTimeStepCruise);
   Get(szProfileLoggerTimeStepCircling,
       settings_computer.LoggerTimeStepCircling);
-  Get(szProfileAbortSafetyUseCurrent,
-      settings_computer.safety_mc_use_current);
 
   if (Get(szProfileSafetyMacCready, Temp))
     settings_computer.safety_mc = fixed(Temp) / 10;
