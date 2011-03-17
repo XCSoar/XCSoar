@@ -27,7 +27,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(10);
+  plan_tests(14);
 
   OverwritingRingBuffer<unsigned,4> buffer;
   ok1(buffer.empty());
@@ -43,6 +43,17 @@ int main(int argc, char **argv)
   buffer.push(4);
   buffer.push(5);
   ok1(!buffer.empty());
+
+  OverwritingRingBuffer<unsigned,4>::const_iterator i = buffer.begin();
+  OverwritingRingBuffer<unsigned,4>::const_iterator end = buffer.end();
+  ok1(*i == 3);
+  ++i;
+  ok1(*i == 4);
+  ++i;
+  ok1(*i == 5);
+  ++i;
+  ok1(i == buffer.end());
+
   ok1(buffer.shift() == 3);
   ok1(buffer.shift() == 4);
   ok1(buffer.shift() == 5);

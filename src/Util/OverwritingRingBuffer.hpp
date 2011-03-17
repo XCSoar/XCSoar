@@ -42,6 +42,36 @@
  */
 template<class T, unsigned size>
 class OverwritingRingBuffer {
+  friend class const_iterator;
+
+public:
+  class const_iterator {
+    friend class OverwritingRingBuffer;
+
+    const OverwritingRingBuffer &buffer;
+    unsigned i;
+
+    const_iterator(const OverwritingRingBuffer<T, size> &_buffer, unsigned _i)
+      :buffer(_buffer), i(_i) {
+      assert(i < size);
+    }
+
+  public:
+    const T &operator*() const {
+      return buffer.data[i];
+    }
+
+    OverwritingRingBuffer::const_iterator &operator++() {
+      i = buffer.next(i);
+      return *this;
+    }
+
+    bool operator==(const const_iterator &other) const {
+      assert(&buffer == &other.buffer);
+      return i == other.i;
+    }
+  };
+
 protected:
   T data[size];
   unsigned head, tail;
@@ -106,6 +136,21 @@ public:
     if (tail == head)
       /* the ring buffer is full - delete the oldest item */
       head = next(head);
+  }
+
+  /**
+   * Returns a pointer to the oldest item.
+   */
+  const_iterator begin() const {
+    return const_iterator(*this, head);
+  }
+
+  /**
+   * Returns a pointer to end of the buffer (one item after the newest
+   * item).
+   */
+  const_iterator end() const {
+    return const_iterator(*this, tail);
   }
 };
 
