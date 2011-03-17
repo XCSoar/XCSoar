@@ -116,6 +116,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.Location = loc;
   basic.LocationAvailable.update(t);
   basic.GroundSpeed = speed;
+  basic.GroundSpeedAvailable.update(t);
   basic.AirspeedAvailable.clear(); // Clear airspeed as it is not given by any value.
   basic.TrackBearing = bearing;
   basic.TrackBearingAvailable.update(t);
