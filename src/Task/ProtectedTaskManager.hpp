@@ -272,8 +272,6 @@ public:
                     const AGeoPoint& destination,
                     GeoPoint& intx, const bool safety=false) const;
 
-  RoutePolars get_route_polars() const;
-
   void solve_reach(const AGeoPoint& origin);
 
   void accept_in_range(const GeoBounds& bounds,

@@ -203,13 +203,6 @@ public:
                            * code is stable. */
 
   /**
-   * Return copy of route polars
-   */
-  RoutePolars get_route_polars() const {
-    return rpolars;
-  }
-
-  /**
    * Find arrival height at destination.
    *
    * Requires solve_reach() to have been called for positive results.

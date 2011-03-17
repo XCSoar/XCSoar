@@ -389,14 +389,6 @@ ProtectedTaskManager::intersection(RasterTerrain* terrain,
   return rpolars.intersection(origin, destination, &terrain->map, proj, intx);
 }
 
-RoutePolars
-ProtectedTaskManager::get_route_polars() const
-{
-  Lease lease(*this);
-  return m_route.get_route_polars();
-}
-
-
 bool
 ReachIntersectionTest::intersects(const AGeoPoint& destination)
 {

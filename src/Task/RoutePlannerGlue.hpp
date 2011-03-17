@@ -55,8 +55,6 @@ public:
     m_planner.get_solution(route);
   }
 
-  RoutePolars get_route_polars() const;
-
   void solve_reach(const AGeoPoint& origin);
 
   bool find_positive_arrival(const AGeoPoint& dest,

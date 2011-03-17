@@ -65,12 +65,6 @@ RoutePlannerGlue::solve_reach(const AGeoPoint& origin)
   m_planner.solve_reach(origin);
 }
 
-RoutePolars
-RoutePlannerGlue::get_route_polars() const
-{
-  return m_planner.get_route_polars();
-}
-
 bool
 RoutePlannerGlue::find_positive_arrival(const AGeoPoint& dest,
                                         short& arrival_height) const
