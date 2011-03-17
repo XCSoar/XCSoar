@@ -9,7 +9,7 @@
 
 void sin_cos(const double&theta, double*s, double*c)
 {
-#ifdef _GNU_SOURCE
+#if defined(_GNU_SOURCE) && !defined(ANDROID)
   sincos(theta, s, c);
 #else
   *s = sin(theta);
