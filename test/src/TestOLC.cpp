@@ -106,15 +106,15 @@ TestOLC(const char *filename)
   putchar('\n');
 
   std::cout << "classic\n";
-  PrintHelper::print(olc_classic.get_contest_result());
+  PrintHelper::print(olc_classic.get_stats().get_contest_result());
   std::cout << "league\n";
-  PrintHelper::print(olc_league.get_contest_result());
+  PrintHelper::print(olc_league.get_stats().get_contest_result());
   std::cout << "fai\n";
-  PrintHelper::print(olc_fai.get_contest_result());
+  PrintHelper::print(olc_fai.get_stats().get_contest_result());
   std::cout << "sprint\n";
-  PrintHelper::print(olc_sprint.get_contest_result());
+  PrintHelper::print(olc_sprint.get_stats().get_contest_result());
   std::cout << "plus\n";
-  PrintHelper::print(olc_plus.get_contest_result());
+  PrintHelper::print(olc_plus.get_stats().get_contest_result());
 
   return 0;
 }

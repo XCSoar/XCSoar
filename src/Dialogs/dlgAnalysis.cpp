@@ -131,13 +131,18 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_OLC:
     if (protected_task_manager != NULL) {
-      ProtectedTaskManager::Lease task(*protected_task_manager);
       TracePointVector trace;
-      task->get_trace_points(trace);
+      {
+        ProtectedTaskManager::Lease task(*protected_task_manager);
+        task->get_trace_points(trace);
+      }
+      const TracePointVector& solution = 
+        XCSoarInterface::Calculated().contest_stats.get_contest_solution();
+
       fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
                    XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::SettingsMap(),
-                   task->get_contest_solution(), trace);
+                   solution, trace);
     }
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
@@ -241,22 +246,18 @@ Update(void)
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"), _("On-Line Contest"));
     wf->SetCaption(sTmp);
     SetCalcCaption(_T(""));
-
-    if (!protected_task_manager)
-      break;
-
     {
-      ProtectedTaskManager::Lease task(*protected_task_manager);
+      const ContestResult& result_olc = 
+        XCSoarInterface::Calculated().contest_stats.get_contest_result();
 
-      const ContestResult& result_olc = task->get_contest_result();
       TCHAR timetext1[100];
       Units::TimeToText(timetext1, (int)result_olc.time);
       TCHAR distance[100];
       Units::FormatUserDistance(result_olc.distance, distance, 100);
       _stprintf(sTmp,
                 (Layout::landscape
-                ? _T("%s:\r\n  %s\r\n%s:\r\n  %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
-                : _T("%s: %s\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
+                 ? _T("%s:\r\n  %s\r\n%s:\r\n  %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
+                 : _T("%s: %s\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
                 _("Distance"), distance,
                 _("Score"), (double)result_olc.score, _("pts"),
                 _("Time"), timetext1,
@@ -264,7 +265,6 @@ Update(void)
                 Units::GetTaskSpeedName());
       wInfo->SetCaption(sTmp);
     }
-
     break;
 
   case ANALYSIS_PAGE_AIRSPACE:

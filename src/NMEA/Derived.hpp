@@ -29,6 +29,7 @@ Copyright_License {
 #include "Navigation/SpeedVector.hpp"
 #include "Task/TaskStats/TaskStats.hpp"
 #include "Task/TaskStats/CommonStats.hpp"
+#include "Task/TaskStats/ContestStatistics.hpp"
 #include "NMEA/ThermalBand.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "NMEA/Validity.hpp"
@@ -286,6 +287,7 @@ struct DERIVED_INFO:
 
   TaskStats task_stats; /**< Copy of task statistics data for active task */
   CommonStats common_stats; /**< Copy of common task statistics data */
+  ContestStatistics contest_stats; /**< Copy of contest statistics data */
 
   FLYING_STATE flight;
 

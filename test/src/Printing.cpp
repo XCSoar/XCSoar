@@ -320,7 +320,7 @@ void PrintHelper::taskmanager_print(TaskManager& task, const AIRCRAFT_STATE &sta
   contestmanager_print(task.contest_manager);
 
   std::ofstream fs("results/res-stats-common.txt");
-  const ContestResult& score = task.get_contest_result();
+  const ContestResult& score = task.get_contest_stats().get_contest_result();
   fs << "#   score " << score.score << "\n";
   fs << "#   distance " << score.distance/fixed(1000) << " (km)\n";
   fs << "#   speed " << score.speed*fixed(3.6) << " (kph)\n";
@@ -619,15 +619,15 @@ PrintHelper::contestmanager_print(const ContestManager& man)
 
   std::ofstream fs("results/res-olc-solution.txt");
 
-  if (man.solution[0].empty()) {
+  if (man.stats.solution[0].empty()) {
     fs << "# no solution\n";
     return;
   }
 
-  if (positive(man.result[0].time)) {
+  if (positive(man.stats.result[0].time)) {
 
-    for (TracePointVector::const_iterator it = man.solution[0].begin();
-         it != man.solution[0].end(); ++it) {
+    for (TracePointVector::const_iterator it = man.stats.solution[0].begin();
+         it != man.stats.solution[0].end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 
          << "\n";

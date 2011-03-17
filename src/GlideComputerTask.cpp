@@ -79,6 +79,7 @@ GlideComputerTask::ProcessBasicTask()
 
   SetCalculated().task_stats = task->get_stats();
   SetCalculated().common_stats = task->get_common_stats();
+  SetCalculated().contest_stats = task->get_contest_stats();
 
 /* JMW @todo 
 

@@ -1,3 +1,24 @@
+/* Copyright_License {
+
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000-2011 The XCSoar Project
+  A detailed list of copyright holders can be found in the file "AUTHORS".
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+ */
 #include "ContestManager.hpp"
 
 #include "Task/TaskStats/CommonStats.hpp"
@@ -56,43 +77,43 @@ ContestManager::update_idle(bool exhaustive)
 
   switch (contest) {
   case OLC_Sprint:
-    retval = run_contest(olc_sprint, result[0], solution[0], exhaustive);
+    retval = run_contest(olc_sprint, stats.result[0], stats.solution[0], exhaustive);
     break;
   case OLC_FAI:
-    retval = run_contest(olc_fai, result[0], solution[0], exhaustive);
+    retval = run_contest(olc_fai, stats.result[0], stats.solution[0], exhaustive);
     break;
   case OLC_Classic:
-    retval = run_contest(olc_classic, result[0], solution[0], exhaustive);
+    retval = run_contest(olc_classic, stats.result[0], stats.solution[0], exhaustive);
     break;
   case OLC_League:
-    retval = run_contest(olc_classic, result[0], solution[0], exhaustive);
+    retval = run_contest(olc_classic, stats.result[0], stats.solution[0], exhaustive);
 
-    olc_league.get_solution_classic() = solution[0];
-    retval |= run_contest(olc_league, result[1], solution[1], exhaustive);
+    olc_league.get_solution_classic() = stats.solution[0];
+    retval |= run_contest(olc_league, stats.result[1], stats.solution[1], exhaustive);
     break;
   case OLC_Plus:
-    retval = run_contest(olc_classic, result[0], solution[0], exhaustive);
+    retval = run_contest(olc_classic, stats.result[0], stats.solution[0], exhaustive);
 
-    olc_plus.get_result_classic() = result[0];
-    olc_plus.get_solution_classic() = solution[0];
-    retval |= run_contest(olc_fai, result[1], solution[1], exhaustive);
+    olc_plus.get_result_classic() = stats.result[0];
+    olc_plus.get_solution_classic() = stats.solution[0];
+    retval |= run_contest(olc_fai, stats.result[1], stats.solution[1], exhaustive);
 
-    olc_plus.get_result_fai() = result[1];
-    olc_plus.get_solution_fai() = solution[1];
+    olc_plus.get_result_fai() = stats.result[1];
+    olc_plus.get_solution_fai() = stats.solution[1];
     if (retval) 
-      run_contest(olc_plus, result[2], solution[2], exhaustive);
+      run_contest(olc_plus, stats.result[2], stats.solution[2], exhaustive);
 
     break;
   case OLC_XContest:
-    retval = run_contest(olc_xcontest_free, result[0], solution[0], exhaustive);
-    retval |= run_contest(olc_xcontest_triangle, result[1], solution[1], exhaustive);
+    retval = run_contest(olc_xcontest_free, stats.result[0], stats.solution[0], exhaustive);
+    retval |= run_contest(olc_xcontest_triangle, stats.result[1], stats.solution[1], exhaustive);
     break;
   case OLC_DHVXC:
-    retval = run_contest(olc_dhvxc_free, result[0], solution[0], exhaustive);
-    retval |= run_contest(olc_dhvxc_triangle, result[1], solution[1], exhaustive);
+    retval = run_contest(olc_dhvxc_free, stats.result[0], stats.solution[0], exhaustive);
+    retval |= run_contest(olc_dhvxc_triangle, stats.result[1], stats.solution[1], exhaustive);
     break;
   case OLC_SISAT:
-    retval = run_contest(olc_sisat, result[0], solution[0], exhaustive);
+    retval = run_contest(olc_sisat, stats.result[0], stats.solution[0], exhaustive);
     break;
   };
 
@@ -102,10 +123,7 @@ ContestManager::update_idle(bool exhaustive)
 void
 ContestManager::reset()
 {
-  for (unsigned i = 0; i < 3; ++i) {
-    solution[i].clear();
-    result[i].reset();
-  }
+  stats.reset();
   olc_sprint.reset();
   olc_fai.reset();
   olc_classic.reset();

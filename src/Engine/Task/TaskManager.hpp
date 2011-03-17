@@ -212,6 +212,16 @@ public:
   }
 
   /**
+   * Accessor for contest statistics
+   *
+   * @return Statistics
+   */
+  gcc_pure
+  const ContestStatistics& get_contest_stats() const {
+    return contest_manager.get_stats();
+  }
+
+  /**
    * Convenience function, determines whether stats are valid
    *
    * @return True if stats valid
@@ -380,29 +390,6 @@ public:
   TracePointVector find_trace_points(const GeoPoint &loc, const fixed range,
                                      const unsigned mintime,
                                      const fixed resolution) const;
-
-  /**
-   * Retrieve olc solution vector
-   *
-   * @param solution_index -1 for best, otherwise index of solution
-   *
-   * @return Vector of trace points selected for OLC
-   */
-  gcc_pure
-  const TracePointVector& get_contest_solution(const int solution_index=-1) const {
-    return contest_manager.get_contest_solution(solution_index);
-  }
-
-  /**
-   * Retrieve olc result
-   *
-   * @param solution_index -1 for best, otherwise index of solution
-   *
-   * @return Result for OLC
-   */
-  const ContestResult& get_contest_result(const int solution_index=-1) const {
-    return contest_manager.get_contest_result(solution_index);
-  }
 
   /**
    * Retrieve olc trace vector

@@ -554,8 +554,9 @@ InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  ProtectedTaskManager::Lease task(*protected_task_manager);
-  const ContestResult& result_olc = task->get_contest_result();
+  const ContestResult& result_olc = 
+    XCSoarInterface::Calculated().contest_stats.get_contest_result();
+
   if (result_olc.score < fixed_one) {
     infobox.SetInvalid();
     return;
