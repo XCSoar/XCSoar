@@ -49,7 +49,7 @@ ContestManager::ContestManager(const Contests _contest,
 bool
 ContestManager::run_contest(AbstractContest &the_contest, 
                             ContestResult &contest_result,
-                            TracePointVector &contest_solution,
+                            ContestTraceVector &contest_solution,
                             bool exhaustive)
 {
   // run solver, return immediately if further processing is required

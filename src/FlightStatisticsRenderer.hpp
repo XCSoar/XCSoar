@@ -44,6 +44,7 @@ class GlidePolar;
 class Chart;
 class TaskManager;
 class ProtectedTaskManager;
+class ContestTraceVector;
 
 class FlightStatisticsRenderer {
   FlightStatistics &fs;
@@ -84,7 +85,7 @@ public:
   void RenderOLC(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
                  const SETTINGS_COMPUTER &settings_computer,
                  const SETTINGS_MAP &settings_map,
-                 const TracePointVector& olc,
+                 const ContestTraceVector& olc,
                  const TracePointVector& trace) const;
 
   void RenderTask(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,

@@ -63,7 +63,7 @@ public:
    *
    * @param vec output vector
    */
-  virtual void copy_solution(TracePointVector &vec) const = 0;
+  virtual void copy_solution(ContestTraceVector &vec) const = 0;
 
 protected:
   /**

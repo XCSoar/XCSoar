@@ -351,12 +351,26 @@ DrawTrace(Chart &chart, const ChartProjection& proj,
   }
 }
 
+static void
+DrawTrace(Chart &chart, const ChartProjection& proj,
+          const ContestTraceVector& trace, Chart::Style style)
+{
+  RasterPoint last;
+  for (const TracePoint* it = trace.begin(); it != trace.end(); ++it) {
+    RasterPoint sc = proj.GeoToScreen(it->get_location());
+    if (it != trace.begin())
+      chart.StyleLine(sc, last, style);
+
+    last = sc;
+  }
+}
+
 void
 FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const RECT rc,
                             const NMEA_INFO &nmea_info, 
                             const SETTINGS_COMPUTER &settings_computer,
                             const SETTINGS_MAP &settings_map, 
-                            const TracePointVector& olc,
+                            const ContestTraceVector& olc,
                             const TracePointVector& trace) const
 {
   // note: braces used here just to delineate separate main steps of

@@ -22,6 +22,9 @@
 #ifndef CONTEST_RESULT_HPP
 #define CONTEST_RESULT_HPP
 
+#include "Navigation/TracePoint.hpp"
+#include "Util/StaticArray.hpp"
+
 struct ContestResult
 {
   /** Score (pts) according to OLC rule */
@@ -43,5 +46,9 @@ struct ContestResult
     return positive(score);
   }
 };
+
+#define MAX_CONTEST_VECTOR 10
+
+class ContestTraceVector: public StaticArray<TracePoint, MAX_CONTEST_VECTOR> {};
 
 #endif

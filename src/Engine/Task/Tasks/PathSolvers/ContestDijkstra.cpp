@@ -296,7 +296,10 @@ ContestDijkstra::save_solution()
   assert(num_stages <= MAX_STAGES);
 
   if (AbstractContest::save_solution()) {
-    std::copy(solution, solution + num_stages, best_solution);
+    best_solution.clear();
+    for (unsigned i=0; i<num_stages; ++i) {
+      best_solution.append(solution[i]);
+    }
     return true;
   }
   return false;
@@ -304,7 +307,7 @@ ContestDijkstra::save_solution()
 
 
 void
-ContestDijkstra::copy_solution(TracePointVector &vec) const
+ContestDijkstra::copy_solution(ContestTraceVector &vec) const
 {
   assert(num_stages <= MAX_STAGES);
 
@@ -312,9 +315,7 @@ ContestDijkstra::copy_solution(TracePointVector &vec) const
   if (solution_found) {
     assert(num_stages <= MAX_STAGES);
 
-    vec.reserve(num_stages);
-    for (unsigned i = 0; i < num_stages; ++i)
-      vec.push_back(best_solution[i]);
+    vec = best_solution;
   }
 }
 

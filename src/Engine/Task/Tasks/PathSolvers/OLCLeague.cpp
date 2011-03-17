@@ -34,7 +34,7 @@ bool
 OLCLeague::save_solution()
 {
   if (AbstractContest::save_solution()) {
-    std::copy(solution, solution + 5, best_solution);
+    best_solution = solution;
     return true;
   }
   return false;
@@ -44,9 +44,12 @@ void
 OLCLeague::reset()
 {
   AbstractContest::reset();
-  std::fill(solution, solution + 5, TracePoint());
   solution_found = false;
+  solution.clear();
   solution_classic.clear();
+  for (unsigned i=0; i<5; ++i) {
+    solution.append(TracePoint());
+  }
 }
 
 bool
@@ -107,13 +110,11 @@ OLCLeague::score(ContestResult &result)
 
 
 void 
-OLCLeague::copy_solution(TracePointVector &vec) const
+OLCLeague::copy_solution(ContestTraceVector &vec) const
 {
   vec.clear();
-  vec.reserve(5);
   if (solution_found) {
-    for (unsigned i = 0; i < 5; ++i)
-      vec.push_back(best_solution[i]);
+    vec = best_solution;
   }
 }
 

@@ -27,6 +27,7 @@ Copyright_License {
 class TaskManager;
 class OrderedTask;
 class OrderedTaskPoint;
+class ContestTraceVector;
 
 /**
  * Utility class to determine projection for a chart from task data,
@@ -51,6 +52,10 @@ public:
 
   ChartProjection(const RECT &rc,
                   const TracePointVector& trace,
+                  const GeoPoint &fallback_loc);
+
+  ChartProjection(const RECT &rc,
+                  const ContestTraceVector& trace,
                   const GeoPoint &fallback_loc);
 private:
 

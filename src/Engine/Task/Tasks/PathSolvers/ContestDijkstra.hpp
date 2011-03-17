@@ -53,7 +53,7 @@ public:
 
   bool score(ContestResult &result);
 
-  virtual void copy_solution(TracePointVector &vec) const;
+  virtual void copy_solution(ContestTraceVector &vec) const;
 
 protected:
   virtual fixed calc_distance() const;
@@ -130,7 +130,7 @@ private:
   TracePoint last_point;
   bool master_is_updated();
 
-  TracePoint best_solution[MAX_STAGES];
+  ContestTraceVector best_solution;
 
 public: // instrumentation
   static unsigned long count_olc_solve;

@@ -38,7 +38,7 @@ public:
 
   bool score(ContestResult &result);
 
-  virtual void copy_solution(TracePointVector &vec) const;
+  virtual void copy_solution(ContestTraceVector &vec) const;
 
 protected:
   virtual fixed calc_distance() const;
@@ -59,17 +59,17 @@ public:
    */
   virtual bool solve(bool exhaustive);
 
-  TracePointVector& get_solution_classic() {
+  ContestTraceVector& get_solution_classic() {
     return solution_classic;
   }
 
 protected:
   virtual bool save_solution();
-  TracePointVector solution_classic;
+  ContestTraceVector solution_classic;
 
 private:
-  TracePoint best_solution[5];
-  TracePoint solution[5];
+  ContestTraceVector best_solution;
+  ContestTraceVector solution;
   bool solution_found;
 };
 

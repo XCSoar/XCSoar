@@ -626,7 +626,7 @@ PrintHelper::contestmanager_print(const ContestManager& man)
 
   if (positive(man.stats.result[0].time)) {
 
-    for (TracePointVector::const_iterator it = man.stats.solution[0].begin();
+    for (const TracePoint* it = man.stats.solution[0].begin();
          it != man.stats.solution[0].end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 

@@ -48,12 +48,9 @@ OLCPlus::solve(bool exhaustive)
 }
 
 void 
-OLCPlus::copy_solution(TracePointVector &vec) const
+OLCPlus::copy_solution(ContestTraceVector &vec) const
 {
-  vec.clear();
-  vec.reserve(5);
-  for (unsigned i = 0; i < solution_classic.size(); ++i)
-    vec.push_back(solution_classic[i]);
+  vec = solution_classic;
 }
 
 fixed 

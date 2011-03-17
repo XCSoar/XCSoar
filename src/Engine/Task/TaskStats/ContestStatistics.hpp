@@ -22,7 +22,6 @@
 #ifndef CONTEST_STATISTICS_HPP
 #define CONTEST_STATISTICS_HPP
 
-#include "Navigation/TracePoint.hpp"
 #include "ContestResult.hpp"
 
 struct ContestStatistics {
@@ -42,7 +41,7 @@ struct ContestStatistics {
    * @return Vector of trace points selected for Contest
    */
   gcc_pure
-  const TracePointVector& get_contest_solution(const int solution_index=-1) const {
+  const ContestTraceVector& get_contest_solution(const int solution_index=-1) const {
     return solution[get_index_best(solution_index)];
   }
 
@@ -73,7 +72,7 @@ struct ContestStatistics {
   }
 
   ContestResult result[3];
-  TracePointVector solution[3];
+  ContestTraceVector solution[3];
 };
 
 #endif

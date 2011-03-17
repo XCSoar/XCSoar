@@ -95,7 +95,7 @@ private:
 
   bool run_contest(AbstractContest& the_contest, 
                    ContestResult &contest_result,
-                   TracePointVector &contest_solution,
+                   ContestTraceVector &contest_solution,
                    bool exhaustive);
 
   OLCSprint olc_sprint;

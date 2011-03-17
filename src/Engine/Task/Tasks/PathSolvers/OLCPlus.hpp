@@ -35,7 +35,7 @@ class OLCPlus:
 public:
   OLCPlus(const Trace &_trace, const unsigned &_handicap);
 
-  virtual void copy_solution(TracePointVector &vec) const;
+  virtual void copy_solution(ContestTraceVector &vec) const;
 
 protected:
   virtual fixed calc_distance() const;
@@ -47,10 +47,10 @@ public:
 
   bool solve(bool exhaustive);
 
-  TracePointVector& get_solution_classic() {
+  ContestTraceVector& get_solution_classic() {
     return solution_classic;
   }
-  TracePointVector& get_solution_fai() {
+  ContestTraceVector& get_solution_fai() {
     return solution_fai;
   }
   ContestResult& get_result_classic() {
@@ -61,8 +61,8 @@ public:
   }
 
 protected:
-  TracePointVector solution_classic;
-  TracePointVector solution_fai;
+  ContestTraceVector solution_classic;
+  ContestTraceVector solution_fai;
   ContestResult result_classic;
   ContestResult result_fai;
 };
