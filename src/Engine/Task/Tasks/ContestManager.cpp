@@ -38,9 +38,8 @@ ContestManager::run_contest(AbstractContest &the_contest,
 
   // if no improved solution was found, must have finished processing
   // with invalid data
-  if (!the_contest.score(contest_result)) {
+  if (!the_contest.score(contest_result))
     return true;
-  }
 
   // solver finished and improved solution was found.  save solution
   // and retrieve new trace.
@@ -49,7 +48,6 @@ ContestManager::run_contest(AbstractContest &the_contest,
 
   return true;
 }
-
 
 bool 
 ContestManager::update_idle(bool exhaustive)
@@ -104,7 +102,7 @@ ContestManager::update_idle(bool exhaustive)
 void
 ContestManager::reset()
 {
-  for (unsigned i=0; i<3; ++i) {
+  for (unsigned i = 0; i < 3; ++i) {
     solution[i].clear();
     result[i].reset();
   }

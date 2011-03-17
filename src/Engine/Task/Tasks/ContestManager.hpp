@@ -85,13 +85,15 @@ public:
 private:
   Contests contest;
 
-  int get_index(const int solution_index) const {
-    if (solution_index>=0) {
+  int
+  get_index(const int solution_index) const
+  {
+    if (solution_index >= 0)
       return solution_index;
-    }
+
     fixed best = fixed_zero;
     int i_best = 0;
-    for (int i=0; i<3; ++i) {
+    for (int i = 0; i < 3; ++i) {
       if (result[i].defined() && (result[i].score > best)) {
         i_best = i;
         best = result[i].score;
