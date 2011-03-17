@@ -40,8 +40,7 @@ Copyright_License {
  * @param _glide_computer The GlideComputer used for the CalculationThread
  */
 CalculationThread::CalculationThread(GlideComputer &_glide_computer)
-  :gps_trigger(false),
-   glide_computer(_glide_computer) {}
+  :glide_computer(_glide_computer) {}
 
 /**
  * Main loop of the CalculationThread
@@ -49,7 +48,7 @@ CalculationThread::CalculationThread(GlideComputer &_glide_computer)
 void
 CalculationThread::tick()
 {
-  const bool gps_updated = gps_trigger.test();
+  const bool gps_updated = true; /* XXX derive from LocationAvailable? */
 
   // update and transfer master info to glide computer
   {
