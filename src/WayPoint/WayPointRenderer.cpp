@@ -199,6 +199,8 @@ public:
           if (h >= 0) {
             reachable_terrain = true;
             arrival_height_terrain = (int)Units::ToUserAltitude(fixed(h));
+            if (arrival_height_terrain > arrival_height_glide)
+              arrival_height_terrain = arrival_height_glide;
           }
         }
       }
