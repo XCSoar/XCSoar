@@ -26,7 +26,7 @@
 #include "UnorderedTask.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Route/RoutePolar.hpp"
+#include "Navigation/SpeedVector.hpp"
 #include <vector>
 
 class AbortIntersectionTest {
@@ -269,9 +269,6 @@ public:
    */
   void set_active(const bool _active) { is_active = _active; }
 
-  const RoutePolars& get_route_polars() const { return route_polars; }
-  const RoutePolars& get_route_polars_safety() const { return route_polars_safety; }
-
   /**
    * Set external test function to be used for additional intersection tests
    */
@@ -281,8 +278,6 @@ public:
 
 protected:
   const Waypoints &waypoints;
-  RoutePolars route_polars;
-  RoutePolars route_polars_safety;
 
   /** Hook for external intersection tests */
   AbortIntersectionTest* intersection_test;

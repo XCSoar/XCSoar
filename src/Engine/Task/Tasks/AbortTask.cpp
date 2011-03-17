@@ -39,8 +39,6 @@ AbortTask::AbortTask(TaskEvents &te, const TaskBehaviour &tb,
                      const GlidePolar &gp, const Waypoints &wps):
   UnorderedTask(ABORT, te, tb, gp),
   waypoints(wps),
-  route_polars(gp, SpeedVector(fixed_zero, fixed_zero)),
-  route_polars_safety(gp, SpeedVector(fixed_zero, fixed_zero)),
   intersection_test(NULL),
   active_waypoint(0),
   polar_safety(gp)
@@ -113,18 +111,8 @@ AbortTask::get_safety_polar() const
 void
 AbortTask::update_polar(const SpeedVector& wind)
 {
-  // @todo: only update route_polars on change
-
   // glide_polar for task
   polar_safety = get_safety_polar();
-
-  // fast lookup versions
-
-  route_polars.set_config(task_behaviour.route_planner);
-  route_polars_safety.set_config(task_behaviour.route_planner);
-
-  route_polars.initialise(polar_safety, wind);
-  route_polars_safety.initialise(glide_polar, wind);
 }
 
 bool

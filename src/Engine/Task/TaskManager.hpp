@@ -610,9 +610,6 @@ public:
     return common_stats.planned_route;
   }
 
-  const RoutePolars& get_route_polars() const { return task_abort.get_route_polars(); }
-  const RoutePolars& get_route_polars_safety() const { return task_abort.get_route_polars_safety(); }
-
   /**
    * Set external test function to be used for additional intersection tests
    */
