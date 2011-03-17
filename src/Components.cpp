@@ -36,6 +36,7 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "Device/Geoid.h"
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/dlgSimulatorPrompt.hpp"
 #include "ButtonLabel.hpp"
 #include "Language.hpp"
 #include "Protection.hpp"

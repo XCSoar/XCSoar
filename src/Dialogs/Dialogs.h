@@ -87,9 +87,6 @@ void dlgLoggerReplayShowModal();
 bool
 dlgStartupShowModal();
 
-bool dlgSimulatorPromptShowModal();
-
-
 void
 dlgTaskCalculatorShowModal(SingleWindow &parent);
 

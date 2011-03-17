@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/dlgSimulatorPrompt.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Gauge/LogoView.hpp"
 #include "Dialogs/Internal.hpp"
