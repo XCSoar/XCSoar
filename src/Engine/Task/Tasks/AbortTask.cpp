@@ -267,17 +267,30 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
     return false;
   }
 
+  // lookup the appropriate polar to use
+  const GlidePolar* mode_polar;
+  switch (task_behaviour.route_planner.reach_polar_mode) {
+  case RoutePlannerConfig::rpmTask:
+    mode_polar = &glide_polar;
+    // make copy to avoid waste
+    break;
+  case RoutePlannerConfig::rpmSafety:
+    mode_polar = &polar_safety;
+    break;
+  }
+  assert(mode_polar);
+
   // sort by alt difference
 
-  // first try with safety polar, final glide only
-  m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, true, true, true);
-  m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, false, true, true);
+  // first try with final glide only
+  m_landable_reachable|=  fill_reachable(state, approx_waypoints, *mode_polar, true, true, true);
+  m_landable_reachable|=  fill_reachable(state, approx_waypoints, *mode_polar, false, true, true);
 
   // inform clients that the landable reachable scan has been performed 
   client_update(state, true);
 
-  // now try with non-safety polar, not final glide (not preferring airports)
-  fill_reachable(state, approx_waypoints, glide_polar, false, false, false);
+  // now try without final glide constraint and not preferring airports
+  fill_reachable(state, approx_waypoints, *mode_polar, false, false, false);
 
   // inform clients that the landable unreachable scan has been performed 
   client_update(state, false);
