@@ -34,8 +34,9 @@ public:
   void set_terrain(RasterTerrain* _terrain);
 
   void update_polar(const GlidePolar& polar,
+                    const GlidePolar& safety_polar,
                     const SpeedVector& wind) {
-    m_planner.update_polar(polar, wind);
+    m_planner.update_polar(polar, safety_polar, wind);
   }
 
   void synchronise(const Airspaces& master,

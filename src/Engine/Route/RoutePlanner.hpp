@@ -175,10 +175,13 @@ public:
   /**
    * Update aircraft performance model used for path planning.
    *
-   * @param polar Glide performance model
+   * @param polar Glide performance model used for route planning
+   * @param polar Glide performance model used for reach planning
    * @param wind Wind estimate
    */
-  void update_polar(const GlidePolar& polar, const SpeedVector& wind);
+  void update_polar(const GlidePolar& polar,
+                    const GlidePolar& safety_polar,
+                    const SpeedVector& wind);
 
   /**
    * Reset the optimiser as if never flown and clear temporary buffers.
@@ -214,7 +217,7 @@ public:
    */
   bool find_positive_arrival(const AGeoPoint& dest,
                              short& arrival_height) const {
-    return reach.find_positive_arrival(dest, rpolars, arrival_height);
+    return reach.find_positive_arrival(dest, rpolars_reach, arrival_height);
   }
 
 protected:
@@ -222,7 +225,8 @@ protected:
 
   bool dirty; /**< Whether an updated solution is required */
   TaskProjection task_projection; /**< Task projection used for flat-earth representation */
-  RoutePolars rpolars; /**< Aircraft performance model */
+  RoutePolars rpolars_route; /**< Aircraft performance model */
+  RoutePolars rpolars_reach; /**< Aircraft performance model */
   const RasterMap *terrain; /**< Terrain raster */
   short h_min; /**< Minimum height scanned during solution (m) */
   short h_max; /**< Maxmimum height scanned during solution (m) */

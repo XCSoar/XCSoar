@@ -366,7 +366,9 @@ void
 ProtectedTaskManager::route_update_polar(const SpeedVector& wind)
 {
   ExclusiveLease lease(*this);
-  m_route.update_polar(lease->get_glide_polar(), wind);
+  m_route.update_polar(lease->get_glide_polar(),
+                       lease->get_safety_polar(),
+                       wind);
 }
 
 bool

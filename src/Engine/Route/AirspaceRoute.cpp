@@ -118,7 +118,7 @@ AirspaceRoute::first_intersecting(const RouteLink& e) const
   const GeoPoint origin(task_projection.unproject(e.first));
   const GeoPoint dest(task_projection.unproject(e.second));
   const GeoVector v(origin, dest);
-  AIV visitor(e, task_projection, rpolars);
+  AIV visitor(e, task_projection, rpolars_route);
   m_airspaces.visit_intersecting(origin, v, visitor);
   const AIV::AIVResult res (visitor.get_nearest());
   count_airspace++;
@@ -294,7 +294,7 @@ AirspaceRoute::add_nearby(const RouteLink &e)
 bool
 AirspaceRoute::check_secondary(const RouteLink &e)
 {
-  if (!rpolars.airspace_enabled())
+  if (!rpolars_route.airspace_enabled())
     return true; // trivial
 
   m_inx = first_intersecting(e);
@@ -317,7 +317,7 @@ AirspaceRoute::check_clearance(const RouteLink &e, RoutePoint& inp) const
     return false;
   }
 
-  if (!rpolars.airspace_enabled())
+  if (!rpolars_route.airspace_enabled())
     return true; // trivial
 
   // passes terrain, so now check airspace clearance
