@@ -204,6 +204,20 @@ MapWindow::get_glide_polar() const
   return task != NULL ? task->get_glide_polar() : GlidePolar(fixed_zero);
 }
 
+GlidePolar
+MapWindow::get_safety_polar() const
+{
+  return task != NULL ? task->get_safety_polar() : GlidePolar(fixed_zero);
+}
+
+GlidePolar
+MapWindow::get_reach_polar() const
+{
+  return (settings_computer.route_planner.reach_polar_mode ==
+          RoutePlannerConfig::rpmTask) ?
+          get_glide_polar() : get_safety_polar();
+}
+
 void
 MapWindow::SetMapScale(const fixed x)
 {
