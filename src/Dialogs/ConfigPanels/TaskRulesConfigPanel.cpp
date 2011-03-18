@@ -70,13 +70,13 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("OLC FAI"), OLC_FAI);
-    dfe->addEnumText(_("OLC Classic"), OLC_Classic);
-    dfe->addEnumText(_("OLC League"), OLC_League);
-    dfe->addEnumText(_("OLC Plus"), OLC_Plus);
-    dfe->addEnumText(_("XContest"), OLC_XContest);
-    dfe->addEnumText(_("DHV-XC"), OLC_DHVXC);
-    dfe->addEnumText(_("SIS-AT"), OLC_SISAT);
+    dfe->addEnumText(ContestToString(OLC_FAI), OLC_FAI);
+    dfe->addEnumText(ContestToString(OLC_Classic), OLC_Classic);
+    dfe->addEnumText(ContestToString(OLC_League), OLC_League);
+    dfe->addEnumText(ContestToString(OLC_Plus), OLC_Plus);
+    dfe->addEnumText(ContestToString(OLC_XContest), OLC_XContest);
+    dfe->addEnumText(ContestToString(OLC_DHVXC), OLC_DHVXC);
+    dfe->addEnumText(ContestToString(OLC_SISAT), OLC_SISAT);
     dfe->Set(settings_computer.contest);
     wp->RefreshDisplay();
   }

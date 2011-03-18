@@ -20,22 +20,28 @@
 }
 */
 
-#ifndef OLC_RULES_HPP
-#define OLC_RULES_HPP
+#include "Contests.hpp"
 
-#include "tchar.h"
-
-enum Contests {
-  OLC_Sprint = 0,
-  OLC_FAI,
-  OLC_Classic,
-  OLC_League,
-  OLC_Plus,
-  OLC_XContest,
-  OLC_DHVXC,
-  OLC_SISAT
-};
-
-const TCHAR* ContestToString(Contests contest);
-
-#endif
+const TCHAR*
+ContestToString(Contests contest)
+{
+  switch (contest) {
+  case OLC_Sprint:
+    return _T("OLC Sprint");
+  case OLC_FAI:
+    return _T("OLC FAI");
+  case OLC_Classic:
+    return _T("OLC Classic");
+  case OLC_League:
+    return _T("OLC League");
+  case OLC_Plus:
+    return _T("OLC Plus");
+  case OLC_XContest:
+    return _T("XContest");
+  case OLC_DHVXC:
+    return _T("DHV-XC");
+  case OLC_SISAT:
+    return _T("SIS-AT");
+  }
+  return NULL;
+}

@@ -90,6 +90,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/BGAFixedCourseZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/BGAEnhancedOptionZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/AnnularSectorZone.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/Contests.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/AbstractContest.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstra.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstraMin.cpp \
