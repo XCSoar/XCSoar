@@ -448,14 +448,14 @@ type=key
 data=8
 event=AdjustWaypoint previousarm
 label=$(WaypointPreviousArm)
-location=7
+location=6
 
 mode=Nav1
 type=key
 data=9
 event=AdjustWaypoint nextarm
 label=$(WaypointNextArm)
-location=8
+location=7
 
 mode=Nav1
 type=key
@@ -463,6 +463,13 @@ data=0
 event=WaypointDetails select
 event=Mode default
 label=Waypoint\nList$(CheckWaypointFile)
+location=8
+
+mode=Nav1
+type=key
+data=9
+event=Setup Alternates
+label=Alternates$(CheckWaypointFile)
 location=9
 
 # -------------
@@ -491,7 +498,7 @@ data=7
 event=GotoLookup
 event=Mode default
 label=GoTo$(CheckWaypointFile)
-location=6
+location=5
 
 mode=Nav2
 type=key
@@ -499,14 +506,7 @@ data=8
 event=Mode default
 event=AbortTask toggle
 label=Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)
-location=7
-
-mode=Nav2
-type=key
-data=9
-event=Setup Alternates
-label=Alternates$(CheckWaypointFile)
-location=8
+location=6
 
 mode=Nav2
 type=key
@@ -514,7 +514,7 @@ data=0
 event=Setup Target
 event=Mode default
 label=$(CheckTask)$(CheckTaskResumed)Target
-location=9
+location=7
 
 # -------------
 # mode=Display1
