@@ -77,6 +77,12 @@ Version 6.1 - not yet released
   - auto goto task: when no task is defined then on takeoff, if there is a waypoint
     within 1km of the takeoff location, a goto task pointing back to this location
     is automatically created.
+* infoboxes
+  - new graphical infoboxes
+    - barogram
+    - vario trace
+    - netto vario trace
+    - thermal circling trace
 * Android
   - support landscape/portrait switching
 
