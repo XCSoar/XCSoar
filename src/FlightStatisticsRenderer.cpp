@@ -370,12 +370,14 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const RECT rc,
                             const NMEA_INFO &nmea_info, 
                             const SETTINGS_COMPUTER &settings_computer,
                             const SETTINGS_MAP &settings_map, 
-                            const ContestTraceVector& olc,
+                            const ContestStatistics &contest,
                             const TracePointVector& trace) const
 {
   // note: braces used here just to delineate separate main steps of
   // this function.  It's useful to ensure things are done in the right
   // order rather than having a monolithic block of code.
+
+  const ContestTraceVector& solution = contest.get_contest_solution();
 
   Chart chart(canvas, rc);
 
@@ -390,7 +392,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const RECT rc,
   Graphics::DrawAircraft(canvas, nmea_info.Heading, aircraft_pos);
 
   DrawTrace(chart, proj, trace, Chart::STYLE_MEDIUMBLACK);
-  DrawTrace(chart, proj, olc, Chart::STYLE_REDTHICK);
+  DrawTrace(chart, proj, solution, Chart::STYLE_REDTHICK);
 }
 
 

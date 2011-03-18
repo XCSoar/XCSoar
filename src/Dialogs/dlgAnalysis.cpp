@@ -136,13 +136,11 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
         ProtectedTaskManager::Lease task(*protected_task_manager);
         task->get_trace_points(trace);
       }
-      const ContestTraceVector& solution = 
-        XCSoarInterface::Calculated().contest_stats.get_contest_solution();
 
       fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
                    XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::SettingsMap(),
-                   solution, trace);
+                   XCSoarInterface::Calculated().contest_stats, trace);
     }
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
