@@ -289,6 +289,27 @@ Chart::DrawLine(const fixed xmin, const fixed ymin,
   StyleLine(line[0], line[1], pen);
 }
 
+void 
+Chart::DrawFilledLine(const fixed xmin, const fixed ymin,
+                      const fixed xmax, const fixed ymax, Color &color)
+{
+  RasterPoint line[4];
+
+  line[0].x = (int)((xmin - x_min) * xscale) + rc.left + PaddingLeft;
+  line[0].y = (int)((y_max - ymin) * yscale) + rc.top;
+  line[1].x = (int)((xmax - x_min) * xscale) + rc.left + PaddingLeft;
+  line[1].y = (int)((y_max - ymax) * yscale) + rc.top;
+  line[2].x = line[1].x;
+  line[2].y = (int)((y_max) * yscale) + rc.top;
+  line[3].x = line[0].x;
+  line[3].y = (int)((y_max) * yscale) + rc.top;
+
+  Brush brush(color);
+  canvas.select(brush);
+  canvas.null_pen();
+  canvas.polygon(line, 4);
+}
+
 void
 Chart::DrawLine(const fixed xmin, const fixed ymin,
                 const fixed xmax, const fixed ymax, enum Style Style)

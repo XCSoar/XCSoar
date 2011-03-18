@@ -74,6 +74,8 @@ public:
                 const fixed xmax, const fixed ymax, Pen &pen);
   void DrawLine(const fixed xmin, const fixed ymin,
                 const fixed xmax, const fixed ymax, enum Style Style);
+  void DrawFilledLine(const fixed xmin, const fixed ymin,
+                const fixed xmax, const fixed ymax, Color &colour);
 
   void ScaleYFromData(const LeastSquares &lsdata);
   void ScaleXFromData(const LeastSquares &lsdata);
