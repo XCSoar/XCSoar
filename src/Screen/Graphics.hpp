@@ -111,6 +111,8 @@ namespace Graphics {
   extern Pen hpTerrainLine;
   extern Pen hpTerrainLineBg;
   extern Pen hpTrackBearingLine;
+  extern Pen TracePen;
+  extern Pen ContestPen;
 
   extern Brush hbCompass;
   extern Brush hbThermalBand;

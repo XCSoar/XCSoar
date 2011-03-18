@@ -81,6 +81,8 @@ Pen Graphics::hpMapScale;
 Pen Graphics::hpTerrainLine;
 Pen Graphics::hpTerrainLineBg;
 Pen Graphics::hpTrackBearingLine;
+Pen Graphics::TracePen;
+Pen Graphics::ContestPen;
 
 Brush Graphics::hbCompass;
 Brush Graphics::hbThermalBand;
@@ -268,6 +270,9 @@ Graphics::Initialise()
   hpMapScale.set(Layout::Scale(1), Color::BLACK);
   hpTerrainLine.set(Pen::DASH, Layout::Scale(2), Color(0x30, 0x30, 0x30));
   hpTerrainLineBg.set(Layout::Scale(2), Color::WHITE);
+
+  TracePen.set(2, Color(50, 243, 45));
+  ContestPen.set(3, Color(200, 50, 50));
 
   SmallIcon.load_big(IDB_SMALL, IDB_SMALL_HD);
   TurnPointIcon.load_big(IDB_TURNPOINT, IDB_TURNPOINT_HD);

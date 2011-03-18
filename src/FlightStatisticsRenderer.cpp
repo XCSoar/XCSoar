@@ -337,29 +337,30 @@ FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const RECT rc,
 }
 
 static void
-DrawTrace(Chart &chart, const ChartProjection& proj,
-          const TracePointVector& trace, Chart::Style style)
+DrawTrace(Canvas &canvas, const ChartProjection& proj,
+          const TracePointVector& trace)
 {
   RasterPoint last;
   for (TracePointVector::const_iterator it = trace.begin();
        it != trace.end(); ++it) {
     RasterPoint sc = proj.GeoToScreen(it->get_location());
     if (it != trace.begin())
-      chart.StyleLine(sc, last, style);
+      canvas.line(sc, last);
 
     last = sc;
   }
 }
 
 static void
-DrawTrace(Chart &chart, const ChartProjection& proj,
-          const ContestTraceVector& trace, Chart::Style style)
+DrawTrace(Canvas &canvas, const ChartProjection& proj,
+          const ContestTraceVector& trace)
 {
+
   RasterPoint last;
   for (const TracePoint* it = trace.begin(); it != trace.end(); ++it) {
     RasterPoint sc = proj.GeoToScreen(it->get_location());
     if (it != trace.begin())
-      chart.StyleLine(sc, last, style);
+      canvas.line(sc, last);
 
     last = sc;
   }
@@ -377,8 +378,6 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const RECT rc,
   // this function.  It's useful to ensure things are done in the right
   // order rather than having a monolithic block of code.
 
-  const ContestTraceVector& solution = contest.get_contest_solution();
-
   Chart chart(canvas, rc);
 
   if (trace.size() < 2) {
@@ -391,8 +390,10 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const RECT rc,
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.Location);
   Graphics::DrawAircraft(canvas, nmea_info.Heading, aircraft_pos);
 
-  DrawTrace(chart, proj, trace, Chart::STYLE_MEDIUMBLACK);
-  DrawTrace(chart, proj, solution, Chart::STYLE_REDTHICK);
+  canvas.select(Graphics::TracePen);
+  DrawTrace(canvas, proj, trace);
+  canvas.select(Graphics::ContestPen);
+  DrawTrace(canvas, proj, contest.get_contest_solution());
 }
 
 
@@ -423,7 +424,8 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const RECT rc,
 
   TracePointVector trace;
   task_manager.get_trace_points(trace);
-  DrawTrace(chart, proj, trace, Chart::STYLE_MEDIUMBLACK);
+  canvas.select(Graphics::TracePen);
+  DrawTrace(canvas, proj, trace);
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.Location);
   Graphics::DrawAircraft(canvas, nmea_info.Heading, aircraft_pos);
