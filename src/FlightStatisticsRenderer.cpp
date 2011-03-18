@@ -392,8 +392,16 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const RECT rc,
 
   canvas.select(Graphics::TracePen);
   DrawTrace(canvas, proj, trace);
-  canvas.select(Graphics::ContestPen);
-  DrawTrace(canvas, proj, contest.get_contest_solution());
+  switch (settings_computer.contest) {
+    case OLC_League:
+      canvas.select(Graphics::ContestPen);
+      DrawTrace(canvas, proj, contest.get_contest_solution(1));
+      break;
+    default:
+      canvas.select(Graphics::ContestPen);
+      DrawTrace(canvas, proj, contest.get_contest_solution());
+      break;
+  }
 }
 
 
