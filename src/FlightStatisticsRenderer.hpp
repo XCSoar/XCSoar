@@ -103,6 +103,8 @@ public:
 
   void CaptionTempTrace(TCHAR *sTmp) const;
   void CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const;
+  void CaptionOLC(TCHAR *sTmp, const SETTINGS_COMPUTER &settings_computer,
+                  const DERIVED_INFO &derived) const;
 };
 
 #endif

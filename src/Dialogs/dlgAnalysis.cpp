@@ -244,25 +244,9 @@ Update(void)
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"), _("On-Line Contest"));
     wf->SetCaption(sTmp);
     SetCalcCaption(_T(""));
-    {
-      const ContestResult& result_olc = 
-        XCSoarInterface::Calculated().contest_stats.get_contest_result();
-
-      TCHAR timetext1[100];
-      Units::TimeToText(timetext1, (int)result_olc.time);
-      TCHAR distance[100];
-      Units::FormatUserDistance(result_olc.distance, distance, 100);
-      _stprintf(sTmp,
-                (Layout::landscape
-                 ? _T("%s:\r\n  %s\r\n%s:\r\n  %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
-                 : _T("%s: %s\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
-                _("Distance"), distance,
-                _("Score"), (double)result_olc.score, _("pts"),
-                _("Time"), timetext1,
-                _("Speed"), (int)Units::ToUserTaskSpeed(result_olc.speed),
-                Units::GetTaskSpeedName());
-      wInfo->SetCaption(sTmp);
-    }
+    fs.CaptionOLC(sTmp, XCSoarInterface::SettingsComputer(),
+                  XCSoarInterface::Calculated());
+    wInfo->SetCaption(sTmp);
     break;
 
   case ANALYSIS_PAGE_AIRSPACE:
