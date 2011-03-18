@@ -695,7 +695,7 @@
         </Panel>
       </Panel>
 
-      <Panel Name="frmTaskType" X="2" Y="143" Width="-2" Height="48" Border="1">    
+      <Panel Name="frmTaskType" X="2" Y="143" Width="-2" Height="72" Border="1">    
          <Edit Name="prpTaskType" Caption="Task" X="0" Y="2" Width="-2" Height="22" CaptionWidth="120"
           Help="Default task type for new tasks you create.">
           <DataField DataType="enum" OnDataAccess="OnTaskDefaults_TaskType"/>
@@ -706,7 +706,7 @@
             <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" Min="1" Max="500" Step="1"/>
           </Edit>
         </Panel>
-        <Panel Name="frmAATTimeMargin" X="0" Y="-2" Width="-2" Height="22">
+        <Panel Name="frmAATTimeMargin" X="0" Y="48" Width="-2" Height="22">
           <Edit Name="prpAATTimeMargin" Caption="Optimisation margin*" Height="22" CaptionWidth="120"
             Help="Safety margin for AAT task optimisation.  Optimisation seeks to complete the task at the minimum time plus this margin time.">
             <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" Min="1" Max="30" Step="1"/>
