@@ -471,7 +471,7 @@ OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
   case AbstractTaskFactory::AAT_SEGMENT:
     return _("Area sector");
   case AbstractTaskFactory::AAT_ANNULAR_SECTOR:
-    return _("Area annular sector");
+    return _("Area sector with inner radius");
   case AbstractTaskFactory::FINISH_SECTOR:
     return _("FAI finish quadrant");
   case AbstractTaskFactory::FINISH_LINE:
