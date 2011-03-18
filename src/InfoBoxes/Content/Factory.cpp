@@ -35,6 +35,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Team.hpp"
 #include "InfoBoxes/Content/Thermal.hpp"
 #include "InfoBoxes/Content/Time.hpp"
+#include "InfoBoxes/Content/Trace.hpp"
 #include "InfoBoxes/Content/Weather.hpp"
 
 #include "Language.hpp"
@@ -774,10 +775,27 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Barogram"),
     N_("Barogram"),
-    N_(""),
+    N_("Trace of altitude during flight"),
     79, // H GPS
     79, // QFE GPS
   },
+
+  {
+    N_("Vario trace"),
+    N_("Vario"),
+    N_("Trace of vertical speed, as reported by the GPS, or the intelligent vario total energy vario value if connected to one."),
+    79, // H GPS
+    79, // QFE GPS
+  },
+
+  {
+    N_("Netto vario trace"),
+    N_("Netto"),
+    N_("Trace of vertical speed of air-mass, equal to vario value less the glider's estimated sink rate."),
+    79, // H GPS
+    79, // QFE GPS
+  },
+
 };
 
 InfoBoxContent*
@@ -940,10 +958,14 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentBarogram();
   case e_WP_H:
     return new InfoBoxContentNextAltitudeArrival();
-  case 77:
+  case e_Free_RAM:
     return new InfoBoxContentFreeRAM();
-  case 78:
+  case e_FlightLevel:
     return new InfoBoxContentFlightLevel();
+  case e_Vario_spark:
+    return new InfoBoxContentVarioSpark();
+  case e_NettoVario_spark:
+    return new InfoBoxContentNettoVarioSpark();
   }
 
   return NULL;

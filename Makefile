@@ -290,6 +290,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Content/Team.cpp \
 	$(SRC)/InfoBoxes/Content/Thermal.cpp \
 	$(SRC)/InfoBoxes/Content/Time.cpp \
+	$(SRC)/InfoBoxes/Content/Trace.cpp \
 	$(SRC)/InfoBoxes/Content/Weather.cpp \
 	$(SRC)/InfoBoxes/InfoBoxWindow.cpp \
 	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \

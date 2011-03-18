@@ -23,6 +23,7 @@ Copyright_License {
 #include "TraceHistory.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
+#include <assert.h>
 
 void
 TraceHistory::append(const NMEA_INFO& basic, const DERIVED_INFO& calculated)

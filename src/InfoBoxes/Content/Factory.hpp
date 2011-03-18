@@ -123,6 +123,8 @@ namespace InfoBoxFactory
     e_FlightLevel, /* Flight Level, also known as pressure altitude */
     /* 79 */
     e_Barogram,
+    e_Vario_spark,
+    e_NettoVario_spark,
     e_NUM_TYPES /* Last item */
   }t_InfoBox;
 
