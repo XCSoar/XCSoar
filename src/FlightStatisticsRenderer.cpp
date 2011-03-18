@@ -384,7 +384,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const RECT rc,
     return;
   }
 
-  ChartProjection proj(rc, olc, nmea_info.Location);
+  ChartProjection proj(rc, trace, nmea_info.Location);
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.Location);
   Graphics::DrawAircraft(canvas, nmea_info.Heading, aircraft_pos);
