@@ -48,6 +48,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &main_window, unsigned panel)
                                              InfoBoxLayout::InfoBoxGeometry,
                                              data);
   if (changed) {
+    data.modified = true;
     Profile::SetInfoBoxManagerConfig(infoBoxManagerConfig);
     Profile::Save();
     LogDebug(_T("InfoBox configuration: Changes saved"));
