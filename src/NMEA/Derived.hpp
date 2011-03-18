@@ -35,7 +35,7 @@ Copyright_License {
 #include "NMEA/Validity.hpp"
 #include "TeamCodeCalculation.h"
 #include "Engine/Navigation/Aircraft.hpp"
-
+#include "Engine/Navigation/TraceHistory.hpp"
 #include <tchar.h>
 
 /**
@@ -297,6 +297,8 @@ struct DERIVED_INFO:
 
   unsigned time_process_gps; /**< Time (ms) to process main computer functions */
   unsigned time_process_idle; /**< Time (ms) to process idle computer functions */
+
+  TraceHistory trace_history; /**< Store of short term history of variables */
 
   void ResetFlight(bool full);
 };

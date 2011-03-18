@@ -128,6 +128,10 @@ GlideComputer::ProcessGPS()
 
   vegavoice.Update(&Basic(), &Calculated(), SettingsComputer());
 
+  // update basic trace history
+  if (time_advanced())
+    SetCalculated().trace_history.append(Basic(), Calculated());
+
   // Update the ConditionMonitors
   ConditionMonitorsUpdate(*this);
 

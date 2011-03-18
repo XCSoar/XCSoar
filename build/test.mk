@@ -1356,6 +1356,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \
+	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceGlue.cpp \

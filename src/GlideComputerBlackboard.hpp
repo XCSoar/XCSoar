@@ -58,15 +58,20 @@ public:
 protected:
   ProtectedTaskManager &m_task;
 
-  bool time_advanced() {
-    return Basic().Time - LastBasic().Time > fixed_zero;
+  bool time_advanced() const {
+    return time_delta() > fixed_zero;
   }
   /**
    * @see GlideComputerBlackboard::ReadBlackboard()
    */
-  bool time_retreated() {
+  bool time_retreated() const {
     return _time_retreated;
   }
+
+  fixed time_delta() const {
+    return Basic().Time - LastBasic().Time;
+  }
+
   void ResetFlight(const bool full=true);
   void StartTask();
   void Initialise();

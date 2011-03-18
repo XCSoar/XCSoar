@@ -195,6 +195,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Task/TaskStore.cpp \
 	\
+	$(SRC)/Engine/Navigation/TraceHistory.cpp \
+	\
 	$(SRC)/Poco/RWLock.cpp \
 	\
 	$(SRC)/Airspace/AirspaceGlue.cpp \
