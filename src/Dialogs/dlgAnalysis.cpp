@@ -234,7 +234,8 @@ Update(void)
     break;
 
   case ANALYSIS_PAGE_OLC:
-    _stprintf(sTmp, _T("%s: %s"), _("Analysis"), _("On-Line Contest"));
+    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
+        ContestToString(XCSoarInterface::SettingsComputer().contest));
     wf->SetCaption(sTmp);
     SetCalcCaption(_T(""));
     fs.CaptionOLC(sTmp, XCSoarInterface::SettingsComputer(),
