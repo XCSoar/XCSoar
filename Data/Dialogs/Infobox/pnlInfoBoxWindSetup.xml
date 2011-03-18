@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 
 <Panel Name="frmInfoBoxAltitudeSetup" Border="0">
-  <Edit Name="prpAutoWind" Caption="Auto. wind" X="2" Y="2" Width="135" Height="22" CaptionWidth="68" Help="This allows switching on or off the automatic wind algorithm.  When the algorithm is switched off, the pilot is responsible for setting the wind estimate.&#10;[Circling] Requires only a GPS source&#10;[ZigZag] requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag and circling.">
+  <Edit Name="prpAutoWind" Caption="Auto. wind" X="2" Y="2" Width="115" Height="22" CaptionWidth="68" Help="This allows switching on or off the automatic wind algorithm.  When the algorithm is switched off, the pilot is responsible for setting the wind estimate.&#10;[Circling] Requires only a GPS source&#10;[ZigZag] requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag and circling.">
     <DataField DataType="enum"/>
   </Edit>
 
-  <Edit Name="prpTrailDrift" Caption="Trail drift" X="2" Y="24" Width="135" Height="22" CaptionWidth="68" Help="Determines whether the snail trail is drifted with the wind when displayed in circling mode.">
+  <Edit Name="prpTrailDrift" Caption="Trail drift" X="2" Y="24" Width="115" Height="22" CaptionWidth="68" Help="Determines whether the snail trail is drifted with the wind when displayed in circling mode.">
     <DataField DataType="boolean"/>
   </Edit>
   
