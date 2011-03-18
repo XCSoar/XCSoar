@@ -35,6 +35,12 @@ ObservationZoneClient::isInSector(const AIRCRAFT_STATE &ref) const
   return m_oz->isInSector(ref);
 }
 
+bool
+ObservationZoneClient::canStartThroughTop() const
+{
+  return m_oz->canStartThroughTop();
+}
+
 GeoPoint
 ObservationZoneClient::randomPointInSector(const fixed mag) const
 {

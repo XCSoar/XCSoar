@@ -156,5 +156,6 @@ StartPoint::check_transition_exit(const AIRCRAFT_STATE & ref_now,
 
   // transition inside sector to above 
   return !now_in_height && last_in_height 
-    && ObservationZoneClient::isInSector(ref_last);
+    && ObservationZoneClient::isInSector(ref_last)
+    && ObservationZoneClient::canStartThroughTop();
 }

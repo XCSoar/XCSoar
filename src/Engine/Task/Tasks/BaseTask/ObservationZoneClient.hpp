@@ -62,7 +62,14 @@ public:
  */
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
 
-/** 
+  /**
+   * If zone when used for start can trigger task start via vertical exit
+   *
+   * @return True if zone type can have a valid start through top
+   */
+  virtual bool canStartThroughTop() const;
+
+  /**
  * Generate a random location inside the OZ (to be used for testing)
  * 
  * @param mag proportional magnitude of error from center (0-1)

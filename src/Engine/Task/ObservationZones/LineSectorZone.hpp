@@ -99,6 +99,15 @@ public:
   fixed getLength() const {
     return getRadius()*fixed_two;
   }
+
+
+  /**
+   * If zone when used for start can trigger start via vertical exit
+   *
+   * @return False for line start sectors
+   */
+  gcc_pure
+  virtual bool canStartThroughTop() const { return false; }
 };
 
 #endif

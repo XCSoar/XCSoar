@@ -45,6 +45,14 @@ public:
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const = 0;
 
   /**
+   * If zone when used for start can trigger task start via vertical exit
+   *
+   * @return True if zone type can have a valid start through top
+   */
+  gcc_pure
+  virtual bool canStartThroughTop() const { return true; }
+
+  /**
    * Check transition constraints
    *
    * @param ref_now Current aircraft state
