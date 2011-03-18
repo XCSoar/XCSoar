@@ -378,9 +378,8 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const RECT rc,
   // this function.  It's useful to ensure things are done in the right
   // order rather than having a monolithic block of code.
 
-  Chart chart(canvas, rc);
-
   if (trace.size() < 2) {
+    Chart chart(canvas, rc);
     chart.DrawNoData();
     return;
   }
