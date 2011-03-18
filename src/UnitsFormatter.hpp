@@ -115,7 +115,22 @@ namespace Units
   bool FormatUserVSpeed(fixed Altitude, TCHAR *Buffer, size_t size,
                         bool IncludeUnit = true);
 
+  /**
+   * precedes with "-" if time is negative
+   * @param text returns HHMM
+   * @param d input seconds
+   */
   void TimeToText(TCHAR* text, int d);
+
+  /**
+   * sets HHMMSSSmart and SSSmart
+   * if hours > 0, returns HHMM in HHMMSSSmart and SS in SSSmart
+   * if hours == 0, returns MMSS in HHMMSSSmart and "" in SSSmart
+   * @param HHMMSSSmart buffer
+   * @param SSSmart buffer
+   * @param d input seconds
+   */
+  void TimeToTextSmart(TCHAR* HHMMSSSmart, TCHAR* SSSmart,int d);
 };
 
 #endif

@@ -167,30 +167,14 @@ InfoBoxContentNextETE::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  TCHAR tmp[32];
-  int dd = abs((int)XCSoarInterface::Calculated().
-               task_stats.current_leg.TimeRemaining) % (3600 * 24);
-  int hours = (dd / 3600);
-  int mins = (dd / 60 - hours * 60);
-  int seconds = (dd - mins * 60 - hours * 3600);
-  hours = hours % 24;
+  TCHAR HHMMSSsmart[32];
+  TCHAR SSsmart[32];
+  const int dd = (int)XCSoarInterface::Calculated().
+      task_stats.current_leg.TimeRemaining;
+  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
-  if (hours > 0) { // hh:mm, ss
-    // Set Value
-    _stprintf(tmp, _T("%02d:%02d"), hours, mins);
-    infobox.SetValue(tmp);
-
-    // Set Comment
-    _stprintf(tmp, _T("%02d"), seconds);
-    infobox.SetComment(tmp);
-  } else { // mm:ss
-    // Set Value
-    _stprintf(tmp, _T("%02d:%02d"), mins, seconds);
-    infobox.SetValue(tmp);
-
-    // Set Comment
-    infobox.SetComment(_T(""));
-  }
+  infobox.SetValue(HHMMSSsmart);
+  infobox.SetComment(SSsmart);
 }
 
 void
@@ -343,29 +327,13 @@ InfoBoxContentFinalETE::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  TCHAR tmp[32];
-  int dd = abs((int)task_stats.total.TimeRemaining) % (3600 * 24);
-  int hours = (dd / 3600);
-  int mins = (dd / 60 - hours * 60);
-  int seconds = (dd - mins * 60 - hours * 3600);
-  hours = hours % 24;
+  TCHAR HHMMSSsmart[32];
+  TCHAR SSsmart[32];
+  const int dd = abs((int)task_stats.total.TimeRemaining);
+  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
-  if (hours > 0) { // hh:mm, ss
-    // Set Value
-    _stprintf(tmp, _T("%02d:%02d"), hours, mins);
-    infobox.SetValue(tmp);
-
-    // Set Comment
-    _stprintf(tmp, _T("%02d"), seconds);
-    infobox.SetComment(tmp);
-  } else { // mm:ss
-    // Set Value
-    _stprintf(tmp, _T("%02d:%02d"), mins, seconds);
-    infobox.SetValue(tmp);
-
-    // Set Comment
-    infobox.SetComment(_T(""));
-  }
+  infobox.SetValue(HHMMSSsmart);
+  infobox.SetComment(SSsmart);
 }
 
 void
@@ -597,29 +565,13 @@ InfoBoxContentTaskAATime::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  TCHAR tmp[32];
-  int dd = abs((int)common_stats.aat_time_remaining) % (3600 * 24);
-  int hours = (dd / 3600);
-  int mins = (dd / 60 - hours * 60);
-  int seconds = (dd - mins * 60 - hours * 3600);
-  hours = hours % 24;
+  TCHAR HHMMSSsmart[32];
+  TCHAR SSsmart[32];
+  const int dd = abs((int)common_stats.aat_time_remaining);
+  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
-  if (hours > 0) { // hh:mm, ss
-    // Set Value
-    _stprintf(tmp, _T("%02d:%02d"), hours, mins);
-    infobox.SetValue(tmp);
-
-    // Set Comment
-    _stprintf(tmp, _T("%02d"), seconds);
-    infobox.SetComment(tmp);
-  } else { // mm:ss
-    // Set Value
-    _stprintf(tmp, _T("%02d:%02d"), mins, seconds);
-    infobox.SetValue(tmp);
-
-    // Set Comment
-    infobox.SetComment(_T(""));
-  }
+  infobox.SetValue(HHMMSSsmart);
+  infobox.SetComment(SSsmart);
 }
 
 void
@@ -635,33 +587,19 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  TCHAR tmp[32];
   fixed diff = task_stats.total.TimeRemaining -
     common_stats.aat_time_remaining;
-  int dd = abs((int)diff) % (3600 * 24);
-  int hours = (dd / 3600);
-  int mins = (dd / 60 - hours * 60);
-  int seconds = (dd - mins * 60 - hours * 3600);
-  hours = hours % 24;
 
-  if (hours > 0) { // hh:mm, ss
-    // Set Value
-    _stprintf(tmp, negative(diff) ? _T("-%02d:%02d") : _T("%02d:%02d"),
-              hours, mins);
-    infobox.SetValue(tmp);
+  TCHAR HHMMSSsmart[32];
+  TCHAR SSsmart[32];
+  const int dd = abs((int)diff);
+  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
-    // Set Comment
-    _stprintf(tmp, _T("%02d"), seconds);
-    infobox.SetComment(tmp);
-  } else { // mm:ss
-    // Set Value
-    _stprintf(tmp, negative(diff) ? _T("-%02d:%02d") : _T("%02d:%02d"),
-              mins, seconds);
-    infobox.SetValue(tmp);
+  TCHAR tmp[32];
+  _stprintf(tmp, negative(diff) ? _T("-%s") : _T("%s"), HHMMSSsmart);
+  infobox.SetValue(tmp);
 
-    // Set Comment
-    infobox.SetComment(_T(""));
-  }
+  infobox.SetComment(SSsmart);
 
   // Set Color (red/blue/black)
   infobox.SetColor(negative(diff) ? 1 :
@@ -779,26 +717,14 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxWindow &infobox)
     infobox.SetInvalid();
     return;
   }
-  TCHAR tmp[32];
-  const fixed deltatime = XCSoarInterface::Basic().Time -
-      common_stats.TimeUnderStartMaxHeight;
-  int dd = (int)deltatime % (3600 * 24);
-  int hours = (dd / 3600);
-  int mins = (dd / 60 - hours * 60);
-  int seconds = (dd - mins * 60 - hours * 3600);
-  hours = hours % 24;
 
-  if (hours > 0) { // hh:mm, ss
-    // Set Value
-    _stprintf(tmp, _T("%02d:%02d"), hours, mins);
-    infobox.SetValue(tmp);
+  const int dd = (int)(XCSoarInterface::Basic().Time -
+      common_stats.TimeUnderStartMaxHeight);
 
-  } else { // mm:ss
-    // Set Value
-    _stprintf(tmp, _T("%02d:%02d"), mins, seconds);
-    infobox.SetValue(tmp);
+  TCHAR HHMMSSsmart[32];
+  TCHAR SSsmart[32];
+  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
-    // Set Comment
-    infobox.SetComment(_T("Time Below"));
-  }
+  infobox.SetValue(HHMMSSsmart);
+  infobox.SetComment(_("Time Below"));
 }

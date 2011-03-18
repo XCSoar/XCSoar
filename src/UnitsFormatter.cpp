@@ -412,3 +412,23 @@ Units::TimeToText(TCHAR* text, int d)
   else
     _stprintf(text, _T("%02d:%02d"), hours, mins);
 }
+
+void
+Units::TimeToTextSmart(TCHAR* HHMMSSSmart, TCHAR* SSSmart,int d)
+{
+  const int dd = abs(d) % (3600 * 24);
+  int hours = (dd / 3600);
+  const int mins = (dd / 60 - hours * 60);
+  const int seconds = (dd - mins * 60 - hours * 3600);
+  hours = hours % 24;
+
+  if (hours > 0) { // hh:mm, ss
+    // Set Value
+    _stprintf(HHMMSSSmart, _T("%02d:%02d"), hours, mins);
+    _stprintf(SSSmart, _T("%02d"), seconds);
+
+  } else { // mm:ss
+    _stprintf(HHMMSSSmart, _T("%02d:%02d"), mins, seconds);
+      SSSmart[0] = '\0';
+  }
+}
