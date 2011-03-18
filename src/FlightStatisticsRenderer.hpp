@@ -84,7 +84,6 @@ public:
 
   void RenderOLC(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
                  const SETTINGS_COMPUTER &settings_computer,
-                 const SETTINGS_MAP &settings_map,
                  const ContestStatistics &contest,
                  const TracePointVector& trace) const;
 
