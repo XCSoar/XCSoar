@@ -409,7 +409,17 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
                                      const SETTINGS_COMPUTER &settings_computer,
                                      const DERIVED_INFO &derived) const
 {
-  const ContestResult& result_olc = derived.contest_stats.get_contest_result();
+  unsigned result_index;
+  switch (settings_computer.contest) {
+    case OLC_League:
+      result_index = 1;
+      break;
+    default:
+      result_index = -1;
+      break;
+  }
+
+  const ContestResult& result_olc = derived.contest_stats.get_contest_result(result_index);
 
   TCHAR timetext1[100];
   Units::TimeToText(timetext1, (int)result_olc.time);
