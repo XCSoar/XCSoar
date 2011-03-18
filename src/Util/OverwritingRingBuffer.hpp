@@ -70,6 +70,11 @@ public:
       assert(&buffer == &other.buffer);
       return i == other.i;
     }
+
+    bool operator!=(const const_iterator &other) const {
+      assert(&buffer == &other.buffer);
+      return i != other.i;
+    }
   };
 
 protected:
