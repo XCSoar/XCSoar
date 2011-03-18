@@ -793,9 +793,6 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxWindow &infobox)
     _stprintf(tmp, _T("%02d:%02d"), hours, mins);
     infobox.SetValue(tmp);
 
-    // Set Comment
-    _stprintf(tmp, _T("%02d"), seconds);
-    infobox.SetComment(tmp);
   } else { // mm:ss
     // Set Value
     _stprintf(tmp, _T("%02d:%02d"), mins, seconds);

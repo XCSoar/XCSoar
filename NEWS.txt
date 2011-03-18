@@ -60,8 +60,9 @@ Version 6.1 - not yet released
   - use runway heading and length contained in cup waypoint files
   - for WELT2000 generated winpilot waypoint files (.dat) use runway heading
 * task
+  - new Task Manager and calculator dialogs
   - added BGA start point sector
-  - added AAT annular sector
+  - added AAT inner radius sector
   - configurable alternate sorting 
     - by arrival altitude
     - along task direction
@@ -77,6 +78,7 @@ Version 6.1 - not yet released
   - auto goto task: when no task is defined then on takeoff, if there is a waypoint
     within 1km of the takeoff location, a goto task pointing back to this location
     is automatically created.
+  - new infobox displays time below maximum task start height
 * infoboxes
   - new graphical infoboxes
     - barogram
