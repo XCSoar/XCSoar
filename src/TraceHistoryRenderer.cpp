@@ -25,11 +25,16 @@ Copyright_License {
 #include "Navigation/TraceHistory.hpp"
 #include "Screen/Chart.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Graphics.hpp"
+#include "Appearance.hpp"
 #include <algorithm>
 
 void
 TraceHistoryRenderer::scale_chart(Chart &chart,
-                                  const TraceVariableHistory& var) {
+                                  const TraceVariableHistory& var) 
+{
+  chart.PaddingBottom = 0;
+  chart.PaddingLeft = 0;
   chart.ScaleXFromValue(fixed(0));
   chart.ScaleXFromValue(fixed(var.capacity()-1));
 
@@ -48,12 +53,21 @@ TraceHistoryRenderer::scale_chart(Chart &chart,
 }
 
 void
-TraceHistoryRenderer::RenderVario(Canvas& canvas,
-                                  const RECT rc,
+TraceHistoryRenderer::render_axis(Chart &chart,
                                   const TraceVariableHistory& var)
 {
-  Chart chart(canvas, rc);
-  scale_chart(chart, var);
+  Pen pen0(1, Color::GRAY);
+  chart.DrawLine(fixed_zero, fixed_zero, 
+                 fixed(var.capacity()-1), fixed_zero, 
+                 pen0);
+}
+
+
+void 
+TraceHistoryRenderer::render_line(Chart &chart,
+                                  const TraceVariableHistory& var)
+{
+  Pen pen(2, Appearance.InverseInfoBox? Color::WHITE: Color::BLACK);
 
   fixed x_last, y_last;
   unsigned i=0;
@@ -62,8 +76,62 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
     fixed x= fixed(i);
     fixed y= *it;
     if (i)
-      chart.DrawLine(x_last, y_last, x, y, Chart::STYLE_REDTHICK);
+      chart.DrawLine(x_last, y_last, x, y, pen);
     x_last = x;
     y_last = y;
   }
+}
+
+static int sgn(const fixed x) {
+  if (positive(x))
+    return 1;
+  if (negative(x))
+    return -1;
+  return 0;
+}
+
+void 
+TraceHistoryRenderer::render_filled_posneg(Chart &chart,
+                                           const TraceVariableHistory& var)
+{
+  Color c_pos(Appearance.InverseInfoBox? Graphics::inv_blueColor: Color::BLUE);
+  Color c_neg(Appearance.InverseInfoBox? Graphics::inv_redColor: Color::RED);
+
+  fixed x_last(fixed_zero), y_last(fixed_zero);
+  unsigned i=0;
+  for (TraceVariableHistory::const_iterator it = var.begin();
+       it != var.end(); ++it, ++i) {
+    fixed x= fixed(i);
+    fixed y= *it;
+    if (i) {
+      if (sgn(y)*sgn(y_last)<0) {
+        if (positive(y_last))
+          chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero, c_pos);
+        else if (negative(y_last))
+          chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero, c_neg);
+        
+        x_last = x-fixed_half;
+        y_last = fixed_zero;
+
+      }
+      if (positive(y) || positive(y_last))
+        chart.DrawFilledLine(x_last, y_last, x, y, c_pos);
+      else if (negative(y) || negative(y_last))
+        chart.DrawFilledLine(x_last, y_last, x, y, c_neg);
+    }
+    x_last = x;
+    y_last = y;
+  }
+}
+
+void
+TraceHistoryRenderer::RenderVario(Canvas& canvas,
+                                  const RECT rc,
+                                  const TraceVariableHistory& var)
+{
+  Chart chart(canvas, rc);
+  scale_chart(chart, var);
+  // render_line(chart, var);
+  render_filled_posneg(chart, var);
+  render_axis(chart, var);
 }

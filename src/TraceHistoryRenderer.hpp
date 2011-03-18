@@ -38,6 +38,12 @@ public:
 private:
   static void scale_chart(Chart &chart,
                           const TraceVariableHistory& var);
+  static void render_axis(Chart &chart,
+                          const TraceVariableHistory& var);
+  static void render_line(Chart &chart,
+                          const TraceVariableHistory& var);
+  static void render_filled_posneg(Chart &chart,
+                                   const TraceVariableHistory& var);
 };
 
 #endif
