@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-11 07:43+0100\n"
-"PO-Revision-Date: 2011-01-19 22:48+0000\n"
-"Last-Translator: Max Kellermann <max@duempel.org>\n"
+"PO-Revision-Date: 2011-03-18 08:02+0000\n"
+"Last-Translator: Roman Stoklasa <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-13 22:56+0000\n"
-"X-Generator: Launchpad (build 12351)\n"
+"X-Launchpad-Export-Date: 2011-03-18 08:24+0000\n"
+"X-Generator: Launchpad (build 12617)\n"
 
 #: src/Airspace/AirspaceGlue.cpp:40
 msgid "Loading Airspace File..."
@@ -345,7 +345,7 @@ msgstr "Výška AGL"
 #: src/InfoBoxes/Content/Factory.cpp:69
 #, no-c-format
 msgid "H AGL"
-msgstr "V AGL"
+msgstr "V. AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:70
 #, no-c-format
@@ -401,7 +401,7 @@ msgstr "Okamžitá kĺzavosť"
 #: src/InfoBoxes/Content/Factory.cpp:96
 #, no-c-format
 msgid "L/D Inst"
-msgstr "Ok. kĺz"
+msgstr "Okamž. kĺz."
 
 #: src/InfoBoxes/Content/Factory.cpp:97
 #, no-c-format
@@ -447,7 +447,7 @@ msgstr "Rýchlosť voči zemi"
 #: src/InfoBoxes/Content/Factory.cpp:114
 #, no-c-format
 msgid "V Gnd"
-msgstr "R zem"
+msgstr "Rychl. zem"
 
 #: src/InfoBoxes/Content/Factory.cpp:115
 #, no-c-format
@@ -539,7 +539,7 @@ msgstr "Vzdialenosť k ďalšiemu"
 #: src/InfoBoxes/Content/Factory.cpp:159
 #, no-c-format
 msgid "WP Dist"
-msgstr "OB vzdial"
+msgstr "Vzdial. k OB"
 
 #: src/InfoBoxes/Content/Factory.cpp:160
 #, no-c-format
@@ -558,7 +558,7 @@ msgstr "Výškový rozdiel k ďalšiemu"
 #: src/InfoBoxes/Content/Factory.cpp:168
 #, no-c-format
 msgid "WP AltD"
-msgstr "OB vyskR"
+msgstr "Výšk.roz.OB"
 
 #: src/InfoBoxes/Content/Factory.cpp:169
 #, no-c-format
@@ -1119,7 +1119,7 @@ msgstr "Rýchlosť pri delfínovaní"
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
 msgid "V Opt"
-msgstr "R Opt"
+msgstr "Opt. rýchl."
 
 #: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
@@ -2567,9 +2567,8 @@ msgid "Fill all"
 msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:793
-#, fuzzy
 msgid "Fill padding"
-msgstr "Pristávacie klapky"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:811
 msgid "ON/Fixed"
@@ -3861,9 +3860,8 @@ msgid "Auto wind"
 msgstr "Automatický výpočet vetra"
 
 #: Data/Dialogs/dlgConfiguration.xml:86 Data/Dialogs/dlgConfiguration_L.xml:86
-#, fuzzy
 msgid "Specifies the mode for filling the airspace area."
-msgstr "Určuje súbor s definíciou topológie."
+msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:20 Data/Dialogs/dlgStatusSystem.xml:4
 msgid "GPS lock"
@@ -3991,7 +3989,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:19
 #: Data/Dialogs/dlgWayPointDetails_L.xml:19
 msgid "Alt diff MC 0"
-msgstr "Výškový rozdiel MC 0"
+msgstr "Výškový rozdiel na MC 0"
 
 #: Data/Dialogs/dlgConfiguration.xml:179
 #: Data/Dialogs/dlgConfiguration_L.xml:179
@@ -4226,9 +4224,8 @@ msgid "Height"
 msgstr "Výška"
 
 #: Data/Dialogs/dlgConfiguration.xml:86 Data/Dialogs/dlgConfiguration_L.xml:86
-#, fuzzy
 msgid "Airspace fill mode*"
-msgstr "Zobrazenie vzduš. priestoru"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:457
 #: Data/Dialogs/dlgConfiguration_L.xml:456
@@ -6203,7 +6200,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:20
 #: Data/Dialogs/dlgWayPointDetails_L.xml:20
 msgid "Alt diff MC safety"
-msgstr "Výškový rozdiel s bezpečným MC"
+msgstr "Výšk. rozdiel na bezpečnom MC"
 
 #: Data/Dialogs/dlgConfiguration.xml:257
 #: Data/Dialogs/dlgConfiguration_L.xml:257
@@ -6515,7 +6512,7 @@ msgstr "Základná frekvencia"
 #: Data/Dialogs/dlgWayPointDetails.xml:21
 #: Data/Dialogs/dlgWayPointDetails_L.xml:21
 msgid "Alt diff MC current"
-msgstr "Výškový rozdiel MC akt."
+msgstr "Výškový rozdiel na akt. MC"
 
 #: Data/Dialogs/dlgConfiguration.xml:123
 #: Data/Dialogs/dlgConfiguration_L.xml:123
