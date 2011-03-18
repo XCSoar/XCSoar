@@ -52,22 +52,6 @@ ChartProjection::ChartProjection(const RECT &rc,
   set_projection(rc, center, radius);
 }
 
-ChartProjection::ChartProjection(const RECT &rc,
-                                 const ContestTraceVector& trace,
-                                 const GeoPoint &fallback_loc) 
-{
-  TaskProjection proj;
-  proj.reset(fallback_loc);
-  for (const TracePoint* it = trace.begin(); it != trace.end(); ++it)
-    proj.scan_location(it->get_location());
-
-  proj.update_fast();
-
-  const GeoPoint center = proj.get_center();
-  const fixed radius = max(fixed(10000), proj.ApproxRadius());
-  set_projection(rc, center, radius);
-}
-
 void ChartProjection::set_projection(const RECT &rc, 
                                      const GeoPoint &center,
                                      const fixed radius)

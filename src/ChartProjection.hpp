@@ -54,11 +54,7 @@ public:
                   const TracePointVector& trace,
                   const GeoPoint &fallback_loc);
 
-  ChartProjection(const RECT &rc,
-                  const ContestTraceVector& trace,
-                  const GeoPoint &fallback_loc);
 private:
-
   void set_projection(const RECT &rc, 
                       const GeoPoint &center,
                       const fixed radius);
