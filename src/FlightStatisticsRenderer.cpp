@@ -411,7 +411,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
         derived.contest_stats.get_contest_result(1);
 
     TCHAR timetext1[100];
-    Units::TimeToText(timetext1, (int)result_classic.time);
+    Units::TimeToTextHHMMSigned(timetext1, (int)result_classic.time);
     TCHAR distance[100];
     Units::FormatUserDistance(result_classic.distance, distance, 100);
     TCHAR distance_fai[100];
@@ -424,6 +424,29 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
               _("Score"), (double)result_classic.score, _("pts"),
               _("Time"), timetext1,
               _("Speed"), (int)Units::ToUserTaskSpeed(result_classic.speed),
+              Units::GetTaskSpeedName());
+  } else if (settings_computer.contest == OLC_DHVXC ||
+             settings_computer.contest == OLC_XContest) {
+    const ContestResult& result_free =
+        derived.contest_stats.get_contest_result(0);
+
+    const ContestResult& result_triangle =
+        derived.contest_stats.get_contest_result(1);
+
+    TCHAR timetext1[100];
+    Units::TimeToTextHHMMSigned(timetext1, (int)result_free.time);
+    TCHAR distance[100];
+    Units::FormatUserDistance(result_free.distance, distance, 100);
+    TCHAR distance_fai[100];
+    Units::FormatUserDistance(result_triangle.distance, distance_fai, 100);
+    _stprintf(sTmp,
+              (Layout::landscape
+               ? _T("%s:\r\n  %s (Free)\r\n  %s (Triangle)\r\n%s:\r\n  %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
+               : _T("%s: %s (Free)\r\n%s (Triangle)\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
+              _("Distance"), distance, distance_fai,
+              _("Score"), (double)result_free.score, _("pts"),
+              _("Time"), timetext1,
+              _("Speed"), (int)Units::ToUserTaskSpeed(result_free.speed),
               Units::GetTaskSpeedName());
   } else {
     unsigned result_index;
@@ -440,7 +463,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
         derived.contest_stats.get_contest_result(result_index);
 
     TCHAR timetext1[100];
-    Units::TimeToText(timetext1, (int)result_olc.time);
+    Units::TimeToTextHHMMSigned(timetext1, (int)result_olc.time);
     TCHAR distance[100];
     Units::FormatUserDistance(result_olc.distance, distance, 100);
     _stprintf(sTmp,
