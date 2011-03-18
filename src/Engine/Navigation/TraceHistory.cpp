@@ -37,4 +37,5 @@ TraceHistory::clear()
 {
   BruttoVario.clear();
   NettoVario.clear();
+  CirclingAverage.clear();
 }

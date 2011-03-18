@@ -362,6 +362,20 @@ GlideComputerAirData::UpdateLiftDatabase()
     unsigned index = heading_to_index(h);
     calculated.LiftDatabase[index] = Basic().BruttoVario;
   }
+
+  // detect zero crossing
+  if (((Basic().Heading.value_degrees()< fixed_90) && 
+       (LastBasic().Heading.value_degrees()> fixed_270)) ||
+      ((LastBasic().Heading.value_degrees()< fixed_90) && 
+       (Basic().Heading.value_degrees()> fixed_270))) {
+
+    fixed h_av = fixed_zero;
+    for (unsigned i=0; i<36; ++i) {
+      h_av += calculated.LiftDatabase[i];
+    }
+    h_av/= 36;
+    calculated.trace_history.CirclingAverage.push(h_av);
+  }
 }
 
 void
@@ -372,6 +386,8 @@ GlideComputerAirData::ResetLiftDatabase()
   // Reset LiftDatabase to zero
   for (unsigned i = 0; i < 36; i++)
     calculated.LiftDatabase[i] = fixed_zero;
+
+  calculated.trace_history.CirclingAverage.clear();
 }
 
 void

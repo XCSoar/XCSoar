@@ -34,6 +34,7 @@ class TraceHistory {
 public:
   TraceVariableHistory BruttoVario;
   TraceVariableHistory NettoVario;
+  TraceVariableHistory CirclingAverage;
 
   void append(const NMEA_INFO& basic, const DERIVED_INFO& calculated);
   void clear();
