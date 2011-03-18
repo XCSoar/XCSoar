@@ -165,6 +165,10 @@ public:
   const_iterator end() const {
     return const_iterator(*this, tail);
   }
+
+  unsigned capacity() const {
+    return size;
+  }
 };
 
 #endif
