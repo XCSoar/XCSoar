@@ -156,7 +156,7 @@ SetLocalTime(void)
 {
   WndProperty* wp;
   TCHAR temp[20];
-  Units::TimeToText(temp, TimeLocal(XCSoarInterface::Basic().Time));
+  Units::TimeToTextHHMMSigned(temp, TimeLocal(XCSoarInterface::Basic().Time));
 
   wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
   assert(wp != NULL);

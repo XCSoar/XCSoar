@@ -399,7 +399,7 @@ Units::FormatUserVSpeed(fixed Speed, TCHAR *Buffer, size_t size,
 }
 
 void
-Units::TimeToText(TCHAR* text, int d)
+Units::TimeToTextHHMMSigned(TCHAR* text, int d)
 {
   int hours, mins;
   bool negative = (d < 0);

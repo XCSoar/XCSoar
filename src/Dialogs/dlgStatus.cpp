@@ -260,13 +260,13 @@ UpdateValuesTimes(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
   assert(wp != NULL);
-  Units::TimeToText(Temp, (int)DetectCurrentTime(&basic));
+  Units::TimeToTextHHMMSigned(Temp, (int)DetectCurrentTime(&basic));
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTakeoffTime"));
   assert(wp != NULL);
   if (positive(flight.FlightTime)) {
-    Units::TimeToText(Temp, TimeLocal((long)flight.TakeOffTime));
+    Units::TimeToTextHHMMSigned(Temp, TimeLocal((long)flight.TakeOffTime));
     wp->SetText(Temp);
   } else {
     wp->SetText(_T(""));
@@ -275,7 +275,7 @@ UpdateValuesTimes(void)
   wp = (WndProperty*)wf->FindByName(_T("prpLandingTime"));
   assert(wp != NULL);
   if (!flight.Flying && positive(flight.FlightTime)) {
-    Units::TimeToText(Temp,
+    Units::TimeToTextHHMMSigned(Temp,
                       TimeLocal((long)(flight.TakeOffTime
                                        + flight.FlightTime)));
     wp->SetText(Temp);
@@ -286,7 +286,7 @@ UpdateValuesTimes(void)
   wp = (WndProperty*)wf->FindByName(_T("prpFlightTime"));
   assert(wp != NULL);
   if (positive(flight.FlightTime)) {
-    Units::TimeToText(Temp, (int)flight.FlightTime);
+    Units::TimeToTextHHMMSigned(Temp, (int)flight.FlightTime);
     wp->SetText(Temp);
   } else {
     wp->SetText(_T(""));
@@ -400,7 +400,7 @@ UpdateValuesRules(void)
   wp = (WndProperty*)wf->FindByName(_T("prpStartTime"));
   assert(wp != NULL);
   if (common_stats.task_started) {
-    Units::TimeToText(Temp, (int)TimeLocal(start_state.Time));
+    Units::TimeToTextHHMMSigned(Temp, (int)TimeLocal(start_state.Time));
     wp->SetText(Temp);
   } else {
     wp->SetText(_T(""));
@@ -468,7 +468,7 @@ UpdateValuesTask(void)
   TCHAR Temp[80];
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskTime"));
-  Units::TimeToText(Temp, protected_task_manager->get_ordered_task_behaviour().aat_min_time);
+  Units::TimeToTextHHMMSigned(Temp, protected_task_manager->get_ordered_task_behaviour().aat_min_time);
   assert(wp != NULL);
   if (task_stats.has_targets)
     wp->SetText(Temp);
@@ -477,14 +477,14 @@ UpdateValuesTask(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpETETime"));
   assert(wp != NULL);
-  Units::TimeToText(Temp,
+  Units::TimeToTextHHMMSigned(Temp,
                     task_stats.total.TimeElapsed +
                     task_stats.total.TimeRemaining);
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpRemainingTime"));
   assert(wp != NULL);
-  Units::TimeToText(Temp, task_stats.total.TimeRemaining);
+  Units::TimeToTextHHMMSigned(Temp, task_stats.total.TimeRemaining);
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskDistance"));

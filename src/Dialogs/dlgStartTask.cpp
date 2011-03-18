@@ -66,7 +66,7 @@ void dlgStartTaskShowModal(bool *validStart, double Time, double Speed, double A
 
   wp = (WndProperty*)wf->FindByName(_T("prpTime"));
   if (wp) {
-    Units::TimeToText(Temp, (int)TimeLocal((int)Time));
+    Units::TimeToTextHHMMSigned(Temp, (int)TimeLocal((int)Time));
     wp->SetText(Temp);
   }
 

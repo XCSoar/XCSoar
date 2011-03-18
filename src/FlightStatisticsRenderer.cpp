@@ -422,7 +422,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
   const ContestResult& result_olc = derived.contest_stats.get_contest_result(result_index);
 
   TCHAR timetext1[100];
-  Units::TimeToText(timetext1, (int)result_olc.time);
+  Units::TimeToTextHHMMSigned(timetext1, (int)result_olc.time);
   TCHAR distance[100];
   Units::FormatUserDistance(result_olc.distance, distance, 100);
   _stprintf(sTmp,
@@ -712,8 +712,8 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) 
     TCHAR timetext1[100];
     TCHAR timetext2[100];
     if (common.ordered_has_targets) {
-      Units::TimeToText(timetext1, (int)common.task_time_remaining);
-      Units::TimeToText(timetext2, (int)common.aat_time_remaining);
+      Units::TimeToTextHHMMSigned(timetext1, (int)common.task_time_remaining);
+      Units::TimeToTextHHMMSigned(timetext2, (int)common.aat_time_remaining);
 
       if (Layout::landscape) {
         _stprintf(sTmp,
@@ -736,7 +736,7 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) 
             Units::GetTaskSpeedName());
       }
     } else {
-      Units::TimeToText(timetext1, (int)common.task_time_remaining);
+      Units::TimeToTextHHMMSigned(timetext1, (int)common.task_time_remaining);
       _stprintf(sTmp, _T("%s: %s\r\n%s: %5.0f %s\r\n"),
                 _("Task to go"), timetext1, _("Distance to go"),
                 (double)Units::ToUserDistance(d_remaining),

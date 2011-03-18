@@ -120,7 +120,7 @@ namespace Units
    * @param text returns HHMM
    * @param d input seconds
    */
-  void TimeToText(TCHAR* text, int d);
+  void TimeToTextHHMMSigned(TCHAR* text, int d);
 
   /**
    * sets HHMMSSSmart and SSSmart
