@@ -25,6 +25,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "FlightStatisticsRenderer.hpp"
+#include "TraceHistoryRenderer.hpp"
 #include "UnitsFormatter.hpp"
 #include "Units.hpp"
 #include "Components.hpp"
@@ -45,6 +46,8 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
 
   if (var.empty())
     return;
+
+  TraceHistoryRenderer::RenderVario(canvas, rc, var);
 }
 
 void

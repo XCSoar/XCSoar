@@ -196,6 +196,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Task/TaskStore.cpp \
 	\
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
+	$(SRC)/TraceHistoryRenderer.cpp \
 	\
 	$(SRC)/Poco/RWLock.cpp \
 	\
