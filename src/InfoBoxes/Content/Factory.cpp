@@ -780,6 +780,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     79, // QFE GPS
   },
 
+  // 80
   {
     N_("Vario trace"),
     N_("Vario"),
@@ -788,6 +789,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     79, // QFE GPS
   },
 
+  // 81
   {
     N_("Netto vario trace"),
     N_("Netto"),
@@ -795,7 +797,15 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     79, // H GPS
     79, // QFE GPS
   },
-
+  
+  // 82
+  {
+    N_("Thermal circling trace"),
+    N_("TC Circling"),
+    N_("Trace of average climb rate each turn in circling, based of the reported GPS altitude, or vario if available."),
+    79, // H GPS
+    79, // QFE GPS
+  },
 };
 
 InfoBoxContent*
@@ -966,6 +976,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentVarioSpark();
   case e_NettoVario_spark:
     return new InfoBoxContentNettoVarioSpark();
+  case e_CirclingAverage_spark:
+    return new InfoBoxContentCirclingAverageSpark();
   }
 
   return NULL;

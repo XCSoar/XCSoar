@@ -63,14 +63,20 @@ InfoBoxContentNettoVarioSpark::on_custom_paint(InfoBoxWindow &infobox, Canvas &c
 }
 
 void
-InfoBoxContentVarioSpark::Update(InfoBoxWindow &infobox)
+InfoBoxContentCirclingAverageSpark::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  const TraceHistory &trace = CommonInterface::Calculated().trace_history;
-  if (trace.BruttoVario.empty())
+  do_paint(infobox, canvas, CommonInterface::Calculated().trace_history.CirclingAverage);
+}
+
+void
+InfoBoxContentSpark::label_vspeed(InfoBoxWindow &infobox,
+                                  const TraceVariableHistory& var)
+{
+  if (var.empty())
     return;
 
   TCHAR sTmp[32];
-  Units::FormatUserVSpeed(trace.BruttoVario.last(), sTmp,
+  Units::FormatUserVSpeed(var.last(), sTmp,
                           sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
 
@@ -79,21 +85,23 @@ InfoBoxContentVarioSpark::Update(InfoBoxWindow &infobox)
 }
 
 void
+InfoBoxContentVarioSpark::Update(InfoBoxWindow &infobox)
+{
+  label_vspeed(infobox, CommonInterface::Calculated().trace_history.BruttoVario);
+}
+
+void
 InfoBoxContentNettoVarioSpark::Update(InfoBoxWindow &infobox)
 {
-  const TraceHistory &trace = CommonInterface::Calculated().trace_history;
-  TCHAR sTmp[32];
-
-  if (trace.NettoVario.empty())
-    return;
-
-  Units::FormatUserVSpeed(trace.NettoVario.last(), sTmp,
-                          sizeof(sTmp) / sizeof(sTmp[0]));
-  infobox.SetComment(sTmp);
-
-  infobox.SetValue(_T(""));
-  infobox.invalidate();
+  label_vspeed(infobox, CommonInterface::Calculated().trace_history.NettoVario);
 }
+
+void
+InfoBoxContentCirclingAverageSpark::Update(InfoBoxWindow &infobox)
+{
+  label_vspeed(infobox, CommonInterface::Calculated().trace_history.CirclingAverage);
+}
+
 
 void
 InfoBoxContentBarogram::Update(InfoBoxWindow &infobox)

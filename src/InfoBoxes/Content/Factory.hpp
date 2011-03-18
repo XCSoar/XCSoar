@@ -125,6 +125,7 @@ namespace InfoBoxFactory
     e_Barogram,
     e_Vario_spark,
     e_NettoVario_spark,
+    e_CirclingAverage_spark,
     e_NUM_TYPES /* Last item */
   }t_InfoBox;
 

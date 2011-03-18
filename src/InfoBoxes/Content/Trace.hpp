@@ -32,8 +32,11 @@ class TraceVariableHistory;
 class InfoBoxContentSpark: public InfoBoxContent
 {
 protected:
-  virtual void do_paint(InfoBoxWindow &infobox, Canvas &canvas,
-                        const TraceVariableHistory& var);
+  void do_paint(InfoBoxWindow &infobox, Canvas &canvas,
+                const TraceVariableHistory& var);
+  void label_vspeed(InfoBoxWindow &infobox,
+                    const TraceVariableHistory& var);
+
 };
 
 class InfoBoxContentVarioSpark : public InfoBoxContentSpark
@@ -44,6 +47,13 @@ public:
 };
 
 class InfoBoxContentNettoVarioSpark : public InfoBoxContentSpark
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
+};
+
+class InfoBoxContentCirclingAverageSpark : public InfoBoxContentSpark
 {
 public:
   virtual void Update(InfoBoxWindow &infobox);
