@@ -101,6 +101,13 @@ protected:
 
     return (i + 1) % size;
   }
+  static unsigned previous(unsigned i) {
+    assert(i < size);
+    if (i>0)
+      return (i-1);
+    else
+      return size-1;
+  }
 
 public:
   bool empty() const {
@@ -112,6 +119,12 @@ public:
 
   void clear() {
     head = tail = 0;
+  }
+
+  // returns last value added
+  const T &last() const {
+    assert(!empty());
+    return data[previous(tail)];
   }
 
   const T &peek() const {
