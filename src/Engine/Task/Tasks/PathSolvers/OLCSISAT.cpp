@@ -19,13 +19,14 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "OLCSISAT.hpp"
 #include "Trace/Trace.hpp"
 #include "Navigation/SearchPointVector.hpp"
 
 OLCSISAT::OLCSISAT(const Trace &_trace,
-                     const unsigned &_handicap):
-  ContestDijkstra(_trace, _handicap, 6, 1000) {}
+                   const unsigned &_handicap)
+  :ContestDijkstra(_trace, _handicap, 6, 1000) {}
 
 /*
   S = total path distance
@@ -45,31 +46,31 @@ OLCSISAT::calc_score() const
 {
   // build convex hull from solution
   SearchPointVector spv;
-  for (unsigned i=0; i< num_stages; ++i) {
+  for (unsigned i = 0; i < num_stages; ++i)
     spv.push_back(solution[i]);
-  }
+
   prune_interior(spv);
 
   // now add leg distances making up the convex hull
   fixed G = fixed_zero;
 
-  if (spv.size()>1) {
-    for (unsigned i=0; i+1< spv.size(); ++i) {
-      G+= spv[i].distance(spv[i+1].get_location());
-    }
+  if (spv.size() > 1) {
+    for (unsigned i = 0; i + 1 < spv.size(); ++i)
+      G += spv[i].distance(spv[i + 1].get_location());
+
     // closing leg (end to start)
-    G+= spv[spv.size()-1].distance(spv[0].get_location());
+    G += spv[spv.size() - 1].distance(spv[0].get_location());
   }
 
   // R distance (start to end)
-  const fixed R =  solution[0].distance(solution[num_stages-1].get_location());
+  const fixed R = solution[0].distance(solution[num_stages - 1].get_location());
 
   // V zigzag-free distance
-  const fixed V = G-R;
+  const fixed V = G - R;
 
   // S = total distance
   const fixed S = calc_distance();
 
-  return apply_handicap((V+fixed(3)*S)*fixed(0.00025));
+  return apply_handicap((V + fixed(3) * S) * fixed(0.00025));
 }
 
