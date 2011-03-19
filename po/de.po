@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-18 09:45+0100\n"
+"POT-Creation-Date: 2011-03-19 09:36+0100\n"
 "PO-Revision-Date: 2011-03-16 20:11+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
@@ -6994,6 +6994,13 @@ msgstr "Unter dem Gleitpfad"
 msgid "Weather"
 msgstr "Wetter"
 
+#: Data/Input/default.xci:795
+#, fuzzy
+msgid ""
+"Waypoint\n"
+"Details"
+msgstr "Wegpunktdetails*"
+
 #: Data/Input/default.xci:532
 msgid "Dropped marker"
 msgstr "Marke gesetzt"
@@ -7143,7 +7150,7 @@ msgstr ""
 "Marke\n"
 "Setzen"
 
-#: Data/Input/default.xci:232
+#: Data/Input/default.xci:232 Data/Input/default.xci:803
 msgid ""
 "Nearest\n"
 "Waypoint"
