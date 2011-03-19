@@ -31,6 +31,7 @@ Copyright_License {
 #include "Task/TaskStats/CommonStats.hpp"
 #include "Task/TaskStats/ContestStatistics.hpp"
 #include "NMEA/VarioInfo.hpp"
+#include "NMEA/ClimbInfo.hpp"
 #include "NMEA/ThermalBand.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "NMEA/Validity.hpp"
@@ -52,35 +53,6 @@ typedef enum {
   CLIMB,                        /**< Established climb mode */
   WAITCRUISE                    /**< In climb, pending transition to cruise */
 } CirclingMode_t;
-
-/**
- * Derived climb data
- * 
- */
-struct CLIMB_INFO
-{
-  /** Average vertical speed in the thermal */
-  fixed ThermalAverage;
-  /** Average vertical speed in the thermal (minimum 0.0) */
-  fixed ThermalAverageAdjusted;
-
-  /** Altitude gained while in the thermal */
-  fixed ThermalGain;
-
-  /** Average vertical speed in the last thermal */
-  fixed LastThermalAverage;
-  /** Altitude gained while in the last thermal */
-  fixed LastThermalGain;
-  /** Time spend in the last thermal */
-  fixed LastThermalTime;
-
-  /** Average vertical speed in the last thermals smoothed by low-pass-filter */
-  fixed LastThermalAverageSmooth;
-
-  void ClearPartial();
-  void Clear();
-};
-
 
 /**
  * Data for tracking of climb/cruise mode and transition points
