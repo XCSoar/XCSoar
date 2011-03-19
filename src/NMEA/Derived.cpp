@@ -85,15 +85,6 @@ TERRAIN_ALT_INFO::Clear()
 }
 
 void
-CLIMB_HISTORY_INFO::Clear()
-{
-  for (unsigned i = 0; i < 200; i++) {
-    AverageClimbRate[i] = fixed_zero;
-    AverageClimbRateN[i] = 0;
-  }
-}
-
-void
 DERIVED_INFO::reset()
 {
   AirspeedAvailable.clear();

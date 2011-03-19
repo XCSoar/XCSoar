@@ -1300,6 +1300,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
+	$(SRC)/NMEA/ClimbHistory.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \

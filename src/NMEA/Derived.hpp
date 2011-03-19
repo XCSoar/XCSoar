@@ -33,6 +33,7 @@ Copyright_License {
 #include "NMEA/ThermalBand.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "NMEA/Validity.hpp"
+#include "NMEA/ClimbHistory.hpp"
 #include "TeamCodeCalculation.h"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "Engine/Navigation/TraceHistory.hpp"
@@ -201,20 +202,6 @@ struct TERRAIN_ALT_INFO
   fixed AltitudeAGL;
 
   GeoPoint TerrainWarningLocation;
-
-  void Clear();
-};
-
-/**
- * Derived climb rate history
- * 
- */
-struct CLIMB_HISTORY_INFO
-{
-  /** Average climb rate for each episode */
-  fixed AverageClimbRate[200];
-  /** Number of samples in each episode */
-  long AverageClimbRateN[200];
 
   void Clear();
 };
