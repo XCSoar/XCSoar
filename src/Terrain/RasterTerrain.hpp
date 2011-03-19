@@ -43,7 +43,6 @@ public:
   friend class RoutePlannerGlue; // for route planning
   friend class ProtectedTaskManager; // for intersection
   friend class WaypointVisitorMap; // for intersection rendering
-  friend class TerrainIntersectionTest; // for abort terrain intersections
 
   /** invalid value for terrain */
   static const short TERRAIN_INVALID = RasterBuffer::TERRAIN_INVALID;

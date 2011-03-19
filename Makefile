@@ -221,7 +221,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/GlideComputerStats.cpp \
 	$(SRC)/GlideComputerTask.cpp \
 	$(SRC)/GlideRatio.cpp \
-	$(SRC)/Terrain/GlideTerrain.cpp \
 	$(SRC)/Logger/Logger.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \
 	$(SRC)/Logger/LoggerGRecord.cpp \

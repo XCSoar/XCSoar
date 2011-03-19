@@ -1347,7 +1347,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Terrain/RasterTile.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \
-	$(SRC)/Terrain/GlideTerrain.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
