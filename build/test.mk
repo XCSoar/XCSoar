@@ -1294,6 +1294,7 @@ $(RUN_PROGRESS_WINDOW_BIN): $(RUN_PROGRESS_WINDOW_OBJS) $(RUN_PROGRESS_WINDOW_LD
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_ANALYSIS_SOURCES = \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/Derived.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \

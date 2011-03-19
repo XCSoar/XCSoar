@@ -36,6 +36,8 @@ Copyright_License {
 #include "TeamCodeCalculation.h"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "Engine/Navigation/TraceHistory.hpp"
+#include "DateTime.hpp"
+
 #include <tchar.h>
 
 /**
@@ -250,6 +252,9 @@ struct DERIVED_INFO:
   void reset();
 
   void expire(fixed Time);
+
+  /** GPS date and time (local) */
+  BrokenDateTime local_date_time;
 
   fixed V_stf; /**< Speed to fly block/dolphin (m/s) */
 

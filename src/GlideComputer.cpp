@@ -37,6 +37,7 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Interface.hpp"
+#include "LocalTime.hpp"
 
 static PeriodClock last_team_code_update;
 
@@ -98,6 +99,8 @@ GlideComputer::ProcessGPS()
 {
   PeriodClock clock;
   clock.update();
+
+  SetCalculated().local_date_time = Basic().DateTime + GetUTCOffset();
 
   SetCalculated().expire(Basic().Time);
 
