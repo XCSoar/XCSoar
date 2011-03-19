@@ -96,9 +96,6 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   // background is painted in the base-class
 
   const FlightStatisticsRenderer fs(glide_computer->GetFlightStats());
-  GlidePolar glide_polar(fixed_zero);
-  if (protected_task_manager != NULL)
-    glide_polar = protected_task_manager->get_glide_polar();
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -106,7 +103,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
                        XCSoarInterface::Calculated(), protected_task_manager);
     break;
   case ANALYSIS_PAGE_CLIMB:
-    fs.RenderClimb(canvas, rcgfx, glide_polar);
+    fs.RenderClimb(canvas, rcgfx, XCSoarInterface::Calculated().glide_polar_task);
     break;
   case ANALYSIS_PAGE_WIND:
     fs.RenderWind(canvas, rcgfx, XCSoarInterface::Basic(),
@@ -115,7 +112,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   case ANALYSIS_PAGE_POLAR:
     fs.RenderGlidePolar(canvas, rcgfx, XCSoarInterface::Calculated(),
                         XCSoarInterface::SettingsComputer(),
-                        glide_polar);
+                        XCSoarInterface::Calculated().glide_polar_task);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
     fs.RenderTemperature(canvas, rcgfx);
@@ -173,9 +170,6 @@ Update(void)
   assert(glide_computer != NULL);
 
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats());
-  GlidePolar polar(fixed_zero);
-  if (protected_task_manager != NULL)
-    polar = protected_task_manager->get_glide_polar();
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -207,9 +201,9 @@ Update(void)
   case ANALYSIS_PAGE_POLAR:
     _stprintf(sTmp, _T("%s: %s (%s %d kg)"), _("Analysis"),
               _("Glide Polar"), _("Mass"),
-              (int)polar.get_all_up_weight());
+              (int)XCSoarInterface::Calculated().glide_polar_task.get_all_up_weight());
     wf->SetCaption(sTmp);
-    fs.CaptionPolar(sTmp, polar);
+    fs.CaptionPolar(sTmp, XCSoarInterface::Calculated().glide_polar_task);
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Settings"));
    break;

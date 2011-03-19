@@ -185,7 +185,7 @@ OnTimerNotify(WndForm &Sender)
   if (protected_task_manager != NULL &&
       XCSoarInterface::SettingsComputer().BallastTimerActive && !changed) {
     /* get new GlidePolar values */
-    glide_polar = protected_task_manager->get_glide_polar();
+    glide_polar = XCSoarInterface::Calculated().glide_polar_task;
 
     /* display the new values on the screen */
     SetBallast();
@@ -267,8 +267,7 @@ static CallBackTableEntry CallBackTable[] = {
 void
 dlgBasicSettingsShowModal()
 {
-  if (protected_task_manager != NULL)
-    glide_polar = protected_task_manager->get_glide_polar();
+  glide_polar = XCSoarInterface::Calculated().glide_polar_task;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                       _T("IDR_XML_BASICSETTINGS"));

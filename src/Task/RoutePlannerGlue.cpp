@@ -87,3 +87,9 @@ RoutePlannerGlue::intersection(const AGeoPoint& origin,
   RasterTerrain::ExclusiveLease lease(*terrain);
   return m_planner.intersection(origin, destination, intx);
 }
+
+GlidePolar
+RoutePlannerGlue::get_reach_polar() const
+{
+  return m_planner.get_reach_polar();
+}

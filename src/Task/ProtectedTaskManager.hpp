@@ -75,8 +75,6 @@ public:
   ~ProtectedTaskManager();
 
   // common accessors for ui and calc clients
-  gcc_pure
-  GlidePolar get_glide_polar() const;
   void set_glide_polar(const GlidePolar& glide_polar);
 
   gcc_pure
@@ -91,9 +89,6 @@ public:
 
   gcc_pure
   const OrderedTaskBehaviour get_ordered_task_behaviour() const;
-
-  gcc_pure
-  GlidePolar get_safety_polar() const;
 
   gcc_pure
   const Waypoint* getActiveWaypoint() const;
@@ -266,6 +261,7 @@ public:
   void route_solve(const AGeoPoint& dest, const AGeoPoint& start,
                    const short h_ceiling);
   void route_update_polar(const SpeedVector& wind);
+  GlidePolar get_reach_polar() const;
 
   bool intersection(const AGeoPoint& origin,
                     const AGeoPoint& destination,

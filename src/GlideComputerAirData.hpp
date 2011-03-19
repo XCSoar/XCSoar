@@ -54,8 +54,6 @@ public:
 		       const int quality=3); // JMW check
   WindAnalyser   windanalyser; // JMW TODO, private and lock-protected
 
-  GlidePolar get_glide_polar() const;
-
 private:
   ThermalLocator thermallocator;
 protected:

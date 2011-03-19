@@ -37,13 +37,6 @@ ProtectedTaskManager::~ProtectedTaskManager() {
   lease->set_intersection_test(NULL); // de-register
 }
 
-GlidePolar 
-ProtectedTaskManager::get_glide_polar() const
-{
-  Lease lease(*this);
-  return lease->get_glide_polar();
-}
-
 void 
 ProtectedTaskManager::set_glide_polar(const GlidePolar& glide_polar)
 {
@@ -73,13 +66,6 @@ ProtectedTaskManager::get_ordered_task_behaviour() const
 {
   Lease lease(*this);
   return lease->get_ordered_task_behaviour();
-}
-
-GlidePolar 
-ProtectedTaskManager::get_safety_polar() const
-{
-  Lease lease(*this);
-  return lease->get_safety_polar();
 }
 
 const Waypoint* 
@@ -369,6 +355,13 @@ ProtectedTaskManager::route_update_polar(const SpeedVector& wind)
   m_route.update_polar(lease->get_glide_polar(),
                        lease->get_safety_polar(),
                        wind);
+}
+
+GlidePolar
+ProtectedTaskManager::get_reach_polar() const
+{
+  Lease lease(*this);
+  return m_route.get_reach_polar();
 }
 
 bool

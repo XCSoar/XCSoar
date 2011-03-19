@@ -81,6 +81,9 @@ GlideComputerTask::ProcessBasicTask()
   SetCalculated().common_stats = task->get_common_stats();
   SetCalculated().contest_stats = task->get_contest_stats();
 
+  SetCalculated().glide_polar_task = task->get_glide_polar();
+  SetCalculated().glide_polar_safety = task->get_safety_polar();
+
 /* JMW @todo 
 
    sending the risk mc to devices and global is
@@ -109,6 +112,7 @@ void
 GlideComputerTask::ProcessMoreTask()
 {
   m_task.route_update_polar(Basic().wind);
+  SetCalculated().glide_polar_reach = m_task.get_reach_polar();
 
   TerrainWarning();
 

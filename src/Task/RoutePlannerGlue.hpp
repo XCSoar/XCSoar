@@ -68,6 +68,8 @@ public:
                     const AGeoPoint& destination,
                     GeoPoint& intx) const;
 
+  GlidePolar get_reach_polar() const;
+
 private:
   RasterTerrain* terrain;
   AirspaceRoute m_planner;

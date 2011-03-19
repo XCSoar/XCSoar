@@ -400,10 +400,9 @@ goto_and_clear_task(const Waypoint &wp)
 
   protected_task_manager->do_goto(wp);
   TaskEvents task_events;
-  GlidePolar glide_polar(protected_task_manager->get_glide_polar());
   const OrderedTask blank(task_events,
                           XCSoarInterface::SettingsComputer(),
-                          glide_polar);
+                          XCSoarInterface::Calculated().glide_polar_task);
   protected_task_manager->task_commit(blank);
 
   return SUCCESS;
@@ -620,8 +619,8 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   ((WndProperty *)wf->FindByName(_T("prpBearing"))) ->SetText(sTmp);
 
   if (protected_task_manager != NULL) {
-    GlidePolar glide_polar = protected_task_manager->get_glide_polar();
-    GlidePolar safety_polar = protected_task_manager->get_safety_polar();
+    GlidePolar glide_polar = XCSoarInterface::Calculated().glide_polar_task;
+    const GlidePolar &safety_polar = XCSoarInterface::Calculated().glide_polar_safety;
 
     UnorderedTaskPoint t(way_point, XCSoarInterface::SettingsComputer());
     GlideResult r;

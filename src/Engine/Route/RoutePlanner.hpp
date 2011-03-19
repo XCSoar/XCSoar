@@ -23,6 +23,7 @@
 #define ROUTE_PLANNER_HPP
 
 #include "Navigation/Geometry/GeoVector.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 #include "RoutePolar.hpp"
 #include "Task/Tasks/PathSolvers/AStar.hpp"
 #include <utility>
@@ -220,6 +221,10 @@ public:
     return reach.find_positive_arrival(dest, rpolars_reach, arrival_height);
   }
 
+  const GlidePolar& get_reach_polar() const {
+    return glide_polar_reach;
+  }
+
 protected:
   typedef std::pair<AFlatGeoPoint, AFlatGeoPoint> ClearingPair;
 
@@ -230,6 +235,7 @@ protected:
   const RasterMap *terrain; /**< Terrain raster */
   short h_min; /**< Minimum height scanned during solution (m) */
   short h_max; /**< Maxmimum height scanned during solution (m) */
+  GlidePolar glide_polar_reach;
 
   /**
    * Test whether a solution is required or the solution is trivial

@@ -30,7 +30,8 @@ MapWindow::DrawWaypoints(Canvas &canvas)
 {
   way_point_renderer.render(canvas, label_block,
                             render_projection, SettingsMap(),
-                            SettingsComputer(), get_reach_polar(),
+                            SettingsComputer(),
+                            Calculated().glide_polar_reach,
                             ToAircraftState(Basic(), Calculated()),
                             task,
                             terrain);

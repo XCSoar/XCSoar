@@ -372,7 +372,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const RECT &rc) const
   // calculate averages
   int numtherm = 0;
 
-  const fixed mc = get_glide_polar().get_mc();
+  const fixed mc = Calculated().glide_polar_task.get_mc();
   fixed Wmax = max(fixed_half, mc);
 
   for (unsigned i = 0; i < ThermalBandInfo::NUMTHERMALBUCKETS; i++) {
@@ -505,10 +505,10 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const RECT &rc,
   if (Basic().gps.Replay)
     _tcscat(ScaleInfo, _T("REPLAY "));
 
-  if (task != NULL && SettingsComputer().BallastTimerActive) {
+  if (SettingsComputer().BallastTimerActive) {
     TCHAR TEMP[20];
     _stprintf(TEMP, _T("BALLAST %d LITERS "),
-              (int)task->get_glide_polar().get_ballast_litres());
+              (int)Calculated().glide_polar_task.get_ballast_litres());
     _tcscat(ScaleInfo, TEMP);
   }
 

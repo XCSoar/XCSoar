@@ -228,10 +228,6 @@ protected:
   virtual void on_paint(Canvas& canvas);
   virtual void on_paint_buffer(Canvas& canvas);
 
-  GlidePolar get_reach_polar() const;
-  GlidePolar get_glide_polar() const;
-  GlidePolar get_safety_polar() const;
-
 private:
   /**
    * Renders the terrain background

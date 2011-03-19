@@ -158,7 +158,7 @@ GlideComputerAirData::Wind()
 
   // update zigzag wind
   if ((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG)
-      && (Basic().TrueAirspeed > m_task.get_glide_polar().get_Vtakeoff())) {
+      && (Basic().TrueAirspeed > Calculated().glide_polar_task.get_Vtakeoff())) {
     fixed zz_wind_speed;
     Angle zz_wind_bearing;
     int quality;
@@ -533,7 +533,7 @@ GlideComputerAirData::FlightTimes()
     return false;
   }
 
-  FlightState(m_task.get_glide_polar());
+  FlightState(Calculated().glide_polar_task);
   TakeoffLanding();
 
   return true;
@@ -639,7 +639,7 @@ GlideComputerAirData::BallastDump()
   if (!SettingsComputer().BallastTimerActive || negative(dt))
     return;
 
-  GlidePolar glide_polar = m_task.get_glide_polar();
+  GlidePolar glide_polar = Calculated().glide_polar_task;
   fixed ballast = glide_polar.get_ballast();
   fixed percent_per_second =
     fixed_one / max(10, SettingsComputer().BallastSecsToEmpty);
@@ -1033,10 +1033,4 @@ GlideComputerAirData::ProcessSun()
                    fixed(GetUTCOffset()) / 3600);
   SetCalculated().TimeSunset = fixed(sun.TimeOfSunSet);
   SetCalculated().SunAzimuth = sun.Azimuth;
-}
-
-GlidePolar 
-GlideComputerAirData::get_glide_polar() const
-{
-  return m_task.get_glide_polar();
 }

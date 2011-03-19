@@ -446,18 +446,20 @@ RoutePlanner::add_edges(const RouteLink &e)
 }
 
 void
-RoutePlanner::update_polar(const GlidePolar& polar,
+RoutePlanner::update_polar(const GlidePolar& task_polar,
                            const GlidePolar& safety_polar,
                            const SpeedVector& wind)
 {
-  rpolars_route.initialise(polar, wind);
+  rpolars_route.initialise(task_polar, wind);
   switch (m_reach_polar_mode) {
   case RoutePlannerConfig::rpmTask:
     rpolars_reach = rpolars_route;
+    glide_polar_reach = task_polar;
     // make copy to avoid waste
     break;
   case RoutePlannerConfig::rpmSafety:
     rpolars_reach.initialise(safety_polar, wind);
+    glide_polar_reach = safety_polar;
     break;
   }
 }
