@@ -47,6 +47,9 @@ OrderedTaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state,
   if (start_max_speed == fixed_zero)
     return true;
 
+  if (fai_finish)
+    return true;
+
   const fixed margin = with_margin ? behaviour.start_max_speed_margin : fixed_zero;
 
   return state.Speed <= start_max_speed + margin;
@@ -59,6 +62,9 @@ OrderedTaskBehaviour::check_start_height(const AIRCRAFT_STATE &state,
                                          const bool with_margin) const
 {
   if (start_max_height == 0)
+    return true;
+
+  if (fai_finish)
     return true;
 
   const unsigned margin = with_margin ? behaviour.start_max_height_margin : 0;
