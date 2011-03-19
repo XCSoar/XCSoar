@@ -412,7 +412,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
   unsigned result_index;
   switch (settings_computer.contest) {
     case OLC_League:
-      result_index = 1;
+      result_index = 0;
       break;
     default:
       result_index = -1;

@@ -86,10 +86,10 @@ ContestManager::update_idle(bool exhaustive)
     retval = run_contest(olc_classic, stats.result[0], stats.solution[0], exhaustive);
     break;
   case OLC_League:
-    retval = run_contest(olc_classic, stats.result[0], stats.solution[0], exhaustive);
+    retval = run_contest(olc_classic, stats.result[1], stats.solution[1], exhaustive);
 
-    olc_league.get_solution_classic() = stats.solution[0];
-    retval |= run_contest(olc_league, stats.result[1], stats.solution[1], exhaustive);
+    olc_league.get_solution_classic() = stats.solution[1];
+    retval |= run_contest(olc_league, stats.result[0], stats.solution[0], exhaustive);
     break;
   case OLC_Plus:
     retval = run_contest(olc_classic, stats.result[0], stats.solution[0], exhaustive);
