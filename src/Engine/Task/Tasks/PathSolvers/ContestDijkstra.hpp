@@ -123,14 +123,14 @@ protected:
 
   virtual bool save_solution();
 
+  ContestTraceVector best_solution;
+
 private:
   bool solution_found;
   bool trace_dirty;
   virtual void add_start_edges();
   TracePoint last_point;
   bool master_is_updated();
-
-  ContestTraceVector best_solution;
 
 public: // instrumentation
   static unsigned long count_olc_solve;

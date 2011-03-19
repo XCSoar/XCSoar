@@ -307,3 +307,21 @@ OLCTriangle::update_score()
   */
   return false;
 }
+
+bool
+OLCTriangle::save_solution()
+{
+  assert(num_stages <= MAX_STAGES);
+
+  if (AbstractContest::save_solution()) {
+    best_solution.clear();
+
+    best_solution.append(solution[3]);
+    best_solution.append(solution[1]);
+    best_solution.append(solution[2]);
+    best_solution.append(solution[0]);
+
+    return true;
+  }
+  return false;
+}

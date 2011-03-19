@@ -39,6 +39,7 @@ public:
   void reset();
 
 protected:
+  virtual bool save_solution();
 
   virtual fixed calc_score() const;
   virtual fixed calc_distance() const;
