@@ -109,7 +109,7 @@ DERIVED_INFO::ResetFlight(bool full)
     VARIO_INFO::Clear();
     CLIMB_INFO::Clear();
     CIRCLING_INFO::Clear();
-    CLIMB_HISTORY_INFO::Clear();
+    ClimbHistory::Clear();
     trace_history.clear();
   } else {
     CLIMB_INFO::ClearPartial();

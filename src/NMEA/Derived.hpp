@@ -231,7 +231,7 @@ struct DERIVED_INFO:
   public CIRCLING_INFO,
   public TERRAIN_ALT_INFO,
   public TEAMCODE_INFO,
-  public CLIMB_HISTORY_INFO
+  public ClimbHistory
 {
   /**
    * @todo Reset to cleared state

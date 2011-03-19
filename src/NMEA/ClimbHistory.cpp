@@ -24,7 +24,7 @@ Copyright_License {
 #include "ClimbHistory.hpp"
 
 void
-CLIMB_HISTORY_INFO::Clear()
+ClimbHistory::Clear()
 {
   for (unsigned i = 0; i < 200; i++) {
     AverageClimbRate[i] = fixed_zero;

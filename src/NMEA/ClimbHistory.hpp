@@ -30,7 +30,7 @@ Copyright_License {
  * Derived climb rate history
  * 
  */
-struct CLIMB_HISTORY_INFO
+struct ClimbHistory
 {
   /** Average climb rate for each episode */
   fixed AverageClimbRate[200];
