@@ -32,12 +32,17 @@
 struct ReachFanParms {
   ReachFanParms(const RoutePolars& _rpolars,
                 const TaskProjection& _task_proj,
+                const short _terrain_base,
                 const RasterMap* _terrain=NULL):
-    rpolars(_rpolars), task_proj(_task_proj), terrain(_terrain) {};
+    rpolars(_rpolars), task_proj(_task_proj), terrain(_terrain), 
+    terrain_base(_terrain_base),
+    terrain_counter(0) {};
 
   const RoutePolars &rpolars;
   const TaskProjection& task_proj;
   const RasterMap* terrain;
+  int terrain_base;
+  int terrain_counter;
 
   FlatGeoPoint reach_intercept(const int index,
                                const AGeoPoint& ao) const {
@@ -177,6 +182,24 @@ FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
   calc_bb();
 }
 
+void
+FlatTriangleFanTree::update_terrain_base(const FlatGeoPoint& o, ReachFanParms& parms)
+{
+  if (!parms.terrain) {
+    parms.terrain_base = 0;
+    return;
+  }
+  for (std::vector<FlatGeoPoint>::const_iterator x= vs.begin(); 
+       x != vs.end(); ++x) {
+    const FlatGeoPoint av = (o+(*x))*fixed_half;
+    const GeoPoint p = parms.task_proj.unproject(av);
+    parms.terrain_base+= parms.terrain->GetField(p);
+    parms.terrain_counter++;
+  }
+  parms.terrain_base/= parms.terrain_counter;
+}
+
+
 bool
 FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
                                const RouteLink& e_1,
@@ -238,6 +261,7 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
 void ReachFan::reset() {
   AbstractReach::reset();
   root.clear();
+  terrain_base = 0;
 }
 
 bool ReachFan::solve(const AGeoPoint origin,
@@ -252,10 +276,15 @@ bool ReachFan::solve(const AGeoPoint origin,
                   rpolars.safety_height()))
     return false;
 
-  ReachFanParms parms(rpolars, task_proj, terrain);
+  ReachFanParms parms(rpolars, task_proj, terrain_base, terrain);
   const AFlatGeoPoint ao(task_proj.project(origin), origin.altitude);
 
   root.fill_reach(ao, parms);
+
+  parms.terrain_base = parms.terrain->GetField(origin);
+  parms.terrain_counter = 1;
+  root.update_terrain_base(ao, parms);
+  terrain_base = parms.terrain_base;
   return true;
 }
 
@@ -281,7 +310,7 @@ ReachFan::find_positive_arrival(const AGeoPoint dest,
     return true;
   }
   arrival_height = dest.altitude-1;
-  ReachFanParms parms(rpolars, task_proj);
+  ReachFanParms parms(rpolars, task_proj, terrain_base);
   root.find_positive_arrival(d, parms, arrival_height);
   if (arrival_height < dest.altitude)
     arrival_height = -1;

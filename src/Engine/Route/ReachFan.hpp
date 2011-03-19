@@ -106,6 +106,9 @@ public:
   void accept_in_range(const FlatBoundingBox& bb,
                        const TaskProjection& task_proj,
                        TriangleFanVisitor& visitor) const;
+
+  void update_terrain_base(const FlatGeoPoint& origin, 
+                           ReachFanParms& parms);
 };
 
 class TriangleFanVisitor {
@@ -120,9 +123,10 @@ public:
 class ReachFan: public AbstractReach {
 protected:
   FlatTriangleFanTree root;
+  short terrain_base;
 
 public:
-  ReachFan():AbstractReach() {};
+  ReachFan():AbstractReach(), terrain_base(0) {};
 
   friend class PrintHelper;
 
@@ -140,6 +144,10 @@ public:
 
   void accept_in_range(const GeoBounds& bounds,
                        TriangleFanVisitor& visitor) const;
+
+  virtual short get_terrain_base() const {
+    return terrain_base;
+  }
 };
 
 #endif

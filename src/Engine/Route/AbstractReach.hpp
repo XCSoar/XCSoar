@@ -83,6 +83,14 @@ public:
   virtual bool find_positive_arrival(const AGeoPoint dest,
                                      const RoutePolars &rpolars,
                                      short& arrival_height) const = 0;
+  /**
+   * Find base terrain height in reachable area.
+   * 
+   * Requires solve() to have been called for positive results.
+   *
+   * @return height (m) of terrain base
+   */
+  virtual short get_terrain_base() const = 0;
 };
 
 #endif
