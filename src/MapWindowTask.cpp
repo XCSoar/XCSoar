@@ -80,7 +80,7 @@ MapWindow::DrawTask(Canvas &canvas)
   const Route& route = Calculated().common_stats.planned_route;
 
   if (draw_bearing) {
-    if (route.size()>0) {
+    if (route.size()>2) {
       draw_bearing = false;
     } else {
       draw_route = false;
@@ -114,11 +114,13 @@ MapWindow::DrawTask(Canvas &canvas)
 
   if (draw_route) {
     canvas.select(Graphics::hpBearing);
-    for (Route::const_iterator i = route.begin(); i+1< route.end(); i++) {
-      RasterPoint p0 = render_projection.GeoToScreen(*i);
-      RasterPoint p1 = render_projection.GeoToScreen(*(i+1));
-      canvas.line(p0, p1);
+    RasterPoint p[route.size()];
+    RasterPoint* pp = &p[0];
+    for (Route::const_iterator i = route.begin(); i!= route.end(); ++i, ++pp) {
+      *pp = render_projection.GeoToScreen(*i);
     }
+    p[route.size()-1] = render_projection.GeoToScreen(Basic().Location);
+    canvas.polyline(p, route.size());
   }
 }
 
