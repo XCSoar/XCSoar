@@ -60,6 +60,10 @@ struct BrokenDate {
   BrokenDate(unsigned _year, unsigned _month, unsigned _day)
     :year(_year), month(_month), day(_day) {}
 
+  bool operator==(const BrokenDate &other) const {
+    return year == other.year && month == other.month && day == other.day;
+  }
+
   bool operator>(const BrokenDate &other) const {
     return year > other.year ||
       (year == other.year && (month > other.month ||
@@ -94,6 +98,11 @@ struct BrokenTime {
   BrokenTime(unsigned _hour, unsigned _minute, unsigned _second=0)
     :hour(_hour), minute(_minute), second(_second) {}
 
+  bool operator==(const BrokenTime &other) const {
+    return hour == other.hour && minute == other.minute &&
+      second == other.second;
+  }
+
   /**
    * Returns the number of seconds which have passed on this day.
    */
@@ -117,6 +126,11 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
 
   BrokenDateTime(unsigned _year, unsigned _month, unsigned _day)
     :BrokenDate(_year, _month, _day), BrokenTime(0, 0) {}
+
+  bool operator==(const BrokenDateTime &other) const {
+    return (const BrokenDate &)*this == (const BrokenDate &)other &&
+      (const BrokenTime &)*this == (const BrokenTime &)other;
+  }
 
 #ifdef HAVE_POSIX
   /**
