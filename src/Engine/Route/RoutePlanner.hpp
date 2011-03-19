@@ -225,6 +225,10 @@ public:
     return glide_polar_reach;
   }
 
+  short get_terrain_base() const {
+    return reach.get_terrain_base();
+  }
+
 protected:
   typedef std::pair<AFlatGeoPoint, AFlatGeoPoint> ClearingPair;
 

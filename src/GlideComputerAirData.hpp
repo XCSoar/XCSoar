@@ -85,7 +85,6 @@ private:
   void FlightState(const GlidePolar& glide_polar);
   void TakeoffLanding();
   void AirspaceWarning();
-  void TerrainFootprint(const fixed max_dist);
   void BallastDump();
   void ThermalSources();
 

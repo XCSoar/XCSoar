@@ -274,6 +274,8 @@ public:
 
   bool find_positive_arrival(const AGeoPoint& dest,
                              short& arrival_height) const;
+
+  short get_terrain_base() const;
 };
 
 #endif

@@ -168,6 +168,10 @@ GlideComputerTask::TerrainWarning()
     const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
     const AGeoPoint start (state.get_location(), state.NavAltitude);
     m_task.solve_reach(start);
+    SetCalculated().TerrainBase = fixed(m_task.get_terrain_base());
+  } else {
+    // fallback to current terrain altitude
+    SetCalculated().TerrainBase = Calculated().TerrainAlt;
   }
 }
 

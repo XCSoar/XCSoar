@@ -70,6 +70,8 @@ public:
 
   GlidePolar get_reach_polar() const;
 
+  short get_terrain_base() const;
+
 private:
   RasterTerrain* terrain;
   AirspaceRoute m_planner;

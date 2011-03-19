@@ -406,3 +406,10 @@ ProtectedTaskManager::accept_in_range(const GeoBounds& bounds,
   Lease lease(*this);
   return m_route.accept_in_range(bounds, visitor);
 }
+
+short
+ProtectedTaskManager::get_terrain_base() const
+{
+  Lease lease(*this);
+  return m_route.get_terrain_base();
+}

@@ -93,3 +93,9 @@ RoutePlannerGlue::get_reach_polar() const
 {
   return m_planner.get_reach_polar();
 }
+
+short
+RoutePlannerGlue::get_terrain_base() const
+{
+  return m_planner.get_terrain_base();
+}

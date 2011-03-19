@@ -543,7 +543,6 @@ void
 GlideComputerAirData::ProcessIdle()
 {
   BallastDump();
-  TerrainFootprint(GetScreenDistanceMeters());
   if (airspace_clock.check_advance(Basic().Time)
       && SettingsComputer().EnableAirspaceWarnings)
     AirspaceWarning();
@@ -618,17 +617,6 @@ GlideComputerAirData::AirspaceWarning()
   const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
   if (m_airspace.update_warning(as, Calculated().Circling))
     airspaceWarningEvent.trigger();
-}
-
-void
-GlideComputerAirData::TerrainFootprint(fixed screen_range)
-{
-  if (terrain == NULL || !SettingsComputer().FinalGlideTerrain)
-    return;
-
-  // initialise base
-  SetCalculated().TerrainBase = Calculated().TerrainAlt;
-  // @todo: update TerrainBase in new footprint calculations
 }
 
 void
