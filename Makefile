@@ -234,6 +234,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/NMEA/Derived.cpp \
 	$(SRC)/NMEA/VarioInfo.cpp \
 	$(SRC)/NMEA/ClimbInfo.cpp \
+	$(SRC)/NMEA/CirclingInfo.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/ClimbHistory.cpp \

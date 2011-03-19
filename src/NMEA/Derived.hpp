@@ -32,6 +32,7 @@ Copyright_License {
 #include "Task/TaskStats/ContestStatistics.hpp"
 #include "NMEA/VarioInfo.hpp"
 #include "NMEA/ClimbInfo.hpp"
+#include "NMEA/CirclingInfo.hpp"
 #include "NMEA/ThermalBand.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "NMEA/Validity.hpp"
@@ -42,77 +43,6 @@ Copyright_License {
 #include "DateTime.hpp"
 
 #include <tchar.h>
-
-/**
- * Enumeration for cruise/circling mode detection
- * 
- */
-typedef enum {
-  CRUISE= 0,                    /**< Established cruise mode */
-  WAITCLIMB,                    /**< In cruise, pending transition to climb */
-  CLIMB,                        /**< Established climb mode */
-  WAITCRUISE                    /**< In climb, pending transition to cruise */
-} CirclingMode_t;
-
-/**
- * Data for tracking of climb/cruise mode and transition points
- * 
- */
-struct CIRCLING_INFO
-{
-
-  /** Turn rate after low pass filter */
-  fixed SmoothedTurnRate;
-
-  /** StartLocation of the current/last climb */
-  GeoPoint ClimbStartLocation;
-  /** StartAltitude of the current/last climb */
-  fixed ClimbStartAlt;
-  /** StartTime of the current/last climb */
-  fixed ClimbStartTime;
-
-  /** StartLocation of the current/last cruise */
-  GeoPoint CruiseStartLocation;
-  /** StartAltitude of the current/last cruise */
-  fixed CruiseStartAlt;
-  /** StartTime of the current/last cruise */
-  fixed CruiseStartTime;
-
-  /** Start/End time of the turn (used for flight mode determination) */
-  fixed TurnStartTime;
-  /** Start/End location of the turn (used for flight mode determination) */
-  GeoPoint TurnStartLocation;
-  /** Start/End altitude of the turn (used for flight mode determination) */
-  fixed TurnStartAltitude;
-  /** Start/End energy height of the turn (used for flight mode determination) */
-  fixed TurnStartEnergyHeight;
-
-  /** Current TurnMode (Cruise, Climb or somewhere between) */
-  CirclingMode_t TurnMode;
-
-  /** True if in circling mode, False otherwise */
-  bool Circling;
-
-  /** Circling/Cruise ratio in percent */
-  fixed PercentCircling;
-
-  /** Time spent in cruise mode */
-  fixed timeCruising;
-  /** Time spent in circling mode */
-  fixed timeCircling;
-
-  /** Minimum altitude since start of task */
-  fixed MinAltitude;
-
-  /** Maximum height gain (from MinAltitude) during task */
-  fixed MaxHeightGain;
-
-  /** Total height climbed during task */
-  fixed TotalHeightClimb;
-
-  void ClearPartial();
-  void Clear();
-};
 
 /**
  * Derived terrain altitude information, including glide range

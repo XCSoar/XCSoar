@@ -24,31 +24,6 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 
 void
-CIRCLING_INFO::ClearPartial()
-{
-  Circling = false;
-}
-
-void
-CIRCLING_INFO::Clear()
-{
-  ClearPartial();
-
-  timeCruising = fixed_zero;
-  timeCircling = fixed_zero;
-  TotalHeightClimb = fixed_zero;
-
-  CruiseStartTime = fixed_minus_one;
-  ClimbStartTime = fixed_minus_one;
-
-  MinAltitude = fixed_zero;
-  MaxHeightGain = fixed_zero;
-
-  SmoothedTurnRate = fixed_zero;
-  TurnMode = CRUISE;
-}
-
-void
 TERRAIN_ALT_INFO::Clear()
 {
   TerrainWarning = false;
