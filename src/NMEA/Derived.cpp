@@ -22,16 +22,6 @@ Copyright_License {
 */
 
 #include "NMEA/Derived.hpp"
-#include "Defines.h"
-
-void
-VARIO_INFO::Clear()
-{
-  CruiseLD = fixed(INVALID_GR);
-  AverageLD = fixed(INVALID_GR);
-  LD = fixed(INVALID_GR);
-  LDvario = fixed(INVALID_GR);
-}
 
 void
 CLIMB_INFO::ClearPartial()

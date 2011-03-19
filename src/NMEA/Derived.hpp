@@ -30,6 +30,7 @@ Copyright_License {
 #include "Task/TaskStats/TaskStats.hpp"
 #include "Task/TaskStats/CommonStats.hpp"
 #include "Task/TaskStats/ContestStatistics.hpp"
+#include "NMEA/VarioInfo.hpp"
 #include "NMEA/ThermalBand.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "NMEA/Validity.hpp"
@@ -51,35 +52,6 @@ typedef enum {
   CLIMB,                        /**< Established climb mode */
   WAITCRUISE                    /**< In climb, pending transition to cruise */
 } CirclingMode_t;
-
-/**
- * Derived vario data
- * 
- */
-struct VARIO_INFO
-{
-  /** Average vertical speed based on 30s */
-  fixed Average30s;
-  /** Average vertical speed of the airmass based on 30s */
-  fixed NettoAverage30s;
-
-  /** Instant glide ratio */
-  fixed LD;
-  /** Glide ratio while in Cruise mode */
-  fixed CruiseLD;
-  /** Average glide ratio */
-  int AverageLD;
-
-  fixed LDvario;
-
-  /**
-   * The lift of each ten degrees while circling.
-   * Index 1 equals 5 to 15 degrees.
-   */
-  fixed LiftDatabase[36];
-
-  void Clear();
-};
 
 /**
  * Derived climb data

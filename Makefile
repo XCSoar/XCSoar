@@ -232,6 +232,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Logger/ExternalLogger.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/Derived.cpp \
+	$(SRC)/NMEA/VarioInfo.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/ClimbHistory.cpp \
