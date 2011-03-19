@@ -127,11 +127,20 @@ TraceHistoryRenderer::render_filled_posneg(Chart &chart,
 void
 TraceHistoryRenderer::RenderVario(Canvas& canvas,
                                   const RECT rc,
-                                  const TraceVariableHistory& var)
+                                  const TraceVariableHistory& var,
+                                  const fixed mc)
 {
   Chart chart(canvas, rc);
   scale_chart(chart, var);
+  chart.ScaleYFromValue(mc);
   // render_line(chart, var);
+
+  if (positive(mc)) {
+    chart.DrawLine(fixed_zero, mc, 
+                   fixed(var.capacity()-1), mc, 
+                   Chart::STYLE_DASHGREEN);
+  }
+
   render_filled_posneg(chart, var);
   render_axis(chart, var);
 }

@@ -25,6 +25,7 @@ Copyright_License {
 #define TRACE_HISTORY_RENDERER_HPP
 
 #include <windef.h>
+#include "Math/fixed.hpp"
 
 class Chart;
 class Canvas;
@@ -34,7 +35,8 @@ class TraceHistoryRenderer {
 public:
   static void RenderVario(Canvas& canvas,
                           const RECT rc,
-                          const TraceVariableHistory& var);
+                          const TraceVariableHistory& var,
+                          const fixed mc=fixed_zero);
 private:
   static void scale_chart(Chart &chart,
                           const TraceVariableHistory& var);
