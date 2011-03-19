@@ -52,6 +52,14 @@ struct BrokenDate {
    */
   unsigned char day_of_week;
 
+  /**
+   * Non-initializing default constructor.
+   */
+  BrokenDate() {}
+
+  BrokenDate(unsigned _year, unsigned _month, unsigned _day)
+    :year(_year), month(_month), day(_day) {}
+
   bool operator>(const BrokenDate &other) const {
     return year > other.year ||
       (year == other.year && (month > other.month ||
@@ -79,6 +87,14 @@ struct BrokenTime {
   uint8_t second;
 
   /**
+   * Non-initializing default constructor.
+   */
+  BrokenTime() {}
+
+  BrokenTime(unsigned _hour, unsigned _minute, unsigned _second=0)
+    :hour(_hour), minute(_minute), second(_second) {}
+
+  /**
    * Returns the number of seconds which have passed on this day.
    */
   unsigned GetSecondOfDay() const {
@@ -90,6 +106,18 @@ struct BrokenTime {
  * A broken-down representation of date and time.
  */
 struct BrokenDateTime : public BrokenDate, public BrokenTime {
+  /**
+   * Non-initializing default constructor.
+   */
+  BrokenDateTime() {}
+
+  BrokenDateTime(unsigned _year, unsigned _month, unsigned _day,
+                 unsigned _hour, unsigned _minute, unsigned _second=0)
+    :BrokenDate(_year, _month, _day), BrokenTime(_hour, _minute, _second) {}
+
+  BrokenDateTime(unsigned _year, unsigned _month, unsigned _day)
+    :BrokenDate(_year, _month, _day), BrokenTime(0, 0) {}
+
 #ifdef HAVE_POSIX
   /**
    * Convert a UNIX UTC time stamp (seconds since epoch) to a
