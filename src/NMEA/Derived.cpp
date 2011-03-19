@@ -94,6 +94,24 @@ CLIMB_HISTORY_INFO::Clear()
 }
 
 void
+DERIVED_INFO::reset()
+{
+  AirspeedAvailable.clear();
+  estimated_wind_available.clear();
+  task_stats.reset();
+  common_stats.reset();
+}
+
+void
+DERIVED_INFO::expire(fixed Time)
+{
+  /* the estimated wind remains valid for an hour */
+  estimated_wind_available.expire(Time, fixed(3600));
+  /* the calculated airspeed expires after 5 seconds */
+  AirspeedAvailable.expire(Time, fixed(5));
+}
+
+void
 DERIVED_INFO::ResetFlight(bool full)
 {
   if (full) {

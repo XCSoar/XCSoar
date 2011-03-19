@@ -247,19 +247,9 @@ struct DERIVED_INFO:
   /**
    * @todo Reset to cleared state
    */
-  void reset() {
-    AirspeedAvailable.clear();
-    estimated_wind_available.clear();
-    task_stats.reset();
-    common_stats.reset();
-  };
+  void reset();
 
-  void expire(fixed Time) {
-    /* the estimated wind remains valid for an hour */
-    estimated_wind_available.expire(Time, fixed(3600));
-    /* the calculated airspeed expires after 5 seconds */
-    AirspeedAvailable.expire(Time, fixed(5));
-  }
+  void expire(fixed Time);
 
   fixed V_stf; /**< Speed to fly block/dolphin (m/s) */
 
