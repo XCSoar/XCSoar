@@ -629,35 +629,6 @@ GlideComputerAirData::TerrainFootprint(fixed screen_range)
   // initialise base
   SetCalculated().TerrainBase = Calculated().TerrainAlt;
   // @todo: update TerrainBase in new footprint calculations
-
-  // estimate max range (only interested in at most one screen
-  // distance away) except we need to scan for terrain base, so 20km
-  // search minimum is required
-
-/*
-  GlidePolar glide_polar = m_task.get_glide_polar();
-  glide_polar.set_mc(min(Calculated().common_stats.current_risk_mc,
-                         SettingsComputer().safety_mc));
-
-  GlideTerrain g_terrain(SettingsComputer(), *terrain);
-
-  g_terrain.set_max_range(max(fixed(20000), screen_range));
-  
-  const fixed d_bearing = fixed_360 / TERRAIN_ALT_INFO::NUMTERRAINSWEEPS;
-
-  unsigned i = 0;
-  AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
-  for (fixed ang = fixed_zero; i < TERRAIN_ALT_INFO::NUMTERRAINSWEEPS;
-       ang += d_bearing, i++) {
-    state.TrackBearing = Angle::degrees(ang);
-
-    TerrainIntersection its = g_terrain.find_intersection(state, glide_polar);
-    
-    SetCalculated().GlideFootPrint[i] = its.location;
-  } 
-
-  SetCalculated().TerrainBase = g_terrain.get_terrain_base();
-*/
 }
 
 void

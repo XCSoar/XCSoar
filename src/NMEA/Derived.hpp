@@ -176,12 +176,6 @@ struct CIRCLING_INFO
  */
 struct TERRAIN_ALT_INFO
 {
-  enum {
-    /** number of radials to do range footprint calculation on,
-     must equal ROUTEPOLAR_POINTS in RoutePolar.hpp */
-    NUMTERRAINSWEEPS = 49,
-  };
-
   /** True if terrain is valid, False otherwise */
   bool TerrainValid;
 
