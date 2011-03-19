@@ -582,7 +582,7 @@ RasterTileCache::LoadCache(FILE *file)
       header.width < 1024 || header.width > 1024 * 1024 ||
       header.height < 1024 || header.height > 1024 * 1024 ||
       header.num_marker_segments < 4 ||
-      header.num_marker_segments > segments.MAX_SIZE ||
+      header.num_marker_segments > segments.capacity() ||
       header.bounds.empty())
     return false;
 

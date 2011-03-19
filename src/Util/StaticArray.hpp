@@ -40,7 +40,7 @@
 template<class T, unsigned max>
 class StaticArray {
 public:
-  static const unsigned MAX_SIZE = max;
+  unsigned capacity() const { return max; }
 
 protected:
   unsigned the_size;

@@ -512,7 +512,7 @@ TaskFileSeeYou::Count()
     if (in_task_section) {
       if (line[0] == _T('\"') || line[0] == _T(',')) {
 
-        if (count < namesuffixes.MAX_SIZE) {
+        if (count < namesuffixes.capacity()) {
           unsigned cc = 0;
           TCHAR buff[40];
           for (cc = 1; line[cc] && line[cc] != '"' && cc < 40; cc++) {
