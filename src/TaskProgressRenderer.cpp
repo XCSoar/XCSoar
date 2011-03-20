@@ -43,13 +43,16 @@ TaskProgressRenderer::DrawTaskProgress(const TaskSummary& summary,
   const fixed sweep = fixed_two_pi*fixed(0.9);
   Pen pen_f(1, Appearance.InverseInfoBox? Color::WHITE: Color::BLACK);
   canvas.select(pen_f);
+  canvas.hollow_brush();
   canvas.circle(center.x, center.y, radius);
 
   canvas.select(Graphics::hbWind);
+  canvas.null_pen();
   canvas.segment(center.x, center.y, radius, Angle::radians(fixed_zero),
                  Angle::radians(sweep*(fixed_one-summary.p_remaining)));
 
   unsigned i=0;
+  canvas.select(pen_f);
   for (TaskSummary::TaskSummaryPointVector::const_iterator it= summary.pts.begin();
        it != summary.pts.end(); ++it, ++i) {
     Angle a= Angle::radians(it->p*sweep);
