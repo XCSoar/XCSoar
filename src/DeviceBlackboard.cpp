@@ -728,4 +728,5 @@ DeviceBlackboard::SetMC(fixed mc)
   ScopeLock protect(mutexBlackboard);
   SetBasic().MacCready = mc;
   AllDevicesPutMacCready(mc);
+  TriggerGPSUpdate();
 }
