@@ -23,7 +23,6 @@
 
 #include "Replay/IgcReplayGlue.hpp"
 #include "Logger/Logger.hpp"
-#include "Protection.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Device/Port.hpp"
@@ -68,7 +67,6 @@ IgcReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
                           const fixed baroalt, const fixed t)
 {
   device_blackboard.SetLocation(loc, speed, bearing, alt, baroalt, t);
-  TriggerGPSUpdate();
 }
 
 void

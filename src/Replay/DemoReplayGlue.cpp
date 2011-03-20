@@ -22,7 +22,6 @@
 */
 
 #include "Replay/DemoReplayGlue.hpp"
-#include "Protection.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Task/TaskManager.hpp"
@@ -113,7 +112,6 @@ DemoReplayGlue::on_advance(const GeoPoint &loc, const fixed speed,
                            const fixed baroalt, const fixed t)
 {
   device_blackboard.SetLocation(loc, speed, bearing, alt, baroalt, t);
-  TriggerGPSUpdate();
 }
 
 void
