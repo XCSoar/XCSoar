@@ -90,15 +90,8 @@ InfoBoxWindow::SetID(const int id)
 void
 InfoBoxWindow::SetTitle(const TCHAR *Value)
 {
-  TCHAR sTmp[TITLESIZE + 1];
-
-  _tcsncpy(sTmp, Value, TITLESIZE);
-  sTmp[TITLESIZE] = '\0';
-
-  _tcsupr(sTmp);
-
-  if (_tcscmp(mTitle, sTmp) != 0) {
-    _tcscpy(mTitle, sTmp);
+  if (_tcscmp(mTitle, Value) != 0) {
+    _tcscpy(mTitle, Value);
     invalidate(recTitle);
   }
 }
