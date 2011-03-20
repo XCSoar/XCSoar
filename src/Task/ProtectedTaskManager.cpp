@@ -186,7 +186,7 @@ ProtectedTaskManager::incrementActiveTaskPointArm(int offset)
     break;
   case TaskAdvance::START_DISARMED:
   case TaskAdvance::TURN_DISARMED:
-    if (offset) {
+    if (offset>0) {
       lease->get_task_advance().set_armed(true);
     } else {
       lease->incrementActiveTaskPoint(offset);
@@ -194,7 +194,7 @@ ProtectedTaskManager::incrementActiveTaskPointArm(int offset)
     break;
   case TaskAdvance::START_ARMED:
   case TaskAdvance::TURN_ARMED:
-    if (offset) {
+    if (offset>0) {
       lease->incrementActiveTaskPoint(offset);
     } else {
       lease->get_task_advance().set_armed(false);
