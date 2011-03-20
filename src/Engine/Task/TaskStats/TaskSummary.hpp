@@ -47,7 +47,7 @@ struct TaskSummary {
 
   void clear() {
     active = 0;
-    p_remaining = fixed_zero;
+    p_remaining = fixed_one;
     pts.clear();
   }
   void append(const TaskSummaryPoint& tsp) {
