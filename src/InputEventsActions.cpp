@@ -138,9 +138,9 @@ InputEvents::eventSounds(const TCHAR *misc)
     XCSoarInterface::SetSettingsComputer().EnableSoundVario = false;
   else if (_tcscmp(misc, _T("show")) == 0) {
     if (XCSoarInterface::SettingsComputer().EnableSoundVario)
-      Message::AddMessage(_("Vario Sounds ON"));
+      Message::AddMessage(_("Vario sounds on"));
     else
-      Message::AddMessage(_("Vario Sounds Off"));
+      Message::AddMessage(_("Vario sounds off"));
   }
   /*
   if (EnableSoundVario != OldEnableSoundVario) {
@@ -167,13 +167,13 @@ InputEvents::eventSnailTrail(const TCHAR *misc)
     XCSoarInterface::SetSettingsMap().TrailActive = 3;
   else if (_tcscmp(misc, _T("show")) == 0) {
     if (XCSoarInterface::SettingsMap().TrailActive == 0)
-      Message::AddMessage(_("SnailTrail Off"));
+      Message::AddMessage(_("Snail trail off"));
     if (XCSoarInterface::SettingsMap().TrailActive == 1)
-      Message::AddMessage(_("SnailTrail ON Long"));
+      Message::AddMessage(_("Long snail trail"));
     if (XCSoarInterface::SettingsMap().TrailActive == 2)
-      Message::AddMessage(_("SnailTrail ON Short"));
+      Message::AddMessage(_("Short snail trail"));
     if (XCSoarInterface::SettingsMap().TrailActive == 3)
-      Message::AddMessage(_("SnailTrail ON Full"));
+      Message::AddMessage(_("Full snail trail"));
   }
 
   trigger_redraw();
@@ -202,9 +202,9 @@ InputEvents::eventAirSpace(const TCHAR *misc)
     XCSoarInterface::SetSettingsMap().EnableAirspace = true;
   else if (_tcscmp(misc, _T("show")) == 0) {
     if (!XCSoarInterface::SetSettingsMap().EnableAirspace)
-      Message::AddMessage(_("Show Airspace Off"));
+      Message::AddMessage(_("Show airspace off"));
     if (XCSoarInterface::SetSettingsMap().EnableAirspace)
-      Message::AddMessage(_("Show Airspace ON"));
+      Message::AddMessage(_("Show airspace on"));
   }
 
   trigger_redraw();
@@ -242,9 +242,9 @@ InputEvents::eventScreenModes(const TCHAR *misc)
     if (XCSoarInterface::main_window.GetFullScreen())
       Message::AddMessage(_("Screen Mode Full"));
     else if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo)
-      Message::AddMessage(_("Screen Mode Auxiliary"));
+        Message::AddMessage(_("Auxiliary InfoBoxes"));
     else
-      Message::AddMessage(_("Screen Mode Normal"));
+        Message::AddMessage(_("Default InfoBoxes"));
   } else if (_tcscmp(misc, _T("togglebiginfo")) == 0) {
     InfoBoxLayout::fullscreen = !InfoBoxLayout::fullscreen;
     InfoBoxManager::SetDirty();
@@ -284,9 +284,9 @@ InputEvents::eventZoom(const TCHAR* misc)
     sub_AutoZoom(0);
   else if (_tcscmp(misc, _T("auto show")) == 0) {
     if (XCSoarInterface::SettingsMap().AutoZoom)
-      Message::AddMessage(_("AutoZoom ON"));
+      Message::AddMessage(_("Auto. zoom on"));
     else
-      Message::AddMessage(_("AutoZoom Off"));
+      Message::AddMessage(_("Auto. zoom off"));
   } else if (_tcscmp(misc, _T("slowout")) == 0)
     sub_ScaleZoom(-1);
   else if (_tcscmp(misc, _T("slowin")) == 0)
@@ -312,9 +312,9 @@ InputEvents::eventZoom(const TCHAR* misc)
     XCSoarInterface::SetSettingsMap().CircleZoom = false;
   } else if (_tcscmp(misc, _T("circlezoom show")) == 0) {
     if (XCSoarInterface::SettingsMap().CircleZoom)
-      Message::AddMessage(_("Circling Zoom ON"));
+      Message::AddMessage(_("Circling zoom on"));
     else
-      Message::AddMessage(_("Circling Zoom Off"));
+      Message::AddMessage(_("Circling zoom off"));
   } else {
     TCHAR *endptr;
     double zoom = _tcstod(misc, &endptr);
@@ -531,22 +531,22 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
   } else if (_tcscmp(misc, _T("show")) == 0) {
     switch (mode) {
     case TaskAdvance::MANUAL:
-      Message::AddMessage(_("Advance: Manual"));
+      Message::AddMessage(_("Advance manually"));
       break;
     case TaskAdvance::AUTO:
-      Message::AddMessage(_("Advance: Automatic"));
+      Message::AddMessage(_("Advance automatically"));
       break;
     case TaskAdvance::START_ARMED:
-      Message::AddMessage(_("Advance: Ready to start"));
+      Message::AddMessage(_("Ready to start"));
       break;
     case TaskAdvance::START_DISARMED:
-      Message::AddMessage(_("Advance: Hold start"));
+      Message::AddMessage(_("Hold start"));
       break;
     case TaskAdvance::TURN_ARMED:
-      Message::AddMessage(_("Advance: Ready to turn"));
+      Message::AddMessage(_("Ready to turn"));
       break;
     case TaskAdvance::TURN_DISARMED:
-      Message::AddMessage(_("Advance: Hold turn"));
+      Message::AddMessage(_("Hold turn"));
       break;
     }
   }
@@ -674,7 +674,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
 
     wp = protected_task_manager->getActiveWaypoint();
     if (!wp) {
-      Message::AddMessage(_("No Active Waypoint!"));
+      Message::AddMessage(_("No active waypoint!"));
       return;
     }
   } else if (_tcscmp(misc, _T("select")) == 0) {
@@ -748,9 +748,9 @@ InputEvents::eventMacCready(const TCHAR *misc)
     XCSoarInterface::SetSettingsComputer().auto_mc = false;
   } else if (_tcscmp(misc, _T("auto show")) == 0) {
     if (XCSoarInterface::SettingsComputer().auto_mc) {
-      Message::AddMessage(_("Auto MacCready ON"));
+      Message::AddMessage(_("Auto. MacCready on"));
     } else {
-      Message::AddMessage(_("Auto MacCready Off"));
+      Message::AddMessage(_("Auto. MacCready off"));
     }
   } else if (_tcscmp(misc, _T("show")) == 0) {
     TCHAR Temp[100];
@@ -967,16 +967,16 @@ InputEvents::eventAbortTask(const TCHAR *misc)
   else if (_tcscmp(misc, _T("show")) == 0) {
     switch (task_manager->get_mode()) {
     case TaskManager::MODE_ABORT:
-      Message::AddMessage(_("Task Aborted"));
+      Message::AddMessage(_("Task aborted"));
       break;
     case TaskManager::MODE_GOTO:
-      Message::AddMessage(_("Task Goto"));
+      Message::AddMessage(_("Go to target"));
       break;
     case TaskManager::MODE_ORDERED:
-      Message::AddMessage(_("Task Ordered"));
+      Message::AddMessage(_("Ordered task"));
       break;
     default:
-      Message::AddMessage(_("No Task"));
+      Message::AddMessage(_("No task"));
     }
   } else {
     // toggle
@@ -1035,7 +1035,7 @@ InputEvents::eventBugs(const TCHAR *misc)
   else if (_tcscmp(misc, _T("show")) == 0) {
     TCHAR Temp[100];
     _stprintf(Temp, _T("%d"), (int)(BUGS * 100));
-    Message::AddMessage(_("Bugs Performance"), Temp);
+    Message::AddMessage(_("Bugs performance"), Temp);
   }
 
   if (BUGS != oldBugs) {
@@ -1136,15 +1136,15 @@ InputEvents::eventLogger(const TCHAR *misc)
   else if (_tcscmp(misc, _T("nmea")) == 0) {
     EnableLogNMEA = !EnableLogNMEA;
     if (EnableLogNMEA) {
-      Message::AddMessage(_("NMEA Log ON"));
+      Message::AddMessage(_("NMEA log on"));
     } else {
-      Message::AddMessage(_("NMEA Log Off"));
+      Message::AddMessage(_("NMEA log off"));
     }
   } else if (_tcscmp(misc, _T("show")) == 0)
     if (logger.isLoggerActive()) {
-      Message::AddMessage(_("Logger ON"));
+      Message::AddMessage(_("Logger on"));
     } else {
-      Message::AddMessage(_("Logger Off"));
+      Message::AddMessage(_("Logger off"));
     }
   else if (_tcsncmp(misc, _T("note"), 4) == 0)
     // add note to logger file if available..
@@ -1387,10 +1387,10 @@ InputEvents::eventRun(const TCHAR *misc)
 void
 InputEvents::eventDeclutterLabels(const TCHAR *misc)
 {
-  static const TCHAR *const msg[] = {N_("ALL"),
+  static const TCHAR *const msg[] = {N_("All"),
                                      N_("Task & Landables"),
                                      N_("Task"),
-                                     N_("NONE")};
+                                     N_("None ")};
   static const unsigned int n=sizeof(msg)/sizeof(msg[0]);
   static const TCHAR *const actions[n] = {_T("all"),
                                           _T("task+landables"),
@@ -1403,7 +1403,7 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
     wls = (WayPointLabelSelection_t) ((wls + 1) %  n);
   else if (_tcscmp(misc, _T("show")) == 0 && (unsigned int) wls < n) {
     TCHAR tbuf[64];
-    _stprintf(tbuf, _T("%s: %s"), _("Waypoint Labels"), gettext(msg[wls]));
+    _stprintf(tbuf, _T("%s: %s"), _("Waypoint labels"), gettext(msg[wls]));
     Message::AddMessage(tbuf);
   }
   else {
@@ -1443,7 +1443,7 @@ InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
   else if (_tcscmp(misc, _T("forcefinal")) == 0)
     XCSoarInterface::SetSettingsMap().UserForceDisplayMode = dmFinalGlide;
   else if (_tcscmp(misc, _T("show")) == 0)
-    Message::AddMessage(_("Map labels ON"));
+    Message::AddMessage(_("Map labels on"));
 }
 
 void
@@ -1604,7 +1604,7 @@ InputEvents::sub_TerrainTopography(int vswitch)
     _tcscat(buf, XCSoarInterface::SettingsMap().EnableTerrain
             ? _("On") : _("Off"));
 
-    Message::AddMessage(_("Topography / Terrain"), buf);
+    Message::AddMessage(_("Topography/Terrain"), buf);
     return;
   }
 
@@ -1701,7 +1701,7 @@ InputEvents::sub_SetZoom(fixed value)
       !XCSoarInterface::SettingsMap().EnablePan) {
     XCSoarInterface::SetSettingsMap().AutoZoom = false;  // disable autozoom if user manually changes zoom
     Profile::Set(szProfileAutoZoom, false);
-    Message::AddMessage(_("AutoZoom Off"));
+    Message::AddMessage(_("Auto. zoom off"));
   }
 
   fixed vmin = CommonInterface::Calculated().glide_polar_task.get_Vmin();
@@ -1768,11 +1768,11 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     TCHAR TempAll[120];
     _stprintf(TempAll, _T("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"),
               TempAlt, TempSpeed, TempTime);
-    Message::AddMessage(_("Task Start"), TempAll);
+    Message::AddMessage(_("Task start"), TempAll);
   } else if (_tcscmp(misc, _T("tp")) == 0) {
     Message::AddMessage(_("Next turnpoint"));
   } else if (_tcscmp(misc, _T("finish")) == 0) {
-    Message::AddMessage(_("Task Finish"));
+    Message::AddMessage(_("Task finished"));
   } else if (_tcscmp(misc, _T("ready")) == 0) {
     Message::AddMessage(_("In sector, arm advance when ready"));
   }
