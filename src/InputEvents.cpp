@@ -712,6 +712,8 @@ InputEvents::ProcessMenuTimer()
       setMode(MODE_DEFAULT);
     }
   }
+  // refresh visible buttons
+  drawButtons(getModeID());
 
   MenuTimeOut++;
 }
