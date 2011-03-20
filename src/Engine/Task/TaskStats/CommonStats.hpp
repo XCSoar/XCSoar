@@ -27,6 +27,7 @@
 #include "Task/TaskStats/ContestResult.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #include "Route/AirspaceRoute.hpp"
+#include "TaskSummary.hpp"
 
 #ifdef DO_PRINT
 #include <iostream>
@@ -112,6 +113,9 @@ public:
 
   /** Route plan for current leg avoiding airspace */
   Route planned_route;
+
+  /** Summary of ordered task progress */
+  TaskSummary ordered_summary;
 
   /**
    * Reset the stats as if never flown

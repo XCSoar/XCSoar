@@ -31,6 +31,7 @@ CommonStats::reset_task()
   next_is_last = false;
   previous_is_first = false;
   next_solution.reset();
+  ordered_summary.clear();
 }
 
 void

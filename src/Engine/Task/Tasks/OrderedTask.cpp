@@ -48,6 +48,7 @@
 
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Geo/GeoBounds.hpp"
+#include "Task/TaskStats/TaskSummary.hpp"
 
 void
 OrderedTask::update_geometry() 
@@ -1382,3 +1383,24 @@ OrderedTask::get_optional_start(unsigned pos) const
 
   return optional_start_points[pos];
 }
+
+void
+OrderedTask::update_summary(TaskSummary& ordered_summary) const
+{
+  ordered_summary.clear();
+
+  ordered_summary.active = activeTaskPoint;
+  for (unsigned i = 0; i < task_points.size(); ++i) {    
+    TaskSummaryPoint tsp;
+    tsp.d_planned = task_points[i]->get_vector_planned().Distance;
+    if (i==0) {
+      tsp.achieved = task_points[i]->has_exited();
+    } else {
+      tsp.achieved = task_points[i]->has_sampled();
+    }
+    ordered_summary.append(tsp);
+  }
+  ordered_summary.update(stats.total.remaining.get_distance(), 
+                         stats.total.planned.get_distance());
+}
+

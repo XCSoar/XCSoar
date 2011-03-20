@@ -41,6 +41,7 @@ class Waypoints;
 class AATPoint;
 class FlatBoundingBox;
 struct GeoBounds;
+struct TaskSummary;
 
 /**
  * A task comprising an ordered sequence of task points, each with
@@ -453,6 +454,11 @@ public:
    * according to the task projection.
    */
   FlatBoundingBox get_bounding_box(const GeoPoint& point) const;
+
+  /**
+   * Update summary task statistics (progress along path)
+   */
+  void update_summary(TaskSummary& summary) const;
 
 protected:
   bool is_scored() const;

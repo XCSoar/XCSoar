@@ -162,6 +162,8 @@ TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
       common_stats.TimeUnderStartMaxHeight = -fixed_one;
     }
 
+    task_ordered.update_summary(common_stats.ordered_summary);
+
   } else {
     common_stats.reset_task();
   }
