@@ -50,6 +50,7 @@ Copyright_License {
 #include "Screen/Chart.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
+#include "Appearance.hpp"
 
 #include <algorithm>
 
@@ -148,7 +149,7 @@ FlightStatisticsRenderer::RenderBarographSpark(
 
   chart.DrawFilledLineGraph(fs.Altitude_Terrain);
 
-  Pen pen(2, Color::BLACK);
+  Pen pen(2, Appearance.InverseInfoBox? Color::WHITE: Color::BLACK);
   chart.DrawLineGraph(fs.Altitude, pen);
 }
 
