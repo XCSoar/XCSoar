@@ -36,6 +36,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Replay/Replay.hpp"
+#include "Device/device.hpp"
 
 #include <stdlib.h>
 
@@ -373,6 +374,12 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     if (!Basic().flarm.available)
       invalid = true;
     ReplaceInString(OutBuffer, _T("$(CheckFLARM)"), _T(""), Size);
+  }
+
+  if (_tcsstr(OutBuffer, _T("$(CheckVega)"))) {
+    if (devVarioFindVega()== NULL)
+      invalid = true;
+    ReplaceInString(OutBuffer, _T("$(CheckVega)"), _T(""), Size);
   }
 
   if (_tcsstr(OutBuffer, _T("$(CheckReplay)"))) {

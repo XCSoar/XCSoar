@@ -681,7 +681,7 @@ mode=Config2
 type=key
 data=6
 event=Mode Vario1
-label=Vario
+label=Vario$(CheckVega)
 location=5
 
 mode=Config2
