@@ -75,4 +75,11 @@ public:
   virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
 };
 
+class InfoBoxContentTaskProgress : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
+};
+
 #endif

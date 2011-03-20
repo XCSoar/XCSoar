@@ -127,6 +127,7 @@ namespace InfoBoxFactory
     e_NettoVario_spark,
     e_CirclingAverage_spark,
     e_ThermalBand,
+    e_TaskProgress,
     e_TaskMaxHeightTime, /* Time aircraft has been under the max start height */
     e_NUM_TYPES /* Last item */
   }t_InfoBox;

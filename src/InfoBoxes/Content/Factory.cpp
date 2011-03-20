@@ -818,6 +818,15 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // 84
   {
+    N_("Task progress"),
+    N_("Progress"),
+    N_("Clock-like display of distance remaining along task, showing achieved taskpoints."),
+    79, // H GPS
+    79, // QFE GPS
+  },
+
+  // 85
+  {
     N_("Time Under Max Start Height"),
     N_("Start Height"),
     N_("The contiguous period the ship has been below the task start max height."),
@@ -999,6 +1008,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentCirclingAverageSpark();
   case e_ThermalBand:
     return new InfoBoxContentThermalBand();
+  case e_TaskProgress:
+    return new InfoBoxContentTaskProgress();
   case e_TaskMaxHeightTime:
     return new InfoBoxContentTaskTimeUnderMaxHeight();
   }

@@ -85,6 +85,7 @@ Version 6.1 - not yet released
     - netto vario trace
     - thermal circling trace
     - thermal band
+    - task progress
   - new infobox displays time below maximum task start height
 * Android
   - support landscape/portrait switching

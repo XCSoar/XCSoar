@@ -27,6 +27,7 @@ Copyright_License {
 #include "FlightStatisticsRenderer.hpp"
 #include "TraceHistoryRenderer.hpp"
 #include "ThermalBandRenderer.hpp"
+#include "TaskProgressRenderer.hpp"
 #include "UnitsFormatter.hpp"
 #include "Units.hpp"
 #include "Components.hpp"
@@ -162,6 +163,26 @@ InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canva
 
 void
 InfoBoxContentThermalBand::Update(InfoBoxWindow &infobox)
+{
+  infobox.SetComment(_T(""));
+  infobox.SetValue(_T(""));
+  infobox.invalidate();
+}
+
+
+void
+InfoBoxContentTaskProgress::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
+{
+  RECT rc = infobox.get_value_rect();
+  rc.top += Layout::FastScale(2);
+
+  TaskProgressRenderer::DrawTaskProgress(CommonInterface::Calculated().common_stats.
+                                         ordered_summary,
+                                         canvas, rc);
+}
+
+void
+InfoBoxContentTaskProgress::Update(InfoBoxWindow &infobox)
 {
   infobox.SetComment(_T(""));
   infobox.SetValue(_T(""));
