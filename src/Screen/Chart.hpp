@@ -33,9 +33,11 @@ Copyright_License {
 
 #include <windef.h>
 #include <tchar.h>
+#include <vector>
 
 class LeastSquares;
 class Canvas;
+class Brush;
 
 class Chart
 {
@@ -76,6 +78,7 @@ public:
                 const fixed xmax, const fixed ymax, enum Style Style);
   void DrawFilledLine(const fixed xmin, const fixed ymin,
                 const fixed xmax, const fixed ymax, Color &colour);
+  void DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals, const Brush &brush);
 
   void ScaleYFromData(const LeastSquares &lsdata);
   void ScaleXFromData(const LeastSquares &lsdata);

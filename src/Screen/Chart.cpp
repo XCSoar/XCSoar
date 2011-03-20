@@ -620,3 +620,26 @@ Chart::DrawArrow(const fixed x, const fixed y, const fixed mag,
   wv[1].y = wv[0].y + (int)p.second;
   StyleLine(wv[0], wv[1], Style);
 }
+
+void 
+Chart::DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals, 
+                   const Brush &brush)
+{
+  if (vals.size()<2)
+    return;
+  const unsigned fsize = vals.size()+2;
+  RasterPoint line[fsize];
+
+  for (unsigned i=0; i< vals.size(); ++i) {
+    line[i+2].x = (int)((vals[i].first - x_min) * xscale) + rc.left + PaddingLeft;
+    line[i+2].y = (int)((y_max - vals[i].second) * yscale) + rc.top;
+  }
+  line[0].x = rc.left + PaddingLeft;
+  line[0].y = line[fsize-1].y;
+  line[1].x = rc.left + PaddingLeft;
+  line[1].y = line[2].y;
+  
+  canvas.select(brush);
+  canvas.null_pen();
+  canvas.polygon(line, fsize);
+}
