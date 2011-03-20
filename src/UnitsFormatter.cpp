@@ -275,7 +275,7 @@ Units::FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
   }
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%.*f%s"), prec, (double)value, pU->Name);
+    _stprintf(sTmp, _T("%.*f %s"), prec, (double)value, pU->Name);
   else
     _stprintf(sTmp, _T("%.*f"), prec, (double)value);
 

@@ -27,7 +27,7 @@
 
   <Edit Name="prpRange" Caption="AAT range" X="2" Height="22" CaptionWidth="150" ReadOnly="1" 
     Help="For AAT tasks, this value tells you how far based on the targets of your task you will fly relative to the minimum and maximum possible tasks. -100% indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% is maximum AAT distance.">
-    <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f"/>
+    <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f"/>
   </Edit>
 
   <Edit Name="prpSpeedRemaining" Caption="Set speed remaining" X="2" Height="22" CaptionWidth="150" ReadOnly="1">
@@ -43,7 +43,7 @@
   </Edit>
 
   <Edit Name="prpCruiseEfficiency" Caption="Cruise efficiency" X="2" Height="22" ReadOnly="1" CaptionWidth="150" Help="Efficiency of cruise.  100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets.  Less than 100 is appropriate if you fly considerably off-track.  This value estimates your cruise efficiency according to the current flight history with the set MC value.  Calculation begins after task is started.">
-    <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f"/>
+    <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f"/>
   </Edit>
 
   </Panel>

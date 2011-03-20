@@ -210,9 +210,9 @@ UpdateValuesSystem()
   wp = (WndProperty*)wf->FindByName(_T("prpDeclared"));
   assert(wp != NULL);
   if (logger.isTaskDeclared())
-    wp->SetText(_("YES"));
+    wp->SetText(_("True"));
   else
-    wp->SetText(_("NO"));
+    wp->SetText(_("False"));
 
   wp->RefreshDisplay();
 
@@ -222,7 +222,7 @@ UpdateValuesSystem()
   Temp[0] = 0;
 #ifdef HAVE_BATTERY
   if (Power::Battery::RemainingPercentValid) {
-    _stprintf(Temp2, _T("%d%% "), Power::Battery::RemainingPercent);
+    _stprintf(Temp2, _T("%d %% "), Power::Battery::RemainingPercent);
     _tcscat(Temp, Temp2);
   }
 #endif
