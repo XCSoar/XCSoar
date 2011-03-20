@@ -942,7 +942,7 @@ mode=Info3
 type=key
 data=6
 event=FlarmTraffic
-label=FLARM Radar
+label=FLARM Radar$(CheckFLARM)
 location=5
 
 mode=Info3

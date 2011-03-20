@@ -612,7 +612,8 @@ void
 InputEvents::eventFlarmTraffic(const TCHAR *misc)
 {
   (void)misc;
-  dlgFlarmTrafficShowModal();
+  if (XCSoarInterface::Basic().flarm.available)
+    dlgFlarmTrafficShowModal();
 }
 
 void
