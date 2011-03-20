@@ -40,12 +40,14 @@ Copyright_License {
 #include "Compiler.h"
 #include "UnitsFormatter.hpp"
 #include "FlightStatisticsRenderer.hpp"
+#include "ThermalBandRenderer.hpp"
 
 #include <stdio.h>
 
 enum analysis_page {
   ANALYSIS_PAGE_BAROGRAPH,
   ANALYSIS_PAGE_CLIMB,
+  ANALYSIS_PAGE_THERMAL_BAND,
   ANALYSIS_PAGE_TASK_SPEED,
   ANALYSIS_PAGE_WIND,
   ANALYSIS_PAGE_POLAR,
@@ -104,6 +106,19 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_CLIMB:
     fs.RenderClimb(canvas, rcgfx, XCSoarInterface::Calculated().glide_polar_task);
+    break;
+  case ANALYSIS_PAGE_THERMAL_BAND:
+  {
+    OrderedTaskBehaviour otb;
+    if (protected_task_manager != NULL) {
+      otb = protected_task_manager->get_ordered_task_behaviour();
+    }
+    ThermalBandRenderer::DrawThermalBand(XCSoarInterface::Basic(),
+                                         XCSoarInterface::Calculated(),
+                                         canvas, rcgfx, 
+                                         XCSoarInterface::SettingsComputer(),
+                                         &otb);
+  }
     break;
   case ANALYSIS_PAGE_WIND:
     fs.RenderWind(canvas, rcgfx, XCSoarInterface::Basic(),
@@ -187,6 +202,15 @@ Update(void)
     fs.CaptionClimb(sTmp);
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Task Calc"));
+    break;
+
+  case ANALYSIS_PAGE_THERMAL_BAND:
+    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
+              _("Thermal band"));
+    wf->SetCaption(sTmp);
+    fs.CaptionClimb(sTmp);
+    wInfo->SetCaption(sTmp);
+    SetCalcCaption(_T(""));
     break;
 
   case ANALYSIS_PAGE_WIND:

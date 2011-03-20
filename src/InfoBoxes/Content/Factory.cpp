@@ -809,6 +809,15 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // 83
   {
+    N_("Climb band"),
+    N_("Climb band"),
+    N_("Graph of average circling climb rate (horizontal axis) as a function of height (vertical axis)."),
+    79, // H GPS
+    79, // QFE GPS
+  },
+
+  // 84
+  {
     N_("Time Under Max Start Height"),
     N_("Start Height"),
     N_("The contiguous period the ship has been below the task start max height."),
@@ -988,6 +997,8 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentNettoVarioSpark();
   case e_CirclingAverage_spark:
     return new InfoBoxContentCirclingAverageSpark();
+  case e_ThermalBand:
+    return new InfoBoxContentThermalBand();
   case e_TaskMaxHeightTime:
     return new InfoBoxContentTaskTimeUnderMaxHeight();
   }

@@ -197,6 +197,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/TraceHistoryRenderer.cpp \
+	$(SRC)/ThermalBandRenderer.cpp \
 	\
 	$(SRC)/Poco/RWLock.cpp \
 	\

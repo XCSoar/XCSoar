@@ -190,7 +190,6 @@ private:
                      const NMEA_INFO &info) const;
   void DrawCrossHairs(Canvas &canvas) const;
   void DrawFinalGlide(Canvas &canvas, const RECT &rc) const;
-  void DrawThermalBand(Canvas &canvas, const RECT &rc) const;
   void DrawHorizon(Canvas &canvas, const RECT &rc) const;
   virtual void DrawThermalEstimate(Canvas &canvas) const;
   virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;

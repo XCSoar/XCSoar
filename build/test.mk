@@ -1359,6 +1359,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/FlightStatisticsRenderer.cpp \
+	$(SRC)/ThermalBandRenderer.cpp \
 	$(SRC)/GlideRatio.cpp \
 	$(SRC)/GlideComputer.cpp \
 	$(SRC)/GlideComputerBlackboard.cpp \

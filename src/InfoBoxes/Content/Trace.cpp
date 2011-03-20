@@ -26,6 +26,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "FlightStatisticsRenderer.hpp"
 #include "TraceHistoryRenderer.hpp"
+#include "ThermalBandRenderer.hpp"
 #include "UnitsFormatter.hpp"
 #include "Units.hpp"
 #include "Components.hpp"
@@ -144,4 +145,25 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
     break;
   }
   return false;
+}
+
+
+void
+InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
+{
+  RECT rc = infobox.get_value_rect();
+  rc.top += Layout::FastScale(2);
+
+  ThermalBandRenderer::DrawThermalBandSpark(CommonInterface::Basic(),
+                                            CommonInterface::Calculated(),
+                                            canvas, rc, 
+                                            XCSoarInterface::SettingsComputer());
+}
+
+void
+InfoBoxContentThermalBand::Update(InfoBoxWindow &infobox)
+{
+  infobox.SetComment(_T(""));
+  infobox.SetValue(_T(""));
+  infobox.invalidate();
 }

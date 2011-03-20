@@ -356,7 +356,6 @@ GlueMapWindow::Render(Canvas &canvas, const RECT &rc)
   MapWindow::Render(canvas, rc);
 
   DrawFlightMode(canvas, rc);
-  DrawThermalBand(canvas, rc);
   DrawFinalGlide(canvas, rc);
   DrawGPSStatus(canvas, rc, Basic());
 
