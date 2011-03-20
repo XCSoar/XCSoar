@@ -152,6 +152,28 @@ public:
   }
 
   /**
+   * Determine if waypoint is marked as a start
+   *
+   * @return True if waypoint is start
+   */
+  bool
+  is_startpoint() const
+  {
+    return Flags.StartPoint;
+  }
+
+  /**
+   * Determine if waypoint is marked as a finish
+   *
+   * @return True if waypoint is finish
+   */
+  bool
+  is_finishpoint() const
+  {
+    return Flags.FinishPoint;
+  }
+
+  /**
    * Equality operator (by id)
    * 
    * @param wp Waypoint object to match against

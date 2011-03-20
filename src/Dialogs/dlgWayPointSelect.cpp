@@ -75,7 +75,10 @@ static int NameFilterIdx = -1;
 
 static const TCHAR *const TypeFilter[] = {
   _T("*"), _T("Airport"), _T("Landable"),
-  _T("Turnpoint"), _T("File 1"), _T("File 2"),
+  _T("Turnpoint"), 
+  _T("Start"), 
+  _T("Finish"), 
+  _T("File 1"), _T("File 2"),
   NULL
 };
 
@@ -84,6 +87,8 @@ enum type_filter {
   tfAirport,
   tfLandable,
   tfTurnpoint,
+  tfStart,
+  tfFinish,
   tfFile1,
   tfFile2
 };
@@ -234,24 +239,32 @@ class FilterWaypointVisitor:
 
 private:
   static bool
-  compare_type(const Waypoint &wp, int type_index)
+  compare_type(const Waypoint &wp, type_filter type_index)
   {
     switch (type_index) {
-    case 0:
+    case tfAll:
       return true;
 
-    case 1:
+    case tfAirport:
       return wp.is_airport();
 
-    case 2:
+    case tfLandable:
       return wp.is_landable();
 
-    case 3:
+    case tfTurnpoint:
       return wp.is_turnpoint();
 
-    case 4:
-    case 5:
-      return wp.FileNum == type_index - 4;
+    case tfStart:
+      return wp.is_startpoint();
+
+    case tfFinish:
+      return wp.is_finishpoint();
+
+    case tfFile1:
+      return wp.FileNum == 0;
+
+    case tfFile2:
+      return wp.FileNum == 1;
     }
 
     /* not reachable */
