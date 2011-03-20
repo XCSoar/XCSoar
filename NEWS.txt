@@ -78,17 +78,19 @@ Version 6.1 - not yet released
   - auto goto task: when no task is defined then on takeoff, if there is a waypoint
     within 1km of the takeoff location, a goto task pointing back to this location
     is automatically created.
-  - new infobox displays time below maximum task start height
 * infoboxes
   - new graphical infoboxes
     - barogram
     - vario trace
     - netto vario trace
     - thermal circling trace
+    - thermal band
+  - new infobox displays time below maximum task start height
 * Android
   - support landscape/portrait switching
 * Dialog updates
   - Analysis dialog shows multiple contest (OLC etc) results
+  - Analysis dialog includes a thermal band graph
   - Waypoint select dialog allows filtering by start/finish
 
 Version 6.0.8 - not yet released
