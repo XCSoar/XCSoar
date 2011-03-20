@@ -136,6 +136,7 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
   // render_line(chart, var);
 
   if (positive(mc)) {
+    canvas.background_transparent();
     chart.DrawLine(fixed_zero, mc, 
                    fixed(var.capacity()-1), mc, 
                    Chart::STYLE_DASHGREEN);
