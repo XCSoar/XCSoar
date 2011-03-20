@@ -139,6 +139,7 @@ FlightStatisticsRenderer::RenderBarographSpark(
 
   if (_task != NULL) {
     ProtectedTaskManager::Lease task(*_task);
+    canvas.hollow_brush();
     DrawLegs(chart, task, nmea_info, derived_info, false);
   }
 
