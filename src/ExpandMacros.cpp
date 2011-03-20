@@ -203,8 +203,6 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
       // Waypoint\nNext
-      if (!task->validTaskPoint(1))
-        invalid = true;
 
       switch (task_manager->get_task_advance().get_advance_state()) {
       case TaskAdvance::MANUAL:
@@ -216,6 +214,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                             _T("$(WaypointNextArm)"),
                             _("Finish Turnpoint"),
                             _("Next Turnpoint"), Size);
+        if (!task->validTaskPoint(1))
+          invalid = true;
         break;
       case TaskAdvance::START_DISARMED:
         ReplaceInString(OutBuffer, _T("$(WaypointNextArm)"), _("Arm start"), Size);
@@ -226,8 +226,6 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       }
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
-      if (!task->validTaskPoint(-1))
-        invalid = true;
 
       switch (task_manager->get_task_advance().get_advance_state()) {
       case TaskAdvance::MANUAL:
@@ -239,6 +237,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                             _T("$(WaypointPreviousArm)"),
                             _("Start Turnpoint"),
                             _("Previous Turnpoint"), Size);
+        if (!task->validTaskPoint(-1))
+          invalid = true;
         break;
       case TaskAdvance::START_ARMED:
         ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"), _("Disarm start"), Size);
