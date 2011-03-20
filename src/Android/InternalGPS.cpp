@@ -56,7 +56,7 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
 {
   mutexBlackboard.Lock();
   NMEA_INFO &basic = device_blackboard.SetBasic();
-  basic.Connected.update(basic.Time);
+  basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
   mutexBlackboard.Unlock();
 
   TriggerGPSUpdate();
