@@ -87,6 +87,9 @@ Version 6.1 - not yet released
     - thermal circling trace
 * Android
   - support landscape/portrait switching
+* Dialog updates
+  - Analysis dialog shows multiple contest (OLC etc) results
+  - Waypoint select dialog allows filtering by start/finish
 
 Version 6.0.8 - not yet released
 * don't estimate thermal source for skewed thermals
