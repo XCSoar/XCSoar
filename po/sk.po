@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-19 09:36+0100\n"
-"PO-Revision-Date: 2011-03-18 21:46+0100\n"
+"PO-Revision-Date: 2011-03-18 22:10+0100\n"
 "Last-Translator: Roman Stoklasa <rstoki@gmail.com>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
@@ -1803,11 +1803,11 @@ msgstr "Plné trasovanie letu zapnuté"
 
 #: src/InputEventsActions.cpp:209
 msgid "Show Airspace OFF"
-msgstr "Zobrazenie vp VYP"
+msgstr "Zobrazenie vzdušných priestorov vypnuté"
 
 #: src/InputEventsActions.cpp:211
 msgid "Show Airspace ON"
-msgstr "Zobrazenie VP ZAP"
+msgstr "Zobrazenie vzdušných priestorov zapnuté"
 
 #: src/InputEventsActions.cpp:249
 msgid "Screen Mode Full"
@@ -2432,7 +2432,7 @@ msgstr "Povinné úkony"
 #: src/Dialogs/dlgConfiguration.cpp:97
 #, no-c-format
 msgid "Site"
-msgstr "Nálezisko"
+msgstr "Umiestnenie súborov"
 
 #: src/Dialogs/dlgConfiguration.cpp:99
 #, no-c-format
@@ -2498,7 +2498,7 @@ msgstr "Východzie pravidlá úlohy"
 #: Data/Dialogs/dlgConfigInfoboxes_L.xml:3
 #, no-c-format
 msgid "InfoBoxes"
-msgstr "Info okná"
+msgstr "Info-okná"
 
 #: src/Dialogs/dlgConfiguration.cpp:112 Data/Dialogs/dlgStatus.xml:24
 #: Data/Dialogs/dlgStatusSystem.xml:8 Data/Input/default.xci:656
@@ -3679,7 +3679,7 @@ msgstr "Stav úlohy"
 #: Data/Dialogs/dlgConfiguration.xml:341
 #: Data/Dialogs/dlgConfiguration_L.xml:340
 msgid "Aircraft/wind speed"
-msgstr "Rýchlosť Lietadla/Vetra"
+msgstr "Rýchlosť lietadla/vetra"
 
 #: Data/Dialogs/dlgConfiguration.xml:514
 #: Data/Dialogs/dlgConfiguration_L.xml:513
@@ -6088,7 +6088,7 @@ msgstr "Po prerušení posledné MC*"
 
 #: Data/Dialogs/dlgConfiguration.xml:61 Data/Dialogs/dlgConfiguration_L.xml:61
 msgid "Clip altitude"
-msgstr "Ignoruj vp nad"
+msgstr "Ignoruj vzduš. priest. nad"
 
 #: Data/Dialogs/dlgConfiguration.xml:524
 #: Data/Dialogs/dlgConfiguration_L.xml:523
@@ -6619,7 +6619,7 @@ msgstr "Automatické vypínanie"
 
 #: Data/Dialogs/dlgConfiguration.xml:66 Data/Dialogs/dlgConfiguration_L.xml:66
 msgid "Margin"
-msgstr "Zobraz vp od"
+msgstr "Zobraz zduš. priest. od"
 
 #: Data/Dialogs/dlgConfiguration.xml:360
 #: Data/Dialogs/dlgConfiguration_L.xml:359
