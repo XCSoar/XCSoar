@@ -87,6 +87,7 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
   int numtherm = 0;
 
   fixed Wmax = fixed_zero;
+  fixed Wav = fixed_zero;
   fixed Wt[ThermalBandInfo::NUMTHERMALBUCKETS];
   fixed ht[ThermalBandInfo::NUMTHERMALBUCKETS];
 
@@ -102,10 +103,14 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
         / ThermalBandInfo::NUMTHERMALBUCKETS;
       Wt[numtherm] = wthis;
       Wmax = std::max(Wmax, wthis);
+      Wav+= wthis;
       numtherm++;
     }
   }
   chart.ScaleXFromValue(Wmax);
+  if (!numtherm)
+    return;
+  chart.ScaleXFromValue(fixed(1.5)*Wav/numtherm);
 
   if ((!draw_start_height) && (numtherm<=1))
     // don't display if insufficient statistics
