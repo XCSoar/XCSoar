@@ -65,6 +65,7 @@ ElementStatComputer::calc_speeds(const fixed dt)
   remaining.calc_speed(data.TimeRemaining);
   planned.calc_speed(data.TimePlanned);
   travelled.calc_speed(data.TimeElapsed);
+  pirker.calc_speed(data.TimeElapsed);
 
   if (!initialised) {
     if (positive(dt) && data.TimeElapsed > fixed(15)) {
@@ -75,11 +76,13 @@ ElementStatComputer::calc_speeds(const fixed dt)
     remaining.calc_incremental_speed(fixed_zero);
     planned.calc_incremental_speed(fixed_zero);
     travelled.calc_incremental_speed(fixed_zero);
+    pirker.calc_incremental_speed(fixed_zero);
   } else {
     remaining_effective.calc_incremental_speed(dt);
     remaining.calc_incremental_speed(dt);
     planned.calc_incremental_speed(dt);
     travelled.calc_incremental_speed(dt);
+    pirker.calc_incremental_speed(dt);
     data.vario.update(data.solution_remaining, fixed(dt));
   }
 }
@@ -90,6 +93,7 @@ ElementStatComputer::ElementStatComputer(ElementStat &_data)
    remaining(data.remaining),
    planned(data.planned),
    travelled(data.travelled, false),
+   pirker(data.pirker, false),
    initialised(false)
 {
 }

@@ -447,8 +447,7 @@ InfoBoxContentTaskSpeedInstant::Update(InfoBoxWindow &infobox)
 
   // Set Value
   SetValueFromFixed(infobox, _T("%2.0f"),
-                    Units::ToUserTaskSpeed(task_stats.total.remaining_effective.
-                                           get_speed_incremental()));
+                    Units::ToUserTaskSpeed(task_stats.get_pirker_speed()));
 
   // Set Unit
   infobox.SetValueUnit(Units::Current.TaskSpeedUnit);

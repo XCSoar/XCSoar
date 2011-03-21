@@ -45,7 +45,8 @@ plot \
      'results/res-stats.txt' using 1:7 with lines title "Remaining", \
      'results/res-stats.txt' using 1:8 with lines title "Remaining instantaneous", \
      'results/res-stats.txt' using 1:9 with lines title "Effective", \
-     'results/res-stats.txt' using 1:10 with lines title "Effective instantaneous"
+     'results/res-stats.txt' using 1:10 with lines title "Effective instantaneous", \
+     'results/res-stats.txt' using 1:13 with lines title "Pirker"
 
 unset multiplot
 

@@ -170,6 +170,9 @@ AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state)
                          stats.total.solution_remaining.TimeElapsed,
                          stats.current_leg.solution_remaining.TimeElapsed);
 
+  stats.total.pirker.set_distance(stats.total.planned.get_distance()
+                                  -stats.total.remaining_effective.get_distance());
+
   stats.current_leg.remaining.set_distance(
     stats.current_leg.solution_remaining.Vector.Distance);
   stats.current_leg.travelled.set_distance(

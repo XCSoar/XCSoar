@@ -71,3 +71,8 @@ TaskStatsComputer::reset()
   total.reset();
   current_leg.reset();
 }
+
+fixed 
+TaskStats::get_pirker_speed() const {
+  return total.pirker.get_speed_incremental();
+}

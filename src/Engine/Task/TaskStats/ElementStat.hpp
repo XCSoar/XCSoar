@@ -54,6 +54,7 @@ public:
   DistanceStat remaining; /**< Stats for actual remaining distance of element */
   DistanceStat planned; /**< Stats for overall element distance */
   DistanceStat travelled; /**< Stats for travelled distance in this element */
+  DistanceStat pirker; /**< Difference beteen planned and remaining_effective */
 
   GlideResult solution_planned; /**< Glide solution for planned element */
   GlideResult solution_travelled; /**< Glide solution for travelled element */
@@ -95,6 +96,7 @@ public:
   DistanceStatComputer remaining;
   DistanceStatComputer planned;
   DistanceStatComputer travelled;
+  DistanceStatComputer pirker;
 
 public:
   ElementStatComputer(ElementStat &_data);
