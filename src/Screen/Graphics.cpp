@@ -121,6 +121,7 @@ Brush Graphics::hbMagenta;
 Brush Graphics::hbOrange;
 Brush Graphics::hbLightGray;
 Brush Graphics::hbNotReachableTerrain;
+Brush Graphics::hbGround;
 
 // airspace brushes/colours
 const Color
@@ -156,7 +157,7 @@ const Color Graphics::inv_blueColor = Color(0x90, 0x90, 0xff);
 const Color Graphics::inv_yellowColor = Color::YELLOW;
 const Color Graphics::inv_greenColor = Color::GREEN;
 const Color Graphics::inv_magentaColor = Color::MAGENTA;
-
+const Color Graphics::GroundColor = Color(157, 101, 60);
 const Color Graphics::TaskColor = Color(0, 120, 0);
 
 const Color Graphics::Colours[] = {
@@ -294,6 +295,8 @@ Graphics::Initialise()
   hbOrange.set(Color::ORANGE);
   hbLightGray.set(Color::LIGHT_GRAY);
   hbNotReachableTerrain.set(Color(224, 64, 64));
+
+  hbGround.set(GroundColor);
 
   hpTrackBearingLine.set(3, Color::GRAY);
 }

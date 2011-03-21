@@ -230,7 +230,7 @@ private:
 };
 
 CrossSectionWindow::CrossSectionWindow() :
-  terrain_brush(Chart::GROUND_COLOUR),
+  terrain_brush(Graphics::GroundColor),
   grid_pen(Pen::DASH, 1, Color(0x60, 0x60, 0x60)),
   terrain(NULL), airspace_database(NULL),
   start(Angle::native(fixed_zero), Angle::native(fixed_zero)),

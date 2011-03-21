@@ -143,10 +143,8 @@ FlightStatisticsRenderer::RenderBarographSpark(
     DrawLegs(chart, task, nmea_info, derived_info, false);
   }
 
-  Brush hbHorizonGround(Color::LIGHT_GRAY);
-
   canvas.null_pen();
-  canvas.select(hbHorizonGround);
+  canvas.select(Graphics::hbGround);
 
   chart.DrawFilledLineGraph(fs.Altitude_Terrain);
 
@@ -178,10 +176,8 @@ FlightStatisticsRenderer::RenderBarograph(Canvas &canvas, const RECT rc,
     DrawLegs(chart, task, nmea_info, derived_info, false);
   }
 
-  Brush hbHorizonGround(Chart::GROUND_COLOUR);
-
   canvas.null_pen();
-  canvas.select(hbHorizonGround);
+  canvas.select(Graphics::hbGround);
 
   chart.DrawFilledLineGraph(fs.Altitude_Terrain);
   canvas.white_pen();

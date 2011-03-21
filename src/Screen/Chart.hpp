@@ -54,8 +54,6 @@ public:
 public:
   Chart(Canvas &the_canvas, const RECT the_rc);
 
-  static const Color GROUND_COLOUR;
-
   enum Style {
     STYLE_BLUETHIN,
     STYLE_REDTHICK,

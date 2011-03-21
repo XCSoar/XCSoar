@@ -150,6 +150,7 @@ namespace Graphics {
   extern Brush hbOrange;
   extern Brush hbLightGray;
   extern Brush hbNotReachableTerrain;
+  extern Brush hbGround;
 
   // misc
   extern const Color TaskColor;
@@ -162,6 +163,9 @@ namespace Graphics {
   extern const Color inv_yellowColor;
   extern const Color inv_greenColor;
   extern const Color inv_magentaColor;
+
+  extern const Color GroundColor;
+
 };
 
 #endif

@@ -35,8 +35,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-const Color Chart::GROUND_COLOUR(157, 101, 60);
-
 void
 Chart::ResetScale()
 {

@@ -409,7 +409,6 @@ GlueMapWindow::DrawHorizon(Canvas &canvas, const RECT &rc) const
   Pen hpHorizonSky(IBLSCALE(1), Color(0x40, 0x40, 0xff));
   Brush hbHorizonSky(Color(0xA0, 0xA0, 0xff));
   Pen hpHorizonGround(IBLSCALE(1), Color(106, 55, 12));
-  Brush hbHorizonGround(Color(157, 101, 60));
 
 #define fixed_div fixed(1.0 / 50.0)
 #define fixed_89 fixed_int_constant(89)
@@ -431,7 +430,7 @@ GlueMapWindow::DrawHorizon(Canvas &canvas, const RECT &rc) const
   canvas.segment(Start.x, Start.y, radius, alpha2, alpha1, true);
 
   canvas.select(hpHorizonGround);
-  canvas.select(hbHorizonGround);
+  canvas.select(Graphics::hbGround);
 
   canvas.segment(Start.x, Start.y, radius, alpha1, alpha2, true);
 
