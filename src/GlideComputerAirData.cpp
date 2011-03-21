@@ -942,9 +942,7 @@ GlideComputerAirData::WorkingBand()
   const fixed h_safety = SettingsComputer().route_planner.safety_height_terrain +
     Calculated().TerrainBase;
 
-  const fixed working_band_height = basic.TEAltitude - h_safety;
-
-  tbi.working_band_height = working_band_height;
+  tbi.working_band_height = basic.TEAltitude - h_safety;
   if (negative(tbi.working_band_height)) {
     tbi.working_band_fraction = fixed_zero;
     return;
@@ -952,7 +950,7 @@ GlideComputerAirData::WorkingBand()
 
   const fixed max_height = Calculated().thermal_band.MaxThermalHeight;
   if (positive(max_height))
-    tbi.working_band_fraction = working_band_height / max_height;
+    tbi.working_band_fraction = tbi.working_band_height / max_height;
   else
     tbi.working_band_fraction = fixed_one;
 
@@ -982,33 +980,6 @@ GlideComputerAirData::ThermalBand()
   // only do this if in thermal and have been climbing
   if ((!Calculated().Circling) || negative(Calculated().Average30s))
     return;
-
-  if (dheight > tbi.MaxThermalHeight) {
-    // moved beyond ceiling, so redistribute buckets
-    ThermalBandInfo new_tbi;
-
-    // calculate new buckets so glider is below max
-    fixed hbuk = tbi.MaxThermalHeight / ThermalBandInfo::NUMTHERMALBUCKETS;
-
-    new_tbi.clear();
-    new_tbi.MaxThermalHeight = max(fixed_one, tbi.MaxThermalHeight);
-    while (new_tbi.MaxThermalHeight < dheight) {
-      new_tbi.MaxThermalHeight += hbuk;
-    }
-
-    // shift data into new buckets
-    for (unsigned i = 0; i < ThermalBandInfo::NUMTHERMALBUCKETS; i++) {
-      fixed h = tbi.bucket_height(i);
-      // height of center of bucket
-      unsigned j = new_tbi.bucket_for_height(h);
-      if (tbi.ThermalProfileN[i] > 0) {
-        new_tbi.ThermalProfileW[j] += tbi.ThermalProfileW[i];
-        new_tbi.ThermalProfileN[j] += tbi.ThermalProfileN[i];
-      }
-    }
-
-    tbi = new_tbi;
-  }
 
   tbi.add(dheight, Basic().BruttoVario);
 }

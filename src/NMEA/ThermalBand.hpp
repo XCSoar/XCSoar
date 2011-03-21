@@ -62,7 +62,9 @@ struct ThermalBandInfo
    */
   fixed bucket_height(unsigned bucket) const;
 
-  void add(fixed height, fixed total_energy_vario);
+  void add(const fixed height, const fixed total_energy_vario);
+private:
+  void expand(const fixed height);
 };
 
 #endif

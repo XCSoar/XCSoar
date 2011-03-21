@@ -67,10 +67,44 @@ ThermalBandInfo::bucket_height(unsigned bucket) const
 }
 
 void
-ThermalBandInfo::add(fixed height, fixed total_energy_vario)
+ThermalBandInfo::add(const fixed height, const fixed total_energy_vario)
 {
-  unsigned bucket = bucket_for_height(height);
+  if (height > MaxThermalHeight) {
+    // moved beyond ceiling, so redistribute buckets
+    expand(height);
+  }
+
+  const unsigned bucket = bucket_for_height(height);
   ThermalProfileW[bucket] += total_energy_vario;
   ThermalProfileN[bucket]++;
 }
 
+void
+ThermalBandInfo::expand(const fixed height)
+{
+  ThermalBandInfo new_tbi;
+
+  // calculate new buckets so glider is below max
+  fixed hbuk = MaxThermalHeight / NUMTHERMALBUCKETS;
+
+  new_tbi.clear();
+  new_tbi.MaxThermalHeight = std::max(fixed_one, MaxThermalHeight);
+
+  // increase ceiling until reach required height
+  while (new_tbi.MaxThermalHeight < height) {
+    new_tbi.MaxThermalHeight += hbuk;
+  }
+
+  // shift data into new buckets
+  for (unsigned i = 0; i < NUMTHERMALBUCKETS; ++i) {
+    const fixed h = bucket_height(i);
+    // height of center of bucket
+    if (ThermalProfileN[i] > 0) {
+      const unsigned j = new_tbi.bucket_for_height(h);
+      new_tbi.ThermalProfileW[j] += ThermalProfileW[i];
+      new_tbi.ThermalProfileN[j] += ThermalProfileN[i];
+    }
+  }
+
+  *this = new_tbi;
+}
