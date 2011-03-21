@@ -583,7 +583,7 @@ mode=Config3
 type=key
 data=6
 event=Logger nmea
-label=Raw Logger
+label=Raw Logger$(CheckLogger)
 location=5
 
 
