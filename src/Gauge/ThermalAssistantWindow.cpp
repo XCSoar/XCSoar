@@ -57,7 +57,6 @@ ThermalAssistantWindow::on_create()
   BufferWindow::on_create();
 
   hbBackground.set(hcBackground);
-  hbRadar.set(hcCircles);
 
 #ifdef ENABLE_OPENGL
   hbPolygon.set(hcPolygonBrush.with_alpha(128));
