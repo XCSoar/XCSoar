@@ -6619,7 +6619,7 @@ msgstr "Automatické vypínanie"
 
 #: Data/Dialogs/dlgConfiguration.xml:66 Data/Dialogs/dlgConfiguration_L.xml:66
 msgid "Margin"
-msgstr "Zobraz zduš. priest. od"
+msgstr "Zobraz vzduš. priest. od"
 
 #: Data/Dialogs/dlgConfiguration.xml:360
 #: Data/Dialogs/dlgConfiguration_L.xml:359
