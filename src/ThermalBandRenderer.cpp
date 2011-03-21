@@ -101,7 +101,7 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
       ht[numtherm] = i * calculated.thermal_band.MaxThermalHeight 
         / ThermalBandInfo::NUMTHERMALBUCKETS;
       Wt[numtherm] = wthis;
-      Wmax = std::max(Wmax, wthis * 2 / 3);
+      Wmax = std::max(Wmax, wthis);
       numtherm++;
     }
   }
