@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-19 09:36+0100\n"
-"PO-Revision-Date: 2011-03-18 21:00+0100\n"
+"PO-Revision-Date: 2011-03-18 21:46+0100\n"
 "Last-Translator: Roman Stoklasa <rstoki@gmail.com>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
@@ -1967,7 +1967,7 @@ msgstr "GPS nepripojené"
 
 #: src/GlueMapWindowOverlays.cpp:67
 msgid "GPS waiting for fix"
-msgstr "GPS čaká na zameranie"
+msgstr "GPS čaká na fix"
 
 #: src/Topology/TopologyGlue.cpp:96
 msgid "Loading Topology File..."
@@ -2519,7 +2519,7 @@ msgstr "Prídavný ovládač GPS"
 #: src/Dialogs/dlgConfiguration.cpp:124
 #, no-c-format
 msgid "Built-in GPS"
-msgstr ""
+msgstr "Vstavaná GPS"
 
 #: src/Dialogs/dlgConfiguration.cpp:154 src/Dialogs/dlgConfiguration.cpp:162
 #: src/Dialogs/dlgConfiguration.cpp:170 src/Dialogs/dlgConfiguration.cpp:178
@@ -3160,7 +3160,7 @@ msgstr "Bod štartu"
 
 #: src/Dialogs/dlgTaskPoint.cpp:261
 msgid "Finish point"
-msgstr ""
+msgstr "Cieľový bod"
 
 #: src/Dialogs/dlgTaskPoint.cpp:264
 msgid "Assigned area point"
@@ -3180,7 +3180,7 @@ msgstr "Otočný bod úlohy"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:49
 msgid "Racing"
-msgstr ""
+msgstr "Súťažná úloha"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:51
 msgid "FAI generic"
@@ -4460,7 +4460,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint.xml:28 Data/Dialogs/dlgTaskPoint_L.xml:29
 msgid "Radius of the OZ sector."
-msgstr ""
+msgstr "Polomer sektoru pozorovacej oblasti"
 
 #: Data/Dialogs/dlgConfiguration.xml:292
 #: Data/Dialogs/dlgConfiguration_L.xml:292
@@ -4754,7 +4754,7 @@ msgstr "Podrobnosti"
 #: Data/Dialogs/dlgConfiguration.xml:577
 #: Data/Dialogs/dlgConfiguration_L.xml:576
 msgid "Competition Id"
-msgstr ""
+msgstr "Súťažný znak"
 
 #: Data/Dialogs/dlgConfiguration.xml:118
 #: Data/Dialogs/dlgConfiguration_L.xml:118
@@ -5102,7 +5102,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:492
 #: Data/Dialogs/dlgConfiguration_L.xml:491
 msgid "Auto close FLARM"
-msgstr ""
+msgstr "Autom. zavrieť FLARM"
 
 #: Data/Dialogs/dlgSwitches.xml:23
 msgid "Gear down"
@@ -5832,7 +5832,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:10
 msgid "Enable warnings for final glide through terrain."
-msgstr "Aktivuj varovania pre doklz cez terén."
+msgstr "Aktivuj varovania pre doklz skrz terén."
 
 #: Data/Dialogs/dlgConfiguration.xml:25 Data/Dialogs/dlgConfiguration_L.xml:25
 msgid "More Waypoints"
@@ -5940,7 +5940,7 @@ msgstr "Vzd. rýchlosť"
 
 #: Data/Dialogs/dlgConfiguration.xml:30 Data/Dialogs/dlgConfiguration_L.xml:30
 msgid "Airspaces"
-msgstr ""
+msgstr "Vzduš. priestory"
 
 #: Data/Dialogs/dlgConfigFonts.xml:28 Data/Dialogs/dlgConfigFonts_L.xml:28
 msgid "Gauges"
@@ -6549,7 +6549,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
-msgstr ""
+msgstr "Podrobnosti vzdušného priestoru"
 
 #: Data/Dialogs/dlgBasicSettings.xml:8
 msgid ""
@@ -6744,7 +6744,7 @@ msgstr ""
 
 #: Data/Input/default.xci:159
 msgid "Below Final Glide"
-msgstr ""
+msgstr "Ste pod doklzovou výškou"
 
 #: Data/Input/default.xci:853
 msgid "Weather"
@@ -6781,7 +6781,7 @@ msgstr ""
 
 #: Data/Input/default.xci:115
 msgid "Waiting for GPS Connection"
-msgstr ""
+msgstr "Čakám na spojenie s GPS"
 
 #: Data/Input/default.xci:701
 msgid ""
@@ -6832,7 +6832,7 @@ msgstr "Info"
 
 #: Data/Input/default.xci:154
 msgid "Above Final Glide"
-msgstr ""
+msgstr "Ste nad doklzovou výškou"
 
 #: Data/Input/default.xci:708
 msgid "Setup Audio"
@@ -6864,7 +6864,7 @@ msgstr ""
 
 #: Data/Input/default.xci:120
 msgid "Restarting Comm Ports"
-msgstr ""
+msgstr "Reštartujem COM porty"
 
 #: Data/Input/default.xci:514
 msgid ""
@@ -6876,7 +6876,7 @@ msgstr ""
 
 #: Data/Input/default.xci:143
 msgid "Takeoff"
-msgstr ""
+msgstr "Vzlet"
 
 #: Data/Input/default.xci:748
 msgid ""
@@ -6932,7 +6932,7 @@ msgstr "Značky na mape zmazané"
 
 #: Data/Input/default.xci:125
 msgid "Waiting for GPS Fix"
-msgstr ""
+msgstr "Čakám na GPS fix"
 
 #: Data/Input/default.xci:777
 msgid ""
@@ -6971,7 +6971,7 @@ msgstr "Uložiť"
 
 #: Data/Input/default.xci:164
 msgid "Final Glide Through Terrain"
-msgstr ""
+msgstr "Doklz skrz terén"
 
 #: Data/Input/default.xci:861
 msgid ""
@@ -6997,7 +6997,7 @@ msgstr "Priblíž"
 
 #: Data/Input/default.xci:148
 msgid "Landing"
-msgstr ""
+msgstr "Pristánie"
 
 #~ msgid ""
 #~ "Error loading Polar file!\r\n"
