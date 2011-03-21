@@ -1161,7 +1161,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/WayPoint/WayPointFileZander.cpp \
 	$(SRC)/WayPoint/WayPointRenderer.cpp \
 	$(SRC)/Compatibility/fmode.c \
-	$(SRC)/Simulator.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
@@ -1434,7 +1433,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
-	$(SRC)/Simulator.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
