@@ -93,6 +93,7 @@ Version 6.1 - not yet released
   - Analysis dialog shows multiple contest (OLC etc) results
   - Analysis dialog includes a thermal band graph
   - Waypoint select dialog allows filtering by start/finish
+  - Airspace warning dialog only shows buttons suitable for the respective airspace item, 
 
 Version 6.0.8 - not yet released
 * don't estimate thermal source for skewed thermals
