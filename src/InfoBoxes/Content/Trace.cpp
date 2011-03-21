@@ -50,12 +50,13 @@ static RECT get_spark_rect(const InfoBoxWindow &infobox)
 
 void
 InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
-                              const TraceVariableHistory& var)
+                              const TraceVariableHistory& var,
+                              const bool center)
 {
   if (var.empty())
     return;
 
-  TraceHistoryRenderer::RenderVario(canvas, get_spark_rect(infobox), var, true,
+  TraceHistoryRenderer::RenderVario(canvas, get_spark_rect(infobox), var, center,
                                     CommonInterface::Calculated().glide_polar_task.get_mc());
 }
 
@@ -74,7 +75,8 @@ InfoBoxContentNettoVarioSpark::on_custom_paint(InfoBoxWindow &infobox, Canvas &c
 void
 InfoBoxContentCirclingAverageSpark::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  do_paint(infobox, canvas, CommonInterface::Calculated().trace_history.CirclingAverage);
+  do_paint(infobox, canvas, CommonInterface::Calculated().trace_history.CirclingAverage,
+    false);
 }
 
 void

@@ -33,7 +33,8 @@ class InfoBoxContentSpark: public InfoBoxContent
 {
 protected:
   void do_paint(InfoBoxWindow &infobox, Canvas &canvas,
-                const TraceVariableHistory& var);
+                const TraceVariableHistory& var,
+                const bool center = true);
   void label_vspeed(InfoBoxWindow &infobox,
                     const TraceVariableHistory& var);
 
