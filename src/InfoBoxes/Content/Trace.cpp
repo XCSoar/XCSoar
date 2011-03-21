@@ -39,17 +39,23 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 
+static RECT get_spark_rect(const InfoBoxWindow &infobox)
+{
+  RECT rc = infobox.get_value_rect();
+  rc.top += Layout::FastScale(2);
+  rc.right -= Layout::FastScale(2);
+  rc.left += Layout::FastScale(2);
+  return rc;
+}
+
 void
 InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
                               const TraceVariableHistory& var)
 {
-  RECT rc = infobox.get_value_rect();
-  rc.top += Layout::FastScale(2);
-
   if (var.empty())
     return;
 
-  TraceHistoryRenderer::RenderVario(canvas, rc, var, true,
+  TraceHistoryRenderer::RenderVario(canvas, get_spark_rect(infobox), var, true,
                                     CommonInterface::Calculated().glide_polar_task.get_mc());
 }
 
@@ -123,11 +129,8 @@ InfoBoxContentBarogram::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentBarogram::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  RECT rc = infobox.get_value_rect();
-  rc.top += Layout::FastScale(2);
-
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats());
-  fs.RenderBarographSpark(canvas, rc, XCSoarInterface::Basic(),
+  fs.RenderBarographSpark(canvas, get_spark_rect(infobox), XCSoarInterface::Basic(),
                           XCSoarInterface::Calculated(), protected_task_manager);
 }
 
@@ -152,12 +155,9 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  RECT rc = infobox.get_value_rect();
-  rc.top += Layout::FastScale(2);
-
   ThermalBandRenderer::DrawThermalBandSpark(CommonInterface::Basic(),
                                             CommonInterface::Calculated(),
-                                            canvas, rc, 
+                                            canvas, get_spark_rect(infobox), 
                                             XCSoarInterface::SettingsComputer());
 }
 
@@ -173,12 +173,9 @@ InfoBoxContentThermalBand::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTaskProgress::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  RECT rc = infobox.get_value_rect();
-  rc.top += Layout::FastScale(2);
-
   TaskProgressRenderer::DrawTaskProgress(CommonInterface::Calculated().common_stats.
                                          ordered_summary,
-                                         canvas, rc);
+                                         canvas, get_spark_rect(infobox));
 }
 
 void
