@@ -31,7 +31,8 @@ Copyright_License {
 
 void
 TraceHistoryRenderer::scale_chart(Chart &chart,
-                                  const TraceVariableHistory& var) 
+                                  const TraceVariableHistory& var,
+                                  const bool centered) 
 {
   chart.PaddingBottom = 0;
   chart.PaddingLeft = 0;
@@ -47,6 +48,10 @@ TraceHistoryRenderer::scale_chart(Chart &chart,
   }
   if (!(vmax>vmin)) {
     vmax += fixed_one;
+  }
+  if (centered) {
+    vmax = std::max(vmax, -vmin);
+    vmin = std::min(vmin, -vmax);
   }
   chart.ScaleYFromValue(vmax);
   chart.ScaleYFromValue(vmin);
@@ -128,10 +133,11 @@ void
 TraceHistoryRenderer::RenderVario(Canvas& canvas,
                                   const RECT rc,
                                   const TraceVariableHistory& var,
+                                  const bool centered,
                                   const fixed mc)
 {
   Chart chart(canvas, rc);
-  scale_chart(chart, var);
+  scale_chart(chart, var, centered);
   chart.ScaleYFromValue(mc);
   // render_line(chart, var);
 

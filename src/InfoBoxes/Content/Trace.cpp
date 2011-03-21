@@ -49,7 +49,7 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
   if (var.empty())
     return;
 
-  TraceHistoryRenderer::RenderVario(canvas, rc, var,
+  TraceHistoryRenderer::RenderVario(canvas, rc, var, true,
                                     CommonInterface::Calculated().glide_polar_task.get_mc());
 }
 

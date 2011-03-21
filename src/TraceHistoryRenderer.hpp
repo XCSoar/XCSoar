@@ -36,10 +36,12 @@ public:
   static void RenderVario(Canvas& canvas,
                           const RECT rc,
                           const TraceVariableHistory& var,
+                          const bool centered = false,
                           const fixed mc=fixed_zero);
 private:
   static void scale_chart(Chart &chart,
-                          const TraceVariableHistory& var);
+                          const TraceVariableHistory& var,
+                          const bool centered);
   static void render_axis(Chart &chart,
                           const TraceVariableHistory& var);
   static void render_line(Chart &chart,
