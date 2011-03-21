@@ -3,9 +3,9 @@
 <Form Name="frmAirspaceWarning" X="2" Y="2" Width="236" Height="172" Caption="Airspace Warnings">
   <List Name="frmAirspaceWarningList" X="1" Y="1" Width="-1" Height="-40" ItemHeight="30"/>
 
-  <Button Caption="ACK Warn" X="1" Y="-38" width="46" height="36" OnClick="OnAck1Clicked"/>
-  <Button Caption="ACK Space" X="47" Y="-38" width="46" height="36" OnClick="OnAckClicked"/>
-  <Button Caption="ACK Day" X="93" Y="-38" width="46" height="36" OnClick="OnAck2Clicked"/>
-  <Button Caption="Enable" X="140" Y="-38" width="48" height="36" OnClick="OnEnableClicked"/>
+  <Button Name="frmAck1" Caption="ACK Warn" X="1" Y="-38" width="46" height="36" OnClick="OnAck1Clicked"/>
+  <Button Name="frmAck" Caption="ACK Space" X="47" Y="-38" width="46" height="36" OnClick="OnAckClicked"/>
+  <Button Name="frmAck2" Caption="ACK Day" X="93" Y="-38" width="46" height="36" OnClick="OnAck2Clicked"/>
+  <Button Name="frmEnable" Caption="Enable" X="140" Y="-38" width="48" height="36" OnClick="OnEnableClicked"/>
   <Button Caption="Close" X="189" Y="-38" width="45" height="36" OnClick="OnCloseClicked"/>
 </Form>

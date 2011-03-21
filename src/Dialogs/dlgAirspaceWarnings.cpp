@@ -36,6 +36,11 @@ Copyright_License {
 #include <stdio.h>
 
 static WndForm *wf = NULL;
+static WndButton *wbAck1 = NULL; // frmAck1 = Ack warn
+static WndButton *wbAck2 = NULL; // frmAck2 = Ack day
+static WndButton *wbAck = NULL; // frmAck = Ack space
+static WndButton *wbEnable = NULL; // Enable
+
 static WndListFrame *wAirspaceList = NULL;
 static Brush hBrushInsideBk;
 static Brush hBrushNearBk;
@@ -223,120 +228,153 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   TCHAR sTmp[128];
   const int paint_rc_margin = 2;   ///< This constant defines the margin that should be respected for renderring within the paint_rc area.
 
-  ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
-  if (lease->empty()) {
-    // the warnings were emptied between the opening of the dialog
-    // and this refresh, so only need to display "No Warnings" for
-    // top item, otherwise exit immediately
-    if (i==0) {
-      canvas.text(paint_rc.left + IBLSCALE(paint_rc_margin),
-                  paint_rc.top + IBLSCALE(paint_rc_margin), _("No Warnings"));
+  bool ack1_vis;
+  bool ack2_vis;
+  bool ack_vis;
+  bool enable_vis;
+  bool update_vis = false;
+
+  {
+    ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
+    if (lease->empty()) {
+      // the warnings were emptied between the opening of the dialog
+      // and this refresh, so only need to display "No Warnings" for
+      // top item, otherwise exit immediately
+      if (i==0) {
+        canvas.text(paint_rc.left + IBLSCALE(paint_rc_margin),
+                    paint_rc.top + IBLSCALE(paint_rc_margin), _("No Warnings"));
+      }
+      return;
     }
-    return;
-  }
-
-  if (i >= lease->size())
-    /* this cannot be an assertion, because another thread may have
-       modified the AirspaceWarningManager */
-    return;
-
-  const AirspaceWarning warning = *(lease->get_warning(i));
-  const AbstractAirspace& as = warning.get_airspace();
-  const AirspaceInterceptSolution& solution = warning.get_solution();
-
-  tstring sName = as.get_name_text(false);
-  tstring sTop = as.get_top_text(true);
-  tstring sBase = as.get_base_text(true);
-  tstring sType = as.get_type_text(true);
-
-  const int TextHeight = 12, TextTop = 1;
-  /// Dynamic columns scaling - "name" column is flexible, altitude and state columns are fixed-width.
-  const int Col0LeftScreenCoords = IBLSCALE(paint_rc_margin),
-    Col2LeftScreenCoords = paint_rc.right - IBLSCALE(40),
-    Col1LeftScreenCoords = Col2LeftScreenCoords - IBLSCALE(50);
-
-  RECT rcTextClip;
-
-  rcTextClip = paint_rc;
-  rcTextClip.right = Col1LeftScreenCoords - IBLSCALE(paint_rc_margin);
-
-  Color old_text_color = canvas.get_text_color();
-  if (!warning.get_ack_expired())
-    canvas.set_text_color(Color::GRAY);
-
-  { // name, altitude info
-    _stprintf(sTmp, _T("%-20s"), sName.c_str());
-
-    canvas.text_clipped(paint_rc.left + Col0LeftScreenCoords,
-                        paint_rc.top + IBLSCALE(TextTop),
-                        rcTextClip, sTmp);
     
-    _stprintf(sTmp, _T("%-20s"), sTop.c_str());
-    canvas.text(paint_rc.left + Col1LeftScreenCoords,
-                paint_rc.top + IBLSCALE(TextTop), sTmp);
+    if (i >= lease->size())
+      /* this cannot be an assertion, because another thread may have
+         modified the AirspaceWarningManager */
+      return;
     
-    _stprintf(sTmp, _T("%-20s"), sBase.c_str());
-    canvas.text(paint_rc.left + Col1LeftScreenCoords,
-                paint_rc.top + IBLSCALE(TextTop + TextHeight),
-                sTmp);
-  }
-
-  if (warning.get_warning_state() != AirspaceWarning::WARNING_INSIDE &&
-      warning.get_warning_state() > AirspaceWarning::WARNING_CLEAR) {
-
-    _stprintf(sTmp, _T("%d secs dist %d m"),
-              (int)solution.elapsed_time,
-              (int)solution.distance);
-
-    canvas.text_clipped(paint_rc.left + Col0LeftScreenCoords,
-                        paint_rc.top + IBLSCALE(TextTop + TextHeight),
-                        rcTextClip, sTmp);
-  }
-
-  /* draw the warning state indicator */
-
-  Brush *state_brush;
-  const TCHAR *state_text;
-
-  if (warning.get_warning_state() == AirspaceWarning::WARNING_INSIDE) {
-    if (warning.get_ack_expired())
-      state_brush = &hBrushInsideBk;
-    else
-      state_brush = &hBrushInsideAckBk;
-    state_text = _T("inside");
-  } else if (warning.get_warning_state() > AirspaceWarning::WARNING_CLEAR) {
-    if (warning.get_ack_expired())
-      state_brush = &hBrushNearBk;
-    else
-      state_brush = &hBrushNearAckBk;
-    state_text = _T("near");
-  } else {
-    state_brush = NULL;
-    state_text = NULL;
-  }
-
-  const SIZE state_text_size =
+    const AirspaceWarning warning = *(lease->get_warning(i));
+    const AbstractAirspace& as = warning.get_airspace();
+    const AirspaceInterceptSolution& solution = warning.get_solution();
+    
+    tstring sName = as.get_name_text(false);
+    tstring sTop = as.get_top_text(true);
+    tstring sBase = as.get_base_text(true);
+    tstring sType = as.get_type_text(true);
+    
+    const int TextHeight = 12, TextTop = 1;
+    /// Dynamic columns scaling - "name" column is flexible, altitude and state columns are fixed-width.
+    const int Col0LeftScreenCoords = IBLSCALE(paint_rc_margin),
+      Col2LeftScreenCoords = paint_rc.right - IBLSCALE(40),
+      Col1LeftScreenCoords = Col2LeftScreenCoords - IBLSCALE(50);
+    
+    RECT rcTextClip;
+    
+    rcTextClip = paint_rc;
+    rcTextClip.right = Col1LeftScreenCoords - IBLSCALE(paint_rc_margin);
+    
+    Color old_text_color = canvas.get_text_color();
+    if (!warning.get_ack_expired())
+      canvas.set_text_color(Color::GRAY);
+    
+    { // name, altitude info
+      _stprintf(sTmp, _T("%-20s"), sName.c_str());
+      
+      canvas.text_clipped(paint_rc.left + Col0LeftScreenCoords,
+                          paint_rc.top + IBLSCALE(TextTop),
+                          rcTextClip, sTmp);
+      
+      _stprintf(sTmp, _T("%-20s"), sTop.c_str());
+      canvas.text(paint_rc.left + Col1LeftScreenCoords,
+                  paint_rc.top + IBLSCALE(TextTop), sTmp);
+      
+      _stprintf(sTmp, _T("%-20s"), sBase.c_str());
+      canvas.text(paint_rc.left + Col1LeftScreenCoords,
+                  paint_rc.top + IBLSCALE(TextTop + TextHeight),
+                  sTmp);
+    }
+    
+    if (warning.get_warning_state() != AirspaceWarning::WARNING_INSIDE &&
+        warning.get_warning_state() > AirspaceWarning::WARNING_CLEAR) {
+      
+      _stprintf(sTmp, _T("%d secs dist %d m"),
+                (int)solution.elapsed_time,
+                (int)solution.distance);
+      
+      canvas.text_clipped(paint_rc.left + Col0LeftScreenCoords,
+                          paint_rc.top + IBLSCALE(TextTop + TextHeight),
+                          rcTextClip, sTmp);
+    }
+    
+    /* draw the warning state indicator */
+    
+    Brush *state_brush;
+    const TCHAR *state_text;
+    
+    if (warning.get_warning_state() == AirspaceWarning::WARNING_INSIDE) {
+      if (warning.get_ack_expired())
+        state_brush = &hBrushInsideBk;
+      else
+        state_brush = &hBrushInsideAckBk;
+      state_text = _T("inside");
+    } else if (warning.get_warning_state() > AirspaceWarning::WARNING_CLEAR) {
+      if (warning.get_ack_expired())
+        state_brush = &hBrushNearBk;
+      else
+        state_brush = &hBrushNearAckBk;
+      state_text = _T("near");
+    } else {
+      state_brush = NULL;
+      state_text = NULL;
+    }
+    
+    const SIZE state_text_size =
       canvas.text_size(state_text != NULL ? state_text : _T("W"));
-
-  if (state_brush != NULL) {
-    /* colored background */
-    RECT rc;
-
-    rc.left = paint_rc.left + Col2LeftScreenCoords;
-    rc.top = paint_rc.top + Layout::FastScale(paint_rc_margin);
-    rc.right = paint_rc.right - Layout::FastScale(paint_rc_margin);
-    rc.bottom = paint_rc.bottom - Layout::FastScale(paint_rc_margin);
-
-    canvas.fill_rectangle(rc, *state_brush);
+    
+    if (state_brush != NULL) {
+      /* colored background */
+      RECT rc;
+      
+      rc.left = paint_rc.left + Col2LeftScreenCoords;
+      rc.top = paint_rc.top + Layout::FastScale(paint_rc_margin);
+      rc.right = paint_rc.right - Layout::FastScale(paint_rc_margin);
+      rc.bottom = paint_rc.bottom - Layout::FastScale(paint_rc_margin);
+      
+      canvas.fill_rectangle(rc, *state_brush);
+    }
+    
+    if (state_text != NULL)
+      canvas.text(paint_rc.left + Col2LeftScreenCoords + Layout::FastScale(paint_rc_margin),
+                  (paint_rc.bottom + paint_rc.top - state_text_size.cy) / 2,
+                  state_text);
+    
+    if (!warning.get_ack_expired())
+      canvas.set_text_color(old_text_color);
+        
+    if (CursorAirspace == &as) {
+      update_vis = true;
+      if (!warning.get_ack_expired()) {
+        ack1_vis = false;
+        ack_vis = false;
+      } else {
+        if (warning.get_warning_state() == 
+            AirspaceWarning::WARNING_INSIDE) {
+          ack_vis = true;
+          ack1_vis = false;
+        } else {
+          ack_vis = false;
+          ack1_vis = true;
+        }
+      }
+      ack2_vis = !warning.get_ack_day();
+      enable_vis = !warning.get_ack_expired();
+    }
+  } // close scope
+  if (update_vis) {
+    wbAck1->set_visible(ack1_vis);
+    wbAck2->set_visible(ack2_vis);
+    wbAck->set_visible(ack_vis);
+    wbEnable->set_visible(enable_vis);
   }
-
-  if (state_text != NULL)
-    canvas.text(paint_rc.left + Col2LeftScreenCoords + Layout::FastScale(paint_rc_margin),
-                (paint_rc.bottom + paint_rc.top - state_text_size.cy) / 2,
-                state_text);
-
-  if (!warning.get_ack_expired())
-    canvas.set_text_color(old_text_color);
 }
 
 static void
@@ -396,6 +434,15 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close)
 
   wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_AIRSPACEWARNINGS"));
   assert(wf != NULL);
+
+  wbAck1 = (WndButton *)wf->FindByName(_T("frmAck1"));
+  wbAck2 = (WndButton *)wf->FindByName(_T("frmAck2"));
+  wbAck = (WndButton *)wf->FindByName(_T("frmAck"));
+  wbEnable = (WndButton *)wf->FindByName(_T("frmEnable"));
+  assert(wbAck1 != NULL);
+  assert(wbAck2 != NULL);
+  assert(wbAck != NULL);
+  assert(wbEnable != NULL);
 
   wf->SetKeyDownNotify(OnKeyDown);
 
