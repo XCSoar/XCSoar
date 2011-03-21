@@ -193,10 +193,14 @@ FlatTriangleFanTree::update_terrain_base(const FlatGeoPoint& o, ReachFanParms& p
        x != vs.end(); ++x) {
     const FlatGeoPoint av = (o+(*x))*fixed_half;
     const GeoPoint p = parms.task_proj.unproject(av);
-    parms.terrain_base+= parms.terrain->GetField(p);
-    parms.terrain_counter++;
+    short h = parms.terrain->GetField(p);
+    if (!RasterBuffer::is_invalid(h)) {
+      parms.terrain_counter++;
+      parms.terrain_base+= h;
+    }
   }
-  parms.terrain_base/= parms.terrain_counter;
+  if (parms.terrain_counter)
+    parms.terrain_base/= parms.terrain_counter;
 }
 
 
@@ -272,8 +276,9 @@ bool ReachFan::solve(const AGeoPoint origin,
   if (!AbstractReach::solve(origin, rpolars, terrain))
     return false;
 
-  if (terrain && (origin.altitude <= terrain->GetField(origin) +
-                  rpolars.safety_height()))
+  const short h = terrain? terrain->GetField(origin): 0;
+
+  if (terrain && (origin.altitude <= h + rpolars.safety_height()))
     return false;
 
   ReachFanParms parms(rpolars, task_proj, terrain_base, terrain);
@@ -281,9 +286,16 @@ bool ReachFan::solve(const AGeoPoint origin,
 
   root.fill_reach(ao, parms);
 
-  parms.terrain_base = parms.terrain->GetField(origin);
-  parms.terrain_counter = 1;
-  root.update_terrain_base(ao, parms);
+  if (!RasterBuffer::is_invalid(h)) {
+    parms.terrain_base = h;
+    parms.terrain_counter = 1;
+  } else {
+    parms.terrain_base = 0;
+    parms.terrain_counter = 0;
+  }
+  if (parms.terrain) {
+    root.update_terrain_base(ao, parms);
+  }
   terrain_base = parms.terrain_base;
   return true;
 }
