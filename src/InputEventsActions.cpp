@@ -379,9 +379,9 @@ InputEvents::eventPan(const TCHAR *misc)
 
   else if (_tcscmp(misc, _T("show")) == 0) {
     if (XCSoarInterface::SettingsMap().EnablePan)
-      Message::AddMessage(_("Pan mode ON"));
+      Message::AddMessage(_("Pan mode on"));
     else
-      Message::AddMessage(_("Pan mode Off"));
+      Message::AddMessage(_("Pan mode off"));
   }
 
   XCSoarInterface::SendSettingsMap(true);
