@@ -126,6 +126,13 @@ public:
    */
   void calc_incremental_speed(const fixed dt);
 
+  fixed get_speed_incremental() const {
+    return data.get_speed_incremental();
+  };
+  fixed get_speed() const {
+    return data.get_speed();
+  };
+
 private:
   AvFilter av_dist;
   DiffFilter df;
