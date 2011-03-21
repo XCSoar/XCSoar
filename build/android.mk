@@ -4,6 +4,12 @@
 
 ifeq ($(TARGET),ANDROID)
 
+# When enabled, the package org.xcsoar.testing is created, with a red
+# Activity icon, to allow simultaneous installation of "stable" and
+# "testing".
+# In the stable branch, this should default to "n".
+TESTING = y
+
 ANT = ant
 JAVAH = javah
 JARSIGNER = jarsigner
@@ -41,8 +47,13 @@ JAVA_CLASSES = $(patsubst android/src/%.java,bin/classes/org/xcsoar/%.class,$(JA
 
 DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
 
+ifeq ($(TESTING),y)
+$(ANDROID_BUILD)/res/drawable/icon.png: $(OUT)/data/graphics/xcsoarswiftsplash_red_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
+	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
+else
 $(ANDROID_BUILD)/res/drawable/icon.png: $(OUT)/data/graphics/xcsoarswiftsplash_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
 	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
+endif
 
 PNG1 := $(patsubst Data/bitmaps/%.bmp,$(DRAWABLE_DIR)/%.png,$(wildcard Data/bitmaps/*.bmp))
 $(PNG1): $(DRAWABLE_DIR)/%.png: Data/bitmaps/%.bmp | $(DRAWABLE_DIR)/dirstamp
@@ -62,15 +73,24 @@ $(PNG4): $(DRAWABLE_DIR)/%.png: output/data/icons/%.bmp | $(DRAWABLE_DIR)/dirsta
 
 PNG_FILES = $(DRAWABLE_DIR)/icon.png $(PNG1) $(PNG2) $(PNG3) $(PNG4)
 
+ifeq ($(TESTING),y)
+MANIFEST = android/testing/AndroidManifest.xml
+else
+MANIFEST = android/AndroidManifest.xml
+endif
+
 # symlink some important files to $(ANDROID_BUILD) and let the Android
 # SDK generate build.xml
-$(ANDROID_BUILD)/build.xml: android/AndroidManifest.xml $(PNG_FILES) | $(TARGET_OUTPUT_DIR)/bin/dirstamp
+$(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_OUTPUT_DIR)/bin/dirstamp
 	@$(NQ)echo "  ANDROID $@"
 	$(Q)rm -f $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
 	$(Q)mkdir -p $(ANDROID_BUILD)/res
-	$(Q)ln -s ../../../android/AndroidManifest.xml ../../../android/src ../bin $(@D)/
+	$(Q)ln -s ../../../$(MANIFEST) ../../../android/src ../bin $(@D)/
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/
 	$(Q)$(ANDROID_SDK)/tools/android update project --path $(@D) --target $(ANDROID_PLATFORM)
+ifeq ($(TESTING),y)
+	$(Q)sed -i -f build/r.sed $@
+endif
 	@touch $@
 
 ifeq ($(FAT_BINARY),y)
