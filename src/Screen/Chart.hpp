@@ -79,6 +79,7 @@ public:
   void DrawFilledLine(const fixed xmin, const fixed ymin,
                 const fixed xmax, const fixed ymax, Color &colour);
   void DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals, const Brush &brush);
+  void DrawDot(const fixed x, const fixed y, const int width);
 
   void ScaleYFromData(const LeastSquares &lsdata);
   void ScaleXFromData(const LeastSquares &lsdata);
@@ -121,6 +122,8 @@ public:
 
   gcc_pure
   long screenS(fixed s) const;
+
+  Canvas& get_canvas() { return canvas; }
 
 private:
   fixed yscale;

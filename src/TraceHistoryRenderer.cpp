@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Chart.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "Appearance.hpp"
 #include <algorithm>
 
@@ -127,6 +128,11 @@ TraceHistoryRenderer::render_filled_posneg(Chart &chart,
     x_last = x;
     y_last = y;
   }
+  if (Appearance.InverseInfoBox)
+    chart.get_canvas().white_brush();
+  else
+    chart.get_canvas().black_brush();
+  chart.DrawDot(x_last, y_last, IBLSCALE(2));
 }
 
 void

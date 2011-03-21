@@ -643,3 +643,13 @@ Chart::DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals,
   canvas.null_pen();
   canvas.polygon(line, fsize);
 }
+
+void
+Chart::DrawDot(const fixed x, const fixed y, const int width)
+{
+  RasterPoint p;
+  p.x = (int)((x - x_min) * xscale) + rc.left + PaddingLeft;
+  p.y = (int)((y_max - y) * yscale) + rc.top;
+  canvas.null_pen();
+  canvas.rectangle(p.x-width, p.y-width, p.x+width, p.y+width);
+}
