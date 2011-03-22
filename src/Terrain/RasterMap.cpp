@@ -124,7 +124,7 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
     return false; // no distance
   }
 
-  const long slope_fact = lround((((long)h_virt)<<RASTER_SLOPE_FACT)/c_diff);
+  const long slope_fact = (((long)h_virt) << RASTER_SLOPE_FACT) / c_diff;
   const short vh_origin = std::max(h_origin, (short)(h_destination-
                                                      ((c_diff*slope_fact)>>RASTER_SLOPE_FACT)));
 
@@ -159,7 +159,7 @@ RasterMap::Intersection(const GeoPoint& origin,
   if (c_diff==0) {
     return destination; // no distance
   }
-  const long slope_fact = lround((((long)h_glide)<<RASTER_SLOPE_FACT)/c_diff);
+  const long slope_fact = (((long)h_glide) << RASTER_SLOPE_FACT) / c_diff;
 
   RasterLocation c_int =
     raster_tile_cache.Intersection(c_origin.x, c_origin.y,
