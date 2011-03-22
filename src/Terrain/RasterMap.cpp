@@ -96,7 +96,7 @@ RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
 short
 RasterMap::GetField(const GeoPoint &location) const
 {
-  RasterLocation pt = projection.project(location);
+  RasterLocation pt = projection.project(location) >> 8;
   return raster_tile_cache.GetField(pt.x, pt.y);
 }
 

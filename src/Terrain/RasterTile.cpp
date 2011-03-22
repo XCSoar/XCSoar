@@ -254,13 +254,11 @@ RasterTileCache::TileRequest(unsigned index)
 }
 
 short
-RasterTileCache::GetField(unsigned int lx, unsigned int ly) const
+RasterTileCache::GetField(unsigned px, unsigned py) const
 {
-  if ((lx >= overview_width_fine) || (ly >= overview_height_fine))
+  if (px >= width || py >= height)
     // outside overall bounds
     return RasterBuffer::TERRAIN_INVALID;
-
-  unsigned px = lx >> 8, py = ly >> 8;
 
   for (unsigned i = 0; i < ActiveTiles.length(); ++i) {
     short h = ActiveTiles[i].GetField(px, py);
@@ -270,7 +268,8 @@ RasterTileCache::GetField(unsigned int lx, unsigned int ly) const
     }
   }
   // still not found, so go to overview
-  return Overview.get_interpolated(lx / RTC_SUBSAMPLING, ly / RTC_SUBSAMPLING);
+  return Overview.get_interpolated(px << 8 / RTC_SUBSAMPLING,
+                                   py << 8 / RTC_SUBSAMPLING);
 }
 
 short
