@@ -262,7 +262,8 @@ RasterTileCache::GetHeight(unsigned px, unsigned py) const
     // outside overall bounds
     return RasterBuffer::TERRAIN_INVALID;
 
-  for (unsigned i = 0; i < ActiveTiles.length(); ++i) {
+  const unsigned length = ActiveTiles.length();
+  for (unsigned i = 0; i < length; ++i) {
     short h = ActiveTiles[i].GetHeight(px, py);
     if (!RasterBuffer::is_invalid(h)) {
       ActiveTiles.move_to_front(i);
@@ -285,7 +286,8 @@ RasterTileCache::GetInterpolatedHeight(unsigned int lx, unsigned int ly) const
   const unsigned int ix = CombinedDivAndMod(px);
   const unsigned int iy = CombinedDivAndMod(py);
 
-  for (unsigned i = 0; i < ActiveTiles.length(); ++i) {
+  const unsigned length = ActiveTiles.length();
+  for (unsigned i = 0; i < length; ++i) {
     short h = ActiveTiles[i].GetInterpolatedHeight(px, py, ix, iy);
     if (!RasterBuffer::is_invalid(h)) {
       ActiveTiles.move_to_front(i);
@@ -826,7 +828,8 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_
   }
 
   // failed, so try all active tiles
-  for (unsigned i = 0; i < ActiveTiles.length(); ++i) {
+  const unsigned length = ActiveTiles.length();
+  for (unsigned i = 0; i < length; ++i) {
     const short h = ActiveTiles[i].GetHeight(px, py);
     if (!RasterBuffer::is_invalid(h)) {
       tile_index = i;
