@@ -47,15 +47,15 @@ RasterBuffer::get_interpolated(unsigned lx, unsigned ly,
                                unsigned ix, unsigned iy) const
 {
   assert(defined());
-  assert(lx < width);
-  assert(ly < height);
+  assert(lx < get_width());
+  assert(ly < get_height());
   assert(ix < 0x100);
   assert(iy < 0x100);
 
   // perform piecewise linear interpolation
-  const unsigned int dx = (lx == width - 1) ? 0 : 1;
-  const unsigned int dy = (ly == height - 1) ? 0 : width;
-  const short *tm = data + ly * width + lx;
+  const unsigned int dx = (lx == get_width() - 1) ? 0 : 1;
+  const unsigned int dy = (ly == get_height() - 1) ? 0 : get_width();
+  const short *tm = get_data_at(lx, ly);
 
   if (is_special(*tm) || is_special(tm[dx]) ||
       is_special(tm[dy]) || is_special(tm[dx + dy]))
@@ -72,12 +72,12 @@ RasterBuffer::get_interpolated(unsigned lx, unsigned ly) const
 {
   // check x in range, and decompose fraction part
   const unsigned int ix = CombinedDivAndMod(lx);
-  if (lx >= width)
+  if (lx >= get_width())
     return TERRAIN_INVALID;
 
   // check y in range, and decompose fraction part
   const unsigned int iy = CombinedDivAndMod(ly);
-  if (ly >= height)
+  if (ly >= get_height())
     return TERRAIN_INVALID;
 
   return get_interpolated(lx, ly, ix, iy);
