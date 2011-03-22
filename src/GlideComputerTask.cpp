@@ -179,5 +179,5 @@ void
 GlideComputerTask::OnTakeoff()
 {
   ProtectedTaskManager::ExclusiveLease task(m_task);
-  task->takeoff_autotask(Basic().Location);
+  task->takeoff_autotask(Basic().Location, Calculated().TerrainAlt);
 }

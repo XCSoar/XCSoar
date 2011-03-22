@@ -697,9 +697,9 @@ TaskManager::getAlternates() const
 }
 
 void
-TaskManager::takeoff_autotask(const GeoPoint& loc)
+TaskManager::takeoff_autotask(const GeoPoint& loc, const fixed terrain_alt)
 {
   // create a goto task on takeoff
-  if (!active_task && task_goto.takeoff_autotask(loc))
+  if (!active_task && task_goto.takeoff_autotask(loc, terrain_alt))
     set_mode(MODE_GOTO);
 }

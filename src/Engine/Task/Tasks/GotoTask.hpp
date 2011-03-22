@@ -111,11 +111,12 @@ public:
   /**
    * When called on takeoff, creates a default goto task
    *
-   * @param loc Location
+   * @param loc Location of takeoff point
+   * @param terrain_alt Terrain height at takeoff point
    *
    * @return True if default task was created
    */
-  bool takeoff_autotask(const GeoPoint& loc);
+  bool takeoff_autotask(const GeoPoint& loc, const fixed terrain_alt);
 
 protected:
 /** 

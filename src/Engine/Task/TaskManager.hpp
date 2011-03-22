@@ -610,7 +610,7 @@ public:
    * Caller is responsible for ensuring the waypoint database already has an
    * appropriate waypoint within 1000m of the takeoff location.
    */
-  void takeoff_autotask(const GeoPoint &ref);
+  void takeoff_autotask(const GeoPoint &ref, const fixed terrain_alt);
 
 private:
   GlidePolar m_glide_polar;
