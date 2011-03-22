@@ -128,7 +128,6 @@ class NativeView extends SurfaceView
 
     hasKeyboard = resources.getConfiguration().keyboard !=
       Configuration.KEYBOARD_NOKEYS;
-    Log.d(TAG, "KEYBOARD="+resources.getConfiguration().keyboard);
 
     touchInput = DifferentTouchInput.getInstance();
 
