@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_RASTER_BUFFER_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Util/AllocatedGrid.hpp"
 #include "Compiler.h"
 
 #include <cstddef>
@@ -50,48 +51,39 @@ public:
   }
 
 private:
-  unsigned width, height;
-  short *data;
+  AllocatedGrid<short> data;
 
 public:
-  RasterBuffer():width(0), height(0), data(NULL) {}
+  RasterBuffer() {}
   RasterBuffer(unsigned _width, unsigned _height)
-    :width(0), height(0), data(NULL) {
-    resize(_width, _height);
-  }
-
-  ~RasterBuffer() {
-    delete[] data;
-  }
+    :data(_width, _height) {}
 
   bool defined() const {
-    return data != NULL;
+    return data.Defined();
   }
 
   unsigned get_width() const {
-    return width;
+    return data.GetWidth();
   }
 
   unsigned get_height() const {
-    return height;
+    return data.GetHeight();
   }
 
   short *get_data() {
-    return data;
+    return data.begin();
   }
 
   const short *get_data() const {
-    return data;
+    return data.begin();
   }
 
   const short *get_data_at(unsigned x, unsigned y) const {
-    return data + y * width + x;
+    return data.GetPointerAt(x, y);
   }
 
   void reset() {
-    delete[] data;
-    data = NULL;
-    width = height = 0;
+    data.Reset();
   }
 
   void resize(unsigned _width, unsigned _height);

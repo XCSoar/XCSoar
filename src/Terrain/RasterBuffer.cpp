@@ -32,14 +32,7 @@ RasterBuffer::resize(unsigned _width, unsigned _height)
 {
   assert(_width > 0 && _height > 0);
 
-  if (_width == width && _height == height)
-    return;
-
-  delete[] data;
-
-  width = _width;
-  height = _height;
-  data = new short[width * height];
+  data.GrowDiscard(_width, _height);
 }
 
 short
@@ -86,5 +79,5 @@ RasterBuffer::get_interpolated(unsigned lx, unsigned ly) const
 short
 RasterBuffer::get_max() const
 {
-  return defined() ? *std::max_element(data, data + width * height) : 0;
+  return defined() ? *std::max_element(data.begin(), data.end()) : 0;
 }
