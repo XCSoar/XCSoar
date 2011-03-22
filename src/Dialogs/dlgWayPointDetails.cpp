@@ -392,6 +392,8 @@ append_to_task(const Waypoint &wp)
   return SUCCESS;
 }
 
+#if 0
+// JMW disabled until 6.2 work, see #996
 static task_edit_result
 goto_and_clear_task(const Waypoint &wp)
 {
@@ -443,6 +445,7 @@ OnGotoAndClearTaskClicked(gcc_unused WndButton &button)
     break;
   }
 }
+#endif
 
 static void
 OnAppendInTaskClicked(gcc_unused WndButton &button)
@@ -722,9 +725,11 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   if (wb)
     wb->SetOnClickNotify(OnRemoveFromTaskClicked);
 
+  /* JMW disabled until 6.2 work, see #996
   wb = ((WndButton *)wf->FindByName(_T("cmdGotoAndClearTask")));
   if (wb)
     wb->SetOnClickNotify(OnGotoAndClearTaskClicked);
+  */
 
   wb = ((WndButton *)wf->FindByName(_T("cmdActivatePan")));
   if (wb)

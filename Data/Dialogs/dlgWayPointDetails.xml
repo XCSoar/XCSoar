@@ -28,7 +28,6 @@
     <Button Name="cmdInserInTask" Caption="Insert In Task" X="40" Width="-40" Height="30" />
     <Button Name="cmdAppendInTask" Caption="Append To Task" X="40" Width="-40" Height="30" />
     <Button Name="cmdRemoveFromTask" Caption="Remove From Task" X="40" Width="-40" Height="30" />
-    <Button Name="cmdGotoAndClearTask" Caption="GoTo And Clear Task" X="40" Width="-40" Height="30" />
     <Button Name="cmdNewHome" Caption="Set As New Home" X="40" Width="-40" Height="30" />
     <Button Name="cmdActivatePan" Caption="Pan To Waypoint" X="40" Width="-40" Height="30" />
   </Panel>
