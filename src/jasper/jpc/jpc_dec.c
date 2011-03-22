@@ -513,7 +513,9 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 		// JMW image created here
 
 		if (dec->cmpts) {
-			jas_rtc_SetSize(dec->cmpts->width, dec->cmpts->height);
+			jas_rtc_SetSize(dec->cmpts->width, dec->cmpts->height,
+					dec->tilewidth, dec->tileheight,
+					dec->numhtiles, dec->numvtiles);
 		}
 
 		// JMW don't create this image in xcsoar mode

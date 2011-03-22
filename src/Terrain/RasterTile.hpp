@@ -26,7 +26,6 @@ Copyright_License {
 #include "Terrain/RasterBuffer.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Util/NonCopyable.hpp"
-#include "Util/ActiveList.hpp"
 #include "Util/StaticArray.hpp"
 
 #include <assert.h>
@@ -201,13 +200,17 @@ class RasterTileCache : private NonCopyable {
   struct CacheHeader {
     enum {
 #ifdef FIXED_MATH
-      VERSION = 0x4,
+      VERSION = 0x6,
 #else
-      VERSION = 0x5,
+      VERSION = 0x7,
 #endif
     };
 
-    unsigned version, width, height, num_marker_segments;
+    unsigned version;
+    unsigned width, height;
+    unsigned short tile_width, tile_height;
+    unsigned tile_columns, tile_rows;
+    unsigned num_marker_segments;
     GeoBounds bounds;
   };
 
@@ -218,14 +221,8 @@ class RasterTileCache : private NonCopyable {
 
   bool dirty;
 
-  RasterTile tiles[MAX_RTC_TILES];
-
-  ActiveList<const RasterTile, MAX_ACTIVE_TILES> ActiveTiles;
-
-  /**
-   * A pointer to the most recently used tile.
-   */
-  mutable const RasterTile *last_tile;
+  AllocatedGrid<RasterTile> tiles;
+  unsigned short tile_width, tile_height;
 
   RasterBuffer Overview;
   bool scan_overview;
@@ -346,7 +343,9 @@ public:
     return Overview.get_data();
   }
 
-  void SetSize(unsigned width, unsigned height);
+  void SetSize(unsigned width, unsigned height,
+               unsigned tile_width, unsigned tile_height,
+               unsigned tile_columns, unsigned tile_rows);
   short* GetImageBuffer(unsigned index);
   void SetLatLonBounds(double lon_min, double lon_max,
                        double lat_min, double lat_max);

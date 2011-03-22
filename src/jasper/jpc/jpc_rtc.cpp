@@ -28,8 +28,12 @@ extern "C" {
     raster_tile_current->SetLatLonBounds(lon_min, lon_max, lat_min, lat_max);
   }
 
-  void jas_rtc_SetSize(unsigned width, unsigned height) {
-    raster_tile_current->SetSize(width, height);
+  void jas_rtc_SetSize(unsigned width, unsigned height,
+                       unsigned tile_width, unsigned tile_height,
+                       unsigned tile_columns, unsigned tile_rows) {
+    raster_tile_current->SetSize(width, height,
+                                 tile_width, tile_height,
+                                 tile_columns, tile_rows);
   }
 
   void jas_rtc_SetInitialised(bool val) {
