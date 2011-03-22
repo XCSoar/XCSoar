@@ -245,11 +245,13 @@ RasterTileCache::TileRequest(unsigned index)
     return false;
   }
 
-  if (ActiveTiles.full() || !tiles[index].is_requested())
+  RasterTile &tile = tiles[index];
+
+  if (ActiveTiles.full() || !tile.is_requested())
     return false;
 
-  tiles[index].Enable();
-  ActiveTiles.append(tiles[index]);
+  tile.Enable();
+  ActiveTiles.append(tile);
   return true; // want to load this one!
 }
 
