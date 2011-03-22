@@ -635,7 +635,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
                                    int x1, int y1,
                                    short h_origin,
                                    short h_dest,
-                                   const long slope_fact, const short h_ceiling,
+                                   const int slope_fact, const short h_ceiling,
                                    const short h_safety,
                                    unsigned& _x, unsigned& _y, short &_h,
                                    const bool can_climb) const
@@ -847,7 +847,7 @@ RasterLocation
 RasterTileCache::Intersection(int x0, int y0,
                               int x1, int y1,
                               short h_origin,
-                              const long slope_fact) const
+                              const int slope_fact) const
 {
   unsigned _x = (unsigned)x0;
   unsigned _y = (unsigned)y0;

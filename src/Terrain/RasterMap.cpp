@@ -116,7 +116,7 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
 {
   const RasterLocation c_origin = projection.project(origin) >> 8;
   const RasterLocation c_destination = projection.project(destination) >> 8;
-  const long c_diff = c_origin.manhattan_distance(c_destination);
+  const int c_diff = c_origin.manhattan_distance(c_destination);
   const bool can_climb = (h_destination< h_virt);
 
   intx = destination; h = h_destination; // fallback, pass
@@ -124,7 +124,7 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
     return false; // no distance
   }
 
-  const long slope_fact = (((long)h_virt) << RASTER_SLOPE_FACT) / c_diff;
+  const int slope_fact = (((int)h_virt) << RASTER_SLOPE_FACT) / c_diff;
   const short vh_origin = std::max(h_origin, (short)(h_destination-
                                                      ((c_diff*slope_fact)>>RASTER_SLOPE_FACT)));
 
@@ -155,11 +155,11 @@ RasterMap::Intersection(const GeoPoint& origin,
 {
   const RasterLocation c_origin = projection.project(origin) >> 8;
   const RasterLocation c_destination = projection.project(destination) >> 8;
-  const long c_diff = c_origin.manhattan_distance(c_destination);
+  const int c_diff = c_origin.manhattan_distance(c_destination);
   if (c_diff==0) {
     return destination; // no distance
   }
-  const long slope_fact = (((long)h_glide) << RASTER_SLOPE_FACT) / c_diff;
+  const int slope_fact = (((int)h_glide) << RASTER_SLOPE_FACT) / c_diff;
 
   RasterLocation c_int =
     raster_tile_cache.Intersection(c_origin.x, c_origin.y,

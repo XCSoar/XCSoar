@@ -227,7 +227,7 @@ public:
                          int destination_x, int destination_y,
                          short h_origin,
                          short h_dest,
-                         const long slope_fact, const short h_ceiling,
+                         const int slope_fact, const short h_ceiling,
                          const short h_safety,
                          unsigned& int_x, unsigned& int_y, short &h_int,
                          const bool can_climb) const;
@@ -235,7 +235,7 @@ public:
   gcc_pure RasterLocation
   Intersection(int origin_x, int origin_y,
                int destination_x, int destination_y,
-               short h_origin, const long slope_fact) const;
+               short h_origin, const int slope_fact) const;
 
 protected:
   void LoadJPG2000(const char *path);
