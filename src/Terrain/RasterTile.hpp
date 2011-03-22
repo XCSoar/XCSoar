@@ -36,6 +36,8 @@ Copyright_License {
 
 #define RASTER_SLOPE_FACT 12
 
+struct RasterLocation;
+
 class RasterTile : private NonCopyable {
   struct MetaData {
     unsigned int xstart, ystart, xend, yend;
@@ -230,10 +232,10 @@ public:
                          unsigned& int_x, unsigned& int_y, short &h_int,
                          const bool can_climb) const;
 
-  void Intersection(int origin_x, int origin_y,
-                    int destination_x, int destination_y,
-                    short h_origin, const long slope_fact,
-                    unsigned& int_x, unsigned& int_y) const;
+  gcc_pure RasterLocation
+  Intersection(int origin_x, int origin_y,
+               int destination_x, int destination_y,
+               short h_origin, const long slope_fact) const;
 
 protected:
   void LoadJPG2000(const char *path);

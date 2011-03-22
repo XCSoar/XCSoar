@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Terrain/RasterTile.hpp"
+#include "Terrain/RasterLocation.hpp"
 #include "jasper/jas_image.h"
 #include "Math/Angle.hpp"
 #include "IO/ZipLineReader.hpp"
@@ -842,20 +843,18 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_
   return Overview.get(px / RTC_SUBSAMPLING, py / RTC_SUBSAMPLING);
 }
 
-
-void
+RasterLocation
 RasterTileCache::Intersection(int x0, int y0,
                               int x1, int y1,
                               short h_origin,
-                              const long slope_fact,
-                              unsigned& _x, unsigned& _y) const
+                              const long slope_fact) const
 {
-  _x = (unsigned)x0;
-  _y = (unsigned)y0;
+  unsigned _x = (unsigned)x0;
+  unsigned _y = (unsigned)y0;
 
   if (((unsigned)x0 >= width) || ((unsigned)y0 >= height)) {
     // origin is outside overall bounds
-    return;
+    return RasterLocation(_x, _y);
   }
 
   // remember index of active tile, so we dont need to scan each each time
@@ -893,16 +892,15 @@ RasterTileCache::Intersection(int x0, int y0,
       h_int = h_origin-dh;
 
       if (h_int < h_terrain)
-        return;
+        return RasterLocation(_x, _y);
+
       if (h_int <= 0) {
-        _x = x1;
-        _y = y1;
-        return; // reached max range
+        return RasterLocation(x1, y1); // reached max range
       }
     }
 
     if ((_x==(unsigned)x1) && (_y==(unsigned)y1))
-      return;
+      return RasterLocation(_x, _y);
 
     const int e2 = 2*err;
     if (e2 > -dy) {
@@ -922,6 +920,5 @@ RasterTileCache::Intersection(int x0, int y0,
   }
 
   // if we reached invalid terrain, assume we can hit MSL
-  _x = x1;
-  _y = y1;
+  return RasterLocation(x1, y1);
 }

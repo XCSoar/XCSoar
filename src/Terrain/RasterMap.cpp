@@ -161,11 +161,10 @@ RasterMap::Intersection(const GeoPoint& origin,
   }
   const long slope_fact = lround((((long)h_glide)<<RASTER_SLOPE_FACT)/c_diff);
 
-  RasterLocation c_int;
-  raster_tile_cache.Intersection(c_origin.x, c_origin.y,
-                                 c_destination.x, c_destination.y,
-                                 h_origin, slope_fact,
-                                 c_int.x, c_int.y);
+  RasterLocation c_int =
+    raster_tile_cache.Intersection(c_origin.x, c_origin.y,
+                                   c_destination.x, c_destination.y,
+                                   h_origin, slope_fact);
 
   if (c_int == c_destination) // made it to grid location, return exact location
                               // of destination
