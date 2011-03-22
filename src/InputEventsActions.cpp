@@ -1466,12 +1466,26 @@ InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
 void
 InputEvents::eventAddWaypoint(const TCHAR *misc)
 {
-  Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().Location);
-  edit_waypoint.Altitude = XCSoarInterface::Basic().NavAltitude;
-  if (dlgWaypointEditShowModal(edit_waypoint)) {
-    if (edit_waypoint.Name.size()) {
+  if (_tcscmp(misc, _T("takeoff")) == 0) {
+    Waypoint edit_waypoint = 
+      way_points.generate_takeoff_point(XCSoarInterface::Basic().Location,
+                                        XCSoarInterface::Calculated().TerrainAlt);
+    {
       ScopeSuspendAllThreads suspend;
       way_points.append(edit_waypoint);
+      way_points.optimise();
+    }
+  } else {
+    Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().Location);
+    edit_waypoint.Altitude = XCSoarInterface::Calculated().TerrainAlt;
+    if (!dlgWaypointEditShowModal(edit_waypoint) || edit_waypoint.Name.empty()) {
+      trigger_redraw();
+      return;
+    }
+    {
+      ScopeSuspendAllThreads suspend;
+      way_points.append(edit_waypoint);
+      way_points.optimise();
     }
   }
 
