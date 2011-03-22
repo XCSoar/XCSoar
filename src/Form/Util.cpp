@@ -177,6 +177,7 @@ SaveFormPropertyNegated(const WndForm &form, const TCHAR *field,
     return false;
 
   value = new_value;
+  Profile::Set(profile_key, value);
   return true;
 }
 

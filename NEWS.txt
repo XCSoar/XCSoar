@@ -4,9 +4,11 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.0.8 - not yet released
 * don't estimate thermal source for skewed thermals
-* Units: fix "feet per minute" support
 * devices
   - CAI302: fix task declaration on Android
+* configuration
+  - Units: fix "feet per minute" support
+  - save the "Auto Logger" setting
 * Android
   - calculate WGS84 to real altitude (internal GPS)
   - fix incorrect airspace warning repetitions
