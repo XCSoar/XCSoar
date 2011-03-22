@@ -40,8 +40,10 @@ RoutePlannerGlue::set_terrain(RasterTerrain* _terrain)
   terrain = _terrain;
   if (terrain) {
     RasterTerrain::ExclusiveLease lease(*terrain);
+    m_planner.reset();
     m_planner.set_terrain(&terrain->map);
   } else {
+    m_planner.reset();
     m_planner.set_terrain(NULL);
   }
 }

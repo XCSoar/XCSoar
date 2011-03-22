@@ -42,9 +42,7 @@ protected:
   void ProcessMoreTask();
   void ResetFlight(const bool full=true);
 
-  void set_terrain(RasterTerrain* _terrain) {
-    terrain = _terrain;
-  }
+  void set_terrain(RasterTerrain* _terrain);
 
   virtual void OnTakeoff();
 

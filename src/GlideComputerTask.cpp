@@ -52,8 +52,6 @@ GlideComputerTask::ProcessBasicTask()
 {
   const NMEA_INFO &basic = Basic();
 
-  m_task.route_set_terrain(terrain);
-
   ProtectedTaskManager::ExclusiveLease task(m_task);
 
   task->set_task_behaviour(SettingsComputer());
@@ -180,4 +178,10 @@ GlideComputerTask::OnTakeoff()
 {
   ProtectedTaskManager::ExclusiveLease task(m_task);
   task->takeoff_autotask(Basic().Location, Calculated().TerrainAlt);
+}
+
+void 
+GlideComputerTask::set_terrain(RasterTerrain* _terrain) {
+  terrain = _terrain;
+  m_task.route_set_terrain(terrain);
 }
