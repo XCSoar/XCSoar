@@ -202,6 +202,22 @@ class RasterTileCache : private NonCopyable {
     GeoBounds bounds;
   };
 
+  bool initialised;
+
+  /** is the "bounds" attribute valid? */
+  bool bounds_initialised;
+
+  bool dirty;
+
+  RasterTile tiles[MAX_RTC_TILES];
+  mutable ActiveList<const RasterTile, MAX_ACTIVE_TILES> ActiveTiles;
+  RasterBuffer Overview;
+  bool scan_overview;
+  unsigned int width, height;
+  unsigned int overview_width_fine, overview_height_fine;
+
+  GeoBounds bounds;
+
   StaticArray<MarkerSegmentInfo, 8192> segments;
 
   /**
@@ -215,21 +231,6 @@ public:
   RasterTileCache() {
     Reset();
   }
-
-private:
-  bool initialised;
-
-  /** is the "bounds" attribute valid? */
-  bool bounds_initialised;
-
-  bool dirty;
-
-  RasterTile tiles[MAX_RTC_TILES];
-  mutable ActiveList<const RasterTile, MAX_ACTIVE_TILES> ActiveTiles;
-  RasterBuffer Overview;
-  bool scan_overview;
-  unsigned int width, height;
-  GeoBounds bounds;
 
 public:
   /**
@@ -349,9 +350,6 @@ public:
 
   unsigned int GetWidth() const { return width; }
   unsigned int GetHeight() const { return height; }
-
-private:
-  unsigned int overview_width_fine, overview_height_fine;
 };
 
 #endif
