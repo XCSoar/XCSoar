@@ -108,7 +108,9 @@ int main(int argc, char** argv) {
   _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
 
   RasterMap map(jp2_path, j2w_path, NULL);
-  map.SetViewCenter(map.GetMapCenter(), fixed(100000));
+  do {
+    map.SetViewCenter(map.GetMapCenter(), fixed(100000));
+  } while (map.IsDirty());
 
   plan_tests(1);
   test_reach(map, fixed_zero, fixed(0.1));
