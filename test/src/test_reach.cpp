@@ -93,10 +93,10 @@ int main(int argc, char** argv) {
 
   const char hc_path[] = "tmp/terrain";
   const char *map_path;
-  if ((argc<2) || !strlen(argv[0])) {
+  if ((argc<2) || !strlen(argv[1])) {
     map_path = hc_path;
   } else {
-    map_path = argv[0];
+    map_path = argv[1];
   }
 
   TCHAR jp2_path[4096];
