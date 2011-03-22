@@ -96,15 +96,15 @@ RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
 short
 RasterMap::GetField(const GeoPoint &location) const
 {
-  std::pair<unsigned, unsigned> xy = projection.project(location);
-  return raster_tile_cache.GetField(xy.first, xy.second);
+  RasterLocation pt = projection.project(location);
+  return raster_tile_cache.GetField(pt.x, pt.y);
 }
 
 short
 RasterMap::GetFieldInterpolated(const GeoPoint &location) const
 {
-  std::pair<unsigned, unsigned> xy = projection.project(location);
-  return raster_tile_cache.GetFieldInterpolated(xy.first, xy.second);
+  RasterLocation pt = projection.project(location);
+  return raster_tile_cache.GetFieldInterpolated(pt.x, pt.y);
 }
 
 bool
@@ -114,14 +114,9 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
                              const short h_safety,
                              GeoPoint& intx, short &h) const
 {
-  std::pair<unsigned, unsigned> c_origin = projection.project(origin);
-  std::pair<unsigned, unsigned> c_destination = projection.project(destination);
-  c_origin.first = (c_origin.first)>>8;
-  c_origin.second = (c_origin.second)>>8;
-  c_destination.first = (c_destination.first)>>8;
-  c_destination.second = (c_destination.second)>>8;
-  const long c_diff = abs((int)c_origin.first-(int)c_destination.first)+
-    abs((int)c_origin.second-(int)c_destination.second);
+  const RasterLocation c_origin = projection.project(origin) >> 8;
+  const RasterLocation c_destination = projection.project(destination) >> 8;
+  const long c_diff = c_origin.manhattan_distance(c_destination);
   const bool can_climb = (h_destination< h_virt);
 
   intx = destination; h = h_destination; // fallback, pass
@@ -133,18 +128,17 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
   const short vh_origin = std::max(h_origin, (short)(h_destination-
                                                      ((c_diff*slope_fact)>>RASTER_SLOPE_FACT)));
 
-  std::pair<unsigned, unsigned> c_int= c_destination;
-  if (raster_tile_cache.FirstIntersection(c_origin.first, c_origin.second,
-                                          c_destination.first, c_destination.second,
+  RasterLocation c_int = c_destination;
+  if (raster_tile_cache.FirstIntersection(c_origin.x, c_origin.y,
+                                          c_destination.x, c_destination.y,
                                           vh_origin, h_destination,
                                           slope_fact, h_ceiling, h_safety,
-                                          c_int.first, c_int.second, h,
+                                          c_int.x, c_int.y, h,
                                           can_climb)) {
-    bool changed = (c_int != c_destination) || ((h > h_destination)&&(c_int == c_destination));
+    bool changed = c_int != c_destination ||
+      (h > h_destination && c_int == c_destination);
     if (changed) {
-      c_int.first = (c_int.first<<8);
-      c_int.second = (c_int.second<<8);
-      intx = projection.unproject(c_int);
+      intx = projection.unproject(c_int << 8);
       assert(h>= h_origin);
     }
     return changed;
@@ -159,30 +153,23 @@ RasterMap::Intersection(const GeoPoint& origin,
                         const short h_glide,
                         const GeoPoint& destination) const
 {
-  std::pair<unsigned, unsigned> c_origin = projection.project(origin);
-  std::pair<unsigned, unsigned> c_destination = projection.project(destination);
-  c_origin.first = (c_origin.first)>>8;
-  c_origin.second = (c_origin.second)>>8;
-  c_destination.first = (c_destination.first)>>8;
-  c_destination.second = (c_destination.second)>>8;
-  const long c_diff = abs((int)c_origin.first-(int)c_destination.first)+
-    abs((int)c_origin.second-(int)c_destination.second);
+  const RasterLocation c_origin = projection.project(origin) >> 8;
+  const RasterLocation c_destination = projection.project(destination) >> 8;
+  const long c_diff = c_origin.manhattan_distance(c_destination);
   if (c_diff==0) {
     return destination; // no distance
   }
   const long slope_fact = lround((((long)h_glide)<<RASTER_SLOPE_FACT)/c_diff);
 
-  std::pair<unsigned, unsigned> c_int;
-  raster_tile_cache.Intersection(c_origin.first, c_origin.second,
-                                 c_destination.first, c_destination.second,
+  RasterLocation c_int;
+  raster_tile_cache.Intersection(c_origin.x, c_origin.y,
+                                 c_destination.x, c_destination.y,
                                  h_origin, slope_fact,
-                                 c_int.first, c_int.second);
+                                 c_int.x, c_int.y);
 
   if (c_int == c_destination) // made it to grid location, return exact location
                               // of destination
     return destination;
 
-  c_int.first = (c_int.first<<8);
-  c_int.second = (c_int.second<<8);
-  return projection.unproject(c_int);
+  return projection.unproject(c_int << 8);
 }

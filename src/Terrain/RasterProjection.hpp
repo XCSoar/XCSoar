@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RASTER_PROJECTION_HPP
 #define XCSOAR_TERRAIN_RASTER_PROJECTION_HPP
 
+#include "Terrain/RasterLocation.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Math/fixed.hpp"
 #include "Compiler.h"
-
-#include <utility>
 
 struct GeoBounds;
 
@@ -58,19 +57,19 @@ public:
     return angle.value_native() * y_scale;
   }
 
-  gcc_pure std::pair<unsigned, unsigned>
+  gcc_pure RasterLocation
   project(const GeoPoint &location) const {
     const unsigned x = ((int)(location.Longitude.value_native() * x_scale)) - left;
     const unsigned y = top - ((int)(location.Latitude.value_native() * y_scale));
 
-    return std::pair<unsigned, unsigned>(x, y);
+    return RasterLocation(x, y);
   }
 
   gcc_pure
   GeoPoint
-  unproject(const std::pair<unsigned, unsigned> coords) const {
-    const fixed x = fixed(((int)coords.first)+left)/x_scale;
-    const fixed y = fixed(top-((int)coords.second))/y_scale;
+  unproject(const RasterLocation &coords) const {
+    const fixed x = fixed((int)coords.x + left) / x_scale;
+    const fixed y = fixed(top - (int)coords.y) / y_scale;
     return GeoPoint(Angle::native(x),Angle::native(y));
   }
 
