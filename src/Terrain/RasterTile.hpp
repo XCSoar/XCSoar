@@ -120,9 +120,25 @@ public:
     return !buffer.defined();
   }
 
+  /**
+   * Determine the non-interpolated height at the specified pixel
+   * location.
+   *
+   * @param x the pixel column within the tile; may be out of range
+   * @param y the pixel row within the tile; may be out of range
+   */
   gcc_pure
   short GetField(unsigned x, unsigned y) const;
 
+  /**
+   * Determine the interpolated height at the specified sub-pixel
+   * location.
+   *
+   * @param x the pixel column within the tile; may be out of range
+   * @param y the pixel row within the tile; may be out of range
+   * @param ix the sub-pixel column for interpolation (0..255)
+   * @param iy the sub-pixel row for interpolation (0..255)
+   */
   gcc_pure
   short GetFieldInterpolated(unsigned x, unsigned y,
                              unsigned ix, unsigned iy) const;
@@ -216,9 +232,23 @@ private:
   GeoBounds bounds;
 
 public:
+  /**
+   * Determine the non-interpolated height at the specified pixel
+   * location.
+   *
+   * @param x the pixel column within the map; may be out of range
+   * @param y the pixel row within the map; may be out of range
+   */
   gcc_pure
   short GetField(unsigned x, unsigned y) const;
 
+  /**
+   * Determine the interpolated height at the specified sub-pixel
+   * location.
+   *
+   * @param lx the sub-pixel column within the map; may be out of range
+   * @param ly the sub-pixel row within the map; may be out of range
+   */
   gcc_pure
   short GetFieldInterpolated(unsigned int lx,
                              unsigned int ly) const;

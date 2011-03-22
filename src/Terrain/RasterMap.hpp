@@ -78,9 +78,15 @@ public:
     return projection.pixel_distance(location, 256 * pixels);
   }
 
+  /**
+   * Determine the non-interpolated height at the specified location.
+   */
   gcc_pure
   short GetField(const GeoPoint &location) const;
 
+  /**
+   * Determine the interpolated height at the specified location.
+   */
   gcc_pure
   short GetFieldInterpolated(const GeoPoint &location) const;
 
