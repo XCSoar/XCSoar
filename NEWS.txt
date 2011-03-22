@@ -15,6 +15,7 @@ Version 6.0.8 - not yet released
 * Linux
   - more dialog improvements
   - fix bold font rendering
+  - case insensitive file name matching
 
 Version 6.0.7 - 2011/03/12
 * devices

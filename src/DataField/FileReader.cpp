@@ -43,6 +43,10 @@ Copyright_License {
 #include <dirent.h>
 #include <unistd.h>
 #include <fnmatch.h>
+
+#ifndef FNM_CASEFOLD
+#define FNM_CASEFOLD 0
+#endif
 #endif
 
 DataFieldFileReader::Item::~Item()
@@ -185,7 +189,8 @@ DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
 
     if (S_ISDIR(st.st_mode))
       ScanDirectories(FileName, filter);
-    else if (S_ISREG(st.st_mode) && fnmatch(filter, ent->d_name, 0) == 0)
+    else if (S_ISREG(st.st_mode) &&
+             fnmatch(filter, ent->d_name, FNM_CASEFOLD) == 0)
       addFile(ent->d_name, FileName);
   }
 
