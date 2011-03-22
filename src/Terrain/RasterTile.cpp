@@ -268,8 +268,8 @@ RasterTileCache::GetHeight(unsigned px, unsigned py) const
     }
   }
   // still not found, so go to overview
-  return Overview.get_interpolated(px << (8 - OVERVIEW_BITS),
-                                   py << (8 - OVERVIEW_BITS));
+  return Overview.get_interpolated(px << (SUBPIXEL_BITS - OVERVIEW_BITS),
+                                   py << (SUBPIXEL_BITS - OVERVIEW_BITS));
 }
 
 short
@@ -302,8 +302,8 @@ RasterTileCache::SetSize(unsigned _width, unsigned _height)
   height = _height;
 
   Overview.resize(width >> OVERVIEW_BITS, height >> OVERVIEW_BITS);
-  overview_width_fine = width * 256;
-  overview_height_fine = height * 256;
+  overview_width_fine = width << SUBPIXEL_BITS;
+  overview_height_fine = height << SUBPIXEL_BITS;
 }
 
 void

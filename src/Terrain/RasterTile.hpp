@@ -174,6 +174,14 @@ class RasterTileCache : private NonCopyable {
    */
   static const unsigned OVERVIEW_BITS = 4;
 
+  /**
+   * The fixed-point fractional part of sub-pixel coordinates.
+   *
+   * Do not edit!  There are still some hard-coded code sections left,
+   * e.g. CombinedDivAndMod().
+   */
+  static const unsigned SUBPIXEL_BITS = 8;
+
   friend struct RTDistanceSort;
 
   struct MarkerSegmentInfo {
