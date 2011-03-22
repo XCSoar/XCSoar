@@ -168,7 +168,11 @@ class RasterTileCache : private NonCopyable {
   static const unsigned MAX_ACTIVE_TILES = 16;
 #endif
 
-  static const unsigned RTC_SUBSAMPLING = 16;
+  /**
+   * The width and height of the terrain bitmap is shifted by this
+   * number of bits to determine the overview size.
+   */
+  static const unsigned OVERVIEW_BITS = 4;
 
   friend struct RTDistanceSort;
 

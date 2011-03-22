@@ -268,8 +268,8 @@ RasterTileCache::GetHeight(unsigned px, unsigned py) const
     }
   }
   // still not found, so go to overview
-  return Overview.get_interpolated(px << 8 / RTC_SUBSAMPLING,
-                                   py << 8 / RTC_SUBSAMPLING);
+  return Overview.get_interpolated(px << (8 - OVERVIEW_BITS),
+                                   py << (8 - OVERVIEW_BITS));
 }
 
 short
@@ -291,7 +291,8 @@ RasterTileCache::GetInterpolatedHeight(unsigned int lx, unsigned int ly) const
     }
   }
   // still not found, so go to overview
-  return Overview.get_interpolated(lx / RTC_SUBSAMPLING, ly / RTC_SUBSAMPLING);
+  return Overview.get_interpolated(lx >> OVERVIEW_BITS,
+                                   ly >> OVERVIEW_BITS);
 }
 
 void
@@ -300,7 +301,7 @@ RasterTileCache::SetSize(unsigned _width, unsigned _height)
   width = _width;
   height = _height;
 
-  Overview.resize(width / RTC_SUBSAMPLING, height / RTC_SUBSAMPLING);
+  Overview.resize(width >> OVERVIEW_BITS, height >> OVERVIEW_BITS);
   overview_width_fine = width * 256;
   overview_height_fine = height * 256;
 }
@@ -839,7 +840,7 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_
     // outside overall bounds
     return RasterBuffer::TERRAIN_INVALID;
 
-  return Overview.get(px / RTC_SUBSAMPLING, py / RTC_SUBSAMPLING);
+  return Overview.get(px >> OVERVIEW_BITS, py >> OVERVIEW_BITS);
 }
 
 RasterLocation
