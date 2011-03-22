@@ -146,6 +146,14 @@ public:
   void set_details(const Waypoint& wp, const tstring& Details);
 
   /**
+   * Generate takeoff waypoint
+   *
+   * @return waypoint copy
+   */
+  Waypoint generate_takeoff_point(const GeoPoint& location,
+                                  const fixed terrain_alt) const;
+
+  /**
    * Find first home waypoint
    *
    * @return Pointer to waypoint if found (or NULL if not)
