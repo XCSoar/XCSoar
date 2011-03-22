@@ -175,12 +175,6 @@ TestExtractParameters()
 
 typedef std::vector<Waypoint> wp_vector;
 
-short
-RasterMap::GetField(const GeoPoint &location) const
-{
-  return 0;
-}
-
 static bool
 TestWayPointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
 {
