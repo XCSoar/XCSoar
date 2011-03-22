@@ -552,6 +552,7 @@ DEBUG_PROGRAM_NAMES = \
 	AddChecksum \
 	KeyCodeDumper \
 	LoadTopography LoadTerrain \
+	RunHeightMatrix \
 	RunInputParser \
 	RunWayPointParser RunAirspaceParser \
 	RunDeviceDriver RunDeclare \
@@ -800,6 +801,32 @@ LOAD_TERRAIN_LDADD = \
 	$(COMPAT_LIBS)
 $(LOAD_TERRAIN_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(LOAD_TERRAIN_BIN): $(LOAD_TERRAIN_OBJS) $(LOAD_TERRAIN_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(ZZIP_LDFLAGS) -o $@
+
+RUN_HEIGHT_MATRIX_SOURCES = \
+	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Terrain/RasterBuffer.cpp \
+	$(SRC)/Terrain/RasterProjection.cpp \
+	$(SRC)/Terrain/RasterMap.cpp \
+	$(SRC)/Terrain/HeightMatrix.cpp \
+	$(SRC)/Projection.cpp \
+	$(SRC)/WindowProjection.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/PathName.cpp \
+	$(SRC)/Engine/Math/Earth.cpp \
+	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
+	$(TEST_SRC_DIR)/RunHeightMatrix.cpp
+RUN_HEIGHT_MATRIX_OBJS = $(call SRC_TO_OBJ,$(RUN_HEIGHT_MATRIX_SOURCES))
+RUN_HEIGHT_MATRIX_BIN = $(TARGET_BIN_DIR)/RunHeightMatrix$(TARGET_EXEEXT)
+RUN_HEIGHT_MATRIX_LDADD = \
+	$(MATH_LIBS) \
+	$(IO_LIBS) \
+	$(JASPER_LIBS) \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
+$(RUN_HEIGHT_MATRIX_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(RUN_HEIGHT_MATRIX_BIN): $(RUN_HEIGHT_MATRIX_OBJS) $(RUN_HEIGHT_MATRIX_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(ZZIP_LDFLAGS) -o $@
 
