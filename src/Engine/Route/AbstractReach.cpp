@@ -31,7 +31,7 @@ AbstractReach::solve(const AGeoPoint origin,
 {
   if (terrain) {
     // immediate exit if starts below terrain
-    const short terrain_height = terrain->GetField(origin);
+    const short terrain_height = terrain->GetHeight(origin);
     if ((origin.altitude-rpolars.safety_height()) < terrain_height)
       return false;
   }

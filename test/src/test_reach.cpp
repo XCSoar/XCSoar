@@ -51,7 +51,7 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
   RoutePlannerConfig config;
   config.mode = RoutePlannerConfig::rpBoth;
 
-  short horigin = map.GetField(origin)+1000;
+  short horigin = map.GetHeight(origin)+1000;
   AGeoPoint aorigin(origin, horigin);
 
   retval = route.solve_reach(aorigin);
@@ -73,7 +73,7 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
         fixed fy = (fixed)j/(ny-1)*fixed_two-fixed_one;
         GeoPoint x(origin.Longitude+Angle::degrees(fixed(0.6)*fx),
                    origin.Latitude+Angle::degrees(fixed(0.6)*fy));
-        short h = map.GetFieldInterpolated(x);
+        short h = map.GetInterpolatedHeight(x);
         AGeoPoint adest(x, h);
         short ha;
         route.find_positive_arrival(adest, ha);

@@ -94,17 +94,17 @@ RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
 }
 
 short
-RasterMap::GetField(const GeoPoint &location) const
+RasterMap::GetHeight(const GeoPoint &location) const
 {
   RasterLocation pt = projection.project(location) >> 8;
-  return raster_tile_cache.GetField(pt.x, pt.y);
+  return raster_tile_cache.GetHeight(pt.x, pt.y);
 }
 
 short
-RasterMap::GetFieldInterpolated(const GeoPoint &location) const
+RasterMap::GetInterpolatedHeight(const GeoPoint &location) const
 {
   RasterLocation pt = projection.project(location);
-  return raster_tile_cache.GetFieldInterpolated(pt.x, pt.y);
+  return raster_tile_cache.GetInterpolatedHeight(pt.x, pt.y);
 }
 
 bool

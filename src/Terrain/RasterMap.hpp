@@ -82,13 +82,13 @@ public:
    * Determine the non-interpolated height at the specified location.
    */
   gcc_pure
-  short GetField(const GeoPoint &location) const;
+  short GetHeight(const GeoPoint &location) const;
 
   /**
    * Determine the interpolated height at the specified location.
    */
   gcc_pure
-  short GetFieldInterpolated(const GeoPoint &location) const;
+  short GetInterpolatedHeight(const GeoPoint &location) const;
 
   gcc_pure
   bool FirstIntersection(const GeoPoint &origin, const short h_origin,

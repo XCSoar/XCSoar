@@ -193,7 +193,7 @@ FlatTriangleFanTree::update_terrain_base(const FlatGeoPoint& o, ReachFanParms& p
        x != vs.end(); ++x) {
     const FlatGeoPoint av = (o+(*x))*fixed_half;
     const GeoPoint p = parms.task_proj.unproject(av);
-    short h = parms.terrain->GetField(p);
+    short h = parms.terrain->GetHeight(p);
     if (!RasterBuffer::is_invalid(h)) {
       parms.terrain_counter++;
       parms.terrain_base+= h;
@@ -276,7 +276,7 @@ bool ReachFan::solve(const AGeoPoint origin,
   if (!AbstractReach::solve(origin, rpolars, terrain))
     return false;
 
-  const short h = terrain? terrain->GetField(origin): 0;
+  const short h = terrain? terrain->GetHeight(origin): 0;
 
   if (terrain && (origin.altitude <= h + rpolars.safety_height()))
     return false;

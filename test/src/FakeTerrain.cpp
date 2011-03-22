@@ -24,7 +24,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 
 short
-RasterMap::GetField(const GeoPoint &location) const
+RasterMap::GetHeight(const GeoPoint &location) const
 {
   return RasterBuffer::TERRAIN_INVALID;
 }

@@ -128,7 +128,7 @@ public:
    * @param y the pixel row within the tile; may be out of range
    */
   gcc_pure
-  short GetField(unsigned x, unsigned y) const;
+  short GetHeight(unsigned x, unsigned y) const;
 
   /**
    * Determine the interpolated height at the specified sub-pixel
@@ -140,8 +140,8 @@ public:
    * @param iy the sub-pixel row for interpolation (0..255)
    */
   gcc_pure
-  short GetFieldInterpolated(unsigned x, unsigned y,
-                             unsigned ix, unsigned iy) const;
+  short GetInterpolatedHeight(unsigned x, unsigned y,
+                              unsigned ix, unsigned iy) const;
 
   inline short* GetImageBuffer() {
     return buffer.get_data();
@@ -240,7 +240,7 @@ public:
    * @param y the pixel row within the map; may be out of range
    */
   gcc_pure
-  short GetField(unsigned x, unsigned y) const;
+  short GetHeight(unsigned x, unsigned y) const;
 
   /**
    * Determine the interpolated height at the specified sub-pixel
@@ -250,8 +250,8 @@ public:
    * @param ly the sub-pixel row within the map; may be out of range
    */
   gcc_pure
-  short GetFieldInterpolated(unsigned int lx,
-                             unsigned int ly) const;
+  short GetInterpolatedHeight(unsigned int lx,
+                              unsigned int ly) const;
 
   bool FirstIntersection(int origin_x, int origin_y,
                          int destination_x, int destination_y,

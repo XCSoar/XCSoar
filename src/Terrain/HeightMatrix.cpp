@@ -87,7 +87,9 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
       GeoPoint gp = projection.ScreenToGeo(x, y);
 #endif
 
-      short h = interpolate ? map.GetFieldInterpolated(gp) : map.GetField(gp);
+      short h = interpolate
+        ? map.GetInterpolatedHeight(gp)
+        : map.GetHeight(gp);
       if (!RasterBuffer::is_special(h)) {
         if (h < minimum)
           minimum = h;

@@ -32,7 +32,7 @@ Copyright_License {
 static fixed
 GetElevation(RasterTerrain::Lease &map, const GeoPoint loc)
 {
-  short hground = map->GetField(loc);
+  short hground = map->GetHeight(loc);
   if (RasterBuffer::is_special(hground))
     hground = 0;
 

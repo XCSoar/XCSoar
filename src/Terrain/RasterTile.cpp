@@ -71,7 +71,7 @@ RasterTile::Enable()
 }
 
 short
-RasterTile::GetField(unsigned x, unsigned y) const
+RasterTile::GetHeight(unsigned x, unsigned y) const
 {
   // we want to exit out of this function as soon as possible
   // if we have the wrong tile
@@ -91,8 +91,8 @@ RasterTile::GetField(unsigned x, unsigned y) const
 }
 
 short
-RasterTile::GetFieldInterpolated(unsigned lx, unsigned ly,
-                                 unsigned ix, unsigned iy) const
+RasterTile::GetInterpolatedHeight(unsigned lx, unsigned ly,
+                                  unsigned ix, unsigned iy) const
 {
   // we want to exit out of this function as soon as possible
   // if we have the wrong tile
@@ -254,14 +254,14 @@ RasterTileCache::TileRequest(unsigned index)
 }
 
 short
-RasterTileCache::GetField(unsigned px, unsigned py) const
+RasterTileCache::GetHeight(unsigned px, unsigned py) const
 {
   if (px >= width || py >= height)
     // outside overall bounds
     return RasterBuffer::TERRAIN_INVALID;
 
   for (unsigned i = 0; i < ActiveTiles.length(); ++i) {
-    short h = ActiveTiles[i].GetField(px, py);
+    short h = ActiveTiles[i].GetHeight(px, py);
     if (!RasterBuffer::is_invalid(h)) {
       ActiveTiles.move_to_front(i);
       return h;
@@ -273,7 +273,7 @@ RasterTileCache::GetField(unsigned px, unsigned py) const
 }
 
 short
-RasterTileCache::GetFieldInterpolated(unsigned int lx, unsigned int ly) const
+RasterTileCache::GetInterpolatedHeight(unsigned int lx, unsigned int ly) const
 {
   if ((lx >= overview_width_fine) || (ly >= overview_height_fine))
     // outside overall bounds
@@ -284,7 +284,7 @@ RasterTileCache::GetFieldInterpolated(unsigned int lx, unsigned int ly) const
   const unsigned int iy = CombinedDivAndMod(py);
 
   for (unsigned i = 0; i < ActiveTiles.length(); ++i) {
-    short h = ActiveTiles[i].GetFieldInterpolated(px, py, ix, iy);
+    short h = ActiveTiles[i].GetInterpolatedHeight(px, py, ix, iy);
     if (!RasterBuffer::is_invalid(h)) {
       ActiveTiles.move_to_front(i);
       return h;
@@ -817,14 +817,14 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_
 
   // try at tile_index if possible
   if (tile_index != -1) {
-    const short h = ActiveTiles[tile_index].GetField(px, py);
+    const short h = ActiveTiles[tile_index].GetHeight(px, py);
     if (!RasterBuffer::is_invalid(h))
       return h;
   }
 
   // failed, so try all active tiles
   for (unsigned i = 0; i < ActiveTiles.length(); ++i) {
-    const short h = ActiveTiles[i].GetField(px, py);
+    const short h = ActiveTiles[i].GetHeight(px, py);
     if (!RasterBuffer::is_invalid(h)) {
       tile_index = i;
       return h;

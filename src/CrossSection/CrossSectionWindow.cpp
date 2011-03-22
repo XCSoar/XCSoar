@@ -306,7 +306,7 @@ CrossSectionWindow::PaintTerrain(Canvas &canvas, Chart &chart)
     const fixed t_this = fixed(j) / (AIRSPACE_SCANSIZE_X - 1);
     const GeoPoint p_this = start + p_diff * t_this;
 
-    short h = map->GetField(p_this);
+    short h = map->GetHeight(p_this);
     if (RasterBuffer::is_special(h)) {
       if (RasterBuffer::is_water(h))
         /* water is at 0m MSL */

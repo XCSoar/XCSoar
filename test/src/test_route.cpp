@@ -53,7 +53,7 @@ bool test_route(const unsigned n_airspaces, const RasterMap& map)
         fixed fy = (fixed)j/(ny-1)*fixed(2.0)-fixed_one;
         GeoPoint x(origin.Longitude+Angle::degrees(fixed(0.2)+fixed(0.7)*fx),
                    origin.Latitude+Angle::degrees(fixed(0.9)*fy));
-        short h = map.GetFieldInterpolated(x);
+        short h = map.GetInterpolatedHeight(x);
         fout << x.Longitude.value_degrees() << " " << x.Latitude.value_degrees() << " " << h << "\n";
       }
       fout << "\n";
@@ -64,8 +64,8 @@ bool test_route(const unsigned n_airspaces, const RasterMap& map)
   { // local scope, see what happens when we go out of scope
     GeoPoint p_start(Angle::degrees(fixed(-0.3)),Angle::degrees(fixed(0.0))); p_start += map.GetMapCenter();
     GeoPoint p_dest(Angle::degrees(fixed(0.8)),Angle::degrees(fixed(-0.7))); p_dest += map.GetMapCenter();
-    AGeoPoint loc_start(p_start,map.GetField(p_start)+100);
-    AGeoPoint loc_end(p_dest,map.GetField(p_dest)+100);
+    AGeoPoint loc_start(p_start,map.GetHeight(p_start)+100);
+    AGeoPoint loc_end(p_dest,map.GetHeight(p_dest)+100);
     AIRCRAFT_STATE state;
     GlidePolar glide_polar(fixed(0.1));
     AirspaceAircraftPerformanceGlide perf(glide_polar);
@@ -125,7 +125,7 @@ bool test_route(const unsigned n_airspaces, const RasterMap& map)
     bool sol = false;
     for (int i=0; i<NUM_SOL; i++) {
       loc_end.Latitude+= Angle::degrees(fixed(0.1));
-      loc_end.altitude = map.GetField(loc_end)+100;
+      loc_end.altitude = map.GetHeight(loc_end)+100;
       route.synchronise(*airspaces, loc_start, loc_end);
       if (route.solve(loc_start, loc_end, config)) {
         sol = true;

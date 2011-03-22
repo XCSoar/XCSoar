@@ -68,7 +68,7 @@ public:
   gcc_pure
   short GetTerrainHeight(const GeoPoint location) const {
     Lease lease(*this);
-    return lease->GetField(location);
+    return lease->GetHeight(location);
   }
 
   GeoPoint GetTerrainCenter() const {

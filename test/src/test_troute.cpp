@@ -58,7 +58,7 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
         fixed fy = (fixed)j/(ny-1)*fixed_two-fixed_one;
         GeoPoint x(origin.Longitude+Angle::degrees(fixed(0.6)*fx),
                    origin.Latitude+Angle::degrees(fixed(0.4)*fy));
-        short h = map.GetFieldInterpolated(x);
+        short h = map.GetInterpolatedHeight(x);
         fout << x.Longitude.value_degrees() << " " << x.Latitude.value_degrees() << " " << h << "\n";
       }
       fout << "\n";
@@ -73,12 +73,12 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
   for (fixed ang=fixed_zero; ang< fixed_two_pi; ang+= fixed_quarter_pi*fixed_half) {
     GeoPoint dest = GeoVector(fixed(40000.0), Angle::radians(ang)).end_point(origin);
 
-    short hdest = map.GetField(dest)+100;
+    short hdest = map.GetHeight(dest)+100;
 
     if (i==3)
       route.verbose=3;
 
-    retval = route.solve(AGeoPoint(origin, map.GetField(origin)+100),
+    retval = route.solve(AGeoPoint(origin, map.GetHeight(origin)+100),
                          AGeoPoint(dest, positive(mc)? hdest: std::max(hdest, (short)3200)),
                          config, ceiling);
     char buffer[80];
