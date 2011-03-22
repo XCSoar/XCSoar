@@ -217,6 +217,7 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius)
 
   /* fill ActiveTiles and request new tiles */
 
+  last_tile = NULL;
   ActiveTiles.clear();
   dirty = false;
 
@@ -262,11 +263,17 @@ RasterTileCache::GetHeight(unsigned px, unsigned py) const
     // outside overall bounds
     return RasterBuffer::TERRAIN_INVALID;
 
+  if (last_tile != NULL) {
+    short h = last_tile->GetHeight(px, py);
+    if (!RasterBuffer::is_invalid(h))
+      return h;
+  }
+
   const unsigned length = ActiveTiles.length();
   for (unsigned i = 0; i < length; ++i) {
     short h = ActiveTiles[i].GetHeight(px, py);
     if (!RasterBuffer::is_invalid(h)) {
-      ActiveTiles.move_to_front(i);
+      last_tile = &ActiveTiles[i];
       return h;
     }
   }
@@ -286,11 +293,17 @@ RasterTileCache::GetInterpolatedHeight(unsigned int lx, unsigned int ly) const
   const unsigned int ix = CombinedDivAndMod(px);
   const unsigned int iy = CombinedDivAndMod(py);
 
+  if (last_tile != NULL) {
+    short h = last_tile->GetInterpolatedHeight(px, py, ix, iy);
+    if (!RasterBuffer::is_invalid(h))
+      return h;
+  }
+
   const unsigned length = ActiveTiles.length();
   for (unsigned i = 0; i < length; ++i) {
     short h = ActiveTiles[i].GetInterpolatedHeight(px, py, ix, iy);
     if (!RasterBuffer::is_invalid(h)) {
-      ActiveTiles.move_to_front(i);
+      last_tile = &ActiveTiles[i];
       return h;
     }
   }
@@ -336,6 +349,7 @@ RasterTileCache::Reset()
   for (unsigned i = 0; i < MAX_RTC_TILES; i++)
     tiles[i].Disable();
 
+  last_tile = NULL;
   ActiveTiles.clear();
 }
 

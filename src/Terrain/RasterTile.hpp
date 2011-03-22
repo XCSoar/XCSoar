@@ -219,7 +219,14 @@ class RasterTileCache : private NonCopyable {
   bool dirty;
 
   RasterTile tiles[MAX_RTC_TILES];
-  mutable ActiveList<const RasterTile, MAX_ACTIVE_TILES> ActiveTiles;
+
+  ActiveList<const RasterTile, MAX_ACTIVE_TILES> ActiveTiles;
+
+  /**
+   * A pointer to the most recently used tile.
+   */
+  mutable const RasterTile *last_tile;
+
   RasterBuffer Overview;
   bool scan_overview;
   unsigned int width, height;
