@@ -140,6 +140,7 @@ mode=default
 type=gce
 data=TAKEOFF
 event=AutoLogger start
+event=AddWaypoint takeoff
 event=StatusMessage Takeoff
 
 mode=default
