@@ -9,6 +9,8 @@ Version 6.0.8 - not yet released
 * configuration
   - Units: fix "feet per minute" support
   - save the "Auto Logger" setting
+* Windows
+  - use backslash for paths on Windows CE
 * Android
   - calculate WGS84 to real altitude (internal GPS)
   - fix incorrect airspace warning repetitions
