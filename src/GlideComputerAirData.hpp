@@ -71,6 +71,7 @@ protected:
   bool FlightTimes();
 private:
   void Airspeed();
+  void EnergyHeight();
   void BruttoVario();
   void NettoVario();
   void AverageClimbRate();

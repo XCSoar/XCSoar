@@ -50,6 +50,8 @@ Copyright_License {
 
 #include <algorithm>
 
+#define fixed_inv_2g fixed(1.0/(2.0*9.81))
+
 using std::min;
 using std::max;
 
@@ -255,6 +257,27 @@ GlideComputerAirData::Airspeed()
 }
 
 /**
+ * Calculates energy height on TAS basis
+ *
+ * \f${m/2} \times v^2 = m \times g \times h\f$ therefore \f$h = {v^2}/{2 \times g}\f$
+ */
+void
+GlideComputerAirData::EnergyHeight()
+{
+  const NMEA_INFO &basic = Basic();
+  DERIVED_INFO &calculated = SetCalculated();
+
+  if (calculated.AirspeedAvailable)
+    calculated.EnergyHeight = sqr(calculated.TrueAirspeed) * fixed_inv_2g;
+  else
+    /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
+       of the glider for sure. */
+    calculated.EnergyHeight = fixed_zero;
+
+  calculated.TEAltitude = basic.NavAltitude + calculated.EnergyHeight;
+}
+
+/**
  * 1. Calculates the vario values for gps vario, gps total energy vario and distance vario
  * 2. Sets Vario to GPSVario or received Vario data from instrument
  */
@@ -262,6 +285,7 @@ void
 GlideComputerAirData::BruttoVario()
 {
   const NMEA_INFO &basic = Basic();
+  const DERIVED_INFO &calculated = Calculated();
   VARIO_INFO &vario = SetCalculated();
 
   // Calculate time passed since last calculation
@@ -269,7 +293,7 @@ GlideComputerAirData::BruttoVario()
 
   if (positive(dT)) {
     const fixed Gain = basic.NavAltitude - LastBasic().NavAltitude;
-    const fixed GainTE = basic.TEAltitude - LastBasic().TEAltitude;
+    const fixed GainTE = calculated.TEAltitude - calculated.TEAltitude;
 
     // estimate value from GPS
     vario.GPSVario = Gain / dT;
@@ -489,7 +513,7 @@ GlideComputerAirData::ThermalGain()
   if (positive(Calculated().ClimbStartTime) &&
       Basic().Time >= Calculated().ClimbStartTime)
     calculated.ThermalGain =
-      Basic().TEAltitude - Calculated().ClimbStartAlt;
+      calculated.TEAltitude - Calculated().ClimbStartAlt;
 }
 
 void
@@ -867,7 +891,7 @@ GlideComputerAirData::Turning()
       calculated.TurnStartTime = Basic().Time;
       calculated.TurnStartLocation = Basic().Location;
       calculated.TurnStartAltitude = Basic().NavAltitude;
-      calculated.TurnStartEnergyHeight = Basic().EnergyHeight;
+      calculated.TurnStartEnergyHeight = calculated.EnergyHeight;
       calculated.TurnMode = WAITCLIMB;
     }
     if (!forcecircling)
@@ -915,7 +939,7 @@ GlideComputerAirData::Turning()
       calculated.TurnStartTime = Basic().Time;
       calculated.TurnStartLocation = Basic().Location;
       calculated.TurnStartAltitude = Basic().NavAltitude;
-      calculated.TurnStartEnergyHeight = Basic().EnergyHeight;
+      calculated.TurnStartEnergyHeight = calculated.EnergyHeight;
 
       // JMW Transition to cruise, due to not properly turning
       calculated.TurnMode = WAITCRUISE;
@@ -1008,7 +1032,7 @@ GlideComputerAirData::LastThermalStats()
     return;
 
   fixed ThermalGain = calculated.CruiseStartAlt
-      + Basic().EnergyHeight - calculated.ClimbStartAlt;
+      + calculated.EnergyHeight - calculated.ClimbStartAlt;
 
   if (!positive(ThermalGain) || ThermalTime <= THERMAL_TIME_MIN)
     return;
@@ -1037,13 +1061,13 @@ GlideComputerAirData::OnDepartedThermal()
 void
 GlideComputerAirData::WorkingBand()
 {
-  const NMEA_INFO &basic = Basic();
+  const DERIVED_INFO &calculated = Calculated();
   ThermalBandInfo &tbi = SetCalculated().thermal_band;
 
   const fixed h_safety = SettingsComputer().route_planner.safety_height_terrain +
     Calculated().TerrainBase;
 
-  tbi.working_band_height = basic.TEAltitude - h_safety;
+  tbi.working_band_height = calculated.TEAltitude - h_safety;
   if (negative(tbi.working_band_height)) {
     tbi.working_band_fraction = fixed_zero;
     return;
@@ -1056,7 +1080,7 @@ GlideComputerAirData::WorkingBand()
     tbi.working_band_fraction = fixed_one;
 
   tbi.working_band_ceiling = std::max(max_height + h_safety,
-                                      basic.TEAltitude);
+                                      calculated.TEAltitude);
 }
 
 void

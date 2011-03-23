@@ -53,8 +53,6 @@ CalculationThread::tick()
     // if (new GPS data available)
     if (gps_updated)
       device_blackboard.tick();
-    else
-      device_blackboard.tick_fast();
 
     // Copy data from DeviceBlackboard to GlideComputerBlackboard
     glide_computer.ReadBlackboard(device_blackboard.Basic());

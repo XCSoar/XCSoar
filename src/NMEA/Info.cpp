@@ -88,7 +88,6 @@ NMEA_INFO::reset()
   BaroAltitudeAvailable.clear();
   BaroAltitudeOrigin = BARO_ALTITUDE_UNKNOWN;
   BaroAltitude = fixed_zero;
-  EnergyHeight = TEAltitude = fixed_zero;
 
   PressureAltitudeAvailable.clear();
   PressureAltitudeOrigin = BARO_ALTITUDE_UNKNOWN;
@@ -220,7 +219,7 @@ NMEA_INFO::complement(const NMEA_INFO &add)
     PressureAltitudeAvailable = add.PressureAltitudeAvailable;
   }
 
-  /* calculated: EnergyHeight, TEAltitude, working_band_height,
+  /* calculated: working_band_height,
      NavAltitude,working_band_fraction */
 
   /* managed by DeviceBlackboard: pressure */

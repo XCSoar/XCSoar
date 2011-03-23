@@ -348,12 +348,6 @@ struct NMEA_INFO {
   fixed PressureAltitude;
   Validity PressureAltitudeAvailable;
 
-  /** Energy height excess to slow to best glide speed @author JMW */
-  fixed EnergyHeight;
-
-  /** Nav Altitude + Energy height (m) */
-  fixed TEAltitude;
-
   /** Altitude used for navigation (GPS or Baro) */
   fixed NavAltitude;
 

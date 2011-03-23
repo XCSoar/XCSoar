@@ -42,7 +42,6 @@ Copyright_License {
 
 #include <limits.h>
 
-#define fixed_inv_2g fixed(1.0/(2.0*9.81))
 #define fixed_inv_g fixed(1.0/9.81)
 #define fixed_small fixed(0.001)
 
@@ -384,8 +383,6 @@ DeviceBlackboard::tick()
   NavAltitude();
   AutoQNH();
 
-  tick_fast();
-
   if (Basic().Time!= LastBasic().Time) {
 
     if (Basic().Time > LastBasic().Time) {
@@ -394,13 +391,6 @@ DeviceBlackboard::tick()
 
     state_last = Basic();
   }
-}
-
-
-void
-DeviceBlackboard::tick_fast()
-{
-  EnergyHeight();
 }
 
 /**
@@ -484,27 +474,6 @@ DeviceBlackboard::Dynamics()
     if (!basic.acceleration.Available)
       basic.acceleration.Gload = fixed_one;
   }
-}
-
-
-/**
- * Calculates energy height on TAS basis
- *
- * \f${m/2} \times v^2 = m \times g \times h\f$ therefore \f$h = {v^2}/{2 \times g}\f$
- */
-void
-DeviceBlackboard::EnergyHeight()
-{
-  NMEA_INFO &basic = SetBasic();
-
-  if (Calculated().AirspeedAvailable)
-    basic.EnergyHeight = Calculated().TrueAirspeed * Calculated().TrueAirspeed * fixed_inv_2g;
-  else
-    /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
-     of the glider for sure. */
-    basic.EnergyHeight = fixed_zero;
-
-  basic.TEAltitude = basic.NavAltitude + basic.EnergyHeight;
 }
 
 void

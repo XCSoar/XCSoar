@@ -122,6 +122,12 @@ struct DERIVED_INFO:
   fixed IndicatedAirspeed;
   Validity AirspeedAvailable;
 
+  /** Energy height excess to slow to best glide speed @author JMW */
+  fixed EnergyHeight;
+
+  /** Nav Altitude + Energy height (m) */
+  fixed TEAltitude;
+
   /**
    * Does #estimated_wind have a meaningful value?
    */

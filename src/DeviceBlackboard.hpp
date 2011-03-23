@@ -97,7 +97,6 @@ public:
   bool expire_wall_clock();
 
   void tick();
-  void tick_fast();
 
 private:
 // moved from GlideComputerAirData
@@ -106,7 +105,6 @@ private:
   void NavAltitude();
   void Heading();
   void Dynamics();
-  void EnergyHeight();
   void Vario();
   void AutoQNH();
 
