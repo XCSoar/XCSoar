@@ -79,6 +79,7 @@ static const TCHAR *const TypeFilter[] = {
   _T("Start"), 
   _T("Finish"), 
   _T("File 1"), _T("File 2"),
+  _T("Recently Used"),
   NULL
 };
 
@@ -90,7 +91,8 @@ enum type_filter {
   tfStart,
   tfFinish,
   tfFile1,
-  tfFile2
+  tfFile2,
+  tfLastUsed,
 };
 
 enum {
@@ -265,6 +267,9 @@ private:
 
     case tfFile2:
       return wp.FileNum == 1;
+
+    case tfLastUsed:
+      return false;
     }
 
     /* not reachable */
@@ -359,12 +364,12 @@ FillLastUsedList(WaypointSelectInfoVector &dest,
 static void
 UpdateList()
 {
-  FillList(WayPointSelectInfo, way_points, g_location,
-          last_heading, filter_data);
-
-  if (WayPointSelectInfo.empty())
+  if (filter_data.type_index == tfLastUsed)
     FillLastUsedList(WayPointSelectInfo, LastUsedWaypointNames,
                      way_points, g_location);
+  else
+    FillList(WayPointSelectInfo, way_points, g_location,
+             last_heading, filter_data);
 
   wWayPointList->SetLength(std::max(1, (int)WayPointSelectInfo.size()));
   wWayPointList->SetOrigin(0);
