@@ -49,6 +49,7 @@ NmeaReplayGlue::Start()
   assert(device == NULL);
 
   parser = new NMEAParser();
+  parser->SetReal(false);
 
   /* get the device driver name from the profile */
   DeviceConfig config;
