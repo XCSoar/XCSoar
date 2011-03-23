@@ -74,7 +74,7 @@ dlgWindSettingsShowModal(void)
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
     df.SetUnits(Units::GetSpeedName());
-    df.Set(Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
+    df.Set(Units::ToUserWindSpeed(CommonInterface::Calculated().wind.norm));
     wp->RefreshDisplay();
   }
 
@@ -82,7 +82,7 @@ dlgWindSettingsShowModal(void)
   if (wp) {
     wp->set_enabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.Set(XCSoarInterface::Basic().wind.bearing.value_degrees());
+    df.Set(CommonInterface::Calculated().wind.bearing.value_degrees());
     wp->RefreshDisplay();
   }
 

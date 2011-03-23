@@ -32,7 +32,7 @@ void
 MapWindow::RenderTerrain(Canvas &canvas)
 {
   if (SettingsMap().SlopeShadingType == sstWind)
-    m_background.sun_from_wind(render_projection, Basic().wind);
+    m_background.sun_from_wind(render_projection, Calculated().wind);
   else
     m_background.set_sun_angle(render_projection,
                                SettingsMap().SlopeShadingType == sstSun ?

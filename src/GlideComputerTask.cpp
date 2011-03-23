@@ -109,7 +109,7 @@ GlideComputerTask::ProcessBasicTask()
 void
 GlideComputerTask::ProcessMoreTask()
 {
-  m_task.route_update_polar(Basic().wind);
+  m_task.route_update_polar(Calculated().wind);
   SetCalculated().glide_polar_reach = m_task.get_reach_polar();
 
   TerrainWarning();

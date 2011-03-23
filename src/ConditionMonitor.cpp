@@ -136,7 +136,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    wind = cmp.Basic().wind;
+    wind = cmp.Calculated().wind;
 
     if (!cmp.Calculated().flight.Flying) {
       last_wind = wind;

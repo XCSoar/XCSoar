@@ -44,7 +44,10 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
   TCHAR sTmp[12];
   static SIZE tsize = { 0, 0 };
 
-  const SpeedVector wind = Basic().wind;
+  if (!Calculated().wind_available)
+    return;
+
+  const SpeedVector wind = Calculated().wind;
 
   if (wind.norm < fixed_one)
     // JMW don't bother drawing it if not significant

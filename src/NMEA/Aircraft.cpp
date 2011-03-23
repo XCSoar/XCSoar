@@ -53,7 +53,7 @@ ToAircraftState(const NMEA_INFO &info, const DERIVED_INFO &calculated)
   aircraft.Location = info.Location;
   aircraft.TrackBearing = info.TrackBearing;
   aircraft.Gload = info.acceleration.Gload;
-  aircraft.wind = info.wind;
+  aircraft.wind = calculated.wind;
 
   return aircraft;
 }

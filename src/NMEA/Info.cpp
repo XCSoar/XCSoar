@@ -116,7 +116,6 @@ NMEA_INFO::reset()
   // XXX MacCready, Ballast, Bugs
 
   ExternalWindAvailable.clear();
-  WindAvailable.clear();
 
   TemperatureAvailable = false;
   HumidityAvailable = false;
@@ -167,7 +166,6 @@ NMEA_INFO::expire()
   TotalEnergyVarioAvailable.expire(Time, fixed(5));
   NettoVarioAvailable.expire(Time, fixed(5));
   ExternalWindAvailable.expire(Time, fixed(600));
-  WindAvailable.expire(Time, fixed(600));
   engine_noise_level_available.expire(Time, fixed(30));
     SupplyBatteryVoltageAvailable.expire(Time, fixed(300));
   flarm.Refresh(Time);

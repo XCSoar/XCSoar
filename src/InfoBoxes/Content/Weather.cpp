@@ -125,7 +125,7 @@ InfoBoxContentWind::PnlEditOnTabPreShow(TabBarControl::EventType EventType)
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), unKiloMeterPerHour)));
     df.SetUnits(Units::GetSpeedName());
-    df.Set(Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
+    df.Set(Units::ToUserWindSpeed(CommonInterface::Calculated().wind.norm));
     wp->RefreshDisplay();
   }
 
@@ -133,7 +133,7 @@ InfoBoxContentWind::PnlEditOnTabPreShow(TabBarControl::EventType EventType)
   if (wp) {
     wp->set_enabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.Set(XCSoarInterface::Basic().wind.bearing.value_degrees());
+    df.Set(CommonInterface::Calculated().wind.bearing.value_degrees());
     wp->RefreshDisplay();
   }
 
@@ -289,31 +289,31 @@ InfoBoxContentWind::GetDialogContent() {
 void
 InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
 {
-  const NMEA_INFO &info = CommonInterface::Basic();
-  if (!info.WindAvailable) {
+  const DERIVED_INFO &info = CommonInterface::Calculated();
+  if (!info.wind_available) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   SetValueFromFixed(infobox, _T("%2.0f"),
-                    Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
+                    Units::ToUserWindSpeed(info.wind.norm));
 
   // Set Unit
   infobox.SetValueUnit(Units::Current.WindSpeedUnit);
 
   // Set Comment
-  infobox.SetComment(XCSoarInterface::Basic().wind.bearing, _T("T"));
+  infobox.SetComment(info.wind.bearing, _T("T"));
 }
 
 void
 InfoBoxContentWindBearing::Update(InfoBoxWindow &infobox)
 {
-  const NMEA_INFO &info = CommonInterface::Basic();
-  if (!info.WindAvailable) {
+  const DERIVED_INFO &info = CommonInterface::Calculated();
+  if (!info.wind_available) {
     infobox.SetInvalid();
     return;
   }
 
-  infobox.SetValue(XCSoarInterface::Basic().wind.bearing, _T("T"));
+  infobox.SetValue(info.wind.bearing, _T("T"));
 }

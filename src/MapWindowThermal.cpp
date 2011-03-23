@@ -40,7 +40,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
   // draw thermal at location it would be at the glider's height
 
   const THERMAL_LOCATOR_INFO &thermal_locator = Calculated().thermal_locator;
-  const SpeedVector &wind = Basic().wind;
+  const SpeedVector &wind = Calculated().wind;
 
   for (unsigned i = 0; i < THERMAL_LOCATOR_INFO::MAX_SOURCES; i++) {
     // trivial/bad thermal, don't draw it

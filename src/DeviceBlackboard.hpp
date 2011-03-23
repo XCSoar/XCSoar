@@ -106,7 +106,6 @@ private:
   void NavAltitude();
   void Heading();
   void Dynamics();
-  void Wind();
   void EnergyHeight();
   void TurnRate();
   void Vario();

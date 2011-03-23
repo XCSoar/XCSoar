@@ -129,6 +129,17 @@ struct DERIVED_INFO:
 
   SpeedVector estimated_wind;   /**< Wind speed, direction */
 
+  /**
+   * Is the wind available?
+   */
+  Validity wind_available;
+
+  /**
+   * The effective wind vector; depending on the settings, this is
+   * either ExternalWind, calculated wind or manual wind.
+   */
+  SpeedVector wind;
+
   fixed AutoZoomDistance; /**< Distance to zoom to for autozoom */
 
   fixed TimeSunset; /**< Local time of sunset */

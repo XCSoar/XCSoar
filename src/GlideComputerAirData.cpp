@@ -113,12 +113,13 @@ GlideComputerAirData::ProcessVertical()
 
   Turning();
   Wind();
+  SelectWind();
   Airspeed();
 
   thermallocator.Process(calculated.Circling,
                          basic.Time, basic.Location,
                          basic.NettoVario,
-                         basic.wind, calculated.thermal_locator);
+                         calculated.wind, calculated.thermal_locator);
 
   CuSonde::updateMeasurements(basic, calculated);
   LastThermalStats();
@@ -171,6 +172,40 @@ GlideComputerAirData::Wind()
 }
 
 void
+GlideComputerAirData::SelectWind()
+{
+  const NMEA_INFO &basic = Basic();
+  DERIVED_INFO &calculated = SetCalculated();
+
+  if (basic.ExternalWindAvailable && SettingsComputer().ExternalWind) {
+    // external wind available
+    calculated.wind = basic.ExternalWind;
+    calculated.wind_available = basic.ExternalWindAvailable;
+
+  } else if (SettingsComputer().ManualWindAvailable && SettingsComputer().AutoWindMode == 0) {
+    // manual wind only if available and desired
+    calculated.wind = SettingsComputer().ManualWind;
+    calculated.wind_available.update(basic.Time);
+
+  } else if (Calculated().estimated_wind_available.modified(SettingsComputer().ManualWindAvailable)
+             && SettingsComputer().AutoWindMode) {
+    // auto wind when available and newer than manual wind
+    calculated.wind = Calculated().estimated_wind;
+    calculated.wind_available = Calculated().estimated_wind_available;
+    XCSoarInterface::SetSettingsComputer().ManualWindAvailable.clear(); // unset manual wind
+
+  } else if (SettingsComputer().ManualWindAvailable
+             && SettingsComputer().AutoWindMode) {
+    // manual wind overrides auto wind if available
+    calculated.wind = SettingsComputer().ManualWind;
+    calculated.wind_available = SettingsComputer().ManualWindAvailable;
+
+  } else
+   // no wind available
+   calculated.wind_available.clear();
+}
+
+void
 GlideComputerAirData::SetWindEstimate(fixed wind_speed, Angle wind_bearing,
                                       const int quality)
 {
@@ -184,17 +219,17 @@ GlideComputerAirData::Airspeed()
 {
   const NMEA_INFO &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
-  const SpeedVector wind = basic.wind;
 
   fixed TrueAirspeedEstimated = fixed_zero;
 
   if (!basic.AirspeedAvailable) {
 
-    if (!basic.WindAvailable) {
+    if (!calculated.wind_available) {
       calculated.AirspeedAvailable.clear();
       return;
     }
 
+    const SpeedVector wind = calculated.wind;
     if (positive(basic.GroundSpeed) || wind.is_non_zero()) {
       fixed x0 = basic.TrackBearing.fastsine() * basic.GroundSpeed;
       fixed y0 = basic.TrackBearing.fastcosine() * basic.GroundSpeed;
@@ -866,7 +901,7 @@ GlideComputerAirData::ThermalSources()
       !positive(calculated.LastThermalAverage))
     return;
 
-  if (Basic().wind.norm/calculated.LastThermalAverage> fixed(10.0)) {
+  if (calculated.wind.norm / calculated.LastThermalAverage > fixed(10.0)) {
     // thermal strength is so weak compared to wind that source estimate
     // is unlikely to be reliable, so don't calculate or remember it
     return;
@@ -877,7 +912,7 @@ GlideComputerAirData::ThermalSources()
   EstimateThermalBase(thermal_locator.estimate_location,
                       Basic().NavAltitude,
                       calculated.LastThermalAverage,
-                      Basic().wind,
+                      calculated.wind,
                       ground_location,
                       ground_altitude);
 

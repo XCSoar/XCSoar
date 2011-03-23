@@ -448,7 +448,7 @@ public:
       return 0;
 
     int quality;
-    const SpeedVector wind = optimises(quality, basic.wind,
+    const SpeedVector wind = optimises(quality, derived.wind,
                                        derived.Circling);
     if (quality) {
       zzwindspeed = wind.norm;

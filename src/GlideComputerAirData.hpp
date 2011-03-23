@@ -81,6 +81,12 @@ private:
   void LD();
   void CruiseLD();
   void Wind();
+
+  /**
+   * Choose a wind from: user input; external device; calculated.
+   */
+  void SelectWind();
+
   void TerrainHeight();
   void FlightState(const GlidePolar& glide_polar);
   void TakeoffLanding();

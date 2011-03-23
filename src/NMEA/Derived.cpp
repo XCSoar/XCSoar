@@ -46,6 +46,7 @@ DERIVED_INFO::expire(fixed Time)
 {
   /* the estimated wind remains valid for an hour */
   estimated_wind_available.expire(Time, fixed(3600));
+  wind_available.expire(Time, fixed(600));
   /* the calculated airspeed expires after 5 seconds */
   AirspeedAvailable.expire(Time, fixed(5));
 }
@@ -66,6 +67,7 @@ DERIVED_INFO::ResetFlight(bool full)
 
   AirspeedAvailable.clear();
   estimated_wind_available.clear();
+  wind_available.clear();
 
   flight.flying_state_reset();
 

@@ -127,7 +127,6 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.TotalEnergyVarioAvailable.clear();
   basic.NettoVarioAvailable.clear();
   basic.ExternalWindAvailable.clear();
-  basic.WindAvailable.clear();
   basic.gps.real = false;
   basic.gps.Replay = true;
   basic.gps.Simulator = false;
@@ -381,7 +380,6 @@ DeviceBlackboard::tick(const GlidePolar& glide_polar)
   SetSystemTime();
 
   // calculate fast data to complete aircraft state
-  Wind();
   Heading();
   NavAltitude();
   AutoQNH();
@@ -452,7 +450,7 @@ void
 DeviceBlackboard::Heading()
 {
   NMEA_INFO &basic = SetBasic();
-  const SpeedVector wind = basic.wind;
+  const SpeedVector wind = Calculated().wind;
 
   if ((positive(basic.GroundSpeed) || wind.is_non_zero()) && Calculated().flight.Flying) {
     fixed x0 = basic.TrackBearing.fastsine() * basic.GroundSpeed;
@@ -492,40 +490,6 @@ DeviceBlackboard::Vario()
     : basic.GPSVario;
 }
 
-
-void
-DeviceBlackboard::Wind()
-{
-  NMEA_INFO &basic = SetBasic();
-
-  if (basic.ExternalWindAvailable && SettingsComputer().ExternalWind) {
-    // external wind available
-    basic.wind = basic.ExternalWind;
-    basic.WindAvailable = basic.ExternalWindAvailable;
-
-  } else if (SettingsComputer().ManualWindAvailable && SettingsComputer().AutoWindMode == 0) {
-    // manual wind only if available and desired
-    basic.wind = SettingsComputer().ManualWind;
-    basic.WindAvailable.update(basic.Time);
-
-  } else if (Calculated().estimated_wind_available.modified(SettingsComputer().ManualWindAvailable)
-             && SettingsComputer().AutoWindMode) {
-    // auto wind when available and newer than manual wind
-    basic.wind = Calculated().estimated_wind;
-    basic.WindAvailable = Calculated().estimated_wind_available;
-    XCSoarInterface::SetSettingsComputer().ManualWindAvailable.clear(); // unset manual wind
-
-  } else if (SettingsComputer().ManualWindAvailable
-             && SettingsComputer().AutoWindMode) {
-    // manual wind overrides auto wind if available
-    basic.wind = SettingsComputer().ManualWind;
-    basic.WindAvailable = SettingsComputer().ManualWindAvailable;
-
-  } else
-   // no wind available
-   basic.WindAvailable.clear();
-}
-
 /**
  * Calculates the turn rate
  */
@@ -561,7 +525,7 @@ DeviceBlackboard::Dynamics()
   NMEA_INFO &basic = SetBasic();
 
   if (Calculated().flight.Flying &&
-      (positive(basic.GroundSpeed) || basic.wind.is_non_zero())) {
+      (positive(basic.GroundSpeed) || Calculated().wind.is_non_zero())) {
 
     // calculate turn rate in wind coordinates
     const fixed dT = basic.Time - LastBasic().Time;
