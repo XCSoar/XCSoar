@@ -100,6 +100,19 @@ public:
     return *get_data_at(x, y);
   }
 
+protected:
+  /**
+   * Special optimized case for ScanLine(), for NorthUp rendering.
+   */
+  void ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
+                          short *buffer, unsigned size,
+                          bool interpolate) const;
+
+
+public:
+  void ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
+                short *buffer, unsigned size, bool interpolate) const;
+
   gcc_pure
   short get_max() const;
 };

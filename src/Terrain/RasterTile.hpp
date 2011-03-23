@@ -36,6 +36,7 @@ Copyright_License {
 #define RASTER_SLOPE_FACT 12
 
 struct RasterLocation;
+struct GridLocation;
 
 class RasterTile : private NonCopyable {
   struct MetaData {
@@ -144,6 +145,13 @@ public:
   }
 
   bool VisibilityChanged(int view_x, int view_y, unsigned view_radius);
+
+  void ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
+                short *dest, unsigned size, bool interpolate) const {
+    buffer.ScanLine(ax - (xstart << 8), ay - (ystart << 8),
+                    bx - (xstart << 8), by - (ystart << 8),
+                    dest, size, interpolate);
+  }
 };
 
 class RasterTileCache : private NonCopyable {
@@ -170,6 +178,7 @@ class RasterTileCache : private NonCopyable {
    */
   static const unsigned OVERVIEW_BITS = 4;
 
+public:
   /**
    * The fixed-point fractional part of sub-pixel coordinates.
    *
@@ -178,6 +187,7 @@ class RasterTileCache : private NonCopyable {
    */
   static const unsigned SUBPIXEL_BITS = 8;
 
+protected:
   friend struct RTDistanceSort;
 
   struct MarkerSegmentInfo {
@@ -245,6 +255,10 @@ public:
     Reset();
   }
 
+protected:
+  void ScanTileLine(GridLocation start, GridLocation end,
+                    short *buffer, unsigned size, bool interpolate) const;
+
 public:
   /**
    * Determine the non-interpolated height at the specified pixel
@@ -266,6 +280,16 @@ public:
   gcc_pure
   short GetInterpolatedHeight(unsigned int lx,
                               unsigned int ly) const;
+
+  /**
+   * Scan a straight line and fill the buffer with the specified
+   * number of samples along the line.
+   *
+   * @param start the sub-pixel start location
+   * @param end the sub-pixel end location
+   */
+  void ScanLine(const RasterLocation start, const RasterLocation end,
+                short *buffer, unsigned size, bool interpolate) const;
 
   bool FirstIntersection(int origin_x, int origin_y,
                          int destination_x, int destination_y,

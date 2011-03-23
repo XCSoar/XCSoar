@@ -64,33 +64,9 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
           (screen_height + quantisation_pixels - 1) / quantisation_pixels);
 
   for (unsigned y = 0; y < screen_height; y += quantisation_pixels) {
-    const FastRowRotation rotation =
-      projection.GetScreenAngleRotation(y - projection.GetScreenOrigin().y);
-
     short *p = data.begin() + y * width / quantisation_pixels;
-
-    for (unsigned x = 0; x < screen_width; x += quantisation_pixels) {
-#ifndef SLOW_TERRAIN_STUFF
-      const FastRowRotation::Pair r =
-        rotation.Rotate(x - projection.GetScreenOrigin().x);
-
-      GeoPoint gp;
-       gp.Latitude = projection.GetGeoLocation().Latitude
-         - projection.PixelsToAngle(r.second);
-       gp.Longitude = projection.GetGeoLocation().Longitude
-         + projection.PixelsToAngle(r.first)
-        * gp.Latitude.invfastcosine();
-#else
-      GeoPoint gp = projection.ScreenToGeo(x, y);
-#endif
-
-      short h = interpolate
-        ? map.GetInterpolatedHeight(gp)
-        : map.GetHeight(gp);
-
-      *p++ = h;
-    }
-
-    assert(p <= data.end());
+    map.ScanLine(projection.ScreenToGeo(0, y),
+                 projection.ScreenToGeo(screen_width, y),
+                 p, width, interpolate);
   }
 }

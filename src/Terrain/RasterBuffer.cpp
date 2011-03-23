@@ -76,6 +76,96 @@ RasterBuffer::get_interpolated(unsigned lx, unsigned ly) const
   return get_interpolated(lx, ly, ix, iy);
 }
 
+void
+RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
+                                 short *buffer, unsigned size,
+                                 bool interpolate) const
+{
+  assert(ax < get_width() << 8);
+  assert(bx < get_width() << 8);
+  assert(y < get_height() << 8);
+  assert(buffer != NULL);
+  assert(size > 0);
+
+  if (size == 1) {
+    *buffer = get(ax >> 8, y >> 8);
+    return;
+  }
+
+  --size;
+  const int dx = bx - ax;
+  if (interpolate && (unsigned)abs(dx) < (size << 8u)) {
+    /* interpolate */
+
+    unsigned cy = y;
+    const unsigned int iy = CombinedDivAndMod(cy);
+
+    for (int i = 0; (unsigned)i <= size; ++i) {
+      unsigned cx = ax + (i * dx) / (int)size;
+      const unsigned int ix = CombinedDivAndMod(cx);
+
+      *buffer++ = get_interpolated(cx, cy, ix, iy);
+    }
+  } else {
+    /* no interpolation needed */
+
+    const short *src = get_data_at(0, y >> 8);
+
+    for (int i = 0; (unsigned)i <= size; ++i) {
+      unsigned cx = ax + (i * dx) / (int)size;
+
+      *buffer++ = src[cx >> 8];
+    }
+  }
+}
+
+void
+RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
+                       short *buffer, unsigned size, bool interpolate) const
+{
+  assert(ax < get_width() << 8);
+  assert(ay < get_height() << 8);
+  assert(bx < get_width() << 8);
+  assert(by < get_height() << 8);
+  assert(buffer != NULL);
+  assert(size > 0);
+
+  if (ay == by) {
+    ScanHorizontalLine(ax, bx, ay, buffer, size, interpolate);
+    return;
+  }
+
+  if (size == 1) {
+    *buffer = get(ax >> 8, ay >> 8);
+    return;
+  }
+
+  --size;
+  const int dx = bx - ax, dy = by - ay;
+  if (interpolate && (unsigned)(abs(dx) + abs(dy)) < (size << 8u)) {
+    /* interpolate */
+
+    for (int i = 0; (unsigned)i <= size; ++i) {
+      unsigned cx = ax + (i * dx) / (int)size;
+      unsigned cy = ay + (i * dy) / (int)size;
+
+      const unsigned int ix = CombinedDivAndMod(cx);
+      const unsigned int iy = CombinedDivAndMod(cy);
+
+      *buffer++ = get_interpolated(cx, cy, ix, iy);
+    }
+  } else {
+    /* no interpolation needed */
+
+    for (int i = 0; (unsigned)i <= size; ++i) {
+      unsigned cx = ax + (i * dx) / (int)size;
+      unsigned cy = ay + (i * dy) / (int)size;
+
+      *buffer++ = get(cx >> 8, cy >> 8);
+    }
+  }
+}
+
 short
 RasterBuffer::get_max() const
 {

@@ -90,6 +90,13 @@ public:
   gcc_pure
   short GetInterpolatedHeight(const GeoPoint &location) const;
 
+  /**
+   * Scan a straight line and fill the buffer with the specified
+   * number of samples along the line.
+   */
+  void ScanLine(const GeoPoint &start, const GeoPoint &end,
+                short *buffer, unsigned size, bool interpolate) const;
+
   gcc_pure
   bool FirstIntersection(const GeoPoint &origin, const short h_origin,
                          const GeoPoint &destination, const short h_destination,
