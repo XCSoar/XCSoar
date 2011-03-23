@@ -111,6 +111,7 @@ GlideComputerAirData::ProcessVertical()
   const NMEA_INFO &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
 
+  TurnRate();
   Turning();
   Wind();
   SelectWind();
@@ -730,6 +731,35 @@ GlideComputerAirData::PercentCircling(const fixed Rate)
 }
 
 /**
+ * Calculates the turn rate
+ */
+void
+GlideComputerAirData::TurnRate()
+{
+  const NMEA_INFO &basic = Basic();
+  DERIVED_INFO &calculated = SetCalculated();
+
+  // Calculate time passed since last calculation
+  const fixed dT = basic.Time - LastBasic().Time;
+
+  // Calculate turn rate
+
+  if (!Calculated().flight.Flying) {
+    calculated.TurnRate = fixed_zero;
+    calculated.TurnRateWind = fixed_zero;
+    return;
+  }
+  if (!positive(dT)) {
+    return;
+  }
+
+  calculated.TurnRate =
+    (basic.TrackBearing - LastBasic().TrackBearing).as_delta().value_degrees() / dT;
+  calculated.TurnRateWind =
+    (basic.Heading - LastBasic().Heading).as_delta().value_degrees() / dT;
+}
+
+/**
  * Calculates the turn rate and the derived features.
  * Determines the current flight mode (cruise/circling).
  */
@@ -744,7 +774,7 @@ GlideComputerAirData::Turning()
 
   // JMW limit rate to 50 deg per second otherwise a big spike
   // will cause spurious lock on circling for a long time
-  fixed Rate = max(fixed(-50), min(fixed(50), Basic().TurnRate));
+  fixed Rate = max(fixed(-50), min(fixed(50), calculated.TurnRate));
 
   // average rate, to detect essing
   // TODO: use rotary buffer

@@ -426,7 +426,7 @@ public:
     }
 
     // temporary manoeuvering, dont append this point
-    if ((fabs(basic.TurnRate) > fixed(20)) ||
+    if ((fabs(derived.TurnRate) > fixed(20)) ||
         (fabs(basic.acceleration.Gload - fixed_one) > fixed(0.3))) {
 
       blackout(basic.Time);

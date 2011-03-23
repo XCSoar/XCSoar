@@ -112,6 +112,7 @@ private:
   void WorkingBand();
   void ThermalBand();
   void PercentCircling(const fixed Rate);
+  void TurnRate();
   void Turning();
   void ProcessSun();
   GPSClock airspace_clock;

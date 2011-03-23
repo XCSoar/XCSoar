@@ -77,7 +77,6 @@ NMEA_INFO::reset()
 
   TrackBearing = Heading = Angle::native(fixed_zero);
   TrackBearingAvailable.clear();
-  TurnRateWind = TurnRate = fixed_zero;
 
   GroundSpeedAvailable.clear();
   AirspeedAvailable.clear();

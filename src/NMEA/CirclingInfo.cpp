@@ -34,6 +34,8 @@ CIRCLING_INFO::Clear()
 {
   ClearPartial();
 
+  TurnRate = TurnRateWind = fixed_zero;
+
   timeCruising = fixed_zero;
   timeCircling = fixed_zero;
   TotalHeightClimb = fixed_zero;

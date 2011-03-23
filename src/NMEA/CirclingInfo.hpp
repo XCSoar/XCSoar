@@ -44,6 +44,11 @@ typedef enum {
  */
 struct CIRCLING_INFO
 {
+  /** Turn rate based on track */
+  fixed TurnRate;
+
+  /** Turn rate based on heading (including wind) */
+  fixed TurnRateWind;
 
   /** Turn rate after low pass filter */
   fixed SmoothedTurnRate;

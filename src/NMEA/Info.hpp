@@ -187,12 +187,6 @@ struct NMEA_INFO {
   /** Bearing including wind factor */
   Angle Heading;
 
-  /** Turn rate based on heading (including wind) */
-  fixed TurnRateWind;
-
-  /** Turn rate based on track */
-  fixed TurnRate;
-
   //############
   //   Speeds
   //############

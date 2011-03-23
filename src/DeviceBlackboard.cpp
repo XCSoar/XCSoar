@@ -386,7 +386,6 @@ DeviceBlackboard::tick(const GlidePolar& glide_polar)
 
   tick_fast(glide_polar);
 
-  TurnRate();
   if (Basic().Time!= LastBasic().Time) {
 
     if (Basic().Time > LastBasic().Time) {
@@ -491,30 +490,6 @@ DeviceBlackboard::Vario()
 }
 
 /**
- * Calculates the turn rate
- */
-void
-DeviceBlackboard::TurnRate()
-{
-  NMEA_INFO &basic = SetBasic();
-  // Calculate time passed since last calculation
-  const fixed dT = basic.Time - LastBasic().Time;
-
-  // Calculate turn rate
-
-  if (!Calculated().flight.Flying) {
-    basic.TurnRate = fixed_zero;
-    return;
-  }
-  if (!positive(dT)) {
-    return;
-  }
-
-  basic.TurnRate =
-    (basic.TrackBearing - LastBasic().TrackBearing).as_delta().value_degrees() / dT;
-}
-
-/**
  * Calculates the turn rate of the heading,
  * the estimated bank angle and
  * the estimated pitch angle
@@ -527,17 +502,9 @@ DeviceBlackboard::Dynamics()
   if (Calculated().flight.Flying &&
       (positive(basic.GroundSpeed) || Calculated().wind.is_non_zero())) {
 
-    // calculate turn rate in wind coordinates
-    const fixed dT = basic.Time - LastBasic().Time;
-
-    if (positive(dT)) {
-      basic.TurnRateWind =
-        (basic.Heading - LastBasic().Heading).as_delta().value_degrees() / dT;
-    }
-
     // estimate bank angle (assuming balanced turn)
     if (Calculated().AirspeedAvailable) {
-      const fixed angle = atan(Angle::degrees(basic.TurnRateWind
+      const fixed angle = atan(Angle::degrees(Calculated().TurnRateWind
           * Calculated().TrueAirspeed * fixed_inv_g).value_radians());
 
       basic.acceleration.BankAngle = Angle::radians(angle);
@@ -559,7 +526,6 @@ DeviceBlackboard::Dynamics()
   } else {
     basic.acceleration.BankAngle = Angle::native(fixed_zero);
     basic.acceleration.PitchAngle = Angle::native(fixed_zero);
-    basic.TurnRateWind = fixed_zero;
 
     if (!basic.acceleration.Available)
       basic.acceleration.Gload = fixed_one;

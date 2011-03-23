@@ -107,7 +107,6 @@ private:
   void Heading();
   void Dynamics();
   void EnergyHeight();
-  void TurnRate();
   void Vario();
   void NettoVario(const GlidePolar& glide_polar);
   void AutoQNH();
