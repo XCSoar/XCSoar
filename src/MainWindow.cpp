@@ -330,6 +330,11 @@ bool MainWindow::on_destroy(void) {
 }
 
 bool MainWindow::on_close() {
+  if (!IsRunning())
+    /* no shutdown dialog if XCSoar hasn't completed initialization
+       yet (e.g. if we are in the simulator prompt) */
+    return SingleWindow::on_close();
+
   if (XCSoarInterface::CheckShutdown()) {
     XCSoarInterface::Shutdown();
   }

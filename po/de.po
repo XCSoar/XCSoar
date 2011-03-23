@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-11 07:43+0100\n"
-"PO-Revision-Date: 2011-03-13 18:23+0100\n"
+"POT-Creation-Date: 2011-03-19 09:36+0100\n"
+"PO-Revision-Date: 2011-03-16 20:11+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-07 11:44+0000\n"
-"X-Generator: Launchpad (build 12515)\n"
+"X-Launchpad-Export-Date: 2011-03-18 08:24+0000\n"
+"X-Generator: Launchpad (build 12617)\n"
 
 #: src/Airspace/AirspaceGlue.cpp:40
 msgid "Loading Airspace File..."
@@ -2237,7 +2237,7 @@ msgid "Quit program?"
 msgstr "Programm beenden?"
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:111 src/Components.cpp:341
+#: src/UtilsSettings.cpp:111 src/Components.cpp:355
 msgid "Loading Terrain File..."
 msgstr "Lade Geländedatei..."
 
@@ -2266,17 +2266,17 @@ msgstr ""
 msgid "Warning"
 msgstr "Warnung"
 
-#: src/Components.cpp:265
+#: src/Components.cpp:279
 msgid "Initialising"
 msgstr "Initialisierung läuft"
 
 #. Scan for weather forecast
-#: src/Components.cpp:359
+#: src/Components.cpp:373
 msgid "Scanning weather forecast"
 msgstr "Suche Wetterprognose"
 
 #. Start the device thread(s)
-#: src/Components.cpp:385
+#: src/Components.cpp:399
 msgid "Starting devices"
 msgstr "Starte Geräte"
 
@@ -2287,27 +2287,27 @@ msgstr "Starte Geräte"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Components.cpp:396
+#: src/Components.cpp:410
 msgid "Initialising display"
 msgstr "Initialisiere Anzeige"
 
 #. Show progress dialog
-#: src/Components.cpp:463 src/Components.cpp:489 src/Components.cpp:546
+#: src/Components.cpp:477 src/Components.cpp:503 src/Components.cpp:560
 msgid "Shutdown, please wait..."
 msgstr "Abstellvorgang, bitte warten..."
 
 #. Stop logger and save igc file
-#: src/Components.cpp:473
+#: src/Components.cpp:487
 msgid "Shutdown, saving logs..."
 msgstr "Abschalten, speichere Logs..."
 
 #. Save settings to profile
-#: src/Components.cpp:477
+#: src/Components.cpp:491
 msgid "Shutdown, saving profile..."
 msgstr "Abstellvorgang, speichere Profil..."
 
 #. Save the task for the next time
-#: src/Components.cpp:532
+#: src/Components.cpp:546
 msgid "Shutdown, saving task..."
 msgstr "Abstellvorgang, speichere Aufgabe..."
 
@@ -2365,7 +2365,7 @@ msgstr "Bestätige für den ganzen Tag?"
 msgid "No Match!"
 msgstr "Keinen Eintrag gefunden!"
 
-#: src/Dialogs/dlgAirspaceWarnings.cpp:215
+#: src/Dialogs/dlgAirspaceWarnings.cpp:216
 msgid "No Warnings"
 msgstr "Keine Warnungen"
 
@@ -2613,12 +2613,11 @@ msgstr "Voreinstellung"
 
 #: src/Dialogs/dlgConfiguration.cpp:792
 msgid "Fill all"
-msgstr ""
+msgstr "Ganz ausfüllen"
 
 #: src/Dialogs/dlgConfiguration.cpp:793
-#, fuzzy
 msgid "Fill padding"
-msgstr "Wölbklappe in Landestellung"
+msgstr "Rahmen"
 
 #: src/Dialogs/dlgConfiguration.cpp:811
 msgid "ON/Fixed"
@@ -2973,12 +2972,12 @@ msgstr "MSL"
 msgid "Altitude"
 msgstr "Höhe"
 
-#: src/Dialogs/dlgConfiguration.cpp:2347
+#: src/Dialogs/dlgConfiguration.cpp:2349
 #: src/Dialogs/dlgConfigInfoboxes.cpp:202 src/Dialogs/dlgVoice.cpp:109
 msgid "Changes to configuration saved."
 msgstr "Änderungen an der Konfiguration gespeichert."
 
-#: src/Dialogs/dlgConfiguration.cpp:2350 src/Dialogs/dlgConfigFonts.cpp:322
+#: src/Dialogs/dlgConfiguration.cpp:2352 src/Dialogs/dlgConfigFonts.cpp:322
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
 "Änderungen an der Konfiguration gespeichert. XCSoar neustarten um Änderungen "
@@ -3929,9 +3928,8 @@ msgid "Auto wind"
 msgstr "Windberech."
 
 #: Data/Dialogs/dlgConfiguration.xml:86 Data/Dialogs/dlgConfiguration_L.xml:86
-#, fuzzy
 msgid "Specifies the mode for filling the airspace area."
-msgstr "Die Datei mit den topologischen Angaben."
+msgstr "Die Art wie das Areal eines Luftraums ausgefüllt wird."
 
 #: Data/Dialogs/dlgStatus.xml:20 Data/Dialogs/dlgStatusSystem.xml:4
 msgid "GPS lock"
@@ -4300,9 +4298,8 @@ msgid "Height"
 msgstr "Höhe"
 
 #: Data/Dialogs/dlgConfiguration.xml:86 Data/Dialogs/dlgConfiguration_L.xml:86
-#, fuzzy
 msgid "Airspace fill mode*"
-msgstr "Luftraumanzeige"
+msgstr "Luftraum Füllmodus*"
 
 #: Data/Dialogs/dlgConfiguration.xml:457
 #: Data/Dialogs/dlgConfiguration_L.xml:456
@@ -4766,8 +4763,9 @@ msgstr ""
 "[DURCHSCHNITT]: Stufe HOCH, wenn das Bruttosteigen höher als das mittlere "
 "Bruttosteigen ist."
 
-#: Data/Dialogs/dlgStartup.xml:10 Data/Dialogs/dlgStartup_L.xml:10
-#: Data/Input/default.xci:948
+#: Data/Dialogs/dlgSimulatorPrompt.xml:8
+#: Data/Dialogs/dlgSimulatorPrompt_L.xml:8 Data/Dialogs/dlgStartup.xml:10
+#: Data/Dialogs/dlgStartup_L.xml:10 Data/Input/default.xci:948
 msgid "Quit"
 msgstr "Beenden"
 
@@ -6996,6 +6994,13 @@ msgstr "Unter dem Gleitpfad"
 msgid "Weather"
 msgstr "Wetter"
 
+#: Data/Input/default.xci:795
+#, fuzzy
+msgid ""
+"Waypoint\n"
+"Details"
+msgstr "Wegpunktdetails*"
+
 #: Data/Input/default.xci:532
 msgid "Dropped marker"
 msgstr "Marke gesetzt"
@@ -7145,7 +7150,7 @@ msgstr ""
 "Marke\n"
 "Setzen"
 
-#: Data/Input/default.xci:232
+#: Data/Input/default.xci:232 Data/Input/default.xci:803
 msgid ""
 "Nearest\n"
 "Waypoint"

@@ -21,33 +21,16 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPATIBILITY_PATH_H
-#define XCSOAR_COMPATIBILITY_PATH_H
+#ifndef XCSOAR_SIMULATOR_PROMPT_HPP
+#define XCSOAR_SIMULATOR_PROMPT_HPP
 
-#if defined(WIN32) && !defined(__WINE__)
+enum SimulatorPromptResult {
+  SPR_QUIT,
+  SPR_FLY,
+  SPR_SIMULATOR,
+};
 
-#define DIR_SEPARATOR '\\'
-#define DIR_SEPARATOR_S "\\"
-
-#else /* !_WIN32 */
-
-#define DIR_SEPARATOR '/'
-#define DIR_SEPARATOR_S "/"
-
-#endif /* !_WIN32 */
-
-static inline bool
-is_dir_separator(TCHAR ch)
-{
-#ifdef WIN32
-#if defined(__WINE__) || defined(_WIN32_WCE)
-  return ch == _T('/') || ch == _T('\\');
-#else
-  return ch == _T('\\');
-#endif
-#else
-  return ch == _T('/');
-#endif
-}
+SimulatorPromptResult
+dlgSimulatorPromptShowModal();
 
 #endif

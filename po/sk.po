@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-11 07:43+0100\n"
-"PO-Revision-Date: 2011-01-19 22:48+0000\n"
-"Last-Translator: Max Kellermann <max@duempel.org>\n"
+"POT-Creation-Date: 2011-03-19 09:36+0100\n"
+"PO-Revision-Date: 2011-03-18 22:10+0100\n"
+"Last-Translator: Roman Stoklasa <rstoki@gmail.com>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-13 22:56+0000\n"
-"X-Generator: Launchpad (build 12351)\n"
+"X-Launchpad-Export-Date: 2011-03-18 08:24+0000\n"
+"X-Generator: Launchpad (build 12617)\n"
 
 #: src/Airspace/AirspaceGlue.cpp:40
 msgid "Loading Airspace File..."
@@ -68,7 +68,7 @@ msgstr "Porušenie pravidiel odletu"
 
 #: src/Logger/Logger.cpp:133
 msgid "Start Logger"
-msgstr "Zapnúť Logger"
+msgstr "Zapnúť logger"
 
 #: src/Logger/Logger.cpp:140
 msgid "Logger inactive, insufficient storage!"
@@ -76,11 +76,11 @@ msgstr "Logger neaktívny, nedostatok miesta!"
 
 #: src/Logger/Logger.cpp:141
 msgid "Logger Error"
-msgstr "Chyba Loggeru"
+msgstr "Chyba loggeru"
 
 #: src/Logger/Logger.cpp:170 src/Logger/Logger.cpp:171
 msgid "Stop Logger"
-msgstr "Ukončiť Logger"
+msgstr "Ukončiť logger"
 
 #: src/Logger/ExternalLogger.cpp:47
 msgid "Declare Task?"
@@ -96,7 +96,7 @@ msgid ""
 "Task NOT Declared!"
 msgstr ""
 "Vyskytla sa chyba,\n"
-"úloha NEdeklarovaná!"
+"úloha NEbola deklarovaná!"
 
 #: src/Logger/ExternalLogger.cpp:79
 msgid "No logger connected"
@@ -132,7 +132,7 @@ msgstr "Nahrávam otočné body..."
 
 #: src/Gauge/ThermalAssistantWindow.cpp:256
 msgid "Not Circling"
-msgstr "Nie v krúžení"
+msgstr "Nekrúži sa"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:251
 msgid "No Traffic"
@@ -153,19 +153,19 @@ msgstr "Predošlý otočný bod"
 
 #: src/ExpandMacros.cpp:144 src/ExpandMacros.cpp:164
 msgid "Furthest landpoint"
-msgstr "Najvzdialenejšia p. plocha"
+msgstr "Najvzdial. prist. plocha"
 
 #: src/ExpandMacros.cpp:145 src/ExpandMacros.cpp:165
 msgid "Next landpoint"
-msgstr "Daľšia p. plocha"
+msgstr "Daľšia prist. plocha"
 
 #: src/ExpandMacros.cpp:154 src/ExpandMacros.cpp:174
 msgid "Closest landpoint"
-msgstr "Najbližšia p. plocha"
+msgstr "Najbližšia prist. plocha"
 
 #: src/ExpandMacros.cpp:155 src/ExpandMacros.cpp:175
 msgid "Previous landpoint"
-msgstr "Predošlá p. plocha"
+msgstr "Predošlá prist. plocha"
 
 #: src/ExpandMacros.cpp:187
 msgid "Finish turnpoint"
@@ -188,7 +188,8 @@ msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
-"Pokračuj\n"
+"Postup\n"
+"v úlohe\n"
 "(manuálne)"
 
 #: src/ExpandMacros.cpp:226
@@ -196,7 +197,8 @@ msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
-"Pokračuj\n"
+"Postup\n"
+"v úlohe\n"
 "(automaticky)"
 
 #: src/ExpandMacros.cpp:231
@@ -204,8 +206,8 @@ msgid ""
 "Abort\n"
 "Start"
 msgstr ""
-"Zruš\n"
-"Štart"
+"Dektivuj\n"
+"pásku (štart)"
 
 #: src/ExpandMacros.cpp:236
 msgid ""
@@ -213,7 +215,7 @@ msgid ""
 "Start"
 msgstr ""
 "Aktivuj\n"
-"Štart"
+"pásku (štart)"
 
 #: src/ExpandMacros.cpp:241
 msgid ""
@@ -221,7 +223,7 @@ msgid ""
 "Turn"
 msgstr ""
 "Zruš\n"
-"Otočenie"
+"otočenie"
 
 #: src/ExpandMacros.cpp:246
 msgid ""
@@ -229,7 +231,7 @@ msgid ""
 "Turn"
 msgstr ""
 "Aktivuj\n"
-"Otočenie"
+"otočenie"
 
 #: src/ExpandMacros.cpp:267 src/ExpandMacros.cpp:271
 msgid "Resume"
@@ -300,7 +302,7 @@ msgstr "Terén vypnutý"
 #: src/ExpandMacros.cpp:420 src/ExpandMacros.cpp:426 src/ExpandMacros.cpp:429
 #: src/ExpandMacros.cpp:453 src/ExpandMacros.cpp:506
 msgid "On"
-msgstr "Zapnuté"
+msgstr "Zapnúť"
 
 #: src/ExpandMacros.cpp:423 src/ExpandMacros.cpp:450
 #: src/Dialogs/dlgConfiguration.cpp:912 src/Dialogs/dlgWindSettings.cpp:100
@@ -314,7 +316,7 @@ msgstr "Automat."
 
 #: src/ExpandMacros.cpp:435
 msgid "MID"
-msgstr "STRED"
+msgstr "STREDNÉ"
 
 #: src/InfoBoxes/Content/Factory.cpp:59
 #, no-c-format
@@ -324,7 +326,7 @@ msgstr "Výška GPS"
 #: src/InfoBoxes/Content/Factory.cpp:60
 #, no-c-format
 msgid "H GPS"
-msgstr "V GPS"
+msgstr "GPS výška"
 
 #: src/InfoBoxes/Content/Factory.cpp:61
 #, no-c-format
@@ -345,7 +347,7 @@ msgstr "Výška AGL"
 #: src/InfoBoxes/Content/Factory.cpp:69
 #, no-c-format
 msgid "H AGL"
-msgstr "V AGL"
+msgstr "AGL výška"
 
 #: src/InfoBoxes/Content/Factory.cpp:70
 #, no-c-format
@@ -365,7 +367,7 @@ msgstr "Stupák za posledných 30 s."
 #: src/InfoBoxes/Content/Factory.cpp:78
 #, no-c-format
 msgid "TC 30s"
-msgstr "SS 30s"
+msgstr "Stúpanie 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:79
 #, no-c-format
@@ -401,7 +403,7 @@ msgstr "Okamžitá kĺzavosť"
 #: src/InfoBoxes/Content/Factory.cpp:96
 #, no-c-format
 msgid "L/D Inst"
-msgstr "Ok. kĺz"
+msgstr "Okamž. kĺz."
 
 #: src/InfoBoxes/Content/Factory.cpp:97
 #, no-c-format
@@ -442,12 +444,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:113
 #, no-c-format
 msgid "Speed ground"
-msgstr "Rýchlosť voči zemi"
+msgstr "Pozemná rýchlosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:114
 #, no-c-format
 msgid "V Gnd"
-msgstr "R zem"
+msgstr "Pozem. rých."
 
 #: src/InfoBoxes/Content/Factory.cpp:115
 #, no-c-format
@@ -539,7 +541,7 @@ msgstr "Vzdialenosť k ďalšiemu"
 #: src/InfoBoxes/Content/Factory.cpp:159
 #, no-c-format
 msgid "WP Dist"
-msgstr "OB vzdial"
+msgstr "Vzdial. od OB"
 
 #: src/InfoBoxes/Content/Factory.cpp:160
 #, no-c-format
@@ -558,7 +560,7 @@ msgstr "Výškový rozdiel k ďalšiemu"
 #: src/InfoBoxes/Content/Factory.cpp:168
 #, no-c-format
 msgid "WP AltD"
-msgstr "OB vyskR"
+msgstr "Výšk.roz.OB"
 
 #: src/InfoBoxes/Content/Factory.cpp:169
 #, no-c-format
@@ -576,7 +578,7 @@ msgstr "Požadovaná výška k ďalšiemu"
 #: src/InfoBoxes/Content/Factory.cpp:177
 #, no-c-format
 msgid "WP AltR"
-msgstr "OB vyskP"
+msgstr "Pož.výš.OB"
 
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
@@ -707,7 +709,7 @@ msgstr "Výška terénu"
 #: src/InfoBoxes/Content/Factory.cpp:240
 #, no-c-format
 msgid "H GND"
-msgstr "V GND"
+msgstr "GND výška"
 
 #: src/InfoBoxes/Content/Factory.cpp:241
 #, no-c-format
@@ -794,7 +796,7 @@ msgstr "Rýchlosť vetra"
 #: src/InfoBoxes/Content/Factory.cpp:285
 #, no-c-format
 msgid "Wind V"
-msgstr "R vetra"
+msgstr "Rých. vetra"
 
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
@@ -805,9 +807,9 @@ msgid ""
 "enter cursor key saves the wind value as the initial value when XCSoar next "
 "starts."
 msgstr ""
-"Rýchlosť vetra odhadovaná XCSoarom. (Iba dotykový displej/PC) Manuálne "
-"nastavenie je možné stlačením klávesy hore/dole pre silu a vľavo/vpravo pre "
-"smer, ak je okno aktivované. Stlačenie klávesy enter uloží parametre vetra "
+"Rýchlosť vetra odhadovaná XCSoarom. Manuálne nastavenie je možné stlačením "
+"klávesy hore/dole pre silu a doľava/doprava pre smer, ak je okno aktivované "
+"(iba pre dotykový displej/PC). Stlačenie klávesy enter uloží parametre vetru "
 "ako počiatočné pre štart XCSoaru."
 
 #: src/InfoBoxes/Content/Factory.cpp:293
@@ -818,7 +820,7 @@ msgstr "Smer vetra"
 #: src/InfoBoxes/Content/Factory.cpp:294
 #, no-c-format
 msgid "Wind B"
-msgstr "S vetra"
+msgstr "Smer vetra"
 
 #: src/InfoBoxes/Content/Factory.cpp:295
 #, no-c-format
@@ -918,7 +920,7 @@ msgstr "Rýchlosť IAS"
 #: src/InfoBoxes/Content/Factory.cpp:348
 #, no-c-format
 msgid "V IAS"
-msgstr "R IAS"
+msgstr "IAS rýchl."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
@@ -933,7 +935,7 @@ msgstr "Výška tlaková"
 #: src/InfoBoxes/Content/Factory.cpp:357
 #, no-c-format
 msgid "H Baro"
-msgstr "V baro"
+msgstr "Baro výška"
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -952,7 +954,7 @@ msgstr "Rýchlosť MacCready"
 #: src/InfoBoxes/Content/Factory.cpp:366
 #, no-c-format
 msgid "V MC"
-msgstr "R MC"
+msgstr "MC rýchl."
 
 #: src/InfoBoxes/Content/Factory.cpp:367
 #, no-c-format
@@ -1080,7 +1082,7 @@ msgstr "Doba k cieľu"
 #: src/InfoBoxes/Content/Factory.cpp:429
 #, no-c-format
 msgid "Fin ETE"
-msgstr "CIEL DOBA"
+msgstr "ETE do cieľ."
 
 #: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
@@ -1099,7 +1101,7 @@ msgstr "Doba k ďaľšiemu"
 #: src/InfoBoxes/Content/Factory.cpp:438
 #, no-c-format
 msgid "WP ETE"
-msgstr "OB DOBA"
+msgstr "ETE OB"
 
 #: src/InfoBoxes/Content/Factory.cpp:439
 #, no-c-format
@@ -1119,7 +1121,7 @@ msgstr "Rýchlosť pri delfínovaní"
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
 msgid "V Opt"
-msgstr "R Opt"
+msgstr "Opt. rýchl."
 
 #: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
@@ -1171,7 +1173,7 @@ msgstr "Čas príletu do cieľa"
 #: src/InfoBoxes/Content/Factory.cpp:465
 #, no-c-format
 msgid "Fin ETA"
-msgstr "CIEL CAS"
+msgstr "ETA do cieľ."
 
 #: src/InfoBoxes/Content/Factory.cpp:466
 #, no-c-format
@@ -1190,7 +1192,7 @@ msgstr "Čas príletu do ďalšieho"
 #: src/InfoBoxes/Content/Factory.cpp:474
 #, no-c-format
 msgid "WP ETA"
-msgstr "OB CAS"
+msgstr "ETA OB"
 
 #: src/InfoBoxes/Content/Factory.cpp:475
 #, no-c-format
@@ -1351,7 +1353,7 @@ msgstr "Rýchlosť TAS"
 #: src/InfoBoxes/Content/Factory.cpp:546
 #, no-c-format
 msgid "V TAS"
-msgstr "R TAS"
+msgstr "TAS rýchl."
 
 #: src/InfoBoxes/Content/Factory.cpp:547
 #, no-c-format
@@ -1768,7 +1770,7 @@ msgstr "MANUÁL"
 #: src/InfoBoxes/InfoBoxManager.cpp:519 src/InfoBoxes/InfoBoxManager.cpp:554
 #: src/Dialogs/dlgConfigInfoboxes.cpp:104
 msgid "InfoBox"
-msgstr "InfoOkno"
+msgstr "Info. okno"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:526 src/Dialogs/dlgConfigInfoboxes.cpp:111
 #: src/Dialogs/dlgWeather.cpp:59
@@ -1801,11 +1803,11 @@ msgstr "Plné trasovanie letu zapnuté"
 
 #: src/InputEventsActions.cpp:209
 msgid "Show Airspace OFF"
-msgstr "Zobrazenie vp VYP"
+msgstr "Zobrazenie vzdušných priestorov vypnuté"
 
 #: src/InputEventsActions.cpp:211
 msgid "Show Airspace ON"
-msgstr "Zobrazenie VP ZAP"
+msgstr "Zobrazenie vzdušných priestorov zapnuté"
 
 #: src/InputEventsActions.cpp:249
 msgid "Screen Mode Full"
@@ -1845,27 +1847,27 @@ msgstr "Posun mapy VYP"
 
 #: src/InputEventsActions.cpp:528
 msgid "Advance: Manual"
-msgstr "Pokračuj: Manuálne"
+msgstr "Postup v úlohe: Manuálne"
 
 #: src/InputEventsActions.cpp:531
 msgid "Advance: Automatic"
-msgstr "Pokračuj: Automaticky"
+msgstr "Postup v úlohe: Automaticky"
 
 #: src/InputEventsActions.cpp:534
 msgid "Advance: Ready to start"
-msgstr "Pokračuj: Pripravený na štart"
+msgstr "Postup v úlohe: Pripravený na štart"
 
 #: src/InputEventsActions.cpp:537
 msgid "Advance: Hold start"
-msgstr "Pokračuj: Pozastavený štart"
+msgstr "Postup v úlohe: Štart pozastavený"
 
 #: src/InputEventsActions.cpp:540
 msgid "Advance: Ready to turn"
-msgstr "Pokračuj: Pripravený na otočenie"
+msgstr "Postup v úlohe: Pripravený na otočenie ot. bodu"
 
 #: src/InputEventsActions.cpp:543
 msgid "Advance: Hold turn"
-msgstr "Pokračuj: Pozastavené otočenie"
+msgstr "Postup v úlohe: Otočenie ot. bodu pozastavené"
 
 #: src/InputEventsActions.cpp:672
 msgid "No Active Waypoint!"
@@ -1909,11 +1911,11 @@ msgstr "Príťaž %"
 
 #: src/InputEventsActions.cpp:1132
 msgid "NMEA Log ON"
-msgstr "Zápis NMEA zapnutý"
+msgstr "Zápis NMEA dát zapnutý"
 
 #: src/InputEventsActions.cpp:1134
 msgid "NMEA Log OFF"
-msgstr "Zápis NMEA vypnutý"
+msgstr "Zápis NMEA dát vypnutý"
 
 #: src/InputEventsActions.cpp:1138
 msgid "Logger ON"
@@ -1929,15 +1931,15 @@ msgstr "Predpovedaná teplota"
 
 #: src/InputEventsActions.cpp:1399 src/InputEventsActions.cpp:1437
 msgid "Map labels ON"
-msgstr "Nazvy v mape ZAP"
+msgstr "Popisky na mape ZAPNUTÉ"
 
 #: src/InputEventsActions.cpp:1401
 msgid "Map labels MID"
-msgstr "Nazvy v mape POL"
+msgstr "Popisky na mape STREDNÉ"
 
 #: src/InputEventsActions.cpp:1403
 msgid "Map labels OFF"
-msgstr "Nazvy v mape VYP"
+msgstr "Popisky na mape VYPNUTÉ"
 
 #: src/InputEventsActions.cpp:1598
 msgid "Topology / Terrain"
@@ -1953,7 +1955,7 @@ msgstr "Cieľ úlohy"
 
 #: src/InputEventsActions.cpp:1770
 msgid "In sector, arm advance when ready"
-msgstr "V sektore, povol pokračovanie ak si pripravený"
+msgstr "Si v sektore, povol postup v úlohe (štart) ak si pripravený"
 
 #: src/GlueMapWindowAirspace.cpp:151
 msgid "Airspaces at this location"
@@ -1965,7 +1967,7 @@ msgstr "GPS nepripojené"
 
 #: src/GlueMapWindowOverlays.cpp:67
 msgid "GPS waiting for fix"
-msgstr "GPS čaká na zameranie"
+msgstr "GPS čaká na fix"
 
 #: src/Topology/TopologyGlue.cpp:96
 msgid "Loading Topology File..."
@@ -2188,7 +2190,7 @@ msgid "Quit program?"
 msgstr "Ukončiť program?"
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:111 src/Components.cpp:341
+#: src/UtilsSettings.cpp:111 src/Components.cpp:355
 msgid "Loading Terrain File..."
 msgstr "Načítavanie súboru s terénom..."
 
@@ -2217,17 +2219,17 @@ msgstr ""
 msgid "Warning"
 msgstr "Varovanie"
 
-#: src/Components.cpp:265
+#: src/Components.cpp:279
 msgid "Initialising"
 msgstr "Spúštanie"
 
 #. Scan for weather forecast
-#: src/Components.cpp:359
+#: src/Components.cpp:373
 msgid "Scanning weather forecast"
 msgstr "Skenovanie predpovede počasia"
 
 #. Start the device thread(s)
-#: src/Components.cpp:385
+#: src/Components.cpp:399
 msgid "Starting devices"
 msgstr "Štartovanie zariadení"
 
@@ -2238,27 +2240,27 @@ msgstr "Štartovanie zariadení"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Components.cpp:396
+#: src/Components.cpp:410
 msgid "Initialising display"
 msgstr "Spúštanie displeja"
 
 #. Show progress dialog
-#: src/Components.cpp:463 src/Components.cpp:489 src/Components.cpp:546
+#: src/Components.cpp:477 src/Components.cpp:503 src/Components.cpp:560
 msgid "Shutdown, please wait..."
 msgstr "Vypínanie, prosím čakajte"
 
 #. Stop logger and save igc file
-#: src/Components.cpp:473
+#: src/Components.cpp:487
 msgid "Shutdown, saving logs..."
 msgstr "Vypínanie, ukladanie logov..."
 
 #. Save settings to profile
-#: src/Components.cpp:477
+#: src/Components.cpp:491
 msgid "Shutdown, saving profile..."
 msgstr "Vypínanie, ukladanie profilu..."
 
 #. Save the task for the next time
-#: src/Components.cpp:532
+#: src/Components.cpp:546
 msgid "Shutdown, saving task..."
 msgstr "Vypínanie, ukladanie úlohy..."
 
@@ -2302,7 +2304,7 @@ msgstr "Varuj"
 #: Data/Input/default.xci:475 Data/Input/default.xci:525
 #: Data/Input/default.xci:919
 msgid "Display"
-msgstr "Zobraz"
+msgstr "Zobrazenie"
 
 #: src/Dialogs/dlgAirspace.cpp:179
 msgid "Configuration saved"
@@ -2316,7 +2318,7 @@ msgstr "Zober dnes na vedomie?"
 msgid "No Match!"
 msgstr "Žiadna zhoda!"
 
-#: src/Dialogs/dlgAirspaceWarnings.cpp:215
+#: src/Dialogs/dlgAirspaceWarnings.cpp:216
 msgid "No Warnings"
 msgstr "Žiadne upozornenia"
 
@@ -2335,7 +2337,7 @@ msgstr "Analýza"
 
 #: src/Dialogs/dlgAnalysis.cpp:173
 msgid "Barograph"
-msgstr "Barograf"
+msgstr "Barogram"
 
 #: src/Dialogs/dlgAnalysis.cpp:177 src/Dialogs/dlgAnalysis.cpp:204
 #: src/Dialogs/dlgAnalysis.cpp:213
@@ -2430,7 +2432,7 @@ msgstr "Povinné úkony"
 #: src/Dialogs/dlgConfiguration.cpp:97
 #, no-c-format
 msgid "Site"
-msgstr "Nálezisko"
+msgstr "Umiestnenie súborov"
 
 #: src/Dialogs/dlgConfiguration.cpp:99
 #, no-c-format
@@ -2496,7 +2498,7 @@ msgstr "Východzie pravidlá úlohy"
 #: Data/Dialogs/dlgConfigInfoboxes_L.xml:3
 #, no-c-format
 msgid "InfoBoxes"
-msgstr "Info okná"
+msgstr "Info-okná"
 
 #: src/Dialogs/dlgConfiguration.cpp:112 Data/Dialogs/dlgStatus.xml:24
 #: Data/Dialogs/dlgStatusSystem.xml:8 Data/Input/default.xci:656
@@ -2517,7 +2519,7 @@ msgstr "Prídavný ovládač GPS"
 #: src/Dialogs/dlgConfiguration.cpp:124
 #, no-c-format
 msgid "Built-in GPS"
-msgstr ""
+msgstr "Vstavaná GPS"
 
 #: src/Dialogs/dlgConfiguration.cpp:154 src/Dialogs/dlgConfiguration.cpp:162
 #: src/Dialogs/dlgConfiguration.cpp:170 src/Dialogs/dlgConfiguration.cpp:178
@@ -2567,9 +2569,8 @@ msgid "Fill all"
 msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:793
-#, fuzzy
 msgid "Fill padding"
-msgstr "Pristávacie klapky"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:811
 msgid "ON/Fixed"
@@ -2641,7 +2642,7 @@ msgstr "Celá šípka"
 #: Data/Dialogs/dlgConfiguration_L.xml:540 Data/Dialogs/dlgVegaDemo.xml:14
 #, no-c-format
 msgid "Circling"
-msgstr "V krúžení"
+msgstr "Pri krúžení"
 
 #: src/Dialogs/dlgConfiguration.cpp:914 src/Dialogs/dlgWindSettings.cpp:102
 msgid "ZigZag"
@@ -2922,14 +2923,14 @@ msgstr "MSL"
 #: Data/Dialogs/dlgStartTask.xml:8 Data/Dialogs/dlgStatus.xml:12
 #: Data/Dialogs/dlgWaypointEdit.xml:58 Data/Dialogs/dlgWaypointEdit_L.xml:58
 msgid "Altitude"
-msgstr "Nadmorská výška"
+msgstr "Nadmor. výška"
 
-#: src/Dialogs/dlgConfiguration.cpp:2347
+#: src/Dialogs/dlgConfiguration.cpp:2349
 #: src/Dialogs/dlgConfigInfoboxes.cpp:202 src/Dialogs/dlgVoice.cpp:109
 msgid "Changes to configuration saved."
 msgstr "Zmeny konfigurácie uložené."
 
-#: src/Dialogs/dlgConfiguration.cpp:2350 src/Dialogs/dlgConfigFonts.cpp:322
+#: src/Dialogs/dlgConfiguration.cpp:2352 src/Dialogs/dlgConfigFonts.cpp:322
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr "Zmeny konfigurácie uložené. Reštartuj XCsoar pre ich aplikáciu."
 
@@ -3101,7 +3102,7 @@ msgid ""
 "Task not valid. Changes will be lost.\n"
 "Continue?"
 msgstr ""
-"Úloha nie je validná. Zmeny budú stratené. \n"
+"Úloha nie je validná. Zmeny budú stratené.\n"
 "Pokračovať?"
 
 #: src/Dialogs/dlgTaskManager.cpp:71 Data/Dialogs/dlgTaskManager.xml:3
@@ -3159,7 +3160,7 @@ msgstr "Bod štartu"
 
 #: src/Dialogs/dlgTaskPoint.cpp:261
 msgid "Finish point"
-msgstr ""
+msgstr "Cieľový bod"
 
 #: src/Dialogs/dlgTaskPoint.cpp:264
 msgid "Assigned area point"
@@ -3179,7 +3180,7 @@ msgstr "Otočný bod úlohy"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:49
 msgid "Racing"
-msgstr ""
+msgstr "Súťažná úloha"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:51
 msgid "FAI generic"
@@ -3637,7 +3638,7 @@ msgstr "Zakázať krúženie"
 
 #: Data/Dialogs/dlgTeamCode.xml:16 Data/Dialogs/dlgTeamCode_L.xml:16
 msgid "Rel. Bearing:"
-msgstr "Rel. kurz:"
+msgstr "Relatívny kurz:"
 
 #: Data/Dialogs/dlgConfigFonts.xml:10 Data/Dialogs/dlgConfigFonts_L.xml:10
 msgid "Info box titles"
@@ -3652,7 +3653,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:274
 #: Data/Dialogs/dlgConfiguration_L.xml:274
 msgid "V rough air"
-msgstr "R. manévrovacia"
+msgstr "Manévrovacia rýchl."
 
 #: Data/Dialogs/dlgVario.xml:44 Data/Dialogs/dlgVario_L.xml:45
 msgid ""
@@ -3678,7 +3679,7 @@ msgstr "Stav úlohy"
 #: Data/Dialogs/dlgConfiguration.xml:341
 #: Data/Dialogs/dlgConfiguration_L.xml:340
 msgid "Aircraft/wind speed"
-msgstr "Rýchlosť Lietadla/Vetra"
+msgstr "Rýchlosť lietadla/vetra"
 
 #: Data/Dialogs/dlgConfiguration.xml:514
 #: Data/Dialogs/dlgConfiguration_L.xml:513
@@ -3697,7 +3698,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgWindSettings.xml:3
 msgid "Wind Settings"
-msgstr "Vietor Nastavenia"
+msgstr "Nastavenie vetra"
 
 #: Data/Dialogs/dlgConfiguration.xml:149
 #: Data/Dialogs/dlgConfiguration_L.xml:149
@@ -3715,7 +3716,7 @@ msgstr "Jas"
 #: Data/Dialogs/dlgWayPointDetails.xml:3
 #: Data/Dialogs/dlgWayPointDetails_L.xml:3
 msgid "Waypoint Info"
-msgstr "OtBod info"
+msgstr "Informácie o otočnom bode"
 
 #: Data/Dialogs/dlgConfiguration.xml:413
 #: Data/Dialogs/dlgConfiguration_L.xml:412
@@ -3858,12 +3859,11 @@ msgstr "Súbor"
 #: Data/Dialogs/dlgConfiguration.xml:201
 #: Data/Dialogs/dlgConfiguration_L.xml:201 Data/Dialogs/dlgWindSettings.xml:12
 msgid "Auto wind"
-msgstr "Automatický výpočet vetra"
+msgstr "Automat. výpočet vetra"
 
 #: Data/Dialogs/dlgConfiguration.xml:86 Data/Dialogs/dlgConfiguration_L.xml:86
-#, fuzzy
 msgid "Specifies the mode for filling the airspace area."
-msgstr "Určuje súbor s definíciou topológie."
+msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:20 Data/Dialogs/dlgStatusSystem.xml:4
 msgid "GPS lock"
@@ -3978,7 +3978,7 @@ msgid ""
 "make any button presses or interacts with the computer."
 msgstr ""
 "Táto voľba určuje, ako dlho bude na obrazovke zobrazené menu, ak uživateľ "
-"nestlačí žiadne tlačítko ani nijak neinteraguje s počítačom."
+"nestlačí žiadne tlačítko ani nijak neinteraguje s programom."
 
 #: Data/Dialogs/dlgStatusTask.xml:10
 msgid "Speed remaining"
@@ -3991,7 +3991,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:19
 #: Data/Dialogs/dlgWayPointDetails_L.xml:19
 msgid "Alt diff MC 0"
-msgstr "Výškový rozdiel MC 0"
+msgstr "Výškový rozdiel na MC 0"
 
 #: Data/Dialogs/dlgConfiguration.xml:179
 #: Data/Dialogs/dlgConfiguration_L.xml:179
@@ -4080,7 +4080,7 @@ msgstr "Deklarovať"
 
 #: Data/Dialogs/dlgBasicSettings.xml:20
 msgid "Clean"
-msgstr "Čistý"
+msgstr "Čistota krídiel"
 
 #: Data/Dialogs/dlgConfiguration.xml:423
 #: Data/Dialogs/dlgConfiguration_L.xml:422
@@ -4226,9 +4226,8 @@ msgid "Height"
 msgstr "Výška"
 
 #: Data/Dialogs/dlgConfiguration.xml:86 Data/Dialogs/dlgConfiguration_L.xml:86
-#, fuzzy
 msgid "Airspace fill mode*"
-msgstr "Zobrazenie vzduš. priestoru"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:457
 #: Data/Dialogs/dlgConfiguration_L.xml:456
@@ -4257,7 +4256,7 @@ msgstr "Interval, Info"
 
 #: Data/Dialogs/dlgSwitches.xml:35
 msgid "Speed command"
-msgstr "Optimalizácia kĺzania (SC)"
+msgstr "Speed commander"
 
 #: Data/Dialogs/dlgStatus.xml:26 Data/Dialogs/dlgStatusSystem.xml:10
 msgid "Supply voltage"
@@ -4285,7 +4284,7 @@ msgstr "Či je pripojený statický tlak."
 
 #: Data/Dialogs/dlgSwitches.xml:53
 msgid "Vario circling"
-msgstr "Vário v krúžení"
+msgstr "Vário v krúž."
 
 #: Data/Dialogs/dlgTarget.xml:6 Data/Dialogs/dlgTarget_L.xml:6
 msgid "This sets the task point for review."
@@ -4327,7 +4326,7 @@ msgstr "Zoom pri krúžení"
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:6
 msgid "ACK Warn"
-msgstr "UZNAJ varovanie"
+msgstr "Potvrď varov."
 
 #: Data/Dialogs/dlgConfiguration.xml:445
 #: Data/Dialogs/dlgConfiguration_L.xml:444
@@ -4453,7 +4452,7 @@ msgstr "Nový traťový bod"
 
 #: Data/Dialogs/dlgBasicSettings.xml:3
 msgid "Flight Setup"
-msgstr ""
+msgstr "Základné letové nastavenia"
 
 #: Data/Dialogs/dlgVario.xml:84 Data/Dialogs/dlgVario_L.xml:85
 msgid "Cruise averager scale"
@@ -4461,7 +4460,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint.xml:28 Data/Dialogs/dlgTaskPoint_L.xml:29
 msgid "Radius of the OZ sector."
-msgstr ""
+msgstr "Polomer sektoru pozorovacej oblasti"
 
 #: Data/Dialogs/dlgConfiguration.xml:292
 #: Data/Dialogs/dlgConfiguration_L.xml:292
@@ -4666,8 +4665,9 @@ msgid ""
 "vario value."
 msgstr ""
 
-#: Data/Dialogs/dlgStartup.xml:10 Data/Dialogs/dlgStartup_L.xml:10
-#: Data/Input/default.xci:948
+#: Data/Dialogs/dlgSimulatorPrompt.xml:8
+#: Data/Dialogs/dlgSimulatorPrompt_L.xml:8 Data/Dialogs/dlgStartup.xml:10
+#: Data/Dialogs/dlgStartup_L.xml:10 Data/Input/default.xci:948
 msgid "Quit"
 msgstr "Ukončiť"
 
@@ -4754,7 +4754,7 @@ msgstr "Podrobnosti"
 #: Data/Dialogs/dlgConfiguration.xml:577
 #: Data/Dialogs/dlgConfiguration_L.xml:576
 msgid "Competition Id"
-msgstr ""
+msgstr "Súťažný znak"
 
 #: Data/Dialogs/dlgConfiguration.xml:118
 #: Data/Dialogs/dlgConfiguration_L.xml:118
@@ -4942,7 +4942,7 @@ msgstr "Rozhranie Flarmu"
 
 #: Data/Dialogs/dlgSwitches.xml:45
 msgid "User middle"
-msgstr "Uzivatel stred"
+msgstr "Stredné tl."
 
 #: Data/Dialogs/dlgConfiguration.xml:100 Data/Dialogs/dlgConfiguration.xml:105
 #: Data/Dialogs/dlgConfiguration_L.xml:100
@@ -4959,7 +4959,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:3 Data/Input/default.xci:664
 msgid "Replay"
-msgstr "Opakované prehranie"
+msgstr "Prehratie záznamu letu"
 
 #: Data/Dialogs/dlgConfiguration.xml:57 Data/Dialogs/dlgConfiguration_L.xml:57
 msgid "Airspace display"
@@ -5102,15 +5102,15 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:492
 #: Data/Dialogs/dlgConfiguration_L.xml:491
 msgid "Auto close FLARM"
-msgstr ""
+msgstr "Autom. zavrieť FLARM"
 
 #: Data/Dialogs/dlgSwitches.xml:23
 msgid "Gear down"
-msgstr "Podvozok vysunutý"
+msgstr "Podvozok vysun."
 
 #: Data/Dialogs/dlgWeather.xml:6 Data/Dialogs/dlgWeather_L.xml:6
 msgid "Field"
-msgstr "Pole"
+msgstr "Snímok"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid "TE vario"
@@ -5215,7 +5215,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:49
 msgid "User down"
-msgstr "Uzivatel dole"
+msgstr "Spodné tl."
 
 #: Data/Dialogs/dlgConfigInfoboxes.xml:6
 #: Data/Dialogs/dlgConfigInfoboxes_L.xml:4
@@ -5259,7 +5259,7 @@ msgstr "Filtruj krúženie"
 #: Data/Dialogs/dlgWayPointDetails.xml:7
 #: Data/Dialogs/dlgWayPointDetails_L.xml:4
 msgid "Goto"
-msgstr "Ísť na"
+msgstr "Navig. na"
 
 #: Data/Dialogs/dlgConfiguration.xml:334
 #: Data/Dialogs/dlgConfiguration_L.xml:333
@@ -5295,7 +5295,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:8
 msgid "ACK Day"
-msgstr "UZNAJ dnes"
+msgstr "Potvrď dnes"
 
 #: Data/Dialogs/dlgConfiguration.xml:242
 #: Data/Dialogs/dlgConfiguration_L.xml:242
@@ -5354,7 +5354,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:230
 #: Data/Dialogs/dlgConfiguration_L.xml:231
 msgid "L/D Average period*"
-msgstr ""
+msgstr "Doba priemerovania kĺzavosti*"
 
 #: Data/Dialogs/dlgWayPointSelect.xml:1 Data/Dialogs/dlgWayPointSelect_L.xml:1
 msgid "Select Waypoint"
@@ -5516,7 +5516,7 @@ msgstr "Port varovania pádu"
 
 #: Data/Dialogs/dlgVario.xml:411 Data/Dialogs/dlgVario_L.xml:412
 msgid "V Manoeuvering"
-msgstr "V manévrovacia"
+msgstr "Manévrovacia rýchl."
 
 #: Data/Dialogs/dlgVoice.xml:14
 msgid ""
@@ -5525,7 +5525,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:401 Data/Dialogs/dlgVario_L.xml:402
 msgid "V Terrain"
-msgstr "V terén"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:431 Data/Dialogs/dlgVario_L.xml:432
 msgid "Zander"
@@ -5604,7 +5604,7 @@ msgstr "Dialógové okná"
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
 msgid "ACK Space"
-msgstr "UZNAJ priesor"
+msgstr "Potvrď priesor"
 
 #: Data/Dialogs/dlgConfiguration.xml:546
 #: Data/Dialogs/dlgConfiguration_L.xml:545
@@ -5761,7 +5761,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:44
 msgid "Start speed"
-msgstr "Rýchlosť štartu"
+msgstr "Rýchlosť pri štarte"
 
 #: Data/Dialogs/dlgTarget_L.xml:25
 msgid ""
@@ -5832,7 +5832,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:10
 msgid "Enable warnings for final glide through terrain."
-msgstr "Aktivuj varovania pre doklz cez terén."
+msgstr "Aktivuj varovania pre doklz skrz terén."
 
 #: Data/Dialogs/dlgConfiguration.xml:25 Data/Dialogs/dlgConfiguration_L.xml:25
 msgid "More Waypoints"
@@ -5854,7 +5854,7 @@ msgstr "Zostávajúci čas"
 
 #: Data/Dialogs/dlgSwitches.xml:41
 msgid "User up"
-msgstr ""
+msgstr "Vrchné tl."
 
 #: Data/Dialogs/dlgConfigFonts.xml:19 Data/Dialogs/dlgConfigFonts_L.xml:19
 msgid "Topology labels"
@@ -5863,7 +5863,7 @@ msgstr "Popisky topológie"
 #: Data/Dialogs/dlgWayPointDetails.xml:28
 #: Data/Dialogs/dlgWayPointDetails_L.xml:28
 msgid "Insert in task"
-msgstr "Vlož do úlohy"
+msgstr "Vložiť do úlohy"
 
 #: Data/Dialogs/dlgConfiguration.xml:74 Data/Dialogs/dlgConfiguration_L.xml:74
 msgid "Warning time*"
@@ -5928,7 +5928,7 @@ msgstr "Skrátený názov súboru"
 
 #: Data/Dialogs/dlgSwitches.xml:57
 msgid "Flap landing"
-msgstr "Pristávacie klapky"
+msgstr "Prist. klapky"
 
 #: Data/Dialogs/dlgVario.xml:294 Data/Dialogs/dlgVario_L.xml:295
 msgid "Vario muting"
@@ -5936,11 +5936,11 @@ msgstr "Vário umlčať"
 
 #: Data/Dialogs/dlgVegaDemo.xml:10
 msgid "Airspeed"
-msgstr "Vzdušná rýchlosť"
+msgstr "Vzd. rýchlosť"
 
 #: Data/Dialogs/dlgConfiguration.xml:30 Data/Dialogs/dlgConfiguration_L.xml:30
 msgid "Airspaces"
-msgstr ""
+msgstr "Vzduš. priestory"
 
 #: Data/Dialogs/dlgConfigFonts.xml:28 Data/Dialogs/dlgConfigFonts_L.xml:28
 msgid "Gauges"
@@ -6047,7 +6047,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:9
 msgid "Enable"
-msgstr "Povoliť"
+msgstr "Povol varov."
 
 #: Data/Dialogs/dlgVario.xml:126 Data/Dialogs/dlgVario_L.xml:127
 msgid "Cruise deadband type"
@@ -6088,7 +6088,7 @@ msgstr "Po prerušení posledné MC*"
 
 #: Data/Dialogs/dlgConfiguration.xml:61 Data/Dialogs/dlgConfiguration_L.xml:61
 msgid "Clip altitude"
-msgstr "Ignoruj vp nad"
+msgstr "Ignoruj vzduš. priest. nad"
 
 #: Data/Dialogs/dlgConfiguration.xml:524
 #: Data/Dialogs/dlgConfiguration_L.xml:523
@@ -6121,7 +6121,7 @@ msgstr "Negatívne klapky"
 #: Data/Dialogs/dlgThermalAssistant.xml:3
 #: Data/Dialogs/dlgThermalAssistant_L.xml:3 Data/Input/default.xci:900
 msgid "Thermal Assistant"
-msgstr "Centrovací pomocník"
+msgstr "Pomocník ustreď."
 
 #: Data/Dialogs/dlgVario.xml:20 Data/Dialogs/dlgVario_L.xml:21
 msgid "Static port"
@@ -6137,7 +6137,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:6
 msgid "Ack Day"
-msgstr "Uznaj dnes"
+msgstr "Potvrď dnes"
 
 #: Data/Dialogs/dlgWindSettings.xml:16
 msgid "Trail drift"
@@ -6203,7 +6203,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:20
 #: Data/Dialogs/dlgWayPointDetails_L.xml:20
 msgid "Alt diff MC safety"
-msgstr "Výškový rozdiel s bezpečným MC"
+msgstr "Výšk. rozdiel na bezpečnom MC"
 
 #: Data/Dialogs/dlgConfiguration.xml:257
 #: Data/Dialogs/dlgConfiguration_L.xml:257
@@ -6506,7 +6506,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTaskCalculator.xml:3 Data/Dialogs/dlgTaskCalculator_L.xml:3
 msgid "Task Calculator"
-msgstr "Výpočet úlohy"
+msgstr "Kalkulátor úlohy"
 
 #: Data/Dialogs/dlgVario.xml:96 Data/Dialogs/dlgVario_L.xml:97
 msgid "Base frequency"
@@ -6515,7 +6515,7 @@ msgstr "Základná frekvencia"
 #: Data/Dialogs/dlgWayPointDetails.xml:21
 #: Data/Dialogs/dlgWayPointDetails_L.xml:21
 msgid "Alt diff MC current"
-msgstr "Výškový rozdiel MC akt."
+msgstr "Výškový rozdiel na akt. MC"
 
 #: Data/Dialogs/dlgConfiguration.xml:123
 #: Data/Dialogs/dlgConfiguration_L.xml:123
@@ -6549,7 +6549,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
-msgstr ""
+msgstr "Podrobnosti vzdušného priestoru"
 
 #: Data/Dialogs/dlgBasicSettings.xml:8
 msgid ""
@@ -6619,7 +6619,7 @@ msgstr "Automatické vypínanie"
 
 #: Data/Dialogs/dlgConfiguration.xml:66 Data/Dialogs/dlgConfiguration_L.xml:66
 msgid "Margin"
-msgstr "Zobraz vp od"
+msgstr "Zobraz vzduš. priest. od"
 
 #: Data/Dialogs/dlgConfiguration.xml:360
 #: Data/Dialogs/dlgConfiguration_L.xml:359
@@ -6647,7 +6647,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgFlarmTraffic.xml:14 Data/Dialogs/dlgFlarmTraffic_L.xml:14
 msgid "A. Zoom"
-msgstr "A. Zoom"
+msgstr "Aut. Zoom"
 
 #: Data/Dialogs/dlgConfiguration.xml:34 Data/Dialogs/dlgConfiguration_L.xml:34
 msgid "More Airspaces"
@@ -6671,7 +6671,7 @@ msgid ""
 "List"
 msgstr ""
 "Zoznam\n"
-"OtBodov"
+"ot. bodov"
 
 #: Data/Input/default.xci:576 Data/Input/default.xci:625
 #: Data/Input/default.xci:674 Data/Input/default.xci:926
@@ -6683,6 +6683,8 @@ msgid ""
 "Simulation\r\n"
 "Nothing is real!"
 msgstr ""
+"Toto je simulácia\r\n"
+"Nič nie je reálne!"
 
 #: Data/Input/default.xci:591
 msgid ""
@@ -6697,6 +6699,8 @@ msgid ""
 "Maintain effective\r\n"
 "LOOKOUT at all times"
 msgstr ""
+"Udržujte efektívny ROZHĽAD\r\n"
+"z kabíny po celú dobu"
 
 #: Data/Input/default.xci:770
 msgid ""
@@ -6728,7 +6732,7 @@ msgstr ""
 
 #: Data/Input/default.xci:868
 msgid "Aux Info"
-msgstr ""
+msgstr "Prídavné info"
 
 #: Data/Input/default.xci:819
 msgid ""
@@ -6740,11 +6744,20 @@ msgstr ""
 
 #: Data/Input/default.xci:159
 msgid "Below Final Glide"
-msgstr ""
+msgstr "Ste pod doklzovou výškou"
 
 #: Data/Input/default.xci:853
 msgid "Weather"
 msgstr "Počasie"
+
+#: Data/Input/default.xci:795
+#, fuzzy
+msgid ""
+"Waypoint\n"
+"Details"
+msgstr ""
+"Zoznam\n"
+"ot. bodov"
 
 #: Data/Input/default.xci:532
 msgid "Dropped marker"
@@ -6752,7 +6765,7 @@ msgstr ""
 
 #: Data/Input/default.xci:681
 msgid "Raw Logger"
-msgstr ""
+msgstr "Logovať NMEA dáta"
 
 #: Data/Input/default.xci:557
 msgid "Topology"
@@ -6768,7 +6781,7 @@ msgstr ""
 
 #: Data/Input/default.xci:115
 msgid "Waiting for GPS Connection"
-msgstr ""
+msgstr "Čakám na spojenie s GPS"
 
 #: Data/Input/default.xci:701
 msgid ""
@@ -6781,38 +6794,36 @@ msgid ""
 "Pan\n"
 "Off"
 msgstr ""
-"Posun\n"
-"vypnutý"
+"Vypnúť\n"
+"posun mapy"
 
 #: Data/Input/default.xci:240
 msgid ""
 "Marks\n"
 "clear"
-msgstr ""
+msgstr "Zmazať značky na mape"
 
 #: Data/Input/default.xci:811
 msgid ""
 "Nearest\n"
 "Airspace"
-msgstr ""
-"Najbližší\n"
-"vzd.priestor"
+msgstr "Najbližší vzduš. priestor"
 
 #: Data/Input/default.xci:607
 msgid ""
 "Flight\n"
 "Setup"
 msgstr ""
-"Nastavenie\n"
-"Letu"
+"Zákl. letové\n"
+"nastavenia"
 
 #: Data/Input/default.xci:640
 msgid ""
 "Setup\n"
 "System"
 msgstr ""
-"Nastavenie\n"
-"Systému"
+"Systémové\n"
+"nastavenia"
 
 #: Data/Input/default.xci:787 Data/Input/default.xci:837
 #: Data/Input/default.xci:886 Data/Input/default.xci:933
@@ -6821,7 +6832,7 @@ msgstr "Info"
 
 #: Data/Input/default.xci:154
 msgid "Above Final Glide"
-msgstr ""
+msgstr "Ste nad doklzovou výškou"
 
 #: Data/Input/default.xci:708
 msgid "Setup Audio"
@@ -6833,7 +6844,7 @@ msgstr "FLARM Radar"
 
 #: Data/Input/default.xci:498
 msgid "Zoom"
-msgstr ""
+msgstr "Zoom"
 
 #: Data/Input/default.xci:747
 msgid "Vario ASI zeroed"
@@ -6845,7 +6856,7 @@ msgstr ""
 
 #: Data/Input/default.xci:441
 msgid "GoTo"
-msgstr "Choď na"
+msgstr "Navigovať na"
 
 #: Data/Input/default.xci:506
 msgid "Full Scrn"
@@ -6853,19 +6864,19 @@ msgstr ""
 
 #: Data/Input/default.xci:120
 msgid "Restarting Comm Ports"
-msgstr ""
+msgstr "Reštartujem COM porty"
 
 #: Data/Input/default.xci:514
 msgid ""
 "Pan\n"
 "On"
 msgstr ""
-"Posun\n"
-"zapnutý"
+"Zapnúť\n"
+"posun mapy"
 
 #: Data/Input/default.xci:143
 msgid "Takeoff"
-msgstr ""
+msgstr "Vzlet"
 
 #: Data/Input/default.xci:748
 msgid ""
@@ -6878,24 +6889,22 @@ msgid ""
 "Task\n"
 "Edit"
 msgstr ""
-"Zmeniť\n"
+"Upraviť\n"
 "úlohu"
 
 #: Data/Input/default.xci:535
 msgid ""
 "Mark\n"
 "Drop"
-msgstr ""
-"Poznač\n"
-"miesto"
+msgstr "Vytvor značku na mape"
 
-#: Data/Input/default.xci:232
+#: Data/Input/default.xci:232 Data/Input/default.xci:803
 msgid ""
 "Nearest\n"
 "Waypoint"
 msgstr ""
 "Najbližší\n"
-"OtBod"
+"ot. bod"
 
 #: Data/Input/default.xci:762
 msgid "Stored to EEPROM"
@@ -6919,11 +6928,11 @@ msgstr "Oddiaľ"
 
 #: Data/Input/default.xci:238
 msgid "Marks cleared"
-msgstr ""
+msgstr "Značky na mape zmazané"
 
 #: Data/Input/default.xci:125
 msgid "Waiting for GPS Fix"
-msgstr ""
+msgstr "Čakám na GPS fix"
 
 #: Data/Input/default.xci:777
 msgid ""
@@ -6948,13 +6957,13 @@ msgstr "Priblíž"
 #: Data/Input/default.xci:374 Data/Input/default.xci:424
 #: Data/Input/default.xci:912
 msgid "Nav"
-msgstr ""
+msgstr "Navigačné menu"
 
 #: Data/Input/default.xci:648
 msgid ""
 "Settings\n"
 "Airspace"
-msgstr ""
+msgstr "Nastavenie vzduš. priestorov"
 
 #: Data/Input/default.xci:763
 msgid "Store"
@@ -6962,20 +6971,22 @@ msgstr "Uložiť"
 
 #: Data/Input/default.xci:164
 msgid "Final Glide Through Terrain"
-msgstr ""
+msgstr "Doklz skrz terén"
 
 #: Data/Input/default.xci:861
 msgid ""
 "Team\n"
 "Code"
 msgstr ""
+"Tímový\n"
+"kód"
 
 #: Data/Input/default.xci:382
 msgid ""
 "Task\n"
 "Calc"
 msgstr ""
-"Výpočet \n"
+"Kalkulátor\n"
 "úlohy"
 
 #: Data/Input/default.xci:218
@@ -6986,7 +6997,7 @@ msgstr "Priblíž"
 
 #: Data/Input/default.xci:148
 msgid "Landing"
-msgstr ""
+msgstr "Pristánie"
 
 #~ msgid ""
 #~ "Error loading Polar file!\r\n"

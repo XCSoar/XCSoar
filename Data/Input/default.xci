@@ -731,7 +731,7 @@ mode=Config3
 type=key
 data=6
 event=Logger nmea
-label=Raw Logger
+label=Raw Logger$(CheckLogger)
 location=5
 
 
@@ -845,7 +845,7 @@ type=key
 data=6
 event=WaypointDetails current
 event=Mode default
-label=$(CheckTask)Waypoint\nDetails
+label=Waypoint\nDetails$(CheckTask)
 location=5
 
 mode=Info1
@@ -853,7 +853,7 @@ type=key
 data=7
 event=NearestWaypointDetails aircraft
 event=Mode default
-label=$(CheckWaypointFile)Nearest\nWaypoint
+label=Nearest\nWaypoint$(CheckWaypointFile)
 location=6
 
 mode=Info1

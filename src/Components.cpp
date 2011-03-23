@@ -35,6 +35,7 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "Device/Geoid.h"
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/dlgSimulatorPrompt.hpp"
 #include "ButtonLabel.hpp"
 #include "LanguageGlue.hpp"
 #include "Language.hpp"
@@ -249,8 +250,21 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
 #ifdef SIMULATOR_AVAILABLE
   // prompt for simulator if not set by command line argument "-simulator" or "-fly"
-  if (!sim_set_in_cmd_line_flag)
-    global_simulator_flag = dlgSimulatorPromptShowModal();
+  if (!sim_set_in_cmd_line_flag) {
+    SimulatorPromptResult result = dlgSimulatorPromptShowModal();
+    switch (result) {
+    case SPR_QUIT:
+      return false;
+
+    case SPR_FLY:
+      global_simulator_flag = false;
+      break;
+
+    case SPR_SIMULATOR:
+      global_simulator_flag = true;
+      break;
+    }
+  }
 #endif
 
   if (!LoadProfile())

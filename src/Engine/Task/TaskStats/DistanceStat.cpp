@@ -29,7 +29,7 @@ DistanceStatComputer::DistanceStatComputer(DistanceStat &_data,
   :data(_data),
   av_dist(N_AV),
   df(fixed_zero),
-  v_lpf(fixed(600) / N_AV, false),
+  v_lpf(fixed(400) / N_AV, false),
   is_positive(_is_positive)
 {
 
@@ -38,16 +38,17 @@ DistanceStatComputer::DistanceStatComputer(DistanceStat &_data,
 void 
 DistanceStatComputer::calc_incremental_speed(const fixed dt)
 {  
-  if (positive(dt) && positive(data.distance)) {
+  if ((dt>=fixed_one) && positive(data.distance)) {
     if (av_dist.update(data.distance)) {
-      fixed d_av = av_dist.average();
+      const fixed d_av = av_dist.average() / N_AV;
       av_dist.reset();
 
-      for (unsigned i=0; i<(unsigned)(dt); i++) {
-        fixed v = df.update(d_av) / N_AV;
-        fixed v_f = v_lpf.update(v);
-        data.speed_incremental = (is_positive? -v_f:v_f);
+      fixed v_f;
+      for (unsigned i=0; i<(unsigned)(dt); ++i) {
+        const fixed v = df.update(d_av);
+        v_f = v_lpf.update(v);
       }
+      data.speed_incremental = (is_positive? -v_f:v_f);
     }
   } else {    
     reset_incremental_speed();
@@ -58,9 +59,9 @@ void
 DistanceStatComputer::reset_incremental_speed()
 {
   df.reset(fixed(data.distance),
-           (is_positive ? -1 : 1) * fixed(data.speed) * N_AV);
+           (is_positive ? -1 : 1) * fixed(data.speed));
   v_lpf.reset((is_positive ? -1 : 1) * fixed(data.speed));
-  data.speed_incremental = data.speed;
+  data.speed_incremental = fixed_zero; // data.speed;
   av_dist.reset();
 }
 

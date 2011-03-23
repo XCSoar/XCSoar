@@ -67,6 +67,17 @@ public:
 
   static bool register_class(HINSTANCE hInstance);
 
+protected:
+  /**
+   * Is XCSoar already up and running?
+   */
+  bool IsRunning() {
+    /* it is safe enough to say that XCSoar initialization is complete
+       after the MapWindow has been created */
+    return map.defined();
+  }
+
+public:
   void set(const TCHAR *text,
            int left, int top, unsigned width, unsigned height);
 

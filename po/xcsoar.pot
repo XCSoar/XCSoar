@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-11 07:43+0100\n"
+"POT-Creation-Date: 2011-03-19 09:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2019,7 +2019,7 @@ msgid "Quit program?"
 msgstr ""
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:111 src/Components.cpp:341
+#: src/UtilsSettings.cpp:111 src/Components.cpp:355
 msgid "Loading Terrain File..."
 msgstr ""
 
@@ -2046,17 +2046,17 @@ msgstr ""
 msgid "Warning"
 msgstr ""
 
-#: src/Components.cpp:265
+#: src/Components.cpp:279
 msgid "Initialising"
 msgstr ""
 
 #. Scan for weather forecast
-#: src/Components.cpp:359
+#: src/Components.cpp:373
 msgid "Scanning weather forecast"
 msgstr ""
 
 #. Start the device thread(s)
-#: src/Components.cpp:385
+#: src/Components.cpp:399
 msgid "Starting devices"
 msgstr ""
 
@@ -2067,27 +2067,27 @@ msgstr ""
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Components.cpp:396
+#: src/Components.cpp:410
 msgid "Initialising display"
 msgstr ""
 
 #. Show progress dialog
-#: src/Components.cpp:463 src/Components.cpp:489 src/Components.cpp:546
+#: src/Components.cpp:477 src/Components.cpp:503 src/Components.cpp:560
 msgid "Shutdown, please wait..."
 msgstr ""
 
 #. Stop logger and save igc file
-#: src/Components.cpp:473
+#: src/Components.cpp:487
 msgid "Shutdown, saving logs..."
 msgstr ""
 
 #. Save settings to profile
-#: src/Components.cpp:477
+#: src/Components.cpp:491
 msgid "Shutdown, saving profile..."
 msgstr ""
 
 #. Save the task for the next time
-#: src/Components.cpp:532
+#: src/Components.cpp:546
 msgid "Shutdown, saving task..."
 msgstr ""
 
@@ -2145,7 +2145,7 @@ msgstr ""
 msgid "No Match!"
 msgstr ""
 
-#: src/Dialogs/dlgAirspaceWarnings.cpp:215
+#: src/Dialogs/dlgAirspaceWarnings.cpp:216
 msgid "No Warnings"
 msgstr ""
 
@@ -2752,12 +2752,12 @@ msgstr ""
 msgid "Altitude"
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:2347
+#: src/Dialogs/dlgConfiguration.cpp:2349
 #: src/Dialogs/dlgConfigInfoboxes.cpp:202 src/Dialogs/dlgVoice.cpp:109
 msgid "Changes to configuration saved."
 msgstr ""
 
-#: src/Dialogs/dlgConfiguration.cpp:2350 src/Dialogs/dlgConfigFonts.cpp:322
+#: src/Dialogs/dlgConfiguration.cpp:2352 src/Dialogs/dlgConfigFonts.cpp:322
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
 
@@ -4414,8 +4414,9 @@ msgid ""
 "vario value."
 msgstr ""
 
-#: Data/Dialogs/dlgStartup.xml:10 Data/Dialogs/dlgStartup_L.xml:10
-#: Data/Input/default.xci:948
+#: Data/Dialogs/dlgSimulatorPrompt.xml:8
+#: Data/Dialogs/dlgSimulatorPrompt_L.xml:8 Data/Dialogs/dlgStartup.xml:10
+#: Data/Dialogs/dlgStartup_L.xml:10 Data/Input/default.xci:948
 msgid "Quit"
 msgstr ""
 
@@ -6396,6 +6397,12 @@ msgstr ""
 msgid "Weather"
 msgstr ""
 
+#: Data/Input/default.xci:795
+msgid ""
+"Waypoint\n"
+"Details"
+msgstr ""
+
 #: Data/Input/default.xci:532
 msgid "Dropped marker"
 msgstr ""
@@ -6523,7 +6530,7 @@ msgid ""
 "Drop"
 msgstr ""
 
-#: Data/Input/default.xci:232
+#: Data/Input/default.xci:232 Data/Input/default.xci:803
 msgid ""
 "Nearest\n"
 "Waypoint"

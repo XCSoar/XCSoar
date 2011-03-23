@@ -31,12 +31,19 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.view.WindowManager;
+import android.view.Surface;
+import java.lang.Math;
 
 /**
  * Code to support the internal GPS receiver via #LocationManager.
  */
 public class InternalGPS
-  implements LocationListener, Runnable {
+  implements LocationListener, SensorEventListener, Runnable {
   private static Handler handler;
 
   /**
@@ -52,11 +59,25 @@ public class InternalGPS
   String locationProvider = LocationManager.GPS_PROVIDER;
   //String locationProvider = LocationManager.NETWORK_PROVIDER;
 
-  LocationManager locationManager;
+  private LocationManager locationManager;
+  private SensorManager sensorManager;
+  private WindowManager windowManager;
+  private Sensor accelerometer;
+  private double acceleration;
 
   InternalGPS(Context context) {
     locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+
+    windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+    accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    acceleration = 1.0;
+
     update();
+  }
+
+  protected void finalize() {
+    setLocationProvider(null);
   }
 
   /**
@@ -65,11 +86,13 @@ public class InternalGPS
    */
   @Override public void run() {
     locationManager.removeUpdates(this);
+    sensorManager.unregisterListener(this);
 
     if (locationProvider != null) {
       locationManager.requestLocationUpdates(locationProvider,
                                              1000, 0, this);
-      setConnected(1); // waiting for fix
+      sensorManager.registerListener(this, accelerometer,
+                                     sensorManager.SENSOR_DELAY_NORMAL);
     } else
       setConnected(0); // not connected
   }
@@ -93,7 +116,8 @@ public class InternalGPS
                                   boolean hasAltitude, double altitude,
                                   boolean hasBearing, double bearing,
                                   boolean hasSpeed, double speed,
-                                  boolean hasAccuracy, double accuracy);
+                                  boolean hasAccuracy, double accuracy,
+                                  boolean hasAcceleration, double acceleration);
 
   private void sendLocation(Location location) {
     Bundle extras = location.getExtras();
@@ -104,7 +128,8 @@ public class InternalGPS
                 location.hasAltitude(), location.getAltitude(),
                 location.hasBearing(), location.getBearing(),
                 location.hasSpeed(), location.getSpeed(),
-                location.hasAccuracy(), location.getAccuracy());
+                location.hasAccuracy(), location.getAccuracy(),
+                true, acceleration);
   }
 
   /** from LocationListener */
@@ -129,12 +154,42 @@ public class InternalGPS
                                         Bundle extras) {
     switch (status) {
     case LocationProvider.OUT_OF_SERVICE:
-    case LocationProvider.TEMPORARILY_UNAVAILABLE:
       setConnected(0); // not connected
+      break;
+
+    case LocationProvider.TEMPORARILY_UNAVAILABLE:
+      setConnected(1); // waiting for fix
       break;
 
     case LocationProvider.AVAILABLE:
       break;
     }
+  }
+
+  /** from sensorEventListener */
+  public void onAccuracyChanged(Sensor sensor, int accuracy) {
+  }
+
+  /** from sensorEventListener */
+  public void onSensorChanged(SensorEvent event) {
+    acceleration = Math.sqrt((double) event.values[0]*event.values[0] +
+                             (double) event.values[1]*event.values[1] +
+                             (double) event.values[2]*event.values[2]) /
+                   SensorManager.GRAVITY_EARTH;
+    switch (windowManager.getDefaultDisplay().getOrientation()) {
+      case Surface.ROTATION_0:   // g = -y
+        acceleration *= Math.signum(event.values[1]);
+        break;
+      case Surface.ROTATION_90:  // g = -x
+        acceleration *= Math.signum(event.values[0]);
+        break;
+      case Surface.ROTATION_180:  // g = y
+        acceleration *= Math.signum(-event.values[1]);
+        break;
+      case Surface.ROTATION_270:  // g = x
+        acceleration *= Math.signum(-event.values[0]);
+        break;
+    }
+    // TODO: do lowpass filtering to remove vibrations?!?
   }
 }

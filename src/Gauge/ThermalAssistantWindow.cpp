@@ -57,7 +57,6 @@ ThermalAssistantWindow::on_create()
   BufferWindow::on_create();
 
   hbBackground.set(hcBackground);
-  hbRadar.set(hcCircles);
 
 #ifdef ENABLE_OPENGL
   hbPolygon.set(hcPolygonBrush.with_alpha(128));
@@ -209,6 +208,7 @@ ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas) const
 
   canvas.set_text_color(hcCircles);
   canvas.select(hfLabels);
+  canvas.set_background_color(hcBackground);
   canvas.background_opaque();
 
   TCHAR lift_string[10];

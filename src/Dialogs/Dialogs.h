@@ -79,9 +79,6 @@ void dlgLoggerReplayShowModal();
 bool
 dlgStartupShowModal();
 
-bool dlgSimulatorPromptShowModal();
-
-
 void dlgWindSettingsShowModal();
 void dlgStartTaskShowModal(bool *validStart, double Time, double Speed,
     double Altitude);

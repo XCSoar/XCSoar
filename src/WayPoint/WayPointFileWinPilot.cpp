@@ -135,10 +135,14 @@ WayPointFileWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
   } else if (*endptr == '.') {
     /* 000..999 */
     long l = _tcstol(src, &endptr, 10);
-    if (endptr != src + 3 || l < 0 || l >= 1000)
-        return false;
-
-    sec = fixed(l) / 60000;
+    if (endptr == src + 1 && l >= 0 && l < 100)
+      sec = fixed(l) / (60 * 10);
+    else if (endptr == src + 2 && l >= 0 && l < 1000)
+      sec = fixed(l) / (60 * 100);
+    else if (endptr == src + 3 && l >= 0 && l < 10000)
+      sec = fixed(l) / (60 * 1000);
+    else
+      return false;
   } else
     return false;
 

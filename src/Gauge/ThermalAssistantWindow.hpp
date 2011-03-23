@@ -35,7 +35,7 @@ protected:
   static const Color hcPolygonBrush;
   static const Color hcPolygonPen;
 
-  Brush hbBackground, hbRadar, hbPolygon;
+  Brush hbBackground, hbPolygon;
   Pen hpPlane, hpRadar, hpPolygon;
   Pen hpInnerCircle;
   Pen hpOuterCircle;

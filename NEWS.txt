@@ -95,18 +95,25 @@ Version 6.1 - not yet released
   - Waypoint select dialog allows filtering by start/finish
   - Airspace warning dialog only shows buttons suitable for the respective airspace item, 
 
-Version 6.0.8 - not yet released
+Version 6.0.8 - 2011/03/23
 * don't estimate thermal source for skewed thermals
-* Units: fix "feet per minute" support
 * devices
   - CAI302: fix task declaration on Android
+  - EW microRecorder: minor task declaration fix
+* configuration
+  - Units: fix "feet per minute" support
+  - save the "Auto Logger" setting
+* Windows
+  - use backslash for paths on Windows CE
 * Android
   - calculate WGS84 to real altitude (internal GPS)
   - fix incorrect airspace warning repetitions
   - auto-reconnect to Bluetooth GPS after timeout
+  - support the acceleration sensor
 * Linux
   - more dialog improvements
   - fix bold font rendering
+  - case insensitive file name matching
 
 Version 6.0.7 - 2011/03/12
 * devices

@@ -680,4 +680,5 @@ DeviceBlackboard::SetMC(fixed mc)
 
   basic.MacCready = mc;
   AllDevicesPutMacCready(mc);
+  TriggerGPSUpdate();
 }

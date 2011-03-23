@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/dlgSimulatorPrompt.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Gauge/LogoView.hpp"
 #include "Dialogs/Internal.hpp"
@@ -32,6 +33,11 @@ Copyright_License {
 #include <stdio.h>
 
 #ifdef SIMULATOR_AVAILABLE
+
+enum {
+  mrFly = 1000,
+  mrSimulator,
+};
 
 static WndForm *wf = NULL;
 static LogoView *logo;
@@ -46,11 +52,17 @@ OnLogoPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 static void
 OnSimulatorClicked(gcc_unused WndButton &button)
 {
-  wf->SetModalResult(mrOK);
+  wf->SetModalResult(mrSimulator);
 }
 
 static void
 OnFlyClicked(gcc_unused WndButton &button)
+{
+  wf->SetModalResult(mrFly);
+}
+
+static void
+OnQuitClicked(gcc_unused WndButton &button)
 {
   wf->SetModalResult(mrCancel);
 }
@@ -62,7 +74,7 @@ static CallBackTableEntry CallBackTable[] = {
 
 #endif
 
-bool
+SimulatorPromptResult
 dlgSimulatorPromptShowModal()
 {
 #ifdef SIMULATOR_AVAILABLE
@@ -82,14 +94,27 @@ dlgSimulatorPromptShowModal()
   assert(wb != NULL);
   wb->SetOnClickNotify(OnFlyClicked);
 
-  bool retval = (wf->ShowModal() == mrOK);
+  wb = ((WndButton *)wf->FindByName(_T("cmdQuit")));
+  assert(wb != NULL);
+  wb->SetOnClickNotify(OnQuitClicked);
+
+  int result = wf->ShowModal();
 
   delete wf;
   delete logo;
 
-  return retval;
+  switch (result) {
+  case mrFly:
+    return SPR_FLY;
+
+  case mrSimulator:
+    return SPR_SIMULATOR;
+
+  default:
+    return SPR_QUIT;
+  }
 #else
-  return false;
+  return SPR_FLY;
 #endif
 }
 

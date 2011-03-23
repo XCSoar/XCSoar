@@ -65,7 +65,17 @@ AircraftStateFilter::update(const AIRCRAFT_STATE& state)
     return;
   }
 
+  if (!positive(dt))
+    return;
+
   GeoVector vec(m_state_last.Location, state.Location);
+
+  const fixed MACH_1 = fixed_int_constant(343);
+  if (vec.Distance / dt > MACH_1) {
+    reset(state);
+    return;
+  }
+
   m_x+= vec.Bearing.sin()*vec.Distance;
   m_y+= vec.Bearing.cos()*vec.Distance;
 
