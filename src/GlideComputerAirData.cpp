@@ -281,17 +281,6 @@ GlideComputerAirData::AverageClimbRate()
   }
 }
 
-#ifdef NEWCLIMBAV
-ClimbAverageCalculator climbAverageCalculator;
-void
-GlideComputerAirData::Average30s()
-{
-  Calculated().Average30s =
-    climbAverageCalculator.GetAverage(Basic().Time, Basic().Altitude, 30);
-  Calculated().NettoAverage30s = Calculated().Average30s;
-}
-#else
-
 void
 GlideComputerAirData::Average30s()
 {
@@ -321,7 +310,6 @@ GlideComputerAirData::Average30s()
                       fixed(0.8));
   }
 }
-#endif
 
 void
 GlideComputerAirData::AverageThermal()
