@@ -63,8 +63,7 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
   SetSize((screen_width + quantisation_pixels - 1) / quantisation_pixels,
           (screen_height + quantisation_pixels - 1) / quantisation_pixels);
 
-  minimum = 0x7fff;
-  maximum = 0;
+  short minimum = 0x7fff, maximum = 0;
 
   for (unsigned y = 0; y < screen_height; y += quantisation_pixels) {
     const FastRowRotation rotation =
@@ -100,4 +99,7 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
 
     assert(p <= data.end());
   }
+
+  this->minimum = minimum;
+  this->maximum = maximum;
 }
