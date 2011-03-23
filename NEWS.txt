@@ -6,6 +6,7 @@ Version 6.0.8 - not yet released
 * don't estimate thermal source for skewed thermals
 * devices
   - CAI302: fix task declaration on Android
+  - EW microRecorder: minor task declaration fix
 * configuration
   - Units: fix "feet per minute" support
   - save the "Auto Logger" setting
