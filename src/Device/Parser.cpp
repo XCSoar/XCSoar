@@ -351,7 +351,6 @@ NMEAParser::GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   for (unsigned i = 0; i < MAXSATELLITES; i++)
     GPS_INFO->gps.SatelliteIDs[i] = line.read(0);
 
-  GSAAvailable = true;
   return true;
 }
 

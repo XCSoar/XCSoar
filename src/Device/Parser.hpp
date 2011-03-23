@@ -61,10 +61,7 @@ public:
   static bool NMEAChecksum(const char *String);
 
 private:
-  bool GSAAvailable;
   bool GGAAvailable;
-  bool RMZAvailable;
-  fixed RMZAltitude;
   fixed LastTime;
 
   bool TimeHasAdvanced(fixed ThisTime, NMEA_INFO *GPS_INFO);
