@@ -29,8 +29,8 @@ Copyright_License {
 #include <windef.h>
 
 enum {
-  IDOK = 1,
-  IDCANCEL,
+  IDCANCEL = 3, /* same value as mrCancel */
+  IDOK,
   IDYES,
   IDNO,
   IDRETRY,
