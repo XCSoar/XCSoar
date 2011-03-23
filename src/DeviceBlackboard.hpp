@@ -60,6 +60,7 @@ public:
 
   // only the device blackboard can write to gps
   friend class DeviceDescriptor;
+  friend class NmeaReplayGlue;
 
 #ifndef ANDROID
 protected:

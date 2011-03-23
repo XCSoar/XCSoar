@@ -22,16 +22,69 @@
 */
 
 #include "Replay/NmeaReplayGlue.hpp"
-
-#include "Device/List.hpp"
-#include "Device/Descriptor.hpp"
+#include "Device/Parser.hpp"
+#include "Device/Driver.hpp"
+#include "Device/Register.hpp"
 #include "Language.hpp"
 #include "Dialogs/Message.hpp"
+#include "Protection.hpp"
+#include "DeviceBlackboard.hpp"
+#include "Profile/DeviceConfig.hpp"
+
+NmeaReplayGlue::NmeaReplayGlue()
+  :parser(NULL), device(NULL)
+{
+}
+
+NmeaReplayGlue::~NmeaReplayGlue()
+{
+  delete device;
+  delete parser;
+}
+
+void
+NmeaReplayGlue::Start()
+{
+  assert(parser == NULL);
+  assert(device == NULL);
+
+  parser = new NMEAParser();
+
+  /* get the device driver name from the profile */
+  DeviceConfig config;
+  Profile::GetDeviceConfig(0, config);
+
+  /* instantiate it */
+  const struct DeviceRegister *driver = devGetDriver(config.driver_name);
+  assert(driver != NULL);
+  if (driver->CreateOnPort != NULL)
+    device = driver->CreateOnPort(&port);
+
+  NmeaReplay::Start();
+}
+
+void
+NmeaReplayGlue::Stop()
+{
+  NmeaReplay::Stop();
+
+  delete device;
+  device = NULL;
+  delete parser;
+  parser = NULL;
+}
 
 void
 NmeaReplayGlue::on_sentence(const char *line)
 {
-  DeviceList[0].LineReceived(line);
+  assert(device != NULL);
+
+  ScopeLock protect(mutexBlackboard);
+  NMEA_INFO &data = device_blackboard.SetBasic();
+
+  if ((device != NULL && device->ParseNMEA(line, &data, true)) ||
+      (parser != NULL && parser->ParseNMEAString_Internal(line, &data)))
+    data.Connected.update(fixed(MonotonicClockMS()) / 1000);
 }
 
 void
