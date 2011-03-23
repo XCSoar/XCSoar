@@ -57,6 +57,13 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
   NMEA_INFO &basic = device_blackboard.SetBasic();
   if (connected)
     basic.gps.AndroidInternalGPS = true;
+
+  if ((jint)basic.gps.Connected == connected) {
+    /* not modified */
+    mutexBlackboard.Unlock();
+    return;
+  }
+
   basic.gps.Connected = connected;
   mutexBlackboard.Unlock();
 
