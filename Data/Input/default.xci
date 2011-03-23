@@ -470,6 +470,7 @@ mode=Nav1
 type=key
 data=9
 event=Setup Alternates
+event=Mode default
 label=Alternates$(CheckWaypointFile)
 location=9
 
