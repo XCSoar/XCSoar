@@ -199,14 +199,14 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   LocalPath(path, _T("logs"));
 
   for (i = 1; i < 99; i++) {
-    // 2003-12-31-XXX-987-01.IGC
+    // 2003-12-31-XXX-987-01.igc
     // long filename form of IGC file.
     // XXX represents manufacturer code
 
     if (!settings.LoggerShortName) {
       // Long file name
       _stprintf(szLoggerFileName,
-                _T("%s" DIR_SEPARATOR_S "%04u-%02u-%02u-XCS-%c%c%c-%02d.IGC"),
+                _T("%s" DIR_SEPARATOR_S "%04u-%02u-%02u-XCS-%c%c%c-%02d.igc"),
           path,
                 gps_info.DateTime.year,
                 gps_info.DateTime.month,
@@ -223,7 +223,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
       cday = NumToIGCChar(gps_info.DateTime.day);
       cflight = NumToIGCChar(i);
       _stprintf(szLoggerFileName,
-                _T("%s" DIR_SEPARATOR_S "%c%c%cX%c%c%c%c.IGC"),
+                _T("%s" DIR_SEPARATOR_S "%c%c%cX%c%c%c%c.igc"),
           path,
           cyear,
           cmonth,
@@ -259,7 +259,7 @@ LogFileDate(const NMEA_INFO &gps_info, const TCHAR *filename)
   unsigned short year, month, day, num;
   int matches;
   // scan for long filename
-  matches = _stscanf(filename, _T("%hu-%hu-%hu-%7s-%hu.IGC"),
+  matches = _stscanf(filename, _T("%hu-%hu-%hu-%7s-%hu.igc"),
                      &year, &month, &day, asset, &num);
 
   if (matches == 5) {
@@ -276,7 +276,7 @@ LogFileDate(const NMEA_INFO &gps_info, const TCHAR *filename)
 
   TCHAR cyear, cmonth, cday, cflight;
   // scan for short filename
-  matches = _stscanf(filename, _T("%c%c%c%4s%c.IGC"),
+  matches = _stscanf(filename, _T("%c%c%c%4s%c.igc"),
 		                 &cyear, &cmonth, &cday, asset, &cflight);
 
   if (matches == 5) {
@@ -297,7 +297,7 @@ LogFileDate(const NMEA_INFO &gps_info, const TCHAR *filename)
     tm.tm_isdst = -1;
     return mktime(&tm);
     /*
-      YMDCXXXF.IGC
+      YMDCXXXF.igc
       Y: Year, 0 to 9 cycling every 10 years
       M: Month, 1 to 9 then A for 10, B=11, C=12
       D: Day, 1 to 9 then A for 10, B=....

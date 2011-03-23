@@ -1041,7 +1041,7 @@ gen_filename(DIRENTRY *de, int flightnum)
     strcpy(temps, "_");
 
   strcat(tempfn, temps);
-  strcat(tempfn, ".IGC");
+  strcat(tempfn, ".igc");
   strupr(tempfn);
 
   // The filename should also be saved
