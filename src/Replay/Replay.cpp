@@ -130,9 +130,3 @@ Replay::SetTimeScale(const fixed TimeScale)
   Nmea.TimeScale = TimeScale;
   Demo.TimeScale = TimeScale;
 }
-
-bool
-Replay::NmeaReplayEnabled()
-{
-  return ((mode == MODE_NMEA) && Nmea.IsEnabled());
-}

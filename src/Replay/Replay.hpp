@@ -50,8 +50,6 @@ public:
   fixed GetTimeScale();
   void SetTimeScale(const fixed TimeScale);
 
-  bool NmeaReplayEnabled();
-
 private:
   enum ReplayMode {
     MODE_NULL,

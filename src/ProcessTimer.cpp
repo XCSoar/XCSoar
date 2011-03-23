@@ -181,7 +181,7 @@ ProcessTimer::Process(void)
     // also service replay logger
     if (replay && replay->Update()) {
       if (CommonInterface::Basic().gps.MovementDetected &&
-          !replay->NmeaReplayEnabled())
+          CommonInterface::Basic().gps.real)
         replay->Stop();
 
       return;

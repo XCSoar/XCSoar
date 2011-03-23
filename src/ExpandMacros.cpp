@@ -35,7 +35,6 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Replay/Replay.hpp"
 #include "Device/device.hpp"
 
 #include <stdlib.h>
@@ -384,8 +383,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
   if (_tcsstr(OutBuffer, _T("$(CheckReplay)"))) {
     if (!Basic().gps.Replay
-        && (replay!=NULL)
-        && !replay->NmeaReplayEnabled()
+        && Basic().gps.real
         && Basic().gps.MovementDetected)
       invalid = true;
 

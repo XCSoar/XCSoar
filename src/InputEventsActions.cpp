@@ -80,7 +80,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceAircraftPerformance.hpp"
-#include "Replay/Replay.hpp"
 #include "DeviceBlackboard.hpp"
 #include "UtilsSettings.hpp"
 #include "Pages.hpp"
@@ -1330,7 +1329,8 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (_tcscmp(misc, _T("Weather")) == 0)
     dlgWeatherShowModal();
   else if (_tcscmp(misc, _T("Replay")) == 0) {
-    if (!XCSoarInterface::Basic().gps.MovementDetected || (replay && replay->NmeaReplayEnabled()))
+    if (!CommonInterface::Basic().gps.MovementDetected ||
+        !CommonInterface::Basic().gps.real)
       dlgLoggerReplayShowModal();
   } else if (_tcscmp(misc, _T("Switches")) == 0)
     dlgSwitchesShowModal();
