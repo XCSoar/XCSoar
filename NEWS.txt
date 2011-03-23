@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.0.8 - not yet released
+Version 6.0.8 - 2011/03/23
 * don't estimate thermal source for skewed thermals
 * devices
   - CAI302: fix task declaration on Android
