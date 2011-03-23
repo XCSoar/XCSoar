@@ -38,10 +38,20 @@ class StatusMessageList;
 class CommonInterface {
   static InterfaceBlackboard blackboard;
 
+protected:
+  /**
+   * True if movement was detected on a real GPS.
+   */
+  static bool movement_detected;
+
 public:
   // window.. make this protected TODO so have to subclass to get access
   static StatusMessageList status_messages;
   static MainWindow main_window;
+
+  static bool MovementDetected() {
+    return movement_detected;
+  }
 
   // TODO: make this protected
   /**

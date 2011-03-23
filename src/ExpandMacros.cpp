@@ -383,9 +383,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   }
 
   if (_tcsstr(OutBuffer, _T("$(CheckReplay)"))) {
-    if (!Basic().gps.Replay
-        && Basic().gps.real
-        && Basic().gps.MovementDetected)
+    if (CommonInterface::MovementDetected())
       invalid = true;
 
     ReplaceInString(OutBuffer, _T("$(CheckReplay)"), _T(""), Size);

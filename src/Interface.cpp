@@ -41,6 +41,8 @@ Copyright_License {
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 
+bool CommonInterface::movement_detected = false;
+
 bool ActionInterface::doForceShutdown = false;
 
 InterfaceBlackboard CommonInterface::blackboard;
@@ -65,6 +67,7 @@ XCSoarInterface::ReceiveBlackboard()
 {
   ScopeLock protect(mutexBlackboard);
   ReadBlackboardBasic(device_blackboard.Basic());
+  movement_detected = Basic().gps.real && Basic().gps.MovementDetected;
   ReadBlackboardCalculated(device_blackboard.Calculated());
 }
 

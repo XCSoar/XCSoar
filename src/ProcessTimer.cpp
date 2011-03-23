@@ -180,8 +180,7 @@ ProcessTimer::Process(void)
 
     // also service replay logger
     if (replay && replay->Update()) {
-      if (CommonInterface::Basic().gps.MovementDetected &&
-          CommonInterface::Basic().gps.real)
+      if (CommonInterface::MovementDetected())
         replay->Stop();
 
       return;

@@ -1329,8 +1329,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (_tcscmp(misc, _T("Weather")) == 0)
     dlgWeatherShowModal();
   else if (_tcscmp(misc, _T("Replay")) == 0) {
-    if (!CommonInterface::Basic().gps.MovementDetected ||
-        !CommonInterface::Basic().gps.real)
+    if (!CommonInterface::MovementDetected())
       dlgLoggerReplayShowModal();
   } else if (_tcscmp(misc, _T("Switches")) == 0)
     dlgSwitchesShowModal();
