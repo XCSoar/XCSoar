@@ -63,7 +63,11 @@ public:
     int FixQuality;             /**< GPS fix quality */
     int SatellitesUsed;         /**< GPS fix state */
     fixed HDOP; /**< GPS Horizontal Dilution of precision */
-    bool Simulator;             /**< GPS Simulator flag  */
+
+    /**
+     * Is the fix real? (no replay, no simulator)
+     */
+    bool real;
 
     /** 
      * Set buffer value from NMEA_INFO structure

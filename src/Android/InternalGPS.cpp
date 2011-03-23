@@ -57,8 +57,10 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
   mutexBlackboard.Lock();
   NMEA_INFO &basic = device_blackboard.SetBasic();
 
-  if (connected)
+  if (connected) {
+    basic.gps.real = true;
     basic.gps.AndroidInternalGPS = true;
+  }
 
   basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
   mutexBlackboard.Unlock();
@@ -95,6 +97,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.DateTime = date_time;
 
   basic.gps.SatellitesUsed = n_satellites;
+  basic.gps.real = true;
   basic.gps.AndroidInternalGPS = true;
   basic.Location = GeoPoint(Angle::degrees(fixed(longitude)),
                             Angle::degrees(fixed(latitude)));

@@ -74,6 +74,7 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
     return true;
 
   parser.Reset();
+  parser.SetReal(_tcscmp(Driver->Name, _T("Condor")) != 0);
 
   device = Driver->CreateOnPort(Com);
   OperationEnvironment env;

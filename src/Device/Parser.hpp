@@ -43,6 +43,7 @@ private:
   fixed LastTime;
 
 public:
+  bool real;
   bool gpsValid;
 
   bool activeGPS;
@@ -51,6 +52,10 @@ public:
 public:
   NMEAParser();
   void Reset(void);
+
+  void SetReal(bool _real) {
+    real = _real;
+  }
 
   bool ParseNMEAString_Internal(const char *line, NMEA_INFO *GPS_INFO);
 

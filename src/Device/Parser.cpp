@@ -67,6 +67,7 @@ NMEAParser::NMEAParser() {
 void
 NMEAParser::Reset(void)
 {
+  real = true;
   gpsValid = false;
   isFlarm = false;
   activeGPS = true;
@@ -402,6 +403,7 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (valid_location)
     GPS_INFO->Location = location;
 
+  GPS_INFO->gps.real = real;
 #ifdef ANDROID
   GPS_INFO->gps.AndroidInternalGPS = false;
 #endif
@@ -554,6 +556,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
       gps.SatellitesUsed = -1;
   }
 
+  GPS_INFO->gps.real = real;
 #ifdef ANDROID
   GPS_INFO->gps.AndroidInternalGPS = false;
 #endif
@@ -644,6 +647,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (valid_location)
     GPS_INFO->Location = location;
 
+  GPS_INFO->gps.real = real;
 #ifdef ANDROID
   GPS_INFO->gps.AndroidInternalGPS = false;
 #endif

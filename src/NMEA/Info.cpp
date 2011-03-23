@@ -44,6 +44,7 @@ SWITCH_INFO::reset()
 void
 GPS_STATE::reset()
 {
+  real = false;
   Simulator = false;
 #ifdef ANDROID
   AndroidInternalGPS = false;

@@ -95,6 +95,11 @@ struct GPS_STATE
   /** Is the GPS unit moving? (Speed > 2.0) */
   bool MovementDetected;
 
+  /**
+   * Is the fix real? (no replay, no simulator)
+   */
+  bool real;
+
   /** Is XCSoar in replay mode? */
   bool Replay;
 

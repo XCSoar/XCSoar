@@ -128,7 +128,9 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.NettoVarioAvailable.clear();
   basic.ExternalWindAvailable.clear();
   basic.WindAvailable.clear();
+  basic.gps.real = false;
   basic.gps.Replay = true;
+  basic.gps.Simulator = false;
 
   TriggerGPSUpdate();
 };
@@ -156,6 +158,7 @@ DeviceBlackboard::ProcessSimulation()
   basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
   basic.gps.SatellitesUsed = 6;
   basic.gps.Simulator = true;
+  basic.gps.real = false;
   basic.gps.MovementDetected = false;
 
 #ifdef ANDROID
@@ -631,8 +634,7 @@ DeviceBlackboard::AutoQNH()
 
   if (!Calculated().flight.OnGround // must be on ground
       || !countdown_autoqnh    // only do it once
-      || basic.gps.Replay // never in replay mode
-      || basic.gps.Simulator // never in simulator
+      || !basic.gps.real // never in replay mode / simulator
       || !basic.LocationAvailable // Reject if no valid GPS fix
       || !basic.PressureAltitudeAvailable // Reject if no pressure altitude
       || basic.QNHAvailable // Reject if QNH already known

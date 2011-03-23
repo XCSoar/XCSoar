@@ -77,7 +77,6 @@ GlideComputerStats::DoLogging()
   if (log_clock.check_advance(Basic().Time)) {
     if (logger != NULL)
       logger->LogPoint(Basic());
-    gps_info.gps.Simulator = false; // reset for next fix (set by NMEA parsing)
   }
 
   if (Calculated().flight.Flying) {

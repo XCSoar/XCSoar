@@ -61,7 +61,7 @@ LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
   FixQuality = src.gps.FixQuality;
   SatellitesUsed = src.gps.SatellitesUsed;
   HDOP = src.gps.HDOP;
-  Simulator = src.gps.Simulator;
+  real = src.gps.real;
 
   std::copy(src.gps.SatelliteIDs, src.gps.SatelliteIDs + MAXSATELLITES,
             SatelliteIDs);
@@ -129,6 +129,9 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
 void
 LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
 {
+  if (!gps_info.Connected && PreTakeoffBuffer.empty())
+    return;
+
   LoggerPreTakeoffBuffer item;
   item = gps_info;
   PreTakeoffBuffer.push(item);
@@ -168,7 +171,7 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
     tmp_info.gps.FixQuality = src.FixQuality;
     tmp_info.gps.SatellitesUsed = src.SatellitesUsed;
     tmp_info.gps.HDOP = src.HDOP;
-    tmp_info.gps.Simulator = src.Simulator;
+    tmp_info.gps.real = src.real;
 
     for (int iSat = 0; iSat < MAXSATELLITES; iSat++)
       tmp_info.gps.SatelliteIDs[iSat] = src.SatelliteIDs[iSat];
