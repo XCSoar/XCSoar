@@ -363,6 +363,10 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const RECT &rc,
 
   if (Basic().gps.Replay)
     _tcscat(ScaleInfo, _T("REPLAY "));
+  else if (Basic().gps.Simulator) {
+    _tcscat(ScaleInfo, _("Simulator"));
+    _tcscat(ScaleInfo, _T(" "));
+  }
 
   if (SettingsComputer().BallastTimerActive) {
     TCHAR TEMP[20];
