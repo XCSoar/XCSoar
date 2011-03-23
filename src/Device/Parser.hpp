@@ -36,17 +36,23 @@ class NMEAParser
 public:
   static bool ignore_checksum;
 
-public:
-  NMEAParser();
-  void Reset(void);
+private:
+  static int StartDay;
 
-  bool ParseNMEAString_Internal(const char *line, NMEA_INFO *GPS_INFO);
+  bool GGAAvailable;
+  fixed LastTime;
+
+public:
   bool gpsValid;
 
   bool activeGPS;
   bool isFlarm;
 
-  static int StartDay;
+public:
+  NMEAParser();
+  void Reset(void);
+
+  bool ParseNMEAString_Internal(const char *line, NMEA_INFO *GPS_INFO);
 
 public:
   void TestRoutine(NMEA_INFO *GPS_INFO);
@@ -61,8 +67,6 @@ public:
   static bool NMEAChecksum(const char *String);
 
 private:
-  bool GGAAvailable;
-  fixed LastTime;
 
   bool TimeHasAdvanced(fixed ThisTime, NMEA_INFO *GPS_INFO);
   static fixed TimeModify(fixed FixTime, BrokenDateTime &date_time);
