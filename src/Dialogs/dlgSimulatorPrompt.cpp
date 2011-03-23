@@ -114,7 +114,7 @@ dlgSimulatorPromptShowModal()
     return SPR_QUIT;
   }
 #else
-  return false;
+  return SPR_FLY;
 #endif
 }
 
