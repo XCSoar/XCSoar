@@ -379,7 +379,6 @@ DeviceBlackboard::tick()
   SetSystemTime();
 
   // calculate fast data to complete aircraft state
-  Heading();
   NavAltitude();
   AutoQNH();
 
@@ -407,29 +406,6 @@ DeviceBlackboard::NavAltitude()
     basic.NavAltitude = basic.GPSAltitude;
   } else {
     basic.NavAltitude = basic.BaroAltitude;
-  }
-}
-
-
-/**
- * Calculates the heading
- */
-void
-DeviceBlackboard::Heading()
-{
-  NMEA_INFO &basic = SetBasic();
-  const SpeedVector wind = Calculated().wind;
-
-  if ((positive(basic.GroundSpeed) || wind.is_non_zero()) && Calculated().flight.Flying) {
-    fixed x0 = basic.TrackBearing.fastsine() * basic.GroundSpeed;
-    fixed y0 = basic.TrackBearing.fastcosine() * basic.GroundSpeed;
-    x0 += wind.bearing.fastsine() * wind.norm;
-    y0 += wind.bearing.fastcosine() * wind.norm;
-
-    basic.Heading = Angle::radians(atan2(x0, y0)).as_bearing();
-
-  } else {
-    basic.Heading = basic.TrackBearing;
   }
 }
 

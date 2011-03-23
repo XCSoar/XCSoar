@@ -115,7 +115,7 @@ static void UpdateList(void)
     sort_distance = true;
     int a = DirectionFilter[DirectionFilterIdx];
     if (a == DirHDG) {
-      a = uround(XCSoarInterface::Basic().Heading.value_degrees());
+      a = uround(CommonInterface::Calculated().Heading.value_degrees());
       lastHeading = a;
     }
     airspace_sorter->filter_direction(AirspaceSelectInfo, 
@@ -246,7 +246,7 @@ static void SetDirectionData(DataFieldString *Sender){
   if (DirectionFilterIdx == 0)
     _stprintf(sTmp, _T("%c"), '*');
   else if (DirectionFilterIdx == 1){
-    int a = iround(XCSoarInterface::Basic().Heading.value_degrees());
+    int a = iround(CommonInterface::Calculated().Heading.value_degrees());
     if (a <=0)
       a += 360;
     _stprintf(sTmp, _T("HDG(%d")_T(DEG)_T(")"), a);
@@ -378,7 +378,7 @@ OnTimerNotify(WndForm &Sender)
   (void)Sender;
   if (DirectionFilterIdx == 1){
     int a;
-    a = (lastHeading - iround(XCSoarInterface::Basic().Heading.value_degrees()));
+    a = (lastHeading - iround(CommonInterface::Calculated().Heading.value_degrees()));
     if (abs(a) > 0){
       UpdateList();
       SetDirectionData(NULL);

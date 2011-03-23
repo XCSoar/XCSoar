@@ -117,6 +117,7 @@ GlideComputerAirData::ProcessVertical()
   Turning();
   Wind();
   SelectWind();
+  Heading();
   Airspeed();
   BruttoVario();
   NettoVario();
@@ -217,6 +218,28 @@ GlideComputerAirData::SetWindEstimate(fixed wind_speed, Angle wind_bearing,
   Vector v_wind = Vector(SpeedVector(wind_bearing, wind_speed));
 
   windanalyser.slot_newEstimate(Basic(), SetCalculated(), v_wind, quality);
+}
+
+/**
+ * Calculates the heading
+ */
+void
+GlideComputerAirData::Heading()
+{
+  const NMEA_INFO &basic = Basic();
+  DERIVED_INFO &calculated = SetCalculated();
+  const SpeedVector wind = calculated.wind;
+
+  if ((positive(basic.GroundSpeed) || wind.is_non_zero()) && Calculated().flight.Flying) {
+    fixed x0 = basic.TrackBearing.fastsine() * basic.GroundSpeed;
+    fixed y0 = basic.TrackBearing.fastcosine() * basic.GroundSpeed;
+    x0 += wind.bearing.fastsine() * wind.norm;
+    y0 += wind.bearing.fastcosine() * wind.norm;
+
+    calculated.Heading = Angle::radians(atan2(x0, y0)).as_bearing();
+  } else {
+    calculated.Heading = basic.TrackBearing;
+  }
 }
 
 void
@@ -452,18 +475,18 @@ GlideComputerAirData::UpdateLiftDatabase()
   // Depending on the circling direction the current heading will be
   // smaller or bigger then the last one, because of that negative() is
   // tested against the left variable.
-  for (Angle h = LastBasic().Heading;
-       left == negative((Basic().Heading - h).as_delta().value_degrees());
+  for (Angle h = LastCalculated().Heading;
+       left == negative((calculated.Heading - h).as_delta().value_degrees());
        h += heading_step) {
     unsigned index = heading_to_index(h);
     calculated.LiftDatabase[index] = calculated.BruttoVario;
   }
 
   // detect zero crossing
-  if (((Basic().Heading.value_degrees()< fixed_90) && 
-       (LastBasic().Heading.value_degrees()> fixed_270)) ||
-      ((LastBasic().Heading.value_degrees()< fixed_90) && 
-       (Basic().Heading.value_degrees()> fixed_270))) {
+  if (((calculated.Heading.value_degrees()< fixed_90) && 
+       (LastCalculated().Heading.value_degrees()> fixed_270)) ||
+      ((LastCalculated().Heading.value_degrees()< fixed_90) && 
+       (calculated.Heading.value_degrees()> fixed_270))) {
 
     fixed h_av = fixed_zero;
     for (unsigned i=0; i<36; ++i) {
@@ -816,7 +839,7 @@ GlideComputerAirData::TurnRate()
   calculated.TurnRate =
     (basic.TrackBearing - LastBasic().TrackBearing).as_delta().value_degrees() / dT;
   calculated.TurnRateWind =
-    (basic.Heading - LastBasic().Heading).as_delta().value_degrees() / dT;
+    (calculated.Heading - LastCalculated().Heading).as_delta().value_degrees() / dT;
 }
 
 /**

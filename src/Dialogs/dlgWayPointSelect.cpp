@@ -592,9 +592,9 @@ OnTimerNotify(WndForm &Sender)
 {
   (void)Sender;
   if (filter_data.direction_index == 1 && !XCSoarInterface::Calculated().Circling) {
-    Angle a = last_heading - XCSoarInterface::Basic().Heading;
+    Angle a = last_heading - CommonInterface::Calculated().Heading;
     if (a.as_delta().magnitude_degrees() >= fixed(60)) {
-      last_heading = XCSoarInterface::Basic().Heading;
+      last_heading = CommonInterface::Calculated().Heading;
       UpdateList();
       InitializeDirection(true);
       wpDirection->RefreshDisplay();
@@ -693,7 +693,7 @@ dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location)
   wpType = (WndProperty *)wf->FindByName(_T("prpFltType"));
 
   g_location = location;
-  last_heading = XCSoarInterface::Basic().Heading;
+  last_heading = CommonInterface::Calculated().Heading;
   PrepareData();
   UpdateList();
 

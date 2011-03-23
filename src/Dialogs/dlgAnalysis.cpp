@@ -136,6 +136,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
     if (protected_task_manager != NULL) {
       ProtectedTaskManager::Lease task(*protected_task_manager);
       fs.RenderTask(canvas, rcgfx, XCSoarInterface::Basic(),
+                    CommonInterface::Calculated(),
                     XCSoarInterface::SettingsComputer(),
                     XCSoarInterface::SettingsMap(),
                     task);
@@ -150,6 +151,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
       }
 
       fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
+                   CommonInterface::Calculated(),
                    XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Calculated().contest_stats, trace);
     }

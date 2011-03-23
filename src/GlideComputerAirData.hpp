@@ -70,6 +70,7 @@ protected:
 
   bool FlightTimes();
 private:
+  void Heading();
   void Airspeed();
   void EnergyHeight();
   void BruttoVario();

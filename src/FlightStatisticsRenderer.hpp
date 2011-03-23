@@ -83,11 +83,13 @@ public:
                    const TracePointVector& trace) const;
 
   void RenderOLC(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
+                 const DERIVED_INFO &calculated,
                  const SETTINGS_COMPUTER &settings_computer,
                  const ContestStatistics &contest,
                  const TracePointVector& trace) const;
 
   void RenderTask(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
+                  const DERIVED_INFO &derived_info,
                   const SETTINGS_COMPUTER &settings_computer,
                   const SETTINGS_MAP &settings_map,
                   const TaskManager &task) const;

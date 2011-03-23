@@ -35,6 +35,7 @@ TERRAIN_ALT_INFO::Clear()
 void
 DERIVED_INFO::reset()
 {
+  Heading = Angle::native(fixed_zero);
   AirspeedAvailable.clear();
   estimated_wind_available.clear();
   task_stats.reset();

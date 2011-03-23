@@ -184,9 +184,6 @@ struct NMEA_INFO {
   /** track angle in degrees true */
   Angle TrackBearing;
 
-  /** Bearing including wind factor */
-  Angle Heading;
-
   //############
   //   Speeds
   //############

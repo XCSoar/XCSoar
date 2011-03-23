@@ -75,7 +75,7 @@ NMEA_INFO::reset()
 
   LocationAvailable.clear();
 
-  TrackBearing = Heading = Angle::native(fixed_zero);
+  TrackBearing = Angle::native(fixed_zero);
   TrackBearingAvailable.clear();
 
   GroundSpeedAvailable.clear();
@@ -180,8 +180,6 @@ NMEA_INFO::complement(const NMEA_INFO &add)
 
   acceleration.complement(add.acceleration);
 
-  /* calculated: flight */
-
   if (LocationAvailable.complement(add.LocationAvailable))
     Location = add.Location;
 
@@ -198,8 +196,6 @@ NMEA_INFO::complement(const NMEA_INFO &add)
 
   if (GPSAltitudeAvailable.complement(add.GPSAltitudeAvailable))
     GPSAltitude = add.GPSAltitude;
-
-  /* calculated: Heading, TurnRateWind, TurnRate */
 
   if ((BaroAltitudeAvailable.complement(add.BaroAltitudeAvailable) ||
        (BaroAltitudeOrigin <= BARO_ALTITUDE_UNKNOWN &&

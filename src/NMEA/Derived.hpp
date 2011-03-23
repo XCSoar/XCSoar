@@ -113,6 +113,9 @@ struct DERIVED_INFO:
 
   fixed V_stf; /**< Speed to fly block/dolphin (m/s) */
 
+  /** Bearing including wind factor */
+  Angle Heading;
+
   /**
    * Airspeed
    * Is set to measured airspeed if provided, otherwise calculated
