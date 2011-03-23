@@ -36,6 +36,8 @@ class StatusMessageList;
  * Class to hold data/methods accessible by all interface subsystems
  */
 class CommonInterface {
+  static InterfaceBlackboard blackboard;
+
 public:
   // window.. make this protected TODO so have to subclass to get access
   static StatusMessageList status_messages;
@@ -94,9 +96,6 @@ public:
   static void ReadBlackboardCalculated(const DERIVED_INFO& derived_info) {
     blackboard.ReadBlackboardCalculated(derived_info);
   }
-
-private:
-  static InterfaceBlackboard blackboard;
 };
 
 /** 
