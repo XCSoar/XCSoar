@@ -378,11 +378,6 @@ struct NMEA_INFO {
   //   Vario
   //###########
 
-  /** GPS-based vario */
-  fixed GPSVario;
-  /** GPS-based vario including energy height */
-  fixed GPSVarioTE;
-
   /**
    * Is an external vario signal available?
    * @see TotalEnergyVario
@@ -406,13 +401,6 @@ struct NMEA_INFO {
    * @see NettoVarioAvailable
    */
   fixed NettoVario;
-
-  /**
-   * Current vertical speed (total energy).  This is set to
-   * TotalEnergyVario if available, and falls back to GPSVario.  It is
-   * maintained by DeviceBlackboard::Vario().
-   */
-  fixed BruttoVario;
 
   //##############
   //   Settings

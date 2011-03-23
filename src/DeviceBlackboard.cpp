@@ -401,7 +401,6 @@ void
 DeviceBlackboard::tick_fast()
 {
   EnergyHeight();
-  Vario();
 }
 
 /**
@@ -445,31 +444,6 @@ DeviceBlackboard::Heading()
 }
 
 /**
- * 1. Calculates the vario values for gps vario, gps total energy vario and distance vario
- * 2. Sets Vario to GPSVario or received Vario data from instrument
- */
-void
-DeviceBlackboard::Vario()
-{
-  NMEA_INFO &basic = SetBasic();
-  // Calculate time passed since last calculation
-  const fixed dT = basic.Time - LastBasic().Time;
-
-  if (positive(dT)) {
-    const fixed Gain = basic.NavAltitude - LastBasic().NavAltitude;
-    const fixed GainTE = basic.TEAltitude - LastBasic().TEAltitude;
-
-    // estimate value from GPS
-    basic.GPSVario = Gain / dT;
-    basic.GPSVarioTE = GainTE / dT;
-  }
-
-  basic.BruttoVario = basic.TotalEnergyVarioAvailable
-    ? basic.TotalEnergyVario
-    : basic.GPSVario;
-}
-
-/**
  * Calculates the turn rate of the heading,
  * the estimated bank angle and
  * the estimated pitch angle
@@ -498,7 +472,7 @@ DeviceBlackboard::Dynamics()
 
     // estimate pitch angle (assuming balanced turn)
     if (Calculated().AirspeedAvailable && basic.TotalEnergyVarioAvailable)
-      basic.acceleration.PitchAngle = Angle::radians(atan2(basic.GPSVario - basic.TotalEnergyVario,
+      basic.acceleration.PitchAngle = Angle::radians(atan2(Calculated().GPSVario - basic.TotalEnergyVario,
           Calculated().TrueAirspeed));
     else
       basic.acceleration.PitchAngle = Angle::native(fixed_zero);

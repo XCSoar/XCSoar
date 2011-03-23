@@ -42,7 +42,7 @@ ToAircraftState(const NMEA_INFO &info, const DERIVED_INFO &calculated)
   aircraft.AirspaceAltitude = info.GetAltitudeBaroPreferred();
 
   /* VARIO_INFO */
-  aircraft.Vario = info.BruttoVario;
+  aircraft.Vario = calculated.BruttoVario;
   aircraft.NettoVario = calculated.NettoVario;
 
   /* FLYING_STATE */

@@ -34,6 +34,18 @@ struct VARIO_INFO
 {
   fixed GliderSinkRate;
 
+  /** GPS-based vario */
+  fixed GPSVario;
+  /** GPS-based vario including energy height */
+  fixed GPSVarioTE;
+
+  /**
+   * Current vertical speed (total energy).  This is set to
+   * TotalEnergyVario if available, and falls back to GPSVario.  It is
+   * maintained by DeviceBlackboard::Vario().
+   */
+  fixed BruttoVario;
+
   /**
    * Vertical speed of air mass (m/s, up positive)
    */

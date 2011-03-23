@@ -28,7 +28,7 @@ Copyright_License {
 void
 TraceHistory::append(const NMEA_INFO& basic, const DERIVED_INFO& calculated)
 {
-  BruttoVario.push(basic.BruttoVario);
+  BruttoVario.push(calculated.BruttoVario);
   NettoVario.push(calculated.NettoVario);
 }
 

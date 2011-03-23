@@ -116,6 +116,7 @@ GlideComputerAirData::ProcessVertical()
   Wind();
   SelectWind();
   Airspeed();
+  BruttoVario();
   NettoVario();
 
   thermallocator.Process(calculated.Circling,
@@ -253,6 +254,33 @@ GlideComputerAirData::Airspeed()
   }
 }
 
+/**
+ * 1. Calculates the vario values for gps vario, gps total energy vario and distance vario
+ * 2. Sets Vario to GPSVario or received Vario data from instrument
+ */
+void
+GlideComputerAirData::BruttoVario()
+{
+  const NMEA_INFO &basic = Basic();
+  VARIO_INFO &vario = SetCalculated();
+
+  // Calculate time passed since last calculation
+  const fixed dT = basic.Time - LastBasic().Time;
+
+  if (positive(dT)) {
+    const fixed Gain = basic.NavAltitude - LastBasic().NavAltitude;
+    const fixed GainTE = basic.TEAltitude - LastBasic().TEAltitude;
+
+    // estimate value from GPS
+    vario.GPSVario = Gain / dT;
+    vario.GPSVarioTE = GainTE / dT;
+  }
+
+  vario.BruttoVario = basic.TotalEnergyVarioAvailable
+    ? basic.TotalEnergyVario
+    : vario.GPSVario;
+}
+
 void
 GlideComputerAirData::NettoVario()
 {
@@ -269,7 +297,7 @@ GlideComputerAirData::NettoVario()
 
   vario.NettoVario = basic.NettoVarioAvailable
     ? basic.NettoVario
-    : basic.BruttoVario - vario.GliderSinkRate;
+    : vario.BruttoVario - vario.GliderSinkRate;
 }
 
 void
@@ -310,7 +338,7 @@ GlideComputerAirData::Average30s()
   if (!time_advanced() || calculated.Circling != LastCalculated().Circling) {
     vario_30s_filter.reset();
     netto_30s_filter.reset();
-    calculated.Average30s = basic.BruttoVario;
+    calculated.Average30s = calculated.BruttoVario;
     calculated.NettoAverage30s = calculated.NettoVario;
   }
 
@@ -319,7 +347,7 @@ GlideComputerAirData::Average30s()
 
   const unsigned Elapsed = (unsigned)(basic.Time - LastBasic().Time);
   for (unsigned i = 0; i < Elapsed; ++i) {
-    if (vario_30s_filter.update(basic.BruttoVario))
+    if (vario_30s_filter.update(calculated.BruttoVario))
       calculated.Average30s =
         LowPassFilter(calculated.Average30s, vario_30s_filter.average(),
                       fixed(0.8));
@@ -404,7 +432,7 @@ GlideComputerAirData::UpdateLiftDatabase()
        left == negative((Basic().Heading - h).as_delta().value_degrees());
        h += heading_step) {
     unsigned index = heading_to_index(h);
-    calculated.LiftDatabase[index] = Basic().BruttoVario;
+    calculated.LiftDatabase[index] = calculated.BruttoVario;
   }
 
   // detect zero crossing
@@ -719,7 +747,7 @@ GlideComputerAirData::PercentCircling(const fixed Rate)
     calculated.timeCircling += fixed_one;
 
     // Add the Vario signal to the total climb height
-    calculated.TotalHeightClimb += Basic().GPSVario;
+    calculated.TotalHeightClimb += calculated.GPSVario;
 
     // call ThermalBand function here because it is then explicitly
     // tied to same condition as %circling calculations
@@ -1054,7 +1082,7 @@ GlideComputerAirData::ThermalBand()
   if ((!Calculated().Circling) || negative(Calculated().Average30s))
     return;
 
-  tbi.add(dheight, Basic().BruttoVario);
+  tbi.add(dheight, Calculated().BruttoVario);
 }
 
 void

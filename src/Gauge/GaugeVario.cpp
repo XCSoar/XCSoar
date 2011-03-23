@@ -182,7 +182,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
   static int sval_last = 0;
   static int ival_last = 0;
 
-  fixed vval = Basic().BruttoVario;
+  fixed vval = Calculated().BruttoVario;
   ival = ValueToNeedlePos(fixed(vval));
   sval = ValueToNeedlePos(Calculated().GliderSinkRate);
   if (ShowAveNeedle) {

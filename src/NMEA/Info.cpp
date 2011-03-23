@@ -104,11 +104,8 @@ NMEA_INFO::reset()
   DateTime.day_of_week = 0;
   DateTime.hour = DateTime.minute = DateTime.second = 0;
 
-  GPSVario = GPSVarioTE = fixed_zero;
-
   TotalEnergyVarioAvailable.clear();
   NettoVarioAvailable.clear();
-  BruttoVario = fixed_zero;
 
   // XXX MacCready, Ballast, Bugs
 
@@ -227,8 +224,6 @@ NMEA_INFO::complement(const NMEA_INFO &add)
      NavAltitude,working_band_fraction */
 
   /* managed by DeviceBlackboard: pressure */
-
-  /* calculated: GPSVario, GPSVarioTE, BruttoVario */
 
   if (TotalEnergyVarioAvailable.complement(add.TotalEnergyVarioAvailable))
     TotalEnergyVario = add.TotalEnergyVario;
