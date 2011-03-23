@@ -39,7 +39,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Screen/Fonts.hpp"
 #include "Components.hpp"
-#include "Replay/Replay.hpp"
 
 #include <algorithm>
 
@@ -133,9 +132,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
     drag_projection = visible_projection;
   }
 
-  if (is_simulator() && !Basic().gps.Replay &&
-      replay &&
-      !replay->NmeaReplayEnabled() && drag_mode == DRAG_NONE)
+  if (Basic().gps.Simulator && drag_mode == DRAG_NONE)
     if (compare_squared(visible_projection.GetScreenOrigin().x - x,
                         visible_projection.GetScreenOrigin().y - y,
                         Layout::Scale(30)) != 1)
