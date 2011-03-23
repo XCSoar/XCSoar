@@ -41,8 +41,6 @@ class AbstractTaskFactory;
 class OrderedTaskPoint;
 class InfoBoxPanelConfig;
 
-void StartupScreen();
-
 void dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close = false);
 bool dlgAirspaceWarningVisible();
 void dlgAirspaceDetails(const AbstractAirspace& the_airspace);
