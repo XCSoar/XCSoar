@@ -42,6 +42,8 @@ class DeviceBlackboard:
   public SettingsComputerBlackboard,
   public SettingsMapBlackboard
 {
+  NMEA_INFO state_last;
+
   fixed ScreenDistanceMeters;
 
 public:
@@ -111,7 +113,6 @@ private:
   void NettoVario(const GlidePolar& glide_polar);
   void AutoQNH();
 
-  NMEA_INFO state_last;
   const NMEA_INFO& LastBasic() { return state_last; }
 };
 
