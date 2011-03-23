@@ -96,8 +96,8 @@ public:
    */
   bool expire_wall_clock();
 
-  void tick(const GlidePolar& glide_polar);
-  void tick_fast(const GlidePolar& glide_polar);
+  void tick();
+  void tick_fast();
 
 private:
 // moved from GlideComputerAirData
@@ -108,7 +108,6 @@ private:
   void Dynamics();
   void EnergyHeight();
   void Vario();
-  void NettoVario(const GlidePolar& glide_polar);
   void AutoQNH();
 
   const NMEA_INFO& LastBasic() { return state_last; }

@@ -378,8 +378,6 @@ struct NMEA_INFO {
   //   Vario
   //###########
 
-  fixed GliderSinkRate;
-
   /** GPS-based vario */
   fixed GPSVario;
   /** GPS-based vario including energy height */

@@ -369,7 +369,7 @@ DeviceBlackboard::expire_wall_clock()
 }
 
 void
-DeviceBlackboard::tick(const GlidePolar& glide_polar)
+DeviceBlackboard::tick()
 {
   SetBasic().expire();
   calculated_info.expire(Basic().Time);
@@ -384,7 +384,7 @@ DeviceBlackboard::tick(const GlidePolar& glide_polar)
   NavAltitude();
   AutoQNH();
 
-  tick_fast(glide_polar);
+  tick_fast();
 
   if (Basic().Time!= LastBasic().Time) {
 
@@ -398,31 +398,11 @@ DeviceBlackboard::tick(const GlidePolar& glide_polar)
 
 
 void
-DeviceBlackboard::tick_fast(const GlidePolar& glide_polar)
+DeviceBlackboard::tick_fast()
 {
   EnergyHeight();
   Vario();
-  NettoVario(glide_polar);
 }
-
-
-void
-DeviceBlackboard::NettoVario(const GlidePolar& glide_polar)
-{
-  NMEA_INFO &basic = SetBasic();
-
-  basic.GliderSinkRate =
-    (Calculated().flight.Flying && Calculated().AirspeedAvailable)
-    ? - glide_polar.SinkRate(Calculated().IndicatedAirspeed,
-                             basic.acceleration.Gload)
-    /* the glider sink rate is useless when not flying */
-    : fixed_zero;
-
-  if (!basic.NettoVarioAvailable)
-    basic.NettoVario = basic.BruttoVario - basic.GliderSinkRate;
-}
-
-
 
 /**
  * 1. Determines which altitude to use (GPS/baro)

@@ -49,13 +49,12 @@ CalculationThread::tick()
   // update and transfer master info to glide computer
   {
     ScopeLock protect(mutexBlackboard);
-    const GlidePolar &glide_polar = glide_computer.Calculated().glide_polar_task;
 
     // if (new GPS data available)
     if (gps_updated)
-      device_blackboard.tick(glide_polar);
+      device_blackboard.tick();
     else
-      device_blackboard.tick_fast(glide_polar);
+      device_blackboard.tick_fast();
 
     // Copy data from DeviceBlackboard to GlideComputerBlackboard
     glide_computer.ReadBlackboard(device_blackboard.Basic());

@@ -29,7 +29,7 @@ void
 TraceHistory::append(const NMEA_INFO& basic, const DERIVED_INFO& calculated)
 {
   BruttoVario.push(basic.BruttoVario);
-  NettoVario.push(basic.NettoVario);
+  NettoVario.push(calculated.NettoVario);
 }
 
 void

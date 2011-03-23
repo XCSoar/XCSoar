@@ -109,7 +109,7 @@ SettingsMapBlackboard::SettingsMapBlackboard() {}
  */
 
 void
-DeviceBlackboard::tick(const GlidePolar& glide_polar)
+DeviceBlackboard::tick()
 {
   if (!Basic().acceleration.Available)
     SetBasic().acceleration.Gload = fixed_one;
@@ -155,7 +155,7 @@ int main(int argc, char **argv)
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
     device.LineReceived(buffer);
 
-    device_blackboard.tick(*(const GlidePolar *)NULL);
+    device_blackboard.tick();
 
     int quality = WindZigZagUpdate(device_blackboard.Basic(),
                                    device_blackboard.Calculated(),

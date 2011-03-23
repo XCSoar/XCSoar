@@ -104,8 +104,6 @@ NMEA_INFO::reset()
   DateTime.day_of_week = 0;
   DateTime.hour = DateTime.minute = DateTime.second = 0;
 
-  GliderSinkRate = fixed_zero;
-
   GPSVario = GPSVarioTE = fixed_zero;
 
   TotalEnergyVarioAvailable.clear();
@@ -230,7 +228,7 @@ NMEA_INFO::complement(const NMEA_INFO &add)
 
   /* managed by DeviceBlackboard: pressure */
 
-  /* calculated: GliderSinkRate, GPSVario, GPSVarioTE, BruttoVario */
+  /* calculated: GPSVario, GPSVarioTE, BruttoVario */
 
   if (TotalEnergyVarioAvailable.complement(add.TotalEnergyVarioAvailable))
     TotalEnergyVario = add.TotalEnergyVario;

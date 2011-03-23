@@ -32,6 +32,13 @@ Copyright_License {
  */
 struct VARIO_INFO
 {
+  fixed GliderSinkRate;
+
+  /**
+   * Vertical speed of air mass (m/s, up positive)
+   */
+  fixed NettoVario;
+
   /** Average vertical speed based on 30s */
   fixed Average30s;
   /** Average vertical speed of the airmass based on 30s */

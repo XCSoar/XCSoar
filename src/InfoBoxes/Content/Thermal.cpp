@@ -51,7 +51,7 @@ InfoBoxContentVario::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentVarioNetto::Update(InfoBoxWindow &infobox)
 {
-  SetVSpeed(infobox, XCSoarInterface::Basic().NettoVario);
+  SetVSpeed(infobox, CommonInterface::Calculated().NettoVario);
 }
 
 void

@@ -43,7 +43,7 @@ ToAircraftState(const NMEA_INFO &info, const DERIVED_INFO &calculated)
 
   /* VARIO_INFO */
   aircraft.Vario = info.BruttoVario;
-  aircraft.NettoVario = info.NettoVario;
+  aircraft.NettoVario = calculated.NettoVario;
 
   /* FLYING_STATE */
   (FLYING_STATE &)aircraft = calculated.flight;

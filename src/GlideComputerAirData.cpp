@@ -116,10 +116,11 @@ GlideComputerAirData::ProcessVertical()
   Wind();
   SelectWind();
   Airspeed();
+  NettoVario();
 
   thermallocator.Process(calculated.Circling,
                          basic.Time, basic.Location,
-                         basic.NettoVario,
+                         calculated.NettoVario,
                          calculated.wind, calculated.thermal_locator);
 
   CuSonde::updateMeasurements(basic, calculated);
@@ -253,6 +254,25 @@ GlideComputerAirData::Airspeed()
 }
 
 void
+GlideComputerAirData::NettoVario()
+{
+  const NMEA_INFO &basic = Basic();
+  const DERIVED_INFO &calculated = Calculated();
+  VARIO_INFO &vario = SetCalculated();
+
+  vario.GliderSinkRate =
+    calculated.flight.Flying && calculated.AirspeedAvailable
+    ? - calculated.glide_polar_task.SinkRate(calculated.IndicatedAirspeed,
+                                             basic.acceleration.Gload)
+    /* the glider sink rate is useless when not flying */
+    : fixed_zero;
+
+  vario.NettoVario = basic.NettoVarioAvailable
+    ? basic.NettoVario
+    : basic.BruttoVario - vario.GliderSinkRate;
+}
+
+void
 GlideComputerAirData::AverageClimbRate()
 {
   const NMEA_INFO &basic = Basic();
@@ -291,7 +311,7 @@ GlideComputerAirData::Average30s()
     vario_30s_filter.reset();
     netto_30s_filter.reset();
     calculated.Average30s = basic.BruttoVario;
-    calculated.NettoAverage30s = basic.NettoVario;
+    calculated.NettoAverage30s = calculated.NettoVario;
   }
 
   if (!time_advanced())
@@ -304,7 +324,7 @@ GlideComputerAirData::Average30s()
         LowPassFilter(calculated.Average30s, vario_30s_filter.average(),
                       fixed(0.8));
 
-    if (netto_30s_filter.update(basic.NettoVario))
+    if (netto_30s_filter.update(calculated.NettoVario))
       calculated.NettoAverage30s =
         LowPassFilter(calculated.NettoAverage30s, netto_30s_filter.average(),
                       fixed(0.8));
