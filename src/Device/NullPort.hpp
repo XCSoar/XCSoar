@@ -29,9 +29,10 @@ Copyright_License {
 /**
  * Generic NullPort thread handler class
  */
-class NullPort : public Port {
+class NullPort : public Port, private Port::Handler {
 public:
-  NullPort(Handler &_handler);
+  NullPort();
+  NullPort(Port::Handler &_handler);
 
   virtual void Write(const void *data, unsigned length);
   virtual void Flush();
@@ -41,6 +42,9 @@ public:
   virtual bool StartRxThread();
   virtual int GetChar();
   virtual int Read(void *Buffer, size_t Size);
+
+private:
+  virtual void LineReceived(const char *line);
 };
 
 #endif

@@ -25,7 +25,12 @@ Copyright_License {
 
 #include <stdio.h>
 
-NullPort::NullPort(Handler &_handler)
+NullPort::NullPort()
+  :Port(*(Port::Handler *)this)
+{
+}
+
+NullPort::NullPort(Port::Handler &_handler)
   :Port(_handler)
 {
 }
@@ -74,4 +79,9 @@ int
 NullPort::Read(void *Buffer, size_t Size)
 {
   return -1;
+}
+
+void
+NullPort::LineReceived(const char *line)
+{
 }

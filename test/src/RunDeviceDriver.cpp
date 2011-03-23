@@ -209,7 +209,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  NullPort port(*(Port::Handler *)NULL);
+  NullPort port;
 
   if (!device.Open(&port, driver)) {
     fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
