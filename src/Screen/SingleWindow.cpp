@@ -24,13 +24,13 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 
 void
-SingleWindow::add_dialog(Window *dialog)
+SingleWindow::add_dialog(WndForm *dialog)
 {
   dialogs.push(dialog);
 }
 
 void
-SingleWindow::remove_dialog(Window *dialog)
+SingleWindow::remove_dialog(WndForm *dialog)
 {
   assert(dialog == dialogs.top());
 
@@ -42,7 +42,7 @@ SingleWindow::on_close()
 {
   if (!dialogs.empty()) {
     /* close the current dialog instead of the main window */
-    Window *dialog = dialogs.top();
+    WndForm *dialog = dialogs.top();
     dialog->reset();
     return true;
   }

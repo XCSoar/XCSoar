@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_SINGLE_WINDOW_HXX
 
 #include "Screen/TopWindow.hpp"
+#include "Form/Form.hpp"
 
 #include <stack>
 #include <assert.h>
@@ -35,11 +36,11 @@ Copyright_License {
  */
 class SingleWindow : public TopWindow {
 protected:
-  std::stack<Window *> dialogs;
+  std::stack<WndForm *> dialogs;
 
 public:
-  void add_dialog(Window *dialog);
-  void remove_dialog(Window *dialog);
+  void add_dialog(WndForm *dialog);
+  void remove_dialog(WndForm *dialog);
 
   bool has_dialog() {
     return !dialogs.empty();

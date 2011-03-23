@@ -38,6 +38,7 @@ Copyright_License {
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
 #include "MenuBar.hpp"
+#include "Form/Form.hpp"
 #include "Appearance.hpp"
 #include "UtilsSystem.hpp"
 
@@ -158,11 +159,16 @@ MainWindow::InitialiseConfigured()
 void
 MainWindow::ReinitialiseLayout()
 {
-  if (!map.defined())
+  if (!map.defined()) {
+#ifdef ANDROID
+    if (has_dialog())
+      dialogs.top()->ReinitialiseLayout();  // adapt simulator prompt
+#endif
     /* without the MapWindow, it is safe to assume that the MainWindow
        is just being initialized, and the InfoBoxes aren't initialized
        yet either, so there is nothing to do here */
     return;
+  }
 
 #ifndef ENABLE_SDL
   if (draw_thread == NULL)
@@ -205,6 +211,12 @@ MainWindow::ReinitialiseLayout()
              map_rect.bottom - map_rect.top);
     map.FullRedraw();
   }
+
+#ifdef ANDROID
+  // move topmost dialog to fit into the current layout, or close it
+  if (has_dialog())
+    dialogs.top()->ReinitialiseLayout();
+#endif
 
   map.BringToBottom();
 }

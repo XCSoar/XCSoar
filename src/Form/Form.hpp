@@ -40,6 +40,7 @@ class PeriodClock;
 enum ModalResult {
   mrOK = 2,
   mrCancel = 3,
+  mrChangeLayout = 4,
 };
 
 /**
@@ -264,6 +265,15 @@ public:
   void SetCommandCallback(ClientAreaWindow::CommandCallback_t CommandCallback) {
     client_area.mCommandCallback = CommandCallback;
   }
+
+#ifdef ANDROID
+  /**
+   * Reposition window, if possible, or fail with mrChangeLayout in case
+   * there is not enough space. Will be called whenever the parent window
+   * changes.
+   */
+  void ReinitialiseLayout();
+#endif
 
 private:
   static PeriodClock timeAnyOpenClose; // when any dlg opens or child closes

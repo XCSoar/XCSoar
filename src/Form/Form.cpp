@@ -555,3 +555,27 @@ WndForm::SetBackColor(Color Value)
 {
   client_area.SetBackColor(Value);
 }
+
+#ifdef ANDROID
+void
+WndForm::ReinitialiseLayout()
+{
+  if (main_window.get_width() < get_width() ||
+      main_window.get_height() < get_height()) {
+    // close dialog, it's creator may want to create a new layout
+    mModalResult = mrChangeLayout;
+  } else {
+    // reposition dialog to fit into TopWindow
+    int left = Window::get_left();
+    int top = Window::get_top();
+
+    if (Window::get_right() > (int) main_window.get_width())
+      left = main_window.get_width() - get_width();
+    if (Window::get_bottom() > (int) main_window.get_height())
+      top = main_window.get_height() - get_height();
+
+    if (left != Window::get_left() || top != Window::get_top())
+      move(left, top);
+  }
+}
+#endif

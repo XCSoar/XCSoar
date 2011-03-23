@@ -78,29 +78,32 @@ SimulatorPromptResult
 dlgSimulatorPromptShowModal()
 {
 #ifdef SIMULATOR_AVAILABLE
+  int result;
+
   logo = new LogoView();
+  do {
+    wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                    Layout::landscape ? _T("IDR_XML_SIMULATORPROMPT_L") :
+                                        _T("IDR_XML_SIMULATORPROMPT"));
+    assert(wf != NULL);
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
-                  Layout::landscape ? _T("IDR_XML_SIMULATORPROMPT_L") :
-                                      _T("IDR_XML_SIMULATORPROMPT"));
-  assert(wf != NULL);
+    WndButton* wb;
+    wb = ((WndButton *)wf->FindByName(_T("cmdSimulator")));
+    assert(wb != NULL);
+    wb->SetOnClickNotify(OnSimulatorClicked);
 
-  WndButton* wb;
-  wb = ((WndButton *)wf->FindByName(_T("cmdSimulator")));
-  assert(wb != NULL);
-  wb->SetOnClickNotify(OnSimulatorClicked);
+    wb = ((WndButton *)wf->FindByName(_T("cmdFly")));
+    assert(wb != NULL);
+    wb->SetOnClickNotify(OnFlyClicked);
 
-  wb = ((WndButton *)wf->FindByName(_T("cmdFly")));
-  assert(wb != NULL);
-  wb->SetOnClickNotify(OnFlyClicked);
+    wb = ((WndButton *)wf->FindByName(_T("cmdQuit")));
+    assert(wb != NULL);
+    wb->SetOnClickNotify(OnQuitClicked);
 
-  wb = ((WndButton *)wf->FindByName(_T("cmdQuit")));
-  assert(wb != NULL);
-  wb->SetOnClickNotify(OnQuitClicked);
+    result = wf->ShowModal();
 
-  int result = wf->ShowModal();
-
-  delete wf;
+    delete wf;
+  } while (result == mrChangeLayout);
   delete logo;
 
   switch (result) {
