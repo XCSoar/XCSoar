@@ -47,29 +47,42 @@ class DeviceBlackboard:
   NMEA_INFO state_last;
   BasicComputer computer;
 
+  /**
+   * Data from the physical devices.
+   */
+  NMEA_INFO real_data;
+
+  /**
+   * Data from simulator.
+   */
+  NMEA_INFO simulator_data;
+
+  /**
+   * Data from replay.
+   */
+  NMEA_INFO replay_data;
+
 public:
   void Initialise();
   void ReadBlackboard(const DERIVED_INFO &derived_info);
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
 
-  // only the device blackboard can write to gps
-  friend class DeviceDescriptor;
-  friend class NmeaReplayGlue;
-
-#ifndef ANDROID
 protected:
-#endif
   NMEA_INFO& SetBasic() { return gps_info; }
 
 public:
+  NMEA_INFO &SetRealState() { return real_data; }
+  NMEA_INFO &SetSimulatorState() { return simulator_data; }
+  NMEA_INFO &SetReplayState() { return replay_data; }
+
+public:
+  const NMEA_INFO &RealState() const { return real_data; }
+
   void SetStartupLocation(const GeoPoint &loc, const fixed alt);
   void SetLocation(const GeoPoint &loc, const fixed speed, const Angle bearing,
                    const fixed alt, const fixed baroalt, const fixed t);
   void ProcessSimulation();
   void StopReplay();
-  void SetBaroAlt(fixed x) {
-    SetBasic().ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, x);
-  }
   void SetTrackBearing(Angle val);
   void SetSpeed(fixed val);
   void SetAltitude(fixed alt);
@@ -85,6 +98,12 @@ public:
    * connection status has not changed
    */
   bool expire_wall_clock();
+
+  /**
+   * Copy real_data or simulator_data or replay_data to gps_info.
+   * Caller must lock the blackboard.
+   */
+  void Merge();
 
   void tick();
 

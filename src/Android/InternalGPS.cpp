@@ -55,7 +55,7 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
                                          jint connected)
 {
   mutexBlackboard.Lock();
-  NMEA_INFO &basic = device_blackboard.SetBasic();
+  NMEA_INFO &basic = device_blackboard.SetRealState();
 
   if (connected) {
     basic.gps.real = true;
@@ -63,6 +63,8 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
   }
 
   basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
+
+  device_blackboard.Merge();
   mutexBlackboard.Unlock();
 
   TriggerGPSUpdate();
@@ -80,7 +82,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
 {
   mutexBlackboard.Lock();
 
-  NMEA_INFO &basic = device_blackboard.SetBasic();
+  NMEA_INFO &basic = device_blackboard.SetRealState();
   basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
 
   BrokenDateTime date_time = BrokenDateTime::FromUnixTimeUTC(time / 1000);
@@ -133,6 +135,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
     basic.acceleration.Gload = fixed(acceleration);
   }
 
+  device_blackboard.Merge();
   mutexBlackboard.Unlock();
 
   TriggerGPSUpdate();

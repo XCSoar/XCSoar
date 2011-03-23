@@ -68,7 +68,11 @@ XCSoarInterface::ReceiveBlackboard()
 {
   ScopeLock protect(mutexBlackboard);
   ReadBlackboardBasic(device_blackboard.Basic());
-  movement_detected = Basic().gps.real && Basic().gps.MovementDetected;
+
+  const NMEA_INFO &real = device_blackboard.RealState();
+  movement_detected = real.Connected && real.gps.real &&
+    real.gps.MovementDetected;
+
   ReadBlackboardCalculated(device_blackboard.Calculated());
 }
 

@@ -65,6 +65,8 @@ DeviceBlackboard::Initialise()
   gps_info.Time = fixed(gps_info.DateTime.hour * 3600 +
                         gps_info.DateTime.minute * 60 +
                         gps_info.DateTime.second);
+
+  real_data = simulator_data = replay_data = gps_info;
 }
 
 /**
@@ -78,13 +80,14 @@ void
 DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
 {
   ScopeLock protect(mutexBlackboard);
-  NMEA_INFO &basic = SetBasic();
 
-  if (basic.gps.Replay || Calculated().flight.Flying ||
-      (basic.LocationAvailable && !basic.gps.Simulator))
+  if (Calculated().flight.Flying)
     return;
 
-  basic.SetFakeLocation(loc, alt);
+  if (!real_data.LocationAvailable)
+    real_data.SetFakeLocation(loc, alt);
+
+  simulator_data.SetFakeLocation(loc, alt);
 }
 
 /**
@@ -106,7 +109,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
                               const fixed t)
 {
   ScopeLock protect(mutexBlackboard);
-  NMEA_INFO &basic = SetBasic();
+  NMEA_INFO &basic = SetReplayState();
 
   basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
   basic.gps.SatellitesUsed = 6;
@@ -137,10 +140,11 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
  */
 void DeviceBlackboard::StopReplay() {
   ScopeLock protect(mutexBlackboard);
-  NMEA_INFO &basic = SetBasic();
 
-  basic.GroundSpeed = fixed_zero;
-  basic.gps.Replay = false;
+  replay_data.Connected.clear();
+
+  Merge();
+  TriggerGPSUpdate();
 }
 
 void
@@ -150,9 +154,8 @@ DeviceBlackboard::ProcessSimulation()
     return;
 
   ScopeLock protect(mutexBlackboard);
-  NMEA_INFO &basic = SetBasic();
 
-  simulator.Process(basic);
+  simulator.Process(simulator_data);
 
   TriggerGPSUpdate();
 }
@@ -167,10 +170,12 @@ void
 DeviceBlackboard::SetSpeed(fixed val)
 {
   ScopeLock protect(mutexBlackboard);
-  NMEA_INFO &basic = SetBasic();
+  NMEA_INFO &basic = simulator_data;
 
   basic.GroundSpeed = val;
   basic.ProvideBothAirspeeds(val);
+
+  Merge();
 }
 
 /**
@@ -183,7 +188,9 @@ void
 DeviceBlackboard::SetTrackBearing(Angle val)
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().TrackBearing = val.as_bearing();
+  simulator_data.TrackBearing = val.as_bearing();
+
+  Merge();
 }
 
 /**
@@ -196,10 +203,12 @@ void
 DeviceBlackboard::SetAltitude(fixed val)
 {
   ScopeLock protect(mutexBlackboard);
-  NMEA_INFO &basic = SetBasic();
+  NMEA_INFO &basic = simulator_data;
 
   basic.GPSAltitude = val;
   basic.ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, val);
+
+  Merge();
 }
 
 /**
@@ -269,6 +278,21 @@ DeviceBlackboard::expire_wall_clock()
 
   basic.expire_wall_clock();
   return !basic.Connected;
+}
+
+void
+DeviceBlackboard::Merge()
+{
+  if (replay_data.Connected) {
+    replay_data.expire();
+    SetBasic() = replay_data;
+  } else if (simulator_data.Connected) {
+    simulator_data.expire();
+    SetBasic() = simulator_data;
+  } else {
+    real_data.expire();
+    SetBasic() = real_data;
+  }
 }
 
 void

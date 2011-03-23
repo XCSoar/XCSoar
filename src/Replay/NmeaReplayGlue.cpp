@@ -73,6 +73,8 @@ NmeaReplayGlue::Stop()
   device = NULL;
   delete parser;
   parser = NULL;
+
+  device_blackboard.StopReplay();
 }
 
 void
@@ -81,11 +83,13 @@ NmeaReplayGlue::on_sentence(const char *line)
   assert(device != NULL);
 
   ScopeLock protect(mutexBlackboard);
-  NMEA_INFO &data = device_blackboard.SetBasic();
+  NMEA_INFO &data = device_blackboard.SetReplayState();
 
   if ((device != NULL && device->ParseNMEA(line, &data, true)) ||
-      (parser != NULL && parser->ParseNMEAString_Internal(line, &data)))
+      (parser != NULL && parser->ParseNMEAString_Internal(line, &data))) {
     data.Connected.update(fixed(MonotonicClockMS()) / 1000);
+    device_blackboard.Merge();
+  }
 }
 
 void

@@ -270,5 +270,6 @@ DeviceDescriptor::LineReceived(const char *line)
   }
 
   ScopeLock protect(mutexBlackboard);
-  ParseNMEA(line, &device_blackboard.SetBasic());
+  if (ParseNMEA(line, &device_blackboard.SetRealState()))
+    device_blackboard.Merge();
 }
