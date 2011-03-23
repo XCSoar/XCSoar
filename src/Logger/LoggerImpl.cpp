@@ -144,6 +144,9 @@ LoggerImpl::LogEvent(const NMEA_INFO& gps_info, const char* event)
 void
 LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
 {
+  if (!gps_info.Connected)
+    return;
+
   if (writer == NULL) {
     LogPointToBuffer(gps_info);
     return;
