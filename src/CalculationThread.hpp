@@ -41,6 +41,14 @@ class CalculationThread : public WorkerThread {
 public:
   CalculationThread(GlideComputer &_glide_computer);
 
+  bool start() {
+    if (!WorkerThread::start())
+      return false;
+
+    set_low_priority();
+    return true;
+  }
+
   /** Triggers the data_trigger */
   void trigger_data() {
     trigger();

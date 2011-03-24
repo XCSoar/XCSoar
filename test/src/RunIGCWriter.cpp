@@ -110,7 +110,7 @@ SettingsMapBlackboard::SettingsMapBlackboard() {}
 int main(int argc, char **argv)
 {
   if (argc != 3) {
-    fprintf(stderr, "Usage: %s DRIVER FILE.IGC\n"
+    fprintf(stderr, "Usage: %s DRIVER FILE.igc\n"
             "Where DRIVER is one of:\n", argv[0]);
 
     const TCHAR *name;

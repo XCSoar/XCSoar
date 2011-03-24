@@ -23,15 +23,19 @@ Copyright_License {
 
 #include "Thread/WorkerThread.hpp"
 #include "Thread/Trigger.hpp"
+#include "PeriodClock.hpp"
 
-WorkerThread::WorkerThread()
-  :event_trigger(false), running(true) {
+WorkerThread::WorkerThread(unsigned _period_min, unsigned _idle_min)
+  :event_trigger(false), running(true),
+   period_min(_period_min), idle_min(_idle_min) {
   running.trigger();
 }
 
 void
 WorkerThread::run()
 {
+  PeriodClock clock;
+
   while (true) {
     /* wait for work */
     event_trigger.wait();
@@ -44,6 +48,19 @@ WorkerThread::run()
       break;
 
     /* do the actual work */
+    if (period_min > 0)
+      clock.update();
+
     tick();
+
+    unsigned idle = idle_min;
+    if (period_min > 0) {
+      unsigned elapsed = clock.elapsed();
+      if (elapsed + idle < period_min)
+        idle = period_min - elapsed;
+    }
+
+    if (idle > 0 && wait_stopped(idle))
+      break;
   }
 }

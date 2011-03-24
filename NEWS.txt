@@ -95,6 +95,10 @@ Version 6.1 - not yet released
   - Waypoint select dialog allows filtering by start/finish
   - Airspace warning dialog only shows buttons suitable for the respective airspace item, 
 
+Version 6.0.9 - not yet released
+* map
+  - fix for hanging map on slow hardware
+
 Version 6.0.8 - 2011/03/23
 * don't estimate thermal source for skewed thermals
 * devices

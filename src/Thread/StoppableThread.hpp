@@ -37,9 +37,9 @@ class StoppableThread : public Thread {
 public:
   StoppableThread();
 
-  void start() {
+  bool start() {
     stop_trigger.reset();
-    Thread::start();
+    return Thread::start();
   }
 
   /**
