@@ -128,6 +128,13 @@ public:
   }
 
   /**
+   * Return address of start of data segment.
+   */
+  const T* raw() const {
+    return data;
+  }
+
+  /**
    * Append an element at the end of the array, increasing the length
    * by one.  No bounds checking.
    */
