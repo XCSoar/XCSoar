@@ -9,6 +9,13 @@
 
 \input{../xcsoar.sty}
 \input{title-xcsoar.sty}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,fit,decorations,decorations.pathmorphing,decorations.pathreplacing,calc}
+
+\tikzstyle{thread}=[draw, fill=lightgray, text centered,
+  minimum width=7em, minimum height=2.5em]
+
 \begin{document}
 \maketitle
 
@@ -260,6 +267,85 @@ will not be drawn.
 \item[important label range] A threshold zoom level. Labels contained
 in the layer file will be rendered in standard style below this threshold.
 \end{description}
+
+\chapter{Architecture}
+
+This chapter describes XCSoar's internal code architecture.
+
+\section{Threads and Locking}
+
+\subsection{Threads}
+
+XCSoar runs on multiple threads, to make the UI responsive but still
+allow expensive background calculations.
+
+This is how it looks like on Windows and Linux/SDL (software
+rendering):
+
+\begin{tikzpicture}
+  \node(ui)[thread]{UI thread};
+
+  \path(ui.east)+(4,0) node(draw)[thread]{DrawThread};
+  \draw[->] (ui.10) -- (draw.170)
+  node[midway, above, sloped, font=\tiny]{redraw (Pan)};
+  \draw[->] (draw.190) -- (ui.350)
+  node[midway, below, sloped, font=\tiny]{BufferCanvas};
+
+  \path(draw.south)+(0,-2) node(calc)[thread]{CalcThread};
+  \draw[->] (calc.north) -- (draw.south)
+  node[midway, below, sloped, font=\tiny]{results};
+
+  \path(calc.south)+(-3,-2) node(device1)[thread]{Device};
+  \draw[->] (device1.north) -- (calc.250)
+  node[midway, above, sloped, font=\tiny]{sensor data};
+
+  \path(calc.south)+(3,-2) node(device2)[thread]{Device 2};
+  \draw[->] (device2.north) -- (calc.290)
+  node[midway, above, sloped, font=\tiny]{sensor data};
+\end{tikzpicture}
+
+The UI thread is the main thread.  It starts the other threads and is
+responsible for the UI event loop.  No other thread is allowed to
+manipulate windows.  The UI thread has a timer which does regular
+house keeping twice per second (\texttt{Pro\-cess\-Ti\-mer.cpp}).
+
+The calculation thread (\texttt{Calcu\-la\-tion\-Thread.cpp},
+\texttt{Glide\-Com\-pu\-ter*.cpp}) does all the expensive calculations in
+background.  It gets data from the devices and forwards it together
+with calculation results to the drawing thread and the main thread.
+
+Each device has its own thread (\texttt{Serial\-Port.cpp}).  This is
+needed because Windows CE does not support asynchronous COMM port I/O.
+The thread is stopped during task declaration (which happens in the UI
+thread).
+
+With OpenGL, the map is rendered live without a buffer.  There is no
+DrawThread.
+
+On Android, the UI thread is not the main thread - the main thread is
+implemented in Java, managed by Android itself.  The UI thread listens
+for events which the Java part drops into the event queue
+(\texttt{NativeView.java} and others).  The internal GPS does not need
+a thread, it is implemented with Java callbacks.  For Bluetooth I/O,
+there are two threads implemented in Java (\texttt{InputThread.java}
+and \texttt{OutputThread.java}, managed by
+\texttt{BluetoothHelper.java}).
+
+\subsection{Locking}
+
+Some data structures are rarely modified.  There is no lock for them.
+For a modifications, all threads must be suspended.  Example:
+waypoints, airspaces.
+
+Other data structures are modified so often that correct locking would
+be too much overhead.  Each thread and each instance has its own
+copy.  The lock needs to be obtained only for making the private
+copy.  The private copy can be used without locking.  Example:
+\texttt{NMEA\_INFO}, \texttt{DERIVED\_INFO}.
+
+There are objects which are too expensive to copy.  Normal locking
+applies to them.  We have a template class called \texttt{Guard} to
+enforce proper read/write locking.  Example: the task.
 
 \appendix
 
