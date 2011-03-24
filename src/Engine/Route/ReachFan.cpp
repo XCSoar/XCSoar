@@ -45,13 +45,15 @@ struct ReachFanParms {
                 const RasterMap* _terrain=NULL):
     rpolars(_rpolars), task_proj(_task_proj), terrain(_terrain), 
     terrain_base(_terrain_base),
-    terrain_counter(0) {};
+    terrain_counter(0),
+    fan_counter(0) {};
 
   const RoutePolars &rpolars;
   const TaskProjection& task_proj;
   const RasterMap* terrain;
   int terrain_base;
   int terrain_counter;
+  int fan_counter;
 
   FlatGeoPoint reach_intercept(const int index,
                                const AGeoPoint& ao) const {
@@ -145,7 +147,7 @@ FlatTriangleFanTree::is_inside_tree(const FlatGeoPoint &p, const bool include_ch
 
 void
 FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
-                                const ReachFanParms& parms) {
+                                ReachFanParms& parms) {
   height = origin.altitude;
   fill_reach(origin, 0, ROUTEPOLAR_POINTS+1, parms);
 }
@@ -153,7 +155,7 @@ FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
 void
 FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
                                 const int index_low, const int index_high,
-                                const ReachFanParms& parms) {
+                                ReachFanParms& parms) {
   const AGeoPoint ao (parms.task_proj.unproject(origin), origin.altitude);
 
   // fill vector
@@ -217,7 +219,7 @@ bool
 FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
                                const RouteLink& e_1,
                                const RouteLink& e_2,
-                               const ReachFanParms& parms)
+                               ReachFanParms& parms)
 {
   const bool side = (e_1.d > e_2.d);
   const RouteLink& e_long = (side)? e_1: e_2;
@@ -263,6 +265,7 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
 
     // prune child if empty or single spike
     if (it->vs.size()>3) {
+      parms.fan_counter++;
       return true;
     }
     children.pop_back();
@@ -287,6 +290,8 @@ bool ReachFan::solve(const AGeoPoint origin,
 
   const short h = terrain? terrain->GetHeight(origin): 0;
 
+  fan_size = 0;
+
   if (terrain && (origin.altitude <= h + rpolars.safety_height()))
     return false;
 
@@ -294,6 +299,7 @@ bool ReachFan::solve(const AGeoPoint origin,
   const AFlatGeoPoint ao(task_proj.project(origin), origin.altitude);
 
   root.fill_reach(ao, parms);
+  fan_size = parms.fan_counter;
 
   if (!RasterBuffer::is_invalid(h)) {
     parms.terrain_base = h;
@@ -395,5 +401,6 @@ ReachFan::accept_in_range(const GeoBounds& bounds,
                           TriangleFanVisitor& visitor) const
 {
   const FlatBoundingBox bb = task_proj.project(bounds);
+  visitor.allocate_fans(fan_size);
   root.accept_in_range(bb, task_proj, visitor);
 }

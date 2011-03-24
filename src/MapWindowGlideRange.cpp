@@ -44,6 +44,10 @@ public:
   {
   }
 
+  virtual void allocate_fans(const unsigned size) {
+    fans.reserve(size);
+  }
+
   virtual void start_fan() {
     // Clear the GeoPointVector for the next TriangleFan
     g.clear();
@@ -79,7 +83,7 @@ private:
   /** Temporary container for TriangleFan processing */
   StaticArray<GeoPoint, ROUTEPOLAR_POINTS+2> g;
   /** Temporary container for TriangleFan clipping */
-  GeoPoint clipped[50 * 4];
+  GeoPoint clipped[(ROUTEPOLAR_POINTS+2) * 3];
   /** Projection to use for GeoPoint -> RasterPoint conversion */
   const MapWindowProjection &proj;
   /** GeoClip instance used for TriangleFan clipping */
