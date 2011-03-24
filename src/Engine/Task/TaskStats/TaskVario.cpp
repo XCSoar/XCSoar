@@ -22,4 +22,5 @@ TaskVario::reset(const GlideResult& solution)
 {
   v_lpf.reset(fixed_zero);
   df.reset(solution.AltitudeDifference, fixed_zero);
+  value = fixed_zero;
 }
