@@ -72,7 +72,7 @@ public:
 
   void set_low_priority() {
 #ifndef HAVE_POSIX
-    ::SetThreadPriority(handle, THREAD_PRIORITY_LOWEST);
+    ::SetThreadPriority(handle, THREAD_PRIORITY_BELOW_NORMAL);
 #endif
   }
 
