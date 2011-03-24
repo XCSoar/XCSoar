@@ -37,8 +37,8 @@
 #endif
 
 #define REACH_MIN_STEP 25
-#define MAX_REACH_FANS 300
-#define MAX_REACH_VERTICES 2000
+#define REACH_MAX_FANS 300
+#define REACH_MAX_VERTICES 2000
 
 struct ReachFanParms {
   ReachFanParms(const RoutePolars& _rpolars,
@@ -178,9 +178,9 @@ FlatTriangleFanTree::fill_depth(const AFlatGeoPoint &origin,
       return true;
     gaps_filled = true;
 
-    if (parms.vertex_counter>MAX_REACH_VERTICES)
+    if (parms.vertex_counter>REACH_MAX_VERTICES)
       return false;
-    if (parms.fan_counter>MAX_REACH_FANS)
+    if (parms.fan_counter>REACH_MAX_FANS)
       return false;
 
     fill_gaps(origin, parms);
