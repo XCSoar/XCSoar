@@ -37,6 +37,8 @@
 #endif
 
 #define REACH_MIN_STEP 25
+#define MAX_REACH_FANS 300
+#define MAX_REACH_VERTICES 2000
 
 struct ReachFanParms {
   ReachFanParms(const RoutePolars& _rpolars,
@@ -47,7 +49,8 @@ struct ReachFanParms {
     terrain_base(_terrain_base),
     terrain_counter(0),
     fan_counter(0),
-    node_counter(0) {};
+    vertex_counter(0),
+    set_depth(0) {};
 
   const RoutePolars &rpolars;
   const TaskProjection& task_proj;
@@ -55,7 +58,8 @@ struct ReachFanParms {
   int terrain_base;
   int terrain_counter;
   int fan_counter;
-  int node_counter;
+  int vertex_counter;
+  unsigned set_depth;
 
   FlatGeoPoint reach_intercept(const int index,
                                const AGeoPoint& ao) const {
@@ -84,11 +88,12 @@ FlatTriangleFanTree::calc_bb() {
 
   bb_children = bb_self;
 
-  for (std::vector<FlatTriangleFanTree>::const_iterator it = children.begin();
+  for (std::vector<FlatTriangleFanTree>::iterator it = children.begin();
        it != children.end(); ++it) {
+    it->calc_bb();
     bb_children.expand(it->bb_children);
   }
-};
+}
 
 //////////
 
@@ -151,7 +156,44 @@ void
 FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
                                 ReachFanParms& parms) {
   height = origin.altitude;
+  gaps_filled = false;
   fill_reach(origin, 0, ROUTEPOLAR_POINTS+1, parms);
+
+  for (parms.set_depth=0; parms.set_depth< REACH_MAX_DEPTH; ++parms.set_depth) {
+    if (!fill_depth(origin, parms)) {
+      break; // stop searching
+    }
+  }
+  // this boundingbox update visits the tree recursively
+  calc_bb();
+}
+
+
+bool
+FlatTriangleFanTree::fill_depth(const AFlatGeoPoint &origin,
+                                ReachFanParms& parms) 
+{
+  if (depth == parms.set_depth) { 
+    if (gaps_filled) 
+      return true;
+    gaps_filled = true;
+
+    if (parms.vertex_counter>MAX_REACH_VERTICES)
+      return false;
+    if (parms.fan_counter>MAX_REACH_FANS)
+      return false;
+
+    fill_gaps(origin, parms);
+
+  } else if (depth< parms.set_depth) {
+
+    for (std::vector<FlatTriangleFanTree>::iterator it = children.begin();
+         it != children.end(); ++it) {
+      if (!it->fill_depth(origin, parms))
+        return false; // stop searching
+    }
+  }
+  return true;
 }
 
 void
@@ -172,9 +214,6 @@ FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
     const FlatGeoPoint x = parms.reach_intercept(index, ao);
     add_point(x);
   }
-
-  if (!gaps_filled) 
-    fill_gaps(origin, parms);
 }
 
 void
@@ -182,8 +221,7 @@ FlatTriangleFanTree::fill_gaps(const AFlatGeoPoint &origin,
                                ReachFanParms& parms)
 {
   // worth checking for gaps?
-  if ((depth< REACH_MAX_DEPTH) && (vs.size()>2) && (parms.rpolars.turning_reach())) {
-    gaps_filled = true;
+  if ((vs.size()>2) && (parms.rpolars.turning_reach())) {
 
    // now check gaps
     const RoutePoint o(origin, 0);
@@ -200,9 +238,6 @@ FlatTriangleFanTree::fill_gaps(const AFlatGeoPoint &origin,
       e_last = e;
     }
   }
-
-  // update bounding box
-  calc_bb();
 }
 
 void
@@ -278,7 +313,7 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
 
     // prune child if empty or single spike
     if (it->vs.size()>3) {
-      parms.node_counter+= it->vs.size();
+      parms.vertex_counter+= it->vs.size();
       parms.fan_counter++;
       return true;
     }

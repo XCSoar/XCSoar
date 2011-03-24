@@ -96,6 +96,9 @@ public:
                   const int index_low, const int index_high,
                   ReachFanParms& parms);
 
+  bool fill_depth(const AFlatGeoPoint &origin,
+                  ReachFanParms& parms);
+
   void fill_gaps(const AFlatGeoPoint &origin,
                  ReachFanParms& parms);
 
