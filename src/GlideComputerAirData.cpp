@@ -119,6 +119,7 @@ GlideComputerAirData::ProcessVertical()
   SelectWind();
   Heading();
   Airspeed();
+  EnergyHeight();
   BruttoVario();
   NettoVario();
 
