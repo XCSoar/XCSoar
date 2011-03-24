@@ -57,7 +57,7 @@ WndListFrame::WndListFrame(ContainerWindow &parent,
 void
 WndListFrame::show_or_hide_scroll_bar()
 {
-  const SIZE size = get_size();
+  const PixelSize size = get_size();
 
   if (length > items_visible)
     // enable the scroll bar
@@ -99,7 +99,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   const Color background_color = Color::WHITE;
   const Color selected_background_color = Color::LIGHT_GRAY;
 
-  RECT rc = item_rect(start);
+  PixelRect rc = item_rect(start);
 
   canvas.set_text_color(text_color);
   canvas.set_background_color(background_color);
@@ -138,7 +138,7 @@ WndListFrame::on_paint(Canvas &canvas)
 }
 
 void
-WndListFrame::on_paint(Canvas &canvas, const RECT &dirty)
+WndListFrame::on_paint(Canvas &canvas, const PixelRect &dirty)
 {
   if (PaintItemCallback != NULL)
     DrawItems(canvas, origin + dirty.top / item_height,
@@ -248,7 +248,7 @@ WndListFrame::SetOrigin(int i)
 
 #ifndef ENABLE_SDL
   if ((unsigned)abs(delta) < items_visible) {
-    RECT rc = get_client_rect();
+    PixelRect rc = get_client_rect();
     rc.right = scroll_bar.get_left(get_size());
     scroll(0, delta * item_height, rc);
 

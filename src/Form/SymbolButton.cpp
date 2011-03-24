@@ -35,15 +35,15 @@ WndSymbolButton::on_paint(Canvas &canvas)
   canvas.clear(background_brush);
 #endif
 
-  // Get button RECT and shrink it to make room for the selector/focus
-  RECT rc = get_client_rect();
+  // Get button PixelRect and shrink it to make room for the selector/focus
+  PixelRect rc = get_client_rect();
 
   // Draw button to the background
   canvas.draw_button(rc, is_down());
 
   // Draw focus rectangle
   if (has_focus()) {
-    RECT focus_rc = rc;
+    PixelRect focus_rc = rc;
     InflateRect(&focus_rc, -3, -3);
     canvas.draw_focus(focus_rc);
   }

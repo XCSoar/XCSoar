@@ -39,9 +39,10 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 
-static RECT get_spark_rect(const InfoBoxWindow &infobox)
+static PixelRect
+get_spark_rect(const InfoBoxWindow &infobox)
 {
-  RECT rc = infobox.get_value_rect();
+  PixelRect rc = infobox.get_value_rect();
   rc.top += Layout::FastScale(2);
   rc.right -= Layout::FastScale(2);
   rc.left += Layout::FastScale(2);

@@ -143,7 +143,8 @@ NextPage(int Step)
 }
 
 static void
-OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
+OnPaintDetailsListItem(Canvas &canvas, const PixelRect rc,
+                       unsigned DrawListIndex)
 {
   assert(selected_waypoint);
   assert(DrawListIndex < nTextLines);

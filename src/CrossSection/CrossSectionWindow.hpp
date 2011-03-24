@@ -51,11 +51,11 @@ public:
                       const SETTINGS_MAP &_settings_map);
 
   /**
-   * Renders the CrossSection to the given canvas in the given RECT
+   * Renders the CrossSection to the given canvas in the given PixelRect
    * @param canvas Canvas to draw on
-   * @param rc RECT to draw in
+   * @param rc PixelRect to draw in
    */
-  void Paint(Canvas &canvas, const RECT rc);
+  void Paint(Canvas &canvas, const PixelRect rc);
 
   /**
    * Set airspace database to use
@@ -130,7 +130,7 @@ protected:
   void PaintAirspaces(Canvas &canvas, Chart &chart);
   void PaintTerrain(Canvas &canvas, Chart &chart);
   void PaintGlide(Chart &chart);
-  void PaintAircraft(Canvas &canvas, const Chart &chart, const RECT rc);
+  void PaintAircraft(Canvas &canvas, const Chart &chart, const PixelRect rc);
   void PaintGrid(Canvas &canvas, Chart &chart);
 
   /**

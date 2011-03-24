@@ -36,18 +36,6 @@ typedef int32_t LONG;
 typedef struct w32_handle *HANDLE;
 typedef HANDLE HINSTANCE;
 
-typedef struct tagSIZE {
-  LONG cx;
-  LONG cy;
-} SIZE;
-
-typedef struct _RECT {
-	LONG left;
-	LONG top;
-	LONG right;
-	LONG bottom;
-} RECT;
-
 #define _cdecl
 
 #endif

@@ -72,7 +72,7 @@ public:
    * @param type Airspace class
    */
   void
-  RenderBox(const RECT rc, const Brush &brush, bool black, int type)
+  RenderBox(const PixelRect rc, const Brush &brush, bool black, int type)
   {
     // Enable "transparency" effect
 #ifdef ENABLE_OPENGL
@@ -89,7 +89,7 @@ public:
     int border_width = Layout::Scale(10);
     if ((rc.right - rc.left) > border_width * 2 &&
         (rc.bottom - rc.top) > border_width * 2) {
-      RECT rc_brush = rc;
+      PixelRect rc_brush = rc;
 
       // Left border
       rc_brush.right = rc.left + border_width;
@@ -166,7 +166,7 @@ public:
         Graphics::GetAirspaceColourByClass(type, settings_map)));
 #endif
 
-    RECT rcd;
+    PixelRect rcd;
     // Calculate top and bottom coordinate
     rcd.top = chart.screenY(as.get_top_altitude(state));
     if (as.is_base_terrain())
@@ -248,7 +248,7 @@ CrossSectionWindow::ReadBlackboard(const NMEA_INFO &_gps_info,
 }
 
 void
-CrossSectionWindow::Paint(Canvas &canvas, const RECT rc)
+CrossSectionWindow::Paint(Canvas &canvas, const PixelRect rc)
 {
   fixed hmin = max(fixed_zero, gps_info.NavAltitude - fixed(3300));
   fixed hmax = max(fixed(3300), gps_info.NavAltitude + fixed(1000));
@@ -342,7 +342,7 @@ CrossSectionWindow::PaintGlide(Chart &chart)
 
 void
 CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
-                                  const RECT rc)
+                                  const PixelRect rc)
 {
   Brush brush(text_color);
   canvas.select(brush);
@@ -383,7 +383,7 @@ CrossSectionWindow::on_paint(Canvas &canvas)
   canvas.set_text_color(text_color);
   canvas.select(Fonts::Map);
 
-  const RECT rc = get_client_rect();
+  const PixelRect rc = get_client_rect();
 
   Paint(canvas, rc);
 }

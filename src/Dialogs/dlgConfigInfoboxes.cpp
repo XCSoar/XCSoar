@@ -222,7 +222,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent, const TCHAR *panel_name,
   current_preview = 0;
   data = data_r;
 
-  RECT rc = parent.get_client_rect();
+  PixelRect rc = parent.get_client_rect();
   wf = new WndForm(parent, rc.left, rc.top,
                    rc.right - rc.left, rc.bottom - rc.top,
                    _("Layout"));

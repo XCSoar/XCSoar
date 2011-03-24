@@ -50,11 +50,11 @@ namespace InfoBoxLayout
 
   static void
   CalcInfoBoxSizes(Layout &layout,
-                   RECT rc, InfoBoxLayout::Geometry geometry);
+                   PixelRect rc, InfoBoxLayout::Geometry geometry);
 }
 
 void
-InfoBoxLayout::Init(RECT rc)
+InfoBoxLayout::Init(PixelRect rc)
 {
   InfoBoxGeometry = LoadGeometryFromProfile(rc.right - rc.left,
                                             rc.bottom - rc.top);
@@ -62,9 +62,9 @@ InfoBoxLayout::Init(RECT rc)
 
 static int
 MakeTopRow(const InfoBoxLayout::Layout &layout,
-           RECT *p, unsigned n, int left, int top)
+           PixelRect *p, unsigned n, int left, int top)
 {
-  RECT *const end = p + n;
+  PixelRect *const end = p + n;
   const int bottom = top + layout.control_height;
   while (p < end) {
     p->left = left;
@@ -81,7 +81,7 @@ MakeTopRow(const InfoBoxLayout::Layout &layout,
 
 static int
 MakeBottomRow(const InfoBoxLayout::Layout &layout,
-              RECT *p, unsigned n, int left, int bottom)
+              PixelRect *p, unsigned n, int left, int bottom)
 {
   int top = bottom - layout.control_height;
   MakeTopRow(layout, p, n, left, top);
@@ -90,9 +90,9 @@ MakeBottomRow(const InfoBoxLayout::Layout &layout,
 
 static int
 MakeLeftColumn(const InfoBoxLayout::Layout &layout,
-               RECT *p, unsigned n, int left, int top)
+               PixelRect *p, unsigned n, int left, int top)
 {
-  RECT *const end = p + n;
+  PixelRect *const end = p + n;
   const int right = left + layout.control_width;
   while (p < end) {
     p->left = left;
@@ -109,7 +109,7 @@ MakeLeftColumn(const InfoBoxLayout::Layout &layout,
 
 static int
 MakeRightColumn(const InfoBoxLayout::Layout &layout,
-                RECT *p, unsigned n, int right, int top)
+                PixelRect *p, unsigned n, int right, int top)
 {
   int left = right - layout.control_width;
   MakeLeftColumn(layout, p, n, left, top);
@@ -117,7 +117,7 @@ MakeRightColumn(const InfoBoxLayout::Layout &layout,
 }
 
 InfoBoxLayout::Layout
-InfoBoxLayout::Calculate(RECT rc, Geometry geometry)
+InfoBoxLayout::Calculate(PixelRect rc, Geometry geometry)
 {
   Layout layout;
   layout.count = geometry_counts[geometry];
@@ -287,7 +287,7 @@ InfoBoxLayout::LoadGeometryFromProfile(unsigned width, unsigned height)
 
 void
 InfoBoxLayout::CalcInfoBoxSizes(Layout &layout,
-                                RECT rc, InfoBoxLayout::Geometry geometry)
+                                PixelRect rc, InfoBoxLayout::Geometry geometry)
 {
   switch (geometry) {
   case ibTop4Bottom4:

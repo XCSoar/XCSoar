@@ -34,7 +34,7 @@ static WndListFrame *wAirspaceColoursList = NULL;
 static int ItemIndex = -1;
 
 static void
-OnAirspaceColoursPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
+OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < NUMAIRSPACECOLORS);
 

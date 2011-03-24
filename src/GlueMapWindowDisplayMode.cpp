@@ -249,7 +249,7 @@ GlueMapWindow::UpdateMapScale()
 void
 GlueMapWindow::UpdateProjection()
 {
-  const RECT rc = get_client_rect();
+  const PixelRect rc = get_client_rect();
   const SETTINGS_MAP &settings_map = SettingsMap();
 
   RasterPoint center;

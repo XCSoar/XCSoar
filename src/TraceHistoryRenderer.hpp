@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef TRACE_HISTORY_RENDERER_HPP
 #define TRACE_HISTORY_RENDERER_HPP
 
-#include <windef.h>
+#include "Screen/Point.hpp"
 #include "Math/fixed.hpp"
 
 class Chart;
@@ -34,7 +34,7 @@ class TraceVariableHistory;
 class TraceHistoryRenderer {
 public:
   static void RenderVario(Canvas& canvas,
-                          const RECT rc,
+                          const PixelRect rc,
                           const TraceVariableHistory& var,
                           const bool centered = false,
                           const fixed mc=fixed_zero);

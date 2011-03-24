@@ -145,7 +145,7 @@ WndForm::~WndForm()
 void
 WndForm::UpdateLayout()
 {
-  RECT rc = get_client_rect();
+  PixelRect rc = get_client_rect();
 
   mTitleRect = rc;
   mTitleRect.bottom = rc.top +
@@ -508,7 +508,7 @@ WndForm::on_paint(Canvas &canvas)
   ContainerWindow::on_paint(canvas);
 
   // Get window coordinates
-  RECT rcClient = get_client_rect();
+  PixelRect rcClient = get_client_rect();
 
   // Draw the borders
   canvas.raised_edge(rcClient);

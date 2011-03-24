@@ -128,8 +128,8 @@ BackgroundDrawHelper::DrawSpotHeight(Canvas &canvas, LabelBlock &block,
   if (string_is_empty(Buffer))
     return;
 
-  RECT brect;
-  SIZE tsize = canvas.text_size(Buffer);
+  PixelRect brect;
+  PixelSize tsize = canvas.text_size(Buffer);
 
   pt.x += 2;
   pt.y += 2;

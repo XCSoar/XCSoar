@@ -76,7 +76,7 @@ Segment(Canvas &canvas, long x, long y, int radius,
         Angle start, Angle end, bool horizon)
 {
   // dont draw if out of view
-  RECT rc, bounds;
+  PixelRect rc, bounds;
   SetRect(&rc, 0, 0, canvas.get_width(), canvas.get_height());
   SetRect(&bounds, x - radius, y - radius, x + radius, y + radius);
   if (!IntersectRect(&bounds, &bounds, &rc))
@@ -111,7 +111,7 @@ Annulus(Canvas &canvas, long x, long y, int radius,
         Angle start, Angle end, int inner_radius)
 {
   // dont draw if out of view
-  RECT rc, bounds;
+  PixelRect rc, bounds;
   SetRect(&rc, 0, 0, canvas.get_width(), canvas.get_height());
   SetRect(&bounds, x - radius, y - radius, x + radius, y + radius);
   if (!IntersectRect(&bounds, &bounds, &rc))
@@ -139,7 +139,7 @@ KeyHole(Canvas &canvas, long x, long y, int radius,
         Angle start, Angle end, int inner_radius)
 {
   // dont draw if out of view
-  RECT rc, bounds;
+  PixelRect rc, bounds;
   SetRect(&rc, 0, 0, canvas.get_width(), canvas.get_height());
   SetRect(&bounds, x - radius, y - radius, x + radius, y + radius);
   if (!IntersectRect(&bounds, &bounds, &rc))

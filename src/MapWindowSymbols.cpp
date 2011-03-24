@@ -36,13 +36,13 @@ Copyright_License {
 
 void
 MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
-                               const RECT &rc) const
+                    const PixelRect &rc) const
 {
   if (SettingsMap().EnablePan && !SettingsMap().TargetPan)
     return;
 
   TCHAR sTmp[12];
-  static SIZE tsize = { 0, 0 };
+  static PixelSize tsize = { 0, 0 };
 
   if (!Calculated().wind_available)
     return;
@@ -114,7 +114,7 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
 }
 
 void
-MapWindow::DrawCompass(Canvas &canvas, const RECT &rc) const
+MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const
 {
   if (!SettingsMap().NorthArrow)
     return;

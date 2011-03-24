@@ -122,7 +122,7 @@ static void DrawLegs(Chart& chart,
 
 void
 FlightStatisticsRenderer::RenderBarographSpark(
-    Canvas &canvas, const RECT rc,const NMEA_INFO &nmea_info,
+    Canvas &canvas, const PixelRect rc,const NMEA_INFO &nmea_info,
     const DERIVED_INFO &derived_info, const ProtectedTaskManager *_task) const
 {
   ScopeLock lock(fs.mutexStats);
@@ -153,7 +153,7 @@ FlightStatisticsRenderer::RenderBarographSpark(
 }
 
 void
-FlightStatisticsRenderer::RenderBarograph(Canvas &canvas, const RECT rc,
+FlightStatisticsRenderer::RenderBarograph(Canvas &canvas, const PixelRect rc,
                                   const NMEA_INFO &nmea_info,
                                   const DERIVED_INFO &derived_info,
                                   const ProtectedTaskManager *_task) const
@@ -197,7 +197,7 @@ FlightStatisticsRenderer::RenderBarograph(Canvas &canvas, const RECT rc,
 }
 
 void
-FlightStatisticsRenderer::RenderSpeed(Canvas &canvas, const RECT rc,
+FlightStatisticsRenderer::RenderSpeed(Canvas &canvas, const PixelRect rc,
                               const NMEA_INFO &nmea_info,
                               const DERIVED_INFO &derived_info,
                               const TaskManager &task) const
@@ -229,7 +229,7 @@ FlightStatisticsRenderer::RenderSpeed(Canvas &canvas, const RECT rc,
 }
 
 void
-FlightStatisticsRenderer::RenderClimb(Canvas &canvas, const RECT rc,
+FlightStatisticsRenderer::RenderClimb(Canvas &canvas, const PixelRect rc,
                               const GlidePolar& glide_polar) const
 {
   Chart chart(canvas, rc);
@@ -266,7 +266,7 @@ FlightStatisticsRenderer::RenderClimb(Canvas &canvas, const RECT rc,
 }
 
 void
-FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const RECT rc,
+FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                                    const DERIVED_INFO &derived, 
                                    const SETTINGS_COMPUTER &settings_computer,
                                    const GlidePolar& glide_polar) const
@@ -365,7 +365,7 @@ DrawTrace(Canvas &canvas, const ChartProjection& proj,
 }
 
 void
-FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const RECT rc,
+FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                             const NMEA_INFO &nmea_info, 
                                     const DERIVED_INFO &calculated,
                             const SETTINGS_COMPUTER &settings_computer,
@@ -478,7 +478,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
 }
 
 void
-FlightStatisticsRenderer::RenderTask(Canvas &canvas, const RECT rc,
+FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
                              const NMEA_INFO &nmea_info, 
                                      const DERIVED_INFO &calculated,
                              const SETTINGS_COMPUTER &settings_computer,
@@ -514,7 +514,8 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const RECT rc,
 
 
 void
-FlightStatisticsRenderer::RenderTemperature(Canvas &canvas, const RECT rc) const
+FlightStatisticsRenderer::RenderTemperature(Canvas &canvas,
+                                            const PixelRect rc) const
 {
   Chart chart(canvas, rc);
 
@@ -595,7 +596,7 @@ FlightStatisticsRenderer::RenderTemperature(Canvas &canvas, const RECT rc) const
 }
 
 void
-FlightStatisticsRenderer::RenderWind(Canvas &canvas, const RECT rc,
+FlightStatisticsRenderer::RenderWind(Canvas &canvas, const PixelRect rc,
                              const NMEA_INFO &nmea_info,
                              const WindStore &wind_store) const
 {

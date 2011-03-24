@@ -150,15 +150,15 @@ Bitmap::reset()
 #endif
 }
 
-const SIZE
+const PixelSize
 Bitmap::get_size() const
 {
   assert(defined());
 
 #ifdef ENABLE_OPENGL
-  const SIZE size = { width, height };
+  const PixelSize size = { width, height };
 #else
-  const SIZE size = { surface->w, surface->h };
+  const PixelSize size = { surface->w, surface->h };
 #endif
   return size;
 }

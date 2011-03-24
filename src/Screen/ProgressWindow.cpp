@@ -34,7 +34,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
    background_brush(background_color),
    position(0)
 {
-  RECT rc = parent.get_client_rect();
+  PixelRect rc = parent.get_client_rect();
   WindowStyle style;
   style.hide();
   set(parent, rc.left, rc.top, rc.right, rc.bottom, style);
@@ -136,7 +136,7 @@ ProgressWindow::on_paint(Canvas &canvas)
   int window_width = canvas.get_width();
   int window_height = canvas.get_height();
 
-  RECT logo_rect;
+  PixelRect logo_rect;
   logo_rect.left = 0;
   logo_rect.top = 0;
   logo_rect.right = window_width;

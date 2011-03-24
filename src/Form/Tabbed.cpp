@@ -41,7 +41,7 @@ TabbedControl::AddClient(Window *w)
 
   tabs.append(w);
 
-  const RECT rc = get_client_rect();
+  const PixelRect rc = get_client_rect();
   w->move(rc.left, rc.top, rc.right, rc.bottom);
 }
 
@@ -85,7 +85,7 @@ TabbedControl::on_resize(unsigned width, unsigned height)
 {
   ContainerWindow::on_resize(width, height);
 
-  const RECT rc = get_client_rect();
+  const PixelRect rc = get_client_rect();
   for (unsigned i = tabs.size(); i--;)
     tabs[i]->move(rc.left, rc.top, rc.right, rc.bottom);
 

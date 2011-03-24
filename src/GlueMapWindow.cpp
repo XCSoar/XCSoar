@@ -32,7 +32,7 @@ GlueMapWindow::GlueMapWindow()
    DisplayMode(dmCruise) {}
 
 void
-GlueMapWindow::set(ContainerWindow &parent, const RECT &rc)
+GlueMapWindow::set(ContainerWindow &parent, const PixelRect &rc)
 {
   MapWindow::set(parent, rc);
 

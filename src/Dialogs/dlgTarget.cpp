@@ -507,8 +507,8 @@ dlgTargetShowModal(int TargetPoint)
 
   XCSoarInterface::main_window.SetFullScreen(true);
 
-  RECT dialog_rect = wf->get_position();
-  RECT map_rect = XCSoarInterface::main_window.get_client_rect();
+  PixelRect dialog_rect = wf->get_position();
+  PixelRect map_rect = XCSoarInterface::main_window.get_client_rect();
   if (Layout::landscape)
     map_rect.left = dialog_rect.right;
   else

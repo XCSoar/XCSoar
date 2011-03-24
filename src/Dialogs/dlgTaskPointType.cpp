@@ -72,7 +72,8 @@ RefreshView()
 
 
 static void
-OnPointPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
+OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
+                     unsigned DrawListIndex)
 {
   assert(DrawListIndex < point_types.size());
 

@@ -79,7 +79,7 @@ Canvas::outline_rectangle(int left, int top, int right, int bottom)
 }
 
 void
-Canvas::raised_edge(RECT &rc)
+Canvas::raised_edge(PixelRect &rc)
 {
   Pen bright(1, Color(240, 240, 240));
   select(bright);
@@ -304,7 +304,7 @@ Canvas::keyhole(int x, int y, unsigned small_radius, unsigned big_radius,
 }
 
 void
-Canvas::draw_focus(RECT rc)
+Canvas::draw_focus(PixelRect rc)
 {
   Pen pen(1, Color::DARK_GRAY);
   select(pen);

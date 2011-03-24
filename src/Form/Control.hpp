@@ -164,7 +164,7 @@ protected:
 
 public:
   /** Paints the "Selector" */
-  static void PaintSelector(Canvas &canvas, const RECT rc);
+  static void PaintSelector(Canvas &canvas, const PixelRect rc);
 
 private:
   /** Background color */

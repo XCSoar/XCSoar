@@ -497,7 +497,7 @@ OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-PaintWaypoint(Canvas &canvas, const RECT rc,
+PaintWaypoint(Canvas &canvas, const PixelRect rc,
               const struct WayPointSelectInfo &info)
 {
   const Waypoint &way_point = *info.way_point;
@@ -549,7 +549,7 @@ PaintWaypoint(Canvas &canvas, const RECT rc,
 }
 
 static void
-OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
+OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   if (WayPointSelectInfo.empty()) {
     assert(i == 0);

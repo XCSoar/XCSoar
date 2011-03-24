@@ -122,7 +122,7 @@ WindowControl::SetBackColor(Color Value)
 }
 
 void
-WindowControl::PaintSelector(Canvas &canvas, const RECT rc)
+WindowControl::PaintSelector(Canvas &canvas, const PixelRect rc)
 {
   const Pen pen(DEFAULTBORDERPENWIDTH + 2, Color::BLACK);
   canvas.select(pen);

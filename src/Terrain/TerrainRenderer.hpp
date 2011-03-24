@@ -27,8 +27,6 @@ Copyright_License {
 #include "RasterRenderer.hpp"
 #include "Util/NonCopyable.hpp"
 
-#include <windef.h>
-
 class Canvas;
 class WindowProjection;
 class RasterTerrain;

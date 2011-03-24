@@ -55,7 +55,7 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
 }
 
 void
-GlueMapWindow::DrawGPSStatus(Canvas &canvas, const RECT &rc,
+GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
                              const NMEA_INFO &info) const
 {
   const TCHAR *txt;
@@ -86,7 +86,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const RECT &rc,
 }
 
 void
-GlueMapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
+GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 {
   int offset = 0;
 
@@ -115,7 +115,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const RECT &rc) const
 }
 
 void
-GlueMapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
+GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
 {
   RasterPoint GlideBar[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
@@ -275,7 +275,6 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
 
     } else if (Appearance.IndFinalGlide == fgFinalGlideAltA) {
 
-      SIZE TextSize;
       int y = GlideBar[3].y;
       // was ((rc.bottom - rc.top )/2)-rc.top-
       //            Appearance.MapWindowBoldFont.CapitalHeight/2-1;
@@ -285,7 +284,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
                                 Value, sizeof(Value) / sizeof(Value[0]), false);
 
       canvas.select(Fonts::MapBold);
-      TextSize = canvas.text_size(Value);
+      PixelSize TextSize = canvas.text_size(Value);
 
       canvas.fill_rectangle(x, y, x + IBLSCALE(1) + TextSize.cx,
                             y + Fonts::MapBold.get_capital_height() + IBLSCALE(2),
@@ -307,7 +306,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const RECT &rc) const
 }
 
 void
-GlueMapWindow::DrawMapScale(Canvas &canvas, const RECT &rc,
+GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             const MapWindowProjection &projection) const
 {
   fixed MapWidth;
@@ -321,7 +320,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const RECT &rc,
   canvas.select(Fonts::MapBold);
   Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
                             sizeof(ScaleInfo) / sizeof(TCHAR), false);
-  SIZE TextSize = canvas.text_size(ScaleInfo);
+  PixelSize TextSize = canvas.text_size(ScaleInfo);
 
   Height = Fonts::MapBold.get_capital_height() + IBLSCALE(2);
   // 2: add 1pix border
@@ -390,7 +389,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const RECT &rc,
 }
 
 void
-GlueMapWindow::DrawHorizon(Canvas &canvas, const RECT &rc) const
+GlueMapWindow::DrawHorizon(Canvas &canvas, const PixelRect &rc) const
 {
   /*
   FEATURE TEMPORARILY DISABLED DUE TO USE OF XCSOAR IN FAI COMPETITIONS

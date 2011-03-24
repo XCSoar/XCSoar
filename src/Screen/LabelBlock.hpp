@@ -24,16 +24,15 @@ Copyright_License {
 #ifndef SCREEN_LABELBLOCK_HPP
 #define SCREEN_LABELBLOCK_HPP
 
+#include "Screen/Point.hpp"
 #include "Util/StaticArray.hpp"
 #include "Compiler.h"
 
-#include <windef.h>
-
 class LabelBlock {
-  StaticArray<RECT, 256> blocks;
+  StaticArray<PixelRect, 256> blocks;
 
 public:
-  bool check(const RECT rc);
+  bool check(const PixelRect rc);
   void reset();
 };
 

@@ -95,11 +95,11 @@ Bitmap::reset()
   texture = NULL;
 }
 
-const SIZE
+const PixelSize
 Bitmap::get_size() const
 {
   assert(defined());
 
-  const SIZE size = { width, height };
+  const PixelSize size = { width, height };
   return size;
 }

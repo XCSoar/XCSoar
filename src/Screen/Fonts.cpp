@@ -112,7 +112,7 @@ SizeLogFont(LOGFONT &logfont, unsigned width, const TCHAR* str)
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
   AnyCanvas canvas;
-  SIZE tsize;
+  PixelSize tsize;
   do {
     --logfont.lfHeight;
 

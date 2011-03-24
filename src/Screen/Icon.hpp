@@ -36,12 +36,12 @@ class MaskedIcon {
 protected:
   Bitmap bitmap;
 
-  SIZE size;
+  PixelSize size;
 
   RasterPoint origin;
 
 public:
-  const SIZE& get_size() const {
+  const PixelSize &get_size() const {
     return size;
   }
 

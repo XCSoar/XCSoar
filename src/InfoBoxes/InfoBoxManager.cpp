@@ -499,7 +499,7 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
 }
 
 void
-InfoBoxManager::Create(RECT rc, const InfoBoxLayout::Layout &_layout)
+InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout)
 {
   first = true;
   layout = _layout;
@@ -540,7 +540,7 @@ InfoBoxManager::Create(RECT rc, const InfoBoxLayout::Layout &_layout)
 
   // create infobox windows
   for (unsigned i = 0; i < layout.count; i++) {
-    const RECT &rc = layout.positions[i];
+    const PixelRect &rc = layout.positions[i];
     int Border = GetInfoBoxBorder(i);
 
     InfoBoxes[i] = new InfoBoxWindow(XCSoarInterface::main_window,

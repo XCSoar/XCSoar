@@ -130,7 +130,7 @@ Canvas::keyhole(int x, int y, unsigned small_radius, unsigned big_radius,
 #endif /* !OPENGL */
 
 void
-Canvas::draw_button(RECT rc, bool down)
+Canvas::draw_button(PixelRect rc, bool down)
 {
   const Pen old_pen = pen;
 
@@ -155,22 +155,22 @@ Canvas::draw_button(RECT rc, bool down)
   pen = old_pen;
 }
 
-const SIZE
+const PixelSize
 Canvas::text_size(const TCHAR *text, size_t length) const
 {
   TCHAR *duplicated = _tcsdup(text);
   duplicated[length] = 0;
 
-  const SIZE size = text_size(duplicated);
+  const PixelSize size = text_size(duplicated);
   free(duplicated);
 
   return size;
 }
 
-const SIZE
+const PixelSize
 Canvas::text_size(const TCHAR *text) const
 {
-  SIZE size = { 0, 0 };
+  PixelSize size = { 0, 0 };
 
   if (font == NULL)
     return size;
@@ -250,7 +250,7 @@ Canvas::text_transparent(int x, int y, const TCHAR *text)
 #endif /* !OPENGL */
 
 void
-Canvas::formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
+Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
   TCHAR *p, *duplicated;
   size_t i, len;
   int x, y, lines = 1;
@@ -275,7 +275,7 @@ Canvas::formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
   // no grouping of multiple spaces
   if (format & DT_WORDBREAK) {
     for (i = 0; i < len; i += tcslen(duplicated + i) + 1) {
-      SIZE sz = text_size(duplicated + i);
+      PixelSize sz = text_size(duplicated + i);
       TCHAR *prev_p = NULL;
 
       // remove words from behind till line fits or no more space is found
@@ -301,7 +301,7 @@ Canvas::formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
   for (i = 0; i < len; i += tcslen(duplicated + i) + 1) {
     if (duplicated[i] != _T('\0')) {
       if (format & (DT_RIGHT | DT_CENTER)) {
-        SIZE sz = text_size(duplicated + i);
+        PixelSize sz = text_size(duplicated + i);
         x = (format & DT_CENTER) ? (rc->left + rc->right - sz.cx)/2 :
                                     rc->right - sz.cx;  // DT_RIGHT
       } else {  // default is DT_LEFT
@@ -325,7 +325,7 @@ Canvas::text(int x, int y, const TCHAR *_text, size_t length)
 }
 
 void
-Canvas::text_opaque(int x, int y, const RECT &rc, const TCHAR *_text)
+Canvas::text_opaque(int x, int y, const PixelRect &rc, const TCHAR *_text)
 {
   fill_rectangle(rc, background_color);
   text_transparent(x, y, _text);

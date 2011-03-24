@@ -69,6 +69,6 @@ LoadWindow(CallBackTableEntry *LookUpTable,
 
 WndForm *
 LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
-               const TCHAR *resource, const RECT *targetRect = NULL);
+               const TCHAR *resource, const PixelRect *targetRect = NULL);
 
 #endif

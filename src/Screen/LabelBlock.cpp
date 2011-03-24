@@ -30,13 +30,13 @@ void LabelBlock::reset()
 }
 
 static gcc_pure bool
-CheckRectOverlap(const RECT& rc1, const RECT& rc2)
+CheckRectOverlap(const PixelRect& rc1, const PixelRect& rc2)
 {
   return rc1.left < rc2.right && rc1.right > rc2.left &&
     rc1.top < rc2.bottom && rc1.bottom > rc2.top;
 }
 
-bool LabelBlock::check(const RECT rc)
+bool LabelBlock::check(const PixelRect rc)
 {
   for (unsigned i = 0; i < blocks.size(); i++)
     if (CheckRectOverlap(blocks[i], rc))

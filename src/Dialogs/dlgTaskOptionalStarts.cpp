@@ -55,7 +55,8 @@ RefreshView()
 }
 
 static void
-OnOptionalStartPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
+OnOptionalStartPaintListItem(Canvas &canvas, const PixelRect rc,
+                             unsigned DrawListIndex)
 {
   assert(DrawListIndex <= ordered_task->optional_start_points_size()
       +  (RealStartExists ? 2 : 1));

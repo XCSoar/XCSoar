@@ -368,7 +368,7 @@ void
 GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
                         DrawInfo_t *diLabel, fixed Value, const TCHAR *Label)
 {
-  SIZE tsize;
+  PixelSize tsize;
 
 #ifndef FIXED_MATH
   Value = (double)iround(Value * 10) / 10; // prevent the -0.0 case
@@ -452,7 +452,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
     RasterPoint BitmapUnitPos = unit_symbol->get_origin(Appearance.InverseInfoBox
                                                   ? UnitSymbol::INVERSE_GRAY
                                                   : UnitSymbol::GRAY);
-    SIZE BitmapUnitSize = unit_symbol->get_size();
+    PixelSize BitmapUnitSize = unit_symbol->get_size();
 
     canvas.scale_copy(x - Layout::Scale(5), diValue->recBkg.top,
                       *unit_symbol,
@@ -588,14 +588,14 @@ void
 GaugeVario::RenderBallast(Canvas &canvas)
 {
   static fixed lastBallast = fixed_one;
-  static RECT recLabelBk = {-1,-1,-1,-1};
-  static RECT recValueBk = {-1,-1,-1,-1};
+  static PixelRect recLabelBk = {-1,-1,-1,-1};
+  static PixelRect recValueBk = {-1,-1,-1,-1};
   static RasterPoint orgLabel = {-1,-1};
   static RasterPoint orgValue = {-1,-1};
 
   if (!ballast_initialised) { // ontime init, origin and background rect
 
-    SIZE tSize;
+    PixelSize tSize;
 
     // position of ballast label
     orgLabel.x = 1;
@@ -679,13 +679,13 @@ void
 GaugeVario::RenderBugs(Canvas &canvas)
 {
   static fixed lastBugs = fixed_one;
-  static RECT recLabelBk = {-1,-1,-1,-1};
-  static RECT recValueBk = {-1,-1,-1,-1};
+  static PixelRect recLabelBk = {-1,-1,-1,-1};
+  static PixelRect recValueBk = {-1,-1,-1,-1};
   static RasterPoint orgLabel = {-1,-1};
   static RasterPoint orgValue = {-1,-1};
 
   if (!bugs_initialised) {
-    SIZE tSize;
+    PixelSize tSize;
 
     orgLabel.x = 1;
     orgLabel.y = get_bottom() - 2

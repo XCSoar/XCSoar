@@ -64,7 +64,7 @@ enum {
 };
 
 static inline void
-SetRect(RECT *rc, int left, int top, int right, int bottom)
+SetRect(PixelRect *rc, int left, int top, int right, int bottom)
 {
   rc->left = left;
   rc->top = top;
@@ -73,7 +73,7 @@ SetRect(RECT *rc, int left, int top, int right, int bottom)
 }
 
 static inline void
-SetRectEmpty(RECT *rc)
+SetRectEmpty(PixelRect *rc)
 {
   rc->left = 0;
   rc->top = 0;
@@ -82,13 +82,13 @@ SetRectEmpty(RECT *rc)
 }
 
 static inline void
-CopyRect(RECT *dest, const RECT *src)
+CopyRect(PixelRect *dest, const PixelRect *src)
 {
   *dest = *src;
 }
 
 static inline void
-InflateRect(RECT *rc, int dx, int dy)
+InflateRect(PixelRect *rc, int dx, int dy)
 {
   rc->left -= dx;
   rc->top -= dy;
@@ -97,7 +97,7 @@ InflateRect(RECT *rc, int dx, int dy)
 }
 
 static inline void
-OffsetRect(RECT *rc, int dx, int dy)
+OffsetRect(PixelRect *rc, int dx, int dy)
 {
   rc->left += dx;
   rc->top += dy;
@@ -106,21 +106,21 @@ OffsetRect(RECT *rc, int dx, int dy)
 }
 
 static inline bool
-PtInRect(const RECT *rc, const RasterPoint &pt)
+PtInRect(const PixelRect *rc, const RasterPoint &pt)
 {
   return pt.x >= rc->left && pt.x < rc->right &&
     pt.y >= rc->top && pt.y < rc->bottom;
 }
 
 static inline bool
-EqualRect(const RECT *a, const RECT *b)
+EqualRect(const PixelRect *a, const PixelRect *b)
 {
   return a->left == b->left && a->top == b->top &&
     a->right == b->right && a->bottom == b->bottom;
 }
 
 static inline bool
-IntersectRect(RECT *dest, const RECT *a, const RECT *b)
+IntersectRect(PixelRect *dest, const PixelRect *a, const PixelRect *b)
 {
   dest->left = a->left < b->left ? a->left : b->left;
   dest->top = a->top < b->top ? a->top : b->top;

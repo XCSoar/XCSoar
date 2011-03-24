@@ -319,7 +319,7 @@ static void OnFilterType(DataField *_Sender,
 }
 
 static void
-OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
+OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   if (AirspaceSelectInfo.empty()) {
     assert(i == 0);

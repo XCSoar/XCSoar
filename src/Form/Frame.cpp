@@ -60,7 +60,7 @@ WndFrame::GetTextHeight()
 #ifdef ENABLE_SDL
   return font->get_height(); // XXX implement properly
 #else /* !ENABLE_SDL */
-  RECT rc = get_client_rect();
+  PixelRect rc = get_client_rect();
   ::InflateRect(&rc, -2, -2); // todo border width
 
   VirtualCanvas canvas(1, 1);
@@ -81,7 +81,7 @@ WndFrame::on_paint(Canvas &canvas)
 
   canvas.select(*font);
 
-  RECT rc = get_client_rect();
+  PixelRect rc = get_client_rect();
   InflateRect(&rc, -2, -2); // todo border width
 
   canvas.formatted_text(&rc, text, mCaptionStyle);

@@ -30,7 +30,7 @@ Copyright_License {
 #include "Sizes.h" /* for WPCIRCLESIZE */
 
 static RasterPoint
-TextInBoxMoveInView(RECT &brect, const RECT &MapRect)
+TextInBoxMoveInView(PixelRect &brect, const PixelRect &MapRect)
 {
   RasterPoint offset;
   offset.x = 0;
@@ -91,9 +91,10 @@ RenderShadowedText(Canvas &canvas, const TCHAR* text, int x, int y,
 // returns true if really wrote something
 bool
 TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
-          TextInBoxMode_t Mode, const RECT &MapRect, LabelBlock *label_block)
+          TextInBoxMode_t Mode, const PixelRect &MapRect,
+          LabelBlock *label_block)
 {
-  RECT brect;
+  PixelRect brect;
 
   if ((x < MapRect.left - WPCIRCLESIZE)
       || (x > MapRect.right + (WPCIRCLESIZE * 3))
@@ -105,7 +106,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
   canvas.select(Mode.Bold ? Fonts::MapBold : Fonts::Map);
 
-  SIZE tsize = canvas.text_size(Value);
+  PixelSize tsize = canvas.text_size(Value);
 
   if (Mode.Align == Right) {
     x -= tsize.cx;
@@ -167,7 +168,7 @@ TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
           unsigned screen_width, unsigned screen_height,
           LabelBlock *label_block)
 {
-  RECT rc;
+  PixelRect rc;
   rc.left = 0;
   rc.top = 0;
   rc.right = screen_width;

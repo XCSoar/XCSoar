@@ -76,7 +76,7 @@ static CallBackTableEntry CallBackTable[] = {
 void
 dlgThermalAssistantShowModal()
 {
-  const RECT targetRect = InfoBoxManager::layout.remaining;
+  const PixelRect targetRect = InfoBoxManager::layout.remaining;
 
   // Load dialog from XML
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,

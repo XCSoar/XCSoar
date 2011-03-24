@@ -92,11 +92,9 @@ public:
   void reset();
 
   #ifdef ANDROID
-  void text_width(const TCHAR *text, int &width, int &height) const;
-  void text_width(const TCHAR *text, SIZE &size) const
-    { text_width(text, size.cx, size.cy); }
+  void text_width(const TCHAR *text, PixelSize &size) const;
 
-  int text_texture_gl(const TCHAR *text, SIZE &size,
+  int text_texture_gl(const TCHAR *text, PixelSize &size,
                       const Color &fg, const Color &bg) const;
   #else // !ANDROID
   #ifdef ENABLE_SDL

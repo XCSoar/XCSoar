@@ -63,7 +63,7 @@ Window::set(ContainerWindow *parent,
 }
 
 void
-Window::to_screen(RECT &rc) const
+Window::to_screen(PixelRect &rc) const
 {
   for (const Window *p = parent; p != NULL; p = p->parent) {
     rc.left += p->left;

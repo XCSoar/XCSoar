@@ -69,9 +69,9 @@ OnTextPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   // Do the actual painting of the text
   canvas.select(Fonts::Map);
 
-  SIZE tsize = canvas.text_size(edittext);
-  SIZE tsizec = canvas.text_size(edittext, cursor);
-  SIZE tsizea = canvas.text_size(edittext, cursor + 1);
+  PixelSize tsize = canvas.text_size(edittext);
+  PixelSize tsizec = canvas.text_size(edittext, cursor);
+  PixelSize tsizea = canvas.text_size(edittext, cursor + 1);
 
   RasterPoint p[5];
   p[0].x = 10;

@@ -93,7 +93,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   canvas.set_text_color(Color::BLACK);
   canvas.select(Fonts::Map);
 
-  RECT rcgfx = Sender->get_client_rect();
+  PixelRect rcgfx = Sender->get_client_rect();
 
   // background is painted in the base-class
 

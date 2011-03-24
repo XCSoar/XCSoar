@@ -93,17 +93,17 @@ Canvas::keyhole(int x, int y, unsigned small_radius, unsigned big_radius,
   ::KeyHole(*this, x, y, big_radius, start, end, small_radius);
 }
 
-const SIZE
+const PixelSize
 Canvas::text_size(const TCHAR *text, size_t length) const
 {
   assert(defined());
 
-  SIZE size;
+  PixelSize size;
   ::GetTextExtentPoint(dc, text, length, &size);
   return size;
 }
 
-const SIZE
+const PixelSize
 Canvas::text_size(const TCHAR *text) const
 {
   return text_size(text, _tcslen(text));
@@ -136,7 +136,7 @@ Canvas::text(int x, int y, const TCHAR *text, size_t length)
 }
 
 void
-Canvas::text_opaque(int x, int y, const RECT &rc, const TCHAR *text)
+Canvas::text_opaque(int x, int y, const PixelRect &rc, const TCHAR *text)
 {
   assert(defined());
 
@@ -144,7 +144,7 @@ Canvas::text_opaque(int x, int y, const RECT &rc, const TCHAR *text)
 }
 
 void
-Canvas::text_clipped(int x, int y, const RECT &rc, const TCHAR *text)
+Canvas::text_clipped(int x, int y, const PixelRect &rc, const TCHAR *text)
 {
   assert(defined());
 
@@ -154,9 +154,9 @@ Canvas::text_clipped(int x, int y, const RECT &rc, const TCHAR *text)
 void
 Canvas::text_clipped(int x, int y, unsigned width, const TCHAR *text)
 {
-  const SIZE size = text_size(text);
+  const PixelSize size = text_size(text);
 
-  RECT rc;
+  PixelRect rc;
   ::SetRect(&rc, x, y, x + min(width, (unsigned)size.cx), y + size.cy);
   text_clipped(x, y, rc, text);
 }
@@ -206,7 +206,7 @@ Canvas::copy(const Canvas &src)
 void
 Canvas::copy(const Bitmap &src)
 {
-  SIZE size = src.get_size();
+  PixelSize size = src.get_size();
   copy(0, 0, size.cx, size.cy, src, 0, 0);
 }
 
@@ -255,7 +255,7 @@ Canvas::stretch_transparent(const Bitmap &src, Color key)
 
   HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src.native());
 
-  SIZE size = src.get_size();
+  PixelSize size = src.get_size();
 #ifdef _WIN32_WCE
   ::TransparentImage(dc, 0, 0, get_width(), get_height(),
                      compatible_dc, 0, 0, size.cx, size.cy,
@@ -279,7 +279,7 @@ Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
     compatible_dc = ::CreateCompatibleDC(dc);
 
   HBITMAP old = (HBITMAP)::SelectObject(compatible_dc, src.native());
-  const SIZE size = src.get_size();
+  const PixelSize size = src.get_size();
 
   BufferCanvas inverted(*this, size.cx, size.cy);
   ::BitBlt(inverted, 0, 0, size.cx, size.cy,
@@ -345,7 +345,7 @@ Canvas::stretch(int dest_x, int dest_y,
 {
   assert(src.defined());
 
-  SIZE size = src.get_size();
+  PixelSize size = src.get_size();
   stretch(dest_x, dest_y, dest_width, dest_height,
           src, 0, 0, size.cx, size.cy);
 }
@@ -355,6 +355,6 @@ Canvas::stretch(const Bitmap &src)
 {
   assert(src.defined());
 
-  SIZE size = src.get_size();
+  PixelSize size = src.get_size();
   stretch(src, 0, 0, size.cx, size.cy);
 }

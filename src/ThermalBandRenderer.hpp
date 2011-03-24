@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef THERMAL_BAND_RENDERER_HPP
 #define THERMAL_BAND_RENDERER_HPP
 
-#include <windef.h>
+#include "Screen/Point.hpp"
 #include "Math/fixed.hpp"
 
 class Chart;
@@ -39,14 +39,14 @@ public:
   static void DrawThermalBand(const NMEA_INFO& basic,
                               const DERIVED_INFO& calculated,
                               Canvas &canvas, 
-                              const RECT &rc,
+                              const PixelRect &rc,
                               const TaskBehaviour& task_props,
                               const OrderedTaskBehaviour* ordered_props=NULL);
 
   static void DrawThermalBandSpark(const NMEA_INFO& basic,
                                    const DERIVED_INFO& calculated,
                                    Canvas &canvas, 
-                                   const RECT &rc,
+                                   const PixelRect &rc,
                                    const TaskBehaviour& task_props);
 
 protected:

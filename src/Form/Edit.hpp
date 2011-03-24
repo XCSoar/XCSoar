@@ -110,9 +110,9 @@ private:
   /** Width reserved for the caption of the Control */
   int  mCaptionWidth;
   /** Coordinates of the "up" button */
-  RECT mHitRectUp;
+  PixelRect mHitRectUp;
   /** Coordinates of the "down" button */
-  RECT mHitRectDown;
+  PixelRect mHitRectDown;
   /** True if the "down" button is currently pressed */
   bool mDownDown;
   /** True if the "up" button is currently pressed */

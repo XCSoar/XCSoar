@@ -33,7 +33,7 @@ Copyright_License {
 void 
 TaskProgressRenderer::DrawTaskProgress(const TaskSummary& summary,
                                        Canvas &canvas, 
-                                       const RECT &rc)
+                                       const PixelRect &rc)
 {
   const int radius = std::min(rc.right-rc.left, rc.bottom-rc.top)/2-IBLSCALE(3);
   RasterPoint center;

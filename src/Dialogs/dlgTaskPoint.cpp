@@ -417,7 +417,7 @@ ReadValues()
 static void
 OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
-  RECT rc = Sender->get_client_rect();
+  PixelRect rc = Sender->get_client_rect();
 
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
 

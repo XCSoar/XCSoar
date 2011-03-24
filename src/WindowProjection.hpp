@@ -24,10 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_WINDOW_PROJECTION_HPP
 #define XCSOAR_WINDOW_PROJECTION_HPP
 
+#include "Screen/Point.hpp"
 #include "Projection.hpp"
 #include "Geo/GeoBounds.hpp"
-
-#include <windef.h>
 
 class WindowProjection:
   public Projection
@@ -65,7 +64,7 @@ public:
     screen_height = height;
   }
 
-  void SetMapRect(const RECT &rc) {
+  void SetMapRect(const PixelRect &rc) {
     SetScreenSize(rc.right - rc.left, rc.bottom - rc.top);
   }
 

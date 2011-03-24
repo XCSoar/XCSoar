@@ -120,9 +120,9 @@ protected:
   /** The ClientWindow */
   ClientAreaWindow client_area;
   /** Coordinates of the ClientWindow */
-  RECT mClientRect;
+  PixelRect mClientRect;
   /** Coordinates of the titlebar */
-  RECT mTitleRect;
+  PixelRect mTitleRect;
 
   TimerNotifyCallback_t mOnTimerNotify;
   KeyDownNotifyCallback_t mOnKeyDownNotify;

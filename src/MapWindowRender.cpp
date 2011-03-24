@@ -89,7 +89,7 @@ MapWindow::RenderGlide(Canvas &canvas)
 }
 
 void
-MapWindow::Render(Canvas &canvas, const RECT &rc)
+MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 { 
   render_projection = visible_projection;
 

@@ -48,7 +48,7 @@ static TabBarControl* wTabBar = NULL;
 static OrderedTask* active_task = NULL;
 static bool task_modified = false;
 static bool fullscreen;
-static RECT TaskViewRect;
+static PixelRect TaskViewRect;
 static unsigned TurnpointTab = 0;
 
 unsigned
@@ -109,7 +109,7 @@ dlgTaskManager::OnBlackBarPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   canvas.clear(Color::BLACK);
   if (wTabBar->has_focus()) {
-    RECT rcFocus;
+    PixelRect rcFocus;
     rcFocus.top = rcFocus.left = 0;
     rcFocus.right = canvas.get_width();
     rcFocus.bottom = canvas.get_height();

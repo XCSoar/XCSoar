@@ -163,7 +163,7 @@ void
 ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
                                      const DERIVED_INFO& calculated,
                                      Canvas &canvas, 
-                                     const RECT &rc,
+                                     const PixelRect &rc,
                                      const TaskBehaviour& task_props,
                                      const OrderedTaskBehaviour* ordered_props)
 {
@@ -185,7 +185,7 @@ void
 ThermalBandRenderer::DrawThermalBandSpark(const NMEA_INFO& basic,
                                           const DERIVED_INFO& calculated,
                                           Canvas &canvas, 
-                                          const RECT &rc,
+                                          const PixelRect &rc,
                                           const TaskBehaviour& task_props)
 {
   Chart chart(canvas, rc);

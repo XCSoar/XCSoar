@@ -34,7 +34,7 @@ class UnitSymbol;
 
 typedef struct {
   bool    InitDone;
-  RECT    recBkg;
+  PixelRect recBkg;
   RasterPoint orgText;
   fixed lastValue;
   TCHAR   lastText[32];

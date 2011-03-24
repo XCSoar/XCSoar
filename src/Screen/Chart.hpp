@@ -31,7 +31,6 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Compiler.h"
 
-#include <windef.h>
 #include <tchar.h>
 #include <vector>
 
@@ -43,7 +42,7 @@ class Chart
 {
 private:
   Canvas &canvas;
-  RECT rc;
+  PixelRect rc;
 
   Pen pens[5];
 
@@ -52,7 +51,7 @@ public:
   int PaddingBottom;
 
 public:
-  Chart(Canvas &the_canvas, const RECT the_rc);
+  Chart(Canvas &the_canvas, const PixelRect the_rc);
 
   enum Style {
     STYLE_BLUETHIN,

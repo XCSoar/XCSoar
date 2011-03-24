@@ -36,4 +36,12 @@ struct RasterPoint {
   GLvalue x, y;
 };
 
+struct PixelSize {
+  GLvalue cx, cy;
+};
+
+struct PixelRect {
+  GLvalue left, top, right, bottom;
+};
+
 #endif

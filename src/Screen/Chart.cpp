@@ -48,7 +48,7 @@ Chart::ResetScale()
   y_max = fixed_zero;
 }
 
-Chart::Chart(Canvas &the_canvas, const RECT the_rc) :
+Chart::Chart(Canvas &the_canvas, const PixelRect the_rc) :
   canvas(the_canvas), rc(the_rc), PaddingLeft(24), PaddingBottom(19)
 {
   ResetScale();
@@ -164,7 +164,7 @@ Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, Pen &pen)
 void
 Chart::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
 {
-  SIZE tsize = canvas.text_size(text);
+  PixelSize tsize = canvas.text_size(text);
 
   int x = (int)((xv - x_min) * xscale) + rc.left - tsize.cx / 2 + PaddingLeft;
   int y = (int)((y_max - yv) * yscale) + rc.top - tsize.cy / 2;
@@ -178,7 +178,7 @@ Chart::DrawNoData()
 {
   const TCHAR *text = _("No data");
 
-  SIZE tsize = canvas.text_size(text);
+  PixelSize tsize = canvas.text_size(text);
 
   int x = (int)(rc.left + rc.right - tsize.cx) / 2;
   int y = (int)(rc.top + rc.bottom - tsize.cy) / 2;
@@ -192,7 +192,7 @@ Chart::DrawXLabel(const TCHAR *text)
 {
   canvas.select(Fonts::MapLabel);
 
-  SIZE tsize = canvas.text_size(text);
+  PixelSize tsize = canvas.text_size(text);
   int x = rc.right - tsize.cx - IBLSCALE(3);
   int y = rc.bottom - tsize.cy;
 
@@ -205,7 +205,7 @@ Chart::DrawYLabel(const TCHAR *text)
 {
   canvas.select(Fonts::MapLabel);
 
-  SIZE tsize = canvas.text_size(text);
+  PixelSize tsize = canvas.text_size(text);
   int x = max(2, (int)(rc.left - tsize.cx));
   int y = rc.top;
 

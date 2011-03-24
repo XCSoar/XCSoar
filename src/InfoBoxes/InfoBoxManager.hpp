@@ -28,8 +28,6 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 
-#include <windef.h>
-
 extern InfoBoxManagerConfig infoBoxManagerConfig;
 
 class InfoBoxWindow;
@@ -77,7 +75,7 @@ namespace InfoBoxManager
   void ProcessTimer();
   void SetDirty();
 
-  void Create(RECT rc, const InfoBoxLayout::Layout &layout);
+  void Create(PixelRect rc, const InfoBoxLayout::Layout &layout);
   void Destroy();
   void Paint();
   void Show();

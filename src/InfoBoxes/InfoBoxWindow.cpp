@@ -202,7 +202,6 @@ InfoBoxWindow::SetCommentInvalid()
 void
 InfoBoxWindow::PaintTitle(Canvas &canvas)
 {
-  SIZE tsize;
   int x, y;
   int halftextwidth;
 
@@ -211,7 +210,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
   const Font &font = *look.title.font;
   canvas.select(font);
 
-  tsize = canvas.text_size(mTitle);
+  PixelSize tsize = canvas.text_size(mTitle);
 
   halftextwidth = (recTitle.left + recTitle.right - tsize.cx) / 2;
 
@@ -247,7 +246,6 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 void
 InfoBoxWindow::PaintValue(Canvas &canvas)
 {
-  SIZE tsize;
   int x, y;
 
   canvas.set_text_color(look.get_value_color(colorValue));
@@ -256,7 +254,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   unsigned ascent_height = look.value.font->get_ascent_height();
   unsigned capital_height = look.value.font->get_capital_height();
 
-  tsize = canvas.text_size(mValue);
+  PixelSize tsize = canvas.text_size(mValue);
   if (tsize.cx > recValue.right - recValue.left) {
     canvas.select(*look.small_font);
     ascent_height = look.small_font->get_ascent_height();
@@ -264,7 +262,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
     tsize = canvas.text_size(mValue);
   }
 
-  SIZE unit_size;
+  PixelSize unit_size;
   const UnitSymbol *unit_symbol = GetUnitSymbol(mValueUnit);
   if (unit_symbol != NULL) {
     unit_size = unit_symbol->get_size();
@@ -298,7 +296,6 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
 void
 InfoBoxWindow::PaintComment(Canvas &canvas)
 {
-  SIZE tsize;
   int x, y;
 
   canvas.set_text_color(look.get_comment_color(colorComment));
@@ -306,7 +303,7 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
   const Font &font = *look.comment.font;
   canvas.select(font);
 
-  tsize = canvas.text_size(mComment);
+  PixelSize tsize = canvas.text_size(mComment);
 
   x = max(1, (int)(recComment.left + recComment.right - tsize.cx) / 2);
   y = recComment.top + 1 + font.get_capital_height()
@@ -383,7 +380,7 @@ InfoBoxWindow::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height
   SubCanvas canvas(dest, xoff, yoff, width, height);
   Paint(canvas);
 #else
-  SIZE size = get_size();
+  PixelSize size = get_size();
   BufferCanvas buffer(dest, size.cx, size.cy);
 
   Paint(buffer);
@@ -448,7 +445,7 @@ InfoBoxWindow::on_resize(unsigned width, unsigned height)
 {
   PaintWindow::on_resize(width, height);
 
-  RECT rc = get_client_rect();
+  PixelRect rc = get_client_rect();
 
   if (mBorderKind & BORDERLEFT)
     rc.left += BORDER_WIDTH;

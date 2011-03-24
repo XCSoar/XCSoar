@@ -268,7 +268,7 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
 
   const TCHAR* str = _("No Traffic");
   canvas.select(hfNoTraffic);
-  SIZE ts = canvas.text_size(str);
+  PixelSize ts = canvas.text_size(str);
   canvas.set_text_color(hcStandard);
   canvas.text(radar_mid.x - (ts.cx / 2), radar_mid.y - (radius / 2), str);
 }
@@ -417,7 +417,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     canvas.set_text_color(Color::BLACK);
 
     // Calculate size of the output string
-    SIZE tsize = canvas.text_size(Buffer);
+    PixelSize tsize = canvas.text_size(Buffer);
 
     int dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
 
@@ -484,7 +484,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   else
     Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 10, true);
 
-  SIZE sz = canvas.text_size(tmp);
+  PixelSize sz = canvas.text_size(tmp);
 
   // Draw vertical speed shadow
   canvas.set_text_color(Color::WHITE);
@@ -626,7 +626,7 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
   canvas.background_transparent();
   canvas.select(hfLabels);
 
-  SIZE s = canvas.text_size(_T("N"));
+  PixelSize s = canvas.text_size(_T("N"));
   canvas.circle(radar_mid.x + iround(x * radius),
                 radar_mid.y + iround(y * radius), s.cy * 0.65);
   canvas.text(radar_mid.x + iround(x * radius) - s.cx / 2,
@@ -661,7 +661,7 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
   TCHAR distance_string[10];
   Units::FormatUserDistance(distance, distance_string,
                             sizeof(distance_string) / sizeof(distance_string[0]));
-  SIZE s = canvas.text_size(distance_string);
+  PixelSize s = canvas.text_size(distance_string);
   canvas.text(radar_mid.x - s.cx / 2,
               radar_mid.y + radius - s.cy * 0.75, distance_string);
 

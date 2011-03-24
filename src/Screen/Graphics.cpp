@@ -20,7 +20,6 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#include <windef.h>
 #include "Screen/Graphics.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/UnitSymbol.hpp"

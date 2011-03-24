@@ -86,7 +86,7 @@ public:
     SingleWindow::set(_T("RunCanvas"), _T("RunCanvas"),
                       left, top, width, height);
 
-    RECT rc = get_client_rect();
+    PixelRect rc = get_client_rect();
 
 #ifndef ENABLE_OPENGL
     buffer_button.set(*this, _T("Buffer"), ID_BUFFER, 5, rc.bottom - 30, 65, 25);
@@ -140,7 +140,7 @@ private:
 
     case 3:
     case 4:
-      RECT rc;
+      PixelRect rc;
       rc.left = get_hmiddle() - 50;
       rc.top = get_vmiddle() - 20;
       rc.right = get_hmiddle() + 50;

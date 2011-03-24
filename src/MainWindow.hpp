@@ -47,7 +47,7 @@ public:
 private:
   timer_t timer_id;
 
-  RECT map_rect;
+  PixelRect map_rect;
   bool FullScreen;
 
   /**
@@ -109,7 +109,7 @@ public:
 
   void SetFullScreen(bool _full_screen);
 
-  void SetCustomView(RECT rc);
+  void SetCustomView(PixelRect rc);
   void LeaveCustomView();
 
 protected:

@@ -36,7 +36,7 @@ static DataField *ComboPopupDataField;
 static const ComboList *ComboListPopup;
 
 static void
-OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
+OnPaintComboPopupListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < (unsigned)ComboListPopup->size());
 

@@ -190,11 +190,11 @@ public:
     fill_rectangle(left, top, right, bottom, brush.get_color());
   }
 
-  void fill_rectangle(const RECT &rc, const Color color) {
+  void fill_rectangle(const PixelRect &rc, const Color color) {
     fill_rectangle(rc.left, rc.top, rc.right, rc.bottom, color);
   }
 
-  void fill_rectangle(const RECT rc, const Brush &brush) {
+  void fill_rectangle(const PixelRect rc, const Brush &brush) {
     fill_rectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
   }
 
@@ -221,7 +221,7 @@ public:
     rectangle(left, top, right, bottom); // XXX
   }
 
-  void raised_edge(RECT &rc);
+  void raised_edge(PixelRect &rc);
 
   void polyline(const RasterPoint *points, unsigned num_points);
 
@@ -250,15 +250,15 @@ public:
   void keyhole(int x, int y, unsigned small_radius, unsigned big_radius,
                Angle start, Angle end);
 
-  void draw_focus(RECT rc);
+  void draw_focus(PixelRect rc);
 
-  void draw_button(RECT rc, bool down);
-
-  gcc_pure
-  const SIZE text_size(const TCHAR *text, size_t length) const;
+  void draw_button(PixelRect rc, bool down);
 
   gcc_pure
-  const SIZE text_size(const TCHAR *text) const;
+  const PixelSize text_size(const TCHAR *text, size_t length) const;
+
+  gcc_pure
+  const PixelSize text_size(const TCHAR *text) const;
 
   gcc_pure
   unsigned text_width(const TCHAR *text) const {
@@ -279,9 +279,9 @@ public:
 
   void text_transparent(int x, int y, const TCHAR *text);
 
-  void text_opaque(int x, int y, const RECT &rc, const TCHAR *text);
+  void text_opaque(int x, int y, const PixelRect &rc, const TCHAR *text);
 
-  void text_clipped(int x, int y, const RECT &rc, const TCHAR *text) {
+  void text_clipped(int x, int y, const PixelRect &rc, const TCHAR *text) {
     // XXX
     this->text(x, y, text);
   }
@@ -291,7 +291,7 @@ public:
     this->text(x, y, text);
   }
 
-  void formatted_text(RECT *rc, const TCHAR *text, unsigned format);
+  void formatted_text(PixelRect *rc, const TCHAR *text, unsigned format);
 
   /**
    * Draws a texture.  The caller is responsible for binding it and

@@ -41,7 +41,7 @@ public:
 
 protected:
   Bitmap bitmap;
-  SIZE size;
+  PixelSize size;
 
 public:
   void load(unsigned id, unsigned width, unsigned height) {
@@ -68,7 +68,7 @@ public:
 
   const RasterPoint get_origin(enum kind kind) const;
 
-  const SIZE get_size() const {
+  const PixelSize get_size() const {
     return size;
   }
 

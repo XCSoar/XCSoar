@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef APPEARANCE_H
 #define APPEARANCE_H
 
-#include <windef.h>
-
 typedef enum {
   fgFinalGlideDefault = 0,
   fgFinalGlideAltA,

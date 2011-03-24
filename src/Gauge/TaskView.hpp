@@ -24,7 +24,7 @@
 #ifndef XCSOAR_TASK_VIEW_HPP
 #define XCSOAR_TASK_VIEW_HPP
 
-#include <windef.h>
+#include "Screen/Point.hpp"
 
 class Canvas;
 class OrderedTask;
@@ -34,12 +34,12 @@ struct GeoPoint;
 struct SETTINGS_MAP;
 
 void
-PaintTask(Canvas &canvas, const RECT &rc, const OrderedTask &task,
+PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
           const GeoPoint &location, const SETTINGS_MAP &settings_map,
           const RasterTerrain *terrain);
 
 void
-PaintTaskPoint(Canvas &canvas, const RECT &rc,
+PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const OrderedTask &task, const OrderedTaskPoint &point,
                const GeoPoint &location, const SETTINGS_MAP &settings_map,
                const RasterTerrain *terrain);

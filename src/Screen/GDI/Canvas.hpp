@@ -216,7 +216,7 @@ public:
 
   void fill_rectangle(int left, int top, int right, int bottom,
                       const HWColor color) {
-    RECT rc;
+    PixelRect rc;
     rc.left = left;
     rc.top = top;
     rc.right = right;
@@ -230,7 +230,7 @@ public:
     fill_rectangle(left, top, right, bottom, map(color));
   }
 
-  void fill_rectangle(const RECT &rc, const HWColor color) {
+  void fill_rectangle(const PixelRect &rc, const HWColor color) {
     assert(defined());
 
     /* this hack allows filling a rectangle with a solid color,
@@ -239,11 +239,11 @@ public:
     ::ExtTextOut(dc, rc.left, rc.top, ETO_OPAQUE, &rc, _T(""), 0, NULL);
   }
 
-  void fill_rectangle(const RECT &rc, const Color color) {
+  void fill_rectangle(const PixelRect &rc, const Color color) {
     fill_rectangle(rc, map(color));
   }
 
-  void fill_rectangle(const RECT rc, const Brush &brush) {
+  void fill_rectangle(const PixelRect rc, const Brush &brush) {
     assert(defined());
 
     ::FillRect(dc, &rc, brush.native());
@@ -251,7 +251,7 @@ public:
 
   void fill_rectangle(int left, int top, int right, int bottom,
                       const Brush &brush) {
-    RECT rc;
+    PixelRect rc;
     rc.left = left;
     rc.top = top;
     rc.right = right;
@@ -288,7 +288,7 @@ public:
     ::RoundRect(dc, left, top, right, bottom, ellipse_width, ellipse_height);
   }
 
-  void raised_edge(RECT &rc) {
+  void raised_edge(PixelRect &rc) {
     assert(defined());
 
     ::DrawEdge(dc, &rc, EDGE_RAISED, BF_ADJUST | BF_FLAT | BF_RECT);
@@ -336,13 +336,13 @@ public:
   void keyhole(int x, int y, unsigned small_radius, unsigned big_radius,
                Angle start, Angle end);
 
-  void draw_focus(RECT rc) {
+  void draw_focus(PixelRect rc) {
     assert(defined());
 
     ::DrawFocusRect(dc, &rc);
   }
 
-  void draw_button(RECT rc, bool down) {
+  void draw_button(PixelRect rc, bool down) {
     assert(defined());
 
     ::DrawFrameControl(dc, &rc, DFC_BUTTON,
@@ -350,10 +350,10 @@ public:
   }
 
   gcc_pure
-  const SIZE text_size(const TCHAR *text, size_t length) const;
+  const PixelSize text_size(const TCHAR *text, size_t length) const;
 
   gcc_pure
-  const SIZE text_size(const TCHAR *text) const;
+  const PixelSize text_size(const TCHAR *text) const;
 
   gcc_pure
   unsigned text_width(const TCHAR *text) const {
@@ -365,9 +365,9 @@ public:
 
   void text(int x, int y, const TCHAR *text);
   void text(int x, int y, const TCHAR *text, size_t length);
-  void text_opaque(int x, int y, const RECT &rc, const TCHAR *text);
+  void text_opaque(int x, int y, const PixelRect &rc, const TCHAR *text);
 
-  void text_clipped(int x, int y, const RECT &rc, const TCHAR *text);
+  void text_clipped(int x, int y, const PixelRect &rc, const TCHAR *text);
   void text_clipped(int x, int y, unsigned width, const TCHAR *text);
 
   void formatted_text(RECT *rc, const TCHAR *text, unsigned format) {

@@ -282,9 +282,9 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   // Temporary string
   TCHAR tmp[20];
   // Temporary string size
-  SIZE sz;
+  PixelSize sz;
 
-  RECT rc;
+  PixelRect rc;
   rc.left = padding;
   rc.top = padding;
   rc.right = canvas.get_width() - padding;

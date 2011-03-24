@@ -29,6 +29,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/MemInfo.hpp"
+#include "Screen/Point.hpp"
 
 #include <tchar.h>
 
@@ -117,8 +118,10 @@ StartupLogFreeRamAndStorage()
  * Returns the screen dimension rect to be used
  * @return The screen dimension rect to be used
  */
-RECT SystemWindowSize(void) {
-  RECT WindowSize;
+PixelRect
+SystemWindowSize()
+{
+  PixelRect WindowSize;
 
 #if defined(WIN32) && !defined(_WIN32_WCE)
   WindowSize.right = SCREENWIDTH + 2 * GetSystemMetrics(SM_CXFIXEDFRAME);

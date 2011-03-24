@@ -23,7 +23,8 @@ Copyright_License {
 #if !defined(XCSOAR_UTILS_SYSTEM_H)
 #define XCSOAR_UTILS_SYSTEM_H
 
-#include <windef.h>
+#include "Screen/Point.hpp"
+
 #include <tchar.h>
 
 void MyCompactHeaps();
@@ -32,6 +33,7 @@ void CreateDirectoryIfAbsent(const TCHAR *filename);
 
 void StartupLogFreeRamAndStorage();
 
-RECT SystemWindowSize(void);
+PixelRect
+SystemWindowSize();
 
 #endif

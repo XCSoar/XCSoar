@@ -61,7 +61,7 @@ DialogStyle DialogStyleSetting = dsFullWidth;
 // used when loading stand-alone XML file with no form control
 static DialogStyle dialog_style_last = dsFullWidth;
 
-struct ControlSize: public SIZE
+struct ControlSize: public PixelSize
 {
   bool no_scaling;
 };
@@ -197,7 +197,7 @@ GetCaption(const XMLNode &Node)
 }
 
 static ControlPosition
-GetPosition(const XMLNode &Node, const RECT rc, int bottom_most=-1)
+GetPosition(const XMLNode &Node, const PixelRect rc, int bottom_most=-1)
 {
   ControlPosition pt;
 
@@ -230,17 +230,17 @@ GetPosition(const XMLNode &Node, const RECT rc, int bottom_most=-1)
 }
 
 static ControlPosition
-SetPositionCentered(const ControlPosition original, const RECT rc,
+SetPositionCentered(const ControlPosition original, const PixelRect rc,
                     const ControlSize size)
 {
   ControlPosition pt = original;
-  // center horizontally in parent RECT
+  // center horizontally in parent PixelRect
   pt.x = (rc.right + rc.left - size.cx) / 2;
   return pt;
 }
 
 static ControlSize
-GetSize(const XMLNode &Node, const RECT rc, const RasterPoint &pos)
+GetSize(const XMLNode &Node, const PixelRect rc, const RasterPoint &pos)
 {
   ControlSize sz;
 
@@ -374,7 +374,8 @@ LoadColors(WindowControl &wc, const XMLNode &node)
 }
 
 static void
-InitScaleWidth(const SIZE size, const RECT rc, const DialogStyle eDialogStyle)
+InitScaleWidth(const PixelSize size, const PixelRect rc,
+               const DialogStyle eDialogStyle)
 {
   // No need to calculate the scale factor on platforms that don't scale
   if (!Layout::ScaleSupported())
@@ -449,7 +450,7 @@ LoadWindow(CallBackTableEntry *LookUpTable,
  */
 WndForm *
 LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
-               const TCHAR* resource, const RECT *targetRect)
+               const TCHAR* resource, const PixelRect *targetRect)
 {
   WndForm *form = NULL;
 
@@ -481,7 +482,7 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
 
   // Determine the dialog size
   const TCHAR* Caption = GetCaption(node);
-  const RECT rc = targetRect ? *targetRect : Parent.get_client_rect();
+  const PixelRect rc = targetRect ? *targetRect : Parent.get_client_rect();
   ControlPosition pos = GetPosition(node, rc, 0);
   ControlSize size = GetSize(node, rc, pos);
 
@@ -611,7 +612,7 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
   // and caption of the control
   const TCHAR* Name = GetName(node);
   const TCHAR* Caption = GetCaption(node);
-  RECT rc = parent.get_client_rect();
+  PixelRect rc = parent.get_client_rect();
   ControlPosition pos = GetPosition(node, rc, bottom_most);
   if (!pos.no_scaling)
     pos.x = ScaleWidth(pos.x, eDialogStyle);

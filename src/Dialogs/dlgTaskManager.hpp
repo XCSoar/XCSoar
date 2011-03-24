@@ -135,7 +135,8 @@ public:
    * @param rc
    * @param DrawListIndex
    */
-  static void OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex);
+  static void OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
+                                  unsigned DrawListIndex);
 
   /**
    * shows dlgTaskPoint to edit point's properties
@@ -226,7 +227,8 @@ public:
                       WndForm* wf, OrderedTask** task, bool* _task_modified);
 
   static void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
-  static void OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex);
+  static void OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
+                                  unsigned DrawListIndex);
   static void OnLoadSaveClicked(WndButton &Sender);
   static bool OnDeclareClicked(WndButton &Sender);
   static bool OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y);

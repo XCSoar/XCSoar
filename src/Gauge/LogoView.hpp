@@ -27,8 +27,6 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Font.hpp"
 
-#include <windef.h>
-
 class Canvas;
 
 class LogoView {
@@ -48,7 +46,7 @@ public:
    * @param canvas the Canvas to draw on
    * @param rc the region within the Canvas to draw into
    */
-  void draw(Canvas &canvas, const RECT &rc);
+  void draw(Canvas &canvas, const PixelRect &rc);
 };
 
 #endif

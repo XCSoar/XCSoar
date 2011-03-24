@@ -291,7 +291,7 @@ Window::on_paint(Canvas &canvas)
 }
 
 void
-Window::on_paint(Canvas &canvas, const RECT &dirty)
+Window::on_paint(Canvas &canvas, const PixelRect &dirty)
 {
   on_paint(canvas);
 }

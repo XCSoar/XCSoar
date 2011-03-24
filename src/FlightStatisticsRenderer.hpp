@@ -28,8 +28,8 @@ Copyright_License {
 #include "Sizes.h"
 #include "Navigation/TracePoint.hpp"
 #include "FlightStatistics.hpp"
+#include "Screen/Point.hpp"
 
-#include <windef.h>
 #include <tchar.h>
 
 struct NMEA_INFO;
@@ -54,47 +54,53 @@ public:
     :fs(_flight_statistics) {}
 
 public:
-  void RenderBarograph(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
+  void RenderBarograph(Canvas &canvas, const PixelRect rc,
+                       const NMEA_INFO &nmea_info,
                        const DERIVED_INFO &derived_info,
                        const ProtectedTaskManager *task) const;
 
-  void RenderBarographSpark(Canvas &canvas, const RECT rc,
+  void RenderBarographSpark(Canvas &canvas, const PixelRect rc,
                             const NMEA_INFO &nmea_info,
                             const DERIVED_INFO &derived_info,
                             const ProtectedTaskManager *task) const;
 
-  void RenderClimb(Canvas &canvas, const RECT rc,
+  void RenderClimb(Canvas &canvas, const PixelRect rc,
                    const GlidePolar& glide_polar) const;
 
-  void RenderGlidePolar(Canvas &canvas, const RECT rc,
+  void RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                         const DERIVED_INFO &derived,
                         const SETTINGS_COMPUTER &settings_computer,
                         const GlidePolar& glide_polar) const;
 
-  void RenderWind(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
+  void RenderWind(Canvas &canvas, const PixelRect rc,
+                  const NMEA_INFO &nmea_info,
                   const WindStore &wind_store) const;
 
-  void RenderTemperature(Canvas &canvas, const RECT rc) const;
+  void RenderTemperature(Canvas &canvas, const PixelRect rc) const;
 
 
-  void RenderTrace(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
+  void RenderTrace(Canvas &canvas, const PixelRect rc,
+                   const NMEA_INFO &nmea_info,
                    const SETTINGS_COMPUTER &settings_computer,
                    const SETTINGS_MAP &settings_map,
                    const TracePointVector& trace) const;
 
-  void RenderOLC(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
+  void RenderOLC(Canvas &canvas, const PixelRect rc,
+                 const NMEA_INFO &nmea_info,
                  const DERIVED_INFO &calculated,
                  const SETTINGS_COMPUTER &settings_computer,
                  const ContestStatistics &contest,
                  const TracePointVector& trace) const;
 
-  void RenderTask(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
+  void RenderTask(Canvas &canvas, const PixelRect rc,
+                  const NMEA_INFO &nmea_info,
                   const DERIVED_INFO &derived_info,
                   const SETTINGS_COMPUTER &settings_computer,
                   const SETTINGS_MAP &settings_map,
                   const TaskManager &task) const;
 
-  void RenderSpeed(Canvas &canvas, const RECT rc, const NMEA_INFO &nmea_info,
+  void RenderSpeed(Canvas &canvas, const PixelRect rc,
+                   const NMEA_INFO &nmea_info,
                    const DERIVED_INFO &derived_info,
                    const TaskManager &task) const;
 

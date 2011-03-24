@@ -120,7 +120,7 @@ public:
    * Invalidates a part of the visible area and schedules a repaint
    * (which will occur in the main thread).
    */
-  void invalidate(const RECT &rect) {
+  void invalidate(const PixelRect &rect) {
 #ifdef ENABLE_SDL
     invalidate();
 #else /* !ENABLE_SDL */

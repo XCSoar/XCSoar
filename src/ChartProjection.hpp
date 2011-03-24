@@ -38,24 +38,24 @@ class ChartProjection:
 {
 public:
 
-  ChartProjection(const RECT &rc,
+  ChartProjection(const PixelRect &rc,
                   const TaskManager &task,
                   const GeoPoint &fallback_loc);
 
-  ChartProjection(const RECT &rc,
+  ChartProjection(const PixelRect &rc,
                   const OrderedTask& task,
                   const GeoPoint &fallback_loc);
 
-  ChartProjection(const RECT &rc,
+  ChartProjection(const PixelRect &rc,
                   const OrderedTaskPoint& point,
                   const GeoPoint &fallback_loc);
 
-  ChartProjection(const RECT &rc,
+  ChartProjection(const PixelRect &rc,
                   const TracePointVector& trace,
                   const GeoPoint &fallback_loc);
 
 private:
-  void set_projection(const RECT &rc, 
+  void set_projection(const PixelRect &rc,
                       const GeoPoint &center,
                       const fixed radius);
 };

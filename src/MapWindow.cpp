@@ -56,7 +56,7 @@ MapWindow::~MapWindow()
 }
 
 void
-MapWindow::set(ContainerWindow &parent, const RECT &rc)
+MapWindow::set(ContainerWindow &parent, const PixelRect &rc)
 {
   WindowStyle style;
   style.enable_double_clicks();

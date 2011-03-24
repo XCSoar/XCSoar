@@ -38,7 +38,8 @@ class WndListFrame : public PaintWindow {
 public:
   typedef void (*ActivateCallback_t)(unsigned idx);
   typedef void (*CursorCallback_t)(unsigned idx);
-  typedef void (*PaintItemCallback_t)(Canvas &canvas, const RECT rc, unsigned idx);
+  typedef void (*PaintItemCallback_t)(Canvas &canvas, const PixelRect rc,
+                                      unsigned idx);
 
 protected:
   /** The ScrollBar object */
@@ -147,8 +148,8 @@ protected:
   }
 
   gcc_const
-  RECT item_rect(unsigned i) const {
-    RECT rc;
+  PixelRect item_rect(unsigned i) const {
+    PixelRect rc;
     rc.left = 0;
     rc.top = (int)(i - origin) * item_height;
     rc.right = scroll_bar.get_left(get_size());
@@ -213,7 +214,7 @@ protected:
    * (derived from PaintWindow)
    */
   virtual void on_paint(Canvas &canvas);
-  virtual void on_paint(Canvas &canvas, const RECT &dirty);
+  virtual void on_paint(Canvas &canvas, const PixelRect &dirty);
 };
 
 #endif

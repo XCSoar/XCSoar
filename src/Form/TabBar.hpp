@@ -100,7 +100,7 @@ public:
     TCHAR Caption[MAX_PATH];
     bool IsButtonOnly;
     const Bitmap *bmp;
-    RECT butSize;
+    PixelRect butSize;
 
     /**
    * Called before the tab is hidden.
@@ -159,7 +159,7 @@ public:
  * @param i index of button
  * @return Rectangle of button coordinates
  */
-  const RECT &GetButtonSize(unsigned i);
+  const PixelRect &GetButtonSize(unsigned i);
   const TCHAR* GetButtonCaption(unsigned i);
   const Bitmap* GetButtonIcon(unsigned i);
   bool GetButtonIsButtonOnly(unsigned i);

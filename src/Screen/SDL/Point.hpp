@@ -32,4 +32,12 @@ struct RasterPoint {
   Sint16 x, y;
 };
 
+struct PixelSize {
+  Sint16 cx, cy;
+};
+
+struct PixelRect {
+  Sint16 left, top, right, bottom;
+};
+
 #endif

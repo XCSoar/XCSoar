@@ -239,7 +239,7 @@ WndProperty::UpdateLayout()
 {
   mBitmapSize = mDialogStyle || edit.is_read_only() ? 0 : Layout::Scale(16);
 
-  const SIZE size = get_size();
+  const PixelSize size = get_size();
 
   if (mCaptionWidth != 0) {
     mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1)
@@ -400,7 +400,6 @@ WndProperty::on_paint(Canvas &canvas)
 #endif
   }
 
-  SIZE tsize;
   RasterPoint org;
 
   WindowControl::on_paint(canvas);
@@ -409,7 +408,7 @@ WndProperty::on_paint(Canvas &canvas)
   canvas.background_transparent();
   canvas.select(*GetFont());
 
-  tsize = canvas.text_size(mCaption);
+  PixelSize tsize = canvas.text_size(mCaption);
 
   if (mCaptionWidth == 0) {
     org.x = mEditPos.x;

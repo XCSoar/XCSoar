@@ -137,7 +137,7 @@ TraceHistoryRenderer::render_filled_posneg(Chart &chart,
 
 void
 TraceHistoryRenderer::RenderVario(Canvas& canvas,
-                                  const RECT rc,
+                                  const PixelRect rc,
                                   const TraceVariableHistory& var,
                                   const bool centered,
                                   const fixed mc)

@@ -76,9 +76,9 @@ public:
 
   bool Idle();
 
-  virtual void Render(Canvas &canvas, const RECT &rc);
+  virtual void Render(Canvas &canvas, const PixelRect &rc);
 
-  virtual void set(ContainerWindow &parent, const RECT &rc);
+  virtual void set(ContainerWindow &parent, const PixelRect &rc);
 
   /**
    * If PanTarget, paints target during drag
@@ -183,14 +183,14 @@ protected:
   virtual void on_paint_buffer(Canvas& canvas);
 
 private:
-  void DrawMapScale(Canvas &canvas, const RECT &rc,
+  void DrawMapScale(Canvas &canvas, const PixelRect &rc,
                     const MapWindowProjection &projection) const;
-  void DrawFlightMode(Canvas &canvas, const RECT &rc) const;
-  void DrawGPSStatus(Canvas &canvas, const RECT &rc,
+  void DrawFlightMode(Canvas &canvas, const PixelRect &rc) const;
+  void DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
                      const NMEA_INFO &info) const;
   void DrawCrossHairs(Canvas &canvas) const;
-  void DrawFinalGlide(Canvas &canvas, const RECT &rc) const;
-  void DrawHorizon(Canvas &canvas, const RECT &rc) const;
+  void DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const;
+  void DrawHorizon(Canvas &canvas, const PixelRect &rc) const;
   virtual void DrawThermalEstimate(Canvas &canvas) const;
   virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;
 

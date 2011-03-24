@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BITMAP_HPP
 #define XCSOAR_SCREEN_BITMAP_HPP
 
+#include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -31,10 +32,8 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
-#include <windef.h>
 #elif defined(ENABLE_SDL)
 #include <SDL_video.h>
-#include <windef.h>
 #else
 #include <windows.h>
 #endif
@@ -125,7 +124,7 @@ public:
 
   void reset();
 
-  const SIZE get_size() const;
+  const PixelSize get_size() const;
 
 #ifdef ENABLE_OPENGL
   GLTexture *native() const {

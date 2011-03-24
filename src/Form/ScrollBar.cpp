@@ -43,7 +43,7 @@ ScrollBar::ScrollBar()
 }
 
 void
-ScrollBar::set(const SIZE size)
+ScrollBar::set(const PixelSize size)
 {
   unsigned width;
 
@@ -142,7 +142,7 @@ ScrollBar::paint(Canvas &canvas) const
   unsigned arrow_padding = max(get_width() / 4, 4);
   canvas.black_brush();
 
-  RECT up_arrow_rect = rc;
+  PixelRect up_arrow_rect = rc;
   ++up_arrow_rect.left;
   up_arrow_rect.bottom = up_arrow_rect.top + get_width();
   canvas.line(up_arrow_rect.left, up_arrow_rect.bottom,
@@ -159,7 +159,7 @@ ScrollBar::paint(Canvas &canvas) const
   };
   canvas.polygon(up_arrow, sizeof(up_arrow) / sizeof(up_arrow[0]));
 
-  RECT down_arrow_rect = rc;
+  PixelRect down_arrow_rect = rc;
   ++down_arrow_rect.left;
   down_arrow_rect.top = down_arrow_rect.bottom - get_width();
   canvas.line(down_arrow_rect.left, down_arrow_rect.top - 1,
@@ -185,7 +185,7 @@ ScrollBar::paint(Canvas &canvas) const
   canvas.line(rc_slider.left, rc_slider.bottom,
               rc_slider.right, rc_slider.bottom);
 
-  RECT rc_slider2 = rc_slider;
+  PixelRect rc_slider2 = rc_slider;
   ++rc_slider2.left;
   ++rc_slider2.top;
   canvas.draw_button(rc_slider2, false);

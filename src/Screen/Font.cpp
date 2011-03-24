@@ -67,19 +67,19 @@ Font::reset()
 }
 
 void
-Font::text_width(const TCHAR *text, int &width, int &height) const
+Font::text_width(const TCHAR *text, PixelSize &result) const
 {
 
   if (!textUtilObject)
     return;
 
   std::pair<unsigned, unsigned> size = textUtilObject->getTextBounds(text);
-  width = size.first;
-  height = size.second;
+  result.cx = size.first;
+  result.cy = size.second;
 }
 
 int
-Font::text_texture_gl(const TCHAR *text, SIZE &size,
+Font::text_texture_gl(const TCHAR *text, PixelSize &size,
                       const Color &fg, const Color &bg) const
 {
   if (!textUtilObject)

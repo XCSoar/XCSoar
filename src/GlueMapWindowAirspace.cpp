@@ -171,7 +171,7 @@ private:
     return AIRSPACE_ALT::SortHighest(a->get_base(), b->get_base());
   }
 
-  static void PaintListItem(Canvas &canvas, const RECT rc, unsigned idx) {
+  static void PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx) {
     const AbstractAirspace &airspace = *instance->airspaces[idx];
 
     const Font &name_font = Fonts::MapBold;
@@ -187,7 +187,7 @@ private:
                         rc.top + name_font.get_height() + Layout::FastScale(4),
                         rc, airspace.get_type_text(true));
 
-    SIZE size = canvas.text_size(_T("9999 m AGL"));
+    PixelSize size = canvas.text_size(_T("9999 m AGL"));
     unsigned altitude_width = size.cx;
     unsigned altitude_height = size.cy;
 

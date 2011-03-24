@@ -94,7 +94,7 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
     w->hide();
 
   TabbedControl::AddClient(w);
-  const RECT rc = get_client_rect();
+  const PixelRect rc = get_client_rect();
   if (clientOverlapTabs) {
     w->move(rc.left , rc.top, rc.right - rc.left , rc.bottom - rc.top);
   } else {
@@ -174,10 +174,10 @@ TabBarControl::PreviousPage(EventType _EventType)
                   _EventType, false);
 }
 
-const RECT
+const PixelRect
 &TabBarControl::GetButtonSize(unsigned i)
 {
-  const static RECT rcFallback = {0, 0, 0, 0};
+  const static PixelRect rcFallback = {0, 0, 0, 0};
 
   if (i >= buttons.size())
     return rcFallback; // should never be used
@@ -196,7 +196,7 @@ const RECT
   // Todo make the final margin display on either beginning or end of tab bar
   // depending on position of tab bar
 
-  RECT rc;
+  PixelRect rc;
 
   if (Layout::landscape ^ flipOrientation) {
     const unsigned but_width =
@@ -285,9 +285,9 @@ TabDisplay::on_paint(Canvas &canvas)
       canvas.set_text_color(Color::BLACK);
       canvas.set_background_color(Color::WHITE);
     }
-    const RECT &rc = theTabBar.GetButtonSize(i);
+    const PixelRect &rc = theTabBar.GetButtonSize(i);
 
-    RECT rcTextFinal = rc;
+    PixelRect rcTextFinal = rc;
     const unsigned buttonheight = rc.bottom - rc.top;
     const int textwidth = canvas.text_width(theTabBar.GetButtonCaption(i));
     const int textheight = canvas.text_height(theTabBar.GetButtonCaption(i));
@@ -336,7 +336,7 @@ TabDisplay::on_paint(Canvas &canvas)
     }
   }
   if (has_focus()) {
-    RECT rcFocus;
+    PixelRect rcFocus;
     rcFocus.top = rcFocus.left = 0;
     rcFocus.right = canvas.get_width();
     rcFocus.bottom = canvas.get_height();
@@ -468,7 +468,7 @@ TabDisplay::on_mouse_down(int x, int y)
   if (!had_focus)
     set_focus();
   for (unsigned i = 0; i < theTabBar.GetTabCount(); i++) {
-    const RECT rc = theTabBar.GetButtonSize(i);
+    const PixelRect rc = theTabBar.GetButtonSize(i);
     if (PtInRect(&rc, Pos)) {
       dragging = true;
       downindex = i;
@@ -490,7 +490,7 @@ TabDisplay::on_mouse_up(int x, int y)
   if (dragging) {
     drag_end();
     for (unsigned i = 0; i < theTabBar.GetTabCount(); i++) {
-      const RECT rc = theTabBar.GetButtonSize(i);
+      const PixelRect rc = theTabBar.GetButtonSize(i);
       if (PtInRect(&rc, Pos)) {
         if ((int)i == downindex) {
           theTabBar.SetCurrentPage(i, TabBarControl::MouseOrButton,
@@ -514,7 +514,7 @@ TabDisplay::on_mouse_move(int x, int y, unsigned keys)
   if (downindex == -1)
     return false;
 
-  const RECT rc = theTabBar.GetButtonSize(downindex);
+  const PixelRect rc = theTabBar.GetButtonSize(downindex);
   RasterPoint Pos;
   Pos.x = x;
   Pos.y = y;

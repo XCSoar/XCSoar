@@ -143,7 +143,7 @@ public:
     SingleWindow::set(_T("KeyCodeDumper"), _T("KeyCodeDumper"),
                       left, top, width, height);
 
-    RECT rc = get_client_rect();
+    PixelRect rc = get_client_rect();
 
     key_code_dumper.set(*this, rc.left, rc.top,
                         rc.right - rc.left, (rc.bottom - rc.top + 1) / 2);

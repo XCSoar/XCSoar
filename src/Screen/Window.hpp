@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 #include "Screen/Font.hpp"
+#include "Screen/Point.hpp"
 #include "Thread/Debug.hpp"
 #include "Compiler.h"
 
@@ -649,16 +650,16 @@ public:
   }
 
 #ifdef ENABLE_SDL
-  void to_screen(RECT &rc) const;
+  void to_screen(PixelRect &rc) const;
 #endif
 
   /**
    * Returns the position on the screen.
    */
   gcc_pure
-  const RECT get_screen_position() const
+  const PixelRect get_screen_position() const
   {
-    RECT rc;
+    PixelRect rc;
 #ifdef ENABLE_SDL
     rc = get_position();
     to_screen(rc);
@@ -672,9 +673,9 @@ public:
    * Returns the position within the parent window.
    */
   gcc_pure
-  const RECT get_position() const
+  const PixelRect get_position() const
   {
-    RECT rc;
+    PixelRect rc;
 #ifdef ENABLE_SDL
     rc.left = get_left();
     rc.top = get_top();
@@ -704,9 +705,9 @@ public:
   }
 
   gcc_pure
-  const RECT get_client_rect() const
+  const PixelRect get_client_rect() const
   {
-    RECT rc;
+    PixelRect rc;
 #ifdef ENABLE_SDL
     rc.left = 0;
     rc.top = 0;
@@ -723,15 +724,15 @@ public:
     if (x < 0 || y < 0)
       return false;
 
-    RECT rc = get_client_rect();
+    PixelRect rc = get_client_rect();
     return x < rc.right && y < rc.bottom;
   }
 
   gcc_pure
-  const SIZE get_size() const
+  const PixelSize get_size() const
   {
-    RECT rc = get_client_rect();
-    SIZE s;
+    PixelRect rc = get_client_rect();
+    PixelSize s;
     s.cx = rc.right;
     s.cy = rc.bottom;
     return s;
@@ -759,7 +760,7 @@ public:
     ::EndPaint(hWnd, ps);
   }
 
-  void scroll(int dx, int dy, const RECT &rc) {
+  void scroll(int dx, int dy, const PixelRect &rc) {
     ::ScrollWindowEx(hWnd, dx, dy, &rc, NULL, NULL, NULL, SW_INVALIDATE);
   }
 #endif /* !ENABLE_SDL */
@@ -865,7 +866,7 @@ public:
 
   virtual bool on_erase(Canvas &canvas);
   virtual void on_paint(Canvas &canvas);
-  virtual void on_paint(Canvas &canvas, const RECT &dirty);
+  virtual void on_paint(Canvas &canvas, const PixelRect &dirty);
 
 #ifndef ENABLE_SDL
   /**

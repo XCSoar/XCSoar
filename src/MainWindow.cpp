@@ -84,7 +84,7 @@ MainWindow::set(const TCHAR* text,
 void
 MainWindow::Initialise()
 {
-  RECT rc = get_client_rect();
+  PixelRect rc = get_client_rect();
 
   Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
 
@@ -98,7 +98,7 @@ MainWindow::Initialise()
 void
 MainWindow::InitialiseConfigured()
 {
-  RECT rc = get_client_rect();
+  PixelRect rc = get_client_rect();
 
   LogStartUp(_T("InfoBox geometry"));
   InfoBoxLayout::Init(rc);
@@ -178,7 +178,7 @@ MainWindow::ReinitialiseLayout()
 
   InfoBoxManager::Destroy();
 
-  RECT rc = get_client_rect();
+  PixelRect rc = get_client_rect();
   InfoBoxLayout::Init(rc);
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, InfoBoxLayout::InfoBoxGeometry);
@@ -224,7 +224,7 @@ MainWindow::ReinitialiseLayout()
 void
 MainWindow::ReinitialisePosition()
 {
-  RECT rc = SystemWindowSize();
+  PixelRect rc = SystemWindowSize();
   fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
 }
 
@@ -370,13 +370,13 @@ MainWindow::SetFullScreen(bool _full_screen)
   else
     InfoBoxManager::Show();
 
-  const RECT rc = FullScreen ? get_client_rect() : map_rect;
+  const PixelRect rc = FullScreen ? get_client_rect() : map_rect;
   map.fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
   // the repaint will be triggered by the DrawThread
 }
 
 void
-MainWindow::SetCustomView(RECT rc)
+MainWindow::SetCustomView(PixelRect rc)
 {
   CustomView = true;
 

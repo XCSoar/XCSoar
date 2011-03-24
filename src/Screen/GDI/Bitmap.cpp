@@ -65,8 +65,8 @@ Bitmap::load_stretch(unsigned id, unsigned zoom)
   if (zoom <= 1)
     return true;
 
-  SIZE src_size = get_size();
-  SIZE dest_size;
+  PixelSize src_size = get_size();
+  PixelSize dest_size;
   dest_size.cx = src_size.cx * zoom;
   dest_size.cy = src_size.cy * zoom;
 
@@ -181,13 +181,13 @@ Bitmap::reset()
   }
 }
 
-const SIZE
+const PixelSize
 Bitmap::get_size() const
 {
   assert(defined());
 
   BITMAP bm;
   ::GetObject(bitmap, sizeof(bm), &bm);
-  const SIZE size = { bm.bmWidth, bm.bmHeight };
+  const PixelSize size = { bm.bmWidth, bm.bmHeight };
   return size;
 }

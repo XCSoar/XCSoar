@@ -180,7 +180,7 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
 {
   assert(quantisation_effective > 0);
 
-  RECT border;
+  PixelRect border;
   border.left = quantisation_effective;
   border.top = quantisation_effective;
   border.right = height_matrix.get_width() - quantisation_effective;

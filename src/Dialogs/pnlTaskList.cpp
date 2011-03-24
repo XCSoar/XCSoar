@@ -41,7 +41,7 @@ static TabBarControl* wTabBar;
 static WndListFrame* wTasks = NULL;
 static WndOwnerDrawFrame* wTaskView = NULL;
 static TaskStore task_store;
-static RECT TaskViewRect;
+static PixelRect TaskViewRect;
 static bool fullscreen;
 
 static OrderedTask** active_task = NULL;
@@ -87,7 +87,7 @@ get_cursor_name()
 void
 pnlTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
-  RECT rc = Sender->get_client_rect();
+  PixelRect rc = Sender->get_client_rect();
 
   OrderedTask* ordered_task = get_cursor_task();
   if (ordered_task == NULL || !ordered_task->check_task()) {
@@ -100,7 +100,8 @@ pnlTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 }
 
 void
-pnlTaskList::OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
+pnlTaskList::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
+                                 unsigned DrawListIndex)
 {
   assert(DrawListIndex <= task_store.size());
 

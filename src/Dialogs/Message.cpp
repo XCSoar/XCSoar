@@ -77,7 +77,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   // TODO bug: doesn't work sometimes. buttons have to be pressed multiple times (TB)
   XCSoarInterface::Debounce();
 
-  const RECT rc = XCSoarInterface::main_window.get_client_rect();
+  const PixelRect rc = XCSoarInterface::main_window.get_client_rect();
 
 #ifdef ALTAIRSYNC
   Width = Layout::Scale(220);

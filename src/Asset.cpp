@@ -34,6 +34,8 @@ Copyright_License {
 #include <winioctl.h>
 #endif
 
+#include <windef.h> /* for MAX_PATH */
+
 // Registration Data
 TCHAR strAssetNumber[MAX_LOADSTRING] = _T(""); //4G17DW31L0HY");
 

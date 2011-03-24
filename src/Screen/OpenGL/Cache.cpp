@@ -109,7 +109,7 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
   /* render the text into a OpenGL texture */
 
 #ifdef ANDROID
-  SIZE size;
+  PixelSize size;
   int texture_id = font->text_texture_gl(text, size, text_color, background_color);
   RenderedText *rt = new RenderedText(key, texture_id, size.cx, size.cy);
 #else

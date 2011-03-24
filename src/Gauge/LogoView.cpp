@@ -36,7 +36,7 @@ LogoView::LogoView()
 }
 
 void
-LogoView::draw(Canvas &canvas, const RECT &rc)
+LogoView::draw(Canvas &canvas, const PixelRect &rc)
 {
   const unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
 
@@ -51,10 +51,10 @@ LogoView::draw(Canvas &canvas, const RECT &rc)
     ? big_title : title;
 
   // Determine logo size
-  SIZE logo_size = bitmap_logo.get_size();
+  PixelSize logo_size = bitmap_logo.get_size();
 
   // Determine title image size
-  SIZE title_size = bitmap_title.get_size();
+  PixelSize title_size = bitmap_title.get_size();
 
   int logox, logoy, titlex, titley;
 

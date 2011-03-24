@@ -43,7 +43,7 @@ static WndListFrame *wAirspaceList = NULL;
 static bool colormode = false;
 
 static void
-OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
+OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < AIRSPACECLASSCOUNT);
 

@@ -188,7 +188,7 @@ OZWindow::on_paint(Canvas &canvas)
 }
 
 static void
-paint_oz_type_name(Canvas &canvas, const RECT rc, unsigned idx)
+paint_oz_type_name(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   assert(idx < NUM_OZ_TYPES);
 
@@ -244,7 +244,7 @@ public:
     SingleWindow::set(_T("RunRenderOZ"), _T("RunRenderOZ"),
                       left, top, width, height);
 
-    const RECT rc = get_client_rect();
+    const PixelRect rc = get_client_rect();
 
     WindowStyle with_border;
     with_border.border();

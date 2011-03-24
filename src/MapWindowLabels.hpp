@@ -46,7 +46,7 @@ public:
 
 protected:
   unsigned width, height;
-  RECT bounds;
+  PixelRect bounds;
   Label labels[128];
   unsigned num_labels;
 

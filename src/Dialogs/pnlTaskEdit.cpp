@@ -38,7 +38,7 @@ static WndForm* wf = NULL;
 static TabBarControl* wTabBar = NULL;
 static WndOwnerDrawFrame* wTaskView = NULL;
 static WndFrame* wSummary = NULL;
-static RECT TaskSummaryRect;
+static PixelRect TaskSummaryRect;
 static WndListFrame* wTaskPoints = NULL;
 static OrderedTask* ordered_task = NULL;
 static OrderedTask** ordered_task_pointer = NULL;
@@ -103,7 +103,8 @@ pnlTaskEdit::OnNewClicked(WndButton &Sender)
 }
 
 void
-pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
+pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
+                                 unsigned DrawListIndex)
 {
   assert(DrawListIndex <= ordered_task->task_size());
 

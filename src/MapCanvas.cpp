@@ -57,7 +57,7 @@ MapCanvas::project(const Projection &projection,
 }
 
 static void
-update_bounds(RECT &bounds, const RasterPoint &pt)
+update_bounds(PixelRect &bounds, const RasterPoint &pt)
 {
   if (pt.x < bounds.left)
     bounds.left = pt.x;
@@ -73,7 +73,7 @@ bool
 MapCanvas::visible(const Canvas &canvas,
                    const RasterPoint *screen, unsigned num)
 {
-  RECT bounds;
+  PixelRect bounds;
   bounds.left = 0x7fff;
   bounds.top = 0x7fff;
   bounds.right = -1;

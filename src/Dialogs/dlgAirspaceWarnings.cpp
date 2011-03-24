@@ -223,7 +223,7 @@ OnKeyDown(WndForm &Sender, unsigned key_code)
 
 
 static void
-OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
+OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
 {
   TCHAR sTmp[128];
   const int paint_rc_margin = 2;   ///< This constant defines the margin that should be respected for renderring within the paint_rc area.
@@ -267,7 +267,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
       Col2LeftScreenCoords = paint_rc.right - IBLSCALE(40),
       Col1LeftScreenCoords = Col2LeftScreenCoords - IBLSCALE(50);
     
-    RECT rcTextClip;
+    PixelRect rcTextClip;
     
     rcTextClip = paint_rc;
     rcTextClip.right = Col1LeftScreenCoords - IBLSCALE(paint_rc_margin);
@@ -327,12 +327,12 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
       state_text = NULL;
     }
     
-    const SIZE state_text_size =
+    const PixelSize state_text_size =
       canvas.text_size(state_text != NULL ? state_text : _T("W"));
     
     if (state_brush != NULL) {
       /* colored background */
-      RECT rc;
+      PixelRect rc;
       
       rc.left = paint_rc.left + Col2LeftScreenCoords;
       rc.top = paint_rc.top + Layout::FastScale(paint_rc_margin);

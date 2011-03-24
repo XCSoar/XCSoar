@@ -239,7 +239,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   // Creates the main window
   LogStartUp(_T("Create main window"));
-  RECT WindowSize = SystemWindowSize();
+  PixelRect WindowSize = SystemWindowSize();
   main_window.set(szTitle,
                   WindowSize.left, WindowSize.top,
                   WindowSize.right, WindowSize.bottom);

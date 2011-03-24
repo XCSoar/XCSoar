@@ -336,8 +336,8 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
       minx += 2;
       miny += 2;
 
-      SIZE tsize = canvas.text_size(label);
-      RECT brect;
+      PixelSize tsize = canvas.text_size(label);
+      PixelRect brect;
       brect.left = minx;
       brect.right = brect.left + tsize.cx;
       brect.top = miny;

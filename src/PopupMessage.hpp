@@ -106,7 +106,7 @@ private:
   const StatusMessageList &status_messages;
 
   SingleWindow &parent;
-  RECT rc; // maximum message size
+  PixelRect rc; // maximum message size
 
   Mutex mutex;
   struct singleMessage messages[MAXMESSAGES];
@@ -120,7 +120,7 @@ public:
   PopupMessage(const StatusMessageList &_status_messages,
                SingleWindow &_parent);
 
-  void set(const RECT _rc);
+  void set(const PixelRect _rc);
 
   virtual bool on_mouse_down(int x, int y);
 

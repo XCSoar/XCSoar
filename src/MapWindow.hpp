@@ -120,7 +120,7 @@ public:
   MapWindow();
   ~MapWindow();
 
-  virtual void set(ContainerWindow &parent, const RECT &rc);
+  virtual void set(ContainerWindow &parent, const PixelRect &rc);
 
   void set_way_points(const Waypoints *_way_points) {
     way_points = _way_points;
@@ -163,9 +163,9 @@ public:
                            const RasterPoint aircraft_pos) const;
   void DrawTrackBearing(Canvas &canvas,
                         const RasterPoint aircraft_pos) const;
-  void DrawCompass(Canvas &canvas, const RECT &rc) const;
+  void DrawCompass(Canvas &canvas, const PixelRect &rc) const;
   void DrawWind(Canvas &canvas, const RasterPoint &Orig,
-                           const RECT &rc) const;
+                           const PixelRect &rc) const;
   void DrawAirspace(Canvas &canvas);
   void DrawAirspaceIntersections(Canvas &canvas) const;
   void DrawWaypoints(Canvas &canvas);
@@ -188,7 +188,7 @@ public:
    * @param canvas The drawing canvas
    * @param rc The area to draw in
    */
-  virtual void Render(Canvas &canvas, const RECT &rc);
+  virtual void Render(Canvas &canvas, const PixelRect &rc);
 
 protected:
   unsigned UpdateTopography(unsigned max_update=1024);

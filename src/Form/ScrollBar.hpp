@@ -37,9 +37,9 @@ protected:
   bool dragging;
   int drag_offset;
   /** Coordinates of the ScrollBar */
-  RECT rc;
+  PixelRect rc;
   /** Coordinates of the Slider */
-  RECT rc_slider;
+  PixelRect rc_slider;
 
 public:
   enum {
@@ -92,7 +92,7 @@ public:
    * @param size Size of the client area including the ScrollBar
    * @return The x-Coordinate of the ScrollBar
    */
-  unsigned get_left(const SIZE size) const {
+  unsigned get_left(const PixelSize size) const {
     return defined() ? rc.left : size.cx;
   }
 
@@ -161,7 +161,7 @@ public:
    * (actually just the height, width is automatically set)
    * @param size Size of the Control the ScrollBar is used with
    */
-  void set(const SIZE size);
+  void set(const PixelSize size);
   /** Resets the ScrollBar (undefines it) */
   void reset();
 

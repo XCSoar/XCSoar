@@ -79,7 +79,7 @@ NextPage(int Step)
 }
 
 static void
-OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
+OnPaintDetailsListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < nTextLines);
 

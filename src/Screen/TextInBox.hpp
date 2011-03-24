@@ -24,7 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_TEXT_IN_BOX_HPP
 #define XCSOAR_SCREEN_TEXT_IN_BOX_HPP
 
-#include <windef.h>
+#ifdef WIN32
+#include "Screen/Point.hpp"
+#else
+struct PixelRect;
+#endif
+
 #include <tchar.h>
 
 class Canvas;
@@ -58,7 +63,7 @@ struct TextInBoxMode_t
 };
 
 bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
-               TextInBoxMode_t Mode, const RECT &MapRect,
+               TextInBoxMode_t Mode, const PixelRect &MapRect,
                LabelBlock *label_block=NULL);
 
 bool

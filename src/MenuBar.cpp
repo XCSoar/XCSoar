@@ -35,7 +35,7 @@ static const Color menu_button_bk_disabled(0xb0, 0xc0, 0xb0);
 #endif
 
 static void
-GetButtonPosition(unsigned i, RECT rc, int *x, int *y, int *sizex, int *sizey)
+GetButtonPosition(unsigned i, PixelRect rc, int *x, int *y, int *sizex, int *sizey)
 {
   unsigned hwidth = rc.right - rc.left;
   unsigned hheight = rc.bottom - rc.top;
@@ -129,7 +129,7 @@ MenuBar::Button::on_paint(Canvas &canvas)
     ::SelectObject(canvas, font);
 #endif
 
-  RECT rc = get_client_rect();
+  PixelRect rc = get_client_rect();
   canvas.formatted_text(&rc, get_text().c_str(),
 #ifdef ENABLE_SDL
                         DT_VCENTER |
@@ -168,7 +168,7 @@ MenuBar::Button::on_message(HWND hWnd, UINT message,
 
 MenuBar::MenuBar(ContainerWindow &parent)
 {
-  const RECT rc = parent.get_client_rect();
+  const PixelRect rc = parent.get_client_rect();
   int x, y, xsize, ysize;
 
   ButtonWindowStyle style;

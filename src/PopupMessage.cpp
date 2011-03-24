@@ -108,7 +108,7 @@ PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
 }
 
 void
-PopupMessage::set(const RECT _rc)
+PopupMessage::set(const PixelRect _rc)
 {
   rc = _rc;
 
@@ -137,8 +137,7 @@ PopupMessage::on_mouse_down(int x, int y)
 }
 
 void PopupMessage::Resize() {
-  RECT rthis;
-  //  RECT mRc;
+  PixelRect rthis;
 
   if (*msgText == _T('\0')) {
     hide();
@@ -147,7 +146,7 @@ void PopupMessage::Resize() {
 
     AnyCanvas canvas;
     canvas.select(Fonts::MapBold);
-    SIZE tsize = canvas.text_size(msgText);
+    PixelSize tsize = canvas.text_size(msgText);
 
     int linecount = max((unsigned)nvisible, max((unsigned)1, get_row_count()));
 

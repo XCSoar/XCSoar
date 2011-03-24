@@ -50,7 +50,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
 }
 
 void
-PaintTask(Canvas &canvas, const RECT &rc, const OrderedTask &task,
+PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
           const GeoPoint &location, const SETTINGS_MAP &settings_map,
           const RasterTerrain *terrain)
 {
@@ -59,7 +59,7 @@ PaintTask(Canvas &canvas, const RECT &rc, const OrderedTask &task,
 }
 
 void
-PaintTaskPoint(Canvas &canvas, const RECT &rc,
+PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const OrderedTask &task, const OrderedTaskPoint &point,
                const GeoPoint &location, const SETTINGS_MAP &settings_map,
                const RasterTerrain *terrain)

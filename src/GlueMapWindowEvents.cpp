@@ -345,7 +345,7 @@ GlueMapWindow::on_paint_buffer(Canvas &canvas)
 }
 
 void
-GlueMapWindow::Render(Canvas &canvas, const RECT &rc)
+GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc)
 {
   UpdateScreenAngle();
   UpdateProjection();

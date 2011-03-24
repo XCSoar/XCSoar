@@ -109,7 +109,7 @@ public:
 
 #if !defined(ENABLE_SDL) && !defined(_WIN32_WCE)
   gcc_pure
-  const RECT get_client_rect() const {
+  const PixelRect get_client_rect() const {
     if (::IsIconic(hWnd)) {
       /* for a minimized window, GetClientRect() returns the
          dimensions of the icon, which is not what we want */
@@ -129,11 +129,11 @@ public:
   }
 
   gcc_pure
-  const SIZE get_size() const {
+  const PixelSize get_size() const {
     /* this is implemented again because Window::get_size() would call
        Window::get_client_rect() (method is not virtual) */
-    RECT rc = get_client_rect();
-    SIZE s;
+    PixelRect rc = get_client_rect();
+    PixelSize s;
     s.cx = rc.right;
     s.cy = rc.bottom;
     return s;

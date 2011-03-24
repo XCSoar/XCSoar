@@ -24,7 +24,7 @@ Copyright_License {
 #include "ChartProjection.hpp"
 #include "Engine/Task/TaskManager.hpp"
 
-ChartProjection::ChartProjection(const RECT &rc,
+ChartProjection::ChartProjection(const PixelRect &rc,
                                  const TaskManager &task,
                                  const GeoPoint &fallback_loc)
 {
@@ -33,7 +33,7 @@ ChartProjection::ChartProjection(const RECT &rc,
   set_projection(rc, center, radius);
 }
 
-ChartProjection::ChartProjection(const RECT &rc,
+ChartProjection::ChartProjection(const PixelRect &rc,
                                  const OrderedTask& task,
                                  const GeoPoint &fallback_loc) 
 {
@@ -42,7 +42,7 @@ ChartProjection::ChartProjection(const RECT &rc,
   set_projection(rc, center, radius);
 }
 
-ChartProjection::ChartProjection(const RECT &rc,
+ChartProjection::ChartProjection(const PixelRect &rc,
                                  const TracePointVector& trace,
                                  const GeoPoint &fallback_loc) 
 {
@@ -52,7 +52,7 @@ ChartProjection::ChartProjection(const RECT &rc,
   set_projection(rc, center, radius);
 }
 
-void ChartProjection::set_projection(const RECT &rc, 
+void ChartProjection::set_projection(const PixelRect &rc, 
                                      const GeoPoint &center,
                                      const fixed radius)
 {
@@ -63,7 +63,7 @@ void ChartProjection::set_projection(const RECT &rc,
   UpdateScreenBounds();
 }
 
-ChartProjection::ChartProjection(const RECT &rc,
+ChartProjection::ChartProjection(const PixelRect &rc,
                                  const OrderedTaskPoint& point,
                                  const GeoPoint &fallback_loc)
 {

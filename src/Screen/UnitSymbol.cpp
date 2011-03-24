@@ -80,7 +80,7 @@ void
 UnitSymbol::draw(Canvas& canvas, const int x, const int y) const
 {
   const RasterPoint BmpPos = get_origin(UnitSymbol::NORMAL);
-  const SIZE size = get_size();
+  const PixelSize size = get_size();
   canvas.scale_copy(x, y, bitmap,
 		    BmpPos.x, BmpPos.y,
 		    size.cx, size.cy);

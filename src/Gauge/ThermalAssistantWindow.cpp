@@ -214,7 +214,7 @@ ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas) const
   TCHAR lift_string[10];
   Units::FormatUserVSpeed(max_lift, lift_string,
                             sizeof(lift_string) / sizeof(lift_string[0]));
-  SIZE s = canvas.text_size(lift_string);
+  PixelSize s = canvas.text_size(lift_string);
   canvas.text(mid.x - s.cx / 2,
               mid.y + radius - s.cy * 0.75, lift_string);
 
@@ -255,7 +255,7 @@ ThermalAssistantWindow::PaintNotCircling(Canvas &canvas) const
 
   const TCHAR* str = _("Not Circling");
   canvas.select(hfNoTraffic);
-  SIZE ts = canvas.text_size(str);
+  PixelSize ts = canvas.text_size(str);
   canvas.set_text_color(hcStandard);
   canvas.text(mid.x - (ts.cx / 2), mid.y - (radius / 2), str);
 }

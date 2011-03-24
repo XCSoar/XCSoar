@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef TASK_PROGRESS_RENDERER_HPP
 #define TASK_PROGRESS_RENDERER_HPP
 
-#include <windef.h>
+#include "Screen/Point.hpp"
 #include "Math/fixed.hpp"
 
 class Chart;
@@ -35,7 +35,7 @@ class TaskProgressRenderer {
 public:
   static void DrawTaskProgress(const TaskSummary& summary,
                               Canvas &canvas, 
-                               const RECT &rc);
+                               const PixelRect &rc);
 };
 
 #endif
