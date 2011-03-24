@@ -279,7 +279,7 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
   // return true if this gap was caught (applicable) whether or not it generated
   // a change
 
-  const fixed f0 = e_short.d/e_long.d;
+  const fixed f0 = e_short.d*e_long.inv_d;
   const short h_loss = parms.rpolars.calc_glide_arrival(n, p_long, parms.task_proj)
     -n.altitude;
 
