@@ -11,7 +11,14 @@ HOT_SOURCES = \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/HeightMatrix.cpp \
 	$(SRC)/Terrain/RasterRenderer.cpp \
-	$(SRC)/Projection.cpp
+	$(SRC)/Terrain/RasterTile.cpp \
+	$(SRC)/Projection.cpp \
+	$(SRC)/Geo/GeoClip.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \
+	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatRay.cpp
 
 $(call SRC_TO_OBJ,$(HOT_SOURCES)): OPTIMIZE += -O3
 
