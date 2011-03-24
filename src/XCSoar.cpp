@@ -78,6 +78,11 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   // Write initialization note to logfile
   LogStartUp(_T("Initialise application instance"));
 
+#ifdef WIN32
+  /* try to make the UI most responsive */
+  SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
+#endif
+
   // Perform application initialization and run loop
   if (!XCSoarInterface::Startup(hInstance))
     return 0;
