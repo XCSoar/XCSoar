@@ -73,13 +73,13 @@ public:
 protected:
   FlatBoundingBox bb_children;
   LeafVector children;
-  unsigned depth;
+  unsigned char depth;
   bool gaps_filled;
 
 public:
   friend class PrintHelper;
 
-  FlatTriangleFanTree(const int _depth=0):
+  FlatTriangleFanTree(const unsigned char _depth=0):
     FlatTriangleFan(),
     bb_children(FlatGeoPoint(0,0)),
     depth(_depth),

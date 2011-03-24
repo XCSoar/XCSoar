@@ -59,7 +59,7 @@ struct ReachFanParms {
   int terrain_counter;
   int fan_counter;
   int vertex_counter;
-  unsigned set_depth;
+  unsigned char set_depth;
 
   FlatGeoPoint reach_intercept(const int index,
                                const AGeoPoint& ao) const {
@@ -203,7 +203,7 @@ FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
   const AGeoPoint ao (parms.task_proj.unproject(origin), origin.altitude);
 
   // fill vector
-  if (depth>0) {
+  if (depth) {
     const int index_mid = (index_high+index_low)/2;
     const FlatGeoPoint x_mid = parms.reach_intercept(index_mid, ao);
     if (too_close(x_mid, origin))
