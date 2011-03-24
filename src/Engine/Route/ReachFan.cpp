@@ -249,6 +249,9 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
     index_right = index+REACH_SWEEP;
   }
 
+  children.push_back(FlatTriangleFanTree(depth+1));
+  std::vector<FlatTriangleFanTree>::reverse_iterator it = children.rbegin();
+
   for (fixed f= f0; f< fixed(0.9); f+= fixed(0.1)) {
     // find corner point
     const FlatGeoPoint px = (dp*f+n);
@@ -258,8 +261,6 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
     // altitude calculated from pure glide from n to x
     const AFlatGeoPoint x(px, h);
 
-    children.push_back(FlatTriangleFanTree(depth+1));
-    std::vector<FlatTriangleFanTree>::reverse_iterator it = children.rbegin();
     it->height = h;
     it->fill_reach(x, index_left, index_right, parms);
 
@@ -268,8 +269,11 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
       parms.fan_counter++;
       return true;
     }
-    children.pop_back();
   }
+
+  // don't need the child
+  children.pop_back();
+
   return false;
 }
 
