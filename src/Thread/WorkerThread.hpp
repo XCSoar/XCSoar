@@ -33,8 +33,18 @@ Copyright_License {
 class WorkerThread : public StoppableThread {
   Trigger event_trigger, running;
 
+  unsigned period_min, idle_min;
+
 public:
-  WorkerThread();
+  /**
+   * @param period_min the minimum duration of one period [ms].  If
+   * tick() is faster than that, then the thread will sleep for the
+   * rest of the time.  This is can be used for rate-limiting.
+   * @param idle_min the minimum sleep time after each tick().  This
+   * can be used to reduce overload and lock contention on a very busy
+   * and slow machine.
+   */
+  WorkerThread(unsigned period_min=0, unsigned idle_min=0);
 
   /**
    * Wakes up the thread to do work, calls tick().
