@@ -26,7 +26,16 @@
 
 #define REACH_BUFFER 1
 #define REACH_SWEEP (ROUTEPOLAR_Q1-REACH_BUFFER)
+
+// max depth set to low limit for older WINCE versions
+#if !defined(_WIN32_WCE) && !defined(ANDROID)
 #define REACH_MAX_DEPTH 4
+#elif !defined(_WIN32_WCE) || (_WIN32_WCE >= 0x0400 && !defined(GNAV))
+#define REACH_MAX_DEPTH 4
+#else
+#define REACH_MAX_DEPTH 3
+#endif
+
 #define REACH_MIN_STEP 25
 
 struct ReachFanParms {
