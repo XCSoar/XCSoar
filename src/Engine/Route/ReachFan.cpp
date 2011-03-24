@@ -76,7 +76,7 @@ static bool too_close(const FlatGeoPoint& p1, const FlatGeoPoint& p2)
 
 void FlatTriangleFan::calc_bb() {
   bb_self = FlatBoundingBox(vs[0]);
-  for (std::vector<FlatGeoPoint>::const_iterator it = vs.begin();
+  for (VertexVector::const_iterator it = vs.begin();
        it != vs.end(); ++it) {
     bb_self.expand(*it);
   }
@@ -88,7 +88,7 @@ FlatTriangleFanTree::calc_bb() {
 
   bb_children = bb_self;
 
-  for (std::vector<FlatTriangleFanTree>::iterator it = children.begin();
+  for (LeafVector::iterator it = children.begin();
        it != children.end(); ++it) {
     it->calc_bb();
     bb_children.expand(it->bb_children);
@@ -114,7 +114,7 @@ FlatTriangleFan::is_inside(const FlatGeoPoint &p) const {
     return false;
 
   int c=0;
-  for (std::vector<FlatGeoPoint>::const_iterator i= vs.begin(), j=vs.end()-1;
+  for (VertexVector::const_iterator i= vs.begin(), j=vs.end()-1;
        i!= vs.end(); j = i++) {
     if ((i->Latitude>p.Latitude) == (j->Latitude>p.Latitude))
       continue;
@@ -141,7 +141,7 @@ FlatTriangleFanTree::is_inside_tree(const FlatGeoPoint &p, const bool include_ch
   if (!include_children)
     return false;
 
-  for (std::vector<FlatTriangleFanTree>::const_iterator it = children.begin();
+  for (LeafVector::const_iterator it = children.begin();
        it != children.end(); ++it) {
     if (it->is_inside_tree(p, true))
       return true;
@@ -187,7 +187,7 @@ FlatTriangleFanTree::fill_depth(const AFlatGeoPoint &origin,
 
   } else if (depth< parms.set_depth) {
 
-    for (std::vector<FlatTriangleFanTree>::iterator it = children.begin();
+    for (LeafVector::iterator it = children.begin();
          it != children.end(); ++it) {
       if (!it->fill_depth(origin, parms))
         return false; // stop searching
@@ -226,7 +226,7 @@ FlatTriangleFanTree::fill_gaps(const AFlatGeoPoint &origin,
    // now check gaps
     const RoutePoint o(origin, 0);
     RouteLink e_last(RoutePoint(*vs.begin(), 0), o, parms.task_proj);
-    for (std::vector<FlatGeoPoint>::const_iterator x_last= vs.begin(), x= x_last+1;
+    for (VertexVector::const_iterator x_last= vs.begin(), x= x_last+1;
          x != vs.end(); x_last = x++) {
       if (too_close(*x, origin) || too_close(*x_last, origin))
         continue;
@@ -247,7 +247,7 @@ FlatTriangleFanTree::update_terrain_base(const FlatGeoPoint& o, ReachFanParms& p
     parms.terrain_base = 0;
     return;
   }
-  for (std::vector<FlatGeoPoint>::const_iterator x= vs.begin(); 
+  for (VertexVector::const_iterator x= vs.begin();
        x != vs.end(); ++x) {
     const FlatGeoPoint av = (o+(*x))*fixed_half;
     const GeoPoint p = parms.task_proj.unproject(av);
@@ -297,7 +297,7 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
   }
 
   children.push_back(FlatTriangleFanTree(depth+1));
-  std::vector<FlatTriangleFanTree>::reverse_iterator it = children.rbegin();
+  LeafVector::reverse_iterator it = children.rbegin();
 
   for (fixed f= f0; f< fixed(0.9); f+= fixed(0.1)) {
     // find corner point
@@ -418,7 +418,7 @@ FlatTriangleFanTree::find_positive_arrival(const FlatGeoPoint& n,
 
   bool retval = false;
 
-  for (std::vector<FlatTriangleFanTree>::const_iterator it = children.begin();
+  for (LeafVector::const_iterator it = children.begin();
        it != children.end(); ++it) {
     if (it->find_positive_arrival(n, parms, arrival_height))
       retval = true;
@@ -436,13 +436,13 @@ FlatTriangleFanTree::accept_in_range(const FlatBoundingBox& bb,
 
   if (bb.overlaps(bb_self)) {
     visitor.start_fan();
-    for (std::vector<FlatGeoPoint>::const_iterator it = vs.begin();
+    for (VertexVector::const_iterator it = vs.begin();
          it != vs.end(); ++it) {
       visitor.add_point(task_proj.unproject(*it));
     }
     visitor.end_fan();
   }
-  for (std::vector<FlatTriangleFanTree>::const_iterator it = children.begin();
+  for (LeafVector::const_iterator it = children.begin();
        it != children.end(); ++it) {
     it->accept_in_range(bb, task_proj, visitor);
   }

@@ -785,7 +785,7 @@ PrintHelper::print(const FlatTriangleFan& r) {
 
   printf("%d %d # fcorner\n", r.vs[0].Longitude, r.vs[0].Latitude);
 
-  for (std::vector<FlatGeoPoint>::const_iterator it = r.vs.begin();
+  for (FlatTriangleFan::VertexVector::const_iterator it = r.vs.begin();
        it != r.vs.end(); ++it) {
     const FlatGeoPoint p = (*it);
     printf("%d %d # ftri\n", p.Longitude, p.Latitude);

@@ -35,8 +35,10 @@ struct RouteLink;
 struct ReachFanParms;
 
 class FlatTriangleFan {
+public:
+  typedef std::vector<FlatGeoPoint> VertexVector;
 protected:
-  std::vector<FlatGeoPoint> vs;
+  VertexVector vs;
   FlatBoundingBox bb_self;
   short height;
 
@@ -66,9 +68,11 @@ public:
 class TriangleFanVisitor;
 
 class FlatTriangleFanTree: public FlatTriangleFan {
+public:
+  typedef std::vector<FlatTriangleFanTree> LeafVector;
 protected:
   FlatBoundingBox bb_children;
-  std::vector<FlatTriangleFanTree> children;
+  LeafVector children;
   unsigned depth;
   bool gaps_filled;
 
