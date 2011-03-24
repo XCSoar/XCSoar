@@ -172,8 +172,8 @@ int i_normalise_mag2(const int mag,
  */
 void mag_rmag(const fixed x,
               const fixed y,
-              fixed& s,
-              fixed& is);
+              fixed& __restrict__ s,
+              fixed& __restrict__ is);
 
 gcc_const
 fixed thermal_recency_fn(unsigned x);

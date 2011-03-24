@@ -239,8 +239,8 @@ void i_normalise(int &x,
 
 void mag_rmag(const fixed x,
               const fixed y,
-              fixed& s,
-              fixed& is)
+              fixed& __restrict__ s,
+              fixed& __restrict__ is)
 {
   const fixed mag_sq = sqr(x)+sqr(y);
   if (!positive(mag_sq)) {
