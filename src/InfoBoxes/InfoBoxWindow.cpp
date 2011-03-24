@@ -229,13 +229,13 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
     canvas.select(look.border_pen);
 
     RasterPoint tab[8];
-    tab[0].x = tab[1].x = recTitle.left + IBLSCALE(1);
+    tab[0].x = tab[1].x = recTitle.left;
     tab[0].y = tab[7].y = ybottom;
-    tab[2].x = recTitle.left + IBLSCALE(3);
+    tab[2].x = recTitle.left + IBLSCALE(2);
     tab[2].y = tab[5].y = tab[3].y = tab[4].y = ytop;
     tab[1].y = tab[6].y = ytopedge;
-    tab[5].x = recTitle.right - IBLSCALE(4);
-    tab[6].x = tab[7].x = recTitle.right - IBLSCALE(2);
+    tab[5].x = recTitle.right - IBLSCALE(2);
+    tab[6].x = tab[7].x = recTitle.right;
     tab[3].x = recTitle.left + halftextwidth - IBLSCALE(1);
     tab[4].x = recTitle.right - halftextwidth + IBLSCALE(1);
 
