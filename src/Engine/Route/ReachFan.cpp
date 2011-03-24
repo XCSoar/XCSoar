@@ -46,7 +46,8 @@ struct ReachFanParms {
     rpolars(_rpolars), task_proj(_task_proj), terrain(_terrain), 
     terrain_base(_terrain_base),
     terrain_counter(0),
-    fan_counter(0) {};
+    fan_counter(0),
+    node_counter(0) {};
 
   const RoutePolars &rpolars;
   const TaskProjection& task_proj;
@@ -54,6 +55,7 @@ struct ReachFanParms {
   int terrain_base;
   int terrain_counter;
   int fan_counter;
+  int node_counter;
 
   FlatGeoPoint reach_intercept(const int index,
                                const AGeoPoint& ao) const {
@@ -171,9 +173,19 @@ FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
     add_point(x);
   }
 
+  if (!gaps_filled) 
+    fill_gaps(origin, parms);
+}
+
+void
+FlatTriangleFanTree::fill_gaps(const AFlatGeoPoint &origin,
+                               ReachFanParms& parms)
+{
   // worth checking for gaps?
   if ((depth< REACH_MAX_DEPTH) && (vs.size()>2) && (parms.rpolars.turning_reach())) {
-    // now check gaps
+    gaps_filled = true;
+
+   // now check gaps
     const RoutePoint o(origin, 0);
     RouteLink e_last(RoutePoint(*vs.begin(), 0), o, parms.task_proj);
     for (std::vector<FlatGeoPoint>::const_iterator x_last= vs.begin(), x= x_last+1;
@@ -266,6 +278,7 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
 
     // prune child if empty or single spike
     if (it->vs.size()>3) {
+      parms.node_counter+= it->vs.size();
       parms.fan_counter++;
       return true;
     }

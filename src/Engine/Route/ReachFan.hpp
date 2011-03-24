@@ -70,6 +70,7 @@ protected:
   FlatBoundingBox bb_children;
   std::vector<FlatTriangleFanTree> children;
   unsigned depth;
+  bool gaps_filled;
 
 public:
   friend class PrintHelper;
@@ -77,7 +78,8 @@ public:
   FlatTriangleFanTree(const int _depth=0):
     FlatTriangleFan(),
     bb_children(FlatGeoPoint(0,0)),
-    depth(_depth) {};
+    depth(_depth),
+    gaps_filled(false) {};
 
   virtual void clear() {
     FlatTriangleFan::clear();
@@ -93,6 +95,9 @@ public:
   void fill_reach(const AFlatGeoPoint &origin,
                   const int index_low, const int index_high,
                   ReachFanParms& parms);
+
+  void fill_gaps(const AFlatGeoPoint &origin,
+                 ReachFanParms& parms);
 
   bool check_gap(const AFlatGeoPoint& n,
                  const RouteLink& e_1,
