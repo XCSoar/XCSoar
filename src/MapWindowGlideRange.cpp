@@ -32,6 +32,7 @@ Copyright_License {
 #endif
 
 #include <stdio.h>
+#include "Util/StaticArray.hpp"
 
 typedef std::vector<RasterPoint> RasterPointVector;
 
@@ -41,7 +42,6 @@ public:
     :proj(_proj),
      clip(_proj.GetScreenBounds().scale(fixed(1.1)))
   {
-    g.reserve(50);
   }
 
   virtual void start_fan() {
@@ -51,25 +51,25 @@ public:
 
   virtual void add_point(const GeoPoint& p) {
     // Add a new GeoPoint to the current TriangleFan
-    g.push_back(p);
+    g.append(p);
   }
 
   virtual void
   end_fan()
   {
     // Perform clipping on the GeoPointVector (Result: clipped)
-    unsigned size = clip.clip_polygon(clipped, &g[0], g.size());
+    unsigned size = clip.clip_polygon(clipped, g.raw(), g.size());
     // With less than three points we can't draw a polygon
     if (size < 3)
       return;
 
-    // Convert GeoPoints to RasterPoints
-    RasterPointVector r;
-    for (unsigned i = 0; i < size; ++i)
-      r.push_back(proj.GeoToScreen(clipped[i]));
+    // Work directly on the RasterPoints in the fans vector
+    fans.push_back(RasterPointVector());
+    std::vector<RasterPointVector>::reverse_iterator it = fans.rbegin();
 
-    // Save the RasterPoints in the fans vector
-    fans.push_back(r);
+    // Convert GeoPoints to RasterPoints
+    for (unsigned i = 0; i < size; ++i)
+      it->push_back(proj.GeoToScreen(clipped[i]));
   };
 
   /** STL-Container of rasterized polygons */
@@ -77,7 +77,7 @@ public:
 
 private:
   /** Temporary container for TriangleFan processing */
-  std::vector<GeoPoint> g;
+  StaticArray<GeoPoint, ROUTEPOLAR_POINTS+2> g;
   /** Temporary container for TriangleFan clipping */
   GeoPoint clipped[50 * 4];
   /** Projection to use for GeoPoint -> RasterPoint conversion */
