@@ -21,12 +21,36 @@
 */
 
 #include "Math/fixed.hpp"
+#include "Math/FastMath.h"
 #include "TestUtil.hpp"
 
 #include <stdio.h>
 
+// tolerance is 0.3%
+
+static void test_mag_rmag(double mag) {
+  fixed px(7.07106*mag);
+  fixed py(-7.07106*mag);
+
+  double msq = px*px+py*py;
+  printf("# testing mag i %g %g\n", mag, msq);
+
+  fixed d; fixed inv_d;
+  mag_rmag(px, py, d, inv_d);
+  fixed ed = fabs(d-fixed(10.0*mag))/fixed(0.03*mag);
+  if (ed>= fixed_one) {
+    printf("# d %g %g %g\n", (double)d, (double)ed, mag);
+  }
+  ok(ed< fixed_one, "mag_rmag d", 0);
+  fixed inv_ed = fabs(inv_d-fixed(0.1/mag))/fixed(3.0e-4/mag);
+  if (inv_ed>= fixed_one) {
+    printf("# inv %g %g %g\n", (double)inv_d, (double)inv_ed, mag);
+  }
+  ok(inv_ed< fixed_one, "mag_rmag inv_d", 0);
+}
+
 int main(int argc, char** argv) {
-  plan_tests(19);
+  plan_tests(43);
 
   /* check the division operator */
   ok((fixed_one / fixed_one) * fixed(1000) == fixed(1000), "1/1", 0);
@@ -75,5 +99,10 @@ int main(int argc, char** argv) {
 
   ok(fabs(t - fixed(dt)) < fixed(1.0e5), "atan(y,x)", 0);
 
+  {
+    for (int i=1; i<=2048; i*= 2) {
+      test_mag_rmag(i);
+    }
+  }
   return exit_status();
 }
