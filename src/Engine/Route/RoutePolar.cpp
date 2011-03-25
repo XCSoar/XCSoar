@@ -160,10 +160,15 @@ RouteLink::calc_speedups(const TaskProjection& proj)
   const fixed scale = proj.get_approx_scale();
   const fixed dx = fixed(first.Longitude-second.Longitude);
   const fixed dy = fixed(first.Latitude-second.Latitude);
+  if (!positive(fabs(dx)) && !positive(fabs(dy))) {
+    d= fixed_zero;
+    inv_d = fixed_zero;
+    polar_index = 0;
+    return;
+  }
   mag_rmag(dx, dy, d, inv_d);
   d*= scale;
   inv_d/= scale;
-  assert(!negative(d));
   polar_index = RoutePolar::dxdy_to_index(dx, dy);
 }
 
