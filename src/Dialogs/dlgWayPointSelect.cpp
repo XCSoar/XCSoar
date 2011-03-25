@@ -220,11 +220,11 @@ PrepareData(void)
     const TCHAR * t;
     if (Profile::GetPath(szProfileWayPointFile, szFile)) {
       t = BaseName(szFile);
-      dfe->replaceEnumText(4, t);
+      dfe->replaceEnumText(tfFile1, t);
     }
     if (Profile::GetPath(szProfileAdditionalWayPointFile, szFile)) {
       t = BaseName(szFile);
-      dfe->replaceEnumText(5, t);
+      dfe->replaceEnumText(tfFile2, t);
     }
     dfe->SetAsInteger(filter_data.type_index);
     wpType->RefreshDisplay();
