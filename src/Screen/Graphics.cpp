@@ -285,8 +285,8 @@ Graphics::Initialise()
   TowerIcon.load_big(IDB_TOWER, IDB_TOWER_HD);
   PowerPlantIcon.load_big(IDB_POWER_PLANT, IDB_POWER_PLANT_HD);
 
-  hpAircraft.set(Layout::Scale(3), Color::WHITE);
-  hpAircraftBorder.set(Layout::Scale(1), Color::BLACK);
+  hpAircraftBorder.set(3, Color::BLACK);
+  hpAircraft.set(1, Color::LIGHT_GRAY);
 
     // used for landable rendering
   hbGreen.set(Color::GREEN);
@@ -477,33 +477,35 @@ Graphics::DrawAircraft(Canvas &canvas,
                        const RasterPoint aircraft_pos)
 {
   RasterPoint Aircraft[] = {
-    {1, -5},
-    {1, 0},
-    {14, 0},
-    {14, 1},
-    {1, 1},
-    {1, 8},
-    {4, 8},
-    {4, 9},
-    {-3, 9},
-    {-3, 8},
-    {0, 8},
-    {0, 1},
-    {-13, 1},
-    {-13, 0},
-    {0, 0},
-    {0, -5},
+    {1, -5}, // nose tip
+    {2, -3}, // nose left
+    {2, 0},  // wing root le left
+    {15, 1}, // wing tip le left
+    {15, 2}, // wing tip te left
+    {1, 2},  // wing root te left
+    {1, 8},  // tail left
+    {5, 9},  // elev le left
+    {5, 10},  // elev te left
+    {-4, 10}, // elev te right
+    {-4, 9}, // elev le right
+    {0, 8},  // tail right
+    {0, 2},  // wing root te right
+    {-14, 2}, // wing tip te right
+    {-14, 1}, // wing tip le right
+    {-1, 0},   // wing root le right
+    {-1, -3},  // nose right
+    {0, -5}, // nose tip
   };
 
   int n = sizeof(Aircraft) / sizeof(Aircraft[0]);
 
   PolygonRotateShift(Aircraft, n, aircraft_pos.x - 1, aircraft_pos.y, angle);
 
-  canvas.select(Graphics::hpAircraft);
+  canvas.hollow_brush();
+  canvas.select(hpAircraftBorder);
   canvas.polygon(Aircraft, n);
 
-  canvas.black_brush();
-
-  canvas.select(Graphics::hpAircraftBorder);
+  canvas.white_brush();
+  canvas.select(hpAircraft);
   canvas.polygon(Aircraft, n);
 }
