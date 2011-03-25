@@ -419,6 +419,11 @@ XCSOAR_SOURCES += \
 	$(SRC)/Device/SerialPort.cpp
 endif
 
+ifeq ($(HAVE_CE),y)
+XCSOAR_SOURCES += \
+	$(SRC)/Device/Widcomm.cpp
+endif
+
 ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \
 	$(SRC)/Java/Global.cpp \

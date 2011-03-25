@@ -46,6 +46,15 @@ class SerialPort : public Port, protected StoppableThread
 
   FifoBuffer<char> buffer;
 
+#ifdef _WIN32_WCE
+  /**
+   * @see IsWidcommDevice()
+   */
+  bool is_widcomm;
+#else
+  static const bool is_widcomm = false;
+#endif
+
 public:
   /**
    * Creates a new serial port (RS-232) object, but does not open it yet.
@@ -62,6 +71,16 @@ public:
    */
   virtual ~SerialPort();
 
+protected:
+  bool IsDataPending() const {
+    COMSTAT com_stat;
+    DWORD errors;
+
+    return ::ClearCommError(hPort, &errors, &com_stat) &&
+      com_stat.cbInQue > 0;
+  }
+
+public:
   virtual void Write(const void *data, unsigned length);
   virtual void Flush();
 

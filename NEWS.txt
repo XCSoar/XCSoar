@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.0.9 - not yet released
+* devices
+  - work around iPaq Bluetooth driver bug
 * map
   - fix for hanging map on slow hardware
 
