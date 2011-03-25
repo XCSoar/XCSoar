@@ -237,18 +237,34 @@ void i_normalise(int &x,
   y= (y<<NORMALISE_BITS)/mag;
 }
 
-void mag_rmag(const fixed x,
-              const fixed y,
-              fixed& __restrict__ s,
-              fixed& __restrict__ is)
+void mag_rmag(fixed x,
+              fixed y,
+              fixed& __restrict__ dist,
+              fixed& __restrict__ inv_dist)
 {
-  const fixed mag_sq = sqr(x)+sqr(y);
-  if (!positive(mag_sq)) {
-    s = fixed_zero;
-    is = fixed_zero;
+  x = fabs(x);
+  y = fabs(y);
+  if (!positive(x) && !positive(y)) {
+    dist = fixed_zero;
+    inv_dist = fixed_zero;
     return;
   }
-  is = rsqrt(mag_sq);
-  assert(positive(is));
-  s = is*mag_sq;
+#ifdef FIXED_MATH
+  unsigned d_shift = 1;
+  while (std::max(x,y) > fixed(1000)) {
+    x = half(x);
+    y = half(y);
+    d_shift = (d_shift << 1);
+  }
+#endif
+  const fixed mag_sq = sqr(x)+sqr(y);
+  inv_dist = rsqrt(mag_sq);
+  assert(positive(inv_dist));
+  dist = inv_dist*mag_sq;
+#ifdef FIXED_MATH
+  if (d_shift>1) {
+    inv_dist /= d_shift;
+    dist *= d_shift;
+  }
+#endif
 }

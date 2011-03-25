@@ -170,8 +170,8 @@ int i_normalise_mag2(const int mag,
 /**
  * Find magnitude and reciprocal magnitude simultaneously
  */
-void mag_rmag(const fixed x,
-              const fixed y,
+void mag_rmag(fixed x,
+              fixed y,
               fixed& __restrict__ s,
               fixed& __restrict__ is);
 
