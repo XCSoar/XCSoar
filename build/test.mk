@@ -898,37 +898,29 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/NullPort.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
-	$(SRC)/Device/Descriptor.cpp \
-	$(SRC)/Device/FLARM.cpp \
-	$(SRC)/Device/Declaration.cpp \
+	$(SRC)/FLARM/State.cpp \
+	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/IO/CSVLine.cpp \
-	$(SRC)/Profile/ProfileKeys.cpp \
-	$(SRC)/Thread/Thread.cpp \
-	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/OS/Clock.cpp \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
+	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeNMEALogger.cpp \
 	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/RunDeviceDriver.cpp
 RUN_DEVICE_DRIVER_OBJS = $(call SRC_TO_OBJ,$(RUN_DEVICE_DRIVER_SOURCES))
 RUN_DEVICE_DRIVER_LDADD = \
-	$(ZZIP_LIBS) \
-	$(ENGINE_LIBS) \
 	$(DRIVER_LIBS) \
 	$(MATH_LIBS) \
 	$(UTIL_LIBS)

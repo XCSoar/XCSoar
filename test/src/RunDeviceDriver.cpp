@@ -21,37 +21,31 @@ Copyright_License {
 }
 */
 
+#include "NMEA/Info.hpp"
 #include "Device/NullPort.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
-#include "Device/Descriptor.hpp"
 #include "Device/device.hpp"
 #include "Device/Geoid.h"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
-#include "Thread/Trigger.hpp"
-#include "DeviceBlackboard.hpp"
 #include "OS/PathName.hpp"
 #include "Protection.hpp"
 
 #include <stdio.h>
 
+const struct DeviceRegister *driver;
+
 Waypoints way_points;
+Waypoints::Waypoints() {}
 
-DeviceBlackboard device_blackboard;
-
-static DeviceDescriptor device;
-
-/*
- * Fake Protection.cpp
- */
-
-Mutex mutexBlackboard;
-
-void TriggerGPSUpdate() {}
-void TriggerVarioUpdate() {}
+const Waypoint *
+Waypoints::find_home() const
+{
+  return NULL;
+}
 
 /*
  * Fake Device/device.cpp
@@ -60,14 +54,21 @@ void TriggerVarioUpdate() {}
 bool
 devHasBaroSource()
 {
-  return device.IsBaroSource();
+  return (driver->Flags & drfBaroAlt) != 0;
 }
 
 bool
 HaveCondorDevice()
 {
-  return device.IsCondor();
+  return _tcscmp(driver->Name, _T("Condor")) == 0;
 }
+
+/*
+ * Fake Protection.cpp
+ */
+
+void TriggerGPSUpdate() {}
+void TriggerVarioUpdate() {}
 
 /*
  * Fake Device/Geoid.cpp
@@ -94,12 +95,6 @@ InputEvents::processNmea(unsigned key)
 {
   return true;
 }
-
-/*
- * Fake Settings*Blackboard.cpp
- */
-
-SettingsComputerBlackboard::SettingsComputerBlackboard() {}
 
 /*
  * The actual code.
@@ -202,26 +197,29 @@ int main(int argc, char **argv)
   }
 
   PathName driver_name(argv[1]);
-  const struct DeviceRegister *driver = devGetDriver(driver_name);
+  driver = devGetDriver(driver_name);
   if (driver == NULL) {
     fprintf(stderr, "No such driver: %s\n", argv[1]);
     return 1;
   }
 
   NullPort port;
+  Device *device = driver->CreateOnPort != NULL
+    ? driver->CreateOnPort(&port)
+    : NULL;
 
-  if (!device.Open(&port, driver)) {
-    fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
-    return 1;
-  }
+  NMEAParser parser;
 
-  device.enable_baro = true;
+  NMEA_INFO data;
+  data.reset();
 
   char buffer[1024];
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
     TrimRight(buffer);
-    device.LineReceived(buffer);
+
+    if (device == NULL || !device->ParseNMEA(buffer, &data, true))
+      parser.ParseNMEAString_Internal(buffer, &data);
   }
 
-  Dump(device_blackboard.Basic());
+  Dump(data);
 }
