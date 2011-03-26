@@ -139,8 +139,7 @@ public:
     if (!way_point.is_landable() && !way_point.Flags.Watched)
       return;
 
-    if ((arrival_height_glide < 0 && !way_point.Flags.Watched) ||
-        arrival_height_glide == 0)
+    if (arrival_height_glide <= 0 && !way_point.Flags.Watched)
       return;
 
     if (settings_map.WaypointArrivalHeightDisplay == WP_ARRIVAL_HEIGHT_NONE)
