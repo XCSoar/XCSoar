@@ -226,19 +226,16 @@ public:
     int arrival_height_terrain = 0;
     bool watchedWaypoint = way_point.Flags.Watched;
 
-    if (way_point.is_landable()) {
+    if (way_point.is_landable() || watchedWaypoint)
       CalculateReachability(way_point, reachable_glide, arrival_height_glide,
                             reachable_terrain, arrival_height_terrain);
 
+    if (way_point.is_landable()) {
       WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable_glide,
                                            reachable_terrain, way_point,
                                            projection.GetScreenAngle());
     } else {
       // non landable turnpoint
-      if (watchedWaypoint)
-        CalculateReachability(way_point, reachable_glide, arrival_height_glide,
-                              reachable_terrain, arrival_height_terrain);
-
       const MaskedIcon *icon;
       if (projection.GetMapScale() > fixed(4000))
         icon = &Graphics::SmallIcon;
