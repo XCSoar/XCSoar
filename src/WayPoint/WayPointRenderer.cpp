@@ -441,18 +441,18 @@ DrawLandableBase(Canvas &canvas, const RasterPoint& pt,
 
 static void
 DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
-                   const Angle &a, fixed radius, fixed width)
+                   const Angle &angle, fixed radius, fixed width)
 {
   if (radius <= fixed_zero)
     return;
 
   fixed fwx, fwy;
-  (a + Angle::degrees(fixed_int_constant(90))).sin_cos(fwx, fwy);
+  (angle + Angle::degrees(fixed_int_constant(90))).sin_cos(fwx, fwy);
   int wx = iround(fwx * width);
   int wy = iround(fwy * width);
 
   fixed x, y;
-  a.sin_cos(x, y);
+  angle.sin_cos(x, y);
   int lx = iround(x * radius * fixed_two) & ~0x1;  // make it a even number
   int ly = iround(y * radius * fixed_two) & ~0x1;
 
