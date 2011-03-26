@@ -66,7 +66,7 @@ MaskedIcon Graphics::hCruise, Graphics::hClimb,
 MaskedIcon Graphics::hGPSStatus1, Graphics::hGPSStatus2;
 
 Pen Graphics::hpAircraft;
-Pen Graphics::hpAircraftBorder;
+Pen Graphics::hpCanopy;
 Pen Graphics::hpWind;
 Pen Graphics::hpBearing;
 Pen Graphics::hpBestCruiseTrack;
@@ -83,6 +83,7 @@ Pen Graphics::hpTrackBearingLine;
 Pen Graphics::TracePen;
 Pen Graphics::ContestPen[3];
 
+Brush Graphics::hbCanopy;
 Brush Graphics::hbCompass;
 Brush Graphics::hbThermalBand;
 Brush Graphics::hbBestCruiseTrack;
@@ -284,8 +285,9 @@ Graphics::Initialise()
   TowerIcon.load_big(IDB_TOWER, IDB_TOWER_HD);
   PowerPlantIcon.load_big(IDB_POWER_PLANT, IDB_POWER_PLANT_HD);
 
-  hpAircraftBorder.set(3, Color::BLACK);
-  hpAircraft.set(1, Color::LIGHT_GRAY);
+  hpAircraft.set(1, Color::DARK_GRAY);
+  hpCanopy.set(1, Color(0x00,0x90,0x90));
+  hbCanopy.set(Color(0x00,0x90,0x90));
 
     // used for landable rendering
   hbGreen.set(Color::GREEN);
@@ -476,35 +478,56 @@ Graphics::DrawAircraft(Canvas &canvas,
                        const RasterPoint aircraft_pos)
 {
   RasterPoint Aircraft[] = {
-    {1, -5}, // nose tip
-    {2, -3}, // nose left
-    {2, 0},  // wing root le left
-    {15, 1}, // wing tip le left
-    {15, 2}, // wing tip te left
-    {1, 2},  // wing root te left
-    {1, 8},  // tail left
-    {5, 9},  // elev le left
-    {5, 10},  // elev te left
-    {-4, 10}, // elev te right
-    {-4, 9}, // elev le right
-    {0, 8},  // tail right
-    {0, 2},  // wing root te right
-    {-14, 2}, // wing tip te right
-    {-14, 1}, // wing tip le right
-    {-1, 0},   // wing root le right
-    {-1, -3},  // nose right
-    {0, -5}, // nose tip
+    {0, -10},
+    {-2, -7},
+    {-2, -2},
+    {-16, -2},
+    {-32, -1},
+    {-32, 2},
+    {-1, 3},
+    {-1, 15},
+    {-3, 15},
+    {-5, 17},
+    {-5, 18},
+    {5, 18},
+    {5, 17},
+    {3, 15},
+    {1, 15},
+    {1, 3},
+    {32, 2},
+    {32, -1},
+    {16, -2},
+    {2, -2},
+    {2, -7},
+    {0, -10},
   };
 
-  int n = sizeof(Aircraft) / sizeof(Aircraft[0]);
+  int n_aircraft = sizeof(Aircraft) / sizeof(Aircraft[0]);
+  PolygonRotateShift(Aircraft, n_aircraft, aircraft_pos.x, aircraft_pos.y, angle, false);
 
-  PolygonRotateShift(Aircraft, n, aircraft_pos.x - 1, aircraft_pos.y, angle);
-
-  canvas.hollow_brush();
-  canvas.select(hpAircraftBorder);
-  canvas.polygon(Aircraft, n);
-
+  if (Layout::Scale(1)==1) {
+    canvas.black_brush();
+    canvas.select(hpBearing);
+    canvas.polygon(Aircraft, n_aircraft);
+    canvas.null_pen();
+  } else {
+    canvas.select(hpAircraft);
+  }
   canvas.white_brush();
-  canvas.select(hpAircraft);
-  canvas.polygon(Aircraft, n);
+  canvas.polygon(Aircraft, n_aircraft);
+
+  RasterPoint Canopy[] = {
+    {-1, -7},
+    {-1, -2},
+    {0, -1},
+    {0, -1},
+    {1, -2},
+    {1, -7},
+  };
+  int n_canopy = sizeof(Canopy) / sizeof(Canopy[0]);
+  PolygonRotateShift(Canopy, n_canopy, aircraft_pos.x, aircraft_pos.y, angle, false);
+
+  canvas.select(hpCanopy);
+  canvas.select(hbCanopy);
+  canvas.polygon(Canopy, n_canopy);
 }

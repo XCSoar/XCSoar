@@ -97,7 +97,9 @@ namespace Graphics {
   extern Brush hBackgroundBrush;
 
   extern Pen hpAircraft;
-  extern Pen hpAircraftBorder;
+  extern Brush hbCanopy;
+  extern Pen hpCanopy;
+
   extern Pen hpWind;
   extern Pen hpBearing;
   extern Pen hpBestCruiseTrack;
