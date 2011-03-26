@@ -132,15 +132,14 @@ public:
 
   void
   FormatLabel(TCHAR *buffer, const Waypoint &way_point,
-              const int arrival_height_glide, const int arrival_height_terrain,
-              bool show_negative_arrival_height_glide)
+              const int arrival_height_glide, const int arrival_height_terrain)
   {
     FormatTitle(buffer, way_point);
 
     if (!way_point.is_landable() && !way_point.Flags.Watched)
       return;
 
-    if ((arrival_height_glide < 0 && !show_negative_arrival_height_glide) ||
+    if ((arrival_height_glide < 0 && !way_point.Flags.Watched) ||
         arrival_height_glide == 0)
       return;
 
@@ -288,8 +287,7 @@ public:
     }
 
     TCHAR Buffer[NAME_SIZE+1];
-    FormatLabel(Buffer, way_point, arrival_height_glide, arrival_height_terrain,
-                watchedWaypoint);
+    FormatLabel(Buffer, way_point, arrival_height_glide, arrival_height_terrain);
 
     if ((reachable_glide && Appearance.IndLandable == wpLandableWinPilot) ||
         Appearance.UseSWLandablesRendering)
