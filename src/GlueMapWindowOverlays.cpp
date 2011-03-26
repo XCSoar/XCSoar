@@ -246,7 +246,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
       cross_sign = -1;
 
     if (cross_sign != 0) {
-      canvas.select(Graphics::hpAircraftBorder);
+      canvas.select(Graphics::hpBearing);
       canvas.line(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 - 5),
                   Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 + 5));
       canvas.line(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 + 5),
