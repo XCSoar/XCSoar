@@ -542,7 +542,7 @@ InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkEnter:
-    dlgAnalysisShowModal(XCSoarInterface::main_window, 7);
+    dlgAnalysisShowModal(XCSoarInterface::main_window, 8);
     return true;
 
   default:
