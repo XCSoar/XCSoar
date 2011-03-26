@@ -68,7 +68,7 @@ event=AutoLogger stop
 # mode=default
 # ------------
 
-mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Config3 Info1 Info2 Info3 Menu Vario1 Vario2
+mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Config3 Info1 Info2 Menu Vario1 Vario2
 type=key
 data=ESCAPE
 event=Mode default
@@ -288,35 +288,33 @@ event=Mode default
 label=Task
 location=5
 
-#mode=Nav1
-#type=key
-#data=7
-#event=ArmAdvance show
-#event=ArmAdvance on
-#event=Mode default
-#label=$(CheckTaskResumed)$(CheckTask)$(AdvanceArmed)
-#location=6
+mode=Nav1
+type=key
+data=7
+event=AdjustWaypoint previousarm
+label=$(WaypointPreviousArm)
+location=6
 
 mode=Nav1
 type=key
 data=8
-event=AdjustWaypoint previousarm
-label=$(WaypointPreviousArm)
+event=AdjustWaypoint nextarm
+label=$(WaypointNextArm)
 location=7
 
 mode=Nav1
 type=key
 data=9
-event=AdjustWaypoint nextarm
-label=$(WaypointNextArm)
+event=WaypointDetails select
+event=Mode default
+label=Waypoint\nList$(CheckWaypointFile)
 location=8
 
 mode=Nav1
 type=key
 data=0
-event=WaypointDetails select
-event=Mode default
-label=Waypoint\nList$(CheckWaypointFile)
+event=FlarmTraffic
+label=FLARM Radar$(CheckFLARM)
 location=9
 
 # -------------
@@ -330,14 +328,13 @@ event=Mode default
 label=Nav
 location=1
 
-
-#mode=Nav2
-#type=key
-#data=6
-#event=Setup Task
-#event=Mode default
-#label=Task\nEdit$(CheckWaypointFile)
-#location=5
+mode=Nav2
+type=key
+data=6
+event=Mode default
+event=AbortTask toggle
+label=Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)
+location=5
 
 mode=Nav2
 type=key
@@ -350,9 +347,9 @@ location=6
 mode=Nav2
 type=key
 data=8
+event=Setup Target
 event=Mode default
-event=AbortTask toggle
-label=Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)
+label=$(CheckTask)$(CheckTaskResumed)Target
 location=7
 
 mode=Nav2
@@ -366,9 +363,8 @@ location=8
 mode=Nav2
 type=key
 data=0
-event=Setup Target
-event=Mode default
-label=$(CheckTask)$(CheckTaskResumed)Target
+event=ThermalAssistant
+label=Thermal Assistant
 location=9
 
 # -------------
@@ -734,7 +730,7 @@ location=9
 mode=Info2
 type=key
 data=APP4
-event=Mode Info3
+event=Mode default
 label=Info
 location=4
 
@@ -776,28 +772,3 @@ data=0
 event=RepeatStatusMessage
 label=Message\nRepeat
 location=9
-
-
-# -------------
-# mode=Info3
-# -------------
-mode=Info3
-type=key
-data=APP4
-event=Mode default
-label=Info
-location=4
-
-mode=Info3
-type=key
-data=6
-event=FlarmTraffic
-label=FLARM Radar$(CheckFLARM)
-location=5
-
-mode=Info3
-type=key
-data=7
-event=ThermalAssistant
-label=Thermal Assistant
-location=6
