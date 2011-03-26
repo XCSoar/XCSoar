@@ -332,9 +332,6 @@ InfoBoxManager::ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode)
 
   SetDirty();
 
-  // emulate update to trigger calculations
-  TriggerGPSUpdate();
-
   ResetDisplayTimeOut();
 }
 
