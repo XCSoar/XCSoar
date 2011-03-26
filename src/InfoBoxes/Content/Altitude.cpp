@@ -207,8 +207,6 @@ InfoBoxContentAltitude::ChangeAltitude(const fixed step)
 
   device_blackboard.SetAltitude(basic.GPSAltitude +
                                 (fixed)Units::ToSysAltitude(step));
-
-  TriggerGPSUpdate();
 }
 
 /*

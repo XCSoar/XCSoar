@@ -151,7 +151,6 @@ InfoBoxContentWind::PnlEditOnWindSpeed(DataFieldFloat &Sender) {
     XCSoarInterface::SetSettingsComputer().ManualWind.norm =
       Units::ToSysWindSpeed(Sender.GetAsFixed());
     XCSoarInterface::SetSettingsComputer().ManualWindAvailable.update(XCSoarInterface::Basic().Time);
-    TriggerGPSUpdate();
   }
 }
 
@@ -166,7 +165,6 @@ InfoBoxContentWind::PnlEditOnWindDirection(DataFieldFloat &Sender) {
     XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
       Angle::degrees(Sender.GetAsFixed());
     XCSoarInterface::SetSettingsComputer().ManualWindAvailable.update(XCSoarInterface::Basic().Time);
-    TriggerGPSUpdate();
   }
 }
 
