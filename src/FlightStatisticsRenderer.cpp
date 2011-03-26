@@ -417,7 +417,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
     Units::FormatUserDistance(result_fai.distance, distance_fai, 100);
     _stprintf(sTmp,
               (Layout::landscape
-               ? _T("%s:\r\n  %s\r\n  %s (FAI)\r\n%s:\r\n  %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
+               ? _T("%s:\r\n%s\r\n%s (FAI)\r\n%s:\r\n%.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
                : _T("%s: %s\r\n%s (FAI)\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
               _("Distance"), distance, distance_fai,
               _("Score"), (double)result_classic.score, _("pts"),
@@ -440,7 +440,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
     Units::FormatUserDistance(result_triangle.distance, distance_fai, 100);
     _stprintf(sTmp,
               (Layout::landscape
-               ? _T("%s:\r\n  %s (Free)\r\n  %s (Triangle)\r\n%s:\r\n  %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
+               ? _T("%s:\r\n%s (Free)\r\n%s (Triangle)\r\n%s:\r\n%.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
                : _T("%s: %s (Free)\r\n%s (Triangle)\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
               _("Distance"), distance, distance_fai,
               _("Score"), (double)result_free.score, _("pts"),
@@ -467,7 +467,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
     Units::FormatUserDistance(result_olc.distance, distance, 100);
     _stprintf(sTmp,
               (Layout::landscape
-               ? _T("%s:\r\n  %s\r\n%s:\r\n  %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
+               ? _T("%s:\r\n%s\r\n%s:\r\n%.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
                : _T("%s: %s\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
               _("Distance"), distance,
               _("Score"), (double)result_olc.score, _("pts"),
