@@ -403,6 +403,9 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
                                      const DERIVED_INFO &derived) const
 {
   if (settings_computer.contest == OLC_Plus) {
+    const ContestResult& result =
+        derived.contest_stats.get_contest_result(2);
+
     const ContestResult& result_classic =
         derived.contest_stats.get_contest_result(0);
 
@@ -410,19 +413,19 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
         derived.contest_stats.get_contest_result(1);
 
     TCHAR timetext1[100];
-    Units::TimeToTextHHMMSigned(timetext1, (int)result_classic.time);
-    TCHAR distance[100];
-    Units::FormatUserDistance(result_classic.distance, distance, 100);
+    Units::TimeToTextHHMMSigned(timetext1, (int)result.time);
+    TCHAR distance_classic[100];
+    Units::FormatUserDistance(result_classic.distance, distance_classic, 100);
     TCHAR distance_fai[100];
     Units::FormatUserDistance(result_fai.distance, distance_fai, 100);
     _stprintf(sTmp,
               (Layout::landscape
                ? _T("%s:\r\n%s\r\n%s (FAI)\r\n%s:\r\n%.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")
                : _T("%s: %s\r\n%s (FAI)\r\n%s: %.1f %s\r\n%s: %s\r\n%s: %d %s\r\n")),
-              _("Distance"), distance, distance_fai,
-              _("Score"), (double)result_classic.score, _("pts"),
+              _("Distance"), distance_classic, distance_fai,
+              _("Score"), (double)result.score, _("pts"),
               _("Time"), timetext1,
-              _("Speed"), (int)Units::ToUserTaskSpeed(result_classic.speed),
+              _("Speed"), (int)Units::ToUserTaskSpeed(result.speed),
               Units::GetTaskSpeedName());
   } else if (settings_computer.contest == OLC_DHVXC ||
              settings_computer.contest == OLC_XContest) {
