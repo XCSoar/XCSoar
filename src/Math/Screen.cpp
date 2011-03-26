@@ -74,7 +74,7 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
  */
 void
 PolygonRotateShift(RasterPoint *poly, const int n, const int xs, const int ys,
-    Angle angle)
+                   Angle angle, const bool scale)
 {
   static Angle lastangle = Angle::native(-fixed_one);
   static int cost = 1024, sint = 0;
@@ -82,12 +82,17 @@ PolygonRotateShift(RasterPoint *poly, const int n, const int xs, const int ys,
 
   if (angle != lastangle) {
     lastangle = angle;
-    cost = Layout::FastScale(angle.ifastcosine());
-    sint = Layout::FastScale(angle.ifastsine());
+    if (scale) {
+      cost = Layout::FastScale(angle.ifastcosine());
+      sint = Layout::FastScale(angle.ifastsine());
+    } else {
+      cost = Layout::FastScale(angle.ifastcosine()/2);
+      sint = Layout::FastScale(angle.ifastsine()/2);
+    }
   }
 
-  const int xxs = (xs << 10) + 512;
-  const int yys = (ys << 10) + 512;
+  const int xxs = (xs << 10);
+  const int yys = (ys << 10);
   RasterPoint *p = poly;
   const RasterPoint *pe = poly + n;
 
