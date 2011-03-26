@@ -364,6 +364,7 @@ mode=Nav2
 type=key
 data=0
 event=ThermalAssistant
+event=Mode default
 label=Thermal Assistant
 location=9
 
