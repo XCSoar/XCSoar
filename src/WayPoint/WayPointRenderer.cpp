@@ -262,15 +262,23 @@ public:
       icon->draw(canvas, sc);
     }
 
-    int pWayPointLabelSelection = settings_map.WayPointLabelSelection;
-    if (pWayPointLabelSelection == wlsNoWayPoints)
+    // Determine whether to draw the waypoint label or not
+    switch (settings_map.WayPointLabelSelection) {
+    case wlsNoWayPoints:
       return;
-    if (!in_task && task_valid && !watchedWaypoint) {
-      if (pWayPointLabelSelection == wlsTaskWayPoints)
+
+    case wlsTaskWayPoints:
+      if (!in_task && task_valid && !watchedWaypoint)
         return;
-      if (pWayPointLabelSelection == wlsTaskAndLandableWayPoints &&
-          !way_point.is_landable())
+      break;
+
+    case wlsTaskAndLandableWayPoints:
+      if (!in_task && task_valid && !watchedWaypoint && !way_point.is_landable())
         return;
+      break;
+
+    default:
+      break;
     }
 
     TextInBoxMode_t text_mode;
