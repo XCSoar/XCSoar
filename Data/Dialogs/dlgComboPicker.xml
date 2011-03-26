@@ -7,6 +7,6 @@
 
   <Button Name="cmdHelp" Caption="Help" X="160" Y="-37" Width="70" Height="35" OnClick="OnHelpClicked"/>
 
-  <List Name="frmComboPopupList" X="1" Y="1" Width="-1" Height="-39" ItemHeight="18"/>
-  <Label Name="lblItemHelp" X="1" Y="-80" Height="41" Width="-1" Visible="0" Border="1"/>
+  <List Name="frmComboPopupList" X="1" Y="1" Width="-1" Height="-41" ItemHeight="18"/>
+  <Label Name="lblItemHelp" X="1" Y="-100" Height="60" Width="-1" Visible="0" Border="1"/>
 </Form>
