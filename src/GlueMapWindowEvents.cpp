@@ -205,8 +205,6 @@ GlueMapWindow::on_mouse_up(int x, int y)
       // change bearing without changing speed if direction change > 30
       // 20080815 JMW prevent dragging to stop glider
 
-      // JMW trigger recalcs immediately
-      TriggerGPSUpdate();
       return true;
     }
 
