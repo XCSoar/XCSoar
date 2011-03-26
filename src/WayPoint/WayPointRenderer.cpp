@@ -207,6 +207,27 @@ public:
     }
   }
 
+  const MaskedIcon&
+  GetWaypointIcon(const Waypoint &wp)
+  {
+    if (projection.GetMapScale() > fixed(4000))
+      return Graphics::SmallIcon;
+
+    switch (wp.Type) {
+    case wtMountainTop:
+      return Graphics::MountainTopIcon;
+    case wtBridge:
+      return Graphics::BridgeIcon;
+    case wtTunnel:
+      return Graphics::TunnelIcon;
+    case wtTower:
+      return Graphics::TowerIcon;
+    case wtPowerPlant:
+      return Graphics::PowerPlantIcon;
+    default:
+      return Graphics::TurnPointIcon;
+    }
+  }
 
   void
   DrawWaypoint(const Waypoint& way_point, bool in_task = false)
@@ -234,32 +255,7 @@ public:
                                            projection.GetScreenAngle());
     } else {
       // non landable turnpoint
-      const MaskedIcon *icon;
-      if (projection.GetMapScale() > fixed(4000))
-        icon = &Graphics::SmallIcon;
-      else {
-        switch (way_point.Type) {
-        case wtMountainTop:
-          icon = &Graphics::MountainTopIcon;
-          break;
-        case wtBridge:
-          icon = &Graphics::BridgeIcon;
-          break;
-        case wtTunnel:
-          icon = &Graphics::TunnelIcon;
-          break;
-        case wtTower:
-          icon = &Graphics::TowerIcon;
-          break;
-        case wtPowerPlant:
-          icon = &Graphics::PowerPlantIcon;
-          break;
-        default:
-          icon = &Graphics::TurnPointIcon;
-          break;
-        }
-      }
-      icon->draw(canvas, sc);
+      GetWaypointIcon(way_point).draw(canvas, sc);
     }
 
     // Determine whether to draw the waypoint label or not
