@@ -42,7 +42,7 @@ enum MapShiftBias_t {
   MAP_SHIFT_BIAS_TARGET
 };
 
-typedef enum {
+enum DisplayTextType_t {
   DISPLAYNAME = 0,
   OBSOLETE_DONT_USE_DISPLAYNUMBER,
   DISPLAYFIRSTFIVE,
@@ -50,7 +50,7 @@ typedef enum {
   DISPLAYFIRSTTHREE,
   OBSOLETE_DONT_USE_DISPLAYNAMEIFINTASK,
   DISPLAYUNTILSPACE
-} DisplayTextType_t;
+};
 
 enum WaypointArrivalHeightDisplay_t {
   WP_ARRIVAL_HEIGHT_NONE = 0,
@@ -59,19 +59,19 @@ enum WaypointArrivalHeightDisplay_t {
   WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN
 };
 
-typedef enum {
+enum WayPointLabelSelection_t {
   wlsAllWayPoints,
   wlsTaskAndLandableWayPoints,
   wlsTaskWayPoints,
   wlsNoWayPoints
-} WayPointLabelSelection_t;
+};
 
-typedef enum {
+enum DisplayMode_t{
   dmNone,
   dmCircling,
   dmCruise,
   dmFinalGlide
-} DisplayMode_t;
+};
 
 enum SnailType_t {
   stStandardVario,
@@ -86,11 +86,11 @@ enum SlopeShadingType_t {
   sstWind,
 };
 
-typedef enum {
+enum DisplayTrackBearing_t {
   dtbOff,
   dtbOn,
   dtbAuto
-} DisplayTrackBearing_t;
+};
 
 
 // user interface options
