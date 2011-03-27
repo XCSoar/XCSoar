@@ -36,6 +36,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "Logger/Logger.hpp"
 #include "Appearance.hpp"
+#include "Protection.hpp"
 
 #include "Form/TabBar.hpp"
 #include "Form/Panel.hpp"
@@ -126,7 +127,13 @@ dlgTaskManager::CommitTaskChanges()
   task_modified |= active_task->get_factory().CheckAddFinish();
 
   if (!active_task->task_size() || active_task->check_task()) {
-    active_task->check_duplicate_waypoints(way_points);
+
+    { // this must be done in thread lock because it potentially changes the
+      // waypoints database
+      ScopeSuspendAllThreads suspend;
+      active_task->check_duplicate_waypoints(way_points);
+    }
+
     protected_task_manager->task_commit(*active_task);
     protected_task_manager->task_save_default();
 

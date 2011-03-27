@@ -233,7 +233,11 @@ replace_in_task(const Waypoint &wp)
   std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
                                                       XCSoarInterface::SettingsComputer(),
                                                       glide_polar));
-  task->check_duplicate_waypoints(way_points);
+  { // this must be done in thread lock because it potentially changes the
+    // waypoints database
+    ScopeSuspendAllThreads suspend;
+    task->check_duplicate_waypoints(way_points);
+  }
 
   if (task->task_size()==0)
     return NOTASK;
@@ -502,7 +506,11 @@ remove_from_task(const Waypoint &wp)
   if (task->task_size()==0)
     return NOTASK;
 
-  task->check_duplicate_waypoints(way_points);
+  { // this must be done in thread lock because it potentially changes the
+    // waypoints database
+    ScopeSuspendAllThreads suspend;
+    task->check_duplicate_waypoints(way_points);
+  }
 
   bool modified = false;
   for (unsigned i = task->task_size(); i--;) {
