@@ -60,6 +60,7 @@ enum task_edit_result {
   SUCCESS,
   UNMODIFIED,
   INVALID,
+  NOTASK
 };
 
 static int page = 0;
@@ -234,6 +235,9 @@ replace_in_task(const Waypoint &wp)
                                                       glide_polar));
   task->check_duplicate_waypoints(way_points);
 
+  if (task->task_size()==0)
+    return NOTASK;
+
   unsigned i = task->getActiveIndex();
   if (i >= task->task_size())
     return UNMODIFIED;
@@ -258,7 +262,10 @@ OnReplaceClicked(gcc_unused WndButton &button)
     protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
     break;
-
+  case NOTASK:
+    MessageBoxX(_("No task defined."), _("Error"),
+                MB_OK | MB_ICONEXCLAMATION);
+    break;
   case UNMODIFIED:
     MessageBoxX(_("No active task point."), _("Replace in task"),
                 MB_OK | MB_ICONINFORMATION);
@@ -298,6 +305,9 @@ insert_in_task(const Waypoint &wp)
   std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
                                                       XCSoarInterface::SettingsComputer(),
                                                       glide_polar));
+
+  if (task->task_size()==0)
+    return NOTASK;
 
   int i = task->getActiveIndex();
   /* skip all start points */
@@ -341,6 +351,10 @@ OnInsertInTaskClicked(gcc_unused WndButton &button)
     wf->SetModalResult(mrOK);
     break;
 
+  case NOTASK:
+    MessageBoxX(_("No task defined."), _("Error"),
+                MB_OK | MB_ICONEXCLAMATION);
+    break;
   case UNMODIFIED:
   case INVALID:
     MessageBoxX(_("Task would not be valid after the change."), _("Error"),
@@ -359,6 +373,9 @@ append_to_task(const Waypoint &wp)
   std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
                                                       XCSoarInterface::SettingsComputer(),
                                                       glide_polar));
+
+  if (task->task_size()==0)
+    return NOTASK;
 
   int i = task->task_size() - 1;
   /* skip all finish points */
@@ -438,7 +455,7 @@ OnGotoAndClearTaskClicked(gcc_unused WndButton &button)
     protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
     break;
-
+  case NOTASK:
   case UNMODIFIED:
   case INVALID:
     MessageBoxX(_("Unknown error creating task."), _("Error"),
@@ -459,7 +476,10 @@ OnAppendInTaskClicked(gcc_unused WndButton &button)
     protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
     break;
-
+  case NOTASK:
+    MessageBoxX(_("No task defined."), _("Error"),
+                MB_OK | MB_ICONEXCLAMATION);
+    break;
   case UNMODIFIED:
   case INVALID:
     MessageBoxX(_("Task would not be valid after the change."), _("Error"),
@@ -478,6 +498,10 @@ remove_from_task(const Waypoint &wp)
   std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
                                                       XCSoarInterface::SettingsComputer(),
                                                       glide_polar));
+
+  if (task->task_size()==0)
+    return NOTASK;
+
   task->check_duplicate_waypoints(way_points);
 
   bool modified = false;
@@ -512,7 +536,10 @@ OnRemoveFromTaskClicked(gcc_unused WndButton &button)
     protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
     break;
-
+  case NOTASK:
+    MessageBoxX(_("No task defined."), _("Error"),
+                MB_OK | MB_ICONEXCLAMATION);
+    break;
   case UNMODIFIED:
     MessageBoxX(_("Waypoint not in task."), _("Remove from task"),
                 MB_OK | MB_ICONINFORMATION);
