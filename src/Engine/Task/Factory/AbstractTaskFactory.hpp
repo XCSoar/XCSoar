@@ -634,6 +634,15 @@ LegalPointVector getValidFinishTypes() const;
   TaskValidationErrorVector getValidationErrors();
 
 
+  /** tests whether three legs comprise a valid FAI Triangle
+   * based on FAI Rules
+   * @param d1 leg1 distance
+   * @param d2 leg2 distance
+   * @param d3 leg3 distance
+   * @return.  True if triangle is valid FAI Triangle
+   */
+  static gcc_pure
+  bool TestFAITriangle(const fixed d1, const fixed d2, const fixed d3);
   /**
    *
    * @return True if task is a valid FAI triangle
