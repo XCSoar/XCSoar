@@ -221,4 +221,6 @@ extern const TCHAR szProfileRoutePlannerUseCeiling[];
 extern const TCHAR szProfileTurningReach[];
 extern const TCHAR szProfileReachPolarMode[];
 
+extern const TCHAR szProfileAircraftSymbol[];
+
 #endif

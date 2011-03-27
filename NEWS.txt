@@ -10,6 +10,7 @@ Version 6.1 - not yet released
   - change the display orientation without restarting XCSoar
   - tabbed Task dialog with icons or text on tabs per settings
   - new InfoBox configuration dialog
+  - configurable aircraft symbol
 * route planning
   - new optional minimum-time route planning around airspace and terrain.  
     - allows avoidance or terrain, airspace or both

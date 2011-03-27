@@ -474,6 +474,9 @@ Profile::Use()
 
   Get(szProfileDisableAutoLogger,
       settings_computer.DisableAutoLogger);
+
+  if (Get(szProfileAircraftSymbol, Temp))
+    Appearance.AircraftSymbol = (AircraftSymbol_t)Temp;
 }
 
 void

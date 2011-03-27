@@ -477,7 +477,7 @@ Graphics::DrawAircraft(Canvas &canvas,
                        const Angle angle,
                        const RasterPoint aircraft_pos)
 {
-  RasterPoint Aircraft[] = {
+  static const RasterPoint Aircraft_detailed[] = {
     {0, -10},
     {-2, -7},
     {-2, -2},
@@ -489,45 +489,97 @@ Graphics::DrawAircraft(Canvas &canvas,
     {-3, 15},
     {-5, 17},
     {-5, 18},
-    {5, 18},
-    {5, 17},
-    {3, 15},
-    {1, 15},
-    {1, 3},
-    {32, 2},
-    {32, -1},
-    {16, -2},
-    {2, -2},
-    {2, -7},
-    {0, -10},
+    {0, 18},
   };
 
-  int n_aircraft = sizeof(Aircraft) / sizeof(Aircraft[0]);
-  PolygonRotateShift(Aircraft, n_aircraft, aircraft_pos.x, aircraft_pos.y, angle, false);
+  static const RasterPoint Aircraft_simple[] = {
+    {0, -10},
+    {-2, -10},
+    {-2, -2},
+    {-32, -2},
+    {-32, 2},
+    {-2, 2},
+    {-2, 14},
+    {-6, 14},
+    {-6, 18},
+    {0, 18},
+  };
 
+  static const RasterPoint Canopy_detailed[] = {
+    {0, -7},
+    {-1, -7},
+    {-1, -2},
+    {0, -1},
+  };
+
+  int n_canopy;
+  int n_aircraft;
+
+  const RasterPoint* Aircraft = NULL;
+  const RasterPoint* Canopy = NULL;
+
+  switch (Appearance.AircraftSymbol) {
+  case acDetailed:
+    n_aircraft = sizeof(Aircraft_detailed) / sizeof(Aircraft_detailed[0]);
+    n_canopy = sizeof(Canopy_detailed) / sizeof(Canopy_detailed[0]);
+    Aircraft = Aircraft_detailed;
+    Canopy = Canopy_detailed;
+    break;
+  case acSimple:
+    n_aircraft = sizeof(Aircraft_simple) / sizeof(Aircraft_simple[0]);
+    n_canopy = 0;
+    Aircraft = Aircraft_simple;
+    Canopy = NULL;
+    break;
+  }
+
+  RasterPoint tmp_left[20];
+  RasterPoint tmp_right[20];
+
+  /* -------------------------------------------------------------- */
+
+  std::copy(Aircraft, Aircraft+n_aircraft, tmp_left);
+  std::copy(Aircraft, Aircraft+n_aircraft, tmp_right);
+  for (int i=0; i< n_aircraft; ++i) {
+    tmp_right[i].x = -tmp_right[i].x;
+  }
+  PolygonRotateShift(tmp_left, n_aircraft, aircraft_pos.x, aircraft_pos.y, angle, false);
+  PolygonRotateShift(tmp_right, n_aircraft, aircraft_pos.x, aircraft_pos.y, angle, false);
+
+  /*
   if (Layout::Scale(1)==1) {
     canvas.black_brush();
     canvas.select(hpBearing);
-    canvas.polygon(Aircraft, n_aircraft);
+    canvas.polygon(tmp_left, n_aircraft);
+    canvas.polygon(tmp_right, n_aircraft);
     canvas.null_pen();
   } else {
     canvas.select(hpAircraft);
   }
+  */
   canvas.white_brush();
-  canvas.polygon(Aircraft, n_aircraft);
+  canvas.null_pen();
+  canvas.polygon(tmp_left, n_aircraft);
+  canvas.polygon(tmp_right, n_aircraft);
+  canvas.select(hpAircraft);
+  canvas.polyline(tmp_left, n_aircraft);
+  canvas.polyline(tmp_right, n_aircraft);
 
-  RasterPoint Canopy[] = {
-    {-1, -7},
-    {-1, -2},
-    {0, -1},
-    {0, -1},
-    {1, -2},
-    {1, -7},
-  };
-  int n_canopy = sizeof(Canopy) / sizeof(Canopy[0]);
-  PolygonRotateShift(Canopy, n_canopy, aircraft_pos.x, aircraft_pos.y, angle, false);
+  if (n_canopy>0) {
+    std::copy(Canopy, Canopy+n_canopy, tmp_left);
+    std::copy(Canopy, Canopy+n_canopy, tmp_right);
+    for (int i=0; i< n_canopy; ++i) {
+      tmp_right[i].x = -tmp_right[i].x;
+    }
+    PolygonRotateShift(tmp_left, n_canopy, aircraft_pos.x, aircraft_pos.y, angle, false);
+    PolygonRotateShift(tmp_right, n_canopy, aircraft_pos.x, aircraft_pos.y, angle, false);
 
-  canvas.select(hpCanopy);
-  canvas.select(hbCanopy);
-  canvas.polygon(Canopy, n_canopy);
+    canvas.null_pen();
+    canvas.select(hbCanopy);
+    canvas.polygon(tmp_left, n_canopy);
+    canvas.polygon(tmp_right, n_canopy);
+    canvas.select(hpCanopy);
+    canvas.polyline(tmp_left, n_canopy);
+    canvas.polyline(tmp_right, n_canopy);
+  }
 }

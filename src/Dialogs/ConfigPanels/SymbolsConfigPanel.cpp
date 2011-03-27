@@ -112,6 +112,16 @@ SymbolsConfigPanel::Init(WndForm *_wf)
 
   LoadFormProperty(*wf, _T("prpEnableFLARMMap"),
                    XCSoarInterface::SettingsMap().EnableFLARMMap);
+
+  wp = (WndProperty*)wf->FindByName(_T("prpAircraftSymbol"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Simple"));
+    dfe->addEnumText(_("Detailed"));
+    dfe->Set(Appearance.AircraftSymbol);
+    wp->RefreshDisplay();
+  }
 }
 
 
@@ -171,6 +181,15 @@ SymbolsConfigPanel::Save()
   changed |= SaveFormProperty(*wf, _T("prpEnableFLARMMap"),
                               szProfileEnableFLARMMap,
                               XCSoarInterface::SetSettingsMap().EnableFLARMMap);
+
+  wp = (WndProperty*)wf->FindByName(_T("prpAircraftSymbol"));
+  if (wp) {
+    if (Appearance.AircraftSymbol != (AircraftSymbol_t)wp->GetDataField()->GetAsInteger()) {
+      Appearance.AircraftSymbol = (AircraftSymbol_t)wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileAircraftSymbol, (int)Appearance.AircraftSymbol);
+      changed = true;
+    }
+  }
 
   return changed;
 }

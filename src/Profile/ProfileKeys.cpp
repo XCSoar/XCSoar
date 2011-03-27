@@ -293,3 +293,5 @@ const TCHAR szProfileRoutePlannerAllowClimb[] = _T("RoutePlannerAllowClimb");
 const TCHAR szProfileRoutePlannerUseCeiling[] = _T("RoutePlannerUseCeiling");
 const TCHAR szProfileTurningReach[] = _T("TurningReach");
 const TCHAR szProfileReachPolarMode[] = _T("ReachPolarMode");
+
+const TCHAR szProfileAircraftSymbol[] = _T("AircraftSymbol");

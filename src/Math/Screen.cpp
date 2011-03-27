@@ -64,6 +64,15 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
   }
 }
 
+static int roundshift(int x) {
+  if (x>0) {
+    x+= 512;
+  } else if (x<0) {
+    x-= 512;
+  }
+  return x >> 10;
+}
+
 /**
  * Shifts and rotates the given polygon and also sizes it via FastScale()
  * @param poly Points specifying the polygon
@@ -91,16 +100,14 @@ PolygonRotateShift(RasterPoint *poly, const int n, const int xs, const int ys,
     }
   }
 
-  const int xxs = (xs << 10);
-  const int yys = (ys << 10);
   RasterPoint *p = poly;
   const RasterPoint *pe = poly + n;
 
   while (p < pe) {
     int x = p->x;
     int y = p->y;
-    p->x = (x * cost - y * sint + xxs) >> 10;
-    p->y = (y * cost + x * sint + yys) >> 10;
+    p->x = roundshift(x * cost - y * sint ) + xs;
+    p->y = roundshift(y * cost + x * sint ) + ys;
     p++;
   }
 }

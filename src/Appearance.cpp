@@ -35,5 +35,6 @@ struct Appearance Appearance = {
   false,
   true,
   100,
-  false
+  false,
+  acDetailed,
 };

@@ -60,6 +60,11 @@ typedef enum {
   apIbTab
 } InfoBoxBorderAppearance_t;
 
+typedef enum {
+  acSimple = 0,
+  acDetailed,
+} AircraftSymbol_t;
+
 struct Appearance {
   IndFinalGlide_t IndFinalGlide;
   IndLandable_t IndLandable;
@@ -73,6 +78,7 @@ struct Appearance {
   bool UseSWLandablesRendering;
   int LandableRenderingScale;
   bool ScaleRunwayLength;
+  AircraftSymbol_t AircraftSymbol;
 };
 
 extern struct Appearance Appearance;

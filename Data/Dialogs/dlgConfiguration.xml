@@ -216,6 +216,12 @@
         Help="This enables the display of FLARM traffic on the map window.&#10;[Off] FLARM map display disabled&#10;[ON/Fixed] FLARM map display enabled with fixed scale.&#10;[ON/Scaled] FLARM map display enabled and auto scaled.&#10;When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.">
         <DataField DataType="boolean"/>
       </Edit>
+
+      <Edit Name="prpAircraftSymbol" Caption="Aircraft symbol*" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="Sets the symbol used for the aircraft. &#10;[Simple] Simplified line graphics. &#10;[Detailed] Rendered aircraft graphics.">
+        <DataField DataType="enum" />
+      </Edit>
+
     </Panel>
   
     <Panel Name="frmTerrain">
