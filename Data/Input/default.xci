@@ -580,9 +580,9 @@ location=2
 mode=Display2
 type=key
 data=6
-event=Pan show
-event=Pan supertoggle
-label=Pan\nOn
+event=DeclutterLabels show
+event=DeclutterLabels toggle
+label=Labels\n$(MapLabelsToggleActionName)
 location=5
 
 mode=Display2
@@ -610,9 +610,9 @@ location=8
 mode=Display2
 type=key
 data=0
-event=DeclutterLabels show
-event=DeclutterLabels toggle
-label=Labels\n$(MapLabelsToggleActionName)
+event=Pan show
+event=Pan supertoggle
+label=Pan\nOn
 location=9
 
 # -------------
