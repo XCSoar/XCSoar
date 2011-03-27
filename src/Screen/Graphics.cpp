@@ -66,6 +66,8 @@ MaskedIcon Graphics::hCruise, Graphics::hClimb,
 MaskedIcon Graphics::hGPSStatus1, Graphics::hGPSStatus2;
 
 Pen Graphics::hpAircraft;
+Pen Graphics::hpAircraftSimple1;
+Pen Graphics::hpAircraftSimple2;
 Pen Graphics::hpCanopy;
 Pen Graphics::hpWind;
 Pen Graphics::hpBearing;
@@ -286,6 +288,8 @@ Graphics::Initialise()
   PowerPlantIcon.load_big(IDB_POWER_PLANT, IDB_POWER_PLANT_HD);
 
   hpAircraft.set(1, Color::DARK_GRAY);
+  hpAircraftSimple1.set(IBLSCALE(2)+2, Color::BLACK);
+  hpAircraftSimple2.set(IBLSCALE(2), Color::WHITE);
   hpCanopy.set(1, Color(0x00,0x90,0x90));
   hbCanopy.set(Color(0x00,0x90,0x90));
 
@@ -494,15 +498,11 @@ Graphics::DrawAircraft(Canvas &canvas,
 
   static const RasterPoint Aircraft_simple[] = {
     {0, -10},
-    {-2, -10},
-    {-2, -2},
-    {-32, -2},
-    {-32, 2},
-    {-2, 2},
-    {-2, 14},
+    {0,  14},
+    {-32, 0},
+    {32, 0},
     {-6, 14},
-    {-6, 18},
-    {0, 18},
+    {6, 14},
   };
 
   static const RasterPoint Canopy_detailed[] = {
@@ -543,27 +543,32 @@ Graphics::DrawAircraft(Canvas &canvas,
   for (int i=0; i< n_aircraft; ++i) {
     tmp_right[i].x = -tmp_right[i].x;
   }
-  PolygonRotateShift(tmp_left, n_aircraft, aircraft_pos.x, aircraft_pos.y, angle, false);
-  PolygonRotateShift(tmp_right, n_aircraft, aircraft_pos.x, aircraft_pos.y, angle, false);
 
-  /*
-  if (Layout::Scale(1)==1) {
-    canvas.black_brush();
-    canvas.select(hpBearing);
+  switch (Appearance.AircraftSymbol) {
+  case acDetailed:
+    PolygonRotateShift(tmp_left, n_aircraft, aircraft_pos.x, aircraft_pos.y, angle, false);
+    PolygonRotateShift(tmp_right, n_aircraft, aircraft_pos.x, aircraft_pos.y, angle, false);
+    canvas.white_brush();
+    canvas.null_pen();
     canvas.polygon(tmp_left, n_aircraft);
     canvas.polygon(tmp_right, n_aircraft);
-    canvas.null_pen();
-  } else {
     canvas.select(hpAircraft);
-  }
-  */
-  canvas.white_brush();
-  canvas.null_pen();
-  canvas.polygon(tmp_left, n_aircraft);
-  canvas.polygon(tmp_right, n_aircraft);
-  canvas.select(hpAircraft);
-  canvas.polyline(tmp_left, n_aircraft);
-  canvas.polyline(tmp_right, n_aircraft);
+    canvas.polyline(tmp_left, n_aircraft);
+    canvas.polyline(tmp_right, n_aircraft);
+    break;
+  case acSimple:
+    PolygonRotateShift(tmp_left, n_aircraft, aircraft_pos.x, aircraft_pos.y, angle, false);
+    canvas.hollow_brush();
+    canvas.select(hpAircraftSimple1);
+    for (int i=0; i< n_aircraft; i+= 2) {
+      canvas.polyline(tmp_left+i, 2);
+    }
+    canvas.select(hpAircraftSimple2);
+    for (int i=0; i< n_aircraft; i+= 2) {
+      canvas.polyline(tmp_left+i, 2);
+    }
+    break;
+  };
 
   if (n_canopy>0) {
     std::copy(Canopy, Canopy+n_canopy, tmp_left);
