@@ -712,8 +712,9 @@ InputEvents::ProcessMenuTimer()
       setMode(MODE_DEFAULT);
     }
   }
-  // refresh visible buttons
-  drawButtons(getModeID());
+  // refresh visible buttons if still visible
+  if ((current_mode != MODE_PAN) && (current_mode != MODE_DEFAULT))
+    drawButtons(getModeID());
 
   MenuTimeOut++;
 }
