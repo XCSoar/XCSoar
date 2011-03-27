@@ -14,7 +14,11 @@ SVG_ICON_LIST = \
 	winpilot_landable \
 	winpilot_marginal \
 	winpilot_reachable \
-	map_turnpoint
+	map_turnpoint \
+	mode_abort \
+	mode_climb \
+	mode_cruise \
+	mode_finalglide
 SVG_ICONS = $(patsubst %,$(GENERATED_DIR)/icons/%.png,$(SVG_ICON_LIST))
 
 SVG_FIGURES_SHARED = $(wildcard $(DOC)/manual/shared/figures/*.svg)
