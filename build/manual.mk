@@ -22,7 +22,7 @@ SVG_ICON_LIST = \
 	map_flag \
 	gps_acquiring \
 	gps_disconnected
-SVG_ICONS = $(patsubst %,$(GENERATED_DIR)/icons/%.png,$(SVG_ICON_LIST))
+SVG_ICONS = $(patsubst %,$(GENERATED_DIR)/icons/%.pdf,$(SVG_ICON_LIST))
 
 SVG_FIGURES_SHARED = $(wildcard $(DOC)/manual/shared/figures/*.svg)
 SVG_FIGURES = $(patsubst $(DOC)/manual/shared/figures/%.svg,$(GENERATED_DIR)/figures/%.pdf,$(SVG_FIGURES_SHARED))
@@ -60,8 +60,8 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-Handbuch.pdf: $(DOC)/manual/de/XCSoar-Handbuch.tex $
 	cd $(<D) && pdflatex $(TEX_FLAGS) -output-directory $(abspath $(@D)) $(<F)
 	cd $(<D) && pdflatex $(TEX_FLAGS) -output-directory $(abspath $(@D)) $(<F)
 
-$(SVG_ICONS): $(GENERATED_DIR)/icons/%.png: $(topdir)/Data/icons/%.svg | $(GENERATED_DIR)/icons/dirstamp
-	rsvg-convert -a -w 32 $< -o $@
+$(SVG_ICONS): $(GENERATED_DIR)/icons/%.pdf: $(topdir)/Data/icons/%.svg | $(GENERATED_DIR)/icons/dirstamp
+	rsvg-convert -a -f pdf -w 32 $< -o $@
 
 $(SVG_FIGURES): $(GENERATED_DIR)/figures/%.pdf: $(topdir)/doc/manual/shared/figures/%.svg | $(GENERATED_DIR)/figures/dirstamp
 	rsvg-convert -a -f pdf $< -o $@
