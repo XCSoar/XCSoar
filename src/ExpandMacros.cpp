@@ -36,6 +36,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Device/device.hpp"
+#include "Pages.hpp"
 
 #include <stdlib.h>
 
@@ -581,6 +582,12 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   CondReplaceInString(SettingsMap().EnableFLARMGauge != 0,
                       OutBuffer, _T("$(FlarmDispToggleActionName)"),
                       _("Off"), _("On"), Size);
+
+  if (_tcsstr(OutBuffer, _T("$(PageName)"))) {
+    TCHAR label[30];
+    Pages::get_current().MakeTitle(label, true);
+    ReplaceInString(OutBuffer, _T("$(PageName)"), label, Size);
+  }
 
   return invalid;
 }
