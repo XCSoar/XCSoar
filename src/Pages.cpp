@@ -79,6 +79,12 @@ Pages::Prev()
   Update();
 }
 
+const Pages::PageLayout& 
+Pages::get_current()
+{
+  assert(Current < MAX_PAGES);
+  return pages[Current];
+}
 
 void
 Pages::Open(unsigned page)
@@ -151,20 +157,33 @@ Pages::GetLayout(unsigned page)
 
 
 void
-Pages::PageLayout::MakeTitle(TCHAR* buffer) const
+Pages::PageLayout::MakeTitle(TCHAR* buffer, const bool concise) const
 {
   switch (topLayout) {
     case PageLayout::tlMap:
-      _tcscpy(buffer, _("Map (Full Screen)"));
+      if (concise)
+        _tcscpy(buffer, _("Info hide"));
+      else 
+        _tcscpy(buffer, _("Map (Full screen)"));
       break;
     case PageLayout::tlMapAndInfoBoxes:
       if (!infoBoxConfig.autoSwitch &&
           infoBoxConfig.panel < InfoBoxManagerConfig::MAX_INFOBOX_PANELS) {
-        _tcscpy(buffer, _("Map & InfoBoxes "));
-        _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
+        if (concise) {
+          _tcscpy(buffer, _("Info "));
+          _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
+        } else {
+          _tcscpy(buffer, _("Map and InfoBoxes "));
+          _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
+        }
       }
-      else
-        _tcscpy(buffer, _("Map & InfoBoxes (Auto)"));
+      else {
+        if (concise) {
+          _tcscpy(buffer, _("Info auto"));
+        } else {
+          _tcscpy(buffer, _("Map and InfoBoxes (Auto)"));
+        }
+      }
       break;
     default:
       _tcscpy(buffer, _("---"));

@@ -64,7 +64,7 @@ namespace Pages
     PageLayout(eTopLayout topLayout=tlEmpty, InfoBoxConfig infoBoxConfig=InfoBoxConfig()) :
       topLayout(topLayout), infoBoxConfig(infoBoxConfig) {}
 
-    void MakeTitle(TCHAR* str) const;
+    void MakeTitle(TCHAR* str, const bool concise=false) const;
 
     bool operator==(const PageLayout& pl) const {
       if (topLayout != pl.topLayout)
@@ -92,6 +92,12 @@ namespace Pages
    * Opens the previous page.
    */
   void Prev();
+
+  /**
+   * Retrieve current layout
+   */
+  const PageLayout& get_current();
+
   /**
    * Opens the given layout.
    * Attention! Internally the previous page is still selected.
