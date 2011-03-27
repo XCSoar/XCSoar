@@ -154,6 +154,13 @@ public:
                                   const fixed terrain_alt) const;
 
   /**
+   * Create a takeoff point or replaces previous.
+   * This modifies the waypoint database.
+   */
+  void add_takeoff_point(const GeoPoint& location,
+                         const fixed terrain_alt);
+
+  /**
    * Find first home waypoint
    *
    * @return Pointer to waypoint if found (or NULL if not)

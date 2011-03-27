@@ -470,3 +470,18 @@ Waypoints::generate_takeoff_point(const GeoPoint& location,
   to_point.Type = wtOutlanding;
   return to_point;
 }
+
+void 
+Waypoints::add_takeoff_point(const GeoPoint& location,
+                             const fixed terrain_alt)
+{
+  // remove old one first
+  const Waypoint *old_takeoff_point = lookup_name(_T("(takeoff)"));
+  if (old_takeoff_point != NULL) {
+    erase(*old_takeoff_point);
+  }
+  // now add new and update database
+  Waypoint new_waypoint = generate_takeoff_point(location, terrain_alt);
+  append(new_waypoint);
+  optimise();
+}
