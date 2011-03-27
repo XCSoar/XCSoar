@@ -38,6 +38,8 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "StringUtil.hpp"
 #include "UnitsFormatter.hpp"
+#include "Task/Tasks/OrderedTask.hpp"
+#include "Task/Factory/AbstractTaskFactory.hpp"
 
 #include <algorithm>
 #include <list>
@@ -46,8 +48,10 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-static GeoPoint g_location;
+class FAITrianglePointValidator;
 
+static GeoPoint g_location;
+static FAITrianglePointValidator *FAITriPtVali = NULL;
 static WndForm *wf = NULL;
 static WndListFrame *wWayPointList = NULL;
 static WndButton *wbName;
@@ -78,6 +82,8 @@ static const TCHAR *const TypeFilter[] = {
   _T("Turnpoint"), 
   _T("Start"), 
   _T("Finish"), 
+  _T("Left FAI Triangle"),
+  _T("Right FAI Triangle"),
   _T("File 1"), _T("File 2"),
   _T("Recently Used"),
   NULL
@@ -90,6 +96,8 @@ enum type_filter {
   tfTurnpoint,
   tfStart,
   tfFinish,
+  tfFAITriangleLeft,
+  tfFAITriangleRight,
   tfFile1,
   tfFile2,
   tfLastUsed,
@@ -231,6 +239,214 @@ PrepareData(void)
   }
 }
 
+/**
+ * Helper class to filter waypoints in list based on whether the filter is set
+ * to Right or Left FAI Triangle.
+ */
+class FAITrianglePointValidator
+{
+public:
+  FAITrianglePointValidator(OrderedTask *ordered_task,
+                            const unsigned ordered_task_index) :
+                            task(ordered_task),
+                            t_index(ordered_task_index),
+                            t_size(0),
+                            leg1(fixed_zero),
+                            leg2(fixed_zero),
+                            leg3(fixed_zero),
+                            minFAILeg(fixed(2000)),
+                            minFAIAngle(fixed(31.5)),
+                            maxFAIAngle(fixed(114)),
+                            FAITrianglePointInvalid(false)
+  {
+    PrepareFAITest(ordered_task, ordered_task_index);
+  }
+
+
+  bool
+  TestFAITriangle(const fixed d1, const fixed d2, const fixed d3)
+  {
+    if ((d1 < minFAILeg) || (d2 < minFAILeg) || (d3 < minFAILeg))
+      return false;
+
+    return AbstractTaskFactory::TestFAITriangle(d1, d2, d3);
+  }
+
+  /**
+   * Perform fast check to exclude point as from further consideration
+   * based on min/max possible values for any FAI triangle
+   * @param p0 point 1 of angle
+   * @param p1 point 2 of angle
+   * @param p2 point 3 of angle
+   * @param right.  = 1 if angle is for right triangle, -1 if left triangle.
+   * @returns False if angle from three points is out of possible range for
+   * an FAI triangle.
+   */
+  bool
+  isFAIAngle(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
+             const fixed right)
+  {
+    const Angle a01 = p0.bearing(p1);
+    const Angle a21 = p2.bearing(p1);
+    const fixed diff = (a01 - a21).as_delta().value_degrees();
+
+    if (positive(right))
+      return (diff > minFAIAngle) && (diff < maxFAIAngle);
+    else
+      return (diff < fixed(-1) * minFAIAngle) && (diff > fixed(-1)
+              * maxFAIAngle);
+  }
+
+  /** Test whether wp could be a point in an FAI triangle based on the other
+   * points in the task and the current ordered task index
+   * Tests angle ranges first to reduce more costly calculation of distances
+   * @param wp Point being tested
+   * @param right = 1 if triangle turns are to right, -1 if turns are to left
+   * @return True if point would be valid in an FAI Triangle
+   */
+  bool
+  isFAITrianglePoint(const Waypoint& wp, const fixed right)
+  {
+    if (FAITrianglePointInvalid)
+      return false;
+
+    if (!task)
+      return true;
+
+    if (t_size == 0)
+      return true;
+
+    const GeoPoint &p = wp.Location;
+    // replace start
+    if (t_index == 0) {
+      assert(t_size <= 4 && t_size > 0);
+
+      switch (t_size) {
+      case 1:
+        return true;
+
+      case 2:
+        return p.distance(task->get_tp(1)->get_location()) > minFAILeg;
+
+      default: // size == 3 or 4
+        if (!isFAIAngle(p, task->get_tp(1)->get_location(),
+                        task->get_tp(2)->get_location(), right))
+          return false;
+        if (t_size == 3) {
+          return TestFAITriangle(p.distance(task->get_tp(1)->get_location()),
+                                 leg2,
+                                 task->get_tp(2)->get_location().distance(p));
+        } else if (t_size == 4) {
+          return (wp == task->get_tp(3)->get_waypoint()) &&
+                 TestFAITriangle(p.distance(task->get_tp(1)->get_location()),
+                                 leg2,
+                                 leg3);
+        }
+      }
+    }
+    // append or replace point #1
+    if (t_index == 1) {
+      assert(t_size > 0);
+
+      if (t_size <= 2)
+        return p.distance(task->get_tp(0)->get_location()) > minFAILeg;
+
+      // size == 3 or 4
+      if (!isFAIAngle(task->get_tp(0)->get_location(),
+                      p,
+                      task->get_tp(2)->get_location(), right))
+        return false;
+
+      if (t_size == 3) {
+        return TestFAITriangle(p.distance(task->get_tp(0)->get_location()),
+                               p.distance(task->get_tp(2)->get_location()),
+                               task->get_tp(2)->get_location().
+                                  distance(task->get_tp(0)->get_location()));
+      } else if (t_size == 4) {
+        return TestFAITriangle(p.distance(task->get_tp(0)->get_location()),
+                               p.distance(task->get_tp(2)->get_location()),
+                               leg3);
+      }
+    }
+    // append or replace point #2
+    if (t_index == 2) {
+      assert(t_size >= 2);
+      if (!isFAIAngle(task->get_tp(0)->get_location(),
+                      task->get_tp(1)->get_location(),
+                      p, right))
+        return false;
+
+      if (t_size < 4) { // no finish point yet
+        return TestFAITriangle(leg1,
+                               p.distance(task->get_tp(1)->get_location()),
+                               p.distance(task->get_tp(0)->get_location()));
+
+      } else { // already finish point(#3) exists
+        return (task->get_tp(0)->get_waypoint() == task->get_tp(3)->get_waypoint()) &&
+                TestFAITriangle(leg1,
+                                p.distance(task->get_tp(1)->get_location()),
+                                p.distance(task->get_tp(0)->get_location()));
+      }
+    }
+    // append or replace finish
+    if (t_index == 3) {
+      assert (t_size == 3 || t_size == 4);
+      return (wp == task->get_tp(0)->get_waypoint()) &&
+              TestFAITriangle(leg1,
+                              leg2,
+                              p.distance(task->get_tp(2)->get_location()));
+    }
+    return true;
+  }
+
+private:
+
+  void
+  PrepareFAITest(OrderedTask *ordered_task, const unsigned ordered_task_index)
+  {
+    task = ordered_task;
+    t_index = ordered_task_index;
+
+    FAITrianglePointInvalid = false;
+
+    if (ordered_task) {
+      t_size = task->task_size();
+      leg1 = (t_size > 1) ? task->getTaskPoint(1)->
+              get_vector_planned().Distance : fixed_zero;
+      leg2 = (t_size > 2) ? task->getTaskPoint(2)->
+              get_vector_planned().Distance : fixed_zero;
+      leg3 = (t_size > 3) ? task->getTaskPoint(3)->
+              get_vector_planned().Distance : fixed_zero;
+    } else {
+      leg1 = leg2 = leg3 = fixed_zero;
+      t_size = 0;
+      t_index = 0;
+    }
+
+    if (t_size > 4)
+      FAITrianglePointInvalid = true;
+
+    if (t_index > 3)
+      FAITrianglePointInvalid = true;
+  }
+
+private:
+  OrderedTask *task;
+  unsigned t_index;
+  unsigned t_size;
+  fixed leg1;
+  fixed leg2;
+  fixed leg3;
+
+  /** min distance for any FAI Leg -- derived from circular FAI sector radius */
+  const fixed minFAILeg;
+  /** min angle allowable in a FAI Triangle 31.5 degrees */
+  const fixed minFAIAngle;
+  /** max angle allowable in a FAI Triangle 113.2 degrees */
+  const fixed maxFAIAngle;
+  bool FAITrianglePointInvalid;
+};
+
 class FilterWaypointVisitor:
   public WaypointVisitor,
   private WayPointFilterData
@@ -261,6 +477,12 @@ private:
 
     case tfFinish:
       return wp.is_finishpoint();
+
+    case tfFAITriangleLeft:
+      return FAITriPtVali->isFAITrianglePoint(wp, fixed(-1));
+
+    case tfFAITriangleRight:
+      return FAITriPtVali->isFAITrianglePoint(wp, fixed_one);
 
     case tfFile1:
       return wp.FileNum == 0;
@@ -658,7 +880,9 @@ dlgWayPointSelectAddToLastUsed(const Waypoint &wp)
 }
 
 const Waypoint*
-dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location)
+dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location,
+                  OrderedTask *ordered_task,
+                  const unsigned ordered_task_index)
 {
   wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
       _T("IDR_XML_WAYPOINTSELECT_L") : _T("IDR_XML_WAYPOINTSELECT"));
@@ -698,7 +922,10 @@ dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location)
   wpType = (WndProperty *)wf->FindByName(_T("prpFltType"));
 
   g_location = location;
+  FAITriPtVali = new FAITrianglePointValidator(ordered_task,
+                                               ordered_task_index);
   last_heading = CommonInterface::Calculated().Heading;
+
   PrepareData();
   UpdateList();
 
@@ -706,12 +933,14 @@ dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location)
 
   if (wf->ShowModal() != mrOK) {
     delete wf;
+    delete FAITriPtVali;
     return NULL;
   }
 
   unsigned ItemIndex = wWayPointList->GetCursorIndex();
 
   delete wf;
+  delete FAITriPtVali;
 
   const Waypoint* retval = NULL;
 

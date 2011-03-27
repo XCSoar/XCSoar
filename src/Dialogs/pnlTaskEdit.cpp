@@ -174,10 +174,11 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
         XCSoarInterface::SetSettingsComputer().ordered_defaults;
     const Waypoint* way_point =
       dlgWayPointSelect(wf->GetMainWindow(),
-                          ordered_task->task_size() > 0 ?
+                        ordered_task->task_size() > 0 ?
                           ordered_task->get_tp(ordered_task->
                               task_size() - 1)->get_location() :
-                          XCSoarInterface::Basic().Location);
+                          XCSoarInterface::Basic().Location,
+                        ordered_task, ItemIndex);
     if (!way_point)
       return;
 
