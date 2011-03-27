@@ -552,16 +552,18 @@ location=7
 mode=Display1
 type=key
 data=9
-event=ScreenModes cycle
-label=$(PageName)
+event=Mode default
+event=StatusMessage Dropped marker
+event=Logger note Mark
+event=MarkLocation
+label=Mark\nDrop
 location=8
 
 mode=Display1
 type=key
 data=0
-event=Pan show
-event=Pan supertoggle
-label=Pan\nOn
+event=ScreenModes cycle
+label=$(PageName)
 location=9
 
 # -------------
@@ -578,11 +580,9 @@ location=2
 mode=Display2
 type=key
 data=6
-event=Mode default
-event=StatusMessage Dropped marker
-event=Logger note Mark
-event=MarkLocation
-label=Mark\nDrop
+event=Pan show
+event=Pan supertoggle
+label=Pan\nOn
 location=5
 
 mode=Display2
@@ -614,7 +614,6 @@ event=DeclutterLabels show
 event=DeclutterLabels toggle
 label=Labels\n$(MapLabelsToggleActionName)
 location=9
-
 
 # -------------
 # mode=Config1
