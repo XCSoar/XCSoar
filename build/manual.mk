@@ -19,7 +19,9 @@ SVG_ICON_LIST = \
 	mode_climb \
 	mode_cruise \
 	mode_finalglide \
-	map_flag
+	map_flag \
+	gps_acquiring \
+	gps_disconnected
 SVG_ICONS = $(patsubst %,$(GENERATED_DIR)/icons/%.png,$(SVG_ICON_LIST))
 
 SVG_FIGURES_SHARED = $(wildcard $(DOC)/manual/shared/figures/*.svg)
