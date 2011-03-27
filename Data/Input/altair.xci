@@ -414,9 +414,8 @@ location=8
 mode=Display1
 type=key
 data=0
-event=ScreenModes togglefull
-event=Mode default
-label=Full Scrn\n$(FullScreenToggleActionName)
+event=ScreenModes cycle
+label=$(PageName)
 location=9
 
 # -------------
@@ -763,13 +762,6 @@ location=7
 mode=Info2
 type=key
 data=9
-event=ScreenModes toggleauxiliary
-label=Aux\nInfobox$(AuxInfoToggleActionName)
-location=8
-
-mode=Info2
-type=key
-data=0
 event=RepeatStatusMessage
 label=Message\nRepeat
-location=9
+location=8
