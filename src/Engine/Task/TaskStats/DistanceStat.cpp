@@ -38,19 +38,19 @@ DistanceStatComputer::DistanceStatComputer(DistanceStat &_data,
 void 
 DistanceStatComputer::calc_incremental_speed(const fixed dt)
 {  
-  if ((dt>=fixed_one) && positive(data.distance)) {
+  if ((dt+fixed_half>=fixed_one) && positive(data.distance)) {
     if (av_dist.update(data.distance)) {
       const fixed d_av = av_dist.average() / N_AV;
       av_dist.reset();
 
       fixed v_f;
-      for (unsigned i=0; i<(unsigned)(dt); ++i) {
+      for (unsigned i=0; i<(unsigned)(dt+fixed_half); ++i) {
         const fixed v = df.update(d_av);
         v_f = v_lpf.update(v);
       }
       data.speed_incremental = (is_positive? -v_f:v_f);
     }
-  } else {    
+  } else if (!positive(dt) || !positive(data.distance)) {    
     reset_incremental_speed();
   }
 }
