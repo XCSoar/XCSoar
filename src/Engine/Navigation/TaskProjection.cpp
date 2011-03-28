@@ -29,6 +29,7 @@
 #include "Math/Earth.hpp"
 
 #include <algorithm>
+#include <cassert>
 
 // scaling for flat earth integer representation, gives approximately 50m resolution
 #ifdef RADIANS
@@ -44,10 +45,16 @@ TaskProjection::reset(const GeoPoint &ref)
   location_min = ref;
   location_max = ref;
   location_mid = ref;
+
+#ifndef NDEBUG
+  initialised = true;
+#endif
 }
 
 void TaskProjection::scan_location(const GeoPoint &ref) 
 {
+  assert(initialised);
+
   location_min.Longitude = min(ref.Longitude, location_min.Longitude);
   location_max.Longitude = max(ref.Longitude, location_max.Longitude);
   location_min.Latitude = min(ref.Latitude, location_min.Latitude);
@@ -57,6 +64,8 @@ void TaskProjection::scan_location(const GeoPoint &ref)
 bool
 TaskProjection::update_fast()
 {
+  assert(initialised);
+
   GeoPoint old_loc = location_mid;
 
   location_mid.Longitude =
@@ -73,6 +82,8 @@ TaskProjection::update_fast()
 FlatPoint
 TaskProjection::fproject(const GeoPoint& tp) const
 {
+  assert(initialised);
+
   return FlatPoint((tp.Longitude - location_mid.Longitude)
                    .as_delta().value_native() * cos_midloc,
                    (tp.Latitude - location_mid.Latitude)
@@ -82,6 +93,8 @@ TaskProjection::fproject(const GeoPoint& tp) const
 GeoPoint 
 TaskProjection::funproject(const FlatPoint& fp) const
 {
+  assert(initialised);
+
   GeoPoint tp;
   tp.Longitude = (Angle::native(fp.x*r_cos_midloc)+location_mid.Longitude).as_delta();
   tp.Latitude = (Angle::native(fp.y*inv_scale)+location_mid.Latitude).as_delta();
@@ -91,6 +104,8 @@ TaskProjection::funproject(const FlatPoint& fp) const
 FlatGeoPoint 
 TaskProjection::project(const GeoPoint& tp) const
 {
+  assert(initialised);
+
   FlatPoint f = fproject(tp);
   FlatGeoPoint fp;
   fp.Longitude = (int)(f.x + fixed_half);
@@ -101,6 +116,8 @@ TaskProjection::project(const GeoPoint& tp) const
 GeoPoint 
 TaskProjection::unproject(const FlatGeoPoint& fp) const
 {
+  assert(initialised);
+
   GeoPoint tp;
   tp.Longitude = Angle::native(fixed(fp.Longitude)*r_cos_midloc) + location_mid.Longitude;
   tp.Latitude = Angle::native(fixed(fp.Latitude)*inv_scale) + location_mid.Latitude;
@@ -110,6 +127,8 @@ TaskProjection::unproject(const FlatGeoPoint& fp) const
 fixed
 TaskProjection::fproject_range(const GeoPoint &tp, const fixed range) const
 {
+  assert(initialised);
+
   GeoPoint fr = ::FindLatitudeLongitude(tp, Angle::native(fixed_zero), range);
   FlatPoint f = fproject(fr);
   FlatPoint p = fproject(tp);
@@ -119,12 +138,16 @@ TaskProjection::fproject_range(const GeoPoint &tp, const fixed range) const
 unsigned
 TaskProjection::project_range(const GeoPoint &tp, const fixed range) const
 {
+  assert(initialised);
+
   return (int)(fproject_range(tp, range) + fixed_half);
 }
 
 fixed
 TaskProjection::ApproxRadius() const
 {
+  assert(initialised);
+
   return max(location_mid.distance(location_max),
              location_mid.distance(location_min));
 }
@@ -132,6 +155,8 @@ TaskProjection::ApproxRadius() const
 GeoBounds
 TaskProjection::unproject(const FlatBoundingBox& bb) const
 {
+  assert(initialised);
+
   return GeoBounds (unproject(FlatGeoPoint(bb.bb_ll.Longitude, bb.bb_ur.Latitude)),
                     unproject(FlatGeoPoint(bb.bb_ur.Longitude, bb.bb_ll.Latitude)));
 }
@@ -139,6 +164,8 @@ TaskProjection::unproject(const FlatBoundingBox& bb) const
 FlatBoundingBox
 TaskProjection::project(const GeoBounds& bb) const
 {
+  assert(initialised);
+
   FlatBoundingBox fb(project(GeoPoint(bb.west, bb.south)),
                      project(GeoPoint(bb.east, bb.north)));
   fb.expand(); // prevent rounding

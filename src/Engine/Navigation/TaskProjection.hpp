@@ -53,7 +53,18 @@ class TaskProjection {
   /**< Approximate scale (m) of grid spacing at center */
   fixed approx_scale;
 
+#ifndef NDEBUG
+  /**
+   * Was this object initialised by reset()?  Used in assertions.
+   */
+  bool initialised;
+#endif
+
 public:
+#ifndef NDEBUG
+  TaskProjection():initialised(false) {}
+#endif
+
   /**
    * Reset search bounds
    *
