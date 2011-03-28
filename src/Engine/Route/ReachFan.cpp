@@ -383,11 +383,12 @@ ReachFan::find_positive_arrival(const AGeoPoint dest,
                                 const RoutePolars &rpolars,
                                 short& arrival_height) const
 {
-  const FlatGeoPoint d (task_proj.project(dest));
   if (dest.altitude>= root.get_height()) {
     arrival_height = -1;
     return true;
   }
+
+  const FlatGeoPoint d (task_proj.project(dest));
   arrival_height = dest.altitude-1;
   ReachFanParms parms(rpolars, task_proj, terrain_base);
   root.find_positive_arrival(d, parms, arrival_height);
