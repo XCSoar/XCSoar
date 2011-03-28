@@ -275,56 +275,6 @@ DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP
 }
 
 /**
- * Sets the system time to GPS time if not yet done and
- * defined in settings
- */
-void
-DeviceBlackboard::SetSystemTime() {
-  // TODO JMW: this should be done outside the parser..
-  if (is_simulator())
-    return;
-
-#ifdef WIN32
-  NMEA_INFO &basic = SetBasic();
-  // Altair doesn't have a battery-backed up realtime clock,
-  // so as soon as we get a fix for the first time, set the
-  // system clock to the GPS time.
-  static bool sysTimeInitialised = false;
-
-  if (basic.Connected && SettingsMap().SetSystemTimeFromGPS
-      && !sysTimeInitialised) {
-    SYSTEMTIME sysTime;
-    ::GetSystemTime(&sysTime);
-
-    sysTime.wYear = (unsigned short)basic.DateTime.year;
-    sysTime.wMonth = (unsigned short)basic.DateTime.month;
-    sysTime.wDay = (unsigned short)basic.DateTime.day;
-    sysTime.wHour = (unsigned short)basic.DateTime.hour;
-    sysTime.wMinute = (unsigned short)basic.DateTime.minute;
-    sysTime.wSecond = (unsigned short)basic.DateTime.second;
-    sysTime.wMilliseconds = 0;
-    sysTimeInitialised = (::SetSystemTime(&sysTime)==true);
-
-#if defined(_WIN32_WCE) && defined(GNAV)
-    TIME_ZONE_INFORMATION tzi;
-    tzi.Bias = -SettingsComputer().UTCOffset/60;
-    _tcscpy(tzi.StandardName,TEXT("Altair"));
-    tzi.StandardDate.wMonth= 0; // disable daylight savings
-    tzi.StandardBias = 0;
-    _tcscpy(tzi.DaylightName,TEXT("Altair"));
-    tzi.DaylightDate.wMonth= 0; // disable daylight savings
-    tzi.DaylightBias = 0;
-
-    SetTimeZoneInformation(&tzi);
-#endif
-    sysTimeInitialised =true;
-  }
-#else
-  // XXX
-#endif
-}
-
-/**
  * Tries to find a name for every current traffic id
  */
 void
@@ -376,8 +326,6 @@ DeviceBlackboard::tick()
 
   // lookup known traffic
   FLARM_ScanTraffic();
-  // set system time if necessary
-  SetSystemTime();
 
   // calculate fast data to complete aircraft state
   NavAltitude();

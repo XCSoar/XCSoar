@@ -101,7 +101,6 @@ public:
 private:
 // moved from GlideComputerAirData
   void FLARM_ScanTraffic();
-  void SetSystemTime();
   void NavAltitude();
   void Heading();
   void Dynamics();
