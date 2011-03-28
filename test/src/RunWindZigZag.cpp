@@ -21,11 +21,13 @@ Copyright_License {
 }
 */
 
+#include "NMEA/Info.hpp"
+#include "NMEA/Derived.hpp"
+#include "SettingsComputer.hpp"
 #include "Device/NullPort.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
-#include "Device/Descriptor.hpp"
 #include "Device/device.hpp"
 #include "Device/Geoid.h"
 #include "Engine/Navigation/GeoPoint.hpp"
@@ -33,24 +35,20 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
 #include "Thread/Trigger.hpp"
-#include "DeviceBlackboard.hpp"
+#include "BasicComputer.hpp"
 #include "OS/PathName.hpp"
 #include "Protection.hpp"
 #include "Wind/WindZigZag.hpp"
 
 #include <stdio.h>
 
+const struct DeviceRegister *driver;
+
 Waypoints way_points;
-
-DeviceBlackboard device_blackboard;
-
-static DeviceDescriptor device;
 
 /*
  * Fake Protection.cpp
  */
-
-Mutex mutexBlackboard;
 
 void TriggerGPSUpdate() {}
 void TriggerVarioUpdate() {}
@@ -62,13 +60,13 @@ void TriggerVarioUpdate() {}
 bool
 devHasBaroSource()
 {
-  return device.IsBaroSource();
+  return (driver->Flags & drfBaroAlt) != 0;
 }
 
 bool
 HaveCondorDevice()
 {
-  return device.IsCondor();
+  return _tcscmp(driver->Name, _T("Condor")) == 0;
 }
 
 /*
@@ -98,23 +96,8 @@ InputEvents::processNmea(unsigned key)
 }
 
 /*
- * Fake Settings*Blackboard.cpp
- */
-
-SettingsComputerBlackboard::SettingsComputerBlackboard() {}
-
-/*
  * The actual code.
  */
-
-void
-DeviceBlackboard::tick()
-{
-  if (!Basic().acceleration.Available)
-    SetBasic().acceleration.Gload = fixed_one;
-
-  SetCalculated().flight.flying_state_moving(Basic().Time);
-}
 
 int main(int argc, char **argv)
 {
@@ -137,13 +120,19 @@ int main(int argc, char **argv)
   }
 
   NullPort port;
+  Device *device = driver->CreateOnPort != NULL
+    ? driver->CreateOnPort(&port)
+    : NULL;
 
-  if (!device.Open(&port, driver)) {
-    fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
-    return 1;
-  }
+  NMEAParser parser;
 
-  device.enable_baro = true;
+  NMEA_INFO data, last;
+  data.reset();
+
+  static DERIVED_INFO calculated;
+  static SETTINGS_COMPUTER settings_computer;
+
+  BasicComputer computer;
 
   printf("# time quality wind_bearing (deg) wind_speed (m/s) grndspeed (m/s) tas (m/s) bearing (deg)\n");
   char buffer[1024];
@@ -152,20 +141,25 @@ int main(int argc, char **argv)
   Angle bearing = Angle::native(fixed(0));
 
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-    device.LineReceived(buffer);
+    last = data;
 
-    device_blackboard.tick();
+    TrimRight(buffer);
 
-    int quality = WindZigZagUpdate(device_blackboard.Basic(),
-                                   device_blackboard.Calculated(),
+    if (device == NULL || !device->ParseNMEA(buffer, &data, true))
+      parser.ParseNMEAString_Internal(buffer, &data);
+
+    computer.Compute(data, last, calculated, settings_computer);
+    calculated.flight.flying_state_moving(data.Time);
+
+    int quality = WindZigZagUpdate(data, calculated,
                                    speed, bearing);
     if (quality > 0)
-      printf("%d %d %d %g %g %g %d\n", (int)device_blackboard.Basic().Time, quality,
+      printf("%d %d %d %g %g %g %d\n", (int)data.Time, quality,
              (int)bearing.value_degrees(),
              (double)speed,
-             (double)device_blackboard.Basic().GroundSpeed,
-             (double)device_blackboard.Basic().TrueAirspeed,
-             (int)device_blackboard.Basic().TrackBearing.value_degrees());
+             (double)data.GroundSpeed,
+             (double)data.TrueAirspeed,
+             (int)data.TrackBearing.value_degrees());
   }
 }
 
