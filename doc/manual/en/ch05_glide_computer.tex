@@ -7,7 +7,6 @@ reading for competition pilots as well as pilots engaging in casual
 cross-country touring.
 
 \section{Flight modes} 
-
 XCSoar automatically detects the difference between thermal (circling)
 flight and cruising flight. After about 30 seconds of circling flight
 the software will switch from cruise to climb mode. After about 30
@@ -16,21 +15,7 @@ cruise mode.
 
 The cruise modes are further divided into final glide and normal
 cruise.  Final glide is active when the last waypoint in the task is
-active, or when the task is aborted.
-
-\begin{description}
-\item[Cruise]   The glider is not circling and there is either no task
-  active, or the task waypoint is not the finish point.
-\item[Circling]  The glider is circling (though it may not be climbing).
-\item[Final glide]  The glider is not circling and the active waypoint is the
- final one in the task, or the gliders height is above the final glide path.
-\end{description}
-
-The specific computations performed by XCSoar are of course dependent
-on this flight mode.  The display changes according to each mode, principally,
-the InfoBoxes may be set up differently for each mode; secondly there
-is a facility to automatically change zoom between circling and other
-flight modes (this is called `circling zoom').
+active, or when the task is in abort mode.
 
 Switching between the different flight modes is automatic.  Circling
 is enabled when the glider turns (typically three quarters of a turn).
@@ -40,7 +25,29 @@ input (e.g.\ from a pilot-operated switch).
 A small symbol is drawn on the lower right corner of the map area to
 indicate which flight mode the computer is in.
 
-\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/symbology.png}
+\begin{tabular}{c c c c}%{c c c c}
+\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/mode_cruise.pdf} &
+\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/mode_climb.pdf} &
+\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/mode_finalglide.pdf} &
+\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/mode_abort.pdf}\\
+(a) & (b) & (c) & (d)
+\end{tabular}
+
+\begin{description}
+\item[Cruise (a)]   The glider is not circling and there is either no task
+  active, or the task waypoint is not the finish point.
+\item[Circling (b)]  The glider is circling (though it may not be climbing).
+\item[Final glide (c)]  The glider is not circling and the active waypoint is the
+ final one in the task.
+\item[Abort (d)]  This manually-triggered mode indicates the immediate landing
+options to the user.(see Section~\ref{sec:abort-resume-task})
+\end{description}
+
+The specific computations performed by XCSoar are of course dependent
+on this flight mode.  The display changes in each mode, principally,
+the InfoBoxes may be set up differently for each mode; secondly there
+is a facility to automatically change zoom between circling and other
+flight modes (this is called `circling zoom').
 
 In addition to these display modes, an auxiliary set of InfoBoxes may
 be displayed in any flight mode.  This is useful if the pilot has
@@ -208,7 +215,7 @@ according to the continuously changing Dolphin speed value.
 
 \begin{maxipage}
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/blockmc.pdf}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/figure_speed_to_fly.pdf}
 \end{center}
 \end{maxipage}
 
@@ -288,7 +295,7 @@ The safety heights are:
 
 \begin{maxipage}
 \begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/fig-terrain.png}
+\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/figure_terrain.pdf}
 \end{center}
 \end{maxipage}
 
@@ -521,7 +528,9 @@ according to classical MacCready theory.
 
 \begin{center}
 \begin{maxipage}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/fig-optcruise.png}
+\centering
+\def\svgwidth{0.8\linewidth}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/figure_optimal_cruise.pdf}
 \end{maxipage}
 \end{center}
 
@@ -611,7 +620,7 @@ setting to zero.
 
 \begin{maxipage}
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/automc.pdf}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/figure_auto_maccready.pdf}
 \end{center}
 \end{maxipage}
 

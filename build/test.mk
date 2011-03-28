@@ -975,6 +975,10 @@ else
 RUN_DECLARE_SOURCES += \
 	$(SRC)/Device/SerialPort.cpp
 endif
+ifeq ($(HAVE_CE),y)
+RUN_DECLARE_SOURCES += \
+	$(SRC)/Device/Widcomm.cpp
+endif
 RUN_DECLARE_OBJS = $(call SRC_TO_OBJ,$(RUN_DECLARE_SOURCES))
 RUN_DECLARE_LDADD = \
 	$(ZZIP_LIBS) \

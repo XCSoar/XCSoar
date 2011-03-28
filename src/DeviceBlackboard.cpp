@@ -42,6 +42,10 @@ Copyright_License {
 
 #include <limits.h>
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 #define fixed_inv_g fixed(1.0/9.81)
 #define fixed_small fixed(0.001)
 
@@ -280,17 +284,14 @@ DeviceBlackboard::SetSystemTime() {
   if (is_simulator())
     return;
 
-#ifdef HAVE_WIN32
+#ifdef WIN32
   NMEA_INFO &basic = SetBasic();
-
   // Altair doesn't have a battery-backed up realtime clock,
   // so as soon as we get a fix for the first time, set the
   // system clock to the GPS time.
   static bool sysTimeInitialised = false;
 
-  const GPS_STATE &gps = basic.gps;
-
-  if (!gps.NAVWarning && SettingsMap().SetSystemTimeFromGPS
+  if (basic.Connected && SettingsMap().SetSystemTimeFromGPS
       && !sysTimeInitialised) {
     SYSTEMTIME sysTime;
     ::GetSystemTime(&sysTime);

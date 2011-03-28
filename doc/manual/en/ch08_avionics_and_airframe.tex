@@ -45,12 +45,18 @@ XCSoar requires a 3D GPS fix for its navigation functions.
 
 GPS status icons and text may appear on the bottom edge of the
 map display to indicate:
+
+\begin{tabular}{c c}%{c c}
+\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/gps_acquiring.pdf} & \includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/gps_disconnected.pdf}\\
+(a) & (b)
+\end{tabular}
+
 \begin{description}
-\item[Waiting for GPS fix]  The GPS may have a 2D fix, better reception
-  or additional time to search for satellites is required.
+\item[Waiting for GPS fix (a)]  Better reception
+  or additional time to search for satellites is required. The GPS may have a 2D fix.
   The aircraft symbol disappears while there is no 3D fix.
-\item[GPS not connected]  No communication with the GPS is received.
-  This indicates an error in the Comm port settings or the GPS device may
+\item[GPS not connected (b)]  No communication with the GPS is received.
+  This indicates an error in the comm port settings or the GPS device may
   be disconnected or switched off.
 \end{description}
 

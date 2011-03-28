@@ -28,6 +28,10 @@ Copyright_License {
 #include "Asset.hpp"
 #include "OS/Sleep.h"
 
+#ifdef _WIN32_WCE
+#include "Device/Widcomm.hpp"
+#endif
+
 #include <windows.h>
 
 #include <assert.h>
@@ -69,6 +73,10 @@ SerialPort::~SerialPort()
 bool
 SerialPort::Open()
 {
+#ifdef _WIN32_WCE
+  is_widcomm = IsWidcommDevice(sPortName);
+#endif
+
   DCB PortDCB;
 
   buffer.clear();
@@ -169,16 +177,27 @@ SerialPort::run()
   ::SetCommMask(hPort, EV_RXCHAR);
 
   while (!is_stopped()) {
-    // Wait for an event to occur for the port.
-    if (!::WaitCommEvent(hPort, &dwCommModemStatus, 0)) {
-      // error reading from port
-      Sleep(100);
-      continue;
-    }
+    if (is_widcomm) {
+      /* WaitCommEvent() doesn't work with the Widcomm Bluetooth
+         driver, it blocks for 11 seconds, regardless whether data is
+         received.  This workaround polls for input manually.
+         Observed on an iPaq hx4700 with WM6. */
 
-    if ((dwCommModemStatus & EV_RXCHAR) == 0)
-      /* no data available */
-      continue;
+      while (!IsDataPending())
+        if (wait_stopped(180))
+          break;
+    } else {
+      // Wait for an event to occur for the port.
+      if (!::WaitCommEvent(hPort, &dwCommModemStatus, 0)) {
+        // error reading from port
+        Sleep(100);
+        continue;
+      }
+
+      if ((dwCommModemStatus & EV_RXCHAR) == 0)
+        /* no data available */
+        continue;
+    }
 
     // Read the data from the serial port.
     if (!ReadFile(hPort, inbuf, 1024, &dwBytesTransferred, NULL) ||
