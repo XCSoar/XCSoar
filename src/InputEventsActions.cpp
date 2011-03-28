@@ -175,7 +175,7 @@ InputEvents::eventSnailTrail(const TCHAR *misc)
       Message::AddMessage(_("Full snail trail"));
   }
 
-  trigger_redraw();
+  ActionInterface::SendSettingsMap(true);
 }
 
 // VENTA3
@@ -206,7 +206,7 @@ InputEvents::eventAirSpace(const TCHAR *misc)
       Message::AddMessage(_("Show airspace on"));
   }
 
-  trigger_redraw();
+  ActionInterface::SendSettingsMap(true);
 }
 
 void
@@ -1411,7 +1411,7 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
         wls = (WayPointLabelSelection_t) i;
   }
 
-  trigger_redraw();
+  ActionInterface::SendSettingsMap(true);
 }
 
 void
@@ -1443,6 +1443,8 @@ InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
     XCSoarInterface::SetSettingsMap().UserForceDisplayMode = dmFinalGlide;
   else if (_tcscmp(misc, _T("show")) == 0)
     Message::AddMessage(_("Map labels on"));
+
+  ActionInterface::SendSettingsMap(true);
 }
 
 void
@@ -1506,7 +1508,7 @@ InputEvents::eventOrientation(const TCHAR *misc)
     XCSoarInterface::SetSettingsMap().OrientationCircling = TARGETUP;
   }
 
-  trigger_redraw();
+  ActionInterface::SendSettingsMap(true);
 }
 
 // JMW TODO enhancement: have all inputevents return bool, indicating whether
@@ -1663,6 +1665,8 @@ InputEvents::sub_Pan(int vswitch)
       Pages::Update();
     }
   }
+
+  ActionInterface::SendSettingsMap(true);
 }
 
 void
@@ -1698,6 +1702,8 @@ InputEvents::sub_AutoZoom(int vswitch)
   if (XCSoarInterface::SettingsMap().AutoZoom &&
       XCSoarInterface::SettingsMap().EnablePan)
     XCSoarInterface::SetSettingsMap().EnablePan = false;
+
+  ActionInterface::SendSettingsMap(true);
 }
 
 void

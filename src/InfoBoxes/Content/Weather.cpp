@@ -235,6 +235,7 @@ InfoBoxContentWind::PnlSetupOnTabPreHide()
 
   SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpTrailDrift"),
                    XCSoarInterface::SetSettingsMap().EnableTrailDrift);
+  ActionInterface::SendSettingsMap();
 
   return true;
 }

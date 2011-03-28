@@ -126,6 +126,11 @@ protected:
   static bool doForceShutdown;
 
 public:
+  /**
+   * Call this after SETTINGS_MAP has been modified with
+   * SetSettingsMap().  It sends the new values to all sub systems,
+   * and optionally forces a redraw.
+   */
   static void SendSettingsMap(const bool trigger_draw = false);
 
 public:

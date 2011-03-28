@@ -387,6 +387,8 @@ RefreshTargetPoint(void)
     protected_task_manager->get_target_range_radial(target_point, range, radial);
     SetZoom();
     RefreshCalculator();
+
+    ActionInterface::SendSettingsMap(true);
   } else {
     Range = fixed_zero;
     Radial = fixed_zero;
@@ -472,6 +474,7 @@ InitTargetPoints()
     XCSoarInterface::SetSettingsMap().EnablePan = true;
     XCSoarInterface::SetSettingsMap().PanLocation = t;
     XCSoarInterface::SetSettingsMap().TargetPanIndex = target_point;
+    ActionInterface::SendSettingsMap(true);
   }
   wp->RefreshDisplay();
 }

@@ -141,5 +141,7 @@ dlgWindSettingsShowModal(void)
   SaveFormProperty(*wf, _T("prpTrailDrift"),
                    XCSoarInterface::SetSettingsMap().EnableTrailDrift);
 
+  ActionInterface::SendSettingsMap();
+
   delete wf;
 }

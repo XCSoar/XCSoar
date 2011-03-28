@@ -178,6 +178,8 @@ SettingsLeave()
 
   ResumeAllThreads();
   // allow map and calculations threads to continue
+
+  ActionInterface::SendSettingsMap(true);
 }
 
 void

@@ -565,6 +565,7 @@ OnActivatePanClicked(gcc_unused WndButton &button)
 {
   XCSoarInterface::SetSettingsMap().PanLocation = selected_waypoint->Location;
   XCSoarInterface::SetSettingsMap().EnablePan = true;
+  XCSoarInterface::SendSettingsMap();
   XCSoarInterface::main_window.SetFullScreen(true);
   InputEvents::setMode(InputEvents::MODE_PAN);
   wf->SetModalResult(mrOK);
