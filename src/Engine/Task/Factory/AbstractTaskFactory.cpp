@@ -1143,6 +1143,33 @@ AbstractTaskFactory::append_optional_start(const OrderedTaskPoint &new_tp,
 }
 
 bool
+AbstractTaskFactory::TestFAITriangle(const fixed d1, const fixed d2,
+                                     const fixed d3)
+{
+  const fixed d_wp = d1 + d2 + d3;
+
+  /**
+   * A triangle is a valid FAI-triangle, if no side is less than
+   * 28% of the total length (total length less than 750 km), or no
+   * side is less than 25% or larger than 45% of the total length
+   * (totallength >= 750km).
+   */
+  bool geometryok = false;
+
+  if (d_wp < fixed(750000) && d1 >= fixed(0.28) * d_wp && d2 >= fixed(0.28)
+      * d_wp && d3 >= fixed(0.28) * d_wp)
+    // small FAI
+    geometryok = true;
+  else if (d_wp >= fixed(750000) && d1 > d_wp / 4 && d2 > d_wp / 4 && d3 > d_wp
+      / 4 && d1 <= fixed(0.45) * d_wp && d2 <= fixed(0.45) * d_wp && d3
+      <= fixed(0.45) * d_wp)
+    // large FAI
+    geometryok = true;
+
+  return geometryok;
+}
+
+bool
 AbstractTaskFactory::TestFAITriangle()
 {
   bool valid = is_unique();
@@ -1151,31 +1178,11 @@ AbstractTaskFactory::TestFAITriangle()
     const fixed d1 = m_task.getTaskPoint(1)->get_vector_planned().Distance;
     const fixed d2 = m_task.getTaskPoint(2)->get_vector_planned().Distance;
     const fixed d3 = m_task.getTaskPoint(3)->get_vector_planned().Distance;
-    const fixed d_wp = d1+d2+d3;
 
-    /**
-     * A triangle is a valid FAI-triangle, if no side is less than
-     * 28% of the total length (total length less than 750 km), or no
-     * side is less than 25% or larger than 45% of the total length
-     * (totallength >= 750km).
-     */
-    bool geometryok = false;
-
-    if (d_wp < fixed(750000) && d1 >= fixed(0.28) * d_wp &&
-        d2 >= fixed(0.28) * d_wp && d3 >= fixed(0.28) * d_wp)
-      // small FAI
-      geometryok =  true;
-    else if (d_wp >= fixed(750000) &&
-             d1 > d_wp / 4 && d2 > d_wp / 4 && d3 > d_wp / 4 &&
-             d1 <= fixed(0.45) * d_wp && d2 <= fixed(0.45) * d_wp &&
-             d3 <= fixed(0.45) * d_wp )
-      // large FAI
-      geometryok = true;
-
-    if (!geometryok) {
-      valid = false;
-    }
+    valid = TestFAITriangle(d1, d2, d3);
   }
+  else
+    valid = false;
 
   return valid;
 }

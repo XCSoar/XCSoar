@@ -62,6 +62,7 @@ Version 6.1 - not yet released
   - for WELT2000 generated winpilot waypoint files (.dat) use runway heading
 * task
   - new Task Manager and calculator dialogs
+  - FAI Triangle filter when adding turnpoints
   - added BGA start point sector
   - added AAT inner radius sector
   - configurable alternate sorting 

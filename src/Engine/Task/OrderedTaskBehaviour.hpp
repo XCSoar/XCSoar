@@ -52,7 +52,8 @@ public:
   unsigned start_max_height_ref;
   /** Minimum height AGL (m) allowed to finish */
   unsigned finish_min_height;
-  /** Whether ordered task finish requires FAI height rule */
+  /** Whether ordered task start and finish requires FAI height rules
+   *  and (no) speed rule */
   bool fai_finish;
   /** Minimum number of turnpoints including start/finish */
   unsigned min_points;

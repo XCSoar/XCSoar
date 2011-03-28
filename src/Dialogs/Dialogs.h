@@ -40,6 +40,7 @@ class AbstractAirspace;
 class AbstractTaskFactory;
 class OrderedTaskPoint;
 class InfoBoxPanelConfig;
+class OrderedTask;
 
 void dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close = false);
 bool dlgAirspaceWarningVisible();
@@ -53,7 +54,9 @@ void dlgAlternatesListShowModal(SingleWindow &parent);
 
 const Waypoint *
 dlgWayPointSelect(SingleWindow &parent,
-                  const GeoPoint &location);
+                  const GeoPoint &location,
+                  OrderedTask *ordered_task = NULL,
+                  const unsigned ordered_task_index = 0);
 void dlgWayPointSelectAddToLastUsed(const Waypoint &wp);
 
 void dlgBasicSettingsShowModal();

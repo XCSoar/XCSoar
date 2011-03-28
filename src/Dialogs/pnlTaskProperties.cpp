@@ -92,7 +92,7 @@ RefreshView()
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
 
   bool aat_types = (ftype == TaskBehaviour::FACTORY_AAT);
-  bool racing_types = (ftype == TaskBehaviour::FACTORY_RT) || aat_types;
+  bool fai_start_finish = p.fai_finish;
 
   LoadFormProperty(*wf, _T("prpTaskType"),(int)ftype);
 
@@ -113,7 +113,7 @@ RefreshView()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxSpeed")));
   if (wp) {
-    wp->set_visible(racing_types);
+    wp->set_visible(!fai_start_finish);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(Units::ToUserSpeed(p.start_max_speed));
     wp->RefreshDisplay();
@@ -121,7 +121,7 @@ RefreshView()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxHeight")));
   if (wp) {
-    wp->set_visible(racing_types);
+    wp->set_visible(!fai_start_finish);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(Units::ToUserAltitude(fixed(p.start_max_height)));
     wp->RefreshDisplay();
@@ -129,7 +129,7 @@ RefreshView()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpFinishMinHeight")));
   if (wp) {
-    wp->set_visible(!p.fai_finish);
+    wp->set_visible(!fai_start_finish);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(Units::ToUserAltitude(fixed(p.finish_min_height)));
     wp->RefreshDisplay();
@@ -137,7 +137,7 @@ RefreshView()
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
   if (wp) {
-    wp->set_visible(racing_types);
+    wp->set_visible(!fai_start_finish);
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->Set(p.start_max_height_ref);
