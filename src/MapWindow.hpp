@@ -159,8 +159,7 @@ public:
   }
 
   void ReadBlackboard(const NMEA_INFO &nmea_info,
-                      const DERIVED_INFO &derived_info,
-                      const SETTINGS_COMPUTER &settings_computer);
+                      const DERIVED_INFO &derived_info);
 
   void ReadBlackboard(const NMEA_INFO &nmea_info,
                       const DERIVED_INFO &derived_info,

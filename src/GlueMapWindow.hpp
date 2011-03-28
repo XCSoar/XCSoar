@@ -99,12 +99,20 @@ class GlueMapWindow : public MapWindow {
    * MapWindowBlackboard::ReadSettingsMap() before the next frame.
    */
   SETTINGS_MAP next_settings_map;
+
+  /**
+   * The new glide computer settings.  It is passed to
+   * MapWindowBlackboard::ReadSettingsComputer() before the next
+   * frame.
+   */
+  SETTINGS_COMPUTER next_settings_computer;
 #endif
 
 public:
   GlueMapWindow();
 
   void SetSettingsMap(const SETTINGS_MAP &new_value);
+  void SetSettingsComputer(const SETTINGS_COMPUTER &new_value);
 
   /**
    * Update the blackboard from DeviceBlackboard and

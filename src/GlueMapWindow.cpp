@@ -60,18 +60,31 @@ GlueMapWindow::SetSettingsMap(const SETTINGS_MAP &new_value)
 }
 
 void
+GlueMapWindow::SetSettingsComputer(const SETTINGS_COMPUTER &new_value)
+{
+  assert_thread();
+
+#ifdef ENABLE_OPENGL
+  ReadSettingsComputer(CommonInterface::SettingsComputer());
+#else
+  ScopeLock protect(next_mutex);
+  next_settings_computer = new_value;
+#endif
+}
+
+void
 GlueMapWindow::ExchangeBlackboard()
 {
   /* copy device_blackboard to MapWindow */
 
   mutexBlackboard.Lock();
-  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated(),
-                 device_blackboard.SettingsComputer());
+  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
   mutexBlackboard.Unlock();
 
 #ifndef ENABLE_OPENGL
   next_mutex.Lock();
   ReadSettingsMap(next_settings_map);
+  ReadSettingsComputer(next_settings_computer);
   next_mutex.Unlock();
 #endif
 

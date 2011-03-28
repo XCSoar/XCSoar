@@ -74,6 +74,8 @@ XCSoarInterface::ReceiveBlackboard()
 void
 ActionInterface::SendSettingsComputer()
 {
+  main_window.map.SetSettingsComputer(SettingsComputer());
+
   ScopeLock protect(mutexBlackboard);
   // send computer settings to the device because we know
   // that it won't be reading from them if we lock it, and
