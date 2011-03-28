@@ -248,3 +248,12 @@
    fun:g_hash_table_new_full
    fun:g_quark_from_string
 }
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Cond
+   fun:inflateReset2
+   fun:inflateInit2_
+   fun:zzip_inflate_init
+   fun:zzip_file_open
+}
