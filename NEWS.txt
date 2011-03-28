@@ -7,6 +7,8 @@ Version 6.0.9 - not yet released
   - work around iPaq Bluetooth driver bug
 * map
   - fix for hanging map on slow hardware
+* Windows
+  - fix setting the system time from GPS
 
 Version 6.0.8 - 2011/03/23
 * don't estimate thermal source for skewed thermals
