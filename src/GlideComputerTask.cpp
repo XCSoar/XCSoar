@@ -145,9 +145,11 @@ GlideComputerTask::ProcessIdle()
   if (terrain) {
     if (sol.defined()) {
       const AGeoPoint dest(v.end_point(start), sol.MinHeight);
-      m_task.route_solve(dest, start, h_ceiling);
-      SetCalculated().TerrainWarning = m_task.intersection(start, dest,
-                                                           SetCalculated().TerrainWarningLocation);
+      if (time_advanced()) {
+        m_task.route_solve(dest, start, h_ceiling);
+        SetCalculated().TerrainWarning = m_task.intersection(start, dest,
+                                                             SetCalculated().TerrainWarningLocation);
+      }
       return;
     } else {
       m_task.route_solve(start, start, h_ceiling);
@@ -165,8 +167,10 @@ GlideComputerTask::TerrainWarning()
 
     const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
     const AGeoPoint start (state.get_location(), state.NavAltitude);
-    m_task.solve_reach(start);
-    SetCalculated().TerrainBase = fixed(m_task.get_terrain_base());
+    if (time_advanced()) {
+      m_task.solve_reach(start);
+      SetCalculated().TerrainBase = fixed(m_task.get_terrain_base());
+    }
   } else {
     // fallback to current terrain altitude
     SetCalculated().TerrainBase = Calculated().TerrainAlt;
