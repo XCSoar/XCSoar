@@ -111,7 +111,7 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
 }
 
 void
-RasterRenderer::GenerateImage(bool is_terrain, bool do_shading,
+RasterRenderer::GenerateImage(bool do_shading,
                               unsigned height_scale,
                               int contrast, int brightness,
                               const Angle sunazimuth)
@@ -128,20 +128,15 @@ RasterRenderer::GenerateImage(bool is_terrain, bool do_shading,
     do_shading = false;
 
   if (do_shading)
-    GenerateSlopeImage(is_terrain, height_scale, contrast, brightness,
+    GenerateSlopeImage(height_scale, contrast, brightness,
                        sunazimuth);
   else
-    GenerateUnshadedImage(is_terrain, height_scale);
+    GenerateUnshadedImage(height_scale);
 }
 
 void
-RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
+RasterRenderer::GenerateUnshadedImage(unsigned height_scale)
 {
-  const int min_height = is_terrain
-    ? min(1000, (int)height_matrix.get_minimum()) : 0;
-  const int height_factor = is_terrain
-    ? max(2000, (int)height_matrix.get_maximum()) - min_height : 0;
-
   const short *src = height_matrix.GetData();
   const BGRColor *oColorBuf = color_table + 64 * 256;
   BGRColor *dest = image->GetTopRow();
@@ -153,9 +148,7 @@ RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
     for (unsigned x = height_matrix.get_width(); x > 0; --x) {
       short h = *src++;
       if (gcc_likely(!RasterBuffer::is_special(h))) {
-        h = height_factor > 0
-          ? (h - min_height) * 254 / height_factor
-          : min(254, h >> height_scale);
+        h = min(254, h >> height_scale);
         *p++ = oColorBuf[h];
       } else if (RasterBuffer::is_water(h)) {
         // we're in the water, so look up the color for water
@@ -174,7 +167,7 @@ RasterRenderer::GenerateUnshadedImage(bool is_terrain, unsigned height_scale)
 // (gridding of display) This is why quantisation_effective is used instead of 1
 // previously.  for large zoom levels, quantisation_effective=1
 void
-RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
+RasterRenderer::GenerateSlopeImage(unsigned height_scale,
                                    int contrast,
                                    const int sx, const int sy, const int sz)
 {
@@ -187,11 +180,6 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
   border.bottom = height_matrix.get_height() - quantisation_effective;
 
   const unsigned height_slope_factor = max(1, (int)pixel_size);
-
-  const int min_height = is_terrain
-    ? min(1000, (int)height_matrix.get_minimum()) : 0;
-  const int height_factor = is_terrain
-    ? max(2000, (int)height_matrix.get_maximum()) - min_height : 0;
 
   const short *src = height_matrix.GetData();
   const BGRColor *oColorBuf = color_table + 64 * 256;
@@ -225,9 +213,7 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
     for (unsigned x = 0; x < height_matrix.get_width(); ++x, ++src) {
       short h = *src;
       if (gcc_likely(!RasterBuffer::is_special(h))) {
-        h = height_factor > 0
-          ? (h - min_height) * 254 / height_factor
-          : min(254, h >> height_scale);
+        h = min(254, h >> height_scale);
 
         // no need to calculate slope if undefined height or sea level
 
@@ -310,7 +296,7 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
 }
 
 void
-RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
+RasterRenderer::GenerateSlopeImage(unsigned height_scale,
                                    int contrast, int brightness,
                                    const Angle sunazimuth)
 {
@@ -321,7 +307,7 @@ RasterRenderer::GenerateSlopeImage(bool is_terrain, unsigned height_scale,
   const int sy = (int)(255 * fudgeelevation.fastcosine() * -sunazimuth.fastcosine());
   const int sz = (int)(255 * fudgeelevation.fastsine());
 
-  GenerateSlopeImage(is_terrain, height_scale, contrast,
+  GenerateSlopeImage(height_scale, contrast,
                      sx, sy, sz);
 }
 

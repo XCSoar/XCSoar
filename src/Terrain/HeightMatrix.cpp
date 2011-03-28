@@ -63,8 +63,6 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
   SetSize((screen_width + quantisation_pixels - 1) / quantisation_pixels,
           (screen_height + quantisation_pixels - 1) / quantisation_pixels);
 
-  short minimum = 0x7fff, maximum = 0;
-
   for (unsigned y = 0; y < screen_height; y += quantisation_pixels) {
     const FastRowRotation rotation =
       projection.GetScreenAngleRotation(y - projection.GetScreenOrigin().y);
@@ -89,19 +87,10 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
       short h = interpolate
         ? map.GetInterpolatedHeight(gp)
         : map.GetHeight(gp);
-      if (!RasterBuffer::is_special(h)) {
-        if (h < minimum)
-          minimum = h;
-        if (h > maximum)
-          maximum = h;
-      }
 
       *p++ = h;
     }
 
     assert(p <= data.end());
   }
-
-  this->minimum = minimum;
-  this->maximum = maximum;
 }

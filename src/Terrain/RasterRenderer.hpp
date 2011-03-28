@@ -86,7 +86,7 @@ public:
   /**
    * Convert the height matrix into the image.
    */
-  void GenerateImage(bool is_terrain, bool do_shading,
+  void GenerateImage(bool do_shading,
                      unsigned height_scale, int contrast, int brightness,
                      const Angle sunazimuth);
 
@@ -98,18 +98,18 @@ protected:
   /**
    * Convert the height matrix into the image, without shading.
    */
-  void GenerateUnshadedImage(bool is_terrain, unsigned height_scale);
+  void GenerateUnshadedImage(unsigned height_scale);
 
   /**
    * Convert the height matrix into the image, with slope shading.
    */
-  void GenerateSlopeImage(bool is_terrain, unsigned height_scale, int contrast,
+  void GenerateSlopeImage(unsigned height_scale, int contrast,
                           const int sx, const int sy, const int sz);
 
   /**
    * Convert the height matrix into the image, with slope shading.
    */
-  void GenerateSlopeImage(bool is_terrain, unsigned height_scale,
+  void GenerateSlopeImage(unsigned height_scale,
                           int contrast, int brightness,
                           const Angle sunazimuth);
 };

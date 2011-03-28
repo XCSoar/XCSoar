@@ -249,7 +249,7 @@ TerrainRenderer::Draw(Canvas &canvas,
     raster_renderer.ScanMap(map, map_projection);
   }
 
-  raster_renderer.GenerateImage(is_terrain, do_shading, height_scale,
+  raster_renderer.GenerateImage(do_shading, height_scale,
                                 TerrainContrast, TerrainBrightness,
                                 sunazimuth);
 

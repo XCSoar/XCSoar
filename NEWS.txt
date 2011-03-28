@@ -50,6 +50,7 @@ Version 6.1 - not yet released
   - glide terrain range line more detailed, uses 50 radial points rather than 20
   - added option to display track bearing line in map
   - optional transparent airspace rendering
+  - terrain ramp auto-scaling disabled
 * data files
   - support for SeeYou .CUP task files in the task manager
   - wing area field is read from extended polar files if available
