@@ -107,7 +107,7 @@ public:
       glVertexPointer(2, GL_VALUE, 0, &points[0].x);
       if (idx_count > 0)
         glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT, triangles);
-      delete triangles;
+      delete[] triangles;
     }
 #else
     if (mode != SOLID) {
