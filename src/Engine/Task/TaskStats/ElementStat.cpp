@@ -77,20 +77,24 @@ ElementStatComputer::calc_speeds(const fixed dt)
     planned.calc_incremental_speed(fixed_zero);
     travelled.calc_incremental_speed(fixed_zero);
     pirker.calc_incremental_speed(fixed_zero);
-  } else {
-    remaining.calc_incremental_speed(dt);
-    planned.calc_incremental_speed(dt);
-    travelled.calc_incremental_speed(dt);
+    return;
+  } 
 
-    if (data.solution_remaining.ok_or_partial()) {
-      remaining_effective.calc_incremental_speed(dt);
-      pirker.calc_incremental_speed(dt);
-      data.vario.update(data.solution_remaining, fixed(dt));
-    } else {
-      remaining_effective.calc_incremental_speed(fixed_zero);
-      pirker.calc_incremental_speed(fixed_zero);
-      data.vario.reset(data.solution_remaining);
-    }
+  if (!positive(dt)) 
+    return;
+
+  remaining.calc_incremental_speed(dt);
+  planned.calc_incremental_speed(dt);
+  travelled.calc_incremental_speed(dt);
+
+  if (data.solution_remaining.ok_or_partial()) {
+    remaining_effective.calc_incremental_speed(dt);
+    pirker.calc_incremental_speed(dt);
+    data.vario.update(data.solution_remaining, fixed(dt));
+  } else {
+    remaining_effective.calc_incremental_speed(fixed_zero);
+    pirker.calc_incremental_speed(fixed_zero);
+    data.vario.reset(data.solution_remaining);
   }
 }
 
