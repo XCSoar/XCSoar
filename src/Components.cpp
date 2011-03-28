@@ -231,9 +231,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   PaintWindow::register_class(hInstance);
   MainWindow::register_class(hInstance);
 
-  // Send the SettingsMap to the DeviceBlackboard
-  SendSettingsMap();
-
   // Creates the main window
   LogStartUp(_T("Create main window"));
   PixelRect WindowSize = SystemWindowSize();
@@ -289,6 +286,9 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   // Initialize Marks
   marks = new Marks();
+
+  // Send the SettingsMap to the DeviceBlackboard
+  SendSettingsMap();
 
   // Show the main and map windows
   LogStartUp(_T("Create map window"));
