@@ -404,6 +404,9 @@ public:
     assert_thread();
 
 #ifdef ENABLE_SDL
+    if (width == this->width && height == this->height)
+      return;
+
     this->width = width;
     this->height = height;
 
