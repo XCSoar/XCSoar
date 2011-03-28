@@ -52,7 +52,7 @@ int main(int argc, char **argv)
   ++i;
   ok1(*i == 5);
   ++i;
-  ok1(i == buffer.end());
+  ok1(i == end);
 
   ok1(buffer.shift() == 3);
   ok1(buffer.shift() == 4);
