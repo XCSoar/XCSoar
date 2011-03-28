@@ -70,7 +70,9 @@ GlueMapWindow::ExchangeBlackboard()
   mutexBlackboard.Unlock();
 
 #ifndef ENABLE_OPENGL
+  next_mutex.Lock();
   ReadSettingsMap(next_settings_map);
+  next_mutex.Unlock();
 #endif
 
   UpdateDisplayMode();
