@@ -383,7 +383,7 @@ ReachFan::find_positive_arrival(const AGeoPoint dest,
                                 const RoutePolars &rpolars,
                                 short& arrival_height) const
 {
-  if (dest.altitude>= root.get_height()) {
+  if (root.empty() || dest.altitude >= root.get_height()) {
     arrival_height = -1;
     return true;
   }
