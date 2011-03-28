@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Blackboard.hpp"
 #include "SettingsComputerBlackboard.hpp"
+#include "BasicComputer.hpp"
 
 class GlidePolar;
 
@@ -41,6 +42,7 @@ class DeviceBlackboard:
   public SettingsComputerBlackboard
 {
   NMEA_INFO state_last;
+  BasicComputer computer;
 
 public:
   void Initialise();
@@ -87,10 +89,6 @@ public:
 private:
 // moved from GlideComputerAirData
   void FLARM_ScanTraffic();
-  void NavAltitude();
-  void Heading();
-  void Dynamics();
-  void Vario();
   void AutoQNH();
 
   const NMEA_INFO& LastBasic() { return state_last; }

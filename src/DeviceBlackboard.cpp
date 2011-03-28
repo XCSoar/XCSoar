@@ -46,9 +46,6 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-#define fixed_inv_g fixed(1.0/9.81)
-#define fixed_small fixed(0.001)
-
 DeviceBlackboard device_blackboard;
 
 /**
@@ -314,76 +311,13 @@ DeviceBlackboard::tick()
   FLARM_ScanTraffic();
 
   // calculate fast data to complete aircraft state
-  NavAltitude();
   AutoQNH();
 
+  computer.Compute(SetBasic(), LastBasic(),
+                   Calculated(), SettingsComputer());
+
   if (Basic().Time!= LastBasic().Time) {
-
-    if (Basic().Time > LastBasic().Time) {
-      Dynamics();
-    }
-
     state_last = Basic();
-  }
-}
-
-/**
- * 1. Determines which altitude to use (GPS/baro)
- * 2. Calculates height over ground
- */
-void
-DeviceBlackboard::NavAltitude()
-{
-  NMEA_INFO &basic = SetBasic();
-
-  if (!SettingsComputer().EnableNavBaroAltitude
-      || !basic.BaroAltitudeAvailable) {
-    basic.NavAltitude = basic.GPSAltitude;
-  } else {
-    basic.NavAltitude = basic.BaroAltitude;
-  }
-}
-
-/**
- * Calculates the turn rate of the heading,
- * the estimated bank angle and
- * the estimated pitch angle
- */
-void
-DeviceBlackboard::Dynamics()
-{
-  NMEA_INFO &basic = SetBasic();
-
-  if (Calculated().flight.Flying &&
-      (positive(basic.GroundSpeed) || Calculated().wind.is_non_zero())) {
-
-    // estimate bank angle (assuming balanced turn)
-    if (Calculated().AirspeedAvailable) {
-      const fixed angle = atan(Angle::degrees(Calculated().TurnRateWind
-          * Calculated().TrueAirspeed * fixed_inv_g).value_radians());
-
-      basic.acceleration.BankAngle = Angle::radians(angle);
-      if (!basic.acceleration.Available)
-        basic.acceleration.Gload = fixed_one / max(fixed_small, fabs(cos(angle)));
-    } else {
-      basic.acceleration.BankAngle = Angle::native(fixed_zero);
-      if (!basic.acceleration.Available)
-        basic.acceleration.Gload = fixed_one;
-    }
-
-    // estimate pitch angle (assuming balanced turn)
-    if (Calculated().AirspeedAvailable && basic.TotalEnergyVarioAvailable)
-      basic.acceleration.PitchAngle = Angle::radians(atan2(Calculated().GPSVario - basic.TotalEnergyVario,
-          Calculated().TrueAirspeed));
-    else
-      basic.acceleration.PitchAngle = Angle::native(fixed_zero);
-
-  } else {
-    basic.acceleration.BankAngle = Angle::native(fixed_zero);
-    basic.acceleration.PitchAngle = Angle::native(fixed_zero);
-
-    if (!basic.acceleration.Available)
-      basic.acceleration.Gload = fixed_one;
   }
 }
 

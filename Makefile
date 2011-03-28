@@ -343,6 +343,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/GestureManager.cpp \
 	$(SRC)/DrawThread.cpp \
 	\
+	$(SRC)/BasicComputer.cpp \
 	$(SRC)/DeviceBlackboard.cpp \
 	$(SRC)/InstrumentBlackboard.cpp \
 	$(SRC)/InterfaceBlackboard.cpp \
