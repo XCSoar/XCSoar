@@ -58,11 +58,13 @@ CalculationThread::SetScreenDistanceMeters(fixed new_value)
 void
 CalculationThread::tick()
 {
-  const bool gps_updated = true; /* XXX derive from LocationAvailable? */
+  bool gps_updated;
 
   // update and transfer master info to glide computer
   {
     ScopeLock protect(mutexBlackboard);
+
+    gps_updated = device_blackboard.Basic().LocationAvailable.modified(glide_computer.Basic().LocationAvailable);
 
     // if (new GPS data available)
     if (gps_updated)
