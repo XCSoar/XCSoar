@@ -85,25 +85,7 @@ void
 MapWindow::on_paint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
-
-  /* copy device_blackboard to MapWindow */
-
-  mutexBlackboard.Lock();
-  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated(),
-                 device_blackboard.SettingsComputer(),
-                 device_blackboard.SettingsMap());
-  mutexBlackboard.Unlock();
-
-  /* paint it */
-
   on_paint_buffer(canvas);
-
-  /* copy MapWindow to device_blackboard */
-
-  mutexBlackboard.Lock();
-  device_blackboard.SetScreenDistanceMeters(VisibleProjection().GetScreenDistanceMeters());
-  mutexBlackboard.Unlock();
-
 #else /* !ENABLE_OPENGL */
   if (buffer_generation == ui_generation)
     DoubleBufferWindow::on_paint(canvas);
