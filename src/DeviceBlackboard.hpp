@@ -62,7 +62,6 @@ public:
   void SetLocation(const GeoPoint &loc, const fixed speed, const Angle bearing,
                    const fixed alt, const fixed baroalt, const fixed t);
   void ProcessSimulation();
-  void RaiseConnection();
   void StopReplay();
   void SetBaroAlt(fixed x) {
     SetBasic().ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, x);
