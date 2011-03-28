@@ -29,6 +29,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct NMEA_INFO;
+struct DERIVED_INFO;
 class Port;
 class AtmosphericPressure;
 class OperationEnvironment;
@@ -53,7 +54,8 @@ public:
   virtual bool PutMacCready(double MacCready) = 0;
   virtual bool PutBugs(double bugs) = 0;
   virtual bool PutBallast(double ballast) = 0;
-  virtual bool PutQNH(const AtmosphericPressure& pres) = 0;
+  virtual bool PutQNH(const AtmosphericPressure &pres,
+                      const DERIVED_INFO &calculated) = 0;
   virtual bool PutVoice(const TCHAR *sentence) = 0;
   virtual bool PutVolume(int volume) = 0;
   virtual bool PutActiveFrequency(double frequency) = 0;
@@ -62,7 +64,8 @@ public:
   virtual bool Declare(const struct Declaration *declaration,
                        OperationEnvironment &env) = 0;
 
-  virtual void OnSysTicker() = 0;
+  virtual void OnSysTicker(const NMEA_INFO &basic,
+                           const DERIVED_INFO &calculated) = 0;
 };
 
 /**
@@ -84,7 +87,8 @@ public:
   virtual bool PutMacCready(double MacCready);
   virtual bool PutBugs(double bugs);
   virtual bool PutBallast(double ballast);
-  virtual bool PutQNH(const AtmosphericPressure& pres);
+  virtual bool PutQNH(const AtmosphericPressure &pres,
+                      const DERIVED_INFO &calculated);
   virtual bool PutVoice(const TCHAR *sentence);
   virtual bool PutVolume(int volume);
   virtual bool PutActiveFrequency(double frequency);
@@ -93,7 +97,8 @@ public:
   virtual bool Declare(const struct Declaration *declaration,
                        OperationEnvironment &env);
 
-  virtual void OnSysTicker();
+  virtual void OnSysTicker(const NMEA_INFO &basic,
+                           const DERIVED_INFO &calculated);
 };
 
 typedef enum {

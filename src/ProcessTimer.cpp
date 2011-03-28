@@ -228,7 +228,7 @@ ProcessTimer::Process(void)
 
   if (!is_simulator()) {
     // now check GPS status
-    devTick();
+    devTick(CommonInterface::Basic(), CommonInterface::Calculated());
 
     static int itimeout = -1;
     itimeout++;

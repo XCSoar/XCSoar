@@ -424,7 +424,7 @@ DeviceBlackboard::AutoQNH()
     } else
       return;
 
-    AllDevicesPutQNH(basic.pressure);
+    AllDevicesPutQNH(basic.pressure, Calculated());
     countdown_autoqnh = UINT_MAX; // disable after performing once
   }
 }
@@ -436,7 +436,7 @@ DeviceBlackboard::SetQNH(fixed qnh)
   NMEA_INFO &basic = SetBasic();
 
   basic.ProvideQNHSetting(qnh);
-  AllDevicesPutQNH(basic.pressure);
+  AllDevicesPutQNH(basic.pressure, Calculated());
 }
 
 void

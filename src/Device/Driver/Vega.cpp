@@ -66,9 +66,11 @@ public:
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
-  virtual bool PutQNH(const AtmosphericPressure& pres);
+  virtual bool PutQNH(const AtmosphericPressure& pres,
+                      const DERIVED_INFO &calculated);
   virtual bool PutVoice(const TCHAR *sentence);
-  virtual void OnSysTicker();
+  virtual void OnSysTicker(const NMEA_INFO &basic,
+                           const DERIVED_INFO &calculated);
 };
 
 static bool
@@ -366,18 +368,16 @@ VegaDevice::PutVoice(const TCHAR *Sentence)
   return true;
 }
 
-#include "Blackboard.hpp"
-
 static void
-_VarioWriteSettings(Port *port)
+_VarioWriteSettings(Port *port, const DERIVED_INFO &calculated)
 {
     char mcbuf[100];
 
     sprintf(mcbuf, "PDVMC,%d,%d,%d,%d,%d",
-            iround(device_blackboard.Calculated().common_stats.current_mc*10),
-            iround(device_blackboard.Calculated().V_stf*10),
-            device_blackboard.Calculated().Circling,
-            iround(device_blackboard.Calculated().TerrainAlt),
+            iround(calculated.common_stats.current_mc*10),
+            iround(calculated.V_stf*10),
+            calculated.Circling,
+            iround(calculated.TerrainAlt),
             10132); // JMW 20080716 bug
               // iround(QNH*10));
 
@@ -385,23 +385,24 @@ _VarioWriteSettings(Port *port)
 }
 
 bool
-VegaDevice::PutQNH(const AtmosphericPressure& pres)
+VegaDevice::PutQNH(const AtmosphericPressure& pres,
+                   const DERIVED_INFO &calculated)
 {
   (void)pres;
 
-  _VarioWriteSettings(port);
+  _VarioWriteSettings(port, calculated);
 
   return true;
 }
 
 void
-VegaDevice::OnSysTicker()
+VegaDevice::OnSysTicker(const NMEA_INFO &basic,
+                        const DERIVED_INFO &calculated)
 {
-  if (device_blackboard.Basic().TotalEnergyVarioAvailable)
-    _VarioWriteSettings(port);
+  if (basic.TotalEnergyVarioAvailable)
+    _VarioWriteSettings(port, calculated);
 
-  const THERMAL_LOCATOR_INFO &t =
-    device_blackboard.Calculated().thermal_locator;
+  const THERMAL_LOCATOR_INFO &t = calculated.thermal_locator;
   char tbuf[100];
   sprintf(tbuf, "PTLOC,%d,%3.5f,%3.5f,%g,%g",
           (int)(t.estimate_valid),

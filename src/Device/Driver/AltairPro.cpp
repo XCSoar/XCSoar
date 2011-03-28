@@ -61,7 +61,8 @@ public:
                          bool enable_baro);
   virtual bool Declare(const struct Declaration *declaration,
                        OperationEnvironment &env);
-  virtual void OnSysTicker();
+  virtual void OnSysTicker(const NMEA_INFO &basic,
+                           const DERIVED_INFO &calculated);
 };
 
 static bool
@@ -312,7 +313,8 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName, const Waypoint *waypoin
 }
 
 void
-AltairProDevice::OnSysTicker()
+AltairProDevice::OnSysTicker(const NMEA_INFO &basic,
+                             const DERIVED_INFO &calculated)
 {
   // Do To get IO data like temp, humid, etc
 }

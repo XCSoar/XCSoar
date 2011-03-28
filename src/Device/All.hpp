@@ -28,9 +28,11 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct NMEA_INFO;
+struct DERIVED_INFO;
 class AtmosphericPressure;
 
-void devTick(void);
+void devTick(const NMEA_INFO &basic, const DERIVED_INFO &calculated);
 
 void AllDevicesPutMacCready(double MacCready);
 void AllDevicesPutBugs(double bugs);
@@ -38,7 +40,11 @@ void AllDevicesPutBallast(double ballast);
 void AllDevicesPutVolume(int volume);
 void AllDevicesPutActiveFrequency(double frequency);
 void AllDevicesPutStandbyFrequency(double frequency);
-void AllDevicesPutQNH(const AtmosphericPressure& pres);
+
+void
+AllDevicesPutQNH(const AtmosphericPressure &pres,
+                 const DERIVED_INFO &calculated);
+
 void AllDevicesPutVoice(const TCHAR *sentence);
 
 void AllDevicesLinkTimeout();

@@ -74,7 +74,8 @@ AbstractDevice::PutBallast(double ballast)
 }
 
 bool
-AbstractDevice::PutQNH(const AtmosphericPressure& pres)
+AbstractDevice::PutQNH(const AtmosphericPressure &pres,
+                       const DERIVED_INFO &calculated)
 {
   return true;
 }
@@ -111,6 +112,7 @@ AbstractDevice::Declare(const struct Declaration *declaration,
 }
 
 void
-AbstractDevice::OnSysTicker()
+AbstractDevice::OnSysTicker(const NMEA_INFO &basic,
+                            const DERIVED_INFO &calculated)
 {
 }

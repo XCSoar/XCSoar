@@ -205,9 +205,10 @@ DeviceDescriptor::PutStandbyFrequency(double frequency)
 }
 
 bool
-DeviceDescriptor::PutQNH(const AtmosphericPressure& pres)
+DeviceDescriptor::PutQNH(const AtmosphericPressure &pres,
+                         const DERIVED_INFO &calculated)
 {
-  return device != NULL ? device->PutQNH(pres) : true;
+  return device != NULL ? device->PutQNH(pres, calculated) : true;
 }
 
 bool
@@ -242,7 +243,8 @@ DeviceDescriptor::Declare(const struct Declaration *declaration)
 }
 
 void
-DeviceDescriptor::OnSysTicker()
+DeviceDescriptor::OnSysTicker(const NMEA_INFO &basic,
+                              const DERIVED_INFO &calculated)
 {
   if (device == NULL || declaring)
     return;
@@ -252,7 +254,7 @@ DeviceDescriptor::OnSysTicker()
   ticker = !ticker;
   if (ticker)
     // write settings to vario every second
-    device->OnSysTicker();
+    device->OnSysTicker(basic, calculated);
 }
 
 void

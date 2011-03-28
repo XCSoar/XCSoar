@@ -31,6 +31,7 @@ Copyright_License {
 #include <stdio.h>
 
 struct NMEA_INFO;
+struct DERIVED_INFO;
 class Port;
 class Device;
 class AtmosphericPressure;
@@ -116,13 +117,14 @@ public:
   bool PutVolume(int volume);
   bool PutActiveFrequency(double frequency);
   bool PutStandbyFrequency(double frequency);
-  bool PutQNH(const AtmosphericPressure& pres);
+  bool PutQNH(const AtmosphericPressure &pres,
+              const DERIVED_INFO &calculated);
   bool PutVoice(const TCHAR *sentence);
 
   void LinkTimeout();
   bool Declare(const struct Declaration *declaration);
 
-  void OnSysTicker();
+  void OnSysTicker(const NMEA_INFO &basic, const DERIVED_INFO &calculated);
 
   virtual void LineReceived(const char *line);
 };

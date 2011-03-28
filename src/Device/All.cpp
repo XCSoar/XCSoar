@@ -31,13 +31,13 @@ Copyright_License {
 #include <assert.h>
 
 void
-devTick()
+devTick(const NMEA_INFO &basic, const DERIVED_INFO &calculated)
 {
   int i;
 
   for (i = 0; i < NUMDEV; i++) {
     DeviceDescriptor *d = &DeviceList[i];
-    d->OnSysTicker();
+    d->OnSysTicker(basic, calculated);
   }
 }
 
@@ -102,13 +102,14 @@ AllDevicesPutStandbyFrequency(double frequency)
 }
 
 void
-AllDevicesPutQNH(const AtmosphericPressure& pres)
+AllDevicesPutQNH(const AtmosphericPressure &pres,
+                 const DERIVED_INFO &calculated)
 {
   if (is_simulator())
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutQNH(pres);
+    DeviceList[i].PutQNH(pres, calculated);
 }
 
 void
