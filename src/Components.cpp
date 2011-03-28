@@ -227,9 +227,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   if (MainWindow::find(szTitle))
     return false;
 
-  // Send the SettingsMap to the DeviceBlackboard
-  SendSettingsMap();
-
   // Register window classes
   PaintWindow::register_class(hInstance);
   MainWindow::register_class(hInstance);
