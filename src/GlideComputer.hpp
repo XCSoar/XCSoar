@@ -62,6 +62,11 @@ public:
 
   void ResetFlight(const bool full=true);
   void Initialise();
+
+  void Expire() {
+    SetCalculated().expire(Basic().Time);
+  }
+
   bool ProcessGPS(); // returns true if idle needs processing
   virtual void ProcessIdle();
 

@@ -80,6 +80,8 @@ CalculationThread::tick()
     glide_computer.SetScreenDistanceMeters(screen_distance_meters);
   }
 
+  glide_computer.Expire();
+
   // if (time advanced and slow calculations need to be updated)
   if (gps_updated && glide_computer.ProcessGPS())
     // do slow calculations

@@ -309,7 +309,6 @@ void
 DeviceBlackboard::tick()
 {
   SetBasic().expire();
-  calculated_info.expire(Basic().Time);
 
   // lookup known traffic
   FLARM_ScanTraffic();
