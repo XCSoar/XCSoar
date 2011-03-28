@@ -545,6 +545,8 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout)
                                      rc.right - rc.left, rc.bottom - rc.top,
                                      Border, info_box_look);
   }
+
+  SetDirty();
 }
 
 void
