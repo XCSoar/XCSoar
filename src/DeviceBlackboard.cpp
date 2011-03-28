@@ -35,7 +35,12 @@ Copyright_License {
 #include "Math/Constants.h"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Simulator.hpp"
+
 #include <limits.h>
+
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 #define fixed_inv_2g fixed(1.0/(2.0*9.81))
 #define fixed_inv_g fixed(1.0/9.81)
