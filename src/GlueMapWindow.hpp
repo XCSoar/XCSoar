@@ -91,6 +91,12 @@ public:
   GlueMapWindow();
 
   /**
+   * Update the blackboard from DeviceBlackboard and
+   * InterfaceBlackboard.
+   */
+  void ExchangeBlackboard();
+
+  /**
    * Trigger a full redraw of the map.
    */
   void FullRedraw();

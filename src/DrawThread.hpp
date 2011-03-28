@@ -104,13 +104,6 @@ public:
     resume();
   }
 
-private:
-  /**
-   * Exchanges blackboard data between the device (device_blackboard)
-   * and the #GlueMapWindow.
-   */
-  void ExchangeBlackboard();
-
 protected:
   virtual void run();
 };

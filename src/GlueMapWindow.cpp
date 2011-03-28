@@ -24,6 +24,8 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 #include "Components.hpp"
 #include "DrawThread.hpp"
+#include "Protection.hpp"
+#include "DeviceBlackboard.hpp"
 
 GlueMapWindow::GlueMapWindow()
   :idle_robin(2),
@@ -38,6 +40,26 @@ GlueMapWindow::set(ContainerWindow &parent, const PixelRect &rc)
 
   LoadDisplayModeScales();
   visible_projection.SetScale(zoomclimb.CruiseScale);
+}
+
+void
+GlueMapWindow::ExchangeBlackboard()
+{
+  /* copy device_blackboard to MapWindow */
+
+  mutexBlackboard.Lock();
+  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated(),
+                 device_blackboard.SettingsComputer(),
+                 device_blackboard.SettingsMap());
+  mutexBlackboard.Unlock();
+
+  UpdateDisplayMode();
+  UpdateMapScale();
+
+  /* copy MapWindow to device_blackboard */
+  mutexBlackboard.Lock();
+  device_blackboard.SetScreenDistanceMeters(VisibleProjection().GetScreenDistanceMeters());
+  mutexBlackboard.Unlock();
 }
 
 void

@@ -30,26 +30,6 @@ Copyright_License {
 
 #ifndef ENABLE_OPENGL
 
-void
-DrawThread::ExchangeBlackboard()
-{
-  /* send device data to the MapWindow */
-  mutexBlackboard.Lock();
-  map.ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated(),
-                     device_blackboard.SettingsComputer(),
-                     device_blackboard.SettingsMap());
-  mutexBlackboard.Unlock();
-
-  /* recalculate the MapWindow projection */
-  map.UpdateDisplayMode();
-  map.UpdateMapScale();
-
-  /* return MapWindow projection to the device_blackboard */
-  mutexBlackboard.Lock();
-  device_blackboard.SetScreenDistanceMeters(map.VisibleProjection().GetScreenDistanceMeters());
-  mutexBlackboard.Unlock();
-}
-
 /**
  * Main loop of the DrawThread
  */
@@ -66,7 +46,7 @@ DrawThread::run()
   running.wait();
 
   // Get data from the DeviceBlackboard
-  ExchangeBlackboard();
+  map.ExchangeBlackboard();
 
   bool bounds_dirty = true;
 
@@ -86,7 +66,7 @@ DrawThread::run()
       trigger.reset();
 
       // Get data from the DeviceBlackboard
-      ExchangeBlackboard();
+      map.ExchangeBlackboard();
 
       // Draw the moving map
       map.repaint();
