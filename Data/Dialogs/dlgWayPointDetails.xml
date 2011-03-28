@@ -9,7 +9,7 @@
   <Button Name="cmdClose" Caption="Close" X="-77" Y="-37" Width="75" Height="35" />
 
   <Panel Name="frmInfos" X="0" Y="0" Height="-39">
-    <Edit Name="prpWpComment" Caption="Comment" X="2" Y="2" Height="40" CaptionWidth="100" ReadOnly="1" MultiLine="1 />
+    <Edit Name="prpWpComment" Caption="Comment" X="2" Y="2" Height="40" CaptionWidth="100" ReadOnly="1" MultiLine="1" />
     <Edit Name="prpLatitude" Caption="Latitude" X="2" Height="22" CaptionWidth="100" ReadOnly="1" />
     <Edit Name="prpLongitude" Caption="Longitude" X="2" Height="22" CaptionWidth="100" ReadOnly="1" />
     <Edit Name="prpAltitude" Caption="Elevation" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />

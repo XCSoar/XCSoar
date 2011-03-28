@@ -218,7 +218,7 @@
       </Edit>
 
       <Edit Name="prpAircraftSymbol" Caption="Aircraft symbol*" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Sets the symbol used for the aircraft. &#10;[Simple] Simplified line graphics. &#10;[Detailed] Rendered aircraft graphics.">
+        Help="Sets the symbol used for the aircraft.&#10;[Simple] Simplified line graphics.&#10;[Detailed] Rendered aircraft graphics.">
         <DataField DataType="enum" />
       </Edit>
 
