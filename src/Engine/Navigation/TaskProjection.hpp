@@ -39,6 +39,20 @@ struct GeoBounds;
  * Needs to be initialized with reset() before first use.
  */
 class TaskProjection {
+  /** Lower left corner found in scan */
+  GeoPoint location_min;
+  /** Upper right corner found in scan */
+  GeoPoint location_max;
+  /** Midpoint of boundary, used as projection center point */
+  GeoPoint location_mid;
+  /** Cosine of the midpoint */
+  fixed cos_midloc;
+  /**< Reciprocal of cosine of the midpoint */
+  fixed r_cos_midloc;
+
+  /**< Approximate scale (m) of grid spacing at center */
+  fixed approx_scale;
+
 public:
   /**
    * Reset search bounds
@@ -179,21 +193,6 @@ public:
   friend std::ostream& operator<< (std::ostream& o, 
                                    const TaskProjection& task_projection);
 #endif
-
-private:
-  /** Lower left corner found in scan */
-  GeoPoint location_min;
-  /** Upper right corner found in scan */
-  GeoPoint location_max;
-  /** Midpoint of boundary, used as projection center point */
-  GeoPoint location_mid;
-  /** Cosine of the midpoint */
-  fixed cos_midloc;
-  /**< Reciprocal of cosine of the midpoint */
-  fixed r_cos_midloc;
-
-  /**< Approximate scale (m) of grid spacing at center */
-  fixed approx_scale;
 };
 
 #endif
