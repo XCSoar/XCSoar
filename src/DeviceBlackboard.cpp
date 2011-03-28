@@ -262,19 +262,6 @@ DeviceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
 }
 
 /**
- * Reads the given settings usually provided by the InterfaceBlackboard
- * and saves it to the own Blackboard
- * @param settings SettingsMap usually provided by the
- * InterfaceBlackboard
- */
-void
-DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP
-				  &settings)
-{
-  settings_map = settings;
-}
-
-/**
  * Tries to find a name for every current traffic id
  */
 void

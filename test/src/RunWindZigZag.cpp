@@ -102,7 +102,6 @@ InputEvents::processNmea(unsigned key)
  */
 
 SettingsComputerBlackboard::SettingsComputerBlackboard() {}
-SettingsMapBlackboard::SettingsMapBlackboard() {}
 
 /*
  * The actual code.

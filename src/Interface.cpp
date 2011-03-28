@@ -99,10 +99,6 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
 
   main_window.map.SetSettingsMap(SettingsMap());
 
-  // Copy InterfaceBlackboard.SettingsMap to the DeviceBlackboard
-  ScopeLock protect(mutexBlackboard);
-  device_blackboard.ReadSettingsMap(SettingsMap());
-
   if (trigger_draw)
     main_window.full_redraw();
 

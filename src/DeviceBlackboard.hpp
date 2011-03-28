@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Blackboard.hpp"
 #include "SettingsComputerBlackboard.hpp"
-#include "SettingsMapBlackboard.hpp"
 
 class GlidePolar;
 
@@ -39,8 +38,7 @@ class GlidePolar;
  */
 class DeviceBlackboard:
   public BaseBlackboard,
-  public SettingsComputerBlackboard,
-  public SettingsMapBlackboard
+  public SettingsComputerBlackboard
 {
   NMEA_INFO state_last;
 
@@ -50,7 +48,6 @@ public:
   void Initialise();
   void ReadBlackboard(const DERIVED_INFO &derived_info);
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
-  void ReadSettingsMap(const SETTINGS_MAP &settings);
 
   fixed GetScreenDistanceMeters() const {
     return ScreenDistanceMeters;
