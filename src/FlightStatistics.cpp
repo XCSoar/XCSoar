@@ -800,9 +800,7 @@ void
 FlightStatistics::AddTaskSpeed(const fixed tflight, const fixed val)
 {
   ScopeLock lock(mutexStats);
-  if (positive(val)) {
-    Task_Speed.LeastSquaresUpdate(tflight / 3600, val);
-  }
+  Task_Speed.LeastSquaresUpdate(tflight / 3600, std::max(fixed_zero,val));
 }
 
 void
