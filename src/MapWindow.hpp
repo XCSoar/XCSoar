@@ -58,6 +58,15 @@ class MapWindow :
   public MapWindowBlackboard,
   public MapWindowTimer
 {
+#ifndef ENABLE_OPENGL
+  // graphics vars
+
+  BufferCanvas buffer_canvas;
+  BufferCanvas stencil_canvas;
+#endif
+
+  LabelBlock label_block;
+
 protected:
   /**
    * The projection as currently visible on the screen.  This object
@@ -115,6 +124,10 @@ protected:
    */
   unsigned scale_buffer;
 #endif
+
+  StaticArray<GeoPoint,32> m_airspace_intersections;
+
+  friend class DrawThread;
 
 public:
   MapWindow();
@@ -209,17 +222,6 @@ protected:
     UpdateWeather();
   }
 
-#ifndef ENABLE_OPENGL
-private:
-  // graphics vars
-
-  BufferCanvas buffer_canvas;
-  BufferCanvas stencil_canvas;
-#endif
-
-private:
-  LabelBlock label_block;
-
 protected:
   virtual bool on_create();
   virtual bool on_destroy();
@@ -264,10 +266,6 @@ private:
    * @param canvas The drawing canvas
    */
   void RenderGlide(Canvas &canvas);
-
-  StaticArray<GeoPoint,32> m_airspace_intersections;
-
-  friend class DrawThread;
 
 public:
   void SetMapScale(const fixed x);
