@@ -44,8 +44,6 @@ Copyright_License {
 
 class AltairProDevice : public AbstractDevice {
 private:
-  fixed lastAlt;
-  bool last_enable_baro;
   Port *port;
 
   bool DeclareInternal(const struct Declaration *decl);
@@ -56,12 +54,11 @@ private:
 #endif
 
 public:
-  AltairProDevice(Port *_port):lastAlt(fixed_zero), last_enable_baro(false), port(_port){}
+  AltairProDevice(Port *_port):port(_port){}
 
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
-  virtual bool PutQNH(const AtmosphericPressure& pres);
   virtual bool Declare(const struct Declaration *declaration,
                        OperationEnvironment &env);
   virtual void OnSysTicker();
@@ -94,12 +91,11 @@ AltairProDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
   // no propriatary sentence
 
   if (strcmp(type, "$PGRMZ") == 0) {
-    bool available = ReadAltitude(line, lastAlt);
+    fixed value;
+    bool available = ReadAltitude(line, value);
     if (enable_baro && available)
       GPS_INFO->ProvidePressureAltitude(NMEA_INFO::BARO_ALTITUDE_TRIADIS_PGRMZ,
-                                        lastAlt);
-
-    last_enable_baro = enable_baro;
+                                        value);
 
     return true;
   }
@@ -313,19 +309,6 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName, const Waypoint *waypoin
 
   PropertySetGet(port, Buffer, dim(Buffer));
 
-}
-
-
-#include "DeviceBlackboard.hpp"
-
-bool
-AltairProDevice::PutQNH(const AtmosphericPressure &pres)
-{
-  // TODO code: JMW check sending QNH to Altair
-  if (last_enable_baro)
-    device_blackboard.SetBaroAlt(pres.PressureAltitudeToQNHAltitude(fixed(lastAlt)));
-
-  return true;
 }
 
 void
