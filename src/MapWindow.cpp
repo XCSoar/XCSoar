@@ -75,6 +75,15 @@ MapWindow::set(ContainerWindow &parent, const PixelRect &rc)
 #endif
 }
 
+void
+MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
+                          const DERIVED_INFO &derived_info,
+                          const SETTINGS_COMPUTER &settings_computer)
+{
+  MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
+  ReadSettingsComputer(settings_computer);
+}
+
 /**
  * Copies the given basic and calculated info to the MapWindowBlackboard
  * and reads the Settings from the DeviceBlackboard.

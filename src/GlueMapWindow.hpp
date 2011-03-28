@@ -87,8 +87,24 @@ class GlueMapWindow : public MapWindow {
 
   OffsetHistory offsetHistory;
 
+#ifndef ENABLE_OPENGL
+  /**
+   * This mutex protects the attributes that are read by the
+   * DrawThread but written by another thread.
+   */
+  Mutex next_mutex;
+
+  /**
+   * The new map settings.  It is passed to
+   * MapWindowBlackboard::ReadSettingsMap() before the next frame.
+   */
+  SETTINGS_MAP next_settings_map;
+#endif
+
 public:
   GlueMapWindow();
+
+  void SetSettingsMap(const SETTINGS_MAP &new_value);
 
   /**
    * Update the blackboard from DeviceBlackboard and

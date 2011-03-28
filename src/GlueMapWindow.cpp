@@ -27,6 +27,10 @@ Copyright_License {
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Interface.hpp"
+#endif
+
 GlueMapWindow::GlueMapWindow()
   :idle_robin(2),
    drag_mode(DRAG_NONE),
@@ -43,15 +47,31 @@ GlueMapWindow::set(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
+GlueMapWindow::SetSettingsMap(const SETTINGS_MAP &new_value)
+{
+  assert_thread();
+
+#ifdef ENABLE_OPENGL
+  ReadSettingsMap(CommonInterface::SettingsMap());
+#else
+  ScopeLock protect(next_mutex);
+  next_settings_map = new_value;
+#endif
+}
+
+void
 GlueMapWindow::ExchangeBlackboard()
 {
   /* copy device_blackboard to MapWindow */
 
   mutexBlackboard.Lock();
   ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated(),
-                 device_blackboard.SettingsComputer(),
-                 device_blackboard.SettingsMap());
+                 device_blackboard.SettingsComputer());
   mutexBlackboard.Unlock();
+
+#ifndef ENABLE_OPENGL
+  ReadSettingsMap(next_settings_map);
+#endif
 
   UpdateDisplayMode();
   UpdateMapScale();
