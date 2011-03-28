@@ -852,6 +852,10 @@ NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time)
 bool
 NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
+  if (!GPS_INFO->LocationAvailable)
+    /* we cannot parse this line if we don't know our own location */
+    return true;
+
   FLARM_STATE &flarm = GPS_INFO->flarm;
 
   isFlarm = true;
