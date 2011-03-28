@@ -298,15 +298,6 @@ void
 GlueMapWindow::on_paint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
-  /* copy device_blackboard to MapWindow */
-
-  mutexBlackboard.Lock();
-  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated(),
-                 device_blackboard.SettingsComputer(),
-                 device_blackboard.SettingsMap());
-  device_blackboard.SetScreenDistanceMeters(VisibleProjection().GetScreenDistanceMeters());
-  mutexBlackboard.Unlock();
-
   /* update terrain, topography, ... */
   Idle();
 #endif
@@ -343,8 +334,21 @@ void
 GlueMapWindow::on_paint_buffer(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
+  /* copy device_blackboard to MapWindow */
+
+  mutexBlackboard.Lock();
+  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated(),
+                 device_blackboard.SettingsComputer(),
+                 device_blackboard.SettingsMap());
+  mutexBlackboard.Unlock();
+
   UpdateDisplayMode();
   UpdateMapScale();
+
+  /* copy MapWindow to device_blackboard */
+  mutexBlackboard.Lock();
+  device_blackboard.SetScreenDistanceMeters(VisibleProjection().GetScreenDistanceMeters());
+  mutexBlackboard.Unlock();
 #endif
 
   MapWindow::on_paint_buffer(canvas);
