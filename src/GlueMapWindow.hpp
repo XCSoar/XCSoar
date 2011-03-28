@@ -40,6 +40,11 @@ struct ZoomClimb_t
 
 
 class OffsetHistory {
+  static const unsigned int historySize = 30;
+  unsigned int pos;
+  RasterPoint offsets[historySize];
+
+  friend class GlueMapWindow;
 
 protected:
   OffsetHistory() : pos(0) { reset(); }
@@ -49,13 +54,6 @@ protected:
   RasterPoint average() const;
 
   static const RasterPoint zeroPoint;
-
-private:
-  static const unsigned int historySize = 30;
-  unsigned int pos;
-  RasterPoint offsets[historySize];
-
-  friend class GlueMapWindow;
 };
 
 
@@ -63,6 +61,31 @@ class GlueMapWindow : public MapWindow {
   unsigned idle_robin;
 
   PeriodClock mouse_down_clock;
+
+  enum drag_mode {
+    DRAG_NONE,
+    DRAG_PAN,
+    DRAG_GESTURE,
+    DRAG_SIMULATOR,
+    DRAG_TARGET,
+  } drag_mode;
+
+  GeoPoint drag_start_geopoint;
+  RasterPoint drag_start, drag_last;
+  GestureManager gestures;
+  bool ignore_single_click;
+  bool dragOverMinDist; /* <// if mouse pan drag has moved over ~10 pixels */
+
+  ZoomClimb_t zoomclimb;
+
+  /**
+   * The projection which was active when dragging started.
+   */
+  Projection drag_projection;
+
+  DisplayMode_t DisplayMode;
+
+  OffsetHistory offsetHistory;
 
 public:
   GlueMapWindow();
@@ -136,27 +159,6 @@ public:
   bool TargetDragged(const int x, const int y);
 
 private:
-  enum drag_mode {
-    DRAG_NONE,
-    DRAG_PAN,
-    DRAG_GESTURE,
-    DRAG_SIMULATOR,
-    DRAG_TARGET,
-  } drag_mode;
-
-  GeoPoint drag_start_geopoint;
-  RasterPoint drag_start, drag_last;
-  GestureManager gestures;
-  bool ignore_single_click;
-  bool dragOverMinDist; /* <// if mouse pan drag has moved over ~10 pixels */
-
-  ZoomClimb_t zoomclimb;
-
-  /**
-   * The projection which was active when dragging started.
-   */
-  Projection drag_projection;
-
   bool AirspaceDetailsAtPoint(const GeoPoint &location);
 
 protected:
@@ -210,12 +212,6 @@ public:
   DisplayMode_t GetDisplayMode() const {
     return DisplayMode;
   }
-
-protected:
-  DisplayMode_t DisplayMode;
-
-private:
-  OffsetHistory offsetHistory;
 };
 
 #endif
