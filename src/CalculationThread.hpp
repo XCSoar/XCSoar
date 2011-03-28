@@ -25,7 +25,8 @@ Copyright_License {
 #define XCSOAR_CALCULATION_THREAD_HPP
 
 #include "Thread/WorkerThread.hpp"
-#include "Thread/Trigger.hpp"
+#include "Thread/Mutex.hpp"
+#include "SettingsComputer.hpp"
 
 class GlideComputer;
 
@@ -35,11 +36,24 @@ class GlideComputer;
  * Data transfer is handled by a blackboard system.
  */
 class CalculationThread : public WorkerThread {
+  /**
+   * This mutex protects #settings_computer and
+   * #screen_distance_meters.
+   */
+  Mutex mutex;
+
+  SETTINGS_COMPUTER settings_computer;
+
+  fixed screen_distance_meters;
+
   /** Pointer to the GlideComputer that should be used */
   GlideComputer &glide_computer;
 
 public:
   CalculationThread(GlideComputer &_glide_computer);
+
+  void SetSettingsComputer(const SETTINGS_COMPUTER &new_value);
+  void SetScreenDistanceMeters(fixed new_value);
 
   bool start() {
     if (!WorkerThread::start())

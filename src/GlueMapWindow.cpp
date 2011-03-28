@@ -90,11 +90,6 @@ GlueMapWindow::ExchangeBlackboard()
 
   UpdateDisplayMode();
   UpdateMapScale();
-
-  /* copy MapWindow to device_blackboard */
-  mutexBlackboard.Lock();
-  device_blackboard.SetScreenDistanceMeters(VisibleProjection().GetScreenDistanceMeters());
-  mutexBlackboard.Unlock();
 }
 
 void

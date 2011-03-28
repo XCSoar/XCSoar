@@ -42,20 +42,10 @@ class DeviceBlackboard:
 {
   NMEA_INFO state_last;
 
-  fixed ScreenDistanceMeters;
-
 public:
   void Initialise();
   void ReadBlackboard(const DERIVED_INFO &derived_info);
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
-
-  fixed GetScreenDistanceMeters() const {
-    return ScreenDistanceMeters;
-  }
-
-  void SetScreenDistanceMeters(fixed _ScreenDistanceMeters) {
-    ScreenDistanceMeters = _ScreenDistanceMeters;
-  }
 
   // only the device blackboard can write to gps
   friend class DeviceDescriptor;

@@ -38,6 +38,20 @@ Copyright_License {
 CalculationThread::CalculationThread(GlideComputer &_glide_computer)
   :WorkerThread(180, 50), glide_computer(_glide_computer) {}
 
+void
+CalculationThread::SetSettingsComputer(const SETTINGS_COMPUTER &new_value)
+{
+  ScopeLock protect(mutex);
+  settings_computer = new_value;
+}
+
+void
+CalculationThread::SetScreenDistanceMeters(fixed new_value)
+{
+  ScopeLock protect(mutex);
+  screen_distance_meters = new_value;
+}
+
 /**
  * Main loop of the CalculationThread
  */
@@ -56,10 +70,14 @@ CalculationThread::tick()
 
     // Copy data from DeviceBlackboard to GlideComputerBlackboard
     glide_computer.ReadBlackboard(device_blackboard.Basic());
+  }
+
+  {
+    ScopeLock protect(mutex);
     // Copy settings form SettingsComputerBlackboard to GlideComputerBlackboard
-    glide_computer.ReadSettingsComputer(device_blackboard.SettingsComputer());
+    glide_computer.ReadSettingsComputer(settings_computer);
     // Copy mapprojection from MapProjectionBlackboard to GlideComputerBlackboard
-    glide_computer.SetScreenDistanceMeters(device_blackboard.GetScreenDistanceMeters());
+    glide_computer.SetScreenDistanceMeters(screen_distance_meters);
   }
 
   // if (time advanced and slow calculations need to be updated)

@@ -40,6 +40,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
+#include "CalculationThread.hpp"
 
 bool CommonInterface::movement_detected = false;
 
@@ -74,7 +75,11 @@ XCSoarInterface::ReceiveBlackboard()
 void
 ActionInterface::SendSettingsComputer()
 {
+  assert(calculation_thread != NULL);
+
   main_window.map.SetSettingsComputer(SettingsComputer());
+  calculation_thread->SetSettingsComputer(SettingsComputer());
+  calculation_thread->SetScreenDistanceMeters(main_window.map.VisibleProjection().GetScreenDistanceMeters());
 
   ScopeLock protect(mutexBlackboard);
   // send computer settings to the device because we know
