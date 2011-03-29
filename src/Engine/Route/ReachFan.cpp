@@ -453,6 +453,9 @@ void
 ReachFan::accept_in_range(const GeoBounds& bounds,
                           TriangleFanVisitor& visitor) const
 {
+  if (root.empty())
+    return;
+
   const FlatBoundingBox bb = task_proj.project(bounds);
   visitor.allocate_fans(fan_size);
   root.accept_in_range(bb, task_proj, visitor);
