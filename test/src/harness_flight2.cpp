@@ -185,11 +185,11 @@ bool test_automc(int test_num, int n_wind)
   double t1 = time_elapsed;
 
   bool fine = (t1/t0<1.015);
-  ok(fine,test_name("faster with auto mc on",test_num, n_wind),0);
-  
   if (!fine || verbose) {
     printf("# time ratio %g\n", t1/t0);
   }
+  ok(fine,test_name("faster with auto mc on",test_num, n_wind),0);
+
   return fine;
 }
 
