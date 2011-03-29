@@ -87,10 +87,12 @@ PolygonRotateShift(RasterPoint *poly, const int n, const int xs, const int ys,
 {
   static Angle lastangle = Angle::native(-fixed_one);
   static int cost = 1024, sint = 0;
+  static bool last_scale = false;
   angle = angle.as_bearing();
 
-  if (angle != lastangle) {
+  if ((angle != lastangle) || (last_scale != scale)) {
     lastangle = angle;
+    last_scale = scale;
     if (scale) {
       cost = Layout::FastScale(angle.ifastcosine());
       sint = Layout::FastScale(angle.ifastsine());
