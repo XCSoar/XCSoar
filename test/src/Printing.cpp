@@ -772,7 +772,7 @@ void
 PrintHelper::print(const FlatTriangleFanTree& r) {
   print((const FlatTriangleFan&)r);
 
-  for (std::vector<FlatTriangleFanTree>::const_iterator it = r.children.begin();
+  for (FlatTriangleFanTree::LeafVector::const_iterator it = r.children.begin();
        it != r.children.end(); ++it) {
     print(*it);
   }
