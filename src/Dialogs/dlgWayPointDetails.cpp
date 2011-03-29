@@ -54,8 +54,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-#include <memory>
-
 enum task_edit_result {
   SUCCESS,
   UNMODIFIED,
@@ -224,15 +222,8 @@ OnGotoClicked(gcc_unused WndButton &button)
 }
 
 static task_edit_result
-replace_in_task(const Waypoint &wp)
+replace_in_task(OrderedTask *task, const Waypoint &wp)
 {
-  assert(protected_task_manager != NULL);
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  TaskEvents task_events;
-  GlidePolar glide_polar(task_manager->get_glide_polar());
-  std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
-                                                      XCSoarInterface::SettingsComputer(),
-                                                      glide_polar));
   { // this must be done in thread lock because it potentially changes the
     // waypoints database
     ScopeSuspendAllThreads suspend;
@@ -251,8 +242,26 @@ replace_in_task(const Waypoint &wp)
   if (!task->check_task())
     return INVALID;
 
-  task_manager->commit(*task);
   return SUCCESS;
+}
+
+static task_edit_result
+replace_in_task(const Waypoint &wp)
+{
+  assert(protected_task_manager != NULL);
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  TaskEvents task_events;
+  GlidePolar glide_polar(task_manager->get_glide_polar());
+  OrderedTask *task = task_manager->clone(task_events,
+                                          XCSoarInterface::SettingsComputer(),
+                                          glide_polar);
+
+  task_edit_result result = replace_in_task(task, wp);
+  if (result == SUCCESS)
+    task_manager->commit(*task);
+
+  delete task;
+  return result;
 }
 
 static void
@@ -300,16 +309,8 @@ OnNewHomeClicked(gcc_unused WndButton &button)
 }
 
 static task_edit_result
-insert_in_task(const Waypoint &wp)
+insert_in_task(OrderedTask *task, const Waypoint &wp)
 {
-  assert(protected_task_manager != NULL);
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  TaskEvents task_events;
-  GlidePolar glide_polar(task_manager->get_glide_polar());
-  std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
-                                                      XCSoarInterface::SettingsComputer(),
-                                                      glide_polar));
-
   if (task->task_size()==0)
     return NOTASK;
 
@@ -339,8 +340,26 @@ insert_in_task(const Waypoint &wp)
   if (!task->check_task())
     return INVALID;
 
-  task_manager->commit(*task);
   return SUCCESS;
+}
+
+static task_edit_result
+insert_in_task(const Waypoint &wp)
+{
+  assert(protected_task_manager != NULL);
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  TaskEvents task_events;
+  GlidePolar glide_polar(task_manager->get_glide_polar());
+  OrderedTask *task = task_manager->clone(task_events,
+                                          XCSoarInterface::SettingsComputer(),
+                                          glide_polar);
+
+  task_edit_result result = insert_in_task(task, wp);
+  if (result == SUCCESS)
+    task_manager->commit(*task);
+
+  delete task;
+  return result;
 }
 
 static void
@@ -368,16 +387,8 @@ OnInsertInTaskClicked(gcc_unused WndButton &button)
 }
 
 static task_edit_result
-append_to_task(const Waypoint &wp)
+append_to_task(OrderedTask *task, const Waypoint &wp)
 {
-  assert(protected_task_manager != NULL);
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  TaskEvents task_events;
-  GlidePolar glide_polar(task_manager->get_glide_polar());
-  std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
-                                                      XCSoarInterface::SettingsComputer(),
-                                                      glide_polar));
-
   if (task->task_size()==0)
     return NOTASK;
 
@@ -410,8 +421,26 @@ append_to_task(const Waypoint &wp)
   if (!task->check_task())
     return INVALID;
 
-  task_manager->commit(*task);
   return SUCCESS;
+}
+
+static task_edit_result
+append_to_task(const Waypoint &wp)
+{
+  assert(protected_task_manager != NULL);
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  TaskEvents task_events;
+  GlidePolar glide_polar(task_manager->get_glide_polar());
+  OrderedTask *task = task_manager->clone(task_events,
+                                          XCSoarInterface::SettingsComputer(),
+                                          glide_polar);
+
+  task_edit_result result = append_to_task(task, wp);
+  if (result == SUCCESS)
+    task_manager->commit(*task);
+
+  delete task;
+  return result;
 }
 
 #if 0
@@ -493,16 +522,8 @@ OnAppendInTaskClicked(gcc_unused WndButton &button)
 }
 
 static task_edit_result
-remove_from_task(const Waypoint &wp)
+remove_from_task(OrderedTask *task, const Waypoint &wp)
 {
-  assert(protected_task_manager != NULL);
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  TaskEvents task_events;
-  GlidePolar glide_polar(task_manager->get_glide_polar());
-  std::auto_ptr<OrderedTask> task(task_manager->clone(task_events,
-                                                      XCSoarInterface::SettingsComputer(),
-                                                      glide_polar));
-
   if (task->task_size()==0)
     return NOTASK;
 
@@ -529,8 +550,26 @@ remove_from_task(const Waypoint &wp)
   if (!task->check_task())
     return INVALID;
 
-  task_manager->commit(*task);
   return SUCCESS;
+}
+
+static task_edit_result
+remove_from_task(const Waypoint &wp)
+{
+  assert(protected_task_manager != NULL);
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  TaskEvents task_events;
+  GlidePolar glide_polar(task_manager->get_glide_polar());
+  OrderedTask *task = task_manager->clone(task_events,
+                                          XCSoarInterface::SettingsComputer(),
+                                          glide_polar);
+
+  task_edit_result result = remove_from_task(task, wp);
+  if (result == SUCCESS)
+    task_manager->commit(*task);
+
+  delete task;
+  return result;
 }
 
 static void
