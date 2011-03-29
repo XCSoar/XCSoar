@@ -61,9 +61,6 @@ public:
   RasterTile()
     :xstart(0), ystart(0), xend(0), yend(0),
      width(0), height(0) {}
-  ~RasterTile() {
-    Disable();
-  }
 
   void set(unsigned _xstart, unsigned _ystart,
            unsigned _xend, unsigned _yend) {
