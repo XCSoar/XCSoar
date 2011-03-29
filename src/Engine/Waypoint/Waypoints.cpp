@@ -74,6 +74,9 @@ Waypoints::Waypoints():
 void
 Waypoints::optimise()
 {
+  if (tmp_wps.empty() && waypoint_tree.empty())
+    return; // nothing to do
+
   if (task_projection.update_fast()) {
     // task projection changed, so need to push items back onto stack
     std::copy(begin(), end(), std::back_inserter(tmp_wps));
@@ -274,7 +277,7 @@ Waypoints::visit_within_range(const GeoPoint &loc, const fixed range,
     WaypointVisitor& visitor) const
 {
   if (empty())
-    return;
+    return; // nothing to do
 
   WaypointEnvelope bb_target(loc, task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
