@@ -44,12 +44,12 @@ bool test_speed_factor(int test_num, int n_wind)
   test_flight(test_num, n_wind, 1.0);
   te0 = time_elapsed;
 
-  test_flight(test_num, n_wind, 0.8);
+  test_flight(test_num, n_wind, 0.7);
   te1 = time_elapsed;
   // time of this should be higher than nominal
   ok(te0<te1, test_name("vopt slow or",test_num, n_wind), 0);
 
-  test_flight(test_num, n_wind, 1.2);
+  test_flight(test_num, n_wind, 1.5);
   te2 = time_elapsed;
   // time of this should be higher than nominal
   ok(te0<te2, test_name("vopt fast or",test_num, n_wind), 0);
