@@ -134,7 +134,9 @@ public:
   };
 
 private:
-  AvFilter av_dist;
+  static const unsigned N_AV = 3;
+
+  AvFilter<N_AV> av_dist;
   DiffFilter df;
   Filter v_lpf;
   bool is_positive; // ideally const but then non-copyable

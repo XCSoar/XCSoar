@@ -28,17 +28,10 @@
 /**
  * Average/window filter.  
  */
-class WindowFilter: public AvFilter
+template<unsigned max>
+class WindowFilter : public AvFilter<max>
 {
 public:
-  /**
-   * Constructor, reserves fized size of bucket
-   *
-   * @param _n_max Number of elements in bucket
-   */
-  WindowFilter(const unsigned _n_max):AvFilter(_n_max)  {
-  }
-
   /**
    * Updates filter to add sample to buffer
    *
@@ -47,12 +40,26 @@ public:
    * @return True if buffer is full
    *
    */
-  bool update(const fixed x0);
+  bool update(const fixed x0) {
+    StaticArray<fixed, max> &x = this->x;
+
+    assert(i < x.capacity());
+
+    if (!x.full())
+      return AvFilter<max>::update(x0);
+
+    x[i] = x0;
+    i = (i + 1) % x.capacity();
+    return x.full();
+  }
 
   /**
    * Resets filter (zero samples)
    */
-  void reset();
+  void reset() {
+    AvFilter<max>::reset();
+    i = 0;
+  }
 
 private:
   unsigned i;

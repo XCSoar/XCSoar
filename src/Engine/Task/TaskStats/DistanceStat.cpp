@@ -22,12 +22,9 @@
 #include "DistanceStat.hpp"
 #include "TaskStats.hpp"
 
-#define N_AV 3
-
 DistanceStatComputer::DistanceStatComputer(DistanceStat &_data,
                                            const bool _is_positive)
   :data(_data),
-  av_dist(N_AV),
   df(fixed_zero),
   v_lpf(fixed(400) / N_AV, false),
   is_positive(_is_positive)

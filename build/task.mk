@@ -139,10 +139,8 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Waypoint/WaypointVisitor.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Util/AircraftStateFilter.cpp \
-	$(ENGINE_SRC_DIR)/Util/AvFilter.cpp \
 	$(ENGINE_SRC_DIR)/Util/DiffFilter.cpp \
 	$(ENGINE_SRC_DIR)/Util/Filter.cpp \
-	$(ENGINE_SRC_DIR)/Util/WindowFilter.cpp \
 	$(ENGINE_SRC_DIR)/Util/Gradient.cpp \
 	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
 	$(ENGINE_SRC_DIR)/Util/Serialiser.cpp \

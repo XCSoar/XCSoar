@@ -24,24 +24,24 @@
 #define AV_FILTER_HPP
 
 #include "Math/fixed.hpp"
-#include "Util/AllocatedArray.hpp"
+#include "Util/StaticArray.hpp"
 #include "Compiler.h"
+
+#include <cassert>
 
 /**
  * Average/bucket filter.  When filter is full, can return samples
  */
+template<unsigned max>
 class AvFilter 
 {
+protected:
+  /** Values stored */
+  StaticArray<fixed, max> x;
+
 public:
-  /**
-   * Constructor, reserves fized size of bucket
-   *
-   * @param _n_max Number of elements in bucket
-   */
-  AvFilter(const unsigned _n_max)
-    :x(_n_max)
-  {
-    reset();
+  unsigned capacity() const {
+    return x.capacity();
   }
 
   /**
@@ -51,7 +51,12 @@ public:
    *
    * @return True if buffer is full
    */
-  bool update(const fixed x0);
+  bool update(const fixed x0) {
+    if (!x.full())
+      x.append(x0);
+
+    return x.full();
+  }
 
   /**
    * Calculate average from samples
@@ -59,17 +64,23 @@ public:
    * @return Average value in buffer
    */
   gcc_pure
-  fixed average();
+  fixed average() const {
+    assert(!x.empty());
+
+    fixed y = fixed_zero;
+    for (unsigned i = 0; i < x.size(); i++)
+      y += x[i];
+
+    return y / x.size();
+  }
 
   /**
    * Resets filter (zero samples)
    *
    */
-  void reset();
-
-protected:
-  AllocatedArray<fixed> x; /**< Values stored */
-  unsigned n; /**< Number of taps */
+  void reset() {
+    x.clear();
+  }
 };
 
 #endif

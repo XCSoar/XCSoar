@@ -122,8 +122,8 @@ private:
   GPSClock airspace_clock;
   GPSClock ballast_clock;
 
-  WindowFilter vario_30s_filter;
-  WindowFilter netto_30s_filter;
+  WindowFilter<30> vario_30s_filter;
+  WindowFilter<30> netto_30s_filter;
 };
 
 #endif
