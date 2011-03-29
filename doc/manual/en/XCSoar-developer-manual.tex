@@ -169,12 +169,41 @@ FooBar(int a_parameter, unsigned another_parameter,
 
 \section{C++}
 
+\subsection{Features}
+
+C++ is a complex language with many features, but some of them come at
+a cost (XCSoar runs on weak embedded devices), and others are not
+supported well by compilers.  Adopting a new compiler version is
+difficult, because the new version may not be available on all
+platforms.  This section describes the C++ language features that are
+allowed to be used.
+
+XCSoar's standard compiler is \texttt{gcc}.  We need to stay
+compatible with version 4.4, because that is what \texttt{cegcc} is
+based on.
+
+The following C++ features must \emph{not} be used:
+
+\begin{itemize}
+\item RTTI
+\item exceptions
+\end{itemize}
+
+\subsubsection{C++11}
+
+The XCSoar code base is currently migrating to the new standard
+C++11.  The following C++11 features are safe to use:
+
+\begin{itemize}
+\item Rvalue references
+\end{itemize}
+
+\subsection{Other rules}
+
 In a class declaration, attributes come first, then
 constructor/destructor, and finally the methods.  Having all
 attributes in one place gives a good overview of the nature of a
 class.
-
-Don't use RTTI and exceptions.
 
 Avoid expensive and bloated STL containers if there are cheaper
 solutions (e.g. \texttt{StaticArray}, \texttt{StaticString} if the
