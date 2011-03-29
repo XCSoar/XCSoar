@@ -53,6 +53,8 @@ Airspaces::visit_within_range(const GeoPoint &loc,
                               AirspaceVisitor& visitor,
                               const AirspacePredicate &predicate) const
 {
+  if (empty()) return; // nothing to do
+
   Airspace bb_target(loc, task_projection);
   int mrange = task_projection.project_range(loc, range);
   AirspacePredicateVisitorAdapter adapter(predicate, visitor);
@@ -88,6 +90,8 @@ Airspaces::visit_intersecting(const GeoPoint &loc,
                               const GeoVector &vec,
                               AirspaceIntersectionVisitor& visitor) const
 {
+  if (empty()) return; // nothing to do
+
   FlatRay ray(task_projection.project(loc), 
               task_projection.project(vec.end_point(loc)));
 
@@ -407,6 +411,8 @@ void
 Airspaces::visit_inside(const GeoPoint &loc,
                         AirspaceVisitor& visitor) const
 {
+  if (empty()) return; // nothing to do
+
   Airspace bb_target(loc, task_projection);
   AirspaceVector vectors;
   airspace_tree.find_within_range(bb_target, 0, std::back_inserter(vectors));
