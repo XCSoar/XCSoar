@@ -47,7 +47,7 @@ public:
     proj(_proj),
     rpolar(_rpolar),
     origin(proj.unproject(_e.first)),
-    nearest(NULL,_e.first)
+    nearest((const AbstractAirspace *)NULL, _e.first)
     {
     }
   virtual void Visit(const AirspaceCircle &as) {
