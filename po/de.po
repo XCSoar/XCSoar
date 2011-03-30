@@ -352,7 +352,7 @@ msgstr "Alle"
 #: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1390
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Aufgaben & Landeplätze"
 
 #: src/ExpandMacros.cpp:517
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:104
@@ -994,7 +994,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
 msgid "Height barometric"
-msgstr ""
+msgstr "Barometrische Höhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:5
@@ -1141,7 +1141,7 @@ msgstr "UTC Zeit laut GPS."
 #: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
 msgid "Task time to go"
-msgstr ""
+msgstr "Restzeit der Aufgabe"
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
@@ -1815,22 +1815,22 @@ msgstr "Absolute Ankunftshöhe am nächsten Wegpunkt im Endanflug."
 #: src/InfoBoxes/Content/Factory.cpp:758 src/InfoBoxes/Content/Factory.cpp:759
 #, no-c-format
 msgid "Free RAM"
-msgstr ""
+msgstr "Freier Arbeitsspeicher"
 
 #: src/InfoBoxes/Content/Factory.cpp:760
 #, no-c-format
 msgid "Free RAM as reported by OS."
-msgstr ""
+msgstr "Freierspeicher Betriebsystem"
 
 #: src/InfoBoxes/Content/Factory.cpp:767
 #, no-c-format
 msgid "Flight level"
-msgstr ""
+msgstr "Flughöhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:768
 #, no-c-format
 msgid "Flight Level"
-msgstr ""
+msgstr "Flughöhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:769
 #, no-c-format
@@ -1842,7 +1842,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:776 src/InfoBoxes/Content/Factory.cpp:777
 #, no-c-format
 msgid "Barogram"
-msgstr ""
+msgstr "Barogramm"
 
 #: src/InfoBoxes/Content/Factory.cpp:778
 #, no-c-format
@@ -1910,7 +1910,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:822
 #, no-c-format
 msgid "Progress"
-msgstr ""
+msgstr "Fortschritt"
 
 #: src/InfoBoxes/Content/Factory.cpp:823
 #, no-c-format
@@ -1927,7 +1927,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:831
 #, no-c-format
 msgid "Start Height"
-msgstr ""
+msgstr "Starthöhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:832
 #, no-c-format
@@ -1979,7 +1979,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Altitude.cpp:117
 #: src/InfoBoxes/Content/Altitude.cpp:127
 msgid "N/A"
-msgstr ""
+msgstr "Nicht Verfügbar"
 
 #: src/InfoBoxes/Content/Altitude.cpp:266 src/GlueMapWindowOverlays.cpp:366
 #: Data/Dialogs/dlgSimulatorPrompt.xml:6
@@ -1996,12 +1996,12 @@ msgstr "Info"
 #: src/InfoBoxes/Content/MacCready.cpp:176
 #: src/InfoBoxes/Content/Weather.cpp:262
 msgid "Setup"
-msgstr ""
+msgstr "Einstellung"
 
 #: src/InfoBoxes/Content/Altitude.cpp:404
 #: src/InfoBoxes/Content/Altitude.cpp:491
 msgid "no QNH"
-msgstr ""
+msgstr "kein QNH"
 
 #: src/InfoBoxes/Content/MacCready.cpp:137
 #: src/InfoBoxes/Content/MacCready.cpp:159
@@ -2128,7 +2128,7 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:246
 msgid "Default InfoBoxes"
-msgstr ""
+msgstr "Standard InfoBoxes"
 
 #: src/InputEventsActions.cpp:286
 msgid "Auto. zoom on"
@@ -2243,7 +2243,7 @@ msgstr "Keine "
 
 #: src/InputEventsActions.cpp:1405
 msgid "Waypoint labels"
-msgstr ""
+msgstr "Wegpunkte Beschriftung"
 
 #: src/InputEventsActions.cpp:1445
 msgid "Map labels on"
