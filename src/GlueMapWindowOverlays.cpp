@@ -37,7 +37,6 @@ Copyright_License {
 #include "Terrain/RasterWeather.hpp"
 #include "UnitsFormatter.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-
 #include <stdio.h>
 
 void
@@ -344,8 +343,6 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   if (symbol != NULL)
     symbol->draw(canvas, IBLSCALE(8) + TextSize.cx, rc.bottom - Height);
 
-  int y = rc.bottom - Height - Fonts::Title.get_ascent_height();
-
   ScaleInfo[0] = '\0';
   if (SettingsMap().AutoZoom)
     _tcscat(ScaleInfo, _T("AUTO "));
@@ -381,9 +378,14 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   }
 
   if (ScaleInfo[0]) {
+    int y = rc.bottom - Height;
+
     canvas.select(Fonts::Title);
     canvas.background_opaque();
     canvas.set_background_color(Color::WHITE);
+
+    TextSize = canvas.text_size(ScaleInfo);
+    y-= TextSize.cy;
     canvas.text(0, y, ScaleInfo);
   }
 }
