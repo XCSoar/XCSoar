@@ -781,35 +781,35 @@
     </Panel>
   
     <Panel Name="frmPages">
-      <Edit Name="prpPageLayout0" Caption="Page 1" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpPageLayout0" Caption="Page 1" X="2" Width="-2" Height="22" CaptionWidth="50"
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
-      <Edit Name="prpPageLayout1" Caption="Page 2" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpPageLayout1" Caption="Page 2" X="2" Width="-2" Height="22" CaptionWidth="50"
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
-      <Edit Name="prpPageLayout2" Caption="Page 3" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpPageLayout2" Caption="Page 3" X="2" Width="-2" Height="22" CaptionWidth="50"
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
-      <Edit Name="prpPageLayout3" Caption="Page 4" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpPageLayout3" Caption="Page 4" X="2" Width="-2" Height="22" CaptionWidth="50"
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
-      <Edit Name="prpPageLayout4" Caption="Page 5" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpPageLayout4" Caption="Page 5" X="2" Width="-2" Height="22" CaptionWidth="50"
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
-      <Edit Name="prpPageLayout5" Caption="Page 6" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpPageLayout5" Caption="Page 6" X="2" Width="-2" Height="22" CaptionWidth="50"
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
-      <Edit Name="prpPageLayout6" Caption="Page 7" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpPageLayout6" Caption="Page 7" X="2" Width="-2" Height="22" CaptionWidth="50"
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
-      <Edit Name="prpPageLayout7" Caption="Page 8" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpPageLayout7" Caption="Page 8" X="2" Width="-2" Height="22" CaptionWidth="50"
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
