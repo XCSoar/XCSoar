@@ -275,9 +275,9 @@ Graphics::Initialise()
   hpTerrainLineBg.set(Layout::Scale(2), Color::WHITE);
 
   TracePen.set(2, Color(50, 243, 45));
-  ContestPen[0].set(3, Color::RED);
-  ContestPen[1].set(3, Color::ORANGE);
-  ContestPen[2].set(3, Color::BLUE);
+  ContestPen[0].set(Layout::Scale(1)+2, Color::RED);
+  ContestPen[1].set(Layout::Scale(1)+1, Color::ORANGE);
+  ContestPen[2].set(Layout::Scale(1), Color::BLUE);
 
   SmallIcon.load_big(IDB_SMALL, IDB_SMALL_HD);
   TurnPointIcon.load_big(IDB_TURNPOINT, IDB_TURNPOINT_HD);
