@@ -76,6 +76,42 @@ RasterBuffer::get_interpolated(unsigned lx, unsigned ly) const
   return get_interpolated(lx, ly, ix, iy);
 }
 
+/**
+ * This class implements an algorithm to traverse pixels quickly with
+ * only integer addition, no multiplication and division.
+ */
+class PixelIterator {
+  unsigned src_increment, src_counter;
+  unsigned dest_increment, dest_counter;
+
+public:
+  PixelIterator(unsigned src_size, unsigned dest_size)
+    :src_increment(dest_size), src_counter(0),
+     dest_increment(src_size), dest_counter(0) {}
+
+  /**
+   * @return the number of source pixels to skip
+   */
+  unsigned Next() {
+    if (dest_counter < src_counter) {
+      dest_counter += dest_increment;
+      return 0;
+    }
+
+    dest_counter += dest_increment;
+
+    unsigned n = 0;
+
+    /* this loop is inefficient with large dest_increment values */
+    while (src_counter + src_increment <= dest_counter) {
+      src_counter += src_increment;
+      ++n;
+    }
+
+    return n;
+  }
+};
+
 void
 RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
                                  short *buffer, unsigned size,
@@ -92,7 +128,6 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
     return;
   }
 
-  --size;
   const int dx = bx - ax;
   if (interpolate && (unsigned)abs(dx) < (size << 8u)) {
     /* interpolate */
@@ -100,17 +135,32 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
     unsigned cy = y;
     const unsigned int iy = CombinedDivAndMod(cy);
 
+    --size;
     for (int i = 0; (unsigned)i <= size; ++i) {
       unsigned cx = ax + (i * dx) / (int)size;
       const unsigned int ix = CombinedDivAndMod(cx);
 
       *buffer++ = get_interpolated(cx, cy, ix, iy);
     }
+  } else if (gcc_likely(dx > 0)) {
+    /* no interpolation needed, forward scan */
+
+    const short *src = get_data_at(ax >> 8, y >> 8);
+
+    PixelIterator iterator(dx >> 8, size);
+    short *end = buffer + size;
+    while (true) {
+      *buffer++ = *src;
+      if (buffer >= end)
+        break;
+      src += iterator.Next();
+    }
   } else {
     /* no interpolation needed */
 
     const short *src = get_data_at(0, y >> 8);
 
+    --size;
     for (int i = 0; (unsigned)i <= size; ++i) {
       unsigned cx = ax + (i * dx) / (int)size;
 
