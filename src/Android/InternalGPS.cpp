@@ -119,8 +119,10 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   } else
     basic.TrackBearingAvailable.clear();
 
-  if (hasSpeed)
+  if (hasSpeed) {
     basic.GroundSpeed = fixed(speed);
+    basic.GroundSpeedAvailable.update(basic.Time);
+  }
 
   if (hasAccuracy)
     basic.gps.HDOP = fixed(accuracy);
