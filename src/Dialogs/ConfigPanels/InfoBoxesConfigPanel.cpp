@@ -77,10 +77,38 @@ OnInfoBoxesFinalGlide(gcc_unused WndButton &button)
 }
 
 static void
-OnInfoBoxesAuxiliary(gcc_unused WndButton &button)
+OnInfoBoxesAux1(gcc_unused WndButton &button)
 {
   dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
                               InfoBoxManager::PANEL_AUXILIARY);
+}
+
+static void
+OnInfoBoxesAux2(gcc_unused WndButton &button)
+{
+  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
+                              InfoBoxManager::PANEL_AUXILIARY+1);
+}
+
+static void
+OnInfoBoxesAux3(gcc_unused WndButton &button)
+{
+  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
+                              InfoBoxManager::PANEL_AUXILIARY+2);
+}
+
+static void
+OnInfoBoxesAux4(gcc_unused WndButton &button)
+{
+  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
+                              InfoBoxManager::PANEL_AUXILIARY+3);
+}
+
+static void
+OnInfoBoxesAux5(gcc_unused WndButton &button)
+{
+  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
+                              InfoBoxManager::PANEL_AUXILIARY+4);
 }
 
 void
@@ -95,8 +123,16 @@ InfoBoxesConfigPanel::Init(WndForm *_wf)
       SetOnClickNotify(OnInfoBoxesCruise);
   ((WndButton *)wf->FindByName(_T("cmdInfoBoxesFinalGlide")))->
       SetOnClickNotify(OnInfoBoxesFinalGlide);
-  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAuxiliary")))->
-      SetOnClickNotify(OnInfoBoxesAuxiliary);
+  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAux1")))->
+      SetOnClickNotify(OnInfoBoxesAux1);
+  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAux2")))->
+      SetOnClickNotify(OnInfoBoxesAux2);
+  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAux3")))->
+      SetOnClickNotify(OnInfoBoxesAux3);
+  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAux4")))->
+      SetOnClickNotify(OnInfoBoxesAux4);
+  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAux5")))->
+      SetOnClickNotify(OnInfoBoxesAux5);
 
 }
 
