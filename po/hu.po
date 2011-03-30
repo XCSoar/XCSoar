@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 17:58+0200\n"
+"POT-Creation-Date: 2011-03-30 14:19+0200\n"
 "PO-Revision-Date: 2011-03-30 17:52+0200\n"
 "Last-Translator: Max Kellermann <max@duempel.org>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -218,12 +218,16 @@ msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
+"Léptet\n"
+"(kézi)"
 
 #: src/ExpandMacros.cpp:278
 msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
+"Léptet\n"
+"(automata)"
 
 #: src/ExpandMacros.cpp:283
 msgid ""
@@ -253,7 +257,7 @@ msgstr ""
 
 #: src/ExpandMacros.cpp:317 src/ExpandMacros.cpp:321
 msgid "Resume"
-msgstr ""
+msgstr "Folytatás"
 
 #: src/ExpandMacros.cpp:317 src/ExpandMacros.cpp:321
 #: src/Dialogs/Message.cpp:168
@@ -305,19 +309,19 @@ msgstr "Be"
 
 #: src/ExpandMacros.cpp:454 src/ExpandMacros.cpp:480
 msgid "Topography On"
-msgstr ""
+msgstr "Térképjelek be"
 
 #: src/ExpandMacros.cpp:458 src/ExpandMacros.cpp:484
 msgid "Terrain On"
-msgstr ""
+msgstr "Domborzat be"
 
 #: src/ExpandMacros.cpp:462 src/ExpandMacros.cpp:488
 msgid "Terrain + Topography"
-msgstr ""
+msgstr "Jelek + Domborzat"
 
 #: src/ExpandMacros.cpp:466 src/ExpandMacros.cpp:492
 msgid "Terrain Off"
-msgstr ""
+msgstr "Domborzat ki"
 
 #: src/ExpandMacros.cpp:502 src/ExpandMacros.cpp:526
 #: src/InfoBoxes/Content/Weather.cpp:203 src/InfoBoxes/Content/Weather.cpp:233
@@ -337,12 +341,12 @@ msgstr "Autómatikus"
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:88
 #, no-c-format
 msgid "All"
-msgstr ""
+msgstr "Mind"
 
 #: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1390
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Feladat és leszállóhelyek"
 
 #: src/ExpandMacros.cpp:517
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:104
@@ -364,7 +368,7 @@ msgstr "GPS magasság"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:4
 #, no-c-format
 msgid "H GPS"
-msgstr ""
+msgstr "M GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:63
 #, no-c-format
@@ -386,7 +390,7 @@ msgstr "Terep feletti magasság"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:7
 #, no-c-format
 msgid "H AGL"
-msgstr ""
+msgstr "M AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:72
 #, no-c-format
@@ -438,12 +442,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:97
 #, no-c-format
 msgid "L/D instantaneous"
-msgstr ""
+msgstr "Pillanatnyi siklószám"
 
 #: src/InfoBoxes/Content/Factory.cpp:98
 #, no-c-format
 msgid "L/D Inst"
-msgstr ""
+msgstr "Siklószám pill"
 
 #: src/InfoBoxes/Content/Factory.cpp:99
 #, no-c-format
@@ -453,16 +457,20 @@ msgid ""
 "climbing cruise. If the vertical speed is close to zero, the displayed value "
 "is '---'."
 msgstr ""
+"Pillanatnyi siklószám, amit az utolsó 20 mp talaj feletti sebességének és a "
+"függőleges sebességnek (GPS szerint) a hányadosa ad. A negatív értékek "
+"emelkedő siklást jeleznek. Nulla közeli függőleges sebesség esetén '---' "
+"kerül megjelenítésre."
 
 #: src/InfoBoxes/Content/Factory.cpp:106
 #, no-c-format
 msgid "L/D cruise"
-msgstr ""
+msgstr "Siklószám siklásban"
 
 #: src/InfoBoxes/Content/Factory.cpp:107
 #, no-c-format
 msgid "L/D Cru"
-msgstr ""
+msgstr "Siklószám skl"
 
 #: src/InfoBoxes/Content/Factory.cpp:108
 #, no-c-format
@@ -472,6 +480,10 @@ msgid ""
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
 msgstr ""
+"Az utolsó termik teteje óta megtett út és a magasságvesztés hányadosa. A "
+"negatív értékek emelkedő siklást jeleznek (a termik elhagyása óta nőtt a "
+"magasság). Nulla közeli függőleges sebesség esetén '---' kerül "
+"megjelenítésre."
 
 #: src/InfoBoxes/Content/Factory.cpp:115
 #, no-c-format
@@ -481,7 +493,7 @@ msgstr "Földhöz viszonyított sebesség"
 #: src/InfoBoxes/Content/Factory.cpp:116
 #, no-c-format
 msgid "V Gnd"
-msgstr ""
+msgstr "V Gnd"
 
 #: src/InfoBoxes/Content/Factory.cpp:117
 #, no-c-format
@@ -490,6 +502,9 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
+"Talaj feletti sebesség GPS szerint mérve. Szimuláció alatt a fel-le nyilak a "
+"vitorlázógép sebességét, a jobbra-balra nyilak pedig az irányát állítják, ha "
+"ez a kijelző van kiválasztva."
 
 #: src/InfoBoxes/Content/Factory.cpp:124
 #, no-c-format
@@ -499,7 +514,7 @@ msgstr "Utolsó termik átlag"
 #: src/InfoBoxes/Content/Factory.cpp:125
 #, no-c-format
 msgid "TL Avg"
-msgstr ""
+msgstr "UT Átl"
 
 #: src/InfoBoxes/Content/Factory.cpp:126
 #, no-c-format
@@ -507,6 +522,8 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
+"Az utolsó termikben nyert/veszített magasság és a körözéssel töltött idő "
+"hányadosa."
 
 #: src/InfoBoxes/Content/Factory.cpp:133
 #, no-c-format
@@ -516,7 +533,7 @@ msgstr "Utolsó termik nyereség"
 #: src/InfoBoxes/Content/Factory.cpp:134
 #, no-c-format
 msgid "TL Gain"
-msgstr ""
+msgstr "UT Nysg"
 
 #: src/InfoBoxes/Content/Factory.cpp:135
 #, no-c-format
@@ -531,7 +548,7 @@ msgstr "Utolsó termik idő"
 #: src/InfoBoxes/Content/Factory.cpp:143
 #, no-c-format
 msgid "TL Time"
-msgstr ""
+msgstr "UT Idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:144
 #, no-c-format
@@ -546,7 +563,7 @@ msgstr "MacCready beállítás"
 #: src/InfoBoxes/Content/Factory.cpp:152
 #, no-c-format
 msgid "MC"
-msgstr ""
+msgstr "MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:153
 #, no-c-format
@@ -555,6 +572,9 @@ msgid ""
 "manual or auto. (Touchscreen/PC only) Also used to adjust the MacCready "
 "Setting if the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"Az aktuális MacCready érték. A kijelzőben látszik, hogy a MacCready érték "
+"kézi vagy automata állásban van-e (érintőképernyőn/csak PC-n). Ha ez a "
+"kijelző van kiválasztva, a MacCready érték a fel-le nyilakkal állítható."
 
 #: src/InfoBoxes/Content/Factory.cpp:160
 #, no-c-format
@@ -564,7 +584,7 @@ msgstr "Következő távolság"
 #: src/InfoBoxes/Content/Factory.cpp:161
 #, no-c-format
 msgid "WP Dist"
-msgstr ""
+msgstr "FP táv"
 
 #: src/InfoBoxes/Content/Factory.cpp:162
 #, no-c-format
@@ -572,6 +592,8 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
+"A kiválasztott fordulópont távolsága. AAT feladatok esetén az AAT szektor "
+"célpontjának távolsága."
 
 #: src/InfoBoxes/Content/Factory.cpp:169
 #, no-c-format
@@ -581,7 +603,7 @@ msgstr "Következő magasság különbség"
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
 msgid "WP AltD"
-msgstr ""
+msgstr "FP mag"
 
 #: src/InfoBoxes/Content/Factory.cpp:171
 #, no-c-format
@@ -589,6 +611,8 @@ msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival "
 "altitude."
 msgstr ""
+"A következő fordulópontba érkezés magassága a biztonságos érkezési "
+"magassághoz képest."
 
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
@@ -598,17 +622,17 @@ msgstr "Következő szükséges magasság"
 #: src/InfoBoxes/Content/Factory.cpp:179
 #, no-c-format
 msgid "WP AltR"
-msgstr ""
+msgstr "FP SzMag"
 
 #: src/InfoBoxes/Content/Factory.cpp:180
 #, no-c-format
 msgid "Additional altitude required to reach the next turn point."
-msgstr ""
+msgstr "Nagyobb magasság szükséges a következő fordulópont eléréséhez."
 
 #: src/InfoBoxes/Content/Factory.cpp:187
 #, no-c-format
 msgid "Next waypoint"
-msgstr ""
+msgstr "Következő fordulópont"
 
 #: src/InfoBoxes/Content/Factory.cpp:188 src/InfoBoxes/Content/Task.cpp:84
 #: Data/Dialogs/dlgTaskPoint.xml:6 Data/Dialogs/dlgTaskPoint_L.xml:5
@@ -624,6 +648,9 @@ msgid ""
 "task. (Touchscreen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"A kiválasztott fordulópont neve. Ha ez a kijelző az aktív, akkor a fel-le "
+"nyilak a feladat következő/előző fordulópontját választják ki "
+"(érintőképernyő/csak PC). Az Enter megjeleníti a fordulópont részleteit."
 
 #: src/InfoBoxes/Content/Factory.cpp:196
 #, no-c-format
@@ -633,7 +660,7 @@ msgstr "Végső magasság különbség"
 #: src/InfoBoxes/Content/Factory.cpp:197
 #, no-c-format
 msgid "Fin AltD"
-msgstr ""
+msgstr "VgsMagK"
 
 #: src/InfoBoxes/Content/Factory.cpp:198
 #, no-c-format
@@ -641,6 +668,8 @@ msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "altitude."
 msgstr ""
+"Az utolsó fordulópontba érkezés magassága a biztonságos érkezési magassághoz "
+"képest."
 
 #: src/InfoBoxes/Content/Factory.cpp:205
 #, no-c-format
@@ -650,12 +679,12 @@ msgstr "Szükséges végső magasság"
 #: src/InfoBoxes/Content/Factory.cpp:206
 #, no-c-format
 msgid "Fin AltR"
-msgstr ""
+msgstr "VgsMagSz"
 
 #: src/InfoBoxes/Content/Factory.cpp:207
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr ""
+msgstr "A feladat befejezéséhez nagyobb magasság szükséges."
 
 #: src/InfoBoxes/Content/Factory.cpp:214
 #, no-c-format
@@ -665,7 +694,7 @@ msgstr "Sebességi feladat átlag"
 #: src/InfoBoxes/Content/Factory.cpp:215
 #, no-c-format
 msgid "VTask Avg"
-msgstr ""
+msgstr "SFldtÁtl"
 
 #: src/InfoBoxes/Content/Factory.cpp:216
 #, no-c-format
@@ -673,6 +702,7 @@ msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
 msgstr ""
+"Az aktuális feladat átlagos utazósebessége, magassági kompenzáció nélkül."
 
 #: src/InfoBoxes/Content/Factory.cpp:223
 #, no-c-format
@@ -682,17 +712,17 @@ msgstr "Végső távolság"
 #: src/InfoBoxes/Content/Factory.cpp:224
 #, no-c-format
 msgid "Fin Dist"
-msgstr ""
+msgstr "VgsTáv"
 
 #: src/InfoBoxes/Content/Factory.cpp:225
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr ""
+msgstr "A hátralevő fordulópontok érintésével számított távolság a célig."
 
 #: src/InfoBoxes/Content/Factory.cpp:232
 #, no-c-format
 msgid "Final L/D"
-msgstr ""
+msgstr "VgsSikl"
 
 #: src/InfoBoxes/Content/Factory.cpp:233
 #, no-c-format
@@ -710,6 +740,13 @@ msgid ""
 "finish by the excess energy height of the glider if its true airspeed is "
 "greater than the MacCready and best LD speeds."
 msgstr ""
+"A feladat befejezéséhez szükséges siklószám, a hátralevő távolság és a "
+"biztonságos érkezési magasság feletti magasság hányadosa. Negatív érték "
+"esetén a befejezéshez további emelkedés szükséges. Nullához közeli érték "
+"esetén '---' kerül kijelzésre. Figyelem, ez esetleg optimista számítás "
+"lehet, mert a gép helyzeti energiájának megfelelően csökkenti a befejezéshez "
+"szükséges magasságot, ha a gép sebessége nagyobb a MacCready- vagy az "
+"optimális sebességnél."
 
 #: src/InfoBoxes/Content/Factory.cpp:241
 #, no-c-format
@@ -720,7 +757,7 @@ msgstr "Domborzat magasság"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:8
 #, no-c-format
 msgid "H GND"
-msgstr ""
+msgstr "TrpMag"
 
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
@@ -728,6 +765,8 @@ msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
 msgstr ""
+"A terep tengerszint feletti magassága a pillanatnyi GPS pozícióban a "
+"domborzati fájl adatai alapján."
 
 #: src/InfoBoxes/Content/Factory.cpp:250
 #, no-c-format
@@ -737,7 +776,7 @@ msgstr "Termik átlag"
 #: src/InfoBoxes/Content/Factory.cpp:251
 #, no-c-format
 msgid "TC Avg"
-msgstr ""
+msgstr "TkÁtl"
 
 #: src/InfoBoxes/Content/Factory.cpp:252
 #, no-c-format
@@ -745,6 +784,8 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermaling."
 msgstr ""
+"Az aktuális termikben nyert/veszített magasság és a körözéssel töltött idő "
+"hányadosa."
 
 #: src/InfoBoxes/Content/Factory.cpp:259
 #, no-c-format
@@ -754,12 +795,12 @@ msgstr "Termik nyereség"
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
 msgid "TC Gain"
-msgstr ""
+msgstr "TkNysg"
 
 #: src/InfoBoxes/Content/Factory.cpp:261
 #, no-c-format
 msgid "The altitude gained/lost in the current thermal."
-msgstr ""
+msgstr "Az aktuális termikben nyert/vesztett magasság."
 
 #: src/InfoBoxes/Content/Factory.cpp:268 src/InfoBoxes/Content/Factory.cpp:269
 #, no-c-format
@@ -773,6 +814,8 @@ msgid ""
 "active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"A GPS által mért mágneses irányszög (érintőképernyő/csak PC). Ha szimuláció "
+"során ez a kijelző az aktív, a fel-le nyilakkal állítható az irány."
 
 #: src/InfoBoxes/Content/Factory.cpp:277 src/InfoBoxes/Content/Factory.cpp:278
 #: src/InfoBoxes/Content/Factory.cpp:786
@@ -791,6 +834,8 @@ msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
 msgstr ""
+"A GPS által mért pillanatnyi varió vagy az összenergia-varió, ha intelligens "
+"variométer van csatlakoztatva."
 
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
@@ -800,7 +845,7 @@ msgstr "Szél sebesség"
 #: src/InfoBoxes/Content/Factory.cpp:287
 #, no-c-format
 msgid "Wind V"
-msgstr ""
+msgstr "Szélseb"
 
 #: src/InfoBoxes/Content/Factory.cpp:288
 #, no-c-format
@@ -811,6 +856,10 @@ msgid ""
 "enter cursor key saves the wind value as the initial value when XCSoar next "
 "starts."
 msgstr ""
+"Az XCSoar által becsült szélsebesség (érintőképernyő/csak PC). Ha ez a "
+"kijelző az aktív, a fel-le nyilak a szélerősséget, a jobbra-balra nyilak a "
+"szélirányt állítják. Az Enter hatására ezek lesznek a kezdőértékek az XCSoar "
+"következő használatakor."
 
 #: src/InfoBoxes/Content/Factory.cpp:295
 #, no-c-format
@@ -820,7 +869,7 @@ msgstr "Szél irány"
 #: src/InfoBoxes/Content/Factory.cpp:296
 #, no-c-format
 msgid "Wind B"
-msgstr ""
+msgstr "Szélirány"
 
 #: src/InfoBoxes/Content/Factory.cpp:297
 #, no-c-format
@@ -829,62 +878,67 @@ msgid ""
 "possible by pressing the up/down cursor keys to adjust bearing when the "
 "InfoBox is active."
 msgstr ""
+"Az XCSoar által becsült szélirány (érintőképernyő/csak PC). Ha ez a kijelző "
+"az aktív, a fel-le nyilakkal állítható az irány."
 
 #: src/InfoBoxes/Content/Factory.cpp:304
 #, no-c-format
 msgid "AA time"
-msgstr ""
+msgstr "AA idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:305
 #, no-c-format
 msgid "AA Time"
-msgstr ""
+msgstr "TS idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:306
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
 msgstr ""
+"Hátralevő idő területi szabad távrepülésen. Vörösre vált ha az idő lejárt."
 
 #: src/InfoBoxes/Content/Factory.cpp:313
 #, no-c-format
 msgid "AA max. distance "
-msgstr ""
+msgstr "TS max. távolság "
 
 #: src/InfoBoxes/Content/Factory.cpp:314
 #, no-c-format
 msgid "AA Dmax"
-msgstr ""
+msgstr "TSMaxTáv"
 
 #: src/InfoBoxes/Content/Factory.cpp:315
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
 msgstr ""
+"Maximális lehetséges távolság területi szabad távrepülés hátralevő részére."
 
 #: src/InfoBoxes/Content/Factory.cpp:322
 #, no-c-format
 msgid "AA min. distance"
-msgstr ""
+msgstr "TS min. távolság"
 
 #: src/InfoBoxes/Content/Factory.cpp:323
 #, no-c-format
 msgid "AA Dmin"
-msgstr ""
+msgstr "TSMinTáv"
 
 #: src/InfoBoxes/Content/Factory.cpp:324
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
 msgstr ""
+"Minimális lehetséges távolság területi szabad távrepülés hátralevő részére."
 
 #: src/InfoBoxes/Content/Factory.cpp:331
 #, no-c-format
 msgid "AA speed max. distance"
-msgstr ""
+msgstr "TS sebesség max. távolság"
 
 #: src/InfoBoxes/Content/Factory.cpp:332
 #, no-c-format
 msgid "AA Vmax"
-msgstr ""
+msgstr "TSSebMaxT"
 
 #: src/InfoBoxes/Content/Factory.cpp:333
 #, no-c-format
@@ -892,11 +946,13 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Területi szabad távrepülésen elérhető átlagsebesség, ha a maximális "
+"lehetséges hátralevő távolságot a minimális TS idő alatt repüljük."
 
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
 msgid "AA speed min. distance"
-msgstr ""
+msgstr "TS sebesség min. távolság"
 
 #: src/InfoBoxes/Content/Factory.cpp:341
 #, no-c-format
@@ -909,32 +965,34 @@ msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"A területi szabad távrepülés elérhető átlagsebessége, ha a lehető "
+"legrövidebb távon repülünk a minimális TS idő alatt."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
 msgid "Airspeed IAS"
-msgstr ""
+msgstr "Műszer szerinti sebesség"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
 msgid "V IAS"
-msgstr ""
+msgstr "V Müsz"
 
 #: src/InfoBoxes/Content/Factory.cpp:351
 #, no-c-format
 msgid "Indicated Airspeed reported by a supported external intelligent vario."
-msgstr ""
+msgstr "A külső intelligens variométer által jelzett műszer szerinti sebesség."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
 msgid "Height barometric"
-msgstr ""
+msgstr "Barometrikus magasság"
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:5
 #, no-c-format
 msgid "H Baro"
-msgstr ""
+msgstr "M baro"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
@@ -942,6 +1000,8 @@ msgid ""
 "This is the barometric altitude obtained from a GPS equipped with pressure "
 "sensor, or a supported external intelligent vario."
 msgstr ""
+"Nyomásmérővel ellátott GPS vagy intelligens variométer által jelzett "
+"barometrikus magasság."
 
 #: src/InfoBoxes/Content/Factory.cpp:367
 #, no-c-format
@@ -951,7 +1011,7 @@ msgstr "MacCready sebesség"
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
 msgid "V MC"
-msgstr ""
+msgstr "V MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:369
 #, no-c-format
@@ -960,16 +1020,19 @@ msgid ""
 "cruise flight mode, this speed-to-fly is calculated for maintaining "
 "altitude. In final glide mode, this speed-to-fly is calculated for descent."
 msgstr ""
+"A MacCready szerint tartandó optimális sebesség a következő fordulópontig. "
+"Siklásban a magasság tartásához szükséges sebességet számítja. Végsiklásban "
+"a kellő merüléshez szükséges sebességet."
 
 #: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
 msgid "Percentage climb"
-msgstr ""
+msgstr "Emelkedések aránya"
 
 #: src/InfoBoxes/Content/Factory.cpp:377
 #, no-c-format
 msgid "% Climb"
-msgstr ""
+msgstr "Emlkds%"
 
 #: src/InfoBoxes/Content/Factory.cpp:378
 #, no-c-format
@@ -977,31 +1040,33 @@ msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
 msgstr ""
+"Emelkedésben töltött idő aránya. Az arányszámítás feladat megkezdésekor "
+"újraindul."
 
 #: src/InfoBoxes/Content/Factory.cpp:385
 #, no-c-format
 msgid "Time of flight"
-msgstr ""
+msgstr "Repült idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:386
 #, no-c-format
 msgid "Time Flt"
-msgstr ""
+msgstr "Repidő"
 
 #: src/InfoBoxes/Content/Factory.cpp:387
 #, no-c-format
 msgid "Time elapsed since takeoff was detected."
-msgstr ""
+msgstr "Felszállás óta eltelt idő."
 
 #: src/InfoBoxes/Content/Factory.cpp:394
 #, no-c-format
 msgid "G load"
-msgstr ""
+msgstr "G terhelés"
 
 #: src/InfoBoxes/Content/Factory.cpp:395
 #, no-c-format
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: src/InfoBoxes/Content/Factory.cpp:396
 #, no-c-format
@@ -1009,6 +1074,8 @@ msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
 msgstr ""
+"A G terhelés csúcspontja a külső intelligens variometer szerint. Ez bólintás "
+"irányú manővereknél negatív."
 
 #: src/InfoBoxes/Content/Factory.cpp:403
 #, no-c-format
@@ -1031,41 +1098,48 @@ msgid ""
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
+"A következő fordulópont eléréséhez szükséges siklószám, ami a fordulópont "
+"távolságának és a biztonsági magasság feletti magasságnak a hányadosa. "
+"Negatív érték a fordulópont eléréséhez szükséges további emelkedésre utal. A "
+"szükséges magasság közelében '---' kerül kijelzésre. A számítás esetleg "
+"optimistának bizonyulhat, mert a fordulópont eléréséhez szükséges "
+"magasságból levonja a gép többletenergiáját, ha a levegőhöz viszonyított "
+"sebesség a MacCready-nél vagy az optimális sebességnél nagyobb."
 
 #: src/InfoBoxes/Content/Factory.cpp:412
 #, no-c-format
 msgid "Time local"
-msgstr ""
+msgstr "Helyi idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:413
 #, no-c-format
 msgid "Time loc"
-msgstr ""
+msgstr "H.idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:414
 #, no-c-format
 msgid "GPS time expressed in local time zone."
-msgstr ""
+msgstr "GPS-idő a helyi időzónára átszámítva."
 
 #: src/InfoBoxes/Content/Factory.cpp:421 src/InfoBoxes/Content/Factory.cpp:422
 #, no-c-format
 msgid "Time UTC"
-msgstr ""
+msgstr "UTC idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:423
 #, no-c-format
 msgid "GPS time expressed in UTC."
-msgstr ""
+msgstr "GPS-idő UTC-re átszámítva."
 
 #: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
 msgid "Task time to go"
-msgstr ""
+msgstr "Feladatból hátralevő idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
 msgid "Fin ETE"
-msgstr ""
+msgstr "Érk."
 
 #: src/InfoBoxes/Content/Factory.cpp:432
 #, no-c-format
@@ -1073,11 +1147,13 @@ msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
+"A feladat befejezéséhez szükséges idő, ideális MacCready siklás/emelkedés "
+"ciklusokat feltételezve."
 
 #: src/InfoBoxes/Content/Factory.cpp:439
 #, no-c-format
 msgid "Next time to go"
-msgstr ""
+msgstr "A következő fordulópontig szükséges idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
@@ -7562,6 +7638,12 @@ msgstr ""
 msgid "Landing"
 msgstr "Leszállás"
 
+#~ msgid "Map Display"
+#~ msgstr "Térkép megjelenítés"
+
+#~ msgid "Interface"
+#~ msgstr "Interfész"
+
 #~ msgid "OFF"
 #~ msgstr "Ki"
 
@@ -7681,3 +7763,255 @@ msgstr "Leszállás"
 
 #~ msgid "Info box values small"
 #~ msgstr "Info box érték pici"
+
+#~ msgid "Previous turnpoint"
+#~ msgstr "Előző fordulópont"
+
+#~ msgid "Furthest landpoint"
+#~ msgstr "Legtávolabbi leszállóhely"
+
+#~ msgid "Next landpoint"
+#~ msgstr "Következő leszállóhely"
+
+#~ msgid "Closest landpoint"
+#~ msgstr "legközelebbi leszállóhely"
+
+#~ msgid "Previous landpoint"
+#~ msgstr "Előző leszállóhely"
+
+#~ msgid "Finish turnpoint"
+#~ msgstr "Végső fordulópont"
+
+#~ msgid "Start turnpoint"
+#~ msgstr "Kezdő fordulópont"
+
+#~ msgid "Previous waypoint"
+#~ msgstr "Előző fordulópont"
+
+#~ msgid "Thermal last 30 sec"
+#~ msgstr "Termik utolsó 30 sec"
+
+#~ msgid "Last Thermal Average"
+#~ msgstr "Utolsó termik átlag"
+
+#~ msgid "Last Thermal Gain"
+#~ msgstr "Utolsó termik nyereség"
+
+#~ msgid "Last Thermal Time"
+#~ msgstr "Utolsó termik idő"
+
+#~ msgid "MacCready Setting"
+#~ msgstr "MacCready beállítás"
+
+#~ msgid "Next Distance"
+#~ msgstr "Következő távolság"
+
+#~ msgid "Next Altitude Difference"
+#~ msgstr "Következő magasság különbség"
+
+#~ msgid "Next Altitude Required"
+#~ msgstr "Következő szükséges magasság"
+
+#~ msgid "Final Altitude Difference"
+#~ msgstr "Végső magasság különbség"
+
+#~ msgid "Final Altitude Required"
+#~ msgstr "Szükséges végső magasság"
+
+#~ msgid "Speed Task Average"
+#~ msgstr "Sebességi feladat átlag"
+
+#~ msgid "Final Distance"
+#~ msgstr "Végső távolság"
+
+#~ msgid "Terrain Elevation"
+#~ msgstr "Domborzat magasság"
+
+#~ msgid "Thermal Average"
+#~ msgstr "Termik átlag"
+
+#~ msgid "Thermal Gain"
+#~ msgstr "Termik nyereség"
+
+#~ msgid "Wind Speed"
+#~ msgstr "Szél sebesség"
+
+#~ msgid "Wind Bearing"
+#~ msgstr "Szél irány"
+
+#~ msgid "SnailTrail OFF"
+#~ msgstr "Nyomvonal KI"
+
+#~ msgid "AutoZoom ON"
+#~ msgstr "Auto Zoom BE"
+
+#~ msgid "Pan mode ON"
+#~ msgstr "Mozgatás mód BE"
+
+#~ msgid "No Active Waypoint!"
+#~ msgstr "Nincs Aktív Fordulópont!"
+
+#~ msgid "Auto MacCready ON"
+#~ msgstr "Auto McCready BE"
+
+#~ msgid "NMEA Log ON"
+#~ msgstr "NMEA Logger BE"
+
+#~ msgid "Logger ON"
+#~ msgstr "Logger BE"
+
+#~ msgid "Map labels ON"
+#~ msgstr "Térkép cimkék BE"
+
+#~ msgid "Task Finish"
+#~ msgstr "Feladat vége"
+
+#~ msgid "Loading Topology File..."
+#~ msgstr "Topológia fájl betöltése..."
+
+#~ msgid "Av climb"
+#~ msgstr "Átlag emelés"
+
+#~ msgid "Best LD"
+#~ msgstr "Legjobb E"
+
+#~ msgid "Min sink"
+#~ msgstr "Min. merülés"
+
+#~ msgid "Wind at Altitude"
+#~ msgstr "Szél adott magasságban"
+
+#~ msgid "Set wind"
+#~ msgstr "Szél beáll."
+
+#~ msgid "Temp trace"
+#~ msgstr "Hőmérséklet görbe"
+
+#~ msgid "OnLine Contest"
+#~ msgstr "OnLine Verseny"
+
+#~ msgid "Safety factors"
+#~ msgstr "Biztonsági tényezők"
+
+#~ msgid "First 5"
+#~ msgstr "Első 5"
+
+#~ msgid "First 3"
+#~ msgstr "Első 3"
+
+#~ msgid "add waypoint"
+#~ msgstr "Fordulópont Hozzáadás"
+
+#~ msgid "FAI Sector"
+#~ msgstr "FAI szektor"
+
+#~ msgid "Append to task"
+#~ msgstr "Feladathoz adás"
+
+#~ msgid "Info box titles"
+#~ msgstr "Info box címek"
+
+#~ msgid "Aircraft/wind speed"
+#~ msgstr "Repgép/szél sebesség"
+
+#~ msgid "Start max height"
+#~ msgstr "Start max magasság"
+
+#~ msgid "Info box values"
+#~ msgstr "Info box érték"
+
+#~ msgid "Start max speed"
+#~ msgstr "Start max sebesség"
+
+#~ msgid "Auto wind"
+#~ msgstr "Aut. szél számítás"
+
+#~ msgid "File browser"
+#~ msgstr "Fájl böngésző"
+
+#~ msgid "Infobox Geometry"
+#~ msgstr "Infobox geometria"
+
+#~ msgid "Max height gain"
+#~ msgstr "Max mag.nyerés"
+
+#~ msgid "UTC Offset"
+#~ msgstr "UTC Offszet"
+
+#~ msgid "Lat/Lon"
+#~ msgstr "Szél/Hossz"
+
+#~ msgid "New Waypoint"
+#~ msgstr "Új Fordulópont"
+
+#~ msgid "V rem"
+#~ msgstr "V marad"
+
+#~ msgid "Achieved Speed"
+#~ msgstr "Elért sebesség"
+
+#~ msgid "Finish min height"
+#~ msgstr "Cél min magasság"
+
+#~ msgid "Select colour"
+#~ msgstr "Válassz színt"
+
+#~ msgid "Customize Fonts"
+#~ msgstr "Testreszabás"
+
+#~ msgid "Polar file"
+#~ msgstr "Polár fájl"
+
+#~ msgid "Start alt"
+#~ msgstr "Start mag."
+
+#~ msgid "FAI finish height"
+#~ msgstr "FAI cél magasság"
+
+#~ msgid "Select pattern"
+#~ msgstr "Válassz mintát"
+
+#~ msgid "Topology labels"
+#~ msgstr "Topológia cimkék"
+
+#~ msgid "Insert in task"
+#~ msgstr "Feladatba beszúr"
+
+#~ msgid "Topology display"
+#~ msgstr "Topológia megjelenítés"
+
+#~ msgid "Start height ref"
+#~ msgstr "Start mag. bázisa"
+
+#~ msgid "Safety lock"
+#~ msgstr "Biztonsági zár"
+
+#~ msgid "AAT min time"
+#~ msgstr "AAT min idő"
+
+#~ msgid "V ach"
+#~ msgstr "V elért"
+
+#~ msgid "Glider position"
+#~ msgstr "Gép poziciója"
+
+#~ msgid "Below Final Glide"
+#~ msgstr "Végsikló pálya alatt"
+
+#~ msgid "Waiting for GPS Connection"
+#~ msgstr "GPS kapcsolatra vár"
+
+#~ msgid "Above Final Glide"
+#~ msgstr "Végsikló pálya fölött"
+
+#~ msgid "Restarting Comm Ports"
+#~ msgstr "Kommunikációs portok újraindítása"
+
+#~ msgid "Waiting for GPS Fix"
+#~ msgstr "GPS műholdakra vár"
+
+#~ msgid "Final Glide Through Terrain"
+#~ msgstr "Végsiklás terepen át"
+
+#~ msgid "Topology"
+#~ msgstr "Topológia"
