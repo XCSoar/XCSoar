@@ -52,6 +52,10 @@ extern "C"
 unsigned int
 isqrt4(unsigned long val)
 {
+#if defined(__i386__) || defined(__x86_64__)
+  /* x86 FPUs are extremely fast */
+  return (unsigned)sqrt((double)val);
+#else
   unsigned int temp, g = 0;
 
   if (val >= 0x40000000) {
@@ -88,6 +92,7 @@ isqrt4(unsigned long val)
     g++;
 
   return g;
+#endif
 }
 
 }
