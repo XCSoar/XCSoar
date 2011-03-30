@@ -833,11 +833,16 @@ msgid ""
 "enter cursor key saves the wind value as the initial value when XCSoar next "
 "starts."
 msgstr ""
+"Скорость ветра вычисленная  XCSoar. Ручная регулировка осуществляется по "
+"нажатию вверх / вниз клавиш курсора для регулировки величины силы ветра, и "
+"влево / вправо, чтобы настроить его направление, когда InfoBox активно. "
+"Нажав ввод сохраните значение ветра в качестве начального значения при "
+"следующем включении XCSoar."
 
 #: src/InfoBoxes/Content/Factory.cpp:295
 #, no-c-format
 msgid "Wind bearing"
-msgstr ""
+msgstr "Направление ветра"
 
 #: src/InfoBoxes/Content/Factory.cpp:296
 #, no-c-format
@@ -851,6 +856,8 @@ msgid ""
 "possible by pressing the up/down cursor keys to adjust bearing when the "
 "InfoBox is active."
 msgstr ""
+"Направление ветра  полученное программой. Настройка вручную возможна "
+"клавишами управления курсором вверх / вниз."
 
 #: src/InfoBoxes/Content/Factory.cpp:304
 #, no-c-format
@@ -867,6 +874,8 @@ msgstr ""
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
 msgstr ""
+"Оставшееся время в упражнении с назначенными зонами. Выделяется красным "
+"цветом, когда оставшееся время истекло."
 
 #: src/InfoBoxes/Content/Factory.cpp:313
 #, no-c-format
