@@ -834,6 +834,22 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_TaskMaxHeightTime,
   },
 
+  {
+    N_("Task time to go (gnd spd)"),
+    N_("Fin ETE VMG"),
+    N_("Estimated time required to complete task, assuming current ground speed is maintained."),
+    e_WP_Time, // WP ETE
+    e_TimeUTC, // Time UTC
+  },
+
+  {
+    N_("Next time to go (gnd spd)"),
+    N_("WP ETE VMG"),
+    N_("Estimated time required to reach next waypoint, assuming current ground speed is maintained."),
+    e_Fin_TimeLocal, // Fin ETA
+    e_Fin_Time, // Fin ETE
+  },
+
 };
 
 InfoBoxContent*
@@ -1012,6 +1028,10 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentTaskProgress();
   case e_TaskMaxHeightTime:
     return new InfoBoxContentTaskTimeUnderMaxHeight();
+  case e_Fin_ETE_VMG:
+    return new InfoBoxContentFinalETEVMG();
+  case e_WP_ETE_VMG:
+    return new InfoBoxContentNextETEVMG();
   }
 
   return NULL;

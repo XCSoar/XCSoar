@@ -129,6 +129,8 @@ namespace InfoBoxFactory
     e_ThermalBand,
     e_TaskProgress,
     e_TaskMaxHeightTime, /* Time aircraft has been under the max start height */
+    e_Fin_ETE_VMG,
+    e_WP_ETE_VMG,
     e_NUM_TYPES /* Last item */
   }t_InfoBox;
 

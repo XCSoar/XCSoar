@@ -727,3 +727,59 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxWindow &infobox)
   infobox.SetValue(HHMMSSsmart);
   infobox.SetComment(_("Time Below"));
 }
+
+void
+InfoBoxContentNextETEVMG::Update(InfoBoxWindow &infobox)
+{
+  if (!XCSoarInterface::Basic().GroundSpeedAvailable) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  const fixed d = XCSoarInterface::Calculated().task_stats.
+    current_leg.remaining.get_distance();
+  const fixed &v = XCSoarInterface::Basic().GroundSpeed;
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+      !positive(d) ||
+      !positive(v)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  TCHAR HHMMSSsmart[32];
+  TCHAR SSsmart[32];
+  const int dd = (int)(d/v);
+  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+
+  infobox.SetValue(HHMMSSsmart);
+  infobox.SetComment(SSsmart);
+}
+
+void
+InfoBoxContentFinalETEVMG::Update(InfoBoxWindow &infobox)
+{
+  if (!XCSoarInterface::Basic().GroundSpeedAvailable) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  const fixed d = XCSoarInterface::Calculated().task_stats.
+    total.remaining.get_distance();
+  const fixed &v = XCSoarInterface::Basic().GroundSpeed;
+
+  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+      !positive(d) ||
+      !positive(v)) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  TCHAR HHMMSSsmart[32];
+  TCHAR SSsmart[32];
+  const int dd = (int)(d/v);
+  Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
+
+  infobox.SetValue(HHMMSSsmart);
+  infobox.SetComment(SSsmart);
+}

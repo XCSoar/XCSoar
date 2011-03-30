@@ -89,7 +89,9 @@ Version 6.1 - not yet released
     - thermal circling trace
     - thermal band
     - task progress
-  - new infobox displays time below maximum task start height
+  - new infoboxes:
+    - time below maximum task start height
+    - wp and task ETE assuming ground speed is maintained
 * Android
   - support landscape/portrait switching
 * Dialog updates
