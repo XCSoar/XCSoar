@@ -587,6 +587,8 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(_T("Close Windows - main "));
   main_window.reset();
 
+  CloseLanguageFile();
+
   RestoreDisplayOrientation();
 
   StartupLogFreeRamAndStorage();

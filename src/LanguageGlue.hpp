@@ -26,6 +26,9 @@ Copyright_License {
 
 void ReadLanguageFile(void);
 
+void
+CloseLanguageFile();
+
 #if (defined(WIN32) && !defined(HAVE_POSIX)) || defined(ANDROID)
 #define HAVE_BUILTIN_LANGUAGES
 

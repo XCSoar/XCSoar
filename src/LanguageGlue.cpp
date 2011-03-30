@@ -54,9 +54,8 @@ Copyright_License {
 #if !defined(HAVE_POSIX) || defined(ANDROID)
 
 #include "MOLoader.hpp"
-#include <memory>
 
-static std::auto_ptr<MOLoader> mo_loader;
+static MOLoader *mo_loader;
 
 #endif
 
@@ -249,10 +248,12 @@ ReadResourceLanguageFile(const TCHAR *resource)
   }
 
   // Load MO file from resource
-  mo_loader.reset(new MOLoader(data.first, data.second));
+  delete mo_loader;
+  mo_loader = new MOLoader(data.first, data.second);
   if (mo_loader->error()) {
     LogStartUp(_T("Language: could not load resource '%s'"), resource);
-    mo_loader.reset();
+    delete mo_loader;
+    mo_loader = NULL;
     return false;
   }
 
@@ -313,10 +314,12 @@ LoadLanguageFile(const TCHAR *path)
 
   LogStartUp(_T("Language: loading file '%s'"), path);
 
-  mo_loader.reset(new MOLoader(path));
+  delete mo_loader;
+  mo_loader = new MOLoader(path);
   if (mo_loader->error()) {
     LogStartUp(_T("Language: could not load file '%s'"), path);
-    mo_loader.reset();
+    delete mo_loader;
+    mo_loader = NULL;
     return false;
   }
 
@@ -335,8 +338,7 @@ void
 ReadLanguageFile()
 {
 #if !defined(HAVE_POSIX) || defined(ANDROID)
-  mo_file = NULL;
-  reset_gettext_cache();
+  CloseLanguageFile();
 #endif
 
   LogStartUp(_T("Loading language file"));
@@ -364,4 +366,15 @@ ReadLanguageFile()
 
   if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base))
     AutoDetectLanguage();
+}
+
+void
+CloseLanguageFile()
+{
+#if !defined(HAVE_POSIX) || defined(ANDROID)
+  mo_file = NULL;
+  reset_gettext_cache();
+  delete mo_loader;
+  mo_loader = NULL;
+#endif
 }
