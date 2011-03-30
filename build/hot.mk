@@ -15,10 +15,12 @@ HOT_SOURCES = \
 	$(SRC)/Projection.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
 	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatRay.cpp \
+	$(ENGINE_SRC_DIR)/Route/RoutePolar.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/ContestDijkstra.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp
 
