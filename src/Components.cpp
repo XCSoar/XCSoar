@@ -538,6 +538,8 @@ XCSoarInterface::Shutdown(void)
 
   delete marks;
 
+  WayPointGlue::Close();
+
   // Close any device connections
   devShutdown();
 

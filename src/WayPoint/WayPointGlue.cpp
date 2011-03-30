@@ -39,9 +39,9 @@ Copyright_License {
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
 
-#include <memory>
-
-static std::auto_ptr<WayPointFile> wp_file0, wp_file1, wp_file2, wp_file3;
+namespace WayPointGlue {
+  static WayPointFile *wp_file0, *wp_file1, *wp_file2, *wp_file3;
+}
 
 /**
  * This functions checks if the home, alternate 1/2 and teamcode waypoint
@@ -129,19 +129,16 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
   way_points.clear();
 
   // tear down old parsers
-  wp_file0.reset();
-  wp_file1.reset();
-  wp_file2.reset();
-  wp_file3.reset();
+  Close();
 
   // ### FIRST FILE ###
 
   // Get first waypoint filename
   if (Profile::GetPath(szProfileWayPointFile, szFile))
-    wp_file0.reset(WayPointFile::create(szFile, 0));
+    wp_file0 = WayPointFile::create(szFile, 0);
 
   // If waypoint file exists
-  if (wp_file0.get() != NULL) {
+  if (wp_file0 != NULL) {
     // parse the file
     wp_file0->SetTerrain(terrain);
     if (wp_file0->Parse(way_points)) {
@@ -159,10 +156,10 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
 
   // Get second waypoint filename
   if (Profile::GetPath(szProfileAdditionalWayPointFile, szFile))
-    wp_file1.reset(WayPointFile::create(szFile, 1));
+    wp_file1 = WayPointFile::create(szFile, 1);
 
   // If waypoint file exists
-  if (wp_file1.get() != NULL) {
+  if (wp_file1 != NULL) {
     // parse the file
     wp_file1->SetTerrain(terrain);
     if (wp_file1->Parse(way_points)) {
@@ -178,10 +175,10 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
 
   // Get third waypoint filename
   if (Profile::GetPath(szProfileWatchedWayPointFile, szFile))
-    wp_file2.reset(WayPointFile::create(szFile, 2));
+    wp_file2 = WayPointFile::create(szFile, 2);
 
   // If waypoint file exists
-  if (wp_file2.get() != NULL) {
+  if (wp_file2 != NULL) {
     // parse the file
     wp_file2->SetTerrain(terrain);
     if (wp_file2->Parse(way_points)) {
@@ -202,20 +199,20 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
     _tcscat(szFile, _T("/"));
     _tcscat(szFile, _T("waypoints.xcw"));
 
-    wp_file3.reset(WayPointFile::create(szFile, 3));
+    wp_file3 = WayPointFile::create(szFile, 3);
 
     // Test if waypoints.xcw can be loaded, otherwise try waypoints.cup
-    if (wp_file3.get() == NULL) {
+    if (wp_file3 == NULL) {
       // Get the map filename
       Profile::GetPath(szProfileMapFile, szFile);
       _tcscat(szFile, _T("/"));
       _tcscat(szFile, _T("waypoints.cup"));
 
-      wp_file3.reset(WayPointFile::create(szFile, 3));
+      wp_file3 = WayPointFile::create(szFile, 3);
     }
 
     // If waypoint file inside map file exists
-    if (wp_file3.get() != NULL) {
+    if (wp_file3 != NULL) {
       // parse the file
       wp_file3->SetTerrain(terrain);
       if (wp_file3->Parse(way_points, true)) {
@@ -243,7 +240,7 @@ WayPointGlue::SaveWaypoints(const Waypoints &way_points)
   LogStartUp(_T("SaveWaypoints"));
 
   // ### FIRST FILE ###
-  if (wp_file0.get() != NULL) {
+  if (wp_file0 != NULL) {
     if (!wp_file0->Save(way_points)) {
       LogStartUp(_T("Waypoint file 1 can not be written"));
     } else {
@@ -253,7 +250,7 @@ WayPointGlue::SaveWaypoints(const Waypoints &way_points)
   }
 
   // ### SECOND FILE ###
-  if (wp_file1.get() != NULL) {
+  if (wp_file1 != NULL) {
     if (!wp_file1->Save(way_points)) {
       LogStartUp(_T("Waypoint file 2 can not be written"));
     } else {
@@ -263,7 +260,7 @@ WayPointGlue::SaveWaypoints(const Waypoints &way_points)
   }
 
   // ### THIRD FILE ###
-  if (wp_file2.get() != NULL) {
+  if (wp_file2 != NULL) {
     if (!wp_file1->Save(way_points)) {
       LogStartUp(_T("Waypoint file 3 can not be written"));
     } else {
@@ -275,3 +272,18 @@ WayPointGlue::SaveWaypoints(const Waypoints &way_points)
   return result;
 }
 
+void
+WayPointGlue::Close()
+{
+  delete wp_file0;
+  wp_file0 = NULL;
+
+  delete wp_file1;
+  wp_file1 = NULL;
+
+  delete wp_file2;
+  wp_file2 = NULL;
+
+  delete wp_file3;
+  wp_file3 = NULL;
+}

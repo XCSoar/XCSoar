@@ -308,6 +308,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   delete terrain;
   delete topography;
+  WayPointGlue::Close();
 
   return 0;
 }
