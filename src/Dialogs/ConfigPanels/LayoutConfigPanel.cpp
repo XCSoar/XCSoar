@@ -106,11 +106,37 @@ LayoutConfigPanel::Init(WndForm *_wf)
     dfe->Set(DialogStyleSetting);
     wp->RefreshDisplay();
   }
+
+  LoadFormProperty(*wf, _T("prpAppInverseInfoBox"),
+                   Appearance.InverseInfoBox);
+
+  LoadFormProperty(*wf, _T("prpAppInfoBoxColors"), Appearance.InfoBoxColors);
+
+  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Box"));
+    dfe->addEnumText(_("Tab"));
+    dfe->Set(Appearance.InfoBoxBorder);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpTabDialogStyle"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Text"));
+    dfe->addEnumText(_("Icons"));
+    dfe->Set(Appearance.DialogTabStyle);
+    wp->RefreshDisplay();
+  }
+
 }
 
 
 bool
-LayoutConfigPanel::Save()
+LayoutConfigPanel::Save(bool &requirerestart)
 {
   bool changed = false;
   WndProperty *wp;
@@ -163,6 +189,35 @@ LayoutConfigPanel::Save()
       Profile::Set(szProfileAppDialogStyle, DialogStyleSetting);
       changed = true;
     }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
+  if (wp) {
+    if (Appearance.InfoBoxBorder != (InfoBoxBorderAppearance_t)
+        (wp->GetDataField()->GetAsInteger())) {
+      Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)
+        (wp->GetDataField()->GetAsInteger());
+      Profile::Set(szProfileAppInfoBoxBorder,
+                    Appearance.InfoBoxBorder);
+      changed = true;
+      requirerestart = true;
+    }
+  }
+
+  changed |= requirerestart |=
+    SaveFormProperty(*wf, _T("prpAppInverseInfoBox"),
+                     szProfileAppInverseInfoBox, Appearance.InverseInfoBox);
+
+  changed |= requirerestart |=
+    SaveFormProperty(*wf, _T("prpAppInfoBoxColors"),
+                     szProfileAppInfoBoxColors, Appearance.InfoBoxColors);
+
+  wp = (WndProperty*)wf->FindByName(_T("prpTabDialogStyle"));
+  assert(wp != NULL);
+  if (Appearance.DialogTabStyle != (DialogTabStyle_t)(wp->GetDataField()->GetAsInteger())) {
+    Appearance.DialogTabStyle = (DialogTabStyle_t)(wp->GetDataField()->GetAsInteger());
+    Profile::Set(szProfileAppDialogTabStyle, Appearance.DialogTabStyle);
+    changed = true;
   }
 
   if (orientation_changed) {

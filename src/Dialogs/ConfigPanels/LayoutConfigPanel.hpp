@@ -29,7 +29,7 @@ Copyright_License {
 namespace LayoutConfigPanel
 {
   void Init(WndForm *wf);
-  bool Save();
+  bool Save(bool &requirerestart);
 };
 
 #endif /* LAYOUTCONFIGPANEL_HPP */

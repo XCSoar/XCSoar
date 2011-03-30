@@ -55,50 +55,50 @@ Copyright_License {
 #include <assert.h>
 
 enum config_page {
-  PAGE_SITE,
-  PAGE_AIRSPACE,
-  PAGE_MAP,
+  PAGE_SITE_FILES,
+  PAGE_MAP_PROJECTION,
+  PAGE_MAP_ELEMENTS,
   PAGE_WAYPOINTS,
-  PAGE_SYMBOLS,
   PAGE_TERRAIN,
+  PAGE_VARIO,
   PAGE_GLIDE_COMPUTER,
   PAGE_SAFETY_FACTORS,
   PAGE_ROUTE,
   PAGE_POLAR,
-  PAGE_DEVICES,
-  PAGE_UNITS,
-  PAGE_INTERFACE,
-  PAGE_LAYOUT,
-  PAGE_VARIO,
+  PAGE_AIRSPACE,
   PAGE_TASK_RULES,
   PAGE_TASK_DEFAULTS,
-  PAGE_INFOBOXES,
+  PAGE_DEVICES,
   PAGE_LOGGER,
-  PAGE_PAGES,
+  PAGE_UNITS,
+  PAGE_USER_INTERFACE,
+  PAGE_LAYOUT,
+  PAGE_INFOBOX_MODES,
+  PAGE_DISPLAY_PAGES,
   PAGE_EXPERIMENTAL,
 };
 
 static const TCHAR *const captions[] = {
-  N_("Site"),
-  N_("Airspace"),
-  N_("Map Display"),
+  N_("Site Files"),
+  N_("Map Projection"),
+  N_("Map Elements"),
   N_("Waypoint Display"),
-  N_("Symbols"),
   N_("Terrain Display"),
+  N_("FLARM And Other Gauges"),
   N_("Glide Computer"),
   N_("Safety Factors"),
   N_("Route"),
   N_("Polar"),
-  N_("Devices"),
-  N_("Units"),
-  N_("Interface"),
-  N_("Layout"),
-  N_("FLARM And Other Gauges"),
+  N_("Airspace"),
   N_("Default Task Rules"),
   N_("Default Task Turnpoint Types"),
-  N_("InfoBoxes"),
+  N_("Devices"),
   N_("Logger"),
-  N_("Pages"),
+  N_("Units"),
+  N_("User Interface"),
+  N_("Interface Appearance"),
+  N_("InfoBox Modes"),
+  N_("InfoBox Pages"),
   N_("Experimental Features"),
 };
 
@@ -118,8 +118,8 @@ PageSwitched()
              gettext(captions[(unsigned)current_page]));
   wf->SetCaption(caption);
 
-  InterfaceConfigPanel::SetVisible(current_page == PAGE_INTERFACE);
-  SiteConfigPanel::SetVisible(current_page == PAGE_SITE);
+  InterfaceConfigPanel::SetVisible(current_page == PAGE_USER_INTERFACE);
+  SiteConfigPanel::SetVisible(current_page == PAGE_SITE_FILES);
   PolarConfigPanel::SetVisible(current_page == PAGE_POLAR);
 }
 
@@ -288,7 +288,7 @@ void dlgConfigurationShowModal(void)
   changed |= SafetyFactorsConfigPanel::Save();
   changed |= RouteConfigPanel::Save();
   changed |= InterfaceConfigPanel::Save(requirerestart);
-  changed |= LayoutConfigPanel::Save();
+  changed |= LayoutConfigPanel::Save(requirerestart);
   changed |= GaugesConfigPanel::Save();
   changed |= TaskRulesConfigPanel::Save();
   changed |= TaskDefaultsConfigPanel::Save();

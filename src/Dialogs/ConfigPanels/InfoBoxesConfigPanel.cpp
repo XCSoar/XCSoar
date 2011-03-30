@@ -88,7 +88,6 @@ InfoBoxesConfigPanel::Init(WndForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;
-  WndProperty *wp;
 
   ((WndButton *)wf->FindByName(_T("cmdInfoBoxesCircling")))->
       SetOnClickNotify(OnInfoBoxesCircling);
@@ -99,50 +98,11 @@ InfoBoxesConfigPanel::Init(WndForm *_wf)
   ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAuxiliary")))->
       SetOnClickNotify(OnInfoBoxesAuxiliary);
 
-  LoadFormProperty(*wf, _T("prpAppInverseInfoBox"),
-                   Appearance.InverseInfoBox);
-
-  LoadFormProperty(*wf, _T("prpAppInfoBoxColors"), Appearance.InfoBoxColors);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Box"));
-    dfe->addEnumText(_("Tab"));
-    dfe->Set(Appearance.InfoBoxBorder);
-    wp->RefreshDisplay();
-  }
 }
 
 
 bool
 InfoBoxesConfigPanel::Save(bool &requirerestart)
 {
-  bool changed = false;
-  WndProperty *wp;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
-  if (wp) {
-    if (Appearance.InfoBoxBorder != (InfoBoxBorderAppearance_t)
-        (wp->GetDataField()->GetAsInteger())) {
-      Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)
-        (wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppInfoBoxBorder,
-                    Appearance.InfoBoxBorder);
-      changed = true;
-      requirerestart = true;
-    }
-  }
-
-  changed |= requirerestart |=
-    SaveFormProperty(*wf, _T("prpAppInverseInfoBox"),
-                     szProfileAppInverseInfoBox, Appearance.InverseInfoBox);
-
-  changed |= requirerestart |=
-    SaveFormProperty(*wf, _T("prpAppInfoBoxColors"),
-                     szProfileAppInfoBoxColors, Appearance.InfoBoxColors);
-
-
-  return changed;
+  return false;
 }

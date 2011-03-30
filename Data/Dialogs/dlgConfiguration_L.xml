@@ -59,49 +59,6 @@
       </Edit>
     </Panel>
   
-    <Panel Name="frmAirspace">
-      <Button Name="cmdAirspaceColours" Caption="Colours" X="100" Y="2" Width="70" Height="22" OnClick="AirspaceConfigPanel::OnAirspaceColoursClicked" />
-      <Button Name="cmdAirspaceMode" Caption="Filter" X="170" Y="2" Width="70" Height="22" OnClick="AirspaceConfigPanel::OnAirspaceModeClicked" />
-  
-      <Edit Name="prpAirspaceDisplay" Caption="Airspace display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Controls filtering of airspace for display and warnings.  The airspace filter button also allows filtering of display and warnings independently for each airspace class.&#10;[All on] All is displayed.&#10;[Clip] Only airspace below the clip altitude.&#10;[Auto] All within a margin of the glider.&#10;[All below] All airspace below the glider.">
-        <DataField DataType="enum" />
-      </Edit>
-  
-      <Edit Name="prpClipAltitude" Caption="Clip altitude" X="2" Width="-2" Height="22" CaptionWidth="150"
-       Help="For clip airspace mode, this is the altitude below which airspace is displayed.">
-        <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="20000" Step="100" />
-      </Edit>
-    
-      <Edit Name="prpAltWarningMargin" Caption="Margin" X="2" Width="-2" Height="22" CaptionWidth="150" Help="For auto airspace mode, this is the altitude above/below which airspace is included.">
-        <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="100" />
-      </Edit>
-    
-      <Edit Name="prpAirspaceWarnings" Caption="Warnings" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Enable/disable all airspace warnings.">
-        <DataField DataType="boolean" />
-      </Edit>
-    
-      <Edit Name="prpWarningTime" Caption="Warning time*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="This is the time before an airspace incursion is estimated at which the system will warn the pilot.">
-        <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="1000" Step="5" />
-      </Edit>
-    
-      <Edit Name="prpAcknowledgementTime" Caption="Acknowledge time*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="This is the time period in which an acknowledged airspace warning will not be repeated.">
-        <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="1000" Step="5" />
-      </Edit>
-    
-      <Edit Name="prpAirspaceOutline" Caption="Use black outline*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw a black outline around each airspace rather than the airspace color">
-        <DataField DataType="boolean" />
-      </Edit>  
-
-      <Edit Name="prpAirspaceFillMode" Caption="Airspace fill mode*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Specifies the mode for filling the airspace area.">
-        <DataField DataType="enum"/>
-      </Edit>
-
-      <Edit Name="prpAirspaceTransparency" Caption="Airspace transparency*" X="2" Width="-2" Height="22" CaptionWidth="150"
-            Help="If enabled, then airspaces are filled transparently.">
-        <DataField DataType="boolean"/>
-      </Edit>
-    </Panel>
-  
     <Panel Name="frmDisplay">
       <Edit Name="prpOrientationCruise" Caption="Cruise orientation" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Determines how the screen is rotated with the glider:&#10;[North up] The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.&#10;[Track up] The moving map display will be rotated so the glider's track is oriented up.&#10;[Target up] The moving map display will be rotated so the navigation target is oriented up.">
@@ -113,25 +70,77 @@
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpMapShiftBias" Caption="Map shift reference" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Determines what is used to shift the glider from the map center:&#10;[None] Disable adjustments.&#10;[Heading] Use a recent average of the flown heading as basis.&#10;[Target]Use the current target waypoint as basis">
-        <DataField DataType="enum" />
-      </Edit>
-
-      <Edit Name="prpGliderScreenPosition" Caption="Glider position offset" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Defines the location of the glider drawn on the screen in percent from the screen edge.">
-        <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="10" Max="50" Step="5"/>
-      </Edit>
-
       <Edit Name="prpCirclingZoom" Caption="Circling zoom" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="If enabled, then the map will zoom in automatically when entering circling mode and zoom out automatically when leaving circling mode.">
         <DataField DataType="boolean"/>
       </Edit>
 
-      <Edit Name="prpMaxAutoZoomDistance" Caption="Max. Auto-Zoom distance" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpMapShiftBias" Caption="Map shift reference*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Determines what is used to shift the glider from the map center:&#10;[None] Disable adjustments.&#10;[Heading] Use a recent average of the flown heading as basis.&#10;[Target]Use the current target waypoint as basis">
+        <DataField DataType="enum" />
+      </Edit>
+
+      <Edit Name="prpGliderScreenPosition" Caption="Glider position offset*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Defines the location of the glider drawn on the screen in percent from the screen edge.">
+        <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="10" Max="50" Step="5"/>
+      </Edit>
+
+      <Edit Name="prpMaxAutoZoomDistance" Caption="Max. Auto-Zoom distance*" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The upper limit for Auto-Zoom distance.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="20" Max="250" Step="10" />
       </Edit>
+    </Panel>
+
+    <Panel>
+      <Edit Name="prpAppIndFinalGlide" Caption="Final glide bar" X="2" Width="-2" Height="22" CaptionWidth="150">
+        <DataField DataType="enum" />
+      </Edit>
+
+      <Edit Name="prpDisplayTrackBearing" Caption="Track bearing" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Display the track bearing (ground track projection) on the map.&#10;[Off] Disable display of track bearing.&#10;[On] Always display track bearing.&#10;[Auto] Display track bearing if there is a significant difference to plane heading.">
+        <DataField DataType="enum"/>
+      </Edit>
+
+      <Edit Name="prpEnableFLARMMap" Caption="FLARM traffic" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="This enables the display of FLARM traffic on the map window.&#10;[Off] FLARM map display disabled&#10;[ON/Fixed] FLARM map display enabled with fixed scale.&#10;[ON/Scaled] FLARM map display enabled and auto scaled.&#10;When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.">
+        <DataField DataType="boolean"/>
+      </Edit>
+
+      <Edit Name="prpTrail" Caption="Trail length" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Determines whether and how long a snail trail is drawn behind the glider">
+        <DataField DataType="enum" />
+      </Edit>
+
+      <Edit Name="prpTrailDrift" Caption="Trail drift*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Determines whether the snail trail is drifted with the wind when displayed in circling mode.">
+        <DataField DataType="boolean" />
+      </Edit>
+
+      <Edit Name="prpSnailType" Caption="Trail type*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Sets the type of the snail trail display.">
+        <DataField DataType="enum" />
+      </Edit>
+
+      <Edit Name="prpSnailWidthScale" Caption="Trail scaled*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="If set to ON the snail trail width is scaled according to the vario signal.">
+        <DataField DataType="boolean"/>
+      </Edit>
+
+      <Edit Name="prpDetourCostMarker" Caption="Detour cost markers*" X="2" Width="-2" Height="22" CaptionWidth="150"
+         Help="If the aircraft heading deviates from the current waypoint, markers are displayed at points ahead of the aircraft. The value of each marker is the extra distance required to reach that point as a percentage of straight-line distance to the waypoint.">
+        <DataField DataType="boolean"/>
+      </Edit>
+
+      <Edit Name="prpAircraftSymbol" Caption="Aircraft symbol*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Sets the symbol used for the aircraft.&#10;[Simple] Simplified line graphics.&#10;[Detailed] Rendered aircraft graphics.">
+        <DataField DataType="enum" />
+      </Edit>
+
+      <Edit Name="prpWindArrowStyle" Caption="Wind arrow*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Determines the way the wind arrow is drawn on the map.&#10;[Arrow head] Draws an arrow head only&#10;[Full arrow] Draws an arrow head with a dashed arrow line">
+        <DataField DataType="enum" />
+      </Edit>
+
     </Panel>
 
     <Panel Name="frmWaypoints">
@@ -147,7 +156,7 @@
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpWayPointLabelSelection" Caption="Label selection" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Determines what waypoint labels are displayed for each waypoint (space permitting):&#10;[All] All waypoints labels will displayed.&#10;[Task Waypoints &amp; Landables] All waypoints labels part of a task and all landables will be displayed.&#10;[Task Waypoints] All waypoints labels part of a task will be displayed.&#10;[None] No waypoint labels will be displayed.">
+      <Edit Name="prpWayPointLabelSelection" Caption="Label visibility" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Determines what waypoint labels are displayed for each waypoint (space permitting):&#10;[All] All waypoints labels will displayed.&#10;[Task Waypoints &amp; Landables] All waypoints labels part of a task and all landables will be displayed.&#10;[Task Waypoints] All waypoints labels part of a task will be displayed.&#10;[None] No waypoint labels will be displayed.">
         <DataField DataType="enum" />
       </Edit>
 
@@ -161,67 +170,15 @@
         <DataField DataType="boolean" />
       </Edit>
 
-      <Edit Name="prpAppLandableRenderingScale" Caption="Landable rendering size" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAppLandableRenderingScale" Caption="Landable rendering size*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="A percentage to select the size landables are displayed on the map.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="50" Max="200" Step="10" />
       </Edit>
 
-      <Edit Name="prpAppScaleRunwayLength" Caption="Scale runway length" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAppScaleRunwayLength" Caption="Scale runway length*" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="[Off] Display fixed length for runways.&#10;[On] Scale displayed runway length based on real length">
         <DataField DataType="boolean" />
       </Edit>
-    </Panel>
-
-    <Panel>
-      <Edit Name="prpAppIndFinalGlide" Caption="Final glide bar" X="2" Width="-2" Height="22" CaptionWidth="100">
-        <DataField DataType="enum" />
-      </Edit>
-
-      <Edit Name="prpWindArrowStyle" Caption="Wind arrow*" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Determines the way the wind arrow is drawn on the map.&#10;[Arrow head] Draws an arrow head only&#10;[Full arrow] Draws an arrow head with a dashed arrow line">
-        <DataField DataType="enum" />
-      </Edit>
-
-      <Edit Name="prpTrail" Caption="Trail length" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Determines whether and how long a snail trail is drawn behind the glider">
-        <DataField DataType="enum" />
-      </Edit>
-
-      <Edit Name="prpTrailDrift" Caption="Trail drift*" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Determines whether the snail trail is drifted with the wind when displayed in circling mode.">
-        <DataField DataType="boolean" />
-      </Edit>
-
-      <Edit Name="prpSnailType" Caption="Trail type*" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Sets the type of the snail trail display.">
-        <DataField DataType="enum" />
-      </Edit>
-
-      <Edit Name="prpSnailWidthScale" Caption="Trail scaled*" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="If set to ON the snail trail width is scaled according to the vario signal.">
-        <DataField DataType="boolean"/>
-      </Edit>
-
-      <Edit Name="prpDetourCostMarker" Caption="Detour cost markers*" X="2" Width="-2" Height="22" CaptionWidth="150"
-         Help="If the aircraft heading deviates from the current waypoint, markers are displayed at points ahead of the aircraft. The value of each marker is the extra distance required to reach that point as a percentage of straight-line distance to the waypoint.">
-        <DataField DataType="boolean"/>
-      </Edit>
-
-      <Edit Name="prpDisplayTrackBearing" Caption="Display track bearing" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Display the track bearing (ground track projection) on the map.&#10;[Off] Disable display of track bearing.&#10;[On] Always display track bearing.&#10;[Auto] Display track bearing if there is a significant difference to plane heading.">
-        <DataField DataType="enum"/>
-      </Edit>
-
-      <Edit Name="prpEnableFLARMMap" Caption="FLARM map" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="This enables the display of FLARM traffic on the map window.&#10;[Off] FLARM map display disabled&#10;[ON/Fixed] FLARM map display enabled with fixed scale.&#10;[ON/Scaled] FLARM map display enabled and auto scaled.&#10;When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.">
-        <DataField DataType="boolean"/>
-      </Edit>
-
-      <Edit Name="prpAircraftSymbol" Caption="Aircraft symbol*" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Sets the symbol used for the aircraft.&#10;[Simple] Simplified line graphics.&#10;[Detailed] Rendered aircraft graphics.">
-        <DataField DataType="enum" />
-      </Edit>
-
     </Panel>
   
     <Panel Name="frmTerrain">
@@ -233,11 +190,6 @@
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpSlopeShadingType" Caption="Slope shading" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="The terrain can be shaded among slopes to indicate either wind direction, sun position or a fixed shading from north-east.">
-        <DataField DataType="enum"/>
-      </Edit>
-
       <Edit Name="prpTerrainContrast" Caption="Terrain contrast" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Defines the amount of phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.">
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="100" Step="5" />
@@ -252,6 +204,66 @@
         Help="Defines the color ramp used in terrain rendering.">
         <DataField DataType="enum"/>
       </Edit>
+
+      <Edit Name="prpSlopeShadingType" Caption="Slope shading*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="The terrain can be shaded among slopes to indicate either wind direction, sun position or a fixed shading from north-east.">
+        <DataField DataType="enum"/>
+      </Edit>
+
+    </Panel>
+
+    <Panel Name="frmVarioAppearance">
+
+      <Edit Name="prpEnableFLARMGauge" Caption="FLARM radar" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="This enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level.">
+        <DataField DataType="boolean" />
+      </Edit>
+      
+      <Edit Name="prpAutoCloseFlarmDialog" Caption="Auto. close FLARM" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Setting this to &quot;ON&quot; will automatically close the FLARM dialog if there is no traffic. &quot;Off&quot; will keep the dialog open even without current traffic.">
+        <DataField DataType="boolean"/>
+      </Edit>
+      
+      <Edit Name="prpEnableTAGauge" Caption="Thermal assistant" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="This enables the display of the thermal assistant gauge.">
+        <DataField DataType="boolean"/>
+      </Edit>
+
+      <Edit Name="prpAppGaugeVarioSpeedToFly" Caption="Speed arrows" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Whether to show speed command arrows on the vario gauge.  When shown, in cruise mode, arrows point up to command slow down; arrows point down to command speed up.">
+        <DataField DataType="boolean" />
+      </Edit>
+    
+      <Edit Name="prpAppGaugeVarioAvgText" Caption="Show average" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Whether to show the average climb rate.  In cruise mode, this switches to showing the average netto airmass rate.">
+        <DataField DataType="boolean" />
+      </Edit>
+    
+      <Edit Name="prpAppGaugeVarioMc" Caption="Show MacReady" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Whether to show the MacCready setting.">
+        <DataField DataType="boolean" />
+      </Edit>
+    
+      <Edit Name="prpAppGaugeVarioBugs" Caption="Show bugs*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Whether to show the bugs percentage.">
+        <DataField DataType="boolean" />
+      </Edit>
+    
+      <Edit Name="prpAppGaugeVarioBallast" Caption="Show ballast*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Whether to show the ballast percentage.">
+        <DataField DataType="boolean" />
+      </Edit>
+    
+      <Edit Name="prpAppGaugeVarioGross" Caption="Show gross*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Whether to show the gross climb rate.">
+        <DataField DataType="boolean" />
+      </Edit>
+    
+      <Edit Name="prpAppAveNeedle" Caption="Averager needle*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="If true, the vario gauge will display a hollow averager needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.">
+        <DataField DataType="boolean" />
+      </Edit>
+    
     </Panel>
   
     <Panel Name="frmFinalGlide">
@@ -390,240 +402,65 @@
         </Edit>
       </Panel>
 
-      <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" X="2" Width="-2" Height="22" CaptionWidth="110"
+      <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5"/>
       </Edit>
 
-      <Edit Name="prpHandicap" Caption="Handicap" X="2" Width="-2" Height="22" CaptionWidth="110"
+      <Edit Name="prpHandicap" Caption="Handicap" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The handicap factor used for On-Line Contest scoring.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="50" Max="150" Step="1"/>
       </Edit>
 
-      <Edit Name="prpBallastSecsToEmpty" Caption="Dump time" X="2" Width="-2" Height="22" CaptionWidth="110"
+      <Edit Name="prpBallastSecsToEmpty" Caption="Dump time" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The time in seconds to dump full ballast.">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="300" Step="5"/>
       </Edit>
     </Panel>
-  
-    <Panel Name="frmComm">
-      <Panel Name="frmComm1" X="0" Y="0" Width="0" Height="68" Border="30">
-        <Label Caption="Device A" X="2" Y="2" Width="70" Height="36"/>
-  
-        <Edit Name="prpComDevice1" Caption="Name" X="72" Y="1" Width="173" Height="22" CaptionWidth="80" Help="Type of primary device. The primary device should be the most reliable GPS data source.">
-          <DataField DataType="enum" OnDataAccess="DevicesConfigPanel::OnDeviceAData" />
-        </Edit>
-  
-        <Edit Name="prpComPort1" Caption="Port" X="72" Width="173" Height="22" CaptionWidth="80" Help="Altair Pro users should set this to Port 3">
-          <DataField DataType="enum"/>
-        </Edit>
-  
-        <Edit Name="prpComSpeed1" Caption="Baudrate" X="72" Width="173" Height="22" CaptionWidth="80" Help="Altair Pro or Vega users should set this to 38400.">
-          <DataField DataType="enum" />
-        </Edit>
-  
-        <Button Name="cmdSetupDeviceA" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" OnClick="DevicesConfigPanel::OnSetupDeviceAClicked" />
-      </Panel>
-  
-      <Panel Name="frmComm2" X="0" Y="69" Width="0" Height="68" Border="30">
-        <Label Caption="Device B" X="2" Y="2" Width="70" Height="36"/>
-  
-        <Edit Name="prpComDevice2" Caption="Name" X="72" Y="1" Width="173" Height="22" CaptionWidth="80"
-          Help="Type of secondary device. The secondary device may be used as backup GPS data or other data e.g. from an intelligent variometer. Generic can be used for GPS sources including FLARM.">
-          <DataField DataType="enum" OnDataAccess="DevicesConfigPanel::OnDeviceBData" />
-        </Edit>
-  
-        <Edit Name="prpComPort2" Caption="Port" X="72" Width="173" Height="22" CaptionWidth="80" Help="Altair Pro users should set this to Port 1.">
-          <DataField DataType="enum"/>
-        </Edit>
-  
-        <Edit Name="prpComSpeed2" Caption="Baudrate" X="72" Width="173" Height="22" CaptionWidth="80"
-          Help="Altair Pro or Vega users should set this to 38400.">
-          <DataField DataType="enum" />
-        </Edit>
-  
-        <Button Name="cmdSetupDeviceB" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" OnClick="DevicesConfigPanel::OnSetupDeviceBClicked" />
-      </Panel>
-  
-      <Edit Name="prpSetSystemTimeFromGPS" Caption="Use GPS time" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="option, if enabled sets the clock of the computer to the GPS time once a fix is set.  This is only necessary if your computer does not have a real-time clock with battery backup or your computer frequently runs out of battery power or otherwise loses time.">
-        <DataField DataType="boolean" />
-      </Edit>
 
-      <Edit Name="prpIgnoreNMEAChecksum" Caption="Ignore checksum*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="If your GPS device outputs invalid NMEA checksums, this will allow it's data to be used anyway">
-        <DataField DataType="boolean"/>
-      </Edit>
-    </Panel>
+    <Panel Name="frmAirspace">
+      <Button Name="cmdAirspaceColours" Caption="Colours" X="100" Y="2" Width="70" Height="22" OnClick="AirspaceConfigPanel::OnAirspaceColoursClicked" />
+      <Button Name="cmdAirspaceMode" Caption="Filter" X="170" Y="2" Width="70" Height="22" OnClick="AirspaceConfigPanel::OnAirspaceModeClicked" />
   
-    <Panel Name="frmUnits">
-      <Panel Name="pnlUnitsDetails" X="2" Y="2" Border="30" Height="156" Width="-2">
-        <Label Name="lblUnitsSetting" Caption="Units:" X="2" Y="2" Height="16" Width="-112" />
-        <Button Name="cmdLoadUnitsPreset" Caption="Load Preset" X="-112" Y="2" Width="108" Height="20" OnClick="UnitsConfigPanel::OnLoadPreset" />
-
-        <Edit Name="prpUnitsSpeed" Caption="Aircraft/Wind speed" X="2" Width="-2" Height="22" CaptionWidth="150"
-          Help="Units used for airspeed and ground speed.  A separate unit is available for task speeds.">
-          <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
-        </Edit>
-    
-        <Edit Name="prpUnitsDistance" Caption="Distance" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Units used for horizontal distances e.g. range to waypoint, distance to go.">
-          <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
-        </Edit>
-    
-        <Edit Name="prpUnitsLift" Caption="Lift" X="2" Width="-2" Height="22" CaptionWidth="150"
-          Help="Units used for vertical speeds (variometer)">
-          <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
-        </Edit>
-    
-        <Edit Name="prpUnitsAltitude" Caption="Altitude" X="2" Width="-2" Height="22" CaptionWidth="150"
-          Help="Units used for altitude and heights.">
-          <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
-        </Edit>
-    
-        <Edit Name="prpUnitsTemperature" Caption="Temperature" X="2" Width="-2" Height="22" CaptionWidth="150"
-          Help="Units used for temperature.">
-          <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData"/>
-        </Edit>
-  
-        <Edit Name="prpUnitsTaskSpeed" Caption="Task speed" X="2" Width="-2" Height="22" CaptionWidth="150"
-          Help="Units used for task speeds.">
-          <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
-        </Edit>
-      </Panel>
-  
-      <Edit Name="prpUnitsLatLon" Caption="Lat./Lon." X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Units used for latitude and longitude.">
+      <Edit Name="prpAirspaceDisplay" Caption="Airspace display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Controls filtering of airspace for display and warnings.  The airspace filter button also allows filtering of display and warnings independently for each airspace class.&#10;[All on] All is displayed.&#10;[Clip] Only airspace below the clip altitude.&#10;[Auto] All within a margin of the glider.&#10;[All below] All airspace below the glider.">
         <DataField DataType="enum" />
       </Edit>
   
-      <Edit Name="prpUTCOffset" Caption="UTC offset" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="The UTC offset field allows the UTC local time offset to be specified.  The local time is displayed below in order to make it easier to verify the correct offset has been entered.">
-        <DataField DataType="double" DisplayFormat="%.1f" EditFormat="%.1f" Min="-13" Max="13" Step="0.5" OnDataAccess="UnitsConfigPanel::OnUTCData" />
+      <Edit Name="prpClipAltitude" Caption="Clip altitude" X="2" Width="-2" Height="22" CaptionWidth="150"
+       Help="For clip airspace mode, this is the altitude below which airspace is displayed.">
+        <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="20000" Step="100" />
       </Edit>
     
-      <Edit Name="prpLocalTime" Caption="Local time" X="2" Width="-2" Height="22" CaptionWidth="150" ReadOnly="1" />
-    </Panel>
-  
-    <Panel Name="frmInterface">
-      <Edit Name="prpAutoBlank" Caption="Auto. blank" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="This determines whether to blank the display after a long period of inactivity when operating on internal battery power.">
-        <DataField DataType="boolean" />
+      <Edit Name="prpAltWarningMargin" Caption="Margin" X="2" Width="-2" Height="22" CaptionWidth="150" Help="For auto airspace mode, this is the altitude above/below which airspace is included.">
+        <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="100" />
       </Edit>
-  
-      <Edit Name="prpGestures" Caption="Gestures" X="2" Width="-2" Height="22" CaptionWidth="110">
+    
+      <Edit Name="prpAirspaceWarnings" Caption="Warnings" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Enable/disable all airspace warnings.">
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpInputFile" Caption="Events*" X="2" Width="-2" Height="22" CaptionWidth="110"
-        Help="The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices.">
-        <DataField DataType="filereader" />
+      <Edit Name="prpWarningTime" Caption="Warning time*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="This is the time before an airspace incursion is estimated at which the system will warn the pilot.">
+        <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="1000" Step="5" />
       </Edit>
     
-      <Edit Name="prpLanguageFile" Caption="Language*" X="2" Width="-2" Height="22" CaptionWidth="110"
-        Help="The language file defines translations for XCSoar text in English to other languages.  If this field is left blank, then XCSoar uses English.">
-        <DataField DataType="enum"/>
+      <Edit Name="prpAcknowledgementTime" Caption="Acknowledge time*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="This is the time period in which an acknowledged airspace warning will not be repeated.">
+        <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="1000" Step="5" />
       </Edit>
     
-      <Edit Name="prpStatusFile" Caption="Status message*" X="2" Width="-2" Height="22" CaptionWidth="110"
-        Help="The status file can be used to define sounds to be played when certain events occur, and how long various status messages will appear on screen.">
-        <DataField DataType="filereader" />
-      </Edit>
-    
-      <Edit Name="prpMenuTimeout" Caption="Menu timeout*" X="2" Width="-2" Height="22" CaptionWidth="110"
-        Help="This determines how long menus will appear on screen if the user does not make any button presses or interacts with the computer.">
-        <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="60" Step="1" />
-      </Edit>
-    
-      <Edit Name="prpDebounceTimeout" Caption="Debounce time*" X="2" Width="-2" Height="22" CaptionWidth="110"
-        Help="This is the minimum interval between the system recognising key presses. Set this to a low value for a more responsive user interface; if it is too low, then accidental multiple key presses can occur.">
-        <DataField DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min="0" Max="1000" Step="25" />
-      </Edit>
-  
-      <Edit Name="prpTextInput" Caption="Text input style*"  X="2"   Width="246" Height="22" CaptionWidth="110"
-        Help="Determines how the user is prompted for text input (filename, teamcode etc.)">
-        <DataField DataType="enum" />
-      </Edit>
+      <Edit Name="prpAirspaceOutline" Caption="Use black outline*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw a black outline around each airspace rather than the airspace color">
+        <DataField DataType="boolean" />
+      </Edit>  
 
-      <Edit Name="prpTabDialogStyle" Caption="Tab dialog style"  X="2" Width="-2" Height="22" CaptionWidth="110"
-      Help="Determines whether tabbed dialogs use text or dialogs">
-        <DataField DataType="enum"/>
-      </Edit>
-    </Panel>
-  
-    <Panel>
-      <Edit Name="prpDisplayOrientation" Caption="Display orientation" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Rotate the display on devices that support it.">
+      <Edit Name="prpAirspaceFillMode" Caption="Airspace fill mode*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Specifies the mode for filling the airspace area.">
         <DataField DataType="enum"/>
       </Edit>
 
-      <Edit Name="prpAppInfoBoxGeom" Caption="Infobox geometry" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Geometry values range 0-7 but in landscape mode only some of them are really available.">
-        <DataField DataType="enum" />
-      </Edit>
-
-      <Edit Name="prpAppStatusMessageAlignment" Caption="Msg. window*" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Defines the alignment of the status message box, either centered or in the top left corner.">
-        <DataField DataType="enum" />
-      </Edit>
-
-      <Edit Name="prpDialogStyle" Caption="Dialog style*"  X="2"   Width="246" Height="22" CaptionWidth="100"
-        Help="Determines display size of dialogs.">
-        <DataField DataType="enum" />
-      </Edit>
-    </Panel>
-    
-    <Panel Name="frmVarioAppearance">
-      <Edit Name="prpAppGaugeVarioSpeedToFly" Caption="Speed arrows" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Whether to show speed command arrows on the vario gauge.  When shown, in cruise mode, arrows point up to command slow down; arrows point down to command speed up.">
-        <DataField DataType="boolean" />
-      </Edit>
-    
-      <Edit Name="prpAppGaugeVarioAvgText" Caption="Show average" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Whether to show the average climb rate.  In cruise mode, this switches to showing the average netto airmass rate.">
-        <DataField DataType="boolean" />
-      </Edit>
-    
-      <Edit Name="prpAppGaugeVarioMc" Caption="Show MacReady" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Whether to show the MacCready setting.">
-        <DataField DataType="boolean" />
-      </Edit>
-    
-      <Edit Name="prpAppGaugeVarioBugs" Caption="Show bugs*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Whether to show the bugs percentage.">
-        <DataField DataType="boolean" />
-      </Edit>
-    
-      <Edit Name="prpAppGaugeVarioBallast" Caption="Show ballast*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Whether to show the ballast percentage.">
-        <DataField DataType="boolean" />
-      </Edit>
-    
-      <Edit Name="prpAppGaugeVarioGross" Caption="Show gross*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Whether to show the gross climb rate.">
-        <DataField DataType="boolean" />
-      </Edit>
-    
-      <Edit Name="prpAppAveNeedle" Caption="Averager needle*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="If true, the vario gauge will display a hollow averager needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.">
-        <DataField DataType="boolean" />
-      </Edit>
-    
-      <Edit Name="prpEnableFLARMGauge" Caption="FLARM radar" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="This enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level.">
-        <DataField DataType="boolean" />
-      </Edit>
-      
-      <Edit Name="prpAutoCloseFlarmDialog" Caption="Auto. close FLARM" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Setting this to &quot;ON&quot; will automatically close the FLARM dialog if there is no traffic. &quot;Off&quot; will keep the dialog open even without current traffic.">
-        <DataField DataType="boolean"/>
-      </Edit>
-      
-      <Edit Name="prpEnableTAGauge" Caption="Thermal assistant" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="This enables the display of the thermal assistant gauge.">
+      <Edit Name="prpAirspaceTransparency" Caption="Airspace transparency*" X="2" Width="-2" Height="22" CaptionWidth="150"
+            Help="If enabled, then airspaces are filled transparently.">
         <DataField DataType="boolean"/>
       </Edit>
     </Panel>
-  
+
     <Panel Name="frmTaskRules">
       <Edit Name="prpStartMaxSpeed" Caption="Start max. speed" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Maximum speed allowed in start observation zone.  Set to 0 for no limit.">
@@ -721,25 +558,53 @@
       </Panel>
     </Panel>
   
-    <Panel Name="frmInfoBoxes">
-      <Button Name="cmdInfoBoxesCircling" Caption="Circling" X="2" Width="-2" Height="22"/>
-      <Button Name="cmdInfoBoxesCruise" Caption="Cruise" X="2" Width="-2" Height="22"/>
-      <Button Name="cmdInfoBoxesFinalGlide" Caption="Final Glide" X="2" Width="-2" Height="22"/>
-      <Button Name="cmdInfoBoxesAuxiliary" Caption="Auxiliary" X="2" Width="-2" Height="22"/>
+    <Panel Name="frmComm">
+      <Panel Name="frmComm1" X="0" Y="0" Width="0" Height="68" Border="30">
+        <Label Caption="Device A" X="2" Y="2" Width="70" Height="36"/>
+  
+        <Edit Name="prpComDevice1" Caption="Name" X="72" Y="1" Width="173" Height="22" CaptionWidth="80" Help="Type of primary device. The primary device should be the most reliable GPS data source.">
+          <DataField DataType="enum" OnDataAccess="DevicesConfigPanel::OnDeviceAData" />
+        </Edit>
+  
+        <Edit Name="prpComPort1" Caption="Port" X="72" Width="173" Height="22" CaptionWidth="80" Help="Altair Pro users should set this to Port 3">
+          <DataField DataType="enum"/>
+        </Edit>
+  
+        <Edit Name="prpComSpeed1" Caption="Baudrate" X="72" Width="173" Height="22" CaptionWidth="80" Help="Altair Pro or Vega users should set this to 38400.">
+          <DataField DataType="enum" />
+        </Edit>
+  
+        <Button Name="cmdSetupDeviceA" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" OnClick="DevicesConfigPanel::OnSetupDeviceAClicked" />
+      </Panel>
+  
+      <Panel Name="frmComm2" X="0" Y="69" Width="0" Height="68" Border="30">
+        <Label Caption="Device B" X="2" Y="2" Width="70" Height="36"/>
+  
+        <Edit Name="prpComDevice2" Caption="Name" X="72" Y="1" Width="173" Height="22" CaptionWidth="80"
+          Help="Type of secondary device. The secondary device may be used as backup GPS data or other data e.g. from an intelligent variometer. Generic can be used for GPS sources including FLARM.">
+          <DataField DataType="enum" OnDataAccess="DevicesConfigPanel::OnDeviceBData" />
+        </Edit>
+  
+        <Edit Name="prpComPort2" Caption="Port" X="72" Width="173" Height="22" CaptionWidth="80" Help="Altair Pro users should set this to Port 1.">
+          <DataField DataType="enum"/>
+        </Edit>
+  
+        <Edit Name="prpComSpeed2" Caption="Baudrate" X="72" Width="173" Height="22" CaptionWidth="80"
+          Help="Altair Pro or Vega users should set this to 38400.">
+          <DataField DataType="enum" />
+        </Edit>
+  
+        <Button Name="cmdSetupDeviceB" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" OnClick="DevicesConfigPanel::OnSetupDeviceBClicked" />
+      </Panel>
+  
+      <Edit Name="prpSetSystemTimeFromGPS" Caption="Use GPS time" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="option, if enabled sets the clock of the computer to the GPS time once a fix is set.  This is only necessary if your computer does not have a real-time clock with battery backup or your computer frequently runs out of battery power or otherwise loses time.">
+        <DataField DataType="boolean" />
+      </Edit>
 
-      <Edit Name="prpAppInverseInfoBox" Caption="Inverse InfoBoxes*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="If true, the InfoBoxes are white on black, otherwise black on white.">
-        <DataField DataType="boolean" />
-      </Edit>
-    
-      <Edit Name="prpAppInfoBoxColors" Caption="Colored InfoBoxes*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="If true, certain InfoBoxes will have coloured text.  For example, the active waypoint infobox will be blue when the glider is above final glide.">
-        <DataField DataType="boolean" />
-      </Edit>
-    
-      <Edit Name="prpAppInfoBoxBorder" Caption="InfoBox border*" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Two styles for infobox borders are available:&#10;[Box] Draws boxes around each infobox.&#10;[Tab] Draws a tab at the top of the infobox across the title.">
-        <DataField DataType="enum" />
+      <Edit Name="prpIgnoreNMEAChecksum" Caption="Ignore checksum*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="If your GPS device outputs invalid NMEA checksums, this will allow it's data to be used anyway">
+        <DataField DataType="boolean"/>
       </Edit>
     </Panel>
   
@@ -775,6 +640,146 @@
       </Edit>
     </Panel>
 
+    <Panel Name="frmUnits">
+      <Panel Name="pnlUnitsDetails" X="2" Y="2" Border="30" Height="156" Width="-2">
+        <Label Name="lblUnitsSetting" Caption="Units:" X="2" Y="2" Height="16" Width="-112" />
+        <Button Name="cmdLoadUnitsPreset" Caption="Load Preset" X="-112" Y="2" Width="108" Height="20" OnClick="UnitsConfigPanel::OnLoadPreset" />
+
+        <Edit Name="prpUnitsSpeed" Caption="Aircraft/Wind speed" X="2" Width="-2" Height="22" CaptionWidth="150"
+          Help="Units used for airspeed and ground speed.  A separate unit is available for task speeds.">
+          <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
+        </Edit>
+    
+        <Edit Name="prpUnitsDistance" Caption="Distance" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Units used for horizontal distances e.g. range to waypoint, distance to go.">
+          <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
+        </Edit>
+    
+        <Edit Name="prpUnitsLift" Caption="Lift" X="2" Width="-2" Height="22" CaptionWidth="150"
+          Help="Units used for vertical speeds (variometer)">
+          <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
+        </Edit>
+    
+        <Edit Name="prpUnitsAltitude" Caption="Altitude" X="2" Width="-2" Height="22" CaptionWidth="150"
+          Help="Units used for altitude and heights.">
+          <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
+        </Edit>
+    
+        <Edit Name="prpUnitsTemperature" Caption="Temperature" X="2" Width="-2" Height="22" CaptionWidth="150"
+          Help="Units used for temperature.">
+          <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData"/>
+        </Edit>
+  
+        <Edit Name="prpUnitsTaskSpeed" Caption="Task speed" X="2" Width="-2" Height="22" CaptionWidth="150"
+          Help="Units used for task speeds.">
+          <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
+        </Edit>
+      </Panel>
+  
+      <Edit Name="prpUnitsLatLon" Caption="Lat./Lon." X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Units used for latitude and longitude.">
+        <DataField DataType="enum" />
+      </Edit>
+  
+      <Edit Name="prpUTCOffset" Caption="UTC offset" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="The UTC offset field allows the UTC local time offset to be specified.  The local time is displayed below in order to make it easier to verify the correct offset has been entered.">
+        <DataField DataType="double" DisplayFormat="%.1f" EditFormat="%.1f" Min="-13" Max="13" Step="0.5" OnDataAccess="UnitsConfigPanel::OnUTCData" />
+      </Edit>
+    
+      <Edit Name="prpLocalTime" Caption="Local time" X="2" Width="-2" Height="22" CaptionWidth="150" ReadOnly="1" />
+    </Panel>
+  
+    <Panel Name="frmInterface">
+      <Edit Name="prpAutoBlank" Caption="Auto. blank" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="This determines whether to blank the display after a long period of inactivity when operating on internal battery power.">
+        <DataField DataType="boolean" />
+      </Edit>
+  
+      <Edit Name="prpGestures" Caption="Gestures" X="2" Width="-2" Height="22" CaptionWidth="150">
+        <DataField DataType="boolean" />
+      </Edit>
+    
+      <Edit Name="prpInputFile" Caption="Events*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices.">
+        <DataField DataType="filereader" />
+      </Edit>
+    
+      <Edit Name="prpLanguageFile" Caption="Language*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="The language file defines translations for XCSoar text in English to other languages.  If this field is left blank, then XCSoar uses English.">
+        <DataField DataType="enum"/>
+      </Edit>
+    
+      <Edit Name="prpStatusFile" Caption="Status message*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="The status file can be used to define sounds to be played when certain events occur, and how long various status messages will appear on screen.">
+        <DataField DataType="filereader" />
+      </Edit>
+    
+      <Edit Name="prpMenuTimeout" Caption="Menu timeout*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="This determines how long menus will appear on screen if the user does not make any button presses or interacts with the computer.">
+        <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="60" Step="1" />
+      </Edit>
+    
+      <Edit Name="prpDebounceTimeout" Caption="Debounce time*" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="This is the minimum interval between the system recognising key presses. Set this to a low value for a more responsive user interface; if it is too low, then accidental multiple key presses can occur.">
+        <DataField DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min="0" Max="1000" Step="25" />
+      </Edit>
+  
+      <Edit Name="prpTextInput" Caption="Text input style*"  X="2"   Width="246" Height="22" CaptionWidth="150"
+        Help="Determines how the user is prompted for text input (filename, teamcode etc.)">
+        <DataField DataType="enum" />
+      </Edit>
+
+    </Panel>
+  
+    <Panel>
+      <Edit Name="prpDisplayOrientation" Caption="Display orientation" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="Rotate the display on devices that support it.">
+        <DataField DataType="enum"/>
+      </Edit>
+
+      <Edit Name="prpAppInfoBoxGeom" Caption="Infobox geometry" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="Geometry values range 0-7 but in landscape mode only some of them are really available.">
+        <DataField DataType="enum" />
+      </Edit>
+
+      <Edit Name="prpTabDialogStyle" Caption="Tab dialog style"  X="2" Width="-2" Height="22" CaptionWidth="100"
+      Help="Determines whether tabbed dialogs use text or dialogs">
+        <DataField DataType="enum"/>
+      </Edit>
+
+      <Edit Name="prpAppStatusMessageAlignment" Caption="Msg. window*" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="Defines the alignment of the status message box, either centered or in the top left corner.">
+        <DataField DataType="enum" />
+      </Edit>
+
+      <Edit Name="prpDialogStyle" Caption="Dialog style*"  X="2"   Width="246" Height="22" CaptionWidth="100"
+        Help="Determines display size of dialogs.">
+        <DataField DataType="enum" />
+      </Edit>
+
+      <Edit Name="prpAppInverseInfoBox" Caption="Inverse InfoBoxes*" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="If true, the InfoBoxes are white on black, otherwise black on white.">
+        <DataField DataType="boolean" />
+      </Edit>
+    
+      <Edit Name="prpAppInfoBoxColors" Caption="Colored InfoBoxes*" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="If true, certain InfoBoxes will have coloured text.  For example, the active waypoint infobox will be blue when the glider is above final glide.">
+        <DataField DataType="boolean" />
+      </Edit>
+    
+      <Edit Name="prpAppInfoBoxBorder" Caption="InfoBox border*" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="Two styles for infobox borders are available:&#10;[Box] Draws boxes around each infobox.&#10;[Tab] Draws a tab at the top of the infobox across the title.">
+        <DataField DataType="enum" />
+      </Edit>
+
+    </Panel>
+  
+    <Panel Name="frmInfoBoxes">
+      <Button Name="cmdInfoBoxesCircling" Caption="Circling" X="2" Width="-2" Height="22"/>
+      <Button Name="cmdInfoBoxesCruise" Caption="Cruise" X="2" Width="-2" Height="22"/>
+      <Button Name="cmdInfoBoxesFinalGlide" Caption="Final Glide" X="2" Width="-2" Height="22"/>
+      <Button Name="cmdInfoBoxesAuxiliary" Caption="Auxiliary" X="2" Width="-2" Height="22"/>
+    </Panel>
+  
     <Panel Name="frmPages">
       <Edit Name="prpPageLayout0" Caption="Page 1" X="2" Width="-2" Height="22" CaptionWidth="100"
          Help="Determines the information displayed on different screen pages.">

@@ -162,15 +162,6 @@ InterfaceConfigPanel::Init(WndForm *_wf)
     wp->hide();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTabDialogStyle"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Text"));
-    dfe->addEnumText(_("Icons"));
-    dfe->Set(Appearance.DialogTabStyle);
-    wp->RefreshDisplay();
-  }
 }
 
 
@@ -264,14 +255,6 @@ InterfaceConfigPanel::Save(bool &requirerestart)
       Profile::Set(szProfileAppTextInputStyle, Appearance.TextInputStyle);
       changed = true;
     }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTabDialogStyle"));
-  assert(wp != NULL);
-  if (Appearance.DialogTabStyle != (DialogTabStyle_t)(wp->GetDataField()->GetAsInteger())) {
-    Appearance.DialogTabStyle = (DialogTabStyle_t)(wp->GetDataField()->GetAsInteger());
-    Profile::Set(szProfileAppDialogTabStyle, Appearance.DialogTabStyle);
-    changed = true;
   }
 
   return changed;
