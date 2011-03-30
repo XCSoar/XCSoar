@@ -392,17 +392,15 @@ GlideComputerAirData::Average30s()
     return;
 
   const unsigned Elapsed = (unsigned)(basic.Time - LastBasic().Time);
-  for (unsigned i = 0; i < Elapsed; ++i) {
-    if (vario_30s_filter.update(calculated.BruttoVario))
-      calculated.Average30s =
-        LowPassFilter(calculated.Average30s, vario_30s_filter.average(),
-                      fixed(0.8));
+  if (Elapsed == 0)
+    return;
 
-    if (netto_30s_filter.update(calculated.NettoVario))
-      calculated.NettoAverage30s =
-        LowPassFilter(calculated.NettoAverage30s, netto_30s_filter.average(),
-                      fixed(0.8));
+  for (unsigned i = 0; i < Elapsed; ++i) {
+    vario_30s_filter.update(calculated.BruttoVario);
+    netto_30s_filter.update(calculated.NettoVario);
   }
+  calculated.Average30s = vario_30s_filter.average();
+  calculated.NettoAverage30s = netto_30s_filter.average();
 }
 
 void
