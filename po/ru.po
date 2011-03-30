@@ -32,15 +32,15 @@ msgstr "Задача"
 
 #: src/Airspace/AirspaceGlue.cpp:40
 msgid "Loading Airspace File..."
-msgstr ""
+msgstr "Загрузка файла воздушного пространства ..."
 
 #: src/Airspace/AirspaceParser.cpp:153
 msgid "Parse Error at Line"
-msgstr ""
+msgstr "Анализ ошибок на линии"
 
 #: src/Airspace/AirspaceParser.cpp:154
 msgid "Line skipped."
-msgstr ""
+msgstr "Линия сброщена"
 
 #: src/Airspace/AirspaceParser.cpp:155 src/Airspace/AirspaceParser.cpp:877
 #: src/Dialogs/dlgAnalysis.cpp:274 src/Dialogs/dlgConfiguration.cpp:92
@@ -57,11 +57,11 @@ msgstr "Неизвестный тип файла"
 
 #: src/ConditionMonitor.cpp:162
 msgid "Significant wind change"
-msgstr ""
+msgstr "Значительное изменение ветра"
 
 #: src/ConditionMonitor.cpp:278
 msgid "Expect arrival past sunset"
-msgstr ""
+msgstr "Ожидать прибытия после заката"
 
 #: src/ConditionMonitor.cpp:323
 msgid "Expect early task arrival"
@@ -89,37 +89,39 @@ msgstr "Логгер выключен, недостаточно памяти!"
 
 #: src/Logger/Logger.cpp:143
 msgid "Logger Error"
-msgstr ""
+msgstr "Ошибка логгера"
 
 #: src/Logger/Logger.cpp:172 src/Logger/Logger.cpp:173
 msgid "Stop Logger"
-msgstr ""
+msgstr "Остановить логгер"
 
 #: src/Logger/ExternalLogger.cpp:48
 msgid "Declare Task?"
-msgstr ""
+msgstr "Объявить упражнение?"
 
 #: src/Logger/ExternalLogger.cpp:51
 msgid "Task Declared!"
-msgstr ""
+msgstr "Упражнение объявлено!"
 
 #: src/Logger/ExternalLogger.cpp:55
 msgid ""
 "Error occured,\n"
 "Task NOT Declared!"
 msgstr ""
+"Произошла ошибка,\n"
+"Задача не объявлена!"
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "No logger connected"
-msgstr ""
+msgstr "Нет соединения с логгером."
 
 #: src/Logger/ExternalLogger.cpp:82
 msgid "Declare task"
-msgstr ""
+msgstr "Установить задание"
 
 #: src/Logger/ExternalLogger.cpp:97
 msgid "OK to invalidate declaration?"
-msgstr ""
+msgstr "Ок для аннулирования объявленной задачи"
 
 #: src/Logger/ExternalLogger.cpp:98
 msgid "Task declared"
@@ -131,19 +133,19 @@ msgstr "Не открывается IGC файл!"
 
 #: src/Replay/IgcReplayGlue.cpp:83 src/Replay/NmeaReplayGlue.cpp:95
 msgid "Flight replay"
-msgstr ""
+msgstr "Просмотр полета."
 
 #: src/Replay/NmeaReplayGlue.cpp:94
 msgid "Could not open NMEA file!"
-msgstr ""
+msgstr "Не могу открыть NMEA файл!"
 
 #: src/WayPoint/WayPointGlue.cpp:123
 msgid "Loading Waypoints..."
-msgstr ""
+msgstr "Загрузка путевых точек..."
 
 #: src/Gauge/ThermalAssistantWindow.cpp:256
 msgid "Not Circling"
-msgstr ""
+msgstr "Нет спирали"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:269
 msgid "No Traffic"
@@ -151,7 +153,7 @@ msgstr "перевозка нет"
 
 #: src/AirfieldDetails.cpp:143
 msgid "Loading Airfield Details File..."
-msgstr ""
+msgstr "Загрузка файла с подробной информацией о аэродроме..."
 
 #: src/ExpandMacros.cpp:118 src/ExpandMacros.cpp:128 src/ExpandMacros.cpp:193
 #: src/ExpandMacros.cpp:217
@@ -165,7 +167,7 @@ msgstr "прошлый поворотный пункт"
 
 #: src/ExpandMacros.cpp:145 src/ExpandMacros.cpp:165
 msgid "Furthest Landpoint"
-msgstr ""
+msgstr "Место посадки на значительном отдалении"
 
 #: src/ExpandMacros.cpp:146 src/ExpandMacros.cpp:166
 msgid "Next Landpoint"
@@ -173,7 +175,7 @@ msgstr "следующий посадкый пункт"
 
 #: src/ExpandMacros.cpp:155 src/ExpandMacros.cpp:175
 msgid "Closest Landpoint"
-msgstr ""
+msgstr "Ближайшее место посадки"
 
 #: src/ExpandMacros.cpp:156 src/ExpandMacros.cpp:176
 msgid "Previous Landpoint"
@@ -189,11 +191,11 @@ msgstr "запускать поворотный пункт"
 
 #: src/ExpandMacros.cpp:222
 msgid "Arm start"
-msgstr ""
+msgstr "Ручной старт"
 
 #: src/ExpandMacros.cpp:225
 msgid "Arm turn"
-msgstr ""
+msgstr "Ручной поворот"
 
 #: src/ExpandMacros.cpp:245
 msgid "Disarm start"
@@ -253,7 +255,7 @@ msgstr ""
 
 #: src/ExpandMacros.cpp:317 src/ExpandMacros.cpp:321
 msgid "Resume"
-msgstr ""
+msgstr "Продолжить"
 
 #: src/ExpandMacros.cpp:317 src/ExpandMacros.cpp:321
 #: src/Dialogs/Message.cpp:168
@@ -271,11 +273,11 @@ msgstr "Запускать"
 
 #: src/ExpandMacros.cpp:423 src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:70
 msgid "Long"
-msgstr ""
+msgstr "Длинный"
 
 #: src/ExpandMacros.cpp:427 src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:71
 msgid "Short"
-msgstr ""
+msgstr "Кратко"
 
 #: src/ExpandMacros.cpp:431 src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:72
 msgid "Full"
@@ -301,30 +303,30 @@ msgstr "Откл."
 #: src/Dialogs/dlgStatus.cpp:203
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:107
 msgid "On"
-msgstr ""
+msgstr "Вкл."
 
 #: src/ExpandMacros.cpp:454 src/ExpandMacros.cpp:480
 msgid "Topography On"
-msgstr ""
+msgstr "Топография Вкл"
 
 #: src/ExpandMacros.cpp:458 src/ExpandMacros.cpp:484
 msgid "Terrain On"
-msgstr ""
+msgstr "Цветной рельеф Вкл"
 
 #: src/ExpandMacros.cpp:462 src/ExpandMacros.cpp:488
 msgid "Terrain + Topography"
-msgstr ""
+msgstr "Ландшафт + Топография"
 
 #: src/ExpandMacros.cpp:466 src/ExpandMacros.cpp:492
 msgid "Terrain Off"
-msgstr ""
+msgstr "Ландшафт выкл"
 
 #: src/ExpandMacros.cpp:502 src/ExpandMacros.cpp:526
 #: src/InfoBoxes/Content/Weather.cpp:203 src/InfoBoxes/Content/Weather.cpp:233
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:48
 #: src/Dialogs/dlgWindSettings.cpp:100
 msgid "Manual"
-msgstr ""
+msgstr "Вручную"
 
 #: src/ExpandMacros.cpp:502 src/ExpandMacros.cpp:526
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:70
@@ -373,6 +375,9 @@ msgid ""
 "only: in simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
+"Эта высота над уровнем моря по данным GPS. Сенсорный экран/ Только для ПК: в "
+"режиме симуляции, это значение устанавливается  вверх / вниз  и правой / "
+"левой клавишами со стрелками к тому же заставляет планер поворачивать."
 
 #: src/InfoBoxes/Content/Factory.cpp:70
 #, no-c-format
@@ -417,7 +422,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails_L.xml:18
 #, no-c-format
 msgid "Bearing"
-msgstr ""
+msgstr "Азимут"
 
 #: src/InfoBoxes/Content/Factory.cpp:90
 #, no-c-format
@@ -429,7 +434,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:97
 #, no-c-format
 msgid "L/D instantaneous"
-msgstr ""
+msgstr "Качество текущее"
 
 #: src/InfoBoxes/Content/Factory.cpp:98
 #, no-c-format
@@ -467,7 +472,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:115
 #, no-c-format
 msgid "Speed ground"
-msgstr ""
+msgstr "Скорость над землей"
 
 #: src/InfoBoxes/Content/Factory.cpp:116
 #, no-c-format
@@ -481,11 +486,14 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
+"Скорость над замлей -  измеряется GPS. Если это InfoBox активен в режиме "
+"симуляции, нажимая стрелки вверх и вниз регулируется скорость, а также левая "
+"и правая стрелки для разворота планера."
 
 #: src/InfoBoxes/Content/Factory.cpp:124
 #, no-c-format
 msgid "Last thermal average"
-msgstr ""
+msgstr "Варио крайнего потока"
 
 #: src/InfoBoxes/Content/Factory.cpp:125
 #, no-c-format
@@ -502,7 +510,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:133
 #, no-c-format
 msgid "Last thermal gain"
-msgstr ""
+msgstr "Высота за крайний набор"
 
 #: src/InfoBoxes/Content/Factory.cpp:134
 #, no-c-format
@@ -512,7 +520,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:135
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr ""
+msgstr "Общая высота прирост / убыль за крайний поток"
 
 #: src/InfoBoxes/Content/Factory.cpp:142
 #, no-c-format
@@ -586,6 +594,8 @@ msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival "
 "altitude."
 msgstr ""
+"Высота прибытия на следующий поворотный сотносительно с безопасной высотой "
+"прибытия."
 
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
@@ -600,12 +610,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:180
 #, no-c-format
 msgid "Additional altitude required to reach the next turn point."
-msgstr ""
+msgstr "Высота необходимая для достижения следующего поворотного пункта."
 
 #: src/InfoBoxes/Content/Factory.cpp:187
 #, no-c-format
 msgid "Next waypoint"
-msgstr ""
+msgstr "Следующий поворотный"
 
 #: src/InfoBoxes/Content/Factory.cpp:188 src/InfoBoxes/Content/Task.cpp:84
 #: Data/Dialogs/dlgTaskPoint.xml:6 Data/Dialogs/dlgTaskPoint_L.xml:5
@@ -641,7 +651,7 @@ msgstr ""
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "altitude."
-msgstr ""
+msgstr "Высота прибытия на финиш касательно безопасной высоты прибытия."
 
 #: src/InfoBoxes/Content/Factory.cpp:205
 #, no-c-format
@@ -656,7 +666,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:207
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr ""
+msgstr "Высота потребная для завершения задачи."
 
 #: src/InfoBoxes/Content/Factory.cpp:214
 #, no-c-format
@@ -688,7 +698,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:225
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr ""
+msgstr "Расстояние до финиша через все поворотные маршрута."
 
 #: src/InfoBoxes/Content/Factory.cpp:232
 #, no-c-format
@@ -711,6 +721,13 @@ msgid ""
 "finish by the excess energy height of the glider if its true airspeed is "
 "greater than the MacCready and best LD speeds."
 msgstr ""
+"Потребное аэродинамическое качество необходимое что бы прийти к финишу, "
+"определяется: дистанция до финиша деленная на безопасную высоту прибытия. "
+"Отрицательные значения говорят о том что необходимо добрать высоты для "
+"долета.Если потребная высота близка к нулю показывается значение '---'. "
+"Обратите внимание на то что расчет может быть оптимистичным поскольку "
+"снижает высоту необходимую для финиша на избыточную энергию высоты планера "
+"если его истинная воздушная скорость больше Маккриди и лучшие LD скоростей"
 
 #: src/InfoBoxes/Content/Factory.cpp:241
 #, no-c-format
@@ -776,6 +793,8 @@ msgid ""
 "active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"Запись пути полученная  от GPS.  Если это InfoBox активен в режиме "
+"симулятора, нажимая стрелки вверх и вниз можно управлять планером."
 
 #: src/InfoBoxes/Content/Factory.cpp:277 src/InfoBoxes/Content/Factory.cpp:278
 #: src/InfoBoxes/Content/Factory.cpp:786
