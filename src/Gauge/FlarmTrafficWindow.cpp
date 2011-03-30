@@ -542,7 +542,7 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
   y2 = -Layout::FastScale(small ? 1 : 2);
 
   if (enable_north_up) {
-    FastRotation::Pair p = fir.Rotate(x1, y1);
+    FastIntegerRotation::Pair p = fir.Rotate(x1, y1);
     x1 = p.first;
     y1 = p.second;
     p = fir.Rotate(x2, y2);
@@ -559,7 +559,7 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
   y2 = Layout::FastScale(small ? 3 : 6);
 
   if (enable_north_up) {
-    FastRotation::Pair p = fir.Rotate(x1, y1);
+    FastIntegerRotation::Pair p = fir.Rotate(x1, y1);
     x1 = p.first;
     y1 = p.second;
     p = fir.Rotate(x2, y2);
@@ -576,7 +576,7 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
   y2 = Layout::FastScale(small ? 2 : 4);
 
   if (enable_north_up) {
-    FastRotation::Pair p = fir.Rotate(x1, y1);
+    FastIntegerRotation::Pair p = fir.Rotate(x1, y1);
     x1 = p.first;
     y1 = p.second;
     p = fir.Rotate(x2, y2);
