@@ -161,8 +161,8 @@ InFlash(const TCHAR *path, TCHAR *buffer)
   const TCHAR *name;
   while ((name = enumerator.next()) != NULL) {
     if (InFlashNamed(path, name)) {
-      buffer[0] = '/';
-      _stprintf(buffer, _T("/%s"), name);
+      buffer[0] = DIR_SEPARATOR;
+      _stprintf(buffer, _T(DIR_SEPARATOR_S"%s"), name);
       return buffer;
     }
   }
@@ -190,7 +190,7 @@ ExistingDataOnFlash(TCHAR *buffer)
   FlashCardEnumerator enumerator;
   const TCHAR *name;
   while ((name = enumerator.next()) != NULL) {
-    _stprintf(buffer, _T("/%s/") XCSDATADIR, name);
+    _stprintf(buffer, _T(DIR_SEPARATOR_S"%s"DIR_SEPARATOR_S) XCSDATADIR, name);
     if (Directory::Exists(buffer))
       return buffer;
   }
@@ -320,7 +320,7 @@ VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
   FlashCardEnumerator enumerator;
   const TCHAR *name;
   while ((name = enumerator.next()) != NULL) {
-    _stprintf(FlashPath, _T("/%s/%s"), name, XCSDATADIR);
+    _stprintf(FlashPath, _T(DIR_SEPARATOR_S"%s"DIR_SEPARATOR_S"%s"), name, XCSDATADIR);
     if (_tcscmp(data_path, FlashPath) == 0)
       /* don't scan primary data path twice */
       continue;
