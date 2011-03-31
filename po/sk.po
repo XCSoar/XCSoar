@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-31 20:05+0200\n"
-"PO-Revision-Date: 2011-03-31 11:04+0200\n"
+"POT-Creation-Date: 2011-03-31 22:08+0200\n"
+"PO-Revision-Date: 2011-03-31 22:10+0200\n"
 "Last-Translator: Roman Stoklasa <rstoki@gmail.com>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
@@ -829,7 +829,8 @@ msgstr ""
 "ľavého/pravého tlačítka vetroň zatáča."
 
 #: src/InfoBoxes/Content/Factory.cpp:277 src/InfoBoxes/Content/Factory.cpp:278
-#: src/InfoBoxes/Content/Factory.cpp:786
+#: src/InfoBoxes/Content/Factory.cpp:786 src/Dialogs/dlgFlarmTraffic.cpp:318
+#: src/Dialogs/dlgFlarmTraffic.cpp:319
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:85
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:88
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14
@@ -2468,7 +2469,8 @@ msgid "Wing loading"
 msgstr "Plošné zaťaženie"
 
 #: src/FlightStatisticsRenderer.cpp:425 src/FlightStatisticsRenderer.cpp:448
-#: src/FlightStatisticsRenderer.cpp:475 Data/Dialogs/dlgAirspaceSelect.xml:10
+#: src/FlightStatisticsRenderer.cpp:475 src/Dialogs/dlgFlarmTraffic.cpp:332
+#: Data/Dialogs/dlgAirspaceSelect.xml:10
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:16
 #: Data/Dialogs/dlgConfiguration.xml:652
 #: Data/Dialogs/dlgConfiguration_L.xml:653
@@ -3016,17 +3018,9 @@ msgstr "Vega-chyba"
 msgid "Reading vario settings..."
 msgstr "Čítam nastavenia varia..."
 
-#: src/Dialogs/dlgFlarmTraffic.cpp:318 src/Dialogs/dlgFlarmTraffic.cpp:319
-msgid "Vario:"
-msgstr "Vário:"
-
-#: src/Dialogs/dlgFlarmTraffic.cpp:332
-msgid "Distance:"
-msgstr "Vzdialenosť:"
-
 #: src/Dialogs/dlgFlarmTraffic.cpp:341 src/Dialogs/dlgFlarmTraffic.cpp:344
-msgid "Rel. Alt.:"
-msgstr "Rel. výška.:"
+msgid "Rel. Alt."
+msgstr "Rel. výška."
 
 #: src/Dialogs/dlgHelp.cpp:59 Data/Dialogs/dlgComboPicker.xml:8
 #: Data/Dialogs/dlgComboPicker_L.xml:8 Data/Dialogs/dlgHelp.xml:3

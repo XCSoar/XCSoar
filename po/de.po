@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-31 20:05+0200\n"
-"PO-Revision-Date: 2011-03-31 20:08+0200\n"
+"POT-Creation-Date: 2011-03-31 22:08+0200\n"
+"PO-Revision-Date: 2011-03-31 22:10+0200\n"
 "Last-Translator: Niklas Fischer <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -825,7 +825,8 @@ msgstr ""
 "eingestellt werden."
 
 #: src/InfoBoxes/Content/Factory.cpp:277 src/InfoBoxes/Content/Factory.cpp:278
-#: src/InfoBoxes/Content/Factory.cpp:786
+#: src/InfoBoxes/Content/Factory.cpp:786 src/Dialogs/dlgFlarmTraffic.cpp:318
+#: src/Dialogs/dlgFlarmTraffic.cpp:319
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:85
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:88
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14
@@ -2516,7 +2517,8 @@ msgid "Wing loading"
 msgstr "Flächenbelastung"
 
 #: src/FlightStatisticsRenderer.cpp:425 src/FlightStatisticsRenderer.cpp:448
-#: src/FlightStatisticsRenderer.cpp:475 Data/Dialogs/dlgAirspaceSelect.xml:10
+#: src/FlightStatisticsRenderer.cpp:475 src/Dialogs/dlgFlarmTraffic.cpp:332
+#: Data/Dialogs/dlgAirspaceSelect.xml:10
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:16
 #: Data/Dialogs/dlgConfiguration.xml:652
 #: Data/Dialogs/dlgConfiguration_L.xml:653
@@ -3066,17 +3068,9 @@ msgstr "Vega Fehler"
 msgid "Reading vario settings..."
 msgstr "Lese Varioeinstellungen..."
 
-#: src/Dialogs/dlgFlarmTraffic.cpp:318 src/Dialogs/dlgFlarmTraffic.cpp:319
-msgid "Vario:"
-msgstr "Vario:"
-
-#: src/Dialogs/dlgFlarmTraffic.cpp:332
-msgid "Distance:"
-msgstr "Distanz:"
-
 #: src/Dialogs/dlgFlarmTraffic.cpp:341 src/Dialogs/dlgFlarmTraffic.cpp:344
-msgid "Rel. Alt.:"
-msgstr "Relative Höhe:"
+msgid "Rel. Alt."
+msgstr "Relative Höhe"
 
 #: src/Dialogs/dlgHelp.cpp:59 Data/Dialogs/dlgComboPicker.xml:8
 #: Data/Dialogs/dlgComboPicker_L.xml:8 Data/Dialogs/dlgHelp.xml:3

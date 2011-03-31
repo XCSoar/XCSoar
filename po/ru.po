@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-31 20:05+0200\n"
+"POT-Creation-Date: 2011-03-31 22:08+0200\n"
 "PO-Revision-Date: 2011-03-31 12:24+0000\n"
 "Last-Translator: Dobrovolsky Ilya <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -810,7 +810,8 @@ msgstr ""
 "симулятора, нажимая стрелки вверх и вниз можно управлять планером."
 
 #: src/InfoBoxes/Content/Factory.cpp:277 src/InfoBoxes/Content/Factory.cpp:278
-#: src/InfoBoxes/Content/Factory.cpp:786
+#: src/InfoBoxes/Content/Factory.cpp:786 src/Dialogs/dlgFlarmTraffic.cpp:318
+#: src/Dialogs/dlgFlarmTraffic.cpp:319
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:85
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:88
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14
@@ -2399,7 +2400,8 @@ msgid "Wing loading"
 msgstr ""
 
 #: src/FlightStatisticsRenderer.cpp:425 src/FlightStatisticsRenderer.cpp:448
-#: src/FlightStatisticsRenderer.cpp:475 Data/Dialogs/dlgAirspaceSelect.xml:10
+#: src/FlightStatisticsRenderer.cpp:475 src/Dialogs/dlgFlarmTraffic.cpp:332
+#: Data/Dialogs/dlgAirspaceSelect.xml:10
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:16
 #: Data/Dialogs/dlgConfiguration.xml:652
 #: Data/Dialogs/dlgConfiguration_L.xml:653
@@ -2948,16 +2950,8 @@ msgstr ""
 msgid "Reading vario settings..."
 msgstr ""
 
-#: src/Dialogs/dlgFlarmTraffic.cpp:318 src/Dialogs/dlgFlarmTraffic.cpp:319
-msgid "Vario:"
-msgstr ""
-
-#: src/Dialogs/dlgFlarmTraffic.cpp:332
-msgid "Distance:"
-msgstr ""
-
 #: src/Dialogs/dlgFlarmTraffic.cpp:341 src/Dialogs/dlgFlarmTraffic.cpp:344
-msgid "Rel. Alt.:"
+msgid "Rel. Alt."
 msgstr ""
 
 #: src/Dialogs/dlgHelp.cpp:59 Data/Dialogs/dlgComboPicker.xml:8
