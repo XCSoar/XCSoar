@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-31 15:49+0200\n"
+"POT-Creation-Date: 2011-03-31 20:05+0200\n"
 "PO-Revision-Date: 2011-03-31 17:01+0200\n"
 "Last-Translator: Max Kellermann <max@duempel.org>\n"
 "Language-Team: none\n"
@@ -2647,6 +2647,8 @@ msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:91
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:109
+#: Data/Dialogs/dlgConfiguration.xml:369
+#: Data/Dialogs/dlgConfiguration_L.xml:370
 #, no-c-format
 msgid "Polar"
 msgstr ""
@@ -2674,6 +2676,8 @@ msgstr "Καταγραφέας"
 
 #: src/Dialogs/dlgConfiguration.cpp:97
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:97
+#: Data/Dialogs/dlgConfiguration.xml:644
+#: Data/Dialogs/dlgConfiguration_L.xml:645
 #, no-c-format
 msgid "Units"
 msgstr "Μονάδες μέτρησης"
@@ -4594,11 +4598,6 @@ msgid ""
 "ABC-01.IGC)."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:369
-#: Data/Dialogs/dlgConfiguration_L.xml:370
-msgid "Polar:"
-msgstr ""
-
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
 msgstr ""
@@ -5150,11 +5149,6 @@ msgstr ""
 #: Data/Dialogs/dlgVario.xml:430 Data/Dialogs/dlgVario_L.xml:431
 msgid "Cambridge"
 msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:644
-#: Data/Dialogs/dlgConfiguration_L.xml:645
-msgid "Units:"
-msgstr "Μονάδες μέτρησης:"
 
 #: Data/Dialogs/dlgConfiguration.xml:99 Data/Dialogs/dlgConfiguration_L.xml:99
 msgid "Track bearing"
@@ -7567,6 +7561,9 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Προσγείωση"
+
+#~ msgid "Units:"
+#~ msgstr "Μονάδες μέτρησης:"
 
 #~ msgid "Logger ON"
 #~ msgstr "Καταγραφέας ON"

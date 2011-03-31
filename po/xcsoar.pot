@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-31 09:46+0200\n"
+"POT-Creation-Date: 2011-03-31 20:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2644,6 +2644,8 @@ msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:91
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:109
+#: Data/Dialogs/dlgConfiguration.xml:369
+#: Data/Dialogs/dlgConfiguration_L.xml:370
 #, no-c-format
 msgid "Polar"
 msgstr ""
@@ -2671,6 +2673,8 @@ msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:97
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:97
+#: Data/Dialogs/dlgConfiguration.xml:644
+#: Data/Dialogs/dlgConfiguration_L.xml:645
 #, no-c-format
 msgid "Units"
 msgstr ""
@@ -4587,11 +4591,6 @@ msgid ""
 "ABC-01.IGC)."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:369
-#: Data/Dialogs/dlgConfiguration_L.xml:370
-msgid "Polar:"
-msgstr ""
-
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
 msgstr ""
@@ -5141,11 +5140,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:430 Data/Dialogs/dlgVario_L.xml:431
 msgid "Cambridge"
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:644
-#: Data/Dialogs/dlgConfiguration_L.xml:645
-msgid "Units:"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:99 Data/Dialogs/dlgConfiguration_L.xml:99

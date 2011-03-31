@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-31 09:46+0200\n"
+"POT-Creation-Date: 2011-03-31 20:05+0200\n"
 "PO-Revision-Date: 2011-03-31 11:04+0200\n"
 "Last-Translator: Roman Stoklasa <rstoki@gmail.com>\n"
 "Language-Team: Slovak <sk@li.org>\n"
@@ -2822,6 +2822,8 @@ msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:91
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:109
+#: Data/Dialogs/dlgConfiguration.xml:369
+#: Data/Dialogs/dlgConfiguration_L.xml:370
 #, no-c-format
 msgid "Polar"
 msgstr "Polára"
@@ -2849,6 +2851,8 @@ msgstr "Logger"
 
 #: src/Dialogs/dlgConfiguration.cpp:97
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:97
+#: Data/Dialogs/dlgConfiguration.xml:644
+#: Data/Dialogs/dlgConfiguration_L.xml:645
 #, no-c-format
 msgid "Units"
 msgstr "Jednotky"
@@ -4832,11 +4836,6 @@ msgstr ""
 "Toto určuje dĺžku pomenovania IGC súboru. Vzor krátkeho názvu (81HXABC1."
 "IGC), dlhý názov (2008-01-18-XXX-ABC-01.IGC)."
 
-#: Data/Dialogs/dlgConfiguration.xml:369
-#: Data/Dialogs/dlgConfiguration_L.xml:370
-msgid "Polar:"
-msgstr "Polára:"
-
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
 msgstr "Prepínače"
@@ -5404,11 +5403,6 @@ msgstr ""
 #: Data/Dialogs/dlgVario.xml:430 Data/Dialogs/dlgVario_L.xml:431
 msgid "Cambridge"
 msgstr "Cambridge"
-
-#: Data/Dialogs/dlgConfiguration.xml:644
-#: Data/Dialogs/dlgConfiguration_L.xml:645
-msgid "Units:"
-msgstr "Jednotky:"
 
 #: Data/Dialogs/dlgConfiguration.xml:99 Data/Dialogs/dlgConfiguration_L.xml:99
 msgid "Track bearing"
@@ -7936,6 +7930,12 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Pristánie"
+
+#~ msgid "Polar:"
+#~ msgstr "Polára:"
+
+#~ msgid "Units:"
+#~ msgstr "Jednotky:"
 
 #~ msgid "OFF"
 #~ msgstr "VYP"

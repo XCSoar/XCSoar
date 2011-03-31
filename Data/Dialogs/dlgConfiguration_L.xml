@@ -367,7 +367,7 @@
   
     <Panel Name="frmPolar">
       <Panel Name="pnlPolarDetails" X="12" Y="2" Border="30" Height="109" Width="-2">
-        <Label Name="lblPolar" Caption="Polar:" X="2" Y="2" Height="16" Width="-60" />
+        <Label Name="lblPolar" Caption="Polar" X="2" Y="2" Height="16" Width="-60" />
         <Label Name="lblPolarInvalid" Caption="Invalid" X="-50" Y="2" Height="16" CaptionColor="0xFF0000" />
 
         <Edit Name="prpPolarV1" Caption="Polar V" X="2" Y="18" Width="130" Height="22" CaptionWidth="80">
@@ -642,7 +642,7 @@
 
     <Panel Name="frmUnits">
       <Panel Name="pnlUnitsDetails" X="2" Y="2" Border="30" Height="156" Width="-2">
-        <Label Name="lblUnitsSetting" Caption="Units:" X="2" Y="2" Height="16" Width="-112" />
+        <Label Name="lblUnitsSetting" Caption="Units" X="2" Y="2" Height="16" Width="-112" />
         <Button Name="cmdLoadUnitsPreset" Caption="Load Preset" X="-112" Y="2" Width="108" Height="20" OnClick="UnitsConfigPanel::OnLoadPreset" />
 
         <Edit Name="prpUnitsSpeed" Caption="Aircraft/Wind speed" X="2" Width="-2" Height="22" CaptionWidth="150"

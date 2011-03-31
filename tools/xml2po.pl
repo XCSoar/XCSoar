@@ -30,7 +30,7 @@ sub handle_start {
             next unless $value =~ /[a-zA-Z]/;
 
             die "Malformed attribute at $path:" . $expat->current_line . "\n  -> \"" . $value . "\"\n"
-              if $value =~ /^\s|\s$|\t| \n| \r|\n /s;
+              if $value =~ /^\s|\s$|:$|\t| \n| \r|\n /s;
 
             $strings{$value} ||= [];
             push @{$strings{$value}}, $path . ":" . $expat->current_line;

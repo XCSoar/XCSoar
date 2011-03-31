@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 14:19+0200\n"
-"PO-Revision-Date: 2011-03-29 12:01+0000\n"
+"POT-Creation-Date: 2011-03-31 20:05+0200\n"
+"PO-Revision-Date: 2011-03-31 20:08+0200\n"
 "Last-Translator: Niklas Fischer <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -1981,7 +1981,7 @@ msgstr ""
 msgid "N/A"
 msgstr "Nicht Verfügbar"
 
-#: src/InfoBoxes/Content/Altitude.cpp:266 src/GlueMapWindowOverlays.cpp:366
+#: src/InfoBoxes/Content/Altitude.cpp:266 src/GlueMapWindowOverlays.cpp:362
 #: Data/Dialogs/dlgSimulatorPrompt.xml:6
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:6
 msgid "Simulator"
@@ -2294,19 +2294,15 @@ msgstr ""
 msgid "Map and InfoBoxes (Auto)"
 msgstr ""
 
-#: src/Pages.cpp:189
-msgid "---"
-msgstr ""
-
 #: src/GlueMapWindowAirspace.cpp:154
 msgid "Airspaces at this location"
 msgstr "Lufträume an diesem Ort"
 
-#: src/GlueMapWindowOverlays.cpp:66
+#: src/GlueMapWindowOverlays.cpp:64
 msgid "GPS not connected"
 msgstr "GPS nicht verbunden"
 
-#: src/GlueMapWindowOverlays.cpp:69
+#: src/GlueMapWindowOverlays.cpp:67
 msgid "GPS waiting for fix"
 msgstr "GPS wartet auf Positionsbestimmung"
 
@@ -2677,22 +2673,22 @@ msgid "Initialising display"
 msgstr "Initialisiere Anzeige"
 
 #. Show progress dialog
-#: src/Components.cpp:463 src/Components.cpp:489 src/Components.cpp:525
+#: src/Components.cpp:464 src/Components.cpp:490 src/Components.cpp:526
 msgid "Shutdown, please wait..."
 msgstr "Abstellvorgang, bitte warten..."
 
 #. Stop logger and save igc file
-#: src/Components.cpp:473
+#: src/Components.cpp:474
 msgid "Shutdown, saving logs..."
 msgstr "Abschalten, speichere Logs..."
 
 #. Save settings to profile
-#: src/Components.cpp:477
+#: src/Components.cpp:478
 msgid "Shutdown, saving profile..."
 msgstr "Abstellvorgang, speichere Profil..."
 
 #. Save the task for the next time
-#: src/Components.cpp:516
+#: src/Components.cpp:517
 msgid "Shutdown, saving task..."
 msgstr "Abstellvorgang, speichere Aufgabe..."
 
@@ -2786,7 +2782,7 @@ msgid "Task Calc"
 msgstr "Aufgabe Berechnung"
 
 #: src/Dialogs/dlgAnalysis.cpp:211
-msgid "Thermal band"
+msgid "Thermal Band"
 msgstr ""
 
 #: src/Dialogs/dlgAnalysis.cpp:220
@@ -2874,6 +2870,8 @@ msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:91
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:109
+#: Data/Dialogs/dlgConfiguration.xml:369
+#: Data/Dialogs/dlgConfiguration_L.xml:370
 #, no-c-format
 msgid "Polar"
 msgstr "Polare"
@@ -2901,6 +2899,8 @@ msgstr "Logger"
 
 #: src/Dialogs/dlgConfiguration.cpp:97
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:97
+#: Data/Dialogs/dlgConfiguration.xml:644
+#: Data/Dialogs/dlgConfiguration_L.xml:645
 #, no-c-format
 msgid "Units"
 msgstr "Maßeinheiten"
@@ -3621,7 +3621,7 @@ msgid "Outlined"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:89
-msgid "All waypoints labels will displayed."
+msgid "All waypoint labels will be displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:90
@@ -3629,8 +3629,7 @@ msgid "Task Waypoints & Landables"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:92
-msgid ""
-"All waypoints labels part of a task and all landables will be displayed."
+msgid "All waypoints part of a task and all landables will be displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:93
@@ -3638,7 +3637,7 @@ msgid "Task Waypoints"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:94
-msgid "All waypoints labels part of a task will be displayed."
+msgid "All waypoints part of a task will be displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:96
@@ -4309,6 +4308,16 @@ msgstr "Menü Zeitabschaltung*"
 msgid "Calibration factor applied to total energy probe to obtain TE vario."
 msgstr "Kalibrierfaktor der Totalenergie-Düse um TE Variowerte zu berechnen."
 
+#: Data/Dialogs/dlgConfiguration.xml:189
+#: Data/Dialogs/dlgConfiguration_L.xml:189
+#, fuzzy
+msgid ""
+"Draw topographical features (roads, rivers, lakes etc) on the map.  Requires "
+"the topography file to be specified."
+msgstr ""
+"Zeige topologische Strukturen (Straßen, Flüsse, Seen usw.) auf der Karte. Es "
+"muss eine Topologiedatei angegeben werden."
+
 #: Data/Dialogs/dlgConfigWaypoints.xml:6
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:6
 msgid "New"
@@ -4381,8 +4390,8 @@ msgstr ""
 msgid "Pilot"
 msgstr "Pilot"
 
-#: Data/Dialogs/dlgConfiguration.xml:783
-#: Data/Dialogs/dlgConfiguration_L.xml:784
+#: Data/Dialogs/dlgConfiguration.xml:787
+#: Data/Dialogs/dlgConfiguration_L.xml:788
 msgid "Page 1"
 msgstr ""
 
@@ -4463,8 +4472,8 @@ msgstr ""
 msgid "Page Configuration"
 msgstr "Seiten Einstellung"
 
-#: Data/Dialogs/dlgConfiguration.xml:811
-#: Data/Dialogs/dlgConfiguration_L.xml:812
+#: Data/Dialogs/dlgConfiguration.xml:815
+#: Data/Dialogs/dlgConfiguration_L.xml:816
 msgid "Page 8"
 msgstr ""
 
@@ -4698,8 +4707,8 @@ msgstr ""
 msgid "Latitude"
 msgstr "Breitengrad"
 
-#: Data/Dialogs/dlgConfiguration.xml:787
-#: Data/Dialogs/dlgConfiguration_L.xml:788
+#: Data/Dialogs/dlgConfiguration.xml:791
+#: Data/Dialogs/dlgConfiguration_L.xml:792
 msgid "Page 2"
 msgstr ""
 
@@ -4894,11 +4903,6 @@ msgstr ""
 "Kurzer Dateiname - 81HXABC1.IGC,\r\n"
 "langer Dateiname - 2008-01-18-XXX-ABC-01.IGC."
 
-#: Data/Dialogs/dlgConfiguration.xml:369
-#: Data/Dialogs/dlgConfiguration_L.xml:370
-msgid "Polar:"
-msgstr "Polare:"
-
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
 msgstr "Schalter"
@@ -4934,8 +4938,8 @@ msgstr "Gleitzahl Mittelwertzeitintervall*"
 msgid "Show average"
 msgstr "Zeige Mittelwert"
 
-#: Data/Dialogs/dlgConfiguration.xml:807
-#: Data/Dialogs/dlgConfiguration_L.xml:808
+#: Data/Dialogs/dlgConfiguration.xml:811
+#: Data/Dialogs/dlgConfiguration_L.xml:812
 msgid "Page 7"
 msgstr ""
 
@@ -5172,6 +5176,11 @@ msgstr "Minimale Dringendlautstärke"
 
 #: Data/Dialogs/dlgConfiguration.xml:13 Data/Dialogs/dlgConfiguration_L.xml:10
 msgid "Import"
+msgstr ""
+
+#: Data/Dialogs/dlgConfiguration.xml:743
+#: Data/Dialogs/dlgConfiguration_L.xml:744
+msgid "Determines whether tabbed dialogs use text or icons"
 msgstr ""
 
 #: Data/Dialogs/dlgStartTask.xml:3
@@ -5471,11 +5480,6 @@ msgstr "Einstellung der Basistonhöhe für alle Modi."
 msgid "Cambridge"
 msgstr "Cambridge"
 
-#: Data/Dialogs/dlgConfiguration.xml:644
-#: Data/Dialogs/dlgConfiguration_L.xml:645
-msgid "Units:"
-msgstr "Maßeinheiten:"
-
 #: Data/Dialogs/dlgConfiguration.xml:99 Data/Dialogs/dlgConfiguration_L.xml:99
 #, fuzzy
 msgid "Track bearing"
@@ -5531,11 +5535,6 @@ msgstr "Anschluss"
 #: Data/Dialogs/dlgTaskPoint.xml:24 Data/Dialogs/dlgTaskPoint_L.xml:23
 msgid "Length"
 msgstr "Länge"
-
-#: Data/Dialogs/dlgConfiguration.xml:743
-#: Data/Dialogs/dlgConfiguration_L.xml:744
-msgid "Determines whether tabbed dialogs use text or dialogs"
-msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:52
 msgid "Takeoff time"
@@ -5669,6 +5668,12 @@ msgstr ""
 msgid "Low limit of cruise dead band"
 msgstr "Untergrenze der Tonausblendung im Vorflug"
 
+#: Data/Dialogs/dlgConfiguration.xml:779
+#: Data/Dialogs/dlgConfiguration_L.xml:780
+#, fuzzy
+msgid "Auxiliary-1"
+msgstr "Zusätzlich"
+
 #: Data/Dialogs/dlgConfiguration.xml:710
 #: Data/Dialogs/dlgConfiguration_L.xml:711
 msgid "Status message*"
@@ -5718,13 +5723,6 @@ msgstr "Max Objekte gemeldet"
 #: Data/Dialogs/dlgConfiguration_L.xml:692
 msgid "Auto. blank"
 msgstr "Auto Blank"
-
-#: Data/Dialogs/dlgConfiguration.xml:189
-#: Data/Dialogs/dlgConfiguration_L.xml:189
-msgid ""
-"Draw topological features (roads, rivers, lakes etc) on the map.  Requires "
-"the topography file to be specified."
-msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:198
 #: Data/Dialogs/dlgConfiguration_L.xml:198
@@ -5859,8 +5857,8 @@ msgstr ""
 msgid "Set speed remaining"
 msgstr "Setze restliche Geschwindigkeit"
 
-#: Data/Dialogs/dlgConfiguration.xml:818
-#: Data/Dialogs/dlgConfiguration_L.xml:819
+#: Data/Dialogs/dlgConfiguration.xml:822
+#: Data/Dialogs/dlgConfiguration_L.xml:823
 msgid "Device model"
 msgstr "Geräte Modell"
 
@@ -6056,6 +6054,12 @@ msgstr "FLARM Sperrung"
 #: Data/Dialogs/dlgConfiguration_L.xml:438
 msgid "Enable/disable all airspace warnings."
 msgstr "Aktivieren/Abschalten der Luftraumwarnungen."
+
+#: Data/Dialogs/dlgConfiguration.xml:780
+#: Data/Dialogs/dlgConfiguration_L.xml:781
+#, fuzzy
+msgid "Auxiliary-2"
+msgstr "Zusätzlich"
 
 #: Data/Dialogs/dlgSwitches.xml:23
 msgid "Gear down"
@@ -6349,8 +6353,8 @@ msgstr ""
 msgid "InfoBox border*"
 msgstr "Infobox Rahmen*"
 
-#: Data/Dialogs/dlgConfiguration.xml:795
-#: Data/Dialogs/dlgConfiguration_L.xml:796
+#: Data/Dialogs/dlgConfiguration.xml:799
+#: Data/Dialogs/dlgConfiguration_L.xml:800
 msgid "Page 4"
 msgstr ""
 
@@ -6464,11 +6468,10 @@ msgstr ""
 msgid "Task speed"
 msgstr "Überland-Geschwindigkeit"
 
-#: Data/Dialogs/dlgConfiguration.xml:783 Data/Dialogs/dlgConfiguration.xml:787
-#: Data/Dialogs/dlgConfiguration.xml:791 Data/Dialogs/dlgConfiguration.xml:795
-#: Data/Dialogs/dlgConfiguration.xml:799 Data/Dialogs/dlgConfiguration.xml:803
-#: Data/Dialogs/dlgConfiguration.xml:807 Data/Dialogs/dlgConfiguration.xml:811
-#: Data/Dialogs/dlgConfiguration_L.xml:784
+#: Data/Dialogs/dlgConfiguration.xml:787 Data/Dialogs/dlgConfiguration.xml:791
+#: Data/Dialogs/dlgConfiguration.xml:795 Data/Dialogs/dlgConfiguration.xml:799
+#: Data/Dialogs/dlgConfiguration.xml:803 Data/Dialogs/dlgConfiguration.xml:807
+#: Data/Dialogs/dlgConfiguration.xml:811 Data/Dialogs/dlgConfiguration.xml:815
 #: Data/Dialogs/dlgConfiguration_L.xml:788
 #: Data/Dialogs/dlgConfiguration_L.xml:792
 #: Data/Dialogs/dlgConfiguration_L.xml:796
@@ -6476,6 +6479,7 @@ msgstr "Überland-Geschwindigkeit"
 #: Data/Dialogs/dlgConfiguration_L.xml:804
 #: Data/Dialogs/dlgConfiguration_L.xml:808
 #: Data/Dialogs/dlgConfiguration_L.xml:812
+#: Data/Dialogs/dlgConfiguration_L.xml:816
 msgid "Determines the information displayed on different screen pages."
 msgstr ""
 
@@ -6611,6 +6615,16 @@ msgstr "Stimme stummschalten"
 msgid "Show MacReady"
 msgstr "Zeige MacCready"
 
+#: Data/Dialogs/dlgVario.xml:28 Data/Dialogs/dlgVario_L.xml:29
+msgid ""
+"Whether the internal accelerometer is used.  Only change this if the "
+"accelerometer has malfunctioned or the instrument cannot be installed with "
+"correct alignment."
+msgstr ""
+"Ob der interne Beschleunigungssensor verwendet werden soll. Schalte dies nur "
+"aus, wenn der Sensor nicht gut funktioniert, oder das Gerät nicht korrekt "
+"ausgerichtet montiert ist."
+
 #: Data/Dialogs/dlgConfiguration.xml:290
 #: Data/Dialogs/dlgConfiguration_L.xml:291
 msgid "Nav. by baro altitude*"
@@ -6635,16 +6649,6 @@ msgstr ""
 "[Auto] Alles in einem Höhenband um den Segler.\n"
 "[Alles unter mir] Alle Lufträume unter dem Segler."
 
-#: Data/Dialogs/dlgVario.xml:28 Data/Dialogs/dlgVario_L.xml:29
-msgid ""
-"Whether the internal accelerometer is used.  Only change this if the "
-"accelerometer has malfunctioned or the instrument cannot be installed with "
-"correct alignment."
-msgstr ""
-"Ob der interne Beschleunigungssensor verwendet werden soll. Schalte dies nur "
-"aus, wenn der Sensor nicht gut funktioniert, oder das Gerät nicht korrekt "
-"ausgerichtet montiert ist."
-
 #: Data/Dialogs/dlgWaypointEdit.xml:3 Data/Dialogs/dlgWaypointEdit_L.xml:3
 msgid "Waypoint Editor"
 msgstr "Wegpunktbearbeitung"
@@ -6665,8 +6669,14 @@ msgstr "Wegpkte."
 msgid "Customize fonts"
 msgstr "Schriften anpassen"
 
-#: Data/Dialogs/dlgConfiguration.xml:818
-#: Data/Dialogs/dlgConfiguration_L.xml:819
+#: Data/Dialogs/dlgConfiguration.xml:781
+#: Data/Dialogs/dlgConfiguration_L.xml:782
+#, fuzzy
+msgid "Auxiliary-3"
+msgstr "Zusätzlich"
+
+#: Data/Dialogs/dlgConfiguration.xml:822
+#: Data/Dialogs/dlgConfiguration_L.xml:823
 msgid ""
 "Select your PNA model to make full use of its hardware capabilities. If it "
 "is not included, use Generic type."
@@ -6857,11 +6867,6 @@ msgstr ""
 msgid "Units used for altitude and heights."
 msgstr "Einheiten für die Flughöhe und Höhen."
 
-#: Data/Dialogs/dlgConfiguration.xml:779
-#: Data/Dialogs/dlgConfiguration_L.xml:780
-msgid "Auxiliary"
-msgstr "Zusätzlich"
-
 #: Data/Dialogs/dlgStatus.xml:32 Data/Dialogs/dlgStatusTask.xml:6
 msgid "Remaining time"
 msgstr "Verbleibende Zeit"
@@ -6894,8 +6899,8 @@ msgstr "Vorwarnzeit*"
 msgid "Units used for latitude and longitude."
 msgstr "Einheiten für Breitengrad und Längengrad."
 
-#: Data/Dialogs/dlgConfiguration.xml:791
-#: Data/Dialogs/dlgConfiguration_L.xml:792
+#: Data/Dialogs/dlgConfiguration.xml:795
+#: Data/Dialogs/dlgConfiguration_L.xml:796
 msgid "Page 3"
 msgstr ""
 
@@ -7032,6 +7037,12 @@ msgstr ""
 "Legt die Ausrichtung der Statusmeldung fest, entweder zentriert, oder "
 "linksoben in der Ecke."
 
+#: Data/Dialogs/dlgConfiguration.xml:783
+#: Data/Dialogs/dlgConfiguration_L.xml:784
+#, fuzzy
+msgid "Auxiliary-5"
+msgstr "Zusätzlich"
+
 #: Data/Dialogs/dlgTextEntry.xml:3
 msgid "Edit text"
 msgstr "Text bearbeiten"
@@ -7113,11 +7124,6 @@ msgstr ""
 "Zeige jeden Luftraum mit einer schwarzen Kontur, anstatt mit der Farbe des "
 "Luftraums."
 
-#: Data/Dialogs/dlgConfiguration.xml:738
-#: Data/Dialogs/dlgConfiguration_L.xml:739
-msgid "Infobox geometry"
-msgstr "InfoBox Geometrie"
-
 #: Data/Dialogs/dlgVario.xml:32 Data/Dialogs/dlgVario_L.xml:33
 msgid ""
 "Whether a temperature and humidity sensor is installed.  Set to 0 to "
@@ -7127,6 +7133,11 @@ msgstr ""
 "Ob ein Temperatur- und Feuchtigkeitssensor verfügbar ist. Setze auf 0, wenn "
 "nicht verfügbar, 255 für eine automatische Erkennung, oder auf die "
 "Gerätekennung der Eindrahtverbindung."
+
+#: Data/Dialogs/dlgConfiguration.xml:738
+#: Data/Dialogs/dlgConfiguration_L.xml:739
+msgid "Infobox geometry"
+msgstr "InfoBox Geometrie"
 
 #: Data/Dialogs/dlgVoice.xml:30
 msgid "In sector"
@@ -7179,8 +7190,8 @@ msgstr ""
 msgid "Topography file*"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:803
-#: Data/Dialogs/dlgConfiguration_L.xml:804
+#: Data/Dialogs/dlgConfiguration.xml:807
+#: Data/Dialogs/dlgConfiguration_L.xml:808
 msgid "Page 6"
 msgstr ""
 
@@ -7386,6 +7397,12 @@ msgstr "FLARM Radar"
 #: Data/Dialogs/pnlTaskCalculator_L.xml:28
 msgid "AAT range"
 msgstr "AAT Bereich"
+
+#: Data/Dialogs/dlgConfiguration.xml:782
+#: Data/Dialogs/dlgConfiguration_L.xml:783
+#, fuzzy
+msgid "Auxiliary-4"
+msgstr "Zusätzlich"
 
 #: Data/Dialogs/dlgStatus.xml:41 Data/Dialogs/dlgStatusTask.xml:7
 msgid "Start time"
@@ -7628,8 +7645,8 @@ msgstr "Weitere Lufträume*"
 msgid "Label style"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:799
-#: Data/Dialogs/dlgConfiguration_L.xml:800
+#: Data/Dialogs/dlgConfiguration.xml:803
+#: Data/Dialogs/dlgConfiguration_L.xml:804
 msgid "Page 5"
 msgstr ""
 
@@ -8122,6 +8139,12 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Gelandet"
+
+#~ msgid "Polar:"
+#~ msgstr "Polare:"
+
+#~ msgid "Units:"
+#~ msgstr "Maßeinheiten:"
 
 #~ msgid "Site"
 #~ msgstr "Platz"
@@ -9626,13 +9649,6 @@ msgstr "Gelandet"
 #~ "Sorge tragen. [Beim Kreisen] benötigt nur eine GPS Quelle, [Zick-Zack] "
 #~ "benötigt zusätzlich ein Geschwindigkeitssensor. [Beides] lässt beide "
 #~ "Berechnungsmethoden zu."
-
-#~ msgid ""
-#~ "Draw topological features (roads, rivers, lakes etc) on the map.  "
-#~ "Requires the topology file to be specified."
-#~ msgstr ""
-#~ "Zeige topologische Strukturen (Straßen, Flüsse, Seen usw.) auf der Karte. "
-#~ "Es muss eine Topologiedatei angegeben werden."
 
 #~ msgid ""
 #~ "This determines whether the the glide terrain range is calculated and "
