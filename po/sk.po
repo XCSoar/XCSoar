@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-31 09:46+0200\n"
-"PO-Revision-Date: 2011-03-31 10:50+0200\n"
+"PO-Revision-Date: 2011-03-31 11:04+0200\n"
 "Last-Translator: Roman Stoklasa <rstoki@gmail.com>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
@@ -3791,7 +3791,7 @@ msgstr ""
 #: src/Dialogs/dlgTaskHelpers.cpp:173
 #, c-format
 msgid "Task is empty (%s)"
-msgstr "Úloha je prázdna (%s)\n"
+msgstr "Úloha je prázdna (%s)"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:177
 #, c-format
