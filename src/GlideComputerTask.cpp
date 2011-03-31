@@ -149,7 +149,21 @@ GlideComputerTask::ProcessIdle()
   if (terrain) {
     if (sol.defined()) {
       const AGeoPoint dest(v.end_point(start), sol.MinHeight);
-      if (route_clock.check_advance(Basic().Time)) {
+      bool dirty = route_clock.check_advance(Basic().Time);
+
+      if (!dirty) {
+        dirty = Calculated().common_stats.active_taskpoint_index != LastCalculated().common_stats.active_taskpoint_index;
+        dirty |= Calculated().common_stats.mode_abort != LastCalculated().common_stats.mode_abort;
+        dirty |= Calculated().common_stats.mode_goto != LastCalculated().common_stats.mode_goto;
+        dirty |= Calculated().common_stats.mode_ordered != LastCalculated().common_stats.mode_ordered;
+        if (dirty) {
+          // restart clock
+          route_clock.check_advance(Basic().Time);
+          route_clock.reset();
+        }
+      }
+
+      if (dirty) {
         m_task.route_solve(dest, start, h_ceiling);
         SetCalculated().TerrainWarning = m_task.intersection(start, dest,
                                                              SetCalculated().TerrainWarningLocation);
