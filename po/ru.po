@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-31 10:56+0200\n"
-"PO-Revision-Date: 2011-03-31 07:05+0000\n"
+"POT-Creation-Date: 2011-03-31 09:46+0200\n"
+"PO-Revision-Date: 2011-03-31 12:24+0000\n"
 "Last-Translator: Dobrovolsky Ilya <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-31 07:44+0000\n"
+"X-Launchpad-Export-Date: 2011-03-31 18:08+0000\n"
 "X-Generator: Launchpad (build 12696)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
@@ -149,7 +149,7 @@ msgstr "Нет спирали"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:269
 msgid "No Traffic"
-msgstr "Нет движения."
+msgstr "Нет движения"
 
 #: src/AirfieldDetails.cpp:143
 msgid "Loading Airfield Details File..."
@@ -207,23 +207,27 @@ msgstr ""
 
 #: src/ExpandMacros.cpp:258
 msgid "Start point cycle"
-msgstr ""
+msgstr "Стартовый круг"
 
 #: src/ExpandMacros.cpp:258 src/ExpandMacros.cpp:264
 msgid "Previous Waypoint"
-msgstr ""
+msgstr "Предыдущий Waypoint"
 
 #: src/ExpandMacros.cpp:273
 msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
+"Расширение \n"
+"(Вручную)"
 
 #: src/ExpandMacros.cpp:278
 msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
+"Расширение\n"
+"(auto)"
 
 #: src/ExpandMacros.cpp:283
 msgid ""
@@ -231,27 +235,31 @@ msgid ""
 "Start"
 msgstr ""
 "Прервать\n"
-"Запускать"
+"Старт"
 
 #: src/ExpandMacros.cpp:288
 msgid ""
 "Arm\n"
 "Start"
 msgstr ""
+"Ручной\n"
+" Старт"
 
 #: src/ExpandMacros.cpp:293
 msgid ""
 "Abort\n"
 "Turn"
 msgstr ""
-"Прервать\n"
-"Поворачивать"
+"Отменить\n"
+"поворот"
 
 #: src/ExpandMacros.cpp:298
 msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
+"Вручную\n"
+"Поворот"
 
 #: src/ExpandMacros.cpp:317 src/ExpandMacros.cpp:321
 msgid "Resume"
@@ -260,7 +268,7 @@ msgstr "Продолжить"
 #: src/ExpandMacros.cpp:317 src/ExpandMacros.cpp:321
 #: src/Dialogs/Message.cpp:168
 msgid "Abort"
-msgstr "Прервать"
+msgstr "Отмена"
 
 #: src/ExpandMacros.cpp:416 src/Dialogs/dlgBasicSettings.cpp:54
 #: Data/Dialogs/dlgLoggerReplay.xml:12
@@ -273,15 +281,15 @@ msgstr "Старт"
 
 #: src/ExpandMacros.cpp:423 src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:70
 msgid "Long"
-msgstr "Длинный"
+msgstr "Long"
 
 #: src/ExpandMacros.cpp:427 src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:71
 msgid "Short"
-msgstr "Кратко"
+msgstr "Short"
 
 #: src/ExpandMacros.cpp:431 src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:72
 msgid "Full"
-msgstr ""
+msgstr "Full"
 
 #: src/ExpandMacros.cpp:435 src/ExpandMacros.cpp:442 src/ExpandMacros.cpp:499
 #: src/ExpandMacros.cpp:505 src/ExpandMacros.cpp:508 src/ExpandMacros.cpp:511
@@ -468,6 +476,9 @@ msgid ""
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
 msgstr ""
+"Это расстояние от вершины крайнего потока до другого потока деленное на "
+"высоту потерянную на переходе. Отрицательные значения указывают на набор "
+"высоты. Если значение около  нуля то показывается '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:115
 #, no-c-format
@@ -639,7 +650,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:196
 #, no-c-format
 msgid "Final altitude difference"
-msgstr ""
+msgstr "Разность высот на Финише"
 
 #: src/InfoBoxes/Content/Factory.cpp:197
 #, no-c-format
@@ -656,7 +667,7 @@ msgstr "Высота прибытия на финиш касательно бе�
 #: src/InfoBoxes/Content/Factory.cpp:205
 #, no-c-format
 msgid "Final altitude required"
-msgstr ""
+msgstr "Потребная Н долета"
 
 #: src/InfoBoxes/Content/Factory.cpp:206
 #, no-c-format
@@ -671,7 +682,7 @@ msgstr "Высота потребная для завершения задачи
 #: src/InfoBoxes/Content/Factory.cpp:214
 #, no-c-format
 msgid "Speed task average"
-msgstr ""
+msgstr "Скорость задачи средняя"
 
 #: src/InfoBoxes/Content/Factory.cpp:215
 #, no-c-format
@@ -684,6 +695,8 @@ msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
 msgstr ""
+"Средняя скорость по маршруту во время упражнения, не скомпенсированная по "
+"высоте."
 
 #: src/InfoBoxes/Content/Factory.cpp:223
 #, no-c-format
@@ -769,7 +782,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:259
 #, no-c-format
 msgid "Thermal gain"
-msgstr ""
+msgstr "Набор за поток"
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
@@ -891,6 +904,8 @@ msgstr ""
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
 msgstr ""
+"Максимально возможное расстояние оставшееся в упражнении с назначенными "
+"зонами."
 
 #: src/InfoBoxes/Content/Factory.cpp:322
 #, no-c-format
@@ -905,7 +920,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:324
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr ""
+msgstr "Минимальное расстояние оставшееся в упражнении с назначенными зонами."
 
 #: src/InfoBoxes/Content/Factory.cpp:331
 #, no-c-format
@@ -923,6 +938,9 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Средняя скорость достигаемая в упражнении с назначенными зонами , если "
+"лететь максимально возможное расстояние, в оставшееся минимальное "
+"назначенное время."
 
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
@@ -940,6 +958,9 @@ msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Средняя скорость в упражнении с назначенными областями достигаемая если "
+"лететь минимально возможное расстояние\r\n"
+"в оставшееся назначенное  время."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
@@ -954,7 +975,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:351
 #, no-c-format
 msgid "Indicated Airspeed reported by a supported external intelligent vario."
-msgstr ""
+msgstr "Скорость полета по данным электронного вариомерта."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -997,12 +1018,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
 msgid "Percentage climb"
-msgstr ""
+msgstr "Процент набора"
 
 #: src/InfoBoxes/Content/Factory.cpp:377
 #, no-c-format
 msgid "% Climb"
-msgstr "% увеличения"
+msgstr "% Набора"
 
 #: src/InfoBoxes/Content/Factory.cpp:378
 #, no-c-format
@@ -1026,7 +1047,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:387
 #, no-c-format
 msgid "Time elapsed since takeoff was detected."
-msgstr ""
+msgstr "Время с момента взлета."
 
 #: src/InfoBoxes/Content/Factory.cpp:394
 #, no-c-format
@@ -1036,14 +1057,14 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:395
 #, no-c-format
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: src/InfoBoxes/Content/Factory.cpp:396
 #, no-c-format
 msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
-msgstr ""
+msgstr "Величина силы тяжести (перегрузки). Из внешнего варио."
 
 #: src/InfoBoxes/Content/Factory.cpp:403
 #, no-c-format
@@ -1066,6 +1087,8 @@ msgid ""
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
+"Потребное качество до следующей путевой точки. Определяется расстоянием до "
+"нее деленным на потребную высоту для безопасного прибытия туда."
 
 #: src/InfoBoxes/Content/Factory.cpp:412
 #, no-c-format
@@ -1090,7 +1113,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:423
 #, no-c-format
 msgid "GPS time expressed in UTC."
-msgstr ""
+msgstr "GPS время выраженное в UTC."
 
 #: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
@@ -1108,6 +1131,8 @@ msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
+"Расчетное время, необходимое для завершения задачи, предполагает собой "
+"выполнение условий  Маккреди в режимах набор / переход."
 
 #: src/InfoBoxes/Content/Factory.cpp:439
 #, no-c-format
@@ -1125,6 +1150,8 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
+"Расчетное время, необходимое для достижения следующего пункта, предполагая "
+"исполнение идеальным Маккриди для режимов перехода и набора."
 
 #: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
@@ -1147,6 +1174,10 @@ msgid ""
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
+"Скорость полета по Маккреди полученная, используя расчеты Нетто Vario, чтобы "
+"определить скорость полета дельфином. В режиме перехода эта, "
+"скоростьрасчитывается с учетом сохранения высоты. В долетном режиме эта "
+"скорость расчитывается для спуска."
 
 #: src/InfoBoxes/Content/Factory.cpp:457
 #, no-c-format
@@ -1210,7 +1241,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:484
 #, no-c-format
 msgid "Bearing difference"
-msgstr ""
+msgstr "Разница курсов"
 
 #: src/InfoBoxes/Content/Factory.cpp:485
 #, no-c-format
@@ -1229,6 +1260,13 @@ msgid ""
 "good is pointing directly at the next waypoint. This bearing takes into "
 "account the curvature of the Earth."
 msgstr ""
+"Разница между текущим курсом планера и курсом на поворотный пункт или "
+"назначенную область.  Показания прибора GPS  могут отличатся от направления "
+"д и эта композиция курсе может отличаться от планера заголовок, если есть "
+"ветер настоящее время. Шевроны указывают на направление планера чтоб "
+"изменить курс, чтобы исправить курсе разницей, что есть, так что конечно "
+"планера сделал хороший указывает непосредственно на следующую точку. Этот "
+"курс учитывает кривизну Земли."
 
 #: src/InfoBoxes/Content/Factory.cpp:493
 #, no-c-format
@@ -1250,7 +1288,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:502
 #, no-c-format
 msgid "Relative humidity"
-msgstr ""
+msgstr "Относительная влажность"
 
 #: src/InfoBoxes/Content/Factory.cpp:503
 #, no-c-format
@@ -1263,11 +1301,13 @@ msgid ""
 "Relative humidity of the air in percent as measured by a probe if supported "
 "by a connected intelligent variometer."
 msgstr ""
+"Относительная влажность воздуха в процентах, измеряется датчиком "
+"электронного вариометра."
 
 #: src/InfoBoxes/Content/Factory.cpp:511 src/InputEventsActions.cpp:1363
 #, no-c-format
 msgid "Forecast temperature"
-msgstr ""
+msgstr "Прогнозируемая температура"
 
 #: src/InfoBoxes/Content/Factory.cpp:512
 #, no-c-format
@@ -1282,6 +1322,9 @@ msgid ""
 "and relative humidity probe. (Touchscreen/PC only) Pressing the up/down "
 "cursor keys adjusts this forecast temperature."
 msgstr ""
+"Прогноз температуры почвы на домашнем аэродроме, используемый при оценке "
+"высоты конвекции и нижней границы облаков в сочетании с температурой и "
+"относительной влажности воздуха полученные с внешнего датчика."
 
 #: src/InfoBoxes/Content/Factory.cpp:520
 #, no-c-format
@@ -1296,7 +1339,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:522
 #, no-c-format
 msgid "Assigned Area Task distance around target points for remainder of task."
-msgstr ""
+msgstr "Расстояние через  поворотные пункты назначенных зон"
 
 #: src/InfoBoxes/Content/Factory.cpp:529
 #, no-c-format
@@ -1314,6 +1357,9 @@ msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
 "in minimum AAT time."
 msgstr ""
+"Средняя скорость в упражнении с назначенными зонами достигаемая прохождением "
+"дистанции через назначенные пункты\r\n"
+" в минимальное назначенное время."
 
 #: src/InfoBoxes/Content/Factory.cpp:538
 #, no-c-format
@@ -1333,6 +1379,10 @@ msgid ""
 "Negative values indicate climbing cruise. If the total energy vario speed is "
 "close to zero, the displayed value is '---'."
 msgstr ""
+"Аэродинамическое качество планера, вычисляется воздушной скоростью, деленной "
+"на скомпенсированную скороподьемность,полученные из электронного вариометра. "
+"Отрицательные значения указывают на восхождящее движениез. Если общая "
+"скороподъемность близка к нулю, отображается значение'---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:547
 #, no-c-format
@@ -1347,12 +1397,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:549
 #, no-c-format
 msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr ""
+msgstr "Истинная воздушная скорость показанная электронным вариометром"
 
 #: src/InfoBoxes/Content/Factory.cpp:556
 #, no-c-format
 msgid "Team code"
-msgstr ""
+msgstr "Код группы"
 
 #: src/InfoBoxes/Content/Factory.cpp:557
 #, no-c-format
@@ -1365,6 +1415,8 @@ msgid ""
 "The current Team code for this aircraft. Use this to report to other team "
 "members. The last team aircraft code entered is displayed underneath."
 msgstr ""
+"Код группы. Поможет найти вам ващего партнера. В нужный момент сообщите его "
+"своему напарнику. Крайний введеный TeamCode отображается внизу."
 
 #: src/InfoBoxes/Content/Factory.cpp:565
 #, no-c-format
@@ -1379,7 +1431,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:567
 #, no-c-format
 msgid "The bearing to the team aircraft location at the last team code report."
-msgstr ""
+msgstr "Курс к местоположению напарников на крайний его доклад."
 
 #: src/InfoBoxes/Content/Factory.cpp:574
 #, no-c-format
@@ -1396,7 +1448,7 @@ msgstr ""
 msgid ""
 "The relative bearing to the team aircraft location at the last reported team "
 "code."
-msgstr ""
+msgstr "разность между курсом к местоположению команды за крайние доклады."
 
 #: src/InfoBoxes/Content/Factory.cpp:583
 #, no-c-format
@@ -1411,7 +1463,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:585
 #, no-c-format
 msgid "The range to the team aircraft location at the last reported team code."
-msgstr ""
+msgstr "Дальность до местоположения члена команды на момент крайнего доклада."
 
 #: src/InfoBoxes/Content/Factory.cpp:592
 #, no-c-format
@@ -7630,6 +7682,9 @@ msgstr "приземление"
 
 #~ msgid "Map Display"
 #~ msgstr "Карта"
+
+#~ msgid "Auxiliary"
+#~ msgstr "Дополнение"
 
 #~ msgid "Previous turnpoint"
 #~ msgstr "прошлый поворотный пункт"
