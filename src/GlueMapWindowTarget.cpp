@@ -25,7 +25,6 @@ Copyright_License {
 
 #include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
-#include "Components.hpp"
 #include "Interface.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Screen/Layout.hpp"
@@ -39,13 +38,11 @@ GlueMapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
 bool
 GlueMapWindow::TargetDragged(const int x, const int y)
 {
-  assert(protected_task_manager != NULL);
+  assert(task != NULL);
 
   GeoPoint gp = visible_projection.ScreenToGeo(x, y);
-  if (protected_task_manager->target_is_locked(
-                             XCSoarInterface::SettingsMap().TargetPanIndex)) {
-    protected_task_manager->set_target(
-                           XCSoarInterface::SettingsMap().TargetPanIndex, gp, true);
+  if (task->target_is_locked(XCSoarInterface::SettingsMap().TargetPanIndex)) {
+    task->set_target(XCSoarInterface::SettingsMap().TargetPanIndex, gp, true);
     return true;
   }
   return false;
@@ -54,16 +51,15 @@ GlueMapWindow::TargetDragged(const int x, const int y)
 bool
 GlueMapWindow::isClickOnTarget(const RasterPoint pc)
 {
-  if (protected_task_manager == NULL)
+  if (task == NULL)
     return false;
 
   if (XCSoarInterface::SettingsMap().TargetPan) {
-    if (!protected_task_manager->target_is_locked(
-                                XCSoarInterface::SettingsMap().TargetPanIndex))
+    if (!task->target_is_locked(XCSoarInterface::SettingsMap().TargetPanIndex))
       return false;
 
     const GeoPoint gnull(Angle::native(fixed_zero), Angle::native(fixed_zero));
-    const GeoPoint& t = protected_task_manager->get_location_target(
+    const GeoPoint& t = task->get_location_target(
         XCSoarInterface::SettingsMap().TargetPanIndex, gnull);
 
     if (t == gnull)
@@ -80,13 +76,13 @@ GlueMapWindow::isClickOnTarget(const RasterPoint pc)
 bool
 GlueMapWindow::isInSector(const int x, const int y)
 {
-  assert(protected_task_manager != NULL);
+  assert(task != NULL);
 
   if (XCSoarInterface::SettingsMap().TargetPan) {
     GeoPoint gp = visible_projection.ScreenToGeo(x, y);
     AIRCRAFT_STATE a;
     a.Location = gp;
-    return protected_task_manager->isInSector(
+    return task->isInSector(
                                   XCSoarInterface::SettingsMap().TargetPanIndex, a);
   }
   return false;
@@ -95,9 +91,9 @@ GlueMapWindow::isInSector(const int x, const int y)
 int
 GlueMapWindow::isInAnyActiveSector(const GeoPoint &gp)
 {
-  assert(protected_task_manager != NULL);
+  assert(task != NULL);
 
-  ProtectedTaskManager::Lease task_manager(*protected_task_manager);
+  ProtectedTaskManager::Lease task_manager(*task);
   const AbstractTask *at = task_manager->get_active_task();
   if (at == NULL)
     return -1;
