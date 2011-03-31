@@ -26,12 +26,12 @@
         <DataField DataType="filereader"/>
       </Edit>
     
-      <Edit Name="prpAdditionalWaypointFile" Caption="More waypoints*" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAdditionalWaypointFile" Caption="More waypoints" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
       Help="Secondary waypoints file.  This may be used to add waypoints for a competition.">
         <DataField DataType="filereader"/>
       </Edit>
 
-      <Edit Name="prpWatchedWaypointFile" Caption="Watched waypoints*" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpWatchedWaypointFile" Caption="Watched waypoints" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
       Help="Waypoint file containing special waypoints for which additional computations like calculation of arrival height in map display always takes place. Useful for waypoints like known reliable thermal sources (e.g. powerplants) or mountain passes.">
         <DataField DataType="filereader" />
       </Edit>
@@ -40,20 +40,20 @@
         <DataField DataType="filereader"/>
       </Edit>
     
-      <Edit Name="prpAdditionalAirspaceFile" Caption="More airspaces*" X="2" Width="-2" Height="22" CaptionWidth="100" Help="The file name of the secondary airspace file.">
+      <Edit Name="prpAdditionalAirspaceFile" Caption="More airspaces" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100" Help="The file name of the secondary airspace file.">
         <DataField DataType="filereader"/>
       </Edit>
     
-      <Edit Name="prpTerrainFile" Caption="Terrain file*" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpTerrainFile" Caption="Terrain file" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
       Help="The name of the file containing digital elevation terrain data.">
         <DataField DataType="filereader"/>
       </Edit>
     
-      <Edit Name="prpTopographyFile" Caption="Topography file*" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Specifies the file defining the topological features.">
+      <Edit Name="prpTopographyFile" Caption="Topography file" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Specifies the file defining the topological features.">
         <DataField DataType="filereader"/>
       </Edit>
     
-      <Edit Name="prpAirfieldFile" Caption="Waypoint details*" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAirfieldFile" Caption="Waypoint details" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
       Help="The file may contain extracts from enroute supplements or other contributed information about individual waypoints and airfields.">
         <DataField DataType="filereader"/>
       </Edit>
@@ -75,17 +75,17 @@
         <DataField DataType="boolean"/>
       </Edit>
 
-      <Edit Name="prpMapShiftBias" Caption="Map shift reference*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpMapShiftBias" Caption="Map shift reference" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Determines what is used to shift the glider from the map center:&#10;[None] Disable adjustments.&#10;[Heading] Use a recent average of the flown heading as basis.&#10;[Target]Use the current target waypoint as basis">
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpGliderScreenPosition" Caption="Glider position offset*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpGliderScreenPosition" Caption="Glider position offset" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Defines the location of the glider drawn on the screen in percent from the screen edge.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="10" Max="50" Step="5"/>
       </Edit>
 
-      <Edit Name="prpMaxAutoZoomDistance" Caption="Max. Auto-Zoom distance*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpMaxAutoZoomDistance" Caption="Max. Auto-Zoom distance" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The upper limit for Auto-Zoom distance.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="20" Max="250" Step="10" />
       </Edit>
@@ -111,32 +111,32 @@
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpTrailDrift" Caption="Trail drift*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpTrailDrift" Caption="Trail drift" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Determines whether the snail trail is drifted with the wind when displayed in circling mode.">
         <DataField DataType="boolean" />
       </Edit>
 
-      <Edit Name="prpSnailType" Caption="Trail type*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpSnailType" Caption="Trail type" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Sets the type of the snail trail display.">
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpSnailWidthScale" Caption="Trail scaled*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpSnailWidthScale" Caption="Trail scaled" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="If set to ON the snail trail width is scaled according to the vario signal.">
         <DataField DataType="boolean"/>
       </Edit>
 
-      <Edit Name="prpDetourCostMarker" Caption="Detour cost markers*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpDetourCostMarker" Caption="Detour cost markers" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
          Help="If the aircraft heading deviates from the current waypoint, markers are displayed at points ahead of the aircraft. The value of each marker is the extra distance required to reach that point as a percentage of straight-line distance to the waypoint.">
         <DataField DataType="boolean"/>
       </Edit>
 
-      <Edit Name="prpAircraftSymbol" Caption="Aircraft symbol*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpAircraftSymbol" Caption="Aircraft symbol" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Sets the symbol used for the aircraft.&#10;[Simple] Simplified line graphics.&#10;[Detailed] Rendered aircraft graphics.">
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpWindArrowStyle" Caption="Wind arrow*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpWindArrowStyle" Caption="Wind arrow" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Determines the way the wind arrow is drawn on the map.&#10;[Arrow head] Draws an arrow head only&#10;[Full arrow] Draws an arrow head with a dashed arrow line">
         <DataField DataType="enum" />
       </Edit>
@@ -170,12 +170,12 @@
         <DataField DataType="boolean" />
       </Edit>
 
-      <Edit Name="prpAppLandableRenderingScale" Caption="Landable rendering size*" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAppLandableRenderingScale" Caption="Landable rendering size" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="A percentage to select the size landables are displayed on the map.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="50" Max="200" Step="10" />
       </Edit>
 
-      <Edit Name="prpAppScaleRunwayLength" Caption="Scale runway length*" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAppScaleRunwayLength" Caption="Scale runway length" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="[Off] Display fixed length for runways.&#10;[On] Scale displayed runway length based on real length">
         <DataField DataType="boolean" />
       </Edit>
@@ -205,7 +205,7 @@
         <DataField DataType="enum"/>
       </Edit>
 
-      <Edit Name="prpSlopeShadingType" Caption="Slope shading*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpSlopeShadingType" Caption="Slope shading" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The terrain can be shaded among slopes to indicate either wind direction, sun position or a fixed shading from north-east.">
         <DataField DataType="enum"/>
       </Edit>
@@ -244,22 +244,22 @@
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpAppGaugeVarioBugs" Caption="Show bugs*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpAppGaugeVarioBugs" Caption="Show bugs" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Whether to show the bugs percentage.">
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpAppGaugeVarioBallast" Caption="Show ballast*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpAppGaugeVarioBallast" Caption="Show ballast" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Whether to show the ballast percentage.">
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpAppGaugeVarioGross" Caption="Show gross*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpAppGaugeVarioGross" Caption="Show gross" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Whether to show the gross climb rate.">
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpAppAveNeedle" Caption="Averager needle*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpAppAveNeedle" Caption="Averager needle" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="If true, the vario gauge will display a hollow averager needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.">
         <DataField DataType="boolean" />
       </Edit>
@@ -283,22 +283,22 @@
         <DataField DataType="enum" />
       </Edit>
     
-      <Edit Name="prpBlockSTF" Caption="Block speed to fly*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpBlockSTF" Caption="Block speed to fly" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="If enabled, the command speed in cruise is set to the MacCready speed to fly in no vertical air-mass movement. If disabled, the command speed in cruise is set to the dolphin speed to fly, equivalent to the MacCready speed with vertical air-mass movement.">
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpEnableNavBaroAltitude" Caption="Nav. by baro altitude*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpEnableNavBaroAltitude" Caption="Nav. by baro altitude" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="When enabled and if connected to a barometric altimeter, barometric altitude is used for all navigation functions. Otherwise GPS altitude is used.">
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpEnableExternalTriggerCruise" Caption="Flap forces cruise*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpEnableExternalTriggerCruise" Caption="Flap forces cruise" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="When Vega variometer is connected and this option is true, the positive flap setting switches the flight mode between circling and cruise.">
         <DataField DataType="enum" />
       </Edit>
     
-      <Edit Name="prpAverEffTime" Caption="L/D average period*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpAverEffTime" Caption="L/D average period" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Average efficiency is always calculated in REAL TIME. Here you can decide on how many seconds of flight this calculation must be done. The real distance covered second by second in this period is divided by the final difference of altitude.  So if for example you go and return back to the same point after 2 minutes, and you have set 2 minutes as period, averageLD will consider the total distance covered in those two minutes , and NOT the distance between your position 2 minutes before and your current position, that in this case could be almost zero! Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds. Lower values will give as a result pretty much the same as LD Instant , while higher values will look like LD Cruise. Other commercial instruments and software use 2 minutes.">
         <DataField DataType="enum" />
       </Edit>
@@ -320,12 +320,12 @@
         <DataField DataType="enum" />
       </Edit>
     
-      <Edit Name="prpSafetyMacCready" Caption="Safety MC*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpSafetyMacCready" Caption="Safety MC" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode, for determining arrival altitude at airfields.">
         <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="10" Step="0.1" />
       </Edit>
     
-      <Edit Name="prpRiskGamma" Caption="STF risk factor*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpRiskGamma" Caption="STF risk factor" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The STF risk factor reduces the MacCready setting used to calculate speed to fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with height.">
         <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="1" Step="0.1"/>
       </Edit>
@@ -439,23 +439,23 @@
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpWarningTime" Caption="Warning time*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="This is the time before an airspace incursion is estimated at which the system will warn the pilot.">
+      <Edit Name="prpWarningTime" Caption="Warning time" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150" Help="This is the time before an airspace incursion is estimated at which the system will warn the pilot.">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="1000" Step="5" />
       </Edit>
     
-      <Edit Name="prpAcknowledgementTime" Caption="Acknowledge time*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="This is the time period in which an acknowledged airspace warning will not be repeated.">
+      <Edit Name="prpAcknowledgementTime" Caption="Acknowledge time" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150" Help="This is the time period in which an acknowledged airspace warning will not be repeated.">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="1000" Step="5" />
       </Edit>
     
-      <Edit Name="prpAirspaceOutline" Caption="Use black outline*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw a black outline around each airspace rather than the airspace color">
+      <Edit Name="prpAirspaceOutline" Caption="Use black outline" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw a black outline around each airspace rather than the airspace color">
         <DataField DataType="boolean" />
       </Edit>  
 
-      <Edit Name="prpAirspaceFillMode" Caption="Airspace fill mode*" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Specifies the mode for filling the airspace area.">
+      <Edit Name="prpAirspaceFillMode" Caption="Airspace fill mode" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Specifies the mode for filling the airspace area.">
         <DataField DataType="enum"/>
       </Edit>
 
-      <Edit Name="prpAirspaceTransparency" Caption="Airspace transparency*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpAirspaceTransparency" Caption="Airspace transparency" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
             Help="If enabled, then airspaces are filled transparently.">
         <DataField DataType="boolean"/>
       </Edit>
@@ -550,7 +550,7 @@
           </Edit>
         </Panel>
         <Panel Name="frmAATTimeMargin" X="0" Y="48" Width="-2" Height="22">
-          <Edit Name="prpAATTimeMargin" Caption="Optimisation margin*" Height="22" CaptionWidth="120"
+          <Edit Name="prpAATTimeMargin" Caption="Optimisation margin" Expert="1" Height="22" CaptionWidth="120"
             Help="Safety margin for AAT task optimisation.  Optimisation seeks to complete the task at the minimum time plus this margin time.">
             <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" Min="1" Max="30" Step="1"/>
           </Edit>
@@ -602,19 +602,19 @@
         <DataField DataType="boolean" />
       </Edit>
 
-      <Edit Name="prpIgnoreNMEAChecksum" Caption="Ignore checksum*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpIgnoreNMEAChecksum" Caption="Ignore checksum" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="If your GPS device outputs invalid NMEA checksums, this will allow it's data to be used anyway">
         <DataField DataType="boolean"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmLogger">
-      <Edit Name="prpLoggerTimeStepCruise" Caption="Time step cruise*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpLoggerTimeStepCruise" Caption="Time step cruise" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="This is the time interval between logged points when not circling.">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="30" Step="1" />
       </Edit>
     
-      <Edit Name="prpLoggerTimeStepCircling" Caption="Time step circling*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpLoggerTimeStepCircling" Caption="Time step circling" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="This is the time interval between logged points when circling.">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="30" Step="1" />
       </Edit>
@@ -634,7 +634,7 @@
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpDisableAutoLogger" Caption="Auto. logger*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpDisableAutoLogger" Caption="Auto. logger" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Enables the automatic starting and stopping of logger on takeoff and landing respectively. Disable when flying paragliders.">
         <DataField DataType="boolean" />
       </Edit>
@@ -698,32 +698,32 @@
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpInputFile" Caption="Events*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpInputFile" Caption="Events" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices.">
         <DataField DataType="filereader" />
       </Edit>
     
-      <Edit Name="prpLanguageFile" Caption="Language*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpLanguageFile" Caption="Language" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The language file defines translations for XCSoar text in English to other languages.  If this field is left blank, then XCSoar uses English.">
         <DataField DataType="enum"/>
       </Edit>
     
-      <Edit Name="prpStatusFile" Caption="Status message*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpStatusFile" Caption="Status message" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The status file can be used to define sounds to be played when certain events occur, and how long various status messages will appear on screen.">
         <DataField DataType="filereader" />
       </Edit>
     
-      <Edit Name="prpMenuTimeout" Caption="Menu timeout*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpMenuTimeout" Caption="Menu timeout" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="This determines how long menus will appear on screen if the user does not make any button presses or interacts with the computer.">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="60" Step="1" />
       </Edit>
     
-      <Edit Name="prpDebounceTimeout" Caption="Debounce time*" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpDebounceTimeout" Caption="Debounce time" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="This is the minimum interval between the system recognising key presses. Set this to a low value for a more responsive user interface; if it is too low, then accidental multiple key presses can occur.">
         <DataField DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min="0" Max="1000" Step="25" />
       </Edit>
   
-      <Edit Name="prpTextInput" Caption="Text input style*"  X="2"   Width="246" Height="22" CaptionWidth="150"
+      <Edit Name="prpTextInput" Caption="Text input style" Expert="1"  X="2"   Width="246" Height="22" CaptionWidth="150"
         Help="Determines how the user is prompted for text input (filename, teamcode etc.)">
         <DataField DataType="enum" />
       </Edit>
@@ -746,27 +746,27 @@
         <DataField DataType="enum"/>
       </Edit>
 
-      <Edit Name="prpAppStatusMessageAlignment" Caption="Msg. window*" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAppStatusMessageAlignment" Caption="Msg. window" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Defines the alignment of the status message box, either centered or in the top left corner.">
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpDialogStyle" Caption="Dialog style*"  X="2"   Width="246" Height="22" CaptionWidth="100"
+      <Edit Name="prpDialogStyle" Caption="Dialog style" Expert="1"  X="2"   Width="246" Height="22" CaptionWidth="100"
         Help="Determines display size of dialogs.">
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpAppInverseInfoBox" Caption="Inverse InfoBoxes*" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAppInverseInfoBox" Caption="Inverse InfoBoxes" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="If true, the InfoBoxes are white on black, otherwise black on white.">
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpAppInfoBoxColors" Caption="Colored InfoBoxes*" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAppInfoBoxColors" Caption="Colored InfoBoxes" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="If true, certain InfoBoxes will have coloured text.  For example, the active waypoint infobox will be blue when the glider is above final glide.">
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpAppInfoBoxBorder" Caption="InfoBox border*" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAppInfoBoxBorder" Caption="InfoBox border" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="Two styles for infobox borders are available:&#10;[Box] Draws boxes around each infobox.&#10;[Tab] Draws a tab at the top of the infobox across the title.">
         <DataField DataType="enum" />
       </Edit>
