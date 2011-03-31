@@ -156,7 +156,6 @@ FlatTriangleFanTree::is_inside_tree(const FlatGeoPoint &p, const bool include_ch
 void
 FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
                                 ReachFanParms& parms) {
-  height = origin.altitude;
   gaps_filled = false;
   fill_reach(origin, 0, ROUTEPOLAR_POINTS+1, parms);
 
@@ -202,6 +201,7 @@ FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
                                 const int index_low, const int index_high,
                                 ReachFanParms& parms) {
   const AGeoPoint ao (parms.task_proj.unproject(origin), origin.altitude);
+  height = origin.altitude;
 
   // fill vector
   if (depth) {
@@ -309,7 +309,6 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
     // altitude calculated from pure glide from n to x
     const AFlatGeoPoint x(px, h);
 
-    it->height = h;
     it->fill_reach(x, index_left, index_right, parms);
 
     // prune child if empty or single spike
