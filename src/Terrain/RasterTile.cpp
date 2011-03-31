@@ -1214,7 +1214,7 @@ RasterTileCache::Intersection(int x0, int y0,
 
       if (h_int < h_terrain) {
         if (refine_step<5) // can't refine any further
-          return RasterLocation(_x, _y);
+          return RasterLocation(last_clear_x, last_clear_y);
 
         // refine solution
         return Intersection(last_clear_x, last_clear_y, _x, _y, last_clear_h, slope_fact);
