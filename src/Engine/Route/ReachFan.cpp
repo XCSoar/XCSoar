@@ -285,7 +285,7 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
 
   const FlatGeoPoint dp(p_long-n);
   // scan from n-p_long to perpendicular to n-p_long
-  const int index = RoutePolar::dxdy_to_index(dp.Longitude, dp.Latitude);
+  const int &index = e_long.polar_index;
 
   int index_left, index_right;
   if (!side) {
