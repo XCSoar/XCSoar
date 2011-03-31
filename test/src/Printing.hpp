@@ -80,7 +80,7 @@ public:
   static void print_reach_tree(const RoutePlanner& r);
   static void print(const ReachFan& r);
   static void print(const FlatTriangleFanTree& r);
-  static void print(const FlatTriangleFan& r);
+  static void print(const FlatTriangleFan& r, const unsigned depth);
 };
 
 #include "Navigation/SearchPointVector.hpp"

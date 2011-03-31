@@ -770,7 +770,7 @@ PrintHelper::print(const ReachFan& r)
 
 void
 PrintHelper::print(const FlatTriangleFanTree& r) {
-  print((const FlatTriangleFan&)r);
+  print((const FlatTriangleFan&)r, r.depth);
 
   for (FlatTriangleFanTree::LeafVector::const_iterator it = r.children.begin();
        it != r.children.end(); ++it) {
@@ -779,11 +779,13 @@ PrintHelper::print(const FlatTriangleFanTree& r) {
 };
 
 void
-PrintHelper::print(const FlatTriangleFan& r) {
+PrintHelper::print(const FlatTriangleFan& r, const unsigned depth) {
   if (r.vs.size()<3)
     return;
 
-  printf("%d %d # fcorner\n", r.vs[0].Longitude, r.vs[0].Latitude);
+  if (depth) {
+    printf("%d %d # fcorner\n", r.vs[0].Longitude, r.vs[0].Latitude);
+  }
 
   for (FlatTriangleFan::VertexVector::const_iterator it = r.vs.begin();
        it != r.vs.end(); ++it) {
