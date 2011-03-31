@@ -84,16 +84,6 @@ static Airspaces airspace_database;
 
 static TopographyStore *topography;
 static RasterTerrain *terrain;
-Logger logger;
-
-LoggerImpl::LoggerImpl() {}
-LoggerImpl::~LoggerImpl() {}
-
-bool
-Logger::isLoggerActive()
-{
-  return false;
-}
 
 bool PlayResource(const TCHAR* lpName)
 {
