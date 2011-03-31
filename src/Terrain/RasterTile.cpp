@@ -964,6 +964,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
   unsigned step_counter = 0; // counter for steps to reach next position on the
                              // field.
   int total_steps = 0; // total counter of steps
+  const int max_steps = dx+dy; // max number of steps to walk (if no intersection)
 
   int intersect_counter = 0;
 
@@ -1073,7 +1074,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
       }
     }
 
-    if (!intersect_counter && (x_int==(unsigned)x1) && (y_int==(unsigned)y1)) {
+    if (!intersect_counter && (total_steps == max_steps)) {
 #ifdef DEBUG_TILE
       printf("# fint cleared\n");
 #endif
@@ -1166,6 +1167,7 @@ RasterTileCache::Intersection(int x0, int y0,
   unsigned step_counter = 0; // counter for steps to reach next position on the
                              // field.
   int total_steps = 0; // total counter of steps
+  const int max_steps = dx+dy; // max number of steps to walk
   short h_int= h_origin;
   short h_terrain = 1;
 
@@ -1192,8 +1194,8 @@ RasterTileCache::Intersection(int x0, int y0,
         break; // reached max range
     }
 
-    if ((_x==(unsigned)x1) && (_y==(unsigned)y1))
-      return RasterLocation(_x, _y);
+    if (total_steps == max_steps)
+      return RasterLocation(_x, _y); // reached destination
 
     const int e2 = 2*err;
     if (e2 > -dy) {

@@ -287,15 +287,14 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
 
   const FlatGeoPoint dp(p_long-n);
   // scan from n-p_long to perpendicular to n-p_long
-  const int &index = e_long.polar_index;
 
   int index_left, index_right;
   if (!side) {
-    index_left = index-REACH_SWEEP;
-    index_right = index-REACH_BUFFER;
+    index_left = e_long.polar_index-REACH_SWEEP;
+    index_right = e_long.polar_index-REACH_BUFFER;
   } else {
-    index_left = index+REACH_BUFFER;
-    index_right = index+REACH_SWEEP;
+    index_left = e_long.polar_index+REACH_BUFFER;
+    index_right = e_long.polar_index+REACH_SWEEP;
   }
 
   children.push_back(FlatTriangleFanTree(depth+1));
