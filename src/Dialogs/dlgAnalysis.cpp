@@ -208,7 +208,7 @@ Update(void)
 
   case ANALYSIS_PAGE_THERMAL_BAND:
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("Thermal band"));
+              _("Thermal Band"));
     wf->SetCaption(sTmp);
     fs.CaptionClimb(sTmp);
     wInfo->SetCaption(sTmp);

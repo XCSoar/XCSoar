@@ -86,12 +86,12 @@ WayPointDisplayConfigPanel::Init(WndForm *_wf)
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
     dfe->addEnumText(_("All"), wlsAllWayPoints,
-                     _("All waypoints labels will displayed."));
+                     _("All waypoint labels will be displayed."));
     dfe->addEnumText(_("Task Waypoints & Landables"),
                      wlsTaskAndLandableWayPoints,
-                     _("All waypoints labels part of a task and all landables will be displayed."));
+                     _("All waypoints part of a task and all landables will be displayed."));
     dfe->addEnumText(_("Task Waypoints"), wlsTaskWayPoints,
-                     _("All waypoints labels part of a task will be displayed."));
+                     _("All waypoints part of a task will be displayed."));
     dfe->addEnumText(_("None"), wlsNoWayPoints,
                      _("No waypoint labels will be displayed."));
     dfe->Set(XCSoarInterface::SettingsMap().WayPointLabelSelection);

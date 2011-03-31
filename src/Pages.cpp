@@ -186,7 +186,7 @@ Pages::PageLayout::MakeTitle(TCHAR* buffer, const bool concise) const
       }
       break;
     default:
-      _tcscpy(buffer, _("---"));
+      _tcscpy(buffer, _T("---"));
       break;
   }
 }

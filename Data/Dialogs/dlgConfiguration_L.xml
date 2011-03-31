@@ -186,7 +186,7 @@
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpEnableTopography" Caption="Topography display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topological features (roads, rivers, lakes etc) on the map.  Requires the topography file to be specified.">
+      <Edit Name="prpEnableTopography" Caption="Topography display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topographical features (roads, rivers, lakes etc) on the map.  Requires the topography file to be specified.">
         <DataField DataType="boolean" />
       </Edit>
     
@@ -742,7 +742,7 @@
       </Edit>
 
       <Edit Name="prpTabDialogStyle" Caption="Tab dialog style"  X="2" Width="-2" Height="22" CaptionWidth="100"
-      Help="Determines whether tabbed dialogs use text or dialogs">
+      Help="Determines whether tabbed dialogs use text or icons">
         <DataField DataType="enum"/>
       </Edit>
 
