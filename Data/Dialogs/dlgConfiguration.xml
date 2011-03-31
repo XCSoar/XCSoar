@@ -776,11 +776,11 @@
       <Button Name="cmdInfoBoxesCircling" Caption="Circling" X="2" Width="-2" Height="22"/>
       <Button Name="cmdInfoBoxesCruise" Caption="Cruise" X="2" Width="-2" Height="22"/>
       <Button Name="cmdInfoBoxesFinalGlide" Caption="FinalGlide" X="2" Width="-2" Height="22"/>
-      <Button Name="cmdInfoBoxesAux1" Caption="Auxiliary-1" X="2" Width="-2" Height="22"/>
-      <Button Name="cmdInfoBoxesAux2" Caption="Auxiliary-2" X="2" Width="-2" Height="22"/>
-      <Button Name="cmdInfoBoxesAux3" Caption="Auxiliary-3" X="2" Width="-2" Height="22"/>
-      <Button Name="cmdInfoBoxesAux4" Caption="Auxiliary-4" X="2" Width="-2" Height="22"/>
-      <Button Name="cmdInfoBoxesAux5" Caption="Auxiliary-5" X="2" Width="-2" Height="22"/>
+      <Button Name="cmdInfoBoxesAux1" Caption="Auxiliary-1" Expert="1" X="2" Width="-2" Height="22"/>
+      <Button Name="cmdInfoBoxesAux2" Caption="Auxiliary-2" Expert="1" X="2" Width="-2" Height="22"/>
+      <Button Name="cmdInfoBoxesAux3" Caption="Auxiliary-3" Expert="1" X="2" Width="-2" Height="22"/>
+      <Button Name="cmdInfoBoxesAux4" Caption="Auxiliary-4" Expert="1" X="2" Width="-2" Height="22"/>
+      <Button Name="cmdInfoBoxesAux5" Caption="Auxiliary-5" Expert="1" X="2" Width="-2" Height="22"/>
     </Panel>
   
     <Panel Name="frmPages">
