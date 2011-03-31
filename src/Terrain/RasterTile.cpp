@@ -1138,7 +1138,7 @@ RasterTileCache::Intersection(int x0, int y0,
   unsigned _x = (unsigned)x0;
   unsigned _y = (unsigned)y0;
 
-  if (((unsigned)x0 >= width) || ((unsigned)y0 >= height)) {
+  if ((_x >= width) || (_y >= height)) {
     // origin is outside overall bounds
     return RasterLocation(_x, _y);
   }
@@ -1168,6 +1168,10 @@ RasterTileCache::Intersection(int x0, int y0,
   while (h_terrain>=0) {
 
     if (!step_counter) {
+
+      if ((_x >= width) || (_y >= height))
+        return RasterLocation(x1, y1); // outside overall bounds
+
       h_terrain = GetFieldDirect(_x, _y, tile_index);
       step_counter = tile_index<0? step_coarse: 1;
 
