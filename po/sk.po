@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-31 22:08+0200\n"
-"PO-Revision-Date: 2011-03-31 22:10+0200\n"
+"PO-Revision-Date: 2011-03-31 22:44+0200\n"
 "Last-Translator: Roman Stoklasa <rstoki@gmail.com>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
@@ -5945,7 +5945,7 @@ msgstr "Stav lietadla"
 
 #: Data/Dialogs/dlgTeamCode.xml:18 Data/Dialogs/dlgTeamCode_L.xml:19
 msgid "Flarm lock"
-msgstr "Flarm zámok:"
+msgstr "Flarm zámok"
 
 #: Data/Dialogs/dlgConfiguration.xml:437
 #: Data/Dialogs/dlgConfiguration_L.xml:438
@@ -7925,12 +7925,6 @@ msgstr ""
 msgid "Landing"
 msgstr "Pristánie"
 
-#~ msgid "Polar:"
-#~ msgstr "Polára:"
-
-#~ msgid "Units:"
-#~ msgstr "Jednotky:"
-
 #~ msgid "OFF"
 #~ msgstr "VYP"
 
@@ -8265,14 +8259,8 @@ msgstr "Pristánie"
 #~ msgid "Lon"
 #~ msgstr "Dlz"
 
-#~ msgid "Bearing:"
-#~ msgstr "Kurz:"
-
 #~ msgid "Task Calculator"
 #~ msgstr "Kalkulátor úlohy"
-
-#~ msgid "Range:"
-#~ msgstr "Rozsah:"
 
 #~ msgid "Info box values small"
 #~ msgstr "Hodnoty v info-oknách malé"
@@ -8439,17 +8427,11 @@ msgstr "Pristánie"
 #~ msgid "Set as Alternate 1"
 #~ msgstr "Nastav ako alternatívu 1"
 
-#~ msgid "Name: "
-#~ msgstr "Názov: "
-
 #~ msgid "Waypoints 1"
 #~ msgstr "Otočné body 1"
 
 #~ msgid "Optimise"
 #~ msgstr "Optimalizovať"
-
-#~ msgid "Aircraft type: "
-#~ msgstr "Typ lietadla: "
 
 #~ msgid "Default map zoom*"
 #~ msgstr "Prednastavený zoom mapy*"
@@ -8472,14 +8454,11 @@ msgstr "Pristánie"
 #~ msgid "Yes All"
 #~ msgstr "Áno pre všetko"
 
-#~ msgid "Number: "
-#~ msgstr "Číslo: "
+#~ msgid "Number"
+#~ msgstr "Číslo"
 
 #~ msgid "Accept"
 #~ msgstr "Prijať"
-
-#~ msgid "Comment: "
-#~ msgstr "Komentár: "
 
 #~ msgid "Move"
 #~ msgstr "Presunúť"
@@ -8489,9 +8468,6 @@ msgstr "Pristánie"
 
 #~ msgid "No All"
 #~ msgstr "Nie pre všetko"
-
-#~ msgid "Pilot name: "
-#~ msgstr "Meno pilota: "
 
 #~ msgid "Waypoints excluded, save anyway?"
 #~ msgstr "Otočné body nezahrnuté, uložiť napriek tomu?"
@@ -8534,17 +8510,11 @@ msgstr "Pristánie"
 #~ msgid "GPS Height Offset*"
 #~ msgstr "Korekcia GPS výšky*"
 
-#~ msgid "Logger ID: "
-#~ msgstr "Logger ID: "
-
 #~ msgid "Msg window"
 #~ msgstr "Okno správy"
 
 #~ msgid "Waypoints 2"
 #~ msgstr "Otočné body 2"
-
-#~ msgid "Competition Id: "
-#~ msgstr "Súťažný znak: "
 
 #~ msgid "Statue"
 #~ msgstr "Anglické míly"
@@ -8795,8 +8765,8 @@ msgstr "Pristánie"
 #~ "enter aktivuje sa okno s otočnými bodmi a vy môžete definovať akcie ako "
 #~ "choď na, vlož do úlohy atď."
 
-#~ msgid "What do you want to do:"
-#~ msgstr "Čo chceš urobiť:"
+#~ msgid "What do you want to do"
+#~ msgstr "Čo chceš urobiť"
 
 #~ msgid "Logger Replay"
 #~ msgstr "Logger Replay"

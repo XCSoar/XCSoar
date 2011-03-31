@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-31 22:08+0200\n"
-"PO-Revision-Date: 2011-03-31 17:01+0200\n"
+"PO-Revision-Date: 2011-03-31 22:34+0200\n"
 "Last-Translator: Max Kellermann <max@duempel.org>\n"
 "Language-Team: none\n"
 "Language: el\n"
@@ -7555,9 +7555,6 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Προσγείωση"
-
-#~ msgid "Units:"
-#~ msgstr "Μονάδες μέτρησης:"
 
 #~ msgid "Logger ON"
 #~ msgstr "Καταγραφέας ON"

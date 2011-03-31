@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-31 22:08+0200\n"
-"PO-Revision-Date: 2011-03-31 14:01+0000\n"
+"PO-Revision-Date: 2011-03-31 22:39+0200\n"
 "Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
@@ -36,7 +36,7 @@ msgstr "Légtér (Airspace) file betöltése..."
 
 #: src/Airspace/AirspaceParser.cpp:153
 msgid "Parse Error at Line"
-msgstr "Hiba a következõ sorban:"
+msgstr "Hiba a következõ sorban"
 
 #: src/Airspace/AirspaceParser.cpp:154
 msgid "Line skipped."
@@ -2812,7 +2812,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:370
 #, no-c-format
 msgid "Polar"
-msgstr ""
+msgstr "Polár"
 
 #: src/Dialogs/dlgConfiguration.cpp:93
 #, no-c-format
@@ -7708,12 +7708,6 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Leszállás"
-
-#~ msgid "Polar:"
-#~ msgstr "Polár:"
-
-#~ msgid "---"
-#~ msgstr "---"
 
 #~ msgid "Site"
 #~ msgstr "Repülési terület"

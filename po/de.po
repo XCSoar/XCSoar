@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-31 22:08+0200\n"
-"PO-Revision-Date: 2011-03-31 22:10+0200\n"
+"PO-Revision-Date: 2011-03-31 22:34+0200\n"
 "Last-Translator: Niklas Fischer <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -4653,7 +4653,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:9 Data/Dialogs/dlgTeamCode_L.xml:10
 msgid "Own code"
-msgstr "Eigener Kode:"
+msgstr "Eigener Kode"
 
 #: Data/Dialogs/dlgConfiguration.xml:409
 #: Data/Dialogs/dlgConfiguration_L.xml:410
@@ -8134,12 +8134,6 @@ msgstr ""
 msgid "Landing"
 msgstr "Gelandet"
 
-#~ msgid "Polar:"
-#~ msgstr "Polare:"
-
-#~ msgid "Units:"
-#~ msgstr "Maßeinheiten:"
-
 #~ msgid "Site"
 #~ msgstr "Platz"
 
@@ -8396,9 +8390,6 @@ msgstr "Gelandet"
 #~ msgid "Task Type"
 #~ msgstr "Aufgabentyp"
 
-#~ msgid "Name: "
-#~ msgstr "Name: "
-
 #~ msgid "Choose a filter"
 #~ msgstr "Wähle einen Filter"
 
@@ -8429,14 +8420,8 @@ msgstr "Gelandet"
 #~ msgid "Period Scheme"
 #~ msgstr "Periodenschema"
 
-#~ msgid "Aircraft type: "
-#~ msgstr "Flugzeugtyp "
-
 #~ msgid "Infobox Geometry"
 #~ msgstr "InfoBox Geometrie"
-
-#~ msgid "Logger ID: "
-#~ msgstr "Logger ID: "
 
 #~ msgid "Msg window*"
 #~ msgstr "Nachrichten Fenster*"
@@ -8504,9 +8489,6 @@ msgstr "Gelandet"
 #~ msgid "Interval, battery"
 #~ msgstr "interval, Batterie"
 
-#~ msgid "Comment: "
-#~ msgstr "Kommentar: "
-
 #~ msgid "Move"
 #~ msgstr "Verschieben"
 
@@ -8519,20 +8501,11 @@ msgstr "Gelandet"
 #~ msgid "Auto logger*"
 #~ msgstr "Auto Logger*"
 
-#~ msgid "Pilot name: "
-#~ msgstr "Pilotenname: "
-
 #~ msgid "Achieved Speed"
 #~ msgstr "Erreichte Geschwindigkeit"
 
 #~ msgid "Airspace 1"
 #~ msgstr "Luftraum 1"
-
-#~ msgid "Range:"
-#~ msgstr "Reichweite:"
-
-#~ msgid "Competition Id: "
-#~ msgstr "Wettbewerbszeichen: "
 
 #~ msgid "Set range"
 #~ msgstr "Setze Reichweite"
@@ -8592,8 +8565,8 @@ msgstr "Gelandet"
 #~ msgid "Team Bearing"
 #~ msgstr "Team - Kurs"
 
-#~ msgid "Rel. Bearing:"
-#~ msgstr "Richtung:"
+#~ msgid "Rel. Bearing"
+#~ msgstr "Richtung"
 
 #~ msgid "Final Altitude Required"
 #~ msgstr "Endanflug - min. Endanflughöhe"
@@ -8733,8 +8706,8 @@ msgstr "Gelandet"
 #~ msgid "Tp"
 #~ msgstr "Wp"
 
-#~ msgid "Number: "
-#~ msgstr "Zahl: "
+#~ msgid "Number"
+#~ msgstr "Zahl"
 
 #~ msgid "Lon"
 #~ msgstr "Länge"
@@ -8761,9 +8734,6 @@ msgstr "Gelandet"
 
 #~ msgid "Relative Humidity"
 #~ msgstr "Relative Luftfeuchtigkeit"
-
-#~ msgid "Flarm lock:"
-#~ msgstr "FLARM Sperrung:"
 
 #~ msgid "Clear Alternates"
 #~ msgstr "Lösche Alternativen"
@@ -9247,9 +9217,6 @@ msgstr "Gelandet"
 #~ msgid "Menu"
 #~ msgstr "Menü"
 
-#~ msgid "Own code:"
-#~ msgstr "Eigener Kode:"
-
 #~ msgid "Own Team Code"
 #~ msgstr "Eigener Teamkode"
 
@@ -9325,8 +9292,8 @@ msgstr "Gelandet"
 #~ "Ist das Vega mit dem Altair verbunden muss diese Einstellung "
 #~ "ausgeschaltet sein."
 
-#~ msgid "What do you want to do:"
-#~ msgstr "Was möchten Sie tun:"
+#~ msgid "What do you want to do"
+#~ msgstr "Was möchten Sie tun"
 
 #~ msgid ""
 #~ "Adjust GPS height with a fixed offset. Be careful with this setting: your "
@@ -9629,9 +9596,6 @@ msgstr "Gelandet"
 #~ msgid "North/track"
 #~ msgstr "Norden im Vorflug/Kurs kreisend"
 
-#~ msgid "Bearing:"
-#~ msgstr "Peilung:"
-
 #~ msgid ""
 #~ "This allows switching on or off the automatic wind algorithm.  When the "
 #~ "algorithm is switched off, the pilot is responsible for setting the wind "
@@ -9715,9 +9679,6 @@ msgstr "Gelandet"
 
 #~ msgid "Set teamcode"
 #~ msgstr "Teamkode setzen"
-
-#~ msgid "Mate code:"
-#~ msgstr "Kameradenkode:"
 
 #~ msgid "Set Mate code"
 #~ msgstr "Kameradenkode setzen"
@@ -10667,9 +10628,6 @@ msgstr "Gelandet"
 #~ msgid "More Waypoints"
 #~ msgstr "Weitere Wegpunkte"
 
-#~ msgid "Competition Id"
-#~ msgstr "Wettbewerbskennzeichen"
-
 #~ msgid ""
 #~ "The name of the file (.xcm) containing terrain, topology, and optionally "
 #~ "waypoints, their details and airspaces."
@@ -10791,6 +10749,3 @@ msgstr "Gelandet"
 #~ msgstr ""
 #~ "Aktuelle Auswertung der geflogenen Strecke an Hand der eingestellten OLC "
 #~ "Regel."
-
-#~ msgid "Waiting for GPS Fix"
-#~ msgstr "Warten auf GPS Fix"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-31 18:37+0200\n"
-"PO-Revision-Date: 2011-03-31 18:54+0200\n"
+"POT-Creation-Date: 2011-03-31 22:08+0200\n"
+"PO-Revision-Date: 2011-03-31 22:45+0200\n"
 "Last-Translator: Max Kellermann <max@duempel.org>\n"
 "Language-Team: none\n"
 "Language: sv\n"
@@ -760,7 +760,8 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:277 src/InfoBoxes/Content/Factory.cpp:278
-#: src/InfoBoxes/Content/Factory.cpp:786
+#: src/InfoBoxes/Content/Factory.cpp:786 src/Dialogs/dlgFlarmTraffic.cpp:318
+#: src/Dialogs/dlgFlarmTraffic.cpp:319
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:85
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:88
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14
@@ -2294,7 +2295,8 @@ msgid "Wing loading"
 msgstr ""
 
 #: src/FlightStatisticsRenderer.cpp:425 src/FlightStatisticsRenderer.cpp:448
-#: src/FlightStatisticsRenderer.cpp:475 Data/Dialogs/dlgAirspaceSelect.xml:10
+#: src/FlightStatisticsRenderer.cpp:475 src/Dialogs/dlgFlarmTraffic.cpp:332
+#: Data/Dialogs/dlgAirspaceSelect.xml:10
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:16
 #: Data/Dialogs/dlgConfiguration.xml:652
 #: Data/Dialogs/dlgConfiguration_L.xml:653
@@ -2648,9 +2650,11 @@ msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:91
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:109
+#: Data/Dialogs/dlgConfiguration.xml:369
+#: Data/Dialogs/dlgConfiguration_L.xml:370
 #, no-c-format
 msgid "Polar"
-msgstr ""
+msgstr "Polar"
 
 #: src/Dialogs/dlgConfiguration.cpp:93
 #, no-c-format
@@ -2675,6 +2679,8 @@ msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:97
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:97
+#: Data/Dialogs/dlgConfiguration.xml:644
+#: Data/Dialogs/dlgConfiguration_L.xml:645
 #, no-c-format
 msgid "Units"
 msgstr "Enheter"
@@ -2838,16 +2844,8 @@ msgstr ""
 msgid "Reading vario settings..."
 msgstr ""
 
-#: src/Dialogs/dlgFlarmTraffic.cpp:318 src/Dialogs/dlgFlarmTraffic.cpp:319
-msgid "Vario:"
-msgstr ""
-
-#: src/Dialogs/dlgFlarmTraffic.cpp:332
-msgid "Distance:"
-msgstr ""
-
 #: src/Dialogs/dlgFlarmTraffic.cpp:341 src/Dialogs/dlgFlarmTraffic.cpp:344
-msgid "Rel. Alt.:"
+msgid "Rel. Alt."
 msgstr ""
 
 #: src/Dialogs/dlgHelp.cpp:59 Data/Dialogs/dlgComboPicker.xml:8
@@ -4595,11 +4593,6 @@ msgid ""
 "ABC-01.IGC)."
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration.xml:369
-#: Data/Dialogs/dlgConfiguration_L.xml:370
-msgid "Polar:"
-msgstr "Polar:"
-
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
 msgstr ""
@@ -5151,12 +5144,6 @@ msgstr ""
 #: Data/Dialogs/dlgVario.xml:430 Data/Dialogs/dlgVario_L.xml:431
 msgid "Cambridge"
 msgstr ""
-
-#: Data/Dialogs/dlgConfiguration.xml:644
-#: Data/Dialogs/dlgConfiguration_L.xml:645
-#, fuzzy
-msgid "Units:"
-msgstr "Enheter:"
 
 #: Data/Dialogs/dlgConfiguration.xml:99 Data/Dialogs/dlgConfiguration_L.xml:99
 msgid "Track bearing"
