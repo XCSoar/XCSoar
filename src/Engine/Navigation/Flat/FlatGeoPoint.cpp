@@ -26,7 +26,8 @@
 unsigned
 FlatGeoPoint::distance_to(const FlatGeoPoint &sp) const
 {
-  return isqrt4(distance_sq_to(sp));
+  const FlatGeoPoint delta = *this - sp;
+  return lhypot(delta.Longitude, delta.Latitude);
 }
 
 unsigned

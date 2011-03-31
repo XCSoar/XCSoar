@@ -36,7 +36,7 @@ void test_normalise_err(const int x, const int y)
   int x1=x;
   int y1=y;
   i_normalise_fast(x1, y1);
-  int mag1 = isqrt4(x1*x1+y1*y1);
+  int mag1 = lhypot(x1, y1);
   int error1 = abs((1<<NORMALISE_BITS)-mag1);
 
   bool err_ok = error1<= error0+1;

@@ -237,7 +237,7 @@ void i_normalise(int &x,
   const unsigned m_max = std::max(abs(x), abs(y));
   if (!m_max)
     return;
-  const int mag = isqrt4((long)x*(long)x+(long)y*(long)y);
+  const int mag = lhypot(x, y);
   x= (x<<NORMALISE_BITS)/mag;
   y= (y<<NORMALISE_BITS)/mag;
 }

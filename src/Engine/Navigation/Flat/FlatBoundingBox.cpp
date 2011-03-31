@@ -36,7 +36,7 @@ FlatBoundingBox::distance(const FlatBoundingBox &f) const
   long dy = max(0, min(f.bb_ll.Latitude - bb_ur.Latitude,
                        bb_ll.Latitude - f.bb_ur.Latitude));
 
-  return isqrt4(dx * dx + dy * dy);
+  return lhypot(dx, dy);
 }
 
 static void

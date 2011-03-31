@@ -79,7 +79,8 @@ public:
    */
   gcc_pure
   unsigned approx_dist(const TracePoint& tp) const {
-    return (unsigned)isqrt4(approx_sq_dist(tp));
+    return (unsigned)lhypot(get_flatLocation().Longitude - tp.get_flatLocation().Longitude,
+                            get_flatLocation().Latitude - tp.get_flatLocation().Latitude);
   }
 
   /** 
