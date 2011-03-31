@@ -28,7 +28,6 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Logger/Logger.hpp"
-#include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Appearance.hpp"
 #include "Screen/TextInBox.hpp"
@@ -89,7 +88,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 {
   int offset = 0;
 
-  if (logger.isLoggerActive()) {
+  if (logger != NULL && logger->isLoggerActive()) {
     bool flip = (Basic().DateTime.second % 2) == 0;
     MaskedIcon &icon = flip ? Graphics::hLogger : Graphics::hLoggerOff;
     offset = icon.get_size().cx;

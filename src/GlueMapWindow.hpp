@@ -28,6 +28,8 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "GestureManager.hpp"
 
+class Logger;
+
 struct ZoomClimb_t
 {
   fixed CruiseScale;
@@ -58,6 +60,8 @@ protected:
 
 
 class GlueMapWindow : public MapWindow {
+  const Logger *logger;
+
   unsigned idle_robin;
 
   PeriodClock mouse_down_clock;
@@ -110,6 +114,10 @@ class GlueMapWindow : public MapWindow {
 
 public:
   GlueMapWindow();
+
+  void SetLogger(Logger *_logger) {
+    logger = _logger;
+  }
 
   void SetSettingsMap(const SETTINGS_MAP &new_value);
   void SetSettingsComputer(const SETTINGS_COMPUTER &new_value);

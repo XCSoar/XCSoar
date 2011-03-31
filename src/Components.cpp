@@ -411,6 +411,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   main_window.map.set_terrain(terrain);
   main_window.map.set_weather(&RASP);
   main_window.map.set_marks(marks);
+  main_window.map.SetLogger(&logger);
 
   // Finally ready to go.. all structures must be present before this.
 
