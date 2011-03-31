@@ -962,6 +962,9 @@ RasterTileCache::FirstIntersection(int x0, int y0,
   // number of steps for update to the overview map
   const int step_coarse = std::max(1<< OVERVIEW_BITS, step_fine);
 
+  // number of steps to be cleared after climbing over obstruction
+  const int intersect_steps = 32;
+
   // counter for steps to reach next position to be checked on the field.
   unsigned step_counter = 0;
   // total counter of fine steps
@@ -1057,14 +1060,14 @@ RasterTileCache::FirstIntersection(int x0, int y0,
 
       if (!this_intersecting) {
         if (intersect_counter) {
-          intersect_counter++;
+          intersect_counter+= step_counter;
 
           // was intersecting, now cleared.
           // exit with small height above terrain
 #ifdef DEBUG_TILE
           printf("# fint int->clear\n");
 #endif
-          if (intersect_counter == 10) {
+          if (intersect_counter >= intersect_steps) {
             _x = x_int;
             _y = y_int;
             _h = h_int;
