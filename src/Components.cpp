@@ -358,7 +358,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   // Set the home waypoint
   WayPointGlue::SetHome(way_points, terrain, SetSettingsComputer(),
-                        false, true);
+                        false);
 
   // ReSynchronise the blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());

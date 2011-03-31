@@ -53,12 +53,11 @@ namespace WayPointGlue {
  * special waypoint indices)
  * @param reset This should be true if the waypoint file was changed,
  * it resets all special waypoints indices
- * @param set_location If true, the SetStartupLocation function will be called
  */
 void
 WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
                       SETTINGS_COMPUTER &settings,
-                      const bool reset, const bool set_location)
+                      const bool reset)
 {
   LogStartUp(_T("SetHome"));
 
@@ -90,20 +89,15 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
     // set team code reference waypoint if we don't have one
     settings.TeamCodeRefWaypoint = settings.HomeWaypoint;
 
-  if (set_location) {
-    if (const Waypoint *wp = way_points.lookup_id(settings.HomeWaypoint)) {
-      // OK, passed all checks now
-      LogStartUp(_T("Start at home waypoint"));
-      device_blackboard.SetStartupLocation(wp->Location, wp->Altitude);
-    } else if (terrain != NULL) {
-      // no home at all, so set it from center of terrain if available
-      GeoPoint loc = terrain->GetTerrainCenter();
-      LogStartUp(_T("Start at terrain center"));
-      device_blackboard.SetStartupLocation(loc, fixed_zero);
-    }
-    const AIRCRAFT_STATE aircraft_state =
-      ToAircraftState(device_blackboard.Basic(), device_blackboard.Calculated());
-    airspace_warnings->reset(aircraft_state);
+  if (const Waypoint *wp = way_points.lookup_id(settings.HomeWaypoint)) {
+    // OK, passed all checks now
+    LogStartUp(_T("Start at home waypoint"));
+    device_blackboard.SetStartupLocation(wp->Location, wp->Altitude);
+  } else if (terrain != NULL) {
+    // no home at all, so set it from center of terrain if available
+    GeoPoint loc = terrain->GetTerrainCenter();
+    LogStartUp(_T("Start at terrain center"));
+    device_blackboard.SetStartupLocation(loc, fixed_zero);
   }
 
   // Save the home waypoint number in the resgistry

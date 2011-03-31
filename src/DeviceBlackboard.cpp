@@ -80,6 +80,10 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
   ScopeLock protect(mutexBlackboard);
   NMEA_INFO &basic = SetBasic();
 
+  if (basic.gps.Replay || Calculated().flight.Flying ||
+      (basic.LocationAvailable && !basic.gps.Simulator))
+    return;
+
   basic.Location = loc;
   basic.GPSAltitude = alt;
 

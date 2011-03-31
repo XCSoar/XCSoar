@@ -137,8 +137,7 @@ SettingsLeave()
     // re-set home
     WayPointGlue::SetHome(way_points, terrain,
                           XCSoarInterface::SetSettingsComputer(),
-                          WaypointFileChanged,
-                          !CommonInterface::Calculated().flight.Flying);
+                          WaypointFileChanged);
   }
 
   if (TopographyFileChanged) {

@@ -302,7 +302,7 @@ OnNewHomeClicked(gcc_unused WndButton &button)
     ScopeSuspendAllThreads suspend;
     WayPointGlue::SetHome(way_points, terrain,
                           XCSoarInterface::SetSettingsComputer(),
-                          false, !CommonInterface::Calculated().flight.Flying);
+                          false);
   }
 
   wf->SetModalResult(mrOK);
