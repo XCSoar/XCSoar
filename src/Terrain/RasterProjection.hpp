@@ -73,6 +73,22 @@ public:
     return GeoPoint(Angle::native(x),Angle::native(y));
   }
 
+  gcc_pure RasterLocation
+  project_coarse(const GeoPoint &location) const {
+    const int x = ((int)(location.Longitude.value_native() * x_scale)) - left;
+    const int y = top - ((int)(location.Latitude.value_native() * y_scale));
+
+    return RasterLocation(x >> 8, y >> 8);
+  }
+
+  gcc_pure
+  GeoPoint
+  unproject_coarse(const RasterLocation &coords) const {
+    const fixed x = fixed(((int)coords.x << 8) + left) / x_scale;
+    const fixed y = fixed(top - ((int)coords.y << 8)) / y_scale;
+    return GeoPoint(Angle::native(x),Angle::native(y));
+  }
+
   /**
    * Determines the distance (in meters) of two raster pixels.
    *
