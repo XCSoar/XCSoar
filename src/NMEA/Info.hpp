@@ -467,6 +467,18 @@ struct NMEA_INFO {
   FLARM_STATE flarm;
 
   /**
+   * Sets a fake location, and marks it as "unavailable".  This is
+   * used during startup to move the glider symbol to the home
+   * waypoint.
+   */
+  void SetFakeLocation(const GeoPoint &_location, const fixed _altitude) {
+    Location = _location;
+    LocationAvailable.clear();
+    GPSAltitude = _altitude;
+    GPSAltitudeAvailable.clear();
+  }
+
+  /**
    * Sets the "true" barometric altitude (i.e. above NN, not above
    * 1013 hPa).
    */

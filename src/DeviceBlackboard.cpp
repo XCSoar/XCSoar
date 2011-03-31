@@ -84,13 +84,7 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
       (basic.LocationAvailable && !basic.gps.Simulator))
     return;
 
-  basic.Location = loc;
-  basic.GPSAltitude = alt;
-
-  // set NAVWarning flags because this value was not provided
-  // by a real GPS
-  basic.LocationAvailable.clear();
-  basic.GPSAltitudeAvailable.clear();
+  basic.SetFakeLocation(loc, alt);
 }
 
 /**
