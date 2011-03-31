@@ -1169,7 +1169,12 @@ RasterTileCache::Intersection(int x0, int y0,
   // max number of steps to walk
   const int max_steps = (dx+dy);
   // calculate number of fine steps to produce a step on the overview field
-  const int step_fine = std::max(1, max_steps >> INTERSECT_BITS);
+
+  // step size at selected refinement level
+  const int refine_step = max_steps >> 5;
+
+  // number of steps for update to the fine map
+  const int step_fine = std::max(1, refine_step);
   // number of steps for update to the overview map
   const int step_coarse = std::max(1<< OVERVIEW_BITS, step_fine);
 
@@ -1187,6 +1192,10 @@ RasterTileCache::Intersection(int x0, int y0,
   short h_int= h_origin;
   short h_terrain = 1;
 
+  unsigned last_clear_x = _x;
+  unsigned last_clear_y = _y;
+  short last_clear_h = h_int;
+
   while (h_terrain>=0) {
 
     if (!step_counter) {
@@ -1203,11 +1212,20 @@ RasterTileCache::Intersection(int x0, int y0,
       // current aircraft height
       h_int = h_origin-dh;
 
-      if (h_int < h_terrain)
-        return RasterLocation(_x, _y);
+      if (h_int < h_terrain) {
+        if (refine_step<5) // can't refine any further
+          return RasterLocation(_x, _y);
+
+        // refine solution
+        return Intersection(last_clear_x, last_clear_y, _x, _y, last_clear_h, slope_fact);
+      }
 
       if (h_int <= 0) 
         break; // reached max range
+
+      last_clear_x = _x;
+      last_clear_y = _y;
+      last_clear_h = h_int;
     }
 
     if (total_steps > max_steps)
