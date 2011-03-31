@@ -248,10 +248,10 @@ PDVDV(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 static bool
 PDVDS(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  double AccelX = line.read(0.0);
-  double AccelZ = line.read(0.0);
+  fixed AccelX = line.read(fixed_zero);
+  fixed AccelZ = line.read(fixed_zero);
 
-  int mag = isqrt4((int)((AccelX * AccelX + AccelZ * AccelZ)));
+  int mag = (int)hypot(AccelX, AccelZ);
   GPS_INFO->acceleration.Gload = fixed(mag) / 100;
   GPS_INFO->acceleration.Available = true;
 
