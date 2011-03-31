@@ -112,6 +112,8 @@ const Airspaces::AirspaceVector
 Airspaces::scan_nearest(const GeoPoint &location,
                         const AirspacePredicate &condition) const 
 {
+  if (empty()) return AirspaceVector(); // nothing to do
+
   Airspace bb_target(location, task_projection);
 
   std::pair<AirspaceTree::const_iterator, AirspaceTree::distance_type>
@@ -141,6 +143,8 @@ Airspaces::scan_range(const GeoPoint &location,
                       const fixed range,
                       const AirspacePredicate &condition) const
 {
+  if (empty()) return AirspaceVector(); // nothing to do
+
   Airspace bb_target(location, task_projection);
   int mrange = task_projection.project_range(location, range);
   
