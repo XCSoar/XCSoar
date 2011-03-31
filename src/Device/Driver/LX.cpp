@@ -62,11 +62,11 @@ protected:
   void WritePilotInfo();
   bool LoadTask(const Declaration *decl);
   void WriteTask();
-  void WriteToNanoint32(int32_t i);
+  void CRCWriteint32(int32_t i);
   void CRCWrite(const char *buff, unsigned size);
   void CRCWrite(char c);
 
-  struct lxNanoDevice_Pilot_t { //strings have extra byte for NULL
+  struct lxDevice_Pilot_t { //strings have extra byte for NULL
     char unknown1[3];
     char PilotName[19];
     char GliderType[12];
@@ -75,7 +75,7 @@ protected:
     char unknown2[73];
   } gcc_packed;
 
-  struct lxNanoDevice_Declaration_t { //strings have extra byte for NULL
+  struct lxDevice_Declaration_t { //strings have extra byte for NULL
     unsigned char unknown1[5];
     unsigned char dayinput;
     unsigned char monthinput;
@@ -91,8 +91,8 @@ protected:
     char WaypointNames[12][9];
   } gcc_packed;
 
-  lxNanoDevice_Declaration_t lxNanoDevice_Declaration;
-  lxNanoDevice_Pilot_t lxNanoDevice_Pilot;
+  lxDevice_Declaration_t lxDevice_Declaration;
+  lxDevice_Pilot_t lxDevice_Pilot;
   char crc;
 
   bool DeclareInner(const Declaration *declaration,
@@ -276,7 +276,7 @@ LXDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 }
 
 void
-LXDevice::WriteToNanoint32(int32_t i)
+LXDevice::CRCWriteint32(int32_t i)
 {
   CRCWrite((char) ((i>>24) & 0xFF));
   CRCWrite((char) ((i>>16) & 0xFF));
@@ -328,18 +328,18 @@ copy_space_padded(char dest[], const TCHAR src[], unsigned int len)
 void
 LXDevice::LoadPilotInfo(const Declaration *decl)
 {
-  memset((void*)lxNanoDevice_Pilot.unknown1, 0, sizeof(lxNanoDevice_Pilot.unknown1));
-  copy_space_padded(lxNanoDevice_Pilot.PilotName, decl->PilotName, sizeof(lxNanoDevice_Pilot.PilotName));
-  copy_space_padded(lxNanoDevice_Pilot.GliderType, decl->AircraftType, sizeof(lxNanoDevice_Pilot.GliderType));
-  copy_space_padded(lxNanoDevice_Pilot.GliderID, decl->AircraftReg, sizeof(lxNanoDevice_Pilot.GliderID));
-  copy_space_padded(lxNanoDevice_Pilot.CompetitionID, decl->CompetitionId, sizeof(lxNanoDevice_Pilot.CompetitionID));
-  memset((void*)lxNanoDevice_Pilot.unknown2, 0, sizeof(lxNanoDevice_Pilot.unknown2));
+  memset((void*)lxDevice_Pilot.unknown1, 0, sizeof(lxDevice_Pilot.unknown1));
+  copy_space_padded(lxDevice_Pilot.PilotName, decl->PilotName, sizeof(lxDevice_Pilot.PilotName));
+  copy_space_padded(lxDevice_Pilot.GliderType, decl->AircraftType, sizeof(lxDevice_Pilot.GliderType));
+  copy_space_padded(lxDevice_Pilot.GliderID, decl->AircraftReg, sizeof(lxDevice_Pilot.GliderID));
+  copy_space_padded(lxDevice_Pilot.CompetitionID, decl->CompetitionId, sizeof(lxDevice_Pilot.CompetitionID));
+  memset((void*)lxDevice_Pilot.unknown2, 0, sizeof(lxDevice_Pilot.unknown2));
 }
 
 void
 LXDevice::WritePilotInfo()
 {
-  CRCWrite((const char*)&lxNanoDevice_Pilot, sizeof(lxNanoDevice_Pilot));
+  CRCWrite((const char*)&lxDevice_Pilot, sizeof(lxDevice_Pilot));
   return;
 }
 
@@ -357,57 +357,57 @@ LXDevice::LoadTask(const Declaration *decl)
   if (decl->size() < 2)
       return false;
 
-  memset((void*)lxNanoDevice_Declaration.unknown1, 0, sizeof(lxNanoDevice_Declaration.unknown1));
+  memset((void*)lxDevice_Declaration.unknown1, 0, sizeof(lxDevice_Declaration.unknown1));
 
   if (DeclDate.day > 0 && DeclDate.day < 32
       && DeclDate.month > 0 && DeclDate.month < 13) {
-    lxNanoDevice_Declaration.dayinput = (unsigned char)DeclDate.day;
-    lxNanoDevice_Declaration.monthinput = (unsigned char)DeclDate.month;
+    lxDevice_Declaration.dayinput = (unsigned char)DeclDate.day;
+    lxDevice_Declaration.monthinput = (unsigned char)DeclDate.month;
     int iCentury = DeclDate.year / 100; // Todo: if no gps fix, use system time
     iCentury *= 100;
-    lxNanoDevice_Declaration.yearinput = (unsigned char)(DeclDate.year - iCentury);
+    lxDevice_Declaration.yearinput = (unsigned char)(DeclDate.year - iCentury);
   }
   else {
-    lxNanoDevice_Declaration.dayinput = (unsigned char)1;
-    lxNanoDevice_Declaration.monthinput = (unsigned char)1;
-    lxNanoDevice_Declaration.yearinput = (unsigned char)10;
+    lxDevice_Declaration.dayinput = (unsigned char)1;
+    lxDevice_Declaration.monthinput = (unsigned char)1;
+    lxDevice_Declaration.yearinput = (unsigned char)10;
   }
-  lxNanoDevice_Declaration.dayuser = lxNanoDevice_Declaration.dayinput;
-  lxNanoDevice_Declaration.monthuser = lxNanoDevice_Declaration.monthinput;
-  lxNanoDevice_Declaration.yearuser = lxNanoDevice_Declaration.yearinput;
-  lxNanoDevice_Declaration.taskid = 0;
-  lxNanoDevice_Declaration.numtps = decl->size();
+  lxDevice_Declaration.dayuser = lxDevice_Declaration.dayinput;
+  lxDevice_Declaration.monthuser = lxDevice_Declaration.monthinput;
+  lxDevice_Declaration.yearuser = lxDevice_Declaration.yearinput;
+  lxDevice_Declaration.taskid = 0;
+  lxDevice_Declaration.numtps = decl->size();
 
   for (unsigned i = 0; i < NUMTPS; i++) {
     if (i == 0) { // takeoff
-      lxNanoDevice_Declaration.tptypes[i] = 3;
-      lxNanoDevice_Declaration.Latitudes[i] = 0;
-      lxNanoDevice_Declaration.Longitudes[i] = 0;
-      copy_space_padded(lxNanoDevice_Declaration.WaypointNames[i], _T("TAKEOFF"),
-        sizeof(lxNanoDevice_Declaration.WaypointNames[i]));
+      lxDevice_Declaration.tptypes[i] = 3;
+      lxDevice_Declaration.Latitudes[i] = 0;
+      lxDevice_Declaration.Longitudes[i] = 0;
+      copy_space_padded(lxDevice_Declaration.WaypointNames[i], _T("TAKEOFF"),
+        sizeof(lxDevice_Declaration.WaypointNames[i]));
 
 
     } else if (i <= decl->size()) {
-      lxNanoDevice_Declaration.tptypes[i] = 1;
-      lxNanoDevice_Declaration.Longitudes[i] =
+      lxDevice_Declaration.tptypes[i] = 1;
+      lxDevice_Declaration.Longitudes[i] =
           (int32_t)(decl->get_location(i - 1).Longitude.value_degrees() * 60000);
-      lxNanoDevice_Declaration.Latitudes[i] =
+      lxDevice_Declaration.Latitudes[i] =
           (int32_t)(decl->get_location(i - 1).Latitude.value_degrees() * 60000);
-      copy_space_padded(lxNanoDevice_Declaration.WaypointNames[i], decl->get_name(i - 1),
-          sizeof(lxNanoDevice_Declaration.WaypointNames[i]));
+      copy_space_padded(lxDevice_Declaration.WaypointNames[i], decl->get_name(i - 1),
+          sizeof(lxDevice_Declaration.WaypointNames[i]));
 
     } else if (i == decl->size() + 1) { // landing
-      lxNanoDevice_Declaration.tptypes[i] = 2;
-      lxNanoDevice_Declaration.Longitudes[i] = 0;
-      lxNanoDevice_Declaration.Latitudes[i] = 0;
-      copy_space_padded(lxNanoDevice_Declaration.WaypointNames[i], _T("LANDING"),
-          sizeof(lxNanoDevice_Declaration.WaypointNames[i]));
+      lxDevice_Declaration.tptypes[i] = 2;
+      lxDevice_Declaration.Longitudes[i] = 0;
+      lxDevice_Declaration.Latitudes[i] = 0;
+      copy_space_padded(lxDevice_Declaration.WaypointNames[i], _T("LANDING"),
+          sizeof(lxDevice_Declaration.WaypointNames[i]));
 
     } else { // unused
-      lxNanoDevice_Declaration.tptypes[i] = 0;
-      lxNanoDevice_Declaration.Longitudes[i] = 0;
-      lxNanoDevice_Declaration.Latitudes[i] = 0;
-      memset((void*)lxNanoDevice_Declaration.WaypointNames[i], 0, 9);
+      lxDevice_Declaration.tptypes[i] = 0;
+      lxDevice_Declaration.Longitudes[i] = 0;
+      lxDevice_Declaration.Latitudes[i] = 0;
+      memset((void*)lxDevice_Declaration.WaypointNames[i], 0, 9);
     }
   }
 
@@ -424,29 +424,29 @@ LXDevice::LoadTask(const Declaration *decl)
 void
 LXDevice::WriteTask()
 {
-  CRCWrite((const char*)&lxNanoDevice_Declaration,
-                                    sizeof(lxNanoDevice_Declaration.unknown1) +
-                                    sizeof(lxNanoDevice_Declaration.dayinput) +
-                                    sizeof(lxNanoDevice_Declaration.monthinput) +
-                                    sizeof(lxNanoDevice_Declaration.yearinput) +
-                                    sizeof(lxNanoDevice_Declaration.dayuser) +
-                                    sizeof(lxNanoDevice_Declaration.monthuser) +
-                                    sizeof(lxNanoDevice_Declaration.yearuser));
+  CRCWrite((const char*)&lxDevice_Declaration,
+                                    sizeof(lxDevice_Declaration.unknown1) +
+                                    sizeof(lxDevice_Declaration.dayinput) +
+                                    sizeof(lxDevice_Declaration.monthinput) +
+                                    sizeof(lxDevice_Declaration.yearinput) +
+                                    sizeof(lxDevice_Declaration.dayuser) +
+                                    sizeof(lxDevice_Declaration.monthuser) +
+                                    sizeof(lxDevice_Declaration.yearuser));
 
-  CRCWrite((const char*)&lxNanoDevice_Declaration.taskid, sizeof(lxNanoDevice_Declaration.taskid));
-  CRCWrite((char)lxNanoDevice_Declaration.numtps);
+  CRCWrite((const char*)&lxDevice_Declaration.taskid, sizeof(lxDevice_Declaration.taskid));
+  CRCWrite((char)lxDevice_Declaration.numtps);
 
   for (unsigned int i = 0; i < NUMTPS; i++) {
-    CRCWrite((char)lxNanoDevice_Declaration.tptypes[i]);
+    CRCWrite((char)lxDevice_Declaration.tptypes[i]);
   }
   for (unsigned int i = 0; i < NUMTPS; i++) {
-    WriteToNanoint32(lxNanoDevice_Declaration.Longitudes[i]);
+    CRCWriteint32(lxDevice_Declaration.Longitudes[i]);
   }
   for (unsigned int i = 0; i < NUMTPS; i++) {
-    WriteToNanoint32(lxNanoDevice_Declaration.Latitudes[i]);
+    CRCWriteint32(lxDevice_Declaration.Latitudes[i]);
   }
   for (unsigned int i = 0; i < NUMTPS; i++) {
-    CRCWrite(lxNanoDevice_Declaration.WaypointNames[i], sizeof(lxNanoDevice_Declaration.WaypointNames[i]));
+    CRCWrite(lxDevice_Declaration.WaypointNames[i], sizeof(lxDevice_Declaration.WaypointNames[i]));
   }
   return;
 }
