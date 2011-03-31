@@ -178,6 +178,12 @@ class RasterTileCache : private NonCopyable {
    */
   static const unsigned OVERVIEW_BITS = 4;
 
+  /**
+   * Target number of steps in intersection searches; total distance
+   * is shifted by this number of bits
+   */
+  static const unsigned INTERSECT_BITS = 7;
+
 public:
   /**
    * The fixed-point fractional part of sub-pixel coordinates.

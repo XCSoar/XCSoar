@@ -955,21 +955,25 @@ RasterTileCache::FirstIntersection(int x0, int y0,
   const int sx = (x0 < x1)? 1: -1;
   const int sy = (y0 < y1)? 1: -1;
 
+  // max number of steps to walk
+  const int max_steps = (dx+dy);
   // calculate number of fine steps to produce a step on the overview field
-  int mx=dx, my=dy;
-  i_normalise(mx, my); // normalise vector components
-  const int step_coarse = (mx+my)>>3;  // number of steps for update to the
-                                       // overview map
+  const int step_fine = std::max(1, max_steps >> INTERSECT_BITS);
+  // number of steps for update to the overview map
+  const int step_coarse = std::max(1<< OVERVIEW_BITS, step_fine);
 
-  unsigned step_counter = 0; // counter for steps to reach next position on the
-                             // field.
-  int total_steps = 0; // total counter of steps
-  const int max_steps = dx+dy; // max number of steps to walk (if no intersection)
+  // counter for steps to reach next position to be checked on the field.
+  unsigned step_counter = 0;
+  // total counter of fine steps
+  int total_steps = 0;
 
+  // number of steps since intersection
   int intersect_counter = 0;
 
 #ifdef DEBUG_TILE
-  printf("# fint %d\n", step_coarse);
+  printf("# max steps %d\n", max_steps);
+  printf("# step coarse %d\n", step_coarse);
+  printf("# step fine %d\n", step_fine);
 #endif
 
   // early exit if origin is too high (should not occur)
@@ -1003,7 +1007,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
         break; // outside bounds
 
       h_terrain = GetFieldDirect(x_int, y_int, tile_index)+h_safety;
-      step_counter = tile_index<0? step_coarse: 1;
+      step_counter = tile_index<0? step_coarse: step_fine;
 
       // calculate height of glide so far
       const short dh = (short)((total_steps*slope_fact)>>RASTER_SLOPE_FACT);
@@ -1159,15 +1163,24 @@ RasterTileCache::Intersection(int x0, int y0,
   const int sx = (x0 < x1)? 1: -1;
   const int sy = (y0 < y1)? 1: -1;
 
+  // max number of steps to walk
+  const int max_steps = (dx+dy);
   // calculate number of fine steps to produce a step on the overview field
-  int mx=dx, my=dy;
-  i_normalise(mx, my); // normalise vector components
-  const int step_coarse = (mx+my)>>3;  // number of steps for update to the
-                                       // overview map
-  unsigned step_counter = 0; // counter for steps to reach next position on the
-                             // field.
-  int total_steps = 0; // total counter of steps
-  const int max_steps = dx+dy; // max number of steps to walk
+  const int step_fine = std::max(1, max_steps >> INTERSECT_BITS);
+  // number of steps for update to the overview map
+  const int step_coarse = std::max(1<< OVERVIEW_BITS, step_fine);
+
+  // counter for steps to reach next position to be checked on the field.
+  unsigned step_counter = 0;
+  // total counter of fine steps
+  int total_steps = 0;
+
+#ifdef DEBUG_TILE
+  printf("# max steps %d\n", max_steps);
+  printf("# step coarse %d\n", step_coarse);
+  printf("# step fine %d\n", step_fine);
+#endif
+
   short h_int= h_origin;
   short h_terrain = 1;
 
@@ -1179,7 +1192,7 @@ RasterTileCache::Intersection(int x0, int y0,
         break; // outside bounds
 
       h_terrain = GetFieldDirect(_x, _y, tile_index);
-      step_counter = tile_index<0? step_coarse: 1;
+      step_counter = tile_index<0? step_coarse: step_fine;
 
       // calculate height of glide so far
       const short dh = (short)((total_steps*slope_fact)>>RASTER_SLOPE_FACT);
@@ -1194,21 +1207,21 @@ RasterTileCache::Intersection(int x0, int y0,
         break; // reached max range
     }
 
-    if (total_steps == max_steps)
-      return RasterLocation(_x, _y); // reached destination
+    if (total_steps > max_steps)
+      break;
 
     const int e2 = 2*err;
     if (e2 > -dy) {
       err -= dy;
       _x += sx;
-      if (step_counter)
+      if (step_counter>0)
         step_counter--;
       total_steps++;
     }
     if (e2 < dx) {
       err += dx;
       _y += sy;
-      if (step_counter)
+      if (step_counter>0)
         step_counter--;
       total_steps++;
     }
