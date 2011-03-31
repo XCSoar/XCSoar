@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_EXTERNAL_LOGGER_HPP
 #define XCSOAR_EXTERNAL_LOGGER_HPP
 
+#include "Compiler.h"
+
 class OrderedTask;
 
 namespace ExternalLogger {
@@ -31,6 +33,7 @@ namespace ExternalLogger {
    * Returns whether a task is declared to the device
    * @return True if a task is declared to the device, False otherwise
    */
+  gcc_pure
   bool IsDeclared();
 
   void Declare(const OrderedTask& task);

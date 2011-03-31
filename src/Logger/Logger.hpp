@@ -40,7 +40,7 @@ class ProtectedTaskManager;
 class Logger {
 private:
   LoggerImpl _logger;
-  Poco::RWLock lock;
+  mutable Poco::RWLock lock;
   void LogEvent(const NMEA_INFO &gps_info, const char*);
 public:
   void LogPoint(const NMEA_INFO &gps_info);
@@ -50,8 +50,13 @@ public:
   void LogOnTaskEvent(const NMEA_INFO &gps_info);
   void LogPilotEvent(const NMEA_INFO &gps_info);
   bool CheckDeclaration(void);
-  bool isTaskDeclared();
-  bool isLoggerActive();
+
+  gcc_pure
+  bool isTaskDeclared() const;
+
+  gcc_pure
+  bool isLoggerActive() const;
+
   bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
   void guiStartLogger(const NMEA_INFO& gps_info,
                       const SETTINGS_COMPUTER& settings,

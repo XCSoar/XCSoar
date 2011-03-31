@@ -83,13 +83,13 @@ Logger::CheckDeclaration(void)
 }
 
 bool
-Logger::isTaskDeclared()
+Logger::isTaskDeclared() const
 {
   return ExternalLogger::IsDeclared();
 }
 
 bool
-Logger::isLoggerActive()
+Logger::isLoggerActive() const
 {
   Poco::ScopedRWLock protect(lock, false);
   return _logger.isLoggerActive();
