@@ -75,8 +75,9 @@ static bool too_close(const FlatGeoPoint& p1, const FlatGeoPoint& p2)
 }
 
 void FlatTriangleFan::calc_bb() {
+  assert(vs.size()>1);
   bb_self = FlatBoundingBox(vs[0]);
-  for (VertexVector::const_iterator it = vs.begin();
+  for (VertexVector::const_iterator it = vs.begin()+1;
        it != vs.end(); ++it) {
     bb_self.expand(*it);
   }
