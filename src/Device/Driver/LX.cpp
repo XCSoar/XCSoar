@@ -116,29 +116,31 @@ public:
 };
 
 static char
-calc_crc_char(char d, char crc) {
-    char tmp;
-    const char crcpoly = 0x69;
-    int count;
+calc_crc_char(char d, char crc)
+{
+  char tmp;
+  const char crcpoly = 0x69;
+  int count;
 
-    for (count = 8; --count >= 0; d <<= 1) {
-        tmp = crc ^ d;
-        crc <<= 1;
-        if (tmp & 0x80)
-            crc ^= crcpoly;
-    }
-    return crc;
+  for (count = 8; --count >= 0; d <<= 1) {
+    tmp = crc ^ d;
+    crc <<= 1;
+    if (tmp & 0x80)
+      crc ^= crcpoly;
+  }
+  return crc;
 }
 
 static char
-filser_calc_crc(const char *p0, size_t len, char crc) {
-    const char *p = p0;
-    size_t i;
+filser_calc_crc(const char *p0, size_t len, char crc)
+{
+  const char *p = p0;
+  size_t i;
 
-    for (i = 0; i < len; i++)
-        crc = calc_crc_char(p[i], crc);
+  for (i = 0; i < len; i++)
+    crc = calc_crc_char(p[i], crc);
 
-    return crc;
+  return crc;
 }
 
 static bool
@@ -187,7 +189,7 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   if (tas_available)
     GPS_INFO->ProvideTrueAirspeedWithAltitude(Units::ToSysUnit(airspeed,
-                                                               unKiloMeterPerHour),
+                                              unKiloMeterPerHour),
                                               alt);
 
   if (line.read_checked(value)) {
@@ -343,10 +345,14 @@ void
 LXDevice::LoadPilotInfo(const Declaration *decl)
 {
   memset((void*)lxDevice_Pilot.unknown1, 0, sizeof(lxDevice_Pilot.unknown1));
-  copy_space_padded(lxDevice_Pilot.PilotName, decl->PilotName, sizeof(lxDevice_Pilot.PilotName));
-  copy_space_padded(lxDevice_Pilot.GliderType, decl->AircraftType, sizeof(lxDevice_Pilot.GliderType));
-  copy_space_padded(lxDevice_Pilot.GliderID, decl->AircraftReg, sizeof(lxDevice_Pilot.GliderID));
-  copy_space_padded(lxDevice_Pilot.CompetitionID, decl->CompetitionId, sizeof(lxDevice_Pilot.CompetitionID));
+  copy_space_padded(lxDevice_Pilot.PilotName, decl->PilotName,
+                    sizeof(lxDevice_Pilot.PilotName));
+  copy_space_padded(lxDevice_Pilot.GliderType, decl->AircraftType,
+                    sizeof(lxDevice_Pilot.GliderType));
+  copy_space_padded(lxDevice_Pilot.GliderID, decl->AircraftReg,
+                    sizeof(lxDevice_Pilot.GliderID));
+  copy_space_padded(lxDevice_Pilot.CompetitionID, decl->CompetitionId,
+                    sizeof(lxDevice_Pilot.CompetitionID));
   memset((void*)lxDevice_Pilot.unknown2, 0, sizeof(lxDevice_Pilot.unknown2));
 }
 
@@ -370,7 +376,8 @@ LXDevice::LoadTask(const Declaration *decl)
   if (decl->size() < 2)
       return false;
 
-  memset((void*)lxDevice_Declaration.unknown1, 0, sizeof(lxDevice_Declaration.unknown1));
+  memset((void*)lxDevice_Declaration.unknown1, 0,
+          sizeof(lxDevice_Declaration.unknown1));
 
   if (DeclDate.day > 0 && DeclDate.day < 32
       && DeclDate.month > 0 && DeclDate.month < 13) {
@@ -403,11 +410,14 @@ LXDevice::LoadTask(const Declaration *decl)
     } else if (i <= decl->size()) {
       lxDevice_Declaration.tptypes[i] = 1;
       lxDevice_Declaration.Longitudes[i] =
-          (int32_t)(decl->get_location(i - 1).Longitude.value_degrees() * 60000);
+          (int32_t)(decl->get_location(i - 1).Longitude.value_degrees()
+           * 60000);
       lxDevice_Declaration.Latitudes[i] =
-          (int32_t)(decl->get_location(i - 1).Latitude.value_degrees() * 60000);
-      copy_space_padded(lxDevice_Declaration.WaypointNames[i], decl->get_name(i - 1),
-          sizeof(lxDevice_Declaration.WaypointNames[i]));
+          (int32_t)(decl->get_location(i - 1).Latitude.value_degrees()
+           * 60000);
+      copy_space_padded(lxDevice_Declaration.WaypointNames[i],
+                        decl->get_name(i - 1),
+                        sizeof(lxDevice_Declaration.WaypointNames[i]));
 
     } else if (i == decl->size() + 1) { // landing
       lxDevice_Declaration.tptypes[i] = 2;
@@ -438,15 +448,16 @@ void
 LXDevice::WriteTask()
 {
   CRCWrite((const char*)&lxDevice_Declaration,
-                                    sizeof(lxDevice_Declaration.unknown1) +
-                                    sizeof(lxDevice_Declaration.dayinput) +
-                                    sizeof(lxDevice_Declaration.monthinput) +
-                                    sizeof(lxDevice_Declaration.yearinput) +
-                                    sizeof(lxDevice_Declaration.dayuser) +
-                                    sizeof(lxDevice_Declaration.monthuser) +
-                                    sizeof(lxDevice_Declaration.yearuser));
+            sizeof(lxDevice_Declaration.unknown1) +
+            sizeof(lxDevice_Declaration.dayinput) +
+            sizeof(lxDevice_Declaration.monthinput) +
+            sizeof(lxDevice_Declaration.yearinput) +
+            sizeof(lxDevice_Declaration.dayuser) +
+            sizeof(lxDevice_Declaration.monthuser) +
+            sizeof(lxDevice_Declaration.yearuser));
 
-  CRCWrite((const char*)&lxDevice_Declaration.taskid, sizeof(lxDevice_Declaration.taskid));
+  CRCWrite((const char*)&lxDevice_Declaration.taskid,
+            sizeof(lxDevice_Declaration.taskid));
   CRCWrite((char)lxDevice_Declaration.numtps);
 
   for (unsigned int i = 0; i < NUMTPS; i++) {
@@ -459,7 +470,8 @@ LXDevice::WriteTask()
     CRCWriteint32(lxDevice_Declaration.Latitudes[i]);
   }
   for (unsigned int i = 0; i < NUMTPS; i++) {
-    CRCWrite(lxDevice_Declaration.WaypointNames[i], sizeof(lxDevice_Declaration.WaypointNames[i]));
+    CRCWrite(lxDevice_Declaration.WaypointNames[i],
+             sizeof(lxDevice_Declaration.WaypointNames[i]));
   }
   return;
 }
@@ -467,14 +479,15 @@ LXDevice::WriteTask()
 void
 LXDevice::LoadContestClass(const Declaration *decl)
 {
-  copy_space_padded(lxDevice_ContestClass.contest_class, _T(""), sizeof(lxDevice_ContestClass.contest_class));
+  copy_space_padded(lxDevice_ContestClass.contest_class, _T(""),
+                    sizeof(lxDevice_ContestClass.contest_class));
 }
 
 void
 LXDevice::WriteContestClass()
 {
   CRCWrite((const char*)&lxDevice_ContestClass.contest_class,
-      sizeof(lxDevice_ContestClass.contest_class));
+            sizeof(lxDevice_ContestClass.contest_class));
   return;
 }
 
