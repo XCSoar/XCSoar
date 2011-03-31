@@ -316,6 +316,8 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
       parms.vertex_counter+= it->vs.size();
       parms.fan_counter++;
       return true;
+    } else {
+      it->vs.clear();
     }
   }
 
