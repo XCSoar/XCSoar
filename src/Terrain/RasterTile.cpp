@@ -997,6 +997,10 @@ RasterTileCache::FirstIntersection(int x0, int y0,
   while (h_terrain>=0) {
 
     if (!step_counter) {
+
+      if ((_x >= width) || (_y >= height))
+        break; // outside bounds
+
       h_terrain = GetFieldDirect(x_int, y_int, tile_index)+h_safety;
       step_counter = tile_index<0? step_coarse: 1;
 
@@ -1170,7 +1174,7 @@ RasterTileCache::Intersection(int x0, int y0,
     if (!step_counter) {
 
       if ((_x >= width) || (_y >= height))
-        return RasterLocation(x1, y1); // outside overall bounds
+        break; // outside bounds
 
       h_terrain = GetFieldDirect(_x, _y, tile_index);
       step_counter = tile_index<0? step_coarse: 1;
@@ -1184,9 +1188,8 @@ RasterTileCache::Intersection(int x0, int y0,
       if (h_int < h_terrain)
         return RasterLocation(_x, _y);
 
-      if (h_int <= 0) {
-        return RasterLocation(x1, y1); // reached max range
-      }
+      if (h_int <= 0) 
+        break; // reached max range
     }
 
     if ((_x==(unsigned)x1) && (_y==(unsigned)y1))
