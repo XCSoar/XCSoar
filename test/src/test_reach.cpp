@@ -77,7 +77,7 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
         AGeoPoint adest(x, h);
         short ha;
         route.find_positive_arrival(adest, ha);
-        if ((i % 10 == 0) && (j % 10 == 0)) {
+        if ((i % 5 == 0) && (j % 5 == 0)) {
           AGeoPoint ao2(x, h+1000);
           route.solve_reach(ao2);
         }
