@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_GLIDECOMPUTER_TASK_HPP
 
 #include "GlideComputerBlackboard.hpp"
+#include "GPSClock.hpp"
 
 class ProtectedTaskManager;
 class RasterTerrain;
@@ -32,6 +33,8 @@ class RasterTerrain;
 class GlideComputerTask: 
   virtual public GlideComputerBlackboard 
 {
+  GPSClock route_clock;
+  GPSClock reach_clock;
 public:
   GlideComputerTask(ProtectedTaskManager& task);
 

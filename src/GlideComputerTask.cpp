@@ -38,6 +38,8 @@ using std::max;
 
 GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task):
   GlideComputerBlackboard(task),
+  route_clock(fixed(5)),
+  reach_clock(fixed(5)),
   terrain(NULL)
 {}
 
@@ -45,6 +47,8 @@ void
 GlideComputerTask::ResetFlight(const bool full)
 {
   m_task.reset();
+  route_clock.reset();
+  reach_clock.reset();
 }
 
 void
@@ -145,7 +149,7 @@ GlideComputerTask::ProcessIdle()
   if (terrain) {
     if (sol.defined()) {
       const AGeoPoint dest(v.end_point(start), sol.MinHeight);
-      if (time_advanced()) {
+      if (route_clock.check_advance(Basic().Time)) {
         m_task.route_solve(dest, start, h_ceiling);
         SetCalculated().TerrainWarning = m_task.intersection(start, dest,
                                                              SetCalculated().TerrainWarningLocation);
@@ -167,7 +171,7 @@ GlideComputerTask::TerrainWarning()
 
     const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
     const AGeoPoint start (state.get_location(), state.NavAltitude);
-    if (time_advanced()) {
+    if (reach_clock.check_advance(Basic().Time)) {
       m_task.solve_reach(start);
       SetCalculated().TerrainBase = fixed(m_task.get_terrain_base());
     }
