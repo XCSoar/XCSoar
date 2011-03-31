@@ -158,36 +158,7 @@ DeviceBlackboard::ProcessSimulation()
   ScopeLock protect(mutexBlackboard);
   NMEA_INFO &basic = SetBasic();
 
-  basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
-  basic.gps.SatellitesUsed = 6;
-  basic.gps.Simulator = true;
-  basic.gps.real = false;
-  basic.gps.MovementDetected = false;
-
-#ifdef ANDROID
-  basic.gps.AndroidInternalGPS = false;
-#endif
-
-  basic.Location = FindLatitudeLongitude(basic.Location, basic.TrackBearing,
-                                         basic.GroundSpeed);
-  basic.LocationAvailable.update(basic.Time);
-  basic.GPSAltitudeAvailable.update(basic.Time);
-  basic.TrackBearingAvailable.update(basic.Time);
-  basic.GroundSpeedAvailable.update(basic.Time);
-
-  basic.Time += fixed_one;
-  long tsec = (long)basic.Time;
-  basic.DateTime.hour = tsec / 3600;
-  basic.DateTime.minute = (tsec - basic.DateTime.hour * 3600) / 60;
-  basic.DateTime.second = tsec - basic.DateTime.hour * 3600
-    - basic.DateTime.minute * 60;
-
-  // use this to test FLARM parsing/display
-  if (is_debug() && !is_altair())
-    DeviceList[0].parser.TestRoutine(&basic);
-
-  // clear Airspeed as it is not available in simulation mode
-  basic.AirspeedAvailable.clear();
+  simulator.Process(basic);
 
   TriggerGPSUpdate();
 }

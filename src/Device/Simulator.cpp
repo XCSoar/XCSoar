@@ -23,9 +23,14 @@ Copyright_License {
 
 */
 
+#include "Device/Simulator.hpp"
 #include "Device/Parser.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "../Simulator.hpp"
+#include "OS/Clock.hpp"
+#include "Asset.hpp"
+#include "Engine/Math/Earth.hpp"
 
 #include <stdio.h>
 
@@ -88,4 +93,42 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 
   line = NMEAInputLine(t_laa2);
   PFLAA(line, GPS_INFO);
+}
+
+void
+Simulator::Process(NMEA_INFO &basic)
+{
+  if (!is_simulator())
+    return;
+
+  basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
+  basic.gps.SatellitesUsed = 6;
+  basic.gps.Simulator = true;
+  basic.gps.real = false;
+  basic.gps.MovementDetected = false;
+
+#ifdef ANDROID
+  basic.gps.AndroidInternalGPS = false;
+#endif
+
+  basic.Location = FindLatitudeLongitude(basic.Location, basic.TrackBearing,
+                                         basic.GroundSpeed);
+  basic.LocationAvailable.update(basic.Time);
+  basic.GPSAltitudeAvailable.update(basic.Time);
+  basic.TrackBearingAvailable.update(basic.Time);
+  basic.GroundSpeedAvailable.update(basic.Time);
+
+  basic.Time += fixed_one;
+  long tsec = (long)basic.Time;
+  basic.DateTime.hour = tsec / 3600;
+  basic.DateTime.minute = (tsec - basic.DateTime.hour * 3600) / 60;
+  basic.DateTime.second = tsec - basic.DateTime.hour * 3600
+    - basic.DateTime.minute * 60;
+
+  // use this to test FLARM parsing/display
+  if (is_debug() && !is_altair())
+    parser.TestRoutine(&basic);
+
+  // clear Airspeed as it is not available in simulation mode
+  basic.AirspeedAvailable.clear();
 }

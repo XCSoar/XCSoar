@@ -27,6 +27,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsComputerBlackboard.hpp"
 #include "BasicComputer.hpp"
+#include "Device/Simulator.hpp"
 
 class GlidePolar;
 
@@ -41,6 +42,8 @@ class DeviceBlackboard:
   public BaseBlackboard,
   public SettingsComputerBlackboard
 {
+  Simulator simulator;
+
   NMEA_INFO state_last;
   BasicComputer computer;
 

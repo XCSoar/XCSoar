@@ -37,7 +37,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Asset.hpp"
-#include "Simulator.hpp"
+#include "../Simulator.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/DeviceConfig.hpp"
 
