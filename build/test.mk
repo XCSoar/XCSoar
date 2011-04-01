@@ -935,32 +935,24 @@ $(TARGET_BIN_DIR)/RunDeviceDriver$(TARGET_EXEEXT): $(RUN_DEVICE_DRIVER_OBJS) $(R
 
 RUN_DECLARE_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
-	$(SRC)/UtilsText.cpp \
 	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
-	$(SRC)/Device/Descriptor.cpp \
-	$(SRC)/Device/FLARM.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/OS/Clock.cpp \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
-	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation.cpp \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeNMEALogger.cpp \
 	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \

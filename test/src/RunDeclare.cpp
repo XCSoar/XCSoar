@@ -24,16 +24,15 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
-#include "Device/Descriptor.hpp"
 #include "Device/device.hpp"
 #include "Device/Geoid.h"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
 #include "Thread/Trigger.hpp"
-#include "DeviceBlackboard.hpp"
 #include "OS/PathName.hpp"
 #include "Protection.hpp"
+#include "Operation.hpp"
 
 #ifdef HAVE_POSIX
 #include "Device/TTYPort.hpp"
@@ -44,10 +43,6 @@ Copyright_License {
 #include <stdio.h>
 
 Waypoints way_points;
-
-DeviceBlackboard device_blackboard;
-
-static DeviceDescriptor device;
 
 /*
  * Fake Protection.cpp
@@ -65,13 +60,13 @@ void TriggerVarioUpdate() {}
 bool
 devHasBaroSource()
 {
-  return device.IsBaroSource();
+  return true;
 }
 
 bool
 HaveCondorDevice()
 {
-  return device.IsCondor();
+  return false;
 }
 
 /*
@@ -99,12 +94,6 @@ InputEvents::processNmea(unsigned key)
 {
   return true;
 }
-
-/*
- * Fake Settings*Blackboard.cpp
- */
-
-SettingsComputerBlackboard::SettingsComputerBlackboard() {}
 
 /*
  * The actual code.
@@ -151,6 +140,8 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
+  assert(driver->CreateOnPort != NULL);
+
 #ifdef HAVE_POSIX
   TTYPort *port = new TTYPort(port_name, baud, *(Port::Handler *)NULL);
 #else
@@ -162,8 +153,12 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  if (!device.Open(port, driver)) {
-    delete device.Com;
+  Device *device = driver->CreateOnPort(port);
+  assert(device != NULL);
+
+  OperationEnvironment env;
+  if (!device->Open(env)) {
+    delete port;
     fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
     return EXIT_FAILURE;
   }
@@ -181,10 +176,11 @@ int main(int argc, char **argv)
   declaration.append(MakeWaypoint(_T("Bergneustadt"), 488,
                                   7.7061111111111114, 51.051944444444445));
 
-  if (device.Declare(&declaration))
+  if (device->Declare(&declaration, env))
     fprintf(stderr, "Declaration ok\n");
   else
     fprintf(stderr, "Declaration failed\n");
 
-  device.Close();
+  delete device;
+  delete port;
 }
