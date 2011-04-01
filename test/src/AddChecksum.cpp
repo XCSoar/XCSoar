@@ -26,7 +26,7 @@
  *
  */
 
-#include "NMEA/Checksum.h"
+#include "NMEA/Checksum.hpp"
 
 #include <stdio.h>
 #include <string.h>

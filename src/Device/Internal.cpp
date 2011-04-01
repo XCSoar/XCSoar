@@ -24,7 +24,7 @@ Copyright_License {
 #include "Device/Internal.hpp"
 
 #include "Device/Port.hpp"
-#include "NMEA/Checksum.h"
+#include "NMEA/Checksum.hpp"
 
 #include <assert.h>
 #include <stdio.h>

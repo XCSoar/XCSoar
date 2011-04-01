@@ -30,7 +30,7 @@ Copyright_License {
 #include "FLARM/FlarmCalculations.h"
 #include "Math/Earth.hpp"
 #include "NMEA/Info.hpp"
-#include "NMEA/Checksum.h"
+#include "NMEA/Checksum.hpp"
 #include "NMEA/InputLine.hpp"
 #include "StringUtil.hpp"
 #include "InputEvents.hpp"

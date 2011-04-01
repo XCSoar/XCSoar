@@ -29,7 +29,7 @@ Copyright_License {
 #include "Device/Driver/EW.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port.hpp"
-#include "NMEA/Checksum.h"
+#include "NMEA/Checksum.hpp"
 #include "Operation.hpp"
 
 #include <tchar.h>
