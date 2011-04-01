@@ -148,6 +148,8 @@ int main(int argc, char **argv)
 
   GPSClock log_clock(fixed(1));
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+    TrimRight(buffer);
+
     device.LineReceived(buffer);
 
     if (log_clock.check_advance(device_blackboard.Basic().Time))
