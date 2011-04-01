@@ -25,13 +25,10 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
-#include "Device/Descriptor.hpp"
 #include "Device/device.hpp"
 #include "Device/Geoid.h"
-#include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
-#include "Thread/Trigger.hpp"
 #include "DeviceBlackboard.hpp"
 #include "OS/PathName.hpp"
 #include "Protection.hpp"
@@ -40,10 +37,6 @@ Copyright_License {
 #include <stdio.h>
 
 Waypoints way_points;
-
-DeviceBlackboard device_blackboard;
-
-static DeviceDescriptor device;
 
 /*
  * Fake Protection.cpp
@@ -61,13 +54,13 @@ void TriggerVarioUpdate() {}
 bool
 devHasBaroSource()
 {
-  return device.IsBaroSource();
+  return true;
 }
 
 bool
 HaveCondorDevice()
 {
-  return device.IsCondor();
+  return false;
 }
 
 /*
@@ -127,22 +120,24 @@ int main(int argc, char **argv)
   }
 
   NullPort port;
+  Device *device = driver->CreateOnPort != NULL
+    ? driver->CreateOnPort(&port)
+    : NULL;
 
-  if (!device.Open(&port, driver)) {
-    fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
-    return 1;
-  }
+  NMEAParser parser;
 
-  device.enable_baro = true;
+  NMEA_INFO data;
+  data.reset();
 
   char buffer[1024];
   for (unsigned i = 0; i < 10 &&
          fgets(buffer, sizeof(buffer), stdin) != NULL; ++i)
-    device.LineReceived(buffer);
+    if (device == NULL || !device->ParseNMEA(buffer, &data, true))
+      parser.ParseNMEAString_Internal(buffer, &data);
 
   PathName igc_path(argv[2]);
-  IGCWriter writer(igc_path, device_blackboard.Basic());
-  writer.header(device_blackboard.Basic().DateTime,
+  IGCWriter writer(igc_path, data);
+  writer.header(data.DateTime,
                 _T("Manfred Mustermann"), _T("Ventus"),
                 _T("D-1234"), _T("Foo"), driver_name);
 
@@ -150,10 +145,11 @@ int main(int argc, char **argv)
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
     TrimRight(buffer);
 
-    device.LineReceived(buffer);
+    if (device == NULL || !device->ParseNMEA(buffer, &data, true))
+      parser.ParseNMEAString_Internal(buffer, &data);
 
-    if (log_clock.check_advance(device_blackboard.Basic().Time))
-      writer.LogPoint(device_blackboard.Basic());
+    if (log_clock.check_advance(data.Time))
+      writer.LogPoint(data);
   }
 
   writer.flush();

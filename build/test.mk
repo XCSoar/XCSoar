@@ -983,23 +983,17 @@ $(TARGET_BIN_DIR)/RunDeclare$(TARGET_EXEEXT): $(RUN_DECLARE_OBJS) $(RUN_DECLARE_
 RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
-	$(SRC)/UtilsText.cpp \
+	$(SRC)/FLARM/State.cpp \
 	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/NullPort.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
-	$(SRC)/Device/Descriptor.cpp \
-	$(SRC)/Device/FLARM.cpp \
-	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/IO/CSVLine.cpp \
-	$(SRC)/Profile/ProfileKeys.cpp \
-	$(SRC)/Thread/Thread.cpp \
-	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/Logger/IGCWriter.cpp \
@@ -1009,10 +1003,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/OS/Clock.cpp \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeNMEALogger.cpp \
 	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
