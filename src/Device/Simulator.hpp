@@ -24,13 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_SIMULATOR_HPP
 #define XCSOAR_DEVICE_SIMULATOR_HPP
 
-#include "Device/Parser.hpp"
-
 struct NMEA_INFO;
 
 class Simulator {
-  NMEAParser parser;
-
   void GenerateFLARMTraffic(NMEA_INFO &basic);
 
 public:

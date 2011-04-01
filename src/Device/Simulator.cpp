@@ -92,6 +92,7 @@ Simulator::GenerateFLARMTraffic(NMEA_INFO &basic)
   AppendNMEAChecksum(t_laa2);
   AppendNMEAChecksum(t_lau);
 
+  NMEAParser parser;
   parser.ParseNMEAString_Internal(t_lau, &basic);
   parser.ParseNMEAString_Internal(t_laa1, &basic);
   parser.ParseNMEAString_Internal(t_laa2, &basic);

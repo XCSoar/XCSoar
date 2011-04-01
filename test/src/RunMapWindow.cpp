@@ -65,8 +65,6 @@ Mutex mutexBlackboard;
 void MapProjectionBlackboard::ReadMapProjection(const MapWindowProjection &) {}
 #endif
 
-NMEAParser::NMEAParser() {}
-
 DeviceBlackboard device_blackboard;
 
 ProtectedTaskManager *protected_task_manager;
