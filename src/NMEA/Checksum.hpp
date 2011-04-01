@@ -83,4 +83,11 @@ gcc_pure
 bool
 VerifyNMEAChecksum(const char *p);
 
+/**
+ * Caclulates the checksum of the specified string, and appends it at
+ * the end, preceded by an asterisk ('*').
+ */
+void
+AppendNMEAChecksum(char *p);
+
 #endif

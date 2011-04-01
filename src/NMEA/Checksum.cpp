@@ -26,6 +26,7 @@ Copyright_License {
 #include <cassert>
 #include <cstring>
 #include <cstdlib>
+#include <cstdio>
 #include <stdint.h>
 
 bool
@@ -47,4 +48,12 @@ VerifyNMEAChecksum(const char *p)
   uint8_t CalcCheckSum = NMEAChecksum(p, asterisk - p);
 
   return CalcCheckSum == ReadCheckSum;
+}
+
+void
+AppendNMEAChecksum(char *p)
+{
+  assert(p != NULL);
+
+  sprintf(p + strlen(p), "*%02X", NMEAChecksum(p));
 }
