@@ -650,8 +650,7 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
   if (StringToIntDflt(node.getAttribute(_T("Border")), 0))
     style.border();
 
-  bool advanced = _tcschr(Caption, _T('*')) != NULL;
-  advanced |= (StringToIntDflt(node.getAttribute(_T("Expert")), 0) == 1);
+  bool advanced = (StringToIntDflt(node.getAttribute(_T("Expert")), 0) == 1);
 
   // PropertyControl (WndProperty)
   if (_tcscmp(node.getName(), _T("Edit")) == 0) {
