@@ -269,8 +269,7 @@ void
 Pages::LoadDefault()
 {
   pages[0]=PageLayout(PageLayout::tlMapAndInfoBoxes);
-  pages[1]=PageLayout(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(false, 3));
-  pages[2]=PageLayout(PageLayout::tlMap);
+  pages[1]=PageLayout(PageLayout::tlMap);
 
   addValidLayout(PageLayout());
   addValidLayout(PageLayout(PageLayout::tlMapAndInfoBoxes));
