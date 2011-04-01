@@ -153,4 +153,6 @@ int main(int argc, char **argv)
     if (log_clock.check_advance(device_blackboard.Basic().Time))
       writer.LogPoint(device_blackboard.Basic());
   }
+
+  writer.flush();
 }
