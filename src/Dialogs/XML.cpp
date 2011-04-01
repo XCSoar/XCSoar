@@ -911,7 +911,7 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
       form.AddNamed(Name, window);
 
     if (expert)
-      form.AddAdvanced(window);
+      form.AddExpert(window);
 
     form.AddDestruct(window);
   }

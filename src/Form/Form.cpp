@@ -179,8 +179,8 @@ WndForm::FindByName(const TCHAR *name)
 void
 WndForm::FilterAdvanced(bool advanced)
 {
-  for (window_list_t::const_iterator i = advanced_windows.begin();
-       i != advanced_windows.end(); ++i)
+  for (window_list_t::const_iterator i = expert_windows.begin();
+       i != expert_windows.end(); ++i)
     (*i)->set_visible(advanced);
 }
 

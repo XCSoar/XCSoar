@@ -105,7 +105,7 @@ private:
   /**
    * List of windows which should only be visible in "advanced" mode.
    */
-  window_list_t advanced_windows;
+  window_list_t expert_windows;
 
 protected:
   SingleWindow &main_window;
@@ -210,8 +210,8 @@ public:
   /**
    * Adds a #Window to the "advanced window list" (#advanced_windows).
    */
-  void AddAdvanced(Window *window) {
-    advanced_windows.push_back(window);
+  void AddExpert(Window *window) {
+    expert_windows.push_back(window);
   }
 
   /**
