@@ -35,6 +35,11 @@ NMEAChecksum(const char *p)
 {
   unsigned char checksum = 0;
 
+  /* skip the dollar sign at the beginning (the exclamation mark is
+     used by CAI302 */
+  if (*p == '$' || *p == '!')
+    ++p;
+
   while (*p != 0)
     checksum ^= *p++;
 
@@ -53,7 +58,16 @@ NMEAChecksum(const char *p, unsigned length)
 {
   unsigned char checksum = 0;
 
-  for (unsigned i = 0; i < length; ++i)
+  unsigned i = 0;
+
+  /* skip the dollar sign at the beginning (the exclamation mark is
+     used by CAI302 */
+  if (length > 0 && (*p == '$' || *p == '!')) {
+    ++i;
+    ++p;
+  }
+
+  for (; i < length; ++i)
     checksum ^= *p++;
 
   return checksum;

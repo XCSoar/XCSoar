@@ -38,9 +38,6 @@ main(int argc, char **argv)
 
   const char *start = buffer;
   while ((start = fgets(buffer, sizeof(buffer) - 3, stdin)) != NULL) {
-    if (*start == '$')
-      ++start;
-
     const char *end = strchr(start, '*');
     if (end == NULL) {
       end = start + strlen(start);

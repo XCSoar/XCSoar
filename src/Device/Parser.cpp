@@ -754,7 +754,7 @@ NMEAParser::NMEAChecksum(const char *String)
     return false;
 
   ReadCheckSum = (unsigned char)ReadCheckSum2;
-  CalcCheckSum = ::NMEAChecksum(String + 1, pEnd - String - 1);
+  CalcCheckSum = ::NMEAChecksum(String, pEnd - String);
 
   if (CalcCheckSum == ReadCheckSum)
     return true;
