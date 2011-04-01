@@ -650,7 +650,7 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
   if (StringToIntDflt(node.getAttribute(_T("Border")), 0))
     style.border();
 
-  bool advanced = (StringToIntDflt(node.getAttribute(_T("Expert")), 0) == 1);
+  bool expert = (StringToIntDflt(node.getAttribute(_T("Expert")), 0) == 1);
 
   // PropertyControl (WndProperty)
   if (_tcscmp(node.getName(), _T("Edit")) == 0) {
@@ -910,7 +910,7 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
     if (!string_is_empty(Name))
       form.AddNamed(Name, window);
 
-    if (advanced)
+    if (expert)
       form.AddAdvanced(window);
 
     form.AddDestruct(window);
