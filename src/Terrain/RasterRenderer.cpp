@@ -106,8 +106,7 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
     /* disable slope shading when zoomed out very far (too tiny) */
     quantisation_effective = 0;
 
-  height_matrix.Fill(map, projection, quantisation_pixels,
-                     pixel_size * 3 < map_pixel_size * 2);
+  height_matrix.Fill(map, projection, quantisation_pixels, true);
 }
 
 void
