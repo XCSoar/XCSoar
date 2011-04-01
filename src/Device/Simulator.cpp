@@ -27,6 +27,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "NMEA/Checksum.hpp"
 #include "../Simulator.hpp"
 #include "OS/Clock.hpp"
 #include "Asset.hpp"
@@ -38,7 +39,9 @@ Copyright_License {
  * This function creates some simulated traffic for FLARM debugging
  * @param GPS_INFO Pointer to the NMEA_INFO struct
  */
-void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
+void
+Simulator::GenerateFLARMTraffic(NMEA_INFO &basic)
+{
   static int i = 90;
 
   i++;
@@ -78,21 +81,20 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   char t_laa1[50];
-  sprintf(t_laa1, "%d,%d,%d,%d,2,DDA85C,%d,0,35,0,1", l, n1, e1, h1, t1);
+  sprintf(t_laa1, "$PFLAA,%d,%d,%d,%d,2,DDA85C,%d,0,35,0,1", l, n1, e1, h1, t1);
   char t_laa2[50];
-  sprintf(t_laa2, "0,%d,%d,%d,2,AA9146,%d,0,27,0,1", n2, e2, h2, t2);
+  sprintf(t_laa2, "$PFLAA,0,%d,%d,%d,2,AA9146,%d,0,27,0,1", n2, e2, h2, t2);
 
   char t_lau[50];
-  sprintf(t_lau, "2,1,2,1,%d", l);
+  sprintf(t_lau, "$PFLAU,2,1,2,1,%d", l);
 
-  NMEAInputLine line(t_lau);
-  PFLAU(line, GPS_INFO->flarm, GPS_INFO->Time);
+  AppendNMEAChecksum(t_laa1);
+  AppendNMEAChecksum(t_laa2);
+  AppendNMEAChecksum(t_lau);
 
-  line = NMEAInputLine(t_laa1);
-  PFLAA(line, GPS_INFO);
-
-  line = NMEAInputLine(t_laa2);
-  PFLAA(line, GPS_INFO);
+  parser.ParseNMEAString_Internal(t_lau, &basic);
+  parser.ParseNMEAString_Internal(t_laa1, &basic);
+  parser.ParseNMEAString_Internal(t_laa2, &basic);
 }
 
 void
@@ -127,7 +129,7 @@ Simulator::Process(NMEA_INFO &basic)
 
   // use this to test FLARM parsing/display
   if (is_debug() && !is_altair())
-    parser.TestRoutine(&basic);
+    GenerateFLARMTraffic(basic);
 
   // clear Airspeed as it is not available in simulation mode
   basic.AirspeedAvailable.clear();

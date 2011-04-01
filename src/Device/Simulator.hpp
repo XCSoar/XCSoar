@@ -31,6 +31,8 @@ struct NMEA_INFO;
 class Simulator {
   NMEAParser parser;
 
+  void GenerateFLARMTraffic(NMEA_INFO &basic);
+
 public:
   void Process(NMEA_INFO &basic);
 };

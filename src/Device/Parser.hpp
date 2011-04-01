@@ -60,8 +60,6 @@ public:
   bool ParseNMEAString_Internal(const char *line, NMEA_INFO *GPS_INFO);
 
 public:
-  void TestRoutine(NMEA_INFO *GPS_INFO);
-
   // these routines can be used by other parsers.
 
   /**
