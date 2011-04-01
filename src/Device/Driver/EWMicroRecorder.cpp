@@ -28,10 +28,10 @@ Copyright_License {
 
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver.hpp"
-#include "Device/Parser.hpp"
 #include "Device/Port.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "NMEA/Checksum.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Units.hpp"
 #include "PeriodClock.hpp"
@@ -91,7 +91,7 @@ bool
 EWMicroRecorderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                                  bool enable_baro)
 {
-  if (!NMEAParser::NMEAChecksum(String))
+  if (!VerifyNMEAChecksum(String))
     return false;
 
   NMEAInputLine line(String);

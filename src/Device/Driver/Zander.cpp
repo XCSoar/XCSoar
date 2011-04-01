@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "Device/Driver/Zander.hpp"
-#include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
 #include "Protection.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "NMEA/Checksum.hpp"
 #include "Units.hpp"
 
 #include <stdlib.h>
@@ -75,7 +75,7 @@ bool
 ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                         bool enable_baro)
 {
-  if (!NMEAParser::NMEAChecksum(String))
+  if (!VerifyNMEAChecksum(String))
     return false;
 
   NMEAInputLine line(String);

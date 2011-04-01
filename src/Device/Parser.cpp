@@ -737,29 +737,7 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 bool
 NMEAParser::NMEAChecksum(const char *String)
 {
-  if (ignore_checksum)
-    return true;
-
-  unsigned char ReadCheckSum, CalcCheckSum;
-  const char *pEnd;
-
-  pEnd = strrchr(String, '*');
-  if(pEnd == NULL)
-    return false;
-
-  const char *checksum_string = pEnd + 1;
-  char *endptr;
-  unsigned long ReadCheckSum2 = strtoul(checksum_string, &endptr, 16);
-  if (endptr == checksum_string || *endptr != 0 || ReadCheckSum2 >= 0x100)
-    return false;
-
-  ReadCheckSum = (unsigned char)ReadCheckSum2;
-  CalcCheckSum = ::NMEAChecksum(String, pEnd - String);
-
-  if (CalcCheckSum == ReadCheckSum)
-    return true;
-  else
-    return false;
+  return ignore_checksum || VerifyNMEAChecksum(String);
 }
 
 /**

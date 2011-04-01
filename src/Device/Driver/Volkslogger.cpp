@@ -27,7 +27,6 @@ Copyright_License {
 // adding baro alt sentance parser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
 #include "Device/Driver/Volkslogger.hpp"
-#include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port.hpp"
 #include "ProgressGlue.hpp"
@@ -37,6 +36,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "NMEA/Checksum.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
@@ -110,7 +110,7 @@ bool
 VolksloggerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                              bool enable_baro)
 {
-  if (!NMEAParser::NMEAChecksum(String))
+  if (!VerifyNMEAChecksum(String))
     return false;
 
   NMEAInputLine line(String);

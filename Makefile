@@ -241,6 +241,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/ClimbHistory.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/Replay/Replay.cpp \
 	$(SRC)/Replay/IGCParser.cpp \

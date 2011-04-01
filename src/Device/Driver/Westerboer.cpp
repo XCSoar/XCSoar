@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "Device/Driver/Westerboer.hpp"
-#include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
 #include "Units.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "NMEA/Checksum.hpp"
 #include "Protection.hpp"
 
 #include <tchar.h>
@@ -103,7 +103,7 @@ bool
 WesterboerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                             bool enable_baro)
 {
-  if (!NMEAParser::NMEAChecksum(String))
+  if (!VerifyNMEAChecksum(String))
     return false;
 
   NMEAInputLine line(String);

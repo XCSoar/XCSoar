@@ -432,6 +432,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/Math/fixed.cpp \
@@ -912,6 +913,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
@@ -934,21 +936,18 @@ $(TARGET_BIN_DIR)/RunDeviceDriver$(TARGET_EXEEXT): $(RUN_DEVICE_DRIVER_OBJS) $(R
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_DECLARE_SOURCES = \
-	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
-	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
-	$(SRC)/FLARM/FlarmCalculations.cpp \
-	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -971,8 +970,8 @@ endif
 RUN_DECLARE_OBJS = $(call SRC_TO_OBJ,$(RUN_DECLARE_SOURCES))
 RUN_DECLARE_LDADD = \
 	$(ZZIP_LIBS) \
-	$(ENGINE_LIBS) \
 	$(DRIVER_LIBS) \
+	$(ENGINE_LIBS) \
 	$(MATH_LIBS) \
 	$(UTIL_LIBS)
 $(RUN_DECLARE_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
@@ -993,6 +992,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
@@ -1033,6 +1033,7 @@ RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(SRC)/BasicComputer.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \

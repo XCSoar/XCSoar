@@ -26,13 +26,13 @@ Copyright_License {
 // all other functions are called from windows message loop thread
 
 #include "Device/Driver/CAI302.hpp"
-#include "Device/Parser.hpp"
 #include "Device/Port.hpp"
 #include "Device/Driver.hpp"
 #include "Protection.hpp"
 #include "Units.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "NMEA/Checksum.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Math/FastMath.h"
 #include "Operation.hpp"
@@ -192,7 +192,7 @@ bool
 CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
                         bool enable_baro)
 {
-  if (!NMEAParser::NMEAChecksum(String))
+  if (!VerifyNMEAChecksum(String))
     return false;
 
   NMEAInputLine line(String);

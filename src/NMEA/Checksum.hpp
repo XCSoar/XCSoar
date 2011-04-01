@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_CHECKSUM_HPP
 #define XCSOAR_NMEA_CHECKSUM_HPP
 
+#include "Compiler.h"
+
 /**
  * Calculates the checksum for the specified line (without the
  * asterisk and the newline character).
@@ -72,5 +74,13 @@ NMEAChecksum(const char *p, unsigned length)
 
   return checksum;
 }
+
+/**
+ * Verify the NMEA checksum at the end of the specified string,
+ * separated with an asterisk ('*').
+ */
+gcc_pure
+bool
+VerifyNMEAChecksum(const char *p);
 
 #endif
