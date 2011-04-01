@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_CHECKSUM_HPP
 #define XCSOAR_NMEA_CHECKSUM_HPP
 
-#include <tchar.h>
-
 /**
  * Calculates the checksum for the specified line (without the
  * asterisk and the newline character).
@@ -60,25 +58,5 @@ NMEAChecksum(const char *p, unsigned length)
 
   return checksum;
 }
-
-#ifdef _UNICODE
-/**
- * Calculates the checksum for the specified line (without the
- * asterisk and the newline character).
- *
- * @param p a string
- * @param length the number of characters in the string
- */
-static inline unsigned char
-NMEAChecksum(const TCHAR *p, unsigned length)
-{
-  unsigned char checksum = 0;
-
-  for (unsigned i = 0; i < length; ++i)
-    checksum ^= *p++;
-
-  return checksum;
-}
-#endif
 
 #endif
