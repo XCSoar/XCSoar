@@ -342,9 +342,6 @@ NMEAParser::TimeHasAdvanced(fixed ThisTime, NMEA_INFO *GPS_INFO)
 bool
 NMEAParser::GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  if (GPS_INFO->gps.Replay)
-    return true;
-
   line.skip(2);
 
   // satellites are in items 4-15 of GSA string (4-15 is 1-indexed)
@@ -385,10 +382,6 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   gpsValid = !NAVWarn(line.read_first_char());
 
   if (!activeGPS)
-    return true;
-
-  if (GPS_INFO->gps.Replay)
-    // block actual GPS signal
     return true;
 
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
@@ -508,10 +501,6 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   bool GroundSpeedAvailable = line.read_checked(speed);
   gps.MovementDetected = GroundSpeedAvailable && speed > fixed_two;
 
-  if (gps.Replay)
-    // block actual GPS signal if not moving and a log is being replayed
-    return true;
-
   fixed TrackBearing;
   bool TrackBearingAvailable = line.read_checked(TrackBearing);
 
@@ -608,9 +597,6 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   GPS_STATE &gps = GPS_INFO->gps;
 
-  if (gps.Replay)
-    return true;
-
   GGAAvailable = true;
 
   fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime);
@@ -706,7 +692,7 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   //JMW?  RMZAltitude = GPS_INFO->pressure.PressureAltitudeToQNHAltitude(RMZAltitude);
 
   fixed value;
-  if (!devHasBaroSource() && !GPS_INFO->gps.Replay &&
+  if (!devHasBaroSource() &&
       ReadAltitude(line, value)) {
     // JMW no in-built baro sources, so use this generic one
     if (isFlarm)
