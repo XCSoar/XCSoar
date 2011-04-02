@@ -324,7 +324,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \
 	$(SRC)/Appearance.cpp \
-	$(SRC)/Hardware/Battery.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/MOFile.cpp \
 	$(SRC)/Language.cpp \
@@ -433,9 +432,12 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/Timer.cpp \
 	$(SRC)/Android/EventBridge.cpp \
 	$(SRC)/Android/BluetoothHelper.cpp \
+	$(SRC)/Android/Battery.cpp \
 	$(SRC)/Android/Main.cpp
 else
-XCSOAR_SOURCES += $(SRC)/XCSoar.cpp
+XCSOAR_SOURCES += \
+	$(SRC)/Hardware/Battery.cpp \
+	$(SRC)/XCSoar.cpp
 endif
 
 ifeq ($(TARGET),ALTAIR)

@@ -11,6 +11,7 @@ Version 6.0.9 - not yet released
   - fix setting the system time from GPS
 * Android
   - don't require GPS and Bluetooth on Android Market
+  - implement the battery InfoBox
 
 Version 6.0.8 - 2011/03/23
 * don't estimate thermal source for skewed thermals

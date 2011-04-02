@@ -278,6 +278,8 @@ class NativeView extends SurfaceView
   protected native void pauseNative();
   protected native void resumeNative();
 
+  protected native void setBatteryPercent(int level, int plugged);
+
   private int findConfigAttrib(EGLConfig config, int attribute,
                                int defaultValue) {
     int[] mValue = new int[1];

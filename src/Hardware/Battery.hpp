@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_BATTERY_H
 #define XCSOAR_HARDWARE_BATTERY_H
 
-#if defined(_WIN32_WCE) && !defined(GNAV)
+#if defined(ANDROID) || (defined(_WIN32_WCE) && !defined(GNAV))
 #define HAVE_BATTERY
 
 #include <stdbool.h>
@@ -58,6 +58,16 @@ namespace Power
 
 }
 
+#ifdef ANDROID
+
+static inline void
+UpdateBatteryInfo()
+{
+  /* nothing to do, this is updated by Android callbacks */
+}
+
+#else /* _WIN32_WCE */
+
 #include <windows.h>
 
 // Battery status for SIMULATOR mode
@@ -70,6 +80,8 @@ extern DWORD BatteryWarningTime;
 
 void
 UpdateBatteryInfo(void);
+
+#endif /* _WIN32_WCE */
 
 #endif /* !HAVE_BATTERY */
 
