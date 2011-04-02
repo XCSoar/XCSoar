@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Device/Driver/Zander.hpp"
 #include "Device/Driver.hpp"
-#include "Protection.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
@@ -63,10 +62,8 @@ PZAN2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     GPS_INFO->ProvideTrueAirspeed(Units::ToSysUnit(vtas,
                                                    unKiloMeterPerHour));
 
-  if (line.read_checked(wnet)) {
+  if (line.read_checked(wnet))
     GPS_INFO->ProvideTotalEnergyVario((wnet - fixed(10000)) / 100);
-    TriggerVarioUpdate();
-  }
 
   return true;
 }

@@ -42,6 +42,10 @@ class DeviceBlackboard:
   public BaseBlackboard,
   public SettingsComputerBlackboard
 {
+  Validity last_location_available;
+
+  Validity last_te_vario_available, last_netto_vario_available;
+
   Simulator simulator;
 
   NMEA_INFO state_last;

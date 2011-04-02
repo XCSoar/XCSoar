@@ -25,7 +25,6 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port.hpp"
-#include "Protection.hpp"
 #include "Units.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -192,10 +191,8 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
                                               unKiloMeterPerHour),
                                               alt);
 
-  if (line.read_checked(value)) {
+  if (line.read_checked(value))
     GPS_INFO->ProvideTotalEnergyVario(value);
-    TriggerVarioUpdate();
-  }
 
   line.skip(6);
 

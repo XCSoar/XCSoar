@@ -75,8 +75,6 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
 
   device_blackboard.Merge();
   mutexBlackboard.Unlock();
-
-  TriggerGPSUpdate();
 }
 
 JNIEXPORT void JNICALL
@@ -146,6 +144,4 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
 
   device_blackboard.Merge();
   mutexBlackboard.Unlock();
-
-  TriggerGPSUpdate();
 }

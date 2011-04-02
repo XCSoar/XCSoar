@@ -27,7 +27,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
-#include "Protection.hpp"
 
 #include <tchar.h>
 #include <stdlib.h>
@@ -93,8 +92,6 @@ PWES0(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
     info.OutsideAirTemperature = fixed(i) / 10;
     info.TemperatureAvailable = true;
   }
-
-  TriggerVarioUpdate();
 
   return true;
 }

@@ -28,7 +28,6 @@ Copyright_License {
 #include "Device/Driver/CAI302.hpp"
 #include "Device/Port.hpp"
 #include "Device/Driver.hpp"
-#include "Protection.hpp"
 #include "Units.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -41,6 +40,10 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+
+#ifdef _UNICODE
+#include <windows.h>
+#endif
 
 #define CtrlC 0x03
 #define swap(x) x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
@@ -562,11 +565,9 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   if (line.read_checked(value))
     GPS_INFO->ProvideTrueAirspeed(value / 100);
 
-  if (line.read_checked(value)) {
+  if (line.read_checked(value))
     GPS_INFO->ProvideTotalEnergyVario(Units::ToSysUnit((value - fixed(200)) / 10,
                                                        unKnots));
-    TriggerVarioUpdate();
-  }
 
   line.skip(2);
 

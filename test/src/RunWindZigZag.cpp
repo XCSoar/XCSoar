@@ -37,7 +37,6 @@ Copyright_License {
 #include "Thread/Trigger.hpp"
 #include "BasicComputer.hpp"
 #include "OS/PathName.hpp"
-#include "Protection.hpp"
 #include "Wind/WindZigZag.hpp"
 
 #include <stdio.h>
@@ -45,13 +44,6 @@ Copyright_License {
 const struct DeviceRegister *driver;
 
 Waypoints way_points;
-
-/*
- * Fake Protection.cpp
- */
-
-void TriggerGPSUpdate() {}
-void TriggerVarioUpdate() {}
 
 /*
  * Fake Device/device.cpp

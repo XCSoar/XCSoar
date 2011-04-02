@@ -32,7 +32,6 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
 #include "OS/PathName.hpp"
-#include "Protection.hpp"
 
 #include <stdio.h>
 
@@ -62,13 +61,6 @@ HaveCondorDevice()
 {
   return _tcscmp(driver->Name, _T("Condor")) == 0;
 }
-
-/*
- * Fake Protection.cpp
- */
-
-void TriggerGPSUpdate() {}
-void TriggerVarioUpdate() {}
 
 /*
  * Fake Device/Geoid.cpp

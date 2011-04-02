@@ -29,9 +29,7 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
-#include "Thread/Trigger.hpp"
 #include "OS/PathName.hpp"
-#include "Protection.hpp"
 #include "Operation.hpp"
 
 #ifdef HAVE_POSIX
@@ -43,15 +41,6 @@ Copyright_License {
 #include <stdio.h>
 
 Waypoints way_points;
-
-/*
- * Fake Protection.cpp
- */
-
-Mutex mutexBlackboard;
-
-void TriggerGPSUpdate() {}
-void TriggerVarioUpdate() {}
 
 /*
  * Fake Device/device.cpp

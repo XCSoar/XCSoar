@@ -24,7 +24,6 @@ Copyright_License {
 #include "Device/Driver/Vega.hpp"
 #include "Device/Internal.hpp"
 #include "Device/Driver.hpp"
-#include "Protection.hpp"
 #include "Message.hpp"
 #include "Profile/Profile.hpp"
 #include "DeviceBlackboard.hpp"
@@ -223,10 +222,8 @@ PDVDV(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   fixed value;
 
-  if (line.read_checked(value)) {
+  if (line.read_checked(value))
     GPS_INFO->ProvideTotalEnergyVario(value / 10);
-    TriggerVarioUpdate();
-  }
 
   bool ias_available = line.read_checked(value);
   fixed tas_ratio = line.read(fixed(1024)) / 1024;
@@ -263,10 +260,8 @@ PDVDS(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   GPS_INFO->StallRatio = line.read(fixed_zero);
 
   fixed value;
-  if (line.read_checked(value)) {
+  if (line.read_checked(value))
     GPS_INFO->ProvideNettoVario(value / 10);
-    TriggerVarioUpdate();
-  }
 
   //hasVega = true;
 

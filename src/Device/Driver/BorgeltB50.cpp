@@ -24,7 +24,6 @@ Copyright_License {
 #include "Device/Driver/BorgeltB50.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
-#include "Protection.hpp"
 #include "Units.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -64,11 +63,8 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   bool vtas_av = line.read_checked(vtas);
 
-  if (line.read_checked(value)) {
+  if (line.read_checked(value))
     GPS_INFO->ProvideTotalEnergyVario(Units::ToSysUnit(value, unKnots));
-
-    TriggerVarioUpdate();
-  }
 
   if (line.read_checked(value))
     GPS_INFO->MacCready = Units::ToSysUnit(value, unKnots);

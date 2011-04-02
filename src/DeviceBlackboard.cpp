@@ -56,6 +56,10 @@ DeviceBlackboard::Initialise()
 {
   ScopeLock protect(mutexBlackboard);
 
+  last_location_available.clear();
+  last_te_vario_available.clear();
+  last_netto_vario_available.clear();
+
   // Clear the gps_info and calculated_info
   gps_info.reset();
   calculated_info.reset();
@@ -132,7 +136,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.gps.Replay = true;
   basic.gps.Simulator = false;
 
-  TriggerGPSUpdate();
+  Merge();
 };
 
 /**
@@ -144,7 +148,6 @@ void DeviceBlackboard::StopReplay() {
   replay_data.Connected.clear();
 
   Merge();
-  TriggerGPSUpdate();
 }
 
 void
@@ -156,8 +159,7 @@ DeviceBlackboard::ProcessSimulation()
   ScopeLock protect(mutexBlackboard);
 
   simulator.Process(simulator_data);
-
-  TriggerGPSUpdate();
+  Merge();
 }
 
 /**
@@ -298,6 +300,18 @@ DeviceBlackboard::Merge()
   } else {
     real_data.expire();
     SetBasic() = real_data;
+  }
+
+  if (last_location_available != Basic().LocationAvailable) {
+    last_location_available = Basic().LocationAvailable;
+    TriggerGPSUpdate();
+  }
+
+  if (last_te_vario_available != Basic().TotalEnergyVarioAvailable ||
+      last_netto_vario_available != Basic().NettoVarioAvailable) {
+    last_te_vario_available = Basic().TotalEnergyVarioAvailable;
+    last_netto_vario_available = Basic().NettoVarioAvailable;
+    TriggerVarioUpdate();
   }
 }
 

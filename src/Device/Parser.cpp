@@ -25,7 +25,6 @@ Copyright_License {
 
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
-#include "Protection.hpp"
 #include "Device/Geoid.h"
 #include "FLARM/FlarmCalculations.h"
 #include "Math/Earth.hpp"
@@ -561,10 +560,6 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   GPS_INFO->gps.AndroidInternalGPS = false;
 #endif
 
-  // say we are updated every time we get this,
-  // so infoboxes get refreshed if GPS connected
-  TriggerGPSUpdate();
-
   return true;
 }
 
@@ -768,8 +763,6 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   fixed vtas;
   if (line.read_checked(vtas))
     GPS_INFO->ProvideTrueAirspeed(Units::ToSysUnit(vtas, unKnots));
-
-  TriggerVarioUpdate();
 
   return true;
 }

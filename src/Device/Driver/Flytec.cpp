@@ -26,7 +26,6 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
-#include "Protection.hpp"
 #include "Units.hpp"
 
 #include <stdlib.h>

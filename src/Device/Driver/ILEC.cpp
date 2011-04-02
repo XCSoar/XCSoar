@@ -27,7 +27,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units.hpp"
-#include "Protection.hpp"
 
 #include <stdlib.h>
 #include <math.h>
@@ -77,10 +76,8 @@ ParsePDA1(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
                                  fixed(altitude));
 
   // total energy vario [m/s]
-  if (line.read_checked(value)) {
+  if (line.read_checked(value))
     info.ProvideTotalEnergyVario(value);
-    TriggerVarioUpdate();
-  }
 
   // wind direction [degrees, kph]
   SpeedVector wind;

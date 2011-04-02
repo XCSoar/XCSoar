@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Device/Driver/Condor.hpp"
 #include "Device/Driver.hpp"
-#include "Protection.hpp"
 #include "Units.hpp"
 #include "Device/Parser.hpp"
 #include "NMEA/Info.hpp"
@@ -91,10 +90,8 @@ cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
     // ToDo check if QNH correction is needed!
     GPS_INFO->ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_LX, alt);
 
-  if (line.read_checked(value)) {
+  if (line.read_checked(value))
     GPS_INFO->ProvideTotalEnergyVario(value);
-    TriggerVarioUpdate();
-  }
 
   line.skip(6);
 

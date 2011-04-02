@@ -24,7 +24,6 @@ Copyright_License {
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
-#include "Protection.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 
@@ -47,10 +46,8 @@ VARIO(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
     GPS_INFO->ProvideStaticPressure(NMEA_INFO::BARO_ALTITUDE_FLYMASTER,
                                     value * 100);
 
-  if (line.read_checked(value)) {
+  if (line.read_checked(value))
     GPS_INFO->ProvideTotalEnergyVario(value / 10);
-    TriggerVarioUpdate();
-  }
 
   return true;
 }

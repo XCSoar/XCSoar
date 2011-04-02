@@ -47,18 +47,6 @@
 #include "FaultInjectionPort.hpp"
 #include "TestUtil.hpp"
 
-static bool gps_updated, vario_updated;
-
-void TriggerGPSUpdate()
-{
-  gps_updated = true;
-}
-
-void TriggerVarioUpdate()
-{
-  vario_updated = true;
-}
-
 bool
 HaveCondorDevice()
 {

@@ -39,15 +39,6 @@ Copyright_License {
 Waypoints way_points;
 
 /*
- * Fake Protection.cpp
- */
-
-Mutex mutexBlackboard;
-
-void TriggerGPSUpdate() {}
-void TriggerVarioUpdate() {}
-
-/*
  * Fake Device/device.cpp
  */
 

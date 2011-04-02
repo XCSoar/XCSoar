@@ -88,6 +88,14 @@ public:
     return last > other.last;
   }
 
+  bool operator==(const Validity &other) const {
+    return last == other.last;
+  }
+
+  bool operator!=(const Validity &other) const {
+    return last != other.last;
+  }
+
   bool complement(const Validity &other) {
     if (!valid() && other.valid()) {
       *this = other;

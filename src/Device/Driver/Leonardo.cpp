@@ -26,7 +26,6 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
-#include "Protection.hpp"
 #include "Units.hpp"
 
 #include <stdlib.h>
@@ -102,8 +101,6 @@ LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
   if (ReadSpeedVector(line, wind))
     info.ProvideExternalWind(wind);
 
-  TriggerVarioUpdate();
-
   return true;
 }
 
@@ -153,8 +150,6 @@ LeonardoParseD(NMEAInputLine &line, NMEA_INFO &info)
   // 8 = wind speed [km/h]
   /* not used here, the "$C" record repeats it together with the
      direction */
-
-  TriggerVarioUpdate();
 
   return true;
 }
