@@ -288,8 +288,8 @@ Graphics::Initialise()
   PowerPlantIcon.load_big(IDB_POWER_PLANT, IDB_POWER_PLANT_HD);
 
   hpAircraft.set(1, Color::DARK_GRAY);
-  hpAircraftSimple1.set(IBLSCALE(2)+2, Color::BLACK);
-  hpAircraftSimple2.set(IBLSCALE(2), Color::WHITE);
+  hpAircraftSimple1.set(Layout::Scale(1), Color::BLACK);
+  hpAircraftSimple2.set(Layout::Scale(3), Color::WHITE);
   hpCanopy.set(1, Color(0x00,0x90,0x90));
   hbCanopy.set(Color(0x00,0x90,0x90));
 
@@ -497,12 +497,22 @@ Graphics::DrawAircraft(Canvas &canvas,
   };
 
   static const RasterPoint Aircraft_simple[] = {
-    {0, -10},
-    {0,  14},
-    {-32, 0},
-    {32, 0},
-    {-6, 14},
-    {6, 14},
+    {1, -5},
+    {1, 0},
+    {14, 0},
+    {14, 1},
+    {1, 1},
+    {1, 8},
+    {4, 8},
+    {4, 9},
+    {-3, 9},
+    {-3, 8},
+    {0, 8},
+    {0, 1},
+    {-13, 1},
+    {-13, 0},
+    {0, 0},
+    {0, -5},
   };
 
   static const RasterPoint Canopy_detailed[] = {
@@ -557,16 +567,12 @@ Graphics::DrawAircraft(Canvas &canvas,
     canvas.polyline(tmp_right, n_aircraft);
     break;
   case acSimple:
-    PolygonRotateShift(tmp_left, n_aircraft, aircraft_pos.x, aircraft_pos.y, angle, false);
-    canvas.hollow_brush();
-    canvas.select(hpAircraftSimple1);
-    for (int i=0; i< n_aircraft; i+= 2) {
-      canvas.polyline(tmp_left+i, 2);
-    }
+    PolygonRotateShift(tmp_left, n_aircraft, aircraft_pos.x, aircraft_pos.y, angle, true);
     canvas.select(hpAircraftSimple2);
-    for (int i=0; i< n_aircraft; i+= 2) {
-      canvas.polyline(tmp_left+i, 2);
-    }
+    canvas.polygon(tmp_left, n_aircraft);
+    canvas.black_brush();
+    canvas.select(hpAircraftSimple1);
+    canvas.polygon(tmp_left, n_aircraft);
     break;
   };
 
