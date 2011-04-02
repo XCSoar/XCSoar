@@ -51,6 +51,8 @@ namespace InfoBoxLayout
     ibRight12 = 8,
     // 9: 24 infoboxes along right side (3x8)
     ibRight24 = 9,
+    // 10: 12 infoboxes along bottom
+    ibBottom12 = 10,
   };
 
   struct Layout {
