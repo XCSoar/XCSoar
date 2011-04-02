@@ -57,12 +57,21 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
   mutexBlackboard.Lock();
   NMEA_INFO &basic = device_blackboard.SetRealState();
 
-  if (connected) {
-    basic.gps.real = true;
-    basic.gps.AndroidInternalGPS = true;
-  }
+  switch (connected) {
+  case 0: /* not connected */
+    basic.Connected.clear();
+    basic.LocationAvailable.clear();
+    break;
 
-  basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
+  case 1: /* waiting for fix */
+    basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
+    basic.LocationAvailable.clear();
+    break;
+
+  case 2: /* connected */
+    basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
+    break;
+  }
 
   device_blackboard.Merge();
   mutexBlackboard.Unlock();
