@@ -438,6 +438,13 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
       border |= BORDERRIGHT;
     break;
 
+  case InfoBoxLayout::ibBottom12:
+    border |= BORDERTOP;
+
+    if (i != 5 && i != 11)
+      border |= BORDERRIGHT;
+    break;
+
   case InfoBoxLayout::ibTop8:
     border |= BORDERBOTTOM;
 
