@@ -209,11 +209,6 @@ InfoBoxContentMacCready::GetDialogContent() {
 void
 InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
 {
-  if (protected_task_manager == NULL) {
-    infobox.SetInvalid();
-    return;
-  }
-
   SetVSpeed(infobox, XCSoarInterface::Calculated().glide_polar_task.get_mc());
 
   // Set Comment
