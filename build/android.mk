@@ -110,6 +110,7 @@ $(TARGET_OUTPUT_DIR)/$(SRC)/Android/Main.o: $(NATIVE_HEADERS)
 $(TARGET_OUTPUT_DIR)/$(SRC)/Android/EventBridge.o: $(NATIVE_HEADERS)
 $(TARGET_OUTPUT_DIR)/$(SRC)/Android/Timer.o: $(NATIVE_HEADERS)
 $(TARGET_OUTPUT_DIR)/$(SRC)/Android/InternalGPS.o: $(NATIVE_HEADERS)
+$(TARGET_OUTPUT_DIR)/$(SRC)/Android/Battery.o: $(NATIVE_HEADERS)
 
 $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libapplication.so: $(TARGET_OUTPUT_DIR)/bin/xcsoar.so | $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/dirstamp
 	cp $< $@
