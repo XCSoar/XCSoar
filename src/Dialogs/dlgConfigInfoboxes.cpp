@@ -84,7 +84,7 @@ static void
 OnCopy(gcc_unused WndButton &button)
 {
   clipboard = data;
-  clipboard_size = InfoBoxManager::layout.count;
+  clipboard_size = InfoBoxPanelConfig::MAX_INFOBOXES;
 
   RefreshPasteButton();
 }
@@ -99,8 +99,7 @@ OnPaste(gcc_unused WndButton &button)
                  MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
-  unsigned count = std::min(InfoBoxManager::layout.count, clipboard_size);
-  for (unsigned item = 0; item < count; item++) {
+  for (unsigned item = 0; item < clipboard_size; item++) {
     unsigned content = clipboard.infoBoxID[item];
     if (content >= InfoBoxFactory::NUM_TYPES)
       continue;
@@ -347,7 +346,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   bool changed = false;
   if (result == mrOK) {
-    for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; ++i)
+    for (unsigned i = 0; i < InfoBoxPanelConfig::MAX_INFOBOXES; ++i)
       if (data.infoBoxID[i] != data_r.infoBoxID[i])
         changed = true;
 
