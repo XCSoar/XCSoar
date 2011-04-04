@@ -78,7 +78,7 @@ AllDevicesPutVolume(int volume)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutBallast(volume);
+    DeviceList[i].PutVolume(volume);
 }
 
 void
