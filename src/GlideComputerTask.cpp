@@ -64,7 +64,7 @@ GlideComputerTask::ProcessBasicTask()
   // if in auto mode, the value will get propagated out via the mechanism
   // below.
   GlidePolar glide_polar = task->get_glide_polar();
-  glide_polar.set_mc(basic.MacCready);
+  glide_polar.set_mc(basic.settings.mac_cready);
   task->set_glide_polar(glide_polar);
 
   bool auto_updated = false;
@@ -104,7 +104,7 @@ GlideComputerTask::ProcessBasicTask()
     // in auto mode, check for changes forced by the computer
     const fixed mc_computer = 
       task->get_glide_polar().get_mc();
-    if (fabs(mc_computer-basic.MacCready)>fixed(0.01)) {
+    if (fabs(mc_computer - basic.settings.mac_cready) > fixed(0.01)) {
       SetMC(mc_computer);
     }
   }

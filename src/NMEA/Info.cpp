@@ -106,7 +106,7 @@ NMEA_INFO::reset()
   TotalEnergyVarioAvailable.clear();
   NettoVarioAvailable.clear();
 
-  // XXX MacCready, Ballast, Bugs
+  settings.Clear();
 
   ExternalWindAvailable.clear();
 
@@ -158,6 +158,7 @@ NMEA_INFO::expire()
   PressureAltitudeAvailable.expire(Time, fixed(30));
   TotalEnergyVarioAvailable.expire(Time, fixed(5));
   NettoVarioAvailable.expire(Time, fixed(5));
+  settings.Expire(Time);
   ExternalWindAvailable.expire(Time, fixed(600));
   engine_noise_level_available.expire(Time, fixed(30));
     SupplyBatteryVoltageAvailable.expire(Time, fixed(300));
@@ -226,7 +227,7 @@ NMEA_INFO::complement(const NMEA_INFO &add)
   if (NettoVarioAvailable.complement(add.NettoVarioAvailable))
     NettoVario = add.NettoVario;
 
-  // XXX MacCready, Ballast, Bugs
+  settings.Complement(add.settings);
 
   if (ExternalWindAvailable.complement(add.ExternalWindAvailable))
     ExternalWind = add.ExternalWind;

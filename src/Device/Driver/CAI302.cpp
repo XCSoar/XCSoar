@@ -573,13 +573,13 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   if (line.read_checked(value)) {
     if (MacCreadyUpdateTimeout <= 0)
-      GPS_INFO->MacCready = Units::ToSysUnit(value / 10, unKnots);
+      GPS_INFO->settings.mac_cready = Units::ToSysUnit(value / 10, unKnots);
     else
       MacCreadyUpdateTimeout--;
   }
 
   if (line.read_checked(value)) {
-    GPS_INFO->Ballast = value / 100;
+    GPS_INFO->settings.ballast = value / 100;
     if (BallastUpdateTimeout <= 0) {
       /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
       ///    oldGlidePolar::SetBallast(GPS_INFO->Ballast);
@@ -588,7 +588,7 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   }
 
   if (line.read_checked(value)) {
-    GPS_INFO->Bugs = value / 100;
+    GPS_INFO->settings.bugs = value / 100;
     if (BugsUpdateTimeout <= 0) {
       /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
       /// oldGlidePolar::SetBugs(GPS_INFO->Bugs);

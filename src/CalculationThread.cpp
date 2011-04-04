@@ -97,9 +97,9 @@ CalculationThread::tick()
   {
     mutexBlackboard.Lock();
     device_blackboard.ReadBlackboard(glide_computer.Calculated());
-    if (device_blackboard.Basic().MacCready != glide_computer.Basic().MacCready) {
+    if (device_blackboard.Basic().settings.mac_cready != glide_computer.Basic().settings.mac_cready) {
       mutexBlackboard.Unlock();
-      device_blackboard.SetMC(glide_computer.Basic().MacCready);
+      device_blackboard.SetMC(glide_computer.Basic().settings.mac_cready);
     } else
       mutexBlackboard.Unlock();
   }

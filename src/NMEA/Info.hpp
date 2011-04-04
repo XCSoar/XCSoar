@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_NMEA_INFO_H
 
 #include "NMEA/Validity.hpp"
+#include "NMEA/ExternalSettings.hpp"
 #include "DateTime.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
@@ -397,14 +398,10 @@ struct NMEA_INFO {
   //   Settings
   //##############
 
-  /** MacCready value of external device (if available) */
-  fixed MacCready;
-
-  /** Ballast information of external device (if available) */
-  fixed Ballast;
-
-  /** Bugs information of external device (if available) */
-  fixed Bugs;
+  /**
+   * Settings received from external devices.
+   */
+  ExternalSettings settings;
 
   //################
   //   Atmosphere

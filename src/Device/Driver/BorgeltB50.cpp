@@ -67,7 +67,7 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     GPS_INFO->ProvideTotalEnergyVario(Units::ToSysUnit(value, unKnots));
 
   if (line.read_checked(value))
-    GPS_INFO->MacCready = Units::ToSysUnit(value, unKnots);
+    GPS_INFO->settings.mac_cready = Units::ToSysUnit(value, unKnots);
 
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
   ///  oldGlidePolar::SetMacCready(GPS_INFO->MacCready);

@@ -390,6 +390,6 @@ DeviceBlackboard::SetMC(fixed mc)
   ScopeLock protect(mutexBlackboard);
   NMEA_INFO &basic = SetBasic();
 
-  basic.MacCready = mc;
+  basic.settings.mac_cready = mc;
   AllDevicesPutMacCready(mc);
 }
