@@ -44,7 +44,7 @@ namespace WayPointGlue {
 }
 
 /**
- * This functions checks if the home, alternate 1/2 and teamcode waypoint
+ * This functions checks if the home and teamcode waypoint
  * indices exist and if necessary tries to find new ones in the waypoint list
  * @param way_points Waypoint list
  * @param terrain RasterTerrain (for placing the aircraft
