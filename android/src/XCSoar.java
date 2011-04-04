@@ -36,13 +36,27 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.os.Handler;
 import android.os.Message;
+import android.os.BatteryManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
 
 public class XCSoar extends Activity {
     private static NativeView nativeView;
 
     PowerManager.WakeLock wakeLock;
+
+  BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
+      @Override public void onReceive(Context context, Intent intent) {
+        if (nativeView == null)
+          return;
+
+        int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+        int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
+        nativeView.setBatteryPercent(level, plugged);
+      }
+    };
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +90,9 @@ public class XCSoar extends Activity {
         TextView tv = new TextView(this);
         tv.setText("Loading XCSoar...");
         setContentView(tv);
+
+      registerReceiver(batteryReceiver,
+                       new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
 
   private void quit() {

@@ -76,10 +76,6 @@ public class InternalGPS
     update();
   }
 
-  protected void finalize() {
-    setLocationProvider(null);
-  }
-
   /**
    * Called by the #Handler, indirectly by update().  Updates the
    * LocationManager subscription inside the main thread.
@@ -89,6 +85,8 @@ public class InternalGPS
     sensorManager.unregisterListener(this);
 
     if (locationProvider != null) {
+      setConnected(1); // waiting for fix
+
       locationManager.requestLocationUpdates(locationProvider,
                                              1000, 0, this);
       sensorManager.registerListener(this, accelerometer,

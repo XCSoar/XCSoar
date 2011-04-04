@@ -54,7 +54,7 @@ protected:
 
 public:
   LineSplitter(Source<char> &_source)
-    :source(_source), remaining(NULL, 0) {}
+    :source(_source), remaining((char *)NULL, 0) {}
 
   virtual char *read();
   virtual long size() const;

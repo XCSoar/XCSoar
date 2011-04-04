@@ -107,6 +107,13 @@ Version 6.0.9 - not yet released
   - fix for hanging map on slow hardware
 * Windows
   - fix setting the system time from GPS
+* Android
+  - don't require GPS and Bluetooth on Android Market
+  - implement the battery InfoBox
+  - internal GPS: show "waiting for fix" until location is obtained
+  - allow SD card installation
+  - "Droid Sans" is the default Android font
+  - enable font preview
 
 Version 6.0.8 - 2011/03/23
 * don't estimate thermal source for skewed thermals

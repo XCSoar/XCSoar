@@ -70,17 +70,20 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
     default:
       infobox.SetCommentInvalid();
   }
+#ifndef ANDROID
   switch (Power::Battery::Status){
     case Power::Battery::HIGH:
     case Power::Battery::LOW:
     case Power::Battery::CRITICAL:
     case Power::Battery::CHARGING:
       if (Power::Battery::RemainingPercentValid){
+#endif
         _stprintf(tmp, _T("%d%%"), Power::Battery::RemainingPercent);
         if (!DisplaySupplyVoltageAsValue)
           infobox.SetValue(tmp);
         else
           infobox.SetComment(tmp);
+#ifndef ANDROID
       }
       else
         if (!DisplaySupplyVoltageAsValue)
@@ -95,6 +98,7 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
       else
         infobox.SetCommentInvalid();
   }
+#endif
   return;
 
 #endif

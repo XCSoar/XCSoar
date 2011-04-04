@@ -36,7 +36,6 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Simulator.hpp"
 #include "OS/Clock.hpp"
-#include "Interface.hpp"
 #include "Components.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 

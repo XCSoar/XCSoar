@@ -207,7 +207,8 @@ public:
     top += y_offset;
     bottom += y_offset;
 
-    SDL_Rect r = { left, top, right - left, bottom - top };
+    SDL_Rect r = { (Sint16)left, (Sint16)top,
+                   (Uint16)(right - left), (Uint16)(bottom - top) };
     SDL_FillRect(surface, &r, color);
   }
 

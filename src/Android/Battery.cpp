@@ -21,26 +21,34 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_INTERNAL_GPS_HPP
-#define XCSOAR_ANDROID_INTERNAL_GPS_HPP
+#include "Hardware/Battery.hpp"
+#include "org_xcsoar_NativeView.h"
 
-#include "Java/Object.hpp"
-#include "Compiler.h"
+namespace Power {
+  namespace Battery {
+    unsigned RemainingPercent = 0;
+    bool RemainingPercentValid = false;
+  }
 
-#include <jni.h>
+  namespace External {
+    externalstatus Status = UNKNOWN;
+  }
+}
 
-class NativeView;
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeView_setBatteryPercent(JNIEnv *env, jobject obj,
+                                             jint value, jint plugged)
+{
+  Power::Battery::RemainingPercent = value;
+  Power::Battery::RemainingPercentValid = true;
 
-class InternalGPS : public Java::Object {
-  jmethodID mid_setLocationProvider;
+  switch (plugged) {
+  case 0:
+    Power::External::Status = Power::External::OFF;
+    break;
 
-  InternalGPS(JNIEnv *env, jobject obj);
-
-public:
-  ~InternalGPS();
-
-  gcc_malloc
-  static InternalGPS *create(JNIEnv *env, NativeView *native_view);
-};
-
-#endif
+  default:
+    Power::External::Status = Power::External::ON;
+    break;
+  }
+}

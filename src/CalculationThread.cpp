@@ -95,10 +95,13 @@ CalculationThread::tick()
   // should be changed in DoCalculations, so we only need to write
   // that one back (otherwise we may write over new data)
   {
-    ScopeLock protect(mutexBlackboard);
+    mutexBlackboard.Lock();
     device_blackboard.ReadBlackboard(glide_computer.Calculated());
-    if (device_blackboard.Basic().MacCready != glide_computer.Basic().MacCready)
+    if (device_blackboard.Basic().MacCready != glide_computer.Basic().MacCready) {
+      mutexBlackboard.Unlock();
       device_blackboard.SetMC(glide_computer.Basic().MacCready);
+    } else
+      mutexBlackboard.Unlock();
   }
 
   // if (new GPS data)
