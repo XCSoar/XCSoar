@@ -78,6 +78,9 @@ public:
   void set_glide_polar(const GlidePolar& glide_polar);
 
   gcc_pure
+  fixed GetMacCready() const;
+
+  gcc_pure
   TaskManager::TaskMode_t get_mode() const;
 
   // trace points

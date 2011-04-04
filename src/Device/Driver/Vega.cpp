@@ -78,12 +78,13 @@ PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   static long last_switchinputs;
   static long last_switchoutputs;
 
-  GPS_INFO->settings.mac_cready = line.read(fixed_zero) / 10;
+  fixed value;
+  if (line.read_checked(value))
+    GPS_INFO->settings.ProvideMacCready(value / 10, GPS_INFO->Time);
 
   long switchinputs = line.read_hex(0L);
   long switchoutputs = line.read_hex(0L);
 
-  fixed value;
   if (line.read_checked(value)) {
     GPS_INFO->SupplyBatteryVoltage = value / 10;
     GPS_INFO->SupplyBatteryVoltageAvailable.update(GPS_INFO->Time);

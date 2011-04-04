@@ -946,6 +946,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \

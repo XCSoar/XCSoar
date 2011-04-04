@@ -26,20 +26,66 @@ Copyright_License {
 void
 ExternalSettings::Clear()
 {
-  mac_cready = fixed_zero;
-  ballast = fixed_zero;
-  bugs = fixed_zero;
+  mac_cready_available.clear();
+  ballast_available.clear();
+  bugs_available.clear();
 }
 
 void
 ExternalSettings::Expire(fixed time)
 {
-  // XXX
+  /* the settings do not expire, they are only updated with a new
+     value */
 }
 
 void
 ExternalSettings::Complement(const ExternalSettings &add)
 {
-  // XXX
+  if (add.mac_cready_available.modified(mac_cready_available)) {
+    mac_cready = add.mac_cready;
+    mac_cready_available = add.mac_cready_available;
+  }
+
+  if (add.ballast_available.modified(ballast_available)) {
+    ballast = add.ballast;
+    ballast_available = add.ballast_available;
+  }
+
+  if (add.bugs_available.modified(bugs_available)) {
+    bugs = add.bugs;
+    bugs_available = add.bugs_available;
+  }
 }
 
+bool
+ExternalSettings::ProvideMacCready(fixed value, fixed time)
+{
+  if (mac_cready_available && fabs(mac_cready - value) <= fixed(0.01))
+    return false;
+
+  mac_cready = value;
+  mac_cready_available.update(time);
+  return true;
+}
+
+bool
+ExternalSettings::ProvideBallast(fixed value, fixed time)
+{
+  if (ballast_available && fabs(ballast - value) <= fixed_one)
+    return false;
+
+  ballast = value;
+  ballast_available.update(time);
+  return true;
+}
+
+bool
+ExternalSettings::ProvideBugs(fixed value, fixed time)
+{
+  if (bugs_available && fabs(bugs - value) <= fixed_one)
+    return false;
+
+  bugs = value;
+  bugs_available.update(time);
+  return true;
+}

@@ -235,18 +235,18 @@ LXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   fixed value;
   // MacCready value
   if (line.read_checked(value))
-    GPS_INFO->settings.mac_cready = value;
+    GPS_INFO->settings.ProvideMacCready(value, GPS_INFO->Time);
 
   // Ballast
   line.skip();
   /*
   if (line.read_checked(value))
-    GPS_INFO->Ballast = value;
+    GPS_INFO->ProvideBallast(value, GPS_INFO->Time);
   */
 
   // Bugs
   if (line.read_checked(value))
-    GPS_INFO->settings.bugs = fixed(100) - value;
+    GPS_INFO->settings.ProvideBugs(fixed(100) - value, GPS_INFO->Time);
 
   return true;
 }

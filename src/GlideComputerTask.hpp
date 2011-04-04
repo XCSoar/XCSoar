@@ -35,12 +35,22 @@ class GlideComputerTask:
 {
   GPSClock route_clock;
   GPSClock reach_clock;
+
+  /** used to update the MacCready value from an external device to XCSoar */
+  ExternalSettings last_external_settings;
+
+public:
+  bool auto_mc_updated;
+
 public:
   GlideComputerTask(ProtectedTaskManager& task);
 
+  gcc_pure
+  fixed GetMacCready() const;
+
 protected:
 
-  void Initialise() {}
+  void Initialise();
   void ProcessBasicTask();
   void ProcessMoreTask();
   void ResetFlight(const bool full=true);

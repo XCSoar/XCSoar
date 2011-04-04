@@ -387,9 +387,5 @@ DeviceBlackboard::SetQNH(fixed qnh)
 void
 DeviceBlackboard::SetMC(fixed mc)
 {
-  ScopeLock protect(mutexBlackboard);
-  NMEA_INFO &basic = SetBasic();
-
-  basic.settings.mac_cready = mc;
   AllDevicesPutMacCready(mc);
 }

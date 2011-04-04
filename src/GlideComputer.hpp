@@ -42,7 +42,7 @@ class RasterTerrain;
 // OR: just make them static?
 
 class GlideComputer:
-    public GlideComputerAirData, GlideComputerTask,
+    public GlideComputerAirData, public GlideComputerTask,
     public GlideComputerStats
 {
   const Waypoints &way_points;

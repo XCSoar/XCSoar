@@ -44,6 +44,12 @@ GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task):
 {}
 
 void
+GlideComputerTask::Initialise()
+{
+  last_external_settings.Clear();
+}
+
+void
 GlideComputerTask::ResetFlight(const bool full)
 {
   m_task.reset();
@@ -63,11 +69,13 @@ GlideComputerTask::ProcessBasicTask()
   // even if we are in auto mode, force the value in the computer.
   // if in auto mode, the value will get propagated out via the mechanism
   // below.
-  GlidePolar glide_polar = task->get_glide_polar();
-  glide_polar.set_mc(basic.settings.mac_cready);
-  task->set_glide_polar(glide_polar);
+  if (last_external_settings.mac_cready_available.modified(basic.settings.mac_cready_available)) {
+    GlidePolar glide_polar = task->get_glide_polar();
+    glide_polar.set_mc(basic.settings.mac_cready);
+    task->set_glide_polar(glide_polar);
+  }
 
-  bool auto_updated = false;
+  last_external_settings = basic.settings;
 
   if (basic.Time != LastBasic().Time && basic.LocationAvailable) {
     const AIRCRAFT_STATE current_as = ToAircraftState(basic, Calculated());
@@ -75,8 +83,9 @@ GlideComputerTask::ProcessBasicTask()
                                                    LastCalculated());
 
     task->update(current_as, last_as);
-    auto_updated = task->update_auto_mc(current_as, std::max(
-                                          Calculated().LastThermalAverageSmooth, fixed_zero));
+    auto_mc_updated = task->update_auto_mc(current_as,
+                                           std::max(Calculated().LastThermalAverageSmooth,
+                                                    fixed_zero));
   }
 
   SetCalculated().task_stats = task->get_stats();
@@ -85,29 +94,6 @@ GlideComputerTask::ProcessBasicTask()
 
   SetCalculated().glide_polar_task = task->get_glide_polar();
   SetCalculated().glide_polar_safety = task->get_safety_polar();
-
-/* JMW @todo 
-
-   sending the risk mc to devices and global is
-   disabled temporarily as this sets a feedback loop through devices,
-   and the set mc call in ProcessBasicTask(), winding the mc down to
-   zero
-
-  SetMC(Calculated().common_stats.current_risk_mc);
-
-  see ticket #583 for symptoms.
-
-  this now also only changes mc if in auto mode and the computer has
-  changed the value.  this may have a bearing on #498.
-*/
-  if (SettingsComputer().auto_mc && auto_updated) {
-    // in auto mode, check for changes forced by the computer
-    const fixed mc_computer = 
-      task->get_glide_polar().get_mc();
-    if (fabs(mc_computer - basic.settings.mac_cready) > fixed(0.01)) {
-      SetMC(mc_computer);
-    }
-  }
 }
 
 void
@@ -206,4 +192,10 @@ void
 GlideComputerTask::set_terrain(RasterTerrain* _terrain) {
   terrain = _terrain;
   m_task.route_set_terrain(terrain);
+}
+
+fixed
+GlideComputerTask::GetMacCready() const
+{
+  return m_task.GetMacCready();
 }

@@ -60,6 +60,8 @@ CalculationThread::tick()
 {
   bool gps_updated;
 
+  glide_computer.auto_mc_updated = false;
+
   // update and transfer master info to glide computer
   {
     ScopeLock protect(mutexBlackboard);
@@ -97,12 +99,11 @@ CalculationThread::tick()
   {
     mutexBlackboard.Lock();
     device_blackboard.ReadBlackboard(glide_computer.Calculated());
-    if (device_blackboard.Basic().settings.mac_cready != glide_computer.Basic().settings.mac_cready) {
-      mutexBlackboard.Unlock();
-      device_blackboard.SetMC(glide_computer.Basic().settings.mac_cready);
-    } else
-      mutexBlackboard.Unlock();
+    mutexBlackboard.Unlock();
   }
+
+  if (glide_computer.auto_mc_updated)
+    device_blackboard.SetMC(glide_computer.GetMacCready());
 
   // if (new GPS data)
   if (gps_updated) {

@@ -571,17 +571,18 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   if (line.read_checked(i) && i != mac_cready) {
     mac_cready = i;
-    GPS_INFO->settings.mac_cready = Units::ToSysUnit(fixed(i) / 10, unKnots);
+    GPS_INFO->settings.ProvideMacCready(Units::ToSysUnit(fixed(i) / 10, unKnots),
+                                        GPS_INFO->Time);
   }
 
   if (line.read_checked(i) && i != ballast) {
     ballast = i;
-    GPS_INFO->settings.ballast = fixed(i) / 100;
+    GPS_INFO->settings.ProvideBallast(value / 100, GPS_INFO->Time);
   }
 
   if (line.read_checked(i) && i != bugs) {
     bugs = i;
-    GPS_INFO->settings.bugs = fixed(i) / 100;
+    GPS_INFO->settings.ProvideBugs(value / 100, GPS_INFO->Time);
   }
 
   return true;

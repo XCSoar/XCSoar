@@ -24,17 +24,24 @@ Copyright_License {
 #ifndef XCSOAR_EXTERNAL_SETTINGS_HPP
 #define XCSOAR_EXTERNAL_SETTINGS_HPP
 
+#include "NMEA/Validity.hpp"
 #include "Math/fixed.hpp"
 
 /**
  * Settings received from an external device.
  */
 struct ExternalSettings {
+  Validity mac_cready_available;
+
   /** MacCready value of external device (if available) */
   fixed mac_cready;
 
+  Validity ballast_available;
+
   /** Ballast information of external device (if available) */
   fixed ballast;
+
+  Validity bugs_available;
 
   /** Bugs information of external device (if available) */
   fixed bugs;
@@ -42,6 +49,16 @@ struct ExternalSettings {
   void Clear();
   void Expire(fixed time);
   void Complement(const ExternalSettings &add);
+
+  /**
+   * Sets a new MacCready value, but updates the time stamp only if
+   * the value has changed.
+   *
+   * @return true if the value and the time stamp have been updated
+   */
+  bool ProvideMacCready(fixed value, fixed time);
+  bool ProvideBallast(fixed value, fixed time);
+  bool ProvideBugs(fixed value, fixed time);
 };
 
 #endif
