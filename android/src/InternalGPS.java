@@ -76,10 +76,6 @@ public class InternalGPS
     update();
   }
 
-  protected void finalize() {
-    setLocationProvider(null);
-  }
-
   /**
    * Called by the #Handler, indirectly by update().  Updates the
    * LocationManager subscription inside the main thread.

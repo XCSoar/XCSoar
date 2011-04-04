@@ -32,9 +32,13 @@ Copyright_License {
 class NativeView;
 
 class InternalGPS : public Java::Object {
-  InternalGPS(JNIEnv *env, jobject obj):Java::Object(env, obj) {}
+  jmethodID mid_setLocationProvider;
+
+  InternalGPS(JNIEnv *env, jobject obj);
 
 public:
+  ~InternalGPS();
+
   gcc_malloc
   static InternalGPS *create(JNIEnv *env, NativeView *native_view);
 };

@@ -28,6 +28,20 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Device/Geoid.h"
 
+InternalGPS::InternalGPS(JNIEnv *env, jobject obj)
+  :Java::Object(env, obj)
+{
+  Java::Class cls(env, env->GetObjectClass(obj));
+  mid_setLocationProvider = env->GetMethodID(cls, "setLocationProvider",
+                                             "(Ljava/lang/String;)V");
+}
+
+InternalGPS::~InternalGPS()
+{
+  JNIEnv *env = Java::GetEnv();
+  env->CallVoidMethod(get(), mid_setLocationProvider, NULL);
+}
+
 InternalGPS *
 InternalGPS::create(JNIEnv *env, NativeView *native_view)
 {
