@@ -169,19 +169,19 @@ DeviceDescriptor::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 }
 
 bool
-DeviceDescriptor::PutMacCready(double MacCready)
+DeviceDescriptor::PutMacCready(fixed MacCready)
 {
   return device != NULL ? device->PutMacCready(MacCready) : true;
 }
 
 bool
-DeviceDescriptor::PutBugs(double bugs)
+DeviceDescriptor::PutBugs(fixed bugs)
 {
   return device != NULL ? device->PutBugs(bugs) : true;
 }
 
 bool
-DeviceDescriptor::PutBallast(double ballast)
+DeviceDescriptor::PutBallast(fixed ballast)
 {
   return device != NULL ? device->PutBallast(ballast) : true;
 }

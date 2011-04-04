@@ -51,9 +51,9 @@ public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro) = 0;
 
-  virtual bool PutMacCready(double MacCready) = 0;
-  virtual bool PutBugs(double bugs) = 0;
-  virtual bool PutBallast(double ballast) = 0;
+  virtual bool PutMacCready(fixed MacCready) = 0;
+  virtual bool PutBugs(fixed bugs) = 0;
+  virtual bool PutBallast(fixed ballast) = 0;
   virtual bool PutQNH(const AtmosphericPressure &pres,
                       const DERIVED_INFO &calculated) = 0;
   virtual bool PutVoice(const TCHAR *sentence) = 0;
@@ -84,9 +84,9 @@ public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
 
-  virtual bool PutMacCready(double MacCready);
-  virtual bool PutBugs(double bugs);
-  virtual bool PutBallast(double ballast);
+  virtual bool PutMacCready(fixed MacCready);
+  virtual bool PutBugs(fixed bugs);
+  virtual bool PutBallast(fixed ballast);
   virtual bool PutQNH(const AtmosphericPressure &pres,
                       const DERIVED_INFO &calculated);
   virtual bool PutVoice(const TCHAR *sentence);

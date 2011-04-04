@@ -42,7 +42,7 @@ devTick(const NMEA_INFO &basic, const DERIVED_INFO &calculated)
 }
 
 void
-AllDevicesPutMacCready(double MacCready)
+AllDevicesPutMacCready(fixed MacCready)
 {
   if (is_simulator())
     return;
@@ -52,7 +52,7 @@ AllDevicesPutMacCready(double MacCready)
 }
 
 void
-AllDevicesPutBugs(double bugs)
+AllDevicesPutBugs(fixed bugs)
 {
   if (is_simulator())
     return;
@@ -62,7 +62,7 @@ AllDevicesPutBugs(double bugs)
 }
 
 void
-AllDevicesPutBallast(double ballast)
+AllDevicesPutBallast(fixed ballast)
 {
   if (is_simulator())
     return;
@@ -78,7 +78,7 @@ AllDevicesPutVolume(int volume)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutBallast(volume);
+    DeviceList[i].PutVolume(volume);
 }
 
 void

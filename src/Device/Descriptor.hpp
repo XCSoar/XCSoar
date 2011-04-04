@@ -111,9 +111,9 @@ private:
   bool ParseNMEA(const char *line, struct NMEA_INFO *info);
 
 public:
-  bool PutMacCready(double MacCready);
-  bool PutBugs(double bugs);
-  bool PutBallast(double ballast);
+  bool PutMacCready(fixed MacCready);
+  bool PutBugs(fixed bugs);
+  bool PutBallast(fixed ballast);
   bool PutVolume(int volume);
   bool PutActiveFrequency(double frequency);
   bool PutStandbyFrequency(double frequency);

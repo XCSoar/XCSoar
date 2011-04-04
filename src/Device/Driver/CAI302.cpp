@@ -142,9 +142,9 @@ public:
   virtual bool Open(OperationEnvironment &env);
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
                          bool enable_baro);
-  virtual bool PutMacCready(double MacCready);
-  virtual bool PutBugs(double bugs);
-  virtual bool PutBallast(double ballast);
+  virtual bool PutMacCready(fixed MacCready);
+  virtual bool PutBugs(fixed bugs);
+  virtual bool PutBallast(fixed ballast);
   virtual bool Declare(const Declaration *declaration,
                        OperationEnvironment &env);
 
@@ -215,11 +215,11 @@ CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
 }
 
 bool
-CAI302Device::PutMacCready(double MacCready)
+CAI302Device::PutMacCready(fixed MacCready)
 {
   char szTmp[32];
   sprintf(szTmp, "!g,m%d\r",
-          iround(Units::ToUserUnit(fixed(MacCready) * 10, unKnots)));
+          iround(Units::ToUserUnit(MacCready * 10, unKnots)));
 
   port->Write(szTmp);
 
@@ -228,10 +228,10 @@ CAI302Device::PutMacCready(double MacCready)
 }
 
 bool
-CAI302Device::PutBugs(double Bugs)
+CAI302Device::PutBugs(fixed Bugs)
 {
   char szTmp[32];
-  sprintf(szTmp, "!g,u%d\r", int((Bugs * 100) + 0.5));
+  sprintf(szTmp, "!g,u%u\r", uround(Bugs * 100));
 
   port->Write(szTmp);
 
@@ -240,10 +240,10 @@ CAI302Device::PutBugs(double Bugs)
 }
 
 bool
-CAI302Device::PutBallast(double Ballast)
+CAI302Device::PutBallast(fixed Ballast)
 {
   char szTmp[32];
-  sprintf(szTmp, "!g,b%d\r", int((Ballast * 100) + 0.5));
+  sprintf(szTmp, "!g,b%u\r", uround(Ballast * 100));
 
   port->Write(szTmp);
 

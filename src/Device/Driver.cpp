@@ -56,19 +56,19 @@ AbstractDevice::ParseNMEA(const char *line, struct NMEA_INFO *info,
 }
 
 bool
-AbstractDevice::PutMacCready(double MacCready)
+AbstractDevice::PutMacCready(fixed MacCready)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutBugs(double bugs)
+AbstractDevice::PutBugs(fixed bugs)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutBallast(double ballast)
+AbstractDevice::PutBallast(fixed ballast)
 {
   return true;
 }

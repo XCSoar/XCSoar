@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_ALL_HPP
 #define XCSOAR_DEVICE_ALL_HPP
 
+#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -34,9 +35,9 @@ class AtmosphericPressure;
 
 void devTick(const NMEA_INFO &basic, const DERIVED_INFO &calculated);
 
-void AllDevicesPutMacCready(double MacCready);
-void AllDevicesPutBugs(double bugs);
-void AllDevicesPutBallast(double ballast);
+void AllDevicesPutMacCready(fixed MacCready);
+void AllDevicesPutBugs(fixed bugs);
+void AllDevicesPutBallast(fixed ballast);
 void AllDevicesPutVolume(int volume);
 void AllDevicesPutActiveFrequency(double frequency);
 void AllDevicesPutStandbyFrequency(double frequency);
