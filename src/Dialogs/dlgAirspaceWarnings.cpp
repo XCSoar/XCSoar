@@ -151,6 +151,7 @@ OnEnableClicked(WndButton &Sender)
 
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
+    airspace_warnings->acknowledge_inside(*airspace, false);
     airspace_warnings->acknowledge_warning(*airspace, false);
     airspace_warnings->acknowledge_day(*airspace, false);
     wAirspaceList->invalidate();
