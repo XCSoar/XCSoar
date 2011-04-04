@@ -214,6 +214,18 @@ OnContentHelp(WindowControl *Sender)
   dlgHelpShowModal(wf->GetMainWindow(), caption, text);
 }
 
+
+static void
+SetTitle(const TCHAR *name)
+{
+  const unsigned BUFFER_LENGTH = InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH + 32;
+  TCHAR caption[BUFFER_LENGTH];
+
+  _sntprintf(caption, BUFFER_LENGTH, _T("%s: %s"), _("InfoBox Layout"), name);
+  wf->SetCaption(caption);
+}
+
+
 bool
 dlgConfigInfoboxesShowModal(SingleWindow &parent,
                             InfoBoxLayout::Geometry geometry,
@@ -224,8 +236,9 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   PixelRect rc = parent.get_client_rect();
   wf = new WndForm(parent, rc.left, rc.top,
-                   rc.right - rc.left, rc.bottom - rc.top,
-                   _("Layout"));
+                   rc.right - rc.left, rc.bottom - rc.top);
+
+  SetTitle(data.name);
 
   ContainerWindow &client_area = wf->GetClientAreaWindow();
   rc = client_area.get_client_rect();
