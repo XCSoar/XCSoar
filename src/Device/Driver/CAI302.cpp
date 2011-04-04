@@ -128,15 +128,12 @@ class CAI302Device : public AbstractDevice {
 private:
   Port *port;
 
-  int MacCreadyUpdateTimeout;
-  int BugsUpdateTimeout;
-  int BallastUpdateTimeout;
+  int mac_cready, bugs, ballast;
 
 public:
   CAI302Device(Port *_port)
     :port(_port),
-     MacCreadyUpdateTimeout(0), BugsUpdateTimeout(0),
-     BallastUpdateTimeout(0) {}
+     mac_cready(-1), bugs(-1), ballast(-1) {}
 
 public:
   virtual bool Open(OperationEnvironment &env);
@@ -217,37 +214,36 @@ CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
 bool
 CAI302Device::PutMacCready(fixed MacCready)
 {
-  char szTmp[32];
-  sprintf(szTmp, "!g,m%d\r",
-          iround(Units::ToUserUnit(MacCready * 10, unKnots)));
+  mac_cready = uround(Units::ToUserUnit(fixed(MacCready) * 10, unKnots));
 
+  char szTmp[32];
+  sprintf(szTmp, "!g,m%u\r", mac_cready);
   port->Write(szTmp);
 
-  MacCreadyUpdateTimeout = 2;
   return true;
 }
 
 bool
 CAI302Device::PutBugs(fixed Bugs)
 {
-  char szTmp[32];
-  sprintf(szTmp, "!g,u%u\r", uround(Bugs * 100));
+  bugs = uround(fixed(Bugs) * 100);
 
+  char szTmp[32];
+  sprintf(szTmp, "!g,u%u\r", bugs);
   port->Write(szTmp);
 
-  BugsUpdateTimeout = 2;
   return true;
 }
 
 bool
 CAI302Device::PutBallast(fixed Ballast)
 {
-  char szTmp[32];
-  sprintf(szTmp, "!g,b%u\r", uround(Ballast * 100));
+  ballast = uround(Ballast * 100);
 
+  char szTmp[32];
+  sprintf(szTmp, "!g,b%u\r", ballast);
   port->Write(szTmp);
 
-  BallastUpdateTimeout = 2;
   return true;
 }
 
@@ -571,29 +567,21 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   line.skip(2);
 
-  if (line.read_checked(value)) {
-    if (MacCreadyUpdateTimeout <= 0)
-      GPS_INFO->settings.mac_cready = Units::ToSysUnit(value / 10, unKnots);
-    else
-      MacCreadyUpdateTimeout--;
+  int i;
+
+  if (line.read_checked(i) && i != mac_cready) {
+    mac_cready = i;
+    GPS_INFO->settings.mac_cready = Units::ToSysUnit(fixed(i) / 10, unKnots);
   }
 
-  if (line.read_checked(value)) {
-    GPS_INFO->settings.ballast = value / 100;
-    if (BallastUpdateTimeout <= 0) {
-      /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
-      ///    oldGlidePolar::SetBallast(GPS_INFO->Ballast);
-    } else
-      BallastUpdateTimeout--;
+  if (line.read_checked(i) && i != ballast) {
+    ballast = i;
+    GPS_INFO->settings.ballast = fixed(i) / 100;
   }
 
-  if (line.read_checked(value)) {
-    GPS_INFO->settings.bugs = value / 100;
-    if (BugsUpdateTimeout <= 0) {
-      /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
-      /// oldGlidePolar::SetBugs(GPS_INFO->Bugs);
-    } else
-      BugsUpdateTimeout--;
+  if (line.read_checked(i) && i != bugs) {
+    bugs = i;
+    GPS_INFO->settings.bugs = fixed(i) / 100;
   }
 
   return true;
