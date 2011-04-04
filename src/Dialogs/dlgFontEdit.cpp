@@ -64,11 +64,13 @@ OnResetClicked(WndButton &Sender)
 static void
 GetLogFont(LOGFONT &logfont)
 {
+#ifndef ENABLE_SDL
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if (wp)
     _tcsncpy(logfont.lfFaceName,
              wp->GetDataField()->GetAsString(), LF_FACESIZE - 1);
+#endif
 
   logfont.lfHeight = GetFormValueInteger(*wf, _T("prpFontHeight"));
   logfont.lfWeight = GetFormValueBoolean(*wf, _T("prpFontWeight")) ? 700 : 500;
@@ -121,12 +123,17 @@ InitGUI(const TCHAR * FontDescription)
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if (wp) {
+#ifdef ENABLE_SDL
+    /* we cannot obtain a list of fonts on SDL/OpenGL currently */
+    wp->hide();
+#else
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_T("Tahoma"));
     dfe->addEnumText(_T("TahomaBD"));
     dfe->addEnumText(_T("DejaVu Sans Condensed"));
     // RLD ToDo code: add more font faces, and validate their availabiliy
+#endif
   }
 }
 
@@ -138,6 +145,7 @@ LoadGUI()
 
   WndProperty* wp;
 
+#ifndef ENABLE_SDL
   wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if (wp) {
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
@@ -158,6 +166,7 @@ LoadGUI()
     }
     wp->RefreshDisplay();
   }
+#endif
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontHeight"));
   if (wp) {
