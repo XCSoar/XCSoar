@@ -221,5 +221,8 @@ Fonts::GetStandardFontFace()
   if (is_altair())
     return _T("RasterGothicFourteenCond");
 
+  if (is_android())
+    return _T("Droid Sans");
+
   return _T("Tahoma");
 }
