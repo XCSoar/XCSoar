@@ -243,7 +243,7 @@ bool
 CAI302Device::PutBallast(double Ballast)
 {
   char szTmp[32];
-  sprintf(szTmp, "!g,b%d\r", int((Ballast * 10) + 0.5));
+  sprintf(szTmp, "!g,b%d\r", int((Ballast * 100) + 0.5));
 
   port->Write(szTmp);
 
