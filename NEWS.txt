@@ -13,6 +13,7 @@ Version 6.0.9 - not yet released
   - don't require GPS and Bluetooth on Android Market
   - implement the battery InfoBox
   - internal GPS: show "waiting for fix" until location is obtained
+  - allow SD card installation
 
 Version 6.0.8 - 2011/03/23
 * don't estimate thermal source for skewed thermals
