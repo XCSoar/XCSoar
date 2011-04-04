@@ -89,6 +89,8 @@ public class InternalGPS
     sensorManager.unregisterListener(this);
 
     if (locationProvider != null) {
+      setConnected(1); // waiting for fix
+
       locationManager.requestLocationUpdates(locationProvider,
                                              1000, 0, this);
       sensorManager.registerListener(this, accelerometer,
