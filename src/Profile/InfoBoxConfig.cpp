@@ -61,7 +61,7 @@ InfoBoxManagerConfig::InfoBoxManagerConfig()
   _tcscpy(panel[1].name, N_("Cruise"));
   _tcscpy(panel[2].name, N_("FinalGlide"));
   for (unsigned int i = PREASSIGNED_PANELS; i < MAX_INFOBOX_PANELS; i++)
-    _stprintf(panel[i].name, N_("Aux-%u"), i-2);
+    _stprintf(panel[i].name, N_("AUX-%u"), i-2);
 
   for (unsigned int i = 0; i < DFLT_CONFIG_PANELS; i++)
     for (unsigned int j = 0; j < DFLT_CONFIG_BOXES; j++)
@@ -99,7 +99,7 @@ Profile::GetInfoBoxManagerConfig(InfoBoxManagerConfig &config)
       _stprintf(profileKey, _T("InfoBoxPanel%uName"), i);
       Get(profileKey, config.panel[i].name, InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH);
       if (config.panel[i].name[0] == 0)
-        _stprintf(config.panel[i].name, N_("Aux-%u"), i-2);
+        _stprintf(config.panel[i].name, N_("AUX-%u"), i-2);
     }
     for (unsigned int j = 0; j < InfoBoxPanelConfig::MAX_INFOBOXES; j++) {
       _stprintf(profileKey, _T("InfoBoxPanel%uBox%u"), i, j);
