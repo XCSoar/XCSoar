@@ -215,7 +215,7 @@ OnContentHelp(WindowControl *Sender)
 }
 
 bool
-dlgConfigInfoboxesShowModal(SingleWindow &parent, const TCHAR *panel_name,
+dlgConfigInfoboxesShowModal(SingleWindow &parent,
                             InfoBoxLayout::Geometry geometry,
                             InfoBoxPanelConfig &data_r)
 {

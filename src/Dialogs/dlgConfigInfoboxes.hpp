@@ -34,7 +34,7 @@ class SingleWindow;
  * @return true when the #InfoBoxPanelConfig object has been modified
  */
 bool
-dlgConfigInfoboxesShowModal(SingleWindow &parent, const TCHAR *panel_name,
+dlgConfigInfoboxesShowModal(SingleWindow &parent,
                             InfoBoxLayout::Geometry geometry,
                             InfoBoxPanelConfig &data);
 
