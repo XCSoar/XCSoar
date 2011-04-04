@@ -37,78 +37,39 @@ Copyright_License {
 #include "Dialogs/dlgConfigInfoboxes.hpp"
 
 static WndForm* wf = NULL;
+static WndButton *buttons[InfoBoxManagerConfig::MAX_INFOBOX_PANELS];
+
+
+static unsigned
+buttonIndex(const WndButton *button)
+{
+  for (unsigned i = 0; i < InfoBoxManagerConfig::MAX_INFOBOX_PANELS; i++)
+    if (button == buttons[i])
+      return i;
+  // Not reached
+  return 0;
+}
+
 
 static void
-dlgConfigInfoboxesShowModal(SingleWindow &main_window, unsigned panel)
+OnInfoBoxesButton(WndButton &button)
 {
-  InfoBoxPanelConfig &data = infoBoxManagerConfig.panel[panel];
+  unsigned i = buttonIndex(&button);
+  InfoBoxPanelConfig &data = infoBoxManagerConfig.panel[i];
 
-  bool changed = dlgConfigInfoboxesShowModal(main_window,
-                                             InfoBoxLayout::InfoBoxGeometry,
-                                             data);
+  bool changed =
+    dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
+                                InfoBoxLayout::InfoBoxGeometry, data,
+                                i >= InfoBoxManagerConfig::PREASSIGNED_PANELS);
   if (changed) {
     data.modified = true;
     Profile::SetInfoBoxManagerConfig(infoBoxManagerConfig);
     Profile::Save();
     LogDebug(_T("InfoBox configuration: Changes saved"));
+    buttons[i]->SetCaption(infoBoxManagerConfig.panel[i].name);
   }
 }
 
-static void
-OnInfoBoxesCircling(gcc_unused WndButton &button)
-{
-  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
-                              InfoBoxManager::PANEL_CIRCLING);
-}
-
-static void
-OnInfoBoxesCruise(gcc_unused WndButton &button)
-{
-  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
-                              InfoBoxManager::PANEL_CRUISE);
-}
-
-static void
-OnInfoBoxesFinalGlide(gcc_unused WndButton &button)
-{
-  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
-                              InfoBoxManager::PANEL_FINAL_GLIDE);
-}
-
-static void
-OnInfoBoxesAux1(gcc_unused WndButton &button)
-{
-  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
-                              InfoBoxManager::PANEL_AUXILIARY);
-}
-
-static void
-OnInfoBoxesAux2(gcc_unused WndButton &button)
-{
-  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
-                              InfoBoxManager::PANEL_AUXILIARY+1);
-}
-
-static void
-OnInfoBoxesAux3(gcc_unused WndButton &button)
-{
-  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
-                              InfoBoxManager::PANEL_AUXILIARY+2);
-}
-
-static void
-OnInfoBoxesAux4(gcc_unused WndButton &button)
-{
-  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
-                              InfoBoxManager::PANEL_AUXILIARY+3);
-}
-
-static void
-OnInfoBoxesAux5(gcc_unused WndButton &button)
-{
-  dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
-                              InfoBoxManager::PANEL_AUXILIARY+4);
-}
 
 void
 InfoBoxesConfigPanel::Init(WndForm *_wf)
@@ -116,23 +77,15 @@ InfoBoxesConfigPanel::Init(WndForm *_wf)
   assert(_wf != NULL);
   wf = _wf;
 
-  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesCircling")))->
-      SetOnClickNotify(OnInfoBoxesCircling);
-  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesCruise")))->
-      SetOnClickNotify(OnInfoBoxesCruise);
-  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesFinalGlide")))->
-      SetOnClickNotify(OnInfoBoxesFinalGlide);
-  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAux1")))->
-      SetOnClickNotify(OnInfoBoxesAux1);
-  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAux2")))->
-      SetOnClickNotify(OnInfoBoxesAux2);
-  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAux3")))->
-      SetOnClickNotify(OnInfoBoxesAux3);
-  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAux4")))->
-      SetOnClickNotify(OnInfoBoxesAux4);
-  ((WndButton *)wf->FindByName(_T("cmdInfoBoxesAux5")))->
-      SetOnClickNotify(OnInfoBoxesAux5);
-
+  for (unsigned i = 0; i < InfoBoxManagerConfig::MAX_INFOBOX_PANELS; i++) {
+    TCHAR buffer[32];
+    _stprintf(buffer, _T("cmdInfoBoxesPanel%u"), i);
+    buttons[i] = (WndButton*) wf->FindByName(buffer);
+    if (buttons[i]) {
+      buttons[i]->SetOnClickNotify(OnInfoBoxesButton);
+      buttons[i]->SetCaption(infoBoxManagerConfig.panel[i].name);
+    }
+  }
 }
 
 

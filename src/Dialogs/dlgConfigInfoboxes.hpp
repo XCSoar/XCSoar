@@ -36,6 +36,7 @@ class SingleWindow;
 bool
 dlgConfigInfoboxesShowModal(SingleWindow &parent,
                             InfoBoxLayout::Geometry geometry,
-                            InfoBoxPanelConfig &data);
+                            InfoBoxPanelConfig &data,
+                            bool allow_name_change);
 
 #endif

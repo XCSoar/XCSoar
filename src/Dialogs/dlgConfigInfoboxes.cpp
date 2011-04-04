@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/dlgConfigInfoboxes.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/TextEntry.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/Edit.hpp"
@@ -56,6 +57,7 @@ static InfoBoxLayout::Layout info_box_layout;
 static InfoBoxPreview previews[InfoBoxPanelConfig::MAX_INFOBOXES];
 static unsigned current_preview;
 
+static WndButton *buttonPanelName;
 static WndProperty *edit_select;
 static WndProperty *edit_content;
 static WndButton *buttonPaste;
@@ -215,20 +217,38 @@ OnContentHelp(WindowControl *Sender)
 
 
 static void
-SetTitle(const TCHAR *name)
+UpdatePanelName()
 {
   const unsigned BUFFER_LENGTH = InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH + 32;
   TCHAR caption[BUFFER_LENGTH];
 
-  _sntprintf(caption, BUFFER_LENGTH, _T("%s: %s"), _("InfoBox Layout"), name);
+  _sntprintf(caption, BUFFER_LENGTH, _T("%s: %s"), _("InfoBox Layout"), data.name);
   wf->SetCaption(caption);
+
+  _sntprintf(caption, BUFFER_LENGTH, _T("%s: %s"), _("Name"), data.name);
+  buttonPanelName->SetCaption(caption);
+}
+
+
+static void
+OnNameAccess(WndButton &button)
+{
+  if (buttonPanelName) {
+    TCHAR buffer[InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH];
+    _tcscpy(buffer, data.name);
+    if (dlgTextEntryShowModal(buffer, InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH)) {
+      _tcscpy(data.name, buffer);
+      UpdatePanelName();
+    }
+  }
 }
 
 
 bool
 dlgConfigInfoboxesShowModal(SingleWindow &parent,
                             InfoBoxLayout::Geometry geometry,
-                            InfoBoxPanelConfig &data_r)
+                            InfoBoxPanelConfig &data_r,
+                            bool allow_name_change)
 {
   current_preview = 0;
   data = data_r;
@@ -236,8 +256,6 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   PixelRect rc = parent.get_client_rect();
   wf = new WndForm(parent, rc.left, rc.top,
                    rc.right - rc.left, rc.bottom - rc.top);
-
-  SetTitle(data.name);
 
   ContainerWindow &client_area = wf->GetClientAreaWindow();
   rc = client_area.get_client_rect();
@@ -277,6 +295,17 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   int y = rc.top;
 
+  ButtonWindowStyle button_style;
+  button_style.tab_stop();
+
+  buttonPanelName =
+    new WndButton(client_area, _T(""),
+                  x, y, width, height, button_style, OnNameAccess);
+  buttonPanelName->set_enabled(allow_name_change);
+  UpdatePanelName();
+
+  y += height;
+
   edit_select = new WndProperty(client_area, _("InfoBox"),
                                 x, y, width, height, caption_width,
                                 background_color, style, edit_style,
@@ -312,8 +341,6 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   RefreshEditContent();
 
-  ButtonWindowStyle button_style;
-  button_style.tab_stop();
   const unsigned button_width = Layout::Scale(60);
   const unsigned button_height = Layout::Scale(28);
   const int button_y = rc.bottom - button_height;
@@ -338,6 +365,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   int result = wf->ShowModal();
 
   delete wf;
+  delete buttonPanelName;
   delete edit_select;
   delete edit_content;
   delete close_button;
@@ -349,6 +377,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
     for (unsigned i = 0; i < InfoBoxPanelConfig::MAX_INFOBOXES; ++i)
       if (data.infoBoxID[i] != data_r.infoBoxID[i])
         changed = true;
+    changed |= (_tcscmp(data.name, data_r.name) != 0);
 
     if (changed)
       data_r = data;
