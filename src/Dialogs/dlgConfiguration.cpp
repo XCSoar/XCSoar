@@ -73,8 +73,8 @@ enum config_page {
   PAGE_UNITS,
   PAGE_USER_INTERFACE,
   PAGE_LAYOUT,
-  PAGE_INFOBOX_MODES,
   PAGE_DISPLAY_PAGES,
+  PAGE_INFOBOX_MODES,
   PAGE_EXPERIMENTAL,
 };
 
@@ -97,8 +97,8 @@ static const TCHAR *const captions[] = {
   N_("Units"),
   N_("User Interface"),
   N_("Interface Appearance"),
-  N_("InfoBox Modes"),
   N_("InfoBox Pages"),
+  N_("InfoBox Modes"),
   N_("Experimental Features"),
 };
 
