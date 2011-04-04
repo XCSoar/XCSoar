@@ -78,12 +78,7 @@ GetLogFont(LOGFONT &logfont)
 static void RedrawSampleFont(void)
 {
   GetLogFont(NewLogFont);
-
-#ifdef ENABLE_SDL
-  // XXX
-#else /* !ENABLE_SDL */
   NewFont.set(NewLogFont);
-#endif /* !ENABLE_SDL */
 
   WndFrame *wp = (WndFrame *)wf->FindByName(_T("prpFontSample"));
   if (wp) {
