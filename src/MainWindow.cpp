@@ -287,3 +287,18 @@ MainWindow::LeaveCustomView()
   FullScreen = !FullScreen;
   SetFullScreen(!FullScreen);
 }
+
+#ifdef ANDROID
+
+void
+MainWindow::on_pause()
+{
+  if (!map.defined() && has_dialog())
+    /* suspending before initialization has finished doesn't leave
+       anything worth resuming, so let's just quit now */
+    CancelDialog();
+
+  SingleWindow::on_pause();
+}
+
+#endif /* ANDROID */
