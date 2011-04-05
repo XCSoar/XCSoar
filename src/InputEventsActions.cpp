@@ -733,11 +733,13 @@ InputEvents::eventMacCready(const TCHAR *misc)
     polar.set_mc(mc);
     protected_task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
+    InfoBoxManager::SetDirty();
   } else if (_tcscmp(misc, _T("down")) == 0) {
     mc = std::max(mc - fixed_one / 10, fixed_zero);
     polar.set_mc(mc);
     protected_task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
+    InfoBoxManager::SetDirty();
   } else if (_tcscmp(misc, _T("auto toggle")) == 0) {
     XCSoarInterface::SetSettingsComputer().auto_mc =
         !XCSoarInterface::SettingsComputer().auto_mc;
