@@ -9,6 +9,7 @@ Version 6.0.9 - not yet released
   - fix for hanging map on slow hardware
 * Windows
   - fix setting the system time from GPS
+  - PPC2000: major performance improvement
 * Android
   - don't require GPS and Bluetooth on Android Market
   - implement the battery InfoBox
