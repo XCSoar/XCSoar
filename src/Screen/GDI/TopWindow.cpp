@@ -101,7 +101,7 @@ TopWindow::full_screen()
   ::SetWindowPos(hWnd, HWND_TOP, 0, 0,
                  GetSystemMetrics(SM_CXSCREEN),
                  GetSystemMetrics(SM_CYSCREEN),
-                 SWP_SHOWWINDOW);
+                 SWP_SHOWWINDOW|SWP_NOOWNERZORDER);
 #endif
 }
 
