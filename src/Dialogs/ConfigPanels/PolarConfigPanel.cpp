@@ -329,9 +329,9 @@ PolarConfigPanel::Save()
     changed = true;
 
     if (protected_task_manager != NULL) {
-      GlidePolar gp = XCSoarInterface::Calculated().glide_polar_task;
-      PolarGlue::LoadFromProfile(gp, settings_computer);
-      protected_task_manager->set_glide_polar(gp);
+      PolarGlue::LoadFromProfile(settings_computer.glide_polar_task,
+                                 settings_computer);
+      protected_task_manager->set_glide_polar(settings_computer.glide_polar_task);
     }
   }
 

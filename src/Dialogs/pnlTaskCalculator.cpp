@@ -57,7 +57,7 @@ GetCruiseEfficiency(void)
 
 static void
 SetMC(fixed mc) {
-  GlidePolar polar = XCSoarInterface::Calculated().glide_polar_task;
+  GlidePolar &polar = XCSoarInterface::SetSettingsComputer().glide_polar_task;
   polar.set_mc(mc);
   protected_task_manager->set_glide_polar(polar);
   device_blackboard.SetMC(mc);
@@ -107,7 +107,7 @@ RefreshCalculator(void)
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetUnits(Units::GetVerticalSpeedName());
-    df.Set(Units::ToUserVSpeed(XCSoarInterface::Calculated().glide_polar_task.get_mc()));
+    df.Set(Units::ToUserVSpeed(CommonInterface::SettingsComputer().glide_polar_task.get_mc()));
     wp->RefreshDisplay();
   }
 
@@ -212,7 +212,7 @@ void
 pnlTaskCalculator::OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
-  fixed clast = XCSoarInterface::Calculated().glide_polar_task.get_cruise_efficiency();
+  fixed clast = CommonInterface::SettingsComputer().glide_polar_task.get_cruise_efficiency();
   (void)clast; // unused for now
 
   switch (Mode) {
@@ -246,7 +246,7 @@ pnlTaskCalculator::OnTabPreShow(TabBarControl::EventType EventType)
 {
   if (!lazy_loaded) {
     lazy_loaded = true;
-    const GlidePolar& polar = XCSoarInterface::Calculated().glide_polar_task;
+    const GlidePolar& polar = CommonInterface::SettingsComputer().glide_polar_task;
 
     fixed CRUISE_EFFICIENCY_enter = polar.get_cruise_efficiency();
 //    fixed MACCREADY_enter = protected_task_manager->get_glide_polar().get_mc();

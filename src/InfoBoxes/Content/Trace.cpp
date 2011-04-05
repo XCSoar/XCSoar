@@ -58,7 +58,7 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
     return;
 
   TraceHistoryRenderer::RenderVario(canvas, get_spark_rect(infobox), var, center,
-                                    CommonInterface::Calculated().glide_polar_task.get_mc());
+                                    CommonInterface::SettingsComputer().glide_polar_task.get_mc());
 }
 
 void
@@ -160,6 +160,7 @@ InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canva
 {
   ThermalBandRenderer::DrawThermalBandSpark(CommonInterface::Basic(),
                                             CommonInterface::Calculated(),
+                                            CommonInterface::SettingsComputer(),
                                             canvas, get_spark_rect(infobox), 
                                             XCSoarInterface::SettingsComputer());
 }

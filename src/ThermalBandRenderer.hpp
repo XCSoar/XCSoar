@@ -31,6 +31,7 @@ class Chart;
 class Canvas;
 struct NMEA_INFO;
 struct DERIVED_INFO;
+struct SETTINGS_COMPUTER;
 class OrderedTaskBehaviour;
 class TaskBehaviour;
 
@@ -38,6 +39,7 @@ class ThermalBandRenderer {
 public:
   static void DrawThermalBand(const NMEA_INFO& basic,
                               const DERIVED_INFO& calculated,
+                              const SETTINGS_COMPUTER &settings_computer,
                               Canvas &canvas, 
                               const PixelRect &rc,
                               const TaskBehaviour& task_props,
@@ -45,6 +47,7 @@ public:
 
   static void DrawThermalBandSpark(const NMEA_INFO& basic,
                                    const DERIVED_INFO& calculated,
+                                   const SETTINGS_COMPUTER &settings_computer,
                                    Canvas &canvas, 
                                    const PixelRect &rc,
                                    const TaskBehaviour& task_props);
@@ -52,12 +55,13 @@ public:
 protected:
   static void DrawThermalBand(const NMEA_INFO& basic,
                               const DERIVED_INFO& calculated,
+                              const SETTINGS_COMPUTER &settings_computer,
                               Chart &chart,
                               const TaskBehaviour& task_props,
                               const OrderedTaskBehaviour* ordered_props);
 
-  static void scale_chart(const NMEA_INFO& basic,
-                          const DERIVED_INFO& calculated,
+  static void scale_chart(const DERIVED_INFO &calculated,
+                          const SETTINGS_COMPUTER &settings_computer,
                           Chart &chart);
 
 };

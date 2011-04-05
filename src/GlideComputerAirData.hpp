@@ -95,7 +95,6 @@ private:
   void FlightState(const GlidePolar& glide_polar);
   void TakeoffLanding();
   void AirspaceWarning();
-  void BallastDump();
   void ThermalSources();
 
   /**
@@ -120,7 +119,6 @@ private:
   void Turning();
   void ProcessSun();
   GPSClock airspace_clock;
-  GPSClock ballast_clock;
 
   WindowFilter<30> vario_30s_filter;
   WindowFilter<30> netto_30s_filter;

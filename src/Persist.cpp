@@ -113,7 +113,7 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated,
     fclose(file);
     return;
   }
-  GlidePolar polar = glide_computer.Calculated().glide_polar_task;
+  GlidePolar polar = glide_computer.SettingsComputer().glide_polar_task;
 
   double MACCREADY = polar.get_mc();
   double BUGS = polar.get_bugs();
@@ -188,7 +188,7 @@ SaveCalculationsPersist(const NMEA_INFO &gps_info,
 
   /// @todo persistence for OLC data
 
-  GlidePolar polar = glide_computer.Calculated().glide_polar_task;
+  GlidePolar polar = glide_computer.SettingsComputer().glide_polar_task;
   double MACCREADY = polar.get_mc();
   double BUGS = polar.get_bugs();
   double BALLAST = polar.get_ballast();

@@ -209,7 +209,10 @@ InfoBoxContentMacCready::GetDialogContent() {
 void
 InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
 {
-  SetVSpeed(infobox, XCSoarInterface::Calculated().glide_polar_task.get_mc());
+  const SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SettingsComputer();
+
+  SetVSpeed(infobox, settings_computer.glide_polar_task.get_mc());
 
   // Set Comment
   if (XCSoarInterface::SettingsComputer().auto_mc)
@@ -224,7 +227,9 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
   if (protected_task_manager == NULL)
     return false;
 
-  GlidePolar polar = XCSoarInterface::Calculated().glide_polar_task;
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
+  GlidePolar &polar = settings_computer.glide_polar_task;
   fixed mc = polar.get_mc();
 
   switch (keycode) {
@@ -264,7 +269,9 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
   if (protected_task_manager == NULL)
     return false;
 
-  GlidePolar polar = XCSoarInterface::Calculated().glide_polar_task;
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
+  GlidePolar &polar = settings_computer.glide_polar_task;
   fixed mc = polar.get_mc();
 
   if (_tcscmp(misc, _T("+0.1")) == 0) {

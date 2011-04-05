@@ -46,7 +46,6 @@ GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task):
 void
 GlideComputerTask::Initialise()
 {
-  last_external_settings.Clear();
 }
 
 void
@@ -67,17 +66,6 @@ GlideComputerTask::ProcessBasicTask()
 
   task->set_task_behaviour(SettingsComputer());
 
-  // even if we are in auto mode, force the value in the computer.
-  // if in auto mode, the value will get propagated out via the mechanism
-  // below.
-  if (last_external_settings.mac_cready_available.modified(basic.settings.mac_cready_available)) {
-    GlidePolar glide_polar = task->get_glide_polar();
-    glide_polar.set_mc(basic.settings.mac_cready);
-    task->set_glide_polar(glide_polar);
-  }
-
-  last_external_settings = basic.settings;
-
   if (basic.Time != LastBasic().Time && basic.LocationAvailable) {
     const AIRCRAFT_STATE current_as = ToAircraftState(basic, Calculated());
     const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic(),
@@ -96,7 +84,6 @@ GlideComputerTask::ProcessBasicTask()
   SetCalculated().common_stats = task->get_common_stats();
   SetCalculated().contest_stats = task->get_contest_stats();
 
-  SetCalculated().glide_polar_task = task->get_glide_polar();
   SetCalculated().glide_polar_safety = task->get_safety_polar();
 }
 

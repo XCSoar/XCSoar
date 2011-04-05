@@ -24,6 +24,7 @@ Copyright_License {
 #include "ThermalBandRenderer.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
+#include "SettingsComputer.hpp"
 #include "Screen/Chart.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Graphics.hpp"
@@ -34,8 +35,8 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 void
-ThermalBandRenderer::scale_chart(const NMEA_INFO& basic,
-                                 const DERIVED_INFO& calculated,
+ThermalBandRenderer::scale_chart(const DERIVED_INFO &calculated,
+                                 const SETTINGS_COMPUTER &settings_computer,
                                  Chart &chart)
 {
   chart.ScaleYFromValue(fixed_zero);
@@ -43,13 +44,14 @@ ThermalBandRenderer::scale_chart(const NMEA_INFO& basic,
 
   chart.ScaleXFromValue(fixed_zero);
   chart.ScaleXFromValue(fixed_half);
-  chart.ScaleXFromValue(calculated.glide_polar_task.get_mc());
+  chart.ScaleXFromValue(settings_computer.glide_polar_task.get_mc());
 }
 
 
 void
 ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
                                      const DERIVED_INFO& calculated,
+                                     const SETTINGS_COMPUTER &settings_computer,
                                      Chart &chart, 
                                      const TaskBehaviour& task_props,
                                      const OrderedTaskBehaviour* ordered_props)
@@ -129,7 +131,7 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
   // position of thermal band
   Pen pen(2, Appearance.InverseInfoBox? Color::WHITE: Color::BLACK);
   chart.DrawLine(fixed_zero, h, 
-                 calculated.glide_polar_task.get_mc(), h, pen);
+                 settings_computer.glide_polar_task.get_mc(), h, pen);
 
   /*
   RasterPoint GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
@@ -162,14 +164,16 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
 void 
 ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
                                      const DERIVED_INFO& calculated,
+                                     const SETTINGS_COMPUTER &settings_computer,
                                      Canvas &canvas, 
                                      const PixelRect &rc,
                                      const TaskBehaviour& task_props,
                                      const OrderedTaskBehaviour* ordered_props)
 {
   Chart chart(canvas, rc);
-  scale_chart(basic, calculated, chart);
-  DrawThermalBand(basic, calculated, chart, task_props, ordered_props);
+  scale_chart(calculated, settings_computer, chart);
+  DrawThermalBand(basic, calculated, settings_computer,
+                  chart, task_props, ordered_props);
 
   chart.DrawXGrid(Units::ToSysVSpeed(fixed_one), fixed_zero,
                   Chart::STYLE_THINDASHPAPER, fixed_one, true);
@@ -184,6 +188,7 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
 void 
 ThermalBandRenderer::DrawThermalBandSpark(const NMEA_INFO& basic,
                                           const DERIVED_INFO& calculated,
+                                          const SETTINGS_COMPUTER &settings_computer,
                                           Canvas &canvas, 
                                           const PixelRect &rc,
                                           const TaskBehaviour& task_props)
@@ -191,6 +196,7 @@ ThermalBandRenderer::DrawThermalBandSpark(const NMEA_INFO& basic,
   Chart chart(canvas, rc);
   chart.PaddingBottom = 0;
   chart.PaddingLeft = IBLSCALE(3);
-  scale_chart(basic, calculated, chart);
-  DrawThermalBand(basic, calculated, chart, task_props, NULL);
+  scale_chart(calculated, settings_computer, chart);
+  DrawThermalBand(basic, calculated, settings_computer,
+                  chart, task_props, NULL);
 }

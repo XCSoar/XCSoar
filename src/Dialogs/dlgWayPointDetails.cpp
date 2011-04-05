@@ -698,7 +698,7 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   ((WndProperty *)wf->FindByName(_T("prpBearing"))) ->SetText(sTmp);
 
   if (protected_task_manager != NULL) {
-    GlidePolar glide_polar = XCSoarInterface::Calculated().glide_polar_task;
+    GlidePolar glide_polar = CommonInterface::SettingsComputer().glide_polar_task;
     const GlidePolar &safety_polar = XCSoarInterface::Calculated().glide_polar_safety;
 
     UnorderedTaskPoint t(way_point, XCSoarInterface::SettingsComputer());

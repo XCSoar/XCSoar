@@ -39,6 +39,8 @@ Copyright_License {
 #include "Replay/Replay.hpp"
 #include "Audio/Sound.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Task/ProtectedTaskManager.hpp"
+#include "GPSClock.hpp"
 
 void
 ProcessTimer::HeapCompact()
@@ -132,6 +134,69 @@ SystemClockTimer()
 #endif
 }
 
+static void
+MacCreadyProcessTimer()
+{
+  static ExternalSettings last_external_settings;
+  static Validity last_auto_mac_cready;
+
+  SETTINGS_COMPUTER &settings_computer = CommonInterface::SetSettingsComputer();
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  GlidePolar &glide_polar = settings_computer.glide_polar_task;
+
+  if (basic.settings.mac_cready_available.modified(last_external_settings.mac_cready_available)) {
+    glide_polar.set_mc(basic.settings.mac_cready);
+    if (protected_task_manager != NULL)
+      protected_task_manager->set_glide_polar(glide_polar);
+  } else if (calculated.auto_mac_cready_available.modified(last_auto_mac_cready)) {
+    last_auto_mac_cready = calculated.auto_mac_cready_available;
+    glide_polar.set_mc(calculated.auto_mac_cready);
+    device_blackboard.SetMC(calculated.auto_mac_cready);
+  }
+
+  last_external_settings = basic.settings;
+}
+
+static void
+BallastDumpProcessTimer()
+{
+  // only update every 5 seconds to stop flooding the devices
+  static GPSClock ballast_clock(fixed(5));
+
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
+  const NMEA_INFO &basic = CommonInterface::Basic();
+
+  fixed dt = ballast_clock.delta_advance(basic.Time);
+
+  if (!settings_computer.BallastTimerActive || negative(dt))
+    return;
+
+  GlidePolar &glide_polar = settings_computer.glide_polar_task;
+  fixed ballast = glide_polar.get_ballast();
+  fixed percent_per_second =
+    fixed_one / max(10, settings_computer.BallastSecsToEmpty);
+
+  ballast -= dt * percent_per_second;
+  if (negative(ballast)) {
+    settings_computer.BallastTimerActive = false;
+    ballast = fixed_zero;
+  }
+
+  glide_polar.set_ballast(ballast);
+
+  if (protected_task_manager != NULL)
+    protected_task_manager->set_glide_polar(glide_polar);
+}
+
+static void
+SettingsProcessTimer()
+{
+  MacCreadyProcessTimer();
+  BallastDumpProcessTimer();
+}
+
 void
 ProcessTimer::CommonProcessTimer()
 {
@@ -141,6 +206,8 @@ ProcessTimer::CommonProcessTimer()
 
   ActionInterface::DisplayModes();
   XCSoarInterface::ExchangeBlackboard();
+
+  SettingsProcessTimer();
 
   InfoBoxManager::ProcessTimer();
   InputEvents::ProcessTimer();

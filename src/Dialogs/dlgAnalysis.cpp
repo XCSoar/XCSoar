@@ -105,7 +105,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
                        XCSoarInterface::Calculated(), protected_task_manager);
     break;
   case ANALYSIS_PAGE_CLIMB:
-    fs.RenderClimb(canvas, rcgfx, XCSoarInterface::Calculated().glide_polar_task);
+    fs.RenderClimb(canvas, rcgfx, CommonInterface::SettingsComputer().glide_polar_task);
     break;
   case ANALYSIS_PAGE_THERMAL_BAND:
   {
@@ -115,6 +115,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
     }
     ThermalBandRenderer::DrawThermalBand(XCSoarInterface::Basic(),
                                          XCSoarInterface::Calculated(),
+                                         CommonInterface::SettingsComputer(),
                                          canvas, rcgfx, 
                                          XCSoarInterface::SettingsComputer(),
                                          &otb);
@@ -127,7 +128,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   case ANALYSIS_PAGE_POLAR:
     fs.RenderGlidePolar(canvas, rcgfx, XCSoarInterface::Calculated(),
                         XCSoarInterface::SettingsComputer(),
-                        XCSoarInterface::Calculated().glide_polar_task);
+                        CommonInterface::SettingsComputer().glide_polar_task);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
     fs.RenderTemperature(canvas, rcgfx);
@@ -226,9 +227,9 @@ Update(void)
   case ANALYSIS_PAGE_POLAR:
     _stprintf(sTmp, _T("%s: %s (%s %d kg)"), _("Analysis"),
               _("Glide Polar"), _("Mass"),
-              (int)XCSoarInterface::Calculated().glide_polar_task.get_all_up_weight());
+              (int)CommonInterface::SettingsComputer().glide_polar_task.get_all_up_weight());
     wf->SetCaption(sTmp);
-    fs.CaptionPolar(sTmp, XCSoarInterface::Calculated().glide_polar_task);
+    fs.CaptionPolar(sTmp, CommonInterface::SettingsComputer().glide_polar_task);
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Settings"));
    break;

@@ -65,9 +65,7 @@ GlideComputerAirData::GlideComputerAirData(ProtectedAirspaceWarningManager &awm,
   GlideComputerBlackboard(_task),
   m_airspace(awm),
   // scan airspace every second
-  airspace_clock(fixed_one),
-  // only update every 5 seconds to stop flooding the devices
-  ballast_clock(fixed(5))
+  airspace_clock(fixed_one)
 {
   rotaryLD.init(SettingsComputer());
 
@@ -164,7 +162,7 @@ GlideComputerAirData::Wind()
 
   // update zigzag wind
   if ((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG)
-      && (Basic().TrueAirspeed > Calculated().glide_polar_task.get_Vtakeoff())) {
+      && Basic().TrueAirspeed > SettingsComputer().glide_polar_task.get_Vtakeoff()) {
     fixed zz_wind_speed;
     Angle zz_wind_bearing;
     int quality;
@@ -332,12 +330,13 @@ GlideComputerAirData::NettoVario()
 {
   const NMEA_INFO &basic = Basic();
   const DERIVED_INFO &calculated = Calculated();
+  const SETTINGS_COMPUTER &settings_computer = SettingsComputer();
   VARIO_INFO &vario = SetCalculated();
 
   vario.GliderSinkRate =
     calculated.flight.Flying && calculated.AirspeedAvailable
-    ? - calculated.glide_polar_task.SinkRate(calculated.IndicatedAirspeed,
-                                             basic.acceleration.Gload)
+    ? - settings_computer.glide_polar_task.SinkRate(calculated.IndicatedAirspeed,
+                                                    basic.acceleration.Gload)
     /* the glider sink rate is useless when not flying */
     : fixed_zero;
 
@@ -649,7 +648,7 @@ GlideComputerAirData::FlightTimes()
     return false;
   }
 
-  FlightState(Calculated().glide_polar_task);
+  FlightState(SettingsComputer().glide_polar_task);
   TakeoffLanding();
 
   return true;
@@ -658,7 +657,6 @@ GlideComputerAirData::FlightTimes()
 void
 GlideComputerAirData::ProcessIdle()
 {
-  BallastDump();
   if (airspace_clock.check_advance(Basic().Time)
       && SettingsComputer().EnableAirspaceWarnings)
     AirspaceWarning();
@@ -733,29 +731,6 @@ GlideComputerAirData::AirspaceWarning()
   const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
   if (m_airspace.update_warning(as, Calculated().Circling))
     airspaceWarningEvent.trigger();
-}
-
-void
-GlideComputerAirData::BallastDump()
-{
-  fixed dt = ballast_clock.delta_advance(Basic().Time);
-
-  if (!SettingsComputer().BallastTimerActive || negative(dt))
-    return;
-
-  GlidePolar glide_polar = Calculated().glide_polar_task;
-  fixed ballast = glide_polar.get_ballast();
-  fixed percent_per_second =
-    fixed_one / max(10, SettingsComputer().BallastSecsToEmpty);
-
-  ballast -= dt * percent_per_second;
-  if (negative(ballast)) {
-    XCSoarInterface::SetSettingsComputer().BallastTimerActive = false;
-    ballast = fixed_zero;
-  }
-
-  glide_polar.set_ballast(ballast);
-  m_task.set_glide_polar(glide_polar);
 }
 
 void

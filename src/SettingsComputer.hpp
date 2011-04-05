@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "FLARM/FlarmId.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
 
 #include <tchar.h>
 
@@ -194,6 +195,8 @@ struct SETTINGS_COMPUTER:
   /** local time adjustment */
   int UTCOffset;
 
+  /** Glide polar used for task calculations */
+  GlidePolar glide_polar_task;
 };
 
 #endif

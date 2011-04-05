@@ -36,9 +36,6 @@ class GlideComputerTask:
   GPSClock route_clock;
   GPSClock reach_clock;
 
-  /** used to update the MacCready value from an external device to XCSoar */
-  ExternalSettings last_external_settings;
-
 public:
   GlideComputerTask(ProtectedTaskManager& task);
 
