@@ -113,12 +113,8 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 
   if (SettingsComputer().FinalGlideTerrain && GroundlineLength >= 3) {
     canvas.hollow_brush();
-
-#ifndef ENABLE_OPENGL
-    canvas.select(Graphics::hpTerrainLineBg);
-    canvas.polygon(Groundline, GroundlineLength);
-#endif
-
+    canvas.background_opaque();
+    canvas.set_background_color(Color::WHITE);
     canvas.select(Graphics::hpTerrainLine);
     canvas.polygon(Groundline, GroundlineLength);
   }

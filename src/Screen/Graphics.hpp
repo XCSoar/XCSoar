@@ -98,7 +98,6 @@ namespace Graphics {
   extern Pen hpFinalGlideBelowLandable;
   extern Pen hpMapScale;
   extern Pen hpTerrainLine;
-  extern Pen hpTerrainLineBg;
 
   extern Brush hbCompass;
   extern Brush hbThermalBand;
