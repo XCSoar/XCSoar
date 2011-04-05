@@ -40,9 +40,6 @@ class GlideComputerTask:
   ExternalSettings last_external_settings;
 
 public:
-  bool auto_mc_updated;
-
-public:
   GlideComputerTask(ProtectedTaskManager& task);
 
   gcc_pure

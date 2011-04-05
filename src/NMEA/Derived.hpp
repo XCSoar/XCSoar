@@ -170,6 +170,9 @@ struct DERIVED_INFO:
 
   TraceHistory trace_history; /**< Store of short term history of variables */
 
+  Validity auto_mac_cready_available;
+  fixed auto_mac_cready;
+
   GlidePolar glide_polar_task; /**< Glide polar used for task calculations */
   GlidePolar glide_polar_reach; /**< Glide polar used for reach calculations */
   GlidePolar glide_polar_safety; /**< Glide polar used for safety calculations */

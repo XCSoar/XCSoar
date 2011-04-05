@@ -58,9 +58,11 @@ CalculationThread::SetScreenDistanceMeters(fixed new_value)
 void
 CalculationThread::tick()
 {
+  const DERIVED_INFO &calculated = glide_computer.Calculated();
+
   bool gps_updated;
 
-  glide_computer.auto_mc_updated = false;
+  Validity last_auto_mc = calculated.auto_mac_cready_available;
 
   // update and transfer master info to glide computer
   {
@@ -102,8 +104,8 @@ CalculationThread::tick()
     mutexBlackboard.Unlock();
   }
 
-  if (glide_computer.auto_mc_updated)
-    device_blackboard.SetMC(glide_computer.GetMacCready());
+  if (calculated.auto_mac_cready_available.modified(last_auto_mc))
+    device_blackboard.SetMC(calculated.auto_mac_cready);
 
   // if (new GPS data)
   if (gps_updated) {

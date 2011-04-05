@@ -40,6 +40,8 @@ DERIVED_INFO::reset()
   estimated_wind_available.clear();
   task_stats.reset();
   common_stats.reset();
+
+  auto_mac_cready_available.clear();
 }
 
 void
@@ -50,6 +52,8 @@ DERIVED_INFO::expire(fixed Time)
   wind_available.expire(Time, fixed(600));
   /* the calculated airspeed expires after 5 seconds */
   AirspeedAvailable.expire(Time, fixed(5));
+
+  auto_mac_cready_available.expire(Time, fixed(300));
 }
 
 void
@@ -75,6 +79,8 @@ DERIVED_INFO::ResetFlight(bool full)
   thermal_band.clear();
 
   thermal_locator.Clear();
+
+  auto_mac_cready_available.clear();
 
   TERRAIN_ALT_INFO::Clear();
 }

@@ -61,6 +61,7 @@ void
 GlideComputerTask::ProcessBasicTask()
 {
   const NMEA_INFO &basic = Basic();
+  DERIVED_INFO &derived = SetCalculated();
 
   ProtectedTaskManager::ExclusiveLease task(m_task);
 
@@ -83,9 +84,12 @@ GlideComputerTask::ProcessBasicTask()
                                                    LastCalculated());
 
     task->update(current_as, last_as);
-    auto_mc_updated = task->update_auto_mc(current_as,
-                                           std::max(Calculated().LastThermalAverageSmooth,
-                                                    fixed_zero));
+    if (task->update_auto_mc(current_as,
+                             std::max(Calculated().LastThermalAverageSmooth,
+                                      fixed_zero))) {
+      derived.auto_mac_cready = task->get_glide_polar().get_mc();
+      derived.auto_mac_cready_available.update(basic.Time);
+    }
   }
 
   SetCalculated().task_stats = task->get_stats();
