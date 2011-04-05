@@ -34,7 +34,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.SlopeShadingType = sstWind;
   settings_map.EnableTrailDrift = false;
   settings_map.EnableDetourCostMarker = false;
-  settings_map.DisplayTrackBearing = dtbOff;
+  settings_map.DisplayTrackBearing = dtbAuto;
   settings_map.AutoZoom = false;
   settings_map.SnailScaling = true;
   settings_map.SnailType = stStandardVario;
