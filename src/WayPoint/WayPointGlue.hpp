@@ -46,6 +46,7 @@ namespace WayPointGlue {
   bool ReadWaypoints(Waypoints &way_points,
                      const RasterTerrain *terrain);
   bool SaveWaypoints(const Waypoints &way_points);
+  bool SaveWaypointFile(const Waypoints &way_points, WayPointFile *wpfile);
 
   /**
    * Close all waypoint files.
