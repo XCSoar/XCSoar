@@ -188,16 +188,16 @@ protected:
 #endif /* !ENABLE_SDL */
 
 #ifdef ANDROID
-private:
+protected:
   /**
    * @see Event::PAUSE
    */
-  void on_pause();
+  virtual void on_pause();
 
   /**
    * @see Event::RESUME
    */
-  void on_resume();
+  virtual void on_resume();
 
 public:
   void pause();
