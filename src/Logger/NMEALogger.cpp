@@ -24,9 +24,13 @@ Copyright_License {
 #include "Logger/NMEALogger.hpp"
 #include "IO/BatchTextWriter.hpp"
 #include "LocalPath.hpp"
+#include "NMEA/Info.hpp"
+#include "Compatibility/path.h"
 #include "Thread/Mutex.hpp"
+#include "Interface.hpp"
 
 #include <windef.h> // for MAX_PATH
+#include <stdio.h>
 
 static Mutex RawLoggerMutex;
 static BatchTextWriter *RawLoggerWriter;
@@ -39,8 +43,15 @@ RawLoggerStart()
   if (RawLoggerWriter != NULL)
     return true;
 
+  BrokenDateTime dt = XCSoarInterface::Basic().DateTime;
+
   TCHAR path[MAX_PATH];
-  LocalPath(path, _T("xcsoar-nmea.log"));
+  LocalPath(path, _T("logs"));
+  unsigned len = _tcslen(path);
+  _sntprintf(path+len, MAX_PATH-len,
+             _T(DIR_SEPARATOR_S "%04u-%02u-%02u_%02u-%02u-nmea.log"),
+             dt.year, dt.month, dt.day,
+             dt.hour, dt.minute);
 
   RawLoggerWriter = new BatchTextWriter(path, false);
   return RawLoggerWriter != NULL;
