@@ -411,7 +411,11 @@ public:
     assert_none_locked();
     assert_thread();
 
-    ::BringWindowToTop(hWnd);
+    /* not using BringWindowToTop() because it activates the
+       winddow */
+    ::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
+                   SWP_NOMOVE|SWP_NOSIZE|
+                   SWP_NOACTIVATE|SWP_NOOWNERZORDER);
   }
 #endif
 
