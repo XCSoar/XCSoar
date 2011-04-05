@@ -149,7 +149,7 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
   FlashCardEnumerator enumerator;
   const TCHAR *name;
   while ((name = enumerator.next()) != NULL) {
-    _stprintf(FlashPath, _T("/%s/%s"), name, XCSDATADIR);
+    _stprintf(FlashPath, _T(DIR_SEPARATOR_S "%s" DIR_SEPARATOR_S "%s"), name, XCSDATADIR);
     if (_tcscmp(data_path, FlashPath) == 0)
       /* don't scan primary data path twice */
       continue;

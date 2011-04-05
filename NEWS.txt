@@ -10,6 +10,7 @@ Version 6.0.9 - not yet released
 * Windows
   - fix setting the system time from GPS
   - PPC2000: major performance improvement
+  - more backslash path fixes on Windows CE
 * Android
   - don't require GPS and Bluetooth on Android Market
   - implement the battery InfoBox
