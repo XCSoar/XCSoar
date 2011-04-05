@@ -372,13 +372,6 @@ public:
     return task_abort.get_safety_polar();
   }
 
-  /**
-   * Update safety polar used by task system
-   *
-   * @param glide_polar The polar to set to
-   */
-  void set_safety_polar(const GlidePolar& glide_polar);
-
   void set_contest(Contests contest) {
     contest_manager.set_contest(contest);
   }
