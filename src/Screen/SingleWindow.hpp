@@ -41,6 +41,11 @@ public:
   void add_dialog(Window *dialog);
   void remove_dialog(Window *dialog);
 
+  /**
+   * Forcefully cancel the top-most dialog.
+   */
+  void CancelDialog();
+
   bool has_dialog() {
     return !dialogs.empty();
   }
