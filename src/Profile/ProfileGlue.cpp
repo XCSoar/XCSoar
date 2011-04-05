@@ -160,14 +160,10 @@ Profile::Use()
     }
   }
 
-  Temp = MAP_SHIFT_BIAS_HEADING;
-  Get(szProfileMapShiftBias, Temp);
-  settings_map.MapShiftBias = (MapShiftBias_t) Temp;
+  GetEnum(szProfileMapShiftBias, settings_map.MapShiftBias);
 
   // NOTE: settings_map.WayPointLabelSelection must be loaded after this code
-  Temp = settings_map.DisplayTextType;
-  Get(szProfileDisplayText, Temp);
-  settings_map.DisplayTextType = (DisplayTextType_t) Temp;
+  GetEnum(szProfileDisplayText, settings_map.DisplayTextType);
   if (settings_map.DisplayTextType == OBSOLETE_DONT_USE_DISPLAYNAMEIFINTASK) {
     // pref migration. The migrated value of DisplayTextType and
     // WayPointLabelSelection will not be written to the config file
@@ -183,24 +179,18 @@ Profile::Use()
 
   // NOTE: settings_map.DisplayTextType must be loaded before this code
   //       due to pref migration dependencies!
-  Temp = settings_map.WayPointLabelSelection;
-  Get(szProfileWayPointLabelSelection, Temp);
-  settings_map.WayPointLabelSelection = (WayPointLabelSelection_t) Temp;
+  GetEnum(szProfileWayPointLabelSelection,
+          settings_map.WayPointLabelSelection);
 
-  Temp = settings_map.WaypointArrivalHeightDisplay;
-  Get(szProfileWaypointArrivalHeightDisplay, Temp);
-  settings_map.WaypointArrivalHeightDisplay = (WaypointArrivalHeightDisplay_t) Temp;
+  GetEnum(szProfileWaypointArrivalHeightDisplay,
+          settings_map.WaypointArrivalHeightDisplay);
 
-  Temp = settings_map.LandableRenderMode;
-  Get(szProfileWaypointLabelStyle, Temp);
-  settings_map.LandableRenderMode = (RenderMode)Temp;
+  GetEnum(szProfileWaypointLabelStyle, settings_map.LandableRenderMode);
 
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
 
-  Temp = settings_computer.AltitudeMode;
-  Get(szProfileAltMode, Temp);
-  settings_computer.AltitudeMode = (AirspaceDisplayMode_t)Temp;
+  GetEnum(szProfileAltMode, settings_computer.AltitudeMode);
 
   Get(szProfileClipAlt,
       settings_computer.ClipAltitude);
@@ -219,10 +209,7 @@ Profile::Use()
 
 #ifndef ENABLE_OPENGL
   Get(szProfileAirspaceTransparency, settings_map.airspace_transparency);
-
-  Temp = (unsigned)settings_map.AirspaceFillMode;
-  Get(szProfileAirspaceFillMode, Temp);
-  settings_map.AirspaceFillMode = (enum SETTINGS_MAP::AirspaceFillMode)Temp;
+  GetEnum(szProfileAirspaceFillMode, settings_map.AirspaceFillMode);
 #endif
 
   Get(szProfileSnailTrail,
@@ -234,9 +221,7 @@ Profile::Use()
   Get(szProfileDetourCostMarker,
       settings_map.EnableDetourCostMarker);
 
-  Temp = settings_map.DisplayTrackBearing;
-  Get(szProfileDisplayTrackBearing, Temp);
-  settings_map.DisplayTrackBearing = (DisplayTrackBearing_t) Temp;
+  GetEnum(szProfileDisplayTrackBearing, settings_map.DisplayTrackBearing);
 
   Get(szProfileDrawTopography,
       settings_map.EnableTopography);
@@ -277,8 +262,7 @@ Profile::Use()
   Get(szProfileSnailWidthScale,
       settings_map.SnailScaling);
 
-  if (Get(szProfileSnailType, Temp))
-    settings_map.SnailType = (SnailType_t)Temp;
+  GetEnum(szProfileSnailType, settings_map.SnailType);
 
   Get(szProfileTeamcodeRefWaypoint,
       settings_computer.TeamCodeRefWaypoint);
@@ -318,8 +302,7 @@ Profile::Use()
   if (Get(szProfileAverEffTime, Temp))
     settings_computer.AverEffTime = Temp;
 
-  if (Get(szProfileDebounceTimeout, Temp))
-    XCSoarInterface::debounceTimeout = Temp;
+  Get(szProfileDebounceTimeout, XCSoarInterface::debounceTimeout);
 
   /* JMW broken
   if (Get(szProfileAccelerometerZero, Temp))
@@ -334,11 +317,8 @@ Profile::Use()
   // new appearance variables
 
   //Temp = Appearance.IndFinalGlide;
-  if (Get(szProfileAppIndFinalGlide, Temp))
-    Appearance.IndFinalGlide = (IndFinalGlide_t)Temp;
-
-  if (Get(szProfileAppIndLandable, Temp))
-    Appearance.IndLandable = (IndLandable_t)Temp;
+  GetEnum(szProfileAppIndFinalGlide, Appearance.IndFinalGlide);
+  GetEnum(szProfileAppIndLandable, Appearance.IndLandable);
 
   Get(szProfileAppUseSWLandablesRendering,
       Appearance.UseSWLandablesRendering);
@@ -352,31 +332,19 @@ Profile::Use()
   Get(szProfileAppInverseInfoBox,
 		  Appearance.InverseInfoBox);
 
-  if (Get(szProfileAppInfoBoxBorder, Temp))
-    Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;
-
-  if (Get(szProfileAppStatusMessageAlignment, Temp))
-    Appearance.StateMessageAlign = (StateMessageAlign_t)Temp;
-
-  if (Get(szProfileAppTextInputStyle, Temp))
-    Appearance.TextInputStyle = (TextInputStyle_t)Temp;
-
-  if (Get(szProfileAppDialogTabStyle, Temp))
-    Appearance.DialogTabStyle = (DialogTabStyle_t)Temp;
-
-  if (Get(szProfileAppDialogStyle, Temp))
-    DialogStyleSetting = (DialogStyle)Temp;
+  GetEnum(szProfileAppInfoBoxBorder, Appearance.InfoBoxBorder);
+  GetEnum(szProfileAppStatusMessageAlignment, Appearance.StateMessageAlign);
+  GetEnum(szProfileAppTextInputStyle, Appearance.TextInputStyle);
+  GetEnum(szProfileAppDialogTabStyle, Appearance.DialogTabStyle);
+  GetEnum(szProfileAppDialogStyle, DialogStyleSetting);
 
   Get(szProfileAppInfoBoxColors,
 		  Appearance.InfoBoxColors);
 
-  if (Get(szProfileAutoMcMode, Temp))
-    settings_computer.auto_mc_mode =
-      (TaskBehaviour::AutoMCMode_t)Temp;
+  GetEnum(szProfileAutoMcMode, settings_computer.auto_mc_mode);
 
-  if (Get(szProfileOLCRules, Temp))
+  if (GetEnum(szProfileOLCRules, settings_computer.contest))
   {
-      settings_computer.contest = (Contests)Temp;
       if ( settings_computer.contest == OLC_Sprint )
         settings_computer.contest = OLC_League; // Handle out-dated Sprint rule in profile
   }
@@ -448,11 +416,9 @@ Profile::Use()
   if (Get(szProfileSafetyMacCready, Temp))
     settings_computer.safety_mc = fixed(Temp) / 10;
 
-  if (Get(szProfileAbortTaskMode, Temp))
-    settings_computer.abort_task_mode = (AbortTaskMode)Temp;
+  GetEnum(szProfileAbortTaskMode, settings_computer.abort_task_mode);
 
-  if (Get(szProfileRoutePlannerMode, Temp))
-    settings_computer.route_planner.mode = (RoutePlannerConfig::Mode)Temp;
+  GetEnum(szProfileRoutePlannerMode, settings_computer.route_planner.mode);
 
   Get(szProfileRoutePlannerAllowClimb,
       settings_computer.route_planner.allow_climb);
@@ -463,8 +429,8 @@ Profile::Use()
   Get(szProfileTurningReach,
       settings_computer.route_planner.turning_reach);
 
-  if (Get(szProfileReachPolarMode, Temp))
-    settings_computer.route_planner.reach_polar_mode = (RoutePlannerConfig::PolarMode)Temp;
+  GetEnum(szProfileReachPolarMode,
+          settings_computer.route_planner.reach_polar_mode);
 
   if (Get(szProfileRiskGamma, Temp))
     settings_computer.risk_gamma = fixed(Temp) / 10;
@@ -475,8 +441,7 @@ Profile::Use()
   Get(szProfileDisableAutoLogger,
       settings_computer.DisableAutoLogger);
 
-  if (Get(szProfileAircraftSymbol, Temp))
-    Appearance.AircraftSymbol = (AircraftSymbol_t)Temp;
+  GetEnum(szProfileAircraftSymbol, Appearance.AircraftSymbol);
 }
 
 void

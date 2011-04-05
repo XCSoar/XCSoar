@@ -120,6 +120,17 @@ namespace ProfileMap {
     return true;
   }
 
+  template<typename T>
+  static inline bool GetEnum(const TCHAR *key, T &value)
+  {
+    int i;
+    if (Get(key, i)) {
+      value = (T)i;
+      return true;
+    } else
+      return false;
+  }
+
   static inline bool Set(const TCHAR *key, bool value)
   {
     return Set(key, value ? _T("1") : _T("0"));
@@ -144,6 +155,12 @@ namespace ProfileMap {
     TCHAR tmp[50];
     _sntprintf(tmp, 50, _T("%u"), value);
     return Set(key, tmp);
+  }
+
+  template<typename T>
+  static inline bool SetEnum(const TCHAR *key, T value)
+  {
+    return Set(key, (int)value);
   }
 
   static inline bool Set(const TCHAR *key, fixed value)
