@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_WAY_POINT_GLUE_HPP
 #define XCSOAR_WAY_POINT_GLUE_HPP
 
+#include <tchar.h>
+
 class Waypoints;
 class RasterTerrain;
 struct SETTINGS_COMPUTER;
@@ -45,6 +47,8 @@ namespace WayPointGlue {
    */
   bool ReadWaypoints(Waypoints &way_points,
                      const RasterTerrain *terrain);
+  bool LoadWaypointFile(WayPointFile *wpfile, int num, const TCHAR* key,
+                        Waypoints &way_points, const RasterTerrain *terrain);
   bool SaveWaypoints(const Waypoints &way_points);
   bool SaveWaypointFile(const Waypoints &way_points, WayPointFile *wpfile);
 

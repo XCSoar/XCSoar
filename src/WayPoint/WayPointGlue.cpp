@@ -36,7 +36,6 @@ Copyright_License {
 #include "NMEA/Aircraft.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 
-#include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
 
 namespace WayPointGlue {
@@ -108,6 +107,34 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
   Profile::Set(szProfileTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
 }
 
+bool
+WayPointGlue::LoadWaypointFile(WayPointFile *wpfile, int num, const TCHAR* key,
+                               Waypoints &way_points, const RasterTerrain *terrain)
+{
+  // Get waypoint filename
+  TCHAR szFile[MAX_PATH];
+  if (Profile::GetPath(key, szFile))
+    wpfile = WayPointFile::create(szFile, num);
+
+  // If waypoint file exists
+  if (wpfile != NULL) {
+    // parse the file
+    wpfile->SetTerrain(terrain);
+    if (wpfile->Parse(way_points)) {
+      if (num == 0)
+        // Set waypoints writable flag
+        way_points.set_file0_writable(wpfile->IsWritable());
+
+      return true;
+    }
+
+    LogStartUp(_T("Parse error in waypoint file %d"), num);
+  } else {
+    LogStartUp(_T("No waypoint file %d"), num);
+  }
+
+  return false;
+}
 
 bool
 WayPointGlue::ReadWaypoints(Waypoints &way_points,
@@ -117,7 +144,6 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
   ProgressGlue::Create(_("Loading Waypoints..."));
 
   bool found = false;
-  TCHAR szFile[MAX_PATH];
 
   // Delete old waypoints
   way_points.clear();
@@ -126,68 +152,23 @@ WayPointGlue::ReadWaypoints(Waypoints &way_points,
   Close();
 
   // ### FIRST FILE ###
-
-  // Get first waypoint filename
-  if (Profile::GetPath(szProfileWayPointFile, szFile))
-    wp_file0 = WayPointFile::create(szFile, 0);
-
-  // If waypoint file exists
-  if (wp_file0 != NULL) {
-    // parse the file
-    wp_file0->SetTerrain(terrain);
-    if (wp_file0->Parse(way_points)) {
-      found = true;
-      // Set waypoints writable flag
-      way_points.set_file0_writable(wp_file0->IsWritable());
-    } else {
-      LogStartUp(_T("Parse error in waypoint file 1"));
-    }
-  } else {
-    LogStartUp(_T("No waypoint file 1"));
-  }
+  found |= LoadWaypointFile(wp_file0, 0, szProfileWayPointFile,
+                            way_points, terrain);
 
   // ### SECOND FILE ###
-
-  // Get second waypoint filename
-  if (Profile::GetPath(szProfileAdditionalWayPointFile, szFile))
-    wp_file1 = WayPointFile::create(szFile, 1);
-
-  // If waypoint file exists
-  if (wp_file1 != NULL) {
-    // parse the file
-    wp_file1->SetTerrain(terrain);
-    if (wp_file1->Parse(way_points)) {
-      found = true;
-    } else {
-      LogStartUp(_T("Parse error in waypoint file 2"));
-    }
-  } else {
-    LogStartUp(_T("No waypoint file 2"));
-  }
+  found |= LoadWaypointFile(wp_file1, 1, szProfileAdditionalWayPointFile,
+                            way_points, terrain);
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
-
-  // Get third waypoint filename
-  if (Profile::GetPath(szProfileWatchedWayPointFile, szFile))
-    wp_file2 = WayPointFile::create(szFile, 2);
-
-  // If waypoint file exists
-  if (wp_file2 != NULL) {
-    // parse the file
-    wp_file2->SetTerrain(terrain);
-    if (wp_file2->Parse(way_points)) {
-      found = true;
-    } else {
-      LogStartUp(_T("Parse error in waypoint file 3"));
-    }
-  } else {
-    LogStartUp(_T("No waypoint file 3"));
-  }
+  found |= LoadWaypointFile(wp_file2, 2, szProfileWatchedWayPointFile,
+                            way_points, terrain);
 
   // ### MAP/FOURTH FILE ###
 
   // If no waypoint file found yet
   if (!found) {
+    TCHAR szFile[MAX_PATH];
+
     // Get the map filename
     Profile::GetPath(szProfileMapFile, szFile);
     _tcscat(szFile, _T("/"));
