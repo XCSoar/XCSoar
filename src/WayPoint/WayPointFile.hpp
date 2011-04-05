@@ -68,6 +68,10 @@ public:
 
   virtual bool IsWritable() = 0;
 
+  int GetFileNumber() {
+    return file_num;
+  }
+
 protected:
   TCHAR file[255];
   const int file_num;
