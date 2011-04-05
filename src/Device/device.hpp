@@ -36,10 +36,6 @@ void VarioWriteNMEA(const TCHAR *Text);
 DeviceDescriptor *devVarioFindVega(void);
 
 bool devHasBaroSource(void);
-bool devDeclare(DeviceDescriptor &d, const struct Declaration *decl);
-bool devIsLogger(const DeviceDescriptor &d);
-bool devIsGPSSource(const DeviceDescriptor &d);
-bool devIsBaroSource(const DeviceDescriptor &d);
 
 /**
  * Returns true if at least one of the connected device is a Condor

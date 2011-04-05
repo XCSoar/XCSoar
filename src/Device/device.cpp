@@ -228,7 +228,7 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
     return false;
   }
 
-  device.enable_baro = devIsBaroSource(device) && !devHasBaroSource();
+  device.enable_baro = device.IsBaroSource() && !devHasBaroSource();
 
   if (nmeaout == NULL && (Driver->Flags & (1l << dfNmeaOut)))
     nmeaout = &device;
@@ -338,27 +338,6 @@ devStartup()
 
   if (pDevNmeaOut != NULL)
     SetPipeTo(*pDevNmeaOut);
-}
-
-bool
-devDeclare(DeviceDescriptor &d, const struct Declaration *decl)
-{
-  if (is_simulator())
-    return true;
-
-  return d.Declare(decl);
-}
-
-bool
-devIsLogger(const DeviceDescriptor &d)
-{
-  return d.IsLogger();
-}
-
-bool
-devIsBaroSource(const DeviceDescriptor &d)
-{
-  return d.IsBaroSource();
 }
 
 bool
