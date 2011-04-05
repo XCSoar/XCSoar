@@ -163,7 +163,11 @@ struct SETTINGS_PLACES_OF_INTEREST {
  */
 struct SETTINGS_FEATURES {
   /** Calculate final glide over terrain */
-  int FinalGlideTerrain;
+  enum FinalGlideTerrain {
+    FGT_OFF,
+    FGT_LINE,
+    FGT_SHADE,
+  } FinalGlideTerrain;
 
   /** block speed to fly instead of dolphin */
   bool EnableBlockSTF;

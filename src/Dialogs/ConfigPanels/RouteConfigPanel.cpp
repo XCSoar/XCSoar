@@ -45,9 +45,9 @@ RouteConfigPanel::Init(WndForm *_wf)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"));
-    dfe->addEnumText(_("Line"));
-    dfe->addEnumText(_("Shade"));
+    dfe->addEnumText(_("Off"), SETTINGS_COMPUTER::FGT_OFF);
+    dfe->addEnumText(_("Line"), SETTINGS_COMPUTER::FGT_LINE);
+    dfe->addEnumText(_("Shade"), SETTINGS_COMPUTER::FGT_SHADE);
     dfe->Set(settings_computer.FinalGlideTerrain);
     wp->RefreshDisplay();
   }
@@ -115,9 +115,9 @@ RouteConfigPanel::Save()
     }
   }
 
-  changed |= SaveFormProperty(*wf, _T("prpFinalGlideTerrain"),
-                              szProfileFinalGlideTerrain,
-                              settings_computer.FinalGlideTerrain);
+  changed |= SaveFormPropertyEnum(*wf, _T("prpFinalGlideTerrain"),
+                                  szProfileFinalGlideTerrain,
+                                  settings_computer.FinalGlideTerrain);
 
   changed |= SaveFormProperty(*wf, _T("prpRoutePlannerAllowClimb"),
                               szProfileRoutePlannerAllowClimb,

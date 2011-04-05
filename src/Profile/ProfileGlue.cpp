@@ -238,8 +238,8 @@ Profile::Use()
   }
   settings_map.SlopeShadingType = (SlopeShadingType_t)Temp;
 
-  Get(szProfileFinalGlideTerrain,
-      settings_computer.FinalGlideTerrain);
+  GetEnum(szProfileFinalGlideTerrain,
+          settings_computer.FinalGlideTerrain);
 
   Get(szProfileAutoWind,
       settings_computer.AutoWindMode);

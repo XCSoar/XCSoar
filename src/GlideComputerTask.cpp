@@ -156,7 +156,8 @@ GlideComputerTask::ProcessIdle()
 void
 GlideComputerTask::TerrainWarning()
 {
-  if (SettingsComputer().FinalGlideTerrain && terrain) {
+  if (SettingsComputer().FinalGlideTerrain != SETTINGS_COMPUTER::FGT_OFF &&
+      terrain != NULL) {
     // @todo: update TerrainBase in new footprint calculations,
     // remove TerrainFootprint function from GlideComputerAirData
 

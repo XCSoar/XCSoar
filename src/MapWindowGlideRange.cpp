@@ -107,7 +107,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // .. feature inaccessible
   if (!Basic().LocationAvailable
       || !Calculated().flight.Flying
-      || !SettingsComputer().FinalGlideTerrain
+      || SettingsComputer().FinalGlideTerrain == SETTINGS_COMPUTER::FGT_OFF
       || !task)
     return;
 
@@ -126,7 +126,8 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // Don't draw shade if
   // .. shade feature disabled
   // .. pan mode activated
-  if (SettingsComputer().FinalGlideTerrain == 2 && !SettingsMap().EnablePan) {
+  if (SettingsComputer().FinalGlideTerrain == SETTINGS_COMPUTER::FGT_SHADE &&
+      !SettingsMap().EnablePan) {
 
 #ifdef ENABLE_OPENGL
 
