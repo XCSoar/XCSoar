@@ -113,6 +113,7 @@ namespace Graphics {
   extern Pen hpFinalGlideBelowLandable;
   extern Pen hpMapScale;
   extern Pen hpTerrainLine;
+  extern Pen hpTerrainLineThick;
   extern Pen hpTrackBearingLine;
   extern Pen TracePen;
   extern Pen ContestPen[3];

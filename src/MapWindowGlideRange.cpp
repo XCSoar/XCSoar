@@ -187,7 +187,22 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   }
 
-  {
+  if (visitor.fans.size() == 1) {
+    /* only one fan: we can draw a simple polygon */
+
+    // Select the TerrainLine pen
+    canvas.hollow_brush();
+    canvas.select(Graphics::hpTerrainLine);
+    canvas.background_opaque();
+    canvas.set_background_color(Color::WHITE);
+
+    // Draw the TerrainLine polygon
+
+    const RasterPointVector &fan = visitor.fans.front();
+    canvas.polygon(&fan[0], fan.size());
+  } else {
+    /* more than one fan (turning reach enabled): we have to use a
+       stencil to draw the outline, because the fans may overlap */
 
 #ifdef ENABLE_OPENGL
   glEnable(GL_STENCIL_TEST);
@@ -208,7 +223,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   glStencilFunc(GL_NOTEQUAL, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-  canvas.select(Graphics::hpTerrainLine);
+  canvas.select(Graphics::hpTerrainLineThick);
   for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
        i != visitor.fans.end(); ++i)
     canvas.polygon(&(*i)[0], i->size());
@@ -225,7 +240,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   // Select the TerrainLine pen
   buffer.hollow_brush();
-  buffer.select(Graphics::hpTerrainLine);
+  buffer.select(Graphics::hpTerrainLineThick);
 
   // Draw the TerrainLine polygons
   for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();

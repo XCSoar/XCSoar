@@ -80,6 +80,7 @@ Pen Graphics::hpFinalGlideBelow;
 Pen Graphics::hpFinalGlideBelowLandable;
 Pen Graphics::hpMapScale;
 Pen Graphics::hpTerrainLine;
+Pen Graphics::hpTerrainLineThick;
 Pen Graphics::hpTrackBearingLine;
 Pen Graphics::TracePen;
 Pen Graphics::ContestPen[3];
@@ -270,7 +271,8 @@ Graphics::Initialise()
   hpFinalGlideAbove.set(Layout::Scale(1), Color(0xA0, 0xFF, 0xA0));
 
   hpMapScale.set(Layout::Scale(1), Color::BLACK);
-  hpTerrainLine.set(Pen::DASH, Layout::Scale(2), Color(0x30, 0x30, 0x30));
+  hpTerrainLine.set(Pen::DASH, Layout::Scale(1), Color(0x30, 0x30, 0x30));
+  hpTerrainLineThick.set(Pen::DASH, Layout::Scale(2), Color(0x30, 0x30, 0x30));
 
   TracePen.set(2, Color(50, 243, 45));
   ContestPen[0].set(Layout::Scale(1)+2, Color::RED);
