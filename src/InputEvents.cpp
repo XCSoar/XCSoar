@@ -48,6 +48,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "InputConfig.hpp"
 #include "InputParser.hpp"
 #include "Interface.hpp"
+#include "MainWindow.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "ButtonLabel.hpp"
@@ -713,7 +714,7 @@ InputEvents::ProcessMenuTimer()
     }
   }
   // refresh visible buttons if still visible
-  if ((current_mode != MODE_PAN) && (current_mode != MODE_DEFAULT))
+  if (!CommonInterface::main_window.has_dialog())
     drawButtons(getModeID());
 
   MenuTimeOut++;
