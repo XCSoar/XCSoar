@@ -21,19 +21,34 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_MAIN_HPP
-#define XCSOAR_ANDROID_MAIN_HPP
+package org.xcsoar;
 
-#include <jni.h>
+import java.util.HashMap;
+import android.media.MediaPlayer;
+import android.content.Context;
 
-class NativeView;
-class EventQueue;
-class SoundUtil;
+public class SoundUtil {
+  private static HashMap<String, Integer> resources = new HashMap();
 
-extern NativeView *native_view;
+  static {
+    resources.put("IDR_FAIL", R.raw.fail);
+    resources.put("IDR_INSERT", R.raw.insert);
+    resources.put("IDR_REMOVE", R.raw.remove);
+    resources.put("IDR_WAV_BEEPBWEEP", R.raw.beep_bweep);
+    resources.put("IDR_WAV_CLEAR", R.raw.beep_clear);
+    resources.put("IDR_WAV_DRIP", R.raw.beep_drip);
+  }
 
-extern EventQueue *event_queue;
+  public static boolean play(Context context, String name) {
+    Integer id = resources.get(name);
+    if (id == null)
+      return false;
 
-extern SoundUtil *sound_util;
+    MediaPlayer mp = MediaPlayer.create(context, id);
+    if (mp == null)
+      return false;
 
-#endif
+    mp.start();
+    return true;
+  }
+}

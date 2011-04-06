@@ -21,19 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_MAIN_HPP
-#define XCSOAR_ANDROID_MAIN_HPP
+#ifndef XCSOAR_ANDROID_SOUND_UTIL_HPP
+#define XCSOAR_ANDROID_SOUND_UTIL_HPP
 
-#include <jni.h>
+#include "Java/Class.hpp"
+#include "Compiler.h"
 
-class NativeView;
-class EventQueue;
-class SoundUtil;
+class SoundUtil {
+  Java::Class cls;
+  jmethodID mid_play;
 
-extern NativeView *native_view;
+public:
+  SoundUtil(JNIEnv *env);
 
-extern EventQueue *event_queue;
-
-extern SoundUtil *sound_util;
+  bool play(JNIEnv *env, jobject context, const char *name);
+};
 
 #endif

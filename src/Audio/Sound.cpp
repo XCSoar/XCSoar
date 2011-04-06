@@ -24,6 +24,12 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 #include "ResourceLoader.hpp"
 
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
+#include "Android/SoundUtil.hpp"
+#endif
+
 #ifndef DISABLEAUDIO
 #include <windows.h>
 #include <mmsystem.h>
@@ -31,7 +37,10 @@ Copyright_License {
 
 bool PlayResource (const TCHAR* lpName)
 {
-#ifdef DISABLEAUDIO
+#ifdef ANDROID
+  return sound_util != NULL &&
+    sound_util->play(Java::GetEnv(), native_view->get_context(), lpName);
+#elif defined(DISABLEAUDIO)
   return false;
 #else
   BOOL bRtn;

@@ -21,19 +21,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_MAIN_HPP
-#define XCSOAR_ANDROID_MAIN_HPP
+#include "Android/SoundUtil.hpp"
+#include "Java/String.hpp"
 
-#include <jni.h>
+SoundUtil::SoundUtil(JNIEnv *env)
+  :cls(env, "org/xcsoar/SoundUtil"),
+   mid_play(env->GetStaticMethodID(cls, "play",
+                                   "(Landroid/content/Context;Ljava/lang/String;)Z"))
+{
+}
 
-class NativeView;
-class EventQueue;
-class SoundUtil;
-
-extern NativeView *native_view;
-
-extern EventQueue *event_queue;
-
-extern SoundUtil *sound_util;
-
-#endif
+bool
+SoundUtil::play(JNIEnv *env, jobject context, const char *name)
+{
+  Java::String paramName(env, name);
+  return env->CallStaticBooleanMethod(cls, mid_play, context, paramName.get());
+}
