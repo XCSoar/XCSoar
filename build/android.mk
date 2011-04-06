@@ -132,7 +132,7 @@ $(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BUILD)/libs/$(ANDROID_ABI)/libapplica
 	@$(NQ)echo "  ANT     $@"
 	$(Q)cd $(ANDROID_BUILD) && $(ANT) debug
 
-$(ANDROID_BIN)/classes/$(CLASS_CLASS): $(JAVA_SOURCES) $(ANDROID_BUILD)/build.xml
+$(ANDROID_BIN)/classes/$(CLASS_CLASS): $(JAVA_SOURCES) $(SOUND_FILES) $(ANDROID_BUILD)/build.xml
 	@$(NQ)echo "  ANT     $@"
 	$(Q)cd $(ANDROID_BUILD) && $(ANT) compile
 
