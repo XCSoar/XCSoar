@@ -51,12 +51,10 @@ public:
 #endif
   {
 #ifdef ENABLE_OPENGL
-#ifdef ANDROID
     assert(canvas.x_offset == OpenGL::translate_x);
     assert(canvas.y_offset == OpenGL::translate_y);
     OpenGL::translate_x += _x;
     OpenGL::translate_y += _y;
-#endif
 #else
     surface = canvas.surface;
 #endif
@@ -73,13 +71,11 @@ public:
 
   ~SubCanvas() {
 #ifdef ENABLE_OPENGL
-#ifdef ANDROID
     assert(x_offset == OpenGL::translate_x);
     assert(y_offset == OpenGL::translate_y);
 
     OpenGL::translate_x -= relative_x;
     OpenGL::translate_y -= relative_y;
-#endif
 
     glMatrixMode(GL_PROJECTION);
     glTranslatef(-relative_x, -relative_y, 0);

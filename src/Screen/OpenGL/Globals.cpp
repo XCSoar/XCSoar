@@ -27,9 +27,7 @@ Copyright_License {
 namespace OpenGL {
   unsigned screen_width, screen_height;
 
-#ifdef ANDROID
   int translate_x, translate_y;
-#endif
 
 #ifndef NDEBUG
   pthread_t thread;

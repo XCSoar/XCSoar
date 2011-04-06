@@ -41,14 +41,10 @@ namespace OpenGL {
    */
   extern unsigned screen_width, screen_height;
 
-#ifdef ANDROID
   /**
-   * The current SubCanvas translation in pixels.  Only needed for
-   * OES_draw_texture, because this extension bypasses the
-   * transformation matrix.
+   * The current SubCanvas translation in pixels.
    */
   extern int translate_x, translate_y;
-#endif
 };
 
 #endif

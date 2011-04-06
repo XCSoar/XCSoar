@@ -72,4 +72,12 @@ public:
 #endif
 };
 
+class GLScissor : public GLEnable {
+public:
+  GLScissor(GLint x, GLint y, GLsizei width, GLsizei height)
+    :GLEnable(GL_SCISSOR_TEST) {
+    ::glScissor(x, y, width, height);
+  }
+};
+
 #endif

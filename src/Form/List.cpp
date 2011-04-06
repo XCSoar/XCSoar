@@ -28,7 +28,10 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Screen/Point.hpp"
 
-#ifndef ENABLE_OPENGL
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#include "Screen/OpenGL/Globals.hpp"
+#elif !defined(ENABLE_SDL)
 #include "Screen/WindowCanvas.hpp"
 #endif
 
@@ -105,6 +108,13 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   canvas.set_background_color(background_color);
   canvas.background_transparent();
   canvas.select(Fonts::MapBold);
+
+#ifdef ENABLE_OPENGL
+  /* enable clipping */
+  GLScissor scissor(OpenGL::translate_x,
+                    OpenGL::screen_height - OpenGL::translate_y - canvas.get_height() - 1,
+                    scroll_bar.get_left(get_size()), canvas.get_height());
+#endif
 
   unsigned last_item = min(length, end);
 

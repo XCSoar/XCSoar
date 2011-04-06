@@ -39,6 +39,11 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Compiler.h"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#include "Screen/OpenGL/Globals.hpp"
+#endif
+
 #include <stdio.h>
 
 enum analysis_page {
@@ -83,6 +88,13 @@ static void
 OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   assert(glide_computer != NULL);
+
+#ifdef ENABLE_OPENGL
+  /* enable clipping */
+  GLScissor scissor(OpenGL::translate_x,
+                    OpenGL::screen_height - OpenGL::translate_y - canvas.get_height() - 1,
+                    canvas.get_width(), canvas.get_height());
+#endif
 
   canvas.clear(Color(0x40, 0x40, 0x00));
   canvas.set_text_color(Color::WHITE);
