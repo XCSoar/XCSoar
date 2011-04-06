@@ -140,16 +140,6 @@ public:
   }
 #endif
 
-  void set_active() {
-    assert_none_locked();
-
-#ifdef ENABLE_SDL
-    // XXX
-#else
-    ::SetActiveWindow(hWnd);
-#endif
-  }
-
   void full_screen();
 
 #ifdef ENABLE_SDL
