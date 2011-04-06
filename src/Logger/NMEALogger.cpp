@@ -49,7 +49,7 @@ RawLoggerStart()
   LocalPath(path, _T("logs"));
   unsigned len = _tcslen(path);
   _sntprintf(path+len, MAX_PATH-len,
-             _T(DIR_SEPARATOR_S "%04u-%02u-%02u_%02u-%02u-nmea.log"),
+             _T(DIR_SEPARATOR_S "%04u-%02u-%02u_%02u-%02u.nmea"),
              dt.year, dt.month, dt.day,
              dt.hour, dt.minute);
 

@@ -105,7 +105,6 @@ dlgLoggerReplayShowModal(void)
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("xcsoar-nmea.log"));
     dfe->ScanDirectoryTop(_T("*.nmea"));
     dfe->ScanDirectoryTop(_T("*.igc"));
     dfe->Lookup(replay->GetFilename());
