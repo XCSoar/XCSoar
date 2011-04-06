@@ -5,53 +5,53 @@
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="165" Y="2" Width="35" Height="28" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="202" Y="2" Width="35" Height="28" OnClick="OnNextClicked" />
 
-  <Tabbed Name="tabbed" X="0" Y="32" Width="230" Height="200">
+  <Tabbed Name="tabbed" X="0" Y="32">
     <Panel Name="frmStatusFlight">
-      <Edit Name="prpLatitude" Caption="Latitude" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpLongitude" Caption="Longitude" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpAltitude" Caption="Altitude" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpMaxHeightGain" Caption="Max height gain" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpNear" Caption="Near" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpBearing" Caption="Bearing" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpDistance" Caption="Distance" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpLatitude" Caption="Latitude" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpLongitude" Caption="Longitude" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpAltitude" Caption="Altitude" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpMaxHeightGain" Caption="Max height gain" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpNear" Caption="Near" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpBearing" Caption="Bearing" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpDistance" Caption="Distance" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
     </Panel>
   
     <Panel Name="frmStatusSystem">
-      <Edit Name="prpGPS" Caption="GPS lock" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpNumSat" Caption="Satellites in view" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpVario" Caption="Vario" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpFLARM" Caption="FLARM" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpLogger" Caption="Logger" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpDeclared" Caption="Declared" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpBattery" Caption="Supply voltage" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpGPS" Caption="GPS lock" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpNumSat" Caption="Satellites in view" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpVario" Caption="Vario" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpFLARM" Caption="FLARM" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpLogger" Caption="Logger" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpDeclared" Caption="Declared" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpBattery" Caption="Supply voltage" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
     </Panel>
   
     <Panel Name="frmStatusTask">
-      <Edit Name="prpTaskTime" Caption="Assigned task time" X="2" Width="235" Height="22" CaptionWidth="150" ReadOnly="1" />
-      <Edit Name="prpETETime" Caption="Estimated task time" X="2" Width="235" Height="22" CaptionWidth="150" ReadOnly="1" />
-      <Edit Name="prpRemainingTime" Caption="Remaining time" X="2" Width="235" Height="22" CaptionWidth="150" ReadOnly="1" />
-      <Edit Name="prpTaskDistance" Caption="Task distance" X="2" Width="235" Height="22" CaptionWidth="150" ReadOnly="1" />
-      <Edit Name="prpRemainingDistance" Caption="Remaining distance" X="2" Width="235" Height="22" CaptionWidth="150" ReadOnly="1" />
-      <Edit Name="prpEstimatedSpeed" Caption="Speed estimated" X="2" Width="235" Height="22" CaptionWidth="150" ReadOnly="1" />
-      <Edit Name="prpAverageSpeed" Caption="Speed average" X="2" Width="235" Height="22" CaptionWidth="150" ReadOnly="1" />
+      <Edit Name="prpTaskTime" Caption="Assigned task time" X="2" Width="-2" Height="22" CaptionWidth="150" ReadOnly="1" />
+      <Edit Name="prpETETime" Caption="Estimated task time" X="2" Width="-2" Height="22" CaptionWidth="150" ReadOnly="1" />
+      <Edit Name="prpRemainingTime" Caption="Remaining time" X="2" Width="-2" Height="22" CaptionWidth="150" ReadOnly="1" />
+      <Edit Name="prpTaskDistance" Caption="Task distance" X="2" Width="-2" Height="22" CaptionWidth="150" ReadOnly="1" />
+      <Edit Name="prpRemainingDistance" Caption="Remaining distance" X="2" Width="-2" Height="22" CaptionWidth="150" ReadOnly="1" />
+      <Edit Name="prpEstimatedSpeed" Caption="Speed estimated" X="2" Width="-2" Height="22" CaptionWidth="150" ReadOnly="1" />
+      <Edit Name="prpAverageSpeed" Caption="Speed average" X="2" Width="-2" Height="22" CaptionWidth="150" ReadOnly="1" />
     </Panel>
   
     <Panel Name="frmStatusRules">
-      <Edit Name="prpValidStart" Caption="Valid start" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpStartTime" Caption="Start time" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpStartHeight" Caption="Start alt" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpStartPoint" Caption="Start point" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpStartSpeed" Caption="Start speed" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpFinishAlt" Caption="Finish alt min" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpValidFinish" Caption="Valid finish" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpValidStart" Caption="Valid start" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpStartTime" Caption="Start time" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpStartHeight" Caption="Start alt" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpStartPoint" Caption="Start point" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpStartSpeed" Caption="Start speed" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpFinishAlt" Caption="Finish alt min" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpValidFinish" Caption="Valid finish" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
     </Panel>
   
     <Panel Name="frmStatusTimes">
-      <Edit Name="prpLocalTime" Caption="Local time" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpFlightTime" Caption="Flight time" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpTakeoffTime" Caption="Takeoff time" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpLandingTime" Caption="Landing time" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
-      <Edit Name="prpSunset" Caption="Sunset" X="2" Width="235" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpLocalTime" Caption="Local time" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpFlightTime" Caption="Flight time" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpTakeoffTime" Caption="Takeoff time" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpLandingTime" Caption="Landing time" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpSunset" Caption="Sunset" X="2" Width="-2" Height="22" CaptionWidth="120" ReadOnly="1" />
     </Panel>
   </Tabbed>
 </Form>
