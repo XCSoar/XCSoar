@@ -21,30 +21,34 @@ Copyright_License {
 }
 */
 
-/*
- * A collection of global variables for the OpenGL backend.  Global
- * variables are not good style, but since there can be only once
- * OpenGL context at a time, this is good enough for XCSoar.
- *
- */
+package org.xcsoar;
 
-#ifndef XCSOAR_SCREEN_OPENGL_GLOBALS_HPP
-#define XCSOAR_SCREEN_OPENGL_GLOBALS_HPP
+import java.util.HashMap;
+import android.media.MediaPlayer;
+import android.content.Context;
 
-#ifndef NDEBUG
-#include <pthread.h>
-#endif
+public class SoundUtil {
+  private static HashMap<String, Integer> resources = new HashMap();
 
-namespace OpenGL {
-  /**
-   * The dimensions of the screen in pixels.
-   */
-  extern unsigned screen_width, screen_height;
+  static {
+    resources.put("IDR_FAIL", R.raw.fail);
+    resources.put("IDR_INSERT", R.raw.insert);
+    resources.put("IDR_REMOVE", R.raw.remove);
+    resources.put("IDR_WAV_BEEPBWEEP", R.raw.beep_bweep);
+    resources.put("IDR_WAV_CLEAR", R.raw.beep_clear);
+    resources.put("IDR_WAV_DRIP", R.raw.beep_drip);
+  }
 
-  /**
-   * The current SubCanvas translation in pixels.
-   */
-  extern int translate_x, translate_y;
-};
+  public static boolean play(Context context, String name) {
+    Integer id = resources.get(name);
+    if (id == null)
+      return false;
 
-#endif
+    MediaPlayer mp = MediaPlayer.create(context, id);
+    if (mp == null)
+      return false;
+
+    mp.start();
+    return true;
+  }
+}

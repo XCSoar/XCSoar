@@ -342,7 +342,10 @@ NMEAParser::TimeHasAdvanced(fixed ThisTime, NMEA_INFO *GPS_INFO)
 bool
 NMEAParser::GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  line.skip(2);
+  line.skip();
+
+  if (line.read(0) == 1)
+    GPS_INFO->LocationAvailable.clear();
 
   // satellites are in items 4-15 of GSA string (4-15 is 1-indexed)
   for (unsigned i = 0; i < MAXSATELLITES; i++)

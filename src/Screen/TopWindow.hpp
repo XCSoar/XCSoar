@@ -140,16 +140,6 @@ public:
   }
 #endif
 
-  void set_active() {
-    assert_none_locked();
-
-#ifdef ENABLE_SDL
-    // XXX
-#else
-    ::SetActiveWindow(hWnd);
-#endif
-  }
-
   void full_screen();
 
 #ifdef ENABLE_SDL
@@ -190,16 +180,15 @@ protected:
 #ifdef ANDROID
   virtual bool on_resize(unsigned width, unsigned height);
 
-private:
   /**
    * @see Event::PAUSE
    */
-  void on_pause();
+  virtual void on_pause();
 
   /**
    * @see Event::RESUME
    */
-  void on_resume();
+  virtual void on_resume();
 
 public:
   void pause();

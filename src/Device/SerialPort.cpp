@@ -174,7 +174,10 @@ SerialPort::run()
   Flush();
 
   // Specify a set of events to be monitored for the port.
-  ::SetCommMask(hPort, EV_RXCHAR);
+  if (is_widcomm)
+    SetRxTimeout(180);
+  else
+    ::SetCommMask(hPort, EV_RXCHAR);
 
   while (!is_stopped()) {
     if (is_widcomm) {
@@ -182,10 +185,6 @@ SerialPort::run()
          driver, it blocks for 11 seconds, regardless whether data is
          received.  This workaround polls for input manually.
          Observed on an iPaq hx4700 with WM6. */
-
-      while (!IsDataPending())
-        if (wait_stopped(180))
-          break;
     } else {
       // Wait for an event to occur for the port.
       if (!::WaitCommEvent(hPort, &dwCommModemStatus, 0)) {
@@ -272,7 +271,8 @@ SerialPort::StopRxThread()
   Flush();
 
   /* this will cancel WaitCommEvent() */
-  ::SetCommMask(hPort, 0);
+  if (!is_widcomm)
+    ::SetCommMask(hPort, 0);
 
   if (!Thread::join(2000)) {
     /* On Dell Axim x51v, the Bluetooth RFCOMM driver seems to be

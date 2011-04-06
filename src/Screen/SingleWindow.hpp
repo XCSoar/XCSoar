@@ -42,6 +42,11 @@ public:
   void add_dialog(WndForm *dialog);
   void remove_dialog(WndForm *dialog);
 
+  /**
+   * Forcefully cancel the top-most dialog.
+   */
+  void CancelDialog();
+
   bool has_dialog() {
     return !dialogs.empty();
   }

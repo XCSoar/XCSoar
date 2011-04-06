@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_FLASH_CARD_ENUMERATOR_HPP
 
 #include "Util/StringUtil.hpp"
+#include "Compatibility/path.h"
 
 #ifdef HAVE_NOTE_PRJ_DLL
 #include "NotePrjDLL.hpp"
@@ -46,11 +47,11 @@ public:
   FlashCardEnumerator()
     :handle(note_prj.defined()
             ? note_prj.FindFirstFlashCard(&data)
-            : ::FindFirstFile(_T("/*"), &data)),
+            : ::FindFirstFile(_T(DIR_SEPARATOR_S "*"), &data)),
      first(true) {}
 #else
   FlashCardEnumerator()
-    :handle(::FindFirstFile(_T("/*"), &data)), first(true) {}
+    :handle(::FindFirstFile(_T(DIR_SEPARATOR_S "*"), &data)), first(true) {}
 #endif
 
   ~FlashCardEnumerator() {

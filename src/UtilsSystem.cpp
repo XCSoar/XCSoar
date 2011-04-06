@@ -48,8 +48,8 @@ Copyright_License {
 // memory defragmentation, since on pocket pc platforms there is no
 // automatic defragmentation.
 void MyCompactHeaps() {
-#ifdef WIN32
-#if !defined(_WIN32_WCE) || (defined(GNAV) && !defined(__GNUC__))
+#ifdef _WIN32_WCE
+#if defined(GNAV) && !defined(__GNUC__)
   HeapCompact(GetProcessHeap(), 0);
 #else
   typedef DWORD (_stdcall *CompactAllHeapsFn) (void);

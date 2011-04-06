@@ -37,13 +37,23 @@ SingleWindow::remove_dialog(WndForm *dialog)
   dialogs.pop();
 }
 
+void
+SingleWindow::CancelDialog()
+{
+  assert_thread();
+
+  assert(!dialogs.empty());
+
+  Window *dialog = dialogs.top();
+  dialog->reset();
+}
+
 bool
 SingleWindow::on_close()
 {
   if (!dialogs.empty()) {
     /* close the current dialog instead of the main window */
-    WndForm *dialog = dialogs.top();
-    dialog->reset();
+    CancelDialog();
     return true;
   }
 

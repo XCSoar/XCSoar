@@ -214,8 +214,7 @@ ProcessTimer::CommonProcessTimer()
 
   AirspaceProcessTimer();
   MessageProcessTimer();
-
-  SystemClockTimer();
+  SystemProcessTimer();
 }
 
 int

@@ -21,30 +21,19 @@ Copyright_License {
 }
 */
 
-/*
- * A collection of global variables for the OpenGL backend.  Global
- * variables are not good style, but since there can be only once
- * OpenGL context at a time, this is good enough for XCSoar.
- *
- */
+#include "Android/SoundUtil.hpp"
+#include "Java/String.hpp"
 
-#ifndef XCSOAR_SCREEN_OPENGL_GLOBALS_HPP
-#define XCSOAR_SCREEN_OPENGL_GLOBALS_HPP
+SoundUtil::SoundUtil(JNIEnv *env)
+  :cls(env, "org/xcsoar/SoundUtil"),
+   mid_play(env->GetStaticMethodID(cls, "play",
+                                   "(Landroid/content/Context;Ljava/lang/String;)Z"))
+{
+}
 
-#ifndef NDEBUG
-#include <pthread.h>
-#endif
-
-namespace OpenGL {
-  /**
-   * The dimensions of the screen in pixels.
-   */
-  extern unsigned screen_width, screen_height;
-
-  /**
-   * The current SubCanvas translation in pixels.
-   */
-  extern int translate_x, translate_y;
-};
-
-#endif
+bool
+SoundUtil::play(JNIEnv *env, jobject context, const char *name)
+{
+  Java::String paramName(env, name);
+  return env->CallStaticBooleanMethod(cls, mid_play, context, paramName.get());
+}

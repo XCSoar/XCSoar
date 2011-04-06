@@ -28,9 +28,12 @@ Copyright_License {
 
 class NativeView;
 class EventQueue;
+class SoundUtil;
 
 extern NativeView *native_view;
 
 extern EventQueue *event_queue;
+
+extern SoundUtil *sound_util;
 
 #endif

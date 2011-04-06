@@ -120,6 +120,10 @@ protected:
   bool on_create();
   bool on_destroy();
   bool on_close();
+
+#ifdef ANDROID
+  virtual void on_pause();
+#endif
 };
 
 #endif

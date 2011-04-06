@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/SubCanvas.hpp"
+#include "Screen/SDL/Reference.hpp"
 
 #include <algorithm>
 #include <assert.h>
@@ -315,6 +316,32 @@ ContainerWindow::on_paint(Canvas &canvas)
   assert(full == NULL);
 }
 
+void
+ContainerWindow::add_child(Window &child) {
+  children.push_back(&child);
+}
+
+void
+ContainerWindow::remove_child(Window &child) {
+  children.remove(&child);
+
+  if (active_child == &child)
+    active_child = NULL;
+}
+
+bool
+ContainerWindow::HasChild(const Window &child) const
+{
+  return std::find(children.begin(), children.end(), &child) != children.end();
+}
+
+void
+ContainerWindow::bring_child_to_top(Window &child) {
+  children.remove(&child);
+  children.insert(children.begin(), &child);
+  invalidate();
+}
+
 Window *
 ContainerWindow::child_at(int x, int y)
 {
@@ -377,6 +404,15 @@ ContainerWindow::get_focused_window()
     return active_child->get_focused_window();
 
   return NULL;
+}
+
+WindowReference
+ContainerWindow::GetFocusedWindowReference()
+{
+  Window *focus = get_focused_window();
+  return focus != NULL
+    ? WindowReference(*this, *focus)
+    : WindowReference();
 }
 
 void
