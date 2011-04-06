@@ -18,6 +18,7 @@ Version 6.0.9 - not yet released
   - allow SD card installation
   - "Droid Sans" is the default Android font
   - enable font preview
+  - dead hardware keys fixed
 
 Version 6.0.8 - 2011/03/23
 * don't estimate thermal source for skewed thermals

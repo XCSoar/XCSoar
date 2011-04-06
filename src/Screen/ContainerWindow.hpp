@@ -30,6 +30,8 @@ Copyright_License {
 #include <list>
 #endif /* !ENABLE_SDL */
 
+class WindowReference;
+
 /**
  * A container for more #Window objects.  It is also derived from
  * #PaintWindow, because you might want to paint a border between the
@@ -77,6 +79,9 @@ public:
   void add_child(Window &child);
   void remove_child(Window &child);
 
+  gcc_pure
+  bool HasChild(const Window &child) const;
+
   void bring_child_to_top(Window &child);
 
   /**
@@ -101,6 +106,9 @@ public:
    */
   gcc_pure
   virtual Window *get_focused_window();
+
+  gcc_pure
+  WindowReference GetFocusedWindowReference();
 
   void set_child_capture(Window *window);
   void release_child_capture(Window *window);

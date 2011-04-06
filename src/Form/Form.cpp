@@ -33,6 +33,10 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Util/StringUtil.hpp"
 
+#ifdef ENABLE_SDL
+#include "Screen/SDL/Reference.hpp"
+#endif
+
 #ifdef ANDROID
 #include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
@@ -376,7 +380,10 @@ WndForm::ShowModal(Window *modal_allowed)
   assert_none_locked();
 
 #define OPENCLOSESUPPRESSTIME 500
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+  ContainerWindow *root = get_root_owner();
+  WindowReference old_focus_reference = root->GetFocusedWindowReference();
+#else
   HWND oldFocusHwnd;
 #endif /* !ENABLE_SDL */
 
@@ -487,7 +494,13 @@ WndForm::ShowModal(Window *modal_allowed)
   // static.  this is current open/close or child open/close
   WndForm::timeAnyOpenClose.update();
 
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+  if (old_focus_reference.Defined()) {
+    Window *old_focus = old_focus_reference.Get(*root);
+    if (old_focus != NULL)
+      old_focus->set_focus();
+  }
+#else
   SetFocus(oldFocusHwnd);
 #endif /* !ENABLE_SDL */
 
