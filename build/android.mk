@@ -93,13 +93,13 @@ $(ANDROID_BUILD)/libs/armeabi/libapplication.so: $(OUT)/ANDROID/build/libs/armea
 	$(Q)cp $< $@
 
 $(OUT)/ANDROID/build/libs/armeabi/libapplication.so:
-	$(Q)$(MAKE) TARGET=ANDROID $@
+	$(Q)$(MAKE) TARGET=ANDROID DEBUG=$(DEBUG) $@
 
 $(ANDROID_BUILD)/libs/armeabi-v7a/libapplication.so: $(OUT)/ANDROID7/build/libs/armeabi-v7a/libapplication.so | $(ANDROID_BUILD)/libs/armeabi-v7a/dirstamp
 	$(Q)cp $< $@
 
 $(OUT)/ANDROID7/build/libs/armeabi-v7a/libapplication.so:
-	$(Q)$(MAKE) TARGET=ANDROID7 $@
+	$(Q)$(MAKE) TARGET=ANDROID7 DEBUG=$(DEBUG) $@
 
 $(ANDROID_BIN)/XCSoar-debug.apk: $(ALL_SO) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) android/src/*.java
 	@$(NQ)echo "  ANT     $@"
