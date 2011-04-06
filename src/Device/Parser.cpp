@@ -345,7 +345,10 @@ NMEAParser::GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (GPS_INFO->gps.Replay)
     return true;
 
-  line.skip(2);
+  line.skip();
+
+  if (line.read(0) == 1)
+    GPS_INFO->gps.NAVWarning = true;
 
   // satellites are in items 4-15 of GSA string (4-15 is 1-indexed)
   for (unsigned i = 0; i < MAXSATELLITES; i++)
