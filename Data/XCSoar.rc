@@ -113,14 +113,14 @@ IDB_TITLE             BITMAP  DISCARDABLE     "../output/data/graphics/title_110
 IDB_TITLE_HD          BITMAP  DISCARDABLE     "../output/data/graphics/title_320.bmp"
 // --- Audio ---
 
-IDR_FAIL                WAVE    DISCARDABLE     "sound/Fail.wav"
-IDR_INSERT              WAVE    DISCARDABLE     "sound/Insert.wav"
-IDR_REMOVE              WAVE    DISCARDABLE     "sound/Remove.wav"
+IDR_FAIL                WAVE    DISCARDABLE     "sound/fail.wav"
+IDR_INSERT              WAVE    DISCARDABLE     "sound/insert.wav"
+IDR_REMOVE              WAVE    DISCARDABLE     "sound/remove.wav"
 
 #ifndef GNAV
-IDR_WAV_BEEPBWEEP       WAVE    DISCARDABLE     "sound/beep-bweep.wav"
-IDR_WAV_CLEAR           WAVE    DISCARDABLE     "sound/beep-clear.wav"
-IDR_WAV_DRIP            WAVE    DISCARDABLE     "sound/beep-drip.wav"
+IDR_WAV_BEEPBWEEP       WAVE    DISCARDABLE     "sound/beep_bweep.wav"
+IDR_WAV_CLEAR           WAVE    DISCARDABLE     "sound/beep_clear.wav"
+IDR_WAV_DRIP            WAVE    DISCARDABLE     "sound/beep_drip.wav"
 #endif
 
 #endif // !ANDROID
