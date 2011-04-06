@@ -315,6 +315,26 @@ ContainerWindow::on_paint(Canvas &canvas)
   assert(full == NULL);
 }
 
+void
+ContainerWindow::add_child(Window &child) {
+  children.push_back(&child);
+}
+
+void
+ContainerWindow::remove_child(Window &child) {
+  children.remove(&child);
+
+  if (active_child == &child)
+    active_child = NULL;
+}
+
+void
+ContainerWindow::bring_child_to_top(Window &child) {
+  children.remove(&child);
+  children.insert(children.begin(), &child);
+  invalidate();
+}
+
 Window *
 ContainerWindow::child_at(int x, int y)
 {

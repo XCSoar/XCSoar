@@ -74,22 +74,10 @@ protected:
 
 public:
 #ifdef ENABLE_SDL
-  void add_child(Window &child) {
-    children.push_back(&child);
-  }
+  void add_child(Window &child);
+  void remove_child(Window &child);
 
-  void remove_child(Window &child) {
-    children.remove(&child);
-
-    if (active_child == &child)
-      active_child = NULL;
-  }
-
-  void bring_child_to_top(Window &child) {
-    children.remove(&child);
-    children.insert(children.begin(), &child);
-    invalidate();
-  }
+  void bring_child_to_top(Window &child);
 
   /**
    * Locate a child window by its relative coordinates.
