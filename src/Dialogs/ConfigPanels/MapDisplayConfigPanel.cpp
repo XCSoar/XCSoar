@@ -76,7 +76,7 @@ MapDisplayConfigPanel::Init(WndForm *_wf)
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
     dfe->addEnumText(_("None"), MAP_SHIFT_BIAS_NONE, _("Disable adjustments."));
-    dfe->addEnumText(_("Heading"), MAP_SHIFT_BIAS_HEADING, _("Use a recent average of the flown heading as basis."));
+    dfe->addEnumText(_("Track"), MAP_SHIFT_BIAS_TRACK, _("Use a recent average of the ground track as basis."));
     dfe->addEnumText(_("Target"), MAP_SHIFT_BIAS_TARGET, _("Use the current target waypoint as basis."));
     dfe->Set(XCSoarInterface::SettingsMap().MapShiftBias);
     wp->RefreshDisplay();

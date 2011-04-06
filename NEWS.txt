@@ -38,7 +38,7 @@ Version 6.1 - not yet released
   - "north up" map orientation now respects "glider position offset"
     by configuring a "shifting axis", i.e.
     - shifting based on bearing to target (i.e. North orientated "target up")
-    - shifting based on avg of recently flown headings
+    - shifting based on average of recent ground track
       (i.e. North orientated "track up")
   - the estimated thermal position is now used as map center during circling
   - a selection of which waypoint labels are displayed is now possible

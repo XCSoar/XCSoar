@@ -76,7 +76,7 @@
       </Edit>
 
       <Edit Name="prpMapShiftBias" Caption="Map shift reference" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Determines what is used to shift the glider from the map center:&#10;[None] Disable adjustments.&#10;[Heading] Use a recent average of the flown heading as basis.&#10;[Target]Use the current target waypoint as basis">
+        Help="Determines what is used to shift the glider from the map center:&#10;[None] Disable adjustments.&#10;[Track] Use a recent average of the ground track as basis.&#10;[Target]Use the current target waypoint as basis">
         <DataField DataType="enum" />
       </Edit>
 

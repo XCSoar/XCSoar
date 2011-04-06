@@ -264,7 +264,7 @@ GlueMapWindow::UpdateProjection()
         settings_map.MapShiftBias != MAP_SHIFT_BIAS_NONE) {
       fixed x = fixed_zero;
       fixed y = fixed_zero;
-      if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_HEADING) {
+      if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_TRACK) {
         if (Basic().GroundSpeed > fixed_int_constant(8)) /* 8 m/s ~ 30 km/h */
           Basic().TrackBearing.Reciprocal().sin_cos(x, y);
       } else if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_TARGET) {
