@@ -57,8 +57,7 @@ public:
   AltairProDevice(Port *_port):port(_port){}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
   virtual bool Declare(const struct Declaration *declaration,
                        OperationEnvironment &env);
   virtual void OnSysTicker(const NMEA_INFO &basic,
@@ -82,8 +81,7 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
 }
 
 bool
-AltairProDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
-                           bool enable_baro)
+AltairProDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
   NMEAInputLine line(String);
   char type[16];
@@ -93,8 +91,7 @@ AltairProDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
 
   if (strcmp(type, "$PGRMZ") == 0) {
     fixed value;
-    bool available = ReadAltitude(line, value);
-    if (enable_baro && available)
+    if (ReadAltitude(line, value))
       GPS_INFO->ProvidePressureAltitude(value);
 
     return true;

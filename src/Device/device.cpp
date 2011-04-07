@@ -95,18 +95,6 @@ static const unsigned dwSpeed[] = {
   115200
 };
 
-// This function is used to determine whether a generic
-// baro source needs to be used if available
-bool
-devHasBaroSource(void)
-{
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    if (DeviceList[i].enable_baro)
-      return true;
-
-  return false;
-}
-
 /**
  * Attempt to detect the GPS device.
  *
@@ -228,8 +216,6 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
     delete Com;
     return false;
   }
-
-  device.enable_baro = device.IsBaroSource() && !devHasBaroSource();
 
   if (nmeaout == NULL && (Driver->Flags & (1l << dfNmeaOut)))
     nmeaout = &device;
@@ -418,22 +404,4 @@ devRestart()
   devShutdown();
 
   devStartup();
-}
-
-void devConnectionMonitor()
-{
-  /* check which port has valid GPS information and activate it */
-
-  bool active = false;
-  for (unsigned i = 0; i < NUMDEV; ++i) {
-    if (!active && DeviceList[i].parser.gpsValid) {
-      DeviceList[i].parser.activeGPS = true;
-      active = true;
-    } else
-      DeviceList[i].parser.activeGPS = false;
-  }
-
-  if (!active)
-    /* none - activate first device anyway */
-    DeviceList[0].parser.activeGPS = true;
 }

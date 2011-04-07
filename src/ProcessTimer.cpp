@@ -250,8 +250,6 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
        device is busy with that and will not send NMEA updates */
     return itimeout;
 
-  devConnectionMonitor();
-
   static bool connected_last = false;
   static bool wait_connect = false;
   static bool wait_lock = false;

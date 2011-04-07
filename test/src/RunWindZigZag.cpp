@@ -50,12 +50,6 @@ Waypoints way_points;
  */
 
 bool
-devHasBaroSource()
-{
-  return (driver->Flags & drfBaroAlt) != 0;
-}
-
-bool
 HaveCondorDevice()
 {
   return _tcscmp(driver->Name, _T("Condor")) == 0;
@@ -137,7 +131,7 @@ int main(int argc, char **argv)
 
     TrimRight(buffer);
 
-    if (device == NULL || !device->ParseNMEA(buffer, &data, true))
+    if (device == NULL || !device->ParseNMEA(buffer, &data))
       parser.ParseNMEAString_Internal(buffer, &data);
 
     computer.Compute(data, last, calculated, settings_computer);

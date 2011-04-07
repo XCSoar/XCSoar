@@ -32,8 +32,7 @@ Copyright_License {
 
 class CondorDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
 };
 
 static bool
@@ -57,7 +56,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 }
 
 static bool
-cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
+cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   /*
   $LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1
@@ -86,9 +85,8 @@ cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
                                                                unKiloMeterPerHour),
                                               alt);
 
-  if (enable_baro)
-    // ToDo check if QNH correction is needed!
-    GPS_INFO->ProvideBaroAltitudeTrue(alt);
+  // ToDo check if QNH correction is needed!
+  GPS_INFO->ProvideBaroAltitudeTrue(alt);
 
   if (line.read_checked(value))
     GPS_INFO->ProvideTotalEnergyVario(value);
@@ -117,15 +115,14 @@ cLXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 }
 
 bool
-CondorDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
-                        bool enable_baro)
+CondorDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
   NMEAInputLine line(String);
   char type[16];
   line.read(type, 16);
 
   if (strcmp(type, "$LXWP0") == 0)
-    return cLXWP0(line, GPS_INFO, enable_baro);
+    return cLXWP0(line, GPS_INFO);
 
   if (strcmp(type, "$LXWP1") == 0)
     return cLXWP1(line, GPS_INFO);

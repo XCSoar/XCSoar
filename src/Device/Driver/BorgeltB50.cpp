@@ -33,8 +33,7 @@ Copyright_License {
 
 class B50Device : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
 };
 
 /*
@@ -123,8 +122,7 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 }
 
 bool
-B50Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
-                     bool enable_baro)
+B50Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
   NMEAInputLine line(String);
   char type[16];

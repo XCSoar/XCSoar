@@ -57,8 +57,7 @@ protected:
   bool DeclareInner(VLAPI &vl, const struct Declaration *declaration);
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
   virtual bool Declare(const Declaration *declaration,
                        OperationEnvironment &env);
 };
@@ -68,7 +67,7 @@ public:
 // $PGCS,1,0EC0,FFF9,0C6E,02*61
 // $PGCS,1,0EC0,FFFA,0C6E,03*18
 static bool
-vl_PGCS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
+vl_PGCS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   GPS_STATE &gps = GPS_INFO->gps;
 
@@ -81,14 +80,12 @@ vl_PGCS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   // four characers, hex, barometric altitude
   long altitude = line.read_hex(0L);
 
-  if (enable_baro) {
-    if (altitude > 60000)
-      /* Assuming that altitude has wrapped around.  60 000 m occurs
-         at QNH ~2000 hPa */
-      altitude -= 65535;
+  if (altitude > 60000)
+    /* Assuming that altitude has wrapped around.  60 000 m occurs at
+       QNH ~2000 hPa */
+    altitude -= 65535;
 
-    GPS_INFO->ProvidePressureAltitude(fixed(altitude));
-  }
+  GPS_INFO->ProvidePressureAltitude(fixed(altitude));
 
   // ExtractParameter(String,ctemp,3);
   // four characters, hex, constant.  Value 1371 (dec)
@@ -106,8 +103,7 @@ vl_PGCS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 }
 
 bool
-VolksloggerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
-                             bool enable_baro)
+VolksloggerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
   if (!VerifyNMEAChecksum(String))
     return false;
@@ -117,7 +113,7 @@ VolksloggerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
   line.read(type, 16);
 
   if (strcmp(type, "$PGCS") == 0)
-    return vl_PGCS1(line, GPS_INFO, enable_baro);
+    return vl_PGCS1(line, GPS_INFO);
   else
     return false;
 }

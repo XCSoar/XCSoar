@@ -39,8 +39,7 @@ public:
   FlytecDevice(Port *_port):port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
 };
 
 /**
@@ -49,7 +48,7 @@ public:
  * Example: "$BRSF,063,-013,-0035,1,193,00351,535,485*38"
  */
 static bool
-FlytecParseBRSF(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
+FlytecParseBRSF(NMEAInputLine &line, NMEA_INFO &info)
 {
   fixed value;
 
@@ -75,7 +74,7 @@ FlytecParseBRSF(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
  * Example: "$VMVABD,0000.0,M,0547.0,M,-0.0,,,MS,0.0,KH,22.4,C*65"
  */
 static bool
-FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
+FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info)
 {
   fixed value;
 
@@ -84,8 +83,7 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
     info.GPSAltitudeAvailable.update(info.Time);
 
   // 2,3 = baro altitude, unit
-  bool available = line.read_checked_compare(value, "M");
-  if (enable_baro && available)
+  if (line.read_checked_compare(value, "M"))
     info.ProvideBaroAltitudeTrue(value);
 
   // 4-7 = integrated vario, unit
@@ -106,16 +104,16 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 }
 
 bool
-FlytecDevice::ParseNMEA(const char *_line, NMEA_INFO *info, bool enable_baro)
+FlytecDevice::ParseNMEA(const char *_line, NMEA_INFO *info)
 {
   NMEAInputLine line(_line);
   char type[16];
   line.read(type, 16);
 
   if (strcmp(type, "$BRSF") == 0)
-    return FlytecParseBRSF(line, *info, enable_baro);
+    return FlytecParseBRSF(line, *info);
   else if (strcmp(type, "$VMVABD") == 0)
-    return FlytecParseVMVABD(line, *info, enable_baro);
+    return FlytecParseVMVABD(line, *info);
   else
     return false;
 }

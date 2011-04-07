@@ -46,7 +46,6 @@ DeviceDescriptor::DeviceDescriptor()
 #ifdef ANDROID
    internal_gps(NULL),
 #endif
-   enable_baro(false),
    ticker(false), declaring(false)
 {
 }
@@ -63,7 +62,6 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
   assert(_driver != NULL);
   assert(Com == NULL);
   assert(device == NULL);
-  assert(!enable_baro);
   assert(!ticker);
 
   mutexBlackboard.Lock();
@@ -111,7 +109,6 @@ DeviceDescriptor::Close()
 
   Driver = NULL;
   pDevPipeTo = NULL;
-  enable_baro = false;
   ticker = false;
 
   mutexBlackboard.Lock();
@@ -163,7 +160,7 @@ DeviceDescriptor::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
   assert(String != NULL);
   assert(GPS_INFO != NULL);
 
-  if (device != NULL && device->ParseNMEA(String, GPS_INFO, enable_baro)) {
+  if (device != NULL && device->ParseNMEA(String, GPS_INFO)) {
     GPS_INFO->Connected.update(fixed(MonotonicClockMS()) / 1000);
     return true;
   }

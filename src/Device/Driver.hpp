@@ -48,8 +48,7 @@ public:
   virtual bool IsLogger() = 0;
   virtual bool IsBaroSource() = 0;
 
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro) = 0;
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info) = 0;
 
   virtual bool PutMacCready(fixed MacCready) = 0;
   virtual bool PutBugs(fixed bugs) = 0;
@@ -81,8 +80,7 @@ public:
   virtual bool IsLogger();
   virtual bool IsBaroSource();
 
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
 
   virtual bool PutMacCready(fixed MacCready);
   virtual bool PutBugs(fixed bugs);

@@ -44,15 +44,14 @@ Copyright_License {
  */
 class WesterboerDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
 };
 
 /**
  * $PWES0,DD,VVVV,MMMM,NNNN,BBBB,SSSS,AAAAA,QQQQQ,IIII,TTTT,UUU,CCC*CS<CR><LF>
  */
 static bool
-PWES0(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
+PWES0(NMEAInputLine &line, NMEA_INFO &info)
 {
   int i, k;
 
@@ -71,7 +70,7 @@ PWES0(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 
   line.skip(); /* baro altitude 1013 */
 
-  if (line.read_checked(i) && enable_baro)
+  if (line.read_checked(i))
     info.ProvideBaroAltitudeTrue(fixed(i));
 
   bool have_ias = line.read_checked(i);
@@ -96,8 +95,7 @@ PWES0(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 }
 
 bool
-WesterboerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
-                            bool enable_baro)
+WesterboerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
   if (!VerifyNMEAChecksum(String))
     return false;
@@ -107,7 +105,7 @@ WesterboerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
   line.read(type, 16);
 
   if (strcmp(type, "$PWES0") == 0)
-    return PWES0(line, *GPS_INFO, enable_baro);
+    return PWES0(line, *GPS_INFO);
 
   return false;
 }

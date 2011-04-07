@@ -53,7 +53,6 @@ public:
   InternalGPS *internal_gps;
 #endif
 
-  bool enable_baro;
   NMEAParser parser;
 
   bool ticker;

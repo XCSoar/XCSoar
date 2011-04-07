@@ -65,8 +65,7 @@ protected:
   bool DeclareInner(const Declaration *declaration);
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
   virtual bool Declare(const Declaration *declaration,
                        OperationEnvironment &env);
 };
@@ -88,8 +87,7 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
 }
 
 bool
-EWMicroRecorderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
-                                 bool enable_baro)
+EWMicroRecorderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
   if (!VerifyNMEAChecksum(String))
     return false;
@@ -107,7 +105,7 @@ EWMicroRecorderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
        altitude.  That is the only reason why we catch this sentence
        in the driver instead of letting the generic class NMEAParser
        do it. */
-    if (ReadAltitude(line, value) && enable_baro)
+    if (ReadAltitude(line, value))
       GPS_INFO->ProvidePressureAltitude(value);
 
     return true;

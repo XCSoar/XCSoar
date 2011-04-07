@@ -108,8 +108,7 @@ protected:
                     OperationEnvironment &env);
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-      bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
   virtual bool Declare(const Declaration *declaration,
                        OperationEnvironment &env);
 };
@@ -159,7 +158,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 }
 
 static bool
-LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
+LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   /*
   $LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1
@@ -181,7 +180,7 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   bool tas_available = line.read_checked(airspeed);
 
   fixed alt = fixed_zero;
-  if (line.read_checked(alt) && enable_baro)
+  if (line.read_checked(alt))
     /* a dump on a LX7007 has confirmed that the LX sends uncorrected
        altitude above 1013.25hPa here */
     GPS_INFO->ProvidePressureAltitude(alt);
@@ -266,14 +265,14 @@ LXDevice::CRCWrite(char c)
 }
 
 bool
-LXDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO, bool enable_baro)
+LXDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
   NMEAInputLine line(String);
   char type[16];
   line.read(type, 16);
 
   if (strcmp(type, "$LXWP0") == 0)
-    return LXWP0(line, GPS_INFO, enable_baro);
+    return LXWP0(line, GPS_INFO);
 
   if (strcmp(type, "$LXWP1") == 0)
     return LXWP1(line, GPS_INFO);

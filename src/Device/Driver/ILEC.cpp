@@ -39,8 +39,7 @@ public:
   ILECDevice(Port *_port):port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
 };
 
 static bool
@@ -65,13 +64,13 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
  * Example: "$PILC,PDA1,1489,-3.21,274,15,58*7D"
  */
 static bool
-ParsePDA1(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
+ParsePDA1(NMEAInputLine &line, NMEA_INFO &info)
 {
   fixed value;
 
   // altitude [m]
   int altitude;
-  if (line.read_checked(altitude) && enable_baro)
+  if (line.read_checked(altitude))
     info.ProvideBaroAltitudeTrue(fixed(altitude));
 
   // total energy vario [m/s]
@@ -90,7 +89,7 @@ ParsePDA1(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
 }
 
 bool
-ILECDevice::ParseNMEA(const char *_line, NMEA_INFO *info, bool enable_baro)
+ILECDevice::ParseNMEA(const char *_line, NMEA_INFO *info)
 {
   NMEAInputLine line(_line);
   char type[16];
@@ -99,7 +98,7 @@ ILECDevice::ParseNMEA(const char *_line, NMEA_INFO *info, bool enable_baro)
   if (strcmp(type, "$PILC") == 0) {
     line.read(type, sizeof(type));
     if (strcmp(type, "PDA1") == 0)
-      return ParsePDA1(line, *info, enable_baro);
+      return ParsePDA1(line, *info);
     else
       return false;
   } else

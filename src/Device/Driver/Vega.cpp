@@ -63,8 +63,7 @@ public:
   VegaDevice(Port *_port):port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
   virtual bool PutQNH(const AtmosphericPressure& pres,
                       const DERIVED_INFO &calculated);
   virtual bool PutVoice(const TCHAR *sentence);
@@ -219,7 +218,7 @@ PDVSC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 // $PDVDV,vario,ias,densityratio,altitude,staticpressure
 
 static bool
-PDVDV(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
+PDVDV(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   fixed value;
 
@@ -234,8 +233,8 @@ PDVDV(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   //hasVega = true;
 
-  if (enable_baro)
-    GPS_INFO->ProvidePressureAltitude(line.read(fixed_zero));
+  if (line.read_checked(value))
+    GPS_INFO->ProvidePressureAltitude(value);
 
   return true;
 }
@@ -309,8 +308,7 @@ PDTSM(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 }
 
 bool
-VegaDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
-                      bool enable_baro)
+VegaDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
   NMEAInputLine line(String);
   char type[16];
@@ -323,7 +321,7 @@ VegaDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
   else if (strcmp(type, "$PDVSC") == 0)
     return PDVSC(line, GPS_INFO);
   else if (strcmp(type, "$PDVDV") == 0)
-    return PDVDV(line, GPS_INFO, enable_baro);
+    return PDVDV(line, GPS_INFO);
   else if (strcmp(type, "$PDVDS") == 0)
     return PDVDS(line, GPS_INFO);
   else if (strcmp(type, "$PDVVT") == 0)

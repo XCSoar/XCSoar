@@ -137,8 +137,7 @@ public:
 
 public:
   virtual bool Open(OperationEnvironment &env);
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
   virtual bool PutMacCready(fixed MacCready);
   virtual bool PutBugs(fixed bugs);
   virtual bool PutBallast(fixed ballast);
@@ -146,7 +145,7 @@ public:
                        OperationEnvironment &env);
 
 private:
-  bool cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro);
+  bool cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
 };
 
 /*
@@ -171,12 +170,12 @@ $PCAID,<1>,<2>,<3>,<4>*hh<CR><LF>
 *hh Checksum, XOR of all bytes of the sentence after the ‘$’ and before the ‘*’
 */
 static bool
-cai_PCAID(NMEAInputLine &line, NMEA_INFO &data, bool enable_baro)
+cai_PCAID(NMEAInputLine &line, NMEA_INFO &data)
 {
   line.skip();
 
   fixed value;
-  if (line.read_checked(value) && enable_baro)
+  if (line.read_checked(value))
     data.ProvidePressureAltitude(value);
 
   unsigned enl;
@@ -189,8 +188,7 @@ cai_PCAID(NMEAInputLine &line, NMEA_INFO &data, bool enable_baro)
 }
 
 bool
-CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
-                        bool enable_baro)
+CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
   if (!VerifyNMEAChecksum(String))
     return false;
@@ -203,10 +201,10 @@ CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
     return cai_PCAIB(line, GPS_INFO);
 
   if (strcmp(type, "$PCAID") == 0)
-    return cai_PCAID(line, *GPS_INFO, enable_baro);
+    return cai_PCAID(line, *GPS_INFO);
 
   if (strcmp(type, "!w") == 0)
-    return cai_w(line, GPS_INFO, enable_baro);
+    return cai_w(line, GPS_INFO);
 
   return false;
 }
@@ -542,7 +540,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 */
 
 bool
-CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
+CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
   SpeedVector wind;
   if (ReadSpeedVector(line, wind))
@@ -551,7 +549,7 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
   line.skip(2);
 
   fixed value;
-  if (line.read_checked(value) && enable_baro)
+  if (line.read_checked(value))
     GPS_INFO->ProvideBaroAltitudeTrue(value - fixed(1000));
 
   line.skip();

@@ -69,7 +69,6 @@ NMEAParser::Reset(void)
   real = true;
   gpsValid = false;
   isFlarm = false;
-  activeGPS = true;
   GGAAvailable = false;
   LastTime = fixed_zero;
 }
@@ -384,9 +383,6 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   gpsValid = !NAVWarn(line.read_first_char());
 
-  if (!activeGPS)
-    return true;
-
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return true;
 
@@ -496,9 +492,6 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   bool valid_location = ReadGeoPoint(line, location);
 
   GPS_STATE &gps = GPS_INFO->gps;
-
-  if (!activeGPS)
-    return true;
 
   fixed speed;
   bool GroundSpeedAvailable = line.read_checked(speed);
@@ -615,9 +608,6 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (nSatellites == 0)
     gpsValid = false;
 
-  if (!activeGPS)
-    return true;
-
   gps.SatellitesUsed = nSatellites;
 
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
@@ -695,8 +685,7 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   //JMW?  RMZAltitude = GPS_INFO->pressure.PressureAltitudeToQNHAltitude(RMZAltitude);
 
   fixed value;
-  if (!devHasBaroSource() &&
-      ReadAltitude(line, value)) {
+  if (ReadAltitude(line, value)) {
     // JMW no in-built baro sources, so use this generic one
     if (isFlarm)
       /* FLARM emulates the Garmin $PGRMZ sentence, but emits the

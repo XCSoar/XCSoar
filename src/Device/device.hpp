@@ -35,16 +35,12 @@ void devWriteNMEAString(DeviceDescriptor &d, const TCHAR *Text);
 void VarioWriteNMEA(const TCHAR *Text);
 DeviceDescriptor *devVarioFindVega(void);
 
-bool devHasBaroSource(void);
-
 /**
  * Returns true if at least one of the connected device is a Condor
  * flight simulator.
  */
 bool
 HaveCondorDevice();
-
-void devConnectionMonitor();
 
 void devStartup();
 void devShutdown();

@@ -39,8 +39,7 @@ public:
   LeonardoDevice(Port *_port):port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
 };
 
 static bool
@@ -65,12 +64,12 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
  * Example: "$C,+2025,-7,+18,+25,+29,122,314,314,0,-356,+25,45,T*3D"
  */
 static bool
-LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
+LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info)
 {
   fixed value;
 
   // 0 = altitude [m]
-  if (line.read_checked(value) && enable_baro)
+  if (line.read_checked(value))
     info.ProvideBaroAltitudeTrue(value);
 
   // 1 = vario [dm/s]
@@ -155,14 +154,14 @@ LeonardoParseD(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 bool
-LeonardoDevice::ParseNMEA(const char *_line, NMEA_INFO *info, bool enable_baro)
+LeonardoDevice::ParseNMEA(const char *_line, NMEA_INFO *info)
 {
   NMEAInputLine line(_line);
   char type[16];
   line.read(type, 16);
 
   if (strcmp(type, "$C") == 0 || strcmp(type, "$c") == 0)
-    return LeonardoParseC(line, *info, enable_baro);
+    return LeonardoParseC(line, *info);
   else if (strcmp(type, "$D") == 0 || strcmp(type, "$D") == 0)
     return LeonardoParseD(line, *info);
   else

@@ -43,12 +43,6 @@ Waypoints way_points;
  */
 
 bool
-devHasBaroSource()
-{
-  return true;
-}
-
-bool
 HaveCondorDevice()
 {
   return false;
@@ -123,7 +117,7 @@ int main(int argc, char **argv)
   char buffer[1024];
   for (unsigned i = 0; i < 10 &&
          fgets(buffer, sizeof(buffer), stdin) != NULL; ++i)
-    if (device == NULL || !device->ParseNMEA(buffer, &data, true))
+    if (device == NULL || !device->ParseNMEA(buffer, &data))
       parser.ParseNMEAString_Internal(buffer, &data);
 
   PathName igc_path(argv[2]);
@@ -136,7 +130,7 @@ int main(int argc, char **argv)
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
     TrimRight(buffer);
 
-    if (device == NULL || !device->ParseNMEA(buffer, &data, true))
+    if (device == NULL || !device->ParseNMEA(buffer, &data))
       parser.ParseNMEAString_Internal(buffer, &data);
 
     if (log_clock.check_advance(data.Time))

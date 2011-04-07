@@ -32,16 +32,12 @@ Copyright_License {
 
 class ZanderDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
 };
 
 static bool
-PZAN1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
+PZAN1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  if (!enable_baro)
-    return true;
-
   fixed baro_altitude;
   if (line.read_checked(baro_altitude))
     /* the ZS1 documentation does not specify wheter the altitude is
@@ -68,8 +64,7 @@ PZAN2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 }
 
 bool
-ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
-                        bool enable_baro)
+ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
   if (!VerifyNMEAChecksum(String))
     return false;
@@ -79,7 +74,7 @@ ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
   line.read(type, 16);
 
   if (strcmp(type, "$PZAN1") == 0)
-    return PZAN1(line, GPS_INFO, enable_baro);
+    return PZAN1(line, GPS_INFO);
 
   if (strcmp(type, "$PZAN2") == 0)
     return PZAN2(line, GPS_INFO);

@@ -47,12 +47,6 @@ Waypoints way_points;
  */
 
 bool
-devHasBaroSource()
-{
-  return true;
-}
-
-bool
 HaveCondorDevice()
 {
   return false;
