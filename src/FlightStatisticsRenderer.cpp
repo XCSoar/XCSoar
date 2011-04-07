@@ -334,12 +334,13 @@ FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   }
 }
 
+template<typename TraceVector>
 static void
-DrawTrace(Canvas &canvas, const ChartProjection& proj,
-          const TracePointVector& trace)
+DrawTraceVector(Canvas &canvas, const ChartProjection& proj,
+                const TraceVector &trace)
 {
   RasterPoint last;
-  for (TracePointVector::const_iterator it = trace.begin();
+  for (typename TraceVector::const_iterator it = trace.begin();
        it != trace.end(); ++it) {
     RasterPoint sc = proj.GeoToScreen(it->get_location());
     if (it != trace.begin())
@@ -351,17 +352,16 @@ DrawTrace(Canvas &canvas, const ChartProjection& proj,
 
 static void
 DrawTrace(Canvas &canvas, const ChartProjection& proj,
+          const TracePointVector& trace)
+{
+  DrawTraceVector(canvas, proj, trace);
+}
+
+static void
+DrawTrace(Canvas &canvas, const ChartProjection& proj,
           const ContestTraceVector& trace)
 {
-
-  RasterPoint last;
-  for (const TracePoint* it = trace.begin(); it != trace.end(); ++it) {
-    RasterPoint sc = proj.GeoToScreen(it->get_location());
-    if (it != trace.begin())
-      canvas.line(sc, last);
-
-    last = sc;
-  }
+  DrawTraceVector(canvas, proj, trace);
 }
 
 void
