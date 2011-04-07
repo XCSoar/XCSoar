@@ -541,6 +541,9 @@ Graphics::DrawAircraft(Canvas &canvas,
     Aircraft = Aircraft_simple;
     Canopy = NULL;
     break;
+  default:
+    assert(false);
+    return;
   }
 
   RasterPoint tmp_left[20];
