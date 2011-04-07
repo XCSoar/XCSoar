@@ -229,6 +229,12 @@ struct NMEA_INFO {
   fixed GPSAltitude; /**< GPS altitude AMSL (m) */
 
   /**
+   * Static pressure value [Pa].
+   */
+  fixed static_pressure;
+  Validity static_pressure_available;
+
+  /**
    * Is a barometric altitude available?
    * @see BaroAltitude
    */
@@ -505,18 +511,13 @@ struct NMEA_INFO {
   }
 
   /**
-   * Sets the barometric altitude from a static pressure sensor.
-   */
-  void SetStaticPressure(enum BaroAltitudeOrigin origin, fixed value) {
-    SetBaroAltitudeTrue(origin, pressure.StaticPressureToQNHAltitude(value), true);
-    SetPressureAltitude(origin, pressure.StaticPressureToPressureAltitude(value), false);
-  }
-
-  /**
    * Provide a "true" barometric altitude, but only use it if the
    * previous altitude was not present or the same/lower priority.
    */
   void ProvideBaroAltitudeTrue(enum BaroAltitudeOrigin origin, fixed value) {
+    if (QNHAvailable)
+      static_pressure = pressure.QNHAltitudeToStaticPressure(value);
+
     if (BaroAltitudeOrigin <= origin)
       SetBaroAltitudeTrue(origin, value, false);
 
@@ -529,6 +530,8 @@ struct NMEA_INFO {
    * the previous altitude was not present or the same/lower priority.
    */
   void ProvidePressureAltitude(enum BaroAltitudeOrigin origin, fixed value) {
+    static_pressure = pressure.PressureAltitudeToStaticPressure(value);
+
     if (PressureAltitudeOrigin <= origin)
       SetPressureAltitude(origin, value, false);
 
@@ -542,8 +545,17 @@ struct NMEA_INFO {
    * same/lower priority.
    */
   void ProvideStaticPressure(enum BaroAltitudeOrigin origin, fixed value) {
+    static_pressure = value;
+    static_pressure_available.update(Time);
+
     if (BaroAltitudeOrigin <= origin)
-      SetStaticPressure(origin, value);
+      SetBaroAltitudeTrue(origin,
+                          pressure.StaticPressureToQNHAltitude(value), true);
+
+    if (PressureAltitudeOrigin <= origin)
+      SetPressureAltitude(origin,
+                          pressure.StaticPressureToPressureAltitude(value),
+                          false);
   }
 
   /**

@@ -85,6 +85,8 @@ NMEA_INFO::reset()
   GPSAltitudeAvailable.clear();
   GPSAltitude = fixed_zero;
 
+  static_pressure_available.clear();
+
   BaroAltitudeAvailable.clear();
   BaroAltitudeOrigin = BARO_ALTITUDE_UNKNOWN;
   BaroAltitude = fixed_zero;
@@ -154,6 +156,7 @@ NMEA_INFO::expire()
   GroundSpeedAvailable.expire(Time, fixed(10));
   AirspeedAvailable.expire(Time, fixed(30));
   GPSAltitudeAvailable.expire(Time, fixed(30));
+  static_pressure_available.expire(Time, fixed(30));
   BaroAltitudeAvailable.expire(Time, fixed(30));
   PressureAltitudeAvailable.expire(Time, fixed(30));
   TotalEnergyVarioAvailable.expire(Time, fixed(5));
@@ -197,6 +200,9 @@ NMEA_INFO::complement(const NMEA_INFO &add)
 
   if (GPSAltitudeAvailable.complement(add.GPSAltitudeAvailable))
     GPSAltitude = add.GPSAltitude;
+
+  if (static_pressure_available.complement(add.static_pressure_available))
+    static_pressure = add.static_pressure;
 
   if ((BaroAltitudeAvailable.complement(add.BaroAltitudeAvailable) ||
        (BaroAltitudeOrigin <= BARO_ALTITUDE_UNKNOWN &&
