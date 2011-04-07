@@ -270,12 +270,13 @@ bool
 DeviceBlackboard::expire_wall_clock()
 {
   ScopeLock protect(mutexBlackboard);
-  NMEA_INFO &basic = SetBasic();
-  if (!basic.Connected)
+  if (!Basic().Connected)
     return false;
 
-  basic.expire_wall_clock();
-  return !basic.Connected;
+  real_data.expire_wall_clock();
+
+  Merge();
+  return !Basic().Connected;
 }
 
 void
