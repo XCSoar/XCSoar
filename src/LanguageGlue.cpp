@@ -70,6 +70,7 @@ static MOLoader *mo_loader;
 enum {
   LANG_NULL,
   LANG_CZECH,
+  LANG_DANISH,
   LANG_GERMAN,
   LANG_GREEK,
   LANG_SPANISH,
@@ -90,6 +91,7 @@ enum {
 
 const struct builtin_language language_table[] = {
   { LANG_CZECH, _T("cs.mo") },
+  { LANG_GERMAN, _T("da.mo") },
   { LANG_GERMAN, _T("de.mo") },
   { LANG_GREEK, _T("el.mo") },
   { LANG_SPANISH, _T("es.mo") },

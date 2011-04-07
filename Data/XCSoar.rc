@@ -248,6 +248,7 @@ IDR_XML_TASKOPTIONALSTARTS_L XMLDIALOG DISCARDABLE   "Dialogs/dlgTaskOptionalSta
 // translations
 #if defined(WIN32) || defined(ANDROID)
 cs.mo MO DISCARDABLE "../output/po/cs.mo"
+da.mo MO DISCARDABLE "../output/po/da.mo"
 de.mo MO DISCARDABLE "../output/po/de.mo"
 el.mo MO DISCARDABLE "../output/po/el.mo"
 es.mo MO DISCARDABLE "../output/po/es.mo"
