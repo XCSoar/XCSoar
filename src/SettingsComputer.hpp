@@ -27,6 +27,7 @@ Copyright_License {
 #include "FLARM/FlarmId.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "Engine/Atmosphere/Pressure.hpp"
 
 #include <tchar.h>
 
@@ -198,6 +199,12 @@ struct SETTINGS_COMPUTER:
 
   /** local time adjustment */
   int UTCOffset;
+
+  /**
+   * Troposhere atmosphere model for QNH correction
+   */
+  AtmosphericPressure pressure;
+  Validity pressure_available;
 
   /** Glide polar used for task calculations */
   GlidePolar glide_polar_task;

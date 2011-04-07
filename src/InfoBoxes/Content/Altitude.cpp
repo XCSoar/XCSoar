@@ -228,7 +228,7 @@ InfoBoxContentAltitude::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBa
   assert(wInfoBoxAccessSetup);
 
   LoadFormProperty(*wf, _T("prpQNH"),
-                   XCSoarInterface::Basic().pressure.get_QNH());
+                   CommonInterface::SettingsComputer().pressure.get_QNH());
 
   return wInfoBoxAccessSetup;
 }
@@ -237,9 +237,13 @@ void
 InfoBoxContentAltitude::PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
 
   switch (Mode) {
   case DataField::daChange:
+    settings_computer.pressure.set_QNH(Sender->GetAsFixed());
+    settings_computer.pressure_available.update(CommonInterface::Basic().Time);
     device_blackboard.SetQNH(Sender->GetAsFixed());
     break;
 
@@ -473,7 +477,9 @@ InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
 
   } else if (basic.GPSAltitudeAvailable && basic.QNHAvailable) {
     // Take gps altitude as baro altitude. This is inaccurate but still fits our needs.
-    fixed Altitude = Units::ToUserUnit(basic.pressure.QNHAltitudeToPressureAltitude(basic.GPSAltitude), unFeet);
+    const AtmosphericPressure &qnh =
+      CommonInterface::SettingsComputer().pressure;
+    fixed Altitude = Units::ToUserUnit(qnh.QNHAltitudeToPressureAltitude(basic.GPSAltitude), unFeet);
 
     // Title color red
     infobox.SetColorTop(1);

@@ -30,8 +30,10 @@ Copyright_License {
 #define fixed_small fixed(0.001)
 
 static void
-ComputePressure(NMEA_INFO &basic)
+ComputePressure(NMEA_INFO &basic, const SETTINGS_COMPUTER &settings_computer)
 {
+  const AtmosphericPressure &qnh = settings_computer.pressure;
+  const bool qnh_available = settings_computer.pressure_available;
   const bool static_pressure_available = basic.static_pressure_available;
 
   if (!basic.static_pressure_available) {
@@ -39,9 +41,9 @@ ComputePressure(NMEA_INFO &basic)
       basic.static_pressure =
         AtmosphericPressure::PressureAltitudeToStaticPressure(basic.PressureAltitude);
       basic.static_pressure_available = basic.PressureAltitudeAvailable;
-    } else if (basic.BaroAltitudeAvailable && basic.QNHAvailable)
+    } else if (basic.BaroAltitudeAvailable && qnh_available)
       basic.static_pressure =
-        basic.pressure.QNHAltitudeToStaticPressure(basic.BaroAltitude);
+        qnh.QNHAltitudeToStaticPressure(basic.BaroAltitude);
   }
 
   if (!basic.PressureAltitudeAvailable) {
@@ -49,23 +51,23 @@ ComputePressure(NMEA_INFO &basic)
       basic.PressureAltitude =
         AtmosphericPressure::StaticPressureToPressureAltitude(basic.static_pressure);
       basic.PressureAltitudeAvailable = basic.static_pressure_available;
-    } else if (basic.BaroAltitudeAvailable && basic.QNHAvailable)
+    } else if (basic.BaroAltitudeAvailable && qnh_available)
       basic.PressureAltitude =
-        basic.pressure.QNHAltitudeToPressureAltitude(basic.BaroAltitude);
+        qnh.QNHAltitudeToPressureAltitude(basic.BaroAltitude);
   }
 
-  if (basic.QNHAvailable) {
+  if (qnh_available) {
     /* if the current pressure and the QNH is known, then true baro
        altitude should be discarded, because the external device which
        provided it may have a different QNH setting */
 
     if (static_pressure_available) {
       basic.BaroAltitude =
-        basic.pressure.StaticPressureToQNHAltitude(basic.static_pressure);
+        qnh.StaticPressureToQNHAltitude(basic.static_pressure);
       basic.BaroAltitudeAvailable = basic.static_pressure_available;
     } else if (basic.PressureAltitudeAvailable) {
       basic.BaroAltitude =
-        basic.pressure.PressureAltitudeToQNHAltitude(basic.PressureAltitude);
+        qnh.PressureAltitudeToQNHAltitude(basic.PressureAltitude);
       basic.BaroAltitudeAvailable = basic.PressureAltitudeAvailable;
     }
   } else if (!basic.BaroAltitudeAvailable && basic.PressureAltitudeAvailable)
@@ -128,7 +130,7 @@ ComputeDynamics(NMEA_INFO &basic, const DERIVED_INFO &calculated)
 void
 BasicComputer::Fill(NMEA_INFO &data, const SETTINGS_COMPUTER &settings_computer)
 {
-  ComputePressure(data);
+  ComputePressure(data, settings_computer);
   ComputeNavAltitude(data, settings_computer);
 }
 

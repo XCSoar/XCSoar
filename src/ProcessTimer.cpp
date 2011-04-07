@@ -134,6 +134,22 @@ SystemClockTimer()
 #endif
 }
 
+/**
+ * Collect QNH updates from external devices and AutoQNH.
+ */
+static void
+QNHProcessTimer()
+{
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
+  const NMEA_INFO &basic = CommonInterface::Basic();
+
+  if (basic.QNHAvailable.modified(settings_computer.pressure_available)) {
+    settings_computer.pressure = basic.pressure;
+    settings_computer.pressure_available = basic.QNHAvailable;
+  }
+}
+
 static void
 MacCreadyProcessTimer()
 {
@@ -193,6 +209,7 @@ BallastDumpProcessTimer()
 static void
 SettingsProcessTimer()
 {
+  QNHProcessTimer();
   MacCreadyProcessTimer();
   BallastDumpProcessTimer();
 }

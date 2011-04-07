@@ -95,10 +95,15 @@ static void
 OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
   WndProperty* wp;
 
   switch (Mode) {
   case DataField::daChange:
+    settings_computer.pressure.set_QNH(Sender->GetAsFixed());
+    settings_computer.pressure_available.update(basic.Time);
     device_blackboard.SetQNH(Sender->GetAsFixed());
     wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
     if (wp) {
@@ -285,7 +290,7 @@ dlgBasicSettingsShowModal()
   SetBallast();
   LoadFormProperty(*wf, _T("prpBugs"), glide_polar.get_bugs() * 100);
   LoadFormProperty(*wf, _T("prpQNH"),
-                   XCSoarInterface::Basic().pressure.get_QNH());
+                   CommonInterface::SettingsComputer().pressure.get_QNH());
 
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpTemperature"));
