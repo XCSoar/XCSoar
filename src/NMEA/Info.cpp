@@ -179,6 +179,8 @@ NMEA_INFO::complement(const NMEA_INFO &add)
     DateTime = add.DateTime;
   }
 
+  Connected.complement(add.Connected);
+
   acceleration.complement(add.acceleration);
 
   if (LocationAvailable.complement(add.LocationAvailable))
