@@ -18,6 +18,18 @@ class TracePoint:
   public VARIO_STATE
 {
 public:
+  /** Time of sample */
+  unsigned time;
+  /** Time of sample prior to this --- mutable for kdtree update efficiency */
+  mutable unsigned last_time;
+  /**
+   * Thermal drift factor:
+   * 1 indicates drift rate equal to wind speed
+   * 0 indicates no drift.
+   */
+  fixed drift_factor;
+
+public:
   /**
    * Dummy constructor for null object
    *
@@ -43,17 +55,6 @@ public:
    * @return Initialised object
    */
   TracePoint(const AIRCRAFT_STATE &state);
-
-  /** Time of sample */
-  unsigned time;
-  /** Time of sample prior to this --- mutable for kdtree update efficiency */
-  mutable unsigned last_time;
-  /**
-   * Thermal drift factor:
-   * 1 indicates drift rate equal to wind speed
-   * 0 indicates no drift.
-   */
-  fixed drift_factor;
 
   /** 
    * Calculate approximate squared (flat projected) distance between this point

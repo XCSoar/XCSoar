@@ -34,6 +34,9 @@ class TaskProjection;
  */
 class SearchPoint
 {
+  GeoPoint reference;
+  FlatGeoPoint flatLocation;
+
 #ifndef NDEBUG
   bool projected;
 #endif
@@ -58,10 +61,10 @@ public:
    * @param tp Projection used
    */
   SearchPoint(const GeoPoint &loc) :
-#ifndef NDEBUG
-    projected(false),
-#endif
     reference(loc)
+#ifndef NDEBUG
+    , projected(false)
+#endif
   {}
 
   /**
@@ -155,10 +158,6 @@ public:
   const GeoPoint & get_location() const {
     return reference;
   }
-
-private:
-  GeoPoint reference;
-  FlatGeoPoint flatLocation;
 };
 
 
