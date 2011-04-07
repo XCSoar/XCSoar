@@ -39,6 +39,10 @@
  */
 template<class T, unsigned max>
 class StaticArray {
+public:
+  typedef T *iterator;
+  typedef const T *const_iterator;
+
 protected:
   unsigned the_size;
   T data[max];
@@ -94,19 +98,19 @@ public:
     return data[i];
   }
 
-  T *begin() {
+  iterator begin() {
     return data;
   }
 
-  const T *begin() const {
+  const_iterator begin() const {
     return data;
   }
 
-  T *end() {
+  iterator end() {
     return data + the_size;
   }
 
-  const T *end() const {
+  const_iterator end() const {
     return data + the_size;
   }
 
