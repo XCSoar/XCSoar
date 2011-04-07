@@ -290,12 +290,12 @@ event=ClearStatusMessages
 mode=default
 type=key
 data=LEFT
-event=MarkLocation
+event=ScreenModes previous
 
 mode=default
 type=key
 data=RIGHT
-event=ScreenModes toggle
+event=ScreenModes next
 
 # Gestures
 
@@ -312,12 +312,12 @@ event=Zoom out
 mode=default
 type=gesture
 data=L
-event=MarkLocation
+event=ScreenModes previous
 
 mode=default
 type=gesture
 data=R
-event=ScreenModes toggle
+event=ScreenModes next
 
 mode=default
 type=gesture

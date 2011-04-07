@@ -247,9 +247,11 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   } else if (_tcscmp(misc, _T("togglebiginfo")) == 0) {
     InfoBoxLayout::fullscreen = !InfoBoxLayout::fullscreen;
     InfoBoxManager::SetDirty();
-  } else {
+  } else if (_tcscmp(misc, _T("previous")) == 0)
+    Pages::Prev();
+  else
     Pages::Next();
-  }
+
 
   trigger_redraw();
 }
