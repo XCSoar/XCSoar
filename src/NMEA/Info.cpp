@@ -212,7 +212,10 @@ NMEA_INFO::complement(const NMEA_INFO &add)
   /* calculated: working_band_height,
      NavAltitude,working_band_fraction */
 
-  /* managed by DeviceBlackboard: pressure */
+  if (add.QNHAvailable.modified(QNHAvailable)) {
+    pressure = add.pressure;
+    QNHAvailable = add.QNHAvailable;
+  }
 
   if (TotalEnergyVarioAvailable.complement(add.TotalEnergyVarioAvailable))
     TotalEnergyVario = add.TotalEnergyVario;
