@@ -271,9 +271,9 @@ static bool
 FinishPortField(DeviceConfig &config, WndProperty &port_field)
 {
   const DataFieldEnum &df = *(const DataFieldEnum *)port_field.GetDataField();
-  int value = df.GetAsInteger();
+  unsigned value = df.GetAsInteger();
 
-  if (value < (int)num_port_types) {
+  if (value + 1 <= num_port_types) {
     if (port_types[value].type == config.port_type)
       return false;
 
@@ -288,7 +288,7 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
       return false;
 #else
     if (config.port_type == DeviceConfig::SERIAL &&
-        value == (int)config.port_index)
+        value == config.port_index)
       return false;
 #endif
 
