@@ -7,19 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-07 16:56+0200\n"
-"PO-Revision-Date: 2011-04-07 17:58+0200\n"
-"Last-Translator: Max Kellermann <max@duempel.org>\n"
+"POT-Creation-Date: 2011-04-07 10:43+0200\n"
+"PO-Revision-Date: 2011-04-05 08:09+0000\n"
+"Last-Translator: Quint Segers <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-13 22:56+0000\n"
-"X-Generator: Launchpad (build 12351)\n"
+"X-Launchpad-Export-Date: 2011-04-07 08:38+0000\n"
+"X-Generator: Launchpad (build 12757)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
-#: src/InputEventsActions.cpp:1394 src/Dialogs/dlgAnalysis.cpp:268
+#: src/InputEventsActions.cpp:1392 src/Dialogs/dlgAnalysis.cpp:268
 #: src/Dialogs/dlgStatus.cpp:53
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:80
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:56
@@ -53,7 +53,7 @@ msgstr "Luchtruim"
 
 #: src/Airspace/AirspaceParser.cpp:877
 msgid "Unknown Filetype."
-msgstr ""
+msgstr "Onbekend Bestandstype."
 
 #: src/ConditionMonitor.cpp:162
 msgid "Significant wind change"
@@ -158,36 +158,36 @@ msgstr "Vliegveldgegevensbestand laden"
 #: src/ExpandMacros.cpp:118 src/ExpandMacros.cpp:128 src/ExpandMacros.cpp:193
 #: src/ExpandMacros.cpp:217
 msgid "Next Turnpoint"
-msgstr "Volgend keerpunt"
+msgstr "Volgende Keerpunt"
 
 #: src/ExpandMacros.cpp:123 src/ExpandMacros.cpp:133 src/ExpandMacros.cpp:203
 #: src/ExpandMacros.cpp:240
 msgid "Previous Turnpoint"
-msgstr "Vorig keerpunt"
+msgstr "Vorige Keerpunt"
 
 #: src/ExpandMacros.cpp:145 src/ExpandMacros.cpp:165
 msgid "Furthest Landpoint"
-msgstr "Verste landingsveld"
+msgstr "Verste Landingspunt"
 
 #: src/ExpandMacros.cpp:146 src/ExpandMacros.cpp:166
 msgid "Next Landpoint"
-msgstr "Volgende landingsveld"
+msgstr "Volgende Landpunt"
 
 #: src/ExpandMacros.cpp:155 src/ExpandMacros.cpp:175
 msgid "Closest Landpoint"
-msgstr "Dichtstbijzijnde landingsveld"
+msgstr "Dichtstbijzijnde Landpunt"
 
 #: src/ExpandMacros.cpp:156 src/ExpandMacros.cpp:176
 msgid "Previous Landpoint"
-msgstr "Vorige landingsveld"
+msgstr "Vorige Landpunt"
 
 #: src/ExpandMacros.cpp:192 src/ExpandMacros.cpp:216
 msgid "Finish Turnpoint"
-msgstr "Finish(keer)punt"
+msgstr "Finish keerpunt"
 
 #: src/ExpandMacros.cpp:202 src/ExpandMacros.cpp:239
 msgid "Start Turnpoint"
-msgstr "Start(keer)punt"
+msgstr "Start Keerpunt"
 
 #: src/ExpandMacros.cpp:222
 msgid "Arm start"
@@ -282,7 +282,7 @@ msgstr "Volledige"
 #: src/ExpandMacros.cpp:435 src/ExpandMacros.cpp:442 src/ExpandMacros.cpp:499
 #: src/ExpandMacros.cpp:505 src/ExpandMacros.cpp:508 src/ExpandMacros.cpp:511
 #: src/ExpandMacros.cpp:529 src/ExpandMacros.cpp:582
-#: src/InputEventsActions.cpp:1615 src/InputEventsActions.cpp:1618
+#: src/InputEventsActions.cpp:1613 src/InputEventsActions.cpp:1616
 #: src/Dialogs/XML.cpp:598 src/Dialogs/dlgStatus.cpp:205
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:79
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:48
@@ -294,8 +294,8 @@ msgstr "Uit"
 
 #: src/ExpandMacros.cpp:442 src/ExpandMacros.cpp:499 src/ExpandMacros.cpp:505
 #: src/ExpandMacros.cpp:508 src/ExpandMacros.cpp:511 src/ExpandMacros.cpp:529
-#: src/ExpandMacros.cpp:582 src/InputEventsActions.cpp:1613
-#: src/InputEventsActions.cpp:1618 src/Dialogs/XML.cpp:598
+#: src/ExpandMacros.cpp:582 src/InputEventsActions.cpp:1611
+#: src/InputEventsActions.cpp:1616 src/Dialogs/XML.cpp:598
 #: src/Dialogs/dlgStatus.cpp:203
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:107
 msgid "On"
@@ -331,13 +331,13 @@ msgstr "Handmatig"
 msgid "Auto"
 msgstr "Auto"
 
-#: src/ExpandMacros.cpp:514 src/InputEventsActions.cpp:1392
+#: src/ExpandMacros.cpp:514 src/InputEventsActions.cpp:1390
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:88
 #, no-c-format
 msgid "All"
 msgstr ""
 
-#: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1393
+#: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1391
 #, no-c-format
 msgid "Task & Landables"
 msgstr ""
@@ -423,7 +423,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails_L.xml:18
 #, no-c-format
 msgid "Bearing"
-msgstr "Koers"
+msgstr "Koers volgend keerpunt"
 
 #: src/InfoBoxes/Content/Factory.cpp:90
 #, no-c-format
@@ -1278,7 +1278,7 @@ msgid ""
 "by a connected intelligent variometer."
 msgstr ""
 
-#: src/InfoBoxes/Content/Factory.cpp:511 src/InputEventsActions.cpp:1366
+#: src/InfoBoxes/Content/Factory.cpp:511 src/InputEventsActions.cpp:1364
 #, no-c-format
 msgid "Forecast temperature"
 msgstr "verwachtte temperatuur"
@@ -1446,13 +1446,11 @@ msgid "V Tsk Ins"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:594
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous cross country speed while on current task, compensated for "
 "altitude. Equivalent to instantaneous Pirker cross-country speed."
 msgstr ""
-"De actuele overlandsnelheid in de huidige opdracht, gecompenseerd voor "
-"hoogte."
 
 #: src/InfoBoxes/Content/Factory.cpp:601
 #, no-c-format
@@ -1480,13 +1478,11 @@ msgid "V Tsk Ach"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:612
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Achieved cross country speed while on current task, compensated for "
 "altitude.  Equivalent to Pirker cross-country speed remaining."
 msgstr ""
-"De bereikte overlandsnelheid in de huidige opdracht, gecompenseerd voor "
-"hoogte."
 
 #: src/InfoBoxes/Content/Factory.cpp:619
 #, no-c-format
@@ -1511,9 +1507,9 @@ msgstr ""
 "gerealiseerd wordt."
 
 #: src/InfoBoxes/Content/Factory.cpp:628
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal average over all"
-msgstr "gemiddeld stijgen"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:629
 #, no-c-format
@@ -1766,9 +1762,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:776 src/InfoBoxes/Content/Factory.cpp:777
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Barogram"
-msgstr "barograaf"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:778
 #, no-c-format
@@ -2049,141 +2045,140 @@ msgstr ""
 msgid "Default InfoBoxes"
 msgstr ""
 
-#: src/InputEventsActions.cpp:288
+#: src/InputEventsActions.cpp:286
 msgid "Auto. zoom on"
 msgstr "Auto zoom aan"
 
-#: src/InputEventsActions.cpp:290 src/InputEventsActions.cpp:1721
+#: src/InputEventsActions.cpp:288 src/InputEventsActions.cpp:1719
 msgid "Auto. zoom off"
 msgstr "Auto zoom uit"
 
-#: src/InputEventsActions.cpp:316
+#: src/InputEventsActions.cpp:314
 msgid "Circling zoom on"
 msgstr "Zoom thermieken aan"
 
-#: src/InputEventsActions.cpp:318
+#: src/InputEventsActions.cpp:316
 msgid "Circling zoom off"
 msgstr "Zoom thermieken uit"
 
-#: src/InputEventsActions.cpp:383
+#: src/InputEventsActions.cpp:381
 msgid "Pan mode on"
 msgstr "Pan modus aan"
 
-#: src/InputEventsActions.cpp:385
+#: src/InputEventsActions.cpp:383
 msgid "Pan mode off"
 msgstr "Pan modus uit"
 
-#: src/InputEventsActions.cpp:535
+#: src/InputEventsActions.cpp:533
 msgid "Advance manually"
 msgstr "voortgang: handmatig"
 
-#: src/InputEventsActions.cpp:538
+#: src/InputEventsActions.cpp:536
 msgid "Advance automatically"
 msgstr "voortgang: automatisch"
 
-#: src/InputEventsActions.cpp:541
+#: src/InputEventsActions.cpp:539
 msgid "Ready to start"
 msgstr ""
 
-#: src/InputEventsActions.cpp:544
+#: src/InputEventsActions.cpp:542
 msgid "Hold start"
 msgstr ""
 
-#: src/InputEventsActions.cpp:547
+#: src/InputEventsActions.cpp:545
 msgid "Ready to turn"
 msgstr ""
 
-#: src/InputEventsActions.cpp:550
+#: src/InputEventsActions.cpp:548
 msgid "Hold turn"
 msgstr ""
 
-#: src/InputEventsActions.cpp:678
+#: src/InputEventsActions.cpp:676
 msgid "No active waypoint!"
 msgstr "geen aktief keerpunt!"
 
-#: src/InputEventsActions.cpp:754
+#: src/InputEventsActions.cpp:752
 msgid "Auto. MacCready on"
 msgstr "Auto McCready aan"
 
-#: src/InputEventsActions.cpp:756
+#: src/InputEventsActions.cpp:754
 msgid "Auto. MacCready off"
 msgstr "Auto McCready uit"
 
-#: src/InputEventsActions.cpp:763
+#: src/InputEventsActions.cpp:761
 msgid "MacCready "
 msgstr "McCready "
 
-#: src/InputEventsActions.cpp:973
+#: src/InputEventsActions.cpp:971
 msgid "Task aborted"
 msgstr "opdracht afgebroken"
 
-#: src/InputEventsActions.cpp:976
+#: src/InputEventsActions.cpp:974
 msgid "Go to target"
 msgstr ""
 
-#: src/InputEventsActions.cpp:979
+#: src/InputEventsActions.cpp:977
 msgid "Ordered task"
 msgstr ""
 
-#: src/InputEventsActions.cpp:982 src/FlightStatisticsRenderer.cpp:756
+#: src/InputEventsActions.cpp:980 src/FlightStatisticsRenderer.cpp:756
 msgid "No task"
 msgstr "geen opdracht"
 
-#: src/InputEventsActions.cpp:1041
+#: src/InputEventsActions.cpp:1039
 msgid "Bugs performance"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1082
+#: src/InputEventsActions.cpp:1080
 msgid "Ballast %"
 msgstr "ballast %"
 
-#: src/InputEventsActions.cpp:1141
+#: src/InputEventsActions.cpp:1139
 msgid "NMEA log on"
 msgstr "NMEA log aan"
 
-#: src/InputEventsActions.cpp:1143
+#: src/InputEventsActions.cpp:1141
 msgid "NMEA log off"
 msgstr "NMEA log uit"
 
-#: src/InputEventsActions.cpp:1147
+#: src/InputEventsActions.cpp:1145
 msgid "Logger on"
 msgstr "Logger aan"
 
-#: src/InputEventsActions.cpp:1149
+#: src/InputEventsActions.cpp:1147
 msgid "Logger off"
 msgstr "Logger uit"
 
-#: src/InputEventsActions.cpp:1395
+#: src/InputEventsActions.cpp:1393
 #, no-c-format
 msgid "None "
 msgstr "Geen "
 
-#: src/InputEventsActions.cpp:1408
+#: src/InputEventsActions.cpp:1406
 msgid "Waypoint labels"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1448
+#: src/InputEventsActions.cpp:1446
 msgid "Map labels on"
 msgstr "Kaartlabels aan"
 
-#: src/InputEventsActions.cpp:1620
-#, fuzzy
+#: src/InputEventsActions.cpp:1618
 msgid "Topography/Terrain"
-msgstr "topologie / terrein"
+msgstr ""
 
-#: src/InputEventsActions.cpp:1788
+#: src/InputEventsActions.cpp:1786
 msgid "Task start"
 msgstr "start opdracht"
 
-#: src/InputEventsActions.cpp:1790
+#: src/InputEventsActions.cpp:1788
 msgid "Next turnpoint"
 msgstr "Volgend keerpunt"
 
-#: src/InputEventsActions.cpp:1792
+#: src/InputEventsActions.cpp:1790
 msgid "Task finished"
 msgstr "finish opdracht"
 
-#: src/InputEventsActions.cpp:1794
+#: src/InputEventsActions.cpp:1792
 msgid "In sector, arm advance when ready"
 msgstr "In sector, schakel in wanneer u klaar bent"
 
@@ -2243,7 +2238,7 @@ msgstr "toon terrein op kaart, zonder weersinformatie."
 #: src/Terrain/RasterWeather.cpp:55
 #, no-c-format
 msgid "W*"
-msgstr ""
+msgstr "W*"
 
 #: src/Terrain/RasterWeather.cpp:56
 #, no-c-format
@@ -2441,7 +2436,7 @@ msgstr "Vleugelbelasting"
 #: Data/Dialogs/dlgWayPointSelect.xml:11
 #: Data/Dialogs/dlgWayPointSelect_L.xml:5
 msgid "Distance"
-msgstr "Afstand"
+msgstr "afstand"
 
 #: src/FlightStatisticsRenderer.cpp:426 src/FlightStatisticsRenderer.cpp:449
 #: src/FlightStatisticsRenderer.cpp:476
@@ -3457,27 +3452,24 @@ msgid "The full name of each waypoint is displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
-#, fuzzy
 msgid "First Word of Name"
-msgstr "Eerste woord"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
 msgid "The first word of the waypoint name is displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
-#, fuzzy
 msgid "First 3 Letters"
-msgstr "Eerste 3"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
 msgid "The first 3 letters of the waypoint name are displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
-#, fuzzy
 msgid "First 5 Letters"
-msgstr "Eerste 5"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
 msgid "The first 5 letters of the waypoint name are displayed."
@@ -4552,9 +4544,8 @@ msgid "Latitude"
 msgstr "Breedtegraad"
 
 #: Data/Dialogs/dlgConfiguration.xml:52 Data/Dialogs/dlgConfiguration_L.xml:52
-#, fuzzy
 msgid "Topography file"
-msgstr "Topologiebestand"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:780
 #: Data/Dialogs/dlgConfiguration_L.xml:781
@@ -4732,9 +4723,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:189
 #: Data/Dialogs/dlgConfiguration_L.xml:189
-#, fuzzy
 msgid "Topography display"
-msgstr "Topologie weergave"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:631
 #: Data/Dialogs/dlgConfiguration_L.xml:632
@@ -4816,9 +4806,8 @@ msgid "Important topography labels"
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:19 Data/Dialogs/dlgConfigFonts_L.xml:19
-#, fuzzy
 msgid "Topography labels"
-msgstr "Topologielabels"
+msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:26 Data/Dialogs/dlgStatusSystem.xml:10
 msgid "Supply voltage"
@@ -5081,9 +5070,8 @@ msgid "System Status"
 msgstr "Systeem Status"
 
 #: Data/Dialogs/dlgTeamCode.xml:6 Data/Dialogs/dlgTeamCode_L.xml:8
-#, fuzzy
 msgid "Set Code"
-msgstr "Instellen teamcode"
+msgstr ""
 
 #: Data/Dialogs/dlgBasicSettings.xml:3
 msgid "Flight Setup"
@@ -6284,9 +6272,8 @@ msgid "If true, the InfoBoxes are white on black, otherwise black on white."
 msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:26
-#, fuzzy
 msgid "New waypoint"
-msgstr "Nieuw keerpunt"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:582
 #: Data/Dialogs/dlgConfiguration_L.xml:583
@@ -6571,9 +6558,8 @@ msgid "Page 3"
 msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:14
-#, fuzzy
 msgid "Waypoint distance"
-msgstr "Keerpunt afstand"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:700
 #: Data/Dialogs/dlgConfiguration_L.xml:701
@@ -7488,9 +7474,8 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:607
-#, fuzzy
 msgid "Topography"
-msgstr "Topokaart"
+msgstr ""
 
 #: Data/Input/default.xci:212
 msgid ""
@@ -7650,35 +7635,84 @@ msgstr ""
 #~ msgid "Cruise"
 #~ msgstr "Kruisvlucht"
 
-#~ msgid "OFF"
-#~ msgstr "UIT"
+#~ msgid ""
+#~ "Terrain\n"
+#~ "Off"
+#~ msgstr ""
+#~ "terrein\n"
+#~ "uit"
 
-#~ msgid "ON"
-#~ msgstr "AAN"
+#~ msgid "Calibrate OFF"
+#~ msgstr "calibreren UIT"
 
-#~ msgid "AA Distance Min"
-#~ msgstr "AAT min afstand"
+#~ msgid "Thermal last 30 sec"
+#~ msgstr "stijgen laatste 30 sec"
 
-#~ msgid "AA Speed Max"
-#~ msgstr "AAT max snelheid"
+#~ msgid "MacCready Setting"
+#~ msgstr "McCready instelling"
 
-#~ msgid "AA Speed Min"
-#~ msgstr "AAT min snelheid"
+#~ msgid "Thermal Average"
+#~ msgstr "gemiddeld stijgen"
+
+#~ msgid "Thermal Gain"
+#~ msgstr "hoogtewinst stijgen"
+
+#~ msgid "Wind Speed"
+#~ msgstr "windsnelheid"
+
+#~ msgid "Wind Bearing"
+#~ msgstr "windrichting"
 
 #~ msgid "Pressure Altitude"
 #~ msgstr "drukhoogte"
 
+#~ msgid "Task Time To Go"
+#~ msgstr "benodigde tijd rest opdracht"
+
+#~ msgid "Speed Dolphin"
+#~ msgstr "dolfijn snelheid"
+
+#~ msgid "Netto Vario"
+#~ msgstr "netto vario"
+
+#~ msgid "Task Arrival Time"
+#~ msgstr "opdracht aankomsttijd"
+
+#~ msgid "Outside Air Temperature"
+#~ msgstr "luchttemperatuur"
+
+#~ msgid "Relative Humidity"
+#~ msgstr "relatieve vochtigheid"
+
 #~ msgid "Forecast Temperature"
 #~ msgstr "verwachtte temperatuur"
 
-#~ msgid "AA Speed Tgt"
-#~ msgstr "AAT snelheid tot doel"
+#~ msgid "Own Team Code"
+#~ msgstr "Eigen teamcode"
 
-#~ msgid "Thermal All"
-#~ msgstr "Stijgen totaal"
+#~ msgid "Team Range"
+#~ msgstr "team range"
 
-#~ msgid "Vario Sounds OFF"
-#~ msgstr "vario geluid UIT"
+#~ msgid "Speed Task Instantaneous"
+#~ msgstr "momentane opdracht snelheid"
+
+#~ msgid "Distance Home"
+#~ msgstr "afstand uit"
+
+#~ msgid "Speed Task Achieved"
+#~ msgstr "snelheid over opdracht"
+
+#~ msgid "Distance Vario"
+#~ msgstr "afstand vario"
+
+#~ msgid "Battery Percent"
+#~ msgstr "accu percentage"
+
+#~ msgid "Battery Voltage"
+#~ msgstr "accuspanning"
+
+#~ msgid "SnailTrail OFF"
+#~ msgstr "Spoor UIT"
 
 #~ msgid "SnailTrail ON Long"
 #~ msgstr "Spoor LANG"
@@ -7691,6 +7725,9 @@ msgstr ""
 
 #~ msgid "Show Airspace OFF"
 #~ msgstr "Luchtruim UIT"
+
+#~ msgid "Show Airspace ON"
+#~ msgstr "Luchtruim AAN"
 
 #~ msgid "Screen Mode Auxiliary"
 #~ msgstr "AUX scherm"
@@ -7710,14 +7747,77 @@ msgstr ""
 #~ msgid "Circling Zoom OFF"
 #~ msgstr "ThermiekZoom UIT"
 
+#~ msgid "Pan mode ON"
+#~ msgstr "Pan modus AAN"
+
 #~ msgid "Pan mode OFF"
 #~ msgstr "Pan modus UIT"
+
+#~ msgid "Next Waypoint"
+#~ msgstr "volgend keerpunt"
+
+#~ msgid "Final Altitude Difference"
+#~ msgstr "eindsteek hoogteverschil"
+
+#~ msgid "Final Altitude Required"
+#~ msgstr "eindsteek vereiste hoogte"
+
+#~ msgid "Final Distance"
+#~ msgstr "eindsteek afstand"
+
+#~ msgid "Final LD"
+#~ msgstr "eindsteek L/D"
+
+#~ msgid "Terrain Elevation"
+#~ msgstr "terreinhoogte"
+
+#~ msgid "Next Arrival Time"
+#~ msgstr "aankomsttijd volgend punt"
+
+#~ msgid "Best Alternate"
+#~ msgstr "beste uitwijk"
+
+#~ msgid "L/D Average"
+#~ msgstr "L/D gemiddeld"
+
+#~ msgid "Experimental1"
+#~ msgstr "experimenteel1"
+
+#~ msgid "Online Contest Distance"
+#~ msgstr "OLC afstand"
+
+#~ msgid "Experimental2"
+#~ msgstr "experimenteel2"
+
+#~ msgid "Vario Sounds ON"
+#~ msgstr "vario geluid AAN"
+
+#~ msgid "Vario Sounds OFF"
+#~ msgstr "vario geluid UIT"
+
+#~ msgid "Advance: Manual"
+#~ msgstr "voortgang: handmatig"
+
+#~ msgid "Advance: Automatic"
+#~ msgstr "voortgang: automatisch"
+
+#~ msgid "No Active Waypoint!"
+#~ msgstr "geen aktief keerpunt!"
+
+#~ msgid "Auto MacCready ON"
+#~ msgstr "auto McCready AAN"
 
 #~ msgid "Auto MacCready OFF"
 #~ msgstr "auto McCready UIT"
 
+#~ msgid "Task Aborted"
+#~ msgstr "opdracht afgebroken"
+
 #~ msgid "No Task"
 #~ msgstr "geen opdracht"
+
+#~ msgid "NMEA Log ON"
+#~ msgstr "NMEA log AAN"
 
 #~ msgid "NMEA Log OFF"
 #~ msgstr "NMEA log UIT"
@@ -7728,165 +7828,23 @@ msgstr ""
 #~ msgid "Logger OFF"
 #~ msgstr "logger UIT"
 
+#~ msgid "Map labels ON"
+#~ msgstr "Kaartlabels AAN"
+
 #~ msgid "Map labels MID"
 #~ msgstr "kaartlabels MEDIUM"
 
 #~ msgid "Map labels OFF"
 #~ msgstr "kaartlabels UIT"
 
-#~ msgid "Settings locked in flight"
-#~ msgstr "Instellingen vast tijdens vlucht"
+#~ msgid "Topology / Terrain"
+#~ msgstr "topologie / terrein"
 
-#~ msgid "Site"
-#~ msgstr "Bestanden"
+#~ msgid "Task Finish"
+#~ msgstr "finish opdracht"
 
-#~ msgid "Map Display"
-#~ msgstr "kaartweergave"
-
-#~ msgid "ON/Fixed"
-#~ msgstr "AAN/Vast"
-
-#~ msgid "ON/Scaled"
-#~ msgstr "AAN/Geschaald"
-
-#~ msgid "Names"
-#~ msgstr "Namen"
-
-#~ msgid "Numbers"
-#~ msgstr "Getallen"
-
-#~ msgid "Names in task"
-#~ msgstr "Namen in opdracht"
-
-#~ msgid "Statute"
-#~ msgstr "Land"
-
-#~ msgid "Nautical"
-#~ msgstr "Zee"
-
-#~ msgid "Metric"
-#~ msgstr "Metrisch"
-
-#~ msgid "Feet"
-#~ msgstr "Voet"
-
-#~ msgid "15 seconds"
-#~ msgstr "15 seconden"
-
-#~ msgid "30 seconds"
-#~ msgstr "30 seconden"
-
-#~ msgid "60 seconds"
-#~ msgstr "60 seconden"
-
-#~ msgid "90 seconds"
-#~ msgstr "90 seconden"
-
-#~ msgid "2 minutes"
-#~ msgstr "2 minuten"
-
-#~ msgid "3 minutes"
-#~ msgstr "3 minuten"
-
-#~ msgid "Normal"
-#~ msgstr "Normaal"
-
-#~ msgid "White outline"
-#~ msgstr "Witte omtrek"
-
-#~ msgid "Changes to configuration saved."
-#~ msgstr "Verandering in configuratie opgeslagen"
-
-#~ msgid "YES"
-#~ msgstr "JA"
-
-#~ msgid "NO"
-#~ msgstr "NEE"
-
-#~ msgid "TRUE"
-#~ msgstr "WAAR"
-
-#~ msgid "FALSE"
-#~ msgstr "FOUTIEF"
-
-#~ msgid "Task invalid.  Not saved."
-#~ msgstr "Opdracht ongeldig. Niet opgeslagen."
-
-#~ msgid "Online contest"
-#~ msgstr "OLC"
-
-#~ msgid "Save as"
-#~ msgstr "Opslaan als"
-
-#~ msgid "Finish alt min"
-#~ msgstr "Finish H min"
-
-#~ msgid "Goto"
-#~ msgstr "Ga naar"
-
-#~ msgid "Set Mate code"
-#~ msgstr "Code teammaat instellen"
-
-#~ msgid "Trail width"
-#~ msgstr "Spoorbreedte"
-
-#~ msgid "Browse"
-#~ msgstr "Bladeren"
-
-#~ msgid "FLARM map"
-#~ msgstr "FLARM kaart"
-
-#~ msgid "Abort use current MC"
-#~ msgstr "Breek gebruik huidige MC* af"
-
-#~ msgid "Properties"
-#~ msgstr "Eigenschappen"
-
-#~ msgid "Safety lock"
-#~ msgstr "Veiligheidsslot"
-
-#~ msgid "North arrow"
-#~ msgstr "Noordpijl"
-
-#~ msgid "Lon"
-#~ msgstr "Lengte"
-
-#~ msgid "Task Calculator"
-#~ msgstr "Opdracht Berekener"
-
-#~ msgid "Info box values small"
-#~ msgstr "Infokader waarden klein"
-
-#~ msgid "V Flap"
-#~ msgstr "VFE"
-
-#~ msgid "Lat"
-#~ msgstr "Breedte"
-
-#~ msgid "A. Zoom"
-#~ msgstr "A. Zoom"
-
-#~ msgid "Avg/Alt"
-#~ msgstr "Gem/H"
-
-#~ msgid ""
-#~ "Terrain\n"
-#~ "Off"
-#~ msgstr ""
-#~ "terrein\n"
-#~ "uit"
-
-#~ msgid "Calibrate OFF"
-#~ msgstr "calibreren UIT"
-
-#~ msgid "Own Team Code"
-#~ msgstr "Eigen teamcode"
-
-#~ msgid "Distance Vario"
-#~ msgstr "afstand vario"
-
-#~ msgid "Best Alternate"
-#~ msgstr "beste uitwijk"
+#~ msgid "Loading Topology File..."
+#~ msgstr "topologiebestand laden"
 
 #~ msgid ""
 #~ "Average dry thermal updraft strength near mid-BL height.  Subtract glider "
@@ -7904,12 +7862,57 @@ msgstr ""
 #~ "werking van de wolken). W* hangt zowel af van de verwarming van de grond "
 #~ "als de grenslaaghoogte."
 
+#~ msgid "Av climb"
+#~ msgstr "gemiddeld stijgen"
+
+#~ msgid "Best LD"
+#~ msgstr "beste L/D"
+
+#~ msgid "Min sink"
+#~ msgstr "min dalen"
+
+#~ msgid "Settings locked in flight"
+#~ msgstr "Instellingen vast tijdens vlucht"
+
 #~ msgid ""
 #~ "Error loading Polar file!\r\n"
 #~ "Use LS8 Polar."
 #~ msgstr ""
 #~ "fout bij laden polaire!\r\n"
 #~ "LS8 polaire wordt gebruikt."
+
+#~ msgid "Wind at Altitude"
+#~ msgstr "hoogtewind"
+
+#~ msgid "Set wind"
+#~ msgstr "stel wind in"
+
+#~ msgid "Temp trace"
+#~ msgstr "temp optekening"
+
+#~ msgid "OnLine Contest"
+#~ msgstr "OLC"
+
+#~ msgid "Map Display"
+#~ msgstr "kaartweergave"
+
+#~ msgid "Safety factors"
+#~ msgstr "veiligheidsfactoren"
+
+#~ msgid "Finish turnpoint"
+#~ msgstr "Finish(keer)punt"
+
+#~ msgid "Start turnpoint"
+#~ msgstr "Start(keer)punt"
+
+#~ msgid "Topology on"
+#~ msgstr "Topokaart aan"
+
+#~ msgid "Terrain on"
+#~ msgstr "Terreinkaart aan"
+
+#~ msgid "Terrain + Topology"
+#~ msgstr "Terrein + Topo"
 
 #~ msgid ""
 #~ "[Thermal last 30 sec]\r\n"
@@ -7936,6 +7939,21 @@ msgstr ""
 #~ "[Laatste thermiektijd:]\r\n"
 #~ "Totale tijd gedraaid in de laatste bel."
 
+#~ msgid "Interface"
+#~ msgstr "Interface"
+
+#~ msgid "Appearance"
+#~ msgstr "Weergave"
+
+#~ msgid "FLARM and other gauges"
+#~ msgstr "FLARM en andere indicators"
+
+#~ msgid "Default task rules"
+#~ msgstr "Standaard opdrachtregels"
+
+#~ msgid "InfoBox Cruise"
+#~ msgstr "Infokader kruisvlucht"
+
 #~ msgid "InfoBox Circling"
 #~ msgstr "Infokader Thermieken"
 
@@ -7944,6 +7962,9 @@ msgstr ""
 
 #~ msgid "Waypoint Edit"
 #~ msgstr "Bewerk Keerpunt"
+
+#~ msgid "Experimental features"
+#~ msgstr "Experimentele opties"
 
 #~ msgid "Waypoints excluded, save anyway?"
 #~ msgstr "Keerpunten uitgesloten, toch bewaren?"
@@ -7960,6 +7981,36 @@ msgstr ""
 #~ msgid "final glide"
 #~ msgstr "eindsteek"
 
+#~ msgid "auxiliary"
+#~ msgstr "hulp"
+
+#~ msgid "ON/Scaled"
+#~ msgstr "AAN/Geschaald"
+
+#~ msgid "ON/Fixed"
+#~ msgstr "AAN/Vast"
+
+#~ msgid "Names"
+#~ msgstr "Namen"
+
+#~ msgid "Numbers"
+#~ msgstr "Getallen"
+
+#~ msgid "First 5"
+#~ msgstr "Eerste 5"
+
+#~ msgid "First 3"
+#~ msgstr "Eerste 3"
+
+#~ msgid "Names in task"
+#~ msgstr "Namen in opdracht"
+
+#~ msgid "First word"
+#~ msgstr "Eerste woord"
+
+#~ msgid "Target circling"
+#~ msgstr "Doel bij thermieken"
+
 #~ msgid "North/track"
 #~ msgstr "Noord/koers"
 
@@ -7974,6 +8025,27 @@ msgstr ""
 
 #~ msgid "Exclude"
 #~ msgstr "Uitsluiten"
+
+#~ msgid "Nautical"
+#~ msgstr "Zee"
+
+#~ msgid "Metric"
+#~ msgstr "Metrisch"
+
+#~ msgid "Statute"
+#~ msgstr "Land"
+
+#~ msgid "Feet"
+#~ msgstr "Voet"
+
+#~ msgid "Meters"
+#~ msgstr "Meter"
+
+#~ msgid "Knots"
+#~ msgstr "Knopen"
+
+#~ msgid "M/s"
+#~ msgstr "m/s"
 
 #~ msgid "Steady"
 #~ msgstr "Constante"
@@ -7996,6 +8068,9 @@ msgstr ""
 #~ msgid "PN6000"
 #~ msgstr "PN6000"
 
+#~ msgid "Normal"
+#~ msgstr "Normaal"
+
 #~ msgid "Extended"
 #~ msgstr "Uitgebreide"
 
@@ -8005,14 +8080,80 @@ msgstr ""
 #~ msgid "Enabled"
 #~ msgstr "Ingeschakeld"
 
+#~ msgid "15 seconds"
+#~ msgstr "15 seconden"
+
+#~ msgid "30 seconds"
+#~ msgstr "30 seconden"
+
+#~ msgid "60 seconds"
+#~ msgstr "60 seconden"
+
+#~ msgid "90 seconds"
+#~ msgstr "90 seconden"
+
+#~ msgid "2 minutes"
+#~ msgstr "2 minuten"
+
+#~ msgid "3 minutes"
+#~ msgstr "3 minuten"
+
+#~ msgid "White outline"
+#~ msgstr "Witte omtrek"
+
 #~ msgid "Winpilot"
 #~ msgstr "Winpilot"
 
 #~ msgid "Green/Orange"
 #~ msgstr "Groen/Oranje"
 
+#~ msgid "Changes to configuration saved."
+#~ msgstr "Verandering in configuratie opgeslagen"
+
+#~ msgid "Vario:"
+#~ msgstr "Vario:"
+
+#~ msgid "Distance:"
+#~ msgstr "Afstand:"
+
+#~ msgid "Rel. Alt.:"
+#~ msgstr "Rel. Hgt.:"
+
+#~ msgid "A. Zoom"
+#~ msgstr "A. Zoom"
+
+#~ msgid "YES"
+#~ msgstr "JA"
+
+#~ msgid "NO"
+#~ msgstr "NEE"
+
+#~ msgid "TRUE"
+#~ msgstr "WAAR"
+
+#~ msgid "FALSE"
+#~ msgstr "FOUTIEF"
+
+#~ msgid "Active task modified"
+#~ msgstr "Aktieve opdracht gewijzigd"
+
 #~ msgid "Task not valid. Changes will be lost."
 #~ msgstr "Opdracht ongeldig. Wijzigingen gaan verloren."
+
+#~ msgid "add waypoint"
+#~ msgstr "keerpunt toevoegen"
+
+#~ msgid "Task invalid.  Not saved."
+#~ msgstr "Opdracht ongeldig. Niet opgeslagen."
+
+#~ msgid "Task saved"
+#~ msgstr "Opdracht opgeslagen."
+
+#~ msgid "Change task type?"
+#~ msgstr "Opdracht type veranderen?"
+
+#~ msgid "Task Type"
+#~ msgstr "Opdracht type"
 
 #~ msgid "Blank!"
 #~ msgstr "Leeg!"
@@ -8020,29 +8161,131 @@ msgstr ""
 #~ msgid "Comms with Volkslogger"
 #~ msgstr "Comms met Volkslogger"
 
+#~ msgid "Name: "
+#~ msgstr "Naam: "
+
 #~ msgid "Set as Alternate 1"
 #~ msgstr "Instellen als uitwijk 1"
 
-#~ msgid "Abort use current Mc"
+#~ msgid "Start max speed margin"
+#~ msgstr "Start max snelheidsmarge"
+
+#~ msgid "Radio com max delay"
+#~ msgstr "Radio com max vertraging"
+
+#~ msgid "Append to task"
+#~ msgstr "Toevoegen aan opdracht"
+
+#~ msgid "V Airbrake"
+#~ msgstr "V Remklep"
+
+#~ msgid "Abort use current Mc*"
 #~ msgstr "Breek gebruik huidige Mc* af"
 
-#~ msgid "Wpt outside terrain"
-#~ msgstr "Kpt buiten terrein"
+#~ msgid "Rel. Bearing:"
+#~ msgstr "Rel. Koers:"
+
+#~ msgid "Info box titles"
+#~ msgstr "Infokader titels"
+
+#~ msgid "Customize Fonts"
+#~ msgstr "Lettertype aanpassen"
+
+#~ msgid "ThermalAssistant"
+#~ msgstr "Thermiekassistent"
+
+#~ msgid "Wpt outside terrain*"
+#~ msgstr "Kpt buiten terrein*"
+
+#~ msgid "Start alt"
+#~ msgstr "Start H"
+
+#~ msgid "Polar file"
+#~ msgstr "Polairebestand"
+
+#~ msgid "Aircraft/wind speed"
+#~ msgstr "Vliegtuig/windsnelheid"
+
+#~ msgid "FAI finish height"
+#~ msgstr "FAI finish hoogte"
+
+#~ msgid "Start max height"
+#~ msgstr "Start max hoogte"
 
 #~ msgid "Optimise"
 #~ msgstr "Optimaliseer"
 
+#~ msgid "Landable fields"
+#~ msgstr "Landbare velden"
+
 #~ msgid "Auto Mc mode"
 #~ msgstr "Auto MC modus"
+
+#~ msgid "Menu timeout*"
+#~ msgstr "Menu timeout*"
 
 #~ msgid "Waypoints 1"
 #~ msgstr "Keerpunten 1"
 
-#~ msgid "GPS Height Offset"
-#~ msgstr "GPS hoogteverschil"
+#~ msgid "Show ballast*"
+#~ msgstr "Toon ballast*"
 
-#~ msgid "Default map zoom"
-#~ msgstr "Standaard kaart zoom"
+#~ msgid "Info box values"
+#~ msgstr "Infokaderwaarden"
+
+#~ msgid "In Sector"
+#~ msgstr "In sector"
+
+#~ msgid "Start max speed"
+#~ msgstr "Start max snelheid"
+
+#~ msgid "Goto"
+#~ msgstr "Ga naar"
+
+#~ msgid "Ignore checksum*"
+#~ msgstr "Ignore checksum*"
+
+#~ msgid "Auto wind"
+#~ msgstr "Auto wind"
+
+#~ msgid "Time step cruise*"
+#~ msgstr "Tijdstap kruisvlucht*"
+
+#~ msgid "GPS Height Offset*"
+#~ msgstr "GPS hoogteverschil*"
+
+#~ msgid "Language*"
+#~ msgstr "Taal*"
+
+#~ msgid "Start max height margin"
+#~ msgstr "Start max hoogte marge"
+
+#~ msgid "Max objects reported"
+#~ msgstr "Max gemelde objecten"
+
+#~ msgid "Aircraft type: "
+#~ msgstr "Vliegtuigtype: "
+
+#~ msgid "Own code:"
+#~ msgstr "Eigen code:"
+
+#~ msgid "Color infoboxes*"
+#~ msgstr "Kleur infokaders*"
+
+#~ msgid "Infobox Geometry"
+#~ msgstr "Infokader vorm"
+
+#~ msgid "V Manoeuvering"
+#~ msgstr "V Manoeuvreer"
+
+#~ msgid "Logger ID: "
+#~ msgstr "Logger ID: "
+
+#~ msgid "Default map zoom*"
+#~ msgstr "Standaard kaart zoom*"
+
+#~ msgid "V Terrain"
+#~ msgstr "V terrein"
 
 #~ msgid "Alt diff Mc safety"
 #~ msgstr "H verschil MC marge"
@@ -8050,35 +8293,230 @@ msgstr ""
 #~ msgid "Alt diff Mc 0"
 #~ msgstr "H verschil MC 0"
 
+#~ msgid "Pitch Scheme"
+#~ msgstr "Toonhoogte opzet"
+
+#~ msgid "Period Scheme"
+#~ msgstr "Interval opzet"
+
+#~ msgid "Topology file*"
+#~ msgstr "Topologiebestand*"
+
+#~ msgid "Max height gain"
+#~ msgstr "Max hoogtewinst"
+
+#~ msgid "UTC Offset"
+#~ msgstr "UTC afwijking"
+
+#~ msgid "Climb Rate"
+#~ msgstr "Stijgsnelheid"
+
+#~ msgid "Msg window*"
+#~ msgstr "Berichtvenster*"
+
+#~ msgid "Text Input Style*"
+#~ msgstr "Tekst invoerstijl*"
+
+#~ msgid "Set Mate code"
+#~ msgstr "Code teammaat instellen"
+
+#~ msgid "Dialog Style*"
+#~ msgstr "Dialoog stijl*"
+
+#~ msgid "Infobox border*"
+#~ msgstr "Infokader rand*"
+
+#~ msgid "Online contest"
+#~ msgstr "OLC"
+
+#~ msgid "TE dynamic cal"
+#~ msgstr "TE dynamische cal"
+
+#~ msgid "Orientation"
+#~ msgstr "Stand"
+
+#~ msgid "Trail drift*"
+#~ msgstr "Spoordrift*"
+
+#~ msgid "TE static cal"
+#~ msgstr "TE statische cal"
+
+#~ msgid "my sample"
+#~ msgstr "Mijn staaltje"
+
 #~ msgid "Set as Alternate 2"
 #~ msgstr "Instellen als uitwijk 2"
+
+#~ msgid "Baud Rate Vega"
+#~ msgstr "Baud Rate Vega"
+
+#~ msgid "Auto zoom"
+#~ msgstr "Auto zoom"
+
+#~ msgid "Interval, Info"
+#~ msgstr "Interval, info"
+
+#~ msgid "Topology labels"
+#~ msgstr "Topologielabels"
+
+#~ msgid "Insert in task"
+#~ msgstr "Invoegen in opdracht"
+
+#~ msgid "Warning time*"
+#~ msgstr "Waarschuwingstijd*"
+
+#~ msgid "Browse"
+#~ msgstr "Bladeren"
+
+#~ msgid "Trail width*"
+#~ msgstr "Spoorbreedte*"
+
+#~ msgid "Inverse infoboxes*"
+#~ msgstr "Omgekeerde infokaders*"
+
+#~ msgid "LED Bright"
+#~ msgstr "LED helder"
+
+#~ msgid "Font Face"
+#~ msgstr "Lettertype"
+
+#~ msgid "Pitch Scale"
+#~ msgstr "Schaal toonhoogte"
+
+#~ msgid "FLARM map"
+#~ msgstr "FLARM kaart"
 
 #~ msgid "Airspace 2"
 #~ msgstr "Luchtruim 2"
 
+#~ msgid "Waypoint Distance"
+#~ msgstr "Keerpunt afstand"
+
+#~ msgid "Interval, Caution"
+#~ msgstr "Interval, waarschuwing"
+
+#~ msgid "Safety Mc*"
+#~ msgstr "Veilige MC*"
+
+#~ msgid "Set teamcode"
+#~ msgstr "Instellen teamcode"
+
+#~ msgid "Lat/Lon"
+#~ msgstr "Lat/Lon"
+
+#~ msgid "Topology display"
+#~ msgstr "Topologie weergave"
+
+#~ msgid "New Waypoint"
+#~ msgstr "Nieuw keerpunt"
+
 #~ msgid "Msg window"
 #~ msgstr "Berichtvenster"
+
+#~ msgid "Start height ref"
+#~ msgstr "Starthoogte ref"
+
+#~ msgid "L/D Average period"
+#~ msgstr "L/D middelingstijd"
+
+#~ msgid "Acknowledge time*"
+#~ msgstr "Accordeertijd*"
+
+#~ msgid "Averager needle*"
+#~ msgstr "Gemiddelde wijzer*"
+
+#~ msgid "Flap forces cruise*"
+#~ msgstr "Flap krachten steek*"
 
 #~ msgid "Tp"
 #~ msgstr "Tp"
 
-#~ msgid "Airfields file"
-#~ msgstr "Vliegveldbestand"
+#~ msgid "Mate code:"
+#~ msgstr "Maat code:"
+
+#~ msgid "Events*"
+#~ msgstr "Gebeurtenissen*"
+
+#~ msgid "Properties"
+#~ msgstr "Eigenschappen"
+
+#~ msgid "Save as"
+#~ msgstr "Opslaan als"
+
+#~ msgid "Nav by baro altitude*"
+#~ msgstr "Nav met baro hoogte*"
+
+#~ msgid "Block speed to fly*"
+#~ msgstr "Te vliegen bloksnelheid*"
+
+#~ msgid "Airfields file*"
+#~ msgstr "Vliegveldbestand*"
+
+#~ msgid "Task Altitude Difference"
+#~ msgstr "Opdracht hoogte verschil"
+
+#~ msgid "Show gross*"
+#~ msgstr "Toon bruto*"
 
 #~ msgid "Yes All"
 #~ msgstr "Ja op alles"
 
+#~ msgid "Flarm lock:"
+#~ msgstr "FLARM lock:"
+
+#~ msgid "Map file"
+#~ msgstr "Kaartbestand"
+
+#~ msgid "STF risk factor*"
+#~ msgstr "STF risico factor*"
+
+#~ msgid "Finish alt min"
+#~ msgstr "Finish H min"
+
+#~ msgid "ASI cal"
+#~ msgstr "ASI cal"
+
+#~ msgid "Task scoring"
+#~ msgstr "Opdracht scoring"
+
 #~ msgid "Accept"
 #~ msgstr "Goedkeuren"
 
-#~ msgid "Number"
-#~ msgstr "Getal"
+#~ msgid "Number: "
+#~ msgstr "Getal: "
+
+#~ msgid "Safety lock"
+#~ msgstr "Veiligheidsslot"
+
+#~ msgid "Interval, battery"
+#~ msgstr "Interval, accu"
+
+#~ msgid "North arrow*"
+#~ msgstr "Noordpijl*"
+
+#~ msgid "Comment: "
+#~ msgstr "Opmerking: "
+
+#~ msgid "Terrain file*"
+#~ msgstr "Terreinbestand*"
 
 #~ msgid "Move"
 #~ msgstr "Verplaats"
 
+#~ msgid "Use black outline*"
+#~ msgstr "Gebruik zwart kader*"
+
+#~ msgid "Lon"
+#~ msgstr "Lengte"
+
+#~ msgid "Interval, Warning"
+#~ msgstr "Interval, Waarschuwing"
+
 #~ msgid "Clear Alternates"
 #~ msgstr "Wis uitwijkvelden"
+
+#~ msgid "AAT min time"
+#~ msgstr "AAT min tijd"
 
 #~ msgid "Alt diff Mc current"
 #~ msgstr "H verschil actuele MC"
@@ -8086,11 +8524,41 @@ msgstr ""
 #~ msgid "Waypoints 2"
 #~ msgstr "Keerpunten 2"
 
+#~ msgid "Pilot name: "
+#~ msgstr "Vliegernaam: "
+
+#~ msgid "Status message*"
+#~ msgstr "Statusbericht*"
+
 #~ msgid "No All"
 #~ msgstr "Nee op alles"
 
+#~ msgid "Bearing:"
+#~ msgstr "Koers:"
+
+#~ msgid "Auto logger*"
+#~ msgstr "Auto logger*"
+
+#~ msgid "Set as new home"
+#~ msgstr "Instellen als nieuwe thuisbasis"
+
+#~ msgid "Time step circling*"
+#~ msgstr "Tijdstap thermieken*"
+
 #~ msgid "Airspace 1"
 #~ msgstr "Luchtruim 1"
+
+#~ msgid "Achieved Speed"
+#~ msgstr "Bereikte snelheid"
+
+#~ msgid "Interval, gear"
+#~ msgstr "Interval, wiel"
+
+#~ msgid "Competition Id: "
+#~ msgstr "Wedstrijd ID: "
+
+#~ msgid "Range:"
+#~ msgstr "Bereik:"
 
 #~ msgid "Auto Sound Volume"
 #~ msgstr "Auto geluidsvolume"
@@ -8101,8 +8569,35 @@ msgstr ""
 #~ msgid "Okay"
 #~ msgstr "OK"
 
+#~ msgid "Info box values small"
+#~ msgstr "Infokader waarden klein"
+
+#~ msgid "Set range"
+#~ msgstr "Bereik instellen"
+
+#~ msgid "V Flap"
+#~ msgstr "VFE"
+
+#~ msgid "Lat"
+#~ msgstr "Breedte"
+
+#~ msgid "Glider position"
+#~ msgstr "Positie zweefvliegtuig"
+
+#~ msgid "Auto Blank"
+#~ msgstr "Auto blank"
+
+#~ msgid "Finish min height"
+#~ msgstr "Finish min hoogte"
+
 #~ msgid "Auto Backlight"
 #~ msgstr "Auto Backlight"
+
+#~ msgid "Wind arrow*"
+#~ msgstr "Windpijl*"
+
+#~ msgid "Avg/Alt"
+#~ msgstr "Gem/H"
 
 #~ msgid ""
 #~ "Start rules slightly violated\r\n"
@@ -8128,6 +8623,27 @@ msgstr ""
 #~ "buiten kaartgrenzen\r\n"
 #~ "\r\n"
 #~ "Toch laden?"
+
+#~ msgid "Previous turnpoint"
+#~ msgstr "Vorig keerpunt"
+
+#~ msgid "Furthest landpoint"
+#~ msgstr "Verste landingsveld"
+
+#~ msgid "Next landpoint"
+#~ msgstr "Volgende landingsveld"
+
+#~ msgid "Closest landpoint"
+#~ msgstr "Dichtstbijzijnde landingsveld"
+
+#~ msgid "Previous landpoint"
+#~ msgstr "Vorige landingsveld"
+
+#~ msgid "Previous waypoint"
+#~ msgstr "Vorig keerpunt"
+
+#~ msgid "Terrain off"
+#~ msgstr "Terreinkaart uit"
 
 #~ msgid ""
 #~ "[Height GPS]\r\n"
@@ -8382,6 +8898,21 @@ msgstr ""
 #~ "[Hoogtewinst bel]\r\n"
 #~ "De hoogte gewonnen/verloren in de huidige bel"
 
+#~ msgid "Last Thermal Average"
+#~ msgstr "Gemiddelde stijgen laatste bel"
+
+#~ msgid "Last Thermal Gain"
+#~ msgstr "Hoogtewinst laatste bel"
+
+#~ msgid "Last Thermal Time"
+#~ msgstr "Tijd in laatste bel"
+
+#~ msgid "Next Altitude Required"
+#~ msgstr "Hoogte nodig voor volgend keerpunt"
+
+#~ msgid "Next Altitude Difference"
+#~ msgstr "Volgend keerpunt - aankomsthoogte"
+
 #~ msgid ""
 #~ "[Team Bearing]\r\n"
 #~ "The bearing to the team aircraft location at the last team code report."
@@ -8530,6 +9061,42 @@ msgstr ""
 #~ msgid "Calibrate ON"
 #~ msgstr "Calibreren AAN"
 
+#~ msgid "Next Distance"
+#~ msgstr "Afstand volgend keerpunt"
+
+#~ msgid "Speed Task Average"
+#~ msgstr "Opdracht - gemiddelde snelheid"
+
+#~ msgid "AA Distance Max"
+#~ msgstr "AAT max afstand"
+
+#~ msgid "AA Distance Min"
+#~ msgstr "AAT min afstand"
+
+#~ msgid "AA Speed Max"
+#~ msgstr "AAT max snelheid"
+
+#~ msgid "AA Speed Min"
+#~ msgstr "AAT min snelheid"
+
+#~ msgid "Next LD"
+#~ msgstr "L/D voor volgend keerpunt"
+
+#~ msgid "Bearing Difference"
+#~ msgstr "Koersafwijking volgend keerpunt"
+
+#~ msgid "AA Distance Tgt"
+#~ msgstr "AAT resterende afstand tot doel"
+
+#~ msgid "AA Speed Tgt"
+#~ msgstr "AAT snelheid tot doel"
+
+#~ msgid "AA Delta Time"
+#~ msgstr "AAT verschiltijd"
+
+#~ msgid "Thermal All"
+#~ msgstr "Stijgen totaal"
+
 #~ msgid "VisualGlide OFF"
 #~ msgstr "Zichtbare glijpad UIT"
 
@@ -8539,11 +9106,90 @@ msgstr ""
 #~ msgid "VisualGlide Moving"
 #~ msgstr "Zichtbare glijpad beweegt"
 
+#~ msgid ""
+#~ "Ground speed measured by the GPS. If this infobox is active in simulation "
+#~ "mode, pressing the up and down arrows adjusts the speed, and left and "
+#~ "right turn the glider."
+#~ msgstr ""
+#~ "Grondsnelheid volgens GPS. Wanneer dit infokader in de simulatie-modus "
+#~ "actief is, kan de snelheid worden gewijzigd met pijltje omhoog/omlaag. "
+#~ "Pijltje links/richts verander de vliegrichting."
+
+#~ msgid ""
+#~ "The current MacCready setting. This infobox also shows whether MacCready "
+#~ "is manual or auto. (Touchscreen/PC only) Also used to adjust the "
+#~ "MacCready Setting if the infobox is active, by using the up/down cursor "
+#~ "keys."
+#~ msgstr ""
+#~ "De huidige McCready instelling. Dit infokader geeft ook aan of de "
+#~ "McCready instelling is handmatig of auto. Alleen Touchscreen/PC: ook "
+#~ "gebruikt om door middel van pijltje omhoog/omlaag de McCready instelling "
+#~ "aan te passen als het infokader actief is."
+
 #~ msgid "Altitude required to reach the next turn point."
 #~ msgstr "Hoogte nodig om het volgende keerpunt te halen"
 
+#~ msgid ""
+#~ "The name of the currently selected turn point. When this infobox is "
+#~ "active, using the up/down cursor keys selects the next/previous waypoint "
+#~ "in the task. (Touchscreen/PC only) Pressing the enter cursor key brings "
+#~ "up the waypoint details."
+#~ msgstr ""
+#~ "De naam van het volgende keerpunt. Als dit infokader actief is, kan met "
+#~ "pijltje omhoog/omlaag het volgende/vorige keerpunt uit de opdracht "
+#~ "gekozen worden. Alleen Touchscreen/PC: de 'enter'-toets laat de keerpunt-"
+#~ "details zien."
+
 #~ msgid "Altitude required to finish the task."
 #~ msgstr "Hoogte vereist om de opdracht te finishen."
+
+#~ msgid ""
+#~ "Average cross country speed while on current task, compensated for "
+#~ "altitude."
+#~ msgstr "Gemiddelde totale snelheid over de huidige taak."
+
+#~ msgid ""
+#~ "Magnetic track reported by the GPS. (Touchscreen/PC only) If this infobox "
+#~ "is active in simulation mode, pressing the up and down  arrows adjusts "
+#~ "the track."
+#~ msgstr ""
+#~ "Logprojectie vanuit de GPS. (Touchscreen/PC) Wanneer in werking tijdens "
+#~ "simulatie kan met de up/downpijlen de log aangepast worden."
+
+#~ msgid ""
+#~ "Wind speed estimated by XCSoar. (Touchscreen/PC only) Manual adjustment "
+#~ "is possible by pressing the up/down cursor keys to adjust magnitude and "
+#~ "left/right cursor keys to adjust bearing when the infobox is active. "
+#~ "Pressing the enter cursor key saves the wind value as the initial value "
+#~ "when XCSoar next starts."
+#~ msgstr ""
+#~ "Windsnelheid berekend door XCSoar. (Touchscreen/PC) Handmatig instellen "
+#~ "bij  actieve infobox is mogelijk door pijlen up/down(snelheid) en/of "
+#~ "pijlen links/rechts(richting). Bij [Enter] worden deze waarden als "
+#~ "standaard bewaard."
+
+#~ msgid ""
+#~ "Wind bearing estimated by XCSoar. (Touchscreen/PC only) Manual adjustment "
+#~ "is possible by pressing the up/down cursor keys to adjust bearing when "
+#~ "the infobox is active."
+#~ msgstr ""
+#~ "Windrichting berekend door XCSoar. (Touchscreen/PC) Handmatig instellen "
+#~ "bij actieve infobox is mogelijk door pijlen up/down. Bij [Enter] worden "
+#~ "deze waarden als standaard bewaard."
+
+#~ msgid ""
+#~ "Instantaneous cross country speed while on current task, compensated for "
+#~ "altitude."
+#~ msgstr ""
+#~ "De actuele overlandsnelheid in de huidige opdracht, gecompenseerd voor "
+#~ "hoogte."
+
+#~ msgid ""
+#~ "Achieved cross country speed while on current task, compensated for "
+#~ "altitude."
+#~ msgstr ""
+#~ "De bereikte overlandsnelheid in de huidige opdracht, gecompenseerd voor "
+#~ "hoogte."
 
 #~ msgid ""
 #~ "Supply battery voltage for Altair systems, for PDA systems, this gives "
@@ -8603,3 +9249,90 @@ msgstr ""
 #~ msgstr ""
 #~ "fout bij laden polaire!\n"
 #~ "LS8 polaire wordt gebruikt."
+
+#~ msgid "Topology"
+#~ msgstr "Topokaart"
+
+#~ msgid "ON"
+#~ msgstr "AAN"
+
+#~ msgid "OFF"
+#~ msgstr "UIT"
+
+#~ msgid "Site"
+#~ msgstr "Bestanden"
+
+#~ msgid "File browser"
+#~ msgstr "Bestandsbrowser"
+
+#~ msgid "Safety MC*"
+#~ msgstr "Veilige MC*"
+
+#~ msgid "Alt diff MC current"
+#~ msgstr "H verschil actuele MC"
+
+#~ msgid "Select colour"
+#~ msgstr "Selecteer kleur"
+
+#~ msgid "Abort use current MC*"
+#~ msgstr "Breek gebruik huidige MC* af"
+
+#~ msgid "Auto MC mode"
+#~ msgstr "Auto MC modus"
+
+#~ msgid "Select pattern"
+#~ msgstr "Selecteer pattroon"
+
+#~ msgid "Alt diff MC safety"
+#~ msgstr "H verschil MC marge"
+
+#~ msgid "Alt diff MC 0"
+#~ msgstr "H verschil MC 0"
+
+#~ msgid "Task Calculator"
+#~ msgstr "Opdracht Berekener"
+
+#~ msgid "Below Final Glide"
+#~ msgstr "Beneden Final Glide"
+
+#~ msgid "Waiting for GPS Connection"
+#~ msgstr "Wachten op GPS connectie"
+
+#~ msgid "Above Final Glide"
+#~ msgstr "Boven Final Glide"
+
+#~ msgid "Restarting Comm Ports"
+#~ msgstr "Comm Poorten herstarten"
+
+#~ msgid "Waiting for GPS Fix"
+#~ msgstr "Wachten op GPS fixatie"
+
+#~ msgid "Final Glide Through Terrain"
+#~ msgstr "Final Glide door terrein"
+
+#~ msgid "Trail width"
+#~ msgstr "Spoorbreedte"
+
+#~ msgid "Abort use current MC"
+#~ msgstr "Breek gebruik huidige MC* af"
+
+#~ msgid "North arrow"
+#~ msgstr "Noordpijl"
+
+#~ msgid "Abort use current Mc"
+#~ msgstr "Breek gebruik huidige Mc* af"
+
+#~ msgid "Wpt outside terrain"
+#~ msgstr "Kpt buiten terrein"
+
+#~ msgid "GPS Height Offset"
+#~ msgstr "GPS hoogteverschil"
+
+#~ msgid "Default map zoom"
+#~ msgstr "Standaard kaart zoom"
+
+#~ msgid "Airfields file"
+#~ msgstr "Vliegveldbestand"
+
+#~ msgid "Number"
+#~ msgstr "Getal"
