@@ -81,12 +81,16 @@ ComputeDynamics(NMEA_INFO &basic, const DERIVED_INFO &calculated)
 }
 
 void
+BasicComputer::Fill(NMEA_INFO &data, const SETTINGS_COMPUTER &settings_computer)
+{
+  ComputeNavAltitude(data, settings_computer);
+}
+
+void
 BasicComputer::Compute(NMEA_INFO &data, const NMEA_INFO &last,
                        const DERIVED_INFO &calculated,
                        const SETTINGS_COMPUTER &settings_computer)
 {
-  ComputeNavAltitude(data, settings_computer);
-
   if (data.Time > last.Time)
     ComputeDynamics(data, calculated);
 }

@@ -301,6 +301,8 @@ DeviceBlackboard::Merge()
     SetBasic() = real_data;
   }
 
+  computer.Fill(SetBasic(), SettingsComputer());
+
   if (last_location_available != Basic().LocationAvailable) {
     last_location_available = Basic().LocationAvailable;
     TriggerGPSUpdate();

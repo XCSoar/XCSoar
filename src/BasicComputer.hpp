@@ -36,6 +36,11 @@ struct SETTINGS_COMPUTER;
 class BasicComputer {
 public:
   /**
+   * Fill the missing attributes with a fallback.
+   */
+  void Fill(NMEA_INFO &data, const SETTINGS_COMPUTER &settings_computer);
+
+  /**
    * Runs all calculations.
    *
    * @param data the current sensor data structure
