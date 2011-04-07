@@ -339,15 +339,14 @@ static void
 DrawTraceVector(Canvas &canvas, const ChartProjection& proj,
                 const TraceVector &trace)
 {
-  RasterPoint last;
+  RasterPoint points[trace.size()];
+  unsigned i = 0;
   for (typename TraceVector::const_iterator it = trace.begin();
        it != trace.end(); ++it) {
-    RasterPoint sc = proj.GeoToScreen(it->get_location());
-    if (it != trace.begin())
-      canvas.line(sc, last);
-
-    last = sc;
+    points[i++] = proj.GeoToScreen(it->get_location());
   }
+
+  canvas.polyline(points, i);
 }
 
 static void
