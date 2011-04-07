@@ -85,7 +85,7 @@ ContestDijkstra::master_is_updated()
 
   // update trace if time and distance are greater than significance thresholds
 
-  const bool updated = 
+  const bool updated = !last_point.Defined() ||
     ((last_master.time > last_point.time + threshold_delta_t_trace)
      && (last_master.approx_dist(last_point) > threshold_distance_trace));
 

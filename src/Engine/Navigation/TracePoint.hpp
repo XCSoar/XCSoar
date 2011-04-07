@@ -56,6 +56,10 @@ public:
    */
   TracePoint(const AIRCRAFT_STATE &state);
 
+  bool Defined() const {
+    return time != (unsigned)(0 - 1);
+  }
+
   /** 
    * Calculate approximate squared (flat projected) distance between this point
    * and another
