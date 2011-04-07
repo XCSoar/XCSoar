@@ -114,7 +114,6 @@ public:
 private:
 // moved from GlideComputerAirData
   void FLARM_ScanTraffic();
-  void AutoQNH();
 
   const NMEA_INFO& LastBasic() { return state_last; }
 };

@@ -28,16 +28,12 @@ Copyright_License {
 #include "TeamCodeCalculation.h"
 #include "FLARM/FlarmDetails.hpp"
 #include "Asset.hpp"
-#include "Device/Parser.hpp"
-#include "Device/List.hpp"
-#include "Device/Descriptor.hpp"
 #include "Device/All.hpp"
 #include "Math/Constants.h"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Simulator.hpp"
 #include "OS/Clock.hpp"
-#include "Components.hpp"
-#include "Engine/Waypoint/Waypoints.hpp"
+#include "AutoQNH.hpp"
 
 #include <limits.h>
 
@@ -327,54 +323,13 @@ DeviceBlackboard::tick()
   FLARM_ScanTraffic();
 
   // calculate fast data to complete aircraft state
-  AutoQNH();
+  AutoQNH(SetBasic(), Calculated());
 
   computer.Compute(SetBasic(), LastBasic(),
                    Calculated(), SettingsComputer());
 
   if (Basic().Time!= LastBasic().Time) {
     state_last = Basic();
-  }
-}
-
-void
-DeviceBlackboard::AutoQNH()
-{
-  NMEA_INFO &basic = SetBasic();
-
-  #define QNH_TIME 10
-
-  static unsigned countdown_autoqnh = QNH_TIME;
-
-  if (!Calculated().flight.OnGround // must be on ground
-      || !countdown_autoqnh    // only do it once
-      || !basic.gps.real // never in replay mode / simulator
-      || !basic.LocationAvailable // Reject if no valid GPS fix
-      || !basic.PressureAltitudeAvailable // Reject if no pressure altitude
-      || basic.QNHAvailable // Reject if QNH already known
-    ) {
-    if (countdown_autoqnh<= QNH_TIME) {
-      countdown_autoqnh= QNH_TIME; // restart if havent performed
-    }
-    return;
-  }
-
-  if (countdown_autoqnh<= QNH_TIME)
-    countdown_autoqnh--;
-
-  if (!countdown_autoqnh) {
-    const Waypoint *next_wp;
-    next_wp = way_points.lookup_location(basic.Location, fixed(1000));
-
-    if (next_wp && next_wp->is_airport()) {
-      basic.ProvideQNHSetting(basic.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, next_wp->Altitude));
-    } else if (Calculated().TerrainValid) {
-      basic.ProvideQNHSetting(basic.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, Calculated().TerrainAlt));
-    } else
-      return;
-
-    AllDevicesPutQNH(basic.pressure, Calculated());
-    countdown_autoqnh = UINT_MAX; // disable after performing once
   }
 }
 

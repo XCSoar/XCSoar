@@ -346,6 +346,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/DrawThread.cpp \
 	\
 	$(SRC)/BasicComputer.cpp \
+	$(SRC)/AutoQNH.cpp \
 	$(SRC)/DeviceBlackboard.cpp \
 	$(SRC)/InstrumentBlackboard.cpp \
 	$(SRC)/InterfaceBlackboard.cpp \
