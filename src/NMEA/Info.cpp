@@ -137,6 +137,12 @@ NMEA_INFO::ResetFlight(bool full)
 void
 NMEA_INFO::expire_wall_clock()
 {
+#ifdef ANDROID
+  if (gps.AndroidInternalGPS)
+    /* the Android internal GPS does not expire */
+    return;
+#endif
+
   const fixed monotonic = fixed(MonotonicClockMS()) / 1000;
   Connected.expire(monotonic, fixed(10));
   if (!Connected) {

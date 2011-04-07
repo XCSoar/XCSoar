@@ -274,12 +274,6 @@ DeviceBlackboard::expire_wall_clock()
   if (!basic.Connected)
     return false;
 
-#ifdef ANDROID
-  if (basic.gps.AndroidInternalGPS)
-    /* the Android internal GPS does not expire */
-    return true;
-#endif
-
   basic.expire_wall_clock();
   return !basic.Connected;
 }
