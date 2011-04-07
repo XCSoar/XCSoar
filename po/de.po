@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-07 10:43+0200\n"
-"PO-Revision-Date: 2011-04-05 07:21+0000\n"
+"PO-Revision-Date: 2011-04-07 20:17+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-07 08:38+0000\n"
+"X-Launchpad-Export-Date: 2011-04-07 20:56+0000\n"
 "X-Generator: Launchpad (build 12757)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -1865,7 +1865,7 @@ msgstr "Barogramm"
 #: src/InfoBoxes/Content/Factory.cpp:778
 #, no-c-format
 msgid "Trace of altitude during flight"
-msgstr "Spur von der Flughöhe während des Flugs"
+msgstr "Spur der Flughöhe während des Flugs"
 
 #: src/InfoBoxes/Content/Factory.cpp:785
 #, no-c-format
@@ -5302,6 +5302,11 @@ msgid ""
 "[Auto] Display track bearing if there is a significant difference to plane "
 "heading."
 msgstr ""
+"Zeige den Steuerkurs auf der Karte.\n"
+"[Aus] Steuerkurs wird nicht angezeigt.\n"
+"[Ein] Zeige den Steuerkurs immer.\n"
+"[Auto] Zeige den Steuerkurs nur, wenn eine signifikante Abweichung zum Kurs "
+"über Grund existiert."
 
 #: Data/Dialogs/dlgConfiguration.xml:19 Data/Dialogs/dlgConfiguration_L.xml:19
 msgid ""
@@ -7746,7 +7751,7 @@ msgstr "Lauftraum Details"
 
 #: Data/Dialogs/dlgWaypointEdit.xml:10
 msgid "Lon."
-msgstr ""
+msgstr "Länge"
 
 #: Data/Dialogs/dlgBasicSettings.xml:7
 msgid ""
@@ -7823,7 +7828,7 @@ msgstr "Auto Höhenband"
 
 #: Data/Dialogs/dlgWaypointEdit.xml:34
 msgid "Lat."
-msgstr ""
+msgstr "Breite"
 
 #: Data/Dialogs/dlgConfiguration.xml:666
 #: Data/Dialogs/dlgConfiguration_L.xml:667
@@ -8217,6 +8222,9 @@ msgstr "Gelandet"
 
 #~ msgid "Auxiliary-3"
 #~ msgstr "Zusätzlich-3"
+
+#~ msgid "Auxiliary-5"
+#~ msgstr "Zusätzlich-5"
 
 #~ msgid "Ignore checksum*"
 #~ msgstr "Prüfsumme ignorieren*"
