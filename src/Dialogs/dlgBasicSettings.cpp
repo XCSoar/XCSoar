@@ -92,25 +92,58 @@ OnBallastDump(WndButton &Sender)
 }
 
 static void
+ShowAltitude(fixed altitude)
+{
+  static fixed last(-2);
+
+  if (fabs(altitude - last) < fixed_one)
+    return;
+
+  last = altitude;
+
+  WndProperty &wp = *(WndProperty *)wf->FindByName(_T("prpAltitude"));
+  DataFieldFloat &df = *(DataFieldFloat *)wp.GetDataField();
+  df.SetAsFloat(Units::ToUserAltitude(altitude));
+  wp.RefreshDisplay();
+  wp.show();
+}
+
+static void
+HideAltitude()
+{
+  WndProperty &wp = *(WndProperty *)wf->FindByName(_T("prpAltitude"));
+  wp.hide();
+}
+
+static void
+RefreshAltitudeControl()
+{
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
+
+  if (basic.PressureAltitudeAvailable && settings_computer.pressure_available)
+    ShowAltitude(settings_computer.pressure.PressureAltitudeToQNHAltitude(basic.PressureAltitude));
+  else if (basic.BaroAltitudeAvailable)
+    ShowAltitude(basic.BaroAltitude);
+  else
+    HideAltitude();
+}
+
+static void
 OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
   const NMEA_INFO &basic = CommonInterface::Basic();
   SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SetSettingsComputer();
-  WndProperty* wp;
 
   switch (Mode) {
   case DataField::daChange:
     settings_computer.pressure.set_QNH(Sender->GetAsFixed());
     settings_computer.pressure_available.update(basic.Time);
     device_blackboard.SetQNH(Sender->GetAsFixed());
-    wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
-    if (wp) {
-      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-      df.SetAsFloat(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
-      wp->RefreshDisplay();
-    }
+    RefreshAltitudeControl();
     break;
 
   case DataField::daInc:
@@ -118,26 +151,6 @@ OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
   case DataField::daSpecial:
     return;
   }
-}
-
-static void
-SetAltitude()
-{
-  static fixed altlast(-2);
-  if (fabs(XCSoarInterface::Basic().BaroAltitude - altlast) > fixed_one) {
-    WndProperty* wp;
-    wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
-    if (wp) {
-      if (!XCSoarInterface::Basic().BaroAltitudeAvailable) {
-        wp->hide();
-      } else {
-        DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-        df.SetAsFloat(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
-        wp->RefreshDisplay();
-      }
-    }
-  }
-  altlast = XCSoarInterface::Basic().BaroAltitude;
 }
 
 static void
@@ -200,7 +213,7 @@ OnTimerNotify(WndForm &Sender)
     changed = false;
   }
 
-  SetAltitude();
+  RefreshAltitudeControl();
 }
 
 static void
