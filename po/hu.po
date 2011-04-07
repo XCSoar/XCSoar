@@ -7,19 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-07 10:43+0200\n"
-"PO-Revision-Date: 2011-04-07 06:58+0000\n"
+"POT-Creation-Date: 2011-04-07 22:57+0200\n"
+"PO-Revision-Date: 2011-04-07 17:44+0000\n"
 "Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-07 08:38+0000\n"
+"X-Launchpad-Export-Date: 2011-04-07 20:56+0000\n"
 "X-Generator: Launchpad (build 12757)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
-#: src/InputEventsActions.cpp:1392 src/Dialogs/dlgAnalysis.cpp:268
+#: src/InputEventsActions.cpp:1394 src/Dialogs/dlgAnalysis.cpp:268
 #: src/Dialogs/dlgStatus.cpp:53
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:80
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:56
@@ -294,7 +294,7 @@ msgstr "Teljes"
 #: src/ExpandMacros.cpp:435 src/ExpandMacros.cpp:442 src/ExpandMacros.cpp:499
 #: src/ExpandMacros.cpp:505 src/ExpandMacros.cpp:508 src/ExpandMacros.cpp:511
 #: src/ExpandMacros.cpp:529 src/ExpandMacros.cpp:582
-#: src/InputEventsActions.cpp:1613 src/InputEventsActions.cpp:1616
+#: src/InputEventsActions.cpp:1615 src/InputEventsActions.cpp:1618
 #: src/Dialogs/XML.cpp:598 src/Dialogs/dlgStatus.cpp:205
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:79
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:48
@@ -306,8 +306,8 @@ msgstr "Ki"
 
 #: src/ExpandMacros.cpp:442 src/ExpandMacros.cpp:499 src/ExpandMacros.cpp:505
 #: src/ExpandMacros.cpp:508 src/ExpandMacros.cpp:511 src/ExpandMacros.cpp:529
-#: src/ExpandMacros.cpp:582 src/InputEventsActions.cpp:1611
-#: src/InputEventsActions.cpp:1616 src/Dialogs/XML.cpp:598
+#: src/ExpandMacros.cpp:582 src/InputEventsActions.cpp:1613
+#: src/InputEventsActions.cpp:1618 src/Dialogs/XML.cpp:598
 #: src/Dialogs/dlgStatus.cpp:203
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:107
 msgid "On"
@@ -343,13 +343,13 @@ msgstr "Kézi"
 msgid "Auto"
 msgstr "Automata"
 
-#: src/ExpandMacros.cpp:514 src/InputEventsActions.cpp:1390
+#: src/ExpandMacros.cpp:514 src/InputEventsActions.cpp:1392
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:88
 #, no-c-format
 msgid "All"
 msgstr "Mind"
 
-#: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1391
+#: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1393
 #, no-c-format
 msgid "Task & Landables"
 msgstr "feladat + leszállható"
@@ -1334,7 +1334,7 @@ msgstr ""
 "A levegő relatív páratartalma, ha ilyen szondával felszerelt intelligens "
 "variométer lett csatlakoztatva."
 
-#: src/InfoBoxes/Content/Factory.cpp:511 src/InputEventsActions.cpp:1364
+#: src/InfoBoxes/Content/Factory.cpp:511 src/InputEventsActions.cpp:1366
 #, no-c-format
 msgid "Forecast temperature"
 msgstr "Hőmérséklet várható"
@@ -2000,25 +2000,25 @@ msgstr ""
 msgid "N/A"
 msgstr "na."
 
-#: src/InfoBoxes/Content/Altitude.cpp:266 src/GlueMapWindowOverlays.cpp:362
+#: src/InfoBoxes/Content/Altitude.cpp:270 src/GlueMapWindowOverlays.cpp:362
 #: Data/Dialogs/dlgSimulatorPrompt.xml:6
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:6
 msgid "Simulator"
 msgstr "Szimulátor"
 
-#: src/InfoBoxes/Content/Altitude.cpp:270 Data/Input/default.xci:836
+#: src/InfoBoxes/Content/Altitude.cpp:274 Data/Input/default.xci:836
 #: Data/Input/default.xci:886 Data/Input/default.xci:949
 msgid "Info"
 msgstr "Infó"
 
-#: src/InfoBoxes/Content/Altitude.cpp:276
+#: src/InfoBoxes/Content/Altitude.cpp:280
 #: src/InfoBoxes/Content/MacCready.cpp:176
 #: src/InfoBoxes/Content/Weather.cpp:262
 msgid "Setup"
 msgstr "Beállítás"
 
-#: src/InfoBoxes/Content/Altitude.cpp:404
-#: src/InfoBoxes/Content/Altitude.cpp:491
+#: src/InfoBoxes/Content/Altitude.cpp:408
+#: src/InfoBoxes/Content/Altitude.cpp:497
 msgid "no QNH"
 msgstr "nincs QNH"
 
@@ -2147,140 +2147,140 @@ msgstr "Külső kijelzők"
 msgid "Default InfoBoxes"
 msgstr "Alap kijelzők"
 
-#: src/InputEventsActions.cpp:286
+#: src/InputEventsActions.cpp:288
 msgid "Auto. zoom on"
 msgstr "Automata nagyítás BE"
 
-#: src/InputEventsActions.cpp:288 src/InputEventsActions.cpp:1719
+#: src/InputEventsActions.cpp:290 src/InputEventsActions.cpp:1721
 msgid "Auto. zoom off"
 msgstr "Automata nagyítás KI"
 
-#: src/InputEventsActions.cpp:314
+#: src/InputEventsActions.cpp:316
 msgid "Circling zoom on"
 msgstr "Körözési zoom BE"
 
-#: src/InputEventsActions.cpp:316
+#: src/InputEventsActions.cpp:318
 msgid "Circling zoom off"
 msgstr "Körözési zoom KI"
 
-#: src/InputEventsActions.cpp:381
+#: src/InputEventsActions.cpp:383
 msgid "Pan mode on"
 msgstr "Görgetés BE"
 
-#: src/InputEventsActions.cpp:383
+#: src/InputEventsActions.cpp:385
 msgid "Pan mode off"
 msgstr "Görgetés KI"
 
-#: src/InputEventsActions.cpp:533
+#: src/InputEventsActions.cpp:535
 msgid "Advance manually"
 msgstr "Kézi léptetés"
 
-#: src/InputEventsActions.cpp:536
+#: src/InputEventsActions.cpp:538
 msgid "Advance automatically"
 msgstr "Automata léptetés"
 
-#: src/InputEventsActions.cpp:539
+#: src/InputEventsActions.cpp:541
 msgid "Ready to start"
 msgstr "Indulásra kész"
 
-#: src/InputEventsActions.cpp:542
+#: src/InputEventsActions.cpp:544
 msgid "Hold start"
 msgstr "Indulásra vár"
 
-#: src/InputEventsActions.cpp:545
+#: src/InputEventsActions.cpp:547
 msgid "Ready to turn"
 msgstr "Fordulásra kész"
 
-#: src/InputEventsActions.cpp:548
+#: src/InputEventsActions.cpp:550
 msgid "Hold turn"
 msgstr "Fordulásra vár"
 
-#: src/InputEventsActions.cpp:676
+#: src/InputEventsActions.cpp:678
 msgid "No active waypoint!"
 msgstr "Nincs Aktív Fordulópont!"
 
-#: src/InputEventsActions.cpp:752
+#: src/InputEventsActions.cpp:754
 msgid "Auto. MacCready on"
 msgstr "MC automata BE"
 
-#: src/InputEventsActions.cpp:754
+#: src/InputEventsActions.cpp:756
 msgid "Auto. MacCready off"
 msgstr "MC automata KI"
 
-#: src/InputEventsActions.cpp:761
+#: src/InputEventsActions.cpp:763
 msgid "MacCready "
 msgstr "MacCready "
 
-#: src/InputEventsActions.cpp:971
+#: src/InputEventsActions.cpp:973
 msgid "Task aborted"
 msgstr "Feladat megszakítva"
 
-#: src/InputEventsActions.cpp:974
+#: src/InputEventsActions.cpp:976
 msgid "Go to target"
 msgstr "Menj a célhoz"
 
-#: src/InputEventsActions.cpp:977
+#: src/InputEventsActions.cpp:979
 msgid "Ordered task"
 msgstr "Kiadott feladat"
 
-#: src/InputEventsActions.cpp:980 src/FlightStatisticsRenderer.cpp:756
+#: src/InputEventsActions.cpp:982 src/FlightStatisticsRenderer.cpp:756
 msgid "No task"
 msgstr "Nincs feladat"
 
-#: src/InputEventsActions.cpp:1039
+#: src/InputEventsActions.cpp:1041
 msgid "Bugs performance"
 msgstr "Bogárpiszkos teljesítmény"
 
-#: src/InputEventsActions.cpp:1080
+#: src/InputEventsActions.cpp:1082
 msgid "Ballast %"
 msgstr "Ballaszt %"
 
-#: src/InputEventsActions.cpp:1139
+#: src/InputEventsActions.cpp:1141
 msgid "NMEA log on"
 msgstr "NMEA Logger BE"
 
-#: src/InputEventsActions.cpp:1141
+#: src/InputEventsActions.cpp:1143
 msgid "NMEA log off"
 msgstr "NMEA Logger KI"
 
-#: src/InputEventsActions.cpp:1145
+#: src/InputEventsActions.cpp:1147
 msgid "Logger on"
 msgstr "Logger BE"
 
-#: src/InputEventsActions.cpp:1147
+#: src/InputEventsActions.cpp:1149
 msgid "Logger off"
 msgstr "Logger KI"
 
-#: src/InputEventsActions.cpp:1393
+#: src/InputEventsActions.cpp:1395
 #, no-c-format
 msgid "None "
 msgstr "Nincs "
 
-#: src/InputEventsActions.cpp:1406
+#: src/InputEventsActions.cpp:1408
 msgid "Waypoint labels"
 msgstr "FP címkék"
 
-#: src/InputEventsActions.cpp:1446
+#: src/InputEventsActions.cpp:1448
 msgid "Map labels on"
 msgstr "Térkép cimkék BE"
 
-#: src/InputEventsActions.cpp:1618
+#: src/InputEventsActions.cpp:1620
 msgid "Topography/Terrain"
 msgstr "Jelek/Domborzat"
 
-#: src/InputEventsActions.cpp:1786
+#: src/InputEventsActions.cpp:1788
 msgid "Task start"
 msgstr "Feladat Start"
 
-#: src/InputEventsActions.cpp:1788
+#: src/InputEventsActions.cpp:1790
 msgid "Next turnpoint"
 msgstr "Következő FP"
 
-#: src/InputEventsActions.cpp:1790
+#: src/InputEventsActions.cpp:1792
 msgid "Task finished"
 msgstr "Feladat vége"
 
-#: src/InputEventsActions.cpp:1792
+#: src/InputEventsActions.cpp:1794
 msgid "In sector, arm advance when ready"
 msgstr "Szektorban, élesítsd az előlépést ha kész vagy"
 
@@ -2340,7 +2340,7 @@ msgstr "Domborzat megjelenítése a térképen, időjárási adat nélkül."
 #: src/Terrain/RasterWeather.cpp:55
 #, no-c-format
 msgid "W*"
-msgstr ""
+msgstr "W*"
 
 #: src/Terrain/RasterWeather.cpp:56
 #, no-c-format
@@ -2351,11 +2351,17 @@ msgid ""
 "present, since cloud condensation adds buoyancy aloft (i.e. this neglects "
 "\"cloudsuck\").  W* depends upon both the surface heating and the BL depth."
 msgstr ""
+"A száraztermikes feláramlás átlagos ereje a határréteg közepének "
+"magasságában. Ebből kivonva a vitorla merülését lehet megkapni az átlagos "
+"varió értéket a száraz termikre. A feláramlások ennél az előrejelzésnél "
+"erősebbek lesznek konvektív felhők jelenlétében, mert a felhők kondenzációja "
+"felhajtóerőt termel. A W* értéke egyaránt függ a felület besugárzásától és a "
+"határréteg vastagságától."
 
 #: src/Terrain/RasterWeather.cpp:60
 #, no-c-format
 msgid "BL Wind spd"
-msgstr ""
+msgstr "Hr szélseb."
 
 #: src/Terrain/RasterWeather.cpp:61
 #, no-c-format
@@ -2364,11 +2370,13 @@ msgid ""
 "prediction can be misleading if there is a large change in wind direction "
 "through the BL."
 msgstr ""
+"A határrétegben megátlagolt szélvektorok sebessége és iránya. Ez az "
+"előrejelzés félrevezető lehet, ha nagy szélirányváltozás van a határrétegben."
 
 #: src/Terrain/RasterWeather.cpp:65
 #, no-c-format
 msgid "H bl"
-msgstr ""
+msgstr "Hr mgsg."
 
 #: src/Terrain/RasterWeather.cpp:66
 #, no-c-format
@@ -2382,11 +2390,18 @@ msgid ""
 "the mixing results from shear turbulence rather than thermal mixing this "
 "parameter is not useful for glider flying. "
 msgstr ""
+"A keveredési réteg tetejének magassága, ami a száraz termikek átlagos "
+"magassága. Síkságokon a maximális kitekerhető magasság ennél kisebb lesz, a "
+"vitorla merülése és más tényezők miatt. Felhők jelenléte esetén a feláramlás "
+"ennél az előrejelzésnél magasabb lesz, de a kitekerhető magasságot a "
+"felhőalap fogja behatárolni. Továbbá, ha a keveredés turbulencia "
+"nyíróhatásának eredménye, ez a paraméter haszontalan a vitorlázás "
+"szempontjából. "
 
 #: src/Terrain/RasterWeather.cpp:70
 #, no-c-format
 msgid "dwcrit"
-msgstr ""
+msgstr "dw krit."
 
 #: src/Terrain/RasterWeather.cpp:71
 #, no-c-format
@@ -2400,11 +2415,19 @@ msgid ""
 "the maximum thermalling height may instead be limited by the cloud base.  "
 "Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
+"Ez a paraméter becslés, hogy az átlagos száraz feláramlás milyen magasan "
+"lassul 1,25 m/s alá és várhatóan jobb mérőszám a maximális termikelhető "
+"magasságra kék ég esetén, különösen ha a keveredés szélnyírás és nem "
+"termikek eredménye. (Megjegyzés: a jelenlegi feltételezések hajlamosak "
+"alábecsülni a termikelhető magasságot száraz körülmények között). Felhők "
+"jelenlétében a termikelhető magasságot a felhőalap korlátozza. Mivel ez a "
+"paraméter száraztermikekhez van, figyelmen kívül hagyja a felhőbeszívás "
+"hatását."
 
 #: src/Terrain/RasterWeather.cpp:75
 #, no-c-format
 msgid "bl cloud"
-msgstr ""
+msgstr "Hr felhő"
 
 #: src/Terrain/RasterWeather.cpp:76
 #, no-c-format
@@ -2416,11 +2439,16 @@ msgid ""
 "humidity within the BL.  The cloud base height is not predicted, but is "
 "expected to be below the BL Top height."
 msgstr ""
+"Ez a paraméter a határrétegben formálódó felhők kiértékeléséhez ad újat, és "
+"más felhő-előrejelző paraméterekkel együtt vagy helyett használható. Egy "
+"nagyon egyszerű összefüggést feltételez a beborultság mértéke és a "
+"határréteg relatív páratartama között. A felhőalapot nem jelzi előre, de "
+"várhatóan a határréteg teteje alatt lesz."
 
 #: src/Terrain/RasterWeather.cpp:80
 #, no-c-format
 msgid "Sfc temp"
-msgstr ""
+msgstr "Talaj hőm"
 
 #: src/Terrain/RasterWeather.cpp:81
 #, no-c-format
@@ -2430,11 +2458,15 @@ msgid ""
 "accuracy; e.g. if observed surface temperatures are significantly below "
 "those forecast, then soaring conditions will be poorer than forecast."
 msgstr ""
+"A hőmérséklet a talaj felett 2m magasságban. Összehasonlítva a felületi "
+"hőmérséklettel megállapítható a modellezés pontossága; ha a megfigyelt "
+"felületi hómérséklet lényegesen kisebb az előrejelzettnél, a vitorlázás "
+"feltételei is rosszabbak lesznek az előrejelzettnél."
 
 #: src/Terrain/RasterWeather.cpp:85
 #, no-c-format
 msgid "hwcrit"
-msgstr ""
+msgstr "w mgsg krit"
 
 #: src/Terrain/RasterWeather.cpp:86
 #, no-c-format
@@ -2448,11 +2480,18 @@ msgid ""
 "maximum thermalling height may instead be limited by the cloud base.  Being "
 "for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
+"Az a magasság, ahol a száraz feláramlás sebessége 1,25 m/s alá esik, ez "
+"várhatóan jobb mérőszám a felhőtlen égen kitekerhető magasságra mint a "
+"határréteg teteje, különösen, ha a keveredés szélnyírás és nem termikek "
+"eredménye. (Megjegyzés: a jelenlegi feltételezések hajlamosak alábecsülni a "
+"kitekerhető magasságot száraz körülmények között.) Felhők jelenlétében a "
+"magasságot a felhőalap korlátozhatja. Mivel száraz termikekhez való, ez a "
+"paraméter figyelmen kívül hagyja a felhőbeszívás hatását."
 
 #: src/Terrain/RasterWeather.cpp:90
 #, no-c-format
 msgid "wblmaxmin"
-msgstr ""
+msgstr "w hr maxmin"
 
 #: src/Terrain/RasterWeather.cpp:91
 #, no-c-format
@@ -2463,11 +2502,16 @@ msgid ""
 "(divergence) produces subsiding vertical motion, creating low-level "
 "inversions which limit thermalling heights."
 msgstr ""
+"Kiterjedt fel- és leáramlások a határrétegben, amit a vízszintes szél "
+"konvergenciája hoz létre. Pozitív konvergencia a helyi, kis léptékű "
+"konvergencia vonalakkal van összefüggésben. Negatív konvergencia "
+"(divergencia) járulékos függőleges áramlást hoz létre, alacsony szintű "
+"inverziókat okozva, amik korlátozzák a kitekerhető magasságot."
 
 #: src/Terrain/RasterWeather.cpp:95
 #, no-c-format
 msgid "blcwbase"
-msgstr ""
+msgstr "Hr cw alap"
 
 #: src/FlightStatisticsRenderer.cpp:324 src/Dialogs/dlgAnalysis.cpp:241
 msgid "Mass"
@@ -2564,7 +2608,7 @@ msgstr "Hátralévő táv"
 
 #: src/FlightStatisticsRenderer.cpp:770 src/FlightStatisticsRenderer.cpp:780
 msgid "Target speed"
-msgstr ""
+msgstr "Cél sebesség"
 
 #: src/Interface.cpp:132
 msgid "Quit program?"
@@ -2732,7 +2776,7 @@ msgstr "Feladatkezelő"
 
 #: src/Dialogs/dlgAnalysis.cpp:224
 msgid "Thermal Band"
-msgstr ""
+msgstr "Termikus sáv"
 
 #: src/Dialogs/dlgAnalysis.cpp:233
 msgid "Wind At Altitude"
@@ -3027,7 +3071,7 @@ msgstr "Varió beállítások beolvasása..."
 
 #: src/Dialogs/dlgFlarmTraffic.cpp:341 src/Dialogs/dlgFlarmTraffic.cpp:344
 msgid "Rel. Alt."
-msgstr ""
+msgstr "Rel. mgsg."
 
 #: src/Dialogs/dlgHelp.cpp:59 Data/Dialogs/dlgComboPicker.xml:8
 #: Data/Dialogs/dlgComboPicker_L.xml:8 Data/Dialogs/dlgHelp.xml:3
@@ -3142,7 +3186,7 @@ msgstr "Ívelőlap"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:81
 msgid "SC"
-msgstr ""
+msgstr "SC"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:103
 msgid "Automatic"
@@ -3345,7 +3389,7 @@ msgid "Load Polar From File"
 msgstr "Polárgörbe betöltése fájlból"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:49
-#: src/Dialogs/dlgTaskHelpers.cpp:243
+#: src/Dialogs/dlgTaskHelpers.cpp:246
 msgid "Line"
 msgstr "Vonal"
 
@@ -3422,23 +3466,23 @@ msgstr "Hegyvidéki"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:75
 msgid "Imhof 7"
-msgstr ""
+msgstr "Imhof 7"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:76
 msgid "Imhof 4"
-msgstr ""
+msgstr "Imhof 4"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:77
 msgid "Imhof 12"
-msgstr ""
+msgstr "Imhof 12"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:78
 msgid "Imhof Atlas"
-msgstr ""
+msgstr "Imhof Atlas"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:79
 msgid "ICAO"
-msgstr ""
+msgstr "ICAO"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:80
 msgid "Grey"
@@ -3810,65 +3854,67 @@ msgstr "%d szakasz"
 msgid "Task is empty (%s)"
 msgstr "A feladat üres (%s)"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:177
-#, c-format
-msgid "%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"
+#: src/Dialogs/dlgTaskHelpers.cpp:183
+msgid "max."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:190
-#, c-format
-msgid "%s%sdist. %.0f %s (%s)"
+#: src/Dialogs/dlgTaskHelpers.cpp:187
+msgid "min."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:207 src/Dialogs/dlgTaskHelpers.cpp:460
+#: src/Dialogs/dlgTaskHelpers.cpp:195
+msgid "dist."
+msgstr ""
+
+#: src/Dialogs/dlgTaskHelpers.cpp:210 src/Dialogs/dlgTaskHelpers.cpp:463
 msgid "FAI quadrant"
 msgstr "FAI négyszög"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:213
+#: src/Dialogs/dlgTaskHelpers.cpp:216
 msgid "Keyhole"
 msgstr "Kulcslyuk"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:219
+#: src/Dialogs/dlgTaskHelpers.cpp:222
 msgid "BGAFixedCourse"
 msgstr "BGA rögzített útvonal"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:225
+#: src/Dialogs/dlgTaskHelpers.cpp:228
 msgid "BGAEnhancedOption"
 msgstr "BGA könnyített"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:231 src/Dialogs/dlgTaskHelpers.cpp:458
+#: src/Dialogs/dlgTaskHelpers.cpp:234 src/Dialogs/dlgTaskHelpers.cpp:461
 msgid "BGA start sector"
 msgstr "BGA startszektor"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:237
+#: src/Dialogs/dlgTaskHelpers.cpp:240
 msgid "Sector"
 msgstr "Szektor"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:249
+#: src/Dialogs/dlgTaskHelpers.cpp:252
 msgid "Cylinder"
 msgstr "Henger"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:269
+#: src/Dialogs/dlgTaskHelpers.cpp:272
 msgid "FAI"
 msgstr "FAI"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:274
+#: src/Dialogs/dlgTaskHelpers.cpp:277
 msgid "DAeC"
 msgstr "DAeC"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:280
+#: src/Dialogs/dlgTaskHelpers.cpp:283
 msgid "BGA"
 msgstr "BGA"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:286
+#: src/Dialogs/dlgTaskHelpers.cpp:289
 msgid "BGAE"
 msgstr "BGAE"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:292
+#: src/Dialogs/dlgTaskHelpers.cpp:295
 msgid "BGA-S"
 msgstr "BGA-S"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:412
+#: src/Dialogs/dlgTaskHelpers.cpp:415
 msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start"
@@ -3876,22 +3922,22 @@ msgstr ""
 "Negyedkör alakú, 1km sugarú szektor. startoláshoz keresztezze az egyenes "
 "élek valamelyikét a terület belsejéből."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:414
+#: src/Dialogs/dlgTaskHelpers.cpp:417
 msgid "A straight line.  Cross line from inside area to start"
 msgstr "Egy egyenes vonal. Startoláshoz keresztezze a terület belsejéből."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:416
+#: src/Dialogs/dlgTaskHelpers.cpp:419
 msgid "A cylinder.  Exit area to start"
 msgstr "Egy henger. Startoláshoz egyszerűen hagyja el a területet."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:418
+#: src/Dialogs/dlgTaskHelpers.cpp:421
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start"
 msgstr ""
 "Félkör alakú, 5km sugarú szektor. Startoláshoz hagyja el a területet "
 "bármilyen irányban."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:420
+#: src/Dialogs/dlgTaskHelpers.cpp:423
 msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point"
@@ -3899,13 +3945,13 @@ msgstr ""
 "Negyedkör alakú, 'végtelen' sugarú szektor. Keresztezze a pontból húzott "
 "bármelyik élt. Távolságmérésben a csúcspont számít."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:422
+#: src/Dialogs/dlgTaskHelpers.cpp:425
 msgid "A cylinder.  Any point within area scored from center"
 msgstr ""
 "Egy henger. A fordulópont köré írt területen belül bármelyik pont érvényes. "
 "Távolságmérésben a központ számít."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:424
+#: src/Dialogs/dlgTaskHelpers.cpp:427
 msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center"
@@ -3914,7 +3960,7 @@ msgstr ""
 "negyedkör és egy 500m sugarú henger összege. Távolságmérésben a központ "
 "számít."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:426
+#: src/Dialogs/dlgTaskHelpers.cpp:429
 msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center"
@@ -3923,7 +3969,7 @@ msgstr ""
 "negyedkör és egy 500m sugarú henger összege. Távolságmérésben a központ "
 "számít."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:428
+#: src/Dialogs/dlgTaskHelpers.cpp:431
 msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center"
@@ -3931,11 +3977,11 @@ msgstr ""
 "(Brit szabályok) A megfigyelési zóna a fordulópontra illesztett 10km sugarú "
 "félkör és egy 500m sugarú henger összege. Távolságmérésben a központ számít."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:430
+#: src/Dialogs/dlgTaskHelpers.cpp:433
 msgid "A cylinder.  Scored by farthest point reached in area"
 msgstr "Egy henger. Távolságmérésben a benne elért legtávolabbi pont számít."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:432
+#: src/Dialogs/dlgTaskHelpers.cpp:435
 msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area"
@@ -3943,7 +3989,7 @@ msgstr ""
 "Különböző szögű és sugarú szektor. Távolságmérésben a benne elért "
 "legtávolabbi pont számít."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:434
+#: src/Dialogs/dlgTaskHelpers.cpp:437
 msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area"
@@ -3951,120 +3997,120 @@ msgstr ""
 "Különböző szögű és sugarú gyűrűszektor. Távolságmérésben a benne elért "
 "legtávolabbi pont számít."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:436
+#: src/Dialogs/dlgTaskHelpers.cpp:439
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish"
 msgstr ""
 "Negyedkör alakú 1km sugarú szektor. Keresztezze egyik élét a befutáshoz."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:438
+#: src/Dialogs/dlgTaskHelpers.cpp:441
 msgid "Cross line into area to finish"
 msgstr "Keresztezze a vonalat a befutáshoz."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:440
+#: src/Dialogs/dlgTaskHelpers.cpp:443
 msgid "Enter cylinder to finish"
 msgstr "Repüljön be a hengerbe a befutáshoz."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:452
+#: src/Dialogs/dlgTaskHelpers.cpp:455
 msgid "FAI start quadrant"
 msgstr "FAI startnégyszög"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:454
+#: src/Dialogs/dlgTaskHelpers.cpp:457
 msgid "Start line"
 msgstr "Startvonal"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:456
+#: src/Dialogs/dlgTaskHelpers.cpp:459
 msgid "Start cylinder"
 msgstr "Starthenger"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:462
+#: src/Dialogs/dlgTaskHelpers.cpp:465
 msgid "Keyhole sector (DAeC)"
 msgstr "Kulcslyuk szektor (DAeC)"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:464
+#: src/Dialogs/dlgTaskHelpers.cpp:467
 msgid "BGA Fixed Course sector"
 msgstr "BGA rögzített útvonal szektor"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:466
+#: src/Dialogs/dlgTaskHelpers.cpp:469
 msgid "BGA Enhanced Option Fixed Course sector"
 msgstr "BGA könnyített rögzített útvonal szektor"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:468
+#: src/Dialogs/dlgTaskHelpers.cpp:471
 msgid "Turn point cylinder"
 msgstr "Henger fordulópont"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:470
+#: src/Dialogs/dlgTaskHelpers.cpp:473
 msgid "Area cylinder"
 msgstr "Terület henger"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:472
+#: src/Dialogs/dlgTaskHelpers.cpp:475
 msgid "Area sector"
 msgstr "Terület szektor"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:474
+#: src/Dialogs/dlgTaskHelpers.cpp:477
 msgid "Area sector with inner radius"
 msgstr "Terület szektor belső sugárral"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:476
+#: src/Dialogs/dlgTaskHelpers.cpp:479
 msgid "FAI finish quadrant"
 msgstr "FAI célnégyszög"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:478
+#: src/Dialogs/dlgTaskHelpers.cpp:481
 msgid "Finish line"
 msgstr "Célvonal"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:480
+#: src/Dialogs/dlgTaskHelpers.cpp:483
 msgid "Finish cylinder"
 msgstr "Célhenger"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:493
+#: src/Dialogs/dlgTaskHelpers.cpp:496
 msgid "Save task?"
 msgstr "Mentsem a feladatot?"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:493
+#: src/Dialogs/dlgTaskHelpers.cpp:496
 msgid "Task Selection"
 msgstr "Feladatválasztás"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:529
+#: src/Dialogs/dlgTaskHelpers.cpp:532
 msgid "No valid start.\n"
 msgstr "Érvénytelen start.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:532
+#: src/Dialogs/dlgTaskHelpers.cpp:535
 msgid "No valid finish.\n"
 msgstr "Érvénytelen befutás.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:535
+#: src/Dialogs/dlgTaskHelpers.cpp:538
 msgid "Task not closed.\n"
 msgstr "A feladat nincs lezárva.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:538
+#: src/Dialogs/dlgTaskHelpers.cpp:541
 msgid "All turnpoints not the same type.\n"
 msgstr "Fordulópontok típusa nem egyforma.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:541
+#: src/Dialogs/dlgTaskHelpers.cpp:544
 msgid "Incorrect number of turnpoints.\n"
 msgstr "Helytelen számú fordulópont.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:544
+#: src/Dialogs/dlgTaskHelpers.cpp:547
 msgid "Too many turnpoints.\n"
 msgstr "Túl sok fordulópont.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:547
+#: src/Dialogs/dlgTaskHelpers.cpp:550
 msgid "Not enough turnpoints.\n"
 msgstr "Kevés a fordulópont.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:550
+#: src/Dialogs/dlgTaskHelpers.cpp:553
 msgid "Turnpoints not unique.\n"
 msgstr "A fordulópontok nem egyediek.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:553
+#: src/Dialogs/dlgTaskHelpers.cpp:556
 msgid "Invalid FAI triangle shape.\n"
 msgstr "Érvénytelen alakú a FAI háromszög.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:556
+#: src/Dialogs/dlgTaskHelpers.cpp:559
 msgid "Empty task.\n"
 msgstr "Üres feladat.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:559
+#: src/Dialogs/dlgTaskHelpers.cpp:562
 msgid "non-FAI turn points"
 msgstr "nem FAI fordulópontok"
 
@@ -4170,7 +4216,7 @@ msgstr "Csapat"
 
 #: Data/Dialogs/dlgVario_L.xml:321
 msgid "Max. reported circling"
-msgstr ""
+msgstr "Max. jelentett körözés"
 
 #: Data/Dialogs/dlgVario.xml:92 Data/Dialogs/dlgVario_L.xml:93
 msgid ""
@@ -4180,7 +4226,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:95 Data/Dialogs/dlgConfiguration_L.xml:95
 msgid "Final glide bar"
-msgstr ""
+msgstr "Végsiklás szintjelző"
 
 #: Data/Dialogs/dlgConfiguration.xml:484
 #: Data/Dialogs/dlgConfiguration_L.xml:485
@@ -4191,16 +4237,16 @@ msgstr "Start mag. bázisa"
 
 #: Data/Dialogs/dlgTaskPoint.xml:44 Data/Dialogs/dlgTaskPoint_L.xml:43
 msgid "Finish radial of the OZ area"
-msgstr ""
+msgstr "Cél megfigyelési zónájának sugara"
 
 #: Data/Dialogs/dlgVario.xml:54 Data/Dialogs/dlgVario_L.xml:55
 msgid "TE mixing"
-msgstr ""
+msgstr "ÖsszE kevert"
 
 #: Data/Dialogs/dlgConfiguration.xml:382
 #: Data/Dialogs/dlgConfiguration_L.xml:383
 msgid "Polar W"
-msgstr ""
+msgstr "Poláris W"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:14
 msgid "Rate"
@@ -4217,7 +4263,7 @@ msgstr "Fényerő"
 
 #: Data/Dialogs/dlgVario.xml:328 Data/Dialogs/dlgVario_L.xml:329
 msgid "Disable circling"
-msgstr ""
+msgstr "Körözés tiltva"
 
 #: Data/Dialogs/dlgVoice.xml:18
 msgid ""
@@ -4240,12 +4286,12 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:12 Data/Dialogs/dlgVario_L.xml:13
 msgid "TE port"
-msgstr ""
+msgstr "ÖsszE port"
 
 #: Data/Dialogs/dlgConfiguration.xml:616
 #: Data/Dialogs/dlgConfiguration_L.xml:617
 msgid "Time step circling"
-msgstr ""
+msgstr "Körözés ütem"
 
 #: Data/Dialogs/dlgStatusTask.xml:3
 msgid "Task Status"
@@ -4529,7 +4575,7 @@ msgstr "Rendben"
 
 #: Data/Dialogs/dlgVario.xml:114 Data/Dialogs/dlgVario_L.xml:115
 msgid "Type of dead band used in circling mode."
-msgstr ""
+msgstr "Körözésben használt holtsáv típusa"
 
 #: Data/Dialogs/dlgVario.xml:58 Data/Dialogs/dlgVario_L.xml:59
 msgid ""
@@ -4589,7 +4635,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:382 Data/Dialogs/dlgVario_L.xml:383
 msgid "Battery low delay"
-msgstr ""
+msgstr "Telep kimerült késl."
 
 #: Data/Dialogs/dlgConfiguration.xml:705
 #: Data/Dialogs/dlgConfiguration_L.xml:706
@@ -4620,7 +4666,7 @@ msgstr "Seb. maradék"
 
 #: Data/Dialogs/dlgVario.xml:118 Data/Dialogs/dlgVario_L.xml:119
 msgid "Circling hi cutoff"
-msgstr ""
+msgstr "Körözés felső vágás"
 
 #: Data/Dialogs/dlgConfiguration.xml:88 Data/Dialogs/dlgConfiguration_L.xml:88
 msgid "The upper limit for Auto-Zoom distance."
@@ -4629,7 +4675,7 @@ msgstr "Az automata nagyítás felső határa."
 #: Data/Dialogs/pnlTaskProperties.xml:34
 #: Data/Dialogs/pnlTaskProperties_L.xml:35
 msgid "Sets the behaviour for the current task."
-msgstr ""
+msgstr "Az aktuális feladatban követendő szabályok."
 
 #: Data/Dialogs/dlgConfiguration.xml:193
 #: Data/Dialogs/dlgConfiguration_L.xml:193
@@ -4807,7 +4853,7 @@ msgstr "Feladat típus"
 
 #: Data/Dialogs/dlgTarget.xml:11
 msgid "delta T"
-msgstr ""
+msgstr "delta Idő"
 
 #: Data/Dialogs/dlgConfigFonts.xml:16 Data/Dialogs/dlgConfigFonts_L.xml:16
 msgid "Map waypoints"
@@ -4887,7 +4933,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:122 Data/Dialogs/dlgVario_L.xml:123
 msgid "Low limit of circling dead band"
-msgstr ""
+msgstr "A körözési holtsáv alsó határa"
 
 #: Data/Dialogs/dlgConfiguration.xml:189
 #: Data/Dialogs/dlgConfiguration_L.xml:189
@@ -4938,7 +4984,7 @@ msgstr "7. oldal"
 #: Data/Dialogs/dlgConfiguration.xml:515
 #: Data/Dialogs/dlgConfiguration_L.xml:516
 msgid "Finish point"
-msgstr ""
+msgstr "Célpont"
 
 #: Data/Dialogs/dlgTeamCode.xml:17 Data/Dialogs/dlgTeamCode_L.xml:18
 msgid "Rel. bearing"
@@ -5016,11 +5062,11 @@ msgstr "Varió körözés"
 
 #: Data/Dialogs/dlgFlarmTraffic.xml:7 Data/Dialogs/dlgFlarmTraffic_L.xml:16
 msgid "AVG/ALT"
-msgstr ""
+msgstr "ÁTL/MAG"
 
 #: Data/Dialogs/dlgTarget.xml:6 Data/Dialogs/dlgTarget_L.xml:4
 msgid "This sets the task point for review."
-msgstr ""
+msgstr "Ezzel kiválasztható a megtekintendő feladatpont."
 
 #: Data/Dialogs/dlgConfiguration.xml:636
 #: Data/Dialogs/dlgConfiguration_L.xml:637
@@ -5055,11 +5101,11 @@ msgstr "Fordulópont részletek"
 #: Data/Dialogs/dlgConfiguration.xml:479
 #: Data/Dialogs/dlgConfiguration_L.xml:480
 msgid "Start max. height margin"
-msgstr ""
+msgstr "Magasság tűrése"
 
 #: Data/Dialogs/dlgVario.xml:114 Data/Dialogs/dlgVario_L.xml:115
 msgid "Circling deadband type"
-msgstr ""
+msgstr "Körözési holtsáv típusa"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:28
 #: Data/Dialogs/dlgWayPointDetails_L.xml:28
@@ -5156,7 +5202,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:372
 #: Data/Dialogs/dlgConfiguration_L.xml:373
 msgid "Polar V"
-msgstr ""
+msgstr "Poláris V"
 
 #: Data/Dialogs/dlgVario.xml:100 Data/Dialogs/dlgVario_L.xml:101
 msgid "Variometer low pass filter time constant in circling mode."
@@ -5254,7 +5300,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:421 Data/Dialogs/dlgVario_L.xml:422
 msgid "V flap"
-msgstr ""
+msgstr "V ív"
 
 #: Data/Dialogs/dlgStartPoint.xml:6 Data/Dialogs/dlgStartPoint_L.xml:6
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:9
@@ -5303,7 +5349,7 @@ msgstr "Csapatkód"
 
 #: Data/Dialogs/dlgVario.xml:84 Data/Dialogs/dlgVario_L.xml:85
 msgid "Cruise averager scale"
-msgstr ""
+msgstr "Siklás átlagoló skálája"
 
 #: Data/Dialogs/dlgVario.xml:378 Data/Dialogs/dlgVario_L.xml:379
 msgid "Radio com. max. delay"
@@ -5325,7 +5371,7 @@ msgstr "Eszköz A"
 
 #: Data/Dialogs/dlgVario.xml:130 Data/Dialogs/dlgVario_L.xml:131
 msgid "High limit of cruise dead band"
-msgstr ""
+msgstr "Siklás holtsáv felső határa"
 
 #: Data/Dialogs/dlgConfiguration.xml:441
 #: Data/Dialogs/dlgConfiguration_L.xml:442
@@ -5614,7 +5660,7 @@ msgstr "Keresés"
 
 #: Data/Dialogs/dlgTarget_L.xml:31
 msgid "Speed Remaining Help"
-msgstr ""
+msgstr "Sebesség a maradékon"
 
 #: Data/Dialogs/dlgTaskPoint.xml:20 Data/Dialogs/dlgTaskPoint_L.xml:19
 msgid "Change Type"
@@ -5680,7 +5726,7 @@ msgstr "Max. hőm."
 
 #: Data/Dialogs/dlgVario.xml:134 Data/Dialogs/dlgVario_L.xml:135
 msgid "Low limit of cruise dead band"
-msgstr ""
+msgstr "Siklás holtsáv alsó határa"
 
 #: Data/Dialogs/dlgConfiguration.xml:533
 #: Data/Dialogs/dlgConfiguration_L.xml:534 Data/Dialogs/dlgTaskPoint.xml:30
@@ -6013,7 +6059,7 @@ msgstr "Cél min magasság"
 #: Data/Dialogs/dlgConfiguration.xml:173
 #: Data/Dialogs/dlgConfiguration_L.xml:173
 msgid "A percentage to select the size landables are displayed on the map."
-msgstr ""
+msgstr "A leszállóhelyek térképen történő kirajzolásának méretét szabályozza."
 
 #: Data/Dialogs/dlgConfiguration.xml:604
 #: Data/Dialogs/dlgConfiguration_L.xml:605
@@ -6081,7 +6127,7 @@ msgstr "Repülőgép Státusz"
 
 #: Data/Dialogs/dlgTeamCode.xml:18 Data/Dialogs/dlgTeamCode_L.xml:19
 msgid "Flarm lock"
-msgstr ""
+msgstr "Flarm kontaktus"
 
 #: Data/Dialogs/dlgConfiguration.xml:437
 #: Data/Dialogs/dlgConfiguration_L.xml:438
@@ -6145,7 +6191,7 @@ msgstr "Vega Hang Bővítmények"
 
 #: Data/Dialogs/dlgVario.xml:118 Data/Dialogs/dlgVario_L.xml:119
 msgid "High limit of circling dead band"
-msgstr ""
+msgstr "Körözési holtsáv felső határa"
 
 #: Data/Dialogs/dlgVario.xml:290 Data/Dialogs/dlgVario_L.xml:291
 msgid "Mute vario on radio"
@@ -6183,6 +6229,7 @@ msgid ""
 "Proportion of TE probe value used in total energy mixing with pitot/static "
 "total energy."
 msgstr ""
+"Az összenergia szonda és a pitot/statikus összenergia keverésének aránya."
 
 #: Data/Dialogs/dlgConfiguration.xml:68 Data/Dialogs/dlgConfiguration_L.xml:68
 msgid "Circling orientation"
@@ -6194,7 +6241,7 @@ msgstr "Kijelzők értékei"
 
 #: Data/Dialogs/dlgTarget.xml:16
 msgid "Speed remaining Help"
-msgstr ""
+msgstr "Segesség a maradékon Súgó"
 
 #: Data/Dialogs/dlgConfiguration.xml:335
 #: Data/Dialogs/dlgConfiguration_L.xml:336
@@ -6260,7 +6307,7 @@ msgstr "A végsiklás közben a terep felett megőrizendő magasság."
 
 #: Data/Dialogs/dlgVario.xml:130 Data/Dialogs/dlgVario_L.xml:131
 msgid "Cruise hi cutoff"
-msgstr ""
+msgstr "Siklás felső vág"
 
 #: Data/Dialogs/dlgConfiguration.xml:285
 #: Data/Dialogs/dlgConfiguration_L.xml:286
@@ -6342,7 +6389,7 @@ msgstr "Válasszon fordulópontot!"
 #: Data/Dialogs/dlgConfiguration.xml:645
 #: Data/Dialogs/dlgConfiguration_L.xml:646
 msgid "Load Preset"
-msgstr ""
+msgstr "Készlet betöltése"
 
 #: Data/Dialogs/dlgConfiguration.xml:616
 #: Data/Dialogs/dlgConfiguration_L.xml:617
@@ -6492,7 +6539,7 @@ msgstr "A különféle képernyőkön megjelenő információkat határozza meg.
 #: Data/Dialogs/dlgVario_L.xml:201 Data/Dialogs/dlgVario_L.xml:223
 #: Data/Dialogs/dlgVario_L.xml:245 Data/Dialogs/dlgVario_L.xml:267
 msgid "Period scale"
-msgstr ""
+msgstr "Ütem"
 
 #: Data/Dialogs/dlgVario.xml:431 Data/Dialogs/dlgVario_L.xml:432
 msgid "Zander"
@@ -6500,7 +6547,7 @@ msgstr "Zander"
 
 #: Data/Dialogs/dlgVario.xml:122 Data/Dialogs/dlgVario_L.xml:123
 msgid "Circling low cutoff"
-msgstr ""
+msgstr "Körözés alsó vág"
 
 #: Data/Dialogs/dlgConfiguration.xml:572 Data/Dialogs/dlgConfiguration.xml:591
 #: Data/Dialogs/dlgConfiguration_L.xml:573
@@ -6521,7 +6568,7 @@ msgstr "Új feladatokban a célzóna alap sugara vagy hossza."
 
 #: Data/Dialogs/dlgVario.xml:134 Data/Dialogs/dlgVario_L.xml:135
 msgid "Cruise low cutoff"
-msgstr ""
+msgstr "Siklás alsó vág"
 
 #: Data/Dialogs/dlgConfiguration.xml:139
 #: Data/Dialogs/dlgConfiguration_L.xml:139
@@ -6911,7 +6958,7 @@ msgstr "Ballaszt kijelzése"
 #: Data/Dialogs/dlgConfiguration.xml:360
 #: Data/Dialogs/dlgConfiguration_L.xml:361
 msgid "Turning reach"
-msgstr ""
+msgstr "Elérhető táv terepen"
 
 #: Data/Dialogs/dlgConfiguration.xml:677
 #: Data/Dialogs/dlgConfiguration_L.xml:678
@@ -7041,7 +7088,7 @@ msgstr "Vega"
 #: Data/Dialogs/dlgConfiguration.xml:355
 #: Data/Dialogs/dlgConfiguration_L.xml:356
 msgid "Reach polar"
-msgstr ""
+msgstr "Elérhető táv polárisa"
 
 #: Data/Dialogs/dlgConfiguration.xml:433
 #: Data/Dialogs/dlgConfiguration_L.xml:434
@@ -7076,7 +7123,7 @@ msgstr "Újra riaszt"
 
 #: Data/Dialogs/dlgVario.xml:126 Data/Dialogs/dlgVario_L.xml:127
 msgid "Cruise deadband type"
-msgstr ""
+msgstr "Siklás holtsáv típusa"
 
 #: Data/Dialogs/dlgConfiguration.xml:748
 #: Data/Dialogs/dlgConfiguration_L.xml:749
@@ -7196,7 +7243,7 @@ msgstr "Statikus szonda"
 
 #: Data/Dialogs/dlgVario.xml:126 Data/Dialogs/dlgVario_L.xml:127
 msgid "Type of dead band used in cruise mode."
-msgstr ""
+msgstr "A siklásban használt holtsáv típusa."
 
 #: Data/Dialogs/dlgConfiguration.xml:317
 #: Data/Dialogs/dlgConfiguration_L.xml:318
@@ -7557,7 +7604,7 @@ msgstr "V elért"
 
 #: Data/Dialogs/dlgVario.xml:320
 msgid "Max. reported Circling"
-msgstr ""
+msgstr "Max jelentett Körözés"
 
 #: Data/Dialogs/dlgConfiguration.xml:768
 #: Data/Dialogs/dlgConfiguration_L.xml:769
@@ -8130,6 +8177,9 @@ msgstr "Leszállás"
 #~ msgid "FinalGlide"
 #~ msgstr "Végsiklás"
 
+#~ msgid "Aux-%u"
+#~ msgstr "Külső-%u"
+
 #~ msgid "Layout"
 #~ msgstr "Elrendezés"
 
@@ -8138,6 +8188,12 @@ msgstr "Leszállás"
 
 #~ msgid "Use a recent average of the flown heading as basis."
 #~ msgstr "Az orrirány görgetett átlaga"
+
+#~ msgid "%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"
+#~ msgstr "%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"
+
+#~ msgid "%s%sdist. %.0f %s (%s)"
+#~ msgstr "%s%stáv %.0f %s (%s)"
 
 #~ msgid ""
 #~ "Determines what is used to shift the glider from the map center:\n"
