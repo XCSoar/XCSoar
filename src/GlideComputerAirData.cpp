@@ -1110,6 +1110,9 @@ GlideComputerAirData::ThermalBand()
 void
 GlideComputerAirData::ProcessSun()
 {
+  if (!Basic().LocationAvailable)
+    return;
+
   SunEphemeris sun;
   sun.CalcSunTimes(Basic().Location, Basic().DateTime,
                    fixed(GetUTCOffset()) / 3600);
