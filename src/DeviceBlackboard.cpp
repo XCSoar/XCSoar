@@ -33,7 +33,6 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Simulator.hpp"
 #include "OS/Clock.hpp"
-#include "AutoQNH.hpp"
 
 #include <limits.h>
 
@@ -323,7 +322,6 @@ DeviceBlackboard::tick()
   FLARM_ScanTraffic();
 
   // calculate fast data to complete aircraft state
-  AutoQNH(SetBasic(), Calculated());
 
   computer.Compute(SetBasic(), LastBasic(),
                    Calculated(), SettingsComputer());

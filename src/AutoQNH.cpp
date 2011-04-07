@@ -26,10 +26,9 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Components.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "Device/All.hpp"
 
 void
-AutoQNH(NMEA_INFO &basic, const DERIVED_INFO &calculated)
+AutoQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated)
 {
   #define QNH_TIME 10
 
@@ -56,13 +55,14 @@ AutoQNH(NMEA_INFO &basic, const DERIVED_INFO &calculated)
     next_wp = way_points.lookup_location(basic.Location, fixed(1000));
 
     if (next_wp && next_wp->is_airport()) {
-      basic.ProvideQNHSetting(basic.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, next_wp->Altitude));
+      calculated.pressure.set_QNH(basic.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, next_wp->Altitude));
+      calculated.pressure_available.update(basic.Time);
     } else if (calculated.TerrainValid) {
-      basic.ProvideQNHSetting(basic.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, calculated.TerrainAlt));
+      calculated.pressure.set_QNH(basic.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, calculated.TerrainAlt));
+      calculated.pressure_available.update(basic.Time);
     } else
       return;
 
-    AllDevicesPutQNH(basic.pressure, calculated);
     countdown_autoqnh = UINT_MAX; // disable after performing once
   }
 }

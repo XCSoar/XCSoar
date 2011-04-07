@@ -1373,6 +1373,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/FlightStatisticsRenderer.cpp \
 	$(SRC)/ThermalBandRenderer.cpp \
 	$(SRC)/GlideRatio.cpp \
+	$(SRC)/AutoQNH.cpp \
 	$(SRC)/GlideComputer.cpp \
 	$(SRC)/GlideComputerBlackboard.cpp \
 	$(SRC)/GlideComputerTask.cpp \

@@ -36,6 +36,7 @@ void
 DERIVED_INFO::reset()
 {
   Heading = Angle::native(fixed_zero);
+  pressure_available.clear();
   AirspeedAvailable.clear();
   estimated_wind_available.clear();
   task_stats.reset();
@@ -70,6 +71,7 @@ DERIVED_INFO::ResetFlight(bool full)
     CIRCLING_INFO::ClearPartial();
   }
 
+  pressure_available.clear();
   AirspeedAvailable.clear();
   estimated_wind_available.clear();
   wind_available.clear();

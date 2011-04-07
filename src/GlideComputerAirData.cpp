@@ -47,6 +47,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Defines.h"
 #include "NMEA/Aircraft.hpp"
+#include "AutoQNH.hpp"
 
 #include <algorithm>
 
@@ -108,6 +109,8 @@ GlideComputerAirData::ProcessVertical()
 {
   const NMEA_INFO &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
+
+  AutoQNH(basic, calculated);
 
   TurnRate();
   Turning();

@@ -28,6 +28,6 @@ struct NMEA_INFO;
 struct DERIVED_INFO;
 
 void
-AutoQNH(NMEA_INFO &basic, const DERIVED_INFO &calculated);
+AutoQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated);
 
 #endif

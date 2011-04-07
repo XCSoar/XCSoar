@@ -42,6 +42,8 @@ Copyright_License {
 #include "Engine/Navigation/TraceHistory.hpp"
 #include "DateTime.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "Engine/Atmosphere/Pressure.hpp"
+
 #include <tchar.h>
 
 /**
@@ -115,6 +117,12 @@ struct DERIVED_INFO:
 
   /** Bearing including wind factor */
   Angle Heading;
+
+  /**
+   * Auto QNH calculation result.
+   */
+  AtmosphericPressure pressure;
+  Validity pressure_available;
 
   /**
    * Airspeed
