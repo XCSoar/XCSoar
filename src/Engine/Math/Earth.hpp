@@ -48,13 +48,16 @@ fixed CrossTrackError(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3,
 /**
  * Calculates projected distance from P3 along line P1-P2.
  */
+gcc_const
 fixed ProjectedDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3);
 
 void DistanceBearing(GeoPoint loc1, GeoPoint loc2, fixed *Distance,
     Angle *Bearing);
 
+gcc_const
 fixed Distance(GeoPoint loc1, GeoPoint loc2);
 
+gcc_const
 Angle Bearing(GeoPoint loc1, GeoPoint loc2);
 
 /**
@@ -63,6 +66,7 @@ Angle Bearing(GeoPoint loc1, GeoPoint loc2);
  *
  * This is a slow function.  Adapted from The Aviation Formulary 1.42.
  */
+gcc_const
 GeoPoint IntermediatePoint(GeoPoint loc1, GeoPoint loc2, const fixed dthis);
 
 /** 
@@ -74,6 +78,7 @@ GeoPoint IntermediatePoint(GeoPoint loc1, GeoPoint loc2, const fixed dthis);
  * 
  * @return Distance 12 plus 23 (m)
  */
+gcc_const
 fixed DoubleDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3);
 
 gcc_const
