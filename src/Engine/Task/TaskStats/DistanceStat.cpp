@@ -40,7 +40,7 @@ DistanceStatComputer::calc_incremental_speed(const fixed dt)
       const fixed d_av = av_dist.average() / N_AV;
       av_dist.reset();
 
-      fixed v_f;
+      fixed v_f = fixed_zero;
       for (unsigned i=0; i<(unsigned)(dt+fixed_half); ++i) {
         const fixed v = df.update(d_av);
         v_f = v_lpf.update(v);
