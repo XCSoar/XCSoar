@@ -39,15 +39,14 @@
  */
 template<class T, unsigned max>
 class StaticArray {
-public:
-  unsigned capacity() const { return max; }
-
 protected:
   unsigned the_size;
   T data[max];
 
 public:
   StaticArray():the_size(0) {}
+
+  unsigned capacity() const { return max; }
 
   /**
    * Returns the number of allocated elements.
