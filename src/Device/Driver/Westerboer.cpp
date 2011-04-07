@@ -72,8 +72,7 @@ PWES0(NMEAInputLine &line, NMEA_INFO &info, bool enable_baro)
   line.skip(); /* baro altitude 1013 */
 
   if (line.read_checked(i) && enable_baro)
-    info.ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_WESTERBOER,
-                                 fixed(i));
+    info.ProvideBaroAltitudeTrue(fixed(i));
 
   bool have_ias = line.read_checked(i);
   bool have_tas = line.read_checked(k);

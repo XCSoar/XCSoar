@@ -703,10 +703,9 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
          altitude above 1013.25 hPa - since the don't have a "FLARM"
          device driver, we use the auto-detected "isFlarm" flag
          here */
-      GPS_INFO->ProvidePressureAltitude(NMEA_INFO::BARO_ALTITUDE_FLARM, value);
+      GPS_INFO->ProvidePressureAltitude(value);
     else
-      GPS_INFO->ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_GARMIN,
-                                        value);
+      GPS_INFO->ProvideBaroAltitudeTrue(value);
   }
 
   return true;
@@ -746,7 +745,7 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   fixed baralt;
   if (line.read_checked(baralt)) {
     baralt = max(fixed_zero, Units::ToSysUnit(baralt - fixed(2000), unFeet));
-    GPS_INFO->ProvidePressureAltitude(NMEA_INFO::BARO_ALTITUDE_TASMAN, baralt);
+    GPS_INFO->ProvidePressureAltitude(baralt);
   }
 
   fixed vtas;

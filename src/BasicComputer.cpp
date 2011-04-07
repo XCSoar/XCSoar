@@ -30,6 +30,51 @@ Copyright_License {
 #define fixed_small fixed(0.001)
 
 static void
+ComputePressure(NMEA_INFO &basic)
+{
+  const bool static_pressure_available = basic.static_pressure_available;
+
+  if (!basic.static_pressure_available) {
+    if (basic.PressureAltitudeAvailable) {
+      basic.static_pressure =
+        AtmosphericPressure::PressureAltitudeToStaticPressure(basic.PressureAltitude);
+      basic.static_pressure_available = basic.PressureAltitudeAvailable;
+    } else if (basic.BaroAltitudeAvailable && basic.QNHAvailable)
+      basic.static_pressure =
+        basic.pressure.QNHAltitudeToStaticPressure(basic.BaroAltitude);
+  }
+
+  if (!basic.PressureAltitudeAvailable) {
+    if (basic.static_pressure_available) {
+      basic.PressureAltitude =
+        AtmosphericPressure::StaticPressureToPressureAltitude(basic.static_pressure);
+      basic.PressureAltitudeAvailable = basic.static_pressure_available;
+    } else if (basic.BaroAltitudeAvailable && basic.QNHAvailable)
+      basic.PressureAltitude =
+        basic.pressure.QNHAltitudeToPressureAltitude(basic.BaroAltitude);
+  }
+
+  if (basic.QNHAvailable) {
+    /* if the current pressure and the QNH is known, then true baro
+       altitude should be discarded, because the external device which
+       provided it may have a different QNH setting */
+
+    if (static_pressure_available) {
+      basic.BaroAltitude =
+        basic.pressure.StaticPressureToQNHAltitude(basic.static_pressure);
+      basic.BaroAltitudeAvailable = basic.static_pressure_available;
+    } else if (basic.PressureAltitudeAvailable) {
+      basic.BaroAltitude =
+        basic.pressure.PressureAltitudeToQNHAltitude(basic.PressureAltitude);
+      basic.BaroAltitudeAvailable = basic.PressureAltitudeAvailable;
+    }
+  } else if (!basic.BaroAltitudeAvailable && basic.PressureAltitudeAvailable)
+    /* no QNH, but let's fill in the best fallback value we can get,
+       without setting BaroAltitudeAvailable */
+    basic.BaroAltitude = basic.PressureAltitude;
+}
+
+static void
 ComputeNavAltitude(NMEA_INFO &basic,
                    const SETTINGS_COMPUTER &settings_computer)
 {
@@ -83,6 +128,7 @@ ComputeDynamics(NMEA_INFO &basic, const DERIVED_INFO &calculated)
 void
 BasicComputer::Fill(NMEA_INFO &data, const SETTINGS_COMPUTER &settings_computer)
 {
+  ComputePressure(data);
   ComputeNavAltitude(data, settings_computer);
 }
 

@@ -86,8 +86,7 @@ GPWIN(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   fixed value;
   if (enable_baro && line.read_checked(value))
-    GPS_INFO->ProvidePressureAltitude(NMEA_INFO::BARO_ALTITUDE_POSIGRAPH,
-                                      value / 10);
+    GPS_INFO->ProvidePressureAltitude(value / 10);
 
   return false;
 }

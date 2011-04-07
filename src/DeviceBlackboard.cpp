@@ -126,7 +126,8 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.TrackBearingAvailable.update(t);
   basic.GPSAltitude = alt;
   basic.GPSAltitudeAvailable.update(t);
-  basic.ProvidePressureAltitude(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, baroalt);
+  basic.ProvidePressureAltitude(baroalt);
+  basic.ProvideBaroAltitudeTrue(baroalt);
   basic.Time = t;
   basic.TotalEnergyVarioAvailable.clear();
   basic.NettoVarioAvailable.clear();
@@ -207,7 +208,8 @@ DeviceBlackboard::SetAltitude(fixed val)
   NMEA_INFO &basic = simulator_data;
 
   basic.GPSAltitude = val;
-  basic.ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_UNKNOWN, val);
+  basic.ProvidePressureAltitude(val);
+  basic.ProvideBaroAltitudeTrue(val);
 
   Merge();
 }

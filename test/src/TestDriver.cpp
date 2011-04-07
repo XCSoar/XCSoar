@@ -148,7 +148,6 @@ TestCAI302()
   NMEA_INFO nmea_info;
   nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
-  nmea_info.ProvideQNHSetting(fixed(1013.25));
 
   /* baro altitude disabled */
   device->ParseNMEA("!w,000,000,0000,500,01287,01020,-0668,191,199,191,000,000,100*44",
@@ -166,6 +165,7 @@ TestCAI302()
   /* pressure altitude enabled (PCAID) */
   device->ParseNMEA("$PCAID,N,500,0,*14", &nmea_info, true);
   ok1(nmea_info.PressureAltitudeAvailable);
+  ok1(!nmea_info.BaroAltitudeAvailable);
   ok1(between(nmea_info.PressureAltitude, 499, 501));
 
   /* ENL */
@@ -188,11 +188,6 @@ TestCAI302()
   ok1(nmea_info.BaroAltitudeAvailable);
   ok1(equals(nmea_info.BaroAltitude, 287));
 
-  /* check if RMZ overrides CAI's baro altitude */
-  parser.ParseNMEAString_Internal("$PGRMZ,100,m,3*11", &nmea_info);
-  ok1(nmea_info.BaroAltitudeAvailable);
-  ok1(equals(nmea_info.BaroAltitude, 287));
-
   delete device;
 }
 
@@ -207,7 +202,6 @@ TestFlymasterF1()
   NMEA_INFO nmea_info;
   nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
-  nmea_info.ProvideQNHSetting(fixed(1013.25));
 
   /* baro altitude disabled */
   device->ParseNMEA("$VARIO,999.98,-12,12.4,12.7,0,21.3,25.5*CS",
@@ -221,14 +215,16 @@ TestFlymasterF1()
   /* baro altitude enabled */
   device->ParseNMEA("$VARIO,999.98,-1.2,12.4,12.7,0,21.3,25.5*CS",
                     &nmea_info, true);
-  ok1(nmea_info.BaroAltitudeAvailable);
-  ok1(between(nmea_info.BaroAltitude, 111.0, 111.1));
+  ok1(!nmea_info.BaroAltitudeAvailable);
+  ok1(!nmea_info.PressureAltitudeAvailable);
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure, 99998));
 
   delete device;
 }
 
 static void
-TestLX(const struct DeviceRegister &driver)
+TestLX(const struct DeviceRegister &driver, bool condor=false)
 {
   Device *device = driver.CreateOnPort(NULL);
   ok1(device != NULL);
@@ -236,7 +232,6 @@ TestLX(const struct DeviceRegister &driver)
   NMEA_INFO nmea_info;
   nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
-  nmea_info.ProvideQNHSetting(fixed(1013.25));
 
   /* pressure altitude disabled */
   device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", &nmea_info, false);
@@ -246,16 +241,20 @@ TestLX(const struct DeviceRegister &driver)
 
   /* pressure altitude enabled */
   device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", &nmea_info, true);
-  ok1(nmea_info.PressureAltitudeAvailable);
-  ok1(between(nmea_info.PressureAltitude, 1266, 1267));
+  ok1((bool)nmea_info.PressureAltitudeAvailable == !condor);
+  ok1((bool)nmea_info.BaroAltitudeAvailable == condor);
+  ok1(equals(condor ? nmea_info.BaroAltitude : nmea_info.PressureAltitude,
+             1266.5));
   ok1(!nmea_info.AirspeedAvailable);
   ok1(!nmea_info.TotalEnergyVarioAvailable);
 
   /* airspeed and vario available */
   device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1",
                     &nmea_info, true);
-  ok1(nmea_info.PressureAltitudeAvailable);
-  ok1(equals(nmea_info.PressureAltitude, 1665.5));
+  ok1((bool)nmea_info.PressureAltitudeAvailable == !condor);
+  ok1((bool)nmea_info.BaroAltitudeAvailable == condor);
+  ok1(equals(condor ? nmea_info.BaroAltitude : nmea_info.PressureAltitude,
+             1665.5));
   ok1(nmea_info.AirspeedAvailable);
   ok1(equals(nmea_info.TrueAirspeed, 222.3/3.6));
   ok1(nmea_info.TotalEnergyVarioAvailable);
@@ -396,13 +395,13 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(127);
+  plan_tests(132);
 
   TestGeneric();
   TestCAI302();
   TestFlymasterF1();
   TestLX(lxDevice);
-  TestLX(condorDevice);
+  TestLX(condorDevice, true);
   TestILEC();
   TestWesterboer();
   TestZander();

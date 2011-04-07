@@ -88,11 +88,9 @@ NMEA_INFO::reset()
   static_pressure_available.clear();
 
   BaroAltitudeAvailable.clear();
-  BaroAltitudeOrigin = BARO_ALTITUDE_UNKNOWN;
   BaroAltitude = fixed_zero;
 
   PressureAltitudeAvailable.clear();
-  PressureAltitudeOrigin = BARO_ALTITUDE_UNKNOWN;
   PressureAltitude = fixed_zero;
 
   NavAltitude = fixed_zero;
@@ -133,7 +131,6 @@ NMEA_INFO::ResetFlight(bool full)
   if (full) {
     Time = fixed_zero;
     BaroAltitudeAvailable.clear();
-    BaroAltitudeOrigin = NMEA_INFO::BARO_ALTITUDE_UNKNOWN;
   }
 }
 
@@ -204,23 +201,11 @@ NMEA_INFO::complement(const NMEA_INFO &add)
   if (static_pressure_available.complement(add.static_pressure_available))
     static_pressure = add.static_pressure;
 
-  if ((BaroAltitudeAvailable.complement(add.BaroAltitudeAvailable) ||
-       (BaroAltitudeOrigin <= BARO_ALTITUDE_UNKNOWN &&
-        add.BaroAltitudeOrigin > BaroAltitudeOrigin)) &&
-      add.BaroAltitudeAvailable) {
+  if (BaroAltitudeAvailable.complement(add.BaroAltitudeAvailable))
     BaroAltitude = add.BaroAltitude;
-    BaroAltitudeOrigin = add.BaroAltitudeOrigin;
-    BaroAltitudeAvailable = add.BaroAltitudeAvailable;
-  }
 
-  if ((PressureAltitudeAvailable.complement(add.PressureAltitudeAvailable) ||
-       (PressureAltitudeOrigin <= BARO_ALTITUDE_UNKNOWN &&
-        add.PressureAltitudeOrigin > PressureAltitudeOrigin)) &&
-      add.PressureAltitudeAvailable) {
+  if (PressureAltitudeAvailable.complement(add.PressureAltitudeAvailable))
     PressureAltitude = add.PressureAltitude;
-    PressureAltitudeOrigin = add.PressureAltitudeOrigin;
-    PressureAltitudeAvailable = add.PressureAltitudeAvailable;
-  }
 
   /* calculated: working_band_height,
      NavAltitude,working_band_fraction */

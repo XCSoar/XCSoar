@@ -95,8 +95,7 @@ AltairProDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO,
     fixed value;
     bool available = ReadAltitude(line, value);
     if (enable_baro && available)
-      GPS_INFO->ProvidePressureAltitude(NMEA_INFO::BARO_ALTITUDE_TRIADIS_PGRMZ,
-                                        value);
+      GPS_INFO->ProvidePressureAltitude(value);
 
     return true;
   }

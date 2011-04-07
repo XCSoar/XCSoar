@@ -47,8 +47,7 @@ PZAN1(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
     /* the ZS1 documentation does not specify wheter the altitude is
        STD or QNH, but Franz Poeschl confirmed via email that it is
        the QNH altitude */
-    GPS_INFO->ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_ZANDER,
-                                      baro_altitude);
+    GPS_INFO->ProvideBaroAltitudeTrue(baro_altitude);
 
   return true;
 }

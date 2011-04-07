@@ -88,7 +88,7 @@ cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   if (enable_baro)
     // ToDo check if QNH correction is needed!
-    GPS_INFO->ProvideBaroAltitudeTrue(NMEA_INFO::BARO_ALTITUDE_LX, alt);
+    GPS_INFO->ProvideBaroAltitudeTrue(alt);
 
   if (line.read_checked(value))
     GPS_INFO->ProvideTotalEnergyVario(value);

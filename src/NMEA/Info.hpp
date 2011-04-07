@@ -241,103 +241,6 @@ struct NMEA_INFO {
   Validity BaroAltitudeAvailable;
 
   /**
-   * Specifies the last-known source for the barometric altitude.
-   * This is used to define a priority of sources.
-   */
-  enum BaroAltitudeOrigin {
-    /**
-     * Unknown origin or not available.  This is the initial value.
-     */
-    BARO_ALTITUDE_UNKNOWN,
-
-    /**
-     * Parsed from proprietary Garmin sentence "PGRMZ".
-     */
-    BARO_ALTITUDE_GARMIN,
-
-    /**
-     * Parsed from proprietary Garmin sentence "PGRMZ", emitted by
-     * a FLARM.
-     */
-    BARO_ALTITUDE_FLARM,
-
-    /**
-     * Parsed from proprietary EW sentence "PGRMZ".
-     */
-    BARO_ALTITUDE_EW,
-
-    /**
-     * Parsed from proprietary Volkslogger sentence "PGCS1".
-     */
-    BARO_ALTITUDE_VOLKSLOGGER,
-
-    /**
-     * Parsed from proprietary Tasman Instruments sentence "PTAS1".
-     */
-    BARO_ALTITUDE_TASMAN,
-
-    /**
-     * Parsed from proprietary Ilec sentence "PDA1".
-     */
-    BARO_ALTITUDE_ILEC,
-
-    /**
-     * Parsed from proprietary Leonardo sentence "C".
-     */
-    BARO_ALTITUDE_LEONARDO,
-
-    /**
-     * Parsed from proprietary Flytec sentence "VMVABD".
-     */
-    BARO_ALTITUDE_FLYTEC,
-
-    /**
-     * Parsed from proprietary Flymaster sentence "VARIO".
-     */
-    BARO_ALTITUDE_FLYMASTER,
-
-    /**
-     * Parsed from proprietary PosiGraph sentence "GPWIN".
-     */
-    BARO_ALTITUDE_POSIGRAPH,
-
-    /**
-     * Parsed from proprietary LX sentence "LXWP0".
-     */
-    BARO_ALTITUDE_LX,
-
-    /**
-     * Parsed from proprietary Triadis sentence "PGRMZ" (Altair Pro).
-     */
-    BARO_ALTITUDE_TRIADIS_PGRMZ,
-
-    /**
-     * Parsed from proprietary Triadis sentence "PDVDV" (Vega).
-     */
-    BARO_ALTITUDE_TRIADIS_PDVDV,
-
-    /**
-     * Parsed from the Westerboer sentence "PWES0".
-     */
-    BARO_ALTITUDE_WESTERBOER,
-
-    /**
-     * Parsed from the Zander sentence "PZAN1".
-     */
-    BARO_ALTITUDE_ZANDER,
-
-    /**
-     * Parsed from the Cambridge CAI302 sentence "PCAID".
-     */
-    BARO_ALTITUDE_CAI302_PCAID,
-
-    /**
-     * Parsed from the Cambridge CAI302 sentence "!w".
-     */
-    BARO_ALTITUDE_CAI302_W,
-  } BaroAltitudeOrigin, PressureAltitudeOrigin;
-
-  /**
    * Barometric altitude (if available)
    * @see BaroAltitudeAvailable
    * @see Altitude
@@ -482,61 +385,21 @@ struct NMEA_INFO {
   }
 
   /**
-   * Sets the "true" barometric altitude (i.e. above NN, not above
-   * 1013 hPa).
-   */
-  void SetBaroAltitudeTrue(enum BaroAltitudeOrigin origin, fixed value, bool needs_qnh) {
-    if (!QNHAvailable && needs_qnh) {
-      BaroAltitudeAvailable.clear();
-      return;
-    }
-
-    BaroAltitude = value;
-    BaroAltitudeOrigin = origin;
-    BaroAltitudeAvailable.update(Time);
-  }
-
-  /**
-   * Sets the pressure altitude above 1013 hPa.
-   */
-  void SetPressureAltitude(enum BaroAltitudeOrigin origin, fixed value, bool needs_qnh) {
-    if (!QNHAvailable && needs_qnh) {
-      PressureAltitudeAvailable.clear();
-      return;
-    }
-
-    PressureAltitude = value;
-    PressureAltitudeOrigin = origin;
-    PressureAltitudeAvailable.update(Time);
-  }
-
-  /**
    * Provide a "true" barometric altitude, but only use it if the
    * previous altitude was not present or the same/lower priority.
    */
-  void ProvideBaroAltitudeTrue(enum BaroAltitudeOrigin origin, fixed value) {
-    if (QNHAvailable)
-      static_pressure = pressure.QNHAltitudeToStaticPressure(value);
-
-    if (BaroAltitudeOrigin <= origin)
-      SetBaroAltitudeTrue(origin, value, false);
-
-    if (PressureAltitudeOrigin <= origin)
-      SetPressureAltitude(origin, pressure.QNHAltitudeToPressureAltitude(value), true);
+  void ProvideBaroAltitudeTrue(fixed value) {
+    BaroAltitude = value;
+    BaroAltitudeAvailable.update(Time);
   }
 
   /**
    * Provide pressure altitude above 1013 hPa, but only use it if
    * the previous altitude was not present or the same/lower priority.
    */
-  void ProvidePressureAltitude(enum BaroAltitudeOrigin origin, fixed value) {
-    static_pressure = pressure.PressureAltitudeToStaticPressure(value);
-
-    if (PressureAltitudeOrigin <= origin)
-      SetPressureAltitude(origin, value, false);
-
-    if (BaroAltitudeOrigin <= origin)
-      SetBaroAltitudeTrue(origin, pressure.PressureAltitudeToQNHAltitude(value), true);
+  void ProvidePressureAltitude(fixed value) {
+    PressureAltitude = value;
+    PressureAltitudeAvailable.update(Time);
   }
 
   /**
@@ -544,18 +407,9 @@ struct NMEA_INFO {
    * only use it if the previous altitude was not present or the
    * same/lower priority.
    */
-  void ProvideStaticPressure(enum BaroAltitudeOrigin origin, fixed value) {
+  void ProvideStaticPressure(fixed value) {
     static_pressure = value;
     static_pressure_available.update(Time);
-
-    if (BaroAltitudeOrigin <= origin)
-      SetBaroAltitudeTrue(origin,
-                          pressure.StaticPressureToQNHAltitude(value), true);
-
-    if (PressureAltitudeOrigin <= origin)
-      SetPressureAltitude(origin,
-                          pressure.StaticPressureToPressureAltitude(value),
-                          false);
   }
 
   /**
