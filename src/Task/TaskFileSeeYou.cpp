@@ -515,18 +515,24 @@ TaskFileSeeYou::Count()
     if (in_task_section) {
       if (line[0] == _T('\"') || line[0] == _T(',')) {
         if (count < namesuffixes.capacity()) {
-          unsigned cc = 1;
-          TCHAR buff[40];
-          for (; line[cc] && line[cc] != '"' && cc < 40; cc++)
-            buff[cc - 1] = line[cc];
-
-          buff[--cc] = '\0';
-
-          if (_tcslen(buff) > 0)
-            namesuffixes.append(_tcsdup(buff));
-          else
+          if (line[0] == _T(','))
             namesuffixes.append(NULL);
+          else {
+            line++;
+
+            TCHAR *name = line;
+            while (line[0] != _T('\"') && line[0] != _T('\0'))
+              line++;
+
+            line[0] = _T('\0');
+
+            if (_tcslen(name) > 0)
+              namesuffixes.append(_tcsdup(name));
+            else
+              namesuffixes.append(NULL);
+          }
         }
+
         count++;
       }
     } else if (_tcsicmp(line, _T("-----Related Tasks-----")) == 0) {
