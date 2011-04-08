@@ -66,7 +66,7 @@ private:
 
 Waypoints::Waypoints():
   next_id(1),
-  m_file0_writable(false),
+  m_file1_writable(false),
   m_home(NULL)
 {
 }
@@ -112,7 +112,7 @@ Waypoints::append(Waypoint& wp)
   if (empty())
     task_projection.reset(wp.Location);
 
-  wp.Flags.Watched = (wp.FileNum == 2);
+  wp.Flags.Watched = (wp.FileNum == 3);
 
   task_projection.scan_location(wp.Location);
   wp.id = next_id++;
@@ -374,7 +374,7 @@ Waypoints::clear()
   name_tree.clear();
   waypoint_tree.clear();
   next_id = 1;
-  m_file0_writable = false;
+  m_file1_writable = false;
 }
 
 unsigned
@@ -420,12 +420,12 @@ Waypoints::create(const GeoPoint &location)
 
   if (empty()) {
     // first waypoint, put into primary file (this will be auto-generated)
-    edit_waypoint.FileNum = 0;
-    m_file0_writable = true;
-  } else if (m_file0_writable) {
-    edit_waypoint.FileNum = 0;
-  } else {
     edit_waypoint.FileNum = 1;
+    m_file1_writable = true;
+  } else if (m_file1_writable) {
+    edit_waypoint.FileNum = 1;
+  } else {
+    edit_waypoint.FileNum = 2;
   }
 
   edit_waypoint.original_id = 0;
@@ -433,16 +433,16 @@ Waypoints::create(const GeoPoint &location)
 }
 
 void
-Waypoints::set_file0_writable(const bool set)
+Waypoints::set_file1_writable(const bool set)
 {
-  m_file0_writable = set;
+  m_file1_writable = set;
 }
 
 bool
 Waypoints::get_writable(const Waypoint& wp) const
 {
-  if (wp.FileNum == 0) {
-    return m_file0_writable || empty();
+  if (wp.FileNum == 1) {
+    return m_file1_writable || empty();
   } else {
     return false;
   }

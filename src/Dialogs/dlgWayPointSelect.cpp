@@ -485,10 +485,10 @@ private:
       return FAITriPtVali->isFAITrianglePoint(wp, fixed_one);
 
     case tfFile1:
-      return wp.FileNum == 0;
+      return wp.FileNum == 1;
 
     case tfFile2:
-      return wp.FileNum == 1;
+      return wp.FileNum == 2;
 
     case tfLastUsed:
       return false;

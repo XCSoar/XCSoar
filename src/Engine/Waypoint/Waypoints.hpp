@@ -124,7 +124,7 @@ public:
    *
    * @param set Set/unset writable
    */
-  void set_file0_writable(const bool set);
+  void set_file1_writable(const bool set);
 
   /**
    * Determine whether a waypoint can be edited
@@ -333,7 +333,7 @@ private:
 
   std::deque<WaypointEnvelope> tmp_wps;
 
-  bool m_file0_writable;
+  bool m_file1_writable;
 
   mutable const Waypoint* m_home;
 };

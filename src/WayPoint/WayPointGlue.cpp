@@ -41,7 +41,7 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 namespace WayPointGlue {
-  static WayPointFile *wp_file0, *wp_file1, *wp_file2, *wp_file_map;
+  static WayPointFile *wp_file1, *wp_file2, *wp_file3, *wp_file_map;
 }
 
 /**
@@ -123,9 +123,9 @@ WayPointGlue::LoadWaypointFile(WayPointFile *wpfile, int num, const TCHAR* key,
     // parse the file
     wpfile->SetTerrain(terrain);
     if (wpfile->Parse(way_points)) {
-      if (num == 0)
+      if (num == 1)
         // Set waypoints writable flag
-        way_points.set_file0_writable(wpfile->IsWritable());
+        way_points.set_file1_writable(wpfile->IsWritable());
 
       return true;
     }
@@ -192,22 +192,22 @@ WayPointGlue::LoadWaypoints(Waypoints &way_points,
   Close();
 
   // ### FIRST FILE ###
-  found |= LoadWaypointFile(wp_file0, 0, szProfileWayPointFile,
+  found |= LoadWaypointFile(wp_file1, 1, szProfileWayPointFile,
                             way_points, terrain);
 
   // ### SECOND FILE ###
-  found |= LoadWaypointFile(wp_file1, 1, szProfileAdditionalWayPointFile,
+  found |= LoadWaypointFile(wp_file2, 2, szProfileAdditionalWayPointFile,
                             way_points, terrain);
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
-  found |= LoadWaypointFile(wp_file2, 2, szProfileWatchedWayPointFile,
+  found |= LoadWaypointFile(wp_file3, 3, szProfileWatchedWayPointFile,
                             way_points, terrain);
 
   // ### MAP/FOURTH FILE ###
 
   // If no waypoint file found yet
   if (!found)
-    found = LoadMapFileWaypoints(wp_file_map, 3, szProfileMapFile,
+    found = LoadMapFileWaypoints(wp_file_map, 0, szProfileMapFile,
                                  way_points, terrain);
 
   // Optimise the waypoint list after attaching new waypoints
@@ -249,13 +249,13 @@ WayPointGlue::SaveWaypoints(const Waypoints &way_points)
   LogStartUp(_T("SaveWaypoints"));
 
   // ### FIRST FILE ###
-  result |= SaveWaypointFile(way_points, wp_file0);
-
-  // ### SECOND FILE ###
   result |= SaveWaypointFile(way_points, wp_file1);
 
-  // ### THIRD FILE ###
+  // ### SECOND FILE ###
   result |= SaveWaypointFile(way_points, wp_file2);
+
+  // ### THIRD FILE ###
+  result |= SaveWaypointFile(way_points, wp_file3);
 
   return result;
 }
@@ -263,14 +263,14 @@ WayPointGlue::SaveWaypoints(const Waypoints &way_points)
 void
 WayPointGlue::Close()
 {
-  delete wp_file0;
-  wp_file0 = NULL;
-
   delete wp_file1;
   wp_file1 = NULL;
 
   delete wp_file2;
   wp_file2 = NULL;
+
+  delete wp_file3;
+  wp_file3 = NULL;
 
   delete wp_file_map;
   wp_file_map = NULL;
