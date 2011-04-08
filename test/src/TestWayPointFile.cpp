@@ -29,7 +29,7 @@
 
 #include <vector>
 
-void
+static void
 TestExtractParameters()
 {
   TCHAR buffer[1024];

@@ -110,8 +110,6 @@ public:
                                   const TCHAR **arr, size_t sz,
                                   const bool trim = false,
                                   const TCHAR quote_char = _T('\0'));
-
-  friend void TestExtractParameters();
 };
 
 #endif
