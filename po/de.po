@@ -7,21 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-07 10:43+0200\n"
-"PO-Revision-Date: 2011-04-07 20:17+0000\n"
+"POT-Creation-Date: 2011-04-08 08:44+0200\n"
+"PO-Revision-Date: 2011-04-07 23:13+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-07 20:56+0000\n"
+"X-Launchpad-Export-Date: 2011-04-08 06:40+0000\n"
 "X-Generator: Launchpad (build 12757)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
-#: src/InputEventsActions.cpp:1392 src/Dialogs/dlgAnalysis.cpp:268
+#: src/InputEventsActions.cpp:1394 src/Dialogs/dlgAnalysis.cpp:268
 #: src/Dialogs/dlgStatus.cpp:53
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:80
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:56
@@ -304,7 +304,7 @@ msgstr "Voll"
 #: src/ExpandMacros.cpp:435 src/ExpandMacros.cpp:442 src/ExpandMacros.cpp:499
 #: src/ExpandMacros.cpp:505 src/ExpandMacros.cpp:508 src/ExpandMacros.cpp:511
 #: src/ExpandMacros.cpp:529 src/ExpandMacros.cpp:582
-#: src/InputEventsActions.cpp:1613 src/InputEventsActions.cpp:1616
+#: src/InputEventsActions.cpp:1615 src/InputEventsActions.cpp:1618
 #: src/Dialogs/XML.cpp:598 src/Dialogs/dlgStatus.cpp:205
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:79
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:48
@@ -316,8 +316,8 @@ msgstr "Aus"
 
 #: src/ExpandMacros.cpp:442 src/ExpandMacros.cpp:499 src/ExpandMacros.cpp:505
 #: src/ExpandMacros.cpp:508 src/ExpandMacros.cpp:511 src/ExpandMacros.cpp:529
-#: src/ExpandMacros.cpp:582 src/InputEventsActions.cpp:1611
-#: src/InputEventsActions.cpp:1616 src/Dialogs/XML.cpp:598
+#: src/ExpandMacros.cpp:582 src/InputEventsActions.cpp:1613
+#: src/InputEventsActions.cpp:1618 src/Dialogs/XML.cpp:598
 #: src/Dialogs/dlgStatus.cpp:203
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:107
 msgid "On"
@@ -353,13 +353,13 @@ msgstr "Manuell"
 msgid "Auto"
 msgstr "Auto"
 
-#: src/ExpandMacros.cpp:514 src/InputEventsActions.cpp:1390
+#: src/ExpandMacros.cpp:514 src/InputEventsActions.cpp:1392
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:88
 #, no-c-format
 msgid "All"
 msgstr "Alle"
 
-#: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1391
+#: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1393
 #, no-c-format
 msgid "Task & Landables"
 msgstr "Aufgaben & Landeplätze"
@@ -1342,7 +1342,7 @@ msgid ""
 "by a connected intelligent variometer."
 msgstr "Relative Feuchtigkeit in Prozent, laut dem angeschlossenen Sensor."
 
-#: src/InfoBoxes/Content/Factory.cpp:511 src/InputEventsActions.cpp:1364
+#: src/InfoBoxes/Content/Factory.cpp:511 src/InputEventsActions.cpp:1366
 #, no-c-format
 msgid "Forecast temperature"
 msgstr "Temperaturprognose"
@@ -2008,25 +2008,25 @@ msgstr ""
 msgid "N/A"
 msgstr "n. v."
 
-#: src/InfoBoxes/Content/Altitude.cpp:266 src/GlueMapWindowOverlays.cpp:362
+#: src/InfoBoxes/Content/Altitude.cpp:270 src/GlueMapWindowOverlays.cpp:362
 #: Data/Dialogs/dlgSimulatorPrompt.xml:6
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:6
 msgid "Simulator"
 msgstr "Simulator"
 
-#: src/InfoBoxes/Content/Altitude.cpp:270 Data/Input/default.xci:836
+#: src/InfoBoxes/Content/Altitude.cpp:274 Data/Input/default.xci:836
 #: Data/Input/default.xci:886 Data/Input/default.xci:949
 msgid "Info"
 msgstr "Info"
 
-#: src/InfoBoxes/Content/Altitude.cpp:276
+#: src/InfoBoxes/Content/Altitude.cpp:280
 #: src/InfoBoxes/Content/MacCready.cpp:176
 #: src/InfoBoxes/Content/Weather.cpp:262
 msgid "Setup"
 msgstr "Einstellung"
 
-#: src/InfoBoxes/Content/Altitude.cpp:404
-#: src/InfoBoxes/Content/Altitude.cpp:491
+#: src/InfoBoxes/Content/Altitude.cpp:408
+#: src/InfoBoxes/Content/Altitude.cpp:497
 msgid "no QNH"
 msgstr "kein QNH"
 
@@ -2155,140 +2155,140 @@ msgstr "Extra InfoBoxen"
 msgid "Default InfoBoxes"
 msgstr "Standard InfoBoxen"
 
-#: src/InputEventsActions.cpp:286
+#: src/InputEventsActions.cpp:288
 msgid "Auto. zoom on"
 msgstr "Auto. Zoom ein"
 
-#: src/InputEventsActions.cpp:288 src/InputEventsActions.cpp:1719
+#: src/InputEventsActions.cpp:290 src/InputEventsActions.cpp:1721
 msgid "Auto. zoom off"
 msgstr "Auto. Zoom aus"
 
-#: src/InputEventsActions.cpp:314
+#: src/InputEventsActions.cpp:316
 msgid "Circling zoom on"
 msgstr "Kreisflug Zoom ein"
 
-#: src/InputEventsActions.cpp:316
+#: src/InputEventsActions.cpp:318
 msgid "Circling zoom off"
 msgstr "Kreisflug Zoom aus"
 
-#: src/InputEventsActions.cpp:381
+#: src/InputEventsActions.cpp:383
 msgid "Pan mode on"
 msgstr "Verschieben ein"
 
-#: src/InputEventsActions.cpp:383
+#: src/InputEventsActions.cpp:385
 msgid "Pan mode off"
 msgstr "Verschieben aus"
 
-#: src/InputEventsActions.cpp:533
+#: src/InputEventsActions.cpp:535
 msgid "Advance manually"
 msgstr "Weiter manuell"
 
-#: src/InputEventsActions.cpp:536
+#: src/InputEventsActions.cpp:538
 msgid "Advance automatically"
 msgstr "Weiter automatisch"
 
-#: src/InputEventsActions.cpp:539
+#: src/InputEventsActions.cpp:541
 msgid "Ready to start"
 msgstr "Bereit zum Abflug"
 
-#: src/InputEventsActions.cpp:542
+#: src/InputEventsActions.cpp:544
 msgid "Hold start"
 msgstr "Mit dem Abflug warten"
 
-#: src/InputEventsActions.cpp:545
+#: src/InputEventsActions.cpp:547
 msgid "Ready to turn"
 msgstr "Bereit zum Wenden"
 
-#: src/InputEventsActions.cpp:548
+#: src/InputEventsActions.cpp:550
 msgid "Hold turn"
 msgstr "Mit dem Wenden warten"
 
-#: src/InputEventsActions.cpp:676
+#: src/InputEventsActions.cpp:678
 msgid "No active waypoint!"
 msgstr "Kein Wendepunkt ausgewählt!"
 
-#: src/InputEventsActions.cpp:752
+#: src/InputEventsActions.cpp:754
 msgid "Auto. MacCready on"
 msgstr "Auto. MacCready ein"
 
-#: src/InputEventsActions.cpp:754
+#: src/InputEventsActions.cpp:756
 msgid "Auto. MacCready off"
 msgstr "Auto. MacCready aus"
 
-#: src/InputEventsActions.cpp:761
+#: src/InputEventsActions.cpp:763
 msgid "MacCready "
 msgstr "MacCready "
 
-#: src/InputEventsActions.cpp:971
+#: src/InputEventsActions.cpp:973
 msgid "Task aborted"
 msgstr "Aufgabe abgebrochen"
 
-#: src/InputEventsActions.cpp:974
+#: src/InputEventsActions.cpp:976
 msgid "Go to target"
 msgstr "Fliege zum Ziel"
 
-#: src/InputEventsActions.cpp:977
+#: src/InputEventsActions.cpp:979
 msgid "Ordered task"
 msgstr "Reguläre Aufgabe"
 
-#: src/InputEventsActions.cpp:980 src/FlightStatisticsRenderer.cpp:756
+#: src/InputEventsActions.cpp:982 src/FlightStatisticsRenderer.cpp:756
 msgid "No task"
 msgstr "Keine Aufgabe"
 
-#: src/InputEventsActions.cpp:1039
+#: src/InputEventsActions.cpp:1041
 msgid "Bugs performance"
 msgstr "Leistung mit verschmutztem Profil"
 
-#: src/InputEventsActions.cpp:1080
+#: src/InputEventsActions.cpp:1082
 msgid "Ballast %"
 msgstr "Ballast %"
 
-#: src/InputEventsActions.cpp:1139
+#: src/InputEventsActions.cpp:1141
 msgid "NMEA log on"
 msgstr "NMEA Log ein"
 
-#: src/InputEventsActions.cpp:1141
+#: src/InputEventsActions.cpp:1143
 msgid "NMEA log off"
 msgstr "NEMA Log aus"
 
-#: src/InputEventsActions.cpp:1145
+#: src/InputEventsActions.cpp:1147
 msgid "Logger on"
 msgstr "Logger ein"
 
-#: src/InputEventsActions.cpp:1147
+#: src/InputEventsActions.cpp:1149
 msgid "Logger off"
 msgstr "Logger aus"
 
-#: src/InputEventsActions.cpp:1393
+#: src/InputEventsActions.cpp:1395
 #, no-c-format
 msgid "None "
 msgstr "Keine "
 
-#: src/InputEventsActions.cpp:1406
+#: src/InputEventsActions.cpp:1408
 msgid "Waypoint labels"
 msgstr "Wegpunktbeschriftung"
 
-#: src/InputEventsActions.cpp:1446
+#: src/InputEventsActions.cpp:1448
 msgid "Map labels on"
 msgstr "Beschriftung ein"
 
-#: src/InputEventsActions.cpp:1618
+#: src/InputEventsActions.cpp:1620
 msgid "Topography/Terrain"
 msgstr "Topographie/Gelände"
 
-#: src/InputEventsActions.cpp:1786
+#: src/InputEventsActions.cpp:1788
 msgid "Task start"
 msgstr "Aufgabenstart"
 
-#: src/InputEventsActions.cpp:1788
+#: src/InputEventsActions.cpp:1790
 msgid "Next turnpoint"
 msgstr "Nächster Wendepunkt"
 
-#: src/InputEventsActions.cpp:1790
+#: src/InputEventsActions.cpp:1792
 msgid "Task finished"
 msgstr "Aufgabenende"
 
-#: src/InputEventsActions.cpp:1792
+#: src/InputEventsActions.cpp:1794
 msgid "In sector, arm advance when ready"
 msgstr "Im Sektor, Fortschritt aktivieren wenn bereit"
 
@@ -2959,9 +2959,8 @@ msgid "Invalid"
 msgstr "Ungültig"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:225
-#, fuzzy
 msgid "InfoBox Layout"
-msgstr "infoBox Einfügen"
+msgstr ""
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:228 src/Dialogs/dlgWaypointEdit.cpp:52
 #: Data/Dialogs/dlgAirspaceDetails.xml:8 Data/Dialogs/dlgAirspaceSelect.xml:6
@@ -3262,9 +3261,8 @@ msgid "12 Right (Landscape)"
 msgstr "12 Rechts (Querformat)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:83
-#, fuzzy
 msgid "12 Bottom (Portrait)"
-msgstr "8 Unten (Hochformat)"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
 msgid "24 Right (Landscape)"
@@ -3410,7 +3408,7 @@ msgid "Load Polar From File"
 msgstr "Lade Polare aus einer Datei"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:49
-#: src/Dialogs/dlgTaskHelpers.cpp:243
+#: src/Dialogs/dlgTaskHelpers.cpp:246
 msgid "Line"
 msgstr "Grenzlinie"
 
@@ -3873,65 +3871,67 @@ msgstr "%d Schenkel"
 msgid "Task is empty (%s)"
 msgstr "Aufgabe ist leer (%s)"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:177
-#, c-format
-msgid "%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"
+#: src/Dialogs/dlgTaskHelpers.cpp:183
+msgid "max."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:190
-#, c-format
-msgid "%s%sdist. %.0f %s (%s)"
+#: src/Dialogs/dlgTaskHelpers.cpp:187
+msgid "min."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:207 src/Dialogs/dlgTaskHelpers.cpp:460
+#: src/Dialogs/dlgTaskHelpers.cpp:195
+msgid "dist."
+msgstr ""
+
+#: src/Dialogs/dlgTaskHelpers.cpp:210 src/Dialogs/dlgTaskHelpers.cpp:463
 msgid "FAI quadrant"
 msgstr "FAI Quadrant"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:213
+#: src/Dialogs/dlgTaskHelpers.cpp:216
 msgid "Keyhole"
 msgstr "Schlüsselloch"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:219
+#: src/Dialogs/dlgTaskHelpers.cpp:222
 msgid "BGAFixedCourse"
 msgstr "BGAFestgelegterKurs"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:225
+#: src/Dialogs/dlgTaskHelpers.cpp:228
 msgid "BGAEnhancedOption"
 msgstr "BGAErweiterteOption"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:231 src/Dialogs/dlgTaskHelpers.cpp:458
+#: src/Dialogs/dlgTaskHelpers.cpp:234 src/Dialogs/dlgTaskHelpers.cpp:461
 msgid "BGA start sector"
 msgstr "BGA Abflugsektor"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:237
+#: src/Dialogs/dlgTaskHelpers.cpp:240
 msgid "Sector"
 msgstr "Sektor"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:249
+#: src/Dialogs/dlgTaskHelpers.cpp:252
 msgid "Cylinder"
 msgstr "Zylinder"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:269
+#: src/Dialogs/dlgTaskHelpers.cpp:272
 msgid "FAI"
 msgstr "FAI"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:274
+#: src/Dialogs/dlgTaskHelpers.cpp:277
 msgid "DAeC"
 msgstr "DAeC"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:280
+#: src/Dialogs/dlgTaskHelpers.cpp:283
 msgid "BGA"
 msgstr "BGA"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:286
+#: src/Dialogs/dlgTaskHelpers.cpp:289
 msgid "BGAE"
 msgstr "BGAE"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:292
+#: src/Dialogs/dlgTaskHelpers.cpp:295
 msgid "BGA-S"
 msgstr "BGA-S"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:412
+#: src/Dialogs/dlgTaskHelpers.cpp:415
 msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start"
@@ -3939,22 +3939,22 @@ msgstr ""
 "Ein 90 Grad Sektor mit 1km Radius. Überquere Begrenzung von innerhalb der "
 "Area als Abflug"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:414
+#: src/Dialogs/dlgTaskHelpers.cpp:417
 msgid "A straight line.  Cross line from inside area to start"
 msgstr "Eine gerade Linie.  Überquere Linie von innerhalb der Area als Abflug"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:416
+#: src/Dialogs/dlgTaskHelpers.cpp:419
 msgid "A cylinder.  Exit area to start"
 msgstr "Ein Zylinder.  Verlasse Area als Abflug"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:418
+#: src/Dialogs/dlgTaskHelpers.cpp:421
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start"
 msgstr ""
 "Einen 180 Grad Sektor mit 5km Radius. Verlasse die Area in irgendeine "
 "Richtung als Abflug"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:420
+#: src/Dialogs/dlgTaskHelpers.cpp:423
 msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point"
@@ -3962,12 +3962,12 @@ msgstr ""
 "Ein 90 Grad Sektor mit unendlich langen Flanken. Überquere eine Flanke, "
 "gewertet wird das Zentrum."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:422
+#: src/Dialogs/dlgTaskHelpers.cpp:425
 msgid "A cylinder.  Any point within area scored from center"
 msgstr ""
 "Ein Zylinder.  Jeder Punkt innerhalb der Area, gewertet wird das Zentrum"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:424
+#: src/Dialogs/dlgTaskHelpers.cpp:427
 msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center"
@@ -3975,7 +3975,7 @@ msgstr ""
 "(Deutsche Regel) Jeder Punkt innerhalb 1/2 km vom Zentrum oder 10 km in "
 "einem 90 Grad Sektor Gewertet wird das Zentrum."
 
-#: src/Dialogs/dlgTaskHelpers.cpp:426
+#: src/Dialogs/dlgTaskHelpers.cpp:429
 msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center"
@@ -3983,7 +3983,7 @@ msgstr ""
 "(Britische Regel) Jeder Punkt innerhalb 1/2 km vom Zentrum oder 20 km in "
 "einem 90 Grad Sektor. Gewertet wird das Zentrum"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:428
+#: src/Dialogs/dlgTaskHelpers.cpp:431
 msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center"
@@ -3991,11 +3991,11 @@ msgstr ""
 "Britische Regel) Jeder Punkt innerhalb 1/2 km vom Zentrum oder 10 km in "
 "einem 180 Grad Sektor. Gewertet wird das Zentrum"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:430
+#: src/Dialogs/dlgTaskHelpers.cpp:433
 msgid "A cylinder.  Scored by farthest point reached in area"
 msgstr "Ein Zylinder. Gewertet wird der entfernteste erreichte Punkt im Gebiet"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:432
+#: src/Dialogs/dlgTaskHelpers.cpp:435
 msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area"
@@ -4003,7 +4003,7 @@ msgstr ""
 "Ein Sektor mit beliebigem Winkel und Radius. Gewertet wird der entfernteste "
 "erreichte Punkt im Gebiet"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:434
+#: src/Dialogs/dlgTaskHelpers.cpp:437
 msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area"
@@ -4011,120 +4011,120 @@ msgstr ""
 "Ein Sektor mit beliebigem Winkel, inneren und äußeren Radius. Gewertet wird "
 "der entfernteste erreichte Punkt im Gebiet"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:436
+#: src/Dialogs/dlgTaskHelpers.cpp:439
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish"
 msgstr ""
 "Ein 90 Grad Sektor mit 1 km Radius. Überfliege eine Kante für die Ankunft"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:438
+#: src/Dialogs/dlgTaskHelpers.cpp:441
 msgid "Cross line into area to finish"
 msgstr "Überquere die Linie zur Area als Ziel"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:440
+#: src/Dialogs/dlgTaskHelpers.cpp:443
 msgid "Enter cylinder to finish"
 msgstr "Zum Abschluss fliege in den Zylinder ein"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:452
+#: src/Dialogs/dlgTaskHelpers.cpp:455
 msgid "FAI start quadrant"
 msgstr "FAI Abflug-Quadrant"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:454
+#: src/Dialogs/dlgTaskHelpers.cpp:457
 msgid "Start line"
 msgstr "Abfluglinie"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:456
+#: src/Dialogs/dlgTaskHelpers.cpp:459
 msgid "Start cylinder"
 msgstr "Abflugzylinder"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:462
+#: src/Dialogs/dlgTaskHelpers.cpp:465
 msgid "Keyhole sector (DAeC)"
 msgstr "Schlüssellochsektor (DAeC)"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:464
+#: src/Dialogs/dlgTaskHelpers.cpp:467
 msgid "BGA Fixed Course sector"
 msgstr "BGA festgelegter Kurssektor"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:466
+#: src/Dialogs/dlgTaskHelpers.cpp:469
 msgid "BGA Enhanced Option Fixed Course sector"
 msgstr "BGA Erweiterterungsoption festgelegter Kurssektor"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:468
+#: src/Dialogs/dlgTaskHelpers.cpp:471
 msgid "Turn point cylinder"
 msgstr "Wendepunkt-Zylinder"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:470
+#: src/Dialogs/dlgTaskHelpers.cpp:473
 msgid "Area cylinder"
 msgstr "Area Zylinder"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:472
+#: src/Dialogs/dlgTaskHelpers.cpp:475
 msgid "Area sector"
 msgstr "Area-Sektor"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:474
+#: src/Dialogs/dlgTaskHelpers.cpp:477
 msgid "Area sector with inner radius"
 msgstr "Sektor Gebiet mit innerem Radius"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:476
+#: src/Dialogs/dlgTaskHelpers.cpp:479
 msgid "FAI finish quadrant"
 msgstr "FAI Ziel Quadrant"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:478
+#: src/Dialogs/dlgTaskHelpers.cpp:481
 msgid "Finish line"
 msgstr "Ziellinie"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:480
+#: src/Dialogs/dlgTaskHelpers.cpp:483
 msgid "Finish cylinder"
 msgstr "Zielzylinder"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:493
+#: src/Dialogs/dlgTaskHelpers.cpp:496
 msgid "Save task?"
 msgstr "Aufgabe speichern?"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:493
+#: src/Dialogs/dlgTaskHelpers.cpp:496
 msgid "Task Selection"
 msgstr "Aufgaben Auswahl"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:529
+#: src/Dialogs/dlgTaskHelpers.cpp:532
 msgid "No valid start.\n"
 msgstr "Kein gültiger Abflug.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:532
+#: src/Dialogs/dlgTaskHelpers.cpp:535
 msgid "No valid finish.\n"
 msgstr "Kein gültiger Zielüberflug.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:535
+#: src/Dialogs/dlgTaskHelpers.cpp:538
 msgid "Task not closed.\n"
 msgstr "Aufgabe nicht geschlossen.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:538
+#: src/Dialogs/dlgTaskHelpers.cpp:541
 msgid "All turnpoints not the same type.\n"
 msgstr "Nicht alle Wenden sind vom selben Typ.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:541
+#: src/Dialogs/dlgTaskHelpers.cpp:544
 msgid "Incorrect number of turnpoints.\n"
 msgstr "Anzahl der Wenden falsch.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:544
+#: src/Dialogs/dlgTaskHelpers.cpp:547
 msgid "Too many turnpoints.\n"
 msgstr "Zu viele Wenden.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:547
+#: src/Dialogs/dlgTaskHelpers.cpp:550
 msgid "Not enough turnpoints.\n"
 msgstr "Nich genügend Wenden.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:550
+#: src/Dialogs/dlgTaskHelpers.cpp:553
 msgid "Turnpoints not unique.\n"
 msgstr "Wenden nicht eindeutig.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:553
+#: src/Dialogs/dlgTaskHelpers.cpp:556
 msgid "Invalid FAI triangle shape.\n"
 msgstr "Ungültiges FAI Dreieck.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:556
+#: src/Dialogs/dlgTaskHelpers.cpp:559
 msgid "Empty task.\n"
 msgstr "Leere Aufgabe.\n"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:559
+#: src/Dialogs/dlgTaskHelpers.cpp:562
 msgid "non-FAI turn points"
 msgstr "Nicht-FAI Wendepunkte"
 
@@ -5054,11 +5054,11 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:22 Data/Dialogs/dlgConfigFonts_L.xml:22
 msgid "Important topography labels"
-msgstr "Wichtige topographische Bezeichnungen"
+msgstr "Wichtige topographische Beschriftungen"
 
 #: Data/Dialogs/dlgConfigFonts.xml:19 Data/Dialogs/dlgConfigFonts_L.xml:19
 msgid "Topography labels"
-msgstr "Topographie Bezeichnungen"
+msgstr "Topographie Beschriftungen"
 
 #: Data/Dialogs/dlgStatus.xml:26 Data/Dialogs/dlgStatusSystem.xml:10
 msgid "Supply voltage"
@@ -5575,7 +5575,7 @@ msgstr "Cambridge"
 
 #: Data/Dialogs/dlgConfiguration.xml:99 Data/Dialogs/dlgConfiguration_L.xml:99
 msgid "Track bearing"
-msgstr "Kurspeilung"
+msgstr "Steuerkurspeilung"
 
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "MacCready"
@@ -6420,7 +6420,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:83 Data/Dialogs/dlgConfiguration_L.xml:83
 msgid "Glider position offset"
-msgstr "Ikon Platzierung"
+msgstr "Seglersymbol Platzierung"
 
 #: Data/Dialogs/dlgConfiguration.xml:788
 #: Data/Dialogs/dlgConfiguration_L.xml:789
@@ -8192,39 +8192,6 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Gelandet"
-
-#~ msgid "Cruise"
-#~ msgstr "Vorflug"
-
-#~ msgid "FinalGlide"
-#~ msgstr "Endanflug"
-
-#~ msgid "Aux-%u"
-#~ msgstr "Extra-%u"
-
-#~ msgid "Layout"
-#~ msgstr "Anordnung"
-
-#~ msgid "Heading"
-#~ msgstr "Kurs"
-
-#~ msgid "Use a recent average of the flown heading as basis."
-#~ msgstr "Nehme eine aktuelles Mittel aus dem geflogenen Kurs als Basis."
-
-#~ msgid "Auxiliary-1"
-#~ msgstr "Zusätzlich-1"
-
-#~ msgid "Auxiliary-2"
-#~ msgstr "Zusätzlich-2"
-
-#~ msgid "Final Glide"
-#~ msgstr "Endanflug"
-
-#~ msgid "Auxiliary-3"
-#~ msgstr "Zusätzlich-3"
-
-#~ msgid "Auxiliary-5"
-#~ msgstr "Zusätzlich-5"
 
 #~ msgid "Ignore checksum*"
 #~ msgstr "Prüfsumme ignorieren*"
@@ -10054,8 +10021,14 @@ msgstr "Gelandet"
 #~ msgid "InfoBoxes"
 #~ msgstr "InfoBoxen"
 
+#~ msgid "Layout"
+#~ msgstr "Anordnung"
+
 #~ msgid "Configuration - Fonts"
 #~ msgstr "Schrift Einstellung"
+
+#~ msgid "FinalGlide"
+#~ msgstr "Endanflug"
 
 #~ msgid ""
 #~ "Efficiency of cruise.  100 indicates perfect MacCready performance, "
@@ -10077,6 +10050,9 @@ msgstr "Gelandet"
 
 #~ msgid "Display Orientation"
 #~ msgstr "Ausrichtung der Anzeige"
+
+#~ msgid "Cruise"
+#~ msgstr "Vorflug"
 
 #~ msgid "Configuration - InfoBoxes - "
 #~ msgstr "Einstellung - InfoBoxen - "
@@ -10990,6 +10966,9 @@ msgstr "Gelandet"
 #~ msgid "InfoBox border*"
 #~ msgstr "Infobox Rahmen*"
 
+#~ msgid "Final Glide"
+#~ msgstr "Endanflug"
+
 #~ msgid "Dialog style*"
 #~ msgstr "Dialogstil*"
 
@@ -11080,8 +11059,17 @@ msgstr "Gelandet"
 #~ msgid "Abort use current MC"
 #~ msgstr "Behalte MC Wert bei Abbruch"
 
+#~ msgid "Aux-%u"
+#~ msgstr "Extra-%u"
+
 #~ msgid "Thermal band"
 #~ msgstr "Thermik Profil"
+
+#~ msgid "Heading"
+#~ msgstr "Kurs"
+
+#~ msgid "Use a recent average of the flown heading as basis."
+#~ msgstr "Nehme eine aktuelles Mittel aus dem geflogenen Kurs als Basis."
 
 #~ msgid "All waypoints labels will displayed."
 #~ msgstr "Alle Wegpunkt Beschriftungen werden angezeigt."
@@ -11136,3 +11124,15 @@ msgstr "Gelandet"
 
 #~ msgid "Map shift reference*"
 #~ msgstr "Kartenreferenz*"
+
+#~ msgid "Auxiliary-1"
+#~ msgstr "Zusätzlich-1"
+
+#~ msgid "Auxiliary-2"
+#~ msgstr "Zusätzlich-2"
+
+#~ msgid "Auxiliary-3"
+#~ msgstr "Zusätzlich-3"
+
+#~ msgid "Auxiliary-5"
+#~ msgstr "Zusätzlich-5"
