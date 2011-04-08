@@ -41,6 +41,7 @@ WayPointFile::WayPointFile(const TCHAR* file_name, const int _file_num):
   file_num(_file_num),
   terrain(NULL)
 {
+
   _tcscpy(file, file_name);
 }
 
@@ -143,9 +144,9 @@ WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
 }
 
 void
-WayPointFile::check_altitude(Waypoint &new_waypoint, bool alt_ok)
+WayPointFile::check_altitude(Waypoint &new_waypoint)
 {
-  if (terrain == NULL || alt_ok)
+  if (terrain == NULL)
     return;
 
   // Load waypoint altitude from terrain

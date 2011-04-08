@@ -68,7 +68,7 @@ public:
   }
 
 protected:
-  void check_altitude(Waypoint &new_waypoint, bool alt_ok);
+  void check_altitude(Waypoint &new_waypoint);
 
   /**
    * Parse a file line

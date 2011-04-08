@@ -85,8 +85,8 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
 
   // Altitude (e.g. 458M)
   /// @todo configurable behaviour
-  bool alt_ok = parseAltitude(params[3], new_waypoint.Altitude);
-  check_altitude(new_waypoint, alt_ok);
+  if (!parseAltitude(params[3], new_waypoint.Altitude))
+    check_altitude(new_waypoint);
 
   if (n_params > 6) {
     // Description (e.g. 119.750 Airport)

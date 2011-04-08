@@ -101,9 +101,9 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
 
   // Elevation (e.g. 458.0m)
   /// @todo configurable behaviour
-  bool alt_ok = iElevation < n_params &&
-    parseAltitude(params[iElevation], new_waypoint.Altitude);
-  check_altitude(new_waypoint, alt_ok);
+  if (iElevation >= n_params ||
+      !parseAltitude(params[iElevation], new_waypoint.Altitude))
+    check_altitude(new_waypoint);
 
   // Style (e.g. 5)
   /// @todo include peaks with peak symbols etc.
