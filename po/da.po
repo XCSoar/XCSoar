@@ -6,16 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-04-07 10:43+0200\n"
-"PO-Revision-Date: 2011-04-06 22:17+0000\n"
+"PO-Revision-Date: 2011-04-07 22:48+0000\n"
 "Last-Translator: Morten Jensen <Unknown>\n"
 "Language-Team: Danish <da@li.org>\n"
-"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-07 08:38+0000\n"
+"X-Launchpad-Export-Date: 2011-04-08 06:40+0000\n"
 "X-Generator: Launchpad (build 12757)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
@@ -318,14 +317,14 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:48
 #: src/Dialogs/dlgWindSettings.cpp:100
 msgid "Manual"
-msgstr ""
+msgstr "Manuelt"
 
 #: src/ExpandMacros.cpp:502 src/ExpandMacros.cpp:526
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:70
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:108
 #: Data/Dialogs/dlgBrightness.xml:6
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #: src/ExpandMacros.cpp:514 src/InputEventsActions.cpp:1390
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:88
@@ -347,7 +346,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:95
 #, no-c-format
 msgid "None"
-msgstr ""
+msgstr "Ingen"
 
 #: src/InfoBoxes/Content/Factory.cpp:61
 #, no-c-format
