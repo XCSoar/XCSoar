@@ -24,6 +24,17 @@ The following people have contributed code to XCSoar:
  Matthew Turnbull <matthewt@talk21.com>
  Olaf Hartmann <olaf.hartmann@s1998.tu-chemnitz.de>
  Andreas Pfaller <pfaller@gmail.com>
+ Florian Reuter <flo.reuter@web.de>
+ Christophe Mutricy <xtophe@chewa.net>
+ Philipp Wollschlegel <folken@kabelsalat.ch>
+ Roman Stoklasa <rstoki@gmail.com>
+
+Documentation:
+
+ Helmut J. Rohs <helmut.j.rohs@web.de>
+ Monika Brinkert <moni@sunpig.de>
+ Claus-W. Häbel <c-wh@online.de>
+ Kevin Ford <ford@math.uiuc.edu>
 
 Translators (by language code):
 
@@ -56,14 +67,17 @@ fr (French):
 *Romaric Boucher
  Sylvain Burger <sylvain.burger@wanadoo.fr>
 *Dany Demarck
+ Arnaud Talon
 
 hr (Croatian):
 *Zoran Milicic
 *Sasa Mihajlovic
+ Filip Novkoski <f1novkoski@gmail.com>
 
 hu (Hungarian):
  Gabor Liptak <liptakgabor@freemail.hu>
 *Kalman Rozsahegyi
+ Szombathelyi Zoltán <szombathelyi.zoltan@main.hu>
 
 it (Italian):
 *Enrico Girardi
@@ -73,6 +87,7 @@ nl (Dutch):
 *Rick Boerma
  Joop Gooden <joop.gooden@nlr.nl>
  Hans van 't Spijker
+ Quint Segers
 
 pl (Polish):
  Michal Jezierski <m.jezierski@finke.pl>
@@ -83,10 +98,12 @@ pl (Polish):
 pt-BR (Portuguese (Brazil)):
 *Tales Maschio
  Luis Fernando Rigato Vasconcellos <fernando.rigato@gmail.com>
+ Mario Souza
 
 ru (Russian):
  Monika Brinkert <moni@sunpig.de>
  Nikolay Dikiy
+ Dobrovolsky Ilya <ilya_42@inbox.ru>
 
 sk (Slovak):
  Brtko Peter <p.brtko@facc.co.at>
