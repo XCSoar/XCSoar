@@ -61,7 +61,7 @@ public:
       return buffer.data[i];
     }
 
-    OverwritingRingBuffer::const_iterator &operator++() {
+    typename OverwritingRingBuffer::const_iterator &operator++() {
       i = buffer.next(i);
       return *this;
     }
