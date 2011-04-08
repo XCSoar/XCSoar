@@ -241,6 +241,8 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // Select the TerrainLine pen
   buffer.hollow_brush();
   buffer.select(Graphics::hpTerrainLineThick);
+  buffer.background_opaque();
+  buffer.set_background_color(Color(0xf0, 0xf0, 0xf0));
 
   // Draw the TerrainLine polygons
   for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
