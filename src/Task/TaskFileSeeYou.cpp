@@ -501,6 +501,9 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 unsigned
 TaskFileSeeYou::Count()
 {
+  // Reset internal task name memory
+  namesuffixes.clear();
+
   FileLineReader reader(path);
   if (reader.error())
     return 0;
