@@ -61,8 +61,6 @@ public:
     terrain = _terrain;
   }
 
-  virtual bool IsWritable() = 0;
-
   int GetFileNumber() {
     return file_num;
   }

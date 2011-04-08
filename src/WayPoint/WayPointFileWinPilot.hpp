@@ -43,8 +43,6 @@ protected:
   bool parseLine(const TCHAR* line, const unsigned linenum,
                  Waypoints &way_points);
 
-  bool IsWritable() { return true; }
-
 private:
   static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
   static bool parseAltitude(const TCHAR* src, fixed& dest);

@@ -26,6 +26,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Profile/Profile.hpp"
 #include "StringUtil.hpp"
+#include "UtilsFile.hpp"
 #include "LogFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -44,6 +45,7 @@ namespace WayPointGlue {
   static WayPointFile *wp_file1, *wp_file2, *wp_file3, *wp_file_map;
 
   bool GetPath(int file_number, TCHAR *value);
+  bool IsWritable(int file_number);
 }
 
 bool
@@ -66,6 +68,17 @@ WayPointGlue::GetPath(int file_number, TCHAR *value)
   }
 
   return Profile::GetPath(key, value);
+}
+
+bool
+WayPointGlue::IsWritable(int file_number)
+{
+  TCHAR file[255];
+  if (!GetPath(file_number, file))
+    return false;
+
+  return (MatchesExtension(file, _T(".dat")) ||
+          MatchesExtension(file, _T(".xcw")));
 }
 
 /**
@@ -239,7 +252,7 @@ WayPointGlue::SaveWaypointFile(const Waypoints &way_points, WayPointFile *wpfile
   if (wpfile == NULL)
     return false;
 
-  if (!wpfile->IsWritable()) {
+  if (!IsWritable(wpfile->GetFileNumber())) {
     LogStartUp(_T("Waypoint file %d can not be written"), wpfile->GetFileNumber());
     return false;
   }

@@ -43,8 +43,6 @@ protected:
   bool parseLine(const TCHAR* line, const unsigned linenum,
                  Waypoints &way_points);
 
-  bool IsWritable() { return false; }
-
 private:
   static void appendStringWithSeperator(tstring &dest, const TCHAR *src,
                                         const TCHAR seperator=' ');
