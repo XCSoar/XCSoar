@@ -157,6 +157,26 @@ WayPointFile::check_altitude(Waypoint &new_waypoint, bool alt_ok)
     new_waypoint.Altitude = (fixed)t_alt;
 }
 
+void
+WayPointFile::Parse(Waypoints &way_points, TLineReader &reader)
+{
+  ProgressGlue::SetRange(25);
+
+  double filesize = std::max(reader.size(), 1l);
+
+  // Read through the lines of the file
+  TCHAR *line;
+  for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
+    // and parse them
+    parseLine(line, i, way_points);
+
+    if ((i & 0x3f) == 0) {
+      unsigned status = reader.tell() * 25 / filesize;
+      ProgressGlue::SetValue(status);
+    }
+  }
+}
+
 bool
 WayPointFile::Parse(Waypoints &way_points, bool compressed)
 {
@@ -164,48 +184,20 @@ WayPointFile::Parse(Waypoints &way_points, bool compressed)
   if (file[0] == 0)
     return false;
 
-  ProgressGlue::SetRange(25);
-
-  // If normal file
   if (!compressed) {
     // Try to open waypoint file
     FileLineReader reader(file);
     if (reader.error())
       return false;
 
-    double filesize = std::max(reader.size(), 1l);
-
-    // Read through the lines of the file
-    TCHAR *line;
-    for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
-      // and parse them
-      parseLine(line, i, way_points);
-
-      if ((i & 0x3f) == 0) {
-        unsigned status = reader.tell() * 25 / filesize;
-        ProgressGlue::SetValue(status);
-      }
-    }
-  // If compressed file inside map file
+    Parse(way_points, reader);
   } else {
     // convert path to ascii
     ZipLineReader reader(file);
     if (reader.error())
       return false;
 
-    double filesize = std::max(reader.size(), 1l);
-
-    // Read through the lines of the file
-    TCHAR *line;
-    for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
-      // and parse them
-      parseLine(line, i, way_points);
-
-      if ((i & 0x3f) == 0) {
-        unsigned status = reader.tell() * 25 / filesize;
-        ProgressGlue::SetValue(status);
-      }
-    }
+    Parse(way_points, reader);
   }
 
   return true;

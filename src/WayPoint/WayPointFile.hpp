@@ -31,6 +31,7 @@ Copyright_License {
 class Waypoints;
 class RasterTerrain;
 class TextWriter;
+class TLineReader;
 
 class WayPointFile 
 {
@@ -54,6 +55,7 @@ public:
    * @return True if the waypoint file parsing was okay, False otherwise
    */
   bool Parse(Waypoints &way_points, bool compressed = false);
+  void Parse(Waypoints &way_points, TLineReader &reader);
 
   void SetTerrain(const RasterTerrain* _terrain) {
     terrain = _terrain;
