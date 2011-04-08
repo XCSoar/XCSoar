@@ -35,6 +35,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "IO/TextWriter.hpp"
+#include "WayPoint/WaypointWriter.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -213,10 +215,20 @@ WayPointGlue::SaveWaypointFile(const Waypoints &way_points, WayPointFile *wpfile
   if (wpfile == NULL)
     return false;
 
-  if (!wpfile->Save(way_points)) {
+  if (!wpfile->IsWritable()) {
     LogStartUp(_T("Waypoint file %d can not be written"), wpfile->GetFileNumber());
     return false;
   }
+
+  const TCHAR* file = wpfile->GetFilePath();
+  TextWriter writer(file);
+  if (writer.error()) {
+    LogStartUp(_T("Waypoint file %d can not be written"), wpfile->GetFileNumber());
+    return false;
+  }
+
+  WaypointWriter wp_writer(way_points, wpfile->GetFileNumber());
+  wp_writer.Save(writer);
 
   LogStartUp(_T("Waypoint file %d saved"), wpfile->GetFileNumber());
   return true;

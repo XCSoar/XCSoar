@@ -55,13 +55,6 @@ public:
    */
   bool Parse(Waypoints &way_points, bool compressed = false);
 
-  /**
-   * Saves the given waypoint list into the waypoint file provided by SetFile()
-   * @param way_points The waypoint list to save
-   * @return True if saving was successful, False otherwise
-   */
-  bool Save(const Waypoints &way_points);
-
   void SetTerrain(const RasterTerrain* _terrain) {
     terrain = _terrain;
   }
@@ -70,6 +63,10 @@ public:
 
   int GetFileNumber() {
     return file_num;
+  }
+
+  const TCHAR* GetFilePath() {
+    return file;
   }
 
 protected:

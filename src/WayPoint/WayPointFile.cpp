@@ -26,7 +26,6 @@ Copyright_License {
 #include "WayPointFileZander.hpp"
 #include "WayPointFileSeeYou.hpp"
 #include "WayPointFileWinPilot.hpp"
-#include "WaypointWriter.hpp"
 
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -35,7 +34,6 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
-#include "IO/TextWriter.hpp"
 
 #include <assert.h>
 
@@ -210,29 +208,6 @@ WayPointFile::Parse(Waypoints &way_points, bool compressed)
     }
   }
 
-  return true;
-}
-
-bool
-WayPointFile::Save(const Waypoints &way_points)
-{
-  // No filename -> return
-  if (file[0] == 0)
-    return false;
-
-  // Not writable -> return
-  if (!IsWritable())
-    return false;
-
-  // Try to open waypoint file for writing
-  TextWriter writer(file);
-  if (writer.error())
-    return false;
-
-  WaypointWriter wp_writer(way_points, file_num);
-  wp_writer.Save(writer);
-
-  // and tell everyone we saved successfully
   return true;
 }
 
