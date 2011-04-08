@@ -42,6 +42,30 @@ Copyright_License {
 
 namespace WayPointGlue {
   static WayPointFile *wp_file1, *wp_file2, *wp_file3, *wp_file_map;
+
+  bool GetPath(int file_number, TCHAR *value);
+}
+
+bool
+WayPointGlue::GetPath(int file_number, TCHAR *value)
+{
+  const TCHAR *key;
+
+  switch (file_number) {
+  case 1:
+    key = szProfileWayPointFile;
+    break;
+  case 2:
+    key = szProfileAdditionalWayPointFile;
+    break;
+  case 3:
+    key = szProfileWatchedWayPointFile;
+    break;
+  default:
+    return false;
+  }
+
+  return Profile::GetPath(key, value);
 }
 
 /**
@@ -110,12 +134,12 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 }
 
 bool
-WayPointGlue::LoadWaypointFile(WayPointFile *wpfile, int num, const TCHAR* key,
+WayPointGlue::LoadWaypointFile(WayPointFile *wpfile, int num,
                                Waypoints &way_points, const RasterTerrain *terrain)
 {
   // Get waypoint filename
   TCHAR szFile[MAX_PATH];
-  if (Profile::GetPath(key, szFile))
+  if (GetPath(num, szFile))
     wpfile = WayPointFile::create(szFile, num);
 
   // If waypoint file exists
@@ -192,16 +216,13 @@ WayPointGlue::LoadWaypoints(Waypoints &way_points,
   Close();
 
   // ### FIRST FILE ###
-  found |= LoadWaypointFile(wp_file1, 1, szProfileWayPointFile,
-                            way_points, terrain);
+  found |= LoadWaypointFile(wp_file1, 1, way_points, terrain);
 
   // ### SECOND FILE ###
-  found |= LoadWaypointFile(wp_file2, 2, szProfileAdditionalWayPointFile,
-                            way_points, terrain);
+  found |= LoadWaypointFile(wp_file2, 2, way_points, terrain);
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
-  found |= LoadWaypointFile(wp_file3, 3, szProfileWatchedWayPointFile,
-                            way_points, terrain);
+  found |= LoadWaypointFile(wp_file3, 3, way_points, terrain);
 
   // ### MAP/FOURTH FILE ###
 
