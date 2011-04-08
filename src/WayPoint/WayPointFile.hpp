@@ -25,12 +25,11 @@ Copyright_License {
 #ifndef WAYPOINTFILE_HPP
 #define WAYPOINTFILE_HPP
 
-#include "Engine/Waypoint/Waypoint.hpp"
-
 #include <tchar.h>
+
+class Waypoint;
 class Waypoints;
 class RasterTerrain;
-class TextWriter;
 class TLineReader;
 
 class WayPointFile 

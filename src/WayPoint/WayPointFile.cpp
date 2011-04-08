@@ -28,6 +28,7 @@ Copyright_License {
 #include "WayPointFileWinPilot.hpp"
 
 #include "Terrain/RasterTerrain.hpp"
+#include "Waypoint/Waypoint.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "UtilsFile.hpp"
 #include "OS/FileUtil.hpp"

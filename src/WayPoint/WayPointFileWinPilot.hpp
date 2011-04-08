@@ -26,8 +26,9 @@ Copyright_License {
 #define WAYPOINTFILEWINPILOT_HPP
 
 #include "WayPointFile.hpp"
+#include "Math/fixed.hpp"
 
-class TextWriter;
+class Angle;
 
 /** 
  * Waypoint file read/writer for WinPilot format

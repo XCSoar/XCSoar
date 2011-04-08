@@ -25,6 +25,10 @@ Copyright_License {
 #define WAYPOINTFILEZANDER_HPP
 
 #include "WayPointFile.hpp"
+#include "Math/fixed.hpp"
+#include "tstring.hpp"
+
+class Angle;
 
 class WayPointFileZander: 
   public WayPointFile 

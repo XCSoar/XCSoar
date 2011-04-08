@@ -26,6 +26,10 @@ Copyright_License {
 #define WAYPOINTFILESEEYOU_HPP
 
 #include "WayPointFile.hpp"
+#include "Math/fixed.hpp"
+#include "tstring.hpp"
+
+class Angle;
 
 class WayPointFileSeeYou: 
   public WayPointFile 
