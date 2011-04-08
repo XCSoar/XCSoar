@@ -52,7 +52,7 @@ namespace WayPointGlue {
   bool LoadMapFileWaypoints(WayPointFile *wpfile, int num, const TCHAR* key,
                             Waypoints &way_points, const RasterTerrain *terrain);
   bool SaveWaypoints(const Waypoints &way_points);
-  bool SaveWaypointFile(const Waypoints &way_points, WayPointFile *wpfile);
+  bool SaveWaypointFile(const Waypoints &way_points, int num);
 
   /**
    * Close all waypoint files.

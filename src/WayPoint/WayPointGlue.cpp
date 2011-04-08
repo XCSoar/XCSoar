@@ -247,27 +247,26 @@ WayPointGlue::LoadWaypoints(Waypoints &way_points,
 }
 
 bool
-WayPointGlue::SaveWaypointFile(const Waypoints &way_points, WayPointFile *wpfile)
+WayPointGlue::SaveWaypointFile(const Waypoints &way_points, int num)
 {
-  if (wpfile == NULL)
-    return false;
-
-  if (!IsWritable(wpfile->GetFileNumber())) {
-    LogStartUp(_T("Waypoint file %d can not be written"), wpfile->GetFileNumber());
+  if (!IsWritable(num)) {
+    LogStartUp(_T("Waypoint file %d can not be written"), num);
     return false;
   }
 
-  const TCHAR* file = wpfile->GetFilePath();
+  TCHAR file[255];
+  GetPath(num, file);
+
   TextWriter writer(file);
   if (writer.error()) {
-    LogStartUp(_T("Waypoint file %d can not be written"), wpfile->GetFileNumber());
+    LogStartUp(_T("Waypoint file %d can not be written"), num);
     return false;
   }
 
-  WaypointWriter wp_writer(way_points, wpfile->GetFileNumber());
+  WaypointWriter wp_writer(way_points, num);
   wp_writer.Save(writer);
 
-  LogStartUp(_T("Waypoint file %d saved"), wpfile->GetFileNumber());
+  LogStartUp(_T("Waypoint file %d saved"), num);
   return true;
 }
 
@@ -278,13 +277,13 @@ WayPointGlue::SaveWaypoints(const Waypoints &way_points)
   LogStartUp(_T("SaveWaypoints"));
 
   // ### FIRST FILE ###
-  result |= SaveWaypointFile(way_points, wp_file1);
+  result |= SaveWaypointFile(way_points, 1);
 
   // ### SECOND FILE ###
-  result |= SaveWaypointFile(way_points, wp_file2);
+  result |= SaveWaypointFile(way_points, 2);
 
   // ### THIRD FILE ###
-  result |= SaveWaypointFile(way_points, wp_file3);
+  result |= SaveWaypointFile(way_points, 3);
 
   return result;
 }
