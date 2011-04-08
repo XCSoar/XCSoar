@@ -22,34 +22,37 @@ Copyright_License {
 */
 
 
-#ifndef WAYPOINTFILEWINPILOT_HPP
-#define WAYPOINTFILEWINPILOT_HPP
+#ifndef WAYPOINT_WRITER_HPP
+#define WAYPOINT_WRITER_HPP
 
-#include "WayPointFile.hpp"
+#include "fixed.hpp"
 
+class Waypoint;
+class Waypoints;
 class TextWriter;
+class Angle;
 
 /** 
- * Waypoint file read/writer for WinPilot format
+ * Waypoint file writer for WinPilot format
  */
-class WayPointFileWinPilot: 
-  public WayPointFile 
+class WaypointWriter
 {
+private:
+  const Waypoints &waypoints;
+  int file_number;
+
 public:
-  WayPointFileWinPilot(const TCHAR* file_name, const int _file_num):
-    WayPointFile(file_name, _file_num) {}
+  WaypointWriter(const Waypoints &_waypoints, int _file_number)
+    :waypoints(_waypoints), file_number(_file_number) {}
 
-protected:
-  bool parseLine(const TCHAR* line, const unsigned linenum,
-                 Waypoints &way_points);
-
-  bool IsWritable() { return true; }
+  void Save(TextWriter &writer);
 
 private:
-  static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
-  static bool parseAltitude(const TCHAR* src, fixed& dest);
-  static bool parseFlags(const TCHAR* src, Waypoint &dest);
-  static bool parseRunwayDirection(const TCHAR* src, Angle& dest);
+  static void WriteWaypoint(TextWriter &writer, const Waypoint &wp);
+  static void WriteAngle(TextWriter &writer, const Angle &angle,
+                         bool is_latitude);
+  static void WriteAltitude(TextWriter &writer, fixed altitude);
+  static void WriteFlags(TextWriter &writer, const Waypoint &wp);
 };
 
 #endif

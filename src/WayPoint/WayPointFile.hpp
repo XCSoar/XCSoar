@@ -92,8 +92,6 @@ protected:
   virtual bool parseLine(const TCHAR* line, unsigned linenum,
                          Waypoints &way_points) = 0;
 
-  virtual void saveFile(TextWriter &writer, const Waypoints &way_points) {};
-
 public:
   // Helper functions
 

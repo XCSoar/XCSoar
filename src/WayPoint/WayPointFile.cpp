@@ -26,6 +26,7 @@ Copyright_License {
 #include "WayPointFileZander.hpp"
 #include "WayPointFileSeeYou.hpp"
 #include "WayPointFileWinPilot.hpp"
+#include "WaypointWriter.hpp"
 
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -228,7 +229,8 @@ WayPointFile::Save(const Waypoints &way_points)
   if (writer.error())
     return false;
 
-  saveFile(writer, way_points);
+  WaypointWriter wp_writer(way_points, file_num);
+  wp_writer.Save(writer);
 
   // and tell everyone we saved successfully
   return true;

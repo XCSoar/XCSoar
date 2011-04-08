@@ -469,6 +469,7 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
 	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
 	$(SRC)/WayPoint/WayPointFileZander.cpp \
+	$(SRC)/WayPoint/WaypointWriter.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
@@ -857,6 +858,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
 	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
 	$(SRC)/WayPoint/WayPointFileZander.cpp \
+	$(SRC)/WayPoint/WaypointWriter.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
@@ -1172,6 +1174,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
 	$(SRC)/WayPoint/WayPointFileZander.cpp \
 	$(SRC)/WayPoint/WayPointRenderer.cpp \
+	$(SRC)/WayPoint/WaypointWriter.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/xmlParser.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
