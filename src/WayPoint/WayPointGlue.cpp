@@ -41,7 +41,7 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 namespace WayPointGlue {
-  static WayPointFile *wp_file0, *wp_file1, *wp_file2, *wp_file3;
+  static WayPointFile *wp_file0, *wp_file1, *wp_file2, *wp_file_map;
 }
 
 /**
@@ -165,7 +165,7 @@ WayPointGlue::LoadMapFileWaypoints(WayPointFile *wpfile, int num, const TCHAR* k
   if (wpfile != NULL) {
     // parse the file
     wpfile->SetTerrain(terrain);
-    if (wp_file3->Parse(way_points, true))
+    if (wp_file_map->Parse(way_points, true))
       return true;
 
     LogStartUp(_T("Parse error in map waypoint file"));
@@ -207,7 +207,7 @@ WayPointGlue::LoadWaypoints(Waypoints &way_points,
 
   // If no waypoint file found yet
   if (!found)
-    found = LoadMapFileWaypoints(wp_file3, 3, szProfileMapFile,
+    found = LoadMapFileWaypoints(wp_file_map, 3, szProfileMapFile,
                                  way_points, terrain);
 
   // Optimise the waypoint list after attaching new waypoints
@@ -272,6 +272,6 @@ WayPointGlue::Close()
   delete wp_file2;
   wp_file2 = NULL;
 
-  delete wp_file3;
-  wp_file3 = NULL;
+  delete wp_file_map;
+  wp_file_map = NULL;
 }
