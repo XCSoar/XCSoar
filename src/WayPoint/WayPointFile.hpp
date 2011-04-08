@@ -36,6 +36,12 @@ class TLineReader;
 class WayPointFile 
 {
 protected:
+  TCHAR file[255];
+  const int file_num;
+
+  const RasterTerrain* terrain;
+
+protected:
   WayPointFile(const TCHAR* file_name, const int _file_num);
 
 public:
@@ -62,11 +68,6 @@ public:
   }
 
 protected:
-  TCHAR file[255];
-  const int file_num;
-
-  const RasterTerrain* terrain;
-
   void check_altitude(Waypoint &new_waypoint, bool alt_ok);
 
   /**
