@@ -45,7 +45,7 @@ namespace WayPointGlue {
    * @param way_points The waypoint list to fill
    * @param terrain RasterTerrain (for automatic waypoint height)
    */
-  bool ReadWaypoints(Waypoints &way_points,
+  bool LoadWaypoints(Waypoints &way_points,
                      const RasterTerrain *terrain);
   bool LoadWaypointFile(WayPointFile *wpfile, int num, const TCHAR* key,
                         Waypoints &way_points, const RasterTerrain *terrain);

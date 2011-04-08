@@ -352,7 +352,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   LoadConfiguredTopography(*topography);
 
   // Read the waypoint files
-  WayPointGlue::ReadWaypoints(way_points, terrain);
+  WayPointGlue::LoadWaypoints(way_points, terrain);
 
   // Read and parse the airfield info file
   ReadAirfieldFile(way_points);

@@ -139,7 +139,7 @@ WayPointGlue::LoadWaypointFile(WayPointFile *wpfile, int num, const TCHAR* key,
 }
 
 bool
-WayPointGlue::ReadWaypoints(Waypoints &way_points,
+WayPointGlue::LoadWaypoints(Waypoints &way_points,
                             const RasterTerrain *terrain)
 {
   LogStartUp(_T("ReadWaypoints"));
