@@ -61,14 +61,6 @@ public:
     terrain = _terrain;
   }
 
-  int GetFileNumber() {
-    return file_num;
-  }
-
-  const TCHAR* GetFilePath() {
-    return file;
-  }
-
 protected:
   TCHAR file[255];
   const int file_num;
