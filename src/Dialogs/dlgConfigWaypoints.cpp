@@ -69,14 +69,10 @@ OnWaypointEditClicked(WndButton &Sender)
   const Waypoint *way_point = dlgWayPointSelect(XCSoarInterface::main_window,
                                                 XCSoarInterface::Basic().Location);
   if (way_point) {
-    if (way_points.get_writable(*way_point)) {
-      Waypoint wp_copy = *way_point;
-      if (dlgWaypointEditShowModal(wp_copy)) {
-        WaypointsNeedSave = true;
-        way_points.replace(*way_point, wp_copy);
-      }
-    } else {
-      MessageBoxX(_("Waypoint not editable"), _("Error"), MB_OK);
+    Waypoint wp_copy = *way_point;
+    if (dlgWaypointEditShowModal(wp_copy)) {
+      WaypointsNeedSave = true;
+      way_points.replace(*way_point, wp_copy);
     }
   }
 }
