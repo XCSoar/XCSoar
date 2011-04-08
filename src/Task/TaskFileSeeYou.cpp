@@ -504,6 +504,7 @@ TaskFileSeeYou::Count()
   // Reset internal task name memory
   namesuffixes.clear();
 
+  // Open the CUP file
   FileLineReader reader(path);
   if (reader.error())
     return 0;
@@ -513,19 +514,28 @@ TaskFileSeeYou::Count()
   TCHAR *line;
   while ((line = reader.read()) != NULL) {
     if (in_task_section) {
+      // If the line starts with a string or "nothing" followed
+      // by a comma it is a new task definition line
       if (line[0] == _T('\"') || line[0] == _T(',')) {
+        // If we still have space in the task name list
         if (count < namesuffixes.capacity()) {
+          // If the task doesn't have a name inside the file
           if (line[0] == _T(','))
             namesuffixes.append(NULL);
           else {
+            // Ignore starting quote (")
             line++;
 
+            // Save pointer to first character
             TCHAR *name = line;
+            // Skip characters until next quote (") or end of string
             while (line[0] != _T('\"') && line[0] != _T('\0'))
               line++;
 
+            // Replace quote (") by end of string (null)
             line[0] = _T('\0');
 
+            // Append task name to the list
             if (_tcslen(name) > 0)
               namesuffixes.append(_tcsdup(name));
             else
@@ -533,12 +543,15 @@ TaskFileSeeYou::Count()
           }
         }
 
+        // Increase the task counter
         count++;
       }
     } else if (_tcsicmp(line, _T("-----Related Tasks-----")) == 0) {
+      // Found the marker -> all following lines are task lines
       in_task_section = true;
     }
   }
 
+  // Return number of tasks found in the CUP file
   return count;
 }
