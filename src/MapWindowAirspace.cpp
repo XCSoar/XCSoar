@@ -348,6 +348,9 @@ private:
       // get brush, can be solid or a 1bpp bitmap
       m_buffer.select(Graphics::hAirspaceBrushes[m_settings_map.
                                                  iAirspaceBrush[airspace.get_type()]]);
+
+      m_buffer.background_opaque();
+      m_buffer.set_background_color(Color::WHITE);
 #ifdef HAVE_ALPHA_BLEND
     }
 #endif
