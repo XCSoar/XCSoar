@@ -139,6 +139,44 @@ WayPointGlue::LoadWaypointFile(WayPointFile *wpfile, int num, const TCHAR* key,
 }
 
 bool
+WayPointGlue::LoadMapFileWaypoints(WayPointFile *wpfile, int num, const TCHAR* key,
+                                   Waypoints &way_points, const RasterTerrain *terrain)
+{
+  TCHAR szFile[MAX_PATH];
+
+  // Get the map filename
+  Profile::GetPath(key, szFile);
+  _tcscat(szFile, _T("/"));
+  _tcscat(szFile, _T("waypoints.xcw"));
+
+  wpfile = WayPointFile::create(szFile, num);
+
+  // Test if waypoints.xcw can be loaded, otherwise try waypoints.cup
+  if (wpfile == NULL) {
+    // Get the map filename
+    Profile::GetPath(key, szFile);
+    _tcscat(szFile, _T("/"));
+    _tcscat(szFile, _T("waypoints.cup"));
+
+    wpfile = WayPointFile::create(szFile, num);
+  }
+
+  // If waypoint file inside map file exists
+  if (wpfile != NULL) {
+    // parse the file
+    wpfile->SetTerrain(terrain);
+    if (wp_file3->Parse(way_points, true))
+      return true;
+
+    LogStartUp(_T("Parse error in map waypoint file"));
+  } else {
+    LogStartUp(_T("No waypoint file in the map file"));
+  }
+
+  return false;
+}
+
+bool
 WayPointGlue::LoadWaypoints(Waypoints &way_points,
                             const RasterTerrain *terrain)
 {
@@ -168,39 +206,9 @@ WayPointGlue::LoadWaypoints(Waypoints &way_points,
   // ### MAP/FOURTH FILE ###
 
   // If no waypoint file found yet
-  if (!found) {
-    TCHAR szFile[MAX_PATH];
-
-    // Get the map filename
-    Profile::GetPath(szProfileMapFile, szFile);
-    _tcscat(szFile, _T("/"));
-    _tcscat(szFile, _T("waypoints.xcw"));
-
-    wp_file3 = WayPointFile::create(szFile, 3);
-
-    // Test if waypoints.xcw can be loaded, otherwise try waypoints.cup
-    if (wp_file3 == NULL) {
-      // Get the map filename
-      Profile::GetPath(szProfileMapFile, szFile);
-      _tcscat(szFile, _T("/"));
-      _tcscat(szFile, _T("waypoints.cup"));
-
-      wp_file3 = WayPointFile::create(szFile, 3);
-    }
-
-    // If waypoint file inside map file exists
-    if (wp_file3 != NULL) {
-      // parse the file
-      wp_file3->SetTerrain(terrain);
-      if (wp_file3->Parse(way_points, true)) {
-        found = true;
-      } else {
-        LogStartUp(_T("Parse error in map waypoint file"));
-      }
-    } else {
-      LogStartUp(_T("No waypoint file in the map file"));
-    }
-  }
+  if (!found)
+    found = LoadMapFileWaypoints(wp_file3, 3, szProfileMapFile,
+                                 way_points, terrain);
 
   // Optimise the waypoint list after attaching new waypoints
   way_points.optimise();
