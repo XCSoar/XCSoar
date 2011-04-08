@@ -42,8 +42,6 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 namespace WayPointGlue {
-  static WayPointFile *wp_file1, *wp_file2, *wp_file3, *wp_file_map;
-
   bool GetPath(int file_number, TCHAR *value);
   bool IsWritable(int file_number);
 }
@@ -147,9 +145,11 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 }
 
 bool
-WayPointGlue::LoadWaypointFile(WayPointFile *wpfile, int num,
-                               Waypoints &way_points, const RasterTerrain *terrain)
+WayPointGlue::LoadWaypointFile(int num, Waypoints &way_points,
+                               const RasterTerrain *terrain)
 {
+  WayPointFile *wpfile = NULL;
+
   // Get waypoint filename
   TCHAR szFile[MAX_PATH];
   if (GetPath(num, szFile))
@@ -159,21 +159,25 @@ WayPointGlue::LoadWaypointFile(WayPointFile *wpfile, int num,
   if (wpfile != NULL) {
     // parse the file
     wpfile->SetTerrain(terrain);
-    if (wpfile->Parse(way_points))
+    if (wpfile->Parse(way_points)) {
+      delete wpfile;
       return true;
+    }
 
     LogStartUp(_T("Parse error in waypoint file %d"), num);
   } else {
     LogStartUp(_T("No waypoint file %d"), num);
   }
 
+  delete wpfile;
   return false;
 }
 
 bool
-WayPointGlue::LoadMapFileWaypoints(WayPointFile *wpfile, int num, const TCHAR* key,
+WayPointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
                                    Waypoints &way_points, const RasterTerrain *terrain)
 {
+  WayPointFile *wpfile = NULL;
   TCHAR szFile[MAX_PATH];
 
   // Get the map filename
@@ -197,14 +201,17 @@ WayPointGlue::LoadMapFileWaypoints(WayPointFile *wpfile, int num, const TCHAR* k
   if (wpfile != NULL) {
     // parse the file
     wpfile->SetTerrain(terrain);
-    if (wp_file_map->Parse(way_points, true))
+    if (wpfile->Parse(way_points, true)) {
+      delete wpfile;
       return true;
+    }
 
     LogStartUp(_T("Parse error in map waypoint file"));
   } else {
     LogStartUp(_T("No waypoint file in the map file"));
   }
 
+  delete wpfile;
   return false;
 }
 
@@ -220,24 +227,20 @@ WayPointGlue::LoadWaypoints(Waypoints &way_points,
   // Delete old waypoints
   way_points.clear();
 
-  // tear down old parsers
-  Close();
-
   // ### FIRST FILE ###
-  found |= LoadWaypointFile(wp_file1, 1, way_points, terrain);
+  found |= LoadWaypointFile(1, way_points, terrain);
 
   // ### SECOND FILE ###
-  found |= LoadWaypointFile(wp_file2, 2, way_points, terrain);
+  found |= LoadWaypointFile(2, way_points, terrain);
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
-  found |= LoadWaypointFile(wp_file3, 3, way_points, terrain);
+  found |= LoadWaypointFile(3, way_points, terrain);
 
   // ### MAP/FOURTH FILE ###
 
   // If no waypoint file found yet
   if (!found)
-    found = LoadMapFileWaypoints(wp_file_map, 0, szProfileMapFile,
-                                 way_points, terrain);
+    found = LoadMapFileWaypoints(0, szProfileMapFile, way_points, terrain);
 
   // Optimise the waypoint list after attaching new waypoints
   way_points.optimise();
@@ -286,20 +289,4 @@ WayPointGlue::SaveWaypoints(const Waypoints &way_points)
   result |= SaveWaypointFile(way_points, 3);
 
   return result;
-}
-
-void
-WayPointGlue::Close()
-{
-  delete wp_file1;
-  wp_file1 = NULL;
-
-  delete wp_file2;
-  wp_file2 = NULL;
-
-  delete wp_file3;
-  wp_file3 = NULL;
-
-  delete wp_file_map;
-  wp_file_map = NULL;
 }
