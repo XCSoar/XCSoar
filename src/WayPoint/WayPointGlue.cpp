@@ -146,13 +146,8 @@ WayPointGlue::LoadWaypointFile(WayPointFile *wpfile, int num,
   if (wpfile != NULL) {
     // parse the file
     wpfile->SetTerrain(terrain);
-    if (wpfile->Parse(way_points)) {
-      if (num == 1)
-        // Set waypoints writable flag
-        way_points.set_file1_writable(wpfile->IsWritable());
-
+    if (wpfile->Parse(way_points))
       return true;
-    }
 
     LogStartUp(_T("Parse error in waypoint file %d"), num);
   } else {

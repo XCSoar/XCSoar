@@ -118,25 +118,6 @@ public:
   bool empty() const;
 
   /**
-   * Set whether first waypoint file will be writable
-   * (this is used for create() method of waypoints not
-   *  generated from the Waypointparser)
-   *
-   * @param set Set/unset writable
-   */
-  void set_file1_writable(const bool set);
-
-  /**
-   * Determine whether a waypoint can be edited
-   * based on the writability of the file it is assigned to
-   *
-   * @param wp Waypoint to check
-   *
-   * @return True if waypoint can be edited
-   */
-  bool get_writable(const Waypoint& wp) const;
-
-  /**
    * Sets the airfield details of the specified waypoint
    *
    * @param wp Waypoint to set
@@ -332,8 +313,6 @@ private:
   TaskProjection task_projection;
 
   std::deque<WaypointEnvelope> tmp_wps;
-
-  bool m_file1_writable;
 
   mutable const Waypoint* m_home;
 };
