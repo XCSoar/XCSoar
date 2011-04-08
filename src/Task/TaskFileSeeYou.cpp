@@ -514,19 +514,18 @@ TaskFileSeeYou::Count()
   while ((line = reader.read()) != NULL) {
     if (in_task_section) {
       if (line[0] == _T('\"') || line[0] == _T(',')) {
-
         if (count < namesuffixes.capacity()) {
-          unsigned cc = 0;
+          unsigned cc = 1;
           TCHAR buff[40];
-          for (cc = 1; line[cc] && line[cc] != '"' && cc < 40; cc++) {
+          for (; line[cc] && line[cc] != '"' && cc < 40; cc++)
             buff[cc - 1] = line[cc];
-          }
+
           buff[--cc] = '\0';
-          if (_tcslen(buff) > 0) {
+
+          if (_tcslen(buff) > 0)
             namesuffixes.append(_tcsdup(buff));
-          } else {
+          else
             namesuffixes.append(NULL);
-          }
         }
         count++;
       }
