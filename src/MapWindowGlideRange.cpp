@@ -164,11 +164,22 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     Canvas &buffer = buffer_canvas;
 
     // Set the pattern colors
+    buffer.background_opaque();
     buffer.set_background_color(Color::WHITE);
     buffer.set_text_color(Color(0xf0, 0xf0, 0xf0));
 
     // Paint the whole buffer canvas with a pattern brush (small dots)
     buffer.clear(Graphics::hAboveTerrainBrush);
+
+    // Select the TerrainLine pen
+    buffer.hollow_brush();
+    buffer.select(Graphics::hpTerrainLineThick);
+    buffer.set_background_color(Color(0xf0, 0xf0, 0xf0));
+
+    // Draw the TerrainLine polygons
+    for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+         i != visitor.fans.end(); ++i)
+      buffer.polygon(&(*i)[0], i->size());
 
     // Select a white brush (will later be transparent)
     buffer.null_pen();
@@ -182,6 +193,10 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
     // Copy everything non-white to the buffer
     canvas.copy_transparent_white(buffer);
+
+    /* skip the separate terrain line step below, because we have done
+       it already */
+    return;
 
 #endif
 
