@@ -263,15 +263,20 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
     tstring sType = as.get_type_text(true);
     
     const int TextHeight = 12, TextTop = 1;
+
+    const int statusColWidth = canvas.text_width(_T("inside"));     //<-- word "inside" is used as the etalon, because it is longer than "near" and currently (9.4.2011) there is no other possibility for the status text.
+    const int heightColWidth = canvas.text_width(_T("1888 m AGL")); // <-- "1888" is used in order to have enough space for 4-digit heights with "AGL"
+
+
     /// Dynamic columns scaling - "name" column is flexible, altitude and state columns are fixed-width.
-    const int Col0LeftScreenCoords = IBLSCALE(paint_rc_margin),
-      Col2LeftScreenCoords = paint_rc.right - IBLSCALE(40),
-      Col1LeftScreenCoords = Col2LeftScreenCoords - IBLSCALE(50);
-    
+    const int Col0LeftScreenCoords = Layout::FastScale(paint_rc_margin),
+        Col2LeftScreenCoords = paint_rc.right - Layout::FastScale(paint_rc_margin) - (statusColWidth + 2 * Layout::FastScale(paint_rc_margin)),
+        Col1LeftScreenCoords = Col2LeftScreenCoords - Layout::FastScale(paint_rc_margin) - heightColWidth;
+
     PixelRect rcTextClip;
     
     rcTextClip = paint_rc;
-    rcTextClip.right = Col1LeftScreenCoords - IBLSCALE(paint_rc_margin);
+    rcTextClip.right = Col1LeftScreenCoords - Layout::FastScale(paint_rc_margin);
     
     Color old_text_color = canvas.get_text_color();
     if (!warning.get_ack_expired())
@@ -343,10 +348,12 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
       canvas.fill_rectangle(rc, *state_brush);
     }
     
-    if (state_text != NULL)
-      canvas.text(paint_rc.left + Col2LeftScreenCoords + Layout::FastScale(paint_rc_margin),
+    if (state_text != NULL) {
+      // -- status text will be centered inside its table cell:
+      canvas.text(paint_rc.left + Col2LeftScreenCoords + Layout::FastScale(paint_rc_margin) + (statusColWidth / 2)  - (canvas.text_width(state_text) / 2),
                   (paint_rc.bottom + paint_rc.top - state_text_size.cy) / 2,
                   state_text);
+    }
     
     if (!warning.get_ack_expired())
       canvas.set_text_color(old_text_color);
