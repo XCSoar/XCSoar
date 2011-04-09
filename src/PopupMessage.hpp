@@ -122,8 +122,6 @@ public:
 
   void set(const PixelRect _rc);
 
-  virtual bool on_mouse_down(int x, int y);
-
   /** returns true if messages have changed */
   bool Render();
 
@@ -145,6 +143,9 @@ public:
  private:
   void Resize();
   int GetEmptySlot();
+
+protected:
+  virtual bool on_mouse_down(int x, int y);
 };
 
 #endif
