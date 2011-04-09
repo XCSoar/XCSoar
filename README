@@ -33,6 +33,7 @@ To compile from source, you need:
 - rsvg (http://librsvg.sourceforge.net/)
 - ImageMagick 6.4 (http://www.imagemagick.org/)
 - xsltproc (http://xmlsoft.org/XSLT/xsltproc2.html)
+- Perl and XML::Parser
 
 To cross-compile to (desktop) Windows, you need the mingw32 version of
 gcc:
