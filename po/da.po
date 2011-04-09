@@ -6,15 +6,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-07 10:43+0200\n"
-"PO-Revision-Date: 2011-04-07 22:48+0000\n"
+"PO-Revision-Date: 2011-04-08 17:02+0000\n"
 "Last-Translator: Morten Jensen <Unknown>\n"
 "Language-Team: Danish <da@li.org>\n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 06:40+0000\n"
+"X-Launchpad-Export-Date: 2011-04-09 07:04+0000\n"
 "X-Generator: Launchpad (build 12757)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
@@ -31,7 +32,7 @@ msgstr "Opgave"
 
 #: src/Airspace/AirspaceGlue.cpp:40
 msgid "Loading Airspace File..."
-msgstr ""
+msgstr "Indlæser luftrumsfil..."
 
 #: src/Airspace/AirspaceParser.cpp:153
 msgid "Parse Error at Line"
@@ -56,11 +57,11 @@ msgstr "Ukendt filtype"
 
 #: src/ConditionMonitor.cpp:162
 msgid "Significant wind change"
-msgstr ""
+msgstr "Signifikant vind ændring"
 
 #: src/ConditionMonitor.cpp:278
 msgid "Expect arrival past sunset"
-msgstr ""
+msgstr "Forvent ankomst efter solnedgang"
 
 #: src/ConditionMonitor.cpp:323
 msgid "Expect early task arrival"
@@ -78,7 +79,7 @@ msgstr ""
 
 #: src/Logger/Logger.cpp:135
 msgid "Start Logger"
-msgstr ""
+msgstr "Start logger"
 
 #: src/Logger/Logger.cpp:142
 msgid "Logger inactive, insufficient storage!"
@@ -86,19 +87,19 @@ msgstr ""
 
 #: src/Logger/Logger.cpp:143
 msgid "Logger Error"
-msgstr ""
+msgstr "Logger fejl"
 
 #: src/Logger/Logger.cpp:172 src/Logger/Logger.cpp:173
 msgid "Stop Logger"
-msgstr ""
+msgstr "Stop logger"
 
 #: src/Logger/ExternalLogger.cpp:48
 msgid "Declare Task?"
-msgstr ""
+msgstr "Deklarere opgave?"
 
 #: src/Logger/ExternalLogger.cpp:51
 msgid "Task Declared!"
-msgstr ""
+msgstr "Opgave deklarerede"
 
 #: src/Logger/ExternalLogger.cpp:55
 msgid ""
@@ -108,11 +109,11 @@ msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "No logger connected"
-msgstr ""
+msgstr "Ingen forbindelse til logger"
 
 #: src/Logger/ExternalLogger.cpp:82
 msgid "Declare task"
-msgstr ""
+msgstr "Deklarere opgave"
 
 #: src/Logger/ExternalLogger.cpp:97
 msgid "OK to invalidate declaration?"
@@ -120,11 +121,11 @@ msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:98
 msgid "Task declared"
-msgstr ""
+msgstr "Opgave Deklarerede"
 
 #: src/Replay/IgcReplayGlue.cpp:82
 msgid "Could not open IGC file!"
-msgstr ""
+msgstr "Kunne ikke åbne IGC fil!"
 
 #: src/Replay/IgcReplayGlue.cpp:83 src/Replay/NmeaReplayGlue.cpp:100
 msgid "Flight replay"
@@ -144,7 +145,7 @@ msgstr ""
 
 #: src/Gauge/FlarmTrafficWindow.cpp:269
 msgid "No Traffic"
-msgstr ""
+msgstr "Ingen trafik"
 
 #: src/AirfieldDetails.cpp:143
 msgid "Loading Airfield Details File..."
@@ -153,12 +154,12 @@ msgstr ""
 #: src/ExpandMacros.cpp:118 src/ExpandMacros.cpp:128 src/ExpandMacros.cpp:193
 #: src/ExpandMacros.cpp:217
 msgid "Next Turnpoint"
-msgstr ""
+msgstr "Næste vendepunkt"
 
 #: src/ExpandMacros.cpp:123 src/ExpandMacros.cpp:133 src/ExpandMacros.cpp:203
 #: src/ExpandMacros.cpp:240
 msgid "Previous Turnpoint"
-msgstr ""
+msgstr "forrige vendepunkt"
 
 #: src/ExpandMacros.cpp:145 src/ExpandMacros.cpp:165
 msgid "Furthest Landpoint"
@@ -182,7 +183,7 @@ msgstr ""
 
 #: src/ExpandMacros.cpp:202 src/ExpandMacros.cpp:239
 msgid "Start Turnpoint"
-msgstr ""
+msgstr "Start vendepunkt"
 
 #: src/ExpandMacros.cpp:222
 msgid "Arm start"
@@ -251,28 +252,28 @@ msgstr ""
 #: src/ExpandMacros.cpp:317 src/ExpandMacros.cpp:321
 #: src/Dialogs/Message.cpp:168
 msgid "Abort"
-msgstr ""
+msgstr "Afbryd"
 
 #: src/ExpandMacros.cpp:416 src/Dialogs/dlgBasicSettings.cpp:54
 #: Data/Dialogs/dlgLoggerReplay.xml:12
 msgid "Stop"
-msgstr ""
+msgstr "Stop"
 
 #: src/ExpandMacros.cpp:417 Data/Dialogs/dlgLoggerReplay.xml:10
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: src/ExpandMacros.cpp:423 src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:70
 msgid "Long"
-msgstr ""
+msgstr "Lang"
 
 #: src/ExpandMacros.cpp:427 src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:71
 msgid "Short"
-msgstr ""
+msgstr "Kort"
 
 #: src/ExpandMacros.cpp:431 src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:72
 msgid "Full"
-msgstr ""
+msgstr "Fuld"
 
 #: src/ExpandMacros.cpp:435 src/ExpandMacros.cpp:442 src/ExpandMacros.cpp:499
 #: src/ExpandMacros.cpp:505 src/ExpandMacros.cpp:508 src/ExpandMacros.cpp:511
@@ -330,7 +331,7 @@ msgstr "Auto"
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:88
 #, no-c-format
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1391
 #, no-c-format
@@ -543,7 +544,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:160
 #, no-c-format
 msgid "Next distance"
-msgstr ""
+msgstr "Næste distance"
 
 #: src/InfoBoxes/Content/Factory.cpp:161
 #, no-c-format
@@ -598,7 +599,7 @@ msgstr ""
 #: Data/Dialogs/dlgTaskPoint.xml:6 Data/Dialogs/dlgTaskPoint_L.xml:5
 #, no-c-format
 msgid "Next"
-msgstr ""
+msgstr "Næste"
 
 #: src/InfoBoxes/Content/Factory.cpp:189
 #, no-c-format
@@ -612,7 +613,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:196
 #, no-c-format
 msgid "Final altitude difference"
-msgstr ""
+msgstr "Endelig højde difference"
 
 #: src/InfoBoxes/Content/Factory.cpp:197
 #, no-c-format
@@ -639,7 +640,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:207
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr ""
+msgstr "Yderlig højde nødvendig for at afslutte opgave"
 
 #: src/InfoBoxes/Content/Factory.cpp:214
 #, no-c-format
@@ -781,7 +782,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
 msgid "Wind speed"
-msgstr ""
+msgstr "Vindhastighed"
 
 #: src/InfoBoxes/Content/Factory.cpp:287
 #, no-c-format
