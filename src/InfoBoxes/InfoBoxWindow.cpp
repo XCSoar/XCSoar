@@ -495,6 +495,8 @@ InfoBoxWindow::on_key_down(unsigned key_code)
 bool
 InfoBoxWindow::on_mouse_down(int x, int y)
 {
+  click_clock.update();
+
   // if single clicked -> focus the InfoBoxWindow
   set_focus();
   return true;
