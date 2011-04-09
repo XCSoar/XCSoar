@@ -32,23 +32,6 @@ Copyright_License {
  */
 #define ALTERNATE_MAXVALIDGR 200
 
-/**
- * DOUBLECLICKINTERVAL is a general purpose timing, used by both VK and synthetic double click
- *
- * No miracles. Couldn't do it any better.
- *
- * Max interval in ms between two clicks for getting a double click
- * Very careful changing this value. It is used by virtual keys also!
- * This is the timing sequence for virtual keys:
- *
- *   0 - VKSHORTCLICK     single click on the waypoint
- *   0 - DCI / 2 + 30     double click detected and VK disabled
- *   DCI / 2 + 30 - DCI   airspace click and double click conflict?
- *   < DCI                possible double click
- *   > DCI                virtual key
- */
-#define DOUBLECLICKINTERVAL 350
-
 /** over this, show INVALID_GR */
 #define MAXEFFICIENCYSHOW 200
 

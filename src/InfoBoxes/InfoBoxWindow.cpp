@@ -30,7 +30,6 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Appearance.hpp"
-#include "Defines.h"
 #include "Asset.hpp"
 #include "Sizes.h"
 
@@ -497,14 +496,6 @@ InfoBoxWindow::on_key_down(unsigned key_code)
 bool
 InfoBoxWindow::on_mouse_down(int x, int y)
 {
-  // synthetic double click detection with no proximity , good for infoboxes
-
-  // if double clicked -> show menu
-  if (!click_clock.check_always_update(DOUBLECLICKINTERVAL)) {
-    InputEvents::ShowMenu();
-    return true;
-  }
-
   // if single clicked -> focus the InfoBoxWindow
   set_focus();
   return true;
