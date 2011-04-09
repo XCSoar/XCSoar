@@ -52,7 +52,7 @@ PopupMessage::Message::Set(int _type, int _tshow, const TCHAR *_text, int now)
   tshow = _tshow;
   tstart = now;
   texpiry = now;
-  _tcscpy(text, _text);
+  text = _text;
 }
 
 bool

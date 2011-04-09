@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_POPUP_MESSAGE_H
 
 #include "Thread/Mutex.hpp"
+#include "Util/StaticString.hpp"
 #include "PeriodClock.hpp"
 #include "Screen/EditWindow.hpp"
 
@@ -62,15 +63,16 @@ private:
   enum { MAXMESSAGES = 20 };
 
   struct Message {
-    TCHAR text[1000];
     int type;
     int tstart; // time message was created
     int texpiry; // time message will expire
     int tshow; // time message is visible for
 
+    StaticString<1000> text;
+
     Message()
       :type(MSG_UNKNOWN), tstart(0), texpiry(0) {
-      text[0] = _T('\0');
+      text.clear();
     }
 
     bool IsUnknown() const {
