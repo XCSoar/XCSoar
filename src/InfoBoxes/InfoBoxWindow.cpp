@@ -31,7 +31,6 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Appearance.hpp"
 #include "Asset.hpp"
-#include "Sizes.h"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/SubCanvas.hpp"

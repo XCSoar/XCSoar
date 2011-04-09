@@ -26,12 +26,6 @@ Copyright_License {
 
 #define INVALID_GR	999
 
-/**
- * Over this GR value, alternates and Final GR are not showing numbers anymore and
- * the variable is set to INVALIDVALUE
- */
-#define ALTERNATE_MAXVALIDGR 200
-
 /** over this, show INVALID_GR */
 #define MAXEFFICIENCYSHOW 200
 

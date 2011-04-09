@@ -34,6 +34,7 @@ Copyright_License {
 #include "Waypoint/Waypoint.hpp"
 #include "StringUtil.hpp"
 #include "Compiler.h"
+#include "Sizes.h"
 
 #include <stdio.h>
 

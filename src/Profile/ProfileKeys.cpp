@@ -21,8 +21,6 @@ Copyright_License {
 }
 */
 
-#include "Sizes.h"
-#include "Defines.h"
 #include "Profile/ProfileKeys.hpp"
 
 const TCHAR *szProfileColour[] = {

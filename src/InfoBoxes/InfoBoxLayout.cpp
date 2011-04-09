@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Profile/Profile.hpp"
-#include "Sizes.h"
 
 #include <stdio.h>
 

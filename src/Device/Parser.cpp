@@ -347,7 +347,7 @@ NMEAParser::GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     GPS_INFO->LocationAvailable.clear();
 
   // satellites are in items 4-15 of GSA string (4-15 is 1-indexed)
-  for (unsigned i = 0; i < MAXSATELLITES; i++)
+  for (unsigned i = 0; i < GPS_STATE::MAXSATELLITES; i++)
     GPS_INFO->gps.SatelliteIDs[i] = line.read(0);
 
   return true;

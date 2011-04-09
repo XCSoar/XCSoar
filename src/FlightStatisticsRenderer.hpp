@@ -25,7 +25,6 @@ Copyright_License {
 #define FLIGHT_STATISTICS_RENDERER_HPP
 
 #include "Math/leastsqs.h"
-#include "Sizes.h"
 #include "Navigation/TracePoint.hpp"
 #include "FlightStatistics.hpp"
 #include "Screen/Point.hpp"

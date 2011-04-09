@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Logger/LoggerFRecord.hpp"
 #include "DateTime.hpp"
-#include "Sizes.h" /* for MAXSATELLITES */
+#include "NMEA/Info.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -70,7 +70,7 @@ LoggerFRecord::update(const int SatelliteIDs[],
           broken_time.hour, broken_time.minute, broken_time.second);
   eof=7;
 
-  for (int i=0; i < MAXSATELLITES; i++){
+  for (unsigned i = 0; i < GPS_STATE::MAXSATELLITES; ++i) {
     if (SatelliteIDs[i] > 0){
       sprintf(szFRecord+eof, "%02d",SatelliteIDs[i]);
       eof +=2;

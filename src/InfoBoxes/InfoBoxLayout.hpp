@@ -30,6 +30,8 @@ Copyright_License {
 
 namespace InfoBoxLayout
 {
+  static const double CONTROLHEIGHTRATIO =  7.4;
+
   enum Geometry {
     // 0: default, infoboxes along top and bottom, map in middle
     ibTop4Bottom4 = 0,

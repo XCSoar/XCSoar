@@ -29,7 +29,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
 #include "Util/StringUtil.hpp"
-#include "Sizes.h"
 
 #if defined(HAVE_POSIX) && !defined(ANDROID)
 #include <locale.h>

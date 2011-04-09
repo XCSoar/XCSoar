@@ -33,6 +33,7 @@ Copyright_License {
 #include "Message.hpp"
 #include "Simulator.hpp"
 #include "Language.hpp"
+#include "Sizes.h"
 
 int DisplayTimeOut = 0;
 

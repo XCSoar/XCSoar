@@ -25,7 +25,6 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
-#include "Sizes.h"
 #include "FLARM/FLARMNet.hpp"
 #include "IO/DataFile.hpp"
 #include "IO/TextWriter.hpp"

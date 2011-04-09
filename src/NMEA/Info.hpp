@@ -30,7 +30,6 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "FLARM/State.hpp"
-#include "Sizes.h"
 #include "Engine/Navigation/SpeedVector.hpp"
 
 /**
@@ -67,6 +66,8 @@ struct SWITCH_INFO
  */
 struct GPS_STATE
 {
+  static const unsigned MAXSATELLITES = 12;
+
   //############
   //   Status
   //############

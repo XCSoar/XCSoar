@@ -116,7 +116,7 @@ class ActionInterface: public CommonInterface {
   friend class ProcessTimer;
 
 public:
-  // settings
+  /** timeout in quarter seconds of menu button */
   static unsigned MenuTimeoutMax;
 
 protected:

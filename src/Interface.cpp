@@ -52,7 +52,7 @@ MainWindow CommonInterface::main_window(status_messages);
 
 // settings used only by interface thread scope
 unsigned XCSoarInterface::debounceTimeout = 250;
-unsigned ActionInterface::MenuTimeoutMax = MENUTIMEOUTMAX;
+unsigned ActionInterface::MenuTimeoutMax = 8 * 4;
 
 void
 XCSoarInterface::ExchangeBlackboard()

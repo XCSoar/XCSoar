@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "UtilsText.hpp"
 #include "Compatibility/string.h"
-#include "Sizes.h"
 
 #include <assert.h>
 #include <stdlib.h>
