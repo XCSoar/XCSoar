@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-07 10:43+0200\n"
-"PO-Revision-Date: 2011-04-08 06:30+0000\n"
-"Last-Translator: Szombathelyi Zoltán <Unknown>\n"
+"PO-Revision-Date: 2011-04-08 15:20+0000\n"
+"Last-Translator: Gabor LIPTAK <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-08 06:40+0000\n"
+"X-Launchpad-Export-Date: 2011-04-09 07:04+0000\n"
 "X-Generator: Launchpad (build 12757)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
@@ -374,7 +374,7 @@ msgstr "Magasság tenger feletti"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:4
 #, no-c-format
 msgid "H GPS"
-msgstr "Mag tenger"
+msgstr "Mgsg GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:63
 #, no-c-format
@@ -396,7 +396,7 @@ msgstr "Magasság terep feletti"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:7
 #, no-c-format
 msgid "H AGL"
-msgstr "Mag terep"
+msgstr "Mgsg FF"
 
 #: src/InfoBoxes/Content/Factory.cpp:72
 #, no-c-format
@@ -434,7 +434,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails_L.xml:18
 #, no-c-format
 msgid "Bearing"
-msgstr "Irány"
+msgstr "Útirány"
 
 #: src/InfoBoxes/Content/Factory.cpp:90
 #, no-c-format
@@ -442,8 +442,8 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
-"Valódi irány a követkző fordulóponthoz. AAT feladat esetén ez a valódi irány "
-"a célponthoz az AAT szektorban"
+"A következő fordulópont valódi mágneses irányszöge. TS feladat esetén ez az "
+"irány a célponthoz a TS szektorban."
 
 #: src/InfoBoxes/Content/Factory.cpp:97
 #, no-c-format
@@ -499,7 +499,7 @@ msgstr "Sebesség földfeletti"
 #: src/InfoBoxes/Content/Factory.cpp:116
 #, no-c-format
 msgid "V Gnd"
-msgstr "Seb földf"
+msgstr "Seb ff"
 
 #: src/InfoBoxes/Content/Factory.cpp:117
 #, no-c-format
@@ -644,7 +644,7 @@ msgstr "FP név irány infó"
 #: Data/Dialogs/dlgTaskPoint.xml:6 Data/Dialogs/dlgTaskPoint_L.xml:5
 #, no-c-format
 msgid "Next"
-msgstr "FP"
+msgstr "Következő"
 
 #: src/InfoBoxes/Content/Factory.cpp:189
 #, no-c-format
@@ -812,7 +812,7 @@ msgstr "Az aktuális termikben nyert/vesztett magasság."
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:79
 #, no-c-format
 msgid "Track"
-msgstr "Irány"
+msgstr "Repirány"
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
@@ -821,8 +821,9 @@ msgid ""
 "active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
-"A GPS által mért mágneses irányszög. Érintőképernyő/PC: ha szimuláció során "
-"ez a kijelző az aktív, a fel-le nyilakkal állítható az irány."
+"A GPS által mért repirány valódi mágneses irányszöge. Érintőképernyő/PC: ha "
+"szimuláció során ez a kijelző az aktív, a fel-le nyilakkal állítható az "
+"irány."
 
 #: src/InfoBoxes/Content/Factory.cpp:277 src/InfoBoxes/Content/Factory.cpp:278
 #: src/InfoBoxes/Content/Factory.cpp:786 src/Dialogs/dlgFlarmTraffic.cpp:318
@@ -984,7 +985,7 @@ msgstr "Sebesség műszersz."
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
 msgid "V IAS"
-msgstr "V műszer"
+msgstr "Seb műsz"
 
 #: src/InfoBoxes/Content/Factory.cpp:351
 #, no-c-format
@@ -1000,7 +1001,7 @@ msgstr "Magasság barometrikus"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:5
 #, no-c-format
 msgid "H Baro"
-msgstr "Mag baro"
+msgstr "Mgsg baro"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
@@ -1424,7 +1425,7 @@ msgstr "Sebesség valós"
 #: src/InfoBoxes/Content/Factory.cpp:548
 #, no-c-format
 msgid "V TAS"
-msgstr "V valós"
+msgstr "Seb vls"
 
 #: src/InfoBoxes/Content/Factory.cpp:549
 #, no-c-format
@@ -1459,7 +1460,7 @@ msgstr "CS irány"
 #: src/InfoBoxes/Content/Factory.cpp:566
 #, no-c-format
 msgid "Tm Brng"
-msgstr "CS ir mag"
+msgstr "CS ir mgs"
 
 #: src/InfoBoxes/Content/Factory.cpp:567
 #, no-c-format
@@ -1609,7 +1610,7 @@ msgstr "A feladat teljesítéséhez szükséges magasság változásának trendj
 #: src/InfoBoxes/Content/Factory.cpp:647
 #, no-c-format
 msgid "Battery percent"
-msgstr "Telep %"
+msgstr "Telep"
 
 #: src/InfoBoxes/Content/Factory.cpp:649
 #, no-c-format
@@ -1652,7 +1653,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:668
 #, no-c-format
 msgid "Alternate 1 name"
-msgstr "Kitérő1 név"
+msgstr "Kitérő1 irány relatív"
 
 #: src/InfoBoxes/Content/Factory.cpp:669
 #, no-c-format
@@ -1667,7 +1668,7 @@ msgstr "Kijelzi a legjobb kitérő leszállóhely nevét és irányát."
 #: src/InfoBoxes/Content/Factory.cpp:677
 #, no-c-format
 msgid "Alternate 2 name"
-msgstr "Kitérő2 név"
+msgstr "Kitérő2 irány relatív"
 
 #: src/InfoBoxes/Content/Factory.cpp:678
 #, no-c-format
@@ -1811,7 +1812,7 @@ msgstr "FP magasság érkezés"
 #: src/InfoBoxes/Content/Factory.cpp:750
 #, no-c-format
 msgid "WP AltA"
-msgstr "FP érkezés"
+msgstr "FP mgsg"
 
 #: src/InfoBoxes/Content/Factory.cpp:751
 #, no-c-format
@@ -1908,7 +1909,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:812 src/InfoBoxes/Content/Factory.cpp:813
 #, no-c-format
 msgid "Climb band"
-msgstr "Emelkedési sáv"
+msgstr "Emelési sáv"
 
 #: src/InfoBoxes/Content/Factory.cpp:814
 #, no-c-format
@@ -2805,7 +2806,7 @@ msgstr "Feladatkezelő"
 #: src/Dialogs/dlgAnalysis.cpp:290 Data/Dialogs/dlgConfiguration.xml:437
 #: Data/Dialogs/dlgConfiguration_L.xml:438
 msgid "Warnings"
-msgstr "Figyelm."
+msgstr "Riasztás"
 
 #: src/Dialogs/dlgBasicSettings.cpp:54 Data/Dialogs/dlgBasicSettings.xml:4
 msgid "Dump"
@@ -2819,12 +2820,12 @@ msgstr "Ellenőrző lista"
 #: src/Dialogs/dlgConfiguration.cpp:82
 #, no-c-format
 msgid "Site Files"
-msgstr "Térképadatok"
+msgstr "Térképfájlok"
 
 #: src/Dialogs/dlgConfiguration.cpp:83
 #, no-c-format
 msgid "Map Projection"
-msgstr "Térkép megjelenítése"
+msgstr "Térkép megjelenítés"
 
 #: src/Dialogs/dlgConfiguration.cpp:84
 #, no-c-format
@@ -2872,12 +2873,12 @@ msgstr "Poláris"
 #: src/Dialogs/dlgConfiguration.cpp:93
 #, no-c-format
 msgid "Default Task Rules"
-msgstr "Alap feladat szabályok"
+msgstr "Feladatszabályok alapértékei"
 
 #: src/Dialogs/dlgConfiguration.cpp:94
 #, no-c-format
 msgid "Default Task Turnpoint Types"
-msgstr "Alap fordulópont típusok"
+msgstr "Fordulópont típusok alapértékei"
 
 #: src/Dialogs/dlgConfiguration.cpp:95
 #, no-c-format
@@ -2911,12 +2912,12 @@ msgstr "Kezelőfelület külleme"
 #: src/Dialogs/dlgConfiguration.cpp:100
 #, no-c-format
 msgid "InfoBox Pages"
-msgstr "Kijelző lapok"
+msgstr "Kijelző oldalak"
 
 #: src/Dialogs/dlgConfiguration.cpp:101
 #, no-c-format
 msgid "InfoBox Modes"
-msgstr "Kijelzők működése"
+msgstr "Kijelző oldalak tartalma"
 
 #: src/Dialogs/dlgConfiguration.cpp:102
 #, no-c-format
@@ -3622,7 +3623,7 @@ msgstr "Minden fordulópont cimke megjelenik."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:90
 msgid "Task Waypoints & Landables"
-msgstr "Feladat fordulópontok & Leszállóhelyek"
+msgstr "Feladat FP & Leszállók"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:92
 msgid "All waypoints part of a task and all landables will be displayed."
@@ -3630,7 +3631,7 @@ msgstr "A feladat részét képező fordulópontok és a leszállóhelyek megjel
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:93
 msgid "Task Waypoints"
-msgstr "Feladat fordulópontok"
+msgstr "Feladat FP"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:94
 msgid "All waypoints part of a task will be displayed."
@@ -4288,7 +4289,7 @@ msgstr "ÖsszE port"
 #: Data/Dialogs/dlgConfiguration.xml:616
 #: Data/Dialogs/dlgConfiguration_L.xml:617
 msgid "Time step circling"
-msgstr "Körözés ütem"
+msgstr "Mintavétel körözésben"
 
 #: Data/Dialogs/dlgStatusTask.xml:3
 msgid "Task Status"
@@ -4369,7 +4370,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:178
 #: Data/Dialogs/dlgConfiguration_L.xml:178
 msgid "Scale runway length"
-msgstr "Méretezd a futópálya hosszát"
+msgstr "Futópálya méretében"
 
 #: Data/Dialogs/dlgConfiguration.xml:222
 #: Data/Dialogs/dlgConfiguration_L.xml:222
@@ -4585,7 +4586,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:271 Data/Dialogs/dlgWindSettings.xml:12
 #: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:4
 msgid "Auto. wind"
-msgstr "Aut. szél számítás"
+msgstr "Szélszámítás"
 
 #: Data/Dialogs/dlgConfiguration.xml:720
 #: Data/Dialogs/dlgConfiguration_L.xml:721
@@ -4677,7 +4678,7 @@ msgstr "Az aktuális feladatban követendő szabályok."
 #: Data/Dialogs/dlgConfiguration.xml:193
 #: Data/Dialogs/dlgConfiguration_L.xml:193
 msgid "Terrain contrast"
-msgstr "Terep kontraszt"
+msgstr "Kontraszt"
 
 #: Data/Dialogs/pnlTaskProperties.xml:15
 #: Data/Dialogs/pnlTaskProperties_L.xml:16
@@ -4751,7 +4752,7 @@ msgstr "2. oldal"
 #: Data/Dialogs/dlgConfiguration.xml:700
 #: Data/Dialogs/dlgConfiguration_L.xml:701
 msgid "Events"
-msgstr "Események"
+msgstr "Eseménykezelés"
 
 #: Data/Dialogs/dlgConfiguration.xml:392
 #: Data/Dialogs/dlgConfiguration_L.xml:393
@@ -4860,7 +4861,7 @@ msgstr "Térkép fordulópontok"
 #: Data/Dialogs/dlgConfiguration_L.xml:683 Data/Dialogs/dlgVario.xml:272
 #: Data/Dialogs/dlgVario_L.xml:273
 msgid "UTC offset"
-msgstr "UTC Offszet"
+msgstr "Helyi idő eltérése UTC-től"
 
 #: Data/Dialogs/dlgVario.xml:390 Data/Dialogs/dlgVario_L.xml:391
 msgid "Interval; battery"
@@ -4935,7 +4936,7 @@ msgstr "A körözési holtsáv alsó határa"
 #: Data/Dialogs/dlgConfiguration.xml:189
 #: Data/Dialogs/dlgConfiguration_L.xml:189
 msgid "Topography display"
-msgstr "Térképjelek kijelzése"
+msgstr "Topográfia"
 
 #: Data/Dialogs/dlgConfiguration.xml:631
 #: Data/Dialogs/dlgConfiguration_L.xml:632
@@ -5116,7 +5117,7 @@ msgstr "Nagyítás körözéskor"
 #: Data/Dialogs/dlgConfiguration.xml:753
 #: Data/Dialogs/dlgConfiguration_L.xml:754
 msgid "Determines display size of dialogs."
-msgstr "A dialógusablakok méretét határozza meg."
+msgstr "A párbeszédablakok méretét, helyét határozza meg."
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:6
 msgid "ACK Warn"
@@ -5162,7 +5163,7 @@ msgstr "FLARM forgalom"
 
 #: Data/Dialogs/dlgVario.xml:401 Data/Dialogs/dlgVario_L.xml:402
 msgid "V terrain"
-msgstr "Seb földf"
+msgstr "Seb ff"
 
 #: Data/Dialogs/dlgVario.xml:429 Data/Dialogs/dlgVario_L.xml:430
 msgid "Borgelt"
@@ -5373,12 +5374,12 @@ msgstr "Siklás holtsáv felső határa"
 #: Data/Dialogs/dlgConfiguration.xml:441
 #: Data/Dialogs/dlgConfiguration_L.xml:442
 msgid "Warning time"
-msgstr "Figyelmeztetési idő"
+msgstr "Riasztás időzítése"
 
 #: Data/Dialogs/dlgConfiguration.xml:252
 #: Data/Dialogs/dlgConfiguration_L.xml:252
 msgid "Whether to show the ballast percentage."
-msgstr "A vízballaszt arányának megfelenítése"
+msgstr "A vízballaszt arányának megjelenítése"
 
 #: Data/Dialogs/dlgConfiguration.xml:208
 #: Data/Dialogs/dlgConfiguration_L.xml:208
@@ -5418,7 +5419,7 @@ msgid ""
 "events occur, and how long various status messages will appear on screen."
 msgstr ""
 "A státusz fájlban adható meg, hogy milyen hangok kerüljenek lejátszásra "
-"bizonyos események esetén és hogy különféle állapotjelentések mennyi ideig "
+"bizonyos események esetén és hogy különféle állapotjelzések mennyi ideig "
 "jelenjenek meg a képernyőn."
 
 #: Data/Dialogs/dlgConfiguration.xml:580
@@ -5447,7 +5448,7 @@ msgstr "Seb. átlag"
 #: Data/Dialogs/dlgConfiguration.xml:636
 #: Data/Dialogs/dlgConfiguration_L.xml:637
 msgid "Auto. logger"
-msgstr "Auto logger"
+msgstr "Automatikus logger"
 
 #: Data/Dialogs/dlgConfiguration.xml:114
 #: Data/Dialogs/dlgConfiguration_L.xml:114 Data/Dialogs/dlgWindSettings.xml:16
@@ -5681,7 +5682,7 @@ msgstr "Kijelző keret"
 #: Data/Dialogs/dlgConfiguration.xml:340
 #: Data/Dialogs/dlgConfiguration_L.xml:341
 msgid "Route climb"
-msgstr "Útvonal emelkedés"
+msgstr "Emelések az útvonalon"
 
 #: Data/Dialogs/dlgVoice.xml:30
 msgid ""
@@ -5773,7 +5774,7 @@ msgstr "Eltérés költsége"
 #: Data/Dialogs/dlgConfiguration.xml:198
 #: Data/Dialogs/dlgConfiguration_L.xml:198
 msgid "Terrain brightness"
-msgstr "Terep fényerő"
+msgstr "Fényerő"
 
 #: Data/Dialogs/dlgConfiguration.xml:129
 #: Data/Dialogs/dlgConfiguration_L.xml:129
@@ -5985,7 +5986,7 @@ msgstr "Szűrő..."
 #: Data/Dialogs/dlgConfiguration.xml:173
 #: Data/Dialogs/dlgConfiguration_L.xml:173
 msgid "Landable rendering size"
-msgstr "Leszállóhelyek kirajzolásának mérete"
+msgstr "Leszállók mérete"
 
 #: Data/Dialogs/dlgStatus.xml:46
 msgid "Valid finish"
@@ -6029,9 +6030,9 @@ msgid ""
 msgstr ""
 "A fordulópontok címkéinek megjelenítését szabályozza:\n"
 "[MIND] Minden címke megjelenik.\n"
-"[FELADAT & LESZÁLLÓHELYEK] A feladat fordulópontjai és a leszállóhelyek "
+"[FELADAT FP & LESZÁLLÓK] A feladat fordulópontjai és a leszállóhelyek "
 "jelennek meg.\n"
-"[FELADAT] A feladat fordulópontjai jelennek meg.\n"
+"[FELADAT FP] A feladat fordulópontjai jelennek meg.\n"
 "[NINCS] Semmilyen címke nem jelenik meg."
 
 #: Data/Dialogs/dlgTeamCode.xml:10 Data/Dialogs/dlgTeamCode_L.xml:11
@@ -6042,7 +6043,7 @@ msgstr "Társ kód"
 #: Data/Dialogs/dlgConfiguration_L.xml:547
 #: Data/Dialogs/pnlTaskProperties.xml:6 Data/Dialogs/pnlTaskProperties_L.xml:7
 msgid "AAT min. time"
-msgstr "AAT min idő"
+msgstr "TS min idő"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:14
 msgid "Top"
@@ -6118,7 +6119,7 @@ msgid ""
 "[Simple] Simplified line graphics.\n"
 "[Detailed] Rendered aircraft graphics."
 msgstr ""
-"A gép kirajzolásához használt szimbólumot állítja be.\n"
+"A gépecske kirajzolásához használt szimbólumot állítja be.\n"
 "[EGYSZERŰ] Egyszerűsített grafika.\n"
 "[RÉSZLETES] Részletezett grafika."
 
@@ -6133,7 +6134,7 @@ msgstr "Flarm kontaktus"
 #: Data/Dialogs/dlgConfiguration.xml:437
 #: Data/Dialogs/dlgConfiguration_L.xml:438
 msgid "Enable/disable all airspace warnings."
-msgstr "Engedélyezi/Letiltja az összes légtér figyelmeztetést."
+msgstr "Engedélyezi vagy letiltja az összes légtér-riasztást."
 
 #: Data/Dialogs/dlgSwitches.xml:23
 msgid "Gear down"
@@ -6247,7 +6248,7 @@ msgstr "Segesség a maradékon Súgó"
 #: Data/Dialogs/dlgConfiguration.xml:335
 #: Data/Dialogs/dlgConfiguration_L.xml:336
 msgid "Route mode"
-msgstr "Útvonal mód"
+msgstr "Útvonaltervezés módja"
 
 #: Data/Dialogs/Infobox/pnlInfoBoxMacCreadySetup.xml:4
 msgid "Setup Mode"
@@ -6286,7 +6287,7 @@ msgstr "A térképjeleket tartalmazó fájl neve."
 #: Data/Dialogs/dlgConfiguration.xml:327
 #: Data/Dialogs/dlgConfiguration_L.xml:328
 msgid "STF risk factor"
-msgstr "Tartandó sebesség kockázati tényező"
+msgstr "Magasságvesztés kockázata"
 
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "Enable voice read-back of MacReady setting after it is adjusted."
@@ -6295,7 +6296,7 @@ msgstr "A MacCready érték változtatását követő hangjelzést engedélyezi.
 #: Data/Dialogs/dlgConfiguration.xml:445
 #: Data/Dialogs/dlgConfiguration_L.xml:446
 msgid "Acknowledge time"
-msgstr "Nyugtázási idő"
+msgstr "Nyugtázás érvénye"
 
 #: Data/Dialogs/dlgVario.xml:100 Data/Dialogs/dlgVario_L.xml:101
 msgid "Filter circling"
@@ -6348,7 +6349,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:203
 #: Data/Dialogs/dlgConfiguration_L.xml:203
 msgid "Terrain colors"
-msgstr "Terep szinei"
+msgstr "Színek"
 
 #: Data/Dialogs/dlgTarget_L.xml:21
 msgid "ETE"
@@ -6476,7 +6477,7 @@ msgstr "Az átlagemelést körözésben beolvasó hangjelzés engedélyezése."
 #: Data/Dialogs/dlgConfiguration.xml:257
 #: Data/Dialogs/dlgConfiguration_L.xml:257
 msgid "Show gross"
-msgstr "Össz kijelzése"
+msgstr "Össz. emelés"
 
 #: Data/Dialogs/dlgConfiguration.xml:576 Data/Dialogs/dlgConfiguration.xml:596
 #: Data/Dialogs/dlgConfiguration_L.xml:577
@@ -6554,7 +6555,7 @@ msgstr "Körözés alsó vág"
 #: Data/Dialogs/dlgConfiguration_L.xml:573
 #: Data/Dialogs/dlgConfiguration_L.xml:592
 msgid "Baudrate"
-msgstr "Baud, adatb."
+msgstr "Baud"
 
 #: Data/Dialogs/dlgConfiguration.xml:572 Data/Dialogs/dlgConfiguration.xml:591
 #: Data/Dialogs/dlgConfiguration_L.xml:573
@@ -6630,7 +6631,7 @@ msgstr "Légtér nyugta"
 #: Data/Dialogs/dlgConfiguration.xml:124
 #: Data/Dialogs/dlgConfiguration_L.xml:124
 msgid "Trail scaled"
-msgstr "Nyomvonal méretezve"
+msgstr "Nyomvonal méretezés"
 
 #: Data/Dialogs/dlgConfiguration.xml:758
 #: Data/Dialogs/dlgConfiguration_L.xml:759
@@ -6683,9 +6684,9 @@ msgstr ""
 "szűrő nyomógomb ugyancsak lehetővé teszi a megjelenítés és a figyelmeztetés "
 "szűrését, osztályonként.\n"
 "[MIND BE] Mind megjelenik.\n"
-"[VÁG] Csak a vágási szint alattiak.\n"
-"[AUTO] Mind, a gép magasságának egy tartományában.\n"
-"[ALATTA] A gép alatt mind megjelenik."
+"[VÁGÁS] Csak a vágási szint alattiak.\n"
+"[AUTOMATA] Mind, a gép magasságának egy tartományában.\n"
+"[ALATTA MINDET] A gép alatt mind megjelenik."
 
 #: Data/Dialogs/dlgVario.xml:28 Data/Dialogs/dlgVario_L.xml:29
 msgid ""
@@ -6754,7 +6755,7 @@ msgstr ""
 "[EGYENES] A gép képességei szerinti magasság.\n"
 "[TEREPET ELKERÜLŐ] A gép képességei és a terep miatt szükséges kerülők "
 "szerinti magasság.\n"
-"[EGYENES+TEREPKERÜLŐ] Az egyenes siklás szerinti és (a van) a kerülővel "
+"[EGYENES+TEREPKERÜLŐ] Az egyenes siklás szerinti és (ha van) a kerülővel "
 "számított magasság kerül kijelzésre."
 
 #: Data/Dialogs/dlgVario.xml:108 Data/Dialogs/dlgVario_L.xml:109
@@ -6826,7 +6827,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:257
 #: Data/Dialogs/dlgConfiguration_L.xml:257
 msgid "Whether to show the gross climb rate."
-msgstr "Össz. emelkedés kijelzése."
+msgstr "Össz. emelés kijelzése a variométerben."
 
 #: Data/Dialogs/dlgVario.xml:332 Data/Dialogs/dlgVario_L.xml:333
 msgid "No mode reports"
@@ -6903,7 +6904,7 @@ msgstr "Távolság"
 #: Data/Dialogs/dlgConfiguration.xml:469
 #: Data/Dialogs/dlgConfiguration_L.xml:470
 msgid "Start max. speed margin"
-msgstr "Max. startsebesség tűrése"
+msgstr "Sebesség tűrése"
 
 #: Data/Dialogs/dlgConfiguration.xml:360
 #: Data/Dialogs/dlgConfiguration_L.xml:361
@@ -7074,12 +7075,12 @@ msgid ""
 "glide mode."
 msgstr ""
 "Ez határozza meg, hogy melyik MacCready algoritmus lesz alkalmazva.\n"
-"[Végsiklás] Az MC a leggyorsabb érkezéshez lesz beállítva. Az Online Verseny "
+"[VÉGSIKLÁS] Az MC a leggyorsabb érkezéshez lesz beállítva. Az Online Verseny "
 "sebességfeladataiban olyan MC lesz beállítva, hogy a legnagyobb távolság "
 "legyen elérhető a maradék időben és az érkezési magasságot is tartsuk.\n"
-"[Trendátlag] az összes emelésen alapuló átlagos emeléshez lesz állítva a "
-"MC.\n"
-"[Mind] a feladat alatt a trendátlag, a végsiklásban pedig a leggyorsabb "
+"[TERMIKÁTLAG KÖVETÉSE] az összes emelésen alapuló trendátlaghoz lesz állítva "
+"a MC.\n"
+"[MIND] a feladat alatt a trendátlag, a végsiklásban pedig a leggyorsabb "
 "érkezés szerint lesz a MC állítva."
 
 #: Data/Dialogs/dlgVario.xml:428 Data/Dialogs/dlgVario_L.xml:429
@@ -7163,7 +7164,7 @@ msgstr ""
 "feladatmegszakítás és kitérő számításánál a gép milyen teljesítményével "
 "számoljon.\n"
 "[FELADAT] A feladat polárgörbéjével\n"
-"[BIZTONSÁGI MC] A biztonsági MC értékkel"
+"[BIZTONSÁGOS MC] A biztonsági MC értékkel"
 
 #: Data/Dialogs/dlgVario.xml:386 Data/Dialogs/dlgVario_L.xml:387
 msgid "Battery empty delay"
@@ -7206,7 +7207,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:738
 #: Data/Dialogs/dlgConfiguration_L.xml:739
 msgid "Infobox geometry"
-msgstr "Infobox geometria"
+msgstr "Kijelzők elrendezése"
 
 #: Data/Dialogs/dlgVario.xml:32 Data/Dialogs/dlgVario_L.xml:33
 msgid ""
@@ -7255,10 +7256,10 @@ msgid ""
 "\"Home\" the sorting will try to find landing options in the current "
 "direction to the configured home waypoint."
 msgstr ""
-"Ha \"Egyszerű\", a kitérők csak a típusuk (reptér/terep) és érkezési "
-"magasságuk alapján kerülnek rendezésre. Ha \"Feladat\", a rendezés "
-"figyelembe veszi az aktuális feladatot. Ha \"Bázis\", akkor a rendezés a "
-"bázisrepülőtér irányában fog keresni leszállóhelyet."
+"Kitérők felsorolásának rendezési elve. [EGYSZERŰ] a kitérők csak a típusuk "
+"(reptér/terep) és érkezési magasságuk alapján kerülnek rendezésre [FELADAT] "
+"a rendezés figyelembe veszi az aktuális feladat pontjait [BÁZISRA] a "
+"rendezés a bázisrepülőtér irányában fog keresni leszállóhelyet."
 
 #: Data/Dialogs/dlgConfiguration.xml:14 Data/Dialogs/dlgConfiguration_L.xml:11
 msgid "Export"
@@ -7277,7 +7278,7 @@ msgstr "Napi nyugta"
 #: Data/Dialogs/dlgConfiguration_L.xml:114 Data/Dialogs/dlgWindSettings.xml:16
 #: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:8
 msgid "Trail drift"
-msgstr "Nyomv. sodrás"
+msgstr "Sodrás"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:41
 #: Data/Dialogs/pnlTaskCalculator_L.xml:41
@@ -7356,7 +7357,7 @@ msgid ""
 "aircraft location and destination."
 msgstr ""
 "Ha bekapcsoljuk és az MC érték pozitív, az útvonaltervező emelésekkel számol "
-"a gép helye az uticél között."
+"a gép helye és az úticél között."
 
 #: Data/Dialogs/dlgConfiguration.xml:763
 #: Data/Dialogs/dlgConfiguration_L.xml:764
@@ -7446,12 +7447,12 @@ msgstr "Áthelyez"
 
 #: Data/Dialogs/pnlTaskEdit.xml:8 Data/Dialogs/pnlTaskEdit_L.xml:6
 msgid "Edit Point"
-msgstr "Pont szerkesztése"
+msgstr "Szerkeszt"
 
 #: Data/Dialogs/dlgConfiguration.xml:185
 #: Data/Dialogs/dlgConfiguration_L.xml:185
 msgid "Terrain display"
-msgstr "Terep megjelenítés"
+msgstr "Domborzat"
 
 #: Data/Dialogs/dlgConfiguration.xml:217
 #: Data/Dialogs/dlgConfiguration_L.xml:217
@@ -7553,7 +7554,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:300
 #: Data/Dialogs/dlgConfiguration_L.xml:301
 msgid "L/D average period"
-msgstr "Sklsz átl intv"
+msgstr "Átlagos siklószám mintavétel"
 
 #: Data/Dialogs/dlgConfiguration.xml:647
 #: Data/Dialogs/dlgConfiguration_L.xml:648
@@ -7719,8 +7720,8 @@ msgid ""
 "values to emphasise terrain slope, smaller values if flying in steep "
 "mountains."
 msgstr ""
-"A terep kidomborításának mértéke. Nagy értékek hangsúlyozzák a lejtőket, "
-"használjon kisebb értékeket ha meredek hegyek között repül."
+"A domborzat kidomborításának mértéke. Használjon nagy értékeket a lejtők "
+"hangsúlyozására, kisebbeket ha meredek hegyek között repül."
 
 #: Data/Dialogs/dlgConfiguration.xml:541
 #: Data/Dialogs/dlgConfiguration_L.xml:542
@@ -7771,7 +7772,7 @@ msgstr "Menj"
 #: Data/Dialogs/dlgConfiguration.xml:409
 #: Data/Dialogs/dlgConfiguration_L.xml:410
 msgid "The handicap factor used for On-Line Contest scoring."
-msgstr "Az Online Verseny során alkamazott hendikepp tényező."
+msgstr "Az Online Verseny során alkamazott handicap tényező."
 
 #: Data/Dialogs/dlgConfiguration.xml:725
 #: Data/Dialogs/dlgConfiguration_L.xml:726
@@ -7808,7 +7809,7 @@ msgstr "Termik segéd"
 #: Data/Dialogs/dlgConfiguration.xml:433
 #: Data/Dialogs/dlgConfiguration_L.xml:434
 msgid "Margin"
-msgstr "Határ"
+msgstr "Vágási sáv"
 
 #: Data/Dialogs/dlgWaypointEdit.xml:34
 msgid "Lat."
