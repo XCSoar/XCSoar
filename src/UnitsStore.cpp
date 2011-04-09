@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "UnitsStore.hpp"
 #include "Units.hpp"
+#include "Language.hpp"
 
 struct UnitStoreItem
 {
@@ -32,7 +33,7 @@ struct UnitStoreItem
 
 static const UnitStoreItem Presets[] =
 {
-  { _T("European"), {
+  { N_("Continental"), {
     unKiloMeter,
     unMeter,
     unGradCelcius,
@@ -41,7 +42,7 @@ static const UnitStoreItem Presets[] =
     unKiloMeterPerHour,
     unKiloMeterPerHour
   } },
-  { _T("British"), {
+  { N_("British"), {
     unKiloMeter,
     unFeet,
     unGradCelcius,
@@ -50,7 +51,7 @@ static const UnitStoreItem Presets[] =
     unKnots,
     unKiloMeterPerHour
   } },
-  { _T("American"), {
+  { N_("American"), {
     unStatuteMiles,
     unFeet,
     unGradFahrenheit,
@@ -59,7 +60,7 @@ static const UnitStoreItem Presets[] =
     unKnots,
     unStatuteMilesPerHour
   } },
-  { _T("Australian"), {
+  { N_("Australian"), {
     unKiloMeter,
     unFeet,
     unGradCelcius,
@@ -74,7 +75,7 @@ const TCHAR*
 Units::Store::GetName(unsigned i)
 {
   assert(i < Count());
-  return Presets[i].Name;
+  return gettext(Presets[i].Name);
 }
 
 const UnitSetting&
