@@ -46,8 +46,7 @@ using std::min;
 using std::max;
 
 void
-PopupMessage::singleMessage::Set(int _type, int _tshow, const TCHAR *_text,
-                                 int now)
+PopupMessage::Message::Set(int _type, int _tshow, const TCHAR *_text, int now)
 {
   type = _type;
   tshow = _tshow;
@@ -57,7 +56,7 @@ PopupMessage::singleMessage::Set(int _type, int _tshow, const TCHAR *_text,
 }
 
 bool
-PopupMessage::singleMessage::Update(int now)
+PopupMessage::Message::Update(int now)
 {
   if (IsUnknown())
     // ignore unknown messages
@@ -79,7 +78,7 @@ PopupMessage::singleMessage::Update(int now)
 }
 
 bool
-PopupMessage::singleMessage::AppendTo(TCHAR *buffer, int now)
+PopupMessage::Message::AppendTo(TCHAR *buffer, int now)
 {
   if (IsUnknown())
     // ignore unknown messages

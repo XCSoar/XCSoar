@@ -61,14 +61,14 @@ public:
 private:
   enum { MAXMESSAGES = 20 };
 
-  struct singleMessage {
+  struct Message {
     TCHAR text[1000];
     int type;
     int tstart; // time message was created
     int texpiry; // time message will expire
     int tshow; // time message is visible for
 
-    singleMessage()
+    Message()
       :type(MSG_UNKNOWN), tstart(0), texpiry(0) {
       text[0] = _T('\0');
     }
@@ -109,7 +109,7 @@ private:
   PixelRect rc; // maximum message size
 
   Mutex mutex;
-  struct singleMessage messages[MAXMESSAGES];
+  struct Message messages[MAXMESSAGES];
   TCHAR msgText[2000];
 
   unsigned nvisible;
