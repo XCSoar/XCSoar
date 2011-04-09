@@ -37,21 +37,20 @@ static const StatusMessageSTRUCT StatusMessageDefaults[] = {
 };
 
 StatusMessageList::StatusMessageList()
-  :StatusMessageData_Size(0), olddelay(2000)
+  :olddelay(2000)
 {
   // DEFAULT - 0 is loaded as default, and assumed to exist
-  StatusMessageData[0].key = _T("DEFAULT");
-  StatusMessageData[0].doStatus = true;
-  StatusMessageData[0].doSound = true;
-  StatusMessageData[0].sound = _T("IDR_WAV_DRIP");
-  StatusMessageData[0].delay_ms = 2500; // 2.5 s
-  StatusMessageData_Size=1;
+  StatusMessageSTRUCT &first = StatusMessageData.append();
+  first.key = _T("DEFAULT");
+  first.doStatus = true;
+  first.doSound = true;
+  first.sound = _T("IDR_WAV_DRIP");
+  first.delay_ms = 2500; // 2.5 s
 
   // Load up other defaults - allow overwrite in config file
-  StatusMessageSTRUCT *dest = StatusMessageData;
   const StatusMessageSTRUCT *src = StatusMessageDefaults;
   while (src->key != NULL)
-    *dest++ = *src++;
+    StatusMessageData.append(*src++);
 }
 
 void
@@ -89,39 +88,42 @@ StatusMessageList::LoadFile(TLineReader &reader)
   bool some_data; // Did we find some in the last loop...
 
   // Init first entry
-  _init_Status(StatusMessageData_Size);
+  StatusMessageSTRUCT current;
+  _init_Status(current);
   some_data = false;
 
   /* Read from the file */
   TCHAR *buffer;
   const TCHAR *key, *value;
-  while ((StatusMessageData_Size < MAXSTATUSMESSAGECACHE) &&
-         (buffer = reader.read()) != NULL) {
+  while ((buffer = reader.read()) != NULL) {
     // Check valid line? If not valid, assume next record (primative, but works ok!)
     if (*buffer == _T('#') || !parse_assignment(buffer, key, value)) {
       // Global counter (only if the last entry had some data)
       if (some_data) {
-        StatusMessageData_Size++;
+        StatusMessageData.append(current);
         some_data = false;
-        _init_Status(StatusMessageData_Size);
+        _init_Status(current);
+
+        if (StatusMessageData.full())
+          break;
       }
     } else {
       location = NULL;
 
       if (_tcscmp(key, _T("key")) == 0) {
         some_data = true; // Success, we have a real entry
-        location = &StatusMessageData[StatusMessageData_Size].key;
+        location = &current.key;
       } else if (_tcscmp(key, _T("sound")) == 0) {
-        StatusMessageData[StatusMessageData_Size].doSound = true;
-        location = &StatusMessageData[StatusMessageData_Size].sound;
+        current.doSound = true;
+        location = &current.sound;
       } else if (_tcscmp(key, _T("delay")) == 0) {
         TCHAR *endptr;
         ms = _tcstol(value, &endptr, 10);
         if (endptr > value)
-          StatusMessageData[StatusMessageData_Size].delay_ms = ms;
+          current.delay_ms = ms;
       } else if (_tcscmp(key, _T("hide")) == 0) {
         if (_tcscmp(value, _T("yes")) == 0)
-          StatusMessageData[StatusMessageData_Size].doStatus = false;
+          current.doStatus = false;
       }
 
       // Do we have somewhere to put this &&
@@ -137,9 +139,8 @@ StatusMessageList::LoadFile(TLineReader &reader)
     }
   }
 
-  // How many we really got (blank next just in case)
-  StatusMessageData_Size++;
-  _init_Status(StatusMessageData_Size);
+  if (some_data)
+    StatusMessageData.append(current);
 }
 
 void
@@ -157,7 +158,7 @@ StatusMessageList::Startup(bool first)
 const StatusMessageSTRUCT *
 StatusMessageList::Find(const TCHAR *key) const
 {
-  for (int i = StatusMessageData_Size - 1; i > 0; i--)
+  for (int i = StatusMessageData.size() - 1; i > 0; i--)
     if (_tcscmp(key, StatusMessageData[i].key) == 0)
       return &StatusMessageData[i];
 
@@ -166,11 +167,11 @@ StatusMessageList::Find(const TCHAR *key) const
 
 // Create a blank entry (not actually used)
 void
-StatusMessageList::_init_Status(int num)
+StatusMessageList::_init_Status(StatusMessageSTRUCT &m)
 {
-  StatusMessageData[num].key = _T("");
-  StatusMessageData[num].doStatus = true;
-  StatusMessageData[num].doSound = false;
-  StatusMessageData[num].sound = _T("");
-  StatusMessageData[num].delay_ms = 2500;  // 2.5 s
+  m.key = _T("");
+  m.doStatus = true;
+  m.doSound = false;
+  m.sound = _T("");
+  m.delay_ms = 2500;  // 2.5 s
 }

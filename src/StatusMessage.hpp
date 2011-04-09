@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_STATUS_MESSAGE_H
 #define XCSOAR_STATUS_MESSAGE_H
 
-#include "Sizes.h"
+#include "Util/StaticArray.hpp"
 
 #include <tchar.h>
 
@@ -45,8 +45,7 @@ typedef struct {
  * Class to manage a list of active and recent status messages
  */
 class StatusMessageList {
-  StatusMessageSTRUCT StatusMessageData[MAXSTATUSMESSAGECACHE];
-  int StatusMessageData_Size;
+  StaticArray<StatusMessageSTRUCT, 1000> StatusMessageData;
   int olddelay;
 
 public:
@@ -64,7 +63,7 @@ public:
   const StatusMessageSTRUCT *Find(const TCHAR *key) const;
 
 private:
-  void _init_Status(int num);
+  void _init_Status(StatusMessageSTRUCT &m);
 };
 
 #endif

@@ -38,13 +38,6 @@
 #define NUMAIRSPACECOLORS 16
 #define NUMAIRSPACEBRUSHES 8
 
-// Size of Status message cache - Note 1000 messages may not be enough...
-// TODO If we continue with the reading one at a time - then consider using
-// a pointer structure and build on the fly, thus no limit, but also only
-// RAM used as required - easy to do with struct above - just point to next.
-// (NOTE: This is used for all the caches for now - temporary)
-#define MAXSTATUSMESSAGECACHE 1000
-
 #define ERROR_TIME 1.0e6
 
 // used by map window
