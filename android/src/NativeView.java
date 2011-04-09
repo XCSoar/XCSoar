@@ -39,6 +39,7 @@ import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.os.Build;
 import android.os.Handler;
+import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -271,14 +272,15 @@ class NativeView extends SurfaceView
     initGL(getHolder());
 
     android.graphics.Rect r = getHolder().getSurfaceFrame();
-    if (initializeNative(r.width(), r.height()))
+    if (initializeNative(getContext(), r.width(), r.height()))
         runNative();
     deinitializeNative();
 
     quitHandler.sendMessage(quitHandler.obtainMessage());
   }
 
-  protected native boolean initializeNative(int width, int height);
+  protected native boolean initializeNative(Context context,
+                                            int width, int height);
   protected native void runNative();
   protected native void deinitializeNative();
   protected native void resizedNative(int width, int height);

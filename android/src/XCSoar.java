@@ -139,6 +139,7 @@ public class XCSoar extends Activity {
           PendingIntent.getActivity(this, 0, intent, 0);
         notification.setLatestEventInfo(this, "XCSoar", "XCSoar is running",
                                         contentIntent);
+        notification.flags |= Notification.FLAG_ONGOING_EVENT;
 
         NotificationManager notificationManager = (NotificationManager)
           getSystemService(Context.NOTIFICATION_SERVICE);
