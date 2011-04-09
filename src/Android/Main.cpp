@@ -50,6 +50,7 @@ SoundUtil *sound_util;
 
 JNIEXPORT jboolean JNICALL
 Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
+                                            jobject context,
                                             jint width, jint height)
 {
   Java::Init(env);
@@ -59,7 +60,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 #endif
 
   assert(native_view == NULL);
-  native_view = new NativeView(env, obj, width, height);
+  native_view = new NativeView(env, obj, context, width, height);
   InitAsset();
 
   Profile::SetFiles(_T(""));

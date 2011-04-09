@@ -33,6 +33,7 @@ Copyright_License {
 class NativeView {
   JNIEnv *env;
   Java::Object obj;
+  Java::Object context;
 
   unsigned width, height;
 
@@ -40,8 +41,10 @@ class NativeView {
   jmethodID swap_method, load_resource_texture_method;
 
 public:
-  NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height)
-    :env(_env), obj(env, _obj), width(_width), height(_height) {
+  NativeView(JNIEnv *_env, jobject _obj, jobject _context,
+             unsigned _width, unsigned _height)
+    :env(_env), obj(env, _obj), context(env, _context),
+     width(_width), height(_height) {
     Java::Class cls(env, "org/xcsoar/NativeView");
     init_surface_method = env->GetMethodID(cls, "initSurface", "()Z");
     deinit_surface_method = env->GetMethodID(cls, "deinitSurface", "()V");
@@ -53,12 +56,12 @@ public:
   unsigned get_width() const { return width; }
   unsigned get_height() const { return height; }
 
+  /**
+   * Returns the android.content.Context object.  The returned value
+   * does not need to be dereferenced by the caller.
+   */
   jobject get_context() {
-    Java::Class cls(env, "org/xcsoar/NativeView");
-    jmethodID mid = env->GetMethodID(cls, "getContext",
-                                     "()Landroid/content/Context;");
-    assert(mid != NULL);
-    return env->CallObjectMethod(obj, mid);
+    return context;
   }
 
   bool initSurface() {

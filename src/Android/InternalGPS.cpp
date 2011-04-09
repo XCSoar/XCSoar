@@ -45,17 +45,14 @@ InternalGPS::~InternalGPS()
 InternalGPS *
 InternalGPS::create(JNIEnv *env, NativeView *native_view)
 {
-  jobject context = native_view->get_context();
-
   Java::Class cls(env, "org/xcsoar/InternalGPS");
 
   jmethodID cid = env->GetMethodID(cls, "<init>",
                                    "(Landroid/content/Context;)V");
   assert(cid != NULL);
 
-  jobject obj = env->NewObject(cls, cid, context);
+  jobject obj = env->NewObject(cls, cid, native_view->get_context());
   assert(obj != NULL);
-  env->DeleteLocalRef(context);
 
   InternalGPS *internal_gps = new InternalGPS(env, obj);
   env->DeleteLocalRef(obj);

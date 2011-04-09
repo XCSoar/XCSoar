@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.0.10 - not yet released
+* Android
+  - fix crash bug on sound effect
 
 Version 6.0.9 - 2011-04-06
 * devices
