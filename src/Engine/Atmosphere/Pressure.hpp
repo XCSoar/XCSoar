@@ -33,6 +33,9 @@ Copyright_License {
  */
 class AtmosphericPressure 
 {
+  /** Pressure at sea level, hPa */
+  fixed m_QNH;
+
 public:
   /**
    * Default constructor, sets QNH to International Standard Atmosphere
@@ -150,11 +153,6 @@ public:
    */
   gcc_const
   static fixed PressureAltitudeToStaticPressure(const fixed alt);
-
-
-private:
-  /** Pressure at sea level, hPa */
-  fixed m_QNH;
 };
 
 #endif
