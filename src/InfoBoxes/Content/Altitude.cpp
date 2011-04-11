@@ -404,7 +404,8 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
   if (!basic.BaroAltitudeAvailable) {
     infobox.SetInvalid();
 
-    if (basic.PressureAltitudeAvailable && !basic.QNHAvailable)
+    if (basic.PressureAltitudeAvailable &&
+        !CommonInterface::SettingsComputer().pressure_available)
       infobox.SetComment(_("no QNH"));
 
     return;
@@ -459,6 +460,8 @@ void
 InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
 {
   const NMEA_INFO &basic = CommonInterface::Basic();
+  const SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SettingsComputer();
   TCHAR sTmp[32];
 
   if (basic.PressureAltitudeAvailable) {
@@ -475,10 +478,10 @@ InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
     _stprintf(sTmp, _T("%dft"), iround(Altitude));
     infobox.SetComment(sTmp);
 
-  } else if (basic.GPSAltitudeAvailable && basic.QNHAvailable) {
+  } else if (basic.GPSAltitudeAvailable &&
+             settings_computer.pressure_available) {
     // Take gps altitude as baro altitude. This is inaccurate but still fits our needs.
-    const AtmosphericPressure &qnh =
-      CommonInterface::SettingsComputer().pressure;
+    const AtmosphericPressure &qnh = settings_computer.pressure;
     fixed Altitude = Units::ToUserUnit(qnh.QNHAltitudeToPressureAltitude(basic.GPSAltitude), unFeet);
 
     // Title color red
@@ -492,7 +495,8 @@ InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
     _stprintf(sTmp, _T("%dft"), iround(Altitude));
     infobox.SetComment(sTmp);
 
-  } else if ((basic.BaroAltitudeAvailable || basic.GPSAltitudeAvailable) && !basic.QNHAvailable) {
+  } else if ((basic.BaroAltitudeAvailable || basic.GPSAltitudeAvailable) &&
+             !settings_computer.pressure_available) {
     infobox.SetInvalid();
     infobox.SetComment(_("no QNH"));
   } else {

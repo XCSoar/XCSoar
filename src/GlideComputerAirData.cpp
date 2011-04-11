@@ -110,7 +110,7 @@ GlideComputerAirData::ProcessVertical()
   const NMEA_INFO &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
 
-  AutoQNH(basic, calculated);
+  AutoQNH(basic, calculated, SettingsComputer());
 
   TurnRate();
   Turning();
@@ -726,7 +726,7 @@ GlideComputerAirData::OnTakeoff()
 void
 GlideComputerAirData::AirspaceWarning()
 {
-  airspace_database.set_flight_levels(Basic().pressure);
+  airspace_database.set_flight_levels(SettingsComputer().pressure);
 
   AirspaceActivity day (Calculated().local_date_time.day_of_week);
   airspace_database.set_activity(day);

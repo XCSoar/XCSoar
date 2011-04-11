@@ -26,8 +26,10 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
+struct SETTINGS_COMPUTER;
 
 void
-AutoQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated);
+AutoQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+        const SETTINGS_COMPUTER &settings_computer);
 
 #endif

@@ -24,11 +24,13 @@ Copyright_License {
 #include "AutoQNH.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
+#include "SettingsComputer.hpp"
 #include "Components.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
 void
-AutoQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated)
+AutoQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+        const SETTINGS_COMPUTER &settings_computer)
 {
   #define QNH_TIME 10
 
@@ -39,7 +41,7 @@ AutoQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated)
       || !basic.gps.real // never in replay mode / simulator
       || !basic.LocationAvailable // Reject if no valid GPS fix
       || !basic.PressureAltitudeAvailable // Reject if no pressure altitude
-      || basic.QNHAvailable // Reject if QNH already known
+      || settings_computer.pressure_available // Reject if QNH already known
     ) {
     if (countdown_autoqnh<= QNH_TIME) {
       countdown_autoqnh= QNH_TIME; // restart if havent performed
@@ -55,10 +57,10 @@ AutoQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated)
     next_wp = way_points.lookup_location(basic.Location, fixed(1000));
 
     if (next_wp && next_wp->is_airport()) {
-      calculated.pressure.set_QNH(basic.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, next_wp->Altitude));
+      calculated.pressure.set_QNH(settings_computer.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, next_wp->Altitude));
       calculated.pressure_available.update(basic.Time);
     } else if (calculated.TerrainValid) {
-      calculated.pressure.set_QNH(basic.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, calculated.TerrainAlt));
+      calculated.pressure.set_QNH(settings_computer.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, calculated.TerrainAlt));
       calculated.pressure_available.update(basic.Time);
     } else
       return;

@@ -152,7 +152,7 @@ SettingsLeave()
       airspace_warnings->clear();
     airspace_database.clear();
     ReadAirspace(airspace_database, terrain,
-                 XCSoarInterface::Basic().pressure);
+                 CommonInterface::SettingsComputer().pressure);
   }
 
   if (protected_task_manager != NULL) {
