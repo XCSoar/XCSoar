@@ -549,8 +549,8 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (line.read_checked(value))
     GPS_INFO->ProvideBaroAltitudeTrue(value - fixed(1000));
 
-  line.skip();
-  // GPS_INFO->pressure.set_QNH(_tcstod(ctemp, NULL) - 1000); ?
+  if (line.read_checked(value))
+    GPS_INFO->settings.ProvideQNH(value, GPS_INFO->Time);
 
   if (line.read_checked(value))
     GPS_INFO->ProvideTrueAirspeed(value / 100);
