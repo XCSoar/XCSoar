@@ -68,7 +68,8 @@ PWES0(NMEAInputLine &line, NMEA_INFO &info)
   line.skip(); /* average netto vario */
   line.skip(); /* speed to fly */
 
-  line.skip(); /* baro altitude 1013 */
+  if (line.read_checked(i))
+    info.ProvidePressureAltitude(fixed(i));
 
   if (line.read_checked(i))
     info.ProvideBaroAltitudeTrue(fixed(i));
