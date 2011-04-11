@@ -222,9 +222,6 @@ UpdatePanelName()
   const unsigned BUFFER_LENGTH = InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH + 32;
   TCHAR caption[BUFFER_LENGTH];
 
-  _sntprintf(caption, BUFFER_LENGTH, _T("%s: %s"), _("InfoBox Layout"), data.name);
-  wf->SetCaption(caption);
-
   _sntprintf(caption, BUFFER_LENGTH, _T("%s: %s"), _("Name"), data.name);
   buttonPanelName->SetCaption(caption);
 }
