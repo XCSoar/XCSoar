@@ -44,6 +44,11 @@ public:
   AtmosphericPressure();
 
   /**
+   * @param qnh the QNH in hPa
+   */
+  AtmosphericPressure(fixed qnh):m_QNH(qnh) {}
+
+  /**
    * Set QNH value (Mean Sea Level pressure)
    *
    * @param set New value of QNH (hPa)
