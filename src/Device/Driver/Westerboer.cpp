@@ -95,6 +95,21 @@ PWES0(NMEAInputLine &line, NMEA_INFO &info)
   return true;
 }
 
+/**
+ * $PWES1,DD,MM,S,AAA,F,V,LLL,BB*CS<CR><LF>
+ */
+static bool
+PWES1(NMEAInputLine &line, NMEA_INFO &info)
+{
+  line.skip(); /* device */
+
+  int i;
+  if (line.read_checked(i))
+    info.settings.ProvideMacCready(fixed(i) / 10, info.Time);
+
+  return true;
+}
+
 bool
 WesterboerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
@@ -107,6 +122,9 @@ WesterboerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 
   if (strcmp(type, "$PWES0") == 0)
     return PWES0(line, *GPS_INFO);
+
+  if (strcmp(type, "$PWES1") == 0)
+    return PWES1(line, *GPS_INFO);
 
   return false;
 }
