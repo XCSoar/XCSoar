@@ -145,9 +145,9 @@ QNHProcessTimer()
   const NMEA_INFO &basic = CommonInterface::Basic();
   const DERIVED_INFO &calculated = CommonInterface::Calculated();
 
-  if (basic.QNHAvailable.modified(settings_computer.pressure_available)) {
-    settings_computer.pressure = basic.pressure;
-    settings_computer.pressure_available = basic.QNHAvailable;
+  if (basic.settings.qnh_available.modified(settings_computer.pressure_available)) {
+    settings_computer.pressure = basic.settings.qnh;
+    settings_computer.pressure_available = basic.settings.qnh_available;
   }
 
   if (calculated.pressure_available.modified(settings_computer.pressure_available)) {

@@ -343,10 +343,8 @@ void
 DeviceBlackboard::SetQNH(fixed qnh)
 {
   ScopeLock protect(mutexBlackboard);
-  NMEA_INFO &basic = SetBasic();
 
-  basic.ProvideQNHSetting(qnh);
-  AllDevicesPutQNH(basic.pressure, Calculated());
+  AllDevicesPutQNH(AtmosphericPressure(qnh), Calculated());
 }
 
 void

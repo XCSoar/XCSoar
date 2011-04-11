@@ -95,9 +95,6 @@ NMEA_INFO::reset()
 
   NavAltitude = fixed_zero;
 
-  pressure.set_QNH(fixed(1013.25));
-  QNHAvailable.clear();
-
   Time = fixed_zero;
   DateTime.year = DateTime.month = DateTime.day = 0;
   DateTime.day_of_week = 0;
@@ -214,14 +211,6 @@ NMEA_INFO::complement(const NMEA_INFO &add)
 
   if (PressureAltitudeAvailable.complement(add.PressureAltitudeAvailable))
     PressureAltitude = add.PressureAltitude;
-
-  /* calculated: working_band_height,
-     NavAltitude,working_band_fraction */
-
-  if (add.QNHAvailable.modified(QNHAvailable)) {
-    pressure = add.pressure;
-    QNHAvailable = add.QNHAvailable;
-  }
 
   if (TotalEnergyVarioAvailable.complement(add.TotalEnergyVarioAvailable))
     TotalEnergyVario = add.TotalEnergyVario;

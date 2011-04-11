@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "NMEA/Validity.hpp"
 #include "Math/fixed.hpp"
+#include "Engine/Atmosphere/Pressure.hpp"
 
 /**
  * Settings received from an external device.
@@ -46,6 +47,11 @@ struct ExternalSettings {
   /** Bugs information of external device (if available) */
   fixed bugs;
 
+  Validity qnh_available;
+
+  /** the QNH setting [hPa] */
+  AtmosphericPressure qnh;
+
   void Clear();
   void Expire(fixed time);
   void Complement(const ExternalSettings &add);
@@ -59,6 +65,7 @@ struct ExternalSettings {
   bool ProvideMacCready(fixed value, fixed time);
   bool ProvideBallast(fixed value, fixed time);
   bool ProvideBugs(fixed value, fixed time);
+  bool ProvideQNH(fixed value, fixed time);
 };
 
 #endif

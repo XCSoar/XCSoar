@@ -29,6 +29,7 @@ ExternalSettings::Clear()
   mac_cready_available.clear();
   ballast_available.clear();
   bugs_available.clear();
+  qnh_available.clear();
 }
 
 void
@@ -54,6 +55,11 @@ ExternalSettings::Complement(const ExternalSettings &add)
   if (add.bugs_available.modified(bugs_available)) {
     bugs = add.bugs;
     bugs_available = add.bugs_available;
+  }
+
+  if (add.qnh_available.modified(qnh_available)) {
+    qnh = add.qnh;
+    qnh_available = add.qnh_available;
   }
 }
 
@@ -87,5 +93,16 @@ ExternalSettings::ProvideBugs(fixed value, fixed time)
 
   bugs = value;
   bugs_available.update(time);
+  return true;
+}
+
+bool
+ExternalSettings::ProvideQNH(fixed value, fixed time)
+{
+  if (qnh_available && fabs(qnh.get_QNH() - value) < fixed(0.1))
+    return false;
+
+  qnh = value;
+  qnh_available.update(time);
   return true;
 }

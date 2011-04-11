@@ -259,14 +259,6 @@ struct NMEA_INFO {
   /** Altitude used for navigation (GPS or Baro) */
   fixed NavAltitude;
 
-  /** QNH value available? */
-  Validity QNHAvailable;
-
-  /**
-   * Troposhere atmosphere model for QNH correction
-   */
-  AtmosphericPressure pressure;
-
   //##########
   //   Time
   //##########
@@ -421,15 +413,6 @@ struct NMEA_INFO {
     return BaroAltitudeAvailable
       ? BaroAltitude
       : GPSAltitude;
-  }
-
-  /**
-   * Provide QNH setting
-   * @param qnh as QNH setting
-   */
-  void ProvideQNHSetting(fixed qnh) {
-    pressure.set_QNH(qnh);
-    QNHAvailable.update(Time);
   }
 
   /**
