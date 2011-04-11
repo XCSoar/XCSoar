@@ -59,8 +59,17 @@ class VegaDevice : public AbstractDevice {
 private:
   Port *port;
 
+  /**
+   * The most recent QNH value, written by SetQNH(), read by
+   * VarioWriteSettings().
+   */
+  AtmosphericPressure qnh;
+
 public:
   VegaDevice(Port *_port):port(_port) {}
+
+protected:
+  void VarioWriteSettings(const DERIVED_INFO &calculated) const;
 
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
@@ -361,8 +370,8 @@ VegaDevice::PutVoice(const TCHAR *Sentence)
   return true;
 }
 
-static void
-_VarioWriteSettings(Port *port, const DERIVED_INFO &calculated)
+void
+VegaDevice::VarioWriteSettings(const DERIVED_INFO &calculated) const
 {
     char mcbuf[100];
 
@@ -371,8 +380,7 @@ _VarioWriteSettings(Port *port, const DERIVED_INFO &calculated)
             iround(calculated.V_stf*10),
             calculated.Circling,
             iround(calculated.TerrainAlt),
-            10132); // JMW 20080716 bug
-              // iround(QNH*10));
+            uround(qnh.get_QNH() * 10));
 
     PortWriteNMEA(port, mcbuf);
 }
@@ -383,7 +391,9 @@ VegaDevice::PutQNH(const AtmosphericPressure& pres,
 {
   (void)pres;
 
-  _VarioWriteSettings(port, calculated);
+  qnh = pres;
+
+  VarioWriteSettings(calculated);
 
   return true;
 }
@@ -393,7 +403,7 @@ VegaDevice::OnSysTicker(const NMEA_INFO &basic,
                         const DERIVED_INFO &calculated)
 {
   if (basic.TotalEnergyVarioAvailable)
-    _VarioWriteSettings(port, calculated);
+    VarioWriteSettings(calculated);
 
   const THERMAL_LOCATOR_INFO &t = calculated.thermal_locator;
   char tbuf[100];
