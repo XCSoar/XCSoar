@@ -103,6 +103,19 @@ Dump(GeoPoint location)
 }
 
 static void
+Dump(const ExternalSettings &settings)
+{
+  if (settings.mac_cready_available)
+    printf("MacCready=%.1f\n", (double)settings.mac_cready);
+
+  if (settings.ballast_available)
+    printf("Ballast=%.1f\n", (double)settings.ballast);
+
+  if (settings.bugs_available)
+    printf("Bugs=%.1f\n", (double)settings.bugs);
+}
+
+static void
 Dump(const NMEA_INFO &basic)
 {
   printf("Date=%02u.%02u.%04u\n",
@@ -173,6 +186,8 @@ Dump(const NMEA_INFO &basic)
 
   if (basic.engine_noise_level_available)
     printf("ENL=%u\n", basic.engine_noise_level);
+
+  Dump(basic.settings);
 }
 
 int main(int argc, char **argv)
