@@ -128,12 +128,9 @@ class CAI302Device : public AbstractDevice {
 private:
   Port *port;
 
-  int mac_cready, bugs, ballast;
-
 public:
   CAI302Device(Port *_port)
-    :port(_port),
-     mac_cready(-1), bugs(-1), ballast(-1) {}
+    :port(_port) {}
 
 public:
   virtual bool Open(OperationEnvironment &env);
@@ -212,7 +209,7 @@ CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 bool
 CAI302Device::PutMacCready(fixed MacCready)
 {
-  mac_cready = uround(Units::ToUserUnit(fixed(MacCready) * 10, unKnots));
+  unsigned mac_cready = uround(Units::ToUserUnit(MacCready * 10, unKnots));
 
   char szTmp[32];
   sprintf(szTmp, "!g,m%u\r", mac_cready);
@@ -224,7 +221,7 @@ CAI302Device::PutMacCready(fixed MacCready)
 bool
 CAI302Device::PutBugs(fixed Bugs)
 {
-  bugs = uround(fixed(Bugs) * 100);
+  unsigned bugs = uround(Bugs * 100);
 
   char szTmp[32];
   sprintf(szTmp, "!g,u%u\r", bugs);
@@ -236,7 +233,7 @@ CAI302Device::PutBugs(fixed Bugs)
 bool
 CAI302Device::PutBallast(fixed Ballast)
 {
-  ballast = uround(Ballast * 100);
+  unsigned ballast = uround(Ballast * 100);
 
   char szTmp[32];
   sprintf(szTmp, "!g,b%u\r", ballast);
@@ -566,21 +563,15 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   int i;
 
-  if (line.read_checked(i) && i != mac_cready) {
-    mac_cready = i;
+  if (line.read_checked(i))
     GPS_INFO->settings.ProvideMacCready(Units::ToSysUnit(fixed(i) / 10, unKnots),
                                         GPS_INFO->Time);
-  }
 
-  if (line.read_checked(i) && i != ballast) {
-    ballast = i;
+  if (line.read_checked(i))
     GPS_INFO->settings.ProvideBallast(value / 100, GPS_INFO->Time);
-  }
 
-  if (line.read_checked(i) && i != bugs) {
-    bugs = i;
+  if (line.read_checked(i))
     GPS_INFO->settings.ProvideBugs(value / 100, GPS_INFO->Time);
-  }
 
   return true;
 }
