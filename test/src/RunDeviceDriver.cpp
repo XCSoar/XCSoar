@@ -136,6 +136,12 @@ Dump(const NMEA_INFO &basic)
   if (basic.GPSAltitudeAvailable)
     printf("GPSAltitude=%d\n", (int)basic.GPSAltitude);
 
+  if (basic.static_pressure_available)
+    printf("StaticPressure=%d\n", (int)basic.static_pressure);
+
+  if (basic.PressureAltitudeAvailable)
+    printf("PressureAltitude=%d\n", (int)basic.PressureAltitude);
+
   if (basic.BaroAltitudeAvailable)
     printf("BaroAltitude=%d\n", (int)basic.BaroAltitude);
 
