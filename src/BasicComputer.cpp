@@ -35,25 +35,30 @@ ComputePressure(NMEA_INFO &basic, const SETTINGS_COMPUTER &settings_computer)
   const AtmosphericPressure &qnh = settings_computer.pressure;
   const bool qnh_available = settings_computer.pressure_available;
   const bool static_pressure_available = basic.static_pressure_available;
+  const bool pressure_altitude_available = basic.PressureAltitudeAvailable;
 
   if (!basic.static_pressure_available) {
     if (basic.PressureAltitudeAvailable) {
       basic.static_pressure =
         AtmosphericPressure::PressureAltitudeToStaticPressure(basic.PressureAltitude);
       basic.static_pressure_available = basic.PressureAltitudeAvailable;
-    } else if (basic.BaroAltitudeAvailable && qnh_available)
+    } else if (basic.BaroAltitudeAvailable && qnh_available) {
       basic.static_pressure =
         qnh.QNHAltitudeToStaticPressure(basic.BaroAltitude);
+      basic.static_pressure_available = basic.BaroAltitudeAvailable;
+    }
   }
 
   if (!basic.PressureAltitudeAvailable) {
-    if (basic.static_pressure_available) {
+    if (static_pressure_available) {
       basic.PressureAltitude =
         AtmosphericPressure::StaticPressureToPressureAltitude(basic.static_pressure);
       basic.PressureAltitudeAvailable = basic.static_pressure_available;
-    } else if (basic.BaroAltitudeAvailable && qnh_available)
+    } else if (basic.BaroAltitudeAvailable && qnh_available) {
       basic.PressureAltitude =
         qnh.QNHAltitudeToPressureAltitude(basic.BaroAltitude);
+      basic.PressureAltitudeAvailable = basic.PressureAltitudeAvailable;
+    }
   }
 
   if (qnh_available) {
@@ -65,12 +70,12 @@ ComputePressure(NMEA_INFO &basic, const SETTINGS_COMPUTER &settings_computer)
       basic.BaroAltitude =
         qnh.StaticPressureToQNHAltitude(basic.static_pressure);
       basic.BaroAltitudeAvailable = basic.static_pressure_available;
-    } else if (basic.PressureAltitudeAvailable) {
+    } else if (pressure_altitude_available) {
       basic.BaroAltitude =
         qnh.PressureAltitudeToQNHAltitude(basic.PressureAltitude);
       basic.BaroAltitudeAvailable = basic.PressureAltitudeAvailable;
     }
-  } else if (!basic.BaroAltitudeAvailable && basic.PressureAltitudeAvailable)
+  } else if (!basic.BaroAltitudeAvailable && pressure_altitude_available)
     /* no QNH, but let's fill in the best fallback value we can get,
        without setting BaroAltitudeAvailable */
     basic.BaroAltitude = basic.PressureAltitude;
