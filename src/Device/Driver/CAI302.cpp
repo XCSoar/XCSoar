@@ -568,10 +568,10 @@ CAI302Device::cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
                                         GPS_INFO->Time);
 
   if (line.read_checked(i))
-    GPS_INFO->settings.ProvideBallast(value / 100, GPS_INFO->Time);
+    GPS_INFO->settings.ProvideBallast(fixed(i) / 100, GPS_INFO->Time);
 
   if (line.read_checked(i))
-    GPS_INFO->settings.ProvideBugs(value / 100, GPS_INFO->Time);
+    GPS_INFO->settings.ProvideBugs(fixed(i) / 100, GPS_INFO->Time);
 
   return true;
 }
