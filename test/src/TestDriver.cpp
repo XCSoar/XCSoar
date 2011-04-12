@@ -150,6 +150,8 @@ TestBorgeltB50()
   ok1(equals(nmea_info.TotalEnergyVario, -0.5658888888888889));
   ok1(nmea_info.settings.mac_cready_available);
   ok1(equals(nmea_info.settings.mac_cready, 0.5144444444444444));
+  ok1(nmea_info.settings.bugs_available);
+  ok1(equals(nmea_info.settings.bugs, 0.9));
   ok1(nmea_info.SwitchState.FlightMode == SWITCH_INFO::MODE_CIRCLING);
   ok1(nmea_info.TemperatureAvailable);
   ok1(equals(nmea_info.OutsideAirTemperature, 245.15));
@@ -419,7 +421,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(147);
+  plan_tests(149);
 
   TestGeneric();
   TestBorgeltB50();

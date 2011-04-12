@@ -81,13 +81,15 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   // RMN: Changed bugs-calculation, swapped ballast and bugs to suit
   // the B50-string for Borgelt, it's % degradation, for us, it is %
   // of max performance
-  line.skip(2);
+
+  if (line.read_checked(value))
+    GPS_INFO->settings.ProvideBugs(
+        fixed_one - max(fixed_zero, min(fixed(30), value)) / 100, GPS_INFO->Time);
+
+  line.skip();
   /*
 
   JMW disabled bugs/ballast due to problems with test b50
-
-  GPS_INFO->Bugs = 1.0 - max(0, min(30, line.read(0.0))) / 100.0;
-  BUGS = GPS_INFO->Bugs;
 
   // for Borgelt it's % of empty weight,
   // for us, it's % of ballast capacity
