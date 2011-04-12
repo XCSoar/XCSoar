@@ -178,6 +178,15 @@ TestCAI302()
   ok1(nmea_info.BaroAltitudeAvailable);
   ok1(equals(nmea_info.BaroAltitude, 287));
 
+  /* MC, ballast, bugs */
+  device->ParseNMEA("!w,0,0,0,0,0,0,0,0,0,0,10,50,90*56", &nmea_info);
+  ok1(nmea_info.settings.mac_cready_available);
+  ok1(equals(nmea_info.settings.mac_cready, 0.5144444444444444));
+  ok1(nmea_info.settings.ballast_available);
+  ok1(equals(nmea_info.settings.ballast, 0.5));
+  ok1(nmea_info.settings.bugs_available);
+  ok1(equals(nmea_info.settings.bugs, 0.9));
+
   delete device;
 }
 
@@ -382,7 +391,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(126);
+  plan_tests(132);
 
   TestGeneric();
   TestCAI302();
