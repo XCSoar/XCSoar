@@ -14,7 +14,7 @@
   </Edit>
 
   <Edit Name="prpSpeedRemaining" Caption="V rem." X="90" Y="29" Width="86" Height="22" CaptionWidth="35" ReadOnly="1" min="0" max="2000" step="10"
-    Help="Speed remaining Help">
+    Help="Speed remaining">
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
   </Edit>
 

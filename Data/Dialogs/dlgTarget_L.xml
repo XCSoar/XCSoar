@@ -29,7 +29,7 @@
   </Edit>
 
   <Edit Name="prpSpeedRemaining" Caption="V rem." X="0" Height="22" CaptionWidth="50" ReadOnly="1" min="0" max="2000" step="10"
-    Help="Speed Remaining Help">
+    Help="Speed remaining">
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
   </Edit>
 

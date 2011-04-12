@@ -1392,7 +1392,7 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
   static const TCHAR *const msg[] = {N_("All"),
                                      N_("Task & Landables"),
                                      N_("Task"),
-                                     N_("None ")};
+                                     N_("None")};
   static const unsigned int n=sizeof(msg)/sizeof(msg[0]);
   static const TCHAR *const actions[n] = {_T("all"),
                                           _T("task+landables"),

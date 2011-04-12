@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-12 09:26+0200\n"
+"POT-Creation-Date: 2011-04-12 09:33+0200\n"
 "PO-Revision-Date: 2011-04-06 13:09+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
@@ -356,7 +356,7 @@ msgstr "Všetky"
 msgid "Task & Landables"
 msgstr "Úloha & P. plochy"
 
-#: src/ExpandMacros.cpp:517
+#: src/ExpandMacros.cpp:517 src/InputEventsActions.cpp:1395
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:78
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:59
@@ -907,9 +907,9 @@ msgid ""
 msgstr "Zostávajúci čas pre AAT úlohu. Sčervená ak čas vypršal."
 
 #: src/InfoBoxes/Content/Factory.cpp:313
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "AA max. distance "
-msgstr "AA Max vzdialenosť "
+msgstr "AA Max vzdialenosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:314
 #, no-c-format
@@ -2241,11 +2241,6 @@ msgstr "Logger zapnutý"
 #: src/InputEventsActions.cpp:1149
 msgid "Logger off"
 msgstr "Logger vypnutý"
-
-#: src/InputEventsActions.cpp:1395
-#, no-c-format
-msgid "None "
-msgstr "Žiadne "
 
 #: src/InputEventsActions.cpp:1408
 msgid "Waypoint labels"
@@ -4575,7 +4570,8 @@ msgstr ""
 "Táto voľba určuje, ako dlho bude na obrazovke zobrazené menu, ak uživateľ "
 "nestlačí žiadne tlačítko ani nijak neinteraguje s programom."
 
-#: Data/Dialogs/dlgStatusTask.xml:10
+#: Data/Dialogs/dlgStatusTask.xml:10 Data/Dialogs/dlgTarget.xml:16
+#: Data/Dialogs/dlgTarget_L.xml:31
 msgid "Speed remaining"
 msgstr "Zostávajúca rýchlosť"
 
@@ -4841,6 +4837,11 @@ msgid ""
 "information about individual waypoints and airfields."
 msgstr ""
 
+#: Data/Dialogs/pnlTaskProperties.xml:30
+#: Data/Dialogs/pnlTaskProperties_L.xml:31
+msgid "FAI start / finish rules"
+msgstr ""
+
 #: Data/Dialogs/dlgVario.xml:122 Data/Dialogs/dlgVario_L.xml:123
 msgid "Low limit of circling dead band"
 msgstr ""
@@ -4909,10 +4910,6 @@ msgstr ""
 "Určuje spôsob, akým je vykreslený indikátor vetra na mape.\n"
 "[Hlava šípky] Vykreslí len hlavu šípky\n"
 "[Celá šípka] Vykreslí hlavu šípky spolu s čiarkovanou nožičkou."
-
-#: Data/Dialogs/dlgVario.xml:324
-msgid "Flarm Iinterface"
-msgstr "Rozhranie Flarmu"
 
 #: Data/Dialogs/dlgConfiguration.xml:611
 #: Data/Dialogs/dlgConfiguration_L.xml:612
@@ -5528,10 +5525,6 @@ msgstr "Smer"
 msgid "Lookup"
 msgstr "Vyhľadať"
 
-#: Data/Dialogs/dlgTarget_L.xml:31
-msgid "Speed Remaining Help"
-msgstr ""
-
 #: Data/Dialogs/dlgTaskPoint.xml:20 Data/Dialogs/dlgTaskPoint_L.xml:19
 msgid "Change Type"
 msgstr ""
@@ -5786,7 +5779,7 @@ msgstr ""
 msgid "Device model"
 msgstr "Model zariadenia"
 
-#: Data/Dialogs/dlgVario_L.xml:325
+#: Data/Dialogs/dlgVario.xml:324 Data/Dialogs/dlgVario_L.xml:325
 msgid "Flarm interface"
 msgstr "Rozhranie Flarmu"
 
@@ -6069,10 +6062,6 @@ msgstr ""
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
 msgid "InfoBox values"
 msgstr "Hodnoty info-okien"
-
-#: Data/Dialogs/dlgTarget.xml:16
-msgid "Speed remaining Help"
-msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:335
 #: Data/Dialogs/dlgConfiguration_L.xml:336
@@ -6437,11 +6426,6 @@ msgstr "Príletová výška"
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
 msgid "Dialog boxes"
 msgstr "Dialógové okná"
-
-#: Data/Dialogs/pnlTaskProperties.xml:30
-#: Data/Dialogs/pnlTaskProperties_L.xml:31
-msgid "FAI start/ finish rules"
-msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
 msgid "ACK Space"
@@ -7877,6 +7861,12 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Pristánie"
+
+#~ msgid "None "
+#~ msgstr "Žiadne "
+
+#~ msgid "Flarm Iinterface"
+#~ msgstr "Rozhranie Flarmu"
 
 #, fuzzy
 #~ msgid "InfoBox Layout"

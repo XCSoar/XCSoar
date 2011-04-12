@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-12 09:26+0200\n"
+"POT-Creation-Date: 2011-04-12 09:33+0200\n"
 "PO-Revision-Date: 2011-04-08 15:20+0000\n"
 "Last-Translator: Gabor LIPTAK <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -354,7 +354,7 @@ msgstr "Mind"
 msgid "Task & Landables"
 msgstr "feladat + leszállható"
 
-#: src/ExpandMacros.cpp:517
+#: src/ExpandMacros.cpp:517 src/InputEventsActions.cpp:1395
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:78
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:59
@@ -908,9 +908,9 @@ msgstr ""
 "Hátralevő idő területi szabad távrepülésen. Vörösre vált ha az idő lejárt."
 
 #: src/InfoBoxes/Content/Factory.cpp:313
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "AA max. distance "
-msgstr "TS távolság max "
+msgstr "TS távolság max"
 
 #: src/InfoBoxes/Content/Factory.cpp:314
 #, no-c-format
@@ -2251,11 +2251,6 @@ msgstr "Logger BE"
 #: src/InputEventsActions.cpp:1149
 msgid "Logger off"
 msgstr "Logger KI"
-
-#: src/InputEventsActions.cpp:1395
-#, no-c-format
-msgid "None "
-msgstr "Nincs "
 
 #: src/InputEventsActions.cpp:1408
 msgid "Waypoint labels"
@@ -4681,7 +4676,8 @@ msgstr ""
 "Ez határozza meg, hogy a menük milyen hosszú ideig maradjanak a képernyőn, "
 "ha a kezelő nem nyom meg egy gombot sem."
 
-#: Data/Dialogs/dlgStatusTask.xml:10
+#: Data/Dialogs/dlgStatusTask.xml:10 Data/Dialogs/dlgTarget.xml:16
+#: Data/Dialogs/dlgTarget_L.xml:31
 msgid "Speed remaining"
 msgstr "Seb. maradék"
 
@@ -4952,6 +4948,11 @@ msgstr ""
 "A fájl kiegészítő információkat tartalmazhat fordulópontokról és "
 "repülőterekről."
 
+#: Data/Dialogs/pnlTaskProperties.xml:30
+#: Data/Dialogs/pnlTaskProperties_L.xml:31
+msgid "FAI start / finish rules"
+msgstr "FAI start/cél szabályok"
+
 #: Data/Dialogs/dlgVario.xml:122 Data/Dialogs/dlgVario_L.xml:123
 msgid "Low limit of circling dead band"
 msgstr "A körözési holtsáv alsó határa"
@@ -5018,10 +5019,6 @@ msgid ""
 "[Arrow head] Draws an arrow head only\n"
 "[Full arrow] Draws an arrow head with a dashed arrow line"
 msgstr "Meghatározza a szél megjelenítésének módját a térképen."
-
-#: Data/Dialogs/dlgVario.xml:324
-msgid "Flarm Iinterface"
-msgstr "FLARM kezelőfelület"
 
 #: Data/Dialogs/dlgConfiguration.xml:611
 #: Data/Dialogs/dlgConfiguration_L.xml:612
@@ -5679,10 +5676,6 @@ msgstr "Irány"
 msgid "Lookup"
 msgstr "Keresés"
 
-#: Data/Dialogs/dlgTarget_L.xml:31
-msgid "Speed Remaining Help"
-msgstr "Sebesség a maradékon"
-
 #: Data/Dialogs/dlgTaskPoint.xml:20 Data/Dialogs/dlgTaskPoint_L.xml:19
 msgid "Change Type"
 msgstr "Típusváltás"
@@ -5952,7 +5945,7 @@ msgstr "Sebesség a maradék távon"
 msgid "Device model"
 msgstr "Eszköz tipus"
 
-#: Data/Dialogs/dlgVario_L.xml:325
+#: Data/Dialogs/dlgVario.xml:324 Data/Dialogs/dlgVario_L.xml:325
 msgid "Flarm interface"
 msgstr "FLARM interfész"
 
@@ -6263,10 +6256,6 @@ msgstr "Tájolás körözéskor"
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
 msgid "InfoBox values"
 msgstr "Kijelzők értékei"
-
-#: Data/Dialogs/dlgTarget.xml:16
-msgid "Speed remaining Help"
-msgstr "Segesség a maradékon Súgó"
 
 #: Data/Dialogs/dlgConfiguration.xml:335
 #: Data/Dialogs/dlgConfiguration_L.xml:336
@@ -6641,11 +6630,6 @@ msgstr "Érkezési magasság"
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
 msgid "Dialog boxes"
 msgstr "Dialógus ablakok"
-
-#: Data/Dialogs/pnlTaskProperties.xml:30
-#: Data/Dialogs/pnlTaskProperties_L.xml:31
-msgid "FAI start/ finish rules"
-msgstr "FAI start/cél szabályok"
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
 msgid "ACK Space"
@@ -8195,6 +8179,18 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Leszállás"
+
+#~ msgid "None "
+#~ msgstr "Nincs "
+
+#~ msgid "Flarm Iinterface"
+#~ msgstr "FLARM kezelőfelület"
+
+#~ msgid "Speed Remaining Help"
+#~ msgstr "Sebesség a maradékon"
+
+#~ msgid "Speed remaining Help"
+#~ msgstr "Segesség a maradékon Súgó"
 
 #~ msgid "InfoBox Layout"
 #~ msgstr "Kijelzők elrendezése"

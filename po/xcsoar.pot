@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-12 09:26+0200\n"
+"POT-Creation-Date: 2011-04-12 09:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -337,7 +337,7 @@ msgstr ""
 msgid "Task & Landables"
 msgstr ""
 
-#: src/ExpandMacros.cpp:517
+#: src/ExpandMacros.cpp:517 src/InputEventsActions.cpp:1395
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:78
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:59
@@ -2061,11 +2061,6 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:1149
 msgid "Logger off"
-msgstr ""
-
-#: src/InputEventsActions.cpp:1395
-#, no-c-format
-msgid "None "
 msgstr ""
 
 #: src/InputEventsActions.cpp:1408
@@ -4352,7 +4347,8 @@ msgid ""
 "make any button presses or interacts with the computer."
 msgstr ""
 
-#: Data/Dialogs/dlgStatusTask.xml:10
+#: Data/Dialogs/dlgStatusTask.xml:10 Data/Dialogs/dlgTarget.xml:16
+#: Data/Dialogs/dlgTarget_L.xml:31
 msgid "Speed remaining"
 msgstr ""
 
@@ -4604,6 +4600,11 @@ msgid ""
 "information about individual waypoints and airfields."
 msgstr ""
 
+#: Data/Dialogs/pnlTaskProperties.xml:30
+#: Data/Dialogs/pnlTaskProperties_L.xml:31
+msgid "FAI start / finish rules"
+msgstr ""
+
 #: Data/Dialogs/dlgVario.xml:122 Data/Dialogs/dlgVario_L.xml:123
 msgid "Low limit of circling dead band"
 msgstr ""
@@ -4666,10 +4667,6 @@ msgid ""
 "Determines the way the wind arrow is drawn on the map.\n"
 "[Arrow head] Draws an arrow head only\n"
 "[Full arrow] Draws an arrow head with a dashed arrow line"
-msgstr ""
-
-#: Data/Dialogs/dlgVario.xml:324
-msgid "Flarm Iinterface"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:611
@@ -5270,10 +5267,6 @@ msgstr ""
 msgid "Lookup"
 msgstr ""
 
-#: Data/Dialogs/dlgTarget_L.xml:31
-msgid "Speed Remaining Help"
-msgstr ""
-
 #: Data/Dialogs/dlgTaskPoint.xml:20 Data/Dialogs/dlgTaskPoint_L.xml:19
 msgid "Change Type"
 msgstr ""
@@ -5518,7 +5511,7 @@ msgstr ""
 msgid "Device model"
 msgstr ""
 
-#: Data/Dialogs/dlgVario_L.xml:325
+#: Data/Dialogs/dlgVario.xml:324 Data/Dialogs/dlgVario_L.xml:325
 msgid "Flarm interface"
 msgstr ""
 
@@ -5786,10 +5779,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
 msgid "InfoBox values"
-msgstr ""
-
-#: Data/Dialogs/dlgTarget.xml:16
-msgid "Speed remaining Help"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:335
@@ -6137,11 +6126,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
 msgid "Dialog boxes"
-msgstr ""
-
-#: Data/Dialogs/pnlTaskProperties.xml:30
-#: Data/Dialogs/pnlTaskProperties_L.xml:31
-msgid "FAI start/ finish rules"
 msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-12 09:26+0200\n"
+"POT-Creation-Date: 2011-04-12 09:33+0200\n"
 "PO-Revision-Date: 2011-04-06 09:51+0000\n"
 "Last-Translator: Dobrovolsky Ilya <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -354,7 +354,7 @@ msgstr ""
 msgid "Task & Landables"
 msgstr ""
 
-#: src/ExpandMacros.cpp:517
+#: src/ExpandMacros.cpp:517 src/InputEventsActions.cpp:1395
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:78
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:59
@@ -893,9 +893,9 @@ msgstr ""
 "цветом, когда оставшееся время истекло."
 
 #: src/InfoBoxes/Content/Factory.cpp:313
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "AA max. distance "
-msgstr ""
+msgstr "Следующая дистанция"
 
 #: src/InfoBoxes/Content/Factory.cpp:314
 #, no-c-format
@@ -2203,11 +2203,6 @@ msgstr "ЗАПИСЬ ТРЕКА ВКЛЮЧЕНА"
 #: src/InputEventsActions.cpp:1149
 msgid "Logger off"
 msgstr "ЗАПИСЬ ТРЕКА ВЫКЛЮЧЕНА"
-
-#: src/InputEventsActions.cpp:1395
-#, no-c-format
-msgid "None "
-msgstr "Нечего "
 
 #: src/InputEventsActions.cpp:1408
 msgid "Waypoint labels"
@@ -4501,7 +4496,8 @@ msgid ""
 "make any button presses or interacts with the computer."
 msgstr ""
 
-#: Data/Dialogs/dlgStatusTask.xml:10
+#: Data/Dialogs/dlgStatusTask.xml:10 Data/Dialogs/dlgTarget.xml:16
+#: Data/Dialogs/dlgTarget_L.xml:31
 msgid "Speed remaining"
 msgstr "Расчетная скорость"
 
@@ -4753,6 +4749,11 @@ msgid ""
 "information about individual waypoints and airfields."
 msgstr ""
 
+#: Data/Dialogs/pnlTaskProperties.xml:30
+#: Data/Dialogs/pnlTaskProperties_L.xml:31
+msgid "FAI start / finish rules"
+msgstr ""
+
 #: Data/Dialogs/dlgVario.xml:122 Data/Dialogs/dlgVario_L.xml:123
 msgid "Low limit of circling dead band"
 msgstr ""
@@ -4815,10 +4816,6 @@ msgid ""
 "Determines the way the wind arrow is drawn on the map.\n"
 "[Arrow head] Draws an arrow head only\n"
 "[Full arrow] Draws an arrow head with a dashed arrow line"
-msgstr ""
-
-#: Data/Dialogs/dlgVario.xml:324
-msgid "Flarm Iinterface"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:611
@@ -5419,10 +5416,6 @@ msgstr "Курс"
 msgid "Lookup"
 msgstr "Уточнить"
 
-#: Data/Dialogs/dlgTarget_L.xml:31
-msgid "Speed Remaining Help"
-msgstr ""
-
 #: Data/Dialogs/dlgTaskPoint.xml:20 Data/Dialogs/dlgTaskPoint_L.xml:19
 msgid "Change Type"
 msgstr ""
@@ -5667,7 +5660,7 @@ msgstr "Расчетная скорость "
 msgid "Device model"
 msgstr "Модель прибора"
 
-#: Data/Dialogs/dlgVario_L.xml:325
+#: Data/Dialogs/dlgVario.xml:324 Data/Dialogs/dlgVario_L.xml:325
 msgid "Flarm interface"
 msgstr ""
 
@@ -5935,10 +5928,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
 msgid "InfoBox values"
-msgstr ""
-
-#: Data/Dialogs/dlgTarget.xml:16
-msgid "Speed remaining Help"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:335
@@ -6287,11 +6276,6 @@ msgstr ""
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
 msgid "Dialog boxes"
 msgstr "Диалоговые окна"
-
-#: Data/Dialogs/pnlTaskProperties.xml:30
-#: Data/Dialogs/pnlTaskProperties_L.xml:31
-msgid "FAI start/ finish rules"
-msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
 msgid "ACK Space"
@@ -7671,6 +7655,9 @@ msgstr "Командный Код"
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "приземление"
+
+#~ msgid "None "
+#~ msgstr "Нечего "
 
 #~ msgid "Waypoint not editable"
 #~ msgstr "Точка не редактируемая"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-12 09:26+0200\n"
+"POT-Creation-Date: 2011-04-12 09:33+0200\n"
 "PO-Revision-Date: 2011-03-31 22:53+0200\n"
 "Last-Translator: Max Kellermann <max@duempel.org>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -363,7 +363,7 @@ msgstr "Wszystkie"
 msgid "Task & Landables"
 msgstr "Menedżer tras"
 
-#: src/ExpandMacros.cpp:517
+#: src/ExpandMacros.cpp:517 src/InputEventsActions.cpp:1395
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:78
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:59
@@ -2189,11 +2189,6 @@ msgstr "Loger WŁĄCZONY"
 #: src/InputEventsActions.cpp:1149
 msgid "Logger off"
 msgstr "Loger WYŁĄCZONY"
-
-#: src/InputEventsActions.cpp:1395
-#, fuzzy, no-c-format
-msgid "None "
-msgstr "Nic"
 
 #: src/InputEventsActions.cpp:1408
 #, fuzzy
@@ -4528,7 +4523,8 @@ msgid ""
 "make any button presses or interacts with the computer."
 msgstr ""
 
-#: Data/Dialogs/dlgStatusTask.xml:10
+#: Data/Dialogs/dlgStatusTask.xml:10 Data/Dialogs/dlgTarget.xml:16
+#: Data/Dialogs/dlgTarget_L.xml:31
 msgid "Speed remaining"
 msgstr "Speed remaining_EOL"
 
@@ -4785,6 +4781,12 @@ msgid ""
 "information about individual waypoints and airfields."
 msgstr ""
 
+#: Data/Dialogs/pnlTaskProperties.xml:30
+#: Data/Dialogs/pnlTaskProperties_L.xml:31
+#, fuzzy
+msgid "FAI start / finish rules"
+msgstr "Wysokość mety FAI"
+
 #: Data/Dialogs/dlgVario.xml:122 Data/Dialogs/dlgVario_L.xml:123
 msgid "Low limit of circling dead band"
 msgstr ""
@@ -4851,11 +4853,6 @@ msgid ""
 "[Arrow head] Draws an arrow head only\n"
 "[Full arrow] Draws an arrow head with a dashed arrow line"
 msgstr ""
-
-#: Data/Dialogs/dlgVario.xml:324
-#, fuzzy
-msgid "Flarm Iinterface"
-msgstr "Interfejs FLARM"
 
 #: Data/Dialogs/dlgConfiguration.xml:611
 #: Data/Dialogs/dlgConfiguration_L.xml:612
@@ -5476,10 +5473,6 @@ msgstr "Kierunek"
 msgid "Lookup"
 msgstr "Wyszukaj"
 
-#: Data/Dialogs/dlgTarget_L.xml:31
-msgid "Speed Remaining Help"
-msgstr ""
-
 #: Data/Dialogs/dlgTaskPoint.xml:20 Data/Dialogs/dlgTaskPoint_L.xml:19
 #, fuzzy
 msgid "Change Type"
@@ -5733,7 +5726,7 @@ msgstr "Ustaw prędkość do mety"
 msgid "Device model"
 msgstr "Model urządzenia"
 
-#: Data/Dialogs/dlgVario_L.xml:325
+#: Data/Dialogs/dlgVario.xml:324 Data/Dialogs/dlgVario_L.xml:325
 msgid "Flarm interface"
 msgstr "Interfejs FLARM"
 
@@ -6010,11 +6003,6 @@ msgstr "Zoom w krążeniu"
 #, fuzzy
 msgid "InfoBox values"
 msgstr "Wartości pól"
-
-#: Data/Dialogs/dlgTarget.xml:16
-#, fuzzy
-msgid "Speed remaining Help"
-msgstr "Ustaw prędkość do mety"
 
 #: Data/Dialogs/dlgConfiguration.xml:335
 #: Data/Dialogs/dlgConfiguration_L.xml:336
@@ -6369,12 +6357,6 @@ msgstr "Wysokość dolotu"
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
 msgid "Dialog boxes"
 msgstr "Okna dialogowe"
-
-#: Data/Dialogs/pnlTaskProperties.xml:30
-#: Data/Dialogs/pnlTaskProperties_L.xml:31
-#, fuzzy
-msgid "FAI start/ finish rules"
-msgstr "Wysokość mety FAI"
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
 msgid "ACK Space"
@@ -7787,6 +7769,18 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Lądowanie"
+
+#, fuzzy
+#~ msgid "None "
+#~ msgstr "Nic"
+
+#, fuzzy
+#~ msgid "Flarm Iinterface"
+#~ msgstr "Interfejs FLARM"
+
+#, fuzzy
+#~ msgid "Speed remaining Help"
+#~ msgstr "Ustaw prędkość do mety"
 
 #, fuzzy
 #~ msgid "InfoBox Layout"

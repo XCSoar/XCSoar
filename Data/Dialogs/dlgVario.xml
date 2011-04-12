@@ -321,7 +321,7 @@
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="1" Max="4" Step="1"/>
       </Edit>
     
-      <Edit Name="prpFlarmUserInterface" Caption="Flarm Iinterface" X="2" Width="246" Height="22" CaptionWidth="150">
+      <Edit Name="prpFlarmUserInterface" Caption="Flarm interface" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
     

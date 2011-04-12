@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-12 09:26+0200\n"
+"POT-Creation-Date: 2011-04-12 09:33+0200\n"
 "PO-Revision-Date: 2011-04-08 09:12+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
@@ -364,7 +364,7 @@ msgstr "Alle"
 msgid "Task & Landables"
 msgstr "Aufgaben & Landeplätze"
 
-#: src/ExpandMacros.cpp:517
+#: src/ExpandMacros.cpp:517 src/InputEventsActions.cpp:1395
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:78
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:59
@@ -920,9 +920,9 @@ msgstr ""
 "verstrichen ist."
 
 #: src/InfoBoxes/Content/Factory.cpp:313
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "AA max. distance "
-msgstr "AAT - max. Distanz "
+msgstr "AAT - max. Distanz"
 
 #: src/InfoBoxes/Content/Factory.cpp:314
 #, no-c-format
@@ -2258,11 +2258,6 @@ msgstr "Logger ein"
 #: src/InputEventsActions.cpp:1149
 msgid "Logger off"
 msgstr "Logger aus"
-
-#: src/InputEventsActions.cpp:1395
-#, no-c-format
-msgid "None "
-msgstr "Keine "
 
 #: src/InputEventsActions.cpp:1408
 msgid "Waypoint labels"
@@ -4701,7 +4696,8 @@ msgstr ""
 "Die Zeitkonstante bestimmt wie lange ein Menü angezeigt wird, wenn der "
 "Benutzer keine Eingabe tätigt und nicht mit dem Rechner interagiert."
 
-#: Data/Dialogs/dlgStatusTask.xml:10
+#: Data/Dialogs/dlgStatusTask.xml:10 Data/Dialogs/dlgTarget.xml:16
+#: Data/Dialogs/dlgTarget_L.xml:31
 msgid "Speed remaining"
 msgstr "Verbleibende Geschwindigkeit"
 
@@ -4977,6 +4973,11 @@ msgstr ""
 "Die Datei kann auszugsweise Luftfahrthandbuch oder Luftrauminformation, oder "
 "andere zusätzliche Informationen über einzelne Flugplätze enthalten."
 
+#: Data/Dialogs/pnlTaskProperties.xml:30
+#: Data/Dialogs/pnlTaskProperties_L.xml:31
+msgid "FAI start / finish rules"
+msgstr "FAI Start-/Zielregeln"
+
 #: Data/Dialogs/dlgVario.xml:122 Data/Dialogs/dlgVario_L.xml:123
 msgid "Low limit of circling dead band"
 msgstr "Untergrenze des Todbands beim Kreisen."
@@ -5047,10 +5048,6 @@ msgstr ""
 "Dies bestimmt die Art wie der Windpfeil auf der Karte angezeigt wird.\n"
 "[Pfeilspitze] zeigt nur die Spitze eines Pfeils\n"
 "[Ganzer Pfeil] zeigt einen Pfeil mit gestrichelter Linie."
-
-#: Data/Dialogs/dlgVario.xml:324
-msgid "Flarm Iinterface"
-msgstr "Flarmverbindung"
 
 #: Data/Dialogs/dlgConfiguration.xml:611
 #: Data/Dialogs/dlgConfiguration_L.xml:612
@@ -5707,10 +5704,6 @@ msgstr "Richtung"
 msgid "Lookup"
 msgstr "Suche"
 
-#: Data/Dialogs/dlgTarget_L.xml:31
-msgid "Speed Remaining Help"
-msgstr "Hilfe Verbleibende Geschwindigkeit"
-
 #: Data/Dialogs/dlgTaskPoint.xml:20 Data/Dialogs/dlgTaskPoint_L.xml:19
 msgid "Change Type"
 msgstr "Aufgabentyp ändern"
@@ -5974,7 +5967,7 @@ msgstr "Benötigte Geschwindigkeit"
 msgid "Device model"
 msgstr "Geräte Modell"
 
-#: Data/Dialogs/dlgVario_L.xml:325
+#: Data/Dialogs/dlgVario.xml:324 Data/Dialogs/dlgVario_L.xml:325
 msgid "Flarm interface"
 msgstr "Flarmverbindung"
 
@@ -6277,10 +6270,6 @@ msgstr "Steigflug Ausrichtung"
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
 msgid "InfoBox values"
 msgstr "InfoBox Werte"
-
-#: Data/Dialogs/dlgTarget.xml:16
-msgid "Speed remaining Help"
-msgstr "Hilfe für: Verbleibende Geschwindigkeit."
 
 #: Data/Dialogs/dlgConfiguration.xml:335
 #: Data/Dialogs/dlgConfiguration_L.xml:336
@@ -6665,11 +6654,6 @@ msgstr "Ankunftshöhe"
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
 msgid "Dialog boxes"
 msgstr "Dialogboxen"
-
-#: Data/Dialogs/pnlTaskProperties.xml:30
-#: Data/Dialogs/pnlTaskProperties_L.xml:31
-msgid "FAI start/ finish rules"
-msgstr "FAI Start-/Zielregeln"
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
 msgid "ACK Space"
@@ -8213,6 +8197,18 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Gelandet"
+
+#~ msgid "None "
+#~ msgstr "Keine "
+
+#~ msgid "Flarm Iinterface"
+#~ msgstr "Flarmverbindung"
+
+#~ msgid "Speed Remaining Help"
+#~ msgstr "Hilfe Verbleibende Geschwindigkeit"
+
+#~ msgid "Speed remaining Help"
+#~ msgstr "Hilfe für: Verbleibende Geschwindigkeit."
 
 #~ msgid "InfoBox Layout"
 #~ msgstr "InfoBox Anordnung"
