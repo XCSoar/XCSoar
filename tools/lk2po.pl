@@ -89,7 +89,7 @@ foreach my $lng (keys %languages) {
     my $iso = $languages{$lng};
 
     # read the LK8000 translation file
-    my @translated = load_msg('UTF-16',
+    my @translated = load_msg('UTF-8',
                               "$lk_language/Translations/${lng}_MSG.TXT");
     my %table;
     for (my $i = 0; $i <= $#translated; $i++) {
@@ -121,7 +121,7 @@ foreach my $lng (keys %languages) {
         }
     }
 
-    my %translated = load_menu('UTF-16',
+    my %translated = load_menu('UTF-8',
                                "$lk_language/Translations/${lng}_MENU.TXT");
     foreach my $key (keys %english_menu) {
         my $english = $english_menu{$key};
