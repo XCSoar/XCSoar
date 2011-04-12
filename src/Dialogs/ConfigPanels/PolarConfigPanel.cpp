@@ -97,9 +97,16 @@ UpdatePolarFields(const PolarInfo &polar)
 
   LoadFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
 
+  WndProperty *ctl = (WndProperty *)wf->FindByName(_T("prpMaxManoeuveringSpeed"));
+  assert(ctl != NULL);
+  Units_t unit = Units::GetUserSpeedUnit();
+
+  DataFieldFloat *df = (DataFieldFloat *)ctl->GetDataField();
+  df->SetUnits(Units::GetUnitName(unit));
   if (positive(polar.v_no))
-    LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"),
-                     ugHorizontalSpeed, polar.v_no);
+    df->SetAsFloat(Units::ToUserUnit(polar.v_no, unit));
+
+  ctl->RefreshDisplay();
 }
 
 static void
