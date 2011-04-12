@@ -105,15 +105,13 @@ AirspaceConfigPanel::Init(WndForm *_wf)
 #endif
   }
 
-#ifndef ENABLE_OPENGL
-#ifdef HAVE_ALPHA_BLEND
+#if !defined(ENABLE_OPENGL) && defined(HAVE_ALPHA_BLEND)
   if (AlphaBlendAvailable())
     LoadFormProperty(*wf, _T("prpAirspaceTransparency"),
                      settings_map.airspace_transparency);
   else
 #endif
     wf->FindByName(_T("prpAirspaceTransparency"))->hide();
-#endif /* !OpenGL */
 }
 
 
