@@ -39,20 +39,6 @@ struct GLVertexArray {
   }
 };
 
-struct GLRectangleVertices : public GLVertexArray<4> {
-  GLRectangleVertices(GLvalue left, GLvalue top,
-                      GLvalue right, GLvalue bottom) {
-    v[0].x = left;
-    v[0].y = top;
-    v[1].x = right;
-    v[1].y = top;
-    v[2].x = right;
-    v[2].y = bottom;
-    v[3].x = left;
-    v[3].y = bottom;
-  }
-};
-
 struct GLCircleVertices : public GLVertexArray<32> {
   GLCircleVertices(GLvalue center_x, GLvalue center_y, GLvalue radius);
 };

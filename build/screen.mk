@@ -48,7 +48,6 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Globals.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/VertexArray.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Draw.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Cache.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Texture.cpp \

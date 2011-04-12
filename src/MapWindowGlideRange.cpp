@@ -27,10 +27,6 @@ Copyright_License {
 #include "Screen/Icon.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Draw.hpp"
-#endif
-
 #include <stdio.h>
 #include "Util/StaticArray.hpp"
 
@@ -152,8 +148,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glColor4f(1.0, 1.0, 1.0, 0.3);
-    GLFillRectangle(0, 0, canvas.get_width(), canvas.get_height());
+    canvas.clear(Color(255, 255, 255, 77));
 
     glDisable(GL_BLEND);
     glDisable(GL_STENCIL_TEST);

@@ -177,17 +177,20 @@ public:
     background_mode = TRANSPARENT;
   }
 
-  void rectangle(int left, int top, int right, int bottom);
+  void rectangle(int left, int top, int right, int bottom) {
+    fill_rectangle(left, top, right, bottom, brush);
+
+    if (pen_over_brush())
+      outline_rectangle(left, top, right, bottom);
+  }
 
   void fill_rectangle(int left, int top, int right, int bottom,
                       const Color color);
 
   void fill_rectangle(int left, int top, int right, int bottom,
                       const Brush &brush) {
-    if (brush.is_hollow())
-      return;
-
-    fill_rectangle(left, top, right, bottom, brush.get_color());
+    if (!brush.is_hollow())
+      fill_rectangle(left, top, right, bottom, brush.get_color());
   }
 
   void fill_rectangle(const PixelRect &rc, const Color color) {

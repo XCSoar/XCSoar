@@ -28,7 +28,6 @@ Copyright_License {
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/Cache.hpp"
 #include "Screen/OpenGL/VertexArray.hpp"
-#include "Screen/OpenGL/Draw.hpp"
 #include "Screen/Util.hpp"
 
 #include <assert.h>
@@ -36,46 +35,39 @@ Copyright_License {
 AllocatedArray<RasterPoint> Canvas::vertex_buffer;
 
 void
-Canvas::rectangle(int left, int top, int right, int bottom)
-{
-  GLRectangleVertices vertices(left, top, right, bottom);
-  vertices.bind();
-
-  if (!brush.is_hollow()) {
-    brush.set();
-    GLubyte i[] = { 0, 1, 2, 0, 2, 3 };
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, i);
-  }
-
-  if (pen_over_brush()) {
-    pen.set();
-    glDrawArrays(GL_LINE_LOOP, 0, 4);
-  }
-}
-
-void
 Canvas::fill_rectangle(int left, int top, int right, int bottom,
                        const Color color)
 {
   color.set();
-  GLFillRectangle(left, top, right, bottom);
+
+#ifdef ANDROID
+  const RasterPoint vertices[] = {
+    { left, top },
+    { right, top },
+    { left, bottom },
+    { right, bottom },
+  };
+
+  glVertexPointer(2, GL_VALUE, 0, vertices);
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+#else
+  glRecti(left, top, right, bottom);
+#endif
 }
 
 void
 Canvas::outline_rectangle(int left, int top, int right, int bottom)
 {
-  pen.set();
-
-  const RasterPoint v[] = {
+  const RasterPoint vertices[] = {
     { left, top },
     { right, top },
     { right, bottom },
     { left, bottom },
-    { left, top },
   };
 
-  glVertexPointer(2, GL_VALUE, 0, v);
-  glDrawArrays(GL_LINE_STRIP, 0, 5);
+  pen.set();
+  glVertexPointer(2, GL_VALUE, 0, vertices);
+  glDrawArrays(GL_LINE_LOOP, 0, 4);
 }
 
 void
