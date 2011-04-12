@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/Westerboer.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Port.hpp"
 #include "Units/Units.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -43,8 +44,13 @@ Copyright_License {
  *
  */
 class WesterboerDevice : public AbstractDevice {
+  Port *port;
+
 public:
+  WesterboerDevice(Port *_port):port(_port) {}
+
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
+  virtual bool PutMacCready(fixed mac_cready);
 };
 
 /**
@@ -129,10 +135,25 @@ WesterboerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
   return false;
 }
 
+bool
+WesterboerDevice::PutMacCready(fixed _mac_cready)
+{
+  /* "0 .. 60 in 5-er Schritten" */
+  unsigned mac_cready = std::min(uround(_mac_cready * 10 / 5) * 5, 60u);
+
+  char buffer[64];
+  sprintf(buffer, "$PWES4,,%u,,,,,,,", mac_cready);
+  AppendNMEAChecksum(buffer);
+  strcat(buffer, "\r\n");
+  port->Write(buffer);
+
+  return true;
+}
+
 static Device *
 WesterboerCreateOnPort(Port *com_port)
 {
-  return new WesterboerDevice();
+  return new WesterboerDevice(com_port);
 }
 
 const struct DeviceRegister westerboer_device_driver = {
