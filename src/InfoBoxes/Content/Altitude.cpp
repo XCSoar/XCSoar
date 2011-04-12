@@ -404,8 +404,7 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
   if (!basic.BaroAltitudeAvailable) {
     infobox.SetInvalid();
 
-    if (basic.PressureAltitudeAvailable &&
-        !CommonInterface::SettingsComputer().pressure_available)
+    if (basic.PressureAltitudeAvailable)
       infobox.SetComment(_("no QNH"));
 
     return;
