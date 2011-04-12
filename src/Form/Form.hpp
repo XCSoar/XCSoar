@@ -215,6 +215,13 @@ public:
   }
 
   /**
+   * Removes a #Window from the "advanced window list" (#advanced_windows).
+   */
+  void RemoveExpert(Window *window) {
+    expert_windows.remove(window);
+  }
+
+  /**
    * Shows/Hides the ClientControls depending on the given value of advanced and
    * whether their caption includes an asterisk.
    * @param advanced True if advanced mode activated

@@ -95,6 +95,7 @@ AirspaceConfigPanel::Init(WndForm *_wf)
   {
 #ifdef ENABLE_OPENGL
     wp->hide();
+    wf->RemoveExpert(wp);  // prevent unhiding with expert-switch
 #else
     DataFieldEnum &dfe = *(DataFieldEnum *)wp->GetDataField();
     dfe.addEnumText(_("Default"), SETTINGS_MAP::AS_FILL_DEFAULT);
@@ -111,7 +112,11 @@ AirspaceConfigPanel::Init(WndForm *_wf)
                      settings_map.airspace_transparency);
   else
 #endif
-    wf->FindByName(_T("prpAirspaceTransparency"))->hide();
+  {
+    wp = (WndProperty *)wf->FindByName(_T("prpAirspaceTransparency"));
+    wp->hide();
+    wf->RemoveExpert(wp);  // prevent unhiding with expert-switch
+  }
 }
 
 
