@@ -75,6 +75,8 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (line.read_checked(value) && vtas_av)
     GPS_INFO->ProvideBothAirspeeds(Units::ToSysUnit(sqrt(value), unKnots),
                                    Units::ToSysUnit(vtas, unKnots));
+  else if (vtas_av)
+    GPS_INFO->ProvideTrueAirspeed(Units::ToSysUnit(vtas, unKnots));
 
   // RMN: Changed bugs-calculation, swapped ballast and bugs to suit
   // the B50-string for Borgelt, it's % degradation, for us, it is %

@@ -22,6 +22,7 @@
 
 #include "Device/Driver/Generic.hpp"
 #include "Device/Driver/AltairPro.hpp"
+#include "Device/Driver/BorgeltB50.hpp"
 #include "Device/Driver/CAI302.hpp"
 #include "Device/Driver/Condor.hpp"
 #include "Device/Driver/EW.hpp"
@@ -132,9 +133,33 @@ TestGeneric()
 }
 
 static void
+TestBorgeltB50()
+{
+  Device *device = b50Device.CreateOnPort(NULL);
+  ok1(device != NULL);
+
+  NMEA_INFO nmea_info;
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+
+  device->ParseNMEA("$PBB50,042,-01.1,1.0,12345,10,1.3,1,-28", &nmea_info);
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.TrueAirspeed, 21.60666666666667));
+  ok1(equals(nmea_info.IndicatedAirspeed, 57.15892189196558));
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, -0.5658888888888889));
+  ok1(nmea_info.settings.mac_cready);
+  ok1(equals(nmea_info.settings.mac_cready, 0.5144444444444444));
+  ok1(nmea_info.SwitchState.FlightMode == SWITCH_INFO::MODE_CIRCLING);
+  ok1(nmea_info.TemperatureAvailable);
+  ok1(equals(nmea_info.OutsideAirTemperature, 245.15));
+
+  delete device;
+}
+
+static void
 TestCAI302()
 {
-
   Device *device = cai302Device.CreateOnPort(NULL);
   ok1(device != NULL);
 
@@ -394,9 +419,10 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(136);
+  plan_tests(147);
 
   TestGeneric();
+  TestBorgeltB50();
   TestCAI302();
   TestFlymasterF1();
   TestLX(lxDevice);

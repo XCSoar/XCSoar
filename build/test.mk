@@ -416,6 +416,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/NullPort.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Driver/BorgeltB50.cpp \
 	$(SRC)/Device/Driver/CAI302.cpp \
 	$(SRC)/Device/Driver/Condor.cpp \
 	$(SRC)/Device/Driver/EW.cpp \
