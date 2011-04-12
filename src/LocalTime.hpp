@@ -24,10 +24,10 @@ Copyright_License {
 #define LOCALTIME_H
 
 struct NMEA_INFO;
-struct DERIVED_INFO;
 
 int DetectCurrentTime(const NMEA_INFO *Basic);
 
+int TimeLocal(int d, int utc_offset);
 int TimeLocal(int d);
 long GetUTCOffset(void);
 

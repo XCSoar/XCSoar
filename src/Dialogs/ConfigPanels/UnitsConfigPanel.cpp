@@ -150,13 +150,13 @@ UnitsConfigPanel::OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mod
   }
 }
 
-
 static void
-SetLocalTime(void)
+SetLocalTime(int utc_offset)
 {
   WndProperty* wp;
   TCHAR temp[20];
-  Units::TimeToTextHHMMSigned(temp, TimeLocal(XCSoarInterface::Basic().Time));
+  Units::TimeToTextHHMMSigned(temp,
+      TimeLocal(XCSoarInterface::Basic().Time, utc_offset));
 
   wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
   assert(wp != NULL);
@@ -174,10 +174,7 @@ UnitsConfigPanel::OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
   {
     DataFieldFloat &df = *(DataFieldFloat *)Sender;
     int ival = iround(df.GetAsFixed() * 3600);
-    if (XCSoarInterface::SettingsComputer().UTCOffset != ival)
-      XCSoarInterface::SetSettingsComputer().UTCOffset = ival;
-
-    SetLocalTime();
+    SetLocalTime(ival);
     break;
   }
   case DataField::daInc:
@@ -274,13 +271,14 @@ UnitsConfigPanel::Init(WndForm *_wf)
 
   UpdateUnitFields(Units::Current);
 
-  LoadFormProperty(*wf, _T("prpUTCOffset"), fixed(iround(
-         fixed(XCSoarInterface::SettingsComputer().UTCOffset) / 1800)) / 2);
+  int utc_offset = XCSoarInterface::SettingsComputer().UTCOffset;
+  LoadFormProperty(*wf, _T("prpUTCOffset"),
+                   fixed(iround(fixed(utc_offset) / 1800)) / 2);
 #ifdef WIN32
   if (is_embedded() && !is_altair())
     ((WndProperty*)wf->FindByName(_T("prpUTCOffset")))->set_enabled(false);
 #endif
-  SetLocalTime();
+  SetLocalTime(utc_offset);
 
   loading = false;
 }
