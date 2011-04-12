@@ -257,6 +257,14 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
   ok1(nmea_info.TotalEnergyVarioAvailable);
   ok1(equals(nmea_info.TotalEnergyVario, 1.71));
 
+  if (!condor) {
+    device->ParseNMEA("$LXWP2,1.7,1.1,5,,,,", &nmea_info);
+    ok1(nmea_info.settings.mac_cready_available);
+    ok1(equals(nmea_info.settings.mac_cready, 1.7));
+    ok1(nmea_info.settings.bugs_available);
+    ok1(equals(nmea_info.settings.bugs, 0.95));
+  }
+
   delete device;
 }
 
@@ -391,7 +399,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(132);
+  plan_tests(136);
 
   TestGeneric();
   TestCAI302();
