@@ -2085,11 +2085,11 @@ msgstr "Trilha Completa"
 
 #: src/InputEventsActions.cpp:204
 msgid "Show airspace off"
-msgstr ""
+msgstr "Mostrar Esp Aéreo DESLIGADO"
 
 #: src/InputEventsActions.cpp:206
 msgid "Show airspace on"
-msgstr ""
+msgstr "Mostrar Esp Aéreo LIGADO"
 
 #: src/InputEventsActions.cpp:242
 msgid "Screen Mode Full"
@@ -2702,7 +2702,7 @@ msgstr "Polar Planeio"
 
 #: src/Dialogs/dlgAnalysis.cpp:251
 msgid "Temp Trace"
-msgstr ""
+msgstr "Registro temperatura"
 
 #: src/Dialogs/dlgAnalysis.cpp:260
 msgid "Task Speed"
@@ -3033,12 +3033,12 @@ msgstr "Conectado"
 #: src/Dialogs/dlgStatus.cpp:213 src/Dialogs/dlgStatus.cpp:387
 #: src/Dialogs/dlgStatus.cpp:394
 msgid "True"
-msgstr ""
+msgstr "VERDAD"
 
 #: src/Dialogs/dlgStatus.cpp:215 src/Dialogs/dlgStatus.cpp:389
 #: src/Dialogs/dlgStatus.cpp:396
 msgid "False"
-msgstr ""
+msgstr "FALSO"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:68
 msgid "All on"
@@ -3308,7 +3308,7 @@ msgstr "Sombra"
 #: Data/Dialogs/dlgConfiguration.xml:322
 #: Data/Dialogs/dlgConfiguration_L.xml:323
 msgid "Safety MC"
-msgstr ""
+msgstr "Mc de Segurança"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:55
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:120
@@ -3558,7 +3558,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:107
 msgid "Orange"
-msgstr ""
+msgstr "Laranja"
 
 #: src/Dialogs/dlgTaskManager.cpp:146
 msgid "Validation Errors"
@@ -3714,7 +3714,7 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:112
 msgid "Unknown"
-msgstr ""
+msgstr "Desconhecido"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:116
 msgid "Goal"
@@ -4154,7 +4154,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:616
 #: Data/Dialogs/dlgConfiguration_L.xml:617
 msgid "Time step circling"
-msgstr ""
+msgstr "Interv reg girando"
 
 #: Data/Dialogs/dlgStatusTask.xml:3
 msgid "Task Status"
@@ -4338,7 +4338,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:47 Data/Dialogs/dlgConfiguration_L.xml:47
 msgid "Terrain file"
-msgstr ""
+msgstr "Terreno"
 
 #: Data/Dialogs/pnlTaskProperties.xml:6 Data/Dialogs/pnlTaskProperties_L.xml:7
 msgid "Minimum AAT task time in minutes."
@@ -4359,7 +4359,7 @@ msgstr ""
 
 #: Data/Dialogs/pnlTaskEdit.xml:12 Data/Dialogs/pnlTaskEdit_L.xml:10
 msgid "Clear Task"
-msgstr ""
+msgstr "Limpar prova"
 
 #: Data/Dialogs/dlgVario.xml:144 Data/Dialogs/dlgVario.xml:166
 #: Data/Dialogs/dlgVario.xml:188 Data/Dialogs/dlgVario.xml:210
@@ -4415,7 +4415,7 @@ msgstr "Vento aut"
 #: Data/Dialogs/dlgConfiguration.xml:720
 #: Data/Dialogs/dlgConfiguration_L.xml:721
 msgid "Debounce time"
-msgstr ""
+msgstr "Tempo debounce"
 
 #: Data/Dialogs/dlgVario.xml:286 Data/Dialogs/dlgVario_L.xml:287
 msgid "Mute vario on voice"
@@ -4424,12 +4424,12 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:611
 #: Data/Dialogs/dlgConfiguration_L.xml:612
 msgid "Time step cruise"
-msgstr ""
+msgstr "Interv reg planeio"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:31
 #: Data/Dialogs/dlgWayPointDetails_L.xml:31
 msgid "Set As New Home"
-msgstr ""
+msgstr "Selec como nova Casa"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:28
 #: Data/Dialogs/pnlTaskCalculator_L.xml:28
@@ -4456,7 +4456,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:705
 #: Data/Dialogs/dlgConfiguration_L.xml:706
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 #: Data/Dialogs/dlgConfiguration.xml:494
 #: Data/Dialogs/dlgConfiguration_L.xml:495
@@ -4564,7 +4564,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:700
 #: Data/Dialogs/dlgConfiguration_L.xml:701
 msgid "Events"
-msgstr ""
+msgstr "Eventos Entr"
 
 #: Data/Dialogs/dlgConfiguration.xml:392
 #: Data/Dialogs/dlgConfiguration_L.xml:393
@@ -4780,7 +4780,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:17 Data/Dialogs/dlgTeamCode_L.xml:18
 msgid "Rel. bearing"
-msgstr ""
+msgstr "Rumo Relat"
 
 #: Data/Dialogs/dlgConfiguration.xml:139
 #: Data/Dialogs/dlgConfiguration_L.xml:139
@@ -5089,7 +5089,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:710
 #: Data/Dialogs/dlgConfiguration_L.xml:711
 msgid "Status message"
-msgstr ""
+msgstr "Msg estado"
 
 #: Data/Dialogs/dlgConfiguration.xml:83 Data/Dialogs/dlgConfiguration_L.xml:83
 msgid ""
@@ -5526,7 +5526,7 @@ msgstr ""
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:3
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:3
 msgid "Alternate Start Points"
-msgstr ""
+msgstr "Pontos largada altenat"
 
 #: Data/Dialogs/dlgFileSelect.xml:10
 msgid "Refresh"
@@ -5952,7 +5952,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:327
 #: Data/Dialogs/dlgConfiguration_L.xml:328
 msgid "STF risk factor"
-msgstr ""
+msgstr "Fator risco VAV"
 
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "Enable voice read-back of MacReady setting after it is adjusted."
@@ -6226,7 +6226,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:139
 #: Data/Dialogs/dlgConfiguration_L.xml:139
 msgid "Wind arrow"
-msgstr ""
+msgstr "Seta do vento"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid ""
@@ -6455,7 +6455,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:285
 #: Data/Dialogs/dlgConfiguration_L.xml:286
 msgid "Block speed to fly"
-msgstr ""
+msgstr "Bloqu veloc a voar"
 
 #: Data/Dialogs/dlgConfiguration.xml:147
 #: Data/Dialogs/dlgConfiguration_L.xml:147
@@ -6584,7 +6584,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:715
 #: Data/Dialogs/dlgConfiguration_L.xml:716
 msgid "Menu timeout"
-msgstr ""
+msgstr "Espera menu"
 
 #: Data/Dialogs/dlgConfiguration.xml:705
 #: Data/Dialogs/dlgConfiguration_L.xml:706
@@ -6831,7 +6831,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:6
 msgid "Ack Day"
-msgstr ""
+msgstr "REC Dia"
 
 #: Data/Dialogs/dlgConfiguration.xml:114
 #: Data/Dialogs/dlgConfiguration_L.xml:114 Data/Dialogs/dlgWindSettings.xml:16
@@ -7029,7 +7029,7 @@ msgstr "Indic alcance plan"
 #: Data/Dialogs/pnlTaskManagerClose.xml:5
 #: Data/Dialogs/pnlTaskManagerClose_L.xml:6
 msgid "Fly"
-msgstr ""
+msgstr "VOAR"
 
 #: Data/Dialogs/dlgConfiguration.xml:109
 #: Data/Dialogs/dlgConfiguration_L.xml:109
@@ -7093,7 +7093,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:300
 #: Data/Dialogs/dlgConfiguration_L.xml:301
 msgid "L/D average period"
-msgstr ""
+msgstr "Período média L/D"
 
 #: Data/Dialogs/dlgConfiguration.xml:647
 #: Data/Dialogs/dlgConfiguration_L.xml:648
@@ -7169,7 +7169,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:725
 #: Data/Dialogs/dlgConfiguration_L.xml:726
 msgid "Text input style"
-msgstr ""
+msgstr "Estilo entrada texto"
 
 #: Data/Dialogs/dlgVegaDemo.xml:3
 msgid "Vario Demo"
@@ -7289,7 +7289,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:7
 #: Data/Dialogs/dlgWayPointDetails_L.xml:4 Data/Input/default.xci:491
 msgid "GoTo"
-msgstr ""
+msgstr "Vá Para"
 
 #: Data/Dialogs/dlgConfiguration.xml:409
 #: Data/Dialogs/dlgConfiguration_L.xml:410

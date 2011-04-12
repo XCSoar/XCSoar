@@ -191,7 +191,7 @@ msgstr "Start Keerpunt"
 
 #: src/ExpandMacros.cpp:222
 msgid "Arm start"
-msgstr ""
+msgstr "Start activeren"
 
 #: src/ExpandMacros.cpp:225
 msgid "Arm turn"
@@ -299,7 +299,7 @@ msgstr "Uit"
 #: src/Dialogs/dlgStatus.cpp:203
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:107
 msgid "On"
-msgstr ""
+msgstr "AAN"
 
 #: src/ExpandMacros.cpp:454 src/ExpandMacros.cpp:480
 msgid "Topography On"
@@ -1924,7 +1924,7 @@ msgstr ""
 #: src/InfoBoxes/Content/MacCready.cpp:159
 #: src/InfoBoxes/Content/MacCready.cpp:221
 msgid "MANUAL"
-msgstr ""
+msgstr "Handmatig"
 
 #: src/InfoBoxes/Content/MacCready.cpp:139
 #: src/InfoBoxes/Content/MacCready.cpp:157
@@ -2691,7 +2691,7 @@ msgstr "glijpolaire"
 
 #: src/Dialogs/dlgAnalysis.cpp:251
 msgid "Temp Trace"
-msgstr ""
+msgstr "Temp spoor"
 
 #: src/Dialogs/dlgAnalysis.cpp:260
 msgid "Task Speed"
@@ -3024,12 +3024,12 @@ msgstr "Verbonden"
 #: src/Dialogs/dlgStatus.cpp:213 src/Dialogs/dlgStatus.cpp:387
 #: src/Dialogs/dlgStatus.cpp:394
 msgid "True"
-msgstr ""
+msgstr "WAAR"
 
 #: src/Dialogs/dlgStatus.cpp:215 src/Dialogs/dlgStatus.cpp:389
 #: src/Dialogs/dlgStatus.cpp:396
 msgid "False"
-msgstr ""
+msgstr "ONJUIST"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:68
 msgid "All on"
@@ -3549,7 +3549,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:107
 msgid "Orange"
-msgstr ""
+msgstr "Oranje"
 
 #: src/Dialogs/dlgTaskManager.cpp:146
 msgid "Validation Errors"
@@ -3705,7 +3705,7 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:112
 msgid "Unknown"
-msgstr ""
+msgstr "Onbekend"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:116
 msgid "Goal"
@@ -4406,7 +4406,7 @@ msgstr "Auto wind"
 #: Data/Dialogs/dlgConfiguration.xml:720
 #: Data/Dialogs/dlgConfiguration_L.xml:721
 msgid "Debounce time"
-msgstr ""
+msgstr "Debounce tijd"
 
 #: Data/Dialogs/dlgVario.xml:286 Data/Dialogs/dlgVario_L.xml:287
 msgid "Mute vario on voice"
@@ -5517,7 +5517,7 @@ msgstr ""
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:3
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:3
 msgid "Alternate Start Points"
-msgstr ""
+msgstr "Alternatieve startpunten"
 
 #: Data/Dialogs/dlgFileSelect.xml:10
 msgid "Refresh"
@@ -6273,7 +6273,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "New waypoint"
-msgstr ""
+msgstr "Nieuw Keerpunt"
 
 #: Data/Dialogs/dlgConfiguration.xml:582
 #: Data/Dialogs/dlgConfiguration_L.xml:583
@@ -7280,7 +7280,7 @@ msgstr "Hernoem"
 #: Data/Dialogs/dlgWayPointDetails.xml:7
 #: Data/Dialogs/dlgWayPointDetails_L.xml:4 Data/Input/default.xci:491
 msgid "GoTo"
-msgstr ""
+msgstr "Ga naar"
 
 #: Data/Dialogs/dlgConfiguration.xml:409
 #: Data/Dialogs/dlgConfiguration_L.xml:410

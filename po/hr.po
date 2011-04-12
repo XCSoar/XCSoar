@@ -153,7 +153,6 @@ msgstr ""
 
 #: src/ExpandMacros.cpp:118 src/ExpandMacros.cpp:128 src/ExpandMacros.cpp:193
 #: src/ExpandMacros.cpp:217
-#, fuzzy
 msgid "Next Turnpoint"
 msgstr "Sljedeća točka"
 
@@ -1852,7 +1851,7 @@ msgstr ""
 #: src/InfoBoxes/Content/MacCready.cpp:159
 #: src/InfoBoxes/Content/MacCready.cpp:221
 msgid "MANUAL"
-msgstr ""
+msgstr "Ručno"
 
 #: src/InfoBoxes/Content/MacCready.cpp:139
 #: src/InfoBoxes/Content/MacCready.cpp:157
@@ -1958,11 +1957,11 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:204
 msgid "Show airspace off"
-msgstr ""
+msgstr "Prikaz zračnog prostora OFF"
 
 #: src/InputEventsActions.cpp:206
 msgid "Show airspace on"
-msgstr ""
+msgstr "Prikaz zračnog prostora ON"
 
 #: src/InputEventsActions.cpp:242
 msgid "Screen Mode Full"
@@ -1987,14 +1986,12 @@ msgid "Auto. zoom off"
 msgstr "AutoZum ON"
 
 #: src/InputEventsActions.cpp:314
-#, fuzzy
 msgid "Circling zoom on"
-msgstr "Zum kruženja"
+msgstr "Zum kruženja ON"
 
 #: src/InputEventsActions.cpp:316
-#, fuzzy
 msgid "Circling zoom off"
-msgstr "Zum kruženja"
+msgstr "Zum kruženja OFF"
 
 #: src/InputEventsActions.cpp:381
 msgid "Pan mode on"
@@ -2031,7 +2028,6 @@ msgid "Hold turn"
 msgstr ""
 
 #: src/InputEventsActions.cpp:676
-#, fuzzy
 msgid "No active waypoint!"
 msgstr "Nema aktivne točke!"
 
@@ -2083,14 +2079,12 @@ msgid "NMEA log off"
 msgstr ""
 
 #: src/InputEventsActions.cpp:1145
-#, fuzzy
 msgid "Logger on"
-msgstr "Loger"
+msgstr "Loger ON"
 
 #: src/InputEventsActions.cpp:1147
-#, fuzzy
 msgid "Logger off"
-msgstr "Loger"
+msgstr "Loger OFF"
 
 #: src/InputEventsActions.cpp:1393
 #, no-c-format
@@ -2103,7 +2097,6 @@ msgid "Waypoint labels"
 msgstr "Točka"
 
 #: src/InputEventsActions.cpp:1446
-#, fuzzy
 msgid "Map labels on"
 msgstr "Oznake na karti ON"
 
@@ -2112,7 +2105,6 @@ msgid "Topography/Terrain"
 msgstr ""
 
 #: src/InputEventsActions.cpp:1786
-#, fuzzy
 msgid "Task start"
 msgstr "Početak zadatka"
 
@@ -2577,7 +2569,6 @@ msgid "Climb"
 msgstr "penjanje"
 
 #: src/Dialogs/dlgAnalysis.cpp:219 src/Dialogs/dlgAnalysis.cpp:263
-#, fuzzy
 msgid "Task Calc"
 msgstr "Računar"
 
@@ -2587,12 +2578,10 @@ msgid "Thermal Band"
 msgstr "Visina T.stupa"
 
 #: src/Dialogs/dlgAnalysis.cpp:233
-#, fuzzy
 msgid "Wind At Altitude"
 msgstr "vjetar po visini"
 
 #: src/Dialogs/dlgAnalysis.cpp:236
-#, fuzzy
 msgid "Set Wind"
 msgstr "Set vjetar"
 
@@ -2601,7 +2590,6 @@ msgid "Glide Polar"
 msgstr "polara"
 
 #: src/Dialogs/dlgAnalysis.cpp:251
-#, fuzzy
 msgid "Temp Trace"
 msgstr "temperatura po visini"
 
@@ -2663,7 +2651,7 @@ msgid "Glide Computer"
 msgstr "Računalo leta"
 
 #: src/Dialogs/dlgConfiguration.cpp:89
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Safety Factors"
 msgstr "Sigurnosne postavke"
 
@@ -2937,12 +2925,12 @@ msgstr "Spojen"
 #: src/Dialogs/dlgStatus.cpp:213 src/Dialogs/dlgStatus.cpp:387
 #: src/Dialogs/dlgStatus.cpp:394
 msgid "True"
-msgstr ""
+msgstr "TOČNO"
 
 #: src/Dialogs/dlgStatus.cpp:215 src/Dialogs/dlgStatus.cpp:389
 #: src/Dialogs/dlgStatus.cpp:396
 msgid "False"
-msgstr ""
+msgstr "NETOČNO"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:68
 msgid "All on"
@@ -2987,7 +2975,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:62
 msgid "Final glide"
-msgstr ""
+msgstr "Final Glide"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
 msgid "Trending Average climb"
@@ -3214,9 +3202,8 @@ msgstr "Sjena"
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:81
 #: Data/Dialogs/dlgConfiguration.xml:322
 #: Data/Dialogs/dlgConfiguration_L.xml:323
-#, fuzzy
 msgid "Safety MC"
-msgstr "Sigurnosne postavke"
+msgstr "Korekcija Mc"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:55
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:120
@@ -3472,9 +3459,8 @@ msgid "B/W"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:107
-#, fuzzy
 msgid "Orange"
-msgstr "Dolet"
+msgstr "Narančasta"
 
 #: src/Dialogs/dlgTaskManager.cpp:146
 msgid "Validation Errors"
@@ -3500,7 +3486,6 @@ msgid "Task edit"
 msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:115
-#, fuzzy
 msgid "Add Waypoint"
 msgstr "Dodaj tačku"
 
@@ -3636,7 +3621,7 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:112
 msgid "Unknown"
-msgstr ""
+msgstr "Nepoznato"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:116
 msgid "Goal"
@@ -4043,7 +4028,7 @@ msgstr "Datoteka polare"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:14
 msgid "Rate"
-msgstr ""
+msgstr "Brzina"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:37
 #: Data/Dialogs/pnlTaskCalculator_L.xml:37
@@ -4081,7 +4066,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:616
 #: Data/Dialogs/dlgConfiguration_L.xml:617
 msgid "Time step circling"
-msgstr ""
+msgstr "Log interval kruženje"
 
 #: Data/Dialogs/dlgStatusTask.xml:3
 msgid "Task Status"
@@ -4265,7 +4250,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:47 Data/Dialogs/dlgConfiguration_L.xml:47
 msgid "Terrain file"
-msgstr ""
+msgstr "Teren"
 
 #: Data/Dialogs/pnlTaskProperties.xml:6 Data/Dialogs/pnlTaskProperties_L.xml:7
 msgid "Minimum AAT task time in minutes."
@@ -4286,9 +4271,8 @@ msgid "Font Configuration"
 msgstr "Podešavanje"
 
 #: Data/Dialogs/pnlTaskEdit.xml:12 Data/Dialogs/pnlTaskEdit_L.xml:10
-#, fuzzy
 msgid "Clear Task"
-msgstr "Prijavi zadatak?"
+msgstr "Briši zadatak"
 
 #: Data/Dialogs/dlgVario.xml:144 Data/Dialogs/dlgVario.xml:166
 #: Data/Dialogs/dlgVario.xml:188 Data/Dialogs/dlgVario.xml:210
@@ -4345,7 +4329,7 @@ msgstr "Detekcija smj.vjetra"
 #: Data/Dialogs/dlgConfiguration.xml:720
 #: Data/Dialogs/dlgConfiguration_L.xml:721
 msgid "Debounce time"
-msgstr ""
+msgstr "Vrijeme odziva"
 
 #: Data/Dialogs/dlgVario.xml:286 Data/Dialogs/dlgVario_L.xml:287
 msgid "Mute vario on voice"
@@ -4354,12 +4338,12 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:611
 #: Data/Dialogs/dlgConfiguration_L.xml:612
 msgid "Time step cruise"
-msgstr ""
+msgstr "Log interval preskok"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:31
 #: Data/Dialogs/dlgWayPointDetails_L.xml:31
 msgid "Set As New Home"
-msgstr ""
+msgstr "Set kao novi Home"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:28
 #: Data/Dialogs/pnlTaskCalculator_L.xml:28
@@ -4386,7 +4370,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:705
 #: Data/Dialogs/dlgConfiguration_L.xml:706
 msgid "Language"
-msgstr ""
+msgstr "Jezik"
 
 #: Data/Dialogs/dlgConfiguration.xml:494
 #: Data/Dialogs/dlgConfiguration_L.xml:495
@@ -4451,7 +4435,6 @@ msgstr "Hendikep faktor"
 
 #: Data/Dialogs/dlgAirspacePatterns.xml:3
 #: Data/Dialogs/dlgAirspacePatterns_L.xml:3
-#, fuzzy
 msgid "Select Pattern"
 msgstr "Izabor mustre"
 
@@ -4463,7 +4446,6 @@ msgstr "Briši"
 
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:3
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:3
-#, fuzzy
 msgid "Edit Text"
 msgstr "Uredi tekst"
 
@@ -4549,7 +4531,6 @@ msgid ""
 msgstr ""
 
 #: Data/Dialogs/dlgFileSelect.xml:3
-#, fuzzy
 msgid "File Browser"
 msgstr "Preglednik datoteka"
 
@@ -4594,7 +4575,6 @@ msgstr "Točke na karti"
 #: Data/Dialogs/dlgConfiguration.xml:682
 #: Data/Dialogs/dlgConfiguration_L.xml:683 Data/Dialogs/dlgVario.xml:272
 #: Data/Dialogs/dlgVario_L.xml:273
-#, fuzzy
 msgid "UTC offset"
 msgstr "UTC +/-"
 
@@ -4718,9 +4698,8 @@ msgid "Finish point"
 msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:17 Data/Dialogs/dlgTeamCode_L.xml:18
-#, fuzzy
 msgid "Rel. bearing"
-msgstr "Smjer"
+msgstr "Rel. smjer"
 
 #: Data/Dialogs/dlgConfiguration.xml:139
 #: Data/Dialogs/dlgConfiguration_L.xml:139
@@ -4835,7 +4814,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgWayPointDetails.xml:28
 #: Data/Dialogs/dlgWayPointDetails_L.xml:28
-#, fuzzy
 msgid "Insert In Task"
 msgstr "Umetni u zadatak"
 
@@ -5038,7 +5016,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:710
 #: Data/Dialogs/dlgConfiguration_L.xml:711
 msgid "Status message"
-msgstr ""
+msgstr "Statusna poruka"
 
 #: Data/Dialogs/dlgConfiguration.xml:83 Data/Dialogs/dlgConfiguration_L.xml:83
 msgid ""
@@ -5053,7 +5031,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:3 Data/Dialogs/dlgTeamCode_L.xml:3
 msgid "Team Code"
-msgstr ""
+msgstr "kod tima"
 
 #: Data/Dialogs/dlgVario.xml:84 Data/Dialogs/dlgVario_L.xml:85
 msgid "Cruise averager scale"
@@ -5485,7 +5463,7 @@ msgstr ""
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:3
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:3
 msgid "Alternate Start Points"
-msgstr ""
+msgstr "Altern. start točka "
 
 #: Data/Dialogs/dlgFileSelect.xml:10
 msgid "Refresh"
@@ -5921,7 +5899,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:327
 #: Data/Dialogs/dlgConfiguration_L.xml:328
 msgid "STF risk factor"
-msgstr ""
+msgstr "STF faktor rizika "
 
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "Enable voice read-back of MacReady setting after it is adjusted."
@@ -6198,7 +6176,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:139
 #: Data/Dialogs/dlgConfiguration_L.xml:139
 msgid "Wind arrow"
-msgstr ""
+msgstr "Strelica vjetra "
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid ""
@@ -6255,7 +6233,6 @@ msgid "If true, the InfoBoxes are white on black, otherwise black on white."
 msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:26
-#, fuzzy
 msgid "New waypoint"
 msgstr "Nova točka"
 
@@ -6314,9 +6291,8 @@ msgid "Waypts."
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:6 Data/Dialogs/dlgConfigFonts_L.xml:6
-#, fuzzy
 msgid "Customize fonts"
-msgstr "Podesi fontove"
+msgstr "Podesi fontove "
 
 #: Data/Dialogs/dlgConfiguration.xml:290
 #: Data/Dialogs/dlgConfiguration_L.xml:291
@@ -6423,7 +6399,6 @@ msgstr "Boje"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:30
 #: Data/Dialogs/dlgWayPointDetails_L.xml:30
-#, fuzzy
 msgid "Remove From Task"
 msgstr "Ukloni iz zadatka"
 
@@ -6434,7 +6409,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:285
 #: Data/Dialogs/dlgConfiguration_L.xml:286
 msgid "Block speed to fly"
-msgstr ""
+msgstr "Blokiraj speed to fly"
 
 #: Data/Dialogs/dlgConfiguration.xml:147
 #: Data/Dialogs/dlgConfiguration_L.xml:147
@@ -6517,7 +6492,6 @@ msgstr "Preostalo vrijeme"
 
 #: Data/Dialogs/dlgAirspaceColours.xml:3
 #: Data/Dialogs/dlgAirspaceColours_L.xml:3
-#, fuzzy
 msgid "Select Colour"
 msgstr "Izbor boje"
 
@@ -6569,7 +6543,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:715
 #: Data/Dialogs/dlgConfiguration_L.xml:716
 msgid "Menu timeout"
-msgstr ""
+msgstr "Tajmaut meni tipki"
 
 #: Data/Dialogs/dlgConfiguration.xml:705
 #: Data/Dialogs/dlgConfiguration_L.xml:706
@@ -6759,9 +6733,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:738
 #: Data/Dialogs/dlgConfiguration_L.xml:739
-#, fuzzy
 msgid "Infobox geometry"
-msgstr "Geometrija infoboxa"
+msgstr "Geometrija infoboxa "
 
 #: Data/Dialogs/dlgVario.xml:32 Data/Dialogs/dlgVario_L.xml:33
 msgid ""
@@ -6822,7 +6795,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:6
 msgid "Ack Day"
-msgstr ""
+msgstr "POTV dan"
 
 #: Data/Dialogs/dlgConfiguration.xml:114
 #: Data/Dialogs/dlgConfiguration_L.xml:114 Data/Dialogs/dlgWindSettings.xml:16
@@ -6832,9 +6805,8 @@ msgstr "Zanos traga"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:41
 #: Data/Dialogs/pnlTaskCalculator_L.xml:41
-#, fuzzy
 msgid "Achieved speed"
-msgstr "Postignuta brzina"
+msgstr "Postignuta brzina "
 
 #: Data/Dialogs/dlgConfiguration.xml:63 Data/Dialogs/dlgConfiguration_L.xml:63
 msgid "Cruise orientation"
@@ -6861,7 +6833,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint.xml:40 Data/Dialogs/dlgTaskPoint_L.xml:39
 msgid "Start radial"
-msgstr ""
+msgstr "Početni radijal "
 
 #: Data/Dialogs/pnlTaskProperties.xml:30
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
@@ -7049,7 +7021,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgWayPointDetails.xml:29
 #: Data/Dialogs/dlgWayPointDetails_L.xml:29
-#, fuzzy
 msgid "Append To Task"
 msgstr "Dodaj na zadatk"
 
@@ -7087,11 +7058,10 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:300
 #: Data/Dialogs/dlgConfiguration_L.xml:301
 msgid "L/D average period"
-msgstr ""
+msgstr "Prosječni L/D period"
 
 #: Data/Dialogs/dlgConfiguration.xml:647
 #: Data/Dialogs/dlgConfiguration_L.xml:648
-#, fuzzy
 msgid "Aircraft/Wind speed"
 msgstr "Brz. zrakoplov/vjetar"
 
@@ -7165,7 +7135,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:725
 #: Data/Dialogs/dlgConfiguration_L.xml:726
 msgid "Text input style"
-msgstr ""
+msgstr "Način unosa texta"
 
 #: Data/Dialogs/dlgVegaDemo.xml:3
 msgid "Vario Demo"
@@ -7207,7 +7177,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgWayPointDetails.xml:27
 #: Data/Dialogs/dlgWayPointDetails_L.xml:27
-#, fuzzy
 msgid "Replace In Task"
 msgstr "Zamjeni u zadatku"
 
@@ -7289,7 +7258,7 @@ msgstr "Preimenuj"
 #: Data/Dialogs/dlgWayPointDetails.xml:7
 #: Data/Dialogs/dlgWayPointDetails_L.xml:4 Data/Input/default.xci:491
 msgid "GoTo"
-msgstr ""
+msgstr "Idi na"
 
 #: Data/Dialogs/dlgConfiguration.xml:409
 #: Data/Dialogs/dlgConfiguration_L.xml:410
@@ -7400,7 +7369,6 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:160
-#, fuzzy
 msgid "Below final glide"
 msgstr "Ispod 'Final Glide' visine"
 
@@ -7440,7 +7408,6 @@ msgid "Trail"
 msgstr "Trag"
 
 #: Data/Input/default.xci:115
-#, fuzzy
 msgid "Waiting for GPS connection"
 msgstr "Čekam GPS konekciju"
 
@@ -7501,7 +7468,6 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:155
-#, fuzzy
 msgid "Above final glide"
 msgstr "Iznad 'Final Glide' visine"
 
@@ -7550,7 +7516,6 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:125
-#, fuzzy
 msgid "Waiting for GPS fix"
 msgstr "Čekam GPS Fix"
 
@@ -7559,7 +7524,6 @@ msgid "Takeoff"
 msgstr "Poletio"
 
 #: Data/Input/default.xci:165
-#, fuzzy
 msgid "Final glide through terrain"
 msgstr "'Final Glide' kroz teren"
 

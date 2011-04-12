@@ -556,7 +556,7 @@ msgstr "Маккреди настройки"
 #: src/InfoBoxes/Content/Factory.cpp:152
 #, no-c-format
 msgid "MC"
-msgstr ""
+msgstr "MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:153
 #, no-c-format
@@ -877,12 +877,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:304
 #, no-c-format
 msgid "AA time"
-msgstr ""
+msgstr "AAТ время"
 
 #: src/InfoBoxes/Content/Factory.cpp:305
 #, no-c-format
 msgid "AA Time"
-msgstr ""
+msgstr "AAТ время"
 
 #: src/InfoBoxes/Content/Factory.cpp:306
 #, no-c-format
@@ -967,7 +967,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
 msgid "Airspeed IAS"
-msgstr ""
+msgstr "Приборная возд скорость"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
@@ -1039,7 +1039,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:385
 #, no-c-format
 msgid "Time of flight"
-msgstr ""
+msgstr "Время полета"
 
 #: src/InfoBoxes/Content/Factory.cpp:386
 #, no-c-format
@@ -1054,7 +1054,7 @@ msgstr "Время с момента взлета."
 #: src/InfoBoxes/Content/Factory.cpp:394
 #, no-c-format
 msgid "G load"
-msgstr ""
+msgstr "Перегрузка G"
 
 #: src/InfoBoxes/Content/Factory.cpp:395
 #, no-c-format
@@ -1095,7 +1095,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:412
 #, no-c-format
 msgid "Time local"
-msgstr ""
+msgstr "Местное время"
 
 #: src/InfoBoxes/Content/Factory.cpp:413
 #, no-c-format
@@ -1110,7 +1110,7 @@ msgstr "GPS время  местном часовом поясе."
 #: src/InfoBoxes/Content/Factory.cpp:421 src/InfoBoxes/Content/Factory.cpp:422
 #, no-c-format
 msgid "Time UTC"
-msgstr ""
+msgstr "Время GMT"
 
 #: src/InfoBoxes/Content/Factory.cpp:423
 #, no-c-format
@@ -1120,7 +1120,7 @@ msgstr "GPS время выраженное в UTC."
 #: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
 msgid "Task time to go"
-msgstr ""
+msgstr "Расчетное время до финиша"
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
@@ -1139,7 +1139,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:439
 #, no-c-format
 msgid "Next time to go"
-msgstr ""
+msgstr "Расчетное время до след точки"
 
 #: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
@@ -1273,12 +1273,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:493
 #, no-c-format
 msgid "Outside air temperature"
-msgstr ""
+msgstr "Температура за бортом"
 
 #: src/InfoBoxes/Content/Factory.cpp:494
 #, no-c-format
 msgid "OAT"
-msgstr ""
+msgstr "Темпер"
 
 #: src/InfoBoxes/Content/Factory.cpp:495
 #, no-c-format
@@ -1314,7 +1314,7 @@ msgstr "Прогнозируемая температура"
 #: src/InfoBoxes/Content/Factory.cpp:512
 #, no-c-format
 msgid "Max Temp"
-msgstr ""
+msgstr "Макс темп"
 
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
@@ -1366,7 +1366,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:538
 #, no-c-format
 msgid "L/D vario"
-msgstr ""
+msgstr "Качество с вариометра"
 
 #: src/InfoBoxes/Content/Factory.cpp:539
 #, no-c-format
@@ -1389,7 +1389,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:547
 #, no-c-format
 msgid "Airspeed TAS"
-msgstr ""
+msgstr "Истинная воздушн скорость"
 
 #: src/InfoBoxes/Content/Factory.cpp:548
 #, no-c-format
@@ -1423,7 +1423,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:565
 #, no-c-format
 msgid "Team bearing"
-msgstr ""
+msgstr "Курс на команду"
 
 #: src/InfoBoxes/Content/Factory.cpp:566
 #, no-c-format
@@ -1455,7 +1455,7 @@ msgstr "разность между курсом к местоположению
 #: src/InfoBoxes/Content/Factory.cpp:583
 #, no-c-format
 msgid "Team range"
-msgstr ""
+msgstr "Расстояние до команды"
 
 #: src/InfoBoxes/Content/Factory.cpp:584
 #, no-c-format
@@ -1519,7 +1519,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:619
 #, no-c-format
 msgid "AA delta time"
-msgstr ""
+msgstr "AAТ разница времени"
 
 #: src/InfoBoxes/Content/Factory.cpp:620
 #, no-c-format
@@ -1575,7 +1575,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:647
 #, no-c-format
 msgid "Battery percent"
-msgstr ""
+msgstr "Уровень заряда батареи"
 
 #: src/InfoBoxes/Content/Factory.cpp:649
 #, no-c-format
@@ -1798,12 +1798,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:767
 #, no-c-format
 msgid "Flight level"
-msgstr ""
+msgstr "Эшелон"
 
 #: src/InfoBoxes/Content/Factory.cpp:768
 #, no-c-format
 msgid "Flight Level"
-msgstr ""
+msgstr "Эшелон"
 
 #: src/InfoBoxes/Content/Factory.cpp:769
 #, no-c-format
@@ -1985,7 +1985,7 @@ msgstr "Вручную"
 #: src/InfoBoxes/Content/MacCready.cpp:157
 #: src/InfoBoxes/Content/MacCready.cpp:219
 msgid "AUTO"
-msgstr ""
+msgstr "Авто"
 
 #: src/InfoBoxes/Content/MacCready.cpp:172
 #: src/InfoBoxes/Content/Weather.cpp:256 Data/Dialogs/dlgConfigFonts.xml:11
@@ -2011,7 +2011,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Speed.cpp:159
 msgid "BLOCK"
-msgstr ""
+msgstr "БЛОК"
 
 #: src/InfoBoxes/Content/Speed.cpp:161
 msgid "DOLPHIN"
@@ -2118,11 +2118,11 @@ msgstr "Зум в спирали выкл"
 
 #: src/InputEventsActions.cpp:381
 msgid "Pan mode on"
-msgstr ""
+msgstr "ПЕРЕМЕЩЕНИЕ НА КАРТЕ ВКЛЮЧЕНО"
 
 #: src/InputEventsActions.cpp:383
 msgid "Pan mode off"
-msgstr ""
+msgstr "ПЕРЕМЕЩЕНИЕ НА КАРТЕ ВЫКЛЮЧЕНО"
 
 #: src/InputEventsActions.cpp:533
 msgid "Advance manually"
@@ -2194,15 +2194,15 @@ msgstr "NMEA"
 
 #: src/InputEventsActions.cpp:1141
 msgid "NMEA log off"
-msgstr ""
+msgstr "ЗАПИСЬ ТРЕКА NMEA ВЫКЛЮЧЕНА"
 
 #: src/InputEventsActions.cpp:1145
 msgid "Logger on"
-msgstr ""
+msgstr "ЗАПИСЬ ТРЕКА ВКЛЮЧЕНА"
 
 #: src/InputEventsActions.cpp:1147
 msgid "Logger off"
-msgstr ""
+msgstr "ЗАПИСЬ ТРЕКА ВЫКЛЮЧЕНА"
 
 #: src/InputEventsActions.cpp:1393
 #, no-c-format
@@ -2215,7 +2215,7 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:1446
 msgid "Map labels on"
-msgstr ""
+msgstr "Обозначения на карте включены"
 
 #: src/InputEventsActions.cpp:1618
 msgid "Topography/Terrain"
@@ -2429,7 +2429,7 @@ msgstr ""
 
 #: src/FlightStatisticsRenderer.cpp:324 src/Dialogs/dlgAnalysis.cpp:241
 msgid "Mass"
-msgstr ""
+msgstr "Масса"
 
 #: src/FlightStatisticsRenderer.cpp:331 Data/Dialogs/dlgBasicSettings.xml:15
 msgid "Wing loading"
@@ -2500,16 +2500,16 @@ msgstr ""
 
 #: src/FlightStatisticsRenderer.cpp:741
 msgid "Thermal height"
-msgstr ""
+msgstr "Высота потока"
 
 #: src/FlightStatisticsRenderer.cpp:744
 msgid "Cloud base"
-msgstr ""
+msgstr "База"
 
 #: src/FlightStatisticsRenderer.cpp:767 src/FlightStatisticsRenderer.cpp:776
 #: src/FlightStatisticsRenderer.cpp:787
 msgid "Task to go"
-msgstr ""
+msgstr "Время до"
 
 #: src/FlightStatisticsRenderer.cpp:767 src/FlightStatisticsRenderer.cpp:776
 msgid "AAT to go"
@@ -2671,7 +2671,7 @@ msgstr "Анализ"
 
 #: src/Dialogs/dlgAnalysis.cpp:206
 msgid "Barograph"
-msgstr ""
+msgstr "Барограмма"
 
 #: src/Dialogs/dlgAnalysis.cpp:210 src/Dialogs/dlgAnalysis.cpp:246
 #: src/Dialogs/dlgAnalysis.cpp:255
@@ -2684,7 +2684,7 @@ msgstr "Подъем"
 
 #: src/Dialogs/dlgAnalysis.cpp:219 src/Dialogs/dlgAnalysis.cpp:263
 msgid "Task Calc"
-msgstr ""
+msgstr "Расч зад"
 
 #: src/Dialogs/dlgAnalysis.cpp:224
 msgid "Thermal Band"
@@ -2692,11 +2692,11 @@ msgstr ""
 
 #: src/Dialogs/dlgAnalysis.cpp:233
 msgid "Wind At Altitude"
-msgstr ""
+msgstr "Ветер по высотам"
 
 #: src/Dialogs/dlgAnalysis.cpp:236
 msgid "Set Wind"
-msgstr ""
+msgstr "Уст. ветра"
 
 #: src/Dialogs/dlgAnalysis.cpp:241
 msgid "Glide Polar"
@@ -2704,15 +2704,15 @@ msgstr "Поляра планера"
 
 #: src/Dialogs/dlgAnalysis.cpp:251
 msgid "Temp Trace"
-msgstr ""
+msgstr "График температуры"
 
 #: src/Dialogs/dlgAnalysis.cpp:260
 msgid "Task Speed"
-msgstr ""
+msgstr "Достигн скорость в задаче"
 
 #: src/Dialogs/dlgAnalysis.cpp:272
 msgid "Task calc"
-msgstr ""
+msgstr "Расч зад"
 
 #: src/Dialogs/dlgAnalysis.cpp:290 Data/Dialogs/dlgConfiguration.xml:437
 #: Data/Dialogs/dlgConfiguration_L.xml:438
@@ -2751,7 +2751,7 @@ msgstr ""
 #: src/Dialogs/dlgConfiguration.cpp:86
 #, no-c-format
 msgid "Terrain Display"
-msgstr ""
+msgstr "Показать ландшафт"
 
 #: src/Dialogs/dlgConfiguration.cpp:87
 #, no-c-format
@@ -2761,12 +2761,12 @@ msgstr ""
 #: src/Dialogs/dlgConfiguration.cpp:88
 #, no-c-format
 msgid "Glide Computer"
-msgstr ""
+msgstr "Полетный компьютер"
 
 #: src/Dialogs/dlgConfiguration.cpp:89
 #, no-c-format
 msgid "Safety Factors"
-msgstr ""
+msgstr "Безопасность"
 
 #: src/Dialogs/dlgConfiguration.cpp:90
 #, no-c-format
@@ -2847,7 +2847,7 @@ msgstr "Перезаписать?"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:100
 msgid "InfoBox paste"
-msgstr ""
+msgstr "Вставить ИнфоБлок"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:186
 #: Data/Dialogs/dlgConfiguration.xml:370
@@ -2868,7 +2868,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointSelect.xml:4 Data/Dialogs/dlgWayPointSelect_L.xml:2
 #: Data/Dialogs/dlgWaypointEdit.xml:6 Data/Dialogs/dlgWaypointEdit_L.xml:6
 msgid "Name"
-msgstr ""
+msgstr "Название"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:325
 msgid "Content"
@@ -2947,15 +2947,15 @@ msgstr "Точки не редактируемы"
 
 #: src/Dialogs/dlgConfigWaypoints.cpp:112
 msgid "Delete Waypoint?"
-msgstr ""
+msgstr "Удалить точку?"
 
 #: src/Dialogs/dlgConfigWaypoints.cpp:147
 msgid "Save changes to waypoint file?"
-msgstr ""
+msgstr "Сохранить изменения в файле точек?"
 
 #: src/Dialogs/dlgConfigWaypoints.cpp:147
 msgid "Waypoints edited"
-msgstr ""
+msgstr "Редактор Точек"
 
 #: src/Dialogs/dlgConfigurationVario.cpp:398
 msgid "Set new audio scheme?  Old values will be lost."
@@ -3000,12 +3000,12 @@ msgstr ""
 #: src/Dialogs/dlgStatus.cpp:52
 #, no-c-format
 msgid "System"
-msgstr ""
+msgstr "Система"
 
 #: src/Dialogs/dlgStatus.cpp:54
 #, no-c-format
 msgid "Task Rules"
-msgstr ""
+msgstr "Задача"
 
 #: src/Dialogs/dlgStatus.cpp:55
 #, no-c-format
@@ -3019,15 +3019,15 @@ msgstr "Отключено"
 
 #: src/Dialogs/dlgStatus.cpp:156
 msgid "Fix invalid"
-msgstr ""
+msgstr "Полож. ошибочно"
 
 #: src/Dialogs/dlgStatus.cpp:158
 msgid "No fix"
-msgstr ""
+msgstr "Нет положения"
 
 #: src/Dialogs/dlgStatus.cpp:160
 msgid "3D fix"
-msgstr ""
+msgstr "3D позиция"
 
 #: src/Dialogs/dlgStatus.cpp:183 src/Dialogs/dlgStatus.cpp:193
 msgid "Connected"
@@ -3037,24 +3037,24 @@ msgstr "Соединение установлено"
 #: src/Dialogs/dlgStatus.cpp:213 src/Dialogs/dlgStatus.cpp:387
 #: src/Dialogs/dlgStatus.cpp:394
 msgid "True"
-msgstr ""
+msgstr "ИСТИНН."
 
 #: src/Dialogs/dlgStatus.cpp:215 src/Dialogs/dlgStatus.cpp:389
 #: src/Dialogs/dlgStatus.cpp:396
 msgid "False"
-msgstr ""
+msgstr "ОШИБКА"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:68
 msgid "All on"
-msgstr ""
+msgstr "Все Вкл."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:69
 msgid "Clip"
-msgstr ""
+msgstr "В диапазоне"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:71
 msgid "All below"
-msgstr ""
+msgstr "Все ниже"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:100
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:154
@@ -3087,7 +3087,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:62
 msgid "Final glide"
-msgstr ""
+msgstr "долет"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
 msgid "Trending Average climb"
@@ -3111,7 +3111,7 @@ msgstr "Клавиатура"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:156
 msgid "HighScore Style"
-msgstr ""
+msgstr "Стиль рекорда"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:57
 msgid "Portrait"
@@ -3171,7 +3171,7 @@ msgstr "Центр"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:94
 msgid "Topleft"
-msgstr ""
+msgstr "Верх/Слева"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:103
 msgid "Full width"
@@ -3188,15 +3188,15 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:106
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:56
 msgid "Fixed"
-msgstr ""
+msgstr "Фиксиров."
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:120
 msgid "Box"
-msgstr ""
+msgstr "Ячейка"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:121
 msgid "Tab"
-msgstr ""
+msgstr "Вкладка"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:130
 msgid "Text"
@@ -3213,7 +3213,7 @@ msgstr "Значки"
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:87
 #: src/Dialogs/dlgWaypointEdit.cpp:53 src/Dialogs/dlgWaypointEdit.cpp:59
 msgid "(blank)"
-msgstr ""
+msgstr "(пустой)"
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:57
 msgid "Pilot name"
@@ -3230,16 +3230,16 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:81
 msgid "Competition ID"
-msgstr ""
+msgstr "Соревновательный номер"
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:89
 msgid "Logger ID"
-msgstr ""
+msgstr "CIVL ID"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:48
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:63
 msgid "Track up"
-msgstr ""
+msgstr "По треку"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:49
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:64
@@ -3251,7 +3251,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:65
 #: Data/Dialogs/dlgFlarmTraffic.xml:13 Data/Dialogs/dlgFlarmTraffic_L.xml:13
 msgid "North up"
-msgstr ""
+msgstr "На север"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:51
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:66
@@ -3302,17 +3302,17 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:49
 #: src/Dialogs/dlgTaskHelpers.cpp:243
 msgid "Line"
-msgstr ""
+msgstr "Линия"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:50
 msgid "Shade"
-msgstr ""
+msgstr "Тень"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:81
 #: Data/Dialogs/dlgConfiguration.xml:322
 #: Data/Dialogs/dlgConfiguration_L.xml:323
 msgid "Safety MC"
-msgstr ""
+msgstr "Безопасное MС"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:55
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:120
@@ -3325,15 +3325,15 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:50
 msgid "Alternate"
-msgstr ""
+msgstr "Настроить"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:59
 msgid "Arrow head"
-msgstr ""
+msgstr "Стрелка"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:60
 msgid "Full arrow"
-msgstr ""
+msgstr "Полная стрелка"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:91
 #: Data/Dialogs/dlgBasicSettings.xml:27 Data/Dialogs/dlgConfiguration.xml:661
@@ -3369,7 +3369,7 @@ msgstr "Ветер"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:73
 msgid "Low lands"
-msgstr ""
+msgstr "Низменности"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:74
 msgid "Mountainous"
@@ -3562,7 +3562,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:107
 msgid "Orange"
-msgstr ""
+msgstr "Оранжевый"
 
 #: src/Dialogs/dlgTaskManager.cpp:146
 msgid "Validation Errors"
@@ -3589,7 +3589,7 @@ msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:115
 msgid "Add Waypoint"
-msgstr ""
+msgstr "Добавить точку"
 
 #: src/Dialogs/pnlTaskList.cpp:154
 msgid "Task not saved"
@@ -3619,12 +3619,12 @@ msgstr ""
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:8 Data/Dialogs/dlgVario.xml:8
 #: Data/Dialogs/dlgVario_L.xml:9
 msgid "Save"
-msgstr ""
+msgstr "Сохранить"
 
 #: src/Dialogs/pnlTaskList.cpp:277 Data/Dialogs/pnlTaskList.xml:8
 #: Data/Dialogs/pnlTaskList_L.xml:6
 msgid "Load"
-msgstr ""
+msgstr "Загрузить"
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:70
 msgid "(Add Alternate Start)"
@@ -3718,7 +3718,7 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:112
 msgid "Unknown"
-msgstr ""
+msgstr "Не известно"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:116
 msgid "Goal"
@@ -3782,11 +3782,11 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:237
 msgid "Sector"
-msgstr ""
+msgstr "Сектор"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:249
 msgid "Cylinder"
-msgstr ""
+msgstr "Цилиндр"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:269
 msgid "FAI"
@@ -3997,7 +3997,7 @@ msgstr ""
 
 #: src/Dialogs/dlgWeather.cpp:50
 msgid "Weather parameters"
-msgstr ""
+msgstr "Параметры погоды"
 
 #: src/Dialogs/dlgWayPointDetails.cpp:279
 #: src/Dialogs/dlgWayPointDetails.cpp:378
@@ -4012,7 +4012,7 @@ msgstr ""
 
 #: src/Dialogs/dlgWayPointDetails.cpp:283
 msgid "Replace in task"
-msgstr ""
+msgstr "Заменить в задаче"
 
 #: src/Dialogs/dlgWayPointDetails.cpp:288
 #: src/Dialogs/dlgWayPointDetails.cpp:383
@@ -4039,13 +4039,13 @@ msgstr ""
 
 #: src/Dialogs/dlgWayPointDetails.cpp:591
 msgid "Remove from task"
-msgstr ""
+msgstr "Удалить из задачи"
 
 #: src/Dialogs/dlgWaypointEdit.cpp:57 Data/Dialogs/dlgWayPointDetails.xml:12
 #: Data/Dialogs/dlgWayPointDetails_L.xml:12 Data/Dialogs/dlgWaypointEdit.xml:8
 #: Data/Dialogs/dlgWaypointEdit_L.xml:8
 msgid "Comment"
-msgstr ""
+msgstr "Комментарий"
 
 #: src/Dialogs/dlgWayPointSelect.cpp:787
 msgid "Choose a filter or click here"
@@ -4063,7 +4063,7 @@ msgstr ""
 
 #: src/Dialogs/dlgFontEdit.cpp:119 Data/Dialogs/dlgFontEdit.xml:3
 msgid "Edit Font"
-msgstr ""
+msgstr "Изменить шрифт"
 
 #: src/Device/SerialPort.cpp:97
 #, c-format
@@ -4120,12 +4120,12 @@ msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:14
 msgid "Rate"
-msgstr ""
+msgstr "Скор."
 
 #: Data/Dialogs/pnlTaskCalculator.xml:37
 #: Data/Dialogs/pnlTaskCalculator_L.xml:37
 msgid "Achieved MacCready"
-msgstr ""
+msgstr "Достигнутый MC "
 
 #: Data/Dialogs/dlgBrightness.xml:3
 msgid "Screen Brightness"
@@ -4143,7 +4143,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:404
 #: Data/Dialogs/dlgConfiguration_L.xml:405
 msgid "V rough air"
-msgstr ""
+msgstr "Макс. скорость"
 
 #: Data/Dialogs/dlgConfiguration.xml:124
 #: Data/Dialogs/dlgConfiguration_L.xml:124
@@ -4158,11 +4158,11 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:616
 #: Data/Dialogs/dlgConfiguration_L.xml:617
 msgid "Time step circling"
-msgstr ""
+msgstr "Шаг времени Вращения"
 
 #: Data/Dialogs/dlgStatusTask.xml:3
 msgid "Task Status"
-msgstr ""
+msgstr "Сост. задачи"
 
 #: Data/Dialogs/dlgConfiguration.xml:327
 #: Data/Dialogs/dlgConfiguration_L.xml:328
@@ -4174,12 +4174,12 @@ msgstr ""
 
 #: Data/Dialogs/dlgWindSettings.xml:3
 msgid "Wind Settings"
-msgstr ""
+msgstr "Настройки ветра"
 
 #: Data/Dialogs/dlgConfiguration.xml:422
 #: Data/Dialogs/dlgConfiguration_L.xml:423
 msgid "Filter"
-msgstr ""
+msgstr "ФильтрВП"
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid "Brightness"
@@ -4188,7 +4188,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:3
 #: Data/Dialogs/dlgWayPointDetails_L.xml:3
 msgid "Waypoint Info"
-msgstr ""
+msgstr "Информация о точке"
 
 #: Data/Dialogs/dlgVario.xml:50 Data/Dialogs/dlgVario_L.xml:51
 msgid "Calibration factor applied to total energy probe to obtain TE vario."
@@ -4209,7 +4209,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfigWaypoints.xml:6
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:6
 msgid "New"
-msgstr ""
+msgstr "Новая"
 
 #: Data/Dialogs/dlgConfiguration.xml:270
 #: Data/Dialogs/dlgConfiguration_L.xml:271 Data/Dialogs/dlgWindSettings.xml:12
@@ -4252,12 +4252,12 @@ msgstr ""
 
 #: Data/Dialogs/dlgWeather.xml:3 Data/Dialogs/dlgWeather_L.xml:3
 msgid "Weather Forecast"
-msgstr ""
+msgstr "Прогноз погоды"
 
 #: Data/Dialogs/dlgConfiguration.xml:414
 #: Data/Dialogs/dlgConfiguration_L.xml:415
 msgid "Dump time"
-msgstr ""
+msgstr "Сброс времени"
 
 #: Data/Dialogs/dlgTarget.xml:26 Data/Dialogs/dlgTarget_L.xml:16
 msgid ""
@@ -4290,7 +4290,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStartTask.xml:12
 msgid "Start Anyway"
-msgstr ""
+msgstr "Старт по-любому"
 
 #: Data/Dialogs/dlgConfiguration.xml:232
 #: Data/Dialogs/dlgConfiguration_L.xml:232
@@ -4342,7 +4342,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:47 Data/Dialogs/dlgConfiguration_L.xml:47
 msgid "Terrain file"
-msgstr ""
+msgstr "Ландшафт"
 
 #: Data/Dialogs/pnlTaskProperties.xml:6 Data/Dialogs/pnlTaskProperties_L.xml:7
 msgid "Minimum AAT task time in minutes."
@@ -4350,7 +4350,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
 #: Data/Dialogs/dlgConfiguration.xml:453
 #: Data/Dialogs/dlgConfiguration_L.xml:454
@@ -4363,7 +4363,7 @@ msgstr ""
 
 #: Data/Dialogs/pnlTaskEdit.xml:12 Data/Dialogs/pnlTaskEdit_L.xml:10
 msgid "Clear Task"
-msgstr ""
+msgstr "Очистка задачи"
 
 #: Data/Dialogs/dlgVario.xml:144 Data/Dialogs/dlgVario.xml:166
 #: Data/Dialogs/dlgVario.xml:188 Data/Dialogs/dlgVario.xml:210
@@ -4376,7 +4376,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:20 Data/Dialogs/dlgStatusSystem.xml:4
 msgid "GPS lock"
-msgstr ""
+msgstr "GPS блок."
 
 #: Data/Dialogs/dlgTextEntry.xml:8
 msgid "A-"
@@ -4419,7 +4419,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:720
 #: Data/Dialogs/dlgConfiguration_L.xml:721
 msgid "Debounce time"
-msgstr ""
+msgstr "Время реакции"
 
 #: Data/Dialogs/dlgVario.xml:286 Data/Dialogs/dlgVario_L.xml:287
 msgid "Mute vario on voice"
@@ -4428,12 +4428,12 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:611
 #: Data/Dialogs/dlgConfiguration_L.xml:612
 msgid "Time step cruise"
-msgstr ""
+msgstr "Шаг времени Полета"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:31
 #: Data/Dialogs/dlgWayPointDetails_L.xml:31
 msgid "Set As New Home"
-msgstr ""
+msgstr "Устан как Дом"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:28
 #: Data/Dialogs/pnlTaskCalculator_L.xml:28
@@ -4460,7 +4460,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:705
 #: Data/Dialogs/dlgConfiguration_L.xml:706
 msgid "Language"
-msgstr ""
+msgstr "Язык"
 
 #: Data/Dialogs/dlgConfiguration.xml:494
 #: Data/Dialogs/dlgConfiguration_L.xml:495
@@ -4480,7 +4480,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatusTask.xml:10
 msgid "Speed remaining"
-msgstr ""
+msgstr "Расчетная скорость"
 
 #: Data/Dialogs/dlgVario.xml:118 Data/Dialogs/dlgVario_L.xml:119
 msgid "Circling hi cutoff"
@@ -4498,7 +4498,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:193
 #: Data/Dialogs/dlgConfiguration_L.xml:193
 msgid "Terrain contrast"
-msgstr ""
+msgstr "Контраст ландшафта"
 
 #: Data/Dialogs/pnlTaskProperties.xml:15
 #: Data/Dialogs/pnlTaskProperties_L.xml:16
@@ -4520,27 +4520,27 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:409
 #: Data/Dialogs/dlgConfiguration_L.xml:410
 msgid "Handicap"
-msgstr ""
+msgstr "Фора"
 
 #: Data/Dialogs/dlgAirspacePatterns.xml:3
 #: Data/Dialogs/dlgAirspacePatterns_L.xml:3
 msgid "Select Pattern"
-msgstr ""
+msgstr "Выбор модели"
 
 #: Data/Dialogs/dlgConfigWaypoints.xml:9
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:9 Data/Dialogs/pnlTaskList.xml:11
 #: Data/Dialogs/pnlTaskList_L.xml:9
 msgid "Delete"
-msgstr ""
+msgstr "Удалить"
 
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:3
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:3
 msgid "Edit Text"
-msgstr ""
+msgstr "Ввод текста"
 
 #: Data/Dialogs/dlgStartup.xml:6 Data/Dialogs/dlgStartup_L.xml:6
 msgid "Profile"
-msgstr ""
+msgstr "Профиль"
 
 #: Data/Dialogs/dlgConfiguration.xml:738
 #: Data/Dialogs/dlgConfiguration_L.xml:739
@@ -4554,7 +4554,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails_L.xml:13
 #: Data/Dialogs/dlgWaypointEdit_L.xml:34
 msgid "Latitude"
-msgstr ""
+msgstr "Широта "
 
 #: Data/Dialogs/dlgConfiguration.xml:52 Data/Dialogs/dlgConfiguration_L.xml:52
 msgid "Topography file"
@@ -4568,7 +4568,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:700
 #: Data/Dialogs/dlgConfiguration_L.xml:701
 msgid "Events"
-msgstr ""
+msgstr "События"
 
 #: Data/Dialogs/dlgConfiguration.xml:392
 #: Data/Dialogs/dlgConfiguration_L.xml:393
@@ -4577,7 +4577,7 @@ msgstr ""
 
 #: Data/Dialogs/pnlTaskList.xml:9 Data/Dialogs/pnlTaskList_L.xml:7
 msgid "Declare"
-msgstr ""
+msgstr "Заявить"
 
 #: Data/Dialogs/dlgVario.xml:7 Data/Dialogs/dlgVario_L.xml:8
 msgid "Demo"
@@ -4602,7 +4602,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:16
 #: Data/Dialogs/dlgWayPointDetails_L.xml:16
 msgid "Sunset"
-msgstr ""
+msgstr "Закат"
 
 #: Data/Dialogs/dlgFontEdit.xml:8
 msgid "Height of font.  65 is large, 20 is very small."
@@ -4610,7 +4610,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:53
 msgid "Landing time"
-msgstr ""
+msgstr "Время приземл."
 
 #: Data/Dialogs/dlgConfiguration.xml:168
 #: Data/Dialogs/dlgConfiguration_L.xml:168
@@ -4621,7 +4621,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgFileSelect.xml:3
 msgid "File Browser"
-msgstr ""
+msgstr "Файл. браузер"
 
 #: Data/Dialogs/dlgConfiguration.xml:441
 #: Data/Dialogs/dlgConfiguration_L.xml:442
@@ -4658,13 +4658,13 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:16 Data/Dialogs/dlgConfigFonts_L.xml:16
 msgid "Map waypoints"
-msgstr ""
+msgstr "Отображение точек на карте"
 
 #: Data/Dialogs/dlgConfiguration.xml:682
 #: Data/Dialogs/dlgConfiguration_L.xml:683 Data/Dialogs/dlgVario.xml:272
 #: Data/Dialogs/dlgVario_L.xml:273
 msgid "UTC offset"
-msgstr ""
+msgstr "Часовой пояс"
 
 #: Data/Dialogs/dlgVario.xml:390 Data/Dialogs/dlgVario_L.xml:391
 msgid "Interval; battery"
@@ -4699,7 +4699,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:502
 #: Data/Dialogs/dlgConfiguration_L.xml:503 Data/Dialogs/dlgStatus.xml:43
 msgid "Start point"
-msgstr ""
+msgstr "Точка старта"
 
 #: Data/Dialogs/dlgVario.xml:66 Data/Dialogs/dlgVario_L.xml:67
 msgid "TE dynamic cal."
@@ -4707,7 +4707,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgFontEdit.xml:23
 msgid "Reset"
-msgstr ""
+msgstr "Сброс"
 
 #: Data/Dialogs/dlgWindSettings.xml:8
 #: Data/Dialogs/Infobox/pnlInfoBoxWindEdit.xml:8
@@ -4716,13 +4716,13 @@ msgstr ""
 
 #: Data/Dialogs/dlgComboPicker.xml:3 Data/Dialogs/dlgComboPicker_L.xml:3
 msgid "Picker"
-msgstr ""
+msgstr "Сортиров."
 
 #: Data/Dialogs/dlgConfiguration.xml:687
 #: Data/Dialogs/dlgConfiguration_L.xml:688 Data/Dialogs/dlgStatus.xml:50
 #: Data/Dialogs/dlgStatusAircraft.xml:7
 msgid "Local time"
-msgstr ""
+msgstr "Местн. время"
 
 #: Data/Dialogs/dlgConfiguration.xml:56 Data/Dialogs/dlgConfiguration_L.xml:56
 msgid ""
@@ -4765,7 +4765,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgFontEdit.xml:8
 msgid "Height"
-msgstr ""
+msgstr "Размер "
 
 #: Data/Dialogs/dlgConfiguration.xml:237
 #: Data/Dialogs/dlgConfiguration_L.xml:237
@@ -4784,7 +4784,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:17 Data/Dialogs/dlgTeamCode_L.xml:18
 msgid "Rel. bearing"
-msgstr ""
+msgstr "Отн. направление"
 
 #: Data/Dialogs/dlgConfiguration.xml:139
 #: Data/Dialogs/dlgConfiguration_L.xml:139
@@ -4824,7 +4824,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:26 Data/Dialogs/dlgStatusSystem.xml:10
 msgid "Supply voltage"
-msgstr ""
+msgstr "Батарея"
 
 #: Data/Dialogs/dlgStartup.xml:4 Data/Dialogs/dlgStartup_L.xml:4
 msgid "Continue"
@@ -4832,7 +4832,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:3
 msgid "Airspace Warnings"
-msgstr ""
+msgstr "Предупрежд. Возд.простр."
 
 #: Data/Dialogs/dlgTarget.xml:21 Data/Dialogs/dlgTarget_L.xml:11
 msgid ""
@@ -4896,11 +4896,11 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:28
 #: Data/Dialogs/dlgWayPointDetails_L.xml:28
 msgid "Insert In Task"
-msgstr ""
+msgstr "Вставить в задачу"
 
 #: Data/Dialogs/dlgConfiguration.xml:73 Data/Dialogs/dlgConfiguration_L.xml:73
 msgid "Circling zoom"
-msgstr ""
+msgstr "Масштаб в спирали"
 
 #: Data/Dialogs/dlgConfiguration.xml:753
 #: Data/Dialogs/dlgConfiguration_L.xml:754
@@ -4909,7 +4909,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:6
 msgid "ACK Warn"
-msgstr ""
+msgstr "ACK Предупр."
 
 #: Data/Dialogs/dlgVario.xml:360 Data/Dialogs/dlgVario_L.xml:361
 msgid "Interval; warning"
@@ -4940,7 +4940,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTarget.xml:31 Data/Dialogs/dlgTarget_L.xml:9
 msgid "Locked"
-msgstr ""
+msgstr "Блокир."
 
 #: Data/Dialogs/dlgConfiguration.xml:104
 #: Data/Dialogs/dlgConfiguration_L.xml:104
@@ -4958,7 +4958,7 @@ msgstr ""
 #: Data/Dialogs/pnlTaskCalculator.xml:45
 #: Data/Dialogs/pnlTaskCalculator_L.xml:45
 msgid "Cruise efficiency"
-msgstr ""
+msgstr "Качество "
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:17
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:17
@@ -5011,7 +5011,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStartTask.xml:3
 msgid "Task Start"
-msgstr ""
+msgstr "Старт задачи"
 
 #: Data/Dialogs/dlgConfiguration.xml:185
 #: Data/Dialogs/dlgConfiguration_L.xml:185
@@ -5071,16 +5071,16 @@ msgstr ""
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:9
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:9
 msgid "Clear"
-msgstr ""
+msgstr "Очистить"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:22
 #: Data/Dialogs/pnlTaskCalculator_L.xml:22
 msgid "Set MacCready"
-msgstr ""
+msgstr "Установить MC "
 
 #: Data/Dialogs/dlgStatusSystem.xml:3
 msgid "System Status"
-msgstr ""
+msgstr "Состояние сисиемы"
 
 #: Data/Dialogs/dlgTeamCode.xml:6 Data/Dialogs/dlgTeamCode_L.xml:8
 msgid "Set Code"
@@ -5093,7 +5093,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:710
 #: Data/Dialogs/dlgConfiguration_L.xml:711
 msgid "Status message"
-msgstr ""
+msgstr "Сообщения"
 
 #: Data/Dialogs/dlgConfiguration.xml:83 Data/Dialogs/dlgConfiguration_L.xml:83
 msgid ""
@@ -5108,7 +5108,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:3 Data/Dialogs/dlgTeamCode_L.xml:3
 msgid "Team Code"
-msgstr ""
+msgstr "Код команды"
 
 #: Data/Dialogs/dlgVario.xml:84 Data/Dialogs/dlgVario_L.xml:85
 msgid "Cruise averager scale"
@@ -5130,7 +5130,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:562
 #: Data/Dialogs/dlgConfiguration_L.xml:563
 msgid "Device A"
-msgstr ""
+msgstr " Прибор A"
 
 #: Data/Dialogs/dlgVario.xml:130 Data/Dialogs/dlgVario_L.xml:131
 msgid "High limit of cruise dead band"
@@ -5160,11 +5160,11 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:656
 #: Data/Dialogs/dlgConfiguration_L.xml:657
 msgid "Lift"
-msgstr ""
+msgstr "Скороподъемность"
 
 #: Data/Dialogs/dlgStatus.xml:3 Data/Input/default.xci:894
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 #: Data/Dialogs/dlgConfiguration.xml:564
 #: Data/Dialogs/dlgConfiguration_L.xml:565
@@ -5183,7 +5183,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:580
 #: Data/Dialogs/dlgConfiguration_L.xml:581
 msgid "Device B"
-msgstr ""
+msgstr " Прибор B"
 
 #: Data/Dialogs/dlgConfiguration.xml:34 Data/Dialogs/dlgConfiguration_L.xml:34
 msgid "Watched waypoints"
@@ -5193,7 +5193,7 @@ msgstr ""
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:5 Data/Dialogs/dlgTaskPoint.xml:14
 #: Data/Dialogs/dlgTaskPoint_L.xml:13
 msgid "Remove"
-msgstr ""
+msgstr "Удалить"
 
 #: Data/Dialogs/dlgVario.xml:352 Data/Dialogs/dlgVario_L.xml:353
 msgid "Interval; info"
@@ -5201,7 +5201,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:36
 msgid "Speed average"
-msgstr ""
+msgstr "Средняя скорость"
 
 #: Data/Dialogs/dlgConfiguration.xml:636
 #: Data/Dialogs/dlgConfiguration_L.xml:637
@@ -5243,7 +5243,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:16
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:16
 msgid "Airport"
-msgstr ""
+msgstr "Аэропорты"
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid ""
@@ -5258,7 +5258,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgFontEdit.xml:16
 msgid "Italic"
-msgstr ""
+msgstr "Курсив "
 
 #: Data/Dialogs/dlgVario.xml:80 Data/Dialogs/dlgVario_L.xml:81
 msgid "Time scale used for vario averager."
@@ -5285,7 +5285,7 @@ msgstr ""
 #: Data/Dialogs/dlgStatus.xml:30 Data/Dialogs/dlgStatusTask.xml:4
 #: Data/Dialogs/pnlTaskCalculator_L.xml:10
 msgid "Assigned task time"
-msgstr ""
+msgstr "Время задачи "
 
 #: Data/Dialogs/dlgVario.xml:96 Data/Dialogs/dlgVario_L.xml:97
 msgid "Adjustment to base frequency of tones in all modes."
@@ -5339,7 +5339,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:569
 #: Data/Dialogs/dlgConfiguration_L.xml:588
 msgid "Port"
-msgstr ""
+msgstr "Порт"
 
 #: Data/Dialogs/dlgTaskPoint.xml:24 Data/Dialogs/dlgTaskPoint_L.xml:23
 msgid "Length"
@@ -5347,7 +5347,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:52
 msgid "Takeoff time"
-msgstr ""
+msgstr "Время старта"
 
 #: Data/Dialogs/dlgConfigFonts.xml:10 Data/Dialogs/dlgConfigFonts_L.xml:10
 msgid "InfoBox titles"
@@ -5390,11 +5390,11 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointSelect_L.xml:8 Data/Dialogs/dlgWindSettings.xml:8
 #: Data/Dialogs/Infobox/pnlInfoBoxWindEdit.xml:8
 msgid "Direction"
-msgstr ""
+msgstr "Курс"
 
 #: Data/Dialogs/dlgAirspace.xml:5 Data/Dialogs/dlgAirspace_L.xml:5
 msgid "Lookup"
-msgstr ""
+msgstr "Уточнить"
 
 #: Data/Dialogs/dlgTarget_L.xml:31
 msgid "Speed Remaining Help"
@@ -5439,7 +5439,7 @@ msgstr ""
 #: Data/Dialogs/dlgTaskPoint.xml:13 Data/Dialogs/dlgTaskPoint.xml:54
 #: Data/Dialogs/dlgTaskPoint_L.xml:12 Data/Dialogs/dlgTaskPoint_L.xml:52
 msgid "Details"
-msgstr ""
+msgstr "Подробн."
 
 #: Data/Dialogs/dlgConfiguration.xml:119
 #: Data/Dialogs/dlgConfiguration_L.xml:119
@@ -5453,7 +5453,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTarget.xml:26 Data/Dialogs/dlgTarget_L.xml:16
 msgid "Radial"
-msgstr ""
+msgstr "ОТстарта"
 
 #: Data/Dialogs/dlgBasicSettings.xml:31
 msgid "Max. temp."
@@ -5486,7 +5486,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointSelect.xml:21
 #: Data/Dialogs/dlgWayPointSelect_L.xml:16
 msgid "Select"
-msgstr ""
+msgstr "Выбор"
 
 #: Data/Dialogs/dlgVoice.xml:6
 msgid "Climb rate"
@@ -5509,7 +5509,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:198
 #: Data/Dialogs/dlgConfiguration_L.xml:198
 msgid "Terrain brightness"
-msgstr ""
+msgstr "Яркость ландшафта"
 
 #: Data/Dialogs/dlgConfiguration.xml:129
 #: Data/Dialogs/dlgConfiguration_L.xml:129
@@ -5530,11 +5530,11 @@ msgstr ""
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:3
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:3
 msgid "Alternate Start Points"
-msgstr ""
+msgstr "Альтерн. старт. точки"
 
 #: Data/Dialogs/dlgFileSelect.xml:10
 msgid "Refresh"
-msgstr ""
+msgstr "Обновить"
 
 #: Data/Dialogs/dlgStatus.xml:23 Data/Dialogs/dlgStatusSystem.xml:7
 msgid "FLARM"
@@ -5546,7 +5546,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgBasicSettings.xml:11
 msgid "Volume"
-msgstr ""
+msgstr "Объем"
 
 #: Data/Dialogs/dlgVoice.xml:18
 msgid "Task altitude difference"
@@ -5563,7 +5563,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:10 Data/Dialogs/dlgConfiguration_L.xml:6
 msgid "Fonts"
-msgstr ""
+msgstr "Шрифты"
 
 #: Data/Dialogs/dlgInfoBoxAccess.xml:3
 msgid "InfoBox Access"
@@ -5588,7 +5588,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointSelect_L.xml:12 Data/Dialogs/dlgWaypointEdit.xml:62
 #: Data/Dialogs/dlgWaypointEdit_L.xml:62
 msgid "Type"
-msgstr ""
+msgstr "Тип "
 
 #: Data/Dialogs/dlgBrightness.xml:6
 msgid "Enables automatic backlight, responsive to light sensor."
@@ -5608,7 +5608,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:25 Data/Dialogs/dlgStatusSystem.xml:9
 msgid "Declared"
-msgstr ""
+msgstr "Заявлено"
 
 #: Data/Dialogs/dlgTarget_L.xml:36
 msgid ""
@@ -5618,7 +5618,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAnalysis.xml:9 Data/Dialogs/dlgAnalysis_L.xml:9
 msgid "Calc"
-msgstr ""
+msgstr "Расчет"
 
 #: Data/Dialogs/pnlTaskEdit.xml:10 Data/Dialogs/pnlTaskEdit_L.xml:8
 msgid "v"
@@ -5637,12 +5637,12 @@ msgstr ""
 #: Data/Dialogs/pnlTaskCalculator.xml:33
 #: Data/Dialogs/pnlTaskCalculator_L.xml:33
 msgid "Set speed remaining"
-msgstr ""
+msgstr "Расчетная скорость "
 
 #: Data/Dialogs/dlgConfiguration.xml:822
 #: Data/Dialogs/dlgConfiguration_L.xml:823
 msgid "Device model"
-msgstr ""
+msgstr "Модель прибора"
 
 #: Data/Dialogs/dlgVario_L.xml:325
 msgid "Flarm interface"
@@ -5683,12 +5683,12 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:424
 #: Data/Dialogs/dlgConfiguration_L.xml:425
 msgid "Airspace display"
-msgstr ""
+msgstr "Фильтр зон ВП"
 
 #: Data/Dialogs/dlgAirspaceSelect.xml:4 Data/Dialogs/dlgAirspaceSelect_L.xml:4
 #: Data/Dialogs/dlgWayPointSelect.xml:2
 msgid "Filter..."
-msgstr ""
+msgstr "Фильтр..."
 
 #: Data/Dialogs/dlgConfiguration.xml:173
 #: Data/Dialogs/dlgConfiguration_L.xml:173
@@ -5697,7 +5697,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:46
 msgid "Valid finish"
-msgstr ""
+msgstr "Подтв. финиша"
 
 #: Data/Dialogs/dlgConfiguration.xml:414
 #: Data/Dialogs/dlgConfiguration_L.xml:415
@@ -5710,7 +5710,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint.xml:44 Data/Dialogs/dlgTaskPoint_L.xml:43
 msgid "Finish radial"
-msgstr ""
+msgstr "Радиальный финиш"
 
 #: Data/Dialogs/dlgConfiguration.xml:743
 #: Data/Dialogs/dlgConfiguration_L.xml:744
@@ -5748,7 +5748,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:14
 msgid "Top"
-msgstr ""
+msgstr "Верх"
 
 #: Data/Dialogs/dlgConfiguration.xml:227
 #: Data/Dialogs/dlgConfiguration_L.xml:227
@@ -5780,7 +5780,7 @@ msgstr ""
 #: Data/Dialogs/dlgStatus.xml:31 Data/Dialogs/dlgStatusTask.xml:5
 #: Data/Dialogs/pnlTaskCalculator_L.xml:14
 msgid "Estimated task time"
-msgstr ""
+msgstr "Расч. время задачи "
 
 #: Data/Dialogs/dlgConfiguration.xml:300
 #: Data/Dialogs/dlgConfiguration_L.xml:301
@@ -5808,7 +5808,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatusAircraft.xml:3
 msgid "Aircraft Status"
-msgstr ""
+msgstr "Статус ЛА"
 
 #: Data/Dialogs/dlgTeamCode.xml:18 Data/Dialogs/dlgTeamCode_L.xml:19
 msgid "Flarm lock"
@@ -5825,7 +5825,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgWeather.xml:6 Data/Dialogs/dlgWeather_L.xml:6
 msgid "Field"
-msgstr ""
+msgstr "Район"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid "TE vario"
@@ -5878,7 +5878,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceSelect.xml:3 Data/Dialogs/dlgAirspaceSelect_L.xml:3
 msgid "Select Airspace"
-msgstr ""
+msgstr "Выбор ВП"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:21
 #: Data/Dialogs/dlgWayPointDetails_L.xml:21
@@ -5947,7 +5947,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:3 Data/Dialogs/dlgConfiguration_L.xml:3
 msgid "Configuration"
-msgstr ""
+msgstr "Конфигурация"
 
 #: Data/Dialogs/dlgConfiguration.xml:52 Data/Dialogs/dlgConfiguration_L.xml:52
 msgid "Specifies the file defining the topological features."
@@ -5956,7 +5956,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:327
 #: Data/Dialogs/dlgConfiguration_L.xml:328
 msgid "STF risk factor"
-msgstr ""
+msgstr "StF фактор риска"
 
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "Enable voice read-back of MacReady setting after it is adjusted."
@@ -5991,12 +5991,12 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:8
 msgid "ACK Day"
-msgstr ""
+msgstr "ACK День"
 
 #: Data/Dialogs/dlgConfiguration.xml:312
 #: Data/Dialogs/dlgConfiguration_L.xml:313
 msgid "Terrain height"
-msgstr ""
+msgstr "Высота над рельефом"
 
 #: Data/Dialogs/dlgVario.xml:306 Data/Dialogs/dlgVario_L.xml:307
 msgid "Headset threshold"
@@ -6012,11 +6012,11 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:203
 #: Data/Dialogs/dlgConfiguration_L.xml:203
 msgid "Terrain colors"
-msgstr ""
+msgstr "Цвет ландшафта"
 
 #: Data/Dialogs/dlgTarget_L.xml:21
 msgid "ETE"
-msgstr ""
+msgstr "Время "
 
 #: Data/Dialogs/dlgConfiguration.xml:24 Data/Dialogs/dlgConfiguration_L.xml:24
 msgid "Waypoints"
@@ -6047,7 +6047,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgWayPointSelect.xml:1 Data/Dialogs/dlgWayPointSelect_L.xml:1
 msgid "Select Waypoint"
-msgstr ""
+msgstr "Выбор точки"
 
 #: Data/Dialogs/dlgConfiguration.xml:645
 #: Data/Dialogs/dlgConfiguration_L.xml:646
@@ -6085,7 +6085,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:8 Data/Dialogs/dlgConfiguration_L.xml:4
 msgid "Expert"
-msgstr ""
+msgstr "Эксперт"
 
 #: Data/Dialogs/dlgConfiguration.xml:753
 #: Data/Dialogs/dlgConfiguration_L.xml:754
@@ -6097,7 +6097,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails_L.xml:14
 #: Data/Dialogs/dlgWaypointEdit_L.xml:10
 msgid "Longitude"
-msgstr ""
+msgstr "Долгота "
 
 #: Data/Dialogs/dlgVario.xml:411 Data/Dialogs/dlgVario_L.xml:412
 msgid "V manoeuvering"
@@ -6114,11 +6114,11 @@ msgstr ""
 
 #: Data/Dialogs/dlgFileSelect.xml:12
 msgid "Free"
-msgstr ""
+msgstr "Свбодн."
 
 #: Data/Dialogs/dlgStatusTask.xml:11
 msgid "Speed achieved"
-msgstr ""
+msgstr "Достигн скорость"
 
 #: Data/Dialogs/dlgVario.xml:88 Data/Dialogs/dlgVario_L.xml:89
 msgid "Circling volume"
@@ -6142,7 +6142,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:577
 #: Data/Dialogs/dlgConfiguration_L.xml:597
 msgid "Setup ..."
-msgstr ""
+msgstr "Установки ..."
 
 #: Data/Dialogs/dlgConfiguration.xml:178
 #: Data/Dialogs/dlgConfiguration_L.xml:178
@@ -6172,7 +6172,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:671
 #: Data/Dialogs/dlgConfiguration_L.xml:672
 msgid "Task speed"
-msgstr ""
+msgstr "Достигн скорость в задаче"
 
 #: Data/Dialogs/dlgConfiguration.xml:776 Data/Dialogs/dlgConfiguration.xml:780
 #: Data/Dialogs/dlgConfiguration.xml:784 Data/Dialogs/dlgConfiguration.xml:788
@@ -6210,7 +6210,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:573
 #: Data/Dialogs/dlgConfiguration_L.xml:592
 msgid "Baudrate"
-msgstr ""
+msgstr "Скорость"
 
 #: Data/Dialogs/dlgConfiguration.xml:572 Data/Dialogs/dlgConfiguration.xml:591
 #: Data/Dialogs/dlgConfiguration_L.xml:573
@@ -6230,7 +6230,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:139
 #: Data/Dialogs/dlgConfiguration_L.xml:139
 msgid "Wind arrow"
-msgstr ""
+msgstr "Стрелка ветра"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid ""
@@ -6263,7 +6263,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
 msgid "Dialog boxes"
-msgstr ""
+msgstr "Диалоговые окна"
 
 #: Data/Dialogs/pnlTaskProperties.xml:30
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
@@ -6272,7 +6272,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
 msgid "ACK Space"
-msgstr ""
+msgstr "ACK Простр."
 
 #: Data/Dialogs/dlgConfiguration.xml:124
 #: Data/Dialogs/dlgConfiguration_L.xml:124
@@ -6286,7 +6286,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "New waypoint"
-msgstr ""
+msgstr "Новая Точка"
 
 #: Data/Dialogs/dlgConfiguration.xml:582
 #: Data/Dialogs/dlgConfiguration_L.xml:583
@@ -6331,7 +6331,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgWaypointEdit.xml:3 Data/Dialogs/dlgWaypointEdit_L.xml:3
 msgid "Waypoint Editor"
-msgstr ""
+msgstr "Редактор точки"
 
 #: Data/Dialogs/dlgTeamCode.xml:7 Data/Dialogs/dlgTeamCode_L.xml:6
 msgid "Set WP"
@@ -6343,7 +6343,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:6 Data/Dialogs/dlgConfigFonts_L.xml:6
 msgid "Customize fonts"
-msgstr ""
+msgstr "Настройки шрифтов"
 
 #: Data/Dialogs/dlgConfiguration.xml:290
 #: Data/Dialogs/dlgConfiguration_L.xml:291
@@ -6423,7 +6423,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:44
 msgid "Start speed"
-msgstr ""
+msgstr "Старт. скорость"
 
 #: Data/Dialogs/dlgTarget.xml:11 Data/Dialogs/dlgTarget_L.xml:26
 msgid ""
@@ -6445,12 +6445,12 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:421
 #: Data/Dialogs/dlgConfiguration_L.xml:422
 msgid "Colours"
-msgstr ""
+msgstr "ЦветаВП"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:30
 #: Data/Dialogs/dlgWayPointDetails_L.xml:30
 msgid "Remove From Task"
-msgstr ""
+msgstr "Удалить из задачи"
 
 #: Data/Dialogs/dlgVario.xml:370 Data/Dialogs/dlgVario_L.xml:371
 msgid "Gear off delay"
@@ -6459,7 +6459,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:285
 #: Data/Dialogs/dlgConfiguration_L.xml:286
 msgid "Block speed to fly"
-msgstr ""
+msgstr "Блокировать StF"
 
 #: Data/Dialogs/dlgConfiguration.xml:147
 #: Data/Dialogs/dlgConfiguration_L.xml:147
@@ -6474,7 +6474,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:34 Data/Dialogs/dlgStatusTask.xml:9
 msgid "Remaining distance"
-msgstr ""
+msgstr "Оставш. расстояние"
 
 #: Data/Dialogs/dlgTaskPoint.xml:30 Data/Dialogs/dlgTaskPoint_L.xml:29
 msgid "Radius of the OZ cylinder."
@@ -6500,7 +6500,7 @@ msgstr ""
 #: Data/Dialogs/dlgTarget_L.xml:11 Data/Dialogs/dlgTeamCode.xml:11
 #: Data/Dialogs/dlgTeamCode_L.xml:12
 msgid "Range"
-msgstr ""
+msgstr "Диапазон"
 
 #: Data/Dialogs/dlgConfiguration.xml:469
 #: Data/Dialogs/dlgConfiguration_L.xml:470
@@ -6535,12 +6535,12 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:32 Data/Dialogs/dlgStatusTask.xml:6
 msgid "Remaining time"
-msgstr ""
+msgstr "Оставшееся время"
 
 #: Data/Dialogs/dlgAirspaceColours.xml:3
 #: Data/Dialogs/dlgAirspaceColours_L.xml:3
 msgid "Select Colour"
-msgstr ""
+msgstr "Выбор цвета"
 
 #: Data/Dialogs/dlgSwitches.xml:41
 msgid "User up"
@@ -6588,7 +6588,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:715
 #: Data/Dialogs/dlgConfiguration_L.xml:716
 msgid "Menu timeout"
-msgstr ""
+msgstr "Время показа меню"
 
 #: Data/Dialogs/dlgConfiguration.xml:705
 #: Data/Dialogs/dlgConfiguration_L.xml:706
@@ -6608,7 +6608,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:14 Data/Dialogs/dlgStatusAircraft.xml:9
 msgid "Near"
-msgstr ""
+msgstr "Ближняя точка"
 
 #: Data/Dialogs/dlgVario.xml:44 Data/Dialogs/dlgVario_L.xml:45
 msgid ""
@@ -6619,7 +6619,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:631
 #: Data/Dialogs/dlgConfiguration_L.xml:632
 msgid "Short file name"
-msgstr ""
+msgstr "Короткое имя файла"
 
 #: Data/Dialogs/dlgSwitches.xml:57
 msgid "Flap landing"
@@ -6652,7 +6652,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:31 Data/Dialogs/dlgConfigFonts_L.xml:31
 msgid "Gauges"
-msgstr ""
+msgstr "Датчики"
 
 #: Data/Dialogs/dlgConfiguration.xml:280
 #: Data/Dialogs/dlgConfiguration_L.xml:281
@@ -6692,7 +6692,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTextEntry.xml:3
 msgid "Edit text"
-msgstr ""
+msgstr "Ввод текста"
 
 #: Data/Dialogs/dlgConfiguration.xml:242
 #: Data/Dialogs/dlgConfiguration_L.xml:242
@@ -6701,7 +6701,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:9
 msgid "Enable"
-msgstr ""
+msgstr "Включить"
 
 #: Data/Dialogs/dlgVario.xml:126 Data/Dialogs/dlgVario_L.xml:127
 msgid "Cruise deadband type"
@@ -6743,7 +6743,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgFileSelect.xml:6
 msgid "File type"
-msgstr ""
+msgstr "Тип файла"
 
 #: Data/Dialogs/dlgConfiguration.xml:222
 #: Data/Dialogs/dlgConfiguration_L.xml:222
@@ -6757,7 +6757,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:428
 #: Data/Dialogs/dlgConfiguration_L.xml:429
 msgid "Clip altitude"
-msgstr ""
+msgstr "Высота диапазона"
 
 #: Data/Dialogs/dlgTaskPoint.xml:12 Data/Dialogs/dlgTaskPoint_L.xml:11
 msgid "Location"
@@ -6777,7 +6777,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:738
 #: Data/Dialogs/dlgConfiguration_L.xml:739
 msgid "Infobox geometry"
-msgstr ""
+msgstr "Разметка Окна"
 
 #: Data/Dialogs/dlgVario.xml:32 Data/Dialogs/dlgVario_L.xml:33
 msgid ""
@@ -6835,18 +6835,18 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:6
 msgid "Ack Day"
-msgstr ""
+msgstr "ACK День"
 
 #: Data/Dialogs/dlgConfiguration.xml:114
 #: Data/Dialogs/dlgConfiguration_L.xml:114 Data/Dialogs/dlgWindSettings.xml:16
 #: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:8
 msgid "Trail drift"
-msgstr ""
+msgstr "Учитывать снос"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:41
 #: Data/Dialogs/pnlTaskCalculator_L.xml:41
 msgid "Achieved speed"
-msgstr ""
+msgstr "Достигнутая скорость "
 
 #: Data/Dialogs/dlgConfiguration.xml:63 Data/Dialogs/dlgConfiguration_L.xml:63
 msgid "Cruise orientation"
@@ -6873,7 +6873,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint.xml:40 Data/Dialogs/dlgTaskPoint_L.xml:39
 msgid "Start radial"
-msgstr ""
+msgstr "Радиальн.Старт"
 
 #: Data/Dialogs/pnlTaskProperties.xml:30
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
@@ -6891,7 +6891,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:109
 #: Data/Dialogs/dlgConfiguration_L.xml:109
 msgid "Trail length"
-msgstr ""
+msgstr "Длинна следа"
 
 #: Data/Dialogs/dlgConfiguration.xml:528
 #: Data/Dialogs/dlgConfiguration_L.xml:529
@@ -6942,7 +6942,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint.xml:3 Data/Dialogs/dlgTaskPoint_L.xml:3
 msgid "Waypoint"
-msgstr ""
+msgstr "Точка"
 
 #: Data/Dialogs/dlgSwitches.xml:31
 msgid "Repeat"
@@ -6961,11 +6961,11 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:599
 #: Data/Dialogs/dlgConfiguration_L.xml:600
 msgid "Use GPS time"
-msgstr ""
+msgstr "Использ. GPS время"
 
 #: Data/Dialogs/dlgStatus.xml:51 Data/Dialogs/dlgStatusAircraft.xml:6
 msgid "Flight time"
-msgstr ""
+msgstr "Время полета"
 
 #: Data/Dialogs/dlgVario.xml:280 Data/Dialogs/dlgVario_L.xml:281
 msgid "Logger interval"
@@ -6980,7 +6980,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgBasicSettings.xml:7
 msgid "Ballast"
-msgstr ""
+msgstr "Балласт"
 
 #: Data/Dialogs/dlgConfiguration.xml:647
 #: Data/Dialogs/dlgConfiguration_L.xml:648
@@ -7002,7 +7002,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:185
 #: Data/Dialogs/dlgConfiguration_L.xml:185
 msgid "Terrain display"
-msgstr ""
+msgstr "Показать ландшафт"
 
 #: Data/Dialogs/dlgConfiguration.xml:217
 #: Data/Dialogs/dlgConfiguration_L.xml:217
@@ -7021,19 +7021,19 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:41 Data/Dialogs/dlgStatusTask.xml:7
 msgid "Start time"
-msgstr ""
+msgstr "Время старта"
 
 #: Data/Dialogs/dlgConfiguration.xml:350
 #: Data/Dialogs/dlgConfiguration_L.xml:351
 msgid "Glide terrain line"
-msgstr ""
+msgstr "Отображение долета"
 
 #: Data/Dialogs/dlgSimulatorPrompt.xml:5
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:5
 #: Data/Dialogs/pnlTaskManagerClose.xml:5
 #: Data/Dialogs/pnlTaskManagerClose_L.xml:6
 msgid "Fly"
-msgstr ""
+msgstr "ПОЛЕТ"
 
 #: Data/Dialogs/dlgConfiguration.xml:109
 #: Data/Dialogs/dlgConfiguration_L.xml:109
@@ -7052,7 +7052,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:35
 msgid "Speed estimated"
-msgstr ""
+msgstr "Расчетная скорость"
 
 #: Data/Dialogs/dlgWeather.xml:10 Data/Dialogs/dlgWeather_L.xml:10
 msgid "TODO"
@@ -7061,7 +7061,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:29
 #: Data/Dialogs/dlgWayPointDetails_L.xml:29
 msgid "Append To Task"
-msgstr ""
+msgstr "Добавить к задаче"
 
 #: Data/Dialogs/dlgBasicSettings.xml:19
 msgid ""
@@ -7073,7 +7073,7 @@ msgstr ""
 #: Data/Dialogs/pnlTaskCalculator.xml:18
 #: Data/Dialogs/pnlTaskCalculator_L.xml:18
 msgid "Task distance"
-msgstr ""
+msgstr "Расстояние до финиша"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:9
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:9
@@ -7086,7 +7086,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:16
 msgid "Base"
-msgstr ""
+msgstr "Основные"
 
 #: Data/Dialogs/dlgConfiguration.xml:307
 #: Data/Dialogs/dlgConfiguration_L.xml:308
@@ -7097,17 +7097,17 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:300
 #: Data/Dialogs/dlgConfiguration_L.xml:301
 msgid "L/D average period"
-msgstr ""
+msgstr "Расчет АД качества"
 
 #: Data/Dialogs/dlgConfiguration.xml:647
 #: Data/Dialogs/dlgConfiguration_L.xml:648
 msgid "Aircraft/Wind speed"
-msgstr ""
+msgstr "Скорость полета"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:15
 #: Data/Dialogs/dlgWayPointDetails_L.xml:15
 msgid "Elevation"
-msgstr ""
+msgstr "Высота"
 
 #: Data/Dialogs/dlgConfiguration.xml:24 Data/Dialogs/dlgConfiguration_L.xml:24
 msgid ""
@@ -7173,7 +7173,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:725
 #: Data/Dialogs/dlgConfiguration_L.xml:726
 msgid "Text input style"
-msgstr ""
+msgstr "Стиль текста"
 
 #: Data/Dialogs/dlgVegaDemo.xml:3
 msgid "Vario Demo"
@@ -7186,7 +7186,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:21 Data/Dialogs/dlgStatusSystem.xml:5
 msgid "Satellites in view"
-msgstr ""
+msgstr "Видимые спутн."
 
 #: Data/Dialogs/dlgTeamCode.xml:5 Data/Dialogs/dlgTeamCode_L.xml:7
 msgid "Flarm Lock"
@@ -7215,7 +7215,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:27
 #: Data/Dialogs/dlgWayPointDetails_L.xml:27
 msgid "Replace In Task"
-msgstr ""
+msgstr "Заменить в задаче"
 
 #: Data/Dialogs/dlgConfiguration.xml:155
 #: Data/Dialogs/dlgConfiguration_L.xml:155
@@ -7264,7 +7264,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
-msgstr ""
+msgstr "Подробн. Возд.простр."
 
 #: Data/Dialogs/dlgWaypointEdit.xml:10
 msgid "Lon."
@@ -7288,12 +7288,12 @@ msgstr ""
 
 #: Data/Dialogs/pnlTaskList.xml:10 Data/Dialogs/pnlTaskList_L.xml:8
 msgid "Rename"
-msgstr ""
+msgstr "Переимен."
 
 #: Data/Dialogs/dlgWayPointDetails.xml:7
 #: Data/Dialogs/dlgWayPointDetails_L.xml:4 Data/Input/default.xci:491
 msgid "GoTo"
-msgstr ""
+msgstr "Лететь к"
 
 #: Data/Dialogs/dlgConfiguration.xml:409
 #: Data/Dialogs/dlgConfiguration_L.xml:410
@@ -7333,7 +7333,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:433
 #: Data/Dialogs/dlgConfiguration_L.xml:434
 msgid "Margin"
-msgstr ""
+msgstr "Превышение"
 
 #: Data/Dialogs/dlgWaypointEdit.xml:34
 msgid "Lat."
@@ -7346,7 +7346,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgStatus.xml:40
 msgid "Valid start"
-msgstr ""
+msgstr "Подтв. старта"
 
 #: Data/Dialogs/dlgVario.xml:374 Data/Dialogs/dlgVario_L.xml:375
 msgid "Interval; gear"
@@ -7388,11 +7388,11 @@ msgstr ""
 #: Data/Input/default.xci:625 Data/Input/default.xci:674
 #: Data/Input/default.xci:723 Data/Input/default.xci:942
 msgid "Config"
-msgstr ""
+msgstr "Настройки"
 
 #: Data/Input/default.xci:585
 msgid "Labels"
-msgstr ""
+msgstr "Обознач"
 
 #: Data/Input/default.xci:640
 msgid ""
@@ -7402,7 +7402,7 @@ msgstr ""
 
 #: Data/Input/default.xci:160
 msgid "Below final glide"
-msgstr ""
+msgstr "НИЖЕ ФИНАЛЬНОГО ГЛАЙДА"
 
 #: Data/Input/default.xci:136
 msgid ""
@@ -7436,11 +7436,11 @@ msgstr ""
 
 #: Data/Input/default.xci:593
 msgid "Trail"
-msgstr ""
+msgstr "След"
 
 #: Data/Input/default.xci:115
 msgid "Waiting for GPS connection"
-msgstr ""
+msgstr "ОЖИДАНИЕ СОЕДИНЕНИЯ GPS"
 
 #: Data/Input/default.xci:771
 msgid ""
@@ -7456,7 +7456,7 @@ msgstr ""
 
 #: Data/Input/default.xci:902
 msgid "Weather"
-msgstr ""
+msgstr "Погода"
 
 #: Data/Input/default.xci:844
 msgid ""
@@ -7496,7 +7496,7 @@ msgstr ""
 
 #: Data/Input/default.xci:155
 msgid "Above final glide"
-msgstr ""
+msgstr "ВЫШЕ ФИНАЛЬНОГО ГЛАЙДА"
 
 #: Data/Input/default.xci:860
 msgid ""
@@ -7526,7 +7526,7 @@ msgstr ""
 
 #: Data/Input/default.xci:549
 msgid "Zoom"
-msgstr ""
+msgstr "Масштаб"
 
 #: Data/Input/default.xci:796
 msgid "Vario ASI zeroed"
@@ -7544,15 +7544,15 @@ msgstr ""
 
 #: Data/Input/default.xci:125
 msgid "Waiting for GPS fix"
-msgstr ""
+msgstr "ОЖИДАНИЕ ПОЗИЦИИ GPS"
 
 #: Data/Input/default.xci:144
 msgid "Takeoff"
-msgstr ""
+msgstr "ВЗЛЕТ"
 
 #: Data/Input/default.xci:165
 msgid "Final glide through terrain"
-msgstr ""
+msgstr "ФИНАЛЬНЫЙ ГЛАЙД ПЕРЕСЕКАЕТ РЕЛЬЕФ"
 
 #: Data/Input/default.xci:797
 msgid ""
@@ -7586,7 +7586,7 @@ msgstr ""
 
 #: Data/Input/default.xci:239
 msgid "Marks cleared"
-msgstr ""
+msgstr "ОЧИСТКА МЕТОК"
 
 #: Data/Input/default.xci:226 Data/Input/default.xci:541
 msgid ""

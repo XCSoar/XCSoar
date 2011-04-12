@@ -1889,7 +1889,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:49
 #: src/Dialogs/dlgWindSettings.cpp:101 Data/Dialogs/dlgVegaDemo.xml:14
 msgid "Circling"
-msgstr ""
+msgstr "Κύκλωμα"
 
 #: src/InfoBoxes/Content/Weather.cpp:205
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:50
@@ -1942,11 +1942,11 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:204
 msgid "Show airspace off"
-msgstr ""
+msgstr "Εμφάνιση εναέριου χώρου OFF"
 
 #: src/InputEventsActions.cpp:206
 msgid "Show airspace on"
-msgstr ""
+msgstr "Εμφάνιση εναέριου χώρου ON"
 
 #: src/InputEventsActions.cpp:242
 msgid "Screen Mode Full"
@@ -2942,7 +2942,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:62
 msgid "Final glide"
-msgstr ""
+msgstr "Τελική Πορεία"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
 msgid "Trending Average climb"
@@ -3167,7 +3167,7 @@ msgstr "Σκιά"
 #: Data/Dialogs/dlgConfiguration.xml:322
 #: Data/Dialogs/dlgConfiguration_L.xml:323
 msgid "Safety MC"
-msgstr ""
+msgstr "Ασφαλές Mc"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:55
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:120
@@ -4200,7 +4200,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:47 Data/Dialogs/dlgConfiguration_L.xml:47
 msgid "Terrain file"
-msgstr ""
+msgstr "Έδαφος"
 
 #: Data/Dialogs/pnlTaskProperties.xml:6 Data/Dialogs/pnlTaskProperties_L.xml:7
 msgid "Minimum AAT task time in minutes."
@@ -4221,7 +4221,7 @@ msgstr ""
 
 #: Data/Dialogs/pnlTaskEdit.xml:12 Data/Dialogs/pnlTaskEdit_L.xml:10
 msgid "Clear Task"
-msgstr ""
+msgstr "Ακύρωση Διαδρομής"
 
 #: Data/Dialogs/dlgVario.xml:144 Data/Dialogs/dlgVario.xml:166
 #: Data/Dialogs/dlgVario.xml:188 Data/Dialogs/dlgVario.xml:210
@@ -4291,7 +4291,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:31
 #: Data/Dialogs/dlgWayPointDetails_L.xml:31
 msgid "Set As New Home"
-msgstr ""
+msgstr "Ορισμός ως νέο Αεροδρόμιο"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:28
 #: Data/Dialogs/pnlTaskCalculator_L.xml:28
@@ -4318,7 +4318,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:705
 #: Data/Dialogs/dlgConfiguration_L.xml:706
 msgid "Language"
-msgstr ""
+msgstr "Γλώσσα"
 
 #: Data/Dialogs/dlgConfiguration.xml:494
 #: Data/Dialogs/dlgConfiguration_L.xml:495
@@ -4953,7 +4953,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:710
 #: Data/Dialogs/dlgConfiguration_L.xml:711
 msgid "Status message"
-msgstr ""
+msgstr "Κατάσταση μηνύματος"
 
 #: Data/Dialogs/dlgConfiguration.xml:83 Data/Dialogs/dlgConfiguration_L.xml:83
 msgid ""
@@ -4968,7 +4968,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:3 Data/Dialogs/dlgTeamCode_L.xml:3
 msgid "Team Code"
-msgstr ""
+msgstr "Κωδικός Ομάδας"
 
 #: Data/Dialogs/dlgVario.xml:84 Data/Dialogs/dlgVario_L.xml:85
 msgid "Cruise averager scale"
@@ -5390,7 +5390,7 @@ msgstr ""
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:3
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:3
 msgid "Alternate Start Points"
-msgstr ""
+msgstr "Εναλλαντικά αρχικά σημεία"
 
 #: Data/Dialogs/dlgFileSelect.xml:10
 msgid "Refresh"
@@ -5816,7 +5816,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:327
 #: Data/Dialogs/dlgConfiguration_L.xml:328
 msgid "STF risk factor"
-msgstr ""
+msgstr "STF παράγοντας κινδύνου"
 
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "Enable voice read-back of MacReady setting after it is adjusted."
@@ -6090,7 +6090,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:139
 #: Data/Dialogs/dlgConfiguration_L.xml:139
 msgid "Wind arrow"
-msgstr ""
+msgstr "Δείκτης Ανέμου"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid ""
@@ -6695,7 +6695,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:6
 msgid "Ack Day"
-msgstr ""
+msgstr "ACK μέρα"
 
 #: Data/Dialogs/dlgConfiguration.xml:114
 #: Data/Dialogs/dlgConfiguration_L.xml:114 Data/Dialogs/dlgWindSettings.xml:16
@@ -6962,7 +6962,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:647
 #: Data/Dialogs/dlgConfiguration_L.xml:648
 msgid "Aircraft/Wind speed"
-msgstr ""
+msgstr "Ταχύτητα ανέμου"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:15
 #: Data/Dialogs/dlgWayPointDetails_L.xml:15
@@ -7033,7 +7033,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:725
 #: Data/Dialogs/dlgConfiguration_L.xml:726
 msgid "Text input style"
-msgstr ""
+msgstr "Style Κειμένου"
 
 #: Data/Dialogs/dlgVegaDemo.xml:3
 msgid "Vario Demo"

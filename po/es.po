@@ -155,9 +155,8 @@ msgstr "Cargando archivo de aerodromos"
 
 #: src/ExpandMacros.cpp:118 src/ExpandMacros.cpp:128 src/ExpandMacros.cpp:193
 #: src/ExpandMacros.cpp:217
-#, fuzzy
 msgid "Next Turnpoint"
-msgstr "Siguiente punto de giro"
+msgstr "Siguiente Turnpoint"
 
 #: src/ExpandMacros.cpp:123 src/ExpandMacros.cpp:133 src/ExpandMacros.cpp:203
 #: src/ExpandMacros.cpp:240
@@ -196,11 +195,8 @@ msgid "Start Turnpoint"
 msgstr "Punto de referencia inicial"
 
 #: src/ExpandMacros.cpp:222
-#, fuzzy
 msgid "Arm start"
-msgstr ""
-"Brazo\n"
-"Iniciar"
+msgstr "Armar Inicio"
 
 #: src/ExpandMacros.cpp:225
 msgid "Arm turn"
@@ -2047,11 +2043,11 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:204
 msgid "Show airspace off"
-msgstr ""
+msgstr "Mostrar Espacio Aéreo OFF"
 
 #: src/InputEventsActions.cpp:206
 msgid "Show airspace on"
-msgstr ""
+msgstr "Mostrar Espacio Aéreo ON"
 
 #: src/InputEventsActions.cpp:242
 msgid "Screen Mode Full"
@@ -2074,24 +2070,20 @@ msgid "Auto. zoom off"
 msgstr ""
 
 #: src/InputEventsActions.cpp:314
-#, fuzzy
 msgid "Circling zoom on"
-msgstr "Zoom de Giro"
+msgstr "Zoom de Giro ON"
 
 #: src/InputEventsActions.cpp:316
-#, fuzzy
 msgid "Circling zoom off"
-msgstr "Zoom de Giro"
+msgstr "Zoom de Giro OFF"
 
 #: src/InputEventsActions.cpp:381
-#, fuzzy
 msgid "Pan mode on"
 msgstr "Modo Pan ON"
 
 #: src/InputEventsActions.cpp:383
-#, fuzzy
 msgid "Pan mode off"
-msgstr "Modo Pan ON"
+msgstr "Modo Pan OFF"
 
 #: src/InputEventsActions.cpp:533
 #, fuzzy
@@ -2126,7 +2118,6 @@ msgid "Hold turn"
 msgstr ""
 
 #: src/InputEventsActions.cpp:676
-#, fuzzy
 msgid "No active waypoint!"
 msgstr "No hay Waypoint activo!"
 
@@ -2171,24 +2162,20 @@ msgid "Ballast %"
 msgstr ""
 
 #: src/InputEventsActions.cpp:1139
-#, fuzzy
 msgid "NMEA log on"
 msgstr "Grabadora NMEA ON"
 
 #: src/InputEventsActions.cpp:1141
-#, fuzzy
 msgid "NMEA log off"
-msgstr "Grabadora NMEA ON"
+msgstr "Grabadora NMEA OFF"
 
 #: src/InputEventsActions.cpp:1145
-#, fuzzy
 msgid "Logger on"
-msgstr "Grabadora"
+msgstr "Grabadora ON"
 
 #: src/InputEventsActions.cpp:1147
-#, fuzzy
 msgid "Logger off"
-msgstr "Grabadora"
+msgstr "Grabadora OFF"
 
 #: src/InputEventsActions.cpp:1393
 #, fuzzy, no-c-format
@@ -2201,7 +2188,6 @@ msgid "Waypoint labels"
 msgstr "Waypoints"
 
 #: src/InputEventsActions.cpp:1446
-#, fuzzy
 msgid "Map labels on"
 msgstr "Etiquetas de Mapa ON"
 
@@ -2210,7 +2196,6 @@ msgid "Topography/Terrain"
 msgstr ""
 
 #: src/InputEventsActions.cpp:1786
-#, fuzzy
 msgid "Task start"
 msgstr "Salida de Manga"
 
@@ -2675,7 +2660,6 @@ msgid "Climb"
 msgstr "Ascenso"
 
 #: src/Dialogs/dlgAnalysis.cpp:219 src/Dialogs/dlgAnalysis.cpp:263
-#, fuzzy
 msgid "Task Calc"
 msgstr "Calc. de Manga"
 
@@ -2685,12 +2669,10 @@ msgid "Thermal Band"
 msgstr "Ganancia en la ultima termica"
 
 #: src/Dialogs/dlgAnalysis.cpp:233
-#, fuzzy
 msgid "Wind At Altitude"
 msgstr "Viento a Altitud"
 
 #: src/Dialogs/dlgAnalysis.cpp:236
-#, fuzzy
 msgid "Set Wind"
 msgstr "Fijar Viento"
 
@@ -2699,7 +2681,6 @@ msgid "Glide Polar"
 msgstr "Polar de Planeo"
 
 #: src/Dialogs/dlgAnalysis.cpp:251
-#, fuzzy
 msgid "Temp Trace"
 msgstr "Traza Temporal"
 
@@ -2761,7 +2742,7 @@ msgid "Glide Computer"
 msgstr "Computadora de Planeo"
 
 #: src/Dialogs/dlgConfiguration.cpp:89
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Safety Factors"
 msgstr "Factores de Seguridad"
 
@@ -3035,12 +3016,12 @@ msgstr "Conectado"
 #: src/Dialogs/dlgStatus.cpp:213 src/Dialogs/dlgStatus.cpp:387
 #: src/Dialogs/dlgStatus.cpp:394
 msgid "True"
-msgstr ""
+msgstr "VERDADERO"
 
 #: src/Dialogs/dlgStatus.cpp:215 src/Dialogs/dlgStatus.cpp:389
 #: src/Dialogs/dlgStatus.cpp:396
 msgid "False"
-msgstr ""
+msgstr "FALSO"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:68
 msgid "All on"
@@ -3312,9 +3293,8 @@ msgstr "Sombreado"
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:81
 #: Data/Dialogs/dlgConfiguration.xml:322
 #: Data/Dialogs/dlgConfiguration_L.xml:323
-#, fuzzy
 msgid "Safety MC"
-msgstr "Bloqueo de Seguridad"
+msgstr "Mc de Seguridad"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:55
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:120
@@ -3572,9 +3552,8 @@ msgid "B/W"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:107
-#, fuzzy
 msgid "Orange"
-msgstr "Rango"
+msgstr "Anaranjado"
 
 #: src/Dialogs/dlgTaskManager.cpp:146
 msgid "Validation Errors"
@@ -3600,7 +3579,6 @@ msgid "Task edit"
 msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:115
-#, fuzzy
 msgid "Add Waypoint"
 msgstr "Agregar Waypoint"
 
@@ -3736,7 +3714,7 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:112
 msgid "Unknown"
-msgstr ""
+msgstr "Desconocido"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:116
 msgid "Goal"
@@ -4182,7 +4160,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:616
 #: Data/Dialogs/dlgConfiguration_L.xml:617
 msgid "Time step circling"
-msgstr ""
+msgstr "Tiempo en Giro"
 
 #: Data/Dialogs/dlgStatusTask.xml:3
 msgid "Task Status"
@@ -4366,7 +4344,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:47 Data/Dialogs/dlgConfiguration_L.xml:47
 msgid "Terrain file"
-msgstr ""
+msgstr "Archivo del Terreno"
 
 #: Data/Dialogs/pnlTaskProperties.xml:6 Data/Dialogs/pnlTaskProperties_L.xml:7
 msgid "Minimum AAT task time in minutes."
@@ -4387,9 +4365,8 @@ msgid "Font Configuration"
 msgstr "Configuración"
 
 #: Data/Dialogs/pnlTaskEdit.xml:12 Data/Dialogs/pnlTaskEdit_L.xml:10
-#, fuzzy
 msgid "Clear Task"
-msgstr "¿Declarar Tarea?"
+msgstr "Cancelar Manga"
 
 #: Data/Dialogs/dlgVario.xml:144 Data/Dialogs/dlgVario.xml:166
 #: Data/Dialogs/dlgVario.xml:188 Data/Dialogs/dlgVario.xml:210
@@ -4446,7 +4423,7 @@ msgstr "Viento Auto"
 #: Data/Dialogs/dlgConfiguration.xml:720
 #: Data/Dialogs/dlgConfiguration_L.xml:721
 msgid "Debounce time"
-msgstr ""
+msgstr "Horario de Retorno"
 
 #: Data/Dialogs/dlgVario.xml:286 Data/Dialogs/dlgVario_L.xml:287
 msgid "Mute vario on voice"
@@ -4455,12 +4432,12 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:611
 #: Data/Dialogs/dlgConfiguration_L.xml:612
 msgid "Time step cruise"
-msgstr ""
+msgstr "Tiempo en Transición"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:31
 #: Data/Dialogs/dlgWayPointDetails_L.xml:31
 msgid "Set As New Home"
-msgstr ""
+msgstr "Fijar como nueva Base"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:28
 #: Data/Dialogs/pnlTaskCalculator_L.xml:28
@@ -4487,7 +4464,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:705
 #: Data/Dialogs/dlgConfiguration_L.xml:706
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 #: Data/Dialogs/dlgConfiguration.xml:494
 #: Data/Dialogs/dlgConfiguration_L.xml:495
@@ -4552,7 +4529,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspacePatterns.xml:3
 #: Data/Dialogs/dlgAirspacePatterns_L.xml:3
-#, fuzzy
 msgid "Select Pattern"
 msgstr "Seleccionar patrón"
 
@@ -4564,7 +4540,6 @@ msgstr "Borrar"
 
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:3
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:3
-#, fuzzy
 msgid "Edit Text"
 msgstr "Editar Texto"
 
@@ -4598,7 +4573,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:700
 #: Data/Dialogs/dlgConfiguration_L.xml:701
 msgid "Events"
-msgstr ""
+msgstr "Eventos"
 
 #: Data/Dialogs/dlgConfiguration.xml:392
 #: Data/Dialogs/dlgConfiguration_L.xml:393
@@ -4650,7 +4625,6 @@ msgid ""
 msgstr ""
 
 #: Data/Dialogs/dlgFileSelect.xml:3
-#, fuzzy
 msgid "File Browser"
 msgstr "Navegador de Archivos"
 
@@ -4819,9 +4793,8 @@ msgid "Finish point"
 msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:17 Data/Dialogs/dlgTeamCode_L.xml:18
-#, fuzzy
 msgid "Rel. bearing"
-msgstr "Acimut del Equipo"
+msgstr "Rel. Dirección"
 
 #: Data/Dialogs/dlgConfiguration.xml:139
 #: Data/Dialogs/dlgConfiguration_L.xml:139
@@ -4936,7 +4909,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgWayPointDetails.xml:28
 #: Data/Dialogs/dlgWayPointDetails_L.xml:28
-#, fuzzy
 msgid "Insert In Task"
 msgstr "Insertar en Manga"
 
@@ -5142,7 +5114,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:710
 #: Data/Dialogs/dlgConfiguration_L.xml:711
 msgid "Status message"
-msgstr ""
+msgstr "Mensaje de Estatus"
 
 #: Data/Dialogs/dlgConfiguration.xml:83 Data/Dialogs/dlgConfiguration_L.xml:83
 msgid ""
@@ -5590,7 +5562,7 @@ msgstr ""
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:3
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:3
 msgid "Alternate Start Points"
-msgstr ""
+msgstr "Arranques Alternativos"
 
 #: Data/Dialogs/dlgFileSelect.xml:10
 msgid "Refresh"
@@ -6027,7 +5999,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:327
 #: Data/Dialogs/dlgConfiguration_L.xml:328
 msgid "STF risk factor"
-msgstr ""
+msgstr "Factor de Riesgo STF"
 
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "Enable voice read-back of MacReady setting after it is adjusted."
@@ -6304,7 +6276,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:139
 #: Data/Dialogs/dlgConfiguration_L.xml:139
 msgid "Wind arrow"
-msgstr ""
+msgstr "flecha del Viento"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid ""
@@ -6361,7 +6333,6 @@ msgid "If true, the InfoBoxes are white on black, otherwise black on white."
 msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:26
-#, fuzzy
 msgid "New waypoint"
 msgstr "Nuevo Waypoint"
 
@@ -6420,7 +6391,6 @@ msgid "Waypts."
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:6 Data/Dialogs/dlgConfigFonts_L.xml:6
-#, fuzzy
 msgid "Customize fonts"
 msgstr "Personalizar fuentes"
 
@@ -6529,7 +6499,6 @@ msgstr "Colores"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:30
 #: Data/Dialogs/dlgWayPointDetails_L.xml:30
-#, fuzzy
 msgid "Remove From Task"
 msgstr "Remover de la Manga"
 
@@ -6540,7 +6509,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:285
 #: Data/Dialogs/dlgConfiguration_L.xml:286
 msgid "Block speed to fly"
-msgstr ""
+msgstr "Bloquear Mejor Velocidad"
 
 #: Data/Dialogs/dlgConfiguration.xml:147
 #: Data/Dialogs/dlgConfiguration_L.xml:147
@@ -6623,7 +6592,6 @@ msgstr "Tiempo Remanente"
 
 #: Data/Dialogs/dlgAirspaceColours.xml:3
 #: Data/Dialogs/dlgAirspaceColours_L.xml:3
-#, fuzzy
 msgid "Select Colour"
 msgstr "Seleccionar color"
 
@@ -6675,7 +6643,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:715
 #: Data/Dialogs/dlgConfiguration_L.xml:716
 msgid "Menu timeout"
-msgstr ""
+msgstr "Tiempo del Menú"
 
 #: Data/Dialogs/dlgConfiguration.xml:705
 #: Data/Dialogs/dlgConfiguration_L.xml:706
@@ -6865,7 +6833,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:738
 #: Data/Dialogs/dlgConfiguration_L.xml:739
-#, fuzzy
 msgid "Infobox geometry"
 msgstr "Geometría de InfoBox"
 
@@ -6928,7 +6895,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:6
 msgid "Ack Day"
-msgstr ""
+msgstr "ACK Día"
 
 #: Data/Dialogs/dlgConfiguration.xml:114
 #: Data/Dialogs/dlgConfiguration_L.xml:114 Data/Dialogs/dlgWindSettings.xml:16
@@ -6938,7 +6905,6 @@ msgstr "Rastro Derivado"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:41
 #: Data/Dialogs/pnlTaskCalculator_L.xml:41
-#, fuzzy
 msgid "Achieved speed"
 msgstr "Velocidad Lograda"
 
@@ -7129,7 +7095,7 @@ msgstr "Línea de Planeo sobre Terreno"
 #: Data/Dialogs/pnlTaskManagerClose.xml:5
 #: Data/Dialogs/pnlTaskManagerClose_L.xml:6
 msgid "Fly"
-msgstr ""
+msgstr "Volar"
 
 #: Data/Dialogs/dlgConfiguration.xml:109
 #: Data/Dialogs/dlgConfiguration_L.xml:109
@@ -7156,7 +7122,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgWayPointDetails.xml:29
 #: Data/Dialogs/dlgWayPointDetails_L.xml:29
-#, fuzzy
 msgid "Append To Task"
 msgstr "Anexar a la Manga"
 
@@ -7193,13 +7158,11 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:300
 #: Data/Dialogs/dlgConfiguration_L.xml:301
-#, fuzzy
 msgid "L/D average period"
-msgstr "L/D Medio"
+msgstr "Periodo Promedio de L/D"
 
 #: Data/Dialogs/dlgConfiguration.xml:647
 #: Data/Dialogs/dlgConfiguration_L.xml:648
-#, fuzzy
 msgid "Aircraft/Wind speed"
 msgstr "Velocidad del Viento/Aeronave"
 
@@ -7275,7 +7238,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:725
 #: Data/Dialogs/dlgConfiguration_L.xml:726
 msgid "Text input style"
-msgstr ""
+msgstr "Estilo de Ingreso de Texto"
 
 #: Data/Dialogs/dlgVegaDemo.xml:3
 msgid "Vario Demo"
@@ -7317,7 +7280,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgWayPointDetails.xml:27
 #: Data/Dialogs/dlgWayPointDetails_L.xml:27
-#, fuzzy
 msgid "Replace In Task"
 msgstr "Remplazar en la prueba"
 
@@ -7399,7 +7361,7 @@ msgstr "Renombrar"
 #: Data/Dialogs/dlgWayPointDetails.xml:7
 #: Data/Dialogs/dlgWayPointDetails_L.xml:4 Data/Input/default.xci:491
 msgid "GoTo"
-msgstr ""
+msgstr "Ir a"
 
 #: Data/Dialogs/dlgConfiguration.xml:409
 #: Data/Dialogs/dlgConfiguration_L.xml:410
@@ -7510,7 +7472,6 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:160
-#, fuzzy
 msgid "Below final glide"
 msgstr "DEBAJO del Planeo Final"
 
@@ -7552,7 +7513,6 @@ msgid "Trail"
 msgstr "Camino"
 
 #: Data/Input/default.xci:115
-#, fuzzy
 msgid "Waiting for GPS connection"
 msgstr "Esperando conexión del GPS"
 
@@ -7613,7 +7573,6 @@ msgstr ""
 "Off"
 
 #: Data/Input/default.xci:155
-#, fuzzy
 msgid "Above final glide"
 msgstr "SOBRE del Planeo Final"
 
@@ -7662,7 +7621,6 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:125
-#, fuzzy
 msgid "Waiting for GPS fix"
 msgstr "Esperando calcular señal de GPS"
 
@@ -7671,9 +7629,8 @@ msgid "Takeoff"
 msgstr "DESPEGUE!"
 
 #: Data/Input/default.xci:165
-#, fuzzy
 msgid "Final glide through terrain"
-msgstr "Planeo Final a través del Terreno"
+msgstr "Planeo final sobre el Terreno"
 
 #: Data/Input/default.xci:797
 msgid ""

@@ -191,7 +191,7 @@ msgstr "Point de virage de départ"
 
 #: src/ExpandMacros.cpp:222
 msgid "Arm start"
-msgstr ""
+msgstr "Armer Départ"
 
 #: src/ExpandMacros.cpp:225
 msgid "Arm turn"
@@ -1856,7 +1856,7 @@ msgstr ""
 #: src/InfoBoxes/Content/MacCready.cpp:159
 #: src/InfoBoxes/Content/MacCready.cpp:221
 msgid "MANUAL"
-msgstr ""
+msgstr "Manuel"
 
 #: src/InfoBoxes/Content/MacCready.cpp:139
 #: src/InfoBoxes/Content/MacCready.cpp:157
@@ -1959,11 +1959,11 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:204
 msgid "Show airspace off"
-msgstr ""
+msgstr "Aff. Zones OFF"
 
 #: src/InputEventsActions.cpp:206
 msgid "Show airspace on"
-msgstr ""
+msgstr "Aff. Zones ON"
 
 #: src/InputEventsActions.cpp:242
 msgid "Screen Mode Full"
@@ -1987,19 +1987,19 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:314
 msgid "Circling zoom on"
-msgstr ""
+msgstr "Zoom Thermique ON"
 
 #: src/InputEventsActions.cpp:316
 msgid "Circling zoom off"
-msgstr ""
+msgstr "Zoom Thermique OFF"
 
 #: src/InputEventsActions.cpp:381
 msgid "Pan mode on"
-msgstr ""
+msgstr "Mode Panoramique ON"
 
 #: src/InputEventsActions.cpp:383
 msgid "Pan mode off"
-msgstr ""
+msgstr "Mode Panoramique OFF"
 
 #: src/InputEventsActions.cpp:533
 msgid "Advance manually"
@@ -2027,7 +2027,7 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:676
 msgid "No active waypoint!"
-msgstr ""
+msgstr "Pas de Waypoint Actif!"
 
 #: src/InputEventsActions.cpp:752
 msgid "Auto. MacCready on"
@@ -2092,7 +2092,7 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:1446
 msgid "Map labels on"
-msgstr ""
+msgstr "Noms Carte ON"
 
 #: src/InputEventsActions.cpp:1618
 msgid "Topography/Terrain"
@@ -2100,7 +2100,7 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:1786
 msgid "Task start"
-msgstr ""
+msgstr "Démarrage Circuit"
 
 #: src/InputEventsActions.cpp:1788
 msgid "Next turnpoint"
@@ -2556,7 +2556,7 @@ msgstr "Vario"
 
 #: src/Dialogs/dlgAnalysis.cpp:219 src/Dialogs/dlgAnalysis.cpp:263
 msgid "Task Calc"
-msgstr ""
+msgstr "Calc. circuit"
 
 #: src/Dialogs/dlgAnalysis.cpp:224
 msgid "Thermal Band"
@@ -2564,11 +2564,11 @@ msgstr ""
 
 #: src/Dialogs/dlgAnalysis.cpp:233
 msgid "Wind At Altitude"
-msgstr ""
+msgstr "Vent en Altitude"
 
 #: src/Dialogs/dlgAnalysis.cpp:236
 msgid "Set Wind"
-msgstr ""
+msgstr "Régl. Vent"
 
 #: src/Dialogs/dlgAnalysis.cpp:241
 msgid "Glide Polar"
@@ -2576,7 +2576,7 @@ msgstr "Polaire"
 
 #: src/Dialogs/dlgAnalysis.cpp:251
 msgid "Temp Trace"
-msgstr ""
+msgstr "Courbe Temp."
 
 #: src/Dialogs/dlgAnalysis.cpp:260
 msgid "Task Speed"
@@ -2638,7 +2638,7 @@ msgstr "Calculateur de Vol"
 #: src/Dialogs/dlgConfiguration.cpp:89
 #, no-c-format
 msgid "Safety Factors"
-msgstr ""
+msgstr "Facteurs de Sécurité"
 
 #: src/Dialogs/dlgConfiguration.cpp:90
 #, no-c-format
@@ -2907,7 +2907,7 @@ msgstr "Connecté"
 #: src/Dialogs/dlgStatus.cpp:213 src/Dialogs/dlgStatus.cpp:387
 #: src/Dialogs/dlgStatus.cpp:394
 msgid "True"
-msgstr ""
+msgstr "VRAI"
 
 #: src/Dialogs/dlgStatus.cpp:215 src/Dialogs/dlgStatus.cpp:389
 #: src/Dialogs/dlgStatus.cpp:396
@@ -3182,7 +3182,7 @@ msgstr "Ombre"
 #: Data/Dialogs/dlgConfiguration.xml:322
 #: Data/Dialogs/dlgConfiguration_L.xml:323
 msgid "Safety MC"
-msgstr ""
+msgstr "Mc de Sécurité"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:55
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:120
@@ -3459,7 +3459,7 @@ msgstr "Editer le circuit"
 
 #: src/Dialogs/pnlTaskEdit.cpp:115
 msgid "Add Waypoint"
-msgstr ""
+msgstr "Ajout waypoint"
 
 #: src/Dialogs/pnlTaskList.cpp:154
 msgid "Task not saved"
@@ -3588,7 +3588,7 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:112
 msgid "Unknown"
-msgstr ""
+msgstr "Inconnu"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:116
 msgid "Goal"
@@ -4212,7 +4212,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:47 Data/Dialogs/dlgConfiguration_L.xml:47
 msgid "Terrain file"
-msgstr ""
+msgstr "Fichier Relief"
 
 #: Data/Dialogs/pnlTaskProperties.xml:6 Data/Dialogs/pnlTaskProperties_L.xml:7
 msgid "Minimum AAT task time in minutes."
@@ -4233,7 +4233,7 @@ msgstr ""
 
 #: Data/Dialogs/pnlTaskEdit.xml:12 Data/Dialogs/pnlTaskEdit_L.xml:10
 msgid "Clear Task"
-msgstr ""
+msgstr "Eff. Circuit"
 
 #: Data/Dialogs/dlgVario.xml:144 Data/Dialogs/dlgVario.xml:166
 #: Data/Dialogs/dlgVario.xml:188 Data/Dialogs/dlgVario.xml:210
@@ -4303,7 +4303,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:31
 #: Data/Dialogs/dlgWayPointDetails_L.xml:31
 msgid "Set As New Home"
-msgstr ""
+msgstr "=> Nvlle Base"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:28
 #: Data/Dialogs/pnlTaskCalculator_L.xml:28
@@ -4330,7 +4330,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:705
 #: Data/Dialogs/dlgConfiguration_L.xml:706
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 #: Data/Dialogs/dlgConfiguration.xml:494
 #: Data/Dialogs/dlgConfiguration_L.xml:495
@@ -4395,7 +4395,7 @@ msgstr "Handicap"
 #: Data/Dialogs/dlgAirspacePatterns.xml:3
 #: Data/Dialogs/dlgAirspacePatterns_L.xml:3
 msgid "Select Pattern"
-msgstr ""
+msgstr "Select. Modèle"
 
 #: Data/Dialogs/dlgConfigWaypoints.xml:9
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:9 Data/Dialogs/pnlTaskList.xml:11
@@ -4406,7 +4406,7 @@ msgstr "Supprimer"
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:3
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:3
 msgid "Edit Text"
-msgstr ""
+msgstr "Saisie texte"
 
 #: Data/Dialogs/dlgStartup.xml:6 Data/Dialogs/dlgStartup_L.xml:6
 msgid "Profile"
@@ -4491,7 +4491,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgFileSelect.xml:3
 msgid "File Browser"
-msgstr ""
+msgstr "Navigateur"
 
 #: Data/Dialogs/dlgConfiguration.xml:441
 #: Data/Dialogs/dlgConfiguration_L.xml:442
@@ -4534,7 +4534,7 @@ msgstr "Map Waypoints"
 #: Data/Dialogs/dlgConfiguration_L.xml:683 Data/Dialogs/dlgVario.xml:272
 #: Data/Dialogs/dlgVario_L.xml:273
 msgid "UTC offset"
-msgstr ""
+msgstr "Fuseau Horaire"
 
 #: Data/Dialogs/dlgVario.xml:390 Data/Dialogs/dlgVario_L.xml:391
 msgid "Interval; battery"
@@ -4654,7 +4654,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:17 Data/Dialogs/dlgTeamCode_L.xml:18
 msgid "Rel. bearing"
-msgstr ""
+msgstr "Cap Réel"
 
 #: Data/Dialogs/dlgConfiguration.xml:139
 #: Data/Dialogs/dlgConfiguration_L.xml:139
@@ -4766,7 +4766,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:28
 #: Data/Dialogs/dlgWayPointDetails_L.xml:28
 msgid "Insert In Task"
-msgstr ""
+msgstr "Inséré dans Circuit"
 
 #: Data/Dialogs/dlgConfiguration.xml:73 Data/Dialogs/dlgConfiguration_L.xml:73
 msgid "Circling zoom"
@@ -4963,7 +4963,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:710
 #: Data/Dialogs/dlgConfiguration_L.xml:711
 msgid "Status message"
-msgstr ""
+msgstr "Message d'état"
 
 #: Data/Dialogs/dlgConfiguration.xml:83 Data/Dialogs/dlgConfiguration_L.xml:83
 msgid ""
@@ -4978,7 +4978,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:3 Data/Dialogs/dlgTeamCode_L.xml:3
 msgid "Team Code"
-msgstr ""
+msgstr "Code Position"
 
 #: Data/Dialogs/dlgVario.xml:84 Data/Dialogs/dlgVario_L.xml:85
 msgid "Cruise averager scale"
@@ -5400,7 +5400,7 @@ msgstr ""
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:3
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:3
 msgid "Alternate Start Points"
-msgstr ""
+msgstr "Départs alternatifs"
 
 #: Data/Dialogs/dlgFileSelect.xml:10
 msgid "Refresh"
@@ -6100,7 +6100,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:139
 #: Data/Dialogs/dlgConfiguration_L.xml:139
 msgid "Wind arrow"
-msgstr ""
+msgstr "Flèche de Vent"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid ""
@@ -6156,7 +6156,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "New waypoint"
-msgstr ""
+msgstr "Nvx Waypoint"
 
 #: Data/Dialogs/dlgConfiguration.xml:582
 #: Data/Dialogs/dlgConfiguration_L.xml:583
@@ -6213,7 +6213,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:6 Data/Dialogs/dlgConfigFonts_L.xml:6
 msgid "Customize fonts"
-msgstr ""
+msgstr "Personnaliser Polices"
 
 #: Data/Dialogs/dlgConfiguration.xml:290
 #: Data/Dialogs/dlgConfiguration_L.xml:291
@@ -6320,7 +6320,7 @@ msgstr "Couleurs"
 #: Data/Dialogs/dlgWayPointDetails.xml:30
 #: Data/Dialogs/dlgWayPointDetails_L.xml:30
 msgid "Remove From Task"
-msgstr ""
+msgstr "Retirer du circuit"
 
 #: Data/Dialogs/dlgVario.xml:370 Data/Dialogs/dlgVario_L.xml:371
 msgid "Gear off delay"
@@ -6410,7 +6410,7 @@ msgstr "Temps restant"
 #: Data/Dialogs/dlgAirspaceColours.xml:3
 #: Data/Dialogs/dlgAirspaceColours_L.xml:3
 msgid "Select Colour"
-msgstr ""
+msgstr "Select. Couleur"
 
 #: Data/Dialogs/dlgSwitches.xml:41
 msgid "User up"
@@ -6458,7 +6458,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:715
 #: Data/Dialogs/dlgConfiguration_L.xml:716
 msgid "Menu timeout"
-msgstr ""
+msgstr "Tps Sortie Menu"
 
 #: Data/Dialogs/dlgConfiguration.xml:705
 #: Data/Dialogs/dlgConfiguration_L.xml:706
@@ -6705,7 +6705,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:6
 msgid "Ack Day"
-msgstr ""
+msgstr "OK Jour"
 
 #: Data/Dialogs/dlgConfiguration.xml:114
 #: Data/Dialogs/dlgConfiguration_L.xml:114 Data/Dialogs/dlgWindSettings.xml:16
@@ -6716,7 +6716,7 @@ msgstr "Trace Redressée"
 #: Data/Dialogs/pnlTaskCalculator.xml:41
 #: Data/Dialogs/pnlTaskCalculator_L.xml:41
 msgid "Achieved speed"
-msgstr ""
+msgstr "Vitesse réalisée"
 
 #: Data/Dialogs/dlgConfiguration.xml:63 Data/Dialogs/dlgConfiguration_L.xml:63
 msgid "Cruise orientation"
@@ -6931,7 +6931,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:29
 #: Data/Dialogs/dlgWayPointDetails_L.xml:29
 msgid "Append To Task"
-msgstr ""
+msgstr "Ajouter Au Circuit"
 
 #: Data/Dialogs/dlgBasicSettings.xml:19
 msgid ""
@@ -6967,12 +6967,12 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:300
 #: Data/Dialogs/dlgConfiguration_L.xml:301
 msgid "L/D average period"
-msgstr ""
+msgstr "Tps Finesse Moy."
 
 #: Data/Dialogs/dlgConfiguration.xml:647
 #: Data/Dialogs/dlgConfiguration_L.xml:648
 msgid "Aircraft/Wind speed"
-msgstr ""
+msgstr "Vitesse Aéronef/Vent"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:15
 #: Data/Dialogs/dlgWayPointDetails_L.xml:15
@@ -7085,7 +7085,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:27
 #: Data/Dialogs/dlgWayPointDetails_L.xml:27
 msgid "Replace In Task"
-msgstr ""
+msgstr "Remplacer dans le circuit"
 
 #: Data/Dialogs/dlgConfiguration.xml:155
 #: Data/Dialogs/dlgConfiguration_L.xml:155
@@ -7163,7 +7163,7 @@ msgstr "Renommer"
 #: Data/Dialogs/dlgWayPointDetails.xml:7
 #: Data/Dialogs/dlgWayPointDetails_L.xml:4 Data/Input/default.xci:491
 msgid "GoTo"
-msgstr ""
+msgstr "Aller à"
 
 #: Data/Dialogs/dlgConfiguration.xml:409
 #: Data/Dialogs/dlgConfiguration_L.xml:410
@@ -7272,7 +7272,7 @@ msgstr ""
 
 #: Data/Input/default.xci:160
 msgid "Below final glide"
-msgstr ""
+msgstr "Sous le plan d'arrivée"
 
 #: Data/Input/default.xci:136
 msgid ""
@@ -7310,7 +7310,7 @@ msgstr "Trace"
 
 #: Data/Input/default.xci:115
 msgid "Waiting for GPS connection"
-msgstr ""
+msgstr "Attente Connexion GPS"
 
 #: Data/Input/default.xci:771
 msgid ""
@@ -7366,7 +7366,7 @@ msgstr ""
 
 #: Data/Input/default.xci:155
 msgid "Above final glide"
-msgstr ""
+msgstr "Au dessus du Plan d'Arrivée"
 
 #: Data/Input/default.xci:860
 msgid ""
@@ -7414,7 +7414,7 @@ msgstr ""
 
 #: Data/Input/default.xci:125
 msgid "Waiting for GPS fix"
-msgstr ""
+msgstr "Attente Fix GPS"
 
 #: Data/Input/default.xci:144
 msgid "Takeoff"
@@ -7422,7 +7422,7 @@ msgstr "Décollage"
 
 #: Data/Input/default.xci:165
 msgid "Final glide through terrain"
-msgstr ""
+msgstr "Relief sur le Plan d'Arrivée"
 
 #: Data/Input/default.xci:797
 msgid ""
