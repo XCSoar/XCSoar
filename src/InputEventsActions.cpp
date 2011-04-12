@@ -1367,6 +1367,12 @@ InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
   }
 }
 
+void
+InputEvents::eventCredits(const TCHAR *misc)
+{
+  dlgCreditsShowModal(XCSoarInterface::main_window);
+}
+
 // Run
 // Runs an external program of the specified filename.
 // Note that XCSoar will wait until this program exits.

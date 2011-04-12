@@ -182,6 +182,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgWayPointSelect.cpp \
 	$(SRC)/Dialogs/dlgWindSettings.cpp \
 	$(SRC)/Dialogs/dlgFontEdit.cpp \
+	$(SRC)/Dialogs/dlgCredits.cpp \
 
 
 XCSOAR_SOURCES := \

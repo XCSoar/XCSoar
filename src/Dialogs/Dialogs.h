@@ -136,6 +136,8 @@ void dlgThermalAssistantShowModal();
 void dlgFlarmTrafficShowModal();
 void dlgFlarmTrafficDetailsShowModal(FlarmId id);
 
+void dlgCreditsShowModal(SingleWindow &parent);
+
 bool PopupNearestWaypointDetails(const Waypoints &way_points,
     const GeoPoint &location, double range, bool scalefilter = false);
 

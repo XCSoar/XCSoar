@@ -765,3 +765,11 @@ data=9
 event=RepeatStatusMessage
 label=Message\nRepeat
 location=8
+
+mode=Info2
+type=key
+data=0
+event=Credits
+event=Mode default
+label=Credits
+location=9

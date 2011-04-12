@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<Form Name="frmCredits" Width="320" Height="240" Caption="XCSoar">
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="29" Height="28" OnClick="OnPrev" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="36" Y="160" Width="29" Height="28" OnClick="OnNext" />
+  <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28" OnClick="OnClose" />
+
+  <Tabbed Name="tab" X="70" Y="2" Width="-2" Height="222">
+    <Panel Name="frmInfo">
+      <Canvas X="0" Y="0" OnPaint="OnLogoPaint" />
+    </Panel>
+    
+    <Panel Name="frmAuthors">
+      <Edit Name="prpAuthors" X="0" Y="0" CaptionWidth="-1" ReadOnly="1" MultiLine="1" />
+    </Panel>
+  
+    <Panel Name="frmLicense">
+      <Edit Name="prpLicense" X="0" Y="0" CaptionWidth="-1" ReadOnly="1" MultiLine="1" />
+    </Panel>
+  </Tabbed>
+</Form>
