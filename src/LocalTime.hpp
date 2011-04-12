@@ -24,7 +24,6 @@ Copyright_License {
 #define LOCALTIME_H
 
 struct NMEA_INFO;
-struct DERIVED_INFO;
 
 int DetectCurrentTime(const NMEA_INFO *Basic);
 
