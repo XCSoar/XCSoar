@@ -33,7 +33,7 @@ struct UnitStoreItem
 
 static const UnitStoreItem Presets[] =
 {
-  { N_("Continental"), {
+  { N_("European"), {
     unKiloMeter,
     unMeter,
     unGradCelcius,
