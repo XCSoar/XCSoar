@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-07 10:43+0200\n"
+"POT-Creation-Date: 2011-04-12 09:26+0200\n"
 "PO-Revision-Date: 2011-03-31 22:53+0200\n"
 "Last-Translator: Filip <Unknown>\n"
 "Language-Team: none\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Launchpad (build 12568)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
-#: src/InputEventsActions.cpp:1392 src/Dialogs/dlgAnalysis.cpp:268
+#: src/InputEventsActions.cpp:1394 src/Dialogs/dlgAnalysis.cpp:268
 #: src/Dialogs/dlgStatus.cpp:53
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:80
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:56
@@ -135,7 +135,7 @@ msgstr "Ponovljeni let"
 msgid "Could not open NMEA file!"
 msgstr ""
 
-#: src/WayPoint/WayPointGlue.cpp:144
+#: src/WayPoint/WayPointGlue.cpp:223
 msgid "Loading Waypoints..."
 msgstr ""
 
@@ -286,7 +286,7 @@ msgstr "Puni"
 #: src/ExpandMacros.cpp:435 src/ExpandMacros.cpp:442 src/ExpandMacros.cpp:499
 #: src/ExpandMacros.cpp:505 src/ExpandMacros.cpp:508 src/ExpandMacros.cpp:511
 #: src/ExpandMacros.cpp:529 src/ExpandMacros.cpp:582
-#: src/InputEventsActions.cpp:1613 src/InputEventsActions.cpp:1616
+#: src/InputEventsActions.cpp:1615 src/InputEventsActions.cpp:1618
 #: src/Dialogs/XML.cpp:598 src/Dialogs/dlgStatus.cpp:205
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:79
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:48
@@ -298,8 +298,8 @@ msgstr "Iskjučen"
 
 #: src/ExpandMacros.cpp:442 src/ExpandMacros.cpp:499 src/ExpandMacros.cpp:505
 #: src/ExpandMacros.cpp:508 src/ExpandMacros.cpp:511 src/ExpandMacros.cpp:529
-#: src/ExpandMacros.cpp:582 src/InputEventsActions.cpp:1611
-#: src/InputEventsActions.cpp:1616 src/Dialogs/XML.cpp:598
+#: src/ExpandMacros.cpp:582 src/InputEventsActions.cpp:1613
+#: src/InputEventsActions.cpp:1618 src/Dialogs/XML.cpp:598
 #: src/Dialogs/dlgStatus.cpp:203
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:107
 msgid "On"
@@ -338,13 +338,13 @@ msgstr "Ručno"
 msgid "Auto"
 msgstr ""
 
-#: src/ExpandMacros.cpp:514 src/InputEventsActions.cpp:1390
+#: src/ExpandMacros.cpp:514 src/InputEventsActions.cpp:1392
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:88
 #, fuzzy, no-c-format
 msgid "All"
 msgstr "Sve uključeno"
 
-#: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1391
+#: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1393
 #, fuzzy, no-c-format
 msgid "Task & Landables"
 msgstr "Pravila"
@@ -1221,7 +1221,7 @@ msgid ""
 "by a connected intelligent variometer."
 msgstr ""
 
-#: src/InfoBoxes/Content/Factory.cpp:511 src/InputEventsActions.cpp:1364
+#: src/InfoBoxes/Content/Factory.cpp:511 src/InputEventsActions.cpp:1366
 #, no-c-format
 msgid "Forecast temperature"
 msgstr ""
@@ -1824,26 +1824,26 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#: src/InfoBoxes/Content/Altitude.cpp:266 src/GlueMapWindowOverlays.cpp:362
+#: src/InfoBoxes/Content/Altitude.cpp:270 src/GlueMapWindowOverlays.cpp:362
 #: Data/Dialogs/dlgSimulatorPrompt.xml:6
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:6
 msgid "Simulator"
 msgstr ""
 
-#: src/InfoBoxes/Content/Altitude.cpp:270 Data/Input/default.xci:836
+#: src/InfoBoxes/Content/Altitude.cpp:274 Data/Input/default.xci:836
 #: Data/Input/default.xci:886 Data/Input/default.xci:949
 msgid "Info"
 msgstr "INFO"
 
-#: src/InfoBoxes/Content/Altitude.cpp:276
+#: src/InfoBoxes/Content/Altitude.cpp:280
 #: src/InfoBoxes/Content/MacCready.cpp:176
 #: src/InfoBoxes/Content/Weather.cpp:262
 #, fuzzy
 msgid "Setup"
 msgstr "Podešavanje ..."
 
-#: src/InfoBoxes/Content/Altitude.cpp:404
-#: src/InfoBoxes/Content/Altitude.cpp:491
+#: src/InfoBoxes/Content/Altitude.cpp:409
+#: src/InfoBoxes/Content/Altitude.cpp:501
 msgid "no QNH"
 msgstr ""
 
@@ -1920,7 +1920,7 @@ msgstr "Oboje"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:576 src/InfoBoxes/InfoBoxManager.cpp:618
 #: src/Dialogs/dlgConfigInfoboxes.cpp:207
-#: src/Dialogs/dlgConfigInfoboxes.cpp:309
+#: src/Dialogs/dlgConfigInfoboxes.cpp:306
 msgid "InfoBox"
 msgstr ""
 
@@ -1975,149 +1975,149 @@ msgstr ""
 msgid "Default InfoBoxes"
 msgstr ""
 
-#: src/InputEventsActions.cpp:286
+#: src/InputEventsActions.cpp:288
 #, fuzzy
 msgid "Auto. zoom on"
 msgstr "AutoZum ON"
 
-#: src/InputEventsActions.cpp:288 src/InputEventsActions.cpp:1719
+#: src/InputEventsActions.cpp:290 src/InputEventsActions.cpp:1721
 #, fuzzy
 msgid "Auto. zoom off"
 msgstr "AutoZum ON"
 
-#: src/InputEventsActions.cpp:314
+#: src/InputEventsActions.cpp:316
 msgid "Circling zoom on"
 msgstr "Zum kruženja ON"
 
-#: src/InputEventsActions.cpp:316
+#: src/InputEventsActions.cpp:318
 msgid "Circling zoom off"
 msgstr "Zum kruženja OFF"
 
-#: src/InputEventsActions.cpp:381
+#: src/InputEventsActions.cpp:383
 msgid "Pan mode on"
 msgstr ""
 
-#: src/InputEventsActions.cpp:383
+#: src/InputEventsActions.cpp:385
 msgid "Pan mode off"
 msgstr ""
 
-#: src/InputEventsActions.cpp:533
+#: src/InputEventsActions.cpp:535
 msgid "Advance manually"
 msgstr ""
 
-#: src/InputEventsActions.cpp:536
+#: src/InputEventsActions.cpp:538
 msgid "Advance automatically"
 msgstr ""
 
-#: src/InputEventsActions.cpp:539
+#: src/InputEventsActions.cpp:541
 #, fuzzy
 msgid "Ready to start"
 msgstr "Validan start"
 
-#: src/InputEventsActions.cpp:542
+#: src/InputEventsActions.cpp:544
 #, fuzzy
 msgid "Hold start"
 msgstr "Validan start"
 
-#: src/InputEventsActions.cpp:545
+#: src/InputEventsActions.cpp:547
 msgid "Ready to turn"
 msgstr ""
 
-#: src/InputEventsActions.cpp:548
+#: src/InputEventsActions.cpp:550
 msgid "Hold turn"
 msgstr ""
 
-#: src/InputEventsActions.cpp:676
+#: src/InputEventsActions.cpp:678
 msgid "No active waypoint!"
 msgstr "Nema aktivne točke!"
 
-#: src/InputEventsActions.cpp:752
+#: src/InputEventsActions.cpp:754
 #, fuzzy
 msgid "Auto. MacCready on"
 msgstr "Set MacCready"
 
-#: src/InputEventsActions.cpp:754
+#: src/InputEventsActions.cpp:756
 #, fuzzy
 msgid "Auto. MacCready off"
 msgstr "Set MacCready"
 
-#: src/InputEventsActions.cpp:761
+#: src/InputEventsActions.cpp:763
 msgid "MacCready "
 msgstr ""
 
-#: src/InputEventsActions.cpp:971
+#: src/InputEventsActions.cpp:973
 #, fuzzy
 msgid "Task aborted"
 msgstr "Početak zadatka"
 
-#: src/InputEventsActions.cpp:974
+#: src/InputEventsActions.cpp:976
 msgid "Go to target"
 msgstr ""
 
-#: src/InputEventsActions.cpp:977
+#: src/InputEventsActions.cpp:979
 msgid "Ordered task"
 msgstr ""
 
-#: src/InputEventsActions.cpp:980 src/FlightStatisticsRenderer.cpp:756
+#: src/InputEventsActions.cpp:982 src/FlightStatisticsRenderer.cpp:756
 msgid "No task"
 msgstr "Nema zadatka"
 
-#: src/InputEventsActions.cpp:1039
+#: src/InputEventsActions.cpp:1041
 msgid "Bugs performance"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1080
+#: src/InputEventsActions.cpp:1082
 msgid "Ballast %"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1139
+#: src/InputEventsActions.cpp:1141
 msgid "NMEA log on"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1141
+#: src/InputEventsActions.cpp:1143
 msgid "NMEA log off"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1145
+#: src/InputEventsActions.cpp:1147
 msgid "Logger on"
 msgstr "Loger ON"
 
-#: src/InputEventsActions.cpp:1147
+#: src/InputEventsActions.cpp:1149
 msgid "Logger off"
 msgstr "Loger OFF"
 
-#: src/InputEventsActions.cpp:1393
+#: src/InputEventsActions.cpp:1395
 #, no-c-format
 msgid "None "
 msgstr ""
 
-#: src/InputEventsActions.cpp:1406
+#: src/InputEventsActions.cpp:1408
 #, fuzzy
 msgid "Waypoint labels"
 msgstr "Točka"
 
-#: src/InputEventsActions.cpp:1446
+#: src/InputEventsActions.cpp:1448
 msgid "Map labels on"
 msgstr "Oznake na karti ON"
 
-#: src/InputEventsActions.cpp:1618
+#: src/InputEventsActions.cpp:1620
 msgid "Topography/Terrain"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1786
+#: src/InputEventsActions.cpp:1788
 msgid "Task start"
 msgstr "Početak zadatka"
 
-#: src/InputEventsActions.cpp:1788
+#: src/InputEventsActions.cpp:1790
 msgid "Next turnpoint"
 msgstr "Sljedeća točka"
 
-#: src/InputEventsActions.cpp:1790
+#: src/InputEventsActions.cpp:1792
 #, fuzzy
 msgid "Task finished"
 msgstr "Zadatak Završen"
 
-#: src/InputEventsActions.cpp:1792
+#: src/InputEventsActions.cpp:1794
 msgid "In sector, arm advance when ready"
 msgstr "U sektoru, 'arm advance' kada si spreman"
 
@@ -2414,13 +2414,33 @@ msgstr ""
 msgid "Quit program?"
 msgstr ""
 
+#: src/Units/UnitsStore.cpp:36
+#, no-c-format
+msgid "European"
+msgstr ""
+
+#: src/Units/UnitsStore.cpp:45
+#, no-c-format
+msgid "British"
+msgstr ""
+
+#: src/Units/UnitsStore.cpp:54
+#, no-c-format
+msgid "American"
+msgstr ""
+
+#: src/Units/UnitsStore.cpp:63
+#, no-c-format
+msgid "Australian"
+msgstr ""
+
 #. Read the terrain file
 #: src/UtilsSettings.cpp:117 src/Components.cpp:327
 msgid "Loading Terrain File..."
 msgstr "Učitavam datoteku terena..."
 
 #. TODO feature: Show the user what the batt status is.
-#: src/Screen/Blank.cpp:82
+#: src/Screen/Blank.cpp:83
 msgid "Organiser Battery Low"
 msgstr ""
 
@@ -2661,7 +2681,7 @@ msgid "Route"
 msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:91
-#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:109
+#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:116
 #: Data/Dialogs/dlgConfiguration.xml:369
 #: Data/Dialogs/dlgConfiguration_L.xml:370
 #, no-c-format
@@ -2741,12 +2761,7 @@ msgstr "InfoBox nalepiti"
 msgid "Invalid"
 msgstr "Fix neispravan"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:225
-#, fuzzy
-msgid "InfoBox Layout"
-msgstr "InfoBox nalepiti"
-
-#: src/Dialogs/dlgConfigInfoboxes.cpp:228 src/Dialogs/dlgWaypointEdit.cpp:52
+#: src/Dialogs/dlgConfigInfoboxes.cpp:225 src/Dialogs/dlgWaypointEdit.cpp:53
 #: Data/Dialogs/dlgAirspaceDetails.xml:8 Data/Dialogs/dlgAirspaceSelect.xml:6
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:8
 #: Data/Dialogs/dlgConfiguration.xml:564 Data/Dialogs/dlgConfiguration.xml:582
@@ -2757,11 +2772,11 @@ msgstr "InfoBox nalepiti"
 msgid "Name"
 msgstr "Ime"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:325
+#: src/Dialogs/dlgConfigInfoboxes.cpp:322
 msgid "Content"
 msgstr ""
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:349 src/Dialogs/dlgInfoBoxAccess.cpp:98
+#: src/Dialogs/dlgConfigInfoboxes.cpp:346 src/Dialogs/dlgInfoBoxAccess.cpp:98
 #: Data/Dialogs/dlgAirspace.xml:4 Data/Dialogs/dlgAirspaceColours.xml:4
 #: Data/Dialogs/dlgAirspaceColours_L.xml:4
 #: Data/Dialogs/dlgAirspaceDetails.xml:4
@@ -2799,22 +2814,23 @@ msgstr ""
 msgid "Close"
 msgstr "Izađi"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:354
+#: src/Dialogs/dlgConfigInfoboxes.cpp:351
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:359
+#: src/Dialogs/dlgConfigInfoboxes.cpp:356
 msgid "Paste"
 msgstr "Zalijepi"
 
-#: src/Dialogs/dlgConfigWaypoints.cpp:79
-msgid "Waypoint not editable"
-msgstr ""
+#: src/Dialogs/dlgConfigWaypoints.cpp:85
+#, fuzzy
+msgid "Waypoints not editable"
+msgstr "Točka promjenjena"
 
 #. TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
 #. gettext(), port added on new line
 #. needed for windows bug
-#: src/Dialogs/dlgConfigWaypoints.cpp:79 src/Dialogs/dlgConfigWaypoints.cpp:89
+#: src/Dialogs/dlgConfigWaypoints.cpp:85
 #: src/Dialogs/dlgWayPointDetails.cpp:279
 #: src/Dialogs/dlgWayPointDetails.cpp:288
 #: src/Dialogs/dlgWayPointDetails.cpp:378
@@ -2828,20 +2844,15 @@ msgstr ""
 msgid "Error"
 msgstr "Greška"
 
-#: src/Dialogs/dlgConfigWaypoints.cpp:89
-#, fuzzy
-msgid "Waypoints not editable"
-msgstr "Točka promjenjena"
-
-#: src/Dialogs/dlgConfigWaypoints.cpp:112
+#: src/Dialogs/dlgConfigWaypoints.cpp:108
 msgid "Delete Waypoint?"
 msgstr "Briši Točku?"
 
-#: src/Dialogs/dlgConfigWaypoints.cpp:147
+#: src/Dialogs/dlgConfigWaypoints.cpp:143
 msgid "Save changes to waypoint file?"
 msgstr "Spremi promjene u dat. točaka?"
 
-#: src/Dialogs/dlgConfigWaypoints.cpp:147
+#: src/Dialogs/dlgConfigWaypoints.cpp:143
 msgid "Waypoints edited"
 msgstr "Točka promjenjena"
 
@@ -3099,7 +3110,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:71
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:79
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:87
-#: src/Dialogs/dlgWaypointEdit.cpp:53 src/Dialogs/dlgWaypointEdit.cpp:59
+#: src/Dialogs/dlgWaypointEdit.cpp:54 src/Dialogs/dlgWaypointEdit.cpp:60
 msgid "(blank)"
 msgstr ""
 
@@ -3180,18 +3191,18 @@ msgid "Use the current target waypoint as basis."
 msgstr ""
 
 #. let the user select
-#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:168
+#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:175
 #, fuzzy
 msgid "Load Polar"
 msgstr "polara"
 
-#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:212
+#: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:219
 #, fuzzy
 msgid "Load Polar From File"
 msgstr "Datoteka polare"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:49
-#: src/Dialogs/dlgTaskHelpers.cpp:243
+#: src/Dialogs/dlgTaskHelpers.cpp:246
 msgid "Line"
 msgstr "Linija"
 
@@ -3297,55 +3308,55 @@ msgstr "Siva"
 msgid "Unit Presets"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:204
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:231
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:201
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:228
 msgid "mph"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:205
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:232
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:269
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:202
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:229
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:266
 msgid "knots"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:206
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:233
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:203
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:230
 msgid "km/h"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:241
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:238
 msgid "sm"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:242
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:239
 msgid "nm"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:243
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:240
 msgid "km"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:251
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:248
 msgid "foot"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:252
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:249
 msgid "meter"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:260
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:257
 msgid "C"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:261
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:258
 msgid "F"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:270
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:267
 msgid "m/s"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:271
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:268
 msgid "ft/min"
 msgstr ""
 
@@ -3476,6 +3487,15 @@ msgstr ""
 #: Data/Dialogs/dlgTaskManager_L.xml:3
 msgid "Task Manager"
 msgstr ""
+
+#: src/Dialogs/pnlTaskManagerClose.cpp:45
+msgid "Task has been modified"
+msgstr ""
+
+#: src/Dialogs/pnlTaskManagerClose.cpp:45
+#, fuzzy
+msgid "Task unchanged"
+msgstr "Zadatak objavljen"
 
 #: src/Dialogs/pnlTaskEdit.cpp:96
 msgid "Clear task?"
@@ -3653,241 +3673,243 @@ msgstr ""
 msgid "Task is empty (%s)"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:177
-#, c-format
-msgid "%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"
+#: src/Dialogs/dlgTaskHelpers.cpp:183
+msgid "max."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:190
-#, c-format
-msgid "%s%sdist. %.0f %s (%s)"
+#: src/Dialogs/dlgTaskHelpers.cpp:187
+msgid "min."
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:207 src/Dialogs/dlgTaskHelpers.cpp:460
+#: src/Dialogs/dlgTaskHelpers.cpp:195
+msgid "dist."
+msgstr ""
+
+#: src/Dialogs/dlgTaskHelpers.cpp:210 src/Dialogs/dlgTaskHelpers.cpp:463
 msgid "FAI quadrant"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:213
+#: src/Dialogs/dlgTaskHelpers.cpp:216
 msgid "Keyhole"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:219
+#: src/Dialogs/dlgTaskHelpers.cpp:222
 msgid "BGAFixedCourse"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:225
+#: src/Dialogs/dlgTaskHelpers.cpp:228
 msgid "BGAEnhancedOption"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:231 src/Dialogs/dlgTaskHelpers.cpp:458
+#: src/Dialogs/dlgTaskHelpers.cpp:234 src/Dialogs/dlgTaskHelpers.cpp:461
 msgid "BGA start sector"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:237
+#: src/Dialogs/dlgTaskHelpers.cpp:240
 msgid "Sector"
 msgstr "Sektor"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:249
+#: src/Dialogs/dlgTaskHelpers.cpp:252
 msgid "Cylinder"
 msgstr "Cilindar"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:269
+#: src/Dialogs/dlgTaskHelpers.cpp:272
 msgid "FAI"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:274
+#: src/Dialogs/dlgTaskHelpers.cpp:277
 msgid "DAeC"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:280
+#: src/Dialogs/dlgTaskHelpers.cpp:283
 msgid "BGA"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:286
+#: src/Dialogs/dlgTaskHelpers.cpp:289
 msgid "BGAE"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:292
+#: src/Dialogs/dlgTaskHelpers.cpp:295
 msgid "BGA-S"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:412
+#: src/Dialogs/dlgTaskHelpers.cpp:415
 msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:414
+#: src/Dialogs/dlgTaskHelpers.cpp:417
 msgid "A straight line.  Cross line from inside area to start"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:416
+#: src/Dialogs/dlgTaskHelpers.cpp:419
 msgid "A cylinder.  Exit area to start"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:418
+#: src/Dialogs/dlgTaskHelpers.cpp:421
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:420
+#: src/Dialogs/dlgTaskHelpers.cpp:423
 msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:422
+#: src/Dialogs/dlgTaskHelpers.cpp:425
 msgid "A cylinder.  Any point within area scored from center"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:424
+#: src/Dialogs/dlgTaskHelpers.cpp:427
 msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:426
+#: src/Dialogs/dlgTaskHelpers.cpp:429
 msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:428
+#: src/Dialogs/dlgTaskHelpers.cpp:431
 msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:430
+#: src/Dialogs/dlgTaskHelpers.cpp:433
 msgid "A cylinder.  Scored by farthest point reached in area"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:432
+#: src/Dialogs/dlgTaskHelpers.cpp:435
 msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:434
+#: src/Dialogs/dlgTaskHelpers.cpp:437
 msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:436
+#: src/Dialogs/dlgTaskHelpers.cpp:439
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:438
+#: src/Dialogs/dlgTaskHelpers.cpp:441
 msgid "Cross line into area to finish"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:440
+#: src/Dialogs/dlgTaskHelpers.cpp:443
 msgid "Enter cylinder to finish"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:452
+#: src/Dialogs/dlgTaskHelpers.cpp:455
 msgid "FAI start quadrant"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:454
+#: src/Dialogs/dlgTaskHelpers.cpp:457
 msgid "Start line"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:456
+#: src/Dialogs/dlgTaskHelpers.cpp:459
 msgid "Start cylinder"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:462
+#: src/Dialogs/dlgTaskHelpers.cpp:465
 msgid "Keyhole sector (DAeC)"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:464
+#: src/Dialogs/dlgTaskHelpers.cpp:467
 msgid "BGA Fixed Course sector"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:466
+#: src/Dialogs/dlgTaskHelpers.cpp:469
 msgid "BGA Enhanced Option Fixed Course sector"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:468
+#: src/Dialogs/dlgTaskHelpers.cpp:471
 msgid "Turn point cylinder"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:470
+#: src/Dialogs/dlgTaskHelpers.cpp:473
 msgid "Area cylinder"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:472
+#: src/Dialogs/dlgTaskHelpers.cpp:475
 msgid "Area sector"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:474
+#: src/Dialogs/dlgTaskHelpers.cpp:477
 msgid "Area sector with inner radius"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:476
+#: src/Dialogs/dlgTaskHelpers.cpp:479
 #, fuzzy
 msgid "FAI finish quadrant"
 msgstr "FAI visina Cilja"
 
-#: src/Dialogs/dlgTaskHelpers.cpp:478
+#: src/Dialogs/dlgTaskHelpers.cpp:481
 msgid "Finish line"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:480
+#: src/Dialogs/dlgTaskHelpers.cpp:483
 msgid "Finish cylinder"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:493
+#: src/Dialogs/dlgTaskHelpers.cpp:496
 msgid "Save task?"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:493
+#: src/Dialogs/dlgTaskHelpers.cpp:496
 msgid "Task Selection"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:529
+#: src/Dialogs/dlgTaskHelpers.cpp:532
 msgid "No valid start.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:532
+#: src/Dialogs/dlgTaskHelpers.cpp:535
 msgid "No valid finish.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:535
+#: src/Dialogs/dlgTaskHelpers.cpp:538
 msgid "Task not closed.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:538
+#: src/Dialogs/dlgTaskHelpers.cpp:541
 msgid "All turnpoints not the same type.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:541
+#: src/Dialogs/dlgTaskHelpers.cpp:544
 msgid "Incorrect number of turnpoints.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:544
+#: src/Dialogs/dlgTaskHelpers.cpp:547
 msgid "Too many turnpoints.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:547
+#: src/Dialogs/dlgTaskHelpers.cpp:550
 msgid "Not enough turnpoints.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:550
+#: src/Dialogs/dlgTaskHelpers.cpp:553
 msgid "Turnpoints not unique.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:553
+#: src/Dialogs/dlgTaskHelpers.cpp:556
 msgid "Invalid FAI triangle shape.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:556
+#: src/Dialogs/dlgTaskHelpers.cpp:559
 msgid "Empty task.\n"
 msgstr ""
 
-#: src/Dialogs/dlgTaskHelpers.cpp:559
+#: src/Dialogs/dlgTaskHelpers.cpp:562
 #, fuzzy
 msgid "non-FAI turn points"
 msgstr "Sljedeća točka"
@@ -3947,7 +3969,7 @@ msgstr ""
 msgid "Remove from task"
 msgstr "Ukloni iz zadatka"
 
-#: src/Dialogs/dlgWaypointEdit.cpp:57 Data/Dialogs/dlgWayPointDetails.xml:12
+#: src/Dialogs/dlgWaypointEdit.cpp:58 Data/Dialogs/dlgWayPointDetails.xml:12
 #: Data/Dialogs/dlgWayPointDetails_L.xml:12 Data/Dialogs/dlgWaypointEdit.xml:8
 #: Data/Dialogs/dlgWaypointEdit_L.xml:8
 msgid "Comment"
@@ -7616,6 +7638,10 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Sletio"
+
+#, fuzzy
+#~ msgid "InfoBox Layout"
+#~ msgstr "InfoBox nalepiti"
 
 #~ msgid "Cruise"
 #~ msgstr "Preskok"
