@@ -148,7 +148,7 @@ TestBorgeltB50()
   ok1(equals(nmea_info.IndicatedAirspeed, 57.15892189196558));
   ok1(nmea_info.TotalEnergyVarioAvailable);
   ok1(equals(nmea_info.TotalEnergyVario, -0.5658888888888889));
-  ok1(nmea_info.settings.mac_cready);
+  ok1(nmea_info.settings.mac_cready_available);
   ok1(equals(nmea_info.settings.mac_cready, 0.5144444444444444));
   ok1(nmea_info.SwitchState.FlightMode == SWITCH_INFO::MODE_CIRCLING);
   ok1(nmea_info.TemperatureAvailable);
