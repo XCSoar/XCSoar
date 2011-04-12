@@ -174,7 +174,6 @@ const TCHAR szProfileVarioGauge[] = _T("VarioGauge");
 
 const TCHAR szProfileDebounceTimeout[] = _T("DebounceTimeout");
 
-const TCHAR szProfileAppIndFinalGlide[] = _T("AppIndFinalGlide");
 const TCHAR szProfileAppIndLandable[] = _T("AppIndLandable");
 const TCHAR szProfileAppUseSWLandablesRendering[] = _T("AppUseSWLandablesRendering");
 const TCHAR szProfileAppLandableRenderingScale[] = _T("AppLandableRenderingScale");

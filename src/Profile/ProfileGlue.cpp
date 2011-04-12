@@ -315,9 +315,6 @@ Profile::Use()
   */
 
   // new appearance variables
-
-  //Temp = Appearance.IndFinalGlide;
-  GetEnum(szProfileAppIndFinalGlide, Appearance.IndFinalGlide);
   GetEnum(szProfileAppIndLandable, Appearance.IndLandable);
 
   Get(szProfileAppUseSWLandablesRendering,

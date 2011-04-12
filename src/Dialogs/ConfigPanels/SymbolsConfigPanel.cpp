@@ -42,16 +42,6 @@ SymbolsConfigPanel::Init(WndForm *_wf)
   wf = _wf;
   WndProperty *wp;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppIndFinalGlide"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Default"));
-    dfe->addEnumText(_("Alternate"));
-    dfe->Set(Appearance.IndFinalGlide);
-    wp->RefreshDisplay();
-  }
-
   wp = (WndProperty*)wf->FindByName(_T("prpWindArrowStyle"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -130,15 +120,6 @@ SymbolsConfigPanel::Save()
 {
   bool changed = false;
   WndProperty *wp;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppIndFinalGlide"));
-  if (wp) {
-    if (Appearance.IndFinalGlide != (IndFinalGlide_t)(wp->GetDataField()->GetAsInteger())) {
-      Appearance.IndFinalGlide = (IndFinalGlide_t)(wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppIndFinalGlide, Appearance.IndFinalGlide);
-      changed = true;
-    }
-  }
 
   changed |= SaveFormProperty(*wf, _T("prpWindArrowStyle"),
                               szProfileWindArrowStyle,

@@ -24,7 +24,6 @@ Copyright_License {
 #include "Appearance.hpp"
 
 struct Appearance Appearance = {
-  fgFinalGlideDefault,
   wpLandableWinPilot,
   false,
   smAlignCenter,

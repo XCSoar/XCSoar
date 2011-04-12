@@ -25,11 +25,6 @@ Copyright_License {
 #define APPEARANCE_H
 
 typedef enum {
-  fgFinalGlideDefault = 0,
-  fgFinalGlideAltA,
-} IndFinalGlide_t;
-
-typedef enum {
   wpLandableWinPilot = 0,
   wpLandableAltA,
   wpLandableAltB,
@@ -66,7 +61,6 @@ typedef enum {
 } AircraftSymbol_t;
 
 struct Appearance {
-  IndFinalGlide_t IndFinalGlide;
   IndLandable_t IndLandable;
   bool InverseInfoBox;
   StateMessageAlign_t StateMessageAlign;

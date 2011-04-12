@@ -251,55 +251,24 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
                   Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 - 5));
     }
 
-    if (Appearance.IndFinalGlide == fgFinalGlideDefault) {
-      Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.AltitudeDifference,
-                                Value, sizeof(Value) / sizeof(Value[0]),
-                                false);
+    Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.AltitudeDifference,
+                              Value, sizeof(Value) / sizeof(Value[0]),
+                              false);
 
-      if (Offset >= 0)
-        Offset = GlideBar[2].y + Offset + IBLSCALE(5);
-      else if (Offset0 > 0)
-        Offset = GlideBar0[1].y - IBLSCALE(15);
-      else
-        Offset = GlideBar[2].y + Offset - IBLSCALE(15);
+    if (Offset >= 0)
+      Offset = GlideBar[2].y + Offset + IBLSCALE(5);
+    else if (Offset0 > 0)
+      Offset = GlideBar0[1].y - IBLSCALE(15);
+    else
+      Offset = GlideBar[2].y + Offset - IBLSCALE(15);
 
-      canvas.set_text_color(Color::BLACK);
-      canvas.set_background_color(Color::WHITE);
+    canvas.set_text_color(Color::BLACK);
+    canvas.set_background_color(Color::WHITE);
 
-      TextInBoxMode_t TextInBoxMode;
-      TextInBoxMode.Mode = RoundedBlack;
-      TextInBoxMode.Bold = true;
-      TextInBox(canvas, Value, 0, (int)Offset, TextInBoxMode, rc);
-
-    } else if (Appearance.IndFinalGlide == fgFinalGlideAltA) {
-
-      int y = GlideBar[3].y;
-      // was ((rc.bottom - rc.top )/2)-rc.top-
-      //            Appearance.MapWindowBoldFont.CapitalHeight/2-1;
-      int x = GlideBar[2].x + IBLSCALE(1);
-
-      Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.AltitudeDifference,
-                                Value, sizeof(Value) / sizeof(Value[0]), false);
-
-      canvas.select(Fonts::MapBold);
-      PixelSize TextSize = canvas.text_size(Value);
-
-      canvas.fill_rectangle(x, y, x + IBLSCALE(1) + TextSize.cx,
-                            y + Fonts::MapBold.get_capital_height() + IBLSCALE(2),
-                            Color::WHITE);
-
-      canvas.set_text_color(Color::BLACK);
-      canvas.set_background_color(Color::WHITE);
-      canvas.text(x + IBLSCALE(1),
-                  y + Fonts::MapBold.get_capital_height() -
-                  Fonts::MapBold.get_ascent_height() + IBLSCALE(1), Value);
-
-      const UnitSymbol *unit_symbol = GetUnitSymbol(
-        Units::GetUserAltitudeUnit());
-
-      if (unit_symbol != NULL)
-        unit_symbol->draw(canvas, x + TextSize.cx + IBLSCALE(1), y);
-    }
+    TextInBoxMode_t TextInBoxMode;
+    TextInBoxMode.Mode = RoundedBlack;
+    TextInBoxMode.Bold = true;
+    TextInBox(canvas, Value, 0, (int)Offset, TextInBoxMode, rc);
   }
 }
 

@@ -92,10 +92,6 @@
     </Panel>
 
     <Panel>
-      <Edit Name="prpAppIndFinalGlide" Caption="Final glide bar" X="2" Width="-2" Height="22" CaptionWidth="150">
-        <DataField DataType="enum"/>
-      </Edit>
-
       <Edit Name="prpDisplayTrackBearing" Caption="Track bearing" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Display the track bearing (ground track projection) on the map.&#10;[Off] Disable display of track bearing.&#10;[On] Always display track bearing.&#10;[Auto] Display track bearing if there is a significant difference to plane heading.">
         <DataField DataType="enum"/>
