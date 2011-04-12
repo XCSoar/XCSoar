@@ -134,7 +134,6 @@ TestGeneric()
 static void
 TestCAI302()
 {
-  NMEAParser parser;
 
   Device *device = cai302Device.CreateOnPort(NULL);
   ok1(device != NULL);
@@ -193,8 +192,6 @@ TestCAI302()
 static void
 TestFlymasterF1()
 {
-  NMEAParser parser;
-
   Device *device = flymasterf1Device.CreateOnPort(NULL);
   ok1(device != NULL);
 
@@ -334,8 +331,6 @@ TestWesterboer()
 static void
 TestZander()
 {
-  NMEAParser parser;
-
   Device *device = zanderDevice.CreateOnPort(NULL);
   ok1(device != NULL);
 
