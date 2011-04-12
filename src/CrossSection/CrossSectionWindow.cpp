@@ -89,31 +89,23 @@ public:
     int border_width = Layout::Scale(10);
     if ((rc.right - rc.left) > border_width * 2 &&
         (rc.bottom - rc.top) > border_width * 2) {
-      PixelRect rc_brush = rc;
+      PixelRect border = rc;
+      border.left += border_width;
+      border.right -= border_width;
+      border.top += border_width;
+      border.bottom -= border_width;
 
       // Left border
-      rc_brush.right = rc.left + border_width;
-      canvas.rectangle(rc_brush.left, rc_brush.top,
-                       rc_brush.right, rc_brush.bottom);
-      rc_brush.right = rc.right;
+      canvas.rectangle(rc.left, rc.top, border.left, rc.bottom);
 
       // Right border
-      rc_brush.left = rc.right - border_width;
-      canvas.rectangle(rc_brush.left, rc_brush.top,
-                       rc_brush.right, rc_brush.bottom);
-      rc_brush.left = rc.left;
+      canvas.rectangle(border.right, rc.top, rc.right, rc.bottom);
 
       // Bottom border
-      rc_brush.top = rc.bottom - border_width;
-      canvas.rectangle(rc_brush.left, rc_brush.top,
-                       rc_brush.right, rc_brush.bottom);
-      rc_brush.top = rc.top;
+      canvas.rectangle(border.left, border.bottom, border.right, rc.bottom);
 
       // Top border
-      rc_brush.bottom = rc.top + border_width;
-      canvas.rectangle(rc_brush.left, rc_brush.top,
-                       rc_brush.right, rc_brush.bottom);
-      rc_brush.bottom = rc.bottom;
+      canvas.rectangle(border.left, rc.top, border.right, border.top);
     } else {
       // .. or fill the entire rect if the outlines would overlap
       canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
