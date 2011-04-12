@@ -25,6 +25,7 @@ my %languages = (
     POL => 'pl',
     PTB => 'pt_BR',
     POR => 'pt',
+    RUS => 'ru',
     SRB => 'sr',
     SWE => 'sv',
 );
