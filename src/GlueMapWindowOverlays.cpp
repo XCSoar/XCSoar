@@ -420,12 +420,14 @@ GlueMapWindow::DrawHorizon(Canvas &canvas, const PixelRect &rc) const
   canvas.line(Start.x + rr2p, Start.y - rr2p, Start.x + rr2n, Start.y - rr2n);
   canvas.line(Start.x - rr2p, Start.y - rr2p, Start.x - rr2n, Start.y - rr2n);
 
-  // JMW experimental, display stall sensor
-  fixed s = max(fixed_zero, min(fixed_one, Basic().StallRatio));
-  long m = (long)((rc.bottom - rc.top) * s * s);
+  if (Basic().StallRatioAvailable) {
+    // JMW experimental, display stall sensor
+    fixed s = max(fixed_zero, min(fixed_one, Basic().StallRatio));
+    long m = (long)((rc.bottom - rc.top) * s * s);
 
-  canvas.black_pen();
-  canvas.line(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);
+    canvas.black_pen();
+    canvas.line(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);
+  }
 }
 
 void

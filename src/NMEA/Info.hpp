@@ -362,6 +362,7 @@ struct NMEA_INFO {
   SWITCH_INFO SwitchState;
 
   fixed StallRatio;
+  Validity StallRatioAvailable;
 
   FLARM_STATE flarm;
 

@@ -117,6 +117,8 @@ NMEA_INFO::reset()
   SwitchStateAvailable = false;
   SwitchState.reset();
 
+  StallRatioAvailable.clear();
+
   // XXX StallRatio
 
   flarm.clear();
@@ -238,6 +240,9 @@ NMEA_INFO::complement(const NMEA_INFO &add)
 
   if (!SwitchStateAvailable && add.SwitchStateAvailable)
     SwitchState = add.SwitchState;
+
+  if (!StallRatioAvailable && add.StallRatioAvailable)
+    StallRatio = add.StallRatio;
 
   flarm.complement(add.flarm);
 }

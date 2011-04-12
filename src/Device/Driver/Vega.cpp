@@ -266,6 +266,7 @@ PDVDS(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   line.skip();
 
   GPS_INFO->StallRatio = line.read(fixed_zero);
+  GPS_INFO->StallRatioAvailable.update(GPS_INFO->Time);
 
   fixed value;
   if (line.read_checked(value))
