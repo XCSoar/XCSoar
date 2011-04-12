@@ -29,15 +29,20 @@ Copyright_License {
 #include <windows.h>
 
 int
-TimeLocal(int localtime)
+TimeLocal(int localtime, int utc_offset)
 {
-  localtime += GetUTCOffset();
+  localtime += utc_offset;
 
-  if (localtime < 0) {
+  if (localtime < 0)
     localtime += 3600 * 24;
-  }
 
   return localtime;
+}
+
+int
+TimeLocal(int localtime)
+{
+  return TimeLocal(localtime, GetUTCOffset());
 }
 
 int
