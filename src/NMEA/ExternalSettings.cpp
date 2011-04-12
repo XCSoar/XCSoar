@@ -77,7 +77,7 @@ ExternalSettings::ProvideMacCready(fixed value, fixed time)
 bool
 ExternalSettings::ProvideBallast(fixed value, fixed time)
 {
-  if (ballast_available && fabs(ballast - value) <= fixed_one)
+  if (ballast_available && fabs(ballast - value) <= fixed(0.01))
     return false;
 
   ballast = value;
@@ -88,7 +88,7 @@ ExternalSettings::ProvideBallast(fixed value, fixed time)
 bool
 ExternalSettings::ProvideBugs(fixed value, fixed time)
 {
-  if (bugs_available && fabs(bugs - value) <= fixed_one)
+  if (bugs_available && fabs(bugs - value) <= fixed(0.01))
     return false;
 
   bugs = value;
