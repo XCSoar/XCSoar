@@ -25,7 +25,7 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
-#include "UnitsFormatter.hpp"
+#include "Units/UnitsFormatter.hpp"
 #include "Util/StringUtil.hpp"
 
 #include <tchar.h>

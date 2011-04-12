@@ -24,8 +24,8 @@ Copyright_License {
 #include "Profile/UnitsConfig.hpp"
 
 #include "Profile/Profile.hpp"
-#include "Units.hpp"
-#include "UnitsGlue.hpp"
+#include "Units/Units.hpp"
+#include "Units/UnitsGlue.hpp"
 
 void
 Profile::LoadUnits()

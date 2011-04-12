@@ -26,7 +26,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
-#include "Units.hpp"
+#include "Units/Units.hpp"
 
 #include <stdlib.h>
 

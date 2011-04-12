@@ -242,8 +242,8 @@ $(TARGET_BIN_DIR)/TestProjection$(TARGET_EXEEXT): $(TEST_PROJECTION_OBJS) $(TEST
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_UNITS_SOURCES = \
-	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestUnits.cpp
 TEST_UNITS_OBJS = $(call SRC_TO_OBJ,$(TEST_UNITS_SOURCES))
@@ -254,7 +254,7 @@ $(TARGET_BIN_DIR)/TestUnits$(TARGET_EXEEXT): $(TEST_UNITS_OBJS) $(TEST_UNITS_LDA
 
 TEST_POLARS_SOURCES = \
 	$(SRC)/Profile/ProfileKeys.cpp \
-	$(SRC)/Units.cpp \
+	$(SRC)/Units/Units.cpp \
 	$(SRC)/Polar/Polar.cpp \
 	$(SRC)/Polar/PolarFileGlue.cpp \
 	$(SRC)/Polar/PolarStore.cpp \
@@ -438,8 +438,8 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Math/Angle.cpp \
-	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
@@ -458,8 +458,8 @@ $(TARGET_BIN_DIR)/TestDriver$(TARGET_EXEEXT): $(TEST_DRIVER_OBJS) $(TEST_DRIVER_
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_WAY_POINT_FILE_SOURCES = \
-	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Poco/RWLock.cpp \
@@ -769,8 +769,8 @@ LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/WindowProjection.cpp \
-	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
 	$(TEST_SRC_DIR)/LoadTopography.cpp
@@ -862,8 +862,8 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
-	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
@@ -884,8 +884,8 @@ $(TARGET_BIN_DIR)/RunWayPointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS
 
 RUN_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
-	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
@@ -906,7 +906,7 @@ $(TARGET_BIN_DIR)/RunAirspaceParser$(TARGET_EXEEXT): $(RUN_AIRSPACE_PARSER_OBJS)
 RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/UtilsText.cpp \
-	$(SRC)/Units.cpp \
+	$(SRC)/Units/Units.cpp \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/NullPort.cpp \
 	$(SRC)/Device/Driver.cpp \
@@ -940,7 +940,7 @@ $(TARGET_BIN_DIR)/RunDeviceDriver$(TARGET_EXEEXT): $(RUN_DEVICE_DRIVER_OBJS) $(R
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_DECLARE_SOURCES = \
-	$(SRC)/Units.cpp \
+	$(SRC)/Units/Units.cpp \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
@@ -988,7 +988,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/State.cpp \
-	$(SRC)/Units.cpp \
+	$(SRC)/Units/Units.cpp \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/NullPort.cpp \
 	$(SRC)/Device/Driver.cpp \
@@ -1027,8 +1027,8 @@ $(TARGET_BIN_DIR)/RunIGCWriter$(TARGET_EXEEXT): $(RUN_IGC_WRITER_OBJS) $(RUN_IGC
 
 RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
-	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/NullPort.cpp \
 	$(SRC)/Device/Driver.cpp \
@@ -1161,8 +1161,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Topography/TopographyRenderer.cpp \
 	$(SRC)/Topography/TopographyGlue.cpp \
 	$(SRC)/Topography/XShape.cpp \
-	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Profile/Profile.cpp \
@@ -1258,8 +1258,8 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Projection.cpp \
-	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -1341,8 +1341,8 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapCanvas.cpp \
-	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
@@ -1429,8 +1429,8 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Appearance.cpp \
-	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
@@ -1509,8 +1509,8 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
-	$(SRC)/Units.cpp \
-	$(SRC)/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/WayPointGlue.cpp \
 	$(SRC)/WayPointFile.cpp \
 	$(SRC)/WayPointFileWinPilot.cpp \

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "UnitsFormatter.hpp"
+#include "Units/UnitsFormatter.hpp"
 #include "Interface.hpp"
 
 #include "Components.hpp"

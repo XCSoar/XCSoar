@@ -25,7 +25,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
-#include "Units.hpp"
+#include "Units/Units.hpp"
 
 #include <math.h>
 #include <stdlib.h> /* for abs() */

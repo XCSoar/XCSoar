@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_UTIL_HPP
 #define XCSOAR_FORM_UTIL_HPP
 
-#include "Units.hpp"
+#include "Units/Units.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>

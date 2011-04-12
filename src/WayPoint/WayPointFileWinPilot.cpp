@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "WayPointFileWinPilot.hpp"
-#include "Units.hpp"
+#include "Units/Units.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "IO/TextWriter.hpp"
 

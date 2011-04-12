@@ -34,7 +34,7 @@
 #include "Airspace/AirspacePolygon.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Units.hpp"
+#include "Units/Units.hpp"
 #include "NMEA/Aircraft.hpp"
 
 #ifdef ENABLE_OPENGL

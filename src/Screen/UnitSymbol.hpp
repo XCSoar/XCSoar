@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_UNIT_SYMBOL_HPP
 #define XCSOAR_SCREEN_UNIT_SYMBOL_HPP
 
-#include "Units.hpp"
+#include "Units/Units.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Point.hpp"
 

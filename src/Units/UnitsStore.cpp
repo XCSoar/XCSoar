@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "UnitsStore.hpp"
-#include "Units.hpp"
+#include "Units/UnitsStore.hpp"
+#include "Units/Units.hpp"
 #include "Language.hpp"
 
 struct UnitStoreItem

@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "UnitsGlue.hpp"
-#include "Units.hpp"
-#include "UnitsStore.hpp"
+#include "Units/UnitsGlue.hpp"
+#include "Units/Units.hpp"
+#include "Units/UnitsStore.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
 

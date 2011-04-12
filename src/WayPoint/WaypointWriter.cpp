@@ -25,7 +25,7 @@ Copyright_License {
 
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "IO/TextWriter.hpp"
-#include "Units.hpp"
+#include "Units/Units.hpp"
 
 void
 WaypointWriter::Save(TextWriter &writer)

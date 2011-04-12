@@ -25,7 +25,7 @@ Copyright_License {
 // - check buffer size in LongitudeToString and LatiditudeToString
 // - unit dialog support
 
-#include "Units.hpp"
+#include "Units/Units.hpp"
 #include "Math/Angle.hpp"
 
 #include <stdlib.h>

@@ -23,7 +23,7 @@
 #include "WayPoint/WayPointFile.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "Units.hpp"
+#include "Units/Units.hpp"
 #include "TestUtil.hpp"
 #include "tstring.hpp"
 

@@ -34,7 +34,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Terrain/RasterWeather.hpp"
-#include "UnitsFormatter.hpp"
+#include "Units/UnitsFormatter.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include <stdio.h>
 

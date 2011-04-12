@@ -390,10 +390,10 @@ XCSOAR_SOURCES := \
 	$(SRC)/Interface.cpp \
 	$(SRC)/ProgressGlue.cpp \
 	$(SRC)/LocalTime.cpp \
-	$(SRC)/Units.cpp \
-	$(SRC)/UnitsGlue.cpp \
-	$(SRC)/UnitsStore.cpp \
-	$(SRC)/UnitsFormatter.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsGlue.cpp \
+	$(SRC)/Units/UnitsStore.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/FLARM/FlarmDetails.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSettings.cpp \

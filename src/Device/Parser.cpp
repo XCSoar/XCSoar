@@ -34,7 +34,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "InputEvents.hpp"
 #include "Compatibility/string.h" /* for _ttoi() */
-#include "Units.hpp"
+#include "Units/Units.hpp"
 
 #include <math.h>
 #include <ctype.h>

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_INFO_BOX_HPP
 #define XCSOAR_INFO_BOX_HPP
 
-#include "Units.hpp"
+#include "Units/Units.hpp"
 #include "InfoBoxes/Content/Base.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "PeriodClock.hpp"

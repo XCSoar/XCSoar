@@ -49,7 +49,7 @@ Copyright_License {
 #include "Compatibility/path.h"
 #include "InputEvents.hpp"
 #include "NMEA/Aircraft.hpp"
-#include "UnitsFormatter.hpp"
+#include "Units/UnitsFormatter.hpp"
 
 #include <assert.h>
 #include <stdio.h>
