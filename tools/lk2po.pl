@@ -30,6 +30,11 @@ my %languages = (
     SWE => 'sv',
 );
 
+sub fold_english($) {
+    my $value = shift;
+    return lc $value;
+}
+
 sub load_msg($$) {
     my $encoding = shift;
     my $path = shift;
@@ -101,6 +106,8 @@ foreach my $lng (keys %languages) {
         next unless length $translated;
         next if $english eq $translated;
 
+        $english = fold_english($english);
+
         # store in table
         $table{$english} = $translated;
 
@@ -129,6 +136,8 @@ foreach my $lng (keys %languages) {
         my $translated = $translated{$key};
         next unless defined $translated;
         next if $english eq $translated;
+
+        $english = fold_english($english);
 
         # store in table
         $table{$english} = $translated;
@@ -163,9 +172,9 @@ foreach my $lng (keys %languages) {
         next unless length $msgid;
         my $msgstr = eval $x->msgstr;
         next if length $msgstr and not $x->fuzzy;
-        next unless exists $table{$msgid};
+        next unless exists $table{fold_english $msgid};
 
-        my $z = $table{$msgid};
+        my $z = $table{fold_english $msgid};
 
         # escape special characters
         $z =~ s/\n/\\n/g;
