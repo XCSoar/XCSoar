@@ -245,7 +245,7 @@ LXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   // Bugs
   if (line.read_checked(value))
-    GPS_INFO->settings.ProvideBugs(fixed(100) - value, GPS_INFO->Time);
+    GPS_INFO->settings.ProvideBugs((fixed(100) - value) / 100, GPS_INFO->Time);
 
   return true;
 }
