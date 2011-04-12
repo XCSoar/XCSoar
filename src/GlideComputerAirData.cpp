@@ -600,7 +600,7 @@ GlideComputerAirData::TerrainHeight()
   const NMEA_INFO &basic = Basic();
   TERRAIN_ALT_INFO &calculated = SetCalculated();
 
-  if (terrain == NULL) {
+  if (!basic.LocationAvailable || terrain == NULL) {
     calculated.TerrainValid = false;
     calculated.TerrainAlt = fixed_zero;
     calculated.AltitudeAGLValid = false;

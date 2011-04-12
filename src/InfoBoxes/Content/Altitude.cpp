@@ -123,7 +123,7 @@ InfoBoxContentAltitude::PnlInfoUpdate()
       ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltGPS")))->SetText(sTmp);
   }
 
-  if (!basic.LocationAvailable || !calculated.TerrainValid){
+  if (!calculated.TerrainValid){
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTerrain")))->SetText(_("N/A"));
   } else {
     // Set Value
@@ -507,11 +507,10 @@ InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTerrainHeight::Update(InfoBoxWindow &infobox)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
   const DERIVED_INFO &calculated = CommonInterface::Calculated();
   TCHAR sTmp[32];
 
-  if (!basic.LocationAvailable || !calculated.TerrainValid){
+  if (!calculated.TerrainValid){
     infobox.SetInvalid();
     return;
   }
