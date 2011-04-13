@@ -373,10 +373,6 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                             const ContestStatistics &contest,
                             const TracePointVector& trace) const
 {
-  // note: braces used here just to delineate separate main steps of
-  // this function.  It's useful to ensure things are done in the right
-  // order rather than having a monolithic block of code.
-
   if (trace.size() < 2) {
     Chart chart(canvas, rc);
     chart.DrawNoData();
