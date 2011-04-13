@@ -50,6 +50,7 @@ static const struct {
   enum DeviceConfig::port_type type;
   const TCHAR *label;
 } port_types[] = {
+  { DeviceConfig::DISABLED, N_("Disabled") },
 #ifdef _WIN32_WCE
   { DeviceConfig::AUTO, N_("GPS Intermediate Driver") },
 #endif
@@ -224,6 +225,7 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
       dfe->Set(config.port_index + num_port_types);
       break;
 
+    case DeviceConfig::DISABLED:
     case DeviceConfig::RFCOMM:
     case DeviceConfig::AUTO:
     case DeviceConfig::INTERNAL:

@@ -126,6 +126,9 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
   TCHAR buffer[MAX_PATH];
 
   switch (config.port_type) {
+  case DeviceConfig::DISABLED:
+    return NULL;
+
   case DeviceConfig::SERIAL:
     path = COMMPort[config.port_index];
     break;
@@ -241,6 +244,9 @@ static bool
 DeviceConfigAvailable(const DeviceConfig &config)
 {
   switch (config.port_type) {
+  case DeviceConfig::DISABLED:
+    return false;
+
   case DeviceConfig::SERIAL:
     return !is_android();
 
@@ -276,6 +282,7 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
     return b.port_type == DeviceConfig::RFCOMM &&
       a.bluetooth_mac.equals(b.bluetooth_mac);
 
+  case DeviceConfig::DISABLED:
   case DeviceConfig::AUTO:
   case DeviceConfig::INTERNAL:
     break;

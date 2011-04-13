@@ -44,6 +44,9 @@ MakeDeviceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n,
 static enum DeviceConfig::port_type
 StringToPortType(const TCHAR *value)
 {
+  if (_tcscmp(value, _T("disabled")) == 0)
+    return DeviceConfig::DISABLED;
+
   if (_tcscmp(value, _T("serial")) == 0)
     return DeviceConfig::SERIAL;
 
@@ -69,9 +72,11 @@ ReadPortType(unsigned n)
 
   MakeDeviceSettingName(name, _T("Port"), n, _T("Type"));
   if (!Profile::Get(name, value, sizeof(value) / sizeof(value[0])))
-    return is_android()
-      ? DeviceConfig::INTERNAL
-      : DeviceConfig::SERIAL;
+    return n == 0
+      ? (is_android()
+         ? DeviceConfig::INTERNAL
+         : DeviceConfig::SERIAL)
+      : DeviceConfig::DISABLED;
 
   return StringToPortType(value);
 }
@@ -124,6 +129,9 @@ static const TCHAR *
 PortTypeToString(enum DeviceConfig::port_type type)
 {
   switch (type) {
+  case DeviceConfig::DISABLED:
+    return _T("disabled");
+
   case DeviceConfig::SERIAL:
     return _T("serial");
 

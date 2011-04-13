@@ -6,6 +6,7 @@ Version 6.1 - not yet released
 * devices
   - CAI302: read QNH setting
   - Vega: send configured QNH to Vega
+  - allow disabling a device explicitly
 * user interface
   - "pan to" button in waypoint dialog
   - waypoint selection screen shows last used waypoints if no filter is set

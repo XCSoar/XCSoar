@@ -34,6 +34,11 @@ Copyright_License {
 struct DeviceConfig {
   enum port_type {
     /**
+     * This device is disabled.
+     */
+    DISABLED,
+
+    /**
      * Serial port, i.e. COMx / RS-232.
      */
     SERIAL,
