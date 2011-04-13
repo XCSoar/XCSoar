@@ -50,8 +50,8 @@ namespace Graphics {
   void InitLandableIcons();
   void InitAirspacePens(const SETTINGS_MAP &settings_map);
   void Deinitialise();
-  void DrawAircraft(Canvas &canvas, const Angle angle,
-                    const RasterPoint aircraft_pos);
+  void DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
+                    const Angle angle, const RasterPoint aircraft_pos);
 
   // airspace brushes/colours
   const Color GetAirspaceColour(const int i);

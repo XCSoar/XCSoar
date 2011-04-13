@@ -166,6 +166,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
       fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
                    CommonInterface::Calculated(),
                    XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::SettingsMap(),
                    XCSoarInterface::Calculated().contest_stats, trace);
     }
     break;

@@ -477,7 +477,7 @@ Graphics::Deinitialise()
 }
 
 void
-Graphics::DrawAircraft(Canvas &canvas, 
+Graphics::DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
                        const Angle angle,
                        const RasterPoint aircraft_pos)
 {
@@ -561,7 +561,10 @@ Graphics::DrawAircraft(Canvas &canvas,
   case acDetailed:
     PolygonRotateShift(tmp_left, n_aircraft, aircraft_pos.x, aircraft_pos.y, angle, false);
     PolygonRotateShift(tmp_right, n_aircraft, aircraft_pos.x, aircraft_pos.y, angle, false);
-    canvas.white_brush();
+    if (settings_map.EnableTerrain)
+      canvas.white_brush();
+    else
+      canvas.black_brush();
     canvas.null_pen();
     canvas.polygon(tmp_left, n_aircraft);
     canvas.polygon(tmp_right, n_aircraft);
