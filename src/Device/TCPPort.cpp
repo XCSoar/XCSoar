@@ -30,6 +30,7 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #ifdef HAVE_POSIX
 #include <netinet/in.h>
