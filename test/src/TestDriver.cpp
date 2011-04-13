@@ -260,6 +260,19 @@ TestFlytec()
   ok1(nmea_info.AirspeedAvailable);
   ok1(equals(nmea_info.TrueAirspeed, 17.5));
 
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+
+  device->ParseNMEA("$VMVABD,1234.5,M,0547.0,M,-0.0,,,MS,63.0,KH,22.4,C*51", &nmea_info);
+  ok1(nmea_info.GPSAltitudeAvailable);
+  ok1(equals(nmea_info.GPSAltitude, 1234.5));
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 547.0));
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.TrueAirspeed, 17.5));
+  ok1(nmea_info.TemperatureAvailable);
+  ok1(equals(nmea_info.OutsideAirTemperature, 295.55));
+
   delete device;
 }
 
@@ -439,7 +452,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(152);
+  plan_tests(160);
 
   TestGeneric();
   TestBorgeltB50();
