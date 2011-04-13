@@ -80,6 +80,37 @@ struct DeviceConfig {
    * Name of the driver.
    */
   StaticString<32> driver_name;
+
+  /**
+   * Does this port type use a baud rate?
+   */
+  static bool UsesSpeed(enum port_type port_type) {
+    return port_type == SERIAL || port_type == AUTO;
+  }
+
+  bool UsesSpeed() const {
+    return UsesSpeed(port_type);
+  }
+
+  /**
+   * Does this port type use a driver?
+   */
+  static bool UsesDriver(enum port_type port_type) {
+    return port_type == SERIAL || port_type == RFCOMM || port_type == AUTO ||
+      port_type == TCP_LISTENER;
+  }
+
+  bool UsesDriver() const {
+    return UsesDriver(port_type);
+  }
+
+  bool IsDriver(const TCHAR *name) const {
+    return UsesDriver() && driver_name.equals(name);
+  }
+
+  bool IsVega() const {
+    return IsDriver(_T("Vega"));
+  }
 };
 
 namespace Profile
