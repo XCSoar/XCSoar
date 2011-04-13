@@ -483,6 +483,11 @@ ifeq ($(TARGET),ANDROID)
 $(call SRC_TO_OBJ,$(SRC)/Device/TCPPort.cpp): CXXFLAGS += -Wno-cast-align
 endif
 
+ifeq ($(HAVE_POSIX),n)
+# broken mingw32 4.4 headers
+$(call SRC_TO_OBJ,$(SRC)/Device/TCPPort.cpp): CXXFLAGS += -Wno-sign-compare
+endif
+
 ifeq ($(HAVE_POSIX),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Device/TTYPort.cpp

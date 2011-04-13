@@ -141,8 +141,7 @@ TCPPort::run()
       fd_set rfds;
       FD_ZERO(&rfds);
 
-      unsigned ufd = listener_fd;
-      FD_SET(ufd, &rfds);
+      FD_SET(listener_fd, &rfds);
 
       struct timeval timeout;
       timeout.tv_sec = 0;
@@ -162,14 +161,13 @@ TCPPort::run()
       fd_set rfds;
       FD_ZERO(&rfds);
 
-      unsigned ufd = connection_fd;
-      FD_SET(ufd, &rfds);
+      FD_SET(connection_fd, &rfds);
 
       struct timeval timeout;
       timeout.tv_sec = 0;
       timeout.tv_usec = 250000;
 
-      int ret = select(ufd + 1, &rfds, NULL, NULL, &timeout);
+      int ret = select(connection_fd + 1, &rfds, NULL, NULL, &timeout);
       if (ret > 0) {
         ssize_t nbytes = recv(connection_fd, buffer, sizeof(buffer), 0);
         if (nbytes <= 0) {
