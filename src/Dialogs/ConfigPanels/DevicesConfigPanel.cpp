@@ -33,7 +33,7 @@ Copyright_License {
 #include "Profile/DeviceConfig.hpp"
 #include "Device/Register.hpp"
 #include "Device/List.hpp"
-#include "Device/Descriptor.hpp"
+#include "Device/Parser.hpp"
 #include "Asset.hpp"
 #include "Protection.hpp"
 #include "DevicesConfigPanel.hpp"
@@ -72,7 +72,7 @@ static const unsigned num_port_types =
 static DeviceConfig device_config[NUMDEV];
 
 static void
-SetupDevice(DeviceDescriptor &device)
+SetupDevice()
 {
 #ifdef ToDo
   device.DoSetup();
@@ -81,9 +81,6 @@ SetupDevice(DeviceDescriptor &device)
 
   // this is a hack, devices dont jet support device dependant setup dialogs
 
-  if (!device.IsVega())
-    return;
-
   changed = dlgConfigurationVarioShowModal();
 }
 
@@ -91,7 +88,7 @@ SetupDevice(DeviceDescriptor &device)
 void
 DevicesConfigPanel::OnSetupDeviceAClicked(WndButton &button)
 {
-  SetupDevice(DeviceList[0]);
+  SetupDevice();
 
   // this is a hack to get the dialog to retain focus because
   // the progress dialog in the vario configuration somehow causes
@@ -103,7 +100,7 @@ DevicesConfigPanel::OnSetupDeviceAClicked(WndButton &button)
 void
 DevicesConfigPanel::OnSetupDeviceBClicked(WndButton &button)
 {
-  SetupDevice(DeviceList[1]);
+  SetupDevice();
 
   // this is a hack to get the dialog to retain focus because
   // the progress dialog in the vario configuration somehow causes
@@ -159,7 +156,7 @@ DevicesConfigPanel::OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t
 
 
 static void
-SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
+SetupDeviceFields(const DeviceConfig &config,
                   WndProperty *port_field, WndProperty *speed_field,
                   WndProperty *driver_field, WndButton *setup_button)
 {
@@ -268,7 +265,7 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
   }
 
   if (setup_button != NULL)
-    setup_button->set_visible(device.IsVega());
+    setup_button->set_visible(config.IsVega());
 }
 
 
@@ -350,13 +347,13 @@ DevicesConfigPanel::Init(WndForm *_wf)
   for (unsigned i = 0; i < NUMDEV; ++i)
     Profile::GetDeviceConfig(i, device_config[i]);
 
-  SetupDeviceFields(DeviceList[0], device_config[0],
+  SetupDeviceFields(device_config[0],
                     (WndProperty*)wf->FindByName(_T("prpComPort1")),
                     (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
                     (WndProperty*)wf->FindByName(_T("prpComDevice1")),
                     (WndButton *)wf->FindByName(_T("cmdSetupDeviceA")));
 
-  SetupDeviceFields(DeviceList[1], device_config[1],
+  SetupDeviceFields(device_config[1],
                     (WndProperty*)wf->FindByName(_T("prpComPort2")),
                     (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
                     (WndProperty*)wf->FindByName(_T("prpComDevice2")),
