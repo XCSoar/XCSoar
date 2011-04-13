@@ -76,7 +76,10 @@ struct DeviceConfig {
    */
   StaticString<32> bluetooth_mac;
 
-  TCHAR driver_name[32];        /**< Name of the driver */
+  /**
+   * Name of the driver.
+   */
+  StaticString<32> driver_name;
 };
 
 namespace Profile

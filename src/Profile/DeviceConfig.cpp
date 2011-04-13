@@ -115,16 +115,15 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
 
   _tcscpy(buffer, _T("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
-  if (!Get(buffer, config.driver_name,
-           sizeof(config.driver_name) / sizeof(config.driver_name[0]))) {
+  if (!Get(buffer, config.driver_name)) {
     if (is_altair() && n == 0)
-      _tcscpy(config.driver_name, _T("Altair RU"));
+      config.driver_name = _T("Altair RU");
     else if (is_altair() && n == 1)
-      _tcscpy(config.driver_name, _T("Vega"));
+      config.driver_name = _T("Vega");
     else if (is_altair() && n == 2)
-      _tcscpy(config.driver_name, _T("NmeaOut"));
+      config.driver_name = _T("NmeaOut");
     else
-      config.driver_name[0] = '\0';
+      config.driver_name.clear();
   }
 }
 

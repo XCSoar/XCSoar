@@ -421,7 +421,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   DeviceConfig device_config;
   // this is only the XCSoar Simulator, not Condor etc, so don't use Simulator flag
   if (is_simulator())
-    _tcscpy(device_config.driver_name, _T("Simulator"));
+    device_config.driver_name = _T("Simulator");
   else
     Profile::GetDeviceConfig(0, device_config);
 

@@ -331,9 +331,8 @@ FinishDeviceFields(DeviceConfig &config,
 #endif
 
   if (driver_field != NULL &&
-      _tcscmp(config.driver_name,
-              driver_field->GetDataField()->GetAsString()) != 0) {
-    _tcscpy(config.driver_name, driver_field->GetDataField()->GetAsString());
+      !config.driver_name.equals(driver_field->GetDataField()->GetAsString())) {
+    config.driver_name = driver_field->GetDataField()->GetAsString();
     changed = true;
   }
 
