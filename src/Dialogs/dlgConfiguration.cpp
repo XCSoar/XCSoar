@@ -187,6 +187,8 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(DevicesConfigPanel::OnSetupDeviceAClicked),
   DeclareCallBackEntry(DevicesConfigPanel::OnSetupDeviceBClicked),
+  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAPort),
+  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceBPort),
   DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAData),
   DeclareCallBackEntry(DevicesConfigPanel::OnDeviceBData),
   DeclareCallBackEntry(PolarConfigPanel::OnLoadInternal),

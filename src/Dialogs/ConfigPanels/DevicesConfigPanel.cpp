@@ -108,6 +108,39 @@ DevicesConfigPanel::OnSetupDeviceBClicked(WndButton &button)
   button.set_focus();
 }
 
+static void
+UpdateDeviceControlVisibility(WndProperty &port_field,
+                              WndProperty &speed_field,
+                              WndProperty &driver_field)
+{
+  unsigned port = port_field.GetDataField()->GetAsInteger();
+  enum DeviceConfig::port_type type = port < num_port_types
+    ? port_types[port].type
+    : (is_android()
+       ? DeviceConfig::RFCOMM
+       : DeviceConfig::SERIAL);
+
+  speed_field.set_visible(DeviceConfig::UsesSpeed(type));
+  driver_field.set_visible(DeviceConfig::UsesDriver(type));
+}
+
+void
+DevicesConfigPanel::OnDeviceAPort(DataField *Sender,
+                                  DataField::DataAccessKind_t Mode)
+{
+  UpdateDeviceControlVisibility(*(WndProperty *)wf->FindByName(_T("prpComPort1")),
+                                *(WndProperty *)wf->FindByName(_T("prpComSpeed1")),
+                                *(WndProperty *)wf->FindByName(_T("prpComDevice1")));
+}
+
+void
+DevicesConfigPanel::OnDeviceBPort(DataField *Sender,
+                                  DataField::DataAccessKind_t Mode)
+{
+  UpdateDeviceControlVisibility(*(WndProperty *)wf->FindByName(_T("prpComPort2")),
+                                *(WndProperty *)wf->FindByName(_T("prpComSpeed2")),
+                                *(WndProperty *)wf->FindByName(_T("prpComDevice2")));
+}
 
 static void
 UpdateDeviceSetupButton(unsigned DeviceIdx, const TCHAR *Name)
@@ -266,6 +299,8 @@ SetupDeviceFields(const DeviceConfig &config,
 
   if (setup_button != NULL)
     setup_button->set_visible(config.IsVega());
+
+  UpdateDeviceControlVisibility(*port_field, *speed_field, *driver_field);
 }
 
 
@@ -320,14 +355,14 @@ FinishDeviceFields(DeviceConfig &config,
     changed = true;
 
 #ifndef ANDROID
-  if (speed_field != NULL &&
+  if (config.UsesSpeed() && speed_field != NULL &&
       (int)config.speed_index != speed_field->GetDataField()->GetAsInteger()) {
     config.speed_index = speed_field->GetDataField()->GetAsInteger();
     changed = true;
   }
 #endif
 
-  if (driver_field != NULL &&
+  if (config.UsesDriver() && driver_field != NULL &&
       !config.driver_name.equals(driver_field->GetDataField()->GetAsString())) {
     config.driver_name = driver_field->GetDataField()->GetAsString();
     changed = true;
