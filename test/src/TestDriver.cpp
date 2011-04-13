@@ -28,6 +28,7 @@
 #include "Device/Driver/EW.hpp"
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/FlymasterF1.hpp"
+#include "Device/Driver/Flytec.hpp"
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver/PosiGraph.hpp"
@@ -246,6 +247,23 @@ TestFlymasterF1()
 }
 
 static void
+TestFlytec()
+{
+  Device *device = flytec_device_driver.CreateOnPort(NULL);
+  ok1(device != NULL);
+
+  NMEA_INFO nmea_info;
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+
+  device->ParseNMEA("$BRSF,063,-013,-0035,1,193,00351,535,485*38", &nmea_info);
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.TrueAirspeed, 17.5));
+
+  delete device;
+}
+
+static void
 TestLX(const struct DeviceRegister &driver, bool condor=false)
 {
   Device *device = driver.CreateOnPort(NULL);
@@ -421,12 +439,13 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(149);
+  plan_tests(152);
 
   TestGeneric();
   TestBorgeltB50();
   TestCAI302();
   TestFlymasterF1();
+  TestFlytec();
   TestLX(lxDevice);
   TestLX(condorDevice, true);
   TestILEC();
