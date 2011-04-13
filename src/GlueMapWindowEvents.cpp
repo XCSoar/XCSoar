@@ -350,9 +350,11 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   MapWindow::Render(canvas, rc);
 
-  DrawFlightMode(canvas, rc);
-  DrawFinalGlide(canvas, rc);
-  DrawGPSStatus(canvas, rc, Basic());
+  if (!settings_map.EnablePan) {
+    DrawFlightMode(canvas, rc);
+    DrawFinalGlide(canvas, rc);
+    DrawGPSStatus(canvas, rc, Basic());
+  }
 
 #ifdef DRAWLOAD
   canvas.select(Fonts::Map);
