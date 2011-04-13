@@ -60,6 +60,11 @@ struct DeviceConfig {
      * The built-in GPS receiver.
      */
     INTERNAL,
+
+    /**
+     * Listen on a TCP port.
+     */
+    TCP_LISTENER,
   };
 
   port_type port_type;          /**< Type of the port */

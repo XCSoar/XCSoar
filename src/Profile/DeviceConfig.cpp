@@ -59,6 +59,9 @@ StringToPortType(const TCHAR *value)
   if (_tcscmp(value, _T("internal")) == 0)
     return DeviceConfig::INTERNAL;
 
+  if (_tcscmp(value, _T("tcp_listener")) == 0)
+    return DeviceConfig::TCP_LISTENER;
+
   if (is_android())
     return DeviceConfig::INTERNAL;
 
@@ -143,6 +146,9 @@ PortTypeToString(enum DeviceConfig::port_type type)
 
   case DeviceConfig::INTERNAL:
     return _T("internal");
+
+  case DeviceConfig::TCP_LISTENER:
+    return _T("tcp_listener");
   }
 
   return NULL;

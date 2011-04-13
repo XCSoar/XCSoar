@@ -57,6 +57,11 @@ static const struct {
 #ifdef ANDROID
   { DeviceConfig::INTERNAL, N_("Built-in GPS") },
 #endif
+
+  /* label not translated for now, until we have a TCP port
+     selection UI */
+  { DeviceConfig::TCP_LISTENER, _T("TCP port 4353") },
+
   { DeviceConfig::SERIAL, NULL } /* sentinel */
 };
 
@@ -229,6 +234,7 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
     case DeviceConfig::RFCOMM:
     case DeviceConfig::AUTO:
     case DeviceConfig::INTERNAL:
+    case DeviceConfig::TCP_LISTENER:
       break;
     }
 #endif

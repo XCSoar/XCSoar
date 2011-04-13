@@ -40,6 +40,7 @@ Copyright_License {
 #include "../Simulator.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Device/TCPPort.hpp"
 
 #ifdef _WIN32_WCE
 #include "Config/Registry.hpp"
@@ -168,6 +169,16 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
 
   case DeviceConfig::INTERNAL:
     break;
+
+  case DeviceConfig::TCP_LISTENER: {
+    TCPPort *port = new TCPPort(4353, handler);
+    if (!port->Open()) {
+      delete port;
+      return NULL;
+    }
+
+    return port;
+  }
   }
 
 #ifdef ANDROID
@@ -258,6 +269,9 @@ DeviceConfigAvailable(const DeviceConfig &config)
 
   case DeviceConfig::INTERNAL:
     return is_android();
+
+  case DeviceConfig::TCP_LISTENER:
+    return true;
   }
 
   /* unreachable */
@@ -285,6 +299,7 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
   case DeviceConfig::DISABLED:
   case DeviceConfig::AUTO:
   case DeviceConfig::INTERNAL:
+  case DeviceConfig::TCP_LISTENER:
     break;
   }
 

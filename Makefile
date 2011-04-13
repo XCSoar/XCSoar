@@ -468,6 +468,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Simulator.cpp \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/NullPort.cpp \
+	$(SRC)/Device/TCPPort.cpp \
 	$(SRC)/Device/FLARM.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(DIALOG_SOURCES)
@@ -475,6 +476,11 @@ XCSOAR_SOURCES := \
 #	$(SRC)/VarioSound.cpp \
 #	$(SRC)/WaveThread.cpp \
 
+
+ifeq ($(TARGET),ANDROID)
+# broken Android headers
+$(call SRC_TO_OBJ,$(SRC)/Device/TCPPort.cpp): CXXFLAGS += -Wno-cast-align
+endif
 
 ifeq ($(HAVE_POSIX),y)
 XCSOAR_SOURCES += \
@@ -530,6 +536,14 @@ XCSOAR_LDFLAGS = \
 	$(PROFILE_LDLIBS) \
 	$(SCREEN_LDLIBS) \
 	$(ZZIP_LDFLAGS)
+
+ifeq ($(HAVE_POSIX),n)
+ifeq ($(HAVE_CE),y)
+XCSOAR_LDFLAGS += -lwinsock
+else
+XCSOAR_LDFLAGS += -lws2_32
+endif
+endif
 
 include $(topdir)/build/gettext.mk
 include $(topdir)/build/cab.mk
