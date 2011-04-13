@@ -281,7 +281,7 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
     break;
   }
 
-  return a.port_type == a.port_type;
+  return a.port_type == b.port_type;
 }
 
 void
