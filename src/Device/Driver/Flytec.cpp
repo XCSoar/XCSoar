@@ -53,7 +53,7 @@ FlytecParseBRSF(NMEAInputLine &line, NMEA_INFO &info)
   fixed value;
 
   // 0 = indicated or true airspeed [km/h]
-  if (line.read_checked_compare(value, "KH"))
+  if (line.read_checked(value))
     // XXX is that TAS or IAS?  Documentation isn't clear.
     info.ProvideBothAirspeeds(Units::ToSysUnit(value, unKiloMeterPerHour));
 
