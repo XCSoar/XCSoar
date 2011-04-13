@@ -82,13 +82,13 @@ OnLogoPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 
   canvas.text(x, y, _T("date: "));
   canvas.text(x + Layout::FastScale(80), y, _T(__DATE__));
+#ifdef GIT_COMMIT_ID
   y += Layout::FastScale(22);
 
-#ifdef GIT_COMMIT_ID
   canvas.text(x, y, _T("git: "));
   canvas.text(x + Layout::FastScale(80), y, _T(GIT_COMMIT_ID));
-  y += Layout::FastScale(37);
 #endif
+  y += Layout::FastScale(37);
 
   canvas.text(x, y, _T("more information at"));
   y += Layout::FastScale(22);
