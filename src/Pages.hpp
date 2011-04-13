@@ -125,6 +125,9 @@ namespace Pages
   void LoadDefault();
   const PageLayout* PossiblePageLayout(unsigned i);
 
+  unsigned NextIndex();
+  unsigned PrevIndex();
+
   void Update();
 };
 

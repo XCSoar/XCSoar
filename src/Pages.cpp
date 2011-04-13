@@ -51,31 +51,47 @@ namespace Pages
 void
 Pages::Update()
 {
-  while (pages[Current].topLayout == PageLayout::tlEmpty)
-    Current = (Current + 1) % MAX_PAGES;
+  if (pages[Current].topLayout == PageLayout::tlEmpty)
+    Current = NextIndex();
 
   OpenLayout(pages[Current]);
+}
+
+
+unsigned
+Pages::NextIndex()
+{
+  unsigned i = Current;
+  do {
+    i = (i + 1) % MAX_PAGES;
+  } while (pages[i].topLayout == PageLayout::tlEmpty);
+  return i;
 }
 
 
 void
 Pages::Next()
 {
-  do {
-    Current = (Current + 1) % MAX_PAGES;
-  } while (pages[Current].topLayout == PageLayout::tlEmpty);
-
+  Current = NextIndex();
   Update();
+}
+
+
+unsigned
+Pages::PrevIndex()
+{
+  unsigned i = Current;
+  do {
+    i = (i == 0) ? MAX_PAGES - 1 : i - 1;
+  } while (pages[i].topLayout == PageLayout::tlEmpty);
+  return i;
 }
 
 
 void
 Pages::Prev()
 {
-  do {
-    Current = (Current == 0) ? MAX_PAGES - 1 : Current - 1;
-  } while (pages[Current].topLayout == PageLayout::tlEmpty);
-
+  Current = PrevIndex();
   Update();
 }
 

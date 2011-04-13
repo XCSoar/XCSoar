@@ -416,7 +416,7 @@ mode=Display1
 type=key
 data=0
 event=ScreenModes cycle
-label=$(PageName)
+label=$(NextPageName)
 location=9
 
 # -------------

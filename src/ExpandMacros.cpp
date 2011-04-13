@@ -581,10 +581,10 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       OutBuffer, _T("$(FlarmDispToggleActionName)"),
                       _("Off"), _("On"), Size);
 
-  if (_tcsstr(OutBuffer, _T("$(PageName)"))) {
+  if (_tcsstr(OutBuffer, _T("$(NextPageName)"))) {
     TCHAR label[30];
-    Pages::get_current().MakeTitle(label, true);
-    ReplaceInString(OutBuffer, _T("$(PageName)"), label, Size);
+    Pages::GetLayout(Pages::NextIndex())->MakeTitle(label, true);
+    ReplaceInString(OutBuffer, _T("$(NextPageName)"), label, Size);
   }
 
   return invalid;
