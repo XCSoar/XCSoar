@@ -327,7 +327,7 @@ GlueMapWindow::on_paint(Canvas &canvas)
   is the case or not.
   */
   if (EnableAuxiliaryInfo)
-    DrawHorizon(canvas, rc);
+    DrawHorizon(canvas, get_client_rect());
 #endif
 }
 
