@@ -557,11 +557,7 @@
       <Panel Name="frmComm1" X="0" Y="0" Width="0" Height="68" Border="30">
         <Label Caption="Device A" X="2" Y="2" Width="70" Height="36"/>
   
-        <Edit Name="prpComDevice1" Caption="Name" X="62" Y="1" Width="173" Height="22" CaptionWidth="80" Help="Type of primary device. The primary device should be the most reliable GPS data source.">
-          <DataField DataType="enum" OnDataAccess="DevicesConfigPanel::OnDeviceAData"/>
-        </Edit>
-  
-        <Edit Name="prpComPort1" Caption="Port" X="62" Width="173" Height="22" CaptionWidth="80" Help="Altair Pro users should set this to Port 3">
+        <Edit Name="prpComPort1" Caption="Port" X="62" Y="1" Width="173" Height="22" CaptionWidth="80" Help="Altair Pro users should set this to Port 3">
           <DataField DataType="enum"/>
         </Edit>
   
@@ -569,18 +565,17 @@
           <DataField DataType="enum"/>
         </Edit>
   
+        <Edit Name="prpComDevice1" Caption="Driver" X="62" Width="173" Height="22" CaptionWidth="80" Help="Type of primary device. The primary device should be the most reliable GPS data source.">
+          <DataField DataType="enum" OnDataAccess="DevicesConfigPanel::OnDeviceAData"/>
+        </Edit>
+
         <Button Name="cmdSetupDeviceA" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" OnClick="DevicesConfigPanel::OnSetupDeviceAClicked" />
       </Panel>
   
       <Panel Name="frmComm2" X="0" Y="69" Width="0" Height="68" Border="30">
         <Label Caption="Device B" X="2" Y="2" Width="70" Height="36"/>
   
-        <Edit Name="prpComDevice2" Caption="Name" X="62" Y="1" Width="173" Height="22" CaptionWidth="80"
-              Help="Type of secondary device. The secondary device may be used as backup GPS data or other data e.g. from an intelligent variometer. Generic can be used for GPS sources including FLARM.">
-          <DataField DataType="enum" OnDataAccess="DevicesConfigPanel::OnDeviceBData"/>
-        </Edit>
-  
-        <Edit Name="prpComPort2" Caption="Port" X="62" Width="173" Height="22" CaptionWidth="80" Help="Altair Pro users should set this to Port 1.">
+        <Edit Name="prpComPort2" Caption="Port" X="62" Y="1" Width="173" Height="22" CaptionWidth="80" Help="Altair Pro users should set this to Port 1.">
           <DataField DataType="enum"/>
         </Edit>
   
@@ -588,7 +583,12 @@
             Help="Altair Pro or Vega users should set this to 38400.">
           <DataField DataType="enum"/>
         </Edit>
-  
+
+        <Edit Name="prpComDevice2" Caption="Driver" X="62" Width="173" Height="22" CaptionWidth="80"
+              Help="Type of secondary device. The secondary device may be used as backup GPS data or other data e.g. from an intelligent variometer. Generic can be used for GPS sources including FLARM.">
+          <DataField DataType="enum" OnDataAccess="DevicesConfigPanel::OnDeviceBData"/>
+        </Edit>
+
         <Button Name="cmdSetupDeviceB" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" OnClick="DevicesConfigPanel::OnSetupDeviceBClicked" />
       </Panel>
   
