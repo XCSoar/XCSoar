@@ -335,7 +335,7 @@
       </Edit>
 
       <Edit Name="prpRoutePlannerAllowClimb" Caption="Route climb" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="When enabled and Mc is positive, route planning allows climbs between the aircraft location and destination.">
+        Help="When enabled and MC is positive, route planning allows climbs between the aircraft location and destination.">
         <DataField DataType="boolean"/>
       </Edit>
 
