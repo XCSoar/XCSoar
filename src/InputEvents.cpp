@@ -200,7 +200,7 @@ apply_defaults(const TCHAR *const* default_modes,
 
   while (default_labels->label != NULL) {
     InputEvents::makeLabel((InputEvents::mode)default_labels->mode,
-                           gettext(default_labels->label),
+                           default_labels->label,
                            default_labels->location, default_labels->event);
     ++default_labels;
   }
