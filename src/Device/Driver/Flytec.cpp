@@ -53,7 +53,7 @@ FlytecParseBRSF(NMEAInputLine &line, NMEA_INFO &info)
   fixed value;
 
   // 0 = indicated or true airspeed [km/h]
-  if (line.read_checked_compare(value, "KH"))
+  if (line.read_checked(value))
     // XXX is that TAS or IAS?  Documentation isn't clear.
     info.ProvideBothAirspeeds(Units::ToSysUnit(value, unKiloMeterPerHour));
 
@@ -103,6 +103,73 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info)
   return true;
 }
 
+/**
+ * Parse a "$FLYSEN" sentence.
+ *
+ * @see http://www.flytec.ch/public/Special%20NMEA%20sentence.pdf
+ */
+static bool
+FlytecParseFLYSEN(NMEAInputLine &line, NMEA_INFO &info)
+{
+  fixed value;
+
+  //  Time(hhmmss),   6 Digits
+  line.skip();
+
+  //  Latitude(ddmm.mmm),   8 Digits incl. decimal
+  //  N (or S),   1 Digit
+  line.skip(2);
+
+  //  Longitude(dddmm.mmm),   9 Digits inc. decimal
+  //  E (or W),   1 Digit
+  line.skip(2);
+
+  //  Track (xxx Deg),   3 Digits
+  //  Speed over Ground (xxxxx cm/s)        5 Digits
+  //  GPS altitude (xxxxx meter),           5 Digits
+  line.skip(3);
+
+  //  Validity of 3 D fix A or V,           1 Digit
+  char validity = line.read_first_char();
+  if (validity != 'A' && validity != 'V') {
+    validity = line.read_first_char();
+    if (validity != 'A' && validity != 'V')
+      return false;
+  }
+
+  //  Satellites in Use (0 to 12),          2 Digits
+  line.skip();
+
+  //  Raw pressure (xxxxxx Pa),  6 Digits
+  if (line.read_checked(value))
+    info.ProvideStaticPressure(value / 100);
+
+  //  Baro Altitude (xxxxx meter),          5 Digits (-xxxx to xxxxx) (Based on 1013.25hPa)
+  if (line.read_checked(value))
+    info.ProvidePressureAltitude(value);
+
+  //  Variometer (xxxx cm/s),   4 or 5 Digits (-9999 to 9999)
+  if (line.read_checked(value))
+    info.ProvideTotalEnergyVario(value / 100);
+
+  //  true airspeed (xxxxx cm/s),           5 Digits (0 to 99999cm/s = 3600km/h)
+  if (line.read_checked(value))
+    info.ProvideTrueAirspeed(value / 100);
+
+  //  Airspeed source P or V,   1 Digit P= pitot, V = Vane wheel
+  //  Temp. PCB (xxx °C),   3 Digits
+  //  Temp. Balloon Envelope (xxx °C),      3 Digits
+  //  Battery Capacity Bank 1 (0 to 100%)   3 Digits
+  //  Battery Capacity Bank 2 (0 to 100%)   3 Digits
+  //  Dist. to WP (xxxxxx m),   6 Digits (Max 200000m)
+  //  Bearing (xxx Deg),   3 Digits
+  //  Speed to fly1 (MC0 xxxxx cm/s),       5 Digits
+  //  Speed to fly2 (McC. xxxxx cm/s)       5 Digits
+  //  Keypress Code (Experimental empty to 99)     2 Digits
+
+  return true;
+}
+
 bool
 FlytecDevice::ParseNMEA(const char *_line, NMEA_INFO *info)
 {
@@ -114,6 +181,8 @@ FlytecDevice::ParseNMEA(const char *_line, NMEA_INFO *info)
     return FlytecParseBRSF(line, *info);
   else if (strcmp(type, "$VMVABD") == 0)
     return FlytecParseVMVABD(line, *info);
+  else if (strcmp(type, "$FLYSEN") == 0)
+    return FlytecParseFLYSEN(line, *info);
   else
     return false;
 }

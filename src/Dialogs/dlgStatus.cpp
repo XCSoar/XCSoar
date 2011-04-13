@@ -210,9 +210,9 @@ UpdateValuesSystem()
   wp = (WndProperty*)wf->FindByName(_T("prpDeclared"));
   assert(wp != NULL);
   if (logger.isTaskDeclared())
-    wp->SetText(_("True"));
+    wp->SetText(_("Yes"));
   else
-    wp->SetText(_("False"));
+    wp->SetText(_("No"));
 
   wp->RefreshDisplay();
 
@@ -384,16 +384,16 @@ UpdateValuesRules(void)
   assert(wp != NULL);
   if (calculated.common_stats.task_started)
     /// @todo proper task validity check
-    wp->SetText(_("True"));
+    wp->SetText(_("Yes"));
   else
-    wp->SetText(_("False"));
+    wp->SetText(_("No"));
 
   wp = (WndProperty*)wf->FindByName(_T("prpValidFinish"));
   assert(wp != NULL);
   if (common_stats.task_finished)
-    wp->SetText(_("True"));
+    wp->SetText(_("Yes"));
   else
-    wp->SetText(_("False"));
+    wp->SetText(_("No"));
 
   AIRCRAFT_STATE start_state = protected_task_manager->get_start_state();
 

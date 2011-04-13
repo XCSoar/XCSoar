@@ -30,7 +30,7 @@
     <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" ReadOnly="1"/>
   </Edit>
 
-  <Edit Name="prpSpeedRemaining" Caption="Set speed remaining" X="12" Height="22" CaptionWidth="150" ReadOnly="1">
+  <Edit Name="prpSpeedRemaining" Caption="Speed remaining" X="12" Height="22" CaptionWidth="150" ReadOnly="1">
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f"/>
   </Edit>
 

@@ -38,6 +38,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Interface.hpp"
 #include "Screen/Fonts.hpp"
+#include "HorizonRenderer.hpp"
 
 #include <algorithm>
 
@@ -326,7 +327,7 @@ GlueMapWindow::on_paint(Canvas &canvas)
   is the case or not.
   */
   if (EnableAuxiliaryInfo)
-    DrawHorizon(canvas, rc);
+    DrawHorizon(canvas, get_client_rect());
 #endif
 }
 
@@ -350,9 +351,11 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   MapWindow::Render(canvas, rc);
 
-  DrawFlightMode(canvas, rc);
-  DrawFinalGlide(canvas, rc);
-  DrawGPSStatus(canvas, rc, Basic());
+  if (!settings_map.EnablePan) {
+    DrawFlightMode(canvas, rc);
+    DrawFinalGlide(canvas, rc);
+    DrawGPSStatus(canvas, rc, Basic());
+  }
 
 #ifdef DRAWLOAD
   canvas.select(Fonts::Map);

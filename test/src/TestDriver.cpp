@@ -28,6 +28,7 @@
 #include "Device/Driver/EW.hpp"
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/FlymasterF1.hpp"
+#include "Device/Driver/Flytec.hpp"
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver/PosiGraph.hpp"
@@ -246,6 +247,66 @@ TestFlymasterF1()
 }
 
 static void
+TestFlytec()
+{
+  Device *device = flytec_device_driver.CreateOnPort(NULL);
+  ok1(device != NULL);
+
+  NMEA_INFO nmea_info;
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+
+  device->ParseNMEA("$BRSF,063,-013,-0035,1,193,00351,535,485*38", &nmea_info);
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.TrueAirspeed, 17.5));
+
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+
+  device->ParseNMEA("$VMVABD,1234.5,M,0547.0,M,-0.0,,,MS,63.0,KH,22.4,C*51", &nmea_info);
+  ok1(nmea_info.GPSAltitudeAvailable);
+  ok1(equals(nmea_info.GPSAltitude, 1234.5));
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 547.0));
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.TrueAirspeed, 17.5));
+  ok1(nmea_info.TemperatureAvailable);
+  ok1(equals(nmea_info.OutsideAirTemperature, 295.55));
+
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+
+  ok1(device->ParseNMEA("$FLYSEN,,,,,,,,,V,,101450,02341,0334,02000,,,,,,,,,*5e",
+                        &nmea_info));
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure, 1014.5));
+  ok1(nmea_info.PressureAltitudeAvailable);
+  ok1(equals(nmea_info.PressureAltitude, 2341));
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, 3.34));
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.TrueAirspeed, 20.0));
+
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+
+  ok1(device->ParseNMEA("$FLYSEN,,,,,,,,,,V,,101450,02341,0334,02000,,,,,,,,,*5e",
+                        &nmea_info));
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure, 1014.5));
+  ok1(nmea_info.PressureAltitudeAvailable);
+  ok1(equals(nmea_info.PressureAltitude, 2341));
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, 3.34));
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.TrueAirspeed, 20.0));
+
+  ok1(!device->ParseNMEA("$FLYSEN,,,,,,,,,,,,,,,,,,,,*5e", &nmea_info));
+
+  delete device;
+}
+
+static void
 TestLX(const struct DeviceRegister &driver, bool condor=false)
 {
   Device *device = driver.CreateOnPort(NULL);
@@ -421,12 +482,13 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(149);
+  plan_tests(179);
 
   TestGeneric();
   TestBorgeltB50();
   TestCAI302();
   TestFlymasterF1();
+  TestFlytec();
   TestLX(lxDevice);
   TestLX(condorDevice, true);
   TestILEC();
