@@ -127,9 +127,18 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEA_INFO &info)
   //  Track (xxx Deg),   3 Digits
   //  Speed over Ground (xxxxx cm/s)        5 Digits
   //  GPS altitude (xxxxx meter),           5 Digits
+  line.skip(3);
+
   //  Validity of 3 D fix A or V,           1 Digit
+  char validity = line.read_first_char();
+  if (validity != 'A' && validity != 'V') {
+    validity = line.read_first_char();
+    if (validity != 'A' && validity != 'V')
+      return false;
+  }
+
   //  Satellites in Use (0 to 12),          2 Digits
-  line.skip(5);
+  line.skip();
 
   //  Raw pressure (xxxxxx Pa),  6 Digits
   if (line.read_checked(value))
