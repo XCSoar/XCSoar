@@ -283,6 +283,14 @@ GlideComputer::OnDepartedThermal()
 void
 GlideComputer::FLARM_ScanTraffic()
 {
+  if (Basic().flarm.rx && LastBasic().flarm.rx == 0)
+    // traffic has appeared..
+    InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
+
+  if (Basic().flarm.rx == 0 && LastBasic().flarm.rx)
+    // traffic has disappeared..
+    InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
+
   // If (not FLARM available) cancel
   if (!Basic().flarm.available || !SettingsComputer().TeamFlarmTracking)
     return;
