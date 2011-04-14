@@ -165,11 +165,10 @@ DeviceDescriptor::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
     return true;
   }
 
-  if (String[0] == '$') { // Additional "if" to find GPS strings
-    if (parser.ParseNMEAString_Internal(String, GPS_INFO)) {
-      GPS_INFO->Connected.update(fixed(MonotonicClockMS()) / 1000);
-      return true;
-    }
+  // Additional "if" to find GPS strings
+  if (parser.ParseNMEAString_Internal(String, GPS_INFO)) {
+    GPS_INFO->Connected.update(fixed(MonotonicClockMS()) / 1000);
+    return true;
   }
 
   return false;
