@@ -431,11 +431,8 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
  * @return Parsing success
  */
 bool
-NMEAParser::RMB(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+NMEAParser::RMB(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
 {
-  (void)line;
-  (void)GPS_INFO;
-
   /* we calculate all this stuff now
   char ctemp[MAX_NMEA_LEN];
 
