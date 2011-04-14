@@ -760,27 +760,6 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   isFlarm = true;
 
-  // calculate relative east and north projection to lat/lon
-
-  Angle delta_lat = Angle::degrees(fixed(0.01));
-  Angle delta_lon = Angle::degrees(fixed(0.01));
-
-  GeoPoint plat = GPS_INFO->Location;
-  plat.Latitude += delta_lat;
-  GeoPoint plon = GPS_INFO->Location;
-  plon.Longitude += delta_lon;
-
-  fixed dlat = Distance(GPS_INFO->Location, plat);
-  fixed dlon = Distance(GPS_INFO->Location, plon);
-
-  fixed FLARM_NorthingToLatitude(0);
-  fixed FLARM_EastingToLongitude(0);
-
-  if (positive(fabs(dlat)) && positive(fabs(dlon))) {
-    FLARM_NorthingToLatitude = delta_lat.value_degrees() / dlat;
-    FLARM_EastingToLongitude = delta_lon.value_degrees() / dlon;
-  }
-
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   FLARM_TRAFFIC traffic;
@@ -830,6 +809,27 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   flarm_slot->Speed = traffic.Speed;
   flarm_slot->ClimbRate = traffic.ClimbRate;
   flarm_slot->Type = traffic.Type;
+
+  // calculate relative east and north projection to lat/lon
+
+  Angle delta_lat = Angle::degrees(fixed(0.01));
+  Angle delta_lon = Angle::degrees(fixed(0.01));
+
+  GeoPoint plat = GPS_INFO->Location;
+  plat.Latitude += delta_lat;
+  GeoPoint plon = GPS_INFO->Location;
+  plon.Longitude += delta_lon;
+
+  fixed dlat = Distance(GPS_INFO->Location, plat);
+  fixed dlon = Distance(GPS_INFO->Location, plon);
+
+  fixed FLARM_NorthingToLatitude(0);
+  fixed FLARM_EastingToLongitude(0);
+
+  if (positive(fabs(dlat)) && positive(fabs(dlon))) {
+    FLARM_NorthingToLatitude = delta_lat.value_degrees() / dlat;
+    FLARM_EastingToLongitude = delta_lon.value_degrees() / dlon;
+  }
 
   // 1 relativenorth, meters
   flarm_slot->Location.Latitude = Angle::degrees(flarm_slot->RelativeNorth
