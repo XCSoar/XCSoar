@@ -117,8 +117,7 @@ NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO *GPS_INFO)
     return GSA(line, GPS_INFO);
 
   if (strcmp(type + 3, "GLL") == 0)
-    //    return GLL(line, GPS_INFO);
-    return true;
+    return GLL(line, GPS_INFO);
 
   if (strcmp(type + 3, "RMB") == 0)
     return RMB(line, GPS_INFO);
