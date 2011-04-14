@@ -62,6 +62,10 @@ struct FLARM_TRAFFIC {
 
   /** Location of the FLARM target */
   GeoPoint Location;
+
+  /** Is the target in stealth mode */
+  bool Stealth;
+
   /** TrackBearing of the FLARM target */
   Angle TrackBearing;
   /** Speed of the FLARM target */

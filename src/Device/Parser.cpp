@@ -765,6 +765,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   traffic.AlarmLevel = line.read(0);
 
   fixed value;
+  bool stealth = false;
 
   if (!line.read_checked(value))
     // Relative North is required !
@@ -788,10 +789,36 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   line.read(id_string, 16);
   traffic.ID.parse(id_string, NULL);
 
-  traffic.TrackBearing = Angle::degrees(line.read(fixed_zero));
-  traffic.TurnRate = line.read(fixed_zero);
-  traffic.Speed = line.read(fixed_zero);
-  traffic.ClimbRate = line.read(fixed_zero);
+  if (!line.read_checked(value)) {
+    // Field is empty in stealth mode
+    stealth = true;
+    traffic.TrackBearing = Angle::native(fixed_zero);
+  } else
+    traffic.TrackBearing = Angle::degrees(value);
+
+  if (!line.read_checked(value)) {
+    // Field is empty in stealth mode
+    stealth = true;
+    traffic.TurnRate = fixed_zero;
+  } else
+    traffic.TurnRate = value;
+
+  if (!line.read_checked(value)) {
+    // Field is empty in stealth mode
+    stealth = true;
+    traffic.Speed = fixed_zero;
+  } else
+    traffic.Speed = value;
+
+  if (!line.read_checked(value)) {
+    // Field is empty in stealth mode
+    stealth = true;
+    traffic.ClimbRate = fixed_zero;
+  } else
+    traffic.ClimbRate = value;
+
+  traffic.Stealth = stealth;
+
   traffic.Type = (FLARM_TRAFFIC::AircraftType)line.read(0);
 
   FLARM_TRAFFIC *flarm_slot = flarm.FindTraffic(traffic.ID);
@@ -821,6 +848,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   flarm_slot->TurnRate = traffic.TurnRate;
   flarm_slot->Speed = traffic.Speed;
   flarm_slot->ClimbRate = traffic.ClimbRate;
+  flarm_slot->Stealth = traffic.Stealth;
   flarm_slot->Type = traffic.Type;
 
   // calculate relative east and north projection to lat/lon
