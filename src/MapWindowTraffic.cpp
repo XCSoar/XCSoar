@@ -73,11 +73,11 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
     // Draw the name 16 points below the icon
     sc_name = sc;
-    sc_name.y -= IBLSCALE(20);
+    sc_name.y -= Layout::Scale(20);
 
     // Draw the average climb value above the icon
     sc_av = sc;
-    sc_av.y += IBLSCALE(5);
+    sc_av.y += Layout::Scale(5);
 
     TextInBoxMode_t mode;
     mode.Mode = Outlined;
@@ -88,7 +88,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     int dy = sc_av.y - aircraft_pos.y;
 
     // only draw labels if not close to aircraft
-    if (dx * dx + dy * dy > IBLSCALE(30) * IBLSCALE(30)) {
+    if (dx * dx + dy * dy > Layout::Scale(30 * 30)) {
       // If FLARM callsign/name available draw it to the canvas
       if (traffic.HasName() && !string_is_empty(traffic.Name))
         TextInBox(canvas, traffic.Name, sc_name.x, sc_name.y,
