@@ -9,6 +9,7 @@ Version 6.1 - not yet released
   - allow disabling a device explicitly
   - listen for NMEA on TCP port
   - automatically restart FLARM after declaration
+  - Stealth mode detection of other FLARM targets
 * user interface
   - "pan to" button in waypoint dialog
   - waypoint selection screen shows last used waypoints if no filter is set
