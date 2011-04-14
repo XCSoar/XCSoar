@@ -133,6 +133,8 @@ FlarmDeclareInternal(Port *port, const Declaration *decl)
   // PFLAC,,NEWTASK:
   // PFLAC,,ADDWP:
 
+  port->Write("$PFLAR,0\r\n");
+
   return true;
 }
 
@@ -147,7 +149,6 @@ FlarmDeclare(Port *port, const Declaration *decl)
   bool result = FlarmDeclareInternal(port, decl);
 
   // TODO bug: JMW, FLARM Declaration checks
-  // Note: FLARM must be power cycled to activate a declaration!
   // Only works on IGC approved devices
   // Total data size must not surpass 183 bytes
   // probably will issue PFLAC,ERROR if a problem?
