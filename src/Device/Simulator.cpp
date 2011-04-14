@@ -52,50 +52,42 @@ Simulator::GenerateFLARMTraffic(NMEA_INFO &basic)
     return;
 
   const Angle angle = Angle::degrees(fixed((i * 360) / 255)).as_bearing();
-
-  // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
-  //   <RelativeVertical>,<RelativeDistance>(,<ID>)
-  int h1;
-  int n1;
-  int e1;
-  int t1;
-  unsigned l;
-  h1 = (angle.ifastsine()) / 7;
-  n1 = (angle.ifastsine()) / 2 - 200;
-  e1 = (angle.ifastcosine()) / 1.5;
-  t1 = -angle.as_bearing().value_degrees();
-
-  l = (i % 30 > 13 ? 0 : (i % 30 > 5 ? 2 : 1));
-  int h2;
-  int n2;
-  int e2;
-  int t2;
   Angle dangle = (angle + Angle::degrees(fixed(120))).as_bearing();
   Angle hangle = dangle.flipped().as_bearing();
 
-  h2 = (angle.ifastcosine()) / 10;
-  n2 = (dangle.ifastsine()) / 1.20 + 300;
-  e2 = (dangle.ifastcosine()) + 500;
-  t2 = hangle.value_degrees();
+  int alt = (angle.ifastsine()) / 7;
+  int north = (angle.ifastsine()) / 2 - 200;
+  int east = (angle.ifastcosine()) / 1.5;
+  int track = -angle.as_bearing().value_degrees();
+  unsigned alarm_level = (i % 30 > 13 ? 0 : (i % 30 > 5 ? 2 : 1));
+
+  NMEAParser parser;
+  char buffer[50];
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
-  char t_laa1[50];
-  sprintf(t_laa1, "$PFLAA,%d,%d,%d,%d,2,DDA85C,%d,0,35,0,1", l, n1, e1, h1, t1);
-  char t_laa2[50];
-  sprintf(t_laa2, "$PFLAA,0,%d,%d,%d,2,AA9146,%d,0,27,0,1", n2, e2, h2, t2);
+  sprintf(buffer, "$PFLAA,%d,%d,%d,%d,2,DDA85C,%d,0,35,0,1",
+          alarm_level, north, east, alt, track);
+  AppendNMEAChecksum(buffer);
+  parser.ParseNMEAString_Internal(buffer, &basic);
 
-  char t_lau[50];
-  sprintf(t_lau, "$PFLAU,2,1,2,1,%d", l);
+  alt = (angle.ifastcosine()) / 10;
+  north = (dangle.ifastsine()) / 1.20 + 300;
+  east = (dangle.ifastcosine()) + 500;
+  track = hangle.value_degrees();
 
-  AppendNMEAChecksum(t_laa1);
-  AppendNMEAChecksum(t_laa2);
-  AppendNMEAChecksum(t_lau);
+  // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
+  //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
+  sprintf(buffer, "$PFLAA,0,%d,%d,%d,2,AA9146,%d,0,27,0,1",
+          north, east, alt, track);
+  AppendNMEAChecksum(buffer);
+  parser.ParseNMEAString_Internal(buffer, &basic);
 
-  NMEAParser parser;
-  parser.ParseNMEAString_Internal(t_lau, &basic);
-  parser.ParseNMEAString_Internal(t_laa1, &basic);
-  parser.ParseNMEAString_Internal(t_laa2, &basic);
+  // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
+  //   <RelativeVertical>,<RelativeDistance>(,<ID>)
+  sprintf(buffer, "$PFLAU,2,1,2,1,%d", alarm_level);
+  AppendNMEAChecksum(buffer);
+  parser.ParseNMEAString_Internal(buffer, &basic);
 }
 
 void
