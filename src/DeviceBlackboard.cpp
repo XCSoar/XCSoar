@@ -245,16 +245,12 @@ DeviceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
 }
 
 /**
- * Tries to find a name for every current traffic id
+ * Calculates location, altitude, average climb speed and
+ * looks up the callsign of each target
  */
 void
 DeviceBlackboard::ProcessFLARM()
 {
-  // TODO: this is a bit silly, it searches every time a target is
-  // visible... going to be slow..
-  // should only scan the first time it appears with that ID.
-  // at least it is now not being done by the parser
-
   const NMEA_INFO &basic = Basic();
   FLARM_STATE &flarm = SetBasic().flarm;
 
@@ -366,7 +362,6 @@ DeviceBlackboard::tick()
 {
   SetBasic().expire();
 
-  // lookup known traffic
   ProcessFLARM();
 
   // calculate fast data to complete aircraft state
