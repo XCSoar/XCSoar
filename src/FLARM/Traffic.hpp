@@ -134,6 +134,8 @@ struct FLARM_TRAFFIC {
   }
 
   static const TCHAR* GetTypeString(AircraftType type);
+
+  void Update(const FLARM_TRAFFIC &other);
 };
 
 #endif

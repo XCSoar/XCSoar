@@ -37,3 +37,19 @@ FLARM_TRAFFIC::GetTypeString(AircraftType Type)
 
   return NULL;
 }
+
+void
+FLARM_TRAFFIC::Update(const FLARM_TRAFFIC &other)
+{
+  AlarmLevel = other.AlarmLevel;
+  RelativeNorth = other.RelativeNorth;
+  RelativeEast = other.RelativeEast;
+  RelativeAltitude = other.RelativeAltitude;
+  IDType = other.IDType;
+  TrackBearing = other.TrackBearing;
+  TurnRate = other.TurnRate;
+  Speed = other.Speed;
+  ClimbRate = other.ClimbRate;
+  Stealth = other.Stealth;
+  Type = other.Type;
+}

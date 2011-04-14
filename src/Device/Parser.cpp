@@ -837,22 +837,9 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   // set time of fix to current time
   flarm_slot->Valid.update(GPS_INFO->Time);
 
-  // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
-  //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
-  flarm_slot->AlarmLevel = traffic.AlarmLevel;
-  flarm_slot->RelativeNorth = traffic.RelativeNorth;
-  flarm_slot->RelativeEast = traffic.RelativeEast;
-  flarm_slot->RelativeAltitude = traffic.RelativeAltitude;
-  flarm_slot->IDType = traffic.IDType;
-  flarm_slot->TrackBearing = traffic.TrackBearing;
-  flarm_slot->TurnRate = traffic.TurnRate;
-  flarm_slot->Speed = traffic.Speed;
-  flarm_slot->ClimbRate = traffic.ClimbRate;
-  flarm_slot->Stealth = traffic.Stealth;
-  flarm_slot->Type = traffic.Type;
+  flarm_slot->Update(traffic);
 
   // calculate relative east and north projection to lat/lon
-
   Angle delta_lat = Angle::degrees(fixed(0.01));
   Angle delta_lon = Angle::degrees(fixed(0.01));
 

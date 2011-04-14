@@ -430,6 +430,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver/Volkslogger.cpp \
 	$(SRC)/Device/Driver/Zander.cpp \
 	$(VOLKSLOGGER_SOURCES) \
+	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/NMEA/Info.cpp \
@@ -916,6 +917,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/FLARM/State.cpp \
+	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
@@ -990,6 +992,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/State.cpp \
+	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/NullPort.cpp \
@@ -1029,6 +1032,7 @@ $(TARGET_BIN_DIR)/RunIGCWriter$(TARGET_EXEEXT): $(RUN_IGC_WRITER_OBJS) $(RUN_IGC
 
 RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Device/Port.cpp \
