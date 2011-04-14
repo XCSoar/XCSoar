@@ -57,7 +57,7 @@ TEST_NAMES = \
 	TestDateTime \
 	TestMathTables \
 	TestAngle TestUnits TestEarth TestSunEphemeris \
-	TestValidity \
+	TestValidity TestUTM \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestDriver \
 	TestWayPointFile TestThermalBase \
@@ -370,6 +370,16 @@ TEST_SUN_EPHEMERIS_SOURCES = \
 TEST_SUN_EPHEMERIS_OBJS = $(call SRC_TO_OBJ,$(TEST_SUN_EPHEMERIS_SOURCES))
 TEST_SUN_EPHEMERIS_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestSunEphemeris$(TARGET_EXEEXT): $(TEST_SUN_EPHEMERIS_OBJS) $(TEST_SUN_EPHEMERIS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_UTM_SOURCES = \
+	$(SRC)/Geo/UTM.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestUTM.cpp
+TEST_UTM_OBJS = $(call SRC_TO_OBJ,$(TEST_UTM_SOURCES))
+TEST_UTM_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestUTM$(TARGET_EXEEXT): $(TEST_UTM_OBJS) $(TEST_UTM_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
