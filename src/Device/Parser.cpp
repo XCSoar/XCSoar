@@ -132,17 +132,6 @@ NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO *GPS_INFO)
   return false;
 }
 
-/*
-static double
-LeftOrRight(double in, char LoR)
-{
-  if(LoR == 'L')
-    return -in;
-  else
-    return in;
-}
-*/
-
 /**
  * Parses whether the given character (GPS status) should create a navigational warning
  * @param c GPS status
@@ -433,23 +422,6 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 bool
 NMEAParser::RMB(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
 {
-  /* we calculate all this stuff now
-  char ctemp[MAX_NMEA_LEN];
-
-  GPS_INFO->NAVWarning = NAVWarn(params[0][0]);
-
-  GPS_INFO->CrossTrackError = NAUTICALMILESTOMETRES * strtod(params[1], NULL);
-  GPS_INFO->CrossTrackError = LeftOrRight(GPS_INFO->CrossTrackError,params[2][0]);
-
-  strcpy(ctemp, params[4]);
-  ctemp[WAY_POINT_ID_SIZE] = '\0';
-  strcpy(GPS_INFO->WaypointID,ctemp);
-
-  GPS_INFO->WaypointDistance = NAUTICALMILESTOMETRES * strtod(params[9], NULL);
-  GPS_INFO->WaypointBearing = strtod(params[10], NULL);
-  GPS_INFO->WaypointSpeed =  Units::ToSysUnit(strtod(params[11], NULL), unKnots);
-  */
-
   return true;
 }
 
