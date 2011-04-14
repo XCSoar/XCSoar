@@ -113,7 +113,7 @@ AutoDetect()
      mingw32ce, we have to look it up dynamically */
   DynamicLibrary coreloc_dll(_T("coredll"));
   if (!coreloc_dll.defined()) {
-    LogStartUp(_T("UnitsGlue: coredll.dll not found"));
+    LogStartUp(_T("Units: coredll.dll not found"));
     return 0;
   }
 
@@ -122,14 +122,14 @@ AutoDetect()
     (GetUserDefaultUILanguage_t)
     coreloc_dll.lookup(_T("GetUserDefaultUILanguage"));
   if (GetUserDefaultUILanguage == NULL) {
-    LogStartUp(_T("UnitsGlue: GetUserDefaultUILanguage() not available"));
+    LogStartUp(_T("Units: GetUserDefaultUILanguage() not available"));
     return 0;
   }
 #endif
 
   // Retrieve the default user language identifier from the OS
   LANGID lang_id = GetUserDefaultUILanguage();
-  LogStartUp(_T("UnitsGlue: GetUserDefaultUILanguage()=0x%x"), (int)lang_id);
+  LogStartUp(_T("Units: GetUserDefaultUILanguage() = 0x%x"), (int)lang_id);
   if (lang_id == 0)
     return 0;
 
