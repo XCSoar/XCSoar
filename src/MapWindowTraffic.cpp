@@ -79,16 +79,11 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     sc_av = sc;
     sc_av.y += IBLSCALE(5);
 
-    const TCHAR *label_name;
+    const TCHAR *label_name = (traffic.HasName() ? traffic.Name.c_str() : NULL);
     TCHAR label_avg[100];
 
     TextInBoxMode_t mode;
     mode.Mode = Outlined;
-
-    if (traffic.HasName())
-      label_name = traffic.Name;
-    else
-      label_name = NULL;
 
     if (traffic.Average30s >= fixed(0.1))
       Units::FormatUserVSpeed(traffic.Average30s, label_avg, 100, false);
