@@ -125,7 +125,7 @@ public:
 
 private:
 // moved from GlideComputerAirData
-  void FLARM_ScanTraffic();
+  void ProcessFLARM();
 
   const NMEA_INFO& LastBasic() { return state_last; }
 };

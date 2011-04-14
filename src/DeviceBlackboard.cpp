@@ -248,7 +248,7 @@ DeviceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
  * Tries to find a name for every current traffic id
  */
 void
-DeviceBlackboard::FLARM_ScanTraffic()
+DeviceBlackboard::ProcessFLARM()
 {
   // TODO: this is a bit silly, it searches every time a target is
   // visible... going to be slow..
@@ -367,7 +367,7 @@ DeviceBlackboard::tick()
   SetBasic().expire();
 
   // lookup known traffic
-  FLARM_ScanTraffic();
+  ProcessFLARM();
 
   // calculate fast data to complete aircraft state
 
