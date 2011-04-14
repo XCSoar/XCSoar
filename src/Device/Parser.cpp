@@ -32,7 +32,6 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "NMEA/InputLine.hpp"
 #include "StringUtil.hpp"
-#include "InputEvents.hpp"
 #include "Compatibility/string.h" /* for _ttoi() */
 #include "Units/Units.hpp"
 
@@ -791,7 +790,6 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     flarm_slot->ID = traffic.ID;
 
     flarm.NewTraffic = true;
-    InputEvents::processGlideComputer(GCE_FLARM_NEWTRAFFIC);
   }
 
   // set time of fix to current time

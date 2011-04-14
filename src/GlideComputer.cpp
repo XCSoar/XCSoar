@@ -291,6 +291,10 @@ GlideComputer::FLARM_ScanTraffic()
     // traffic has disappeared..
     InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
 
+  if (Basic().flarm.NewTraffic)
+    // new traffic has appeared
+    InputEvents::processGlideComputer(GCE_FLARM_NEWTRAFFIC);
+
   // If (not FLARM available) cancel
   if (!Basic().flarm.available || !SettingsComputer().TeamFlarmTracking)
     return;
