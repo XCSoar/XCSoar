@@ -725,7 +725,7 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 bool
 NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time)
 {
-  static int old_flarm_rx = 0;
+  static bool old_flarm_rx = false;
 
   flarm.available.update(Time);
   isFlarm = true;
@@ -740,7 +740,7 @@ NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time)
 
   // process flarm updates
 
-  if (flarm.rx && old_flarm_rx == 0)
+  if (flarm.rx && !old_flarm_rx)
     // traffic has appeared..
     InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
 
@@ -750,7 +750,7 @@ NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time)
 
   // TODO feature: add another event for new traffic.
 
-  old_flarm_rx = flarm.rx;
+  old_flarm_rx = (flarm.rx != 0);
 
   return true;
 }
