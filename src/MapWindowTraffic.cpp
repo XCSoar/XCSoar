@@ -79,8 +79,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     sc_av = sc;
     sc_av.y += IBLSCALE(5);
 
-    const TCHAR *label_name = (traffic.HasName() ? traffic.Name.c_str() : NULL);
-
     TextInBoxMode_t mode;
     mode.Mode = Outlined;
 
@@ -92,8 +90,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     // only draw labels if not close to aircraft
     if (dx * dx + dy * dy > IBLSCALE(30) * IBLSCALE(30)) {
       // If FLARM callsign/name available draw it to the canvas
-      if (label_name != NULL && !string_is_empty(label_name))
-        TextInBox(canvas, label_name, sc_name.x, sc_name.y,
+      if (traffic.HasName() && !string_is_empty(traffic.Name))
+        TextInBox(canvas, traffic.Name, sc_name.x, sc_name.y,
                   mode, get_client_rect());
 
       if (traffic.Average30s >= fixed(0.1)) {
