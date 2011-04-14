@@ -168,7 +168,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next altitude difference"),
     N_("WP AltD"),
-    N_("Arrival altitude at the next waypoint relative to the safety arrival altitude."),
+    N_("Arrival altitude at the next waypoint relative to the safety arrival height."),
     76, // WP AltA
     e_WP_Distance, // WP Dist
   },
@@ -195,7 +195,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Final altitude difference"),
     N_("Fin AltD"),
-    N_("Arrival altitude at the final task turn point relative to the safety arrival altitude."),
+    N_("Arrival altitude at the final task turn point relative to the safety arrival height."),
     e_Fin_AltReq, // Fin AltR
     e_WP_AltReq, // WP AltR
   },
@@ -231,7 +231,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Final L/D"),
     N_("Fin LD"),
-    N_("The required glide ratio to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival altitude. Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'. Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds."),
+    N_("The required glide ratio to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'. Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds."),
     e_Fin_GR, // Final GR
     e_LD_Cruise, // LD Cruise
   },
@@ -402,7 +402,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next L/D"),
     N_("WP LD"),
-    N_("The required glide ratio to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival altitude. Negative values indicate a climb is necessary to reach the waypoint. If the height required is close to zero, the displayed value is '---'.   Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds."),
+    N_("The required glide ratio to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to reach the waypoint. If the height required is close to zero, the displayed value is '---'.   Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds."),
     e_LD, // LD Vario
     e_Fin_GR, // Final GR
   },

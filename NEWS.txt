@@ -1578,7 +1578,7 @@ Changes from 4.21 to 4.22
 - Terrain cache updates
 - File loading improvements
 - New wind vector graphics
-- New labels with Mc0 arrival height above safety arrival altitude for
+- New labels with Mc0 arrival height above safety arrival height for
   reachable airfields
 - Updated aircraft graphics
 - Proper units display in dialogs.

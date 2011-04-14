@@ -58,7 +58,7 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
 {
   const ThermalBandInfo &thermal_band = calculated.thermal_band;
 
-  // calculate height above safety altitude
+  // calculate height above safety height
   fixed hoffset = task_props.route_planner.safety_height_terrain +
                    calculated.TerrainBase;
   fixed h = basic.NavAltitude - hoffset;
@@ -81,7 +81,7 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
     chart.ScaleYFromValue(hstart);
   }
 
-  // no thermalling has been done above safety altitude
+  // no thermalling has been done above safety height
   if (!positive(calculated.thermal_band.MaxThermalHeight))
     return;
 

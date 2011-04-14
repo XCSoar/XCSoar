@@ -48,14 +48,14 @@ namespace InfoBoxFactory
     /* 10..19 */
     e_MacCready, /* The current MacCready setting. This infobox also shows whether MacCready is manual or auto. (Touchscreen/PC only) Also used to adjust the MacCready Setting if the infobox is active, by using the up/down cursor keys */
     e_WP_Distance, /* The distance to the currently selected waypoint. For AAT tasks, this is the distance to the target within the AAT sector */
-    e_WP_AltDiff, /* Next Altitude Difference - Arrival altitude at the next waypoint relative to the safety arrival altitude */
+    e_WP_AltDiff, /* Next Altitude Difference - Arrival altitude at the next waypoint relative to the safety arrival height */
     e_WP_AltReq, /* Additional altitude required to reach the next turn point */
     e_WP_Name, /* The name of the currently selected turn point. When this infobox is active, using the up/down cursor keys selects the next/previous waypoint in the task. (Touchscreen/PC only) Pressing the enter cursor key brings up the waypoint details */
-    e_Fin_AltDiff, /* Arrival altitude at the final task turn point relative to the safety arrival altitude */
+    e_Fin_AltDiff, /* Arrival altitude at the final task turn point relative to the safety arrival height */
     e_Fin_AltReq, /* Additional altitude required to finish the task */
     e_SpeedTaskAvg, /* Average cross country speed while on current task, compensated for altitude */
     e_Fin_Distance, /* Distance to finish around remaining turn points */
-    e_Fin_LD, /* The required glide ratio to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival altitude. Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'. Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds */
+    e_Fin_LD, /* The required glide ratio to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'. Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds */
     /* 20..29 */
     e_H_Terrain, /* This is the elevation of the terrain above mean sea level, obtained from the terrain file at the current GPS location */
     e_Thermal_Avg, /* Altitude gained/lost in the current thermal, divided by time spent thermaling */
@@ -76,7 +76,7 @@ namespace InfoBoxFactory
     e_Climb_Perc, /* Percentage of time spent in climb mode. These statistics are reset upon starting the task */
     e_TimeSinceTakeoff, /* Time elapsed since takeoff was detected */
     e_Load_G, /* Magnitude of G loading reported by a supported external intelligent vario. This value is negative for pitch-down manoeuvres */
-    e_WP_LD, /* The required glide ratio to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival altitude. Negative values indicate a climb is necessary to reach the waypoint. If the height required is close to zero, the displayed value is '---'.   Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds */
+    e_WP_LD, /* The required glide ratio to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to reach the waypoint. If the height required is close to zero, the displayed value is '---'.   Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds */
     e_TimeLocal, /* GPS time expressed in local time zone */
     /* 40..49 */
     e_TimeUTC, /* GPS time expressed in UTC */
