@@ -763,9 +763,24 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   FLARM_TRAFFIC traffic;
   traffic.AlarmLevel = line.read(0);
-  traffic.RelativeNorth = line.read(fixed_zero);
-  traffic.RelativeEast = line.read(fixed_zero);
-  traffic.RelativeAltitude = line.read(fixed_zero);
+
+  fixed value;
+
+  if (!line.read_checked(value))
+    // Relative North is required !
+    return true;
+  traffic.RelativeNorth = value;
+
+  if (!line.read_checked(value))
+    // Relative East is required !
+    return true;
+  traffic.RelativeEast = value;
+
+  if (!line.read_checked(value))
+    // Relative Altitude is required !
+    return true;
+  traffic.RelativeAltitude = value;
+
   traffic.IDType = line.read(0);
 
   // 5 id, 6 digit hex
