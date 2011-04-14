@@ -26,6 +26,7 @@ Copyright_License {
 #include "WayPointFileZander.hpp"
 #include "WayPointFileSeeYou.hpp"
 #include "WayPointFileWinPilot.hpp"
+#include "WayPointFileFS.hpp"
 
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoint.hpp"
@@ -233,6 +234,10 @@ WayPointFile::create(const TCHAR* filename, int the_filenum)
   // If Zander waypoint file -> save type and return true
   if (MatchesExtension(filename, _T(".wpz")))
     return new WayPointFileZander(filename, the_filenum);
+
+  // If FS waypoint file -> save type and return true
+  if (MatchesExtension(filename, _T(".wpt")))
+    return new WayPointFileFS(filename, the_filenum);
 
   // unknown
   return NULL;

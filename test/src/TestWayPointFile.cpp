@@ -317,6 +317,25 @@ TestZander(wp_vector org_wp)
   }
 }
 
+static void
+TestFS(wp_vector org_wp)
+{
+  Waypoints way_points;
+  if (!TestWayPointFile(_T("test/data/waypoints_geo.wpt"), way_points,
+                        org_wp.size())) {
+    skip(3 * org_wp.size(), 0, "opening waypoint file failed");
+    return;
+  }
+
+  wp_vector::iterator it;
+  for (it = org_wp.begin(); it < org_wp.end(); it++) {
+    if (it->Name.length() > 8)
+      it->Name = it->Name.erase(8);
+    trim_inplace(it->Name);
+    GetWayPoint(*it, way_points);
+  }
+}
+
 static wp_vector
 CreateOriginalWaypoints()
 {
@@ -421,13 +440,14 @@ int main(int argc, char **argv)
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(63 + 3 * 4 + (9 + 10 + 8) * org_wp.size());
+  plan_tests(63 + 4 * 4 + (9 + 10 + 8 + 3) * org_wp.size());
 
   TestExtractParameters();
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);
   TestZander(org_wp);
+  TestFS(org_wp);
 
   return exit_status();
 }
