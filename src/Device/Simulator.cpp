@@ -78,8 +78,8 @@ Simulator::GenerateFLARMTraffic(NMEA_INFO &basic)
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
-  sprintf(buffer, "$PFLAA,0,%d,%d,%d,2,AA9146,%d,0,27,0,1",
-          north, east, alt, track);
+  sprintf(buffer, "$PFLAA,0,%d,%d,%d,2,AA9146,,,,,1",
+          north, east, alt);
   AppendNMEAChecksum(buffer);
   parser.ParseNMEAString_Internal(buffer, &basic);
 
