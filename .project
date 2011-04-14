@@ -51,7 +51,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.fullBuildTarget</key>
-					<value>everything WINHOST=y TARGET=PC</value>
+					<value>everything WINHOST=y TARGET=PC GREEN_MENU=n</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.stopOnError</key>
