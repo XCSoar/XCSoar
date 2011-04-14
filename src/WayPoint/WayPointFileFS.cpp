@@ -24,6 +24,7 @@ Copyright_License {
 #include "WayPointFileFS.hpp"
 #include "Units/Units.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "Geo/UTM.hpp"
 
 #include <stdio.h>
 
@@ -86,6 +87,37 @@ ParseLocation(const TCHAR *src, GeoPoint &p)
 }
 
 static bool
+ParseLocationUTM(const TCHAR *src, GeoPoint &p)
+{
+  TCHAR *endptr;
+
+  long zone_number = _tcstol(src, &endptr, 10);
+  if (endptr == src)
+    return false;
+
+  src = endptr;
+  char zone_letter = src[0];
+
+  src++;
+  long easting = _tcstol(src, &endptr, 10);
+  if (endptr == src || *endptr != _T(' '))
+    return false;
+
+  src = endptr;
+  long northing = _tcstol(src, &endptr, 10);
+  if (endptr == src || *endptr != _T(' '))
+    return false;
+
+  UTM u(zone_number, zone_letter, fixed(easting), fixed(northing));
+  p = u.ToGeoPoint();
+
+  // ensure longitude is within -180:180
+  p.normalize();
+
+  return true;
+}
+
+static bool
 ParseAltitude(const TCHAR *src, fixed &dest)
 {
   TCHAR *endptr;
@@ -123,6 +155,13 @@ WayPointFileFS::parseLine(const TCHAR* line, const unsigned linenum,
   //REDSQUAR  N 55 45 15.00    E 037 37 12.00   123  Red Square
   //SYDNEYOP  S 33 51 25.02    E 151 12 54.96     5  Sydney Opera
 
+  //$FormatUTM
+  //Aconcagu 19H   0405124   6386692   6962  Aconcagua
+  //Bergneus 32U   0409312   5656398    488  Bergneustadt [A]
+  //Golden G 10S   0545914   4185695    227  Golden Gate Bridge
+  //Red Squa 37U   0413390   6179582    123  Red Square
+  //Sydney O 56H   0334898   6252272      5  Sydney Opera
+
   if (line[0] == '\0')
     return true;
 
@@ -135,18 +174,15 @@ WayPointFileFS::parseLine(const TCHAR* line, const unsigned linenum,
   if (line[0] == _T('$'))
     return true;
 
-  if (is_utm)
-    // not supported yet
-    return false;
-
   // Determine the length of the line
   size_t len = _tcslen(line);
   // If less then 27 characters -> something is wrong -> cancel
-  if (len < 47)
+  if (len < (is_utm ? 39 : 47))
     return false;
 
   GeoPoint location;
-  if (!ParseLocation(line + 10, location))
+  if ((!is_utm && !ParseLocation(line + 10, location)) ||
+      (is_utm && !ParseLocationUTM(line + 9, location)))
     return false;
 
   Waypoint new_waypoint(location);
@@ -156,12 +192,12 @@ WayPointFileFS::parseLine(const TCHAR* line, const unsigned linenum,
   if (!ParseString(line, new_waypoint.Name, 8))
     return false;
 
-  if (!ParseAltitude(line + 41, new_waypoint.Altitude))
+  if (!ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.Altitude))
     check_altitude(new_waypoint);
 
   // Description (Characters 35-44)
-  if (len > 47)
-    ParseString(line + 47, new_waypoint.Comment);
+  if (len > (is_utm ? 38 : 47))
+    ParseString(line + (is_utm ? 38 : 47), new_waypoint.Comment);
 
   way_points.append(new_waypoint);
   return true;
