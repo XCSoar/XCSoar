@@ -82,6 +82,9 @@ NMEAParser::Reset(void)
 bool
 NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO *GPS_INFO)
 {
+  if (String[0] != '$')
+    return false;
+
   if (!NMEAChecksum(String))
     return false;
 
@@ -89,9 +92,6 @@ NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO *GPS_INFO)
 
   char type[16];
   line.read(type, 16);
-
-  if (type[0] != '$')
-    return false;
 
   // if (proprietary sentence) ...
   if (type[1] == 'P') {
