@@ -61,6 +61,10 @@ bool
 GlueMapWindow::on_mouse_double(int x, int y)
 {
   mouse_down_clock.update();
+
+  if (settings_map.EnablePan)
+    return true;
+
   InputEvents::ShowMenu();
   ignore_single_click = true;
   return true;
