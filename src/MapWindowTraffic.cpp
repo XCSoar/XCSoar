@@ -80,15 +80,9 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     sc_av.y += IBLSCALE(5);
 
     const TCHAR *label_name = (traffic.HasName() ? traffic.Name.c_str() : NULL);
-    TCHAR label_avg[100];
 
     TextInBoxMode_t mode;
     mode.Mode = Outlined;
-
-    if (traffic.Average30s >= fixed(0.1))
-      Units::FormatUserVSpeed(traffic.Average30s, label_avg, 100, false);
-    else
-      label_avg[0] = _T('\0');
 
     // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 
@@ -102,9 +96,12 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
         TextInBox(canvas, label_name, sc_name.x, sc_name.y,
                   mode, get_client_rect());
 
-      // If average climb data available draw it to the canvas
-      if (!string_is_empty(label_avg))
+      if (traffic.Average30s >= fixed(0.1)) {
+        // If average climb data available draw it to the canvas
+        TCHAR label_avg[100];
+        Units::FormatUserVSpeed(traffic.Average30s, label_avg, 100, false);
         TextInBox(canvas, label_avg, sc_av.x, sc_av.y, mode, get_client_rect());
+      }
     }
 
     // If FLARM alarm draw alarm icon below corresponding target
