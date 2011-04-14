@@ -57,7 +57,7 @@ ComputePressure(NMEA_INFO &basic, const SETTINGS_COMPUTER &settings_computer)
     } else if (basic.BaroAltitudeAvailable && qnh_available) {
       basic.PressureAltitude =
         qnh.QNHAltitudeToPressureAltitude(basic.BaroAltitude);
-      basic.PressureAltitudeAvailable = basic.PressureAltitudeAvailable;
+      basic.PressureAltitudeAvailable = basic.BaroAltitudeAvailable;
     }
   }
 
