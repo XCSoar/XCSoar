@@ -26,7 +26,6 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
 #include "Device/Geoid.h"
-#include "FLARM/FlarmCalculations.h"
 #include "Math/Earth.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Checksum.hpp"
@@ -44,8 +43,6 @@ Copyright_License {
 
 using std::min;
 using std::max;
-
-static FlarmCalculations flarmCalculations;
 
 bool NMEAParser::ignore_checksum;
 
@@ -838,41 +835,6 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   flarm_slot->Valid.update(GPS_INFO->Time);
 
   flarm_slot->Update(traffic);
-
-  // calculate relative east and north projection to lat/lon
-  Angle delta_lat = Angle::degrees(fixed(0.01));
-  Angle delta_lon = Angle::degrees(fixed(0.01));
-
-  GeoPoint plat = GPS_INFO->Location;
-  plat.Latitude += delta_lat;
-  GeoPoint plon = GPS_INFO->Location;
-  plon.Longitude += delta_lon;
-
-  fixed dlat = Distance(GPS_INFO->Location, plat);
-  fixed dlon = Distance(GPS_INFO->Location, plon);
-
-  fixed FLARM_NorthingToLatitude(0);
-  fixed FLARM_EastingToLongitude(0);
-
-  if (positive(fabs(dlat)) && positive(fabs(dlon))) {
-    FLARM_NorthingToLatitude = delta_lat.value_degrees() / dlat;
-    FLARM_EastingToLongitude = delta_lon.value_degrees() / dlon;
-  }
-
-  // 1 relativenorth, meters
-  flarm_slot->Location.Latitude = Angle::degrees(flarm_slot->RelativeNorth
-                                        * FLARM_NorthingToLatitude) + GPS_INFO->Location.Latitude;
-
-  // 2 relativeeast, meters
-  flarm_slot->Location.Longitude = Angle::degrees(flarm_slot->RelativeEast
-                                         * FLARM_EastingToLongitude) + GPS_INFO->Location.Longitude;
-
-  // alt
-  flarm_slot->Altitude = flarm_slot->RelativeAltitude + GPS_INFO->GPSAltitude;
-
-  flarm_slot->Average30s = flarmCalculations.Average30s(flarm_slot->ID,
-                                                        GPS_INFO->Time,
-                                                        flarm_slot->Altitude);
 
   return true;
 }

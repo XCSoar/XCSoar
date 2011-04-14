@@ -27,6 +27,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "TeamCodeCalculation.h"
 #include "FLARM/FlarmDetails.hpp"
+#include "FLARM/FlarmCalculations.h"
 #include "Asset.hpp"
 #include "Device/All.hpp"
 #include "Math/Constants.h"
@@ -39,6 +40,8 @@ Copyright_License {
 #ifdef WIN32
 #include <windows.h>
 #endif
+
+static FlarmCalculations flarmCalculations;
 
 DeviceBlackboard device_blackboard;
 
@@ -252,11 +255,32 @@ DeviceBlackboard::FLARM_ScanTraffic()
   // should only scan the first time it appears with that ID.
   // at least it is now not being done by the parser
 
+  const NMEA_INFO &basic = Basic();
   FLARM_STATE &flarm = SetBasic().flarm;
 
   // if (FLARM data is available)
   if (!flarm.available)
     return;
+
+  // calculate relative east and north projection to lat/lon
+  Angle delta_lat = Angle::degrees(fixed(0.01));
+  Angle delta_lon = Angle::degrees(fixed(0.01));
+
+  GeoPoint plat = basic.Location;
+  plat.Latitude += delta_lat;
+  GeoPoint plon = basic.Location;
+  plon.Longitude += delta_lon;
+
+  fixed dlat = Distance(basic.Location, plat);
+  fixed dlon = Distance(basic.Location, plon);
+
+  fixed FLARM_NorthingToLatitude(0);
+  fixed FLARM_EastingToLongitude(0);
+
+  if (positive(fabs(dlat)) && positive(fabs(dlon))) {
+    FLARM_NorthingToLatitude = delta_lat.value_degrees() / dlat;
+    FLARM_EastingToLongitude = delta_lon.value_degrees() / dlon;
+  }
 
   // for each item in traffic
   for (unsigned i = 0; i < flarm.traffic.size(); i++) {
@@ -270,6 +294,22 @@ DeviceBlackboard::FLARM_ScanTraffic()
       if (fname != NULL)
         traffic.Name = fname;
     }
+
+    // 1 relativenorth, meters
+    traffic.Location.Latitude =
+        Angle::degrees(traffic.RelativeNorth * FLARM_NorthingToLatitude) +
+        basic.Location.Latitude;
+
+    // 2 relativeeast, meters
+    traffic.Location.Longitude =
+        Angle::degrees(traffic.RelativeEast * FLARM_EastingToLongitude) +
+        basic.Location.Longitude;
+
+    // alt
+    traffic.Altitude = traffic.RelativeAltitude + basic.GPSAltitude;
+
+    traffic.Average30s =
+        flarmCalculations.Average30s(traffic.ID, basic.Time, traffic.Altitude);
   }
 }
 
