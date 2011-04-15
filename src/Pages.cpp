@@ -178,7 +178,7 @@ Pages::PageLayout::MakeTitle(TCHAR* buffer, const bool concise) const
   switch (topLayout) {
     case PageLayout::tlMap:
       if (concise)
-        _tcscpy(buffer, _("Info hide"));
+        _tcscpy(buffer, _("Info Hide"));
       else 
         _tcscpy(buffer, _("Map (Full screen)"));
       break;
@@ -195,7 +195,7 @@ Pages::PageLayout::MakeTitle(TCHAR* buffer, const bool concise) const
       }
       else {
         if (concise) {
-          _tcscpy(buffer, _("Info auto"));
+          _tcscpy(buffer, _("Info Auto"));
         } else {
           _tcscpy(buffer, _("Map and InfoBoxes (Auto)"));
         }

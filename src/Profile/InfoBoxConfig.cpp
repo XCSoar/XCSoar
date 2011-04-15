@@ -57,9 +57,9 @@ InfoBoxManagerConfig::InfoBoxManagerConfig()
   assert(MAX_INFOBOX_PANELS >= DFLT_CONFIG_PANELS);
   assert(InfoBoxPanelConfig::MAX_INFOBOXES >= DFLT_CONFIG_BOXES);
 
-  _tcscpy(panel[0].name, _T("Circling"));
-  _tcscpy(panel[1].name, _T("Cruise"));
-  _tcscpy(panel[2].name, _T("FinalGlide"));
+  _tcscpy(panel[0].name, N_("Circling"));
+  _tcscpy(panel[1].name, N_("Cruise"));
+  _tcscpy(panel[2].name, N_("FinalGlide"));
   for (unsigned int i = PREASSIGNED_PANELS; i < MAX_INFOBOX_PANELS; i++)
     _stprintf(panel[i].name, _T("AUX-%u"), i-2);
 

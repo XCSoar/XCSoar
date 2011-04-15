@@ -66,7 +66,7 @@ OnInfoBoxesButton(WndButton &button)
     Profile::SetInfoBoxManagerConfig(infoBoxManagerConfig);
     Profile::Save();
     LogDebug(_T("InfoBox configuration: Changes saved"));
-    buttons[i]->SetCaption(infoBoxManagerConfig.panel[i].name);
+    buttons[i]->SetCaption(gettext(infoBoxManagerConfig.panel[i].name));
   }
 }
 
@@ -83,7 +83,7 @@ InfoBoxesConfigPanel::Init(WndForm *_wf)
     buttons[i] = (WndButton*) wf->FindByName(buffer);
     if (buttons[i]) {
       buttons[i]->SetOnClickNotify(OnInfoBoxesButton);
-      buttons[i]->SetCaption(infoBoxManagerConfig.panel[i].name);
+      buttons[i]->SetCaption(gettext(infoBoxManagerConfig.panel[i].name));
     }
   }
 }
