@@ -46,7 +46,6 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
-#include "Terrain/RasterTerrain.hpp"
 
 #include <stdio.h>
 
@@ -64,7 +63,6 @@ public:
                      const TaskBehaviour &_task_behaviour,
                      const AIRCRAFT_STATE &_aircraft_state, Canvas &_canvas,
                      const GlidePolar &polar,
-                     RasterTerrain* _terrain,
                      const ProtectedTaskManager& _task):
     projection(_projection),
     settings_map(_settings_map), task_behaviour(_task_behaviour),
@@ -73,7 +71,6 @@ public:
     canvas(_canvas),
     glide_polar(polar),
     task_valid(false),
-    terrain(_terrain),
     task(_task),
     labels(projection.GetScreenWidth(), projection.GetScreenHeight())
   {
@@ -177,8 +174,8 @@ public:
 
   void
   CalculateReachability(const Waypoint &way_point,
-                        bool &reachable_glide, int &arrival_height_glide,
-                        bool &reachable_terrain, int &arrival_height_terrain)
+                        int &arrival_height_glide,
+                        int &arrival_height_terrain)
   {
     const UnorderedTaskPoint t(way_point, task_behaviour);
     const GlideResult r =
@@ -186,24 +183,18 @@ public:
 
     arrival_height_glide = r.AltitudeDifference;
 
-    if (r.glide_reachable()) {
-      reachable_glide = true;
+    if (arrival_height_glide <= 0)
+      return; // no point continuing
 
-      // reachable according to height, now check terrain intersection
-      if (terrain) {
-        const AGeoPoint p_dest (t.get_location(), r.MinHeight);
-        short h = 0;
-        if (task.find_positive_arrival(p_dest, h)) {
-          h -= terrain->GetTerrainHeight(p_dest);
-          h -= iround(task_behaviour.safety_height_arrival);
-          if (h >= 0) {
-            reachable_terrain = true;
-            arrival_height_terrain = h;
-            if (arrival_height_terrain > arrival_height_glide)
-              arrival_height_terrain = arrival_height_glide;
-          }
-        }
-      }
+    // reachable according to height, now check terrain intersection
+    const AGeoPoint p_dest (t.get_location(), t.get_elevation());
+    short h_turning = 0;
+    if (task.find_positive_arrival(p_dest, h_turning)) {
+      const short h_base = iround(t.get_elevation() + task_behaviour.safety_height_arrival);
+      h_turning -= h_base;
+
+      if (h_turning > 0)
+        arrival_height_terrain = std::min((int)h_turning, arrival_height_glide);
     }
   }
 
@@ -245,9 +236,11 @@ public:
     int arrival_height_terrain = 0;
     bool watchedWaypoint = way_point.Flags.Watched;
 
-    if (way_point.is_landable() || watchedWaypoint)
-      CalculateReachability(way_point, reachable_glide, arrival_height_glide,
-                            reachable_terrain, arrival_height_terrain);
+    if (way_point.is_landable() || watchedWaypoint) {
+      CalculateReachability(way_point, arrival_height_glide, arrival_height_terrain);
+      reachable_glide = arrival_height_glide > 0;
+      reachable_terrain = arrival_height_terrain > 0;
+    }
 
     if (way_point.is_landable()) {
       WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable_glide,
@@ -347,7 +340,6 @@ private:
   const GlidePolar glide_polar;
   bool task_valid;
   TaskProjection proj;
-  RasterTerrain* terrain;
   const ProtectedTaskManager& task;
 
 public:
@@ -378,8 +370,7 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
                          const TaskBehaviour &task_behaviour,
                          const GlidePolar &glide_polar,
                          const AIRCRAFT_STATE &aircraft_state,
-                         const ProtectedTaskManager *task,
-                         RasterTerrain* terrain)
+                         const ProtectedTaskManager *task)
 {
   if ((way_points == NULL) || way_points->empty())
     return;
@@ -391,7 +382,6 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
     WaypointVisitorMap v(projection, settings_map, task_behaviour,
                          aircraft_state,
                          canvas, glide_polar,
-                         terrain,
                          *task);
 
     {

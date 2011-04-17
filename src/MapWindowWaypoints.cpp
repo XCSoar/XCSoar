@@ -33,6 +33,5 @@ MapWindow::DrawWaypoints(Canvas &canvas)
                             SettingsComputer(),
                             Calculated().glide_polar_reach,
                             ToAircraftState(Basic(), Calculated()),
-                            task,
-                            terrain);
+                            task);
 }
